@@ -6,43 +6,34 @@
 <meta name="theme-color" content="#1a1a19">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Plug Inspection — Capture</title>
+<title>Truck Inspection — Capture</title>
 <link rel="manifest" href="manifest.webmanifest">
 <!--
-  Magnetic Plug — mobile CAPTURE app (offline-first).
-  • Take/pick photos in the field with NO internet; stored on the phone (IndexedDB).
-  • Export = correctly-named photos (TK146_4C_30.07.2026_MP.jpg) + entries.json for the dashboard.
-  • EN/RU interface · QR scan for the unit number · dictation for comments.
-  Filenames: <EQUIP>_<POS>_<DD.MM.YYYY>_<TYPE>.jpg  — set INSPECTION_TYPE below (MP / FC / …).
+  Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
+  Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
+  Files: <EQUIP>_<ITEM>_<DD.MM.YYYY>_<TYPE>.jpg  e.g. TK146_4C_30.07.2026_MP.jpg,
+                                                       TK146_ENG_30.07.2026_INSP.jpg
+  Edit the TYPES config below to change components/filters/positions.
 -->
 <style>
-  :root{
-    color-scheme: dark;
+  :root{ color-scheme:dark;
     --page:#0d0d0d; --surface:#1a1a19; --surface-2:#242422; --surface-3:#2f2f2c;
     --ink:#fff; --ink-2:#c3c2b7; --muted:#8b8a83; --border:rgba(255,255,255,.12);
     --accent:#3987e5; --accent-ink:#fff;
-    --good:#0ca30c; --warning:#fab219; --serious:#ec835a; --critical:#d03b3b; --none:#6b6a65;
-  }
-  @media (prefers-color-scheme: light){
-    :root:where(:not([data-theme="dark"])){
-      color-scheme: light;
-      --page:#f4f4f1; --surface:#fff; --surface-2:#f2f2ef; --surface-3:#e9e9e4;
-      --ink:#111; --ink-2:#44433f; --muted:#8b8a83; --border:rgba(0,0,0,.12);
-    }
-  }
+    --good:#0ca30c; --warning:#fab219; --serious:#ec835a; --critical:#d03b3b; --none:#6b6a65; }
+  @media (prefers-color-scheme: light){ :root:where(:not([data-theme="dark"])){ color-scheme:light;
+    --page:#f4f4f1; --surface:#fff; --surface-2:#f2f2ef; --surface-3:#e9e9e4;
+    --ink:#111; --ink-2:#44433f; --muted:#8b8a83; --border:rgba(0,0,0,.12); } }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
   html,body{margin:0;padding:0;}
-  body{background:var(--page);color:var(--ink);
-    font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.4;
-    padding-bottom:120px;}
+  body{background:var(--page);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.4;padding-bottom:120px;}
   header{position:sticky;top:0;z-index:10;background:var(--surface);border-bottom:1px solid var(--border);
     padding:calc(env(safe-area-inset-top) + 12px) 16px 12px;display:flex;align-items:center;gap:10px;}
   header .t{font-weight:700;font-size:16px;}
   .lang{display:flex;border:1px solid var(--border);border-radius:9px;overflow:hidden;margin-left:6px;}
   .lang button{border:none;background:var(--surface-2);color:var(--ink-2);padding:6px 10px;font-size:13px;font-weight:700;cursor:pointer;}
   .lang button.on{background:var(--accent);color:#fff;}
-  header .st{margin-left:auto;font-size:12px;padding:3px 9px;border-radius:999px;background:var(--surface-2);
-    border:1px solid var(--border);color:var(--ink-2);}
+  header .st{margin-left:auto;font-size:12px;padding:3px 9px;border-radius:999px;background:var(--surface-2);border:1px solid var(--border);color:var(--ink-2);}
   header .st.off{color:var(--warning);} header .st.on{color:var(--good);}
   main{padding:16px;max-width:640px;margin:0 auto;}
   .card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:16px;}
@@ -51,55 +42,47 @@
   label.fld > span{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:5px;}
   input,select,textarea{width:100%;min-width:0;max-width:100%;background:var(--surface-2);color:var(--ink);border:1px solid var(--border);
     border-radius:12px;padding:13px 14px;font-size:16px;font-family:inherit;-webkit-appearance:none;appearance:none;}
+  select{background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
+    background-position:calc(100% - 18px) 20px,calc(100% - 13px) 20px;background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:36px;}
   input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:1px;}
   textarea{resize:vertical;min-height:52px;}
   .row{display:flex;gap:12px;} .row > *{flex:1 1 0;min-width:0;}
   .withbtn{display:flex;gap:8px;align-items:stretch;}
   .withbtn > input, .withbtn > textarea{flex:1;}
-  .iconbtn{flex:none;white-space:nowrap;background:var(--surface-3);color:var(--ink);border:1px solid var(--border);
-    border-radius:12px;padding:0 14px;font-size:15px;font-weight:650;cursor:pointer;}
+  .iconbtn{flex:none;white-space:nowrap;background:var(--surface-3);color:var(--ink);border:1px solid var(--border);border-radius:12px;padding:0 14px;font-size:15px;font-weight:650;cursor:pointer;}
   .withbtn > textarea + .iconbtn{align-self:flex-start;padding:12px;font-size:18px;}
   .iconbtn.rec{background:var(--critical);color:#fff;border-color:transparent;animation:pulse 1s infinite;}
   @keyframes pulse{50%{opacity:.55;}}
   .seg{display:flex;gap:8px;flex-wrap:wrap;}
-  .seg button{flex:1;min-width:56px;padding:12px 8px;border-radius:12px;border:1px solid var(--border);
-    background:var(--surface-2);color:var(--ink-2);font-size:15px;font-weight:650;cursor:pointer;}
+  .seg button{flex:1;min-width:56px;padding:12px 8px;border-radius:12px;border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);font-size:15px;font-weight:650;cursor:pointer;}
   .seg button.on{background:var(--accent);color:var(--accent-ink);border-color:transparent;}
-  .posnav{display:flex;gap:8px;margin-bottom:14px;}
-  .posnav button{flex:1;padding:12px 6px;border-radius:12px;border:1px solid var(--border);background:var(--surface-2);
-    color:var(--ink-2);font-weight:700;font-size:15px;cursor:pointer;position:relative;}
+  .posnav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+  .posnav button{flex:1 1 auto;min-width:56px;padding:11px 10px;border-radius:12px;border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);font-weight:700;font-size:14px;cursor:pointer;position:relative;}
   .posnav button.on{background:var(--ink);color:var(--page);border-color:transparent;}
-  .posnav button .dot{position:absolute;top:6px;right:8px;width:9px;height:9px;border-radius:50%;background:var(--good);display:none;}
+  .posnav button .dot{position:absolute;top:5px;right:6px;width:8px;height:8px;border-radius:50%;background:var(--good);display:none;}
   .posnav button.has .dot{display:block;}
-  .shot{width:100%;aspect-ratio:4/3;border-radius:14px;border:2px dashed var(--border);background:var(--surface-2);
-    display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:14px;overflow:hidden;margin-bottom:12px;position:relative;text-align:center;padding:10px;}
+  .shot{width:100%;aspect-ratio:4/3;border-radius:14px;border:2px dashed var(--border);background:var(--surface-2);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:14px;overflow:hidden;margin-bottom:12px;position:relative;text-align:center;padding:10px;}
   .shot img{width:100%;height:100%;object-fit:cover;}
   .shot .retake{position:absolute;bottom:10px;right:10px;background:rgba(0,0,0,.6);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:13px;}
-  .gradeseg button.g-A.on{background:var(--good);}
-  .gradeseg button.g-B.on{background:var(--warning);color:#111;}
-  .gradeseg button.g-C.on{background:var(--serious);}
-  .gradeseg button.g-D.on{background:var(--critical);}
-  .gradeseg button.g-X.on{background:var(--none);}
+  .gradeseg button.g-A.on{background:var(--good);} .gradeseg button.g-B.on{background:var(--warning);color:#111;}
+  .gradeseg button.g-C.on{background:var(--serious);} .gradeseg button.g-D.on{background:var(--critical);} .gradeseg button.g-X.on{background:var(--none);}
   .btn{display:block;width:100%;padding:16px;border-radius:14px;border:none;font-size:17px;font-weight:700;cursor:pointer;}
   .btn.primary{background:var(--accent);color:var(--accent-ink);}
   .btn.ghost{background:var(--surface-2);color:var(--ink);border:1px solid var(--border);}
   .pending{display:flex;flex-direction:column;gap:10px;}
-  .pitem{display:flex;align-items:center;gap:12px;background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:10px 12px;}
+  .pitem{display:flex;align-items:center;gap:12px;background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:10px 12px;cursor:pointer;}
   .pitem .thumb{width:52px;height:52px;border-radius:9px;object-fit:cover;background:var(--surface-3);flex:none;}
   .pitem .meta{flex:1;min-width:0;} .pitem .meta .a{font-weight:700;} .pitem .meta .b{font-size:12.5px;color:var(--muted);}
+  .tag{display:inline-block;font-size:10.5px;font-weight:700;padding:1px 6px;border-radius:6px;background:var(--accent);color:#fff;margin-right:6px;vertical-align:middle;}
   .pitem .edit{background:none;border:none;color:var(--accent);font-size:19px;padding:6px;cursor:pointer;}
   .pitem .del{background:none;border:none;color:var(--critical);font-size:20px;padding:6px;cursor:pointer;}
-  .pitem{cursor:pointer;}
-  .editbar{display:flex;align-items:center;gap:10px;background:color-mix(in srgb,var(--accent) 16%,var(--surface));
-    border:1px solid color-mix(in srgb,var(--accent) 45%,var(--border));border-radius:12px;padding:10px 14px;margin-bottom:10px;font-size:13.5px;}
-  .editbar span{flex:1;color:var(--ink);}
-  .linkbtn{background:none;border:none;color:var(--accent);font-weight:700;font-size:14px;cursor:pointer;}
   .empty{color:var(--muted);text-align:center;padding:20px;font-size:14px;}
-  .bottombar{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--border);
-    padding:12px 16px calc(env(safe-area-inset-bottom) + 12px);display:flex;gap:10px;z-index:10;}
+  .bottombar{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--border);padding:12px 16px calc(env(safe-area-inset-bottom) + 12px);display:flex;gap:10px;z-index:10;}
   .bottombar .btn{margin:0;}
   .hint{font-size:12.5px;color:var(--muted);margin-top:6px;}
   .ver{text-align:center;color:var(--muted);font-size:11px;margin:2px 0 8px;}
+  .editbar{display:flex;align-items:center;gap:10px;background:color-mix(in srgb,var(--accent) 16%,var(--surface));border:1px solid color-mix(in srgb,var(--accent) 45%,var(--border));border-radius:12px;padding:10px 14px;margin-bottom:10px;font-size:13.5px;}
+  .editbar span{flex:1;color:var(--ink);} .linkbtn{background:none;border:none;color:var(--accent);font-weight:700;font-size:14px;cursor:pointer;}
   .hidden{display:none!important;}
   .count-badge{background:var(--accent);color:#fff;border-radius:999px;padding:1px 8px;font-size:12px;margin-left:6px;}
   dialog{border:none;border-radius:16px;background:var(--surface);color:var(--ink);max-width:92vw;width:420px;padding:0;}
@@ -114,17 +97,17 @@
 </head>
 <body>
 <header>
-  <span class="t" data-i18n="app_title">Plug Capture</span>
-  <span class="lang">
-    <button data-lang="en" class="on">EN</button>
-    <button data-lang="ru">RU</button>
-  </span>
+  <span class="t" data-i18n="app_title">Truck Inspection</span>
+  <span class="lang"><button data-lang="en" class="on">EN</button><button data-lang="ru">RU</button></span>
   <span class="st" id="netStatus">…</span>
 </header>
 
 <main>
   <div class="card">
     <h2 data-i18n="sec_inspection">Inspection</h2>
+    <label class="fld"><span data-i18n="lbl_type">Inspection type</span>
+      <select id="typeSel"></select>
+    </label>
     <label class="fld"><span data-i18n="lbl_truck">Truck / Unit</span>
       <div class="withbtn">
         <input id="equip" list="equipList" data-i18n-ph="ph_truck" placeholder="e.g. TK158" autocapitalize="characters" autocomplete="off">
@@ -140,13 +123,8 @@
   </div>
 
   <div class="card">
-    <h2 data-i18n="sec_position">Plug position</h2>
-    <div class="posnav" id="posnav">
-      <button data-pos="4C" class="on">4C<span class="dot"></span></button>
-      <button data-pos="4D">4D<span class="dot"></span></button>
-      <button data-pos="4E">4E<span class="dot"></span></button>
-      <button data-pos="4F">4F<span class="dot"></span></button>
-    </div>
+    <h2 id="secPosTitle">Component</h2>
+    <div class="posnav" id="posnav"></div>
     <div class="posLabel hint" id="posLabel"></div>
 
     <div class="shot" id="shot">
@@ -159,34 +137,34 @@
     <label class="fld"><span data-i18n="lbl_grade">Grade / condition</span>
       <div class="seg gradeseg" id="gradeSeg">
         <button class="g-A" data-g="A">A</button><button class="g-B" data-g="B">B</button>
-        <button class="g-C" data-g="C">C</button><button class="g-D" data-g="D">D</button>
-        <button class="g-X" data-g="X">X</button>
+        <button class="g-C" data-g="C">C</button><button class="g-D" data-g="D">D</button><button class="g-X" data-g="X">X</button>
       </div>
     </label>
-    <div class="row">
-      <label class="fld"><span data-i18n="lbl_particle">Particle count</span><input id="particle" type="text" inputmode="numeric"></label>
-      <label class="fld"><span data-i18n="lbl_comp">Component hrs</span><input id="comp" type="number" inputmode="numeric"></label>
+    <div id="mpFields">
+      <div class="row">
+        <label class="fld"><span data-i18n="lbl_particle">Particle count</span><input id="particle" type="text" inputmode="numeric"></label>
+        <label class="fld"><span data-i18n="lbl_comp">Component hrs</span><input id="comp" type="number" inputmode="numeric"></label>
+      </div>
+      <label class="fld"><span data-i18n="lbl_oil">Oil hrs</span><input id="oil" type="number" inputmode="numeric"></label>
     </div>
-    <label class="fld"><span data-i18n="lbl_oil">Oil hrs</span><input id="oil" type="number" inputmode="numeric"></label>
-    <label class="fld"><span data-i18n="lbl_comment">Comment</span>
+    <label class="fld"><span data-i18n="lbl_comment">Comment / defect</span>
       <div class="withbtn">
         <textarea id="comment" rows="2" data-i18n-ph="ph_comment" placeholder="notes…"></textarea>
         <button type="button" class="iconbtn" id="micBtn" title="Dictate">🎤</button>
       </div>
     </label>
-    <div class="hint" data-i18n="hint_fields">Fields save to the current position automatically. Switch positions with the 4C–4F tabs.</div>
+    <div class="hint" data-i18n="hint_fields">Fields save automatically. Switch items with the buttons above.</div>
   </div>
 
-  <div id="editBanner" class="editbar hidden"><span id="editBannerText"></span>
-    <button type="button" id="cancelEdit" class="linkbtn"></button></div>
-  <button class="btn primary" id="saveBtn" style="margin-bottom:16px">✔ Save this truck to queue</button>
+  <div id="editBanner" class="editbar hidden"><span id="editBannerText"></span><button type="button" id="cancelEdit" class="linkbtn"></button></div>
+  <button class="btn primary" id="saveBtn" style="margin-bottom:16px">✔ Save</button>
 
   <div class="card">
     <h2><span data-i18n="sec_onphone">On this phone</span> <span class="count-badge" id="qCount">0</span></h2>
     <div class="pending" id="pending"></div>
   </div>
 
-  <div class="ver">build v6 · 2026-07-30 · Edit enabled</div>
+  <div class="ver">build v7 · 2026-07-30 · MP / FC / Inspection</div>
 </main>
 
 <div class="bottombar">
@@ -195,8 +173,7 @@
 </div>
 
 <div id="scanOverlay" class="scan-ov hidden">
-  <video id="scanVideo" playsinline muted></video>
-  <div class="scan-frame"></div>
+  <video id="scanVideo" playsinline muted></video><div class="scan-frame"></div>
   <div class="scan-hint" data-i18n="scan_hint">Point at the unit's QR code</div>
   <button class="btn ghost" id="scanCancel" data-i18n="btn_cancel">Cancel</button>
 </div>
@@ -207,60 +184,100 @@
 
 <script src="jsQR.js"></script>
 <script>
-/* ===================== config ===================== */
-const INSPECTION_TYPE = "MP";   // file-name suffix at the END. Magnetic Plug = "MP". Filter Cut app = "FC".
-const POS_KEYS = ["4C","4D","4E","4F"];
+/* ============================================================================
+   INSPECTION TYPES  —  EDIT here to change components / filters / positions.
+   Each item: { k: short code used in the file name, en/ru: display label }.
+   Recommended component set for an NHL TR60 rigid haul truck (CM walk-around).
+   ========================================================================== */
+const TYPES = {
+  MP: { suffix:"MP", showReadings:true,
+    title:{en:"Plug position", ru:"Позиция пробки"},
+    items:[
+      {k:"4C", en:"Left Rear Final Drive",  ru:"Левый задний бортовой редуктор"},
+      {k:"4D", en:"Right Rear Final Drive", ru:"Правый задний бортовой редуктор"},
+      {k:"4E", en:"Left Rear Final Drive",  ru:"Левый задний бортовой редуктор"},
+      {k:"4F", en:"Right Rear Final Drive", ru:"Правый задний бортовой редуктор"},
+    ]},
+  FC: { suffix:"FC", showReadings:true,
+    title:{en:"Filter", ru:"Фильтр"},
+    items:[
+      {k:"ENG",   en:"Engine Oil Filter",     ru:"Фильтр моторного масла"},
+      {k:"TRANS", en:"Transmission Filter",   ru:"Фильтр трансмиссии"},
+      {k:"HYD",   en:"Hydraulic Filter",      ru:"Гидравлический фильтр"},
+      {k:"DIFF",  en:"Differential Filter",   ru:"Фильтр дифференциала"},
+      {k:"FDR",   en:"Final Drive Filter",    ru:"Фильтр бортового редуктора"},
+      {k:"FUEL",  en:"Fuel Filter",           ru:"Топливный фильтр"},
+    ]},
+  INSP: { suffix:"INSP", showReadings:false,
+    title:{en:"Component / System", ru:"Узел / Система"},
+    items:[
+      {k:"ENG",   en:"Engine",                ru:"Двигатель"},
+      {k:"COOL",  en:"Cooling System",        ru:"Система охлаждения"},
+      {k:"AIR",   en:"Air Intake & Exhaust",  ru:"Впуск и выпуск"},
+      {k:"FUEL",  en:"Fuel System",           ru:"Топливная система"},
+      {k:"TRANS", en:"Transmission",          ru:"Трансмиссия"},
+      {k:"DRV",   en:"Driveline",             ru:"Карданная передача"},
+      {k:"DIFF",  en:"Differential",          ru:"Дифференциал"},
+      {k:"FDR",   en:"Final Drives",          ru:"Бортовые редукторы"},
+      {k:"HYD",   en:"Hydraulic System",      ru:"Гидросистема"},
+      {k:"HOIST", en:"Hoist & Body",          ru:"Подъём и кузов"},
+      {k:"STEER", en:"Steering",              ru:"Рулевое управление"},
+      {k:"BRK",   en:"Brakes & Retarder",     ru:"Тормоза и ретардер"},
+      {k:"SUSP",  en:"Suspension",            ru:"Подвеска"},
+      {k:"FRAME", en:"Frame & Chassis",       ru:"Рама и шасси"},
+      {k:"TYRE",  en:"Tyres & Rims",          ru:"Шины и диски"},
+      {k:"ELEC",  en:"Electrical",            ru:"Электрооборудование"},
+      {k:"CAB",   en:"Cab & Controls",        ru:"Кабина и управление"},
+      {k:"LUBE",  en:"Auto-Lube",             ru:"Система смазки"},
+      {k:"FIRE",  en:"Fire & Safety",         ru:"Пожаробезопасность"},
+    ]},
+};
+const TYPE_ORDER = ["MP","FC","INSP"];
 const $ = (id)=>document.getElementById(id);
 
 /* ===================== i18n ===================== */
 const I18N = {
-  en:{
-    app_title:"Plug Capture", net_online:"online", net_offline:"offline — OK",
-    sec_inspection:"Inspection", lbl_truck:"Truck / Unit", ph_truck:"e.g. TK158", btn_scan:"Scan",
+  en:{ app_title:"Truck Inspection", net_online:"online", net_offline:"offline — OK",
+    sec_inspection:"Inspection", lbl_type:"Inspection type", lbl_truck:"Truck / Unit", ph_truck:"e.g. TK158", btn_scan:"Scan",
     lbl_date:"Date", lbl_smu:"SMU / machine hrs", ph_smu:"e.g. 6018",
-    sec_position:"Plug position", btn_take:"Take photo", btn_retake:"Retake",
-    shot_placeholder:"No photo yet — tap “Take photo”.",
-    lbl_grade:"Grade / condition", lbl_particle:"Particle count", lbl_comp:"Component hrs",
-    lbl_oil:"Oil hrs", lbl_comment:"Comment", ph_comment:"notes…",
-    hint_fields:"Fields save to the current position automatically. Switch positions with the 4C–4F tabs.",
-    btn_save:"✔ Save this truck to queue", btn_update:"✔ Update this truck",
-    editing_hint:"Editing {x} — change fields, then Update.",
+    btn_take:"Take photo", btn_retake:"Retake", shot_placeholder:"No photo yet — tap “Take photo”.",
+    lbl_grade:"Grade / condition", lbl_particle:"Particle count", lbl_comp:"Component hrs", lbl_oil:"Oil hrs",
+    lbl_comment:"Comment / defect", ph_comment:"notes…",
+    hint_fields:"Fields save automatically. Switch items with the buttons above.",
+    btn_save:"✔ Save", btn_update:"✔ Update", editing_hint:"Editing {x} — change fields, then Update.",
     sec_onphone:"On this phone", empty_none:"Nothing captured yet.",
     btn_share:"Share", btn_export:"Export ZIP", scan_hint:"Point at the unit's QR code", btn_cancel:"Cancel", dlg_ok:"OK",
-    pos_count:"position(s)", photo_count:"photo(s)",
-    posL:{ "4C":"Left Rear Final Drive","4D":"Right Rear Final Drive","4E":"Left Rear Final Drive","4F":"Right Rear Final Drive" },
+    pos_count:"item(s)", photo_count:"photo(s)",
+    type_MP:"Magnetic Plug", type_FC:"Filter Cut", type_INSP:"Inspection",
     m_need_truck:["Add the truck","Enter the truck / unit number (e.g. TK158) first."],
     m_nothing_save:["Nothing to save","Take at least one photo or set a grade."],
-    m_saved:["Saved ✔","{x} saved on this phone. Capture the next truck, then Share/Export when you have internet."],
-    m_nothing_export:["Nothing to export","Capture at least one truck first."],
-    m_exported:["Exported ✔","A ZIP with correctly-named photos + entries.json was downloaded. Put the photos in your N: drive folder and Import entries.json into the dashboard."],
-    m_nothing_share:["Nothing to share","Capture at least one truck first."],
+    m_saved:["Saved ✔","{x} saved on this phone. Capture the next one, then Share/Export when you have internet."],
+    m_nothing_export:["Nothing to export","Capture at least one item first."],
+    m_exported:["Exported ✔","A ZIP with correctly-named photos + entries.json was downloaded. Put the photos in your N: drive folder."],
+    m_nothing_share:["Nothing to share","Capture at least one item first."],
     m_share_na:["Sharing not available","Your phone can't share files from the browser. Use “Export ZIP” instead."],
     m_scan_wait:["Scanner not ready","Open the app once with internet so the scanner loads, then try again."],
     m_no_qr:["No QR found","Couldn't read a QR in that photo. Try again — closer and well-lit."],
     m_dictation:["Dictation","Tap the comment box, then tap the 🎤 microphone key on your phone's keyboard to dictate."],
   },
-  ru:{
-    app_title:"Съёмка пробок", net_online:"онлайн", net_offline:"офлайн — ОК",
-    sec_inspection:"Осмотр", lbl_truck:"Трак / Ед.", ph_truck:"напр. TK158", btn_scan:"Скан",
+  ru:{ app_title:"Осмотр самосвала", net_online:"онлайн", net_offline:"офлайн — ОК",
+    sec_inspection:"Осмотр", lbl_type:"Тип осмотра", lbl_truck:"Трак / Ед.", ph_truck:"напр. TK158", btn_scan:"Скан",
     lbl_date:"Дата", lbl_smu:"Моточасы (SMU)", ph_smu:"напр. 6018",
-    sec_position:"Позиция пробки", btn_take:"Сделать фото", btn_retake:"Переснять",
-    shot_placeholder:"Нет фото — нажмите «Сделать фото».",
-    lbl_grade:"Степень / состояние", lbl_particle:"Количество частиц", lbl_comp:"Наработка компонента",
-    lbl_oil:"Наработка масла", lbl_comment:"Комментарий", ph_comment:"заметки…",
-    hint_fields:"Поля сохраняются автоматически. Переключайте позиции вкладками 4C–4F.",
-    btn_save:"✔ Сохранить трак в очередь", btn_update:"✔ Обновить трак",
-    editing_hint:"Редактирование {x} — измените поля и нажмите «Обновить».",
+    btn_take:"Сделать фото", btn_retake:"Переснять", shot_placeholder:"Нет фото — нажмите «Сделать фото».",
+    lbl_grade:"Степень / состояние", lbl_particle:"Количество частиц", lbl_comp:"Наработка компонента", lbl_oil:"Наработка масла",
+    lbl_comment:"Комментарий / дефект", ph_comment:"заметки…",
+    hint_fields:"Поля сохраняются автоматически. Переключайте пункты кнопками выше.",
+    btn_save:"✔ Сохранить", btn_update:"✔ Обновить", editing_hint:"Редактирование {x} — измените поля и нажмите «Обновить».",
     sec_onphone:"На этом телефоне", empty_none:"Пока ничего не снято.",
     btn_share:"Поделиться", btn_export:"Экспорт ZIP", scan_hint:"Наведите на QR-код трака", btn_cancel:"Отмена", dlg_ok:"ОК",
-    pos_count:"позиц.", photo_count:"фото",
-    posL:{ "4C":"Левый задний бортовой редуктор","4D":"Правый задний бортовой редуктор","4E":"Левый задний бортовой редуктор","4F":"Правый задний бортовой редуктор" },
+    pos_count:"поз.", photo_count:"фото",
+    type_MP:"Магнитная пробка", type_FC:"Разрез фильтра", type_INSP:"Осмотр",
     m_need_truck:["Укажите трак","Сначала введите номер трака (напр. TK158)."],
     m_nothing_save:["Нечего сохранять","Сделайте хотя бы одно фото или укажите степень."],
-    m_saved:["Сохранено ✔","{x} сохранён на телефоне. Снимайте следующий трак, затем «Поделиться»/«Экспорт» при интернете."],
-    m_nothing_export:["Нечего экспортировать","Сначала снимите хотя бы один трак."],
-    m_exported:["Экспортировано ✔","Скачан ZIP с правильно названными фото + entries.json. Положите фото в папку на N: и импортируйте entries.json в дашборд."],
-    m_nothing_share:["Нечем делиться","Сначала снимите хотя бы один трак."],
+    m_saved:["Сохранено ✔","{x} сохранён на телефоне. Снимайте следующий, затем «Поделиться»/«Экспорт» при интернете."],
+    m_nothing_export:["Нечего экспортировать","Сначала снимите хотя бы один пункт."],
+    m_exported:["Экспортировано ✔","Скачан ZIP с правильно названными фото + entries.json. Положите фото в папку на N:."],
+    m_nothing_share:["Нечем делиться","Сначала снимите хотя бы один пункт."],
     m_share_na:["Общий доступ недоступен","Телефон не может делиться файлами из браузера. Используйте «Экспорт ZIP»."],
     m_scan_wait:["Сканер не готов","Откройте приложение один раз с интернетом, чтобы загрузился сканер, затем повторите."],
     m_no_qr:["QR не найден","Не удалось распознать QR на фото. Попробуйте ближе и при хорошем свете."],
@@ -269,85 +286,75 @@ const I18N = {
 };
 let lang = localStorage.getItem("lang") || "en";
 function t(k){ return (I18N[lang] && I18N[lang][k]) || I18N.en[k] || k; }
-function applyLang(){
-  document.documentElement.lang = lang;
-  document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t(el.dataset.i18n));
-  document.querySelectorAll("[data-i18n-ph]").forEach(el => el.placeholder = t(el.dataset.i18nPh));
-  $("posLabel").textContent = `${curPos} — ${t("posL")[curPos]}`;
-  updateSaveLabel();
-  if(editing) $("editBannerText").textContent = t("editing_hint").replace("{x}", editing.equip);
-  $("cancelEdit").textContent = t("btn_cancel");
-  setNet(); renderPending();
-  document.querySelectorAll(".lang button").forEach(b=>b.classList.toggle("on", b.dataset.lang===lang));
-}
-document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target.closest("button[data-lang]"); if(!b) return;
-  lang=b.dataset.lang; localStorage.setItem("lang",lang); applyLang(); });
 
+/* ===================== state ===================== */
+let type = localStorage.getItem("insp_type") || "MP";
+if(!TYPES[type]) type="MP";
+let draft={positions:{}}; let curItem=TYPES[type].items[0].k;
+let editing=null;
 const dlg=(pair)=>{ $("dlgTitle").textContent=pair[0]; $("dlgMsg").textContent=pair[1]; $("dlg").showModal(); };
 $("dlgOk").onclick=()=>$("dlg").close();
+function items(){ return TYPES[type].items; }
+function itemLabel(k){ const it=items().find(i=>i.k===k); return it?(it[lang]||it.en):k; }
+function curP(){ return (draft.positions[curItem] ||= {}); }
 
 /* ===================== IndexedDB ===================== */
 const DB_NAME="plug_capture", STORE="inspections";
 function idb(){ return new Promise((res,rej)=>{ const r=indexedDB.open(DB_NAME,1);
   r.onupgradeneeded=()=>{ if(!r.result.objectStoreNames.contains(STORE)) r.result.createObjectStore(STORE,{keyPath:"id"}); };
   r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error); }); }
-async function dbPut(rec){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite");
-  t.objectStore(STORE).put(rec); t.oncomplete=res; t.onerror=()=>rej(t.error); }); }
-async function dbAll(){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readonly");
-  const rq=t.objectStore(STORE).getAll(); rq.onsuccess=()=>res(rq.result||[]); rq.onerror=()=>rej(rq.error); }); }
-async function dbDel(id){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite");
-  t.objectStore(STORE).delete(id); t.oncomplete=res; t.onerror=()=>rej(t.error); }); }
+async function dbPut(rec){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); t.objectStore(STORE).put(rec); t.oncomplete=res; t.onerror=()=>rej(t.error); }); }
+async function dbAll(){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readonly"); const rq=t.objectStore(STORE).getAll(); rq.onsuccess=()=>res(rq.result||[]); rq.onerror=()=>rej(rq.error); }); }
+async function dbDel(id){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); t.objectStore(STORE).delete(id); t.oncomplete=res; t.onerror=()=>rej(t.error); }); }
 
-/* ===================== working draft ===================== */
-let draft={positions:{}}; let curPos="4C";
-function curP(){ return (draft.positions[curPos] ||= {}); }
+/* ===================== type + component chips ===================== */
+function fillTypeSel(){ $("typeSel").innerHTML=TYPE_ORDER.map(k=>`<option value="${k}">${t("type_"+k)}</option>`).join(""); $("typeSel").value=type; }
+$("typeSel") && ($("typeSel").onchange=(e)=>{ type=e.target.value; localStorage.setItem("insp_type",type);
+  draft={positions:{}}; editing=null; curItem=items()[0].k; applyType(); setEditing(null); });
+function renderChips(){ $("posnav").innerHTML=items().map(it=>`<button data-pos="${it.k}"><span>${it.k}</span><span class="dot"></span></button>`).join(""); refreshChips(); }
+function refreshChips(){ $("posnav").querySelectorAll("button").forEach(b=>{
+  b.classList.toggle("on", b.dataset.pos===curItem); b.classList.toggle("has", !!draft.positions[b.dataset.pos]); }); }
+$("posnav").addEventListener("click",(e)=>{ const b=e.target.closest("button[data-pos]"); if(!b) return;
+  saveCur(); curItem=b.dataset.pos; refreshChips(); loadPos(); });
+function applyType(){ $("secPosTitle").textContent=TYPES[type].title[lang]||TYPES[type].title.en;
+  $("mpFields").classList.toggle("hidden", !TYPES[type].showReadings);
+  fillTypeSel(); renderChips(); loadPos(); }
+
+/* ===================== camera ===================== */
+$("takeBtn").onclick=()=>$("camera").click(); $("retakeBtn").onclick=()=>$("camera").click();
+$("camera").onchange=(e)=>{ const f=e.target.files[0]; if(!f) return; curP().photoBlob=f; showShot(URL.createObjectURL(f)); refreshChips(); e.target.value=""; };
+function showShot(url){ $("shot").querySelector("img")?.remove();
+  if(url){ const img=new Image(); img.src=url; $("shot").insertBefore(img,$("retakeBtn")); $("shotPlaceholder").classList.add("hidden"); $("retakeBtn").classList.remove("hidden"); }
+  else { $("shotPlaceholder").classList.remove("hidden"); $("retakeBtn").classList.add("hidden"); } }
+
+/* ===================== grade + fields ===================== */
+$("gradeSeg").addEventListener("click",(e)=>{ const b=e.target.closest("button[data-g]"); if(!b) return;
+  const p=curP(); p.grade=(p.grade===b.dataset.g)?null:b.dataset.g; renderGrade(); refreshChips(); });
+function renderGrade(){ const g=curP().grade; $("gradeSeg").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.g===g)); }
+["particle","comp","oil","comment"].forEach(id=>$(id).addEventListener("input",()=>{ saveCur(); refreshChips(); }));
+function saveCur(){ const p=curP(); p.particle=$("particle").value.trim(); p.comp=$("comp").value.trim(); p.oil=$("oil").value.trim(); p.comment=$("comment").value.trim();
+  if(!p.grade&&!p.photoBlob&&!p.particle&&!p.comp&&!p.oil&&!p.comment) delete draft.positions[curItem]; }
+function loadPos(){ $("posLabel").textContent=`${curItem} — ${itemLabel(curItem)}`;
+  const p=draft.positions[curItem]||{}; $("particle").value=p.particle||""; $("comp").value=p.comp||""; $("oil").value=p.oil||""; $("comment").value=p.comment||"";
+  renderGrade(); showShot(p.photoBlob?URL.createObjectURL(p.photoBlob):null); }
+
+/* ===================== date + edit ===================== */
 function todayISO(){ const d=new Date(),p=(n)=>String(n).padStart(2,"0"); return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`; }
 $("date").value=todayISO();
-
-/* ---- edit an already-saved truck (instead of only delete) ---- */
-let editing=null;   // the queued record being edited, or null
 function updateSaveLabel(){ $("saveBtn").textContent = editing ? t("btn_update") : t("btn_save"); }
 function setEditing(rec){ editing=rec||null;
   if(editing){ $("editBanner").classList.remove("hidden"); $("editBannerText").textContent=t("editing_hint").replace("{x}",editing.equip); }
   else $("editBanner").classList.add("hidden");
   $("cancelEdit").textContent=t("btn_cancel"); updateSaveLabel(); }
-function resetForm(){ draft={positions:{}}; curPos="4C";
-  $("posnav").querySelectorAll("button").forEach((x,i)=>{x.classList.toggle("on",i===0);x.classList.remove("has");});
-  $("equip").value=""; $("smu").value=""; $("date").value=todayISO(); loadPos(); setEditing(null); }
-function editRecord(rec){ draft={positions:{}};
-  for(const [pos,pp] of Object.entries(rec.positions))
-    draft.positions[pos]={grade:pp.grade,particle:pp.particle,comp:pp.comp,oil:pp.oil,comment:pp.comment,photoBlob:pp.photoBlob};
+function resetForm(){ draft={positions:{}}; curItem=items()[0].k; $("equip").value=""; $("smu").value=""; $("date").value=todayISO();
+  refreshChips(); loadPos(); setEditing(null); }
+function editRecord(rec){ if(rec.type && TYPES[rec.type]){ type=rec.type; localStorage.setItem("insp_type",type); }
+  draft={positions:{}};
+  for(const [k,pp] of Object.entries(rec.positions)) draft.positions[k]={grade:pp.grade,particle:pp.particle,comp:pp.comp,oil:pp.oil,comment:pp.comment,photoBlob:pp.photoBlob};
   $("equip").value=rec.equip; $("date").value=rec.date; $("smu").value=rec.smu||"";
-  curPos=Object.keys(draft.positions)[0]||"4C";
-  $("posnav").querySelectorAll("button").forEach(x=>{ x.classList.toggle("on",x.dataset.pos===curPos); x.classList.toggle("has",!!draft.positions[x.dataset.pos]); });
-  loadPos(); setEditing(rec); window.scrollTo({top:0,behavior:"smooth"}); }
+  curItem=Object.keys(draft.positions)[0]||items()[0].k;
+  applyType(); loadPos(); setEditing(rec); window.scrollTo({top:0,behavior:"smooth"}); }
 $("cancelEdit").onclick=()=>resetForm();
-
-/* ===================== camera (photo) ===================== */
-$("takeBtn").onclick=()=>$("camera").click();
-$("retakeBtn").onclick=()=>$("camera").click();
-$("camera").onchange=(e)=>{ const f=e.target.files[0]; if(!f) return; curP().photoBlob=f; showShot(URL.createObjectURL(f)); markPos(); e.target.value=""; };
-function showShot(url){ $("shot").querySelector("img")?.remove();
-  if(url){ const img=new Image(); img.src=url; $("shot").insertBefore(img,$("retakeBtn"));
-    $("shotPlaceholder").classList.add("hidden"); $("retakeBtn").classList.remove("hidden"); }
-  else { $("shotPlaceholder").classList.remove("hidden"); $("retakeBtn").classList.add("hidden"); } }
-
-/* ===================== position tabs / grade / fields ===================== */
-$("posnav").addEventListener("click",(e)=>{ const b=e.target.closest("button[data-pos]"); if(!b) return;
-  saveCur(); curPos=b.dataset.pos;
-  $("posnav").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));
-  $("posLabel").textContent=`${curPos} — ${t("posL")[curPos]}`; loadPos(); });
-function markPos(){ $("posnav").querySelector(`button[data-pos="${curPos}"]`).classList.add("has"); }
-$("gradeSeg").addEventListener("click",(e)=>{ const b=e.target.closest("button[data-g]"); if(!b) return;
-  const p=curP(); p.grade=(p.grade===b.dataset.g)?null:b.dataset.g; renderGrade(); markPos(); });
-function renderGrade(){ const g=curP().grade; $("gradeSeg").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.g===g)); }
-["particle","comp","oil","comment"].forEach(id=>$(id).addEventListener("input",()=>{ saveCur(); markPos(); }));
-function saveCur(){ const p=curP(); p.particle=$("particle").value.trim(); p.comp=$("comp").value.trim();
-  p.oil=$("oil").value.trim(); p.comment=$("comment").value.trim();
-  if(!p.grade&&!p.photoBlob&&!p.particle&&!p.comp&&!p.oil&&!p.comment) delete draft.positions[curPos]; }
-function loadPos(){ $("posLabel").textContent=`${curPos} — ${t("posL")[curPos]}`;
-  const p=draft.positions[curPos]||{}; $("particle").value=p.particle||""; $("comp").value=p.comp||"";
-  $("oil").value=p.oil||""; $("comment").value=p.comment||""; renderGrade(); showShot(p.photoBlob?URL.createObjectURL(p.photoBlob):null); }
 
 /* ===================== save to queue ===================== */
 $("saveBtn").onclick=async ()=>{
@@ -355,19 +362,17 @@ $("saveBtn").onclick=async ()=>{
   const equip=$("equip").value.trim().toUpperCase().replace(/\s+/g,""); const date=$("date").value;
   if(!equip){ dlg(t("m_need_truck")); return; }
   if(!Object.keys(draft.positions).length){ dlg(t("m_nothing_save")); return; }
-  const id = editing ? editing.id : `${equip}__${date}__${Date.now()}`;
+  const id = editing ? editing.id : `${type}__${equip}__${date}__${Date.now()}`;
   const created = editing ? (editing.created||new Date().toISOString()) : new Date().toISOString();
-  const rec={ id, equip, date, smu:$("smu").value.trim(), positions:{}, created };
-  for(const [pos,p] of Object.entries(draft.positions))
-    rec.positions[pos]={ grade:p.grade||null, particle:p.particle||"", comp:p.comp||"", oil:p.oil||"", comment:p.comment||"", photoBlob:p.photoBlob||null };
-  await dbPut(rec); rememberEquip(equip);
-  resetForm(); renderPending();
+  const rec={ id, type, equip, date, smu:$("smu").value.trim(), positions:{}, created };
+  for(const [k,p] of Object.entries(draft.positions))
+    rec.positions[k]={ grade:p.grade||null, particle:p.particle||"", comp:p.comp||"", oil:p.oil||"", comment:p.comment||"", photoBlob:p.photoBlob||null };
+  await dbPut(rec); rememberEquip(equip); resetForm(); renderPending();
   const m=t("m_saved"); dlg([m[0], m[1].replace("{x}",equip)]);
 };
 
-/* ===================== pending list ===================== */
-function rememberEquip(e){ const s=new Set(JSON.parse(localStorage.getItem("equipHist")||"[]")); s.add(e);
-  const arr=[...s].sort(); localStorage.setItem("equipHist",JSON.stringify(arr)); fillEquipList(arr); }
+/* ===================== pending ===================== */
+function rememberEquip(e){ const s=new Set(JSON.parse(localStorage.getItem("equipHist")||"[]")); s.add(e); const arr=[...s].sort(); localStorage.setItem("equipHist",JSON.stringify(arr)); fillEquipList(arr); }
 function fillEquipList(arr){ $("equipList").innerHTML=arr.map(x=>`<option value="${x}">`).join(""); }
 async function renderPending(){
   const all=(await dbAll()).sort((a,b)=>b.created.localeCompare(a.created));
@@ -376,54 +381,45 @@ async function renderPending(){
   $("pending").innerHTML="";
   for(const rec of all){
     const first=Object.values(rec.positions).find(p=>p.photoBlob);
-    const nPhotos=Object.values(rec.positions).filter(p=>p.photoBlob).length;
-    const nPos=Object.keys(rec.positions).length;
+    const nPhotos=Object.values(rec.positions).filter(p=>p.photoBlob).length; const nPos=Object.keys(rec.positions).length;
     const row=document.createElement("div"); row.className="pitem";
     const thumb=first?`<img class="thumb" src="${URL.createObjectURL(first.photoBlob)}">`:`<div class="thumb"></div>`;
-    row.innerHTML=`${thumb}<div class="meta"><div class="a">${rec.equip} · ${rec.date}</div>
+    const typeTag=(rec.type||"MP");
+    row.innerHTML=`${thumb}<div class="meta"><div class="a"><span class="tag">${typeTag}</span>${rec.equip} · ${rec.date}</div>
       <div class="b">${nPos} ${t("pos_count")} · ${nPhotos} ${t("photo_count")}${rec.smu?` · SMU ${rec.smu}`:""}</div></div>
       <button class="edit" title="Edit">✎</button><button class="del" title="Delete">🗑</button>`;
     const openEdit=()=>editRecord(rec);
-    row.querySelector(".edit").onclick=(ev)=>{ ev.stopPropagation(); openEdit(); };
-    row.querySelector(".meta").onclick=openEdit;
-    row.querySelector(".thumb").onclick=openEdit;
-    row.querySelector(".del").onclick=async (ev)=>{ ev.stopPropagation(); await dbDel(rec.id);
-      if(editing && editing.id===rec.id) setEditing(null); renderPending(); };
+    row.querySelector(".edit").onclick=(ev)=>{ev.stopPropagation();openEdit();};
+    row.querySelector(".meta").onclick=openEdit; row.querySelector(".thumb").onclick=openEdit;
+    row.querySelector(".del").onclick=async (ev)=>{ ev.stopPropagation(); await dbDel(rec.id); if(editing&&editing.id===rec.id) setEditing(null); renderPending(); };
     $("pending").appendChild(row);
   }
 }
 
 /* ===================== naming + export ===================== */
 function ddmmyyyy(iso){ const m=String(iso).match(/(\d{4})-(\d{2})-(\d{2})/); return m?`${m[3]}.${m[2]}.${m[1]}`:iso; }
-function fileName(equip,pos,date,ext){ return `${equip}_${pos}_${ddmmyyyy(date)}_${INSPECTION_TYPE}.${ext}`; }
+function fileName(equip,item,date,ext,suffix){ return `${equip}_${item}_${ddmmyyyy(date)}_${suffix}.${ext}`; }
 function extOf(blob){ const t=(blob.type||"").toLowerCase(); if(t.includes("png"))return"png"; if(t.includes("webp"))return"webp"; return "jpg"; }
 async function buildPackage(){
   const all=await dbAll(); const files=[]; const grades={}, notes={};
-  for(const rec of all){
+  for(const rec of all){ const suffix=(TYPES[rec.type]&&TYPES[rec.type].suffix)||rec.type||"MP";
     if(rec.smu) (notes[`${rec.equip}|${rec.date}`] ||= {}).smu=rec.smu;
-    for(const [pos,p] of Object.entries(rec.positions)){
-      if(p.photoBlob){ const ext=extOf(p.photoBlob);
-        files.push({name:fileName(rec.equip,pos,rec.date,ext), data:new Uint8Array(await p.photoBlob.arrayBuffer())}); }
-      if(p.grade) grades[`${rec.equip}|${rec.date}|${pos}`]=p.grade;
-      const nk=`${rec.equip}|${rec.date}|${pos}`; const n={};
-      if(p.particle)n.particleCount=p.particle; if(p.comp)n.componentHours=p.comp;
-      if(p.oil)n.oilHours=p.oil; if(p.comment)n.comment=p.comment;
+    for(const [k,p] of Object.entries(rec.positions)){
+      if(p.photoBlob){ const ext=extOf(p.photoBlob); files.push({name:fileName(rec.equip,k,rec.date,ext,suffix), data:new Uint8Array(await p.photoBlob.arrayBuffer())}); }
+      if(p.grade) grades[`${rec.equip}|${rec.date}|${k}`]=p.grade;
+      const nk=`${rec.equip}|${rec.date}|${k}`; const n={};
+      if(p.particle)n.particleCount=p.particle; if(p.comp)n.componentHours=p.comp; if(p.oil)n.oilHours=p.oil; if(p.comment)n.comment=p.comment;
       if(Object.keys(n).length) notes[nk]={...(notes[nk]||{}),...n};
-    }
-  }
+    } }
   files.push({name:"entries.json", data:new TextEncoder().encode(JSON.stringify({type:"cm-magplug-entries",version:1,grades,notes},null,2))});
   return {files, count:all.length};
 }
-$("exportBtn").onclick=async ()=>{ const {files,count}=await buildPackage();
-  if(!count){ dlg(t("m_nothing_export")); return; }
+$("exportBtn").onclick=async ()=>{ const {files,count}=await buildPackage(); if(!count){ dlg(t("m_nothing_export")); return; }
   const url=URL.createObjectURL(new Blob([makeZip(files)],{type:"application/zip"}));
-  const a=document.createElement("a"); a.href=url; a.download=`plug_inspection_${$("date").value||"export"}.zip`; a.click(); URL.revokeObjectURL(url);
-  dlg(t("m_exported")); };
-$("shareBtn").onclick=async ()=>{ const {files,count}=await buildPackage();
-  if(!count){ dlg(t("m_nothing_share")); return; }
-  const zf=new File([makeZip(files)],`plug_inspection_${$("date").value||"export"}.zip`,{type:"application/zip"});
-  if(navigator.canShare && navigator.canShare({files:[zf]})){ try{ await navigator.share({files:[zf],title:"Plug inspection"}); }catch(e){} }
-  else dlg(t("m_share_na")); };
+  const a=document.createElement("a"); a.href=url; a.download=`truck_inspection_${$("date").value||"export"}.zip`; a.click(); URL.revokeObjectURL(url); dlg(t("m_exported")); };
+$("shareBtn").onclick=async ()=>{ const {files,count}=await buildPackage(); if(!count){ dlg(t("m_nothing_share")); return; }
+  const zf=new File([makeZip(files)],`truck_inspection_${$("date").value||"export"}.zip`,{type:"application/zip"});
+  if(navigator.canShare && navigator.canShare({files:[zf]})){ try{ await navigator.share({files:[zf],title:"Truck inspection"}); }catch(e){} } else dlg(t("m_share_na")); };
 
 /* ===================== minimal ZIP (store) ===================== */
 function makeZip(files){ const enc=new TextEncoder(); const chunks=[],central=[]; let offset=0;
@@ -440,27 +436,17 @@ function makeZip(files){ const enc=new TextEncoder(); const chunks=[],central=[]
 const CRC_TABLE=(()=>{ const t=new Uint32Array(256); for(let n=0;n<256;n++){ let c=n; for(let k=0;k<8;k++) c=c&1?0xEDB88320^(c>>>1):c>>>1; t[n]=c>>>0; } return t; })();
 function crc32(buf){ let c=0xFFFFFFFF; for(let i=0;i<buf.length;i++) c=CRC_TABLE[(c^buf[i])&0xFF]^(c>>>8); return (c^0xFFFFFFFF)>>>0; }
 
-/* ===================== QR scan (unit number) ===================== */
-const qrCanvas=$("qrCanvas"); const qctx=qrCanvas.getContext("2d",{willReadFrequently:true});
-let scanStream=null, scanRAF=null;
-function extractUnit(text){ if(!text) return null; const m=String(text).match(/([A-Za-z]{1,4}\s?\d+)/);
-  return m ? m[1].toUpperCase().replace(/\s+/g,"") : String(text).trim().toUpperCase(); }
-async function startScan(){
-  if(!window.jsQR){ dlg(t("m_scan_wait")); return; }
-  try{ scanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:"environment"}}}); }
-  catch(e){ $("qrPhoto").click(); return; }   // fallback: photograph the QR
+/* ===================== QR scan ===================== */
+const qrCanvas=$("qrCanvas"); const qctx=qrCanvas.getContext("2d",{willReadFrequently:true}); let scanStream=null, scanRAF=null;
+function extractUnit(text){ if(!text) return null; const m=String(text).match(/([A-Za-z]{1,4}\s?\d+)/); return m?m[1].toUpperCase().replace(/\s+/g,""):String(text).trim().toUpperCase(); }
+async function startScan(){ if(!window.jsQR){ dlg(t("m_scan_wait")); return; }
+  try{ scanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:"environment"}}}); }catch(e){ $("qrPhoto").click(); return; }
   const v=$("scanVideo"); v.srcObject=scanStream; await v.play(); $("scanOverlay").classList.remove("hidden");
-  const tick=()=>{ if(v.readyState>=2){ qrCanvas.width=v.videoWidth; qrCanvas.height=v.videoHeight;
-      qctx.drawImage(v,0,0,qrCanvas.width,qrCanvas.height);
-      const img=qctx.getImageData(0,0,qrCanvas.width,qrCanvas.height);
-      const code=window.jsQR(img.data,img.width,img.height,{inversionAttempts:"dontInvert"});
+  const tick=()=>{ if(v.readyState>=2){ qrCanvas.width=v.videoWidth; qrCanvas.height=v.videoHeight; qctx.drawImage(v,0,0,qrCanvas.width,qrCanvas.height);
+      const img=qctx.getImageData(0,0,qrCanvas.width,qrCanvas.height); const code=window.jsQR(img.data,img.width,img.height,{inversionAttempts:"dontInvert"});
       if(code&&code.data){ const u=extractUnit(code.data); if(u){ $("equip").value=u; stopScan(); return; } } }
-    scanRAF=requestAnimationFrame(tick); };
-  scanRAF=requestAnimationFrame(tick);
-}
-function stopScan(){ if(scanRAF)cancelAnimationFrame(scanRAF); scanRAF=null;
-  if(scanStream){ scanStream.getTracks().forEach(t=>t.stop()); scanStream=null; }
-  $("scanVideo").srcObject=null; $("scanOverlay").classList.add("hidden"); }
+    scanRAF=requestAnimationFrame(tick); }; scanRAF=requestAnimationFrame(tick); }
+function stopScan(){ if(scanRAF)cancelAnimationFrame(scanRAF); scanRAF=null; if(scanStream){ scanStream.getTracks().forEach(t=>t.stop()); scanStream=null; } $("scanVideo").srcObject=null; $("scanOverlay").classList.add("hidden"); }
 $("scanBtn").onclick=startScan; $("scanCancel").onclick=stopScan;
 $("qrPhoto").onchange=async (e)=>{ const f=e.target.files[0]; e.target.value=""; if(!f) return;
   const img=await new Promise((res,rej)=>{ const i=new Image(); i.onload=()=>res(i); i.onerror=rej; i.src=URL.createObjectURL(f); });
@@ -472,27 +458,33 @@ $("qrPhoto").onchange=async (e)=>{ const f=e.target.files[0]; e.target.value="";
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
 if(SR){ let rec=null, listening=false;
   $("micBtn").onclick=()=>{ if(listening){ rec&&rec.stop(); return; }
-    rec=new SR(); rec.lang = lang==="ru"?"ru-RU":"en-US"; rec.interimResults=false; rec.continuous=false;
-    rec.onresult=(e)=>{ const tr=e.results[0][0].transcript; const ta=$("comment");
-      ta.value=(ta.value?ta.value+" ":"")+tr; ta.dispatchEvent(new Event("input")); };
-    rec.onend=()=>{ listening=false; $("micBtn").classList.remove("rec"); };
-    rec.onerror=()=>{ listening=false; $("micBtn").classList.remove("rec"); };
+    rec=new SR(); rec.lang=lang==="ru"?"ru-RU":"en-US"; rec.interimResults=false; rec.continuous=false;
+    rec.onresult=(e)=>{ const tr=e.results[0][0].transcript; const ta=$("comment"); ta.value=(ta.value?ta.value+" ":"")+tr; ta.dispatchEvent(new Event("input")); };
+    rec.onend=()=>{ listening=false; $("micBtn").classList.remove("rec"); }; rec.onerror=()=>{ listening=false; $("micBtn").classList.remove("rec"); };
     listening=true; $("micBtn").classList.add("rec"); rec.start(); };
 } else { $("micBtn").onclick=()=>dlg(t("m_dictation")); }
 
+/* ===================== language ===================== */
+function applyLang(){ document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i18n]").forEach(el=>el.textContent=t(el.dataset.i18n));
+  document.querySelectorAll("[data-i18n-ph]").forEach(el=>el.placeholder=t(el.dataset.i18nPh));
+  fillTypeSel(); $("secPosTitle").textContent=TYPES[type].title[lang]||TYPES[type].title.en;
+  $("posLabel").textContent=`${curItem} — ${itemLabel(curItem)}`;
+  updateSaveLabel(); if(editing) $("editBannerText").textContent=t("editing_hint").replace("{x}",editing.equip); $("cancelEdit").textContent=t("btn_cancel");
+  setNet(); renderPending();
+  document.querySelectorAll(".lang button").forEach(b=>b.classList.toggle("on", b.dataset.lang===lang)); }
+document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target.closest("button[data-lang]"); if(!b) return; lang=b.dataset.lang; localStorage.setItem("lang",lang); applyLang(); });
+
 /* ===================== connectivity + SW ===================== */
-function setNet(){ const on=navigator.onLine; $("netStatus").textContent=on?t("net_online"):t("net_offline");
-  $("netStatus").className="st "+(on?"on":"off"); }
+function setNet(){ const on=navigator.onLine; $("netStatus").textContent=on?t("net_online"):t("net_offline"); $("netStatus").className="st "+(on?"on":"off"); }
 addEventListener("online",setNet); addEventListener("offline",setNet);
-if("serviceWorker" in navigator && location.protocol==="https:"){
-  let reloaded=false;
+if("serviceWorker" in navigator && location.protocol==="https:"){ let reloaded=false;
   navigator.serviceWorker.addEventListener("controllerchange",()=>{ if(reloaded)return; reloaded=true; location.reload(); });
-  navigator.serviceWorker.register("sw.js").then(reg=>{ reg.update && reg.update(); }).catch(()=>{});
-}
+  navigator.serviceWorker.register("sw.js").then(reg=>{ reg.update&&reg.update(); }).catch(()=>{}); }
 
 /* ===================== init ===================== */
 fillEquipList(JSON.parse(localStorage.getItem("equipHist")||"[]"));
-loadPos(); applyLang(); renderPending();
+applyType(); applyLang();
 </script>
 </body>
 </html>
