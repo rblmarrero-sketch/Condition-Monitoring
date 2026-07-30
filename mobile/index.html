@@ -105,9 +105,10 @@
 <main>
   <div class="card">
     <h2 data-i18n="sec_inspection">Inspection</h2>
-    <label class="fld"><span data-i18n="lbl_type">Inspection type</span>
-      <select id="typeSel"></select>
-    </label>
+    <div class="row">
+      <label class="fld"><span data-i18n="lbl_class">Equipment</span><select id="classSel"></select></label>
+      <label class="fld"><span data-i18n="lbl_type">Inspection type</span><select id="typeSel"></select></label>
+    </div>
     <label class="fld"><span data-i18n="lbl_truck">Truck / Unit</span>
       <div class="withbtn">
         <input id="equip" list="equipList" data-i18n-ph="ph_truck" placeholder="e.g. TK158" autocapitalize="characters" autocomplete="off">
@@ -147,7 +148,10 @@
       </div>
       <label class="fld"><span data-i18n="lbl_oil">Oil hrs</span><input id="oil" type="number" inputmode="numeric"></label>
     </div>
-    <label class="fld"><span data-i18n="lbl_comment">Comment / defect</span>
+    <label class="fld"><span data-i18n="lbl_defect">Defect / failure mode</span>
+      <select id="defect"></select>
+    </label>
+    <label class="fld"><span data-i18n="lbl_comment">Comment</span>
       <div class="withbtn">
         <textarea id="comment" rows="2" data-i18n-ph="ph_comment" placeholder="notes…"></textarea>
         <button type="button" class="iconbtn" id="micBtn" title="Dictate">🎤</button>
@@ -164,7 +168,7 @@
     <div class="pending" id="pending"></div>
   </div>
 
-  <div class="ver">build v7 · 2026-07-30 · MP / FC / Inspection</div>
+  <div class="ver">build v8 · 2026-07-30 · Fleet · Defect list</div>
 </main>
 
 <div class="bottombar">
@@ -185,60 +189,87 @@
 <script src="jsQR.js"></script>
 <script>
 /* ============================================================================
-   INSPECTION TYPES  —  EDIT here to change components / filters / positions.
-   Each item: { k: short code used in the file name, en/ru: display label }.
-   Recommended component set for an NHL TR60 rigid haul truck (CM walk-around).
+   EQUIPMENT CLASSES & INSPECTION TYPES  —  EDIT here for your fleet.
+   • TYPE_META: the 3 inspection kinds (Magnetic Plug / Filter Cut / Inspection).
+   • COMP: reusable component dictionary (code -> EN/RU label) for INSP walk-arounds.
+   • CLASSES: per machine class, the MP plug positions, FC filters, and INSP list.
+   Item code (k) goes into the file name, e.g. EX07_TL_30.07.2026_MP.jpg.
    ========================================================================== */
-const TYPES = {
-  MP: { suffix:"MP", showReadings:true,
-    title:{en:"Plug position", ru:"Позиция пробки"},
-    items:[
-      {k:"4C", en:"Left Rear Final Drive",  ru:"Левый задний бортовой редуктор"},
-      {k:"4D", en:"Right Rear Final Drive", ru:"Правый задний бортовой редуктор"},
-      {k:"4E", en:"Left Rear Final Drive",  ru:"Левый задний бортовой редуктор"},
-      {k:"4F", en:"Right Rear Final Drive", ru:"Правый задний бортовой редуктор"},
-    ]},
-  FC: { suffix:"FC", showReadings:true,
-    title:{en:"Filter", ru:"Фильтр"},
-    items:[
-      {k:"ENG",   en:"Engine Oil Filter",     ru:"Фильтр моторного масла"},
-      {k:"TRANS", en:"Transmission Filter",   ru:"Фильтр трансмиссии"},
-      {k:"HYD",   en:"Hydraulic Filter",      ru:"Гидравлический фильтр"},
-      {k:"DIFF",  en:"Differential Filter",   ru:"Фильтр дифференциала"},
-      {k:"FDR",   en:"Final Drive Filter",    ru:"Фильтр бортового редуктора"},
-      {k:"FUEL",  en:"Fuel Filter",           ru:"Топливный фильтр"},
-    ]},
-  INSP: { suffix:"INSP", showReadings:false,
-    title:{en:"Component / System", ru:"Узел / Система"},
-    items:[
-      {k:"ENG",   en:"Engine",                ru:"Двигатель"},
-      {k:"COOL",  en:"Cooling System",        ru:"Система охлаждения"},
-      {k:"AIR",   en:"Air Intake & Exhaust",  ru:"Впуск и выпуск"},
-      {k:"FUEL",  en:"Fuel System",           ru:"Топливная система"},
-      {k:"TRANS", en:"Transmission",          ru:"Трансмиссия"},
-      {k:"DRV",   en:"Driveline",             ru:"Карданная передача"},
-      {k:"DIFF",  en:"Differential",          ru:"Дифференциал"},
-      {k:"FDR",   en:"Final Drives",          ru:"Бортовые редукторы"},
-      {k:"HYD",   en:"Hydraulic System",      ru:"Гидросистема"},
-      {k:"HOIST", en:"Hoist & Body",          ru:"Подъём и кузов"},
-      {k:"STEER", en:"Steering",              ru:"Рулевое управление"},
-      {k:"BRK",   en:"Brakes & Retarder",     ru:"Тормоза и ретардер"},
-      {k:"SUSP",  en:"Suspension",            ru:"Подвеска"},
-      {k:"FRAME", en:"Frame & Chassis",       ru:"Рама и шасси"},
-      {k:"TYRE",  en:"Tyres & Rims",          ru:"Шины и диски"},
-      {k:"ELEC",  en:"Electrical",            ru:"Электрооборудование"},
-      {k:"CAB",   en:"Cab & Controls",        ru:"Кабина и управление"},
-      {k:"LUBE",  en:"Auto-Lube",             ru:"Система смазки"},
-      {k:"FIRE",  en:"Fire & Safety",         ru:"Пожаробезопасность"},
-    ]},
+const TYPE_META = {
+  MP:   { suffix:"MP",   showReadings:true,  title:{en:"Plug position",     ru:"Позиция пробки"} },
+  FC:   { suffix:"FC",   showReadings:true,  title:{en:"Filter",           ru:"Фильтр"} },
+  INSP: { suffix:"INSP", showReadings:false, title:{en:"Component / System",ru:"Узел / Система"} },
 };
 const TYPE_ORDER = ["MP","FC","INSP"];
+
+const COMP = {
+  ENG:{en:"Engine",ru:"Двигатель"}, COOL:{en:"Cooling System",ru:"Система охлаждения"},
+  AIR:{en:"Air Intake & Exhaust",ru:"Впуск и выпуск"}, FUEL:{en:"Fuel System",ru:"Топливная система"},
+  TRANS:{en:"Transmission",ru:"Трансмиссия"}, TCONV:{en:"Torque Converter",ru:"Гидротрансформатор"},
+  DRV:{en:"Driveline",ru:"Карданная передача"}, DIFF:{en:"Differential",ru:"Дифференциал"},
+  FDR:{en:"Final Drives",ru:"Бортовые редукторы"}, HYD:{en:"Hydraulic System",ru:"Гидросистема"},
+  HOIST:{en:"Hoist & Body",ru:"Подъём и кузов"}, STEER:{en:"Steering",ru:"Рулевое управление"},
+  BRK:{en:"Brakes & Retarder",ru:"Тормоза и ретардер"}, SUSP:{en:"Suspension",ru:"Подвеска"},
+  FRAME:{en:"Frame & Chassis",ru:"Рама и шасси"}, TYRE:{en:"Tyres & Rims",ru:"Шины и диски"},
+  ELEC:{en:"Electrical",ru:"Электрооборудование"}, CAB:{en:"Cab & Controls",ru:"Кабина и управление"},
+  LUBE:{en:"Auto-Lube",ru:"Система смазки"}, FIRE:{en:"Fire & Safety",ru:"Пожаробезопасность"},
+  SWING:{en:"Swing System",ru:"Механизм поворота"}, SWGB:{en:"Swing Gearbox",ru:"Редуктор поворота"},
+  TRAVEL:{en:"Travel / Track Drive",ru:"Ходовой привод"}, UC:{en:"Undercarriage",ru:"Ходовая часть"},
+  TRACK:{en:"Tracks & Tension",ru:"Гусеницы и натяжение"}, BOOM:{en:"Boom",ru:"Стрела"},
+  STICK:{en:"Stick / Arm",ru:"Рукоять"}, BKT:{en:"Bucket & GET",ru:"Ковш и зубья"},
+  ATT:{en:"Attachment / Pins",ru:"Навесное / пальцы"}, BLADE:{en:"Blade & C-Frame",ru:"Отвал и С-рама"},
+  RIPPER:{en:"Ripper",ru:"Рыхлитель"}, MOLD:{en:"Moldboard & Circle",ru:"Отвал и круг"},
+  DRAWBAR:{en:"Drawbar",ru:"Тяговая рама"}, TANDEM:{en:"Tandems",ru:"Балансиры"},
+  ARTIC:{en:"Articulation Joint",ru:"Шарнир сочленения"}, AXLE:{en:"Axles",ru:"Мосты"},
+  LINK:{en:"Bucket Linkage",ru:"Рычаги ковша"},
+};
+function mk(k,en,ru){ return {k,en,ru}; }
+const CLASSES = {
+  HT:{ en:"Haul Truck", ru:"Самосвал",
+    MP:[mk("4C","Left Rear Final Drive","Левый задний бортовой редуктор"),mk("4D","Right Rear Final Drive","Правый задний бортовой редуктор"),
+        mk("4E","Left Rear Final Drive","Левый задний бортовой редуктор"),mk("4F","Right Rear Final Drive","Правый задний бортовой редуктор")],
+    FC:[mk("ENG","Engine Oil Filter","Фильтр моторного масла"),mk("TRANS","Transmission Filter","Фильтр трансмиссии"),mk("HYD","Hydraulic Filter","Гидравлический фильтр"),
+        mk("DIFF","Differential Filter","Фильтр дифференциала"),mk("FDR","Final Drive Filter","Фильтр бортового редуктора"),mk("FUEL","Fuel Filter","Топливный фильтр")],
+    INSP:["ENG","COOL","AIR","FUEL","TRANS","DRV","DIFF","FDR","HYD","HOIST","STEER","BRK","SUSP","FRAME","TYRE","ELEC","CAB","LUBE","FIRE"] },
+  EXC:{ en:"Excavator", ru:"Экскаватор",
+    MP:[mk("TL","Left Travel Final Drive","Левый ходовой редуктор"),mk("TR","Right Travel Final Drive","Правый ходовой редуктор"),
+        mk("SW1","Swing Gearbox 1","Редуктор поворота 1"),mk("SW2","Swing Gearbox 2","Редуктор поворота 2"),mk("PD","Pump Drive / PTO","Привод насосов")],
+    FC:[mk("ENG","Engine Oil Filter","Фильтр моторного масла"),mk("HYD","Main Hydraulic Filter","Основной гидрофильтр"),mk("PILOT","Pilot Filter","Фильтр управления"),
+        mk("FUEL","Fuel Filter","Топливный фильтр"),mk("SWING","Swing Drive Filter","Фильтр редуктора поворота"),mk("TRAVEL","Travel Drive Filter","Фильтр ходового привода")],
+    INSP:["ENG","COOL","AIR","FUEL","HYD","SWING","SWGB","TRAVEL","UC","TRACK","BOOM","STICK","BKT","ATT","ELEC","CAB","FRAME","LUBE","FIRE"] },
+  DOZ:{ en:"Dozer", ru:"Бульдозер",
+    MP:[mk("FDL","Left Final Drive","Левый бортовой редуктор"),mk("FDRR","Right Final Drive","Правый бортовой редуктор"),
+        mk("TRANS","Transmission","Трансмиссия"),mk("BEVEL","Bevel / Steer Gear","Конический/поворотный редуктор")],
+    FC:[mk("ENG","Engine Oil Filter","Фильтр моторного масла"),mk("TRANS","Transmission Filter","Фильтр трансмиссии"),
+        mk("HYD","Hydraulic Filter","Гидравлический фильтр"),mk("FUEL","Fuel Filter","Топливный фильтр")],
+    INSP:["ENG","COOL","AIR","FUEL","TRANS","TCONV","STEER","FDR","UC","TRACK","BLADE","RIPPER","HYD","BRK","FRAME","ELEC","CAB","LUBE","FIRE"] },
+  LDR:{ en:"Wheel Loader", ru:"Фронтальный погрузчик",
+    MP:[mk("FDIF","Front Differential","Передний дифференциал"),mk("RDIF","Rear Differential","Задний дифференциал"),mk("TRANS","Transmission","Трансмиссия"),
+        mk("LF","LF Wheel End","Левый передний редуктор"),mk("RF","RF Wheel End","Правый передний редуктор"),mk("LR","LR Wheel End","Левый задний редуктор"),mk("RR","RR Wheel End","Правый задний редуктор")],
+    FC:[mk("ENG","Engine Oil Filter","Фильтр моторного масла"),mk("TRANS","Transmission Filter","Фильтр трансмиссии"),mk("HYD","Hydraulic Filter","Гидравлический фильтр"),
+        mk("AXLE","Axle Filter","Фильтр моста"),mk("FUEL","Fuel Filter","Топливный фильтр")],
+    INSP:["ENG","COOL","AIR","FUEL","TRANS","TCONV","DRV","AXLE","DIFF","FDR","HYD","LINK","BKT","ARTIC","STEER","BRK","TYRE","FRAME","ELEC","CAB","LUBE","FIRE"] },
+  GRD:{ en:"Grader", ru:"Автогрейдер",
+    MP:[mk("TANL","Left Tandem","Левый балансир"),mk("TANR","Right Tandem","Правый балансир"),mk("TRANS","Transmission","Трансмиссия"),
+        mk("DIFF","Differential","Дифференциал"),mk("CIRCLE","Circle Drive","Привод круга")],
+    FC:[mk("ENG","Engine Oil Filter","Фильтр моторного масла"),mk("TRANS","Transmission Filter","Фильтр трансмиссии"),mk("HYD","Hydraulic Filter","Гидравлический фильтр"),
+        mk("TANDEM","Tandem Filter","Фильтр балансира"),mk("FUEL","Fuel Filter","Топливный фильтр")],
+    INSP:["ENG","COOL","AIR","FUEL","TRANS","TANDEM","MOLD","DRAWBAR","RIPPER","HYD","STEER","ARTIC","AXLE","BRK","TYRE","FRAME","ELEC","CAB","LUBE","FIRE"] },
+  GEN:{ en:"General / Other", ru:"Общее / Другое",
+    MP:[mk("TRANS","Transmission","Трансмиссия"),mk("DIFF","Differential","Дифференциал"),mk("FD1","Final Drive 1","Бортовой редуктор 1"),
+        mk("FD2","Final Drive 2","Бортовой редуктор 2"),mk("HYD","Hydraulic Tank","Гидробак")],
+    FC:[mk("ENG","Engine Oil Filter","Фильтр моторного масла"),mk("TRANS","Transmission Filter","Фильтр трансмиссии"),
+        mk("HYD","Hydraulic Filter","Гидравлический фильтр"),mk("FUEL","Fuel Filter","Топливный фильтр")],
+    INSP:["ENG","COOL","AIR","FUEL","TRANS","DRV","HYD","UC","TYRE","BRK","STEER","FRAME","ELEC","CAB","LUBE","FIRE"] },
+};
+const CLASS_ORDER = ["HT","EXC","DOZ","LDR","GRD","GEN"];
 const $ = (id)=>document.getElementById(id);
 
 /* ===================== i18n ===================== */
 const I18N = {
   en:{ app_title:"Truck Inspection", net_online:"online", net_offline:"offline — OK",
-    sec_inspection:"Inspection", lbl_type:"Inspection type", lbl_truck:"Truck / Unit", ph_truck:"e.g. TK158", btn_scan:"Scan",
+    sec_inspection:"Inspection", lbl_class:"Equipment", lbl_type:"Inspection type", lbl_truck:"Truck / Unit", ph_truck:"e.g. TK158", btn_scan:"Scan",
+    lbl_defect:"Defect / failure mode",
     lbl_date:"Date", lbl_smu:"SMU / machine hrs", ph_smu:"e.g. 6018",
     btn_take:"Take photo", btn_retake:"Retake", shot_placeholder:"No photo yet — tap “Take photo”.",
     lbl_grade:"Grade / condition", lbl_particle:"Particle count", lbl_comp:"Component hrs", lbl_oil:"Oil hrs",
@@ -261,7 +292,8 @@ const I18N = {
     m_dictation:["Dictation","Tap the comment box, then tap the 🎤 microphone key on your phone's keyboard to dictate."],
   },
   ru:{ app_title:"Осмотр самосвала", net_online:"онлайн", net_offline:"офлайн — ОК",
-    sec_inspection:"Осмотр", lbl_type:"Тип осмотра", lbl_truck:"Трак / Ед.", ph_truck:"напр. TK158", btn_scan:"Скан",
+    sec_inspection:"Осмотр", lbl_class:"Оборудование", lbl_type:"Тип осмотра", lbl_truck:"Трак / Ед.", ph_truck:"напр. TK158", btn_scan:"Скан",
+    lbl_defect:"Дефект / вид отказа",
     lbl_date:"Дата", lbl_smu:"Моточасы (SMU)", ph_smu:"напр. 6018",
     btn_take:"Сделать фото", btn_retake:"Переснять", shot_placeholder:"Нет фото — нажмите «Сделать фото».",
     lbl_grade:"Степень / состояние", lbl_particle:"Количество частиц", lbl_comp:"Наработка компонента", lbl_oil:"Наработка масла",
@@ -287,15 +319,51 @@ const I18N = {
 let lang = localStorage.getItem("lang") || "en";
 function t(k){ return (I18N[lang] && I18N[lang][k]) || I18N.en[k] || k; }
 
+/* ===================== defect / failure-mode list (reliability) — EDIT freely ===================== */
+const DEFECTS = [
+  {k:"",           en:"— none / OK —",           ru:"— нет / норма —"},
+  {k:"LEAK_OIL",   en:"Oil leak",                ru:"Течь масла"},
+  {k:"LEAK_COOL",  en:"Coolant leak",            ru:"Течь охлаждающей жидкости"},
+  {k:"LEAK_FUEL",  en:"Fuel leak",               ru:"Течь топлива"},
+  {k:"LEAK_HYD",   en:"Hydraulic leak",          ru:"Течь гидравлики"},
+  {k:"LEAK_GREASE",en:"Grease / seal leak",      ru:"Течь смазки / сальника"},
+  {k:"LEAK_AIR",   en:"Air / pneumatic leak",    ru:"Утечка воздуха"},
+  {k:"WEAR",       en:"Wear",                    ru:"Износ"},
+  {k:"GET_WEAR",   en:"GET / edge / tyre wear",  ru:"Износ зубьев / кромки / шины"},
+  {k:"BEARING",    en:"Bearing wear / noise",    ru:"Износ / шум подшипника"},
+  {k:"PLAY",       en:"Play / backlash",         ru:"Люфт / зазор"},
+  {k:"CRACK",      en:"Crack / structural",      ru:"Трещина / конструкция"},
+  {k:"WELD",       en:"Weld failure",            ru:"Разрушение сварного шва"},
+  {k:"DEFORM",     en:"Deformation / bent",      ru:"Деформация / изгиб"},
+  {k:"CORROSION",  en:"Corrosion / rust",        ru:"Коррозия / ржавчина"},
+  {k:"OVERHEAT",   en:"Overheating",             ru:"Перегрев"},
+  {k:"NOISE",      en:"Abnormal noise",          ru:"Посторонний шум"},
+  {k:"VIBRATION",  en:"Vibration",               ru:"Вибрация"},
+  {k:"CONTAM",     en:"Contamination",           ru:"Загрязнение"},
+  {k:"BLOCKED",    en:"Blocked / restricted",    ru:"Засорение / ограничение потока"},
+  {k:"LOW_LEVEL",  en:"Low fluid level",         ru:"Низкий уровень жидкости"},
+  {k:"LOOSE",      en:"Loose / missing bolts",   ru:"Ослаблен / отсутствует крепёж"},
+  {k:"DAMAGE",     en:"Damage / broken",         ru:"Повреждение / поломка"},
+  {k:"CHAFE",      en:"Hose chafing / rubbing",  ru:"Перетирание шланга"},
+  {k:"MISALIGN",   en:"Misalignment",            ru:"Несоосность"},
+  {k:"ELEC_FAULT", en:"Electrical fault",        ru:"Неисправность электрики"},
+  {k:"SEAL",       en:"Seal failure",            ru:"Разрушение сальника"},
+  {k:"GUARD",      en:"Missing guard / safety",  ru:"Отсутствует ограждение / защита"},
+  {k:"OTHER",      en:"Other (see comment)",     ru:"Другое (см. комментарий)"},
+];
+function defectLabel(k, l){ const d=DEFECTS.find(x=>x.k===k); return d?(d[l||lang]||d.en):k; }
+
 /* ===================== state ===================== */
+let eqClass = localStorage.getItem("equip_class") || "HT";
+if(!CLASSES[eqClass]) eqClass="HT";
 let type = localStorage.getItem("insp_type") || "MP";
-if(!TYPES[type]) type="MP";
-let draft={positions:{}}; let curItem=TYPES[type].items[0].k;
+if(!TYPE_META[type]) type="MP";
 let editing=null;
 const dlg=(pair)=>{ $("dlgTitle").textContent=pair[0]; $("dlgMsg").textContent=pair[1]; $("dlg").showModal(); };
 $("dlgOk").onclick=()=>$("dlg").close();
-function items(){ return TYPES[type].items; }
+function items(){ return CLASSES[eqClass][type].map(e=> typeof e==="string" ? {k:e, en:COMP[e].en, ru:COMP[e].ru} : e); }
 function itemLabel(k){ const it=items().find(i=>i.k===k); return it?(it[lang]||it.en):k; }
+let draft={positions:{}}; let curItem=items()[0].k;
 function curP(){ return (draft.positions[curItem] ||= {}); }
 
 /* ===================== IndexedDB ===================== */
@@ -307,18 +375,22 @@ async function dbPut(rec){ const d=await idb(); return new Promise((res,rej)=>{ 
 async function dbAll(){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readonly"); const rq=t.objectStore(STORE).getAll(); rq.onsuccess=()=>res(rq.result||[]); rq.onerror=()=>rej(rq.error); }); }
 async function dbDel(id){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); t.objectStore(STORE).delete(id); t.oncomplete=res; t.onerror=()=>rej(t.error); }); }
 
-/* ===================== type + component chips ===================== */
+/* ===================== class + type + component chips ===================== */
+function fillClassSel(){ $("classSel").innerHTML=CLASS_ORDER.map(k=>`<option value="${k}">${CLASSES[k][lang]||CLASSES[k].en}</option>`).join(""); $("classSel").value=eqClass; }
 function fillTypeSel(){ $("typeSel").innerHTML=TYPE_ORDER.map(k=>`<option value="${k}">${t("type_"+k)}</option>`).join(""); $("typeSel").value=type; }
-$("typeSel") && ($("typeSel").onchange=(e)=>{ type=e.target.value; localStorage.setItem("insp_type",type);
-  draft={positions:{}}; editing=null; curItem=items()[0].k; applyType(); setEditing(null); });
+function fillDefectSel(){ $("defect").innerHTML=DEFECTS.map(d=>`<option value="${d.k}">${d[lang]||d.en}</option>`).join(""); }
+$("classSel").onchange=(e)=>{ eqClass=e.target.value; localStorage.setItem("equip_class",eqClass);
+  draft={positions:{}}; editing=null; curItem=items()[0].k; applyForm(); setEditing(null); };
+$("typeSel").onchange=(e)=>{ type=e.target.value; localStorage.setItem("insp_type",type);
+  draft={positions:{}}; editing=null; curItem=items()[0].k; applyForm(); setEditing(null); };
 function renderChips(){ $("posnav").innerHTML=items().map(it=>`<button data-pos="${it.k}"><span>${it.k}</span><span class="dot"></span></button>`).join(""); refreshChips(); }
 function refreshChips(){ $("posnav").querySelectorAll("button").forEach(b=>{
   b.classList.toggle("on", b.dataset.pos===curItem); b.classList.toggle("has", !!draft.positions[b.dataset.pos]); }); }
 $("posnav").addEventListener("click",(e)=>{ const b=e.target.closest("button[data-pos]"); if(!b) return;
   saveCur(); curItem=b.dataset.pos; refreshChips(); loadPos(); });
-function applyType(){ $("secPosTitle").textContent=TYPES[type].title[lang]||TYPES[type].title.en;
-  $("mpFields").classList.toggle("hidden", !TYPES[type].showReadings);
-  fillTypeSel(); renderChips(); loadPos(); }
+function applyForm(){ $("secPosTitle").textContent=TYPE_META[type].title[lang]||TYPE_META[type].title.en;
+  $("mpFields").classList.toggle("hidden", !TYPE_META[type].showReadings);
+  fillClassSel(); fillTypeSel(); fillDefectSel(); renderChips(); loadPos(); }
 
 /* ===================== camera ===================== */
 $("takeBtn").onclick=()=>$("camera").click(); $("retakeBtn").onclick=()=>$("camera").click();
@@ -332,10 +404,13 @@ $("gradeSeg").addEventListener("click",(e)=>{ const b=e.target.closest("button[d
   const p=curP(); p.grade=(p.grade===b.dataset.g)?null:b.dataset.g; renderGrade(); refreshChips(); });
 function renderGrade(){ const g=curP().grade; $("gradeSeg").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.g===g)); }
 ["particle","comp","oil","comment"].forEach(id=>$(id).addEventListener("input",()=>{ saveCur(); refreshChips(); }));
-function saveCur(){ const p=curP(); p.particle=$("particle").value.trim(); p.comp=$("comp").value.trim(); p.oil=$("oil").value.trim(); p.comment=$("comment").value.trim();
-  if(!p.grade&&!p.photoBlob&&!p.particle&&!p.comp&&!p.oil&&!p.comment) delete draft.positions[curItem]; }
+$("defect").addEventListener("change",()=>{ saveCur(); refreshChips(); });
+function saveCur(){ const p=curP(); p.particle=$("particle").value.trim(); p.comp=$("comp").value.trim(); p.oil=$("oil").value.trim();
+  p.comment=$("comment").value.trim(); p.defect=$("defect").value;
+  if(!p.grade&&!p.photoBlob&&!p.particle&&!p.comp&&!p.oil&&!p.comment&&!p.defect) delete draft.positions[curItem]; }
 function loadPos(){ $("posLabel").textContent=`${curItem} — ${itemLabel(curItem)}`;
-  const p=draft.positions[curItem]||{}; $("particle").value=p.particle||""; $("comp").value=p.comp||""; $("oil").value=p.oil||""; $("comment").value=p.comment||"";
+  const p=draft.positions[curItem]||{}; $("particle").value=p.particle||""; $("comp").value=p.comp||""; $("oil").value=p.oil||"";
+  $("comment").value=p.comment||""; $("defect").value=p.defect||"";
   renderGrade(); showShot(p.photoBlob?URL.createObjectURL(p.photoBlob):null); }
 
 /* ===================== date + edit ===================== */
@@ -348,12 +423,13 @@ function setEditing(rec){ editing=rec||null;
   $("cancelEdit").textContent=t("btn_cancel"); updateSaveLabel(); }
 function resetForm(){ draft={positions:{}}; curItem=items()[0].k; $("equip").value=""; $("smu").value=""; $("date").value=todayISO();
   refreshChips(); loadPos(); setEditing(null); }
-function editRecord(rec){ if(rec.type && TYPES[rec.type]){ type=rec.type; localStorage.setItem("insp_type",type); }
+function editRecord(rec){ if(rec.cls && CLASSES[rec.cls]){ eqClass=rec.cls; localStorage.setItem("equip_class",eqClass); }
+  if(rec.type && TYPE_META[rec.type]){ type=rec.type; localStorage.setItem("insp_type",type); }
   draft={positions:{}};
-  for(const [k,pp] of Object.entries(rec.positions)) draft.positions[k]={grade:pp.grade,particle:pp.particle,comp:pp.comp,oil:pp.oil,comment:pp.comment,photoBlob:pp.photoBlob};
+  for(const [k,pp] of Object.entries(rec.positions)) draft.positions[k]={grade:pp.grade,particle:pp.particle,comp:pp.comp,oil:pp.oil,comment:pp.comment,defect:pp.defect,photoBlob:pp.photoBlob};
   $("equip").value=rec.equip; $("date").value=rec.date; $("smu").value=rec.smu||"";
   curItem=Object.keys(draft.positions)[0]||items()[0].k;
-  applyType(); loadPos(); setEditing(rec); window.scrollTo({top:0,behavior:"smooth"}); }
+  applyForm(); loadPos(); setEditing(rec); window.scrollTo({top:0,behavior:"smooth"}); }
 $("cancelEdit").onclick=()=>resetForm();
 
 /* ===================== save to queue ===================== */
@@ -364,9 +440,9 @@ $("saveBtn").onclick=async ()=>{
   if(!Object.keys(draft.positions).length){ dlg(t("m_nothing_save")); return; }
   const id = editing ? editing.id : `${type}__${equip}__${date}__${Date.now()}`;
   const created = editing ? (editing.created||new Date().toISOString()) : new Date().toISOString();
-  const rec={ id, type, equip, date, smu:$("smu").value.trim(), positions:{}, created };
+  const rec={ id, cls:eqClass, type, equip, date, smu:$("smu").value.trim(), positions:{}, created };
   for(const [k,p] of Object.entries(draft.positions))
-    rec.positions[k]={ grade:p.grade||null, particle:p.particle||"", comp:p.comp||"", oil:p.oil||"", comment:p.comment||"", photoBlob:p.photoBlob||null };
+    rec.positions[k]={ grade:p.grade||null, particle:p.particle||"", comp:p.comp||"", oil:p.oil||"", defect:p.defect||"", comment:p.comment||"", photoBlob:p.photoBlob||null };
   await dbPut(rec); rememberEquip(equip); resetForm(); renderPending();
   const m=t("m_saved"); dlg([m[0], m[1].replace("{x}",equip)]);
 };
@@ -384,7 +460,7 @@ async function renderPending(){
     const nPhotos=Object.values(rec.positions).filter(p=>p.photoBlob).length; const nPos=Object.keys(rec.positions).length;
     const row=document.createElement("div"); row.className="pitem";
     const thumb=first?`<img class="thumb" src="${URL.createObjectURL(first.photoBlob)}">`:`<div class="thumb"></div>`;
-    const typeTag=(rec.type||"MP");
+    const typeTag=`${rec.cls||""} ${rec.type||"MP"}`.trim();
     row.innerHTML=`${thumb}<div class="meta"><div class="a"><span class="tag">${typeTag}</span>${rec.equip} · ${rec.date}</div>
       <div class="b">${nPos} ${t("pos_count")} · ${nPhotos} ${t("photo_count")}${rec.smu?` · SMU ${rec.smu}`:""}</div></div>
       <button class="edit" title="Edit">✎</button><button class="del" title="Delete">🗑</button>`;
@@ -402,13 +478,14 @@ function fileName(equip,item,date,ext,suffix){ return `${equip}_${item}_${ddmmyy
 function extOf(blob){ const t=(blob.type||"").toLowerCase(); if(t.includes("png"))return"png"; if(t.includes("webp"))return"webp"; return "jpg"; }
 async function buildPackage(){
   const all=await dbAll(); const files=[]; const grades={}, notes={};
-  for(const rec of all){ const suffix=(TYPES[rec.type]&&TYPES[rec.type].suffix)||rec.type||"MP";
+  for(const rec of all){ const suffix=(TYPE_META[rec.type]&&TYPE_META[rec.type].suffix)||rec.type||"MP";
     if(rec.smu) (notes[`${rec.equip}|${rec.date}`] ||= {}).smu=rec.smu;
     for(const [k,p] of Object.entries(rec.positions)){
       if(p.photoBlob){ const ext=extOf(p.photoBlob); files.push({name:fileName(rec.equip,k,rec.date,ext,suffix), data:new Uint8Array(await p.photoBlob.arrayBuffer())}); }
       if(p.grade) grades[`${rec.equip}|${rec.date}|${k}`]=p.grade;
       const nk=`${rec.equip}|${rec.date}|${k}`; const n={};
-      if(p.particle)n.particleCount=p.particle; if(p.comp)n.componentHours=p.comp; if(p.oil)n.oilHours=p.oil; if(p.comment)n.comment=p.comment;
+      if(p.particle)n.particleCount=p.particle; if(p.comp)n.componentHours=p.comp; if(p.oil)n.oilHours=p.oil;
+      if(p.defect)n.defect=defectLabel(p.defect,"en"); if(p.comment)n.comment=p.comment;
       if(Object.keys(n).length) notes[nk]={...(notes[nk]||{}),...n};
     } }
   files.push({name:"entries.json", data:new TextEncoder().encode(JSON.stringify({type:"cm-magplug-entries",version:1,grades,notes},null,2))});
@@ -468,7 +545,8 @@ if(SR){ let rec=null, listening=false;
 function applyLang(){ document.documentElement.lang=lang;
   document.querySelectorAll("[data-i18n]").forEach(el=>el.textContent=t(el.dataset.i18n));
   document.querySelectorAll("[data-i18n-ph]").forEach(el=>el.placeholder=t(el.dataset.i18nPh));
-  fillTypeSel(); $("secPosTitle").textContent=TYPES[type].title[lang]||TYPES[type].title.en;
+  fillClassSel(); fillTypeSel(); fillDefectSel(); $("defect").value=(draft.positions[curItem]||{}).defect||"";
+  $("secPosTitle").textContent=TYPE_META[type].title[lang]||TYPE_META[type].title.en;
   $("posLabel").textContent=`${curItem} — ${itemLabel(curItem)}`;
   updateSaveLabel(); if(editing) $("editBannerText").textContent=t("editing_hint").replace("{x}",editing.equip); $("cancelEdit").textContent=t("btn_cancel");
   setNet(); renderPending();
@@ -484,7 +562,7 @@ if("serviceWorker" in navigator && location.protocol==="https:"){ let reloaded=f
 
 /* ===================== init ===================== */
 fillEquipList(JSON.parse(localStorage.getItem("equipHist")||"[]"));
-applyType(); applyLang();
+applyForm(); applyLang();
 </script>
 </body>
 </html>
