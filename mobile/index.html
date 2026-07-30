@@ -212,7 +212,7 @@
 
   <button class="btn ghost" id="reportBtn" style="margin-bottom:16px">📄 <span data-i18n="btn_report">PDF report</span></button>
 
-  <div class="ver">build v17 · 2026-07-31 · Cards for Inspection</div>
+  <div class="ver">build v18 · 2026-07-31 · Card hierarchy</div>
 </main>
 
 <div class="bottombar">
@@ -536,11 +536,12 @@ function renderComponentNav(tree){
     h+='<div class="cards">'+tree.map(n=>`<button data-l7="${n.k}" class="${hasUnder(n)?'has':''}"><span class="cc">${n.k}</span><span class="cn">${n[lang]||n.en}</span><span class="dot"></span></button>`).join('')+'</div>';
   } else if(!cascL8){
     const n7=nodeByCode(tree,cascL7); const kids=(n7&&n7.ch)||[];
-    h+='<div class="clist">'+kids.map(n=>{ const hk=n.ch&&n.ch.length; return `<button data-l8="${n.k}" class="${(draft.positions[n.k]||hasUnder(n))?'has':''}"><span>${n[lang]||n.en}</span><span class="r">${hk?'›':(draft.positions[n.k]?'●':'')}</span></button>`; }).join('')+'</div>';
+    h+='<div class="cards">'+kids.map(n=>{ const hk=n.ch&&n.ch.length;
+      return `<button data-l8="${n.k}" class="${(draft.positions[n.k]||hasUnder(n))?'has':''}"><span class="cc">${String(n.k).split('.').pop()}${hk?' ›':''}</span><span class="cn">${n[lang]||n.en}</span><span class="dot"></span></button>`; }).join('')+'</div>';
   } else {
     const n8=nodeByCode(tree,cascL8); const kids=(n8&&n8.ch)||[];
-    h+='<div class="clist"><button data-pick="'+n8.k+'" class="'+(draft.positions[n8.k]?'has':'')+'"><span>▶ '+t("nav_whole")+': '+(n8[lang]||n8.en)+'</span><span class="r">'+(draft.positions[n8.k]?'●':'')+'</span></button>';
-    h+=kids.map(n=>`<button data-pick="${n.k}" class="${draft.positions[n.k]?'has':''}"><span>${n[lang]||n.en}</span><span class="r">${draft.positions[n.k]?'●':''}</span></button>`).join('')+'</div>';
+    h+='<div class="cards"><button data-pick="'+n8.k+'" class="'+(draft.positions[n8.k]?'has':'')+'"><span class="cc">▶</span><span class="cn">'+t("nav_whole")+'</span><span class="dot"></span></button>';
+    h+=kids.map(n=>`<button data-pick="${n.k}" class="${draft.positions[n.k]?'has':''}"><span class="cc">${String(n.k).split('.').pop()}</span><span class="cn">${n[lang]||n.en}</span><span class="dot"></span></button>`).join('')+'</div>';
   }
   if(cap.length) h+='<div class="posnav" style="margin-top:6px">'+cap.map(it=>`<button data-pos="${it.k}" title="${itemLabel(it.k)}"><span>${String(it.k).split('.').pop()}</span><span class="dot"></span></button>`).join('')+'</div>';
   h+='</div>';
