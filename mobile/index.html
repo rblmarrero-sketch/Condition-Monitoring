@@ -87,7 +87,13 @@
   .pitem{display:flex;align-items:center;gap:12px;background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:10px 12px;}
   .pitem .thumb{width:52px;height:52px;border-radius:9px;object-fit:cover;background:var(--surface-3);flex:none;}
   .pitem .meta{flex:1;min-width:0;} .pitem .meta .a{font-weight:700;} .pitem .meta .b{font-size:12.5px;color:var(--muted);}
-  .pitem .del{background:none;border:none;color:var(--critical);font-size:20px;padding:6px;}
+  .pitem .edit{background:none;border:none;color:var(--accent);font-size:19px;padding:6px;cursor:pointer;}
+  .pitem .del{background:none;border:none;color:var(--critical);font-size:20px;padding:6px;cursor:pointer;}
+  .pitem{cursor:pointer;}
+  .editbar{display:flex;align-items:center;gap:10px;background:color-mix(in srgb,var(--accent) 16%,var(--surface));
+    border:1px solid color-mix(in srgb,var(--accent) 45%,var(--border));border-radius:12px;padding:10px 14px;margin-bottom:10px;font-size:13.5px;}
+  .editbar span{flex:1;color:var(--ink);}
+  .linkbtn{background:none;border:none;color:var(--accent);font-weight:700;font-size:14px;cursor:pointer;}
   .empty{color:var(--muted);text-align:center;padding:20px;font-size:14px;}
   .bottombar{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--border);
     padding:12px 16px calc(env(safe-area-inset-bottom) + 12px);display:flex;gap:10px;z-index:10;}
@@ -170,7 +176,9 @@
     <div class="hint" data-i18n="hint_fields">Fields save to the current position automatically. Switch positions with the 4C–4F tabs.</div>
   </div>
 
-  <button class="btn primary" id="saveBtn" style="margin-bottom:16px" data-i18n="btn_save">✔ Save this truck to queue</button>
+  <div id="editBanner" class="editbar hidden"><span id="editBannerText"></span>
+    <button type="button" id="cancelEdit" class="linkbtn"></button></div>
+  <button class="btn primary" id="saveBtn" style="margin-bottom:16px">✔ Save this truck to queue</button>
 
   <div class="card">
     <h2><span data-i18n="sec_onphone">On this phone</span> <span class="count-badge" id="qCount">0</span></h2>
@@ -212,7 +220,9 @@ const I18N = {
     lbl_grade:"Grade / condition", lbl_particle:"Particle count", lbl_comp:"Component hrs",
     lbl_oil:"Oil hrs", lbl_comment:"Comment", ph_comment:"notes…",
     hint_fields:"Fields save to the current position automatically. Switch positions with the 4C–4F tabs.",
-    btn_save:"✔ Save this truck to queue", sec_onphone:"On this phone", empty_none:"Nothing captured yet.",
+    btn_save:"✔ Save this truck to queue", btn_update:"✔ Update this truck",
+    editing_hint:"Editing {x} — change fields, then Update.",
+    sec_onphone:"On this phone", empty_none:"Nothing captured yet.",
     btn_share:"Share", btn_export:"Export ZIP", scan_hint:"Point at the unit's QR code", btn_cancel:"Cancel", dlg_ok:"OK",
     pos_count:"position(s)", photo_count:"photo(s)",
     posL:{ "4C":"Left Rear Final Drive","4D":"Right Rear Final Drive","4E":"Left Rear Final Drive","4F":"Right Rear Final Drive" },
@@ -236,7 +246,9 @@ const I18N = {
     lbl_grade:"Степень / состояние", lbl_particle:"Количество частиц", lbl_comp:"Наработка компонента",
     lbl_oil:"Наработка масла", lbl_comment:"Комментарий", ph_comment:"заметки…",
     hint_fields:"Поля сохраняются автоматически. Переключайте позиции вкладками 4C–4F.",
-    btn_save:"✔ Сохранить трак в очередь", sec_onphone:"На этом телефоне", empty_none:"Пока ничего не снято.",
+    btn_save:"✔ Сохранить трак в очередь", btn_update:"✔ Обновить трак",
+    editing_hint:"Редактирование {x} — измените поля и нажмите «Обновить».",
+    sec_onphone:"На этом телефоне", empty_none:"Пока ничего не снято.",
     btn_share:"Поделиться", btn_export:"Экспорт ZIP", scan_hint:"Наведите на QR-код трака", btn_cancel:"Отмена", dlg_ok:"ОК",
     pos_count:"позиц.", photo_count:"фото",
     posL:{ "4C":"Левый задний бортовой редуктор","4D":"Правый задний бортовой редуктор","4E":"Левый задний бортовой редуктор","4F":"Правый задний бортовой редуктор" },
@@ -259,6 +271,9 @@ function applyLang(){
   document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t(el.dataset.i18n));
   document.querySelectorAll("[data-i18n-ph]").forEach(el => el.placeholder = t(el.dataset.i18nPh));
   $("posLabel").textContent = `${curPos} — ${t("posL")[curPos]}`;
+  updateSaveLabel();
+  if(editing) $("editBannerText").textContent = t("editing_hint").replace("{x}", editing.equip);
+  $("cancelEdit").textContent = t("btn_cancel");
   setNet(); renderPending();
   document.querySelectorAll(".lang button").forEach(b=>b.classList.toggle("on", b.dataset.lang===lang));
 }
@@ -283,8 +298,27 @@ async function dbDel(id){ const d=await idb(); return new Promise((res,rej)=>{ c
 /* ===================== working draft ===================== */
 let draft={positions:{}}; let curPos="4C";
 function curP(){ return (draft.positions[curPos] ||= {}); }
-(function(){ const d=new Date(); const p=(n)=>String(n).padStart(2,"0");
-  $("date").value=`${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`; })();
+function todayISO(){ const d=new Date(),p=(n)=>String(n).padStart(2,"0"); return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`; }
+$("date").value=todayISO();
+
+/* ---- edit an already-saved truck (instead of only delete) ---- */
+let editing=null;   // the queued record being edited, or null
+function updateSaveLabel(){ $("saveBtn").textContent = editing ? t("btn_update") : t("btn_save"); }
+function setEditing(rec){ editing=rec||null;
+  if(editing){ $("editBanner").classList.remove("hidden"); $("editBannerText").textContent=t("editing_hint").replace("{x}",editing.equip); }
+  else $("editBanner").classList.add("hidden");
+  $("cancelEdit").textContent=t("btn_cancel"); updateSaveLabel(); }
+function resetForm(){ draft={positions:{}}; curPos="4C";
+  $("posnav").querySelectorAll("button").forEach((x,i)=>{x.classList.toggle("on",i===0);x.classList.remove("has");});
+  $("equip").value=""; $("smu").value=""; $("date").value=todayISO(); loadPos(); setEditing(null); }
+function editRecord(rec){ draft={positions:{}};
+  for(const [pos,pp] of Object.entries(rec.positions))
+    draft.positions[pos]={grade:pp.grade,particle:pp.particle,comp:pp.comp,oil:pp.oil,comment:pp.comment,photoBlob:pp.photoBlob};
+  $("equip").value=rec.equip; $("date").value=rec.date; $("smu").value=rec.smu||"";
+  curPos=Object.keys(draft.positions)[0]||"4C";
+  $("posnav").querySelectorAll("button").forEach(x=>{ x.classList.toggle("on",x.dataset.pos===curPos); x.classList.toggle("has",!!draft.positions[x.dataset.pos]); });
+  loadPos(); setEditing(rec); window.scrollTo({top:0,behavior:"smooth"}); }
+$("cancelEdit").onclick=()=>resetForm();
 
 /* ===================== camera (photo) ===================== */
 $("takeBtn").onclick=()=>$("camera").click();
@@ -308,7 +342,8 @@ function renderGrade(){ const g=curP().grade; $("gradeSeg").querySelectorAll("bu
 function saveCur(){ const p=curP(); p.particle=$("particle").value.trim(); p.comp=$("comp").value.trim();
   p.oil=$("oil").value.trim(); p.comment=$("comment").value.trim();
   if(!p.grade&&!p.photoBlob&&!p.particle&&!p.comp&&!p.oil&&!p.comment) delete draft.positions[curPos]; }
-function loadPos(){ const p=draft.positions[curPos]||{}; $("particle").value=p.particle||""; $("comp").value=p.comp||"";
+function loadPos(){ $("posLabel").textContent=`${curPos} — ${t("posL")[curPos]}`;
+  const p=draft.positions[curPos]||{}; $("particle").value=p.particle||""; $("comp").value=p.comp||"";
   $("oil").value=p.oil||""; $("comment").value=p.comment||""; renderGrade(); showShot(p.photoBlob?URL.createObjectURL(p.photoBlob):null); }
 
 /* ===================== save to queue ===================== */
@@ -317,13 +352,13 @@ $("saveBtn").onclick=async ()=>{
   const equip=$("equip").value.trim().toUpperCase().replace(/\s+/g,""); const date=$("date").value;
   if(!equip){ dlg(t("m_need_truck")); return; }
   if(!Object.keys(draft.positions).length){ dlg(t("m_nothing_save")); return; }
-  const rec={ id:`${equip}__${date}__${Date.now()}`, equip, date, smu:$("smu").value.trim(), positions:{}, created:new Date().toISOString() };
+  const id = editing ? editing.id : `${equip}__${date}__${Date.now()}`;
+  const created = editing ? (editing.created||new Date().toISOString()) : new Date().toISOString();
+  const rec={ id, equip, date, smu:$("smu").value.trim(), positions:{}, created };
   for(const [pos,p] of Object.entries(draft.positions))
     rec.positions[pos]={ grade:p.grade||null, particle:p.particle||"", comp:p.comp||"", oil:p.oil||"", comment:p.comment||"", photoBlob:p.photoBlob||null };
   await dbPut(rec); rememberEquip(equip);
-  draft={positions:{}}; curPos="4C";
-  $("posnav").querySelectorAll("button").forEach((x,i)=>{x.classList.toggle("on",i===0);x.classList.remove("has");});
-  $("posLabel").textContent=`4C — ${t("posL")["4C"]}`; $("equip").value=""; loadPos(); renderPending();
+  resetForm(); renderPending();
   const m=t("m_saved"); dlg([m[0], m[1].replace("{x}",equip)]);
 };
 
@@ -344,8 +379,13 @@ async function renderPending(){
     const thumb=first?`<img class="thumb" src="${URL.createObjectURL(first.photoBlob)}">`:`<div class="thumb"></div>`;
     row.innerHTML=`${thumb}<div class="meta"><div class="a">${rec.equip} · ${rec.date}</div>
       <div class="b">${nPos} ${t("pos_count")} · ${nPhotos} ${t("photo_count")}${rec.smu?` · SMU ${rec.smu}`:""}</div></div>
-      <button class="del" data-id="${rec.id}">🗑</button>`;
-    row.querySelector(".del").onclick=async ()=>{ await dbDel(rec.id); renderPending(); };
+      <button class="edit" title="Edit">✎</button><button class="del" title="Delete">🗑</button>`;
+    const openEdit=()=>editRecord(rec);
+    row.querySelector(".edit").onclick=(ev)=>{ ev.stopPropagation(); openEdit(); };
+    row.querySelector(".meta").onclick=openEdit;
+    row.querySelector(".thumb").onclick=openEdit;
+    row.querySelector(".del").onclick=async (ev)=>{ ev.stopPropagation(); await dbDel(rec.id);
+      if(editing && editing.id===rec.id) setEditing(null); renderPending(); };
     $("pending").appendChild(row);
   }
 }
