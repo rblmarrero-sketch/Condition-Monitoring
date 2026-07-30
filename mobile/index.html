@@ -214,7 +214,7 @@
 
   <button class="btn ghost" id="reportBtn" style="margin-bottom:16px">📄 <span data-i18n="btn_report">PDF report</span></button>
 
-  <div class="ver">build v23 · 2026-07-31 · ISO 14224 · context filter · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver">build v24 · 2026-07-31 · Asset-code file naming · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <div class="bottombar">
@@ -804,19 +804,25 @@ async function renderPending(){
 
 /* ===================== naming + export ===================== */
 function ddmmyyyy(iso){ const m=String(iso).match(/(\d{4})-(\d{2})-(\d{2})/); return m?`${m[3]}.${m[2]}.${m[1]}`:iso; }
-function fileName(equip,item,date,ext,suffix){ return `${equip}_${String(item).replace(/\./g,"-")}_${ddmmyyyy(date)}_${suffix}.${ext}`; }
+// Naming standard:
+//   Inspection of a register component -> <UNIT>.<COMPONENT CODE>_<DD.MM.YYYY>_<TYPE>   e.g. TK151.DRS.ENG_31.07.2026_INSP.jpg
+//   Magnetic Plug / Filter Cut          -> <UNIT>_<ITEM>_<DD.MM.YYYY>_<TYPE>            e.g. TK146_4C_31.07.2026_MP.jpg
+function fileName(equip,item,date,ext,suffix,isComp){
+  const head = isComp ? `${equip}.${item}` : `${equip}_${String(item).replace(/\./g,"-")}`;
+  return `${head}_${ddmmyyyy(date)}_${suffix}.${ext}`; }
 function extOf(blob){ const t=(blob.type||"").toLowerCase(); if(t.includes("png"))return"png"; if(t.includes("webp"))return"webp"; return "jpg"; }
 async function buildPackage(){
   const all=await dbAll(); const files=[]; const grades={}, notes={};
   for(const rec of all){ const suffix=(TYPE_META[rec.type]&&TYPE_META[rec.type].suffix)||rec.type||"MP";
     if(rec.smu) (notes[`${rec.equip}|${rec.date}`] ||= {}).smu=rec.smu;
+    const isComp = rec.type==="INSP" && rec.equip && UNIT_TPL[rec.equip]!=null;
     for(const [k,p] of Object.entries(rec.positions)){
       const ph=p.photos||(p.photoBlob?[p.photoBlob]:[]);
-      for(let i=0;i<ph.length;i++){ const ext=extOf(ph[i]); const base=fileName(rec.equip,k,rec.date,ext,suffix);
+      for(let i=0;i<ph.length;i++){ const ext=extOf(ph[i]); const base=fileName(rec.equip,k,rec.date,ext,suffix,isComp);
         const name = ph.length>1 ? base.replace("."+ext, "_"+(i+1)+"."+ext) : base;
         files.push({name, data:new Uint8Array(await ph[i].arrayBuffer())}); }
       if(p.video){ const vext=(p.video.type||"").includes("quicktime")?"mov":"mp4";
-        files.push({name:fileName(rec.equip,k,rec.date,vext,suffix), data:new Uint8Array(await p.video.arrayBuffer())}); }
+        files.push({name:fileName(rec.equip,k,rec.date,vext,suffix,isComp), data:new Uint8Array(await p.video.arrayBuffer())}); }
       if(p.grade) grades[`${rec.equip}|${rec.date}|${k}`]=p.grade;
       const nk=`${rec.equip}|${rec.date}|${k}`; const n={};
       if(p.particle)n.particleCount=p.particle; if(p.comp)n.componentHours=p.comp; if(p.oil)n.oilHours=p.oil;
