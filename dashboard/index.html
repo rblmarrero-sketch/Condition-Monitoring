@@ -178,6 +178,19 @@
   .lb .cap { position:absolute; bottom:20px; left:0; right:0; text-align:center; color:#eee; font-size:13px; }
   .lb .x { position:absolute; top:18px; right:22px; color:#fff; font-size:30px; cursor:pointer; line-height:1; background:none; border:none; }
   .hidden { display:none !important; }
+
+  /* editable readings on each photo card */
+  .fields { display:grid; grid-template-columns:1fr 1fr; gap:8px 10px; margin-top:10px; }
+  .fields .f { display:flex; flex-direction:column; gap:3px; }
+  .fields .f.wide { grid-column:1 / -1; }
+  .fields .f > span { font-size:10px; text-transform:uppercase; letter-spacing:.4px; color:var(--muted); }
+  .fields input, .fields textarea, .smu-input { background:var(--surface); color:var(--ink); border:1px solid var(--border);
+    border-radius:7px; padding:6px 8px; font-size:12.5px; font-family:inherit; width:100%; }
+  .fields input:focus, .fields textarea:focus, .smu-input:focus { outline:2px solid var(--accent); outline-offset:1px; }
+  .fields textarea { resize:vertical; min-height:38px; }
+  .smu-input { max-width:120px; font-variant-numeric:tabular-nums; }
+  .insp .head .smu { display:inline-flex; align-items:center; gap:7px; font-size:12.5px; color:var(--ink-2); }
+  .savehint { font-size:11.5px; color:var(--muted); margin:2px 0 14px; }
 </style>
 </head>
 <body>
@@ -188,6 +201,9 @@
   </div>
   <div class="spacer"></div>
   <button class="btn primary" id="folderBtn" title="Read photos straight from a folder on disk / N: drive">📂 Open photo folder</button>
+  <button class="btn" id="exportBtn" title="Save your typed grades, hours &amp; comments to a file (backup or share to another PC)">💾 Save entries</button>
+  <button class="btn" id="importBtn" title="Load entries from a saved file">📥 Import</button>
+  <input type="file" id="importFile" accept="application/json,.json" hidden>
   <button class="btn" id="themeBtn" title="Toggle light / dark">◐ Theme</button>
 </header>
 
@@ -302,6 +318,44 @@ function setGrade(equip, date, key, val){
   renderAll();
 }
 
+/* ---- user readings/comments (saved in this browser) ---- */
+const NOTE_STORE_KEY = "cm_magplug_notes";
+let NOTES = {};
+try { NOTES = JSON.parse(localStorage.getItem(NOTE_STORE_KEY)) || {}; } catch(e) { NOTES = {}; }
+function saveNotes(){ try { localStorage.setItem(NOTE_STORE_KEY, JSON.stringify(NOTES)); } catch(e){} }
+function findPos(equip, date, key){
+  const rec = (byEquip[equip]||[]).find(r => (r.date||"") === (date||""));
+  return rec ? rec.positions.find(p => p.key === key) : null;
+}
+// per-position field (particleCount / componentHours / oilHours / comment): override else original
+function getField(equip, date, key, field){
+  const nk = gkey(equip,date,key);
+  if (NOTES[nk] && field in NOTES[nk]) return NOTES[nk][field];
+  const p = findPos(equip,date,key);
+  return p ? (p[field] ?? "") : "";
+}
+function setField(equip, date, key, field, val){
+  const nk = gkey(equip,date,key);
+  (NOTES[nk] ||= {});
+  if (val === "" || val == null) delete NOTES[nk][field]; else NOTES[nk][field] = val;
+  if (Object.keys(NOTES[nk]).length === 0) delete NOTES[nk];
+  saveNotes();
+}
+// per-inspection SMU / machine hours: override else original motorHours
+function getSMU(equip, date){
+  const nk = equip+"|"+(date||"");
+  if (NOTES[nk] && "smu" in NOTES[nk]) return NOTES[nk].smu;
+  const rec = (byEquip[equip]||[]).find(r => (r.date||"") === (date||""));
+  return rec && rec.motorHours != null ? rec.motorHours : "";
+}
+function setSMU(equip, date, val){
+  const nk = equip+"|"+(date||"");
+  (NOTES[nk] ||= {});
+  if (val === "" || val == null) delete NOTES[nk].smu; else NOTES[nk].smu = val;
+  if (Object.keys(NOTES[nk]).length === 0) delete NOTES[nk];
+  saveNotes();
+}
+
 /* ============================ Data state ============================ */
 let DATA = window.CM_DATA || { component:"Magnetic Plug", assetClass:"", equipmentList:[], inspections:[] };
 let byEquip = {};
@@ -388,11 +442,15 @@ function renderHistory(){
     : "No inspections on record for this unit.";
   if (!recs.length){ $("history").innerHTML = `<div class="hist-empty">No data.</div>`; return; }
 
-  $("history").innerHTML = recs.map(rec => `
-    <div class="insp">
+  $("history").innerHTML =
+    `<div class="savehint">✎ Grades, hours and comments you type are saved automatically on this computer.</div>` +
+    recs.map(rec => `
+    <div class="insp" data-reckey="${rec.equipment}␟${rec.date||''}">
       <div class="head">
         <span class="date">${rec.date || "Undated"}</span>
-        ${rec.motorHours!=null?`<span class="meta">Motor hours: <b>${rec.motorHours}</b></span>`:""}
+        <span class="smu">SMU / machine hrs
+          <input class="smu-input" type="text" inputmode="numeric" data-smu placeholder="—">
+        </span>
         <span class="spacer"></span>
         <span class="meta" style="font-size:11.5px">${rec.source||""}</span>
       </div>
@@ -402,7 +460,7 @@ function renderHistory(){
           const gi = gradeInfo(cur);
           const url = photoUrl(p.photo);
           const cap = `${e} · ${p.key} ${p.label||""} · ${rec.date||""} · ${gi.label}`;
-          return `<div class="pos">
+          return `<div class="pos" data-poskey="${rec.equipment}␟${rec.date||''}␟${p.key}">
             ${url
               ? `<img class="photo" loading="lazy" src="${url}" alt="${cap}" data-full="${url}" data-cap="${cap}"
                      onerror="this.outerHTML='<div class=\\'nophoto\\'>photo not found</div>'">`
@@ -411,8 +469,13 @@ function renderHistory(){
               <div class="pk">${p.key} ${badge(gi)}</div>
               <div class="pl">${p.label||POS_LABELS[p.key]||""}</div>
               ${gradePicker(rec, p, cur)}
-              <dl>${field("Particle count",p.particleCount)}${field("Component hrs",p.componentHours)}${field("Oil hrs",p.oilHours)}</dl>
-              ${p.comment?`<div class="comment">“${p.comment}”</div>`:""}
+              <div class="fields">
+                <label class="f"><span>Particle count</span><input type="text" data-field="particleCount"></label>
+                <label class="f"><span>Component hrs</span><input type="text" inputmode="numeric" data-field="componentHours"></label>
+                <label class="f"><span>Oil hrs</span><input type="text" inputmode="numeric" data-field="oilHours"></label>
+                <label class="f"><span>&nbsp;</span></label>
+                <label class="f wide"><span>Comment</span><textarea rows="2" data-field="comment"></textarea></label>
+              </div>
             </div>
           </div>`;
         }).join("")}
@@ -426,6 +489,24 @@ function renderHistory(){
       const same = b.classList.contains("on");
       setGrade(b.dataset.equip, b.dataset.date, b.dataset.key, same ? null : b.dataset.grade);
     });
+
+  // SMU / machine-hours inputs (one per inspection)
+  $("history").querySelectorAll(".insp").forEach(card => {
+    const [eq, dt] = card.dataset.reckey.split("␟");
+    const inp = card.querySelector("input[data-smu]");
+    if (!inp) return;
+    inp.value = getSMU(eq, dt);
+    inp.oninput = () => setSMU(eq, dt, inp.value.trim());
+  });
+
+  // per-position readings + comment (populate current values, save on input)
+  $("history").querySelectorAll(".pos[data-poskey]").forEach(card => {
+    const [eq, dt, key] = card.dataset.poskey.split("␟");
+    card.querySelectorAll("[data-field]").forEach(inp => {
+      inp.value = getField(eq, dt, key, inp.dataset.field);
+      inp.oninput = () => setField(eq, dt, key, inp.dataset.field, inp.value.trim());
+    });
+  });
 }
 
 /* Rebuild the equipment + grade selectors, then render everything. */
@@ -460,6 +541,30 @@ $("themeBtn").addEventListener("click", () => {
   const cur = document.documentElement.getAttribute("data-theme");
   const dark = cur ? cur==="dark" : matchMedia("(prefers-color-scheme: dark)").matches;
   document.documentElement.setAttribute("data-theme", dark ? "light" : "dark");
+});
+
+/* ---- Save / import typed entries (grades, hours, comments) ---- */
+$("exportBtn").addEventListener("click", () => {
+  const payload = { type:"cm-magplug-entries", version:1, grades:GRADES, notes:NOTES };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type:"application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "magnetic_plug_entries.json";
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
+$("importBtn").addEventListener("click", () => $("importFile").click());
+$("importFile").addEventListener("change", async (e) => {
+  const f = e.target.files[0]; if (!f) return;
+  try {
+    const j = JSON.parse(await f.text());
+    if (j.grades) Object.assign(GRADES, j.grades);
+    if (j.notes)  Object.assign(NOTES, j.notes);
+    try { localStorage.setItem(GRADE_STORE_KEY, JSON.stringify(GRADES)); } catch(_){}
+    saveNotes(); renderAll();
+    alert("Entries imported and merged.");
+  } catch(err) { alert("Could not read that file: " + (err && err.message || err)); }
+  e.target.value = "";
 });
 
 /* ============================ Folder ingest (Chrome / Edge) ============================ */

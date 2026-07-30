@@ -62,6 +62,25 @@ can point at right now.
 (remembered in your browser), or put the grade in the file name
 (`4C_C.jpg` or `TK146_4C_2026-10-15_C.jpg`).
 
+### Recording readings, grades & comments (no Excel)
+
+Each photo card has type-in fields, filled in straight on the dashboard:
+
+- **Grade** (`A/B/C/D/X`) — click to set the plug's condition.
+- **Particle count**, **Component hrs**, **Oil hrs**, **Comment** — per plug position.
+- **SMU / machine hrs** — once per inspection (the machine's hour meter).
+
+Everything you type **saves automatically in that browser** as you go. Because
+it's stored per-browser, use the header buttons to keep it safe and shared:
+
+- **💾 Save entries** — download all your grades/hours/comments to a file
+  (`magnetic_plug_entries.json`) as a backup, or to copy to another PC / the N: drive.
+- **📥 Import** — load a saved entries file (it merges into what's there).
+
+> Entries live in the browser's local storage, not in the photo files. Clearing
+> the browser's site data would erase unsaved entries — click **Save entries**
+> periodically, and keep that file on the N: drive so the record is shared.
+
 > The “Open photo folder” button uses the browser’s folder-picker, available in
 > Chrome and Edge. In other browsers, use the command-line scanner below to
 > generate `data/magnetic_plug.js` instead.
