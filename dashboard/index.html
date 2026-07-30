@@ -299,7 +299,7 @@ function gradeInfo(g) {
 /* ---- resolve a repo-relative photo path from this dashboard/ subfolder ---- */
 function photoUrl(p) {
   if (!p) return null;
-  if (/^([a-zA-Z]:|https?:|file:|\/|\\)/.test(p)) return p; // absolute / URL / N: drive
+  if (/^(data:|[a-zA-Z]:|https?:|file:|\/|\\)/.test(p)) return p; // data URI / absolute / URL / N: drive
   return "../" + p;
 }
 
