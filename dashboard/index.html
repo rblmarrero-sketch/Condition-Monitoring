@@ -489,15 +489,19 @@ async function scanDirectory(dirHandle){
       } else if (entry.kind === "file" && IMG_RE.test(entry.name)){
         const equip = ctx.equip || parseEquipFromName(entry.name) || "UNKNOWN";
         const date = ctx.date || parseDate(entry.name) || "";
-        const pos = parsePos(entry.name) || parsePos(path) || nextPos(recs, equip, date);
-        const grade = parseGrade(entry.name);
-        const file = await entry.getFile();
-        const url = URL.createObjectURL(file);
         const rk = equip + "|" + date;
         if (!recs.has(rk)) recs.set(rk, { equipment:equip, date, motorHours:null, source:"photo folder", positions:[] });
-        recs.get(rk).positions.push({
+        const rec = recs.get(rk);
+        const pos = parsePos(entry.name) || parsePos(path) || nextPos(recs, equip, date);
+        // one card per plug position — if the same position already has a photo
+        // (e.g. a duplicate "_MP" copy), keep the first and skip the rest.
+        if (rec.positions.some(x => x.key === pos)) continue;
+        const grade = parseGrade(entry.name);
+        const file = await entry.getFile();
+        rec.positions.push({
           key: pos, label: POS_LABELS[pos] || "", grade: grade,
-          particleCount:null, componentHours:null, oilHours:null, comment:null, photo:url,
+          particleCount:null, componentHours:null, oilHours:null, comment:null,
+          photo: URL.createObjectURL(file),
         });
       }
     }
@@ -505,7 +509,12 @@ async function scanDirectory(dirHandle){
   await walk(dirHandle, "", {});
   return recs;
 }
-function parseEquipFromName(name){ const m = name.match(/\b([A-Za-z]{1,4}\d+)\b/); return m ? m[1].toUpperCase() : null; }
+function parseEquipFromName(name){
+  // equipment token = 1-4 letters + digits, bounded by separators (_ - . space) or ends.
+  // e.g. "TK146_4C_29.07.2026_MP.jpg" -> "TK146"
+  const m = name.match(/(?:^|[_\-.\s])([A-Za-z]{1,4}\d+)(?=[_\-.\s]|$)/);
+  return m ? m[1].toUpperCase() : null;
+}
 function nextPos(recs, equip, date){
   const rk = equip+"|"+date; const n = recs.has(rk) ? recs.get(rk).positions.length : 0;
   return HEAT_POSITIONS[n] || ("P"+(n+1));

@@ -36,7 +36,7 @@ IMG_RE = re.compile(r"\.(jpe?g|png|webp|gif|bmp)$", re.I)
 DATE_RE = re.compile(r"(20\d{2})[-_.]?(\d{2})[-_.]?(\d{2})|(\d{2})[-_.](\d{2})[-_.](20\d{2})")
 POS_RE = re.compile(r"(4[CDEF])", re.I)
 GRADE_RE = re.compile(r"[_\-\s]([ABCDX])(?=[_\-.\s]|$)", re.I)
-EQUIP_RE = re.compile(r"\b([A-Za-z]{1,4}\d+)\b")
+EQUIP_RE = re.compile(r"(?:^|[_\-.\s])([A-Za-z]{1,4}\d+)(?=[_\-.\s]|$)")
 
 POS_LABELS = {"4C": "Left Rear Final Drive", "4D": "Right Rear Final Drive",
               "4E": "Left Rear Final Drive", "4F": "Right Rear Final Drive"}
@@ -88,6 +88,9 @@ def scan(root, copy):
                                           "source": "photo folder", "positions": []})
             pos = parse_pos(fn) or parse_pos(dirpath) or (POS_ORDER[len(rec["positions"])]
                                                           if len(rec["positions"]) < 4 else f"P{len(rec['positions'])+1}")
+            # one photo per plug position — skip duplicates (e.g. an "_MP" copy)
+            if any(p["key"] == pos for p in rec["positions"]):
+                continue
             grade = parse_grade(fn)
             src = os.path.join(dirpath, fn)
             if copy:
