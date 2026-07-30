@@ -212,7 +212,7 @@
 
   <button class="btn ghost" id="reportBtn" style="margin-bottom:16px">📄 <span data-i18n="btn_report">PDF report</span></button>
 
-  <div class="ver">build v18 · 2026-07-31 · Card hierarchy</div>
+  <div class="ver">build v19 · 2026-07-31 · Card hierarchy · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <div class="bottombar">
@@ -885,6 +885,12 @@ addEventListener("online",setNet); addEventListener("offline",setNet);
 if("serviceWorker" in navigator && location.protocol==="https:"){ let reloaded=false;
   navigator.serviceWorker.addEventListener("controllerchange",()=>{ if(reloaded)return; reloaded=true; location.reload(); });
   navigator.serviceWorker.register("sw.js").then(reg=>{ reg.update&&reg.update(); }).catch(()=>{}); }
+
+/* ===================== force-update (clears cache + service worker) ===================== */
+const fu=$("forceUpdate"); if(fu) fu.onclick=async (e)=>{ e.preventDefault();
+  try{ if("serviceWorker" in navigator){ const rs=await navigator.serviceWorker.getRegistrations(); await Promise.all(rs.map(r=>r.unregister())); } }catch(_){}
+  try{ if(window.caches){ const ks=await caches.keys(); await Promise.all(ks.map(k=>caches.delete(k))); } }catch(_){}
+  location.reload(true); };
 
 /* ===================== init ===================== */
 updateEquipBtn();
