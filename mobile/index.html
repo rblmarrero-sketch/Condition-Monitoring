@@ -214,7 +214,7 @@
 
   <button class="btn ghost" id="reportBtn" style="margin-bottom:16px">📄 <span data-i18n="btn_report">PDF report</span></button>
 
-  <div class="ver">build v22 · 2026-07-31 · 1C+HME defects · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver">build v23 · 2026-07-31 · ISO 14224 · context filter · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <div class="bottombar">
@@ -383,7 +383,7 @@ const I18N = {
     sec_inspection:"Inspection", lbl_class:"Equipment", lbl_type:"Inspection type", lbl_truck:"Truck / Unit", ph_truck:"e.g. TK158", btn_scan:"Scan",
     lbl_defect:"Defect / failure mode", lbl_cause:"Direct cause",
     opt_none:"— none / OK —", opt_cause_tbd:"— to be confirmed —", opt_cause_pick:"Select a defect first",
-    opt_all_equip:"All equipment", opt_pick_unit:"Tap to choose a unit…", opt_use:"Use", opt_pick_item:"Choose component…",
+    opt_all_equip:"All equipment", opt_pick_unit:"Tap to choose a unit…", opt_use:"Use", opt_pick_item:"Choose component…", opt_show_all:"⋯ show all failure modes",
     need_unit:"Choose the unit first — its real components will load here.", nav_systems:"Systems", nav_whole:"Inspect whole", nav_choose:"Choose a component to inspect ↑", opt_search_all:"Search all components",
     lbl_date:"Date", lbl_smu:"SMU / machine hrs", ph_smu:"e.g. 6018",
     btn_take:"Add photo", btn_video:"Video", btn_retake:"Retake",
@@ -417,7 +417,7 @@ const I18N = {
     sec_inspection:"Осмотр", lbl_class:"Оборудование", lbl_type:"Тип осмотра", lbl_truck:"Трак / Ед.", ph_truck:"напр. TK158", btn_scan:"Скан",
     lbl_defect:"Дефект / вид отказа", lbl_cause:"Прямая причина",
     opt_none:"— нет / норма —", opt_cause_tbd:"— уточнить —", opt_cause_pick:"Сначала выберите дефект",
-    opt_all_equip:"Всё оборудование", opt_pick_unit:"Нажмите, чтобы выбрать ед. техники…", opt_use:"Использовать", opt_pick_item:"Выбрать узел…",
+    opt_all_equip:"Всё оборудование", opt_pick_unit:"Нажмите, чтобы выбрать ед. техники…", opt_use:"Использовать", opt_pick_item:"Выбрать узел…", opt_show_all:"⋯ показать все виды отказов",
     need_unit:"Сначала выберите единицу техники — её узлы загрузятся здесь.", nav_systems:"Системы", nav_whole:"Осмотреть узел целиком", nav_choose:"Выберите узел для осмотра ↑", opt_search_all:"Поиск по всем узлам",
     lbl_date:"Дата", lbl_smu:"Моточасы (SMU)", ph_smu:"напр. 6018",
     btn_take:"Добавить фото", btn_video:"Видео", btn_retake:"Переснять",
@@ -459,6 +459,57 @@ const CAUSE_BY  = {}; TAX.causes.forEach(c=>CAUSE_BY[c.c]=c);
 function defectLabel(code,l){ const d=DEFECT_BY[code]; return d?(d[l||lang]||d.en):code; }
 function causeLabel(code,l){ const c=CAUSE_BY[code]; return c?(c[l||lang]||c.en):code; }
 function groupLabel(g,l){ const x=TAX.groups[g]; return x?(x[l||lang]||x.en):g; }
+function isoText(d,l){ const m=TAX.isoMech&&TAX.isoMech[d.iso], mo=TAX.isoMode&&TAX.isoMode[d.im];
+  return `ISO ${d.iso} ${m?(m[l||lang]||m.en):""} · ${d.im}`; }
+
+/* --- Which failure modes make sense for which component (ISO 14224 practice) --- */
+const SYS_TAGS={
+  AU:"ELEC CI UNIV", ELS:"ELEC CI UNIV", OC:"ELEC CI STRUCT UNIV",
+  DRS:"ENGINE MECH FLUID DRIVE WEAR ELEC OIL UNIV", HS:"HYD FLUID MECH OIL UNIV",
+  BS:"BRAKE MECH HYD FLUID UNIV", SS:"STEER HYD MECH UNIV",
+  CH:"STRUCT MECH WEAR GET UC TYRE UNIV", LS:"FLUID MECH OIL UNIV", PS:"PNEU FLUID MECH UNIV",
+  CONV:"CONV MECH STRUCT UNIV", CRS:"CRUSH MECH STRUCT HYD UNIV", SCN:"SCREEN MECH STRUCT UNIV",
+  FEED:"CONV MECH STRUCT UNIV", DUS:"FLUID MECH ELEC UNIV", WE:"MECH STRUCT HYD WEAR GET UNIV",
+};
+const ITEM_TAGS={ // finer overrides by component code / keyword
+  "DRS.ENG":"ENGINE MECH FLUID OIL ELEC UNIV", "DRS.COO":"FLUID MECH ENGINE UNIV",
+  "DRS.FD":"DRIVE MECH OIL FLUID UNIV", "DRS.TM":"DRIVE MECH OIL FLUID UNIV",
+  "DRS.SW":"DRIVE MECH OIL UNIV", "DRS.FUE":"FLUID ENGINE MECH UNIV",
+  "CH.UC":"UC MECH STRUCT WEAR UNIV", "CH.BUC":"GET STRUCT MECH WEAR UNIV",
+  "CH.BOO":"STRUCT MECH HYD UNIV", "CH.STK":"STRUCT MECH HYD UNIV", "CH.FR":"STRUCT MECH UNIV",
+};
+const KEY_TAGS=[[/tyre|tire|wheel|rim/i,"TYRE MECH STRUCT UNIV"],[/track|undercarriage/i,"UC MECH WEAR STRUCT UNIV"],
+  [/bucket|tooth|teeth|GET|lip/i,"GET WEAR MECH STRUCT UNIV"],[/brake|retard/i,"BRAKE MECH HYD UNIV"],
+  [/steer/i,"STEER HYD MECH UNIV"],[/conveyor|belt/i,"CONV MECH STRUCT UNIV"],
+  [/crusher|jaw|cone|mantle|liner/i,"CRUSH MECH STRUCT UNIV"],[/screen|exciter/i,"SCREEN MECH STRUCT UNIV"],
+  [/filter/i,"FILTER FLUID OIL HYD UNIV"],[/drill|rotary head|mast|rod/i,"DRILL MECH HYD UNIV"],
+  [/fire|suppress|safety/i,"SAFETY UNIV"],[/lubric|grease/i,"FLUID OIL MECH UNIV"]];
+function tagsForCurrentItem(){
+  if(type==="MP") return "OIL WEAR MECH DRIVE UNIV";     // magnetic plug -> wear debris & oil
+  if(type==="FC") return "FILTER OIL FLUID WEAR UNIV";   // filter cut  -> filter findings
+  const k=curItem||""; if(!k) return null;
+  if(ITEM_TAGS[k]) return ITEM_TAGS[k];
+  const label=(itemLabel(k)||"")+" "+k;
+  for(const [re,tg] of KEY_TAGS) if(re.test(label)) return tg;
+  const sys=String(k).split(".")[0];
+  return SYS_TAGS[sys] || null;                          // null = show everything
+}
+function defectsForContext(){
+  const tg=tagsForCurrentItem();
+  const vis=TAX.defects.filter(d=>!d.hide);
+  if(!tg) return vis;
+  const allow=new Set(tg.split(" "));
+  const hit=vis.filter(d=>d.t.split(" ").some(x=>allow.has(x)));
+  if(!hit.length) return vis;                            // never leave the user with nothing
+  const primary=tg.split(" ")[0];                        // most relevant modes first
+  return hit.slice().sort((a,b)=>{
+    const ap=a.t.split(" ").indexOf(primary)>=0?0:1, bp=b.t.split(" ").indexOf(primary)>=0?0:1;
+    if(ap!==bp) return ap-bp;
+    const au=a.t==="UNIV"?1:0, bu=b.t==="UNIV"?1:0;      // generic/external last
+    if(au!==bu) return au-bu;
+    return a.c.localeCompare(b.c);
+  });
+}
 // Direct causes for a defect, filtered by the equipment's asset range.
 function causesFor(defectCode){
   if(!defectCode) return [];
@@ -645,7 +696,7 @@ function selectEquip(n){ n=(n||"").trim().toUpperCase().replace(/\s+/g,""); curE
   if(a){ eqCat=a.cat||"— UNCATEGORISED —"; localStorage.setItem("equip_cat",eqCat); }
   const cls=assetClassOf(n); if(cls){ eqClass=cls; localStorage.setItem("equip_class",eqClass); }
   draft={positions:{}}; editing=null; curItem=""; applyForm(); setEditing(null); updateEquipBtn(); }
-let pickMode=null;
+let pickMode=null, showAllDefects=false;
 function pickerSource(){
   if(pickMode==="cat"){
     return [{k:"ALL",label:`${t("opt_all_equip")} (${ASSETS.length})`,group:""}]
@@ -659,7 +710,9 @@ function pickerSource(){
     return items().map(it=>({k:it.k, label:(it[lang]||it.en||it.k), group:String(it.k).split(".")[0]}));
   }
   if(pickMode==="defect"){
-    return [{k:"",label:t("opt_none")}].concat(TAX.defects.map(d=>({k:d.c,label:(d[lang]||d.en)+"  ·  "+d.c,group:groupLabel(d.g)})));
+    return [{k:"",label:t("opt_none")},{k:"__all__",label:t("opt_show_all")}].concat(
+      (showAllDefects?TAX.defects.filter(d=>!d.hide):defectsForContext())
+        .map(d=>({k:d.c,label:(d[lang]||d.en)+"  ·  "+d.c,group:groupLabel(d.g)})));
   }
   const cs=causesFor((draft.positions[curItem]||{}).defect);
   return [{k:"",label:t("opt_cause_tbd")}].concat(cs.map(c=>({k:c.c,label:(c[lang]||c.en),group:(lang==="ru"?(TAX.causeGroupRu[c.g]||c.g):c.g)})));
@@ -676,7 +729,7 @@ function updateDefectCauseBtns(){ const p=draft.positions[curItem]||{};
   $("causeBtn").disabled = !p.defect;
   $("causeBtn").textContent = p.cause ? causeLabel(p.cause) : (p.defect ? t("opt_cause_tbd") : t("opt_cause_pick")); }
 $("equipBtn").onclick=()=>openPicker("equip");
-$("defectBtn").onclick=()=>openPicker("defect");
+$("defectBtn").onclick=()=>{ showAllDefects=false; openPicker("defect"); };
 $("causeBtn").onclick=()=>{ if((draft.positions[curItem]||{}).defect) openPicker("cause"); };
 $("pickSearch").oninput=(e)=>renderPickList(e.target.value);
 $("pickCancel").onclick=closePicker;
@@ -684,6 +737,7 @@ $("pickList").onclick=(e)=>{ const b=e.target.closest(".pickitem"); if(!b) retur
   if(pickMode==="cat"){ selectCat(k); closePicker(); return; }
   if(pickMode==="equip"){ selectEquip(k==="__custom__" ? $("pickSearch").value : k); closePicker(); return; }
   if(pickMode==="item"){ saveCur(); curItem=k; closePicker(); renderChips(); loadPos(); return; }
+  if(k==="__all__"){ showAllDefects=true; renderPickList($("pickSearch").value); return; }
   const p=curP();
   if(pickMode==="defect"){ p.defect=k||""; if(!causesFor(p.defect).some(c=>c.c===p.cause)) p.cause=""; }
   else { p.cause=k||""; }
