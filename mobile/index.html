@@ -143,10 +143,10 @@
 <main>
   <div class="card">
     <h2 data-i18n="sec_inspection">Inspection</h2>
-    <div class="row">
-      <label class="fld"><span data-i18n="lbl_class">Equipment</span><select id="classSel"></select></label>
-      <label class="fld"><span data-i18n="lbl_type">Inspection type</span><select id="typeSel"></select></label>
-    </div>
+    <label class="fld"><span data-i18n="lbl_type">Inspection type</span><select id="typeSel"></select></label>
+    <label class="fld"><span data-i18n="lbl_class">Equipment</span>
+      <button type="button" class="picker-btn" id="classBtn"></button>
+    </label>
     <label class="fld"><span data-i18n="lbl_truck">Truck / Unit</span>
       <div class="withbtn">
         <button type="button" class="picker-btn" id="equipBtn"></button>
@@ -214,7 +214,7 @@
 
   <button class="btn ghost" id="reportBtn" style="margin-bottom:16px">📄 <span data-i18n="btn_report">PDF report</span></button>
 
-  <div class="ver">build v21 · 2026-07-31 · Real fleet categories · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver">build v22 · 2026-07-31 · 1C+HME defects · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <div class="bottombar">
@@ -242,6 +242,7 @@
 
 <script src="jsQR.js"></script>
 <script src="taxonomy.js"></script>
+<script src="taxonomy2.js"></script>
 <script src="assets.js"></script>
 <script src="components.js"></script>
 <script src="jspdf.umd.min.js"></script>
@@ -451,19 +452,23 @@ let lang = localStorage.getItem("lang") || "en";
 function t(k){ return (I18N[lang] && I18N[lang][k]) || I18N.en[k] || k; }
 
 /* ===================== defect + direct-cause taxonomy (from taxonomy.js) ===================== */
-const TAX = window.TAX || {defects:[],causes:[],defectGroups:[],defectGroupRu:{},causeGroupRu:{}};
+// Merged taxonomy: 1C CMMS defect codes (spine) + HME mobile-equipment modes.
+const TAX = window.TAX2 || {groups:{},defects:[],causes:[],causeGroupRu:{}};
 const DEFECT_BY = {}; TAX.defects.forEach(d=>DEFECT_BY[d.c]=d);
 const CAUSE_BY  = {}; TAX.causes.forEach(c=>CAUSE_BY[c.c]=c);
 function defectLabel(code,l){ const d=DEFECT_BY[code]; return d?(d[l||lang]||d.en):code; }
 function causeLabel(code,l){ const c=CAUSE_BY[code]; return c?(c[l||lang]||c.en):code; }
-// direct causes that apply to a defect for the current equipment's asset range
+function groupLabel(g,l){ const x=TAX.groups[g]; return x?(x[l||lang]||x.en):g; }
+// Direct causes for a defect, filtered by the equipment's asset range.
 function causesFor(defectCode){
   if(!defectCode) return [];
+  const d=DEFECT_BY[defectCode]; const hcodes=(d&&d.hme)||[];
   const asset=(CLASSES[eqClass]||{}).asset||"";
-  let list=TAX.causes.filter(c=>c.dt&&c.dt.indexOf(defectCode)>=0 &&
-    (!asset || (c.as&&(c.as.indexOf(asset)>=0||c.as.indexOf("ALL PRIMARY HME")>=0))));
-  if(asset && !list.length) list=TAX.causes.filter(c=>c.dt&&c.dt.indexOf(defectCode)>=0); // fallback: ignore asset
-  return list;
+  const inAsset=(c)=>!asset || (c.as&&(c.as.indexOf(asset)>=0||c.as.indexOf("ALL PRIMARY HME")>=0));
+  let list=TAX.causes.filter(c=>c.dt&&c.dt.some&&hcodes.some(h=>c.dt.indexOf(h)>=0)&&inAsset(c));
+  if(!list.length) list=TAX.causes.filter(c=>c.dt&&hcodes.some(h=>c.dt.indexOf(h)>=0)); // ignore asset filter
+  const external=TAX.causes.filter(c=>c.any);   // external/operating causes always offered
+  return list.concat(external);
 }
 
 /* ===================== asset register ===================== */
@@ -514,15 +519,13 @@ async function dbAll(){ const d=await idb(); return new Promise((res,rej)=>{ con
 async function dbDel(id){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); t.objectStore(STORE).delete(id); t.oncomplete=res; t.onerror=()=>rej(t.error); }); }
 
 /* ===================== class + type + component chips ===================== */
-function fillClassSel(){
-  let h=`<option value="ALL">${t("opt_all_equip")} (${ASSETS.length})</option>`;
-  h+=CAT_LIST.map(c=>`<option value="${c}">${c} (${CAT_COUNT[c]})</option>`).join("");
-  $("classSel").innerHTML=h; $("classSel").value=eqCat; }
-function fillTypeSel(){ $("typeSel").innerHTML=TYPE_ORDER.map(k=>`<option value="${k}">${t("type_"+k)}</option>`).join(""); $("typeSel").value=type; }
-$("classSel").onchange=(e)=>{ eqCat=e.target.value; localStorage.setItem("equip_cat",eqCat);
+function fillClassSel(){ $("classBtn").textContent = eqCat==="ALL"
+  ? `${t("opt_all_equip")} (${ASSETS.length})` : `${eqCat} (${CAT_COUNT[eqCat]||0})`; }
+function selectCat(c){ eqCat=c; localStorage.setItem("equip_cat",eqCat);
   eqClass = eqCat==="ALL" ? "GEN" : classForCat(eqCat); localStorage.setItem("equip_class",eqClass);
-  curEquip=""; updateEquipBtn();
-  draft={positions:{}}; editing=null; curItem=""; applyForm(); setEditing(null); };
+  curEquip=""; updateEquipBtn(); draft={positions:{}}; editing=null; curItem=""; applyForm(); setEditing(null); }
+$("classBtn").onclick=()=>openPicker("cat");
+function fillTypeSel(){ $("typeSel").innerHTML=TYPE_ORDER.map(k=>`<option value="${k}">${t("type_"+k)}</option>`).join(""); $("typeSel").value=type; }
 $("typeSel").onchange=(e)=>{ type=e.target.value; localStorage.setItem("insp_type",type);
   draft={positions:{}}; editing=null; curItem=""; applyForm(); setEditing(null); };
 function renderChips(){ const tr=currentTree();
@@ -644,6 +647,10 @@ function selectEquip(n){ n=(n||"").trim().toUpperCase().replace(/\s+/g,""); curE
   draft={positions:{}}; editing=null; curItem=""; applyForm(); setEditing(null); updateEquipBtn(); }
 let pickMode=null;
 function pickerSource(){
+  if(pickMode==="cat"){
+    return [{k:"ALL",label:`${t("opt_all_equip")} (${ASSETS.length})`,group:""}]
+      .concat(CAT_LIST.map(c=>({k:c,label:`${c} (${CAT_COUNT[c]})`,group:""})));
+  }
   if(pickMode==="equip"){
     const src = eqCat==="ALL" ? ASSETS : ASSETS.filter(a=>(a.cat||"— UNCATEGORISED —")===eqCat);
     return src.map(a=>({k:a.n, label:a.n+(a.m?" · "+a.m:""), group:(a.cat||"— UNCATEGORISED —")}));
@@ -652,7 +659,7 @@ function pickerSource(){
     return items().map(it=>({k:it.k, label:(it[lang]||it.en||it.k), group:String(it.k).split(".")[0]}));
   }
   if(pickMode==="defect"){
-    return [{k:"",label:t("opt_none")}].concat(TAX.defects.map(d=>({k:d.c,label:(d[lang]||d.en),group:(lang==="ru"?(TAX.defectGroupRu[d.g]||d.g):d.g)})));
+    return [{k:"",label:t("opt_none")}].concat(TAX.defects.map(d=>({k:d.c,label:(d[lang]||d.en)+"  ·  "+d.c,group:groupLabel(d.g)})));
   }
   const cs=causesFor((draft.positions[curItem]||{}).defect);
   return [{k:"",label:t("opt_cause_tbd")}].concat(cs.map(c=>({k:c.c,label:(c[lang]||c.en),group:(lang==="ru"?(TAX.causeGroupRu[c.g]||c.g):c.g)})));
@@ -674,6 +681,7 @@ $("causeBtn").onclick=()=>{ if((draft.positions[curItem]||{}).defect) openPicker
 $("pickSearch").oninput=(e)=>renderPickList(e.target.value);
 $("pickCancel").onclick=closePicker;
 $("pickList").onclick=(e)=>{ const b=e.target.closest(".pickitem"); if(!b) return; const k=b.dataset.k;
+  if(pickMode==="cat"){ selectCat(k); closePicker(); return; }
   if(pickMode==="equip"){ selectEquip(k==="__custom__" ? $("pickSearch").value : k); closePicker(); return; }
   if(pickMode==="item"){ saveCur(); curItem=k; closePicker(); renderChips(); loadPos(); return; }
   const p=curP();

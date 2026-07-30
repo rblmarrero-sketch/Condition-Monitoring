@@ -1,12 +1,13 @@
 /* Service worker for the Plug Capture app — makes it open offline once installed.
    Caches the app shell; captured photos live in IndexedDB (not here). */
-const CACHE = "plug-capture-v21-2026-07-31";
+const CACHE = "plug-capture-v22-2026-07-31";
 const SHELL = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
   "./jsQR.js",
   "./taxonomy.js",
+  "./taxonomy2.js",
   "./assets.js",
   "./components.js",
   "./jspdf.umd.min.js",
