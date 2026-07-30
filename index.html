@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Condition Monitoring — NHL TR60</title>
+<style>
+  :root{ color-scheme:light;
+    --page:#f4f4f1; --surface:#fff; --surface-2:#f2f2ef; --ink:#111; --ink-2:#44433f;
+    --muted:#8b8a83; --border:rgba(0,0,0,.12); --accent:#2a78d6; --shadow:0 1px 2px rgba(0,0,0,.06),0 8px 30px rgba(0,0,0,.06); }
+  @media (prefers-color-scheme:dark){ :root:where(:not([data-theme="light"])){ color-scheme:dark;
+    --page:#0d0d0d; --surface:#1a1a19; --surface-2:#242422; --ink:#fff; --ink-2:#c3c2b7;
+    --muted:#8b8a83; --border:rgba(255,255,255,.12); --accent:#3987e5; --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 40px rgba(0,0,0,.5); } }
+  :root[data-theme="dark"]{ color-scheme:dark; --page:#0d0d0d; --surface:#1a1a19; --surface-2:#242422; --ink:#fff;
+    --ink-2:#c3c2b7; --muted:#8b8a83; --border:rgba(255,255,255,.12); --accent:#3987e5; --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 40px rgba(0,0,0,.5); }
+  *{box-sizing:border-box;} html,body{margin:0;}
+  body{background:var(--page);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+    min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:40px 20px;}
+  .wrap{width:100%;max-width:760px;}
+  .eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:6px;}
+  h1{margin:0 0 6px;font-size:28px;letter-spacing:-.3px;}
+  .sub{color:var(--ink-2);margin-bottom:32px;}
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+  @media (max-width:560px){ .cards{grid-template-columns:1fr;} }
+  a.card{display:block;text-decoration:none;color:inherit;background:var(--surface);border:1px solid var(--border);
+    border-radius:18px;padding:24px;box-shadow:var(--shadow);transition:transform .08s ease,border-color .08s ease;}
+  a.card:hover{transform:translateY(-2px);border-color:var(--accent);}
+  a.card .ico{font-size:38px;}
+  a.card h2{margin:12px 0 4px;font-size:19px;}
+  a.card p{margin:0;color:var(--ink-2);font-size:14px;}
+  a.card .go{margin-top:16px;display:inline-flex;align-items:center;gap:6px;color:var(--accent);font-weight:650;font-size:14px;}
+  .foot{margin-top:34px;color:var(--muted);font-size:13px;line-height:1.6;}
+  .foot code{background:var(--surface-2);padding:2px 6px;border-radius:6px;}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="eyebrow">Condition Monitoring · NHL TR60 Dump Trucks</div>
+    <h1>Magnetic Plug Monitoring</h1>
+    <p class="sub">Choose where you are working.</p>
+
+    <div class="cards">
+      <a class="card" href="dashboard/">
+        <div class="ico">📊</div>
+        <h2>Dashboard</h2>
+        <p>Office / PC. Review each truck's plug history, photos, grades and readings; open a photo folder from the N: drive.</p>
+        <span class="go">Open dashboard →</span>
+      </a>
+      <a class="card" href="mobile/">
+        <div class="ico">📱</div>
+        <h2>Field Capture</h2>
+        <p>Phone, works offline. Photograph each plug, enter grade and readings, then share/upload when back online.</p>
+        <span class="go">Open capture app →</span>
+      </a>
+    </div>
+
+    <p class="foot">
+      On your phone, open <b>Field Capture</b> then use your browser's <b>Add to Home Screen</b> to install it as an app that works with no signal.<br>
+      Filter Cut, Oil Analysis and Temperature are planned next.
+    </p>
+  </div>
+</body>
+</html>
