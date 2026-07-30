@@ -77,6 +77,8 @@
   .clist button.has{border-color:var(--good);}
   .searchall{width:100%;padding:9px;border:1px dashed var(--border);background:none;color:var(--accent);border-radius:10px;font-size:13px;font-weight:650;cursor:pointer;margin-bottom:10px;}
   .prompt-pick{color:var(--muted);font-size:13px;text-align:center;padding:14px;}
+  .needunit{width:100%;text-align:center;padding:12px 6px 4px;}
+  .needunit .nu-t{color:var(--ink-2);font-size:14px;margin-bottom:12px;}
   .posnav button .dot{position:absolute;top:5px;right:6px;width:8px;height:8px;border-radius:50%;background:var(--good);display:none;}
   .posnav button.has .dot{display:block;}
   .shot{width:100%;aspect-ratio:4/3;border-radius:14px;border:2px dashed var(--border);background:var(--surface-2);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:14px;overflow:hidden;margin-bottom:12px;position:relative;text-align:center;padding:10px;}
@@ -212,7 +214,7 @@
 
   <button class="btn ghost" id="reportBtn" style="margin-bottom:16px">📄 <span data-i18n="btn_report">PDF report</span></button>
 
-  <div class="ver">build v19 · 2026-07-31 · Card hierarchy · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver">build v20 · 2026-07-31 · Unit-first components · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <div class="bottombar">
@@ -381,7 +383,7 @@ const I18N = {
     lbl_defect:"Defect / failure mode", lbl_cause:"Direct cause",
     opt_none:"— none / OK —", opt_cause_tbd:"— to be confirmed —", opt_cause_pick:"Select a defect first",
     opt_pick_unit:"Tap to choose a unit…", opt_use:"Use", opt_pick_item:"Choose component…",
-    nav_systems:"Systems", nav_whole:"Inspect whole", nav_choose:"Choose a component to inspect ↑", opt_search_all:"Search all components",
+    need_unit:"Choose the unit first — its real components will load here.", nav_systems:"Systems", nav_whole:"Inspect whole", nav_choose:"Choose a component to inspect ↑", opt_search_all:"Search all components",
     lbl_date:"Date", lbl_smu:"SMU / machine hrs", ph_smu:"e.g. 6018",
     btn_take:"Add photo", btn_video:"Video", btn_retake:"Retake",
     media_hint:"Up to 4 photos + 1 video (max 1 min).", media_empty:"No photos yet.",
@@ -415,7 +417,7 @@ const I18N = {
     lbl_defect:"Дефект / вид отказа", lbl_cause:"Прямая причина",
     opt_none:"— нет / норма —", opt_cause_tbd:"— уточнить —", opt_cause_pick:"Сначала выберите дефект",
     opt_pick_unit:"Нажмите, чтобы выбрать ед. техники…", opt_use:"Использовать", opt_pick_item:"Выбрать узел…",
-    nav_systems:"Системы", nav_whole:"Осмотреть узел целиком", nav_choose:"Выберите узел для осмотра ↑", opt_search_all:"Поиск по всем узлам",
+    need_unit:"Сначала выберите единицу техники — её узлы загрузятся здесь.", nav_systems:"Системы", nav_whole:"Осмотреть узел целиком", nav_choose:"Выберите узел для осмотра ↑", opt_search_all:"Поиск по всем узлам",
     lbl_date:"Дата", lbl_smu:"Моточасы (SMU)", ph_smu:"напр. 6018",
     btn_take:"Добавить фото", btn_video:"Видео", btn_retake:"Переснять",
     media_hint:"До 4 фото + 1 видео (макс. 1 мин).", media_empty:"Пока нет фото.",
@@ -511,7 +513,14 @@ $("typeSel").onchange=(e)=>{ type=e.target.value; localStorage.setItem("insp_typ
 function renderChips(){ const tr=currentTree();
   if(tr){ renderComponentNav(tr); return; }         // registered unit -> L7/L8/L9 cascade cards
   const its=items();
-  if(type==="INSP"){ renderFlatCards(its); return; } // Inspection (no unit tree) -> flat cards
+  if(type==="INSP"){
+    // Real components come from the register, so a unit must be chosen first.
+    if(!curEquip){ $("posnav").innerHTML='<div class="needunit"><div class="nu-t">'+t("need_unit")+'</div>'+
+        '<button class="btn primary" id="needUnitBtn">'+t("opt_pick_unit")+'</button></div>';
+      const nb=$("needUnitBtn"); if(nb) nb.onclick=()=>openPicker("equip");
+      toggleCapture(); return; }
+    renderFlatCards(its); return;                    // unit has no register tree -> generic cards
+  }
   // Magnetic Plug / Filter Cut -> compact chip row (few items)
   $("posnav").innerHTML=its.map(it=>`<button data-pos="${it.k}"><span>${it.k}</span><span class="dot"></span></button>`).join("");
   toggleCapture(); refreshChips(); }
@@ -522,7 +531,8 @@ function renderFlatCards(its){
   const sa=$("searchAllBtn"); if(sa) sa.onclick=()=>openPicker("item");
   $("posnav").querySelectorAll('[data-pick]').forEach(b=>b.onclick=()=>pickComponent(b.dataset.pick));
   toggleCapture(); }
-function toggleCapture(){ const tr=currentTree(); const show=!tr||!!curItem;
+function toggleCapture(){ const tr=currentTree();
+  const show = (type==="INSP" && !curEquip) ? false : (!tr || !!curItem);
   $("captureBox").style.display=show?"":"none"; }
 function pickComponent(code){ saveCur(); curItem=code; loadPos(); renderChips(); }
 function renderComponentNav(tree){
