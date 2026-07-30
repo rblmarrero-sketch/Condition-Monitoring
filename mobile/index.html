@@ -211,7 +211,7 @@
 
   <button class="btn ghost" id="reportBtn" style="margin-bottom:16px">📄 <span data-i18n="btn_report">PDF report</span></button>
 
-  <div class="ver">build v15 · 2026-07-30 · All-equipment default</div>
+  <div class="ver">build v16 · 2026-07-30 · Full fleet in picker</div>
 </main>
 
 <div class="bottombar">
@@ -629,7 +629,7 @@ function pickerSource(){
 }
 function renderPickList(q){ q=(q||"").trim(); const ql=q.toLowerCase();
   let src=pickerSource().filter(o=>!ql||o.label.toLowerCase().indexOf(ql)>=0||(o.group||"").toLowerCase().indexOf(ql)>=0);
-  if(pickMode==="equip"){ src=src.slice(0,300);
+  if(pickMode==="equip"){   // show the whole fleet (no cap) — search filters it
     if(q && !ASSET_BY[q.toUpperCase().replace(/\s+/g,"")]) src=[{k:"__custom__",label:t("opt_use")+' "'+q.toUpperCase()+'"',group:""}].concat(src); }
   $("pickList").innerHTML=src.map(o=>`<button class="pickitem" data-k="${o.k}">${o.group?`<span class="pickgrp">${o.group}</span>`:""}${o.label}</button>`).join("")||`<div class="empty-m">—</div>`; }
 function openPicker(mode){ pickMode=mode; $("pickSearch").value=""; $("pickSearch").placeholder=t("pick_search"); renderPickList(""); $("pickOv").classList.remove("hidden"); setTimeout(()=>$("pickSearch").focus(),50); }
