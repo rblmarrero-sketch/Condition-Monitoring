@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1a1a19">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Plug Inspection — Capture</title>
+<link rel="manifest" href="manifest.webmanifest">
+<!--
+  Magnetic Plug — mobile CAPTURE app (offline-first).
+  • Take/pick photos in the field with NO internet.
+  • Everything is stored on the phone (IndexedDB) until you export.
+  • Export produces correctly-named photos (TK146_4C_2026-07-29.jpg) + entries.json
+    that the desktop dashboard reads. Share to OneDrive/email or download a ZIP.
+  Auto-upload to a server/SharePoint is a small add-on — see uploadHook() below.
+-->
+<style>
+  :root{
+    color-scheme: dark;
+    --page:#0d0d0d; --surface:#1a1a19; --surface-2:#242422; --surface-3:#2f2f2c;
+    --ink:#fff; --ink-2:#c3c2b7; --muted:#8b8a83; --border:rgba(255,255,255,.12);
+    --accent:#3987e5; --accent-ink:#fff;
+    --good:#0ca30c; --warning:#fab219; --serious:#ec835a; --critical:#d03b3b; --none:#6b6a65;
+  }
+  @media (prefers-color-scheme: light){
+    :root:where(:not([data-theme="dark"])){
+      color-scheme: light;
+      --page:#f4f4f1; --surface:#fff; --surface-2:#f2f2ef; --surface-3:#e9e9e4;
+      --ink:#111; --ink-2:#44433f; --muted:#8b8a83; --border:rgba(0,0,0,.12);
+    }
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{background:var(--page);color:var(--ink);
+    font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.4;
+    padding-bottom:120px;}
+  header{position:sticky;top:0;z-index:10;background:var(--surface);border-bottom:1px solid var(--border);
+    padding:calc(env(safe-area-inset-top) + 12px) 16px 12px;display:flex;align-items:center;gap:10px;}
+  header .t{font-weight:700;font-size:17px;}
+  header .st{margin-left:auto;font-size:12px;padding:3px 9px;border-radius:999px;background:var(--surface-2);
+    border:1px solid var(--border);color:var(--ink-2);}
+  header .st.off{color:var(--warning);}
+  header .st.on{color:var(--good);}
+  main{padding:16px;max-width:640px;margin:0 auto;}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:16px;}
+  .card h2{margin:0 0 12px;font-size:14px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);}
+  label.fld{display:block;margin-bottom:12px;}
+  label.fld > span{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:5px;}
+  input,select,textarea{width:100%;background:var(--surface-2);color:var(--ink);border:1px solid var(--border);
+    border-radius:12px;padding:13px 14px;font-size:16px;font-family:inherit;}
+  input:focus,select,textarea:focus{outline:2px solid var(--accent);outline-offset:1px;}
+  textarea{resize:vertical;min-height:52px;}
+  .row{display:flex;gap:10px;}
+  .row > *{flex:1;}
+  .seg{display:flex;gap:8px;flex-wrap:wrap;}
+  .seg button{flex:1;min-width:60px;padding:12px 8px;border-radius:12px;border:1px solid var(--border);
+    background:var(--surface-2);color:var(--ink-2);font-size:15px;font-weight:650;cursor:pointer;}
+  .seg button.on{background:var(--accent);color:var(--accent-ink);border-color:transparent;}
+  .posnav{display:flex;gap:8px;margin-bottom:14px;}
+  .posnav button{flex:1;padding:12px 6px;border-radius:12px;border:1px solid var(--border);background:var(--surface-2);
+    color:var(--ink-2);font-weight:700;font-size:15px;cursor:pointer;position:relative;}
+  .posnav button.on{background:var(--ink);color:var(--page);border-color:transparent;}
+  .posnav button .dot{position:absolute;top:6px;right:8px;width:9px;height:9px;border-radius:50%;background:var(--good);display:none;}
+  .posnav button.has .dot{display:block;}
+  .shot{width:100%;aspect-ratio:4/3;border-radius:14px;border:2px dashed var(--border);background:var(--surface-2);
+    display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:14px;overflow:hidden;margin-bottom:12px;position:relative;}
+  .shot img{width:100%;height:100%;object-fit:cover;}
+  .shot .retake{position:absolute;bottom:10px;right:10px;background:rgba(0,0,0,.6);color:#fff;border:none;
+    border-radius:10px;padding:8px 12px;font-size:13px;}
+  .gradeseg button.g-A.on{background:var(--good);}
+  .gradeseg button.g-B.on{background:var(--warning);color:#111;}
+  .gradeseg button.g-C.on{background:var(--serious);}
+  .gradeseg button.g-D.on{background:var(--critical);}
+  .gradeseg button.g-X.on{background:var(--none);}
+  .btn{display:block;width:100%;padding:16px;border-radius:14px;border:none;font-size:17px;font-weight:700;cursor:pointer;}
+  .btn.primary{background:var(--accent);color:var(--accent-ink);}
+  .btn.ghost{background:var(--surface-2);color:var(--ink);border:1px solid var(--border);}
+  .btn:disabled{opacity:.5;}
+  .pending{display:flex;flex-direction:column;gap:10px;}
+  .pitem{display:flex;align-items:center;gap:12px;background:var(--surface-2);border:1px solid var(--border);
+    border-radius:12px;padding:10px 12px;}
+  .pitem .thumb{width:52px;height:52px;border-radius:9px;object-fit:cover;background:var(--surface-3);flex:none;}
+  .pitem .meta{flex:1;min-width:0;}
+  .pitem .meta .a{font-weight:700;}
+  .pitem .meta .b{font-size:12.5px;color:var(--muted);}
+  .pitem .del{background:none;border:none;color:var(--critical);font-size:20px;padding:6px;}
+  .empty{color:var(--muted);text-align:center;padding:20px;font-size:14px;}
+  .bottombar{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--border);
+    padding:12px 16px calc(env(safe-area-inset-bottom) + 12px);display:flex;gap:10px;z-index:10;}
+  .bottombar .btn{margin:0;}
+  .hint{font-size:12.5px;color:var(--muted);margin-top:6px;}
+  .hidden{display:none!important;}
+  .count-badge{background:var(--accent);color:#fff;border-radius:999px;padding:1px 8px;font-size:12px;margin-left:6px;}
+  dialog{border:none;border-radius:16px;background:var(--surface);color:var(--ink);max-width:92vw;width:420px;padding:0;}
+  dialog::backdrop{background:rgba(0,0,0,.6);}
+  .dlg-in{padding:20px;}
+  .dlg-in h3{margin:0 0 8px;}
+  .dlg-in p{color:var(--ink-2);font-size:14px;}
+</style>
+</head>
+<body>
+<header>
+  <span class="t">🧲 Plug Capture</span>
+  <span class="st" id="netStatus">…</span>
+</header>
+
+<main>
+  <!-- Inspection identity -->
+  <div class="card">
+    <h2>Inspection</h2>
+    <div class="row">
+      <label class="fld"><span>Truck / Unit</span>
+        <input id="equip" list="equipList" placeholder="e.g. TK158" autocapitalize="characters" autocomplete="off">
+        <datalist id="equipList"></datalist>
+      </label>
+      <label class="fld"><span>Date</span>
+        <input id="date" type="date">
+      </label>
+    </div>
+    <label class="fld"><span>SMU / machine hours</span>
+      <input id="smu" type="number" inputmode="numeric" placeholder="e.g. 6018">
+    </label>
+  </div>
+
+  <!-- Per-position capture -->
+  <div class="card">
+    <h2>Plug position</h2>
+    <div class="posnav" id="posnav">
+      <button data-pos="4C" class="on">4C<span class="dot"></span></button>
+      <button data-pos="4D">4D<span class="dot"></span></button>
+      <button data-pos="4E">4E<span class="dot"></span></button>
+      <button data-pos="4F">4F<span class="dot"></span></button>
+    </div>
+    <div class="posLabel hint" id="posLabel">4C — Left Rear Final Drive</div>
+
+    <div class="shot" id="shot">
+      <span id="shotPlaceholder">No photo yet — tap “Take photo”.</span>
+      <button class="retake hidden" id="retakeBtn" type="button">Retake</button>
+    </div>
+    <input id="camera" type="file" accept="image/*" capture="environment" class="hidden">
+    <button class="btn primary" id="takeBtn" type="button" style="margin-bottom:14px">📷 Take photo</button>
+
+    <label class="fld"><span>Grade / condition</span>
+      <div class="seg gradeseg" id="gradeSeg">
+        <button class="g-A" data-g="A">A</button>
+        <button class="g-B" data-g="B">B</button>
+        <button class="g-C" data-g="C">C</button>
+        <button class="g-D" data-g="D">D</button>
+        <button class="g-X" data-g="X">X</button>
+      </div>
+    </label>
+    <div class="row">
+      <label class="fld"><span>Particle count</span><input id="particle" type="text" inputmode="numeric"></label>
+      <label class="fld"><span>Component hrs</span><input id="comp" type="number" inputmode="numeric"></label>
+    </div>
+    <label class="fld"><span>Oil hrs</span><input id="oil" type="number" inputmode="numeric"></label>
+    <label class="fld"><span>Comment</span><textarea id="comment" rows="2" placeholder="notes…"></textarea></label>
+    <div class="hint">Fields save to the current position automatically. Switch positions with the 4C–4F tabs.</div>
+  </div>
+
+  <!-- Save / queue -->
+  <button class="btn primary" id="saveBtn" style="margin-bottom:16px">✔ Save this truck to queue</button>
+
+  <div class="card">
+    <h2>On this phone <span class="count-badge" id="qCount">0</span></h2>
+    <div class="pending" id="pending"><div class="empty">Nothing captured yet.</div></div>
+  </div>
+</main>
+
+<div class="bottombar">
+  <button class="btn ghost" id="shareBtn">📤 Share</button>
+  <button class="btn primary" id="exportBtn">⬇ Export ZIP</button>
+</div>
+
+<dialog id="dlg"><div class="dlg-in"><h3 id="dlgTitle"></h3><p id="dlgMsg"></p>
+  <button class="btn primary" id="dlgOk" style="margin-top:14px">OK</button></div></dialog>
+
+<script>
+/* ===================== config ===================== */
+const POS_KEYS = ["4C","4D","4E","4F"];
+const POS_LABELS = {"4C":"Left Rear Final Drive","4D":"Right Rear Final Drive",
+                    "4E":"Left Rear Final Drive","4F":"Right Rear Final Drive"};
+const PHOTO_TAG = "";           // set to "_MP" to name files like TK158_4C_2026-07-29_MP.jpg
+const $ = (id)=>document.getElementById(id);
+const dlg=(t,m)=>{ $("dlgTitle").textContent=t; $("dlgMsg").textContent=m; $("dlg").showModal(); };
+$("dlgOk").onclick=()=>$("dlg").close();
+
+/* ===================== tiny IndexedDB ===================== */
+const DB_NAME="plug_capture", STORE="inspections";
+function idb(){ return new Promise((res,rej)=>{ const r=indexedDB.open(DB_NAME,1);
+  r.onupgradeneeded=()=>{ if(!r.result.objectStoreNames.contains(STORE)) r.result.createObjectStore(STORE,{keyPath:"id"}); };
+  r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error); }); }
+async function dbPut(rec){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite");
+  t.objectStore(STORE).put(rec); t.oncomplete=res; t.onerror=()=>rej(t.error); }); }
+async function dbAll(){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readonly");
+  const rq=t.objectStore(STORE).getAll(); rq.onsuccess=()=>res(rq.result||[]); rq.onerror=()=>rej(rq.error); }); }
+async function dbDel(id){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite");
+  t.objectStore(STORE).delete(id); t.oncomplete=res; t.onerror=()=>rej(t.error); }); }
+
+/* ===================== working draft (one truck being captured) ===================== */
+let draft = newDraft();
+let curPos = "4C";
+function newDraft(){ return { positions:{} }; }   // positions[pos] = {photoBlob, grade, particle, comp, oil, comment}
+function curP(){ return (draft.positions[curPos] ||= {}); }
+
+/* date default = today (local) */
+(function(){ const d=new Date(); const p=(n)=>String(n).padStart(2,"0");
+  $("date").value = `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`; })();
+
+/* ===================== camera ===================== */
+$("takeBtn").onclick=()=>$("camera").click();
+$("retakeBtn").onclick=()=>$("camera").click();
+$("camera").onchange=(e)=>{ const f=e.target.files[0]; if(!f) return;
+  curP().photoBlob=f; showShot(URL.createObjectURL(f)); markPosFilled(); e.target.value=""; };
+function showShot(url){
+  $("shot").querySelector("img")?.remove();
+  if(url){ const img=new Image(); img.src=url; $("shot").insertBefore(img,$("retakeBtn"));
+    $("shotPlaceholder").classList.add("hidden"); $("retakeBtn").classList.remove("hidden"); }
+  else { $("shotPlaceholder").classList.remove("hidden"); $("retakeBtn").classList.add("hidden"); }
+}
+
+/* ===================== position tabs ===================== */
+$("posnav").addEventListener("click",(e)=>{ const b=e.target.closest("button[data-pos]"); if(!b) return;
+  saveCurFields(); curPos=b.dataset.pos;
+  $("posnav").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));
+  $("posLabel").textContent=`${curPos} — ${POS_LABELS[curPos]}`;
+  loadPosIntoForm();
+});
+function markPosFilled(){ $("posnav").querySelector(`button[data-pos="${curPos}"]`).classList.add("has"); }
+
+/* ===================== grade + fields ===================== */
+$("gradeSeg").addEventListener("click",(e)=>{ const b=e.target.closest("button[data-g]"); if(!b) return;
+  const g=b.dataset.g; const p=curP(); p.grade = (p.grade===g)?null:g; renderGrade(); markPosFilled(); });
+function renderGrade(){ const g=curP().grade;
+  $("gradeSeg").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.g===g)); }
+["particle","comp","oil","comment"].forEach(id=>{
+  $(id).addEventListener("input",()=>{ saveCurFields(); markPosFilled(); }); });
+function saveCurFields(){ const p=curP();
+  p.particle=$("particle").value.trim(); p.comp=$("comp").value.trim();
+  p.oil=$("oil").value.trim(); p.comment=$("comment").value.trim();
+  if(!p.grade && !p.photoBlob && !p.particle && !p.comp && !p.oil && !p.comment) delete draft.positions[curPos]; }
+function loadPosIntoForm(){ const p=draft.positions[curPos]||{};
+  $("particle").value=p.particle||""; $("comp").value=p.comp||""; $("oil").value=p.oil||""; $("comment").value=p.comment||"";
+  renderGrade(); showShot(p.photoBlob?URL.createObjectURL(p.photoBlob):null); }
+
+/* ===================== save truck to queue ===================== */
+$("saveBtn").onclick=async ()=>{
+  saveCurFields();
+  const equip=$("equip").value.trim().toUpperCase().replace(/\s+/g,"");
+  const date=$("date").value;
+  if(!equip){ dlg("Add the truck","Enter the truck / unit number (e.g. TK158) first."); return; }
+  if(!Object.keys(draft.positions).length){ dlg("Nothing to save","Take at least one photo or enter a grade."); return; }
+  const rec={ id:`${equip}__${date}__${Date.now()}`, equip, date, smu:$("smu").value.trim(),
+    positions:{}, created:new Date().toISOString() };
+  for(const [pos,p] of Object.entries(draft.positions)){
+    rec.positions[pos]={ grade:p.grade||null, particle:p.particle||"", comp:p.comp||"", oil:p.oil||"", comment:p.comment||"",
+      photoBlob:p.photoBlob||null };
+  }
+  await dbPut(rec);
+  // remember equip for the datalist
+  rememberEquip(equip);
+  // reset draft (keep date + smu for the next truck of the same round)
+  draft=newDraft(); curPos="4C";
+  $("posnav").querySelectorAll("button").forEach((x,i)=>{x.classList.toggle("on",i===0);x.classList.remove("has");});
+  $("posLabel").textContent="4C — Left Rear Final Drive";
+  $("equip").value=""; loadPosIntoForm();
+  await renderPending();
+  dlg("Saved ✔", `${equip} saved on this phone. Capture the next truck, then Share/Export when you have internet.`);
+};
+
+/* ===================== pending list ===================== */
+function rememberEquip(e){ const s=new Set(JSON.parse(localStorage.getItem("equipHist")||"[]")); s.add(e);
+  const arr=[...s].sort(); localStorage.setItem("equipHist",JSON.stringify(arr));
+  $("equipList").innerHTML=arr.map(x=>`<option value="${x}">`).join(""); }
+function loadEquipHist(){ const arr=JSON.parse(localStorage.getItem("equipHist")||"[]");
+  $("equipList").innerHTML=arr.map(x=>`<option value="${x}">`).join(""); }
+async function renderPending(){
+  const all=(await dbAll()).sort((a,b)=>b.created.localeCompare(a.created));
+  $("qCount").textContent=all.length;
+  if(!all.length){ $("pending").innerHTML=`<div class="empty">Nothing captured yet.</div>`; return; }
+  $("pending").innerHTML="";
+  for(const rec of all){
+    const first=Object.values(rec.positions).find(p=>p.photoBlob);
+    const nPhotos=Object.values(rec.positions).filter(p=>p.photoBlob).length;
+    const nPos=Object.keys(rec.positions).length;
+    const row=document.createElement("div"); row.className="pitem";
+    const thumb=first?`<img class="thumb" src="${URL.createObjectURL(first.photoBlob)}">`:`<div class="thumb"></div>`;
+    row.innerHTML=`${thumb}<div class="meta"><div class="a">${rec.equip} · ${rec.date}</div>
+      <div class="b">${nPos} position(s) · ${nPhotos} photo(s)${rec.smu?` · SMU ${rec.smu}`:""}</div></div>
+      <button class="del" title="Delete" data-id="${rec.id}">🗑</button>`;
+    row.querySelector(".del").onclick=async ()=>{ await dbDel(rec.id); renderPending(); };
+    $("pending").appendChild(row);
+  }
+}
+
+/* ===================== naming + export ===================== */
+function fileName(equip,pos,date,ext){ return `${equip}_${pos}_${date}${PHOTO_TAG}.${ext}`; }
+function extOf(blob){ const t=(blob.type||"").toLowerCase();
+  if(t.includes("png"))return"png"; if(t.includes("webp"))return"webp"; return "jpg"; }
+async function buildPackage(){
+  const all=await dbAll();
+  const files=[]; const grades={}, notes={};
+  for(const rec of all){
+    if(rec.smu) (notes[`${rec.equip}|${rec.date}`] ||= {}).smu = rec.smu;
+    for(const [pos,p] of Object.entries(rec.positions)){
+      if(p.photoBlob){ const ext=extOf(p.photoBlob);
+        files.push({ name:fileName(rec.equip,pos,rec.date,ext), data:new Uint8Array(await p.photoBlob.arrayBuffer()) }); }
+      if(p.grade) grades[`${rec.equip}|${rec.date}|${pos}`]=p.grade;
+      const nk=`${rec.equip}|${rec.date}|${pos}`; const n={};
+      if(p.particle)n.particleCount=p.particle; if(p.comp)n.componentHours=p.comp;
+      if(p.oil)n.oilHours=p.oil; if(p.comment)n.comment=p.comment;
+      if(Object.keys(n).length) notes[nk]={...(notes[nk]||{}),...n};
+    }
+  }
+  const entries={type:"cm-magplug-entries",version:1,grades,notes};
+  files.push({ name:"entries.json", data:new TextEncoder().encode(JSON.stringify(entries,null,2)) });
+  return {files, count:all.length};
+}
+$("exportBtn").onclick=async ()=>{
+  const {files,count}=await buildPackage();
+  if(!count){ dlg("Nothing to export","Capture at least one truck first."); return; }
+  const zip=makeZip(files);
+  const url=URL.createObjectURL(new Blob([zip],{type:"application/zip"}));
+  const a=document.createElement("a"); a.href=url; a.download=`plug_inspection_${$("date").value||"export"}.zip`; a.click();
+  URL.revokeObjectURL(url);
+  dlg("Exported ✔","A ZIP with correctly-named photos + entries.json was downloaded. Put the photos in your N: drive folder and Import entries.json into the dashboard.");
+};
+$("shareBtn").onclick=async ()=>{
+  const {files,count}=await buildPackage();
+  if(!count){ dlg("Nothing to share","Capture at least one truck first."); return; }
+  const zip=makeZip(files);
+  const zipFile=new File([zip],`plug_inspection_${$("date").value||"export"}.zip`,{type:"application/zip"});
+  if(navigator.canShare && navigator.canShare({files:[zipFile]})){
+    try{ await navigator.share({files:[zipFile],title:"Plug inspection",text:"Magnetic plug photos + data"}); }
+    catch(e){ /* cancelled */ }
+  } else {
+    dlg("Sharing not available","Your phone can't share files from the browser. Use “Export ZIP” instead, then upload it to OneDrive / email.");
+  }
+};
+
+/* ===================== minimal ZIP writer (store, no deps) ===================== */
+function makeZip(files){
+  const enc=new TextEncoder(); const chunks=[]; const central=[]; let offset=0;
+  const u16=n=>[n&255,(n>>8)&255]; const u32=n=>[n&255,(n>>8)&255,(n>>16)&255,(n>>24)&255];
+  for(const f of files){
+    const nameB=enc.encode(f.name); const data=f.data; const crc=crc32(data);
+    const local=[].concat([0x50,0x4b,0x03,0x04],u16(20),u16(0),u16(0),u16(0),u16(0),
+      u32(crc),u32(data.length),u32(data.length),u16(nameB.length),u16(0));
+    chunks.push(new Uint8Array(local),nameB,data);
+    const cen=[].concat([0x50,0x4b,0x01,0x02],u16(20),u16(20),u16(0),u16(0),u16(0),u16(0),
+      u32(crc),u32(data.length),u32(data.length),u16(nameB.length),u16(0),u16(0),u16(0),u16(0),u32(0),u32(offset));
+    central.push(new Uint8Array(cen),nameB);
+    offset += local.length + nameB.length + data.length;
+  }
+  let censize=0; central.forEach(c=>censize+=c.length);
+  const end=[].concat([0x50,0x4b,0x05,0x06],u16(0),u16(0),u16(files.length),u16(files.length),
+    u32(censize),u32(offset),u16(0));
+  const parts=[...chunks,...central,new Uint8Array(end)];
+  let total=0; parts.forEach(p=>total+=p.length);
+  const out=new Uint8Array(total); let pos=0; parts.forEach(p=>{out.set(p,pos);pos+=p.length;});
+  return out;
+}
+const CRC_TABLE=(()=>{ const t=new Uint32Array(256);
+  for(let n=0;n<256;n++){ let c=n; for(let k=0;k<8;k++) c=c&1?0xEDB88320^(c>>>1):c>>>1; t[n]=c>>>0; } return t; })();
+function crc32(buf){ let c=0xFFFFFFFF; for(let i=0;i<buf.length;i++) c=CRC_TABLE[(c^buf[i])&0xFF]^(c>>>8); return (c^0xFFFFFFFF)>>>0; }
+
+/* ===================== upload hook (wire to your server/SharePoint later) ===================== */
+async function uploadHook(files){
+  // Example for a future server endpoint:
+  //   const fd=new FormData();
+  //   files.forEach(f=>fd.append("files", new Blob([f.data]), f.name));
+  //   await fetch("https://YOUR-SERVER/upload", {method:"POST", body:fd});
+  // For SharePoint/OneDrive, the simplest path today is the Share button above.
+}
+
+/* ===================== connectivity + offline ===================== */
+function setNet(){ const on=navigator.onLine;
+  $("netStatus").textContent = on ? "online" : "offline — OK";
+  $("netStatus").className = "st " + (on?"on":"off"); }
+addEventListener("online",setNet); addEventListener("offline",setNet); setNet();
+
+if("serviceWorker" in navigator && location.protocol==="https:"){
+  navigator.serviceWorker.register("sw.js").catch(()=>{});
+}
+
+/* ===================== init ===================== */
+loadEquipHist(); loadPosIntoForm(); renderPending();
+</script>
+</body>
+</html>
