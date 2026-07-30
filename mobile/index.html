@@ -60,6 +60,22 @@
   .posnav button{flex:1 1 auto;min-width:56px;padding:11px 10px;border-radius:12px;border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);font-weight:700;font-size:14px;cursor:pointer;position:relative;}
   .posnav button.on{background:var(--ink);color:var(--page);border-color:transparent;}
   .posnav-pick{flex:1 1 100%;padding:11px;border-radius:12px;border:1px solid var(--accent);background:var(--surface-2);color:var(--accent);font-weight:700;font-size:14px;cursor:pointer;margin-bottom:2px;}
+  /* component cascade (L7 cards -> L8 -> L9) */
+  .casc{margin-bottom:14px;}
+  .crumb{display:flex;flex-wrap:wrap;gap:4px;align-items:center;font-size:12.5px;color:var(--muted);margin-bottom:10px;}
+  .crumb button{background:none;border:none;color:var(--accent);font-weight:650;font-size:12.5px;cursor:pointer;padding:2px 0;}
+  .crumb .sep{color:var(--muted);}
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .cards button{display:flex;flex-direction:column;gap:3px;align-items:flex-start;text-align:left;background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:14px 12px;cursor:pointer;position:relative;}
+  .cards button .cc{font-size:11px;color:var(--muted);font-weight:700;}
+  .cards button .cn{font-size:14px;color:var(--ink);font-weight:600;line-height:1.2;}
+  .cards button .dot{position:absolute;top:8px;right:9px;width:9px;height:9px;border-radius:50%;background:var(--good);display:none;}
+  .cards button.has .dot{display:block;}
+  .clist button{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:left;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:12px 13px;margin-bottom:7px;cursor:pointer;color:var(--ink);font-size:14px;}
+  .clist button .r{color:var(--muted);font-size:13px;}
+  .clist button.has{border-color:var(--good);}
+  .searchall{width:100%;padding:9px;border:1px dashed var(--border);background:none;color:var(--accent);border-radius:10px;font-size:13px;font-weight:650;cursor:pointer;margin-bottom:10px;}
+  .prompt-pick{color:var(--muted);font-size:13px;text-align:center;padding:14px;}
   .posnav button .dot{position:absolute;top:5px;right:6px;width:8px;height:8px;border-radius:50%;background:var(--good);display:none;}
   .posnav button.has .dot{display:block;}
   .shot{width:100%;aspect-ratio:4/3;border-radius:14px;border:2px dashed var(--border);background:var(--surface-2);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:14px;overflow:hidden;margin-bottom:12px;position:relative;text-align:center;padding:10px;}
@@ -145,6 +161,7 @@
     <div class="posnav" id="posnav"></div>
     <div class="posLabel hint" id="posLabel"></div>
 
+    <div id="captureBox">
     <div class="mediastrip" id="mediastrip"></div>
     <div class="mediahint hint" id="mediaHint"></div>
     <input id="camera" type="file" accept="image/*" capture="environment" class="hidden">
@@ -180,6 +197,7 @@
       </div>
     </label>
     <div class="hint" data-i18n="hint_fields">Fields save automatically. Switch items with the buttons above.</div>
+    </div><!-- /captureBox -->
   </div>
 
   <div id="editBanner" class="editbar hidden"><span id="editBannerText"></span><button type="button" id="cancelEdit" class="linkbtn"></button></div>
@@ -192,7 +210,7 @@
 
   <button class="btn ghost" id="reportBtn" style="margin-bottom:16px">📄 <span data-i18n="btn_report">PDF report</span></button>
 
-  <div class="ver">build v12 · 2026-07-30 · Real components</div>
+  <div class="ver">build v13 · 2026-07-30 · Component cascade</div>
 </main>
 
 <div class="bottombar">
@@ -360,6 +378,7 @@ const I18N = {
     lbl_defect:"Defect / failure mode", lbl_cause:"Direct cause",
     opt_none:"— none / OK —", opt_cause_tbd:"— to be confirmed —", opt_cause_pick:"Select a defect first",
     opt_pick_unit:"Tap to choose a unit…", opt_use:"Use", opt_pick_item:"Choose component…",
+    nav_systems:"Systems", nav_whole:"Inspect whole", nav_choose:"Choose a component to inspect ↑", opt_search_all:"Search all components",
     lbl_date:"Date", lbl_smu:"SMU / machine hrs", ph_smu:"e.g. 6018",
     btn_take:"Add photo", btn_video:"Video", btn_retake:"Retake",
     media_hint:"Up to 4 photos + 1 video (max 1 min).", media_empty:"No photos yet.",
@@ -393,6 +412,7 @@ const I18N = {
     lbl_defect:"Дефект / вид отказа", lbl_cause:"Прямая причина",
     opt_none:"— нет / норма —", opt_cause_tbd:"— уточнить —", opt_cause_pick:"Сначала выберите дефект",
     opt_pick_unit:"Нажмите, чтобы выбрать ед. техники…", opt_use:"Использовать", opt_pick_item:"Выбрать узел…",
+    nav_systems:"Системы", nav_whole:"Осмотреть узел целиком", nav_choose:"Выберите узел для осмотра ↑", opt_search_all:"Поиск по всем узлам",
     lbl_date:"Дата", lbl_smu:"Моточасы (SMU)", ph_smu:"напр. 6018",
     btn_take:"Добавить фото", btn_video:"Видео", btn_retake:"Переснять",
     media_hint:"До 4 фото + 1 видео (макс. 1 мин).", media_empty:"Пока нет фото.",
@@ -455,10 +475,13 @@ if(!TYPE_META[type]) type="MP";
 let editing=null;
 const dlg=(pair)=>{ $("dlgTitle").textContent=pair[0]; $("dlgMsg").textContent=pair[1]; $("dlg").showModal(); };
 $("dlgOk").onclick=()=>$("dlg").close();
-const COMP_TPL=window.COMP_TPL||[], UNIT_TPL=window.UNIT_TPL||{};
-function items(){
-  // Inspection of a registered unit -> use its REAL component list from the register.
-  if(type==="INSP" && curEquip && UNIT_TPL[curEquip]!=null) return COMP_TPL[UNIT_TPL[curEquip]];
+const COMP_TREE=window.COMP_TREE||[], UNIT_TPL=window.UNIT_TPL||{};
+let cascL7=null, cascL8=null;   // component cascade selection
+function currentTree(){ return (type==="INSP" && curEquip && UNIT_TPL[curEquip]!=null) ? COMP_TREE[UNIT_TPL[curEquip]] : null; }
+function flattenTree(nodes,out){ out=out||[]; for(const n of nodes){ if(String(n.k).indexOf(".")>=0) out.push({k:n.k,en:n.en,ru:n.ru}); if(n.ch) flattenTree(n.ch,out); } return out; }
+function nodeByCode(tree,code){ let f=null; (function rec(ns){ for(const n of ns){ if(n.k===code){f=n;return;} if(n.ch)rec(n.ch);} })(tree); return f; }
+function hasUnder(node){ if(!node) return false; if(draft.positions[node.k]) return true; return node.ch? node.ch.some(hasUnder):false; }
+function items(){ const tr=currentTree(); if(tr) return flattenTree(tr);
   return CLASSES[eqClass][type].map(e=> typeof e==="string" ? {k:e, en:COMP[e].en, ru:COMP[e].ru} : e); }
 function itemLabel(k){ const it=items().find(i=>i.k===k); return it?(it[lang]||it.en):k; }
 let draft={positions:{}}; let curItem=items()[0].k;
@@ -477,27 +500,62 @@ async function dbDel(id){ const d=await idb(); return new Promise((res,rej)=>{ c
 function fillClassSel(){ $("classSel").innerHTML=CLASS_ORDER.map(k=>`<option value="${k}">${CLASSES[k][lang]||CLASSES[k].en}</option>`).join(""); $("classSel").value=eqClass; }
 function fillTypeSel(){ $("typeSel").innerHTML=TYPE_ORDER.map(k=>`<option value="${k}">${t("type_"+k)}</option>`).join(""); $("typeSel").value=type; }
 $("classSel").onchange=(e)=>{ eqClass=e.target.value; localStorage.setItem("equip_class",eqClass);
-  draft={positions:{}}; editing=null; curItem=items()[0].k; applyForm(); setEditing(null); };
+  draft={positions:{}}; editing=null; curItem=""; applyForm(); setEditing(null); };
 $("typeSel").onchange=(e)=>{ type=e.target.value; localStorage.setItem("insp_type",type);
-  draft={positions:{}}; editing=null; curItem=items()[0].k; applyForm(); setEditing(null); };
-function renderChips(){ const its=items();
+  draft={positions:{}}; editing=null; curItem=""; applyForm(); setEditing(null); };
+function renderChips(){ const tr=currentTree();
+  if(tr){ renderComponentNav(tr); return; }
+  const its=items();
   if(its.length<=14){
     $("posnav").innerHTML=its.map(it=>`<button data-pos="${it.k}"><span>${it.k}</span><span class="dot"></span></button>`).join("");
   } else {
-    // long register component list -> a searchable "choose component" button + already-captured chips
     const show=its.filter(it=>draft.positions[it.k]||it.k===curItem);
     let h=`<button class="posnav-pick" id="itemPickBtn">🔍 ${t("opt_pick_item")}</button>`;
     h+=show.map(it=>`<button data-pos="${it.k}"><span>${it.k}</span><span class="dot"></span></button>`).join("");
     $("posnav").innerHTML=h;
     const pb=$("itemPickBtn"); if(pb) pb.onclick=()=>openPicker("item");
   }
-  refreshChips(); }
+  toggleCapture(); refreshChips(); }
+function toggleCapture(){ const tr=currentTree(); const show=!tr||!!curItem;
+  $("captureBox").style.display=show?"":"none"; }
+function pickComponent(code){ saveCur(); curItem=code; loadPos(); renderChips(); }
+function renderComponentNav(tree){
+  const cap=items().filter(it=>draft.positions[it.k]);
+  let h='<div class="casc"><div class="crumb"><button data-nav="root">'+t("nav_systems")+'</button>';
+  if(cascL7){ const n=nodeByCode(tree,cascL7); h+='<span class="sep">›</span><button data-nav="l7">'+(n?(n[lang]||n.en):cascL7)+'</button>'; }
+  if(cascL8){ const n=nodeByCode(tree,cascL8); h+='<span class="sep">›</span><button data-nav="l8">'+(n?(n[lang]||n.en):cascL8)+'</button>'; }
+  h+='</div>';
+  h+='<button class="searchall" id="searchAllBtn">🔍 '+t("opt_search_all")+'</button>';
+  if(!cascL7){
+    h+='<div class="cards">'+tree.map(n=>`<button data-l7="${n.k}" class="${hasUnder(n)?'has':''}"><span class="cc">${n.k}</span><span class="cn">${n[lang]||n.en}</span><span class="dot"></span></button>`).join('')+'</div>';
+  } else if(!cascL8){
+    const n7=nodeByCode(tree,cascL7); const kids=(n7&&n7.ch)||[];
+    h+='<div class="clist">'+kids.map(n=>{ const hk=n.ch&&n.ch.length; return `<button data-l8="${n.k}" class="${(draft.positions[n.k]||hasUnder(n))?'has':''}"><span>${n[lang]||n.en}</span><span class="r">${hk?'›':(draft.positions[n.k]?'●':'')}</span></button>`; }).join('')+'</div>';
+  } else {
+    const n8=nodeByCode(tree,cascL8); const kids=(n8&&n8.ch)||[];
+    h+='<div class="clist"><button data-pick="'+n8.k+'" class="'+(draft.positions[n8.k]?'has':'')+'"><span>▶ '+t("nav_whole")+': '+(n8[lang]||n8.en)+'</span><span class="r">'+(draft.positions[n8.k]?'●':'')+'</span></button>';
+    h+=kids.map(n=>`<button data-pick="${n.k}" class="${draft.positions[n.k]?'has':''}"><span>${n[lang]||n.en}</span><span class="r">${draft.positions[n.k]?'●':''}</span></button>`).join('')+'</div>';
+  }
+  if(cap.length) h+='<div class="posnav" style="margin-top:6px">'+cap.map(it=>`<button data-pos="${it.k}" title="${itemLabel(it.k)}"><span>${String(it.k).split('.').pop()}</span><span class="dot"></span></button>`).join('')+'</div>';
+  h+='</div>';
+  $("posnav").innerHTML=h;
+  $("posnav").querySelectorAll('[data-nav]').forEach(b=>b.onclick=()=>{ if(b.dataset.nav==='root'){cascL7=null;cascL8=null;} else if(b.dataset.nav==='l7'){cascL8=null;} renderChips(); });
+  const sa=$("searchAllBtn"); if(sa) sa.onclick=()=>openPicker("item");
+  $("posnav").querySelectorAll('[data-l7]').forEach(b=>b.onclick=()=>{cascL7=b.dataset.l7;cascL8=null;renderChips();});
+  $("posnav").querySelectorAll('[data-l8]').forEach(b=>b.onclick=()=>{ const n=nodeByCode(tree,b.dataset.l8); if(n&&n.ch&&n.ch.length){cascL8=b.dataset.l8;renderChips();} else pickComponent(b.dataset.l8); });
+  $("posnav").querySelectorAll('[data-pick]').forEach(b=>b.onclick=()=>pickComponent(b.dataset.pick));
+  $("posnav").querySelectorAll('[data-pos]').forEach(b=>b.onclick=()=>pickComponent(b.dataset.pos));
+  toggleCapture(); refreshChips(); }
 function refreshChips(){ $("posnav").querySelectorAll("button").forEach(b=>{
   b.classList.toggle("on", b.dataset.pos===curItem); b.classList.toggle("has", !!draft.positions[b.dataset.pos]); }); }
 $("posnav").addEventListener("click",(e)=>{ const b=e.target.closest("button[data-pos]"); if(!b) return;
   saveCur(); curItem=b.dataset.pos; refreshChips(); loadPos(); });
 function applyForm(){ $("secPosTitle").textContent=TYPE_META[type].title[lang]||TYPE_META[type].title.en;
   $("mpFields").classList.toggle("hidden", !TYPE_META[type].showReadings);
+  cascL7=null; cascL8=null;
+  const tr=currentTree(); const flat=items();
+  if(tr){ if(curItem && !flat.some(i=>i.k===curItem)) curItem=""; }
+  else { if(!curItem || !flat.some(i=>i.k===curItem)) curItem=(flat[0]||{k:""}).k; }
   fillClassSel(); fillTypeSel(); renderChips(); loadPos(); }
 
 /* ===================== media: up to 4 photos + 1 video (<=60s) ===================== */
@@ -505,12 +563,12 @@ const MAX_PHOTOS=4, MAX_VIDEO_SEC=60;
 $("takeBtn").onclick=()=>{ if((curP().photos||[]).length>=MAX_PHOTOS){ return; } $("camera").click(); };
 $("videoBtn").onclick=()=>$("video").click();
 $("camera").onchange=(e)=>{ const f=e.target.files[0]; e.target.value=""; if(!f) return;
-  const p=curP(); (p.photos ||= []); if(p.photos.length<MAX_PHOTOS) p.photos.push(f); renderMedia(); refreshChips(); };
+  const p=curP(); (p.photos ||= []); if(p.photos.length<MAX_PHOTOS) p.photos.push(f); renderMedia(); renderChips(); };
 $("video").onchange=(e)=>{ const f=e.target.files[0]; e.target.value=""; if(!f) return;
   const v=document.createElement("video"); v.preload="metadata";
   v.onloadedmetadata=()=>{ if(v.duration && v.duration>MAX_VIDEO_SEC+0.8){ dlg(t("video_too_long")); }
-    else { curP().video=f; renderMedia(); refreshChips(); } URL.revokeObjectURL(v.src); };
-  v.onerror=()=>{ curP().video=f; renderMedia(); refreshChips(); };  // if metadata fails, accept
+    else { curP().video=f; renderMedia(); renderChips(); } URL.revokeObjectURL(v.src); };
+  v.onerror=()=>{ curP().video=f; renderMedia(); renderChips(); };  // if metadata fails, accept
   v.src=URL.createObjectURL(f); };
 function renderMedia(){ const p=draft.positions[curItem]||{}; const ph=p.photos||[]; let h="";
   ph.forEach((b,i)=>{ h+=`<div class="mtile"><img src="${URL.createObjectURL(b)}"><button class="mdel" data-ph="${i}">✕</button></div>`; });
@@ -522,20 +580,22 @@ function renderMedia(){ const p=draft.positions[curItem]||{}; const ph=p.photos|
   $("videoBtn").disabled = !!p.video;
   $("mediastrip").querySelectorAll(".mdel").forEach(btn=>btn.onclick=()=>{ const p=curP();
     if(btn.dataset.ph!==undefined){ p.photos.splice(+btn.dataset.ph,1); if(!p.photos.length) delete p.photos; }
-    else { delete p.video; } renderMedia(); refreshChips(); }); }
+    else { delete p.video; } renderMedia(); renderChips(); }); }
 
 /* ===================== grade + fields ===================== */
 $("gradeSeg").addEventListener("click",(e)=>{ const b=e.target.closest("button[data-g]"); if(!b) return;
-  const p=curP(); p.grade=(p.grade===b.dataset.g)?null:b.dataset.g; renderGrade(); refreshChips(); });
+  const p=curP(); p.grade=(p.grade===b.dataset.g)?null:b.dataset.g; renderGrade(); renderChips(); });
 function renderGrade(){ const g=curP().grade; $("gradeSeg").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.g===g)); }
 ["particle","comp","oil","comment"].forEach(id=>$(id).addEventListener("input",()=>{ saveCur(); refreshChips(); }));
 function hasData(p){ return p.grade||(p.photos&&p.photos.length)||p.video||p.particle||p.comp||p.oil||p.comment||p.defect||p.cause; }
-function saveCur(){ const p=curP(); p.particle=$("particle").value.trim(); p.comp=$("comp").value.trim(); p.oil=$("oil").value.trim();
+function saveCur(){ if(!curItem) return; const p=curP(); p.particle=$("particle").value.trim(); p.comp=$("comp").value.trim(); p.oil=$("oil").value.trim();
   p.comment=$("comment").value.trim();
   if(!hasData(p)) delete draft.positions[curItem]; }
-function loadPos(){ $("posLabel").textContent=`${curItem} — ${itemLabel(curItem)}`;
+function loadPos(){
+  if(!curItem){ $("posLabel").textContent=t("nav_choose"); toggleCapture(); return; }
+  $("posLabel").textContent=`${curItem} — ${itemLabel(curItem)}`;
   const p=draft.positions[curItem]||{}; $("particle").value=p.particle||""; $("comp").value=p.comp||""; $("oil").value=p.oil||"";
-  $("comment").value=p.comment||""; renderGrade(); renderMedia(); updateDefectCauseBtns(); }
+  $("comment").value=p.comment||""; renderGrade(); renderMedia(); updateDefectCauseBtns(); toggleCapture(); }
 
 /* ===================== searchable defect / cause pickers ===================== */
 function updateDefectCauseBtns(){ const p=draft.positions[curItem]||{};
@@ -547,11 +607,11 @@ function updateEquipBtn(){ const a=ASSET_BY[curEquip];
   $("equipBtn").textContent = curEquip ? (a&&a.cat? `${curEquip} · ${a.cat}` : curEquip) : t("opt_pick_unit"); }
 function selectEquip(n){ n=(n||"").trim().toUpperCase().replace(/\s+/g,""); curEquip=n;
   const cls=assetClassOf(n); if(cls){ eqClass=cls; localStorage.setItem("equip_class",eqClass); }
-  draft={positions:{}}; editing=null; curItem=(items()[0]||{k:""}).k; applyForm(); setEditing(null); updateEquipBtn(); }
+  draft={positions:{}}; editing=null; curItem=""; applyForm(); setEditing(null); updateEquipBtn(); }
 let pickMode=null;
 function pickerSource(){
   if(pickMode==="equip"){
-    return ASSETS.map(a=>({k:a.n, label:a.n+(a.m?" · "+a.m:""), group:(a.cat||CLASSES[a.cls][lang]||CLASSES[a.cls].en)}));
+    return ASSETS.filter(a=>a.cls===eqClass).map(a=>({k:a.n, label:a.n+(a.m?" · "+a.m:""), group:(a.cat||CLASSES[a.cls][lang]||CLASSES[a.cls].en)}));
   }
   if(pickMode==="item"){
     return items().map(it=>({k:it.k, label:(it[lang]||it.en||it.k), group:String(it.k).split(".")[0]}));
@@ -595,8 +655,8 @@ function setEditing(rec){ editing=rec||null;
   if(editing){ $("editBanner").classList.remove("hidden"); $("editBannerText").textContent=t("editing_hint").replace("{x}",editing.equip); }
   else $("editBanner").classList.add("hidden");
   $("cancelEdit").textContent=t("btn_cancel"); updateSaveLabel(); }
-function resetForm(){ draft={positions:{}}; curItem=items()[0].k; curEquip=""; updateEquipBtn(); $("smu").value=""; $("date").value=todayISO();
-  refreshChips(); loadPos(); setEditing(null); }
+function resetForm(){ draft={positions:{}}; curEquip=""; curItem=""; updateEquipBtn(); $("smu").value=""; $("date").value=todayISO();
+  applyForm(); setEditing(null); }
 function editRecord(rec){ if(rec.cls && CLASSES[rec.cls]){ eqClass=rec.cls; localStorage.setItem("equip_class",eqClass); }
   if(rec.type && TYPE_META[rec.type]){ type=rec.type; localStorage.setItem("insp_type",type); }
   draft={positions:{}};
@@ -680,7 +740,7 @@ $("shareBtn").onclick=async ()=>{ const {files,count}=await buildPackage(); if(!
 const GRADE_HEX={A:"#0ca30c",B:"#fab219",C:"#ec835a",D:"#d03b3b",X:"#8b8a83"};
 function esc(s){ return String(s==null?"":s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
 function itemLabelFor(rec,k){
-  if(rec.type==="INSP" && rec.equip && UNIT_TPL[rec.equip]!=null){ const it=COMP_TPL[UNIT_TPL[rec.equip]].find(x=>x.k===k); if(it) return it[lang]||it.en; }
+  if(rec.type==="INSP" && rec.equip && UNIT_TPL[rec.equip]!=null){ const it=flattenTree(COMP_TREE[UNIT_TPL[rec.equip]]).find(x=>x.k===k); if(it) return it[lang]||it.en; }
   const list=(CLASSES[rec.cls]&&CLASSES[rec.cls][rec.type])||[];
   for(const e of list){ if(typeof e==="string"){ if(e===k) return COMP[e]?(COMP[e][lang]||COMP[e].en):k; } else if(e.k===k){ return e[lang]||e.en; } } return ""; }
 async function blobToThumb(blob,max){ const img=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=URL.createObjectURL(blob);});
