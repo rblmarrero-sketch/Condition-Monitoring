@@ -214,7 +214,7 @@
 
   <button class="btn ghost" id="reportBtn" style="margin-bottom:16px">📄 <span data-i18n="btn_report">PDF report</span></button>
 
-  <div class="ver">build v20 · 2026-07-31 · Unit-first components · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver">build v21 · 2026-07-31 · Real fleet categories · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <div class="bottombar">
@@ -382,7 +382,7 @@ const I18N = {
     sec_inspection:"Inspection", lbl_class:"Equipment", lbl_type:"Inspection type", lbl_truck:"Truck / Unit", ph_truck:"e.g. TK158", btn_scan:"Scan",
     lbl_defect:"Defect / failure mode", lbl_cause:"Direct cause",
     opt_none:"— none / OK —", opt_cause_tbd:"— to be confirmed —", opt_cause_pick:"Select a defect first",
-    opt_pick_unit:"Tap to choose a unit…", opt_use:"Use", opt_pick_item:"Choose component…",
+    opt_all_equip:"All equipment", opt_pick_unit:"Tap to choose a unit…", opt_use:"Use", opt_pick_item:"Choose component…",
     need_unit:"Choose the unit first — its real components will load here.", nav_systems:"Systems", nav_whole:"Inspect whole", nav_choose:"Choose a component to inspect ↑", opt_search_all:"Search all components",
     lbl_date:"Date", lbl_smu:"SMU / machine hrs", ph_smu:"e.g. 6018",
     btn_take:"Add photo", btn_video:"Video", btn_retake:"Retake",
@@ -416,7 +416,7 @@ const I18N = {
     sec_inspection:"Осмотр", lbl_class:"Оборудование", lbl_type:"Тип осмотра", lbl_truck:"Трак / Ед.", ph_truck:"напр. TK158", btn_scan:"Скан",
     lbl_defect:"Дефект / вид отказа", lbl_cause:"Прямая причина",
     opt_none:"— нет / норма —", opt_cause_tbd:"— уточнить —", opt_cause_pick:"Сначала выберите дефект",
-    opt_pick_unit:"Нажмите, чтобы выбрать ед. техники…", opt_use:"Использовать", opt_pick_item:"Выбрать узел…",
+    opt_all_equip:"Всё оборудование", opt_pick_unit:"Нажмите, чтобы выбрать ед. техники…", opt_use:"Использовать", opt_pick_item:"Выбрать узел…",
     need_unit:"Сначала выберите единицу техники — её узлы загрузятся здесь.", nav_systems:"Системы", nav_whole:"Осмотреть узел целиком", nav_choose:"Выберите узел для осмотра ↑", opt_search_all:"Поиск по всем узлам",
     lbl_date:"Дата", lbl_smu:"Моточасы (SMU)", ph_smu:"напр. 6018",
     btn_take:"Добавить фото", btn_video:"Видео", btn_retake:"Переснять",
@@ -471,6 +471,16 @@ const ASSETS = window.ASSETS || [];
 const ASSET_BY = {}; ASSETS.forEach(a=>ASSET_BY[a.n]=a);
 let curEquip = "";
 function assetClassOf(n){ const a=ASSET_BY[n]; return a?a.cls:null; }
+// Real equipment categories from the asset register (what the fleet actually has),
+// each mapped to the inspection class that drives components + defect/cause filtering.
+const CAT2CLS={"TRUCK, DUMP":"HT","TRUCK, ARTICULATED":"AT","EXCAVATOR, BUCKET":"EXC","DOZER, TRACK TYPE":"DOZ",
+  "GRADER, MOBILE":"GRD","LOADER, FRONT":"LDR","DRILL, BLASTING":"DRB","DRILL, EXPLORATION":"DRE",
+  "CRUSHER, MOBILE CONE":"CRC","CRUSHER, MOBILE JAW":"CRJ","SCREENER, MOBILE":"SCR","ROCK BREAKER, HYDRAULIC":"HRB"};
+const CAT_COUNT={}; ASSETS.forEach(a=>{ const c=a.cat||"— UNCATEGORISED —"; CAT_COUNT[c]=(CAT_COUNT[c]||0)+1; });
+const CAT_LIST=Object.keys(CAT_COUNT).sort();
+let eqCat = localStorage.getItem("equip_cat") || "ALL";
+if(eqCat!=="ALL" && !CAT_COUNT[eqCat]) eqCat="ALL";
+function classForCat(cat){ return CAT2CLS[cat] || "GEN"; }
 
 /* ===================== state ===================== */
 let eqClass = localStorage.getItem("equip_class") || "ALL";
@@ -504,9 +514,14 @@ async function dbAll(){ const d=await idb(); return new Promise((res,rej)=>{ con
 async function dbDel(id){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); t.objectStore(STORE).delete(id); t.oncomplete=res; t.onerror=()=>rej(t.error); }); }
 
 /* ===================== class + type + component chips ===================== */
-function fillClassSel(){ $("classSel").innerHTML=CLASS_ORDER.map(k=>`<option value="${k}">${CLASSES[k][lang]||CLASSES[k].en}</option>`).join(""); $("classSel").value=eqClass; }
+function fillClassSel(){
+  let h=`<option value="ALL">${t("opt_all_equip")} (${ASSETS.length})</option>`;
+  h+=CAT_LIST.map(c=>`<option value="${c}">${c} (${CAT_COUNT[c]})</option>`).join("");
+  $("classSel").innerHTML=h; $("classSel").value=eqCat; }
 function fillTypeSel(){ $("typeSel").innerHTML=TYPE_ORDER.map(k=>`<option value="${k}">${t("type_"+k)}</option>`).join(""); $("typeSel").value=type; }
-$("classSel").onchange=(e)=>{ eqClass=e.target.value; localStorage.setItem("equip_class",eqClass);
+$("classSel").onchange=(e)=>{ eqCat=e.target.value; localStorage.setItem("equip_cat",eqCat);
+  eqClass = eqCat==="ALL" ? "GEN" : classForCat(eqCat); localStorage.setItem("equip_class",eqClass);
+  curEquip=""; updateEquipBtn();
   draft={positions:{}}; editing=null; curItem=""; applyForm(); setEditing(null); };
 $("typeSel").onchange=(e)=>{ type=e.target.value; localStorage.setItem("insp_type",type);
   draft={positions:{}}; editing=null; curItem=""; applyForm(); setEditing(null); };
@@ -623,13 +638,15 @@ function updateDefectCauseBtns(){ const p=draft.positions[curItem]||{};
 function updateEquipBtn(){ const a=ASSET_BY[curEquip];
   $("equipBtn").textContent = curEquip ? (a&&a.cat? `${curEquip} · ${a.cat}` : curEquip) : t("opt_pick_unit"); }
 function selectEquip(n){ n=(n||"").trim().toUpperCase().replace(/\s+/g,""); curEquip=n;
+  const a=ASSET_BY[n];
+  if(a){ eqCat=a.cat||"— UNCATEGORISED —"; localStorage.setItem("equip_cat",eqCat); }
   const cls=assetClassOf(n); if(cls){ eqClass=cls; localStorage.setItem("equip_class",eqClass); }
   draft={positions:{}}; editing=null; curItem=""; applyForm(); setEditing(null); updateEquipBtn(); }
 let pickMode=null;
 function pickerSource(){
   if(pickMode==="equip"){
-    const src = eqClass==="ALL" ? ASSETS : ASSETS.filter(a=>a.cls===eqClass);
-    return src.map(a=>({k:a.n, label:a.n+(a.m?" · "+a.m:""), group:(a.cat||(CLASSES[a.cls]&&(CLASSES[a.cls][lang]||CLASSES[a.cls].en))||a.cls)}));
+    const src = eqCat==="ALL" ? ASSETS : ASSETS.filter(a=>(a.cat||"— UNCATEGORISED —")===eqCat);
+    return src.map(a=>({k:a.n, label:a.n+(a.m?" · "+a.m:""), group:(a.cat||"— UNCATEGORISED —")}));
   }
   if(pickMode==="item"){
     return items().map(it=>({k:it.k, label:(it[lang]||it.en||it.k), group:String(it.k).split(".")[0]}));
