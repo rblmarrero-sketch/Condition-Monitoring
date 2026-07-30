@@ -1,6 +1,6 @@
 /* Service worker for the Plug Capture app — makes it open offline once installed.
    Caches the app shell; captured photos live in IndexedDB (not here). */
-const CACHE = "plug-capture-v5-2026-07-30";
+const CACHE = "plug-capture-v6-2026-07-30";
 const SHELL = [
   "./",
   "./index.html",
@@ -22,16 +22,17 @@ self.addEventListener("activate", (e) => {
   );
 });
 
+// Network-first: always get the latest when online, fall back to cache offline.
+// (Cache-first previously left phones stuck on an old version.)
 self.addEventListener("fetch", (e) => {
   if (e.request.method !== "GET") return;
   e.respondWith(
-    caches.match(e.request).then((hit) =>
-      hit ||
-      fetch(e.request).then((res) => {
-        const copy = res.clone();
-        caches.open(CACHE).then((c) => c.put(e.request, copy)).catch(() => {});
-        return res;
-      }).catch(() => caches.match("./index.html"))
+    fetch(e.request).then((res) => {
+      const copy = res.clone();
+      caches.open(CACHE).then((c) => c.put(e.request, copy)).catch(() => {});
+      return res;
+    }).catch(() =>
+      caches.match(e.request).then((hit) => hit || caches.match("./index.html"))
     )
   );
 });
