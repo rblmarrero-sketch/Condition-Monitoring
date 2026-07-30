@@ -27,7 +27,7 @@ window.CM_DATA = {
       "equipment": "TK146",
       "date": "2026-07-29",
       "motorHours": 6018,
-      "source": "ac7f11c8-Magnetic_Plug_Inspection.xlsm",
+      "source": "Magnetic_Plug_Inspection_2026-07-29.xlsm",
       "positions": [
         {
           "key": "4C",
@@ -75,7 +75,7 @@ window.CM_DATA = {
       "equipment": "TK147",
       "date": "2026-07-29",
       "motorHours": null,
-      "source": "ac7f11c8-Magnetic_Plug_Inspection.xlsm",
+      "source": "Magnetic_Plug_Inspection_2026-07-29.xlsm",
       "positions": [
         {
           "key": "4C",
@@ -123,7 +123,7 @@ window.CM_DATA = {
       "equipment": "TK148",
       "date": "2026-07-29",
       "motorHours": null,
-      "source": "ac7f11c8-Magnetic_Plug_Inspection.xlsm",
+      "source": "Magnetic_Plug_Inspection_2026-07-29.xlsm",
       "positions": [
         {
           "key": "4C",
@@ -171,7 +171,7 @@ window.CM_DATA = {
       "equipment": "TK149",
       "date": "2026-07-29",
       "motorHours": null,
-      "source": "ac7f11c8-Magnetic_Plug_Inspection.xlsm",
+      "source": "Magnetic_Plug_Inspection_2026-07-29.xlsm",
       "positions": [
         {
           "key": "4C",
@@ -219,7 +219,7 @@ window.CM_DATA = {
       "equipment": "TK150",
       "date": "2026-07-29",
       "motorHours": null,
-      "source": "ac7f11c8-Magnetic_Plug_Inspection.xlsm",
+      "source": "Magnetic_Plug_Inspection_2026-07-29.xlsm",
       "positions": [
         {
           "key": "4C",
@@ -267,7 +267,7 @@ window.CM_DATA = {
       "equipment": "TK151",
       "date": "2026-07-29",
       "motorHours": 6018,
-      "source": "ac7f11c8-Magnetic_Plug_Inspection.xlsm",
+      "source": "Magnetic_Plug_Inspection_2026-07-29.xlsm",
       "positions": [
         {
           "key": "4C",
@@ -315,7 +315,7 @@ window.CM_DATA = {
       "equipment": "TK152",
       "date": "2026-07-29",
       "motorHours": null,
-      "source": "ac7f11c8-Magnetic_Plug_Inspection.xlsm",
+      "source": "Magnetic_Plug_Inspection_2026-07-29.xlsm",
       "positions": [
         {
           "key": "4C",
@@ -363,7 +363,7 @@ window.CM_DATA = {
       "equipment": "TK153",
       "date": "2026-07-29",
       "motorHours": null,
-      "source": "ac7f11c8-Magnetic_Plug_Inspection.xlsm",
+      "source": "Magnetic_Plug_Inspection_2026-07-29.xlsm",
       "positions": [
         {
           "key": "4C",
@@ -411,7 +411,7 @@ window.CM_DATA = {
       "equipment": "TK154",
       "date": "2026-07-29",
       "motorHours": null,
-      "source": "ac7f11c8-Magnetic_Plug_Inspection.xlsm",
+      "source": "Magnetic_Plug_Inspection_2026-07-29.xlsm",
       "positions": [
         {
           "key": "4C",
@@ -459,7 +459,7 @@ window.CM_DATA = {
       "equipment": "TK155",
       "date": "2026-07-29",
       "motorHours": null,
-      "source": "ac7f11c8-Magnetic_Plug_Inspection.xlsm",
+      "source": "Magnetic_Plug_Inspection_2026-07-29.xlsm",
       "positions": [
         {
           "key": "4C",
@@ -507,7 +507,7 @@ window.CM_DATA = {
       "equipment": "TK156",
       "date": "2026-07-29",
       "motorHours": null,
-      "source": "ac7f11c8-Magnetic_Plug_Inspection.xlsm",
+      "source": "Magnetic_Plug_Inspection_2026-07-29.xlsm",
       "positions": [
         {
           "key": "4C",
@@ -555,7 +555,7 @@ window.CM_DATA = {
       "equipment": "TK157",
       "date": "2026-07-29",
       "motorHours": null,
-      "source": "ac7f11c8-Magnetic_Plug_Inspection.xlsm",
+      "source": "Magnetic_Plug_Inspection_2026-07-29.xlsm",
       "positions": [
         {
           "key": "4C",
@@ -603,7 +603,7 @@ window.CM_DATA = {
       "equipment": "TK158",
       "date": "2026-07-29",
       "motorHours": null,
-      "source": "ac7f11c8-Magnetic_Plug_Inspection.xlsm",
+      "source": "Magnetic_Plug_Inspection_2026-07-29.xlsm",
       "positions": [
         {
           "key": "4C",
@@ -651,7 +651,7 @@ window.CM_DATA = {
       "equipment": "TK159",
       "date": "2026-07-29",
       "motorHours": null,
-      "source": "ac7f11c8-Magnetic_Plug_Inspection.xlsm",
+      "source": "Magnetic_Plug_Inspection_2026-07-29.xlsm",
       "positions": [
         {
           "key": "4C",
@@ -699,7 +699,7 @@ window.CM_DATA = {
       "equipment": "TK160",
       "date": "2026-07-29",
       "motorHours": null,
-      "source": "ac7f11c8-Magnetic_Plug_Inspection.xlsm",
+      "source": "Magnetic_Plug_Inspection_2026-07-29.xlsm",
       "positions": [
         {
           "key": "4C",
@@ -747,7 +747,7 @@ window.CM_DATA = {
       "equipment": "TK161",
       "date": "2026-07-29",
       "motorHours": null,
-      "source": "ac7f11c8-Magnetic_Plug_Inspection.xlsm",
+      "source": "Magnetic_Plug_Inspection_2026-07-29.xlsm",
       "positions": [
         {
           "key": "4C",

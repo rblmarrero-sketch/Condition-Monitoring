@@ -31,7 +31,54 @@ The dashboard is self-contained and reads its data from
 
 ---
 
-## How the data gets in
+## Adding inspections — just drop photos in a folder (no Excel)
+
+This is the simplest workflow. **Organise photos as `Truck / Date / Position`:**
+
+```
+Photos/
+  TK146/
+    2026-07-29/        ← one inspection (date = YYYY-MM-DD)
+      4C.jpg           ← one photo per plug position: 4C 4D 4E 4F
+      4D.jpg  4E.jpg  4F.jpg
+    2026-10-15/        ← add a NEW date folder = a new inspection
+      4C.jpg ...
+  TK147/
+    2026-07-29/ ...
+```
+
+Then, in **Chrome or Edge**:
+
+1. Open `dashboard/index.html` (double-click the file).
+2. Click **“📂 Open photo folder”** and choose your `Photos` folder — this can
+   live on the **N: drive**.
+3. Pick a truck → its full photo history appears. Click a photo to enlarge.
+
+To add an inspection later, just add another **date folder** with photos and
+click *Open photo folder* again. There's a ready-made example in `Photos/` you
+can point at right now.
+
+**Grades are optional.** Either click a photo and pick `A/B/C/D` in the app
+(remembered in your browser), or put the grade in the file name
+(`4C_C.jpg` or `TK146_4C_2026-10-15_C.jpg`).
+
+> The “Open photo folder” button uses the browser’s folder-picker, available in
+> Chrome and Edge. In other browsers, use the command-line scanner below to
+> generate `data/magnetic_plug.js` instead.
+
+### Command-line folder scanner (optional)
+
+Regenerate the bundled/shareable data file from a photo folder — handy for
+other browsers or for refreshing a copy you send to someone:
+
+```bash
+python ingest/scan_photos.py "N:/Condition Monitoring/Magnetic Plug/Photos"
+python ingest/scan_photos.py ./Photos --copy    # also copy photos into assets/photos/
+```
+
+---
+
+## Alternative: importing from the Excel workbook
 
 The source of truth is the Excel inspection workbook
 (`Magnetic Plug Inspection.xlsm`). A Python ingester parses it into the data +
