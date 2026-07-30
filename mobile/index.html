@@ -71,6 +71,7 @@
   .cards button .cn{font-size:14px;color:var(--ink);font-weight:600;line-height:1.2;}
   .cards button .dot{position:absolute;top:8px;right:9px;width:9px;height:9px;border-radius:50%;background:var(--good);display:none;}
   .cards button.has .dot{display:block;}
+  .cards button.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent) inset;}
   .clist button{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:left;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:12px 13px;margin-bottom:7px;cursor:pointer;color:var(--ink);font-size:14px;}
   .clist button .r{color:var(--muted);font-size:13px;}
   .clist button.has{border-color:var(--good);}
@@ -211,7 +212,7 @@
 
   <button class="btn ghost" id="reportBtn" style="margin-bottom:16px">📄 <span data-i18n="btn_report">PDF report</span></button>
 
-  <div class="ver">build v16 · 2026-07-30 · Full fleet in picker</div>
+  <div class="ver">build v17 · 2026-07-31 · Cards for Inspection</div>
 </main>
 
 <div class="bottombar">
@@ -508,18 +509,19 @@ $("classSel").onchange=(e)=>{ eqClass=e.target.value; localStorage.setItem("equi
 $("typeSel").onchange=(e)=>{ type=e.target.value; localStorage.setItem("insp_type",type);
   draft={positions:{}}; editing=null; curItem=""; applyForm(); setEditing(null); };
 function renderChips(){ const tr=currentTree();
-  if(tr){ renderComponentNav(tr); return; }
+  if(tr){ renderComponentNav(tr); return; }         // registered unit -> L7/L8/L9 cascade cards
   const its=items();
-  if(its.length<=14){
-    $("posnav").innerHTML=its.map(it=>`<button data-pos="${it.k}"><span>${it.k}</span><span class="dot"></span></button>`).join("");
-  } else {
-    const show=its.filter(it=>draft.positions[it.k]||it.k===curItem);
-    let h=`<button class="posnav-pick" id="itemPickBtn">🔍 ${t("opt_pick_item")}</button>`;
-    h+=show.map(it=>`<button data-pos="${it.k}"><span>${it.k}</span><span class="dot"></span></button>`).join("");
-    $("posnav").innerHTML=h;
-    const pb=$("itemPickBtn"); if(pb) pb.onclick=()=>openPicker("item");
-  }
+  if(type==="INSP"){ renderFlatCards(its); return; } // Inspection (no unit tree) -> flat cards
+  // Magnetic Plug / Filter Cut -> compact chip row (few items)
+  $("posnav").innerHTML=its.map(it=>`<button data-pos="${it.k}"><span>${it.k}</span><span class="dot"></span></button>`).join("");
   toggleCapture(); refreshChips(); }
+function renderFlatCards(its){
+  let h='<div class="casc"><button class="searchall" id="searchAllBtn">🔍 '+t("opt_search_all")+'</button>';
+  h+='<div class="cards">'+its.map(it=>`<button data-pick="${it.k}" class="${draft.positions[it.k]?'has':''}${it.k===curItem?' on':''}"><span class="cc">${it.k}</span><span class="cn">${it[lang]||it.en}</span><span class="dot"></span></button>`).join('')+'</div></div>';
+  $("posnav").innerHTML=h;
+  const sa=$("searchAllBtn"); if(sa) sa.onclick=()=>openPicker("item");
+  $("posnav").querySelectorAll('[data-pick]').forEach(b=>b.onclick=()=>pickComponent(b.dataset.pick));
+  toggleCapture(); }
 function toggleCapture(){ const tr=currentTree(); const show=!tr||!!curItem;
   $("captureBox").style.display=show?"":"none"; }
 function pickComponent(code){ saveCur(); curItem=code; loadPos(); renderChips(); }
