@@ -211,7 +211,7 @@
 
   <button class="btn ghost" id="reportBtn" style="margin-bottom:16px">📄 <span data-i18n="btn_report">PDF report</span></button>
 
-  <div class="ver">build v14 · 2026-07-30 · All-equipment search</div>
+  <div class="ver">build v15 · 2026-07-30 · All-equipment default</div>
 </main>
 
 <div class="bottombar">
@@ -471,6 +471,8 @@ function assetClassOf(n){ const a=ASSET_BY[n]; return a?a.cls:null; }
 
 /* ===================== state ===================== */
 let eqClass = localStorage.getItem("equip_class") || "ALL";
+// One-time on upgrade: default returning users to "All equipment" so the unit search covers the whole fleet.
+if(localStorage.getItem("cm_seen")!=="allfleet"){ eqClass="ALL"; localStorage.setItem("cm_seen","allfleet"); localStorage.setItem("equip_class","ALL"); }
 if(!CLASSES[eqClass]) eqClass="ALL";
 let type = localStorage.getItem("insp_type") || "MP";
 if(!TYPE_META[type]) type="MP";
