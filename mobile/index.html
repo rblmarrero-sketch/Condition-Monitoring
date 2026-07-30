@@ -10,11 +10,10 @@
 <link rel="manifest" href="manifest.webmanifest">
 <!--
   Magnetic Plug — mobile CAPTURE app (offline-first).
-  • Take/pick photos in the field with NO internet.
-  • Everything is stored on the phone (IndexedDB) until you export.
-  • Export produces correctly-named photos (TK146_4C_2026-07-29.jpg) + entries.json
-    that the desktop dashboard reads. Share to OneDrive/email or download a ZIP.
-  Auto-upload to a server/SharePoint is a small add-on — see uploadHook() below.
+  • Take/pick photos in the field with NO internet; stored on the phone (IndexedDB).
+  • Export = correctly-named photos (TK146_4C_30.07.2026_MP.jpg) + entries.json for the dashboard.
+  • EN/RU interface · QR scan for the unit number · dictation for comments.
+  Filenames: <EQUIP>_<POS>_<DD.MM.YYYY>_<TYPE>.jpg  — set INSPECTION_TYPE below (MP / FC / …).
 -->
 <style>
   :root{
@@ -38,11 +37,13 @@
     padding-bottom:120px;}
   header{position:sticky;top:0;z-index:10;background:var(--surface);border-bottom:1px solid var(--border);
     padding:calc(env(safe-area-inset-top) + 12px) 16px 12px;display:flex;align-items:center;gap:10px;}
-  header .t{font-weight:700;font-size:17px;}
+  header .t{font-weight:700;font-size:16px;}
+  .lang{display:flex;border:1px solid var(--border);border-radius:9px;overflow:hidden;margin-left:6px;}
+  .lang button{border:none;background:var(--surface-2);color:var(--ink-2);padding:6px 10px;font-size:13px;font-weight:700;cursor:pointer;}
+  .lang button.on{background:var(--accent);color:#fff;}
   header .st{margin-left:auto;font-size:12px;padding:3px 9px;border-radius:999px;background:var(--surface-2);
     border:1px solid var(--border);color:var(--ink-2);}
-  header .st.off{color:var(--warning);}
-  header .st.on{color:var(--good);}
+  header .st.off{color:var(--warning);} header .st.on{color:var(--good);}
   main{padding:16px;max-width:640px;margin:0 auto;}
   .card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:16px;}
   .card h2{margin:0 0 12px;font-size:14px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);}
@@ -50,12 +51,18 @@
   label.fld > span{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:5px;}
   input,select,textarea{width:100%;background:var(--surface-2);color:var(--ink);border:1px solid var(--border);
     border-radius:12px;padding:13px 14px;font-size:16px;font-family:inherit;}
-  input:focus,select,textarea:focus{outline:2px solid var(--accent);outline-offset:1px;}
+  input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:1px;}
   textarea{resize:vertical;min-height:52px;}
-  .row{display:flex;gap:10px;}
-  .row > *{flex:1;}
+  .row{display:flex;gap:10px;} .row > *{flex:1;}
+  .withbtn{display:flex;gap:8px;align-items:stretch;}
+  .withbtn > input, .withbtn > textarea{flex:1;}
+  .iconbtn{flex:none;white-space:nowrap;background:var(--surface-3);color:var(--ink);border:1px solid var(--border);
+    border-radius:12px;padding:0 14px;font-size:15px;font-weight:650;cursor:pointer;}
+  .withbtn > textarea + .iconbtn{align-self:flex-start;padding:12px;font-size:18px;}
+  .iconbtn.rec{background:var(--critical);color:#fff;border-color:transparent;animation:pulse 1s infinite;}
+  @keyframes pulse{50%{opacity:.55;}}
   .seg{display:flex;gap:8px;flex-wrap:wrap;}
-  .seg button{flex:1;min-width:60px;padding:12px 8px;border-radius:12px;border:1px solid var(--border);
+  .seg button{flex:1;min-width:56px;padding:12px 8px;border-radius:12px;border:1px solid var(--border);
     background:var(--surface-2);color:var(--ink-2);font-size:15px;font-weight:650;cursor:pointer;}
   .seg button.on{background:var(--accent);color:var(--accent-ink);border-color:transparent;}
   .posnav{display:flex;gap:8px;margin-bottom:14px;}
@@ -65,10 +72,9 @@
   .posnav button .dot{position:absolute;top:6px;right:8px;width:9px;height:9px;border-radius:50%;background:var(--good);display:none;}
   .posnav button.has .dot{display:block;}
   .shot{width:100%;aspect-ratio:4/3;border-radius:14px;border:2px dashed var(--border);background:var(--surface-2);
-    display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:14px;overflow:hidden;margin-bottom:12px;position:relative;}
+    display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:14px;overflow:hidden;margin-bottom:12px;position:relative;text-align:center;padding:10px;}
   .shot img{width:100%;height:100%;object-fit:cover;}
-  .shot .retake{position:absolute;bottom:10px;right:10px;background:rgba(0,0,0,.6);color:#fff;border:none;
-    border-radius:10px;padding:8px 12px;font-size:13px;}
+  .shot .retake{position:absolute;bottom:10px;right:10px;background:rgba(0,0,0,.6);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:13px;}
   .gradeseg button.g-A.on{background:var(--good);}
   .gradeseg button.g-B.on{background:var(--warning);color:#111;}
   .gradeseg button.g-C.on{background:var(--serious);}
@@ -77,14 +83,10 @@
   .btn{display:block;width:100%;padding:16px;border-radius:14px;border:none;font-size:17px;font-weight:700;cursor:pointer;}
   .btn.primary{background:var(--accent);color:var(--accent-ink);}
   .btn.ghost{background:var(--surface-2);color:var(--ink);border:1px solid var(--border);}
-  .btn:disabled{opacity:.5;}
   .pending{display:flex;flex-direction:column;gap:10px;}
-  .pitem{display:flex;align-items:center;gap:12px;background:var(--surface-2);border:1px solid var(--border);
-    border-radius:12px;padding:10px 12px;}
+  .pitem{display:flex;align-items:center;gap:12px;background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:10px 12px;}
   .pitem .thumb{width:52px;height:52px;border-radius:9px;object-fit:cover;background:var(--surface-3);flex:none;}
-  .pitem .meta{flex:1;min-width:0;}
-  .pitem .meta .a{font-weight:700;}
-  .pitem .meta .b{font-size:12.5px;color:var(--muted);}
+  .pitem .meta{flex:1;min-width:0;} .pitem .meta .a{font-weight:700;} .pitem .meta .b{font-size:12.5px;color:var(--muted);}
   .pitem .del{background:none;border:none;color:var(--critical);font-size:20px;padding:6px;}
   .empty{color:var(--muted);text-align:center;padding:20px;font-size:14px;}
   .bottombar{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--border);
@@ -95,99 +97,178 @@
   .count-badge{background:var(--accent);color:#fff;border-radius:999px;padding:1px 8px;font-size:12px;margin-left:6px;}
   dialog{border:none;border-radius:16px;background:var(--surface);color:var(--ink);max-width:92vw;width:420px;padding:0;}
   dialog::backdrop{background:rgba(0,0,0,.6);}
-  .dlg-in{padding:20px;}
-  .dlg-in h3{margin:0 0 8px;}
-  .dlg-in p{color:var(--ink-2);font-size:14px;}
+  .dlg-in{padding:20px;} .dlg-in h3{margin:0 0 8px;} .dlg-in p{color:var(--ink-2);font-size:14px;}
+  .scan-ov{position:fixed;inset:0;background:#000;z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+  .scan-ov video{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
+  .scan-frame{position:relative;width:66vw;max-width:280px;aspect-ratio:1;border:3px solid #fff;border-radius:18px;box-shadow:0 0 0 100vmax rgba(0,0,0,.5);}
+  .scan-hint{position:absolute;bottom:120px;color:#fff;font-size:15px;background:rgba(0,0,0,.5);padding:8px 14px;border-radius:10px;text-align:center;}
+  .scan-ov .btn{position:absolute;bottom:40px;width:200px;}
 </style>
 </head>
 <body>
 <header>
-  <span class="t">🧲 Plug Capture</span>
+  <span class="t" data-i18n="app_title">Plug Capture</span>
+  <span class="lang">
+    <button data-lang="en" class="on">EN</button>
+    <button data-lang="ru">RU</button>
+  </span>
   <span class="st" id="netStatus">…</span>
 </header>
 
 <main>
-  <!-- Inspection identity -->
   <div class="card">
-    <h2>Inspection</h2>
-    <div class="row">
-      <label class="fld"><span>Truck / Unit</span>
-        <input id="equip" list="equipList" placeholder="e.g. TK158" autocapitalize="characters" autocomplete="off">
-        <datalist id="equipList"></datalist>
-      </label>
-      <label class="fld"><span>Date</span>
-        <input id="date" type="date">
-      </label>
-    </div>
-    <label class="fld"><span>SMU / machine hours</span>
-      <input id="smu" type="number" inputmode="numeric" placeholder="e.g. 6018">
+    <h2 data-i18n="sec_inspection">Inspection</h2>
+    <label class="fld"><span data-i18n="lbl_truck">Truck / Unit</span>
+      <div class="withbtn">
+        <input id="equip" list="equipList" data-i18n-ph="ph_truck" placeholder="e.g. TK158" autocapitalize="characters" autocomplete="off">
+        <button type="button" class="iconbtn" id="scanBtn">🔳 <span data-i18n="btn_scan">Scan</span></button>
+      </div>
+      <datalist id="equipList"></datalist>
     </label>
+    <input id="qrPhoto" type="file" accept="image/*" capture="environment" class="hidden">
+    <div class="row">
+      <label class="fld"><span data-i18n="lbl_date">Date</span><input id="date" type="date"></label>
+      <label class="fld"><span data-i18n="lbl_smu">SMU / machine hrs</span><input id="smu" type="number" inputmode="numeric" data-i18n-ph="ph_smu" placeholder="e.g. 6018"></label>
+    </div>
   </div>
 
-  <!-- Per-position capture -->
   <div class="card">
-    <h2>Plug position</h2>
+    <h2 data-i18n="sec_position">Plug position</h2>
     <div class="posnav" id="posnav">
       <button data-pos="4C" class="on">4C<span class="dot"></span></button>
       <button data-pos="4D">4D<span class="dot"></span></button>
       <button data-pos="4E">4E<span class="dot"></span></button>
       <button data-pos="4F">4F<span class="dot"></span></button>
     </div>
-    <div class="posLabel hint" id="posLabel">4C — Left Rear Final Drive</div>
+    <div class="posLabel hint" id="posLabel"></div>
 
     <div class="shot" id="shot">
-      <span id="shotPlaceholder">No photo yet — tap “Take photo”.</span>
-      <button class="retake hidden" id="retakeBtn" type="button">Retake</button>
+      <span id="shotPlaceholder" data-i18n="shot_placeholder">No photo yet — tap “Take photo”.</span>
+      <button class="retake hidden" id="retakeBtn" type="button" data-i18n="btn_retake">Retake</button>
     </div>
     <input id="camera" type="file" accept="image/*" capture="environment" class="hidden">
-    <button class="btn primary" id="takeBtn" type="button" style="margin-bottom:14px">📷 Take photo</button>
+    <button class="btn primary" id="takeBtn" type="button" style="margin-bottom:14px">📷 <span data-i18n="btn_take">Take photo</span></button>
 
-    <label class="fld"><span>Grade / condition</span>
+    <label class="fld"><span data-i18n="lbl_grade">Grade / condition</span>
       <div class="seg gradeseg" id="gradeSeg">
-        <button class="g-A" data-g="A">A</button>
-        <button class="g-B" data-g="B">B</button>
-        <button class="g-C" data-g="C">C</button>
-        <button class="g-D" data-g="D">D</button>
+        <button class="g-A" data-g="A">A</button><button class="g-B" data-g="B">B</button>
+        <button class="g-C" data-g="C">C</button><button class="g-D" data-g="D">D</button>
         <button class="g-X" data-g="X">X</button>
       </div>
     </label>
     <div class="row">
-      <label class="fld"><span>Particle count</span><input id="particle" type="text" inputmode="numeric"></label>
-      <label class="fld"><span>Component hrs</span><input id="comp" type="number" inputmode="numeric"></label>
+      <label class="fld"><span data-i18n="lbl_particle">Particle count</span><input id="particle" type="text" inputmode="numeric"></label>
+      <label class="fld"><span data-i18n="lbl_comp">Component hrs</span><input id="comp" type="number" inputmode="numeric"></label>
     </div>
-    <label class="fld"><span>Oil hrs</span><input id="oil" type="number" inputmode="numeric"></label>
-    <label class="fld"><span>Comment</span><textarea id="comment" rows="2" placeholder="notes…"></textarea></label>
-    <div class="hint">Fields save to the current position automatically. Switch positions with the 4C–4F tabs.</div>
+    <label class="fld"><span data-i18n="lbl_oil">Oil hrs</span><input id="oil" type="number" inputmode="numeric"></label>
+    <label class="fld"><span data-i18n="lbl_comment">Comment</span>
+      <div class="withbtn">
+        <textarea id="comment" rows="2" data-i18n-ph="ph_comment" placeholder="notes…"></textarea>
+        <button type="button" class="iconbtn" id="micBtn" title="Dictate">🎤</button>
+      </div>
+    </label>
+    <div class="hint" data-i18n="hint_fields">Fields save to the current position automatically. Switch positions with the 4C–4F tabs.</div>
   </div>
 
-  <!-- Save / queue -->
-  <button class="btn primary" id="saveBtn" style="margin-bottom:16px">✔ Save this truck to queue</button>
+  <button class="btn primary" id="saveBtn" style="margin-bottom:16px" data-i18n="btn_save">✔ Save this truck to queue</button>
 
   <div class="card">
-    <h2>On this phone <span class="count-badge" id="qCount">0</span></h2>
-    <div class="pending" id="pending"><div class="empty">Nothing captured yet.</div></div>
+    <h2><span data-i18n="sec_onphone">On this phone</span> <span class="count-badge" id="qCount">0</span></h2>
+    <div class="pending" id="pending"></div>
   </div>
 </main>
 
 <div class="bottombar">
-  <button class="btn ghost" id="shareBtn">📤 Share</button>
-  <button class="btn primary" id="exportBtn">⬇ Export ZIP</button>
+  <button class="btn ghost" id="shareBtn">📤 <span data-i18n="btn_share">Share</span></button>
+  <button class="btn primary" id="exportBtn">⬇ <span data-i18n="btn_export">Export ZIP</span></button>
 </div>
 
-<dialog id="dlg"><div class="dlg-in"><h3 id="dlgTitle"></h3><p id="dlgMsg"></p>
-  <button class="btn primary" id="dlgOk" style="margin-top:14px">OK</button></div></dialog>
+<div id="scanOverlay" class="scan-ov hidden">
+  <video id="scanVideo" playsinline muted></video>
+  <div class="scan-frame"></div>
+  <div class="scan-hint" data-i18n="scan_hint">Point at the unit's QR code</div>
+  <button class="btn ghost" id="scanCancel" data-i18n="btn_cancel">Cancel</button>
+</div>
+<canvas id="qrCanvas" class="hidden"></canvas>
 
+<dialog id="dlg"><div class="dlg-in"><h3 id="dlgTitle"></h3><p id="dlgMsg"></p>
+  <button class="btn primary" id="dlgOk" style="margin-top:14px" data-i18n="dlg_ok">OK</button></div></dialog>
+
+<script src="jsQR.js"></script>
 <script>
 /* ===================== config ===================== */
+const INSPECTION_TYPE = "MP";   // file-name suffix at the END. Magnetic Plug = "MP". Filter Cut app = "FC".
 const POS_KEYS = ["4C","4D","4E","4F"];
-const POS_LABELS = {"4C":"Left Rear Final Drive","4D":"Right Rear Final Drive",
-                    "4E":"Left Rear Final Drive","4F":"Right Rear Final Drive"};
-const PHOTO_TAG = "";           // set to "_MP" to name files like TK158_4C_2026-07-29_MP.jpg
 const $ = (id)=>document.getElementById(id);
-const dlg=(t,m)=>{ $("dlgTitle").textContent=t; $("dlgMsg").textContent=m; $("dlg").showModal(); };
+
+/* ===================== i18n ===================== */
+const I18N = {
+  en:{
+    app_title:"Plug Capture", net_online:"online", net_offline:"offline — OK",
+    sec_inspection:"Inspection", lbl_truck:"Truck / Unit", ph_truck:"e.g. TK158", btn_scan:"Scan",
+    lbl_date:"Date", lbl_smu:"SMU / machine hrs", ph_smu:"e.g. 6018",
+    sec_position:"Plug position", btn_take:"Take photo", btn_retake:"Retake",
+    shot_placeholder:"No photo yet — tap “Take photo”.",
+    lbl_grade:"Grade / condition", lbl_particle:"Particle count", lbl_comp:"Component hrs",
+    lbl_oil:"Oil hrs", lbl_comment:"Comment", ph_comment:"notes…",
+    hint_fields:"Fields save to the current position automatically. Switch positions with the 4C–4F tabs.",
+    btn_save:"✔ Save this truck to queue", sec_onphone:"On this phone", empty_none:"Nothing captured yet.",
+    btn_share:"Share", btn_export:"Export ZIP", scan_hint:"Point at the unit's QR code", btn_cancel:"Cancel", dlg_ok:"OK",
+    pos_count:"position(s)", photo_count:"photo(s)",
+    posL:{ "4C":"Left Rear Final Drive","4D":"Right Rear Final Drive","4E":"Left Rear Final Drive","4F":"Right Rear Final Drive" },
+    m_need_truck:["Add the truck","Enter the truck / unit number (e.g. TK158) first."],
+    m_nothing_save:["Nothing to save","Take at least one photo or set a grade."],
+    m_saved:["Saved ✔","{x} saved on this phone. Capture the next truck, then Share/Export when you have internet."],
+    m_nothing_export:["Nothing to export","Capture at least one truck first."],
+    m_exported:["Exported ✔","A ZIP with correctly-named photos + entries.json was downloaded. Put the photos in your N: drive folder and Import entries.json into the dashboard."],
+    m_nothing_share:["Nothing to share","Capture at least one truck first."],
+    m_share_na:["Sharing not available","Your phone can't share files from the browser. Use “Export ZIP” instead."],
+    m_scan_wait:["Scanner not ready","Open the app once with internet so the scanner loads, then try again."],
+    m_no_qr:["No QR found","Couldn't read a QR in that photo. Try again — closer and well-lit."],
+    m_dictation:["Dictation","Tap the comment box, then tap the 🎤 microphone key on your phone's keyboard to dictate."],
+  },
+  ru:{
+    app_title:"Съёмка пробок", net_online:"онлайн", net_offline:"офлайн — ОК",
+    sec_inspection:"Осмотр", lbl_truck:"Трак / Ед.", ph_truck:"напр. TK158", btn_scan:"Скан",
+    lbl_date:"Дата", lbl_smu:"Моточасы (SMU)", ph_smu:"напр. 6018",
+    sec_position:"Позиция пробки", btn_take:"Сделать фото", btn_retake:"Переснять",
+    shot_placeholder:"Нет фото — нажмите «Сделать фото».",
+    lbl_grade:"Степень / состояние", lbl_particle:"Количество частиц", lbl_comp:"Наработка компонента",
+    lbl_oil:"Наработка масла", lbl_comment:"Комментарий", ph_comment:"заметки…",
+    hint_fields:"Поля сохраняются автоматически. Переключайте позиции вкладками 4C–4F.",
+    btn_save:"✔ Сохранить трак в очередь", sec_onphone:"На этом телефоне", empty_none:"Пока ничего не снято.",
+    btn_share:"Поделиться", btn_export:"Экспорт ZIP", scan_hint:"Наведите на QR-код трака", btn_cancel:"Отмена", dlg_ok:"ОК",
+    pos_count:"позиц.", photo_count:"фото",
+    posL:{ "4C":"Левый задний бортовой редуктор","4D":"Правый задний бортовой редуктор","4E":"Левый задний бортовой редуктор","4F":"Правый задний бортовой редуктор" },
+    m_need_truck:["Укажите трак","Сначала введите номер трака (напр. TK158)."],
+    m_nothing_save:["Нечего сохранять","Сделайте хотя бы одно фото или укажите степень."],
+    m_saved:["Сохранено ✔","{x} сохранён на телефоне. Снимайте следующий трак, затем «Поделиться»/«Экспорт» при интернете."],
+    m_nothing_export:["Нечего экспортировать","Сначала снимите хотя бы один трак."],
+    m_exported:["Экспортировано ✔","Скачан ZIP с правильно названными фото + entries.json. Положите фото в папку на N: и импортируйте entries.json в дашборд."],
+    m_nothing_share:["Нечем делиться","Сначала снимите хотя бы один трак."],
+    m_share_na:["Общий доступ недоступен","Телефон не может делиться файлами из браузера. Используйте «Экспорт ZIP»."],
+    m_scan_wait:["Сканер не готов","Откройте приложение один раз с интернетом, чтобы загрузился сканер, затем повторите."],
+    m_no_qr:["QR не найден","Не удалось распознать QR на фото. Попробуйте ближе и при хорошем свете."],
+    m_dictation:["Диктовка","Коснитесь поля комментария и нажмите значок 🎤 на клавиатуре телефона, чтобы диктовать."],
+  }
+};
+let lang = localStorage.getItem("lang") || "en";
+function t(k){ return (I18N[lang] && I18N[lang][k]) || I18N.en[k] || k; }
+function applyLang(){
+  document.documentElement.lang = lang;
+  document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t(el.dataset.i18n));
+  document.querySelectorAll("[data-i18n-ph]").forEach(el => el.placeholder = t(el.dataset.i18nPh));
+  $("posLabel").textContent = `${curPos} — ${t("posL")[curPos]}`;
+  setNet(); renderPending();
+  document.querySelectorAll(".lang button").forEach(b=>b.classList.toggle("on", b.dataset.lang===lang));
+}
+document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target.closest("button[data-lang]"); if(!b) return;
+  lang=b.dataset.lang; localStorage.setItem("lang",lang); applyLang(); });
+
+const dlg=(pair)=>{ $("dlgTitle").textContent=pair[0]; $("dlgMsg").textContent=pair[1]; $("dlg").showModal(); };
 $("dlgOk").onclick=()=>$("dlg").close();
 
-/* ===================== tiny IndexedDB ===================== */
+/* ===================== IndexedDB ===================== */
 const DB_NAME="plug_capture", STORE="inspections";
 function idb(){ return new Promise((res,rej)=>{ const r=indexedDB.open(DB_NAME,1);
   r.onupgradeneeded=()=>{ if(!r.result.objectStoreNames.contains(STORE)) r.result.createObjectStore(STORE,{keyPath:"id"}); };
@@ -199,87 +280,61 @@ async function dbAll(){ const d=await idb(); return new Promise((res,rej)=>{ con
 async function dbDel(id){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite");
   t.objectStore(STORE).delete(id); t.oncomplete=res; t.onerror=()=>rej(t.error); }); }
 
-/* ===================== working draft (one truck being captured) ===================== */
-let draft = newDraft();
-let curPos = "4C";
-function newDraft(){ return { positions:{} }; }   // positions[pos] = {photoBlob, grade, particle, comp, oil, comment}
+/* ===================== working draft ===================== */
+let draft={positions:{}}; let curPos="4C";
 function curP(){ return (draft.positions[curPos] ||= {}); }
-
-/* date default = today (local) */
 (function(){ const d=new Date(); const p=(n)=>String(n).padStart(2,"0");
-  $("date").value = `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`; })();
+  $("date").value=`${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`; })();
 
-/* ===================== camera ===================== */
+/* ===================== camera (photo) ===================== */
 $("takeBtn").onclick=()=>$("camera").click();
 $("retakeBtn").onclick=()=>$("camera").click();
-$("camera").onchange=(e)=>{ const f=e.target.files[0]; if(!f) return;
-  curP().photoBlob=f; showShot(URL.createObjectURL(f)); markPosFilled(); e.target.value=""; };
-function showShot(url){
-  $("shot").querySelector("img")?.remove();
+$("camera").onchange=(e)=>{ const f=e.target.files[0]; if(!f) return; curP().photoBlob=f; showShot(URL.createObjectURL(f)); markPos(); e.target.value=""; };
+function showShot(url){ $("shot").querySelector("img")?.remove();
   if(url){ const img=new Image(); img.src=url; $("shot").insertBefore(img,$("retakeBtn"));
     $("shotPlaceholder").classList.add("hidden"); $("retakeBtn").classList.remove("hidden"); }
-  else { $("shotPlaceholder").classList.remove("hidden"); $("retakeBtn").classList.add("hidden"); }
-}
+  else { $("shotPlaceholder").classList.remove("hidden"); $("retakeBtn").classList.add("hidden"); } }
 
-/* ===================== position tabs ===================== */
+/* ===================== position tabs / grade / fields ===================== */
 $("posnav").addEventListener("click",(e)=>{ const b=e.target.closest("button[data-pos]"); if(!b) return;
-  saveCurFields(); curPos=b.dataset.pos;
+  saveCur(); curPos=b.dataset.pos;
   $("posnav").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));
-  $("posLabel").textContent=`${curPos} — ${POS_LABELS[curPos]}`;
-  loadPosIntoForm();
-});
-function markPosFilled(){ $("posnav").querySelector(`button[data-pos="${curPos}"]`).classList.add("has"); }
-
-/* ===================== grade + fields ===================== */
+  $("posLabel").textContent=`${curPos} — ${t("posL")[curPos]}`; loadPos(); });
+function markPos(){ $("posnav").querySelector(`button[data-pos="${curPos}"]`).classList.add("has"); }
 $("gradeSeg").addEventListener("click",(e)=>{ const b=e.target.closest("button[data-g]"); if(!b) return;
-  const g=b.dataset.g; const p=curP(); p.grade = (p.grade===g)?null:g; renderGrade(); markPosFilled(); });
-function renderGrade(){ const g=curP().grade;
-  $("gradeSeg").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.g===g)); }
-["particle","comp","oil","comment"].forEach(id=>{
-  $(id).addEventListener("input",()=>{ saveCurFields(); markPosFilled(); }); });
-function saveCurFields(){ const p=curP();
-  p.particle=$("particle").value.trim(); p.comp=$("comp").value.trim();
+  const p=curP(); p.grade=(p.grade===b.dataset.g)?null:b.dataset.g; renderGrade(); markPos(); });
+function renderGrade(){ const g=curP().grade; $("gradeSeg").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.g===g)); }
+["particle","comp","oil","comment"].forEach(id=>$(id).addEventListener("input",()=>{ saveCur(); markPos(); }));
+function saveCur(){ const p=curP(); p.particle=$("particle").value.trim(); p.comp=$("comp").value.trim();
   p.oil=$("oil").value.trim(); p.comment=$("comment").value.trim();
-  if(!p.grade && !p.photoBlob && !p.particle && !p.comp && !p.oil && !p.comment) delete draft.positions[curPos]; }
-function loadPosIntoForm(){ const p=draft.positions[curPos]||{};
-  $("particle").value=p.particle||""; $("comp").value=p.comp||""; $("oil").value=p.oil||""; $("comment").value=p.comment||"";
-  renderGrade(); showShot(p.photoBlob?URL.createObjectURL(p.photoBlob):null); }
+  if(!p.grade&&!p.photoBlob&&!p.particle&&!p.comp&&!p.oil&&!p.comment) delete draft.positions[curPos]; }
+function loadPos(){ const p=draft.positions[curPos]||{}; $("particle").value=p.particle||""; $("comp").value=p.comp||"";
+  $("oil").value=p.oil||""; $("comment").value=p.comment||""; renderGrade(); showShot(p.photoBlob?URL.createObjectURL(p.photoBlob):null); }
 
-/* ===================== save truck to queue ===================== */
+/* ===================== save to queue ===================== */
 $("saveBtn").onclick=async ()=>{
-  saveCurFields();
-  const equip=$("equip").value.trim().toUpperCase().replace(/\s+/g,"");
-  const date=$("date").value;
-  if(!equip){ dlg("Add the truck","Enter the truck / unit number (e.g. TK158) first."); return; }
-  if(!Object.keys(draft.positions).length){ dlg("Nothing to save","Take at least one photo or enter a grade."); return; }
-  const rec={ id:`${equip}__${date}__${Date.now()}`, equip, date, smu:$("smu").value.trim(),
-    positions:{}, created:new Date().toISOString() };
-  for(const [pos,p] of Object.entries(draft.positions)){
-    rec.positions[pos]={ grade:p.grade||null, particle:p.particle||"", comp:p.comp||"", oil:p.oil||"", comment:p.comment||"",
-      photoBlob:p.photoBlob||null };
-  }
-  await dbPut(rec);
-  // remember equip for the datalist
-  rememberEquip(equip);
-  // reset draft (keep date + smu for the next truck of the same round)
-  draft=newDraft(); curPos="4C";
+  saveCur();
+  const equip=$("equip").value.trim().toUpperCase().replace(/\s+/g,""); const date=$("date").value;
+  if(!equip){ dlg(t("m_need_truck")); return; }
+  if(!Object.keys(draft.positions).length){ dlg(t("m_nothing_save")); return; }
+  const rec={ id:`${equip}__${date}__${Date.now()}`, equip, date, smu:$("smu").value.trim(), positions:{}, created:new Date().toISOString() };
+  for(const [pos,p] of Object.entries(draft.positions))
+    rec.positions[pos]={ grade:p.grade||null, particle:p.particle||"", comp:p.comp||"", oil:p.oil||"", comment:p.comment||"", photoBlob:p.photoBlob||null };
+  await dbPut(rec); rememberEquip(equip);
+  draft={positions:{}}; curPos="4C";
   $("posnav").querySelectorAll("button").forEach((x,i)=>{x.classList.toggle("on",i===0);x.classList.remove("has");});
-  $("posLabel").textContent="4C — Left Rear Final Drive";
-  $("equip").value=""; loadPosIntoForm();
-  await renderPending();
-  dlg("Saved ✔", `${equip} saved on this phone. Capture the next truck, then Share/Export when you have internet.`);
+  $("posLabel").textContent=`4C — ${t("posL")["4C"]}`; $("equip").value=""; loadPos(); renderPending();
+  const m=t("m_saved"); dlg([m[0], m[1].replace("{x}",equip)]);
 };
 
 /* ===================== pending list ===================== */
 function rememberEquip(e){ const s=new Set(JSON.parse(localStorage.getItem("equipHist")||"[]")); s.add(e);
-  const arr=[...s].sort(); localStorage.setItem("equipHist",JSON.stringify(arr));
-  $("equipList").innerHTML=arr.map(x=>`<option value="${x}">`).join(""); }
-function loadEquipHist(){ const arr=JSON.parse(localStorage.getItem("equipHist")||"[]");
-  $("equipList").innerHTML=arr.map(x=>`<option value="${x}">`).join(""); }
+  const arr=[...s].sort(); localStorage.setItem("equipHist",JSON.stringify(arr)); fillEquipList(arr); }
+function fillEquipList(arr){ $("equipList").innerHTML=arr.map(x=>`<option value="${x}">`).join(""); }
 async function renderPending(){
   const all=(await dbAll()).sort((a,b)=>b.created.localeCompare(a.created));
   $("qCount").textContent=all.length;
-  if(!all.length){ $("pending").innerHTML=`<div class="empty">Nothing captured yet.</div>`; return; }
+  if(!all.length){ $("pending").innerHTML=`<div class="empty">${t("empty_none")}</div>`; return; }
   $("pending").innerHTML="";
   for(const rec of all){
     const first=Object.values(rec.positions).find(p=>p.photoBlob);
@@ -288,25 +343,24 @@ async function renderPending(){
     const row=document.createElement("div"); row.className="pitem";
     const thumb=first?`<img class="thumb" src="${URL.createObjectURL(first.photoBlob)}">`:`<div class="thumb"></div>`;
     row.innerHTML=`${thumb}<div class="meta"><div class="a">${rec.equip} · ${rec.date}</div>
-      <div class="b">${nPos} position(s) · ${nPhotos} photo(s)${rec.smu?` · SMU ${rec.smu}`:""}</div></div>
-      <button class="del" title="Delete" data-id="${rec.id}">🗑</button>`;
+      <div class="b">${nPos} ${t("pos_count")} · ${nPhotos} ${t("photo_count")}${rec.smu?` · SMU ${rec.smu}`:""}</div></div>
+      <button class="del" data-id="${rec.id}">🗑</button>`;
     row.querySelector(".del").onclick=async ()=>{ await dbDel(rec.id); renderPending(); };
     $("pending").appendChild(row);
   }
 }
 
 /* ===================== naming + export ===================== */
-function fileName(equip,pos,date,ext){ return `${equip}_${pos}_${date}${PHOTO_TAG}.${ext}`; }
-function extOf(blob){ const t=(blob.type||"").toLowerCase();
-  if(t.includes("png"))return"png"; if(t.includes("webp"))return"webp"; return "jpg"; }
+function ddmmyyyy(iso){ const m=String(iso).match(/(\d{4})-(\d{2})-(\d{2})/); return m?`${m[3]}.${m[2]}.${m[1]}`:iso; }
+function fileName(equip,pos,date,ext){ return `${equip}_${pos}_${ddmmyyyy(date)}_${INSPECTION_TYPE}.${ext}`; }
+function extOf(blob){ const t=(blob.type||"").toLowerCase(); if(t.includes("png"))return"png"; if(t.includes("webp"))return"webp"; return "jpg"; }
 async function buildPackage(){
-  const all=await dbAll();
-  const files=[]; const grades={}, notes={};
+  const all=await dbAll(); const files=[]; const grades={}, notes={};
   for(const rec of all){
-    if(rec.smu) (notes[`${rec.equip}|${rec.date}`] ||= {}).smu = rec.smu;
+    if(rec.smu) (notes[`${rec.equip}|${rec.date}`] ||= {}).smu=rec.smu;
     for(const [pos,p] of Object.entries(rec.positions)){
       if(p.photoBlob){ const ext=extOf(p.photoBlob);
-        files.push({ name:fileName(rec.equip,pos,rec.date,ext), data:new Uint8Array(await p.photoBlob.arrayBuffer()) }); }
+        files.push({name:fileName(rec.equip,pos,rec.date,ext), data:new Uint8Array(await p.photoBlob.arrayBuffer())}); }
       if(p.grade) grades[`${rec.equip}|${rec.date}|${pos}`]=p.grade;
       const nk=`${rec.equip}|${rec.date}|${pos}`; const n={};
       if(p.particle)n.particleCount=p.particle; if(p.comp)n.componentHours=p.comp;
@@ -314,79 +368,84 @@ async function buildPackage(){
       if(Object.keys(n).length) notes[nk]={...(notes[nk]||{}),...n};
     }
   }
-  const entries={type:"cm-magplug-entries",version:1,grades,notes};
-  files.push({ name:"entries.json", data:new TextEncoder().encode(JSON.stringify(entries,null,2)) });
+  files.push({name:"entries.json", data:new TextEncoder().encode(JSON.stringify({type:"cm-magplug-entries",version:1,grades,notes},null,2))});
   return {files, count:all.length};
 }
-$("exportBtn").onclick=async ()=>{
-  const {files,count}=await buildPackage();
-  if(!count){ dlg("Nothing to export","Capture at least one truck first."); return; }
-  const zip=makeZip(files);
-  const url=URL.createObjectURL(new Blob([zip],{type:"application/zip"}));
-  const a=document.createElement("a"); a.href=url; a.download=`plug_inspection_${$("date").value||"export"}.zip`; a.click();
-  URL.revokeObjectURL(url);
-  dlg("Exported ✔","A ZIP with correctly-named photos + entries.json was downloaded. Put the photos in your N: drive folder and Import entries.json into the dashboard.");
-};
-$("shareBtn").onclick=async ()=>{
-  const {files,count}=await buildPackage();
-  if(!count){ dlg("Nothing to share","Capture at least one truck first."); return; }
-  const zip=makeZip(files);
-  const zipFile=new File([zip],`plug_inspection_${$("date").value||"export"}.zip`,{type:"application/zip"});
-  if(navigator.canShare && navigator.canShare({files:[zipFile]})){
-    try{ await navigator.share({files:[zipFile],title:"Plug inspection",text:"Magnetic plug photos + data"}); }
-    catch(e){ /* cancelled */ }
-  } else {
-    dlg("Sharing not available","Your phone can't share files from the browser. Use “Export ZIP” instead, then upload it to OneDrive / email.");
-  }
-};
+$("exportBtn").onclick=async ()=>{ const {files,count}=await buildPackage();
+  if(!count){ dlg(t("m_nothing_export")); return; }
+  const url=URL.createObjectURL(new Blob([makeZip(files)],{type:"application/zip"}));
+  const a=document.createElement("a"); a.href=url; a.download=`plug_inspection_${$("date").value||"export"}.zip`; a.click(); URL.revokeObjectURL(url);
+  dlg(t("m_exported")); };
+$("shareBtn").onclick=async ()=>{ const {files,count}=await buildPackage();
+  if(!count){ dlg(t("m_nothing_share")); return; }
+  const zf=new File([makeZip(files)],`plug_inspection_${$("date").value||"export"}.zip`,{type:"application/zip"});
+  if(navigator.canShare && navigator.canShare({files:[zf]})){ try{ await navigator.share({files:[zf],title:"Plug inspection"}); }catch(e){} }
+  else dlg(t("m_share_na")); };
 
-/* ===================== minimal ZIP writer (store, no deps) ===================== */
-function makeZip(files){
-  const enc=new TextEncoder(); const chunks=[]; const central=[]; let offset=0;
+/* ===================== minimal ZIP (store) ===================== */
+function makeZip(files){ const enc=new TextEncoder(); const chunks=[],central=[]; let offset=0;
   const u16=n=>[n&255,(n>>8)&255]; const u32=n=>[n&255,(n>>8)&255,(n>>16)&255,(n>>24)&255];
-  for(const f of files){
-    const nameB=enc.encode(f.name); const data=f.data; const crc=crc32(data);
-    const local=[].concat([0x50,0x4b,0x03,0x04],u16(20),u16(0),u16(0),u16(0),u16(0),
-      u32(crc),u32(data.length),u32(data.length),u16(nameB.length),u16(0));
+  for(const f of files){ const nameB=enc.encode(f.name); const data=f.data; const crc=crc32(data);
+    const local=[].concat([0x50,0x4b,0x03,0x04],u16(20),u16(0),u16(0),u16(0),u16(0),u32(crc),u32(data.length),u32(data.length),u16(nameB.length),u16(0));
     chunks.push(new Uint8Array(local),nameB,data);
-    const cen=[].concat([0x50,0x4b,0x01,0x02],u16(20),u16(20),u16(0),u16(0),u16(0),u16(0),
-      u32(crc),u32(data.length),u32(data.length),u16(nameB.length),u16(0),u16(0),u16(0),u16(0),u32(0),u32(offset));
-    central.push(new Uint8Array(cen),nameB);
-    offset += local.length + nameB.length + data.length;
-  }
+    const cen=[].concat([0x50,0x4b,0x01,0x02],u16(20),u16(20),u16(0),u16(0),u16(0),u16(0),u32(crc),u32(data.length),u32(data.length),u16(nameB.length),u16(0),u16(0),u16(0),u16(0),u32(0),u32(offset));
+    central.push(new Uint8Array(cen),nameB); offset+=local.length+nameB.length+data.length; }
   let censize=0; central.forEach(c=>censize+=c.length);
-  const end=[].concat([0x50,0x4b,0x05,0x06],u16(0),u16(0),u16(files.length),u16(files.length),
-    u32(censize),u32(offset),u16(0));
-  const parts=[...chunks,...central,new Uint8Array(end)];
-  let total=0; parts.forEach(p=>total+=p.length);
-  const out=new Uint8Array(total); let pos=0; parts.forEach(p=>{out.set(p,pos);pos+=p.length;});
-  return out;
-}
-const CRC_TABLE=(()=>{ const t=new Uint32Array(256);
-  for(let n=0;n<256;n++){ let c=n; for(let k=0;k<8;k++) c=c&1?0xEDB88320^(c>>>1):c>>>1; t[n]=c>>>0; } return t; })();
+  const end=[].concat([0x50,0x4b,0x05,0x06],u16(0),u16(0),u16(files.length),u16(files.length),u32(censize),u32(offset),u16(0));
+  const parts=[...chunks,...central,new Uint8Array(end)]; let total=0; parts.forEach(p=>total+=p.length);
+  const out=new Uint8Array(total); let pos=0; parts.forEach(p=>{out.set(p,pos);pos+=p.length;}); return out; }
+const CRC_TABLE=(()=>{ const t=new Uint32Array(256); for(let n=0;n<256;n++){ let c=n; for(let k=0;k<8;k++) c=c&1?0xEDB88320^(c>>>1):c>>>1; t[n]=c>>>0; } return t; })();
 function crc32(buf){ let c=0xFFFFFFFF; for(let i=0;i<buf.length;i++) c=CRC_TABLE[(c^buf[i])&0xFF]^(c>>>8); return (c^0xFFFFFFFF)>>>0; }
 
-/* ===================== upload hook (wire to your server/SharePoint later) ===================== */
-async function uploadHook(files){
-  // Example for a future server endpoint:
-  //   const fd=new FormData();
-  //   files.forEach(f=>fd.append("files", new Blob([f.data]), f.name));
-  //   await fetch("https://YOUR-SERVER/upload", {method:"POST", body:fd});
-  // For SharePoint/OneDrive, the simplest path today is the Share button above.
+/* ===================== QR scan (unit number) ===================== */
+const qrCanvas=$("qrCanvas"); const qctx=qrCanvas.getContext("2d",{willReadFrequently:true});
+let scanStream=null, scanRAF=null;
+function extractUnit(text){ if(!text) return null; const m=String(text).match(/([A-Za-z]{1,4}\s?\d+)/);
+  return m ? m[1].toUpperCase().replace(/\s+/g,"") : String(text).trim().toUpperCase(); }
+async function startScan(){
+  if(!window.jsQR){ dlg(t("m_scan_wait")); return; }
+  try{ scanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:"environment"}}}); }
+  catch(e){ $("qrPhoto").click(); return; }   // fallback: photograph the QR
+  const v=$("scanVideo"); v.srcObject=scanStream; await v.play(); $("scanOverlay").classList.remove("hidden");
+  const tick=()=>{ if(v.readyState>=2){ qrCanvas.width=v.videoWidth; qrCanvas.height=v.videoHeight;
+      qctx.drawImage(v,0,0,qrCanvas.width,qrCanvas.height);
+      const img=qctx.getImageData(0,0,qrCanvas.width,qrCanvas.height);
+      const code=window.jsQR(img.data,img.width,img.height,{inversionAttempts:"dontInvert"});
+      if(code&&code.data){ const u=extractUnit(code.data); if(u){ $("equip").value=u; stopScan(); return; } } }
+    scanRAF=requestAnimationFrame(tick); };
+  scanRAF=requestAnimationFrame(tick);
 }
+function stopScan(){ if(scanRAF)cancelAnimationFrame(scanRAF); scanRAF=null;
+  if(scanStream){ scanStream.getTracks().forEach(t=>t.stop()); scanStream=null; }
+  $("scanVideo").srcObject=null; $("scanOverlay").classList.add("hidden"); }
+$("scanBtn").onclick=startScan; $("scanCancel").onclick=stopScan;
+$("qrPhoto").onchange=async (e)=>{ const f=e.target.files[0]; e.target.value=""; if(!f) return;
+  const img=await new Promise((res,rej)=>{ const i=new Image(); i.onload=()=>res(i); i.onerror=rej; i.src=URL.createObjectURL(f); });
+  qrCanvas.width=img.width; qrCanvas.height=img.height; qctx.drawImage(img,0,0);
+  const id=qctx.getImageData(0,0,img.width,img.height); const code=window.jsQR && window.jsQR(id.data,id.width,id.height);
+  if(code&&code.data){ $("equip").value=extractUnit(code.data); } else dlg(t("m_no_qr")); };
 
-/* ===================== connectivity + offline ===================== */
-function setNet(){ const on=navigator.onLine;
-  $("netStatus").textContent = on ? "online" : "offline — OK";
-  $("netStatus").className = "st " + (on?"on":"off"); }
-addEventListener("online",setNet); addEventListener("offline",setNet); setNet();
+/* ===================== dictation ===================== */
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+if(SR){ let rec=null, listening=false;
+  $("micBtn").onclick=()=>{ if(listening){ rec&&rec.stop(); return; }
+    rec=new SR(); rec.lang = lang==="ru"?"ru-RU":"en-US"; rec.interimResults=false; rec.continuous=false;
+    rec.onresult=(e)=>{ const tr=e.results[0][0].transcript; const ta=$("comment");
+      ta.value=(ta.value?ta.value+" ":"")+tr; ta.dispatchEvent(new Event("input")); };
+    rec.onend=()=>{ listening=false; $("micBtn").classList.remove("rec"); };
+    rec.onerror=()=>{ listening=false; $("micBtn").classList.remove("rec"); };
+    listening=true; $("micBtn").classList.add("rec"); rec.start(); };
+} else { $("micBtn").onclick=()=>dlg(t("m_dictation")); }
 
-if("serviceWorker" in navigator && location.protocol==="https:"){
-  navigator.serviceWorker.register("sw.js").catch(()=>{});
-}
+/* ===================== connectivity + SW ===================== */
+function setNet(){ const on=navigator.onLine; $("netStatus").textContent=on?t("net_online"):t("net_offline");
+  $("netStatus").className="st "+(on?"on":"off"); }
+addEventListener("online",setNet); addEventListener("offline",setNet);
+if("serviceWorker" in navigator && location.protocol==="https:") navigator.serviceWorker.register("sw.js").catch(()=>{});
 
 /* ===================== init ===================== */
-loadEquipHist(); loadPosIntoForm(); renderPending();
+fillEquipList(JSON.parse(localStorage.getItem("equipHist")||"[]"));
+loadPos(); applyLang(); renderPending();
 </script>
 </body>
 </html>
