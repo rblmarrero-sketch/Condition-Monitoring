@@ -93,6 +93,23 @@
   .scan-frame{position:relative;width:66vw;max-width:280px;aspect-ratio:1;border:3px solid #fff;border-radius:18px;box-shadow:0 0 0 100vmax rgba(0,0,0,.5);}
   .scan-hint{position:absolute;bottom:120px;color:#fff;font-size:15px;background:rgba(0,0,0,.5);padding:8px 14px;border-radius:10px;text-align:center;}
   .scan-ov .btn{position:absolute;bottom:40px;width:200px;}
+  /* media strip (multi-photo + video) */
+  .mediastrip{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px;}
+  .mtile{position:relative;width:calc(25% - 6px);aspect-ratio:1;border-radius:10px;overflow:hidden;background:var(--surface-2);border:1px solid var(--border);}
+  .mtile img,.mtile video{width:100%;height:100%;object-fit:cover;display:block;}
+  .mtile .mdel{position:absolute;top:2px;right:2px;width:22px;height:22px;border-radius:50%;border:none;background:rgba(0,0,0,.65);color:#fff;font-size:13px;cursor:pointer;line-height:22px;padding:0;}
+  .mtile .vbadge{position:absolute;left:0;right:0;bottom:0;background:rgba(0,0,0,.55);color:#fff;font-size:10px;text-align:center;padding:1px;}
+  .mediastrip .empty-m{color:var(--muted);font-size:13px;padding:14px 2px;}
+  .mediahint{margin:0 0 12px;}
+  .picker-btn{width:100%;text-align:left;background:var(--surface-2);color:var(--ink);border:1px solid var(--border);border-radius:12px;padding:13px 14px;font-size:16px;font-family:inherit;cursor:pointer;}
+  .picker-btn:disabled{color:var(--muted);}
+  .pick-ov{position:fixed;inset:0;background:var(--page);z-index:210;display:flex;flex-direction:column;}
+  .pickhead{display:flex;gap:8px;padding:calc(env(safe-area-inset-top) + 12px) 14px 12px;background:var(--surface);border-bottom:1px solid var(--border);}
+  .pickhead input{flex:1;}
+  .picklist{flex:1;overflow-y:auto;padding:8px 14px calc(env(safe-area-inset-bottom) + 20px);}
+  .pickitem{display:block;width:100%;text-align:left;background:none;border:none;border-bottom:1px solid var(--border);color:var(--ink);padding:13px 4px;font-size:15px;cursor:pointer;}
+  .pickitem .pickgrp{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);margin-bottom:2px;}
+  .pickitem:active{background:var(--surface-2);}
 </style>
 </head>
 <body>
@@ -128,12 +145,14 @@
     <div class="posnav" id="posnav"></div>
     <div class="posLabel hint" id="posLabel"></div>
 
-    <div class="shot" id="shot">
-      <span id="shotPlaceholder" data-i18n="shot_placeholder">No photo yet — tap “Take photo”.</span>
-      <button class="retake hidden" id="retakeBtn" type="button" data-i18n="btn_retake">Retake</button>
-    </div>
+    <div class="mediastrip" id="mediastrip"></div>
+    <div class="mediahint hint" id="mediaHint"></div>
     <input id="camera" type="file" accept="image/*" capture="environment" class="hidden">
-    <button class="btn primary" id="takeBtn" type="button" style="margin-bottom:14px">📷 <span data-i18n="btn_take">Take photo</span></button>
+    <input id="video" type="file" accept="video/*" capture="environment" class="hidden">
+    <div class="row" style="margin-bottom:14px">
+      <button class="btn primary" id="takeBtn" type="button">📷 <span data-i18n="btn_take">Add photo</span></button>
+      <button class="btn ghost" id="videoBtn" type="button">🎥 <span data-i18n="btn_video">Video</span></button>
+    </div>
 
     <label class="fld"><span data-i18n="lbl_grade">Grade / condition</span>
       <div class="seg gradeseg" id="gradeSeg">
@@ -149,7 +168,10 @@
       <label class="fld"><span data-i18n="lbl_oil">Oil hrs</span><input id="oil" type="number" inputmode="numeric"></label>
     </div>
     <label class="fld"><span data-i18n="lbl_defect">Defect / failure mode</span>
-      <select id="defect"></select>
+      <button type="button" class="picker-btn" id="defectBtn"></button>
+    </label>
+    <label class="fld"><span data-i18n="lbl_cause">Direct cause</span>
+      <button type="button" class="picker-btn" id="causeBtn"></button>
     </label>
     <label class="fld"><span data-i18n="lbl_comment">Comment</span>
       <div class="withbtn">
@@ -168,7 +190,7 @@
     <div class="pending" id="pending"></div>
   </div>
 
-  <div class="ver">build v8 · 2026-07-30 · Fleet · Defect list</div>
+  <div class="ver">build v9 · 2026-07-30 · Defect+Cause · Search · Media</div>
 </main>
 
 <div class="bottombar">
@@ -186,7 +208,16 @@
 <dialog id="dlg"><div class="dlg-in"><h3 id="dlgTitle"></h3><p id="dlgMsg"></p>
   <button class="btn primary" id="dlgOk" style="margin-top:14px" data-i18n="dlg_ok">OK</button></div></dialog>
 
+<div id="pickOv" class="pick-ov hidden">
+  <div class="pickhead">
+    <input id="pickSearch" type="search" autocomplete="off">
+    <button id="pickCancel" class="linkbtn"></button>
+  </div>
+  <div id="pickList" class="picklist"></div>
+</div>
+
 <script src="jsQR.js"></script>
+<script src="taxonomy.js"></script>
 <script>
 /* ============================================================================
    EQUIPMENT CLASSES & INSPECTION TYPES  —  EDIT here for your fleet.
@@ -213,6 +244,7 @@ const COMP = {
   FRAME:{en:"Frame & Chassis",ru:"Рама и шасси"}, TYRE:{en:"Tyres & Rims",ru:"Шины и диски"},
   ELEC:{en:"Electrical",ru:"Электрооборудование"}, CAB:{en:"Cab & Controls",ru:"Кабина и управление"},
   LUBE:{en:"Auto-Lube",ru:"Система смазки"}, FIRE:{en:"Fire & Safety",ru:"Пожаробезопасность"},
+  ETRAC:{en:"Electric Drive / Traction",ru:"Электропривод / тяга"}, WHEELM:{en:"Wheel Motors",ru:"Мотор-колёса"},
   SWING:{en:"Swing System",ru:"Механизм поворота"}, SWGB:{en:"Swing Gearbox",ru:"Редуктор поворота"},
   TRAVEL:{en:"Travel / Track Drive",ru:"Ходовой привод"}, UC:{en:"Undercarriage",ru:"Ходовая часть"},
   TRACK:{en:"Tracks & Tension",ru:"Гусеницы и натяжение"}, BOOM:{en:"Boom",ru:"Стрела"},
@@ -222,56 +254,110 @@ const COMP = {
   DRAWBAR:{en:"Drawbar",ru:"Тяговая рама"}, TANDEM:{en:"Tandems",ru:"Балансиры"},
   ARTIC:{en:"Articulation Joint",ru:"Шарнир сочленения"}, AXLE:{en:"Axles",ru:"Мосты"},
   LINK:{en:"Bucket Linkage",ru:"Рычаги ковша"},
+  COMPR:{en:"Compressor",ru:"Компрессор"}, ROT:{en:"Rotary Head",ru:"Вращатель"},
+  FEED:{en:"Feed System",ru:"Система подачи"}, MAST:{en:"Mast",ru:"Мачта"},
+  DSTR:{en:"Drill String",ru:"Буровой став"}, DUST:{en:"Dust Collector",ru:"Пылеуловитель"},
+  WINCH:{en:"Winch",ru:"Лебёдка"}, ROD:{en:"Drill Rods",ru:"Буровые штанги"},
+  JAW:{en:"Jaw Plates",ru:"Дробящие плиты"}, TOGGLE:{en:"Toggle",ru:"Распорная плита"},
+  ECC:{en:"Eccentric Shaft",ru:"Эксцентриковый вал"}, BEAR:{en:"Bearings",ru:"Подшипники"},
+  FEEDER:{en:"Feeder",ru:"Питатель"}, CONV:{en:"Conveyor",ru:"Конвейер"}, DRIVE:{en:"Drive",ru:"Привод"},
+  MANTLE:{en:"Mantle & Concave",ru:"Мантия и чаша"}, MSHAFT:{en:"Main Shaft",ru:"Главный вал"},
+  LUBEU:{en:"Lubrication Unit",ru:"Маслостанция"}, TRAMP:{en:"Tramp Release",ru:"Система разгрузки"},
+  SCRM:{en:"Screen Media",ru:"Просеивающие поверхности"}, EXCITER:{en:"Exciter / Vibrator",ru:"Вибровозбудитель"},
+  SPRING:{en:"Springs / Mounts",ru:"Пружины / опоры"}, DECK:{en:"Deck / Structure",ru:"Дека / конструкция"},
+  BODY:{en:"Breaker Body",ru:"Корпус гидромолота"}, PISTON:{en:"Piston",ru:"Поршень"},
+  BUSH:{en:"Bushings",ru:"Втулки"}, CHISEL:{en:"Chisel / Tool",ru:"Пика / инструмент"},
+  ACCUM:{en:"Accumulator",ru:"Гидроаккумулятор"}, HOSE:{en:"Hoses",ru:"Рукава РВД"},
+  BRACKET:{en:"Mounting Bracket",ru:"Монтажный кронштейн"},
 };
 function mk(k,en,ru){ return {k,en,ru}; }
+// asset = the matrix Asset Range EN used to filter Direct Causes ("" = no filter).
 const CLASSES = {
-  HT:{ en:"Haul Truck", ru:"Самосвал",
+  HT:{ en:"Haul Truck", ru:"Карьерный самосвал", asset:"TRUCK, DUMP",
     MP:[mk("4C","Left Rear Final Drive","Левый задний бортовой редуктор"),mk("4D","Right Rear Final Drive","Правый задний бортовой редуктор"),
         mk("4E","Left Rear Final Drive","Левый задний бортовой редуктор"),mk("4F","Right Rear Final Drive","Правый задний бортовой редуктор")],
-    FC:[mk("ENG","Engine Oil Filter","Фильтр моторного масла"),mk("TRANS","Transmission Filter","Фильтр трансмиссии"),mk("HYD","Hydraulic Filter","Гидравлический фильтр"),
-        mk("DIFF","Differential Filter","Фильтр дифференциала"),mk("FDR","Final Drive Filter","Фильтр бортового редуктора"),mk("FUEL","Fuel Filter","Топливный фильтр")],
-    INSP:["ENG","COOL","AIR","FUEL","TRANS","DRV","DIFF","FDR","HYD","HOIST","STEER","BRK","SUSP","FRAME","TYRE","ELEC","CAB","LUBE","FIRE"] },
-  EXC:{ en:"Excavator", ru:"Экскаватор",
+    FC:[mk("ENG","Engine Oil Filter","Фильтр моторного масла"),mk("HYD","Hydraulic Filter","Гидравлический фильтр"),
+        mk("FDR","Final Drive Filter","Фильтр бортового редуктора"),mk("FUEL","Fuel Filter","Топливный фильтр")],
+    INSP:["ENG","COOL","AIR","FUEL","ETRAC","WHEELM","FDR","HYD","HOIST","STEER","BRK","SUSP","FRAME","TYRE","ELEC","CAB","LUBE","FIRE"] },
+  AT:{ en:"Articulated Truck", ru:"Сочленённый самосвал", asset:"TRUCK, ARTICULATED",
+    MP:[mk("FRD","Front Differential","Передний дифференциал"),mk("CTR","Centre / Inter-axle","Межосевой дифференциал"),
+        mk("RRD","Rear Differential","Задний дифференциал"),mk("TRANS","Transmission","Трансмиссия")],
+    FC:[mk("ENG","Engine Oil Filter","Фильтр моторного масла"),mk("TRANS","Transmission Filter","Фильтр трансмиссии"),
+        mk("HYD","Hydraulic Filter","Гидравлический фильтр"),mk("FUEL","Fuel Filter","Топливный фильтр")],
+    INSP:["ENG","COOL","AIR","FUEL","TRANS","ARTIC","AXLE","DRV","DIFF","HYD","HOIST","STEER","BRK","TYRE","FRAME","ELEC","CAB","LUBE","FIRE"] },
+  EXC:{ en:"Excavator", ru:"Экскаватор", asset:"EXCAVATOR, BUCKET",
     MP:[mk("TL","Left Travel Final Drive","Левый ходовой редуктор"),mk("TR","Right Travel Final Drive","Правый ходовой редуктор"),
         mk("SW1","Swing Gearbox 1","Редуктор поворота 1"),mk("SW2","Swing Gearbox 2","Редуктор поворота 2"),mk("PD","Pump Drive / PTO","Привод насосов")],
     FC:[mk("ENG","Engine Oil Filter","Фильтр моторного масла"),mk("HYD","Main Hydraulic Filter","Основной гидрофильтр"),mk("PILOT","Pilot Filter","Фильтр управления"),
         mk("FUEL","Fuel Filter","Топливный фильтр"),mk("SWING","Swing Drive Filter","Фильтр редуктора поворота"),mk("TRAVEL","Travel Drive Filter","Фильтр ходового привода")],
     INSP:["ENG","COOL","AIR","FUEL","HYD","SWING","SWGB","TRAVEL","UC","TRACK","BOOM","STICK","BKT","ATT","ELEC","CAB","FRAME","LUBE","FIRE"] },
-  DOZ:{ en:"Dozer", ru:"Бульдозер",
+  DOZ:{ en:"Dozer", ru:"Бульдозер", asset:"DOZER, TRACK TYPE",
     MP:[mk("FDL","Left Final Drive","Левый бортовой редуктор"),mk("FDRR","Right Final Drive","Правый бортовой редуктор"),
         mk("TRANS","Transmission","Трансмиссия"),mk("BEVEL","Bevel / Steer Gear","Конический/поворотный редуктор")],
     FC:[mk("ENG","Engine Oil Filter","Фильтр моторного масла"),mk("TRANS","Transmission Filter","Фильтр трансмиссии"),
         mk("HYD","Hydraulic Filter","Гидравлический фильтр"),mk("FUEL","Fuel Filter","Топливный фильтр")],
     INSP:["ENG","COOL","AIR","FUEL","TRANS","TCONV","STEER","FDR","UC","TRACK","BLADE","RIPPER","HYD","BRK","FRAME","ELEC","CAB","LUBE","FIRE"] },
-  LDR:{ en:"Wheel Loader", ru:"Фронтальный погрузчик",
+  LDR:{ en:"Wheel Loader", ru:"Фронтальный погрузчик", asset:"LOADER, FRONT",
     MP:[mk("FDIF","Front Differential","Передний дифференциал"),mk("RDIF","Rear Differential","Задний дифференциал"),mk("TRANS","Transmission","Трансмиссия"),
         mk("LF","LF Wheel End","Левый передний редуктор"),mk("RF","RF Wheel End","Правый передний редуктор"),mk("LR","LR Wheel End","Левый задний редуктор"),mk("RR","RR Wheel End","Правый задний редуктор")],
     FC:[mk("ENG","Engine Oil Filter","Фильтр моторного масла"),mk("TRANS","Transmission Filter","Фильтр трансмиссии"),mk("HYD","Hydraulic Filter","Гидравлический фильтр"),
         mk("AXLE","Axle Filter","Фильтр моста"),mk("FUEL","Fuel Filter","Топливный фильтр")],
     INSP:["ENG","COOL","AIR","FUEL","TRANS","TCONV","DRV","AXLE","DIFF","FDR","HYD","LINK","BKT","ARTIC","STEER","BRK","TYRE","FRAME","ELEC","CAB","LUBE","FIRE"] },
-  GRD:{ en:"Grader", ru:"Автогрейдер",
+  GRD:{ en:"Grader", ru:"Автогрейдер", asset:"GRADER, MOBILE",
     MP:[mk("TANL","Left Tandem","Левый балансир"),mk("TANR","Right Tandem","Правый балансир"),mk("TRANS","Transmission","Трансмиссия"),
         mk("DIFF","Differential","Дифференциал"),mk("CIRCLE","Circle Drive","Привод круга")],
     FC:[mk("ENG","Engine Oil Filter","Фильтр моторного масла"),mk("TRANS","Transmission Filter","Фильтр трансмиссии"),mk("HYD","Hydraulic Filter","Гидравлический фильтр"),
         mk("TANDEM","Tandem Filter","Фильтр балансира"),mk("FUEL","Fuel Filter","Топливный фильтр")],
     INSP:["ENG","COOL","AIR","FUEL","TRANS","TANDEM","MOLD","DRAWBAR","RIPPER","HYD","STEER","ARTIC","AXLE","BRK","TYRE","FRAME","ELEC","CAB","LUBE","FIRE"] },
-  GEN:{ en:"General / Other", ru:"Общее / Другое",
+  DRB:{ en:"Blasthole Drill", ru:"Буровой станок", asset:"DRILL, BLASTING",
+    MP:[mk("ROT","Rotary Head Gearbox","Редуктор вращателя"),mk("COMPR","Compressor Sump","Картер компрессора"),
+        mk("FEED","Feed Gearbox","Редуктор подачи"),mk("TRK","Track Final Drive","Ходовой редуктор")],
+    FC:[mk("ENG","Engine Oil Filter","Фильтр моторного масла"),mk("HYD","Hydraulic Filter","Гидравлический фильтр"),
+        mk("COMPR","Compressor Oil Filter","Фильтр масла компрессора"),mk("FUEL","Fuel Filter","Топливный фильтр")],
+    INSP:["ENG","COOL","AIR","FUEL","COMPR","ROT","FEED","MAST","DSTR","DUST","HYD","UC","TRACK","ELEC","CAB","LUBE","FIRE"] },
+  DRE:{ en:"Exploration Drill", ru:"Разведочный буровой станок", asset:"DRILL, EXPLORATION",
+    MP:[mk("ROT","Rotation Gearbox","Редуктор вращения"),mk("WIN","Winch Gearbox","Редуктор лебёдки"),mk("HYD","Hydraulic Tank","Гидробак")],
+    FC:[mk("ENG","Engine Oil Filter","Фильтр моторного масла"),mk("HYD","Hydraulic Filter","Гидравлический фильтр"),mk("FUEL","Fuel Filter","Топливный фильтр")],
+    INSP:["ENG","COOL","FUEL","HYD","ROT","FEED","MAST","ROD","COMPR","WINCH","UC","ELEC","CAB","LUBE","FIRE"] },
+  CRJ:{ en:"Jaw Crusher", ru:"Щековая дробилка", asset:"CRUSHER, MOBILE JAW",
+    MP:[mk("ECC","Eccentric / Oil Sump","Эксцентрик / картер"),mk("DRV","Drive Gearbox","Редуктор привода"),mk("LUBE","Lube Tank","Бак смазки")],
+    FC:[mk("ENG","Engine Oil Filter","Фильтр моторного масла"),mk("HYD","Hydraulic Filter","Гидравлический фильтр"),
+        mk("LUBE","Lube Oil Filter","Фильтр смазки"),mk("FUEL","Fuel Filter","Топливный фильтр")],
+    INSP:["JAW","TOGGLE","ECC","BEAR","FEEDER","CONV","HYD","DRIVE","ENG","ELEC","FRAME","LUBE","FIRE"] },
+  CRC:{ en:"Cone Crusher", ru:"Конусная дробилка", asset:"CRUSHER, MOBILE CONE",
+    MP:[mk("MSH","Main Shaft / Oil","Главный вал / масло"),mk("LUBE","Lube Tank","Бак смазки"),mk("DRV","Drive Gearbox","Редуктор привода")],
+    FC:[mk("ENG","Engine Oil Filter","Фильтр моторного масла"),mk("HYD","Hydraulic Filter","Гидравлический фильтр"),
+        mk("LUBE","Lube Oil Filter","Фильтр смазки"),mk("FUEL","Fuel Filter","Топливный фильтр")],
+    INSP:["MANTLE","MSHAFT","ECC","BEAR","LUBEU","TRAMP","HYD","DRIVE","FEEDER","CONV","ENG","ELEC","FRAME","FIRE"] },
+  SCR:{ en:"Screen", ru:"Грохот", asset:"SCREENER, MOBILE",
+    MP:[mk("EXC","Exciter Oil","Масло вибровозбудителя"),mk("BRG","Bearing Housing","Корпус подшипника")],
+    FC:[mk("ENG","Engine Oil Filter","Фильтр моторного масла"),mk("HYD","Hydraulic Filter","Гидравлический фильтр"),mk("FUEL","Fuel Filter","Топливный фильтр")],
+    INSP:["SCRM","EXCITER","BEAR","SPRING","DECK","FEEDER","CONV","DRIVE","HYD","ENG","ELEC","FRAME","FIRE"] },
+  HRB:{ en:"Rock Breaker", ru:"Гидромолот", asset:"HYDRAULIC ROCK BREAKER",
+    MP:[mk("HYD","Hydraulic Oil Sample","Проба гидравлического масла")],
+    FC:[mk("HYD","Hydraulic Filter","Гидравлический фильтр")],
+    INSP:["BODY","PISTON","BUSH","CHISEL","ACCUM","HOSE","BRACKET","HYD"] },
+  GEN:{ en:"General / Other", ru:"Общее / Другое", asset:"",
     MP:[mk("TRANS","Transmission","Трансмиссия"),mk("DIFF","Differential","Дифференциал"),mk("FD1","Final Drive 1","Бортовой редуктор 1"),
         mk("FD2","Final Drive 2","Бортовой редуктор 2"),mk("HYD","Hydraulic Tank","Гидробак")],
     FC:[mk("ENG","Engine Oil Filter","Фильтр моторного масла"),mk("TRANS","Transmission Filter","Фильтр трансмиссии"),
         mk("HYD","Hydraulic Filter","Гидравлический фильтр"),mk("FUEL","Fuel Filter","Топливный фильтр")],
     INSP:["ENG","COOL","AIR","FUEL","TRANS","DRV","HYD","UC","TYRE","BRK","STEER","FRAME","ELEC","CAB","LUBE","FIRE"] },
 };
-const CLASS_ORDER = ["HT","EXC","DOZ","LDR","GRD","GEN"];
+const CLASS_ORDER = ["HT","AT","EXC","DOZ","LDR","GRD","DRB","DRE","CRJ","CRC","SCR","HRB","GEN"];
 const $ = (id)=>document.getElementById(id);
 
 /* ===================== i18n ===================== */
 const I18N = {
   en:{ app_title:"Truck Inspection", net_online:"online", net_offline:"offline — OK",
     sec_inspection:"Inspection", lbl_class:"Equipment", lbl_type:"Inspection type", lbl_truck:"Truck / Unit", ph_truck:"e.g. TK158", btn_scan:"Scan",
-    lbl_defect:"Defect / failure mode",
+    lbl_defect:"Defect / failure mode", lbl_cause:"Direct cause",
+    opt_none:"— none / OK —", opt_cause_tbd:"— to be confirmed —", opt_cause_pick:"Select a defect first",
     lbl_date:"Date", lbl_smu:"SMU / machine hrs", ph_smu:"e.g. 6018",
-    btn_take:"Take photo", btn_retake:"Retake", shot_placeholder:"No photo yet — tap “Take photo”.",
+    btn_take:"Add photo", btn_video:"Video", btn_retake:"Retake",
+    media_hint:"Up to 4 photos + 1 video (max 1 min).", media_empty:"No photos yet.",
+    pick_search:"Search…", video_too_long:["Video too long","Please record a clip of 1 minute or less."],
+    shot_placeholder:"No photo yet.",
     lbl_grade:"Grade / condition", lbl_particle:"Particle count", lbl_comp:"Component hrs", lbl_oil:"Oil hrs",
     lbl_comment:"Comment / defect", ph_comment:"notes…",
     hint_fields:"Fields save automatically. Switch items with the buttons above.",
@@ -293,9 +379,13 @@ const I18N = {
   },
   ru:{ app_title:"Осмотр самосвала", net_online:"онлайн", net_offline:"офлайн — ОК",
     sec_inspection:"Осмотр", lbl_class:"Оборудование", lbl_type:"Тип осмотра", lbl_truck:"Трак / Ед.", ph_truck:"напр. TK158", btn_scan:"Скан",
-    lbl_defect:"Дефект / вид отказа",
+    lbl_defect:"Дефект / вид отказа", lbl_cause:"Прямая причина",
+    opt_none:"— нет / норма —", opt_cause_tbd:"— уточнить —", opt_cause_pick:"Сначала выберите дефект",
     lbl_date:"Дата", lbl_smu:"Моточасы (SMU)", ph_smu:"напр. 6018",
-    btn_take:"Сделать фото", btn_retake:"Переснять", shot_placeholder:"Нет фото — нажмите «Сделать фото».",
+    btn_take:"Добавить фото", btn_video:"Видео", btn_retake:"Переснять",
+    media_hint:"До 4 фото + 1 видео (макс. 1 мин).", media_empty:"Пока нет фото.",
+    pick_search:"Поиск…", video_too_long:["Видео слишком длинное","Запишите ролик не длиннее 1 минуты."],
+    shot_placeholder:"Нет фото.",
     lbl_grade:"Степень / состояние", lbl_particle:"Количество частиц", lbl_comp:"Наработка компонента", lbl_oil:"Наработка масла",
     lbl_comment:"Комментарий / дефект", ph_comment:"заметки…",
     hint_fields:"Поля сохраняются автоматически. Переключайте пункты кнопками выше.",
@@ -319,39 +409,21 @@ const I18N = {
 let lang = localStorage.getItem("lang") || "en";
 function t(k){ return (I18N[lang] && I18N[lang][k]) || I18N.en[k] || k; }
 
-/* ===================== defect / failure-mode list (reliability) — EDIT freely ===================== */
-const DEFECTS = [
-  {k:"",           en:"— none / OK —",           ru:"— нет / норма —"},
-  {k:"LEAK_OIL",   en:"Oil leak",                ru:"Течь масла"},
-  {k:"LEAK_COOL",  en:"Coolant leak",            ru:"Течь охлаждающей жидкости"},
-  {k:"LEAK_FUEL",  en:"Fuel leak",               ru:"Течь топлива"},
-  {k:"LEAK_HYD",   en:"Hydraulic leak",          ru:"Течь гидравлики"},
-  {k:"LEAK_GREASE",en:"Grease / seal leak",      ru:"Течь смазки / сальника"},
-  {k:"LEAK_AIR",   en:"Air / pneumatic leak",    ru:"Утечка воздуха"},
-  {k:"WEAR",       en:"Wear",                    ru:"Износ"},
-  {k:"GET_WEAR",   en:"GET / edge / tyre wear",  ru:"Износ зубьев / кромки / шины"},
-  {k:"BEARING",    en:"Bearing wear / noise",    ru:"Износ / шум подшипника"},
-  {k:"PLAY",       en:"Play / backlash",         ru:"Люфт / зазор"},
-  {k:"CRACK",      en:"Crack / structural",      ru:"Трещина / конструкция"},
-  {k:"WELD",       en:"Weld failure",            ru:"Разрушение сварного шва"},
-  {k:"DEFORM",     en:"Deformation / bent",      ru:"Деформация / изгиб"},
-  {k:"CORROSION",  en:"Corrosion / rust",        ru:"Коррозия / ржавчина"},
-  {k:"OVERHEAT",   en:"Overheating",             ru:"Перегрев"},
-  {k:"NOISE",      en:"Abnormal noise",          ru:"Посторонний шум"},
-  {k:"VIBRATION",  en:"Vibration",               ru:"Вибрация"},
-  {k:"CONTAM",     en:"Contamination",           ru:"Загрязнение"},
-  {k:"BLOCKED",    en:"Blocked / restricted",    ru:"Засорение / ограничение потока"},
-  {k:"LOW_LEVEL",  en:"Low fluid level",         ru:"Низкий уровень жидкости"},
-  {k:"LOOSE",      en:"Loose / missing bolts",   ru:"Ослаблен / отсутствует крепёж"},
-  {k:"DAMAGE",     en:"Damage / broken",         ru:"Повреждение / поломка"},
-  {k:"CHAFE",      en:"Hose chafing / rubbing",  ru:"Перетирание шланга"},
-  {k:"MISALIGN",   en:"Misalignment",            ru:"Несоосность"},
-  {k:"ELEC_FAULT", en:"Electrical fault",        ru:"Неисправность электрики"},
-  {k:"SEAL",       en:"Seal failure",            ru:"Разрушение сальника"},
-  {k:"GUARD",      en:"Missing guard / safety",  ru:"Отсутствует ограждение / защита"},
-  {k:"OTHER",      en:"Other (see comment)",     ru:"Другое (см. комментарий)"},
-];
-function defectLabel(k, l){ const d=DEFECTS.find(x=>x.k===k); return d?(d[l||lang]||d.en):k; }
+/* ===================== defect + direct-cause taxonomy (from taxonomy.js) ===================== */
+const TAX = window.TAX || {defects:[],causes:[],defectGroups:[],defectGroupRu:{},causeGroupRu:{}};
+const DEFECT_BY = {}; TAX.defects.forEach(d=>DEFECT_BY[d.c]=d);
+const CAUSE_BY  = {}; TAX.causes.forEach(c=>CAUSE_BY[c.c]=c);
+function defectLabel(code,l){ const d=DEFECT_BY[code]; return d?(d[l||lang]||d.en):code; }
+function causeLabel(code,l){ const c=CAUSE_BY[code]; return c?(c[l||lang]||c.en):code; }
+// direct causes that apply to a defect for the current equipment's asset range
+function causesFor(defectCode){
+  if(!defectCode) return [];
+  const asset=(CLASSES[eqClass]||{}).asset||"";
+  let list=TAX.causes.filter(c=>c.dt&&c.dt.indexOf(defectCode)>=0 &&
+    (!asset || (c.as&&(c.as.indexOf(asset)>=0||c.as.indexOf("ALL PRIMARY HME")>=0))));
+  if(asset && !list.length) list=TAX.causes.filter(c=>c.dt&&c.dt.indexOf(defectCode)>=0); // fallback: ignore asset
+  return list;
+}
 
 /* ===================== state ===================== */
 let eqClass = localStorage.getItem("equip_class") || "HT";
@@ -378,7 +450,6 @@ async function dbDel(id){ const d=await idb(); return new Promise((res,rej)=>{ c
 /* ===================== class + type + component chips ===================== */
 function fillClassSel(){ $("classSel").innerHTML=CLASS_ORDER.map(k=>`<option value="${k}">${CLASSES[k][lang]||CLASSES[k].en}</option>`).join(""); $("classSel").value=eqClass; }
 function fillTypeSel(){ $("typeSel").innerHTML=TYPE_ORDER.map(k=>`<option value="${k}">${t("type_"+k)}</option>`).join(""); $("typeSel").value=type; }
-function fillDefectSel(){ $("defect").innerHTML=DEFECTS.map(d=>`<option value="${d.k}">${d[lang]||d.en}</option>`).join(""); }
 $("classSel").onchange=(e)=>{ eqClass=e.target.value; localStorage.setItem("equip_class",eqClass);
   draft={positions:{}}; editing=null; curItem=items()[0].k; applyForm(); setEditing(null); };
 $("typeSel").onchange=(e)=>{ type=e.target.value; localStorage.setItem("insp_type",type);
@@ -390,28 +461,72 @@ $("posnav").addEventListener("click",(e)=>{ const b=e.target.closest("button[dat
   saveCur(); curItem=b.dataset.pos; refreshChips(); loadPos(); });
 function applyForm(){ $("secPosTitle").textContent=TYPE_META[type].title[lang]||TYPE_META[type].title.en;
   $("mpFields").classList.toggle("hidden", !TYPE_META[type].showReadings);
-  fillClassSel(); fillTypeSel(); fillDefectSel(); renderChips(); loadPos(); }
+  fillClassSel(); fillTypeSel(); renderChips(); loadPos(); }
 
-/* ===================== camera ===================== */
-$("takeBtn").onclick=()=>$("camera").click(); $("retakeBtn").onclick=()=>$("camera").click();
-$("camera").onchange=(e)=>{ const f=e.target.files[0]; if(!f) return; curP().photoBlob=f; showShot(URL.createObjectURL(f)); refreshChips(); e.target.value=""; };
-function showShot(url){ $("shot").querySelector("img")?.remove();
-  if(url){ const img=new Image(); img.src=url; $("shot").insertBefore(img,$("retakeBtn")); $("shotPlaceholder").classList.add("hidden"); $("retakeBtn").classList.remove("hidden"); }
-  else { $("shotPlaceholder").classList.remove("hidden"); $("retakeBtn").classList.add("hidden"); } }
+/* ===================== media: up to 4 photos + 1 video (<=60s) ===================== */
+const MAX_PHOTOS=4, MAX_VIDEO_SEC=60;
+$("takeBtn").onclick=()=>{ if((curP().photos||[]).length>=MAX_PHOTOS){ return; } $("camera").click(); };
+$("videoBtn").onclick=()=>$("video").click();
+$("camera").onchange=(e)=>{ const f=e.target.files[0]; e.target.value=""; if(!f) return;
+  const p=curP(); (p.photos ||= []); if(p.photos.length<MAX_PHOTOS) p.photos.push(f); renderMedia(); refreshChips(); };
+$("video").onchange=(e)=>{ const f=e.target.files[0]; e.target.value=""; if(!f) return;
+  const v=document.createElement("video"); v.preload="metadata";
+  v.onloadedmetadata=()=>{ if(v.duration && v.duration>MAX_VIDEO_SEC+0.8){ dlg(t("video_too_long")); }
+    else { curP().video=f; renderMedia(); refreshChips(); } URL.revokeObjectURL(v.src); };
+  v.onerror=()=>{ curP().video=f; renderMedia(); refreshChips(); };  // if metadata fails, accept
+  v.src=URL.createObjectURL(f); };
+function renderMedia(){ const p=draft.positions[curItem]||{}; const ph=p.photos||[]; let h="";
+  ph.forEach((b,i)=>{ h+=`<div class="mtile"><img src="${URL.createObjectURL(b)}"><button class="mdel" data-ph="${i}">✕</button></div>`; });
+  if(p.video) h+=`<div class="mtile"><video src="${URL.createObjectURL(p.video)}" muted playsinline></video><span class="vbadge">▶ video</span><button class="mdel" data-vid="1">✕</button></div>`;
+  if(!ph.length && !p.video) h=`<div class="empty-m">${t("media_empty")}</div>`;
+  $("mediastrip").innerHTML=h;
+  $("mediaHint").textContent=t("media_hint");
+  $("takeBtn").disabled = ph.length>=MAX_PHOTOS;
+  $("videoBtn").disabled = !!p.video;
+  $("mediastrip").querySelectorAll(".mdel").forEach(btn=>btn.onclick=()=>{ const p=curP();
+    if(btn.dataset.ph!==undefined){ p.photos.splice(+btn.dataset.ph,1); if(!p.photos.length) delete p.photos; }
+    else { delete p.video; } renderMedia(); refreshChips(); }); }
 
 /* ===================== grade + fields ===================== */
 $("gradeSeg").addEventListener("click",(e)=>{ const b=e.target.closest("button[data-g]"); if(!b) return;
   const p=curP(); p.grade=(p.grade===b.dataset.g)?null:b.dataset.g; renderGrade(); refreshChips(); });
 function renderGrade(){ const g=curP().grade; $("gradeSeg").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.g===g)); }
 ["particle","comp","oil","comment"].forEach(id=>$(id).addEventListener("input",()=>{ saveCur(); refreshChips(); }));
-$("defect").addEventListener("change",()=>{ saveCur(); refreshChips(); });
+function hasData(p){ return p.grade||(p.photos&&p.photos.length)||p.video||p.particle||p.comp||p.oil||p.comment||p.defect||p.cause; }
 function saveCur(){ const p=curP(); p.particle=$("particle").value.trim(); p.comp=$("comp").value.trim(); p.oil=$("oil").value.trim();
-  p.comment=$("comment").value.trim(); p.defect=$("defect").value;
-  if(!p.grade&&!p.photoBlob&&!p.particle&&!p.comp&&!p.oil&&!p.comment&&!p.defect) delete draft.positions[curItem]; }
+  p.comment=$("comment").value.trim();
+  if(!hasData(p)) delete draft.positions[curItem]; }
 function loadPos(){ $("posLabel").textContent=`${curItem} — ${itemLabel(curItem)}`;
   const p=draft.positions[curItem]||{}; $("particle").value=p.particle||""; $("comp").value=p.comp||""; $("oil").value=p.oil||"";
-  $("comment").value=p.comment||""; $("defect").value=p.defect||"";
-  renderGrade(); showShot(p.photoBlob?URL.createObjectURL(p.photoBlob):null); }
+  $("comment").value=p.comment||""; renderGrade(); renderMedia(); updateDefectCauseBtns(); }
+
+/* ===================== searchable defect / cause pickers ===================== */
+function updateDefectCauseBtns(){ const p=draft.positions[curItem]||{};
+  $("defectBtn").textContent = p.defect ? defectLabel(p.defect) : t("opt_none");
+  $("causeBtn").disabled = !p.defect;
+  $("causeBtn").textContent = p.cause ? causeLabel(p.cause) : (p.defect ? t("opt_cause_tbd") : t("opt_cause_pick")); }
+let pickMode=null;
+function pickerSource(){
+  if(pickMode==="defect"){
+    return [{k:"",label:t("opt_none")}].concat(TAX.defects.map(d=>({k:d.c,label:(d[lang]||d.en),group:(lang==="ru"?(TAX.defectGroupRu[d.g]||d.g):d.g)})));
+  }
+  const cs=causesFor((draft.positions[curItem]||{}).defect);
+  return [{k:"",label:t("opt_cause_tbd")}].concat(cs.map(c=>({k:c.c,label:(c[lang]||c.en),group:(lang==="ru"?(TAX.causeGroupRu[c.g]||c.g):c.g)})));
+}
+function renderPickList(q){ q=(q||"").trim().toLowerCase();
+  const src=pickerSource().filter(o=>!q||o.label.toLowerCase().indexOf(q)>=0||(o.group||"").toLowerCase().indexOf(q)>=0);
+  $("pickList").innerHTML=src.map(o=>`<button class="pickitem" data-k="${o.k}">${o.group?`<span class="pickgrp">${o.group}</span>`:""}${o.label}</button>`).join("")||`<div class="empty-m">—</div>`; }
+function openPicker(mode){ pickMode=mode; $("pickSearch").value=""; $("pickSearch").placeholder=t("pick_search"); renderPickList(""); $("pickOv").classList.remove("hidden"); setTimeout(()=>$("pickSearch").focus(),50); }
+function closePicker(){ $("pickOv").classList.add("hidden"); }
+$("defectBtn").onclick=()=>openPicker("defect");
+$("causeBtn").onclick=()=>{ if((draft.positions[curItem]||{}).defect) openPicker("cause"); };
+$("pickSearch").oninput=(e)=>renderPickList(e.target.value);
+$("pickCancel").onclick=closePicker;
+$("pickList").onclick=(e)=>{ const b=e.target.closest(".pickitem"); if(!b) return; const k=b.dataset.k; const p=curP();
+  if(pickMode==="defect"){ p.defect=k||""; if(!causesFor(p.defect).some(c=>c.c===p.cause)) p.cause=""; }
+  else { p.cause=k||""; }
+  if(!hasData(p)) delete draft.positions[curItem];
+  closePicker(); updateDefectCauseBtns(); refreshChips(); };
 
 /* ===================== date + edit ===================== */
 function todayISO(){ const d=new Date(),p=(n)=>String(n).padStart(2,"0"); return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`; }
@@ -426,7 +541,7 @@ function resetForm(){ draft={positions:{}}; curItem=items()[0].k; $("equip").val
 function editRecord(rec){ if(rec.cls && CLASSES[rec.cls]){ eqClass=rec.cls; localStorage.setItem("equip_class",eqClass); }
   if(rec.type && TYPE_META[rec.type]){ type=rec.type; localStorage.setItem("insp_type",type); }
   draft={positions:{}};
-  for(const [k,pp] of Object.entries(rec.positions)) draft.positions[k]={grade:pp.grade,particle:pp.particle,comp:pp.comp,oil:pp.oil,comment:pp.comment,defect:pp.defect,photoBlob:pp.photoBlob};
+  for(const [k,pp] of Object.entries(rec.positions)) draft.positions[k]={grade:pp.grade,particle:pp.particle,comp:pp.comp,oil:pp.oil,comment:pp.comment,defect:pp.defect,cause:pp.cause,photos:(pp.photos?pp.photos.slice():(pp.photoBlob?[pp.photoBlob]:[])),video:pp.video||null};
   $("equip").value=rec.equip; $("date").value=rec.date; $("smu").value=rec.smu||"";
   curItem=Object.keys(draft.positions)[0]||items()[0].k;
   applyForm(); loadPos(); setEditing(rec); window.scrollTo({top:0,behavior:"smooth"}); }
@@ -442,7 +557,7 @@ $("saveBtn").onclick=async ()=>{
   const created = editing ? (editing.created||new Date().toISOString()) : new Date().toISOString();
   const rec={ id, cls:eqClass, type, equip, date, smu:$("smu").value.trim(), positions:{}, created };
   for(const [k,p] of Object.entries(draft.positions))
-    rec.positions[k]={ grade:p.grade||null, particle:p.particle||"", comp:p.comp||"", oil:p.oil||"", defect:p.defect||"", comment:p.comment||"", photoBlob:p.photoBlob||null };
+    rec.positions[k]={ grade:p.grade||null, particle:p.particle||"", comp:p.comp||"", oil:p.oil||"", defect:p.defect||"", cause:p.cause||"", comment:p.comment||"", photos:(p.photos||[]).slice(), video:p.video||null };
   await dbPut(rec); rememberEquip(equip); resetForm(); renderPending();
   const m=t("m_saved"); dlg([m[0], m[1].replace("{x}",equip)]);
 };
@@ -456,13 +571,14 @@ async function renderPending(){
   if(!all.length){ $("pending").innerHTML=`<div class="empty">${t("empty_none")}</div>`; return; }
   $("pending").innerHTML="";
   for(const rec of all){
-    const first=Object.values(rec.positions).find(p=>p.photoBlob);
-    const nPhotos=Object.values(rec.positions).filter(p=>p.photoBlob).length; const nPos=Object.keys(rec.positions).length;
+    const firstP=Object.values(rec.positions).find(p=>(p.photos&&p.photos.length)); const first=firstP?firstP.photos[0]:null;
+    const nPhotos=Object.values(rec.positions).reduce((s,p)=>s+((p.photos&&p.photos.length)||0),0);
+    const nVid=Object.values(rec.positions).filter(p=>p.video).length; const nPos=Object.keys(rec.positions).length;
     const row=document.createElement("div"); row.className="pitem";
-    const thumb=first?`<img class="thumb" src="${URL.createObjectURL(first.photoBlob)}">`:`<div class="thumb"></div>`;
+    const thumb=first?`<img class="thumb" src="${URL.createObjectURL(first)}">`:`<div class="thumb"></div>`;
     const typeTag=`${rec.cls||""} ${rec.type||"MP"}`.trim();
     row.innerHTML=`${thumb}<div class="meta"><div class="a"><span class="tag">${typeTag}</span>${rec.equip} · ${rec.date}</div>
-      <div class="b">${nPos} ${t("pos_count")} · ${nPhotos} ${t("photo_count")}${rec.smu?` · SMU ${rec.smu}`:""}</div></div>
+      <div class="b">${nPos} ${t("pos_count")} · ${nPhotos} ${t("photo_count")}${nVid?` · ${nVid}🎥`:""}${rec.smu?` · SMU ${rec.smu}`:""}</div></div>
       <button class="edit" title="Edit">✎</button><button class="del" title="Delete">🗑</button>`;
     const openEdit=()=>editRecord(rec);
     row.querySelector(".edit").onclick=(ev)=>{ev.stopPropagation();openEdit();};
@@ -481,11 +597,16 @@ async function buildPackage(){
   for(const rec of all){ const suffix=(TYPE_META[rec.type]&&TYPE_META[rec.type].suffix)||rec.type||"MP";
     if(rec.smu) (notes[`${rec.equip}|${rec.date}`] ||= {}).smu=rec.smu;
     for(const [k,p] of Object.entries(rec.positions)){
-      if(p.photoBlob){ const ext=extOf(p.photoBlob); files.push({name:fileName(rec.equip,k,rec.date,ext,suffix), data:new Uint8Array(await p.photoBlob.arrayBuffer())}); }
+      const ph=p.photos||(p.photoBlob?[p.photoBlob]:[]);
+      for(let i=0;i<ph.length;i++){ const ext=extOf(ph[i]); const base=fileName(rec.equip,k,rec.date,ext,suffix);
+        const name = ph.length>1 ? base.replace("."+ext, "_"+(i+1)+"."+ext) : base;
+        files.push({name, data:new Uint8Array(await ph[i].arrayBuffer())}); }
+      if(p.video){ const vext=(p.video.type||"").includes("quicktime")?"mov":"mp4";
+        files.push({name:fileName(rec.equip,k,rec.date,vext,suffix), data:new Uint8Array(await p.video.arrayBuffer())}); }
       if(p.grade) grades[`${rec.equip}|${rec.date}|${k}`]=p.grade;
       const nk=`${rec.equip}|${rec.date}|${k}`; const n={};
       if(p.particle)n.particleCount=p.particle; if(p.comp)n.componentHours=p.comp; if(p.oil)n.oilHours=p.oil;
-      if(p.defect)n.defect=defectLabel(p.defect,"en"); if(p.comment)n.comment=p.comment;
+      if(p.defect)n.defect=defectLabel(p.defect,"en"); if(p.cause)n.cause=causeLabel(p.cause,"en"); if(p.comment)n.comment=p.comment;
       if(Object.keys(n).length) notes[nk]={...(notes[nk]||{}),...n};
     } }
   files.push({name:"entries.json", data:new TextEncoder().encode(JSON.stringify({type:"cm-magplug-entries",version:1,grades,notes},null,2))});
@@ -545,9 +666,10 @@ if(SR){ let rec=null, listening=false;
 function applyLang(){ document.documentElement.lang=lang;
   document.querySelectorAll("[data-i18n]").forEach(el=>el.textContent=t(el.dataset.i18n));
   document.querySelectorAll("[data-i18n-ph]").forEach(el=>el.placeholder=t(el.dataset.i18nPh));
-  fillClassSel(); fillTypeSel(); fillDefectSel(); $("defect").value=(draft.positions[curItem]||{}).defect||"";
+  fillClassSel(); fillTypeSel();
   $("secPosTitle").textContent=TYPE_META[type].title[lang]||TYPE_META[type].title.en;
   $("posLabel").textContent=`${curItem} — ${itemLabel(curItem)}`;
+  updateDefectCauseBtns(); renderMedia();
   updateSaveLabel(); if(editing) $("editBannerText").textContent=t("editing_hint").replace("{x}",editing.equip); $("cancelEdit").textContent=t("btn_cancel");
   setNet(); renderPending();
   document.querySelectorAll(".lang button").forEach(b=>b.classList.toggle("on", b.dataset.lang===lang)); }
