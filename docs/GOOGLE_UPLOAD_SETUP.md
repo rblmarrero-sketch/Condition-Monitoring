@@ -31,6 +31,9 @@ https://drive.google.com/drive/folders/1AbCdEfGhIjKlMnOpQrStUvWxYz123456
                                         └──────────── this ────────────┘
 ```
 
+Pasting the **whole URL** works too — the script pulls the id out itself, including a
+trailing `?usp=drive_link`.
+
 ## 2. Create the script
 
 1. Go to **script.google.com** → **New project**
@@ -40,16 +43,29 @@ https://drive.google.com/drive/folders/1AbCdEfGhIjKlMnOpQrStUvWxYz123456
 5. *(Optional)* set `SECRET` to any password — put the same value in the app later
 6. Rename the project (top left) to `CM Upload` and **save** (💾)
 
-## 3. Deploy it
+## 3. Authorise it — do this BEFORE deploying
+
+In the editor pick **`setup`** from the function dropdown at the top, then click **Run**.
+
+Google asks you to authorise. You will see *"Google hasn't verified this app"* — expected
+for a script you wrote yourself: **Advanced** → **Go to CM Upload (unsafe)** → **Allow**.
+
+The Execution log should end with `"ok": true` and your folder's name. If it throws, the
+message tells you exactly what is wrong.
+
+> **Don't skip this.** A deployed web app cannot ask for permission on your behalf, so the
+> Drive grant has to be given interactively first. Without it every Drive call fails with
+> Google's unhelpful *"Unexpected error while getting the method or property getFolderById
+> on object DriveApp"*.
+
+## 4. Deploy it
 
 1. **Deploy** → **New deployment**
 2. Click the ⚙ next to "Select type" → **Web app**
 3. Set:
    - **Execute as:** `Me`
    - **Who has access:** `Anyone` ← *not* "Anyone with a Google account"
-4. **Deploy** → Google asks you to **authorise**. You will see
-   *"Google hasn't verified this app"* — that is expected for your own script:
-   **Advanced** → **Go to CM Upload (unsafe)** → **Allow**.
+4. **Deploy**
 5. Copy the **Web app URL**. It ends in `/exec`. **Treat it as a password.**
 
 **Check it works:** paste that URL into a browser tab. You should see
@@ -60,7 +76,7 @@ https://drive.google.com/drive/folders/1AbCdEfGhIjKlMnOpQrStUvWxYz123456
 
 If you see `ok:false`, the `ROOT_FOLDER_ID` is wrong or the folder isn't yours.
 
-## 4. Point the app at it
+## 5. Point the app at it
 
 On the phone, open the app → **⚙** (top right):
 
@@ -101,6 +117,33 @@ Install **Google Drive for desktop** on the PC that runs the dashboard. The fold
 appears as a normal drive (usually `G:`), so the dashboard's **📂 Photo folder** button
 works exactly as it does today — point it at *Condition Monitoring* once and it keeps
 finding the new monthly sub-folders.
+
+---
+
+## Troubleshooting
+
+### `{"ok":false,"error":"…getFolderById on object DriveApp…"}`
+
+Google's catch-all for "the Drive service would not answer". In order of likelihood:
+
+1. **The script was never authorised.** Editor → function dropdown → **`setup`** → **Run**
+   → **Allow**. Then **Deploy → Manage deployments → ✏️ → Version: New version**.
+2. **The edit was never deployed.** Changing `ROOT_FOLDER_ID` in the editor does *not*
+   change what the `/exec` URL serves — you must deploy a new version.
+3. **The id is wrong** — a file id rather than a folder id, or a folder in someone else's
+   Drive / a Shared Drive you only have view access to.
+
+Reload the `/exec` URL after each attempt. The health check now names the cause itself
+instead of passing Google's message through.
+
+### `{"ok":false,"error":"ROOT_FOLDER_ID is still the placeholder…"}`
+
+You edited the script but the old version is still deployed — point 2 above.
+
+### The phone says "Unexpected reply — check the deployment is set to Anyone."
+
+"Who has access" is *Anyone with a Google account*, so Google returned a sign-in page
+instead of JSON. **Manage deployments → ✏️ → Who has access: `Anyone`.**
 
 ---
 
