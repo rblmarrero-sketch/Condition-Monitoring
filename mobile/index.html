@@ -40,7 +40,8 @@
   .card h2{margin:0 0 12px;font-size:14px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);}
   label.fld{display:block;margin-bottom:12px;}
   label.fld > span{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:5px;}
-  input,select,textarea{width:100%;min-width:0;max-width:100%;background:var(--surface-2);color:var(--ink);border:1px solid var(--border);
+  input:not([type="checkbox"]):not([type="radio"]),select,textarea{width:100%;min-width:0;max-width:100%;
+    background:var(--surface-2);color:var(--ink);border:1px solid var(--border);
     border-radius:12px;padding:13px 14px;font-size:16px;font-family:inherit;-webkit-appearance:none;appearance:none;}
   select{background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
     background-position:calc(100% - 18px) 20px,calc(100% - 13px) 20px;background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:36px;}
@@ -113,8 +114,18 @@
   .editbar span{flex:1;color:var(--ink);} .linkbtn{background:none;border:none;color:var(--accent);font-weight:700;font-size:14px;cursor:pointer;}
   .hidden{display:none!important;}
   .dest{border:1px solid var(--border);border-radius:12px;padding:12px 12px 2px;margin-bottom:14px;background:var(--surface-2);}
-  .dest .dhead{display:flex;align-items:center;gap:9px;font-weight:700;font-size:14px;margin-bottom:10px;}
-  .dest .dhead input{width:20px;height:20px;flex:none;accent-color:var(--accent);}
+  .dest.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--surface-2));}
+  .dest .dhead{display:flex;align-items:center;gap:11px;font-weight:700;font-size:14px;margin-bottom:10px;
+    cursor:pointer;user-select:none;-webkit-user-select:none;}
+  /* Drawn by hand: the app strips native control styling, and a bare accent-color
+     leaves no visible tick. Sized for a gloved finger. */
+  .dest .dhead input[type="checkbox"]{appearance:none;-webkit-appearance:none;flex:none;margin:0;padding:0;
+    width:26px;height:26px;border-radius:8px;border:2px solid var(--muted);background:var(--surface-3);
+    position:relative;cursor:pointer;transition:background .12s,border-color .12s;}
+  .dest .dhead input[type="checkbox"]:checked{background:var(--accent);border-color:var(--accent);}
+  .dest .dhead input[type="checkbox"]:checked::after{content:"";position:absolute;left:8px;top:3px;
+    width:6px;height:13px;border:solid #fff;border-width:0 3px 3px 0;transform:rotate(45deg);}
+  .dest .dhead input[type="checkbox"]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
   .provqr{width:100%;max-width:280px;margin:0 auto;display:block;background:#fff;border-radius:8px;padding:10px;}
   .count-badge{background:var(--accent);color:#fff;border-radius:999px;padding:1px 8px;font-size:12px;margin-left:6px;}
   .count-badge.warn{background:var(--warning);color:#111;} .count-badge.crit{background:var(--critical);}
@@ -303,7 +314,7 @@
   <div class="syncbar" id="syncBar"></div>
   <button class="btn ghost" id="reportBtn" style="margin-bottom:16px">📄 <span data-i18n="btn_report">PDF report</span></button>
 
-  <div class="ver">build v35 · 2026-07-31 · Two destinations · QR setup · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver">build v36 · 2026-07-31 · Two destinations · QR setup · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <div class="bottombar">
@@ -554,7 +565,7 @@ const I18N = {
     sync_ok:"All synced.", sync_pending:"{n} inspection(s) waiting to upload", sync_running:"Uploading…",
     sync_err:"Upload failed", sync_now:"Sync now",
     set_title:"Upload settings", set_mode:"Upload mode", set_off:"Off — export manually",
-    set_gas:"Google Drive (Apps Script)", set_pa:"Power Automate (JSON + base64)", set_post:"Plain HTTPS POST (multipart)",
+    set_gas:"Google Drive (Apps Script)", set_pa:"SharePoint / OneDrive (Power Automate)", set_post:"Plain HTTPS POST (multipart)",
     set_secret:"Shared secret (optional)",
     set_px:"Photo size on upload", set_px_full:"Original — full detail (slowest)",
     set_px_2000:"Large — 2000 px", set_px_1600:"Medium — 1600 px (much smaller, fastest)",
@@ -634,7 +645,7 @@ const I18N = {
     sync_ok:"Всё синхронизировано.", sync_pending:"Ожидает отправки: {n}", sync_running:"Отправка…",
     sync_err:"Ошибка отправки", sync_now:"Отправить",
     set_title:"Настройки отправки", set_mode:"Режим отправки", set_off:"Выкл — выгружать вручную",
-    set_gas:"Google Диск (Apps Script)", set_pa:"Power Automate (JSON + base64)", set_post:"Обычный HTTPS POST (multipart)",
+    set_gas:"Google Диск (Apps Script)", set_pa:"SharePoint / OneDrive (Power Automate)", set_post:"Обычный HTTPS POST (multipart)",
     set_secret:"Общий секрет (необяз.)",
     set_px:"Размер фото при отправке", set_px_full:"Оригинал — полная детализация (медленнее всего)",
     set_px_2000:"Крупный — 2000 px", set_px_1600:"Средний — 1600 px (намного меньше, быстрее всего)",
@@ -1717,7 +1728,11 @@ function formToDests(){ return DEST_IDS.map(id=>({ id,
   folder: $(id+"Folder").value.trim() })); }
 function destsToForm(d){ d.forEach(x=>{
   $(x.id+"On").checked=!!x.on; $(x.id+"Url").value=x.url||"";
-  $(x.id+(x.id==="gas"?"Sec":"Hdr")).value=x.sec||""; $(x.id+"Folder").value=x.folder||""; }); }
+  $(x.id+(x.id==="gas"?"Sec":"Hdr")).value=x.sec||""; $(x.id+"Folder").value=x.folder||""; });
+  markDestState(); }
+function markDestState(){ DEST_IDS.forEach(id=>{
+  const cb=$(id+"On"); cb.closest(".dest").classList.toggle("on", cb.checked); }); }
+DEST_IDS.forEach(id=>$(id+"On").addEventListener("change",markDestState));
 function openSettings(){ destsToForm(loadDests()); $("upPx").value=localStorage.getItem("up_px")||"0";
   $("setMsg").textContent=""; $("provBox").classList.add("hidden"); $("setOv").classList.remove("hidden"); }
 function persistSettings(){ saveDests(formToDests()); localStorage.setItem("up_px",$("upPx").value); }
