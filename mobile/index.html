@@ -301,6 +301,7 @@
 
   <div class="card">
     <h2><span data-i18n="sec_team">In the system</span> <span class="count-badge" id="teamCount">0</span></h2>
+    <div class="hint" id="teamScope" style="margin:-4px 0 10px"></div>
     <div class="duelist" id="teamList"></div>
     <div class="row" style="margin-top:12px">
       <button class="btn ghost" id="teamRefresh">⟳ <span data-i18n="btn_team_refresh">Check for new</span></button>
@@ -329,7 +330,7 @@
   <div class="syncbar" id="syncBar"></div>
   <button class="btn ghost" id="reportBtn" style="margin-bottom:16px">📄 <span data-i18n="btn_report">PDF report</span></button>
 
-  <div class="ver">build v43 · 2026-07-31 · Team sync ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver">build v44 · 2026-07-31 · Team sync ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <div class="bottombar">
@@ -653,6 +654,11 @@ const I18N = {
     team_nodrive:"Set up Google Drive in ⚙ to see the team's inspections.",
     team_offline:"Offline — showing what was last pulled.",
     team_unreach:"Could not reach Google Drive — weak signal, or the /exec URL in ⚙ is wrong.",
+    team_checking:"Checking Google Drive…",
+    team_timeout:"Google Drive did not answer in 20 s — weak signal. Try again in coverage.",
+    team_more:"More is waiting — tap again.",
+    team_oftype:"{n} × {ty}", team_other:"· {n} more under other types — switch type above.",
+    team_none_type:"None of this type yet — switch type above to see the others.",
     team_old:"Update the Google script to use this (Deploy → Manage deployments → New version).",
     team_new:"{n} new · {t} in the system", team_upto:"Up to date · {t} in the system",
     team_by:"by {n}", team_you:"this phone",
@@ -748,6 +754,11 @@ const I18N = {
     team_nodrive:"Настройте Google Drive в ⚙, чтобы видеть осмотры бригады.",
     team_offline:"Нет сети — показано последнее загруженное.",
     team_unreach:"Не удалось связаться с Google Drive — слабый сигнал или неверный адрес /exec в ⚙.",
+    team_checking:"Проверяем Google Drive…",
+    team_timeout:"Google Drive не ответил за 20 с — слабый сигнал. Повторите в зоне покрытия.",
+    team_more:"Есть ещё — нажмите ещё раз.",
+    team_oftype:"{n} × {ty}", team_other:"· ещё {n} других типов — переключите тип выше.",
+    team_none_type:"Этого типа пока нет — переключите тип выше.",
     team_old:"Обновите скрипт Google (Deploy → Manage deployments → New version).",
     team_new:"Новых: {n} · всего в системе: {t}", team_upto:"Актуально · в системе: {t}",
     team_by:"— {n}", team_you:"этот телефон",
@@ -1337,25 +1348,41 @@ function teamMerge(recs){
   teamSave([...have.values()]); histSave(h);
   return {added,hist};
 }
-let teamBusy=false, teamAt=0;
-const TEAM_MIN_GAP=60000;   // automatic pulls only; the button always goes
+let teamBusy=false, teamAt=0, teamAbort=null, teamRun=0;
+const TEAM_MIN_GAP=60000;    // automatic pulls only; the button always goes
+const TEAM_TIMEOUT=20000;    // pit signal can leave a fetch hanging for ever
 async function teamPull(manual){
-  if(teamBusy) return;
+  const msg=$("teamMsg"); if(!msg) return;
+  if(teamBusy){
+    // A hung request must never wedge the button. fetch() has no timeout of its
+    // own, so on weak signal the startup pull could sit open indefinitely and
+    // every later press returned here — doing nothing, silently.
+    if(!manual) return;
+    if(teamAbort){ try{ teamAbort.abort(); }catch(_){ } }
+  }
   // syncNow() calls this whenever it finishes, and a dead destination can make
   // that happen repeatedly — don't turn a retry loop into a request storm.
   if(!manual && Date.now()-teamAt < TEAM_MIN_GAP) return;
   teamAt=Date.now();
   const g=loadDests().find(d=>d.id==="gas" && d.url);
-  const msg=$("teamMsg"); if(!msg) return;
   if(!g){ if(manual) msg.textContent=t("team_nodrive"); return; }
   if(!navigator.onLine){ if(manual) msg.textContent=t("team_offline"); return; }
+
+  // Pressing a button must visibly do something, even before the reply lands.
+  if(manual) msg.textContent=t("team_checking");
+  const run=++teamRun;                       // a superseded pull must not clobber
+  const mine=()=>teamRun===run;
+  const ac=new AbortController(); teamAbort=ac;
+  const timer=setTimeout(()=>{ try{ ac.abort(); }catch(_){ } }, TEAM_TIMEOUT);
   teamBusy=true; $("teamRefresh").disabled=true;
   try{
     const after=Number(localStorage.getItem(TEAM_CUR)||0)||0;
     const q=new URLSearchParams({action:"records", after:String(after), index:"0"});
     if(g.sec) q.set("secret",g.sec);
-    const res=await fetch(g.url+(g.url.indexOf("?")<0?"?":"&")+q.toString(),{method:"GET"});
+    const res=await fetch(g.url+(g.url.indexOf("?")<0?"?":"&")+q.toString(),
+                          {method:"GET", signal:ac.signal});
     const txt=await res.text();
+    if(!mine()) return;
     let j=null; try{ j=JSON.parse(txt); }catch(e){}
     if(!j){ if(manual) msg.textContent="⚠ "+txt.slice(0,90); return; }
     if(j.ok===false){
@@ -1366,21 +1393,39 @@ async function teamPull(manual){
     const {added}=teamMerge(j.records||[]);
     if(j.cursor) localStorage.setItem(TEAM_CUR,String(j.cursor));
     const total=teamAll().length;
-    msg.textContent=(added?t("team_new").replace("{n}",added):t("team_upto")).replace("{t}",total);
+    msg.textContent=(added?t("team_new").replace("{n}",added):t("team_upto")).replace("{t}",total)
+      // A truncated reply means the folder holds more than one call returns.
+      +(j.truncated?" "+t("team_more"):"");
     renderTeam(); renderDue(); renderLastDone();
   }catch(e){
+    if(!mine()) return;                      // superseded by a newer press
+    if(e && e.name==="AbortError"){ if(manual) msg.textContent=t("team_timeout"); }
     // fetch() reports every network and CORS failure as the opaque "Failed to
     // fetch", which tells an inspector in the pit nothing they can act on.
-    if(manual) msg.textContent = /failed to fetch|networkerror|load failed/i.test(String(e.message||e))
+    else if(manual) msg.textContent = /failed to fetch|networkerror|load failed/i.test(String(e.message||e))
       ? t("team_unreach") : "⚠ "+(e.message||e);
   }
-  finally{ teamBusy=false; $("teamRefresh").disabled=false; }
+  finally{
+    clearTimeout(timer);
+    if(mine()){ teamBusy=false; teamAbort=null; $("teamRefresh").disabled=false; }
+  }
 }
 function renderTeam(){
   const box=$("teamList"); if(!box) return;
-  const rows=teamAll().filter(r=>r.t===type);
+  const all=teamAll(), rows=all.filter(r=>r.t===type);
   $("teamCount").textContent=String(rows.length);
-  if(!rows.length){ box.innerHTML=`<div class="empty">${esc(t("team_none"))}</div>`; return; }
+  // The list only ever showed the CURRENT type, which reads as "only 2 in the
+  // whole system" when the other 40 are simply under another type.
+  const other=all.length-rows.length;
+  $("teamScope").textContent = all.length
+    ? t("team_oftype").replace("{n}",rows.length)
+        .replace("{ty}",t("type_"+type))     // the type name, not the section heading
+      +(other?" "+t("team_other").replace("{n}",other):"")
+    : "";
+  if(!rows.length){
+    box.innerHTML=`<div class="empty">${esc(all.length?t("team_none_type"):t("team_none"))}</div>`;
+    return;
+  }
   box.innerHTML=rows.slice(0,60).map(r=>{
     const sev=GRADE_SEV[r.g]||"";
     const cls=sev==="CRI"?"over":sev==="DEG"?"soon":"";
@@ -1758,7 +1803,7 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
    has accepted every one of its files. */
 const DEST_META={ gas:{label:"Google Drive"}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
 const DEST_IDS=["gas","pa","post"];
-const BUILD="43";
+const BUILD="44";
 const DEFAULT_DESTS=((window.UPLOAD_DEFAULTS||{}).dests)||[];
 function loadDests(){
   let d=null; try{ d=JSON.parse(localStorage.getItem("up_dests")||"null"); }catch(e){}
