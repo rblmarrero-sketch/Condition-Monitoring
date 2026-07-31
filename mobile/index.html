@@ -314,7 +314,7 @@
   <div class="syncbar" id="syncBar"></div>
   <button class="btn ghost" id="reportBtn" style="margin-bottom:16px">📄 <span data-i18n="btn_report">PDF report</span></button>
 
-  <div class="ver">build v36 · 2026-07-31 · Two destinations · QR setup · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver">build v37 · 2026-07-31 · Built-in destinations · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <div class="bottombar">
@@ -415,6 +415,7 @@
 
 <script src="jsQR.js"></script>
 <script src="qrcode.js"></script>
+<script src="upload-defaults.js"></script>
 <script src="taxonomy.js"></script>
 <script src="taxonomy2.js"></script>
 <script src="assets.js"></script>
@@ -1567,20 +1568,23 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
    has accepted every one of its files. */
 const DEST_META={ gas:{label:"Google Drive"}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
 const DEST_IDS=["gas","pa","post"];
+const DEFAULT_DESTS=((window.UPLOAD_DEFAULTS||{}).dests)||[];
 function loadDests(){
   let d=null; try{ d=JSON.parse(localStorage.getItem("up_dests")||"null"); }catch(e){}
   if(!Array.isArray(d)){
-    // First run: carry over the old single-mode settings if there are any, otherwise
-    // start with Google Drive ticked — it is the route we recommend, so a new phone
-    // only has to paste the /exec URL. Nothing uploads until a URL is present.
+    // Carry over the old single-mode settings if this phone had any.
     const m=localStorage.getItem("up_mode");
-    const on=(m && m!=="off") ? m : "gas";
-    d=DEST_IDS.map(id=>({id, on:id===on,
-      url: (m && id===m) ? (localStorage.getItem("up_url")||"") : "",
-      sec: (m && id===m) ? (localStorage.getItem("up_hdr")||"") : "",
-      folder: localStorage.getItem("up_folder")||"" }));
-    localStorage.setItem("up_dests",JSON.stringify(d));
+    d = (m && m!=="off")
+      ? DEST_IDS.map(id=>({id, on:id===m,
+          url: id===m ? (localStorage.getItem("up_url")||"") : "",
+          sec: id===m ? (localStorage.getItem("up_hdr")||"") : "",
+          folder: localStorage.getItem("up_folder")||"" }))
+      : [];
   }
+  // A phone with no destination URL at all takes the built-in ones, so a fresh
+  // install uploads with nothing to configure. Anything already saved wins.
+  if(!d.some(x=>x && x.url)) d=DEFAULT_DESTS.map(x=>Object.assign({},x));
+  localStorage.setItem("up_dests",JSON.stringify(d));
   return DEST_IDS.map(id=>Object.assign({id,on:false,url:"",sec:"",folder:""}, d.find(x=>x.id===id)||{}));
 }
 function saveDests(d){ localStorage.setItem("up_dests",JSON.stringify(d)); }

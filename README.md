@@ -370,15 +370,27 @@ Failed uploads are retried; nothing is deleted from the phone until the server c
 
 ### Setting up more than one phone
 
-Upload settings are stored per device (browser `localStorage`), so each phone needs
-configuring once — but not by typing. Configure one, then **⚙ → Show setup code** and
-**⚙ → Scan setup** on the next phone, or **Copy setup link** and send it. Google Drive and
-SharePoint can both be enabled at the same time; a record is only marked uploaded when
-every enabled destination has taken every file.
+Upload settings live in the browser's `localStorage`, so they are per device. There are
+two ways to avoid setting up each phone by hand.
 
-The setup code and link carry the upload credentials, so keep them on internal channels.
-They are never stored in this repository — the published site is world-readable, so
-baking a write credential into it would hand the destination to anyone who views source.
+**Phone to phone (nothing published).** Configure one phone, then **⚙ → Show setup code**
+and **⚙ → Scan setup** on the next one — or **Copy setup link** and send it. Both
+destinations, folder prefixes and photo size come across in one scan.
+
+**Built into the app.** `mobile/upload-defaults.js` holds a destination list that any
+phone with no configuration picks up on first open, with Google Drive and SharePoint both
+enabled. The URLs ship **empty**; paste yours in and new phones need no setup at all.
+Settings already saved on a phone always win, and switching a destination off sticks.
+
+> ⚠️ **Filling those in publishes a write credential.** The site serves
+> `upload-defaults.js` to anyone who opens the app, so anyone who finds the URL could
+> write files into the Drive folder and the SharePoint library — with no way to tell who.
+> It can be a fair trade for removing setup; make it knowingly. Hosting behind
+> **Cloudflare Pages + Access** makes it safe, and the setup-code route above avoids it
+> entirely. To undo: clear the fields **and rotate both endpoints** — clearing alone does
+> not un-publish what was already served.
+
+A record is only marked uploaded once every enabled destination has taken every file.
 
 ### Upload speed
 
