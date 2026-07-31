@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Truck Inspection — Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=47">
+<link rel="manifest" href="manifest.webmanifest?v=48">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -95,9 +95,15 @@
   .pitem .thumb{width:52px;height:52px;border-radius:9px;object-fit:cover;background:var(--surface-3);flex:none;}
   .pitem .meta{flex:1;min-width:0;} .pitem .meta .a{font-weight:700;} .pitem .meta .b{font-size:12.5px;color:var(--muted);}
   .tag{display:inline-block;font-size:10.5px;font-weight:700;padding:1px 6px;border-radius:6px;background:var(--accent);color:#fff;margin-right:6px;vertical-align:middle;}
-  .pitem .edit{background:none;border:none;color:var(--accent);font-size:19px;padding:6px;cursor:pointer;}
-  .pitem .del{background:none;border:none;color:var(--critical);font-size:20px;padding:6px;cursor:pointer;}
+  /* 44px minimum, and a gap between them: these sat at ~34px side by side, so a
+     gloved thumb aiming for Edit could hit Delete instead. */
+  .pitem .edit,.pitem .del{background:none;border:1px solid transparent;border-radius:10px;
+    min-width:44px;min-height:44px;display:grid;place-items:center;font-size:19px;cursor:pointer;flex:none;}
+  .pitem .edit{color:var(--accent);}
+  .pitem .del{color:var(--critical);margin-left:8px;border-color:color-mix(in srgb,var(--critical) 30%,transparent);}
+  .pitem .del:active{background:color-mix(in srgb,var(--critical) 15%,transparent);}
   .empty{color:var(--muted);text-align:center;padding:20px;font-size:14px;}
+  .hint.warn{color:var(--critical);font-weight:600;}
   .bottombar{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--border);padding:12px 16px calc(env(safe-area-inset-bottom) + 12px);display:flex;gap:10px;z-index:10;}
   .bottombar .btn{margin:0;}
   .hint{font-size:12.5px;color:var(--muted);margin-top:6px;} #setMsg{white-space:pre-wrap;word-break:break-word;user-select:text;}
@@ -331,7 +337,7 @@
   <div class="syncbar" id="syncBar"></div>
   <button class="btn ghost" id="reportBtn" style="margin-bottom:16px">📄 <span data-i18n="btn_report">PDF report</span></button>
 
-  <div class="ver">build v47 · 2026-07-31 · Void & correct ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver">build v48 · 2026-07-31 · Safer deletes ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <div class="bottombar">
@@ -397,7 +403,8 @@
       <button class="btn primary" id="saveSet" data-i18n="set_save">Save</button>
     </div>
     <div class="hint" id="setMsg" style="margin-top:12px"></div>
-    <div class="hint" id="setDiag" style="margin-top:10px"></div>
+    <div class="hint" id="setStore" style="margin-top:10px"></div>
+    <div class="hint" id="setDiag" style="margin-top:6px"></div>
 
     <div class="dest" style="margin-top:18px">
       <div class="dhead"><span data-i18n="set_prov">Set up the other phones</span></div>
@@ -425,7 +432,9 @@
 <canvas id="qrCanvas" class="hidden"></canvas>
 
 <dialog id="dlg"><div class="dlg-in"><h3 id="dlgTitle"></h3><p id="dlgMsg"></p>
-  <button class="btn primary" id="dlgOk" style="margin-top:14px" data-i18n="dlg_ok">OK</button></div></dialog>
+  <div class="row" style="margin-top:14px">
+    <button class="btn hidden" id="dlgCancel" data-i18n="dlg_cancel">Keep</button>
+    <button class="btn primary" id="dlgOk" data-i18n="dlg_ok">OK</button></div></div></dialog>
 
 <div id="pickOv" class="pick-ov hidden">
   <div class="pickhead">
@@ -435,16 +444,16 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="jsQR.js?v=47"></script>
-<script src="qrcode.js?v=47"></script>
-<script src="upload-defaults.js?v=47"></script>
-<script src="taxonomy.js?v=47"></script>
-<script src="taxonomy2.js?v=47"></script>
-<script src="assets.js?v=47"></script>
-<script src="components.js?v=47"></script>
-<script src="temp-limits.js?v=47"></script>
-<script src="jspdf.umd.min.js?v=47"></script>
-<script src="html2canvas.min.js?v=47"></script>
+<script src="jsQR.js?v=48"></script>
+<script src="qrcode.js?v=48"></script>
+<script src="upload-defaults.js?v=48"></script>
+<script src="taxonomy.js?v=48"></script>
+<script src="taxonomy2.js?v=48"></script>
+<script src="assets.js?v=48"></script>
+<script src="components.js?v=48"></script>
+<script src="temp-limits.js?v=48"></script>
+<script src="jspdf.umd.min.js?v=48"></script>
+<script src="html2canvas.min.js?v=48"></script>
 <script>
 /* ============================================================================
    EQUIPMENT CLASSES & INSPECTION TYPES  —  EDIT here for your fleet.
@@ -678,6 +687,18 @@ const I18N = {
     m_merged:["Merged ✔","{a} new inspection(s), {b} item(s) added to existing ones, {c} already present."],
     m_need_truck:["Add the truck","Enter the truck / unit number (e.g. TK158) first."],
     m_nothing_save:["Nothing to save","Take at least one photo or set a grade."],
+    dlg_cancel:"Keep it", del_go:"Delete anyway",
+    st_ok:"Storage {p}% used ({u} of {q}) · room for about {n} more photos",
+    st_low:"⚠ Storage {p}% full ({u} of {q}) · room for only about {n} more photos — upload and clear some inspections",
+    st_unknown:"This browser does not report storage use.",
+    st_kept:"kept by the browser",
+    st_evictable:"not protected — add the app to the home screen so the browser stops evicting it",
+    st_unasked:"protection not requested yet",
+    del_sign:"the signature", del_readings:"the readings",
+    del_t_unsent:"This has not been uploaded",
+    del_m_unsent:"{x} is only on this phone. Deleting it destroys {d} for good — there is no copy anywhere else and it cannot be undone.",
+    del_t_sent:"Delete from this phone?",
+    del_m_sent:"{x} has already been uploaded. Removing it here frees space on the phone; the copy in Drive is not touched.",
     m_saved:["Saved ✔","{x} saved on this phone. Capture the next one, then Share/Export when you have internet."],
     m_nothing_export:["Nothing to export","Capture at least one item first."],
     m_exported:["Exported ✔","A ZIP with correctly-named photos + entries.json was downloaded. Put the photos in your N: drive folder."],
@@ -784,6 +805,18 @@ const I18N = {
     m_merged:["Объединено ✔","Новых осмотров: {a}, добавлено позиций: {b}, уже было: {c}."],
     m_need_truck:["Укажите трак","Сначала введите номер трака (напр. TK158)."],
     m_nothing_save:["Нечего сохранять","Сделайте хотя бы одно фото или укажите степень."],
+    dlg_cancel:"Оставить", del_go:"Всё равно удалить",
+    st_ok:"Память занята на {p}% ({u} из {q}) · хватит примерно ещё на {n} фото",
+    st_low:"⚠ Память занята на {p}% ({u} из {q}) · хватит лишь примерно на {n} фото — выгрузите и очистите часть осмотров",
+    st_unknown:"Этот браузер не сообщает об использовании памяти.",
+    st_kept:"браузер сохраняет данные",
+    st_evictable:"без защиты — добавьте приложение на главный экран, чтобы браузер не удалял данные",
+    st_unasked:"защита ещё не запрошена",
+    del_sign:"подпись", del_readings:"замеры",
+    del_t_unsent:"Это ещё не выгружено",
+    del_m_unsent:"{x} есть только на этом телефоне. Удаление уничтожит {d} безвозвратно — копии нигде нет, отменить нельзя.",
+    del_t_sent:"Удалить с этого телефона?",
+    del_m_sent:"{x} уже выгружено. Удаление здесь освободит место на телефоне; копия на Диске не затрагивается.",
     m_saved:["Сохранено ✔","{x} сохранён на телефоне. Снимайте следующий, затем «Поделиться»/«Экспорт» при интернете."],
     m_nothing_export:["Нечего экспортировать","Сначала снимите хотя бы один пункт."],
     m_exported:["Экспортировано ✔","Скачан ZIP с правильно названными фото + entries.json. Положите фото в папку на N:."],
@@ -795,7 +828,13 @@ const I18N = {
   }
 };
 let lang = localStorage.getItem("lang") || "en";
-function t(k){ return (I18N[lang] && I18N[lang][k]) || I18N.en[k] || k; }
+/* Optional {name} substitution. Callers elsewhere still do their own .replace(),
+   which keeps working — this only fills in what it is given. */
+function t(k,vars){
+  let s=(I18N[lang] && I18N[lang][k]) || I18N.en[k] || k;
+  if(vars && typeof s==="string") Object.keys(vars).forEach(v=>{ s=s.split("{"+v+"}").join(vars[v]); });
+  return s;
+}
 
 /* ===================== defect + direct-cause taxonomy (from taxonomy.js) ===================== */
 // Merged taxonomy: 1C CMMS defect codes (spine) + HME mobile-equipment modes.
@@ -920,8 +959,29 @@ let editing=null;
 // Stable id for this phone — used to keep record ids unique and to attribute merged rounds.
 const DEVICE = (()=>{ let d=localStorage.getItem("cm_dev");
   if(!d){ d="D"+Math.random().toString(36).slice(2,7).toUpperCase(); localStorage.setItem("cm_dev",d); } return d; })();
-const dlg=(pair)=>{ $("dlgTitle").textContent=pair[0]; $("dlgMsg").textContent=pair[1]; $("dlg").showModal(); };
-$("dlgOk").onclick=()=>$("dlg").close();
+const dlg=(pair)=>{ $("dlgTitle").textContent=pair[0]; $("dlgMsg").textContent=pair[1];
+  $("dlgCancel").classList.add("hidden"); $("dlgOk").className="btn primary";
+  $("dlgOk").textContent=t("dlg_ok"); $("dlg").showModal(); };
+/* A question, not a notice. Used where the answer destroys something: the caller
+   waits for a real choice instead of assuming one. */
+function ask(title,msg,okLabel,danger){
+  $("dlgTitle").textContent=title; $("dlgMsg").textContent=msg;
+  $("dlgCancel").classList.remove("hidden"); $("dlgCancel").textContent=t("dlg_cancel");
+  $("dlgOk").textContent=okLabel||t("dlg_ok");
+  $("dlgOk").className="btn "+(danger?"danger":"primary");
+  $("dlg").showModal();
+  return new Promise(res=>{
+    // Restore the plain-notice handler, not null: dlg() relies on it, so
+    // nulling it here would leave the next OK button dead.
+    const done=v=>{ $("dlgOk").onclick=dlgClose; $("dlgCancel").onclick=null; $("dlg").onclose=null;
+                    $("dlg").close(); res(v); };
+    $("dlgOk").onclick=()=>done(true);
+    $("dlgCancel").onclick=()=>done(false);
+    $("dlg").onclose=()=>res(false);      // Esc and the backdrop mean "keep it"
+  });
+}
+const dlgClose=()=>$("dlg").close();
+$("dlgOk").onclick=dlgClose;
 const COMP_TREE=window.COMP_TREE||[], UNIT_TPL=window.UNIT_TPL||{};
 let cascL7=null, cascL8=null;   // component cascade selection
 // Inspection and Temperature both address real register components (L7→L8→L9).
@@ -1272,6 +1332,8 @@ $("saveBtn").onclick=async ()=>{
   for(const [k,p] of Object.entries(draft.positions))
     rec.positions[k]={ grade:p.grade||null, sev:p.sev||"", sevMan:p.sevMan||0, action:p.action||"", wo:p.wo||"", particle:p.particle||"", comp:p.comp||"", oil:p.oil||"", defect:p.defect||"", cause:p.cause||"", comment:p.comment||"", tempV:p.tempV||"", tempA:p.tempA||"", tempM:p.tempM||"", photos:(p.photos||[]).slice(), video:p.video||null };
   await dbPut(rec); noteDone(rec); resetForm(); renderPending(); renderDue(); syncNow();
+  // First real save is the moment there is something worth protecting.
+  if(persistState===null) askPersist();
   const m=t("m_saved"); dlg([m[0], m[1].replace("{x}",equip)]);
 };
 
@@ -1649,7 +1711,24 @@ async function renderPending(){
     const openEdit=()=>editRecord(rec);
     row.querySelector(".edit").onclick=(ev)=>{ev.stopPropagation();openEdit();};
     row.querySelector(".meta").onclick=openEdit; row.querySelector(".thumb").onclick=openEdit;
-    row.querySelector(".del").onclick=async (ev)=>{ ev.stopPropagation(); await dbDel(rec.id); if(editing&&editing.id===rec.id) setEditing(null); renderPending(); };
+    /* Deleting here is final — the record lives nowhere else until it has been
+       uploaded. Name the unit and say which case this is, because "are you sure?"
+       does not tell anyone what they are about to lose. */
+    row.querySelector(".del").onclick=async (ev)=>{
+      ev.stopPropagation();
+      const what=`${rec.equip} · ${t("type_"+(rec.type||"MP"))} · ${rec.date}`;
+      const bits=[]; if(nPhotos) bits.push(nPhotos+" "+t("photo_count"));
+      if(nVid) bits.push(nVid+" 🎥"); if(rec.sign) bits.push(t("del_sign"));
+      const detail=bits.length?bits.join(", "):t("del_readings");
+      const gone=!rec.up;
+      const okd=await ask(t(gone?"del_t_unsent":"del_t_sent"),
+        (gone ? t("del_m_unsent",{x:what,d:detail}) : t("del_m_sent",{x:what})),
+        t("del_go"), gone);
+      if(!okd) return;
+      await dbDel(rec.id);
+      if(editing&&editing.id===rec.id) setEditing(null);
+      renderPending();
+    };
     $("pending").appendChild(row);
   }
 }
@@ -1898,7 +1977,7 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
    has accepted every one of its files. */
 const DEST_META={ gas:{label:"Google Drive"}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
 const DEST_IDS=["gas","pa","post"];
-const BUILD="47";
+const BUILD="48";
 const DEFAULT_DESTS=((window.UPLOAD_DEFAULTS||{}).dests)||[];
 /* Parsed once and reused — see the note by the write below. */
 let destsCache=null, destsRaw=null;
@@ -2076,6 +2155,44 @@ async function filesForRecord(rec){
   if(isBlob(rec.sign)) out.push({name:`${rec.equip}_${ddmmyyyy(rec.date)}_${suffix}_SIGN.png`, blob:rec.sign});
   return out;
 }
+/* ===================== keeping what is captured =====================
+   Browser storage is "best effort" unless the page asks for better. Safari
+   evicts a web app's storage after about seven days of disuse when it has not
+   been added to the home screen, and Android evicts under pressure — either
+   would take an un-uploaded round, photos and all, with no warning. Asking
+   costs one call; on Android it is usually granted silently, and on iOS the
+   answer is honest so ⚙ can say what is actually true rather than reassure. */
+let persistState=null;                 // true | false | null = not asked / unsupported
+async function askPersist(){
+  try{
+    if(!navigator.storage || !navigator.storage.persist) return null;
+    if(await navigator.storage.persisted()) return (persistState=true);
+    return (persistState=await navigator.storage.persist());
+  }catch(e){ return null; }
+}
+/* Bytes free, in the terms a technician cares about: roughly how many more
+   photos fit. Reported before it matters, not after a save has degraded. */
+const PHOTO_BYTES=450*1024;            // a shrunk field photo, near enough
+async function storageInfo(){
+  try{
+    if(!navigator.storage || !navigator.storage.estimate) return null;
+    const e=await navigator.storage.estimate();
+    if(!e || !e.quota) return null;
+    const used=e.usage||0, quota=e.quota, free=Math.max(0,quota-used);
+    return { used, quota, free, pct:Math.round(used/quota*100), photos:Math.floor(free/PHOTO_BYTES) };
+  }catch(e){ return null; }
+}
+const mb=b=>b>=1073741824 ? (b/1073741824).toFixed(1)+" GB" : Math.round(b/1048576)+" MB";
+async function renderStorage(){
+  const el=$("setStore"); if(!el) return;
+  const i=await storageInfo();
+  if(!i){ el.textContent=t("st_unknown"); el.className="hint"; return; }
+  const low=i.pct>=80;
+  el.className="hint"+(low?" warn":"");
+  el.textContent=t(low?"st_low":"st_ok",{u:mb(i.used),q:mb(i.quota),p:i.pct,n:i.photos})
+    +" · "+t(persistState===true?"st_kept":persistState===false?"st_evictable":"st_unasked");
+}
+
 let syncing=false, lastErr="";
 async function syncNow(manual){
   if(syncing) return; if(!UP.on){ renderSync(); return; }
@@ -2189,6 +2306,7 @@ function openSettings(){ destsToForm(loadDests()); $("upPx").value=localStorage.
     ? `${n} built-in destination(s) available`
     : `no built-in destinations — upload-defaults.js has no URLs (or is a cached old copy)`)
     + ` · in use: ${where.join(", ")||"none"}`;
+  renderStorage();
   $("setMsg").textContent=""; $("provBox").classList.add("hidden"); $("setOv").classList.remove("hidden"); }
 function persistSettings(){ saveDests(formToDests());
   try{ localStorage.setItem("up_px",$("upPx").value); }catch(e){} }

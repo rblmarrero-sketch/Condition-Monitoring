@@ -322,6 +322,20 @@ rather than failing. Automatic pulls are rate-limited to one a minute; the butto
 > needs the read actions in `docs/google-upload.gs`; if the deployed script predates them
 > the card says exactly what to redeploy.
 
+### Not losing what was captured
+
+Deleting a queued inspection asks first, and says which case it is: an un-uploaded record names
+the unit and states that its photos, signature and readings exist nowhere else, with a
+destructive-styled confirm; an already-uploaded one says plainly that the Drive copy is not
+touched. Escape and the backdrop both mean *keep it*. The delete control is 44 px and set apart
+from Edit — the two used to be ~34 px and adjacent.
+
+The app also asks the browser to treat its storage as **persistent** at the first save. Without
+that grant, iOS evicts a non-installed web app's storage after about a week of disuse and Android
+evicts under pressure — either would take a queued round, photos included. ⚙ reports the real
+answer rather than assuming it, along with storage used, room remaining in photos, and a warning
+at 80% while there is still time to upload and clear.
+
 ### Two inspectors, one round (multi-device merge)
 
 Each phone has a device id. Tap **⇄ Send round** to export that phone's records (photos
