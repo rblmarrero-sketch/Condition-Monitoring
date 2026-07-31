@@ -229,7 +229,7 @@
 
   <button class="btn ghost" id="reportBtn" style="margin-bottom:16px">📄 <span data-i18n="btn_report">PDF report</span></button>
 
-  <div class="ver">build v25 · 2026-07-31 · Inspector · Severity · Action · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver">build v26 · 2026-07-31 · Dashboard export · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <div class="bottombar">
@@ -891,7 +891,22 @@ async function buildPackage(){
       if(p.comment)n.comment=p.comment;
       if(Object.keys(n).length) notes[nk]={...(notes[nk]||{}),...n};
     } }
-  files.push({name:"entries.json", data:new TextEncoder().encode(JSON.stringify({type:"cm-magplug-entries",version:1,grades,notes},null,2))});
+  // self-describing record list for the dashboard (type, class, inspector, coded findings)
+  const records=all.map(rec=>({
+    equip:rec.equip, date:rec.date, type:rec.type||"MP", cls:rec.cls||"", by:rec.by||"", smu:rec.smu||"",
+    items:Object.entries(rec.positions).map(([k,p])=>{
+      const d=DEFECT_BY[p.defect]||null;
+      return { key:k, label:itemLabelFor(rec,k)||"", grade:p.grade||"", sev:p.sev||"", action:p.action||"",
+        actionLabel:p.action?actionLabel(p.action,"en"):"", wo:p.wo||"",
+        defectCode:p.defect||"", defect:p.defect?defectLabel(p.defect,"en"):"",
+        iso:d?d.iso:"", isoMode:d?d.im:"",
+        causeCode:p.cause||"", cause:p.cause?causeLabel(p.cause,"en"):"",
+        particle:p.particle||"", comp:p.comp||"", oil:p.oil||"", comment:p.comment||"",
+        photos:((p.photos||[]).length), video:p.video?1:0 };
+    })
+  }));
+  files.push({name:"entries.json", data:new TextEncoder().encode(JSON.stringify(
+    {type:"cm-inspection-entries",version:2,exported:todayISO(),records,grades,notes},null,2))});
   return {files, count:all.length};
 }
 $("exportBtn").onclick=async ()=>{ const {files,count}=await buildPackage(); if(!count){ dlg(t("m_nothing_export")); return; }

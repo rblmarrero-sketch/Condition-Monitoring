@@ -3,660 +3,406 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Condition Monitoring &mdash; Magnetic Plug</title>
+<title>Condition Monitoring — Dashboard</title>
 <!--
-  Condition Monitoring dashboard — Magnetic Plug.
-
-  TWO WAYS TO GET DATA IN:
-  1) "Open photo folder" button (Chrome/Edge, opens a folder on disk / N: drive).
-     Folder layout the dashboard understands:
-
-         <PhotosRoot>/
-           TK146/                     <- truck / equipment folder
-             2026-10-15/              <- inspection date (YYYY-MM-DD)
-               4C.jpg                 <- plug position photo (4C/4D/4E/4F)
-               4D.jpg
-               4E.jpg
-               4F.jpg
-             2026-07-29/ ...
-           TK147/ ...
-
-     Add a new inspection = add a new date folder with photos. That's it.
-     (Also accepts flat names like TK146_4C_2026-10-15.jpg, and an optional
-      grade suffix like 4C_C.jpg / TK146_4C_2026-10-15_C.jpg.)
-
-  2) Bundled file data/magnetic_plug.js (window.CM_DATA), produced by the
-     ingesters in ingest/. Used automatically when no folder is chosen.
-
-  GRADES are optional. If a photo's file name carries a grade it's used; you can
-  also click a photo and pick A/B/C/D/X in the app (saved in this browser).
-
-  ┌───────────────────────────────────────────────────────────────────────────┐
-  │  EDIT ME: grade / severity colour scale (GRADE_SCALE, in the script below). │
-  │  Default assumes A→D = good→critical, X = not inspected. Confirm & edit.     │
-  └───────────────────────────────────────────────────────────────────────────┘
+  Condition Monitoring dashboard (offline, single file).
+  Data sources:
+    1) data/magnetic_plug.js  (window.CM_DATA)  - bundled magnetic-plug history
+    2) entries.json exported by the Field Capture app (version 2, self-describing)
+       -> "Import inspections" button; merged records are kept in this browser.
+  Photos: assets/photos/ or a folder you open with "Open photo folder".
 -->
 <style>
-  :root {
-    color-scheme: light;
-    --page:#f9f9f7; --surface:#fcfcfb; --surface-2:#f2f2ef;
-    --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781;
-    --grid:#e1e0d9; --axis:#c3c2b7; --border:rgba(11,11,11,0.10); --accent:#2a78d6;
-    --st-good:#0ca30c; --st-warning:#fab219; --st-serious:#ec835a; --st-critical:#d03b3b; --st-none:#898781;
-    --shadow:0 1px 2px rgba(11,11,11,.06), 0 4px 16px rgba(11,11,11,.05);
+  :root{
+    color-scheme:light;
+    --page:#f9f9f7; --surface:#fcfcfb; --surface-2:#f2f2ef; --surface-3:#e9e9e4;
+    --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781; --grid:#e1e0d9; --axis:#c3c2b7;
+    --border:rgba(11,11,11,.10); --accent:#2a78d6;
+    --good:#0ca30c; --warning:#fab219; --serious:#ec835a; --critical:#d03b3b; --none:#898781;
+    --shadow:0 1px 2px rgba(11,11,11,.06),0 4px 16px rgba(11,11,11,.05);
   }
-  @media (prefers-color-scheme: dark) {
-    :root:where(:not([data-theme="light"])) {
-      color-scheme: dark;
-      --page:#0d0d0d; --surface:#1a1a19; --surface-2:#232321;
-      --ink:#fff; --ink-2:#c3c2b7; --muted:#898781;
-      --grid:#2c2c2a; --axis:#383835; --border:rgba(255,255,255,0.10); --accent:#3987e5;
-      --shadow:0 1px 2px rgba(0,0,0,.4), 0 4px 20px rgba(0,0,0,.4);
-    }
-  }
-  :root[data-theme="dark"] {
-    color-scheme: dark;
-    --page:#0d0d0d; --surface:#1a1a19; --surface-2:#232321; --ink:#fff;
-    --ink-2:#c3c2b7; --muted:#898781; --grid:#2c2c2a; --axis:#383835;
-    --border:rgba(255,255,255,0.10); --accent:#3987e5;
-    --shadow:0 1px 2px rgba(0,0,0,.4), 0 4px 20px rgba(0,0,0,.4);
-  }
-
-  * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; }
-  body { background: var(--page); color: var(--ink);
-    font-family: system-ui, -apple-system, "Segoe UI", sans-serif; font-size: 14px; line-height: 1.45;
-    -webkit-font-smoothing: antialiased; }
-  a { color: var(--accent); }
-
-  header.app { display:flex; align-items:center; gap:14px; padding:14px 22px; background:var(--surface);
-    border-bottom:1px solid var(--border); position:sticky; top:0; z-index:20; }
-  header.app .brand { display:flex; flex-direction:column; }
-  header.app .brand .t1 { font-weight:650; font-size:16px; letter-spacing:.2px; }
-  header.app .brand .t2 { color:var(--muted); font-size:12px; }
-  header.app .spacer { flex:1; }
-  .btn { border:1px solid var(--border); background:var(--surface-2); color:var(--ink-2);
-    border-radius:8px; padding:8px 12px; cursor:pointer; font-size:13px; font-family:inherit; }
-  .btn:hover { color:var(--ink); }
-  .btn.primary { background:var(--accent); color:#fff; border-color:transparent; font-weight:600; }
-  .btn.primary:hover { color:#fff; filter:brightness(1.05); }
-
-  nav.tabs { display:flex; gap:4px; padding:0 18px; background:var(--surface);
-    border-bottom:1px solid var(--border); position:sticky; top:57px; z-index:19; }
-  nav.tabs button { border:none; background:none; color:var(--muted); padding:11px 15px; cursor:pointer;
-    font-size:13.5px; font-weight:550; border-bottom:2px solid transparent; margin-bottom:-1px; }
-  nav.tabs button:hover { color:var(--ink-2); }
-  nav.tabs button.active { color:var(--ink); border-bottom-color:var(--accent); }
-  nav.tabs button:disabled { color:var(--axis); cursor:not-allowed; }
-  nav.tabs .soon { font-size:10px; text-transform:uppercase; letter-spacing:.5px; color:var(--muted);
-    border:1px solid var(--border); border-radius:999px; padding:1px 6px; margin-left:6px; }
-
-  main { max-width:1240px; margin:0 auto; padding:22px; }
-
-  .srcbar { display:flex; flex-wrap:wrap; align-items:center; gap:12px; background:var(--surface);
-    border:1px solid var(--border); border-radius:12px; padding:12px 16px; margin-bottom:18px; box-shadow:var(--shadow); }
-  .srcbar .desc { font-size:12.5px; color:var(--ink-2); }
-  .srcbar .desc b { color:var(--ink); }
-  .srcbar .spacer { flex:1; }
-  .pill { font-size:11px; padding:2px 9px; border-radius:999px; background:var(--surface-2);
-    border:1px solid var(--border); color:var(--ink-2); }
-
-  .controls { display:flex; flex-wrap:wrap; gap:14px; align-items:flex-end; margin-bottom:18px; }
-  .field { display:flex; flex-direction:column; gap:5px; }
-  .field label { font-size:11px; text-transform:uppercase; letter-spacing:.6px; color:var(--muted); }
-  select { background:var(--surface); color:var(--ink); border:1px solid var(--border); border-radius:8px;
-    padding:9px 11px; font-size:14px; min-width:190px; font-family:inherit; }
-  select:focus { outline:2px solid var(--accent); outline-offset:1px; }
-
-  .kpis { display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:12px; margin-bottom:22px; }
-  .tile { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:14px 16px; box-shadow:var(--shadow); }
-  .tile .k { font-size:11px; text-transform:uppercase; letter-spacing:.6px; color:var(--muted); }
-  .tile .v { font-size:28px; font-weight:640; margin-top:4px; }
-  .tile .s { font-size:12px; color:var(--ink-2); margin-top:2px; }
-  .tile .bar { display:flex; height:8px; border-radius:6px; overflow:hidden; margin-top:10px; gap:2px; background:var(--surface-2); }
-  .tile .bar span { display:block; }
-
-  .section { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:18px 20px;
-    margin-bottom:22px; box-shadow:var(--shadow); }
-  .section > h2 { margin:0 0 3px; font-size:15px; font-weight:640; }
-  .section > .sub { color:var(--muted); font-size:12.5px; margin-bottom:16px; }
-
-  .heatwrap { overflow-x:auto; }
-  table.heat { border-collapse:separate; border-spacing:3px; font-size:12.5px; }
-  table.heat th { color:var(--ink-2); font-weight:600; padding:4px 6px; text-align:center; white-space:nowrap; }
-  table.heat th.rowh { text-align:left; position:sticky; left:0; background:var(--surface); z-index:2; }
-  table.heat td { text-align:center; }
-  .cell { width:52px; height:34px; border-radius:7px; display:flex; align-items:center; justify-content:center;
-    font-weight:650; color:#fff; cursor:pointer; border:1px solid var(--border); font-variant-numeric:tabular-nums;
-    user-select:none; transition:transform .06s ease; }
-  .cell:hover { transform:scale(1.06); outline:2px solid var(--ink); outline-offset:1px; }
-  .cell.none { color:var(--ink-2); background:var(--surface-2)!important; }
-
-  .badge { display:inline-flex; align-items:center; gap:6px; padding:3px 9px; border-radius:999px;
-    font-weight:600; font-size:12px; color:#fff; }
-  .badge .ico { font-size:11px; }
-  .badge.none { color:var(--ink-2); background:var(--surface-2); border:1px solid var(--border); }
-
-  .legend { display:flex; flex-wrap:wrap; gap:8px 16px; align-items:center; font-size:12.5px; color:var(--ink-2); }
-  .legend .item { display:inline-flex; align-items:center; gap:6px; }
-  .legend .sw { width:14px; height:14px; border-radius:4px; border:1px solid var(--border); }
-  .note { font-size:12px; color:var(--ink-2); background:color-mix(in srgb, var(--st-warning) 14%, var(--surface));
-    border:1px solid color-mix(in srgb, var(--st-warning) 45%, var(--border)); border-radius:8px; padding:8px 11px; margin-top:12px; }
-
-  .hist-empty { color:var(--muted); padding:30px; text-align:center; }
-  .insp { border:1px solid var(--border); border-radius:12px; margin-bottom:16px; overflow:hidden; }
-  .insp .head { display:flex; flex-wrap:wrap; align-items:center; gap:12px; padding:12px 16px;
-    background:var(--surface-2); border-bottom:1px solid var(--border); }
-  .insp .head .date { font-weight:640; font-size:14px; }
-  .insp .head .meta { color:var(--ink-2); font-size:12.5px; }
-  .insp .head .spacer { flex:1; }
-  .pos-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(230px, 1fr)); gap:14px; padding:16px; }
-  .pos { border:1px solid var(--border); border-radius:10px; overflow:hidden; background:var(--surface); }
-  .pos .photo { width:100%; aspect-ratio:4/3; object-fit:cover; display:block; background:var(--surface-2); cursor:zoom-in; border:none; }
-  .pos .nophoto { width:100%; aspect-ratio:4/3; display:flex; align-items:center; justify-content:center;
-    color:var(--muted); background:var(--surface-2); font-size:12px; }
-  .pos .body { padding:10px 12px; }
-  .pos .body .pk { font-weight:640; font-size:13px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
-  .pos .body .pl { color:var(--muted); font-size:11.5px; margin-bottom:8px; }
-  .pos .body dl { margin:8px 0 0; display:grid; grid-template-columns:auto 1fr; gap:3px 10px; font-size:12px; }
-  .pos .body dt { color:var(--muted); }
-  .pos .body dd { margin:0; text-align:right; font-variant-numeric:tabular-nums; }
-  .pos .body .comment { margin-top:8px; font-size:12px; color:var(--ink-2); font-style:italic; }
-  .gradepick { display:flex; gap:3px; margin-top:9px; align-items:center; }
-  .gradepick .lbl { font-size:10.5px; text-transform:uppercase; letter-spacing:.5px; color:var(--muted); margin-right:3px; }
-  .gradepick button { width:22px; height:22px; border-radius:6px; border:1px solid var(--border); background:var(--surface-2);
-    color:var(--ink-2); cursor:pointer; font-size:11px; font-weight:650; padding:0; }
-  .gradepick button:hover { color:var(--ink); }
-  .gradepick button.on { color:#fff; border-color:transparent; }
-
-  .soon-panel { text-align:center; color:var(--muted); padding:60px 20px; }
-  .soon-panel .big { font-size:40px; margin-bottom:10px; }
-
-  .lb { position:fixed; inset:0; background:rgba(0,0,0,.86); display:none; align-items:center; justify-content:center; z-index:100; padding:30px; }
-  .lb.open { display:flex; }
-  .lb img { max-width:100%; max-height:82vh; border-radius:8px; box-shadow:0 10px 40px rgba(0,0,0,.6); }
-  .lb .cap { position:absolute; bottom:20px; left:0; right:0; text-align:center; color:#eee; font-size:13px; }
-  .lb .x { position:absolute; top:18px; right:22px; color:#fff; font-size:30px; cursor:pointer; line-height:1; background:none; border:none; }
-  .hidden { display:none !important; }
-
-  /* editable readings on each photo card */
-  .fields { display:grid; grid-template-columns:1fr 1fr; gap:8px 10px; margin-top:10px; }
-  .fields .f { display:flex; flex-direction:column; gap:3px; }
-  .fields .f.wide { grid-column:1 / -1; }
-  .fields .f > span { font-size:10px; text-transform:uppercase; letter-spacing:.4px; color:var(--muted); }
-  .fields input, .fields textarea, .smu-input { background:var(--surface); color:var(--ink); border:1px solid var(--border);
-    border-radius:7px; padding:6px 8px; font-size:12.5px; font-family:inherit; width:100%; }
-  .fields input:focus, .fields textarea:focus, .smu-input:focus { outline:2px solid var(--accent); outline-offset:1px; }
-  .fields textarea { resize:vertical; min-height:38px; }
-  .smu-input { max-width:120px; font-variant-numeric:tabular-nums; }
-  .insp .head .smu { display:inline-flex; align-items:center; gap:7px; font-size:12.5px; color:var(--ink-2); }
-  .savehint { font-size:11.5px; color:var(--muted); margin:2px 0 14px; }
+  @media (prefers-color-scheme:dark){ :root:where(:not([data-theme="light"])){
+    color-scheme:dark; --page:#0d0d0d; --surface:#1a1a19; --surface-2:#232321; --surface-3:#2c2c2a;
+    --ink:#fff; --ink-2:#c3c2b7; --muted:#898781; --grid:#2c2c2a; --axis:#383835;
+    --border:rgba(255,255,255,.10); --accent:#3987e5; --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 20px rgba(0,0,0,.4); } }
+  :root[data-theme="dark"]{ color-scheme:dark; --page:#0d0d0d; --surface:#1a1a19; --surface-2:#232321; --surface-3:#2c2c2a;
+    --ink:#fff; --ink-2:#c3c2b7; --muted:#898781; --grid:#2c2c2a; --axis:#383835;
+    --border:rgba(255,255,255,.10); --accent:#3987e5; --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 20px rgba(0,0,0,.4); }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{background:var(--page);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased;}
+  header.app{display:flex;align-items:center;gap:12px;padding:14px 22px;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:20;}
+  header.app .t1{font-weight:650;font-size:16px;} header.app .t2{color:var(--muted);font-size:12px;}
+  header.app .spacer{flex:1;}
+  .btn{border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);border-radius:8px;padding:8px 12px;cursor:pointer;font-size:13px;font-family:inherit;}
+  .btn:hover{color:var(--ink);} .btn.primary{background:var(--accent);color:#fff;border-color:transparent;font-weight:600;}
+  nav.tabs{display:flex;gap:4px;padding:0 18px;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:57px;z-index:19;overflow-x:auto;}
+  nav.tabs button{border:none;background:none;color:var(--muted);padding:11px 15px;cursor:pointer;font-size:13.5px;font-weight:550;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;}
+  nav.tabs button.active{color:var(--ink);border-bottom-color:var(--accent);} nav.tabs button:hover{color:var(--ink-2);}
+  main{max-width:1240px;margin:0 auto;padding:22px;}
+  .controls{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;margin-bottom:18px;}
+  .field{display:flex;flex-direction:column;gap:5px;}
+  .field label{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);}
+  select,input[type=search]{background:var(--surface);color:var(--ink);border:1px solid var(--border);border-radius:8px;padding:9px 11px;font-size:14px;min-width:190px;font-family:inherit;}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:12px;margin-bottom:22px;}
+  .tile{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow);}
+  .tile .k{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);}
+  .tile .v{font-size:28px;font-weight:640;margin-top:4px;font-variant-numeric:tabular-nums;}
+  .tile .s{font-size:12px;color:var(--ink-2);margin-top:2px;}
+  .tile .bar{display:flex;height:8px;border-radius:6px;overflow:hidden;margin-top:10px;gap:2px;background:var(--surface-2);}
+  .section{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 20px;margin-bottom:22px;box-shadow:var(--shadow);}
+  .section>h2{margin:0 0 3px;font-size:15px;font-weight:640;} .section>.sub{color:var(--muted);font-size:12.5px;margin-bottom:16px;}
+  /* Pareto */
+  .pareto{display:flex;flex-direction:column;gap:7px;}
+  .prow{display:grid;grid-template-columns:minmax(160px,2fr) 1fr auto;gap:10px;align-items:center;font-size:12.5px;}
+  .prow .lbl{color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .prow .lbl small{color:var(--muted);}
+  .ptrack{background:var(--surface-2);border-radius:5px;height:16px;overflow:hidden;}
+  .pfill{height:100%;border-radius:5px;}
+  .prow .n{font-variant-numeric:tabular-nums;color:var(--ink-2);min-width:34px;text-align:right;}
+  /* table */
+  table.grid{width:100%;border-collapse:collapse;font-size:12.5px;}
+  table.grid th{text-align:left;color:var(--ink-2);font-weight:600;border-bottom:1px solid var(--border);padding:8px 6px;white-space:nowrap;}
+  table.grid td{border-bottom:1px solid var(--border);padding:8px 6px;vertical-align:top;}
+  table.grid tr:hover td{background:var(--surface-2);}
+  .tblwrap{overflow-x:auto;}
+  .pill{display:inline-block;padding:1px 8px;border-radius:999px;font-size:11px;font-weight:650;color:#fff;}
+  .pill.g{background:var(--good);} .pill.w{background:var(--warning);color:#111;}
+  .pill.s{background:var(--serious);} .pill.c{background:var(--critical);} .pill.n{background:var(--none);}
+  .tag{display:inline-block;font-size:10.5px;font-weight:700;padding:1px 6px;border-radius:6px;background:var(--surface-3);color:var(--ink-2);margin-right:5px;}
+  .muted{color:var(--muted);} .mono{font-variant-numeric:tabular-nums;}
+  /* history */
+  .insp{border:1px solid var(--border);border-radius:12px;margin-bottom:16px;overflow:hidden;}
+  .insp .head{display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:12px 16px;background:var(--surface-2);border-bottom:1px solid var(--border);}
+  .insp .head .date{font-weight:640;} .insp .head .meta{color:var(--ink-2);font-size:12.5px;} .insp .head .spacer{flex:1;}
+  .pos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;padding:16px;}
+  .pos{border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--surface);}
+  .pos .photo{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:var(--surface-2);cursor:zoom-in;}
+  .pos .nophoto{width:100%;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;color:var(--muted);background:var(--surface-2);font-size:12px;}
+  .pos .body{padding:10px 12px;} .pos .body .pk{font-weight:640;font-size:13px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+  .pos .body .pl{color:var(--muted);font-size:11.5px;margin-bottom:6px;}
+  .pos dl{margin:6px 0 0;display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:12px;}
+  .pos dt{color:var(--muted);} .pos dd{margin:0;text-align:right;}
+  .pos .cm{margin-top:6px;font-size:12px;color:var(--ink-2);font-style:italic;}
+  .empty{color:var(--muted);text-align:center;padding:34px;}
+  .note{font-size:12px;color:var(--ink-2);background:color-mix(in srgb,var(--warning) 14%,var(--surface));border:1px solid color-mix(in srgb,var(--warning) 45%,var(--border));border-radius:8px;padding:8px 11px;margin-top:12px;}
+  .lb{position:fixed;inset:0;background:rgba(0,0,0,.86);display:none;align-items:center;justify-content:center;z-index:100;padding:30px;}
+  .lb.open{display:flex;} .lb img{max-width:100%;max-height:82vh;border-radius:8px;}
+  .lb .cap{position:absolute;bottom:20px;left:0;right:0;text-align:center;color:#eee;font-size:13px;}
+  .lb .x{position:absolute;top:18px;right:22px;color:#fff;font-size:30px;background:none;border:none;cursor:pointer;}
+  .hidden{display:none!important;}
+  .legend{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;font-size:12.5px;color:var(--ink-2);margin-top:12px;}
+  .legend .sw{width:13px;height:13px;border-radius:4px;display:inline-block;margin-right:5px;vertical-align:-2px;}
 </style>
 </head>
 <body>
 <header class="app">
-  <div class="brand">
-    <span class="t1">Condition Monitoring</span>
-    <span class="t2" id="assetClass">Magnetic Plug Inspection</span>
-  </div>
+  <div><div class="t1">Condition Monitoring</div><div class="t2" id="sub">Fleet dashboard</div></div>
   <div class="spacer"></div>
-  <button class="btn primary" id="folderBtn" title="Read photos straight from a folder on disk / N: drive">📂 Open photo folder</button>
-  <button class="btn" id="exportBtn" title="Save your typed grades, hours &amp; comments to a file (backup or share to another PC)">💾 Save entries</button>
-  <button class="btn" id="importBtn" title="Load entries from a saved file">📥 Import</button>
-  <input type="file" id="importFile" accept="application/json,.json" hidden>
-  <button class="btn" id="themeBtn" title="Toggle light / dark">◐ Theme</button>
+  <input type="file" id="importFile" accept=".json,application/json" hidden multiple>
+  <button class="btn primary" id="importBtn">📥 Import inspections</button>
+  <button class="btn" id="folderBtn" title="Point at the photo folder (N: drive)">📂 Photo folder</button>
+  <button class="btn" id="clearBtn" title="Remove imported inspections from this browser">🗑</button>
+  <button class="btn" id="themeBtn">◐</button>
 </header>
 
 <nav class="tabs" id="tabs">
-  <button data-tab="magplug" class="active">Magnetic Plug</button>
-  <button data-tab="filtercut" disabled>Filter Cut <span class="soon">soon</span></button>
-  <button data-tab="oil" disabled>Oil Analysis <span class="soon">soon</span></button>
-  <button data-tab="temp" disabled>Temperature <span class="soon">soon</span></button>
+  <button data-tab="overview" class="active">Overview</button>
+  <button data-tab="failure">Failure modes</button>
+  <button data-tab="actions">Action register</button>
+  <button data-tab="equipment">Equipment history</button>
 </nav>
 
 <main>
-  <section id="tab-magplug">
+  <div class="controls">
+    <div class="field"><label for="fType">Inspection type</label><select id="fType"></select></div>
+    <div class="field"><label for="fClass">Equipment class</label><select id="fClass"></select></div>
+    <div class="field"><label for="fRange">Period</label><select id="fRange">
+      <option value="0">All time</option><option value="30">Last 30 days</option>
+      <option value="90">Last 90 days</option><option value="365">Last 12 months</option></select></div>
+  </div>
 
-    <div class="srcbar">
-      <span class="pill" id="srcPill">bundled data</span>
-      <span class="desc" id="srcDesc">Showing the bundled sample. Click <b>Open photo folder</b> to load photos straight from a folder. It reads names like <code>TK146_4C_29.07.2026_MP.jpg</code> or a <b>Truck / Date / Position</b> layout.</span>
-      <span class="spacer"></span>
-      <span class="pill" title="dashboard version — make sure your download shows this" style="opacity:.75">build v4 · 2026-07-30</span>
-    </div>
-
-    <div class="controls">
-      <div class="field">
-        <label for="equipSel">Equipment</label>
-        <select id="equipSel"></select>
-      </div>
-      <div class="field">
-        <label for="gradeFilter">Grade filter (fleet view)</label>
-        <select id="gradeFilter"><option value="">All grades</option></select>
-      </div>
-    </div>
-
+  <section id="tab-overview">
     <div class="kpis" id="kpis"></div>
-
     <div class="section">
-      <h2>Fleet overview &mdash; latest inspection</h2>
-      <div class="sub">Each cell is a magnetic-plug position on its most recent inspection. Click a cell to jump to that unit's history.</div>
-      <div class="heatwrap"><table class="heat" id="heat"></table></div>
-      <div class="legend" id="legend" style="margin-top:14px"></div>
-      <div class="note" id="gradeNote"></div>
-    </div>
-
-    <div class="section">
-      <h2 id="histTitle">Inspection history</h2>
-      <div class="sub" id="histSub">Select an equipment unit to see its full magnetic-plug history.</div>
-      <div id="history"></div>
+      <h2>Condition by equipment — latest inspection</h2>
+      <div class="sub">Worst severity found on each unit's most recent inspection. Click a unit to open its history.</div>
+      <div class="tblwrap"><table class="grid" id="fleetTbl"></table></div>
+      <div class="legend" id="sevLegend"></div>
     </div>
   </section>
 
-  <section id="tab-filtercut" class="hidden"><div class="soon-panel"><div class="big">🧪</div><div>Filter Cut monitoring — coming soon.</div></div></section>
-  <section id="tab-oil" class="hidden"><div class="soon-panel"><div class="big">🛢️</div><div>Oil Analysis — coming soon.</div></div></section>
-  <section id="tab-temp" class="hidden"><div class="soon-panel"><div class="big">🌡️</div><div>Temperature monitoring — coming soon.</div></div></section>
+  <section id="tab-failure" class="hidden">
+    <div class="section">
+      <h2>Top failure modes (Pareto)</h2>
+      <div class="sub">Coded defect types ranked by frequency — this is your defect-elimination shortlist.</div>
+      <div class="pareto" id="paretoDefect"></div>
+    </div>
+    <div class="section">
+      <h2>Direct causes</h2>
+      <div class="sub">Why those defects occurred, as recorded at inspection.</div>
+      <div class="pareto" id="paretoCause"></div>
+    </div>
+    <div class="section">
+      <h2>ISO 14224 failure mechanism</h2>
+      <div class="sub">Table B.2 mechanism classes — comparable across sites and benchmarks.</div>
+      <div class="pareto" id="paretoIso"></div>
+    </div>
+  </section>
+
+  <section id="tab-actions" class="hidden">
+    <div class="section">
+      <h2>Action register</h2>
+      <div class="sub">Every finding that needs work, worst first. Export to CSV to hand to planning.</div>
+      <div style="margin-bottom:12px"><button class="btn" id="csvBtn">⬇ Export CSV</button></div>
+      <div class="tblwrap"><table class="grid" id="actionTbl"></table></div>
+    </div>
+  </section>
+
+  <section id="tab-equipment" class="hidden">
+    <div class="controls">
+      <div class="field"><label for="equipSel">Equipment</label><select id="equipSel"></select></div>
+    </div>
+    <div class="section">
+      <h2 id="histTitle">Inspection history</h2>
+      <div class="sub" id="histSub"></div>
+      <div id="history"></div>
+    </div>
+  </section>
 </main>
 
-<div class="lb" id="lb">
-  <button class="x" id="lbx">&times;</button>
-  <img id="lbimg" alt="">
-  <div class="cap" id="lbcap"></div>
-</div>
+<div class="lb" id="lb"><button class="x" id="lbx">&times;</button><img id="lbimg" alt=""><div class="cap" id="lbcap"></div></div>
 
 <script src="../data/magnetic_plug.js"></script>
+<script src="../mobile/taxonomy2.js"></script>
 <script>
-/* ============================================================================
-   GRADE / SEVERITY SCALE  —  EDIT to match your inspection standard.
-   status ∈ good | warning | serious | critical | none
-   ========================================================================== */
-const GRADE_SCALE = {
-  "A": { rank:1, status:"good",     label:"A — Good"         },
-  "B": { rank:2, status:"warning",  label:"B — Watch"        },
-  "C": { rank:3, status:"serious",  label:"C — Serious"      },
-  "D": { rank:4, status:"critical", label:"D — Critical"     },
-  "X": { rank:0, status:"none",     label:"X — Not inspected"},
-};
-const GRADE_ASSUMPTION = true;   // set false once the scale above is confirmed
-const GRADE_CHOICES = ["A","B","C","D","X"];
+const $=(id)=>document.getElementById(id);
+const TAX=window.TAX2||{groups:{},defects:[],causes:[],isoMech:{}};
+const DEF={}; TAX.defects.forEach(d=>DEF[d.c]=d);
+const SEV={NOF:{l:"No failure",c:"g",r:0},INC:{l:"Incipient",c:"w",r:1},DEG:{l:"Degraded",c:"s",r:2},CRI:{l:"Critical",c:"c",r:3}};
+const SEVC={NOF:"var(--good)",INC:"var(--warning)",DEG:"var(--serious)",CRI:"var(--critical)"};
+const GRADE_SEV={A:"NOF",B:"INC",C:"DEG",D:"CRI"};
+const TYPE_LABEL={MP:"Magnetic Plug",FC:"Filter Cut",INSP:"Inspection"};
+const STORE="cm_dash_records";
 
-/* Default position labels (used when photos come from a folder). */
-const POS_LABELS = {
-  "4C":"Left Rear Final Drive", "4D":"Right Rear Final Drive",
-  "4E":"Left Rear Final Drive", "4F":"Right Rear Final Drive",
-};
-const HEAT_POSITIONS = ["4C","4D","4E","4F"];
+/* ---------- records: bundled magnetic-plug data + imported entries.json ---------- */
+function fromBundled(){
+  const d=window.CM_DATA; if(!d||!d.inspections) return [];
+  return d.inspections.map(r=>({equip:r.equipment,date:r.date,type:"MP",cls:"HT",by:"",smu:r.motorHours||"",
+    items:(r.positions||[]).map(p=>({key:p.key,label:p.label||"",grade:p.grade||"",sev:GRADE_SEV[p.grade]||"",
+      action:"",actionLabel:"",wo:"",defectCode:"",defect:"",iso:"",isoMode:"",causeCode:"",cause:"",
+      particle:p.particleCount||"",comp:p.componentHours||"",oil:p.oilHours||"",comment:p.comment||"",
+      photo:p.photo||"",photos:p.photo?1:0,video:0})),src:"bundled"}));
+}
+let imported=[]; try{ imported=JSON.parse(localStorage.getItem(STORE))||[]; }catch(e){ imported=[]; }
+let RECS=[];
+function rebuild(){
+  const key=r=>`${r.equip}|${r.date}|${r.type}`;
+  const map=new Map();
+  fromBundled().forEach(r=>map.set(key(r),r));
+  imported.forEach(r=>map.set(key(r),r));          // imported wins
+  RECS=[...map.values()].sort((a,b)=>(b.date||"").localeCompare(a.date||"")||a.equip.localeCompare(b.equip));
+}
+function saveImported(){ try{ localStorage.setItem(STORE,JSON.stringify(imported)); }catch(e){ alert("Storage full — clear old imports."); } }
 
-const STATUS_COLOR = { good:"var(--st-good)", warning:"var(--st-warning)", serious:"var(--st-serious)",
-  critical:"var(--st-critical)", none:"var(--st-none)" };
-const STATUS_ICON = { good:"●", warning:"▲", serious:"◆", critical:"■", none:"—" };
+/* ---------- filters ---------- */
+function filtered(){
+  const t=$("fType").value, c=$("fClass").value, days=+$("fRange").value;
+  const cutoff=days? new Date(Date.now()-days*864e5).toISOString().slice(0,10):null;
+  return RECS.filter(r=>(!t||r.type===t)&&(!c||r.cls===c)&&(!cutoff||(r.date||"")>=cutoff));
+}
+function findings(recs){            // one row per item that has any content
+  const out=[];
+  recs.forEach(r=>r.items.forEach(i=>{ if(i.grade||i.sev||i.defectCode||i.comment||i.action) out.push({r,i}); }));
+  return out;
+}
+const sevRank=s=>SEV[s]?SEV[s].r:-1;
+function worstOf(rec){ let w="",n=-1; rec.items.forEach(i=>{ const s=i.sev||GRADE_SEV[i.grade]||""; if(sevRank(s)>n){n=sevRank(s);w=s;} }); return w; }
 
-const $ = (id) => document.getElementById(id);
-
-function gradeInfo(g) {
-  if (g == null || g === "") return { key:"", rank:0, status:"none", label:"No data" };
-  const key = String(g).trim().toUpperCase();
-  const def = GRADE_SCALE[key];
-  if (def) return { key, ...def };
-  return { key, rank:0, status:"none", label:key };
-}
-function photoUrl(p) {
-  if (!p) return null;
-  if (/^(blob:|data:|[a-zA-Z]:|https?:|file:|\/|\\)/.test(p)) return p;
-  return "../" + p;
-}
-
-/* ---- user grade overrides (saved in this browser) ---- */
-const GRADE_STORE_KEY = "cm_magplug_grades";
-let GRADES = {};
-try { GRADES = JSON.parse(localStorage.getItem(GRADE_STORE_KEY)) || {}; } catch(e) { GRADES = {}; }
-function gkey(e,d,k){ return e+"|"+(d||"")+"|"+k; }
-function effGrade(rec, p){ const k = gkey(rec.equipment, rec.date, p.key); return (k in GRADES) ? GRADES[k] : p.grade; }
-function setGrade(equip, date, key, val){
-  const k = gkey(equip,date,key);
-  if (val === null) delete GRADES[k]; else GRADES[k] = val;
-  try { localStorage.setItem(GRADE_STORE_KEY, JSON.stringify(GRADES)); } catch(e){}
-  renderAll();
-}
-
-/* ---- user readings/comments (saved in this browser) ---- */
-const NOTE_STORE_KEY = "cm_magplug_notes";
-let NOTES = {};
-try { NOTES = JSON.parse(localStorage.getItem(NOTE_STORE_KEY)) || {}; } catch(e) { NOTES = {}; }
-function saveNotes(){ try { localStorage.setItem(NOTE_STORE_KEY, JSON.stringify(NOTES)); } catch(e){} }
-function findPos(equip, date, key){
-  const rec = (byEquip[equip]||[]).find(r => (r.date||"") === (date||""));
-  return rec ? rec.positions.find(p => p.key === key) : null;
-}
-// per-position field (particleCount / componentHours / oilHours / comment): override else original
-function getField(equip, date, key, field){
-  const nk = gkey(equip,date,key);
-  if (NOTES[nk] && field in NOTES[nk]) return NOTES[nk][field];
-  const p = findPos(equip,date,key);
-  return p ? (p[field] ?? "") : "";
-}
-function setField(equip, date, key, field, val){
-  const nk = gkey(equip,date,key);
-  (NOTES[nk] ||= {});
-  if (val === "" || val == null) delete NOTES[nk][field]; else NOTES[nk][field] = val;
-  if (Object.keys(NOTES[nk]).length === 0) delete NOTES[nk];
-  saveNotes();
-}
-// per-inspection SMU / machine hours: override else original motorHours
-function getSMU(equip, date){
-  const nk = equip+"|"+(date||"");
-  if (NOTES[nk] && "smu" in NOTES[nk]) return NOTES[nk].smu;
-  const rec = (byEquip[equip]||[]).find(r => (r.date||"") === (date||""));
-  return rec && rec.motorHours != null ? rec.motorHours : "";
-}
-function setSMU(equip, date, val){
-  const nk = equip+"|"+(date||"");
-  (NOTES[nk] ||= {});
-  if (val === "" || val == null) delete NOTES[nk].smu; else NOTES[nk].smu = val;
-  if (Object.keys(NOTES[nk]).length === 0) delete NOTES[nk];
-  saveNotes();
-}
-
-/* ============================ Data state ============================ */
-let DATA = window.CM_DATA || { component:"Magnetic Plug", assetClass:"", equipmentList:[], inspections:[] };
-let byEquip = {};
-function reindex(){
-  byEquip = {};
-  for (const rec of DATA.inspections) (byEquip[rec.equipment] ||= []).push(rec);
-  for (const k in byEquip) byEquip[k].sort((a,b)=>(b.date||"").localeCompare(a.date||""));
-}
-
-/* ============================ Renderers ============================ */
-function renderHeader(){
-  $("assetClass").textContent = `${DATA.component||"Magnetic Plug"} · ${DATA.assetClass||""}`.replace(/ · $/,"");
-}
+/* ---------- KPIs ---------- */
 function renderKpis(){
-  const latest = DATA.equipmentList.map(e=>byEquip[e]?.[0]).filter(Boolean);
-  const counts = { good:0, warning:0, serious:0, critical:0, none:0 };
-  let positions = 0;
-  for (const rec of latest) for (const p of rec.positions){ positions++; counts[gradeInfo(effGrade(rec,p)).status]++; }
-  const inspected = positions - counts.none;
-  const bar = ["critical","serious","warning","good","none"].map(s =>
-    counts[s] ? `<span style="flex:${counts[s]};background:${STATUS_COLOR[s]}"></span>` : "").join("");
-  $("kpis").innerHTML = `
-    <div class="tile"><div class="k">Equipment</div><div class="v">${DATA.equipmentList.length}</div>
-      <div class="s">${DATA.assetClass||"units"}</div></div>
-    <div class="tile"><div class="k">Plug positions (latest)</div><div class="v">${positions}</div>
-      <div class="s">${inspected} inspected · ${counts.none} not inspected</div></div>
-    <div class="tile"><div class="k">Needs attention</div><div class="v">${counts.serious + counts.critical}</div>
-      <div class="s">serious + critical positions</div></div>
-    <div class="tile"><div class="k">Condition mix (latest)</div><div class="v" style="font-size:15px;margin-top:9px">
-        ${["good","warning","serious","critical"].filter(s=>counts[s]).map(s=>`${STATUS_ICON[s]} ${counts[s]}`).join("  ")}
-        ${counts.none?`<span style="color:var(--muted)"> — ${counts.none}</span>`:""}
-      </div><div class="bar">${bar}</div></div>`;
+  const recs=filtered(), f=findings(recs);
+  const units=new Set(recs.map(r=>r.equip)).size;
+  const cnt={NOF:0,INC:0,DEG:0,CRI:0};
+  f.forEach(x=>{ const s=x.i.sev||GRADE_SEV[x.i.grade]||""; if(cnt[s]!=null)cnt[s]++; });
+  const attention=cnt.DEG+cnt.CRI;
+  const openActions=f.filter(x=>x.i.action&&!["MON"].includes(x.i.action)).length;
+  const bar=["CRI","DEG","INC","NOF"].map(s=>cnt[s]?`<span style="flex:${cnt[s]};background:${SEVC[s]}"></span>`:"").join("");
+  $("kpis").innerHTML=`
+   <div class="tile"><div class="k">Inspections</div><div class="v">${recs.length}</div><div class="s">${units} unit(s)</div></div>
+   <div class="tile"><div class="k">Findings</div><div class="v">${f.length}</div><div class="s">items with a record</div></div>
+   <div class="tile"><div class="k">Needs attention</div><div class="v">${attention}</div><div class="s">degraded + critical</div></div>
+   <div class="tile"><div class="k">Actions to plan</div><div class="v">${openActions}</div><div class="s">excluding “monitor”</div></div>
+   <div class="tile"><div class="k">Severity mix</div>
+     <div class="v" style="font-size:14px;margin-top:8px">${["CRI","DEG","INC","NOF"].filter(s=>cnt[s]).map(s=>`${SEV[s].l.split(" ")[0]} ${cnt[s]}`).join(" · ")||"—"}</div>
+     <div class="bar">${bar}</div></div>`;
 }
-function renderLegend(){
-  $("legend").innerHTML = Object.entries(GRADE_SCALE).map(([k,v]) =>
-    `<span class="item"><span class="sw" style="background:${STATUS_COLOR[v.status]}"></span>${v.label}</span>`).join("");
-  $("gradeNote").style.display = GRADE_ASSUMPTION ? "block" : "none";
-  $("gradeNote").innerHTML =
-    "⚠ <b>Grade colours are an assumption.</b> A→D = good→critical is a placeholder — confirm it and edit " +
-    "<code>GRADE_SCALE</code> in <code>dashboard/index.html</code>. The raw grade is always shown.";
+
+/* ---------- fleet table ---------- */
+function renderFleet(){
+  const recs=filtered(); const byU={};
+  recs.forEach(r=>{ const k=r.equip; if(!byU[k]||(r.date||"")>(byU[k].date||"")) byU[k]=r; });
+  const rows=Object.values(byU).sort((a,b)=>sevRank(worstOf(b))-sevRank(worstOf(a))||a.equip.localeCompare(b.equip));
+  if(!rows.length){ $("fleetTbl").innerHTML=`<tr><td class="empty">No inspections match the filters.</td></tr>`; return; }
+  let h=`<thead><tr><th>Unit</th><th>Type</th><th>Date</th><th>Worst severity</th><th>Findings</th><th>Top defect</th><th>Inspector</th></tr></thead><tbody>`;
+  rows.forEach(r=>{
+    const w=worstOf(r); const fs=r.items.filter(i=>i.grade||i.defectCode);
+    const top=fs.map(i=>i.defect).filter(Boolean)[0]||"";
+    h+=`<tr data-u="${r.equip}" style="cursor:pointer">
+      <td><b>${r.equip}</b></td><td><span class="tag">${TYPE_LABEL[r.type]||r.type}</span></td>
+      <td class="mono">${r.date||""}</td>
+      <td>${w?`<span class="pill ${SEV[w].c}">${SEV[w].l}</span>`:'<span class="muted">—</span>'}</td>
+      <td class="mono">${fs.length}</td><td>${top||'<span class="muted">—</span>'}</td>
+      <td class="muted">${r.by||""}</td></tr>`;
+  });
+  $("fleetTbl").innerHTML=h+"</tbody>";
+  $("fleetTbl").querySelectorAll("tr[data-u]").forEach(tr=>tr.onclick=()=>{ showTab("equipment"); $("equipSel").value=tr.dataset.u; renderHistory(); });
 }
-function renderHeat(){
-  const filter = $("gradeFilter").value;
-  let html = "<thead><tr><th class='rowh'>Unit</th>" + HEAT_POSITIONS.map(p=>`<th>${p}</th>`).join("") + "<th>Date</th></tr></thead><tbody>";
-  for (const e of DATA.equipmentList){
-    const rec = byEquip[e]?.[0]; if (!rec) continue;
-    const posByKey = {}; for (const p of rec.positions) posByKey[p.key] = p;
-    if (filter && !rec.positions.some(p => gradeInfo(effGrade(rec,p)).key === filter)) continue;
-    html += `<tr><th class='rowh'>${e}</th>`;
-    for (const key of HEAT_POSITIONS){
-      const p = posByKey[key];
-      const gi = gradeInfo(p ? effGrade(rec,p) : null);
-      const dim = filter && gi.key !== filter ? "opacity:.28;" : "";
-      html += `<td><div class="cell ${gi.status==='none'?'none':''}" style="background:${STATUS_COLOR[gi.status]};${dim}"
-                 title="${e} · ${key} · ${gi.label}" data-equip="${e}">${gi.key||"–"}</div></td>`;
-    }
-    html += `<td style="color:var(--muted);font-size:11.5px;white-space:nowrap">${rec.date||""}</td></tr>`;
+
+/* ---------- Pareto ---------- */
+function pareto(el,pairs,colorFn){
+  if(!pairs.length){ el.innerHTML=`<div class="empty">No coded data yet.</div>`; return; }
+  const max=pairs[0][1];
+  el.innerHTML=pairs.map(([label,n,sub])=>`
+    <div class="prow"><div class="lbl" title="${label}">${label}${sub?` <small>${sub}</small>`:""}</div>
+      <div class="ptrack"><div class="pfill" style="width:${Math.max(2,n/max*100)}%;background:${colorFn?colorFn(label):"var(--accent)"}"></div></div>
+      <div class="n">${n}</div></div>`).join("");
+}
+function renderFailure(){
+  const f=findings(filtered());
+  const cnt=(keyFn,subFn)=>{ const m=new Map();
+    f.forEach(x=>{ const k=keyFn(x); if(!k) return; const e=m.get(k)||{n:0,sub:subFn?subFn(x):""}; e.n++; m.set(k,e); });
+    return [...m.entries()].map(([k,v])=>[k,v.n,v.sub]).sort((a,b)=>b[1]-a[1]).slice(0,15); };
+  pareto($("paretoDefect"), cnt(x=>x.i.defect, x=>x.i.defectCode?`· ${x.i.defectCode}`:""));
+  pareto($("paretoCause"),  cnt(x=>x.i.cause,  x=>x.i.causeCode?`· ${x.i.causeCode}`:""), ()=>"var(--serious)");
+  pareto($("paretoIso"),    cnt(x=>{ const m=TAX.isoMech&&TAX.isoMech[x.i.iso]; return x.i.iso?`${x.i.iso} ${m?m.en:""}`:""; }), ()=>"var(--accent)");
+}
+
+/* ---------- action register ---------- */
+function actionRows(){
+  return findings(filtered())
+    .filter(x=>x.i.action||sevRank(x.i.sev||GRADE_SEV[x.i.grade]||"")>=2)
+    .sort((a,b)=>sevRank(b.i.sev||GRADE_SEV[b.i.grade]||"")-sevRank(a.i.sev||GRADE_SEV[a.i.grade]||"")
+      ||(b.r.date||"").localeCompare(a.r.date||""));
+}
+function renderActions(){
+  const rows=actionRows();
+  if(!rows.length){ $("actionTbl").innerHTML=`<tr><td class="empty">Nothing outstanding.</td></tr>`; return; }
+  let h=`<thead><tr><th>Sev</th><th>Unit</th><th>Component</th><th>Defect</th><th>Direct cause</th><th>Action</th><th>WO</th><th>Date</th><th>By</th></tr></thead><tbody>`;
+  rows.forEach(({r,i})=>{ const s=i.sev||GRADE_SEV[i.grade]||"";
+    h+=`<tr><td>${s?`<span class="pill ${SEV[s].c}">${SEV[s].l}</span>`:""}</td>
+      <td><b>${r.equip}</b><div class="muted" style="font-size:11px">${TYPE_LABEL[r.type]||r.type}</div></td>
+      <td>${i.key}<div class="muted" style="font-size:11px">${i.label||""}</div></td>
+      <td>${i.defect||'<span class="muted">—</span>'}${i.defectCode?`<div class="muted" style="font-size:11px">${i.defectCode}${i.iso?` · ISO ${i.iso}/${i.isoMode}`:""}</div>`:""}</td>
+      <td>${i.cause||'<span class="muted">—</span>'}</td>
+      <td>${i.actionLabel||'<span class="muted">—</span>'}</td>
+      <td class="mono">${i.wo||""}</td><td class="mono">${r.date||""}</td><td class="muted">${r.by||""}</td></tr>`; });
+  $("actionTbl").innerHTML=h+"</tbody>";
+}
+$("csvBtn").onclick=()=>{
+  const rows=actionRows(); const q=s=>`"${String(s==null?"":s).replace(/"/g,'""')}"`;
+  const head=["Severity","Unit","Type","Component","ComponentName","DefectCode","Defect","ISOMechanism","ISOMode","CauseCode","Cause","Action","WO","Grade","Date","Inspector","Comment"];
+  const body=rows.map(({r,i})=>[SEV[i.sev||GRADE_SEV[i.grade]||""]?.l||"",r.equip,r.type,i.key,i.label,i.defectCode,i.defect,i.iso,i.isoMode,i.causeCode,i.cause,i.actionLabel,i.wo,i.grade,r.date,r.by,i.comment].map(q).join(","));
+  const csv=[head.map(q).join(","),...body].join("\r\n");
+  const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob(["﻿"+csv],{type:"text/csv"}));
+  a.download=`cm_action_register_${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(a.href);
+};
+
+/* ---------- equipment history ---------- */
+let folderPhotos=null;   // name -> objectURL, from "Photo folder"
+function photoSrc(it,rec){
+  if(folderPhotos){
+    const base=`${rec.equip}${rec.type==="INSP"?"."+it.key:"_"+String(it.key).replace(/\./g,"-")}_${(rec.date||"").split("-").reverse().join(".")}_${rec.type}`;
+    for(const ext of ["jpg","jpeg","png","JPG"]) { const u=folderPhotos[`${base}.${ext}`]||folderPhotos[`${base}_1.${ext}`]; if(u) return u; }
   }
-  $("heat").innerHTML = html + "</tbody>";
-  $("heat").querySelectorAll(".cell[data-equip]").forEach(c =>
-    c.onclick = () => { $("equipSel").value = c.dataset.equip; renderHistory(); });
-}
-function badge(gi){
-  if (gi.status === "none") return `<span class="badge none">${STATUS_ICON.none} ${gi.key||"No grade"}</span>`;
-  return `<span class="badge" style="background:${STATUS_COLOR[gi.status]}"><span class="ico">${STATUS_ICON[gi.status]}</span>${gi.label}</span>`;
-}
-function field(dt, dd){ return dd==null||dd==="" ? "" : `<dt>${dt}</dt><dd>${dd}</dd>`; }
-function gradePicker(rec, p, cur){
-  const btns = GRADE_CHOICES.map(g => {
-    const gi = gradeInfo(g);
-    const on = cur === g;
-    const style = on ? `background:${STATUS_COLOR[gi.status]}` : "";
-    return `<button class="${on?'on':''}" style="${style}" title="${gi.label}"
-              data-equip="${rec.equipment}" data-date="${rec.date||''}" data-key="${p.key}" data-grade="${g}">${g}</button>`;
-  }).join("");
-  return `<div class="gradepick"><span class="lbl">grade</span>${btns}</div>`;
+  if(it.photo) return /^(data:|blob:|https?:|\/)/.test(it.photo)?it.photo:"../"+it.photo;
+  return null;
 }
 function renderHistory(){
-  const e = $("equipSel").value;
-  const recs = byEquip[e] || [];
-  $("histTitle").textContent = `Inspection history — ${e||""}`;
-  $("histSub").textContent = recs.length
-    ? `${recs.length} inspection${recs.length>1?"s":""} on record · newest first`
-    : "No inspections on record for this unit.";
-  if (!recs.length){ $("history").innerHTML = `<div class="hist-empty">No data.</div>`; return; }
-
-  $("history").innerHTML =
-    `<div class="savehint">✎ Grades, hours and comments you type are saved automatically on this computer.</div>` +
-    recs.map(rec => `
-    <div class="insp" data-reckey="${rec.equipment}␟${rec.date||''}">
-      <div class="head">
-        <span class="date">${rec.date || "Undated"}</span>
-        <span class="smu">SMU / machine hrs
-          <input class="smu-input" type="text" inputmode="numeric" data-smu placeholder="—">
-        </span>
-        <span class="spacer"></span>
-        <span class="meta" style="font-size:11.5px">${rec.source||""}</span>
-      </div>
-      <div class="pos-grid">
-        ${rec.positions.map(p => {
-          const cur = effGrade(rec, p);
-          const gi = gradeInfo(cur);
-          const url = photoUrl(p.photo);
-          const cap = `${e} · ${p.key} ${p.label||""} · ${rec.date||""} · ${gi.label}`;
-          return `<div class="pos" data-poskey="${rec.equipment}␟${rec.date||''}␟${p.key}">
-            ${url
-              ? `<img class="photo" loading="lazy" src="${url}" alt="${cap}" data-full="${url}" data-cap="${cap}"
-                     onerror="this.outerHTML='<div class=\\'nophoto\\'>photo not found</div>'">`
-              : `<div class="nophoto">no photo</div>`}
-            <div class="body">
-              <div class="pk">${p.key} ${badge(gi)}</div>
-              <div class="pl">${p.label||POS_LABELS[p.key]||""}</div>
-              ${gradePicker(rec, p, cur)}
-              <div class="fields">
-                <label class="f"><span>Particle count</span><input type="text" data-field="particleCount"></label>
-                <label class="f"><span>Component hrs</span><input type="text" inputmode="numeric" data-field="componentHours"></label>
-                <label class="f"><span>Oil hrs</span><input type="text" inputmode="numeric" data-field="oilHours"></label>
-                <label class="f"><span>&nbsp;</span></label>
-                <label class="f wide"><span>Comment</span><textarea rows="2" data-field="comment"></textarea></label>
-              </div>
-            </div>
-          </div>`;
-        }).join("")}
-      </div>
-    </div>`).join("");
-
-  $("history").querySelectorAll("img.photo").forEach(img =>
-    img.onclick = () => openLB(img.dataset.full, img.dataset.cap));
-  $("history").querySelectorAll(".gradepick button").forEach(b =>
-    b.onclick = () => {
-      const same = b.classList.contains("on");
-      setGrade(b.dataset.equip, b.dataset.date, b.dataset.key, same ? null : b.dataset.grade);
-    });
-
-  // SMU / machine-hours inputs (one per inspection)
-  $("history").querySelectorAll(".insp").forEach(card => {
-    const [eq, dt] = card.dataset.reckey.split("␟");
-    const inp = card.querySelector("input[data-smu]");
-    if (!inp) return;
-    inp.value = getSMU(eq, dt);
-    inp.oninput = () => setSMU(eq, dt, inp.value.trim());
-  });
-
-  // per-position readings + comment (populate current values, save on input)
-  $("history").querySelectorAll(".pos[data-poskey]").forEach(card => {
-    const [eq, dt, key] = card.dataset.poskey.split("␟");
-    card.querySelectorAll("[data-field]").forEach(inp => {
-      inp.value = getField(eq, dt, key, inp.dataset.field);
-      inp.oninput = () => setField(eq, dt, key, inp.dataset.field, inp.value.trim());
-    });
-  });
+  const e=$("equipSel").value; const recs=RECS.filter(r=>r.equip===e);
+  $("histTitle").textContent=`Inspection history — ${e||""}`;
+  $("histSub").textContent=recs.length?`${recs.length} inspection(s) · newest first`:"No inspections recorded.";
+  if(!recs.length){ $("history").innerHTML=`<div class="empty">No data.</div>`; return; }
+  $("history").innerHTML=recs.map(rec=>`
+    <div class="insp"><div class="head">
+      <span class="date">${rec.date||""}</span>
+      <span class="tag">${TYPE_LABEL[rec.type]||rec.type}</span>
+      ${rec.smu?`<span class="meta">SMU <b>${rec.smu}</b></span>`:""}
+      <span class="spacer"></span>${rec.by?`<span class="meta">${rec.by}</span>`:""}</div>
+      <div class="pos-grid">${rec.items.map(i=>{
+        const s=i.sev||GRADE_SEV[i.grade]||""; const src=photoSrc(i,rec);
+        const cap=`${rec.equip} · ${i.key} · ${rec.date}`;
+        return `<div class="pos">
+          ${src?`<img class="photo" loading="lazy" src="${src}" alt="${cap}" data-cap="${cap}">`:`<div class="nophoto">no photo</div>`}
+          <div class="body"><div class="pk">${i.key}${i.grade?` <span class="pill ${SEV[GRADE_SEV[i.grade]]?.c||'n'}">${i.grade}</span>`:""}
+            ${s?`<span class="pill ${SEV[s].c}">${SEV[s].l}</span>`:""}</div>
+            <div class="pl">${i.label||""}</div>
+            ${i.defect?`<div style="font-size:12px"><b>${i.defect}</b> <span class="muted">${i.defectCode}</span></div>`:""}
+            ${i.cause?`<div style="font-size:12px" class="muted">Cause: ${i.cause}</div>`:""}
+            <dl>${i.particle?`<dt>Particles</dt><dd>${i.particle}</dd>`:""}${i.comp?`<dt>Comp hrs</dt><dd>${i.comp}</dd>`:""}${i.oil?`<dt>Oil hrs</dt><dd>${i.oil}</dd>`:""}${i.actionLabel?`<dt>Action</dt><dd>${i.actionLabel}</dd>`:""}${i.wo?`<dt>WO</dt><dd>${i.wo}</dd>`:""}</dl>
+            ${i.comment?`<div class="cm">“${i.comment}”</div>`:""}
+          </div></div>`; }).join("")}</div></div>`).join("");
+  $("history").querySelectorAll("img.photo").forEach(img=>img.onclick=()=>{ $("lbimg").src=img.src; $("lbcap").textContent=img.dataset.cap; $("lb").classList.add("open"); });
 }
 
-/* Rebuild the equipment + grade selectors, then render everything. */
+/* ---------- import / folder / misc ---------- */
+$("importBtn").onclick=()=>$("importFile").click();
+$("importFile").onchange=async e=>{
+  const files=[...e.target.files]; let added=0, skipped=0;
+  for(const f of files){
+    try{
+      const j=JSON.parse(await f.text());
+      const recs = j.records || null;
+      if(!recs){ skipped++; continue; }
+      recs.forEach(r=>{
+        const k=`${r.equip}|${r.date}|${r.type}`;
+        imported=imported.filter(x=>`${x.equip}|${x.date}|${x.type}`!==k);
+        imported.push(r); added++;
+      });
+    }catch(err){ skipped++; }
+  }
+  saveImported(); rebuild(); refreshControls(); renderAll();
+  alert(`Imported ${added} inspection record(s).` + (skipped?` ${skipped} file(s) skipped (not a v2 entries.json).`:""));
+  e.target.value="";
+};
+$("clearBtn").onclick=()=>{ if(!imported.length) return alert("Nothing imported yet.");
+  if(confirm(`Remove ${imported.length} imported inspection record(s) from this browser?`)){ imported=[]; saveImported(); rebuild(); refreshControls(); renderAll(); } };
+$("folderBtn").onclick=async ()=>{
+  if(!window.showDirectoryPicker) return alert("Use Chrome or Edge to open a photo folder.");
+  try{
+    const dir=await window.showDirectoryPicker({id:"cm-photos",mode:"read"}); folderPhotos={};
+    async function walk(h){ for await (const en of h.values()){
+      if(en.kind==="directory") await walk(en);
+      else if(/\.(jpe?g|png|webp)$/i.test(en.name)) folderPhotos[en.name]=URL.createObjectURL(await en.getFile()); } }
+    await walk(dir); renderHistory();
+    alert(`Loaded ${Object.keys(folderPhotos).length} photo(s) from ${dir.name}.`);
+  }catch(err){ if(err&&err.name!=="AbortError") alert("Could not read that folder."); }
+};
+$("lb").onclick=e=>{ if(e.target.id==="lb"||e.target.id==="lbx"){ $("lb").classList.remove("open"); $("lbimg").src=""; } };
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ $("lb").classList.remove("open"); } });
+$("themeBtn").onclick=()=>{ const c=document.documentElement.getAttribute("data-theme");
+  const dark=c?c==="dark":matchMedia("(prefers-color-scheme: dark)").matches;
+  document.documentElement.setAttribute("data-theme",dark?"light":"dark"); };
+function showTab(t){ $("tabs").querySelectorAll("button").forEach(b=>b.classList.toggle("active",b.dataset.tab===t));
+  ["overview","failure","actions","equipment"].forEach(x=>$("tab-"+x).classList.toggle("hidden",x!==t)); }
+$("tabs").onclick=e=>{ const b=e.target.closest("button[data-tab]"); if(b) showTab(b.dataset.tab); };
+
+/* ---------- init ---------- */
 function refreshControls(){
-  const sel = $("equipSel");
-  const prev = sel.value;
-  sel.innerHTML = DATA.equipmentList.map(e=>`<option value="${e}">${e}</option>`).join("");
-  if (DATA.equipmentList.includes(prev)) sel.value = prev;
-  const grades = [...new Set(DATA.inspections.flatMap(r=>r.positions.map(p=>gradeInfo(effGrade(r,p)).key)).filter(Boolean))].sort();
-  const gprev = $("gradeFilter").value;
-  $("gradeFilter").innerHTML = `<option value="">All grades</option>` +
-    grades.map(g=>`<option value="${g}">${gradeInfo(g).label}</option>`).join("");
-  $("gradeFilter").value = gprev;
-  sel.onchange = renderHistory;
-  $("gradeFilter").onchange = renderHeat;
+  const types=[...new Set(RECS.map(r=>r.type))].sort();
+  $("fType").innerHTML=`<option value="">All types</option>`+types.map(t=>`<option value="${t}">${TYPE_LABEL[t]||t}</option>`).join("");
+  const cls=[...new Set(RECS.map(r=>r.cls).filter(Boolean))].sort();
+  $("fClass").innerHTML=`<option value="">All classes</option>`+cls.map(c=>`<option value="${c}">${c}</option>`).join("");
+  const units=[...new Set(RECS.map(r=>r.equip))].sort();
+  const prev=$("equipSel").value;
+  $("equipSel").innerHTML=units.map(u=>`<option value="${u}">${u}</option>`).join("");
+  if(units.includes(prev)) $("equipSel").value=prev;
+  $("sevLegend").innerHTML=Object.entries(SEV).map(([k,v])=>`<span><span class="sw" style="background:${SEVC[k]}"></span>${v.l}</span>`).join("");
+  $("sub").textContent=`${RECS.length} inspection(s) · ${units.length} unit(s)`+(imported.length?` · ${imported.length} imported`:"");
 }
-function renderAll(){ renderHeader(); refreshControls(); renderKpis(); renderLegend(); renderHeat();
-  if (!$("equipSel").value && DATA.equipmentList.length) $("equipSel").value = DATA.equipmentList[0];
-  renderHistory(); }
-
-/* ============================ Lightbox / tabs / theme ============================ */
-function openLB(src, cap){ $("lbimg").src=src; $("lbcap").textContent=cap||""; $("lb").classList.add("open"); }
-function closeLB(){ $("lb").classList.remove("open"); $("lbimg").src=""; }
-$("lb").addEventListener("click", e => { if (e.target.id==="lb"||e.target.id==="lbx") closeLB(); });
-document.addEventListener("keydown", e => { if (e.key==="Escape") closeLB(); });
-$("tabs").addEventListener("click", e => {
-  const b = e.target.closest("button[data-tab]"); if (!b || b.disabled) return;
-  $("tabs").querySelectorAll("button").forEach(x=>x.classList.remove("active")); b.classList.add("active");
-  for (const t of ["magplug","filtercut","oil","temp"]) $("tab-"+t).classList.toggle("hidden", t !== b.dataset.tab);
-});
-$("themeBtn").addEventListener("click", () => {
-  const cur = document.documentElement.getAttribute("data-theme");
-  const dark = cur ? cur==="dark" : matchMedia("(prefers-color-scheme: dark)").matches;
-  document.documentElement.setAttribute("data-theme", dark ? "light" : "dark");
-});
-
-/* ---- Save / import typed entries (grades, hours, comments) ---- */
-$("exportBtn").addEventListener("click", () => {
-  const payload = { type:"cm-magplug-entries", version:1, grades:GRADES, notes:NOTES };
-  const blob = new Blob([JSON.stringify(payload, null, 2)], { type:"application/json" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "magnetic_plug_entries.json";
-  a.click();
-  URL.revokeObjectURL(a.href);
-});
-$("importBtn").addEventListener("click", () => $("importFile").click());
-$("importFile").addEventListener("change", async (e) => {
-  const f = e.target.files[0]; if (!f) return;
-  try {
-    const j = JSON.parse(await f.text());
-    if (j.grades) Object.assign(GRADES, j.grades);
-    if (j.notes)  Object.assign(NOTES, j.notes);
-    try { localStorage.setItem(GRADE_STORE_KEY, JSON.stringify(GRADES)); } catch(_){}
-    saveNotes(); renderAll();
-    alert("Entries imported and merged.");
-  } catch(err) { alert("Could not read that file: " + (err && err.message || err)); }
-  e.target.value = "";
-});
-
-/* ============================ Folder ingest (Chrome / Edge) ============================ */
-const DATE_RE = /(20\d{2})[-_.]?(\d{2})[-_.]?(\d{2})|(\d{2})[-_.](\d{2})[-_.](20\d{2})/;
-function parseDate(s){
-  const m = String(s).match(DATE_RE); if (!m) return null;
-  if (m[1]) return `${m[1]}-${m[2]}-${m[3]}`;
-  return `${m[6]}-${m[5]}-${m[4]}`;
-}
-function parsePos(name){ const m = name.match(/\b(4[CDEF])\b/i) || name.match(/(4[CDEF])/i); return m ? m[1].toUpperCase() : null; }
-function parseGrade(name){
-  const m = name.match(/[_\-\s]([ABCDX])(?=[_\-.\s]|$)/i);   // grade token e.g. 4C_C.jpg
-  return m ? m[1].toUpperCase() : null;
-}
-const IMG_RE = /\.(jpe?g|png|webp|gif|bmp)$/i;
-
-async function scanDirectory(dirHandle){
-  // records keyed by equip|date
-  const recs = new Map();
-  async function walk(handle, path, ctx){
-    for await (const entry of handle.values()){
-      if (entry.kind === "directory"){
-        const nctx = { ...ctx };
-        if (!nctx.equip && /^[A-Za-z]{1,4}\s?\d+/.test(entry.name)) nctx.equip = entry.name.trim().toUpperCase().replace(/\s+/g,"");
-        else if (!nctx.date && parseDate(entry.name)) nctx.date = parseDate(entry.name);
-        else if (!nctx.equip) nctx.equip = entry.name.trim().toUpperCase().replace(/\s+/g,"");
-        await walk(entry, path + "/" + entry.name, nctx);
-      } else if (entry.kind === "file" && IMG_RE.test(entry.name)){
-        const equip = ctx.equip || parseEquipFromName(entry.name) || "UNKNOWN";
-        const date = ctx.date || parseDate(entry.name) || "";
-        const rk = equip + "|" + date;
-        if (!recs.has(rk)) recs.set(rk, { equipment:equip, date, motorHours:null, source:"photo folder", positions:[] });
-        const rec = recs.get(rk);
-        const pos = parsePos(entry.name) || parsePos(path) || nextPos(recs, equip, date);
-        // one card per plug position — if the same position already has a photo
-        // (e.g. a duplicate "_MP" copy), keep the first and skip the rest.
-        if (rec.positions.some(x => x.key === pos)) continue;
-        const grade = parseGrade(entry.name);
-        const file = await entry.getFile();
-        rec.positions.push({
-          key: pos, label: POS_LABELS[pos] || "", grade: grade,
-          particleCount:null, componentHours:null, oilHours:null, comment:null,
-          photo: URL.createObjectURL(file),
-        });
-      }
-    }
-  }
-  await walk(dirHandle, "", {});
-  return recs;
-}
-function parseEquipFromName(name){
-  // equipment token = 1-4 letters + digits, bounded by separators (_ - . space) or ends.
-  // e.g. "TK146_4C_29.07.2026_MP.jpg" -> "TK146"
-  const m = name.match(/(?:^|[_\-.\s])([A-Za-z]{1,4}\d+)(?=[_\-.\s]|$)/);
-  return m ? m[1].toUpperCase() : null;
-}
-function nextPos(recs, equip, date){
-  const rk = equip+"|"+date; const n = recs.has(rk) ? recs.get(rk).positions.length : 0;
-  return HEAT_POSITIONS[n] || ("P"+(n+1));
-}
-function recsToData(recs){
-  const inspections = [...recs.values()];
-  for (const r of inspections) r.positions.sort((a,b)=>(a.key||"").localeCompare(b.key||""));
-  inspections.sort((a,b)=> a.equipment.localeCompare(b.equipment) || (b.date||"").localeCompare(a.date||""));
-  const equipmentList = [...new Set(inspections.map(r=>r.equipment))].sort();
-  return { component:"Magnetic Plug", assetClass:"from photo folder", equipmentList, inspections };
-}
-async function openFolder(){
-  if (!window.showDirectoryPicker){
-    alert("This browser can't open a folder directly.\n\nUse Google Chrome or Microsoft Edge, and open this dashboard file from disk (double-click index.html). Then try again.");
-    return;
-  }
-  try {
-    const dir = await window.showDirectoryPicker({ id:"cm-photos", mode:"read" });
-    $("srcDesc").textContent = "Reading photos…";
-    const recs = await scanDirectory(dir);
-    if (!recs.size){ alert("No photos found. Expected folders like  TK146/2026-10-15/4C.jpg  (or files named TK146_4C_2026-10-15.jpg)."); $("srcDesc").textContent="No photos found."; return; }
-    DATA = recsToData(recs); reindex();
-    $("equipSel").value = ""; renderAll();
-    const n = DATA.inspections.length, u = DATA.equipmentList.length;
-    $("srcPill").textContent = "📂 photo folder";
-    $("srcDesc").innerHTML = `Loaded <b>${dir.name}</b> — ${u} unit(s), ${n} inspection(s). Add a new date folder and click <b>Open photo folder</b> again to refresh.`;
-  } catch(err){
-    if (err && err.name === "AbortError") return;   // user cancelled
-    console.error(err); alert("Could not read that folder: " + (err && err.message || err));
-  }
-}
-$("folderBtn").addEventListener("click", openFolder);
-
-/* ============================ Init ============================ */
-reindex();
-renderAll();
+function renderAll(){ renderKpis(); renderFleet(); renderFailure(); renderActions(); renderHistory(); }
+["fType","fClass","fRange"].forEach(id=>$(id).onchange=renderAll);
+$("equipSel").onchange=renderHistory;
+rebuild(); refreshControls(); renderAll();
 </script>
 </body>
 </html>
