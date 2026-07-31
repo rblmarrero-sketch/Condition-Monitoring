@@ -112,6 +112,10 @@
   .editbar{display:flex;align-items:center;gap:10px;background:color-mix(in srgb,var(--accent) 16%,var(--surface));border:1px solid color-mix(in srgb,var(--accent) 45%,var(--border));border-radius:12px;padding:10px 14px;margin-bottom:10px;font-size:13.5px;}
   .editbar span{flex:1;color:var(--ink);} .linkbtn{background:none;border:none;color:var(--accent);font-weight:700;font-size:14px;cursor:pointer;}
   .hidden{display:none!important;}
+  .dest{border:1px solid var(--border);border-radius:12px;padding:12px 12px 2px;margin-bottom:14px;background:var(--surface-2);}
+  .dest .dhead{display:flex;align-items:center;gap:9px;font-weight:700;font-size:14px;margin-bottom:10px;}
+  .dest .dhead input{width:20px;height:20px;flex:none;accent-color:var(--accent);}
+  .provqr{width:100%;max-width:280px;margin:0 auto;display:block;background:#fff;border-radius:8px;padding:10px;}
   .count-badge{background:var(--accent);color:#fff;border-radius:999px;padding:1px 8px;font-size:12px;margin-left:6px;}
   .count-badge.warn{background:var(--warning);color:#111;} .count-badge.crit{background:var(--critical);}
   /* temperature reading */
@@ -299,7 +303,7 @@
   <div class="syncbar" id="syncBar"></div>
   <button class="btn ghost" id="reportBtn" style="margin-bottom:16px">📄 <span data-i18n="btn_report">PDF report</span></button>
 
-  <div class="ver">build v33 · 2026-07-31 · Google Drive upload · Photo resize · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver">build v34 · 2026-07-31 · Two destinations · QR setup · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <div class="bottombar">
@@ -311,31 +315,72 @@
   <div class="pickhead"><button id="setClose" class="pickback">‹</button>
     <b style="align-self:center" data-i18n="set_title">Upload settings</b></div>
   <div class="picklist">
-    <label class="fld"><span data-i18n="set_mode">Upload mode</span>
-      <select id="upMode">
-        <option value="off" data-i18n="set_off">Off — export manually</option>
-        <option value="gas" data-i18n="set_gas">Google Drive (Apps Script)</option>
-        <option value="pa" data-i18n="set_pa">Power Automate (JSON + base64)</option>
-        <option value="post" data-i18n="set_post">Plain HTTPS POST (multipart)</option>
-      </select></label>
-    <label class="fld"><span data-i18n="set_url">Upload URL</span>
-      <input id="upUrl" type="url" placeholder="https://prod-xx.westeurope.logic.azure.com/workflows/..." autocomplete="off"></label>
-    <label class="fld"><span id="upHdrLbl" data-i18n="set_hdr">Secret header (optional)</span>
-      <input id="upHdr" type="text" placeholder="x-api-key: abc123" autocomplete="off"></label>
+    <div class="hint" style="margin-bottom:14px" data-i18n="set_intro">Turn on one or both destinations. With both on, an inspection only counts as uploaded once every destination has accepted it.</div>
+
+    <div class="dest">
+      <label class="dhead"><input type="checkbox" id="gasOn"><span data-i18n="set_gas">Google Drive (Apps Script)</span></label>
+      <label class="fld"><span data-i18n="set_url">Upload URL</span>
+        <input id="gasUrl" type="url" placeholder="https://script.google.com/macros/s/…/exec" autocomplete="off"></label>
+      <div class="row">
+        <label class="fld"><span data-i18n="set_secret">Shared secret (optional)</span>
+          <input id="gasSec" type="text" autocomplete="off"></label>
+        <label class="fld"><span data-i18n="set_folder">Folder / prefix</span>
+          <input id="gasFolder" type="text" placeholder="{YYYY-MM}" autocomplete="off"></label>
+      </div>
+    </div>
+
+    <div class="dest">
+      <label class="dhead"><input type="checkbox" id="paOn"><span data-i18n="set_pa">SharePoint / OneDrive (Power Automate)</span></label>
+      <label class="fld"><span data-i18n="set_url">Upload URL</span>
+        <input id="paUrl" type="url" placeholder="https://…/triggers/manual/paths/invoke?…&amp;sig=…" autocomplete="off"></label>
+      <div class="row">
+        <label class="fld"><span data-i18n="set_hdr">Secret header (optional)</span>
+          <input id="paHdr" type="text" placeholder="x-api-key: abc123" autocomplete="off"></label>
+        <label class="fld"><span data-i18n="set_folder">Folder / prefix</span>
+          <input id="paFolder" type="text" placeholder="{YYYY-MM}" autocomplete="off"></label>
+      </div>
+    </div>
+
+    <div class="dest">
+      <label class="dhead"><input type="checkbox" id="postOn"><span data-i18n="set_post">Plain HTTPS POST (multipart)</span></label>
+      <label class="fld"><span data-i18n="set_url">Upload URL</span>
+        <input id="postUrl" type="url" autocomplete="off"></label>
+      <div class="row">
+        <label class="fld"><span data-i18n="set_hdr">Secret header (optional)</span>
+          <input id="postHdr" type="text" placeholder="x-api-key: abc123" autocomplete="off"></label>
+        <label class="fld"><span data-i18n="set_folder">Folder / prefix</span>
+          <input id="postFolder" type="text" placeholder="{YYYY-MM}" autocomplete="off"></label>
+      </div>
+    </div>
+
     <label class="fld"><span data-i18n="set_px">Photo size on upload</span>
       <select id="upPx">
         <option value="0" data-i18n="set_px_full">Original — full detail (slowest)</option>
         <option value="2000" data-i18n="set_px_2000">Large — 2000 px</option>
         <option value="1600" data-i18n="set_px_1600">Medium — 1600 px (much smaller, fastest)</option>
       </select></label>
-    <label class="fld"><span data-i18n="set_folder">Folder / prefix (optional)</span>
-      <input id="upFolder" type="text" placeholder="{YYYY-MM}" autocomplete="off"></label>
+
     <div class="row" style="gap:10px">
       <button class="btn ghost" id="testUp" data-i18n="set_test">Test connection</button>
       <button class="btn primary" id="saveSet" data-i18n="set_save">Save</button>
     </div>
     <div class="hint" id="setMsg" style="margin-top:12px"></div>
-    <div class="hint" style="margin-top:18px" id="setHelp" data-i18n="set_help">Power Automate: create a flow with the trigger “When an HTTP request is received”, add “Create file” (SharePoint) using name = triggerBody()?['name'] and content = base64ToBinary(triggerBody()?['file']), then copy the generated URL here.</div>
+
+    <div class="dest" style="margin-top:18px">
+      <div class="dhead"><span data-i18n="set_prov">Set up the other phones</span></div>
+      <div class="hint" data-i18n="set_prov_hint">Configure this phone once, then show the code to the next phone and tap Scan setup there. Nothing to type.</div>
+      <div class="row" style="gap:10px;margin-top:10px">
+        <button class="btn ghost" id="provShow">🔳 <span data-i18n="btn_prov_show">Show setup code</span></button>
+        <button class="btn ghost" id="provScan">📷 <span data-i18n="btn_prov_scan">Scan setup</span></button>
+      </div>
+      <div id="provBox" class="hidden" style="margin-top:12px">
+        <canvas id="provQR" class="provqr"></canvas>
+        <div class="row" style="gap:10px;margin-top:10px">
+          <button class="btn ghost" id="provCopy" data-i18n="btn_prov_copy">Copy setup link</button>
+        </div>
+        <div class="hint" style="margin-top:8px" data-i18n="set_prov_warn">⚠ This code and link contain your upload credentials. Share them on internal channels only.</div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -358,6 +403,7 @@
 </div>
 
 <script src="jsQR.js"></script>
+<script src="qrcode.js"></script>
 <script src="taxonomy.js"></script>
 <script src="taxonomy2.js"></script>
 <script src="assets.js"></script>
@@ -512,6 +558,14 @@ const I18N = {
     set_secret:"Shared secret (optional)",
     set_px:"Photo size on upload", set_px_full:"Original — full detail (slowest)",
     set_px_2000:"Large — 2000 px", set_px_1600:"Medium — 1600 px (much smaller, fastest)",
+    set_intro:"Turn on one or both destinations. With both on, an inspection only counts as uploaded once every destination has accepted it.",
+    set_prov:"Set up the other phones",
+    set_prov_hint:"Configure this phone once, then show the code to the next phone and tap Scan setup there. Nothing to type.",
+    set_prov_warn:"⚠ This code and link contain your upload credentials. Share them on internal channels only.",
+    btn_prov_show:"Show setup code", btn_prov_scan:"Scan setup", btn_prov_copy:"Copy setup link",
+    set_copied:"Setup link copied.",
+    m_cfg_ok:["Settings applied ✔","This phone is now pointed at the same destinations. Capture as usual."],
+    m_cfg_bad:["Setup code not recognised","Ask the other phone to tap “Show setup code” again, and scan the whole square."],
     set_help_gas:"Google Drive: open script.google.com, paste docs/google-upload.gs, set ROOT_FOLDER_ID to your Drive folder, then Deploy → Web app with Execute as “Me” and Who has access “Anyone”. Copy the /exec URL here. Re-deploy a NEW VERSION after every edit or the old code keeps running.",
     set_url:"Upload URL", set_hdr:"Secret header (optional)", set_folder:"Folder / prefix — {YYYY-MM} rolls monthly",
     set_test:"Test connection", set_save:"Save", set_testing:"Testing…", set_ok:"Connected — test file uploaded.",
@@ -584,6 +638,14 @@ const I18N = {
     set_secret:"Общий секрет (необяз.)",
     set_px:"Размер фото при отправке", set_px_full:"Оригинал — полная детализация (медленнее всего)",
     set_px_2000:"Крупный — 2000 px", set_px_1600:"Средний — 1600 px (намного меньше, быстрее всего)",
+    set_intro:"Включите один или оба адресата. Если включены оба, осмотр считается отправленным только после подтверждения от каждого.",
+    set_prov:"Настроить остальные телефоны",
+    set_prov_hint:"Настройте один телефон, затем покажите код следующему и нажмите там «Сканировать настройки». Ничего вводить не нужно.",
+    set_prov_warn:"⚠ Код и ссылка содержат ваши учётные данные для загрузки. Передавайте только по внутренним каналам.",
+    btn_prov_show:"Показать код настроек", btn_prov_scan:"Сканировать настройки", btn_prov_copy:"Копировать ссылку",
+    set_copied:"Ссылка скопирована.",
+    m_cfg_ok:["Настройки применены ✔","Телефон настроен на те же адресаты. Работайте как обычно."],
+    m_cfg_bad:["Код не распознан","Попросите показать код настроек ещё раз и снимите весь квадрат целиком."],
     set_help_gas:"Google Диск: откройте script.google.com, вставьте docs/google-upload.gs, укажите ROOT_FOLDER_ID вашей папки Диска, затем Deploy → Web app: «Execute as: Me», «Who has access: Anyone». Скопируйте URL /exec сюда. После каждой правки развёртывайте НОВУЮ ВЕРСИЮ, иначе работает старый код.",
     set_url:"URL отправки", set_hdr:"Секретный заголовок (необяз.)", set_folder:"Папка / префикс — {YYYY-MM} по месяцам",
     set_test:"Проверить соединение", set_save:"Сохранить", set_testing:"Проверка…", set_ok:"Успешно — тестовый файл отправлен.",
@@ -1428,21 +1490,35 @@ function crc32(buf){ let c=0xFFFFFFFF; for(let i=0;i<buf.length;i++) c=CRC_TABLE
 
 /* ===================== QR scan ===================== */
 const qrCanvas=$("qrCanvas"); const qctx=qrCanvas.getContext("2d",{willReadFrequently:true}); let scanStream=null, scanRAF=null;
+let scanMode="unit";                       // "unit" = truck number, "cfg" = settings hand-off
+function onScanned(text){
+  if(scanMode==="cfg"){
+    const m=String(text).match(/[?&]cfg=([^&\s]+)/);
+    const ok=m ? applyCfg(m[1]) : false;
+    stopScan(); scanMode="unit";
+    if(ok){ destsToForm(loadDests()); $("upPx").value=localStorage.getItem("up_px")||"0"; renderSync(); syncNow(); }
+    dlg(t(ok?"m_cfg_ok":"m_cfg_bad"));
+    return true;
+  }
+  const u=extractUnit(text); if(!u) return false;
+  selectEquip(u); stopScan(); return true;
+}
 function extractUnit(text){ if(!text) return null; const m=String(text).match(/([A-Za-z]{1,4}\s?\d+)/); return m?m[1].toUpperCase().replace(/\s+/g,""):String(text).trim().toUpperCase(); }
 async function startScan(){ if(!window.jsQR){ dlg(t("m_scan_wait")); return; }
   try{ scanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:"environment"}}}); }catch(e){ $("qrPhoto").click(); return; }
   const v=$("scanVideo"); v.srcObject=scanStream; await v.play(); $("scanOverlay").classList.remove("hidden");
   const tick=()=>{ if(v.readyState>=2){ qrCanvas.width=v.videoWidth; qrCanvas.height=v.videoHeight; qctx.drawImage(v,0,0,qrCanvas.width,qrCanvas.height);
       const img=qctx.getImageData(0,0,qrCanvas.width,qrCanvas.height); const code=window.jsQR(img.data,img.width,img.height,{inversionAttempts:"dontInvert"});
-      if(code&&code.data){ const u=extractUnit(code.data); if(u){ selectEquip(u); stopScan(); return; } } }
+      if(code&&code.data){ if(onScanned(code.data)) return; } }
     scanRAF=requestAnimationFrame(tick); }; scanRAF=requestAnimationFrame(tick); }
 function stopScan(){ if(scanRAF)cancelAnimationFrame(scanRAF); scanRAF=null; if(scanStream){ scanStream.getTracks().forEach(t=>t.stop()); scanStream=null; } $("scanVideo").srcObject=null; $("scanOverlay").classList.add("hidden"); }
-$("scanBtn").onclick=startScan; $("scanCancel").onclick=stopScan;
+$("scanBtn").onclick=()=>{ scanMode="unit"; startScan(); };
+$("scanCancel").onclick=()=>{ scanMode="unit"; stopScan(); };
 $("qrPhoto").onchange=async (e)=>{ const f=e.target.files[0]; e.target.value=""; if(!f) return;
   const img=await new Promise((res,rej)=>{ const i=new Image(); i.onload=()=>res(i); i.onerror=rej; i.src=URL.createObjectURL(f); });
   qrCanvas.width=img.width; qrCanvas.height=img.height; qctx.drawImage(img,0,0);
   const id=qctx.getImageData(0,0,img.width,img.height); const code=window.jsQR && window.jsQR(id.data,id.width,id.height);
-  if(code&&code.data){ selectEquip(extractUnit(code.data)); } else dlg(t("m_no_qr")); };
+  if(code&&code.data){ onScanned(code.data); } else dlg(t("m_no_qr")); };
 
 /* ===================== dictation ===================== */
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
@@ -1475,10 +1551,25 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
    A record is marked up:1 only after the server confirms every one of its files.
    iOS cannot upload in the background: sync runs whenever the app is open + online.
 ============================================================================= */
-const UP={ get mode(){return localStorage.getItem("up_mode")||"off";},
-  get url(){return localStorage.getItem("up_url")||"";},
-  get hdr(){return localStorage.getItem("up_hdr")||"";},
-  get folder(){return expandFolder(localStorage.getItem("up_folder")||"");} };
+/* Destinations are stored as one JSON list so Google Drive and SharePoint can both
+   be on at once. A record is only marked uploaded when EVERY enabled destination
+   has accepted every one of its files. */
+const DEST_META={ gas:{label:"Google Drive"}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
+const DEST_IDS=["gas","pa","post"];
+function loadDests(){
+  let d=null; try{ d=JSON.parse(localStorage.getItem("up_dests")||"null"); }catch(e){}
+  if(!Array.isArray(d)){
+    // one-time migration from the single-mode settings
+    const m=localStorage.getItem("up_mode")||"off";
+    d=DEST_IDS.map(id=>({id, on:id===m, url:id===m?(localStorage.getItem("up_url")||""):"",
+      sec:id===m?(localStorage.getItem("up_hdr")||""):"", folder:localStorage.getItem("up_folder")||""}));
+    localStorage.setItem("up_dests",JSON.stringify(d));
+  }
+  return DEST_IDS.map(id=>Object.assign({id,on:false,url:"",sec:"",folder:""}, d.find(x=>x.id===id)||{}));
+}
+function saveDests(d){ localStorage.setItem("up_dests",JSON.stringify(d)); }
+function activeDests(){ return loadDests().filter(d=>d.on && d.url); }
+const UP={ get on(){ return activeDests().length>0; } };
 // Folder placeholders so the destination rolls over on its own:
 //   {YYYY} {MM} {DD} {YYYY-MM}  e.g. "{YYYY-MM}" -> "2026-07"
 function expandFolder(f){ if(!f) return "";
@@ -1487,7 +1578,7 @@ function expandFolder(f){ if(!f) return "";
           .replace(/\{YYYY\}/g,String(d.getFullYear()))
           .replace(/\{MM\}/g,p(d.getMonth()+1))
           .replace(/\{DD\}/g,p(d.getDate())); }
-function upHeaders(extra){ const h=Object.assign({},extra||{}); const raw=UP.hdr;
+function upHeaders(raw,extra){ const h=Object.assign({},extra||{});
   if(raw && raw.indexOf(":")>0){ const i=raw.indexOf(":"); h[raw.slice(0,i).trim()]=raw.slice(i+1).trim(); }
   return h; }
 function blobToB64(b){ return new Promise((res,rej)=>{ const r=new FileReader();
@@ -1510,13 +1601,24 @@ async function maybeShrink(blob,name){
   try{ return await shrinkImage(blob,max); }catch(e){ return blob; }   // never block the upload
 }
 async function putFile(name, blob, type){
-  if(UP.mode==="off" || !UP.url) throw new Error("upload not configured");
+  const dests=activeDests();
+  if(!dests.length) throw new Error("upload not configured");
   blob=await maybeShrink(blob,name);
-  if(UP.mode==="gas"){
+  const errs=[];
+  for(const d of dests){
+    try{ await putOne(d,name,blob,type); }
+    catch(e){ errs.push(DEST_META[d.id].label+": "+(e.message||e)); }
+  }
+  if(errs.length) throw new Error(errs.join(" · "));
+  return true;
+}
+async function putOne(UP, name, blob, type){
+  const folder=expandFolder(UP.folder||"");
+  if(UP.id==="gas"){
     // Apps Script web apps cannot answer a CORS preflight, so this must stay a
     // "simple" request: text/plain body, no custom headers, secret inside the JSON.
-    const body={ name, folder:UP.folder||"", contentType:type||blob.type||"application/octet-stream",
-                 file: await blobToB64(blob), secret: UP.hdr||"" };
+    const body={ name, folder, contentType:type||blob.type||"application/octet-stream",
+                 file: await blobToB64(blob), secret: UP.sec||"" };
     const r=await fetch(UP.url,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
                                 body:JSON.stringify(body)});
     if(!r.ok) throw new Error(await httpErr(r));
@@ -1525,14 +1627,14 @@ async function putFile(name, blob, type){
     if(!j) throw new Error("Unexpected reply — check the deployment is set to “Anyone”.");
     return true;
   }
-  if(UP.mode==="pa"){
-    const body={ name, folder:UP.folder||"", contentType:type||blob.type||"application/octet-stream",
+  if(UP.id==="pa"){
+    const body={ name, folder, contentType:type||blob.type||"application/octet-stream",
                  file: await blobToB64(blob) };
-    const r=await fetch(UP.url,{method:"POST",headers:upHeaders({"Content-Type":"application/json"}),body:JSON.stringify(body)});
+    const r=await fetch(UP.url,{method:"POST",headers:upHeaders(UP.sec,{"Content-Type":"application/json"}),body:JSON.stringify(body)});
     if(!r.ok) throw new Error(await httpErr(r)); return true;
   }
-  const fd=new FormData(); fd.append("file",blob,name); fd.append("name",name); fd.append("folder",UP.folder||"");
-  const r=await fetch(UP.url,{method:"POST",headers:upHeaders(),body:fd});
+  const fd=new FormData(); fd.append("file",blob,name); fd.append("name",name); fd.append("folder",folder);
+  const r=await fetch(UP.url,{method:"POST",headers:upHeaders(UP.sec),body:fd});
   if(!r.ok) throw new Error(await httpErr(r)); return true;
 }
 // surface the server's own error text (Power Automate explains 400s in the body)
@@ -1558,7 +1660,7 @@ async function filesForRecord(rec){
 }
 let syncing=false, lastErr="";
 async function syncNow(manual){
-  if(syncing) return; if(UP.mode==="off"||!UP.url){ renderSync(); return; }
+  if(syncing) return; if(!UP.on){ renderSync(); return; }
   if(!navigator.onLine){ renderSync(); return; }
   syncing=true; lastErr=""; renderSync();
   try{
@@ -1588,7 +1690,7 @@ function recToExport(rec){
 }
 async function renderSync(){
   const bar=$("syncBar"); if(!bar) return;
-  if(UP.mode==="off"||!UP.url){ bar.className="syncbar"; bar.innerHTML=`<span class="dot"></span><span class="sp">${t("sync_off")}</span>
+  if(!UP.on){ bar.className="syncbar"; bar.innerHTML=`<span class="dot"></span><span class="sp">${t("sync_off")}</span>
     <button id="syncSet">${t("sync_setup")}</button>`; const b=$("syncSet"); if(b)b.onclick=openSettings; return; }
   const all=await dbAll(); const pend=all.filter(r=>!r.up).length;
   let cls="syncbar", txt;
@@ -1602,33 +1704,76 @@ async function renderSync(){
   const g=$("syncGo"); if(g)g.onclick=()=>syncNow(true);
   const st=$("syncSet"); if(st)st.onclick=openSettings;
 }
-/* settings sheet */
-function openSettings(){ $("upMode").value=UP.mode; $("upUrl").value=UP.url; $("upHdr").value=UP.hdr;
-  $("upFolder").value=UP.folder; $("upPx").value=localStorage.getItem("up_px")||"0";
-  $("setMsg").textContent=""; syncModeHints(); $("setOv").classList.remove("hidden"); }
-// The "secret" field means different things per mode: a header for a plain server,
-// a body field for Apps Script, and nothing at all for Power Automate.
-function syncModeHints(){ const m=$("upMode").value;
-  $("upHdrLbl").textContent = m==="gas" ? t("set_secret") : t("set_hdr");
-  $("upHdr").placeholder = m==="gas" ? "" : "x-api-key: abc123";
-  $("upUrl").placeholder = m==="gas" ? "https://script.google.com/macros/s/…/exec"
-                                     : "https://prod-xx.westeurope.logic.azure.com/workflows/...";
-  $("setHelp").textContent = m==="gas" ? t("set_help_gas") : t("set_help"); }
-$("upMode").onchange=syncModeHints;
+/* settings sheet — one block per destination */
+function formToDests(){ return DEST_IDS.map(id=>({ id,
+  on: $(id+"On").checked,
+  url: $(id+"Url").value.trim(),
+  sec: $(id+(id==="gas"?"Sec":"Hdr")).value.trim(),
+  folder: $(id+"Folder").value.trim() })); }
+function destsToForm(d){ d.forEach(x=>{
+  $(x.id+"On").checked=!!x.on; $(x.id+"Url").value=x.url||"";
+  $(x.id+(x.id==="gas"?"Sec":"Hdr")).value=x.sec||""; $(x.id+"Folder").value=x.folder||""; }); }
+function openSettings(){ destsToForm(loadDests()); $("upPx").value=localStorage.getItem("up_px")||"0";
+  $("setMsg").textContent=""; $("provBox").classList.add("hidden"); $("setOv").classList.remove("hidden"); }
+function persistSettings(){ saveDests(formToDests()); localStorage.setItem("up_px",$("upPx").value); }
 $("setBtn").onclick=openSettings;
 $("setClose").onclick=()=>$("setOv").classList.add("hidden");
-$("saveSet").onclick=()=>{ localStorage.setItem("up_mode",$("upMode").value); localStorage.setItem("up_px",$("upPx").value);
-  localStorage.setItem("up_url",$("upUrl").value.trim()); localStorage.setItem("up_hdr",$("upHdr").value.trim());
-  localStorage.setItem("up_folder",$("upFolder").value.trim());
-  $("setOv").classList.add("hidden"); renderSync(); syncNow(); };
-$("testUp").onclick=async ()=>{ const m=$("setMsg"); m.textContent=t("set_testing");
-  const mode=$("upMode").value, url=$("upUrl").value.trim();
-  if(mode==="off"||!url){ m.textContent=t("set_needurl"); return; }
-  localStorage.setItem("up_mode",mode); localStorage.setItem("up_url",url);
-  localStorage.setItem("up_hdr",$("upHdr").value.trim()); localStorage.setItem("up_folder",$("upFolder").value.trim());
-  localStorage.setItem("up_px",$("upPx").value);
-  try{ await putFile("connection_test.txt",new Blob(["Condition Monitoring upload test "+new Date().toISOString()],{type:"text/plain"}),"text/plain");
-    m.textContent="✅ "+t("set_ok"); }catch(e){ m.textContent="❌ "+String(e.message||e); } };
+$("saveSet").onclick=()=>{ persistSettings(); $("setOv").classList.add("hidden"); renderSync(); syncNow(); };
+$("testUp").onclick=async ()=>{ const m=$("setMsg");
+  persistSettings();
+  const on=activeDests();
+  if(!on.length){ m.textContent=t("set_needurl"); return; }
+  m.textContent=t("set_testing");
+  const blob=new Blob(["Condition Monitoring upload test "+new Date().toISOString()],{type:"text/plain"});
+  const out=[];
+  for(const d of on){
+    try{ await putOne(d,"connection_test.txt",blob,"text/plain"); out.push("✅ "+DEST_META[d.id].label); }
+    catch(e){ out.push("❌ "+DEST_META[d.id].label+" — "+String(e.message||e)); }
+  }
+  m.textContent=out.join("\n"); };
+
+/* ===================== provisioning: QR / link =====================
+   Typing a 250-character flow URL into six phones is where this falls over, so a
+   configured phone can hand its settings to the next one. The payload carries
+   upload credentials — it is never committed to the repo, only shown on screen. */
+function cfgPayload(){
+  return btoa(unescape(encodeURIComponent(JSON.stringify({
+    v:1, px:$("upPx").value, dests:formToDests().filter(d=>d.url)
+  })))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+}
+function cfgLink(){ return location.origin+location.pathname+"?cfg="+cfgPayload(); }
+function applyCfg(b64){
+  try{
+    const j=JSON.parse(decodeURIComponent(escape(atob(String(b64).replace(/-/g,"+").replace(/_/g,"/")))));
+    if(!j || j.v!==1 || !Array.isArray(j.dests)) return false;
+    saveDests(DEST_IDS.map(id=>Object.assign({id,on:false,url:"",sec:"",folder:""}, j.dests.find(x=>x.id===id)||{})));
+    if(j.px!=null) localStorage.setItem("up_px",String(j.px));
+    return true;
+  }catch(e){ return false; }
+}
+function drawQR(text){
+  const q=qrcode(0,"L"); q.addData(text); q.make();
+  const n=q.getModuleCount(), c=$("provQR"), px=Math.max(2,Math.floor(260/n)), pad=4*px;
+  c.width=c.height=n*px+pad*2;
+  const x=c.getContext("2d");
+  x.fillStyle="#fff"; x.fillRect(0,0,c.width,c.height); x.fillStyle="#000";
+  for(let r=0;r<n;r++) for(let col=0;col<n;col++) if(q.isDark(r,col)) x.fillRect(pad+col*px,pad+r*px,px,px);
+}
+$("provShow").onclick=()=>{
+  persistSettings();
+  if(!formToDests().some(d=>d.url)){ $("setMsg").textContent=t("set_needurl"); return; }
+  if(!window.qrcode){ dlg(t("m_scan_wait")); return; }
+  drawQR(cfgLink()); $("provBox").classList.remove("hidden"); };
+$("provCopy").onclick=async ()=>{
+  try{ await navigator.clipboard.writeText(cfgLink()); $("setMsg").textContent=t("set_copied"); }
+  catch(e){ $("setMsg").textContent=cfgLink(); } };
+$("provScan").onclick=()=>{ scanMode="cfg"; startScan(); };
+// A phone opened with ?cfg=… configures itself, then drops the query so the
+// credentials do not sit in the address bar.
+(function(){ const m=location.search.match(/[?&]cfg=([^&]+)/); if(!m) return;
+  const ok=applyCfg(m[1]);
+  history.replaceState(null,"",location.pathname);
+  setTimeout(()=>dlg(t(ok?"m_cfg_ok":"m_cfg_bad")),400); })();
 addEventListener("online",()=>syncNow());
 
 /* ===================== connectivity + SW ===================== */

@@ -78,18 +78,41 @@ If you see `ok:false`, the `ROOT_FOLDER_ID` is wrong or the folder isn't yours.
 
 ## 5. Point the app at it
 
-On the phone, open the app → **⚙** (top right):
+On the phone, open the app → **⚙** (top right) and fill in the **Google Drive (Apps
+Script)** block:
 
 | Field | Value |
 |---|---|
-| **Upload mode** | `Google Drive (Apps Script)` |
+| **(tick the box)** | turns the destination on |
 | **Upload URL** | the `/exec` URL |
 | **Shared secret** | the `SECRET` value, or leave empty if you left it `''` |
 | **Folder / prefix** | `{YYYY-MM}` — rolls into a new sub-folder each month |
 | **Photo size on upload** | see below |
 
-Tap **Test connection** → *"✅ Connected — test file uploaded."* and a
-`connection_test.txt` appears in Drive. Then **Save**.
+Tap **Test connection** → *"✅ Google Drive"* and a `connection_test.txt` appears in
+Drive. Then **Save**.
+
+### Both destinations at once
+
+Google Drive and SharePoint each have their own block and their own tick box, so you can
+run both — Drive for speed, SharePoint as the system of record. With both on, an
+inspection is only marked uploaded once **every** enabled destination has accepted every
+one of its files; if one fails, the record stays pending and retries. Each destination
+keeps its own folder prefix.
+
+### Setting up the other phones — don't type the URL again
+
+A flow URL is ~250 characters and one wrong character gives a confusing failure. Instead:
+
+1. On the configured phone: **⚙ → Show setup code**
+2. On the next phone: **⚙ → Scan setup**, point it at the square
+
+That phone is now pointed at the same destinations, with the same folder prefix and photo
+size. **Copy setup link** does the same over Teams/WhatsApp — opening the link configures
+the phone and then strips it from the address bar.
+
+> ⚠️ The code and the link **contain your upload credentials**. Internal channels only,
+> and re-provision if a phone leaves the company (see Security notes).
 
 ---
 

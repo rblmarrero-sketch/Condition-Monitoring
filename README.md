@@ -368,6 +368,18 @@ Failed uploads are retried; nothing is deleted from the phone until the server c
 * **SharePoint:** **[docs/AUTO_UPLOAD_SETUP.md](docs/AUTO_UPLOAD_SETUP.md)** — Power
   Automate flow into a document library.
 
+### Setting up more than one phone
+
+Upload settings are stored per device (browser `localStorage`), so each phone needs
+configuring once — but not by typing. Configure one, then **⚙ → Show setup code** and
+**⚙ → Scan setup** on the next phone, or **Copy setup link** and send it. Google Drive and
+SharePoint can both be enabled at the same time; a record is only marked uploaded when
+every enabled destination has taken every file.
+
+The setup code and link carry the upload credentials, so keep them on internal channels.
+They are never stored in this repository — the published site is world-readable, so
+baking a write credential into it would hand the destination to anyone who views source.
+
 ### Upload speed
 
 **Photo size on upload** (⚙ in the app) is the biggest lever, whichever route you use:
