@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Truck Inspection — Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=40">
+<link rel="manifest" href="manifest.webmanifest?v=41">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -282,7 +282,8 @@
     <button class="btn ghost" id="signClear" style="margin-top:8px">✕ <span data-i18n="btn_sign_clear">Clear signature</span></button>
   </div>
 
-  <div id="editBanner" class="editbar hidden"><span id="editBannerText"></span><button type="button" id="cancelEdit" class="linkbtn"></button></div>
+  <div id="dataWarn" class="editbar hidden" style="background:color-mix(in srgb,var(--critical) 16%,var(--surface));border-color:color-mix(in srgb,var(--critical) 45%,var(--border))"><span id="dataWarnText"></span><button type="button" id="dataWarnFix" class="linkbtn">⟳</button></div>
+<div id="editBanner" class="editbar hidden"><span id="editBannerText"></span><button type="button" id="cancelEdit" class="linkbtn"></button></div>
   <button class="btn primary" id="saveBtn" style="margin-bottom:16px">✔ Save</button>
 
   <div class="card">
@@ -316,7 +317,7 @@
   <div class="syncbar" id="syncBar"></div>
   <button class="btn ghost" id="reportBtn" style="margin-bottom:16px">📄 <span data-i18n="btn_report">PDF report</span></button>
 
-  <div class="ver">build v40 · 2026-07-31 · Cache-busted assets · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver">build v41 · 2026-07-31 · Offline-first ·  <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <div class="bottombar">
@@ -419,16 +420,16 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="jsQR.js?v=40"></script>
-<script src="qrcode.js?v=40"></script>
-<script src="upload-defaults.js?v=40"></script>
-<script src="taxonomy.js?v=40"></script>
-<script src="taxonomy2.js?v=40"></script>
-<script src="assets.js?v=40"></script>
-<script src="components.js?v=40"></script>
-<script src="temp-limits.js?v=40"></script>
-<script src="jspdf.umd.min.js?v=40"></script>
-<script src="html2canvas.min.js?v=40"></script>
+<script src="jsQR.js?v=41"></script>
+<script src="qrcode.js?v=41"></script>
+<script src="upload-defaults.js?v=41"></script>
+<script src="taxonomy.js?v=41"></script>
+<script src="taxonomy2.js?v=41"></script>
+<script src="assets.js?v=41"></script>
+<script src="components.js?v=41"></script>
+<script src="temp-limits.js?v=41"></script>
+<script src="jspdf.umd.min.js?v=41"></script>
+<script src="html2canvas.min.js?v=41"></script>
 <script>
 /* ============================================================================
    EQUIPMENT CLASSES & INSPECTION TYPES  —  EDIT here for your fleet.
@@ -586,6 +587,7 @@ const I18N = {
     btn_prov_show:"Show setup code", btn_prov_scan:"Scan setup", btn_prov_copy:"Copy setup link",
     set_copied:"Setup link copied.",
     m_cfg_ok:["Settings applied ✔","This phone is now pointed at the same destinations. Capture as usual."],
+    m_data_missing:"Some data did not load ({x}) — lists will be incomplete. Tap ⟳ while online.",
     m_cfg_bad:["Setup code not recognised","Ask the other phone to tap “Show setup code” again, and scan the whole square."],
     set_help_gas:"Google Drive: open script.google.com, paste docs/google-upload.gs, set ROOT_FOLDER_ID to your Drive folder, then Deploy → Web app with Execute as “Me” and Who has access “Anyone”. Copy the /exec URL here. Re-deploy a NEW VERSION after every edit or the old code keeps running.",
     set_url:"Upload URL", set_hdr:"Secret header (optional)", set_folder:"Folder / prefix — {YYYY-MM} rolls monthly",
@@ -597,7 +599,7 @@ const I18N = {
     lbl_action:"Recommended action", lbl_wo:"1C notification / WO no. (optional)", opt_action_none:"— not set —",
     m_need_inspector:["Add the inspector","Enter who carried out the inspection first."],
     opt_none:"— none / OK —", opt_cause_tbd:"— to be confirmed —", opt_cause_pick:"Select a defect first",
-    opt_all_equip:"All equipment", opt_pick_unit:"Tap to choose a unit…", opt_use:"Use", opt_pick_item:"Choose component…", opt_show_all:"⋯ show all failure modes",
+    opt_all_equip:"All equipment", opt_pick_unit:"Tap to choose a unit…", opt_use:"Use", opt_add_unit:"Type a unit number to add one not in the register", opt_pick_item:"Choose component…", opt_show_all:"⋯ show all failure modes",
     need_unit:"Choose the unit first — its real components will load here.", nav_systems:"Systems", nav_whole:"Inspect whole", nav_choose:"Choose a component to inspect ↑", opt_search_all:"Search all components",
     lbl_date:"Date", lbl_smu:"SMU / machine hrs", ph_smu:"e.g. 6018",
     btn_take:"Add photo", btn_video:"Video", btn_retake:"Retake",
@@ -669,6 +671,7 @@ const I18N = {
     btn_prov_show:"Показать код настроек", btn_prov_scan:"Сканировать настройки", btn_prov_copy:"Копировать ссылку",
     set_copied:"Ссылка скопирована.",
     m_cfg_ok:["Настройки применены ✔","Телефон настроен на те же адресаты. Работайте как обычно."],
+    m_data_missing:"Часть данных не загрузилась ({x}) — списки будут неполными. Нажмите ⟳ при интернете.",
     m_cfg_bad:["Код не распознан","Попросите показать код настроек ещё раз и снимите весь квадрат целиком."],
     set_help_gas:"Google Диск: откройте script.google.com, вставьте docs/google-upload.gs, укажите ROOT_FOLDER_ID вашей папки Диска, затем Deploy → Web app: «Execute as: Me», «Who has access: Anyone». Скопируйте URL /exec сюда. После каждой правки развёртывайте НОВУЮ ВЕРСИЮ, иначе работает старый код.",
     set_url:"URL отправки", set_hdr:"Секретный заголовок (необяз.)", set_folder:"Папка / префикс — {YYYY-MM} по месяцам",
@@ -680,7 +683,7 @@ const I18N = {
     lbl_action:"Рекомендуемое действие", lbl_wo:"Уведомление / № заказа 1С (необяз.)", opt_action_none:"— не задано —",
     m_need_inspector:["Укажите исполнителя","Сначала укажите, кто выполнил осмотр."],
     opt_none:"— нет / норма —", opt_cause_tbd:"— уточнить —", opt_cause_pick:"Сначала выберите дефект",
-    opt_all_equip:"Всё оборудование", opt_pick_unit:"Нажмите, чтобы выбрать ед. техники…", opt_use:"Использовать", opt_pick_item:"Выбрать узел…", opt_show_all:"⋯ показать все виды отказов",
+    opt_all_equip:"Всё оборудование", opt_pick_unit:"Нажмите, чтобы выбрать ед. техники…", opt_use:"Использовать", opt_add_unit:"Введите номер, чтобы добавить технику вне реестра", opt_pick_item:"Выбрать узел…", opt_show_all:"⋯ показать все виды отказов",
     need_unit:"Сначала выберите единицу техники — её узлы загрузятся здесь.", nav_systems:"Системы", nav_whole:"Осмотреть узел целиком", nav_choose:"Выберите узел для осмотра ↑", opt_search_all:"Поиск по всем узлам",
     lbl_date:"Дата", lbl_smu:"Моточасы (SMU)", ph_smu:"напр. 6018",
     btn_take:"Добавить фото", btn_video:"Видео", btn_retake:"Переснять",
@@ -872,15 +875,25 @@ function items(){ const tr=currentTree(); if(tr) return flattenTree(tr);
   return CLASSES[eqClass][type].map(e=> typeof e==="string" ? {k:e, en:COMP[e].en, ru:COMP[e].ru} : e); }
 function itemLabel(k){ const it=items().find(i=>i.k===k); return it?(it[lang]||it.en):k; }
 let draft={positions:{}}; let curItem=items()[0].k;
-function curP(){ return (draft.positions[curItem] ||= {}); }
+function curP(){ return (draft.positions[curItem] ||= {}); }   // WRITE path: creates the entry
+// READ path. curP() here would create an empty entry, and every "has data" check
+// treats any entry as captured — so merely looking at a component marked it done.
+function posRO(){ return draft.positions[curItem]||{}; }
 
 /* ===================== IndexedDB ===================== */
 const DB_NAME="plug_capture", STORE="inspections";
-function idb(){ return new Promise((res,rej)=>{ const r=indexedDB.open(DB_NAME,1);
+// One connection, opened once and reused. Opening per operation left a growing
+// pile of open handles and blocked any future version upgrade.
+let dbConn=null;
+function idb(){ return dbConn ||= new Promise((res,rej)=>{ const r=indexedDB.open(DB_NAME,1);
   r.onupgradeneeded=()=>{ if(!r.result.objectStoreNames.contains(STORE)) r.result.createObjectStore(STORE,{keyPath:"id"}); };
-  r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error); }); }
-async function dbPut(rec){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); t.objectStore(STORE).put(rec); t.oncomplete=res; t.onerror=()=>rej(t.error); }); }
+  r.onsuccess=()=>{ r.result.onclose=()=>{ dbConn=null; };          // reopen if the browser drops it
+    r.result.onversionchange=()=>{ try{r.result.close();}catch(_){ } dbConn=null; };
+    res(r.result); };
+  r.onerror=()=>{ dbConn=null; rej(r.error); }; }); }
+async function dbPut(rec){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); t.objectStore(STORE).put(rec); t.oncomplete=res; t.onerror=()=>rej(t.error); t.onabort=()=>rej(t.error||new Error("save aborted — storage may be full")); }); }
 async function dbAll(){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readonly"); const rq=t.objectStore(STORE).getAll(); rq.onsuccess=()=>res(rq.result||[]); rq.onerror=()=>rej(rq.error); }); }
+async function dbGet(id){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readonly"); const rq=t.objectStore(STORE).get(id); rq.onsuccess=()=>res(rq.result||null); rq.onerror=()=>rej(rq.error); }); }
 async function dbDel(id){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); t.objectStore(STORE).delete(id); t.oncomplete=res; t.onerror=()=>rej(t.error); }); }
 
 /* ===================== class + type + component chips ===================== */
@@ -962,7 +975,7 @@ function applyForm(){ $("secPosTitle").textContent=TYPE_META[type].title[lang]||
 
 /* ===================== media: up to 4 photos + 1 video (<=60s) ===================== */
 const MAX_PHOTOS=4, MAX_VIDEO_SEC=60;
-$("takeBtn").onclick=()=>{ if((curP().photos||[]).length>=MAX_PHOTOS){ return; } $("camera").click(); };
+$("takeBtn").onclick=()=>{ if((posRO().photos||[]).length>=MAX_PHOTOS){ return; } $("camera").click(); };
 $("videoBtn").onclick=()=>$("video").click();
 $("camera").onchange=(e)=>{ const f=e.target.files[0]; e.target.value=""; if(!f) return;
   const p=curP(); (p.photos ||= []); if(p.photos.length<MAX_PHOTOS) p.photos.push(f); renderMedia(); renderChips(); };
@@ -972,9 +985,17 @@ $("video").onchange=(e)=>{ const f=e.target.files[0]; e.target.value=""; if(!f) 
     else { curP().video=f; renderMedia(); renderChips(); } URL.revokeObjectURL(v.src); };
   v.onerror=()=>{ curP().video=f; renderMedia(); renderChips(); };  // if metadata fails, accept
   v.src=URL.createObjectURL(f); };
+/* Blob URLs pin the whole photo in memory until revoked. These render functions
+   run on every capture, delete and item switch, so without this a long round
+   leaks every photo it has ever displayed. */
+function urlPool(){ let held=[];
+  return { url(b){ const u=URL.createObjectURL(b); held.push(u); return u; },
+           free(){ held.forEach(u=>{ try{ URL.revokeObjectURL(u); }catch(_){ } }); held=[]; } }; }
+const mediaPool=urlPool(), pendPool=urlPool();
 function renderMedia(){ const p=draft.positions[curItem]||{}; const ph=p.photos||[]; let h="";
-  ph.forEach((b,i)=>{ h+=`<div class="mtile"><img src="${URL.createObjectURL(b)}"><button class="mdel" data-ph="${i}">✕</button></div>`; });
-  if(p.video) h+=`<div class="mtile"><video src="${URL.createObjectURL(p.video)}" muted playsinline></video><span class="vbadge">▶ video</span><button class="mdel" data-vid="1">✕</button></div>`;
+  mediaPool.free();
+  ph.forEach((b,i)=>{ h+=`<div class="mtile"><img src="${mediaPool.url(b)}"><button class="mdel" data-ph="${i}">✕</button></div>`; });
+  if(p.video) h+=`<div class="mtile"><video src="${mediaPool.url(p.video)}" muted playsinline></video><span class="vbadge">▶ video</span><button class="mdel" data-vid="1">✕</button></div>`;
   if(!ph.length && !p.video) h=`<div class="empty-m">${t("media_empty")}</div>`;
   $("mediastrip").innerHTML=h;
   $("mediaHint").textContent=t("media_hint");
@@ -989,8 +1010,8 @@ $("gradeSeg").addEventListener("click",(e)=>{ const b=e.target.closest("button[d
   const p=curP(); p.grade=(p.grade===b.dataset.g)?null:b.dataset.g;
   if(p.grade && !p.sev){ const sug=GRADE_SEV[p.grade]; if(sug) p.sev=sug; }   // suggest ISO severity
   renderGrade(); renderSev(); renderChips(); });
-function renderGrade(){ const g=curP().grade; $("gradeSeg").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.g===g)); }
-function renderSev(){ const v=curP().sev; $("sevSeg").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.s===v)); }
+function renderGrade(){ const g=posRO().grade; $("gradeSeg").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.g===g)); }
+function renderSev(){ const v=posRO().sev; $("sevSeg").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.s===v)); }
 $("sevSeg").addEventListener("click",(e)=>{ const b=e.target.closest("button[data-s]"); if(!b) return;
   const p=curP(); p.sev=(p.sev===b.dataset.s)?null:b.dataset.s; p.sevMan=1;   // manual choice wins over the temperature rule
   renderSev(); renderChips(); });
@@ -1075,8 +1096,12 @@ function pickerSource(){
 function renderPickList(q){ q=(q||"").trim(); const ql=q.toLowerCase();
   let src=pickerSource().filter(o=>!ql||o.label.toLowerCase().indexOf(ql)>=0||(o.group||"").toLowerCase().indexOf(ql)>=0);
   if(pickMode==="equip"){   // show the whole fleet (no cap) — search filters it
-    if(q && !ASSET_BY[q.toUpperCase().replace(/\s+/g,"")]) src=[{k:"__custom__",label:t("opt_use")+' "'+q.toUpperCase()+'"',group:""}].concat(src); }
-  $("pickList").innerHTML=src.map(o=>`<button class="pickitem" data-k="${o.k}">${o.group?`<span class="pickgrp">${o.group}</span>`:""}${o.label}</button>`).join("")||`<div class="empty-m">—</div>`; }
+    // A unit missing from the register (new machine, hired plant, a typo in the
+    // register) must never block an inspection: type it and add it.
+    const typed=q.toUpperCase().replace(/\s+/g,"");
+    if(typed && !ASSET_BY[typed]) src=[{k:"__custom__",label:"➕ "+t("opt_use")+' "'+esc(typed)+'"',group:""}].concat(src);
+    else if(!q) src=[{k:"__addhint__",label:"➕ "+t("opt_add_unit"),group:""}].concat(src); }
+  $("pickList").innerHTML=src.map(o=>`<button class="pickitem" data-k="${esc(o.k)}">${o.group?`<span class="pickgrp">${esc(o.group)}</span>`:""}${o.k==="__custom__"?o.label:esc(o.label)}</button>`).join("")||`<div class="empty-m">—</div>`; }
 function openPicker(mode){ pickMode=mode; $("pickSearch").value=""; $("pickSearch").placeholder=t("pick_search"); renderPickList(""); $("pickOv").classList.remove("hidden"); setTimeout(()=>$("pickSearch").focus(),50); }
 function closePicker(){ $("pickOv").classList.add("hidden"); }
 function updateDefectCauseBtns(){ const p=draft.positions[curItem]||{};
@@ -1090,7 +1115,9 @@ $("pickSearch").oninput=(e)=>renderPickList(e.target.value);
 $("pickCancel").onclick=closePicker;
 $("pickList").onclick=(e)=>{ const b=e.target.closest(".pickitem"); if(!b) return; const k=b.dataset.k;
   if(pickMode==="cat"){ selectCat(k); closePicker(); return; }
-  if(pickMode==="equip"){ selectEquip(k==="__custom__" ? $("pickSearch").value : k); closePicker(); return; }
+  if(pickMode==="equip"){
+    if(k==="__addhint__"){ $("pickSearch").focus(); return; }   // it is a prompt, not a choice
+    selectEquip(k==="__custom__" ? $("pickSearch").value : k); closePicker(); return; }
   if(pickMode==="item"){ saveCur(); curItem=k; closePicker(); renderChips(); loadPos(); return; }
   if(k==="__all__"){ showAllDefects=true; renderPickList($("pickSearch").value); return; }
   if(pickMode==="action"){ const p=curP(); p.action=k||"";
@@ -1180,7 +1207,8 @@ $("saveBtn").onclick=async ()=>{
   const created = editing ? (editing.created||new Date().toISOString()) : new Date().toISOString();
   if(!gps) await getGps(true);   // best effort — never blocks the save
   const rec={ id, cls:eqClass, type, equip, date, smu:$("smu").value.trim(), by:$("inspector").value.trim(),
-    sup:$("supName").value.trim(), sign:await signBlob(), gps:gps||null, dev:DEVICE, positions:{}, created, up:0 };
+    sup:$("supName").value.trim(), sign:await signBlob(), gps:gps||null, dev:DEVICE, positions:{}, created, up:0, upTo:{},
+    rev:(editing?(editing.rev||0)+1:1) };
   for(const [k,p] of Object.entries(draft.positions))
     rec.positions[k]={ grade:p.grade||null, sev:p.sev||"", sevMan:p.sevMan||0, action:p.action||"", wo:p.wo||"", particle:p.particle||"", comp:p.comp||"", oil:p.oil||"", defect:p.defect||"", cause:p.cause||"", comment:p.comment||"", tempV:p.tempV||"", tempA:p.tempA||"", tempM:p.tempM||"", photos:(p.photos||[]).slice(), video:p.video||null };
   await dbPut(rec); noteDone(rec); resetForm(); renderPending(); renderDue(); syncNow();
@@ -1223,8 +1251,8 @@ function renderDue(){
   box.innerHTML=show.slice(0,200).map(r=>{
     const a=ASSET_BY[r.unit];
     const when = r.left<0 ? t("due_over").replace("{n}",-r.left) : t("due_in").replace("{n}",r.left);
-    return `<button class="dueitem ${r.st}" data-u="${r.unit}">
-      <span class="u">${r.unit}${a&&a.cat?` · <span style="color:var(--muted);font-weight:400">${a.cat}</span>`:""}</span>
+    return `<button class="dueitem ${r.st}" data-u="${esc(r.unit)}">
+      <span class="u">${esc(r.unit)}${a&&a.cat?` · <span style="color:var(--muted);font-weight:400">${esc(a.cat)}</span>`:""}</span>
       <span class="d">${t("due_days").replace("{n}",r.age)} · ${when}</span></button>`; }).join("");
   box.querySelectorAll("[data-u]").forEach(b=>b.onclick=()=>{ selectEquip(b.dataset.u); window.scrollTo({top:0,behavior:"smooth"}); });
 }
@@ -1307,7 +1335,7 @@ $("mergeFile").onchange=async (e)=>{ const f=e.target.files[0]; e.target.value="
     if(inc.sign && !cur.sign){ cur.sign=inc.sign; touched=true; }
     if(inc.gps && !cur.gps){ cur.gps=inc.gps; touched=true; }
     if(inc.smu && !cur.smu){ cur.smu=inc.smu; touched=true; }
-    if(touched){ cur.up=0; await dbPut(cur); noteDone(cur); }   // changed -> re-upload
+    if(touched){ cur.up=0; cur.upTo={}; cur.rev=(cur.rev||0)+1; await dbPut(cur); noteDone(cur); }   // changed -> re-upload
   }
   renderPending(); renderDue(); syncNow();
   const m=t("m_merged"); dlg([m[0], m[1].replace("{a}",added).replace("{b}",items).replace("{c}",dup)]);
@@ -1318,16 +1346,17 @@ async function renderPending(){
   const all=(await dbAll()).sort((a,b)=>b.created.localeCompare(a.created));
   $("qCount").textContent=all.length;
   if(!all.length){ $("pending").innerHTML=`<div class="empty">${t("empty_none")}</div>`; return; }
-  $("pending").innerHTML="";
+  $("pending").innerHTML=""; pendPool.free();
   for(const rec of all){
-    const firstP=Object.values(rec.positions).find(p=>(p.photos&&p.photos.length)); const first=firstP?firstP.photos[0]:null;
-    const nPhotos=Object.values(rec.positions).reduce((s,p)=>s+((p.photos&&p.photos.length)||0),0);
-    const nVid=Object.values(rec.positions).filter(p=>p.video).length; const nPos=Object.keys(rec.positions).length;
+    const pos=positionsOf(rec);
+    const first=pos.map(([,p])=>photosOf(p)[0]).find(Boolean)||null;
+    const nPhotos=pos.reduce((s,[,p])=>s+photosOf(p).length,0);
+    const nVid=pos.filter(([,p])=>isBlob(p.video)).length; const nPos=pos.length;
     const row=document.createElement("div"); row.className="pitem";
-    const thumb=first?`<img class="thumb" src="${URL.createObjectURL(first)}">`:`<div class="thumb"></div>`;
+    const thumb=first?`<img class="thumb" src="${pendPool.url(first)}">`:`<div class="thumb"></div>`;
     const typeTag=`${rec.cls||""} ${rec.type||"MP"}`.trim();
-    row.innerHTML=`${thumb}<div class="meta"><div class="a"><span class="tag">${typeTag}</span>${rec.equip} · ${rec.date}</div>
-      <div class="b">${nPos} ${t("pos_count")} · ${nPhotos} ${t("photo_count")}${nVid?` · ${nVid}🎥`:""}${rec.smu?` · SMU ${rec.smu}`:""}${rec.sign?" · ✍":""}${rec.gps?" · 📍":""}</div></div>
+    row.innerHTML=`${thumb}<div class="meta"><div class="a"><span class="tag">${esc(typeTag)}</span>${esc(rec.equip)} · ${esc(rec.date)}</div>
+      <div class="b">${nPos} ${t("pos_count")} · ${nPhotos} ${t("photo_count")}${nVid?` · ${nVid}🎥`:""}${rec.smu?` · SMU ${esc(rec.smu)}`:""}${rec.sign?" · ✍":""}${rec.gps?" · 📍":""}</div></div>
       <button class="edit" title="Edit">✎</button><button class="del" title="Delete">🗑</button>`;
     const openEdit=()=>editRecord(rec);
     row.querySelector(".edit").onclick=(ev)=>{ev.stopPropagation();openEdit();};
@@ -1351,12 +1380,12 @@ async function buildPackage(){
   for(const rec of all){ const suffix=(TYPE_META[rec.type]&&TYPE_META[rec.type].suffix)||rec.type||"MP";
     if(rec.smu) (notes[`${rec.equip}|${rec.date}`] ||= {}).smu=rec.smu;
     const isComp = usesRegister(rec.type) && rec.equip && UNIT_TPL[rec.equip]!=null;
-    for(const [k,p] of Object.entries(rec.positions)){
-      const ph=p.photos||(p.photoBlob?[p.photoBlob]:[]);
+    for(const [k,p] of positionsOf(rec)){
+      const ph=photosOf(p);
       for(let i=0;i<ph.length;i++){ const ext=extOf(ph[i]); const base=fileName(rec.equip,k,rec.date,ext,suffix,isComp);
         const name = ph.length>1 ? base.replace("."+ext, "_"+(i+1)+"."+ext) : base;
         files.push({name, data:new Uint8Array(await ph[i].arrayBuffer())}); }
-      if(p.video){ const vext=(p.video.type||"").includes("quicktime")?"mov":"mp4";
+      if(isBlob(p.video)){ const vext=(p.video.type||"").includes("quicktime")?"mov":"mp4";
         files.push({name:fileName(rec.equip,k,rec.date,vext,suffix,isComp), data:new Uint8Array(await p.video.arrayBuffer())}); }
       if(p.grade) grades[`${rec.equip}|${rec.date}|${k}`]=p.grade;
       const nk=`${rec.equip}|${rec.date}|${k}`; const n={};
@@ -1372,7 +1401,7 @@ async function buildPackage(){
       if(Object.keys(n).length) notes[nk]={...(notes[nk]||{}),...n};
     } }
   // self-describing record list for the dashboard (type, class, inspector, coded findings)
-  for(const rec of all){ if(!rec.sign) continue;
+  for(const rec of all){ if(!isBlob(rec.sign)) continue;
     const suffix=(TYPE_META[rec.type]&&TYPE_META[rec.type].suffix)||rec.type||"MP";
     files.push({name:`${rec.equip}_${ddmmyyyy(rec.date)}_${suffix}_SIGN.png`, data:new Uint8Array(await rec.sign.arrayBuffer())}); }
   const records=all.map(rec=>({
@@ -1404,7 +1433,7 @@ $("shareBtn").onclick=async ()=>{ const {files,count}=await buildPackage(); if(!
 /* ===================== PDF condition-monitoring report ===================== */
 const GRADE_HEX={A:"#0ca30c",B:"#fab219",C:"#ec835a",X:"#d03b3b"};
 const SEV_HEX={NOF:"#0ca30c",INC:"#fab219",DEG:"#ec835a",CRI:"#d03b3b"};
-function esc(s){ return String(s==null?"":s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function itemLabelFor(rec,k){
   if(usesRegister(rec.type) && rec.equip && UNIT_TPL[rec.equip]!=null){ const it=flattenTree(COMP_TREE[UNIT_TPL[rec.equip]]).find(x=>x.k===k); if(it) return it[lang]||it.en; }
   const list=(CLASSES[rec.cls]&&CLASSES[rec.cls][rec.type])||[];
@@ -1580,7 +1609,7 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
    has accepted every one of its files. */
 const DEST_META={ gas:{label:"Google Drive"}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
 const DEST_IDS=["gas","pa","post"];
-const BUILD="40";
+const BUILD="41";
 const DEFAULT_DESTS=((window.UPLOAD_DEFAULTS||{}).dests)||[];
 function loadDests(){
   let d=null; try{ d=JSON.parse(localStorage.getItem("up_dests")||"null"); }catch(e){}
@@ -1690,19 +1719,24 @@ async function httpErr(r){
   try{ const j=JSON.parse(d); d=(j.error&&(j.error.message||j.error.code))||j.message||d; }catch(e){}
   return "HTTP "+r.status+(d?" — "+d.slice(0,300):"");
 }
+const isBlob=v=>v instanceof Blob;
+/* Every position of a record, skipping anything malformed. Records can arrive
+   from another phone's merge bundle, so "shaped correctly" is not a given. */
+function positionsOf(rec){ return Object.entries((rec&&rec.positions)||{}).filter(([,p])=>p&&typeof p==="object"); }
+function photosOf(p){ const ph=p.photos||(p.photoBlob?[p.photoBlob]:[]); return Array.isArray(ph)?ph.filter(isBlob):[]; }
 /* files belonging to one record, using the agreed naming standard */
 async function filesForRecord(rec){
   const suffix=(TYPE_META[rec.type]&&TYPE_META[rec.type].suffix)||rec.type||"MP";
   const isComp = usesRegister(rec.type) && rec.equip && UNIT_TPL[rec.equip]!=null;
   const out=[];
-  for(const [k,p] of Object.entries(rec.positions)){
-    const ph=p.photos||(p.photoBlob?[p.photoBlob]:[]);
+  for(const [k,p] of positionsOf(rec)){
+    const ph=photosOf(p);
     for(let i=0;i<ph.length;i++){ const ext=extOf(ph[i]); const base=fileName(rec.equip,k,rec.date,ext,suffix,isComp);
       out.push({name: ph.length>1? base.replace("."+ext,"_"+(i+1)+"."+ext) : base, blob:ph[i]}); }
-    if(p.video){ const vext=(p.video.type||"").includes("quicktime")?"mov":"mp4";
+    if(isBlob(p.video)){ const vext=(p.video.type||"").includes("quicktime")?"mov":"mp4";
       out.push({name:fileName(rec.equip,k,rec.date,vext,suffix,isComp), blob:p.video}); }
   }
-  if(rec.sign) out.push({name:`${rec.equip}_${ddmmyyyy(rec.date)}_${suffix}_SIGN.png`, blob:rec.sign});
+  if(isBlob(rec.sign)) out.push({name:`${rec.equip}_${ddmmyyyy(rec.date)}_${suffix}_SIGN.png`, blob:rec.sign});
   return out;
 }
 let syncing=false, lastErr="";
@@ -1711,16 +1745,47 @@ async function syncNow(manual){
   if(!navigator.onLine){ renderSync(); return; }
   syncing=true; lastErr=""; renderSync();
   try{
+    const dests=activeDests();
     const all=(await dbAll()).filter(r=>!r.up);
+    let consecutive=0;
     for(const rec of all){
-      try{
-        for(const f of await filesForRecord(rec)) await putFile(f.name,f.blob,f.blob.type);
-        // one JSON sidecar per record so the dashboard can import without the ZIP
-        const meta={type:"cm-inspection-entries",version:2,records:[recToExport(rec)]};
-        await putFile(`${rec.equip}_${ddmmyyyy(rec.date)}_${rec.type}.json`,
-                      new Blob([JSON.stringify(meta,null,2)],{type:"application/json"}),"application/json");
-        rec.up=1; rec.upAt=new Date().toISOString(); await dbPut(rec);
-      }catch(e){ lastErr=String(e.message||e); break; }   // stop on first failure, retry later
+      const rev=rec.rev||0;                       // what we are about to upload
+      const done=Object.assign({},rec.upTo||{});  // destinations that already have it
+      const todo=dests.filter(d=>!done[d.id]);
+      let payload=null;
+      if(todo.length){
+        try{
+          // Shrink once, then send the same bytes to every destination.
+          payload=[];
+          for(const f of await filesForRecord(rec))
+            payload.push({name:f.name, blob:await maybeShrink(f.blob,f.name), type:f.blob.type});
+          const meta={type:"cm-inspection-entries",version:2,records:[recToExport(rec)]};
+          payload.push({name:`${rec.equip}_${ddmmyyyy(rec.date)}_${rec.type}.json`,
+                        blob:new Blob([JSON.stringify(meta,null,2)],{type:"application/json"}),
+                        type:"application/json"});
+        }catch(e){ lastErr="Could not read "+rec.equip+": "+(e.message||e); continue; }
+      }
+      const errs=[];
+      for(const d of todo){
+        try{ for(const f of payload) await putOne(d,f.name,f.blob,f.type); done[d.id]=1; }
+        catch(e){ errs.push(DEST_META[d.id].label+": "+String(e.message||e)); }
+      }
+      // Re-read before writing. Putting back the copy we started with would
+      // silently discard an edit made during the upload — and mark it synced, so
+      // the edit would never be sent.
+      const fresh=await dbGet(rec.id);
+      if(fresh && (fresh.rev||0)===rev){
+        fresh.upTo=done;
+        fresh.up = dests.every(d=>done[d.id]) ? 1 : 0;
+        if(fresh.up) fresh.upAt=new Date().toISOString();
+        await dbPut(fresh);
+      }
+      if(errs.length){
+        lastErr=errs.join(" · ");
+        // One unsendable record must not block every record behind it, but a dead
+        // link should not be retried against all 50 either.
+        if(++consecutive>=3) break;
+      } else consecutive=0;
     }
   } finally { syncing=false; renderSync(); renderPending(); }
 }
@@ -1742,7 +1807,8 @@ async function renderSync(){
   const all=await dbAll(); const pend=all.filter(r=>!r.up).length;
   let cls="syncbar", txt;
   if(syncing){ cls+=" pend"; txt=t("sync_running"); }
-  else if(lastErr){ cls+=" err"; txt=t("sync_err")+": "+lastErr; }
+  else if(lastErr){ cls+=" err"; txt=t("sync_err")+": "+lastErr
+      +(pend?" · "+t("sync_pending").replace("{n}",pend):""); }
   else if(pend){ cls+=" pend"; txt=t("sync_pending").replace("{n}",pend)+(navigator.onLine?"":" · "+t("net_offline")); }
   else { cls+=" on"; txt=t("sync_ok"); }
   bar.className=cls;
@@ -1843,7 +1909,9 @@ addEventListener("online",()=>syncNow());
 /* ===================== connectivity + SW ===================== */
 function setNet(){ const on=navigator.onLine; $("netStatus").textContent=on?t("net_online"):t("net_offline"); $("netStatus").className="st "+(on?"on":"off"); }
 addEventListener("online",setNet); addEventListener("offline",setNet);
-if("serviceWorker" in navigator && location.protocol==="https:"){ let reloaded=false;
+// isSecureContext, not a protocol check: http://localhost is a secure context too,
+// and excluding it meant the offline path could never be exercised outside production.
+if("serviceWorker" in navigator && window.isSecureContext){ let reloaded=false;
   navigator.serviceWorker.addEventListener("controllerchange",()=>{ if(reloaded)return; reloaded=true; location.reload(); });
   navigator.serviceWorker.register("sw.js").then(reg=>{ reg.update&&reg.update(); }).catch(()=>{}); }
 
@@ -1869,8 +1937,23 @@ const fu=$("forceUpdate"); if(fu) fu.onclick=async (e)=>{ e.preventDefault();
 // …and drop that marker again so it does not linger in the address bar
 if(/[?&]fresh=/.test(location.search)) history.replaceState(null,"",location.pathname);
 
+/* An empty equipment or defect list means a data file did not load — almost
+   always a half-populated cache. Silent empty pickers are indistinguishable from
+   "no data exists", so say which file is missing and offer the one-tap fix. */
+function checkData(){
+  const missing=[];
+  if(!ASSETS.length)                       missing.push("assets.js");
+  if(!(TAX.defects||[]).length)            missing.push("taxonomy2.js");
+  if(!COMP_TREE.length)                    missing.push("components.js");
+  const w=$("dataWarn");
+  if(!missing.length){ w.classList.add("hidden"); return; }
+  $("dataWarnText").textContent=t("m_data_missing").replace("{x}",missing.join(", "));
+  w.classList.remove("hidden");
+  $("dataWarnFix").onclick=()=>$("forceUpdate").click();
+}
+
 /* ===================== init ===================== */
-updateEquipBtn(); renderGps();
+updateEquipBtn(); renderGps(); checkData();
 $("dueScope").value=localStorage.getItem("due_scope")||"due";
 applyForm(); applyLang(); sizeSignPad(); renderSync(); syncNow();
 </script>

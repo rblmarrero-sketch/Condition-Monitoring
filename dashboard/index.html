@@ -256,6 +256,10 @@ function findings(recs){            // one row per item that has any content
   return out;
 }
 const sevRank=s=>SEV[s]?SEV[s].r:-1;
+/* Records arrive from files on a shared drive or from Drive — i.e. from outside
+   this page. Everything below builds HTML by interpolation, so it all goes
+   through here. */
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function worstOf(rec){ let w="",n=-1; rec.items.forEach(i=>{ const s=i.sev||GRADE_SEV[i.grade]||""; if(sevRank(s)>n){n=sevRank(s);w=s;} }); return w; }
 
 /* ---------- KPIs ---------- */
@@ -287,12 +291,12 @@ function renderFleet(){
   rows.forEach(r=>{
     const w=worstOf(r); const fs=r.items.filter(i=>i.grade||i.defectCode);
     const top=fs.map(i=>i.defect).filter(Boolean)[0]||"";
-    h+=`<tr data-u="${r.equip}" style="cursor:pointer">
-      <td><b>${r.equip}</b></td><td><span class="tag">${TYPE_LABEL[r.type]||r.type}</span></td>
-      <td class="mono">${r.date||""}</td>
+    h+=`<tr data-u="${esc(r.equip)}" style="cursor:pointer">
+      <td><b>${esc(r.equip)}</b></td><td><span class="tag">${esc(TYPE_LABEL[r.type]||r.type)}</span></td>
+      <td class="mono">${esc(r.date||"")}</td>
       <td>${w?`<span class="pill ${SEV[w].c}">${SEV[w].l}</span>`:'<span class="muted">—</span>'}</td>
-      <td class="mono">${fs.length}</td><td>${top||'<span class="muted">—</span>'}</td>
-      <td class="muted">${r.by||""}</td></tr>`;
+      <td class="mono">${fs.length}</td><td>${top?esc(top):'<span class="muted">—</span>'}</td>
+      <td class="muted">${esc(r.by||"")}</td></tr>`;
   });
   $("fleetTbl").innerHTML=h+"</tbody>";
   $("fleetTbl").querySelectorAll("tr[data-u]").forEach(tr=>tr.onclick=()=>{ showTab("equipment"); $("equipSel").value=tr.dataset.u; renderHistory(); });
@@ -303,7 +307,7 @@ function pareto(el,pairs,colorFn){
   if(!pairs.length){ el.innerHTML=`<div class="empty">No coded data yet.</div>`; return; }
   const max=pairs[0][1];
   el.innerHTML=pairs.map(([label,n,sub])=>`
-    <div class="prow"><div class="lbl" title="${label}">${label}${sub?` <small>${sub}</small>`:""}</div>
+    <div class="prow"><div class="lbl" title="${esc(label)}">${esc(label)}${sub?` <small>${esc(sub)}</small>`:""}</div>
       <div class="ptrack"><div class="pfill" style="width:${Math.max(2,n/max*100)}%;background:${colorFn?colorFn(label):"var(--accent)"}"></div></div>
       <div class="n">${n}</div></div>`).join("");
 }
@@ -330,12 +334,12 @@ function renderActions(){
   let h=`<thead><tr><th>Sev</th><th>Unit</th><th>Component</th><th>Defect</th><th>Direct cause</th><th>Action</th><th>WO</th><th>Date</th><th>By</th></tr></thead><tbody>`;
   rows.forEach(({r,i})=>{ const s=i.sev||GRADE_SEV[i.grade]||"";
     h+=`<tr><td>${s?`<span class="pill ${SEV[s].c}">${SEV[s].l}</span>`:""}</td>
-      <td><b>${r.equip}</b><div class="muted" style="font-size:11px">${TYPE_LABEL[r.type]||r.type}</div></td>
-      <td>${i.key}<div class="muted" style="font-size:11px">${i.label||""}</div></td>
-      <td>${i.defect||'<span class="muted">—</span>'}${i.defectCode?`<div class="muted" style="font-size:11px">${i.defectCode}${i.iso?` · ISO ${i.iso}/${i.isoMode}`:""}</div>`:""}</td>
-      <td>${i.cause||'<span class="muted">—</span>'}</td>
-      <td>${i.actionLabel||'<span class="muted">—</span>'}</td>
-      <td class="mono">${i.wo||""}</td><td class="mono">${r.date||""}</td><td class="muted">${r.by||""}</td></tr>`; });
+      <td><b>${esc(r.equip)}</b><div class="muted" style="font-size:11px">${esc(TYPE_LABEL[r.type]||r.type)}</div></td>
+      <td>${esc(i.key)}<div class="muted" style="font-size:11px">${esc(i.label||"")}</div></td>
+      <td>${i.defect?esc(i.defect):'<span class="muted">—</span>'}${i.defectCode?`<div class="muted" style="font-size:11px">${esc(i.defectCode)}${i.iso?` · ISO ${esc(i.iso)}/${esc(i.isoMode)}`:""}</div>`:""}</td>
+      <td>${i.cause?esc(i.cause):'<span class="muted">—</span>'}</td>
+      <td>${i.actionLabel?esc(i.actionLabel):'<span class="muted">—</span>'}</td>
+      <td class="mono">${esc(i.wo||"")}</td><td class="mono">${esc(r.date||"")}</td><td class="muted">${esc(r.by||"")}</td></tr>`; });
   $("actionTbl").innerHTML=h+"</tbody>";
 }
 $("csvBtn").onclick=()=>{
@@ -382,22 +386,22 @@ function renderHistory(){
   if(!recs.length){ $("history").innerHTML=`<div class="empty">No data.</div>`; return; }
   $("history").innerHTML=recs.map(rec=>`
     <div class="insp"><div class="head">
-      <span class="date">${rec.date||""}</span>
-      <span class="tag">${TYPE_LABEL[rec.type]||rec.type}</span>
-      ${rec.smu?`<span class="meta">SMU <b>${rec.smu}</b></span>`:""}
-      <span class="spacer"></span>${rec.by?`<span class="meta">${rec.by}</span>`:""}${rec.sup?`<span class="meta">✍ ${rec.sup}</span>`:""}${rec.gps?`<a class="meta" href="https://www.google.com/maps?q=${rec.gps.lat},${rec.gps.lon}" target="_blank" rel="noopener">📍 ${rec.gps.lat.toFixed(4)}, ${rec.gps.lon.toFixed(4)}</a>`:""}</div>
+      <span class="date">${esc(rec.date||"")}</span>
+      <span class="tag">${esc(TYPE_LABEL[rec.type]||rec.type)}</span>
+      ${rec.smu?`<span class="meta">SMU <b>${esc(rec.smu)}</b></span>`:""}
+      <span class="spacer"></span>${rec.by?`<span class="meta">${esc(rec.by)}</span>`:""}${rec.sup?`<span class="meta">✍ ${esc(rec.sup)}</span>`:""}${rec.gps?`<a class="meta" href="https://www.google.com/maps?q=${rec.gps.lat},${rec.gps.lon}" target="_blank" rel="noopener">📍 ${rec.gps.lat.toFixed(4)}, ${rec.gps.lon.toFixed(4)}</a>`:""}</div>
       <div class="pos-grid">${rec.items.map(i=>{
         const s=i.sev||GRADE_SEV[i.grade]||""; const src=photoSrc(i,rec);
-        const cap=`${rec.equip} · ${i.key} · ${rec.date}`;
+        const cap=esc(`${rec.equip} · ${i.key} · ${rec.date}`);
         return `<div class="pos">
-          ${src?`<img class="photo" loading="lazy" src="${src}" alt="${cap}" data-cap="${cap}">`:`<div class="nophoto">no photo</div>`}
-          <div class="body"><div class="pk">${i.key}${i.grade?` <span class="pill ${SEV[GRADE_SEV[i.grade]]?.c||'n'}">${i.grade}</span>`:""}
+          ${src?`<img class="photo" loading="lazy" src="${esc(src)}" alt="${cap}" data-cap="${cap}">`:`<div class="nophoto">no photo</div>`}
+          <div class="body"><div class="pk">${esc(i.key)}${i.grade?` <span class="pill ${SEV[GRADE_SEV[i.grade]]?.c||'n'}">${esc(i.grade)}</span>`:""}
             ${s?`<span class="pill ${SEV[s].c}">${SEV[s].l}</span>`:""}</div>
-            <div class="pl">${i.label||""}</div>
-            ${i.defect?`<div style="font-size:12px"><b>${i.defect}</b> <span class="muted">${i.defectCode}</span></div>`:""}
-            ${i.cause?`<div style="font-size:12px" class="muted">Cause: ${i.cause}</div>`:""}
-            <dl>${i.tempC?`<dt>Temp</dt><dd><b>${i.tempC} °C</b>${i.ambC?` <span class="muted">(amb ${i.ambC})</span>`:""}${i.tempMethod?` <span class="muted">${i.tempMethod}</span>`:""}</dd>`:""}${i.particle?`<dt>Particles</dt><dd>${i.particle}</dd>`:""}${i.comp?`<dt>Comp hrs</dt><dd>${i.comp}</dd>`:""}${i.oil?`<dt>Oil hrs</dt><dd>${i.oil}</dd>`:""}${i.actionLabel?`<dt>Action</dt><dd>${i.actionLabel}</dd>`:""}${i.wo?`<dt>WO</dt><dd>${i.wo}</dd>`:""}</dl>
-            ${i.comment?`<div class="cm">“${i.comment}”</div>`:""}
+            <div class="pl">${esc(i.label||"")}</div>
+            ${i.defect?`<div style="font-size:12px"><b>${esc(i.defect)}</b> <span class="muted">${esc(i.defectCode)}</span></div>`:""}
+            ${i.cause?`<div style="font-size:12px" class="muted">Cause: ${esc(i.cause)}</div>`:""}
+            <dl>${i.tempC?`<dt>Temp</dt><dd><b>${esc(i.tempC)} °C</b>${i.ambC?` <span class="muted">(amb ${esc(i.ambC)})</span>`:""}${i.tempMethod?` <span class="muted">${esc(i.tempMethod)}</span>`:""}</dd>`:""}${i.particle?`<dt>Particles</dt><dd>${esc(i.particle)}</dd>`:""}${i.comp?`<dt>Comp hrs</dt><dd>${esc(i.comp)}</dd>`:""}${i.oil?`<dt>Oil hrs</dt><dd>${esc(i.oil)}</dd>`:""}${i.actionLabel?`<dt>Action</dt><dd>${esc(i.actionLabel)}</dd>`:""}${i.wo?`<dt>WO</dt><dd>${esc(i.wo)}</dd>`:""}</dl>
+            ${i.comment?`<div class="cm">“${esc(i.comment)}”</div>`:""}
           </div></div>`; }).join("")}</div></div>`).join("");
   $("history").querySelectorAll("img.photo").forEach(img=>img.onclick=()=>{ $("lbimg").src=img.src; $("lbcap").textContent=img.dataset.cap; $("lb").classList.add("open"); });
   // If the photos are in Drive rather than on disk, fetch this unit's and repaint once.
@@ -429,7 +433,10 @@ $("clearBtn").onclick=()=>{ if(!imported.length) return alert("Nothing imported 
 $("folderBtn").onclick=async ()=>{
   if(!window.showDirectoryPicker) return alert("Use Chrome or Edge to open a photo folder.");
   try{
-    const dir=await window.showDirectoryPicker({id:"cm-photos",mode:"read"}); folderPhotos={};
+    const dir=await window.showDirectoryPicker({id:"cm-photos",mode:"read"});
+    // release the previous pick's URLs, otherwise every re-pick leaks the lot
+    if(folderPhotos) Object.values(folderPhotos).forEach(u=>{ try{ URL.revokeObjectURL(u); }catch(_){ } });
+    folderPhotos={};
     async function walk(h){ for await (const en of h.values()){
       if(en.kind==="directory") await walk(en);
       else if(/\.(jpe?g|png|webp)$/i.test(en.name)) folderPhotos[en.name]=URL.createObjectURL(await en.getFile()); } }
@@ -489,7 +496,7 @@ function refreshReportTargets(){
   else { $("rTargetLbl").textContent="Month";
     opts=[...new Set(RECS.map(r=>(r.date||"").slice(0,7)).filter(Boolean))].sort().reverse()
       .map(m=>[m,`${m} · ${RECS.filter(r=>(r.date||"").slice(0,7)===m).length} inspection(s)`]); }
-  sel.innerHTML=opts.map(([v,l])=>`<option value="${v}">${l}</option>`).join("")||`<option value="">— no data —</option>`;
+  sel.innerHTML=opts.map(([v,l])=>`<option value="${esc(v)}">${esc(l)}</option>`).join("")||`<option value="">— no data —</option>`;
   if(opts.some(o=>o[0]===prev)) sel.value=prev;
 }
 $("rScope").onchange=refreshReportTargets;
@@ -514,12 +521,12 @@ $("rGo").onclick=async ()=>{
 /* ---------- init ---------- */
 function refreshControls(){
   const types=[...new Set(RECS.map(r=>r.type))].sort();
-  $("fType").innerHTML=`<option value="">All types</option>`+types.map(t=>`<option value="${t}">${TYPE_LABEL[t]||t}</option>`).join("");
+  $("fType").innerHTML=`<option value="">All types</option>`+types.map(t=>`<option value="${esc(t)}">${esc(TYPE_LABEL[t]||t)}</option>`).join("");
   const cls=[...new Set(RECS.map(r=>r.cls).filter(Boolean))].sort();
-  $("fClass").innerHTML=`<option value="">All classes</option>`+cls.map(c=>`<option value="${c}">${c}</option>`).join("");
+  $("fClass").innerHTML=`<option value="">All classes</option>`+cls.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join("");
   const units=[...new Set(RECS.map(r=>r.equip))].sort();
   const prev=$("equipSel").value;
-  $("equipSel").innerHTML=units.map(u=>`<option value="${u}">${u}</option>`).join("");
+  $("equipSel").innerHTML=units.map(u=>`<option value="${esc(u)}">${esc(u)}</option>`).join("");
   if(units.includes(prev)) $("equipSel").value=prev;
   $("sevLegend").innerHTML=Object.entries(SEV).map(([k,v])=>`<span><span class="sw" style="background:${SEVC[k]}"></span>${v.l}</span>`).join("");
   refreshReportTargets();
