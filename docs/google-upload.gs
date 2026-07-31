@@ -1,9 +1,15 @@
 /**
  * Condition Monitoring — Google Drive upload endpoint (Google Apps Script).
  *
- * Paste this whole file into a new Apps Script project, set ROOT_FOLDER_ID below,
- * then Deploy → New deployment → Web app → Execute as "Me", Who has access "Anyone".
- * Copy the /exec URL into the Field Capture app (⚙ → Upload mode: Google Drive).
+ * 1. Paste this whole file into a new Apps Script project and set ROOT_FOLDER_ID below.
+ * 2. Run ▸ setup   ← DO THIS FIRST. A deployed web app cannot ask for Drive
+ *    permission on your behalf, so grant it here or every upload fails with
+ *    "Unexpected error while getting the method or property getFolderById".
+ * 3. Deploy → New deployment → Web app → Execute as "Me", Who has access "Anyone".
+ * 4. Copy the /exec URL into the Field Capture app (⚙ → Upload mode: Google Drive).
+ *
+ * After ANY later edit: Deploy → Manage deployments → ✏️ → Version: New version.
+ * Saving alone does not change what the /exec URL serves.
  *
  * Full walkthrough: docs/GOOGLE_UPLOAD_SETUP.md
  *
