@@ -86,11 +86,40 @@ Script)** block:
 | **(tick the box)** | turns the destination on |
 | **Upload URL** | the `/exec` URL |
 | **Shared secret** | the `SECRET` value, or leave empty if you left it `''` |
-| **Folder / prefix** | `{YYYY-MM}` — rolls into a new sub-folder each month |
+| **Folder** | `{TYPE}/{YYYY-MM}` — a folder per inspection type, per month |
 | **Photo size on upload** | see below |
 
 Tap **Test connection** → *"✅ Google Drive"* and a `connection_test.txt` appears in
 Drive. Then **Save**.
+
+### Folder layout
+
+The **Folder** field takes placeholders, and sub-folders are created as needed, so each
+inspection type can have its own home instead of everything landing in one listing:
+
+| Placeholder | Becomes |
+|---|---|
+| `{TYPE}` | `MP` · `FC` · `INSP` · `TEMP` |
+| `{TYPENAME}` | `Magnetic Plug` · `Filter Cut` · `Inspection` · `Temperature` |
+| `{UNIT}` | the unit number, e.g. `TK146` |
+| `{YYYY}` `{MM}` `{DD}` `{YYYY-MM}` | parts of the **inspection** date |
+
+`{TYPE}/{YYYY-MM}` gives:
+
+```
+Condition Monitoring/
+  MP/2026-07/    TK146_4C_31.07.2026_MP.jpg  …
+  FC/2026-07/    TK151_HYD_31.07.2026_FC.jpg …
+  TEMP/2026-07/  TK146_31.07.2026_TEMP.json  …
+  INSP/2026-07/  …
+```
+
+Date parts come from the **inspection date**, not from today, so a round entered a few
+days late still files under the month it was actually done. Each destination has its own
+folder setting, so Drive and SharePoint can be laid out differently.
+
+> Already-configured phones keep whatever folder they have — change it in ⚙ on each phone,
+> or send a fresh **setup code** from one you have updated.
 
 ### Both destinations at once
 

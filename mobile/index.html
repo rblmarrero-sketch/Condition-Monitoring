@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Truck Inspection — Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=41">
+<link rel="manifest" href="manifest.webmanifest?v=42">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -317,7 +317,7 @@
   <div class="syncbar" id="syncBar"></div>
   <button class="btn ghost" id="reportBtn" style="margin-bottom:16px">📄 <span data-i18n="btn_report">PDF report</span></button>
 
-  <div class="ver">build v41 · 2026-07-31 · Offline-first ·  <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver">build v42 · 2026-07-31 · Folder per type ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <div class="bottombar">
@@ -330,6 +330,7 @@
     <b style="align-self:center" data-i18n="set_title">Upload settings</b></div>
   <div class="picklist">
     <div class="hint" style="margin-bottom:14px" data-i18n="set_intro">Turn on one or both destinations. With both on, an inspection only counts as uploaded once every destination has accepted it.</div>
+    <div class="hint" style="margin-bottom:14px" data-i18n="set_folder_help">Folder placeholders: {TYPE} (MP / FC / INSP / TEMP), {UNIT}, {YYYY} {MM} {DD} {YYYY-MM}. Sub-folders are created as needed, so {TYPE}/{YYYY-MM} files each inspection type separately, by month.</div>
 
     <div class="dest">
       <label class="dhead"><input type="checkbox" id="gasOn"><span data-i18n="set_gas">Google Drive (Apps Script)</span></label>
@@ -340,7 +341,7 @@
         <label class="fld"><span data-i18n="set_secret">Shared secret (optional)</span>
           <input id="gasSec" type="text" autocomplete="off"></label>
         <label class="fld"><span data-i18n="set_folder">Folder / prefix</span>
-          <input id="gasFolder" type="text" placeholder="{YYYY-MM}" autocomplete="off"></label>
+          <input id="gasFolder" type="text" placeholder="{TYPE}/{YYYY-MM}" autocomplete="off"></label>
       </div>
     </div>
 
@@ -353,7 +354,7 @@
         <label class="fld"><span data-i18n="set_hdr">Secret header (optional)</span>
           <input id="paHdr" type="text" placeholder="x-api-key: abc123" autocomplete="off"></label>
         <label class="fld"><span data-i18n="set_folder">Folder / prefix</span>
-          <input id="paFolder" type="text" placeholder="{YYYY-MM}" autocomplete="off"></label>
+          <input id="paFolder" type="text" placeholder="{TYPE}/{YYYY-MM}" autocomplete="off"></label>
       </div>
     </div>
 
@@ -366,7 +367,7 @@
         <label class="fld"><span data-i18n="set_hdr">Secret header (optional)</span>
           <input id="postHdr" type="text" placeholder="x-api-key: abc123" autocomplete="off"></label>
         <label class="fld"><span data-i18n="set_folder">Folder / prefix</span>
-          <input id="postFolder" type="text" placeholder="{YYYY-MM}" autocomplete="off"></label>
+          <input id="postFolder" type="text" placeholder="{TYPE}/{YYYY-MM}" autocomplete="off"></label>
       </div>
     </div>
 
@@ -420,16 +421,16 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="jsQR.js?v=41"></script>
-<script src="qrcode.js?v=41"></script>
-<script src="upload-defaults.js?v=41"></script>
-<script src="taxonomy.js?v=41"></script>
-<script src="taxonomy2.js?v=41"></script>
-<script src="assets.js?v=41"></script>
-<script src="components.js?v=41"></script>
-<script src="temp-limits.js?v=41"></script>
-<script src="jspdf.umd.min.js?v=41"></script>
-<script src="html2canvas.min.js?v=41"></script>
+<script src="jsQR.js?v=42"></script>
+<script src="qrcode.js?v=42"></script>
+<script src="upload-defaults.js?v=42"></script>
+<script src="taxonomy.js?v=42"></script>
+<script src="taxonomy2.js?v=42"></script>
+<script src="assets.js?v=42"></script>
+<script src="components.js?v=42"></script>
+<script src="temp-limits.js?v=42"></script>
+<script src="jspdf.umd.min.js?v=42"></script>
+<script src="html2canvas.min.js?v=42"></script>
 <script>
 /* ============================================================================
    EQUIPMENT CLASSES & INSPECTION TYPES  —  EDIT here for your fleet.
@@ -581,6 +582,7 @@ const I18N = {
     set_px:"Photo size on upload", set_px_full:"Original — full detail (slowest)",
     set_px_2000:"Large — 2000 px", set_px_1600:"Medium — 1600 px (much smaller, fastest)",
     set_intro:"Turn on one or both destinations. With both on, an inspection only counts as uploaded once every destination has accepted it.",
+    set_folder_help:"Folder placeholders: {TYPE} (MP / FC / INSP / TEMP), {UNIT}, {YYYY} {MM} {DD} {YYYY-MM}. Sub-folders are created as needed, so {TYPE}/{YYYY-MM} files each inspection type separately, by month.",
     set_prov:"Set up the other phones",
     set_prov_hint:"Configure this phone once, then show the code to the next phone and tap Scan setup there. Nothing to type.",
     set_prov_warn:"⚠ This code and link contain your upload credentials. Share them on internal channels only.",
@@ -590,7 +592,7 @@ const I18N = {
     m_data_missing:"Some data did not load ({x}) — lists will be incomplete. Tap ⟳ while online.",
     m_cfg_bad:["Setup code not recognised","Ask the other phone to tap “Show setup code” again, and scan the whole square."],
     set_help_gas:"Google Drive: open script.google.com, paste docs/google-upload.gs, set ROOT_FOLDER_ID to your Drive folder, then Deploy → Web app with Execute as “Me” and Who has access “Anyone”. Copy the /exec URL here. Re-deploy a NEW VERSION after every edit or the old code keeps running.",
-    set_url:"Upload URL", set_hdr:"Secret header (optional)", set_folder:"Folder / prefix — {YYYY-MM} rolls monthly",
+    set_url:"Upload URL", set_hdr:"Secret header (optional)", set_folder:"Folder — e.g. {TYPE}/{YYYY-MM}",
     set_test:"Test connection", set_save:"Save", set_testing:"Testing…", set_ok:"Connected — test file uploaded.",
     set_needurl:"Choose a mode and paste the URL first.",
     set_help:"Power Automate: create a flow with the trigger \u201cWhen an HTTP request is received\u201d, add \u201cCreate file\u201d (SharePoint) with name = triggerBody()?['name'] and content = base64ToBinary(triggerBody()?['file']), then copy the generated URL here.",
@@ -665,6 +667,7 @@ const I18N = {
     set_px:"Размер фото при отправке", set_px_full:"Оригинал — полная детализация (медленнее всего)",
     set_px_2000:"Крупный — 2000 px", set_px_1600:"Средний — 1600 px (намного меньше, быстрее всего)",
     set_intro:"Включите один или оба адресата. Если включены оба, осмотр считается отправленным только после подтверждения от каждого.",
+    set_folder_help:"Подстановки: {TYPE} (MP / FC / INSP / TEMP), {UNIT}, {YYYY} {MM} {DD} {YYYY-MM}. Вложенные папки создаются автоматически: {TYPE}/{YYYY-MM} раскладывает по типу осмотра и месяцам.",
     set_prov:"Настроить остальные телефоны",
     set_prov_hint:"Настройте один телефон, затем покажите код следующему и нажмите там «Сканировать настройки». Ничего вводить не нужно.",
     set_prov_warn:"⚠ Код и ссылка содержат ваши учётные данные для загрузки. Передавайте только по внутренним каналам.",
@@ -674,7 +677,7 @@ const I18N = {
     m_data_missing:"Часть данных не загрузилась ({x}) — списки будут неполными. Нажмите ⟳ при интернете.",
     m_cfg_bad:["Код не распознан","Попросите показать код настроек ещё раз и снимите весь квадрат целиком."],
     set_help_gas:"Google Диск: откройте script.google.com, вставьте docs/google-upload.gs, укажите ROOT_FOLDER_ID вашей папки Диска, затем Deploy → Web app: «Execute as: Me», «Who has access: Anyone». Скопируйте URL /exec сюда. После каждой правки развёртывайте НОВУЮ ВЕРСИЮ, иначе работает старый код.",
-    set_url:"URL отправки", set_hdr:"Секретный заголовок (необяз.)", set_folder:"Папка / префикс — {YYYY-MM} по месяцам",
+    set_url:"URL отправки", set_hdr:"Секретный заголовок (необяз.)", set_folder:"Папка — напр. {TYPE}/{YYYY-MM}",
     set_test:"Проверить соединение", set_save:"Сохранить", set_testing:"Проверка…", set_ok:"Успешно — тестовый файл отправлен.",
     set_needurl:"Сначала выберите режим и укажите URL.",
     set_help:"Power Automate: создайте поток с триггером \u201cWhen an HTTP request is received\u201d, добавьте \u201cCreate file\u201d (SharePoint): name = triggerBody()?['name'], content = base64ToBinary(triggerBody()?['file']), затем скопируйте URL сюда.",
@@ -1609,7 +1612,7 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
    has accepted every one of its files. */
 const DEST_META={ gas:{label:"Google Drive"}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
 const DEST_IDS=["gas","pa","post"];
-const BUILD="41";
+const BUILD="42";
 const DEFAULT_DESTS=((window.UPLOAD_DEFAULTS||{}).dests)||[];
 function loadDests(){
   let d=null; try{ d=JSON.parse(localStorage.getItem("up_dests")||"null"); }catch(e){}
@@ -1648,12 +1651,22 @@ function activeDests(){ return loadDests().filter(d=>d.on && d.url); }
 const UP={ get on(){ return activeDests().length>0; } };
 // Folder placeholders so the destination rolls over on its own:
 //   {YYYY} {MM} {DD} {YYYY-MM}  e.g. "{YYYY-MM}" -> "2026-07"
-function expandFolder(f){ if(!f) return "";
+/* ctx = the record being uploaded, so a folder can be split by inspection type
+   ("MP/2026-07") instead of everything landing in one listing. Date parts come
+   from the INSPECTION date when there is one, not from today, so a round entered
+   late still files under the month it was done. */
+function expandFolder(f,ctx){ if(!f) return "";
+  ctx=ctx||{};
+  const iso=String(ctx.date||"").match(/^(\d{4})-(\d{2})-(\d{2})/);
   const d=new Date(), p=n=>String(n).padStart(2,"0");
-  return f.replace(/\{YYYY-MM\}/g,`${d.getFullYear()}-${p(d.getMonth()+1)}`)
-          .replace(/\{YYYY\}/g,String(d.getFullYear()))
-          .replace(/\{MM\}/g,p(d.getMonth()+1))
-          .replace(/\{DD\}/g,p(d.getDate())); }
+  const Y=iso?iso[1]:String(d.getFullYear()), M=iso?iso[2]:p(d.getMonth()+1), D=iso?iso[3]:p(d.getDate());
+  const clean=v=>String(v||"").replace(/[\\/:*?"<>|]/g,"-").trim();
+  return f.replace(/\{YYYY-MM\}/g,`${Y}-${M}`)
+          .replace(/\{YYYY\}/g,Y).replace(/\{MM\}/g,M).replace(/\{DD\}/g,D)
+          .replace(/\{TYPE\}/g,clean((TYPE_META[ctx.type]&&TYPE_META[ctx.type].suffix)||ctx.type||""))
+          .replace(/\{TYPENAME\}/gi,clean(ctx.type?t("type_"+ctx.type):""))
+          .replace(/\{UNIT\}/gi,clean(ctx.equip))
+          .replace(/\/{2,}/g,"/").replace(/^\/+|\/+$/g,""); }
 function upHeaders(raw,extra){ const h=Object.assign({},extra||{});
   if(raw && raw.indexOf(":")>0){ const i=raw.indexOf(":"); h[raw.slice(0,i).trim()]=raw.slice(i+1).trim(); }
   return h; }
@@ -1688,8 +1701,8 @@ async function putFile(name, blob, type){
   if(errs.length) throw new Error(errs.join(" · "));
   return true;
 }
-async function putOne(UP, name, blob, type){
-  const folder=expandFolder(UP.folder||"");
+async function putOne(UP, name, blob, type, ctx){
+  const folder=expandFolder(UP.folder||"", ctx);
   if(UP.id==="gas"){
     // Apps Script web apps cannot answer a CORS preflight, so this must stay a
     // "simple" request: text/plain body, no custom headers, secret inside the JSON.
@@ -1767,7 +1780,7 @@ async function syncNow(manual){
       }
       const errs=[];
       for(const d of todo){
-        try{ for(const f of payload) await putOne(d,f.name,f.blob,f.type); done[d.id]=1; }
+        try{ for(const f of payload) await putOne(d,f.name,f.blob,f.type,rec); done[d.id]=1; }
         catch(e){ errs.push(DEST_META[d.id].label+": "+String(e.message||e)); }
       }
       // Re-read before writing. Putting back the copy we started with would

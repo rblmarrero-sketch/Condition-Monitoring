@@ -409,6 +409,15 @@ Settings already saved on a phone always win, and switching a destination off st
 
 A record is only marked uploaded once every enabled destination has taken every file.
 
+### Where the files land
+
+The **Folder** field in ⚙ takes placeholders and creates sub-folders as needed, so each
+inspection type gets its own: `{TYPE}/{YYYY-MM}` produces `MP/2026-07/`, `FC/2026-07/`,
+`TEMP/2026-07/`, `INSP/2026-07/`. Also available: `{TYPENAME}` (the readable name),
+`{UNIT}`, and `{YYYY} {MM} {DD}`. Date parts come from the **inspection** date, not from
+today, so a round entered late still files under the month it was done. Each destination
+has its own folder setting.
+
 ### Upload speed
 
 **Photo size on upload** (⚙ in the app) is the biggest lever, whichever route you use:
