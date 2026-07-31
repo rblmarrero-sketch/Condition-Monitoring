@@ -180,7 +180,9 @@ const TAX=window.TAX2||{groups:{},defects:[],causes:[],isoMech:{}};
 const DEF={}; TAX.defects.forEach(d=>DEF[d.c]=d);
 const SEV={NOF:{l:"No failure",c:"g",r:0},INC:{l:"Incipient",c:"w",r:1},DEG:{l:"Degraded",c:"s",r:2},CRI:{l:"Critical",c:"c",r:3}};
 const SEVC={NOF:"var(--good)",INC:"var(--warning)",DEG:"var(--serious)",CRI:"var(--critical)"};
-const GRADE_SEV={A:"NOF",B:"INC",C:"DEG",D:"CRI"};
+// Inspection grade scale: A / B / C / X, X being the worst (confirmed with the
+// reliability team). A record's own ISO severity always wins over the grade.
+const GRADE_SEV={A:"NOF",B:"INC",C:"DEG",X:"CRI"};
 const TYPE_LABEL={MP:"Magnetic Plug",FC:"Filter Cut",INSP:"Inspection",TEMP:"Temperature"};
 // Inspection and Temperature name their files with the real component code (TK151.DRS.ENG_…)
 const usesRegister=(ty)=>ty==="INSP"||ty==="TEMP";

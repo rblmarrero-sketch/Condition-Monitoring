@@ -155,25 +155,30 @@ must be reachable from the machine viewing the dashboard.)
 
 ---
 
-## Grade / severity colours — please confirm
+## Grade / severity scale
 
-The workbook records a letter **Grade** (`Степень`) per plug position. This file
-had mostly `C` and a few `X`. Because the workbook has no legend, the dashboard
-ships with an **assumed** scale:
+The workbook records a letter **Grade** (`Степень`) per plug position. The scale is
+**A / B / C / X**, with **X the worst** — there is no `D`:
 
-| Grade | Assumed meaning | Colour |
-|-------|-----------------|--------|
-| A | Good | green |
-| B | Watch | yellow |
-| C | Serious | orange |
-| D | Critical | red |
-| X | Not inspected | grey |
+| Grade | Meaning | Colour | Suggested ISO 14224 severity |
+|-------|---------|--------|------------------------------|
+| A | Good | green | No failure |
+| B | Watch | yellow | Incipient |
+| C | Serious | orange | Degraded |
+| X | Critical | red | Critical |
 
-> ⚠️ **This mapping is a placeholder.** Confirm it against your inspection
-> standard and edit the `GRADE_SCALE` object near the top of
-> `dashboard/index.html` (one place, clearly commented). Set
-> `GRADE_ASSUMPTION = false` there to hide the on-screen warning once confirmed.
-> The raw grade letter is always shown, so colour is never the only signal.
+The grade only **suggests** the ISO severity when you tap it — the inspector can set a
+different severity, and that choice always wins. On the dashboard, an item's own severity
+takes priority over anything derived from the grade.
+
+The mapping lives in one clearly-commented `GRADE_SEV` constant in both
+`mobile/index.html` and `dashboard/index.html`. The raw grade letter is always shown, so
+colour is never the only signal.
+
+> The historical magnetic-plug workbook is **56 × `C` and 8 × `X`** — i.e. almost every
+> reading sits at *Serious*. If `C` is in practice your normal/acceptable grade rather
+> than a finding, say so and the two constants change to `C: "INC"`; that alone decides
+> whether those 56 rows appear in the action register.
 
 ---
 
