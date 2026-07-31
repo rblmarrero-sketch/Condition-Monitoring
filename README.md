@@ -389,6 +389,10 @@ one-file-at-a-time path automatically and says so.
 | | What it does |
 |---|---|
 | **Correct** | Severity, recommendation, WO, defect, direct cause and comments, per position, plus a note on the round. Only what you actually change is recorded, and your name goes with it. |
+
+The defect and cause pickers have a search box above them — 132 defects and 223 causes is
+too many to scroll. Typing narrows the list and shows how many matched; Enter takes it when
+one is left. Whatever is already recorded stays selectable however you filter.
 | **Void** | Withdraws the round from every count, chart, action list and report, with a reason. Nothing is deleted; **Show voided** brings it back into view, and **Un-void** reverses it. |
 | **Delete** | Sidecar, photos, signature and corrections to Drive's **trash** (30 days), logged with who and why. Off unless `ADMIN_SECRET` is set in the Apps Script. |
 

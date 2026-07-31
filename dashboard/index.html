@@ -100,6 +100,9 @@
   .lang button{background:var(--surface);color:var(--ink-2);border:0;padding:7px 11px;font:inherit;
     font-size:12px;font-weight:650;cursor:pointer;}
   .lang button.on{background:var(--accent);color:#fff;}
+  .pick .pickq{margin-bottom:5px;min-width:0;width:100%;font-size:12.5px;padding:6px 9px;}
+  .pick select{min-width:0;width:100%;}
+  .pickn{font-size:11px;color:var(--muted);margin-top:3px;min-height:14px;}
   .voidtog{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--ink-2);
     padding-bottom:9px;cursor:pointer;user-select:none;}
   .voidtog input{width:16px;height:16px;accent-color:var(--accent);cursor:pointer;}
@@ -476,6 +479,7 @@ const I18N={
   ed_sev:"Severity", ed_rec:"Recommendation", ed_wo:"WO / notification",
   ed_defect:"Defect", ed_cause:"Direct cause", ed_comment:"Comment",
   ed_none:"— none —", ed_nosev:"no severity",
+  ed_find:"type to narrow…", ed_matches:"{n} of {t}", ed_nomatch:"nothing matches — clear the search",
   ed_nothing:"Nothing to correct", ed_nothing_sub:"This inspection has no positions recorded.",
   ed_needdrive:"❌ Set up Google Drive first — corrections are stored there.",
   ed_needname:"Put your name in first — a correction has to be attributable.",
@@ -601,6 +605,7 @@ const I18N={
   ed_sev:"Степень", ed_rec:"Рекомендация", ed_wo:"Заявка / уведомление",
   ed_defect:"Дефект", ed_cause:"Непосредственная причина", ed_comment:"Комментарий",
   ed_none:"— нет —", ed_nosev:"степень не указана",
+  ed_find:"начните вводить…", ed_matches:"{n} из {t}", ed_nomatch:"совпадений нет — очистите поиск",
   ed_nothing:"Нечего исправлять", ed_nothing_sub:"В этом осмотре нет записанных позиций.",
   ed_needdrive:"❌ Сначала настройте Google Диск — правки хранятся там.",
   ed_needname:"Сначала укажите своё имя — правка должна быть именной.",
@@ -1010,6 +1015,37 @@ function renderHistory(){
 const ACTION_CODES=["MON","SCH","REP","REP_MON","SAM","INV","NA"];
 const actionOpts=()=>[["",t("ed_none")]].concat(ACTION_CODES.map(c=>[c,t("a_"+c)]));
 let edKey=null;
+
+/* 132 defects and 223 causes is too many to scroll for. Each picker gets a
+   filter box above it; typing rebuilds the option list from the full one. The
+   <select> itself is untouched, so collectEdit() and the data-init
+   "only what actually changed" comparison keep working exactly as before. */
+const OPTS={
+  get defectCode(){ return (TAX.defects||[]).map(d=>({v:d.c,l:`${d.c} · ${d.en||d.name||""}`})); },
+  get causeCode(){ return (TAX.causes||[]).map(c=>({v:c.c||c.code||"",l:c.en||c.name||c.c||""})); },
+};
+function picker(f,key,label){
+  return `<div class="field pick" style="flex:1"><label>${esc(label)}</label>
+    <input class="pickq" type="search" data-filter="${f}" data-k="${esc(key)}"
+           data-i18n-ph="ed_find" placeholder="${esc(t("ed_find"))}">
+    <select data-f="${f}" data-k="${esc(key)}"></select>
+    <div class="pickn" data-count="${f}" data-k="${esc(key)}"></div></div>`;
+}
+/* Rebuild one picker's options. The current value is always kept in the list
+   even when it does not match the search, or filtering would silently drop a
+   choice the inspector had already made. */
+function fillPicker(f,key,q){
+  const sel=$("edItems").querySelector(`select[data-f="${f}"][data-k="${CSS.escape(key)}"]`);
+  if(!sel) return;
+  const cur=sel.value, all=OPTS[f], needle=(q||"").trim().toLowerCase();
+  const hit=needle ? all.filter(o=>o.l.toLowerCase().indexOf(needle)>=0) : all;
+  const list=(cur && !hit.some(o=>o.v===cur)) ? hit.concat(all.filter(o=>o.v===cur)) : hit;
+  sel.innerHTML=`<option value="">${esc(t("ed_none"))}</option>`
+    +list.map(o=>`<option value="${esc(o.v)}">${esc(o.l)}</option>`).join("");
+  sel.value=cur;                      // survives the rebuild
+  const c=$("edItems").querySelector(`[data-count="${f}"][data-k="${CSS.escape(key)}"]`);
+  if(c) c.textContent = needle ? t(hit.length?"ed_matches":"ed_nomatch",{n:hit.length,t:all.length}) : "";
+}
 /* keepMsg: re-opened after a save, to show the change applied. Without it the
    re-render wiped the "Saved" line the user had just earned, so a successful
    correction looked like nothing had happened. */
@@ -1025,10 +1061,6 @@ function openEdit(key,keepMsg){
   $("edUnvoid").style.display=rec._void?"":"none";
   $("edVoid").style.display=rec._void?"none":"";
 
-  const defOpts=`<option value="">${esc(t("ed_none"))}</option>`
-    +(TAX.defects||[]).map(d=>`<option value="${esc(d.c)}">${esc(d.c)} · ${esc(d.en||d.name||"")}</option>`).join("");
-  const cauOpts=`<option value="">${esc(t("ed_none"))}</option>`
-    +(TAX.causes||[]).map(c=>`<option value="${esc(c.c||c.code||"")}">${esc(c.en||c.name||c.c||"")}</option>`).join("");
 
   $("edItems").innerHTML=(rec.items||[]).map((i,n)=>{
     const sev=i.sev||GRADE_SEV[i.grade]||"";
@@ -1049,15 +1081,23 @@ function openEdit(key,keepMsg){
             <input data-f="wo" data-k="${esc(i.key)}" type="text" value="${esc(i.wo||"")}"></div>
         </div>
         <div class="row">
-          <div class="field" style="flex:1"><label>${esc(t("ed_defect"))}</label>
-            <select data-f="defectCode" data-k="${esc(i.key)}">${defOpts}</select></div>
-          <div class="field" style="flex:1"><label>${esc(t("ed_cause"))}</label>
-            <select data-f="causeCode" data-k="${esc(i.key)}">${cauOpts}</select></div>
+          ${picker("defectCode",i.key,t("ed_defect"))}
+          ${picker("causeCode",i.key,t("ed_cause"))}
         </div>
         <div class="field"><label>${esc(t("ed_comment"))}</label>
           <input data-f="comment" data-k="${esc(i.key)}" type="text" value="${esc(i.comment||"")}"></div>
       </div></div>`;
   }).join("")||`<div class="empty"><b>${esc(t("ed_nothing"))}</b><span>${esc(t("ed_nothing_sub"))}</span></div>`;
+
+  // Fill the two searchable pickers before the codes below are applied to them.
+  (rec.items||[]).forEach(i=>{ fillPicker("defectCode",i.key,""); fillPicker("causeCode",i.key,""); });
+  $("edItems").querySelectorAll("[data-filter]").forEach(inp=>{
+    inp.oninput=()=>fillPicker(inp.dataset.filter,inp.dataset.k,inp.value);
+    // Enter on a search that has narrowed to one picks it — keyboard only, no mouse
+    inp.onkeydown=e=>{ if(e.key!=="Enter") return; e.preventDefault();
+      const sel=$("edItems").querySelector(`select[data-f="${inp.dataset.filter}"][data-k="${CSS.escape(inp.dataset.k)}"]`);
+      if(sel && sel.options.length===2){ sel.value=sel.options[1].value; sel.focus(); } };
+  });
 
   // Pre-select the codes the record already carries, without trusting innerHTML
   (rec.items||[]).forEach(i=>{
