@@ -52,12 +52,27 @@ Optionally click **Sync** in SharePoint so the folder appears on the N: drive / 
 6. **Save**. Re-open the trigger and copy the **HTTP POST URL** — it is long and
    contains a signature. **Treat it as a password.**
 
-### Optional: put each month in its own folder
-Set **Folder Path** to an expression instead:
+### Recommended: a folder per month (no extra flow step)
+
+SharePoint's *Create file* **creates missing folders when the path is part of the
+File Name**, so you don't need a "create folder if it doesn't exist" action.
+
+Keep **Folder Path** as it is and change **File Name** to this expression (ƒx tab):
+
 ```
-concat('/Documents/Condition Monitoring/Inspections/', triggerBody()?['folder'])
+if(empty(triggerBody()?['folder']), triggerBody()?['name'], concat(triggerBody()?['folder'], '/', triggerBody()?['name']))
 ```
-and set the app's **Folder / prefix** field to e.g. `2026-07`.
+
+Then in the app set **Folder / prefix** to `{YYYY-MM}` — the app substitutes the
+current year-month at upload time, so files land in
+`Inspections/2026-07/…`, `Inspections/2026-08/…` and so on with no maintenance.
+
+Supported placeholders: `{YYYY}` `{MM}` `{DD}` `{YYYY-MM}`.
+Leave the field empty to keep everything in one folder.
+
+> The dashboard's **📂 Photo folder** picker searches sub-folders, so point it at
+> the top **Condition Monitoring** folder once and it will keep finding new
+> monthly folders automatically.
 
 ---
 

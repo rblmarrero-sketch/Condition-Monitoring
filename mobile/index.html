@@ -239,7 +239,7 @@
   <div class="syncbar" id="syncBar"></div>
   <button class="btn ghost" id="reportBtn" style="margin-bottom:16px">📄 <span data-i18n="btn_report">PDF report</span></button>
 
-  <div class="ver">build v28 · 2026-07-31 · Upload error detail · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver">build v29 · 2026-07-31 · Monthly upload folders · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <div class="bottombar">
@@ -262,7 +262,7 @@
     <label class="fld"><span data-i18n="set_hdr">Secret header (optional)</span>
       <input id="upHdr" type="text" placeholder="x-api-key: abc123" autocomplete="off"></label>
     <label class="fld"><span data-i18n="set_folder">Folder / prefix (optional)</span>
-      <input id="upFolder" type="text" placeholder="2026-07" autocomplete="off"></label>
+      <input id="upFolder" type="text" placeholder="{YYYY-MM}" autocomplete="off"></label>
     <div class="row" style="gap:10px">
       <button class="btn ghost" id="testUp" data-i18n="set_test">Test connection</button>
       <button class="btn primary" id="saveSet" data-i18n="set_save">Save</button>
@@ -437,7 +437,7 @@ const I18N = {
     sync_err:"Upload failed", sync_now:"Sync now",
     set_title:"Upload settings", set_mode:"Upload mode", set_off:"Off — export manually",
     set_pa:"Power Automate (JSON + base64)", set_post:"Plain HTTPS POST (multipart)",
-    set_url:"Upload URL", set_hdr:"Secret header (optional)", set_folder:"Folder / prefix (optional)",
+    set_url:"Upload URL", set_hdr:"Secret header (optional)", set_folder:"Folder / prefix — {YYYY-MM} rolls monthly",
     set_test:"Test connection", set_save:"Save", set_testing:"Testing…", set_ok:"Connected — test file uploaded.",
     set_needurl:"Choose a mode and paste the URL first.",
     set_help:"Power Automate: create a flow with the trigger \u201cWhen an HTTP request is received\u201d, add \u201cCreate file\u201d (SharePoint) with name = triggerBody()?['name'] and content = base64ToBinary(triggerBody()?['file']), then copy the generated URL here.",
@@ -484,7 +484,7 @@ const I18N = {
     sync_err:"Ошибка отправки", sync_now:"Отправить",
     set_title:"Настройки отправки", set_mode:"Режим отправки", set_off:"Выкл — выгружать вручную",
     set_pa:"Power Automate (JSON + base64)", set_post:"Обычный HTTPS POST (multipart)",
-    set_url:"URL отправки", set_hdr:"Секретный заголовок (необяз.)", set_folder:"Папка / префикс (необяз.)",
+    set_url:"URL отправки", set_hdr:"Секретный заголовок (необяз.)", set_folder:"Папка / префикс — {YYYY-MM} по месяцам",
     set_test:"Проверить соединение", set_save:"Сохранить", set_testing:"Проверка…", set_ok:"Успешно — тестовый файл отправлен.",
     set_needurl:"Сначала выберите режим и укажите URL.",
     set_help:"Power Automate: создайте поток с триггером \u201cWhen an HTTP request is received\u201d, добавьте \u201cCreate file\u201d (SharePoint): name = triggerBody()?['name'], content = base64ToBinary(triggerBody()?['file']), затем скопируйте URL сюда.",
@@ -1120,7 +1120,15 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
 const UP={ get mode(){return localStorage.getItem("up_mode")||"off";},
   get url(){return localStorage.getItem("up_url")||"";},
   get hdr(){return localStorage.getItem("up_hdr")||"";},
-  get folder(){return localStorage.getItem("up_folder")||"";} };
+  get folder(){return expandFolder(localStorage.getItem("up_folder")||"");} };
+// Folder placeholders so the destination rolls over on its own:
+//   {YYYY} {MM} {DD} {YYYY-MM}  e.g. "{YYYY-MM}" -> "2026-07"
+function expandFolder(f){ if(!f) return "";
+  const d=new Date(), p=n=>String(n).padStart(2,"0");
+  return f.replace(/\{YYYY-MM\}/g,`${d.getFullYear()}-${p(d.getMonth()+1)}`)
+          .replace(/\{YYYY\}/g,String(d.getFullYear()))
+          .replace(/\{MM\}/g,p(d.getMonth()+1))
+          .replace(/\{DD\}/g,p(d.getDate())); }
 function upHeaders(extra){ const h=Object.assign({},extra||{}); const raw=UP.hdr;
   if(raw && raw.indexOf(":")>0){ const i=raw.indexOf(":"); h[raw.slice(0,i).trim()]=raw.slice(i+1).trim(); }
   return h; }
