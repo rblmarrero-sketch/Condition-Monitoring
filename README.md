@@ -175,10 +175,9 @@ The mapping lives in one clearly-commented `GRADE_SEV` constant in both
 `mobile/index.html` and `dashboard/index.html`. The raw grade letter is always shown, so
 colour is never the only signal.
 
-> The historical magnetic-plug workbook is **56 × `C` and 8 × `X`** — i.e. almost every
-> reading sits at *Serious*. If `C` is in practice your normal/acceptable grade rather
-> than a finding, say so and the two constants change to `C: "INC"`; that alone decides
-> whether those 56 rows appear in the action register.
+Both `C` and `X` count as findings, so the action register lists every `C` and `X` as
+outstanding work. The historical magnetic-plug workbook is **56 × `C` and 8 × `X`**, so
+expect the register to open with 64 rows from that round alone.
 
 ---
 
