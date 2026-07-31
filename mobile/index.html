@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Truck Inspection — Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=39">
+<link rel="manifest" href="manifest.webmanifest?v=40">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -316,7 +316,7 @@
   <div class="syncbar" id="syncBar"></div>
   <button class="btn ghost" id="reportBtn" style="margin-bottom:16px">📄 <span data-i18n="btn_report">PDF report</span></button>
 
-  <div class="ver">build v39 · 2026-07-31 · Cache-busted assets · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver">build v40 · 2026-07-31 · Cache-busted assets · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <div class="bottombar">
@@ -419,16 +419,16 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="jsQR.js?v=39"></script>
-<script src="qrcode.js?v=39"></script>
-<script src="upload-defaults.js?v=39"></script>
-<script src="taxonomy.js?v=39"></script>
-<script src="taxonomy2.js?v=39"></script>
-<script src="assets.js?v=39"></script>
-<script src="components.js?v=39"></script>
-<script src="temp-limits.js?v=39"></script>
-<script src="jspdf.umd.min.js?v=39"></script>
-<script src="html2canvas.min.js?v=39"></script>
+<script src="jsQR.js?v=40"></script>
+<script src="qrcode.js?v=40"></script>
+<script src="upload-defaults.js?v=40"></script>
+<script src="taxonomy.js?v=40"></script>
+<script src="taxonomy2.js?v=40"></script>
+<script src="assets.js?v=40"></script>
+<script src="components.js?v=40"></script>
+<script src="temp-limits.js?v=40"></script>
+<script src="jspdf.umd.min.js?v=40"></script>
+<script src="html2canvas.min.js?v=40"></script>
 <script>
 /* ============================================================================
    EQUIPMENT CLASSES & INSPECTION TYPES  —  EDIT here for your fleet.
@@ -1580,7 +1580,7 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
    has accepted every one of its files. */
 const DEST_META={ gas:{label:"Google Drive"}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
 const DEST_IDS=["gas","pa","post"];
-const BUILD="39";
+const BUILD="40";
 const DEFAULT_DESTS=((window.UPLOAD_DEFAULTS||{}).dests)||[];
 function loadDests(){
   let d=null; try{ d=JSON.parse(localStorage.getItem("up_dests")||"null"); }catch(e){}
@@ -1594,9 +1594,23 @@ function loadDests(){
           folder: localStorage.getItem("up_folder")||"" }))
       : [];
   }
-  // A phone with no destination URL at all takes the built-in ones, so a fresh
-  // install uploads with nothing to configure. Anything already saved wins.
-  if(!d.some(x=>x && x.url)) d=DEFAULT_DESTS.map(x=>Object.assign({},x));
+  // Fill in the built-ins PER DESTINATION. Doing this all-or-nothing was wrong:
+  // a phone that had SharePoint set up by hand counted as "configured", so Google
+  // never got its URL and sat ticked-but-empty. A destination the phone already
+  // has a URL for is left completely alone; the tick state is never overridden.
+  DEFAULT_DESTS.forEach(def=>{
+    const cur=d.find(x=>x && x.id===def.id);
+    if(!cur){ d.push(Object.assign({},def)); return; }
+    if(cur.url) return;              // configured here — leave it entirely alone,
+                                     // including an untick, which IS a real choice
+    // No URL means this phone has never actually had this destination: either a
+    // fresh install or the single-mode migration, which left the other one off.
+    // Introduce it exactly as the defaults describe it, tick included.
+    cur.url=def.url||"";
+    cur.on=!!def.on;
+    if(!cur.sec)    cur.sec=def.sec||"";
+    if(!cur.folder) cur.folder=def.folder||"";
+  });
   localStorage.setItem("up_dests",JSON.stringify(d));
   return DEST_IDS.map(id=>Object.assign({id,on:false,url:"",sec:"",folder:""}, d.find(x=>x.id===id)||{}));
 }
@@ -1757,9 +1771,13 @@ DEST_IDS.forEach(id=>{ $(id+"On").addEventListener("change",markDestState);
   $(id+"Url").addEventListener("input",markDestState); });
 function openSettings(){ destsToForm(loadDests()); $("upPx").value=localStorage.getItem("up_px")||"0";
   const n=DEFAULT_DESTS.filter(d=>d.url).length;
+  const where=activeDests().map(d=>{
+    const def=DEFAULT_DESTS.find(x=>x.id===d.id);
+    return `${DEST_META[d.id].label} (${def&&def.url===d.url?"built-in":"set on this phone"})`; });
   $("setDiag").textContent = `build v${BUILD} · `+(n
     ? `${n} built-in destination(s) available`
-    : `no built-in destinations — upload-defaults.js has no URLs (or is a cached old copy)`);
+    : `no built-in destinations — upload-defaults.js has no URLs (or is a cached old copy)`)
+    + ` · in use: ${where.join(", ")||"none"}`;
   $("setMsg").textContent=""; $("provBox").classList.add("hidden"); $("setOv").classList.remove("hidden"); }
 function persistSettings(){ saveDests(formToDests()); localStorage.setItem("up_px",$("upPx").value); }
 $("setBtn").onclick=openSettings;
