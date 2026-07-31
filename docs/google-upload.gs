@@ -40,7 +40,7 @@ const SECRET = '';
  *
  *  Deleting moves files to Drive's TRASH (recoverable for 30 days) and writes a
  *  log entry saying what went, when, and why. Nothing is ever purged outright. */
-const ADMIN_SECRET = 'rbonm';
+const ADMIN_SECRET = '';
 
 /** Where the audit trail and the dashboard's edits live, inside ROOT_FOLDER_ID. */
 const META_DIR = '_meta';
