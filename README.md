@@ -407,6 +407,13 @@ office has retracted.
 > and it needs a password that is deliberately **not** the one the phones carry, because
 > the upload URL is effectively public.
 
+### EN / RU
+
+The dashboard has an **EN | RU** toggle in the header, matching the app. Everything
+switches — tabs, filters, KPI tiles, table headings, severity and inspection-type names,
+the data-sources sheet and the edit panel — and the choice is remembered per browser. The
+PDF reports were already bilingual and print both languages side by side regardless.
+
 ### Finding things once the data is in
 
 * **Search** (or press `/`) matches unit, defect, cause, comment, inspector and WO across

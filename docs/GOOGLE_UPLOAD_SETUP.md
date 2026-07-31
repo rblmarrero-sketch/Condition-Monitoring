@@ -143,6 +143,10 @@ re-syncing overwrites the sidecar — a correction stored there would vanish wit
 The clients merge the marker over the record when they read, so the original readings,
 photos and signature are never altered. Only fields you actually change are recorded.
 
+A correction shows immediately and uploads in the background — Apps Script takes a few
+seconds to answer and there is no reason to sit and watch it. If the upload is refused the
+change is undone and the panel says why, so nothing is left applied in one browser only.
+
 **Void** withdraws a round from every count, chart, action list and report, with a reason
 attached. Nothing is deleted. Voided rounds still appear in Equipment history, greyed and
 flagged, and **Show voided** in the controls brings them back into view. The phones honour
