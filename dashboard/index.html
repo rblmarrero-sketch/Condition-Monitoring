@@ -176,7 +176,8 @@
           <div class="field"><label for="drvSec">Shared secret (blank if SECRET is '')</label>
             <input id="drvSec" type="text" placeholder="leave empty if you did not set one"></div>
           <div class="row"><button class="btn primary" id="drvGo">Load from Drive</button>
-            <button class="btn" id="drvTest">Test connection</button></div>
+            <button class="btn" id="drvTest">Test connection</button>
+            <button class="btn" id="drvFull" title="Re-read every inspection. Use after deleting files in Drive — a normal load only asks for what is new.">Reload everything</button></div>
           <div class="msg" id="drvMsg"></div>
         </div>
       </div>
@@ -326,7 +327,9 @@ const GRADE_SEV={A:"NOF",B:"INC",C:"DEG",X:"CRI"};
 const TYPE_LABEL={MP:"Magnetic Plug",FC:"Filter Cut",INSP:"Inspection",TEMP:"Temperature"};
 // Inspection and Temperature name their files with the real component code (TK151.DRS.ENG_…)
 const usesRegister=(ty)=>ty==="INSP"||ty==="TEMP";
-const STORE="cm_dash_records";
+const STORE="cm_dash_records";        // records from "Import a file"
+const DSTORE="cm_dash_drive";         // records pulled from Google Drive, kept so a
+                                      // refresh only has to ask for what is new
 
 /* ---------- records: bundled magnetic-plug data + imported entries.json ---------- */
 function fromBundled(){
@@ -338,15 +341,24 @@ function fromBundled(){
       photo:p.photo||"",photos:p.photo?1:0,video:0})),src:"bundled"}));
 }
 let imported=[]; try{ imported=JSON.parse(localStorage.getItem(STORE))||[]; }catch(e){ imported=[]; }
+let driveRecs=[]; try{ driveRecs=JSON.parse(localStorage.getItem(DSTORE))||[]; }catch(e){ driveRecs=[]; }
 let RECS=[];
 function rebuild(){
   const key=r=>`${r.equip}|${r.date}|${r.type}`;
   const map=new Map();
   fromBundled().forEach(r=>map.set(key(r),r));
-  imported.forEach(r=>map.set(key(r),r));          // imported wins
+  driveRecs.forEach(r=>map.set(key(r),r));         // Drive beats the bundled history
+  imported.forEach(r=>map.set(key(r),r));          // a hand-picked file beats both
   RECS=[...map.values()].sort((a,b)=>(b.date||"").localeCompare(a.date||"")||a.equip.localeCompare(b.equip));
 }
 function saveImported(){ try{ localStorage.setItem(STORE,JSON.stringify(imported)); }catch(e){ alert("Storage full — clear old imports."); } }
+/* Losing this cache is survivable — it only means the next refresh re-reads the
+   folder, which is one request. Dropping the cursor is what makes that happen. */
+function saveDrive(){
+  try{ localStorage.setItem(DSTORE,JSON.stringify(driveRecs)); }
+  catch(e){ localStorage.removeItem(DSTORE); localStorage.removeItem("cm_drive_cursor");
+            console.warn("Drive cache too big for localStorage — will re-read next time."); }
+}
 
 /* ---------- filters ---------- */
 /* Extra filters set by clicking a chart, a KPI or a table — they live here rather
@@ -561,6 +573,16 @@ window.CMDash={
       imported=imported.filter(x=>`${x.equip}|${x.date}|${x.type}`!==k); imported.push(r); });
     saveImported(); rebuild(); refreshControls(); renderAll(); refreshSources();
   },
+  /* Drive records are kept apart from imported ones so the sources panel can say
+     honestly where each inspection came from. `replace` is the full-reload path;
+     without it an incremental pull merges on top of what is already held. */
+  setDriveRecords(recs,opts){
+    if(opts&&opts.replace) driveRecs=[];
+    recs.forEach(r=>{ const k=`${r.equip}|${r.date}|${r.type}`;
+      driveRecs=driveRecs.filter(x=>`${x.equip}|${x.date}|${x.type}`!==k); driveRecs.push(r); });
+    saveDrive(); rebuild(); refreshControls(); renderAll(); refreshSources();
+  },
+  driveCount(){ return driveRecs.length; },
   recsFor(equip){ return RECS.filter(r=>r.equip===equip); },
   allRecs(){ return RECS; },
   rerender(){ renderAll(); },
@@ -671,37 +693,58 @@ $("dataOv").onclick=e=>{ if(e.target.id==="dataOv") $("dataOv").classList.add("h
 function refreshSources(){
   const units=new Set(RECS.map(r=>r.equip)).size;
   const nPhotos=folderPhotos?Object.keys(folderPhotos).length:0;
-  const where=[]; if(drvOn()) where.push("Drive"); if(folderName) where.push(folderName);
+  const where=[]; if(driveRecs.length) where.push("Drive"); if(folderName) where.push(folderName);
   if(imported.length && !where.length) where.push("imported file");
   $("srcText").textContent = RECS.length
     ? `${RECS.length} inspections · ${units} units${nPhotos?` · ${nPhotos} photos`:""}${where.length?` · ${where.join(" + ")}`:""}`
     : "No data yet — click to connect";
   $("srcChip").classList.toggle("live", RECS.length>0);
   const set=(card,state,on,text)=>{ $(card).classList.toggle("on",!!on); $(state).textContent=text; };
-  set("cardDrive","stDrive",drvOn(),drvOn()?`${drv().indexed()} files indexed`:"not set up");
+  // driveRecs is restored from localStorage at init, before drive.js exists
+  const nIdx=drv()?drv().indexed():0;
+  set("cardDrive","stDrive",driveRecs.length>0,
+    driveRecs.length ? `${driveRecs.length} inspection(s)${nIdx?` · ${nIdx} files indexed`:""}`
+    : drvOn() ? "set up — not loaded yet" : "not set up");
   set("cardFolder","stFolder",!!folderName,folderName?`${folderName} · ${nPhotos} photos`:"not opened");
   set("cardFile","stFile",imported.length>0,imported.length?`${imported.length} record(s) in this browser`:"—");
 }
 
 /* ---------- Google Drive ---------- */
-async function driveRun(loadIt){
+const SLOW_HINT=" This /exec is on the old one-file-at-a-time reader, which is slow and"
+  +" eats the daily quota. Re-paste docs/google-upload.gs, then Deploy → Manage"
+  +" deployments → ✏️ → Version: New version.";
+
+async function driveRun(mode){            // "test" | "load" | "full"
   const msg=$("drvMsg"), url=$("drvUrl").value.trim();
   if(!url){ msg.textContent="Paste the /exec URL first."; return; }
   if(!drv()){ msg.textContent="Drive reader did not load — reload the page."; return; }
   drv().save(url,$("drvSec").value);
-  $("drvGo").disabled=$("drvTest").disabled=true;
+  const btns=["drvGo","drvTest","drvFull"];
+  btns.forEach(b=>$(b).disabled=true);
   try{
-    if(!loadIt){ const n=await window.CMDrive.ping(); msg.textContent="✅ Connected — folder “"+n+"”."; return; }
-    const r=await window.CMDrive.load(m=>{ msg.textContent=m; });
-    msg.textContent = r.note ? r.note
-      : `✅ ${r.records} inspection(s) loaded, ${r.photos} photo/video file(s) indexed — they download as you open a unit.`
-        +(r.failed?` ${r.failed} file(s) could not be read.`:"")
-        +(r.truncated?` The folder has more files than one listing returns; the oldest may be missing.`:"");
+    if(mode==="test"){
+      const p=await drv().ping();
+      msg.textContent="✅ Connected — folder “"+p.folder+"”."+(p.batch?"":SLOW_HINT);
+      return;
+    }
+    const r=await drv().load(m=>{ msg.textContent=m; }, {full:mode==="full"});
+    if(r.note){ msg.textContent=r.note; return; }
+    // A refresh that finds nothing is the normal case, and saying "0 loaded"
+    // reads like a failure — say what is actually held instead.
+    msg.textContent = (r.records
+        ? `✅ ${r.records} new inspection(s) — ${r.held} held from Drive`
+        : `✅ Up to date — ${r.held} inspection(s) held from Drive`)
+      + (r.photos?`, ${r.photos} photo/video file(s) indexed (they download as you open a unit).`:".")
+      + (r.incremental?"":"")
+      + (r.failed?` ${r.failed} file(s) could not be read.`:"")
+      + (r.truncated?` More is waiting — click Load again to continue.`:"")
+      + (r.legacy?SLOW_HINT:"");
   }catch(err){ msg.textContent="❌ "+(err&&err.message||err); }
-  finally{ $("drvGo").disabled=$("drvTest").disabled=false; refreshSources(); }
+  finally{ btns.forEach(b=>$(b).disabled=false); refreshSources(); }
 }
-$("drvGo").onclick=()=>driveRun(true);
-$("drvTest").onclick=()=>driveRun(false);
+$("drvGo").onclick=()=>driveRun("load");
+$("drvTest").onclick=()=>driveRun("test");
+$("drvFull").onclick=()=>driveRun("full");
 /* Photos live in Drive, not on disk — pull the ones this view needs, then repaint. */
 let drivePending=false;
 async function pullDrivePhotos(recs, after){

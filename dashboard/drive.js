@@ -5,12 +5,23 @@
    over plain HTTPS from the same Apps Script /exec URL the phones upload to —
    nothing to install, no synced folder.
 
-     1. GET ?action=list&ext=.json   → the sidecars, which carry the records
-     2. GET ?action=file&id=…        → one file as base64, fetched on demand
+     GET ?action=records[&after=<ms>]  → every inspection in ONE reply, plus an
+                                         index of the photo file names
+     GET ?action=file&id=…             → one file as base64, fetched on demand
 
-   Photos are NOT pulled up front: a month of rounds is hundreds of megabytes.
-   The index of names is loaded, and the bytes are fetched only for the unit you
-   open or the report you generate.
+   Why one call and not one per file: the folder holds a sidecar per inspection,
+   so the obvious "list, then fetch each" costs a few hundred round trips and a
+   few hundred Apps Script invocations against a ~90 min/day quota — every time
+   somebody opens the dashboard, re-reading files that never changed. The loop
+   now runs inside Apps Script, where Drive is local.
+
+   `after` makes a refresh nearly free: the cursor from the last reply comes
+   back with the next request and only genuinely new inspections travel. A
+   deleted file cannot be noticed that way, so a full reload is offered too.
+
+   Photos are NOT pulled up front — a month of rounds is hundreds of megabytes.
+   Only the names are indexed; bytes are fetched for the unit you open or the
+   report you generate.
 
    Requests are plain GETs with no custom headers, so no CORS preflight — an
    Apps Script web app cannot answer one. The secret rides in the query string.
@@ -18,15 +29,18 @@
 (function () {
   "use strict";
 
-  const LS_URL = "cm_drive_url", LS_SEC = "cm_drive_sec";
-  const POOL = 5;                       // parallel fetches; Apps Script is rate-limited
+  const LS_URL = "cm_drive_url", LS_SEC = "cm_drive_sec", LS_CUR = "cm_drive_cursor";
+  const POOL = 5;                       // parallel photo fetches; Apps Script is rate-limited
+  const MAX_PAGES = 25;                 // a very large first load still terminates
 
   let index = {};                       // file name -> {id, size}
   let fetched = {};                     // file name -> objectURL (or null if it failed)
+  let legacy = false;                   // deployed script predates ?action=records
 
   const cfg = () => ({ url: (localStorage.getItem(LS_URL) || "").trim(),
                        sec: localStorage.getItem(LS_SEC) || "" });
   const configured = () => !!cfg().url;
+  const cursor = () => Number(localStorage.getItem(LS_CUR) || 0) || 0;
 
   function api(params) {
     const c = cfg();
@@ -63,8 +77,55 @@
     return new Blob([u], { type: mime || "application/octet-stream" });
   };
 
-  /* ---- 1. index the folder and pull the record sidecars ---- */
-  async function load(onProgress) {
+  /* ---- 1. pull the inspections ---- */
+  async function load(onProgress, opts) {
+    opts = opts || {};
+    const say = (m) => onProgress && onProgress(m);
+    if (opts.full) { index = {}; fetched = {}; localStorage.removeItem(LS_CUR); }
+
+    const resuming = !opts.full && !!cursor();
+    let at = opts.full ? 0 : cursor();
+    say(resuming ? "Checking Drive for new inspections…" : "Reading inspections from Drive…");
+
+    const recs = [];
+    let pages = 0, failed = 0, files = 0, photos = 0, truncated = false, pending = 0;
+
+    try {
+      for (;;) {
+        // The photo index only needs to come down once per load, not per page.
+        const r = await api({ action: "records", after: at, index: pages === 0 ? 1 : 0 });
+        pages++;
+        (r.records || []).forEach(x => recs.push(x));
+        (r.index || []).forEach(f => { index[f.name] = { id: f.id, size: f.size }; });
+        failed += r.failed || 0;
+        files = r.files || files;
+        photos = r.photos || photos;
+        pending = r.pending || 0;
+        if (r.cursor) at = r.cursor;
+        if (!r.truncated) { pending = 0; break; }
+        if (pages >= MAX_PAGES) { truncated = true; break; }
+        say(`Reading inspections… ${recs.length} so far, ${pending} to go`);
+      }
+    } catch (e) {
+      // An /exec deployed before the batch action exists says so — fall back
+      // rather than leaving the user staring at an error they cannot act on.
+      if (/unknown action/i.test(e.message || "")) { legacy = true; return legacyLoad(onProgress); }
+      throw e;
+    }
+
+    // Commit the cursor only once the records are actually in, or a failure
+    // here would silently skip those inspections on every future refresh.
+    if (recs.length || opts.full) window.CMDash.setDriveRecords(recs, { replace: !!opts.full });
+    try { localStorage.setItem(LS_CUR, String(at)); } catch (e) {}
+
+    const held = window.CMDash.driveCount();
+    return { records: recs.length, held, files, photos, failed, truncated, pending, pages,
+             incremental: resuming,
+             note: recs.length ? "" : (held ? "" : "No inspections (*.json) in that folder yet.") };
+  }
+
+  /* ---- 1b. the old path, for an /exec that has not been redeployed ---- */
+  async function legacyLoad(onProgress) {
     const say = (m) => onProgress && onProgress(m);
     say("Listing the Drive folder…");
     const all = await api({ action: "list" });
@@ -74,13 +135,14 @@
 
     const sidecars = all.files.filter(f => /\.json$/i.test(f.name));
     if (!sidecars.length) {
-      return { files: all.files.length, records: 0, truncated: !!all.truncated,
-               note: "No inspection sidecars (*.json) in that folder yet." };
+      return { records: 0, held: window.CMDash.driveCount(), files: all.files.length,
+               truncated: !!all.truncated, legacy: true,
+               note: "No inspections (*.json) in that folder yet." };
     }
 
     const recs = [];
     let bad = 0;
-    say(`Reading ${sidecars.length} inspection file(s)…`);
+    say(`Reading ${sidecars.length} inspection file(s) one at a time…`);
     await pool(sidecars, async (f) => {
       try {
         const r = await api({ action: "file", id: f.id });
@@ -89,8 +151,9 @@
       } catch (e) { bad++; }
     }, (d, n) => say(`Reading inspections… ${d}/${n}`));
 
-    if (recs.length) window.CMDash.importRecords(recs);
-    return { files: all.files.length, records: recs.length, failed: bad,
+    window.CMDash.setDriveRecords(recs, { replace: true });
+    return { records: recs.length, held: window.CMDash.driveCount(), files: all.files.length,
+             failed: bad, legacy: true,
              photos: all.files.filter(f => /\.(jpe?g|png|webp|mp4|mov)$/i.test(f.name)).length,
              truncated: !!all.truncated };
   }
@@ -129,22 +192,36 @@
     return names.length;
   }
 
-  /* Health check without pulling anything: the bare /exec URL reports the folder. */
+  /* Health check without pulling anything: the bare /exec URL reports the folder.
+     Also reports whether the fast path is deployed, since the usual reason it is
+     not is an edit that was saved but never released as a new version. */
   async function ping(){
     const c = cfg();
+    if (!c.url) throw new Error("No Drive URL configured.");
     const r = await fetch(c.url, { method: "GET" });
     const text = await r.text();
     let j = null; try { j = JSON.parse(text); } catch (e) {}
     if (!j) throw new Error("Unexpected reply — check the deployment's “Who has access” is Anyone.");
     if (j.ok === false) throw new Error(j.error || "Drive refused the request");
-    return j.folder || "(unnamed)";
+    let batch = true;
+    // after=<now> so this costs a walk and no file reads whatever is deployed
+    try { await api({ action: "records", after: Date.now(), index: 0 }); }
+    catch (e) { if (/unknown action/i.test(e.message || "")) batch = false; }
+    return { folder: j.folder || "(unnamed)", batch };
   }
 
   window.CMDrive = {
     load, ensurePhotos, configured, ping,
     get url() { return cfg().url; },
     get secret() { return cfg().sec; },
-    save(url, sec) { localStorage.setItem(LS_URL, (url || "").trim()); localStorage.setItem(LS_SEC, sec || ""); },
+    get legacy() { return legacy; },
+    save(url, sec) {
+      const changed = (url || "").trim() !== cfg().url;
+      localStorage.setItem(LS_URL, (url || "").trim());
+      localStorage.setItem(LS_SEC, sec || "");
+      // A different folder's cursor means nothing — start that one from scratch.
+      if (changed) { localStorage.removeItem(LS_CUR); index = {}; fetched = {}; legacy = false; }
+    },
     indexed() { return Object.keys(index).length; },
   };
 })();

@@ -193,6 +193,8 @@
         <button type="button" class="iconbtn" id="scanBtn">🔳 <span data-i18n="btn_scan">Scan</span></button>
       </div>
     </label>
+    <!-- Answers "has someone already done this one?" before the round is walked. -->
+    <div class="hint hidden" id="lastDone" style="margin:-4px 0 10px;font-weight:600;color:var(--accent)"></div>
     <input id="qrPhoto" type="file" accept="image/*" capture="environment" class="hidden">
     <div class="row">
       <label class="fld"><span data-i18n="lbl_date">Date</span><input id="date" type="date"></label>
@@ -298,6 +300,16 @@
   </div>
 
   <div class="card">
+    <h2><span data-i18n="sec_team">In the system</span> <span class="count-badge" id="teamCount">0</span></h2>
+    <div class="duelist" id="teamList"></div>
+    <div class="row" style="margin-top:12px">
+      <button class="btn ghost" id="teamRefresh">⟳ <span data-i18n="btn_team_refresh">Check for new</span></button>
+    </div>
+    <div class="hint" id="teamMsg" style="margin-top:8px"></div>
+    <div class="hint" style="margin-top:8px" data-i18n="team_hint">Everything the whole team has uploaded, not just this phone. Refreshes itself after each upload and is kept for offline — so the due list below knows about rounds someone else did.</div>
+  </div>
+
+  <div class="card">
     <h2><span data-i18n="sec_due">Inspection due</span> <span class="count-badge" id="dueCount">0</span></h2>
     <div class="row" style="margin-bottom:12px">
       <label class="fld" style="margin:0"><span data-i18n="lbl_due_int">Interval (days)</span>
@@ -317,7 +329,7 @@
   <div class="syncbar" id="syncBar"></div>
   <button class="btn ghost" id="reportBtn" style="margin-bottom:16px">📄 <span data-i18n="btn_report">PDF report</span></button>
 
-  <div class="ver">build v42 · 2026-07-31 · Folder per type ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver">build v43 · 2026-07-31 · Team sync ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <div class="bottombar">
@@ -633,8 +645,18 @@ const I18N = {
     due_overdue:"Overdue & due soon", due_all:"All units with history",
     btn_due_import:"Load history file", due_days:"{n} d ago", due_over:"overdue {n} d", due_in:"in {n} d",
     due_never:"never done", due_empty:"Nothing due — or no history on this phone yet.",
-    due_hint:"Built from what this phone has recorded. Load an entries.json exported from the dashboard to seed the whole fleet's last-done dates.",
+    due_hint:"Built from what this phone has recorded plus everything in the system above. Load an entries.json exported from the dashboard to seed the whole fleet's last-done dates.",
     m_due_loaded:["History loaded ✔","{n} unit/type dates added to the due list."],
+    sec_team:"In the system", btn_team_refresh:"Check for new",
+    team_hint:"Everything the whole team has uploaded, not just this phone. Refreshes itself after each upload and is kept for offline — so the due list below knows about rounds someone else did.",
+    team_none:"Nothing pulled yet — tap “Check for new”.",
+    team_nodrive:"Set up Google Drive in ⚙ to see the team's inspections.",
+    team_offline:"Offline — showing what was last pulled.",
+    team_unreach:"Could not reach Google Drive — weak signal, or the /exec URL in ⚙ is wrong.",
+    team_old:"Update the Google script to use this (Deploy → Manage deployments → New version).",
+    team_new:"{n} new · {t} in the system", team_upto:"Up to date · {t} in the system",
+    team_by:"by {n}", team_you:"this phone",
+    team_last:"Last done {d} ({n} d ago){by}",
     btn_merge_out:"Send round", btn_merge_in:"Receive round",
     merge_hint:"Two inspectors on the same round: each phone sends its round, the other receives it. Duplicates are merged, never doubled.",
     m_merge_empty:["Nothing to send","Capture at least one inspection first."],
@@ -718,8 +740,18 @@ const I18N = {
     due_overdue:"Просроченные и скоро", due_all:"Все ед. с историей",
     btn_due_import:"Загрузить историю", due_days:"{n} дн. назад", due_over:"просрочено {n} дн.", due_in:"через {n} дн.",
     due_never:"не проводился", due_empty:"Ничего не требуется — или на телефоне ещё нет истории.",
-    due_hint:"Строится по данным этого телефона. Загрузите entries.json из дашборда, чтобы подтянуть даты по всему парку.",
+    due_hint:"Строится по данным этого телефона и по всему, что есть в системе выше. Загрузите entries.json из дашборда, чтобы подтянуть даты по всему парку.",
     m_due_loaded:["История загружена ✔","Добавлено дат: {n}."],
+    sec_team:"В системе", btn_team_refresh:"Проверить новые",
+    team_hint:"Всё, что загрузила вся бригада, а не только этот телефон. Обновляется после каждой выгрузки и хранится офлайн — поэтому список плановых осмотров знает об обходах, сделанных другими.",
+    team_none:"Пока ничего не загружено — нажмите «Проверить новые».",
+    team_nodrive:"Настройте Google Drive в ⚙, чтобы видеть осмотры бригады.",
+    team_offline:"Нет сети — показано последнее загруженное.",
+    team_unreach:"Не удалось связаться с Google Drive — слабый сигнал или неверный адрес /exec в ⚙.",
+    team_old:"Обновите скрипт Google (Deploy → Manage deployments → New version).",
+    team_new:"Новых: {n} · всего в системе: {t}", team_upto:"Актуально · в системе: {t}",
+    team_by:"— {n}", team_you:"этот телефон",
+    team_last:"Последний: {d} ({n} дн. назад){by}",
     btn_merge_out:"Отправить обход", btn_merge_in:"Принять обход",
     merge_hint:"Два инспектора на одном обходе: каждый телефон отправляет свой файл, второй его принимает. Дубликаты объединяются, а не удваиваются.",
     m_merge_empty:["Нечего отправлять","Сначала снимите хотя бы один осмотр."],
@@ -969,7 +1001,7 @@ $("posnav").addEventListener("click",(e)=>{ const b=e.target.closest("button[dat
 function applyForm(){ $("secPosTitle").textContent=TYPE_META[type].title[lang]||TYPE_META[type].title.en;
   $("mpFields").classList.toggle("hidden", !TYPE_META[type].showReadings);
   $("tempFields").classList.toggle("hidden", !TYPE_META[type].temp);
-  $("dueInt").value=dueInterval(type); renderDue();
+  $("dueInt").value=dueInterval(type); renderDue(); renderTeam(); renderLastDone();
   cascL7=null; cascL8=null;
   const tr=currentTree(); const flat=items();
   if(tr){ if(curItem && !flat.some(i=>i.k===curItem)) curItem=""; }
@@ -1071,7 +1103,8 @@ function selectEquip(n){ n=(n||"").trim().toUpperCase().replace(/\s+/g,""); curE
   const a=ASSET_BY[n];
   if(a){ eqCat=a.cat||"— UNCATEGORISED —"; localStorage.setItem("equip_cat",eqCat); }
   const cls=assetClassOf(n); if(cls){ eqClass=cls; localStorage.setItem("equip_class",eqClass); }
-  draft={positions:{}}; editing=null; curItem=""; applyForm(); setEditing(null); updateEquipBtn(); }
+  draft={positions:{}}; editing=null; curItem=""; applyForm(); setEditing(null); updateEquipBtn();
+  renderLastDone(); }
 let pickMode=null, showAllDefects=false;
 function pickerSource(){
   if(pickMode==="cat"){
@@ -1259,6 +1292,119 @@ function renderDue(){
       <span class="d">${t("due_days").replace("{n}",r.age)} · ${when}</span></button>`; }).join("");
   box.querySelectorAll("[data-u]").forEach(b=>b.onclick=()=>{ selectEquip(b.dataset.u); window.scrollTo({top:0,behavior:"smooth"}); });
 }
+/* ===================== what the whole team has uploaded =====================
+   The due list only ever knew what THIS phone had recorded, so a unit another
+   inspector covered yesterday still read as overdue, and two people could walk
+   the same round. The dashboard's batch endpoint answers "what is in the system"
+   in a single request, which is small enough to pull on a phone over pit signal.
+
+   Kept in local storage, so it still shows with no signal, and folded into the
+   same cm_hist index the due list reads — one source of "last done", whoever
+   did it. Records only: no photos are fetched here. */
+const TEAM_KEY="cm_team", TEAM_CUR="cm_team_cursor", TEAM_MAX=2000;
+function teamAll(){ try{ return JSON.parse(localStorage.getItem(TEAM_KEY)||"[]"); }catch(e){ return []; } }
+function teamSave(a){
+  a.sort((x,y)=>(y.d||"").localeCompare(x.d||""));
+  try{ localStorage.setItem(TEAM_KEY,JSON.stringify(a.slice(0,TEAM_MAX))); }
+  // A full quota must not wedge the feature: drop the cursor so the next pull
+  // starts clean rather than believing it already has everything.
+  catch(e){ localStorage.removeItem(TEAM_KEY); localStorage.removeItem(TEAM_CUR); }
+}
+const teamKey=r=>`${r.t}|${r.u}|${r.d}`;
+/* One compact row per inspection — the phone needs who/when/how bad, not the
+   full record, and 2000 of these stay well inside the storage budget. */
+const GRADE_RANK={A:0,B:1,C:2,X:3};
+// GRADE_HEX is declared further down this script; this list renders before it.
+const GRADE_TINT={A:"#0ca30c",B:"#fab219",C:"#ec835a",X:"#d03b3b"};
+function teamRow(r){
+  let worst="", n=0;
+  (r.items||[]).forEach(i=>{ const g=i.grade||""; if(!g) return; n++;
+    if(GRADE_RANK[g]!=null && (worst===""||GRADE_RANK[g]>GRADE_RANK[worst])) worst=g; });
+  return { u:(r.equip||"").toUpperCase(), d:r.date||"", t:r.type||"MP",
+           by:r.by||"", g:worst, n };
+}
+function teamMerge(recs){
+  const have=new Map(teamAll().map(x=>[teamKey(x),x]));
+  const h=histAll(); let added=0, hist=0;
+  for(const r of recs){
+    const row=teamRow(r); if(!row.u||!row.d) continue;
+    const k=teamKey(row);
+    if(!have.has(k)) added++;
+    have.set(k,row);                                  // a re-upload replaces
+    const hk=row.t+"|"+row.u;
+    if(!h[hk]||h[hk]<row.d){ h[hk]=row.d; hist++; }
+  }
+  teamSave([...have.values()]); histSave(h);
+  return {added,hist};
+}
+let teamBusy=false, teamAt=0;
+const TEAM_MIN_GAP=60000;   // automatic pulls only; the button always goes
+async function teamPull(manual){
+  if(teamBusy) return;
+  // syncNow() calls this whenever it finishes, and a dead destination can make
+  // that happen repeatedly — don't turn a retry loop into a request storm.
+  if(!manual && Date.now()-teamAt < TEAM_MIN_GAP) return;
+  teamAt=Date.now();
+  const g=loadDests().find(d=>d.id==="gas" && d.url);
+  const msg=$("teamMsg"); if(!msg) return;
+  if(!g){ if(manual) msg.textContent=t("team_nodrive"); return; }
+  if(!navigator.onLine){ if(manual) msg.textContent=t("team_offline"); return; }
+  teamBusy=true; $("teamRefresh").disabled=true;
+  try{
+    const after=Number(localStorage.getItem(TEAM_CUR)||0)||0;
+    const q=new URLSearchParams({action:"records", after:String(after), index:"0"});
+    if(g.sec) q.set("secret",g.sec);
+    const res=await fetch(g.url+(g.url.indexOf("?")<0?"?":"&")+q.toString(),{method:"GET"});
+    const txt=await res.text();
+    let j=null; try{ j=JSON.parse(txt); }catch(e){}
+    if(!j){ if(manual) msg.textContent="⚠ "+txt.slice(0,90); return; }
+    if(j.ok===false){
+      // The usual reason: the script was edited but never released as a new version.
+      if(manual) msg.textContent=/unknown action/i.test(j.error||"") ? t("team_old") : "⚠ "+j.error;
+      return;
+    }
+    const {added}=teamMerge(j.records||[]);
+    if(j.cursor) localStorage.setItem(TEAM_CUR,String(j.cursor));
+    const total=teamAll().length;
+    msg.textContent=(added?t("team_new").replace("{n}",added):t("team_upto")).replace("{t}",total);
+    renderTeam(); renderDue(); renderLastDone();
+  }catch(e){
+    // fetch() reports every network and CORS failure as the opaque "Failed to
+    // fetch", which tells an inspector in the pit nothing they can act on.
+    if(manual) msg.textContent = /failed to fetch|networkerror|load failed/i.test(String(e.message||e))
+      ? t("team_unreach") : "⚠ "+(e.message||e);
+  }
+  finally{ teamBusy=false; $("teamRefresh").disabled=false; }
+}
+function renderTeam(){
+  const box=$("teamList"); if(!box) return;
+  const rows=teamAll().filter(r=>r.t===type);
+  $("teamCount").textContent=String(rows.length);
+  if(!rows.length){ box.innerHTML=`<div class="empty">${esc(t("team_none"))}</div>`; return; }
+  box.innerHTML=rows.slice(0,60).map(r=>{
+    const sev=GRADE_SEV[r.g]||"";
+    const cls=sev==="CRI"?"over":sev==="DEG"?"soon":"";
+    const age=daysBetween(r.d);
+    return `<button class="dueitem ${cls}" data-u="${esc(r.u)}">
+      <span class="u">${esc(r.u)}${r.g?` · <span style="color:${GRADE_TINT[r.g]||"var(--muted)"};font-weight:700">${esc(r.g)}</span>`:""}</span>
+      <span class="d">${esc(r.d)}${age!=null?` · ${t("due_days").replace("{n}",age)}`:""}${r.by?` · ${esc(r.by)}`:""}</span></button>`;
+  }).join("");
+  box.querySelectorAll("[data-u]").forEach(b=>b.onclick=()=>{ selectEquip(b.dataset.u); window.scrollTo({top:0,behavior:"smooth"}); });
+}
+/* The point-of-capture answer: standing at TK146, has it just been done? */
+function renderLastDone(){
+  const el=$("lastDone"); if(!el) return;
+  const u=(curEquip||"").toUpperCase();
+  const hit=u ? teamAll().filter(r=>r.u===u && r.t===type)[0] : null;
+  if(!hit){ el.classList.add("hidden"); el.textContent=""; return; }
+  const age=daysBetween(hit.d);
+  el.textContent=t("team_last").replace("{d}",hit.d).replace("{n}",age==null?"?":age)
+    .replace("{by}",hit.by?" "+t("team_by").replace("{n}",hit.by):"")
+    +(hit.g?` · ${hit.g}`:"");
+  el.classList.remove("hidden");
+}
+$("teamRefresh").onclick=()=>teamPull(true);
+
 $("dueImport").onclick=()=>$("dueFile").click();
 $("dueFile").onchange=async (e)=>{ const f=e.target.files[0]; e.target.value=""; if(!f) return;
   let j; try{ j=JSON.parse(await f.text()); }catch(err){ dlg(t("m_merge_bad")); return; }
@@ -1593,7 +1739,7 @@ function applyLang(){ document.documentElement.lang=lang;
   fillClassSel(); fillTypeSel();
   $("secPosTitle").textContent=TYPE_META[type].title[lang]||TYPE_META[type].title.en;
   $("posLabel").textContent=`${curItem} — ${itemLabel(curItem)}`;
-  updateDefectCauseBtns(); updateActionBtn(); renderSev(); renderMedia(); renderGps(); renderTempHint(); renderDue();
+  updateDefectCauseBtns(); updateActionBtn(); renderSev(); renderMedia(); renderGps(); renderTempHint(); renderDue(); renderTeam(); renderLastDone();
   updateSaveLabel(); if(editing) $("editBannerText").textContent=t("editing_hint").replace("{x}",editing.equip); $("cancelEdit").textContent=t("btn_cancel");
   setNet(); renderPending();
   document.querySelectorAll(".lang button").forEach(b=>b.classList.toggle("on", b.dataset.lang===lang)); }
@@ -1612,7 +1758,7 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
    has accepted every one of its files. */
 const DEST_META={ gas:{label:"Google Drive"}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
 const DEST_IDS=["gas","pa","post"];
-const BUILD="42";
+const BUILD="43";
 const DEFAULT_DESTS=((window.UPLOAD_DEFAULTS||{}).dests)||[];
 function loadDests(){
   let d=null; try{ d=JSON.parse(localStorage.getItem("up_dests")||"null"); }catch(e){}
@@ -1800,7 +1946,12 @@ async function syncNow(manual){
         if(++consecutive>=3) break;
       } else consecutive=0;
     }
-  } finally { syncing=false; renderSync(); renderPending(); }
+  } finally {
+    syncing=false; renderSync(); renderPending();
+    // Whatever this phone just pushed, someone else has pushed something too.
+    // One request, and it keeps the due list honest across the whole team.
+    teamPull(false);
+  }
 }
 function recToExport(rec){
   return { equip:rec.equip, date:rec.date, type:rec.type||"MP", cls:rec.cls||"", by:rec.by||"", smu:rec.smu||"",
@@ -1969,6 +2120,10 @@ function checkData(){
 updateEquipBtn(); renderGps(); checkData();
 $("dueScope").value=localStorage.getItem("due_scope")||"due";
 applyForm(); applyLang(); sizeSignPad(); renderSync(); syncNow();
+// syncNow() pulls the team list when it finishes, but it returns early with
+// nothing queued or no signal — so ask once here too. Both paths are guarded.
+teamPull(false);
+window.addEventListener("online",()=>teamPull(false));
 </script>
 </body>
 </html>

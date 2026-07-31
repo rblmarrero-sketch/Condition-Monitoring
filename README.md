@@ -302,9 +302,25 @@ The limit table is one clearly-commented array, `TEMP_LIMITS`, near the top of
 
 The app keeps a small "last done" index per unit and type, and shows what is **overdue**
 or **due soon** against an interval you set per type (defaults: MP/FC 90 days, INSP/TEMP
-30 days). Tap a unit to load it into the form. It is built from what that phone has
-recorded — use **Load history file** with an `entries.json` exported from the dashboard to
-seed last-done dates for the whole fleet.
+30 days). Tap a unit to load it into the form. It is fed by this phone's saves **and by
+everything the team has uploaded** (below), so a unit someone else covered no longer reads
+as overdue. **Load history file** still works for seeding from an `entries.json`.
+
+### What the whole team has uploaded
+
+With Google Drive configured, the **In the system** card lists every inspection the team
+has uploaded — unit, grade, date, who did it — not just this phone's. Picking a unit shows
+*"Last done 2026-07-28 (3 d ago) by B. Ivanov · C"* right on the capture screen, so nobody
+walks a round that was done yesterday.
+
+It reads the same one-request endpoint the dashboard uses (records only, no photos),
+refreshes itself after each upload, and keeps the result on the phone — so it still shows
+with no signal. A refresh in the pit says *"Offline — showing what was last pulled"*
+rather than failing. Automatic pulls are rate-limited to one a minute; the button is not.
+
+> This is a **shared** view by design — every inspector sees every inspector's work. It
+> needs the read actions in `docs/google-upload.gs`; if the deployed script predates them
+> the card says exactly what to redeploy.
 
 ### Two inspectors, one round (multi-device merge)
 
@@ -343,12 +359,28 @@ monthly sub-folders, so pointing it at *Condition Monitoring* once is enough.
 > It now reads both.
 
 **☁ Google Drive** — paste the `/exec` URL and the shared secret once, then **Load from
-Drive**; **Test connection** checks the deployment without pulling anything. It lists the
-folder, reads every `*.json` sidecar and loads the records. Photos are indexed by name but
-only downloaded when you open a unit or generate a PDF with photos — a month of rounds is
-hundreds of megabytes, so pulling it all up front would be pointless. It needs the read
-actions in `docs/google-upload.gs`; re-paste that file and deploy a new version if yours
-predates them.
+Drive**; **Test connection** checks the deployment without pulling anything. Photos are
+indexed by name but only downloaded when you open a unit or generate a PDF with photos — a
+month of rounds is hundreds of megabytes, so pulling it all up front would be pointless.
+
+Every inspection arrives in **one request**. The reading loop runs inside Apps Script,
+where Drive is local, and the dashboard sends back the last reply's cursor so a refresh
+only carries what is new:
+
+| | Before | Now |
+|---|---|---|
+| First load, 300 inspections | 301 requests | **1** |
+| Refresh, nothing new | 301 requests | **1**, no files read |
+| Reopening the dashboard | 301 requests | **0** — cached |
+
+A consumer Google account allows ~90 minutes of script runtime a day, and the old path
+spent about 5 of those minutes on every load. **Reload everything** re-reads from scratch;
+use it after deleting files in Drive, since an incremental refresh asks "what is new?" and
+so cannot notice a deletion.
+
+This needs the read actions in `docs/google-upload.gs` — re-paste that file and deploy a
+new version if yours predates them. Until you do, the dashboard falls back to the old
+one-file-at-a-time path automatically and says so.
 
 ### Finding things once the data is in
 

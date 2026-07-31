@@ -68,19 +68,22 @@ function doPost(e) {
 }
 
 /**
- * GET serves three things:
- *   (no action)  health check — open the /exec URL in a browser
- *   ?action=list what is in the folder, so the dashboard can find the sidecars
- *   ?action=file one file as base64, so the dashboard can show a photo
+ * GET serves four things:
+ *   (no action)     health check — open the /exec URL in a browser
+ *   ?action=records EVERY inspection in one reply. Use this one.
+ *   ?action=list    what is in the folder, so a client can find files by name
+ *   ?action=file    one file as base64, so a client can show a photo
  *
  * The read side exists so the dashboard works on a PC with no Google Drive client
- * installed — everything comes over plain HTTPS from this URL.
+ * installed, and so the phones can show what the rest of the team has already
+ * uploaded — everything comes over plain HTTPS from this URL.
  */
 function doGet(e) {
   var p = (e && e.parameter) || {};
   if (!p.action) return json(diagnose_());          // health check needs no secret
   if (SECRET && p.secret !== SECRET) return json({ ok: false, error: 'Bad or missing secret' });
   try {
+    if (p.action === 'records') return json(readRecords_(p));
     if (p.action === 'list') return json(listFiles_(p.folder || '', p.ext || ''));
     if (p.action === 'file') return json(readFile_(p.id));
     return json({ ok: false, error: 'Unknown action: ' + p.action });
@@ -88,6 +91,69 @@ function doGet(e) {
     return json({ ok: false, error: String((err && err.message) || err) });
   }
 }
+
+/* ── the batch read ──────────────────────────────────────────────────────────
+   Reading the sidecars one HTTP request at a time meant a few hundred round
+   trips — and a few hundred script invocations against a ~90 min/day quota —
+   every time a dashboard was opened, re-reading files that had not changed.
+
+   Here the loop runs inside Apps Script, where Drive is local, and the client
+   gets everything in one reply.
+
+     ?action=records                 every inspection
+     ?action=records&after=<ms>      only sidecars written since that moment
+     ?action=records&index=0         skip the photo index (smaller reply)
+
+   `after` is what makes a refresh nearly free. Pass back the `cursor` from the
+   previous reply and only genuinely new inspections come down the wire.
+
+   A run that hits `max` or the time guard returns truncated:true with the
+   cursor it reached — call again with that cursor to continue. Deletions are
+   invisible to an incremental read, so the client must offer a full reload.
+   ──────────────────────────────────────────────────────────────────────────*/
+var RECORDS_MAX = 600;         // sidecars read per call; response stays ~1-2 MB
+var TIME_BUDGET_MS = 240000;   // stop at 4 min — Apps Script kills us at 6
+
+function readRecords_(p) {
+  var started = new Date().getTime();
+  var after = Number(p.after || 0) || 0;
+  var max = Math.min(Number(p.max || 0) || RECORDS_MAX, 2000);
+  var wantIndex = String(p.index == null ? '1' : p.index) !== '0';
+
+  var all = [];
+  collect_(rootFolder_(), '', all, 0, '');
+
+  // Oldest first, so a truncated run resumes cleanly from its cursor.
+  var sidecars = all.filter(function (f) { return /\.json$/i.test(f.name) && f.updated > after; })
+                    .sort(function (a, b) { return a.updated - b.updated; });
+
+  var records = [], read = 0, bad = 0, truncated = false;
+  var cursor = after;
+  for (var i = 0; i < sidecars.length; i++) {
+    if (read >= max || new Date().getTime() - started > TIME_BUDGET_MS) { truncated = true; break; }
+    var f = sidecars[i];
+    try {
+      var j = JSON.parse(DriveApp.getFileById(f.id).getBlob().getDataAsString());
+      var rs = (j && j.records) || [];
+      for (var k = 0; k < rs.length; k++) { rs[k]._file = f.path; records.push(rs[k]); }
+      read++;
+    } catch (err) { bad++; }
+    cursor = f.updated;          // advance even on a bad file, or it blocks the queue
+  }
+
+  var out = { ok: true, records: records, read: read, failed: bad,
+              pending: Math.max(0, sidecars.length - read - bad),
+              truncated: truncated, cursor: cursor, files: all.length,
+              photos: all.filter(function (f) { return MEDIA_RE.test(f.name); }).length };
+  // The client needs name -> id to fetch a photo later. Sending it here saves a
+  // second call; index=0 turns it off when only the records are wanted.
+  if (wantIndex) {
+    out.index = all.filter(function (f) { return MEDIA_RE.test(f.name); })
+                   .map(function (f) { return { name: f.name, id: f.id, size: f.size }; });
+  }
+  return out;
+}
+var MEDIA_RE = /\.(jpe?g|png|webp|mp4|mov)$/i;
 
 /** Every file under the root, sub-folders included. `ext` filters by suffix. */
 function listFiles_(sub, ext) {
@@ -104,7 +170,9 @@ function collect_(dir, prefix, out, depth, ext) {
   while (fs.hasNext() && out.length < LIST_CAP) {
     var f = fs.next(), n = f.getName();
     if (!ext || n.toLowerCase().slice(-ext.length) === ext) {
-      out.push({ name: n, path: prefix + n, id: f.getId(), size: f.getSize() });
+      // updated drives the incremental read — see readRecords_
+      out.push({ name: n, path: prefix + n, id: f.getId(), size: f.getSize(),
+                 updated: f.getLastUpdated().getTime() });
     }
   }
   var ds = dir.getFolders();
@@ -126,7 +194,7 @@ function readFile_(id) {
 
 /** Walk parents up to the root folder — Drive files can have more than one. */
 function underRoot_(file) {
-  var rootId = diagnose_().id, seen = {}, stack = [];
+  var rootId = rootId_(), seen = {}, stack = [];
   var it = file.getParents();
   while (it.hasNext()) stack.push(it.next());
   for (var guard = 0; stack.length && guard < 300; guard++) {
@@ -185,11 +253,20 @@ function folderId_(s) {
   return s.split('?')[0].split('#')[0].replace(/\/+$/, '');
 }
 
+/* diagnose_() opens the folder to check it, so calling it per file — as
+   underRoot_ used to — turned every photo fetch into three Drive round trips.
+   One invocation only ever serves one request, so caching for its lifetime is
+   safe and there is nothing to invalidate. */
+var ROOT_CACHE = null;
 function rootFolder_() {
-  var d = diagnose_();
-  if (!d.ok) throw new Error(d.error);
-  return DriveApp.getFolderById(d.id);
+  if (!ROOT_CACHE) {
+    var d = diagnose_();
+    if (!d.ok) throw new Error(d.error);
+    ROOT_CACHE = { id: d.id, folder: DriveApp.getFolderById(d.id) };
+  }
+  return ROOT_CACHE.folder;
 }
+function rootId_() { rootFolder_(); return ROOT_CACHE.id; }
 
 /** "2026-07" or "2026/07/TK146" → the matching folder, creating what's missing. */
 function folderPath_(root, path) {

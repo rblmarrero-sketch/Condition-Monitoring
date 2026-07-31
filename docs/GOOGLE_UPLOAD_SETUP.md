@@ -121,6 +121,21 @@ folder setting, so Drive and SharePoint can be laid out differently.
 > Already-configured phones keep whatever folder they have — change it in ⚙ on each phone,
 > or send a fresh **setup code** from one you have updated.
 
+### What the rest of the team has uploaded
+
+The phones read that same endpoint, so every inspector sees the whole team's work, not
+just their own phone's. The **In the system** card lists recent inspections with the unit,
+grade, date and who did it, and picking a unit shows *"Last done 2026-07-28 (3 d ago) by
+B. Ivanov · C"* right on the capture screen — so nobody walks a round that was done
+yesterday.
+
+It also feeds **Inspection due**: that list used to know only what *this* phone had
+recorded, so a unit someone else covered still read as overdue. Now it is fleet-wide.
+
+The pull is one request, records only — no photos — and it refreshes itself after each
+upload. The result is kept on the phone, so it still shows with no signal; a refresh in
+the pit says *"Offline — showing what was last pulled"* rather than failing.
+
 ### Both destinations at once
 
 Google Drive and SharePoint each have their own block and their own tick box, so you can
@@ -177,7 +192,29 @@ to install, no synced folder, no drive letter.
 2. In the **Google Drive** card, paste the `/exec` URL and the shared secret (leave the
    secret empty if `SECRET` is `''`)
 3. **Test connection** confirms the deployment answers and names the folder;
-   **Load from Drive** lists it, reads every `*.json` sidecar and loads the records
+   **Load from Drive** reads every inspection and loads the records
+
+### One request, not one per inspection
+
+`?action=records` reads all the sidecars **inside Apps Script**, where Drive is local,
+and returns them together. The dashboard remembers what it already has and sends the
+last reply's cursor back, so a refresh only carries genuinely new inspections.
+
+| | Before | Now |
+|---|---|---|
+| First load, 300 inspections | 301 requests | **1** |
+| Refresh, nothing new | 301 requests | **1**, and no files read |
+| Reopening the dashboard | 301 requests | **0** — it is cached |
+
+That matters because a consumer Google account allows ~90 minutes of script runtime a
+day. The old path spent roughly 5 of those minutes on every single load.
+
+**Reload everything** re-reads the folder from scratch. Use it after deleting files in
+Drive — an incremental refresh asks "what is new?", so it cannot notice a deletion.
+
+> If **Test connection** says the deployment is *on the old one-file-at-a-time reader*,
+> the script needs redeploying — see step 4 and the gotcha below. Everything still works
+> meanwhile; the dashboard falls back to the old path automatically.
 
 Photos are **not** downloaded up front — a month of rounds is hundreds of megabytes. Only
 the file names are indexed; the bytes are fetched when you open a unit in **Equipment
@@ -246,6 +283,8 @@ instead of JSON. **Manage deployments → ✏️ → Who has access: `Anyone`.**
    a day is comfortable — a full-fleet backfill of thousands at once is not.
 6. **Re-uploads overwrite.** Editing a saved inspection and re-syncing replaces the file
    in Drive rather than creating `TK146_… (1).jpg`.
+7. **An incremental refresh cannot see a deletion.** It asks "what changed since?", so a
+   file removed from Drive stays in the dashboard until **Reload everything**.
 
 ---
 
