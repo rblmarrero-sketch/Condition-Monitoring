@@ -99,7 +99,7 @@
   .empty{color:var(--muted);text-align:center;padding:20px;font-size:14px;}
   .bottombar{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--border);padding:12px 16px calc(env(safe-area-inset-bottom) + 12px);display:flex;gap:10px;z-index:10;}
   .bottombar .btn{margin:0;}
-  .hint{font-size:12.5px;color:var(--muted);margin-top:6px;}
+  .hint{font-size:12.5px;color:var(--muted);margin-top:6px;} #setMsg{white-space:pre-wrap;word-break:break-word;user-select:text;}
   .btn-set{border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);border-radius:9px;padding:5px 9px;font-size:15px;cursor:pointer;margin-left:auto;}
   .ver{text-align:center;color:var(--muted);font-size:11px;margin:2px 0 8px;}
   .syncbar{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--ink-2);background:var(--surface);
@@ -239,7 +239,7 @@
   <div class="syncbar" id="syncBar"></div>
   <button class="btn ghost" id="reportBtn" style="margin-bottom:16px">📄 <span data-i18n="btn_report">PDF report</span></button>
 
-  <div class="ver">build v27 · 2026-07-31 · Auto-upload · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver">build v28 · 2026-07-31 · Upload error detail · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <div class="bottombar">
@@ -1132,11 +1132,17 @@ async function putFile(name, blob, type){
     const body={ name, folder:UP.folder||"", contentType:type||blob.type||"application/octet-stream",
                  file: await blobToB64(blob) };
     const r=await fetch(UP.url,{method:"POST",headers:upHeaders({"Content-Type":"application/json"}),body:JSON.stringify(body)});
-    if(!r.ok) throw new Error("HTTP "+r.status); return true;
+    if(!r.ok) throw new Error(await httpErr(r)); return true;
   }
   const fd=new FormData(); fd.append("file",blob,name); fd.append("name",name); fd.append("folder",UP.folder||"");
   const r=await fetch(UP.url,{method:"POST",headers:upHeaders(),body:fd});
-  if(!r.ok) throw new Error("HTTP "+r.status); return true;
+  if(!r.ok) throw new Error(await httpErr(r)); return true;
+}
+// surface the server's own error text (Power Automate explains 400s in the body)
+async function httpErr(r){
+  let d=""; try{ d=(await r.text()||"").trim(); }catch(e){}
+  try{ const j=JSON.parse(d); d=(j.error&&(j.error.message||j.error.code))||j.message||d; }catch(e){}
+  return "HTTP "+r.status+(d?" — "+d.slice(0,300):"");
 }
 /* files belonging to one record, using the agreed naming standard */
 async function filesForRecord(rec){
