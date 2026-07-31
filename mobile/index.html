@@ -303,7 +303,7 @@
   <div class="syncbar" id="syncBar"></div>
   <button class="btn ghost" id="reportBtn" style="margin-bottom:16px">📄 <span data-i18n="btn_report">PDF report</span></button>
 
-  <div class="ver">build v34 · 2026-07-31 · Two destinations · QR setup · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver">build v35 · 2026-07-31 · Two destinations · QR setup · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <div class="bottombar">
@@ -1559,10 +1559,15 @@ const DEST_IDS=["gas","pa","post"];
 function loadDests(){
   let d=null; try{ d=JSON.parse(localStorage.getItem("up_dests")||"null"); }catch(e){}
   if(!Array.isArray(d)){
-    // one-time migration from the single-mode settings
-    const m=localStorage.getItem("up_mode")||"off";
-    d=DEST_IDS.map(id=>({id, on:id===m, url:id===m?(localStorage.getItem("up_url")||""):"",
-      sec:id===m?(localStorage.getItem("up_hdr")||""):"", folder:localStorage.getItem("up_folder")||""}));
+    // First run: carry over the old single-mode settings if there are any, otherwise
+    // start with Google Drive ticked — it is the route we recommend, so a new phone
+    // only has to paste the /exec URL. Nothing uploads until a URL is present.
+    const m=localStorage.getItem("up_mode");
+    const on=(m && m!=="off") ? m : "gas";
+    d=DEST_IDS.map(id=>({id, on:id===on,
+      url: (m && id===m) ? (localStorage.getItem("up_url")||"") : "",
+      sec: (m && id===m) ? (localStorage.getItem("up_hdr")||"") : "",
+      folder: localStorage.getItem("up_folder")||"" }));
     localStorage.setItem("up_dests",JSON.stringify(d));
   }
   return DEST_IDS.map(id=>Object.assign({id,on:false,url:"",sec:"",folder:""}, d.find(x=>x.id===id)||{}));
