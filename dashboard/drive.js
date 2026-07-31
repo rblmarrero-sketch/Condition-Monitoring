@@ -209,7 +209,15 @@
     if (!j) throw new Error(r.ok
       ? "Unexpected reply — check the deployment's “Who has access” is Anyone."
       : "HTTP " + r.status + " — " + text.slice(0, 160));
-    if (j.ok === false) throw new Error(j.error || "Drive refused the request");
+    if (j.ok === false) {
+      // The script's wording does not say WHICH secret, and the only password
+      // on screen is the admin one — so this reads as "wrong admin password"
+      // when it means the Shared secret box above is empty.
+      if (/bad or missing secret/i.test(j.error || "")) throw new Error(
+        "The Shared secret in Data sources is empty or wrong. It must match SECRET in "
+        + "the Apps Script — this is not the admin password.");
+      throw new Error(j.error || "Drive refused the request");
+    }
     return j;
   }
 
