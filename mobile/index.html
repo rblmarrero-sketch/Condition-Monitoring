@@ -299,7 +299,7 @@
   <div class="syncbar" id="syncBar"></div>
   <button class="btn ghost" id="reportBtn" style="margin-bottom:16px">📄 <span data-i18n="btn_report">PDF report</span></button>
 
-  <div class="ver">build v31 · 2026-07-31 · Temperature · GPS &amp; sign-off · Due list · Merge · Grade A/B/C/X · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver">build v33 · 2026-07-31 · Google Drive upload · Photo resize · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <div class="bottombar">
@@ -314,13 +314,20 @@
     <label class="fld"><span data-i18n="set_mode">Upload mode</span>
       <select id="upMode">
         <option value="off" data-i18n="set_off">Off — export manually</option>
+        <option value="gas" data-i18n="set_gas">Google Drive (Apps Script)</option>
         <option value="pa" data-i18n="set_pa">Power Automate (JSON + base64)</option>
         <option value="post" data-i18n="set_post">Plain HTTPS POST (multipart)</option>
       </select></label>
     <label class="fld"><span data-i18n="set_url">Upload URL</span>
       <input id="upUrl" type="url" placeholder="https://prod-xx.westeurope.logic.azure.com/workflows/..." autocomplete="off"></label>
-    <label class="fld"><span data-i18n="set_hdr">Secret header (optional)</span>
+    <label class="fld"><span id="upHdrLbl" data-i18n="set_hdr">Secret header (optional)</span>
       <input id="upHdr" type="text" placeholder="x-api-key: abc123" autocomplete="off"></label>
+    <label class="fld"><span data-i18n="set_px">Photo size on upload</span>
+      <select id="upPx">
+        <option value="0" data-i18n="set_px_full">Original — full detail (slowest)</option>
+        <option value="2000" data-i18n="set_px_2000">Large — 2000 px</option>
+        <option value="1600" data-i18n="set_px_1600">Medium — 1600 px (much smaller, fastest)</option>
+      </select></label>
     <label class="fld"><span data-i18n="set_folder">Folder / prefix (optional)</span>
       <input id="upFolder" type="text" placeholder="{YYYY-MM}" autocomplete="off"></label>
     <div class="row" style="gap:10px">
@@ -328,7 +335,7 @@
       <button class="btn primary" id="saveSet" data-i18n="set_save">Save</button>
     </div>
     <div class="hint" id="setMsg" style="margin-top:12px"></div>
-    <div class="hint" style="margin-top:18px" data-i18n="set_help">Power Automate: create a flow with the trigger “When an HTTP request is received”, add “Create file” (SharePoint) using name = triggerBody()?['name'] and content = base64ToBinary(triggerBody()?['file']), then copy the generated URL here.</div>
+    <div class="hint" style="margin-top:18px" id="setHelp" data-i18n="set_help">Power Automate: create a flow with the trigger “When an HTTP request is received”, add “Create file” (SharePoint) using name = triggerBody()?['name'] and content = base64ToBinary(triggerBody()?['file']), then copy the generated URL here.</div>
   </div>
 </div>
 
@@ -501,7 +508,11 @@ const I18N = {
     sync_ok:"All synced.", sync_pending:"{n} inspection(s) waiting to upload", sync_running:"Uploading…",
     sync_err:"Upload failed", sync_now:"Sync now",
     set_title:"Upload settings", set_mode:"Upload mode", set_off:"Off — export manually",
-    set_pa:"Power Automate (JSON + base64)", set_post:"Plain HTTPS POST (multipart)",
+    set_gas:"Google Drive (Apps Script)", set_pa:"Power Automate (JSON + base64)", set_post:"Plain HTTPS POST (multipart)",
+    set_secret:"Shared secret (optional)",
+    set_px:"Photo size on upload", set_px_full:"Original — full detail (slowest)",
+    set_px_2000:"Large — 2000 px", set_px_1600:"Medium — 1600 px (much smaller, fastest)",
+    set_help_gas:"Google Drive: open script.google.com, paste docs/google-upload.gs, set ROOT_FOLDER_ID to your Drive folder, then Deploy → Web app with Execute as “Me” and Who has access “Anyone”. Copy the /exec URL here. Re-deploy a NEW VERSION after every edit or the old code keeps running.",
     set_url:"Upload URL", set_hdr:"Secret header (optional)", set_folder:"Folder / prefix — {YYYY-MM} rolls monthly",
     set_test:"Test connection", set_save:"Save", set_testing:"Testing…", set_ok:"Connected — test file uploaded.",
     set_needurl:"Choose a mode and paste the URL first.",
@@ -569,7 +580,11 @@ const I18N = {
     sync_ok:"Всё синхронизировано.", sync_pending:"Ожидает отправки: {n}", sync_running:"Отправка…",
     sync_err:"Ошибка отправки", sync_now:"Отправить",
     set_title:"Настройки отправки", set_mode:"Режим отправки", set_off:"Выкл — выгружать вручную",
-    set_pa:"Power Automate (JSON + base64)", set_post:"Обычный HTTPS POST (multipart)",
+    set_gas:"Google Диск (Apps Script)", set_pa:"Power Automate (JSON + base64)", set_post:"Обычный HTTPS POST (multipart)",
+    set_secret:"Общий секрет (необяз.)",
+    set_px:"Размер фото при отправке", set_px_full:"Оригинал — полная детализация (медленнее всего)",
+    set_px_2000:"Крупный — 2000 px", set_px_1600:"Средний — 1600 px (намного меньше, быстрее всего)",
+    set_help_gas:"Google Диск: откройте script.google.com, вставьте docs/google-upload.gs, укажите ROOT_FOLDER_ID вашей папки Диска, затем Deploy → Web app: «Execute as: Me», «Who has access: Anyone». Скопируйте URL /exec сюда. После каждой правки развёртывайте НОВУЮ ВЕРСИЮ, иначе работает старый код.",
     set_url:"URL отправки", set_hdr:"Секретный заголовок (необяз.)", set_folder:"Папка / префикс — {YYYY-MM} по месяцам",
     set_test:"Проверить соединение", set_save:"Сохранить", set_testing:"Проверка…", set_ok:"Успешно — тестовый файл отправлен.",
     set_needurl:"Сначала выберите режим и укажите URL.",
@@ -1477,8 +1492,39 @@ function upHeaders(extra){ const h=Object.assign({},extra||{}); const raw=UP.hdr
   return h; }
 function blobToB64(b){ return new Promise((res,rej)=>{ const r=new FileReader();
   r.onload=()=>res(String(r.result).split(",")[1]); r.onerror=rej; r.readAsDataURL(b); }); }
+/* Shrink camera photos before upload — the single biggest lever on upload time.
+   Skipped for the signature PNG and for anything already smaller than the limit. */
+async function shrinkImage(blob,max){
+  const bmp=await createImageBitmap(blob);
+  const big=Math.max(bmp.width,bmp.height);
+  if(big<=max){ bmp.close&&bmp.close(); return blob; }
+  const s=max/big, w=Math.round(bmp.width*s), h=Math.round(bmp.height*s);
+  const c=document.createElement("canvas"); c.width=w; c.height=h;
+  c.getContext("2d").drawImage(bmp,0,0,w,h); bmp.close&&bmp.close();
+  const out=await new Promise(r=>c.toBlob(r,"image/jpeg",0.85));
+  return (out && out.size<blob.size) ? out : blob;
+}
+async function maybeShrink(blob,name){
+  const max=parseInt(localStorage.getItem("up_px")||"0",10);
+  if(!max || !/^image\/jpe?g$/i.test(blob.type||"") || /_SIGN\.png$/i.test(name)) return blob;
+  try{ return await shrinkImage(blob,max); }catch(e){ return blob; }   // never block the upload
+}
 async function putFile(name, blob, type){
   if(UP.mode==="off" || !UP.url) throw new Error("upload not configured");
+  blob=await maybeShrink(blob,name);
+  if(UP.mode==="gas"){
+    // Apps Script web apps cannot answer a CORS preflight, so this must stay a
+    // "simple" request: text/plain body, no custom headers, secret inside the JSON.
+    const body={ name, folder:UP.folder||"", contentType:type||blob.type||"application/octet-stream",
+                 file: await blobToB64(blob), secret: UP.hdr||"" };
+    const r=await fetch(UP.url,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+                                body:JSON.stringify(body)});
+    if(!r.ok) throw new Error(await httpErr(r));
+    let j=null; try{ j=JSON.parse(await r.text()); }catch(e){}
+    if(j && j.ok===false) throw new Error(j.error||"Apps Script rejected the upload");
+    if(!j) throw new Error("Unexpected reply — check the deployment is set to “Anyone”.");
+    return true;
+  }
   if(UP.mode==="pa"){
     const body={ name, folder:UP.folder||"", contentType:type||blob.type||"application/octet-stream",
                  file: await blobToB64(blob) };
@@ -1558,10 +1604,20 @@ async function renderSync(){
 }
 /* settings sheet */
 function openSettings(){ $("upMode").value=UP.mode; $("upUrl").value=UP.url; $("upHdr").value=UP.hdr;
-  $("upFolder").value=UP.folder; $("setMsg").textContent=""; $("setOv").classList.remove("hidden"); }
+  $("upFolder").value=UP.folder; $("upPx").value=localStorage.getItem("up_px")||"0";
+  $("setMsg").textContent=""; syncModeHints(); $("setOv").classList.remove("hidden"); }
+// The "secret" field means different things per mode: a header for a plain server,
+// a body field for Apps Script, and nothing at all for Power Automate.
+function syncModeHints(){ const m=$("upMode").value;
+  $("upHdrLbl").textContent = m==="gas" ? t("set_secret") : t("set_hdr");
+  $("upHdr").placeholder = m==="gas" ? "" : "x-api-key: abc123";
+  $("upUrl").placeholder = m==="gas" ? "https://script.google.com/macros/s/…/exec"
+                                     : "https://prod-xx.westeurope.logic.azure.com/workflows/...";
+  $("setHelp").textContent = m==="gas" ? t("set_help_gas") : t("set_help"); }
+$("upMode").onchange=syncModeHints;
 $("setBtn").onclick=openSettings;
 $("setClose").onclick=()=>$("setOv").classList.add("hidden");
-$("saveSet").onclick=()=>{ localStorage.setItem("up_mode",$("upMode").value);
+$("saveSet").onclick=()=>{ localStorage.setItem("up_mode",$("upMode").value); localStorage.setItem("up_px",$("upPx").value);
   localStorage.setItem("up_url",$("upUrl").value.trim()); localStorage.setItem("up_hdr",$("upHdr").value.trim());
   localStorage.setItem("up_folder",$("upFolder").value.trim());
   $("setOv").classList.add("hidden"); renderSync(); syncNow(); };
@@ -1570,6 +1626,7 @@ $("testUp").onclick=async ()=>{ const m=$("setMsg"); m.textContent=t("set_testin
   if(mode==="off"||!url){ m.textContent=t("set_needurl"); return; }
   localStorage.setItem("up_mode",mode); localStorage.setItem("up_url",url);
   localStorage.setItem("up_hdr",$("upHdr").value.trim()); localStorage.setItem("up_folder",$("upFolder").value.trim());
+  localStorage.setItem("up_px",$("upPx").value);
   try{ await putFile("connection_test.txt",new Blob(["Condition Monitoring upload test "+new Date().toISOString()],{type:"text/plain"}),"text/plain");
     m.textContent="✅ "+t("set_ok"); }catch(e){ m.textContent="❌ "+String(e.message||e); } };
 addEventListener("online",()=>syncNow());

@@ -1,5 +1,9 @@
 # Auto-upload setup (Power Automate → SharePoint)
 
+> **Looking for something quicker?** [docs/GOOGLE_UPLOAD_SETUP.md](GOOGLE_UPLOAD_SETUP.md)
+> does the same job with a Google Apps Script into Drive — free, no premium connector,
+> and one hop instead of going through the Logic Apps queue.
+
 The Field Capture app can upload photos, videos and inspection data automatically
 whenever the phone is **open and online**. This guide sets up the recommended route:
 a Power Automate flow that drops the files into a SharePoint library (which can be
@@ -117,7 +121,8 @@ needed for true background sync.
 
 | Mode | Body sent | Use when |
 |---|---|---|
-| **Power Automate (JSON + base64)** | `{name, folder, contentType, file}` as JSON | Recommended — Power Automate / Logic Apps |
+| **Google Drive (Apps Script)** | `{name, folder, contentType, file, secret}` as `text/plain` | Fastest to set up — see [GOOGLE_UPLOAD_SETUP.md](GOOGLE_UPLOAD_SETUP.md) |
+| **Power Automate (JSON + base64)** | `{name, folder, contentType, file}` as JSON | You need the files in SharePoint |
 | **Plain HTTPS POST (multipart)** | `multipart/form-data` with `file`, `name`, `folder` | Your own server / API gateway |
 | **Off** | — | Manual **Share / Export ZIP** only |
 

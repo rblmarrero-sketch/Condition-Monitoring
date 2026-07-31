@@ -356,10 +356,22 @@ Open **⚙** in the app and set the upload mode, URL and optional secret header:
 
 | Mode | Sends | Use when |
 |---|---|---|
-| Power Automate (JSON + base64) | `{name, folder, contentType, file}` | **Recommended** — Power Automate / Logic Apps into SharePoint (syncs to N:) |
+| **Google Drive (Apps Script)** | `{name, folder, contentType, file, secret}` as `text/plain` | **Fastest to set up and to run** — free, no premium connector, one hop |
+| Power Automate (JSON + base64) | `{name, folder, contentType, file}` | You need the files in SharePoint / on the N: drive |
 | Plain HTTPS POST (multipart) | `file`, `name`, `folder` | Your own server endpoint (needs CORS) |
 | Off | — | Manual export only |
 
-Failed uploads are retried; nothing is deleted from the phone until the server
-confirms. Step-by-step Power Automate instructions (you can set it up yourself,
-no IT ticket to trial it): **[docs/AUTO_UPLOAD_SETUP.md](docs/AUTO_UPLOAD_SETUP.md)**.
+Failed uploads are retried; nothing is deleted from the phone until the server confirms.
+
+* **Google Drive:** **[docs/GOOGLE_UPLOAD_SETUP.md](docs/GOOGLE_UPLOAD_SETUP.md)** — paste
+  `docs/google-upload.gs` into script.google.com and deploy. About 10 minutes.
+* **SharePoint:** **[docs/AUTO_UPLOAD_SETUP.md](docs/AUTO_UPLOAD_SETUP.md)** — Power
+  Automate flow into a document library.
+
+### Upload speed
+
+**Photo size on upload** (⚙ in the app) is the biggest lever, whichever route you use:
+*Original* keeps every pixel the camera captured (3–5 MB a photo); *Medium — 1600 px*
+sends a fraction of that and still resolves plug debris clearly. Use Original when a
+photo is evidence for a warranty claim or failure investigation. Signatures and the JSON
+sidecar are never resized.
