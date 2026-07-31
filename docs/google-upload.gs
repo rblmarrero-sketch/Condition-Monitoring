@@ -26,7 +26,7 @@ const ROOT_FOLDER_ID = '1aeTSn7FWw9Zh8Xv6SNsdc6mC77MLcsSa?usp=sharing';
 
 /** Optional shared secret. Leave '' to accept any request that has the URL.
  *  If you set it, put the same value in the app's "Shared secret" field. */
-const SECRET = '';
+const SECRET = 'ADMIN_SECRET';
 
 /** Password for DELETING inspections from the dashboard. Deletion is OFF while
  *  this is '' — that is the safe default and most sites should leave it so.
