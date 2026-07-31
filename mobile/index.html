@@ -100,7 +100,15 @@
   .bottombar{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--border);padding:12px 16px calc(env(safe-area-inset-bottom) + 12px);display:flex;gap:10px;z-index:10;}
   .bottombar .btn{margin:0;}
   .hint{font-size:12.5px;color:var(--muted);margin-top:6px;}
+  .btn-set{border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);border-radius:9px;padding:5px 9px;font-size:15px;cursor:pointer;margin-left:auto;}
   .ver{text-align:center;color:var(--muted);font-size:11px;margin:2px 0 8px;}
+  .syncbar{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--ink-2);background:var(--surface);
+    border:1px solid var(--border);border-radius:12px;padding:10px 14px;margin-bottom:12px;}
+  .syncbar .dot{width:9px;height:9px;border-radius:50%;background:var(--muted);flex:none;}
+  .syncbar.on .dot{background:var(--good);} .syncbar.pend .dot{background:var(--warning);}
+  .syncbar.err .dot{background:var(--critical);} .syncbar .sp{flex:1;}
+  .syncbar button{border:1px solid var(--border);background:var(--surface-2);color:var(--accent);border-radius:8px;
+    padding:6px 10px;font-size:12.5px;font-weight:650;cursor:pointer;}
   .editbar{display:flex;align-items:center;gap:10px;background:color-mix(in srgb,var(--accent) 16%,var(--surface));border:1px solid color-mix(in srgb,var(--accent) 45%,var(--border));border-radius:12px;padding:10px 14px;margin-bottom:10px;font-size:13.5px;}
   .editbar span{flex:1;color:var(--ink);} .linkbtn{background:none;border:none;color:var(--accent);font-weight:700;font-size:14px;cursor:pointer;}
   .hidden{display:none!important;}
@@ -137,6 +145,7 @@
 <header>
   <span class="t" data-i18n="app_title">Truck Inspection</span>
   <span class="lang"><button data-lang="en" class="on">EN</button><button data-lang="ru">RU</button></span>
+  <button class="btn-set" id="setBtn" title="Upload settings">⚙</button>
   <span class="st" id="netStatus">…</span>
 </header>
 
@@ -227,14 +236,40 @@
     <div class="pending" id="pending"></div>
   </div>
 
+  <div class="syncbar" id="syncBar"></div>
   <button class="btn ghost" id="reportBtn" style="margin-bottom:16px">📄 <span data-i18n="btn_report">PDF report</span></button>
 
-  <div class="ver">build v26 · 2026-07-31 · Dashboard export · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver">build v27 · 2026-07-31 · Auto-upload · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <div class="bottombar">
   <button class="btn ghost" id="shareBtn">📤 <span data-i18n="btn_share">Share</span></button>
   <button class="btn primary" id="exportBtn">⬇ <span data-i18n="btn_export">Export ZIP</span></button>
+</div>
+
+<div id="setOv" class="pick-ov hidden">
+  <div class="pickhead"><button id="setClose" class="pickback">‹</button>
+    <b style="align-self:center" data-i18n="set_title">Upload settings</b></div>
+  <div class="picklist">
+    <label class="fld"><span data-i18n="set_mode">Upload mode</span>
+      <select id="upMode">
+        <option value="off" data-i18n="set_off">Off — export manually</option>
+        <option value="pa" data-i18n="set_pa">Power Automate (JSON + base64)</option>
+        <option value="post" data-i18n="set_post">Plain HTTPS POST (multipart)</option>
+      </select></label>
+    <label class="fld"><span data-i18n="set_url">Upload URL</span>
+      <input id="upUrl" type="url" placeholder="https://prod-xx.westeurope.logic.azure.com/workflows/..." autocomplete="off"></label>
+    <label class="fld"><span data-i18n="set_hdr">Secret header (optional)</span>
+      <input id="upHdr" type="text" placeholder="x-api-key: abc123" autocomplete="off"></label>
+    <label class="fld"><span data-i18n="set_folder">Folder / prefix (optional)</span>
+      <input id="upFolder" type="text" placeholder="2026-07" autocomplete="off"></label>
+    <div class="row" style="gap:10px">
+      <button class="btn ghost" id="testUp" data-i18n="set_test">Test connection</button>
+      <button class="btn primary" id="saveSet" data-i18n="set_save">Save</button>
+    </div>
+    <div class="hint" id="setMsg" style="margin-top:12px"></div>
+    <div class="hint" style="margin-top:18px" data-i18n="set_help">Power Automate: create a flow with the trigger “When an HTTP request is received”, add “Create file” (SharePoint) using name = triggerBody()?['name'] and content = base64ToBinary(triggerBody()?['file']), then copy the generated URL here.</div>
+  </div>
 </div>
 
 <div id="scanOverlay" class="scan-ov hidden">
@@ -397,6 +432,15 @@ const I18N = {
   en:{ app_title:"Truck Inspection", net_online:"online", net_offline:"offline — OK",
     sec_inspection:"Inspection", lbl_class:"Equipment", lbl_type:"Inspection type", lbl_truck:"Truck / Unit", ph_truck:"e.g. TK158", btn_scan:"Scan",
     lbl_defect:"Defect / failure mode", lbl_cause:"Direct cause",
+    sync_off:"Auto-upload is off — findings stay on this phone.", sync_setup:"Set up",
+    sync_ok:"All synced.", sync_pending:"{n} inspection(s) waiting to upload", sync_running:"Uploading…",
+    sync_err:"Upload failed", sync_now:"Sync now",
+    set_title:"Upload settings", set_mode:"Upload mode", set_off:"Off — export manually",
+    set_pa:"Power Automate (JSON + base64)", set_post:"Plain HTTPS POST (multipart)",
+    set_url:"Upload URL", set_hdr:"Secret header (optional)", set_folder:"Folder / prefix (optional)",
+    set_test:"Test connection", set_save:"Save", set_testing:"Testing…", set_ok:"Connected — test file uploaded.",
+    set_needurl:"Choose a mode and paste the URL first.",
+    set_help:"Power Automate: create a flow with the trigger \u201cWhen an HTTP request is received\u201d, add \u201cCreate file\u201d (SharePoint) with name = triggerBody()?['name'] and content = base64ToBinary(triggerBody()?['file']), then copy the generated URL here.",
     lbl_inspector:"Inspected by", ph_inspector:"name / badge no.", lbl_sev:"Severity (ISO 14224)",
     sev_NOF:"No failure", sev_INC:"Incipient", sev_DEG:"Degraded", sev_CRI:"Critical",
     lbl_action:"Recommended action", lbl_wo:"1C notification / WO no. (optional)", opt_action_none:"— not set —",
@@ -435,6 +479,15 @@ const I18N = {
   ru:{ app_title:"Осмотр самосвала", net_online:"онлайн", net_offline:"офлайн — ОК",
     sec_inspection:"Осмотр", lbl_class:"Оборудование", lbl_type:"Тип осмотра", lbl_truck:"Трак / Ед.", ph_truck:"напр. TK158", btn_scan:"Скан",
     lbl_defect:"Дефект / вид отказа", lbl_cause:"Прямая причина",
+    sync_off:"Автозагрузка выключена — данные остаются на телефоне.", sync_setup:"Настроить",
+    sync_ok:"Всё синхронизировано.", sync_pending:"Ожидает отправки: {n}", sync_running:"Отправка…",
+    sync_err:"Ошибка отправки", sync_now:"Отправить",
+    set_title:"Настройки отправки", set_mode:"Режим отправки", set_off:"Выкл — выгружать вручную",
+    set_pa:"Power Automate (JSON + base64)", set_post:"Обычный HTTPS POST (multipart)",
+    set_url:"URL отправки", set_hdr:"Секретный заголовок (необяз.)", set_folder:"Папка / префикс (необяз.)",
+    set_test:"Проверить соединение", set_save:"Сохранить", set_testing:"Проверка…", set_ok:"Успешно — тестовый файл отправлен.",
+    set_needurl:"Сначала выберите режим и укажите URL.",
+    set_help:"Power Automate: создайте поток с триггером \u201cWhen an HTTP request is received\u201d, добавьте \u201cCreate file\u201d (SharePoint): name = triggerBody()?['name'], content = base64ToBinary(triggerBody()?['file']), затем скопируйте URL сюда.",
     lbl_inspector:"Осмотр выполнил", ph_inspector:"ФИО / табельный №", lbl_sev:"Категория (ISO 14224)",
     sev_NOF:"Без отказа", sev_INC:"Зарождающийся", sev_DEG:"Частичный", sev_CRI:"Критический",
     lbl_action:"Рекомендуемое действие", lbl_wo:"Уведомление / № заказа 1С (необяз.)", opt_action_none:"— не задано —",
@@ -828,10 +881,10 @@ $("saveBtn").onclick=async ()=>{
   if(!Object.keys(draft.positions).length){ dlg(t("m_nothing_save")); return; }
   const id = editing ? editing.id : `${type}__${equip}__${date}__${Date.now()}`;
   const created = editing ? (editing.created||new Date().toISOString()) : new Date().toISOString();
-  const rec={ id, cls:eqClass, type, equip, date, smu:$("smu").value.trim(), by:$("inspector").value.trim(), positions:{}, created };
+  const rec={ id, cls:eqClass, type, equip, date, smu:$("smu").value.trim(), by:$("inspector").value.trim(), positions:{}, created, up:0 };
   for(const [k,p] of Object.entries(draft.positions))
     rec.positions[k]={ grade:p.grade||null, sev:p.sev||"", action:p.action||"", wo:p.wo||"", particle:p.particle||"", comp:p.comp||"", oil:p.oil||"", defect:p.defect||"", cause:p.cause||"", comment:p.comment||"", photos:(p.photos||[]).slice(), video:p.video||null };
-  await dbPut(rec); resetForm(); renderPending();
+  await dbPut(rec); resetForm(); renderPending(); syncNow();
   const m=t("m_saved"); dlg([m[0], m[1].replace("{x}",equip)]);
 };
 
@@ -1056,6 +1109,111 @@ function applyLang(){ document.documentElement.lang=lang;
   document.querySelectorAll(".lang button").forEach(b=>b.classList.toggle("on", b.dataset.lang===lang)); }
 document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target.closest("button[data-lang]"); if(!b) return; lang=b.dataset.lang; localStorage.setItem("lang",lang); applyLang(); });
 
+
+/* ===================== auto-upload (generic sync queue) =====================
+   Modes:
+     pa   -> POST JSON {name, folder, contentType, file:<base64>}   (Power Automate / Logic Apps)
+     post -> POST multipart/form-data with fields file, name, folder (any server)
+   A record is marked up:1 only after the server confirms every one of its files.
+   iOS cannot upload in the background: sync runs whenever the app is open + online.
+============================================================================= */
+const UP={ get mode(){return localStorage.getItem("up_mode")||"off";},
+  get url(){return localStorage.getItem("up_url")||"";},
+  get hdr(){return localStorage.getItem("up_hdr")||"";},
+  get folder(){return localStorage.getItem("up_folder")||"";} };
+function upHeaders(extra){ const h=Object.assign({},extra||{}); const raw=UP.hdr;
+  if(raw && raw.indexOf(":")>0){ const i=raw.indexOf(":"); h[raw.slice(0,i).trim()]=raw.slice(i+1).trim(); }
+  return h; }
+function blobToB64(b){ return new Promise((res,rej)=>{ const r=new FileReader();
+  r.onload=()=>res(String(r.result).split(",")[1]); r.onerror=rej; r.readAsDataURL(b); }); }
+async function putFile(name, blob, type){
+  if(UP.mode==="off" || !UP.url) throw new Error("upload not configured");
+  if(UP.mode==="pa"){
+    const body={ name, folder:UP.folder||"", contentType:type||blob.type||"application/octet-stream",
+                 file: await blobToB64(blob) };
+    const r=await fetch(UP.url,{method:"POST",headers:upHeaders({"Content-Type":"application/json"}),body:JSON.stringify(body)});
+    if(!r.ok) throw new Error("HTTP "+r.status); return true;
+  }
+  const fd=new FormData(); fd.append("file",blob,name); fd.append("name",name); fd.append("folder",UP.folder||"");
+  const r=await fetch(UP.url,{method:"POST",headers:upHeaders(),body:fd});
+  if(!r.ok) throw new Error("HTTP "+r.status); return true;
+}
+/* files belonging to one record, using the agreed naming standard */
+async function filesForRecord(rec){
+  const suffix=(TYPE_META[rec.type]&&TYPE_META[rec.type].suffix)||rec.type||"MP";
+  const isComp = rec.type==="INSP" && rec.equip && UNIT_TPL[rec.equip]!=null;
+  const out=[];
+  for(const [k,p] of Object.entries(rec.positions)){
+    const ph=p.photos||(p.photoBlob?[p.photoBlob]:[]);
+    for(let i=0;i<ph.length;i++){ const ext=extOf(ph[i]); const base=fileName(rec.equip,k,rec.date,ext,suffix,isComp);
+      out.push({name: ph.length>1? base.replace("."+ext,"_"+(i+1)+"."+ext) : base, blob:ph[i]}); }
+    if(p.video){ const vext=(p.video.type||"").includes("quicktime")?"mov":"mp4";
+      out.push({name:fileName(rec.equip,k,rec.date,vext,suffix,isComp), blob:p.video}); }
+  }
+  return out;
+}
+let syncing=false, lastErr="";
+async function syncNow(manual){
+  if(syncing) return; if(UP.mode==="off"||!UP.url){ renderSync(); return; }
+  if(!navigator.onLine){ renderSync(); return; }
+  syncing=true; lastErr=""; renderSync();
+  try{
+    const all=(await dbAll()).filter(r=>!r.up);
+    for(const rec of all){
+      try{
+        for(const f of await filesForRecord(rec)) await putFile(f.name,f.blob,f.blob.type);
+        // one JSON sidecar per record so the dashboard can import without the ZIP
+        const meta={type:"cm-inspection-entries",version:2,records:[recToExport(rec)]};
+        await putFile(`${rec.equip}_${ddmmyyyy(rec.date)}_${rec.type}.json`,
+                      new Blob([JSON.stringify(meta,null,2)],{type:"application/json"}),"application/json");
+        rec.up=1; rec.upAt=new Date().toISOString(); await dbPut(rec);
+      }catch(e){ lastErr=String(e.message||e); break; }   // stop on first failure, retry later
+    }
+  } finally { syncing=false; renderSync(); renderPending(); }
+}
+function recToExport(rec){
+  return { equip:rec.equip, date:rec.date, type:rec.type||"MP", cls:rec.cls||"", by:rec.by||"", smu:rec.smu||"",
+    items:Object.entries(rec.positions).map(([k,p])=>{ const d=DEFECT_BY[p.defect]||null;
+      return { key:k, label:itemLabelFor(rec,k)||"", grade:p.grade||"", sev:p.sev||"", action:p.action||"",
+        actionLabel:p.action?actionLabel(p.action,"en"):"", wo:p.wo||"", defectCode:p.defect||"",
+        defect:p.defect?defectLabel(p.defect,"en"):"", iso:d?d.iso:"", isoMode:d?d.im:"",
+        causeCode:p.cause||"", cause:p.cause?causeLabel(p.cause,"en"):"", particle:p.particle||"",
+        comp:p.comp||"", oil:p.oil||"", comment:p.comment||"", photos:((p.photos||[]).length), video:p.video?1:0 }; }) };
+}
+async function renderSync(){
+  const bar=$("syncBar"); if(!bar) return;
+  if(UP.mode==="off"||!UP.url){ bar.className="syncbar"; bar.innerHTML=`<span class="dot"></span><span class="sp">${t("sync_off")}</span>
+    <button id="syncSet">${t("sync_setup")}</button>`; const b=$("syncSet"); if(b)b.onclick=openSettings; return; }
+  const all=await dbAll(); const pend=all.filter(r=>!r.up).length;
+  let cls="syncbar", txt;
+  if(syncing){ cls+=" pend"; txt=t("sync_running"); }
+  else if(lastErr){ cls+=" err"; txt=t("sync_err")+": "+lastErr; }
+  else if(pend){ cls+=" pend"; txt=t("sync_pending").replace("{n}",pend)+(navigator.onLine?"":" · "+t("net_offline")); }
+  else { cls+=" on"; txt=t("sync_ok"); }
+  bar.className=cls;
+  bar.innerHTML=`<span class="dot"></span><span class="sp">${txt}</span>
+    <button id="syncGo">${t("sync_now")}</button><button id="syncSet">⚙</button>`;
+  const g=$("syncGo"); if(g)g.onclick=()=>syncNow(true);
+  const st=$("syncSet"); if(st)st.onclick=openSettings;
+}
+/* settings sheet */
+function openSettings(){ $("upMode").value=UP.mode; $("upUrl").value=UP.url; $("upHdr").value=UP.hdr;
+  $("upFolder").value=UP.folder; $("setMsg").textContent=""; $("setOv").classList.remove("hidden"); }
+$("setBtn").onclick=openSettings;
+$("setClose").onclick=()=>$("setOv").classList.add("hidden");
+$("saveSet").onclick=()=>{ localStorage.setItem("up_mode",$("upMode").value);
+  localStorage.setItem("up_url",$("upUrl").value.trim()); localStorage.setItem("up_hdr",$("upHdr").value.trim());
+  localStorage.setItem("up_folder",$("upFolder").value.trim());
+  $("setOv").classList.add("hidden"); renderSync(); syncNow(); };
+$("testUp").onclick=async ()=>{ const m=$("setMsg"); m.textContent=t("set_testing");
+  const mode=$("upMode").value, url=$("upUrl").value.trim();
+  if(mode==="off"||!url){ m.textContent=t("set_needurl"); return; }
+  localStorage.setItem("up_mode",mode); localStorage.setItem("up_url",url);
+  localStorage.setItem("up_hdr",$("upHdr").value.trim()); localStorage.setItem("up_folder",$("upFolder").value.trim());
+  try{ await putFile("connection_test.txt",new Blob(["Condition Monitoring upload test "+new Date().toISOString()],{type:"text/plain"}),"text/plain");
+    m.textContent="✅ "+t("set_ok"); }catch(e){ m.textContent="❌ "+String(e.message||e); } };
+addEventListener("online",()=>syncNow());
+
 /* ===================== connectivity + SW ===================== */
 function setNet(){ const on=navigator.onLine; $("netStatus").textContent=on?t("net_online"):t("net_offline"); $("netStatus").className="st "+(on?"on":"off"); }
 addEventListener("online",setNet); addEventListener("offline",setNet);
@@ -1071,7 +1229,7 @@ const fu=$("forceUpdate"); if(fu) fu.onclick=async (e)=>{ e.preventDefault();
 
 /* ===================== init ===================== */
 updateEquipBtn();
-applyForm(); applyLang();
+applyForm(); applyLang(); renderSync(); syncNow();
 </script>
 </body>
 </html>

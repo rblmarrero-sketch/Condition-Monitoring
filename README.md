@@ -229,3 +229,22 @@ Adding **Filter Cut / Oil Analysis / Temperature** later follows the same
 pattern: an ingester per component writing a parallel `data/<component>.js`, and
 a tab in the dashboard that renders it. The tabs are already stubbed in
 `dashboard/index.html`.
+
+---
+
+## Auto-upload (phone → SharePoint / server)
+
+The Field Capture app can upload photos, video and inspection data automatically
+whenever it is open and online — no manual Share/Export.
+
+Open **⚙** in the app and set the upload mode, URL and optional secret header:
+
+| Mode | Sends | Use when |
+|---|---|---|
+| Power Automate (JSON + base64) | `{name, folder, contentType, file}` | **Recommended** — Power Automate / Logic Apps into SharePoint (syncs to N:) |
+| Plain HTTPS POST (multipart) | `file`, `name`, `folder` | Your own server endpoint (needs CORS) |
+| Off | — | Manual export only |
+
+Failed uploads are retried; nothing is deleted from the phone until the server
+confirms. Step-by-step Power Automate instructions (you can set it up yourself,
+no IT ticket to trial it): **[docs/AUTO_UPLOAD_SETUP.md](docs/AUTO_UPLOAD_SETUP.md)**.
