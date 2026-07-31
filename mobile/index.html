@@ -115,6 +115,8 @@
   .hidden{display:none!important;}
   .dest{border:1px solid var(--border);border-radius:12px;padding:12px 12px 2px;margin-bottom:14px;background:var(--surface-2);}
   .dest.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--surface-2));}
+  .dest.needurl{border-color:var(--warning);}
+  .dest .need{color:var(--warning);font-size:12.5px;margin:-6px 0 12px;}
   .dest .dhead{display:flex;align-items:center;gap:11px;font-weight:700;font-size:14px;margin-bottom:10px;
     cursor:pointer;user-select:none;-webkit-user-select:none;}
   /* Drawn by hand: the app strips native control styling, and a bare accent-color
@@ -314,7 +316,7 @@
   <div class="syncbar" id="syncBar"></div>
   <button class="btn ghost" id="reportBtn" style="margin-bottom:16px">📄 <span data-i18n="btn_report">PDF report</span></button>
 
-  <div class="ver">build v37 · 2026-07-31 · Built-in destinations · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver">build v38 · 2026-07-31 · Clearer upload settings · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <div class="bottombar">
@@ -331,7 +333,8 @@
     <div class="dest">
       <label class="dhead"><input type="checkbox" id="gasOn"><span data-i18n="set_gas">Google Drive (Apps Script)</span></label>
       <label class="fld"><span data-i18n="set_url">Upload URL</span>
-        <input id="gasUrl" type="url" placeholder="https://script.google.com/macros/s/…/exec" autocomplete="off"></label>
+        <input id="gasUrl" type="url" data-i18n-ph="ph_gas_url" placeholder="paste the Apps Script /exec URL here" autocomplete="off"></label>
+        <div class="need hidden" id="gasNeed" data-i18n="set_need_url">Ticked, but no URL — this destination will not upload.</div>
       <div class="row">
         <label class="fld"><span data-i18n="set_secret">Shared secret (optional)</span>
           <input id="gasSec" type="text" autocomplete="off"></label>
@@ -343,7 +346,8 @@
     <div class="dest">
       <label class="dhead"><input type="checkbox" id="paOn"><span data-i18n="set_pa">SharePoint / OneDrive (Power Automate)</span></label>
       <label class="fld"><span data-i18n="set_url">Upload URL</span>
-        <input id="paUrl" type="url" placeholder="https://…/triggers/manual/paths/invoke?…&amp;sig=…" autocomplete="off"></label>
+        <input id="paUrl" type="url" data-i18n-ph="ph_pa_url" placeholder="paste the Power Automate flow URL here" autocomplete="off"></label>
+        <div class="need hidden" id="paNeed" data-i18n="set_need_url">Ticked, but no URL — this destination will not upload.</div>
       <div class="row">
         <label class="fld"><span data-i18n="set_hdr">Secret header (optional)</span>
           <input id="paHdr" type="text" placeholder="x-api-key: abc123" autocomplete="off"></label>
@@ -355,7 +359,8 @@
     <div class="dest">
       <label class="dhead"><input type="checkbox" id="postOn"><span data-i18n="set_post">Plain HTTPS POST (multipart)</span></label>
       <label class="fld"><span data-i18n="set_url">Upload URL</span>
-        <input id="postUrl" type="url" autocomplete="off"></label>
+        <input id="postUrl" type="url" data-i18n-ph="ph_post_url" placeholder="paste your server endpoint here" autocomplete="off"></label>
+        <div class="need hidden" id="postNeed" data-i18n="set_need_url">Ticked, but no URL — this destination will not upload.</div>
       <div class="row">
         <label class="fld"><span data-i18n="set_hdr">Secret header (optional)</span>
           <input id="postHdr" type="text" placeholder="x-api-key: abc123" autocomplete="off"></label>
@@ -565,7 +570,10 @@ const I18N = {
     sync_off:"Auto-upload is off — findings stay on this phone.", sync_setup:"Set up",
     sync_ok:"All synced.", sync_pending:"{n} inspection(s) waiting to upload", sync_running:"Uploading…",
     sync_err:"Upload failed", sync_now:"Sync now",
-    set_title:"Upload settings", set_mode:"Upload mode", set_off:"Off — export manually",
+    set_title:"Upload settings",
+    set_need_url:"Ticked, but no URL — this destination will not upload.",
+    ph_gas_url:"paste the Apps Script /exec URL here", ph_pa_url:"paste the Power Automate flow URL here",
+    ph_post_url:"paste your server endpoint here",
     set_gas:"Google Drive (Apps Script)", set_pa:"SharePoint / OneDrive (Power Automate)", set_post:"Plain HTTPS POST (multipart)",
     set_secret:"Shared secret (optional)",
     set_px:"Photo size on upload", set_px_full:"Original — full detail (slowest)",
@@ -645,7 +653,10 @@ const I18N = {
     sync_off:"Автозагрузка выключена — данные остаются на телефоне.", sync_setup:"Настроить",
     sync_ok:"Всё синхронизировано.", sync_pending:"Ожидает отправки: {n}", sync_running:"Отправка…",
     sync_err:"Ошибка отправки", sync_now:"Отправить",
-    set_title:"Настройки отправки", set_mode:"Режим отправки", set_off:"Выкл — выгружать вручную",
+    set_title:"Настройки отправки",
+    set_need_url:"Отмечено, но нет URL — сюда ничего не отправится.",
+    ph_gas_url:"вставьте сюда URL /exec из Apps Script", ph_pa_url:"вставьте сюда URL потока Power Automate",
+    ph_post_url:"вставьте сюда адрес вашего сервера",
     set_gas:"Google Диск (Apps Script)", set_pa:"SharePoint / OneDrive (Power Automate)", set_post:"Обычный HTTPS POST (multipart)",
     set_secret:"Общий секрет (необяз.)",
     set_px:"Размер фото при отправке", set_px_full:"Оригинал — полная детализация (медленнее всего)",
@@ -1734,9 +1745,14 @@ function destsToForm(d){ d.forEach(x=>{
   $(x.id+"On").checked=!!x.on; $(x.id+"Url").value=x.url||"";
   $(x.id+(x.id==="gas"?"Sec":"Hdr")).value=x.sec||""; $(x.id+"Folder").value=x.folder||""; });
   markDestState(); }
+// Ticked with an empty URL uploads nothing, so it must not look configured.
 function markDestState(){ DEST_IDS.forEach(id=>{
-  const cb=$(id+"On"); cb.closest(".dest").classList.toggle("on", cb.checked); }); }
-DEST_IDS.forEach(id=>$(id+"On").addEventListener("change",markDestState));
+  const cb=$(id+"On"), has=!!$(id+"Url").value.trim(), box=cb.closest(".dest");
+  box.classList.toggle("on", cb.checked && has);
+  box.classList.toggle("needurl", cb.checked && !has);
+  $(id+"Need").classList.toggle("hidden", !(cb.checked && !has)); }); }
+DEST_IDS.forEach(id=>{ $(id+"On").addEventListener("change",markDestState);
+  $(id+"Url").addEventListener("input",markDestState); });
 function openSettings(){ destsToForm(loadDests()); $("upPx").value=localStorage.getItem("up_px")||"0";
   $("setMsg").textContent=""; $("provBox").classList.add("hidden"); $("setOv").classList.remove("hidden"); }
 function persistSettings(){ saveDests(formToDests()); localStorage.setItem("up_px",$("upPx").value); }
