@@ -67,9 +67,77 @@ function doPost(e) {
   }
 }
 
-/** Opening the /exec URL in a browser is a health check. */
-function doGet() {
-  return json(diagnose_());
+/**
+ * GET serves three things:
+ *   (no action)  health check — open the /exec URL in a browser
+ *   ?action=list what is in the folder, so the dashboard can find the sidecars
+ *   ?action=file one file as base64, so the dashboard can show a photo
+ *
+ * The read side exists so the dashboard works on a PC with no Google Drive client
+ * installed — everything comes over plain HTTPS from this URL.
+ */
+function doGet(e) {
+  var p = (e && e.parameter) || {};
+  if (!p.action) return json(diagnose_());          // health check needs no secret
+  if (SECRET && p.secret !== SECRET) return json({ ok: false, error: 'Bad or missing secret' });
+  try {
+    if (p.action === 'list') return json(listFiles_(p.folder || '', p.ext || ''));
+    if (p.action === 'file') return json(readFile_(p.id));
+    return json({ ok: false, error: 'Unknown action: ' + p.action });
+  } catch (err) {
+    return json({ ok: false, error: String((err && err.message) || err) });
+  }
+}
+
+/** Every file under the root, sub-folders included. `ext` filters by suffix. */
+function listFiles_(sub, ext) {
+  var root = rootFolder_();
+  var dir = sub ? folderPath_(root, sub) : root;
+  var out = [];
+  collect_(dir, '', out, 0, String(ext || '').toLowerCase());
+  return { ok: true, count: out.length, truncated: out.length >= LIST_CAP, files: out };
+}
+var LIST_CAP = 4000;
+function collect_(dir, prefix, out, depth, ext) {
+  if (depth > 5 || out.length >= LIST_CAP) return;
+  var fs = dir.getFiles();
+  while (fs.hasNext() && out.length < LIST_CAP) {
+    var f = fs.next(), n = f.getName();
+    if (!ext || n.toLowerCase().slice(-ext.length) === ext) {
+      out.push({ name: n, path: prefix + n, id: f.getId(), size: f.getSize() });
+    }
+  }
+  var ds = dir.getFolders();
+  while (ds.hasNext()) {
+    var d = ds.next();
+    collect_(d, prefix + d.getName() + '/', out, depth + 1, ext);
+  }
+}
+
+function readFile_(id) {
+  if (!id) return { ok: false, error: 'Missing file id' };
+  var f = DriveApp.getFileById(id);
+  // Never hand back something outside the configured folder, even with a valid id.
+  if (!underRoot_(f)) return { ok: false, error: 'That file is not inside the configured folder' };
+  var b = f.getBlob();
+  return { ok: true, name: f.getName(), mime: b.getContentType(),
+           data: Utilities.base64Encode(b.getBytes()) };
+}
+
+/** Walk parents up to the root folder — Drive files can have more than one. */
+function underRoot_(file) {
+  var rootId = diagnose_().id, seen = {}, stack = [];
+  var it = file.getParents();
+  while (it.hasNext()) stack.push(it.next());
+  for (var guard = 0; stack.length && guard < 300; guard++) {
+    var f = stack.pop(), fid = f.getId();
+    if (fid === rootId) return true;
+    if (seen[fid]) continue;
+    seen[fid] = 1;
+    var ps = f.getParents();
+    while (ps.hasNext()) stack.push(ps.next());
+  }
+  return false;
 }
 
 /**

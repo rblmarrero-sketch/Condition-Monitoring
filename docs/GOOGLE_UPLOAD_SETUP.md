@@ -134,12 +134,37 @@ The signature image and the JSON sidecar are never resized.
 
 ---
 
-## Getting the photos onto the N: drive / into the dashboard
+## Getting the inspections into the dashboard
 
-Install **Google Drive for desktop** on the PC that runs the dashboard. The folder
-appears as a normal drive (usually `G:`), so the dashboard's **📂 Photo folder** button
-works exactly as it does today — point it at *Condition Monitoring* once and it keeps
-finding the new monthly sub-folders.
+### If IT will not let you install Google Drive for desktop — use ☁ Drive
+
+The dashboard can read everything over plain HTTPS from the same `/exec` URL the phones
+upload to. Nothing to install, no synced folder, no drive letter.
+
+1. Open the dashboard → **☁ Drive** in the header
+2. Paste the `/exec` URL, then the shared secret (empty if `SECRET` is `''`)
+3. It lists the folder, reads every `*.json` sidecar, and loads the records
+
+Photos are **not** downloaded up front — a month of rounds is hundreds of megabytes. Only
+the file names are indexed; the bytes are fetched when you open a unit in **Equipment
+history** or generate a PDF with photos included. The settings are remembered, so it is
+one click next time.
+
+This needs the read actions in the script, so if your `google-upload.gs` predates them:
+re-paste the file, then **Deploy → Manage deployments → ✏️ → Version: New version**.
+`?action=file` refuses anything that is not inside your configured folder, even with a
+valid file id.
+
+### If you can install it
+
+**Google Drive for desktop** mounts the folder as a normal drive (usually `G:`), so the
+dashboard's **📂 Photo folder** button works exactly as it does with the N: drive — point
+it at *Condition Monitoring* once and it keeps finding new monthly sub-folders.
+
+### Or keep SharePoint on as a second destination
+
+With both destinations ticked in the app, the same files land in SharePoint too, and the
+laptop reads the OneDrive-synced folder with **📂 Photo folder** as before.
 
 ---
 

@@ -101,6 +101,7 @@
   <input type="file" id="importFile" accept=".json,application/json" hidden multiple>
   <button class="btn primary" id="importBtn">📥 Import inspections</button>
   <button class="btn" id="folderBtn" title="Point at the photo folder (N: drive)">📂 Photo folder</button>
+  <button class="btn" id="driveBtn" title="Read inspections straight from Google Drive — nothing to install">☁ Drive</button>
   <button class="btn" id="clearBtn" title="Remove imported inspections from this browser">🗑</button>
   <button class="btn" id="themeBtn">◐</button>
 </header>
@@ -347,15 +348,33 @@ $("csvBtn").onclick=()=>{
 };
 
 /* ---------- equipment history ---------- */
-let folderPhotos=null;   // name -> objectURL, from "Photo folder"
+let folderPhotos=null;   // name -> objectURL, from "Photo folder" or from Drive
+// The agreed file name for an item's photo, minus the extension.
+function photoBase(it,rec){
+  return `${rec.equip}${usesRegister(rec.type)?"."+it.key:"_"+String(it.key).replace(/\./g,"-")}_${(rec.date||"").split("-").reverse().join(".")}_${rec.type}`;
+}
 function photoSrc(it,rec){
   if(folderPhotos){
-    const base=`${rec.equip}${usesRegister(rec.type)?"."+it.key:"_"+String(it.key).replace(/\./g,"-")}_${(rec.date||"").split("-").reverse().join(".")}_${rec.type}`;
-    for(const ext of ["jpg","jpeg","png","JPG"]) { const u=folderPhotos[`${base}.${ext}`]||folderPhotos[`${base}_1.${ext}`]; if(u) return u; }
+    const base=photoBase(it,rec);
+    for(const ext of ["jpg","jpeg","png","JPG","webp"]) { const u=folderPhotos[`${base}.${ext}`]||folderPhotos[`${base}_1.${ext}`]; if(u) return u; }
   }
   if(it.photo) return /^(data:|blob:|https?:|\/)/.test(it.photo)?it.photo:"../"+it.photo;
   return null;
 }
+/* Bridge for drive.js — RECS, imported and folderPhotos are `let`s in this script,
+   so they are not reachable as window properties from another file. */
+window.CMDash={
+  photoBase,
+  addPhoto(name,url){ (folderPhotos ||= {})[name]=url; },
+  importRecords(recs){
+    recs.forEach(r=>{ const k=`${r.equip}|${r.date}|${r.type}`;
+      imported=imported.filter(x=>`${x.equip}|${x.date}|${x.type}`!==k); imported.push(r); });
+    saveImported(); rebuild(); refreshControls(); renderAll();
+  },
+  recsFor(equip){ return RECS.filter(r=>r.equip===equip); },
+  allRecs(){ return RECS; },
+  rerender(){ renderAll(); },
+};
 function renderHistory(){
   const e=$("equipSel").value; const recs=RECS.filter(r=>r.equip===e);
   $("histTitle").textContent=`Inspection history — ${e||""}`;
@@ -381,6 +400,8 @@ function renderHistory(){
             ${i.comment?`<div class="cm">“${i.comment}”</div>`:""}
           </div></div>`; }).join("")}</div></div>`).join("");
   $("history").querySelectorAll("img.photo").forEach(img=>img.onclick=()=>{ $("lbimg").src=img.src; $("lbcap").textContent=img.dataset.cap; $("lb").classList.add("open"); });
+  // If the photos are in Drive rather than on disk, fetch this unit's and repaint once.
+  pullDrivePhotos(recs, renderHistory);
 }
 
 /* ---------- import / folder / misc ---------- */
@@ -416,6 +437,37 @@ $("folderBtn").onclick=async ()=>{
     alert(`Loaded ${Object.keys(folderPhotos).length} photo(s) from ${dir.name}.`);
   }catch(err){ if(err&&err.name!=="AbortError") alert("Could not read that folder."); }
 };
+/* ---------- read straight from Google Drive (no Drive client installed) ---------- */
+$("driveBtn").onclick=async ()=>{
+  const cur=window.CMDrive.url;
+  const url=prompt("Google Apps Script /exec URL\n\n(the same one the phones upload to)", cur||"");
+  if(url===null) return;
+  const sec=prompt("Shared secret — leave empty if the script's SECRET is ''", window.CMDrive.secret||"");
+  if(sec===null) return;
+  window.CMDrive.save(url,sec);
+  if(!url.trim()) return;
+  const b=$("driveBtn"), label=b.innerHTML; b.disabled=true;
+  const show=m=>{ b.innerHTML="☁ "+m; };
+  try{
+    const r=await window.CMDrive.load(show);
+    b.innerHTML=label;
+    alert(r.note ? r.note
+      : `Loaded ${r.records} inspection record(s) from Drive.\n`+
+        `${r.photos} photo/video file(s) indexed — they download as you open each unit.`+
+        (r.failed?`\n${r.failed} file(s) could not be read.`:"")+
+        (r.truncated?`\n\nThe folder has more files than one listing returns; oldest may be missing.`:""));
+  }catch(err){ b.innerHTML=label; alert("Drive load failed:\n\n"+(err&&err.message||err)); }
+  finally{ b.disabled=false; }
+};
+/* Photos live in Drive, not on disk — pull the ones this view needs, then repaint. */
+let drivePending=false;
+async function pullDrivePhotos(recs, after){
+  // drive.js loads after this script, and renderAll() runs during init
+  if(!window.CMDrive || !window.CMDrive.configured() || drivePending || !recs.length) return;
+  drivePending=true;
+  try{ if(await window.CMDrive.ensurePhotos(recs)) after&&after(); }
+  finally{ drivePending=false; }
+}
 $("lb").onclick=e=>{ if(e.target.id==="lb"||e.target.id==="lbx"){ $("lb").classList.remove("open"); $("lbimg").src=""; } };
 document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ $("lb").classList.remove("open"); } });
 $("themeBtn").onclick=()=>{ const c=document.documentElement.getAttribute("data-theme");
@@ -446,6 +498,11 @@ $("rGo").onclick=async ()=>{
   if(!target){ msg.textContent="No inspections to report on yet — import an entries.json first."; return; }
   go.disabled=true; msg.textContent="Building report…";
   try{
+    if($("rPhotos").value==="1" && window.CMDrive && window.CMDrive.configured()){
+      const recs=window.CMReport.recsForScope($("rScope").value, target);
+      msg.textContent="Fetching photos from Drive…";
+      await window.CMDrive.ensurePhotos(recs,(d,n)=>{ msg.textContent=`Fetching photos from Drive… ${d}/${n}`; });
+    }
     const n=await window.CMReport.generate($("rScope").value, target,
       {photos:$("rPhotos").value==="1", scale:parseFloat($("rScale").value)},
       (i,total)=>{ msg.textContent=`Rendering page ${i} of ${total}…`; });
@@ -473,6 +530,7 @@ function renderAll(){ renderKpis(); renderFleet(); renderFailure(); renderAction
 $("equipSel").onchange=renderHistory;
 rebuild(); refreshControls(); renderAll();
 </script>
+<script src="drive.js"></script>
 <script src="report.js"></script>
 </body>
 </html>

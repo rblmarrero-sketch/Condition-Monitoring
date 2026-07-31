@@ -316,6 +316,23 @@ inspectors' names are kept.
 
 ---
 
+## Getting inspections into the dashboard
+
+| Route | When |
+|---|---|
+| **☁ Drive** | Google Drive without installing anything — reads over HTTPS from the Apps Script `/exec` URL |
+| **📂 Photo folder** | A folder on disk: the N: drive, an OneDrive-synced SharePoint library, or a Drive-for-desktop letter |
+| **📥 Import inspections** | An `entries.json` exported from a phone |
+
+**☁ Drive** is the answer when IT will not allow the Google Drive client on the laptop.
+Paste the `/exec` URL and the shared secret once; it lists the folder, reads every `*.json`
+sidecar and loads the records. Photos are indexed by name but only downloaded when you
+open a unit or generate a PDF with photos — a month of rounds is hundreds of megabytes,
+so pulling it all up front would be pointless. It needs the read actions in
+`docs/google-upload.gs`; re-paste that file and deploy a new version if yours predates them.
+
+---
+
 ## PDF reports (dashboard → Reports tab)
 
 Bilingual **EN / RU** — every heading and column shows both, so nothing is lost between
