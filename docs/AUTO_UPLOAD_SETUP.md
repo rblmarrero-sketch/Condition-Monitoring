@@ -119,3 +119,40 @@ For a plain server the endpoint must allow **CORS** from the app's origin
   library's permissions, and consider adding an API-key check inside the flow
   (a Condition on a custom header, using the app's **Secret header** field).
 * The app stores the URL in the phone's local storage only.
+
+---
+
+## Gotchas we hit in practice (read this first)
+
+1. **The flow must be turned ON.** If Power Automate shows *“saved but can’t be
+   used”*, it saves the flow **disabled**, and every upload returns
+   `HTTP 400 — trigger 'manual' with state 'Disabled'`. Fix the validation error
+   (usually an empty field on **Create file**), **Save** until the banner turns
+   green — *“Your flow is ready to go”* — then check **My flows → Status = On**.
+2. **“Who can trigger the flow?” must be `Anyone`.** The default *“Any user in my
+   tenant”* expects an Entra ID token the app cannot supply → 401.
+3. **Leave the app’s “Secret header” empty** for Power Automate — the flow URL
+   already carries its `&sig=` signature. (A custom header also forces a CORS
+   preflight.)
+4. **File Content must be the ƒx expression**, not the `file` dynamic-content
+   token, or files arrive corrupted/0 KB.
+5. **Create the SharePoint folders first** — *Create file* will not create a
+   missing folder path.
+6. In the **new designer** the HTTP URL only appears on the trigger card *after*
+   the first successful save.
+
+### New designer — where things are
+| Task | Where |
+|---|---|
+| Paste the JSON schema | click the **manual** card → *Request Body JSON Schema* → **Use sample payload to generate schema** |
+| Add SharePoint step | **⊕** under the trigger → search *Create file* |
+| Enter an expression | click the field → **ƒx / Function** tab → paste → **Add** |
+| Add the reply | **⊕** → search *Response* → pick it under the **Request** group |
+| Copy the URL | click **manual** after saving → **HTTP URL** with the 📋 icon |
+
+### Reading errors
+The app now shows the server’s own message, e.g.
+`HTTP 400 — Could not execute workflow … trigger 'manual' with state 'Disabled'`.
+For anything else, open the flow → **Run history** → the failed run highlights the
+step and the exact error.
+
