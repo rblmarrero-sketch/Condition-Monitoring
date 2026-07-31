@@ -1,10 +1,26 @@
-# ⚠️  OUT OF SYNC — do not re-run over mobile/taxonomy2.js without checking the output.
-# The shipped taxonomy2.js (132 defects, 14 groups, plus the isoMech / isoMode maps) was
-# produced by a later iteration than this script, which still emits 129 defects, 12 groups
-# and no ISO maps. Re-running it here silently drops data. Bring the script up to the
-# shipped output before using it again; until then, edit taxonomy2.js directly.
-import xlrd, re, json
-sh=xlrd.open_workbook("/root/.claude/uploads/1f3ebdba-c3da-5675-b557-e45dfee4b57e/cf490d29-Defect_type.xls").sheet_by_index(0)
+"""Build mobile/taxonomy2.js — the merged defect / direct-cause taxonomy.
+
+    1C CMMS defect codes (Defect_type.xls)      = the spine
+  + HME Copper defect matrix (mobile/taxonomy.js) = mobile-equipment modes
+  + tags.py                                     = applicability tags + DT9-DT15 extensions
+  + iso.py                                      = ISO 14224 Table B.2 / B.6 codes
+
+Usage:  python ingest/build_defect_taxonomy.py [path/to/Defect_type.xls] [--check]
+
+--check writes nothing and reports whether the output still matches the shipped file;
+run it after editing any of the inputs.
+"""
+import xlrd, re, json, sys, os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from tags import tag_for, EXTRA_GROUPS, EXTRA, DROP, HIDE
+from iso import MECH, MODE, MAP as ISO
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+OUT  = os.path.join(ROOT, "mobile", "taxonomy2.js")
+args = [a for a in sys.argv[1:] if not a.startswith("--")]
+CHECK = "--check" in sys.argv
+SRC = args[0] if args else "/root/.claude/uploads/1f3ebdba-c3da-5675-b557-e45dfee4b57e/cf490d29-Defect_type.xls"
+sh=xlrd.open_workbook(SRC).sheet_by_index(0)
 def split_en_ru(nm):
     """EN | RU: everything before the first Cyrillic char is English (drop a trailing separator)."""
     nm=re.sub(r'^\s*\d+(\.\d+)?\s*','',str(nm).strip())
@@ -21,7 +37,7 @@ for r in range(1,sh.nrows):
     elif re.fullmatch(r'DT\d+-\d+',cd): items.append({"c":cd,"g":cd.split('-')[0],"en":en,"ru":ru,"wc":wc})
 CAUSE_LIKE={"DT5-03","DT5-04","DT5-05","DT5-06","DT5-07","DT5-08","DT5-10","DT5-11","DT5-12","DT5-13","DT5-14","DT5-15"}
 defects=[i for i in items if i["c"] not in CAUSE_LIKE]; moved=[i for i in items if i["c"] in CAUSE_LIKE]
-tax=json.loads(re.search(r'window\.TAX = (\{.*\});',open('/home/user/Condition-Monitoring/mobile/taxonomy.js',encoding='utf-8').read(),re.S).group(1))
+tax=json.loads(re.search(r'window\.TAX = (\{.*\});',open(os.path.join(ROOT,'mobile','taxonomy.js'),encoding='utf-8').read(),re.S).group(1))
 hme={d['c']:d for d in tax['defects']}
 M={"DT1-01":["DT-LEK-01","DT-LEK-02","DT-LEK-03"],"DT1-02":["DT-TMP-01","DT-TMP-02"],"DT1-03":["DT-PRS-01"],
  "DT1-04":["DT-MEC-01"],"DT1-05":["DT-MEC-09"],"DT1-06":["DT-MEC-04"],"DT1-07":["DT-MEC-07"],"DT1-08":["DT-MEC-03"],
@@ -52,14 +68,38 @@ for g,codes in ADD.items():
         if h: merged.append({"c":f"{g}-{i:02d}","g":g,"en":h["en"],"ru":h["ru"],"hme":[hc]})
 GRP.update(ADD_GROUPS); GRP["DT5"]={"en":"External & operating conditions","ru":"Внешние и эксплуатационные условия"}
 merged.append({"c":"DT0-00","g":"DT1","en":"Not confirmed / to be investigated","ru":"Не подтверждено / требует проверки","hme":["DT-DQ-01"]})
+# Extensions that close real gaps the 1C list has no code for (oil debris, filter cut, …)
+GRP.update(EXTRA_GROUPS)
+for c,g,en,ru,_t in EXTRA: merged.append({"c":c,"g":g,"en":en,"ru":ru,"hme":[]})
+# ext:1 marks a group that does NOT exist in 1C yet — flagged for import into the CMMS
+for g in list(ADD_GROUPS) + list(EXTRA_GROUPS): GRP[g]["ext"]=1
+# Redundant entries never reach the picker; true 1C duplicates stay (for reconciliation) but hidden
+merged=[d for d in merged if d["c"] not in DROP]
+for d in merged:
+    if d["c"] in HIDE: d["hide"]=1
+    d["t"]=tag_for(d["c"])
+    iso,mode=ISO.get(d["c"],("6.4","OTH"))
+    d["iso"],d["im"]=iso,mode
 causes=list(tax['causes'])
 for m in moved: causes.append({"c":m["c"],"g":"External & operating causes","en":m["en"],"ru":m["ru"],"dt":[],"as":["ALL PRIMARY HME"],"any":1})
 cgru=dict(tax['causeGroupRu']); cgru["External & operating causes"]="Внешние и эксплуатационные причины"
-js=("// AUTO-GENERATED merged defect taxonomy: 1C CMMS codes (spine) + HME mobile-equipment modes.\n"
-    "// 1C 'external factor' entries that are really causes were moved into the cause list.\n"
-    "window.TAX2 = "+json.dumps({"groups":GRP,"defects":merged,"causes":causes,"causeGroupRu":cgru},ensure_ascii=False)+";\n")
-open('/home/user/Condition-Monitoring/mobile/taxonomy2.js','w',encoding='utf-8').write(js)
-print("defects:",len(merged),"groups:",len(GRP),"causes:",len(causes))
+isoMech={k:{"en":v[0],"ru":v[1]} for k,v in MECH.items()}
+isoMode={k:{"en":v[0],"ru":v[1]} for k,v in MODE.items()}
+js=("// AUTO-GENERATED merged defect taxonomy (ISO 14224-aligned).\n"
+    "// Spine: 1C CMMS defect codes. Extensions (DT9-DT15) close mobile-mining / oil-debris gaps.\n"
+    "// Each entry carries: 1C code, applicability tags, ISO 14224 failure mechanism (Table B.2)\n"
+    "// and ISO 14224 failure mode (Table B.6).\n"
+    "window.TAX2 = "+json.dumps({"groups":GRP,"defects":merged,"causes":causes,"causeGroupRu":cgru,
+                                 "isoMech":isoMech,"isoMode":isoMode},ensure_ascii=False)+";\n")
+if CHECK:
+    cur=open(OUT,encoding='utf-8').read() if os.path.exists(OUT) else ""
+    same = json.loads(re.search(r'window\.TAX2 = (\{.*\});',js,re.S).group(1)) == \
+           (json.loads(re.search(r'window\.TAX2 = (\{.*\});',cur,re.S).group(1)) if cur else None)
+    print("MATCHES shipped file" if same else "DIFFERS from shipped file")
+else:
+    open(OUT,'w',encoding='utf-8').write(js)
+print("defects:",len(merged),"groups:",len(GRP),"causes:",len(causes),
+      "isoMech:",len(isoMech),"isoMode:",len(isoMode))
 for c in ["DT1-01","DT1-02","DT6-08","DT9-01"]:
     d=[x for x in merged if x["c"]==c]
     if d: print(" ",c,"|",d[0]["en"],"|",d[0]["ru"][:34])

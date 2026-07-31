@@ -85,6 +85,29 @@ it's stored per-browser, use the header buttons to keep it safe and shared:
 > Chrome and Edge. In other browsers, use the command-line scanner below to
 > generate `data/magnetic_plug.js` instead.
 
+### Rebuilding the defect taxonomy
+
+`mobile/taxonomy2.js` (the defect / direct-cause list the app and dashboard both read) is
+generated, not hand-edited:
+
+```
+Defect_type.xls (1C CMMS)  ─┐
+mobile/taxonomy.js (HME)   ─┼─▶ ingest/build_defect_taxonomy.py ─▶ mobile/taxonomy2.js
+ingest/tags.py  ingest/iso.py ─┘
+```
+
+```bash
+pip install xlrd                                            # one-time
+python ingest/build_defect_taxonomy.py --check              # writes nothing, reports drift
+python ingest/build_defect_taxonomy.py path/to/Defect_type.xls
+```
+
+`tags.py` holds the applicability tags (which failure modes make sense for which component)
+plus the DT9–DT15 extensions that close gaps the 1C list has no code for. `iso.py` holds
+ISO 14224 Table B.2 mechanisms and Table B.6 failure modes, and the per-defect mapping.
+Run `--check` after editing any of them — it re-derives the file and tells you whether the
+shipped copy is still in sync.
+
 ### Command-line folder scanner (optional)
 
 Regenerate the bundled/shareable data file from a photo folder — handy for
