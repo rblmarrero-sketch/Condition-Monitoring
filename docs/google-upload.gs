@@ -26,7 +26,7 @@ const ROOT_FOLDER_ID = '1aeTSn7FWw9Zh8Xv6SNsdc6mC77MLcsSa?usp=sharing';
 
 /** Optional shared secret. Leave '' to accept any request that has the URL.
  *  If you set it, put the same value in the app's "Shared secret" field. */
-const SECRET = 'ADMIN_SECRET';
+const SECRET = '';
 
 /** Password for DELETING inspections from the dashboard. Deletion is OFF while
  *  this is '' — that is the safe default and most sites should leave it so.
@@ -40,7 +40,7 @@ const SECRET = 'ADMIN_SECRET';
  *
  *  Deleting moves files to Drive's TRASH (recoverable for 30 days) and writes a
  *  log entry saying what went, when, and why. Nothing is ever purged outright. */
-const ADMIN_SECRET = '';
+const ADMIN_SECRET = 'rbonm';
 
 /** Where the audit trail and the dashboard's edits live, inside ROOT_FOLDER_ID. */
 const META_DIR = '_meta';
