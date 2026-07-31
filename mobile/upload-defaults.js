@@ -35,14 +35,14 @@ window.UPLOAD_DEFAULTS = {
       on: true,
       url: "https://script.google.com/macros/s/AKfycbwWJ1vb-OjP0VQPcrnoEB8PkuFyhk86mecIrkcomSVFqE5ddJynSwSheuskNGMcwLGf/exec",                         // ← paste the /exec URL between the quotes
       sec: "",                         // must match SECRET in docs/google-upload.gs
-      folder: "{YYYY-MM}",
+      folder: "{TYPE}/{YYYY-MM}",
     },
     {
       id: "pa",                        // SharePoint / OneDrive via Power Automate
       on: true,
       url: "https://defaultcdec65183a8e4078a165704f2b7e42.df.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/18/workflows/6f45fe051c4e47429c9759483834044a/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=yiQSUSpmsqOe1LYqTqNYmDJ6bAczA4ungMZkYI68aFI",                         // ← paste the flow's HTTP POST URL here
       sec: "",                         // the sig= in that URL is the authentication
-      folder: "{YYYY-MM}",
+      folder: "{TYPE}/{YYYY-MM}",
     },
   ],
   // Photo size is deliberately NOT defaulted here — it stays on "Original" so no

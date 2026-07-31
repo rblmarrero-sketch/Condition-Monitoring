@@ -480,6 +480,15 @@ inspection type gets its own: `{TYPE}/{YYYY-MM}` produces `MP/2026-07/`, `FC/202
 today, so a round entered late still files under the month it was done. Each destination
 has its own folder setting.
 
+`{TYPE}/{YYYY-MM}` is the shipped default, so a new phone splits by type with no setup.
+Phones still on the earlier `{YYYY-MM}` default — one folder for all four types — are
+upgraded once, automatically; a folder you typed yourself is left alone. Files already in
+Drive are not moved, so the split starts from the next upload.
+
+A destination that is failing no longer holds up one that is working: upload state is
+tracked per destination, so with SharePoint down every record still reaches Drive, and
+nothing is ever re-sent to a destination that already has it.
+
 ### Upload speed
 
 **Photo size on upload** (⚙ in the app) is the biggest lever, whichever route you use:

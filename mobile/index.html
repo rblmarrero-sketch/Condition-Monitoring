@@ -331,7 +331,7 @@
   <div class="syncbar" id="syncBar"></div>
   <button class="btn ghost" id="reportBtn" style="margin-bottom:16px">📄 <span data-i18n="btn_report">PDF report</span></button>
 
-  <div class="ver">build v45 · 2026-07-31 · Stability ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver">build v46 · 2026-07-31 · Folder per type ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <div class="bottombar">
@@ -1870,7 +1870,7 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
    has accepted every one of its files. */
 const DEST_META={ gas:{label:"Google Drive"}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
 const DEST_IDS=["gas","pa","post"];
-const BUILD="45";
+const BUILD="46";
 const DEFAULT_DESTS=((window.UPLOAD_DEFAULTS||{}).dests)||[];
 /* Parsed once and reused — see the note by the write below. */
 let destsCache=null, destsRaw=null;
@@ -1904,6 +1904,17 @@ function loadDests(){
     if(!cur.sec)    cur.sec=def.sec||"";
     if(!cur.folder) cur.folder=def.folder||"";
   });
+  /* One-time upgrade to per-type folders. The first build to ship a folder
+     default used "{YYYY-MM}", so every phone set up before this one files all
+     four inspection types into the same monthly folder. That exact string is
+     the old built-in, never something an inspector typed, so replacing it is
+     safe — anything else is a real choice and is left alone. Flagged so it
+     happens once and an inspector who deliberately goes back to "{YYYY-MM}"
+     keeps it. */
+  if(!localStorage.getItem("up_folder_v2")){
+    d.forEach(x=>{ if(x && x.folder==="{YYYY-MM}") x.folder="{TYPE}/{YYYY-MM}"; });
+    try{ localStorage.setItem("up_folder_v2","1"); }catch(e){}
+  }
   // This used to write unconditionally, and loadDests() is reached from the UP.on
   // getter — so every renderSync() did a JSON.stringify plus a synchronous
   // localStorage write, and on a phone with no room left it threw from inside a
@@ -2064,8 +2075,9 @@ async function syncNow(manual){
         }catch(e){ lastErr="Could not read "+rec.equip+": "+(e.message||e); continue; }
       }
       const errs=[];
+      let progressed=false;
       for(const d of todo){
-        try{ for(const f of payload) await putOne(d,f.name,f.blob,f.type,rec); done[d.id]=1; }
+        try{ for(const f of payload) await putOne(d,f.name,f.blob,f.type,rec); done[d.id]=1; progressed=true; }
         catch(e){ errs.push(DEST_META[d.id].label+": "+String(e.message||e)); }
       }
       // Re-read before writing. Putting back the copy we started with would
@@ -2078,12 +2090,14 @@ async function syncNow(manual){
         if(fresh.up) fresh.upAt=new Date().toISOString();
         await dbPut(fresh);
       }
-      if(errs.length){
-        lastErr=errs.join(" · ");
-        // One unsendable record must not block every record behind it, but a dead
-        // link should not be retried against all 50 either.
-        if(++consecutive>=3) break;
-      } else consecutive=0;
+      if(errs.length) lastErr=errs.join(" · ");
+      // The breaker exists so a dead link is not retried against all 50 records.
+      // It used to trip on ANY error, so one slow destination stopped the queue
+      // for the working one too: with SharePoint down, only three records ever
+      // reached Google per sync and the rest sat untouched. Give up only when a
+      // record gets nowhere at all.
+      if(progressed) consecutive=0;
+      else if(errs.length && ++consecutive>=3) break;
     }
   } finally {
     syncing=false; renderSync(); renderPending();

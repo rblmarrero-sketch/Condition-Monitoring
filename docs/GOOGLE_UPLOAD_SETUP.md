@@ -118,8 +118,17 @@ Date parts come from the **inspection date**, not from today, so a round entered
 days late still files under the month it was actually done. Each destination has its own
 folder setting, so Drive and SharePoint can be laid out differently.
 
-> Already-configured phones keep whatever folder they have — change it in ⚙ on each phone,
-> or send a fresh **setup code** from one you have updated.
+`{TYPE}/{YYYY-MM}` is the built-in default, so a phone set up from scratch files each type
+separately without anyone configuring it.
+
+> **Upgrading from an older build.** The first build to ship a folder default used
+> `{YYYY-MM}`, which put all four types in one monthly folder. Phones on that exact
+> setting are moved to `{TYPE}/{YYYY-MM}` once, automatically. A folder you typed
+> yourself is never touched, and setting `{YYYY-MM}` back deliberately sticks.
+
+Files already in Drive are not moved — the split applies from the next upload. Drag the
+old ones into the new folders if you want the history tidy; nothing reads the folder
+layout, so it is cosmetic.
 
 ### What the rest of the team has uploaded
 
@@ -143,6 +152,15 @@ run both — Drive for speed, SharePoint as the system of record. With both on, 
 inspection is only marked uploaded once **every** enabled destination has accepted every
 one of its files; if one fails, the record stays pending and retries. Each destination
 keeps its own folder prefix.
+
+**A slow destination no longer holds up a fast one.** Each destination is tracked
+separately, so a record that Drive has already accepted is never re-sent there, and the
+queue keeps working through every record even while SharePoint is failing. The counter
+stays up until *both* have it — that is the queue being honest, not a stall.
+
+> If SharePoint is not your system of record, untick it. Drive alone carries everything,
+> and the dashboard reads Drive directly, so nothing needs the SharePoint folder synced
+> to a PC any more.
 
 ### Setting up the other phones — don't type the URL again
 
