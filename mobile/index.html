@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Truck Inspection — Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=42">
+<link rel="manifest" href="manifest.webmanifest?v=46">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -435,16 +435,16 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="jsQR.js?v=42"></script>
-<script src="qrcode.js?v=42"></script>
-<script src="upload-defaults.js?v=42"></script>
-<script src="taxonomy.js?v=42"></script>
-<script src="taxonomy2.js?v=42"></script>
-<script src="assets.js?v=42"></script>
-<script src="components.js?v=42"></script>
-<script src="temp-limits.js?v=42"></script>
-<script src="jspdf.umd.min.js?v=42"></script>
-<script src="html2canvas.min.js?v=42"></script>
+<script src="jsQR.js?v=46"></script>
+<script src="qrcode.js?v=46"></script>
+<script src="upload-defaults.js?v=46"></script>
+<script src="taxonomy.js?v=46"></script>
+<script src="taxonomy2.js?v=46"></script>
+<script src="assets.js?v=46"></script>
+<script src="components.js?v=46"></script>
+<script src="temp-limits.js?v=46"></script>
+<script src="jspdf.umd.min.js?v=46"></script>
+<script src="html2canvas.min.js?v=46"></script>
 <script>
 /* ============================================================================
    EQUIPMENT CLASSES & INSPECTION TYPES  —  EDIT here for your fleet.
@@ -2274,6 +2274,15 @@ function checkData(){
   if(!ASSETS.length)                       missing.push("assets.js");
   if(!(TAX.defects||[]).length)            missing.push("taxonomy2.js");
   if(!COMP_TREE.length)                    missing.push("components.js");
+  /* The ?v= on each <script> is what makes an asset cacheable-forever, and it has
+     to equal BUILD or the service worker precaches one URL while the page asks
+     for another — every asset then misses the cache on every load. They were
+     left at 42 for four builds without anything noticing, so check it out loud
+     rather than trusting the next person to remember. */
+  const tagged=(document.querySelector('script[src^="assets.js"]')||{}).src||"";
+  const m=tagged.match(/[?&]v=([^&]+)/);
+  if(m && m[1]!==BUILD) console.warn(`[cm] asset tags say v=${m[1]} but BUILD is ${BUILD} —`
+    +` cache-busting is broken; retag the <script> URLs in index.html.`);
   const w=$("dataWarn");
   if(!missing.length){ w.classList.add("hidden"); return; }
   $("dataWarnText").textContent=t("m_data_missing").replace("{x}",missing.join(", "));
