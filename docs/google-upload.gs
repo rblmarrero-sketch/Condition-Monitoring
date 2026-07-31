@@ -22,7 +22,7 @@
 /** The Drive folder everything lands in. Paste either the folder id or the whole
  *  Drive URL — the script pulls the id out of
  *  drive.google.com/drive/folders/<id>?usp=... on its own. */
-const ROOT_FOLDER_ID = 'https://drive.google.com/drive/folders/1aeTSn7FWw9Zh8Xv6SNsdc6mC77MLcsSa?usp=sharing';
+const ROOT_FOLDER_ID = '1aeTSn7FWw9Zh8Xv6SNsdc6mC77MLcsSa?usp=sharing';
 
 /** Optional shared secret. Leave '' to accept any request that has the URL.
  *  If you set it, put the same value in the app's "Shared secret" field. */
