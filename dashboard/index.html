@@ -181,7 +181,9 @@ const DEF={}; TAX.defects.forEach(d=>DEF[d.c]=d);
 const SEV={NOF:{l:"No failure",c:"g",r:0},INC:{l:"Incipient",c:"w",r:1},DEG:{l:"Degraded",c:"s",r:2},CRI:{l:"Critical",c:"c",r:3}};
 const SEVC={NOF:"var(--good)",INC:"var(--warning)",DEG:"var(--serious)",CRI:"var(--critical)"};
 const GRADE_SEV={A:"NOF",B:"INC",C:"DEG",D:"CRI"};
-const TYPE_LABEL={MP:"Magnetic Plug",FC:"Filter Cut",INSP:"Inspection"};
+const TYPE_LABEL={MP:"Magnetic Plug",FC:"Filter Cut",INSP:"Inspection",TEMP:"Temperature"};
+// Inspection and Temperature name their files with the real component code (TK151.DRS.ENG_…)
+const usesRegister=(ty)=>ty==="INSP"||ty==="TEMP";
 const STORE="cm_dash_records";
 
 /* ---------- records: bundled magnetic-plug data + imported entries.json ---------- */
@@ -300,8 +302,8 @@ function renderActions(){
 }
 $("csvBtn").onclick=()=>{
   const rows=actionRows(); const q=s=>`"${String(s==null?"":s).replace(/"/g,'""')}"`;
-  const head=["Severity","Unit","Type","Component","ComponentName","DefectCode","Defect","ISOMechanism","ISOMode","CauseCode","Cause","Action","WO","Grade","Date","Inspector","Comment"];
-  const body=rows.map(({r,i})=>[SEV[i.sev||GRADE_SEV[i.grade]||""]?.l||"",r.equip,r.type,i.key,i.label,i.defectCode,i.defect,i.iso,i.isoMode,i.causeCode,i.cause,i.actionLabel,i.wo,i.grade,r.date,r.by,i.comment].map(q).join(","));
+  const head=["Severity","Unit","Type","Component","ComponentName","DefectCode","Defect","ISOMechanism","ISOMode","CauseCode","Cause","Action","WO","Grade","TempC","AmbientC","Method","Date","Inspector","VerifiedBy","GPS","Comment"];
+  const body=rows.map(({r,i})=>[SEV[i.sev||GRADE_SEV[i.grade]||""]?.l||"",r.equip,r.type,i.key,i.label,i.defectCode,i.defect,i.iso,i.isoMode,i.causeCode,i.cause,i.actionLabel,i.wo,i.grade,i.tempC,i.ambC,i.tempMethod,r.date,r.by,r.sup||"",r.gps?`${r.gps.lat},${r.gps.lon}`:"",i.comment].map(q).join(","));
   const csv=[head.map(q).join(","),...body].join("\r\n");
   const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob(["﻿"+csv],{type:"text/csv"}));
   a.download=`cm_action_register_${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(a.href);
@@ -311,7 +313,7 @@ $("csvBtn").onclick=()=>{
 let folderPhotos=null;   // name -> objectURL, from "Photo folder"
 function photoSrc(it,rec){
   if(folderPhotos){
-    const base=`${rec.equip}${rec.type==="INSP"?"."+it.key:"_"+String(it.key).replace(/\./g,"-")}_${(rec.date||"").split("-").reverse().join(".")}_${rec.type}`;
+    const base=`${rec.equip}${usesRegister(rec.type)?"."+it.key:"_"+String(it.key).replace(/\./g,"-")}_${(rec.date||"").split("-").reverse().join(".")}_${rec.type}`;
     for(const ext of ["jpg","jpeg","png","JPG"]) { const u=folderPhotos[`${base}.${ext}`]||folderPhotos[`${base}_1.${ext}`]; if(u) return u; }
   }
   if(it.photo) return /^(data:|blob:|https?:|\/)/.test(it.photo)?it.photo:"../"+it.photo;
@@ -327,7 +329,7 @@ function renderHistory(){
       <span class="date">${rec.date||""}</span>
       <span class="tag">${TYPE_LABEL[rec.type]||rec.type}</span>
       ${rec.smu?`<span class="meta">SMU <b>${rec.smu}</b></span>`:""}
-      <span class="spacer"></span>${rec.by?`<span class="meta">${rec.by}</span>`:""}</div>
+      <span class="spacer"></span>${rec.by?`<span class="meta">${rec.by}</span>`:""}${rec.sup?`<span class="meta">✍ ${rec.sup}</span>`:""}${rec.gps?`<a class="meta" href="https://www.google.com/maps?q=${rec.gps.lat},${rec.gps.lon}" target="_blank" rel="noopener">📍 ${rec.gps.lat.toFixed(4)}, ${rec.gps.lon.toFixed(4)}</a>`:""}</div>
       <div class="pos-grid">${rec.items.map(i=>{
         const s=i.sev||GRADE_SEV[i.grade]||""; const src=photoSrc(i,rec);
         const cap=`${rec.equip} · ${i.key} · ${rec.date}`;
@@ -338,7 +340,7 @@ function renderHistory(){
             <div class="pl">${i.label||""}</div>
             ${i.defect?`<div style="font-size:12px"><b>${i.defect}</b> <span class="muted">${i.defectCode}</span></div>`:""}
             ${i.cause?`<div style="font-size:12px" class="muted">Cause: ${i.cause}</div>`:""}
-            <dl>${i.particle?`<dt>Particles</dt><dd>${i.particle}</dd>`:""}${i.comp?`<dt>Comp hrs</dt><dd>${i.comp}</dd>`:""}${i.oil?`<dt>Oil hrs</dt><dd>${i.oil}</dd>`:""}${i.actionLabel?`<dt>Action</dt><dd>${i.actionLabel}</dd>`:""}${i.wo?`<dt>WO</dt><dd>${i.wo}</dd>`:""}</dl>
+            <dl>${i.tempC?`<dt>Temp</dt><dd><b>${i.tempC} °C</b>${i.ambC?` <span class="muted">(amb ${i.ambC})</span>`:""}${i.tempMethod?` <span class="muted">${i.tempMethod}</span>`:""}</dd>`:""}${i.particle?`<dt>Particles</dt><dd>${i.particle}</dd>`:""}${i.comp?`<dt>Comp hrs</dt><dd>${i.comp}</dd>`:""}${i.oil?`<dt>Oil hrs</dt><dd>${i.oil}</dd>`:""}${i.actionLabel?`<dt>Action</dt><dd>${i.actionLabel}</dd>`:""}${i.wo?`<dt>WO</dt><dd>${i.wo}</dd>`:""}</dl>
             ${i.comment?`<div class="cm">“${i.comment}”</div>`:""}
           </div></div>`; }).join("")}</div></div>`).join("");
   $("history").querySelectorAll("img.photo").forEach(img=>img.onclick=()=>{ $("lbimg").src=img.src; $("lbcap").textContent=img.dataset.cap; $("lb").classList.add("open"); });

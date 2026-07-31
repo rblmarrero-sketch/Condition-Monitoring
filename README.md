@@ -10,9 +10,10 @@ the same way:
 | Component | Status |
 |-----------|--------|
 | **Magnetic Plug** | ✅ Live |
-| Filter Cut | 🔜 Planned |
+| **Filter Cut** | ✅ Live |
+| **Inspection** (walk-around) | ✅ Live |
+| **Temperature** | ✅ Live |
 | Oil Analysis | 🔜 Planned |
-| Temperature | 🔜 Planned |
 
 ---
 
@@ -229,6 +230,56 @@ Adding **Filter Cut / Oil Analysis / Temperature** later follows the same
 pattern: an ingester per component writing a parallel `data/<component>.js`, and
 a tab in the dashboard that renders it. The tabs are already stubbed in
 `dashboard/index.html`.
+
+---
+
+## Field Capture app — what it records
+
+Pick the **inspection type** at the top of the app; everything else adapts.
+
+| Type | Suffix | What it captures |
+|---|---|---|
+| Magnetic Plug | `MP` | Plug position, grade, particle count, component/oil hours |
+| Filter Cut | `FC` | Filter, grade, findings |
+| Inspection | `INSP` | Any real component from the asset register (L7 → L8 → L9 cards) |
+| **Temperature** | `TEMP` | Reading °C, ambient °C, method (IR gun / thermal camera / contact probe / telemetry) |
+
+### Temperature module
+
+The measurement point is a real register component, the same L7→L8→L9 cards the
+walk-around inspection uses. Each component has **warn / alarm limits** matched on its
+name (bearings 70/85 °C, hubs 80/95, final drives 85/100, transmissions 95/110,
+exhaust 450/550, brakes 150/200, electrical panels 60/75, …), and the reading
+**auto-suggests the ISO 14224 severity** — tapping a severity yourself always overrides it.
+The limit table is one clearly-commented array, `TEMP_LIMITS`, near the top of
+`mobile/index.html`; edit it to match your OEM limits.
+
+> ⚠️ The shipped limits are sound general mobile-equipment values, **not** your OEM's.
+> Confirm them against the machine manuals before using them to stop equipment.
+
+### GPS stamp & supervisor sign-off
+
+* Every record carries the **GPS position** where it was taken (captured quietly as soon
+  as a unit is picked, so Save never waits; the record still saves if location is denied).
+  The dashboard shows it as a Google Maps link.
+* A **supervisor** name and an on-screen **signature** can be added before saving. The
+  signature uploads as `<UNIT>_<DD.MM.YYYY>_<TYPE>_SIGN.png` and is printed on the PDF report.
+
+### Inspection due-list
+
+The app keeps a small "last done" index per unit and type, and shows what is **overdue**
+or **due soon** against an interval you set per type (defaults: MP/FC 90 days, INSP/TEMP
+30 days). Tap a unit to load it into the form. It is built from what that phone has
+recorded — use **Load history file** with an `entries.json` exported from the dashboard to
+seed last-done dates for the whole fleet.
+
+### Two inspectors, one round (multi-device merge)
+
+Each phone has a device id. Tap **⇄ Send round** to export that phone's records (photos
+and video inlined) and **📥 Receive round** on the other phone to merge them. Records are
+keyed `TYPE|UNIT|DATE`, so the same unit inspected on both phones merges into one record
+instead of doubling: missing items are added, the richer capture wins on a clash, and both
+inspectors' names are kept.
 
 ---
 

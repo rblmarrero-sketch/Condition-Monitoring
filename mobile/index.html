@@ -113,6 +113,20 @@
   .editbar span{flex:1;color:var(--ink);} .linkbtn{background:none;border:none;color:var(--accent);font-weight:700;font-size:14px;cursor:pointer;}
   .hidden{display:none!important;}
   .count-badge{background:var(--accent);color:#fff;border-radius:999px;padding:1px 8px;font-size:12px;margin-left:6px;}
+  .count-badge.warn{background:var(--warning);color:#111;} .count-badge.crit{background:var(--critical);}
+  /* temperature reading */
+  .tempbar{display:flex;align-items:center;gap:8px;font-size:12.5px;margin:-4px 0 12px;}
+  .tempbar .pill{border-radius:999px;padding:2px 10px;font-weight:700;color:#fff;font-size:12px;}
+  /* supervisor sign-off */
+  .signpad{width:100%;height:132px;background:#fff;border:1px solid var(--border);border-radius:12px;display:block;touch-action:none;}
+  /* inspection due list */
+  .duelist{display:flex;flex-direction:column;gap:8px;}
+  .dueitem{display:flex;align-items:center;gap:10px;background:var(--surface-2);border:1px solid var(--border);
+    border-left:4px solid var(--muted);border-radius:12px;padding:9px 12px;cursor:pointer;text-align:left;width:100%;color:var(--ink);font:inherit;}
+  .dueitem.ok{border-left-color:var(--good);} .dueitem.soon{border-left-color:var(--warning);}
+  .dueitem.over{border-left-color:var(--critical);}
+  .dueitem .u{font-weight:700;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .dueitem .d{font-size:12.5px;color:var(--muted);flex:none;}
   dialog{border:none;border-radius:16px;background:var(--surface);color:var(--ink);max-width:92vw;width:420px;padding:0;}
   dialog::backdrop{background:rgba(0,0,0,.6);}
   .dlg-in{padding:20px;} .dlg-in h3{margin:0 0 8px;} .dlg-in p{color:var(--ink-2);font-size:14px;}
@@ -169,6 +183,8 @@
     </div>
     <label class="fld"><span data-i18n="lbl_inspector">Inspected by</span>
       <input id="inspector" type="text" data-i18n-ph="ph_inspector" placeholder="name / badge no." autocomplete="name"></label>
+    <label class="fld" style="margin-bottom:0"><span data-i18n="lbl_gps">Location (GPS)</span>
+      <button type="button" class="picker-btn" id="gpsBtn"></button></label>
   </div>
 
   <div class="card">
@@ -192,6 +208,18 @@
         <button class="g-C" data-g="C">C</button><button class="g-D" data-g="D">D</button><button class="g-X" data-g="X">X</button>
       </div>
     </label>
+    <div id="tempFields" class="hidden">
+      <div class="row">
+        <label class="fld"><span data-i18n="lbl_temp">Temperature °C</span><input id="tempV" type="number" inputmode="decimal" step="0.1"></label>
+        <label class="fld"><span data-i18n="lbl_amb">Ambient °C</span><input id="tempA" type="number" inputmode="decimal" step="0.1"></label>
+      </div>
+      <label class="fld"><span data-i18n="lbl_method">Measurement method</span>
+        <select id="tempM">
+          <option value="IR" data-i18n="tm_IR">IR gun</option><option value="CAM" data-i18n="tm_CAM">Thermal camera</option>
+          <option value="CON" data-i18n="tm_CON">Contact probe</option><option value="TEL" data-i18n="tm_TEL">Machine telemetry</option>
+        </select></label>
+      <div class="tempbar" id="tempLim"></div>
+    </div>
     <label class="fld"><span data-i18n="lbl_sev">Severity (ISO 14224)</span>
       <div class="seg sevseg" id="sevSeg">
         <button class="s-NOF" data-s="NOF" data-i18n="sev_NOF">No failure</button>
@@ -228,18 +256,50 @@
     </div><!-- /captureBox -->
   </div>
 
+  <div class="card">
+    <h2 data-i18n="sec_sign">Supervisor sign-off</h2>
+    <label class="fld"><span data-i18n="lbl_sup">Verified by (supervisor)</span>
+      <input id="supName" type="text" data-i18n-ph="ph_sup" placeholder="name / badge no." autocomplete="name"></label>
+    <div class="hint" style="margin-bottom:6px" data-i18n="sign_hint">Sign in the box (optional) — it is stored with the record and printed on the report.</div>
+    <canvas id="signPad" class="signpad"></canvas>
+    <button class="btn ghost" id="signClear" style="margin-top:8px">✕ <span data-i18n="btn_sign_clear">Clear signature</span></button>
+  </div>
+
   <div id="editBanner" class="editbar hidden"><span id="editBannerText"></span><button type="button" id="cancelEdit" class="linkbtn"></button></div>
   <button class="btn primary" id="saveBtn" style="margin-bottom:16px">✔ Save</button>
 
   <div class="card">
     <h2><span data-i18n="sec_onphone">On this phone</span> <span class="count-badge" id="qCount">0</span></h2>
     <div class="pending" id="pending"></div>
+    <div class="row" style="margin-top:12px">
+      <button class="btn ghost" id="mergeOut">⇄ <span data-i18n="btn_merge_out">Send round</span></button>
+      <button class="btn ghost" id="mergeIn">📥 <span data-i18n="btn_merge_in">Receive round</span></button>
+    </div>
+    <div class="hint" style="margin-top:8px" data-i18n="merge_hint">Two inspectors on the same round: each phone sends its round, the other receives it. Duplicates are merged, never doubled.</div>
+    <input id="mergeFile" type="file" accept=".json,application/json" class="hidden">
+  </div>
+
+  <div class="card">
+    <h2><span data-i18n="sec_due">Inspection due</span> <span class="count-badge" id="dueCount">0</span></h2>
+    <div class="row" style="margin-bottom:12px">
+      <label class="fld" style="margin:0"><span data-i18n="lbl_due_int">Interval (days)</span>
+        <input id="dueInt" type="number" inputmode="numeric" min="1"></label>
+      <label class="fld" style="margin:0"><span data-i18n="lbl_due_scope">Show</span>
+        <select id="dueScope">
+          <option value="due" data-i18n="due_overdue">Overdue &amp; due soon</option>
+          <option value="all" data-i18n="due_all">All units with history</option>
+        </select></label>
+    </div>
+    <div class="duelist" id="dueList"></div>
+    <button class="btn ghost" id="dueImport" style="margin-top:12px">📥 <span data-i18n="btn_due_import">Load history file</span></button>
+    <div class="hint" style="margin-top:8px" data-i18n="due_hint">Built from what this phone has recorded. Load an entries.json exported from the dashboard to seed the whole fleet's last-done dates.</div>
+    <input id="dueFile" type="file" accept=".json,application/json" class="hidden">
   </div>
 
   <div class="syncbar" id="syncBar"></div>
   <button class="btn ghost" id="reportBtn" style="margin-bottom:16px">📄 <span data-i18n="btn_report">PDF report</span></button>
 
-  <div class="ver">build v29 · 2026-07-31 · Monthly upload folders · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver">build v30 · 2026-07-31 · Temperature · GPS &amp; sign-off · Due list · Merge · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <div class="bottombar">
@@ -309,8 +369,9 @@ const TYPE_META = {
   MP:   { suffix:"MP",   showReadings:true,  title:{en:"Plug position",     ru:"Позиция пробки"} },
   FC:   { suffix:"FC",   showReadings:true,  title:{en:"Filter",           ru:"Фильтр"} },
   INSP: { suffix:"INSP", showReadings:false, title:{en:"Component / System",ru:"Узел / Система"} },
+  TEMP: { suffix:"TEMP", showReadings:false, temp:true, title:{en:"Measurement point",ru:"Точка замера"} },
 };
-const TYPE_ORDER = ["MP","FC","INSP"];
+const TYPE_ORDER = ["MP","FC","INSP","TEMP"];
 
 const COMP = {
   ENG:{en:"Engine",ru:"Двигатель"}, COOL:{en:"Cooling System",ru:"Система охлаждения"},
@@ -424,6 +485,9 @@ const CLASSES = {
     INSP:["ENG","COOL","AIR","FUEL","TRANS","DRV","HYD","UC","TYRE","BRK","STEER","FRAME","ELEC","CAB","LUBE","FIRE"] },
 };
 CLASSES.ALL = { en:"All equipment", ru:"Всё оборудование", asset:"", MP:CLASSES.GEN.MP, FC:CLASSES.GEN.FC, INSP:CLASSES.GEN.INSP };
+// Thermal survey points = the same components as the walk-around inspection. Registered
+// units use their real L7/L8/L9 tree instead (see currentTree), so this is the fallback list.
+Object.keys(CLASSES).forEach(k=>{ CLASSES[k].TEMP = CLASSES[k].INSP; });
 const CLASS_ORDER = ["ALL","HT","AT","EXC","DOZ","LDR","GRD","DRB","DRE","CRJ","CRC","SCR","HRB","GEN"];
 const $ = (id)=>document.getElementById(id);
 
@@ -464,7 +528,28 @@ const I18N = {
     rep_item:"Item", rep_grade:"Grade", rep_defect:"Defect", rep_cause:"Direct cause", rep_read:"Readings / comment", rep_photos:"Photos",
     rep_unit:"Unit", rep_type:"Type", rep_date:"Date", rep_sev:"Severity", rep_action:"Action", rep_by_who:"Inspected by", rep_by:"Generated by the Truck Inspection app",
     pos_count:"item(s)", photo_count:"photo(s)",
-    type_MP:"Magnetic Plug", type_FC:"Filter Cut", type_INSP:"Inspection",
+    type_MP:"Magnetic Plug", type_FC:"Filter Cut", type_INSP:"Inspection", type_TEMP:"Temperature",
+    lbl_temp:"Temperature °C", lbl_amb:"Ambient °C", lbl_method:"Measurement method",
+    tm_IR:"IR gun", tm_CAM:"Thermal camera", tm_CON:"Contact probe", tm_TEL:"Machine telemetry",
+    temp_lim:"Warn ≥ {w} °C · Alarm ≥ {a} °C", temp_rise:"rise", rep_temp:"Temp",
+    lbl_gps:"Location (GPS)", gps_none:"Tap to stamp the location", gps_getting:"Getting location…",
+    m_gps_na:["Location not available","This browser can't provide GPS. The record still saves without it."],
+    m_gps_fail:["Location failed","Allow location access for this site, or continue — the record still saves."],
+    sec_sign:"Supervisor sign-off", lbl_sup:"Verified by (supervisor)", ph_sup:"name / badge no.",
+    sign_hint:"Sign in the box (optional) — it is stored with the record and printed on the report.",
+    btn_sign_clear:"Clear signature", rep_sup:"Verified by", rep_gps:"Location",
+    sec_due:"Inspection due", lbl_due_int:"Interval (days)", lbl_due_scope:"Show",
+    due_overdue:"Overdue & due soon", due_all:"All units with history",
+    btn_due_import:"Load history file", due_days:"{n} d ago", due_over:"overdue {n} d", due_in:"in {n} d",
+    due_never:"never done", due_empty:"Nothing due — or no history on this phone yet.",
+    due_hint:"Built from what this phone has recorded. Load an entries.json exported from the dashboard to seed the whole fleet's last-done dates.",
+    m_due_loaded:["History loaded ✔","{n} unit/type dates added to the due list."],
+    btn_merge_out:"Send round", btn_merge_in:"Receive round",
+    merge_hint:"Two inspectors on the same round: each phone sends its round, the other receives it. Duplicates are merged, never doubled.",
+    m_merge_empty:["Nothing to send","Capture at least one inspection first."],
+    m_merge_sent:["Round exported ✔","Send the file to the other phone (AirDrop / WhatsApp / e-mail), then tap “Receive round” there."],
+    m_merge_bad:["Not a round file","Choose a file created by “Send round” on the other phone."],
+    m_merged:["Merged ✔","{a} new inspection(s), {b} item(s) added to existing ones, {c} already present."],
     m_need_truck:["Add the truck","Enter the truck / unit number (e.g. TK158) first."],
     m_nothing_save:["Nothing to save","Take at least one photo or set a grade."],
     m_saved:["Saved ✔","{x} saved on this phone. Capture the next one, then Share/Export when you have internet."],
@@ -511,7 +596,28 @@ const I18N = {
     rep_item:"Узел", rep_grade:"Степень", rep_defect:"Дефект", rep_cause:"Прямая причина", rep_read:"Показания / комментарий", rep_photos:"Фото",
     rep_unit:"Ед.", rep_type:"Тип", rep_date:"Дата", rep_sev:"Категория", rep_action:"Действие", rep_by_who:"Осмотр выполнил", rep_by:"Сформировано приложением осмотра",
     pos_count:"поз.", photo_count:"фото",
-    type_MP:"Магнитная пробка", type_FC:"Разрез фильтра", type_INSP:"Осмотр",
+    type_MP:"Магнитная пробка", type_FC:"Разрез фильтра", type_INSP:"Осмотр", type_TEMP:"Температура",
+    lbl_temp:"Температура °C", lbl_amb:"Окружающая среда °C", lbl_method:"Метод замера",
+    tm_IR:"Пирометр (ИК)", tm_CAM:"Тепловизор", tm_CON:"Контактный датчик", tm_TEL:"Телеметрия машины",
+    temp_lim:"Предупр. ≥ {w} °C · Тревога ≥ {a} °C", temp_rise:"превышение", rep_temp:"Темп.",
+    lbl_gps:"Координаты (GPS)", gps_none:"Нажмите, чтобы записать координаты", gps_getting:"Определение координат…",
+    m_gps_na:["Геолокация недоступна","Браузер не может дать GPS. Запись всё равно сохранится."],
+    m_gps_fail:["Не удалось определить координаты","Разрешите доступ к геолокации для этого сайта или продолжайте — запись сохранится."],
+    sec_sign:"Подпись руководителя", lbl_sup:"Проверил (руководитель)", ph_sup:"ФИО / табельный №",
+    sign_hint:"Распишитесь в поле (необязательно) — подпись сохраняется с записью и печатается в отчёте.",
+    btn_sign_clear:"Очистить подпись", rep_sup:"Проверил", rep_gps:"Координаты",
+    sec_due:"Плановые осмотры", lbl_due_int:"Интервал (дней)", lbl_due_scope:"Показать",
+    due_overdue:"Просроченные и скоро", due_all:"Все ед. с историей",
+    btn_due_import:"Загрузить историю", due_days:"{n} дн. назад", due_over:"просрочено {n} дн.", due_in:"через {n} дн.",
+    due_never:"не проводился", due_empty:"Ничего не требуется — или на телефоне ещё нет истории.",
+    due_hint:"Строится по данным этого телефона. Загрузите entries.json из дашборда, чтобы подтянуть даты по всему парку.",
+    m_due_loaded:["История загружена ✔","Добавлено дат: {n}."],
+    btn_merge_out:"Отправить обход", btn_merge_in:"Принять обход",
+    merge_hint:"Два инспектора на одном обходе: каждый телефон отправляет свой файл, второй его принимает. Дубликаты объединяются, а не удваиваются.",
+    m_merge_empty:["Нечего отправлять","Сначала снимите хотя бы один осмотр."],
+    m_merge_sent:["Обход выгружен ✔","Передайте файл на второй телефон (AirDrop / WhatsApp / почта) и нажмите там «Принять обход»."],
+    m_merge_bad:["Неверный файл","Выберите файл, созданный кнопкой «Отправить обход» на другом телефоне."],
+    m_merged:["Объединено ✔","Новых осмотров: {a}, добавлено позиций: {b}, уже было: {c}."],
     m_need_truck:["Укажите трак","Сначала введите номер трака (напр. TK158)."],
     m_nothing_save:["Нечего сохранять","Сделайте хотя бы одно фото или укажите степень."],
     m_saved:["Сохранено ✔","{x} сохранён на телефоне. Снимайте следующий, затем «Поделиться»/«Экспорт» при интернете."],
@@ -571,6 +677,11 @@ function tagsForCurrentItem(){
   return SYS_TAGS[sys] || null;                          // null = show everything
 }
 function defectsForContext(){
+  const list=defectsByTag();
+  // A temperature survey is looking for heat: put ISO "overheating" modes at the top.
+  return type==="TEMP" ? list.slice().sort((a,b)=>(b.im==="OHE"?1:0)-(a.im==="OHE"?1:0)) : list;
+}
+function defectsByTag(){
   const tg=tagsForCurrentItem();
   const vis=TAX.defects.filter(d=>!d.hide);
   if(!tg) return vis;
@@ -597,6 +708,33 @@ function causesFor(defectCode){
   const external=TAX.causes.filter(c=>c.any);   // external/operating causes always offered
   return list.concat(external);
 }
+
+/* --- Temperature limits (°C): [warn, alarm]. Matched on component name/code. --- */
+const TEMP_LIMITS=[
+  [/bearing|подшип/i,            70,  85],
+  [/hub|wheel end|ступиц/i,      80,  95],
+  [/final drive|бортов/i,        85, 100],
+  [/gearbox|reducer|редуктор/i,  80,  95],
+  [/transmission|трансмис/i,     95, 110],
+  [/differential|дифференц/i,    90, 105],
+  [/hydraulic|гидро/i,           80,  95],
+  [/coolant|radiator|охлажд/i,   95, 105],
+  [/engine|двигател/i,          100, 110],
+  [/exhaust|выхлоп/i,           450, 550],
+  [/brake|retard|тормоз/i,      150, 200],
+  [/motor|generator|alternator/i,80,  95],
+  [/panel|cabinet|electric|электр/i, 60, 75],
+  [/compressor|компрессор/i,     90, 105],
+  [/conveyor|idler|roller|ролик/i,60, 75],
+];
+function tempLimit(codeOrName){ const t=String(codeOrName||"");
+  for(const [re,w,a] of TEMP_LIMITS) if(re.test(t)) return {warn:w,alarm:a};
+  return {warn:80,alarm:95};   // generic default
+}
+function tempSeverity(v,lim){ if(v==null||v==="") return "";
+  const n=parseFloat(v); if(isNaN(n)) return "";
+  if(n>=lim.alarm) return "CRI"; if(n>=lim.warn) return "DEG";
+  if(n>=lim.warn-10) return "INC"; return "NOF"; }
 
 /* ===================== asset register ===================== */
 const ASSETS = window.ASSETS || [];
@@ -638,11 +776,16 @@ if(!CLASSES[eqClass]) eqClass="ALL";
 let type = localStorage.getItem("insp_type") || "MP";
 if(!TYPE_META[type]) type="MP";
 let editing=null;
+// Stable id for this phone — used to keep record ids unique and to attribute merged rounds.
+const DEVICE = (()=>{ let d=localStorage.getItem("cm_dev");
+  if(!d){ d="D"+Math.random().toString(36).slice(2,7).toUpperCase(); localStorage.setItem("cm_dev",d); } return d; })();
 const dlg=(pair)=>{ $("dlgTitle").textContent=pair[0]; $("dlgMsg").textContent=pair[1]; $("dlg").showModal(); };
 $("dlgOk").onclick=()=>$("dlg").close();
 const COMP_TREE=window.COMP_TREE||[], UNIT_TPL=window.UNIT_TPL||{};
 let cascL7=null, cascL8=null;   // component cascade selection
-function currentTree(){ return (type==="INSP" && curEquip && UNIT_TPL[curEquip]!=null) ? COMP_TREE[UNIT_TPL[curEquip]] : null; }
+// Inspection and Temperature both address real register components (L7→L8→L9).
+function usesRegister(ty){ return ty==="INSP" || ty==="TEMP"; }
+function currentTree(){ return (usesRegister(type) && curEquip && UNIT_TPL[curEquip]!=null) ? COMP_TREE[UNIT_TPL[curEquip]] : null; }
 function flattenTree(nodes,out){ out=out||[]; for(const n of nodes){ if(String(n.k).indexOf(".")>=0) out.push({k:n.k,en:n.en,ru:n.ru}); if(n.ch) flattenTree(n.ch,out); } return out; }
 function nodeByCode(tree,code){ let f=null; (function rec(ns){ for(const n of ns){ if(n.k===code){f=n;return;} if(n.ch)rec(n.ch);} })(tree); return f; }
 function hasUnder(node){ if(!node) return false; if(draft.positions[node.k]) return true; return node.ch? node.ch.some(hasUnder):false; }
@@ -674,7 +817,7 @@ $("typeSel").onchange=(e)=>{ type=e.target.value; localStorage.setItem("insp_typ
 function renderChips(){ const tr=currentTree();
   if(tr){ renderComponentNav(tr); return; }         // registered unit -> L7/L8/L9 cascade cards
   const its=items();
-  if(type==="INSP"){
+  if(usesRegister(type)){
     // Real components come from the register, so a unit must be chosen first.
     if(!curEquip){ $("posnav").innerHTML='<div class="needunit"><div class="nu-t">'+t("need_unit")+'</div>'+
         '<button class="btn primary" id="needUnitBtn">'+t("opt_pick_unit")+'</button></div>';
@@ -693,7 +836,7 @@ function renderFlatCards(its){
   $("posnav").querySelectorAll('[data-pick]').forEach(b=>b.onclick=()=>pickComponent(b.dataset.pick));
   toggleCapture(); }
 function toggleCapture(){ const tr=currentTree();
-  const show = (type==="INSP" && !curEquip) ? false : (!tr || !!curItem);
+  const show = (usesRegister(type) && !curEquip) ? false : (!tr || !!curItem);
   $("captureBox").style.display=show?"":"none"; }
 function pickComponent(code){ saveCur(); curItem=code; loadPos(); renderChips(); }
 function renderComponentNav(tree){
@@ -730,6 +873,8 @@ $("posnav").addEventListener("click",(e)=>{ const b=e.target.closest("button[dat
   saveCur(); curItem=b.dataset.pos; refreshChips(); loadPos(); });
 function applyForm(){ $("secPosTitle").textContent=TYPE_META[type].title[lang]||TYPE_META[type].title.en;
   $("mpFields").classList.toggle("hidden", !TYPE_META[type].showReadings);
+  $("tempFields").classList.toggle("hidden", !TYPE_META[type].temp);
+  $("dueInt").value=dueInterval(type); renderDue();
   cascL7=null; cascL8=null;
   const tr=currentTree(); const flat=items();
   if(tr){ if(curItem && !flat.some(i=>i.k===curItem)) curItem=""; }
@@ -768,21 +913,47 @@ $("gradeSeg").addEventListener("click",(e)=>{ const b=e.target.closest("button[d
 function renderGrade(){ const g=curP().grade; $("gradeSeg").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.g===g)); }
 function renderSev(){ const v=curP().sev; $("sevSeg").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.s===v)); }
 $("sevSeg").addEventListener("click",(e)=>{ const b=e.target.closest("button[data-s]"); if(!b) return;
-  const p=curP(); p.sev=(p.sev===b.dataset.s)?null:b.dataset.s; renderSev(); renderChips(); });
+  const p=curP(); p.sev=(p.sev===b.dataset.s)?null:b.dataset.s; p.sevMan=1;   // manual choice wins over the temperature rule
+  renderSev(); renderChips(); });
+
+/* --- temperature: limit hint + auto-suggested ISO severity --------------- */
+// Match the limit table against the code + BOTH language labels, so the limits never
+// depend on which language the app happens to be showing.
+function tempCtx(){ if(!curItem) return "";
+  const it=items().find(i=>i.k===curItem)||{};
+  return `${curItem} ${it.en||""} ${it.ru||""}`; }
+function renderTempHint(){ if(!TYPE_META[type].temp) return;
+  const lim=tempLimit(tempCtx()); const v=$("tempV").value, a=$("tempA").value;
+  let h=`<span>${t("temp_lim").replace("{w}",lim.warn).replace("{a}",lim.alarm)}</span>`;
+  const n=parseFloat(v);
+  if(v!=="" && !isNaN(n)){
+    const sv=tempSeverity(v,lim); const an=parseFloat(a);
+    h+=`<span class="pill" style="background:${SEV_HEX[sv]||"#888"}">${t("sev_"+sv)}</span>`;
+    if(a!=="" && !isNaN(an)) h+=`<span>Δ ${Math.round((n-an)*10)/10} °C ${t("temp_rise")}</span>`;
+  }
+  $("tempLim").innerHTML=h; }
+function syncTempSev(){ if(!TYPE_META[type].temp || !curItem) return;
+  const p=draft.positions[curItem];
+  if(p && !p.sevMan){ const sv=tempSeverity(p.tempV,tempLimit(tempCtx())); if(sv && p.sev!==sv){ p.sev=sv; renderSev(); } }
+  renderTempHint(); }
 function updateActionBtn(){ const a=(draft.positions[curItem]||{}).action;
   $("actionBtn").textContent = a ? actionLabel(a) : t("opt_action_none"); }
 $("actionBtn").onclick=()=>openPicker("action");
 ["particle","comp","oil","comment","wo"].forEach(id=>$(id).addEventListener("input",()=>{ saveCur(); refreshChips(); }));
-function hasData(p){ return p.grade||p.sev||p.action||p.wo||(p.photos&&p.photos.length)||p.video||p.particle||p.comp||p.oil||p.comment||p.defect||p.cause; }
+["tempV","tempA"].forEach(id=>$(id).addEventListener("input",()=>{ saveCur(); syncTempSev(); refreshChips(); }));
+$("tempM").onchange=()=>{ saveCur(); refreshChips(); };
+function hasData(p){ return p.grade||p.sev||p.action||p.wo||(p.photos&&p.photos.length)||p.video||p.particle||p.comp||p.oil||p.comment||p.defect||p.cause||p.tempV; }
 function saveCur(){ if(!curItem) return; const p=curP(); p.particle=$("particle").value.trim(); p.comp=$("comp").value.trim(); p.oil=$("oil").value.trim();
   p.comment=$("comment").value.trim(); p.wo=$("wo").value.trim();
+  if(TYPE_META[type].temp){ p.tempV=$("tempV").value.trim(); p.tempA=$("tempA").value.trim(); p.tempM=p.tempV?$("tempM").value:""; }
   if(!hasData(p)) delete draft.positions[curItem]; }
 function loadPos(){
   if(!curItem){ $("posLabel").textContent=t("nav_choose"); toggleCapture(); return; }
   $("posLabel").textContent=`${curItem} — ${itemLabel(curItem)}`;
   const p=draft.positions[curItem]||{}; $("particle").value=p.particle||""; $("comp").value=p.comp||""; $("oil").value=p.oil||"";
   $("comment").value=p.comment||""; $("wo").value=p.wo||"";
-  renderGrade(); renderSev(); updateActionBtn(); renderMedia(); updateDefectCauseBtns(); toggleCapture(); }
+  $("tempV").value=p.tempV||""; $("tempA").value=p.tempA||""; $("tempM").value=p.tempM||"IR";
+  renderGrade(); renderSev(); updateActionBtn(); renderMedia(); updateDefectCauseBtns(); renderTempHint(); toggleCapture(); }
 
 /* ===================== searchable defect / cause pickers ===================== */
 function updateDefectCauseBtns(){ const p=draft.positions[curItem]||{};
@@ -793,6 +964,7 @@ function updateDefectCauseBtns(){ const p=draft.positions[curItem]||{};
 function updateEquipBtn(){ const a=ASSET_BY[curEquip];
   $("equipBtn").textContent = curEquip ? (a&&a.cat? `${curEquip} · ${a.cat}` : curEquip) : t("opt_pick_unit"); }
 function selectEquip(n){ n=(n||"").trim().toUpperCase().replace(/\s+/g,""); curEquip=n;
+  if(!gps) getGps(true);   // start the fix now so Save never has to wait
   const a=ASSET_BY[n];
   if(a){ eqCat=a.cat||"— UNCATEGORISED —"; localStorage.setItem("equip_cat",eqCat); }
   const cls=assetClassOf(n); if(cls){ eqClass=cls; localStorage.setItem("equip_class",eqClass); }
@@ -851,6 +1023,50 @@ $("pickList").onclick=(e)=>{ const b=e.target.closest(".pickitem"); if(!b) retur
   if(!hasData(p)) delete draft.positions[curItem];
   closePicker(); updateDefectCauseBtns(); refreshChips(); };
 
+/* ===================== GPS stamp =====================
+   Where the inspection was actually done. Captured silently when a unit is chosen
+   (so it is ready by the time Save is pressed) and never blocks saving. */
+let gps=null;
+function renderGps(){ $("gpsBtn").textContent = gps
+  ? `${gps.lat.toFixed(5)}, ${gps.lon.toFixed(5)} · ±${Math.round(gps.acc)} m` : t("gps_none"); }
+function getGps(silent){ return new Promise(res=>{
+  if(!navigator.geolocation){ if(!silent) dlg(t("m_gps_na")); return res(null); }
+  $("gpsBtn").textContent=t("gps_getting");
+  navigator.geolocation.getCurrentPosition(
+    pos=>{ gps={lat:pos.coords.latitude, lon:pos.coords.longitude, acc:pos.coords.accuracy||0, at:new Date().toISOString()};
+      renderGps(); res(gps); },
+    err=>{ renderGps(); if(!silent){ const m=t("m_gps_fail"); dlg([m[0], m[1]+" ("+String(err.message||err)+")"]); } res(null); },
+    {enableHighAccuracy:true, timeout:silent?8000:15000, maximumAge:120000}); }); }
+$("gpsBtn").onclick=()=>getGps(false);
+
+/* ===================== supervisor signature pad ===================== */
+const signPad=$("signPad"); let signDirty=false, signing=false;
+function sizeSignPad(){ const r=Math.max(1,Math.min(3,window.devicePixelRatio||1));
+  const w=signPad.clientWidth||300, h=signPad.clientHeight||132;
+  if(signPad.width===Math.round(w*r) && signPad.height===Math.round(h*r)) return;
+  const keep = signDirty ? signPad.toDataURL() : null;
+  signPad.width=Math.round(w*r); signPad.height=Math.round(h*r);
+  const c=signPad.getContext("2d"); c.setTransform(r,0,0,r,0,0);
+  c.fillStyle="#fff"; c.fillRect(0,0,w,h); c.lineWidth=2.2; c.lineCap="round"; c.lineJoin="round"; c.strokeStyle="#111";
+  if(keep){ const i=new Image(); i.onload=()=>c.drawImage(i,0,0,w,h); i.src=keep; } }
+function signXY(e){ const r=signPad.getBoundingClientRect(); return [e.clientX-r.left, e.clientY-r.top]; }
+signPad.addEventListener("pointerdown",e=>{ signing=true; signPad.setPointerCapture(e.pointerId);
+  const c=signPad.getContext("2d"); c.beginPath(); c.moveTo(...signXY(e)); e.preventDefault(); });
+signPad.addEventListener("pointermove",e=>{ if(!signing) return; const c=signPad.getContext("2d");
+  c.lineTo(...signXY(e)); c.stroke(); signDirty=true; e.preventDefault(); });
+["pointerup","pointercancel","pointerleave"].forEach(ev=>signPad.addEventListener(ev,()=>{ signing=false; }));
+function clearSign(){ signDirty=false; const c=signPad.getContext("2d");
+  c.fillStyle="#fff"; c.fillRect(0,0,signPad.width,signPad.height); }
+$("signClear").onclick=clearSign;
+$("supName").value=localStorage.getItem("supervisor")||"";
+$("supName").addEventListener("input",()=>localStorage.setItem("supervisor",$("supName").value.trim()));
+function signBlob(){ return signDirty ? new Promise(r=>signPad.toBlob(r,"image/png")) : Promise.resolve(null); }
+function loadSign(blob){ clearSign(); if(!blob) return;
+  const i=new Image(); i.onload=()=>{ const r=Math.max(1,Math.min(3,window.devicePixelRatio||1));
+    signPad.getContext("2d").drawImage(i,0,0,signPad.width/r,signPad.height/r); signDirty=true; URL.revokeObjectURL(i.src); };
+  i.src=URL.createObjectURL(blob); }
+addEventListener("resize",sizeSignPad);
+
 /* ===================== date + edit ===================== */
 function todayISO(){ const d=new Date(),p=(n)=>String(n).padStart(2,"0"); return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`; }
 $("date").value=todayISO();
@@ -862,12 +1078,14 @@ function setEditing(rec){ editing=rec||null;
   else $("editBanner").classList.add("hidden");
   $("cancelEdit").textContent=t("btn_cancel"); updateSaveLabel(); }
 function resetForm(){ draft={positions:{}}; curEquip=""; curItem=""; updateEquipBtn(); $("smu").value=""; $("date").value=todayISO();
+  gps=null; renderGps(); clearSign();
   applyForm(); setEditing(null); }
 function editRecord(rec){ if(rec.cls && CLASSES[rec.cls]){ eqClass=rec.cls; localStorage.setItem("equip_class",eqClass); }
   if(rec.type && TYPE_META[rec.type]){ type=rec.type; localStorage.setItem("insp_type",type); }
   draft={positions:{}};
-  for(const [k,pp] of Object.entries(rec.positions)) draft.positions[k]={grade:pp.grade,sev:pp.sev,action:pp.action,wo:pp.wo,particle:pp.particle,comp:pp.comp,oil:pp.oil,comment:pp.comment,defect:pp.defect,cause:pp.cause,photos:(pp.photos?pp.photos.slice():(pp.photoBlob?[pp.photoBlob]:[])),video:pp.video||null};
+  for(const [k,pp] of Object.entries(rec.positions)) draft.positions[k]={grade:pp.grade,sev:pp.sev,sevMan:pp.sevMan||0,action:pp.action,wo:pp.wo,particle:pp.particle,comp:pp.comp,oil:pp.oil,comment:pp.comment,defect:pp.defect,cause:pp.cause,tempV:pp.tempV||"",tempA:pp.tempA||"",tempM:pp.tempM||"",photos:(pp.photos?pp.photos.slice():(pp.photoBlob?[pp.photoBlob]:[])),video:pp.video||null};
   curEquip=rec.equip||""; updateEquipBtn(); $("date").value=rec.date; $("smu").value=rec.smu||""; if(rec.by) $("inspector").value=rec.by;
+  gps=rec.gps||null; renderGps(); $("supName").value=rec.sup||""; loadSign(rec.sign||null);
   curItem=Object.keys(draft.positions)[0]||items()[0].k;
   applyForm(); loadPos(); setEditing(rec); window.scrollTo({top:0,behavior:"smooth"}); }
 $("cancelEdit").onclick=()=>resetForm();
@@ -879,13 +1097,141 @@ $("saveBtn").onclick=async ()=>{
   if(!equip){ dlg(t("m_need_truck")); return; }
   if(!$("inspector").value.trim()){ dlg(t("m_need_inspector")); return; }
   if(!Object.keys(draft.positions).length){ dlg(t("m_nothing_save")); return; }
-  const id = editing ? editing.id : `${type}__${equip}__${date}__${Date.now()}`;
+  const id = editing ? editing.id : `${type}__${equip}__${date}__${DEVICE}__${Date.now()}`;
   const created = editing ? (editing.created||new Date().toISOString()) : new Date().toISOString();
-  const rec={ id, cls:eqClass, type, equip, date, smu:$("smu").value.trim(), by:$("inspector").value.trim(), positions:{}, created, up:0 };
+  if(!gps) await getGps(true);   // best effort — never blocks the save
+  const rec={ id, cls:eqClass, type, equip, date, smu:$("smu").value.trim(), by:$("inspector").value.trim(),
+    sup:$("supName").value.trim(), sign:await signBlob(), gps:gps||null, dev:DEVICE, positions:{}, created, up:0 };
   for(const [k,p] of Object.entries(draft.positions))
-    rec.positions[k]={ grade:p.grade||null, sev:p.sev||"", action:p.action||"", wo:p.wo||"", particle:p.particle||"", comp:p.comp||"", oil:p.oil||"", defect:p.defect||"", cause:p.cause||"", comment:p.comment||"", photos:(p.photos||[]).slice(), video:p.video||null };
-  await dbPut(rec); resetForm(); renderPending(); syncNow();
+    rec.positions[k]={ grade:p.grade||null, sev:p.sev||"", sevMan:p.sevMan||0, action:p.action||"", wo:p.wo||"", particle:p.particle||"", comp:p.comp||"", oil:p.oil||"", defect:p.defect||"", cause:p.cause||"", comment:p.comment||"", tempV:p.tempV||"", tempA:p.tempA||"", tempM:p.tempM||"", photos:(p.photos||[]).slice(), video:p.video||null };
+  await dbPut(rec); noteDone(rec); resetForm(); renderPending(); renderDue(); syncNow();
   const m=t("m_saved"); dlg([m[0], m[1].replace("{x}",equip)]);
+};
+
+/* ===================== inspection due-list =====================
+   Keeps a small "last done" index (TYPE|UNIT -> YYYY-MM-DD) in local storage.
+   Fed by every save on this phone, and seeded for the whole fleet by importing an
+   entries.json exported from the dashboard. Interval is per inspection type. */
+const DUE_DEFAULT={MP:90, FC:90, INSP:30, TEMP:30};
+function dueInterval(ty){ const v=parseInt(localStorage.getItem("due_int_"+ty),10);
+  return (v>0)?v:(DUE_DEFAULT[ty]||30); }
+function histAll(){ try{ return JSON.parse(localStorage.getItem("cm_hist")||"{}"); }catch(e){ return {}; } }
+function histSave(h){ localStorage.setItem("cm_hist",JSON.stringify(h)); }
+function noteDone(rec){ if(!rec.equip||!rec.date) return; const h=histAll();
+  const k=(rec.type||"MP")+"|"+rec.equip; if(!h[k]||h[k]<rec.date) h[k]=rec.date; histSave(h); }
+function daysBetween(iso){ const d=new Date(iso+"T00:00:00"); if(isNaN(d)) return null;
+  return Math.floor((new Date(todayISO()+"T00:00:00")-d)/86400000); }
+$("dueInt").addEventListener("input",()=>{ const v=parseInt($("dueInt").value,10);
+  if(v>0) localStorage.setItem("due_int_"+type,String(v)); renderDue(); });
+$("dueScope").onchange=()=>{ localStorage.setItem("due_scope",$("dueScope").value); renderDue(); };
+function renderDue(){
+  const box=$("dueList"); if(!box) return;
+  const iv=dueInterval(type), soon=Math.max(3,Math.round(iv*0.2)), h=histAll();
+  const rows=[];
+  for(const [k,date] of Object.entries(h)){
+    const [ty,unit]=k.split("|"); if(ty!==type) continue;
+    const age=daysBetween(date); if(age==null) continue;
+    const left=iv-age;
+    rows.push({unit,date,age,left,st: left<0?"over" : left<=soon?"soon" : "ok"});
+  }
+  rows.sort((a,b)=>a.left-b.left || a.unit.localeCompare(b.unit));
+  const scope=$("dueScope").value;
+  const show = scope==="all" ? rows : rows.filter(r=>r.st!=="ok");
+  const nOver=rows.filter(r=>r.st==="over").length, nSoon=rows.filter(r=>r.st==="soon").length;
+  const badge=$("dueCount"); badge.textContent=nOver+nSoon;
+  badge.className="count-badge"+(nOver?" crit":(nSoon?" warn":""));
+  if(!show.length){ box.innerHTML=`<div class="empty">${t("due_empty")}</div>`; return; }
+  box.innerHTML=show.slice(0,200).map(r=>{
+    const a=ASSET_BY[r.unit];
+    const when = r.left<0 ? t("due_over").replace("{n}",-r.left) : t("due_in").replace("{n}",r.left);
+    return `<button class="dueitem ${r.st}" data-u="${r.unit}">
+      <span class="u">${r.unit}${a&&a.cat?` · <span style="color:var(--muted);font-weight:400">${a.cat}</span>`:""}</span>
+      <span class="d">${t("due_days").replace("{n}",r.age)} · ${when}</span></button>`; }).join("");
+  box.querySelectorAll("[data-u]").forEach(b=>b.onclick=()=>{ selectEquip(b.dataset.u); window.scrollTo({top:0,behavior:"smooth"}); });
+}
+$("dueImport").onclick=()=>$("dueFile").click();
+$("dueFile").onchange=async (e)=>{ const f=e.target.files[0]; e.target.value=""; if(!f) return;
+  let j; try{ j=JSON.parse(await f.text()); }catch(err){ dlg(t("m_merge_bad")); return; }
+  const recs=(j&&(j.records||j.inspections))||[]; const h=histAll(); let n=0;
+  for(const r of recs){ const u=(r.equip||r.equipment||"").toUpperCase(), d=r.date, ty=r.type||"MP";
+    if(!u||!d) continue; const k=ty+"|"+u; if(!h[k]||h[k]<d){ h[k]=d; n++; } }
+  histSave(h); renderDue(); const m=t("m_due_loaded"); dlg([m[0], m[1].replace("{n}",n)]); };
+
+/* ===================== multi-device merge =====================
+   Two inspectors on the same round. Each phone exports its records (media inlined as
+   base64) and the other imports them. Records are keyed TYPE|UNIT|DATE, so the same
+   unit inspected by both phones merges into one record instead of doubling. */
+function b64of(blob){ return blobToB64(blob); }
+function blobFromB64(b64,type){ const bin=atob(b64); const u=new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++) u[i]=bin.charCodeAt(i); return new Blob([u],{type:type||"application/octet-stream"}); }
+async function recToBundle(rec){
+  const out={ id:rec.id, cls:rec.cls, type:rec.type, equip:rec.equip, date:rec.date, smu:rec.smu,
+    by:rec.by, sup:rec.sup||"", gps:rec.gps||null, dev:rec.dev||DEVICE, created:rec.created, up:rec.up?1:0, positions:{} };
+  if(rec.sign) out.sign={t:rec.sign.type||"image/png", b:await b64of(rec.sign)};
+  for(const [k,p] of Object.entries(rec.positions)){
+    const q=Object.assign({},p); delete q.photos; delete q.video; delete q.photoBlob;
+    q.photos=[]; for(const b of (p.photos||[])) q.photos.push({t:b.type||"image/jpeg", b:await b64of(b)});
+    if(p.video) q.video={t:p.video.type||"video/mp4", b:await b64of(p.video)};
+    out.positions[k]=q;
+  }
+  return out;
+}
+function recFromBundle(r){
+  const rec={ id:r.id||`${r.type}__${r.equip}__${r.date}__${r.dev||"X"}__${Math.random().toString(36).slice(2)}`,
+    cls:r.cls||"", type:r.type||"MP", equip:r.equip||"", date:r.date||"", smu:r.smu||"", by:r.by||"",
+    sup:r.sup||"", gps:r.gps||null, dev:r.dev||"", created:r.created||new Date().toISOString(),
+    up:r.up?1:0, positions:{} };
+  if(r.sign&&r.sign.b) rec.sign=blobFromB64(r.sign.b,r.sign.t);
+  for(const [k,p] of Object.entries(r.positions||{})){
+    const q=Object.assign({},p);
+    q.photos=(p.photos||[]).map(x=>blobFromB64(x.b,x.t));
+    q.video = p.video&&p.video.b ? blobFromB64(p.video.b,p.video.t) : null;
+    rec.positions[k]=q;
+  }
+  return rec;
+}
+const roundKey=(r)=>`${r.type||"MP"}|${(r.equip||"").toUpperCase()}|${r.date||""}`;
+const mediaCount=(p)=>((p.photos||[]).length)+(p.video?1:0);
+$("mergeOut").onclick=async ()=>{
+  const all=await dbAll(); if(!all.length){ dlg(t("m_merge_empty")); return; }
+  const bundle={ type:"cm-round-merge", version:1, device:DEVICE, exported:new Date().toISOString(),
+    records:[] };
+  for(const rec of all) bundle.records.push(await recToBundle(rec));
+  const name=`round_${$("date").value||todayISO()}_${DEVICE}.cmr.json`;
+  const file=new File([JSON.stringify(bundle)],name,{type:"application/json"});
+  if(navigator.canShare && navigator.canShare({files:[file]})){
+    try{ await navigator.share({files:[file],title:"Inspection round"}); return; }catch(e){}
+  }
+  const url=URL.createObjectURL(file); const a=document.createElement("a"); a.href=url; a.download=name; a.click();
+  URL.revokeObjectURL(url); dlg(t("m_merge_sent"));
+};
+$("mergeIn").onclick=()=>$("mergeFile").click();
+$("mergeFile").onchange=async (e)=>{ const f=e.target.files[0]; e.target.value=""; if(!f) return;
+  let j; try{ j=JSON.parse(await f.text()); }catch(err){ j=null; }
+  if(!j || j.type!=="cm-round-merge" || !Array.isArray(j.records)){ dlg(t("m_merge_bad")); return; }
+  const mine=await dbAll(); const byKey={}; mine.forEach(r=>byKey[roundKey(r)]=r);
+  let added=0, items=0, dup=0;
+  for(const raw of j.records){
+    const inc=recFromBundle(raw); const key=roundKey(inc); const cur=byKey[key];
+    if(!cur){ await dbPut(inc); byKey[key]=inc; noteDone(inc); added++; continue; }
+    let touched=false;
+    for(const [k,p] of Object.entries(inc.positions)){
+      const have=cur.positions[k];
+      if(!have){ cur.positions[k]=p; items++; touched=true; }
+      else if(mediaCount(p)>mediaCount(have)){ cur.positions[k]=p; items++; touched=true; }   // richer capture wins
+      else dup++;
+    }
+    // keep both inspectors on the record, and the signature/GPS we don't already have
+    if(inc.by && cur.by && cur.by.indexOf(inc.by)<0){ cur.by=cur.by+" / "+inc.by; touched=true; }
+    else if(inc.by && !cur.by){ cur.by=inc.by; touched=true; }
+    if(inc.sup && !cur.sup){ cur.sup=inc.sup; touched=true; }
+    if(inc.sign && !cur.sign){ cur.sign=inc.sign; touched=true; }
+    if(inc.gps && !cur.gps){ cur.gps=inc.gps; touched=true; }
+    if(inc.smu && !cur.smu){ cur.smu=inc.smu; touched=true; }
+    if(touched){ cur.up=0; await dbPut(cur); noteDone(cur); }   // changed -> re-upload
+  }
+  renderPending(); renderDue(); syncNow();
+  const m=t("m_merged"); dlg([m[0], m[1].replace("{a}",added).replace("{b}",items).replace("{c}",dup)]);
 };
 
 /* ===================== pending ===================== */
@@ -902,7 +1248,7 @@ async function renderPending(){
     const thumb=first?`<img class="thumb" src="${URL.createObjectURL(first)}">`:`<div class="thumb"></div>`;
     const typeTag=`${rec.cls||""} ${rec.type||"MP"}`.trim();
     row.innerHTML=`${thumb}<div class="meta"><div class="a"><span class="tag">${typeTag}</span>${rec.equip} · ${rec.date}</div>
-      <div class="b">${nPos} ${t("pos_count")} · ${nPhotos} ${t("photo_count")}${nVid?` · ${nVid}🎥`:""}${rec.smu?` · SMU ${rec.smu}`:""}</div></div>
+      <div class="b">${nPos} ${t("pos_count")} · ${nPhotos} ${t("photo_count")}${nVid?` · ${nVid}🎥`:""}${rec.smu?` · SMU ${rec.smu}`:""}${rec.sign?" · ✍":""}${rec.gps?" · 📍":""}</div></div>
       <button class="edit" title="Edit">✎</button><button class="del" title="Delete">🗑</button>`;
     const openEdit=()=>editRecord(rec);
     row.querySelector(".edit").onclick=(ev)=>{ev.stopPropagation();openEdit();};
@@ -925,7 +1271,7 @@ async function buildPackage(){
   const all=await dbAll(); const files=[]; const grades={}, notes={};
   for(const rec of all){ const suffix=(TYPE_META[rec.type]&&TYPE_META[rec.type].suffix)||rec.type||"MP";
     if(rec.smu) (notes[`${rec.equip}|${rec.date}`] ||= {}).smu=rec.smu;
-    const isComp = rec.type==="INSP" && rec.equip && UNIT_TPL[rec.equip]!=null;
+    const isComp = usesRegister(rec.type) && rec.equip && UNIT_TPL[rec.equip]!=null;
     for(const [k,p] of Object.entries(rec.positions)){
       const ph=p.photos||(p.photoBlob?[p.photoBlob]:[]);
       for(let i=0;i<ph.length;i++){ const ext=extOf(ph[i]); const base=fileName(rec.equip,k,rec.date,ext,suffix,isComp);
@@ -940,13 +1286,19 @@ async function buildPackage(){
         if(d){ n.isoMechanism=d.iso; n.isoFailureMode=d.im; } }
       if(p.cause){ n.cause=causeLabel(p.cause,"en"); n.causeCode=p.cause; }
       if(p.sev)n.severity=p.sev; if(p.action)n.action=actionLabel(p.action,"en"); if(p.wo)n.workOrder=p.wo;
-      if(rec.by)n.inspector=rec.by;
+      if(p.tempV){ n.temperatureC=p.tempV; if(p.tempA)n.ambientC=p.tempA; if(p.tempM)n.tempMethod=p.tempM; }
+      if(rec.by)n.inspector=rec.by; if(rec.sup)n.verifiedBy=rec.sup;
+      if(rec.gps)n.gps=`${rec.gps.lat.toFixed(6)},${rec.gps.lon.toFixed(6)}`;
       if(p.comment)n.comment=p.comment;
       if(Object.keys(n).length) notes[nk]={...(notes[nk]||{}),...n};
     } }
   // self-describing record list for the dashboard (type, class, inspector, coded findings)
+  for(const rec of all){ if(!rec.sign) continue;
+    const suffix=(TYPE_META[rec.type]&&TYPE_META[rec.type].suffix)||rec.type||"MP";
+    files.push({name:`${rec.equip}_${ddmmyyyy(rec.date)}_${suffix}_SIGN.png`, data:new Uint8Array(await rec.sign.arrayBuffer())}); }
   const records=all.map(rec=>({
     equip:rec.equip, date:rec.date, type:rec.type||"MP", cls:rec.cls||"", by:rec.by||"", smu:rec.smu||"",
+    sup:rec.sup||"", gps:rec.gps||null, dev:rec.dev||"", signed:rec.sign?1:0,
     items:Object.entries(rec.positions).map(([k,p])=>{
       const d=DEFECT_BY[p.defect]||null;
       return { key:k, label:itemLabelFor(rec,k)||"", grade:p.grade||"", sev:p.sev||"", action:p.action||"",
@@ -955,6 +1307,7 @@ async function buildPackage(){
         iso:d?d.iso:"", isoMode:d?d.im:"",
         causeCode:p.cause||"", cause:p.cause?causeLabel(p.cause,"en"):"",
         particle:p.particle||"", comp:p.comp||"", oil:p.oil||"", comment:p.comment||"",
+        tempC:p.tempV||"", ambC:p.tempA||"", tempMethod:p.tempM||"",
         photos:((p.photos||[]).length), video:p.video?1:0 };
     })
   }));
@@ -974,7 +1327,7 @@ const GRADE_HEX={A:"#0ca30c",B:"#fab219",C:"#ec835a",D:"#d03b3b",X:"#8b8a83"};
 const SEV_HEX={NOF:"#0ca30c",INC:"#fab219",DEG:"#ec835a",CRI:"#d03b3b"};
 function esc(s){ return String(s==null?"":s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
 function itemLabelFor(rec,k){
-  if(rec.type==="INSP" && rec.equip && UNIT_TPL[rec.equip]!=null){ const it=flattenTree(COMP_TREE[UNIT_TPL[rec.equip]]).find(x=>x.k===k); if(it) return it[lang]||it.en; }
+  if(usesRegister(rec.type) && rec.equip && UNIT_TPL[rec.equip]!=null){ const it=flattenTree(COMP_TREE[UNIT_TPL[rec.equip]]).find(x=>x.k===k); if(it) return it[lang]||it.en; }
   const list=(CLASSES[rec.cls]&&CLASSES[rec.cls][rec.type])||[];
   for(const e of list){ if(typeof e==="string"){ if(e===k) return COMP[e]?(COMP[e][lang]||COMP[e].en):k; } else if(e.k===k){ return e[lang]||e.en; } } return ""; }
 async function blobToThumb(blob,max){ const img=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=URL.createObjectURL(blob);});
@@ -989,12 +1342,14 @@ async function buildReportHTML(){
   for(const rec of all){
     const cls=CLASSES[rec.cls]?(CLASSES[rec.cls][lang]||CLASSES[rec.cls].en):(rec.cls||"");
     const pos=Object.entries(rec.positions); const cnt={A:0,B:0,C:0,D:0,X:0};
+    const isTemp = !!(TYPE_META[rec.type]&&TYPE_META[rec.type].temp);
     pos.forEach(([k,p])=>{ if(p.grade&&cnt[p.grade]!=null)cnt[p.grade]++; });
     const att=pos.filter(([k,p])=>p.grade==="C"||p.grade==="D"||p.defect);
     h+=`<div style="margin-bottom:22px;page-break-inside:avoid;">
       <div style="background:#f2f2ef;border:1px solid #ddd;border-radius:8px;padding:10px 12px;">
         <span style="font-size:16px;font-weight:800;">${esc(rec.equip)}</span>
-        <span style="color:#555;"> — ${esc(cls)} · ${esc(L("type_"+(rec.type||"MP")))} · ${esc(rec.date||"")}${rec.smu?` · SMU ${esc(rec.smu)}`:""}${rec.by?` · ${esc(L("rep_by_who"))}: ${esc(rec.by)}`:""}</span></div>
+        <span style="color:#555;"> — ${esc(cls)} · ${esc(L("type_"+(rec.type||"MP")))} · ${esc(rec.date||"")}${rec.smu?` · SMU ${esc(rec.smu)}`:""}${rec.by?` · ${esc(L("rep_by_who"))}: ${esc(rec.by)}`:""}</span>${
+        rec.gps?`<div style="color:#666;font-size:11px;margin-top:3px;">${esc(L("rep_gps"))}: ${rec.gps.lat.toFixed(5)}, ${rec.gps.lon.toFixed(5)} (±${Math.round(rec.gps.acc)} m)</div>`:""}</div>
       <div style="margin:8px 0;font-size:12px;">${esc(L("rep_summary"))}: `;
     ["A","B","C","D","X"].forEach(g=>{ if(cnt[g]) h+=`<span style="display:inline-block;background:${GRADE_HEX[g]};color:#fff;border-radius:10px;padding:1px 8px;margin-right:5px;">${g}: ${cnt[g]}</span>`; });
     h+=`</div><div style="font-size:12px;margin-bottom:6px;"><b>${esc(L("rep_attention"))}:</b> `;
@@ -1005,7 +1360,8 @@ async function buildReportHTML(){
       <th style="border:1px solid #ccc;padding:4px;">${esc(L("rep_sev"))}</th>
       <th style="border:1px solid #ccc;padding:4px;text-align:left;">${esc(L("rep_defect"))}</th>
       <th style="border:1px solid #ccc;padding:4px;text-align:left;">${esc(L("rep_cause"))}</th>
-      <th style="border:1px solid #ccc;padding:4px;text-align:left;">${esc(L("rep_action"))}</th>
+      <th style="border:1px solid #ccc;padding:4px;text-align:left;">${esc(L("rep_action"))}</th>${
+      isTemp?`<th style="border:1px solid #ccc;padding:4px;">${esc(L("rep_temp"))}</th>`:""}
       <th style="border:1px solid #ccc;padding:4px;text-align:left;">${esc(L("rep_read"))}</th></tr>`;
     for(const [k,p] of pos){ const read=[p.particle&&`PC ${esc(p.particle)}`,p.comp&&`${esc(p.comp)}h comp`,p.oil&&`${esc(p.oil)}h oil`,p.comment&&esc(p.comment)].filter(Boolean).join(" · ");
       h+=`<tr><td style="border:1px solid #ccc;padding:4px;"><b>${esc(k)}</b> ${esc(itemLabelFor(rec,k))}</td>
@@ -1014,6 +1370,7 @@ async function buildReportHTML(){
         <td style="border:1px solid #ccc;padding:4px;">${p.defect?esc(defectLabel(p.defect))+(DEFECT_BY[p.defect]?` <span style="color:#888;">(${esc(p.defect)} · ISO ${esc(DEFECT_BY[p.defect].iso)}/${esc(DEFECT_BY[p.defect].im)})</span>`:""):""}</td>
         <td style="border:1px solid #ccc;padding:4px;">${p.cause?esc(causeLabel(p.cause)):""}</td>
         <td style="border:1px solid #ccc;padding:4px;">${p.action?esc(actionLabel(p.action)):""}${p.wo?` <b>[${esc(p.wo)}]</b>`:""}</td>
+        ${isTemp?`<td style="border:1px solid #ccc;padding:4px;text-align:center;white-space:nowrap;">${p.tempV?`<b>${esc(p.tempV)}</b> °C${p.tempA?`<span style="color:#888;"> / ${esc(p.tempA)}</span>`:""}${p.tempM?`<div style="color:#888;font-size:9.5px;">${esc(p.tempM)}</div>`:""}`:""}</td>`:""}
         <td style="border:1px solid #ccc;padding:4px;">${read}</td></tr>`; }
     h+=`</table>`;
     for(const [k,p] of pos){ const ph=p.photos||(p.photoBlob?[p.photoBlob]:[]); if(!ph.length) continue;
@@ -1021,6 +1378,14 @@ async function buildReportHTML(){
       h+=`<span style="font-size:10.5px;color:#555;min-width:70px;"><b>${esc(k)}</b></span>`;
       for(const b of ph){ const u=await blobToThumb(b,260); h+=`<img src="${u}" style="width:104px;height:78px;object-fit:cover;border:1px solid #ccc;border-radius:4px;">`; }
       h+=`</div>`; }
+    if(rec.sup||rec.sign){
+      let sig=""; if(rec.sign){ try{ sig=await blobToThumb(rec.sign,320); }catch(e){} }
+      h+=`<div style="margin-top:8px;display:flex;align-items:flex-end;gap:12px;font-size:11px;color:#444;">
+        <div><div style="color:#666;">${esc(L("rep_sup"))}</div>
+          ${sig?`<img src="${sig}" style="height:44px;background:#fff;border-bottom:1px solid #999;display:block;">`
+               :`<div style="height:44px;border-bottom:1px solid #999;width:180px;"></div>`}
+          <div style="margin-top:2px;font-weight:700;">${esc(rec.sup||"")}</div></div></div>`;
+    }
     h+=`</div>`;
   }
   h+=`<div style="border-top:1px solid #ccc;margin-top:20px;padding-top:8px;color:#888;font-size:10px;">${esc(L("rep_by"))}</div></div>`;
@@ -1103,7 +1468,7 @@ function applyLang(){ document.documentElement.lang=lang;
   fillClassSel(); fillTypeSel();
   $("secPosTitle").textContent=TYPE_META[type].title[lang]||TYPE_META[type].title.en;
   $("posLabel").textContent=`${curItem} — ${itemLabel(curItem)}`;
-  updateDefectCauseBtns(); updateActionBtn(); renderSev(); renderMedia();
+  updateDefectCauseBtns(); updateActionBtn(); renderSev(); renderMedia(); renderGps(); renderTempHint(); renderDue();
   updateSaveLabel(); if(editing) $("editBannerText").textContent=t("editing_hint").replace("{x}",editing.equip); $("cancelEdit").textContent=t("btn_cancel");
   setNet(); renderPending();
   document.querySelectorAll(".lang button").forEach(b=>b.classList.toggle("on", b.dataset.lang===lang)); }
@@ -1155,7 +1520,7 @@ async function httpErr(r){
 /* files belonging to one record, using the agreed naming standard */
 async function filesForRecord(rec){
   const suffix=(TYPE_META[rec.type]&&TYPE_META[rec.type].suffix)||rec.type||"MP";
-  const isComp = rec.type==="INSP" && rec.equip && UNIT_TPL[rec.equip]!=null;
+  const isComp = usesRegister(rec.type) && rec.equip && UNIT_TPL[rec.equip]!=null;
   const out=[];
   for(const [k,p] of Object.entries(rec.positions)){
     const ph=p.photos||(p.photoBlob?[p.photoBlob]:[]);
@@ -1164,6 +1529,7 @@ async function filesForRecord(rec){
     if(p.video){ const vext=(p.video.type||"").includes("quicktime")?"mov":"mp4";
       out.push({name:fileName(rec.equip,k,rec.date,vext,suffix,isComp), blob:p.video}); }
   }
+  if(rec.sign) out.push({name:`${rec.equip}_${ddmmyyyy(rec.date)}_${suffix}_SIGN.png`, blob:rec.sign});
   return out;
 }
 let syncing=false, lastErr="";
@@ -1187,12 +1553,14 @@ async function syncNow(manual){
 }
 function recToExport(rec){
   return { equip:rec.equip, date:rec.date, type:rec.type||"MP", cls:rec.cls||"", by:rec.by||"", smu:rec.smu||"",
+    sup:rec.sup||"", gps:rec.gps||null, dev:rec.dev||"", signed:rec.sign?1:0,
     items:Object.entries(rec.positions).map(([k,p])=>{ const d=DEFECT_BY[p.defect]||null;
       return { key:k, label:itemLabelFor(rec,k)||"", grade:p.grade||"", sev:p.sev||"", action:p.action||"",
         actionLabel:p.action?actionLabel(p.action,"en"):"", wo:p.wo||"", defectCode:p.defect||"",
         defect:p.defect?defectLabel(p.defect,"en"):"", iso:d?d.iso:"", isoMode:d?d.im:"",
         causeCode:p.cause||"", cause:p.cause?causeLabel(p.cause,"en"):"", particle:p.particle||"",
-        comp:p.comp||"", oil:p.oil||"", comment:p.comment||"", photos:((p.photos||[]).length), video:p.video?1:0 }; }) };
+        comp:p.comp||"", oil:p.oil||"", comment:p.comment||"", tempC:p.tempV||"", ambC:p.tempA||"", tempMethod:p.tempM||"",
+        photos:((p.photos||[]).length), video:p.video?1:0 }; }) };
 }
 async function renderSync(){
   const bar=$("syncBar"); if(!bar) return;
@@ -1242,8 +1610,9 @@ const fu=$("forceUpdate"); if(fu) fu.onclick=async (e)=>{ e.preventDefault();
   location.reload(true); };
 
 /* ===================== init ===================== */
-updateEquipBtn();
-applyForm(); applyLang(); renderSync(); syncNow();
+updateEquipBtn(); renderGps();
+$("dueScope").value=localStorage.getItem("due_scope")||"due";
+applyForm(); applyLang(); sizeSignPad(); renderSync(); syncNow();
 </script>
 </body>
 </html>

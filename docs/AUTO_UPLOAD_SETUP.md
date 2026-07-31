@@ -94,8 +94,11 @@ Tap **Test connection** — you should see *“✅ Connected — test file uploa
 
 ## 4. How it behaves
 
-* After each **Save**, the app uploads that inspection's photos, any video, and a
-  small `<UNIT>_<DATE>_<TYPE>.json` sidecar.
+* After each **Save**, the app uploads that inspection's photos, any video, the
+  supervisor's signature (`<UNIT>_<DATE>_<TYPE>_SIGN.png`, if signed), and a small
+  `<UNIT>_<DATE>_<TYPE>.json` sidecar. The sidecar carries the readings, coded
+  defect/cause, GPS position and sign-off — so a **Temperature** round with no photos
+  still uploads everything it recorded.
 * The status strip above the PDF button shows: `All synced` / `N inspection(s) waiting
   to upload` / `Uploading…` / `Upload failed: …` with a **Sync now** button.
 * **Nothing is lost if upload fails** — the record stays on the phone marked pending
