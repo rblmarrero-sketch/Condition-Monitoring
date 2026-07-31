@@ -165,14 +165,19 @@ The signature image and the JSON sidecar are never resized.
 
 ## Getting the inspections into the dashboard
 
-### If IT will not let you install Google Drive for desktop — use ☁ Drive
+The dashboard reads **records** (the `.json` sidecars) and **photos** together — they are
+uploaded side by side, so any route that reaches the folder brings both.
 
-The dashboard can read everything over plain HTTPS from the same `/exec` URL the phones
-upload to. Nothing to install, no synced folder, no drive letter.
+### If IT will not let you install Google Drive for desktop — read it over HTTPS
 
-1. Open the dashboard → **☁ Drive** in the header
-2. Paste the `/exec` URL, then the shared secret (empty if `SECRET` is `''`)
-3. It lists the folder, reads every `*.json` sidecar, and loads the records
+The dashboard can read everything from the same `/exec` URL the phones upload to. Nothing
+to install, no synced folder, no drive letter.
+
+1. Open the dashboard → **Data sources** in the header (or click the status chip)
+2. In the **Google Drive** card, paste the `/exec` URL and the shared secret (leave the
+   secret empty if `SECRET` is `''`)
+3. **Test connection** confirms the deployment answers and names the folder;
+   **Load from Drive** lists it, reads every `*.json` sidecar and loads the records
 
 Photos are **not** downloaded up front — a month of rounds is hundreds of megabytes. Only
 the file names are indexed; the bytes are fetched when you open a unit in **Equipment
@@ -186,14 +191,14 @@ valid file id.
 
 ### If you can install it
 
-**Google Drive for desktop** mounts the folder as a normal drive (usually `G:`), so the
-dashboard's **📂 Photo folder** button works exactly as it does with the N: drive — point
-it at *Condition Monitoring* once and it keeps finding new monthly sub-folders.
+**Google Drive for desktop** mounts the folder as a normal drive (usually `G:`), so
+**Data sources → Folder on this PC** works exactly as it does with the N: drive — point it
+at *Condition Monitoring* once and it keeps finding new monthly sub-folders.
 
 ### Or keep SharePoint on as a second destination
 
 With both destinations ticked in the app, the same files land in SharePoint too, and the
-laptop reads the OneDrive-synced folder with **📂 Photo folder** as before.
+laptop reads the OneDrive-synced folder with **Folder on this PC** as before.
 
 ---
 

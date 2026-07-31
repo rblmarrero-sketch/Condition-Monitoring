@@ -74,7 +74,7 @@ current year-month at upload time, so files land in
 Supported placeholders: `{YYYY}` `{MM}` `{DD}` `{YYYY-MM}`.
 Leave the field empty to keep everything in one folder.
 
-> The dashboard's **📂 Photo folder** picker searches sub-folders, so point it at
+> The dashboard's **Data sources → Folder on this PC** picker searches sub-folders, so point it at
 > the top **Condition Monitoring** folder once and it will keep finding new
 > monthly folders automatically.
 

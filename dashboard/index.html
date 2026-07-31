@@ -6,11 +6,15 @@
 <title>Condition Monitoring — Dashboard</title>
 <!--
   Condition Monitoring dashboard (offline, single file).
-  Data sources:
-    1) data/magnetic_plug.js  (window.CM_DATA)  - bundled magnetic-plug history
-    2) entries.json exported by the Field Capture app (version 2, self-describing)
-       -> "Import inspections" button; merged records are kept in this browser.
-  Photos: assets/photos/ or a folder you open with "Open photo folder".
+  An inspection is RECORDS (readings, grades, coded defects — the .json sidecar) plus
+  PHOTOS. The phones upload both side by side, so a source that reaches the folder
+  brings both. See the "Data sources" sheet.
+
+    1) data/magnetic_plug.js (window.CM_DATA) — bundled magnetic-plug history, always on
+    2) Google Drive  — drive.js reads the sidecars over HTTPS from the Apps Script /exec
+                       URL; photos are indexed by name and fetched on demand
+    3) Folder on PC  — showDirectoryPicker(), reads .json AND images, recursing
+    4) Import a file — a single entries.json; records only, kept in localStorage
 -->
 <style>
   :root{
@@ -49,6 +53,15 @@
   .tile .v{font-size:28px;font-weight:640;margin-top:4px;font-variant-numeric:tabular-nums;}
   .tile .s{font-size:12px;color:var(--ink-2);margin-top:2px;}
   .tile .bar{display:flex;height:8px;border-radius:6px;overflow:hidden;margin-top:10px;gap:2px;background:var(--surface-2);}
+  /* Severity mix reads as a legend, not a sentence — and each band filters the view. */
+  .tile .legend{display:flex;flex-direction:column;gap:1px;margin-top:9px;}
+  .tile .legend button{display:flex;align-items:center;gap:7px;width:100%;padding:2px 4px;margin-left:-4px;
+    background:none;border:0;border-radius:6px;cursor:pointer;font:inherit;font-size:12px;color:var(--ink-2);text-align:left;}
+  .tile .legend button:hover:not(:disabled){background:var(--surface-2);color:var(--ink);}
+  .tile .legend button.on{background:var(--surface-2);color:var(--ink);font-weight:650;}
+  .tile .legend button:disabled{opacity:.4;cursor:default;}
+  .tile .legend i{width:9px;height:9px;border-radius:2px;flex:none;}
+  .tile .legend b{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--ink);}
   .section{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 20px;margin-bottom:22px;box-shadow:var(--shadow);}
   .section>h2{margin:0 0 3px;font-size:15px;font-weight:640;} .section>.sub{color:var(--muted);font-size:12.5px;margin-bottom:16px;}
   /* Pareto */
@@ -83,8 +96,49 @@
   .pos dl{margin:6px 0 0;display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:12px;}
   .pos dt{color:var(--muted);} .pos dd{margin:0;text-align:right;}
   .pos .cm{margin-top:6px;font-size:12px;color:var(--ink-2);font-style:italic;}
-  .empty{color:var(--muted);text-align:center;padding:34px;}
+  .empty{color:var(--muted);text-align:center;padding:26px 34px;}
+  .empty b{display:block;color:var(--ink-2);font-size:13px;font-weight:640;margin-bottom:4px;}
+  .empty span{display:block;font-size:12.5px;line-height:1.5;max-width:52ch;margin:0 auto;}
+  /* active filters, as removable chips */
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:-6px 0 18px;}
+  .chips:empty{display:none;}
+  .chip{display:inline-flex;align-items:center;gap:7px;background:color-mix(in srgb,var(--accent) 14%,var(--surface));
+    border:1px solid color-mix(in srgb,var(--accent) 40%,var(--border));color:var(--ink);
+    border-radius:999px;padding:4px 6px 4px 11px;font-size:12.5px;}
+  .chip b{font-weight:650;} .chip button{border:none;background:none;color:var(--ink-2);cursor:pointer;
+    font-size:14px;line-height:1;padding:0 4px;border-radius:50%;} .chip button:hover{color:var(--critical);}
+  .chip.clearall{background:var(--surface-2);border-style:dashed;cursor:pointer;padding:4px 12px;}
+  /* interactive affordances */
+  .prow{cursor:pointer;border-radius:6px;} .prow:hover{background:var(--surface-2);}
+  .prow.sel .pfill{outline:2px solid var(--ink);outline-offset:1px;}
+  table.grid th.sortable{cursor:pointer;user-select:none;} table.grid th.sortable:hover{color:var(--ink);}
+  table.grid th .arrow{opacity:.35;font-size:10px;margin-left:3px;} table.grid th.on .arrow{opacity:1;}
+  .tile.clickable{cursor:pointer;transition:border-color .12s,transform .06s;}
+  .tile.clickable:hover{border-color:var(--accent);} .tile.clickable:active{transform:translateY(1px);}
   .note{font-size:12px;color:var(--ink-2);background:color-mix(in srgb,var(--warning) 14%,var(--surface));border:1px solid color-mix(in srgb,var(--warning) 45%,var(--border));border-radius:8px;padding:8px 11px;margin-top:12px;}
+  /* data-source sheet */
+  .ov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:60;display:flex;align-items:flex-start;justify-content:center;padding:40px 16px;overflow:auto;}
+  .ov.hidden{display:none;}
+  .sheet{background:var(--page);border:1px solid var(--border);border-radius:16px;max-width:640px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+  .sheethead{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--page);border-radius:16px 16px 0 0;}
+  .sheetbody{padding:18px 20px 22px;} .sheetbody .lede{margin:0 0 16px;color:var(--ink-2);font-size:13px;}
+  .srccard{border:1px solid var(--border);border-radius:12px;margin-bottom:14px;overflow:hidden;background:var(--surface);}
+  .srccard.on{border-color:var(--accent);}
+  .srchead{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;background:var(--surface-2);}
+  .srchead .ico{font-size:20px;line-height:1;} .srchead b{font-size:14px;}
+  .srchead .muted{font-size:12px;margin-top:3px;}
+  .srchead .state{margin-left:auto;font-size:11px;color:var(--muted);white-space:nowrap;padding-top:2px;}
+  .srccard.on .srchead .state{color:var(--good);font-weight:650;}
+  .srcbody{padding:14px 16px;display:flex;flex-direction:column;gap:10px;}
+  .srcbody .row{display:flex;gap:10px;flex-wrap:wrap;}
+  .srcbody input{width:100%;min-width:0;}
+  .srcbody .msg{font-size:12px;color:var(--muted);min-height:16px;white-space:pre-wrap;}
+  .btn.danger{color:var(--critical);}
+  /* header status chip */
+  .src{display:flex;align-items:center;gap:8px;border:1px solid var(--border);background:var(--surface-2);
+    color:var(--ink-2);border-radius:999px;padding:6px 13px;font-size:12.5px;cursor:pointer;font-family:inherit;}
+  .src .dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex:none;}
+  .src.live .dot{background:var(--good);} .src.live{color:var(--ink);}
   .lb{position:fixed;inset:0;background:rgba(0,0,0,.86);display:none;align-items:center;justify-content:center;z-index:100;padding:30px;}
   .lb.open{display:flex;} .lb img{max-width:100%;max-height:82vh;border-radius:8px;}
   .lb .cap{position:absolute;bottom:20px;left:0;right:0;text-align:center;color:#eee;font-size:13px;}
@@ -99,12 +153,58 @@
   <div><div class="t1">Condition Monitoring</div><div class="t2" id="sub">Fleet dashboard</div></div>
   <div class="spacer"></div>
   <input type="file" id="importFile" accept=".json,application/json" hidden multiple>
-  <button class="btn primary" id="importBtn">📥 Import inspections</button>
-  <button class="btn" id="folderBtn" title="Point at the photo folder (N: drive)">📂 Photo folder</button>
-  <button class="btn" id="driveBtn" title="Read inspections straight from Google Drive — nothing to install">☁ Drive</button>
-  <button class="btn" id="clearBtn" title="Remove imported inspections from this browser">🗑</button>
-  <button class="btn" id="themeBtn">◐</button>
+  <button class="src" id="srcChip" title="Where the dashboard is reading from"><span class="dot"></span><span id="srcText">No data yet</span></button>
+  <button class="btn primary" id="dataBtn">Data sources</button>
+  <button class="btn" id="themeBtn" title="Light / dark">◐</button>
 </header>
+
+<!-- One place that answers "where does the dashboard get its data?" -->
+<div id="dataOv" class="ov hidden">
+  <div class="sheet">
+    <div class="sheethead"><b>Data sources</b><button class="btn" id="dataClose">Close</button></div>
+    <div class="sheetbody">
+      <p class="lede">An inspection is <b>records</b> (readings, grades, defects) plus <b>photos</b>.
+         The phones upload both. Pick whichever route your PC can reach — you can use more than one.</p>
+
+      <div class="srccard" id="cardDrive">
+        <div class="srchead"><span class="ico">☁</span><div><b>Google Drive</b>
+          <div class="muted">Records + photos, straight over the internet. Nothing to install — for a PC where IT blocks the Drive app.</div></div>
+          <span class="state" id="stDrive">not set up</span></div>
+        <div class="srcbody">
+          <div class="field"><label for="drvUrl">Apps Script /exec URL</label>
+            <input id="drvUrl" type="url" placeholder="https://script.google.com/macros/s/…/exec"></div>
+          <div class="field"><label for="drvSec">Shared secret (blank if SECRET is '')</label>
+            <input id="drvSec" type="text" placeholder="leave empty if you did not set one"></div>
+          <div class="row"><button class="btn primary" id="drvGo">Load from Drive</button>
+            <button class="btn" id="drvTest">Test connection</button></div>
+          <div class="msg" id="drvMsg"></div>
+        </div>
+      </div>
+
+      <div class="srccard" id="cardFolder">
+        <div class="srchead"><span class="ico">📂</span><div><b>Folder on this PC</b>
+          <div class="muted">The N: drive, or a SharePoint / OneDrive / Drive folder synced to a drive letter.
+            Reads <b>records and photos together</b>, sub-folders included.</div></div>
+          <span class="state" id="stFolder">not opened</span></div>
+        <div class="srcbody">
+          <div class="row"><button class="btn primary" id="folderBtn">Open folder…</button></div>
+          <div class="msg" id="folderMsg">Chrome or Edge only — other browsers can use Import file below.</div>
+        </div>
+      </div>
+
+      <div class="srccard" id="cardFile">
+        <div class="srchead"><span class="ico">📄</span><div><b>Import a file</b>
+          <div class="muted">A single <code>entries.json</code> exported from a phone (Share / Export ZIP). Records only, no photos.</div></div>
+          <span class="state" id="stFile">—</span></div>
+        <div class="srcbody">
+          <div class="row"><button class="btn primary" id="importBtn">Choose file(s)…</button>
+            <button class="btn danger" id="clearBtn">Clear imported data</button></div>
+          <div class="msg" id="fileMsg"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <nav class="tabs" id="tabs">
   <button data-tab="overview" class="active">Overview</button>
@@ -121,7 +221,10 @@
     <div class="field"><label for="fRange">Period</label><select id="fRange">
       <option value="0">All time</option><option value="30">Last 30 days</option>
       <option value="90">Last 90 days</option><option value="365">Last 12 months</option></select></div>
+    <div class="field"><label for="fQ">Search</label>
+      <input id="fQ" type="search" placeholder="unit, defect, cause, comment…  ( / )"></div>
   </div>
+  <div class="chips" id="chips"></div>
 
   <section id="tab-overview">
     <div class="kpis" id="kpis"></div>
@@ -197,8 +300,9 @@
       </div>
       <div id="rMsg" class="sub" style="margin:0"></div>
       <div class="sub" style="margin-top:14px">
-        Photos and supervisor signatures are read from the folder you opened with
-        <b>📂 Photo folder</b> — open it first if you want them in the report.
+        Photos and supervisor signatures come from whichever data source is loaded — set one
+        up under <b>Data sources</b> first if you want them in the report. Google Drive
+        fetches just the photos this report needs.
       </div>
     </div>
   </section>
@@ -245,10 +349,57 @@ function rebuild(){
 function saveImported(){ try{ localStorage.setItem(STORE,JSON.stringify(imported)); }catch(e){ alert("Storage full — clear old imports."); } }
 
 /* ---------- filters ---------- */
+/* Extra filters set by clicking a chart, a KPI or a table — they live here rather
+   than in the controls so a drill-down is one click and one click to undo. */
+let drill={ sev:"", defect:"", cause:"", unit:"" };
+function setDrill(k,v){ drill[k] = (drill[k]===v ? "" : v); renderAll(); }
+function clearDrill(){ drill={sev:"",defect:"",cause:"",unit:""}; renderAll(); }
+function matchesText(r,q){
+  if(!q) return true;
+  const hay=[r.equip,r.by,r.type,r.date].concat(
+    (r.items||[]).flatMap(i=>[i.key,i.label,i.defect,i.cause,i.comment,i.wo,i.actionLabel]));
+  return hay.some(v=>String(v||"").toLowerCase().includes(q));
+}
 function filtered(){
   const t=$("fType").value, c=$("fClass").value, days=+$("fRange").value;
   const cutoff=days? new Date(Date.now()-days*864e5).toISOString().slice(0,10):null;
-  return RECS.filter(r=>(!t||r.type===t)&&(!c||r.cls===c)&&(!cutoff||(r.date||"")>=cutoff));
+  const q=($("fQ").value||"").trim().toLowerCase();
+  return RECS.filter(r=>{
+    if(t&&r.type!==t) return false;
+    if(c&&r.cls!==c) return false;
+    if(cutoff&&(r.date||"")<cutoff) return false;
+    if(drill.unit&&r.equip!==drill.unit) return false;
+    if(!matchesText(r,q)) return false;
+    if(drill.sev||drill.defect||drill.cause){
+      const hit=(r.items||[]).some(i=>
+        (!drill.sev    || (i.sev||GRADE_SEV[i.grade]||"")===drill.sev) &&
+        (!drill.defect || i.defect===drill.defect) &&
+        (!drill.cause  || i.cause===drill.cause));
+      if(!hit) return false;
+    }
+    return true;
+  });
+}
+function renderChips(){
+  const c=[];
+  const add=(label,val,onX)=>c.push({label,val,onX});
+  if($("fType").value)  add("Type", TYPE_LABEL[$("fType").value]||$("fType").value, ()=>{ $("fType").value=""; renderAll(); });
+  if($("fClass").value) add("Class", $("fClass").value, ()=>{ $("fClass").value=""; renderAll(); });
+  if(+$("fRange").value) add("Period", $("fRange").selectedOptions[0].textContent, ()=>{ $("fRange").value="0"; renderAll(); });
+  if(($("fQ").value||"").trim()) add("Search", $("fQ").value.trim(), ()=>{ $("fQ").value=""; renderAll(); });
+  if(drill.unit)   add("Unit", drill.unit, ()=>setDrill("unit",drill.unit));
+  if(drill.sev)    add("Severity", SEV[drill.sev]?SEV[drill.sev].l:drill.sev, ()=>setDrill("sev",drill.sev));
+  if(drill.defect) add("Defect", drill.defect, ()=>setDrill("defect",drill.defect));
+  if(drill.cause)  add("Cause", drill.cause, ()=>setDrill("cause",drill.cause));
+  const box=$("chips");
+  if(!c.length){ box.innerHTML=""; return; }
+  box.innerHTML=c.map((x,i)=>`<span class="chip"><span class="muted">${esc(x.label)}</span> <b>${esc(x.val)}</b><button data-x="${i}" title="Remove">×</button></span>`).join("")
+    +`<button class="chip clearall" id="chipClear">Clear all</button>`;
+  box.querySelectorAll("[data-x]").forEach(b=>b.onclick=()=>c[+b.dataset.x].onX());
+  const ca=$("chipClear"); if(ca) ca.onclick=()=>{
+    $("fType").value=""; $("fClass").value=""; $("fRange").value="0"; $("fQ").value="";
+    clearDrill();                      // ends with renderAll(), so the cleared controls take effect
+  };
 }
 function findings(recs){            // one row per item that has any content
   const out=[];
@@ -277,17 +428,34 @@ function renderKpis(){
    <div class="tile"><div class="k">Needs attention</div><div class="v">${attention}</div><div class="s">degraded + critical</div></div>
    <div class="tile"><div class="k">Actions to plan</div><div class="v">${openActions}</div><div class="s">excluding “monitor”</div></div>
    <div class="tile"><div class="k">Severity mix</div>
-     <div class="v" style="font-size:14px;margin-top:8px">${["CRI","DEG","INC","NOF"].filter(s=>cnt[s]).map(s=>`${SEV[s].l.split(" ")[0]} ${cnt[s]}`).join(" · ")||"—"}</div>
-     <div class="bar">${bar}</div></div>`;
+     <div class="bar" style="margin-top:8px">${bar}</div>
+     <div class="legend">${["CRI","DEG","INC","NOF"].map(s=>
+       `<button data-sev="${s}" class="${drill.sev===s?"on":""}"${cnt[s]?"":" disabled"}
+          title="${cnt[s]?"Show only "+esc(SEV[s].l):"None in this view"}"
+        ><i style="background:${SEVC[s]}"></i>${esc(SEV[s].l)}<b>${cnt[s]}</b></button>`).join("")}</div>
+   </div>`;
+  // the mix doubles as a filter — click a band to see only those findings
+  $("kpis").querySelectorAll("[data-sev]").forEach(b=>b.onclick=()=>setDrill("sev",b.dataset.sev));
 }
 
 /* ---------- fleet table ---------- */
+let fleetSort={k:"sev",dir:-1};
 function renderFleet(){
   const recs=filtered(); const byU={};
   recs.forEach(r=>{ const k=r.equip; if(!byU[k]||(r.date||"")>(byU[k].date||"")) byU[k]=r; });
-  const rows=Object.values(byU).sort((a,b)=>sevRank(worstOf(b))-sevRank(worstOf(a))||a.equip.localeCompare(b.equip));
+  const val=(r,k)=>({ equip:r.equip, type:r.type, date:r.date||"",
+    sev:sevRank(worstOf(r)), find:(r.items||[]).filter(i=>i.grade||i.defectCode).length,
+    defect:((r.items||[]).map(i=>i.defect).filter(Boolean)[0]||""), by:r.by||"" }[k]);
+  const rows=Object.values(byU).sort((a,b)=>{
+    const x=val(a,fleetSort.k), y=val(b,fleetSort.k);
+    const c = typeof x==="number" ? x-y : String(x).localeCompare(String(y));
+    return (c||a.equip.localeCompare(b.equip))*fleetSort.dir;
+  });
   if(!rows.length){ $("fleetTbl").innerHTML=`<tr><td class="empty">No inspections match the filters.</td></tr>`; return; }
-  let h=`<thead><tr><th>Unit</th><th>Type</th><th>Date</th><th>Worst severity</th><th>Findings</th><th>Top defect</th><th>Inspector</th></tr></thead><tbody>`;
+  const cols=[["equip","Unit"],["type","Type"],["date","Date"],["sev","Worst severity"],
+              ["find","Findings"],["defect","Top defect"],["by","Inspector"]];
+  let h=`<thead><tr>`+cols.map(([k,l])=>
+    `<th class="sortable${fleetSort.k===k?" on":""}" data-sort="${k}">${l}<span class="arrow">${fleetSort.k===k?(fleetSort.dir>0?"▲":"▼"):"↕"}</span></th>`).join("")+`</tr></thead><tbody>`;
   rows.forEach(r=>{
     const w=worstOf(r); const fs=r.items.filter(i=>i.grade||i.defectCode);
     const top=fs.map(i=>i.defect).filter(Boolean)[0]||"";
@@ -299,26 +467,43 @@ function renderFleet(){
       <td class="muted">${esc(r.by||"")}</td></tr>`;
   });
   $("fleetTbl").innerHTML=h+"</tbody>";
+  $("fleetTbl").querySelectorAll("th[data-sort]").forEach(th=>th.onclick=()=>{
+    const k=th.dataset.sort;
+    // a new column starts on the reading people expect: worst/newest first
+    if(fleetSort.k===k) fleetSort.dir*=-1; else fleetSort={k,dir:(k==="sev"||k==="find"||k==="date")?-1:1};
+    renderFleet(); });
   $("fleetTbl").querySelectorAll("tr[data-u]").forEach(tr=>tr.onclick=()=>{ showTab("equipment"); $("equipSel").value=tr.dataset.u; renderHistory(); });
 }
 
 /* ---------- Pareto ---------- */
-function pareto(el,pairs,colorFn){
-  if(!pairs.length){ el.innerHTML=`<div class="empty">No coded data yet.</div>`; return; }
+/* Clicking a bar filters the whole dashboard by it — the obvious next question
+   after "which failure mode is worst?" is "on which units?". */
+function pareto(el,pairs,colorFn,drillKey,why){
+  // "No data" on its own reads like a fault. Say which field is missing and where it
+  // comes from, because the usual cause is graded-only records with no defect coding.
+  if(!pairs.length){ el.innerHTML=`<div class="empty"><b>Nothing to rank yet</b><span>${esc(why||"No coded entries in this view.")}</span></div>`; return; }
   const max=pairs[0][1];
   el.innerHTML=pairs.map(([label,n,sub])=>`
-    <div class="prow"><div class="lbl" title="${esc(label)}">${esc(label)}${sub?` <small>${esc(sub)}</small>`:""}</div>
+    <div class="prow${drillKey&&drill[drillKey]===label?" sel":""}" ${drillKey?`data-drill="${esc(label)}" title="Click to filter by this"`:""}>
+      <div class="lbl" title="${esc(label)}">${esc(label)}${sub?` <small>${esc(sub)}</small>`:""}</div>
       <div class="ptrack"><div class="pfill" style="width:${Math.max(2,n/max*100)}%;background:${colorFn?colorFn(label):"var(--accent)"}"></div></div>
       <div class="n">${n}</div></div>`).join("");
+  if(drillKey) el.querySelectorAll("[data-drill]").forEach(r=>r.onclick=()=>setDrill(drillKey,r.dataset.drill));
 }
 function renderFailure(){
   const f=findings(filtered());
   const cnt=(keyFn,subFn)=>{ const m=new Map();
     f.forEach(x=>{ const k=keyFn(x); if(!k) return; const e=m.get(k)||{n:0,sub:subFn?subFn(x):""}; e.n++; m.set(k,e); });
     return [...m.entries()].map(([k,v])=>[k,v.n,v.sub]).sort((a,b)=>b[1]-a[1]).slice(0,15); };
-  pareto($("paretoDefect"), cnt(x=>x.i.defect, x=>x.i.defectCode?`· ${x.i.defectCode}`:""));
-  pareto($("paretoCause"),  cnt(x=>x.i.cause,  x=>x.i.causeCode?`· ${x.i.causeCode}`:""), ()=>"var(--serious)");
-  pareto($("paretoIso"),    cnt(x=>{ const m=TAX.isoMech&&TAX.isoMech[x.i.iso]; return x.i.iso?`${x.i.iso} ${m?m.en:""}`:""; }), ()=>"var(--accent)");
+  const src=f.length
+    ? `${f.length} finding(s) in this view, but none carry a coded `
+    : "No findings match the current filters — widen the type, class or period.";
+  pareto($("paretoDefect"), cnt(x=>x.i.defect, x=>x.i.defectCode?`· ${x.i.defectCode}`:""), null, "defect",
+    f.length ? src+"defect. Inspectors pick one from the defect list in the app; older graded-only rounds have none." : src);
+  pareto($("paretoCause"),  cnt(x=>x.i.cause,  x=>x.i.causeCode?`· ${x.i.causeCode}`:""), ()=>"var(--serious)", "cause",
+    f.length ? src+"cause. A cause is recorded after a defect is chosen." : src);
+  pareto($("paretoIso"),    cnt(x=>{ const m=TAX.isoMech&&TAX.isoMech[x.i.iso]; return x.i.iso?`${x.i.iso} ${m?m.en:""}`:""; }), ()=>"var(--accent)", null,
+    f.length ? src+"ISO 14224 mechanism. It is derived from the defect, so coding defects fills this in too." : src);
 }
 
 /* ---------- action register ---------- */
@@ -352,7 +537,8 @@ $("csvBtn").onclick=()=>{
 };
 
 /* ---------- equipment history ---------- */
-let folderPhotos=null;   // name -> objectURL, from "Photo folder" or from Drive
+let folderPhotos=null;   // name -> objectURL, from the folder pick or from Drive
+let folderName="";       // for the status chip
 // The agreed file name for an item's photo, minus the extension.
 function photoBase(it,rec){
   return `${rec.equip}${usesRegister(rec.type)?"."+it.key:"_"+String(it.key).replace(/\./g,"-")}_${(rec.date||"").split("-").reverse().join(".")}_${rec.type}`;
@@ -373,7 +559,7 @@ window.CMDash={
   importRecords(recs){
     recs.forEach(r=>{ const k=`${r.equip}|${r.date}|${r.type}`;
       imported=imported.filter(x=>`${x.equip}|${x.date}|${x.type}`!==k); imported.push(r); });
-    saveImported(); rebuild(); refreshControls(); renderAll();
+    saveImported(); rebuild(); refreshControls(); renderAll(); refreshSources();
   },
   recsFor(equip){ return RECS.filter(r=>r.equip===equip); },
   allRecs(){ return RECS; },
@@ -424,55 +610,105 @@ $("importFile").onchange=async e=>{
       });
     }catch(err){ skipped++; }
   }
-  saveImported(); rebuild(); refreshControls(); renderAll();
-  alert(`Imported ${added} inspection record(s).` + (skipped?` ${skipped} file(s) skipped (not a v2 entries.json).`:""));
+  saveImported(); rebuild(); refreshControls(); renderAll(); refreshSources();
+  $("fileMsg").textContent=`Imported ${added} inspection record(s).` + (skipped?` ${skipped} file(s) skipped — not an entries.json.`:"");
   e.target.value="";
 };
-$("clearBtn").onclick=()=>{ if(!imported.length) return alert("Nothing imported yet.");
-  if(confirm(`Remove ${imported.length} imported inspection record(s) from this browser?`)){ imported=[]; saveImported(); rebuild(); refreshControls(); renderAll(); } };
+$("clearBtn").onclick=()=>{ if(!imported.length){ $("fileMsg").textContent="Nothing imported yet."; return; }
+  if(confirm(`Remove ${imported.length} imported inspection record(s) from this browser?\n\nPhotos and anything in Drive are untouched.`)){
+    imported=[]; saveImported(); rebuild(); refreshControls(); renderAll(); refreshSources();
+    $("fileMsg").textContent="Cleared."; } };
+/* One pick, everything in it. The phones upload the photos AND a small .json
+   sidecar per inspection side by side, so reading only the images left the
+   dashboard with pictures and no readings — which looked like "no data". */
 $("folderBtn").onclick=async ()=>{
-  if(!window.showDirectoryPicker) return alert("Use Chrome or Edge to open a photo folder.");
+  const msg=$("folderMsg");
+  if(!window.showDirectoryPicker){ msg.textContent="This browser has no folder picker — use Chrome or Edge, or Import a file below."; return; }
+  let dir;
+  try{ dir=await window.showDirectoryPicker({id:"cm-photos",mode:"read"}); }
+  catch(err){ if(err&&err.name!=="AbortError") msg.textContent="Could not open that folder."; return; }
+  msg.textContent="Reading…";
+  if(folderPhotos) Object.values(folderPhotos).forEach(u=>{ try{ URL.revokeObjectURL(u); }catch(_){ } });
+  folderPhotos={};
+  const recs=[]; let photos=0, sidecars=0, bad=0, seen=0;
   try{
-    const dir=await window.showDirectoryPicker({id:"cm-photos",mode:"read"});
-    // release the previous pick's URLs, otherwise every re-pick leaks the lot
-    if(folderPhotos) Object.values(folderPhotos).forEach(u=>{ try{ URL.revokeObjectURL(u); }catch(_){ } });
-    folderPhotos={};
-    async function walk(h){ for await (const en of h.values()){
-      if(en.kind==="directory") await walk(en);
-      else if(/\.(jpe?g|png|webp)$/i.test(en.name)) folderPhotos[en.name]=URL.createObjectURL(await en.getFile()); } }
-    await walk(dir); renderHistory();
-    alert(`Loaded ${Object.keys(folderPhotos).length} photo(s) from ${dir.name}.`);
-  }catch(err){ if(err&&err.name!=="AbortError") alert("Could not read that folder."); }
+    async function walk(h,depth){
+      if(depth>6) return;
+      for await (const en of h.values()){
+        if(en.kind==="directory"){ await walk(en,depth+1); continue; }
+        seen++;
+        if(/\.(jpe?g|png|webp)$/i.test(en.name)){ folderPhotos[en.name]=URL.createObjectURL(await en.getFile()); photos++; }
+        else if(/\.json$/i.test(en.name)){
+          try{ const j=JSON.parse(await (await en.getFile()).text());
+            if(Array.isArray(j.records)){ j.records.forEach(r=>recs.push(r)); sidecars++; }
+          }catch(e){ bad++; }                                  // a stray json is not an error
+        }
+      }
+    }
+    await walk(dir,0);
+  }catch(err){ msg.textContent="Could not read that folder: "+(err&&err.message||err); return; }
+  if(recs.length) window.CMDash.importRecords(recs); else { rebuild(); refreshControls(); renderAll(); }
+  folderName=dir.name;
+  msg.textContent=`${dir.name}: ${recs.length} inspection(s) from ${sidecars} file(s), ${photos} photo(s).`
+    +(bad?` ${bad} json file(s) were not inspection data.`:"")
+    +(recs.length?"":" No .json sidecars found — this folder has photos only.");
+  refreshSources();
 };
-/* ---------- read straight from Google Drive (no Drive client installed) ---------- */
-$("driveBtn").onclick=async ()=>{
-  const cur=window.CMDrive.url;
-  const url=prompt("Google Apps Script /exec URL\n\n(the same one the phones upload to)", cur||"");
-  if(url===null) return;
-  const sec=prompt("Shared secret — leave empty if the script's SECRET is ''", window.CMDrive.secret||"");
-  if(sec===null) return;
-  window.CMDrive.save(url,sec);
-  if(!url.trim()) return;
-  const b=$("driveBtn"), label=b.innerHTML; b.disabled=true;
-  const show=m=>{ b.innerHTML="☁ "+m; };
+/* ---------- data-source sheet ---------- */
+/* drive.js is loaded after this script (it needs the CMDash bridge), and
+   renderAll()/refreshSources() run during init — so never assume it is there yet. */
+const drv=()=>window.CMDrive||null;
+const drvOn=()=>!!(drv()&&drv().configured());
+
+function openData(){ const D=drv();
+  $("drvUrl").value=(D&&D.url)||""; $("drvSec").value=(D&&D.secret)||"";
+  refreshSources(); $("dataOv").classList.remove("hidden"); }
+$("dataBtn").onclick=openData; $("srcChip").onclick=openData;
+$("dataClose").onclick=()=>$("dataOv").classList.add("hidden");
+$("dataOv").onclick=e=>{ if(e.target.id==="dataOv") $("dataOv").classList.add("hidden"); };
+
+/* One line that always answers "what am I looking at, and from where?" */
+function refreshSources(){
+  const units=new Set(RECS.map(r=>r.equip)).size;
+  const nPhotos=folderPhotos?Object.keys(folderPhotos).length:0;
+  const where=[]; if(drvOn()) where.push("Drive"); if(folderName) where.push(folderName);
+  if(imported.length && !where.length) where.push("imported file");
+  $("srcText").textContent = RECS.length
+    ? `${RECS.length} inspections · ${units} units${nPhotos?` · ${nPhotos} photos`:""}${where.length?` · ${where.join(" + ")}`:""}`
+    : "No data yet — click to connect";
+  $("srcChip").classList.toggle("live", RECS.length>0);
+  const set=(card,state,on,text)=>{ $(card).classList.toggle("on",!!on); $(state).textContent=text; };
+  set("cardDrive","stDrive",drvOn(),drvOn()?`${drv().indexed()} files indexed`:"not set up");
+  set("cardFolder","stFolder",!!folderName,folderName?`${folderName} · ${nPhotos} photos`:"not opened");
+  set("cardFile","stFile",imported.length>0,imported.length?`${imported.length} record(s) in this browser`:"—");
+}
+
+/* ---------- Google Drive ---------- */
+async function driveRun(loadIt){
+  const msg=$("drvMsg"), url=$("drvUrl").value.trim();
+  if(!url){ msg.textContent="Paste the /exec URL first."; return; }
+  if(!drv()){ msg.textContent="Drive reader did not load — reload the page."; return; }
+  drv().save(url,$("drvSec").value);
+  $("drvGo").disabled=$("drvTest").disabled=true;
   try{
-    const r=await window.CMDrive.load(show);
-    b.innerHTML=label;
-    alert(r.note ? r.note
-      : `Loaded ${r.records} inspection record(s) from Drive.\n`+
-        `${r.photos} photo/video file(s) indexed — they download as you open each unit.`+
-        (r.failed?`\n${r.failed} file(s) could not be read.`:"")+
-        (r.truncated?`\n\nThe folder has more files than one listing returns; oldest may be missing.`:""));
-  }catch(err){ b.innerHTML=label; alert("Drive load failed:\n\n"+(err&&err.message||err)); }
-  finally{ b.disabled=false; }
-};
+    if(!loadIt){ const n=await window.CMDrive.ping(); msg.textContent="✅ Connected — folder “"+n+"”."; return; }
+    const r=await window.CMDrive.load(m=>{ msg.textContent=m; });
+    msg.textContent = r.note ? r.note
+      : `✅ ${r.records} inspection(s) loaded, ${r.photos} photo/video file(s) indexed — they download as you open a unit.`
+        +(r.failed?` ${r.failed} file(s) could not be read.`:"")
+        +(r.truncated?` The folder has more files than one listing returns; the oldest may be missing.`:"");
+  }catch(err){ msg.textContent="❌ "+(err&&err.message||err); }
+  finally{ $("drvGo").disabled=$("drvTest").disabled=false; refreshSources(); }
+}
+$("drvGo").onclick=()=>driveRun(true);
+$("drvTest").onclick=()=>driveRun(false);
 /* Photos live in Drive, not on disk — pull the ones this view needs, then repaint. */
 let drivePending=false;
 async function pullDrivePhotos(recs, after){
   // drive.js loads after this script, and renderAll() runs during init
-  if(!window.CMDrive || !window.CMDrive.configured() || drivePending || !recs.length) return;
+  if(!drvOn() || drivePending || !recs.length) return;
   drivePending=true;
-  try{ if(await window.CMDrive.ensurePhotos(recs)) after&&after(); }
+  try{ if(await drv().ensurePhotos(recs)) after&&after(); }
   finally{ drivePending=false; }
 }
 $("lb").onclick=e=>{ if(e.target.id==="lb"||e.target.id==="lbx"){ $("lb").classList.remove("open"); $("lbimg").src=""; } };
@@ -505,7 +741,7 @@ $("rGo").onclick=async ()=>{
   if(!target){ msg.textContent="No inspections to report on yet — import an entries.json first."; return; }
   go.disabled=true; msg.textContent="Building report…";
   try{
-    if($("rPhotos").value==="1" && window.CMDrive && window.CMDrive.configured()){
+    if($("rPhotos").value==="1" && drvOn()){
       const recs=window.CMReport.recsForScope($("rScope").value, target);
       msg.textContent="Fetching photos from Drive…";
       await window.CMDrive.ensurePhotos(recs,(d,n)=>{ msg.textContent=`Fetching photos from Drive… ${d}/${n}`; });
@@ -532,10 +768,17 @@ function refreshControls(){
   refreshReportTargets();
   $("sub").textContent=`${RECS.length} inspection(s) · ${units.length} unit(s)`+(imported.length?` · ${imported.length} imported`:"");
 }
-function renderAll(){ renderKpis(); renderFleet(); renderFailure(); renderActions(); renderHistory(); }
+function renderAll(){ renderChips(); renderKpis(); renderFleet(); renderFailure(); renderActions(); renderHistory(); }
 ["fType","fClass","fRange"].forEach(id=>$(id).onchange=renderAll);
+let qTimer=null;
+$("fQ").oninput=()=>{ clearTimeout(qTimer); qTimer=setTimeout(renderAll,180); };   // debounce, the fleet table is big
+document.addEventListener("keydown",e=>{
+  if(e.key==="/"&&!/^(INPUT|SELECT|TEXTAREA)$/.test(document.activeElement.tagName)){ e.preventDefault(); $("fQ").focus(); }
+  if(e.key==="Escape"&&document.activeElement===$("fQ")){ $("fQ").value=""; renderAll(); $("fQ").blur(); }
+});
 $("equipSel").onchange=renderHistory;
-rebuild(); refreshControls(); renderAll();
+rebuild(); refreshControls(); renderAll(); refreshSources();
+if(!RECS.length) openData();          // first run: show where data comes from
 </script>
 <script src="drive.js"></script>
 <script src="report.js"></script>

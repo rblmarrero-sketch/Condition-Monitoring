@@ -318,18 +318,47 @@ inspectors' names are kept.
 
 ## Getting inspections into the dashboard
 
-| Route | When |
-|---|---|
-| **☁ Drive** | Google Drive without installing anything — reads over HTTPS from the Apps Script `/exec` URL |
-| **📂 Photo folder** | A folder on disk: the N: drive, an OneDrive-synced SharePoint library, or a Drive-for-desktop letter |
-| **📥 Import inspections** | An `entries.json` exported from a phone |
+An inspection is two things: the **records** (readings, grades, coded defects) and the
+**photos**. The phones upload both, side by side — `TK146_4C_31.07.2026_MP.jpg` next to
+`TK146_31.07.2026_MP.json`. Everything below is about getting those to the dashboard.
 
-**☁ Drive** is the answer when IT will not allow the Google Drive client on the laptop.
-Paste the `/exec` URL and the shared secret once; it lists the folder, reads every `*.json`
-sidecar and loads the records. Photos are indexed by name but only downloaded when you
-open a unit or generate a PDF with photos — a month of rounds is hundreds of megabytes,
-so pulling it all up front would be pointless. It needs the read actions in
-`docs/google-upload.gs`; re-paste that file and deploy a new version if yours predates them.
+Click the status chip in the header, or **Data sources**, to open the panel. Three routes,
+and you can use more than one at a time:
+
+| Route | Brings | When |
+|---|---|---|
+| **☁ Google Drive** | records **and** photos | IT will not allow the Google Drive client on the laptop. Reads over plain HTTPS from the Apps Script `/exec` URL — nothing to install. |
+| **📂 Folder on this PC** | records **and** photos | The N: drive, an OneDrive-synced SharePoint library, or a Drive-for-desktop letter. Chrome/Edge only. |
+| **📄 Import a file** | records only | A single `entries.json` exported from one phone. No photos — it is a fallback for a browser that cannot open a folder. |
+
+The status chip always answers *what am I looking at, and from where?* —
+`31 inspections · 17 units · 480 photos · N:\Condition Monitoring`.
+
+**Folder on this PC** reads the `.json` sidecars *and* the images, recursing through the
+monthly sub-folders, so pointing it at *Condition Monitoring* once is enough.
+
+> Before build 42 this button was labelled **Photo folder** and it lived up to the name —
+> it loaded the images and ignored the `.json` sidecars sitting beside them, so the folder
+> gave you photos with no inspection data and you had to import the records separately.
+> It now reads both.
+
+**☁ Google Drive** — paste the `/exec` URL and the shared secret once, then **Load from
+Drive**; **Test connection** checks the deployment without pulling anything. It lists the
+folder, reads every `*.json` sidecar and loads the records. Photos are indexed by name but
+only downloaded when you open a unit or generate a PDF with photos — a month of rounds is
+hundreds of megabytes, so pulling it all up front would be pointless. It needs the read
+actions in `docs/google-upload.gs`; re-paste that file and deploy a new version if yours
+predates them.
+
+### Finding things once the data is in
+
+* **Search** (or press `/`) matches unit, defect, cause, comment, inspector and WO across
+  every tab.
+* **Click to filter** — a Pareto bar, a severity band in the mix tile, a unit row. The
+  filter applies to the whole dashboard, so "which failure mode is worst?" is one click
+  away from "on which units?".
+* Everything active shows as a removable chip under the controls, with **Clear all**.
+* The fleet table sorts on any column; click again to reverse.
 
 ---
 
@@ -356,8 +385,9 @@ expat and local staff. Three scopes share one section library:
 
 Pages are laid out as real A4 boxes and flowed block by block, so a table row is never
 sliced in half and a section heading never strands at the foot of a page. Photos and
-supervisor signatures come from the folder opened with **📂 Photo folder** — open it before
-generating if you want them included.
+supervisor signatures come from whichever data source is loaded — **Folder on this PC**, or
+Google Drive, which fetches just the photos that report needs. Set one up before generating
+if you want them included.
 
 The temperature limits are shared with the app (`mobile/temp-limits.js`), so a reading is
 judged identically on the phone and in the report.

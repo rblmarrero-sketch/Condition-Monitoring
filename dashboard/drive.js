@@ -129,8 +129,19 @@
     return names.length;
   }
 
+  /* Health check without pulling anything: the bare /exec URL reports the folder. */
+  async function ping(){
+    const c = cfg();
+    const r = await fetch(c.url, { method: "GET" });
+    const text = await r.text();
+    let j = null; try { j = JSON.parse(text); } catch (e) {}
+    if (!j) throw new Error("Unexpected reply — check the deployment's “Who has access” is Anyone.");
+    if (j.ok === false) throw new Error(j.error || "Drive refused the request");
+    return j.folder || "(unnamed)";
+  }
+
   window.CMDrive = {
-    load, ensurePhotos, configured,
+    load, ensurePhotos, configured, ping,
     get url() { return cfg().url; },
     get secret() { return cfg().sec; },
     save(url, sec) { localStorage.setItem(LS_URL, (url || "").trim()); localStorage.setItem(LS_SEC, sec || ""); },
