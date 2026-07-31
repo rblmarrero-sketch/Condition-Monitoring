@@ -27,6 +27,23 @@ const ROOT_FOLDER_ID = '1aeTSn7FWw9Zh8Xv6SNsdc6mC77MLcsSa?usp=sharing';
 /** Optional shared secret. Leave '' to accept any request that has the URL.
  *  If you set it, put the same value in the app's "Shared secret" field. */
 const SECRET = '';
+
+/** Password for DELETING inspections from the dashboard. Deletion is OFF while
+ *  this is '' — that is the safe default and most sites should leave it so.
+ *
+ *  Set it only if you want the dashboard's Delete button to work, and then:
+ *    • NEVER put this value in the app, in upload-defaults.js, or in the repo.
+ *      The /exec URL is handed to every phone and is effectively public; this
+ *      password is the only thing standing between that URL and someone wiping
+ *      the folder in one request.
+ *    • Type it into the dashboard when you delete. It is not stored.
+ *
+ *  Deleting moves files to Drive's TRASH (recoverable for 30 days) and writes a
+ *  log entry saying what went, when, and why. Nothing is ever purged outright. */
+const ADMIN_SECRET = '';
+
+/** Where the audit trail and the dashboard's edits live, inside ROOT_FOLDER_ID. */
+const META_DIR = '_meta';
 // ────────────────────────────────────────────────────────────────────────────
 
 function doPost(e) {
@@ -37,6 +54,13 @@ function doPost(e) {
     var b = JSON.parse(e.postData.contents);
 
     if (SECRET && b.secret !== SECRET) return json({ ok: false, error: 'Bad or missing secret' });
+
+    // The dashboard posts corrections and deletions through the same endpoint,
+    // because a web app cannot answer a CORS preflight and this body shape is
+    // already a "simple" request. Everything else is an ordinary file upload.
+    if (b.op === 'edit')   return json(saveEdit_(b));
+    if (b.op === 'delete') return json(deleteRecord_(b));
+
     if (!b.name) return json({ ok: false, error: 'Missing file name' });
     if (!b.file) return json({ ok: false, error: 'Missing file content' });
 
@@ -92,6 +116,98 @@ function doGet(e) {
   }
 }
 
+/* ── corrections, voids and deletion ─────────────────────────────────────────
+   A correction is NOT written back into the inspection's own sidecar. The phone
+   that captured it still holds that record, and re-syncing it — after an edit,
+   or just a retry — overwrites the file. A correction saved there would vanish
+   without trace. So each one is its own small file that nothing else ever
+   touches, and the clients merge it over the record when they read.
+
+     _meta/<UNIT>_<DDMMYYYY>_<TYPE>.edit.json
+
+   Voiding is the same mechanism with void:true. Nothing is destroyed: the
+   photos, the signature and the original readings all stay exactly as captured,
+   and the reason and author travel with the marker.
+   ──────────────────────────────────────────────────────────────────────────*/
+function keyFile_(key, ext) {
+  // "TK146|2026-03-09|MP" -> "TK146_09.03.2026_MP" + ext, matching the sidecars
+  var p = String(key || '').split('|');
+  if (p.length !== 3 || !p[0] || !p[1] || !p[2]) return null;
+  var d = p[1].split('-');
+  if (d.length !== 3) return null;
+  return p[0] + '_' + d[2] + '.' + d[1] + '.' + d[0] + '_' + p[2] + ext;
+}
+
+function saveEdit_(b) {
+  var name = keyFile_(b.key, '.edit.json');
+  if (!name) return { ok: false, error: 'Bad record key: ' + b.key };
+  var dir = folderPath_(rootFolder_(), META_DIR);
+  var doc = {
+    type: 'cm-record-edit', version: 1,
+    key: b.key,
+    at: new Date().toISOString(),
+    by: String(b.by || '').slice(0, 80),
+    void: !!b.void,
+    reason: String(b.reason || '').slice(0, 400),
+    note: String(b.note || '').slice(0, 2000),
+    items: (b.items && typeof b.items === 'object') ? b.items : {},
+  };
+  var old = dir.getFilesByName(name);
+  while (old.hasNext()) old.next().setTrashed(true);      // one marker per record
+  dir.createFile(Utilities.newBlob(JSON.stringify(doc, null, 2), 'application/json', name));
+  return { ok: true, saved: name, at: doc.at };
+}
+
+/* Deletion. Guarded by ADMIN_SECRET, which is deliberately NOT the same secret
+   the phones carry — that one is published with the app. Files are trashed, not
+   purged, so Drive keeps them for 30 days, and every deletion leaves a log. */
+function deleteRecord_(b) {
+  if (!ADMIN_SECRET) return { ok: false, error:
+    'Deletion is switched off. Set ADMIN_SECRET in the Apps Script and deploy a new version.' };
+  if (String(b.admin || '') !== ADMIN_SECRET) return { ok: false, error: 'Wrong admin password' };
+
+  var p = String(b.key || '').split('|');
+  var stem = keyFile_(b.key, '');
+  if (!stem) return { ok: false, error: 'Bad record key: ' + b.key };
+
+  // Every file belonging to this inspection: the sidecar, its photos and video,
+  // the signature, and any correction marker. Matched on the naming standard —
+  // <UNIT>...<DD.MM.YYYY>_<TYPE>.<ext> — so a photo for a component keeps its
+  // own prefix (TK146.4C_…) and is still caught.
+  //
+  // The type must be followed by "." or "_" or nothing: "_2" marks the second
+  // photo of a position and "_SIGN" the signature, and "\b" does NOT match
+  // before an underscore, so anchoring on a word boundary silently left those
+  // files behind — a delete that looked clean and was not.
+  // Requiring a separator also stops TYPE "MP" from matching a "MPX" suffix.
+  var unit = p[0], dmy = stem.split('_')[1], type = p[2];
+  var re = new RegExp('^' + esc_(unit) + '[._-].*?' + esc_(dmy) + '_' + esc_(type) + '([._]|$)', 'i');
+
+  var all = [];
+  collect_(rootFolder_(), '', all, 0, '');
+  var hit = all.filter(function (f) { return re.test(f.name); });
+  if (!hit.length) return { ok: false, error: 'Nothing found for ' + b.key };
+
+  var gone = [];
+  for (var i = 0; i < hit.length; i++) {
+    try { DriveApp.getFileById(hit[i].id).setTrashed(true); gone.push(hit[i].path); }
+    catch (err) { /* already gone — not a failure */ }
+  }
+
+  // Append-only: one file per deletion, so two people deleting at once cannot
+  // overwrite each other's entry the way a single shared log would.
+  var stampSafe = new Date().toISOString().replace(/[:.]/g, '-');
+  var log = { type: 'cm-deletion', version: 1, key: b.key, at: new Date().toISOString(),
+              by: String(b.by || '').slice(0, 80), reason: String(b.reason || '').slice(0, 400),
+              files: gone };
+  folderPath_(rootFolder_(), META_DIR + '/deletions').createFile(
+    Utilities.newBlob(JSON.stringify(log, null, 2), 'application/json',
+                      stampSafe + '_' + stem + '.deleted.json'));
+
+  return { ok: true, deleted: gone.length, files: gone, trashed: true };
+}
+function esc_(s) { return String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+
 /* ── the batch read ──────────────────────────────────────────────────────────
    Reading the sidecars one HTTP request at a time meant a few hundred round
    trips — and a few hundred script invocations against a ~90 min/day quota —
@@ -123,25 +239,31 @@ function readRecords_(p) {
   var all = [];
   collect_(rootFolder_(), '', all, 0, '');
 
-  // Oldest first, so a truncated run resumes cleanly from its cursor.
+  // Oldest first, so a truncated run resumes cleanly from its cursor. Records
+  // and correction markers share one cursor: they interleave by write time, and
+  // two cursors would let an edit arrive before the record it corrects.
   var sidecars = all.filter(function (f) { return /\.json$/i.test(f.name) && f.updated > after; })
                     .sort(function (a, b) { return a.updated - b.updated; });
 
-  var records = [], read = 0, bad = 0, truncated = false;
+  var records = [], edits = [], read = 0, bad = 0, truncated = false;
   var cursor = after;
   for (var i = 0; i < sidecars.length; i++) {
     if (read >= max || new Date().getTime() - started > TIME_BUDGET_MS) { truncated = true; break; }
     var f = sidecars[i];
     try {
       var j = JSON.parse(DriveApp.getFileById(f.id).getBlob().getDataAsString());
-      var rs = (j && j.records) || [];
-      for (var k = 0; k < rs.length; k++) { rs[k]._file = f.path; records.push(rs[k]); }
+      if (/\.edit\.json$/i.test(f.name) || (j && j.type === 'cm-record-edit')) {
+        if (j && j.key) edits.push(j);
+      } else if (!/\.deleted\.json$/i.test(f.name)) {
+        var rs = (j && j.records) || [];
+        for (var k = 0; k < rs.length; k++) { rs[k]._file = f.path; records.push(rs[k]); }
+      }
       read++;
     } catch (err) { bad++; }
     cursor = f.updated;          // advance even on a bad file, or it blocks the queue
   }
 
-  var out = { ok: true, records: records, read: read, failed: bad,
+  var out = { ok: true, records: records, edits: edits, read: read, failed: bad,
               pending: Math.max(0, sidecars.length - read - bad),
               truncated: truncated, cursor: cursor, files: all.length,
               photos: all.filter(function (f) { return MEDIA_RE.test(f.name); }).length };

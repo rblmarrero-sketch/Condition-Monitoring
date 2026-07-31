@@ -96,6 +96,14 @@
   .pos dl{margin:6px 0 0;display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:12px;}
   .pos dt{color:var(--muted);} .pos dd{margin:0;text-align:right;}
   .pos .cm{margin-top:6px;font-size:12px;color:var(--ink-2);font-style:italic;}
+  .voidtog{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--ink-2);
+    padding-bottom:9px;cursor:pointer;user-select:none;}
+  .voidtog input{width:16px;height:16px;accent-color:var(--accent);cursor:pointer;}
+  .insp.voided{opacity:.55;}
+  .voidflag{display:inline-block;padding:1px 8px;border-radius:999px;font-size:11px;font-weight:650;
+    background:var(--surface-3);color:var(--ink-2);border:1px dashed var(--border);}
+  .editflag{display:inline-block;padding:1px 7px;border-radius:999px;font-size:10.5px;font-weight:650;
+    background:color-mix(in srgb,var(--accent) 18%,transparent);color:var(--accent);}
   .empty{color:var(--muted);text-align:center;padding:26px 34px;}
   .empty b{display:block;color:var(--ink-2);font-size:13px;font-weight:640;margin-bottom:4px;}
   .empty span{display:block;font-size:12.5px;line-height:1.5;max-width:52ch;margin:0 auto;}
@@ -119,9 +127,16 @@
   /* data-source sheet */
   .ov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:60;display:flex;align-items:flex-start;justify-content:center;padding:40px 16px;overflow:auto;}
   .ov.hidden{display:none;}
-  .sheet{background:var(--page);border:1px solid var(--border);border-radius:16px;max-width:640px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);}
-  .sheethead{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--page);border-radius:16px 16px 0 0;}
-  .sheetbody{padding:18px 20px 22px;} .sheetbody .lede{margin:0 0 16px;color:var(--ink-2);font-size:13px;}
+  /* The sheet is the scroller, not the overlay: a sticky header inside a
+     scrolling overlay pins to the overlay's top, which sits above the sheet's
+     padding — so content scrolled past it in the gap. */
+  .sheet{background:var(--page);border:1px solid var(--border);border-radius:16px;max-width:640px;width:100%;
+    box-shadow:0 20px 60px rgba(0,0,0,.3);display:flex;flex-direction:column;max-height:calc(100vh - 80px);}
+  .sheethead{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px;
+    border-bottom:1px solid var(--border);background:var(--page);border-radius:16px 16px 0 0;flex:none;}
+  .sheethead b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .sheetbody{padding:18px 20px 22px;overflow-y:auto;overscroll-behavior:contain;}
+  .sheetbody .lede{margin:0 0 16px;color:var(--ink-2);font-size:13px;}
   .srccard{border:1px solid var(--border);border-radius:12px;margin-bottom:14px;overflow:hidden;background:var(--surface);}
   .srccard.on{border-color:var(--accent);}
   .srchead{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;background:var(--surface-2);}
@@ -207,6 +222,55 @@
   </div>
 </div>
 
+<!-- Correct, withdraw or remove one inspection -->
+<div id="editOv" class="ov hidden">
+  <div class="sheet">
+    <div class="sheethead"><b id="edTitle">Edit inspection</b><button class="btn" id="edClose">Close</button></div>
+    <div class="sheetbody">
+      <p class="lede">Corrections are saved beside the inspection, never over it — the phone that
+        captured it still holds the original, and the photos and readings are never altered.
+        Your change shows here and in the reports, with your name on it.</p>
+
+      <div class="field"><label for="edBy">Your name</label>
+        <input id="edBy" type="text" placeholder="who is making this change"></div>
+
+      <div id="edItems"></div>
+
+      <div class="field"><label for="edNote">Note on this inspection (optional)</label>
+        <input id="edNote" type="text" placeholder="e.g. plug re-read under magnification"></div>
+
+      <div class="srccard" style="margin-top:16px">
+        <div class="srchead"><span class="ico">⊘</span><div><b>Void this inspection</b>
+          <div class="muted">Withdraws it from every count, chart, action list and report.
+            Nothing is deleted — the photos and readings stay exactly as captured.</div></div></div>
+        <div class="srcbody">
+          <div class="field"><label for="edReason">Reason</label>
+            <input id="edReason" type="text" placeholder="e.g. duplicate of the round on the 10th"></div>
+          <div class="row"><button class="btn" id="edVoid">Void inspection</button>
+            <button class="btn" id="edUnvoid">Un-void</button></div>
+        </div>
+      </div>
+
+      <div class="srccard" id="edDelCard" style="margin-top:14px;border-color:var(--critical)">
+        <div class="srchead"><span class="ico">🗑</span><div><b>Delete permanently</b>
+          <div class="muted">Removes the sidecar, every photo, the signature and any correction.
+            Files go to Drive's <b>trash</b> — recoverable for 30 days — and the deletion is logged
+            with your name and reason. Needs the admin password set in the Apps Script.</div></div></div>
+        <div class="srcbody">
+          <div class="field"><label for="edAdmin">Admin password</label>
+            <input id="edAdmin" type="password" autocomplete="off" placeholder="not the phones' shared secret"></div>
+          <div class="field"><label for="edConfirm">Type the unit number to confirm</label>
+            <input id="edConfirm" type="text" autocomplete="off" placeholder="e.g. TK146"></div>
+          <div class="row"><button class="btn danger" id="edDelete">Delete permanently</button></div>
+        </div>
+      </div>
+
+      <div class="msg" id="edMsg"></div>
+      <div class="row" style="margin-top:14px"><button class="btn primary" id="edSave">Save correction</button></div>
+    </div>
+  </div>
+</div>
+
 <nav class="tabs" id="tabs">
   <button data-tab="overview" class="active">Overview</button>
   <button data-tab="failure">Failure modes</button>
@@ -224,6 +288,8 @@
       <option value="90">Last 90 days</option><option value="365">Last 12 months</option></select></div>
     <div class="field"><label for="fQ">Search</label>
       <input id="fQ" type="search" placeholder="unit, defect, cause, comment…  ( / )"></div>
+    <label class="voidtog" title="Voided inspections are withdrawn from every count, but nothing is deleted">
+      <input type="checkbox" id="fVoid"><span>Show voided</span></label>
   </div>
   <div class="chips" id="chips"></div>
 
@@ -330,6 +396,7 @@ const usesRegister=(ty)=>ty==="INSP"||ty==="TEMP";
 const STORE="cm_dash_records";        // records from "Import a file"
 const DSTORE="cm_dash_drive";         // records pulled from Google Drive, kept so a
                                       // refresh only has to ask for what is new
+const ESTORE="cm_dash_edits";         // corrections + voids, same reason
 
 /* ---------- records: bundled magnetic-plug data + imported entries.json ---------- */
 function fromBundled(){
@@ -342,14 +409,40 @@ function fromBundled(){
 }
 let imported=[]; try{ imported=JSON.parse(localStorage.getItem(STORE))||[]; }catch(e){ imported=[]; }
 let driveRecs=[]; try{ driveRecs=JSON.parse(localStorage.getItem(DSTORE))||[]; }catch(e){ driveRecs=[]; }
+/* Corrections and voids made here, keyed UNIT|DATE|TYPE. They live in their own
+   files in Drive rather than inside the inspection, because the phone that
+   captured it still holds that record and re-syncing would overwrite anything
+   written there. Merged on top at read time — see applyEdits(). */
+let edits={}; try{ edits=JSON.parse(localStorage.getItem(ESTORE))||{}; }catch(e){ edits={}; }
 let RECS=[];
+const recKey=r=>`${r.equip}|${r.date}|${r.type}`;
+function applyEdits(r){
+  const e=edits[recKey(r)];
+  if(!e) return r;
+  const out=Object.assign({},r);
+  out._void=!!e.void; out._reason=e.reason||""; out._editBy=e.by||""; out._editAt=e.at||"";
+  out._note=e.note||"";
+  const per=e.items||{};
+  out._edited=Object.keys(per);
+  out.items=(r.items||[]).map(i=>{
+    const p=per[i.key]; if(!p) return i;
+    // Only fields actually set in the correction win; a blank means "unchanged",
+    // so clearing a value is done by writing "" explicitly, not by omission.
+    const m=Object.assign({},i);
+    Object.keys(p).forEach(k=>{ if(p[k]!==undefined && p[k]!==null) m[k]=p[k]; });
+    m._edited=1;
+    return m;
+  });
+  return out;
+}
 function rebuild(){
   const key=r=>`${r.equip}|${r.date}|${r.type}`;
   const map=new Map();
   fromBundled().forEach(r=>map.set(key(r),r));
   driveRecs.forEach(r=>map.set(key(r),r));         // Drive beats the bundled history
   imported.forEach(r=>map.set(key(r),r));          // a hand-picked file beats both
-  RECS=[...map.values()].sort((a,b)=>(b.date||"").localeCompare(a.date||"")||a.equip.localeCompare(b.equip));
+  RECS=[...map.values()].map(applyEdits)           // corrections last, over whatever won
+    .sort((a,b)=>(b.date||"").localeCompare(a.date||"")||a.equip.localeCompare(b.equip));
 }
 function saveImported(){ try{ localStorage.setItem(STORE,JSON.stringify(imported)); }catch(e){ alert("Storage full — clear old imports."); } }
 /* Losing this cache is survivable — it only means the next refresh re-reads the
@@ -358,6 +451,11 @@ function saveDrive(){
   try{ localStorage.setItem(DSTORE,JSON.stringify(driveRecs)); }
   catch(e){ localStorage.removeItem(DSTORE); localStorage.removeItem("cm_drive_cursor");
             console.warn("Drive cache too big for localStorage — will re-read next time."); }
+}
+function saveEdits(){
+  try{ localStorage.setItem(ESTORE,JSON.stringify(edits)); }
+  catch(e){ localStorage.removeItem("cm_drive_cursor");   // re-read them next time
+            console.warn("Edit cache too big for localStorage."); }
 }
 
 /* ---------- filters ---------- */
@@ -376,7 +474,11 @@ function filtered(){
   const t=$("fType").value, c=$("fClass").value, days=+$("fRange").value;
   const cutoff=days? new Date(Date.now()-days*864e5).toISOString().slice(0,10):null;
   const q=($("fQ").value||"").trim().toLowerCase();
+  const showVoid=$("fVoid")&&$("fVoid").checked;
   return RECS.filter(r=>{
+    // A voided inspection is withdrawn, not deleted: it must not reach any KPI,
+    // Pareto, action row or report, but it is still there to look at on request.
+    if(r._void&&!showVoid) return false;
     if(t&&r.type!==t) return false;
     if(c&&r.cls!==c) return false;
     if(cutoff&&(r.date||"")<cutoff) return false;
@@ -583,6 +685,15 @@ window.CMDash={
     saveDrive(); rebuild(); refreshControls(); renderAll(); refreshSources();
   },
   driveCount(){ return driveRecs.length; },
+  setEdits(list,opts){
+    if(opts&&opts.replace) edits={};
+    // Last write wins, and a stale one arriving late must not undo a newer edit.
+    (list||[]).forEach(e=>{ if(!e||!e.key) return;
+      const cur=edits[e.key];
+      if(!cur || String(e.at||"")>=String(cur.at||"")) edits[e.key]=e; });
+    saveEdits(); rebuild(); refreshControls(); renderAll(); refreshSources();
+  },
+  editCount(){ return Object.keys(edits).length; },
   recsFor(equip){ return RECS.filter(r=>r.equip===equip); },
   allRecs(){ return RECS; },
   rerender(){ renderAll(); },
@@ -592,12 +703,18 @@ function renderHistory(){
   $("histTitle").textContent=`Inspection history — ${e||""}`;
   $("histSub").textContent=recs.length?`${recs.length} inspection(s) · newest first`:"No inspections recorded.";
   if(!recs.length){ $("history").innerHTML=`<div class="empty">No data.</div>`; return; }
+  // History deliberately shows voided rounds — this is where you look at one and
+  // un-void it. Everywhere that counts things filters them out instead.
   $("history").innerHTML=recs.map(rec=>`
-    <div class="insp"><div class="head">
+    <div class="insp${rec._void?" voided":""}"><div class="head">
       <span class="date">${esc(rec.date||"")}</span>
       <span class="tag">${esc(TYPE_LABEL[rec.type]||rec.type)}</span>
+      ${rec._void?`<span class="voidflag" title="${esc(rec._reason||"")}">VOID${rec._reason?" · "+esc(rec._reason):""}</span>`:""}
+      ${!rec._void&&rec._editAt?`<span class="editflag" title="corrected ${esc(rec._editAt)} by ${esc(rec._editBy||"—")}">corrected</span>`:""}
       ${rec.smu?`<span class="meta">SMU <b>${esc(rec.smu)}</b></span>`:""}
-      <span class="spacer"></span>${rec.by?`<span class="meta">${esc(rec.by)}</span>`:""}${rec.sup?`<span class="meta">✍ ${esc(rec.sup)}</span>`:""}${rec.gps?`<a class="meta" href="https://www.google.com/maps?q=${rec.gps.lat},${rec.gps.lon}" target="_blank" rel="noopener">📍 ${rec.gps.lat.toFixed(4)}, ${rec.gps.lon.toFixed(4)}</a>`:""}</div>
+      <span class="spacer"></span>${rec.by?`<span class="meta">${esc(rec.by)}</span>`:""}${rec.sup?`<span class="meta">✍ ${esc(rec.sup)}</span>`:""}${rec.gps?`<a class="meta" href="https://www.google.com/maps?q=${rec.gps.lat},${rec.gps.lon}" target="_blank" rel="noopener">📍 ${rec.gps.lat.toFixed(4)}, ${rec.gps.lon.toFixed(4)}</a>`:""}
+      <button class="btn" data-edit="${esc(recKey(rec))}" style="padding:3px 10px;font-size:12px">✎ Edit</button></div>
+      ${rec._note?`<div class="sub" style="margin:2px 0 8px">📝 ${esc(rec._note)}</div>`:""}
       <div class="pos-grid">${rec.items.map(i=>{
         const s=i.sev||GRADE_SEV[i.grade]||""; const src=photoSrc(i,rec);
         const cap=esc(`${rec.equip} · ${i.key} · ${rec.date}`);
@@ -613,8 +730,168 @@ function renderHistory(){
           </div></div>`; }).join("")}</div></div>`).join("");
   $("history").querySelectorAll("img.photo").forEach(img=>img.onclick=()=>{ $("lbimg").src=img.src; $("lbcap").textContent=img.dataset.cap; $("lb").classList.add("open"); });
   // If the photos are in Drive rather than on disk, fetch this unit's and repaint once.
+  $("history").querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>openEdit(b.dataset.edit));
   pullDrivePhotos(recs, renderHistory);
 }
+
+/* ---------- correcting, voiding and deleting one inspection ---------- */
+const ACTION_OPTS=[["","— none —"],["MON","Monitor"],["SCH","Schedule repair"],
+  ["REP","Repair now"],["REP_MON","Repair at next service"],["SAM","Take oil sample"],
+  ["INV","Investigate"],["NA","No action"]];
+let edKey=null;
+/* keepMsg: re-opened after a save, to show the change applied. Without it the
+   re-render wiped the "Saved" line the user had just earned, so a successful
+   correction looked like nothing had happened. */
+function openEdit(key,keepMsg){
+  const rec=RECS.find(r=>recKey(r)===key); if(!rec) return;
+  edKey=key;
+  const held=keepMsg?$("edMsg").textContent:"";
+  $("edTitle").textContent=`${rec.equip} · ${TYPE_LABEL[rec.type]||rec.type} · ${rec.date}`;
+  $("edBy").value=localStorage.getItem("cm_dash_who")||"";
+  $("edNote").value=rec._note||"";
+  $("edReason").value=rec._reason||"";
+  $("edAdmin").value=""; $("edConfirm").value=""; $("edMsg").textContent=held;
+  $("edUnvoid").style.display=rec._void?"":"none";
+  $("edVoid").style.display=rec._void?"none":"";
+
+  const defOpts=`<option value="">— none —</option>`
+    +(TAX.defects||[]).map(d=>`<option value="${esc(d.c)}">${esc(d.c)} · ${esc(d.en||d.name||"")}</option>`).join("");
+  const cauOpts=`<option value="">— none —</option>`
+    +(TAX.causes||[]).map(c=>`<option value="${esc(c.c||c.code||"")}">${esc(c.en||c.name||c.c||"")}</option>`).join("");
+
+  $("edItems").innerHTML=(rec.items||[]).map((i,n)=>{
+    const sev=i.sev||GRADE_SEV[i.grade]||"";
+    return `<div class="srccard" style="margin-bottom:10px"><div class="srchead">
+      <span class="ico">${i.grade?esc(i.grade):"·"}</span><div><b>${esc(i.key)}</b>
+      <div class="muted">${esc(i.label||"")}${i.comment?` — “${esc(i.comment)}”`:""}</div></div>
+      <span class="state">${sev?esc(SEV[sev]?SEV[sev].l:sev):"no severity"}</span></div>
+      <div class="srcbody">
+        <div class="row">
+          <div class="field"><label>Severity</label><select data-f="sev" data-k="${esc(i.key)}">
+            <option value="">— none —</option>
+            ${["NOF","INC","DEG","CRI"].map(s=>`<option value="${s}"${s===sev?" selected":""}>${esc(SEV[s].l)}</option>`).join("")}
+          </select></div>
+          <div class="field"><label>Recommendation</label><select data-f="action" data-k="${esc(i.key)}">
+            ${ACTION_OPTS.map(([v,l])=>`<option value="${esc(v)}"${v&&v===i.action?" selected":""}>${esc(l)}</option>`).join("")}
+          </select></div>
+          <div class="field"><label>WO / notification</label>
+            <input data-f="wo" data-k="${esc(i.key)}" type="text" value="${esc(i.wo||"")}"></div>
+        </div>
+        <div class="row">
+          <div class="field" style="flex:1"><label>Defect</label>
+            <select data-f="defectCode" data-k="${esc(i.key)}">${defOpts}</select></div>
+          <div class="field" style="flex:1"><label>Direct cause</label>
+            <select data-f="causeCode" data-k="${esc(i.key)}">${cauOpts}</select></div>
+        </div>
+        <div class="field"><label>Comment</label>
+          <input data-f="comment" data-k="${esc(i.key)}" type="text" value="${esc(i.comment||"")}"></div>
+      </div></div>`;
+  }).join("")||`<div class="empty"><b>Nothing to correct</b><span>This inspection has no positions recorded.</span></div>`;
+
+  // Pre-select the codes the record already carries, without trusting innerHTML
+  (rec.items||[]).forEach(i=>{
+    const d=$("edItems").querySelector(`[data-f="defectCode"][data-k="${CSS.escape(i.key)}"]`);
+    if(d&&i.defectCode) d.value=i.defectCode;
+    const c=$("edItems").querySelector(`[data-f="causeCode"][data-k="${CSS.escape(i.key)}"]`);
+    if(c&&i.causeCode) c.value=i.causeCode;
+  });
+  // Remember what each control started as. The fields show the current values so
+  // you can see what you are changing — which means "has a value" cannot mean
+  // "the user set it". Without this, opening the panel and pressing Save
+  // rewrote every field, and rewriting the defect from its code silently
+  // replaced the inspector's wording with the taxonomy's.
+  $("edItems").querySelectorAll("[data-f]").forEach(el=>{ el.dataset.init=el.value; });
+  $("editOv").classList.remove("hidden");
+}
+$("edClose").onclick=()=>$("editOv").classList.add("hidden");
+$("editOv").onclick=e=>{ if(e.target.id==="editOv") $("editOv").classList.add("hidden"); };
+
+/* Only what actually moved. Comparing against the value the control opened with
+   means an untouched field is never written, and clearing one on purpose still
+   is — "" differs from what it started as. */
+function collectEdit(){
+  const items={};
+  $("edItems").querySelectorAll("[data-f]").forEach(el=>{
+    const k=el.dataset.k, f=el.dataset.f, v=(el.value||"").trim();
+    if(v===(el.dataset.init||"")) return;
+    (items[k]||(items[k]={}))[f]=v;
+    if(!v) return;                       // cleared: nothing to derive from it
+    if(f==="action"){ const o=ACTION_OPTS.find(a=>a[0]===v); if(o) items[k].actionLabel=o[1]; }
+    if(f==="defectCode"){ const d=DEF[v]; if(d) items[k].defect=d.en||d.name||v;
+      if(d&&d.iso) items[k].iso=d.iso; }
+    if(f==="causeCode"){ const c=(TAX.causes||[]).find(x=>(x.c||x.code)===v);
+      if(c) items[k].cause=c.en||c.name||v; }
+  });
+  return items;
+}
+/* Each save writes one complete marker, but the panel only reports what moved
+   this time — so a later void or a one-field tweak would drop every earlier
+   correction. Layer this change over the one already stored. */
+function mergedItems(){
+  const prior=(edits[edKey]&&edits[edKey].items)||{};
+  const now=collectEdit(), out={};
+  Object.keys(prior).forEach(k=>out[k]=Object.assign({},prior[k]));
+  Object.keys(now).forEach(k=>out[k]=Object.assign({},out[k]||{},now[k]));
+  return out;
+}
+async function edPost(extra,busyBtn){
+  const msg=$("edMsg");
+  if(!drvOn()){ msg.textContent="❌ Set up Google Drive first — corrections are stored there."; return false; }
+  const by=$("edBy").value.trim();
+  if(!by){ msg.textContent="Put your name in first — a correction has to be attributable."; return false; }
+  try{ localStorage.setItem("cm_dash_who",by); }catch(e){}
+  const btns=["edSave","edVoid","edUnvoid","edDelete"]; btns.forEach(b=>$(b).disabled=true);
+  msg.textContent="Saving…";
+  try{
+    await window.CMDrive.saveEdit(Object.assign({ key:edKey, by }, extra));
+    // Apply locally straight away so the change is visible without a re-read
+    window.CMDash.setEdits([Object.assign({ key:edKey, by, at:new Date().toISOString() }, extra)]);
+    msg.textContent="✅ Saved.";
+    return true;
+  }catch(err){ msg.textContent="❌ "+(err&&err.message||err); return false; }
+  finally{ btns.forEach(b=>$(b).disabled=false); }
+}
+$("edSave").onclick=async ()=>{
+  const rec=RECS.find(r=>recKey(r)===edKey);
+  if(await edPost({ items:mergedItems(), note:$("edNote").value.trim(),
+                    void:!!(rec&&rec._void), reason:(rec&&rec._reason)||"" })) openEdit(edKey,true);
+};
+$("edVoid").onclick=async ()=>{
+  const reason=$("edReason").value.trim();
+  if(!reason){ $("edMsg").textContent="Give a reason — that is the point of voiding rather than deleting."; return; }
+  if(await edPost({ void:true, reason, items:mergedItems(), note:$("edNote").value.trim() })) openEdit(edKey,true);
+};
+$("edUnvoid").onclick=async ()=>{
+  if(await edPost({ void:false, reason:"", items:mergedItems(), note:$("edNote").value.trim() })) openEdit(edKey,true);
+};
+$("edDelete").onclick=async ()=>{
+  const msg=$("edMsg"), rec=RECS.find(r=>recKey(r)===edKey);
+  if(!rec) return;
+  if(!drvOn()){ msg.textContent="❌ Set up Google Drive first."; return; }
+  const by=$("edBy").value.trim();
+  if(!by){ msg.textContent="Put your name in first — the deletion is logged against it."; return; }
+  const admin=$("edAdmin").value;
+  if(!admin){ msg.textContent="The admin password is required. It is set in the Apps Script, not in the app."; return; }
+  // Typing the unit is the last thing between a mis-click and losing a round.
+  if($("edConfirm").value.trim().toUpperCase()!==String(rec.equip).toUpperCase()){
+    msg.textContent=`Type “${rec.equip}” to confirm.`; return; }
+  const reason=$("edReason").value.trim();
+  const btns=["edSave","edVoid","edUnvoid","edDelete"]; btns.forEach(b=>$(b).disabled=true);
+  msg.textContent="Deleting…";
+  try{
+    const r=await window.CMDrive.remove(edKey, admin, by, reason);
+    // Drop it here too, or it would linger until the next full reload
+    driveRecs=driveRecs.filter(x=>recKey(x)!==edKey);
+    imported=imported.filter(x=>recKey(x)!==edKey);
+    delete edits[edKey];
+    saveDrive(); saveImported(); saveEdits();
+    rebuild(); refreshControls(); renderAll(); refreshSources();
+    msg.textContent=`✅ ${r.deleted} file(s) moved to Drive's trash — recoverable there for 30 days.`;
+    $("edAdmin").value=""; $("edConfirm").value="";
+  }catch(err){ msg.textContent="❌ "+(err&&err.message||err); }
+  finally{ btns.forEach(b=>$(b).disabled=false); }
+};
+$("fVoid").onchange=()=>renderAll();
 
 /* ---------- import / folder / misc ---------- */
 $("importBtn").onclick=()=>$("importFile").click();

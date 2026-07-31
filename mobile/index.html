@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Truck Inspection — Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=46">
+<link rel="manifest" href="manifest.webmanifest?v=47">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -331,7 +331,7 @@
   <div class="syncbar" id="syncBar"></div>
   <button class="btn ghost" id="reportBtn" style="margin-bottom:16px">📄 <span data-i18n="btn_report">PDF report</span></button>
 
-  <div class="ver">build v46 · 2026-07-31 · Folder per type ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver">build v47 · 2026-07-31 · Void & correct ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <div class="bottombar">
@@ -435,16 +435,16 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="jsQR.js?v=46"></script>
-<script src="qrcode.js?v=46"></script>
-<script src="upload-defaults.js?v=46"></script>
-<script src="taxonomy.js?v=46"></script>
-<script src="taxonomy2.js?v=46"></script>
-<script src="assets.js?v=46"></script>
-<script src="components.js?v=46"></script>
-<script src="temp-limits.js?v=46"></script>
-<script src="jspdf.umd.min.js?v=46"></script>
-<script src="html2canvas.min.js?v=46"></script>
+<script src="jsQR.js?v=47"></script>
+<script src="qrcode.js?v=47"></script>
+<script src="upload-defaults.js?v=47"></script>
+<script src="taxonomy.js?v=47"></script>
+<script src="taxonomy2.js?v=47"></script>
+<script src="assets.js?v=47"></script>
+<script src="components.js?v=47"></script>
+<script src="temp-limits.js?v=47"></script>
+<script src="jspdf.umd.min.js?v=47"></script>
+<script src="html2canvas.min.js?v=47"></script>
 <script>
 /* ============================================================================
    EQUIPMENT CLASSES & INSPECTION TYPES  —  EDIT here for your fleet.
@@ -663,6 +663,7 @@ const I18N = {
     up_timeout:"timed out — signal too weak to finish the upload",
     team_timeout:"Google Drive did not answer in 20 s — weak signal. Try again in coverage.",
     team_more:"More is waiting — tap again.",
+    team_voided:"{n} withdrawn by the office.",
     team_oftype:"{n} × {ty}", team_other:"· {n} more under other types — switch type above.",
     team_none_type:"None of this type yet — switch type above to see the others.",
     team_old:"Update the Google script to use this (Deploy → Manage deployments → New version).",
@@ -768,6 +769,7 @@ const I18N = {
     up_timeout:"истекло время — слишком слабый сигнал для выгрузки",
     team_timeout:"Google Drive не ответил за 20 с — слабый сигнал. Повторите в зоне покрытия.",
     team_more:"Есть ещё — нажмите ещё раз.",
+    team_voided:"Отозвано офисом: {n}.",
     team_oftype:"{n} × {ty}", team_other:"· ещё {n} других типов — переключите тип выше.",
     team_none_type:"Этого типа пока нет — переключите тип выше.",
     team_old:"Обновите скрипт Google (Deploy → Manage deployments → New version).",
@@ -1378,6 +1380,30 @@ function teamRow(r){
   return { u:(r.equip||"").toUpperCase(), d:r.date||"", t:r.type||"MP",
            by:r.by||"", g:worst };
 }
+/* A round voided in the dashboard has been withdrawn. It must stop counting as
+   "done" here too, or the due list keeps saying a unit was covered when the
+   office has already decided that round does not stand. Voids arrive as their
+   own markers on the same read, keyed the same way. */
+function teamVoid(eds){
+  if(!eds || !eds.length) return 0;
+  const have=new Map(teamAll().map(x=>[teamKey(x),x]));
+  const h=histAll(); let n=0;
+  for(const e of eds){
+    const p=String(e.key||"").split("|"); if(p.length!==3) continue;
+    const k=`${p[2]}|${p[0].toUpperCase()}|${p[1]}`;
+    if(e.void){
+      if(have.delete(k)) n++;
+      // The last-done date has to be recomputed from what is left, or a voided
+      // round would keep a unit looking inspected.
+      const hk=p[2]+"|"+p[0].toUpperCase();
+      const rest=[...have.values()].filter(x=>x.t===p[2]&&x.u===p[0].toUpperCase())
+                  .map(x=>x.d).sort();
+      if(rest.length) h[hk]=rest[rest.length-1]; else delete h[hk];
+    }
+  }
+  if(n){ teamSave([...have.values()]); histSave(h); }
+  return n;
+}
 function teamMerge(recs,replace){
   // replace = a full re-read, so rows deleted in Drive should disappear too.
   // The due-list index is deliberately NOT reset: a last-done date is worth
@@ -1445,12 +1471,14 @@ async function teamPull(manual,full){
       return;
     }
     const {added,saved}=teamMerge(j.records||[], !!full);
+    const voided=teamVoid(j.edits||[]);   // after the merge, so a re-uploaded record is voided too
     // Only claim to have them once they are actually stored. Advancing the
     // cursor after a failed write loses those inspections permanently.
     if(saved && j.cursor) localStorage.setItem(TEAM_CUR,String(j.cursor));
     const total=teamAll().length;
     msg.textContent=(!saved ? t("team_full")
       : (added?t("team_new").replace("{n}",added):t("team_upto")).replace("{t}",total))
+      +(voided?" "+t("team_voided").replace("{n}",voided):"")
       // A truncated reply means the folder holds more than one call returns.
       +(saved&&j.truncated?" "+t("team_more"):"");
     renderTeam(); renderDue(); renderLastDone();
@@ -1870,7 +1898,7 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
    has accepted every one of its files. */
 const DEST_META={ gas:{label:"Google Drive"}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
 const DEST_IDS=["gas","pa","post"];
-const BUILD="46";
+const BUILD="47";
 const DEFAULT_DESTS=((window.UPLOAD_DEFAULTS||{}).dests)||[];
 /* Parsed once and reused — see the note by the write below. */
 let destsCache=null, destsRaw=null;

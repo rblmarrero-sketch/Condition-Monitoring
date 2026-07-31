@@ -130,6 +130,47 @@ Files already in Drive are not moved — the split applies from the next upload.
 old ones into the new folders if you want the history tidy; nothing reads the folder
 layout, so it is cosmetic.
 
+### Correcting, voiding and deleting an inspection
+
+**Equipment history → ✎ Edit** on any inspection.
+
+**Correct** severity, recommendation, WO, defect, direct cause and comments, per position,
+plus a note on the round. Your name is required and travels with the change.
+
+Corrections are written to `_meta/<UNIT>_<DATE>_<TYPE>.edit.json`, **never into the
+inspection's own sidecar**. The phone that captured it still holds that record, and
+re-syncing overwrites the sidecar — a correction stored there would vanish without trace.
+The clients merge the marker over the record when they read, so the original readings,
+photos and signature are never altered. Only fields you actually change are recorded.
+
+**Void** withdraws a round from every count, chart, action list and report, with a reason
+attached. Nothing is deleted. Voided rounds still appear in Equipment history, greyed and
+flagged, and **Show voided** in the controls brings them back into view. The phones honour
+it too: a voided round drops out of *In the system* and stops counting as done in the
+due list. **Un-void** puts it back.
+
+**Delete** is switched off unless you set `ADMIN_SECRET` in the Apps Script:
+
+```js
+const ADMIN_SECRET = '';   // deletion disabled while empty — the safe default
+```
+
+Set it only if you want it, and **never put that value in the app, in
+`upload-defaults.js`, or anywhere in the repo**. The `/exec` URL is handed to every phone
+and is effectively public; this password is the only thing between that URL and someone
+emptying the folder in a single request. You type it into the dashboard when deleting; it
+is not stored.
+
+Deleting removes the sidecar, every photo, the signature and any correction — moved to
+Drive's **trash**, recoverable for 30 days, never purged — and writes an entry to
+`_meta/deletions/` recording what went, when, who and why. The dashboard also asks you to
+type the unit number to confirm.
+
+> Prefer **Void** to Delete. Inspection photos are evidence for warranty claims and
+> failure investigations, and "who deleted TK146's plug photos?" is a bad conversation to
+> have with no answer. Delete is for test records and mistakes that should never have
+> existed.
+
 ### What the rest of the team has uploaded
 
 The phones read that same endpoint, so every inspector sees the whole team's work, not

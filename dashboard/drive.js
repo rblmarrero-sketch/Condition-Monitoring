@@ -87,7 +87,7 @@
     let at = opts.full ? 0 : cursor();
     say(resuming ? "Checking Drive for new inspections…" : "Reading inspections from Drive…");
 
-    const recs = [];
+    const recs = [], eds = [];
     let pages = 0, failed = 0, files = 0, photos = 0, truncated = false, pending = 0;
 
     try {
@@ -96,6 +96,7 @@
         const r = await api({ action: "records", after: at, index: pages === 0 ? 1 : 0 });
         pages++;
         (r.records || []).forEach(x => recs.push(x));
+        (r.edits || []).forEach(x => eds.push(x));
         (r.index || []).forEach(f => { index[f.name] = { id: f.id, size: f.size }; });
         failed += r.failed || 0;
         files = r.files || files;
@@ -116,11 +117,12 @@
     // Commit the cursor only once the records are actually in, or a failure
     // here would silently skip those inspections on every future refresh.
     if (recs.length || opts.full) window.CMDash.setDriveRecords(recs, { replace: !!opts.full });
+    if (eds.length || opts.full) window.CMDash.setEdits(eds, { replace: !!opts.full });
     try { localStorage.setItem(LS_CUR, String(at)); } catch (e) {}
 
     const held = window.CMDash.driveCount();
-    return { records: recs.length, held, files, photos, failed, truncated, pending, pages,
-             incremental: resuming,
+    return { records: recs.length, edits: eds.length, held, files, photos, failed,
+             truncated, pending, pages, incremental: resuming,
              note: recs.length ? "" : (held ? "" : "No inspections (*.json) in that folder yet.") };
   }
 
@@ -192,6 +194,34 @@
     return names.length;
   }
 
+  /* ---- 3. corrections, voids and deletion ----
+     POSTed as text/plain so the browser treats it as a "simple" request: an Apps
+     Script web app cannot answer a CORS preflight. Same reason the secret rides
+     in the body rather than an Authorization header. */
+  async function post(body) {
+    const c = cfg();
+    if (!c.url) throw new Error("No Drive URL configured.");
+    const r = await fetch(c.url, { method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(Object.assign({ secret: c.sec || "" }, body)) });
+    const text = await r.text();
+    let j = null; try { j = JSON.parse(text); } catch (e) {}
+    if (!j) throw new Error(r.ok
+      ? "Unexpected reply — check the deployment's “Who has access” is Anyone."
+      : "HTTP " + r.status + " — " + text.slice(0, 160));
+    if (j.ok === false) throw new Error(j.error || "Drive refused the request");
+    return j;
+  }
+
+  /* A correction is stored as its own file, never written into the inspection's
+     sidecar — the phone still holds that record and re-syncing would erase it. */
+  const saveEdit = (payload) => post(Object.assign({ op: "edit" }, payload));
+
+  /* Guarded by ADMIN_SECRET in the Apps Script, which is deliberately not the
+     secret the phones carry. Files are trashed, not purged, and logged. */
+  const remove = (key, admin, by, reason) =>
+    post({ op: "delete", key, admin, by, reason });
+
   /* Health check without pulling anything: the bare /exec URL reports the folder.
      Also reports whether the fast path is deployed, since the usual reason it is
      not is an edit that was saved but never released as a new version. */
@@ -211,7 +241,7 @@
   }
 
   window.CMDrive = {
-    load, ensurePhotos, configured, ping,
+    load, ensurePhotos, configured, ping, saveEdit, remove,
     get url() { return cfg().url; },
     get secret() { return cfg().sec; },
     get legacy() { return legacy; },

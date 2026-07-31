@@ -382,6 +382,31 @@ This needs the read actions in `docs/google-upload.gs` — re-paste that file an
 new version if yours predates them. Until you do, the dashboard falls back to the old
 one-file-at-a-time path automatically and says so.
 
+### Correcting, voiding and deleting
+
+**Equipment history → ✎ Edit** on any inspection.
+
+| | What it does |
+|---|---|
+| **Correct** | Severity, recommendation, WO, defect, direct cause and comments, per position, plus a note on the round. Only what you actually change is recorded, and your name goes with it. |
+| **Void** | Withdraws the round from every count, chart, action list and report, with a reason. Nothing is deleted; **Show voided** brings it back into view, and **Un-void** reverses it. |
+| **Delete** | Sidecar, photos, signature and corrections to Drive's **trash** (30 days), logged with who and why. Off unless `ADMIN_SECRET` is set in the Apps Script. |
+
+Corrections are stored as their own files in `_meta/`, never written into the inspection's
+sidecar — the phone that captured it still holds that record and re-syncing overwrites the
+sidecar, so a correction stored there would disappear silently. The clients merge the
+marker over the record at read time; the original readings, photos and signature are never
+altered, and the change is visible as "corrected" with the author and timestamp.
+
+Voids reach the phones too: a withdrawn round drops out of **In the system** and stops
+counting as done in the due list, so nobody skips a unit on the strength of a round the
+office has retracted.
+
+> Prefer Void to Delete. Inspection photos are evidence for warranty claims and failure
+> investigations. Delete is for test records and mistakes that should never have existed —
+> and it needs a password that is deliberately **not** the one the phones carry, because
+> the upload URL is effectively public.
+
 ### Finding things once the data is in
 
 * **Search** (or press `/`) matches unit, defect, cause, comment, inspector and WO across
