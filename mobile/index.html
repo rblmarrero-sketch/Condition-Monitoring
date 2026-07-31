@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Truck Inspection — Capture</title>
-<link rel="manifest" href="manifest.webmanifest">
+<link rel="manifest" href="manifest.webmanifest?v=39">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -316,7 +316,7 @@
   <div class="syncbar" id="syncBar"></div>
   <button class="btn ghost" id="reportBtn" style="margin-bottom:16px">📄 <span data-i18n="btn_report">PDF report</span></button>
 
-  <div class="ver">build v38 · 2026-07-31 · Clearer upload settings · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver">build v39 · 2026-07-31 · Cache-busted assets · <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <div class="bottombar">
@@ -381,6 +381,7 @@
       <button class="btn primary" id="saveSet" data-i18n="set_save">Save</button>
     </div>
     <div class="hint" id="setMsg" style="margin-top:12px"></div>
+    <div class="hint" id="setDiag" style="margin-top:10px"></div>
 
     <div class="dest" style="margin-top:18px">
       <div class="dhead"><span data-i18n="set_prov">Set up the other phones</span></div>
@@ -418,16 +419,16 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="jsQR.js"></script>
-<script src="qrcode.js"></script>
-<script src="upload-defaults.js"></script>
-<script src="taxonomy.js"></script>
-<script src="taxonomy2.js"></script>
-<script src="assets.js"></script>
-<script src="components.js"></script>
-<script src="temp-limits.js"></script>
-<script src="jspdf.umd.min.js"></script>
-<script src="html2canvas.min.js"></script>
+<script src="jsQR.js?v=39"></script>
+<script src="qrcode.js?v=39"></script>
+<script src="upload-defaults.js?v=39"></script>
+<script src="taxonomy.js?v=39"></script>
+<script src="taxonomy2.js?v=39"></script>
+<script src="assets.js?v=39"></script>
+<script src="components.js?v=39"></script>
+<script src="temp-limits.js?v=39"></script>
+<script src="jspdf.umd.min.js?v=39"></script>
+<script src="html2canvas.min.js?v=39"></script>
 <script>
 /* ============================================================================
    EQUIPMENT CLASSES & INSPECTION TYPES  —  EDIT here for your fleet.
@@ -1579,6 +1580,7 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
    has accepted every one of its files. */
 const DEST_META={ gas:{label:"Google Drive"}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
 const DEST_IDS=["gas","pa","post"];
+const BUILD="39";
 const DEFAULT_DESTS=((window.UPLOAD_DEFAULTS||{}).dests)||[];
 function loadDests(){
   let d=null; try{ d=JSON.parse(localStorage.getItem("up_dests")||"null"); }catch(e){}
@@ -1754,6 +1756,10 @@ function markDestState(){ DEST_IDS.forEach(id=>{
 DEST_IDS.forEach(id=>{ $(id+"On").addEventListener("change",markDestState);
   $(id+"Url").addEventListener("input",markDestState); });
 function openSettings(){ destsToForm(loadDests()); $("upPx").value=localStorage.getItem("up_px")||"0";
+  const n=DEFAULT_DESTS.filter(d=>d.url).length;
+  $("setDiag").textContent = `build v${BUILD} · `+(n
+    ? `${n} built-in destination(s) available`
+    : `no built-in destinations — upload-defaults.js has no URLs (or is a cached old copy)`);
   $("setMsg").textContent=""; $("provBox").classList.add("hidden"); $("setOv").classList.remove("hidden"); }
 function persistSettings(){ saveDests(formToDests()); localStorage.setItem("up_px",$("upPx").value); }
 $("setBtn").onclick=openSettings;
@@ -1824,10 +1830,26 @@ if("serviceWorker" in navigator && location.protocol==="https:"){ let reloaded=f
   navigator.serviceWorker.register("sw.js").then(reg=>{ reg.update&&reg.update(); }).catch(()=>{}); }
 
 /* ===================== force-update (clears cache + service worker) ===================== */
+/* Every asset the app loads. Listed here so "Update" can re-fetch each one:
+   clearing the service worker and Cache Storage is NOT enough, because the
+   browser's own HTTP cache still holds them and a reload does not bust the
+   <script src> URLs — only the page's own URL. cache:"reload" fetches past the
+   HTTP cache AND replaces what is stored there, so the reload that follows
+   picks up the new files. */
+const SHELL_ASSETS=["index.html","manifest.webmanifest","jsQR.js","qrcode.js","upload-defaults.js",
+  "taxonomy.js","taxonomy2.js","assets.js","components.js","temp-limits.js",
+  "jspdf.umd.min.js","html2canvas.min.js","sw.js"];
 const fu=$("forceUpdate"); if(fu) fu.onclick=async (e)=>{ e.preventDefault();
+  const old=fu.textContent; fu.textContent="⟳ …";
   try{ if("serviceWorker" in navigator){ const rs=await navigator.serviceWorker.getRegistrations(); await Promise.all(rs.map(r=>r.unregister())); } }catch(_){}
   try{ if(window.caches){ const ks=await caches.keys(); await Promise.all(ks.map(k=>caches.delete(k))); } }catch(_){}
-  location.reload(true); };
+  await Promise.all(SHELL_ASSETS.map(u=>
+    fetch(u+"?v="+BUILD,{cache:"reload"}).catch(()=>
+      fetch(u,{cache:"reload"}).catch(()=>{}))));   // versioned and bare, both get refreshed
+  fu.textContent=old;
+  location.replace(location.pathname+"?fresh="+Date.now()); };
+// …and drop that marker again so it does not linger in the address bar
+if(/[?&]fresh=/.test(location.search)) history.replaceState(null,"",location.pathname);
 
 /* ===================== init ===================== */
 updateEquipBtn(); renderGps();
