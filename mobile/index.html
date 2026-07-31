@@ -305,6 +305,7 @@
     <div class="duelist" id="teamList"></div>
     <div class="row" style="margin-top:12px">
       <button class="btn ghost" id="teamRefresh">⟳ <span data-i18n="btn_team_refresh">Check for new</span></button>
+      <button class="btn ghost" id="teamReload" data-i18n-title="team_reload_hint">↻ <span data-i18n="btn_team_reload">Reload all</span></button>
     </div>
     <div class="hint" id="teamMsg" style="margin-top:8px"></div>
     <div class="hint" style="margin-top:8px" data-i18n="team_hint">Everything the whole team has uploaded, not just this phone. Refreshes itself after each upload and is kept for offline — so the due list below knows about rounds someone else did.</div>
@@ -330,7 +331,7 @@
   <div class="syncbar" id="syncBar"></div>
   <button class="btn ghost" id="reportBtn" style="margin-bottom:16px">📄 <span data-i18n="btn_report">PDF report</span></button>
 
-  <div class="ver">build v44 · 2026-07-31 · Team sync ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver">build v45 · 2026-07-31 · Stability ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <div class="bottombar">
@@ -655,6 +656,11 @@ const I18N = {
     team_offline:"Offline — showing what was last pulled.",
     team_unreach:"Could not reach Google Drive — weak signal, or the /exec URL in ⚙ is wrong.",
     team_checking:"Checking Google Drive…",
+    btn_team_reload:"Reload all",
+    team_reload_hint:"Forget what is stored here and read the whole folder again.",
+    team_full:"⚠ No room left on this phone — export or clear old inspections, then reload.",
+    m_storage_full:["No room left","This phone's storage is full. Export and clear some inspections, then try again."],
+    up_timeout:"timed out — signal too weak to finish the upload",
     team_timeout:"Google Drive did not answer in 20 s — weak signal. Try again in coverage.",
     team_more:"More is waiting — tap again.",
     team_oftype:"{n} × {ty}", team_other:"· {n} more under other types — switch type above.",
@@ -755,6 +761,11 @@ const I18N = {
     team_offline:"Нет сети — показано последнее загруженное.",
     team_unreach:"Не удалось связаться с Google Drive — слабый сигнал или неверный адрес /exec в ⚙.",
     team_checking:"Проверяем Google Drive…",
+    btn_team_reload:"Загрузить всё",
+    team_reload_hint:"Забыть сохранённое здесь и перечитать всю папку.",
+    team_full:"⚠ На телефоне нет места — выгрузите или очистите старые осмотры и повторите.",
+    m_storage_full:["Нет места","Память телефона заполнена. Выгрузите и очистите часть осмотров и повторите."],
+    up_timeout:"истекло время — слишком слабый сигнал для выгрузки",
     team_timeout:"Google Drive не ответил за 20 с — слабый сигнал. Повторите в зоне покрытия.",
     team_more:"Есть ещё — нажмите ещё раз.",
     team_oftype:"{n} × {ty}", team_other:"· ещё {n} других типов — переключите тип выше.",
@@ -1269,14 +1280,30 @@ $("saveBtn").onclick=async ()=>{
 const DUE_DEFAULT={MP:90, FC:90, INSP:30, TEMP:30};
 function dueInterval(ty){ const v=parseInt(localStorage.getItem("due_int_"+ty),10);
   return (v>0)?v:(DUE_DEFAULT[ty]||30); }
-function histAll(){ try{ return JSON.parse(localStorage.getItem("cm_hist")||"{}"); }catch(e){ return {}; } }
-function histSave(h){ localStorage.setItem("cm_hist",JSON.stringify(h)); }
+/* Up to one entry per unit per type — ~4000 on this fleet. renderDue() runs it
+   on every keystroke in the interval box, so re-parsing it each time was real,
+   felt lag. Parsed once, replaced on write. */
+let histCache=null;
+function histAll(){ return histCache || (histCache=(()=>{
+  try{ return JSON.parse(localStorage.getItem("cm_hist")||"{}"); }catch(e){ return {}; }
+})()); }
+/* noteDone() calls this from the Save path, straight after dbPut. An unguarded
+   throw here left the record stored but the form un-reset and sync never
+   started — the inspection looked lost. Storage is best-effort; the record in
+   IndexedDB is the thing that matters. */
+function histSave(h){ histCache=h; try{ localStorage.setItem("cm_hist",JSON.stringify(h)); }catch(e){} }
 function noteDone(rec){ if(!rec.equip||!rec.date) return; const h=histAll();
   const k=(rec.type||"MP")+"|"+rec.equip; if(!h[k]||h[k]<rec.date) h[k]=rec.date; histSave(h); }
 function daysBetween(iso){ const d=new Date(iso+"T00:00:00"); if(isNaN(d)) return null;
   return Math.floor((new Date(todayISO()+"T00:00:00")-d)/86400000); }
-$("dueInt").addEventListener("input",()=>{ const v=parseInt($("dueInt").value,10);
-  if(v>0) localStorage.setItem("due_int_"+type,String(v)); renderDue(); });
+// Typing "90" fired three full re-renders of a 1000-row list. Coalesce them.
+let dueT=null;
+$("dueInt").addEventListener("input",()=>{
+  clearTimeout(dueT);
+  dueT=setTimeout(()=>{ const v=parseInt($("dueInt").value,10);
+    if(v>0) try{ localStorage.setItem("due_int_"+type,String(v)); }catch(e){}
+    renderDue(); }, 250);
+});
 $("dueScope").onchange=()=>{ localStorage.setItem("due_scope",$("dueScope").value); renderDue(); };
 function renderDue(){
   const box=$("dueList"); if(!box) return;
@@ -1313,13 +1340,30 @@ function renderDue(){
    same cm_hist index the due list reads — one source of "last done", whoever
    did it. Records only: no photos are fetched here. */
 const TEAM_KEY="cm_team", TEAM_CUR="cm_team_cursor", TEAM_MAX=2000;
-function teamAll(){ try{ return JSON.parse(localStorage.getItem(TEAM_KEY)||"[]"); }catch(e){ return []; } }
+/* Parsing the whole cache on every call was costing a JSON.parse of up to a
+   megabyte each time a unit was picked — renderLastDone, renderTeam and
+   teamMerge all call this. Hold it in memory and invalidate on write. */
+let teamCache=null;
+function teamAllUncached(){ try{ return JSON.parse(localStorage.getItem(TEAM_KEY)||"[]"); }catch(e){ return []; } }
+function teamAll(){ return teamCache || (teamCache=teamAllUncached()); }
+/* Returns false when the write did not stick. The caller MUST NOT advance the
+   cursor in that case: the records were dropped, and an advanced cursor means
+   "already have them", so they would never be asked for again. */
 function teamSave(a){
   a.sort((x,y)=>(y.d||"").localeCompare(x.d||""));
-  try{ localStorage.setItem(TEAM_KEY,JSON.stringify(a.slice(0,TEAM_MAX))); }
-  // A full quota must not wedge the feature: drop the cursor so the next pull
-  // starts clean rather than believing it already has everything.
-  catch(e){ localStorage.removeItem(TEAM_KEY); localStorage.removeItem(TEAM_CUR); }
+  const keep=a.slice(0,TEAM_MAX);
+  try{ localStorage.setItem(TEAM_KEY,JSON.stringify(keep)); teamCache=keep; return true; }
+  catch(e){
+    // Out of room. Halve it and try once more before giving up — a phone with a
+    // big photo queue should still get the recent rounds rather than nothing.
+    try{
+      const half=keep.slice(0,Math.max(100,Math.floor(keep.length/2)));
+      localStorage.setItem(TEAM_KEY,JSON.stringify(half)); teamCache=half; return true;
+    }catch(e2){
+      localStorage.removeItem(TEAM_KEY); localStorage.removeItem(TEAM_CUR);
+      teamCache=[]; return false;
+    }
+  }
 }
 const teamKey=r=>`${r.t}|${r.u}|${r.d}`;
 /* One compact row per inspection — the phone needs who/when/how bad, not the
@@ -1328,14 +1372,17 @@ const GRADE_RANK={A:0,B:1,C:2,X:3};
 // GRADE_HEX is declared further down this script; this list renders before it.
 const GRADE_TINT={A:"#0ca30c",B:"#fab219",C:"#ec835a",X:"#d03b3b"};
 function teamRow(r){
-  let worst="", n=0;
-  (r.items||[]).forEach(i=>{ const g=i.grade||""; if(!g) return; n++;
+  let worst="";
+  (r.items||[]).forEach(i=>{ const g=i.grade||"";
     if(GRADE_RANK[g]!=null && (worst===""||GRADE_RANK[g]>GRADE_RANK[worst])) worst=g; });
   return { u:(r.equip||"").toUpperCase(), d:r.date||"", t:r.type||"MP",
-           by:r.by||"", g:worst, n };
+           by:r.by||"", g:worst };
 }
-function teamMerge(recs){
-  const have=new Map(teamAll().map(x=>[teamKey(x),x]));
+function teamMerge(recs,replace){
+  // replace = a full re-read, so rows deleted in Drive should disappear too.
+  // The due-list index is deliberately NOT reset: a last-done date is worth
+  // keeping even when its row has aged out of this bounded cache.
+  const have=replace ? new Map() : new Map(teamAll().map(x=>[teamKey(x),x]));
   const h=histAll(); let added=0, hist=0;
   for(const r of recs){
     const row=teamRow(r); if(!row.u||!row.d) continue;
@@ -1345,13 +1392,13 @@ function teamMerge(recs){
     const hk=row.t+"|"+row.u;
     if(!h[hk]||h[hk]<row.d){ h[hk]=row.d; hist++; }
   }
-  teamSave([...have.values()]); histSave(h);
-  return {added,hist};
+  const saved=teamSave([...have.values()]); histSave(h);
+  return {added,hist,saved};
 }
 let teamBusy=false, teamAt=0, teamAbort=null, teamRun=0;
 const TEAM_MIN_GAP=60000;    // automatic pulls only; the button always goes
 const TEAM_TIMEOUT=20000;    // pit signal can leave a fetch hanging for ever
-async function teamPull(manual){
+async function teamPull(manual,full){
   const msg=$("teamMsg"); if(!msg) return;
   if(teamBusy){
     // A hung request must never wedge the button. fetch() has no timeout of its
@@ -1376,7 +1423,14 @@ async function teamPull(manual){
   const timer=setTimeout(()=>{ try{ ac.abort(); }catch(_){ } }, TEAM_TIMEOUT);
   teamBusy=true; $("teamRefresh").disabled=true;
   try{
-    const after=Number(localStorage.getItem(TEAM_CUR)||0)||0;
+    // The cursor means "I already hold everything up to here". If the cache is
+    // gone — cleared, evicted, a fresh install of the same origin — that claim
+    // is false, and asking "what is new since X" returns nothing for ever.
+    // Self-heal by starting over whenever we hold nothing.
+    // Note the cursor is only *cleared* here, never on a path that could fail —
+    // it is rewritten below from the reply, and only if the save stuck.
+    let after=Number(localStorage.getItem(TEAM_CUR)||0)||0;
+    if(full || (after && !teamAll().length)) after=0;
     const q=new URLSearchParams({action:"records", after:String(after), index:"0"});
     if(g.sec) q.set("secret",g.sec);
     const res=await fetch(g.url+(g.url.indexOf("?")<0?"?":"&")+q.toString(),
@@ -1390,12 +1444,15 @@ async function teamPull(manual){
       if(manual) msg.textContent=/unknown action/i.test(j.error||"") ? t("team_old") : "⚠ "+j.error;
       return;
     }
-    const {added}=teamMerge(j.records||[]);
-    if(j.cursor) localStorage.setItem(TEAM_CUR,String(j.cursor));
+    const {added,saved}=teamMerge(j.records||[], !!full);
+    // Only claim to have them once they are actually stored. Advancing the
+    // cursor after a failed write loses those inspections permanently.
+    if(saved && j.cursor) localStorage.setItem(TEAM_CUR,String(j.cursor));
     const total=teamAll().length;
-    msg.textContent=(added?t("team_new").replace("{n}",added):t("team_upto")).replace("{t}",total)
+    msg.textContent=(!saved ? t("team_full")
+      : (added?t("team_new").replace("{n}",added):t("team_upto")).replace("{t}",total))
       // A truncated reply means the folder holds more than one call returns.
-      +(j.truncated?" "+t("team_more"):"");
+      +(saved&&j.truncated?" "+t("team_more"):"");
     renderTeam(); renderDue(); renderLastDone();
   }catch(e){
     if(!mine()) return;                      // superseded by a newer press
@@ -1449,6 +1506,15 @@ function renderLastDone(){
   el.classList.remove("hidden");
 }
 $("teamRefresh").onclick=()=>teamPull(true);
+/* Two phones can hold different subsets: an installed app and a browser tab do
+   not always share storage (iOS keeps them apart), and each keeps its own
+   cursor. Nothing can reconcile that from the inside — so offer the one thing
+   that always works, a clean re-read of the whole folder.
+
+   It does NOT wipe first. Clearing and then failing to reach Drive — the exact
+   situation in the pit — would leave the inspector with nothing at all. The
+   fetched set replaces the stored one only once it has actually arrived. */
+$("teamReload").onclick=()=>teamPull(true,true);
 
 $("dueImport").onclick=()=>$("dueFile").click();
 $("dueFile").onchange=async (e)=>{ const f=e.target.files[0]; e.target.value=""; if(!f) return;
@@ -1781,6 +1847,7 @@ if(SR){ let rec=null, listening=false;
 function applyLang(){ document.documentElement.lang=lang;
   document.querySelectorAll("[data-i18n]").forEach(el=>el.textContent=t(el.dataset.i18n));
   document.querySelectorAll("[data-i18n-ph]").forEach(el=>el.placeholder=t(el.dataset.i18nPh));
+  document.querySelectorAll("[data-i18n-title]").forEach(el=>el.title=t(el.dataset.i18nTitle));
   fillClassSel(); fillTypeSel();
   $("secPosTitle").textContent=TYPE_META[type].title[lang]||TYPE_META[type].title.en;
   $("posLabel").textContent=`${curItem} — ${itemLabel(curItem)}`;
@@ -1803,9 +1870,12 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
    has accepted every one of its files. */
 const DEST_META={ gas:{label:"Google Drive"}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
 const DEST_IDS=["gas","pa","post"];
-const BUILD="44";
+const BUILD="45";
 const DEFAULT_DESTS=((window.UPLOAD_DEFAULTS||{}).dests)||[];
+/* Parsed once and reused — see the note by the write below. */
+let destsCache=null, destsRaw=null;
 function loadDests(){
+  if(destsCache) return destsCache;
   let d=null; try{ d=JSON.parse(localStorage.getItem("up_dests")||"null"); }catch(e){}
   if(!Array.isArray(d)){
     // Carry over the old single-mode settings if this phone had any.
@@ -1834,10 +1904,19 @@ function loadDests(){
     if(!cur.sec)    cur.sec=def.sec||"";
     if(!cur.folder) cur.folder=def.folder||"";
   });
-  localStorage.setItem("up_dests",JSON.stringify(d));
-  return DEST_IDS.map(id=>Object.assign({id,on:false,url:"",sec:"",folder:""}, d.find(x=>x.id===id)||{}));
+  // This used to write unconditionally, and loadDests() is reached from the UP.on
+  // getter — so every renderSync() did a JSON.stringify plus a synchronous
+  // localStorage write, and on a phone with no room left it threw from inside a
+  // render. Persist only a genuine change, and never let storage break the app.
+  const json=JSON.stringify(d);
+  if(json!==destsRaw){ destsRaw=json; try{ localStorage.setItem("up_dests",json); }catch(e){} }
+  destsCache=DEST_IDS.map(id=>Object.assign({id,on:false,url:"",sec:"",folder:""}, d.find(x=>x.id===id)||{}));
+  return destsCache;
 }
-function saveDests(d){ localStorage.setItem("up_dests",JSON.stringify(d)); }
+function saveDests(d){
+  destsCache=null; destsRaw=null;
+  try{ localStorage.setItem("up_dests",JSON.stringify(d)); }catch(e){ dlg(t("m_storage_full")); }
+}
 function activeDests(){ return loadDests().filter(d=>d.on && d.url); }
 const UP={ get on(){ return activeDests().length>0; } };
 // Folder placeholders so the destination rolls over on its own:
@@ -1892,6 +1971,21 @@ async function putFile(name, blob, type){
   if(errs.length) throw new Error(errs.join(" · "));
   return true;
 }
+/* fetch() has no timeout. On a signal that connects and then delivers nothing —
+   the pit's normal state — an upload could sit open indefinitely, leaving
+   syncing=true, the strip stuck on "Uploading…" and Sync now dead until the app
+   was force-closed. Every upload is now bounded; a timeout is just a failure,
+   so the record stays pending and retries like any other. */
+const UP_TIMEOUT=90000;         // generous: a full-size photo on weak signal
+function fetchT(url,opts,ms){
+  const ac=new AbortController();
+  const t=setTimeout(()=>{ try{ ac.abort(); }catch(_){ } }, ms||UP_TIMEOUT);
+  return fetch(url,Object.assign({},opts,{signal:ac.signal}))
+    .catch(e=>{ throw (e && e.name==="AbortError") ? new Error(t_up_timeout()) : e; })
+    .finally(()=>clearTimeout(t));
+}
+const t_up_timeout=()=>t("up_timeout");
+
 async function putOne(UP, name, blob, type, ctx){
   const folder=expandFolder(UP.folder||"", ctx);
   if(UP.id==="gas"){
@@ -1899,8 +1993,8 @@ async function putOne(UP, name, blob, type, ctx){
     // "simple" request: text/plain body, no custom headers, secret inside the JSON.
     const body={ name, folder, contentType:type||blob.type||"application/octet-stream",
                  file: await blobToB64(blob), secret: UP.sec||"" };
-    const r=await fetch(UP.url,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
-                                body:JSON.stringify(body)});
+    const r=await fetchT(UP.url,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+                                 body:JSON.stringify(body)});
     if(!r.ok) throw new Error(await httpErr(r));
     let j=null; try{ j=JSON.parse(await r.text()); }catch(e){}
     if(j && j.ok===false) throw new Error(j.error||"Apps Script rejected the upload");
@@ -1910,11 +2004,11 @@ async function putOne(UP, name, blob, type, ctx){
   if(UP.id==="pa"){
     const body={ name, folder, contentType:type||blob.type||"application/octet-stream",
                  file: await blobToB64(blob) };
-    const r=await fetch(UP.url,{method:"POST",headers:upHeaders(UP.sec,{"Content-Type":"application/json"}),body:JSON.stringify(body)});
+    const r=await fetchT(UP.url,{method:"POST",headers:upHeaders(UP.sec,{"Content-Type":"application/json"}),body:JSON.stringify(body)});
     if(!r.ok) throw new Error(await httpErr(r)); return true;
   }
   const fd=new FormData(); fd.append("file",blob,name); fd.append("name",name); fd.append("folder",folder);
-  const r=await fetch(UP.url,{method:"POST",headers:upHeaders(UP.sec),body:fd});
+  const r=await fetchT(UP.url,{method:"POST",headers:upHeaders(UP.sec),body:fd});
   if(!r.ok) throw new Error(await httpErr(r)); return true;
 }
 // surface the server's own error text (Power Automate explains 400s in the body)
@@ -2054,22 +2148,26 @@ function openSettings(){ destsToForm(loadDests()); $("upPx").value=localStorage.
     : `no built-in destinations — upload-defaults.js has no URLs (or is a cached old copy)`)
     + ` · in use: ${where.join(", ")||"none"}`;
   $("setMsg").textContent=""; $("provBox").classList.add("hidden"); $("setOv").classList.remove("hidden"); }
-function persistSettings(){ saveDests(formToDests()); localStorage.setItem("up_px",$("upPx").value); }
+function persistSettings(){ saveDests(formToDests());
+  try{ localStorage.setItem("up_px",$("upPx").value); }catch(e){} }
 $("setBtn").onclick=openSettings;
 $("setClose").onclick=()=>$("setOv").classList.add("hidden");
 $("saveSet").onclick=()=>{ persistSettings(); $("setOv").classList.add("hidden"); renderSync(); syncNow(); };
 $("testUp").onclick=async ()=>{ const m=$("setMsg");
+  if($("testUp").disabled) return;
   persistSettings();
   const on=activeDests();
   if(!on.length){ m.textContent=t("set_needurl"); return; }
-  m.textContent=t("set_testing");
+  m.textContent=t("set_testing"); $("testUp").disabled=true;
+  try{
   const blob=new Blob(["Condition Monitoring upload test "+new Date().toISOString()],{type:"text/plain"});
   const out=[];
   for(const d of on){
     try{ await putOne(d,"connection_test.txt",blob,"text/plain"); out.push("✅ "+DEST_META[d.id].label); }
     catch(e){ out.push("❌ "+DEST_META[d.id].label+" — "+String(e.message||e)); }
   }
-  m.textContent=out.join("\n"); };
+  m.textContent=out.join("\n");
+  } finally { $("testUp").disabled=false; } };
 
 /* ===================== provisioning: QR / link =====================
    Typing a 250-character flow URL into six phones is where this falls over, so a
@@ -2086,7 +2184,7 @@ function applyCfg(b64){
     const j=JSON.parse(decodeURIComponent(escape(atob(String(b64).replace(/-/g,"+").replace(/_/g,"/")))));
     if(!j || j.v!==1 || !Array.isArray(j.dests)) return false;
     saveDests(DEST_IDS.map(id=>Object.assign({id,on:false,url:"",sec:"",folder:""}, j.dests.find(x=>x.id===id)||{})));
-    if(j.px!=null) localStorage.setItem("up_px",String(j.px));
+    if(j.px!=null) try{ localStorage.setItem("up_px",String(j.px)); }catch(e){}
     return true;
   }catch(e){ return false; }
 }
@@ -2118,6 +2216,14 @@ addEventListener("online",()=>syncNow());
 /* ===================== connectivity + SW ===================== */
 function setNet(){ const on=navigator.onLine; $("netStatus").textContent=on?t("net_online"):t("net_offline"); $("netStatus").className="st "+(on?"on":"off"); }
 addEventListener("online",setNet); addEventListener("offline",setNet);
+/* Settings and caches are now held in memory to keep rendering cheap. Another
+   tab — or the installed app alongside the browser — writing the same origin's
+   storage would otherwise leave this one acting on a stale copy. */
+addEventListener("storage",e=>{
+  if(!e.key || e.key==="up_dests"){ destsCache=null; destsRaw=null; renderSync(); }
+  if(!e.key || e.key===TEAM_KEY){ teamCache=null; renderTeam(); renderLastDone(); }
+  if(!e.key || e.key==="cm_hist"){ histCache=null; renderDue(); }
+});
 // isSecureContext, not a protocol check: http://localhost is a secure context too,
 // and excluding it meant the offline path could never be exercised outside production.
 if("serviceWorker" in navigator && window.isSecureContext){ let reloaded=false;

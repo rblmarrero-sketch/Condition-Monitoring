@@ -16,7 +16,7 @@
    where JavaScript was expected leaves window.ASSETS / window.TAX2 undefined, and
    the equipment, defect and cause lists come up blank with no error the inspector
    can see. */
-const BUILD = "44";
+const BUILD = "45";
 const CACHE = "plug-capture-v" + BUILD;
 const SHELL = [
   "./",
@@ -86,13 +86,23 @@ self.addEventListener("fetch", (e) => {
   }
 
   e.respondWith((async () => {
+    // Network first, but not for ever. "Offline" is the easy case — the fetch
+    // fails at once. The pit's normal case is worse: a signal that connects and
+    // then delivers nothing, where an untimed fetch leaves the app on a blank
+    // screen. Give the network a short window, then serve what we have.
+    const cached = () => caches.match(req).then(h => h || caches.match(req, { ignoreSearch: true }));
     try {
-      const res = await fetch(req, { cache: isDoc ? "reload" : "default" });
+      const res = await withTimeout(fetch(req, { cache: isDoc ? "reload" : "default" }), NET_WAIT);
       if (res && res.ok) (await caches.open(CACHE)).put(req, res.clone());
       return res;
     } catch (err) {
-      const hit = await caches.match(req) || await caches.match(req, { ignoreSearch: true });
-      if (hit) return hit;
+      const hit = await cached();
+      if (hit) {
+        // Served stale because the network was slow, not absent — refresh the
+        // copy in the background so the next start is current.
+        if (err && err.name === "TimeoutError") e.waitUntil(revalidate(req, isDoc));
+        return hit;
+      }
       // Only a page navigation may fall back to the shell.
       if (isDoc) {
         const shell = await caches.match("./index.html") || await caches.match("./");
@@ -102,3 +112,23 @@ self.addEventListener("fetch", (e) => {
     }
   })());
 });
+
+/* How long a slow network may hold up a start before the cache wins. Long
+   enough that a normal connection always beats it, short enough that a stalled
+   one is not felt as a hang. */
+const NET_WAIT = 3500;
+function withTimeout(p, ms) {
+  return new Promise((resolve, reject) => {
+    const t = setTimeout(() => {
+      const e = new Error("network too slow"); e.name = "TimeoutError"; reject(e);
+    }, ms);
+    p.then(r => { clearTimeout(t); resolve(r); },
+           e => { clearTimeout(t); reject(e); });
+  });
+}
+async function revalidate(req, isDoc) {
+  try {
+    const res = await fetch(req, { cache: isDoc ? "reload" : "default" });
+    if (res && res.ok) (await caches.open(CACHE)).put(req, res.clone());
+  } catch (_) { /* still no network — the cached copy stands */ }
+}
