@@ -110,6 +110,7 @@
   <button data-tab="failure">Failure modes</button>
   <button data-tab="actions">Action register</button>
   <button data-tab="equipment">Equipment history</button>
+  <button data-tab="reports">Reports</button>
 </nav>
 
 <main>
@@ -170,10 +171,44 @@
   </section>
 </main>
 
+  <section id="tab-reports" class="hidden">
+    <div class="section">
+      <h2>PDF report</h2>
+      <div class="sub">Bilingual EN&nbsp;/&nbsp;RU. Each inspection type prints its own layout —
+        magnetic plug shows debris and a condition timeline, temperature shows readings against
+        warn&nbsp;/&nbsp;alarm limits, the walk-around shows coded defects and actions.</div>
+      <div class="controls">
+        <div class="field"><label for="rScope">Report</label><select id="rScope">
+          <option value="unit">Equipment — one machine + trend</option>
+          <option value="round">Round — one date, all units</option>
+          <option value="month">Fleet summary — one month</option>
+        </select></div>
+        <div class="field"><label for="rTarget" id="rTargetLbl">Equipment</label><select id="rTarget"></select></div>
+        <div class="field"><label for="rPhotos">Photos</label><select id="rPhotos">
+          <option value="1">Include photos</option>
+          <option value="0">No photos (smaller file)</option>
+        </select></div>
+        <div class="field"><label for="rScale">Quality</label><select id="rScale">
+          <option value="1.8">Standard</option>
+          <option value="2.4">High (larger file)</option>
+        </select></div>
+        <button class="btn primary" id="rGo">📄 Generate PDF</button>
+      </div>
+      <div id="rMsg" class="sub" style="margin:0"></div>
+      <div class="sub" style="margin-top:14px">
+        Photos and supervisor signatures are read from the folder you opened with
+        <b>📂 Photo folder</b> — open it first if you want them in the report.
+      </div>
+    </div>
+  </section>
+
 <div class="lb" id="lb"><button class="x" id="lbx">&times;</button><img id="lbimg" alt=""><div class="cap" id="lbcap"></div></div>
 
 <script src="../data/magnetic_plug.js"></script>
 <script src="../mobile/taxonomy2.js"></script>
+<script src="../mobile/temp-limits.js"></script>
+<script src="../mobile/jspdf.umd.min.js"></script>
+<script src="../mobile/html2canvas.min.js"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 const TAX=window.TAX2||{groups:{},defects:[],causes:[],isoMech:{}};
@@ -387,8 +422,37 @@ $("themeBtn").onclick=()=>{ const c=document.documentElement.getAttribute("data-
   const dark=c?c==="dark":matchMedia("(prefers-color-scheme: dark)").matches;
   document.documentElement.setAttribute("data-theme",dark?"light":"dark"); };
 function showTab(t){ $("tabs").querySelectorAll("button").forEach(b=>b.classList.toggle("active",b.dataset.tab===t));
-  ["overview","failure","actions","equipment"].forEach(x=>$("tab-"+x).classList.toggle("hidden",x!==t)); }
+  ["overview","failure","actions","equipment","reports"].forEach(x=>$("tab-"+x).classList.toggle("hidden",x!==t)); }
 $("tabs").onclick=e=>{ const b=e.target.closest("button[data-tab]"); if(b) showTab(b.dataset.tab); };
+
+/* ---------- reports ---------- */
+function refreshReportTargets(){
+  const scope=$("rScope").value, sel=$("rTarget"); const prev=sel.value;
+  let opts=[];
+  if(scope==="unit"){ $("rTargetLbl").textContent="Equipment";
+    opts=[...new Set(RECS.map(r=>r.equip))].sort().map(u=>[u,u]); }
+  else if(scope==="round"){ $("rTargetLbl").textContent="Inspection date";
+    opts=[...new Set(RECS.map(r=>r.date).filter(Boolean))].sort().reverse()
+      .map(d=>[d,`${d} · ${new Set(RECS.filter(r=>r.date===d).map(r=>r.equip)).size} unit(s)`]); }
+  else { $("rTargetLbl").textContent="Month";
+    opts=[...new Set(RECS.map(r=>(r.date||"").slice(0,7)).filter(Boolean))].sort().reverse()
+      .map(m=>[m,`${m} · ${RECS.filter(r=>(r.date||"").slice(0,7)===m).length} inspection(s)`]); }
+  sel.innerHTML=opts.map(([v,l])=>`<option value="${v}">${l}</option>`).join("")||`<option value="">— no data —</option>`;
+  if(opts.some(o=>o[0]===prev)) sel.value=prev;
+}
+$("rScope").onchange=refreshReportTargets;
+$("rGo").onclick=async ()=>{
+  const go=$("rGo"), msg=$("rMsg"), target=$("rTarget").value;
+  if(!target){ msg.textContent="No inspections to report on yet — import an entries.json first."; return; }
+  go.disabled=true; msg.textContent="Building report…";
+  try{
+    const n=await window.CMReport.generate($("rScope").value, target,
+      {photos:$("rPhotos").value==="1", scale:parseFloat($("rScale").value)},
+      (i,total)=>{ msg.textContent=`Rendering page ${i} of ${total}…`; });
+    msg.textContent=`Done — ${n} page(s) downloaded.`;
+  }catch(err){ msg.textContent="Report failed: "+(err&&err.message||err); }
+  finally{ go.disabled=false; }
+};
 
 /* ---------- init ---------- */
 function refreshControls(){
@@ -401,6 +465,7 @@ function refreshControls(){
   $("equipSel").innerHTML=units.map(u=>`<option value="${u}">${u}</option>`).join("");
   if(units.includes(prev)) $("equipSel").value=prev;
   $("sevLegend").innerHTML=Object.entries(SEV).map(([k,v])=>`<span><span class="sw" style="background:${SEVC[k]}"></span>${v.l}</span>`).join("");
+  refreshReportTargets();
   $("sub").textContent=`${RECS.length} inspection(s) · ${units.length} unit(s)`+(imported.length?` · ${imported.length} imported`:"");
 }
 function renderAll(){ renderKpis(); renderFleet(); renderFailure(); renderActions(); renderHistory(); }
@@ -408,5 +473,6 @@ function renderAll(){ renderKpis(); renderFleet(); renderFailure(); renderAction
 $("equipSel").onchange=renderHistory;
 rebuild(); refreshControls(); renderAll();
 </script>
+<script src="report.js"></script>
 </body>
 </html>

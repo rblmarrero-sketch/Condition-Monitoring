@@ -1,3 +1,8 @@
+# ⚠️  OUT OF SYNC — do not re-run over mobile/taxonomy2.js without checking the output.
+# The shipped taxonomy2.js (132 defects, 14 groups, plus the isoMech / isoMode maps) was
+# produced by a later iteration than this script, which still emits 129 defects, 12 groups
+# and no ISO maps. Re-running it here silently drops data. Bring the script up to the
+# shipped output before using it again; until then, edit taxonomy2.js directly.
 import xlrd, re, json
 sh=xlrd.open_workbook("/root/.claude/uploads/1f3ebdba-c3da-5675-b557-e45dfee4b57e/cf490d29-Defect_type.xls").sheet_by_index(0)
 def split_en_ru(nm):

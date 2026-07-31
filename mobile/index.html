@@ -355,6 +355,7 @@
 <script src="taxonomy2.js"></script>
 <script src="assets.js"></script>
 <script src="components.js"></script>
+<script src="temp-limits.js"></script>
 <script src="jspdf.umd.min.js"></script>
 <script src="html2canvas.min.js"></script>
 <script>
@@ -709,32 +710,8 @@ function causesFor(defectCode){
   return list.concat(external);
 }
 
-/* --- Temperature limits (°C): [warn, alarm]. Matched on component name/code. --- */
-const TEMP_LIMITS=[
-  [/bearing|подшип/i,            70,  85],
-  [/hub|wheel end|ступиц/i,      80,  95],
-  [/final drive|бортов/i,        85, 100],
-  [/gearbox|reducer|редуктор/i,  80,  95],
-  [/transmission|трансмис/i,     95, 110],
-  [/differential|дифференц/i,    90, 105],
-  [/hydraulic|гидро/i,           80,  95],
-  [/coolant|radiator|охлажд/i,   95, 105],
-  [/engine|двигател/i,          100, 110],
-  [/exhaust|выхлоп/i,           450, 550],
-  [/brake|retard|тормоз/i,      150, 200],
-  [/motor|generator|alternator/i,80,  95],
-  [/panel|cabinet|electric|электр/i, 60, 75],
-  [/compressor|компрессор/i,     90, 105],
-  [/conveyor|idler|roller|ролик/i,60, 75],
-];
-function tempLimit(codeOrName){ const t=String(codeOrName||"");
-  for(const [re,w,a] of TEMP_LIMITS) if(re.test(t)) return {warn:w,alarm:a};
-  return {warn:80,alarm:95};   // generic default
-}
-function tempSeverity(v,lim){ if(v==null||v==="") return "";
-  const n=parseFloat(v); if(isNaN(n)) return "";
-  if(n>=lim.alarm) return "CRI"; if(n>=lim.warn) return "DEG";
-  if(n>=lim.warn-10) return "INC"; return "NOF"; }
+/* Temperature limits + tempLimit()/tempSeverity() come from temp-limits.js
+   (shared with the dashboard report builder so a reading is judged identically). */
 
 /* ===================== asset register ===================== */
 const ASSETS = window.ASSETS || [];

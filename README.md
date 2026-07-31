@@ -4,8 +4,7 @@ An interactive condition-monitoring dashboard for the mine's haul-truck fleet.
 Select an equipment unit and see the **full history** of its inspections, with
 grade, hours, comments, and the actual inspection **photos**.
 
-The first component is live; the others are stubbed in the UI and will be added
-the same way:
+Four inspection types are live; Oil Analysis will be added the same way:
 
 | Component | Status |
 |-----------|--------|
@@ -59,7 +58,7 @@ To add an inspection later, just add another **date folder** with photos and
 click *Open photo folder* again. There's a ready-made example in `Photos/` you
 can point at right now.
 
-**Grades are optional.** Either click a photo and pick `A/B/C/D` in the app
+**Grades are optional.** Either click a photo and pick `A/B/C/X` in the app
 (remembered in your browser), or put the grade in the file name
 (`4C_C.jpg` or `TK146_4C_2026-10-15_C.jpg`).
 
@@ -67,7 +66,7 @@ can point at right now.
 
 Each photo card has type-in fields, filled in straight on the dashboard:
 
-- **Grade** (`A/B/C/D/X`) — click to set the plug's condition.
+- **Grade** (`A/B/C/X`, X worst) — click to set the plug's condition.
 - **Particle count**, **Component hrs**, **Oil hrs**, **Comment** — per plug position.
 - **SMU / machine hrs** — once per inspection (the machine's hour meter).
 
@@ -186,7 +185,14 @@ expect the register to open with 64 rows from that round alone.
 ```
 Condition-Monitoring/
 ├── dashboard/
-│   └── index.html              # the dashboard (open this)
+│   ├── index.html              # the dashboard (open this)
+│   └── report.js               # bilingual PDF report builder
+├── mobile/
+│   ├── index.html              # offline Field Capture app (PWA)
+│   ├── temp-limits.js          # temperature warn/alarm limits (shared with the report)
+│   ├── taxonomy2.js            # merged 1C + HME defect/cause taxonomy, ISO 14224 aligned
+│   ├── assets.js  components.js# asset register + L7/L8/L9 component templates
+│   └── sw.js  manifest.webmanifest
 ├── data/
 │   └── magnetic_plug.js        # generated data (window.CM_DATA)
 ├── assets/
@@ -284,6 +290,37 @@ and video inlined) and **📥 Receive round** on the other phone to merge them. 
 keyed `TYPE|UNIT|DATE`, so the same unit inspected on both phones merges into one record
 instead of doubling: missing items are added, the richer capture wins on a clash, and both
 inspectors' names are kept.
+
+---
+
+## PDF reports (dashboard → Reports tab)
+
+Bilingual **EN / RU** — every heading and column shows both, so nothing is lost between
+expat and local staff. Three scopes share one section library:
+
+| Scope | Answers | Contains |
+|---|---|---|
+| **Equipment** | "how is this machine trending?" | KPIs, severity mix, a **condition timeline** per component across every round, then each inspection in full |
+| **Round** | "what came out of today's shift?" | KPIs, then a **cross-unit action table** sorted worst-first — what the supervisor reads — then per-unit detail |
+| **Fleet summary** | "what is the month telling us?" | KPIs, coverage by type, Pareto of failure modes / direct causes / ISO 14224 mechanisms, worst units, outstanding actions |
+
+**Each inspection type prints its own layout**, because they answer different questions:
+
+* **Magnetic Plug** — position, grade, severity, particle count, component/oil hours, coded
+  defect and cause, with the debris photos in a horizontal strip.
+* **Filter Cut** — filter, grade, what the cut media showed, cause, action.
+* **Inspection** — coded defect (with ISO mechanism/mode), direct cause, action and WO,
+  plus a compact "checked, no findings" line so coverage is provable.
+* **Temperature** — reading, ambient, rise, and a **limit bar** showing the reading against
+  that component's warn/alarm thresholds, with exceedances called out above the table.
+
+Pages are laid out as real A4 boxes and flowed block by block, so a table row is never
+sliced in half and a section heading never strands at the foot of a page. Photos and
+supervisor signatures come from the folder opened with **📂 Photo folder** — open it before
+generating if you want them included.
+
+The temperature limits are shared with the app (`mobile/temp-limits.js`), so a reading is
+judged identically on the phone and in the report.
 
 ---
 

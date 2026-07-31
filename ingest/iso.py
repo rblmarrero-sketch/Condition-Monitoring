@@ -2,6 +2,7 @@
 MECH={
  "1.1":("Leakage","Утечка"),"1.2":("Vibration","Вибрация"),"1.3":("Clearance / alignment failure","Зазор / несоосность"),
  "1.4":("Deformation","Деформация"),"1.5":("Looseness","Ослабление"),"1.6":("Sticking","Заедание"),
+ "2.1":("Cavitation","Кавитация"),
  "2.2":("Corrosion","Коррозия"),"2.3":("Erosion","Эрозия"),"2.4":("Wear","Износ"),"2.5":("Breakage","Разрушение"),
  "2.6":("Fatigue","Усталость"),"2.7":("Overheating","Перегрев"),"2.8":("Burst","Разрыв"),
  "3.1":("Control failure","Отказ управления"),"3.2":("No signal / indication / alarm","Нет сигнала / индикации"),
@@ -12,9 +13,12 @@ MECH={
  "4.5":("Earth / isolation fault","Замыкание на землю / изоляция"),
  "5.1":("Blockage / plugged","Засорение"),"5.2":("Contamination","Загрязнение"),
  "5.3":("Miscellaneous external influence","Прочее внешнее воздействие"),
- "6.1":("No cause found","Причина не установлена"),"6.3":("Other","Прочее"),"6.4":("Unknown","Неизвестно"),
+ "6.1":("No cause found","Причина не установлена"),"6.2":("Combined causes","Совокупность причин"),
+ "6.3":("Other","Прочее"),"6.4":("Unknown","Неизвестно"),
  "1.0":("Mechanical – general","Механический – общий"),"2.0":("Material – general","Материал – общий"),
  "3.0":("Instrument – general","КИПиА – общий"),"4.0":("Electrical – general","Электрика – общий"),
+ "5.0":("External influence – general","Внешнее воздействие – общий"),
+ "6.0":("Miscellaneous – general","Прочее – общий"),
 }
 # ISO 14224 Table B.6 — equipment failure mode (3-letter)
 MODE={"AIR":("Abnormal instrument reading","Аномальные показания"),"BRD":("Breakdown","Выход из строя"),
