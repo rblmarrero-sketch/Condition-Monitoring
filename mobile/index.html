@@ -545,7 +545,7 @@
   </div>
 </div><!-- /paneSystem -->
 
-  <div class="ver">build v53 · 2026-08-01 · Light · dark · honest sync ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver" id="verLine">build v<span id="verNum">?</span> · <span id="verNote">undercarriage round</span> ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <nav class="tabbar" id="tabbar">
@@ -3235,6 +3235,7 @@ function checkData(){
      for another — every asset then misses the cache on every load. They were
      left at 42 for four builds without anything noticing, so check it out loud
      rather than trusting the next person to remember. */
+  const vn=$("verNum"); if(vn) vn.textContent=BUILD;   // never hand-typed again
   const tagged=(document.querySelector('script[src^="assets.js"]')||{}).src||"";
   const m=tagged.match(/[?&]v=([^&]+)/);
   if(m && m[1]!==BUILD) console.warn(`[cm] asset tags say v=${m[1]} but BUILD is ${BUILD} —`
