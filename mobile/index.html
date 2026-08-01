@@ -279,6 +279,35 @@
   .tempbar{display:flex;align-items:center;gap:8px;font-size:12.5px;margin:-4px 0 12px;}
   /* Undercarriage: the drawing, the number, and what the number means — in that
      order, because the inspector is holding the tool while reading it. */
+  /* The map is at the top of the card and the form was under it, so every one of
+     36 points cost a scroll down and a scroll back. The measurement comes to the
+     inspector instead: a sheet over the machine, with the machine still visible
+     above it, and Next walking the round without ever returning to the map. */
+  #ucBackdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:60;
+    pointer-events:none;}
+  #ucFields.sheet{position:fixed;left:0;right:0;bottom:0;z-index:61;
+    background:var(--surface);border-radius:18px 18px 0 0;
+    box-shadow:0 -8px 40px rgba(0,0,0,.35);border-top:1px solid var(--line);
+    padding:0 16px calc(12px + env(safe-area-inset-bottom));
+    max-height:62vh;overflow-y:auto;overscroll-behavior:contain;}
+  .sh-head{display:none;}
+  #ucFields.sheet .sh-head{display:block;position:sticky;top:0;z-index:2;
+    background:var(--surface);padding:8px 0 10px;margin:0 0 4px;}
+  .sh-grab{width:38px;height:4px;border-radius:999px;background:var(--line);margin:0 auto 10px;}
+  .sh-row{display:flex;align-items:flex-start;gap:12px;}
+  .sh-t{flex:1;min-width:0;}
+  .sh-t b{display:block;font-size:16px;font-weight:650;line-height:1.25;}
+  .sh-t span{display:block;font-size:12px;color:var(--muted);margin-top:2px;
+    font-variant-numeric:tabular-nums;}
+  .sh-row button{flex:0 0 auto;width:40px;height:40px;border-radius:12px;border:1px solid var(--line);
+    background:var(--surface-2);color:var(--ink-2);font-size:17px;cursor:pointer;}
+  .sh-nav{display:none;}
+  #ucFields.sheet .sh-nav{display:flex;gap:9px;position:sticky;bottom:0;
+    background:var(--surface);padding:10px 0 2px;margin-top:6px;}
+  .sh-nav button{flex:1;min-height:52px;border-radius:13px;border:1px solid var(--line);
+    background:var(--surface-2);color:var(--ink);font:650 15px/1 inherit;cursor:pointer;}
+  .sh-nav button.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);}
+  .sh-nav button:disabled{opacity:.4;}
   .ucfig{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;
     padding:9px;margin-bottom:11px;text-align:center;}
   .ucfig svg{width:100%;max-width:340px;height:auto;display:block;margin:0 auto;}
@@ -478,7 +507,15 @@
         </select></label>
       <div class="tempbar" id="tempLim"></div>
     </div>
+    <div id="ucBackdrop" class="hidden"></div>
     <div id="ucFields" class="hidden">
+      <div class="sh-head" id="ucSheetHead">
+        <div class="sh-grab"></div>
+        <div class="sh-row">
+          <div class="sh-t"><b id="ucSheetTitle"></b><span id="ucSheetCount"></span></div>
+          <button type="button" id="ucClose" aria-label="close">✕</button>
+        </div>
+      </div>
       <div class="ucfig" id="ucFig"></div>
       <div class="ucref" id="ucRefLine"></div>
       <label class="fld"><span id="ucLbl" data-i18n="lbl_mm">Measured (mm)</span>
@@ -492,6 +529,10 @@
       <div class="ucna">
         <div class="ucna-h" data-i18n="uc_cannot">Could not measure it?</div>
         <div class="chips" id="ucReasons"></div>
+      </div>
+      <div class="sh-nav" id="ucSheetNav">
+        <button type="button" id="ucPrev"></button>
+        <button type="button" id="ucNext" class="pri"></button>
       </div>
     </div>
     <label class="fld"><span data-i18n="lbl_sev">Severity (ISO 14224)</span>
@@ -602,7 +643,7 @@
     <span id="staleTxt"></span>
     <button type="button" id="staleGo"></button>
   </div>
-  <div class="ver" id="verLine">build v<span id="verNum">?</span> · <span id="verNote">the whole frame, and the figures</span> ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver" id="verLine">build v<span id="verNum">?</span> · <span id="verNote">measure sheet · tap, type, next</span> ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <nav class="tabbar" id="tabbar">
@@ -945,6 +986,8 @@ const I18N = {
     upd_avail:"Build v{n} is out — this phone is still on v{cur}.",
     upd_go:"Update now",
     unit_guess:"{u} is not in the asset register. Showing the standard {c} component list — check it fits the machine, and ask for the register to be updated.",
+    uc_sheet_pos:"point {i} of {of} · {done} taken",
+    uc_prev:"‹ Back", uc_next:"Next ›", uc_last:"Done ✓",
     uc_ref_span:"new {n} mm → condemn {c} mm",
     uc_dir_up:"counts up", uc_dir_down:"counts down",
     uc_swipe:"← swipe the frame to reach the sprocket end →",
@@ -1109,6 +1152,8 @@ const I18N = {
     upd_avail:"Вышла сборка v{n} — на этом телефоне ещё v{cur}.",
     upd_go:"Обновить",
     unit_guess:"{u} нет в реестре оборудования. Показан стандартный перечень узлов «{c}» — проверьте соответствие машине и запросите обновление реестра.",
+    uc_sheet_pos:"точка {i} из {of} · снято {done}",
+    uc_prev:"‹ Назад", uc_next:"Далее ›", uc_last:"Готово ✓",
     uc_ref_span:"новый {n} мм → предел {c} мм",
     uc_dir_up:"растёт", uc_dir_down:"убывает",
     uc_swipe:"← проведите по раме до звёздочки →",
@@ -1772,6 +1817,7 @@ function renderUC(){
     const rec=draft.positions[curItem]; if(rec && rec.stood) delete rec.stood;
   }
   renderUCReasons();
+  renderUCSheet();
 }
 function ucReasonLabel(code){
   const r=(window.WEAR&&WEAR.reasons||[]).find(x=>x.code===code);
@@ -1821,6 +1867,56 @@ function wireUCViews(){
 }
 /* An untouched round is all white pucks, which reads as "broken" rather than
    "nothing captured yet". Say the count, so the absence of colour is an answer. */
+/* The round in order, so Next means the next thing you walk to. */
+function ucOrder(){ const st=ucStatus(curEquip); return st.ok ? WEAR.walk(st.model).map(w=>w.k) : []; }
+function ucStep(d){
+  const o=ucOrder(), i=o.indexOf(curItem);
+  if(i<0) return;
+  const j=i+d;
+  if(j<0 || j>=o.length) return;
+  pickComponent(o[j]);
+  const f=$("ucFields"); if(f) f.scrollTop=0;
+}
+function ucCloseSheet(){ saveCur(); curItem=""; renderChips(); loadPos(); }
+/* The sheet is for the map: on the list the cards are already the navigation and
+   a sheet over them would just be a second one. */
+function ucSheetOn(){ return wearType() && ucView==="map" && !!curItem && !!curEquip
+  && ucStatus(curEquip).ok; }
+/* Keep the frame this reading belongs to in the strip the sheet leaves above it.
+   scrollIntoView centres on the viewport, which is behind the sheet — the usable
+   window is 0..sheetTop, so aim at that. Deferred and re-queried by selector,
+   because picking a point re-renders the map and detaches the old node. */
+let ucScrollT=0;
+function ucKeepFrameInView(){
+  if(!ucSheetOn()) return;
+  const g=$("posnav").querySelector('.um-spot[data-uc="'+cssEsc(curItem)+'"]');
+  const box=g && g.closest(".ucmapwrap");
+  if(!box) return;
+  const top=$("ucFields").getBoundingClientRect().top, r=box.getBoundingClientRect();
+  if(!r.height || !top) return;
+  const pad=10;
+  if(r.bottom <= top-pad && r.top >= pad) return;              // already in the strip
+  const want = r.height <= top-2*pad ? (top-pad-r.height) : pad;
+  window.scrollBy({top: Math.round(r.top-want), behavior:"smooth"});
+}
+const cssEsc = v => String(v).replace(/["\\]/g,"\\$&");
+function renderUCSheet(){
+  const on=ucSheetOn(), f=$("ucFields"), bd=$("ucBackdrop");
+  if(!f||!bd) return;
+  f.classList.toggle("sheet", on);
+  bd.classList.toggle("hidden", !on);
+  document.body.style.overflow = on ? "hidden" : "";
+  if(!on) return;
+  const o=ucOrder(), i=o.indexOf(curItem);
+  $("ucSheetTitle").textContent = ucLabel(curItem);
+  const done=o.filter(k=>ucState(k)).length;
+  $("ucSheetCount").textContent = t("uc_sheet_pos",{i:i+1,of:o.length,done:done});
+  clearTimeout(ucScrollT); ucScrollT=setTimeout(ucKeepFrameInView, 70);
+  const prev=$("ucPrev"), next=$("ucNext");
+  prev.disabled = i<=0; next.disabled = i<0 || i>=o.length-1;
+  prev.textContent = t("uc_prev");
+  next.textContent = i>=o.length-1 ? t("uc_last") : t("uc_next");
+}
 function ucTally(){
   const w=WEAR.walk(ucStatus(curEquip).model);
   const c={ "":0, done:0, watch:0, act:0, na:0 };
@@ -1892,6 +1988,23 @@ function renderUCRef(){
 const fmtMM = v => v==null ? "—" : String(Math.round(v*100)/100);
 $("ucMM").addEventListener("input", ()=>{ saveCur(); renderUC(); refreshChips(); });
 $("ucStood").addEventListener("change", ()=>{ saveCur(); });
+// the keypad's own go-key walks the round, so 36 numbers need no navigation at all
+$("ucMM").addEventListener("keydown", e=>{ if(e.key==="Enter"){ e.preventDefault();
+  $("ucMM").blur(); saveCur(); ucStep(1); } });
+$("ucPrev").onclick=()=>ucStep(-1);
+$("ucNext").onclick=()=>ucStep(1);
+$("ucClose").onclick=ucCloseSheet;
+/* Tapping the machine while the sheet is up jumps to that point rather than
+   dismissing first — the frame stays live above the sheet on purpose. Anything
+   else outside the sheet closes it. */
+document.addEventListener("click", e=>{
+  if(!ucSheetOn()) return;
+  if(e.target.closest("#ucFields")) return;
+  if(e.target.closest(".um-spot")) return;        // the map is still the picker
+  if(e.target.closest(".ucviews")) return;
+  ucCloseSheet();
+}, true);
+document.addEventListener("keydown", e=>{ if(e.key==="Escape" && ucSheetOn()) ucCloseSheet(); });
 
 function renderTempHint(){ if(!TYPE_META[type].temp) return;
   const lim=tempLimit(tempCtx()); const v=$("tempV").value, a=$("tempA").value;
@@ -1930,7 +2043,7 @@ function saveCur(){ if(!curItem) return; const p=curP(); p.particle=$("particle"
   }
   if(!hasData(p)) delete draft.positions[curItem]; }
 function loadPos(){
-  if(!curItem){ $("posLabel").textContent=t("nav_choose"); toggleCapture(); return; }
+  if(!curItem){ $("posLabel").textContent=t("nav_choose"); renderUCSheet(); toggleCapture(); return; }
   $("posLabel").textContent = wearType() ? ucLabel(curItem) : `${curItem} — ${itemLabel(curItem)}`;
   const p=draft.positions[curItem]||{}; $("particle").value=p.particle||""; $("comp").value=p.comp||""; $("oil").value=p.oil||"";
   if(TYPE_META[type].wear){ $("ucMM").value = (p.mm==null?"":p.mm); $("ucStood").checked=!!p.stood; renderUC(); }
