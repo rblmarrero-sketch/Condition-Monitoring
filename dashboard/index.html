@@ -168,6 +168,50 @@
   .hidden{display:none!important;}
   .legend{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;font-size:12.5px;color:var(--ink-2);margin-top:12px;}
   .legend .sw{width:13px;height:13px;border-radius:4px;display:inline-block;margin-right:5px;vertical-align:-2px;}
+
+  /* ---- one visual language with the printed report ----------------------
+     The report an inspector carries and this screen describe the same fleet, so
+     they use the same devices: an uppercase eyebrow over every block, hairlines
+     across a table and never down it, a severity stripe on the left edge of a
+     row rather than a colour buried in a column, tabular figures, and one wear
+     bar drawn the same way in both. Anything a reader learns here they can read
+     on paper without relearning it. */
+  .eyebrow{font-size:9.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--muted);}
+  .section>h2{letter-spacing:-.01em;}
+  table.grid th{font-size:8.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;
+    color:var(--muted);border-bottom:1px solid var(--ink);padding:0 8px 5px;vertical-align:bottom;}
+  table.grid td{border-bottom:1px solid var(--border);padding:7px 8px;}
+  table.grid td.r,table.grid th.r{text-align:right;}
+  table.grid td.c,table.grid th.c{text-align:center;}
+  table.grid tbody tr:nth-child(even) td{background:color-mix(in srgb,var(--surface-2) 55%,transparent);}
+  table.grid tbody tr:hover td{background:var(--surface-2);}
+  table.grid td.stripe{border-left:3px solid transparent;}
+  /* the report's chips, to the pixel: amber takes dark ink or it cannot be read */
+  .pill{border-radius:3px;padding:2px 7px;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;}
+  .pill.w{color:#3d2c00;}
+  .grade{display:inline-block;min-width:17px;text-align:center;color:#fff;font-size:10px;
+    font-weight:800;border-radius:3px;padding:1px 5px;line-height:1.4;}
+  /* wear */
+  .wb{display:block;height:5px;background:var(--surface-3);border-radius:3px;overflow:hidden;min-width:52px;}
+  .wb i{display:block;height:5px;border-radius:3px;}
+  .ucgrid{display:grid;grid-template-columns:1fr 1fr;gap:0 26px;padding:0 16px 16px;}
+  @media (max-width:820px){ .ucgrid{grid-template-columns:1fr;} }
+  table.grid.wear td{font-size:12px;padding:6px 8px;}
+  .ucsum{margin:12px 16px 0;padding:8px 12px;border-radius:6px;font-size:12.5px;font-weight:650;}
+  .ucsum .muted{font-weight:400;}
+  .ucsum.ok{background:color-mix(in srgb,var(--good) 12%,var(--surface));color:var(--good);}
+  .ucsum.watch{background:color-mix(in srgb,var(--serious) 13%,var(--surface));color:var(--serious);}
+  .ucsum.act{background:color-mix(in srgb,var(--critical) 12%,var(--surface));color:var(--critical);}
+  .ucsum.warnrow{background:var(--surface-2);color:var(--ink-2);font-weight:550;}
+  /* KPI tiles as one strip, the way the report's cover states its four numbers */
+  .kpis{gap:0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+    background:var(--surface);border-radius:0;box-shadow:none;}
+  .tile{border:0;border-right:1px solid var(--border);border-radius:0;box-shadow:none;padding:13px 16px 14px;}
+  .tile:last-child{border-right:0;}
+  .tile .k{font-size:9px;letter-spacing:.13em;font-weight:700;}
+  .tile .v{font-size:27px;font-weight:800;letter-spacing:-.02em;line-height:1.1;margin-top:5px;}
+  .tile .s{font-size:10.5px;color:var(--muted);margin-top:1px;}
 </style>
 </head>
 <body>
@@ -386,8 +430,14 @@
 <script src="../mobile/mp-fc.js"></script>
 <script src="../mobile/hme-cascade.js"></script>
 <script src="../mobile/temp-limits.js"></script>
+<!-- The register and the wear reference, the same files the phones carry. A
+     millimetre is judged here exactly as it was judged in the pit; the exported
+     figures are a fallback for a machine this build does not know. -->
+<script src="../mobile/assets.js"></script>
+<script src="../mobile/wear.js"></script>
 <script src="../mobile/jspdf.umd.min.js"></script>
 <script src="../mobile/html2canvas.min.js"></script>
+<script src="../mobile/report-core.js"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* The 1C defect & cause matrix, the same file the phones carry. Records already
@@ -451,6 +501,13 @@ const I18N={
 
   sev_NOF:"No failure", sev_INC:"Incipient", sev_DEG:"Degraded", sev_CRI:"Critical",
   type_MP:"Magnetic Plug", type_FC:"Filter Cut", type_INSP:"Inspection", type_TEMP:"Temperature",
+  type_UC:"Undercarriage",
+  uc_th_point:"Point", uc_th_meas:"Measured", uc_th_worn:"Worn",
+  uc_noref:"no reference for this model",
+  uc_sum_act:"{n} points at or past condemn", uc_sum_watch:"{n} above 80%",
+  uc_sum_ok:"All {n} measured points inside limits.",
+  uc_sum_unread:"{n} points could not be measured.",
+  uc_top_over:"{n} at or past condemn · worst {p}%", uc_top_worst:"worst {p}% worn",
 
   s_fleet:"Condition by equipment — latest inspection",
   s_fleet_sub:"Worst severity found on each unit's most recent inspection. Click a unit to open its history.",
@@ -538,6 +595,11 @@ const I18N={
   cf_saving:"Recording the choice…", cf_saved:"Reports now use device {d} ✔",
 
 
+  rep_title_doc:"Condition Monitoring Inspection Report",
+  rpt_trend:"Condition over time", rpt_trend_sub:"oldest first",
+  rpt_pareto:"Failure modes, ranked", rpt_pareto_sub:"the defect-elimination shortlist",
+  c_unit_h:"Machine", rpt_type_h:"Type", rpt_rounds_h:"Rounds",
+  rpt_mode_h:"Failure mode", rpt_count_h:"Count",
   r_title:"PDF report",
   r_sub:"Bilingual EN / RU. Each inspection type prints its own layout —",
   r_scope:"Scope", r_unit:"Equipment — one machine + trend", r_round:"Round — one date, all units",
@@ -585,6 +647,13 @@ const I18N={
 
   sev_NOF:"Без отказа", sev_INC:"Начальный", sev_DEG:"Ухудшено", sev_CRI:"Критично",
   type_MP:"Магнитная пробка", type_FC:"Разрез фильтра", type_INSP:"Осмотр", type_TEMP:"Температура",
+  type_UC:"Ходовая часть",
+  uc_th_point:"Точка", uc_th_meas:"Замер", uc_th_worn:"Износ",
+  uc_noref:"нет эталона для этой модели",
+  uc_sum_act:"{n} точек на пределе или за ним", uc_sum_watch:"{n} выше 80%",
+  uc_sum_ok:"Все {n} измеренных точек в пределах нормы.",
+  uc_sum_unread:"{n} точек измерить не удалось.",
+  uc_top_over:"{n} на пределе · худшая {p}%", uc_top_worst:"худшая {p}% износа",
 
   s_fleet:"Состояние по технике — последний осмотр",
   s_fleet_sub:"Худшая степень по последнему осмотру каждой единицы. Нажмите на единицу, чтобы открыть историю.",
@@ -672,6 +741,11 @@ const I18N={
   cf_saving:"Сохраняем выбор…", cf_saved:"Отчёты теперь используют устройство {d} ✔",
 
 
+  rep_title_doc:"Отчёт по мониторингу состояния",
+  rpt_trend:"Состояние во времени", rpt_trend_sub:"сначала старые",
+  rpt_pareto:"Виды отказов по частоте", rpt_pareto_sub:"список на устранение",
+  c_unit_h:"Машина", rpt_type_h:"Тип", rpt_rounds_h:"Обходы",
+  rpt_mode_h:"Вид отказа", rpt_count_h:"Кол-во",
   r_title:"PDF-отчёт",
   r_sub:"Двуязычный EN / RU. Каждый тип осмотра печатается по-своему —",
   r_scope:"Объём", r_unit:"Техника — одна машина + тренд", r_round:"Обход — одна дата, все единицы",
@@ -726,7 +800,50 @@ const SEVC={NOF:"var(--good)",INC:"var(--warning)",DEG:"var(--serious)",CRI:"var
 // Inspection grade scale: A / B / C / X, X being the worst (confirmed with the
 // reliability team). A record's own ISO severity always wins over the grade.
 const GRADE_SEV={A:"NOF",B:"INC",C:"DEG",X:"CRI"};
-const TYPE_LABEL=new Proxy({},{ get:(_,k)=> ["MP","FC","INSP","TEMP"].indexOf(k)>=0?t("type_"+k):undefined });
+const TYPE_ORDER=["MP","FC","INSP","TEMP","UC"];
+const TYPE_LABEL=new Proxy({},{ get:(_,k)=> TYPE_ORDER.indexOf(k)>=0?t("type_"+k):undefined });
+const isWearType = ty => ty==="UC";
+const ASSET_BY={}; (window.ASSETS||[]).forEach(a=>ASSET_BY[a.n]=a);
+/* Wear judged here, not trusted from the file. The record carries the figures
+   the phone resolved at export; if this build knows the machine's model it
+   re-resolves against the same reference the phone used, so a reference
+   corrected since the export shows corrected here too. Both ends run the
+   identical WEAR.wear() — there is no second opinion to reconcile. */
+const UC_BAND = pct => pct>=100 ? "act" : pct>=80 ? "watch" : "ok";
+const UC_SEV  = {act:"CRI", watch:"DEG", ok:"NOF"};
+function wearOf(rec,it){
+  if(!isWearType(rec.type)) return null;
+  const mm = (it.mm===""||it.mm==null) ? null : Number(it.mm);
+  let n=it.newMM, c=it.condemnMM, pct=(it.wearPct===""||it.wearPct==null)?null:Number(it.wearPct),
+      src=it.refSrc||"";
+  const a=ASSET_BY[rec.equip];
+  if(window.WEAR && a && a.m){
+    const i=String(it.key||"").indexOf("."), pt=i<0?it.key:String(it.key).slice(0,i),
+          pos=i<0?"":String(it.key).slice(i+1);
+    /* Resolved even when nothing was measured: a point behind a guard still has
+       limits, and printing "no reference for this model" against one that has a
+       perfectly good reference is a lie about the data. */
+    const ref=WEAR.refFor(rec.equip, a.m, pt, pos, rec.date);
+    if(ref && !ref.x){ n=ref.n; c=ref.c; src=ref.src;
+      const w = mm==null ? null : WEAR.wear(ref,mm);
+      pct = (w==null?null:Math.round(w)); }
+    else if(ref && ref.x){ n=ref.n; c=ref.c; src="x:"+ref.x; pct=null; }
+    else { n=null; c=null; pct=null; src=""; }
+  }
+  if(mm==null) return { mm:null, newMM:n, condemnMM:c, wearPct:null, band:"", refSrc:src,
+                        reason:it.reason||"", reasonLabel:it.reasonLabel||"" };
+  return { mm, newMM:n, condemnMM:c, wearPct:pct, band:(pct==null?"":UC_BAND(pct)),
+           refSrc:src, stood:!!it.stood, reason:"", reasonLabel:"" };
+}
+/* One severity scale across the whole dashboard: a wear band is an ISO severity
+   like any other finding, so worn points count in the mix, rank in the action
+   register and colour a machine in the fleet table without a special case at
+   every call site. */
+function sevOf(rec,it){
+  const w=wearOf(rec,it);
+  if(w && w.band) return UC_SEV[w.band]||"";
+  return it.sev||GRADE_SEV[it.grade]||"";
+}
 // Inspection and Temperature name their files with the real component code (TK151.DRS.ENG_…)
 const usesRegister=(ty)=>ty==="INSP"||ty==="TEMP";
 const STORE="cm_dash_records";        // records from "Import a file"
@@ -860,7 +977,7 @@ function filtered(){
     if(!matchesText(r,q)) return false;
     if(drill.sev||drill.defect||drill.cause){
       const hit=(r.items||[]).some(i=>
-        (!drill.sev    || (i.sev||GRADE_SEV[i.grade]||"")===drill.sev) &&
+        (!drill.sev    || sevOf(r,i)===drill.sev) &&
         (!drill.defect || i.defect===drill.defect) &&
         (!drill.cause  || i.cause===drill.cause));
       if(!hit) return false;
@@ -891,22 +1008,45 @@ function renderChips(){
 }
 function findings(recs){            // one row per item that has any content
   const out=[];
-  recs.forEach(r=>r.items.forEach(i=>{ if(i.grade||i.sev||i.defectCode||i.comment||i.action) out.push({r,i}); }));
+  recs.forEach(r=>r.items.forEach(i=>{
+    // A millimetre is content. Counting only graded items left an undercarriage
+    // round showing zero findings on a machine measured past its condemn limit.
+    const w=wearOf(r,i);
+    if(i.grade||i.sev||i.defectCode||i.comment||i.action||(w&&(w.mm!=null||w.reason)))
+      out.push({r,i});
+  }));
   return out;
 }
 const sevRank=s=>SEV[s]?SEV[s].r:-1;
+/* What a round found, and the one line that says it. An undercarriage round
+   raises no defect codes — its finding is a number against a limit — so both
+   have to ask the wear band as well as the grade. */
+function notable(rec){
+  return (rec.items||[]).filter(i=>{ const w=wearOf(rec,i);
+    return i.grade||i.defectCode||(w&&(w.band==="act"||w.band==="watch")); });
+}
+function topFinding(rec){
+  const d=(rec.items||[]).map(i=>i.defect).filter(Boolean)[0];
+  if(d) return d;
+  if(!isWearType(rec.type)) return "";
+  const w=(rec.items||[]).map(i=>wearOf(rec,i)).filter(x=>x&&x.wearPct!=null)
+    .sort((a,b)=>b.wearPct-a.wearPct)[0];
+  const n=(rec.items||[]).map(i=>wearOf(rec,i)).filter(x=>x&&(x.band==="act")).length;
+  if(!w) return "";
+  return n ? t("uc_top_over",{n:n,p:w.wearPct}) : t("uc_top_worst",{p:w.wearPct});
+}
 /* Records arrive from files on a shared drive or from Drive — i.e. from outside
    this page. Everything below builds HTML by interpolation, so it all goes
    through here. */
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-function worstOf(rec){ let w="",n=-1; rec.items.forEach(i=>{ const s=i.sev||GRADE_SEV[i.grade]||""; if(sevRank(s)>n){n=sevRank(s);w=s;} }); return w; }
+function worstOf(rec){ let w="",n=-1; rec.items.forEach(i=>{ const s=sevOf(rec,i); if(sevRank(s)>n){n=sevRank(s);w=s;} }); return w; }
 
 /* ---------- KPIs ---------- */
 function renderKpis(){
   const recs=filtered(), f=findings(recs);
   const units=new Set(recs.map(r=>r.equip)).size;
   const cnt={NOF:0,INC:0,DEG:0,CRI:0};
-  f.forEach(x=>{ const s=x.i.sev||GRADE_SEV[x.i.grade]||""; if(cnt[s]!=null)cnt[s]++; });
+  f.forEach(x=>{ const s=sevOf(x.r,x.i); if(cnt[s]!=null)cnt[s]++; });
   const attention=cnt.DEG+cnt.CRI;
   const openActions=f.filter(x=>x.i.action&&!["MON"].includes(x.i.action)).length;
   const bar=["CRI","DEG","INC","NOF"].map(s=>cnt[s]?`<span style="flex:${cnt[s]};background:${SEVC[s]}"></span>`:"").join("");
@@ -932,8 +1072,8 @@ function renderFleet(){
   const recs=filtered(); const byU={};
   recs.forEach(r=>{ const k=r.equip; if(!byU[k]||(r.date||"")>(byU[k].date||"")) byU[k]=r; });
   const val=(r,k)=>({ equip:r.equip, type:r.type, date:r.date||"",
-    sev:sevRank(worstOf(r)), find:(r.items||[]).filter(i=>i.grade||i.defectCode).length,
-    defect:((r.items||[]).map(i=>i.defect).filter(Boolean)[0]||""), by:r.by||"" }[k]);
+    sev:sevRank(worstOf(r)), find:notable(r).length,
+    defect:topFinding(r), by:r.by||"" }[k]);
   const rows=Object.values(byU).sort((a,b)=>{
     const x=val(a,fleetSort.k), y=val(b,fleetSort.k);
     const c = typeof x==="number" ? x-y : String(x).localeCompare(String(y));
@@ -945,8 +1085,7 @@ function renderFleet(){
   let h=`<thead><tr>`+cols.map(([k,l])=>
     `<th class="sortable${fleetSort.k===k?" on":""}" data-sort="${k}">${l}<span class="arrow">${fleetSort.k===k?(fleetSort.dir>0?"▲":"▼"):"↕"}</span></th>`).join("")+`</tr></thead><tbody>`;
   rows.forEach(r=>{
-    const w=worstOf(r); const fs=r.items.filter(i=>i.grade||i.defectCode);
-    const top=fs.map(i=>i.defect).filter(Boolean)[0]||"";
+    const w=worstOf(r); const fs=notable(r); const top=topFinding(r);
     h+=`<tr data-u="${esc(r.equip)}" style="cursor:pointer">
       <td><b>${esc(r.equip)}</b></td><td><span class="tag">${esc(TYPE_LABEL[r.type]||r.type)}</span></td>
       <td class="mono">${esc(r.date||"")}</td>
@@ -995,8 +1134,8 @@ function renderFailure(){
 /* ---------- action register ---------- */
 function actionRows(){
   return findings(filtered())
-    .filter(x=>x.i.action||sevRank(x.i.sev||GRADE_SEV[x.i.grade]||"")>=2)
-    .sort((a,b)=>sevRank(b.i.sev||GRADE_SEV[b.i.grade]||"")-sevRank(a.i.sev||GRADE_SEV[a.i.grade]||"")
+    .filter(x=>x.i.action||sevRank(sevOf(x.r,x.i))>=2)
+    .sort((a,b)=>sevRank(sevOf(b.r,b.i))-sevRank(sevOf(a.r,a.i))
       ||(b.r.date||"").localeCompare(a.r.date||""));
 }
 function renderActions(){
@@ -1004,7 +1143,7 @@ function renderActions(){
   if(!rows.length){ $("actionTbl").innerHTML=`<tr><td class="empty">${esc(t("e_nothing"))}</td></tr>`; return; }
   let h=`<thead><tr>`+["th_sev","th_unit","th_comp","th_defect","th_cause","th_action","th_wo","th_date","th_byshort"]
     .map(k=>`<th>${esc(t(k))}</th>`).join("")+`</tr></thead><tbody>`;
-  rows.forEach(({r,i})=>{ const s=i.sev||GRADE_SEV[i.grade]||"";
+  rows.forEach(({r,i})=>{ const s=sevOf(r,i);
     h+=`<tr><td>${s?`<span class="pill ${SEV[s].c}">${SEV[s].l}</span>`:""}</td>
       <td><b>${esc(r.equip)}</b><div class="muted" style="font-size:11px">${esc(TYPE_LABEL[r.type]||r.type)}</div></td>
       <td>${esc(i.key)}<div class="muted" style="font-size:11px">${esc(i.label||"")}</div></td>
@@ -1017,7 +1156,7 @@ function renderActions(){
 $("csvBtn").onclick=()=>{
   const rows=actionRows(); const q=s=>`"${String(s==null?"":s).replace(/"/g,'""')}"`;
   const head=["Severity","Unit","Type","Component","ComponentName","DefectCode","Defect","ISOMechanism","ISOMode","CauseCode","Cause","Action","WO","Grade","TempC","AmbientC","Method","Date","Inspector","VerifiedBy","GPS","Comment"];
-  const body=rows.map(({r,i})=>[SEV[i.sev||GRADE_SEV[i.grade]||""]?.l||"",r.equip,r.type,i.key,i.label,i.defectCode,i.defect,i.iso,i.isoMode,i.causeCode,i.cause,i.actionLabel,i.wo,i.grade,i.tempC,i.ambC,i.tempMethod,r.date,r.by,r.sup||"",r.gps?`${r.gps.lat},${r.gps.lon}`:"",i.comment].map(q).join(","));
+  const body=rows.map(({r,i})=>[SEV[sevOf(r,i)]?.l||"",r.equip,r.type,i.key,i.label,i.defectCode,i.defect,i.iso,i.isoMode,i.causeCode,i.cause,i.actionLabel,i.wo,i.grade,i.tempC,i.ambC,i.tempMethod,r.date,r.by,r.sup||"",r.gps?`${r.gps.lat},${r.gps.lon}`:"",i.comment].map(q).join(","));
   const csv=[head.map(q).join(","),...body].join("\r\n");
   const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob(["﻿"+csv],{type:"text/csv"}));
   a.download=`cm_action_register_${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(a.href);
@@ -1100,6 +1239,51 @@ window.CMDash={
   allRecs(){ return RECS; },
   rerender(){ renderAll(); },
 };
+/* Thirty-six photo cards for a round that took no photographs is not a record of
+   anything. An undercarriage round is its measurements, so print them: every
+   point, what it read, the limits it was judged against and how far through its
+   life it is — the same table, the same bars and the same bands as the report
+   the inspector carries. */
+function wearBar(pct){
+  const p=Math.max(0,Math.min(130,Number(pct)||0));
+  const c = p>=100?"var(--critical)" : p>=80?"var(--serious)" : "var(--good)";
+  return `<span class="wb"><i style="width:${(p/130*100).toFixed(1)}%;background:${c}"></i></span>`;
+}
+/* Rounds captured before the app exported point names carry a bare ROLLER.L6.
+   The same reference that judges the millimetres can name the point, so an old
+   record reads the same as a new one. */
+function ucName(it){
+  if(it.label) return it.label;
+  const k=String(it.key||""), i=k.indexOf("."), pt=i<0?k:k.slice(0,i), pos=i<0?"":k.slice(i+1);
+  const p=(window.WEAR&&WEAR.points||[]).find(x=>x.code===pt);
+  return (p?(p[lang]||p.en):pt)+(pos?" — "+pos:"");
+}
+function ucBlock(rec){
+  const rows=(rec.items||[]).map(i=>[i,wearOf(rec,i)]).filter(([i,w])=>w&&(w.mm!=null||w.reason));
+  if(!rows.length) return "";
+  const over=rows.filter(([i,w])=>w.band==="act"), watch=rows.filter(([i,w])=>w.band==="watch");
+  const unread=rows.filter(([i,w])=>w.mm==null).length;
+  const worst=rows.filter(([i,w])=>w.wearPct!=null).sort((a,b)=>b[1].wearPct-a[1].wearPct);
+  const half=Math.ceil(rows.length/2);
+  const col=list=>`<table class="grid wear"><thead><tr>
+      <th>${esc(t("uc_th_point"))}</th><th class="r">${esc(t("uc_th_meas"))}</th>
+      <th class="r">${esc(t("uc_th_worn"))}</th><th style="width:62px"></th></tr></thead><tbody>`+
+    list.map(([i,w])=>`<tr><td>${esc(ucName(i))}
+        <div class="muted" style="font-size:10.5px">${w.newMM!=null&&w.newMM!==""?esc(w.newMM)+" → "+esc(w.condemnMM)+" mm":esc(t("uc_noref"))}</div></td>
+      <td class="r mono">${w.mm!=null?`<b>${esc(w.mm)}</b>`:`<span class="muted" style="font-size:11px">${esc(w.reasonLabel||w.reason||"—")}</span>`}</td>
+      <td class="r mono">${w.wearPct!=null?esc(w.wearPct)+"%":""}</td>
+      <td>${w.wearPct!=null?wearBar(w.wearPct):""}</td></tr>`).join("")+`</tbody></table>`;
+  const line = over.length
+    ? `<div class="ucsum act">${esc(t("uc_sum_act",{n:over.length}))}${watch.length?" · "+esc(t("uc_sum_watch",{n:watch.length})):""}
+        <span class="muted">${worst.slice(0,4).map(([i,w])=>esc(ucName(i))+" "+w.wearPct+"%").join(" · ")}</span></div>`
+    : watch.length
+    ? `<div class="ucsum watch">${esc(t("uc_sum_watch",{n:watch.length}))}
+        <span class="muted">${worst.slice(0,4).map(([i,w])=>esc(ucName(i))+" "+w.wearPct+"%").join(" · ")}</span></div>`
+    : `<div class="ucsum ok">${esc(t("uc_sum_ok",{n:rows.length-unread}))}</div>`;
+  return line
+    + (unread?`<div class="ucsum warnrow">${esc(t("uc_sum_unread",{n:unread}))}</div>`:"")
+    + `<div class="ucgrid"><div>${col(rows.slice(0,half))}</div><div>${col(rows.slice(half))}</div></div>`;
+}
 function renderHistory(){
   const e=$("equipSel").value; const recs=RECS.filter(r=>r.equip===e);
   $("histTitle").textContent=t("hist_title",{x:e||""});
@@ -1119,8 +1303,9 @@ function renderHistory(){
       <span class="spacer"></span>${rec.by?`<span class="meta">${esc(rec.by)}</span>`:""}${rec.sup?`<span class="meta">✍ ${esc(rec.sup)}</span>`:""}${rec.gps?`<a class="meta" href="https://www.google.com/maps?q=${rec.gps.lat},${rec.gps.lon}" target="_blank" rel="noopener">📍 ${rec.gps.lat.toFixed(4)}, ${rec.gps.lon.toFixed(4)}</a>`:""}
       <button class="btn" data-edit="${esc(recKey(rec))}" style="padding:3px 10px;font-size:12px">${esc(t("ed_edit"))}</button></div>
       ${rec._note?`<div class="sub" style="margin:2px 0 8px">📝 ${esc(rec._note)}</div>`:""}
-      <div class="pos-grid">${rec.items.map(i=>{
-        const s=i.sev||GRADE_SEV[i.grade]||""; const src=photoSrc(i,rec);
+      ${isWearType(rec.type)?ucBlock(rec):""}
+      <div class="pos-grid">${rec.items.filter(i=>!isWearType(rec.type)||photoSrc(i,rec)||i.comment||i.defect).map(i=>{
+        const s=sevOf(rec,i); const src=photoSrc(i,rec);
         const cap=esc(`${rec.equip} · ${i.key} · ${rec.date}`);
         return `<div class="pos">
           ${src?`<img class="photo" loading="lazy" src="${esc(src)}" alt="${cap}" data-cap="${cap}">`:`<div class="nophoto">no photo</div>`}
@@ -1213,7 +1398,7 @@ function openEdit(key,keepMsg){
 
 
   $("edItems").innerHTML=(rec.items||[]).map((i,n)=>{
-    const sev=i.sev||GRADE_SEV[i.grade]||"";
+    const sev=sevOf(rec,i);
     return `<div class="srccard" style="margin-bottom:10px"><div class="srchead">
       <span class="ico">${i.grade?esc(i.grade):"·"}</span><div><b>${esc(i.key)}</b>
       <div class="muted">${esc(i.label||"")}${i.comment?` — “${esc(i.comment)}”`:""}</div></div>
@@ -1608,7 +1793,9 @@ $("rGo").onclick=async ()=>{
 
 /* ---------- init ---------- */
 function refreshControls(){
-  const types=[...new Set(RECS.map(r=>r.type))].sort();
+  // the phone's order, not the alphabet — the two ends list types the same way
+  const types=[...new Set(RECS.map(r=>r.type))]
+    .sort((a,b)=>(TYPE_ORDER.indexOf(a)+1||99)-(TYPE_ORDER.indexOf(b)+1||99));
   $("fType").innerHTML=`<option value="">${esc(t("f_alltypes"))}</option>`
     +types.map(ty=>`<option value="${esc(ty)}">${esc(TYPE_LABEL[ty]||ty)}</option>`).join("");
   const cls=[...new Set(RECS.map(r=>r.cls).filter(Boolean))].sort();

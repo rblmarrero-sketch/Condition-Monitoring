@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Truck Inspection — Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=62">
+<link rel="manifest" href="manifest.webmanifest?v=63">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -719,7 +719,7 @@
     <span id="staleTxt"></span>
     <button type="button" id="staleGo"></button>
   </div>
-  <div class="ver" id="verLine">build v<span id="verNum">?</span> · <span id="verNote">a report three people can read</span> ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver" id="verLine">build v<span id="verNum">?</span> · <span id="verNote">one report, both ends</span> ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <nav class="tabbar" id="tabbar">
@@ -835,15 +835,16 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="upload-defaults.js?v=62"></script>
-<script src="hme.js?v=62"></script>
-<script src="mp-fc.js?v=62"></script>
-<script src="hme-cascade.js?v=62"></script>
-<script src="assets.js?v=62"></script>
-<script src="temp-limits.js?v=62"></script>
-<script src="wear.js?v=62"></script>
-<script src="wear-figs.js?v=62"></script>
-<script src="wear-map.js?v=62"></script>
+<script src="upload-defaults.js?v=63"></script>
+<script src="hme.js?v=63"></script>
+<script src="mp-fc.js?v=63"></script>
+<script src="hme-cascade.js?v=63"></script>
+<script src="assets.js?v=63"></script>
+<script src="temp-limits.js?v=63"></script>
+<script src="wear.js?v=63"></script>
+<script src="wear-figs.js?v=63"></script>
+<script src="wear-map.js?v=63"></script>
+<script src="report-core.js?v=63"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3167,6 +3168,10 @@ const GRADE_HEX={A:"#0ca30c",B:"#fab219",C:"#ec835a",X:"#d03b3b"};
 const SEV_HEX={NOF:"#0ca30c",INC:"#fab219",DEG:"#ec835a",CRI:"#d03b3b"};
 function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function itemLabelFor(rec,k){
+  /* An undercarriage point is named by the walk, not the component tree. Without
+     this the app called it "Track roller — Left 6" on screen and exported a bare
+     ROLLER.L6, so Drive, the CSV, the dashboard and 1C all lost the name. */
+  if(TYPE_META[rec.type] && TYPE_META[rec.type].wear) return ucLabel(k);
   if(usesRegister(rec.type) && COMP_BY[upComp(k)]) return compLabel(k);
   const list=(CLASSES[rec.cls]&&CLASSES[rec.cls][rec.type])||[];
   for(const e of list){ if(typeof e==="string"){ if(e===k) return COMP[e]?(COMP[e][lang]||COMP[e].en):k; } else if(e.k===k){ return e[lang]||e.en; } } return ""; }
@@ -3184,591 +3189,74 @@ async function blobToThumb(blob,max){ const img=await new Promise((res,rej)=>{co
 
    So it is built in that order: the answer, then the work, then the evidence,
    then how to read any of it. */
-const RPT_CSS = `
-#rptRoot{font:400 12px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
-  color:#12161a;width:760px;background:#fff;letter-spacing:0;}
-#rptRoot *{box-sizing:border-box;margin:0;padding:0;}
-#rptRoot .sec{width:760px;background:#fff;}
-#rptRoot .eyebrow{font-size:9.5px;font-weight:700;letter-spacing:.16em;
-  text-transform:uppercase;color:#5b6670;}
-#rptRoot .h1{font-size:29px;font-weight:800;letter-spacing:-.02em;line-height:1.1;margin-top:7px;}
-#rptRoot .h2{font-size:16px;font-weight:750;letter-spacing:-.01em;}
-#rptRoot .lede{font-size:15px;line-height:1.45;font-weight:500;color:#12161a;}
-#rptRoot .muted{color:#5b6670;}
-#rptRoot .rule{height:2.5px;background:#12161a;}
-#rptRoot .hair{height:1px;background:#dfe4e9;}
-#rptRoot .num{font-variant-numeric:tabular-nums;}
-#rptRoot .sechd{display:flex;align-items:baseline;gap:10px;
-  border-bottom:2.5px solid #12161a;padding-bottom:6px;margin-bottom:13px;}
-#rptRoot .sechd .n{font-size:9.5px;font-weight:800;letter-spacing:.16em;color:#1f5fa8;}
-
-/* the four numbers on the cover */
-#rptRoot .stats{display:flex;gap:0;border-top:1px solid #dfe4e9;border-bottom:1px solid #dfe4e9;}
-#rptRoot .stat{flex:1;padding:13px 16px 14px;border-right:1px solid #dfe4e9;}
-#rptRoot .stat:last-child{border-right:0;}
-#rptRoot .stat .k{font-size:9px;font-weight:700;letter-spacing:.13em;
-  text-transform:uppercase;color:#5b6670;}
-#rptRoot .stat .v{font-size:27px;font-weight:800;line-height:1.1;margin-top:5px;
-  font-variant-numeric:tabular-nums;letter-spacing:-.02em;}
-#rptRoot .stat .s{font-size:10.5px;color:#5b6670;margin-top:1px;}
-
-/* condition of everything inspected, as one bar */
-#rptRoot .bar{display:flex;height:22px;border-radius:3px;overflow:hidden;background:#eef1f4;}
-#rptRoot .bar span{display:block;height:22px;}
-#rptRoot .barkey{display:flex;flex-wrap:wrap;gap:6px 20px;margin-top:9px;}
-#rptRoot .barkey .i{display:flex;align-items:center;gap:6px;font-size:10.5px;}
-#rptRoot .barkey .sw{width:9px;height:9px;border-radius:2px;display:block;}
-#rptRoot .barkey b{font-variant-numeric:tabular-nums;}
-
-/* tables: hairlines across, never down */
-#rptRoot table{width:100%;border-collapse:collapse;}
-#rptRoot th{font-size:8.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;
-  color:#5b6670;text-align:left;padding:0 8px 5px;border-bottom:1px solid #12161a;
-  vertical-align:bottom;}
-#rptRoot td{font-size:11px;line-height:1.4;padding:6px 8px;border-bottom:1px solid #eaeef1;
-  vertical-align:top;}
-#rptRoot tr.zebra td{background:#fafbfc;}
-#rptRoot td.c,#rptRoot th.c{text-align:center;}
-#rptRoot td.r,#rptRoot th.r{text-align:right;}
-#rptRoot td.n{font-variant-numeric:tabular-nums;white-space:nowrap;}
-#rptRoot td.stripe{border-left:3px solid transparent;padding-left:8px;}
-#rptRoot .unit{font-weight:750;letter-spacing:-.01em;white-space:nowrap;}
-#rptRoot .code{font-size:9px;color:#7b858e;font-variant-numeric:tabular-nums;
-  letter-spacing:.02em;white-space:nowrap;}
-
-/* chips */
-#rptRoot .g{display:inline-block;min-width:17px;text-align:center;color:#fff;
-  font-size:10px;font-weight:800;border-radius:3px;padding:1px 5px;line-height:1.4;}
-#rptRoot .sev{display:inline-block;font-size:8.5px;font-weight:700;letter-spacing:.07em;
-  text-transform:uppercase;color:#fff;border-radius:3px;padding:2px 6px;line-height:1.25;}
-
-/* the machine block */
-#rptRoot .mach{border-top:2.5px solid #12161a;padding-top:9px;}
-#rptRoot .machhd{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;}
-#rptRoot .machhd .u{font-size:19px;font-weight:800;letter-spacing:-.02em;}
-#rptRoot .machhd .c{font-size:11.5px;color:#5b6670;}
-#rptRoot .meta{display:flex;flex-wrap:wrap;gap:3px 22px;margin-top:6px;}
-#rptRoot .meta .m{font-size:10px;}
-#rptRoot .meta .m i{font-style:normal;color:#7b858e;letter-spacing:.06em;
-  text-transform:uppercase;font-size:8.5px;font-weight:700;margin-right:5px;}
-#rptRoot .verdict{font-size:12.5px;font-weight:650;padding:7px 11px;border-radius:4px;
-  margin-top:10px;}
-#rptRoot .v-ok{background:#eef6ef;color:#146b2c;}
-#rptRoot .v-watch{background:#fdf5e3;color:#8a6100;}
-#rptRoot .v-act{background:#fcecea;color:#98201a;}
-
-/* undercarriage measurement grid — two columns of readings, not one long list */
-#rptRoot .meas{display:flex;gap:20px;}
-#rptRoot .meas > div{flex:1;}
-#rptRoot .wb{display:block;height:5px;background:#eef1f4;border-radius:3px;
-  position:relative;overflow:hidden;min-width:52px;}
-#rptRoot .wb i{display:block;height:5px;border-radius:3px;}
-#rptRoot .subhd{font-size:9px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
-  color:#5b6670;margin-bottom:5px;}
-
-#rptRoot .shots{display:flex;flex-wrap:wrap;gap:7px;}
-#rptRoot .shots figure{width:150px;}
-#rptRoot .shots img{width:150px;height:112px;object-fit:cover;border-radius:3px;
-  border:1px solid #dfe4e9;display:block;}
-#rptRoot .shots figcaption{font-size:8.5px;color:#5b6670;margin-top:3px;line-height:1.3;}
-
-#rptRoot .sign{display:flex;gap:34px;align-items:flex-end;}
-#rptRoot .sign > div{min-width:210px;}
-#rptRoot .sign .ln{border-bottom:1px solid #9aa4ad;height:46px;display:flex;align-items:flex-end;}
-#rptRoot .sign img{height:44px;display:block;}
-#rptRoot .sign .nm{font-size:11.5px;font-weight:700;margin-top:4px;}
-#rptRoot .sign .rl{font-size:8.5px;letter-spacing:.11em;text-transform:uppercase;
-  color:#7b858e;font-weight:700;}
-
-#rptRoot .legend{display:flex;gap:26px;}
-#rptRoot .legend > div{flex:1;}
-#rptRoot .lgrow{display:flex;gap:9px;align-items:flex-start;margin-bottom:7px;}
-#rptRoot .lgrow .t{font-size:11px;line-height:1.4;}
-#rptRoot .body{font-size:11px;line-height:1.55;color:#2b333a;}
-`;
-
-/* Everything the cover and the work list need, counted once. */
-function rptScan(all){
-  const s={ rounds:all.length, units:new Set(), types:{}, grade:{A:0,B:0,C:0,X:0}, pts:0,
-            act:[], crit:0, first:"", last:"", wear:{ok:0,watch:0,act:0,none:0} };
-  for(const rec of all){
-    s.units.add(rec.equip);
-    s.types[rec.type||"MP"]=(s.types[rec.type||"MP"]||0)+1;
-    if(rec.date){ if(!s.first||rec.date<s.first) s.first=rec.date;
-                  if(!s.last ||rec.date>s.last ) s.last =rec.date; }
-    for(const [k,p] of Object.entries(rec.positions||{})){
-      s.pts++;
-      if(p.grade && s.grade[p.grade]!=null) s.grade[p.grade]++;
-      const w=wearOut(rec,k,p);
-      if(w && w.band) s.wear[w.band==="ok"?"ok":w.band]++;
-      const sev=effSev(p);
-      const bad = p.grade==="C"||p.grade==="X"||sev==="DEG"||sev==="CRI"
-                  ||(w&&(w.band==="act"||w.band==="watch"));
-      if(bad||p.action||p.defect) s.act.push({rec,k,p,w,sev});
-      if(p.grade==="X"||sev==="CRI"||(w&&w.band==="act")) s.crit++;
-    }
-  }
-  /* Thirty-one rows saying "DZ002 undercarriage past condemn" is not a work
-     list, it is the same instruction thirty-one times. A worn undercarriage is
-     one job: roll the machine's wear findings into a single line that still
-     names the worst points and counts the rest. */
-  s.total=s.act.length;                       // findings, before any roll-up
-  const byUC=new Map();
-  s.act=s.act.filter(f=>{
-    if(!f.w || !f.w.band || (f.w.band!=="act" && f.w.band!=="watch")) return true;
-    if(f.p.defect||f.p.action) return true;              // called out by hand: keep it
-    const id=f.rec.id;
-    let g=byUC.get(id);
-    if(!g){ g={rec:f.rec, roll:true, act:[], watch:[], worst:0, sev:"", p:{}, k:""};
-            byUC.set(id,g); }
-    (f.w.band==="act"?g.act:g.watch).push({k:f.k, pct:Number(f.w.wearPct)||0, mm:f.w.mm});
-    if((Number(f.w.wearPct)||0)>g.worst){ g.worst=Number(f.w.wearPct)||0; g.k=f.k; }
-    return false;
-  });
-  byUC.forEach(g=>{ g.act.sort((a,b)=>b.pct-a.pct); g.watch.sort((a,b)=>b.pct-a.pct);
-    g.sev = g.act.length ? "CRI" : "DEG"; s.act.push(g); });
-  const rank={X:0,C:1,B:2,A:3}, srank={CRI:0,DEG:1,INC:2,NOF:3};
-  s.act.sort((a,b)=>
-    (srank[a.sev]==null?4:srank[a.sev])-(srank[b.sev]==null?4:srank[b.sev]) ||
-    (rank[a.p.grade]==null?4:rank[a.p.grade])-(rank[b.p.grade]==null?4:rank[b.p.grade]) ||
-    ((b.w&&b.w.wearPct)||0)-((a.w&&a.w.wearPct)||0) ||
-    String(a.rec.equip).localeCompare(String(b.rec.equip)));
-  return s;
-}
-/* A magnetic-plug point is named by the component tree; an undercarriage point
-   is named by the walk. Printing the key underneath only helps when it says
-   something the name does not — "ROLLER.L6" twice is noise. */
+/* ===================== the report =====================
+   The document itself lives in report-core.js, which the dashboard loads too —
+   one stylesheet, one set of sections, one wording. All this end does is put
+   its records into the shape that module reads. */
 function rptName(rec,k){
   const w=!!(TYPE_META[rec.type]&&TYPE_META[rec.type].wear);
   const name=(w?ucLabel(k):itemLabelFor(rec,k))||k;
   return {name, code: name===k ? "" : k};
 }
-const rptCell = (rec,k) => { const n=rptName(rec,k);
-  return esc(n.name)+(n.code?`<div class="code">${esc(n.code)}</div>`:""); };
-/* White on the amber is barely legible in print; the amber chips take dark ink. */
-const rptInk = hex => hex===GRADE_HEX.B ? "#3d2c00" : "#fff";
-const rptGrade = g => { const c=GRADE_HEX[g]||"#8a939b";
-  return g ? `<span class="g" style="background:${c};color:${rptInk(c)}">${esc(g)}</span>` : ""; };
-const rptSev   = s => { const c=SEV_HEX[s]||"#8a939b";
-  return s ? `<span class="sev" style="background:${c};color:${rptInk(c)}">${esc(t("sev_"+s))}</span>` : ""; };
-const rptWearBar = pct => {
-  const p=Math.max(0,Math.min(130,Number(pct)||0));
-  const col = p>=100?GRADE_HEX.X : p>=80?GRADE_HEX.C : GRADE_HEX.A;
-  return `<span class="wb"><i style="width:${Math.round(p/130*100)}%;background:${col}"></i></span>`;
-};
-/* The one line a machine gets in its own header — what this round concluded. */
-function rptVerdict(rec,rows){
-  /* A round with points nobody could reach is not "all normal" — saying so is
-     how a roller behind a guard stays unmeasured for a year. */
-  const worst=rows.reduce((a,[k,p])=>{ const w=wearOut(rec,k,p), s=effSev(p);
-    if(p.grade==="X"||s==="CRI"||(w&&w.band==="act")) return "act";
-    if(a==="act") return a;
-    if(p.grade==="C"||p.grade==="B"||s==="DEG"||s==="INC"||(w&&w.band==="watch")) return "watch";
-    return a; }, "ok");
-  return worst;
-}
-
-async function buildReportSections(){
-  const all=(await dbAll()).sort((a,b)=>
-    (a.date||"").localeCompare(b.date||"") || String(a.equip).localeCompare(String(b.equip)));
-  const L=t, S=rptScan(all), secs=[];
-  const stamp=new Date();
-  // 8/1/2026 means one thing in Anadyr and another in Denver. Write it once.
-  const pad=n=>String(n).padStart(2,"0");
-  const stampTxt=`${stamp.getFullYear()}-${pad(stamp.getMonth()+1)}-${pad(stamp.getDate())} `
-    +`${pad(stamp.getHours())}:${pad(stamp.getMinutes())}`;
-
-  /* ---------- 1. the answer ---------- */
-  const totalGraded=S.grade.A+S.grade.B+S.grade.C+S.grade.X;
-  const barSeg=g=>{ const n=S.grade[g]; if(!n) return "";
-    return `<span style="width:${(n/totalGraded*100).toFixed(2)}%;background:${GRADE_HEX[g]}"></span>`; };
-  const key=g=>{ const n=S.grade[g]; if(!n) return "";
-    return `<span class="i"><span class="sw" style="background:${GRADE_HEX[g]}"></span>
-      <b>${n}</b> ${esc(L("rep_g_"+g))}</span>`; };
-  const typeLine=TYPE_ORDER.filter(k=>S.types[k])
-    .map(k=>`${S.types[k]} ${esc(L("type_"+k))}`).join(" · ");
-  const headline = S.total
-    ? L("rep_head_some",{n:S.total,c:S.crit})
-    : L("rep_head_none");
-
-  secs.push({nb:false, html:`
-    <div class="sec">
-      <div class="eyebrow">${esc(L("rep_sub"))}</div>
-      <div class="h1">${esc(L("rep_title"))}</div>
-      <div class="rule" style="margin:13px 0 0"></div>
-      <div class="muted num" style="font-size:10.5px;padding:7px 0 22px;">
-        ${esc(L("rep_generated"))} ${esc(stampTxt)}${typeLine?" · "+typeLine:""}</div>
-
-      <div class="lede" style="margin-bottom:20px;">${esc(headline)}</div>
-
-      <div class="stats">
-        <div class="stat"><div class="k">${esc(L("rep_mach"))}</div>
-          <div class="v">${S.units.size}</div>
-          <div class="s">${esc(L("rep_ins"))}: ${S.rounds}</div></div>
-        <div class="stat"><div class="k">${esc(L("rep_c_pts"))}</div>
-          <div class="v">${S.pts}</div>
-          <div class="s">${esc(S.first||"—")}${S.last&&S.last!==S.first?" → "+esc(S.last):""}</div></div>
-        <div class="stat"><div class="k">${esc(L("rep_work"))}</div>
-          <div class="v" style="color:${S.total?GRADE_HEX.C:GRADE_HEX.A}">${S.total}</div>
-          <div class="s">${esc(L("rep_findings"))}</div></div>
-        <div class="stat"><div class="k">${esc(L("rep_now"))}</div>
-          <div class="v" style="color:${S.crit?GRADE_HEX.X:GRADE_HEX.A}">${S.crit}</div>
-          <div class="s">${esc(L("rep_now_s"))}</div></div>
-      </div>
-
-      ${totalGraded?`<div style="margin-top:24px;">
-        <div class="eyebrow" style="margin-bottom:8px;">${esc(L("rep_cond"))}</div>
-        <div class="bar">${["A","B","C","X"].map(barSeg).join("")}</div>
-        <div class="barkey">${["A","B","C","X"].map(key).join("")}</div>
-      </div>`:""}
-
-      <div style="margin-top:26px;">
-        <div class="eyebrow" style="margin-bottom:9px;">${esc(L("rep_glance"))}</div>
-        <table><tr>
-          <th style="width:78px">${esc(L("rep_c_unit"))}</th>
-          <th style="width:118px">${esc(L("rep_type"))}</th>
-          <th class="c" style="width:60px">${esc(L("rep_date"))}</th>
-          <th class="c" style="width:52px">${esc(L("rep_c_pts"))}</th>
-          <th>${esc(L("rep_c_find"))}</th></tr>
-        ${all.map((rec,i)=>{
-          const rows=Object.entries(rec.positions||{});
-          const v=rptVerdict(rec,rows);
-          const unread=(TYPE_META[rec.type]&&TYPE_META[rec.type].wear)
-            ? rows.filter(([k,p])=>p.mm==null).length : 0;
-          // points nobody could reach are not green
-          const v2 = (v==="ok"&&unread) ? "watch" : v;
-          const col=v2==="act"?GRADE_HEX.X:v2==="watch"?GRADE_HEX.C:GRADE_HEX.A;
-          const mine=S.act.filter(f=>f.rec.id===rec.id);
-          const seen=[];
-          mine.forEach(f=>{ const w=f.roll ? L("rep_uc_over",{n:f.act.length})
-              : (f.p.defect?defectLabel(f.p.defect):rptName(rec,f.k).name);
-            if(seen.indexOf(w)<0) seen.push(w); });
-          if(unread) seen.push(L("rep_unread_s",{n:unread}));
-          const words = seen.length
-            ? seen.slice(0,2).map(esc).join(" · ")
-              + (seen.length>2?` <span class="muted">+${seen.length-2}</span>`:"")
-            : `<span class="muted">${esc(L("rep_none_att"))}</span>`;
-          return `<tr class="${i%2?"zebra":""}">
-            <td class="stripe" style="border-left-color:${col}"><span class="unit">${esc(rec.equip)}</span></td>
-            <td>${esc(L("type_"+(rec.type||"MP")))}</td>
-            <td class="c n">${esc(rec.date||"")}</td>
-            <td class="c n">${rows.length}</td>
-            <td>${words}</td></tr>`;
-        }).join("")}
-        </table>
-      </div>
-
-      ${(S.wear.ok+S.wear.watch+S.wear.act)?`<div style="margin-top:22px;">
-        <div class="eyebrow" style="margin-bottom:8px;">${esc(L("rep_uc_cond"))}</div>
-        <div class="barkey" style="margin-top:0;">
-          <span class="i"><span class="sw" style="background:${GRADE_HEX.A}"></span><b>${S.wear.ok}</b> ${esc(L("uc_band_ok"))}</span>
-          <span class="i"><span class="sw" style="background:${GRADE_HEX.C}"></span><b>${S.wear.watch}</b> ${esc(L("uc_band_watch"))}</span>
-          <span class="i"><span class="sw" style="background:${GRADE_HEX.X}"></span><b>${S.wear.act}</b> ${esc(L("uc_band_act"))}</span>
-        </div></div>`:""}
-    </div>`});
-
-  /* ---------- 2. the work ---------- */
-  let wl=`<div class="sec"><div class="sechd"><span class="n">01</span>
-      <span class="h2">${esc(L("rep_work"))}</span>
-      <span class="muted" style="font-size:10.5px;margin-left:auto;">${esc(L("rep_work_sub"))}</span></div>`;
-  if(!S.act.length){
-    wl+=`<div class="verdict v-ok">${esc(L("rep_work_none"))}</div>`;
-  }else{
-    wl+=`<table><tr>
-      <th style="width:74px">${esc(L("rep_c_unit"))}</th>
-      <th style="width:150px">${esc(L("rep_c_comp"))}</th>
-      <th style="width:180px">${esc(L("rep_c_find"))}</th>
-      <th style="width:150px">${esc(L("rep_cause"))}</th>
-      <th style="width:130px">${esc(L("rep_c_do"))}</th>
-      <th class="c" style="width:52px">${esc(L("rep_date"))}</th></tr>`;
-    S.act.forEach((f,i)=>{
-      const {rec,k,p,w,sev}=f;
-      const col=SEV_HEX[sev]||GRADE_HEX[p.grade]||"#c9d0d6";
-      const row=(comp,find,cause,todo)=>{ wl+=`<tr class="${i%2?"zebra":""}">
-        <td class="stripe" style="border-left-color:${col}">
-          <span class="unit">${esc(rec.equip)}</span>
-          <div class="code">${esc(L("type_"+(rec.type||"MP")))}</div></td>
-        <td>${comp}</td><td>${find}</td><td>${cause}</td><td>${todo}</td>
-        <td class="c n">${esc((rec.date||"").slice(5))}</td></tr>`; };
-      const todo = p.action
-        ? `<b>${esc(actionLabel(p.action))}</b>${p.wo?`<div class="code">${esc(L("rep_c_wo"))} ${esc(p.wo)}</div>`:""}`
-        : `<span class="muted">${esc(L("rep_do_tbd"))}</span>`;
-      if(f.roll){
-        const nm=x=>rptName(rec,x.k).name;
-        const worst=f.act.concat(f.watch).slice(0,3)
-          .map(x=>`${esc(nm(x))} <span class="n">${x.pct}%</span>`).join("<br>");
-        row(`<b>${esc(L("rep_uc_cond"))}</b><div class="code">${esc(L("rep_flagged",{n:f.act.length+f.watch.length}))}</div>`,
-            `${f.act.length?`<b>${esc(L("rep_uc_over",{n:f.act.length}))}</b><br>`:""}
-             ${f.watch.length?`${esc(L("rep_uc_watch",{n:f.watch.length}))}<br>`:""}
-             <div style="margin-top:3px;">${rptSev(f.sev)}</div>
-             <div class="code" style="margin-top:4px;line-height:1.5;">${worst}</div>`,
-            `<span class="muted">${esc(L("rep_uc_cause"))}</span>`, todo);
-        return;
-      }
-      const find=[ p.defect?esc(defectLabel(p.defect)):"",
-                   (w&&w.wearPct!=="")?`${esc(w.wearPct)}% ${esc(L("rep_c_worn"))} · ${esc(w.mm)} mm`:"",
-                   (!p.defect&&p.comment)?esc(p.comment):"" ].filter(Boolean).join("<br>");
-      row(rptCell(rec,k),
-        `${find||"—"}<div style="margin-top:3px;">${rptGrade(p.grade)} ${rptSev(sev)}</div>
-         ${p.defect&&DEFECT_BY[upDefect(p.defect)]?`<div class="code">${esc(upDefect(p.defect))} · ISO ${esc(DEFECT_BY[upDefect(p.defect)].iso14224)}</div>`:""}`,
-        p.cause?esc(causeLabel(p.cause)):`<span class="muted">${esc(L("rep_cause_tbd"))}</span>`,
-        todo);
-    });
-    wl+=`</table>`;
-  }
-  secs.push({nb:true, html:wl+`</div>`});
-
-  /* ---------- 3. the evidence, one machine at a time ---------- */
-  let firstDetail=true;
+async function rptRecords(){
+  const all=await dbAll();
+  const out=[];
   for(const rec of all){
-    const cls=CLASSES[rec.cls]?(CLASSES[rec.cls][lang]||CLASSES[rec.cls].en):(rec.cls||"");
-    const pos=Object.entries(rec.positions||{});
-    const isWear=!!(TYPE_META[rec.type]&&TYPE_META[rec.type].wear);
-    const isTemp=!!(TYPE_META[rec.type]&&TYPE_META[rec.type].temp);
-    /* On a wear round the measurement grid IS the detail — every reading, its
-       limits and a bar. Listing the same thirty-four points again above it, in a
-       table whose grade, severity and defect columns are all empty, was two
-       pages saying one thing. Only a point somebody wrote something about earns
-       a row up here. */
-    const notable=pos.filter(([k,p])=>{ const w=wearOut(rec,k,p);
-      const said = p.grade==="B"||p.grade==="C"||p.grade==="X"||p.defect||p.action||p.comment
-        ||effSev(p)==="DEG"||effSev(p)==="CRI";
-      return isWear ? said : (said || (w&&(w.band==="act"||w.band==="watch"))); });
-    const quiet=pos.length-notable.length;
-    const vc=rptVerdict(rec,pos);
-    const unread=isWear?pos.filter(([k,p])=>p.mm==null).length:0;
-    const over=isWear ? pos.map(([k,p])=>[k,wearOut(rec,k,p)])
-        .filter(([k,w])=>w&&(w.band==="act"||w.band==="watch"))
-        .sort((x,y)=>(Number(y[1].wearPct)||0)-(Number(x[1].wearPct)||0)) : [];
-    const overAct=over.filter(([k,w])=>w.band==="act");
-    /* On a wear round the verdict counts worn points, not rows in a table that
-       deliberately holds none of them. */
-    const vn = isWear ? over.length : notable.length;
-
-    let m=`<div class="sec"><div class="mach">
-      ${firstDetail?`<div class="sechd" style="border:0;padding:0;margin:0 0 11px;">
-        <span class="n">02</span><span class="h2">${esc(L("rep_detail"))}</span></div>`:""}
-      <div class="machhd"><span class="u">${esc(rec.equip)}</span>
-        <span class="c">${esc(cls)}</span>
-        <span class="c" style="margin-left:auto;">${esc(L("type_"+(rec.type||"MP")))}</span></div>
-      <div class="meta">
-        <span class="m"><i>${esc(L("rep_date"))}</i><span class="num">${esc(rec.date||"")}</span></span>
-        ${rec.smu?`<span class="m"><i>SMU</i><span class="num">${esc(rec.smu)}</span></span>`:""}
-        ${rec.by?`<span class="m"><i>${esc(L("rep_by_who"))}</i>${esc(rec.by)}</span>`:""}
-        <span class="m"><i>${esc(L("rep_c_pts"))}</i><span class="num">${pos.length}</span></span>
-        ${rec.gps?`<span class="m"><i>${esc(L("rep_gps"))}</i><span class="num">${rec.gps.lat.toFixed(4)}, ${rec.gps.lon.toFixed(4)}</span></span>`:""}
-      </div>
-      <div class="verdict v-${vc==="ok"&&unread?"watch":vc}">${
-        (vc==="ok"&&unread)
-          ? esc(L("rep_verdict_part",{m:pos.length-unread,of:pos.length,n:unread}))
-          : esc(L("rep_verdict_"+vc,{n:vn,of:pos.length}))
-            +(unread?" "+esc(L("rep_unread_n",{n:unread,of:pos.length})):"")
-      }</div>`;
-    firstDetail=false;
-
-    if(notable.length){
-      m+=`<div class="subhd" style="margin-top:15px;">${esc(L("rep_notable"))}</div>
-        <table><tr>
-        <th style="width:168px">${esc(L("rep_item"))}</th>
-        <th class="c" style="width:34px">${esc(L("rep_grade"))}</th>
-        <th style="width:74px">${esc(L("rep_sev"))}</th>
-        <th style="width:158px">${esc(L("rep_defect"))}</th>
-        <th style="width:130px">${esc(L("rep_cause"))}</th>
-        <th>${esc(L("rep_c_do"))} / ${esc(L("rep_read"))}</th></tr>`;
-      notable.forEach(([k,p],i)=>{
-        const w=wearOut(rec,k,p), sev=effSev(p);
-        const read=[ p.particle&&`PC ${esc(p.particle)}`, p.comp&&`${esc(p.comp)} h`,
-          p.oil&&`${esc(p.oil)} h oil`,
-          (isTemp&&p.tempV)&&`${esc(p.tempV)} °C${p.tempA?` / ${esc(p.tempA)}`:""}`,
-          (w&&w.mm!=="")&&`${esc(w.mm)} mm${w.wearPct!==""?` · ${esc(w.wearPct)}%`:""}`,
-          (w&&w.reason)&&esc(w.reasonLabel||w.reason),
-          p.comment&&esc(p.comment) ].filter(Boolean).join(" · ");
-        m+=`<tr class="${i%2?"zebra":""}">
-          <td class="stripe" style="border-left-color:${SEV_HEX[sev]||GRADE_HEX[p.grade]||"transparent"}">
-            ${rptCell(rec,k)}</td>
-          <td class="c">${rptGrade(p.grade)}</td>
-          <td>${rptSev(sev)}</td>
-          <td>${p.defect?esc(defectLabel(p.defect)):""}
-            ${p.defect&&DEFECT_BY[upDefect(p.defect)]?`<div class="code">ISO ${esc(DEFECT_BY[upDefect(p.defect)].iso14224)}</div>`:""}</td>
-          <td>${p.cause?esc(causeLabel(p.cause)):""}</td>
-          <td>${p.action?`<b>${esc(actionLabel(p.action))}</b>${p.wo?` <span class="code">[${esc(p.wo)}]</span>`:""}${read?"<br>":""}`:""}${read}</td></tr>`;
-      });
-      m+=`</table>`;
-    }
-    // the verdict already said "all N normal" — no need to say it twice
-    if(quiet>0 && notable.length) m+=`<div class="muted" style="font-size:10.5px;margin-top:8px;">
-      ${esc(L("rep_normal_n",{n:quiet}))}</div>`;
-    /* A thirty-six point measurement grid plus four photographs is taller than a
-       page, and slicing one canvas at an arbitrary pixel cut a table row in
-       half. Anything that could overflow becomes its own section, headed with
-       the machine it continues; a short round stays in one piece. */
-    const extra=[];
-    const cont=`<div class="sec"><div class="mach" style="border-top-width:1px;">
-      <div class="machhd"><span class="u" style="font-size:14px;">${esc(rec.equip)}</span>
-      <span class="c">${esc(L("rep_cont"))}</span></div>`;
-
-    /* An undercarriage round IS its numbers — all of them, in two columns. */
-    if(isWear){
-      const rows=pos.filter(([k,p])=>p.mm!=null||p.reason);
-      if(over.length) m+=`<div class="verdict v-${overAct.length?"act":"watch"}" style="margin-top:12px;">
-        ${overAct.length?esc(L("rep_uc_over",{n:overAct.length}))+". ":""}${
-          over.length>overAct.length?esc(L("rep_uc_watch",{n:over.length-overAct.length}))+". ":""}
-        <span style="font-weight:500;">${over.slice(0,6).map(([k,w])=>
-          esc(rptName(rec,k).name)+` <span class="num">${esc(w.wearPct)}%</span>`).join(" · ")}${
-          over.length>6?" · +"+(over.length-6):""}</span></div>`;
-      if(rows.length){
-        const col=list=>{ let x=`<table><tr>
-            <th>${esc(L("rep_item"))}</th>
-            <th class="r" style="width:52px">${esc(L("rep_c_meas"))}</th>
-            <th class="r" style="width:44px">${esc(L("rep_c_worn"))}</th>
-            <th style="width:60px"></th></tr>`;
-          list.forEach(([k,p],i)=>{ const w=wearOut(rec,k,p)||{};
-            x+=`<tr class="${i%2?"zebra":""}"><td style="padding-left:0;">${esc(rptName(rec,k).name)}
-                <div class="code">${esc((w.newMM!==""&&w.newMM!=null)?`${w.newMM} → ${w.condemnMM} mm`:L("uc_noref"))}</div></td>
-              <td class="r n">${w.mm!==""&&w.mm!=null?`<b>${esc(w.mm)}</b>`:`<span class="muted" style="font-size:9px">${esc(w.reasonLabel||w.reason||"—")}</span>`}</td>
-              <td class="r n">${w.wearPct!==""&&w.wearPct!=null?esc(w.wearPct)+"%":""}</td>
-              <td>${w.wearPct!==""&&w.wearPct!=null?rptWearBar(w.wearPct):""}</td></tr>`; });
-          return x+`</table>`; };
-        /* Two columns of twenty-two clears a page. Split into equal parts
-           rather than fixed ones, so forty-four readings are 22+22 and not a
-           full page followed by a stub. */
-        const MAX=44, parts=Math.ceil(rows.length/MAX), PER=Math.ceil(rows.length/parts);
-        for(let o=0;o<rows.length;o+=PER){
-          const chunk=rows.slice(o,o+PER), hf=Math.ceil(chunk.length/2);
-          extra.push(cont+
-            `<div class="subhd" style="margin-top:11px;">${esc(L("rep_meas_t"))}${
-              parts>1?` <span class="muted">${o+1}\u2013${Math.min(o+PER,rows.length)} / ${rows.length}</span>`:""}</div>
-             <div class="meas"><div>${col(chunk.slice(0,hf))}</div><div>${col(chunk.slice(hf))}</div></div>
-             </div></div>`);
-        }
+    const meta=TYPE_META[rec.type]||{};
+    const items=[];
+    for(const [k,p] of Object.entries(rec.positions||{})){
+      const nm=rptName(rec,k), d=DEFECT_BY[upDefect(p.defect)];
+      /* wearOut() describes a position somebody acted on. On a wear round every
+         position in the walk gets a slot even when nobody did: a point with no
+         millimetres and no reason is a gap in the round, and the report has to
+         count it rather than quietly leave it out. */
+      let w=wearOut(rec,k,p);
+      if(!w && meta.wear){
+        const a2=ASSET_BY[rec.equip]||{}, [pt,pos]=ucSplit(k);
+        const ref=(window.WEAR && a2.m) ? WEAR.refFor(rec.equip,a2.m,pt,pos,rec.date) : null;
+        w={ mm:"", stood:0, reason:"", reasonLabel:"",
+            newMM:(ref&&!ref.x)?ref.n:"", condemnMM:(ref&&!ref.x)?ref.c:"",
+            wearPct:"", band:"", refSrc:ref?(ref.x?("x:"+ref.x):ref.src):"" };
       }
+      const read=[ p.particle&&`PC ${p.particle}`, p.comp&&`${p.comp} h`, p.oil&&`${p.oil} h oil`,
+        (meta.temp&&p.tempV)&&`${p.tempV} °C${p.tempA?` / ${p.tempA}`:""}` ].filter(Boolean);
+      const photos=[];
+      for(const b of (p.photos||(p.photoBlob?[p.photoBlob]:[])))
+        { try{ photos.push(await blobToThumb(b,420)); }catch(e){} }
+      items.push({ key:k, name:nm.name, code:nm.code,
+        grade:p.grade||"", sev:effSev(p),
+        defect:p.defect?defectLabel(p.defect):"", defectCode:p.defect?upDefect(p.defect):"",
+        iso:d?d.iso14224:"", cause:p.cause?causeLabel(p.cause):"",
+        action:p.action?actionLabel(p.action):"", wo:p.wo||"", comment:p.comment||"",
+        readings:read, photos,
+        w: w ? { mm:(w.mm===""?null:w.mm), newMM:(w.newMM===""?null:w.newMM),
+                 condemnMM:(w.condemnMM===""?null:w.condemnMM),
+                 pct:(w.wearPct===""?null:w.wearPct), band:w.band||"",
+                 refSrc:w.refSrc||"", reason:w.reason||"", reasonLabel:w.reasonLabel||"",
+                 stood:!!w.stood } : null });
     }
-
-    /* photographs, captioned with the point they belong to */
-    const shots=[];
-    for(const [k,p] of pos){ const ph=p.photos||(p.photoBlob?[p.photoBlob]:[]);
-      for(const b of ph) shots.push({k,b}); }
-    if(shots.length){
-      let ph=cont+`<div class="subhd" style="margin-top:11px;">${esc(L("rep_photos"))}</div><div class="shots">`;
-      for(const s of shots){ let u=""; try{ u=await blobToThumb(s.b,420); }catch(e){ continue; }
-        ph+=`<figure><img src="${u}"><figcaption>${esc(rptName(rec,s.k).name)}</figcaption></figure>`; }
-      extra.push(ph+`</div></div></div>`);
-    }
-
-    /* who stood behind it */
-    let sig=""; if(rec.sign){ try{ sig=await blobToThumb(rec.sign,400); }catch(e){} }
-    const signHTML=`<div class="hair" style="margin:15px 0 11px;"></div>
-      <div class="sign">
-        <div><div class="rl">${esc(L("rep_by_who"))}</div>
-          <div class="ln"></div><div class="nm">${esc(rec.by||"\u2014")}</div></div>
-        <div><div class="rl">${esc(L("rep_sup"))}</div>
-          <div class="ln">${sig?`<img src="${sig}">`:""}</div>
-          <div class="nm">${esc(rec.sup||L("rep_nosign"))}</div></div>
-      </div>`;
-    if(!extra.length){
-      secs.push({nb:false, html:m+signHTML+`</div></div>`});     // a short round stays whole
-    }else{
-      secs.push({nb:false, html:m+`</div></div>`});
-      extra.forEach(x=>secs.push({nb:false, html:x}));
-      // the names go with the last part, never alone on a page of their own
-      const last=secs.pop();
-      secs.push({nb:false, html:last.html.replace(/<\/div><\/div>$/, signHTML+`</div></div>`)});
-    }
+    let signUrl=""; if(rec.sign){ try{ signUrl=await blobToThumb(rec.sign,400); }catch(e){} }
+    out.push({ equip:rec.equip, clsLabel:(CLASSES[rec.cls]?(CLASSES[rec.cls][lang]||CLASSES[rec.cls].en):(rec.cls||"")),
+      type:rec.type, typeLabel:t("type_"+(rec.type||"MP")), date:rec.date||"",
+      by:rec.by||"", sup:rec.sup||"", smu:rec.smu||"", gps:rec.gps||null, signUrl,
+      wear:!!meta.wear, temp:!!meta.temp, items });
   }
-
-  /* ---------- 4. how to read any of it ---------- */
-  const gl=g=>`<div class="lgrow">${rptGrade(g)}<div class="t">${esc(L("rep_g_"+g))}</div></div>`;
-  const sl=s=>`<div class="lgrow">${rptSev(s)}<div class="t">${esc(L("rep_s_"+s))}</div></div>`;
-  secs.push({nb:true, html:`<div class="sec">
-    <div class="sechd"><span class="n">03</span><span class="h2">${esc(L("rep_legend"))}</span></div>
-    <div class="legend">
-      <div>
-        <div class="eyebrow" style="margin-bottom:9px;">${esc(L("rep_lg_grade"))}</div>
-        ${["A","B","C","X"].map(gl).join("")}
-        <div class="eyebrow" style="margin:16px 0 9px;">${esc(L("rep_lg_sev"))}</div>
-        ${["NOF","INC","DEG","CRI"].map(sl).join("")}
-      </div>
-      <div>
-        <div class="eyebrow" style="margin-bottom:9px;">${esc(L("rep_lg_wear"))}</div>
-        <div class="body">${esc(L("rep_lg_wear_d"))}</div>
-        <div style="display:flex;gap:9px;align-items:center;margin-top:10px;">
-          ${rptWearBar(45)}<span class="body">45% — ${esc(L("uc_band_ok"))}</span></div>
-        <div style="display:flex;gap:9px;align-items:center;margin-top:5px;">
-          ${rptWearBar(88)}<span class="body">88% — ${esc(L("uc_band_watch"))}</span></div>
-        <div style="display:flex;gap:9px;align-items:center;margin-top:5px;">
-          ${rptWearBar(112)}<span class="body">112% — ${esc(L("uc_band_act"))}</span></div>
-        <div class="eyebrow" style="margin:16px 0 9px;">${esc(L("rep_lg_iso"))}</div>
-        <div class="body">${esc(L("rep_lg_iso_d"))}</div>
-      </div>
-    </div>
-    <div class="hair" style="margin:20px 0 8px;"></div>
-    <div class="muted" style="font-size:9.5px;">${esc(L("rep_by"))} · ${esc(stamp.toISOString().slice(0,10))}</div>
-  </div>`});
-
-  return secs;
+  return out;
 }
-
-/* Rasterise section by section rather than the whole document at once. One
-   canvas sliced at fixed intervals cut tables through the middle of a row and
-   split a machine's header from its findings; a section that will not fit the
-   room left on a page now starts the next one. */
+async function buildReportSections(){
+  return CMR.sections({ lang, title:t("rep_title"), stamp:new Date(),
+    sevLabel:s=>t("sev_"+s), records: await rptRecords() });
+}
 $("reportBtn").onclick=async ()=>{
   const all=await dbAll(); if(!all.length){ dlg(t("m_nothing_export")); return; }
   if(!await needPdf()){ dlg(t("m_lib_pdf")); return; }
   dlg(t("rep_building"));
-  const holder=document.createElement("div");
-  holder.id="rptRoot";
-  holder.style.cssText="position:fixed;left:-99999px;top:0;width:760px;background:#fff;z-index:-1;";
   try{
-    const st=document.createElement("style"); st.textContent=RPT_CSS;
-    document.head.appendChild(st);
-    const secs=await buildReportSections();
-    holder.innerHTML=secs.map(s=>`<div class="secwrap">${s.html}</div>`).join("");
-    document.body.appendChild(holder);
-    await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
-
-    const doc=new window.jspdf.jsPDF({unit:"pt",format:"a4"});
-    const PW=595, PH=842, M=38, FOOT=22, cw=PW-2*M, top=M, bottom=PH-M-FOOT;
-    const els=[...holder.children];
-    let y=top, page=1, drew=false;
-    for(let i=0;i<els.length;i++){
-      const c=await window.html2canvas(els[i],{scale:2,backgroundColor:"#ffffff",logging:false});
-      if(!c.width||!c.height) continue;
-      const k=cw/c.width;                       // canvas px → pt
-      let hh=c.height*k;
-      if(secs[i].nb && drew){ doc.addPage(); page++; y=top; }
-      else if(drew && hh<=bottom-top && y+hh>bottom){ doc.addPage(); page++; y=top; }
-      let sY=0;
-      while(sY<c.height){
-        const roomPt=bottom-y;
-        if(roomPt<46){ doc.addPage(); page++; y=top; continue; }
-        const sliceH=Math.min(Math.floor(roomPt/k), c.height-sY);
-        const c2=document.createElement("canvas");
-        c2.width=c.width; c2.height=sliceH;
-        const cx=c2.getContext("2d");
-        cx.fillStyle="#ffffff"; cx.fillRect(0,0,c2.width,c2.height);
-        cx.drawImage(c,0,sY,c.width,sliceH,0,0,c.width,sliceH);
-        doc.addImage(c2.toDataURL("image/jpeg",0.92),"JPEG",M,y,cw,sliceH*k);
-        y+=sliceH*k; sY+=sliceH; drew=true;
-        if(sY<c.height){ doc.addPage(); page++; y=top; }
-      }
-      y+=14;
-    }
-    // Page numbers are drawn as text, not raster — crisp, and digits need no font.
-    const n=doc.getNumberOfPages();
-    for(let i=1;i<=n;i++){
-      doc.setPage(i);
-      doc.setDrawColor(223,228,233); doc.setLineWidth(0.5);
-      doc.line(M,PH-M-10,PW-M,PH-M-10);
-      doc.setFontSize(7.5); doc.setTextColor(123,133,142);
-      doc.text(`CM-${todayISO()}`,M,PH-M+2);
-      doc.text(`${i} / ${n}`,PW-M,PH-M+2,{align:"right"});
-    }
-    st.remove();
+    const doc=await CMR.paginate({ sections:await buildReportSections(),
+      jsPDF:window.jspdf.jsPDF, html2canvas:window.html2canvas, docId:"CM-"+todayISO() });
     $("dlg").close();
     doc.save(`CM_report_${todayISO()}.pdf`);
   }catch(err){ $("dlg").close(); dlg(["Report error", String(err&&err.message||err)]); }
-  finally{ holder.remove(); }
 };
 
 /* ===================== minimal ZIP (store) ===================== */
@@ -3860,7 +3348,7 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
    has accepted every one of its files. */
 const DEST_META={ gas:{label:"Google Drive"}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
 const DEST_IDS=["gas","pa","post"];
-const BUILD="62";
+const BUILD="63";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -4381,6 +3869,7 @@ if("serviceWorker" in navigator && window.isSecureContext){ let reloaded=false;
    picks up the new files. */
 const SHELL_ASSETS=["index.html","manifest.webmanifest","jsQR.js","qrcode.js","upload-defaults.js",
   "hme.js","hme-cascade.js","mp-fc.js","assets.js","temp-limits.js",
+  "wear.js","wear-figs.js","wear-map.js","report-core.js",
   "jspdf.umd.min.js","html2canvas.min.js","sw.js"];
 /* "Am I on the latest build?" used to be unanswerable from inside the app: the
    service worker serves the copy it has, and a stale page looks exactly like a
