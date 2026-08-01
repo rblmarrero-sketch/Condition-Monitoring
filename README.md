@@ -432,6 +432,33 @@ evicts under pressure — either would take a queued round, photos included. ⚙
 answer rather than assuming it, along with storage used, room remaining in photos, and a warning
 at 80% while there is still time to upload and clear.
 
+### Light, dark, and what the header pill means
+
+⚙ → **Appearance**: Auto, Light or Dark. Auto follows the phone and keeps following
+it while the app is open; the other two override it and stick. Both palettes are
+designed rather than one inverted from the other — the neutrals carry a slight
+cool-steel bias, and every text tone clears WCAG AA against the surface it actually
+sits on, checked in the test suite rather than by eye. The severity colours are the
+same in both: a grade C must not look like a different grade because of the time of day.
+
+The pill in the header used to read `navigator.onLine` and say **online**. That
+property means the phone has a network interface attached, not that anything can be
+reached — in the pit it reads true while every upload times out, so a confident
+green light sat over failing uploads. It now reports the only thing worth a permanent
+place in the header, *is the work safe*, and only claims to be connected when Drive
+has actually answered:
+
+| | |
+|---|---|
+| **Synced** (green) | everything captured is in Drive |
+| **N waiting** (amber) | that many rounds still to upload |
+| **No signal** (amber) | the phone has a network and Drive is not answering — the pit |
+| **Offline** (grey) | no network at all |
+| **Upload failing** (red) | a destination is returning errors |
+| **Not syncing** (grey) | no upload destination configured |
+
+Tapping it opens the Queue screen, where the detail and the retry are.
+
 ### How the defect was found
 
 Every position records a **Detection Method** (ISO 14224 Table B.3) beside the severity,

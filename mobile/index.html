@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Truck Inspection — Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=52">
+<link rel="manifest" href="manifest.webmanifest?v=53">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -16,33 +16,67 @@
   Edit the TYPES config below to change components/filters/positions.
 -->
 <style>
-  :root{ color-scheme:dark;
-    --page:#0d0d0d; --surface:#1a1a19; --surface-2:#242422; --surface-3:#2f2f2c;
-    --ink:#fff; --ink-2:#c3c2b7; --muted:#8b8a83; --border:rgba(255,255,255,.12);
-    --accent:#3987e5; --accent-ink:#fff;
-    --good:#0ca30c; --warning:#fab219; --serious:#ec835a; --critical:#d03b3b; --none:#6b6a65; }
-  @media (prefers-color-scheme: light){ :root:where(:not([data-theme="dark"])){ color-scheme:light;
-    --page:#f4f4f1; --surface:#fff; --surface-2:#f2f2ef; --surface-3:#e9e9e4;
-    --ink:#111; --ink-2:#44433f; --muted:#8b8a83; --border:rgba(0,0,0,.12); } }
+  /* Light and dark are both designed, not one inverted from the other. The
+     neutrals carry a slight cool-steel bias — a pure grey reads as unfinished,
+     and this app is looked at on a bright bench and in a dark cab on night
+     shift. The severity colours are the same in both: they encode data, and a
+     grade C must not look like a different grade because of the time of day.
+
+     Three states: follow the phone, force light, force dark. The media query is
+     skipped when the inspector has forced light, and [data-theme] wins outright. */
+  :root, :root[data-theme="light"]{ color-scheme:light;
+    --page:#eceff1; --surface:#fff; --surface-2:#f3f6f7; --surface-3:#e4e9ec;
+    --ink:#11171a; --ink-2:#41505a; --muted:#616f76; --border:#d6dde1;
+    --line:#e7ecee; --shadow:0 1px 2px rgba(16,26,32,.05);
+    --accent:#1f6fc4; --accent-ink:#fff; --accent-soft:#e8f1fb;
+    --good:#0c8a3e; --warning:#c07c07; --serious:#c95a2c; --critical:#c02f2f; --none:#8b969b; }
+  @media (prefers-color-scheme: dark){ :root:where(:not([data-theme="light"])){ color-scheme:dark;
+    --page:#0d1013; --surface:#171b1f; --surface-2:#1f252a; --surface-3:#2a3238;
+    --ink:#eef2f4; --ink-2:#b3bec4; --muted:#828e95; --border:#2c353b;
+    --line:#232a30; --shadow:none;
+    --accent:#4d9bef; --accent-ink:#06131f; --accent-soft:#16283b;
+    --good:#3aad5c; --warning:#e0a52a; --serious:#e2825a; --critical:#e05a52; --none:#69757b; } }
+  :root[data-theme="dark"]{ color-scheme:dark;
+    --page:#0d1013; --surface:#171b1f; --surface-2:#1f252a; --surface-3:#2a3238;
+    --ink:#eef2f4; --ink-2:#b3bec4; --muted:#828e95; --border:#2c353b;
+    --line:#232a30; --shadow:none;
+    --accent:#4d9bef; --accent-ink:#06131f; --accent-soft:#16283b;
+    --good:#3aad5c; --warning:#e0a52a; --serious:#e2825a; --critical:#e05a52; --none:#69757b; }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
   html,body{margin:0;padding:0;}
   body{background:var(--page);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.4;padding-bottom:92px;}
   header{position:sticky;top:0;z-index:10;background:var(--surface);border-bottom:1px solid var(--border);
-    padding:calc(env(safe-area-inset-top) + 12px) 16px 12px;display:flex;align-items:center;gap:10px;}
-  header .t{font-weight:700;font-size:16px;}
-  .lang{display:flex;border:1px solid var(--border);border-radius:9px;overflow:hidden;margin-left:6px;}
-  .lang button{border:none;background:var(--surface-2);color:var(--ink-2);padding:6px 10px;font-size:13px;font-weight:700;cursor:pointer;}
-  .lang button.on{background:var(--accent);color:#fff;}
-  header .st{margin-left:auto;font-size:12px;padding:3px 9px;border-radius:999px;background:var(--surface-2);border:1px solid var(--border);color:var(--ink-2);}
-  header .st.off{color:var(--warning);} header .st.on{color:var(--good);}
+    padding:calc(env(safe-area-inset-top) + 10px) 14px 10px;display:flex;align-items:center;gap:8px;}
+  header .t{font-weight:700;font-size:15.5px;letter-spacing:-.01em;margin-right:auto;}
+  .lang{display:flex;border:1px solid var(--border);border-radius:9px;overflow:hidden;}
+  .lang button{border:none;background:var(--surface-2);color:var(--ink-2);padding:7px 10px;font-size:12.5px;font-weight:700;cursor:pointer;letter-spacing:.02em;}
+  .lang button.on{background:var(--accent);color:var(--accent-ink);}
+  /* The sync pill. It reports whether the work is safe, which is the only thing
+     worth a permanent place in the header, and tapping it goes to the queue. */
+  header .st{font-size:12px;font-weight:650;padding:6px 11px;border-radius:999px;
+    background:var(--surface-2);border:1px solid var(--border);color:var(--ink-2);
+    cursor:pointer;white-space:nowrap;font-variant-numeric:tabular-nums;}
+  header .st .d{display:inline-block;width:7px;height:7px;border-radius:50%;
+    background:currentColor;margin-right:6px;vertical-align:1px;}
+  header .st.on{color:var(--good);border-color:color-mix(in srgb,var(--good) 35%,var(--border));}
+  header .st.warn{color:var(--warning);border-color:color-mix(in srgb,var(--warning) 40%,var(--border));}
+  header .st.err{color:var(--critical);border-color:color-mix(in srgb,var(--critical) 40%,var(--border));}
+  header .st.off{color:var(--muted);}
   main{padding:16px;max-width:640px;margin:0 auto;}
-  .card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:16px;}
-  .card h2{margin:0 0 12px;font-size:14px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);}
-  label.fld{display:block;margin-bottom:12px;}
-  label.fld > span{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:5px;}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:0 15px 15px;margin-bottom:14px;box-shadow:var(--shadow);}
+  /* A rule under the heading gives each card a head, so the eye finds the start
+     of a section instead of reading one long column of labels. */
+  .card h2{margin:0 -15px 14px;padding:13px 15px 11px;border-bottom:1px solid var(--line);
+    font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-2);
+    display:flex;align-items:center;gap:8px;}
+  label.fld{display:block;margin-bottom:13px;}
+  label.fld > span{display:block;font-size:11px;font-weight:600;text-transform:uppercase;
+    letter-spacing:.07em;color:var(--muted);margin-bottom:6px;}
   input:not([type="checkbox"]):not([type="radio"]),select,textarea{width:100%;min-width:0;max-width:100%;
     background:var(--surface-2);color:var(--ink);border:1px solid var(--border);
-    border-radius:12px;padding:13px 14px;font-size:16px;font-family:inherit;-webkit-appearance:none;appearance:none;}
+    border-radius:11px;padding:12px 13px;font-size:16px;font-family:inherit;-webkit-appearance:none;appearance:none;}
+  input[inputmode="numeric"],input[type="number"],input[type="date"]{font-variant-numeric:tabular-nums;}
+  ::placeholder{color:var(--muted);opacity:1;}
   select{background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
     background-position:calc(100% - 18px) 20px,calc(100% - 13px) 20px;background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:36px;}
   input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:1px;}
@@ -55,8 +89,10 @@
   .iconbtn.rec{background:var(--critical);color:#fff;border-color:transparent;animation:pulse 1s infinite;}
   @keyframes pulse{50%{opacity:.55;}}
   .seg{display:flex;gap:8px;flex-wrap:wrap;}
-  .seg button{flex:1;min-width:56px;padding:12px 8px;border-radius:12px;border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);font-size:15px;font-weight:650;cursor:pointer;}
+  .seg button{flex:1;min-width:56px;padding:12px 8px;border-radius:11px;border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);font-size:15px;font-weight:650;cursor:pointer;transition:background .1s,color .1s;}
   .seg button.on{background:var(--accent);color:var(--accent-ink);border-color:transparent;}
+  .seg button:active{background:var(--surface-3);}
+  .seg button.on:active{opacity:.85;background:var(--accent);}
   .posnav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
   .posnav button{flex:1 1 auto;min-width:56px;padding:11px 10px;border-radius:12px;border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);font-weight:700;font-size:14px;cursor:pointer;position:relative;}
   .posnav button.on{background:var(--ink);color:var(--page);border-color:transparent;}
@@ -67,8 +103,10 @@
   .crumb button{background:none;border:none;color:var(--accent);font-weight:650;font-size:12.5px;cursor:pointer;padding:2px 0;}
   .crumb .sep{color:var(--muted);}
   .cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-  .cards button{display:flex;flex-direction:column;gap:3px;align-items:flex-start;text-align:left;background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:14px 12px;cursor:pointer;position:relative;}
-  .cards button .cc{font-size:11px;color:var(--muted);font-weight:700;}
+  .cards button{display:flex;flex-direction:column;gap:3px;align-items:flex-start;text-align:left;background:var(--surface-2);border:1px solid var(--border);border-radius:11px;padding:13px 12px;cursor:pointer;position:relative;}
+  .cards button:active{background:var(--surface-3);}
+  .cards button.on{background:var(--accent-soft);}
+  .cards button .cc{font-size:10.5px;color:var(--muted);font-weight:700;letter-spacing:.05em;}
   .cards button .cn{font-size:14px;color:var(--ink);font-weight:600;line-height:1.2;}
   .cards button .dot{position:absolute;top:8px;right:9px;width:9px;height:9px;border-radius:50%;background:var(--good);display:none;}
   .cards button.has .dot{display:block;}
@@ -87,9 +125,12 @@
   .shot .retake{position:absolute;bottom:10px;right:10px;background:rgba(0,0,0,.6);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:13px;}
   .gradeseg button.g-A.on{background:var(--good);} .gradeseg button.g-B.on{background:var(--warning);color:#111;}
   .gradeseg button.g-C.on{background:var(--serious);} .gradeseg button.g-X.on{background:var(--critical);}
-  .btn{display:block;width:100%;padding:16px;border-radius:14px;border:none;font-size:17px;font-weight:700;cursor:pointer;}
+  .btn{display:block;width:100%;padding:15px;border-radius:13px;border:none;font-size:16.5px;font-weight:700;cursor:pointer;
+    font-family:inherit;transition:opacity .1s;}
+  .btn:active{opacity:.86;}
   .btn.primary{background:var(--accent);color:var(--accent-ink);}
   .btn.ghost{background:var(--surface-2);color:var(--ink);border:1px solid var(--border);}
+  .btn.ghost:active{background:var(--surface-3);opacity:1;}
   .pending{display:flex;flex-direction:column;gap:10px;}
   .pitem{display:flex;align-items:center;gap:12px;background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:10px 12px;cursor:pointer;}
   .pitem .thumb{width:52px;height:52px;border-radius:9px;object-fit:cover;background:var(--surface-3);flex:none;}
@@ -263,8 +304,15 @@
   .mtile .vbadge{position:absolute;left:0;right:0;bottom:0;background:rgba(0,0,0,.55);color:#fff;font-size:10px;text-align:center;padding:1px;}
   .mediastrip .empty-m{color:var(--muted);font-size:13px;padding:14px 2px;}
   .mediahint{margin:0 0 12px;}
-  .picker-btn{width:100%;text-align:left;background:var(--surface-2);color:var(--ink);border:1px solid var(--border);border-radius:12px;padding:13px 14px;font-size:16px;font-family:inherit;cursor:pointer;}
-  .picker-btn:disabled{color:var(--muted);}
+  /* Reads as a field, behaves as a button — the chevron is what says it opens. */
+  .picker-btn{width:100%;text-align:left;background:var(--surface-2);color:var(--ink);border:1px solid var(--border);
+    border-radius:11px;padding:12px 34px 12px 13px;font-size:16px;font-family:inherit;cursor:pointer;position:relative;
+    background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
+    background-position:calc(100% - 17px) calc(50% + 1px),calc(100% - 12px) calc(50% + 1px);
+    background-size:5px 5px,5px 5px;background-repeat:no-repeat;}
+  .picker-btn:disabled{color:var(--muted);background-image:none;}
+  .picker-btn.act{background-image:none;padding-right:13px;}   /* an action, not a list */
+  .picker-btn:active{background-color:var(--surface-3);}
   .pick-ov{position:fixed;inset:0;background:var(--page);z-index:210;display:flex;flex-direction:column;}
   .pickhead{display:flex;gap:8px;align-items:center;padding:calc(env(safe-area-inset-top) + 12px) 14px 12px;background:var(--surface);border-bottom:1px solid var(--border);}
   .pickhead input{flex:1;}
@@ -279,8 +327,8 @@
 <header>
   <span class="t" data-i18n="app_title">Truck Inspection</span>
   <span class="lang"><button data-lang="en" class="on">EN</button><button data-lang="ru">RU</button></span>
-  <button class="btn-set" id="setBtn" title="Upload settings">⚙</button>
-  <span class="st" id="netStatus">…</span>
+  <button class="btn-set" id="setBtn" data-i18n-title="set_title" title="Settings">⚙</button>
+  <button type="button" class="st" id="netStatus">…</button>
 </header>
 
 <main>
@@ -311,8 +359,9 @@
     </div>
     <label class="fld"><span data-i18n="lbl_inspector">Inspected by</span>
       <input id="inspector" type="text" data-i18n-ph="ph_inspector" placeholder="name / badge no." autocomplete="name"></label>
+
     <label class="fld" style="margin-bottom:0"><span data-i18n="lbl_gps">Location (GPS)</span>
-      <button type="button" class="picker-btn" id="gpsBtn"></button></label>
+      <button type="button" class="picker-btn act" id="gpsBtn"></button></label>
   </div>
 
   <div class="card" id="cardComponent">
@@ -452,7 +501,7 @@
   </div>
 </div><!-- /paneSystem -->
 
-  <div class="ver">build v52 · 2026-08-01 · 1C matrix v4 · card fix ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver">build v53 · 2026-08-01 · Light · dark · honest sync ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <nav class="tabbar" id="tabbar">
@@ -465,6 +514,14 @@
   <div class="pickhead"><button id="setClose" class="pickback">‹</button>
     <b style="align-self:center" data-i18n="set_title">Upload settings</b></div>
   <div class="picklist">
+    <label class="fld" style="margin-bottom:18px"><span data-i18n="set_theme">Appearance</span>
+      <div class="seg" id="themeSeg">
+        <button type="button" data-theme="auto" data-i18n="theme_auto">Auto</button>
+        <button type="button" data-theme="light" data-i18n="theme_light">Light</button>
+        <button type="button" data-theme="dark" data-i18n="theme_dark">Dark</button>
+      </div>
+      <div class="hint" data-i18n="theme_hint">Auto follows the phone. Night shift in a dark cab and a bright bench are different problems.</div>
+    </label>
     <div class="hint" style="margin-bottom:14px" data-i18n="set_intro">Turn on one or both destinations. With both on, an inspection only counts as uploaded once every destination has accepted it.</div>
     <div class="hint" style="margin-bottom:14px" data-i18n="set_folder_help">Folder placeholders: {TYPE} (MP / FC / INSP / TEMP), {UNIT}, {YYYY} {MM} {DD} {YYYY-MM}. Sub-folders are created as needed, so {TYPE}/{YYYY-MM} files each inspection type separately, by month.</div>
 
@@ -560,16 +617,16 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="jsQR.js?v=52"></script>
-<script src="qrcode.js?v=52"></script>
-<script src="upload-defaults.js?v=52"></script>
-<script src="hme.js?v=52"></script>
-<script src="mp-fc.js?v=52"></script>
-<script src="hme-cascade.js?v=52"></script>
-<script src="assets.js?v=52"></script>
-<script src="temp-limits.js?v=52"></script>
-<script src="jspdf.umd.min.js?v=52"></script>
-<script src="html2canvas.min.js?v=52"></script>
+<script src="jsQR.js?v=53"></script>
+<script src="qrcode.js?v=53"></script>
+<script src="upload-defaults.js?v=53"></script>
+<script src="hme.js?v=53"></script>
+<script src="mp-fc.js?v=53"></script>
+<script src="hme-cascade.js?v=53"></script>
+<script src="assets.js?v=53"></script>
+<script src="temp-limits.js?v=53"></script>
+<script src="jspdf.umd.min.js?v=53"></script>
+<script src="html2canvas.min.js?v=53"></script>
 <script>
 /* ============================================================================
    EQUIPMENT CLASSES & INSPECTION TYPES  —  EDIT here for your fleet.
@@ -712,7 +769,7 @@ const I18N = {
     sync_off:"Auto-upload is off — findings stay on this phone.", sync_setup:"Set up",
     sync_ok:"All synced.", sync_pending:"{n} inspection(s) waiting to upload", sync_running:"Uploading…",
     sync_err:"Upload failed", sync_now:"Sync now",
-    set_title:"Upload settings",
+    set_title:"Settings",
     set_need_url:"Ticked, but no URL — this destination will not upload.",
     ph_gas_url:"paste the Apps Script /exec URL here", ph_pa_url:"paste the Power Automate flow URL here",
     ph_post_url:"paste your server endpoint here",
@@ -804,6 +861,10 @@ const I18N = {
     m_merge_bad:["Not a round file","Choose a file created by “Send round” on the other phone."],
     m_merged:["Merged ✔","{a} new inspection(s), {b} item(s) added to existing ones, {c} already present."],
     tab_capture:"Capture", tab_queue:"Queue", tab_system:"System",
+    set_theme:"Appearance", theme_auto:"Auto", theme_light:"Light", theme_dark:"Dark",
+    theme_hint:"Auto follows the phone. Night shift in a dark cab and a bright bench are different problems.",
+    net_synced:"Synced", net_waiting:"{n} waiting", net_off:"Offline",
+    net_nosignal:"No signal", net_failing:"Upload failing", net_nosync:"Not syncing",
     lbl_detect:"How it was found (ISO 14224)",
     opt_more_causes:"▾ More causes — general",
     opt_action_fit:"Fits this severity", opt_action_other:"Other actions",
@@ -841,7 +902,7 @@ const I18N = {
     sync_off:"Автозагрузка выключена — данные остаются на телефоне.", sync_setup:"Настроить",
     sync_ok:"Всё синхронизировано.", sync_pending:"Ожидает отправки: {n}", sync_running:"Отправка…",
     sync_err:"Ошибка отправки", sync_now:"Отправить",
-    set_title:"Настройки отправки",
+    set_title:"Настройки",
     set_need_url:"Отмечено, но нет URL — сюда ничего не отправится.",
     ph_gas_url:"вставьте сюда URL /exec из Apps Script", ph_pa_url:"вставьте сюда URL потока Power Automate",
     ph_post_url:"вставьте сюда адрес вашего сервера",
@@ -933,6 +994,10 @@ const I18N = {
     m_merge_bad:["Неверный файл","Выберите файл, созданный кнопкой «Отправить обход» на другом телефоне."],
     m_merged:["Объединено ✔","Новых осмотров: {a}, добавлено позиций: {b}, уже было: {c}."],
     tab_capture:"Осмотр", tab_queue:"Очередь", tab_system:"Система",
+    set_theme:"Оформление", theme_auto:"Авто", theme_light:"Светлое", theme_dark:"Тёмное",
+    theme_hint:"«Авто» — как на телефоне. Ночная смена в тёмной кабине и яркий стол — разные задачи.",
+    net_synced:"Синхронизировано", net_waiting:"Ожидает: {n}", net_off:"Офлайн",
+    net_nosignal:"Нет связи", net_failing:"Ошибка отправки", net_nosync:"Без отправки",
     lbl_detect:"Как обнаружено (ИСО 14224)",
     opt_more_causes:"▾ Другие причины — общие",
     opt_action_fit:"Подходит по критичности", opt_action_other:"Другие действия",
@@ -1863,6 +1928,7 @@ async function teamPull(manual,full){
       if(manual) msg.textContent=/unknown action/i.test(j.error||"") ? t("team_old") : "⚠ "+j.error;
       return;
     }
+    netSeen(true);                                  // Drive answered — that is "online"
     const {added,saved}=teamMerge(j.records||[], !!full);
     const voided=teamVoid(j.edits||[]);   // after the merge, so a re-uploaded record is voided too
     const clash=cfMerge(j.conflicts||[]);
@@ -1879,6 +1945,7 @@ async function teamPull(manual,full){
     renderTeam(); renderDue(); renderLastDone(); renderTrend();
   }catch(e){
     if(!mine()) return;                      // superseded by a newer press
+    netSeen(false);
     if(e && e.name==="AbortError"){ if(manual) msg.textContent=t("team_timeout"); }
     // fetch() reports every network and CORS failure as the opaque "Failed to
     // fetch", which tells an inspector in the pit nothing they can act on.
@@ -2115,7 +2182,7 @@ $("mergeFile").onchange=async (e)=>{ const f=e.target.files[0]; e.target.value="
 
 /* ===================== pending ===================== */
 async function renderPending(){
-  renderTabs();
+  renderTabs(); renderNet();
   const all=(await dbAll()).sort((a,b)=>b.created.localeCompare(a.created));
   $("qCount").textContent=all.length;
   if(!all.length){ $("pending").innerHTML=`<div class="empty">${t("empty_none")}</div>`; return; }
@@ -2400,7 +2467,7 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
    has accepted every one of its files. */
 const DEST_META={ gas:{label:"Google Drive"}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
 const DEST_IDS=["gas","pa","post"];
-const BUILD="52";
+const BUILD="53";
 const DEFAULT_DESTS=((window.UPLOAD_DEFAULTS||{}).dests)||[];
 /* Parsed once and reused — see the note by the write below. */
 let destsCache=null, destsRaw=null;
@@ -2663,6 +2730,7 @@ async function syncNow(manual){
         await dbPut(fresh);
       }
       if(errs.length) lastErr=errs.join(" · ");
+      if(todo.length) netSeen(progressed);          // evidence, not navigator.onLine
       // The breaker exists so a dead link is not retried against all 50 records.
       // It used to trip on ANY error, so one slow destination stopped the queue
       // for the working one too: with SharePoint down, only three records ever
@@ -2672,7 +2740,7 @@ async function syncNow(manual){
       else if(errs.length && ++consecutive>=3) break;
     }
   } finally {
-    syncing=false; renderSync(); renderPending();
+    syncing=false; renderSync(); renderPending(); renderNet();
     // Whatever this phone just pushed, someone else has pushed something too.
     // One request, and it keeps the due list honest across the whole team.
     teamPull(false);
@@ -2809,13 +2877,72 @@ $("provScan").onclick=()=>{ scanMode="cfg"; startScan(); };
 addEventListener("online",()=>syncNow());
 
 /* ===================== connectivity + SW ===================== */
-function setNet(){ const on=navigator.onLine; $("netStatus").textContent=on?t("net_online"):t("net_offline"); $("netStatus").className="st "+(on?"on":"off"); }
-addEventListener("online",setNet); addEventListener("offline",setNet);
+/* ===================== is the work safe? =====================
+   The header used to read navigator.onLine and say "online". That property means
+   the phone has a network interface attached, not that anything can be reached —
+   in the pit it says online while every upload times out. A confident green
+   light over failing uploads is worse than no light at all.
+
+   So the pill reports the only thing worth a permanent place in the header: is
+   what I captured safe yet. "Online" is only claimed when Drive has actually
+   answered; when the phone says it has a network and nothing gets through, that
+   is "no signal", which is what it feels like and what it is. Tapping it goes to
+   the queue, where the detail and the retry live. */
+let netOkAt=0, netFailAt=0;
+function netSeen(ok){ if(ok) netOkAt=Date.now(); else netFailAt=Date.now(); renderNet(); }
+async function netState(){
+  if(!UP.on) return {cls:"off", txt:t("net_nosync")};
+  let pend=0; try{ pend=(await dbAll()).filter(r=>!r.up).length; }catch(e){}
+  if(!navigator.onLine)          return {cls:pend?"warn":"off", txt:t("net_off")};
+  if(lastErr)                    return {cls:"err",  txt:t("net_failing")};
+  // Attached to a network, but the last thing we tried did not get through and
+  // nothing has since. That is the pit, and it is not "online".
+  if(netFailAt>netOkAt)          return {cls:"warn", txt:t("net_nosignal")};
+  if(pend)                       return {cls:"warn", txt:t("net_waiting",{n:pend})};
+  return {cls:"on", txt:t("net_synced")};
+}
+let netRun=0;
+async function renderNet(){
+  const el=$("netStatus"); if(!el) return;
+  const run=++netRun;
+  const st=await netState();
+  if(run!==netRun) return;                       // a newer render already won
+  el.className="st "+st.cls;
+  el.innerHTML=`<span class="d"></span>${esc(st.txt)}`;
+}
+const setNet=renderNet;                          // the old name, still called at init
+$("netStatus").onclick=()=>showPane("paneQueue");
+addEventListener("online",renderNet); addEventListener("offline",renderNet);
+
+/* ===================== light / dark ===================== */
+/* Auto follows the phone; the other two override it. Stored per phone, because
+   which one is right depends on the shift, not on the person. */
+function themePref(){ const v=localStorage.getItem("theme"); return v==="light"||v==="dark"?v:"auto"; }
+function applyTheme(){
+  const v=themePref();
+  if(v==="auto") document.documentElement.removeAttribute("data-theme");
+  else document.documentElement.setAttribute("data-theme",v);
+  const seg=$("themeSeg");
+  if(seg) seg.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.theme===v));
+  // Keep the browser's own chrome in step, or the notch area stays the old colour.
+  const m=document.querySelector('meta[name="theme-color"]');
+  if(m) m.setAttribute("content", getComputedStyle(document.documentElement)
+    .getPropertyValue("--surface").trim() || "#171b1f");
+}
+$("themeSeg").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-theme]"); if(!b) return;
+  try{ localStorage.setItem("theme",b.dataset.theme); }catch(_){ }
+  applyTheme();
+});
+// "Auto" has to keep following the phone after the app is open.
+if(window.matchMedia) matchMedia("(prefers-color-scheme: dark)")
+  .addEventListener("change",()=>{ if(themePref()==="auto") applyTheme(); });
 /* Settings and caches are now held in memory to keep rendering cheap. Another
    tab — or the installed app alongside the browser — writing the same origin's
    storage would otherwise leave this one acting on a stale copy. */
 addEventListener("storage",e=>{
-  if(!e.key || e.key==="up_dests"){ destsCache=null; destsRaw=null; renderSync(); }
+  if(!e.key || e.key==="up_dests"){ destsCache=null; destsRaw=null; renderSync(); renderNet(); }
+  if(!e.key || e.key==="theme"){ applyTheme(); }
   if(!e.key || e.key===TEAM_KEY || e.key===TEAM_CF){ teamCache=null; cfCache=null; renderTeam(); renderLastDone(); renderTrend(); }
   if(!e.key || e.key==="cm_hist"){ histCache=null; renderDue(); }
 });
@@ -2874,7 +3001,7 @@ function checkData(){
 /* ===================== init ===================== */
 updateEquipBtn(); renderGps(); checkData();
 $("dueScope").value=localStorage.getItem("due_scope")||"due";
-applyForm(); applyLang(); sizeSignPad(); renderSync(); syncNow();
+applyForm(); applyTheme(); applyLang(); sizeSignPad(); renderSync(); syncNow();
 // syncNow() pulls the team list when it finishes, but it returns early with
 // nothing queued or no signal — so ask once here too. Both paths are guarded.
 teamPull(false);
