@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Truck Inspection — Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=51">
+<link rel="manifest" href="manifest.webmanifest?v=52">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -452,7 +452,7 @@
   </div>
 </div><!-- /paneSystem -->
 
-  <div class="ver">build v51 · 2026-08-01 · 1C defect matrix v4 ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver">build v52 · 2026-08-01 · 1C matrix v4 · card fix ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <nav class="tabbar" id="tabbar">
@@ -560,16 +560,16 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="jsQR.js?v=51"></script>
-<script src="qrcode.js?v=51"></script>
-<script src="upload-defaults.js?v=51"></script>
-<script src="hme.js?v=51"></script>
-<script src="mp-fc.js?v=51"></script>
-<script src="hme-cascade.js?v=51"></script>
-<script src="assets.js?v=51"></script>
-<script src="temp-limits.js?v=51"></script>
-<script src="jspdf.umd.min.js?v=51"></script>
-<script src="html2canvas.min.js?v=51"></script>
+<script src="jsQR.js?v=52"></script>
+<script src="qrcode.js?v=52"></script>
+<script src="upload-defaults.js?v=52"></script>
+<script src="hme.js?v=52"></script>
+<script src="mp-fc.js?v=52"></script>
+<script src="hme-cascade.js?v=52"></script>
+<script src="assets.js?v=52"></script>
+<script src="temp-limits.js?v=52"></script>
+<script src="jspdf.umd.min.js?v=52"></script>
+<script src="html2canvas.min.js?v=52"></script>
 <script>
 /* ============================================================================
    EQUIPMENT CLASSES & INSPECTION TYPES  —  EDIT here for your fleet.
@@ -1268,11 +1268,12 @@ function renderComponentNav(tree){
   } else if(!cascL8){
     const n7=nodeByCode(tree,cascL7); const kids=(n7&&n7.ch)||[];
     h+='<div class="cards">'+kids.map(n=>{ const hk=n.ch&&n.ch.length;
-      return `<button data-l8="${n.k}" class="${(draft.positions[n.k]||hasUnder(n))?'has':''}"><span class="cc">${String(n.k).split('.').pop()}${hk?' ›':''}</span><span class="cn">${n[lang]||n.en}</span><span class="dot"></span></button>`; }).join('')+'</div>';
+      const cls=[(draft.positions[n.k]||hasUnder(n))?'has':'', (!hk&&n.k===curItem)?'on':''].filter(Boolean).join(' ');
+      return `<button data-l8="${n.k}" class="${cls}"><span class="cc">${String(n.k).split('.').pop()}${hk?' ›':''}</span><span class="cn">${n[lang]||n.en}</span><span class="dot"></span></button>`; }).join('')+'</div>';
   } else {
     const n8=nodeByCode(tree,cascL8); const kids=(n8&&n8.ch)||[];
-    h+='<div class="cards"><button data-pick="'+n8.k+'" class="'+(draft.positions[n8.k]?'has':'')+'"><span class="cc">▶</span><span class="cn">'+t("nav_whole")+'</span><span class="dot"></span></button>';
-    h+=kids.map(n=>`<button data-pick="${n.k}" class="${draft.positions[n.k]?'has':''}"><span class="cc">${String(n.k).split('.').pop()}</span><span class="cn">${n[lang]||n.en}</span><span class="dot"></span></button>`).join('')+'</div>';
+    h+='<div class="cards"><button data-pick="'+n8.k+'" class="'+[draft.positions[n8.k]?'has':'',n8.k===curItem?'on':''].filter(Boolean).join(' ')+'"><span class="cc">▶</span><span class="cn">'+t("nav_whole")+'</span><span class="dot"></span></button>';
+    h+=kids.map(n=>`<button data-pick="${n.k}" class="${[draft.positions[n.k]?'has':'',n.k===curItem?'on':''].filter(Boolean).join(' ')}"><span class="cc">${String(n.k).split('.').pop()}</span><span class="cn">${n[lang]||n.en}</span><span class="dot"></span></button>`).join('')+'</div>';
   }
   if(cap.length) h+='<div class="posnav" style="margin-top:6px">'+cap.map(it=>`<button data-pos="${it.k}" title="${itemLabel(it.k)}"><span>${String(it.k).split('.').pop()}</span><span class="dot"></span></button>`).join('')+'</div>';
   h+='</div>';
@@ -1284,8 +1285,32 @@ function renderComponentNav(tree){
   $("posnav").querySelectorAll('[data-pick]').forEach(b=>b.onclick=()=>pickComponent(b.dataset.pick));
   $("posnav").querySelectorAll('[data-pos]').forEach(b=>b.onclick=()=>pickComponent(b.dataset.pos));
   toggleCapture(); refreshChips(); }
-function refreshChips(){ $("posnav").querySelectorAll("button").forEach(b=>{
-  b.classList.toggle("on", b.dataset.pos===curItem); b.classList.toggle("has", !!draft.positions[b.dataset.pos]); }); }
+/* Repaint the "captured" dot and the selected outline without rebuilding the DOM.
+
+   This used to read b.dataset.pos only, which is the compact chip row for
+   magnetic plug and filter cut. Every card in the component cascade carries
+   data-l7 / data-l8 / data-pick instead, so `pos` was undefined on all of them:
+   nothing was ever marked selected, and — worse — draft.positions[undefined] is
+   falsy, so each repaint STRIPPED the green dot off a component that had just
+   been captured. Setting a grade made the evidence of it disappear. */
+function refreshChips(){
+  const tr=currentTree();
+  $("posnav").querySelectorAll("button").forEach(b=>{
+    const d=b.dataset;
+    if(d.l7){                                   // a system: only "something under here"
+      const n=tr&&nodeByCode(tr,d.l7);
+      b.classList.toggle("has", !!(n&&hasUnder(n)));
+      b.classList.remove("on");
+      return;
+    }
+    const code=d.pos||d.pick||d.l8;
+    if(!code) return;                           // breadcrumb, "search all" — not a card
+    const n=(d.l8&&tr)?nodeByCode(tr,d.l8):null;
+    const group=!!(n&&n.ch&&n.ch.length);       // a card that drills in, not a component
+    b.classList.toggle("has", group ? hasUnder(n) : !!draft.positions[code]);
+    b.classList.toggle("on", !group && code===curItem);
+  });
+}
 $("posnav").addEventListener("click",(e)=>{ const b=e.target.closest("button[data-pos]"); if(!b) return;
   saveCur(); curItem=b.dataset.pos; refreshChips(); loadPos(); });
 function applyForm(){ $("secPosTitle").textContent=TYPE_META[type].title[lang]||TYPE_META[type].title.en;
@@ -2375,7 +2400,7 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
    has accepted every one of its files. */
 const DEST_META={ gas:{label:"Google Drive"}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
 const DEST_IDS=["gas","pa","post"];
-const BUILD="51";
+const BUILD="52";
 const DEFAULT_DESTS=((window.UPLOAD_DEFAULTS||{}).dests)||[];
 /* Parsed once and reused — see the note by the write below. */
 let destsCache=null, destsRaw=null;
