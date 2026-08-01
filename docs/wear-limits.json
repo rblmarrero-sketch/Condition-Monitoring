@@ -1,0 +1,752 @@
+{
+ "CAT 336": {
+  "pts": {
+   "BUSH": {
+    "condemn": 65.8,
+    "new": 70,
+    "tabs": 2
+   },
+   "CARRIER": {
+    "condemn": 132.5,
+    "new": 160,
+    "tabs": 4
+   },
+   "GROUSER": {
+    "condemn": 38,
+    "new": 71,
+    "tabs": 2
+   },
+   "IDLER": {
+    "condemn": 29,
+    "new": 20,
+    "tabs": 4
+   },
+   "LINKH": {
+    "condemn": 115,
+    "new": 124,
+    "tabs": 2
+   },
+   "PITCH1": {
+    "condemn": 219,
+    "new": 216,
+    "tabs": 2
+   },
+   "PITCH4": {
+    "condemn": 877.5,
+    "new": 865,
+    "tabs": 2
+   },
+   "ROLLER": {
+    "condemn": 162.5,
+    "new": 180,
+    "tabs": 16
+   }
+  },
+  "units": [
+   "EX013"
+  ]
+ },
+ "CAT D9R": {
+  "pts": {
+   "BUSH": {
+    "condemn": 77.2,
+    "new": 84.8,
+    "tabs": 2
+   },
+   "CARRIER": {
+    "condemn": 189,
+    "new": 250,
+    "tabs": 4
+   },
+   "GROUSER": {
+    "condemn": 38,
+    "new": 84,
+    "tabs": 2
+   },
+   "IDLER": {
+    "condemn": 36,
+    "new": 20,
+    "tabs": 4
+   },
+   "LINKH": {
+    "condemn": 149.5,
+    "new": 166,
+    "tabs": 2
+   },
+   "PITCH1": {
+    "condemn": 246.4,
+    "new": 240,
+    "tabs": 2
+   },
+   "PITCH4": {
+    "condemn": 985.6,
+    "new": 960,
+    "tabs": 2
+   },
+   "ROLLER": {
+    "condemn": 186,
+    "new": 260,
+    "tabs": 16
+   },
+   "SPROCKET": {
+    "condemn": 240,
+    "new": 266.5,
+    "tabs": 2
+   }
+  },
+  "units": [
+   "DZ010"
+  ]
+ },
+ "Hitachi ZX 1200": {
+  "pts": {
+   "BUSH": {
+    "condemn": 90,
+    "new": 98,
+    "tabs": 4
+   },
+   "CARRIER": {
+    "condemn": 202,
+    "new": 210,
+    "tabs": 8
+   },
+   "GROUSER": {
+    "condemn": 35,
+    "new": 50,
+    "tabs": 4
+   },
+   "IDLER": {
+    "condemn": 29,
+    "new": 23,
+    "tabs": 8
+   },
+   "LINKH": {
+    "condemn": 109,
+    "new": 116,
+    "tabs": 4
+   },
+   "PITCH1": {
+    "condemn": 286,
+    "new": 280,
+    "tabs": 4
+   },
+   "PITCH4": {
+    "condemn": 1145.2,
+    "new": 1122.3,
+    "tabs": 4
+   },
+   "ROLLER": {
+    "condemn": 270,
+    "new": 290,
+    "tabs": 32
+   }
+  },
+  "units": [
+   "EX001",
+   "EX002"
+  ]
+ },
+ "Hitachi ZX 280": {
+  "pts": {
+   "BUSH": {
+    "condemn": 61.9,
+    "new": 66.91,
+    "tabs": 2
+   },
+   "CARRIER": {
+    "condemn": 140,
+    "new": 150,
+    "tabs": 4
+   },
+   "GROUSER": {
+    "condemn": 21,
+    "new": 30,
+    "tabs": 2
+   },
+   "IDLER": {
+    "condemn": 29.5,
+    "new": 22.5,
+    "tabs": 4
+   },
+   "LINKH": {
+    "condemn": 109,
+    "new": 116,
+    "tabs": 2
+   },
+   "PITCH1": {
+    "condemn": 223.25,
+    "new": 216.48,
+    "tabs": 2
+   },
+   "PITCH4": {
+    "condemn": 983,
+    "new": 865.92,
+    "tabs": 2
+   },
+   "ROLLER": {
+    "condemn": 162,
+    "new": 180,
+    "tabs": 16
+   }
+  },
+  "units": [
+   "EX016"
+  ]
+ },
+ "Hitachi ZX 330": {
+  "pts": {
+   "BUSH": {
+    "condemn": 61.9,
+    "new": 66.91,
+    "tabs": 8
+   },
+   "CARRIER": {
+    "condemn": 140,
+    "new": 150,
+    "tabs": 16
+   },
+   "GROUSER": {
+    "condemn": 21,
+    "new": 30,
+    "tabs": 8
+   },
+   "IDLER": {
+    "condemn": 29.5,
+    "new": 22.5,
+    "tabs": 16
+   },
+   "LINKH": {
+    "condemn": 109,
+    "new": 116,
+    "tabs": 8
+   },
+   "PITCH1": {
+    "condemn": 255,
+    "new": 250,
+    "rival": [
+     {
+      "condemn": 223.25,
+      "new": 216.48,
+      "tabs": 2
+     }
+    ],
+    "tabs": 6
+   },
+   "PITCH4": {
+    "condemn": 893,
+    "new": 865.92,
+    "tabs": 8
+   },
+   "ROLLER": {
+    "condemn": 162,
+    "new": 180,
+    "tabs": 64
+   }
+  },
+  "units": [
+   "EX007",
+   "EX008",
+   "EX019",
+   "EX020"
+  ]
+ },
+ "Hitachi ZX 470LC": {
+  "pts": {
+   "BUSH": {
+    "condemn": 66.4,
+    "new": 71.35,
+    "tabs": 4
+   },
+   "CARRIER": {
+    "condemn": 160,
+    "new": 170,
+    "tabs": 8
+   },
+   "GROUSER": {
+    "condemn": 24,
+    "new": 36,
+    "tabs": 4
+   },
+   "IDLER": {
+    "condemn": 19.2,
+    "new": 22.5,
+    "tabs": 8
+   },
+   "LINKH": {
+    "condemn": 122,
+    "new": 129,
+    "tabs": 4
+   },
+   "PITCH1": {
+    "condemn": 220.25,
+    "new": 215,
+    "tabs": 4
+   },
+   "PITCH4": {
+    "condemn": 905.3,
+    "new": 863.3,
+    "tabs": 4
+   },
+   "ROLLER": {
+    "condemn": 182,
+    "new": 200,
+    "tabs": 32
+   }
+  },
+  "units": [
+   "EX004",
+   "EX005"
+  ]
+ },
+ "Komatsu 275A": {
+  "pts": {
+   "BUSH": {
+    "condemn": 82,
+    "new": 90,
+    "tabs": 2
+   },
+   "CARRIER": {
+    "condemn": 175,
+    "new": 200,
+    "tabs": 4
+   },
+   "GROUSER": {
+    "condemn": 30,
+    "new": 88,
+    "tabs": 2
+   },
+   "IDLER": {
+    "condemn": 33.5,
+    "new": 21,
+    "tabs": 4
+   },
+   "LINKH": {
+    "condemn": 148,
+    "new": 166,
+    "tabs": 2
+   },
+   "PITCH1": {
+    "condemn": 263.6,
+    "new": 260.6,
+    "tabs": 2
+   },
+   "PITCH4": {
+    "condemn": 1054.4,
+    "new": 1042.4,
+    "tabs": 2
+   },
+   "ROLLER": {
+    "condemn": 185,
+    "new": 255,
+    "tabs": 16
+   }
+  },
+  "units": [
+   "DZ003"
+  ]
+ },
+ "Komatsu D155A": {
+  "pts": {
+   "BUSH": {
+    "condemn": 75,
+    "new": 81,
+    "tabs": 2
+   },
+   "CARRIER": {
+    "condemn": 171,
+    "new": 190,
+    "tabs": 4
+   },
+   "GROUSER": {
+    "condemn": 30,
+    "new": 80,
+    "tabs": 2
+   },
+   "IDLER": {
+    "condemn": 33.5,
+    "new": 21,
+    "tabs": 4
+   },
+   "LINKH": {
+    "condemn": 128,
+    "new": 144,
+    "tabs": 2
+   },
+   "PITCH1": {
+    "condemn": 233.85,
+    "new": 228.85,
+    "tabs": 2
+   },
+   "PITCH4": {
+    "condemn": 935.4,
+    "new": 915.4,
+    "tabs": 2
+   },
+   "ROLLER": {
+    "condemn": 210,
+    "new": 250,
+    "tabs": 16
+   }
+  },
+  "units": [
+   "DZ001"
+  ]
+ },
+ "Komatsu D375A": {
+  "pts": {
+   "BUSH": {
+    "condemn": 92.5,
+    "new": 98.5,
+    "tabs": 8
+   },
+   "CARRIER": {
+    "condemn": 185,
+    "new": 210,
+    "tabs": 16
+   },
+   "GROUSER": {
+    "condemn": 30,
+    "new": 93,
+    "tabs": 8
+   },
+   "IDLER": {
+    "condemn": 36,
+    "new": 23.5,
+    "tabs": 16
+   },
+   "LINKH": {
+    "condemn": 163,
+    "new": 181,
+    "tabs": 8
+   },
+   "PITCH1": {
+    "condemn": 283.3,
+    "new": 280.3,
+    "tabs": 8
+   },
+   "PITCH4": {
+    "condemn": 1133.2,
+    "new": 1121.2,
+    "tabs": 8
+   },
+   "ROLLER": {
+    "condemn": 205,
+    "new": 280,
+    "tabs": 64
+   }
+  },
+  "units": [
+   "DZ005",
+   "DZ006",
+   "DZ008",
+   "DZ009"
+  ]
+ },
+ "Komatsu PC800SE": {
+  "pts": {
+   "BUSH": {
+    "condemn": 82.9,
+    "new": 87,
+    "tabs": 4
+   },
+   "CARRIER": {
+    "condemn": 155,
+    "new": 175,
+    "tabs": 8
+   },
+   "GROUSER": {
+    "condemn": 25,
+    "new": 50,
+    "tabs": 4
+   },
+   "IDLER": {
+    "condemn": 28.5,
+    "new": 22,
+    "tabs": 8
+   },
+   "LINKH": {
+    "condemn": 143,
+    "new": 156,
+    "tabs": 4
+   },
+   "PITCH1": {
+    "condemn": 263.6,
+    "new": 260,
+    "tabs": 4
+   },
+   "PITCH4": {
+    "condemn": 1054.4,
+    "new": 1042,
+    "tabs": 4
+   },
+   "ROLLER": {
+    "condemn": 243,
+    "new": 255,
+    "tabs": 32
+   }
+  },
+  "units": [
+   "EX009",
+   "EX010"
+  ]
+ },
+ "Shantui SD32": {
+  "pts": {
+   "BUSH": {
+    "condemn": 74,
+    "new": 79,
+    "tabs": 4
+   },
+   "CARRIER": {
+    "condemn": 171,
+    "new": 190,
+    "tabs": 8
+   },
+   "GROUSER": {
+    "condemn": 25,
+    "new": 80,
+    "tabs": 4
+   },
+   "IDLER": {
+    "condemn": 30,
+    "new": 25,
+    "tabs": 8
+   },
+   "LINKH": {
+    "condemn": 125,
+    "new": 138,
+    "tabs": 4
+   },
+   "PITCH1": {
+    "condemn": 233.85,
+    "new": 228.6,
+    "tabs": 4
+   },
+   "PITCH4": {
+    "condemn": 895,
+    "new": 914.4,
+    "tabs": 4
+   },
+   "ROLLER": {
+    "condemn": 229,
+    "new": 255,
+    "tabs": 32
+   }
+  },
+  "units": [
+   "DZ014",
+   "DZ016"
+  ]
+ },
+ "Shantui SD34": {
+  "pts": {
+   "BUSH": {
+    "condemn": 74,
+    "new": 79,
+    "tabs": 4
+   },
+   "CARRIER": {
+    "condemn": 171,
+    "new": 190,
+    "tabs": 8
+   },
+   "GROUSER": {
+    "condemn": 25,
+    "new": 80,
+    "tabs": 4
+   },
+   "IDLER": {
+    "condemn": 30,
+    "new": 25,
+    "tabs": 8
+   },
+   "LINKH": {
+    "condemn": 125,
+    "new": 138,
+    "tabs": 4
+   },
+   "PITCH1": {
+    "condemn": 233.85,
+    "new": 228.6,
+    "tabs": 4
+   },
+   "PITCH4": {
+    "condemn": 895,
+    "new": 914.4,
+    "tabs": 4
+   },
+   "ROLLER": {
+    "condemn": 229,
+    "new": 255,
+    "tabs": 32
+   }
+  },
+  "units": [
+   "DZ012",
+   "DZ020"
+  ]
+ },
+ "Shantui SD60": {
+  "pts": {
+   "BUSH": {
+    "condemn": 97.65,
+    "new": 98,
+    "tabs": 6
+   },
+   "CARRIER": {
+    "condemn": 185,
+    "new": 210,
+    "tabs": 12
+   },
+   "GROUSER": {
+    "condemn": 30,
+    "new": 93,
+    "tabs": 6
+   },
+   "IDLER": {
+    "condemn": 36,
+    "new": 23.5,
+    "tabs": 12
+   },
+   "LINKH": {
+    "condemn": 163,
+    "new": 181,
+    "tabs": 6
+   },
+   "PITCH1": {
+    "condemn": 283,
+    "new": 280,
+    "tabs": 6
+   },
+   "PITCH4": {
+    "condemn": 1132,
+    "new": 1120,
+    "tabs": 6
+   },
+   "ROLLER": {
+    "condemn": 200,
+    "new": 270,
+    "tabs": 48
+   }
+  },
+  "units": [
+   "DZ019",
+   "DZ021",
+   "DZ022"
+  ]
+ },
+ "Shantui SD90": {
+  "pts": {
+   "BUSH": {
+    "condemn": 74,
+    "new": 79,
+    "tabs": 4
+   },
+   "CARRIER": {
+    "condemn": 171,
+    "new": 190,
+    "tabs": 8
+   },
+   "GROUSER": {
+    "condemn": 25,
+    "new": 80,
+    "tabs": 4
+   },
+   "IDLER": {
+    "condemn": 30,
+    "new": 25,
+    "tabs": 8
+   }
+  },
+  "units": [
+   "DZ017",
+   "DZ018"
+  ]
+ },
+ "liuGong 970Е": {
+  "pts": {
+   "CARRIER": {
+    "condemn": 106,
+    "new": 200,
+    "tabs": 8
+   },
+   "GROUSER": {
+    "condemn": 40,
+    "new": 50,
+    "tabs": 4
+   },
+   "IDLER": {
+    "condemn": 28.5,
+    "new": 22.5,
+    "tabs": 8
+   },
+   "LINKH": {
+    "condemn": 147,
+    "new": 156,
+    "tabs": 4
+   },
+   "PITCH1": {
+    "condemn": 263.35,
+    "new": 260.35,
+    "tabs": 4
+   },
+   "PITCH4": {
+    "condemn": 1053.4,
+    "new": 1041.4,
+    "tabs": 4
+   },
+   "ROLLER": {
+    "condemn": 168,
+    "new": 180,
+    "tabs": 32
+   }
+  },
+  "units": [
+   "EX024",
+   "EX025"
+  ]
+ },
+ "liuGong 990F": {
+  "pts": {
+   "CARRIER": {
+    "condemn": 192,
+    "new": 200,
+    "tabs": 8
+   },
+   "GROUSER": {
+    "condemn": 40,
+    "new": 50,
+    "tabs": 4
+   },
+   "IDLER": {
+    "condemn": 28.5,
+    "new": 22,
+    "tabs": 8
+   },
+   "LINKH": {
+    "condemn": 147,
+    "new": 156,
+    "tabs": 4
+   },
+   "PITCH1": {
+    "condemn": 263.35,
+    "new": 260.35,
+    "tabs": 4
+   },
+   "PITCH4": {
+    "condemn": 1053.4,
+    "new": 1041.4,
+    "tabs": 4
+   },
+   "ROLLER": {
+    "condemn": 258,
+    "new": 270,
+    "tabs": 36
+   }
+  },
+  "units": [
+   "EX021",
+   "EX022"
+  ]
+ }
+}
