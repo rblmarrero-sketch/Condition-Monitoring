@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Truck Inspection — Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=60">
+<link rel="manifest" href="manifest.webmanifest?v=61">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -75,7 +75,7 @@
   input:not([type="checkbox"]):not([type="radio"]),select,textarea{width:100%;min-width:0;max-width:100%;
     background:var(--surface-2);color:var(--ink);border:1px solid var(--border);
     border-radius:11px;padding:12px 13px;font-size:16px;font-family:inherit;-webkit-appearance:none;appearance:none;}
-  input[inputmode="numeric"],input[type="number"],input[type="date"]{font-variant-numeric:tabular-nums;}
+  input[inputmode="numeric"],input[inputmode="decimal"],input[type="number"],input[type="date"]{font-variant-numeric:tabular-nums;}
   ::placeholder{color:var(--muted);opacity:1;}
   select{background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
     background-position:calc(100% - 18px) 20px,calc(100% - 13px) 20px;background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:36px;}
@@ -289,7 +289,19 @@
     background:var(--surface);border-radius:18px 18px 0 0;
     box-shadow:0 -8px 40px rgba(0,0,0,.35);border-top:1px solid var(--line);
     padding:0 16px calc(12px + env(safe-area-inset-bottom));
-    max-height:62vh;overflow-y:auto;overscroll-behavior:contain;}
+    max-height:70vh;display:flex;flex-direction:column;overflow:hidden;
+    overscroll-behavior:contain;}
+  /* Off the sheet these two are nothing — the fields sit in the page as before. */
+  .sh-body,.sh-foot{display:contents;}
+  /* The body is cut off wherever the foot begins. A hard edge slices a line of
+     type in half and reads as a rendering fault; the fade says "there is more,
+     scroll". The matching padding means the last line is never left dimmed. */
+  #ucFields.sheet .sh-body{display:block;flex:1 1 auto;min-height:0;overflow-y:auto;
+    overscroll-behavior:contain;padding-bottom:18px;
+    -webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 18px),transparent);
+    mask-image:linear-gradient(to bottom,#000 calc(100% - 18px),transparent);}
+  #ucFields.sheet .sh-foot{display:block;flex:0 0 auto;background:var(--surface);
+    border-top:1px solid var(--line);padding-top:11px;margin-top:2px;}
   .sh-head{display:none;}
   #ucFields.sheet .sh-head{display:block;position:sticky;top:0;z-index:2;
     background:var(--surface);padding:8px 0 10px;margin:0 0 4px;}
@@ -299,10 +311,11 @@
   .sh-t b{display:block;font-size:16px;font-weight:650;line-height:1.25;}
   .sh-t span{display:block;font-size:12px;color:var(--muted);margin-top:2px;
     font-variant-numeric:tabular-nums;}
-  .sh-row button{flex:0 0 auto;width:40px;height:40px;border-radius:12px;border:1px solid var(--line);
+  /* 44 px is the floor for a gloved thumb; close was two short of it. */
+  .sh-row button{flex:0 0 auto;width:44px;height:44px;border-radius:13px;border:1px solid var(--line);
     background:var(--surface-2);color:var(--ink-2);font-size:17px;cursor:pointer;}
   .sh-nav{display:none;}
-  #ucFields.sheet .sh-nav{display:flex;gap:9px;position:sticky;bottom:0;
+  #ucFields.sheet .sh-nav{display:flex;gap:9px;
     background:var(--surface);padding:10px 0 2px;margin-top:6px;}
   .sh-nav button{flex:1;min-height:52px;border-radius:13px;border:1px solid var(--line);
     background:var(--surface-2);color:var(--ink);font:650 15px/1 inherit;cursor:pointer;}
@@ -338,6 +351,20 @@
   .ucwarn .uw-ok{display:flex;gap:9px;align-items:flex-start;margin-top:10px;font-size:13px;
     color:var(--ink);line-height:1.45;}
   .ucwarn .uw-ok input{margin-top:2px;width:19px;height:19px;flex:0 0 auto;}
+  /* Short screens — an SE, or any phone turned on its side. The frame strip
+     above the sheet is worth less than the reading, its verdict and the way
+     out, so the sheet takes the room it needs and the drawing scrolls. */
+  @media (max-height:760px){ #ucFields.sheet{max-height:84vh;} }
+  @media (max-height:620px){
+    #ucFields.sheet{max-height:93vh;}
+    #ucFields.sheet .ucfig{max-height:34vh;overflow:hidden;}
+    .ucwarn{padding:9px 11px;margin-bottom:9px;}
+    .ucwarn .uw-t{font-size:12.5px;line-height:1.4;}
+    .ucwarn .uw-ok{margin-top:7px;font-size:12.5px;}
+    .sh-nav button{min-height:46px;}
+    #ucFields.sheet .sh-nav{padding:8px 0 2px;margin-top:4px;}
+    #ucFields.sheet .sh-foot{padding-top:9px;}
+  }
   .ucna{border-top:1px solid var(--line);padding-top:11px;margin-bottom:4px;}
   .ucna-h{font-size:12.5px;color:var(--muted);margin-bottom:8px;}
   .chips{display:flex;flex-wrap:wrap;gap:7px;}
@@ -537,8 +564,8 @@
     </label>
     <div id="tempFields" class="hidden">
       <div class="row">
-        <label class="fld"><span data-i18n="lbl_temp">Temperature °C</span><input id="tempV" type="number" inputmode="decimal" step="0.1"></label>
-        <label class="fld"><span data-i18n="lbl_amb">Ambient °C</span><input id="tempA" type="number" inputmode="decimal" step="0.1"></label>
+        <label class="fld"><span data-i18n="lbl_temp">Temperature °C</span><input id="tempV" type="text" inputmode="decimal" autocomplete="off"></label>
+        <label class="fld"><span data-i18n="lbl_amb">Ambient °C</span><input id="tempA" type="text" inputmode="decimal" autocomplete="off"></label>
       </div>
       <label class="fld"><span data-i18n="lbl_method">Measurement method</span>
         <select id="tempM">
@@ -556,25 +583,32 @@
           <button type="button" id="ucClose" aria-label="close">✕</button>
         </div>
       </div>
-      <button type="button" class="ucfigtog" id="ucFigTog"></button>
-      <div class="ucfig" id="ucFig"></div>
-      <div class="ucref" id="ucRefLine"></div>
-      <div class="uclast" id="ucLast"></div>
-      <label class="fld"><span id="ucLbl" data-i18n="lbl_mm">Measured (mm)</span>
-        <input id="ucMM" type="number" inputmode="decimal" step="0.1"></label>
-      <div class="ucread" id="ucRead"></div>
-      <div class="ucwarn hidden" id="ucWarn">
-        <div class="uw-t" id="ucWarnText"></div>
-        <label class="uw-ok"><input type="checkbox" id="ucStood">
-          <span data-i18n="uc_stood">I measured it again — the reading is right, check the reference</span></label>
+      <!-- Reference material scrolls; the number, the verdict and the way out do
+           not. Typing 88 mm and having "past the condemn limit" sit behind the
+           Next button is how a scrapped roller gets signed off as fine. -->
+      <div class="sh-body" id="ucSheetBody">
+        <button type="button" class="ucfigtog" id="ucFigTog"></button>
+        <div class="ucfig" id="ucFig"></div>
+        <div class="ucref" id="ucRefLine"></div>
+        <div class="uclast" id="ucLast"></div>
+        <div class="ucna">
+          <div class="ucna-h" data-i18n="uc_cannot">Could not measure it?</div>
+          <div class="chips" id="ucReasons"></div>
+        </div>
       </div>
-      <div class="ucna">
-        <div class="ucna-h" data-i18n="uc_cannot">Could not measure it?</div>
-        <div class="chips" id="ucReasons"></div>
-      </div>
-      <div class="sh-nav" id="ucSheetNav">
-        <button type="button" id="ucPrev"></button>
-        <button type="button" id="ucNext" class="pri"></button>
+      <div class="sh-foot" id="ucSheetFoot">
+        <label class="fld"><span id="ucLbl" data-i18n="lbl_mm">Measured (mm)</span>
+          <input id="ucMM" type="text" inputmode="decimal" autocomplete="off"></label>
+        <div class="ucread" id="ucRead"></div>
+        <div class="ucwarn hidden" id="ucWarn">
+          <div class="uw-t" id="ucWarnText"></div>
+          <label class="uw-ok"><input type="checkbox" id="ucStood">
+            <span data-i18n="uc_stood">I measured it again — the reading is right, check the reference</span></label>
+        </div>
+        <div class="sh-nav" id="ucSheetNav">
+          <button type="button" id="ucPrev"></button>
+          <button type="button" id="ucNext" class="pri"></button>
+        </div>
       </div>
     </div>
     <label class="fld"><span data-i18n="lbl_sev">Severity (ISO 14224)</span>
@@ -685,7 +719,7 @@
     <span id="staleTxt"></span>
     <button type="button" id="staleGo"></button>
   </div>
-  <div class="ver" id="verLine">build v<span id="verNum">?</span> · <span id="verNote">the machine answers back</span> ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver" id="verLine">build v<span id="verNum">?</span> · <span id="verNote">the number and its verdict, together</span> ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <nav class="tabbar" id="tabbar">
@@ -801,19 +835,18 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="jsQR.js?v=60"></script>
-<script src="qrcode.js?v=60"></script>
-<script src="upload-defaults.js?v=60"></script>
-<script src="hme.js?v=60"></script>
-<script src="mp-fc.js?v=60"></script>
-<script src="hme-cascade.js?v=60"></script>
-<script src="assets.js?v=60"></script>
-<script src="temp-limits.js?v=60"></script>
-<script src="wear.js?v=60"></script>
-<script src="wear-figs.js?v=60"></script>
-<script src="wear-map.js?v=60"></script>
-<script src="jspdf.umd.min.js?v=60"></script>
-<script src="html2canvas.min.js?v=60"></script>
+<script src="upload-defaults.js?v=61"></script>
+<script src="hme.js?v=61"></script>
+<script src="mp-fc.js?v=61"></script>
+<script src="hme-cascade.js?v=61"></script>
+<script src="assets.js?v=61"></script>
+<script src="temp-limits.js?v=61"></script>
+<script src="wear.js?v=61"></script>
+<script src="wear-figs.js?v=61"></script>
+<script src="wear-map.js?v=61"></script>
+<!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
+     them; see loadLib(). The service worker precaches all four at install,
+     so that tap resolves from cache and works with no signal. -->
 <script>
 /* ============================================================================
    EQUIPMENT CLASSES & INSPECTION TYPES  —  EDIT here for your fleet.
@@ -1042,6 +1075,7 @@ const I18N = {
     lbl_temp:"Temperature °C", lbl_amb:"Ambient °C", lbl_method:"Measurement method",
     tm_IR:"IR gun", tm_CAM:"Thermal camera", tm_CON:"Contact probe", tm_TEL:"Machine telemetry",
     temp_lim:"Warn ≥ {w} °C · Alarm ≥ {a} °C", temp_rise:"rise", rep_temp:"Temp",
+    rep_wear:"Wear", rep_recheck:"re-measured",
     lbl_gps:"Location (GPS)", gps_none:"Tap to stamp the location", gps_getting:"Getting location…",
     m_gps_na:["Location not available","This browser can't provide GPS. The record still saves without it."],
     m_gps_fail:["Location failed","Allow location access for this site, or continue — the record still saves."],
@@ -1115,6 +1149,9 @@ const I18N = {
     m_exported:["Exported ✔","A ZIP with correctly-named photos + entries.json was downloaded. Put the photos in your N: drive folder."],
     m_nothing_share:["Nothing to share","Capture at least one item first."],
     m_share_na:["Sharing not available","Your phone can't share files from the browser. Use “Export ZIP” instead."],
+    m_lib_pdf:["Report engine did not load","It is fetched the first time you build a report. Connect once, then try again."],
+    m_lib_scan:["Scanner did not load","It is fetched the first time you scan. Connect once, then try again."],
+    m_lib_qr:["QR builder did not load","It is fetched the first time you show a code. Connect once, then try again."],
     m_scan_wait:["Scanner not ready","Open the app once with internet so the scanner loads, then try again."],
     m_no_qr:["No QR found","Couldn't read a QR in that photo. Try again — closer and well-lit."],
     m_dictation:["Dictation","Tap the comment box, then tap the 🎤 microphone key on your phone's keyboard to dictate."],
@@ -1210,6 +1247,7 @@ const I18N = {
     lbl_temp:"Температура °C", lbl_amb:"Окружающая среда °C", lbl_method:"Метод замера",
     tm_IR:"Пирометр (ИК)", tm_CAM:"Тепловизор", tm_CON:"Контактный датчик", tm_TEL:"Телеметрия машины",
     temp_lim:"Предупр. ≥ {w} °C · Тревога ≥ {a} °C", temp_rise:"превышение", rep_temp:"Темп.",
+    rep_wear:"Износ", rep_recheck:"перепроверено",
     lbl_gps:"Координаты (GPS)", gps_none:"Нажмите, чтобы записать координаты", gps_getting:"Определение координат…",
     m_gps_na:["Геолокация недоступна","Браузер не может дать GPS. Запись всё равно сохранится."],
     m_gps_fail:["Не удалось определить координаты","Разрешите доступ к геолокации для этого сайта или продолжайте — запись сохранится."],
@@ -1283,6 +1321,9 @@ const I18N = {
     m_exported:["Экспортировано ✔","Скачан ZIP с правильно названными фото + entries.json. Положите фото в папку на N:."],
     m_nothing_share:["Нечем делиться","Сначала снимите хотя бы один пункт."],
     m_share_na:["Общий доступ недоступен","Телефон не может делиться файлами из браузера. Используйте «Экспорт ZIP»."],
+    m_lib_pdf:["Модуль отчётов не загрузился","Он загружается при первом построении отчёта. Подключитесь один раз и повторите."],
+    m_lib_scan:["Сканер не загрузился","Он загружается при первом сканировании. Подключитесь один раз и повторите."],
+    m_lib_qr:["Генератор QR не загрузился","Он загружается при первом показе кода. Подключитесь один раз и повторите."],
     m_scan_wait:["Сканер не готов","Откройте приложение один раз с интернетом, чтобы загрузился сканер, затем повторите."],
     m_no_qr:["QR не найден","Не удалось распознать QR на фото. Попробуйте ближе и при хорошем свете."],
     m_dictation:["Диктовка","Коснитесь поля комментария и нажмите значок 🎤 на клавиатуре телефона, чтобы диктовать."],
@@ -1624,10 +1665,13 @@ function idb(){ return dbConn ||= new Promise((res,rej)=>{ const r=indexedDB.ope
     r.result.onversionchange=()=>{ try{r.result.close();}catch(_){ } dbConn=null; };
     res(r.result); };
   r.onerror=()=>{ dbConn=null; rej(r.error); }; }); }
-async function dbPut(rec){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); t.objectStore(STORE).put(rec); t.oncomplete=res; t.onerror=()=>rej(t.error); t.onabort=()=>rej(t.error||new Error("save aborted — storage may be full")); }); }
+/* Anything that reads the store and keeps the answer has to know when the answer
+   went stale. One counter, bumped by the only two writers. */
+let dbVer=0;
+async function dbPut(rec){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); t.objectStore(STORE).put(rec); t.oncomplete=()=>{ dbVer++; res(); }; t.onerror=()=>rej(t.error); t.onabort=()=>rej(t.error||new Error("save aborted — storage may be full")); }); }
 async function dbAll(){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readonly"); const rq=t.objectStore(STORE).getAll(); rq.onsuccess=()=>res(rq.result||[]); rq.onerror=()=>rej(rq.error); }); }
 async function dbGet(id){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readonly"); const rq=t.objectStore(STORE).get(id); rq.onsuccess=()=>res(rq.result||null); rq.onerror=()=>rej(rq.error); }); }
-async function dbDel(id){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); t.objectStore(STORE).delete(id); t.oncomplete=res; t.onerror=()=>rej(t.error); }); }
+async function dbDel(id){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); t.objectStore(STORE).delete(id); t.oncomplete=()=>{ dbVer++; res(); }; t.onerror=()=>rej(t.error); }); }
 
 /* ===================== class + type + component chips ===================== */
 function fillClassSel(){ $("classBtn").textContent = eqCat==="ALL"
@@ -1824,6 +1868,25 @@ function ucRef(){
   return WEAR.refFor(curEquip, st.model, pt, pos, $("date").value||todayISO());
 }
 function ucBand(pct){ return pct>=100?"act" : pct>=80?"watch" : "ok"; }
+/* A saved record keeps only what the inspector did: the millimetres, whether the
+   reading was re-taken after a challenge, and — if nothing was measured — why not. Every
+   derived figure is resolved here, at read time, against the reference that
+   record's own date sees. Correcting a bad reference must not need the history
+   rewritten, so nothing derived is ever stored. `stood` is the inspector having
+   gone back and taken the reading again after the app questioned it. */
+function wearOut(rec,k,p){
+  if((rec.type||"")!=="UC") return null;
+  if(p.mm==null && !p.reason) return null;
+  const a=ASSET_BY[rec.equip]||{}, [pt,pos]=ucSplit(k);
+  const ref=(window.WEAR && a.m) ? WEAR.refFor(rec.equip, a.m, pt, pos, rec.date) : null;
+  const pct=(ref && p.mm!=null) ? WEAR.wear(ref, Number(p.mm)) : null;
+  return { mm:(p.mm==null?"":Number(p.mm)), stood:p.stood?1:0, reason:p.reason||"",
+           reasonLabel:p.reason?ucReasonLabel(p.reason,"en"):"",
+           newMM:(ref&&!ref.x)?ref.n:"", condemnMM:(ref&&!ref.x)?ref.c:"",
+           wearPct:(pct==null?"":Math.round(pct)),
+           band:(pct==null?"":ucBand(pct)),
+           refSrc:ref?(ref.x?("x:"+ref.x):ref.src):"" };
+}
 function renderUC(){
   if(!TYPE_META[type].wear) return;
   const box=$("ucRead"), warn=$("ucWarn");
@@ -1850,7 +1913,9 @@ function renderUC(){
     } else if(!ref){
       h += '<span class="band b-watch">'+t("uc_noref")+'</span>';
     }
-    if(ref) h += '<span class="src">'+t("uc_src_"+ref.src)+(ref.from?" "+ref.from:"")+'</span>';
+    /* Where the reference came from is stated once, on the line above the box.
+       Repeating it under the verdict spent a line of a 640 px sheet saying a
+       thing the inspector had just read. */
     box.innerHTML=h;
   }
   // the question, which is never a refusal
@@ -1866,9 +1931,9 @@ function renderUC(){
   renderUCReasons();
   renderUCSheet();
 }
-function ucReasonLabel(code){
+function ucReasonLabel(code,lg){
   const r=(window.WEAR&&WEAR.reasons||[]).find(x=>x.code===code);
-  return r?(r[lang]||r.en):code;
+  return r?(r[lg||lang]||r.en):code;
 }
 function renderUCReasons(){
   const box=$("ucReasons"); if(!box) return;
@@ -1949,12 +2014,15 @@ function ucKeepFrameInView(){
 const cssEsc = v => String(v).replace(/["\\]/g,"\\$&");
 const UC_MOVE = ["mediastrip","mediaHint","mediaRow","commentFld"];
 let ucHome = null;
+/* Photo, video and comment belong with the reference material in the scrolling
+   half — putting them in the pinned foot would push the reading and its verdict
+   back off the screen, which is the whole thing this layout exists to prevent. */
 function ucMoveIn(){
-  const nav=$("ucSheetNav"); if(!nav) return;
+  const body=$("ucSheetBody"), mark=body&&body.querySelector(".ucna"); if(!mark) return;
   if(!ucHome){ ucHome=UC_MOVE.map(id=>{ const el=$(id);
     return el ? {el, parent:el.parentNode, next:el.nextSibling} : null; }).filter(Boolean); }
-  ucHome.forEach(h=>{ if(h.el.parentNode!==nav.parentNode || h.el.nextSibling!==nav)
-    nav.parentNode.insertBefore(h.el, nav); });
+  ucHome.forEach(h=>{ if(h.el.parentNode!==body || h.el.nextSibling!==mark)
+    body.insertBefore(h.el, mark); });
 }
 function ucMoveOut(){
   if(!ucHome) return;
@@ -1974,9 +2042,12 @@ function renderUCSheet(){
   $("ucSheetCount").textContent = t("uc_sheet_pos",{i:i+1,of:o.length,done:done});
   clearTimeout(ucScrollT); ucScrollT=setTimeout(ucKeepFrameInView, 70);
   const prev=$("ucPrev"), next=$("ucNext");
-  prev.disabled = i<=0; next.disabled = i<0 || i>=o.length-1;
+  /* At the last point the button says "Done" and must mean it — disabled here
+     left the round with no way out but the ✕, under a label promising one. */
+  prev.disabled = i<=0; next.disabled = i<0;
   prev.textContent = t("uc_prev");
   next.textContent = i>=o.length-1 ? t("uc_last") : t("uc_next");
+  next.dataset.done = i>=o.length-1 ? "1" : "";
 }
 function ucTally(){
   const w=WEAR.walk(ucStatus(curEquip).model);
@@ -2057,10 +2128,12 @@ function renderUCFig(){
    every check the reference can make, and is only obvious next to the number the
    same point gave a month ago. Cheap to show, and the only moment it is cheap to
    catch. */
-let ucPrevCache={key:"",rows:null};
+let ucPrevCache={key:"",ver:-1,rows:null};
 async function ucPrevReadings(unit){
   const u=(unit||"").toUpperCase();
-  if(ucPrevCache.key===u) return ucPrevCache.rows;
+  /* keyed on the store's version too — saving this round must not leave the
+     line quoting the round before it as "last time". */
+  if(ucPrevCache.key===u && ucPrevCache.ver===dbVer) return ucPrevCache.rows;
   const out={};
   try{
     const recs=(await dbAll()).filter(r=>(r.equip||"").toUpperCase()===u && r.type==="UC" && r.date);
@@ -2069,7 +2142,7 @@ async function ucPrevReadings(unit){
       if(p && p.mm!=null) out[k]={mm:Number(p.mm), d:r.date};
     }));
   }catch(e){ /* no history is not an error */ }
-  ucPrevCache={key:u, rows:out};
+  ucPrevCache={key:u, ver:dbVer, rows:out};
   return out;
 }
 let ucLastRun=0;
@@ -2107,9 +2180,11 @@ $("ucMM").addEventListener("input", ()=>{ saveCur(); renderUC(); refreshChips();
 $("ucStood").addEventListener("change", ()=>{ saveCur(); });
 // the keypad's own go-key walks the round, so 36 numbers need no navigation at all
 $("ucMM").addEventListener("keydown", e=>{ if(e.key==="Enter"){ e.preventDefault();
-  $("ucMM").blur(); saveCur(); ucStep(1); } });
+  $("ucMM").blur(); saveCur();
+  // the keypad's go-key follows the same contract as the button beneath it
+  if($("ucNext").dataset.done==="1") ucCloseSheet(); else ucStep(1); } });
 $("ucPrev").onclick=()=>ucStep(-1);
-$("ucNext").onclick=()=>ucStep(1);
+$("ucNext").onclick=()=>{ if($("ucNext").dataset.done==="1") ucCloseSheet(); else ucStep(1); };
 $("ucClose").onclick=ucCloseSheet;
 /* Tapping the machine while the sheet is up jumps to that point rather than
    dismissing first — the frame stays live above the sheet on purpose. Anything
@@ -2143,11 +2218,24 @@ $("actionBtn").onclick=()=>openPicker("action");
 ["particle","comp","oil","comment","wo"].forEach(id=>$(id).addEventListener("input",()=>{ saveCur(); refreshChips(); }));
 ["tempV","tempA"].forEach(id=>$(id).addEventListener("input",()=>{ saveCur(); syncTempSev(); refreshChips(); }));
 $("tempM").onchange=()=>{ saveCur(); refreshChips(); };
+/* A Russian-locale Android keypad offers a comma. These fields are type="text"
+   with a decimal inputmode rather than type="number" for exactly that reason:
+   a number input reads "12,5" as empty, so the inspector sees the figure on
+   screen and the record stores nothing. Normalise here instead. */
+function normDec(el){
+  const s=el.value, n=s.replace(/[,٫،]/g,".").replace(/[^0-9.\-]/g,"")
+    .replace(/(\..*)\./g,"$1").replace(/(?!^)-/g,"");
+  if(n!==s){ const end=el.selectionStart===s.length; el.value=n;
+    if(end){ try{ el.setSelectionRange(n.length,n.length); }catch(_){} } }
+}
+/* Called from saveCur — the one choke point every one of these fields passes
+   through — so it does not matter which input listener was registered first. */
+function normDecAll(){ ["ucMM","tempV","tempA"].forEach(id=>{ const el=$(id); if(el) normDec(el); }); }
 function hasData(p){ return (p.mm!=null&&p.mm!=="")||p.reason||p.grade||p.sev||p.action||p.wo||(p.photos&&p.photos.length)||p.video||p.particle||p.comp||p.oil||p.comment||p.defect||p.cause||p.tempV; }
 /* The severity that actually applies: what the inspector set, or what the grade
    implies. Everything that reasons about how bad a finding is goes through here. */
 function effSev(p){ return (p&&(p.sev||GRADE_SEV[p.grade]))||""; }
-function saveCur(){ if(!curItem) return; const p=curP(); p.particle=$("particle").value.trim(); p.comp=$("comp").value.trim(); p.oil=$("oil").value.trim();
+function saveCur(){ if(!curItem) return; normDecAll(); const p=curP(); p.particle=$("particle").value.trim(); p.comp=$("comp").value.trim(); p.oil=$("oil").value.trim();
   p.comment=$("comment").value.trim(); p.wo=$("wo").value.trim();
   if(TYPE_META[type].temp){ p.tempV=$("tempV").value.trim(); p.tempA=$("tempA").value.trim(); p.tempM=p.tempV?$("tempM").value:""; }
   if(TYPE_META[type].wear){
@@ -2164,6 +2252,9 @@ function loadPos(){
   $("posLabel").textContent = wearType() ? ucLabel(curItem) : `${curItem} — ${itemLabel(curItem)}`;
   const p=draft.positions[curItem]||{}; $("particle").value=p.particle||""; $("comp").value=p.comp||""; $("oil").value=p.oil||"";
   if(TYPE_META[type].wear){ $("ucMM").value = (p.mm==null?"":p.mm); $("ucStood").checked=!!p.stood; renderUC(); }
+  /* Always — leaving a wear type with the sheet up strands the media controls
+     inside #ucFields and leaves the body unscrollable behind a live backdrop. */
+  else renderUCSheet();
   $("comment").value=p.comment||""; $("wo").value=p.wo||"";
   $("tempV").value=p.tempV||""; $("tempA").value=p.tempA||""; $("tempM").value=p.tempM||"IR";
   renderGrade(); renderSev(); updateActionBtn(); updateDetectBtn(); renderMedia(); updateDefectCauseBtns(); renderTempHint(); toggleCapture(); }
@@ -2345,10 +2436,13 @@ function resetForm(){ draft={positions:{}}; curEquip=""; curItem=""; updateEquip
 function editRecord(rec){ if(rec.cls && CLASSES[rec.cls]){ eqClass=rec.cls; localStorage.setItem("equip_class",eqClass); }
   if(rec.type && TYPE_META[rec.type]){ type=rec.type; localStorage.setItem("insp_type",type); }
   draft={positions:{}};
-  for(const [k,pp] of Object.entries(rec.positions)) draft.positions[k]={grade:pp.grade,sev:pp.sev,sevMan:pp.sevMan||0,action:pp.action,wo:pp.wo,particle:pp.particle,comp:pp.comp,oil:pp.oil,comment:pp.comment,defect:pp.defect,cause:pp.cause,tempV:pp.tempV||"",tempA:pp.tempA||"",tempM:pp.tempM||"",photos:(pp.photos?pp.photos.slice():(pp.photoBlob?[pp.photoBlob]:[])),video:pp.video||null};
+  for(const [k,pp] of Object.entries(rec.positions)) draft.positions[k]={grade:pp.grade,sev:pp.sev,sevMan:pp.sevMan||0,action:pp.action,wo:pp.wo,particle:pp.particle,comp:pp.comp,oil:pp.oil,comment:pp.comment,defect:pp.defect,cause:pp.cause,tempV:pp.tempV||"",tempA:pp.tempA||"",tempM:pp.tempM||"",
+    mm:(pp.mm==null?null:Number(pp.mm)),stood:pp.stood?1:0,reason:pp.reason||"",detect:pp.detect||"",
+    photos:(pp.photos?pp.photos.slice():(pp.photoBlob?[pp.photoBlob]:[])),video:pp.video||null};
   curEquip=rec.equip||""; updateEquipBtn(); $("date").value=rec.date; $("smu").value=rec.smu||""; if(rec.by) $("inspector").value=rec.by;
   gps=rec.gps||null; renderGps(); $("supName").value=rec.sup||""; loadSign(rec.sign||null);
-  curItem=Object.keys(draft.positions)[0]||items()[0].k;
+  // items() is empty for a unit this type has no walk for — indexing it threw.
+  curItem=Object.keys(draft.positions)[0]||(items()[0]||{}).k||"";
   applyForm(); loadPos(); setEditing(rec); showPane("paneCapture"); }
 $("cancelEdit").onclick=()=>resetForm();
 
@@ -2387,7 +2481,9 @@ $("saveBtn").onclick=async ()=>{
     sup:$("supName").value.trim(), sign:await signBlob(), gps:gps||null, dev:DEVICE, positions:{}, created, up:0, upTo:{},
     rev:(editing?(editing.rev||0)+1:1) };
   for(const [k,p] of Object.entries(draft.positions))
-    rec.positions[k]={ grade:p.grade||null, sev:p.sev||"", sevMan:p.sevMan||0, action:p.action||"", wo:p.wo||"", particle:p.particle||"", comp:p.comp||"", oil:p.oil||"", defect:p.defect||"", cause:p.cause||"", comment:p.comment||"", tempV:p.tempV||"", tempA:p.tempA||"", tempM:p.tempM||"", detect:p.detect||DETECT_DEFAULT, photos:(p.photos||[]).slice(), video:p.video||null };
+    rec.positions[k]={ grade:p.grade||null, sev:p.sev||"", sevMan:p.sevMan||0, action:p.action||"", wo:p.wo||"", particle:p.particle||"", comp:p.comp||"", oil:p.oil||"", defect:p.defect||"", cause:p.cause||"", comment:p.comment||"", tempV:p.tempV||"", tempA:p.tempA||"", tempM:p.tempM||"", detect:p.detect||DETECT_DEFAULT,
+      mm:(p.mm==null?null:Number(p.mm)), stood:p.stood?1:0, reason:p.reason||"",
+      photos:(p.photos||[]).slice(), video:p.video||null };
   await dbPut(rec); noteDone(rec); resetForm(); renderPending(); renderDue(); syncNow();
   // First real save is the moment there is something worth protecting.
   if(persistState===null) askPersist();
@@ -2398,7 +2494,9 @@ $("saveBtn").onclick=async ()=>{
    Keeps a small "last done" index (TYPE|UNIT -> YYYY-MM-DD) in local storage.
    Fed by every save on this phone, and seeded for the whole fleet by importing an
    entries.json exported from the dashboard. Interval is per inspection type. */
-const DUE_DEFAULT={MP:90, FC:90, INSP:30, TEMP:30};
+// Undercarriage is a quarterly round on this fleet, not a monthly one — a 30-day
+// default would put all 1,085 units in the due list every month for nothing.
+const DUE_DEFAULT={MP:90, FC:90, INSP:30, TEMP:30, UC:90};
 function dueInterval(ty){ const v=parseInt(localStorage.getItem("due_int_"+ty),10);
   return (v>0)?v:(DUE_DEFAULT[ty]||30); }
 /* Up to one entry per unit per type — ~4000 on this fleet. renderDue() runs it
@@ -2947,6 +3045,11 @@ async function buildPackage(){
       if(p.cause){ n.cause=causeLabel(p.cause,"en"); n.causeCode=p.cause; }
       if(p.sev)n.severity=p.sev; if(p.action)n.action=actionLabel(p.action,"en"); if(p.wo)n.workOrder=p.wo;
       if(p.tempV){ n.temperatureC=p.tempV; if(p.tempA)n.ambientC=p.tempA; if(p.tempM)n.tempMethod=p.tempM; }
+      const wo_=wearOut(rec,k,p);
+      if(wo_){ if(wo_.mm!=="")n.measuredMM=wo_.mm; if(wo_.newMM!=="")n.newMM=wo_.newMM;
+        if(wo_.condemnMM!=="")n.condemnMM=wo_.condemnMM; if(wo_.wearPct!=="")n.wearPct=wo_.wearPct;
+        if(wo_.refSrc)n.wearRef=wo_.refSrc; if(wo_.stood)n.reMeasured=1;
+        if(wo_.reason){ n.notMeasured=wo_.reason; n.notMeasuredReason=wo_.reasonLabel; } }
       if(rec.by)n.inspector=rec.by; if(rec.sup)n.verifiedBy=rec.sup;
       if(rec.gps)n.gps=`${rec.gps.lat.toFixed(6)},${rec.gps.lon.toFixed(6)}`;
       if(p.comment)n.comment=p.comment;
@@ -2968,6 +3071,7 @@ async function buildPackage(){
         causeCode:p.cause||"", cause:p.cause?causeLabel(p.cause,"en"):"",
         particle:p.particle||"", comp:p.comp||"", oil:p.oil||"", comment:p.comment||"",
         tempC:p.tempV||"", ambC:p.tempA||"", tempMethod:p.tempM||"",
+        ...(wearOut(rec,k,p)||{}),
         photos:((p.photos||[]).length), video:p.video?1:0 };
     })
   }));
@@ -3003,6 +3107,7 @@ async function buildReportHTML(){
     const cls=CLASSES[rec.cls]?(CLASSES[rec.cls][lang]||CLASSES[rec.cls].en):(rec.cls||"");
     const pos=Object.entries(rec.positions); const cnt={A:0,B:0,C:0,X:0};
     const isTemp = !!(TYPE_META[rec.type]&&TYPE_META[rec.type].temp);
+    const isWear = !!(TYPE_META[rec.type]&&TYPE_META[rec.type].wear);
     pos.forEach(([k,p])=>{ if(p.grade&&cnt[p.grade]!=null)cnt[p.grade]++; });
     const att=pos.filter(([k,p])=>p.grade==="C"||p.grade==="X"||p.defect);
     h+=`<div style="margin-bottom:22px;page-break-inside:avoid;">
@@ -3021,7 +3126,8 @@ async function buildReportHTML(){
       <th style="border:1px solid #ccc;padding:4px;text-align:left;">${esc(L("rep_defect"))}</th>
       <th style="border:1px solid #ccc;padding:4px;text-align:left;">${esc(L("rep_cause"))}</th>
       <th style="border:1px solid #ccc;padding:4px;text-align:left;">${esc(L("rep_action"))}</th>${
-      isTemp?`<th style="border:1px solid #ccc;padding:4px;">${esc(L("rep_temp"))}</th>`:""}
+      isTemp?`<th style="border:1px solid #ccc;padding:4px;">${esc(L("rep_temp"))}</th>`:""}${
+      isWear?`<th style="border:1px solid #ccc;padding:4px;">${esc(L("rep_wear"))}</th>`:""}
       <th style="border:1px solid #ccc;padding:4px;text-align:left;">${esc(L("rep_read"))}</th></tr>`;
     for(const [k,p] of pos){ const read=[p.particle&&`PC ${esc(p.particle)}`,p.comp&&`${esc(p.comp)}h comp`,p.oil&&`${esc(p.oil)}h oil`,p.comment&&esc(p.comment)].filter(Boolean).join(" · ");
       h+=`<tr><td style="border:1px solid #ccc;padding:4px;"><b>${esc(k)}</b> ${esc(itemLabelFor(rec,k))}</td>
@@ -3031,6 +3137,13 @@ async function buildReportHTML(){
         <td style="border:1px solid #ccc;padding:4px;">${p.cause?esc(causeLabel(p.cause)):""}</td>
         <td style="border:1px solid #ccc;padding:4px;">${p.action?esc(actionLabel(p.action)):""}${p.wo?` <b>[${esc(p.wo)}]</b>`:""}</td>
         ${isTemp?`<td style="border:1px solid #ccc;padding:4px;text-align:center;white-space:nowrap;">${p.tempV?`<b>${esc(p.tempV)}</b> °C${p.tempA?`<span style="color:#888;"> / ${esc(p.tempA)}</span>`:""}${p.tempM?`<div style="color:#888;font-size:9.5px;">${esc(p.tempM)}</div>`:""}`:""}</td>`:""}
+        ${isWear?(()=>{ const w=wearOut(rec,k,p); if(!w) return `<td style="border:1px solid #ccc;padding:4px;"></td>`;
+          if(w.mm==="") return `<td style="border:1px solid #ccc;padding:4px;text-align:center;color:#888;font-size:10px;">${esc(w.reasonLabel||w.reason)}</td>`;
+          const bh=w.band==="act"?GRADE_HEX.X:w.band==="watch"?GRADE_HEX.C:GRADE_HEX.A;
+          return `<td style="border:1px solid #ccc;padding:4px;text-align:center;white-space:nowrap;"><b>${esc(w.mm)}</b> mm${
+            w.wearPct===""?`<div style="color:#888;font-size:9.5px;">${esc(L("uc_noref"))}</div>`
+            :`<div><span style="background:${bh};color:#fff;border-radius:8px;padding:0 6px;font-size:10px;">${esc(w.wearPct)}%</span></div>`}${
+            w.stood?`<div style="color:#888;font-size:9.5px;">${esc(L("rep_recheck"))}</div>`:""}</td>`; })():""}
         <td style="border:1px solid #ccc;padding:4px;">${read}</td></tr>`; }
     h+=`</table>`;
     for(const [k,p] of pos){ const ph=p.photos||(p.photoBlob?[p.photoBlob]:[]); if(!ph.length) continue;
@@ -3053,7 +3166,7 @@ async function buildReportHTML(){
 }
 $("reportBtn").onclick=async ()=>{
   const all=await dbAll(); if(!all.length){ dlg(t("m_nothing_export")); return; }
-  if(!(window.jspdf&&window.jspdf.jsPDF)||!window.html2canvas){ dlg(["PDF engine not ready","Open the app once online so it can load, then try again."]); return; }
+  if(!await needPdf()){ dlg(t("m_lib_pdf")); return; }
   dlg(t("rep_building"));
   try{
     const holder=document.createElement("div"); holder.style.cssText="position:fixed;left:-9999px;top:0;width:760px;background:#fff;padding:24px;";
@@ -3109,7 +3222,7 @@ function onScanned(text){
   selectEquip(u); stopScan(); return true;
 }
 function extractUnit(text){ if(!text) return null; const m=String(text).match(/([A-Za-z]{1,4}\s?\d+)/); return m?m[1].toUpperCase().replace(/\s+/g,""):String(text).trim().toUpperCase(); }
-async function startScan(){ if(!window.jsQR){ dlg(t("m_scan_wait")); return; }
+async function startScan(){ if(!await needScan()){ dlg(t("m_lib_scan")); return; }
   try{ scanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:"environment"}}}); }catch(e){ $("qrPhoto").click(); return; }
   const v=$("scanVideo"); v.srcObject=scanStream; await v.play(); $("scanOverlay").classList.remove("hidden");
   const tick=()=>{ if(v.readyState>=2){ qrCanvas.width=v.videoWidth; qrCanvas.height=v.videoHeight; qctx.drawImage(v,0,0,qrCanvas.width,qrCanvas.height);
@@ -3122,7 +3235,8 @@ $("scanCancel").onclick=()=>{ scanMode="unit"; stopScan(); };
 $("qrPhoto").onchange=async (e)=>{ const f=e.target.files[0]; e.target.value=""; if(!f) return;
   const img=await new Promise((res,rej)=>{ const i=new Image(); i.onload=()=>res(i); i.onerror=rej; i.src=URL.createObjectURL(f); });
   qrCanvas.width=img.width; qrCanvas.height=img.height; qctx.drawImage(img,0,0);
-  const id=qctx.getImageData(0,0,img.width,img.height); const code=window.jsQR && window.jsQR(id.data,id.width,id.height);
+  if(!await needScan()){ dlg(t("m_lib_scan")); return; }
+  const id=qctx.getImageData(0,0,img.width,img.height); const code=window.jsQR(id.data,id.width,id.height);
   if(code&&code.data){ onScanned(code.data); } else dlg(t("m_no_qr")); };
 
 /* ===================== dictation ===================== */
@@ -3166,7 +3280,32 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
    has accepted every one of its files. */
 const DEST_META={ gas:{label:"Google Drive"}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
 const DEST_IDS=["gas","pa","post"];
-const BUILD="60";
+const BUILD="61";
+/* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
+   and a QR writer. A round of measurements touches none of them, yet every cold
+   start waited for all four before the first paint. Fetch them on the tap that
+   needs them — and quietly, once the app is idle, so that tap is instant too.
+   The service worker precaches them at install either way, so this costs nothing
+   offline. */
+const libP={};
+function loadLib(file){
+  return libP[file] || (libP[file]=new Promise(res=>{
+    const el=document.createElement("script");
+    el.src=file+"?v="+BUILD;
+    el.onload=()=>res(true);
+    // Drop the promise so a later tap can try again rather than fail forever.
+    el.onerror=()=>{ delete libP[file]; el.remove(); res(false); };
+    document.head.appendChild(el);
+  }));
+}
+async function needPdf(){ await Promise.all([loadLib("jspdf.umd.min.js"),loadLib("html2canvas.min.js")]);
+  return !!(window.jspdf&&window.jspdf.jsPDF&&window.html2canvas); }
+async function needScan(){ await loadLib("jsQR.js"); return !!window.jsQR; }
+async function needQRGen(){ await loadLib("qrcode.js"); return !!window.qrcode; }
+/* Warm them after the app has settled — idle time on the capture screen is free,
+   and it means the report button does not feel like it is fetching anything. */
+function warmLibs(){ ["jsQR.js","qrcode.js","jspdf.umd.min.js","html2canvas.min.js"].forEach(loadLib); }
+(window.requestIdleCallback||(f=>setTimeout(f,3000)))(warmLibs,{timeout:6000});
 const DEFAULT_DESTS=((window.UPLOAD_DEFAULTS||{}).dests)||[];
 /* Parsed once and reused — see the note by the write below. */
 let destsCache=null, destsRaw=null;
@@ -3462,6 +3601,7 @@ function recToExport(rec){
         cause:p.cause?causeLabel(p.cause,"en"):"", particle:p.particle||"",
         detection:det, detectionLabel:detectLabel(det,"en"),
         comp:p.comp||"", oil:p.oil||"", comment:p.comment||"", tempC:p.tempV||"", ambC:p.tempA||"", tempMethod:p.tempM||"",
+        ...(wearOut(rec,k,p)||{}),
         photos:((p.photos||[]).length), video:p.video?1:0 }; }) };
 }
 async function renderSync(){
@@ -3471,7 +3611,8 @@ async function renderSync(){
   const all=await dbAll(); const pend=all.filter(r=>!r.up).length;
   let cls="syncbar", txt;
   if(syncing){ cls+=" pend"; txt=t("sync_running"); }
-  else if(lastErr){ cls+=" err"; txt=t("sync_err")+": "+lastErr
+  /* lastErr carries a message off the wire — it is never trusted as markup. */
+  else if(lastErr){ cls+=" err"; txt=t("sync_err")+": "+esc(lastErr)
       +(pend?" · "+t("sync_pending").replace("{n}",pend):""); }
   else if(pend){ cls+=" pend"; txt=t("sync_pending").replace("{n}",pend)+(navigator.onLine?"":" · "+t("net_offline")); }
   else { cls+=" on"; txt=t("sync_ok"); }
@@ -3558,10 +3699,10 @@ function drawQR(text){
   x.fillStyle="#fff"; x.fillRect(0,0,c.width,c.height); x.fillStyle="#000";
   for(let r=0;r<n;r++) for(let col=0;col<n;col++) if(q.isDark(r,col)) x.fillRect(pad+col*px,pad+r*px,px,px);
 }
-$("provShow").onclick=()=>{
+$("provShow").onclick=async ()=>{
   persistSettings();
   if(!formToDests().some(d=>d.url)){ $("setMsg").textContent=t("set_needurl"); return; }
-  if(!window.qrcode){ dlg(t("m_scan_wait")); return; }
+  if(!await needQRGen()){ dlg(t("m_lib_qr")); return; }
   drawQR(cfgLink()); $("provBox").classList.remove("hidden"); };
 $("provCopy").onclick=async ()=>{
   try{ await navigator.clipboard.writeText(cfgLink()); $("setMsg").textContent=t("set_copied"); }
