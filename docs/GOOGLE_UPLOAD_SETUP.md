@@ -289,6 +289,17 @@ re-paste the file, then **Deploy → Manage deployments → ✏️ → Version: 
 `?action=file` refuses anything that is not inside your configured folder, even with a
 valid file id.
 
+### Two phones, one inspection
+
+From build 49 the script refuses to let one phone overwrite another's files. A second
+device's copy is kept as `<name>~<DEVICE>.<ext>` and the clash is recorded in
+`_meta/<UNIT>_<DDMMYYYY>_<TYPE>.conflict.json`, which the dashboard shows and resolves.
+
+**This only works once the script is redeployed.** An older deployment still overwrites,
+and the loss is silent — the phone reports a successful upload either way. If two people
+ever cover the same unit on the same day, re-paste `docs/google-upload.gs` and
+**Deploy → Manage deployments → ✏️ → Version: New version** before that happens.
+
 ### If you can install it
 
 **Google Drive for desktop** mounts the folder as a normal drive (usually `G:`), so

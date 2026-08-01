@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Truck Inspection — Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=48">
+<link rel="manifest" href="manifest.webmanifest?v=49">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -444,16 +444,16 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="jsQR.js?v=48"></script>
-<script src="qrcode.js?v=48"></script>
-<script src="upload-defaults.js?v=48"></script>
-<script src="taxonomy.js?v=48"></script>
-<script src="taxonomy2.js?v=48"></script>
-<script src="assets.js?v=48"></script>
-<script src="components.js?v=48"></script>
-<script src="temp-limits.js?v=48"></script>
-<script src="jspdf.umd.min.js?v=48"></script>
-<script src="html2canvas.min.js?v=48"></script>
+<script src="jsQR.js?v=49"></script>
+<script src="qrcode.js?v=49"></script>
+<script src="upload-defaults.js?v=49"></script>
+<script src="taxonomy.js?v=49"></script>
+<script src="taxonomy2.js?v=49"></script>
+<script src="assets.js?v=49"></script>
+<script src="components.js?v=49"></script>
+<script src="temp-limits.js?v=49"></script>
+<script src="jspdf.umd.min.js?v=49"></script>
+<script src="html2canvas.min.js?v=49"></script>
 <script>
 /* ============================================================================
    EQUIPMENT CLASSES & INSPECTION TYPES  —  EDIT here for your fleet.
@@ -673,6 +673,8 @@ const I18N = {
     team_timeout:"Google Drive did not answer in 20 s — weak signal. Try again in coverage.",
     team_more:"More is waiting — tap again.",
     team_voided:"{n} withdrawn by the office.",
+    team_clash:"⑂ {n} sent twice — the office must pick which one stands.",
+    team_clash_one:"sent twice",
     team_oftype:"{n} × {ty}", team_other:"· {n} more under other types — switch type above.",
     team_none_type:"None of this type yet — switch type above to see the others.",
     team_old:"Update the Google script to use this (Deploy → Manage deployments → New version).",
@@ -687,6 +689,9 @@ const I18N = {
     m_merged:["Merged ✔","{a} new inspection(s), {b} item(s) added to existing ones, {c} already present."],
     m_need_truck:["Add the truck","Enter the truck / unit number (e.g. TK158) first."],
     m_nothing_save:["Nothing to save","Take at least one photo or set a grade."],
+    req_defect:"a defect", req_action:"a recommended action",
+    m_need_crit_t:"Critical needs more than a grade",
+    m_need_crit_m:"{k} is marked Critical, so it needs {x}. Planning cannot act on a critical finding that does not say what is wrong or what to do.",
     dlg_cancel:"Keep it", del_go:"Delete anyway",
     st_ok:"Storage {p}% used ({u} of {q}) · room for about {n} more photos",
     st_low:"⚠ Storage {p}% full ({u} of {q}) · room for only about {n} more photos — upload and clear some inspections",
@@ -791,6 +796,8 @@ const I18N = {
     team_timeout:"Google Drive не ответил за 20 с — слабый сигнал. Повторите в зоне покрытия.",
     team_more:"Есть ещё — нажмите ещё раз.",
     team_voided:"Отозвано офисом: {n}.",
+    team_clash:"⑂ Прислано дважды: {n} — офис выберет верную версию.",
+    team_clash_one:"прислано дважды",
     team_oftype:"{n} × {ty}", team_other:"· ещё {n} других типов — переключите тип выше.",
     team_none_type:"Этого типа пока нет — переключите тип выше.",
     team_old:"Обновите скрипт Google (Deploy → Manage deployments → New version).",
@@ -805,6 +812,9 @@ const I18N = {
     m_merged:["Объединено ✔","Новых осмотров: {a}, добавлено позиций: {b}, уже было: {c}."],
     m_need_truck:["Укажите трак","Сначала введите номер трака (напр. TK158)."],
     m_nothing_save:["Нечего сохранять","Сделайте хотя бы одно фото или укажите степень."],
+    req_defect:"дефект", req_action:"рекомендуемое действие",
+    m_need_crit_t:"Для «Критично» нужна не только степень",
+    m_need_crit_m:"{k} отмечено как критичное, поэтому нужно указать: {x}. По критичной находке без дефекта и действия планирование работать не может.",
     dlg_cancel:"Оставить", del_go:"Всё равно удалить",
     st_ok:"Память занята на {p}% ({u} из {q}) · хватит примерно ещё на {n} фото",
     st_low:"⚠ Память занята на {p}% ({u} из {q}) · хватит лишь примерно на {n} фото — выгрузите и очистите часть осмотров",
@@ -1323,6 +1333,27 @@ $("saveBtn").onclick=async ()=>{
   if(!equip){ dlg(t("m_need_truck")); return; }
   if(!$("inspector").value.trim()){ dlg(t("m_need_inspector")); return; }
   if(!Object.keys(draft.positions).length){ dlg(t("m_nothing_save")); return; }
+
+  /* A Critical finding has to say what is wrong and what to do about it.
+     Marking something critical and leaving the coded fields blank produces a
+     record planning cannot act on, and it is why the Pareto charts have nothing
+     to rank. Deliberately CRITICAL ONLY: applying this to Serious as well was
+     considered and rejected — a rule that blocks too often gets satisfied with
+     whatever is top of the list, which is worse than an honest blank.
+     Severity is the effective one, so an inspector who raises a B to Critical
+     by hand is held to the same standard as a grade of X. */
+  for(const [k,p] of Object.entries(draft.positions)){
+    const sev=p.sev||GRADE_SEV[p.grade]||"";
+    if(sev!=="CRI") continue;
+    const miss=[];
+    if(!p.defect) miss.push(t("req_defect"));
+    if(!p.action) miss.push(t("req_action"));
+    if(!miss.length) continue;
+    // Put them on the position that needs it, not just an error at the bottom.
+    if(curItem!==k){ saveCur(); curItem=k; loadPos(); renderChips(); }
+    dlg([t("m_need_crit_t"), t("m_need_crit_m",{k, x:miss.join(", ")})]);
+    return;
+  }
   const id = editing ? editing.id : `${type}__${equip}__${date}__${DEVICE}__${Date.now()}`;
   const created = editing ? (editing.created||new Date().toISOString()) : new Date().toISOString();
   if(!gps) await getGps(true);   // best effort — never blocks the save
@@ -1404,6 +1435,39 @@ function renderDue(){
    same cm_hist index the due list reads — one source of "last done", whoever
    did it. Records only: no photos are fetched here. */
 const TEAM_KEY="cm_team", TEAM_CUR="cm_team_cursor", TEAM_MAX=2000;
+/* Rounds another phone sent for the same unit, date and type as somebody else.
+   Both versions are safe in Drive; the office decides which one stands. Nothing
+   here can resolve it — the point is that the inspector is told, rather than
+   assuming the round they can see is the only one. */
+const TEAM_CF="cm_team_conflicts";
+let cfCache=null;                                   // read once per row, not once per parse
+function cfAll(){
+  if(cfCache) return cfCache;
+  try{ cfCache=JSON.parse(localStorage.getItem(TEAM_CF)||"{}")||{}; }catch(e){ cfCache={}; }
+  return cfCache;
+}
+/* Returns how many clashes are still open in total, NOT how many arrived in this
+   batch. A marker only travels once — the pull after it advances past the cursor
+   and brings nothing — so counting the batch would mention the clash on one sync
+   and never again, while it is still sitting there unanswered. */
+function cfMerge(list){
+  const have=cfAll();
+  let touched=false;
+  for(const c of (list||[])){
+    if(!c || !c.key) continue;
+    const cur=have[c.key];
+    if(cur && String(c.at||"")<String(cur.at||"")) continue;   // a stale marker must not re-open a decision
+    if(c.resolved){ if(cur){ delete have[c.key]; touched=true; } }
+    else { have[c.key]={at:c.at||""}; touched=true; }
+  }
+  if(touched){
+    try{ localStorage.setItem(TEAM_CF,JSON.stringify(have)); }catch(e){ /* not worth failing a sync over */ }
+    cfCache=have;
+  }
+  return Object.keys(have).length;
+}
+const cfKey=r=>`${r.u}|${r.d}|${r.t}`;              // markers arrive as UNIT|DATE|TYPE
+function cfHas(row){ return Object.prototype.hasOwnProperty.call(cfAll(),cfKey(row)); }
 /* Parsing the whole cache on every call was costing a JSON.parse of up to a
    megabyte each time a unit was picked — renderLastDone, renderTeam and
    teamMerge all call this. Hold it in memory and invalidate on write. */
@@ -1534,6 +1598,7 @@ async function teamPull(manual,full){
     }
     const {added,saved}=teamMerge(j.records||[], !!full);
     const voided=teamVoid(j.edits||[]);   // after the merge, so a re-uploaded record is voided too
+    const clash=cfMerge(j.conflicts||[]);
     // Only claim to have them once they are actually stored. Advancing the
     // cursor after a failed write loses those inspections permanently.
     if(saved && j.cursor) localStorage.setItem(TEAM_CUR,String(j.cursor));
@@ -1541,6 +1606,7 @@ async function teamPull(manual,full){
     msg.textContent=(!saved ? t("team_full")
       : (added?t("team_new").replace("{n}",added):t("team_upto")).replace("{t}",total))
       +(voided?" "+t("team_voided").replace("{n}",voided):"")
+      +(clash?" "+t("team_clash").replace("{n}",clash):"")
       // A truncated reply means the folder holds more than one call returns.
       +(saved&&j.truncated?" "+t("team_more"):"");
     renderTeam(); renderDue(); renderLastDone();
@@ -1577,9 +1643,10 @@ function renderTeam(){
     const sev=GRADE_SEV[r.g]||"";
     const cls=sev==="CRI"?"over":sev==="DEG"?"soon":"";
     const age=daysBetween(r.d);
+    const clash=cfHas(r);
     return `<button class="dueitem ${cls}" data-u="${esc(r.u)}">
-      <span class="u">${esc(r.u)}${r.g?` · <span style="color:${GRADE_TINT[r.g]||"var(--muted)"};font-weight:700">${esc(r.g)}</span>`:""}</span>
-      <span class="d">${esc(r.d)}${age!=null?` · ${t("due_days").replace("{n}",age)}`:""}${r.by?` · ${esc(r.by)}`:""}</span></button>`;
+      <span class="u">${esc(r.u)}${r.g?` · <span style="color:${GRADE_TINT[r.g]||"var(--muted)"};font-weight:700">${esc(r.g)}</span>`:""}${clash?` · <span style="color:var(--warning);font-weight:700">⑂</span>`:""}</span>
+      <span class="d">${esc(r.d)}${age!=null?` · ${t("due_days").replace("{n}",age)}`:""}${r.by?` · ${esc(r.by)}`:""}${clash?` · ${esc(t("team_clash_one"))}`:""}</span></button>`;
   }).join("");
   box.querySelectorAll("[data-u]").forEach(b=>b.onclick=()=>{ selectEquip(b.dataset.u); window.scrollTo({top:0,behavior:"smooth"}); });
 }
@@ -1592,7 +1659,8 @@ function renderLastDone(){
   const age=daysBetween(hit.d);
   el.textContent=t("team_last").replace("{d}",hit.d).replace("{n}",age==null?"?":age)
     .replace("{by}",hit.by?" "+t("team_by").replace("{n}",hit.by):"")
-    +(hit.g?` · ${hit.g}`:"");
+    +(hit.g?` · ${hit.g}`:"")
+    +(cfHas(hit)?` · ⑂ ${t("team_clash_one")}`:"");
   el.classList.remove("hidden");
 }
 $("teamRefresh").onclick=()=>teamPull(true);
@@ -1977,7 +2045,7 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
    has accepted every one of its files. */
 const DEST_META={ gas:{label:"Google Drive"}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
 const DEST_IDS=["gas","pa","post"];
-const BUILD="48";
+const BUILD="49";
 const DEFAULT_DESTS=((window.UPLOAD_DEFAULTS||{}).dests)||[];
 /* Parsed once and reused — see the note by the write below. */
 let destsCache=null, destsRaw=null;
@@ -2109,8 +2177,12 @@ async function putOne(UP, name, blob, type, ctx){
   if(UP.id==="gas"){
     // Apps Script web apps cannot answer a CORS preflight, so this must stay a
     // "simple" request: text/plain body, no custom headers, secret inside the JSON.
+    // dev lets the script tell "this phone re-sending its own record" from "another
+    // phone about to overwrite it". Without it the second upload of the day wins
+    // silently and the first inspector's round is gone.
     const body={ name, folder, contentType:type||blob.type||"application/octet-stream",
-                 file: await blobToB64(blob), secret: UP.sec||"" };
+                 file: await blobToB64(blob), secret: UP.sec||"",
+                 dev:(ctx&&ctx.dev)||DEVICE };
     const r=await fetchT(UP.url,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
                                  body:JSON.stringify(body)});
     if(!r.ok) throw new Error(await httpErr(r));
@@ -2381,7 +2453,7 @@ addEventListener("online",setNet); addEventListener("offline",setNet);
    storage would otherwise leave this one acting on a stale copy. */
 addEventListener("storage",e=>{
   if(!e.key || e.key==="up_dests"){ destsCache=null; destsRaw=null; renderSync(); }
-  if(!e.key || e.key===TEAM_KEY){ teamCache=null; renderTeam(); renderLastDone(); }
+  if(!e.key || e.key===TEAM_KEY || e.key===TEAM_CF){ teamCache=null; cfCache=null; renderTeam(); renderLastDone(); }
   if(!e.key || e.key==="cm_hist"){ histCache=null; renderDue(); }
 });
 // isSecureContext, not a protocol check: http://localhost is a secure context too,

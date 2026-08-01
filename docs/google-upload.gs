@@ -58,8 +58,9 @@ function doPost(e) {
     // The dashboard posts corrections and deletions through the same endpoint,
     // because a web app cannot answer a CORS preflight and this body shape is
     // already a "simple" request. Everything else is an ordinary file upload.
-    if (b.op === 'edit')   return json(saveEdit_(b));
-    if (b.op === 'delete') return json(deleteRecord_(b));
+    if (b.op === 'edit')    return json(saveEdit_(b));
+    if (b.op === 'delete')  return json(deleteRecord_(b));
+    if (b.op === 'resolve') return json(resolveConflict_(b));
 
     if (!b.name) return json({ ok: false, error: 'Missing file name' });
     if (!b.file) return json({ ok: false, error: 'Missing file content' });
@@ -72,6 +73,16 @@ function doPost(e) {
     var root = rootFolder_();
     var dir = path ? folderPath_(root, path) : root;
 
+    // Two phones can inspect the same unit on the same day — a hand-over, or two
+    // people covering a big machine between them. Both name their sidecar
+    // <UNIT>_<DD.MM.YYYY>_<TYPE>.json, so the overwrite below used to throw the
+    // first inspector's round away without either of them ever being told.
+    // A rival now gets its own file and a marker; the office decides which stands.
+    var dev = cleanDev_(b.dev);
+    var plan = placeUpload_(dir, fileName, dev);
+    var wanted = fileName;
+    fileName = plan.name;
+
     var blob = Utilities.newBlob(
       Utilities.base64Decode(b.file),
       b.contentType || 'application/octet-stream',
@@ -79,12 +90,26 @@ function doPost(e) {
     );
 
     // Re-sending a record (after an edit, or a retry) must overwrite, not pile up
-    // "TK146_… (1).jpg" copies next to the original.
+    // "TK146_… (1).jpg" copies next to the original. placeUpload_ has already
+    // made sure this name belongs to us, so what we overwrite is our own.
     var existing = dir.getFilesByName(fileName);
     while (existing.hasNext()) existing.next().setTrashed(true);
 
     var f = dir.createFile(blob);
-    return json({ ok: true, id: f.getId(), name: f.getName(), url: f.getUrl(), folder: dir.getName() });
+    // Who uploaded it, so the next phone to send this name can tell whether it is
+    // overwriting its own work or someone else's. Kept out of the bytes so the
+    // file itself is untouched, and out of the name so nothing has to parse it.
+    if (dev) { try { f.setDescription('cm-dev:' + dev); } catch (err) { /* not fatal */ } }
+
+    var out = { ok: true, id: f.getId(), name: f.getName(), url: f.getUrl(), folder: dir.getName() };
+    if (plan.rival) {
+      out.kept = true;                       // "we did not overwrite the other phone"
+      if (isSidecar_(wanted)) {
+        var c = markConflict_(wanted, plan.rival, dev);
+        if (c) { out.conflict = c.key; out.devices = c.devices; }
+      }
+    }
+    return json(out);
 
   } catch (err) {
     return json({ ok: false, error: String((err && err.message) || err) });
@@ -158,6 +183,121 @@ function saveEdit_(b) {
   return { ok: true, saved: name, at: doc.at };
 }
 
+/* ── two phones, one inspection ───────────────────────────────────────────────
+   Every file an inspection produces is named from the unit, the date and the
+   type, so two people who cover the same unit on the same day — a hand-over, a
+   big machine split between them, or simply a re-inspection — produce byte-for-
+   byte the same file names. The upload used to trash whatever was already there,
+   which meant the first inspector's round, photos included, disappeared without
+   either of them being told.
+
+   Now a file is only overwritten by the phone that wrote it. A rival keeps its
+   own copy under "<stem>~<DEVICE>.<ext>", and the sidecar clash also writes
+
+     _meta/<UNIT>_<DDMMYYYY>_<TYPE>.conflict.json
+
+   listing both devices. The dashboard shows it and records which version stands;
+   nothing is destroyed either way, so a wrong choice is one click to change.
+
+   Limit worth knowing: a file uploaded before this guard existed carries no
+   device tag. For a sidecar the device is still readable from the content, so
+   records are protected regardless; for a photo it is not, and that one first
+   clash still overwrites. Everything uploaded from here on is tagged.
+   ──────────────────────────────────────────────────────────────────────────*/
+function cleanDev_(v) { return String(v || '').replace(/[^A-Za-z0-9_-]/g, '').slice(0, 12); }
+function isSidecar_(name) {
+  return /\.json$/i.test(name) && !/\.(edit|deleted|conflict)\.json$/i.test(name);
+}
+function variantName_(name, dev) {
+  var i = name.lastIndexOf('.');
+  return i > 0 ? name.slice(0, i) + '~' + dev + name.slice(i) : name + '~' + dev;
+}
+/** Which device owns the file already sitting under this name, '' if unknowable. */
+function ownerDev_(file) {
+  var desc = '';
+  try { desc = String(file.getDescription() || ''); } catch (err) { desc = ''; }
+  var m = /(?:^|\s)cm-dev:([A-Za-z0-9_-]{1,12})/.exec(desc);
+  if (m) return m[1];
+  if (isSidecar_(file.getName())) {
+    try {
+      var j = JSON.parse(file.getBlob().getDataAsString());
+      var r = j && j.records && j.records[0];
+      if (r && r.dev) return cleanDev_(r.dev);
+    } catch (err) { /* unreadable — treat as unowned */ }
+  }
+  return '';
+}
+/** The name this upload may safely take, and whose work it would have replaced. */
+function placeUpload_(dir, fileName, dev) {
+  if (!dev) return { name: fileName, rival: '' };     // an older app: behave as before
+  var hit = dir.getFilesByName(fileName);
+  if (!hit.hasNext()) return { name: fileName, rival: '' };
+  var owner = ownerDev_(hit.next());
+  if (!owner || owner === dev) return { name: fileName, rival: '' };
+  return { name: variantName_(fileName, dev), rival: owner };
+}
+/** "TK146_09.03.2026_MP.json" -> "TK146|2026-03-09|MP", '' if it is not one. */
+function keyFromSidecar_(fileName) {
+  var m = /^(.+)_(\d{2})\.(\d{2})\.(\d{4})_([^_.]+)\.json$/i.exec(fileName);
+  return m ? (m[1] + '|' + m[4] + '-' + m[3] + '-' + m[2] + '|' + m[5]) : '';
+}
+/* One marker per record, listing every device that has sent a version. Re-sending
+   a copy already listed changes nothing — a retry must not re-open a decision the
+   office has already made. A genuinely new device does re-open it, because that
+   is a version nobody has looked at. */
+function markConflict_(sidecarName, rivalDev, dev) {
+  var key = keyFromSidecar_(sidecarName);
+  if (!key) return null;
+  var name = sidecarName.replace(/\.json$/i, '') + '.conflict.json';
+  var meta = folderPath_(rootFolder_(), META_DIR);
+
+  var doc = null, it = meta.getFilesByName(name);
+  if (it.hasNext()) { try { doc = JSON.parse(it.next().getBlob().getDataAsString()); } catch (err) { doc = null; } }
+
+  var devices = (doc && doc.devices) || [];
+  var known = {}, i;
+  for (i = 0; i < devices.length; i++) known[devices[i].dev] = 1;
+  var fresh = false;
+  if (!known[rivalDev]) { devices.push({ dev: rivalDev, file: sidecarName }); fresh = true; }
+  if (!known[dev])      { devices.push({ dev: dev, file: variantName_(sidecarName, dev) }); fresh = true; }
+  if (doc && !fresh) return { key: key, devices: devices };
+
+  var out = { type: 'cm-record-conflict', version: 1, key: key,
+              at: new Date().toISOString(), devices: devices,
+              resolved: false, keep: '', by: '' };
+  var old = meta.getFilesByName(name);
+  while (old.hasNext()) old.next().setTrashed(true);
+  meta.createFile(Utilities.newBlob(JSON.stringify(out, null, 2), 'application/json', name));
+  return { key: key, devices: devices };
+}
+/* The office's decision. Both versions stay in Drive — this only records which
+   one the reports should use, so it is as reversible as a void. */
+function resolveConflict_(b) {
+  var stem = keyFile_(b.key, '');
+  if (!stem) return { ok: false, error: 'Bad record key: ' + b.key };
+  var name = stem + '.conflict.json';
+  var meta = folderPath_(rootFolder_(), META_DIR);
+  var it = meta.getFilesByName(name);
+  if (!it.hasNext()) return { ok: false, error: 'No conflict recorded for ' + b.key };
+
+  var doc;
+  try { doc = JSON.parse(it.next().getBlob().getDataAsString()); }
+  catch (err) { return { ok: false, error: 'The conflict marker for ' + b.key + ' is unreadable' }; }
+
+  var keep = cleanDev_(b.keep), devices = doc.devices || [], ok = false;
+  for (var i = 0; i < devices.length; i++) if (devices[i].dev === keep) ok = true;
+  if (!ok) return { ok: false, error: 'No version from device ' + (keep || '(blank)') + ' for ' + b.key };
+
+  doc.resolved = true;
+  doc.keep = keep;
+  doc.by = String(b.by || '').slice(0, 80);
+  doc.at = new Date().toISOString();
+  var old = meta.getFilesByName(name);
+  while (old.hasNext()) old.next().setTrashed(true);
+  meta.createFile(Utilities.newBlob(JSON.stringify(doc, null, 2), 'application/json', name));
+  return { ok: true, key: doc.key, keep: keep, at: doc.at };
+}
+
 /* Deletion. Guarded by ADMIN_SECRET, which is deliberately NOT the same secret
    the phones carry — that one is published with the app. Files are trashed, not
    purged, so Drive keeps them for 30 days, and every deletion leaves a log. */
@@ -180,8 +320,10 @@ function deleteRecord_(b) {
   // before an underscore, so anchoring on a word boundary silently left those
   // files behind — a delete that looked clean and was not.
   // Requiring a separator also stops TYPE "MP" from matching a "MPX" suffix.
+  // "~" is there for the second device's copy of a clashing inspection — those
+  // are part of the same record and must go with it.
   var unit = p[0], dmy = stem.split('_')[1], type = p[2];
-  var re = new RegExp('^' + esc_(unit) + '[._-].*?' + esc_(dmy) + '_' + esc_(type) + '([._]|$)', 'i');
+  var re = new RegExp('^' + esc_(unit) + '[._-].*?' + esc_(dmy) + '_' + esc_(type) + '([._~]|$)', 'i');
 
   var all = [];
   collect_(rootFolder_(), '', all, 0, '');
@@ -245,7 +387,7 @@ function readRecords_(p) {
   var sidecars = all.filter(function (f) { return /\.json$/i.test(f.name) && f.updated > after; })
                     .sort(function (a, b) { return a.updated - b.updated; });
 
-  var records = [], edits = [], read = 0, bad = 0, truncated = false;
+  var records = [], edits = [], conflicts = [], read = 0, bad = 0, truncated = false;
   var cursor = after;
   for (var i = 0; i < sidecars.length; i++) {
     if (read >= max || new Date().getTime() - started > TIME_BUDGET_MS) { truncated = true; break; }
@@ -254,6 +396,8 @@ function readRecords_(p) {
       var j = JSON.parse(DriveApp.getFileById(f.id).getBlob().getDataAsString());
       if (/\.edit\.json$/i.test(f.name) || (j && j.type === 'cm-record-edit')) {
         if (j && j.key) edits.push(j);
+      } else if (/\.conflict\.json$/i.test(f.name) || (j && j.type === 'cm-record-conflict')) {
+        if (j && j.key) conflicts.push(j);
       } else if (!/\.deleted\.json$/i.test(f.name)) {
         var rs = (j && j.records) || [];
         for (var k = 0; k < rs.length; k++) { rs[k]._file = f.path; records.push(rs[k]); }
@@ -263,7 +407,7 @@ function readRecords_(p) {
     cursor = f.updated;          // advance even on a bad file, or it blocks the queue
   }
 
-  var out = { ok: true, records: records, edits: edits, read: read, failed: bad,
+  var out = { ok: true, records: records, edits: edits, conflicts: conflicts, read: read, failed: bad,
               pending: Math.max(0, sidecars.length - read - bad),
               truncated: truncated, cursor: cursor, files: all.length,
               photos: all.filter(function (f) { return MEDIA_RE.test(f.name); }).length };

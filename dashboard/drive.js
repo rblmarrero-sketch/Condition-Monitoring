@@ -87,7 +87,7 @@
     let at = opts.full ? 0 : cursor();
     say(resuming ? "Checking Drive for new inspections…" : "Reading inspections from Drive…");
 
-    const recs = [], eds = [];
+    const recs = [], eds = [], cons = [];
     let pages = 0, failed = 0, files = 0, photos = 0, truncated = false, pending = 0;
 
     try {
@@ -97,6 +97,7 @@
         pages++;
         (r.records || []).forEach(x => recs.push(x));
         (r.edits || []).forEach(x => eds.push(x));
+        (r.conflicts || []).forEach(x => cons.push(x));
         (r.index || []).forEach(f => { index[f.name] = { id: f.id, size: f.size }; });
         failed += r.failed || 0;
         files = r.files || files;
@@ -118,10 +119,11 @@
     // here would silently skip those inspections on every future refresh.
     if (recs.length || opts.full) window.CMDash.setDriveRecords(recs, { replace: !!opts.full });
     if (eds.length || opts.full) window.CMDash.setEdits(eds, { replace: !!opts.full });
+    if (cons.length || opts.full) window.CMDash.setConflicts(cons, { replace: !!opts.full });
     try { localStorage.setItem(LS_CUR, String(at)); } catch (e) {}
 
     const held = window.CMDash.driveCount();
-    return { records: recs.length, edits: eds.length, held, files, photos, failed,
+    return { records: recs.length, edits: eds.length, conflicts: cons.length, held, files, photos, failed,
              truncated, pending, pages, incremental: resuming,
              note: recs.length ? "" : (held ? "" : "No inspections (*.json) in that folder yet.") };
   }
@@ -166,15 +168,16 @@
     for (const rec of recs) {
       for (const it of (rec.items || [])) {
         const base = window.CMDash.photoBase(it, rec);
-        for (const ext of ["jpg", "jpeg", "png", "JPG", "webp"]) {
-          for (const nm of [`${base}.${ext}`, `${base}_1.${ext}`, `${base}_2.${ext}`,
-                            `${base}_3.${ext}`, `${base}_4.${ext}`]) {
-            if (index[nm] && !(nm in fetched)) names.push(nm);
-          }
+        // The same candidate list the history uses, so a record whose photos were
+        // kept under "~DEVICE" after a two-phone clash still gets them fetched.
+        for (const nm of window.CMDash.photoNames(base, rec, ["", "_1", "_2", "_3", "_4"])) {
+          if (index[nm] && !(nm in fetched)) names.push(nm);
         }
       }
-      const sig = `${rec.equip}_${(rec.date || "").split("-").reverse().join(".")}_${rec.type}_SIGN.png`;
-      if (index[sig] && !(sig in fetched)) names.push(sig);
+      const stem = `${rec.equip}_${(rec.date || "").split("-").reverse().join(".")}_${rec.type}_SIGN`;
+      const dev = String(rec.dev || "");
+      for (const sig of (dev ? [`${stem}~${dev}.png`, `${stem}.png`] : [`${stem}.png`]))
+        if (index[sig] && !(sig in fetched)) names.push(sig);
     }
     return [...new Set(names)];
   }
@@ -230,6 +233,11 @@
   const remove = (key, admin, by, reason) =>
     post({ op: "delete", key, admin, by, reason });
 
+  /* Two phones sent the same unit, date and type. Both versions are in Drive;
+     this records which one the reports should use. Nothing is deleted, so the
+     decision is as reversible as a void. */
+  const resolve = (key, keep, by) => post({ op: "resolve", key, keep, by });
+
   /* Health check without pulling anything: the bare /exec URL reports the folder.
      Also reports whether the fast path is deployed, since the usual reason it is
      not is an edit that was saved but never released as a new version. */
@@ -249,7 +257,7 @@
   }
 
   window.CMDrive = {
-    load, ensurePhotos, configured, ping, saveEdit, remove,
+    load, ensurePhotos, configured, ping, saveEdit, remove, resolve,
     get url() { return cfg().url; },
     get secret() { return cfg().sec; },
     get legacy() { return legacy; },

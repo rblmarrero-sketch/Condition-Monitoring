@@ -246,6 +246,12 @@
       <div class="field"><label for="edNote" data-i18n="ed_note">Note on this inspection (optional)</label>
         <input id="edNote" type="text" data-i18n-ph="ed_noteph" placeholder="e.g. plug re-read under magnification"></div>
 
+      <div class="srccard hidden" id="edCfCard" style="margin-top:16px;border-color:var(--warning)">
+        <div class="srchead"><span class="ico">⑂</span><div><b data-i18n="cf_title">Two phones sent this inspection</b>
+          <div class="muted" data-i18n="cf_sub">Both versions are in Drive and nothing has been deleted. Choose the one the reports should use — you can change it later.</div></div></div>
+        <div class="srcbody"><div id="edCfList"></div></div>
+      </div>
+
       <div class="srccard" style="margin-top:16px">
         <div class="srchead"><span class="ico">⊘</span><div><b data-i18n="ed_void">Void this inspection</b>
           <div class="muted" data-i18n="ed_void_sub">Withdraws it from every count, chart, action list and report.</div></div></div>
@@ -490,6 +496,16 @@ const I18N={
   ed_undone:"❌ Not saved — {e} The change has been undone.",
   ed_deleting:"Deleting…", ed_deleted:"✅ {n} file(s) moved to Drive's trash — recoverable there for 30 days.",
   ed_voided:"VOID", ed_corrected:"corrected",
+  cf_flag:"CONFLICT", cf_resolved:"resolved",
+  cf_waiting:"{n} need a decision",
+  cf_hint:"Two phones sent this inspection. Open Edit to choose which one stands.",
+  cf_kept:"Using device {d} · chosen by {by}",
+  cf_title:"Two phones sent this inspection",
+  cf_sub:"Both versions are in Drive and nothing has been deleted. Choose the one the reports should use — you can change it later.",
+  cf_dev:"Device {d}", cf_by:"By {by} · {n} position(s)",
+  cf_absent:"Not in this browser yet — refresh from Drive to see it",
+  cf_inuse:"in use", cf_use:"Use this one",
+  cf_saving:"Recording the choice…", cf_saved:"Reports now use device {d} ✔",
 
   a_MON:"Monitor", a_SCH:"Schedule repair", a_REP:"Repair now",
   a_REP_MON:"Repair at next service", a_SAM:"Take oil sample", a_INV:"Investigate", a_NA:"No action",
@@ -616,6 +632,16 @@ const I18N={
   ed_undone:"❌ Не сохранено — {e} Изменение отменено.",
   ed_deleting:"Удаляем…", ed_deleted:"✅ Файлов в корзину Диска: {n} — восстановимо 30 дней.",
   ed_voided:"ОТОЗВАН", ed_corrected:"исправлено",
+  cf_flag:"КОНФЛИКТ", cf_resolved:"решено",
+  cf_waiting:"ждут решения: {n}",
+  cf_hint:"Осмотр прислали два телефона. Откройте «Правка» и выберите, какой считать верным.",
+  cf_kept:"Используется устройство {d} · выбрал {by}",
+  cf_title:"Осмотр прислали два телефона",
+  cf_sub:"Обе версии лежат в Drive, ничего не удалено. Выберите ту, по которой считать отчёты — решение можно изменить позже.",
+  cf_dev:"Устройство {d}", cf_by:"Автор {by} · позиций: {n}",
+  cf_absent:"Ещё не загружено в этот браузер — обновите из Drive",
+  cf_inuse:"используется", cf_use:"Взять эту",
+  cf_saving:"Сохраняем выбор…", cf_saved:"Отчёты теперь используют устройство {d} ✔",
 
   a_MON:"Наблюдать", a_SCH:"Запланировать ремонт", a_REP:"Ремонт сейчас",
   a_REP_MON:"Ремонт на следующем ТО", a_SAM:"Взять пробу масла", a_INV:"Расследовать", a_NA:"Без действий",
@@ -658,6 +684,12 @@ function applyLang(){
   document.querySelectorAll(".lang button").forEach(b=>b.classList.toggle("on",b.dataset.lang===lang));
   // Everything built in code has to be repainted, not just the static markup.
   refreshControls(); renderAll(); refreshSources(); refreshReportTargets();
+  // The edit panel is built when it opens, so a switch made with it open leaves
+  // it in the old language. Repaint the part that is generated rather than
+  // reopening the panel, which would throw away selections not yet saved.
+  if(edKey && !$("editOv").classList.contains("hidden")){
+    const r=RECS.find(x=>recKey(x)===edKey); if(r) renderConflict(r);
+  }
 }
 
 /* Labels are looked up live so a language switch repaints them. */
@@ -675,6 +707,7 @@ const STORE="cm_dash_records";        // records from "Import a file"
 const DSTORE="cm_dash_drive";         // records pulled from Google Drive, kept so a
                                       // refresh only has to ask for what is new
 const ESTORE="cm_dash_edits";         // corrections + voids, same reason
+const CSTORE="cm_dash_conflicts";     // two phones sent the same unit/date/type
 
 /* ---------- records: bundled magnetic-plug data + imported entries.json ---------- */
 function fromBundled(){
@@ -692,6 +725,10 @@ let driveRecs=[]; try{ driveRecs=JSON.parse(localStorage.getItem(DSTORE))||[]; }
    captured it still holds that record and re-syncing would overwrite anything
    written there. Merged on top at read time — see applyEdits(). */
 let edits={}; try{ edits=JSON.parse(localStorage.getItem(ESTORE))||{}; }catch(e){ edits={}; }
+/* Clashes reported by the Apps Script: two phones inspected the same unit on the
+   same day and both versions are in Drive. Keyed the same way, and holding the
+   device chosen once somebody here has decided. */
+let conflicts={}; try{ conflicts=JSON.parse(localStorage.getItem(CSTORE))||{}; }catch(e){ conflicts={}; }
 let RECS=[];
 const recKey=r=>`${r.equip}|${r.date}|${r.type}`;
 function applyEdits(r){
@@ -713,11 +750,39 @@ function applyEdits(r){
   });
   return out;
 }
+/* One record per key, plus what was set aside to get there. The office's choice
+   decides when there is one; until then the newest stands so the dashboard is
+   never empty, and it is flagged so nobody trusts it by accident. */
+function groupRivals(list){
+  const groups=new Map();
+  list.forEach(r=>{ const k=recKey(r); if(!groups.has(k)) groups.set(k,[]); groups.get(k).push(r); });
+  const out=new Map();
+  groups.forEach((rivals,k)=>{
+    const c=conflicts[k]||null;
+    let win=rivals[rivals.length-1];
+    if(c&&c.resolved&&c.keep) win=rivals.find(r=>String(r.dev||"")===c.keep)||win;
+    if(rivals.length<2&&!c){ out.set(k,win); return; }
+    const m=Object.assign({},win);
+    m._rivals=rivals.filter(r=>r!==win)
+      .map(r=>({dev:String(r.dev||""),by:r.by||"",n:(r.items||[]).length,date:r.date}));
+    m._devs=(c&&(c.devices||[]).map(d=>d.dev))||rivals.map(r=>String(r.dev||""));
+    m._keep=(c&&c.keep)||"";
+    m._resolvedBy=(c&&c.by)||"";
+    // No marker but two copies means the clash predates the marker, or the marker
+    // has not come down yet. Either way it still needs a decision.
+    m._conflict=c?!c.resolved:true;
+    out.set(k,m);
+  });
+  return out;
+}
 function rebuild(){
   const key=r=>`${r.equip}|${r.date}|${r.type}`;
   const map=new Map();
   fromBundled().forEach(r=>map.set(key(r),r));
-  driveRecs.forEach(r=>map.set(key(r),r));         // Drive beats the bundled history
+  // Drive beats the bundled history. Two Drive records CAN share a key now — the
+  // script keeps both when two phones clash — and "last one in the array wins"
+  // would throw one away here after taking the trouble to keep it in Drive.
+  groupRivals(driveRecs).forEach((r,k)=>map.set(k,r));
   imported.forEach(r=>map.set(key(r),r));          // a hand-picked file beats both
   RECS=[...map.values()].map(applyEdits)           // corrections last, over whatever won
     .sort((a,b)=>(b.date||"").localeCompare(a.date||"")||a.equip.localeCompare(b.equip));
@@ -729,6 +794,11 @@ function saveDrive(){
   try{ localStorage.setItem(DSTORE,JSON.stringify(driveRecs)); }
   catch(e){ localStorage.removeItem(DSTORE); localStorage.removeItem("cm_drive_cursor");
             console.warn("Drive cache too big for localStorage — will re-read next time."); }
+}
+function saveConflicts(){
+  try{ localStorage.setItem(CSTORE,JSON.stringify(conflicts)); }
+  catch(e){ localStorage.removeItem("cm_drive_cursor");   // re-read them next time
+            console.warn("Conflict cache too big for localStorage."); }
 }
 function saveEdits(){
   try{ localStorage.setItem(ESTORE,JSON.stringify(edits)); }
@@ -934,10 +1004,26 @@ let folderName="";       // for the status chip
 function photoBase(it,rec){
   return `${rec.equip}${usesRegister(rec.type)?"."+it.key:"_"+String(it.key).replace(/\./g,"-")}_${(rec.date||"").split("-").reverse().join(".")}_${rec.type}`;
 }
+/* Every name a photo could be under, best first. The "~DEVICE" copies exist
+   because two phones inspected the same unit on the same day and the script kept
+   both sets rather than letting the second overwrite the first. */
+const PHOTO_EXT=["jpg","jpeg","png","JPG","webp"];
+function photoNames(base,rec,sufs){
+  const dev=String((rec&&rec.dev)||""), out=[];
+  for(const s of (sufs||["","_1"]))
+    for(const e of PHOTO_EXT){
+      if(dev) out.push(`${base}${s}~${dev}.${e}`);
+      out.push(`${base}${s}.${e}`);
+    }
+  return out;
+}
 function photoSrc(it,rec){
   if(folderPhotos){
     const base=photoBase(it,rec);
-    for(const ext of ["jpg","jpeg","png","JPG","webp"]) { const u=folderPhotos[`${base}.${ext}`]||folderPhotos[`${base}_1.${ext}`]; if(u) return u; }
+    // When two phones clashed, the second one's files were kept under "~DEVICE"
+    // so neither set was lost. Ask for this record's own copy first, or the photo
+    // shown would belong to the version that did NOT win.
+    for(const n of photoNames(base,rec)) { const u=folderPhotos[n]; if(u) return u; }
   }
   if(it.photo) return /^(data:|blob:|https?:|\/)/.test(it.photo)?it.photo:"../"+it.photo;
   return null;
@@ -945,7 +1031,7 @@ function photoSrc(it,rec){
 /* Bridge for drive.js — RECS, imported and folderPhotos are `let`s in this script,
    so they are not reachable as window properties from another file. */
 window.CMDash={
-  photoBase,
+  photoBase, photoNames,
   addPhoto(name,url){ (folderPhotos ||= {})[name]=url; },
   importRecords(recs){
     recs.forEach(r=>{ const k=`${r.equip}|${r.date}|${r.type}`;
@@ -957,8 +1043,13 @@ window.CMDash={
      without it an incremental pull merges on top of what is already held. */
   setDriveRecords(recs,opts){
     if(opts&&opts.replace) driveRecs=[];
-    recs.forEach(r=>{ const k=`${r.equip}|${r.date}|${r.type}`;
-      driveRecs=driveRecs.filter(x=>`${x.equip}|${x.date}|${x.type}`!==k); driveRecs.push(r); });
+    // The device is part of the identity here, not just the unit/date/type. Two
+    // phones can send the same round, the script keeps both files, and merging
+    // them on unit/date/type alone would throw one away again on arrival —
+    // undoing in the browser exactly what Drive went to the trouble of keeping.
+    // groupRivals() is what picks the one to show.
+    recs.forEach(r=>{ const k=`${r.equip}|${r.date}|${r.type}|${r.dev||""}`;
+      driveRecs=driveRecs.filter(x=>`${x.equip}|${x.date}|${x.type}|${x.dev||""}`!==k); driveRecs.push(r); });
     saveDrive(); rebuild(); refreshControls(); renderAll(); refreshSources();
   },
   driveCount(){ return driveRecs.length; },
@@ -971,6 +1062,14 @@ window.CMDash={
     saveEdits(); rebuild(); refreshControls(); renderAll(); refreshSources();
   },
   editCount(){ return Object.keys(edits).length; },
+  setConflicts(list,opts){
+    if(opts&&opts.replace) conflicts={};
+    (list||[]).forEach(c=>{ if(!c||!c.key) return;
+      const cur=conflicts[c.key];
+      if(!cur || String(c.at||"")>=String(cur.at||"")) conflicts[c.key]=c; });
+    saveConflicts(); rebuild(); refreshControls(); renderAll(); refreshSources();
+  },
+  conflictCount(){ return Object.values(conflicts).filter(c=>c&&!c.resolved).length; },
   recsFor(equip){ return RECS.filter(r=>r.equip===equip); },
   allRecs(){ return RECS; },
   rerender(){ renderAll(); },
@@ -988,6 +1087,8 @@ function renderHistory(){
       <span class="tag">${esc(TYPE_LABEL[rec.type]||rec.type)}</span>
       ${rec._void?`<span class="voidflag" title="${esc(rec._reason||"")}">${esc(t("ed_voided"))}${rec._reason?" · "+esc(rec._reason):""}</span>`:""}
       ${!rec._void&&rec._editAt?`<span class="editflag" title="${esc(rec._editAt)} · ${esc(rec._editBy||"—")}">${esc(t("ed_corrected"))}</span>`:""}
+      ${rec._conflict?`<span class="voidflag" title="${esc(t("cf_hint"))}">${esc(t("cf_flag"))}</span>`:""}
+      ${!rec._conflict&&rec._keep?`<span class="editflag" title="${esc(t("cf_kept",{d:rec._keep,by:rec._resolvedBy||"—"}))}">${esc(t("cf_resolved"))}</span>`:""}
       ${rec.smu?`<span class="meta">SMU <b>${esc(rec.smu)}</b></span>`:""}
       <span class="spacer"></span>${rec.by?`<span class="meta">${esc(rec.by)}</span>`:""}${rec.sup?`<span class="meta">✍ ${esc(rec.sup)}</span>`:""}${rec.gps?`<a class="meta" href="https://www.google.com/maps?q=${rec.gps.lat},${rec.gps.lon}" target="_blank" rel="noopener">📍 ${rec.gps.lat.toFixed(4)}, ${rec.gps.lon.toFixed(4)}</a>`:""}
       <button class="btn" data-edit="${esc(recKey(rec))}" style="padding:3px 10px;font-size:12px">${esc(t("ed_edit"))}</button></div>
@@ -1060,6 +1161,7 @@ function openEdit(key,keepMsg){
   $("edAdmin").value=""; $("edConfirm").value=""; $("edMsg").textContent=held;
   $("edUnvoid").style.display=rec._void?"":"none";
   $("edVoid").style.display=rec._void?"none":"";
+  renderConflict(rec);
 
 
   $("edItems").innerHTML=(rec.items||[]).map((i,n)=>{
@@ -1114,6 +1216,56 @@ function openEdit(key,keepMsg){
   $("edItems").querySelectorAll("[data-f]").forEach(el=>{ el.dataset.init=el.value; });
   $("editOv").classList.remove("hidden");
 }
+/* The choice between two phones' versions of the same round. Both are listed
+   with enough to tell them apart — who took it and how many positions they
+   filled — and the current answer is marked, because "already decided" is as
+   useful to see as the options. */
+function renderConflict(rec){
+  const card=$("edCfCard"), box=$("edCfList");
+  if(!card||!box) return;
+  const devs=rec._devs||[];
+  if(!devs.length){ card.classList.add("hidden"); box.innerHTML=""; return; }
+  card.classList.remove("hidden");
+  const mine={dev:String(rec.dev||""),by:rec.by||"",n:(rec.items||[]).length};
+  const all=[mine].concat(rec._rivals||[])
+    .filter(v=>v.dev).filter((v,i,a)=>a.findIndex(x=>x.dev===v.dev)===i);
+  // A device named in the marker whose file has not reached this browser yet.
+  devs.forEach(d=>{ if(d&&!all.some(v=>v.dev===d)) all.push({dev:d,by:"",n:null,absent:1}); });
+  box.innerHTML=all.map(v=>{
+    const on=rec._keep&&rec._keep===v.dev;
+    return `<div class="row" style="align-items:center;gap:10px;margin-bottom:8px">
+      <div style="flex:1">
+        <b>${esc(t("cf_dev",{d:v.dev}))}</b>${on?` <span class="editflag">${esc(t("cf_inuse"))}</span>`:""}
+        <div class="muted" style="font-size:12px">${esc(v.absent
+          ? t("cf_absent")
+          : t("cf_by",{by:v.by||"—", n:v.n==null?"?":v.n}))}</div>
+      </div>
+      <button class="btn${on?"":" primary"}" data-keep="${esc(v.dev)}"${on||v.absent?" disabled":""}>${esc(t("cf_use"))}</button>
+    </div>`;
+  }).join("");
+  box.querySelectorAll("[data-keep]").forEach(b=>b.onclick=()=>keepVersion(b.dataset.keep));
+}
+/* Unlike a correction this is not applied first and uploaded after: which version
+   stands changes every number on the page, and showing a reorganised dashboard
+   that then rolls back would be worse than a two-second wait. */
+async function keepVersion(dev){
+  const msg=$("edMsg"), key=edKey;
+  if(!drvOn()){ msg.textContent=t("ed_needdrive"); return; }
+  const by=$("edBy").value.trim();
+  if(!by){ msg.textContent=t("ed_needname"); return; }
+  try{ localStorage.setItem("cm_dash_who",by); }catch(e){}
+  $("edCfList").querySelectorAll("[data-keep]").forEach(b=>b.disabled=true);
+  msg.textContent=t("cf_saving");
+  try{
+    const r=await window.CMDrive.resolve(key,dev,by);
+    window.CMDash.setConflicts([Object.assign({},conflicts[key]||{key,devices:(rec_devs(key)||[]).map(d=>({dev:d}))},
+      {resolved:true, keep:dev, by, at:r.at||new Date().toISOString()})]);
+    if(edKey===key){ openEdit(key,true); $("edMsg").textContent=t("cf_saved",{d:dev}); }
+  }catch(err){
+    if(edKey===key){ openEdit(key,true); $("edMsg").textContent="❌ "+((err&&err.message)||err); }
+  }
+}
+const rec_devs=k=>{ const r=RECS.find(x=>recKey(x)===k); return r&&r._devs; };
 $("edClose").onclick=()=>$("editOv").classList.add("hidden");
 $("editOv").onclick=e=>{ if(e.target.id==="editOv") $("editOv").classList.add("hidden"); };
 
@@ -1311,8 +1463,12 @@ function refreshSources(){
   const set=(card,state,on,text)=>{ $(card).classList.toggle("on",!!on); $(state).textContent=text; };
   // driveRecs is restored from localStorage at init, before drive.js exists
   const nIdx=drv()?drv().indexed():0;
+  // An unresolved clash is not something to discover by opening the right unit —
+  // it is two versions of a round, one of which is being counted and one ignored.
+  const nCf=window.CMDash.conflictCount();
   set("cardDrive","stDrive",driveRecs.length>0,
     driveRecs.length ? t("ds_insp",{n:driveRecs.length})+(nIdx?" · "+t("ds_indexed",{n:nIdx}):"")
+      +(nCf?" · ⑂ "+t("cf_waiting",{n:nCf}):"")
     : drvOn() ? t("ds_notloaded") : t("ds_notset"));
   set("cardFolder","stFolder",!!folderName,folderName?`${folderName} · ${t("ds_photosn",{n:nPhotos})}`:t("ds_notopened"));
   set("cardFile","stFile",imported.length>0,imported.length?t("ds_inbrowser",{n:imported.length}):"—");

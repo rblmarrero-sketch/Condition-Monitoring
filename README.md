@@ -322,6 +322,29 @@ rather than failing. Automatic pulls are rate-limited to one a minute; the butto
 > needs the read actions in `docs/google-upload.gs`; if the deployed script predates them
 > the card says exactly what to redeploy.
 
+### When two phones send the same round
+
+Every file an inspection produces is named from the unit, the date and the type, so two
+people who cover the same unit on the same day produce the same file names — a hand-over,
+a big machine split between them, or a re-inspection. The upload used to overwrite, and the
+first inspector's round and photos went with it, silently.
+
+Now a file is only ever overwritten by the phone that wrote it. Anyone else's copy is kept
+alongside as `<name>~<DEVICE>.<ext>`, and the clash is recorded in
+`_meta/<UNIT>_<DDMMYYYY>_<TYPE>.conflict.json`. Both phones see *"sent twice"* against that
+round in **In the system**; the dashboard flags it **CONFLICT** and its Data sources card
+counts how many are waiting.
+
+The office picks which version stands — **✎ Edit → Two phones sent this inspection** lists
+each one with who took it and how many positions it covers. Nothing is deleted either way,
+so the choice is as reversible as a void, and a third phone sending its own version re-opens
+the decision. A retry from a phone already listed does not.
+
+> The device tag is written on the Drive file itself, not in the name or the bytes. Files
+> uploaded before this was deployed carry no tag: a sidecar still names its device inside,
+> so **records** are protected regardless, but one first clash on an old **photo** can still
+> overwrite. Everything uploaded from build 49 on is tagged.
+
 ### Not losing what was captured
 
 Deleting a queued inspection asks first, and says which case it is: an un-uploaded record names
@@ -335,6 +358,18 @@ that grant, iOS evicts a non-installed web app's storage after about a week of d
 evicts under pressure — either would take a queued round, photos included. ⚙ reports the real
 answer rather than assuming it, along with storage used, room remaining in photos, and a warning
 at 80% while there is still time to upload and clear.
+
+### A Critical finding has to say what is wrong
+
+Saving will not finish while any position marked **Critical** — grade X, or a severity
+raised to Critical by hand — has no defect or no recommended action. The app jumps to that
+position and names what is missing, rather than reporting an error at the bottom of a long
+form. Planning cannot act on a critical finding that does not say what is wrong or what to
+do, and it is why the Pareto charts used to have blanks at the top.
+
+Deliberately Critical only. Applying the same rule to Serious was considered and rejected:
+a rule that blocks too often gets satisfied with whatever is top of the list, which is
+worse for the data than an honest blank.
 
 ### Two inspectors, one round (multi-device merge)
 
@@ -407,6 +442,7 @@ one-file-at-a-time path automatically and says so.
 The defect and cause pickers have a search box above them — 132 defects and 223 causes is
 too many to scroll. Typing narrows the list and shows how many matched; Enter takes it when
 one is left. Whatever is already recorded stays selectable however you filter.
+| **Choose a version** | When two phones sent the same round, both are offered with the inspector and position count. Picking one decides what the reports use; neither file is deleted and the choice can be changed. |
 | **Void** | Withdraws the round from every count, chart, action list and report, with a reason. Nothing is deleted; **Show voided** brings it back into view, and **Un-void** reverses it. |
 | **Delete** | Sidecar, photos, signature and corrections to Drive's **trash** (30 days), logged with who and why. Off unless `ADMIN_SECRET` is set in the Apps Script. |
 
