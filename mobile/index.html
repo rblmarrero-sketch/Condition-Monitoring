@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Truck Inspection — Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=56">
+<link rel="manifest" href="manifest.webmanifest?v=57">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -283,6 +283,9 @@
     padding:9px;margin-bottom:11px;text-align:center;}
   .ucfig svg{width:100%;max-width:340px;height:auto;display:block;margin:0 auto;}
   .ucfig .cap{font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.45;}
+  .ucref{font-size:12.5px;font-weight:600;color:var(--ink-2);margin:-4px 0 10px;
+    font-variant-numeric:tabular-nums;line-height:1.5;}
+  .ucref.none{color:var(--warning);font-weight:600;}
   .ucread{font-size:13.5px;margin:-4px 0 12px;display:flex;flex-wrap:wrap;gap:6px 10px;
     align-items:center;min-height:20px;}
   .ucread b{font-variant-numeric:tabular-nums;font-size:15px;}
@@ -312,19 +315,25 @@
   .guess{background:color-mix(in srgb,var(--warning) 14%,var(--surface));
     border:1px solid var(--warning);border-radius:11px;padding:11px 13px;margin:0 0 10px;
     font-size:12.5px;line-height:1.5;color:var(--ink);}
-  .ucmapwrap{overflow-x:auto;background:var(--surface-2);border:1px solid var(--line);
-    border-radius:12px;padding:6px;margin-bottom:9px;position:relative;
-    scrollbar-width:thin;}
+  /* Eight rollers and a 44 px tap target do not both fit inside the card's
+     padding, so the map takes the full width of the pane. It is a drawing of a
+     machine, not a paragraph — it can sit edge to edge. */
+  .ucmapwrap{background:var(--surface-2);border:1px solid var(--line);
+    border-radius:12px;padding:3px 2px;position:relative;overflow:hidden;
+    /* posnav is a flex row, so the map has to claim the width rather than
+       stretch into it */
+    flex:0 0 auto;width:calc(100% + 32px);margin:0 -16px 9px;}
+  .ucviews,.ucleg,.ucprog,.ucswipe{flex:0 0 100%;}
   .ucmapwrap.more::after{content:"";position:sticky;right:0;top:0;float:right;
     width:34px;height:100%;margin-left:-34px;pointer-events:none;
     background:linear-gradient(90deg,transparent,var(--surface-2));}
   .ucswipe{font-size:11.5px;color:var(--muted);text-align:center;margin:-4px 0 10px;}
-  .ucmap{display:block;width:100%;min-width:640px;height:auto;}
-  .um-side{font:700 20px/1 inherit;fill:var(--muted);letter-spacing:.04em;}
+  .ucmap{display:block;width:100%;height:auto;}
+  .um-side{font:700 17px/1 inherit;fill:var(--muted);letter-spacing:.04em;}
   .um-spot{cursor:pointer;}
   .um-spot .um-puck{fill:var(--surface);stroke:var(--ink-2);stroke-width:2.4;}
-  .um-spot .um-n{font:700 15px/1 inherit;fill:var(--ink-2);pointer-events:none;}
-  .um-spot .um-n.um-chain{font-size:13px;letter-spacing:.02em;}
+  .um-spot .um-n{font:700 16px/1 inherit;fill:var(--ink-2);pointer-events:none;}
+  .um-spot .um-n.um-chain{font-size:14px;letter-spacing:.02em;}
   .um-spot.done .um-puck{fill:var(--good);stroke:var(--good);}
   .um-spot.watch .um-puck{fill:var(--warning);stroke:var(--warning);}
   .um-spot.act .um-puck{fill:var(--critical);stroke:var(--critical);}
@@ -473,6 +482,7 @@
     </div>
     <div id="ucFields" class="hidden">
       <div class="ucfig" id="ucFig"></div>
+      <div class="ucref" id="ucRefLine"></div>
       <label class="fld"><span id="ucLbl" data-i18n="lbl_mm">Measured (mm)</span>
         <input id="ucMM" type="number" inputmode="decimal" step="0.1"></label>
       <div class="ucread" id="ucRead"></div>
@@ -594,7 +604,7 @@
     <span id="staleTxt"></span>
     <button type="button" id="staleGo"></button>
   </div>
-  <div class="ver" id="verLine">build v<span id="verNum">?</span> · <span id="verNote">narrowed pickers · unknown units</span> ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver" id="verLine">build v<span id="verNum">?</span> · <span id="verNote">the whole frame, and the figures</span> ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <nav class="tabbar" id="tabbar">
@@ -710,19 +720,19 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="jsQR.js?v=56"></script>
-<script src="qrcode.js?v=56"></script>
-<script src="upload-defaults.js?v=56"></script>
-<script src="hme.js?v=56"></script>
-<script src="mp-fc.js?v=56"></script>
-<script src="hme-cascade.js?v=56"></script>
-<script src="assets.js?v=56"></script>
-<script src="temp-limits.js?v=56"></script>
-<script src="wear.js?v=56"></script>
-<script src="wear-figs.js?v=56"></script>
-<script src="wear-map.js?v=56"></script>
-<script src="jspdf.umd.min.js?v=56"></script>
-<script src="html2canvas.min.js?v=56"></script>
+<script src="jsQR.js?v=57"></script>
+<script src="qrcode.js?v=57"></script>
+<script src="upload-defaults.js?v=57"></script>
+<script src="hme.js?v=57"></script>
+<script src="mp-fc.js?v=57"></script>
+<script src="hme-cascade.js?v=57"></script>
+<script src="assets.js?v=57"></script>
+<script src="temp-limits.js?v=57"></script>
+<script src="wear.js?v=57"></script>
+<script src="wear-figs.js?v=57"></script>
+<script src="wear-map.js?v=57"></script>
+<script src="jspdf.umd.min.js?v=57"></script>
+<script src="html2canvas.min.js?v=57"></script>
 <script>
 /* ============================================================================
    EQUIPMENT CLASSES & INSPECTION TYPES  —  EDIT here for your fleet.
@@ -937,6 +947,8 @@ const I18N = {
     upd_avail:"Build v{n} is out — this phone is still on v{cur}.",
     upd_go:"Update now",
     unit_guess:"{u} is not in the asset register. Showing the standard {c} component list — check it fits the machine, and ask for the register to be updated.",
+    uc_ref_span:"new {n} mm → condemn {c} mm",
+    uc_dir_up:"counts up", uc_dir_down:"counts down",
     uc_prog:"{n} of {of} points taken", uc_prog_act:"{n} at or past condemn",
     uc_prog_watch:"{n} to watch",
     uc_swipe:"← swipe the frame to reach the sprocket end →",
@@ -1101,6 +1113,8 @@ const I18N = {
     upd_avail:"Вышла сборка v{n} — на этом телефоне ещё v{cur}.",
     upd_go:"Обновить",
     unit_guess:"{u} нет в реестре оборудования. Показан стандартный перечень узлов «{c}» — проверьте соответствие машине и запросите обновление реестра.",
+    uc_ref_span:"новый {n} мм → предел {c} мм",
+    uc_dir_up:"растёт", uc_dir_down:"убывает",
     uc_prog:"снято {n} из {of} точек", uc_prog_act:"{n} достигли предела",
     uc_prog_watch:"{n} под наблюдением",
     uc_swipe:"← проведите по раме до звёздочки →",
@@ -1730,6 +1744,7 @@ function renderUC(){
   renderUCFig();
   const st=curEquip?ucStatus(curEquip):null;
   if(st && !st.ok){ box.innerHTML=""; warn.classList.add("hidden"); return; }
+  renderUCRef();
   const p=posRO(), ref=ucRef(), mm=(p.mm==null?null:Number(p.mm));
   // what the number means
   let h="";
@@ -1871,6 +1886,18 @@ function renderUCFig(){
   if(!svg) return;
   box.innerHTML = svg + (meta?'<div class="cap">'+esc(meta.tool)+'</div>':"");
 }
+function renderUCRef(){
+  const el=$("ucRefLine"); if(!el) return;
+  const ref=ucRef();
+  if(!ref){ el.textContent=t("uc_noref"); el.className="ucref none"; return; }
+  if(ref.x){ el.textContent=t("uc_ref_span",{n:fmtMM(ref.n),c:fmtMM(ref.c)})+" · "+t("uc_x_"+ref.x);
+    el.className="ucref none"; return; }
+  const dir=t(ref.d==="grow"?"uc_dir_up":"uc_dir_down");
+  el.textContent=t("uc_ref_span",{n:fmtMM(ref.n),c:fmtMM(ref.c)})+" · "+dir
+    +" · "+t("uc_src_"+ref.src)+(ref.from?" "+ref.from:"");
+  el.className="ucref";
+}
+const fmtMM = v => v==null ? "—" : String(Math.round(v*100)/100);
 $("ucMM").addEventListener("input", ()=>{ saveCur(); renderUC(); refreshChips(); });
 $("ucStood").addEventListener("change", ()=>{ saveCur(); });
 
@@ -2917,7 +2944,7 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
    has accepted every one of its files. */
 const DEST_META={ gas:{label:"Google Drive"}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
 const DEST_IDS=["gas","pa","post"];
-const BUILD="56";
+const BUILD="57";
 const DEFAULT_DESTS=((window.UPLOAD_DEFAULTS||{}).dests)||[];
 /* Parsed once and reused — see the note by the write below. */
 let destsCache=null, destsRaw=null;

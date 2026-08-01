@@ -18,68 +18,66 @@
 (function (W) {
   if (!W) return;
 
-  var VB_W = 660, VB_H = 300;
+  var VB_W = 460, VB_H = 286;
 
-  /* Where each point sits on one frame. Rollers are laid out at run time because
-     the count is a property of the model, not of the drawing. */
+  /* Where each point sits. The whole frame has to fit a phone without a sideways
+     scroll, and eight rollers plus a 44 px tap target do not both fit ON the
+     frame at that width — so the rollers get their own full-width row directly
+     under it, which is where they are on the machine anyway. */
   function layout(rollers, high) {
-    var ix = 92, sx = 566, cy = high ? 150 : 138, cr = 46;
+    var ix = 64, sx = 396, cy = high ? 112 : 100, cr = 38;
     var spots = [];
-    // idler and carrier are two readings each: the outer and the inner tread band
-    spots.push({ k: 'IDLER.@-OUT', x: ix - 17, y: cy, lab: 'O' });
-    spots.push({ k: 'IDLER.@-IN', x: ix + 17, y: cy, lab: 'I' });
-    spots.push({ k: 'CARRIER.@-OUT', x: 246, y: cy - 62, lab: 'O' });
-    spots.push({ k: 'CARRIER.@-IN', x: 286, y: cy - 62, lab: 'I' });
-    var x0 = 150, x1 = 500, step = rollers > 1 ? (x1 - x0) / (rollers - 1) : 0;
+    // the two bands are stacked at the idler and spread at the carrier, because
+    // touching hit areas are how a gloved thumb picks the wrong one
+    spots.push({ k: 'IDLER.@-OUT', x: ix, y: cy - 30, lab: 'O' });
+    spots.push({ k: 'IDLER.@-IN',  x: ix, y: cy + 30, lab: 'I' });
+    spots.push({ k: 'CARRIER.@-OUT', x: 176, y: cy - 58, lab: 'O' });
+    spots.push({ k: 'CARRIER.@-IN',  x: 234, y: cy - 58, lab: 'I' });
+    spots.push({ k: 'SPROCKET.@', x: sx, y: high ? 46 : cy, lab: 'S' });
+    var x0 = 34, x1 = 426, step = rollers > 1 ? (x1 - x0) / (rollers - 1) : 0;
     for (var i = 1; i <= rollers; i++)
-      spots.push({ k: 'ROLLER.@' + i, x: Math.round(x0 + (i - 1) * step), y: cy + 44, lab: String(i) });
-    spots.push({ k: 'SPROCKET.@', x: sx, y: high ? 74 : cy, lab: 'S' });
-    // the chain: not a place on the frame, so it gets its own row
-    var chain = ['LINKH.@', 'BUSH.@', 'PITCH4.@', 'PITCH1.@', 'GROUSER.@'];
-    var cx0 = 196, cstep = 76;
-    chain.forEach(function (k, j) {
-      spots.push({ k: k, x: cx0 + j * cstep, y: 268, lab: k.split('.')[0] });
+      spots.push({ k: 'ROLLER.@' + i, x: Math.round(x0 + (i - 1) * step), y: 190, lab: String(i) });
+    ['LINKH.@', 'BUSH.@', 'PITCH4.@', 'PITCH1.@', 'GROUSER.@'].forEach(function (k, j) {
+      spots.push({ k: k, x: 48 + j * 91, y: 254, lab: k.split('.')[0] });
     });
-    return { spots: spots, ix: ix, sx: sx, cy: cy, cr: cr };
+    return { spots: spots, ix: ix, sx: sx, cy: cy, cr: cr, rollerY: 190, step: step };
   }
 
   function frameArt(L, high) {
     var s = [], ix = L.ix, sx = L.sx, cy = L.cy, cr = L.cr;
     function loop(d) {
-      return '<path d="' + d + '" fill="none" stroke="var(--ink-2)" stroke-width="13" ' +
+      return '<path d="' + d + '" fill="none" stroke="var(--ink-2)" stroke-width="11" ' +
              'stroke-linejoin="round"/><path d="' + d + '" fill="none" stroke="var(--surface-3)" ' +
-             'stroke-width="8" stroke-linejoin="round"/>';
+             'stroke-width="6.5" stroke-linejoin="round"/>';
     }
     if (high) {
-      // elevated sprocket: the drive wheel sits above the frame on a triangle
-      s.push('<path d="M' + ix + ',' + (cy - cr) + ' L' + (sx - 30) + ',' + (74 - cr) +
-             ' A' + cr + ',' + cr + ' 0 0 1 ' + (sx + 18) + ',' + (74 + cr - 8) +
-             ' L' + (sx - 60) + ',' + (cy + cr) + ' L' + ix + ',' + (cy + cr) +
-             ' A' + cr + ',' + cr + ' 0 0 1 ' + ix + ',' + (cy - cr) + ' Z"' +
-             ' fill="none" stroke="var(--ink-2)" stroke-width="13" stroke-linejoin="round"/>');
-      s.push('<rect x="' + (ix + 20) + '" y="' + (cy - 18) + '" width="' + (sx - ix - 100) +
-             '" height="36" rx="8" fill="var(--surface-2)" stroke="var(--ink-2)" stroke-width="2"/>');
-      s.push(wheel(sx - 6, 74, 32));
+      s.push(loop('M' + ix + ',' + (cy - cr) + ' L' + (sx - 22) + ',' + (46 - cr) +
+                  ' A' + cr + ',' + cr + ' 0 0 1 ' + (sx + 14) + ',' + (46 + cr - 6) +
+                  ' L' + (sx - 44) + ',' + (cy + cr) + ' L' + ix + ',' + (cy + cr) +
+                  ' A' + cr + ',' + cr + ' 0 0 1 ' + ix + ',' + (cy - cr) + ' Z'));
+      s.push(wheel(sx - 4, 46, 26));
     } else {
       s.push(loop('M' + ix + ',' + (cy - cr) + ' L' + sx + ',' + (cy - cr) +
                   ' A' + cr + ',' + cr + ' 0 0 1 ' + sx + ',' + (cy + cr) +
                   ' L' + ix + ',' + (cy + cr) +
                   ' A' + cr + ',' + cr + ' 0 0 1 ' + ix + ',' + (cy - cr) + ' Z'));
-      s.push('<rect x="' + (ix + 26) + '" y="' + (cy - 18) + '" width="' + (sx - ix - 52) +
-             '" height="36" rx="8" fill="var(--surface-2)" stroke="var(--ink-2)" stroke-width="2"/>');
-      s.push(wheel(sx, cy, 32));
+      s.push(wheel(sx, cy, 26));
     }
-    s.push(wheel(ix, cy, 32));
-    // the ground run and its shoes
-    var gy = cy + cr + 9;
-    s.push('<rect x="' + (ix - 40) + '" y="' + gy + '" width="' + (sx - ix + 80) +
-           '" height="12" rx="2" fill="var(--surface-3)" stroke="var(--ink-2)" stroke-width="2"/>');
-    for (var gx = ix - 30; gx < sx + 40; gx += 38)
-      s.push('<path d="M' + gx + ',' + (gy + 12) + ' l8,0 l-2,11 l-4,0 Z" ' +
-             'fill="var(--surface-3)" stroke="var(--ink-2)" stroke-width="1.6"/>');
-    // the chain points hang below on a bracket, because that is where they live
-    s.push('<path d="M170,246 L170,238 L500,238 L500,246" fill="none" stroke="var(--muted)" ' +
-           'stroke-width="1.4" stroke-dasharray="4 3"/>');
+    s.push('<rect x="' + (ix + 20) + '" y="' + (cy - 14) + '" width="' + (sx - ix - 40) +
+           '" height="28" rx="7" fill="var(--surface-2)" stroke="var(--ink-2)" stroke-width="2"/>');
+    s.push(wheel(ix, cy, 26));
+    // the ground run, and a leader from it to the row of rollers beneath
+    var gy = cy + cr + 7;
+    s.push('<rect x="' + (ix - 34) + '" y="' + gy + '" width="' + (sx - ix + 68) +
+           '" height="10" rx="2" fill="var(--surface-3)" stroke="var(--ink-2)" stroke-width="2"/>');
+    for (var gx = ix - 26; gx < sx + 34; gx += 34)
+      s.push('<path d="M' + gx + ',' + (gy + 10) + ' l7,0 l-1.8,9 l-3.4,0 Z" ' +
+             'fill="var(--surface-3)" stroke="var(--ink-2)" stroke-width="1.4"/>');
+    s.push('<path d="M34,' + (L.rollerY - 22) + ' L34,' + (gy + 22) + ' L426,' + (gy + 22) +
+           ' L426,' + (L.rollerY - 22) + '" fill="none" stroke="var(--muted)" ' +
+           'stroke-width="1.3" stroke-dasharray="4 3"/>');
+    s.push('<path d="M48,' + (L.rollerY + 30) + ' L48,238 L410,238 L410,' + (L.rollerY + 30) +
+           '" fill="none" stroke="var(--muted)" stroke-width="1.3" stroke-dasharray="4 3"/>');
     return s.join('');
   }
   function wheel(x, y, r) {
@@ -94,17 +92,18 @@
     var L = layout(rollers, high), s = [];
     s.push('<svg class="ucmap" viewBox="0 0 ' + VB_W + ' ' + VB_H + '" role="group" aria-label="' +
            (side === 'L' ? 'Left' : 'Right') + ' track frame">');
-    s.push('<text class="um-side" x="16" y="30">' + (label || side) + '</text>');
+    s.push('<text class="um-side" x="10" y="22">' + (label || side) + '</text>');
     s.push(frameArt(L, high));
     L.spots.forEach(function (sp) {
       var k = sp.k.replace('@', side), st = state(k) || '';
       var cls = 'um-spot' + (st ? ' ' + st : '') + (k === sel ? ' sel' : '');
-      var chain = sp.y > 240;
+      var chain = sp.y > 230;
       s.push('<g class="' + cls + '" data-uc="' + k + '" transform="translate(' + sp.x + ',' + sp.y +
              ')" role="button" tabindex="0" aria-label="' + k + '">');
-      s.push('<circle class="um-hit" r="' + (chain ? 32 : 28) + '" fill="transparent"/>');
-      if (chain) s.push('<rect class="um-puck" x="-33" y="-15" width="66" height="30" rx="15"/>');
-      else s.push('<circle class="um-puck" r="16"/>');
+      s.push(chain ? '<rect class="um-hit" x="-45" y="-28" width="90" height="56" fill="transparent"/>'
+                   : '<circle class="um-hit" r="28" fill="transparent"/>');
+      if (chain) s.push('<rect class="um-puck" x="-40" y="-17" width="80" height="34" rx="17"/>');
+      else s.push('<circle class="um-puck" r="17"/>');
       s.push('<text class="um-n' + (chain ? ' um-chain' : '') + '" y="' + (chain ? 4.5 : 5) +
              '" text-anchor="middle">' + sp.lab + '</text>');
       s.push('</g>');
