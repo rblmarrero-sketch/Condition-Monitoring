@@ -25,14 +25,14 @@
      frame at that width — so the rollers get their own full-width row directly
      under it, which is where they are on the machine anyway. */
   function layout(rollers, high) {
-    var ix = 64, sx = 396, cy = high ? 112 : 100, cr = 38;
+    var ix = 88, sx = 404, cy = high ? 112 : 100, cr = 34;
     var spots = [];
     // the two bands are stacked at the idler and spread at the carrier, because
     // touching hit areas are how a gloved thumb picks the wrong one
-    spots.push({ k: 'IDLER.@-OUT', x: ix, y: cy - 30, lab: 'O' });
-    spots.push({ k: 'IDLER.@-IN',  x: ix, y: cy + 30, lab: 'I' });
-    spots.push({ k: 'CARRIER.@-OUT', x: 176, y: cy - 58, lab: 'O' });
-    spots.push({ k: 'CARRIER.@-IN',  x: 234, y: cy - 58, lab: 'I' });
+    spots.push({ k: 'IDLER.@-OUT', x: 24, y: cy - 28, lab: 'O' });
+    spots.push({ k: 'IDLER.@-IN',  x: 24, y: cy + 28, lab: 'I' });
+    spots.push({ k: 'CARRIER.@-OUT', x: 186, y: cy - 58, lab: 'O' });
+    spots.push({ k: 'CARRIER.@-IN',  x: 244, y: cy - 58, lab: 'I' });
     spots.push({ k: 'SPROCKET.@', x: sx, y: high ? 46 : cy, lab: 'S' });
     var x0 = 34, x1 = 426, step = rollers > 1 ? (x1 - x0) / (rollers - 1) : 0;
     for (var i = 1; i <= rollers; i++)
@@ -79,6 +79,8 @@
     return out;
   }
 
+  function part(k, body) { return '<g data-part="' + k + '">' + body + '</g>'; }
+
   function frameArt(L, high) {
     var s = [], ix = L.ix, sx = L.sx, cy = L.cy, cr = L.cr, R = cr;
     var gy = cy + cr + 12;                                  // ground
@@ -101,6 +103,7 @@
     s.push('<path class="mf-line" d="M' + (ix + 4) + ',' + cy + ' L' + (ix + 10) + ',' + cy + '"/>');
 
 
+    s.push('<g data-part="CHAIN">');
     // ── the chain: two rails, then a pin and a link plate at every pitch
     var pitch = 2 * Math.PI * R / 20;
     var P = pins(L, pitch);
@@ -116,6 +119,8 @@
       s.push('<circle class="mf-pin" cx="' + q.x.toFixed(1) + '" cy="' + q.y.toFixed(1) + '" r="2.6"/>');
     });
 
+    s.push('</g>');
+    s.push('<g data-part="SPROCKET">');
     // ── sprocket: a rim, and a tooth reaching up between every second pair of
     //    pins. One tooth per pin turns the wheel into a starburst; a tooth per
     //    pocket is what actually drives the chain.
@@ -135,23 +140,29 @@
              ' ' + (sx + ux * b - px * 6).toFixed(1) + ',' + (cy + uy * b - py * 6).toFixed(1) + ' Z"/>');
     });
 
+    s.push('</g>');
     // ── final drive hub, in front of the sprocket rim
     s.push('<circle class="mf-part" cx="' + sx + '" cy="' + cy + '" r="' + (R * 0.42).toFixed(1) + '"/>');
     s.push('<circle class="mf-hair" cx="' + sx + '" cy="' + cy + '" r="' + (R * 0.22).toFixed(1) + '"/>');
 
+    s.push('<g data-part="IDLER">');
     // ── idler: rim, hub, and the flange the rails ride either side of
     s.push('<circle class="mf-part" cx="' + ix + '" cy="' + cy + '" r="' + (R * 0.74) + '"/>');
     s.push('<circle class="mf-line" cx="' + ix + '" cy="' + cy + '" r="' + (R * 0.5) + '"/>');
     s.push('<circle class="mf-part" cx="' + ix + '" cy="' + cy + '" r="' + (R * 0.24) + '"/>');
 
+    s.push('</g>');
+    s.push('<g data-part="CARRIER">');
     // ── carrier rollers, on their brackets on top of the frame
-    [176, 234].forEach(function (x) {
+    [186, 244].forEach(function (x) {
       s.push('<path class="mf-part" d="M' + (x - 8) + ',' + (cy - 14) + ' L' + (x - 5) + ',' + (cy - 32) +
              ' L' + (x + 5) + ',' + (cy - 32) + ' L' + (x + 8) + ',' + (cy - 14) + ' Z"/>');
       s.push('<circle class="mf-part" cx="' + x + '" cy="' + (cy - 39) + '" r="8"/>');
       s.push('<circle class="mf-hair" cx="' + x + '" cy="' + (cy - 39) + '" r="3.2"/>');
     });
 
+    s.push('</g>');
+    s.push('<g data-part="ROLLER">');
     // ── lower rollers, slung under the frame on the ground run
     for (var rx = ix + 34; rx < sx - 20; rx += 44) {
       s.push('<path class="mf-line" d="M' + (rx - 7) + ',' + (cy + 15) + ' L' + (rx - 7) + ',' + (cy + 24) +
@@ -160,6 +171,8 @@
       s.push('<circle class="mf-hair" cx="' + rx + '" cy="' + (cy + 30) + '" r="3.4"/>');
     }
 
+    s.push('</g>');
+    s.push('<g data-part="GROUSER">');
     // ── shoes and grousers on the ground run, and the ground itself
     s.push('<path class="mf-line" d="M' + (ix - 30) + ',' + (gy - 1) + ' L' + (sx + 30) + ',' + (gy - 1) + '"/>');
     for (var gx = ix - 26; gx < sx + 26; gx += 15) {
@@ -170,6 +183,7 @@
     for (var hx = ix - 40; hx < sx + 40; hx += 11)
       s.push('<path class="mf-hair" d="M' + hx + ',' + (gy + 7) + ' l-5,6"/>');
 
+    s.push('</g>');
     // the row of roller pucks below stands in for the rollers on the frame
     s.push('<path class="mf-lead" d="M34,' + (L.rollerY - 22) + ' L34,' + (gy + 18) +
            ' L426,' + (gy + 18) + ' L426,' + (L.rollerY - 22) + '"/>');

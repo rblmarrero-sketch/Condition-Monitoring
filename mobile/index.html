@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Truck Inspection — Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=59">
+<link rel="manifest" href="manifest.webmanifest?v=60">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -308,6 +308,10 @@
     background:var(--surface-2);color:var(--ink);font:650 15px/1 inherit;cursor:pointer;}
   .sh-nav button.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);}
   .sh-nav button:disabled{opacity:.4;}
+  .ucfigtog{display:none;width:100%;font:600 12.5px/1 inherit;color:var(--muted);
+    background:none;border:0;border-bottom:1px dashed var(--line);padding:9px 0 10px;
+    margin:0 0 10px;cursor:pointer;text-align:left;}
+  #ucFields.sheet .ucfigtog{display:block;}
   .ucfig{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;
     padding:9px;margin-bottom:11px;text-align:center;}
   .ucfig svg{width:100%;max-width:340px;height:auto;display:block;margin:0 auto;}
@@ -315,6 +319,10 @@
   .ucref{font-size:12.5px;font-weight:600;color:var(--ink-2);margin:-4px 0 10px;
     font-variant-numeric:tabular-nums;line-height:1.5;}
   .ucref.none{color:var(--warning);font-weight:600;}
+  .uclast{font-size:12.5px;color:var(--muted);margin:-6px 0 10px;line-height:1.5;
+    font-variant-numeric:tabular-nums;}
+  .uclast b{color:var(--ink-2);font-weight:650;}
+  .uclast.jump{color:var(--warning);}
   .ucread{font-size:13.5px;margin:-4px 0 12px;display:flex;flex-wrap:wrap;gap:6px 10px;
     align-items:center;min-height:20px;}
   .ucread b{font-variant-numeric:tabular-nums;font-size:15px;}
@@ -351,7 +359,7 @@
     border-radius:12px;padding:3px 2px;position:relative;overflow:hidden;
     /* posnav is a flex row, so the map has to claim the width rather than
        stretch into it */
-    flex:0 0 auto;width:calc(100% + 32px);margin:0 -16px 9px;}
+    flex:0 0 auto;}
   .ucviews,.uctally,.ucswipe{flex:0 0 100%;}
   .ucmapwrap.more::after{content:"";position:sticky;right:0;top:0;float:right;
     width:34px;height:100%;margin-left:-34px;pointer-events:none;
@@ -367,6 +375,30 @@
   .ucmap .mf-hair{fill:none;stroke:var(--muted);stroke-width:.7;stroke-linecap:round;}
   .ucmap .mf-ground{fill:none;stroke:var(--muted);stroke-width:1.1;}
   .ucmap .mf-lead{fill:none;stroke:var(--muted);stroke-width:.9;stroke-dasharray:3 3;opacity:.7;}
+  /* Picking a point fades the rest of the machine, so the drawing answers
+     "which bit is this?" without a label or a leader line. */
+  .ucmap [data-part]{transition:opacity .18s ease;}
+  .ucmap[data-sel] [data-part]{opacity:.22;}
+  .ucmap[data-sel="IDLER"] [data-part="IDLER"],
+  .ucmap[data-sel="CARRIER"] [data-part="CARRIER"],
+  .ucmap[data-sel="ROLLER"] [data-part="ROLLER"],
+  .ucmap[data-sel="SPROCKET"] [data-part="SPROCKET"],
+  .ucmap[data-sel="GROUSER"] [data-part="GROUSER"],
+  .ucmap[data-sel="LINKH"] [data-part="CHAIN"],
+  .ucmap[data-sel="BUSH"] [data-part="CHAIN"],
+  .ucmap[data-sel="PITCH4"] [data-part="CHAIN"],
+  .ucmap[data-sel="PITCH1"] [data-part="CHAIN"]{opacity:1;}
+  @media (prefers-reduced-motion:reduce){ .ucmap [data-part]{transition:none;} }
+  /* The pair of frames is what claims the pane width now; posnav is a flex row,
+     so the claim has to sit on the element that is actually its child. */
+  .ucmaps{flex:0 0 calc(100% + 32px);width:calc(100% + 32px);margin:0 -16px 9px;}
+  .ucmaps .ucmapwrap{width:100%;margin:0 0 9px;}
+  .ucmaps .ucmapwrap:last-child{margin-bottom:0;}
+  /* Not side by side, even on a tablet. The app's two-column layout caps the
+     content column at ~317 px per frame however wide the screen gets, which puts
+     the tap targets at 38 px — below the floor the stacked pair clears at 46.
+     Two frames one above the other, at full width, wins on the only measure
+     that matters here. */
   .um-spot{cursor:pointer;}
   .um-spot .um-puck{fill:var(--surface);stroke:var(--ink-2);stroke-width:2.4;}
   .um-spot .um-n{font:700 16px/1 inherit;fill:var(--ink-2);pointer-events:none;}
@@ -524,8 +556,10 @@
           <button type="button" id="ucClose" aria-label="close">✕</button>
         </div>
       </div>
+      <button type="button" class="ucfigtog" id="ucFigTog"></button>
       <div class="ucfig" id="ucFig"></div>
       <div class="ucref" id="ucRefLine"></div>
+      <div class="uclast" id="ucLast"></div>
       <label class="fld"><span id="ucLbl" data-i18n="lbl_mm">Measured (mm)</span>
         <input id="ucMM" type="number" inputmode="decimal" step="0.1"></label>
       <div class="ucread" id="ucRead"></div>
@@ -651,7 +685,7 @@
     <span id="staleTxt"></span>
     <button type="button" id="staleGo"></button>
   </div>
-  <div class="ver" id="verLine">build v<span id="verNum">?</span> · <span id="verNote">a track frame, drawn properly</span> ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver" id="verLine">build v<span id="verNum">?</span> · <span id="verNote">the machine answers back</span> ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <nav class="tabbar" id="tabbar">
@@ -767,19 +801,19 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="jsQR.js?v=59"></script>
-<script src="qrcode.js?v=59"></script>
-<script src="upload-defaults.js?v=59"></script>
-<script src="hme.js?v=59"></script>
-<script src="mp-fc.js?v=59"></script>
-<script src="hme-cascade.js?v=59"></script>
-<script src="assets.js?v=59"></script>
-<script src="temp-limits.js?v=59"></script>
-<script src="wear.js?v=59"></script>
-<script src="wear-figs.js?v=59"></script>
-<script src="wear-map.js?v=59"></script>
-<script src="jspdf.umd.min.js?v=59"></script>
-<script src="html2canvas.min.js?v=59"></script>
+<script src="jsQR.js?v=60"></script>
+<script src="qrcode.js?v=60"></script>
+<script src="upload-defaults.js?v=60"></script>
+<script src="hme.js?v=60"></script>
+<script src="mp-fc.js?v=60"></script>
+<script src="hme-cascade.js?v=60"></script>
+<script src="assets.js?v=60"></script>
+<script src="temp-limits.js?v=60"></script>
+<script src="wear.js?v=60"></script>
+<script src="wear-figs.js?v=60"></script>
+<script src="wear-map.js?v=60"></script>
+<script src="jspdf.umd.min.js?v=60"></script>
+<script src="html2canvas.min.js?v=60"></script>
 <script>
 /* ============================================================================
    EQUIPMENT CLASSES & INSPECTION TYPES  —  EDIT here for your fleet.
@@ -994,6 +1028,8 @@ const I18N = {
     upd_avail:"Build v{n} is out — this phone is still on v{cur}.",
     upd_go:"Update now",
     unit_guess:"{u} is not in the asset register. Showing the standard {c} component list — check it fits the machine, and ask for the register to be updated.",
+    uc_fig_hide:"Hide the diagram", uc_fig_show:"Show the diagram",
+    uc_prevread:"last round {b}{v} mm{/b} · {d}",
     uc_sheet_pos:"point {i} of {of} · {done} taken",
     uc_prev:"‹ Back", uc_next:"Next ›", uc_last:"Done ✓",
     uc_ref_span:"new {n} mm → condemn {c} mm",
@@ -1160,6 +1196,8 @@ const I18N = {
     upd_avail:"Вышла сборка v{n} — на этом телефоне ещё v{cur}.",
     upd_go:"Обновить",
     unit_guess:"{u} нет в реестре оборудования. Показан стандартный перечень узлов «{c}» — проверьте соответствие машине и запросите обновление реестра.",
+    uc_fig_hide:"Скрыть схему", uc_fig_show:"Показать схему",
+    uc_prevread:"в прошлый раз {b}{v} мм{/b} · {d}",
     uc_sheet_pos:"точка {i} из {of} · снято {done}",
     uc_prev:"‹ Назад", uc_next:"Далее ›", uc_last:"Готово ✓",
     uc_ref_span:"новый {n} мм → предел {c} мм",
@@ -1682,6 +1720,7 @@ function refreshChips(){
       const k=el.dataset.uc;
       el.setAttribute("class", "um-spot "+(ucState(k)||"")+(k===curItem?" sel":""));
     });
+    ucMarkSelectedPart();
     const tl=$("posnav").querySelector(".uctally");
     if(tl){ const tmp=document.createElement("div"); tmp.innerHTML=ucTally();
       tl.innerHTML=tmp.firstChild.innerHTML; }
@@ -1791,7 +1830,7 @@ function renderUC(){
   renderUCFig();
   const st=curEquip?ucStatus(curEquip):null;
   if(st && !st.ok){ box.innerHTML=""; warn.classList.add("hidden"); return; }
-  renderUCRef();
+  renderUCRef(); renderUCLast();
   const p=posRO(), ref=ucRef(), mm=(p.mm==null?null:Number(p.mm));
   // what the number means
   let h="";
@@ -1949,6 +1988,17 @@ function ucTally(){
     '<span class="t '+(k||"non")+'"><i></i>'+c[k]+' '+esc(t(lab))+'</span>');
   return '<div class="uctally">'+bits.join("")+'</div>';
 }
+/* The frame that owns the current reading dims everything except the part
+   being measured; the other side is left alone. */
+function ucMarkSelectedPart(){
+  const [pt,pos]=ucSplit(curItem||"");
+  const side=(pos||"").charAt(0);
+  $("posnav").querySelectorAll(".ucmap").forEach(sv=>{
+    const own=sv.closest(".ucmapwrap");
+    if(pt && own && own.dataset.side===side) sv.setAttribute("data-sel", pt);
+    else sv.removeAttribute("data-sel");
+  });
+}
 function renderUCMap(){
   const st=ucStatus(curEquip);
   const rollers=(st.prof&&st.prof.rollers)||WEAR.rollersDefault;
@@ -1956,8 +2006,10 @@ function renderUCMap(){
   const side=s=>t(s==="L"?"uc_left":"uc_right");
   let h=ucViewsBar();
   h+=ucTally();
+  h+='<div class="ucmaps">';
   ["L","R"].forEach(s=>{ h+='<div class="ucmapwrap" data-side="'+s+'">'+
       WEAR.mapSVG(s, rollers, high, ucState, curItem, side(s))+'</div>'; });
+  h+='</div>';
   $("posnav").innerHTML=h;
   /* A track frame is three metres long and a phone is not. Rather than shrink the
      pucks under a gloved thumb, the frame scrolls — but silently off-screen is
@@ -1975,6 +2027,7 @@ function renderUCMap(){
   });
   if(over) wraps[wraps.length-1].insertAdjacentHTML("afterend",
     '<div class="ucswipe">'+t("uc_swipe")+'</div>');
+  ucMarkSelectedPart();
   // the chain pucks carry short codes; the drawing on the capture screen names them in full
   $("posnav").querySelectorAll(".um-spot .um-chain").forEach(el=>{
     const k=el.closest(".um-spot").dataset.uc.split(".")[0];
@@ -1987,14 +2040,56 @@ function renderUCMap(){
   });
   toggleCapture();
 }
+let ucFigOpen = localStorage.getItem("uc_fig")!=="0";
 function renderUCFig(){
-  const box=$("ucFig"); if(!box) return;
+  const box=$("ucFig"), tog=$("ucFigTog"); if(!box) return;
+  if(tog){ tog.textContent = (ucFigOpen?"▾ ":"▸ ")+t(ucFigOpen?"uc_fig_hide":"uc_fig_show");
+    tog.onclick=()=>{ ucFigOpen=!ucFigOpen; localStorage.setItem("uc_fig",ucFigOpen?"1":"0");
+      renderUCFig(); }; }
   const [pt]=ucSplit(curItem||"");
   const svg=(window.WEAR_FIG||{})[pt];
   const meta=(window.WEAR&&WEAR.points||[]).find(x=>x.code===pt);
-  box.style.display = svg?"":"none";
-  if(!svg) return;
+  box.style.display = (svg && ucFigOpen)?"":"none";
+  if(!svg || !ucFigOpen) return;
   box.innerHTML = svg + (meta?'<div class="cap">'+esc(meta.tool)+'</div>':"");
+}
+/* What this position read last time. A transposed digit — 204 for 240 — passes
+   every check the reference can make, and is only obvious next to the number the
+   same point gave a month ago. Cheap to show, and the only moment it is cheap to
+   catch. */
+let ucPrevCache={key:"",rows:null};
+async function ucPrevReadings(unit){
+  const u=(unit||"").toUpperCase();
+  if(ucPrevCache.key===u) return ucPrevCache.rows;
+  const out={};
+  try{
+    const recs=(await dbAll()).filter(r=>(r.equip||"").toUpperCase()===u && r.type==="UC" && r.date);
+    recs.sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+    recs.forEach(r=>Object.entries(r.positions||{}).forEach(([k,p])=>{
+      if(p && p.mm!=null) out[k]={mm:Number(p.mm), d:r.date};
+    }));
+  }catch(e){ /* no history is not an error */ }
+  ucPrevCache={key:u, rows:out};
+  return out;
+}
+let ucLastRun=0;
+async function renderUCLast(){
+  const el=$("ucLast"); if(!el) return;
+  const run=++ucLastRun, key=curItem, unit=curEquip;
+  el.textContent=""; el.className="uclast";
+  if(!key || !unit) return;
+  const rows=await ucPrevReadings(unit);
+  if(run!==ucLastRun || key!==curItem) return;                 // moved on while we waited
+  const prev=rows[key];
+  if(!prev) return;
+  const now=posRO().mm;
+  el.innerHTML=esc(t("uc_prevread",{v:fmtMM(prev.mm),d:String(prev.d)}))
+    .replace("{b}","<b>").replace("{/b}","</b>");
+  // a big jump either way is worth a second look before it is recorded
+  if(now!=null && prev.mm){
+    const ch=Math.abs(Number(now)-prev.mm)/Math.abs(prev.mm);
+    if(ch>0.15) el.classList.add("jump");
+  }
 }
 function renderUCRef(){
   const el=$("ucRefLine"); if(!el) return;
@@ -3071,7 +3166,7 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
    has accepted every one of its files. */
 const DEST_META={ gas:{label:"Google Drive"}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
 const DEST_IDS=["gas","pa","post"];
-const BUILD="59";
+const BUILD="60";
 const DEFAULT_DESTS=((window.UPLOAD_DEFAULTS||{}).dests)||[];
 /* Parsed once and reused — see the note by the write below. */
 let destsCache=null, destsRaw=null;
