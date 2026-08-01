@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Truck Inspection — Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=54">
+<link rel="manifest" href="manifest.webmanifest?v=55">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -304,6 +304,45 @@
   .chips button{font:600 12.5px/1 inherit;color:var(--ink);background:var(--surface-2);
     border:1px solid var(--line);border-radius:999px;padding:9px 13px;cursor:pointer;}
   .chips button.on{background:color-mix(in srgb,var(--warning) 16%,var(--surface));border-color:var(--warning);color:var(--warning);}
+  .stale{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between;
+    background:var(--accent-soft);border:1px solid var(--accent);border-radius:12px;
+    padding:12px 14px;margin:0 0 12px;font-size:13.5px;color:var(--ink);line-height:1.45;}
+  .stale button{font:700 13px/1 inherit;color:var(--accent-ink);background:var(--accent);
+    border:0;border-radius:9px;padding:11px 16px;cursor:pointer;white-space:nowrap;}
+  .ucmapwrap{overflow-x:auto;background:var(--surface-2);border:1px solid var(--line);
+    border-radius:12px;padding:6px;margin-bottom:9px;position:relative;
+    scrollbar-width:thin;}
+  .ucmapwrap.more::after{content:"";position:sticky;right:0;top:0;float:right;
+    width:34px;height:100%;margin-left:-34px;pointer-events:none;
+    background:linear-gradient(90deg,transparent,var(--surface-2));}
+  .ucswipe{font-size:11.5px;color:var(--muted);text-align:center;margin:-4px 0 10px;}
+  .ucmap{display:block;width:100%;min-width:640px;height:auto;}
+  .um-side{font:700 20px/1 inherit;fill:var(--muted);letter-spacing:.04em;}
+  .um-spot{cursor:pointer;}
+  .um-spot .um-puck{fill:var(--surface);stroke:var(--ink-2);stroke-width:2.4;}
+  .um-spot .um-n{font:700 15px/1 inherit;fill:var(--ink-2);pointer-events:none;}
+  .um-spot .um-n.um-chain{font-size:13px;letter-spacing:.02em;}
+  .um-spot.done .um-puck{fill:var(--good);stroke:var(--good);}
+  .um-spot.watch .um-puck{fill:var(--warning);stroke:var(--warning);}
+  .um-spot.act .um-puck{fill:var(--critical);stroke:var(--critical);}
+  .um-spot.done .um-n,.um-spot.act .um-n{fill:#fff;}
+  .um-spot.watch .um-n{fill:#231a00;}
+  .um-spot.na .um-puck{fill:var(--surface-3);stroke:var(--muted);stroke-dasharray:4 3;}
+  .um-spot.sel .um-puck{stroke:var(--accent);stroke-width:4.5;}
+  .um-spot:focus-visible{outline:none;}
+  .um-spot:focus-visible .um-puck{stroke:var(--accent);stroke-width:4.5;}
+  .ucviews{display:flex;gap:7px;margin:0 0 9px;}
+  .ucviews button{flex:1;font:600 13px/1 inherit;color:var(--muted);background:var(--surface-2);
+    border:1px solid var(--line);border-radius:10px;padding:10px;cursor:pointer;}
+  .ucviews button.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);}
+  .ucleg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:11.5px;color:var(--muted);
+    margin:0 0 10px;}
+  .ucleg i{width:12px;height:12px;border-radius:999px;display:inline-block;margin-right:5px;
+    vertical-align:-1px;border:2px solid var(--ink-2);background:var(--surface);}
+  .ucleg i.done{background:var(--good);border-color:var(--good);}
+  .ucleg i.watch{background:var(--warning);border-color:var(--warning);}
+  .ucleg i.act{background:var(--critical);border-color:var(--critical);}
+  .ucleg i.na{background:var(--surface-3);border-color:var(--muted);border-style:dashed;}
   .ucblock{background:var(--surface-2);border:1px dashed var(--line);border-radius:12px;
     padding:18px 16px;text-align:center;color:var(--muted);font-size:13.5px;line-height:1.55;}
   .tempbar .pill{border-radius:999px;padding:2px 10px;font-weight:700;color:#fff;font-size:12px;}
@@ -545,7 +584,11 @@
   </div>
 </div><!-- /paneSystem -->
 
-  <div class="ver" id="verLine">build v<span id="verNum">?</span> · <span id="verNote">undercarriage round</span> ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="stale hidden" id="staleBar" role="status">
+    <span id="staleTxt"></span>
+    <button type="button" id="staleGo"></button>
+  </div>
+  <div class="ver" id="verLine">build v<span id="verNum">?</span> · <span id="verNote">undercarriage round · tap the machine</span> ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <nav class="tabbar" id="tabbar">
@@ -661,18 +704,19 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="jsQR.js?v=54"></script>
-<script src="qrcode.js?v=54"></script>
-<script src="upload-defaults.js?v=54"></script>
-<script src="hme.js?v=54"></script>
-<script src="mp-fc.js?v=54"></script>
-<script src="hme-cascade.js?v=54"></script>
-<script src="assets.js?v=54"></script>
-<script src="temp-limits.js?v=54"></script>
-<script src="wear.js?v=54"></script>
-<script src="wear-figs.js?v=54"></script>
-<script src="jspdf.umd.min.js?v=54"></script>
-<script src="html2canvas.min.js?v=54"></script>
+<script src="jsQR.js?v=55"></script>
+<script src="qrcode.js?v=55"></script>
+<script src="upload-defaults.js?v=55"></script>
+<script src="hme.js?v=55"></script>
+<script src="mp-fc.js?v=55"></script>
+<script src="hme-cascade.js?v=55"></script>
+<script src="assets.js?v=55"></script>
+<script src="temp-limits.js?v=55"></script>
+<script src="wear.js?v=55"></script>
+<script src="wear-figs.js?v=55"></script>
+<script src="wear-map.js?v=55"></script>
+<script src="jspdf.umd.min.js?v=55"></script>
+<script src="html2canvas.min.js?v=55"></script>
 <script>
 /* ============================================================================
    EQUIPMENT CLASSES & INSPECTION TYPES  —  EDIT here for your fleet.
@@ -884,6 +928,13 @@ const I18N = {
     uc_no_wheeled:"This machine runs on tyres. There is no undercarriage to measure.",
     uc_no_tracks:"The undercarriage round is for tracked dozers and excavators.",
     uc_no_unknown:"This unit is not in the register, so there is no model to measure against.",
+    upd_avail:"Build v{n} is out — this phone is still on v{cur}.",
+    upd_go:"Update now",
+    uc_swipe:"← swipe the frame to reach the sprocket end →",
+    uc_v_map:"Tap the machine", uc_v_list:"Work down a list",
+    uc_left:"LEFT", uc_right:"RIGHT",
+    uc_leg_none:"not taken", uc_leg_done:"serviceable", uc_leg_watch:"watch",
+    uc_leg_act:"at or past condemn", uc_leg_na:"could not measure",
     lbl_temp:"Temperature °C", lbl_amb:"Ambient °C", lbl_method:"Measurement method",
     tm_IR:"IR gun", tm_CAM:"Thermal camera", tm_CON:"Contact probe", tm_TEL:"Machine telemetry",
     temp_lim:"Warn ≥ {w} °C · Alarm ≥ {a} °C", temp_rise:"rise", rep_temp:"Temp",
@@ -1038,6 +1089,13 @@ const I18N = {
     uc_no_wheeled:"Эта машина на шинах. Ходовой части для замера нет.",
     uc_no_tracks:"Осмотр ходовой части — для гусеничных бульдозеров и экскаваторов.",
     uc_no_unknown:"Этой единицы нет в реестре, поэтому не с чем сравнивать.",
+    upd_avail:"Вышла сборка v{n} — на этом телефоне ещё v{cur}.",
+    upd_go:"Обновить",
+    uc_swipe:"← проведите по раме до звёздочки →",
+    uc_v_map:"Нажать на машину", uc_v_list:"Идти по списку",
+    uc_left:"ЛЕВАЯ", uc_right:"ПРАВАЯ",
+    uc_leg_none:"не снято", uc_leg_done:"годен", uc_leg_watch:"наблюдать",
+    uc_leg_act:"достиг предела", uc_leg_na:"не удалось измерить",
     lbl_temp:"Температура °C", lbl_amb:"Окружающая среда °C", lbl_method:"Метод замера",
     tm_IR:"Пирометр (ИК)", tm_CAM:"Тепловизор", tm_CON:"Контактный датчик", tm_TEL:"Телеметрия машины",
     temp_lim:"Предупр. ≥ {w} °C · Тревога ≥ {a} °C", temp_rise:"превышение", rep_temp:"Темп.",
@@ -1404,7 +1462,7 @@ function itemLabel(k){ const it=items().find(i=>i.k===k); if(it) return it[lang]
   if(wearType()){ const [pt,pos]=ucSplit(k); const p=(window.WEAR&&WEAR.points||[]).find(x=>x.code===pt);
     return (p?(p[lang]||p.en):pt)+(pos?" — "+ucPosLabel(pos,lang):""); }
   return COMP_BY[k] ? compLabel(k) : k; }
-let draft={positions:{}}; let curItem=items()[0].k;
+let draft={positions:{}}; let curItem=(items()[0]||{}).k||"";
 function curP(){ return (draft.positions[curItem] ||= {}); }   // WRITE path: creates the entry
 // READ path. curP() here would create an empty entry, and every "has data" check
 // treats any entry as captured — so merely looking at a component marked it done.
@@ -1437,6 +1495,7 @@ function fillTypeSel(){ $("typeSel").innerHTML=TYPE_ORDER.map(k=>`<option value=
 $("typeSel").onchange=(e)=>{ type=e.target.value; localStorage.setItem("insp_type",type);
   draft={positions:{}}; editing=null; curItem=""; applyForm(); setEditing(null); };
 function renderChips(){ const tr=currentTree();
+  if(wearType() && curEquip && ucStatus(curEquip).ok && ucView==="map"){ renderUCMap(); return; }
   if(tr){ renderComponentNav(tr); return; }         // registered unit -> L7/L8/L9 cascade cards
   const its=items();
   if(usesRegister(type)){
@@ -1508,6 +1567,13 @@ function renderComponentNav(tree){
    falsy, so each repaint STRIPPED the green dot off a component that had just
    been captured. Setting a grade made the evidence of it disappear. */
 function refreshChips(){
+  if(wearType() && ucView==="map" && $("posnav").querySelector(".um-spot")){
+    $("posnav").querySelectorAll(".um-spot").forEach(el=>{
+      const k=el.dataset.uc;
+      el.setAttribute("class", "um-spot "+(ucState(k)||"")+(k===curItem?" sel":""));
+    });
+    return;
+  }
   const tr=currentTree();
   $("posnav").querySelectorAll("button").forEach(b=>{
     const d=b.dataset;
@@ -1663,6 +1729,61 @@ function renderUCReasons(){
     if(!hasData(p)) delete draft.positions[curItem];
     renderUC(); refreshChips();
   });
+}
+let ucView = localStorage.getItem("uc_view")==="list" ? "list" : "map";
+/* What a position looks like from across the yard. A reason is a state of its
+   own — "we looked and could not reach it" must not read the same as a blank. */
+function ucState(k){
+  const p=draft.positions[k]; if(!p) return "";
+  if(p.reason) return "na";
+  if(p.mm==null) return "";
+  const st=ucStatus(curEquip); if(!st.ok) return "done";
+  const [pt,pos]=ucSplit(k);
+  const ref=WEAR.refFor(curEquip, st.model, pt, pos, $("date").value||todayISO());
+  const pct=ref?WEAR.wear(ref,Number(p.mm)):null;
+  if(pct==null) return "done";
+  return pct>=100?"act" : pct>=80?"watch" : "done";
+}
+function renderUCMap(){
+  const st=ucStatus(curEquip);
+  const rollers=(st.prof&&st.prof.rollers)||WEAR.rollersDefault;
+  const high=!!(st.prof&&st.prof.frame==="highdrive");
+  const side=s=>t(s==="L"?"uc_left":"uc_right");
+  let h='<div class="ucviews"><button data-v="map" class="on">'+t("uc_v_map")+
+        '</button><button data-v="list">'+t("uc_v_list")+'</button></div>';
+  h+='<div class="ucleg">'+["","done","watch","act","na"].map(c=>
+       '<span><i class="'+c+'"></i>'+t("uc_leg_"+(c||"none"))+'</span>').join("")+'</div>';
+  ["L","R"].forEach(s=>{ h+='<div class="ucmapwrap" data-side="'+s+'">'+
+      WEAR.mapSVG(s, rollers, high, ucState, curItem, side(s))+'</div>'; });
+  $("posnav").innerHTML=h;
+  /* A track frame is three metres long and a phone is not. Rather than shrink the
+     pucks under a gloved thumb, the frame scrolls — but silently off-screen is
+     how a whole sprocket gets missed, so say so, and move both frames together
+     so the same roller stays side by side on each. */
+  const wraps=[...$("posnav").querySelectorAll(".ucmapwrap")];
+  const over = wraps.some(w=>w.scrollWidth > w.clientWidth + 4);
+  wraps.forEach(w=>{
+    w.classList.toggle("more", over);
+    w.addEventListener("scroll", ()=>{
+      if(w.dataset.lock) return;
+      wraps.forEach(o=>{ if(o!==w){ o.dataset.lock="1"; o.scrollLeft=w.scrollLeft;
+        requestAnimationFrame(()=>delete o.dataset.lock); } });
+    }, {passive:true});
+  });
+  if(over) wraps[wraps.length-1].insertAdjacentHTML("afterend",
+    '<div class="ucswipe">'+t("uc_swipe")+'</div>');
+  // the chain pucks carry short codes; the drawing on the capture screen names them in full
+  $("posnav").querySelectorAll(".um-spot .um-chain").forEach(el=>{
+    const k=el.closest(".um-spot").dataset.uc.split(".")[0];
+    if(WEAR.mapShort[k]) el.textContent=WEAR.mapShort[k]; });
+  $("posnav").querySelectorAll(".ucviews button").forEach(b=>b.onclick=()=>{
+    ucView=b.dataset.v; localStorage.setItem("uc_view",ucView); renderChips(); });
+  const go=el=>pickComponent(el.dataset.uc);
+  $("posnav").querySelectorAll(".um-spot").forEach(el=>{
+    el.onclick=()=>go(el);
+    el.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(el); } };
+  });
+  toggleCapture();
 }
 function renderUCFig(){
   const box=$("ucFig"); if(!box) return;
@@ -2699,6 +2820,10 @@ function applyLang(){ document.documentElement.lang=lang;
   updateDefectCauseBtns(); updateActionBtn(); renderSev(); renderMedia(); renderGps(); renderTempHint(); renderDue(); renderTeam(); renderLastDone(); renderTrend();
   updateSaveLabel(); if(editing) $("editBannerText").textContent=t("editing_hint").replace("{x}",editing.equip); $("cancelEdit").textContent=t("btn_cancel");
   setNet(); renderPending();
+  // the machine map is drawn, not templated, so a [data-i18n] sweep never reaches
+  // its side names, its legend or its own view toggle — repaint it
+  if(wearType() && ucView==="map" && $("posnav").querySelector(".um-spot")) renderUCMap();
+  if(TYPE_META[type].wear) renderUC();
   document.querySelectorAll(".lang button").forEach(b=>b.classList.toggle("on", b.dataset.lang===lang)); }
 document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target.closest("button[data-lang]"); if(!b) return; lang=b.dataset.lang; localStorage.setItem("lang",lang); applyLang(); });
 
@@ -2715,7 +2840,7 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
    has accepted every one of its files. */
 const DEST_META={ gas:{label:"Google Drive"}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
 const DEST_IDS=["gas","pa","post"];
-const BUILD="54";
+const BUILD="55";
 const DEFAULT_DESTS=((window.UPLOAD_DEFAULTS||{}).dests)||[];
 /* Parsed once and reused — see the note by the write below. */
 let destsCache=null, destsRaw=null;
@@ -3210,6 +3335,34 @@ if("serviceWorker" in navigator && window.isSecureContext){ let reloaded=false;
 const SHELL_ASSETS=["index.html","manifest.webmanifest","jsQR.js","qrcode.js","upload-defaults.js",
   "hme.js","hme-cascade.js","mp-fc.js","assets.js","temp-limits.js",
   "jspdf.umd.min.js","html2canvas.min.js","sw.js"];
+/* "Am I on the latest build?" used to be unanswerable from inside the app: the
+   service worker serves the copy it has, and a stale page looks exactly like a
+   current one. So ask. sw.js carries the build number, it is tiny, and fetching
+   it with no-store bypasses every cache between here and the server.
+
+   Silence is the normal offline case and must stay silent — a pit with no signal
+   is not a problem to report. Only a build number that differs from the one
+   running says anything, and then it says it loudly, because an inspector on an
+   old build is capturing against an old reference table. */
+async function checkForNewBuild(){
+  if(!navigator.onLine) return;
+  try{
+    const res=await withTimeoutMs(fetch("sw.js?ts="+Date.now(),{cache:"no-store"}), 8000);
+    if(!res || !res.ok) return;
+    const m=(await res.text()).match(/const BUILD\s*=\s*"([^"]+)"/);
+    if(!m || m[1]===BUILD) return;
+    const bar=$("staleBar"); if(!bar) return;
+    $("staleTxt").textContent=t("upd_avail",{n:m[1],cur:BUILD});
+    $("staleGo").textContent=t("upd_go");
+    bar.classList.remove("hidden");
+    $("staleGo").onclick=()=>$("forceUpdate").click();
+  }catch(_){}                                   // offline, slow, blocked — all fine, say nothing
+}
+function withTimeoutMs(p,ms){ return Promise.race([p,
+  new Promise((_,rej)=>setTimeout(()=>rej(new Error("timeout")),ms))]); }
+document.addEventListener("visibilitychange",()=>{ if(!document.hidden) checkForNewBuild(); });
+setTimeout(checkForNewBuild, 1500);
+
 const fu=$("forceUpdate"); if(fu) fu.onclick=async (e)=>{ e.preventDefault();
   const old=fu.textContent; fu.textContent="⟳ …";
   try{ if("serviceWorker" in navigator){ const rs=await navigator.serviceWorker.getRegistrations(); await Promise.all(rs.map(r=>r.unregister())); } }catch(_){}
