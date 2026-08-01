@@ -21,7 +21,9 @@ The legacy map exists so that history keeps its meaning. No stored inspection is
 ever rewritten: an old code is resolved to its v4 meaning when a record is read,
 the same way corrections and voids are merged rather than written back.
 """
-import json, re, sys, subprocess, collections
+import json, re, sys, subprocess, collections, os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from fluidfit import LEK_FLUID, fluids_for
 
 SRC  = sys.argv[1] if len(sys.argv) > 1 else \
     '/root/.claude/uploads/1f3ebdba-c3da-5675-b557-e45dfee4b57e/5250be34-hme_defect_cause_matrix_1C_v4.json'
@@ -98,6 +100,27 @@ PREFIX_FALLBACK = {
     'LS': 'LIGHTING PLANT, DIESEL',    # 24 lighting towers
     'TK': 'TRUCK, GENERIC',            # 301 support trucks of unstated type
 }
+# A unit that is not in the register yet — DR011 arrives on site before anyone
+# updates the asset list — would otherwise get no component tree at all, and the
+# inspector would be offered a generic list instead of a drill's. Rather than
+# guess a class, take the one the register itself already uses for that unit-
+# number prefix, and record how strong the evidence is so the app can say it is
+# a fallback rather than a fact.
+def prefix_classes(assets, classes):
+    from collections import Counter, defaultdict
+    seen = defaultdict(Counter)
+    for a in assets:
+        m = re.match(r'^([A-Za-z]+)', a['n'])
+        cat = a.get('cat') or a.get('fb')
+        if m and cat in classes:
+            seen[m.group(1).upper()][cat] += 1
+    out = {}
+    for pre, c in seen.items():
+        top, n = c.most_common(1)[0]
+        out[pre] = {'c': top, 'n': n, 'of': sum(c.values())}
+    return out
+
+
 # Three rows in the register are system codes, not machines.
 NOT_MACHINES = {'CH', 'DRS', 'ELS'}
 
@@ -165,6 +188,7 @@ hme = dict(
     severity=V['severity'], grade=V['grade'], action=V['action'], detection=V['detection'],
     isoFailureModeCodes=V['isoFailureModeCodes'],
     unitPrefixToEquipmentType=V['unitPrefixToEquipmentType'],
+    prefixClass=prefix_classes(units, {c['name'] for c in V['equipmentClasses']}),
     legacy=legacy,
 )
 # A local component has to reach the machines that carry it — both through the
@@ -185,11 +209,36 @@ for l in LOCAL:
         if k in hme['models'] and l['code'] not in hme['models'][k]:
             hme['models'][k] = sorted(hme['models'][k] + [l['code']])
 
+# ── narrow the picker without losing anything ────────────────────────────────
+# A component offers everything the matrix pairs with it, which puts a coolant
+# leak on an A/C condenser and a fuel leak on a steering accumulator. Those are
+# not wrong enough to delete — an inspector who genuinely finds one must still be
+# able to record it — but they should not be in the first list they scan. Demote
+# them behind "show all" instead, and count what moved.
+DEF_GROUP = {d['code']: d['group'] for d in hme['defectTypes']}
+# CH.VD is a local component that inherits its list from CH.ROL. A vibrator drum
+# has no undercarriage, so the roller's UC modes must not come with it.
+for d in [d for d in cx.get('CH.VD', {}) if DEF_GROUP.get(d) == 'UC']:
+    cx['CH.VD'].pop(d, None)
+
+COMP_BY = {c['code']: c for c in hme['components']}
+demote, moved = {}, 0
+for code, by in cx.items():
+    f = fluids_for(COMP_BY.get(code, {}))
+    if f is None:
+        continue
+    out = [d for d in by if LEK_FLUID.get(d) and LEK_FLUID[d] not in f]
+    if out:
+        demote[code] = sorted(out)
+        moved += len(out)
+
 open(REPO + '/mobile/hme.js', 'w').write(HEAD + 'window.HME=' + js(hme) + ';\n')
 open(REPO + '/mobile/hme-cascade.js', 'w').write(
     HEAD + '/* g = the shared rank-3 tails; c[component][defect] = [rank1, rank2, tailIndex],\n'
-    '   every number an index into HME.directCauses. */\n'
-    'window.HME_CX=' + js(dict(g=sets, c=cx)) + ';\n')
+    '   every number an index into HME.directCauses.\n'
+    '   dm[component] = defect codes demoted behind "show all" because the part does\n'
+    '   not contain that fluid. Nothing is removed from the matrix. */\n'
+    'window.HME_CX=' + js(dict(g=sets, c=cx, dm=demote)) + ';\n')
 
 AHEAD = ('/* GENERATED — do not edit by hand. Rebuild: python3 docs/build-hme-data.py\n'
          '   The unit list is a MERGE of what the app already held and what the register\n'
@@ -208,5 +257,6 @@ print(f"legacy       {sum(len(v) for v in legacy.values()):5} entries")
 print(f"units        {len(units):5}  (+{len(added)} added, {len(rejected)} malformed: {rejected}, "
       f"{len(dropped)} not machines: {dropped})")
 print(f"  no class in the register, resolved from the unit prefix: {fell}")
+print(f"  leak modes demoted behind \"show all\": {moved} across {len(demote)} components")
 for f in ('hme.js', 'hme-cascade.js', 'assets.js'):
     print(f"  mobile/{f:18} {os.path.getsize(REPO+'/mobile/'+f):>9,} bytes")

@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Truck Inspection — Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=55">
+<link rel="manifest" href="manifest.webmanifest?v=56">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -309,6 +309,9 @@
     padding:12px 14px;margin:0 0 12px;font-size:13.5px;color:var(--ink);line-height:1.45;}
   .stale button{font:700 13px/1 inherit;color:var(--accent-ink);background:var(--accent);
     border:0;border-radius:9px;padding:11px 16px;cursor:pointer;white-space:nowrap;}
+  .guess{background:color-mix(in srgb,var(--warning) 14%,var(--surface));
+    border:1px solid var(--warning);border-radius:11px;padding:11px 13px;margin:0 0 10px;
+    font-size:12.5px;line-height:1.5;color:var(--ink);}
   .ucmapwrap{overflow-x:auto;background:var(--surface-2);border:1px solid var(--line);
     border-radius:12px;padding:6px;margin-bottom:9px;position:relative;
     scrollbar-width:thin;}
@@ -335,6 +338,9 @@
   .ucviews button{flex:1;font:600 13px/1 inherit;color:var(--muted);background:var(--surface-2);
     border:1px solid var(--line);border-radius:10px;padding:10px;cursor:pointer;}
   .ucviews button.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);}
+  .ucprog{font-size:12.5px;font-weight:600;color:var(--muted);margin:0 0 8px;}
+  .ucprog.warn{color:var(--warning);}
+  .ucprog.bad{color:var(--critical);}
   .ucleg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:11.5px;color:var(--muted);
     margin:0 0 10px;}
   .ucleg i{width:12px;height:12px;border-radius:999px;display:inline-block;margin-right:5px;
@@ -588,7 +594,7 @@
     <span id="staleTxt"></span>
     <button type="button" id="staleGo"></button>
   </div>
-  <div class="ver" id="verLine">build v<span id="verNum">?</span> · <span id="verNote">undercarriage round · tap the machine</span> ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver" id="verLine">build v<span id="verNum">?</span> · <span id="verNote">narrowed pickers · unknown units</span> ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <nav class="tabbar" id="tabbar">
@@ -704,19 +710,19 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="jsQR.js?v=55"></script>
-<script src="qrcode.js?v=55"></script>
-<script src="upload-defaults.js?v=55"></script>
-<script src="hme.js?v=55"></script>
-<script src="mp-fc.js?v=55"></script>
-<script src="hme-cascade.js?v=55"></script>
-<script src="assets.js?v=55"></script>
-<script src="temp-limits.js?v=55"></script>
-<script src="wear.js?v=55"></script>
-<script src="wear-figs.js?v=55"></script>
-<script src="wear-map.js?v=55"></script>
-<script src="jspdf.umd.min.js?v=55"></script>
-<script src="html2canvas.min.js?v=55"></script>
+<script src="jsQR.js?v=56"></script>
+<script src="qrcode.js?v=56"></script>
+<script src="upload-defaults.js?v=56"></script>
+<script src="hme.js?v=56"></script>
+<script src="mp-fc.js?v=56"></script>
+<script src="hme-cascade.js?v=56"></script>
+<script src="assets.js?v=56"></script>
+<script src="temp-limits.js?v=56"></script>
+<script src="wear.js?v=56"></script>
+<script src="wear-figs.js?v=56"></script>
+<script src="wear-map.js?v=56"></script>
+<script src="jspdf.umd.min.js?v=56"></script>
+<script src="html2canvas.min.js?v=56"></script>
 <script>
 /* ============================================================================
    EQUIPMENT CLASSES & INSPECTION TYPES  —  EDIT here for your fleet.
@@ -930,6 +936,9 @@ const I18N = {
     uc_no_unknown:"This unit is not in the register, so there is no model to measure against.",
     upd_avail:"Build v{n} is out — this phone is still on v{cur}.",
     upd_go:"Update now",
+    unit_guess:"{u} is not in the asset register. Showing the standard {c} component list — check it fits the machine, and ask for the register to be updated.",
+    uc_prog:"{n} of {of} points taken", uc_prog_act:"{n} at or past condemn",
+    uc_prog_watch:"{n} to watch",
     uc_swipe:"← swipe the frame to reach the sprocket end →",
     uc_v_map:"Tap the machine", uc_v_list:"Work down a list",
     uc_left:"LEFT", uc_right:"RIGHT",
@@ -1091,6 +1100,9 @@ const I18N = {
     uc_no_unknown:"Этой единицы нет в реестре, поэтому не с чем сравнивать.",
     upd_avail:"Вышла сборка v{n} — на этом телефоне ещё v{cur}.",
     upd_go:"Обновить",
+    unit_guess:"{u} нет в реестре оборудования. Показан стандартный перечень узлов «{c}» — проверьте соответствие машине и запросите обновление реестра.",
+    uc_prog:"снято {n} из {of} точек", uc_prog_act:"{n} достигли предела",
+    uc_prog_watch:"{n} под наблюдением",
     uc_swipe:"← проведите по раме до звёздочки →",
     uc_v_map:"Нажать на машину", uc_v_list:"Идти по списку",
     uc_left:"ЛЕВАЯ", uc_right:"ПРАВАЯ",
@@ -1256,12 +1268,25 @@ function isoText(d,l){
 /* The modes this component can actually fail in. Sorted by group so the picker
    reads in the same order every time; the cascade's own key order is not
    meaningful. */
-function defectsForComponent(code,ty){
+/* What this component can show, most plausible first.
+
+   The matrix pairs a component with everything its system might do, which puts
+   a coolant leak on an A/C condenser and a fuel leak on a steering accumulator.
+   Those stay reachable — an inspector who genuinely finds one must be able to
+   record it — but they sit behind "show all" rather than in the list scanned at
+   the machine. 262 pairs across 103 components move; nothing is deleted. */
+function defectsForComponent(code,ty,withDemoted){
   if(mpfcType(ty||type)) return MPFC.defects;
-  const by=CX.c[upComp(code)];
+  const k=upComp(code), by=CX.c[k];
   if(!by) return [];
-  return Object.keys(by).map(k=>DEFECT_BY[k]).filter(Boolean)
+  const dm=(!withDemoted && CX.dm && CX.dm[k]) ? new Set(CX.dm[k]) : null;
+  return Object.keys(by).filter(d=>!dm||!dm.has(d))
+    .map(d=>DEFECT_BY[d]).filter(Boolean)
     .sort((a,b)=> (a.group||"").localeCompare(b.group||"") || a.code.localeCompare(b.code));
+}
+function demotedCount(code){
+  const d=CX.dm && CX.dm[upComp(code)];
+  return d ? d.length : 0;
 }
 /* Specific first, general behind the expander. Within a rank the matrix is
    already sorted alphabetically by English name — preserve that. */
@@ -1416,13 +1441,34 @@ const ucSplit = k => { const i=String(k).indexOf("."); return i<0?[k,""]:[k.slic
    prefix says when the register says nothing — 345 units, and without it an
    inspector standing at a lighting tower would be offered no components at all. */
 let treeCache={key:"",tree:null};
+/* Never let a guessed component list pass for a recorded one. */
+function guessNote(){
+  if(!isGuessedUnit(curEquip)) return "";
+  const p=(HME.prefixClass||{})[prefixOf(curEquip)]||{};
+  const cls=CLASS_BY[p.c];
+  return '<div class="guess">'+esc(t("unit_guess",{u:curEquip,
+    c:(cls?(cls[lang]||cls.en||p.c):p.c)}))+'</div>';
+}
+function prefixOf(unit){ const m=/^([A-Za-z]+)/.exec(unit||""); return m?m[1].toUpperCase():""; }
+/* A machine can be on site before the asset list catches up — DR011 arrives and
+   the register still stops at DR010. Without a fallback the inspector loses the
+   component tree entirely and is offered a generic list, which is worse than a
+   near-miss. So use the class the register itself already gives that unit-number
+   prefix, and let the caller say out loud that it is a fallback. */
+function fallbackClassFor(unit){
+  const p=(HME.prefixClass||{})[prefixOf(unit)];
+  return p ? CLASS_BY[p.c] : null;
+}
 function componentsForUnit(unit){
-  const a=ASSET_BY[unit]; if(!a) return null;
+  const a=ASSET_BY[unit];
+  if(!a){ const fb=fallbackClassFor(unit); return fb ? fb.components : null; }
   const cls=CLASS_BY[a.cat] || CLASS_BY[a.fb];
   if(!cls) return null;
   const m=a.mk && HME.models && HME.models[a.mk];
   return (m && m.length) ? m : cls.components;
 }
+// true when the components on screen are a prefix guess, not the register
+function isGuessedUnit(unit){ return !!unit && !ASSET_BY[unit] && !!fallbackClassFor(unit); }
 function currentTree(){
   if(!usesRegister(type) || !curEquip) return null;
   if(wearType()){
@@ -1518,7 +1564,7 @@ function renderChips(){ const tr=currentTree();
   $("posnav").innerHTML=its.map(it=>`<button data-pos="${it.k}"><span>${it.k}</span><span class="dot"></span></button>`).join("");
   toggleCapture(); refreshChips(); }
 function renderFlatCards(its){
-  let h='<div class="casc"><button class="searchall" id="searchAllBtn">🔍 '+t("opt_search_all")+'</button>';
+  let h=guessNote()+'<div class="casc"><button class="searchall" id="searchAllBtn">🔍 '+t("opt_search_all")+'</button>';
   h+='<div class="cards">'+its.map(it=>`<button data-pick="${it.k}" class="${draft.positions[it.k]?'has':''}${it.k===curItem?' on':''}"><span class="cc">${it.k}</span><span class="cn">${it[lang]||it.en}</span><span class="dot"></span></button>`).join('')+'</div></div>';
   $("posnav").innerHTML=h;
   const sa=$("searchAllBtn"); if(sa) sa.onclick=()=>openPicker("item");
@@ -1531,7 +1577,7 @@ function toggleCapture(){ const tr=currentTree();
 function pickComponent(code){ saveCur(); curItem=code; loadPos(); renderChips(); }
 function renderComponentNav(tree){
   const cap=items().filter(it=>draft.positions[it.k]);
-  let h='<div class="casc"><div class="crumb"><button data-nav="root">'+t("nav_systems")+'</button>';
+  let h=guessNote()+ucViewsBar()+'<div class="casc"><div class="crumb"><button data-nav="root">'+t("nav_systems")+'</button>';
   if(cascL7){ const n=nodeByCode(tree,cascL7); h+='<span class="sep">›</span><button data-nav="l7">'+(n?(n[lang]||n.en):cascL7)+'</button>'; }
   if(cascL8){ const n=nodeByCode(tree,cascL8); h+='<span class="sep">›</span><button data-nav="l8">'+(n?(n[lang]||n.en):cascL8)+'</button>'; }
   h+='</div>';
@@ -1557,6 +1603,7 @@ function renderComponentNav(tree){
   $("posnav").querySelectorAll('[data-l8]').forEach(b=>b.onclick=()=>{ const n=nodeByCode(tree,b.dataset.l8); if(n&&n.ch&&n.ch.length){cascL8=b.dataset.l8;renderChips();} else pickComponent(b.dataset.l8); });
   $("posnav").querySelectorAll('[data-pick]').forEach(b=>b.onclick=()=>pickComponent(b.dataset.pick));
   $("posnav").querySelectorAll('[data-pos]').forEach(b=>b.onclick=()=>pickComponent(b.dataset.pos));
+  wireUCViews();
   toggleCapture(); refreshChips(); }
 /* Repaint the "captured" dot and the selected outline without rebuilding the DOM.
 
@@ -1568,10 +1615,15 @@ function renderComponentNav(tree){
    been captured. Setting a grade made the evidence of it disappear. */
 function refreshChips(){
   if(wearType() && ucView==="map" && $("posnav").querySelector(".um-spot")){
+    // repaint in place rather than re-rendering, so the frame does not jump back
+    // to the start of its scroll on every keystroke
     $("posnav").querySelectorAll(".um-spot").forEach(el=>{
       const k=el.dataset.uc;
       el.setAttribute("class", "um-spot "+(ucState(k)||"")+(k===curItem?" sel":""));
     });
+    const pr=$("posnav").querySelector(".ucprog");
+    if(pr){ const tmp=document.createElement("div"); tmp.innerHTML=ucProgress();
+      pr.className=tmp.firstChild.className; pr.textContent=tmp.firstChild.textContent; }
     return;
   }
   const tr=currentTree();
@@ -1744,13 +1796,39 @@ function ucState(k){
   if(pct==null) return "done";
   return pct>=100?"act" : pct>=80?"watch" : "done";
 }
+/* Present in BOTH views. It used to be drawn only by the map, so an inspector who
+   chose the list had no way back to the machine short of clearing the app. */
+function ucViewsBar(){
+  if(!wearType() || !curEquip || !ucStatus(curEquip).ok) return "";
+  return '<div class="ucviews">'
+    + '<button type="button" data-v="map"'+(ucView==="map"?' class="on"':'')+'>'+t("uc_v_map")+'</button>'
+    + '<button type="button" data-v="list"'+(ucView==="list"?' class="on"':'')+'>'+t("uc_v_list")+'</button>'
+    + '</div>';
+}
+function wireUCViews(){
+  $("posnav").querySelectorAll(".ucviews button").forEach(b=>b.onclick=()=>{
+    ucView=b.dataset.v; localStorage.setItem("uc_view",ucView);
+    cascL7=null; cascL8=null; renderChips(); });
+}
+/* An untouched round is all white pucks, which reads as "broken" rather than
+   "nothing captured yet". Say the count, so the absence of colour is an answer. */
+function ucProgress(){
+  const w=WEAR.walk(ucStatus(curEquip).model);
+  const st=w.map(x=>ucState(x.k));
+  const took=st.filter(Boolean).length;
+  const red=st.filter(x=>x==="act").length, amb=st.filter(x=>x==="watch").length;
+  let bits=[t("uc_prog",{n:took,of:w.length})];
+  if(red) bits.push(t("uc_prog_act",{n:red}));
+  else if(amb) bits.push(t("uc_prog_watch",{n:amb}));
+  return '<div class="ucprog'+(red?" bad":amb?" warn":"")+'">'+esc(bits.join(" · "))+'</div>';
+}
 function renderUCMap(){
   const st=ucStatus(curEquip);
   const rollers=(st.prof&&st.prof.rollers)||WEAR.rollersDefault;
   const high=!!(st.prof&&st.prof.frame==="highdrive");
   const side=s=>t(s==="L"?"uc_left":"uc_right");
-  let h='<div class="ucviews"><button data-v="map" class="on">'+t("uc_v_map")+
-        '</button><button data-v="list">'+t("uc_v_list")+'</button></div>';
+  let h=ucViewsBar();
+  h+=ucProgress();
   h+='<div class="ucleg">'+["","done","watch","act","na"].map(c=>
        '<span><i class="'+c+'"></i>'+t("uc_leg_"+(c||"none"))+'</span>').join("")+'</div>';
   ["L","R"].forEach(s=>{ h+='<div class="ucmapwrap" data-side="'+s+'">'+
@@ -1776,8 +1854,7 @@ function renderUCMap(){
   $("posnav").querySelectorAll(".um-spot .um-chain").forEach(el=>{
     const k=el.closest(".um-spot").dataset.uc.split(".")[0];
     if(WEAR.mapShort[k]) el.textContent=WEAR.mapShort[k]; });
-  $("posnav").querySelectorAll(".ucviews button").forEach(b=>b.onclick=()=>{
-    ucView=b.dataset.v; localStorage.setItem("uc_view",ucView); renderChips(); });
+  wireUCViews();
   const go=el=>pickComponent(el.dataset.uc);
   $("posnav").querySelectorAll(".um-spot").forEach(el=>{
     el.onclick=()=>go(el);
@@ -2840,7 +2917,7 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
    has accepted every one of its files. */
 const DEST_META={ gas:{label:"Google Drive"}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
 const DEST_IDS=["gas","pa","post"];
-const BUILD="55";
+const BUILD="56";
 const DEFAULT_DESTS=((window.UPLOAD_DEFAULTS||{}).dests)||[];
 /* Parsed once and reused — see the note by the write below. */
 let destsCache=null, destsRaw=null;
