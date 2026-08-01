@@ -310,7 +310,8 @@
       <div class="srccard" id="edDelCard" style="margin-top:14px;border-color:var(--critical)">
         <div class="srchead"><span class="ico">🗑</span><div><b data-i18n="ed_del">Delete permanently</b>
           <div class="muted"><span data-i18n="ed_del_sub1">Removes the sidecar, every photo, the signature and any correction. Files go to Drive's</span>
-            <b data-i18n="ed_trash">trash</b> <span data-i18n="ed_del_sub2">— recoverable for 30 days — and the deletion is logged.</span></div></div></div>
+            <b data-i18n="ed_trash">trash</b> <span data-i18n="ed_del_sub2">— recoverable for 30 days — and the deletion is logged.</span>
+            <div class="note" style="margin-top:9px" data-i18n="ed_del_off">Deletion is switched off until an admin sets ADMIN_SECRET in the Apps Script.</div></div></div></div>
         <div class="srcbody">
           <div class="field"><label for="edAdmin" data-i18n="ed_admin">Admin password</label>
             <input id="edAdmin" type="password" autocomplete="off" data-i18n-ph="ed_adminph" placeholder="not the phones' shared secret"></div>
@@ -566,8 +567,9 @@ const I18N={
   ed_del:"Delete permanently",
   ed_del_sub1:"Removes the sidecar, every photo, the signature and any correction. Files go to Drive's",
   ed_trash:"trash",
-  ed_del_sub2:"— recoverable for 30 days — and the deletion is logged with your name and reason. Needs the admin password set in the Apps Script.",
-  ed_admin:"Admin password", ed_adminph:"not the phones' shared secret",
+  ed_del_sub2:"— recoverable for 30 days — and the deletion is logged with your name and reason.",
+  ed_del_off:"Deletion is switched off until an admin sets ADMIN_SECRET in the Apps Script and deploys a new version. Until then, use Void above — it withdraws the round from every count, chart and report, keeps the photos, and can be undone.",
+  ed_admin:"Admin password", ed_adminph:"leave empty if none is set",
   ed_confirm:"Type the unit number to confirm", ed_confirmph:"e.g. TK146",
   ed_save:"Save correction", ed_edit:"✎ Edit",
   ed_sev:"Severity", ed_rec:"Recommendation", ed_wo:"WO / notification",
@@ -578,7 +580,7 @@ const I18N={
   ed_needdrive:"❌ Set up Google Drive first — corrections are stored there.",
   ed_needname:"Put your name in first — a correction has to be attributable.",
   ed_needreason:"Give a reason — that is the point of voiding rather than deleting.",
-  ed_needadmin:"The admin password is required. It is set in the Apps Script, not in the app.",
+  ed_needadmin:"The admin password is set in the Apps Script, not in the app.",
   ed_needconfirm:"Type “{x}” to confirm.",
   ed_sending:"✅ Saved — sending to Drive…", ed_saved:"✅ Saved.",
   ed_undone:"❌ Not saved — {e} The change has been undone.",
@@ -713,8 +715,9 @@ const I18N={
   ed_del:"Удалить безвозвратно",
   ed_del_sub1:"Удаляет запись, все фото, подпись и правки. Файлы уходят в",
   ed_trash:"корзину Диска",
-  ed_del_sub2:"— восстановимо 30 дней — и удаление фиксируется с вашим именем и причиной. Нужен пароль администратора из Apps Script.",
-  ed_admin:"Пароль администратора", ed_adminph:"это не общий секрет телефонов",
+  ed_del_sub2:"— восстановимо 30 дней — и удаление фиксируется с вашим именем и причиной.",
+  ed_del_off:"Удаление выключено, пока администратор не задаст ADMIN_SECRET в Apps Script и не опубликует новую версию. До этого пользуйтесь «Отозвать» выше — осмотр исключается из всех подсчётов, графиков и отчётов, фото сохраняются, действие обратимо.",
+  ed_admin:"Пароль администратора", ed_adminph:"оставьте пустым, если не задан",
   ed_confirm:"Введите номер единицы для подтверждения", ed_confirmph:"напр. TK146",
   ed_save:"Сохранить правку", ed_edit:"✎ Правка",
   ed_sev:"Степень", ed_rec:"Рекомендация", ed_wo:"Заявка / уведомление",
@@ -725,7 +728,7 @@ const I18N={
   ed_needdrive:"❌ Сначала настройте Google Диск — правки хранятся там.",
   ed_needname:"Сначала укажите своё имя — правка должна быть именной.",
   ed_needreason:"Укажите причину — в этом и смысл отзыва вместо удаления.",
-  ed_needadmin:"Нужен пароль администратора. Он задаётся в Apps Script, а не в приложении.",
+  ed_needadmin:"Пароль администратора задаётся в Apps Script, а не в приложении.",
   ed_needconfirm:"Введите «{x}» для подтверждения.",
   ed_sending:"✅ Сохранено — отправляем на Диск…", ed_saved:"✅ Сохранено.",
   ed_undone:"❌ Не сохранено — {e} Изменение отменено.",
@@ -864,17 +867,25 @@ function fromBundled(){
       particle:p.particleCount||"",comp:p.componentHours||"",oil:p.oilHours||"",comment:p.comment||"",
       photo:p.photo||"",photos:p.photo?1:0,video:0})),src:"bundled"}));
 }
-let imported=[]; try{ imported=JSON.parse(localStorage.getItem(STORE))||[]; }catch(e){ imported=[]; }
-let driveRecs=[]; try{ driveRecs=JSON.parse(localStorage.getItem(DSTORE))||[]; }catch(e){ driveRecs=[]; }
+/* A store that parses but is not the shape we expect is worse than one that does
+   not parse: `||[]` lets an object through, and the first .forEach takes the page
+   down on load with no way back in but clearing storage by hand. */
+const asList = k => { try{ const v=JSON.parse(localStorage.getItem(k)); return Array.isArray(v)?v:[]; }
+                      catch(e){ return []; } };
+const asMap  = k => { try{ const v=JSON.parse(localStorage.getItem(k));
+                      return (v && typeof v==="object" && !Array.isArray(v))?v:{}; }
+                      catch(e){ return {}; } };
+let imported=asList(STORE);
+let driveRecs=asList(DSTORE);
 /* Corrections and voids made here, keyed UNIT|DATE|TYPE. They live in their own
    files in Drive rather than inside the inspection, because the phone that
    captured it still holds that record and re-syncing would overwrite anything
    written there. Merged on top at read time — see applyEdits(). */
-let edits={}; try{ edits=JSON.parse(localStorage.getItem(ESTORE))||{}; }catch(e){ edits={}; }
+let edits=asMap(ESTORE);
 /* Clashes reported by the Apps Script: two phones inspected the same unit on the
    same day and both versions are in Drive. Keyed the same way, and holding the
    device chosen once somebody here has decided. */
-let conflicts={}; try{ conflicts=JSON.parse(localStorage.getItem(CSTORE))||{}; }catch(e){ conflicts={}; }
+let conflicts=asMap(CSTORE);
 let RECS=[];
 const recKey=r=>`${r.equip}|${r.date}|${r.type}`;
 function applyEdits(r){
@@ -1589,8 +1600,11 @@ $("edDelete").onclick=async ()=>{
   if(!drvOn()){ msg.textContent=t("ed_needdrive"); return; }
   const by=$("edBy").value.trim();
   if(!by){ msg.textContent=t("ed_needname"); return; }
+  /* No client-side refusal on an empty box. Deletion is OFF at the script until
+     somebody sets ADMIN_SECRET there and deploys a new version — refusing here
+     sent people hunting for a password that does not exist, when the script's
+     own answer says exactly what to do. Let the request go and show it. */
   const admin=$("edAdmin").value;
-  if(!admin){ msg.textContent=t("ed_needadmin"); return; }
   // Typing the unit is the last thing between a mis-click and losing a round.
   if($("edConfirm").value.trim().toUpperCase()!==String(rec.equip).toUpperCase()){
     msg.textContent=t("ed_needconfirm",{x:rec.equip}); return; }
