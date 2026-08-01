@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Truck Inspection — Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=49">
+<link rel="manifest" href="manifest.webmanifest?v=50">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -26,7 +26,7 @@
     --ink:#111; --ink-2:#44433f; --muted:#8b8a83; --border:rgba(0,0,0,.12); } }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
   html,body{margin:0;padding:0;}
-  body{background:var(--page);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.4;padding-bottom:120px;}
+  body{background:var(--page);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.4;padding-bottom:92px;}
   header{position:sticky;top:0;z-index:10;background:var(--surface);border-bottom:1px solid var(--border);
     padding:calc(env(safe-area-inset-top) + 12px) 16px 12px;display:flex;align-items:center;gap:10px;}
   header .t{font-weight:700;font-size:16px;}
@@ -106,6 +106,103 @@
   .hint.warn{color:var(--critical);font-weight:600;}
   .bottombar{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--border);padding:12px 16px calc(env(safe-area-inset-bottom) + 12px);display:flex;gap:10px;z-index:10;}
   .bottombar .btn{margin:0;}
+
+  /* ── one job per screen ──────────────────────────────────────────────────
+     The app used to be one long scroll: capture, then the queue, then what the
+     team has done, then the due list. Reaching the due list meant scrolling
+     past everything, and the capture screen never ended. Each is its own pane
+     now, switched from the bar at the bottom of the thumb's reach. */
+  .pane{display:none;}
+  .pane.on{display:block;}
+  #saveBtn{margin-bottom:16px;}
+  /* Save is the one control that must never be hunted for — least of all on a
+     phone turned sideways, where the form is longer than three screens. It is
+     pinned above the tab bar and, being a child of the capture pane, disappears
+     with it. Wide layouts leave it in the flow: there it is already on screen. */
+  /* Wherever the tab bar shows — a narrow screen OR a short one, since a phone
+     turned sideways is 844 px wide and 390 px tall. */
+  @media (max-width: 819px), (max-height: 559px){
+    #saveBtn{position:fixed;left:16px;right:16px;bottom:calc(env(safe-area-inset-bottom) + 64px);
+      z-index:9;margin:0;width:auto;box-shadow:0 8px 24px rgba(0,0,0,.40);}
+    body{padding-bottom:150px;}
+  }
+  .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:10;display:flex;
+    background:var(--surface);border-top:1px solid var(--border);
+    padding-bottom:env(safe-area-inset-bottom);}
+  .tabbar button{flex:1;min-height:56px;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;gap:2px;position:relative;border:none;background:none;cursor:pointer;
+    color:var(--muted);font-size:11px;font-weight:650;font-family:inherit;
+    text-transform:uppercase;letter-spacing:.4px;padding:6px 4px;}
+  .tabbar button .ti{font-size:19px;line-height:1;}
+  .tabbar button.on{color:var(--accent);}
+  .tabbar button.on::before{content:"";position:absolute;top:0;left:18%;right:18%;height:3px;
+    border-radius:0 0 3px 3px;background:var(--accent);}
+  /* A count that means "there is something here for you", not decoration. */
+  .tabbar .tb{position:absolute;top:5px;left:50%;margin-left:6px;min-width:17px;height:17px;padding:0 4px;
+    border-radius:999px;background:var(--accent);color:#fff;font-size:10px;line-height:17px;
+    text-align:center;letter-spacing:0;}
+  .tabbar .tb.warn{background:var(--warning);color:#111;}
+
+  /* The unit's recent history, at the moment of standing in front of it. */
+  .trend{display:flex;align-items:center;gap:8px;margin:-2px 0 12px;}
+  .trend .bars{display:flex;align-items:flex-end;gap:3px;height:26px;}
+  .trend .bars i{width:9px;border-radius:2px 2px 0 0;display:block;}
+  .trend .tt{font-size:12px;color:var(--muted);line-height:1.25;}
+  .trend .tt b{color:var(--ink-2);}
+  .trend .tt.worse b{color:var(--critical);}
+
+  /* ── tablet ──────────────────────────────────────────────────────────────
+     An iPad ran the phone layout stretched to full width: 150-character lines,
+     form fields the width of the screen. Two columns and a cap, and with the
+     room there is no reason to hide anything — every pane shows at once and
+     the tab bar goes away. */
+  /* Height matters as much as width: a phone turned sideways is 844 px wide and
+     390 px tall, and two columns there means one card per screenful and a long
+     scroll with no way between panes. Tablets are wide AND tall. */
+  @media (min-width: 820px) and (min-height: 560px){
+    body{padding-bottom:32px;}
+    main{max-width:1180px;padding:20px;display:grid;gap:0 20px;
+         grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start;}
+    .pane{display:block;}                      /* the tab state stops applying */
+    #paneCapture{grid-column:1;grid-row:1 / span 3;}
+    #paneQueue{grid-column:2;grid-row:1;}
+    #paneSystem{grid-column:2;grid-row:2;}
+    main > .ver{grid-column:1 / -1;}
+    .tabbar{display:none;}
+    .card{padding:20px;}
+  }
+  @media (min-width: 1180px) and (min-height: 560px){
+    main{grid-template-columns:minmax(0,7fr) minmax(0,5fr);}
+  }
+
+  /* ── landscape phone ─────────────────────────────────────────────────────
+     Rotating to type a comment left the sticky header, the card heading and the
+     tab bar eating most of a 380px-tall screen. Everything chrome shrinks; Save
+     stays where the thumb is. */
+  @media (max-height: 500px) and (orientation: landscape){
+    header{padding:calc(env(safe-area-inset-top) + 6px) 12px 6px;gap:8px;}
+    header .t{font-size:14px;}
+    main{padding:10px 12px;}
+    .card{padding:12px;margin-bottom:12px;border-radius:12px;}
+    .card h2{margin-bottom:8px;}
+    label.fld{margin-bottom:8px;}
+    .tabbar button{min-height:44px;font-size:10px;}
+    .tabbar button .ti{font-size:16px;}
+    /* Sideways the screen is 390 px tall — a full-width Save would take a tenth
+       of it for one button. Half the width, still under the thumb. */
+    #saveBtn{left:auto;width:min(260px,42vw);bottom:calc(env(safe-area-inset-bottom) + 52px);}
+    body{padding-bottom:104px;}
+  }
+  /* Sideways there is width but almost no height, so the two halves of a round —
+     which unit, and what is on the plug — go beside each other instead of one
+     above the other. Three fields visible at a time was not a usable form. */
+  @media (max-height: 500px) and (orientation: landscape) and (min-width: 740px){
+    main{max-width:100%;}
+    #paneCapture.on{display:grid;align-items:start;gap:0 14px;
+      grid-template-columns:minmax(0,5fr) minmax(0,7fr);}
+    #cardComponent{grid-column:2;grid-row:1 / span 5;}
+    #paneCapture > *:not(#cardComponent){grid-column:1;}
+  }
   .hint{font-size:12.5px;color:var(--muted);margin-top:6px;} #setMsg{white-space:pre-wrap;word-break:break-word;user-select:text;}
   .btn-set{border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);border-radius:9px;padding:5px 9px;font-size:15px;cursor:pointer;margin-left:auto;}
   .ver{text-align:center;color:var(--muted);font-size:11px;margin:2px 0 8px;}
@@ -187,7 +284,12 @@
 </header>
 
 <main>
-  <div class="card">
+<!-- Three panes, one job each. A technician in gloves should not have to scroll
+     past the queue to reach the due list, and the capture screen should not
+     scroll at all once the unit is picked. On a tablet the media query below
+     shows every pane at once and hides the tab bar — there is room for it. -->
+<div class="pane on" id="paneCapture">
+  <div class="card" id="cardInspection">
     <h2 data-i18n="sec_inspection">Inspection</h2>
     <label class="fld"><span data-i18n="lbl_type">Inspection type</span><select id="typeSel"></select></label>
     <label class="fld"><span data-i18n="lbl_class">Equipment</span>
@@ -201,6 +303,7 @@
     </label>
     <!-- Answers "has someone already done this one?" before the round is walked. -->
     <div class="hint hidden" id="lastDone" style="margin:-4px 0 10px;font-weight:600;color:var(--accent)"></div>
+    <div class="trend hidden" id="trend"></div>
     <input id="qrPhoto" type="file" accept="image/*" capture="environment" class="hidden">
     <div class="row">
       <label class="fld"><span data-i18n="lbl_date">Date</span><input id="date" type="date"></label>
@@ -212,7 +315,7 @@
       <button type="button" class="picker-btn" id="gpsBtn"></button></label>
   </div>
 
-  <div class="card">
+  <div class="card" id="cardComponent">
     <h2 id="secPosTitle">Component</h2>
     <div class="posnav" id="posnav"></div>
     <div class="posLabel hint" id="posLabel"></div>
@@ -281,7 +384,7 @@
     </div><!-- /captureBox -->
   </div>
 
-  <div class="card">
+  <div class="card" id="cardSign">
     <h2 data-i18n="sec_sign">Supervisor sign-off</h2>
     <label class="fld"><span data-i18n="lbl_sup">Verified by (supervisor)</span>
       <input id="supName" type="text" data-i18n-ph="ph_sup" placeholder="name / badge no." autocomplete="name"></label>
@@ -292,8 +395,10 @@
 
   <div id="dataWarn" class="editbar hidden" style="background:color-mix(in srgb,var(--critical) 16%,var(--surface));border-color:color-mix(in srgb,var(--critical) 45%,var(--border))"><span id="dataWarnText"></span><button type="button" id="dataWarnFix" class="linkbtn">⟳</button></div>
 <div id="editBanner" class="editbar hidden"><span id="editBannerText"></span><button type="button" id="cancelEdit" class="linkbtn"></button></div>
-  <button class="btn primary" id="saveBtn" style="margin-bottom:16px">✔ Save</button>
+  <button class="btn primary" id="saveBtn">✔ Save</button>
+</div><!-- /paneCapture -->
 
+<div class="pane" id="paneQueue">
   <div class="card">
     <h2><span data-i18n="sec_onphone">On this phone</span> <span class="count-badge" id="qCount">0</span></h2>
     <div class="pending" id="pending"></div>
@@ -305,6 +410,15 @@
     <input id="mergeFile" type="file" accept=".json,application/json" class="hidden">
   </div>
 
+  <div class="syncbar" id="syncBar"></div>
+  <div class="row" style="margin-bottom:16px">
+    <button class="btn ghost" id="shareBtn">📤 <span data-i18n="btn_share">Share</span></button>
+    <button class="btn primary" id="exportBtn">⬇ <span data-i18n="btn_export">Export ZIP</span></button>
+  </div>
+  <button class="btn ghost" id="reportBtn" style="margin-bottom:16px">📄 <span data-i18n="btn_report">PDF report</span></button>
+</div><!-- /paneQueue -->
+
+<div class="pane" id="paneSystem">
   <div class="card">
     <h2><span data-i18n="sec_team">In the system</span> <span class="count-badge" id="teamCount">0</span></h2>
     <div class="hint" id="teamScope" style="margin:-4px 0 10px"></div>
@@ -333,17 +447,16 @@
     <div class="hint" style="margin-top:8px" data-i18n="due_hint">Built from what this phone has recorded. Load an entries.json exported from the dashboard to seed the whole fleet's last-done dates.</div>
     <input id="dueFile" type="file" accept=".json,application/json" class="hidden">
   </div>
+</div><!-- /paneSystem -->
 
-  <div class="syncbar" id="syncBar"></div>
-  <button class="btn ghost" id="reportBtn" style="margin-bottom:16px">📄 <span data-i18n="btn_report">PDF report</span></button>
-
-  <div class="ver">build v48 · 2026-07-31 · Safer deletes ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver">build v50 · 2026-08-01 · One screen per job ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
-<div class="bottombar">
-  <button class="btn ghost" id="shareBtn">📤 <span data-i18n="btn_share">Share</span></button>
-  <button class="btn primary" id="exportBtn">⬇ <span data-i18n="btn_export">Export ZIP</span></button>
-</div>
+<nav class="tabbar" id="tabbar">
+  <button type="button" data-pane="paneCapture" class="on"><span class="ti">✎</span><span data-i18n="tab_capture">Capture</span></button>
+  <button type="button" data-pane="paneQueue"><span class="ti">📤</span><span data-i18n="tab_queue">Queue</span><span class="tb hidden" id="tabQ"></span></button>
+  <button type="button" data-pane="paneSystem"><span class="ti">🗂</span><span data-i18n="tab_system">System</span><span class="tb hidden" id="tabS"></span></button>
+</nav>
 
 <div id="setOv" class="pick-ov hidden">
   <div class="pickhead"><button id="setClose" class="pickback">‹</button>
@@ -444,16 +557,16 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="jsQR.js?v=49"></script>
-<script src="qrcode.js?v=49"></script>
-<script src="upload-defaults.js?v=49"></script>
-<script src="taxonomy.js?v=49"></script>
-<script src="taxonomy2.js?v=49"></script>
-<script src="assets.js?v=49"></script>
-<script src="components.js?v=49"></script>
-<script src="temp-limits.js?v=49"></script>
-<script src="jspdf.umd.min.js?v=49"></script>
-<script src="html2canvas.min.js?v=49"></script>
+<script src="jsQR.js?v=50"></script>
+<script src="qrcode.js?v=50"></script>
+<script src="upload-defaults.js?v=50"></script>
+<script src="taxonomy.js?v=50"></script>
+<script src="taxonomy2.js?v=50"></script>
+<script src="assets.js?v=50"></script>
+<script src="components.js?v=50"></script>
+<script src="temp-limits.js?v=50"></script>
+<script src="jspdf.umd.min.js?v=50"></script>
+<script src="html2canvas.min.js?v=50"></script>
 <script>
 /* ============================================================================
    EQUIPMENT CLASSES & INSPECTION TYPES  —  EDIT here for your fleet.
@@ -687,6 +800,9 @@ const I18N = {
     m_merge_sent:["Round exported ✔","Send the file to the other phone (AirDrop / WhatsApp / e-mail), then tap “Receive round” there."],
     m_merge_bad:["Not a round file","Choose a file created by “Send round” on the other phone."],
     m_merged:["Merged ✔","{a} new inspection(s), {b} item(s) added to existing ones, {c} already present."],
+    tab_capture:"Capture", tab_queue:"Queue", tab_system:"System",
+    trend_hdr:"Last {n} rounds", trend_worse:"getting worse", trend_steady:"steady",
+    trend_better:"improving", trend_one:"first recorded round",
     m_need_truck:["Add the truck","Enter the truck / unit number (e.g. TK158) first."],
     m_nothing_save:["Nothing to save","Take at least one photo or set a grade."],
     req_defect:"a defect", req_action:"a recommended action",
@@ -810,6 +926,9 @@ const I18N = {
     m_merge_sent:["Обход выгружен ✔","Передайте файл на второй телефон (AirDrop / WhatsApp / почта) и нажмите там «Принять обход»."],
     m_merge_bad:["Неверный файл","Выберите файл, созданный кнопкой «Отправить обход» на другом телефоне."],
     m_merged:["Объединено ✔","Новых осмотров: {a}, добавлено позиций: {b}, уже было: {c}."],
+    tab_capture:"Осмотр", tab_queue:"Очередь", tab_system:"Система",
+    trend_hdr:"Последние осмотры: {n}", trend_worse:"ухудшается", trend_steady:"без изменений",
+    trend_better:"улучшается", trend_one:"первый записанный осмотр",
     m_need_truck:["Укажите трак","Сначала введите номер трака (напр. TK158)."],
     m_nothing_save:["Нечего сохранять","Сделайте хотя бы одно фото или укажите степень."],
     req_defect:"дефект", req_action:"рекомендуемое действие",
@@ -1095,7 +1214,7 @@ $("posnav").addEventListener("click",(e)=>{ const b=e.target.closest("button[dat
 function applyForm(){ $("secPosTitle").textContent=TYPE_META[type].title[lang]||TYPE_META[type].title.en;
   $("mpFields").classList.toggle("hidden", !TYPE_META[type].showReadings);
   $("tempFields").classList.toggle("hidden", !TYPE_META[type].temp);
-  $("dueInt").value=dueInterval(type); renderDue(); renderTeam(); renderLastDone();
+  $("dueInt").value=dueInterval(type); renderDue(); renderTeam(); renderLastDone(); renderTrend();
   cascL7=null; cascL8=null;
   const tr=currentTree(); const flat=items();
   if(tr){ if(curItem && !flat.some(i=>i.k===curItem)) curItem=""; }
@@ -1198,7 +1317,7 @@ function selectEquip(n){ n=(n||"").trim().toUpperCase().replace(/\s+/g,""); curE
   if(a){ eqCat=a.cat||"— UNCATEGORISED —"; localStorage.setItem("equip_cat",eqCat); }
   const cls=assetClassOf(n); if(cls){ eqClass=cls; localStorage.setItem("equip_class",eqClass); }
   draft={positions:{}}; editing=null; curItem=""; applyForm(); setEditing(null); updateEquipBtn();
-  renderLastDone(); }
+  renderLastDone(); renderTrend(); }
 let pickMode=null, showAllDefects=false;
 function pickerSource(){
   if(pickMode==="cat"){
@@ -1323,7 +1442,7 @@ function editRecord(rec){ if(rec.cls && CLASSES[rec.cls]){ eqClass=rec.cls; loca
   curEquip=rec.equip||""; updateEquipBtn(); $("date").value=rec.date; $("smu").value=rec.smu||""; if(rec.by) $("inspector").value=rec.by;
   gps=rec.gps||null; renderGps(); $("supName").value=rec.sup||""; loadSign(rec.sign||null);
   curItem=Object.keys(draft.positions)[0]||items()[0].k;
-  applyForm(); loadPos(); setEditing(rec); window.scrollTo({top:0,behavior:"smooth"}); }
+  applyForm(); loadPos(); setEditing(rec); showPane("paneCapture"); }
 $("cancelEdit").onclick=()=>resetForm();
 
 /* ===================== save to queue ===================== */
@@ -1401,6 +1520,7 @@ $("dueInt").addEventListener("input",()=>{
 });
 $("dueScope").onchange=()=>{ localStorage.setItem("due_scope",$("dueScope").value); renderDue(); };
 function renderDue(){
+  renderTabs();
   const box=$("dueList"); if(!box) return;
   const iv=dueInterval(type), soon=Math.max(3,Math.round(iv*0.2)), h=histAll();
   const rows=[];
@@ -1423,7 +1543,7 @@ function renderDue(){
     return `<button class="dueitem ${r.st}" data-u="${esc(r.unit)}">
       <span class="u">${esc(r.unit)}${a&&a.cat?` · <span style="color:var(--muted);font-weight:400">${esc(a.cat)}</span>`:""}</span>
       <span class="d">${t("due_days").replace("{n}",r.age)} · ${when}</span></button>`; }).join("");
-  box.querySelectorAll("[data-u]").forEach(b=>b.onclick=()=>{ selectEquip(b.dataset.u); window.scrollTo({top:0,behavior:"smooth"}); });
+  box.querySelectorAll("[data-u]").forEach(b=>b.onclick=()=>{ selectEquip(b.dataset.u); showPane("paneCapture"); });
 }
 /* ===================== what the whole team has uploaded =====================
    The due list only ever knew what THIS phone had recorded, so a unit another
@@ -1609,7 +1729,7 @@ async function teamPull(manual,full){
       +(clash?" "+t("team_clash").replace("{n}",clash):"")
       // A truncated reply means the folder holds more than one call returns.
       +(saved&&j.truncated?" "+t("team_more"):"");
-    renderTeam(); renderDue(); renderLastDone();
+    renderTeam(); renderDue(); renderLastDone(); renderTrend();
   }catch(e){
     if(!mine()) return;                      // superseded by a newer press
     if(e && e.name==="AbortError"){ if(manual) msg.textContent=t("team_timeout"); }
@@ -1648,7 +1768,7 @@ function renderTeam(){
       <span class="u">${esc(r.u)}${r.g?` · <span style="color:${GRADE_TINT[r.g]||"var(--muted)"};font-weight:700">${esc(r.g)}</span>`:""}${clash?` · <span style="color:var(--warning);font-weight:700">⑂</span>`:""}</span>
       <span class="d">${esc(r.d)}${age!=null?` · ${t("due_days").replace("{n}",age)}`:""}${r.by?` · ${esc(r.by)}`:""}${clash?` · ${esc(t("team_clash_one"))}`:""}</span></button>`;
   }).join("");
-  box.querySelectorAll("[data-u]").forEach(b=>b.onclick=()=>{ selectEquip(b.dataset.u); window.scrollTo({top:0,behavior:"smooth"}); });
+  box.querySelectorAll("[data-u]").forEach(b=>b.onclick=()=>{ selectEquip(b.dataset.u); showPane("paneCapture"); });
 }
 /* The point-of-capture answer: standing at TK146, has it just been done? */
 function renderLastDone(){
@@ -1662,6 +1782,93 @@ function renderLastDone(){
     +(hit.g?` · ${hit.g}`:"")
     +(cfHas(hit)?` · ⑂ ${t("team_clash_one")}`:"");
   el.classList.remove("hidden");
+}
+
+/* ===================== the unit's recent condition =====================
+   "Last done" answers whether to walk away. It does not answer the question the
+   inspector is actually standing there to answer: is this getting worse? The
+   dashboard has the history, but the dashboard is in the office.
+
+   Built from the team cache — every round anyone uploaded — plus whatever this
+   phone is still holding, so a round saved five minutes ago is in the picture
+   even before it has been sent. One entry per date; the newest is on the right. */
+const TREND_MAX=8;
+async function trendFor(unit,ty){
+  const u=(unit||"").toUpperCase();
+  if(!u) return [];
+  const by=new Map();
+  teamAll().forEach(r=>{ if(r.u===u && r.t===ty && r.d) by.set(r.d,{d:r.d,g:r.g||""}); });
+  // Local records outrank the cached copy of themselves: same round, fresher.
+  try{
+    for(const rec of await dbAll()){
+      if((rec.equip||"").toUpperCase()!==u || (rec.type||"MP")!==ty || !rec.date) continue;
+      let worst="";
+      Object.values(rec.positions||{}).forEach(p=>{ const g=p.grade||"";
+        if(GRADE_RANK[g]!=null && (worst===""||GRADE_RANK[g]>GRADE_RANK[worst])) worst=g; });
+      by.set(rec.date,{d:rec.date,g:worst});
+    }
+  }catch(e){ /* the cache alone is still worth drawing */ }
+  return [...by.values()].sort((a,b)=>a.d.localeCompare(b.d)).slice(-TREND_MAX);
+}
+let trendRun=0;
+async function renderTrend(){
+  const el=$("trend"); if(!el) return;
+  const run=++trendRun;                          // a fast unit switch must not repaint stale data
+  const rows=await trendFor(curEquip,type);
+  if(run!==trendRun) return;
+  if(rows.length<2){ el.classList.add("hidden"); el.innerHTML=""; return; }
+  const rank=r=>GRADE_RANK[r.g]!=null?GRADE_RANK[r.g]:-1;
+  const bars=rows.map(r=>{
+    const k=rank(r);
+    const h=k<0?4:6+k*6;                         // A is a stub, X is full height
+    const c=k<0?"var(--none)":GRADE_TINT[r.g];
+    return `<i style="height:${h}px;background:${c}" title="${esc(r.d)}${r.g?" · "+esc(r.g):""}"></i>`;
+  }).join("");
+  // Compare the newest against the best of what came before it: one bad round
+  // after a run of good ones is exactly what should be called out.
+  const last=rank(rows[rows.length-1]);
+  const prev=rows.slice(0,-1).map(rank).filter(x=>x>=0);
+  const best=prev.length?Math.min(...prev):-1;
+  const dir = last<0||best<0 ? "" : last>best ? "worse" : last<best ? "better" : "steady";
+  const word = dir==="worse" ? t("trend_worse") : dir==="better" ? t("trend_better")
+             : dir==="steady" ? t("trend_steady") : "";
+  el.innerHTML=`<span class="bars">${bars}</span>
+    <span class="tt${dir==="worse"?" worse":""}">${esc(t("trend_hdr",{n:rows.length}))}${
+      word?` · <b>${esc(word)}</b>`:""}</span>`;
+  el.classList.remove("hidden");
+}
+
+/* ===================== one job per screen =====================
+   Switching a pane is a view change and nothing else: the draft, the queue and
+   the caches are untouched, so a half-finished round survives a trip to the due
+   list and back. On a tablet every pane is on screen at once and the CSS
+   overrides these classes, which is why nothing here reads them back. */
+function showPane(id){
+  document.querySelectorAll("main > .pane").forEach(p=>p.classList.toggle("on",p.id===id));
+  document.querySelectorAll("#tabbar button").forEach(b=>b.classList.toggle("on",b.dataset.pane===id));
+  window.scrollTo({top:0});
+  // The signature canvas cannot be measured while its pane is display:none, so a
+  // pad sized then would come back one pixel tall.
+  if(id==="paneCapture") sizeSignPad();
+}
+$("tabbar").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-pane]"); if(!b) return;
+  showPane(b.dataset.pane);
+});
+/* Badges say "there is something here for you". The queue's is what is waiting
+   to go out; the system's is what is overdue — the two reasons to leave the
+   capture screen. */
+function renderTabs(){
+  const set=(el,n,warn)=>{ if(!el) return;
+    el.textContent=n>99?"99+":String(n);
+    el.className="tb"+(warn?" warn":"")+(n?"":" hidden"); };
+  dbAll().then(all=>set($("tabQ"),all.filter(r=>!r.up).length,!!lastErr)).catch(()=>{});
+  const iv=dueInterval(type), h=histAll(); let over=0;
+  for(const [k,date] of Object.entries(h)){
+    const [ty]=k.split("|"); if(ty!==type) continue;
+    const age=daysBetween(date); if(age!=null && iv-age<0) over++;
+  }
+  set($("tabS"),over,true);
 }
 $("teamRefresh").onclick=()=>teamPull(true);
 /* Two phones can hold different subsets: an installed app and a browser tab do
@@ -1761,6 +1968,7 @@ $("mergeFile").onchange=async (e)=>{ const f=e.target.files[0]; e.target.value="
 
 /* ===================== pending ===================== */
 async function renderPending(){
+  renderTabs();
   const all=(await dbAll()).sort((a,b)=>b.created.localeCompare(a.created));
   $("qCount").textContent=all.length;
   if(!all.length){ $("pending").innerHTML=`<div class="empty">${t("empty_none")}</div>`; return; }
@@ -2026,7 +2234,7 @@ function applyLang(){ document.documentElement.lang=lang;
   fillClassSel(); fillTypeSel();
   $("secPosTitle").textContent=TYPE_META[type].title[lang]||TYPE_META[type].title.en;
   $("posLabel").textContent=`${curItem} — ${itemLabel(curItem)}`;
-  updateDefectCauseBtns(); updateActionBtn(); renderSev(); renderMedia(); renderGps(); renderTempHint(); renderDue(); renderTeam(); renderLastDone();
+  updateDefectCauseBtns(); updateActionBtn(); renderSev(); renderMedia(); renderGps(); renderTempHint(); renderDue(); renderTeam(); renderLastDone(); renderTrend();
   updateSaveLabel(); if(editing) $("editBannerText").textContent=t("editing_hint").replace("{x}",editing.equip); $("cancelEdit").textContent=t("btn_cancel");
   setNet(); renderPending();
   document.querySelectorAll(".lang button").forEach(b=>b.classList.toggle("on", b.dataset.lang===lang)); }
@@ -2045,7 +2253,7 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
    has accepted every one of its files. */
 const DEST_META={ gas:{label:"Google Drive"}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
 const DEST_IDS=["gas","pa","post"];
-const BUILD="49";
+const BUILD="50";
 const DEFAULT_DESTS=((window.UPLOAD_DEFAULTS||{}).dests)||[];
 /* Parsed once and reused — see the note by the write below. */
 let destsCache=null, destsRaw=null;
@@ -2453,7 +2661,7 @@ addEventListener("online",setNet); addEventListener("offline",setNet);
    storage would otherwise leave this one acting on a stale copy. */
 addEventListener("storage",e=>{
   if(!e.key || e.key==="up_dests"){ destsCache=null; destsRaw=null; renderSync(); }
-  if(!e.key || e.key===TEAM_KEY || e.key===TEAM_CF){ teamCache=null; cfCache=null; renderTeam(); renderLastDone(); }
+  if(!e.key || e.key===TEAM_KEY || e.key===TEAM_CF){ teamCache=null; cfCache=null; renderTeam(); renderLastDone(); renderTrend(); }
   if(!e.key || e.key==="cm_hist"){ histCache=null; renderDue(); }
 });
 // isSecureContext, not a protocol check: http://localhost is a secure context too,

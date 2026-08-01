@@ -268,6 +268,45 @@ a tab in the dashboard that renders it. The tabs are already stubbed in
 
 ## Field Capture app — what it records
 
+### Three screens, one job each
+
+The app used to be one long scroll — capture, then the queue, then what the team
+had done, then the due list — so reaching the due list meant scrolling past
+everything and the capture screen never ended. Each is its own screen now, from a
+bar at the bottom of the thumb's reach:
+
+| | |
+|---|---|
+| **Capture** | The round: unit, positions, photos, grades. **Save** is pinned above the tab bar, so it is never scrolled away from. |
+| **Queue** | What is on the phone and what is waiting to go out, with Share, Export ZIP and the PDF report. |
+| **System** | What the whole team has uploaded, and what is due. |
+
+Switching screens is a view change and nothing else: a half-finished round is
+exactly where you left it when you come back. The Queue tab carries a count of what
+is waiting to upload and the System tab a count of what is overdue — the two
+reasons to leave the capture screen. Tapping a unit in either list takes you to
+Capture with that unit already picked.
+
+**On a tablet all three are on screen at once and the tab bar goes away** — an
+iPad has the room, and the phone layout stretched to 834 px was 150-character
+lines and form fields the width of the screen. A phone turned sideways keeps the
+tab bar (390 px of height is not a tablet) but puts the unit on the left and the
+capture panel on the right, with a compact header and a half-width Save.
+
+### The unit's recent condition, before you write the round
+
+**Last done** answers whether to walk away. Standing at the unit, the question is
+usually the other one: *is this getting worse?* Under it, a small bar per round —
+the last eight, oldest on the left, coloured by grade — and a word for the
+direction: **getting worse**, steady, or improving. Worsening is called out in red.
+
+It is built from what the team has uploaded plus whatever this phone is still
+holding, so a round saved five minutes ago is in the picture before it has been
+sent. A unit with only one recorded round shows nothing rather than a meaningless
+single bar.
+
+### What it records
+
 Pick the **inspection type** at the top of the app; everything else adapts.
 
 | Type | Suffix | What it captures |
@@ -308,7 +347,7 @@ as overdue. **Load history file** still works for seeding from an `entries.json`
 
 ### What the whole team has uploaded
 
-With Google Drive configured, the **In the system** card lists every inspection the team
+With Google Drive configured, the **System** screen lists every inspection the team
 has uploaded — unit, grade, date, who did it — not just this phone's. Picking a unit shows
 *"Last done 2026-07-28 (3 d ago) by B. Ivanov · C"* right on the capture screen, so nobody
 walks a round that was done yesterday.
@@ -332,7 +371,7 @@ first inspector's round and photos went with it, silently.
 Now a file is only ever overwritten by the phone that wrote it. Anyone else's copy is kept
 alongside as `<name>~<DEVICE>.<ext>`, and the clash is recorded in
 `_meta/<UNIT>_<DDMMYYYY>_<TYPE>.conflict.json`. Both phones see *"sent twice"* against that
-round in **In the system**; the dashboard flags it **CONFLICT** and its Data sources card
+round on the **System** screen; the dashboard flags it **CONFLICT** and its Data sources card
 counts how many are waiting.
 
 The office picks which version stands — **✎ Edit → Two phones sent this inspection** lists
@@ -452,7 +491,7 @@ sidecar, so a correction stored there would disappear silently. The clients merg
 marker over the record at read time; the original readings, photos and signature are never
 altered, and the change is visible as "corrected" with the author and timestamp.
 
-Voids reach the phones too: a withdrawn round drops out of **In the system** and stops
+Voids reach the phones too: a withdrawn round drops out of the phones' **System** screen and stops
 counting as done in the due list, so nobody skips a unit on the strength of a round the
 office has retracted.
 
