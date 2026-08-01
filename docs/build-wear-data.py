@@ -254,7 +254,7 @@ window.WEAR = '''
         for (var s = 0; s < 2; s++)
           for (var i = 1; i <= n; i++) list.push((s ? 'R' : 'L') + i);
       }
-      list.forEach(function (pos) { out.push({ point: p.code, pos: pos, k: p.code + ':' + pos }); });
+      list.forEach(function (pos) { out.push({ point: p.code, pos: pos, k: p.code + '.' + pos }); });
     });
     return out;
   };
