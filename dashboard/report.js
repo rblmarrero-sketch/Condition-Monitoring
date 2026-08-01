@@ -17,7 +17,7 @@
    ever sliced through the middle of a row. Each finished page is rasterised
    (Cyrillic renders correctly this way) and placed into the PDF.
 
-   Depends on: jsPDF, html2canvas, and the dashboard's RECS / SEV / TAX globals.
+   Depends on: jsPDF, html2canvas, and the dashboard's RECS / SEV / HME globals.
    ========================================================================== */
 (function () {
   "use strict";
@@ -502,7 +502,7 @@ html,body{margin:0;padding:0;background:#fff;}
     blocks.push(`<h3>${L2("topDefects")}</h3>` + paretoRows(topN(all, x => x.defect, x => x.defectCode, 10)));
     blocks.push(`<h3>${L2("topCauses")}</h3>` + paretoRows(topN(all, x => x.cause, x => x.causeCode, 10), "#ec835a"));
     blocks.push(`<h3>${L2("topIso")}</h3>` + paretoRows(topN(all, x => {
-      const m = window.TAX2 && window.TAX2.isoMech && window.TAX2.isoMech[x.iso];
+      const m = window.HME && window.HME.isoFailureModeCodes && window.HME.isoFailureModeCodes[x.iso];
       return x.iso ? `${x.iso} ${m ? m.en : ""}` : "";
     }, null, 10), "#1f5fa8"));
 

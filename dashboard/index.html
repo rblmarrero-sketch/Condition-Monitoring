@@ -382,14 +382,44 @@
 <div class="lb" id="lb"><button class="x" id="lbx">&times;</button><img id="lbimg" alt=""><div class="cap" id="lbcap"></div></div>
 
 <script src="../data/magnetic_plug.js"></script>
-<script src="../mobile/taxonomy2.js"></script>
+<script src="../mobile/hme.js"></script>
+<script src="../mobile/mp-fc.js"></script>
+<script src="../mobile/hme-cascade.js"></script>
 <script src="../mobile/temp-limits.js"></script>
 <script src="../mobile/jspdf.umd.min.js"></script>
 <script src="../mobile/html2canvas.min.js"></script>
 <script>
 const $=(id)=>document.getElementById(id);
-const TAX=window.TAX2||{groups:{},defects:[],causes:[],isoMech:{}};
-const DEF={}; TAX.defects.forEach(d=>DEF[d.c]=d);
+/* The 1C defect & cause matrix, the same file the phones carry. Records already
+   in Drive hold the codes the app used before it — those are never rewritten;
+   HME.legacy resolves them here, at read time, exactly as a correction or a void
+   is merged over a record rather than written into it. */
+const HME=window.HME||{};
+const CX=window.HME_CX||{g:[],c:{}};
+const CAUSES=HME.directCauses||[];
+const DEF={};      (HME.defectTypes||[]).forEach(d=>DEF[d.code]=d);
+const CAUSE_BY={}; CAUSES.forEach(c=>CAUSE_BY[c.code]=c);
+const COMP_BY={};  (HME.components||[]).forEach(c=>COMP_BY[c.code]=c);
+const ISO_BY=HME.isoFailureModeCodes||{};
+const LEG=HME.legacy||{components:{},defects:{},causes:{},actions:{},labels:{}};
+/* Magnetic plug and filter cut keep their own vocabulary — they address plug
+   positions, not register components, so the cascade has nothing to key on. */
+const MPFC=window.MPFC||{defects:[],causes:[]};
+MPFC.defects.forEach(d=>{ if(!DEF[d.code]) DEF[d.code]=d; });
+MPFC.causes.forEach(c=>{ if(!CAUSE_BY[c.code]) CAUSE_BY[c.code]=c; });
+const mpfcType=ty=>ty==="MP"||ty==="FC";
+const upDefect=c=>LEG.defects[c]||c, upCause=c=>LEG.causes[c]||c;
+const upComp=c=>LEG.components[c]||c, upAction=c=>LEG.actions[c]||c;
+const defName=(c,l)=>{ const d=DEF[upDefect(c)]; return d?(d[l||lang]||d.en):(LEG.labels[c]||c); };
+const causeName=(c,l)=>{ const x=CAUSE_BY[upCause(c)]; return x?(x[l||lang]||x.en):(LEG.labels[c]||c); };
+/* Specific causes first, general behind the expander — the same split the phone
+   makes, from the same table. 74% of the matrix is the general tail. */
+function causesFor(compCode,defectCode){
+  const by=CX.c[upComp(compCode)], row=by&&by[upDefect(defectCode)];
+  if(!row) return {primary:[],general:[]};
+  const pick=a=>a.map(i=>CAUSES[i]).filter(Boolean);
+  return { primary:pick(row[0]).concat(pick(row[1])), general:pick(CX.g[row[2]]||[]) };
+}
 /* ===================== EN / RU =====================
    The app and the PDF reports are already bilingual; the dashboard was not, so
    a Russian-speaking planner reading it had to work in English. Same shape as
@@ -507,8 +537,6 @@ const I18N={
   cf_inuse:"in use", cf_use:"Use this one",
   cf_saving:"Recording the choice…", cf_saved:"Reports now use device {d} ✔",
 
-  a_MON:"Monitor", a_SCH:"Schedule repair", a_REP:"Repair now",
-  a_REP_MON:"Repair at next service", a_SAM:"Take oil sample", a_INV:"Investigate", a_NA:"No action",
 
   r_title:"PDF report",
   r_sub:"Bilingual EN / RU. Each inspection type prints its own layout —",
@@ -643,8 +671,6 @@ const I18N={
   cf_inuse:"используется", cf_use:"Взять эту",
   cf_saving:"Сохраняем выбор…", cf_saved:"Отчёты теперь используют устройство {d} ✔",
 
-  a_MON:"Наблюдать", a_SCH:"Запланировать ремонт", a_REP:"Ремонт сейчас",
-  a_REP_MON:"Ремонт на следующем ТО", a_SAM:"Взять пробу масла", a_INV:"Расследовать", a_NA:"Без действий",
 
   r_title:"PDF-отчёт",
   r_sub:"Двуязычный EN / RU. Каждый тип осмотра печатается по-своему —",
@@ -962,7 +988,7 @@ function renderFailure(){
     f.length ? src+t("e_defect_tail") : src);
   pareto($("paretoCause"),  cnt(x=>x.i.cause,  x=>x.i.causeCode?`· ${x.i.causeCode}`:""), ()=>"var(--serious)", "cause",
     f.length ? src+t("e_cause_tail") : src);
-  pareto($("paretoIso"),    cnt(x=>{ const m=TAX.isoMech&&TAX.isoMech[x.i.iso]; return x.i.iso?`${x.i.iso} ${m?m.en:""}`:""; }), ()=>"var(--accent)", null,
+  pareto($("paretoIso"),    cnt(x=>{ const m=ISO_BY[x.i.iso]; return x.i.iso?`${x.i.iso} ${m?(m[lang]||m.en||m):""}`:""; }), ()=>"var(--accent)", null,
     f.length ? src+t("e_iso_tail") : src);
 }
 
@@ -1113,18 +1139,38 @@ function renderHistory(){
 }
 
 /* ---------- correcting, voiding and deleting one inspection ---------- */
-const ACTION_CODES=["MON","SCH","REP","REP_MON","SAM","INV","NA"];
-const actionOpts=()=>[["",t("ed_none")]].concat(ACTION_CODES.map(c=>[c,t("a_"+c)]));
+/* The matrix's own recommended actions, each tied to a severity. The dashboard's
+   older short codes still render through HME.legacy.actions. */
+const ACTIONS=(HME.action||[]).map(a=>({k:a.code,en:a.en,ru:a.ru,sev:a.severity}));
+const ACTION_BY={}; ACTIONS.forEach(a=>ACTION_BY[a.k]=a);
+const actionName=(k,l)=>{ const a=ACTION_BY[upAction(k)]; return a?(a[l||lang]||a.en):k; };
+const actionOpts=()=>[["",t("ed_none")]].concat(ACTIONS.map(a=>[a.k,a[lang]||a.en]));
 let edKey=null;
 
 /* 132 defects and 223 causes is too many to scroll for. Each picker gets a
    filter box above it; typing rebuilds the option list from the full one. The
    <select> itself is untouched, so collectEdit() and the data-init
    "only what actually changed" comparison keep working exactly as before. */
-const OPTS={
-  get defectCode(){ return (TAX.defects||[]).map(d=>({v:d.c,l:`${d.c} · ${d.en||d.name||""}`})); },
-  get causeCode(){ return (TAX.causes||[]).map(c=>({v:c.c||c.code||"",l:c.en||c.name||c.c||""})); },
-};
+/* The defect list is what this component can actually fail in, and the cause
+   list is what can cause that mode on that component — the same cascade the
+   phone uses. Falling back to everything only when there is no component to key
+   on, because an empty picker is worse than a long one. */
+function optsFor(f,key){
+  const rec=RECS.find(r=>recKey(r)===edKey);
+  const it=rec&&(rec.items||[]).find(x=>x.key===key);
+  const mp=rec&&mpfcType(rec.type);
+  if(f==="defectCode"){
+    const by=mp?null:CX.c[upComp(key)];
+    const list=mp ? MPFC.defects : by ? Object.keys(by).map(c=>DEF[c]).filter(Boolean) : (HME.defectTypes||[]);
+    return list.slice().sort((a,b)=>(a.group||"").localeCompare(b.group||"")||a.code.localeCompare(b.code))
+      .map(d=>({v:d.code,l:`${d.code} · ${d[lang]||d.en}`,s:`${d.code} ${d.en} ${d.ru||""}`}));
+  }
+  if(mp) return MPFC.causes.map(c=>({v:c.code,l:c[lang]||c.en,s:`${c.code} ${c.en} ${c.ru||""}`}));
+  const dc=it && (it.defectCode||"");
+  const cs=dc ? causesFor(key,dc) : null;
+  const rows=cs && (cs.primary.length||cs.general.length) ? cs.primary.concat(cs.general) : CAUSES;
+  return rows.map(c=>({v:c.code,l:c[lang]||c.en,s:`${c.code} ${c.en} ${c.ru||""}`}));
+}
 function picker(f,key,label){
   return `<div class="field pick" style="flex:1"><label>${esc(label)}</label>
     <input class="pickq" type="search" data-filter="${f}" data-k="${esc(key)}"
@@ -1138,8 +1184,10 @@ function picker(f,key,label){
 function fillPicker(f,key,q){
   const sel=$("edItems").querySelector(`select[data-f="${f}"][data-k="${CSS.escape(key)}"]`);
   if(!sel) return;
-  const cur=sel.value, all=OPTS[f], needle=(q||"").trim().toLowerCase();
-  const hit=needle ? all.filter(o=>o.l.toLowerCase().indexOf(needle)>=0) : all;
+  const cur=sel.value, all=optsFor(f,key), needle=(q||"").trim().toLowerCase();
+  // Match the code and both languages, not just the label showing. An engineer
+  // reading the Russian UI still knows the code and often the English term.
+  const hit=needle ? all.filter(o=>(o.s||o.l).toLowerCase().indexOf(needle)>=0) : all;
   const list=(cur && !hit.some(o=>o.v===cur)) ? hit.concat(all.filter(o=>o.v===cur)) : hit;
   sel.innerHTML=`<option value="">${esc(t("ed_none"))}</option>`
     +list.map(o=>`<option value="${esc(o.v)}">${esc(o.l)}</option>`).join("");
@@ -1279,11 +1327,10 @@ function collectEdit(){
     if(v===(el.dataset.init||"")) return;
     (items[k]||(items[k]={}))[f]=v;
     if(!v) return;                       // cleared: nothing to derive from it
-    if(f==="action"){ const o=actionOpts().find(a=>a[0]===v); if(o) items[k].actionLabel=o[1]; }
-    if(f==="defectCode"){ const d=DEF[v]; if(d) items[k].defect=d.en||d.name||v;
-      if(d&&d.iso) items[k].iso=d.iso; }
-    if(f==="causeCode"){ const c=(TAX.causes||[]).find(x=>(x.c||x.code)===v);
-      if(c) items[k].cause=c.en||c.name||v; }
+    if(f==="action"){ if(v) items[k].actionLabel=actionName(v,"en"); }
+    if(f==="defectCode"){ const d=DEF[upDefect(v)];
+      if(d){ items[k].defect=d.en; items[k].iso=d.iso14224||""; items[k].isoMode=d.iso14224||""; } }
+    if(f==="causeCode"){ const c=CAUSE_BY[upCause(v)]; if(c) items[k].cause=c.en; }
   });
   return items;
 }

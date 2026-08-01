@@ -85,28 +85,61 @@ it's stored per-browser, use the header buttons to keep it safe and shared:
 > Chrome and Edge. In other browsers, use the command-line scanner below to
 > generate `data/magnetic_plug.js` instead.
 
-### Rebuilding the defect taxonomy
+### The defect and cause matrix
 
-`mobile/taxonomy2.js` (the defect / direct-cause list the app and dashboard both read) is
-generated, not hand-edited:
-
-```
-Defect_type.xls (1C CMMS)  ─┐
-mobile/taxonomy.js (HME)   ─┼─▶ ingest/build_defect_taxonomy.py ─▶ mobile/taxonomy2.js
-ingest/tags.py  ingest/iso.py ─┘
-```
+What the app offers an inspector — components, failure modes, direct causes — comes from
+the client's **HME Defect & Direct Cause Matrix**, built against the 1C register and
+aligned to ISO 14224:2016. It is pre-computed: `cascade[component][defect] → causes`, so
+there is no matching logic in the app and no combination that cannot happen can be picked.
 
 ```bash
-pip install xlrd                                            # one-time
-python ingest/build_defect_taxonomy.py --check              # writes nothing, reports drift
-python ingest/build_defect_taxonomy.py path/to/Defect_type.xls
+python3 docs/build-hme-data.py path/to/hme_defect_cause_matrix_1C_vN.json
 ```
 
-`tags.py` holds the applicability tags (which failure modes make sense for which component)
-plus the DT9–DT15 extensions that close gaps the 1C list has no code for. `iso.py` holds
-ISO 14224 Table B.2 mechanisms and Table B.6 failure modes, and the per-defect mapping.
-Run `--check` after editing any of them — it re-derives the file and tells you whether the
-shipped copy is still in sync.
+writes `mobile/hme.js`, `mobile/hme-cascade.js` and merges any new units into
+`mobile/assets.js`. Never edit those three by hand.
+
+| | |
+|---|---|
+| 263 components | 53 equipment classes, 150 manufacturer+model groups |
+| 114 failure modes | ISO 14224 Table B.6 |
+| 495 direct causes | ranked 1–3 against every component and mode |
+| 9,794 pairs | zero dead ends — every lookup returns something |
+
+**What it replaced.** The app used to guess which failure modes suited a component by
+matching keywords against its *name* — "brake" in the label meant offer the brake modes.
+It offered a frame "bucket tooth worn". Worse, the cause list never received the component
+at all, so asking why a frame had cracked returned 53 answers led by *"oil contaminated
+with dirt"*, and the whole app could only ever produce **113 distinct cause lists**. The
+matrix produces **1,373**. A frame crack now offers three: *Frame crack*, *Mounting bracket
+cracked/loose*, *Weld failure*.
+
+**Ranks matter.** 74% of the 71,858 rows are rank 3 — general causes that apply to
+anything. Shown in one flat list they drown the two or three that are specific, every
+dropdown looks the same, and inspectors stop reading them. So rank 1 and 2 come first and
+rank 3 sits behind **More causes / Другие причины**. Where a pair has no specific cause at
+all — 31% of them — the general list opens by itself, because an empty box above a "more"
+button reads as broken.
+
+**History is never rewritten.** Records already in Drive carry the codes the app used
+before the matrix. `HME.legacy` resolves them when a record is *read*, the same way a
+correction or a void is merged over a record rather than written into it. 393 old codes
+map forward; two that turned out to be failure modes mis-filed as causes (*"Hoist system
+not lifting"*, *"Track derailed"*) are retired from the picker but keep their wording
+wherever they were already recorded. `docs/v4-migration-map.json` is the full audit —
+every code, its target, and how it matched.
+
+**Two things the client should fix in 1C**, flagged rather than papered over:
+`CH.VD` the vibratory drum is missing from the *COMPACTOR, ROLLER DRUM* class, so the app
+carries it locally (marked `local: true`) with its failure modes borrowed from `CH.ROL`
+Track Rollers; and `ELS.BAT` Batteries is offered external oil, coolant, fuel and grease
+leaks, which a battery does not have.
+
+**Magnetic plug and filter cut are deliberately outside the matrix** for now. They address
+plug positions — *"4C Left Rear Final Drive"* — not register component codes, so the
+cascade has nothing to key on. Their 14 debris and filter findings live in
+`mobile/mp-fc.js`, carried forward unchanged. Mapping each position to a real component is
+the next piece of work; when that lands these lists retire into the cascade.
 
 ### Command-line folder scanner (optional)
 
@@ -213,8 +246,9 @@ Condition-Monitoring/
 ├── mobile/
 │   ├── index.html              # offline Field Capture app (PWA)
 │   ├── temp-limits.js          # temperature warn/alarm limits (shared with the report)
-│   ├── taxonomy2.js            # merged 1C + HME defect/cause taxonomy, ISO 14224 aligned
-│   ├── assets.js  components.js# asset register + L7/L8/L9 component templates
+│   ├── hme.js  hme-cascade.js  # GENERATED — the 1C defect & cause matrix, ISO 14224
+│   ├── mp-fc.js                # magnetic plug + filter cut findings (outside the matrix)
+│   ├── assets.js               # GENERATED — the unit list, merged from the register
 │   └── sw.js  manifest.webmanifest
 ├── data/
 │   └── magnetic_plug.js        # generated data (window.CM_DATA)
@@ -398,6 +432,14 @@ evicts under pressure — either would take a queued round, photos included. ⚙
 answer rather than assuming it, along with storage used, room remaining in photos, and a warning
 at 80% while there is still time to upload and clear.
 
+### How the defect was found
+
+Every position records a **Detection Method** (ISO 14224 Table B.3) beside the severity,
+defaulting to *DM-02 Visual inspection* for a routine walk-around. It is what separates a
+condition-monitoring finding from a breakdown, and without it a reliability programme
+cannot show it is working — `DM-08 Oil / fluid analysis` and `DM-09 Vibration analysis`
+are what the CM programme reports under.
+
 ### A Critical finding has to say what is wrong
 
 Saving will not finish while any position marked **Critical** — grade X, or a severity
@@ -478,9 +520,10 @@ one-file-at-a-time path automatically and says so.
 |---|---|
 | **Correct** | Severity, recommendation, WO, defect, direct cause and comments, per position, plus a note on the round. Only what you actually change is recorded, and your name goes with it. |
 
-The defect and cause pickers have a search box above them — 132 defects and 223 causes is
-too many to scroll. Typing narrows the list and shows how many matched; Enter takes it when
-one is left. Whatever is already recorded stays selectable however you filter.
+The defect and cause pickers offer what the cascade says this component can do, with a
+search box above them; typing narrows the list and shows how many matched, and the search
+reads the code and both languages, so an engineer working in Russian can still type the
+English term or the code. Whatever is already recorded stays selectable however you filter.
 | **Choose a version** | When two phones sent the same round, both are offered with the inspector and position count. Picking one decides what the reports use; neither file is deleted and the choice can be changed. |
 | **Void** | Withdraws the round from every count, chart, action list and report, with a reason. Nothing is deleted; **Show voided** brings it back into view, and **Un-void** reverses it. |
 | **Delete** | Sidecar, photos, signature and corrections to Drive's **trash** (30 days), logged with who and why. Off unless `ADMIN_SECRET` is set in the Apps Script. |

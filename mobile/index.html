@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Truck Inspection — Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=50">
+<link rel="manifest" href="manifest.webmanifest?v=51">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -356,6 +356,9 @@
         <button class="s-CRI" data-s="CRI" data-i18n="sev_CRI">Critical</button>
       </div>
     </label>
+    <label class="fld"><span data-i18n="lbl_detect">How it was found (ISO 14224)</span>
+      <button type="button" class="picker-btn" id="detectBtn"></button>
+    </label>
     <div id="mpFields">
       <div class="row">
         <label class="fld"><span data-i18n="lbl_particle">Particle count</span><input id="particle" type="text" inputmode="numeric"></label>
@@ -449,7 +452,7 @@
   </div>
 </div><!-- /paneSystem -->
 
-  <div class="ver">build v50 · 2026-08-01 · One screen per job ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver">build v51 · 2026-08-01 · 1C defect matrix v4 ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <nav class="tabbar" id="tabbar">
@@ -557,16 +560,16 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="jsQR.js?v=50"></script>
-<script src="qrcode.js?v=50"></script>
-<script src="upload-defaults.js?v=50"></script>
-<script src="taxonomy.js?v=50"></script>
-<script src="taxonomy2.js?v=50"></script>
-<script src="assets.js?v=50"></script>
-<script src="components.js?v=50"></script>
-<script src="temp-limits.js?v=50"></script>
-<script src="jspdf.umd.min.js?v=50"></script>
-<script src="html2canvas.min.js?v=50"></script>
+<script src="jsQR.js?v=51"></script>
+<script src="qrcode.js?v=51"></script>
+<script src="upload-defaults.js?v=51"></script>
+<script src="hme.js?v=51"></script>
+<script src="mp-fc.js?v=51"></script>
+<script src="hme-cascade.js?v=51"></script>
+<script src="assets.js?v=51"></script>
+<script src="temp-limits.js?v=51"></script>
+<script src="jspdf.umd.min.js?v=51"></script>
+<script src="html2canvas.min.js?v=51"></script>
 <script>
 /* ============================================================================
    EQUIPMENT CLASSES & INSPECTION TYPES  —  EDIT here for your fleet.
@@ -801,6 +804,9 @@ const I18N = {
     m_merge_bad:["Not a round file","Choose a file created by “Send round” on the other phone."],
     m_merged:["Merged ✔","{a} new inspection(s), {b} item(s) added to existing ones, {c} already present."],
     tab_capture:"Capture", tab_queue:"Queue", tab_system:"System",
+    lbl_detect:"How it was found (ISO 14224)",
+    opt_more_causes:"▾ More causes — general",
+    opt_action_fit:"Fits this severity", opt_action_other:"Other actions",
     trend_hdr:"Last {n} rounds", trend_worse:"getting worse", trend_steady:"steady",
     trend_better:"improving", trend_one:"first recorded round",
     m_need_truck:["Add the truck","Enter the truck / unit number (e.g. TK158) first."],
@@ -927,6 +933,9 @@ const I18N = {
     m_merge_bad:["Неверный файл","Выберите файл, созданный кнопкой «Отправить обход» на другом телефоне."],
     m_merged:["Объединено ✔","Новых осмотров: {a}, добавлено позиций: {b}, уже было: {c}."],
     tab_capture:"Осмотр", tab_queue:"Очередь", tab_system:"Система",
+    lbl_detect:"Как обнаружено (ИСО 14224)",
+    opt_more_causes:"▾ Другие причины — общие",
+    opt_action_fit:"Подходит по критичности", opt_action_other:"Другие действия",
     trend_hdr:"Последние осмотры: {n}", trend_worse:"ухудшается", trend_steady:"без изменений",
     trend_better:"улучшается", trend_one:"первый записанный осмотр",
     m_need_truck:["Укажите трак","Сначала введите номер трака (напр. TK158)."],
@@ -965,81 +974,119 @@ function t(k,vars){
   return s;
 }
 
-/* ===================== defect + direct-cause taxonomy (from taxonomy.js) ===================== */
-// Merged taxonomy: 1C CMMS defect codes (spine) + HME mobile-equipment modes.
-const TAX = window.TAX2 || {groups:{},defects:[],causes:[],causeGroupRu:{}};
-const DEFECT_BY = {}; TAX.defects.forEach(d=>DEFECT_BY[d.c]=d);
-const CAUSE_BY  = {}; TAX.causes.forEach(c=>CAUSE_BY[c.c]=c);
-function defectLabel(code,l){ const d=DEFECT_BY[code]; return d?(d[l||lang]||d.en):code; }
-function causeLabel(code,l){ const c=CAUSE_BY[code]; return c?(c[l||lang]||c.en):code; }
-function groupLabel(g,l){ const x=TAX.groups[g]; return x?(x[l||lang]||x.en):g; }
-function isoText(d,l){ const m=TAX.isoMech&&TAX.isoMech[d.iso], mo=TAX.isoMode&&TAX.isoMode[d.im];
-  return `ISO ${d.iso} ${m?(m[l||lang]||m.en):""} · ${d.im}`; }
+/* ===================== defect + direct cause: the 1C matrix =====================
+   Everything below is a dictionary lookup. There is no matching logic here, and
+   that is the point.
 
-/* --- Which failure modes make sense for which component (ISO 14224 practice) --- */
-const SYS_TAGS={
-  AU:"ELEC CI UNIV", ELS:"ELEC CI UNIV", OC:"ELEC CI STRUCT UNIV",
-  DRS:"ENGINE MECH FLUID DRIVE WEAR ELEC OIL UNIV", HS:"HYD FLUID MECH OIL UNIV",
-  BS:"BRAKE MECH HYD FLUID UNIV", SS:"STEER HYD MECH UNIV",
-  CH:"STRUCT MECH WEAR GET UC TYRE UNIV", LS:"FLUID MECH OIL UNIV", PS:"PNEU FLUID MECH UNIV",
-  CONV:"CONV MECH STRUCT UNIV", CRS:"CRUSH MECH STRUCT HYD UNIV", SCN:"SCREEN MECH STRUCT UNIV",
-  FEED:"CONV MECH STRUCT UNIV", DUS:"FLUID MECH ELEC UNIV", WE:"MECH STRUCT HYD WEAR GET UNIV",
-};
-const ITEM_TAGS={ // finer overrides by component code / keyword
-  "DRS.ENG":"ENGINE MECH FLUID OIL ELEC UNIV", "DRS.COO":"FLUID MECH ENGINE UNIV",
-  "DRS.FD":"DRIVE MECH OIL FLUID UNIV", "DRS.TM":"DRIVE MECH OIL FLUID UNIV",
-  "DRS.SW":"DRIVE MECH OIL UNIV", "DRS.FUE":"FLUID ENGINE MECH UNIV",
-  "CH.UC":"UC MECH STRUCT WEAR UNIV", "CH.BUC":"GET STRUCT MECH WEAR UNIV",
-  "CH.BOO":"STRUCT MECH HYD UNIV", "CH.STK":"STRUCT MECH HYD UNIV", "CH.FR":"STRUCT MECH UNIV",
-};
-const KEY_TAGS=[[/tyre|tire|wheel|rim/i,"TYRE MECH STRUCT UNIV"],[/track|undercarriage/i,"UC MECH WEAR STRUCT UNIV"],
-  [/bucket|tooth|teeth|GET|lip/i,"GET WEAR MECH STRUCT UNIV"],[/brake|retard/i,"BRAKE MECH HYD UNIV"],
-  [/steer/i,"STEER HYD MECH UNIV"],[/conveyor|belt/i,"CONV MECH STRUCT UNIV"],
-  [/crusher|jaw|cone|mantle|liner/i,"CRUSH MECH STRUCT UNIV"],[/screen|exciter/i,"SCREEN MECH STRUCT UNIV"],
-  [/filter/i,"FILTER FLUID OIL HYD UNIV"],[/drill|rotary head|mast|rod/i,"DRILL MECH HYD UNIV"],
-  [/fire|suppress|safety/i,"SAFETY UNIV"],[/lubric|grease/i,"FLUID OIL MECH UNIV"]];
-function tagsForCurrentItem(){
-  if(type==="MP") return "OIL WEAR MECH DRIVE UNIV";     // magnetic plug -> wear debris & oil
-  if(type==="FC") return "FILTER OIL FLUID WEAR UNIV";   // filter cut  -> filter findings
-  const k=curItem||""; if(!k) return null;
-  if(ITEM_TAGS[k]) return ITEM_TAGS[k];
-  const label=(itemLabel(k)||"")+" "+k;
-  for(const [re,tg] of KEY_TAGS) if(re.test(label)) return tg;
-  const sys=String(k).split(".")[0];
-  return SYS_TAGS[sys] || null;                          // null = show everything
+   What this replaced: the app used to guess which failure modes suited a
+   component by matching keywords against its NAME — "brake" in the label meant
+   offer the brake modes. It got a frame offered "bucket tooth worn", and it
+   never had the component in hand at all when it came to causes, so asking why
+   a frame had cracked returned fifty-three answers led by "oil contaminated
+   with dirt". The whole app could only ever produce 113 distinct cause lists.
+
+   The matrix is pre-computed against the client's 1C register, four rounds of
+   engineering review deep: cascade[component][defectType] is the answer, and it
+   is never empty. 9,794 component-and-mode pairs, 1,373 distinct cause lists.
+
+   Ranks matter. 74% of the rows are rank 3 — the general causes that apply to
+   anything — and shown in one flat list they drown the two or three that are
+   specific to this component. So rank 1 and 2 come first and rank 3 sits behind
+   an expander. Where a pair has no specific cause at all (31% of them do not)
+   the general list opens by itself: an empty box above a "more" button reads as
+   broken, and it is not. */
+const HME = window.HME || {};
+const CX  = window.HME_CX || {g:[],c:{}};
+const CAUSES = HME.directCauses || [];
+const COMP_BY   = {}; (HME.components||[]).forEach(c=>COMP_BY[c.code]=c);
+const DEFECT_BY = {}; (HME.defectTypes||[]).forEach(d=>DEFECT_BY[d.code]=d);
+const CAUSE_BY  = {}; CAUSES.forEach(c=>CAUSE_BY[c.code]=c);
+const DGROUP_BY = {}; (HME.defectTypeGroups||[]).forEach(g=>DGROUP_BY[g.code]=g);
+const CGROUP_BY = {}; (HME.directCauseGroups||[]).forEach(g=>CGROUP_BY[g.code]=g);
+const CLASS_BY  = {}; (HME.equipmentClasses||[]).forEach(e=>CLASS_BY[e.name]=e);
+const LEG = HME.legacy || {components:{},defects:{},causes:{},actions:{},labels:{}};
+/* Magnetic plug and filter cut address plug positions, not register components,
+   so the cascade has nothing to key on and they keep their own vocabulary. See
+   mp-fc.js — mapping each position to a real component is the next piece of work. */
+const MPFC = window.MPFC || {defects:[],causes:[],defectGroups:{},causeGroups:{}};
+const mpfcType = ty => ty==="MP" || ty==="FC";
+MPFC.defects.forEach(d=>{ if(!DEFECT_BY[d.code]) DEFECT_BY[d.code]=d; });
+MPFC.causes.forEach(c=>{ if(!CAUSE_BY[c.code]) CAUSE_BY[c.code]=c; });
+Object.entries(MPFC.defectGroups||{}).forEach(([k,v])=>{ if(!DGROUP_BY[k]) DGROUP_BY[k]=v; });
+Object.entries(MPFC.causeGroups||{}).forEach(([k,v])=>{ if(!CGROUP_BY[k]) CGROUP_BY[k]=v; });
+
+/* Records already in Drive carry the codes the app used before this matrix. They
+   are never rewritten — an old code is resolved to its v4 meaning here, at read
+   time, exactly the way a correction or a void is merged over a record rather
+   than written into it. A code that was retired rather than re-pointed keeps its
+   original wording, because what an inspector recorded is what they recorded. */
+const upDefect = c => LEG.defects[c] || c;
+const upCause  = c => LEG.causes[c]  || c;
+const upComp   = c => LEG.components[c] || c;
+function defectLabel(code,l){
+  const d=DEFECT_BY[upDefect(code)]; if(d) return d[l||lang]||d.en;
+  return LEG.labels[code] || code;
 }
-function defectsForContext(){
-  const list=defectsByTag();
-  // A temperature survey is looking for heat: put ISO "overheating" modes at the top.
-  return type==="TEMP" ? list.slice().sort((a,b)=>(b.im==="OHE"?1:0)-(a.im==="OHE"?1:0)) : list;
+function causeLabel(code,l){
+  const c=CAUSE_BY[upCause(code)]; if(c) return c[l||lang]||c.en;
+  return LEG.labels[code] || code;
 }
-function defectsByTag(){
-  const tg=tagsForCurrentItem();
-  const vis=TAX.defects.filter(d=>!d.hide);
-  if(!tg) return vis;
-  const allow=new Set(tg.split(" "));
-  const hit=vis.filter(d=>d.t.split(" ").some(x=>allow.has(x)));
-  if(!hit.length) return vis;                            // never leave the user with nothing
-  const primary=tg.split(" ")[0];                        // most relevant modes first
-  return hit.slice().sort((a,b)=>{
-    const ap=a.t.split(" ").indexOf(primary)>=0?0:1, bp=b.t.split(" ").indexOf(primary)>=0?0:1;
-    if(ap!==bp) return ap-bp;
-    const au=a.t==="UNIV"?1:0, bu=b.t==="UNIV"?1:0;      // generic/external last
-    if(au!==bu) return au-bu;
-    return a.c.localeCompare(b.c);
-  });
+function compLabel(code,l){
+  const c=COMP_BY[upComp(code)]; return c ? (c[l||lang]||c.en) : (LEG.labels[code]||code);
 }
-// Direct causes for a defect, filtered by the equipment's asset range.
-function causesFor(defectCode){
-  if(!defectCode) return [];
-  const d=DEFECT_BY[defectCode]; const hcodes=(d&&d.hme)||[];
-  const asset=(CLASSES[eqClass]||{}).asset||"";
-  const inAsset=(c)=>!asset || (c.as&&(c.as.indexOf(asset)>=0||c.as.indexOf("ALL PRIMARY HME")>=0));
-  let list=TAX.causes.filter(c=>c.dt&&c.dt.some&&hcodes.some(h=>c.dt.indexOf(h)>=0)&&inAsset(c));
-  if(!list.length) list=TAX.causes.filter(c=>c.dt&&hcodes.some(h=>c.dt.indexOf(h)>=0)); // ignore asset filter
-  const external=TAX.causes.filter(c=>c.any);   // external/operating causes always offered
-  return list.concat(external);
+function groupLabel(g,l){ const x=DGROUP_BY[g]; return x?(x[l||lang]||x.en):g; }
+function causeGroupLabel(g,l){ const x=CGROUP_BY[g]; return x?(x[l||lang]||x.en):g; }
+function isoText(d,l){
+  const m=(HME.isoFailureModeCodes||{})[d.iso14224];
+  return `ISO ${d.iso14224||"—"}${m?" "+(m[l||lang]||m.en||m):""}`;
 }
+
+/* The modes this component can actually fail in. Sorted by group so the picker
+   reads in the same order every time; the cascade's own key order is not
+   meaningful. */
+function defectsForComponent(code,ty){
+  if(mpfcType(ty||type)) return MPFC.defects;
+  const by=CX.c[upComp(code)];
+  if(!by) return [];
+  return Object.keys(by).map(k=>DEFECT_BY[k]).filter(Boolean)
+    .sort((a,b)=> (a.group||"").localeCompare(b.group||"") || a.code.localeCompare(b.code));
+}
+/* Specific first, general behind the expander. Within a rank the matrix is
+   already sorted alphabetically by English name — preserve that. */
+function causesFor(compCode,defectCode,ty){
+  if(mpfcType(ty||type)) return {primary:[], general:MPFC.causes};
+  const by=CX.c[upComp(compCode)];
+  const row=by && by[upDefect(defectCode)];
+  if(!row) return {primary:[],general:[]};
+  const pick=a=>a.map(i=>CAUSES[i]).filter(Boolean);
+  return { primary: pick(row[0]).concat(pick(row[1])), general: pick(CX.g[row[2]]||[]) };
+}
+
+/* ===================== recommended action ===================== */
+/* The matrix's own list. Each action carries the severity it belongs to, which
+   is what lets the picker lead with the ones that fit what was just found. */
+const ACTIONS=(HME.action||[]).map(a=>({k:a.code, en:a.en, ru:a.ru, sev:a.severity}));
+const ACTION_BY={}; ACTIONS.forEach(a=>ACTION_BY[a.k]=a);
+const upAction = k => LEG.actions[k] || k;
+function actionLabel(k,l){
+  const a=ACTION_BY[upAction(k)]; return a?(a[l||lang]||a.en):k;
+}
+/* The app's four severity codes stay as they are. They are in every record
+   already in Drive and in every filter, chart and report at both ends; the v4
+   codes are a clean one-to-one with identical labels, so they are emitted on
+   export instead of being swapped in everywhere. */
+const SEV_V4={NOF:"SEV-0",INC:"SEV-1",DEG:"SEV-2",CRI:"SEV-3"};
+const V4_SEV={"SEV-0":"NOF","SEV-1":"INC","SEV-2":"DEG","SEV-3":"CRI"};
+
+/* ===================== how the defect was found ===================== */
+/* ISO 14224 Table B.3. This is what separates a condition-monitoring finding
+   from a breakdown, and without it a reliability programme cannot show it is
+   working. A routine walk-around is a visual inspection, so that is the
+   default; oil analysis and vibration are what the CM programme reports under. */
+const DETECT=(HME.detection||[]).map(d=>({k:d.code,en:d.en,ru:d.ru}));
+const DETECT_BY={}; DETECT.forEach(d=>DETECT_BY[d.k]=d);
+const DETECT_DEFAULT="DM-02";
+function detectLabel(k,l){ const d=DETECT_BY[k]; return d?(d[l||lang]||d.en):k; }
 
 /* Temperature limits + tempLimit()/tempSeverity() come from temp-limits.js
    (shared with the dashboard report builder so a reading is judged identically). */
@@ -1060,19 +1107,7 @@ let eqCat = localStorage.getItem("equip_cat") || "ALL";
 if(eqCat!=="ALL" && !CAT_COUNT[eqCat]) eqCat="ALL";
 function classForCat(cat){ return CAT2CLS[cat] || "GEN"; }
 
-/* --- Recommended actions (ISO 14224 maintenance activity flavour) --- */
-const ACTIONS=[
- {k:"MON", en:"Monitor — no action now",            ru:"Наблюдать — действий не требуется"},
- {k:"REI", en:"Re-inspect / shorten interval",      ru:"Повторный осмотр / сократить интервал"},
- {k:"SAM", en:"Take oil / debris sample",           ru:"Отобрать пробу масла / частиц"},
- {k:"TOP", en:"Top up / adjust / clean",            ru:"Долив / регулировка / очистка"},
- {k:"PM",  en:"Repair at next PM",                  ru:"Ремонт на следующем ТО"},
- {k:"SCH", en:"Schedule repair / order parts",      ru:"Запланировать ремонт / заказать ЗЧ"},
- {k:"NOW", en:"Repair immediately",                 ru:"Ремонт немедленно"},
- {k:"STOP",en:"Stop equipment — do not operate",    ru:"Остановить технику — не эксплуатировать"},
- {k:"NOTI",en:"Notification raised in 1C",          ru:"Создано уведомление в 1С"},
-];
-function actionLabel(k,l){ const a=ACTIONS.find(x=>x.k===k); return a?(a[l||lang]||a.en):k; }
+/* Recommended actions come from the matrix — see ACTIONS above. */
 // Inspection grade scale is A / B / C / X, X being the worst (confirmed with the
 // reliability team). Grade only suggests the ISO severity — the inspector can override.
 const GRADE_SEV={A:"NOF",B:"INC",C:"DEG",X:"CRI"};
@@ -1111,17 +1146,59 @@ function ask(title,msg,okLabel,danger){
 }
 const dlgClose=()=>$("dlg").close();
 $("dlgOk").onclick=dlgClose;
-const COMP_TREE=window.COMP_TREE||[], UNIT_TPL=window.UNIT_TPL||{};
 let cascL7=null, cascL8=null;   // component cascade selection
-// Inspection and Temperature both address real register components (L7→L8→L9).
+// Inspection and Temperature both address real register components.
 function usesRegister(ty){ return ty==="INSP" || ty==="TEMP"; }
-function currentTree(){ return (usesRegister(type) && curEquip && UNIT_TPL[curEquip]!=null) ? COMP_TREE[UNIT_TPL[curEquip]] : null; }
+
+/* What is actually fitted to THIS machine.
+
+   The equipment class says what a haul truck has. The model says what a
+   Komatsu HD785 has, which is not the same list — a Shantui SD32 and a Komatsu
+   D375 are both DOZER, TRACK TYPE and do not carry identical components. Narrow
+   to the model where the register records one, fall back to the class where it
+   does not. A missing model is normal: 565 of 1,129 units have one.
+
+   `cat` is what the register says the machine is. `fb` is what the unit-number
+   prefix says when the register says nothing — 345 units, and without it an
+   inspector standing at a lighting tower would be offered no components at all. */
+let treeCache={key:"",tree:null};
+function componentsForUnit(unit){
+  const a=ASSET_BY[unit]; if(!a) return null;
+  const cls=CLASS_BY[a.cat] || CLASS_BY[a.fb];
+  if(!cls) return null;
+  const m=a.mk && HME.models && HME.models[a.mk];
+  return (m && m.length) ? m : cls.components;
+}
+function currentTree(){
+  if(!usesRegister(type) || !curEquip) return null;
+  const key=curEquip;
+  if(treeCache.key===key) return treeCache.tree;
+  const codes=componentsForUnit(curEquip);
+  let tree=null;
+  if(codes && codes.length){
+    // Grouped by system, which is the breadcrumb the picker shows.
+    const bySys=new Map();
+    for(const code of codes){
+      const c=COMP_BY[code]; if(!c) continue;
+      if(!bySys.has(c.system)) bySys.set(c.system,[]);
+      bySys.get(c.system).push({k:c.code, en:c.en, ru:c.ru});
+    }
+    const sysBy={}; (HME.systems||[]).forEach(x=>sysBy[x.code]=x);
+    tree=[...bySys.entries()].map(([sys,ch])=>({
+      k:sys, en:(sysBy[sys]||{}).en||sys, ru:(sysBy[sys]||{}).ru||sys,
+      ch:ch.sort((x,y)=>x.en.localeCompare(y.en))
+    })).sort((x,y)=>x.en.localeCompare(y.en));
+  }
+  treeCache={key,tree};
+  return tree;
+}
 function flattenTree(nodes,out){ out=out||[]; for(const n of nodes){ if(String(n.k).indexOf(".")>=0) out.push({k:n.k,en:n.en,ru:n.ru}); if(n.ch) flattenTree(n.ch,out); } return out; }
 function nodeByCode(tree,code){ let f=null; (function rec(ns){ for(const n of ns){ if(n.k===code){f=n;return;} if(n.ch)rec(n.ch);} })(tree); return f; }
 function hasUnder(node){ if(!node) return false; if(draft.positions[node.k]) return true; return node.ch? node.ch.some(hasUnder):false; }
 function items(){ const tr=currentTree(); if(tr) return flattenTree(tr);
   return CLASSES[eqClass][type].map(e=> typeof e==="string" ? {k:e, en:COMP[e].en, ru:COMP[e].ru} : e); }
-function itemLabel(k){ const it=items().find(i=>i.k===k); return it?(it[lang]||it.en):k; }
+function itemLabel(k){ const it=items().find(i=>i.k===k); if(it) return it[lang]||it.en;
+  return COMP_BY[k] ? compLabel(k) : k; }
 let draft={positions:{}}; let curItem=items()[0].k;
 function curP(){ return (draft.positions[curItem] ||= {}); }   // WRITE path: creates the entry
 // READ path. curP() here would create an empty entry, and every "has data" check
@@ -1291,6 +1368,9 @@ $("actionBtn").onclick=()=>openPicker("action");
 ["tempV","tempA"].forEach(id=>$(id).addEventListener("input",()=>{ saveCur(); syncTempSev(); refreshChips(); }));
 $("tempM").onchange=()=>{ saveCur(); refreshChips(); };
 function hasData(p){ return p.grade||p.sev||p.action||p.wo||(p.photos&&p.photos.length)||p.video||p.particle||p.comp||p.oil||p.comment||p.defect||p.cause||p.tempV; }
+/* The severity that actually applies: what the inspector set, or what the grade
+   implies. Everything that reasons about how bad a finding is goes through here. */
+function effSev(p){ return (p&&(p.sev||GRADE_SEV[p.grade]))||""; }
 function saveCur(){ if(!curItem) return; const p=curP(); p.particle=$("particle").value.trim(); p.comp=$("comp").value.trim(); p.oil=$("oil").value.trim();
   p.comment=$("comment").value.trim(); p.wo=$("wo").value.trim();
   if(TYPE_META[type].temp){ p.tempV=$("tempV").value.trim(); p.tempA=$("tempA").value.trim(); p.tempM=p.tempV?$("tempM").value:""; }
@@ -1301,7 +1381,11 @@ function loadPos(){
   const p=draft.positions[curItem]||{}; $("particle").value=p.particle||""; $("comp").value=p.comp||""; $("oil").value=p.oil||"";
   $("comment").value=p.comment||""; $("wo").value=p.wo||"";
   $("tempV").value=p.tempV||""; $("tempA").value=p.tempA||""; $("tempM").value=p.tempM||"IR";
-  renderGrade(); renderSev(); updateActionBtn(); renderMedia(); updateDefectCauseBtns(); renderTempHint(); toggleCapture(); }
+  renderGrade(); renderSev(); updateActionBtn(); updateDetectBtn(); renderMedia(); updateDefectCauseBtns(); renderTempHint(); toggleCapture(); }
+/* Blank means the default — a routine walk-around is a visual inspection. It is
+   only written to the record on save, so an untouched position stays untouched. */
+function updateDetectBtn(){ const d=(draft.positions[curItem]||{}).detect;
+  $("detectBtn").textContent = detectLabel(d||DETECT_DEFAULT); }
 
 /* ===================== searchable defect / cause pickers ===================== */
 function updateDefectCauseBtns(){ const p=draft.positions[curItem]||{};
@@ -1318,7 +1402,7 @@ function selectEquip(n){ n=(n||"").trim().toUpperCase().replace(/\s+/g,""); curE
   const cls=assetClassOf(n); if(cls){ eqClass=cls; localStorage.setItem("equip_class",eqClass); }
   draft={positions:{}}; editing=null; curItem=""; applyForm(); setEditing(null); updateEquipBtn();
   renderLastDone(); renderTrend(); }
-let pickMode=null, showAllDefects=false;
+let pickMode=null, showAllDefects=false, showAllCauses=false;
 function pickerSource(){
   if(pickMode==="cat"){
     return [{k:"ALL",label:`${t("opt_all_equip")} (${ASSETS.length})`,group:""}]
@@ -1329,18 +1413,40 @@ function pickerSource(){
     return src.map(a=>({k:a.n, label:a.n+(a.m?" · "+a.m:""), group:(a.cat||"— UNCATEGORISED —")}));
   }
   if(pickMode==="action"){
-    return [{k:"",label:t("opt_action_none")}].concat(ACTIONS.map(a=>({k:a.k,label:(a[lang]||a.en),group:""})));
+    // Each action belongs to a severity. Lead with the ones that fit what was
+    // just found, so a critical plug is not one tap away from "no action".
+    const sev=SEV_V4[effSev(draft.positions[curItem]||{})]||"";
+    const fit=a=>sev&&a.sev===sev;
+    const list=ACTIONS.slice().sort((a,b)=>(fit(b)?1:0)-(fit(a)?1:0));
+    return [{k:"",label:t("opt_action_none")}].concat(list.map(a=>({k:a.k,
+      label:(a[lang]||a.en), group:fit(a)?t("opt_action_fit"):t("opt_action_other")})));
+  }
+  if(pickMode==="detect"){
+    return DETECT.map(d=>({k:d.k,label:(d[lang]||d.en),group:""}));
   }
   if(pickMode==="item"){
     return items().map(it=>({k:it.k, label:(it[lang]||it.en||it.k), group:String(it.k).split(".")[0]}));
   }
   if(pickMode==="defect"){
-    return [{k:"",label:t("opt_none")},{k:"__all__",label:t("opt_show_all")}].concat(
-      (showAllDefects?TAX.defects.filter(d=>!d.hide):defectsForContext())
-        .map(d=>({k:d.c,label:(d[lang]||d.en)+"  ·  "+d.c,group:groupLabel(d.g)})));
+    // Only the modes this component can actually fail in. "Show all" is still
+    // there, because a list that cannot be escaped is worse than a long one.
+    const mine=defectsForComponent(curItem);
+    const list=(showAllDefects || !mine.length) ? (HME.defectTypes||[]) : mine;
+    return [{k:"",label:t("opt_none")}]
+      .concat(mine.length&&!showAllDefects ? [{k:"__all__",label:t("opt_show_all")}] : [])
+      .concat(list.map(d=>({k:d.code,label:(d[lang]||d.en)+"  ·  "+d.code,group:groupLabel(d.group)})));
   }
-  const cs=causesFor((draft.positions[curItem]||{}).defect);
-  return [{k:"",label:t("opt_cause_tbd")}].concat(cs.map(c=>({k:c.c,label:(c[lang]||c.en),group:(lang==="ru"?(TAX.causeGroupRu[c.g]||c.g):c.g)})));
+  /* Specific causes first, general behind the expander — see causesFor(). Where
+     there is nothing specific the general list stands on its own rather than
+     hiding behind a button over an empty box. */
+  const cs=causesFor(curItem,(draft.positions[curItem]||{}).defect);
+  const row=c=>({k:c.code,label:(c[lang]||c.en),group:causeGroupLabel(c.group)});
+  const out=[{k:"",label:t("opt_cause_tbd")}].concat(cs.primary.map(row));
+  if(cs.general.length){
+    if(cs.primary.length && !showAllCauses) out.push({k:"__more__",label:t("opt_more_causes")});
+    else out.push(...cs.general.map(row));
+  }
+  return out;
 }
 function renderPickList(q){ q=(q||"").trim(); const ql=q.toLowerCase();
   let src=pickerSource().filter(o=>!ql||o.label.toLowerCase().indexOf(ql)>=0||(o.group||"").toLowerCase().indexOf(ql)>=0);
@@ -1359,7 +1465,8 @@ function updateDefectCauseBtns(){ const p=draft.positions[curItem]||{};
   $("causeBtn").textContent = p.cause ? causeLabel(p.cause) : (p.defect ? t("opt_cause_tbd") : t("opt_cause_pick")); }
 $("equipBtn").onclick=()=>openPicker("equip");
 $("defectBtn").onclick=()=>{ showAllDefects=false; openPicker("defect"); };
-$("causeBtn").onclick=()=>{ if((draft.positions[curItem]||{}).defect) openPicker("cause"); };
+$("causeBtn").onclick=()=>{ showAllCauses=false; if((draft.positions[curItem]||{}).defect) openPicker("cause"); };
+$("detectBtn").onclick=()=>openPicker("detect");
 $("pickSearch").oninput=(e)=>renderPickList(e.target.value);
 $("pickCancel").onclick=closePicker;
 $("pickList").onclick=(e)=>{ const b=e.target.closest(".pickitem"); if(!b) return; const k=b.dataset.k;
@@ -1369,11 +1476,26 @@ $("pickList").onclick=(e)=>{ const b=e.target.closest(".pickitem"); if(!b) retur
     selectEquip(k==="__custom__" ? $("pickSearch").value : k); closePicker(); return; }
   if(pickMode==="item"){ saveCur(); curItem=k; closePicker(); renderChips(); loadPos(); return; }
   if(k==="__all__"){ showAllDefects=true; renderPickList($("pickSearch").value); return; }
+  if(k==="__more__"){ showAllCauses=true; renderPickList($("pickSearch").value); return; }
+  if(pickMode==="detect"){ const p=curP(); p.detect=k||"";
+    if(!hasData(p)) delete draft.positions[curItem];
+    closePicker(); updateDetectBtn(); renderChips(); return; }
   if(pickMode==="action"){ const p=curP(); p.action=k||"";
     if(!hasData(p)) delete draft.positions[curItem];
     closePicker(); updateActionBtn(); renderChips(); return; }
   const p=curP();
-  if(pickMode==="defect"){ p.defect=k||""; if(!causesFor(p.defect).some(c=>c.c===p.cause)) p.cause=""; }
+  if(pickMode==="defect"){
+    p.defect=k||"";
+    // A cause only means something under the defect it was chosen for.
+    const cs=causesFor(curItem,p.defect);
+    if(![...cs.primary,...cs.general].some(c=>c.code===p.cause)) p.cause="";
+    // The matrix knows how bad this mode usually is. Offer it; do not impose it.
+    const d=DEFECT_BY[p.defect];
+    if(d && d.defaultSeverity && !p.sevMan){
+      const m={"No failure":"NOF",Incipient:"INC",Degraded:"DEG",Critical:"CRI"};
+      if(m[d.defaultSeverity]) { p.sev=m[d.defaultSeverity]; renderSev(); }
+    }
+  }
   else { p.cause=k||""; }
   if(!hasData(p)) delete draft.positions[curItem];
   closePicker(); updateDefectCauseBtns(); refreshChips(); };
@@ -1480,7 +1602,7 @@ $("saveBtn").onclick=async ()=>{
     sup:$("supName").value.trim(), sign:await signBlob(), gps:gps||null, dev:DEVICE, positions:{}, created, up:0, upTo:{},
     rev:(editing?(editing.rev||0)+1:1) };
   for(const [k,p] of Object.entries(draft.positions))
-    rec.positions[k]={ grade:p.grade||null, sev:p.sev||"", sevMan:p.sevMan||0, action:p.action||"", wo:p.wo||"", particle:p.particle||"", comp:p.comp||"", oil:p.oil||"", defect:p.defect||"", cause:p.cause||"", comment:p.comment||"", tempV:p.tempV||"", tempA:p.tempA||"", tempM:p.tempM||"", photos:(p.photos||[]).slice(), video:p.video||null };
+    rec.positions[k]={ grade:p.grade||null, sev:p.sev||"", sevMan:p.sevMan||0, action:p.action||"", wo:p.wo||"", particle:p.particle||"", comp:p.comp||"", oil:p.oil||"", defect:p.defect||"", cause:p.cause||"", comment:p.comment||"", tempV:p.tempV||"", tempA:p.tempA||"", tempM:p.tempM||"", detect:p.detect||DETECT_DEFAULT, photos:(p.photos||[]).slice(), video:p.video||null };
   await dbPut(rec); noteDone(rec); resetForm(); renderPending(); renderDue(); syncNow();
   // First real save is the moment there is something worth protecting.
   if(persistState===null) askPersist();
@@ -2022,7 +2144,7 @@ async function buildPackage(){
   const all=await dbAll(); const files=[]; const grades={}, notes={};
   for(const rec of all){ const suffix=(TYPE_META[rec.type]&&TYPE_META[rec.type].suffix)||rec.type||"MP";
     if(rec.smu) (notes[`${rec.equip}|${rec.date}`] ||= {}).smu=rec.smu;
-    const isComp = usesRegister(rec.type) && rec.equip && UNIT_TPL[rec.equip]!=null;
+    const isComp = usesRegister(rec.type) && rec.equip && !!componentsForUnit(rec.equip);
     for(const [k,p] of positionsOf(rec)){
       const ph=photosOf(p);
       for(let i=0;i<ph.length;i++){ const ext=extOf(ph[i]); const base=fileName(rec.equip,k,rec.date,ext,suffix,isComp);
@@ -2033,8 +2155,8 @@ async function buildPackage(){
       if(p.grade) grades[`${rec.equip}|${rec.date}|${k}`]=p.grade;
       const nk=`${rec.equip}|${rec.date}|${k}`; const n={};
       if(p.particle)n.particleCount=p.particle; if(p.comp)n.componentHours=p.comp; if(p.oil)n.oilHours=p.oil;
-      if(p.defect){ const d=DEFECT_BY[p.defect]; n.defect=defectLabel(p.defect,"en"); n.defectCode=p.defect;
-        if(d){ n.isoMechanism=d.iso; n.isoFailureMode=d.im; } }
+      if(p.defect){ const d=DEFECT_BY[upDefect(p.defect)]; n.defect=defectLabel(p.defect,"en"); n.defectCode=p.defect;
+        if(d){ n.isoMechanism=d.iso14224; n.isoFailureMode=d.iso14224; } }
       if(p.cause){ n.cause=causeLabel(p.cause,"en"); n.causeCode=p.cause; }
       if(p.sev)n.severity=p.sev; if(p.action)n.action=actionLabel(p.action,"en"); if(p.wo)n.workOrder=p.wo;
       if(p.tempV){ n.temperatureC=p.tempV; if(p.tempA)n.ambientC=p.tempA; if(p.tempM)n.tempMethod=p.tempM; }
@@ -2051,11 +2173,11 @@ async function buildPackage(){
     equip:rec.equip, date:rec.date, type:rec.type||"MP", cls:rec.cls||"", by:rec.by||"", smu:rec.smu||"",
     sup:rec.sup||"", gps:rec.gps||null, dev:rec.dev||"", signed:rec.sign?1:0,
     items:Object.entries(rec.positions).map(([k,p])=>{
-      const d=DEFECT_BY[p.defect]||null;
+      const d=DEFECT_BY[upDefect(p.defect)]||null;
       return { key:k, label:itemLabelFor(rec,k)||"", grade:p.grade||"", sev:p.sev||"", action:p.action||"",
         actionLabel:p.action?actionLabel(p.action,"en"):"", wo:p.wo||"",
         defectCode:p.defect||"", defect:p.defect?defectLabel(p.defect,"en"):"",
-        iso:d?d.iso:"", isoMode:d?d.im:"",
+        iso:d?d.iso14224:"", isoMode:d?d.iso14224:"",
         causeCode:p.cause||"", cause:p.cause?causeLabel(p.cause,"en"):"",
         particle:p.particle||"", comp:p.comp||"", oil:p.oil||"", comment:p.comment||"",
         tempC:p.tempV||"", ambC:p.tempA||"", tempMethod:p.tempM||"",
@@ -2078,7 +2200,7 @@ const GRADE_HEX={A:"#0ca30c",B:"#fab219",C:"#ec835a",X:"#d03b3b"};
 const SEV_HEX={NOF:"#0ca30c",INC:"#fab219",DEG:"#ec835a",CRI:"#d03b3b"};
 function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function itemLabelFor(rec,k){
-  if(usesRegister(rec.type) && rec.equip && UNIT_TPL[rec.equip]!=null){ const it=flattenTree(COMP_TREE[UNIT_TPL[rec.equip]]).find(x=>x.k===k); if(it) return it[lang]||it.en; }
+  if(usesRegister(rec.type) && COMP_BY[upComp(k)]) return compLabel(k);
   const list=(CLASSES[rec.cls]&&CLASSES[rec.cls][rec.type])||[];
   for(const e of list){ if(typeof e==="string"){ if(e===k) return COMP[e]?(COMP[e][lang]||COMP[e].en):k; } else if(e.k===k){ return e[lang]||e.en; } } return ""; }
 async function blobToThumb(blob,max){ const img=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=URL.createObjectURL(blob);});
@@ -2118,7 +2240,7 @@ async function buildReportHTML(){
       h+=`<tr><td style="border:1px solid #ccc;padding:4px;"><b>${esc(k)}</b> ${esc(itemLabelFor(rec,k))}</td>
         <td style="border:1px solid #ccc;padding:4px;text-align:center;">${p.grade?`<span style="background:${GRADE_HEX[p.grade]||"#888"};color:#fff;border-radius:8px;padding:1px 7px;">${esc(p.grade)}</span>`:""}</td>
         <td style="border:1px solid #ccc;padding:4px;text-align:center;">${p.sev?`<span style="background:${SEV_HEX[p.sev]||"#888"};color:#fff;border-radius:8px;padding:1px 6px;font-size:10px;">${esc(L("sev_"+p.sev))}</span>`:""}</td>
-        <td style="border:1px solid #ccc;padding:4px;">${p.defect?esc(defectLabel(p.defect))+(DEFECT_BY[p.defect]?` <span style="color:#888;">(${esc(p.defect)} · ISO ${esc(DEFECT_BY[p.defect].iso)}/${esc(DEFECT_BY[p.defect].im)})</span>`:""):""}</td>
+        <td style="border:1px solid #ccc;padding:4px;">${p.defect?esc(defectLabel(p.defect))+(DEFECT_BY[upDefect(p.defect)]?` <span style="color:#888;">(${esc(upDefect(p.defect))} · ISO ${esc(DEFECT_BY[upDefect(p.defect)].iso14224)})</span>`:""):""}</td>
         <td style="border:1px solid #ccc;padding:4px;">${p.cause?esc(causeLabel(p.cause)):""}</td>
         <td style="border:1px solid #ccc;padding:4px;">${p.action?esc(actionLabel(p.action)):""}${p.wo?` <b>[${esc(p.wo)}]</b>`:""}</td>
         ${isTemp?`<td style="border:1px solid #ccc;padding:4px;text-align:center;white-space:nowrap;">${p.tempV?`<b>${esc(p.tempV)}</b> °C${p.tempA?`<span style="color:#888;"> / ${esc(p.tempA)}</span>`:""}${p.tempM?`<div style="color:#888;font-size:9.5px;">${esc(p.tempM)}</div>`:""}`:""}</td>`:""}
@@ -2253,7 +2375,7 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
    has accepted every one of its files. */
 const DEST_META={ gas:{label:"Google Drive"}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
 const DEST_IDS=["gas","pa","post"];
-const BUILD="50";
+const BUILD="51";
 const DEFAULT_DESTS=((window.UPLOAD_DEFAULTS||{}).dests)||[];
 /* Parsed once and reused — see the note by the write below. */
 let destsCache=null, destsRaw=null;
@@ -2423,7 +2545,7 @@ function photosOf(p){ const ph=p.photos||(p.photoBlob?[p.photoBlob]:[]); return 
 /* files belonging to one record, using the agreed naming standard */
 async function filesForRecord(rec){
   const suffix=(TYPE_META[rec.type]&&TYPE_META[rec.type].suffix)||rec.type||"MP";
-  const isComp = usesRegister(rec.type) && rec.equip && UNIT_TPL[rec.equip]!=null;
+  const isComp = usesRegister(rec.type) && rec.equip && !!componentsForUnit(rec.equip);
   const out=[];
   for(const [k,p] of positionsOf(rec)){
     const ph=photosOf(p);
@@ -2534,11 +2656,19 @@ async function syncNow(manual){
 function recToExport(rec){
   return { equip:rec.equip, date:rec.date, type:rec.type||"MP", cls:rec.cls||"", by:rec.by||"", smu:rec.smu||"",
     sup:rec.sup||"", gps:rec.gps||null, dev:rec.dev||"", signed:rec.sign?1:0,
-    items:Object.entries(rec.positions).map(([k,p])=>{ const d=DEFECT_BY[p.defect]||null;
-      return { key:k, label:itemLabelFor(rec,k)||"", grade:p.grade||"", sev:p.sev||"", action:p.action||"",
+    items:Object.entries(rec.positions).map(([k,p])=>{ const d=DEFECT_BY[upDefect(p.defect)]||null;
+      const det=p.detect||DETECT_DEFAULT;
+      // Codes leave the app in the shape 1C expects: v4 for the mode, the cause,
+      // the action and the severity. The app's own severity codes stay internal.
+      return { key:k, label:itemLabelFor(rec,k)||"", grade:p.grade||"", sev:p.sev||"",
+        sevIso:SEV_V4[effSev(p)]||"", action:p.action||"",
+        actionIso:p.action?upAction(p.action):"",
         actionLabel:p.action?actionLabel(p.action,"en"):"", wo:p.wo||"", defectCode:p.defect||"",
-        defect:p.defect?defectLabel(p.defect,"en"):"", iso:d?d.iso:"", isoMode:d?d.im:"",
-        causeCode:p.cause||"", cause:p.cause?causeLabel(p.cause,"en"):"", particle:p.particle||"",
+        defectIso:p.defect?upDefect(p.defect):"",
+        defect:p.defect?defectLabel(p.defect,"en"):"", iso:d?d.iso14224:"", isoMode:d?d.iso14224:"",
+        causeCode:p.cause||"", causeIso:p.cause?upCause(p.cause):"",
+        cause:p.cause?causeLabel(p.cause,"en"):"", particle:p.particle||"",
+        detection:det, detectionLabel:detectLabel(det,"en"),
         comp:p.comp||"", oil:p.oil||"", comment:p.comment||"", tempC:p.tempV||"", ambC:p.tempA||"", tempMethod:p.tempM||"",
         photos:((p.photos||[]).length), video:p.video?1:0 }; }) };
 }
@@ -2678,7 +2808,7 @@ if("serviceWorker" in navigator && window.isSecureContext){ let reloaded=false;
    HTTP cache AND replaces what is stored there, so the reload that follows
    picks up the new files. */
 const SHELL_ASSETS=["index.html","manifest.webmanifest","jsQR.js","qrcode.js","upload-defaults.js",
-  "taxonomy.js","taxonomy2.js","assets.js","components.js","temp-limits.js",
+  "hme.js","hme-cascade.js","mp-fc.js","assets.js","temp-limits.js",
   "jspdf.umd.min.js","html2canvas.min.js","sw.js"];
 const fu=$("forceUpdate"); if(fu) fu.onclick=async (e)=>{ e.preventDefault();
   const old=fu.textContent; fu.textContent="⟳ …";
@@ -2698,8 +2828,8 @@ if(/[?&]fresh=/.test(location.search)) history.replaceState(null,"",location.pat
 function checkData(){
   const missing=[];
   if(!ASSETS.length)                       missing.push("assets.js");
-  if(!(TAX.defects||[]).length)            missing.push("taxonomy2.js");
-  if(!COMP_TREE.length)                    missing.push("components.js");
+  if(!(HME.defectTypes||[]).length)        missing.push("hme.js");
+  if(!Object.keys(CX.c).length)            missing.push("hme-cascade.js");
   /* The ?v= on each <script> is what makes an asset cacheable-forever, and it has
      to equal BUILD or the service worker precaches one URL while the page asks
      for another — every asset then misses the cache on every load. They were
