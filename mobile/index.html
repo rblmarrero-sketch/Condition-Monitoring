@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Truck Inspection — Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=57">
+<link rel="manifest" href="manifest.webmanifest?v=58">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -323,7 +323,7 @@
     /* posnav is a flex row, so the map has to claim the width rather than
        stretch into it */
     flex:0 0 auto;width:calc(100% + 32px);margin:0 -16px 9px;}
-  .ucviews,.ucleg,.ucprog,.ucswipe{flex:0 0 100%;}
+  .ucviews,.uctally,.ucswipe{flex:0 0 100%;}
   .ucmapwrap.more::after{content:"";position:sticky;right:0;top:0;float:right;
     width:34px;height:100%;margin-left:-34px;pointer-events:none;
     background:linear-gradient(90deg,transparent,var(--surface-2));}
@@ -347,17 +347,15 @@
   .ucviews button{flex:1;font:600 13px/1 inherit;color:var(--muted);background:var(--surface-2);
     border:1px solid var(--line);border-radius:10px;padding:10px;cursor:pointer;}
   .ucviews button.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);}
-  .ucprog{font-size:12.5px;font-weight:600;color:var(--muted);margin:0 0 8px;}
-  .ucprog.warn{color:var(--warning);}
-  .ucprog.bad{color:var(--critical);}
-  .ucleg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:11.5px;color:var(--muted);
-    margin:0 0 10px;}
-  .ucleg i{width:12px;height:12px;border-radius:999px;display:inline-block;margin-right:5px;
-    vertical-align:-1px;border:2px solid var(--ink-2);background:var(--surface);}
-  .ucleg i.done{background:var(--good);border-color:var(--good);}
-  .ucleg i.watch{background:var(--warning);border-color:var(--warning);}
-  .ucleg i.act{background:var(--critical);border-color:var(--critical);}
-  .ucleg i.na{background:var(--surface-3);border-color:var(--muted);border-style:dashed;}
+  .uctally{display:flex;flex-wrap:wrap;gap:6px 14px;margin:0 0 10px;
+    font-size:12.5px;font-weight:600;font-variant-numeric:tabular-nums;}
+  .uctally .t{display:inline-flex;align-items:center;gap:6px;color:var(--muted);}
+  .uctally i{width:11px;height:11px;border-radius:999px;flex:0 0 auto;
+    background:var(--surface);border:2px solid var(--ink-2);}
+  .uctally .done{color:var(--good);}      .uctally .done i{background:var(--good);border-color:var(--good);}
+  .uctally .watch{color:var(--warning);}  .uctally .watch i{background:var(--warning);border-color:var(--warning);}
+  .uctally .act{color:var(--critical);}   .uctally .act i{background:var(--critical);border-color:var(--critical);}
+  .uctally .na i{background:var(--surface-3);border-color:var(--muted);border-style:dashed;}
   .ucblock{background:var(--surface-2);border:1px dashed var(--line);border-radius:12px;
     padding:18px 16px;text-align:center;color:var(--muted);font-size:13.5px;line-height:1.55;}
   .tempbar .pill{border-radius:999px;padding:2px 10px;font-weight:700;color:#fff;font-size:12px;}
@@ -720,19 +718,19 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="jsQR.js?v=57"></script>
-<script src="qrcode.js?v=57"></script>
-<script src="upload-defaults.js?v=57"></script>
-<script src="hme.js?v=57"></script>
-<script src="mp-fc.js?v=57"></script>
-<script src="hme-cascade.js?v=57"></script>
-<script src="assets.js?v=57"></script>
-<script src="temp-limits.js?v=57"></script>
-<script src="wear.js?v=57"></script>
-<script src="wear-figs.js?v=57"></script>
-<script src="wear-map.js?v=57"></script>
-<script src="jspdf.umd.min.js?v=57"></script>
-<script src="html2canvas.min.js?v=57"></script>
+<script src="jsQR.js?v=58"></script>
+<script src="qrcode.js?v=58"></script>
+<script src="upload-defaults.js?v=58"></script>
+<script src="hme.js?v=58"></script>
+<script src="mp-fc.js?v=58"></script>
+<script src="hme-cascade.js?v=58"></script>
+<script src="assets.js?v=58"></script>
+<script src="temp-limits.js?v=58"></script>
+<script src="wear.js?v=58"></script>
+<script src="wear-figs.js?v=58"></script>
+<script src="wear-map.js?v=58"></script>
+<script src="jspdf.umd.min.js?v=58"></script>
+<script src="html2canvas.min.js?v=58"></script>
 <script>
 /* ============================================================================
    EQUIPMENT CLASSES & INSPECTION TYPES  —  EDIT here for your fleet.
@@ -949,8 +947,6 @@ const I18N = {
     unit_guess:"{u} is not in the asset register. Showing the standard {c} component list — check it fits the machine, and ask for the register to be updated.",
     uc_ref_span:"new {n} mm → condemn {c} mm",
     uc_dir_up:"counts up", uc_dir_down:"counts down",
-    uc_prog:"{n} of {of} points taken", uc_prog_act:"{n} at or past condemn",
-    uc_prog_watch:"{n} to watch",
     uc_swipe:"← swipe the frame to reach the sprocket end →",
     uc_v_map:"Tap the machine", uc_v_list:"Work down a list",
     uc_left:"LEFT", uc_right:"RIGHT",
@@ -1115,8 +1111,6 @@ const I18N = {
     unit_guess:"{u} нет в реестре оборудования. Показан стандартный перечень узлов «{c}» — проверьте соответствие машине и запросите обновление реестра.",
     uc_ref_span:"новый {n} мм → предел {c} мм",
     uc_dir_up:"растёт", uc_dir_down:"убывает",
-    uc_prog:"снято {n} из {of} точек", uc_prog_act:"{n} достигли предела",
-    uc_prog_watch:"{n} под наблюдением",
     uc_swipe:"← проведите по раме до звёздочки →",
     uc_v_map:"Нажать на машину", uc_v_list:"Идти по списку",
     uc_left:"ЛЕВАЯ", uc_right:"ПРАВАЯ",
@@ -1635,9 +1629,9 @@ function refreshChips(){
       const k=el.dataset.uc;
       el.setAttribute("class", "um-spot "+(ucState(k)||"")+(k===curItem?" sel":""));
     });
-    const pr=$("posnav").querySelector(".ucprog");
-    if(pr){ const tmp=document.createElement("div"); tmp.innerHTML=ucProgress();
-      pr.className=tmp.firstChild.className; pr.textContent=tmp.firstChild.textContent; }
+    const tl=$("posnav").querySelector(".uctally");
+    if(tl){ const tmp=document.createElement("div"); tmp.innerHTML=ucTally();
+      tl.innerHTML=tmp.firstChild.innerHTML; }
     return;
   }
   const tr=currentTree();
@@ -1827,15 +1821,15 @@ function wireUCViews(){
 }
 /* An untouched round is all white pucks, which reads as "broken" rather than
    "nothing captured yet". Say the count, so the absence of colour is an answer. */
-function ucProgress(){
+function ucTally(){
   const w=WEAR.walk(ucStatus(curEquip).model);
-  const st=w.map(x=>ucState(x.k));
-  const took=st.filter(Boolean).length;
-  const red=st.filter(x=>x==="act").length, amb=st.filter(x=>x==="watch").length;
-  let bits=[t("uc_prog",{n:took,of:w.length})];
-  if(red) bits.push(t("uc_prog_act",{n:red}));
-  else if(amb) bits.push(t("uc_prog_watch",{n:amb}));
-  return '<div class="ucprog'+(red?" bad":amb?" warn":"")+'">'+esc(bits.join(" · "))+'</div>';
+  const c={ "":0, done:0, watch:0, act:0, na:0 };
+  w.forEach(x=>{ c[ucState(x.k)||""]++; });
+  const order=[["act","uc_leg_act"],["watch","uc_leg_watch"],["na","uc_leg_na"],
+               ["done","uc_leg_done"],["","uc_leg_none"]];
+  const bits=order.filter(([k])=>c[k]>0).map(([k,lab])=>
+    '<span class="t '+(k||"non")+'"><i></i>'+c[k]+' '+esc(t(lab))+'</span>');
+  return '<div class="uctally">'+bits.join("")+'</div>';
 }
 function renderUCMap(){
   const st=ucStatus(curEquip);
@@ -1843,9 +1837,7 @@ function renderUCMap(){
   const high=!!(st.prof&&st.prof.frame==="highdrive");
   const side=s=>t(s==="L"?"uc_left":"uc_right");
   let h=ucViewsBar();
-  h+=ucProgress();
-  h+='<div class="ucleg">'+["","done","watch","act","na"].map(c=>
-       '<span><i class="'+c+'"></i>'+t("uc_leg_"+(c||"none"))+'</span>').join("")+'</div>';
+  h+=ucTally();
   ["L","R"].forEach(s=>{ h+='<div class="ucmapwrap" data-side="'+s+'">'+
       WEAR.mapSVG(s, rollers, high, ucState, curItem, side(s))+'</div>'; });
   $("posnav").innerHTML=h;
@@ -2944,7 +2936,7 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
    has accepted every one of its files. */
 const DEST_META={ gas:{label:"Google Drive"}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
 const DEST_IDS=["gas","pa","post"];
-const BUILD="57";
+const BUILD="58";
 const DEFAULT_DESTS=((window.UPLOAD_DEFAULTS||{}).dests)||[];
 /* Parsed once and reused — see the note by the write below. */
 let destsCache=null, destsRaw=null;
