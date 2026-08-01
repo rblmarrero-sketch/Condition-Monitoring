@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Truck Inspection — Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=53">
+<link rel="manifest" href="manifest.webmanifest?v=54">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -277,6 +277,35 @@
   .count-badge.warn{background:var(--warning);color:#111;} .count-badge.crit{background:var(--critical);}
   /* temperature reading */
   .tempbar{display:flex;align-items:center;gap:8px;font-size:12.5px;margin:-4px 0 12px;}
+  /* Undercarriage: the drawing, the number, and what the number means — in that
+     order, because the inspector is holding the tool while reading it. */
+  .ucfig{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;
+    padding:9px;margin-bottom:11px;text-align:center;}
+  .ucfig svg{width:100%;max-width:340px;height:auto;display:block;margin:0 auto;}
+  .ucfig .cap{font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.45;}
+  .ucread{font-size:13.5px;margin:-4px 0 12px;display:flex;flex-wrap:wrap;gap:6px 10px;
+    align-items:center;min-height:20px;}
+  .ucread b{font-variant-numeric:tabular-nums;font-size:15px;}
+  .ucread .band{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+    padding:4px 8px;border-radius:999px;}
+  .ucread .b-ok{background:color-mix(in srgb,var(--good) 14%,var(--surface));color:var(--good);}
+  .ucread .b-watch{background:color-mix(in srgb,var(--warning) 16%,var(--surface));color:var(--warning);}
+  .ucread .b-act{background:color-mix(in srgb,var(--critical) 12%,var(--surface));color:var(--critical);}
+  .ucread .src{color:var(--muted);font-size:12px;}
+  .ucwarn{background:color-mix(in srgb,var(--critical) 12%,var(--surface));border:1px solid var(--critical);border-radius:12px;
+    padding:12px 13px;margin:0 0 12px;}
+  .ucwarn .uw-t{font-size:13.5px;line-height:1.5;color:var(--critical);font-weight:600;}
+  .ucwarn .uw-ok{display:flex;gap:9px;align-items:flex-start;margin-top:10px;font-size:13px;
+    color:var(--ink);line-height:1.45;}
+  .ucwarn .uw-ok input{margin-top:2px;width:19px;height:19px;flex:0 0 auto;}
+  .ucna{border-top:1px solid var(--line);padding-top:11px;margin-bottom:4px;}
+  .ucna-h{font-size:12.5px;color:var(--muted);margin-bottom:8px;}
+  .chips{display:flex;flex-wrap:wrap;gap:7px;}
+  .chips button{font:600 12.5px/1 inherit;color:var(--ink);background:var(--surface-2);
+    border:1px solid var(--line);border-radius:999px;padding:9px 13px;cursor:pointer;}
+  .chips button.on{background:color-mix(in srgb,var(--warning) 16%,var(--surface));border-color:var(--warning);color:var(--warning);}
+  .ucblock{background:var(--surface-2);border:1px dashed var(--line);border-radius:12px;
+    padding:18px 16px;text-align:center;color:var(--muted);font-size:13.5px;line-height:1.55;}
   .tempbar .pill{border-radius:999px;padding:2px 10px;font-weight:700;color:#fff;font-size:12px;}
   /* supervisor sign-off */
   .signpad{width:100%;height:132px;background:#fff;border:1px solid var(--border);border-radius:12px;display:block;touch-action:none;}
@@ -396,6 +425,21 @@
           <option value="CON" data-i18n="tm_CON">Contact probe</option><option value="TEL" data-i18n="tm_TEL">Machine telemetry</option>
         </select></label>
       <div class="tempbar" id="tempLim"></div>
+    </div>
+    <div id="ucFields" class="hidden">
+      <div class="ucfig" id="ucFig"></div>
+      <label class="fld"><span id="ucLbl" data-i18n="lbl_mm">Measured (mm)</span>
+        <input id="ucMM" type="number" inputmode="decimal" step="0.1"></label>
+      <div class="ucread" id="ucRead"></div>
+      <div class="ucwarn hidden" id="ucWarn">
+        <div class="uw-t" id="ucWarnText"></div>
+        <label class="uw-ok"><input type="checkbox" id="ucStood">
+          <span data-i18n="uc_stood">I measured it again — the reading is right, check the reference</span></label>
+      </div>
+      <div class="ucna">
+        <div class="ucna-h" data-i18n="uc_cannot">Could not measure it?</div>
+        <div class="chips" id="ucReasons"></div>
+      </div>
     </div>
     <label class="fld"><span data-i18n="lbl_sev">Severity (ISO 14224)</span>
       <div class="seg sevseg" id="sevSeg">
@@ -617,16 +661,18 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="jsQR.js?v=53"></script>
-<script src="qrcode.js?v=53"></script>
-<script src="upload-defaults.js?v=53"></script>
-<script src="hme.js?v=53"></script>
-<script src="mp-fc.js?v=53"></script>
-<script src="hme-cascade.js?v=53"></script>
-<script src="assets.js?v=53"></script>
-<script src="temp-limits.js?v=53"></script>
-<script src="jspdf.umd.min.js?v=53"></script>
-<script src="html2canvas.min.js?v=53"></script>
+<script src="jsQR.js?v=54"></script>
+<script src="qrcode.js?v=54"></script>
+<script src="upload-defaults.js?v=54"></script>
+<script src="hme.js?v=54"></script>
+<script src="mp-fc.js?v=54"></script>
+<script src="hme-cascade.js?v=54"></script>
+<script src="assets.js?v=54"></script>
+<script src="temp-limits.js?v=54"></script>
+<script src="wear.js?v=54"></script>
+<script src="wear-figs.js?v=54"></script>
+<script src="jspdf.umd.min.js?v=54"></script>
+<script src="html2canvas.min.js?v=54"></script>
 <script>
 /* ============================================================================
    EQUIPMENT CLASSES & INSPECTION TYPES  —  EDIT here for your fleet.
@@ -640,8 +686,9 @@ const TYPE_META = {
   FC:   { suffix:"FC",   showReadings:true,  title:{en:"Filter",           ru:"Фильтр"} },
   INSP: { suffix:"INSP", showReadings:false, title:{en:"Component / System",ru:"Узел / Система"} },
   TEMP: { suffix:"TEMP", showReadings:false, temp:true, title:{en:"Measurement point",ru:"Точка замера"} },
+  UC:   { suffix:"UC",   showReadings:false, wear:true, title:{en:"Measurement point",ru:"Точка замера"} },
 };
-const TYPE_ORDER = ["MP","FC","INSP","TEMP"];
+const TYPE_ORDER = ["MP","FC","INSP","TEMP","UC"];
 
 const COMP = {
   ENG:{en:"Engine",ru:"Двигатель"}, COOL:{en:"Cooling System",ru:"Система охлаждения"},
@@ -816,6 +863,27 @@ const I18N = {
     rep_unit:"Unit", rep_type:"Type", rep_date:"Date", rep_sev:"Severity", rep_action:"Action", rep_by_who:"Inspected by", rep_by:"Generated by the Truck Inspection app",
     pos_count:"item(s)", photo_count:"photo(s)",
     type_MP:"Magnetic Plug", type_FC:"Filter Cut", type_INSP:"Inspection", type_TEMP:"Temperature",
+    type_UC:"Undercarriage",
+    lbl_mm:"Measured (mm)",
+    uc_cannot:"Could not measure it?",
+    uc_stood:"I measured it again — the reading is right, check the reference",
+    uc_notmeasured:"Not measured",
+    uc_noscore:"Recorded, not scored",
+    uc_noref:"No reference for this model",
+    uc_band_ok:"Serviceable", uc_band_watch:"Watch", uc_band_act:"At or past condemn",
+    uc_toGo:"{n} mm to condemn",
+    uc_src_catalogue:"vs the model reference",
+    uc_src_baseline:"vs the baseline set",
+    uc_src_override:"vs the corrected reference set",
+    uc_x_borrowed:"this model's figures belong to another model",
+    uc_x_rival:"two different references exist for this model",
+    uc_x_nolimit:"a baseline, but no condemn limit anywhere",
+    uc_w_over_new:"{mm} mm is larger than the \u201cnew\u201d figure of {n} mm. This point wears down, so it cannot grow.",
+    uc_w_under_new:"{mm} mm is smaller than the \u201cnew\u201d figure of {n} mm. This point wears upward, so it cannot shrink.",
+    uc_w_past_condemn:"{p}% worn is well past the condemn limit of {c} mm. Worth a second look before it is recorded.",
+    uc_no_wheeled:"This machine runs on tyres. There is no undercarriage to measure.",
+    uc_no_tracks:"The undercarriage round is for tracked dozers and excavators.",
+    uc_no_unknown:"This unit is not in the register, so there is no model to measure against.",
     lbl_temp:"Temperature °C", lbl_amb:"Ambient °C", lbl_method:"Measurement method",
     tm_IR:"IR gun", tm_CAM:"Thermal camera", tm_CON:"Contact probe", tm_TEL:"Machine telemetry",
     temp_lim:"Warn ≥ {w} °C · Alarm ≥ {a} °C", temp_rise:"rise", rep_temp:"Temp",
@@ -949,6 +1017,27 @@ const I18N = {
     rep_unit:"Ед.", rep_type:"Тип", rep_date:"Дата", rep_sev:"Категория", rep_action:"Действие", rep_by_who:"Осмотр выполнил", rep_by:"Сформировано приложением осмотра",
     pos_count:"поз.", photo_count:"фото",
     type_MP:"Магнитная пробка", type_FC:"Разрез фильтра", type_INSP:"Осмотр", type_TEMP:"Температура",
+    type_UC:"Ходовая часть",
+    lbl_mm:"Измерено (мм)",
+    uc_cannot:"Не удалось измерить?",
+    uc_stood:"Я перемерил — значение верное, проверьте эталон",
+    uc_notmeasured:"Не измерено",
+    uc_noscore:"Записано, без оценки",
+    uc_noref:"Нет эталона для этой модели",
+    uc_band_ok:"Годен", uc_band_watch:"Наблюдать", uc_band_act:"Достиг предела износа",
+    uc_toGo:"до предела {n} мм",
+    uc_src_catalogue:"по эталону модели",
+    uc_src_baseline:"по базовому замеру от",
+    uc_src_override:"по исправленному эталону от",
+    uc_x_borrowed:"эталон этой модели принадлежит другой модели",
+    uc_x_rival:"для этой модели существуют два разных эталона",
+    uc_x_nolimit:"базовый замер есть, предела износа нет",
+    uc_w_over_new:"{mm} мм больше значения \u00abновый\u00bb {n} мм. Эта точка изнашивается вниз и не может вырасти.",
+    uc_w_under_new:"{mm} мм меньше значения \u00abновый\u00bb {n} мм. Эта точка изнашивается вверх и не может уменьшиться.",
+    uc_w_past_condemn:"Износ {p}% значительно превышает предел {c} мм. Стоит перепроверить перед записью.",
+    uc_no_wheeled:"Эта машина на шинах. Ходовой части для замера нет.",
+    uc_no_tracks:"Осмотр ходовой части — для гусеничных бульдозеров и экскаваторов.",
+    uc_no_unknown:"Этой единицы нет в реестре, поэтому не с чем сравнивать.",
     lbl_temp:"Температура °C", lbl_amb:"Окружающая среда °C", lbl_method:"Метод замера",
     tm_IR:"Пирометр (ИК)", tm_CAM:"Тепловизор", tm_CON:"Контактный датчик", tm_TEL:"Телеметрия машины",
     temp_lim:"Предупр. ≥ {w} °C · Тревога ≥ {a} °C", temp_rise:"превышение", rep_temp:"Темп.",
@@ -1213,7 +1302,49 @@ const dlgClose=()=>$("dlg").close();
 $("dlgOk").onclick=dlgClose;
 let cascL7=null, cascL8=null;   // component cascade selection
 // Inspection and Temperature both address real register components.
-function usesRegister(ty){ return ty==="INSP" || ty==="TEMP"; }
+function usesRegister(ty){ return ty==="INSP" || ty==="TEMP" || ty==="UC"; }
+const wearType = ty => (ty||type)==="UC";
+
+/* Undercarriage: the walk comes from the model, not from the component tree.
+
+   A model that is not in the map has no undercarriage this round can measure —
+   a haul truck, a light tower — and the two wheeled ZX210W are excluded by name
+   for the same reason. Refusing here is the whole point: a form keyed on the
+   unit prefix would happily ask an inspector to caliper the tracks on a machine
+   that runs on tyres. */
+function ucStatus(unit){
+  const a=ASSET_BY[unit]; if(!a) return {ok:false, why:"unknown"};
+  const m=a.m||"";
+  if(!window.WEAR) return {ok:false, why:"unknown"};
+  if(WEAR.exclude[m]) return {ok:false, why:WEAR.exclude[m], model:m};
+  if(!WEAR.map[m])    return {ok:false, why:"notracks", model:m};
+  return {ok:true, model:m, ref:WEAR.map[m], prof:WEAR.modelFor(m)};
+}
+function ucWalkTree(unit){
+  const st=ucStatus(unit); if(!st.ok) return null;
+  const byPoint=new Map();
+  WEAR.walk(st.model).forEach(w=>{
+    if(!byPoint.has(w.point)) byPoint.set(w.point,[]);
+    byPoint.get(w.point).push({k:w.k, en:ucPosLabel(w.pos,"en"), ru:ucPosLabel(w.pos,"ru")});
+  });
+  return WEAR.points.filter(p=>byPoint.has(p.code))
+    .map(p=>({k:p.code, en:p.en, ru:p.ru, ch:byPoint.get(p.code)}));
+}
+const UC_POS={ "L":{en:"Left",ru:"Слева"}, "R":{en:"Right",ru:"Справа"},
+  "L-OUT":{en:"Left · outer",ru:"Слева · внешнее"}, "L-IN":{en:"Left · inner",ru:"Слева · внутренее"},
+  "R-OUT":{en:"Right · outer",ru:"Справа · внешнее"}, "R-IN":{en:"Right · inner",ru:"Справа · внутренее"} };
+function ucPosLabel(pos,lg){
+  if(UC_POS[pos]) return UC_POS[pos][lg];
+  const m=/^([LR])(\d+)$/.exec(pos);
+  if(m) return (lg==="ru"? (m[1]==="L"?"Слева":"Справа") : (m[1]==="L"?"Left":"Right"))+" "+m[2];
+  return pos;
+}
+function ucLabel(k){
+  const [pt,pos]=ucSplit(k);
+  const p=(window.WEAR&&WEAR.points||[]).find(x=>x.code===pt);
+  return (p?(p[lang]||p.en):pt) + (pos? " — "+ucPosLabel(pos,lang) : "");
+}
+const ucSplit = k => { const i=String(k).indexOf("."); return i<0?[k,""]:[k.slice(0,i),k.slice(i+1)]; };
 
 /* What is actually fitted to THIS machine.
 
@@ -1236,6 +1367,12 @@ function componentsForUnit(unit){
 }
 function currentTree(){
   if(!usesRegister(type) || !curEquip) return null;
+  if(wearType()){
+    const key="UC|"+curEquip;
+    if(treeCache.key===key) return treeCache.tree;
+    treeCache={key, tree:ucWalkTree(curEquip)};
+    return treeCache.tree;
+  }
   const key=curEquip;
   if(treeCache.key===key) return treeCache.tree;
   const codes=componentsForUnit(curEquip);
@@ -1261,8 +1398,11 @@ function flattenTree(nodes,out){ out=out||[]; for(const n of nodes){ if(String(n
 function nodeByCode(tree,code){ let f=null; (function rec(ns){ for(const n of ns){ if(n.k===code){f=n;return;} if(n.ch)rec(n.ch);} })(tree); return f; }
 function hasUnder(node){ if(!node) return false; if(draft.positions[node.k]) return true; return node.ch? node.ch.some(hasUnder):false; }
 function items(){ const tr=currentTree(); if(tr) return flattenTree(tr);
+  if(wearType()) return [];              // no walk without an eligible, registered machine
   return CLASSES[eqClass][type].map(e=> typeof e==="string" ? {k:e, en:COMP[e].en, ru:COMP[e].ru} : e); }
 function itemLabel(k){ const it=items().find(i=>i.k===k); if(it) return it[lang]||it.en;
+  if(wearType()){ const [pt,pos]=ucSplit(k); const p=(window.WEAR&&WEAR.points||[]).find(x=>x.code===pt);
+    return (p?(p[lang]||p.en):pt)+(pos?" — "+ucPosLabel(pos,lang):""); }
   return COMP_BY[k] ? compLabel(k) : k; }
 let draft={positions:{}}; let curItem=items()[0].k;
 function curP(){ return (draft.positions[curItem] ||= {}); }   // WRITE path: creates the entry
@@ -1305,6 +1445,14 @@ function renderChips(){ const tr=currentTree();
         '<button class="btn primary" id="needUnitBtn">'+t("opt_pick_unit")+'</button></div>';
       const nb=$("needUnitBtn"); if(nb) nb.onclick=()=>openPicker("equip");
       toggleCapture(); return; }
+    if(wearType()){
+      // The unit is chosen but has nothing this round can measure. Say which, and stop.
+      const st=ucStatus(curEquip);
+      const key = st.why==="wheeled" ? "uc_no_wheeled" : st.why==="unknown" ? "uc_no_unknown" : "uc_no_tracks";
+      $("posnav").innerHTML='<div class="ucblock">'+esc(t(key))+
+        (st.model?'<br><b>'+esc(st.model)+'</b>':"")+'</div>';
+      curItem=""; toggleCapture(); return;
+    }
     renderFlatCards(its); return;                    // unit has no register tree -> generic cards
   }
   // Magnetic Plug / Filter Cut -> compact chip row (few items)
@@ -1318,7 +1466,8 @@ function renderFlatCards(its){
   $("posnav").querySelectorAll('[data-pick]').forEach(b=>b.onclick=()=>pickComponent(b.dataset.pick));
   toggleCapture(); }
 function toggleCapture(){ const tr=currentTree();
-  const show = (usesRegister(type) && !curEquip) ? false : (!tr || !!curItem);
+  let show = (usesRegister(type) && !curEquip) ? false : (!tr || !!curItem);
+  if(wearType() && (!curEquip || !ucStatus(curEquip).ok)) show=false;
   $("captureBox").style.display=show?"":"none"; }
 function pickComponent(code){ saveCur(); curItem=code; loadPos(); renderChips(); }
 function renderComponentNav(tree){
@@ -1381,6 +1530,8 @@ $("posnav").addEventListener("click",(e)=>{ const b=e.target.closest("button[dat
 function applyForm(){ $("secPosTitle").textContent=TYPE_META[type].title[lang]||TYPE_META[type].title.en;
   $("mpFields").classList.toggle("hidden", !TYPE_META[type].showReadings);
   $("tempFields").classList.toggle("hidden", !TYPE_META[type].temp);
+  $("ucFields").classList.toggle("hidden", !TYPE_META[type].wear);
+  if(TYPE_META[type].wear) renderUCReasons();
   $("dueInt").value=dueInterval(type); renderDue(); renderTeam(); renderLastDone(); renderTrend();
   cascL7=null; cascL8=null;
   const tr=currentTree(); const flat=items();
@@ -1437,6 +1588,94 @@ $("sevSeg").addEventListener("click",(e)=>{ const b=e.target.closest("button[dat
 function tempCtx(){ if(!curItem) return "";
   const it=items().find(i=>i.k===curItem)||{};
   return `${curItem} ${it.en||""} ${it.ru||""}`; }
+/* ===================== undercarriage: number, meaning, or a reason =====================
+
+   Three states per position and only three: a number, a reason, or nothing yet.
+   A reason counts as done — that is the whole difference from the paper form,
+   where "behind the guard" and "did not do it" are both a dash.
+
+   The reading is never blocked. Sixty of the 789 readings in the source
+   workbook are arithmetically impossible, and the cause is a wrong reference
+   rather than a wrong measurement: both SD90s carry SD32 figures. A form that
+   refused those numbers would have buried the finding instead of surfacing it.
+   So an implausible reading gets questioned, and the inspector can stand by it. */
+function ucRef(){
+  if(!curItem || !curEquip || !window.WEAR) return null;
+  const st=ucStatus(curEquip); if(!st.ok) return null;
+  const [pt,pos]=ucSplit(curItem);
+  return WEAR.refFor(curEquip, st.model, pt, pos, $("date").value||todayISO());
+}
+function ucBand(pct){ return pct>=100?"act" : pct>=80?"watch" : "ok"; }
+function renderUC(){
+  if(!TYPE_META[type].wear) return;
+  const box=$("ucRead"), warn=$("ucWarn");
+  renderUCFig();
+  const st=curEquip?ucStatus(curEquip):null;
+  if(st && !st.ok){ box.innerHTML=""; warn.classList.add("hidden"); return; }
+  const p=posRO(), ref=ucRef(), mm=(p.mm==null?null:Number(p.mm));
+  // what the number means
+  let h="";
+  if(mm==null){ box.innerHTML = p.reason ? '<span class="band b-watch">'+t("uc_notmeasured")+'</span>'+
+      '<span class="src">'+ucReasonLabel(p.reason)+'</span>' : "";
+  } else {
+    const bad = ref && WEAR.implausible(ref, mm);
+    const pct = bad ? null : (ref ? WEAR.wear(ref, mm) : null);
+    if(pct!=null){
+      const b=ucBand(pct), left = ref.d==="grow" ? ref.c-mm : mm-ref.c;
+      h += '<b>'+Math.round(pct)+'%</b>';
+      h += '<span class="band b-'+b+'">'+t("uc_band_"+b)+'</span>';
+      h += '<span class="src">'+t("uc_toGo",{n:Math.abs(left).toFixed(1)})+'</span>';
+    } else if(ref && ref.x){
+      h += '<span class="band b-watch">'+t("uc_noscore")+'</span><span class="src">'+
+           t("uc_x_"+ref.x)+'</span>';
+    } else if(!ref){
+      h += '<span class="band b-watch">'+t("uc_noref")+'</span>';
+    }
+    if(ref) h += '<span class="src">'+t("uc_src_"+ref.src)+(ref.from?" "+ref.from:"")+'</span>';
+    box.innerHTML=h;
+  }
+  // the question, which is never a refusal
+  const why = (ref && mm!=null) ? WEAR.implausible(ref, mm) : null;
+  if(why){ warn.classList.remove("hidden");
+    $("ucWarnText").textContent = t("uc_w_"+why.replace(/-/g,"_"), {mm:mm, n:ref.n, c:ref.c,
+      p:Math.round(WEAR.wear({...ref,x:null}, mm)||0)});
+  } else {
+    warn.classList.add("hidden");
+    $("ucStood").checked=false;
+    const rec=draft.positions[curItem]; if(rec && rec.stood) delete rec.stood;
+  }
+  renderUCReasons();
+}
+function ucReasonLabel(code){
+  const r=(window.WEAR&&WEAR.reasons||[]).find(x=>x.code===code);
+  return r?(r[lang]||r.en):code;
+}
+function renderUCReasons(){
+  const box=$("ucReasons"); if(!box) return;
+  const cur=posRO().reason||"";
+  box.innerHTML=(window.WEAR&&WEAR.reasons||[]).map(r=>
+    '<button type="button" data-r="'+r.code+'" class="'+(r.code===cur?"on":"")+'">'+
+    esc(r[lang]||r.en)+'</button>').join("");
+  box.querySelectorAll("button").forEach(b=>b.onclick=()=>{
+    const p=curP();
+    if(p.reason===b.dataset.r){ delete p.reason; }
+    else { p.reason=b.dataset.r; p.mm=null; $("ucMM").value=""; delete p.stood; $("ucStood").checked=false; }
+    if(!hasData(p)) delete draft.positions[curItem];
+    renderUC(); refreshChips();
+  });
+}
+function renderUCFig(){
+  const box=$("ucFig"); if(!box) return;
+  const [pt]=ucSplit(curItem||"");
+  const svg=(window.WEAR_FIG||{})[pt];
+  const meta=(window.WEAR&&WEAR.points||[]).find(x=>x.code===pt);
+  box.style.display = svg?"":"none";
+  if(!svg) return;
+  box.innerHTML = svg + (meta?'<div class="cap">'+esc(meta.tool)+'</div>':"");
+}
+$("ucMM").addEventListener("input", ()=>{ saveCur(); renderUC(); refreshChips(); });
+$("ucStood").addEventListener("change", ()=>{ saveCur(); });
+
 function renderTempHint(){ if(!TYPE_META[type].temp) return;
   const lim=tempLimit(tempCtx()); const v=$("tempV").value, a=$("tempA").value;
   let h=`<span>${t("temp_lim").replace("{w}",lim.warn).replace("{a}",lim.alarm)}</span>`;
@@ -1457,18 +1696,27 @@ $("actionBtn").onclick=()=>openPicker("action");
 ["particle","comp","oil","comment","wo"].forEach(id=>$(id).addEventListener("input",()=>{ saveCur(); refreshChips(); }));
 ["tempV","tempA"].forEach(id=>$(id).addEventListener("input",()=>{ saveCur(); syncTempSev(); refreshChips(); }));
 $("tempM").onchange=()=>{ saveCur(); refreshChips(); };
-function hasData(p){ return p.grade||p.sev||p.action||p.wo||(p.photos&&p.photos.length)||p.video||p.particle||p.comp||p.oil||p.comment||p.defect||p.cause||p.tempV; }
+function hasData(p){ return (p.mm!=null&&p.mm!=="")||p.reason||p.grade||p.sev||p.action||p.wo||(p.photos&&p.photos.length)||p.video||p.particle||p.comp||p.oil||p.comment||p.defect||p.cause||p.tempV; }
 /* The severity that actually applies: what the inspector set, or what the grade
    implies. Everything that reasons about how bad a finding is goes through here. */
 function effSev(p){ return (p&&(p.sev||GRADE_SEV[p.grade]))||""; }
 function saveCur(){ if(!curItem) return; const p=curP(); p.particle=$("particle").value.trim(); p.comp=$("comp").value.trim(); p.oil=$("oil").value.trim();
   p.comment=$("comment").value.trim(); p.wo=$("wo").value.trim();
   if(TYPE_META[type].temp){ p.tempV=$("tempV").value.trim(); p.tempA=$("tempA").value.trim(); p.tempM=p.tempV?$("tempM").value:""; }
+  if(TYPE_META[type].wear){
+    const raw=$("ucMM").value.trim();
+    p.mm = raw==="" ? null : Number(raw);
+    if(p.mm!=null && !isFinite(p.mm)) p.mm=null;
+    p.stood = !!(p.mm!=null && $("ucStood").checked);
+    if(p.mm!=null) delete p.reason;                 // a number replaces a reason
+    if(p.mm==null && !p.reason) delete p.stood;
+  }
   if(!hasData(p)) delete draft.positions[curItem]; }
 function loadPos(){
   if(!curItem){ $("posLabel").textContent=t("nav_choose"); toggleCapture(); return; }
-  $("posLabel").textContent=`${curItem} — ${itemLabel(curItem)}`;
+  $("posLabel").textContent = wearType() ? ucLabel(curItem) : `${curItem} — ${itemLabel(curItem)}`;
   const p=draft.positions[curItem]||{}; $("particle").value=p.particle||""; $("comp").value=p.comp||""; $("oil").value=p.oil||"";
+  if(TYPE_META[type].wear){ $("ucMM").value = (p.mm==null?"":p.mm); $("ucStood").checked=!!p.stood; renderUC(); }
   $("comment").value=p.comment||""; $("wo").value=p.wo||"";
   $("tempV").value=p.tempV||""; $("tempA").value=p.tempA||""; $("tempM").value=p.tempM||"IR";
   renderGrade(); renderSev(); updateActionBtn(); updateDetectBtn(); renderMedia(); updateDefectCauseBtns(); renderTempHint(); toggleCapture(); }
@@ -2447,7 +2695,7 @@ function applyLang(){ document.documentElement.lang=lang;
   document.querySelectorAll("[data-i18n-title]").forEach(el=>el.title=t(el.dataset.i18nTitle));
   fillClassSel(); fillTypeSel();
   $("secPosTitle").textContent=TYPE_META[type].title[lang]||TYPE_META[type].title.en;
-  $("posLabel").textContent=`${curItem} — ${itemLabel(curItem)}`;
+  $("posLabel").textContent = wearType() ? ucLabel(curItem) : `${curItem} — ${itemLabel(curItem)}`;
   updateDefectCauseBtns(); updateActionBtn(); renderSev(); renderMedia(); renderGps(); renderTempHint(); renderDue(); renderTeam(); renderLastDone(); renderTrend();
   updateSaveLabel(); if(editing) $("editBannerText").textContent=t("editing_hint").replace("{x}",editing.equip); $("cancelEdit").textContent=t("btn_cancel");
   setNet(); renderPending();
@@ -2467,7 +2715,7 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
    has accepted every one of its files. */
 const DEST_META={ gas:{label:"Google Drive"}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
 const DEST_IDS=["gas","pa","post"];
-const BUILD="53";
+const BUILD="54";
 const DEFAULT_DESTS=((window.UPLOAD_DEFAULTS||{}).dests)||[];
 /* Parsed once and reused — see the note by the write below. */
 let destsCache=null, destsRaw=null;
