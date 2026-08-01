@@ -50,6 +50,29 @@
     return out;
   }
 
+  /* The two frames, coloured by what each point read — the same drawing the
+     phone prints, from the same module, so a fitter sees one machine picture
+     wherever the report came from. */
+  function reportMap(rec) {
+    if (rec.type !== "UC" || !(window.WEAR && WEAR.mapSVG)) return "";
+    const a = (typeof ASSET_BY !== "undefined" && ASSET_BY[rec.equip]) || null;
+    const prof = a && a.m && WEAR.modelFor ? WEAR.modelFor(a.m) : null;
+    if (!prof) return "";
+    const by = {};
+    (rec.items || []).forEach(it => {
+      const w = typeof wearOf === "function" ? wearOf(rec, it) : null;
+      by[it.key] = !w ? "" : w.mm == null ? (w.reason ? "na" : "")
+        : w.band === "act" ? "act" : w.band === "watch" ? "watch" : "done";
+    });
+    const short = h => h.replace(/(<text class="um-n um-chain"[^>]*>)([A-Z0-9]+)(<\/text>)/g,
+      (m, x, code, y) => x + (WEAR.mapShort[code] || code) + y);
+    const side = s => L(s === "L" ? "uc_left_h" : "uc_right_h");
+    return window.CMR.fitMap(["L", "R"].map(s => '<div class="ucmapwrap">'
+      + short(WEAR.mapSVG(s, prof.rollers || WEAR.rollersDefault,
+          prof.frame === "highdrive", k => by[k] || "", "", side(s)))
+      + '</div>').join(""));
+  }
+
   /* ---- the dashboard's records, in the shape the core reads -------------- */
   function normalise(recs, opts) {
     const wantPhotos = !!(opts && opts.photos);
@@ -62,6 +85,7 @@
       by: rec.by || "", sup: rec.sup || "", smu: rec.smu || "",
       gps: rec.gps || null,
       signUrl: rec.signUrl || "",
+      mapHTML: reportMap(rec),
       wear: typeof isWearType === "function" && isWearType(rec.type),
       temp: rec.type === "TEMP",
       items: (rec.items || []).map(it => {
@@ -102,7 +126,7 @@
     const units = Object.keys(byU).filter(u => byU[u].length > 1);
     if (!units.length) return null;
     const rank = { NOF: 0, INC: 1, DEG: 2, CRI: 3 };
-    let h = '<div class="sec"><div class="sechd"><span class="n">02</span>'
+    let h = '<div class="sec"><div class="sechd"><span class="n">__N__</span>'
       + `<span class="h2">${esc(L("rpt_trend"))}</span>`
       + `<span class="muted" style="font-size:10.5px;margin-left:auto;">${esc(L("rpt_trend_sub"))}</span></div>`
       + `<table><tr><th style="width:86px">${esc(L("c_unit_h"))}</th>`
@@ -137,7 +161,7 @@
     const rows = Object.keys(cnt).map(k => [k, cnt[k]]).sort((a, b) => b[1] - a[1]).slice(0, 12);
     if (!rows.length) return null;
     const top = rows[0][1];
-    let h = '<div class="sec"><div class="sechd"><span class="n">02</span>'
+    let h = '<div class="sec"><div class="sechd"><span class="n">__N__</span>'
       + `<span class="h2">${esc(L("rpt_pareto"))}</span>`
       + `<span class="muted" style="font-size:10.5px;margin-left:auto;">${esc(L("rpt_pareto_sub"))}</span></div>`
       + `<table><tr><th>${esc(L("rpt_mode_h"))}</th><th style="width:250px"></th>`

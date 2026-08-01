@@ -6,8 +6,8 @@
 <meta name="theme-color" content="#1a1a19">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Truck Inspection — Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=63">
+<title>Condition Monitoring — Field Capture</title>
+<link rel="manifest" href="manifest.webmanifest?v=64">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -719,7 +719,7 @@
     <span id="staleTxt"></span>
     <button type="button" id="staleGo"></button>
   </div>
-  <div class="ver" id="verLine">build v<span id="verNum">?</span> · <span id="verNote">one report, both ends</span> ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver" id="verLine">build v<span id="verNum">?</span> · <span id="verNote">the machine, drawn</span> ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <nav class="tabbar" id="tabbar">
@@ -835,16 +835,16 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="upload-defaults.js?v=63"></script>
-<script src="hme.js?v=63"></script>
-<script src="mp-fc.js?v=63"></script>
-<script src="hme-cascade.js?v=63"></script>
-<script src="assets.js?v=63"></script>
-<script src="temp-limits.js?v=63"></script>
-<script src="wear.js?v=63"></script>
-<script src="wear-figs.js?v=63"></script>
-<script src="wear-map.js?v=63"></script>
-<script src="report-core.js?v=63"></script>
+<script src="upload-defaults.js?v=64"></script>
+<script src="hme.js?v=64"></script>
+<script src="mp-fc.js?v=64"></script>
+<script src="hme-cascade.js?v=64"></script>
+<script src="assets.js?v=64"></script>
+<script src="temp-limits.js?v=64"></script>
+<script src="wear.js?v=64"></script>
+<script src="wear-figs.js?v=64"></script>
+<script src="wear-map.js?v=64"></script>
+<script src="report-core.js?v=64"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3198,6 +3198,23 @@ function rptName(rec,k){
   const name=(w?ucLabel(k):itemLabelFor(rec,k))||k;
   return {name, code: name===k ? "" : k};
 }
+/* The two frames, coloured by what each point read. Same drawing as the capture
+   screen; the state comes from the round rather than from the live draft. */
+function rptMap(rec,items){
+  if(!window.WEAR || !window.WEAR.mapSVG) return "";
+  const st=ucStatus(rec.equip); if(!st.ok) return "";
+  const by={}; items.forEach(it=>{ const w=it.w;
+    by[it.key] = !w ? "" : w.mm==null ? (w.reason?"na":"") :
+      w.band==="act" ? "act" : w.band==="watch" ? "watch" : "done"; });
+  const rollers=(st.prof&&st.prof.rollers)||WEAR.rollersDefault;
+  const high=!!(st.prof&&st.prof.frame==="highdrive");
+  // the chain row carries short codes on screen too — same drawing, same labels
+  const short = h => h.replace(/(<text class="um-n um-chain"[^>]*>)([A-Z0-9]+)(<\/text>)/g,
+    (m,a,code,c)=>a+(WEAR.mapShort[code]||code)+c);
+  return CMR.fitMap(["L","R"].map(side=>'<div class="ucmapwrap">'+
+    short(WEAR.mapSVG(side, rollers, high, k=>by[k]||"", "", t(side==="L"?"uc_left":"uc_right")))+
+    '</div>').join(""));
+}
 async function rptRecords(){
   const all=await dbAll();
   const out=[];
@@ -3236,10 +3253,13 @@ async function rptRecords(){
                  stood:!!w.stood } : null });
     }
     let signUrl=""; if(rec.sign){ try{ signUrl=await blobToThumb(rec.sign,400); }catch(e){} }
+    /* One picture of the machine per round. A red puck at roller 6 is a place a
+       fitter can walk to; a row in a table is a place they have to look up. */
+    let mapHTML=""; if(meta.wear) mapHTML=rptMap(rec,items);
     out.push({ equip:rec.equip, clsLabel:(CLASSES[rec.cls]?(CLASSES[rec.cls][lang]||CLASSES[rec.cls].en):(rec.cls||"")),
       type:rec.type, typeLabel:t("type_"+(rec.type||"MP")), date:rec.date||"",
       by:rec.by||"", sup:rec.sup||"", smu:rec.smu||"", gps:rec.gps||null, signUrl,
-      wear:!!meta.wear, temp:!!meta.temp, items });
+      wear:!!meta.wear, temp:!!meta.temp, mapHTML, items });
   }
   return out;
 }
@@ -3348,7 +3368,7 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
    has accepted every one of its files. */
 const DEST_META={ gas:{label:"Google Drive"}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
 const DEST_IDS=["gas","pa","post"];
-const BUILD="63";
+const BUILD="64";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

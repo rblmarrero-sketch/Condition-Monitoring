@@ -119,6 +119,41 @@
 #rptRoot .subhd{font-size:9px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
   color:#5b6670;margin-bottom:5px;}
 
+/* The machine, printed. On screen the frame is a picker; on paper it is the one
+   picture that says where the wear is without reading a single number — a red
+   puck at roller 6 is a place you can walk to. Colours are literal here rather
+   than themed: this renders on white paper, not in a theme. */
+/* The app's own screen rules use these class names and let the frames run 32 px
+   past the column so they can be scrolled under a thumb. On paper there is
+   nothing to scroll, so the width is reclaimed here explicitly — without this
+   the last roller and the grouser row fell off the right edge of the page. */
+#rptRoot .ucmaps{display:flex;flex-direction:column;gap:7px;margin:9px 0 4px;
+  width:100%;max-width:470px;flex:0 0 auto;}
+#rptRoot .ucmapwrap{background:#f6f8f9;border:1px solid #dfe4e9;border-radius:8px;padding:3px 2px;
+  width:100%;margin:0;flex:0 0 auto;overflow:visible;}
+#rptRoot .ucmapwrap::after{content:none;}
+#rptRoot .ucmap{display:block;width:100%;height:auto;}
+#rptRoot .um-side{font:700 17px/1 inherit;fill:#8b939b;letter-spacing:.04em;}
+#rptRoot .ucmap .mf-body{fill:#e6eaee;stroke:#5b6670;stroke-width:1.3;stroke-linejoin:round;}
+#rptRoot .ucmap .mf-part{fill:#f2f5f7;stroke:#5b6670;stroke-width:1.2;stroke-linejoin:round;}
+#rptRoot .ucmap .mf-rail{fill:none;stroke:#5b6670;stroke-width:1.3;}
+#rptRoot .ucmap .mf-pin{fill:#fff;stroke:#5b6670;stroke-width:1;}
+#rptRoot .ucmap .mf-line{fill:none;stroke:#5b6670;stroke-width:1.1;stroke-linejoin:round;stroke-linecap:round;}
+#rptRoot .ucmap .mf-hair{fill:none;stroke:#a9b2ba;stroke-width:.7;stroke-linecap:round;}
+#rptRoot .ucmap .mf-ground{fill:none;stroke:#a9b2ba;stroke-width:1.1;}
+#rptRoot .ucmap .mf-lead{fill:none;stroke:#a9b2ba;stroke-width:.9;stroke-dasharray:3 3;opacity:.7;}
+#rptRoot .um-spot .um-puck{fill:#fff;stroke:#5b6670;stroke-width:2.4;}
+#rptRoot .um-spot .um-n{font:700 16px/1 inherit;fill:#5b6670;}
+#rptRoot .um-spot .um-n.um-chain{font-size:14px;letter-spacing:.02em;}
+#rptRoot .um-spot.done .um-puck{fill:#0ca30c;stroke:#0ca30c;}
+#rptRoot .um-spot.watch .um-puck{fill:#ec835a;stroke:#ec835a;}
+#rptRoot .um-spot.act .um-puck{fill:#d03b3b;stroke:#d03b3b;}
+#rptRoot .um-spot.done .um-n,#rptRoot .um-spot.act .um-n,
+#rptRoot .um-spot.watch .um-n{fill:#fff;}
+#rptRoot .um-spot.na .um-puck{fill:#e6eaee;stroke:#a9b2ba;stroke-dasharray:4 3;}
+#rptRoot .mapkey{display:flex;flex-wrap:wrap;gap:5px 16px;margin-top:6px;font-size:9.5px;color:#5b6670;}
+#rptRoot .mapkey .i{display:inline-flex;align-items:center;gap:5px;}
+#rptRoot .mapkey .d{width:10px;height:10px;border-radius:50%;display:block;border:1.5px solid #5b6670;}
 #rptRoot .shots{display:flex;flex-wrap:wrap;gap:7px;}
 #rptRoot .shots figure{width:150px;}
 #rptRoot .shots img{width:150px;height:112px;object-fit:cover;border-radius:3px;
@@ -169,6 +204,7 @@
       unread_s:"{n} not measured", flagged:"{n} points flagged",
       uc_over:"{n} points at or past condemn", uc_watch:"{n} more above 80%",
       uc_cause:"normal service wear unless noted",
+      map_t:"Where the wear is", map_na:"Not measured",
       meas_t:"Undercarriage measurements", photos:"Photographs",
       by_who:"Inspected by", sup:"Verified by", nosign:"not signed off",
       gps:"Location", none_att:"None flagged.",
@@ -212,6 +248,7 @@
       unread_s:"{n} не измерено", flagged:"{n} точек отмечено",
       uc_over:"{n} точек на пределе или за ним", uc_watch:"ещё {n} выше 80%",
       uc_cause:"обычный эксплуатационный износ, если не указано иное",
+      map_t:"Где износ", map_na:"Не измерено",
       meas_t:"Замеры ходовой части", photos:"Фотографии",
       by_who:"Осмотр выполнил", sup:"Проверил", nosign:"не подписано",
       gps:"Координаты", none_att:"Не отмечено.",
@@ -255,6 +292,13 @@
     return '<span class="wb"><i style="width:'+Math.round(p/130*100)+'%;background:'+col+'"></i></span>';
   }
   CMR.wearBar = wearBar;
+
+  /* The drawing is laid out a few units outside its own viewBox — harmless on a
+     screen that scrolls it, a shaved idler on paper. Both hosts pass their map
+     through here so the printed copy has room on both sides. */
+  CMR.fitMap = function (html) {
+    return String(html||"").replace(/viewBox="0 0 460 286"/g, 'viewBox="-8 2 476 284"');
+  };
 
   function nameCell(it){
     return esc(it.name||it.key)+(it.code?'<div class="code">'+esc(it.code)+'</div>':"");
@@ -460,8 +504,15 @@
     }
     secs.push({nb:true, html: wl+'</div>'});
 
-    /* ---------- host sections (trends, Pareto) sit between work and detail ---- */
-    (ctx.extra||[]).forEach(function(x){ secs.push(x); });
+    /* ---------- host sections (trends, Pareto) sit between work and detail ----
+       They are numbered by position, not by hand: a host that adds a section
+       should not have to know what number the detail section will then be, and
+       two sections both labelled 02 is how a reader loses their place. */
+    var secN = 1;                                   // 01 was the work list
+    (ctx.extra||[]).forEach(function(x){
+      secN++;
+      secs.push({nb:x.nb, html:String(x.html).split("__N__").join(p2(secN))});
+    });
 
     /* ---------- 3. the evidence, one machine at a time ---------- */
     var first = true;
@@ -484,7 +535,7 @@
 
       var m = '<div class="sec"><div class="mach">'
         + (first ? '<div class="sechd" style="border:0;padding:0;margin:0 0 11px;">'
-            + '<span class="n">02</span><span class="h2">'+esc(T("detail"))+'</span></div>' : "")
+            + '<span class="n">'+p2(secN+1)+'</span><span class="h2">'+esc(T("detail"))+'</span></div>' : "")
         + '<div class="machhd"><span class="u">'+esc(rec.equip)+'</span>'
           + '<span class="c">'+esc(rec.clsLabel||"")+'</span>'
           + '<span class="c" style="margin-left:auto;">'+esc(rec.typeLabel||rec.type)+'</span></div>'
@@ -542,6 +593,18 @@
         + '<span class="c">'+esc(T("cont"))+'</span></div>';
 
       if(isWear){
+        /* The frames are their own section — one picture of the machine per
+           round, and a page break lands between the drawing and the readings
+           rather than through the middle of a track frame. */
+        if(rec.mapHTML) extra.push(cont
+          + '<div class="subhd" style="margin-top:11px;">'+esc(T("map_t"))+'</div>'
+          + '<div class="ucmaps">'+rec.mapHTML+'</div>'
+          + '<div class="mapkey">'
+          + '<span class="i"><span class="d" style="background:'+GRADE_HEX.A+';border-color:'+GRADE_HEX.A+'"></span>'+esc(T("band_ok"))+'</span>'
+          + '<span class="i"><span class="d" style="background:'+GRADE_HEX.C+';border-color:'+GRADE_HEX.C+'"></span>'+esc(T("band_watch"))+'</span>'
+          + '<span class="i"><span class="d" style="background:'+GRADE_HEX.X+';border-color:'+GRADE_HEX.X+'"></span>'+esc(T("band_act"))+'</span>'
+          + '<span class="i"><span class="d" style="background:#e6eaee;border-style:dashed"></span>'+esc(T("map_na"))+'</span>'
+          + '</div></div></div>');
         if(over.length) m += '<div class="verdict v-'+(overAct.length?"act":"watch")+'" style="margin-top:12px;">'
           + (overAct.length?esc(T("uc_over",{n:overAct.length}))+". ":"")
           + (over.length>overAct.length?esc(T("uc_watch",{n:over.length-overAct.length}))+". ":"")
@@ -610,7 +673,7 @@
     var sl=["NOF","INC","DEG","CRI"].map(function(s){
       return '<div class="lgrow">'+sevChip(ctx,s)+'<div class="t">'+esc(T("s_"+s))+'</div></div>'; }).join("");
     secs.push({nb:true, html:'<div class="sec">'
-      + '<div class="sechd"><span class="n">03</span><span class="h2">'+esc(T("legend"))+'</span></div>'
+      + '<div class="sechd"><span class="n">'+p2(secN+2)+'</span><span class="h2">'+esc(T("legend"))+'</span></div>'
       + '<div class="legend"><div>'
         + '<div class="eyebrow" style="margin-bottom:9px;">'+esc(T("lg_grade"))+'</div>'+gl
         + '<div class="eyebrow" style="margin:16px 0 9px;">'+esc(T("lg_sev"))+'</div>'+sl
