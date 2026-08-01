@@ -43,48 +43,139 @@
     return { spots: spots, ix: ix, sx: sx, cy: cy, cr: cr, rollerY: 190, step: step };
   }
 
-  function frameArt(L, high) {
-    var s = [], ix = L.ix, sx = L.sx, cy = L.cy, cr = L.cr;
-    function loop(d) {
-      return '<path d="' + d + '" fill="none" stroke="var(--ink-2)" stroke-width="11" ' +
-             'stroke-linejoin="round"/><path d="' + d + '" fill="none" stroke="var(--surface-3)" ' +
-             'stroke-width="6.5" stroke-linejoin="round"/>';
-    }
-    if (high) {
-      s.push(loop('M' + ix + ',' + (cy - cr) + ' L' + (sx - 22) + ',' + (46 - cr) +
-                  ' A' + cr + ',' + cr + ' 0 0 1 ' + (sx + 14) + ',' + (46 + cr - 6) +
-                  ' L' + (sx - 44) + ',' + (cy + cr) + ' L' + ix + ',' + (cy + cr) +
-                  ' A' + cr + ',' + cr + ' 0 0 1 ' + ix + ',' + (cy - cr) + ' Z'));
-      s.push(wheel(sx - 4, 46, 26));
-    } else {
-      s.push(loop('M' + ix + ',' + (cy - cr) + ' L' + sx + ',' + (cy - cr) +
-                  ' A' + cr + ',' + cr + ' 0 0 1 ' + sx + ',' + (cy + cr) +
-                  ' L' + ix + ',' + (cy + cr) +
-                  ' A' + cr + ',' + cr + ' 0 0 1 ' + ix + ',' + (cy - cr) + ' Z'));
-      s.push(wheel(sx, cy, 26));
-    }
-    s.push('<rect x="' + (ix + 20) + '" y="' + (cy - 14) + '" width="' + (sx - ix - 40) +
-           '" height="28" rx="7" fill="var(--surface-2)" stroke="var(--ink-2)" stroke-width="2"/>');
-    s.push(wheel(ix, cy, 26));
-    // the ground run, and a leader from it to the row of rollers beneath
-    var gy = cy + cr + 7;
-    s.push('<rect x="' + (ix - 34) + '" y="' + gy + '" width="' + (sx - ix + 68) +
-           '" height="10" rx="2" fill="var(--surface-3)" stroke="var(--ink-2)" stroke-width="2"/>');
-    for (var gx = ix - 26; gx < sx + 34; gx += 34)
-      s.push('<path d="M' + gx + ',' + (gy + 10) + ' l7,0 l-1.8,9 l-3.4,0 Z" ' +
-             'fill="var(--surface-3)" stroke="var(--ink-2)" stroke-width="1.4"/>');
-    s.push('<path d="M34,' + (L.rollerY - 22) + ' L34,' + (gy + 22) + ' L426,' + (gy + 22) +
-           ' L426,' + (L.rollerY - 22) + '" fill="none" stroke="var(--muted)" ' +
-           'stroke-width="1.3" stroke-dasharray="4 3"/>');
-    s.push('<path d="M48,' + (L.rollerY + 30) + ' L48,238 L410,238 L410,' + (L.rollerY + 30) +
-           '" fill="none" stroke="var(--muted)" stroke-width="1.3" stroke-dasharray="4 3"/>');
-    return s.join('');
+  /* A track frame, not an outline of one.
+
+     The loop is the chain: two rails at a fixed offset either side of the pin
+     line, with a pin every pitch and a link plate between them — that repeat is
+     what makes a track read as a track rather than as a stadium. Around it go
+     the parts an inspector actually names: the recoil spring and adjuster at the
+     idler end, the final drive behind the sprocket, teeth meshing with the pins,
+     carrier rollers on their brackets, and shoes with grousers on the ground run.
+
+     Everything is hairline. At this scale a 2 px stroke is a 2.5 mm line on the
+     real machine — it buries the detail it is supposed to describe. */
+  function railPath(L, o) {
+    var ix = L.ix, sx = L.sx, cy = L.cy, R = L.cr + o;
+    return 'M' + ix + ',' + (cy - R) + ' L' + sx + ',' + (cy - R) +
+           ' A' + R + ',' + R + ' 0 0 1 ' + sx + ',' + (cy + R) +
+           ' L' + ix + ',' + (cy + R) +
+           ' A' + R + ',' + R + ' 0 0 1 ' + ix + ',' + (cy - R) + ' Z';
   }
-  function wheel(x, y, r) {
-    return '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="var(--surface-3)" ' +
-           'stroke="var(--ink-2)" stroke-width="2.4"/><circle cx="' + x + '" cy="' + y +
-           '" r="' + Math.round(r / 2.6) + '" fill="var(--surface-2)" stroke="var(--ink-2)" ' +
-           'stroke-width="1.8"/>';
+  /* Walk the pin line and hand back a point every `pitch` units, with the
+     outward normal, so pins, plates and teeth all land on the same rhythm. */
+  function pins(L, pitch) {
+    var ix = L.ix, sx = L.sx, cy = L.cy, R = L.cr, run = sx - ix;
+    var arc = Math.PI * R, total = 2 * run + 2 * arc, out = [];
+    for (var d = 0; d < total; d += pitch) {
+      var x, y, nx, ny, t = d;
+      if (t < run) { x = ix + t; y = cy - R; nx = 0; ny = -1; }
+      else if ((t -= run) < arc) { var a = -Math.PI / 2 + t / R;
+        x = sx + R * Math.cos(a); y = cy + R * Math.sin(a); nx = Math.cos(a); ny = Math.sin(a); }
+      else if ((t -= arc) < run) { x = sx - t; y = cy + R; nx = 0; ny = 1; }
+      else { t -= run; var b = Math.PI / 2 + t / R;
+        x = ix + R * Math.cos(b); y = cy + R * Math.sin(b); nx = Math.cos(b); ny = Math.sin(b); }
+      out.push({ x: x, y: y, nx: nx, ny: ny, onSprocket: x > sx - 2 });
+    }
+    return out;
+  }
+
+  function frameArt(L, high) {
+    var s = [], ix = L.ix, sx = L.sx, cy = L.cy, cr = L.cr, R = cr;
+    var gy = cy + cr + 12;                                  // ground
+
+    // ── track frame: a tapered box between the wheels, not a bar
+    s.push('<path class="mf-body" d="M' + (ix + 4) + ',' + (cy - 15) + ' L' + (sx - 34) + ',' + (cy - 15) +
+           ' L' + (sx - 34) + ',' + (cy - 21) + ' L' + (sx - 4) + ',' + (cy - 21) +
+           ' L' + (sx - 4) + ',' + (cy + 21) + ' L' + (sx - 34) + ',' + (cy + 21) +
+           ' L' + (sx - 34) + ',' + (cy + 15) + ' L' + (ix + 4) + ',' + (cy + 15) + ' Z"/>');
+    // the rail the lower rollers bolt to
+    s.push('<path class="mf-hair" d="M' + (ix + 10) + ',' + (cy + 10) + ' L' + (sx - 36) + ',' + (cy + 10) + '"/>');
+    for (var bx = ix + 44; bx < sx - 40; bx += 44)
+      s.push('<circle class="mf-hair" cx="' + bx + '" cy="' + (cy - 6) + '" r="2"/>');
+
+    // ── recoil spring and track adjuster, at the idler end
+    s.push('<rect class="mf-part" x="' + (ix + 10) + '" y="' + (cy - 11) + '" width="46" height="22" rx="4"/>');
+    for (var c = 0; c < 7; c++)
+      s.push('<path class="mf-hair" d="M' + (ix + 14 + c * 6) + ',' + (cy - 11) +
+             ' L' + (ix + 18 + c * 6) + ',' + (cy + 11) + '"/>');
+    s.push('<path class="mf-line" d="M' + (ix + 4) + ',' + cy + ' L' + (ix + 10) + ',' + cy + '"/>');
+
+
+    // ── the chain: two rails, then a pin and a link plate at every pitch
+    var pitch = 2 * Math.PI * R / 20;
+    var P = pins(L, pitch);
+    s.push('<path class="mf-rail" d="' + railPath(L, 6.5) + '"/>');
+    s.push('<path class="mf-rail" d="' + railPath(L, -6.5) + '"/>');
+    P.forEach(function (q, i) {
+      var n = P[(i + 1) % P.length];
+      // link plate: a chord between this pin and the next, on both rails
+      [6.5, -6.5].forEach(function (o) {
+        s.push('<path class="mf-hair" d="M' + (q.x + q.nx * o).toFixed(1) + ',' + (q.y + q.ny * o).toFixed(1) +
+               ' L' + (n.x + n.nx * o).toFixed(1) + ',' + (n.y + n.ny * o).toFixed(1) + '"/>');
+      });
+      s.push('<circle class="mf-pin" cx="' + q.x.toFixed(1) + '" cy="' + q.y.toFixed(1) + '" r="2.6"/>');
+    });
+
+    // ── sprocket: a rim, and a tooth reaching up between every second pair of
+    //    pins. One tooth per pin turns the wheel into a starburst; a tooth per
+    //    pocket is what actually drives the chain.
+    s.push('<circle class="mf-part" cx="' + sx + '" cy="' + cy + '" r="' + (R * 0.6).toFixed(1) + '"/>');
+    P.forEach(function (q, i) {
+      if (!q.onSprocket || i % 2) return;
+      var n = P[(i + 1) % P.length];
+      var mx = (q.x + n.x) / 2, my = (q.y + n.y) / 2;
+      var len = Math.hypot(mx - sx, my - cy) || 1;
+      var ux = (mx - sx) / len, uy = (my - cy) / len;
+      var b = R * 0.55, tip = R * 0.93;
+      var px = -uy, py = ux;
+      s.push('<path class="mf-part" d="M' + (sx + ux * b + px * 6).toFixed(1) + ',' + (cy + uy * b + py * 6).toFixed(1) +
+             ' Q' + (sx + ux * tip + px * 3.4).toFixed(1) + ',' + (cy + uy * tip + py * 3.4).toFixed(1) +
+             ' ' + (sx + ux * tip).toFixed(1) + ',' + (cy + uy * tip).toFixed(1) +
+             ' Q' + (sx + ux * tip - px * 3.4).toFixed(1) + ',' + (cy + uy * tip - py * 3.4).toFixed(1) +
+             ' ' + (sx + ux * b - px * 6).toFixed(1) + ',' + (cy + uy * b - py * 6).toFixed(1) + ' Z"/>');
+    });
+
+    // ── final drive hub, in front of the sprocket rim
+    s.push('<circle class="mf-part" cx="' + sx + '" cy="' + cy + '" r="' + (R * 0.42).toFixed(1) + '"/>');
+    s.push('<circle class="mf-hair" cx="' + sx + '" cy="' + cy + '" r="' + (R * 0.22).toFixed(1) + '"/>');
+
+    // ── idler: rim, hub, and the flange the rails ride either side of
+    s.push('<circle class="mf-part" cx="' + ix + '" cy="' + cy + '" r="' + (R * 0.74) + '"/>');
+    s.push('<circle class="mf-line" cx="' + ix + '" cy="' + cy + '" r="' + (R * 0.5) + '"/>');
+    s.push('<circle class="mf-part" cx="' + ix + '" cy="' + cy + '" r="' + (R * 0.24) + '"/>');
+
+    // ── carrier rollers, on their brackets on top of the frame
+    [176, 234].forEach(function (x) {
+      s.push('<path class="mf-part" d="M' + (x - 8) + ',' + (cy - 14) + ' L' + (x - 5) + ',' + (cy - 32) +
+             ' L' + (x + 5) + ',' + (cy - 32) + ' L' + (x + 8) + ',' + (cy - 14) + ' Z"/>');
+      s.push('<circle class="mf-part" cx="' + x + '" cy="' + (cy - 39) + '" r="8"/>');
+      s.push('<circle class="mf-hair" cx="' + x + '" cy="' + (cy - 39) + '" r="3.2"/>');
+    });
+
+    // ── lower rollers, slung under the frame on the ground run
+    for (var rx = ix + 34; rx < sx - 20; rx += 44) {
+      s.push('<path class="mf-line" d="M' + (rx - 7) + ',' + (cy + 15) + ' L' + (rx - 7) + ',' + (cy + 24) +
+             ' M' + (rx + 7) + ',' + (cy + 15) + ' L' + (rx + 7) + ',' + (cy + 24) + '"/>');
+      s.push('<circle class="mf-part" cx="' + rx + '" cy="' + (cy + 30) + '" r="9"/>');
+      s.push('<circle class="mf-hair" cx="' + rx + '" cy="' + (cy + 30) + '" r="3.4"/>');
+    }
+
+    // ── shoes and grousers on the ground run, and the ground itself
+    s.push('<path class="mf-line" d="M' + (ix - 30) + ',' + (gy - 1) + ' L' + (sx + 30) + ',' + (gy - 1) + '"/>');
+    for (var gx = ix - 26; gx < sx + 26; gx += 15) {
+      s.push('<path class="mf-hair" d="M' + gx + ',' + (gy - 7) + ' L' + gx + ',' + (gy - 1) + '"/>');
+      s.push('<path class="mf-part" d="M' + (gx + 5) + ',' + (gy - 1) + ' l5,0 l-1.4,7 l-2.2,0 Z"/>');
+    }
+    s.push('<path class="mf-ground" d="M' + (ix - 44) + ',' + (gy + 7) + ' L' + (sx + 44) + ',' + (gy + 7) + '"/>');
+    for (var hx = ix - 40; hx < sx + 40; hx += 11)
+      s.push('<path class="mf-hair" d="M' + hx + ',' + (gy + 7) + ' l-5,6"/>');
+
+    // the row of roller pucks below stands in for the rollers on the frame
+    s.push('<path class="mf-lead" d="M34,' + (L.rollerY - 22) + ' L34,' + (gy + 18) +
+           ' L426,' + (gy + 18) + ' L426,' + (L.rollerY - 22) + '"/>');
+    s.push('<path class="mf-lead" d="M48,' + (L.rollerY + 30) + ' L48,238 L410,238 L410,' +
+           (L.rollerY + 30) + '"/>');
+    return s.join('');
   }
 
   /* state(key) -> "" | "done" | "watch" | "act" | "na"; sel is the current key. */

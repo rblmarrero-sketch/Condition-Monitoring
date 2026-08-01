@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Truck Inspection — Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=58">
+<link rel="manifest" href="manifest.webmanifest?v=59">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -359,6 +359,14 @@
   .ucswipe{font-size:11.5px;color:var(--muted);text-align:center;margin:-4px 0 10px;}
   .ucmap{display:block;width:100%;height:auto;}
   .um-side{font:700 17px/1 inherit;fill:var(--muted);letter-spacing:.04em;}
+  .ucmap .mf-body{fill:var(--surface-3);stroke:var(--ink-2);stroke-width:1.3;stroke-linejoin:round;}
+  .ucmap .mf-part{fill:var(--surface-2);stroke:var(--ink-2);stroke-width:1.2;stroke-linejoin:round;}
+  .ucmap .mf-rail{fill:none;stroke:var(--ink-2);stroke-width:1.3;}
+  .ucmap .mf-pin{fill:var(--surface);stroke:var(--ink-2);stroke-width:1;}
+  .ucmap .mf-line{fill:none;stroke:var(--ink-2);stroke-width:1.1;stroke-linejoin:round;stroke-linecap:round;}
+  .ucmap .mf-hair{fill:none;stroke:var(--muted);stroke-width:.7;stroke-linecap:round;}
+  .ucmap .mf-ground{fill:none;stroke:var(--muted);stroke-width:1.1;}
+  .ucmap .mf-lead{fill:none;stroke:var(--muted);stroke-width:.9;stroke-dasharray:3 3;opacity:.7;}
   .um-spot{cursor:pointer;}
   .um-spot .um-puck{fill:var(--surface);stroke:var(--ink-2);stroke-width:2.4;}
   .um-spot .um-n{font:700 16px/1 inherit;fill:var(--ink-2);pointer-events:none;}
@@ -484,7 +492,7 @@
     <div class="mediahint hint" id="mediaHint"></div>
     <input id="camera" type="file" accept="image/*" capture="environment" class="hidden">
     <input id="video" type="file" accept="video/*" capture="environment" class="hidden">
-    <div class="row" style="margin-bottom:14px">
+    <div class="row" id="mediaRow" style="margin-bottom:14px">
       <button class="btn primary" id="takeBtn" type="button">📷 <span data-i18n="btn_take">Add photo</span></button>
       <button class="btn ghost" id="videoBtn" type="button">🎥 <span data-i18n="btn_video">Video</span></button>
     </div>
@@ -559,7 +567,7 @@
     <label class="fld"><span data-i18n="lbl_cause">Direct cause</span>
       <button type="button" class="picker-btn" id="causeBtn"></button>
     </label>
-    <label class="fld"><span data-i18n="lbl_comment">Comment</span>
+    <label class="fld" id="commentFld"><span data-i18n="lbl_comment">Comment</span>
       <div class="withbtn">
         <textarea id="comment" rows="2" data-i18n-ph="ph_comment" placeholder="notes…"></textarea>
         <button type="button" class="iconbtn" id="micBtn" title="Dictate">🎤</button>
@@ -643,7 +651,7 @@
     <span id="staleTxt"></span>
     <button type="button" id="staleGo"></button>
   </div>
-  <div class="ver" id="verLine">build v<span id="verNum">?</span> · <span id="verNote">measure sheet · tap, type, next</span> ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver" id="verLine">build v<span id="verNum">?</span> · <span id="verNote">a track frame, drawn properly</span> ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <nav class="tabbar" id="tabbar">
@@ -759,19 +767,19 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="jsQR.js?v=58"></script>
-<script src="qrcode.js?v=58"></script>
-<script src="upload-defaults.js?v=58"></script>
-<script src="hme.js?v=58"></script>
-<script src="mp-fc.js?v=58"></script>
-<script src="hme-cascade.js?v=58"></script>
-<script src="assets.js?v=58"></script>
-<script src="temp-limits.js?v=58"></script>
-<script src="wear.js?v=58"></script>
-<script src="wear-figs.js?v=58"></script>
-<script src="wear-map.js?v=58"></script>
-<script src="jspdf.umd.min.js?v=58"></script>
-<script src="html2canvas.min.js?v=58"></script>
+<script src="jsQR.js?v=59"></script>
+<script src="qrcode.js?v=59"></script>
+<script src="upload-defaults.js?v=59"></script>
+<script src="hme.js?v=59"></script>
+<script src="mp-fc.js?v=59"></script>
+<script src="hme-cascade.js?v=59"></script>
+<script src="assets.js?v=59"></script>
+<script src="temp-limits.js?v=59"></script>
+<script src="wear.js?v=59"></script>
+<script src="wear-figs.js?v=59"></script>
+<script src="wear-map.js?v=59"></script>
+<script src="jspdf.umd.min.js?v=59"></script>
+<script src="html2canvas.min.js?v=59"></script>
 <script>
 /* ============================================================================
    EQUIPMENT CLASSES & INSPECTION TYPES  —  EDIT here for your fleet.
@@ -1900,12 +1908,26 @@ function ucKeepFrameInView(){
   window.scrollBy({top: Math.round(r.top-want), behavior:"smooth"});
 }
 const cssEsc = v => String(v).replace(/["\\]/g,"\\$&");
+const UC_MOVE = ["mediastrip","mediaHint","mediaRow","commentFld"];
+let ucHome = null;
+function ucMoveIn(){
+  const nav=$("ucSheetNav"); if(!nav) return;
+  if(!ucHome){ ucHome=UC_MOVE.map(id=>{ const el=$(id);
+    return el ? {el, parent:el.parentNode, next:el.nextSibling} : null; }).filter(Boolean); }
+  ucHome.forEach(h=>{ if(h.el.parentNode!==nav.parentNode || h.el.nextSibling!==nav)
+    nav.parentNode.insertBefore(h.el, nav); });
+}
+function ucMoveOut(){
+  if(!ucHome) return;
+  ucHome.forEach(h=>{ if(h.parent) h.parent.insertBefore(h.el, h.next); });
+}
 function renderUCSheet(){
   const on=ucSheetOn(), f=$("ucFields"), bd=$("ucBackdrop");
   if(!f||!bd) return;
   f.classList.toggle("sheet", on);
   bd.classList.toggle("hidden", !on);
   document.body.style.overflow = on ? "hidden" : "";
+  if(on) ucMoveIn(); else ucMoveOut();
   if(!on) return;
   const o=ucOrder(), i=o.indexOf(curItem);
   $("ucSheetTitle").textContent = ucLabel(curItem);
@@ -3049,7 +3071,7 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
    has accepted every one of its files. */
 const DEST_META={ gas:{label:"Google Drive"}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
 const DEST_IDS=["gas","pa","post"];
-const BUILD="58";
+const BUILD="59";
 const DEFAULT_DESTS=((window.UPLOAD_DEFAULTS||{}).dests)||[];
 /* Parsed once and reused — see the note by the write below. */
 let destsCache=null, destsRaw=null;

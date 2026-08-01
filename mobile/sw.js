@@ -16,7 +16,7 @@
    where JavaScript was expected leaves window.ASSETS / window.TAX2 undefined, and
    the equipment, defect and cause lists come up blank with no error the inspector
    can see. */
-const BUILD = "58";
+const BUILD = "59";
 const CACHE = "plug-capture-v" + BUILD;
 const SHELL = [
   "./",
