@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=64">
+<link rel="manifest" href="manifest.webmanifest?v=65">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -719,7 +719,7 @@
     <span id="staleTxt"></span>
     <button type="button" id="staleGo"></button>
   </div>
-  <div class="ver" id="verLine">build v<span id="verNum">?</span> · <span id="verNote">the machine, drawn</span> ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver" id="verLine">build v<span id="verNum">?</span> · <span id="verNote">photographs, at both ends</span> ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <nav class="tabbar" id="tabbar">
@@ -835,16 +835,16 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="upload-defaults.js?v=64"></script>
-<script src="hme.js?v=64"></script>
-<script src="mp-fc.js?v=64"></script>
-<script src="hme-cascade.js?v=64"></script>
-<script src="assets.js?v=64"></script>
-<script src="temp-limits.js?v=64"></script>
-<script src="wear.js?v=64"></script>
-<script src="wear-figs.js?v=64"></script>
-<script src="wear-map.js?v=64"></script>
-<script src="report-core.js?v=64"></script>
+<script src="upload-defaults.js?v=65"></script>
+<script src="hme.js?v=65"></script>
+<script src="mp-fc.js?v=65"></script>
+<script src="hme-cascade.js?v=65"></script>
+<script src="assets.js?v=65"></script>
+<script src="temp-limits.js?v=65"></script>
+<script src="wear.js?v=65"></script>
+<script src="wear-figs.js?v=65"></script>
+<script src="wear-map.js?v=65"></script>
+<script src="report-core.js?v=65"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3368,7 +3368,7 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
    has accepted every one of its files. */
 const DEST_META={ gas:{label:"Google Drive"}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
 const DEST_IDS=["gas","pa","post"];
-const BUILD="64";
+const BUILD="65";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

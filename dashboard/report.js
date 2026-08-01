@@ -42,11 +42,22 @@
     const fp = folder();
     if (fp && window.CMDash && window.CMDash.photoBase) {
       const base = window.CMDash.photoBase(it, rec);
-      (window.CMDash.photoNames(base, rec, ["jpg", "jpeg", "png", "JPG", "webp"]) || [])
-        .forEach(n => { if (fp[n]) out.push(fp[n]); });
+      /* photoNames()'s third argument is a list of SUFFIXES — "", "_1", "_2" —
+         and it appends the extensions itself. Handing it the extension list
+         built names like "…_MP jpg.jpg", which matched nothing, and no report
+         from the dashboard has ever carried a photograph. One name per slot,
+         first hit wins, because the same photo exists under several extensions. */
+      ["", "_1", "_2", "_3", "_4"].forEach(sfx => {
+        const names = window.CMDash.photoNames(base, rec, [sfx]) || [];
+        for (const n of names) {
+          if (fp[n]) { if (out.indexOf(fp[n]) < 0) out.push(fp[n]); break; }
+        }
+      });
     }
-    if (!out.length && it.photoUrl) out.push(it.photoUrl);
-    if (!out.length && it.photo && /^(data:|blob:|https?:)/.test(it.photo)) out.push(it.photo);
+    // a record that carries its own URL (Drive, or an import that inlined it)
+    if (!out.length && it.photo) {
+      out.push(/^(data:|blob:|https?:|\/)/.test(it.photo) ? it.photo : "../" + it.photo);
+    }
     return out;
   }
 
