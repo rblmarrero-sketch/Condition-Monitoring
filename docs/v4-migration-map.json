@@ -1,0 +1,7936 @@
+{
+ "generatedFor": "hme-defect-cause-matrix 4.0.0",
+ "components": {
+  "rows": [
+   {
+    "old": "AU.AS",
+    "new": "AU.AS",
+    "how": "exact",
+    "label": "Aerial System",
+    "note": ""
+   },
+   {
+    "old": "AU.CAM",
+    "new": "AU.CAM",
+    "how": "exact",
+    "label": "Cameras",
+    "note": ""
+   },
+   {
+    "old": "AU.CS",
+    "new": "AU.CS",
+    "how": "exact",
+    "label": "Control System",
+    "note": ""
+   },
+   {
+    "old": "AU.GPS",
+    "new": "AU.GPS",
+    "how": "exact",
+    "label": "GPS System",
+    "note": ""
+   },
+   {
+    "old": "AU.TEL",
+    "new": "AU.TEL",
+    "how": "exact",
+    "label": "Telematics",
+    "note": ""
+   },
+   {
+    "old": "AU.TU",
+    "new": "AU.TU",
+    "how": "exact",
+    "label": "Transceiver Unit",
+    "note": ""
+   },
+   {
+    "old": "BS.ABS",
+    "new": "BS.ABS",
+    "how": "exact",
+    "label": "ABS System",
+    "note": ""
+   },
+   {
+    "old": "BS.ACC",
+    "new": "BS.ACC",
+    "how": "exact",
+    "label": "Brake Accumulators",
+    "note": ""
+   },
+   {
+    "old": "BS.ADR",
+    "new": "BS.ADR",
+    "how": "exact",
+    "label": "Air Dryer",
+    "note": ""
+   },
+   {
+    "old": "BS.BC",
+    "new": "BS.BC",
+    "how": "exact",
+    "label": "Brake Packs",
+    "note": ""
+   },
+   {
+    "old": "BS.BP",
+    "new": "BS.BP",
+    "how": "exact",
+    "label": "Brake Pump",
+    "note": ""
+   },
+   {
+    "old": "BS.BPC",
+    "new": "BS.BPC",
+    "how": "exact",
+    "label": "Brake Packs",
+    "note": ""
+   },
+   {
+    "old": "BS.BPc",
+    "new": "BS.BPC",
+    "how": "proposed",
+    "label": "Brake Packs",
+    "note": "lowercase typo in components.js for BS.BPC Brake Packs"
+   },
+   {
+    "old": "BS.COM",
+    "new": "BS.COM",
+    "how": "exact",
+    "label": "Air Compressor",
+    "note": ""
+   },
+   {
+    "old": "BS.CV",
+    "new": "BS.CV",
+    "how": "exact",
+    "label": "Control Valve",
+    "note": ""
+   },
+   {
+    "old": "BS.DRM",
+    "new": "BS.DRM",
+    "how": "exact",
+    "label": "Brake Drums",
+    "note": ""
+   },
+   {
+    "old": "BS.HOS",
+    "new": "BS.HOS",
+    "how": "exact",
+    "label": "Hoses and Piping",
+    "note": ""
+   },
+   {
+    "old": "BS.PU",
+    "new": "BS.PU",
+    "how": "exact",
+    "label": "Pneumatic Control",
+    "note": ""
+   },
+   {
+    "old": "BS.RCH",
+    "new": "BS.RCH",
+    "how": "exact",
+    "label": "Brake Chambers",
+    "note": ""
+   },
+   {
+    "old": "BS.RES",
+    "new": "BS.RES",
+    "how": "exact",
+    "label": "Air Reservoirs",
+    "note": ""
+   },
+   {
+    "old": "BS.RV",
+    "new": "BS.RV",
+    "how": "exact",
+    "label": "Retarder Valve",
+    "note": ""
+   },
+   {
+    "old": "BS.SHO",
+    "new": "BS.SHO",
+    "how": "exact",
+    "label": "Brake Shoes",
+    "note": ""
+   },
+   {
+    "old": "BS.TV",
+    "new": "BS.TV",
+    "how": "exact",
+    "label": "Treadle Valve",
+    "note": ""
+   },
+   {
+    "old": "CH.AC",
+    "new": "CH.AC",
+    "how": "exact",
+    "label": "Air Conditioning",
+    "note": ""
+   },
+   {
+    "old": "CH.AIR",
+    "new": "CH.AIR",
+    "how": "exact",
+    "label": "Compressed Air System",
+    "note": ""
+   },
+   {
+    "old": "CH.AIR.ATK",
+    "new": "AIR.ATK",
+    "how": "proposed",
+    "label": "Auxiliary Air Tank",
+    "note": "v4 files the air system under system HS, not CH"
+   },
+   {
+    "old": "CH.AIR.AVP",
+    "new": "AIR.AVP",
+    "how": "proposed",
+    "label": "Alcohol Vaporizer",
+    "note": "v4 files the air system under system HS, not CH"
+   },
+   {
+    "old": "CH.AIR.CMP",
+    "new": "AIR.CMP",
+    "how": "proposed",
+    "label": "Air Compressor",
+    "note": "v4 files the air system under system HS, not CH"
+   },
+   {
+    "old": "CH.AL",
+    "new": "CH.AL",
+    "how": "exact",
+    "label": "Central Lubrication System",
+    "note": ""
+   },
+   {
+    "old": "CH.BED",
+    "new": "CH.BED",
+    "how": "exact",
+    "label": "Bed",
+    "note": ""
+   },
+   {
+    "old": "CH.BL",
+    "new": "CH.BL",
+    "how": "exact",
+    "label": "Blade",
+    "note": ""
+   },
+   {
+    "old": "CH.BOO",
+    "new": "CH.BOO",
+    "how": "exact",
+    "label": "Boom",
+    "note": ""
+   },
+   {
+    "old": "CH.BUC",
+    "new": "CH.BUC",
+    "how": "exact",
+    "label": "Bucket",
+    "note": ""
+   },
+   {
+    "old": "CH.BY",
+    "new": "CH.BY",
+    "how": "exact",
+    "label": "Dump Body",
+    "note": ""
+   },
+   {
+    "old": "CH.CL",
+    "new": "CH.CL",
+    "how": "exact",
+    "label": "Semi-trailer",
+    "note": ""
+   },
+   {
+    "old": "CH.CP",
+    "new": "CH.CP",
+    "how": "exact",
+    "label": "Concrete Pump",
+    "note": ""
+   },
+   {
+    "old": "CH.CRS",
+    "new": "CH.CRS",
+    "how": "exact",
+    "label": "Crusher Unit",
+    "note": ""
+   },
+   {
+    "old": "CH.CRW",
+    "new": "CH.CRW",
+    "how": "exact",
+    "label": "Crawler Chassis",
+    "note": ""
+   },
+   {
+    "old": "CH.CV",
+    "new": "CH.CV",
+    "how": "exact",
+    "label": "Conveyor",
+    "note": ""
+   },
+   {
+    "old": "CH.CWT",
+    "new": "CH.CWT",
+    "how": "exact",
+    "label": "Counterweight",
+    "note": ""
+   },
+   {
+    "old": "CH.CY",
+    "new": "CH.CY",
+    "how": "exact",
+    "label": "Canopy",
+    "note": ""
+   },
+   {
+    "old": "CH.DB",
+    "new": "CH.DB",
+    "how": "exact",
+    "label": "Drill Bit",
+    "note": ""
+   },
+   {
+    "old": "CH.DR",
+    "new": "CH.DR",
+    "how": "exact",
+    "label": "Semi-trailer",
+    "note": ""
+   },
+   {
+    "old": "CH.FEN",
+    "new": "CH.FEN",
+    "how": "exact",
+    "label": "Fenders",
+    "note": ""
+   },
+   {
+    "old": "CH.FK",
+    "new": "CH.FK",
+    "how": "exact",
+    "label": "Forklift",
+    "note": ""
+   },
+   {
+    "old": "CH.FP",
+    "new": "CH.FP",
+    "how": "exact",
+    "label": "Fuel Pump",
+    "note": ""
+   },
+   {
+    "old": "CH.FR",
+    "new": "CH.FR",
+    "how": "exact",
+    "label": "Frame",
+    "note": ""
+   },
+   {
+    "old": "CH.GAN",
+    "new": "CH.GAN",
+    "how": "exact",
+    "label": "Gantry",
+    "note": ""
+   },
+   {
+    "old": "CH.GL",
+    "new": "CH.GL",
+    "how": "exact",
+    "label": "Glass",
+    "note": ""
+   },
+   {
+    "old": "CH.HS",
+    "new": "CH.HS",
+    "how": "exact",
+    "label": "Hydraulic System",
+    "note": ""
+   },
+   {
+    "old": "CH.HT",
+    "new": "CH.HT",
+    "how": "exact",
+    "label": "Hitch & Articulation Joint",
+    "note": ""
+   },
+   {
+    "old": "CH.IDL",
+    "new": "CH.IDL",
+    "how": "exact",
+    "label": "Idlers",
+    "note": ""
+   },
+   {
+    "old": "CH.MB",
+    "new": "CH.MB",
+    "how": "exact",
+    "label": "Manlift",
+    "note": ""
+   },
+   {
+    "old": "CH.MT",
+    "new": "CH.MT",
+    "how": "exact",
+    "label": "Mast",
+    "note": ""
+   },
+   {
+    "old": "CH.OD",
+    "new": "CH.OD",
+    "how": "exact",
+    "label": "Semi-trailer",
+    "note": ""
+   },
+   {
+    "old": "CH.PC",
+    "new": "CH.PC",
+    "how": "exact",
+    "label": "Pipe Carousel",
+    "note": ""
+   },
+   {
+    "old": "CH.RA",
+    "new": "CH.RA",
+    "how": "exact",
+    "label": "Truck",
+    "note": ""
+   },
+   {
+    "old": "CH.RH",
+    "new": "CH.RH",
+    "how": "exact",
+    "label": "Rotary Head",
+    "note": ""
+   },
+   {
+    "old": "CH.ROL",
+    "new": "CH.ROL",
+    "how": "exact",
+    "label": "Track Rollers",
+    "note": ""
+   },
+   {
+    "old": "CH.RP",
+    "new": "CH.RP",
+    "how": "exact",
+    "label": "Ripper",
+    "note": ""
+   },
+   {
+    "old": "CH.SB",
+    "new": "CH.SB",
+    "how": "exact",
+    "label": "Semi-trailer",
+    "note": ""
+   },
+   {
+    "old": "CH.SCN",
+    "new": "CH.SCN",
+    "how": "exact",
+    "label": "Screen",
+    "note": ""
+   },
+   {
+    "old": "CH.ST",
+    "new": "CH.ST",
+    "how": "exact",
+    "label": "Semi-trailer",
+    "note": ""
+   },
+   {
+    "old": "CH.STR",
+    "new": "CH.STR",
+    "how": "exact",
+    "label": "Superstructure",
+    "note": ""
+   },
+   {
+    "old": "CH.SU",
+    "new": "CH.SU",
+    "how": "exact",
+    "label": "Suspension",
+    "note": ""
+   },
+   {
+    "old": "CH.SU.FRC",
+    "new": "SU.FRC",
+    "how": "system",
+    "label": "Front Ride Cylinder",
+    "note": "v4 code is SU.FRC, system CH"
+   },
+   {
+    "old": "CH.SU.RRC",
+    "new": "SU.RRC",
+    "how": "system",
+    "label": "Rear Ride Cylinder",
+    "note": "v4 code is SU.RRC, system CH"
+   },
+   {
+    "old": "CH.TDV",
+    "new": "CH.TDV",
+    "how": "exact",
+    "label": "Travel Drives",
+    "note": ""
+   },
+   {
+    "old": "CH.TEN",
+    "new": "CH.TEN",
+    "how": "exact",
+    "label": "Track Tension System",
+    "note": ""
+   },
+   {
+    "old": "CH.TK",
+    "new": "CH.TK",
+    "how": "exact",
+    "label": "Tank",
+    "note": ""
+   },
+   {
+    "old": "CH.TRK",
+    "new": "CH.TRK",
+    "how": "exact",
+    "label": "Tracks",
+    "note": ""
+   },
+   {
+    "old": "CH.UC",
+    "new": "CH.UC",
+    "how": "exact",
+    "label": "Undercarriage",
+    "note": ""
+   },
+   {
+    "old": "CH.UC.FRT",
+    "new": "UC.FRT",
+    "how": "system",
+    "label": "Front Wheel, Rim & Tire",
+    "note": "v4 code is UC.FRT, system CH"
+   },
+   {
+    "old": "CH.UC.REA",
+    "new": "UC.REA",
+    "how": "system",
+    "label": "Rear Wheel, Rim & Tire",
+    "note": "v4 code is UC.REA, system CH"
+   },
+   {
+    "old": "CH.VD",
+    "new": null,
+    "how": "unmatched",
+    "label": "",
+    "note": "no v4 component; check what CH.VD is meant to be"
+   },
+   {
+    "old": "CH.VU",
+    "new": "CH.VU",
+    "how": "exact",
+    "label": "Vacuum Pump",
+    "note": ""
+   },
+   {
+    "old": "CH.WB",
+    "new": "CH.WB",
+    "how": "exact",
+    "label": "Washer Unit",
+    "note": ""
+   },
+   {
+    "old": "CH.WC",
+    "new": "CH.WC",
+    "how": "exact",
+    "label": "Winch",
+    "note": ""
+   },
+   {
+    "old": "CH.WL",
+    "new": "CH.WL",
+    "how": "exact",
+    "label": "Wireline System",
+    "note": ""
+   },
+   {
+    "old": "CH.WP",
+    "new": "CH.WP",
+    "how": "exact",
+    "label": "Water Pump",
+    "note": ""
+   },
+   {
+    "old": "CONV.BEL",
+    "new": "CONV.BEL",
+    "how": "exact",
+    "label": "Conveyor Belt",
+    "note": ""
+   },
+   {
+    "old": "CONV.IDL",
+    "new": "CONV.IDL",
+    "how": "exact",
+    "label": "Idlers & Rollers",
+    "note": ""
+   },
+   {
+    "old": "CONV.IRON",
+    "new": "CONV.IRON",
+    "how": "exact",
+    "label": "Iron Remover",
+    "note": ""
+   },
+   {
+    "old": "CONV.MAG",
+    "new": "CONV.MAG",
+    "how": "exact",
+    "label": "Overband Magnet",
+    "note": ""
+   },
+   {
+    "old": "CONV.MAIN",
+    "new": "CONV.MAIN",
+    "how": "exact",
+    "label": "Main Conveyor",
+    "note": ""
+   },
+   {
+    "old": "CONV.MDC",
+    "new": "CONV.MDC",
+    "how": "exact",
+    "label": "Main Discharge Conveyor",
+    "note": ""
+   },
+   {
+    "old": "CONV.PUL",
+    "new": "CONV.PUL",
+    "how": "exact",
+    "label": "Pulleys",
+    "note": ""
+   },
+   {
+    "old": "CONV.SDC",
+    "new": "CONV.SDC",
+    "how": "exact",
+    "label": "Side Discharge Conveyor",
+    "note": ""
+   },
+   {
+    "old": "CONV.SIDE",
+    "new": "CONV.SIDE",
+    "how": "exact",
+    "label": "Side Conveyor (Fine Product)",
+    "note": ""
+   },
+   {
+    "old": "CRS.BWL",
+    "new": "CRS.BWL",
+    "how": "exact",
+    "label": "Bowl Assembly",
+    "note": ""
+   },
+   {
+    "old": "CRS.CHM",
+    "new": "CRS.CHM",
+    "how": "exact",
+    "label": "Crushing Chamber",
+    "note": ""
+   },
+   {
+    "old": "CRS.DRV",
+    "new": "CRS.DRV",
+    "how": "exact",
+    "label": "Crusher Drive",
+    "note": ""
+   },
+   {
+    "old": "CRS.ECC",
+    "new": "CRS.ECC",
+    "how": "exact",
+    "label": "Eccentric Assembly",
+    "note": ""
+   },
+   {
+    "old": "CRS.JAW",
+    "new": "CRS.JAW",
+    "how": "exact",
+    "label": "Jaw Crusher",
+    "note": ""
+   },
+   {
+    "old": "CRS.LNR",
+    "new": "CRS.LNR",
+    "how": "exact",
+    "label": "Liners (Mantle & Concaves)",
+    "note": ""
+   },
+   {
+    "old": "CRS.MSA",
+    "new": "CRS.MSA",
+    "how": "exact",
+    "label": "Main Shaft Assembly",
+    "note": ""
+   },
+   {
+    "old": "DRS. ELE",
+    "new": "DRS.ELE",
+    "how": "proposed",
+    "label": "High Voltage Electrical Control",
+    "note": "stray space in components.js; v4 code is DRS.ELE High Voltage Electrical Control"
+   },
+   {
+    "old": "DRS.AIR",
+    "new": "DRS.AIR",
+    "how": "exact",
+    "label": "Air Intake System",
+    "note": ""
+   },
+   {
+    "old": "DRS.AXL",
+    "new": "DRS.AXL",
+    "how": "exact",
+    "label": "Axles",
+    "note": ""
+   },
+   {
+    "old": "DRS.AXL.FAX",
+    "new": "AXL.FAX",
+    "how": "system",
+    "label": "Front Axle Group",
+    "note": "v4 code is AXL.FAX, system DRS"
+   },
+   {
+    "old": "DRS.AXL.RAX",
+    "new": "AXL.RAX",
+    "how": "system",
+    "label": "Rear Axle Group",
+    "note": "v4 code is AXL.RAX, system DRS"
+   },
+   {
+    "old": "DRS.CLU",
+    "new": "DRS.CLU",
+    "how": "exact",
+    "label": "Clutch",
+    "note": ""
+   },
+   {
+    "old": "DRS.COO",
+    "new": "DRS.COO",
+    "how": "exact",
+    "label": "Cooling System",
+    "note": ""
+   },
+   {
+    "old": "DRS.COO.BELT",
+    "new": "COO.BELT",
+    "how": "system",
+    "label": "Fan Belt",
+    "note": "v4 code is COO.BELT, system DRS"
+   },
+   {
+    "old": "DRS.COO.BOC",
+    "new": "COO.BOC",
+    "how": "system",
+    "label": "Brake Oil Cooler",
+    "note": "v4 code is COO.BOC, system DRS"
+   },
+   {
+    "old": "DRS.COO.CAC",
+    "new": "COO.CAC",
+    "how": "system",
+    "label": "Charge Air Cooler",
+    "note": "v4 code is COO.CAC, system DRS"
+   },
+   {
+    "old": "DRS.COO.FAN",
+    "new": "COO.FAN",
+    "how": "system",
+    "label": "Cooling Fan & Drive",
+    "note": "v4 code is COO.FAN, system DRS"
+   },
+   {
+    "old": "DRS.COO.HOC",
+    "new": "COO.HOC",
+    "how": "system",
+    "label": "Hydraulic Oil Cooler",
+    "note": "v4 code is COO.HOC, system DRS"
+   },
+   {
+    "old": "DRS.COO.RAD",
+    "new": "COO.RAD",
+    "how": "system",
+    "label": "Radiator",
+    "note": "v4 code is COO.RAD, system DRS"
+   },
+   {
+    "old": "DRS.COO.THS",
+    "new": "COO.THS",
+    "how": "system",
+    "label": "Thermostat",
+    "note": "v4 code is COO.THS, system DRS"
+   },
+   {
+    "old": "DRS.COO.TOC",
+    "new": "COO.TOC",
+    "how": "system",
+    "label": "Transmission Oil Cooler",
+    "note": "v4 code is COO.TOC, system DRS"
+   },
+   {
+    "old": "DRS.COO.WP",
+    "new": "COO.WP",
+    "how": "system",
+    "label": "Coolant Pump",
+    "note": "v4 code is COO.WP, system DRS"
+   },
+   {
+    "old": "DRS.CS",
+    "new": "DRS.CS",
+    "how": "exact",
+    "label": "Cooling System",
+    "note": ""
+   },
+   {
+    "old": "DRS.DIF",
+    "new": "DRS.DIF",
+    "how": "exact",
+    "label": "Differential",
+    "note": ""
+   },
+   {
+    "old": "DRS.DRV",
+    "new": "DRS.DRV",
+    "how": "exact",
+    "label": "Driveline",
+    "note": ""
+   },
+   {
+    "old": "DRS.DRV.FRT",
+    "new": "DRV.FRT",
+    "how": "system",
+    "label": "Front Driveline",
+    "note": "v4 code is DRV.FRT, system DRS"
+   },
+   {
+    "old": "DRS.DRV.REA",
+    "new": "DRV.REA",
+    "how": "system",
+    "label": "Rear Driveline",
+    "note": "v4 code is DRV.REA, system DRS"
+   },
+   {
+    "old": "DRS.DSH",
+    "new": "DRS.DSH",
+    "how": "exact",
+    "label": "Driveshafts",
+    "note": ""
+   },
+   {
+    "old": "DRS.ELE",
+    "new": "DRS.ELE",
+    "how": "exact",
+    "label": "High Voltage Electrical Control",
+    "note": ""
+   },
+   {
+    "old": "DRS.EM",
+    "new": "DRS.EM",
+    "how": "exact",
+    "label": "Electric Motor",
+    "note": ""
+   },
+   {
+    "old": "DRS.ENG",
+    "new": "DRS.ENG",
+    "how": "exact",
+    "label": "Engine",
+    "note": ""
+   },
+   {
+    "old": "DRS.ENG.AIS",
+    "new": "ENG.AIS",
+    "how": "system",
+    "label": "Air Intake System",
+    "note": "v4 code is ENG.AIS, system DRS"
+   },
+   {
+    "old": "DRS.ENG.EXS",
+    "new": "ENG.EXS",
+    "how": "system",
+    "label": "Exhaust System",
+    "note": "v4 code is ENG.EXS, system DRS"
+   },
+   {
+    "old": "DRS.ENG.LUB",
+    "new": "ENG.LUB",
+    "how": "system",
+    "label": "Engine Lubrication System",
+    "note": "v4 code is ENG.LUB, system DRS"
+   },
+   {
+    "old": "DRS.ENG.STC",
+    "new": "ENG.STC",
+    "how": "system",
+    "label": "Starting & Charging System",
+    "note": "v4 code is ENG.STC, system DRS"
+   },
+   {
+    "old": "DRS.EXH",
+    "new": "DRS.EXH",
+    "how": "exact",
+    "label": "Exhaust System",
+    "note": ""
+   },
+   {
+    "old": "DRS.FD",
+    "new": "DRS.FD",
+    "how": "exact",
+    "label": "Final Drives",
+    "note": ""
+   },
+   {
+    "old": "DRS.FD.RLF",
+    "new": "FD.RLF",
+    "how": "system",
+    "label": "Rear-Left Final Drive",
+    "note": "v4 code is FD.RLF, system DRS"
+   },
+   {
+    "old": "DRS.FD.RRF",
+    "new": "FD.RRF",
+    "how": "system",
+    "label": "Rear-Right Final Drive",
+    "note": "v4 code is FD.RRF, system DRS"
+   },
+   {
+    "old": "DRS.FDI",
+    "new": "DRS.FDI",
+    "how": "exact",
+    "label": "Front Differential",
+    "note": ""
+   },
+   {
+    "old": "DRS.FS",
+    "new": "DRS.FS",
+    "how": "exact",
+    "label": "Fuel System",
+    "note": ""
+   },
+   {
+    "old": "DRS.FUE",
+    "new": "DRS.FUE",
+    "how": "exact",
+    "label": "Fuel System",
+    "note": ""
+   },
+   {
+    "old": "DRS.FUE.FIL",
+    "new": "FUE.FIL",
+    "how": "system",
+    "label": "Fuel Filters",
+    "note": "v4 code is FUE.FIL, system DRS"
+   },
+   {
+    "old": "DRS.FUE.HPP",
+    "new": "FUE.HPP",
+    "how": "system",
+    "label": "High Pressure Pump",
+    "note": "v4 code is FUE.HPP, system DRS"
+   },
+   {
+    "old": "DRS.FUE.INJ",
+    "new": "FUE.INJ",
+    "how": "system",
+    "label": "Injectors",
+    "note": "v4 code is FUE.INJ, system DRS"
+   },
+   {
+    "old": "DRS.FUE.LFP",
+    "new": "FUE.LFP",
+    "how": "system",
+    "label": "Fuel Lift Pump",
+    "note": "v4 code is FUE.LFP, system DRS"
+   },
+   {
+    "old": "DRS.FUE.LIN",
+    "new": "FUE.LIN",
+    "how": "system",
+    "label": "Fuel Lines",
+    "note": "v4 code is FUE.LIN, system DRS"
+   },
+   {
+    "old": "DRS.FUE.TNK",
+    "new": "FUE.TNK",
+    "how": "system",
+    "label": "Fuel Tank",
+    "note": "v4 code is FUE.TNK, system DRS"
+   },
+   {
+    "old": "DRS.FUE.WS",
+    "new": "FUE.WS",
+    "how": "system",
+    "label": "Water Separator",
+    "note": "v4 code is FUE.WS, system DRS"
+   },
+   {
+    "old": "DRS.PD",
+    "new": "DRS.PD",
+    "how": "exact",
+    "label": "Pump Drive",
+    "note": ""
+   },
+   {
+    "old": "DRS.PG",
+    "new": "DRS.PG",
+    "how": "exact",
+    "label": "Power Generator",
+    "note": ""
+   },
+   {
+    "old": "DRS.PTO",
+    "new": "DRS.PTO",
+    "how": "exact",
+    "label": "Power Take-Off (PTO)",
+    "note": ""
+   },
+   {
+    "old": "DRS.PTO.ENG",
+    "new": "PTO.ENG",
+    "how": "system",
+    "label": "Power Take-Off - Engine",
+    "note": "v4 code is PTO.ENG, system DRS"
+   },
+   {
+    "old": "DRS.PTO.TRA",
+    "new": "PTO.TRA",
+    "how": "system",
+    "label": "Power Take-Off - Transmission",
+    "note": "v4 code is PTO.TRA, system DRS"
+   },
+   {
+    "old": "DRS.RDI",
+    "new": "DRS.RDI",
+    "how": "exact",
+    "label": "Rear Differential",
+    "note": ""
+   },
+   {
+    "old": "DRS.SW",
+    "new": "DRS.SW",
+    "how": "exact",
+    "label": "Swing Drive",
+    "note": ""
+   },
+   {
+    "old": "DRS.TC",
+    "new": "DRS.TC",
+    "how": "exact",
+    "label": "Torque Converter",
+    "note": ""
+   },
+   {
+    "old": "DRS.TM",
+    "new": "DRS.TM",
+    "how": "exact",
+    "label": "Travel Motors",
+    "note": ""
+   },
+   {
+    "old": "DRS.TRA",
+    "new": "DRS.TRA",
+    "how": "exact",
+    "label": "Transmission",
+    "note": ""
+   },
+   {
+    "old": "DRS.TRA.RET",
+    "new": "TRA.RET",
+    "how": "system",
+    "label": "Transmission Retarder",
+    "note": "v4 code is TRA.RET, system DRS"
+   },
+   {
+    "old": "DRS.TRF",
+    "new": "DRS.TRF",
+    "how": "exact",
+    "label": "Transfer Case",
+    "note": ""
+   },
+   {
+    "old": "DRS.WH",
+    "new": "DRS.WH",
+    "how": "exact",
+    "label": "Engine Wiring Harness",
+    "note": ""
+   },
+   {
+    "old": "DUS.NZL",
+    "new": "DUS.NZL",
+    "how": "exact",
+    "label": "Spray Nozzles",
+    "note": ""
+   },
+   {
+    "old": "DUS.PIP",
+    "new": "DUS.PIP",
+    "how": "exact",
+    "label": "Piping",
+    "note": ""
+   },
+   {
+    "old": "DUS.PMP",
+    "new": "DUS.PMP",
+    "how": "exact",
+    "label": "Water Pump",
+    "note": ""
+   },
+   {
+    "old": "DUS.SPR",
+    "new": "DUS.SPR",
+    "how": "exact",
+    "label": "Water Spray System",
+    "note": ""
+   },
+   {
+    "old": "DUS.TNK",
+    "new": "DUS.TNK",
+    "how": "exact",
+    "label": "Water Tank",
+    "note": ""
+   },
+   {
+    "old": "ELS.ALT",
+    "new": "ELS.ALT",
+    "how": "exact",
+    "label": "Alternator",
+    "note": ""
+   },
+   {
+    "old": "ELS.AS",
+    "new": "ELS.AS",
+    "how": "exact",
+    "label": "Alarm System",
+    "note": ""
+   },
+   {
+    "old": "ELS.BAT",
+    "new": "ELS.BAT",
+    "how": "exact",
+    "label": "Batteries",
+    "note": ""
+   },
+   {
+    "old": "ELS.CAB",
+    "new": "ELS.CAB",
+    "how": "exact",
+    "label": "Electric Cabinet",
+    "note": ""
+   },
+   {
+    "old": "ELS.DSC",
+    "new": "ELS.DSC",
+    "how": "exact",
+    "label": "Powertrain Control System",
+    "note": ""
+   },
+   {
+    "old": "ELS.ECU",
+    "new": "ELS.ECU",
+    "how": "exact",
+    "label": "Electronic Control Unit (ECU)",
+    "note": ""
+   },
+   {
+    "old": "ELS.HD",
+    "new": "ELS.HD",
+    "how": "exact",
+    "label": "Head Lamps & Tail Lights",
+    "note": ""
+   },
+   {
+    "old": "ELS.HMI",
+    "new": "ELS.HMI",
+    "how": "exact",
+    "label": "HMI Display",
+    "note": ""
+   },
+   {
+    "old": "ELS.LIG",
+    "new": "ELS.LIG",
+    "how": "exact",
+    "label": "Head Lighting System",
+    "note": ""
+   },
+   {
+    "old": "ELS.MW",
+    "new": "ELS.MW",
+    "how": "exact",
+    "label": "Machine Wiring",
+    "note": ""
+   },
+   {
+    "old": "ELS.PH",
+    "new": "ELS.PH",
+    "how": "exact",
+    "label": "Preheater",
+    "note": ""
+   },
+   {
+    "old": "ELS.PLC",
+    "new": "ELS.PLC",
+    "how": "exact",
+    "label": "PLC & Control Panel",
+    "note": ""
+   },
+   {
+    "old": "ELS.RPS",
+    "new": "ELS.RPS",
+    "how": "exact",
+    "label": "Radio Power System",
+    "note": ""
+   },
+   {
+    "old": "ELS.SNS",
+    "new": "ELS.SNS",
+    "how": "exact",
+    "label": "Sensors & Switches",
+    "note": ""
+   },
+   {
+    "old": "ELS.STM",
+    "new": "ELS.STM",
+    "how": "exact",
+    "label": "Starter Motor",
+    "note": ""
+   },
+   {
+    "old": "ELS.TC",
+    "new": "ELS.TC",
+    "how": "exact",
+    "label": "Transmission Control",
+    "note": ""
+   },
+   {
+    "old": "ELS.WH",
+    "new": "ELS.WH",
+    "how": "exact",
+    "label": "Wiring Harness",
+    "note": ""
+   },
+   {
+    "old": "FEED.BEL",
+    "new": "FEED.BEL",
+    "how": "exact",
+    "label": "Feeder Belt",
+    "note": ""
+   },
+   {
+    "old": "FEED.CHU",
+    "new": "FEED.CHU",
+    "how": "exact",
+    "label": "Feed Chute",
+    "note": ""
+   },
+   {
+    "old": "FEED.FBX",
+    "new": "FEED.FBX",
+    "how": "exact",
+    "label": "Feed Box",
+    "note": ""
+   },
+   {
+    "old": "FEED.FDR",
+    "new": "FEED.FDR",
+    "how": "exact",
+    "label": "Feeder",
+    "note": ""
+   },
+   {
+    "old": "FEED.FUN",
+    "new": "FEED.FUN",
+    "how": "exact",
+    "label": "Feeder Funnel",
+    "note": ""
+   },
+   {
+    "old": "FEED.HOP",
+    "new": "FEED.HOP",
+    "how": "exact",
+    "label": "Hopper",
+    "note": ""
+   },
+   {
+    "old": "FEED.PNF",
+    "new": "FEED.PNF",
+    "how": "exact",
+    "label": "Pan Feeder",
+    "note": ""
+   },
+   {
+    "old": "FEED.PRE",
+    "new": "FEED.PRE",
+    "how": "exact",
+    "label": "Pre-screen",
+    "note": ""
+   },
+   {
+    "old": "HS.ACC",
+    "new": "HS.ACC",
+    "how": "exact",
+    "label": "Accumulators",
+    "note": ""
+   },
+   {
+    "old": "HS.CV",
+    "new": "HS.CV",
+    "how": "exact",
+    "label": "Control Valves",
+    "note": ""
+   },
+   {
+    "old": "HS.CYL",
+    "new": "HS.CYL",
+    "how": "exact",
+    "label": "Cylinders",
+    "note": ""
+   },
+   {
+    "old": "HS.DL",
+    "new": "HS.DL",
+    "how": "exact",
+    "label": "Hydraulic Lines",
+    "note": ""
+   },
+   {
+    "old": "HS.FIL",
+    "new": "HS.FIL",
+    "how": "exact",
+    "label": "Hydraulic Filters",
+    "note": ""
+   },
+   {
+    "old": "HS.HM",
+    "new": "HS.HM",
+    "how": "exact",
+    "label": "Hydraulic Motors",
+    "note": ""
+   },
+   {
+    "old": "HS.HOI",
+    "new": "HS.HOI",
+    "how": "exact",
+    "label": "Body Hoist System",
+    "note": ""
+   },
+   {
+    "old": "HS.HOI.CV",
+    "new": "HOI.CV",
+    "how": "system",
+    "label": "Hoist Control Valve",
+    "note": "v4 code is HOI.CV, system HS"
+   },
+   {
+    "old": "HS.HOI.CYL",
+    "new": "HOI.CYL",
+    "how": "system",
+    "label": "Body Hoist Cylinders",
+    "note": "v4 code is HOI.CYL, system HS"
+   },
+   {
+    "old": "HS.HOI.FIL",
+    "new": "HOI.FIL",
+    "how": "system",
+    "label": "Hoist Hydraulic Filter",
+    "note": "v4 code is HOI.FIL, system HS"
+   },
+   {
+    "old": "HS.HOI.LIN",
+    "new": "HOI.LIN",
+    "how": "system",
+    "label": "Hoist Hydraulic Lines",
+    "note": "v4 code is HOI.LIN, system HS"
+   },
+   {
+    "old": "HS.HOI.PMP",
+    "new": "HOI.PMP",
+    "how": "system",
+    "label": "Body Hoist Pump",
+    "note": "v4 code is HOI.PMP, system HS"
+   },
+   {
+    "old": "HS.HOI.TNK",
+    "new": "HOI.TNK",
+    "how": "system",
+    "label": "Hoist Hydraulic Tank",
+    "note": "v4 code is HOI.TNK, system HS"
+   },
+   {
+    "old": "HS.HOS",
+    "new": "HS.HOS",
+    "how": "exact",
+    "label": "Hoses & Piping",
+    "note": ""
+   },
+   {
+    "old": "HS.MP",
+    "new": "HS.MP",
+    "how": "exact",
+    "label": "Hydraulic Pumps",
+    "note": ""
+   },
+   {
+    "old": "HS.PD",
+    "new": "HS.PD",
+    "how": "exact",
+    "label": "Hydraulic Motors",
+    "note": ""
+   },
+   {
+    "old": "HS.PST",
+    "new": "HS.PST",
+    "how": "exact",
+    "label": "Hydraulic Pump Station",
+    "note": ""
+   },
+   {
+    "old": "HS.RES",
+    "new": "HS.RES",
+    "how": "exact",
+    "label": "Hydraulic Tank",
+    "note": ""
+   },
+   {
+    "old": "HS.TIP",
+    "new": "HS.TIP",
+    "how": "exact",
+    "label": "Tipping System",
+    "note": ""
+   },
+   {
+    "old": "HS.TIP.CYL",
+    "new": "TIP.CYL",
+    "how": "system",
+    "label": "Hydraulic Cylinder (Tipping)",
+    "note": "v4 code is TIP.CYL, system HS"
+   },
+   {
+    "old": "HS.TIP.FIL",
+    "new": "TIP.FIL",
+    "how": "system",
+    "label": "Hydraulic Filter",
+    "note": "v4 code is TIP.FIL, system HS"
+   },
+   {
+    "old": "HS.TIP.PMP",
+    "new": "TIP.PMP",
+    "how": "system",
+    "label": "Hydraulic Pump (Tipping)",
+    "note": "v4 code is TIP.PMP, system HS"
+   },
+   {
+    "old": "HS.TIP.TNK",
+    "new": "TIP.TNK",
+    "how": "system",
+    "label": "Hydraulic Tank",
+    "note": "v4 code is TIP.TNK, system HS"
+   },
+   {
+    "old": "HS.TIP.VAL",
+    "new": "TIP.VAL",
+    "how": "system",
+    "label": "Control Valve (Tipping)",
+    "note": "v4 code is TIP.VAL, system HS"
+   },
+   {
+    "old": "HS.TNK",
+    "new": "HS.TNK",
+    "how": "exact",
+    "label": "Hydraulic Oil Tank",
+    "note": ""
+   },
+   {
+    "old": "LS.AUTO",
+    "new": "LS.AUTO",
+    "how": "exact",
+    "label": "Automatic Lubrication",
+    "note": ""
+   },
+   {
+    "old": "LS.CLU",
+    "new": "LS.CLU",
+    "how": "exact",
+    "label": "Central Lubrication Unit",
+    "note": ""
+   },
+   {
+    "old": "LS.CTL",
+    "new": "LS.CTL",
+    "how": "exact",
+    "label": "Control Unit",
+    "note": ""
+   },
+   {
+    "old": "LS.DL",
+    "new": "LS.DL",
+    "how": "exact",
+    "label": "Distribution Lines",
+    "note": ""
+   },
+   {
+    "old": "LS.DST",
+    "new": "LS.DST",
+    "how": "exact",
+    "label": "Distribution Blocks",
+    "note": ""
+   },
+   {
+    "old": "LS.LNS",
+    "new": "LS.LNS",
+    "how": "exact",
+    "label": "Lubrication Lines",
+    "note": ""
+   },
+   {
+    "old": "LS.LU",
+    "new": "LS.LU",
+    "how": "exact",
+    "label": "Lubrication Unit",
+    "note": ""
+   },
+   {
+    "old": "LS.PI",
+    "new": "LS.PI",
+    "how": "exact",
+    "label": "Pressure Indicator",
+    "note": ""
+   },
+   {
+    "old": "LS.PMP",
+    "new": "LS.PMP",
+    "how": "exact",
+    "label": "Grease Pump",
+    "note": ""
+   },
+   {
+    "old": "LS.RV",
+    "new": "LS.RV",
+    "how": "exact",
+    "label": "Relief Valve",
+    "note": ""
+   },
+   {
+    "old": "LS.TNK",
+    "new": "LS.TNK",
+    "how": "exact",
+    "label": "Grease Tank",
+    "note": ""
+   },
+   {
+    "old": "OC.AC",
+    "new": "OC.AC",
+    "how": "exact",
+    "label": "Air Conditioning",
+    "note": ""
+   },
+   {
+    "old": "OC.AC.CMP",
+    "new": "AC.CMP",
+    "how": "system",
+    "label": "A/C Compressor",
+    "note": "v4 code is AC.CMP, system OC"
+   },
+   {
+    "old": "OC.AC.CND",
+    "new": "AC.CND",
+    "how": "system",
+    "label": "Condenser",
+    "note": "v4 code is AC.CND, system OC"
+   },
+   {
+    "old": "OC.AC.EVP",
+    "new": "AC.EVP",
+    "how": "system",
+    "label": "Evaporator",
+    "note": "v4 code is AC.EVP, system OC"
+   },
+   {
+    "old": "OC.AC.EXV",
+    "new": "AC.EXV",
+    "how": "system",
+    "label": "Expansion Valve",
+    "note": "v4 code is AC.EXV, system OC"
+   },
+   {
+    "old": "OC.AC.RDR",
+    "new": "AC.RDR",
+    "how": "system",
+    "label": "Receiver Drier",
+    "note": "v4 code is AC.RDR, system OC"
+   },
+   {
+    "old": "OC.CO",
+    "new": "OC.CO",
+    "how": "exact",
+    "label": "Console",
+    "note": ""
+   },
+   {
+    "old": "OC.CON",
+    "new": "OC.CON",
+    "how": "exact",
+    "label": "Control Console",
+    "note": ""
+   },
+   {
+    "old": "OC.CR",
+    "new": "OC.CR",
+    "how": "exact",
+    "label": "Cab ROPS",
+    "note": ""
+   },
+   {
+    "old": "OC.DO",
+    "new": "OC.DO",
+    "how": "exact",
+    "label": "Doors",
+    "note": ""
+   },
+   {
+    "old": "OC.EST",
+    "new": "OC.EST",
+    "how": "exact",
+    "label": "Emergency Stop System",
+    "note": ""
+   },
+   {
+    "old": "OC.FS",
+    "new": "OC.FS",
+    "how": "exact",
+    "label": "Fire Suppression",
+    "note": ""
+   },
+   {
+    "old": "OC.GL",
+    "new": "OC.GL",
+    "how": "exact",
+    "label": "Glass",
+    "note": ""
+   },
+   {
+    "old": "OC.HE",
+    "new": "OC.HE",
+    "how": "exact",
+    "label": "Heating",
+    "note": ""
+   },
+   {
+    "old": "OC.MR",
+    "new": "OC.MR",
+    "how": "exact",
+    "label": "Multimedia / Radio",
+    "note": ""
+   },
+   {
+    "old": "OC.REM",
+    "new": "OC.REM",
+    "how": "exact",
+    "label": "Remote Control",
+    "note": ""
+   },
+   {
+    "old": "OC.RMT",
+    "new": "OC.RMT",
+    "how": "exact",
+    "label": "Remote Control Panel",
+    "note": ""
+   },
+   {
+    "old": "OC.SE",
+    "new": "OC.SE",
+    "how": "exact",
+    "label": "Seat",
+    "note": ""
+   },
+   {
+    "old": "PS.AL",
+    "new": "PS.AL",
+    "how": "exact",
+    "label": "Air Lines",
+    "note": ""
+   },
+   {
+    "old": "PS.CO",
+    "new": "PS.CO",
+    "how": "exact",
+    "label": "Air Compressor",
+    "note": ""
+   },
+   {
+    "old": "PS.CV",
+    "new": "PS.CV",
+    "how": "exact",
+    "label": "Control Valves",
+    "note": ""
+   },
+   {
+    "old": "PS.OC",
+    "new": "PS.OC",
+    "how": "exact",
+    "label": "Compressor Oil Cooler",
+    "note": ""
+   },
+   {
+    "old": "PS.RC",
+    "new": "PS.RC",
+    "how": "exact",
+    "label": "Air Receiver",
+    "note": ""
+   },
+   {
+    "old": "SCN.BRG",
+    "new": "SCN.BRG",
+    "how": "exact",
+    "label": "Bearings",
+    "note": ""
+   },
+   {
+    "old": "SCN.DKS",
+    "new": "SCN.DKS",
+    "how": "exact",
+    "label": "Screen Decks",
+    "note": ""
+   },
+   {
+    "old": "SCN.DRV",
+    "new": "SCN.DRV",
+    "how": "exact",
+    "label": "Screen Drive",
+    "note": ""
+   },
+   {
+    "old": "SCN.EXC",
+    "new": "SCN.EXC",
+    "how": "exact",
+    "label": "Exciter",
+    "note": ""
+   },
+   {
+    "old": "SCN.MED",
+    "new": "SCN.MED",
+    "how": "exact",
+    "label": "Screen Media",
+    "note": ""
+   },
+   {
+    "old": "SCN.SBX",
+    "new": "SCN.SBX",
+    "how": "exact",
+    "label": "Screen Box",
+    "note": ""
+   },
+   {
+    "old": "SCN.SPR",
+    "new": "SCN.SPR",
+    "how": "exact",
+    "label": "Isolation Springs",
+    "note": ""
+   },
+   {
+    "old": "SS.ACC",
+    "new": "SS.ACC",
+    "how": "exact",
+    "label": "Steering Accumulator",
+    "note": ""
+   },
+   {
+    "old": "SS.COL",
+    "new": "SS.COL",
+    "how": "exact",
+    "label": "Steering Column",
+    "note": ""
+   },
+   {
+    "old": "SS.CV",
+    "new": "SS.CV",
+    "how": "exact",
+    "label": "Control Valve",
+    "note": ""
+   },
+   {
+    "old": "SS.CYL",
+    "new": "SS.CYL",
+    "how": "exact",
+    "label": "Steering Cylinders",
+    "note": ""
+   },
+   {
+    "old": "SS.FIL",
+    "new": "SS.FIL",
+    "how": "exact",
+    "label": "Steering Filter",
+    "note": ""
+   },
+   {
+    "old": "SS.HOS",
+    "new": "SS.HOS",
+    "how": "exact",
+    "label": "Hoses and Piping",
+    "note": ""
+   },
+   {
+    "old": "SS.MU",
+    "new": "SS.MU",
+    "how": "exact",
+    "label": "Hand Metering Unit (HMU/Orbitrol)",
+    "note": ""
+   },
+   {
+    "old": "SS.RE",
+    "new": "SS.RE",
+    "how": "exact",
+    "label": "Tie Rod Ends",
+    "note": ""
+   },
+   {
+    "old": "SS.RES",
+    "new": "SS.RES",
+    "how": "exact",
+    "label": "Steering Reservoir",
+    "note": ""
+   },
+   {
+    "old": "SS.SG",
+    "new": "SS.SG",
+    "how": "exact",
+    "label": "Steering Gearbox",
+    "note": ""
+   },
+   {
+    "old": "SS.SP",
+    "new": "SS.SP",
+    "how": "exact",
+    "label": "Steering Pump",
+    "note": ""
+   },
+   {
+    "old": "SS.SR",
+    "new": "SS.SR",
+    "how": "exact",
+    "label": "Steering Rack",
+    "note": ""
+   },
+   {
+    "old": "SS.TNK",
+    "new": "SS.TNK",
+    "how": "exact",
+    "label": "Steering Tank",
+    "note": ""
+   },
+   {
+    "old": "WE.BKL",
+    "new": "WE.BKL",
+    "how": "exact",
+    "label": "Bucket Link",
+    "note": ""
+   },
+   {
+    "old": "WE.BOO",
+    "new": "WE.BOO",
+    "how": "exact",
+    "label": "Boom Assembly",
+    "note": ""
+   },
+   {
+    "old": "WE.BUC",
+    "new": "WE.BUC",
+    "how": "exact",
+    "label": "Bucket",
+    "note": ""
+   },
+   {
+    "old": "WE.LNK",
+    "new": "WE.LNK",
+    "how": "exact",
+    "label": "Linkage (Bell Crank)",
+    "note": ""
+   }
+  ],
+  "newInV4": []
+ },
+ "defectTypes": {
+  "rows": [
+   {
+    "old": "DT0-00",
+    "oldLabel": "Not confirmed / to be investigated",
+    "new": "FM-DQ-02",
+    "how": "proposed",
+    "newLabel": "Cause not confirmed - under investigation",
+    "note": "v4 has an explicit data-quality group"
+   },
+   {
+    "old": "DT1-01",
+    "oldLabel": "Leakage (external/internal)",
+    "new": "FM-LEK-01",
+    "how": "legacy2",
+    "newLabel": "External leak - oil / hydraulic fluid",
+    "note": ""
+   },
+   {
+    "old": "DT1-02",
+    "oldLabel": "Overheating / high temperature",
+    "new": "FM-TMP-01",
+    "how": "legacy2",
+    "newLabel": "Overheating / high temperature",
+    "note": ""
+   },
+   {
+    "old": "DT1-03",
+    "oldLabel": "Low pressure / low flow",
+    "new": "FM-PRS-01",
+    "how": "legacy2",
+    "newLabel": "Low pressure / low flow",
+    "note": ""
+   },
+   {
+    "old": "DT1-04",
+    "oldLabel": "Abnormal noise / vibration",
+    "new": "FM-MEC-01",
+    "how": "legacy2",
+    "newLabel": "Abnormal noise",
+    "note": ""
+   },
+   {
+    "old": "DT1-05",
+    "oldLabel": "Misalignment / incorrect adjustment",
+    "new": "FM-MEC-11",
+    "how": "legacy2",
+    "newLabel": "Misalignment / out of adjustment",
+    "note": ""
+   },
+   {
+    "old": "DT1-06",
+    "oldLabel": "Deformation / bending / buckling",
+    "new": "FM-MEC-06",
+    "how": "legacy2",
+    "newLabel": "Deformation / bending / buckling",
+    "note": ""
+   },
+   {
+    "old": "DT1-07",
+    "oldLabel": "Looseness / missing fasteners",
+    "new": "FM-MEC-07",
+    "how": "legacy2",
+    "newLabel": "Loose / missing fastener",
+    "note": ""
+   },
+   {
+    "old": "DT1-08",
+    "oldLabel": "Crack / fracture / breakage",
+    "new": "FM-MEC-04",
+    "how": "legacy2",
+    "newLabel": "Crack / fracture",
+    "note": ""
+   },
+   {
+    "old": "DT1-09",
+    "oldLabel": "Sticking / seizure / jamming",
+    "new": "FM-MEC-08",
+    "how": "legacy2",
+    "newLabel": "Seizure / jamming / sticking",
+    "note": ""
+   },
+   {
+    "old": "DT1-10",
+    "oldLabel": "Rupture / Burst",
+    "new": "FM-LEK-08",
+    "how": "legacy2",
+    "newLabel": "Rupture / burst / blow-out",
+    "note": ""
+   },
+   {
+    "old": "DT1-11",
+    "oldLabel": "High pressure / overpressure",
+    "new": "FM-PRS-02",
+    "how": "legacy2",
+    "newLabel": "High pressure / overpressure",
+    "note": ""
+   },
+   {
+    "old": "DT1-12",
+    "oldLabel": "Low fluid level",
+    "new": "FM-CON-08",
+    "how": "legacy2",
+    "newLabel": "Low fluid level",
+    "note": ""
+   },
+   {
+    "old": "DT1-13",
+    "oldLabel": "Fluid contamination (water/dirt)",
+    "new": "FM-CON-01",
+    "how": "legacy2",
+    "newLabel": "Fluid contamination (dirt / wear debris)",
+    "note": ""
+   },
+   {
+    "old": "DT1-14",
+    "oldLabel": "Aeration / foaming",
+    "new": "FM-CON-09",
+    "how": "legacy2",
+    "newLabel": "Aeration / foaming / air in system",
+    "note": ""
+   },
+   {
+    "old": "DT1-15",
+    "oldLabel": "Abnormal smoke / abnormal exhaust",
+    "new": "FM-TMP-04",
+    "how": "legacy2",
+    "newLabel": "Abnormal smoke / exhaust",
+    "note": ""
+   },
+   {
+    "old": "DT1-16",
+    "oldLabel": "Burning smell / thermal odor",
+    "new": "FM-TMP-03",
+    "how": "legacy2",
+    "newLabel": "Burning smell / thermal odour",
+    "note": ""
+   },
+   {
+    "old": "DT1-17",
+    "oldLabel": "Loss of power / reduced power",
+    "new": "FM-PER-04",
+    "how": "legacy2",
+    "newLabel": "Low power / reduced output",
+    "note": ""
+   },
+   {
+    "old": "DT1-18",
+    "oldLabel": "No start / fails to start",
+    "new": "FM-PER-01",
+    "how": "legacy2",
+    "newLabel": "No start / fails to start",
+    "note": ""
+   },
+   {
+    "old": "DT1-19",
+    "oldLabel": "No movement / no drive",
+    "new": "FM-PER-06",
+    "how": "legacy2",
+    "newLabel": "Fails to operate / no response",
+    "note": ""
+   },
+   {
+    "old": "DT1-20",
+    "oldLabel": "Slow response / sluggish operation",
+    "new": "FM-PER-05",
+    "how": "legacy2",
+    "newLabel": "Slow / weak function",
+    "note": ""
+   },
+   {
+    "old": "DT1-21",
+    "oldLabel": "Erratic / unstable operation",
+    "new": "FM-PRS-03",
+    "how": "legacy2",
+    "newLabel": "Pressure fluctuation / unstable",
+    "note": ""
+   },
+   {
+    "old": "DT1-22",
+    "oldLabel": "Incorrect speed (overspeed/underspeed)",
+    "new": "FM-PER-09",
+    "how": "legacy2",
+    "newLabel": "Incorrect speed (over / under)",
+    "note": ""
+   },
+   {
+    "old": "DT1-23",
+    "oldLabel": "Excessive play / backlash",
+    "new": "FM-MEC-09",
+    "how": "legacy2",
+    "newLabel": "Excessive play / backlash",
+    "note": ""
+   },
+   {
+    "old": "DT1-24",
+    "oldLabel": "Low temperature / freezing",
+    "new": "FM-TMP-02",
+    "how": "legacy2",
+    "newLabel": "Low temperature / freezing",
+    "note": ""
+   },
+   {
+    "old": "DT1-25",
+    "oldLabel": "Reduced capacity / output",
+    "new": "FM-PER-04",
+    "how": "legacy2",
+    "newLabel": "Low power / reduced output",
+    "note": ""
+   },
+   {
+    "old": "DT1-26",
+    "oldLabel": "Abnormal wear (rapid wear)",
+    "new": "FM-MEC-03",
+    "how": "legacy2",
+    "newLabel": "Abnormal / accelerated wear",
+    "note": ""
+   },
+   {
+    "old": "DT1-27",
+    "oldLabel": "Belt drive issue (slip/break)",
+    "new": "FM-MEC-14",
+    "how": "legacy2",
+    "newLabel": "Belt / chain drive slip or breakage",
+    "note": ""
+   },
+   {
+    "old": "DT10-01",
+    "oldLabel": "Transmission slipping / drive loss",
+    "new": "FM-PER-10",
+    "how": "proposed",
+    "newLabel": "Loss of drive / no movement",
+    "note": "transmission slipping = loss of drive, on the transmission"
+   },
+   {
+    "old": "DT10-02",
+    "oldLabel": "Travel / propulsion fault",
+    "new": "FM-PER-10",
+    "how": "proposed",
+    "newLabel": "Loss of drive / no movement",
+    "note": "travel / propulsion fault = loss of drive, on the travel drive"
+   },
+   {
+    "old": "DT10-03",
+    "oldLabel": "Final drive / axle fault",
+    "new": "FM-PER-06",
+    "how": "proposed",
+    "newLabel": "Fails to operate / no response",
+    "note": "component (final drive / axle) now carries what the old code named"
+   },
+   {
+    "old": "DT10-04",
+    "oldLabel": "Brake performance low",
+    "new": "FM-PER-11",
+    "how": "proposed",
+    "newLabel": "Fails to stop / will not hold on demand",
+    "note": "brake performance low = fails to stop / will not hold, on the brakes"
+   },
+   {
+    "old": "DT10-05",
+    "oldLabel": "Brake overheating / dragging",
+    "new": "FM-TMP-01",
+    "how": "proposed",
+    "newLabel": "Overheating / high temperature",
+    "note": "brake overheating = overheating, on the brakes"
+   },
+   {
+    "old": "DT10-06",
+    "oldLabel": "Steering fault",
+    "new": "FM-PER-06",
+    "how": "proposed",
+    "newLabel": "Fails to operate / no response",
+    "note": "steering fault = fails to operate, on the steering"
+   },
+   {
+    "old": "DT10-07",
+    "oldLabel": "Bearing damage / failure",
+    "new": "FM-MEC-03",
+    "how": "proposed",
+    "newLabel": "Abnormal / accelerated wear",
+    "note": "bearing damage = abnormal / accelerated wear"
+   },
+   {
+    "old": "DT11-01",
+    "oldLabel": "Drill rotation / feed fault",
+    "new": "FM-DRL-01",
+    "how": "name",
+    "newLabel": "Rotation / feed fault",
+    "note": "same concept, v4 legacy fields missed it (similarity 0.75)"
+   },
+   {
+    "old": "DT11-02",
+    "oldLabel": "Drill air / compressor fault",
+    "new": "FM-DRL-02",
+    "how": "name",
+    "newLabel": "Drill air / compressor fault",
+    "note": "same concept, v4 legacy fields missed it (similarity 1.00)"
+   },
+   {
+    "old": "DT11-03",
+    "oldLabel": "Drill bit / string damage",
+    "new": "FM-DRL-03",
+    "how": "name",
+    "newLabel": "Bit / drill string damage",
+    "note": "same concept, v4 legacy fields missed it (similarity 1.00)"
+   },
+   {
+    "old": "DT12-01",
+    "oldLabel": "Fire suppression fault",
+    "new": "FM-SAF-01",
+    "how": "name",
+    "newLabel": "Fire suppression system fault",
+    "note": "same concept, v4 legacy fields missed it (similarity 0.75)"
+   },
+   {
+    "old": "DT12-02",
+    "oldLabel": "Safety interlock fault",
+    "new": "FM-SAF-02",
+    "how": "name",
+    "newLabel": "Safety interlock / E-stop fault",
+    "note": "same concept, v4 legacy fields missed it (similarity 0.60)"
+   },
+   {
+    "old": "DT13-02",
+    "oldLabel": "Cylinder drift / internal leakage",
+    "new": "FM-PER-08",
+    "how": "proposed",
+    "newLabel": "Cannot hold load / creeps / drifts",
+    "note": "cylinder drift = cannot hold load / creeps / drifts"
+   },
+   {
+    "old": "DT13-03",
+    "oldLabel": "Pump / motor fault",
+    "new": "FM-PER-06",
+    "how": "proposed",
+    "newLabel": "Fails to operate / no response",
+    "note": "pump / motor fault = fails to operate, on the pump"
+   },
+   {
+    "old": "DT13-04",
+    "oldLabel": "Filter plugged",
+    "new": "FM-CON-04",
+    "how": "name",
+    "newLabel": "Filter plugged / bypassing",
+    "note": "same concept, v4 legacy fields missed it (similarity 0.67)"
+   },
+   {
+    "old": "DT13-05",
+    "oldLabel": "Hose / line chafing or damage",
+    "new": "FM-MEC-05",
+    "how": "proposed",
+    "newLabel": "Broken / damaged component",
+    "note": "hose chafing = broken / damaged component, on the hose"
+   },
+   {
+    "old": "DT14-01",
+    "oldLabel": "Ferrous debris — light / normal",
+    "new": "DT14-01",
+    "how": "keep",
+    "newLabel": "Ferrous debris — light / normal",
+    "note": "magnetic plug / filter cut — unchanged this round"
+   },
+   {
+    "old": "DT14-02",
+    "oldLabel": "Ferrous debris — moderate",
+    "new": "DT14-02",
+    "how": "keep",
+    "newLabel": "Ferrous debris — moderate",
+    "note": "magnetic plug / filter cut — unchanged this round"
+   },
+   {
+    "old": "DT14-03",
+    "oldLabel": "Ferrous debris — heavy / chips / flakes",
+    "new": "DT14-03",
+    "how": "keep",
+    "newLabel": "Ferrous debris — heavy / chips / flakes",
+    "note": "magnetic plug / filter cut — unchanged this round"
+   },
+   {
+    "old": "DT14-04",
+    "oldLabel": "Non-ferrous debris (bronze / aluminium)",
+    "new": "DT14-04",
+    "how": "keep",
+    "newLabel": "Non-ferrous debris (bronze / aluminium)",
+    "note": "magnetic plug / filter cut — unchanged this round"
+   },
+   {
+    "old": "DT14-05",
+    "oldLabel": "Water in oil",
+    "new": "DT14-05",
+    "how": "keep",
+    "newLabel": "Water in oil",
+    "note": "magnetic plug / filter cut — unchanged this round"
+   },
+   {
+    "old": "DT14-06",
+    "oldLabel": "Coolant in oil",
+    "new": "DT14-06",
+    "how": "keep",
+    "newLabel": "Coolant in oil",
+    "note": "magnetic plug / filter cut — unchanged this round"
+   },
+   {
+    "old": "DT14-07",
+    "oldLabel": "Fuel dilution",
+    "new": "DT14-07",
+    "how": "keep",
+    "newLabel": "Fuel dilution",
+    "note": "magnetic plug / filter cut — unchanged this round"
+   },
+   {
+    "old": "DT14-08",
+    "oldLabel": "Oil degradation / discolouration / smell",
+    "new": "DT14-08",
+    "how": "keep",
+    "newLabel": "Oil degradation / discolouration / smell",
+    "note": "magnetic plug / filter cut — unchanged this round"
+   },
+   {
+    "old": "DT14-09",
+    "oldLabel": "Oil viscosity out of specification",
+    "new": "DT14-09",
+    "how": "keep",
+    "newLabel": "Oil viscosity out of specification",
+    "note": "magnetic plug / filter cut — unchanged this round"
+   },
+   {
+    "old": "DT15-01",
+    "oldLabel": "Ferrous debris in filter media",
+    "new": "DT15-01",
+    "how": "keep",
+    "newLabel": "Ferrous debris in filter media",
+    "note": "magnetic plug / filter cut — unchanged this round"
+   },
+   {
+    "old": "DT15-02",
+    "oldLabel": "Non-ferrous debris in filter media",
+    "new": "DT15-02",
+    "how": "keep",
+    "newLabel": "Non-ferrous debris in filter media",
+    "note": "magnetic plug / filter cut — unchanged this round"
+   },
+   {
+    "old": "DT15-03",
+    "oldLabel": "Filter media damaged / ruptured",
+    "new": "DT15-03",
+    "how": "keep",
+    "newLabel": "Filter media damaged / ruptured",
+    "note": "magnetic plug / filter cut — unchanged this round"
+   },
+   {
+    "old": "DT15-04",
+    "oldLabel": "Filter bypass indication",
+    "new": "DT15-04",
+    "how": "keep",
+    "newLabel": "Filter bypass indication",
+    "note": "magnetic plug / filter cut — unchanged this round"
+   },
+   {
+    "old": "DT15-05",
+    "oldLabel": "Abnormal contamination (silt / varnish / sludge)",
+    "new": "DT15-05",
+    "how": "keep",
+    "newLabel": "Abnormal contamination (silt / varnish / sludge)",
+    "note": "magnetic plug / filter cut — unchanged this round"
+   },
+   {
+    "old": "DT3-01",
+    "oldLabel": "Control failure",
+    "new": "FM-SAF-01",
+    "how": "legacy2",
+    "newLabel": "Fire suppression system fault",
+    "note": ""
+   },
+   {
+    "old": "DT3-02",
+    "oldLabel": "No signal/ indication /alarm",
+    "new": "FM-CTL-08",
+    "how": "legacy2",
+    "newLabel": "No signal / no indication",
+    "note": ""
+   },
+   {
+    "old": "DT3-03",
+    "oldLabel": "Out of adjustment",
+    "new": "FM-MEC-11",
+    "how": "legacy2",
+    "newLabel": "Misalignment / out of adjustment",
+    "note": ""
+   },
+   {
+    "old": "DT3-04",
+    "oldLabel": "Software failure",
+    "new": "FM-CTL-04",
+    "how": "legacy2",
+    "newLabel": "Software / HMI / display fault",
+    "note": ""
+   },
+   {
+    "old": "DT3-06",
+    "oldLabel": "Sensor failure",
+    "new": "FM-CTL-01",
+    "how": "legacy2",
+    "newLabel": "Sensor / instrument fault",
+    "note": ""
+   },
+   {
+    "old": "DT3-07",
+    "oldLabel": "Actuator / control valve fault",
+    "new": "FM-CTL-07",
+    "how": "legacy2",
+    "newLabel": "Actuator / control valve fault",
+    "note": ""
+   },
+   {
+    "old": "DT3-08",
+    "oldLabel": "Signal noise / interference",
+    "new": "FM-CTL-03",
+    "how": "proposed",
+    "newLabel": "Communication / CAN / network fault",
+    "note": "signal noise / interference = communication fault"
+   },
+   {
+    "old": "DT3-09",
+    "oldLabel": "PLC / controller hardware fault",
+    "new": "FM-CTL-02",
+    "how": "legacy2",
+    "newLabel": "Controller / ECU / PLC fault",
+    "note": ""
+   },
+   {
+    "old": "DT3-10",
+    "oldLabel": "HMI/SCADA interface fault",
+    "new": "FM-CTL-04",
+    "how": "legacy2",
+    "newLabel": "Software / HMI / display fault",
+    "note": ""
+   },
+   {
+    "old": "DT3-11",
+    "oldLabel": "Communication / network fault",
+    "new": "FM-CTL-03",
+    "how": "legacy2",
+    "newLabel": "Communication / CAN / network fault",
+    "note": ""
+   },
+   {
+    "old": "DT3-12",
+    "oldLabel": "Incorrect parameter / setpoint",
+    "new": "FM-CTL-05",
+    "how": "legacy2",
+    "newLabel": "Incorrect parameter / setpoint",
+    "note": ""
+   },
+   {
+    "old": "DT3-13",
+    "oldLabel": "Warning light / alarm active",
+    "new": "FM-CTL-06",
+    "how": "legacy2",
+    "newLabel": "Warning light / alarm active",
+    "note": ""
+   },
+   {
+    "old": "DT4-01",
+    "oldLabel": "Short circuiting",
+    "new": "FM-ELE-01",
+    "how": "legacy2",
+    "newLabel": "Short circuit / earth fault",
+    "note": ""
+   },
+   {
+    "old": "DT4-02",
+    "oldLabel": "Open circuit",
+    "new": "FM-ELE-02",
+    "how": "legacy2",
+    "newLabel": "Open circuit / no continuity",
+    "note": ""
+   },
+   {
+    "old": "DT4-03",
+    "oldLabel": "No power/voltage",
+    "new": "FM-ELE-03",
+    "how": "legacy2",
+    "newLabel": "No power / no voltage",
+    "note": ""
+   },
+   {
+    "old": "DT4-04",
+    "oldLabel": "Faulty power/voltage",
+    "new": "FM-ELE-04",
+    "how": "legacy2",
+    "newLabel": "Abnormal voltage / current",
+    "note": ""
+   },
+   {
+    "old": "DT4-05",
+    "oldLabel": "Earth/isolation fault",
+    "new": "FM-ELE-01",
+    "how": "legacy2",
+    "newLabel": "Short circuit / earth fault",
+    "note": ""
+   },
+   {
+    "old": "DT4-06",
+    "oldLabel": "Loose connection / high resistance",
+    "new": "FM-ELE-05",
+    "how": "legacy2",
+    "newLabel": "Loose connection / high resistance",
+    "note": ""
+   },
+   {
+    "old": "DT4-07",
+    "oldLabel": "Breaker trip / overload",
+    "new": "FM-ELE-06",
+    "how": "legacy2",
+    "newLabel": "Protection trip / breaker / fuse",
+    "note": ""
+   },
+   {
+    "old": "DT4-08",
+    "oldLabel": "Fuse blown",
+    "new": "FM-ELE-06",
+    "how": "legacy2",
+    "newLabel": "Protection trip / breaker / fuse",
+    "note": ""
+   },
+   {
+    "old": "DT4-09",
+    "oldLabel": "Relay / contactor failure",
+    "new": "FM-ELE-06",
+    "how": "proposed",
+    "newLabel": "Protection trip / breaker / fuse",
+    "note": "relay / contactor failure = protection trip / breaker / fuse"
+   },
+   {
+    "old": "DT4-10",
+    "oldLabel": "Motor electrical fault (winding/insulation)",
+    "new": "FM-ELE-11",
+    "how": "legacy2",
+    "newLabel": "Electric motor / generator fault",
+    "note": ""
+   },
+   {
+    "old": "DT4-11",
+    "oldLabel": "VFD / drive fault",
+    "new": "FM-ELE-12",
+    "how": "legacy2",
+    "newLabel": "Drive / VFD fault",
+    "note": ""
+   },
+   {
+    "old": "DT4-12",
+    "oldLabel": "Cable / harness damage",
+    "new": "FM-ELE-07",
+    "how": "legacy2",
+    "newLabel": "Cable / harness damage",
+    "note": ""
+   },
+   {
+    "old": "DT4-13",
+    "oldLabel": "Connector corrosion / water ingress",
+    "new": "FM-ELE-08",
+    "how": "legacy2",
+    "newLabel": "Connector corrosion / water ingress",
+    "note": ""
+   },
+   {
+    "old": "DT4-14",
+    "oldLabel": "Battery / starting circuit fault",
+    "new": "FM-ELE-09",
+    "how": "legacy2",
+    "newLabel": "Battery / starting circuit fault",
+    "note": ""
+   },
+   {
+    "old": "DT4-15",
+    "oldLabel": "Alternator / charging fault",
+    "new": "FM-ELE-10",
+    "how": "legacy2",
+    "newLabel": "Charging / alternator fault",
+    "note": ""
+   },
+   {
+    "old": "DT4-16",
+    "oldLabel": "Starter motor fault",
+    "new": "FM-ELE-09",
+    "how": "proposed",
+    "newLabel": "Battery / starting circuit fault",
+    "note": "starter motor fault = battery / starting circuit fault"
+   },
+   {
+    "old": "DT4-17",
+    "oldLabel": "Phase loss / imbalance",
+    "new": "FM-ELE-04",
+    "how": "proposed",
+    "newLabel": "Abnormal voltage / current",
+    "note": "phase loss / imbalance = abnormal voltage / current"
+   },
+   {
+    "old": "DT4-18",
+    "oldLabel": "Voltage surge / lightning",
+    "new": "FM-ELE-04",
+    "how": "proposed",
+    "newLabel": "Abnormal voltage / current",
+    "note": "voltage surge = abnormal voltage / current; EX-19 records the lightning"
+   },
+   {
+    "old": "DT4-19",
+    "oldLabel": "The light bulb has burned out",
+    "new": "FM-ELE-13",
+    "how": "legacy2",
+    "newLabel": "Lighting / signalling fault",
+    "note": ""
+   },
+   {
+    "old": "DT4-20",
+    "oldLabel": "Auxiliary electrical circuit fault",
+    "new": "FM-ELE-13",
+    "how": "legacy2",
+    "newLabel": "Lighting / signalling fault",
+    "note": ""
+   },
+   {
+    "old": "DT4-21",
+    "oldLabel": "Cab HVAC/heater/blower electrical fault",
+    "new": "FM-ELE-14",
+    "how": "legacy2",
+    "newLabel": "Cab HVAC / heater / blower fault",
+    "note": ""
+   },
+   {
+    "old": "DT4-22",
+    "oldLabel": "Wiper/washer circuit fault",
+    "new": "FM-ELE-15",
+    "how": "legacy2",
+    "newLabel": "Wiper / washer fault",
+    "note": ""
+   },
+   {
+    "old": "DT4-23",
+    "oldLabel": "Charging system fault (alternator/regulator)",
+    "new": "FM-ELE-10",
+    "how": "legacy2",
+    "newLabel": "Charging / alternator fault",
+    "note": ""
+   },
+   {
+    "old": "DT5-01",
+    "oldLabel": "Blockage/plugged",
+    "new": "FM-CON-03",
+    "how": "legacy2",
+    "newLabel": "Blockage / restriction / plugged",
+    "note": ""
+   },
+   {
+    "old": "DT5-02",
+    "oldLabel": "Contamination",
+    "new": "FM-CON-01",
+    "how": "legacy2",
+    "newLabel": "Fluid contamination (dirt / wear debris)",
+    "note": ""
+   },
+   {
+    "old": "DT5-09",
+    "oldLabel": "Fire / overheating event",
+    "new": "FM-SAF-05",
+    "how": "legacy2",
+    "newLabel": "Fire / thermal event damage",
+    "note": ""
+   },
+   {
+    "old": "DT6-01",
+    "oldLabel": "Weld defect",
+    "new": "FM-MEC-13",
+    "how": "legacy2",
+    "newLabel": "Weld defect / crack at weld (HAZ)",
+    "note": ""
+   },
+   {
+    "old": "DT6-02",
+    "oldLabel": "Crack at weld / HAZ",
+    "new": "FM-MEC-13",
+    "how": "legacy2",
+    "newLabel": "Weld defect / crack at weld (HAZ)",
+    "note": ""
+   },
+   {
+    "old": "DT6-03",
+    "oldLabel": "Structural crack",
+    "new": "FM-MEC-04",
+    "how": "legacy2",
+    "newLabel": "Crack / fracture",
+    "note": ""
+   },
+   {
+    "old": "DT6-04",
+    "oldLabel": "Structural deformation",
+    "new": "FM-MEC-06",
+    "how": "legacy2",
+    "newLabel": "Deformation / bending / buckling",
+    "note": ""
+   },
+   {
+    "old": "DT6-05",
+    "oldLabel": "Loose/missing structural fasteners",
+    "new": "FM-MEC-07",
+    "how": "legacy2",
+    "newLabel": "Loose / missing fastener",
+    "note": ""
+   },
+   {
+    "old": "DT6-06",
+    "oldLabel": "Foundation / anchor bolt issue",
+    "new": "FM-MEC-07",
+    "how": "proposed",
+    "newLabel": "Loose / missing fastener",
+    "note": "anchor bolt issue = loose / missing fastener"
+   },
+   {
+    "old": "DT6-07",
+    "oldLabel": "Corrosion / section loss",
+    "new": "FM-MEC-12",
+    "how": "legacy2",
+    "newLabel": "Corrosion / section loss",
+    "note": ""
+   },
+   {
+    "old": "DT6-08",
+    "oldLabel": "Guarding / cover damage",
+    "new": "FM-SAF-03",
+    "how": "legacy2",
+    "newLabel": "Guard / cover / handrail damaged or missing",
+    "note": ""
+   },
+   {
+    "old": "DT7-01",
+    "oldLabel": "Cone crusher liner wear",
+    "new": "FM-CRU-01",
+    "how": "legacy2",
+    "newLabel": "Crusher liner / wear part worn",
+    "note": ""
+   },
+   {
+    "old": "DT7-02",
+    "oldLabel": "Cone crusher liner breakage",
+    "new": "FM-CRU-02",
+    "how": "legacy2",
+    "newLabel": "Crusher liner / wear part broken",
+    "note": ""
+   },
+   {
+    "old": "DT7-03",
+    "oldLabel": "Cone crusher chamber jam",
+    "new": "FM-CON-03",
+    "how": "legacy2",
+    "newLabel": "Blockage / restriction / plugged",
+    "note": ""
+   },
+   {
+    "old": "DT7-04",
+    "oldLabel": "Cone crusher setting / CSS incorrect",
+    "new": "FM-CRU-03",
+    "how": "legacy2",
+    "newLabel": "Crusher setting / CSS incorrect",
+    "note": ""
+   },
+   {
+    "old": "DT7-05",
+    "oldLabel": "Jaw crusher jaw die wear",
+    "new": "FM-CRU-01",
+    "how": "legacy2",
+    "newLabel": "Crusher liner / wear part worn",
+    "note": ""
+   },
+   {
+    "old": "DT7-06",
+    "oldLabel": "Jaw crusher die / toggle breakage",
+    "new": "FM-CRU-02",
+    "how": "legacy2",
+    "newLabel": "Crusher liner / wear part broken",
+    "note": ""
+   },
+   {
+    "old": "DT7-07",
+    "oldLabel": "Jaw crusher jam / choke",
+    "new": "FM-CON-03",
+    "how": "legacy2",
+    "newLabel": "Blockage / restriction / plugged",
+    "note": ""
+   },
+   {
+    "old": "DT7-08",
+    "oldLabel": "Screen media wear",
+    "new": "FM-SCR-01",
+    "how": "legacy2",
+    "newLabel": "Screen media worn",
+    "note": ""
+   },
+   {
+    "old": "DT7-09",
+    "oldLabel": "Screen media tear / breakage",
+    "new": "FM-SCR-02",
+    "how": "legacy2",
+    "newLabel": "Screen media torn / broken",
+    "note": ""
+   },
+   {
+    "old": "DT7-10",
+    "oldLabel": "Screen blinding / pegging / plugging",
+    "new": "FM-CON-03",
+    "how": "legacy2",
+    "newLabel": "Blockage / restriction / plugged",
+    "note": ""
+   },
+   {
+    "old": "DT7-11",
+    "oldLabel": "Screen exciter / vibration drive fault",
+    "new": "FM-SCR-04",
+    "how": "legacy2",
+    "newLabel": "Exciter / vibrator drive fault",
+    "note": ""
+   },
+   {
+    "old": "DT8-01",
+    "oldLabel": "Conveyor belt cut / tear",
+    "new": "FM-CNV-01",
+    "how": "legacy2",
+    "newLabel": "Belt cut / tear",
+    "note": ""
+   },
+   {
+    "old": "DT8-02",
+    "oldLabel": "Conveyor belt mistracking",
+    "new": "FM-CNV-02",
+    "how": "legacy2",
+    "newLabel": "Belt mistracking",
+    "note": ""
+   },
+   {
+    "old": "DT8-03",
+    "oldLabel": "Conveyor belt splice failure",
+    "new": "FM-CNV-03",
+    "how": "legacy2",
+    "newLabel": "Belt splice failure",
+    "note": ""
+   },
+   {
+    "old": "DT8-04",
+    "oldLabel": "Conveyor belt slip",
+    "new": "FM-MEC-14",
+    "how": "legacy2",
+    "newLabel": "Belt / chain drive slip or breakage",
+    "note": ""
+   },
+   {
+    "old": "DT8-05",
+    "oldLabel": "Conveyor belt wear",
+    "new": "FM-CNV-08",
+    "how": "proposed",
+    "newLabel": "Chute / liner wear or damage",
+    "note": "conveyor belt wear; check against FM-MEC-03 on the belt"
+   },
+   {
+    "old": "DT8-06",
+    "oldLabel": "Roller / idler failure",
+    "new": "FM-CNV-04",
+    "how": "legacy2",
+    "newLabel": "Roller / idler failure",
+    "note": ""
+   },
+   {
+    "old": "DT8-07",
+    "oldLabel": "Pulley / lagging damage",
+    "new": "FM-CNV-05",
+    "how": "legacy2",
+    "newLabel": "Pulley / lagging damage",
+    "note": ""
+   },
+   {
+    "old": "DT8-08",
+    "oldLabel": "Conveyor blockage / carryback / material buildup",
+    "new": "FM-CON-03",
+    "how": "legacy2",
+    "newLabel": "Blockage / restriction / plugged",
+    "note": ""
+   },
+   {
+    "old": "DT8-09",
+    "oldLabel": "Scraper / cleaner failure",
+    "new": "FM-CNV-06",
+    "how": "legacy2",
+    "newLabel": "Scraper / cleaner failure",
+    "note": ""
+   },
+   {
+    "old": "DT8-10",
+    "oldLabel": "Take-up / tensioner fault",
+    "new": "FM-CNV-07",
+    "how": "legacy2",
+    "newLabel": "Take-up / tensioner fault",
+    "note": ""
+   },
+   {
+    "old": "DT9-01",
+    "oldLabel": "GET worn",
+    "new": "FM-GET-01",
+    "how": "name",
+    "newLabel": "GET worn beyond limit",
+    "note": "same concept, v4 legacy fields missed it (similarity 0.50)"
+   },
+   {
+    "old": "DT9-02",
+    "oldLabel": "GET broken / missing",
+    "new": "FM-GET-02",
+    "how": "name",
+    "newLabel": "GET broken / lost",
+    "note": "same concept, v4 legacy fields missed it (similarity 0.50)"
+   },
+   {
+    "old": "DT9-03",
+    "oldLabel": "Undercarriage worn",
+    "new": "FM-UC-01",
+    "how": "name",
+    "newLabel": "Undercarriage worn beyond limit",
+    "note": "same concept, v4 legacy fields missed it (similarity 0.50)"
+   },
+   {
+    "old": "DT9-04",
+    "oldLabel": "Track derailment",
+    "new": "FM-UC-02",
+    "how": "name",
+    "newLabel": "Track derailment / thrown track",
+    "note": "same concept, v4 legacy fields missed it (similarity 0.67)"
+   },
+   {
+    "old": "DT9-05",
+    "oldLabel": "Tire cut / puncture",
+    "new": "FM-TYR-01",
+    "how": "name",
+    "newLabel": "Tyre cut / puncture",
+    "note": "same concept, v4 legacy fields missed it (similarity 0.50)"
+   },
+   {
+    "old": "DT9-06",
+    "oldLabel": "Tire separation / heat damage",
+    "new": "FM-TYR-03",
+    "how": "name",
+    "newLabel": "Tyre separation / heat damage",
+    "note": "same concept, v4 legacy fields missed it (similarity 0.60)"
+   },
+   {
+    "old": "DT9-07",
+    "oldLabel": "Rim / wheel damage",
+    "new": "FM-TYR-05",
+    "how": "name",
+    "newLabel": "Rim / wheel damage",
+    "note": "same concept, v4 legacy fields missed it (similarity 1.00)"
+   }
+  ],
+  "newInV4": [
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "FM-LEK-02",
+    "how": "new",
+    "newLabel": "External leak - coolant",
+    "note": "group LEK · ISO ELU · default Degraded"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "FM-LEK-03",
+    "how": "new",
+    "newLabel": "External leak - fuel",
+    "note": "group LEK · ISO ELP · default Critical"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "FM-LEK-04",
+    "how": "new",
+    "newLabel": "External leak - grease",
+    "note": "group LEK · ISO ELU · default Incipient"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "FM-LEK-05",
+    "how": "new",
+    "newLabel": "Air / pneumatic leak",
+    "note": "group LEK · ISO ELU · default Degraded"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "FM-LEK-06",
+    "how": "new",
+    "newLabel": "Exhaust leak",
+    "note": "group LEK · ISO ELP · default Degraded"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "FM-LEK-07",
+    "how": "new",
+    "newLabel": "Internal leak / bypass",
+    "note": "group LEK · ISO INL · default Degraded"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "FM-MEC-02",
+    "how": "new",
+    "newLabel": "Excessive vibration",
+    "note": "group MEC · ISO VIB · default Degraded"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "FM-MEC-10",
+    "how": "new",
+    "newLabel": "Component missing / detached",
+    "note": "group MEC · ISO BRD · default Critical"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "FM-PER-02",
+    "how": "new",
+    "newLabel": "Hard start",
+    "note": "group PER · ISO FTS · default Degraded"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "FM-PER-03",
+    "how": "new",
+    "newLabel": "Unexpected stop / stall / shutdown",
+    "note": "group PER · ISO UST · default Critical"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "FM-PER-07",
+    "how": "new",
+    "newLabel": "Intermittent / erratic operation",
+    "note": "group PER · ISO ERO · default Degraded"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "FM-CON-02",
+    "how": "new",
+    "newLabel": "Water in oil / fluid",
+    "note": "group CON · ISO SER · default Degraded"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "FM-CON-05",
+    "how": "new",
+    "newLabel": "Dust / dirt ingress",
+    "note": "group CON · ISO SER · default Degraded"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "FM-CON-06",
+    "how": "new",
+    "newLabel": "Water ingress",
+    "note": "group CON · ISO SER · default Degraded"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "FM-CON-07",
+    "how": "new",
+    "newLabel": "Foreign object / tramp material",
+    "note": "group CON · ISO BRD · default Critical"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "FM-CON-10",
+    "how": "new",
+    "newLabel": "Material build-up / carryback / packing",
+    "note": "group CON · ISO PLU · default Degraded"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "FM-UC-03",
+    "how": "new",
+    "newLabel": "Track tension incorrect",
+    "note": "group UC · ISO SER · default Degraded"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "FM-TYR-02",
+    "how": "new",
+    "newLabel": "Tyre tread / sidewall wear",
+    "note": "group TYR · ISO SER · default Degraded"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "FM-TYR-04",
+    "how": "new",
+    "newLabel": "Tyre pressure incorrect",
+    "note": "group TYR · ISO SER · default Degraded"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "FM-SCR-03",
+    "how": "new",
+    "newLabel": "Screen blinding / pegging",
+    "note": "group SCR · ISO PLU · default Degraded"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "FM-DRL-04",
+    "how": "new",
+    "newLabel": "Poor penetration rate",
+    "note": "group DRL · ISO LOO · default Degraded"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "FM-SAF-04",
+    "how": "new",
+    "newLabel": "Glass / mirror / visibility defect",
+    "note": "group SAF · ISO STD · default Degraded"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "FM-IMP-01",
+    "how": "new",
+    "newLabel": "Impact / collision damage",
+    "note": "group IMP · ISO BRD · default Critical"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "FM-DQ-01",
+    "how": "new",
+    "newLabel": "No fault found / cannot reproduce",
+    "note": "group DQ · ISO UNK · default No failure"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "FM-PER-12",
+    "how": "new",
+    "newLabel": "Spurious / unintended operation or movement",
+    "note": "group PER · ISO UST · default Critical"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "FM-LUB-01",
+    "how": "new",
+    "newLabel": "Lubrication not delivered to point",
+    "note": "group LUB · ISO FTF · default Degraded"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "FM-CON-11",
+    "how": "new",
+    "newLabel": "Excessive fluid consumption (no visible leak)",
+    "note": "group CON · ISO SER · default Degraded"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "FM-CTL-09",
+    "how": "new",
+    "newLabel": "Payload / weighing / monitoring system fault",
+    "note": "group CTL · ISO AIR · default Degraded"
+   }
+  ]
+ },
+ "directCauses": {
+  "rows": [
+   {
+    "old": "DC-CPC-001",
+    "oldLabel": "Jaw plate worn",
+    "new": "DC-CRU-014",
+    "how": "legacy1",
+    "newLabel": "Jaw plate worn",
+    "note": ""
+   },
+   {
+    "old": "DC-CPC-002",
+    "oldLabel": "Jaw plate cracked/broken",
+    "new": "DC-CRU-013",
+    "how": "legacy1",
+    "newLabel": "Jaw plate cracked/broken",
+    "note": ""
+   },
+   {
+    "old": "DC-CPC-003",
+    "oldLabel": "Toggle plate failure",
+    "new": "DC-CRU-018",
+    "how": "legacy1",
+    "newLabel": "Toggle plate failure",
+    "note": ""
+   },
+   {
+    "old": "DC-CPC-004",
+    "oldLabel": "Eccentric shaft bearing failure",
+    "new": "DC-MEC-002",
+    "how": "legacy1",
+    "newLabel": "Eccentric shaft bearing failure",
+    "note": ""
+   },
+   {
+    "old": "DC-CPC-005",
+    "oldLabel": "Flywheel/drive pulley damage",
+    "new": "DC-CRU-011",
+    "how": "legacy1",
+    "newLabel": "Flywheel/drive pulley damage",
+    "note": ""
+   },
+   {
+    "old": "DC-CPC-006",
+    "oldLabel": "Crusher blocked by oversized material",
+    "new": "DC-CRU-004",
+    "how": "legacy1",
+    "newLabel": "Crusher blocked by oversized material",
+    "note": ""
+   },
+   {
+    "old": "DC-CPC-007",
+    "oldLabel": "Uncrushable tramp metal/foreign object",
+    "new": "DC-CRU-019",
+    "how": "legacy1",
+    "newLabel": "Uncrushable tramp metal/foreign object",
+    "note": ""
+   },
+   {
+    "old": "DC-CPC-008",
+    "oldLabel": "Crusher drive belt slipping/broken",
+    "new": "DC-CRU-005",
+    "how": "legacy1",
+    "newLabel": "Crusher drive belt slipping/broken",
+    "note": ""
+   },
+   {
+    "old": "DC-CPC-009",
+    "oldLabel": "Crusher lubrication pressure low",
+    "new": "DC-CRU-008",
+    "how": "legacy1",
+    "newLabel": "Crusher lubrication pressure low",
+    "note": ""
+   },
+   {
+    "old": "DC-CPC-010",
+    "oldLabel": "Crusher lubrication oil contamination",
+    "new": "DC-CRU-007",
+    "how": "legacy1",
+    "newLabel": "Crusher lubrication oil contamination",
+    "note": ""
+   },
+   {
+    "old": "DC-CPC-011",
+    "oldLabel": "Mantle worn",
+    "new": "DC-CRU-015",
+    "how": "legacy1",
+    "newLabel": "Mantle worn",
+    "note": ""
+   },
+   {
+    "old": "DC-CPC-012",
+    "oldLabel": "Concave worn",
+    "new": "DC-CRU-002",
+    "how": "legacy1",
+    "newLabel": "Concave worn",
+    "note": ""
+   },
+   {
+    "old": "DC-CPC-013",
+    "oldLabel": "Mantle/concave cracked",
+    "new": "DC-CRU-016",
+    "how": "legacy1",
+    "newLabel": "Mantle/concave cracked",
+    "note": ""
+   },
+   {
+    "old": "DC-CPC-014",
+    "oldLabel": "Main shaft bearing failure",
+    "new": "DC-MEC-006",
+    "how": "legacy1",
+    "newLabel": "Main shaft bearing failure",
+    "note": ""
+   },
+   {
+    "old": "DC-CPC-015",
+    "oldLabel": "Hydraulic tramp release fault",
+    "new": "DC-CRU-012",
+    "how": "legacy1",
+    "newLabel": "Hydraulic tramp release fault",
+    "note": ""
+   },
+   {
+    "old": "DC-CPC-016",
+    "oldLabel": "Cone crusher cavity blocked",
+    "new": "DC-CRU-003",
+    "how": "legacy1",
+    "newLabel": "Cone crusher cavity blocked",
+    "note": ""
+   },
+   {
+    "old": "DC-CPC-017",
+    "oldLabel": "Crusher motor/drive fault",
+    "new": "DC-CRU-009",
+    "how": "legacy1",
+    "newLabel": "Crusher motor/drive fault",
+    "note": ""
+   },
+   {
+    "old": "DC-CPC-018",
+    "oldLabel": "Crusher excessive vibration",
+    "new": "DC-GEN-065",
+    "how": "proposed",
+    "newLabel": "Excessive vibration transmitted from adjacent item",
+    "note": "excessive vibration transmitted from adjacent equipment"
+   },
+   {
+    "old": "DC-CSC-001",
+    "oldLabel": "Radiator/core blocked by dust/mud",
+    "new": "DC-COO-101",
+    "how": "proposed",
+    "newLabel": "Radiator core externally plugged (dust, seeds, mud)",
+    "note": "radiator core externally plugged (dust, seeds, mud)"
+   },
+   {
+    "old": "DC-CSC-002",
+    "oldLabel": "Coolant hose damaged/leaking",
+    "new": "DC-COO-004",
+    "how": "legacy1",
+    "newLabel": "Coolant hose damaged/leaking",
+    "note": ""
+   },
+   {
+    "old": "DC-CSC-003",
+    "oldLabel": "Radiator leak/crack",
+    "new": "DC-COO-103",
+    "how": "proposed",
+    "newLabel": "Radiator core seam split or tube leaking",
+    "note": "radiator core seam split or tube leaking"
+   },
+   {
+    "old": "DC-CSC-004",
+    "oldLabel": "Water pump failure",
+    "new": "DC-COO-006",
+    "how": "proposed",
+    "newLabel": "Coolant pump fault",
+    "note": "v4 calls it the coolant pump, not the water pump"
+   },
+   {
+    "old": "DC-CSC-005",
+    "oldLabel": "Thermostat stuck closed/open",
+    "new": "DC-COO-111",
+    "how": "proposed",
+    "newLabel": "Thermostat stuck closed - no flow to radiator",
+    "note": "stuck CLOSED; v4 splits the two directions — DC-COO-112 is stuck open"
+   },
+   {
+    "old": "DC-CSC-006",
+    "oldLabel": "Fan motor/drive failure",
+    "new": "DC-COO-009",
+    "how": "legacy1",
+    "newLabel": "Fan motor/drive failure",
+    "note": ""
+   },
+   {
+    "old": "DC-CSC-007",
+    "oldLabel": "Fan blade damaged",
+    "new": "DC-COO-007",
+    "how": "legacy1",
+    "newLabel": "Fan blade damaged",
+    "note": ""
+   },
+   {
+    "old": "DC-CSC-008",
+    "oldLabel": "Coolant contaminated/wrong coolant",
+    "new": "DC-COO-002",
+    "how": "legacy1",
+    "newLabel": "Coolant contaminated/wrong coolant",
+    "note": ""
+   },
+   {
+    "old": "DC-DABC-001",
+    "oldLabel": "Compressor low pressure",
+    "new": "DC-HYD-010",
+    "how": "legacy1",
+    "newLabel": "Compressor low pressure",
+    "note": ""
+   },
+   {
+    "old": "DC-DABC-002",
+    "oldLabel": "Compressor overheating",
+    "new": "DC-HYD-012",
+    "how": "legacy1",
+    "newLabel": "Compressor overheating",
+    "note": ""
+   },
+   {
+    "old": "DC-DABC-003",
+    "oldLabel": "Compressor oil leak",
+    "new": "DC-HYD-011",
+    "how": "legacy1",
+    "newLabel": "Compressor oil leak",
+    "note": ""
+   },
+   {
+    "old": "DC-DABC-004",
+    "oldLabel": "Air line/hose leak",
+    "new": "DC-AIR-001",
+    "how": "legacy1",
+    "newLabel": "Air line/hose leak",
+    "note": ""
+   },
+   {
+    "old": "DC-DABC-005",
+    "oldLabel": "Rotary head bearing/gear failure",
+    "new": "DC-DRL-016",
+    "how": "legacy1",
+    "newLabel": "Rotary head bearing/gear failure",
+    "note": ""
+   },
+   {
+    "old": "DC-DABC-006",
+    "oldLabel": "Rotary head oil leak",
+    "new": "DC-DRL-017",
+    "how": "legacy1",
+    "newLabel": "Rotary head oil leak",
+    "note": ""
+   },
+   {
+    "old": "DC-DABC-007",
+    "oldLabel": "Feed chain/cable failure",
+    "new": "DC-DRL-008",
+    "how": "legacy1",
+    "newLabel": "Feed chain/cable failure",
+    "note": ""
+   },
+   {
+    "old": "DC-DABC-008",
+    "oldLabel": "Feed cylinder leak",
+    "new": "DC-DRL-009",
+    "how": "legacy1",
+    "newLabel": "Feed cylinder leak",
+    "note": ""
+   },
+   {
+    "old": "DC-DABC-009",
+    "oldLabel": "Feed slide/guide worn",
+    "new": "DC-DRL-010",
+    "how": "legacy1",
+    "newLabel": "Feed slide/guide worn",
+    "note": ""
+   },
+   {
+    "old": "DC-DABC-010",
+    "oldLabel": "Mast alignment issue",
+    "new": "DC-DRL-014",
+    "how": "legacy1",
+    "newLabel": "Mast alignment issue",
+    "note": ""
+   },
+   {
+    "old": "DC-DABC-011",
+    "oldLabel": "Drill rod worn",
+    "new": "DC-DRL-006",
+    "how": "legacy1",
+    "newLabel": "Drill rod worn",
+    "note": ""
+   },
+   {
+    "old": "DC-DABC-012",
+    "oldLabel": "Drill rod bent",
+    "new": "DC-DRL-003",
+    "how": "legacy1",
+    "newLabel": "Drill rod bent",
+    "note": ""
+   },
+   {
+    "old": "DC-DABC-013",
+    "oldLabel": "Drill rod thread damaged",
+    "new": "DC-DRL-005",
+    "how": "legacy1",
+    "newLabel": "Drill rod thread damaged",
+    "note": ""
+   },
+   {
+    "old": "DC-DABC-014",
+    "oldLabel": "Drill bit worn",
+    "new": "DC-DRL-002",
+    "how": "legacy1",
+    "newLabel": "Drill bit worn",
+    "note": ""
+   },
+   {
+    "old": "DC-DABC-015",
+    "oldLabel": "Drill bit broken",
+    "new": "DC-DRL-001",
+    "how": "legacy1",
+    "newLabel": "Drill bit broken",
+    "note": ""
+   },
+   {
+    "old": "DC-DABC-016",
+    "oldLabel": "Dust collector filter blocked",
+    "new": "DC-AIR-003",
+    "how": "legacy1",
+    "newLabel": "Dust collector filter blocked",
+    "note": ""
+   },
+   {
+    "old": "DC-DABC-017",
+    "oldLabel": "Dust collector fan failure",
+    "new": "DC-AIR-002",
+    "how": "legacy1",
+    "newLabel": "Dust collector fan failure",
+    "note": ""
+   },
+   {
+    "old": "DC-DABC-018",
+    "oldLabel": "Track drive failure on drill",
+    "new": "DC-UNC-011",
+    "how": "legacy1",
+    "newLabel": "Track drive failure on drill",
+    "note": ""
+   },
+   {
+    "old": "DC-DABC-019",
+    "oldLabel": "Winch/cable failure",
+    "new": "DC-MEC-012",
+    "how": "legacy1",
+    "newLabel": "Winch/cable failure",
+    "note": ""
+   },
+   {
+    "old": "DC-DABC-020",
+    "oldLabel": "Hydraulic breaker piston/bushing worn",
+    "new": "DC-DRL-012",
+    "how": "legacy1",
+    "newLabel": "Hydraulic breaker piston/bushing worn",
+    "note": ""
+   },
+   {
+    "old": "DC-DABC-021",
+    "oldLabel": "Hydraulic breaker tool/chisel broken",
+    "new": "DC-DRL-013",
+    "how": "legacy1",
+    "newLabel": "Hydraulic breaker tool/chisel broken",
+    "note": ""
+   },
+   {
+    "old": "DC-DABC-022",
+    "oldLabel": "Hydraulic breaker accumulator pressure low",
+    "new": "DC-DRL-011",
+    "how": "legacy1",
+    "newLabel": "Hydraulic breaker accumulator pressure low",
+    "note": ""
+   },
+   {
+    "old": "DC-DBASC-001",
+    "oldLabel": "Transmission clutch pack worn/slipping",
+    "new": "DC-DRV-039",
+    "how": "legacy1",
+    "newLabel": "Transmission clutch pack worn/slipping",
+    "note": ""
+   },
+   {
+    "old": "DC-DBASC-002",
+    "oldLabel": "Transmission oil overheating",
+    "new": "DC-DRV-041",
+    "how": "legacy1",
+    "newLabel": "Transmission oil overheating",
+    "note": ""
+   },
+   {
+    "old": "DC-DBASC-003",
+    "oldLabel": "Torque converter failure",
+    "new": "DC-DRV-038",
+    "how": "legacy1",
+    "newLabel": "Torque converter failure",
+    "note": ""
+   },
+   {
+    "old": "DC-DBASC-004",
+    "oldLabel": "Driveshaft/u-joint failure",
+    "new": "DC-DRV-019",
+    "how": "legacy1",
+    "newLabel": "Driveshaft/u-joint failure",
+    "note": ""
+   },
+   {
+    "old": "DC-DBASC-005",
+    "oldLabel": "Differential bearing/gear failure",
+    "new": "DC-DRV-018",
+    "how": "legacy1",
+    "newLabel": "Differential bearing/gear failure",
+    "note": ""
+   },
+   {
+    "old": "DC-DBASC-006",
+    "oldLabel": "Final drive oil leak",
+    "new": "DC-DRV-022",
+    "how": "legacy1",
+    "newLabel": "Final drive oil leak",
+    "note": ""
+   },
+   {
+    "old": "DC-DBASC-007",
+    "oldLabel": "Final drive bearing/gear failure",
+    "new": "DC-DRV-114",
+    "how": "name",
+    "newLabel": "Final drive planetary gear or bearing failure",
+    "note": "same concept, v4 legacy fields missed it (similarity 0.71)"
+   },
+   {
+    "old": "DC-DBASC-008",
+    "oldLabel": "Wheel motor mechanical failure",
+    "new": "DC-ELE-049",
+    "how": "legacy1",
+    "newLabel": "Wheel motor mechanical failure",
+    "note": ""
+   },
+   {
+    "old": "DC-DBASC-009",
+    "oldLabel": "Brake lining/disc worn",
+    "new": "DC-DRV-009",
+    "how": "name",
+    "newLabel": "Brake disc worn / cracked",
+    "note": "same concept, v4 legacy fields missed it (similarity 0.60)"
+   },
+   {
+    "old": "DC-DBASC-010",
+    "oldLabel": "Brake caliper/piston sticking",
+    "new": "DC-DRV-006",
+    "how": "legacy1",
+    "newLabel": "Brake caliper/piston sticking",
+    "note": ""
+   },
+   {
+    "old": "DC-DBASC-011",
+    "oldLabel": "Brake cooling flow restricted",
+    "new": "DC-DRV-008",
+    "how": "legacy1",
+    "newLabel": "Brake cooling flow restricted",
+    "note": ""
+   },
+   {
+    "old": "DC-DBASC-012",
+    "oldLabel": "Steering pump weak/failed",
+    "new": "DC-DRV-034",
+    "how": "legacy1",
+    "newLabel": "Steering pump weak/failed",
+    "note": ""
+   },
+   {
+    "old": "DC-DBASC-013",
+    "oldLabel": "Steering valve sticking",
+    "new": "DC-DRV-035",
+    "how": "legacy1",
+    "newLabel": "Steering valve sticking",
+    "note": ""
+   },
+   {
+    "old": "DC-DBASC-014",
+    "oldLabel": "Articulation joint bearing worn",
+    "new": "DC-DRV-002",
+    "how": "legacy1",
+    "newLabel": "Articulation joint bearing worn",
+    "note": ""
+   },
+   {
+    "old": "DC-DBASC-015",
+    "oldLabel": "Suspension cylinder leak",
+    "new": "DC-DRV-036",
+    "how": "legacy1",
+    "newLabel": "Suspension cylinder leak",
+    "note": ""
+   },
+   {
+    "old": "DC-DBASC-016",
+    "oldLabel": "Hoist system not lifting",
+    "new": null,
+    "how": "unmatched",
+    "newLabel": "",
+    "note": "RETIRE — \"hoist not lifting\" is a failure mode (FM-PER-06 on the hoist), not a cause. Historical records carrying it should re-point to the mode, not to a cause."
+   },
+   {
+    "old": "DC-EACC-001",
+    "oldLabel": "Battery discharged/weak",
+    "new": "DC-ELE-002",
+    "how": "legacy1",
+    "newLabel": "Battery discharged/weak",
+    "note": ""
+   },
+   {
+    "old": "DC-EACC-002",
+    "oldLabel": "Battery terminal loose/corroded",
+    "new": "DC-ELE-004",
+    "how": "legacy1",
+    "newLabel": "Battery terminal loose/corroded",
+    "note": ""
+   },
+   {
+    "old": "DC-EACC-003",
+    "oldLabel": "Alternator/generator failed",
+    "new": "DC-ELE-001",
+    "how": "legacy1",
+    "newLabel": "Alternator/generator failed",
+    "note": ""
+   },
+   {
+    "old": "DC-EACC-004",
+    "oldLabel": "Charging belt failed",
+    "new": "DC-ELE-013",
+    "how": "legacy1",
+    "newLabel": "Charging belt failed",
+    "note": ""
+   },
+   {
+    "old": "DC-EACC-005",
+    "oldLabel": "Starter relay/solenoid failed",
+    "new": "DC-ELE-042",
+    "how": "legacy1",
+    "newLabel": "Starter relay/solenoid failed",
+    "note": ""
+   },
+   {
+    "old": "DC-EACC-006",
+    "oldLabel": "Wiring harness rubbed through",
+    "new": "DC-ELE-052",
+    "how": "legacy1",
+    "newLabel": "Wiring harness rubbed through",
+    "note": ""
+   },
+   {
+    "old": "DC-EACC-007",
+    "oldLabel": "Connector loose/water ingress",
+    "new": "DC-ELE-016",
+    "how": "legacy1",
+    "newLabel": "Connector loose/water ingress",
+    "note": ""
+   },
+   {
+    "old": "DC-EACC-008",
+    "oldLabel": "Fuse blown",
+    "new": "DC-ELE-037",
+    "how": "name",
+    "newLabel": "Relay/fuse blown",
+    "note": "same concept, v4 legacy fields missed it (similarity 0.67)"
+   },
+   {
+    "old": "DC-EACC-009",
+    "oldLabel": "Relay/contactor failed",
+    "new": "DC-ELE-036",
+    "how": "legacy1",
+    "newLabel": "Relay/contactor failed",
+    "note": ""
+   },
+   {
+    "old": "DC-EACC-010",
+    "oldLabel": "Sensor damaged/failed",
+    "new": "DC-CTL-015",
+    "how": "legacy1",
+    "newLabel": "Sensor damaged/failed",
+    "note": ""
+   },
+   {
+    "old": "DC-EACC-011",
+    "oldLabel": "Sensor calibration/parameter incorrect",
+    "new": "DC-CTL-014",
+    "how": "legacy1",
+    "newLabel": "Sensor calibration/parameter incorrect",
+    "note": ""
+   },
+   {
+    "old": "DC-EACC-012",
+    "oldLabel": "Controller/ECU fault",
+    "new": "DC-CTL-004",
+    "how": "legacy1",
+    "newLabel": "Controller/ECU fault",
+    "note": ""
+   },
+   {
+    "old": "DC-EACC-013",
+    "oldLabel": "CAN communication lost",
+    "new": "DC-CTL-001",
+    "how": "legacy1",
+    "newLabel": "CAN communication lost",
+    "note": ""
+   },
+   {
+    "old": "DC-EACC-014",
+    "oldLabel": "Grounding/earth fault",
+    "new": "DC-ELE-025",
+    "how": "legacy1",
+    "newLabel": "Grounding/earth fault",
+    "note": ""
+   },
+   {
+    "old": "DC-EACC-015",
+    "oldLabel": "Switch/interlock failed",
+    "new": "DC-ELE-044",
+    "how": "legacy1",
+    "newLabel": "Switch/interlock failed",
+    "note": ""
+   },
+   {
+    "old": "DC-EACC-016",
+    "oldLabel": "Emergency stop circuit active/faulty",
+    "new": "DC-SAF-004",
+    "how": "legacy1",
+    "newLabel": "Emergency stop circuit active/faulty",
+    "note": ""
+   },
+   {
+    "old": "DC-EACC-017",
+    "oldLabel": "Traction inverter fault",
+    "new": "DC-ELE-045",
+    "how": "legacy1",
+    "newLabel": "Traction inverter fault",
+    "note": ""
+   },
+   {
+    "old": "DC-EACC-018",
+    "oldLabel": "Wheel motor electrical fault",
+    "new": "DC-ELE-048",
+    "how": "legacy1",
+    "newLabel": "Wheel motor electrical fault",
+    "note": ""
+   },
+   {
+    "old": "DC-EACC-019",
+    "oldLabel": "Blower/cooling fan electrical failure",
+    "new": "DC-ELE-007",
+    "how": "legacy1",
+    "newLabel": "Blower/cooling fan electrical failure",
+    "note": ""
+   },
+   {
+    "old": "DC-EACC-020",
+    "oldLabel": "Software/parameter setting incorrect",
+    "new": "DC-CTL-019",
+    "how": "legacy1",
+    "newLabel": "Software/parameter setting incorrect",
+    "note": ""
+   },
+   {
+    "old": "DC-ERC-001",
+    "oldLabel": "Engine oil hose damaged",
+    "new": "DC-ENG-009",
+    "how": "legacy1",
+    "newLabel": "Engine oil hose damaged",
+    "note": ""
+   },
+   {
+    "old": "DC-ERC-002",
+    "oldLabel": "Engine oil seal/gasket failed",
+    "new": "DC-ENG-011",
+    "how": "legacy1",
+    "newLabel": "Engine oil seal/gasket failed",
+    "note": ""
+   },
+   {
+    "old": "DC-ERC-003",
+    "oldLabel": "Low engine oil level",
+    "new": "DC-ENG-015",
+    "how": "legacy1",
+    "newLabel": "Low engine oil level",
+    "note": ""
+   },
+   {
+    "old": "DC-ERC-004",
+    "oldLabel": "Engine oil pump worn/failed",
+    "new": "DC-ENG-010",
+    "how": "legacy1",
+    "newLabel": "Engine oil pump worn/failed",
+    "note": ""
+   },
+   {
+    "old": "DC-ERC-005",
+    "oldLabel": "Engine bearing wear/seizure",
+    "new": "DC-ENG-007",
+    "how": "legacy1",
+    "newLabel": "Engine bearing wear/seizure",
+    "note": ""
+   },
+   {
+    "old": "DC-ERC-006",
+    "oldLabel": "Air filter restricted",
+    "new": "DC-ENG-002",
+    "how": "legacy1",
+    "newLabel": "Air filter restricted",
+    "note": ""
+   },
+   {
+    "old": "DC-ERC-007",
+    "oldLabel": "Air intake duct leak/damage",
+    "new": "DC-ENG-003",
+    "how": "legacy1",
+    "newLabel": "Air intake duct leak/damage",
+    "note": ""
+   },
+   {
+    "old": "DC-ERC-008",
+    "oldLabel": "Turbocharger bearing/seal failure",
+    "new": "DC-ENG-021",
+    "how": "legacy1",
+    "newLabel": "Turbocharger bearing/seal failure",
+    "note": ""
+   },
+   {
+    "old": "DC-ERC-009",
+    "oldLabel": "Exhaust manifold/turbo joint leak",
+    "new": "DC-ENG-012",
+    "how": "legacy1",
+    "newLabel": "Exhaust manifold/turbo joint leak",
+    "note": ""
+   },
+   {
+    "old": "DC-ERC-010",
+    "oldLabel": "Injector failed/restricted",
+    "new": "DC-FUE-009",
+    "how": "legacy1",
+    "newLabel": "Injector failed/restricted",
+    "note": ""
+   },
+   {
+    "old": "DC-ERC-011",
+    "oldLabel": "Fuel pump weak/failed",
+    "new": "DC-FUE-007",
+    "how": "legacy1",
+    "newLabel": "Fuel pump weak/failed",
+    "note": ""
+   },
+   {
+    "old": "DC-ERC-012",
+    "oldLabel": "Fuel filter blocked",
+    "new": "DC-FUE-005",
+    "how": "legacy1",
+    "newLabel": "Fuel filter blocked",
+    "note": ""
+   },
+   {
+    "old": "DC-ERC-013",
+    "oldLabel": "Fuel contamination/water in fuel",
+    "new": "DC-FUE-002",
+    "how": "name",
+    "newLabel": "Fuel contamination",
+    "note": "same concept, v4 legacy fields missed it (similarity 0.50)"
+   },
+   {
+    "old": "DC-ERC-014",
+    "oldLabel": "Engine mount damaged/loose",
+    "new": "DC-ENG-008",
+    "how": "legacy1",
+    "newLabel": "Engine mount damaged/loose",
+    "note": ""
+   },
+   {
+    "old": "DC-ERC-015",
+    "oldLabel": "Starter motor failure",
+    "new": "DC-ELE-041",
+    "how": "legacy1",
+    "newLabel": "Starter motor failure",
+    "note": ""
+   },
+   {
+    "old": "DC-ERC-016",
+    "oldLabel": "Preheater/glow plug failure",
+    "new": "DC-ENG-016",
+    "how": "legacy1",
+    "newLabel": "Preheater/glow plug failure",
+    "note": ""
+   },
+   {
+    "old": "DC-GC-001",
+    "oldLabel": "Bucket tooth worn",
+    "new": "DC-GET-009",
+    "how": "legacy1",
+    "newLabel": "Bucket tooth worn",
+    "note": ""
+   },
+   {
+    "old": "DC-GC-002",
+    "oldLabel": "Bucket tooth broken",
+    "new": "DC-GET-007",
+    "how": "legacy1",
+    "newLabel": "Bucket tooth broken",
+    "note": ""
+   },
+   {
+    "old": "DC-GC-003",
+    "oldLabel": "Bucket tooth missing",
+    "new": "DC-GET-008",
+    "how": "legacy1",
+    "newLabel": "Bucket tooth missing",
+    "note": ""
+   },
+   {
+    "old": "DC-GC-004",
+    "oldLabel": "Tooth adapter worn",
+    "new": "DC-GET-019",
+    "how": "legacy1",
+    "newLabel": "Tooth adapter worn",
+    "note": ""
+   },
+   {
+    "old": "DC-GC-005",
+    "oldLabel": "Tooth adapter broken",
+    "new": "DC-GET-018",
+    "how": "legacy1",
+    "newLabel": "Tooth adapter broken",
+    "note": ""
+   },
+   {
+    "old": "DC-GC-006",
+    "oldLabel": "Tooth pin/lock failed",
+    "new": "DC-GET-020",
+    "how": "legacy1",
+    "newLabel": "Tooth pin/lock failed",
+    "note": ""
+   },
+   {
+    "old": "DC-GC-007",
+    "oldLabel": "Bucket lip worn",
+    "new": "DC-GET-006",
+    "how": "legacy1",
+    "newLabel": "Bucket lip worn",
+    "note": ""
+   },
+   {
+    "old": "DC-GC-008",
+    "oldLabel": "Bucket lip cracked",
+    "new": "DC-GET-005",
+    "how": "legacy1",
+    "newLabel": "Bucket lip cracked",
+    "note": ""
+   },
+   {
+    "old": "DC-GC-009",
+    "oldLabel": "Cutting edge worn",
+    "new": "DC-GET-002",
+    "how": "name",
+    "newLabel": "Blade cutting edge worn",
+    "note": "same concept, v4 legacy fields missed it (similarity 0.75)"
+   },
+   {
+    "old": "DC-GC-010",
+    "oldLabel": "Cutting edge broken",
+    "new": "DC-GET-001",
+    "how": "name",
+    "newLabel": "Blade cutting edge broken",
+    "note": "same concept, v4 legacy fields missed it (similarity 0.75)"
+   },
+   {
+    "old": "DC-GC-011",
+    "oldLabel": "Side cutter worn",
+    "new": "DC-GET-017",
+    "how": "legacy1",
+    "newLabel": "Side cutter worn",
+    "note": ""
+   },
+   {
+    "old": "DC-GC-012",
+    "oldLabel": "Side cutter broken",
+    "new": "DC-GET-016",
+    "how": "legacy1",
+    "newLabel": "Side cutter broken",
+    "note": ""
+   },
+   {
+    "old": "DC-GC-013",
+    "oldLabel": "Wear plate worn",
+    "new": "DC-GET-022",
+    "how": "legacy1",
+    "newLabel": "Wear plate worn",
+    "note": ""
+   },
+   {
+    "old": "DC-GC-014",
+    "oldLabel": "Wear plate detached",
+    "new": "DC-GET-021",
+    "how": "legacy1",
+    "newLabel": "Wear plate detached",
+    "note": ""
+   },
+   {
+    "old": "DC-GC-015",
+    "oldLabel": "Blade cutting edge worn",
+    "new": "DC-GET-002",
+    "how": "legacy1",
+    "newLabel": "Blade cutting edge worn",
+    "note": ""
+   },
+   {
+    "old": "DC-GC-016",
+    "oldLabel": "Blade cutting edge broken",
+    "new": "DC-GET-001",
+    "how": "legacy1",
+    "newLabel": "Blade cutting edge broken",
+    "note": ""
+   },
+   {
+    "old": "DC-GC-017",
+    "oldLabel": "Ripper shank worn/broken",
+    "new": "DC-GET-014",
+    "how": "legacy1",
+    "newLabel": "Ripper shank worn/broken",
+    "note": ""
+   },
+   {
+    "old": "DC-GC-018",
+    "oldLabel": "Grader moldboard cutting edge worn",
+    "new": "DC-GET-013",
+    "how": "legacy1",
+    "newLabel": "Grader moldboard cutting edge worn",
+    "note": ""
+   },
+   {
+    "old": "DC-GC-019",
+    "oldLabel": "Wrong GET selection/application",
+    "new": "DC-GET-023",
+    "how": "legacy1",
+    "newLabel": "Wrong GET selection/application",
+    "note": ""
+   },
+   {
+    "old": "DC-HSC-001",
+    "oldLabel": "Hydraulic hose burst",
+    "new": "DC-HYD-035",
+    "how": "legacy1",
+    "newLabel": "Hydraulic hose burst",
+    "note": ""
+   },
+   {
+    "old": "DC-HSC-002",
+    "oldLabel": "Hydraulic hose rubbed through",
+    "new": "DC-HYD-036",
+    "how": "legacy1",
+    "newLabel": "Hydraulic hose rubbed through",
+    "note": ""
+   },
+   {
+    "old": "DC-HSC-003",
+    "oldLabel": "Hydraulic fitting/adapter leak",
+    "new": "DC-HYD-034",
+    "how": "legacy1",
+    "newLabel": "Hydraulic fitting/adapter leak",
+    "note": ""
+   },
+   {
+    "old": "DC-HSC-004",
+    "oldLabel": "Hydraulic cylinder rod seal failed",
+    "new": "DC-HYD-032",
+    "how": "legacy1",
+    "newLabel": "Hydraulic cylinder rod seal failed",
+    "note": ""
+   },
+   {
+    "old": "DC-HSC-005",
+    "oldLabel": "Hydraulic cylinder internal bypass",
+    "new": "DC-HYD-030",
+    "how": "legacy1",
+    "newLabel": "Hydraulic cylinder internal bypass",
+    "note": ""
+   },
+   {
+    "old": "DC-HSC-006",
+    "oldLabel": "Hydraulic cylinder rod scored/bent",
+    "new": "DC-HYD-103",
+    "how": "name",
+    "newLabel": "Hoist cylinder rod scored, pitted or bent",
+    "note": "same concept, v4 legacy fields missed it (similarity 0.50)"
+   },
+   {
+    "old": "DC-HSC-007",
+    "oldLabel": "Main hydraulic pump worn/failed",
+    "new": "DC-HYD-044",
+    "how": "legacy1",
+    "newLabel": "Main hydraulic pump worn/failed",
+    "note": ""
+   },
+   {
+    "old": "DC-HSC-008",
+    "oldLabel": "Hydraulic motor worn/failed",
+    "new": "DC-HYD-037",
+    "how": "legacy1",
+    "newLabel": "Hydraulic motor worn/failed",
+    "note": ""
+   },
+   {
+    "old": "DC-HSC-009",
+    "oldLabel": "Control valve sticking/spool jammed",
+    "new": "DC-HYD-013",
+    "how": "legacy1",
+    "newLabel": "Control valve sticking/spool jammed",
+    "note": ""
+   },
+   {
+    "old": "DC-HSC-010",
+    "oldLabel": "Relief valve stuck/misadjusted",
+    "new": "DC-HYD-051",
+    "how": "name",
+    "newLabel": "Relief valve stuck",
+    "note": "same concept, v4 legacy fields missed it (similarity 0.75)"
+   },
+   {
+    "old": "DC-HSC-011",
+    "oldLabel": "Accumulator precharge low/failed",
+    "new": "DC-HYD-002",
+    "how": "legacy1",
+    "newLabel": "Accumulator precharge low/failed",
+    "note": ""
+   },
+   {
+    "old": "DC-HSC-012",
+    "oldLabel": "Hydraulic oil cooler blocked",
+    "new": "DC-COO-011",
+    "how": "legacy1",
+    "newLabel": "Hydraulic oil cooler blocked",
+    "note": ""
+   },
+   {
+    "old": "DC-HSC-013",
+    "oldLabel": "Hydraulic oil overheating",
+    "new": "DC-HYD-038",
+    "how": "legacy1",
+    "newLabel": "Hydraulic oil overheating",
+    "note": ""
+   },
+   {
+    "old": "DC-HSC-014",
+    "oldLabel": "Hydraulic filter plugged",
+    "new": "DC-HYD-033",
+    "how": "legacy1",
+    "newLabel": "Hydraulic filter plugged",
+    "note": ""
+   },
+   {
+    "old": "DC-HSC-015",
+    "oldLabel": "Pilot pressure low",
+    "new": "DC-HYD-047",
+    "how": "legacy1",
+    "newLabel": "Pilot pressure low",
+    "note": ""
+   },
+   {
+    "old": "DC-HSC-016",
+    "oldLabel": "Hoist/lift cylinder leak",
+    "new": "DC-HYD-027",
+    "how": "legacy1",
+    "newLabel": "Hoist/lift cylinder leak",
+    "note": ""
+   },
+   {
+    "old": "DC-HSC-017",
+    "oldLabel": "Steering cylinder leak",
+    "new": "DC-DRV-033",
+    "how": "legacy1",
+    "newLabel": "Steering cylinder leak",
+    "note": ""
+   },
+   {
+    "old": "DC-HSC-018",
+    "oldLabel": "Brake hydraulic pressure low",
+    "new": "DC-DRV-011",
+    "how": "legacy1",
+    "newLabel": "Brake hydraulic pressure low",
+    "note": ""
+   },
+   {
+    "old": "DC-HSC-019",
+    "oldLabel": "Hose clamp/bracket missing",
+    "new": "DC-HYD-028",
+    "how": "legacy1",
+    "newLabel": "Hose clamp/bracket missing",
+    "note": ""
+   },
+   {
+    "old": "DC-HSC-020",
+    "oldLabel": "Hydraulic tank cap/breather missing",
+    "new": "DC-HYD-039",
+    "how": "legacy1",
+    "newLabel": "Hydraulic tank cap/breather missing",
+    "note": ""
+   },
+   {
+    "old": "DC-LACC-001",
+    "oldLabel": "Oil contaminated with dirt/dust",
+    "new": "DC-LUB-007",
+    "how": "legacy1",
+    "newLabel": "Oil contaminated with dirt/dust",
+    "note": ""
+   },
+   {
+    "old": "DC-LACC-002",
+    "oldLabel": "Oil contaminated with water/coolant",
+    "new": "DC-GEN-054",
+    "how": "name",
+    "newLabel": "Water / coolant in oil",
+    "note": "same concept, v4 legacy fields missed it (similarity 0.50)"
+   },
+   {
+    "old": "DC-LACC-003",
+    "oldLabel": "Oil degraded/oxidized",
+    "new": "DC-LUB-009",
+    "how": "legacy1",
+    "newLabel": "Oil degraded/oxidized",
+    "note": ""
+   },
+   {
+    "old": "DC-LACC-004",
+    "oldLabel": "Wrong lubricant used",
+    "new": "DC-LUB-010",
+    "how": "legacy1",
+    "newLabel": "Wrong lubricant used",
+    "note": ""
+   },
+   {
+    "old": "DC-LACC-005",
+    "oldLabel": "Lubrication line blocked",
+    "new": "DC-LUB-006",
+    "how": "legacy1",
+    "newLabel": "Lubrication line blocked",
+    "note": ""
+   },
+   {
+    "old": "DC-LACC-006",
+    "oldLabel": "Auto-lube injector failed",
+    "new": "DC-LUB-001",
+    "how": "legacy1",
+    "newLabel": "Auto-lube injector failed",
+    "note": ""
+   },
+   {
+    "old": "DC-LACC-007",
+    "oldLabel": "Auto-lube pump failed",
+    "new": "DC-LUB-002",
+    "how": "legacy1",
+    "newLabel": "Auto-lube pump failed",
+    "note": ""
+   },
+   {
+    "old": "DC-LACC-008",
+    "oldLabel": "Breather blocked/damaged",
+    "new": "DC-LUB-003",
+    "how": "legacy1",
+    "newLabel": "Breather blocked/damaged",
+    "note": ""
+   },
+   {
+    "old": "DC-LACC-009",
+    "oldLabel": "Filter bypassed due to blockage",
+    "new": "DC-HYD-017",
+    "how": "legacy1",
+    "newLabel": "Filter bypassed due to blockage",
+    "note": ""
+   },
+   {
+    "old": "DC-NC-001",
+    "oldLabel": "Cause not confirmed yet",
+    "new": "DC-GEN-090",
+    "how": "name",
+    "newLabel": "Cause not confirmed - awaiting investigation",
+    "note": "same concept, v4 legacy fields missed it (similarity 0.50)"
+   },
+   {
+    "old": "DC-NC-002",
+    "oldLabel": "Insufficient information from inspection",
+    "new": "DC-GEN-091",
+    "how": "name",
+    "newLabel": "Insufficient information from inspection",
+    "note": "same concept, v4 legacy fields missed it (similarity 1.00)"
+   },
+   {
+    "old": "DC-SC-001",
+    "oldLabel": "Frame crack",
+    "new": "DC-STR-007",
+    "how": "legacy1",
+    "newLabel": "Frame crack",
+    "note": ""
+   },
+   {
+    "old": "DC-SC-002",
+    "oldLabel": "Body liner worn",
+    "new": "DC-STR-002",
+    "how": "legacy1",
+    "newLabel": "Body liner worn",
+    "note": ""
+   },
+   {
+    "old": "DC-SC-003",
+    "oldLabel": "Dump body crack",
+    "new": "DC-STR-006",
+    "how": "legacy1",
+    "newLabel": "Dump body crack",
+    "note": ""
+   },
+   {
+    "old": "DC-SC-004",
+    "oldLabel": "Boom crack",
+    "new": "DC-STR-003",
+    "how": "legacy1",
+    "newLabel": "Boom crack",
+    "note": ""
+   },
+   {
+    "old": "DC-SC-005",
+    "oldLabel": "Arm/stick crack",
+    "new": "DC-STR-001",
+    "how": "legacy1",
+    "newLabel": "Arm/stick crack",
+    "note": ""
+   },
+   {
+    "old": "DC-SC-006",
+    "oldLabel": "Bucket crack",
+    "new": "DC-GET-004",
+    "how": "legacy1",
+    "newLabel": "Bucket crack",
+    "note": ""
+   },
+   {
+    "old": "DC-SC-007",
+    "oldLabel": "Loader arm crack",
+    "new": "DC-STR-009",
+    "how": "legacy1",
+    "newLabel": "Loader arm crack",
+    "note": ""
+   },
+   {
+    "old": "DC-SC-008",
+    "oldLabel": "Blade frame/crack",
+    "new": "DC-GET-003",
+    "how": "legacy1",
+    "newLabel": "Blade frame/crack",
+    "note": ""
+   },
+   {
+    "old": "DC-SC-009",
+    "oldLabel": "Mast crack/damage",
+    "new": "DC-DRL-015",
+    "how": "legacy1",
+    "newLabel": "Mast crack/damage",
+    "note": ""
+   },
+   {
+    "old": "DC-SC-010",
+    "oldLabel": "Guard/cover damaged",
+    "new": "DC-STR-008",
+    "how": "legacy1",
+    "newLabel": "Guard/cover damaged",
+    "note": ""
+   },
+   {
+    "old": "DC-SC-011",
+    "oldLabel": "Mounting bracket cracked/loose",
+    "new": "DC-MEC-008",
+    "how": "legacy1",
+    "newLabel": "Mounting bracket cracked/loose",
+    "note": ""
+   },
+   {
+    "old": "DC-SC-012",
+    "oldLabel": "Pin/bushing worn",
+    "new": "DC-MEC-009",
+    "how": "legacy1",
+    "newLabel": "Pin/bushing worn",
+    "note": ""
+   },
+   {
+    "old": "DC-SC-013",
+    "oldLabel": "Pivot bearing failed",
+    "new": "DC-MEC-010",
+    "how": "legacy1",
+    "newLabel": "Pivot bearing failed",
+    "note": ""
+   },
+   {
+    "old": "DC-SC-014",
+    "oldLabel": "Weld failure",
+    "new": "DC-STR-012",
+    "how": "legacy1",
+    "newLabel": "Weld failure",
+    "note": ""
+   },
+   {
+    "old": "DC-SCACC-001",
+    "oldLabel": "Screen media worn",
+    "new": "DC-SCR-008",
+    "how": "legacy1",
+    "newLabel": "Screen media worn",
+    "note": ""
+   },
+   {
+    "old": "DC-SCACC-002",
+    "oldLabel": "Screen media torn/broken",
+    "new": "DC-SCR-007",
+    "how": "legacy1",
+    "newLabel": "Screen media torn/broken",
+    "note": ""
+   },
+   {
+    "old": "DC-SCACC-003",
+    "oldLabel": "Screen panel loose",
+    "new": "DC-SCR-009",
+    "how": "legacy1",
+    "newLabel": "Screen panel loose",
+    "note": ""
+   },
+   {
+    "old": "DC-SCACC-004",
+    "oldLabel": "Screen blinded with clay/fines",
+    "new": "DC-SCR-004",
+    "how": "legacy1",
+    "newLabel": "Screen blinded with clay/fines",
+    "note": ""
+   },
+   {
+    "old": "DC-SCACC-005",
+    "oldLabel": "Vibrator/exciter bearing failure",
+    "new": "DC-SCR-010",
+    "how": "legacy1",
+    "newLabel": "Vibrator/exciter bearing failure",
+    "note": ""
+   },
+   {
+    "old": "DC-SCACC-006",
+    "oldLabel": "Exciter oil leak",
+    "new": "DC-SCR-002",
+    "how": "legacy1",
+    "newLabel": "Exciter oil leak",
+    "note": ""
+   },
+   {
+    "old": "DC-SCACC-007",
+    "oldLabel": "Screen deck crack",
+    "new": "DC-SCR-005",
+    "how": "legacy1",
+    "newLabel": "Screen deck crack",
+    "note": ""
+   },
+   {
+    "old": "DC-SCACC-008",
+    "oldLabel": "Screen drive belt slipping/broken",
+    "new": "DC-SCR-006",
+    "how": "legacy1",
+    "newLabel": "Screen drive belt slipping/broken",
+    "note": ""
+   },
+   {
+    "old": "DC-SCACC-009",
+    "oldLabel": "Feed chute liner worn",
+    "new": "DC-CNV-006",
+    "how": "legacy1",
+    "newLabel": "Feed chute liner worn",
+    "note": ""
+   },
+   {
+    "old": "DC-SCACC-010",
+    "oldLabel": "Conveyor belt cut/torn",
+    "new": "DC-CNV-002",
+    "how": "legacy1",
+    "newLabel": "Conveyor belt cut/torn",
+    "note": ""
+   },
+   {
+    "old": "DC-SCACC-011",
+    "oldLabel": "Conveyor belt mistracking",
+    "new": "DC-CNV-003",
+    "how": "legacy1",
+    "newLabel": "Conveyor belt mistracking",
+    "note": ""
+   },
+   {
+    "old": "DC-SCACC-012",
+    "oldLabel": "Conveyor roller/idler seized",
+    "new": "DC-CNV-005",
+    "how": "legacy1",
+    "newLabel": "Conveyor roller/idler seized",
+    "note": ""
+   },
+   {
+    "old": "DC-SCACC-013",
+    "oldLabel": "Conveyor pulley lagging worn",
+    "new": "DC-CNV-004",
+    "how": "legacy1",
+    "newLabel": "Conveyor pulley lagging worn",
+    "note": ""
+   },
+   {
+    "old": "DC-SCACC-014",
+    "oldLabel": "Skirt rubber/seal worn",
+    "new": "DC-CNV-007",
+    "how": "legacy1",
+    "newLabel": "Skirt rubber/seal worn",
+    "note": ""
+   },
+   {
+    "old": "DC-SSC-001",
+    "oldLabel": "Fire suppression cylinder discharged/low",
+    "new": "DC-SAF-006",
+    "how": "legacy1",
+    "newLabel": "Fire suppression cylinder discharged/low",
+    "note": ""
+   },
+   {
+    "old": "DC-SSC-002",
+    "oldLabel": "Fire suppression line/nozzle damaged",
+    "new": "DC-SAF-008",
+    "how": "legacy1",
+    "newLabel": "Fire suppression line/nozzle damaged",
+    "note": ""
+   },
+   {
+    "old": "DC-SSC-003",
+    "oldLabel": "Fire suppression detection wire/sensor fault",
+    "new": "DC-SAF-007",
+    "how": "legacy1",
+    "newLabel": "Fire suppression detection wire/sensor fault",
+    "note": ""
+   },
+   {
+    "old": "DC-SSC-004",
+    "oldLabel": "Door/guard interlock switch failed",
+    "new": "DC-ELE-044",
+    "how": "name",
+    "newLabel": "Switch/interlock failed",
+    "note": "same concept, v4 legacy fields missed it (similarity 0.60)"
+   },
+   {
+    "old": "DC-SSC-005",
+    "oldLabel": "Backup alarm/camera fault",
+    "new": "DC-SAF-001",
+    "how": "legacy1",
+    "newLabel": "Backup alarm/camera fault",
+    "note": ""
+   },
+   {
+    "old": "DC-SSC-006",
+    "oldLabel": "Emergency stop button damaged/stuck",
+    "new": "DC-SAF-003",
+    "how": "legacy1",
+    "newLabel": "Emergency stop button damaged/stuck",
+    "note": ""
+   },
+   {
+    "old": "DC-TAWC-001",
+    "oldLabel": "Tire tread cut",
+    "new": "DC-TYR-010",
+    "how": "legacy1",
+    "newLabel": "Tire tread cut",
+    "note": ""
+   },
+   {
+    "old": "DC-TAWC-002",
+    "oldLabel": "Tire sidewall cut",
+    "new": "DC-TYR-009",
+    "how": "legacy1",
+    "newLabel": "Tire sidewall cut",
+    "note": ""
+   },
+   {
+    "old": "DC-TAWC-003",
+    "oldLabel": "Tire puncture by rock/foreign object",
+    "new": "DC-TYR-007",
+    "how": "legacy1",
+    "newLabel": "Tire puncture by rock/foreign object",
+    "note": ""
+   },
+   {
+    "old": "DC-TAWC-004",
+    "oldLabel": "Tire impact damage",
+    "new": "DC-TYR-004",
+    "how": "legacy1",
+    "newLabel": "Tire impact damage",
+    "note": ""
+   },
+   {
+    "old": "DC-TAWC-005",
+    "oldLabel": "Tire separation/delamination",
+    "new": "DC-TYR-008",
+    "how": "legacy1",
+    "newLabel": "Tire separation/delamination",
+    "note": ""
+   },
+   {
+    "old": "DC-TAWC-006",
+    "oldLabel": "Tire heat damage",
+    "new": "DC-TYR-003",
+    "how": "legacy1",
+    "newLabel": "Tire heat damage",
+    "note": ""
+   },
+   {
+    "old": "DC-TAWC-007",
+    "oldLabel": "Tire underinflation damage",
+    "new": "DC-TYR-011",
+    "how": "legacy1",
+    "newLabel": "Tire underinflation damage",
+    "note": ""
+   },
+   {
+    "old": "DC-TAWC-008",
+    "oldLabel": "Tire overinflation damage",
+    "new": "DC-TYR-005",
+    "how": "legacy1",
+    "newLabel": "Tire overinflation damage",
+    "note": ""
+   },
+   {
+    "old": "DC-TAWC-009",
+    "oldLabel": "Uneven tire wear",
+    "new": "DC-TYR-013",
+    "how": "legacy1",
+    "newLabel": "Uneven tire wear",
+    "note": ""
+   },
+   {
+    "old": "DC-TAWC-010",
+    "oldLabel": "Rim cracked/damaged",
+    "new": "DC-TYR-001",
+    "how": "legacy1",
+    "newLabel": "Rim cracked/damaged",
+    "note": ""
+   },
+   {
+    "old": "DC-TAWC-011",
+    "oldLabel": "Wheel nut/fastener loose",
+    "new": "DC-TYR-015",
+    "how": "legacy1",
+    "newLabel": "Wheel nut/fastener loose",
+    "note": ""
+   },
+   {
+    "old": "DC-TAWC-012",
+    "oldLabel": "Valve stem leak/damage",
+    "new": "DC-TYR-014",
+    "how": "legacy1",
+    "newLabel": "Valve stem leak/damage",
+    "note": ""
+   },
+   {
+    "old": "DC-UC-001",
+    "oldLabel": "Track shoe worn",
+    "new": "DC-UNC-018",
+    "how": "legacy1",
+    "newLabel": "Track shoe worn",
+    "note": ""
+   },
+   {
+    "old": "DC-UC-002",
+    "oldLabel": "Track shoe broken",
+    "new": "DC-UNC-017",
+    "how": "legacy1",
+    "newLabel": "Track shoe broken",
+    "note": ""
+   },
+   {
+    "old": "DC-UC-003",
+    "oldLabel": "Track shoe bolt loose/missing",
+    "new": "DC-UNC-016",
+    "how": "legacy1",
+    "newLabel": "Track shoe bolt loose/missing",
+    "note": ""
+   },
+   {
+    "old": "DC-UC-004",
+    "oldLabel": "Track chain worn/stretched",
+    "new": "DC-UNC-009",
+    "how": "legacy1",
+    "newLabel": "Track chain worn/stretched",
+    "note": ""
+   },
+   {
+    "old": "DC-UC-005",
+    "oldLabel": "Track link cracked/broken",
+    "new": "DC-UNC-013",
+    "how": "legacy1",
+    "newLabel": "Track link cracked/broken",
+    "note": ""
+   },
+   {
+    "old": "DC-UC-006",
+    "oldLabel": "Track pin/bushing worn",
+    "new": "DC-UNC-014",
+    "how": "legacy1",
+    "newLabel": "Track pin/bushing worn",
+    "note": ""
+   },
+   {
+    "old": "DC-UC-007",
+    "oldLabel": "Track roller failed",
+    "new": "DC-UNC-015",
+    "how": "legacy1",
+    "newLabel": "Track roller failed",
+    "note": ""
+   },
+   {
+    "old": "DC-UC-008",
+    "oldLabel": "Carrier roller failed",
+    "new": "DC-UNC-002",
+    "how": "legacy1",
+    "newLabel": "Carrier roller failed",
+    "note": ""
+   },
+   {
+    "old": "DC-UC-009",
+    "oldLabel": "Idler worn/failed",
+    "new": "DC-UNC-004",
+    "how": "legacy1",
+    "newLabel": "Idler worn/failed",
+    "note": ""
+   },
+   {
+    "old": "DC-UC-010",
+    "oldLabel": "Sprocket worn",
+    "new": "DC-UNC-008",
+    "how": "legacy1",
+    "newLabel": "Sprocket worn",
+    "note": ""
+   },
+   {
+    "old": "DC-UC-011",
+    "oldLabel": "Track derailed",
+    "new": null,
+    "how": "unmatched",
+    "newLabel": "",
+    "note": "RETIRE — \"track derailed\" is a failure mode (FM-UC-02), not a cause. Historical records carrying it should re-point to the mode, not to a cause."
+   },
+   {
+    "old": "DC-UC-012",
+    "oldLabel": "Incorrect track tension",
+    "new": "DC-UNC-005",
+    "how": "legacy1",
+    "newLabel": "Incorrect track tension",
+    "note": ""
+   },
+   {
+    "old": "DC-UC-013",
+    "oldLabel": "Recoil/tensioner failure",
+    "new": "DC-UNC-007",
+    "how": "legacy1",
+    "newLabel": "Recoil/tensioner failure",
+    "note": ""
+   },
+   {
+    "old": "DC-UC-014",
+    "oldLabel": "Mud/ice packing in undercarriage",
+    "new": "DC-UNC-006",
+    "how": "legacy1",
+    "newLabel": "Mud/ice packing in undercarriage",
+    "note": ""
+   },
+   {
+    "old": "DC-UC-015",
+    "oldLabel": "Track guard/frame damaged",
+    "new": "DC-UNC-012",
+    "how": "legacy1",
+    "newLabel": "Track guard/frame damaged",
+    "note": ""
+   },
+   {
+    "old": "DT5-03",
+    "oldLabel": "Impact/collision",
+    "new": "DC-GEN-031",
+    "how": "proposed",
+    "newLabel": "Collision with equipment or structure",
+    "note": "impact / collision; EX-08 / EX-09 record the condition"
+   },
+   {
+    "old": "DT5-04",
+    "oldLabel": "Harsh environment (dust/mud/ice)",
+    "new": "DC-GEN-042",
+    "how": "proposed",
+    "newLabel": "Dust / dirt ingress from environment",
+    "note": "harsh environment; EX-01 / EX-02 record the condition"
+   },
+   {
+    "old": "DT5-05",
+    "oldLabel": "Foreign object ingress",
+    "new": "DC-ENG-014",
+    "how": "proposed",
+    "newLabel": "Foreign object in equipment",
+    "note": "foreign object in equipment"
+   },
+   {
+    "old": "DT5-06",
+    "oldLabel": "Water ingress",
+    "new": "DC-ELE-016",
+    "how": "name",
+    "newLabel": "Connector loose/water ingress",
+    "note": "same concept, v4 legacy fields missed it (similarity 0.50)"
+   },
+   {
+    "old": "DT5-07",
+    "oldLabel": "Dust ingress",
+    "new": "DC-GEN-042",
+    "how": "proposed",
+    "newLabel": "Dust / dirt ingress from environment",
+    "note": "dust / dirt ingress from environment"
+   },
+   {
+    "old": "DT5-08",
+    "oldLabel": "Third‑party damage",
+    "new": "DC-GEN-031",
+    "how": "proposed",
+    "newLabel": "Collision with equipment or structure",
+    "note": "third-party damage; EX-10 records the condition"
+   },
+   {
+    "old": "DT5-10",
+    "oldLabel": "Improper operation / misuse",
+    "new": "DC-GEN-021",
+    "how": "proposed",
+    "newLabel": "Overload / single overstress event",
+    "note": "improper operation; overload / single overstress event"
+   },
+   {
+    "old": "DT5-11",
+    "oldLabel": "Overload / overspeed operation",
+    "new": "DC-GEN-021",
+    "how": "proposed",
+    "newLabel": "Overload / single overstress event",
+    "note": "overload / overspeed; EX-13 / EX-14 record the condition"
+   },
+   {
+    "old": "DT5-12",
+    "oldLabel": "Poor maintenance / missed service",
+    "new": "DC-GEN-032",
+    "how": "proposed",
+    "newLabel": "Damaged during maintenance / handling",
+    "note": "poor maintenance; damaged during maintenance / handling"
+   },
+   {
+    "old": "DT5-13",
+    "oldLabel": "Incorrect installation / assembly error",
+    "new": "DC-GEN-082",
+    "how": "name",
+    "newLabel": "Assembly / installation error",
+    "note": "same concept, v4 legacy fields missed it (similarity 0.75)"
+   },
+   {
+    "old": "DT5-14",
+    "oldLabel": "Extreme temperature (cold/heat)",
+    "new": "DC-GEN-023",
+    "how": "proposed",
+    "newLabel": "Corrosion / section loss",
+    "note": "extreme temperature; EX-03 / EX-04 record the condition"
+   },
+   {
+    "old": "DT5-15",
+    "oldLabel": "Corrosive atmosphere / chemicals",
+    "new": "DC-GEN-023",
+    "how": "proposed",
+    "newLabel": "Corrosion / section loss",
+    "note": "corrosive atmosphere; EX-05 records the condition"
+   }
+  ],
+  "newInV4": [
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-AIR-004",
+    "how": "new",
+    "newLabel": "Ice blockage",
+    "note": "group AIR"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-AIR-005",
+    "how": "new",
+    "newLabel": "Low air supply",
+    "note": "group AIR"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-AIR-101",
+    "how": "new",
+    "newLabel": "Air tank not drained - water carryover",
+    "note": "group AIR"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-AIR-102",
+    "how": "new",
+    "newLabel": "Air tank drain valve frozen or leaking",
+    "note": "group AIR"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-AIR-103",
+    "how": "new",
+    "newLabel": "Alcohol vaporizer empty or not dosing",
+    "note": "group AIR"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-AIR-104",
+    "how": "new",
+    "newLabel": "Air compressor not building pressure to cut-out",
+    "note": "group AIR"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-AIR-105",
+    "how": "new",
+    "newLabel": "Air compressor passing oil into the system",
+    "note": "group AIR"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-CAB-001",
+    "how": "new",
+    "newLabel": "Aux heater fault (Webasto)",
+    "note": "group CAB"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-CAB-002",
+    "how": "new",
+    "newLabel": "Block heater fault",
+    "note": "group CAB"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-CAB-004",
+    "how": "new",
+    "newLabel": "Mirror broken / loose",
+    "note": "group CAB"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-CAB-005",
+    "how": "new",
+    "newLabel": "Operator seat damaged",
+    "note": "group CAB"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-CAB-006",
+    "how": "new",
+    "newLabel": "Washer pump fault",
+    "note": "group CAB"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-CAB-007",
+    "how": "new",
+    "newLabel": "Wiper blade worn",
+    "note": "group CAB"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-CAB-101",
+    "how": "new",
+    "newLabel": "Refrigerant charge low - leak in circuit",
+    "note": "group CAB"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-CAB-102",
+    "how": "new",
+    "newLabel": "A/C compressor clutch not engaging",
+    "note": "group CAB"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-CAB-103",
+    "how": "new",
+    "newLabel": "A/C compressor seized or noisy",
+    "note": "group CAB"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-CAB-104",
+    "how": "new",
+    "newLabel": "Condenser fins blocked with dust",
+    "note": "group CAB"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-CAB-105",
+    "how": "new",
+    "newLabel": "Evaporator iced up or drain blocked",
+    "note": "group CAB"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-CAB-106",
+    "how": "new",
+    "newLabel": "Expansion valve stuck or sensing bulb detached",
+    "note": "group CAB"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-CAB-107",
+    "how": "new",
+    "newLabel": "Receiver drier saturated - moisture in circuit",
+    "note": "group CAB"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-CNV-001",
+    "how": "new",
+    "newLabel": "Carryback / buildup",
+    "note": "group CNV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-CNV-008",
+    "how": "new",
+    "newLabel": "Splice failure",
+    "note": "group CNV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-CNV-009",
+    "how": "new",
+    "newLabel": "Take-up tension fault",
+    "note": "group CNV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-COO-001",
+    "how": "new",
+    "newLabel": "Coolant burning",
+    "note": "group COO"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-COO-005",
+    "how": "new",
+    "newLabel": "Coolant ingress",
+    "note": "group COO"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-COO-008",
+    "how": "new",
+    "newLabel": "Fan drive fault",
+    "note": "group COO"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-COO-010",
+    "how": "new",
+    "newLabel": "Heat exchanger fouled",
+    "note": "group COO"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-COO-012",
+    "how": "new",
+    "newLabel": "Low coolant level",
+    "note": "group COO"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-COO-013",
+    "how": "new",
+    "newLabel": "Oil cooler fouled",
+    "note": "group COO"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-COO-102",
+    "how": "new",
+    "newLabel": "Radiator core internally scaled or fouled",
+    "note": "group COO"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-COO-104",
+    "how": "new",
+    "newLabel": "Radiator mounting or isolator failed - core fretting",
+    "note": "group COO"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-COO-105",
+    "how": "new",
+    "newLabel": "Pressure cap not holding rated pressure",
+    "note": "group COO"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-COO-106",
+    "how": "new",
+    "newLabel": "Charge air cooler leaking - boost loss",
+    "note": "group COO"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-COO-112",
+    "how": "new",
+    "newLabel": "Thermostat stuck open - engine runs cold",
+    "note": "group COO"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-COO-113",
+    "how": "new",
+    "newLabel": "Thermostat seal or housing leaking",
+    "note": "group COO"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-COO-121",
+    "how": "new",
+    "newLabel": "Coolant pump seal weeping from telltale",
+    "note": "group COO"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-COO-122",
+    "how": "new",
+    "newLabel": "Coolant pump bearing worn - shaft play",
+    "note": "group COO"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-COO-123",
+    "how": "new",
+    "newLabel": "Coolant pump impeller eroded or loose on shaft",
+    "note": "group COO"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-COO-131",
+    "how": "new",
+    "newLabel": "Fan blade cracked, bent or missing",
+    "note": "group COO"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-COO-132",
+    "how": "new",
+    "newLabel": "Viscous or hydraulic fan drive not engaging",
+    "note": "group COO"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-COO-133",
+    "how": "new",
+    "newLabel": "Fan shroud damaged or contacting blade",
+    "note": "group COO"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-COO-141",
+    "how": "new",
+    "newLabel": "Fan belt glazed, cracked or delaminated",
+    "note": "group COO"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-COO-142",
+    "how": "new",
+    "newLabel": "Fan belt tension incorrect / tensioner failed",
+    "note": "group COO"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-CRU-001",
+    "how": "new",
+    "newLabel": "Chamber choke",
+    "note": "group CRU"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-CRU-010",
+    "how": "new",
+    "newLabel": "CSS misadjusted",
+    "note": "group CRU"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-CRU-017",
+    "how": "new",
+    "newLabel": "Toggle plate broken",
+    "note": "group CRU"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-CTL-003",
+    "how": "new",
+    "newLabel": "Controller overheat",
+    "note": "group CTL"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-CTL-005",
+    "how": "new",
+    "newLabel": "Dirty sensor",
+    "note": "group CTL"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-CTL-006",
+    "how": "new",
+    "newLabel": "ECU / immobiliser blocking start",
+    "note": "group CTL"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-CTL-007",
+    "how": "new",
+    "newLabel": "I/O module fault",
+    "note": "group CTL"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-CTL-008",
+    "how": "new",
+    "newLabel": "Incorrect setpoint",
+    "note": "group CTL"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-CTL-009",
+    "how": "new",
+    "newLabel": "Intermittent signal",
+    "note": "group CTL"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-CTL-010",
+    "how": "new",
+    "newLabel": "IP conflict",
+    "note": "group CTL"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-CTL-011",
+    "how": "new",
+    "newLabel": "Joystick fault",
+    "note": "group CTL"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-CTL-012",
+    "how": "new",
+    "newLabel": "Memory overload",
+    "note": "group CTL"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-CTL-013",
+    "how": "new",
+    "newLabel": "Network drop",
+    "note": "group CTL"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-CTL-016",
+    "how": "new",
+    "newLabel": "Sensor element fail",
+    "note": "group CTL"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-CTL-017",
+    "how": "new",
+    "newLabel": "Sensor false high",
+    "note": "group CTL"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-CTL-018",
+    "how": "new",
+    "newLabel": "Software glitch",
+    "note": "group CTL"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRL-004",
+    "how": "new",
+    "newLabel": "Drill rod broken",
+    "note": "group DRL"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRL-007",
+    "how": "new",
+    "newLabel": "DTH hammer fault",
+    "note": "group DRL"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRV-001",
+    "how": "new",
+    "newLabel": "Air-brake leak",
+    "note": "group DRV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRV-003",
+    "how": "new",
+    "newLabel": "Belt loose",
+    "note": "group DRV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRV-004",
+    "how": "new",
+    "newLabel": "Belt slip",
+    "note": "group DRV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRV-005",
+    "how": "new",
+    "newLabel": "Belt worn",
+    "note": "group DRV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRV-007",
+    "how": "new",
+    "newLabel": "Brake calliper sticking",
+    "note": "group DRV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRV-010",
+    "how": "new",
+    "newLabel": "Brake fluid leak",
+    "note": "group DRV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRV-013",
+    "how": "new",
+    "newLabel": "Brake pad worn",
+    "note": "group DRV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRV-014",
+    "how": "new",
+    "newLabel": "Brake stuck on",
+    "note": "group DRV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRV-015",
+    "how": "new",
+    "newLabel": "Brake/clutch overheated",
+    "note": "group DRV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRV-016",
+    "how": "new",
+    "newLabel": "Clutch slip",
+    "note": "group DRV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRV-017",
+    "how": "new",
+    "newLabel": "Coupling damage",
+    "note": "group DRV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRV-023",
+    "how": "new",
+    "newLabel": "Gear wear",
+    "note": "group DRV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRV-025",
+    "how": "new",
+    "newLabel": "Mechanical slip / loss of grip",
+    "note": "group DRV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRV-026",
+    "how": "new",
+    "newLabel": "Misalignment",
+    "note": "group DRV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRV-027",
+    "how": "new",
+    "newLabel": "Oil contamination on belt/drive",
+    "note": "group DRV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRV-028",
+    "how": "new",
+    "newLabel": "Park brake fault",
+    "note": "group DRV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRV-029",
+    "how": "new",
+    "newLabel": "Pulley damage",
+    "note": "group DRV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRV-030",
+    "how": "new",
+    "newLabel": "Pulley lagging damage",
+    "note": "group DRV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRV-031",
+    "how": "new",
+    "newLabel": "Pulley misalign",
+    "note": "group DRV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRV-032",
+    "how": "new",
+    "newLabel": "Shaft break",
+    "note": "group DRV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRV-037",
+    "how": "new",
+    "newLabel": "Tensioner fault",
+    "note": "group DRV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRV-042",
+    "how": "new",
+    "newLabel": "Worn gear mesh",
+    "note": "group DRV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRV-101",
+    "how": "new",
+    "newLabel": "Ride cylinder nitrogen charge low - bottoming out",
+    "note": "group DRV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRV-102",
+    "how": "new",
+    "newLabel": "Ride cylinder rod seal leaking oil",
+    "note": "group DRV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRV-103",
+    "how": "new",
+    "newLabel": "Ride cylinder rod pitted or plating damaged",
+    "note": "group DRV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRV-104",
+    "how": "new",
+    "newLabel": "Ride height uneven side to side",
+    "note": "group DRV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRV-111",
+    "how": "new",
+    "newLabel": "Axle housing breather blocked - seals pushed out",
+    "note": "group DRV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRV-112",
+    "how": "new",
+    "newLabel": "Axle or final drive oil contaminated with water",
+    "note": "group DRV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRV-113",
+    "how": "new",
+    "newLabel": "Wheel end / duo-cone seal leaking",
+    "note": "group DRV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRV-115",
+    "how": "new",
+    "newLabel": "Axle shaft twisted or splines stripped",
+    "note": "group DRV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRV-121",
+    "how": "new",
+    "newLabel": "Driveline universal joint worn or seized",
+    "note": "group DRV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRV-122",
+    "how": "new",
+    "newLabel": "Driveline centre bearing or hanger failed",
+    "note": "group DRV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRV-123",
+    "how": "new",
+    "newLabel": "Driveline out of balance or slip yoke worn",
+    "note": "group DRV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRV-131",
+    "how": "new",
+    "newLabel": "PTO will not engage or drops out under load",
+    "note": "group DRV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRV-132",
+    "how": "new",
+    "newLabel": "PTO output seal leaking",
+    "note": "group DRV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRV-141",
+    "how": "new",
+    "newLabel": "Retarder not developing braking effort",
+    "note": "group DRV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-DRV-142",
+    "how": "new",
+    "newLabel": "Retarder overheating - cooling flow low",
+    "note": "group DRV"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ELE-003",
+    "how": "new",
+    "newLabel": "Battery low",
+    "note": "group ELE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ELE-005",
+    "how": "new",
+    "newLabel": "Beacon / strobe fault",
+    "note": "group ELE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ELE-006",
+    "how": "new",
+    "newLabel": "Blower motor fault",
+    "note": "group ELE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ELE-008",
+    "how": "new",
+    "newLabel": "Breaker tripped",
+    "note": "group ELE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ELE-009",
+    "how": "new",
+    "newLabel": "Broken wire",
+    "note": "group ELE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ELE-010",
+    "how": "new",
+    "newLabel": "Cable shielding damaged",
+    "note": "group ELE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ELE-011",
+    "how": "new",
+    "newLabel": "Chafed cable",
+    "note": "group ELE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ELE-012",
+    "how": "new",
+    "newLabel": "Charger fault",
+    "note": "group ELE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ELE-014",
+    "how": "new",
+    "newLabel": "Coil failure",
+    "note": "group ELE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ELE-015",
+    "how": "new",
+    "newLabel": "Connector corrosion",
+    "note": "group ELE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ELE-017",
+    "how": "new",
+    "newLabel": "Contact wear",
+    "note": "group ELE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ELE-018",
+    "how": "new",
+    "newLabel": "Diode failure",
+    "note": "group ELE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ELE-019",
+    "how": "new",
+    "newLabel": "Electric motor fault",
+    "note": "group ELE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ELE-020",
+    "how": "new",
+    "newLabel": "EMI interference",
+    "note": "group ELE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ELE-021",
+    "how": "new",
+    "newLabel": "External power supply outage",
+    "note": "group ELE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ELE-024",
+    "how": "new",
+    "newLabel": "Grounding issue",
+    "note": "group ELE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ELE-026",
+    "how": "new",
+    "newLabel": "High inrush",
+    "note": "group ELE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ELE-027",
+    "how": "new",
+    "newLabel": "Insulation damage",
+    "note": "group ELE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ELE-028",
+    "how": "new",
+    "newLabel": "Loose connection",
+    "note": "group ELE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ELE-029",
+    "how": "new",
+    "newLabel": "Overvoltage",
+    "note": "group ELE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ELE-030",
+    "how": "new",
+    "newLabel": "Parasitic drain",
+    "note": "group ELE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ELE-031",
+    "how": "new",
+    "newLabel": "Pinched cable",
+    "note": "group ELE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ELE-032",
+    "how": "new",
+    "newLabel": "Poor grounding",
+    "note": "group ELE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ELE-033",
+    "how": "new",
+    "newLabel": "Power quality issue",
+    "note": "group ELE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ELE-035",
+    "how": "new",
+    "newLabel": "Regulator fault",
+    "note": "group ELE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ELE-038",
+    "how": "new",
+    "newLabel": "Resistor pack fault",
+    "note": "group ELE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ELE-039",
+    "how": "new",
+    "newLabel": "Solenoid fault",
+    "note": "group ELE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ELE-046",
+    "how": "new",
+    "newLabel": "Voltage drop",
+    "note": "group ELE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ELE-047",
+    "how": "new",
+    "newLabel": "Voltage surge",
+    "note": "group ELE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ELE-050",
+    "how": "new",
+    "newLabel": "Winding short",
+    "note": "group ELE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ELE-051",
+    "how": "new",
+    "newLabel": "Wiper motor fault",
+    "note": "group ELE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ENG-001",
+    "how": "new",
+    "newLabel": "AdBlue / SCR fault",
+    "note": "group ENG"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ENG-004",
+    "how": "new",
+    "newLabel": "DPF clogged",
+    "note": "group ENG"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ENG-005",
+    "how": "new",
+    "newLabel": "DPF regen fault",
+    "note": "group ENG"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ENG-006",
+    "how": "new",
+    "newLabel": "EGR valve stuck",
+    "note": "group ENG"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ENG-013",
+    "how": "new",
+    "newLabel": "Exhaust restriction",
+    "note": "group ENG"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ENG-017",
+    "how": "new",
+    "newLabel": "Scraper / cleaner worn",
+    "note": "group ENG"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ENG-018",
+    "how": "new",
+    "newLabel": "Screen blinding",
+    "note": "group ENG"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ENG-019",
+    "how": "new",
+    "newLabel": "Turbo fault",
+    "note": "group ENG"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ENG-020",
+    "how": "new",
+    "newLabel": "Turbo/boost leak",
+    "note": "group ENG"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ENG-101",
+    "how": "new",
+    "newLabel": "Air filter restricted - restriction indicator tripped",
+    "note": "group ENG"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ENG-102",
+    "how": "new",
+    "newLabel": "Intake pipework leaking downstream of filter",
+    "note": "group ENG"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ENG-103",
+    "how": "new",
+    "newLabel": "Turbocharger shaft play or seal leaking",
+    "note": "group ENG"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ENG-111",
+    "how": "new",
+    "newLabel": "Exhaust manifold or turbo joint leaking",
+    "note": "group ENG"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ENG-112",
+    "how": "new",
+    "newLabel": "Exhaust bellows or flexible section split",
+    "note": "group ENG"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ENG-113",
+    "how": "new",
+    "newLabel": "Exhaust mounting or hanger broken",
+    "note": "group ENG"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ENG-121",
+    "how": "new",
+    "newLabel": "Engine oil pressure low at rated speed",
+    "note": "group ENG"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ENG-122",
+    "how": "new",
+    "newLabel": "Engine oil filter bypassing / overdue",
+    "note": "group ENG"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ENG-123",
+    "how": "new",
+    "newLabel": "Engine oil cooler internally leaking to coolant",
+    "note": "group ENG"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ENG-124",
+    "how": "new",
+    "newLabel": "Front or rear crank seal leaking",
+    "note": "group ENG"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ENG-125",
+    "how": "new",
+    "newLabel": "Rocker cover or sump gasket leaking",
+    "note": "group ENG"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ENG-131",
+    "how": "new",
+    "newLabel": "Batteries below rated cranking capacity",
+    "note": "group ENG"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ENG-132",
+    "how": "new",
+    "newLabel": "Starter motor slow crank / solenoid chattering",
+    "note": "group ENG"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ENG-133",
+    "how": "new",
+    "newLabel": "Charging output low - belt, alternator or regulator",
+    "note": "group ENG"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-ENG-134",
+    "how": "new",
+    "newLabel": "Preheat / cold start aid not operating",
+    "note": "group ENG"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-FUE-001",
+    "how": "new",
+    "newLabel": "Fuel air-lock",
+    "note": "group FUE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-FUE-004",
+    "how": "new",
+    "newLabel": "Fuel dilution",
+    "note": "group FUE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-FUE-006",
+    "how": "new",
+    "newLabel": "Fuel pre-heater fault",
+    "note": "group FUE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-FUE-011",
+    "how": "new",
+    "newLabel": "No fuel supply",
+    "note": "group FUE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-FUE-012",
+    "how": "new",
+    "newLabel": "Overfueling",
+    "note": "group FUE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-FUE-101",
+    "how": "new",
+    "newLabel": "Fuel filter restricted - differential pressure high",
+    "note": "group FUE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-FUE-102",
+    "how": "new",
+    "newLabel": "Fuel filter waxing / gelling in cold",
+    "note": "group FUE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-FUE-103",
+    "how": "new",
+    "newLabel": "Water separator bowl full / not drained",
+    "note": "group FUE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-FUE-104",
+    "how": "new",
+    "newLabel": "Water separator sensor or drain valve faulty",
+    "note": "group FUE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-FUE-111",
+    "how": "new",
+    "newLabel": "Injector nozzle coked or eroded - poor spray",
+    "note": "group FUE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-FUE-112",
+    "how": "new",
+    "newLabel": "Injector return flow excessive - internal wear",
+    "note": "group FUE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-FUE-113",
+    "how": "new",
+    "newLabel": "Injector sealing washer failed - combustion blowby",
+    "note": "group FUE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-FUE-114",
+    "how": "new",
+    "newLabel": "Injector solenoid or trim code wrong",
+    "note": "group FUE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-FUE-121",
+    "how": "new",
+    "newLabel": "High pressure pump worn - rail pressure low",
+    "note": "group FUE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-FUE-122",
+    "how": "new",
+    "newLabel": "High pressure pump drive coupling failed",
+    "note": "group FUE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-FUE-131",
+    "how": "new",
+    "newLabel": "Lift pump weak - suction pressure low",
+    "note": "group FUE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-FUE-132",
+    "how": "new",
+    "newLabel": "Air drawn in on suction side of fuel system",
+    "note": "group FUE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-FUE-141",
+    "how": "new",
+    "newLabel": "Fuel line chafed or cracked - external leak",
+    "note": "group FUE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-FUE-142",
+    "how": "new",
+    "newLabel": "Fuel tank breather blocked - vacuum lock",
+    "note": "group FUE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-FUE-143",
+    "how": "new",
+    "newLabel": "Fuel tank internally contaminated - water or sludge",
+    "note": "group FUE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-FUE-144",
+    "how": "new",
+    "newLabel": "Fuel tank seam or mount cracked",
+    "note": "group FUE"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GEN-010",
+    "how": "new",
+    "newLabel": "Fastener loose / backed off",
+    "note": "group GEN · generic fallback"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GEN-011",
+    "how": "new",
+    "newLabel": "Fastener missing",
+    "note": "group GEN · generic fallback"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GEN-012",
+    "how": "new",
+    "newLabel": "Fastener / thread failed or stripped",
+    "note": "group GEN · generic fallback"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GEN-013",
+    "how": "new",
+    "newLabel": "Component not refitted / secured after work",
+    "note": "group GEN · generic fallback"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GEN-014",
+    "how": "new",
+    "newLabel": "Component detached in service",
+    "note": "group GEN · generic fallback"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GEN-020",
+    "how": "new",
+    "newLabel": "Fatigue cracking",
+    "note": "group GEN · generic fallback"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GEN-022",
+    "how": "new",
+    "newLabel": "Weld cracked / weld defect",
+    "note": "group GEN · generic fallback"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GEN-024",
+    "how": "new",
+    "newLabel": "Protective coating / paint failed",
+    "note": "group GEN · generic fallback"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GEN-025",
+    "how": "new",
+    "newLabel": "Wear beyond service limit",
+    "note": "group GEN · generic fallback"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GEN-026",
+    "how": "new",
+    "newLabel": "Deformation from load / impact",
+    "note": "group GEN · generic fallback"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GEN-030",
+    "how": "new",
+    "newLabel": "Struck by rock / material",
+    "note": "group GEN · generic fallback"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GEN-033",
+    "how": "new",
+    "newLabel": "Fire / thermal event damage",
+    "note": "group GEN · generic fallback"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GEN-034",
+    "how": "new",
+    "newLabel": "Ground / bench condition damage",
+    "note": "group GEN · generic fallback"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GEN-040",
+    "how": "new",
+    "newLabel": "Seal / cover not sealing - ingress path open",
+    "note": "group GEN · generic fallback"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GEN-041",
+    "how": "new",
+    "newLabel": "Water ingress from washdown / rain",
+    "note": "group GEN · generic fallback"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GEN-043",
+    "how": "new",
+    "newLabel": "Ice / snow / freezing conditions",
+    "note": "group GEN · generic fallback"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GEN-044",
+    "how": "new",
+    "newLabel": "Material build-up / packing on component",
+    "note": "group GEN · generic fallback"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GEN-050",
+    "how": "new",
+    "newLabel": "Fluid level low - loss through leak",
+    "note": "group GEN · generic fallback"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GEN-051",
+    "how": "new",
+    "newLabel": "Fluid level low - not topped up at service",
+    "note": "group GEN · generic fallback"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GEN-052",
+    "how": "new",
+    "newLabel": "Fluid degraded / past change interval",
+    "note": "group GEN · generic fallback"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GEN-053",
+    "how": "new",
+    "newLabel": "Internal wear debris in fluid",
+    "note": "group GEN · generic fallback"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GEN-060",
+    "how": "new",
+    "newLabel": "Bearing worn or failed",
+    "note": "group GEN · generic fallback"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GEN-061",
+    "how": "new",
+    "newLabel": "Lack of lubrication at the point",
+    "note": "group GEN · generic fallback"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GEN-062",
+    "how": "new",
+    "newLabel": "Misalignment / incorrect adjustment",
+    "note": "group GEN · generic fallback"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GEN-063",
+    "how": "new",
+    "newLabel": "Mechanical interference / rubbing",
+    "note": "group GEN · generic fallback"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GEN-064",
+    "how": "new",
+    "newLabel": "Foreign object trapped in component",
+    "note": "group GEN · generic fallback"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GEN-070",
+    "how": "new",
+    "newLabel": "Restriction / blockage in flow path",
+    "note": "group GEN · generic fallback"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GEN-071",
+    "how": "new",
+    "newLabel": "Internal leakage / bypass across the item",
+    "note": "group GEN · generic fallback"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GEN-072",
+    "how": "new",
+    "newLabel": "Setting / calibration out of specification",
+    "note": "group GEN · generic fallback"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GEN-073",
+    "how": "new",
+    "newLabel": "Genuine fault present - alarm is correct",
+    "note": "group GEN · generic fallback"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GEN-075",
+    "how": "new",
+    "newLabel": "Electrical connection loose or corroded",
+    "note": "group GEN · generic fallback"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GEN-076",
+    "how": "new",
+    "newLabel": "Wiring / cable damaged at this item",
+    "note": "group GEN · generic fallback"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GEN-077",
+    "how": "new",
+    "newLabel": "Overheating of adjacent / upstream system",
+    "note": "group GEN · generic fallback"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GEN-078",
+    "how": "new",
+    "newLabel": "Drive input lost / upstream drive fault",
+    "note": "group GEN · generic fallback"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GEN-079",
+    "how": "new",
+    "newLabel": "Belt / chain worn, loose or broken",
+    "note": "group GEN · generic fallback"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GEN-080",
+    "how": "new",
+    "newLabel": "Reached end of service life (normal wear-out)",
+    "note": "group GEN · generic fallback"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GEN-081",
+    "how": "new",
+    "newLabel": "Incorrect part / specification fitted",
+    "note": "group GEN · generic fallback"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GET-012",
+    "how": "new",
+    "newLabel": "Grader / dozer blade edge worn",
+    "note": "group GET"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-GET-015",
+    "how": "new",
+    "newLabel": "Ripper tip worn / lost",
+    "note": "group GET"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-001",
+    "how": "new",
+    "newLabel": "Abrasive particles in fluid",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-003",
+    "how": "new",
+    "newLabel": "Actuator leakage",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-004",
+    "how": "new",
+    "newLabel": "Actuator stuck",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-005",
+    "how": "new",
+    "newLabel": "Air in system",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-006",
+    "how": "new",
+    "newLabel": "Auto-lube line broken",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-007",
+    "how": "new",
+    "newLabel": "Auto-lube reservoir empty",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-008",
+    "how": "new",
+    "newLabel": "Blockage downstream",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-014",
+    "how": "new",
+    "newLabel": "Cross-contamination",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-015",
+    "how": "new",
+    "newLabel": "Drain plug loose",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-016",
+    "how": "new",
+    "newLabel": "Filter bypass",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-019",
+    "how": "new",
+    "newLabel": "Fitting/union loose",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-020",
+    "how": "new",
+    "newLabel": "Flow restriction",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-021",
+    "how": "new",
+    "newLabel": "Fluid viscosity too low",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-022",
+    "how": "new",
+    "newLabel": "Freeze burst",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-023",
+    "how": "new",
+    "newLabel": "Frozen lines",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-024",
+    "how": "new",
+    "newLabel": "High velocity flow",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-025",
+    "how": "new",
+    "newLabel": "High viscosity",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-029",
+    "how": "new",
+    "newLabel": "Hose/line damaged",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-040",
+    "how": "new",
+    "newLabel": "Line/port blocked",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-041",
+    "how": "new",
+    "newLabel": "Low fluid level",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-042",
+    "how": "new",
+    "newLabel": "Low NPSH / starved suction",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-043",
+    "how": "new",
+    "newLabel": "Low system pressure",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-045",
+    "how": "new",
+    "newLabel": "Metal chips / wear debris in fluid",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-046",
+    "how": "new",
+    "newLabel": "Oil on hot surface",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-048",
+    "how": "new",
+    "newLabel": "Positioner fault",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-049",
+    "how": "new",
+    "newLabel": "Pump overspeed",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-050",
+    "how": "new",
+    "newLabel": "Pump wear",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-053",
+    "how": "new",
+    "newLabel": "Relief valve venting",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-054",
+    "how": "new",
+    "newLabel": "Return line aeration",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-055",
+    "how": "new",
+    "newLabel": "Sludge buildup",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-056",
+    "how": "new",
+    "newLabel": "Suction air leak",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-057",
+    "how": "new",
+    "newLabel": "Suction restriction",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-058",
+    "how": "new",
+    "newLabel": "Valve sticking",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-101",
+    "how": "new",
+    "newLabel": "Hoist cylinder rod seal leaking",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-102",
+    "how": "new",
+    "newLabel": "Hoist cylinder internal bypass - body drifts down",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-104",
+    "how": "new",
+    "newLabel": "Hoist cylinder trunnion or pin bush worn",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-105",
+    "how": "new",
+    "newLabel": "Hoist control valve spool sticking",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-106",
+    "how": "new",
+    "newLabel": "Hoist relief setting incorrect or valve venting",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-107",
+    "how": "new",
+    "newLabel": "Hoist pump worn - slow raise time",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-108",
+    "how": "new",
+    "newLabel": "Hoist tank level low or strainer blocked",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-109",
+    "how": "new",
+    "newLabel": "Hoist filter plugged - bypass open",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-110",
+    "how": "new",
+    "newLabel": "Hoist line chafed against frame or body",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-121",
+    "how": "new",
+    "newLabel": "Concrete pump S-valve or wear plate worn",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-HYD-122",
+    "how": "new",
+    "newLabel": "Concrete pump delivery line blocked",
+    "note": "group HYD"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-LUB-004",
+    "how": "new",
+    "newLabel": "Gasket failed",
+    "note": "group LUB"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-LUB-005",
+    "how": "new",
+    "newLabel": "Lack of lubrication",
+    "note": "group LUB"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-MEC-003",
+    "how": "new",
+    "newLabel": "Fastener backed off from vibration",
+    "note": "group MEC"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-MEC-004",
+    "how": "new",
+    "newLabel": "Fastener loose",
+    "note": "group MEC"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-MEC-007",
+    "how": "new",
+    "newLabel": "Misadjusted clearance",
+    "note": "group MEC"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-MEC-011",
+    "how": "new",
+    "newLabel": "Thread stripped",
+    "note": "group MEC"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-MEC-013",
+    "how": "new",
+    "newLabel": "Worn bushings",
+    "note": "group MEC"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-SAF-005",
+    "how": "new",
+    "newLabel": "Fire detector fault",
+    "note": "group SAF"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-SCR-001",
+    "how": "new",
+    "newLabel": "Exciter fault",
+    "note": "group SCR"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-SCR-003",
+    "how": "new",
+    "newLabel": "Rotating assembly out of balance",
+    "note": "group SCR"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-STR-004",
+    "how": "new",
+    "newLabel": "Control panel fault",
+    "note": "group STR"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-STR-005",
+    "how": "new",
+    "newLabel": "Cracked housing",
+    "note": "group STR"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-STR-010",
+    "how": "new",
+    "newLabel": "Loose mounting",
+    "note": "group STR"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-STR-101",
+    "how": "new",
+    "newLabel": "Trailer suspension or spring pack broken",
+    "note": "group STR"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-STR-102",
+    "how": "new",
+    "newLabel": "Trailer coupling or kingpin worn",
+    "note": "group STR"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-TYR-002",
+    "how": "new",
+    "newLabel": "Tire blowout",
+    "note": "group TYR"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-TYR-006",
+    "how": "new",
+    "newLabel": "Tire puncture / leak",
+    "note": "group TYR"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-TYR-012",
+    "how": "new",
+    "newLabel": "Tread separation",
+    "note": "group TYR"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-TYR-101",
+    "how": "new",
+    "newLabel": "Wheel nut torque lost - stud damage",
+    "note": "group TYR"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-TYR-102",
+    "how": "new",
+    "newLabel": "Rim flange or lock ring cracked",
+    "note": "group TYR"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-TYR-103",
+    "how": "new",
+    "newLabel": "Wheel bearing rough or hub running hot",
+    "note": "group TYR"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-TYR-104",
+    "how": "new",
+    "newLabel": "Dual tyre mismatch or spacing incorrect",
+    "note": "group TYR"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-TYR-105",
+    "how": "new",
+    "newLabel": "Tyre run at excessive TKPH for the haul profile",
+    "note": "group TYR"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-UNC-001",
+    "how": "new",
+    "newLabel": "Bent linkage",
+    "note": "group UNC"
+   },
+   {
+    "old": null,
+    "oldLabel": "",
+    "new": "DC-UNC-003",
+    "how": "new",
+    "newLabel": "Debris build-up on component",
+    "note": "group UNC"
+   }
+  ]
+ },
+ "units": {
+  "appOnly": [
+   "CH",
+   "CO001",
+   "DRS",
+   "ELS",
+   "GE010",
+   "HX004",
+   "HX005",
+   "HX007",
+   "HX008",
+   "HX009",
+   "HX019",
+   "HX020",
+   "HX021",
+   "HX022",
+   "HX023",
+   "HX024",
+   "HX025",
+   "HX026",
+   "HX027",
+   "HX028",
+   "HX056",
+   "HX057",
+   "HX062",
+   "HX070",
+   "HX071",
+   "LS035",
+   "LS041",
+   "LS042",
+   "LS043",
+   "LS044",
+   "LS045",
+   "LS046",
+   "LS047",
+   "LS048",
+   "LS049",
+   "LS050",
+   "LS051",
+   "LS052",
+   "LS053",
+   "LS054",
+   "LS055",
+   "LS056",
+   "LS057",
+   "LS058",
+   "LS059",
+   "LS061",
+   "LS064",
+   "LS065",
+   "LS066",
+   "TK163",
+   "TK173",
+   "TK174",
+   "TK175",
+   "TK176",
+   "TK177",
+   "TK178",
+   "TK179",
+   "TK180",
+   "TK181",
+   "TK182",
+   "TK183",
+   "TK184",
+   "TK185",
+   "TK186",
+   "TK187",
+   "TK188",
+   "TK189",
+   "TK190",
+   "TK191",
+   "TK192",
+   "TK193",
+   "TK194",
+   "TK195",
+   "TK196",
+   "TK197",
+   "TK198",
+   "TK199",
+   "TK200",
+   "TK201",
+   "TK202",
+   "TK203",
+   "TK204",
+   "TK205",
+   "TK206",
+   "TK207",
+   "TK208",
+   "TK209",
+   "TK210",
+   "TK211",
+   "TK212",
+   "TK213",
+   "TK214",
+   "TK215",
+   "TK216",
+   "TK217",
+   "TK218",
+   "TK219",
+   "TK222",
+   "TK223",
+   "TK224",
+   "TK225",
+   "TK226",
+   "TK227",
+   "TK228",
+   "TK229",
+   "TK230",
+   "TK231",
+   "TK232",
+   "TK233",
+   "TK234",
+   "TK235",
+   "TK236",
+   "TK237",
+   "TK238",
+   "TK239",
+   "TK240",
+   "TK241",
+   "TK242",
+   "TK243",
+   "TK244",
+   "TK245",
+   "TK246",
+   "TK247",
+   "TK248",
+   "TK249",
+   "TK250",
+   "TK251",
+   "TK252",
+   "TK253",
+   "TK254",
+   "TK255",
+   "TK256",
+   "TK257",
+   "TK258",
+   "TK259",
+   "TK260",
+   "TK261",
+   "TK262",
+   "TK263",
+   "TK264",
+   "TK265",
+   "TK266",
+   "TK267",
+   "TK268",
+   "TK269",
+   "TK270",
+   "TK271",
+   "TK272",
+   "TK273",
+   "TK274",
+   "TK275",
+   "TK276",
+   "TK277",
+   "TK278",
+   "TK279",
+   "TK280",
+   "TK281",
+   "TK282",
+   "TK283",
+   "TK284",
+   "TK285",
+   "TK286",
+   "TK287",
+   "TK288",
+   "TK289",
+   "TK290",
+   "TK291",
+   "TK292",
+   "TK293",
+   "TK294",
+   "TK295",
+   "TK296",
+   "TK297",
+   "TK298",
+   "TK299",
+   "TK300",
+   "TK301",
+   "TK302",
+   "TK303",
+   "TK304",
+   "TK305",
+   "TK306",
+   "TK307",
+   "TK308",
+   "TK309",
+   "TK310",
+   "TK311",
+   "TK312",
+   "TK313",
+   "TK314",
+   "TK315",
+   "TK316",
+   "TK317",
+   "TK318",
+   "TK319",
+   "TK320",
+   "TK321",
+   "TK322",
+   "TK324",
+   "TK325",
+   "TK326",
+   "TK327",
+   "TK328",
+   "TK329",
+   "TK330",
+   "TK331",
+   "TK332",
+   "TK333",
+   "TK334",
+   "TK3340",
+   "TK335",
+   "TK336",
+   "TK337",
+   "TK338",
+   "TK339",
+   "TK340",
+   "TK341",
+   "TK342",
+   "TK343",
+   "TK344",
+   "TK345",
+   "TK346",
+   "TK347",
+   "TK348",
+   "TK349",
+   "TK350",
+   "TK351",
+   "TK352",
+   "TK353",
+   "TK354",
+   "TK355",
+   "TK356",
+   "TK357",
+   "TK358",
+   "TK359",
+   "TK360",
+   "TK361",
+   "TK362",
+   "TK363",
+   "TK364",
+   "TK365",
+   "TK366",
+   "TK367",
+   "TK368",
+   "TK369",
+   "TK370",
+   "TK371",
+   "TK372",
+   "TK373",
+   "TK374",
+   "TK375",
+   "TK376",
+   "TK377",
+   "TK378",
+   "TK379",
+   "TK380",
+   "TK381",
+   "TK382",
+   "TK383",
+   "TK384",
+   "TK385",
+   "TK386",
+   "TK387",
+   "TK388",
+   "TK389",
+   "TK390",
+   "TK391",
+   "TK392",
+   "TK393",
+   "TK394",
+   "TK395",
+   "TK396",
+   "TK397",
+   "TK398",
+   "TK399",
+   "TK400",
+   "TK401",
+   "TK402",
+   "TK403",
+   "TK404",
+   "TK405",
+   "TK406",
+   "TK407",
+   "TK408",
+   "TK409",
+   "TK410",
+   "TK411",
+   "TK412",
+   "TK413",
+   "TK414",
+   "TK415",
+   "TK416",
+   "TK417",
+   "TK418",
+   "TK419",
+   "TK420",
+   "TK421",
+   "TK422",
+   "TK423",
+   "TK424",
+   "TK425",
+   "TK426",
+   "TK427",
+   "TK428",
+   "TK429",
+   "TK430",
+   "TK431",
+   "TK432",
+   "TK433",
+   "TK434",
+   "TK435",
+   "TK436",
+   "TK437",
+   "TK438",
+   "TK439",
+   "TK440",
+   "TK441",
+   "TK442",
+   "TK443",
+   "TK444",
+   "TK445",
+   "TK446",
+   "TK447",
+   "TK448",
+   "TK449",
+   "TK451",
+   "TK452",
+   "TK453",
+   "TK454",
+   "TK455",
+   "TK456",
+   "TK457",
+   "TK458",
+   "TK459",
+   "TK460",
+   "TK461",
+   "TK462",
+   "TK463",
+   "TK464",
+   "TK465",
+   "TK466",
+   "TK467",
+   "TK4672M1",
+   "TK4672N7",
+   "TK468",
+   "TK469",
+   "TK470",
+   "TK471",
+   "TK472",
+   "TK5453K2",
+   "TK65115"
+  ],
+  "bothCount": 734,
+  "addFromV4": [
+   {
+    "unit": "CN024",
+    "equipmentClass": "CRANE, MOBILE",
+    "manufacturer": "",
+    "model": "ZRT400"
+   },
+   {
+    "unit": "CO015",
+    "equipmentClass": "COMPRESSOR, AIR",
+    "manufacturer": "",
+    "model": "55-7B"
+   },
+   {
+    "unit": "CO016",
+    "equipmentClass": "COMPRESSOR, AIR",
+    "manufacturer": "",
+    "model": "55-7B"
+   },
+   {
+    "unit": "CO017",
+    "equipmentClass": "COMPRESSOR, AIR",
+    "manufacturer": "",
+    "model": "55-7B"
+   },
+   {
+    "unit": "DR009",
+    "equipmentClass": "DRILL, BLASTING",
+    "manufacturer": "SUNWARD",
+    "model": "SWDE165A"
+   },
+   {
+    "unit": "DR010",
+    "equipmentClass": "DRILL, BLASTING",
+    "manufacturer": "SUNWARD",
+    "model": "SWDE165A"
+   },
+   {
+    "unit": "DZ021",
+    "equipmentClass": "DOZER, TRACK TYPE",
+    "manufacturer": "SHANTUI",
+    "model": "SD60-C5"
+   },
+   {
+    "unit": "DZ022",
+    "equipmentClass": "DOZER, TRACK TYPE",
+    "manufacturer": "SHANTUI",
+    "model": "SD60-C5"
+   },
+   {
+    "unit": "GE008",
+    "equipmentClass": "GENERATOR, DIESEL",
+    "manufacturer": "CUMMINS",
+    "model": "C250 D5"
+   },
+   {
+    "unit": "GE025",
+    "equipmentClass": "GENERATOR, DIESEL",
+    "manufacturer": "CATERPILLAR",
+    "model": "C18"
+   },
+   {
+    "unit": "GE042",
+    "equipmentClass": "GENERATOR, DIESEL",
+    "manufacturer": "ELCOS",
+    "model": "GE.CU.030/027.SS+011"
+   },
+   {
+    "unit": "GE083",
+    "equipmentClass": "GENERATOR, DIESEL",
+    "manufacturer": "AKSA",
+    "model": "APD145C"
+   },
+   {
+    "unit": "GE084",
+    "equipmentClass": "GENERATOR, DIESEL",
+    "manufacturer": "PSM",
+    "model": "AD30"
+   },
+   {
+    "unit": "GE097",
+    "equipmentClass": "GENERATOR, DIESEL",
+    "manufacturer": "",
+    "model": "AD20S-T400-1RKM7"
+   },
+   {
+    "unit": "GE098",
+    "equipmentClass": "GENERATOR, DIESEL",
+    "manufacturer": "",
+    "model": "AD40S-T400-2RPM7"
+   },
+   {
+    "unit": "GE099",
+    "equipmentClass": "GENERATOR, DIESEL",
+    "manufacturer": "ENERGO",
+    "model": "MP44C-S"
+   },
+   {
+    "unit": "GE101",
+    "equipmentClass": "GENERATOR, DIESEL",
+    "manufacturer": "",
+    "model": "ED20P-T400-50-2RN-G2"
+   },
+   {
+    "unit": "GE103",
+    "equipmentClass": "GENERATOR, DIESEL",
+    "manufacturer": "",
+    "model": "ED20S-T400-50-2RN-G2"
+   },
+   {
+    "unit": "GE104",
+    "equipmentClass": "GENERATOR, DIESEL",
+    "manufacturer": "",
+    "model": "ED20S-T400-50-2RN-G2"
+   },
+   {
+    "unit": "GE105",
+    "equipmentClass": "GENERATOR, DIESEL",
+    "manufacturer": "",
+    "model": "ED20S-T400-50-2RN-G2"
+   },
+   {
+    "unit": "GE107",
+    "equipmentClass": "GENERATOR, DIESEL",
+    "manufacturer": "",
+    "model": "RESURS-D1000"
+   },
+   {
+    "unit": "GE108",
+    "equipmentClass": "GENERATOR, DIESEL",
+    "manufacturer": "",
+    "model": "RESURS-D1000"
+   },
+   {
+    "unit": "GE109",
+    "equipmentClass": "GENERATOR, DIESEL",
+    "manufacturer": "",
+    "model": "ED-50"
+   },
+   {
+    "unit": "GE110",
+    "equipmentClass": "GENERATOR, DIESEL",
+    "manufacturer": "",
+    "model": "ED-50"
+   },
+   {
+    "unit": "GE111",
+    "equipmentClass": "GENERATOR, DIESEL",
+    "manufacturer": "",
+    "model": "ED-50"
+   },
+   {
+    "unit": "HX010",
+    "equipmentClass": "HEATING UNIT, EQUIPMENT",
+    "manufacturer": "",
+    "model": "BV471S"
+   },
+   {
+    "unit": "HX011",
+    "equipmentClass": "HEATING UNIT, EQUIPMENT",
+    "manufacturer": "",
+    "model": "BV471S"
+   },
+   {
+    "unit": "HX012",
+    "equipmentClass": "HEATING UNIT, EQUIPMENT",
+    "manufacturer": "",
+    "model": "BV471S"
+   },
+   {
+    "unit": "HX013",
+    "equipmentClass": "HEATING UNIT, EQUIPMENT",
+    "manufacturer": "",
+    "model": "BV471S"
+   },
+   {
+    "unit": "HX045",
+    "equipmentClass": "HEATING UNIT, EQUIPMENT",
+    "manufacturer": "MASTER",
+    "model": "BV470FS"
+   },
+   {
+    "unit": "HX046",
+    "equipmentClass": "HEATING UNIT, EQUIPMENT",
+    "manufacturer": "MASTER",
+    "model": "BV470FS"
+   },
+   {
+    "unit": "HX058",
+    "equipmentClass": "HEATING UNIT, EQUIPMENT",
+    "manufacturer": "",
+    "model": "С-175/DG"
+   },
+   {
+    "unit": "HX059",
+    "equipmentClass": "HEATING UNIT, EQUIPMENT",
+    "manufacturer": "",
+    "model": "С-175/DG"
+   },
+   {
+    "unit": "HX060",
+    "equipmentClass": "HEATING UNIT, EQUIPMENT",
+    "manufacturer": "СиТерра",
+    "model": "UMNSH-200"
+   },
+   {
+    "unit": "HX061",
+    "equipmentClass": "HEATING UNIT, EQUIPMENT",
+    "manufacturer": "СиТерра",
+    "model": "UMNSH-200"
+   },
+   {
+    "unit": "HX072",
+    "equipmentClass": "HEATING UNIT, EQUIPMENT",
+    "manufacturer": "СиТерра",
+    "model": "UMNSH-200"
+   },
+   {
+    "unit": "LD017",
+    "equipmentClass": "LOADER, FRONT",
+    "manufacturer": "",
+    "model": "CLGF330"
+   },
+   {
+    "unit": "LV115",
+    "equipmentClass": "LIGHT VEHICLE, DOUBLE CAB",
+    "manufacturer": "DongFeng",
+    "model": "FENGDU_P15MC"
+   },
+   {
+    "unit": "LV116",
+    "equipmentClass": "LIGHT VEHICLE, DOUBLE CAB",
+    "manufacturer": "DongFeng",
+    "model": "FENGDU_P15MC"
+   },
+   {
+    "unit": "LV170",
+    "equipmentClass": "LIGHT VEHICLE HAVAL",
+    "manufacturer": "",
+    "model": "H9"
+   },
+   {
+    "unit": "TK473",
+    "equipmentClass": "TRUCK, ROAD UTILITY VEHICLE,",
+    "manufacturer": "Ural Next",
+    "model": "5849DA-0009032"
+   },
+   {
+    "unit": "TK475",
+    "equipmentClass": "TRUCK, VACUUM",
+    "manufacturer": "URAL",
+    "model": "4672M8"
+   },
+   {
+    "unit": "TK476",
+    "equipmentClass": "EMERGENCY EQUIPMENT, FIRE-TRUCK",
+    "manufacturer": "",
+    "model": "43441C-10 АЦ 6.0-70"
+   },
+   {
+    "unit": "TK477",
+    "equipmentClass": "EMERGENCY EQUIPMENT, FIRE-TRUCK",
+    "manufacturer": "",
+    "model": "43441C-10 АЦ 6.0-70"
+   },
+   {
+    "unit": "TK478",
+    "equipmentClass": "EMERGENCY EQUIPMENT, FIRE-TRUCK",
+    "manufacturer": "",
+    "model": "43441C-10 АЦ 6.0-70"
+   },
+   {
+    "unit": "TK500",
+    "equipmentClass": "TRUCK, WATER NHL",
+    "manufacturer": "",
+    "model": "NTE150-WT"
+   },
+   {
+    "unit": "WE011",
+    "equipmentClass": "SHOP TOOL, WELDING MACHINE",
+    "manufacturer": "",
+    "model": "DCW-480ESW"
+   }
+  ],
+  "rejected": [
+   {
+    "unit": "CO001_22012025",
+    "why": "malformed register code — reported, not imported"
+   }
+  ]
+ },
+ "actions": [
+  {
+   "old": "MON",
+   "new": "RA-02",
+   "newLabel": "Monitor / re-inspect next PM",
+   "note": "collides with another old code — old records keep their own code"
+  },
+  {
+   "old": "REI",
+   "new": "RA-02",
+   "newLabel": "Monitor / re-inspect next PM",
+   "note": "collides with another old code — old records keep their own code"
+  },
+  {
+   "old": "SAM",
+   "new": "RA-09",
+   "newLabel": "Send sample / further diagnosis",
+   "note": ""
+  },
+  {
+   "old": "TOP",
+   "new": "RA-03",
+   "newLabel": "Top up / adjust / clean on site",
+   "note": ""
+  },
+  {
+   "old": "PM",
+   "new": "RA-05",
+   "newLabel": "Repair at next scheduled service",
+   "note": ""
+  },
+  {
+   "old": "SCH",
+   "new": "RA-04",
+   "newLabel": "Create 1C notification - plan repair",
+   "note": "collides with another old code — old records keep their own code"
+  },
+  {
+   "old": "NOW",
+   "new": "RA-06",
+   "newLabel": "Repair immediately",
+   "note": ""
+  },
+  {
+   "old": "STOP",
+   "new": "RA-07",
+   "newLabel": "Stop machine - do not operate",
+   "note": ""
+  },
+  {
+   "old": "NOTI",
+   "new": "RA-04",
+   "newLabel": "Create 1C notification - plan repair",
+   "note": "collides with another old code — old records keep their own code"
+  }
+ ],
+ "actionsNewInV4": [
+  {
+   "new": "RA-01",
+   "newLabel": "No action required",
+   "severity": "SEV-0"
+  },
+  {
+   "new": "RA-08",
+   "newLabel": "Replace component",
+   "severity": "SEV-2"
+  },
+  {
+   "new": "RA-10",
+   "newLabel": "Escalate to RCA / failure analysis",
+   "severity": "SEV-3"
+  }
+ ],
+ "severity": [
+  {
+   "old": "NOF",
+   "new": "SEV-0",
+   "note": "internal code unchanged; emitted as the v4 code on export"
+  },
+  {
+   "old": "INC",
+   "new": "SEV-1",
+   "note": "internal code unchanged; emitted as the v4 code on export"
+  },
+  {
+   "old": "DEG",
+   "new": "SEV-2",
+   "note": "internal code unchanged; emitted as the v4 code on export"
+  },
+  {
+   "old": "CRI",
+   "new": "SEV-3",
+   "note": "internal code unchanged; emitted as the v4 code on export"
+  }
+ ]
+}
