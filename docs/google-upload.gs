@@ -64,6 +64,12 @@ function doPost(e) {
     // The dashboard posts corrections and deletions through the same endpoint,
     // because a web app cannot answer a CORS preflight and this body shape is
     // already a "simple" request. Everything else is an ordinary file upload.
+    /* The dashboard's write-path probe. Reading and writing are deployed
+       together but fail apart — a version released before doPost existed still
+       answers every GET — so the dashboard sends this to find out whether the
+       half it needs is actually live. It writes nothing. */
+    if (b.op === 'ping')    return json({ ok: true, write: true, canDelete: !!ADMIN_SECRET });
+
     if (b.op === 'edit')    return json(saveEdit_(b));
     if (b.op === 'delete')  return json(deleteRecord_(b));
     if (b.op === 'resolve') return json(resolveConflict_(b));

@@ -50,9 +50,9 @@
       .then(async r => {
         const text = await r.text();
         let j = null; try { j = JSON.parse(text); } catch (e) {}
-        if (!j) throw new Error(r.ok
-          ? "Unexpected reply — check the deployment's “Who has access” is Anyone."
-          : "HTTP " + r.status + " — " + text.slice(0, 160));
+        if (!j) throw (r.ok
+          ? new Error("Unexpected reply — check the deployment's “Who has access” is Anyone.")
+          : notJSON(r.status, text));
         if (j.ok === false) throw new Error(j.error || "Drive refused the request");
         return j;
       });
@@ -201,6 +201,26 @@
      POSTed as text/plain so the browser treats it as a "simple" request: an Apps
      Script web app cannot answer a CORS preflight. Same reason the secret rides
      in the body rather than an Authorization header. */
+  /* Google answers a POST that its deployed code cannot handle with a Docs error
+     page, and pasting 160 characters of that HTML into the panel tells the
+     reader nothing they can act on. Name the cause instead. */
+  function notJSON(status, text) {
+    const html = /^\s*<(!doctype|html)/i.test(text || "");
+    if (html && (status === 404 || status === 405)) return new Error(
+      "The deployed script is an older version — it has no doPost, so corrections, "
+      + "voids and deletions cannot reach it. Reading works because that half is "
+      + "deployed. Fix it in the Apps Script editor: Deploy → Manage deployments → "
+      + "✏️ Edit → Version: New version → Deploy. The URL does not change.");
+    if (html && (status === 401 || status === 403)) return new Error(
+      "Google asked this request to sign in. Set the deployment's “Who has access” "
+      + "to Anyone, then deploy a new version.");
+    if (html) return new Error(
+      "The script answered with a web page instead of data (HTTP " + status + "). "
+      + "That is Google's error page, not the script's — re-deploy it and check the "
+      + "/exec URL in Data sources is the current one.");
+    return new Error("HTTP " + status + " — " + String(text || "").slice(0, 160));
+  }
+
   async function post(body) {
     const c = cfg();
     if (!c.url) throw new Error("No Drive URL configured.");
@@ -209,9 +229,9 @@
       body: JSON.stringify(Object.assign({ secret: c.sec || "" }, body)) });
     const text = await r.text();
     let j = null; try { j = JSON.parse(text); } catch (e) {}
-    if (!j) throw new Error(r.ok
-      ? "Unexpected reply — check the deployment's “Who has access” is Anyone."
-      : "HTTP " + r.status + " — " + text.slice(0, 160));
+    if (!j) throw (r.ok
+      ? new Error("Unexpected reply — check the deployment's “Who has access” is Anyone.")
+      : notJSON(r.status, text));
     if (j.ok === false) {
       // The script's wording does not say WHICH secret, and the only password
       // on screen is the admin one — so this reads as "wrong admin password"
@@ -253,9 +273,26 @@
     // after=<now> so this costs a walk and no file reads whatever is deployed
     try { await api({ action: "records", after: Date.now(), index: 0 }); }
     catch (e) { if (/unknown action/i.test(e.message || "")) batch = false; }
+    /* Reading and writing are two halves of the deployment and they fail apart:
+       a version deployed before doPost existed still answers every GET, so the
+       panel says "connected" and the first correction anybody saves comes back
+       as one of Google's error pages. Probe the write path here, where the
+       person is already looking, instead of leaving them to find it at the
+       moment they are trying to delete something.
+
+       The probe is a POST with no file in it. Any JSON reply proves doPost is
+       running — even a refusal, which is what a current deployment sends back.
+       Nothing is written either way. */
+    let write = true, writeErr = "";
+    try { await post({ op: "ping" }); }
+    catch (e) {
+      const m = (e && e.message) || "";
+      // a refusal is an answer: the script is there and it spoke
+      if (/older version|web page instead of data|sign in/i.test(m)) { write = false; writeErr = m; }
+    }
     // A deployment older than this flag reports undefined, which the dashboard
     // reads as "cannot tell" rather than as "off".
-    return { folder: j.folder || "(unnamed)", batch, canDelete: j.canDelete };
+    return { folder: j.folder || "(unnamed)", batch, canDelete: j.canDelete, write, writeErr };
   }
 
   window.CMDrive = {

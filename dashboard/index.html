@@ -426,20 +426,27 @@
 
 <div class="lb" id="lb"><button class="x" id="lbx">&times;</button><img id="lbimg" alt=""><div class="cap" id="lbcap"></div></div>
 
-<script src="../data/magnetic_plug.js"></script>
-<script src="../mobile/hme.js"></script>
-<script src="../mobile/mp-fc.js"></script>
-<script src="../mobile/hme-cascade.js"></script>
-<script src="../mobile/temp-limits.js"></script>
+<!-- ?v= on every shared file, and it is the phones' build number.
+     index.html and report-core.js are one program split across two files: the
+     page calls CMR.sections() and the engine answers. A browser holding a fresh
+     page and a cached engine — or the reverse — runs two halves of different
+     builds, and the report it prints belongs to neither. The version tag makes
+     each build a new URL, so the pair always arrives together. Bump it with
+     mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
+<script src="../data/magnetic_plug.js?v=67"></script>
+<script src="../mobile/hme.js?v=67"></script>
+<script src="../mobile/mp-fc.js?v=67"></script>
+<script src="../mobile/hme-cascade.js?v=67"></script>
+<script src="../mobile/temp-limits.js?v=67"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js"></script>
-<script src="../mobile/wear.js"></script>
-<script src="../mobile/wear-map.js"></script>
-<script src="../mobile/jspdf.umd.min.js"></script>
-<script src="../mobile/html2canvas.min.js"></script>
-<script src="../mobile/report-core.js"></script>
+<script src="../mobile/assets.js?v=67"></script>
+<script src="../mobile/wear.js?v=67"></script>
+<script src="../mobile/wear-map.js?v=67"></script>
+<script src="../mobile/jspdf.umd.min.js?v=67"></script>
+<script src="../mobile/html2canvas.min.js?v=67"></script>
+<script src="../mobile/report-core.js?v=67"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* The 1C defect & cause matrix, the same file the phones carry. Records already
@@ -571,6 +578,7 @@ const I18N={
   ed_del_off:"Deletion is switched off. An admin has to set ADMIN_SECRET in the Apps Script and deploy a new version. Until then use Void above — it withdraws the round from every count, chart and report, keeps the photos, and can be undone.",
   ed_del_on:"Deletion is switched on. The password is the one set in the Apps Script — it is never stored here.",
   ed_del_unknown:"Deletion needs the admin password set in the Apps Script. Use Test connection in Data sources to find out whether it is switched on.",
+  ed_del_stale:"This deployment answers reads but not writes — corrections, voids and deletions cannot reach it. In the Apps Script editor: Deploy → Manage deployments → ✏️ Edit → Version: New version → Deploy. The URL does not change.",
   ed_admin:"Admin password", ed_adminph:"the one set in the Apps Script",
   ed_confirm:"Type the unit number to confirm", ed_confirmph:"e.g. TK146",
   ed_save:"Save correction", ed_edit:"✎ Edit",
@@ -621,6 +629,7 @@ const I18N={
   dl_photos:", {n} photo/video file(s) indexed (they download as you open a unit).",
   dl_failed:" {n} file(s) could not be read.", dl_more:" More is waiting — click Load again to continue.",
   dl_connected:"✅ Connected — folder “{x}”.", dl_needurl:"Paste the /exec URL first.",
+  dl_readonly:"Reading works, writing does not — the deployed version is older than the code.",
   dl_noreader:"Drive reader did not load — reload the page.",
   fold_read:"{d}: {n} inspection(s) from {f} file(s), {p} photo(s).",
   fold_bad:" {n} json file(s) were not inspection data.",
@@ -722,6 +731,7 @@ const I18N={
   ed_del_off:"Удаление выключено. Администратор должен задать ADMIN_SECRET в Apps Script и опубликовать новую версию. До этого пользуйтесь «Отозвать» выше — осмотр исключается из всех подсчётов, графиков и отчётов, фото сохраняются, действие обратимо.",
   ed_del_on:"Удаление включено. Пароль — тот, что задан в Apps Script; здесь он не сохраняется.",
   ed_del_unknown:"Для удаления нужен пароль администратора из Apps Script. Нажмите «Проверить связь» в «Источниках данных», чтобы узнать, включено ли оно.",
+  ed_del_stale:"Эта публикация отвечает на чтение, но не на запись — исправления, отзыв и удаление до неё не доходят. В редакторе Apps Script: «Развернуть» → «Управление развёртываниями» → ✏️ → Версия: «Новая версия» → «Развернуть». Адрес не изменится.",
   ed_admin:"Пароль администратора", ed_adminph:"тот, что задан в Apps Script",
   ed_confirm:"Введите номер единицы для подтверждения", ed_confirmph:"напр. TK146",
   ed_save:"Сохранить правку", ed_edit:"✎ Правка",
@@ -772,6 +782,7 @@ const I18N={
   dl_photos:", фото/видео в индексе: {n} (скачиваются при открытии единицы).",
   dl_failed:" Не удалось прочитать файлов: {n}.", dl_more:" Есть ещё — нажмите «Загрузить» снова.",
   dl_connected:"✅ Связь есть — папка «{x}».", dl_needurl:"Сначала вставьте адрес /exec.",
+  dl_readonly:"Чтение работает, запись — нет: опубликованная версия старее кода.",
   dl_noreader:"Модуль чтения Диска не загрузился — перезагрузите страницу.",
   fold_read:"{d}: осмотров {n} из файлов {f}, фото {p}.",
   fold_bad:" Не являются данными осмотра: {n} json-файл(ов).",
@@ -877,6 +888,11 @@ const ESTORE="cm_dash_edits";         // corrections + voids, same reason
 const CSTORE="cm_dash_conflicts";     // two phones sent the same unit/date/type
 const CANDEL="cm_dash_candelete";     // "1" | "0" | "?" — does the script accept a delete
 const canDelete = () => localStorage.getItem(CANDEL) || "?";
+/* "0" once Test connection has proved the deployment answers reads but not
+   writes. Kept apart from CANDEL: one is about the admin password, this one is
+   about whether the deployed code can be written to at all. */
+const CANWRITE="cm_dash_canwrite";
+const canWrite = () => localStorage.getItem(CANWRITE) || "?";
 
 /* ---------- records: bundled magnetic-plug data + imported entries.json ---------- */
 function fromBundled(){
@@ -1428,9 +1444,14 @@ function openEdit(key,keepMsg){
   $("edNote").value=rec._note||"";
   $("edReason").value=rec._reason||"";
   $("edAdmin").value=""; $("edConfirm").value=""; $("edMsg").textContent=held;
-  const cd=canDelete(), note=$("edDelOff");
-  if(note){ note.textContent = cd==="0" ? t("ed_del_off") : cd==="1" ? t("ed_del_on") : t("ed_del_unknown");
-            note.className = cd==="1" ? "sub" : "note"; }
+  /* Three questions, asked in the order they stop you: can the deployment take
+     a write at all, is deletion switched on, and is the password right. Only
+     the first two can be answered before the button is pressed — so answer
+     them, rather than offering a password box that cannot succeed. */
+  const cd=canDelete(), cw=canWrite(), note=$("edDelOff");
+  if(note){ note.textContent = cw==="0" ? t("ed_del_stale")
+              : cd==="0" ? t("ed_del_off") : cd==="1" ? t("ed_del_on") : t("ed_del_unknown");
+            note.className = (cd==="1"&&cw!=="0") ? "sub" : "note"; }
   $("edUnvoid").style.display=rec._void?"":"none";
   $("edVoid").style.display=rec._void?"none":"";
   renderConflict(rec);
@@ -1773,7 +1794,14 @@ async function driveRun(mode){            // "test" | "load" | "full"
          can say which it is rather than offering a password box that may be
          impossible to satisfy. Only the yes/no travels — never the secret. */
       try{ localStorage.setItem(CANDEL, p.canDelete===undefined?"?":(p.canDelete?"1":"0")); }catch(e){}
-      msg.textContent=t("dl_connected",{x:p.folder})+(p.batch?"":SLOW_HINT);
+      /* Reading works or we would not be here. Say so plainly, and say it
+         separately from whether writing works — "connected" on a deployment
+         that cannot take a correction is the message that sent somebody to
+         the delete panel to find out. */
+      try{ localStorage.setItem(CANWRITE, p.write===false?"0":"1"); }catch(e){}
+      msg.textContent = p.write===false
+        ? "⚠️ "+t("dl_connected",{x:p.folder})+" "+t("dl_readonly")+" "+(p.writeErr||"")
+        : t("dl_connected",{x:p.folder})+(p.batch?"":SLOW_HINT);
       return;
     }
     const r=await drv().load(m=>{ msg.textContent=m; }, {full:mode==="full"});
@@ -1880,7 +1908,7 @@ rebuild(); refreshControls(); renderAll(); refreshSources();
 applyLang();                          // paints the static markup and re-renders in the saved language
 if(!RECS.length) openData();          // first run: show where data comes from
 </script>
-<script src="drive.js"></script>
-<script src="report.js"></script>
+<script src="drive.js?v=67"></script>
+<script src="report.js?v=67"></script>
 </body>
 </html>

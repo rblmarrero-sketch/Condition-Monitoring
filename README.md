@@ -555,7 +555,7 @@ monthly sub-folders, so pointing it at *Condition Monitoring* once is enough.
 > It now reads both.
 
 **☁ Google Drive** — paste the `/exec` URL and the shared secret once, then **Load from
-Drive**; **Test connection** checks the deployment without pulling anything. Photos are
+Drive**; **Test connection** checks the deployment — both halves of it, see below. Photos are
 indexed by name but only downloaded when you open a unit or generate a PDF with photos — a
 month of rounds is hundreds of megabytes, so pulling it all up front would be pointless.
 
@@ -573,6 +573,26 @@ A consumer Google account allows ~90 minutes of script runtime a day, and the ol
 spent about 5 of those minutes on every load. **Reload everything** re-reads from scratch;
 use it after deleting files in Drive, since an incremental refresh asks "what is new?" and
 so cannot notice a deletion.
+
+### Saving the script is not deploying it
+
+Reading and writing are two halves of the same deployment and they fail apart. Apps Script
+serves the **released version**, not the code in the editor — so a deployment released
+before `doPost` existed answers every read, loads every inspection, and looks completely
+healthy right up until the first correction, void or deletion, which comes back as one of
+Google's error pages (HTTP 404, a Docs 404 in HTML).
+
+**Test connection** now probes both halves and says so:
+
+> ⚠️ Connected — folder "Condition Monitoring". Reading works, writing does not — the
+> deployed version is older than the code.
+
+The fix, in the Apps Script editor: **Deploy → Manage deployments → ✏️ Edit → Version: New
+version → Deploy.** The URL does not change, so nothing needs re-pasting. Do this after
+*every* edit to `google-upload.gs`, including after setting `ADMIN_SECRET`.
+
+The write probe is a POST that carries no file. Any JSON reply — even a refusal — proves
+`doPost` is running; only Google's HTML means it is not. Nothing is written either way.
 
 This needs the read actions in `docs/google-upload.gs` — re-paste that file and deploy a
 new version if yours predates them. Until you do, the dashboard falls back to the old
