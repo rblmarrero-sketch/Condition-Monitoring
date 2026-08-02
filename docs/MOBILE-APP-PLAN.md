@@ -383,6 +383,28 @@ It also sharpens item 8 in §4. Background sync is not a nice-to-have on the lis
 others: the retry loop only runs while the app is open, and "the app is open" is exactly
 the assumption that failed here.
 
+**And it changed how updating works, which the store plan depends on.** Two properties are
+in tension — *always be on the newest build* and *never be caught out in a pit* — and the
+resolution is to split updating into three steps and only automate the two that are safe at
+any moment:
+
+| | When | Risk |
+|---|---|---|
+| **Find** | on open, on focus, on reconnect, every 5 min | none, it is a few hundred bytes |
+| **Fetch** | the instant a newer build exists | none: it downloads into a *new* cache and a link that dies leaves it simply unfinished |
+| **Apply** | only when nobody is mid-round | a reload, and a reload over an open draft loses a measurement somebody already took |
+
+An idle phone therefore updates itself silently — which is the usual case, because the
+moment somebody opens or refreshes is the moment they are not typing. A phone in use waits,
+then applies by itself the instant its owner is free. Nothing is ever tapped, and an
+incomplete download never takes over.
+
+This matters for §1's recommendation. A wrapped web app can be updated the same afternoon a
+fix is written, with no review queue and nothing for the user to do — the store binary is
+only the shell. A native rewrite gives that up: every fix waits for review and then for
+each phone's owner to accept it. For a tool whose reference tables change as machines
+arrive, that difference is worth more than most of what native buys.
+
 Fixed in build 71, with a suite that stands the app up against a dead link, a link that
 connects and never answers, and an update that dies part-way — and requires it to open
 under all three. It does, in about 150 ms with the radios off.

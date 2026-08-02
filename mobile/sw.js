@@ -36,7 +36,7 @@
        explains itself and offers a retry — because an honest offline page is
        recoverable and a browser error page is not. */
 
-const BUILD = "71";
+const BUILD = "72";
 const CACHE = "plug-capture-v" + BUILD;
 
 /* Without these the app is not an app: no page, no equipment register, no
@@ -221,7 +221,22 @@ self.addEventListener("fetch", (e) => {
      version exists. The service worker does not need to race for it. */
   if (isDoc) {
     e.respondWith((async () => {
-      const hit = await caches.match("./index.html") || await caches.match("./")
+      /* THIS build's cache first, by name — not caches.match(), which searches
+         every cache and returns whichever it finds first.
+
+         That distinction is the whole update mechanism. Since activate() now
+         deliberately keeps the previous build's cache (so a page still running
+         on it can still fetch its PDF engine), a cross-cache match can hand
+         back the OLD index.html after the new worker has taken over. The phone
+         then reloads onto the version it was already running, for ever, and
+         looks like it is simply refusing to update — which is exactly what it
+         is doing.
+
+         Older caches are still the fallback, and must be: a build whose page
+         somehow did not cache is better served by last week's than by nothing. */
+      const mine = await caches.open(CACHE);
+      const hit = await mine.match("./index.html") || await mine.match("./")
+        || await caches.match("./index.html") || await caches.match("./")
         || await caches.match(req, { ignoreSearch: true });
       if (hit) {
         e.waitUntil(revalidate("./index.html"));        // fresher next time
@@ -244,7 +259,9 @@ self.addEventListener("fetch", (e) => {
   /* ---- ?v=<build>: an immutable URL --------------------------------------- */
   if (url.searchParams.has("v")) {
     e.respondWith((async () => {
-      const hit = await caches.match(req);
+      // Same rule, same reason: this build's copy wins over an older build's.
+      const mine = await caches.open(CACHE);
+      const hit = await mine.match(req) || await caches.match(req);
       if (hit) return hit;
       try {
         const res = await withTimeout(fetch(req), NET_WAIT + 6000);

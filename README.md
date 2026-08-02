@@ -809,21 +809,61 @@ page still running on the old build fetches the PDF engine and the QR reader on 
 under the old `?v=`; deleting that cache means an inspector who was mid-round when an
 update landed cannot print, in a pit, for no reason they can see.
 
-### Telling people a new version is out
+### Is this phone safe to walk away from wifi with?
 
-The service worker serves the copy it has, so a stale phone looks exactly like a current
-one. The app asks instead: it fetches `sw.js` (a few hundred bytes, `no-store`, so no cache
-can answer) and compares the build number with the one running.
+That question has one moment where it can still be answered usefully — while the person is
+standing in the office next to the wifi — and it used to be answerable only by opening
+Settings, which is where questions nobody thinks to ask go to die.
 
-It asks at startup, whenever the app is brought back to the foreground, **and every half
-hour while it stays open** — a phone opened at the start of a shift and never closed would
-otherwise have checked once, twelve hours ago.
+So it is the first thing on the capture screen, and it has exactly two states:
 
-A newer build raises a banner naming both versions — *"Build v69 is out — this phone is
-still on v68"* — with one button that clears the service worker and every cache and
-reloads. Silence is the normal offline case and stays silent: a pit with no signal is not
-a problem worth reporting. Only a real difference speaks, and then it speaks loudly,
-because an inspector on an old build is capturing against an old reference table.
+- **`● Ready to work offline`** — a slim green line. Present enough to glance at and trust,
+  quiet enough that it does not become the banner everyone stops seeing by Wednesday.
+- **`⚠️ Not ready to work offline — 11 of 12 files downloaded`** — a full card, above the
+  fold, with **Finish downloading now** on it. This is the state worth interrupting
+  somebody for, and the only one they can still fix cheaply.
+
+It re-checks when the app is opened and every time it comes back to the front — which is
+what catches a phone that has been in a locker since iOS evicted a file under storage
+pressure.
+
+### Updating is not somebody's job
+
+An inspector should never have to think about versions, and the app should never go into a
+pit on last month's reference table because nobody tapped a banner.
+
+Three steps, deliberately separate, because only the first two are safe at any moment:
+
+| | When | What |
+|---|---|---|
+| **Find** | on open, on focus, on reconnect, every 5 minutes | fetch `sw.js` — a few hundred bytes |
+| **Fetch** | the instant a newer build is found | the service worker downloads it into a *new* cache; the running one is untouched, and a link that dies half way simply leaves it unfinished |
+| **Apply** | only when nobody is mid-round | a reload — and a reload with an open draft is somebody losing a measurement they already took |
+
+The old behaviour only did the first, and put up a banner. A phone could sit on that banner
+all week and still be on the old build when it drove out of signal.
+
+**If the phone is idle it updates itself**, silently, with nothing tapped — which is the
+usual case, because the moment somebody opens or refreshes the app is exactly the moment
+they are not typing into it. **If somebody is working it waits**, and then applies by
+itself the instant they are free: the round is saved, the app comes back to the front, the
+dialog closes. The banner is information, not an instruction, and it disappears on its own.
+
+Refreshing the page while online therefore does get you the latest: the page opens
+instantly from cache, the new build is already downloading, and it swaps a couple of
+seconds later without being asked.
+
+And an update that cannot finish never takes over. The phone stays on the build that works.
+
+**How it knows.** The service worker serves the copy it has, so a stale phone looks exactly
+like a current one from the inside. The app asks instead: it fetches `sw.js` with
+`no-store`, so no cache between here and the server can answer, and compares the build
+number with the one running.
+
+Silence stays silence. A pit with no signal is not a problem worth reporting, and nothing
+is said unless there is a real difference. **⟳ Update** at the bottom of the screen is still
+there for the case where somebody wants to force it — it clears the service worker, every
+cache and the browser's own HTTP copies, then reloads.
 
 ### Does the dashboard need a button press? No.
 

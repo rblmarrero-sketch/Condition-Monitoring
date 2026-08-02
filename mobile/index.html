@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=71">
+<link rel="manifest" href="manifest.webmanifest?v=72">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=71">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=71">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=71">
+<link rel="apple-touch-icon" href="icon-192.png?v=72">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=72">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=72">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -506,6 +506,27 @@
   .picklist{flex:1;overflow-y:auto;padding:8px 14px calc(env(safe-area-inset-bottom) + 20px);}
   .pickitem{display:block;width:100%;text-align:left;background:none;border:none;border-bottom:1px solid var(--border);color:var(--ink);padding:13px 4px;font-size:15px;cursor:pointer;}
   .pickitem .pickgrp{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);margin-bottom:2px;}
+  /* Two states, two weights, on purpose.
+
+     Ready is a slim line — present enough to glance at and trust, quiet enough
+     that it does not become the banner everybody stops seeing by Wednesday.
+     Not-ready is a full card with the fix on it, because that is the state
+     worth interrupting somebody for, and it is the one they can still do
+     something about while they are standing next to the wifi. */
+  .ready{margin:0 0 10px;border-radius:10px;font-size:12.5px;line-height:1.35;}
+  .ready:empty{display:none;}
+  .ready.good{display:flex;align-items:center;gap:7px;padding:6px 11px;
+    color:var(--good);background:color-mix(in srgb,var(--good) 10%,transparent);
+    border:1px solid color-mix(in srgb,var(--good) 26%,transparent);font-weight:650;}
+  .ready.bad{padding:12px 13px;background:color-mix(in srgb,var(--warning) 15%,var(--surface));
+    border:1px solid color-mix(in srgb,var(--warning) 48%,var(--border));}
+  .ready.bad b{display:block;font-size:14px;margin-bottom:3px;color:var(--ink);}
+  .ready.bad .sub{color:var(--muted);}
+  .ready.bad button{margin-top:10px;width:100%;min-height:46px;border:0;border-radius:9px;
+    font:650 15px system-ui,-apple-system,sans-serif;background:var(--accent);color:#1a1a19;}
+  .ready.bad button[disabled]{opacity:.6;}
+  .ready.busy{display:flex;align-items:center;gap:7px;padding:6px 11px;color:var(--muted);}
+  .ready .dot{width:8px;height:8px;border-radius:50%;background:currentColor;flex:none;}
   .pickitem:active{background:var(--surface-2);}
 </style>
 </head>
@@ -523,6 +544,11 @@
      scroll at all once the unit is picked. On a tablet the media query below
      shows every pane at once and hides the tab bar — there is room for it. -->
 <div class="pane on" id="paneCapture">
+  <!-- The go/no-go check, and the first thing on the screen because the moment
+       it matters is before somebody drives away from wifi. Not in Settings: a
+       question nobody thinks to ask is answered by a thing they have to go and
+       look for exactly never. -->
+  <div class="ready" id="readyBar" role="status" aria-live="polite"></div>
   <div class="card" id="cardInspection">
     <h2 data-i18n="sec_inspection">Inspection</h2>
     <label class="fld"><span data-i18n="lbl_type">Inspection type</span><select id="typeSel"></select></label>
@@ -731,7 +757,7 @@
     <span id="staleTxt"></span>
     <button type="button" id="staleGo"></button>
   </div>
-  <div class="ver" id="verLine">build v<span id="verNum">?</span> · <span id="verNote">it opens, whatever the link is doing</span> ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver" id="verLine">build v<span id="verNum">?</span> · <span id="verNote">updates itself, says when it is ready</span> ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <nav class="tabbar" id="tabbar">
@@ -848,17 +874,17 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="native.js?v=71"></script>
-<script src="upload-defaults.js?v=71"></script>
-<script src="hme.js?v=71"></script>
-<script src="mp-fc.js?v=71"></script>
-<script src="hme-cascade.js?v=71"></script>
-<script src="assets.js?v=71"></script>
-<script src="temp-limits.js?v=71"></script>
-<script src="wear.js?v=71"></script>
-<script src="wear-figs.js?v=71"></script>
-<script src="wear-map.js?v=71"></script>
-<script src="report-core.js?v=71"></script>
+<script src="native.js?v=72"></script>
+<script src="upload-defaults.js?v=72"></script>
+<script src="hme.js?v=72"></script>
+<script src="mp-fc.js?v=72"></script>
+<script src="hme-cascade.js?v=72"></script>
+<script src="assets.js?v=72"></script>
+<script src="temp-limits.js?v=72"></script>
+<script src="wear.js?v=72"></script>
+<script src="wear-figs.js?v=72"></script>
+<script src="wear-map.js?v=72"></script>
+<script src="report-core.js?v=72"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -1039,7 +1065,12 @@ const I18N = {
     lbl_date:"Date", lbl_smu:"SMU / machine hrs", ph_smu:"e.g. 6018",
     btn_take:"Add photo", btn_video:"Video", btn_retake:"Retake",
     media_hint:"Up to 4 photos + 1 video (max 1 min).", media_empty:"No photos yet.",
-    upd_ready:"A new version is ready. It will load when you tap — your round is not affected.",
+    upd_ready:"A new version is ready. It will load by itself when you finish this round — or tap to load it now.",
+    rdy_ok:"Ready to work offline",
+    rdy_checking:"Checking…",
+    rdy_bad:"⚠️ Not ready to work offline",
+    rdy_bad_sub:"{n} of {of} files downloaded. Finish this while you still have signal — in the pit the app may not open.",
+    rdy_fix:"Finish downloading now", rdy_fixing:"Downloading…",
     sw_checking:"Checking the offline copy…",
     sw_ok:"Offline copy complete — all {n} files. This phone works with no signal.",
     sw_partial:"⚠️ Offline copy incomplete — {n} of {of} files. The app may not open without signal until this is finished.",
@@ -1083,7 +1114,7 @@ const I18N = {
     uc_no_wheeled:"This machine runs on tyres. There is no undercarriage to measure.",
     uc_no_tracks:"The undercarriage round is for tracked dozers and excavators.",
     uc_no_unknown:"This unit is not in the register, so there is no model to measure against.",
-    upd_avail:"Build v{n} is out — this phone is still on v{cur}.",
+    upd_avail:"Build v{n} is downloading itself — this phone is on v{cur}. Nothing to do.",
     upd_go:"Update now",
     unit_guess:"{u} is not in the asset register. Showing the standard {c} component list — check it fits the machine, and ask for the register to be updated.",
     uc_fig_hide:"Hide the diagram", uc_fig_show:"Show the diagram",
@@ -1259,7 +1290,12 @@ const I18N = {
     lbl_date:"Дата", lbl_smu:"Моточасы (SMU)", ph_smu:"напр. 6018",
     btn_take:"Добавить фото", btn_video:"Видео", btn_retake:"Переснять",
     media_hint:"До 4 фото + 1 видео (макс. 1 мин).", media_empty:"Пока нет фото.",
-    upd_ready:"Новая версия готова. Загрузится по нажатию — на текущий осмотр это не влияет.",
+    upd_ready:"Новая версия готова. Загрузится сама, когда закончите осмотр — или нажмите, чтобы сейчас.",
+    rdy_ok:"Готово к работе без связи",
+    rdy_checking:"Проверка…",
+    rdy_bad:"⚠️ К работе без связи не готово",
+    rdy_bad_sub:"Загружено {n} из {of} файлов. Завершите, пока есть связь — в карьере приложение может не открыться.",
+    rdy_fix:"Дозагрузить сейчас", rdy_fixing:"Загрузка…",
     sw_checking:"Проверяем офлайн-копию…",
     sw_ok:"Офлайн-копия полная — все файлы ({n}). Телефон работает без связи.",
     sw_partial:"⚠️ Офлайн-копия неполная — {n} из {of}. Без связи приложение может не открыться, пока загрузка не завершена.",
@@ -1303,7 +1339,7 @@ const I18N = {
     uc_no_wheeled:"Эта машина на шинах. Ходовой части для замера нет.",
     uc_no_tracks:"Осмотр ходовой части — для гусеничных бульдозеров и экскаваторов.",
     uc_no_unknown:"Этой единицы нет в реестре, поэтому не с чем сравнивать.",
-    upd_avail:"Вышла сборка v{n} — на этом телефоне ещё v{cur}.",
+    upd_avail:"Сборка v{n} загружается сама — на телефоне v{cur}. Делать ничего не нужно.",
     upd_go:"Обновить",
     unit_guess:"{u} нет в реестре оборудования. Показан стандартный перечень узлов «{c}» — проверьте соответствие машине и запросите обновление реестра.",
     uc_fig_hide:"Скрыть схему", uc_fig_show:"Показать схему",
@@ -2671,6 +2707,9 @@ $("saveBtn").onclick=async ()=>{
       mm:(p.mm==null?null:Number(p.mm)), stood:p.stood?1:0, reason:p.reason||"",
       photos:(p.photos||[]).slice(), video:p.video||null };
   await dbPut(rec); noteDone(rec); resetForm(); renderPending(); renderDue(); syncThenArm();
+  /* The round is away and the form is clear: if an update has been waiting
+     for somebody to stop working, this is that moment. */
+  setTimeout(applyUpdateIfIdle, 400);
   // First real save is the moment there is something worth protecting.
   if(persistState===null) askPersist();
   const m=t("m_saved"); dlg([m[0], m[1].replace("{x}",equip)]);
@@ -3473,6 +3512,10 @@ function applyLang(){ document.documentElement.lang=lang;
   updateDefectCauseBtns(); updateActionBtn(); renderSev(); renderMedia(); renderGps(); renderTempHint(); renderDue(); renderTeam(); renderLastDone(); renderTrend();
   updateSaveLabel(); if(editing) $("editBannerText").textContent=t("editing_hint").replace("{x}",editing.equip); $("cancelEdit").textContent=t("btn_cancel");
   setNet(); renderPending();
+  /* Built in code, so the [data-i18n] sweep above never reaches it — and a
+     go/no-go check stuck in the language somebody just switched away from is
+     the wrong one to leave on the screen. */
+  checkReady();
   // the machine map is drawn, not templated, so a [data-i18n] sweep never reaches
   // its side names, its legend or its own view toggle — repaint it
   if(wearType() && ucView==="map" && $("posnav").querySelector(".um-spot")) renderUCMap();
@@ -3493,7 +3536,7 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
    has accepted every one of its files. */
 const DEST_META={ gas:{label:"Google Drive"}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
 const DEST_IDS=["gas","pa","post"];
-const BUILD="71";
+const BUILD="72";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -3887,6 +3930,75 @@ function openSettings(){ destsToForm(loadDests()); $("upPx").value=localStorage.
 
    A phone that reports "12 of 13 files" can be diagnosed over a radio. One that
    just fails cannot. */
+/* Is this phone safe to walk away from wifi with?
+
+   Rendered into the capture screen rather than reported in Settings. The
+   failure it guards against — the app not opening in the pit because the
+   download never finished — is invisible right up until it is unrecoverable,
+   and the last moment anybody can act on it is while they are still standing
+   in the office. So it is the first thing on the screen, and when the answer is
+   no it says so with the fix attached.
+
+   Deliberately silent while there is nothing useful to say: no service worker
+   yet, or still checking on a first load, would only be noise. */
+function renderReady(state){
+  const el=$("readyBar"); if(!el) return;
+  if(!state){ el.className="ready"; el.textContent=""; return; }
+  if(state.kind==="ok"){
+    el.className="ready good";
+    el.innerHTML='<span class="dot"></span><span>'+esc(t("rdy_ok"))+'</span>';
+    return;
+  }
+  if(state.kind==="busy"){
+    el.className="ready busy";
+    el.innerHTML='<span class="dot"></span><span>'+esc(t("rdy_checking"))+'</span>';
+    return;
+  }
+  el.className="ready bad";
+  el.innerHTML='<b>'+esc(t("rdy_bad"))+'</b>'
+    +'<span class="sub">'+esc(t("rdy_bad_sub",{n:state.have,of:state.need}))+'</span>';
+  const b=document.createElement("button");
+  b.type="button"; b.textContent=t("rdy_fix");
+  b.onclick=()=>{
+    b.disabled=true; b.textContent=t("rdy_fixing");
+    try{ navigator.serviceWorker.controller.postMessage({type:"sw-heal"}); }catch(e){}
+    setTimeout(()=>checkReady(), 7000);
+  };
+  el.appendChild(b);
+}
+
+let readyRun=0;
+function checkReady(){
+  const run=++readyRun;
+  if(!("serviceWorker" in navigator) || !navigator.serviceWorker.controller){
+    /* Nothing installed yet. On a first load that is normal and transient, so
+       say nothing rather than alarm somebody about a state that fixes itself a
+       second later. Only speak up if it is still true once the page has
+       settled. */
+    renderReady(null);
+    setTimeout(()=>{ if(run===readyRun && !(navigator.serviceWorker||{}).controller)
+      renderReady({kind:"bad", have:0, need:ESSENTIAL_N}); }, 12000);
+    return;
+  }
+  const ch=new MessageChannel();
+  const giveUp=setTimeout(()=>{ if(run===readyRun) renderReady(null); }, 5000);
+  ch.port1.onmessage=(ev)=>{
+    clearTimeout(giveUp);
+    if(run!==readyRun) return;
+    const d=ev.data||{};
+    ESSENTIAL_N = d.need || ESSENTIAL_N;
+    renderReady(d.ok ? {kind:"ok"} : {kind:"bad", have:d.have||0, need:d.need||ESSENTIAL_N});
+  };
+  try{ navigator.serviceWorker.controller.postMessage({type:"sw-health"},[ch.port2]); }
+  catch(e){ clearTimeout(giveUp); renderReady(null); }
+}
+let ESSENTIAL_N=12;
+/* Ask when the app opens and whenever it comes back to the front — the second
+   is the one that catches a phone that has been sitting in a locker since the
+   files were evicted. */
+document.addEventListener("visibilitychange",()=>{ if(!document.hidden) checkReady(); });
+setTimeout(checkReady, 2200);
+
 function swHealth(){
   const el=$("swHealth"); if(!el) return;
   if(!("serviceWorker" in navigator) || !navigator.serviceWorker.controller){
@@ -4134,16 +4246,37 @@ if("serviceWorker" in navigator && window.isSecureContext){ let reloaded=false;
     }catch(e){ return true; }        // cannot tell → assume they are working
     return false;
   };
+  /* The new build is downloaded, complete, and in charge of the cache. All that
+     is left is the reload — and the only question is when.
+
+     If nobody is mid-round: now, silently. That is the common case by a long
+     way, because the moment somebody opens or refreshes the app is exactly the
+     moment they are not typing into it. From where they stand the app simply
+     is the new version.
+
+     If somebody IS working: not now, and not "when they remember to tap
+     either". The intention is held and applied the instant they are free — the
+     round is saved, the app comes back to the front, the dialog closes. They
+     never do anything, and they never lose a measurement to a reload. */
+  window.__updateWaiting=false;
   navigator.serviceWorker.addEventListener("controllerchange",()=>{
-    if(reloaded) return; reloaded=true;
-    if(!busy()){ location.reload(); return; }
+    if(reloaded) return;
+    if(!busy()){ reloaded=true; location.reload(); return; }
+    window.__updateWaiting=true;
     const bar=document.getElementById("staleBar");
-    if(!bar){ return; }              // nothing to announce it with; leave them alone
-    document.getElementById("staleTxt").textContent=t("upd_ready");
-    document.getElementById("staleGo").textContent=t("upd_go");
-    document.getElementById("staleGo").onclick=()=>location.reload();
-    bar.classList.remove("hidden");
+    if(bar){
+      document.getElementById("staleTxt").textContent=t("upd_ready");
+      document.getElementById("staleGo").textContent=t("upd_go");
+      document.getElementById("staleGo").onclick=()=>location.reload();
+      bar.classList.remove("hidden");
+    }
+    /* A slow poll as the backstop. The hooks below catch every ordinary way of
+       becoming free; this catches the ones nobody thought of, and costs one
+       cheap predicate a second. */
+    clearInterval(window.__updTimer);
+    window.__updTimer=setInterval(applyUpdateIfIdle, 1000);
   });
+  window.__swBusy=busy;
   navigator.serviceWorker.register("sw.js").then(reg=>{ reg.update&&reg.update(); }).catch(()=>{}); }
 
 /* ===================== force-update (clears cache + service worker) ===================== */
@@ -4166,6 +4299,30 @@ const SHELL_ASSETS=["index.html","manifest.webmanifest","native.js","jsQR.js","q
    is not a problem to report. Only a build number that differs from the one
    running says anything, and then it says it loudly, because an inspector on an
    old build is capturing against an old reference table. */
+/* Updating should not be somebody's job.
+
+   This used to find a newer build and put a banner up. Two things wrong with
+   that. It never started the download — so a phone could sit on a banner all
+   week and still be on the old build when it went out of signal. And it made
+   staying current a task an inspector had to remember, which is a task that
+   does not get done, because the person it inconveniences is not the person it
+   protects.
+
+   So: find it, fetch it, and put it on — without being asked. The three steps
+   are separate on purpose, because only the first two are safe to do at any
+   moment.
+
+     find   any time, online. A few hundred bytes.
+     fetch  any time. The service worker downloads the new build into a NEW
+            cache and does not touch the running one. If the link dies half way
+            it simply does not finish, and nothing has changed.
+     apply  only when nobody is mid-round. The download is complete by then, so
+            "apply" is a reload, and a reload with an open draft is somebody
+            losing a measurement they already took.
+
+   Which means the banner is now information, not an instruction. It appears
+   only if somebody is working when an update is ready, and it goes away by
+   itself the moment they are not. */
 async function checkForNewBuild(){
   if(!navigator.onLine) return;
   try{
@@ -4173,22 +4330,57 @@ async function checkForNewBuild(){
     if(!res || !res.ok) return;
     const m=(await res.text()).match(/const BUILD\s*=\s*"([^"]+)"/);
     if(!m || m[1]===BUILD) return;
-    const bar=$("staleBar"); if(!bar) return;
-    $("staleTxt").textContent=t("upd_avail",{n:m[1],cur:BUILD});
-    $("staleGo").textContent=t("upd_go");
-    bar.classList.remove("hidden");
-    $("staleGo").onclick=()=>$("forceUpdate").click();
+
+    /* Found one. Start it downloading NOW rather than waiting for a tap: this
+       is the step that was missing, and it is the one that decides whether the
+       phone is current when it leaves the yard. The worker fetches into its own
+       cache and only takes over once every essential file is in — see sw.js. */
+    if("serviceWorker" in navigator){
+      try{
+        const reg=await navigator.serviceWorker.getRegistration();
+        if(reg && reg.update) reg.update();
+      }catch(_){}
+    }
+    showUpdateBanner(m[1]);
   }catch(_){}                                   // offline, slow, blocked — all fine, say nothing
+}
+
+function showUpdateBanner(ver){
+  const bar=$("staleBar"); if(!bar) return;
+  $("staleTxt").textContent=t("upd_avail",{n:ver||"?",cur:BUILD});
+  $("staleGo").textContent=t("upd_go");
+  bar.classList.remove("hidden");
+  /* This banner appears when a newer build has been FOUND and the download has
+     only just been started. A plain reload here would serve the copy already in
+     the cache and change nothing — the button would look broken. So this one is
+     still the full force-update: clear the worker, the caches and the browser's
+     own copies, then reload, which fetches the new build directly.
+
+     The other banner — raised from controllerchange when somebody is mid-round
+     — is the opposite case. There the new build is downloaded, complete and in
+     charge, and all that is left is the reload. */
+  $("staleGo").onclick=()=>$("forceUpdate").click();
+}
+/* Called from anywhere that might have just made the app idle. Cheap, silent,
+   and does nothing at all unless a finished update is actually waiting. */
+function applyUpdateIfIdle(){
+  if(!window.__updateWaiting) return;
+  try{ if(window.__swBusy && window.__swBusy()) return; }catch(e){ return; }
+  window.__updateWaiting=false;
+  clearInterval(window.__updTimer);
+  location.reload();
 }
 function withTimeoutMs(p,ms){ return Promise.race([p,
   new Promise((_,rej)=>setTimeout(()=>rej(new Error("timeout")),ms))]); }
-document.addEventListener("visibilitychange",()=>{ if(!document.hidden) checkForNewBuild(); });
+document.addEventListener("visibilitychange",()=>{ if(!document.hidden){ checkForNewBuild(); applyUpdateIfIdle(); } });
+addEventListener("online",()=>checkForNewBuild());
 setTimeout(checkForNewBuild, 1500);
 /* A phone is opened at the start of a shift and not closed again, so "check on
-   open" can mean "check once, twelve hours ago". Ask again every half hour: it is
-   one request for a file of a few hundred bytes, and an inspector on an old build
-   is capturing against an old reference table without knowing it. */
-setInterval(checkForNewBuild, 1800000);
+   open" can mean "check once, twelve hours ago". Every five minutes instead of
+   every thirty: the request is a few hundred bytes, and the difference decides
+   whether a fix that shipped this morning is on the phone before it drives out
+   this afternoon. */
+setInterval(checkForNewBuild, 300000);
 
 const fu=$("forceUpdate"); if(fu) fu.onclick=async (e)=>{ e.preventDefault();
   const old=fu.textContent; fu.textContent="⟳ …";
