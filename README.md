@@ -350,6 +350,18 @@ Pick the **inspection type** at the top of the app; everything else adapts.
 | Inspection | `INSP` | Any real component from the asset register (L7 → L8 → L9 cards) |
 | **Temperature** | `TEMP` | Reading °C, ambient °C, method (IR gun / thermal camera / contact probe / telemetry) |
 
+### Photographs and video — four per component
+
+The limit is **four photographs and one video (≤60 s) per component**, not per machine.
+Every position in the walk has its own strip: a magnetic-plug round can carry sixteen
+photographs across its four plugs, an undercarriage round up to a hundred and forty-four.
+Filling one position's strip does not touch any other — the shutter greys out on that
+component only, and deleting a photo frees a slot there and nowhere else.
+
+Each one gets its own file name (`TK151_4C_29.07.2026_MP_1.jpg` … `_4.jpg`), so nothing
+overwrites anything on the way to Drive. The report prints all four: the first at full
+width, the rest in a strip beneath it, which fits four in about the height of two.
+
 ### Temperature module
 
 The measurement point is a real register component, the same L7→L8→L9 cards the

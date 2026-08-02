@@ -194,7 +194,14 @@
 #rptRoot .cel{border:1px solid #dfe4e9;border-radius:6px;overflow:hidden;background:#fff;
   page-break-inside:avoid;}
 #rptRoot .cel .ph{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:#f2f5f7;}
-#rptRoot .cel .ph + .ph{border-top:1px solid #dfe4e9;}
+/* The rest of the position's photographs, in a strip under the first. Four
+   stacked at full width is most of a page for one plug; this shows all four in
+   about the height of two, and the reader still gets the establishing shot big. */
+#rptRoot .cel .phx{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;
+  gap:1px;background:#dfe4e9;border-top:1px solid #dfe4e9;position:relative;}
+#rptRoot .cel .phx img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:#f2f5f7;}
+#rptRoot .cel .phn{position:absolute;right:3px;bottom:3px;background:rgba(23,28,33,.82);
+  color:#fff;font-size:7.5px;font-weight:700;border-radius:2px;padding:1px 4px;}
 #rptRoot .cel .bd{padding:7px 9px 9px;}
 #rptRoot .cel .pk{font-size:11px;font-weight:750;letter-spacing:-.01em;line-height:1.25;}
 #rptRoot .cel .pn{font-size:9px;color:#7b858e;line-height:1.35;margin-top:1px;}
@@ -674,10 +681,24 @@
      and anything the band above already said is not said again here. */
   function cell(ctx, T, it, sh) {
     sh = sh || {};
-    var ph = (it.photos || []).slice(0, 2);
-    /* No placeholder box. A grey rectangle saying "no photograph" is the same
-       area as a photograph and carries none of the information. */
-    var top = ph.map(function (u) { return '<img class="ph" src="' + u + '">'; }).join("");
+    /* Every photograph the inspector took, not the first two of them. Four per
+       component is the capture limit and somebody walked to the machine for
+       each one; a report that quietly prints half is a report that loses
+       evidence. No placeholder box either — a grey rectangle saying "no
+       photograph" is the same area as a photograph and carries none of the
+       information. */
+    var ph = it.photos || [];
+    var top = "";
+    if (ph.length) {
+      top = '<img class="ph" src="' + ph[0] + '">';
+      var rest = ph.slice(1, 4);
+      if (rest.length) {
+        top += '<div class="phx">'
+          + rest.map(function (u) { return '<img src="' + u + '">'; }).join("")
+          + (ph.length > 4 ? '<span class="phn">+' + (ph.length - 4) + '</span>' : "")
+          + '</div>';
+      }
+    }
     var rows = "";
     function row(k, v) { rows += '<dt>' + esc(k) + '</dt><dd>' + v + '</dd>'; }
     if (it.defect && !sh.defect) row(T("c_defect"), esc(it.defect)
