@@ -38,9 +38,15 @@ const SECRET = '';
  *      the folder in one request.
  *    • Type it into the dashboard when you delete. It is not stored.
  *
+ *  SET IT IN THE APPS SCRIPT EDITOR ONLY — never in this file in the repository.
+ *  This copy is the template and is published with everything else; a password
+ *  committed here is a password anyone can read, which is the same as having
+ *  none. Paste it into script.google.com, then Deploy > Manage deployments >
+ *  edit > Version: New version. Editing without deploying changes nothing.
+ *
  *  Deleting moves files to Drive's TRASH (recoverable for 30 days) and writes a
  *  log entry saying what went, when, and why. Nothing is ever purged outright. */
-const ADMIN_SECRET = '';
+const ADMIN_SECRET = '';        // leave empty HERE. Fill it in the script editor.
 
 /** Where the audit trail and the dashboard's edits live, inside ROOT_FOLDER_ID. */
 const META_DIR = '_meta';
@@ -502,7 +508,11 @@ function diagnose_() {
   }
   try {
     var f = DriveApp.getFolderById(id);
-    return { ok: true, service: 'Condition Monitoring upload', folder: f.getName(), id: id };
+    // Whether deletion is switched on, so the dashboard can say which it is
+    // instead of offering a password box that can never be satisfied. The
+    // secret itself never leaves the script — only whether one is set.
+    return { ok: true, service: 'Condition Monitoring upload', folder: f.getName(), id: id,
+             canDelete: !!ADMIN_SECRET };
   } catch (err) {
     return { ok: false, id: id, error: 'Could not open that folder. Either (a) the script has ' +
       'not been authorised for Drive — open the editor, Run > setup, click Allow, then deploy a ' +

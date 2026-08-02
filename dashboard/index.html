@@ -311,7 +311,7 @@
         <div class="srchead"><span class="ico">🗑</span><div><b data-i18n="ed_del">Delete permanently</b>
           <div class="muted"><span data-i18n="ed_del_sub1">Removes the sidecar, every photo, the signature and any correction. Files go to Drive's</span>
             <b data-i18n="ed_trash">trash</b> <span data-i18n="ed_del_sub2">— recoverable for 30 days — and the deletion is logged.</span>
-            <div class="note" style="margin-top:9px" data-i18n="ed_del_off">Deletion is switched off until an admin sets ADMIN_SECRET in the Apps Script.</div></div></div></div>
+            <div class="note" id="edDelOff" style="margin-top:9px"></div></div></div></div>
         <div class="srcbody">
           <div class="field"><label for="edAdmin" data-i18n="ed_admin">Admin password</label>
             <input id="edAdmin" type="password" autocomplete="off" data-i18n-ph="ed_adminph" placeholder="not the phones' shared secret"></div>
@@ -568,8 +568,10 @@ const I18N={
   ed_del_sub1:"Removes the sidecar, every photo, the signature and any correction. Files go to Drive's",
   ed_trash:"trash",
   ed_del_sub2:"— recoverable for 30 days — and the deletion is logged with your name and reason.",
-  ed_del_off:"Deletion is switched off until an admin sets ADMIN_SECRET in the Apps Script and deploys a new version. Until then, use Void above — it withdraws the round from every count, chart and report, keeps the photos, and can be undone.",
-  ed_admin:"Admin password", ed_adminph:"leave empty if none is set",
+  ed_del_off:"Deletion is switched off. An admin has to set ADMIN_SECRET in the Apps Script and deploy a new version. Until then use Void above — it withdraws the round from every count, chart and report, keeps the photos, and can be undone.",
+  ed_del_on:"Deletion is switched on. The password is the one set in the Apps Script — it is never stored here.",
+  ed_del_unknown:"Deletion needs the admin password set in the Apps Script. Use Test connection in Data sources to find out whether it is switched on.",
+  ed_admin:"Admin password", ed_adminph:"the one set in the Apps Script",
   ed_confirm:"Type the unit number to confirm", ed_confirmph:"e.g. TK146",
   ed_save:"Save correction", ed_edit:"✎ Edit",
   ed_sev:"Severity", ed_rec:"Recommendation", ed_wo:"WO / notification",
@@ -716,8 +718,10 @@ const I18N={
   ed_del_sub1:"Удаляет запись, все фото, подпись и правки. Файлы уходят в",
   ed_trash:"корзину Диска",
   ed_del_sub2:"— восстановимо 30 дней — и удаление фиксируется с вашим именем и причиной.",
-  ed_del_off:"Удаление выключено, пока администратор не задаст ADMIN_SECRET в Apps Script и не опубликует новую версию. До этого пользуйтесь «Отозвать» выше — осмотр исключается из всех подсчётов, графиков и отчётов, фото сохраняются, действие обратимо.",
-  ed_admin:"Пароль администратора", ed_adminph:"оставьте пустым, если не задан",
+  ed_del_off:"Удаление выключено. Администратор должен задать ADMIN_SECRET в Apps Script и опубликовать новую версию. До этого пользуйтесь «Отозвать» выше — осмотр исключается из всех подсчётов, графиков и отчётов, фото сохраняются, действие обратимо.",
+  ed_del_on:"Удаление включено. Пароль — тот, что задан в Apps Script; здесь он не сохраняется.",
+  ed_del_unknown:"Для удаления нужен пароль администратора из Apps Script. Нажмите «Проверить связь» в «Источниках данных», чтобы узнать, включено ли оно.",
+  ed_admin:"Пароль администратора", ed_adminph:"тот, что задан в Apps Script",
   ed_confirm:"Введите номер единицы для подтверждения", ed_confirmph:"напр. TK146",
   ed_save:"Сохранить правку", ed_edit:"✎ Правка",
   ed_sev:"Степень", ed_rec:"Рекомендация", ed_wo:"Заявка / уведомление",
@@ -857,6 +861,8 @@ const DSTORE="cm_dash_drive";         // records pulled from Google Drive, kept 
                                       // refresh only has to ask for what is new
 const ESTORE="cm_dash_edits";         // corrections + voids, same reason
 const CSTORE="cm_dash_conflicts";     // two phones sent the same unit/date/type
+const CANDEL="cm_dash_candelete";     // "1" | "0" | "?" — does the script accept a delete
+const canDelete = () => localStorage.getItem(CANDEL) || "?";
 
 /* ---------- records: bundled magnetic-plug data + imported entries.json ---------- */
 function fromBundled(){
@@ -1406,6 +1412,9 @@ function openEdit(key,keepMsg){
   $("edNote").value=rec._note||"";
   $("edReason").value=rec._reason||"";
   $("edAdmin").value=""; $("edConfirm").value=""; $("edMsg").textContent=held;
+  const cd=canDelete(), note=$("edDelOff");
+  if(note){ note.textContent = cd==="0" ? t("ed_del_off") : cd==="1" ? t("ed_del_on") : t("ed_del_unknown");
+            note.className = cd==="1" ? "sub" : "note"; }
   $("edUnvoid").style.display=rec._void?"":"none";
   $("edVoid").style.display=rec._void?"none":"";
   renderConflict(rec);
@@ -1738,6 +1747,10 @@ async function driveRun(mode){            // "test" | "load" | "full"
   try{
     if(mode==="test"){
       const p=await drv().ping();
+      /* Remember whether the script will accept a deletion, so the edit panel
+         can say which it is rather than offering a password box that may be
+         impossible to satisfy. Only the yes/no travels — never the secret. */
+      try{ localStorage.setItem(CANDEL, p.canDelete===undefined?"?":(p.canDelete?"1":"0")); }catch(e){}
       msg.textContent=t("dl_connected",{x:p.folder})+(p.batch?"":SLOW_HINT);
       return;
     }

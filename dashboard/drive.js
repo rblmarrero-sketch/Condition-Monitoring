@@ -253,7 +253,9 @@
     // after=<now> so this costs a walk and no file reads whatever is deployed
     try { await api({ action: "records", after: Date.now(), index: 0 }); }
     catch (e) { if (/unknown action/i.test(e.message || "")) batch = false; }
-    return { folder: j.folder || "(unnamed)", batch };
+    // A deployment older than this flag reports undefined, which the dashboard
+    // reads as "cannot tell" rather than as "off".
+    return { folder: j.folder || "(unnamed)", batch, canDelete: j.canDelete };
   }
 
   window.CMDrive = {
