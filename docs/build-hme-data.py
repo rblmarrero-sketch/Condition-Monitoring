@@ -124,6 +124,25 @@ def prefix_classes(assets, classes):
 # Three rows in the register are system codes, not machines.
 NOT_MACHINES = {'CH', 'DRS', 'ELS'}
 
+# Eight rows arrived from 1C with a date welded onto the equipment number —
+# "DZ015_10112024" for the SHANTUI SD32 that sits between DZ014 and DZ016. The
+# machine is on site and the number painted on it is DZ015, so that is the only
+# name anyone will look for: an inspector picking from the list, a QR label, a
+# photo file name, the dashboard matching a round to a unit. Left alone it is a
+# machine nobody can inspect. Strip the date; if the bare number is already in
+# the register the dated row is the duplicate and goes.
+DATED_UNIT = re.compile(r'^([A-Z]{2,3}\d{3})_(\d{8})$')
+def undate(assets):
+    have = {a['n'] for a in assets if not DATED_UNIT.match(a['n'])}
+    out = []
+    for a in assets:
+        m = DATED_UNIT.match(a['n'])
+        if not m:
+            out.append(a)
+        elif m.group(1) not in have:
+            a = dict(a); a['n'] = m.group(1); out.append(a)
+    return out
+
 # ── units: merge, never replace ───────────────────────────────────────────────
 ASSETS = json.loads(subprocess.run(
     ['node', '-e', 'global.window={};require("./mobile/assets.js");console.log(JSON.stringify(window.ASSETS))'],
@@ -148,7 +167,7 @@ for u in sorted(byUnit):
                       m=' '.join(x for x in (m.get('manufacturer'), m.get('model')) if x) or None))
 ecNames = {e['name'] for e in V['equipmentClasses']}
 units, dropped, fell = [], [], 0
-for a in sorted(ASSETS + added, key=lambda a: a['n']):
+for a in sorted(undate(ASSETS + added), key=lambda a: a['n']):
     if a['n'] in NOT_MACHINES:
         dropped.append(a['n']); continue
     a.pop('fb', None); a.pop('mk', None)      # recomputed below, never inherited

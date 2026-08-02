@@ -78,6 +78,15 @@
   table.grid td{border-bottom:1px solid var(--border);padding:8px 6px;vertical-align:top;}
   table.grid tr:hover td{background:var(--surface-2);}
   .tblwrap{overflow-x:auto;}
+  /* Background refresh: a breathing chip while it asks, a line that fades when
+     something arrived. Neither takes a click to dismiss — news this small does
+     not deserve a dialog. */
+  .src.syncing .dot{animation:pulse 1.1s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.25;}}
+  @media (prefers-reduced-motion:reduce){ .src.syncing .dot{animation:none;opacity:.5;} }
+  .syncflash{margin-left:8px;font-size:12px;color:var(--good);opacity:0;
+    transition:opacity .4s;pointer-events:none;white-space:nowrap;}
+  .syncflash.on{opacity:1;}
   .pill{display:inline-block;padding:1px 8px;border-radius:999px;font-size:11px;font-weight:650;color:#fff;}
   .pill.g{background:var(--good);} .pill.w{background:var(--warning);color:#111;}
   .pill.s{background:var(--serious);} .pill.c{background:var(--critical);} .pill.n{background:var(--none);}
@@ -219,7 +228,7 @@
   <div><div class="t1">Condition Monitoring</div><div class="t2" id="sub" data-i18n="sub">Fleet dashboard</div></div>
   <div class="spacer"></div>
   <input type="file" id="importFile" accept=".json,application/json" hidden multiple>
-  <button class="src" id="srcChip" data-i18n-title="srctitle" title="Where the dashboard is reading from"><span class="dot"></span><span id="srcText">No data yet</span></button>
+  <button class="src" id="srcChip" data-i18n-title="srctitle" title="Where the dashboard is reading from"><span class="dot"></span><span id="srcText">No data yet</span></button><span class="syncflash" id="syncFlash"></span>
   <button class="btn primary" id="dataBtn" data-i18n="datasources">Data sources</button>
   <div class="lang"><button data-lang="en">EN</button><button data-lang="ru">RU</button></div>
   <button class="btn" id="themeBtn" data-i18n-title="theme" title="Light / dark">◐</button>
@@ -246,6 +255,9 @@
           <div class="row"><button class="btn primary" id="drvGo" data-i18n="ds_load">Load from Drive</button>
             <button class="btn" id="drvTest" data-i18n="ds_test">Test connection</button>
             <button class="btn" id="drvFull" data-i18n-title="ds_reloadtip" data-i18n="ds_reload" title="Re-read every inspection. Use after deleting files in Drive — a normal load only asks for what is new.">Reload everything</button></div>
+          <!-- Three buttons that look alike and are not. Say which is which
+               here, once, instead of leaving it to a tooltip nobody hovers. -->
+          <p class="sub" style="margin:10px 0 0" data-i18n="ds_btnhelp">This page checks Drive by itself every few minutes and when you come back to the tab, so a round uploaded from a phone appears on its own. “Load from Drive” asks now instead of waiting. “Reload everything” re-reads the whole folder from scratch — only needed after files are deleted or renamed in Drive, because a normal check asks “what is new?” and cannot notice something disappearing.</p>
           <div class="msg" id="drvMsg"></div>
         </div>
       </div>
@@ -433,20 +445,20 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=67"></script>
-<script src="../mobile/hme.js?v=67"></script>
-<script src="../mobile/mp-fc.js?v=67"></script>
-<script src="../mobile/hme-cascade.js?v=67"></script>
-<script src="../mobile/temp-limits.js?v=67"></script>
+<script src="../data/magnetic_plug.js?v=68"></script>
+<script src="../mobile/hme.js?v=68"></script>
+<script src="../mobile/mp-fc.js?v=68"></script>
+<script src="../mobile/hme-cascade.js?v=68"></script>
+<script src="../mobile/temp-limits.js?v=68"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=67"></script>
-<script src="../mobile/wear.js?v=67"></script>
-<script src="../mobile/wear-map.js?v=67"></script>
-<script src="../mobile/jspdf.umd.min.js?v=67"></script>
-<script src="../mobile/html2canvas.min.js?v=67"></script>
-<script src="../mobile/report-core.js?v=67"></script>
+<script src="../mobile/assets.js?v=68"></script>
+<script src="../mobile/wear.js?v=68"></script>
+<script src="../mobile/wear-map.js?v=68"></script>
+<script src="../mobile/jspdf.umd.min.js?v=68"></script>
+<script src="../mobile/html2canvas.min.js?v=68"></script>
+<script src="../mobile/report-core.js?v=68"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* The 1C defect & cause matrix, the same file the phones carry. Records already
@@ -551,6 +563,8 @@ const I18N={
   ds_url:"Apps Script /exec URL", ds_sec:"Shared secret (blank if SECRET is '')",
   ds_secph:"leave empty if you did not set one",
   ds_load:"Load from Drive", ds_test:"Test connection", ds_reload:"Reload everything",
+  ds_btnhelp:"This page checks Drive by itself every few minutes and when you come back to the tab, so a round uploaded from a phone appears on its own. “Load from Drive” asks now instead of waiting. “Reload everything” re-reads the whole folder from scratch — only needed after files are deleted or renamed in Drive, because a normal check asks “what is new?” and cannot notice something disappearing.",
+  dl_auto_new:"✓ {n} new from Drive",
   ds_reloadtip:"Re-read every inspection. Use after deleting files in Drive — a normal load only asks for what is new.",
   ds_folder:"Folder on this PC",
   ds_folder_sub1:"The N: drive, or a SharePoint / OneDrive / Drive folder synced to a drive letter. Reads",
@@ -596,6 +610,9 @@ const I18N={
   ed_sending:"✅ Saved — sending to Drive…", ed_saved:"✅ Saved.",
   ed_undone:"❌ Not saved — {e} The change has been undone.",
   ed_deleting:"Deleting…", ed_deleted:"✅ {n} file(s) moved to Drive's trash — recoverable there for 30 days.",
+  ed_del_local:"✅ Removed from this dashboard. No Google Drive is set up here, so this round existed only in this browser and there was nothing else to delete.",
+  ed_del_gone:"✅ Removed from this dashboard. Drive holds no files under that name, so nothing there was touched. If the files do exist under another name, Reload everything will bring the round back.",
+  ed_del_bundled:"This round is bundled sample data built into the page, not a record in Drive or an import. It cannot be deleted from here.",
   ed_voided:"VOID", ed_corrected:"corrected",
   cf_flag:"CONFLICT", cf_resolved:"resolved",
   cf_waiting:"{n} need a decision",
@@ -704,6 +721,8 @@ const I18N={
   ds_url:"Адрес /exec (Apps Script)", ds_sec:"Общий секрет (пусто, если SECRET = '')",
   ds_secph:"оставьте пустым, если не задавали",
   ds_load:"Загрузить с Диска", ds_test:"Проверить связь", ds_reload:"Перечитать всё",
+  ds_btnhelp:"Панель сама опрашивает Диск каждые несколько минут и при возврате на вкладку — осмотр, загруженный с телефона, появится без нажатий. «Загрузить с Диска» — спросить сейчас, не дожидаясь. «Перечитать всё» — перечитать папку целиком; нужно только после удаления или переименования файлов на Диске, потому что обычная проверка спрашивает «что нового» и исчезновение заметить не может.",
+  dl_auto_new:"✓ новых с Диска: {n}",
   ds_reloadtip:"Перечитать все осмотры. Нужно после удаления файлов на Диске — обычная загрузка спрашивает только новое.",
   ds_folder:"Папка на этом ПК",
   ds_folder_sub1:"Диск N:, или папка SharePoint / OneDrive / Диска, подключённая как диск. Читает",
@@ -749,6 +768,9 @@ const I18N={
   ed_sending:"✅ Сохранено — отправляем на Диск…", ed_saved:"✅ Сохранено.",
   ed_undone:"❌ Не сохранено — {e} Изменение отменено.",
   ed_deleting:"Удаляем…", ed_deleted:"✅ Файлов в корзину Диска: {n} — восстановимо 30 дней.",
+  ed_del_local:"✅ Удалено из этой панели. Google Диск здесь не подключён, поэтому осмотр существовал только в этом браузере — удалять больше нечего.",
+  ed_del_gone:"✅ Удалено из этой панели. В Google Диске нет файлов с таким именем, там ничего не тронуто. Если файлы существуют под другим именем, «Перезагрузить всё» вернёт осмотр.",
+  ed_del_bundled:"Это встроенные демонстрационные данные страницы, а не запись в Google Диске или импорт. Отсюда их удалить нельзя.",
   ed_voided:"ОТОЗВАН", ed_corrected:"исправлено",
   cf_flag:"КОНФЛИКТ", cf_resolved:"решено",
   cf_waiting:"ждут решения: {n}",
@@ -1646,34 +1668,77 @@ $("edVoid").onclick=()=>{
 $("edUnvoid").onclick=()=>{
   if(edPost({ void:false, reason:"", items:mergedItems(), note:$("edNote").value.trim() })) openEdit(edKey,true);
 };
+/* Where a round is actually held here. Note this says nothing about Drive: a
+   record the dashboard holds as "imported" may well be in Drive too — the phone
+   uploaded it and this end simply has not pulled it yet. Only the script can
+   answer for Drive, so only the script is allowed to. */
+function heldIn(key){
+  return { drive: driveRecs.some(x=>recKey(x)===key),
+           imported: imported.some(x=>recKey(x)===key),
+           bundled: fromBundled().some(x=>recKey(x)===key) };
+}
+/* Forget this dashboard's copy. The Drive files, if there are any, are not
+   touched — Reload everything brings the round back if they exist. */
+function dropLocal(key){
+  driveRecs=driveRecs.filter(x=>recKey(x)!==key);
+  imported=imported.filter(x=>recKey(x)!==key);
+  delete edits[key]; delete conflicts[key];
+  saveDrive(); saveImported(); saveEdits(); saveConflicts();
+  rebuild(); refreshControls(); renderAll(); refreshSources();
+}
 $("edDelete").onclick=async ()=>{
   const msg=$("edMsg"), rec=RECS.find(r=>recKey(r)===edKey);
   if(!rec) return;
-  if(!drvOn()){ msg.textContent=t("ed_needdrive"); return; }
   const by=$("edBy").value.trim();
   if(!by){ msg.textContent=t("ed_needname"); return; }
+  // Typing the unit guards the local removal below just as it guards the Drive one
+  if($("edConfirm").value.trim().toUpperCase()!==String(rec.equip).toUpperCase()){
+    msg.textContent=t("ed_needconfirm",{x:rec.equip}); return; }
+
+  /* Ask Drive whenever Drive is configured, whatever this end thinks it holds —
+     it is the only thing that knows what is in the folder, and answering for it
+     from a cache would mean telling somebody their files are gone while they
+     sit there. Only when there is no Drive at all is the round certainly
+     local, and then the button can only mean "forget it here". */
+  const where=heldIn(edKey);
+  if(!drvOn()){
+    if(where.bundled && !where.imported && !where.drive){
+      msg.textContent=t("ed_del_bundled"); return; }
+    dropLocal(edKey);
+    msg.textContent=t("ed_del_local");
+    $("edAdmin").value=""; $("edConfirm").value="";
+    $("editOv").classList.add("hidden");
+    return;
+  }
+  if(where.bundled && !where.imported && !where.drive){
+    msg.textContent=t("ed_del_bundled"); return; }
   /* No client-side refusal on an empty box. Deletion is OFF at the script until
      somebody sets ADMIN_SECRET there and deploys a new version — refusing here
      sent people hunting for a password that does not exist, when the script's
      own answer says exactly what to do. Let the request go and show it. */
   const admin=$("edAdmin").value;
-  // Typing the unit is the last thing between a mis-click and losing a round.
-  if($("edConfirm").value.trim().toUpperCase()!==String(rec.equip).toUpperCase()){
-    msg.textContent=t("ed_needconfirm",{x:rec.equip}); return; }
   const reason=$("edReason").value.trim();
   const btns=["edSave","edVoid","edUnvoid","edDelete"]; btns.forEach(b=>$(b).disabled=true);
   msg.textContent=t("ed_deleting");
+  const key=edKey;
   try{
-    const r=await window.CMDrive.remove(edKey, admin, by, reason);
-    // Drop it here too, or it would linger until the next full reload
-    driveRecs=driveRecs.filter(x=>recKey(x)!==edKey);
-    imported=imported.filter(x=>recKey(x)!==edKey);
-    delete edits[edKey];
-    saveDrive(); saveImported(); saveEdits();
-    rebuild(); refreshControls(); renderAll(); refreshSources();
+    const r=await window.CMDrive.remove(key, admin, by, reason);
+    dropLocal(key);                 // or it would linger until the next full reload
     msg.textContent=t("ed_deleted",{n:r.deleted});
     $("edAdmin").value=""; $("edConfirm").value="";
-  }catch(err){ msg.textContent="❌ "+(err&&err.message||err); }
+  }catch(err){
+    const m=(err&&err.message)||String(err);
+    /* "Nothing found" is the script telling the truth about Drive: no file
+       carries that name any more. Somebody deleted it there, or it never
+       arrived. Either way the row here is a leftover and leaving it — after a
+       typed confirmation — is the behaviour that looks broken. Clear it, and
+       say plainly that Drive was not touched. */
+    if(/nothing found/i.test(m)){
+      dropLocal(key);
+      msg.textContent=t("ed_del_gone");
+      $("edAdmin").value=""; $("edConfirm").value="";
+    } else msg.textContent="❌ "+m;
+  }
   finally{ btns.forEach(b=>$(b).disabled=false); }
 };
 $("fVoid").onchange=()=>renderAll();
@@ -1819,6 +1884,67 @@ async function driveRun(mode){            // "test" | "load" | "full"
 $("drvGo").onclick=()=>driveRun("load");
 $("drvTest").onclick=()=>driveRun("test");
 $("drvFull").onclick=()=>driveRun("full");
+
+/* ---------- keeping up with the phones on its own ----------------------------
+   A round saved in the pit reaches Drive as soon as the phone has signal. The
+   dashboard is a page in a browser, so nothing can push it that news — it has
+   to ask. Making somebody press a button to ask is how a round sits in Drive
+   for an afternoon while the screen shows yesterday.
+
+   So ask automatically. The incremental read is one request carrying the last
+   cursor; when nothing is new the script reads no files and answers in well
+   under a second, which is cheap enough to repeat every few minutes and far
+   cheaper than the full re-read the button used to be needed for.
+
+   Three rules keep it out of the way:
+     · never while a correction panel is open — the rebuild underneath would
+       move the record the user is editing;
+     · never while offline, and never two at once;
+     · a background failure is silent. The button is there to be pressed and
+       told why; a toast every three minutes on a flaky link is not news. */
+const AUTO_MS = 180000;          // three minutes
+let autoBusy = false, autoLast = 0, autoTimer = null;
+
+async function autoRefresh(why){
+  if(autoBusy || !drvOn() || !navigator.onLine) return;
+  if(!$("editOv").classList.contains("hidden")) return;      // mid-correction
+  if(Date.now() - autoLast < 20000) return;                  // focus events arrive in flurries
+  autoBusy = true;
+  const chip = $("srcChip");
+  chip.classList.add("syncing");
+  try{
+    const r = await drv().load(null, {});
+    autoLast = Date.now();
+    if(r && r.records){
+      rebuild(); refreshControls(); renderAll();
+      // Say it once, where the reader is already looking, and let it fade.
+      flashSync(t("dl_auto_new",{n:r.records}));
+    }
+    refreshSources();
+  }catch(e){
+    /* Silent on purpose — see above. The Data sources panel still reports the
+       real reason the moment anybody presses a button there. */
+    console.warn("background refresh ("+why+"):", (e&&e.message)||e);
+  }finally{ autoBusy = false; chip.classList.remove("syncing"); }
+}
+function flashSync(text){
+  const el = $("syncFlash"); if(!el) return;
+  el.textContent = text; el.classList.add("on");
+  clearTimeout(flashSync._t);
+  flashSync._t = setTimeout(()=>el.classList.remove("on"), 6000);
+}
+function startAuto(){
+  clearInterval(autoTimer);
+  if(!drvOn()) return;
+  autoTimer = setInterval(()=>autoRefresh("timer"), AUTO_MS);
+}
+/* Coming back to the tab is the moment somebody most wants it to be current —
+   they have walked back to the desk to look at what came in. */
+document.addEventListener("visibilitychange", ()=>{ if(!document.hidden) autoRefresh("focus"); });
+window.addEventListener("online", ()=>autoRefresh("online"));
+/* On open: catch up first, then keep up. Deferred a beat so the page paints
+   what it already holds rather than waiting on the network to show anything. */
+setTimeout(()=>{ autoRefresh("open"); startAuto(); }, 1200);
 /* Photos live in Drive, not on disk — pull the ones this view needs, then repaint. */
 let drivePending=false;
 async function pullDrivePhotos(recs, after){
@@ -1908,7 +2034,7 @@ rebuild(); refreshControls(); renderAll(); refreshSources();
 applyLang();                          // paints the static markup and re-renders in the saved language
 if(!RECS.length) openData();          // first run: show where data comes from
 </script>
-<script src="drive.js?v=67"></script>
-<script src="report.js?v=67"></script>
+<script src="drive.js?v=68"></script>
+<script src="report.js?v=68"></script>
 </body>
 </html>

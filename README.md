@@ -350,6 +350,31 @@ Pick the **inspection type** at the top of the app; everything else adapts.
 | Inspection | `INSP` | Any real component from the asset register (L7 → L8 → L9 cards) |
 | **Temperature** | `TEMP` | Reading °C, ambient °C, method (IR gun / thermal camera / contact probe / telemetry) |
 
+### The unit list, and a machine that arrives before the paperwork
+
+1,128 units. The list is a **merge** of what the app already held and what the 1C register
+names — replacing it would drop machines that are on site but have no manufacturer or model
+recorded, which is most of the support fleet.
+
+Two things are worth knowing about it.
+
+**A dated unit number is not a unit number.** Eight rows arrived from 1C with a date welded
+on — `DZ015_10112024` for the SHANTUI SD32 that sits between DZ014 and DZ016. The number
+painted on the machine is DZ015, and that is the only name anyone will ever look for: the
+inspector picking from the list, the QR label, the photo file name, the dashboard matching
+a round to a unit. Left alone, seven machines were uninspectable and one was a duplicate.
+The build strips the date now, and drops the row if the bare number already exists.
+
+**A machine can arrive before the list catches up.** DR011 is not in the register — the
+drills stop at DR010. Rather than offer a generic component list, the app takes the class
+the register itself already uses for that unit-number prefix and *says out loud* that it is
+a fallback. The inspector gets a drill's components; nothing pretends the register knows
+about DR011. Send the new rows whenever 1C has them and re-run `docs/build-hme-data.py`.
+
+345 units carry no equipment category from 1C — 301 `TK` support trucks, 24 `LS` lighting
+plants, 20 `HX` heaters. Each gets a category inferred from its prefix, written to `fb`
+rather than `cat`, so a guess can never pass for a record.
+
 ### Photographs and video — four per component
 
 The limit is **four photographs and one video (≤60 s) per component**, not per machine.
@@ -518,6 +543,25 @@ The code travels with the finding — into the record, `entries.json`, the actio
 and its CSV, and the printed report. The dashboard's correction panel can set or change it
 from that end too, for a planner working from the desk rather than the machine.
 
+### Deleting a round, and where it actually lives
+
+**Delete permanently** trashes the files in Drive. A round that is not in Drive cannot be
+deleted from Drive — so the panel checks where the round is held before it asks:
+
+- **In Drive** — the files go to Drive's trash, recoverable there for 30 days, and the
+  deletion is logged with the name and reason.
+- **Imported from a file** — nothing was ever in Drive. The dashboard's own copy is removed
+  and it says so.
+- **Drive answers "nothing found"** — no file carries that name any more; somebody removed
+  it there, or it never arrived. The row here is a leftover, so it is cleared and the
+  message says plainly that Drive was not touched. If the files do exist under another
+  name, **Reload everything** brings the round back.
+- **Bundled sample data** — built into the page, not a record. It cannot be deleted here.
+
+In every case the unit number has to be typed to confirm first. **Void** remains the
+reversible option: it withdraws the round from every count, chart and report, keeps the
+photographs, and can be undone.
+
 ### Two inspectors, one round (multi-device merge)
 
 Each phone has a device id. Tap **⇄ Send round** to export that phone's records (photos
@@ -573,6 +617,76 @@ A consumer Google account allows ~90 minutes of script runtime a day, and the ol
 spent about 5 of those minutes on every load. **Reload everything** re-reads from scratch;
 use it after deleting files in Drive, since an incremental refresh asks "what is new?" and
 so cannot notice a deletion.
+
+### Dropping photographs into Drive by hand
+
+You can. Put them in the same folder the phones upload to — the script files them under
+`YYYY-MM`, and a photo dropped into that month folder is found.
+
+The name is what matters, and it is not free-form:
+
+```
+TK152_4C_31.07.2026_MP.jpg
+└──┬─┘ └┬┘ └────┬───┘ └┬┘ └┬┘
+ unit  position   date   type  extension
+                (DD.MM.YYYY)
+```
+
+For **Inspection** and **Temperature** the position is a real register component and the
+separator is a dot, not an underscore: `TK152.DRS.ENG_31.07.2026_INSP.jpg`. A second
+photograph of the same position is `…_MP_2.jpg`, a third `…_MP_3.jpg`, up to four. The
+signature is `TK152_31.07.2026_MP_SIGN.png`.
+
+Three things quietly find nothing:
+
+- **No extension.** Windows hides them; the dashboard requires one — `.jpg`, `.jpeg`,
+  `.png`, `.JPG` or `.webp`.
+- **An ISO date.** It must be `31.07.2026`, not `2026-07-31`.
+- **No inspection to attach to.** This is the usual one. *A photograph is not an
+  inspection.* The count on the dashboard is of **rounds**, and a round is the `.json`
+  sidecar the phone uploads beside the photos — `TK152_31.07.2026_MP.json`. Photographs
+  hang off that record by name. Drop a photo into a folder with no matching sidecar and
+  nothing appears, because there is no round for it to belong to.
+
+So hand-dropped photographs work for **adding pictures to a round that already exists**.
+They cannot create one. To create a round without a phone, import an `entries.json`
+through **Import a file**, or capture it in the app.
+
+> The `Photos/` folder in this repository is a different thing entirely — the old
+> `<Unit>/<Date>/<Position>.jpg` layout read by **Open photo folder** from a local disk.
+> Uploading there does nothing for a dashboard reading from Drive.
+
+### Does the dashboard need a button press? No.
+
+A round saved in the pit reaches Drive as soon as the phone has signal. The dashboard is a
+page in a browser, and nothing can push it that news — Drive has no way to call a web page,
+and Apps Script cannot hold a socket open. So it asks, on its own:
+
+| When | What it does |
+|---|---|
+| When you open the page | Catches up with anything uploaded since you last looked |
+| Every 3 minutes while the tab is open | Asks "anything new?" |
+| When you come back to the tab | Asks again — that is the moment you want it current |
+| When the network comes back | Asks again |
+
+The check is one request carrying the last cursor. When nothing is new the script reads no
+files and answers in well under a second, so repeating it costs almost nothing. When
+something *is* new, the page repaints and says so quietly beside the source chip — `✓ 2 new
+from Drive`. No dialog, nothing to dismiss.
+
+It stays out of the way in three ways: never while a correction panel is open (the rebuild
+underneath would move the record being edited), never while offline or when a check is
+already running, and a background failure is silent — the buttons are there to be pressed
+and told why, but a toast every three minutes on a flaky link is not news.
+
+**So the three buttons are:**
+
+- **Load from Drive** — ask *now* instead of waiting for the next check. Same cheap
+  incremental read.
+- **Reload everything** — re-read the whole folder from scratch, ignoring the cursor. Only
+  needed after files are **deleted or renamed in Drive**, because an incremental check asks
+  "what is new?" and cannot notice something disappearing.
+- **Test connection** — check the deployment without pulling anything, both halves of it.
 
 ### Saving the script is not deploying it
 
