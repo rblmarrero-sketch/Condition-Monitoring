@@ -21,5 +21,38 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
+  ],
+  "lang": "en",
+  "dir": "ltr",
+  "categories": [
+    "productivity",
+    "business",
+    "utilities"
+  ],
+  "shortcuts": [
+    {
+      "name": "New round",
+      "short_name": "New",
+      "url": "./?new=1",
+      "description": "Start a new inspection",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Upload queue",
+      "short_name": "Queue",
+      "url": "./?pane=queue",
+      "description": "What is still waiting to upload",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
   ]
 }

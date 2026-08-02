@@ -6,8 +6,17 @@
 <meta name="theme-color" content="#1a1a19">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=68">
+<link rel="manifest" href="manifest.webmanifest?v=69">
+<!-- iOS does not read the manifest for "Add to Home Screen". Without an
+     apple-touch-icon it puts a screenshot of the page on the home screen,
+     which is unrecognisable at icon size and looks like a bookmark rather
+     than an app. Same file the manifest uses; iOS wants 180×180 and will
+     scale 192 without complaint. -->
+<link rel="apple-touch-icon" href="icon-192.png?v=69">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=69">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=69">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -722,7 +731,7 @@
     <span id="staleTxt"></span>
     <button type="button" id="staleGo"></button>
   </div>
-  <div class="ver" id="verLine">build v<span id="verNum">?</span> · <span id="verNote">the register, and Drive on its own</span> ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver" id="verLine">build v<span id="verNum">?</span> · <span id="verNote">the queue sends itself</span> ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <nav class="tabbar" id="tabbar">
@@ -838,16 +847,16 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="upload-defaults.js?v=68"></script>
-<script src="hme.js?v=68"></script>
-<script src="mp-fc.js?v=68"></script>
-<script src="hme-cascade.js?v=68"></script>
-<script src="assets.js?v=68"></script>
-<script src="temp-limits.js?v=68"></script>
-<script src="wear.js?v=68"></script>
-<script src="wear-figs.js?v=68"></script>
-<script src="wear-map.js?v=68"></script>
-<script src="report-core.js?v=68"></script>
+<script src="upload-defaults.js?v=69"></script>
+<script src="hme.js?v=69"></script>
+<script src="mp-fc.js?v=69"></script>
+<script src="hme-cascade.js?v=69"></script>
+<script src="assets.js?v=69"></script>
+<script src="temp-limits.js?v=69"></script>
+<script src="wear.js?v=69"></script>
+<script src="wear-figs.js?v=69"></script>
+<script src="wear-map.js?v=69"></script>
+<script src="report-core.js?v=69"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -993,6 +1002,7 @@ const I18N = {
     lbl_defect:"Defect / failure mode", lbl_cause:"Direct cause",
     sync_off:"Auto-upload is off — findings stay on this phone.", sync_setup:"Set up",
     sync_ok:"All synced.", sync_pending:"{n} inspection(s) waiting to upload", sync_running:"Uploading…",
+    sync_auto:"will retry by itself",
     sync_err:"Upload failed", sync_now:"Sync now",
     set_title:"Settings",
     set_need_url:"Ticked, but no URL — this destination will not upload.",
@@ -1205,6 +1215,7 @@ const I18N = {
     lbl_defect:"Дефект / вид отказа", lbl_cause:"Прямая причина",
     sync_off:"Автозагрузка выключена — данные остаются на телефоне.", sync_setup:"Настроить",
     sync_ok:"Всё синхронизировано.", sync_pending:"Ожидает отправки: {n}", sync_running:"Отправка…",
+    sync_auto:"повторит сам",
     sync_err:"Ошибка отправки", sync_now:"Отправить",
     set_title:"Настройки",
     set_need_url:"Отмечено, но нет URL — сюда ничего не отправится.",
@@ -2611,7 +2622,7 @@ $("saveBtn").onclick=async ()=>{
       prio:p.prio||"",
       mm:(p.mm==null?null:Number(p.mm)), stood:p.stood?1:0, reason:p.reason||"",
       photos:(p.photos||[]).slice(), video:p.video||null };
-  await dbPut(rec); noteDone(rec); resetForm(); renderPending(); renderDue(); syncNow();
+  await dbPut(rec); noteDone(rec); resetForm(); renderPending(); renderDue(); syncThenArm();
   // First real save is the moment there is something worth protecting.
   if(persistState===null) askPersist();
   const m=t("m_saved"); dlg([m[0], m[1].replace("{x}",equip)]);
@@ -3096,7 +3107,7 @@ $("mergeFile").onchange=async (e)=>{ const f=e.target.files[0]; e.target.value="
     if(inc.smu && !cur.smu){ cur.smu=inc.smu; touched=true; }
     if(touched){ cur.up=0; cur.upTo={}; cur.rev=(cur.rev||0)+1; await dbPut(cur); noteDone(cur); }   // changed -> re-upload
   }
-  renderPending(); renderDue(); syncNow();
+  renderPending(); renderDue(); syncThenArm();
   const m=t("m_merged"); dlg([m[0], m[1].replace("{a}",added).replace("{b}",items).replace("{c}",dup)]);
 };
 
@@ -3357,7 +3368,7 @@ function onScanned(text){
     const m=String(text).match(/[?&]cfg=([^&\s]+)/);
     const ok=m ? applyCfg(m[1]) : false;
     stopScan(); scanMode="unit";
-    if(ok){ destsToForm(loadDests()); $("upPx").value=localStorage.getItem("up_px")||"0"; renderSync(); syncNow(); }
+    if(ok){ destsToForm(loadDests()); $("upPx").value=localStorage.getItem("up_px")||"0"; renderSync(); syncThenArm(); }
     dlg(t(ok?"m_cfg_ok":"m_cfg_bad"));
     return true;
   }
@@ -3423,7 +3434,7 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
    has accepted every one of its files. */
 const DEST_META={ gas:{label:"Google Drive"}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
 const DEST_IDS=["gas","pa","post"];
-const BUILD="68";
+const BUILD="69";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -3755,15 +3766,24 @@ async function renderSync(){
   const all=await dbAll(); const pend=all.filter(r=>!r.up).length;
   let cls="syncbar", txt;
   if(syncing){ cls+=" pend"; txt=t("sync_running"); }
-  /* lastErr carries a message off the wire — it is never trusted as markup. */
+  /* lastErr carries a message off the wire — it is never trusted as markup.
+     A failure that will be retried has to say so here too, not only in the
+     quiet pending state: this is the branch an inspector in the pit actually
+     sees, and "Upload failed" with no more than that reads as work lost. */
   else if(lastErr){ cls+=" err"; txt=t("sync_err")+": "+esc(lastErr)
-      +(pend?" · "+t("sync_pending").replace("{n}",pend):""); }
-  else if(pend){ cls+=" pend"; txt=t("sync_pending").replace("{n}",pend)+(navigator.onLine?"":" · "+t("net_offline")); }
+      +(pend?" · "+t("sync_pending").replace("{n}",pend):"")
+      +(retryTimer?" · "+t("sync_auto"):""); }
+  /* Anything queued is retried on a timer, so say so. Without it the bar reads
+     as a standing instruction to press the button, and an inspector who is busy
+     reasonably concludes the app has given up. */
+  else if(pend){ cls+=" pend"; txt=t("sync_pending").replace("{n}",pend)
+      +(navigator.onLine?"":" · "+t("net_offline"))
+      +(retryTimer?" · "+t("sync_auto"):""); }
   else { cls+=" on"; txt=t("sync_ok"); }
   bar.className=cls;
   bar.innerHTML=`<span class="dot"></span><span class="sp">${txt}</span>
     <button id="syncGo">${t("sync_now")}</button><button id="syncSet">⚙</button>`;
-  const g=$("syncGo"); if(g)g.onclick=()=>syncNow(true);
+  const g=$("syncGo"); if(g)g.onclick=()=>{ retryAt=RETRY_MIN; syncThenArm(true); };
   const st=$("syncSet"); if(st)st.onclick=openSettings;
 }
 /* settings sheet — one block per destination */
@@ -3799,7 +3819,7 @@ function persistSettings(){ saveDests(formToDests());
   try{ localStorage.setItem("up_px",$("upPx").value); }catch(e){} }
 $("setBtn").onclick=openSettings;
 $("setClose").onclick=()=>$("setOv").classList.add("hidden");
-$("saveSet").onclick=()=>{ persistSettings(); $("setOv").classList.add("hidden"); renderSync(); syncNow(); };
+$("saveSet").onclick=()=>{ persistSettings(); $("setOv").classList.add("hidden"); renderSync(); syncThenArm(); };
 $("testUp").onclick=async ()=>{ const m=$("setMsg");
   if($("testUp").disabled) return;
   persistSettings();
@@ -3858,7 +3878,58 @@ $("provScan").onclick=()=>{ scanMode="cfg"; startScan(); };
   const ok=applyCfg(m[1]);
   history.replaceState(null,"",location.pathname);
   setTimeout(()=>dlg(t(ok?"m_cfg_ok":"m_cfg_bad")),400); })();
-addEventListener("online",()=>syncNow());
+/* ---------- getting the queue away without being asked ----------------------
+   syncNow() already runs at every moment that obviously calls for it: after a
+   save, after an import, when settings change, at startup, and on the browser's
+   "online" event. What was missing is the one that matters in a pit — trying
+   AGAIN, later, on its own.
+
+   "online" fires when a network interface attaches, not when the network starts
+   working. Driving out of a dead zone on the same cellular connection never
+   fires it, because the interface never went away. So a round captured at the
+   face could sit in the queue for the rest of the shift, with the phone showing
+   full bars, until somebody thought to press Sync. That is not an offline-first
+   app; that is an app that hides its failures.
+
+   So: while anything is queued, keep trying, backing off so a genuinely dead
+   link is not hammered — and stop the moment the queue is empty, so an idle
+   phone in a locker does nothing at all. */
+const RETRY_MIN=20000, RETRY_MAX=300000;     // 20 s, backing off to 5 min
+let retryAt=RETRY_MIN, retryTimer=null;
+
+async function pendingCount(){
+  try{ return (await dbAll()).filter(r=>!r.up).length; }catch(e){ return 0; }
+}
+async function armRetry(){
+  clearTimeout(retryTimer); retryTimer=null;
+  /* The bar reads retryTimer, and syncNow() renders it from its own finally —
+     which runs before this does. Without a repaint here the very state this
+     exists to explain, a failed send that will be retried, shows as a bare
+     "Upload failed". Repaint on the way out of every branch. */
+  const done=()=>renderSync();
+  if(!UP.on) { done(); return; }              // nowhere to send it
+  if(!(await pendingCount())) { retryAt=RETRY_MIN; done(); return; }   // nothing waiting
+  retryTimer=setTimeout(async ()=>{
+    const before=await pendingCount();
+    await syncNow();
+    const after=await pendingCount();
+    // Progress resets the patience; no progress lengthens the wait.
+    retryAt = after < before ? RETRY_MIN : Math.min(retryAt*1.8, RETRY_MAX);
+    armRetry();
+  }, retryAt);
+  done();
+}
+/* Every finish re-arms, whether it worked or not: cleared queue → disarmed,
+   anything left → another attempt scheduled. */
+const syncThenArm = (manual)=>syncNow(manual).finally(armRetry);
+
+addEventListener("online",()=>{ retryAt=RETRY_MIN; syncThenArm(); });
+/* Picking the phone up is the strongest signal there is that the situation may
+   have changed — out of the pit, in the crib room, on camp wifi. */
+document.addEventListener("visibilitychange",()=>{
+  if(document.hidden){ clearTimeout(retryTimer); retryTimer=null; return; }
+  retryAt=RETRY_MIN; syncThenArm();
+});
 
 /* ===================== connectivity + SW ===================== */
 /* ===================== is the work safe? =====================
@@ -3974,6 +4045,11 @@ function withTimeoutMs(p,ms){ return Promise.race([p,
   new Promise((_,rej)=>setTimeout(()=>rej(new Error("timeout")),ms))]); }
 document.addEventListener("visibilitychange",()=>{ if(!document.hidden) checkForNewBuild(); });
 setTimeout(checkForNewBuild, 1500);
+/* A phone is opened at the start of a shift and not closed again, so "check on
+   open" can mean "check once, twelve hours ago". Ask again every half hour: it is
+   one request for a file of a few hundred bytes, and an inspector on an old build
+   is capturing against an old reference table without knowing it. */
+setInterval(checkForNewBuild, 1800000);
 
 const fu=$("forceUpdate"); if(fu) fu.onclick=async (e)=>{ e.preventDefault();
   const old=fu.textContent; fu.textContent="⟳ …";
@@ -4015,7 +4091,19 @@ function checkData(){
 /* ===================== init ===================== */
 updateEquipBtn(); renderGps(); checkData();
 $("dueScope").value=localStorage.getItem("due_scope")||"due";
-applyForm(); applyTheme(); applyLang(); sizeSignPad(); renderSync(); syncNow();
+applyForm(); applyTheme(); applyLang(); sizeSignPad(); renderSync(); syncThenArm();
+/* Long-press the home-screen icon and Android offers the manifest's shortcuts.
+   They have to land somewhere, or the promise is empty: "Upload queue" that
+   opens the capture screen is worse than no shortcut. Honour them, then drop
+   the parameter so a reload does not keep re-applying it. */
+(function(){
+  const q=new URLSearchParams(location.search);
+  const pane=q.get("pane");
+  if(pane==="queue")  showPane("paneQueue");
+  if(pane==="system") showPane("paneSystem");
+  if(q.get("new")==="1"){ showPane("paneCapture"); resetForm(); }
+  if(pane || q.get("new")) history.replaceState(null,"",location.pathname);
+})();
 // syncNow() pulls the team list when it finishes, but it returns early with
 // nothing queued or no signal — so ask once here too. Both paths are guarded.
 teamPull(false);

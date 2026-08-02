@@ -131,8 +131,8 @@ None of this is large. It is the honest list.
 | 4 | Replace the service worker's update flow with a native update check | web SW updates are invisible inside a shell |
 | 5 | Real app icon + splash | store requirement |
 | 6 | Deep link `cm://unit/TK151` | QR labels can open the app straight into the machine |
-| 7 | `@capacitor/network` in place of `navigator.onLine` | onLine lies on mobile — it reports "online" on a captive portal and on 2 dead bars |
-| 8 | Background sync (`@capacitor/background-runner`) | uploads finish when the phone reaches camp wifi, without the app open |
+| 7 | `@capacitor/network` in place of `navigator.onLine` | onLine lies on mobile — it reports "online" on a captive portal and on 2 dead bars. Build 69 works around this with a retry timer; a native listener removes the guesswork |
+| 8 | Background sync (`@capacitor/background-runner`) | build 69 retries while the app is *open*. A native runner finishes the upload when the phone reaches camp wifi in somebody's pocket — the last thing a wrapper cannot do from the web layer |
 | 9 | Crash + error reporting (Sentry) | you cannot debug a phone in a pit any other way |
 
 Items 1–5 are the store minimum. 6–9 are what makes it feel like an app.

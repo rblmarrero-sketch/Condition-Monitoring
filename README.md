@@ -656,6 +656,75 @@ through **Import a file**, or capture it in the app.
 > `<Unit>/<Date>/<Position>.jpg` layout read by **Open photo folder** from a local disk.
 > Uploading there does nothing for a dashboard reading from Drive.
 
+### Nobody presses Sync
+
+Synchronisation has two halves and they fail differently. Both are automatic.
+
+**The phone pushing.** A round is queued the moment it is saved and sent as soon as
+anything can be reached. The upload is attempted:
+
+| When | Why |
+|---|---|
+| Immediately after Save | the obvious one |
+| At startup | anything left from last shift |
+| On the browser's `online` event | a network interface came up |
+| **When the app is brought back to the foreground** | out of the pit, in the crib room, on camp wifi |
+| **On a timer, while anything is queued** | 20 s, then backing off ×1.8 to a 5-minute ceiling |
+
+That timer is the one that matters. `online` fires when a network interface *attaches*, not
+when the network starts *working* — drive out of a dead zone on the same cellular
+connection and it never fires at all, because the interface never went away. Before this,
+a round captured at the face could sit in the queue for the rest of the shift while the
+phone showed full bars, until somebody thought to press Sync.
+
+The backoff resets to 20 seconds the moment anything gets through, and the timer disarms
+completely when the queue empties — a phone in a locker does nothing. It is also cancelled
+while the app is in the background, so it never works the radio behind the inspector's
+back.
+
+**And it says so.** A queued round now reads `2 inspections waiting to upload · will retry
+by itself`, and a failed one `Upload failed: … · will retry by itself` — including on the
+error line, which is the one an inspector in the pit actually sees. "Upload failed" with
+nothing after it reads as work lost.
+
+**The dashboard pulling.** See below — on open, every 3 minutes, on focus, on reconnect.
+
+**End to end:** a round saved with signal is on the dashboard within about three minutes,
+with nobody pressing anything at either end. Saved without signal, it goes as soon as the
+phone can reach anything and appears on the next dashboard check.
+
+### Installing it on a phone
+
+**Android.** Chrome offers *Install app* on its own. The manifest declares a maskable icon,
+so Android does not letterboxing it inside a white circle, and the two long-press shortcuts
+go straight where they say: **New round** opens a clean capture screen, **Upload queue**
+opens the queue.
+
+**iPhone.** Safari → Share → *Add to Home Screen*. It opens full-screen with no browser
+chrome. iOS does **not** read the manifest for this — it needs an `apple-touch-icon`, and
+without one it puts a screenshot of the page on the home screen, which is unreadable at
+icon size and looks like a bookmark rather than an app. That is now declared.
+
+Once installed, everything works with no signal: the service worker precaches the whole
+shell, all the reference data, the icons and the manifest, so a cold start in a pit is the
+same app as a cold start on wifi.
+
+### Telling people a new version is out
+
+The service worker serves the copy it has, so a stale phone looks exactly like a current
+one. The app asks instead: it fetches `sw.js` (a few hundred bytes, `no-store`, so no cache
+can answer) and compares the build number with the one running.
+
+It asks at startup, whenever the app is brought back to the foreground, **and every half
+hour while it stays open** — a phone opened at the start of a shift and never closed would
+otherwise have checked once, twelve hours ago.
+
+A newer build raises a banner naming both versions — *"Build v69 is out — this phone is
+still on v68"* — with one button that clears the service worker and every cache and
+reloads. Silence is the normal offline case and stays silent: a pit with no signal is not
+a problem worth reporting. Only a real difference speaks, and then it speaks loudly,
+because an inspector on an old build is capturing against an old reference table.
+
 ### Does the dashboard need a button press? No.
 
 A round saved in the pit reaches Drive as soon as the phone has signal. The dashboard is a
