@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Paste these into ios/App/App/Info.plist after `npx cap add ios` on a Mac.
+
+  They are kept here, in the repository, rather than left to whoever runs the
+  build, for one reason: Apple reads the purpose strings, and a reviewer who
+  finds "to use the camera" rejects the build. These say what the app does with
+  the permission, in the words a person would use — which is also what the
+  inspector sees in the permission dialog, so it is not a compliance exercise.
+
+  ios/ is not committed (see .gitignore): it is generated, and it contains
+  signing settings that belong to whoever builds it. This file is the part of
+  it that is a decision rather than a generated artefact.
+-->
+<plist version="1.0">
+<dict>
+
+  <!-- Shown when the shutter is first tapped. -->
+  <key>NSCameraUsageDescription</key>
+  <string>To photograph the component you are inspecting, so the finding has evidence attached to it.</string>
+
+  <!-- Only if a photograph is picked from the library rather than taken. -->
+  <key>NSPhotoLibraryUsageDescription</key>
+  <string>To attach a photograph you have already taken of the component you are inspecting.</string>
+
+  <!-- The app never writes to the library; this is here only because the share
+       sheet can offer "Save Image" and iOS then asks. -->
+  <key>NSPhotoLibraryAddUsageDescription</key>
+  <string>To save an inspection photograph to your phone if you choose to.</string>
+
+  <!-- Stamps the round with where the machine was standing. Never in the
+       background: "WhenInUse" is deliberate and is what the reviewer checks. -->
+  <key>NSLocationWhenInUseUsageDescription</key>
+  <string>To record where the machine was standing when you inspected it, so a finding can be traced back to the working area.</string>
+
+  <!-- Portrait only, matching the manifest and the layout. Landscape is allowed
+       on iPad, where the dashboard-style views are usable. -->
+  <key>UISupportedInterfaceOrientations</key>
+  <array>
+    <string>UIInterfaceOrientationPortrait</string>
+  </array>
+  <key>UISupportedInterfaceOrientations~ipad</key>
+  <array>
+    <string>UIInterfaceOrientationPortrait</string>
+    <string>UIInterfaceOrientationPortraitUpsideDown</string>
+    <string>UIInterfaceOrientationLandscapeLeft</string>
+    <string>UIInterfaceOrientationLandscapeRight</string>
+  </array>
+
+  <!-- The app talks only to HTTPS endpoints the site configures. No exception
+       is requested, which is one less thing for review to ask about. -->
+  <key>NSAppTransportSecurity</key>
+  <dict>
+    <key>NSAllowsArbitraryLoads</key>
+    <false/>
+  </dict>
+
+  <!-- Deep links: a QR label on a machine opens the app straight into that unit. -->
+  <key>CFBundleURLTypes</key>
+  <array>
+    <dict>
+      <key>CFBundleURLName</key>
+      <string>com.nordrim.conditionmonitoring</string>
+      <key>CFBundleURLSchemes</key>
+      <array><string>cm</string></array>
+    </dict>
+  </array>
+
+  <key>ITSAppUsesNonExemptEncryption</key>
+  <false/>
+
+</dict>
+</plist>

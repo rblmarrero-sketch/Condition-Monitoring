@@ -1,0 +1,38 @@
+{
+  "name": "condition-monitoring",
+  "version": "70.0.0",
+  "private": true,
+  "description": "Offline-first condition monitoring \u2014 the same web app, on the web and in the stores.",
+  "scripts": {
+    "//": "webDir is mobile/ and the app is plain HTML, so there is no build step. cap sync just copies it into the two native projects.",
+    "sync": "cap sync",
+    "add:android": "cap add android && cap sync android",
+    "add:ios": "cap add ios && cap sync ios",
+    "open:android": "cap open android",
+    "open:ios": "cap open ios",
+    "run:android": "cap run android",
+    "run:ios": "cap run ios",
+    "doctor": "cap doctor",
+    "test:server": "node server/test-backend.cjs",
+    "db:schema": "psql \"$DATABASE_URL\" -f server/schema.sql",
+    "serve": "node server/api.js"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.0.0",
+    "@capacitor/app": "^7.0.0",
+    "@capacitor/camera": "^7.0.0",
+    "@capacitor/core": "^7.0.0",
+    "@capacitor/filesystem": "^7.0.0",
+    "@capacitor/geolocation": "^7.0.0",
+    "@capacitor/ios": "^7.0.0",
+    "@capacitor/network": "^7.0.0",
+    "@capacitor/preferences": "^7.0.0",
+    "@capacitor/share": "^7.0.0",
+    "@capacitor/splash-screen": "^7.0.0",
+    "@capacitor/status-bar": "^7.0.0",
+    "pg": "^8.22.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^7.0.0"
+  }
+}

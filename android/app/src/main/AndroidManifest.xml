@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <activity
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode|navigation"
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBarLaunch"
+            android:launchMode="singleTask"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!-- A QR label on the machine opens the app already on that unit.
+                 There are 1,085 units and the alternative is scrolling a picker
+                 while wearing gloves.
+
+                 launchMode is singleTask above, so scanning a second label does
+                 not stack a second copy of the app — it re-enters the running
+                 one, which matters when an inspector walks a row of trucks. -->
+            <intent-filter android:autoVerify="false">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="cm" android:host="unit" />
+            </intent-filter>
+
+        </activity>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"></meta-data>
+        </provider>
+    </application>
+
+    <!-- Permissions
+
+         Declared here rather than left to the plugins: only @capacitor/network
+         ships a manifest entry of its own, so a build that relies on merging
+         gets a camera that throws SecurityException the first time an inspector
+         taps the shutter — in the pit, on somebody else's phone.
+
+         Each one is here because a specific thing stops working without it, and
+         nothing is here speculatively. Both stores ask you to justify every
+         permission, and the shortest honest list is also the easiest to defend.
+    -->
+
+    <!-- upload a round, pull the register -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- tell a dead interface from a working link, so the queue retries sensibly -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- photograph the component being inspected -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+
+    <!-- stamp the round with where the machine was standing -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- Reading a photograph the inspector picked from the gallery. Scoped
+         storage means API 33+ uses READ_MEDIA_IMAGES and older releases use
+         READ_EXTERNAL_STORAGE; declaring both with maxSdkVersion keeps Play's
+         reviewers from asking why a newer permission is requested on a device
+         that cannot use it. Nothing is ever written to shared storage — the
+         app's own files live in its private directory and need no permission. -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+</manifest>

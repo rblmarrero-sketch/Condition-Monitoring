@@ -572,6 +572,33 @@ inspectors' names are kept.
 
 ---
 
+## When Drive stops being enough
+
+Google Drive was the right call for a pilot — no server, no IT approval, no hosting bill —
+and it is the wrong call for a product. One shared secret instead of per-user identity, an
+Apps Script quota of about 90 minutes a day, no server-side conflict resolution, no way to
+push, and a folder listing that is O(files). All of that is fine at twenty phones and none
+of it is fine at two hundred.
+
+So there is a backend, in `server/`: Postgres, four REST endpoints, and server-sent events
+so the dashboard is *told* rather than asking every three minutes. It is tested against a
+real Postgres, not a mock — see `server/README.md`.
+
+**Drive is not deprecated.** A site whose IT blocks everything but a browser can still run
+the whole system out of a shared folder, and keeping that working is a feature.
+`dashboard/sync-adapter.js` is the seam that lets both be true: one interface, two
+implementations, and nothing else in the dashboard knows which it is talking to. Set
+`cm_api_url` and `cm_api_token` and it uses the server; leave them unset and it uses Drive,
+exactly as now.
+
+| | Drive | Server |
+|---|---|---|
+| A lost phone | rotate the secret on every phone | revoke one row |
+| Phone → dashboard | ~3 minutes (the poll) | 2–5 seconds (pushed) |
+| Conflicts | by hand, per dashboard | by hand, recorded once, shared |
+| Audit | the deletion log | every request, including refusals |
+| At 100,000 photographs | slows down | indexed |
+
 ## Getting inspections into the dashboard
 
 An inspection is two things: the **records** (readings, grades, coded defects) and the
@@ -692,6 +719,27 @@ nothing after it reads as work lost.
 **End to end:** a round saved with signal is on the dashboard within about three minutes,
 with nobody pressing anything at either end. Saved without signal, it goes as soon as the
 phone can reach anything and appears on the next dashboard check.
+
+### It is a web app, and it is also two store apps
+
+Same code. Capacitor puts the *same* `mobile/` folder inside an Android and an iOS
+container — no port, no second codebase, and no build step, because the app is plain HTML.
+The URL your technicians already use is unaffected by any of it.
+
+One file, `mobile/native.js`, is the only thing that knows which it is running in.
+Everything else calls `CMNative.photo()`, `CMNative.geo.here()`, `CMNative.net.onChange()`
+and gets the same shapes back either way. That is deliberate: `if (isNative)` scattered
+through the capture logic is how one codebase quietly becomes two, with the web half
+getting the bug fixes and the native half getting the attention, until the report a phone
+prints and the report the office prints disagree.
+
+The web path is the reference implementation, not an apology. Native is an optimisation for
+four things a browser genuinely cannot do well: the camera (the file input re-encodes and
+drops EXIF), large binaries (150 photographs is not what IndexedDB is for), knowing whether
+the network actually works, and handing a PDF to a share sheet instead of a downloads
+folder.
+
+Building it: **`docs/BUILDING-THE-APP.md`**. Submitting it: **`docs/STORE-SUBMISSION.md`**.
 
 ### Installing it on a phone
 

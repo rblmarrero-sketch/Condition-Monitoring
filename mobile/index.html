@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=69">
+<link rel="manifest" href="manifest.webmanifest?v=70">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=69">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=69">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=69">
+<link rel="apple-touch-icon" href="icon-192.png?v=70">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=70">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=70">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -731,7 +731,7 @@
     <span id="staleTxt"></span>
     <button type="button" id="staleGo"></button>
   </div>
-  <div class="ver" id="verLine">build v<span id="verNum">?</span> · <span id="verNote">the queue sends itself</span> ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver" id="verLine">build v<span id="verNum">?</span> · <span id="verNote">every round has a name</span> ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <nav class="tabbar" id="tabbar">
@@ -847,16 +847,17 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="upload-defaults.js?v=69"></script>
-<script src="hme.js?v=69"></script>
-<script src="mp-fc.js?v=69"></script>
-<script src="hme-cascade.js?v=69"></script>
-<script src="assets.js?v=69"></script>
-<script src="temp-limits.js?v=69"></script>
-<script src="wear.js?v=69"></script>
-<script src="wear-figs.js?v=69"></script>
-<script src="wear-map.js?v=69"></script>
-<script src="report-core.js?v=69"></script>
+<script src="native.js?v=70"></script>
+<script src="upload-defaults.js?v=70"></script>
+<script src="hme.js?v=70"></script>
+<script src="mp-fc.js?v=70"></script>
+<script src="hme-cascade.js?v=70"></script>
+<script src="assets.js?v=70"></script>
+<script src="temp-limits.js?v=70"></script>
+<script src="wear.js?v=70"></script>
+<script src="wear-figs.js?v=70"></script>
+<script src="wear-map.js?v=70"></script>
+<script src="report-core.js?v=70"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -1918,8 +1919,28 @@ function applyForm(){ $("secPosTitle").textContent=TYPE_META[type].title[lang]||
    of four. A magnetic-plug round is four positions, so sixteen photographs; an
    undercarriage round is thirty-six. The report prints every one of them. */
 const MAX_PHOTOS=4, MAX_VIDEO_SEC=60;
-$("takeBtn").onclick=()=>{ if((posRO().photos||[]).length>=MAX_PHOTOS){ return; } $("camera").click(); };
+/* One call, two implementations — see mobile/native.js. In a browser this is
+   still the hidden file input below; inside the shell it is the platform
+   camera, which keeps the resolution and the orientation the web path loses.
+   Nothing here knows which, and the photograph is a Blob either way. */
+async function takePhoto(){
+  if((posRO().photos||[]).length>=MAX_PHOTOS) return;
+  const btn=$("takeBtn"); btn.disabled=true;
+  try{
+    const f = await (window.CMNative ? CMNative.photo() : new Promise(res=>{
+      const el=$("camera"); const on=()=>{ el.removeEventListener("change",on);
+        const x=el.files&&el.files[0]; el.value=""; res(x||null); };
+      el.addEventListener("change",on); el.click(); }));
+    if(!f) return;                                  // cancelled — not an error
+    const p=curP(); (p.photos ||= []);
+    if(p.photos.length<MAX_PHOTOS) p.photos.push(f);
+    renderMedia(); renderChips();
+  } finally { renderMedia(); }                      // re-derives the disabled state
+}
+$("takeBtn").onclick=takePhoto;
 $("videoBtn").onclick=()=>$("video").click();
+/* Still wired: the shell falls back to it if the Camera plugin is missing, and
+   it is the whole implementation on the web. */
 $("camera").onchange=(e)=>{ const f=e.target.files[0]; e.target.value=""; if(!f) return;
   const p=curP(); (p.photos ||= []); if(p.photos.length<MAX_PHOTOS) p.photos.push(f); renderMedia(); renderChips(); };
 $("video").onchange=(e)=>{ const f=e.target.files[0]; e.target.value=""; if(!f) return;
@@ -2518,14 +2539,26 @@ $("pickList").onclick=(e)=>{ const b=e.target.closest(".pickitem"); if(!b) retur
 let gps=null;
 function renderGps(){ $("gpsBtn").textContent = gps
   ? `${gps.lat.toFixed(5)}, ${gps.lon.toFixed(5)} · ±${Math.round(gps.acc)} m` : t("gps_none"); }
-function getGps(silent){ return new Promise(res=>{
-  if(!navigator.geolocation){ if(!silent) dlg(t("m_gps_na")); return res(null); }
-  $("gpsBtn").textContent=t("gps_getting");
-  navigator.geolocation.getCurrentPosition(
-    pos=>{ gps={lat:pos.coords.latitude, lon:pos.coords.longitude, acc:pos.coords.accuracy||0, at:new Date().toISOString()};
-      renderGps(); res(gps); },
-    err=>{ renderGps(); if(!silent){ const m=t("m_gps_fail"); dlg([m[0], m[1]+" ("+String(err.message||err)+")"]); } res(null); },
-    {enableHighAccuracy:true, timeout:silent?8000:15000, maximumAge:120000}); }); }
+async function getGps(silent){
+  /* Native Geolocation where there is one — it asks the OS rather than the
+     browser's own permission layer, which on iOS inside a shell is a different
+     prompt and a different answer. Same shape back either way. */
+  if(window.CMNative){
+    $("gpsBtn").textContent=t("gps_getting");
+    const g=await CMNative.geo.here(silent?8000:15000);
+    if(g){ gps={lat:g.lat, lon:g.lon, acc:g.acc||0, at:new Date().toISOString()}; renderGps(); return gps; }
+    renderGps();
+    if(!silent){ const m=t("m_gps_fail"); dlg([m[0], m[1]]); }
+    return null;
+  }
+  return new Promise(res=>{
+    if(!navigator.geolocation){ if(!silent) dlg(t("m_gps_na")); return res(null); }
+    $("gpsBtn").textContent=t("gps_getting");
+    navigator.geolocation.getCurrentPosition(
+      pos=>{ gps={lat:pos.coords.latitude, lon:pos.coords.longitude, acc:pos.coords.accuracy||0, at:new Date().toISOString()};
+        renderGps(); res(gps); },
+      err=>{ renderGps(); if(!silent){ const m=t("m_gps_fail"); dlg([m[0], m[1]+" ("+String(err.message||err)+")"]); } res(null); },
+      {enableHighAccuracy:true, timeout:silent?8000:15000, maximumAge:120000}); }); }
 $("gpsBtn").onclick=()=>getGps(false);
 
 /* ===================== supervisor signature pad ===================== */
@@ -3199,6 +3232,17 @@ async function buildPackage(){
     const suffix=(TYPE_META[rec.type]&&TYPE_META[rec.type].suffix)||rec.type||"MP";
     files.push({name:`${rec.equip}_${ddmmyyyy(rec.date)}_${suffix}_SIGN.png`, data:new Uint8Array(await rec.sign.arrayBuffer())}); }
   const records=all.map(rec=>({
+    /* The identity the phone has held all along, finally written down.
+
+       Everything downstream keyed on equip|date|type, which is neither
+       unique — two phones on one unit on one day is the exact clash the
+       conflict machinery exists for — nor stable: correct a mistyped date
+       and the round silently becomes a different record. `id` is issued
+       once at save, survives every edit and every phone-to-phone transfer,
+       and `rev` says which version of it this is. Together they are what
+       lets a retried upload be recognised instead of duplicated, and what
+       any real backend — or 1C — needs to import idempotently. */
+    id:rec.id||"", rev:rec.rev||1,
     equip:rec.equip, date:rec.date, type:rec.type||"MP", cls:rec.cls||"", by:rec.by||"", smu:rec.smu||"",
     sup:rec.sup||"", gps:rec.gps||null, dev:rec.dev||"", signed:rec.sign?1:0,
     items:Object.entries(rec.positions).map(([k,p])=>{
@@ -3434,7 +3478,7 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
    has accepted every one of its files. */
 const DEST_META={ gas:{label:"Google Drive"}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
 const DEST_IDS=["gas","pa","post"];
-const BUILD="69";
+const BUILD="70";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -3739,7 +3783,9 @@ async function syncNow(manual){
   }
 }
 function recToExport(rec){
-  return { equip:rec.equip, date:rec.date, type:rec.type||"MP", cls:rec.cls||"", by:rec.by||"", smu:rec.smu||"",
+  // id + rev travel with every record — see the note in buildEntriesJson().
+  return { id:rec.id||"", rev:rec.rev||1,
+    equip:rec.equip, date:rec.date, type:rec.type||"MP", cls:rec.cls||"", by:rec.by||"", smu:rec.smu||"",
     sup:rec.sup||"", gps:rec.gps||null, dev:rec.dev||"", signed:rec.sign?1:0,
     items:Object.entries(rec.positions).map(([k,p])=>{ const d=DEFECT_BY[upDefect(p.defect)]||null;
       const det=p.detect||DETECT_DEFAULT;
@@ -3923,7 +3969,14 @@ async function armRetry(){
    anything left → another attempt scheduled. */
 const syncThenArm = (manual)=>syncNow(manual).finally(armRetry);
 
-addEventListener("online",()=>{ retryAt=RETRY_MIN; syncThenArm(); });
+/* Through the seam: inside the shell this is the OS telling us the connection
+   changed, which fires in the cases navigator.onLine sleeps through. On the
+   web it IS navigator.onLine, and the retry timer above is what covers it. */
+if(window.CMNative){
+  CMNative.net.onChange(st=>{ if(st.online){ retryAt=RETRY_MIN; syncThenArm(); } renderNet(); });
+} else {
+  addEventListener("online",()=>{ retryAt=RETRY_MIN; syncThenArm(); });
+}
 /* Picking the phone up is the strongest signal there is that the situation may
    have changed — out of the pit, in the crib room, on camp wifi. */
 document.addEventListener("visibilitychange",()=>{
@@ -4014,7 +4067,7 @@ if("serviceWorker" in navigator && window.isSecureContext){ let reloaded=false;
    <script src> URLs — only the page's own URL. cache:"reload" fetches past the
    HTTP cache AND replaces what is stored there, so the reload that follows
    picks up the new files. */
-const SHELL_ASSETS=["index.html","manifest.webmanifest","jsQR.js","qrcode.js","upload-defaults.js",
+const SHELL_ASSETS=["index.html","manifest.webmanifest","native.js","jsQR.js","qrcode.js","upload-defaults.js",
   "hme.js","hme-cascade.js","mp-fc.js","assets.js","temp-limits.js",
   "wear.js","wear-figs.js","wear-map.js","report-core.js",
   "jspdf.umd.min.js","html2canvas.min.js","sw.js"];
@@ -4102,7 +4155,52 @@ applyForm(); applyTheme(); applyLang(); sizeSignPad(); renderSync(); syncThenArm
   if(pane==="queue")  showPane("paneQueue");
   if(pane==="system") showPane("paneSystem");
   if(q.get("new")==="1"){ showPane("paneCapture"); resetForm(); }
-  if(pane || q.get("new")) history.replaceState(null,"",location.pathname);
+  /* ?unit=TK151 — the web half of the QR deep link. The same handler serves a
+     scanned label, a link in a message, and the native cm://unit/TK151 below,
+     so there is one place where "go to this machine" is implemented. */
+  const u=(q.get("unit")||"").trim().toUpperCase();
+  if(u) openUnit(u, q.get("type"));
+  if(pane || q.get("new") || u) history.replaceState(null,"",location.pathname);
+})();
+
+/* One machine, from wherever the request came. Unknown units are not refused:
+   a truck can arrive before the register catches up, and the app already falls
+   back to the class its number prefix carries. */
+function openUnit(unit, type){
+  if(!unit) return;
+  showPane("paneCapture");
+  if(type && TYPE_META[type]){
+    const sel=$("typeSel"); sel.value=type; sel.dispatchEvent(new Event("change"));
+  }
+  try{ selectEquip(unit); }catch(e){ return; }
+  window.scrollTo({top:0});
+}
+
+/* The native half. Capacitor hands the URL to the running app rather than
+   reloading it, so a second scan while the app is open re-enters this instead
+   of starting over — which is the whole point when somebody is walking a row
+   of machines. */
+(function(){
+  const App = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App;
+  if(!App || !App.addListener) return;
+  const handle = (url)=>{
+    if(!url) return;
+    // cm://unit/TK151?type=UC  — and http(s) links land here too on iOS
+    let unit="", type="";
+    try{
+      const u=new URL(url);
+      if(u.protocol==="cm:"){ unit=(u.pathname||"").replace(/^\/+/,""); if(!unit) unit=u.hostname==="unit"?"":u.hostname; }
+      else unit=u.searchParams.get("unit")||"";
+      type=u.searchParams.get("type")||"";
+    }catch(e){
+      const m=/unit\/([A-Za-z0-9._-]+)/.exec(String(url)); if(m) unit=m[1];
+    }
+    if(unit) openUnit(unit.toUpperCase(), type);
+  };
+  App.addListener("appUrlOpen", d=>handle(d && d.url));
+  if(App.getLaunchUrl) App.getLaunchUrl().then(r=>handle(r && r.url)).catch(()=>{});
+  /* Coming back to the foreground is also when the queue should be tried and
+     the build re-checked; both already listen for it, so nothing here. */
 })();
 // syncNow() pulls the team list when it finishes, but it returns early with
 // nothing queued or no signal — so ask once here too. Both paths are guarded.

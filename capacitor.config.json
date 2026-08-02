@@ -1,0 +1,32 @@
+{
+  "appId": "com.nordrim.conditionmonitoring",
+  "appName": "Condition Monitoring",
+  "webDir": "mobile",
+  "bundledWebRuntime": false,
+  "android": {
+    "allowMixedContent": false,
+    "captureInput": true,
+    "webContentsDebuggingEnabled": false
+  },
+  "ios": {
+    "contentInset": "always",
+    "limitsNavigationsToAppBoundDomains": false
+  },
+  "server": {
+    "androidScheme": "https",
+    "iosScheme": "https",
+    "cleartext": false
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 600,
+      "launchAutoHide": true,
+      "backgroundColor": "#0d0d0d",
+      "androidScaleType": "CENTER_CROP",
+      "showSpinner": false
+    },
+    "Camera": {
+      "androidxExifInterfaceVersion": "1.3.7"
+    }
+  }
+}

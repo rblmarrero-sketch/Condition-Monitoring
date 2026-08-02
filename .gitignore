@@ -14,3 +14,36 @@ Thumbs.db
 # Excel lock files
 ~$*.xlsm
 ~$*.xlsx
+
+# ── the native shells ─────────────────────────────────────────────────────────
+# android/ and ios/ ARE committed, deliberately. Capacitor generates them once,
+# and then they stop being generated output and become source: the permission
+# list, the purpose strings, the icons and the signing config are all decisions,
+# and losing them to a regenerate is how a build starts crashing the first time
+# somebody taps the shutter.
+#
+# What is NOT committed is the copy of mobile/ that `cap sync` stamps into each
+# project. That is genuinely build output — every asset duplicated, and stale
+# the moment mobile/ changes. `npx cap sync` puts it back.
+android/app/src/main/assets/public/
+ios/App/App/public/
+android/app/src/main/assets/capacitor.config.json
+android/app/src/main/assets/capacitor.plugins.json
+ios/App/App/capacitor.config.json
+ios/App/App/config.xml
+
+# Gradle and Xcode working files
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+android/capacitor-cordova-android-plugins/
+ios/App/Pods/
+ios/App/build/
+ios/App/App.xcworkspace/xcuserdata/
+ios/App/App.xcodeproj/xcuserdata/
+*.xcuserstate
+
+node_modules/
+npm-debug.log*
+package-lock.json

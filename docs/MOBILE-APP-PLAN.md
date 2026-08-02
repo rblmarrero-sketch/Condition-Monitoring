@@ -3,7 +3,8 @@
 **What it takes to put this on Google Play and the App Store, sync it properly, make it fit
 any fleet, and be ready for 1C the day the client asks.**
 
-Written against build 68. Assumptions are stated where a decision has not been made — none
+Written against build 70. Phases 0–3 are now built — see §9 for what is done and what is
+waiting on you. Assumptions are stated where a decision has not been made; none
 of them block starting.
 
 ---
@@ -334,18 +335,41 @@ it, the conversation restarts every meeting.
 
 ## 9. Phasing
 
-| Phase | What | Effort | Depends on |
-|---|---|---|---|
-| **0** | Write the `id` and `rev` the phone already holds into the sidecar; teach the dashboard and the script to key on it; extract the `SyncAdapter` seam behind the existing Drive code | **3–4 days** | nothing — do this next |
-| **1** | Capacitor shell, native camera / filesystem / geo, icons, deep links | 2–3 weeks | 0 |
-| **2** | Store accounts, listings, privacy policy, data-safety declarations, TestFlight + closed track | 1–2 weeks, overlaps | D-U-N-S, a Mac or CI |
-| **3** | Real backend: Postgres + REST + object storage + SSE. Drive kept as a fallback adapter | 3–4 weeks | 0 |
-| **4** | 1C integration spec + mock service; the four endpoints once their team engages | 1 week spec, 2 weeks build | client's 1C team |
-| **5** | Template engine — inspection types as configuration, not code | 6 weeks | 3 |
+| Phase | What | State |
+|---|---|---|
+| **0** | `id` and `rev` on the wire; the dashboard tells a correction from a clash | **done** — build 70, `ident.cjs` |
+| **1** | Capacitor shell, the native seam, permissions, deep links | **done in code** — `mobile/native.js`, `android/`, `seam.cjs`. Needs a Mac for the iOS half |
+| **2** | Privacy policy, both stores' forms, listing copy EN/RU, screenshots, review notes | **written** — `docs/STORE-SUBMISSION.md`, `docs/privacy-policy.md`. Needs accounts and a D-U-N-S number |
+| **3** | Postgres, REST, SSE, object storage, the `SyncAdapter` seam | **done in code** — `server/`, `dashboard/sync-adapter.js`, tested against a real Postgres. Needs hosting |
+| **4** | 1C — the contract, a mock service, then the four endpoints | not started. Needs their team; the spec does not |
+| **5** | Template engine — inspection types as configuration | not started |
 
-**Phase 0 is the one to start today** and it is the cheapest. Everything after it is easier
-if records carry stable identity, and every week it is delayed is another week of records
-in Drive that cannot be reconciled against anything.
+### What is left, and who has to do it
+
+Nothing in 0–3 is waiting on more code. Four things are waiting on you:
+
+| | What | Why it cannot be done here |
+|---|---|---|
+| **A** | A **D-U-N-S number** for the organisation | two weeks of somebody else's process — start it first, it gates both stores |
+| **B** | **A Mac, or a cloud macOS runner** | the toolchain that produces an `.ipa` runs only on macOS. `npx cap add ios` then paste `ios-Info.plist.additions.xml` |
+| **C** | **Hosting** for `server/` + Postgres, and a decision on where photographs live | a bucket, a NAS, or the client's own tin. The `put/get/del` interface is three methods wide so this can change later |
+| **D** | **Six screenshots** on a real phone with real data | listed shot by shot in `docs/STORE-SUBMISSION.md` §4 |
+
+### Two bugs the real database found
+
+Worth recording, because both would have passed against a mock and failed in production:
+
+- **`id` alone as the primary key** made the first correction unstorable — a second
+  revision of the same round is a second row, and the key has to be `(id, rev)`.
+- **`bigserial` on both `round` and `marker`** looks like one cursor and is two independent
+  counters. A correction written at marker-seq 1 would never reach a client whose cursor
+  sat at round-seq 6 — the dashboard would show an uncorrected round forever, silently.
+  They share one sequence now.
+
+Phase 0 is done, which matters more than its size suggests: every round captured from
+build 70 onward carries an identity that a backend, or 1C, can reconcile against. Rounds
+already sitting in Drive from earlier builds do not, and no later work can retrofit them —
+they can be matched on unit, date and type, and that is all.
 
 ---
 

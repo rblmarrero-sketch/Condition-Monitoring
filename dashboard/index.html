@@ -445,20 +445,20 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=69"></script>
-<script src="../mobile/hme.js?v=69"></script>
-<script src="../mobile/mp-fc.js?v=69"></script>
-<script src="../mobile/hme-cascade.js?v=69"></script>
-<script src="../mobile/temp-limits.js?v=69"></script>
+<script src="../data/magnetic_plug.js?v=70"></script>
+<script src="../mobile/hme.js?v=70"></script>
+<script src="../mobile/mp-fc.js?v=70"></script>
+<script src="../mobile/hme-cascade.js?v=70"></script>
+<script src="../mobile/temp-limits.js?v=70"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=69"></script>
-<script src="../mobile/wear.js?v=69"></script>
-<script src="../mobile/wear-map.js?v=69"></script>
-<script src="../mobile/jspdf.umd.min.js?v=69"></script>
-<script src="../mobile/html2canvas.min.js?v=69"></script>
-<script src="../mobile/report-core.js?v=69"></script>
+<script src="../mobile/assets.js?v=70"></script>
+<script src="../mobile/wear.js?v=70"></script>
+<script src="../mobile/wear-map.js?v=70"></script>
+<script src="../mobile/jspdf.umd.min.js?v=70"></script>
+<script src="../mobile/html2canvas.min.js?v=70"></script>
+<script src="../mobile/report-core.js?v=70"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* The 1C defect & cause matrix, the same file the phones carry. Records already
@@ -945,7 +945,21 @@ let edits=asMap(ESTORE);
    device chosen once somebody here has decided. */
 let conflicts=asMap(CSTORE);
 let RECS=[];
+/* Two different things, deliberately not merged.
+
+   recKey is the STORAGE key. It is what the sidecar, the photographs, the
+   correction markers and the Apps Script's delete matcher are all named after,
+   and it is readable by a person standing in the Drive folder — which is most
+   of why it is shaped that way. Changing it is a migration, not a refactor.
+
+   recId is the record's IDENTITY. The phone issues it once at save, keeps it
+   across every edit and every phone-to-phone transfer, and since build 70 it
+   travels in the sidecar. It is unique where the storage key is not: two
+   phones inspecting one unit on one day produce one recKey and two recIds.
+   Anything that has to be certain two rows are the same round asks this. */
 const recKey=r=>`${r.equip}|${r.date}|${r.type}`;
+const recId=r=>String((r&&r.id)||"")||null;
+const recRev=r=>Number((r&&r.rev)||0)||0;
 function applyEdits(r){
   const e=edits[recKey(r)];
   if(!e) return r;
@@ -972,8 +986,20 @@ function groupRivals(list){
   const groups=new Map();
   list.forEach(r=>{ const k=recKey(r); if(!groups.has(k)) groups.set(k,[]); groups.get(k).push(r); });
   const out=new Map();
-  groups.forEach((rivals,k)=>{
+  groups.forEach((rivals0,k)=>{
+    let rivals=rivals0;
     const c=conflicts[k]||null;
+    /* Two copies from the SAME phone are not a clash — they are one round that
+       was corrected, and the later revision is simply the right one. Settling
+       those here means the panel only ever asks about a genuine disagreement
+       between two devices. Records with no rev sort as 0, so a pre-build-70
+       sidecar keeps the old "last one wins" behaviour rather than jumping the
+       queue ahead of a numbered one. */
+    const byDev=new Map();
+    rivals.forEach(r=>{ const d=String(r.dev||"");
+      const cur=byDev.get(d);
+      if(!cur || recRev(r)>=recRev(cur)) byDev.set(d,r); });
+    rivals=[...byDev.values()];
     let win=rivals[rivals.length-1];
     if(c&&c.resolved&&c.keep) win=rivals.find(r=>String(r.dev||"")===c.keep)||win;
     if(rivals.length<2&&!c){ out.set(k,win); return; }
@@ -1228,8 +1254,8 @@ function renderActions(){
 }
 $("csvBtn").onclick=()=>{
   const rows=actionRows(); const q=s=>`"${String(s==null?"":s).replace(/"/g,'""')}"`;
-  const head=["Severity","Unit","Type","Component","ComponentName","DefectCode","Defect","ISOMechanism","ISOMode","CauseCode","Cause","Action","Priority","PriorityLabel","WO","Grade","TempC","AmbientC","Method","Date","Inspector","VerifiedBy","GPS","Comment"];
-  const body=rows.map(({r,i})=>[SEV[sevOf(r,i)]?.l||"",r.equip,r.type,i.key,i.label,i.defectCode,i.defect,i.iso,i.isoMode,i.causeCode,i.cause,i.actionLabel,i.prio||"",i.prio?prioName(i.prio,"en"):"",i.wo,i.grade,i.tempC,i.ambC,i.tempMethod,r.date,r.by,r.sup||"",r.gps?`${r.gps.lat},${r.gps.lon}`:"",i.comment].map(q).join(","));
+  const head=["RecordId","Rev","Severity","Unit","Type","Component","ComponentName","DefectCode","Defect","ISOMechanism","ISOMode","CauseCode","Cause","Action","Priority","PriorityLabel","WO","Grade","TempC","AmbientC","Method","Date","Inspector","VerifiedBy","GPS","Comment"];
+  const body=rows.map(({r,i})=>[recId(r)||"",recRev(r)||"",SEV[sevOf(r,i)]?.l||"",r.equip,r.type,i.key,i.label,i.defectCode,i.defect,i.iso,i.isoMode,i.causeCode,i.cause,i.actionLabel,i.prio||"",i.prio?prioName(i.prio,"en"):"",i.wo,i.grade,i.tempC,i.ambC,i.tempMethod,r.date,r.by,r.sup||"",r.gps?`${r.gps.lat},${r.gps.lon}`:"",i.comment].map(q).join(","));
   const csv=[head.map(q).join(","),...body].join("\r\n");
   const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob(["﻿"+csv],{type:"text/csv"}));
   a.download=`cm_action_register_${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(a.href);
@@ -2034,7 +2060,8 @@ rebuild(); refreshControls(); renderAll(); refreshSources();
 applyLang();                          // paints the static markup and re-renders in the saved language
 if(!RECS.length) openData();          // first run: show where data comes from
 </script>
-<script src="drive.js?v=69"></script>
-<script src="report.js?v=69"></script>
+<script src="drive.js?v=70"></script>
+<script src="sync-adapter.js?v=70"></script>
+<script src="report.js?v=70"></script>
 </body>
 </html>
