@@ -459,6 +459,8 @@
 <script src="../mobile/assets.js?v=74"></script>
 <script src="../mobile/wear.js?v=74"></script>
 <script src="../mobile/wear-map.js?v=74"></script>
+<script src="../mobile/machine-fig.js?v=74"></script>
+<script src="../mobile/get.js?v=74"></script>
 <script src="../mobile/jspdf.umd.min.js?v=74"></script>
 <script src="../mobile/html2canvas.min.js?v=74"></script>
 <script src="../mobile/report-core.js?v=74"></script>
@@ -526,7 +528,7 @@ const I18N={
 
   sev_NOF:"No failure", sev_INC:"Incipient", sev_DEG:"Degraded", sev_CRI:"Critical",
   type_MP:"Magnetic Plug", type_FC:"Filter Cut", type_INSP:"Inspection", type_TEMP:"Temperature",
-  type_UC:"Undercarriage",
+  type_UC:"Undercarriage", type_GET:"Ground engaging tools",
   uc_th_point:"Point", uc_th_meas:"Measured", uc_th_worn:"Worn",
   uc_noref:"no reference for this model",
   uc_sum_act:"{n} points at or past condemn", uc_sum_watch:"{n} above 80%",
@@ -685,7 +687,7 @@ const I18N={
 
   sev_NOF:"Без отказа", sev_INC:"Начальный", sev_DEG:"Ухудшено", sev_CRI:"Критично",
   type_MP:"Магнитная пробка", type_FC:"Разрез фильтра", type_INSP:"Осмотр", type_TEMP:"Температура",
-  type_UC:"Ходовая часть",
+  type_UC:"Ходовая часть", type_GET:"Рабочий инструмент",
   uc_th_point:"Точка", uc_th_meas:"Замер", uc_th_worn:"Износ",
   uc_noref:"нет эталона для этой модели",
   uc_sum_act:"{n} точек на пределе или за ним", uc_sum_watch:"{n} выше 80%",
@@ -862,9 +864,13 @@ const PRIORITIES=[
 const PRIO_BY={}; PRIORITIES.forEach(p=>PRIO_BY[p.k]=p);
 const prioName=(k,l)=>{ const p=PRIO_BY[String(k||"").toUpperCase()]; return p?(p[l||lang]||p.en):(k||""); };
 const prioClass=k=>{ const p=PRIO_BY[String(k||"").toUpperCase()]; return p?p.c:"n"; };
-const TYPE_ORDER=["MP","FC","INSP","TEMP","UC"];
+const TYPE_ORDER=["MP","FC","INSP","TEMP","UC","GET"];
 const TYPE_LABEL=new Proxy({},{ get:(_,k)=> TYPE_ORDER.indexOf(k)>=0?t("type_"+k):undefined });
-const isWearType = ty => ty==="UC";
+/* "Carries millimetres." Undercarriage demands them at every point; ground
+   engaging tools accept them wherever somebody had a tape. Everything below
+   this line — the bands, the severities, the Pareto, the action register —
+   treats the two the same, because a percentage worn is a percentage worn. */
+const isWearType = ty => ty==="UC" || ty==="GET";
 const ASSET_BY={}; (window.ASSETS||[]).forEach(a=>ASSET_BY[a.n]=a);
 /* Wear judged here, not trusted from the file. The record carries the figures
    the phone resolved at export; if this build knows the machine's model it
@@ -879,9 +885,19 @@ function wearOf(rec,it){
   let n=it.newMM, c=it.condemnMM, pct=(it.wearPct===""||it.wearPct==null)?null:Number(it.wearPct),
       src=it.refSrc||"";
   const a=ASSET_BY[rec.equip];
-  if(window.WEAR && a && a.m){
-    const i=String(it.key||"").indexOf("."), pt=i<0?it.key:String(it.key).slice(0,i),
-          pos=i<0?"":String(it.key).slice(i+1);
+  const i=String(it.key||"").indexOf("."), pt=i<0?it.key:String(it.key).slice(0,i),
+        pos=i<0?"":String(it.key).slice(i+1);
+  if(rec.type==="GET" && window.GET && a){
+    /* GET limits key on the machine family and the point, not on the model's
+       undercarriage table. Same shape of answer, so everything downstream is
+       unchanged. */
+    const ref=GET.refFor(rec.equip, a.cat||a.cls||"", a.m||"", pt);
+    if(ref){ n=ref.n; c=ref.c; src=ref.src||"";
+      const w = mm==null ? null : WEAR.wear(ref,mm);
+      pct = (w==null?null:Math.round(w)); }
+    else { n=null; c=null; pct=null; src=""; }
+  }
+  else if(window.WEAR && a && a.m){
     /* Resolved even when nothing was measured: a point behind a guard still has
        limits, and printing "no reference for this model" against one that has a
        perfectly good reference is a lie about the data. */
@@ -1365,9 +1381,13 @@ function wearBar(pct){
 /* Rounds captured before the app exported point names carry a bare ROLLER.L6.
    The same reference that judges the millimetres can name the point, so an old
    record reads the same as a new one. */
-function ucName(it){
+/* The phone sends the label with the record, so this only runs for a round
+   captured by an older build — or for a point whose name was added after that
+   round was walked. Ask whichever taxonomy owns the point. */
+function ucName(it,rec){
   if(it.label) return it.label;
   const k=String(it.key||""), i=k.indexOf("."), pt=i<0?k:k.slice(0,i), pos=i<0?"":k.slice(i+1);
+  if(rec && rec.type==="GET" && window.GET) return GET.label(pt,lang)+(pos?" "+pos:"");
   const p=(window.WEAR&&WEAR.points||[]).find(x=>x.code===pt);
   return (p?(p[lang]||p.en):pt)+(pos?" — "+pos:"");
 }
@@ -1381,17 +1401,17 @@ function ucBlock(rec){
   const col=list=>`<table class="grid wear"><thead><tr>
       <th>${esc(t("uc_th_point"))}</th><th class="r">${esc(t("uc_th_meas"))}</th>
       <th class="r">${esc(t("uc_th_worn"))}</th><th style="width:62px"></th></tr></thead><tbody>`+
-    list.map(([i,w])=>`<tr><td>${esc(ucName(i))}
+    list.map(([i,w])=>`<tr><td>${esc(ucName(i,rec))}
         <div class="muted" style="font-size:10.5px">${w.newMM!=null&&w.newMM!==""?esc(w.newMM)+" → "+esc(w.condemnMM)+" mm":esc(t("uc_noref"))}</div></td>
       <td class="r mono">${w.mm!=null?`<b>${esc(w.mm)}</b>`:`<span class="muted" style="font-size:11px">${esc(w.reasonLabel||w.reason||"—")}</span>`}</td>
       <td class="r mono">${w.wearPct!=null?esc(w.wearPct)+"%":""}</td>
       <td>${w.wearPct!=null?wearBar(w.wearPct):""}</td></tr>`).join("")+`</tbody></table>`;
   const line = over.length
     ? `<div class="ucsum act">${esc(t("uc_sum_act",{n:over.length}))}${watch.length?" · "+esc(t("uc_sum_watch",{n:watch.length})):""}
-        <span class="muted">${worst.slice(0,4).map(([i,w])=>esc(ucName(i))+" "+w.wearPct+"%").join(" · ")}</span></div>`
+        <span class="muted">${worst.slice(0,4).map(([i,w])=>esc(ucName(i,rec))+" "+w.wearPct+"%").join(" · ")}</span></div>`
     : watch.length
     ? `<div class="ucsum watch">${esc(t("uc_sum_watch",{n:watch.length}))}
-        <span class="muted">${worst.slice(0,4).map(([i,w])=>esc(ucName(i))+" "+w.wearPct+"%").join(" · ")}</span></div>`
+        <span class="muted">${worst.slice(0,4).map(([i,w])=>esc(ucName(i,rec))+" "+w.wearPct+"%").join(" · ")}</span></div>`
     : `<div class="ucsum ok">${esc(t("uc_sum_ok",{n:rows.length-unread}))}</div>`;
   return line
     + (unread?`<div class="ucsum warnrow">${esc(t("uc_sum_unread",{n:unread}))}</div>`:"")

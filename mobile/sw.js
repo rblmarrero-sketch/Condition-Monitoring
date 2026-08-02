@@ -60,6 +60,8 @@ const ESSENTIAL = [
   "./wear.js?v=" + BUILD,
   "./wear-figs.js?v=" + BUILD,
   "./wear-map.js?v=" + BUILD,
+  "./machine-fig.js?v=" + BUILD,
+  "./get.js?v=" + BUILD,
   "./report-core.js?v=" + BUILD,
 ];
 

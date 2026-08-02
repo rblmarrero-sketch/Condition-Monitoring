@@ -425,6 +425,50 @@
   .ucmap[data-sel="PITCH4"] [data-part="CHAIN"],
   .ucmap[data-sel="PITCH1"] [data-part="CHAIN"]{opacity:1;}
   @media (prefers-reduced-motion:reduce){ .ucmap [data-part]{transition:none;} }
+  /* ---- GET: the optional millimetre ------------------------------------
+     Sits under the grade, quiet. The round is complete on grades, so nothing
+     here nags: no red, no "required", and an empty box is the normal state. */
+  .getrow{display:flex;gap:12px;align-items:flex-end;margin:0 0 6px;}
+  .getrow .fld{flex:1 1 auto;margin-bottom:0;}
+  .getread{flex:0 0 auto;display:flex;align-items:center;gap:7px;padding-bottom:11px;
+    font-size:13px;white-space:nowrap;}
+  .getread b{font-size:17px;font-variant-numeric:tabular-nums;}
+  .getread .src{color:var(--muted);font-size:11.5px;}
+  .getref{font-size:11.5px;color:var(--muted);margin:0 0 14px;display:flex;
+    flex-wrap:wrap;gap:6px;align-items:center;}
+  /* ---- the machine, once, above the pair of frames ----------------------
+     One figure, not one per side: the machine is the same machine whichever
+     track you are standing at, and "Left"/"Right" are already on the frames
+     below. Repeating the drawing would only make the pane longer and push the
+     first roller off the screen. */
+  .mfig{margin:0 0 10px;background:var(--surface-2);border:1px solid var(--line);
+    border-radius:12px;padding:6px 8px 4px;position:relative;}
+  .mfig svg{display:block;width:100%;height:auto;max-height:132px;}
+  .mfig img{display:block;width:100%;height:auto;max-height:132px;object-fit:contain;}
+  .mfig figcaption{position:absolute;left:12px;top:8px;font-size:11px;font-weight:700;
+    letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
+  .mfig .mf-body{fill:var(--surface-3);stroke:var(--ink-2);stroke-width:1.4;stroke-linejoin:round;}
+  .mfig .mf-arm{fill:var(--surface-3);stroke:var(--ink-2);stroke-width:1.4;stroke-linejoin:round;}
+  .mfig .mf-glass{fill:var(--surface);stroke:var(--ink-2);stroke-width:1;}
+  .mfig .mf-uc{fill:var(--surface-3);stroke:var(--ink-2);stroke-width:1.4;stroke-linejoin:round;}
+  .mfig .mf-uc-w{fill:var(--surface);stroke:var(--ink-2);stroke-width:1.2;}
+  .mfig .mf-uc-r{fill:var(--surface);stroke:var(--ink-2);stroke-width:1;}
+  .mfig .mf-tooth{fill:var(--surface-3);stroke:var(--ink-2);stroke-width:1.2;stroke-linejoin:round;}
+  .mfig .mf-hair{fill:none;stroke:var(--muted);stroke-width:.8;stroke-linecap:round;}
+  /* What this round is about is lit; the rest of the machine drops back, so an
+     undercarriage round and a GET round on the same machine are told apart at
+     arm's length rather than by reading the heading. */
+  .mfig[class*="hi-"] .mf-part{opacity:.26;transition:opacity .18s ease;}
+  .mfig.hi-uc  .mf-part[data-part="UC"],
+  .mfig.hi-get .mf-part[data-part="GET"]{opacity:1;}
+  .mfig.hi-uc  .mf-part[data-part="UC"] .mf-uc,
+  .mfig.hi-get .mf-part[data-part="GET"] .mf-body,
+  .mfig.hi-get .mf-part[data-part="GET"] .mf-tooth{stroke:var(--accent);stroke-width:1.8;}
+  /* A photograph cannot be dimmed part by part and still read, so it keeps its
+     tone and says in words which part the round is about. */
+  .mfig-photo figcaption{background:var(--surface);border:1px solid var(--line);
+    border-radius:6px;padding:2px 7px;}
+  @media (prefers-reduced-motion:reduce){ .mfig .mf-part{transition:none;} }
   /* The pair of frames is what claims the pane width now; posnav is a flex row,
      so the claim has to sit on the element that is actually its child. */
   .ucmaps{flex:0 0 calc(100% + 32px);width:calc(100% + 32px);margin:0 -16px 9px;}
@@ -597,6 +641,17 @@
         <button class="g-C" data-g="C">C</button><button class="g-X" data-g="X">X</button>
       </div>
     </label>
+    <!-- GET: a millimetre is welcome, never demanded. The round is complete on
+         grades alone, so this sits quietly under the grade rather than taking
+         over the screen the way the undercarriage sheet does. -->
+    <div id="getFields" class="hidden">
+      <div class="getrow">
+        <label class="fld"><span id="getLbl" data-i18n="get_mm">Remaining (mm) — optional</span>
+          <input id="getMM" type="text" inputmode="decimal" autocomplete="off"></label>
+        <div class="getread" id="getRead"></div>
+      </div>
+      <div class="getref" id="getRefLine"></div>
+    </div>
     <div id="tempFields" class="hidden">
       <div class="row">
         <label class="fld"><span data-i18n="lbl_temp">Temperature °C</span><input id="tempV" type="text" inputmode="decimal" autocomplete="off"></label>
@@ -885,6 +940,8 @@
 <script src="wear.js?v=74"></script>
 <script src="wear-figs.js?v=74"></script>
 <script src="wear-map.js?v=74"></script>
+<script src="machine-fig.js?v=74"></script>
+<script src="get.js?v=74"></script>
 <script src="report-core.js?v=74"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
@@ -903,8 +960,15 @@ const TYPE_META = {
   INSP: { suffix:"INSP", showReadings:false, title:{en:"Component / System",ru:"Узел / Система"} },
   TEMP: { suffix:"TEMP", showReadings:false, temp:true, title:{en:"Measurement point",ru:"Точка замера"} },
   UC:   { suffix:"UC",   showReadings:false, wear:true, title:{en:"Measurement point",ru:"Точка замера"} },
+  /* Ground engaging tools. Graded like a walk-around — every position gets
+     A/B/C/X, a defect and an action — with a millimetre accepted on any
+     position where somebody had a tape. `get:true` is what turns the optional
+     measurement row on; it is deliberately NOT `wear:true`, which means "this
+     round is measurements" and would demand a reading or a reason at every
+     position. A GET round is complete on grades. */
+  GET:  { suffix:"GET",  showReadings:false, get:true, title:{en:"Tool position",ru:"Позиция инструмента"} },
 };
-const TYPE_ORDER = ["MP","FC","INSP","TEMP","UC"];
+const TYPE_ORDER = ["MP","FC","INSP","TEMP","UC","GET"];
 
 const COMP = {
   ENG:{en:"Engine",ru:"Двигатель"}, COOL:{en:"Cooling System",ru:"Система охлаждения"},
@@ -1039,6 +1103,7 @@ const I18N = {
     ph_post_url:"paste your server endpoint here",
     set_gas:"Google Drive (Apps Script)", set_pa:"SharePoint / OneDrive (Power Automate)", set_post:"Plain HTTPS POST (multipart)",
     set_secret:"Shared secret (optional)",
+    mf_uc:"Undercarriage", mf_get:"Ground engaging tools",
     set_px:"Photo size", set_px_full:"Original — full detail, much slower to send",
     set_px_2000:"Large — 2000 px", set_px_1600:"Medium — 1600 px (recommended)",
     set_px_help:"Photos are shrunk as they are taken, so uploads are already small. The report and the dashboard never show more than this.",
@@ -1095,7 +1160,10 @@ const I18N = {
     rep_unit:"Unit", rep_type:"Type", rep_date:"Date", rep_sev:"Severity", rep_action:"Action", rep_by_who:"Inspected by", rep_by:"Generated by the Truck Inspection app",
     pos_count:"item(s)", photo_count:"photo(s)",
     type_MP:"Magnetic Plug", type_FC:"Filter Cut", type_INSP:"Inspection", type_TEMP:"Temperature",
-    type_UC:"Undercarriage",
+    type_UC:"Undercarriage", type_GET:"Ground engaging tools",
+    get_mm:"Remaining (mm) — optional", get_mm_of:"{x} (mm) — optional",
+    get_ref:"New {n} mm · condemn {c} mm", get_generic:"generic limit",
+    get_notool:"This machine has no ground engaging tools to walk.",
     lbl_mm:"Measured (mm)",
     uc_cannot:"Could not measure it?",
     uc_stood:"I measured it again — the reading is right, check the reference",
@@ -1265,6 +1333,7 @@ const I18N = {
     ph_post_url:"вставьте сюда адрес вашего сервера",
     set_gas:"Google Диск (Apps Script)", set_pa:"SharePoint / OneDrive (Power Automate)", set_post:"Обычный HTTPS POST (multipart)",
     set_secret:"Общий секрет (необяз.)",
+    mf_uc:"Ходовая часть", mf_get:"Рабочий инструмент",
     set_px:"Размер фото", set_px_full:"Оригинал — полная детализация, отправка намного дольше",
     set_px_2000:"Крупный — 2000 px", set_px_1600:"Средний — 1600 px (рекомендуется)",
     set_px_help:"Фото уменьшаются в момент съёмки, поэтому отправка уже небольшая. Отчёт и панель никогда не показывают больше.",
@@ -1321,7 +1390,10 @@ const I18N = {
     rep_unit:"Ед.", rep_type:"Тип", rep_date:"Дата", rep_sev:"Категория", rep_action:"Действие", rep_by_who:"Осмотр выполнил", rep_by:"Сформировано приложением осмотра",
     pos_count:"поз.", photo_count:"фото",
     type_MP:"Магнитная пробка", type_FC:"Разрез фильтра", type_INSP:"Осмотр", type_TEMP:"Температура",
-    type_UC:"Ходовая часть",
+    type_UC:"Ходовая часть", type_GET:"Рабочий инструмент",
+    get_mm:"Остаток (мм) — необязательно", get_mm_of:"{x} (мм) — необязательно",
+    get_ref:"Новый {n} мм · предел {c} мм", get_generic:"типовой предел",
+    get_notool:"У этой машины нет рабочего инструмента для обхода.",
     lbl_mm:"Измерено (мм)",
     uc_cannot:"Не удалось измерить?",
     uc_stood:"Я перемерил — значение верное, проверьте эталон",
@@ -1692,8 +1764,44 @@ const dlgClose=()=>$("dlg").close();
 $("dlgOk").onclick=dlgClose;
 let cascL7=null, cascL8=null;   // component cascade selection
 // Inspection and Temperature both address real register components.
-function usesRegister(ty){ return ty==="INSP" || ty==="TEMP" || ty==="UC"; }
+function usesRegister(ty){ return ty==="INSP" || ty==="TEMP" || ty==="UC" || ty==="GET"; }
 const wearType = ty => (ty||type)==="UC";
+/* "This round takes millimetres." UC demands them, GET accepts them — the two
+   are separated everywhere it matters, and joined only where the arithmetic is
+   the same: percentage worn against new and condemn is one calculation. */
+const getType  = ty => (ty||type)==="GET";
+const measType = ty => wearType(ty) || getType(ty);
+/* The ground-engaging walk for a machine, or null where the machine has none.
+   A haul truck, a light tower and a generator have no GET, and offering an
+   empty round is worse than not offering one at all. */
+function getStatus(unit){
+  const a=ASSET_BY[unit]; if(!a) return {ok:false, why:"unknown"};
+  if(!window.GET) return {ok:false, why:"unknown"};
+  const prof=GET.profileFor(unit, a.cat||a.cls||"", a.m||"");
+  if(!prof) return {ok:false, why:"notool", model:a.m||""};
+  return {ok:true, model:a.m||"", prof};
+}
+function getLabel(k){
+  const [pt,pos]=ucSplit(k);
+  return (window.GET?GET.label(pt,lang):pt) + (pos? " "+getPosLabel(pos) : "");
+}
+function getPosLabel(pos){
+  if(UC_POS[pos]) return UC_POS[pos][lang];
+  if(pos==="C") return lang==="ru"?"Центр":"Centre";
+  return pos;
+}
+/* Grouped by point for the picker, so eight teeth sit under "Tooth" rather than
+   as eight siblings of "Bucket lip". */
+function getWalkTree(unit){
+  const st=getStatus(unit); if(!st.ok) return null;
+  const by=new Map();
+  GET.walk(unit,(ASSET_BY[unit]||{}).cat||"",(ASSET_BY[unit]||{}).m||"").forEach(w=>{
+    if(!by.has(w.point)) by.set(w.point,[]);
+    by.get(w.point).push({k:w.k, en:GET.label(w.point,"en")+(w.pos?" "+w.pos:""),
+                                ru:GET.label(w.point,"ru")+(w.pos?" "+w.pos:"")});
+  });
+  return [...by.keys()].map(pt=>({k:pt, en:GET.label(pt,"en"), ru:GET.label(pt,"ru"), ch:by.get(pt)}));
+}
 
 /* Undercarriage: the walk comes from the model, not from the component tree.
 
@@ -1784,6 +1892,12 @@ function currentTree(){
     treeCache={key, tree:ucWalkTree(curEquip)};
     return treeCache.tree;
   }
+  if(getType()){
+    const key="GET|"+curEquip;
+    if(treeCache.key===key) return treeCache.tree;
+    treeCache={key, tree:getWalkTree(curEquip)};
+    return treeCache.tree;
+  }
   const key=curEquip;
   if(treeCache.key===key) return treeCache.tree;
   const codes=componentsForUnit(curEquip);
@@ -1805,13 +1919,25 @@ function currentTree(){
   treeCache={key,tree};
   return tree;
 }
-function flattenTree(nodes,out){ out=out||[]; for(const n of nodes){ if(String(n.k).indexOf(".")>=0) out.push({k:n.k,en:n.en,ru:n.ru}); if(n.ch) flattenTree(n.ch,out); } return out; }
+/* A leaf is a thing you can capture against; a branch is a heading. The test
+   used to be "the code has a dot in it", which is true of every component in
+   the register and every undercarriage point — and false of a bucket lip,
+   which comes as one and is keyed LIP. A node with no children is a leaf too,
+   and no tree in the app has an empty branch for that to catch by mistake. */
+function flattenTree(nodes,out){ out=out||[];
+  for(const n of nodes){
+    const leaf = !n.ch || !n.ch.length;
+    if(leaf || String(n.k).indexOf(".")>=0) out.push({k:n.k,en:n.en,ru:n.ru});
+    if(n.ch) flattenTree(n.ch,out);
+  }
+  return out; }
 function nodeByCode(tree,code){ let f=null; (function rec(ns){ for(const n of ns){ if(n.k===code){f=n;return;} if(n.ch)rec(n.ch);} })(tree); return f; }
 function hasUnder(node){ if(!node) return false; if(draft.positions[node.k]) return true; return node.ch? node.ch.some(hasUnder):false; }
 function items(){ const tr=currentTree(); if(tr) return flattenTree(tr);
-  if(wearType()) return [];              // no walk without an eligible, registered machine
+  if(measType()) return [];              // no walk without an eligible, registered machine
   return CLASSES[eqClass][type].map(e=> typeof e==="string" ? {k:e, en:COMP[e].en, ru:COMP[e].ru} : e); }
 function itemLabel(k){ const it=items().find(i=>i.k===k); if(it) return it[lang]||it.en;
+  if(getType()) return getLabel(k);
   if(wearType()){ const [pt,pos]=ucSplit(k); const p=(window.WEAR&&WEAR.points||[]).find(x=>x.code===pt);
     return (p?(p[lang]||p.en):pt)+(pos?" — "+ucPosLabel(pos,lang):""); }
   return COMP_BY[k] ? compLabel(k) : k; }
@@ -1868,6 +1994,16 @@ function renderChips(){ const tr=currentTree();
         (st.model?'<br><b>'+esc(st.model)+'</b>':"")+'</div>';
       curItem=""; toggleCapture(); return;
     }
+    if(getType()){
+      // Same refusal, same reason: a haul truck has no teeth to walk, and an
+      // empty round that looks walkable is worse than none offered.
+      const st=getStatus(curEquip);
+      if(!st.ok){
+        $("posnav").innerHTML='<div class="ucblock">'+esc(t("get_notool"))+
+          (st.model?'<br><b>'+esc(st.model)+'</b>':"")+'</div>';
+        curItem=""; toggleCapture(); return;
+      }
+    }
     renderFlatCards(its); return;                    // unit has no register tree -> generic cards
   }
   // Magnetic Plug / Filter Cut -> compact chip row (few items)
@@ -1887,7 +2023,7 @@ function toggleCapture(){ const tr=currentTree();
 function pickComponent(code){ saveCur(); curItem=code; loadPos(); renderChips(); }
 function renderComponentNav(tree){
   const cap=items().filter(it=>draft.positions[it.k]);
-  let h=guessNote()+ucViewsBar()+'<div class="casc"><div class="crumb"><button data-nav="root">'+t("nav_systems")+'</button>';
+  let h=guessNote()+ucViewsBar()+(getType()?machineFig("GET"):"")+'<div class="casc"><div class="crumb"><button data-nav="root">'+t("nav_systems")+'</button>';
   if(cascL7){ const n=nodeByCode(tree,cascL7); h+='<span class="sep">›</span><button data-nav="l7">'+(n?(n[lang]||n.en):cascL7)+'</button>'; }
   if(cascL8){ const n=nodeByCode(tree,cascL8); h+='<span class="sep">›</span><button data-nav="l8">'+(n?(n[lang]||n.en):cascL8)+'</button>'; }
   h+='</div>';
@@ -1960,7 +2096,9 @@ function applyForm(){ $("secPosTitle").textContent=TYPE_META[type].title[lang]||
   $("mpFields").classList.toggle("hidden", !TYPE_META[type].showReadings);
   $("tempFields").classList.toggle("hidden", !TYPE_META[type].temp);
   $("ucFields").classList.toggle("hidden", !TYPE_META[type].wear);
+  $("getFields").classList.toggle("hidden", !TYPE_META[type].get);
   if(TYPE_META[type].wear) renderUCReasons();
+  if(TYPE_META[type].get) renderGET();
   $("dueInt").value=dueInterval(type); renderDue(); renderTeam(); renderLastDone(); renderTrend();
   cascL7=null; cascL8=null;
   const tr=currentTree(); const flat=items();
@@ -2068,10 +2206,13 @@ function ucBand(pct){ return pct>=100?"act" : pct>=80?"watch" : "ok"; }
    rewritten, so nothing derived is ever stored. `stood` is the inspector having
    gone back and taken the reading again after the app questioned it. */
 function wearOut(rec,k,p){
-  if((rec.type||"")!=="UC") return null;
+  const ty=rec.type||"";
+  if(ty!=="UC" && ty!=="GET") return null;
   if(p.mm==null && !p.reason) return null;
   const a=ASSET_BY[rec.equip]||{}, [pt,pos]=ucSplit(k);
-  const ref=(window.WEAR && a.m) ? WEAR.refFor(rec.equip, a.m, pt, pos, rec.date) : null;
+  const ref = ty==="GET"
+    ? (window.GET ? GET.refFor(rec.equip, a.cat||a.cls||"", a.m||"", pt) : null)
+    : ((window.WEAR && a.m) ? WEAR.refFor(rec.equip, a.m, pt, pos, rec.date) : null);
   const pct=(ref && p.mm!=null) ? WEAR.wear(ref, Number(p.mm)) : null;
   return { mm:(p.mm==null?"":Number(p.mm)), stood:p.stood?1:0, reason:p.reason||"",
            reasonLabel:p.reason?ucReasonLabel(p.reason,"en"):"",
@@ -2123,6 +2264,36 @@ function renderUC(){
   }
   renderUCReasons();
   renderUCSheet();
+}
+/* ---- the optional millimetre on a GET position -------------------------
+   Same arithmetic as the undercarriage — percentage worn between new and
+   condemn — and deliberately the same words and the same colour bands, so an
+   inspector who has done a track round already knows what amber means here.
+   What is different is the absence of pressure: no reading is the normal state
+   and nothing says otherwise. */
+function getRef(){
+  if(!window.GET || !curEquip || !curItem) return null;
+  const a=ASSET_BY[curEquip]||{}, [pt]=ucSplit(curItem);
+  return GET.refFor(curEquip, a.cat||a.cls||"", a.m||"", pt);
+}
+function renderGET(){
+  if(!TYPE_META[type] || !TYPE_META[type].get) return;
+  const line=$("getRefLine"), read=$("getRead"); if(!line||!read) return;
+  const [pt]=ucSplit(curItem||"");
+  const ref=getRef();
+  const tool=window.GET?GET.toolFor(pt):"", dim=window.GET?GET.dimFor(pt):"";
+  $("getLbl").textContent = dim ? t("get_mm_of",{x:dim}) : t("get_mm");
+  line.innerHTML = ref
+    ? esc(t("get_ref",{n:ref.n, c:ref.c})) + (tool? ' · '+esc(tool) : '') +
+      (ref.src==="generic"? ' · <span class="band b-watch">'+esc(t("get_generic"))+'</span>' : '')
+    : (tool? esc(tool) : '');
+  const p=posRO(), mm=(p.mm==null?null:Number(p.mm));
+  if(mm==null || !ref || !window.WEAR){ read.innerHTML=""; return; }
+  const pct=WEAR.wear(ref, mm);
+  if(pct==null){ read.innerHTML=""; return; }
+  const b=ucBand(pct);
+  read.innerHTML='<b>'+Math.round(pct)+'%</b><span class="band b-'+b+'">'+esc(t("uc_band_"+b))+'</span>'+
+    '<span class="src">'+esc(t("uc_toGo",{n:Math.abs(mm-ref.c).toFixed(1)}))+'</span>';
 }
 function ucReasonLabel(code,lg){
   const r=(window.WEAR&&WEAR.reasons||[]).find(x=>x.code===code);
@@ -2263,6 +2434,19 @@ function ucMarkSelectedPart(){
     else sv.removeAttribute("data-sel");
   });
 }
+/* The machine at the top of a measurement round. One figure for the whole
+   machine, not one per track: the drawing would be identical on both sides, and
+   the frames below already carry Left and Right. What it adds is orientation —
+   the figure faces the way the frames do, so "roller 1" on the screen is the
+   one nearest the idler on the ground — and it says which round this is by
+   lighting the part being walked. */
+function machineFig(part){
+  if(!window.MFIG) return "";
+  const a=ASSET_BY[curEquip]||{};
+  const fam=MFIG.familyFor(curEquip, a.cat||a.cls||"");
+  return MFIG.svg(fam, { part:part, label:t(part==="GET"?"mf_get":"mf_uc"),
+                         alt:(curEquip||"")+" "+(a.m||"") });
+}
 function renderUCMap(){
   const st=ucStatus(curEquip);
   const rollers=(st.prof&&st.prof.rollers)||WEAR.rollersDefault;
@@ -2270,6 +2454,7 @@ function renderUCMap(){
   const side=s=>t(s==="L"?"uc_left":"uc_right");
   let h=ucViewsBar();
   h+=ucTally();
+  h+=machineFig("UC");
   h+='<div class="ucmaps">';
   ["L","R"].forEach(s=>{ h+='<div class="ucmapwrap" data-side="'+s+'">'+
       WEAR.mapSVG(s, rollers, high, ucState, curItem, side(s))+'</div>'; });
@@ -2370,6 +2555,7 @@ function renderUCRef(){
 }
 const fmtMM = v => v==null ? "—" : String(Math.round(v*100)/100);
 $("ucMM").addEventListener("input", ()=>{ saveCur(); renderUC(); refreshChips(); });
+$("getMM").addEventListener("input", ()=>{ saveCur(); renderGET(); refreshChips(); });
 $("ucStood").addEventListener("change", ()=>{ saveCur(); });
 // the keypad's own go-key walks the round, so 36 numbers need no navigation at all
 $("ucMM").addEventListener("keydown", e=>{ if(e.key==="Enter"){ e.preventDefault();
@@ -2446,12 +2632,28 @@ function saveCur(){ if(!curItem) return; normDecAll(); const p=curP(); p.particl
     if(p.mm!=null) delete p.reason;                 // a number replaces a reason
     if(p.mm==null && !p.reason) delete p.stood;
   }
+  if(TYPE_META[type].get){
+    const raw=$("getMM").value.trim();
+    p.mm = raw==="" ? null : Number(raw);
+    if(p.mm!=null && !isFinite(p.mm)) p.mm=null;
+    if(p.mm==null) delete p.mm;      // no measurement is the norm here, not a gap
+  }
   if(!hasData(p)) delete draft.positions[curItem]; }
+/* A measurement point is named by its walk; a component is named by its code
+   and its label. One rule, so the heading on the capture screen and the heading
+   after a language switch cannot drift apart. */
+function posHeading(k){
+  if(!k) return t("nav_choose");
+  if(wearType()) return ucLabel(k);
+  if(getType())  return getLabel(k);
+  return `${k} — ${itemLabel(k)}`;
+}
 function loadPos(){
   if(!curItem){ $("posLabel").textContent=t("nav_choose"); renderUCSheet(); toggleCapture(); return; }
-  $("posLabel").textContent = wearType() ? ucLabel(curItem) : `${curItem} — ${itemLabel(curItem)}`;
+  $("posLabel").textContent = posHeading(curItem);
   const p=draft.positions[curItem]||{}; $("particle").value=p.particle||""; $("comp").value=p.comp||""; $("oil").value=p.oil||"";
   if(TYPE_META[type].wear){ $("ucMM").value = (p.mm==null?"":p.mm); $("ucStood").checked=!!p.stood; renderUC(); }
+  if(TYPE_META[type].get){ $("getMM").value = (p.mm==null?"":p.mm); renderGET(); }
   /* Always — leaving a wear type with the sheet up strands the media controls
      inside #ucFields and leaves the body unscrollable behind a live backdrop. */
   else renderUCSheet();
@@ -3339,6 +3541,7 @@ function itemLabelFor(rec,k){
      this the app called it "Track roller — Left 6" on screen and exported a bare
      ROLLER.L6, so Drive, the CSV, the dashboard and 1C all lost the name. */
   if(TYPE_META[rec.type] && TYPE_META[rec.type].wear) return ucLabel(k);
+  if(TYPE_META[rec.type] && TYPE_META[rec.type].get)  return getLabel(k);
   if(usesRegister(rec.type) && COMP_BY[upComp(k)]) return compLabel(k);
   const list=(CLASSES[rec.cls]&&CLASSES[rec.cls][rec.type])||[];
   for(const e of list){ if(typeof e==="string"){ if(e===k) return COMP[e]?(COMP[e][lang]||COMP[e].en):k; } else if(e.k===k){ return e[lang]||e.en; } } return ""; }
@@ -3514,7 +3717,7 @@ function applyLang(){ document.documentElement.lang=lang;
   document.querySelectorAll("[data-i18n-title]").forEach(el=>el.title=t(el.dataset.i18nTitle));
   fillClassSel(); fillTypeSel();
   $("secPosTitle").textContent=TYPE_META[type].title[lang]||TYPE_META[type].title.en;
-  $("posLabel").textContent = wearType() ? ucLabel(curItem) : `${curItem} — ${itemLabel(curItem)}`;
+  $("posLabel").textContent = posHeading(curItem);
   updateDefectCauseBtns(); updateActionBtn(); renderSev(); renderMedia(); renderGps(); renderTempHint(); renderDue(); renderTeam(); renderLastDone(); renderTrend();
   updateSaveLabel(); if(editing) $("editBannerText").textContent=t("editing_hint").replace("{x}",editing.equip); $("cancelEdit").textContent=t("btn_cancel");
   setNet(); renderPending();
@@ -4109,7 +4312,7 @@ function checkReady(){
   try{ navigator.serviceWorker.controller.postMessage({type:"sw-health"},[ch.port2]); }
   catch(e){ clearTimeout(giveUp); renderReady(null); }
 }
-let ESSENTIAL_N=12;
+let ESSENTIAL_N=14;   // the SW is the authority; this is only the first paint
 /* Ask when the app opens and whenever it comes back to the front — the second
    is the one that catches a phone that has been sitting in a locker since the
    files were evicted. */
@@ -4420,7 +4623,7 @@ if("serviceWorker" in navigator && window.isSecureContext){ let reloaded=false;
    picks up the new files. */
 const SHELL_ASSETS=["index.html","manifest.webmanifest","native.js","jsQR.js","qrcode.js","upload-defaults.js",
   "hme.js","hme-cascade.js","mp-fc.js","assets.js","temp-limits.js",
-  "wear.js","wear-figs.js","wear-map.js","report-core.js",
+  "wear.js","wear-figs.js","wear-map.js","machine-fig.js","get.js","report-core.js",
   "jspdf.umd.min.js","html2canvas.min.js","sw.js"];
 /* "Am I on the latest build?" used to be unanswerable from inside the app: the
    service worker serves the copy it has, and a stale page looks exactly like a
