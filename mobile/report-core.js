@@ -92,6 +92,12 @@
 /* chips */
 #rptRoot .g{display:inline-block;min-width:17px;text-align:center;color:#fff;
   font-size:10px;font-weight:800;border-radius:3px;padding:1px 5px;line-height:1.4;}
+/* Outlined, never filled. A solid chip beside a solid severity chip reads as a
+   second opinion on how bad the part is; the priority is not that — it is how
+   the job gets scheduled. The outline keeps the urgency colour and says so. */
+#rptRoot .prio{display:inline-block;font-size:8px;font-weight:800;letter-spacing:.06em;
+  background:#fff;border:1px solid currentColor;border-radius:2.5px;
+  padding:1px 4.5px;vertical-align:1px;}
 #rptRoot .sev{display:inline-block;font-size:8.5px;font-weight:700;letter-spacing:.07em;
   text-transform:uppercase;color:#fff;border-radius:3px;padding:2px 6px;line-height:1.25;}
 
@@ -154,6 +160,63 @@
 #rptRoot .mapkey{display:flex;flex-wrap:wrap;gap:5px 16px;margin-top:6px;font-size:9.5px;color:#5b6670;}
 #rptRoot .mapkey .i{display:inline-flex;align-items:center;gap:5px;}
 #rptRoot .mapkey .d{width:10px;height:10px;border-radius:50%;display:block;border:1.5px solid #5b6670;}
+
+/* ---- one machine, one sheet -------------------------------------------------
+   A fleet export needs a cover and a work list because twenty machines have to
+   be triaged before anything else makes sense. One machine does not: the reader
+   already knows which machine, already knows why they opened it, and every line
+   that repeats the unit number is a line spent telling them something they
+   brought with them. So a single-machine report drops the cover, the work list
+   and the legend, and prints the round the way the workbook does — the positions
+   across, the photograph at the top of each, and what was found underneath. */
+#rptRoot .mast{border-bottom:2.5px solid #12161a;padding-bottom:9px;margin-bottom:13px;}
+#rptRoot .mast .m1{font-size:22px;font-weight:800;letter-spacing:-.02em;line-height:1.1;}
+#rptRoot .mast .m2{display:flex;flex-wrap:wrap;gap:3px 18px;margin-top:7px;}
+#rptRoot .mast .m2 .f{font-size:10.5px;}
+#rptRoot .mast .m2 .f i{font-style:normal;color:#7b858e;letter-spacing:.09em;
+  text-transform:uppercase;font-size:8.5px;font-weight:700;margin-right:5px;}
+#rptRoot .mast .m2 .f b{font-weight:700;font-variant-numeric:tabular-nums;}
+#rptRoot .mast .unum{font-size:15px;font-weight:800;letter-spacing:-.01em;}
+
+/* When every position says the same thing, the sheet says it once. Four columns
+   repeating one defect, one cause and one action is four times the ink for the
+   same sentence, and it buries the thing that does differ — the photograph. */
+#rptRoot .common{border:1px solid #dfe4e9;border-left:3px solid #12161a;border-radius:0 5px 5px 0;
+  padding:9px 12px;margin-top:12px;background:#fafbfc;}
+#rptRoot .common .k{font-size:7.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
+  color:#8b939b;}
+#rptRoot .common dl{display:grid;grid-template-columns:auto 1fr;gap:3px 10px;margin-top:5px;}
+#rptRoot .common dt{font-size:7.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+  color:#8b939b;padding-top:2px;}
+#rptRoot .common dd{font-size:11px;line-height:1.35;}
+#rptRoot .common dd b{font-weight:700;}
+#rptRoot .board{display:grid;gap:12px 11px;margin-top:12px;}
+#rptRoot .cel{border:1px solid #dfe4e9;border-radius:6px;overflow:hidden;background:#fff;
+  page-break-inside:avoid;}
+#rptRoot .cel .ph{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:#f2f5f7;}
+#rptRoot .cel .ph + .ph{border-top:1px solid #dfe4e9;}
+#rptRoot .cel .bd{padding:7px 9px 9px;}
+#rptRoot .cel .pk{font-size:11px;font-weight:750;letter-spacing:-.01em;line-height:1.25;}
+#rptRoot .cel .pn{font-size:9px;color:#7b858e;line-height:1.35;margin-top:1px;}
+#rptRoot .cel .chips{display:flex;gap:4px;align-items:center;margin-top:5px;flex-wrap:wrap;}
+#rptRoot .cel dl{margin-top:6px;display:grid;grid-template-columns:auto 1fr;gap:2px 7px;}
+#rptRoot .cel dt{font-size:7.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+  color:#8b939b;padding-top:1px;}
+#rptRoot .cel dd{font-size:9.5px;line-height:1.35;}
+#rptRoot .cel dd b{font-weight:700;}
+#rptRoot .cel .cm{font-size:9px;line-height:1.4;color:#2b333a;margin-top:6px;
+  border-top:1px solid #eaeef1;padding-top:5px;}
+#rptRoot .cel .num{font-variant-numeric:tabular-nums;}
+#rptRoot .b4{grid-template-columns:repeat(4,1fr);}
+#rptRoot .b3{grid-template-columns:repeat(3,1fr);}
+#rptRoot .b2{grid-template-columns:repeat(2,1fr);}
+#rptRoot .b1{grid-template-columns:1fr;max-width:340px;}
+#rptRoot .allok{background:#eef6ef;color:#146b2c;font-size:12px;font-weight:650;
+  padding:8px 12px;border-radius:4px;margin-top:12px;}
+#rptRoot .quiet{font-size:10px;color:#5b6670;margin-top:10px;line-height:1.5;}
+#rptRoot .quiet b{color:#12161a;font-weight:700;}
+#rptRoot .shsign{display:flex;gap:34px;align-items:flex-end;margin-top:16px;
+  border-top:1px solid #dfe4e9;padding-top:11px;}
 #rptRoot .shots{display:flex;flex-wrap:wrap;gap:7px;}
 #rptRoot .shots figure{width:150px;}
 #rptRoot .shots img{width:150px;height:112px;object-fit:cover;border-radius:3px;
@@ -181,6 +244,15 @@
   var S = {
     en: {
       sub:"Field condition monitoring", generated:"Generated",
+      method_MP:"Magnetic Plug Inspection", method_FC:"Filter Cut Inspection",
+      method_INSP:"General Inspection", method_TEMP:"Thermography",
+      method_UC:"Undercarriage Measurement",
+      f_date:"Date", f_cat:"Equipment", f_model:"Model", f_unit:"Unit",
+      f_smu:"SMU", f_pts:"Points", f_by:"Inspected by", f_sup:"Verified by",
+      allok:"All {n} points normal. Nothing to do on this machine.",
+      rest_n:"Also checked, nothing to report —",
+      c_action:"Action", c_reading:"Reading",
+      common_n:"Same on all {n} points",
       mach:"Machines", ins:"Inspections", pts:"Points checked",
       findings:"Findings raised", now:"Act now", now_s:"before the next shift",
       head_none:"Nothing outstanding. Every point inspected is inside its limit.",
@@ -225,6 +297,15 @@
     },
     ru: {
       sub:"Мониторинг состояния в поле", generated:"Сформировано",
+      method_MP:"\u041e\u0441\u043c\u043e\u0442\u0440 \u043c\u0430\u0433\u043d\u0438\u0442\u043d\u043e\u0439 \u043f\u0440\u043e\u0431\u043a\u0438", method_FC:"\u0420\u0430\u0437\u0440\u0435\u0437 \u0444\u0438\u043b\u044c\u0442\u0440\u0430",
+      method_INSP:"\u041e\u0431\u0449\u0438\u0439 \u043e\u0441\u043c\u043e\u0442\u0440", method_TEMP:"\u0422\u0435\u0440\u043c\u043e\u0433\u0440\u0430\u0444\u0438\u044f",
+      method_UC:"\u0417\u0430\u043c\u0435\u0440\u044b \u0445\u043e\u0434\u043e\u0432\u043e\u0439 \u0447\u0430\u0441\u0442\u0438",
+      f_date:"\u0414\u0430\u0442\u0430", f_cat:"\u0422\u0435\u0445\u043d\u0438\u043a\u0430", f_model:"\u041c\u043e\u0434\u0435\u043b\u044c", f_unit:"\u0415\u0434\u0438\u043d\u0438\u0446\u0430",
+      f_smu:"\u041d\u0430\u0440\u0430\u0431\u043e\u0442\u043a\u0430", f_pts:"\u0422\u043e\u0447\u0435\u043a", f_by:"\u041e\u0441\u043c\u043e\u0442\u0440 \u0432\u044b\u043f\u043e\u043b\u043d\u0438\u043b", f_sup:"\u041f\u0440\u043e\u0432\u0435\u0440\u0438\u043b",
+      allok:"\u0412\u0441\u0435 {n} \u0442\u043e\u0447\u0435\u043a \u0432 \u043d\u043e\u0440\u043c\u0435. \u0414\u0435\u0439\u0441\u0442\u0432\u0438\u0439 \u043d\u0435 \u0442\u0440\u0435\u0431\u0443\u0435\u0442\u0441\u044f.",
+      rest_n:"\u0422\u0430\u043a\u0436\u0435 \u043f\u0440\u043e\u0432\u0435\u0440\u0435\u043d\u043e, \u0431\u0435\u0437 \u0437\u0430\u043c\u0435\u0447\u0430\u043d\u0438\u0439 \u2014",
+      c_action:"\u0414\u0435\u0439\u0441\u0442\u0432\u0438\u0435", c_reading:"\u041f\u043e\u043a\u0430\u0437\u0430\u043d\u0438\u044f",
+      common_n:"\u041e\u0434\u0438\u043d\u0430\u043a\u043e\u0432\u043e \u043d\u0430 \u0432\u0441\u0435\u0445 {n} \u0442\u043e\u0447\u043a\u0430\u0445",
       mach:"Машин", ins:"Осмотров", pts:"Точек проверено",
       findings:"Выявлено", now:"Срочно", now_s:"до следующей смены",
       head_none:"Нет открытых замечаний. Все проверенные точки в пределах нормы.",
@@ -300,6 +381,14 @@
     return String(html||"").replace(/viewBox="0 0 460 286"/g, 'viewBox="-8 2 476 284"');
   };
 
+  /* The 1C work-request priority, if the inspector set one. It rides with the
+     action because that is the moment it means something — a job to be queued,
+     not a judgement about the part. */
+  function prioTag(it) {
+    if (!it || !it.prio) return "";
+    var hot = it.prio === "P1" ? SEV_HEX.CRI : it.prio === "P2" ? SEV_HEX.DEG : "#5b6670";
+    return ' <span class="prio" style="color:' + hot + '">' + esc(it.prio) + '</span>';
+  }
   function nameCell(it){
     return esc(it.name||it.key)+(it.code?'<div class="code">'+esc(it.code)+'</div>':"");
   }
@@ -365,6 +454,263 @@
       return a; }, "ok");
   }
 
+
+
+  /* The measurement grid and the "worth reading" table are wanted by both the
+     fleet detail and the single-machine sheet, so they live out here rather
+     than being written twice and drifting. */
+  function measSections(ctx, T, rec, tailHTML) {
+    var out = [];
+    var rows = rec.items.filter(function (it) { return it.w && (it.w.mm != null || it.w.reason); });
+    if (!rows.length) return out;
+    var cont = '<div class="sec"><div class="mach" style="border-top-width:1px;">'
+      + '<div class="machhd"><span class="u" style="font-size:14px;">' + esc(rec.equip) + '</span>'
+      + '<span class="c">' + esc(T("cont")) + '</span></div>';
+    var col = function (list) {
+      var x = '<table><tr><th>' + esc(T("c_item")) + '</th>'
+        + '<th class="r" style="width:52px">' + esc(T("c_meas")) + '</th>'
+        + '<th class="r" style="width:44px">' + esc(T("c_worn")) + '</th>'
+        + '<th style="width:60px"></th></tr>';
+      list.forEach(function (it, i) { var w = it.w;
+        x += '<tr class="' + (i % 2 ? "zebra" : "") + '"><td style="padding-left:0;">' + esc(it.name || it.key)
+          + '<div class="code">' + esc(w.newMM != null && w.newMM !== ""
+              ? w.newMM + " → " + w.condemnMM + " mm" : T("noref")) + '</div></td>'
+          + '<td class="r n">' + (w.mm != null ? '<b>' + esc(w.mm) + '</b>'
+              : '<span class="muted" style="font-size:9px">' + esc(w.reasonLabel || w.reason || "—") + '</span>') + '</td>'
+          + '<td class="r n">' + (w.pct != null ? esc(w.pct) + "%" : "") + '</td>'
+          + '<td>' + (w.pct != null ? wearBar(w.pct) : "") + '</td></tr>'; });
+      return x + '</table>'; };
+    var MAX = 44, parts = Math.ceil(rows.length / MAX), PER = Math.ceil(rows.length / parts);
+    for (var o = 0; o < rows.length; o += PER) {
+      var chunk = rows.slice(o, o + PER), hf = Math.ceil(chunk.length / 2);
+      out.push({ nb: false, html: cont
+        + '<div class="subhd" style="margin-top:11px;">' + esc(T("meas_t"))
+        + (parts > 1 ? ' <span class="muted">' + (o + 1) + "–" + Math.min(o + PER, rows.length)
+            + " / " + rows.length + '</span>' : "")
+        + '</div><div class="meas"><div>' + col(chunk.slice(0, hf)) + '</div><div>'
+        + col(chunk.slice(hf)) + '</div></div></div></div>' });
+    }
+    if (tailHTML) {
+      var last = out.pop();
+      out.push({ nb: false, html: last.html.replace(/<\/div><\/div>$/, tailHTML + '</div></div>') });
+    }
+    return out;
+  }
+
+  function notableTable(ctx, T, list) {
+    var h = '<div class="subhd" style="margin-top:13px;">' + esc(T("notable")) + '</div><table><tr>'
+      + '<th style="width:168px">' + esc(T("c_item")) + '</th>'
+      + '<th class="c" style="width:34px">' + esc(T("c_grade")) + '</th>'
+      + '<th style="width:74px">' + esc(T("c_sev")) + '</th>'
+      + '<th style="width:158px">' + esc(T("c_defect")) + '</th>'
+      + '<th style="width:130px">' + esc(T("c_cause")) + '</th>'
+      + '<th>' + esc(T("c_do")) + ' / ' + esc(T("c_read")) + '</th></tr>';
+    list.forEach(function (it, i) {
+      var read = (it.readings || []).slice();
+      if (it.w && it.w.mm != null) read.unshift(it.w.mm + " mm" + (it.w.pct != null ? " · " + it.w.pct + "%" : ""));
+      if (it.w && it.w.reason) read.unshift(it.w.reasonLabel || it.w.reason);
+      if (it.comment) read.push(it.comment);
+      h += '<tr class="' + (i % 2 ? "zebra" : "") + '">'
+        + '<td class="stripe" style="border-left-color:' + (SEV_HEX[it.sev] || GRADE_HEX[it.grade] || "transparent") + '">'
+          + nameCell(it) + '</td>'
+        + '<td class="c">' + gradeChip(it.grade) + '</td>'
+        + '<td>' + sevChip(ctx, it.sev) + '</td>'
+        + '<td>' + (it.defect ? esc(it.defect) : "") + (it.iso ? '<div class="code">ISO ' + esc(it.iso) + '</div>' : "") + '</td>'
+        + '<td>' + (it.cause ? esc(it.cause) : "") + '</td>'
+        + '<td>' + (it.action ? '<b>' + esc(it.action) + '</b>' + prioTag(it)
+            + (it.wo ? ' <span class="code">[' + esc(it.wo) + ']</span>' : "") + (read.length ? "<br>" : "") : "")
+          + esc(read.join(" · ")) + '</td></tr>';
+    });
+    return h + '</table>';
+  }
+  /* ======================================================================
+     One machine: a sheet per round, laid out the way the workbook is —
+     the positions across, the photograph at the top of each, what was found
+     underneath. No cover, no work list, no legend: the reader already knows
+     which machine and why they opened it. */
+  function unitSheets(ctx, T, recs) {
+    var secs = [];
+    recs.forEach(function (rec, n) {
+      var isWear = !!rec.wear;
+      var head =
+        '<div class="mast">'
+        + '<div class="eyebrow">' + esc(T("sub")) + '</div>'
+        + '<div class="m1">' + esc(T("method_" + rec.type) || rec.typeLabel) + '</div>'
+        + '<div class="m2">'
+          + fld(T("f_unit"), '<span class="unum">' + esc(rec.equip) + '</span>')
+          + fld(T("f_cat"), esc(rec.clsLabel || ""))
+          + (rec.model ? fld(T("f_model"), esc(rec.model)) : "")
+          + fld(T("f_date"), '<b>' + esc(rec.date || "") + '</b>')
+          + (rec.smu ? fld(T("f_smu"), '<b>' + esc(rec.smu) + '</b>') : "")
+          + fld(T("f_pts"), '<b>' + rec.items.length + '</b>')
+        + '</div></div>';
+      function fld(k, v) {
+        return '<span class="f"><i>' + esc(k) + '</i>' + v + '</span>';
+      }
+
+      /* A cell is earned by having something to show or something to say. A
+         position with nothing but the machine's hours on it is not a finding,
+         and giving it a photo-sized box says it is. Those go on one line under
+         the board, which is where they belong and where they cost nothing.
+         On a wear round the grid and the drawing are the record, so nothing
+         goes on the board at all. */
+      var told = rec.items.filter(function (it) {
+        return it.grade === "B" || it.grade === "C" || it.grade === "X" || it.defect
+          || it.action || it.comment || it.sev === "DEG" || it.sev === "CRI"
+          || (it.photos && it.photos.length);
+      });
+      var rest = rec.items.filter(function (it) { return told.indexOf(it) < 0; });
+      var board = isWear ? [] : told;
+      var vc = verdict(rec);
+
+      var body = "";
+      if (!isWear && !board.length) {
+        body = '<div class="allok">' + esc(T("allok", { n: rec.items.length })) + '</div>'
+             + restLine(T, rest, true);
+      } else if (board.length && board.length <= 12) {
+        var cols = board.length >= 4 ? 4 : board.length === 3 ? 3 : board.length === 2 ? 2 : 1;
+        var sh = shared(board);
+        body = commonBand(T, sh, board.length)
+          + '<div class="board b' + cols + '">'
+          + board.map(function (it) { return cell(ctx, T, it, sh); }).join("") + '</div>'
+          + restLine(T, rest, false);
+      } else if (board.length) {
+        body = notableTable(ctx, T, board) + restLine(T, rest, false);
+      }
+
+      var sign = '<div class="shsign">'
+        + '<div><div class="rl">' + esc(T("f_by")) + '</div><div class="ln"></div>'
+          + '<div class="nm">' + esc(rec.by || "—") + '</div></div>'
+        + '<div><div class="rl">' + esc(T("f_sup")) + '</div>'
+          + '<div class="ln">' + (rec.signUrl ? '<img src="' + rec.signUrl + '">' : "") + '</div>'
+          + '<div class="nm">' + esc(rec.sup || T("nosign")) + '</div></div></div>';
+
+      /* A round with nothing to measure is one page: masthead, board, names. */
+      if (!isWear) {
+        secs.push({ nb: n > 0, html: '<div class="sec">' + head + body + sign + '</div>' });
+        return;
+      }
+
+      /* An undercarriage round earns its extra pages — the drawing and the
+         readings are the whole point of it. */
+      var over = rec.items.filter(function (it) {
+        return it.w && (it.w.band === "act" || it.w.band === "watch"); })
+        .sort(function (a, b) { return (Number(b.w.pct) || 0) - (Number(a.w.pct) || 0); });
+      var overAct = over.filter(function (it) { return it.w.band === "act"; });
+      var unread = rec.items.filter(function (it) { return it.w && it.w.mm == null; }).length;
+      var verd = (vc === "ok" && unread)
+        ? T("verdict_part", { m: rec.items.length - unread, of: rec.items.length, n: unread })
+        : T("verdict_" + vc, { n: over.length, of: rec.items.length })
+          + (unread ? " " + T("unread_n", { n: unread, of: rec.items.length }) : "");
+      var top = '<div class="sec">' + head
+        + '<div class="verdict v-' + ((vc === "ok" && unread) ? "watch" : vc) + '">' + esc(verd) + '</div>'
+        + (over.length ? '<div class="verdict v-' + (overAct.length ? "act" : "watch") + '" style="margin-top:9px;">'
+            + (overAct.length ? esc(T("uc_over", { n: overAct.length })) + ". " : "")
+            + (over.length > overAct.length ? esc(T("uc_watch", { n: over.length - overAct.length })) + ". " : "")
+            + '<span style="font-weight:500;">' + over.slice(0, 6).map(function (it) {
+                return esc(it.name || it.key) + ' <span class="num">' + esc(it.w.pct) + '%</span>'; }).join(" · ")
+            + (over.length > 6 ? " · +" + (over.length - 6) : "") + '</span></div>' : "")
+        + (rec.mapHTML
+            ? '<div class="subhd" style="margin-top:13px;">' + esc(T("map_t")) + '</div>'
+              + '<div class="ucmaps">' + rec.mapHTML + '</div>' + mapKey(T)
+            : "")
+        + '</div>';
+      secs.push({ nb: n > 0, html: top });
+      measSections(ctx, T, rec, sign).forEach(function (x) { secs.push(x); });
+      if (told.filter(function (it) { return it.photos && it.photos.length; }).length) {
+        var ph = told.filter(function (it) { return it.photos && it.photos.length; });
+        secs.push({ nb: false, html: '<div class="sec">'
+          + '<div class="subhd">' + esc(T("photos")) + '</div>'
+          + '<div class="board b' + (ph.length >= 4 ? 4 : ph.length) + '">'
+          + ph.map(function (it) { return cell(ctx, T, it); }).join("") + '</div></div>' });
+      }
+    });
+    return secs;
+  }
+
+  /* The positions that were checked and had nothing to report. Named, so nobody
+     wonders whether they were skipped, and their readings printed once when they
+     all read the same — which on a plug round they do, because component and oil
+     hours belong to the machine, not to the plug. */
+  function restLine(T, rest, alreadySaid) {
+    if (!rest.length) return "";
+    var codes = rest.map(function (it) { return it.code || it.key; }).join(", ");
+    var first = (rest[0].readings || []).join(" · ");
+    var same = first && rest.every(function (it) { return (it.readings || []).join(" · ") === first; });
+    var reads = same ? first
+      : rest.map(function (it) { return (it.readings || []).join(" · "); }).filter(Boolean).join(" · ");
+    return '<div class="quiet">'
+      + (alreadySaid ? "" : esc(T("rest_n", { n: rest.length })) + " ")
+      + '<b>' + esc(codes) + '</b>'
+      + (reads ? ' <span class="num">· ' + esc(reads) + '</span>' : "")
+      + '</div>';
+  }
+
+  /* A field every position agrees on, or nothing. Two positions are not a
+     pattern worth lifting; three or more saying the same thing are. */
+  function shared(list) {
+    var out = {};
+    if (list.length < 3) return out;
+    ["defect", "cause", "action", "iso", "prio"].forEach(function (f) {
+      var v = list[0][f];
+      if (v && list.every(function (it) { return it[f] === v; })) out[f] = v;
+    });
+    return out;
+  }
+  function commonBand(T, sh, n) {
+    if (!sh.defect && !sh.cause && !sh.action) return "";
+    var rows = "";
+    if (sh.defect) rows += '<dt>' + esc(T("c_defect")) + '</dt><dd>' + esc(sh.defect)
+      + (sh.iso ? ' <span class="code">ISO ' + esc(sh.iso) + '</span>' : "") + '</dd>';
+    if (sh.cause) rows += '<dt>' + esc(T("c_cause")) + '</dt><dd>' + esc(sh.cause) + '</dd>';
+    if (sh.action) rows += '<dt>' + esc(T("c_action")) + '</dt><dd><b>' + esc(sh.action) + '</b>'
+      + (sh.prio ? prioTag({ prio: sh.prio }) : "") + '</dd>';
+    return '<div class="common"><div class="k">' + esc(T("common_n", { n: n })) + '</div>'
+      + '<dl>' + rows + '</dl></div>';
+  }
+
+  /* One position: what it looked like, then what it was. Rows appear only when
+     there is something in them — an empty "Cause —" line is a line of nothing,
+     and anything the band above already said is not said again here. */
+  function cell(ctx, T, it, sh) {
+    sh = sh || {};
+    var ph = (it.photos || []).slice(0, 2);
+    /* No placeholder box. A grey rectangle saying "no photograph" is the same
+       area as a photograph and carries none of the information. */
+    var top = ph.map(function (u) { return '<img class="ph" src="' + u + '">'; }).join("");
+    var rows = "";
+    function row(k, v) { rows += '<dt>' + esc(k) + '</dt><dd>' + v + '</dd>'; }
+    if (it.defect && !sh.defect) row(T("c_defect"), esc(it.defect)
+      + (it.iso ? ' <span class="code">ISO ' + esc(it.iso) + '</span>' : ""));
+    if (it.cause && !sh.cause) row(T("c_cause"), esc(it.cause));
+    if (it.action && !sh.action) row(T("c_action"), '<b>' + esc(it.action) + '</b>'
+      + prioTag(it) + (it.wo ? ' <span class="code">' + esc(T("c_wo")) + ' ' + esc(it.wo) + '</span>' : ""));
+    else if (it.wo || (it.prio && !sh.prio)) row(T("c_wo"),
+      (it.prio && !sh.prio ? prioTag(it) + " " : "") + '<span class="num">' + esc(it.wo || "") + '</span>');
+    var read = (it.readings || []).slice();
+    if (it.w && it.w.mm != null) read.unshift(it.w.mm + " mm" + (it.w.pct != null ? " · " + it.w.pct + "%" : ""));
+    if (read.length) row(T("c_reading"), '<span class="num">' + esc(read.join(" · ")) + '</span>');
+    return '<div class="cel">' + top + '<div class="bd">'
+      /* The code first: it is what is stamped on the machine and what a fitter
+         navigates by. The name underneath says which one that is. */
+      + '<div class="pk">' + esc(it.code || it.key) + '</div>'
+      + (it.code && it.name && it.name !== it.code
+          ? '<div class="pn">' + esc(it.name) + '</div>' : "")
+      + ((it.grade || it.sev) ? '<div class="chips">' + gradeChip(it.grade) + sevChip(ctx, it.sev) + '</div>' : "")
+      + (rows ? '<dl>' + rows + '</dl>' : "")
+      + (it.comment ? '<div class="cm">' + esc(it.comment) + '</div>' : "")
+      + '</div></div>';
+  }
+
+  function mapKey(T) {
+    return '<div class="mapkey">'
+      + '<span class="i"><span class="d" style="background:' + GRADE_HEX.A + ';border-color:' + GRADE_HEX.A + '"></span>' + esc(T("band_ok")) + '</span>'
+      + '<span class="i"><span class="d" style="background:' + GRADE_HEX.C + ';border-color:' + GRADE_HEX.C + '"></span>' + esc(T("band_watch")) + '</span>'
+      + '<span class="i"><span class="d" style="background:' + GRADE_HEX.X + ';border-color:' + GRADE_HEX.X + '"></span>' + esc(T("band_act")) + '</span>'
+      + '<span class="i"><span class="d" style="background:#e6eaee;border-style:dashed"></span>' + esc(T("map_na")) + '</span>'
+      + '</div>';
+  }
+
   /* ======================================================================== */
   CMR.sections = function (ctx) {
     var D = S[ctx.lang] || S.en;
@@ -376,6 +722,14 @@
         || String(a.equip).localeCompare(String(b.equip)); });
     var X = scan(recs), secs = [];
     var st = ctx.stamp || new Date(), p2=function(n){return String(n).padStart(2,"0");};
+    /* The document's shape follows what is in it. One machine does not need a
+       fleet cover, a triage list or a legend page — it needs the round. */
+    var oneMachine = X.unitN === 1;
+    var mode = ctx.mode || (oneMachine ? "unit" : "fleet");
+    if (mode === "unit") {
+      var byNew = recs.slice().reverse();          // newest round first
+      return unitSheets(ctx, T, byNew).concat(ctx.extra || []);
+    }
     // 8/1/2026 means one thing in Anadyr and another in Denver. Write it once.
     var stampTxt = st.getFullYear()+"-"+p2(st.getMonth()+1)+"-"+p2(st.getDate())
                  +" "+p2(st.getHours())+":"+p2(st.getMinutes());
@@ -470,7 +824,8 @@
       X.act.forEach(function(f,i){
         var rec=f.rec, it=f.it||{}, col=SEV_HEX[f.sev]||GRADE_HEX[it.grade]||"#c9d0d6";
         var todo = it.action
-          ? '<b>'+esc(it.action)+'</b>'+(it.wo?'<div class="code">'+esc(T("c_wo"))+' '+esc(it.wo)+'</div>':"")
+          ? '<b>'+esc(it.action)+'</b>'+prioTag(it)
+            +(it.wo?'<div class="code">'+esc(T("c_wo"))+' '+esc(it.wo)+'</div>':"")
           : '<span class="muted">'+esc(T("do_tbd"))+'</span>';
         var head = '<tr class="'+(i%2?"zebra":"")+'">'
           + '<td class="stripe" style="border-left-color:'+col+'"><span class="unit">'+esc(rec.equip)+'</span>'
@@ -555,31 +910,7 @@
           + '</div>';
       first = false;
 
-      if(notable.length){
-        m += '<div class="subhd" style="margin-top:15px;">'+esc(T("notable"))+'</div><table><tr>'
-          + '<th style="width:168px">'+esc(T("c_item"))+'</th>'
-          + '<th class="c" style="width:34px">'+esc(T("c_grade"))+'</th>'
-          + '<th style="width:74px">'+esc(T("c_sev"))+'</th>'
-          + '<th style="width:158px">'+esc(T("c_defect"))+'</th>'
-          + '<th style="width:130px">'+esc(T("c_cause"))+'</th>'
-          + '<th>'+esc(T("c_do"))+' / '+esc(T("c_read"))+'</th></tr>';
-        notable.forEach(function(it,i){
-          var read = (it.readings||[]).slice();
-          if(it.w && it.w.mm!=null) read.unshift(it.w.mm+" mm"+(it.w.pct!=null?" · "+it.w.pct+"%":""));
-          if(it.w && it.w.reason) read.unshift(it.w.reasonLabel||it.w.reason);
-          if(it.comment) read.push(it.comment);
-          m += '<tr class="'+(i%2?"zebra":"")+'">'
-            + '<td class="stripe" style="border-left-color:'+(SEV_HEX[it.sev]||GRADE_HEX[it.grade]||"transparent")+'">'
-              + nameCell(it)+'</td>'
-            + '<td class="c">'+gradeChip(it.grade)+'</td>'
-            + '<td>'+sevChip(ctx,it.sev)+'</td>'
-            + '<td>'+(it.defect?esc(it.defect):"")+(it.iso?'<div class="code">ISO '+esc(it.iso)+'</div>':"")+'</td>'
-            + '<td>'+(it.cause?esc(it.cause):"")+'</td>'
-            + '<td>'+(it.action?'<b>'+esc(it.action)+'</b>'+(it.wo?' <span class="code">['+esc(it.wo)+']</span>':"")
-                + (read.length?"<br>":""):"")+esc(read.join(" · "))+'</td></tr>';
-        });
-        m += '</table>';
-      }
+      if(notable.length) m += notableTable(ctx,T,notable);
       // the verdict already said "all N normal" — no need to say it twice
       if(quiet>0 && notable.length)
         m += '<div class="muted" style="font-size:10.5px;margin-top:8px;">'+esc(T("normal_n",{n:quiet}))+'</div>';
@@ -598,47 +929,14 @@
            rather than through the middle of a track frame. */
         if(rec.mapHTML) extra.push(cont
           + '<div class="subhd" style="margin-top:11px;">'+esc(T("map_t"))+'</div>'
-          + '<div class="ucmaps">'+rec.mapHTML+'</div>'
-          + '<div class="mapkey">'
-          + '<span class="i"><span class="d" style="background:'+GRADE_HEX.A+';border-color:'+GRADE_HEX.A+'"></span>'+esc(T("band_ok"))+'</span>'
-          + '<span class="i"><span class="d" style="background:'+GRADE_HEX.C+';border-color:'+GRADE_HEX.C+'"></span>'+esc(T("band_watch"))+'</span>'
-          + '<span class="i"><span class="d" style="background:'+GRADE_HEX.X+';border-color:'+GRADE_HEX.X+'"></span>'+esc(T("band_act"))+'</span>'
-          + '<span class="i"><span class="d" style="background:#e6eaee;border-style:dashed"></span>'+esc(T("map_na"))+'</span>'
-          + '</div></div></div>');
+          + '<div class="ucmaps">'+rec.mapHTML+'</div>'+mapKey(T)+'</div></div>');
         if(over.length) m += '<div class="verdict v-'+(overAct.length?"act":"watch")+'" style="margin-top:12px;">'
           + (overAct.length?esc(T("uc_over",{n:overAct.length}))+". ":"")
           + (over.length>overAct.length?esc(T("uc_watch",{n:over.length-overAct.length}))+". ":"")
           + '<span style="font-weight:500;">'+over.slice(0,6).map(function(it){
               return esc(it.name||it.key)+' <span class="num">'+esc(it.w.pct)+'%</span>'; }).join(" · ")
           + (over.length>6?" · +"+(over.length-6):"")+'</span></div>';
-        var rows=rec.items.filter(function(it){ return it.w && (it.w.mm!=null||it.w.reason); });
-        if(rows.length){
-          var col=function(list){
-            var x='<table><tr><th>'+esc(T("c_item"))+'</th>'
-              + '<th class="r" style="width:52px">'+esc(T("c_meas"))+'</th>'
-              + '<th class="r" style="width:44px">'+esc(T("c_worn"))+'</th>'
-              + '<th style="width:60px"></th></tr>';
-            list.forEach(function(it,i){ var w=it.w;
-              x += '<tr class="'+(i%2?"zebra":"")+'"><td style="padding-left:0;">'+esc(it.name||it.key)
-                + '<div class="code">'+esc(w.newMM!=null&&w.newMM!==""
-                    ? w.newMM+" → "+w.condemnMM+" mm" : T("noref"))+'</div></td>'
-                + '<td class="r n">'+(w.mm!=null?'<b>'+esc(w.mm)+'</b>'
-                    :'<span class="muted" style="font-size:9px">'+esc(w.reasonLabel||w.reason||"—")+'</span>')+'</td>'
-                + '<td class="r n">'+(w.pct!=null?esc(w.pct)+"%":"")+'</td>'
-                + '<td>'+(w.pct!=null?wearBar(w.pct):"")+'</td></tr>'; });
-            return x+'</table>'; };
-          /* Two columns of twenty-two clears a page. Split into equal parts
-             rather than fixed ones, so forty-four readings are 22+22 and not a
-             full page followed by a stub. */
-          var MAX=44, parts=Math.ceil(rows.length/MAX), PER=Math.ceil(rows.length/parts);
-          for(var o=0;o<rows.length;o+=PER){
-            var chunk=rows.slice(o,o+PER), hf=Math.ceil(chunk.length/2);
-            extra.push(cont+'<div class="subhd" style="margin-top:11px;">'+esc(T("meas_t"))
-              + (parts>1?' <span class="muted">'+(o+1)+"–"+Math.min(o+PER,rows.length)+" / "+rows.length+'</span>':"")
-              + '</div><div class="meas"><div>'+col(chunk.slice(0,hf))+'</div><div>'
-              + col(chunk.slice(hf))+'</div></div></div></div>');
-          }
-        }
+        measSections(ctx,T,rec,"").forEach(function(x){ extra.push(x.html); });
       }
 
       var shots=[];

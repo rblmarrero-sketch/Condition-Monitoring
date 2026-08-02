@@ -89,7 +89,8 @@
     const wantPhotos = !!(opts && opts.photos);
     return recs.map(rec => ({
       equip: rec.equip,
-      clsLabel: rec.cls || "",
+      clsLabel: ((typeof ASSET_BY !== "undefined" && ASSET_BY[rec.equip]) || {}).cat || rec.cls || "",
+      model: ((typeof ASSET_BY !== "undefined" && ASSET_BY[rec.equip]) || {}).m || "",
       type: rec.type,
       typeLabel: (typeof TYPE_LABEL !== "undefined" && TYPE_LABEL[rec.type]) || rec.type,
       date: rec.date || "",
@@ -103,8 +104,8 @@
         const w = typeof wearOf === "function" ? wearOf(rec, it) : null;
         const read = [
           it.particle && `PC ${it.particle}`,
-          it.comp && `${it.comp} h`,
-          it.oil && `${it.oil} h oil`,
+          it.comp && `comp ${it.comp} h`,
+          it.oil && `oil ${it.oil} h`,
           it.tempC && `${it.tempC} °C${it.ambC ? ` / ${it.ambC}` : ""}`,
         ].filter(Boolean);
         return {
@@ -114,7 +115,8 @@
           grade: it.grade || "",
           sev: typeof sevOf === "function" ? sevOf(rec, it) : (it.sev || ""),
           defect: it.defect || "", defectCode: it.defectCode || "", iso: it.iso || "",
-          cause: it.cause || "", action: it.actionLabel || "", wo: it.wo || "",
+          cause: it.cause || "", action: it.actionLabel || "",
+          prio: it.prio || "", prioLabel: it.prioLabel || "", wo: it.wo || "",
           comment: it.comment || "", readings: read,
           photos: wantPhotos ? photoSrcs(it, rec) : [],
           w: w ? { mm: w.mm, newMM: w.newMM, condemnMM: w.condemnMM, pct: w.wearPct,

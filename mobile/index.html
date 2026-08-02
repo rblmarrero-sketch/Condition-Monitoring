@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=65">
+<link rel="manifest" href="manifest.webmanifest?v=66">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -644,6 +644,9 @@
     <label class="fld"><span data-i18n="lbl_action">Recommended action</span>
       <button type="button" class="picker-btn" id="actionBtn"></button>
     </label>
+    <label class="fld" id="prioFld"><span data-i18n="lbl_prio">Work request priority (1C)</span>
+      <button type="button" class="picker-btn" id="prioBtn"></button>
+    </label>
     <label class="fld"><span data-i18n="lbl_wo">1C notification / WO no. (optional)</span>
       <input id="wo" type="text" autocomplete="off"></label>
     <div class="hint" data-i18n="hint_fields">Fields save automatically. Switch items with the buttons above.</div>
@@ -719,7 +722,7 @@
     <span id="staleTxt"></span>
     <button type="button" id="staleGo"></button>
   </div>
-  <div class="ver" id="verLine">build v<span id="verNum">?</span> · <span id="verNote">photographs, at both ends</span> ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver" id="verLine">build v<span id="verNum">?</span> · <span id="verNote">1C work-request priority</span> ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <nav class="tabbar" id="tabbar">
@@ -835,16 +838,16 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="upload-defaults.js?v=65"></script>
-<script src="hme.js?v=65"></script>
-<script src="mp-fc.js?v=65"></script>
-<script src="hme-cascade.js?v=65"></script>
-<script src="assets.js?v=65"></script>
-<script src="temp-limits.js?v=65"></script>
-<script src="wear.js?v=65"></script>
-<script src="wear-figs.js?v=65"></script>
-<script src="wear-map.js?v=65"></script>
-<script src="report-core.js?v=65"></script>
+<script src="upload-defaults.js?v=66"></script>
+<script src="hme.js?v=66"></script>
+<script src="mp-fc.js?v=66"></script>
+<script src="hme-cascade.js?v=66"></script>
+<script src="assets.js?v=66"></script>
+<script src="temp-limits.js?v=66"></script>
+<script src="wear.js?v=66"></script>
+<script src="wear-figs.js?v=66"></script>
+<script src="wear-map.js?v=66"></script>
+<script src="report-core.js?v=66"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -1027,6 +1030,8 @@ const I18N = {
     pick_search:"Search…", video_too_long:["Video too long","Please record a clip of 1 minute or less."],
     shot_placeholder:"No photo yet.",
     lbl_grade:"Grade / condition", lbl_particle:"Particle count", lbl_comp:"Component hrs", lbl_oil:"Oil hrs",
+    lbl_prio:"Work request priority (1C)",
+    opt_prio_none:"— not set —", opt_prio_fit:"Fits what was found", opt_prio_other:"All priorities",
     lbl_comment:"Comment / defect", ph_comment:"notes…",
     hint_fields:"Fields save automatically. Switch items with the buttons above.",
     btn_save:"✔ Save", btn_update:"✔ Update", editing_hint:"Editing {x} — change fields, then Update.",
@@ -1237,6 +1242,8 @@ const I18N = {
     pick_search:"Поиск…", video_too_long:["Видео слишком длинное","Запишите ролик не длиннее 1 минуты."],
     shot_placeholder:"Нет фото.",
     lbl_grade:"Степень / состояние", lbl_particle:"Количество частиц", lbl_comp:"Наработка компонента", lbl_oil:"Наработка масла",
+    lbl_prio:"Приоритет заявки (1С)",
+    opt_prio_none:"— не указан —", opt_prio_fit:"Подходит к находке", opt_prio_other:"Все приоритеты",
     lbl_comment:"Комментарий / дефект", ph_comment:"заметки…",
     hint_fields:"Поля сохраняются автоматически. Переключайте пункты кнопками выше.",
     btn_save:"✔ Сохранить", btn_update:"✔ Обновить", editing_hint:"Редактирование {x} — измените поля и нажмите «Обновить».",
@@ -1520,6 +1527,23 @@ function causesFor(compCode,defectCode,ty){
 /* The matrix's own list. Each action carries the severity it belongs to, which
    is what lets the picker lead with the ones that fit what was just found. */
 const ACTIONS=(HME.action||[]).map(a=>({k:a.code, en:a.en, ru:a.ru, sev:a.severity}));
+/* The priority 1C asks for when the notification becomes a work request. It is
+   not the severity: severity says how bad the part is, priority says how the
+   planner should queue the job. A degraded bearing on a spare machine and the
+   same bearing on the only working loader are the same severity and different
+   priorities, and only the person standing there knows which. Suggested from
+   severity, never forced. */
+const PRIORITIES=[
+  {k:"P1", en:"P1 Breakdown", ru:"P1 Остановка (авария)",           sev:"CRI"},
+  {k:"P2", en:"P2 Defect",    ru:"P2 Остановка (неисправность)",    sev:"DEG"},
+  {k:"P3", en:"P3 PM",        ru:"P3 Остановка (ППТО)",             sev:"INC"},
+  {k:"P4", en:"P4 Planned Repair", ru:"P4 Остановка (плановый ремонт)", sev:"INC"},
+];
+const PRIO_BY={}; PRIORITIES.forEach(x=>PRIO_BY[x.k]=x);
+const prioLabel=(k,l)=>{ const x=PRIO_BY[k]; return x?(x[l||lang]||x.en):k; };
+/* Which one to lead with. An action that stops the machine is a breakdown; one
+   that plans a repair is a planned repair; monitoring raises nothing at all. */
+const PRIO_SUGGEST={CRI:"P1", DEG:"P2", INC:"P4", NOF:""};
 const ACTION_BY={}; ACTIONS.forEach(a=>ACTION_BY[a.k]=a);
 const upAction = k => LEG.actions[k] || k;
 function actionLabel(k,l){
@@ -2292,6 +2316,13 @@ function syncTempSev(){ if(!TYPE_META[type].temp || !curItem) return;
 function updateActionBtn(){ const a=(draft.positions[curItem]||{}).action;
   $("actionBtn").textContent = a ? actionLabel(a) : t("opt_action_none"); }
 $("actionBtn").onclick=()=>openPicker("action");
+/* The priority only exists once there is an action to raise a job for — asking
+   for it on a plug that is fine is asking for noise. */
+function updatePrioBtn(){ const p=draft.positions[curItem]||{};
+  const on=!!p.action && p.action!=="RA-01" && p.action!=="RA-02";
+  $("prioFld").classList.toggle("hidden", !on);
+  $("prioBtn").textContent = p.prio ? prioLabel(p.prio) : t("opt_prio_none"); }
+$("prioBtn").onclick=()=>openPicker("prio");
 ["particle","comp","oil","comment","wo"].forEach(id=>$(id).addEventListener("input",()=>{ saveCur(); refreshChips(); }));
 ["tempV","tempA"].forEach(id=>$(id).addEventListener("input",()=>{ saveCur(); syncTempSev(); refreshChips(); }));
 $("tempM").onchange=()=>{ saveCur(); refreshChips(); };
@@ -2308,7 +2339,7 @@ function normDec(el){
 /* Called from saveCur — the one choke point every one of these fields passes
    through — so it does not matter which input listener was registered first. */
 function normDecAll(){ ["ucMM","tempV","tempA"].forEach(id=>{ const el=$(id); if(el) normDec(el); }); }
-function hasData(p){ return (p.mm!=null&&p.mm!=="")||p.reason||p.grade||p.sev||p.action||p.wo||(p.photos&&p.photos.length)||p.video||p.particle||p.comp||p.oil||p.comment||p.defect||p.cause||p.tempV; }
+function hasData(p){ return (p.mm!=null&&p.mm!=="")||p.reason||p.grade||p.sev||p.action||p.prio||p.wo||(p.photos&&p.photos.length)||p.video||p.particle||p.comp||p.oil||p.comment||p.defect||p.cause||p.tempV; }
 /* The severity that actually applies: what the inspector set, or what the grade
    implies. Everything that reasons about how bad a finding is goes through here. */
 function effSev(p){ return (p&&(p.sev||GRADE_SEV[p.grade]))||""; }
@@ -2334,7 +2365,7 @@ function loadPos(){
   else renderUCSheet();
   $("comment").value=p.comment||""; $("wo").value=p.wo||"";
   $("tempV").value=p.tempV||""; $("tempA").value=p.tempA||""; $("tempM").value=p.tempM||"IR";
-  renderGrade(); renderSev(); updateActionBtn(); updateDetectBtn(); renderMedia(); updateDefectCauseBtns(); renderTempHint(); toggleCapture(); }
+  renderGrade(); renderSev(); updateActionBtn(); updatePrioBtn(); updateDetectBtn(); renderMedia(); updateDefectCauseBtns(); renderTempHint(); toggleCapture(); }
 /* Blank means the default — a routine walk-around is a visual inspection. It is
    only written to the record on save, so an untouched position stays untouched. */
 function updateDetectBtn(){ const d=(draft.positions[curItem]||{}).detect;
@@ -2364,6 +2395,13 @@ function pickerSource(){
   if(pickMode==="equip"){
     const src = eqCat==="ALL" ? ASSETS : ASSETS.filter(a=>(a.cat||"— UNCATEGORISED —")===eqCat);
     return src.map(a=>({k:a.n, label:a.n+(a.m?" · "+a.m:""), group:(a.cat||"— UNCATEGORISED —")}));
+  }
+  if(pickMode==="prio"){
+    const sev=effSev(draft.positions[curItem]||{});
+    const want=PRIO_SUGGEST[sev]||"";
+    const list=PRIORITIES.slice().sort((a,b)=>(b.k===want?1:0)-(a.k===want?1:0));
+    return [{k:"",label:t("opt_prio_none")}].concat(list.map(x=>({k:x.k,
+      label:(x[lang]||x.en), group:x.k===want?t("opt_prio_fit"):t("opt_prio_other")})));
   }
   if(pickMode==="action"){
     // Each action belongs to a severity. Lead with the ones that fit what was
@@ -2433,9 +2471,16 @@ $("pickList").onclick=(e)=>{ const b=e.target.closest(".pickitem"); if(!b) retur
   if(pickMode==="detect"){ const p=curP(); p.detect=k||"";
     if(!hasData(p)) delete draft.positions[curItem];
     closePicker(); updateDetectBtn(); renderChips(); return; }
-  if(pickMode==="action"){ const p=curP(); p.action=k||"";
+  if(pickMode==="prio"){ const p=curP(); p.prio=k||"";
     if(!hasData(p)) delete draft.positions[curItem];
-    closePicker(); updateActionBtn(); renderChips(); return; }
+    closePicker(); updatePrioBtn(); renderChips(); return; }
+  if(pickMode==="action"){ const p=curP(); p.action=k||"";
+    /* An action that raises a job needs a priority. Suggest the one that fits
+       what was found rather than leaving the planner to guess. */
+    if(p.action && !p.prio){ const g=PRIO_SUGGEST[effSev(p)]; if(g) p.prio=g; }
+    if(!p.action) delete p.prio;
+    if(!hasData(p)) delete draft.positions[curItem];
+    closePicker(); updateActionBtn(); updatePrioBtn(); renderChips(); return; }
   const p=curP();
   if(pickMode==="defect"){
     p.defect=k||"";
@@ -2514,6 +2559,7 @@ function editRecord(rec){ if(rec.cls && CLASSES[rec.cls]){ eqClass=rec.cls; loca
   if(rec.type && TYPE_META[rec.type]){ type=rec.type; localStorage.setItem("insp_type",type); }
   draft={positions:{}};
   for(const [k,pp] of Object.entries(rec.positions)) draft.positions[k]={grade:pp.grade,sev:pp.sev,sevMan:pp.sevMan||0,action:pp.action,wo:pp.wo,particle:pp.particle,comp:pp.comp,oil:pp.oil,comment:pp.comment,defect:pp.defect,cause:pp.cause,tempV:pp.tempV||"",tempA:pp.tempA||"",tempM:pp.tempM||"",
+    prio:pp.prio||"",
     mm:(pp.mm==null?null:Number(pp.mm)),stood:pp.stood?1:0,reason:pp.reason||"",detect:pp.detect||"",
     photos:(pp.photos?pp.photos.slice():(pp.photoBlob?[pp.photoBlob]:[])),video:pp.video||null};
   curEquip=rec.equip||""; updateEquipBtn(); $("date").value=rec.date; $("smu").value=rec.smu||""; if(rec.by) $("inspector").value=rec.by;
@@ -2559,6 +2605,7 @@ $("saveBtn").onclick=async ()=>{
     rev:(editing?(editing.rev||0)+1:1) };
   for(const [k,p] of Object.entries(draft.positions))
     rec.positions[k]={ grade:p.grade||null, sev:p.sev||"", sevMan:p.sevMan||0, action:p.action||"", wo:p.wo||"", particle:p.particle||"", comp:p.comp||"", oil:p.oil||"", defect:p.defect||"", cause:p.cause||"", comment:p.comment||"", tempV:p.tempV||"", tempA:p.tempA||"", tempM:p.tempM||"", detect:p.detect||DETECT_DEFAULT,
+      prio:p.prio||"",
       mm:(p.mm==null?null:Number(p.mm)), stood:p.stood?1:0, reason:p.reason||"",
       photos:(p.photos||[]).slice(), video:p.video||null };
   await dbPut(rec); noteDone(rec); resetForm(); renderPending(); renderDue(); syncNow();
@@ -3121,6 +3168,7 @@ async function buildPackage(){
         if(d){ n.isoMechanism=d.iso14224; n.isoFailureMode=d.iso14224; } }
       if(p.cause){ n.cause=causeLabel(p.cause,"en"); n.causeCode=p.cause; }
       if(p.sev)n.severity=p.sev; if(p.action)n.action=actionLabel(p.action,"en"); if(p.wo)n.workOrder=p.wo;
+      if(p.prio){ n.priority=p.prio; n.priorityLabel=prioLabel(p.prio,"en"); }
       if(p.tempV){ n.temperatureC=p.tempV; if(p.tempA)n.ambientC=p.tempA; if(p.tempM)n.tempMethod=p.tempM; }
       const wo_=wearOut(rec,k,p);
       if(wo_){ if(wo_.mm!=="")n.measuredMM=wo_.mm; if(wo_.newMM!=="")n.newMM=wo_.newMM;
@@ -3143,6 +3191,7 @@ async function buildPackage(){
       const d=DEFECT_BY[upDefect(p.defect)]||null;
       return { key:k, label:itemLabelFor(rec,k)||"", grade:p.grade||"", sev:p.sev||"", action:p.action||"",
         actionLabel:p.action?actionLabel(p.action,"en"):"", wo:p.wo||"",
+        prio:p.prio||"", prioLabel:p.prio?prioLabel(p.prio,"en"):"",
         defectCode:p.defect||"", defect:p.defect?defectLabel(p.defect,"en"):"",
         iso:d?d.iso14224:"", isoMode:d?d.iso14224:"",
         causeCode:p.cause||"", cause:p.cause?causeLabel(p.cause,"en"):"",
@@ -3235,7 +3284,7 @@ async function rptRecords(){
             newMM:(ref&&!ref.x)?ref.n:"", condemnMM:(ref&&!ref.x)?ref.c:"",
             wearPct:"", band:"", refSrc:ref?(ref.x?("x:"+ref.x):ref.src):"" };
       }
-      const read=[ p.particle&&`PC ${p.particle}`, p.comp&&`${p.comp} h`, p.oil&&`${p.oil} h oil`,
+      const read=[ p.particle&&`PC ${p.particle}`, p.comp&&`comp ${p.comp} h`, p.oil&&`oil ${p.oil} h`,
         (meta.temp&&p.tempV)&&`${p.tempV} °C${p.tempA?` / ${p.tempA}`:""}` ].filter(Boolean);
       const photos=[];
       for(const b of (p.photos||(p.photoBlob?[p.photoBlob]:[])))
@@ -3244,7 +3293,8 @@ async function rptRecords(){
         grade:p.grade||"", sev:effSev(p),
         defect:p.defect?defectLabel(p.defect):"", defectCode:p.defect?upDefect(p.defect):"",
         iso:d?d.iso14224:"", cause:p.cause?causeLabel(p.cause):"",
-        action:p.action?actionLabel(p.action):"", wo:p.wo||"", comment:p.comment||"",
+        action:p.action?actionLabel(p.action):"", prio:p.prio||"",
+        prioLabel:p.prio?prioLabel(p.prio):"", wo:p.wo||"", comment:p.comment||"",
         readings:read, photos,
         w: w ? { mm:(w.mm===""?null:w.mm), newMM:(w.newMM===""?null:w.newMM),
                  condemnMM:(w.condemnMM===""?null:w.condemnMM),
@@ -3256,7 +3306,9 @@ async function rptRecords(){
     /* One picture of the machine per round. A red puck at roller 6 is a place a
        fitter can walk to; a row in a table is a place they have to look up. */
     let mapHTML=""; if(meta.wear) mapHTML=rptMap(rec,items);
-    out.push({ equip:rec.equip, clsLabel:(CLASSES[rec.cls]?(CLASSES[rec.cls][lang]||CLASSES[rec.cls].en):(rec.cls||"")),
+    const a0=ASSET_BY[rec.equip]||{};
+    out.push({ equip:rec.equip, clsLabel:a0.cat||(CLASSES[rec.cls]?(CLASSES[rec.cls][lang]||CLASSES[rec.cls].en):(rec.cls||"")),
+      model:a0.m||"",
       type:rec.type, typeLabel:t("type_"+(rec.type||"MP")), date:rec.date||"",
       by:rec.by||"", sup:rec.sup||"", smu:rec.smu||"", gps:rec.gps||null, signUrl,
       wear:!!meta.wear, temp:!!meta.temp, mapHTML, items });
@@ -3368,7 +3420,7 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
    has accepted every one of its files. */
 const DEST_META={ gas:{label:"Google Drive"}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
 const DEST_IDS=["gas","pa","post"];
-const BUILD="65";
+const BUILD="66";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -3682,7 +3734,8 @@ function recToExport(rec){
       return { key:k, label:itemLabelFor(rec,k)||"", grade:p.grade||"", sev:p.sev||"",
         sevIso:SEV_V4[effSev(p)]||"", action:p.action||"",
         actionIso:p.action?upAction(p.action):"",
-        actionLabel:p.action?actionLabel(p.action,"en"):"", wo:p.wo||"", defectCode:p.defect||"",
+        actionLabel:p.action?actionLabel(p.action,"en"):"", wo:p.wo||"",
+        prio:p.prio||"", prioLabel:p.prio?prioLabel(p.prio,"en"):"", defectCode:p.defect||"",
         defectIso:p.defect?upDefect(p.defect):"",
         defect:p.defect?defectLabel(p.defect,"en"):"", iso:d?d.iso14224:"", isoMode:d?d.iso14224:"",
         causeCode:p.cause||"", causeIso:p.cause?upCause(p.cause):"",

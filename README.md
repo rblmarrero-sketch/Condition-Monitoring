@@ -479,6 +479,33 @@ Deliberately Critical only. Applying the same rule to Serious was considered and
 a rule that blocks too often gets satisfied with whatever is top of the list, which is
 worse for the data than an honest blank.
 
+### The priority the work request is raised at
+
+A recommended action that raises a job in 1C asks for the priority 1C files it under, in
+1C's own four words:
+
+| Code | English | Русский |
+|------|---------|---------|
+| P1 | Breakdown | Остановка (авария) |
+| P2 | Defect | Остановка (неисправность) |
+| P3 | PM | Остановка (ППТО) |
+| P4 | Planned Repair | Остановка (плановый ремонт) |
+
+The field appears only once an action has been chosen, and disappears again if the action
+is cleared — there is no priority without a job to raise. Choosing the action suggests the
+priority that matches the severity (Critical → P1, Degraded → P2, otherwise P4) and puts it
+at the top of the picker, but it is only a suggestion: the person standing at the machine
+decides, and an override sticks.
+
+Severity and priority are not the same thing and are not printed as though they were.
+Severity says how bad the part is; priority says how the repair gets scheduled. In the
+report the priority is an outlined tag beside the action, never a filled chip like the
+severity.
+
+The code travels with the finding — into the record, `entries.json`, the action register
+and its CSV, and the printed report. The dashboard's correction panel can set or change it
+from that end too, for a planner working from the desk rather than the machine.
+
 ### Two inspectors, one round (multi-device merge)
 
 Each phone has a device id. Tap **⇄ Send round** to export that phone's records (photos

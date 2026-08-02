@@ -525,7 +525,7 @@ const I18N={
   th_unit:"Unit", th_type:"Type", th_date:"Date", th_worst:"Worst severity",
   th_find:"Findings", th_topdef:"Top defect", th_by:"Inspector",
   th_sev:"Sev", th_comp:"Component", th_defect:"Defect", th_cause:"Direct cause",
-  th_action:"Action", th_wo:"WO", th_byshort:"By",
+  th_action:"Action", th_prio:"Priority", th_wo:"WO", th_byshort:"By",
 
   e_nofilter:"No inspections match the filters.", e_nothing:"Nothing outstanding.",
   e_nodata:"No data.", e_norank:"Nothing to rank yet",
@@ -575,6 +575,7 @@ const I18N={
   ed_confirm:"Type the unit number to confirm", ed_confirmph:"e.g. TK146",
   ed_save:"Save correction", ed_edit:"✎ Edit",
   ed_sev:"Severity", ed_rec:"Recommendation", ed_wo:"WO / notification",
+  ed_prio:"1C priority",
   ed_defect:"Defect", ed_cause:"Direct cause", ed_comment:"Comment",
   ed_none:"— none —", ed_nosev:"no severity",
   ed_find:"type to narrow…", ed_matches:"{n} of {t}", ed_nomatch:"nothing matches — clear the search",
@@ -675,7 +676,7 @@ const I18N={
   th_unit:"Ед.", th_type:"Тип", th_date:"Дата", th_worst:"Худшая степень",
   th_find:"Находок", th_topdef:"Основной дефект", th_by:"Инспектор",
   th_sev:"Степ.", th_comp:"Узел", th_defect:"Дефект", th_cause:"Причина",
-  th_action:"Действие", th_wo:"Заявка", th_byshort:"Кто",
+  th_action:"Действие", th_prio:"Приоритет", th_wo:"Заявка", th_byshort:"Кто",
 
   e_nofilter:"Нет осмотров по этим фильтрам.", e_nothing:"Нет открытых позиций.",
   e_nodata:"Нет данных.", e_norank:"Пока нечего ранжировать",
@@ -725,6 +726,7 @@ const I18N={
   ed_confirm:"Введите номер единицы для подтверждения", ed_confirmph:"напр. TK146",
   ed_save:"Сохранить правку", ed_edit:"✎ Правка",
   ed_sev:"Степень", ed_rec:"Рекомендация", ed_wo:"Заявка / уведомление",
+  ed_prio:"Приоритет 1С",
   ed_defect:"Дефект", ed_cause:"Непосредственная причина", ed_comment:"Комментарий",
   ed_none:"— нет —", ed_nosev:"степень не указана",
   ed_find:"начните вводить…", ed_matches:"{n} из {t}", ed_nomatch:"совпадений нет — очистите поиск",
@@ -810,6 +812,18 @@ const SEVC={NOF:"var(--good)",INC:"var(--warning)",DEG:"var(--serious)",CRI:"var
 // Inspection grade scale: A / B / C / X, X being the worst (confirmed with the
 // reliability team). A record's own ISO severity always wins over the grade.
 const GRADE_SEV={A:"NOF",B:"INC",C:"DEG",X:"CRI"};
+/* 1C's stoppage priority, the same four the planners pick from when a work
+   request is raised. The phone writes the code onto the finding; here it is only
+   read back and shown, so the register and 1C use one vocabulary. */
+const PRIORITIES=[
+  {k:"P1", en:"P1 Breakdown",      ru:"P1 Остановка (авария)",           c:"c"},
+  {k:"P2", en:"P2 Defect",         ru:"P2 Остановка (неисправность)",    c:"s"},
+  {k:"P3", en:"P3 PM",             ru:"P3 Остановка (ППТО)",             c:"n"},
+  {k:"P4", en:"P4 Planned Repair", ru:"P4 Остановка (плановый ремонт)",  c:"n"},
+];
+const PRIO_BY={}; PRIORITIES.forEach(p=>PRIO_BY[p.k]=p);
+const prioName=(k,l)=>{ const p=PRIO_BY[String(k||"").toUpperCase()]; return p?(p[l||lang]||p.en):(k||""); };
+const prioClass=k=>{ const p=PRIO_BY[String(k||"").toUpperCase()]; return p?p.c:"n"; };
 const TYPE_ORDER=["MP","FC","INSP","TEMP","UC"];
 const TYPE_LABEL=new Proxy({},{ get:(_,k)=> TYPE_ORDER.indexOf(k)>=0?t("type_"+k):undefined });
 const isWearType = ty => ty==="UC";
@@ -978,7 +992,7 @@ function clearDrill(){ drill={sev:"",defect:"",cause:"",unit:""}; renderAll(); }
 function matchesText(r,q){
   if(!q) return true;
   const hay=[r.equip,r.by,r.type,r.date].concat(
-    (r.items||[]).flatMap(i=>[i.key,i.label,i.defect,i.cause,i.comment,i.wo,i.actionLabel]));
+    (r.items||[]).flatMap(i=>[i.key,i.label,i.defect,i.cause,i.comment,i.wo,i.actionLabel,i.prio]));
   return hay.some(v=>String(v||"").toLowerCase().includes(q));
 }
 function filtered(){
@@ -1161,7 +1175,7 @@ function actionRows(){
 function renderActions(){
   const rows=actionRows();
   if(!rows.length){ $("actionTbl").innerHTML=`<tr><td class="empty">${esc(t("e_nothing"))}</td></tr>`; return; }
-  let h=`<thead><tr>`+["th_sev","th_unit","th_comp","th_defect","th_cause","th_action","th_wo","th_date","th_byshort"]
+  let h=`<thead><tr>`+["th_sev","th_unit","th_comp","th_defect","th_cause","th_action","th_prio","th_wo","th_date","th_byshort"]
     .map(k=>`<th>${esc(t(k))}</th>`).join("")+`</tr></thead><tbody>`;
   rows.forEach(({r,i})=>{ const s=sevOf(r,i);
     h+=`<tr><td>${s?`<span class="pill ${SEV[s].c}">${SEV[s].l}</span>`:""}</td>
@@ -1170,13 +1184,14 @@ function renderActions(){
       <td>${i.defect?esc(i.defect):'<span class="muted">—</span>'}${i.defectCode?`<div class="muted" style="font-size:11px">${esc(i.defectCode)}${i.iso?` · ISO ${esc(i.iso)}/${esc(i.isoMode)}`:""}</div>`:""}</td>
       <td>${i.cause?esc(i.cause):'<span class="muted">—</span>'}</td>
       <td>${i.actionLabel?esc(i.actionLabel):'<span class="muted">—</span>'}</td>
+      <td>${i.prio?`<span class="pill ${prioClass(i.prio)}" title="${esc(prioName(i.prio))}">${esc(i.prio)}</span>`:'<span class="muted">—</span>'}</td>
       <td class="mono">${esc(i.wo||"")}</td><td class="mono">${esc(r.date||"")}</td><td class="muted">${esc(r.by||"")}</td></tr>`; });
   $("actionTbl").innerHTML=h+"</tbody>";
 }
 $("csvBtn").onclick=()=>{
   const rows=actionRows(); const q=s=>`"${String(s==null?"":s).replace(/"/g,'""')}"`;
-  const head=["Severity","Unit","Type","Component","ComponentName","DefectCode","Defect","ISOMechanism","ISOMode","CauseCode","Cause","Action","WO","Grade","TempC","AmbientC","Method","Date","Inspector","VerifiedBy","GPS","Comment"];
-  const body=rows.map(({r,i})=>[SEV[sevOf(r,i)]?.l||"",r.equip,r.type,i.key,i.label,i.defectCode,i.defect,i.iso,i.isoMode,i.causeCode,i.cause,i.actionLabel,i.wo,i.grade,i.tempC,i.ambC,i.tempMethod,r.date,r.by,r.sup||"",r.gps?`${r.gps.lat},${r.gps.lon}`:"",i.comment].map(q).join(","));
+  const head=["Severity","Unit","Type","Component","ComponentName","DefectCode","Defect","ISOMechanism","ISOMode","CauseCode","Cause","Action","Priority","PriorityLabel","WO","Grade","TempC","AmbientC","Method","Date","Inspector","VerifiedBy","GPS","Comment"];
+  const body=rows.map(({r,i})=>[SEV[sevOf(r,i)]?.l||"",r.equip,r.type,i.key,i.label,i.defectCode,i.defect,i.iso,i.isoMode,i.causeCode,i.cause,i.actionLabel,i.prio||"",i.prio?prioName(i.prio,"en"):"",i.wo,i.grade,i.tempC,i.ambC,i.tempMethod,r.date,r.by,r.sup||"",r.gps?`${r.gps.lat},${r.gps.lon}`:"",i.comment].map(q).join(","));
   const csv=[head.map(q).join(","),...body].join("\r\n");
   const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob(["﻿"+csv],{type:"text/csv"}));
   a.download=`cm_action_register_${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(a.href);
@@ -1334,7 +1349,7 @@ function renderHistory(){
             <div class="pl">${esc(i.label||"")}</div>
             ${i.defect?`<div style="font-size:12px"><b>${esc(i.defect)}</b> <span class="muted">${esc(i.defectCode)}</span></div>`:""}
             ${i.cause?`<div style="font-size:12px" class="muted">Cause: ${esc(i.cause)}</div>`:""}
-            <dl>${i.tempC?`<dt>Temp</dt><dd><b>${esc(i.tempC)} °C</b>${i.ambC?` <span class="muted">(amb ${esc(i.ambC)})</span>`:""}${i.tempMethod?` <span class="muted">${esc(i.tempMethod)}</span>`:""}</dd>`:""}${i.particle?`<dt>Particles</dt><dd>${esc(i.particle)}</dd>`:""}${i.comp?`<dt>Comp hrs</dt><dd>${esc(i.comp)}</dd>`:""}${i.oil?`<dt>Oil hrs</dt><dd>${esc(i.oil)}</dd>`:""}${i.actionLabel?`<dt>Action</dt><dd>${esc(i.actionLabel)}</dd>`:""}${i.wo?`<dt>WO</dt><dd>${esc(i.wo)}</dd>`:""}</dl>
+            <dl>${i.tempC?`<dt>Temp</dt><dd><b>${esc(i.tempC)} °C</b>${i.ambC?` <span class="muted">(amb ${esc(i.ambC)})</span>`:""}${i.tempMethod?` <span class="muted">${esc(i.tempMethod)}</span>`:""}</dd>`:""}${i.particle?`<dt>Particles</dt><dd>${esc(i.particle)}</dd>`:""}${i.comp?`<dt>Comp hrs</dt><dd>${esc(i.comp)}</dd>`:""}${i.oil?`<dt>Oil hrs</dt><dd>${esc(i.oil)}</dd>`:""}${i.actionLabel?`<dt>Action</dt><dd>${esc(i.actionLabel)}</dd>`:""}${i.prio?`<dt>Priority</dt><dd>${esc(prioName(i.prio))}</dd>`:""}${i.wo?`<dt>WO</dt><dd>${esc(i.wo)}</dd>`:""}</dl>
             ${i.comment?`<div class="cm">“${esc(i.comment)}”</div>`:""}
           </div></div>`; }).join("")}</div></div>`).join("");
   $("history").querySelectorAll("img.photo").forEach(img=>img.onclick=()=>{ $("lbimg").src=img.src; $("lbcap").textContent=img.dataset.cap; $("lb").classList.add("open"); });
@@ -1350,6 +1365,7 @@ const ACTIONS=(HME.action||[]).map(a=>({k:a.code,en:a.en,ru:a.ru,sev:a.severity}
 const ACTION_BY={}; ACTIONS.forEach(a=>ACTION_BY[a.k]=a);
 const actionName=(k,l)=>{ const a=ACTION_BY[upAction(k)]; return a?(a[l||lang]||a.en):k; };
 const actionOpts=()=>[["",t("ed_none")]].concat(ACTIONS.map(a=>[a.k,a[lang]||a.en]));
+const prioOpts=()=>[["",t("ed_none")]].concat(PRIORITIES.map(p=>[p.k,p[lang]||p.en]));
 let edKey=null;
 
 /* 132 defects and 223 causes is too many to scroll for. Each picker gets a
@@ -1434,6 +1450,11 @@ function openEdit(key,keepMsg){
           </select></div>
           <div class="field"><label>${esc(t("ed_rec"))}</label><select data-f="action" data-k="${esc(i.key)}">
             ${actionOpts().map(([v,l])=>`<option value="${esc(v)}"${v&&v===i.action?" selected":""}>${esc(l)}</option>`).join("")}
+          </select></div>
+        </div>
+        <div class="row">
+          <div class="field"><label>${esc(t("ed_prio"))}</label><select data-f="prio" data-k="${esc(i.key)}">
+            ${prioOpts().map(([v,l])=>`<option value="${esc(v)}"${v&&v===i.prio?" selected":""}>${esc(l)}</option>`).join("")}
           </select></div>
           <div class="field"><label>${esc(t("ed_wo"))}</label>
             <input data-f="wo" data-k="${esc(i.key)}" type="text" value="${esc(i.wo||"")}"></div>
@@ -1536,6 +1557,7 @@ function collectEdit(){
     (items[k]||(items[k]={}))[f]=v;
     if(!v) return;                       // cleared: nothing to derive from it
     if(f==="action"){ if(v) items[k].actionLabel=actionName(v,"en"); }
+    if(f==="prio"){ if(v) items[k].prioLabel=prioName(v,"en"); }
     if(f==="defectCode"){ const d=DEF[upDefect(v)];
       if(d){ items[k].defect=d.en; items[k].iso=d.iso14224||""; items[k].isoMode=d.iso14224||""; } }
     if(f==="causeCode"){ const c=CAUSE_BY[upCause(v)]; if(c) items[k].cause=c.en; }
