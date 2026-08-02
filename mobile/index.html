@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=72">
+<link rel="manifest" href="manifest.webmanifest?v=73">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=72">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=72">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=72">
+<link rel="apple-touch-icon" href="icon-192.png?v=73">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=73">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=73">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -874,17 +874,17 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="native.js?v=72"></script>
-<script src="upload-defaults.js?v=72"></script>
-<script src="hme.js?v=72"></script>
-<script src="mp-fc.js?v=72"></script>
-<script src="hme-cascade.js?v=72"></script>
-<script src="assets.js?v=72"></script>
-<script src="temp-limits.js?v=72"></script>
-<script src="wear.js?v=72"></script>
-<script src="wear-figs.js?v=72"></script>
-<script src="wear-map.js?v=72"></script>
-<script src="report-core.js?v=72"></script>
+<script src="native.js?v=73"></script>
+<script src="upload-defaults.js?v=73"></script>
+<script src="hme.js?v=73"></script>
+<script src="mp-fc.js?v=73"></script>
+<script src="hme-cascade.js?v=73"></script>
+<script src="assets.js?v=73"></script>
+<script src="temp-limits.js?v=73"></script>
+<script src="wear.js?v=73"></script>
+<script src="wear-figs.js?v=73"></script>
+<script src="wear-map.js?v=73"></script>
+<script src="report-core.js?v=73"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3536,7 +3536,7 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
    has accepted every one of its files. */
 const DEST_META={ gas:{label:"Google Drive"}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
 const DEST_IDS=["gas","pa","post"];
-const BUILD="72";
+const BUILD="73";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -4221,6 +4221,21 @@ addEventListener("storage",e=>{
 });
 // isSecureContext, not a protocol check: http://localhost is a secure context too,
 // and excluding it meant the offline path could never be exercised outside production.
+/* Open at the top. Always.
+
+   The browser restores the scroll offset across a reload, and this app reloads
+   itself — when the service worker first takes over, and again whenever an
+   update lands. The result was a phone that opened part-scrolled, about 150
+   pixels down, with the readiness check and half the header already off the
+   screen. Which defeats the point of putting a go/no-go check at the top: the
+   one thing it must do is be the first thing seen.
+
+   Restoring scroll is right for a document you were reading and wrong for a
+   form you are filling in — there is no "where I was" to return to here, only
+   a round that starts at the beginning. */
+if("scrollRestoration" in history) history.scrollRestoration="manual";
+addEventListener("pageshow",()=>{ window.scrollTo(0,0); });
+
 if("serviceWorker" in navigator && window.isSecureContext){ let reloaded=false;
   /* A new worker taking over used to reload the page on the spot. Consider what
      that is on a phone: an inspector halfway through typing a measurement, the

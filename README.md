@@ -827,6 +827,13 @@ It re-checks when the app is opened and every time it comes back to the front â€
 what catches a phone that has been in a locker since iOS evicted a file under storage
 pressure.
 
+**And the app opens at the top.** Browsers restore the scroll offset across a reload, and
+this app reloads itself â€” when the service worker first takes over, and again whenever an
+update lands. The phone was opening about 150 px down, with the readiness check and half
+the header already off screen, which defeats the one thing a go/no-go check has to do.
+Restoring scroll is right for a document somebody was reading and wrong for a form they are
+filling in: there is no "where I was" here, only a round that starts at the beginning.
+
 ### Updating is not somebody's job
 
 An inspector should never have to think about versions, and the app should never go into a
