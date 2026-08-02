@@ -1039,6 +1039,7 @@ const I18N = {
     lbl_date:"Date", lbl_smu:"SMU / machine hrs", ph_smu:"e.g. 6018",
     btn_take:"Add photo", btn_video:"Video", btn_retake:"Retake",
     media_hint:"Up to 4 photos + 1 video (max 1 min).", media_empty:"No photos yet.",
+    upd_ready:"A new version is ready. It will load when you tap — your round is not affected.",
     sw_checking:"Checking the offline copy…",
     sw_ok:"Offline copy complete — all {n} files. This phone works with no signal.",
     sw_partial:"⚠️ Offline copy incomplete — {n} of {of} files. The app may not open without signal until this is finished.",
@@ -1258,6 +1259,7 @@ const I18N = {
     lbl_date:"Дата", lbl_smu:"Моточасы (SMU)", ph_smu:"напр. 6018",
     btn_take:"Добавить фото", btn_video:"Видео", btn_retake:"Переснять",
     media_hint:"До 4 фото + 1 видео (макс. 1 мин).", media_empty:"Пока нет фото.",
+    upd_ready:"Новая версия готова. Загрузится по нажатию — на текущий осмотр это не влияет.",
     sw_checking:"Проверяем офлайн-копию…",
     sw_ok:"Офлайн-копия полная — все файлы ({n}). Телефон работает без связи.",
     sw_partial:"⚠️ Офлайн-копия неполная — {n} из {of}. Без связи приложение может не открыться, пока загрузка не завершена.",
@@ -4108,7 +4110,40 @@ addEventListener("storage",e=>{
 // isSecureContext, not a protocol check: http://localhost is a secure context too,
 // and excluding it meant the offline path could never be exercised outside production.
 if("serviceWorker" in navigator && window.isSecureContext){ let reloaded=false;
-  navigator.serviceWorker.addEventListener("controllerchange",()=>{ if(reloaded)return; reloaded=true; location.reload(); });
+  /* A new worker taking over used to reload the page on the spot. Consider what
+     that is on a phone: an inspector halfway through typing a measurement, the
+     update finishes installing, and the screen resets under their thumb.
+     Anything in the draft that has not been committed by saveCur() is gone, and
+     they have no idea why. It is a rare window, but it is rare in the way that
+     means it happens to somebody else and never in front of you.
+
+     There is no need for it either. The page already has a banner that says a
+     new version is ready, with a button, and it is already shown by the
+     half-hourly build check. So: reload only when the reload cannot cost
+     anything — nothing typed, nothing part-captured, nothing being edited.
+     Otherwise say so and let the person choose the moment. */
+  const busy = () => {
+    try{
+      if(typeof editing !== "undefined" && editing) return true;
+      if(typeof draft !== "undefined" && draft && draft.positions
+         && Object.keys(draft.positions).length) return true;
+      const a=document.activeElement;
+      if(a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)) return true;
+      if(document.getElementById("dlg") && document.getElementById("dlg").open) return true;
+      if(typeof ucSheetOn === "function" && ucSheetOn()) return true;
+    }catch(e){ return true; }        // cannot tell → assume they are working
+    return false;
+  };
+  navigator.serviceWorker.addEventListener("controllerchange",()=>{
+    if(reloaded) return; reloaded=true;
+    if(!busy()){ location.reload(); return; }
+    const bar=document.getElementById("staleBar");
+    if(!bar){ return; }              // nothing to announce it with; leave them alone
+    document.getElementById("staleTxt").textContent=t("upd_ready");
+    document.getElementById("staleGo").textContent=t("upd_go");
+    document.getElementById("staleGo").onclick=()=>location.reload();
+    bar.classList.remove("hidden");
+  });
   navigator.serviceWorker.register("sw.js").then(reg=>{ reg.update&&reg.update(); }).catch(()=>{}); }
 
 /* ===================== force-update (clears cache + service worker) ===================== */

@@ -795,6 +795,20 @@ found missing the worker quietly finishes the download the next time something h
 *"⚠️ 11 of 12"* with a button to finish it. A phone that can say "11 of 12" is diagnosable
 over a radio; one that just fails is not.
 
+**And an update never pulls the page out from under anybody.** A new worker taking over
+used to reload the page on the spot — which on a phone is an inspector halfway through
+typing a measurement whose screen resets under their thumb, losing whatever the draft had
+not yet committed. Rare, in the way that means it happens to somebody else and never in
+front of you. Now the reload happens only when it cannot cost anything: nothing typed,
+nothing part-captured, no edit open, no dialog, no cursor in a field. Otherwise the banner
+that already exists says a version is ready and waits to be tapped. If the app cannot tell,
+it assumes somebody is working.
+
+For the same reason the previous build's cache is kept rather than swept immediately. A
+page still running on the old build fetches the PDF engine and the QR reader on demand,
+under the old `?v=`; deleting that cache means an inspector who was mid-round when an
+update landed cannot print, in a pit, for no reason they can see.
+
 ### Telling people a new version is out
 
 The service worker serves the copy it has, so a stale phone looks exactly like a current

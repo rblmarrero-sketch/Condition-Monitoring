@@ -144,9 +144,18 @@ self.addEventListener("activate", (e) => {
        so keeping them is what makes the fallback below possible. */
     const missing = await missingEssentials();
     if (!missing.length) {
-      const keys = await caches.keys();
-      await Promise.all(keys.filter(k => k !== CACHE && k.startsWith("plug-capture-v"))
-        .map(k => caches.delete(k)));
+      /* Keep the immediately previous build as well as this one, and sweep only
+         what is older. A page loaded from the old build is still running: its
+         <script> tags name ?v=<old>, and the PDF engine and QR reader are
+         fetched on demand, not at load. Delete that build's cache and an
+         inspector who was mid-round when the update landed cannot print, in a
+         pit, for no reason they can see. Two builds is a couple of megabytes;
+         the page reloads onto the new one soon enough and the next activate
+         sweeps it then. */
+      const keys = (await caches.keys()).filter(k => k.startsWith("plug-capture-v") && k !== CACHE);
+      const n = (k) => Number(String(k).replace("plug-capture-v", "")) || 0;
+      keys.sort((a, b) => n(b) - n(a));
+      await Promise.all(keys.slice(1).map(k => caches.delete(k)));
     } else {
       console.warn("[sw] keeping older caches, this build is incomplete:", missing);
       healSoon();
