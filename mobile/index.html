@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=73">
+<link rel="manifest" href="manifest.webmanifest?v=74">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=73">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=73">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=73">
+<link rel="apple-touch-icon" href="icon-192.png?v=74">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=74">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=74">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -779,7 +779,7 @@
       <div class="hint" data-i18n="theme_hint">Auto follows the phone. Night shift in a dark cab and a bright bench are different problems.</div>
     </label>
     <div class="hint" style="margin-bottom:14px" data-i18n="set_intro">Turn on one or both destinations. With both on, an inspection only counts as uploaded once every destination has accepted it.</div>
-    <div class="hint" style="margin-bottom:14px" data-i18n="set_folder_help">Folder placeholders: {TYPE} (MP / FC / INSP / TEMP), {UNIT}, {YYYY} {MM} {DD} {YYYY-MM}. Sub-folders are created as needed, so {TYPE}/{YYYY-MM} files each inspection type separately, by month.</div>
+    <div class="hint" style="margin-bottom:14px" data-i18n="set_folder_help">Folder placeholders: {TYPE} (MP / FC / INSP / TEMP), {UNIT}, {YYYY} {MM} {DD} {YYYY-MM} {YYYY-MM-DD}. Sub-folders are created as needed, so {TYPE}/{UNIT}/{YYYY-MM-DD} gives one folder per machine, per round.</div>
 
     <div class="dest">
       <label class="dhead"><input type="checkbox" id="gasOn"><span data-i18n="set_gas">Google Drive (Apps Script)</span></label>
@@ -790,7 +790,7 @@
         <label class="fld"><span data-i18n="set_secret">Shared secret (optional)</span>
           <input id="gasSec" type="text" autocomplete="off"></label>
         <label class="fld"><span data-i18n="set_folder">Folder / prefix</span>
-          <input id="gasFolder" type="text" placeholder="{TYPE}/{YYYY-MM}" autocomplete="off"></label>
+          <input id="gasFolder" type="text" placeholder="{TYPE}/{UNIT}/{YYYY-MM-DD}" autocomplete="off"></label>
       </div>
     </div>
 
@@ -803,7 +803,7 @@
         <label class="fld"><span data-i18n="set_hdr">Secret header (optional)</span>
           <input id="paHdr" type="text" placeholder="x-api-key: abc123" autocomplete="off"></label>
         <label class="fld"><span data-i18n="set_folder">Folder / prefix</span>
-          <input id="paFolder" type="text" placeholder="{TYPE}/{YYYY-MM}" autocomplete="off"></label>
+          <input id="paFolder" type="text" placeholder="{TYPE}/{UNIT}/{YYYY-MM-DD}" autocomplete="off"></label>
       </div>
     </div>
 
@@ -816,16 +816,17 @@
         <label class="fld"><span data-i18n="set_hdr">Secret header (optional)</span>
           <input id="postHdr" type="text" placeholder="x-api-key: abc123" autocomplete="off"></label>
         <label class="fld"><span data-i18n="set_folder">Folder / prefix</span>
-          <input id="postFolder" type="text" placeholder="{TYPE}/{YYYY-MM}" autocomplete="off"></label>
+          <input id="postFolder" type="text" placeholder="{TYPE}/{UNIT}/{YYYY-MM-DD}" autocomplete="off"></label>
       </div>
     </div>
 
     <label class="fld"><span data-i18n="set_px">Photo size on upload</span>
       <select id="upPx">
-        <option value="0" data-i18n="set_px_full">Original — full detail (slowest)</option>
+        <option value="1600" data-i18n="set_px_1600">Medium — 1600 px (recommended)</option>
         <option value="2000" data-i18n="set_px_2000">Large — 2000 px</option>
-        <option value="1600" data-i18n="set_px_1600">Medium — 1600 px (much smaller, fastest)</option>
-      </select></label>
+        <option value="0" data-i18n="set_px_full">Original — full detail, much slower to send</option>
+      </select>
+      <span class="hint" data-i18n="set_px_help">Photos are shrunk as they are taken, so uploads are already small. The report and the dashboard never show more than this.</span></label>
 
     <div class="row" style="gap:10px">
       <button class="btn ghost" id="testUp" data-i18n="set_test">Test connection</button>
@@ -874,17 +875,17 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="native.js?v=73"></script>
-<script src="upload-defaults.js?v=73"></script>
-<script src="hme.js?v=73"></script>
-<script src="mp-fc.js?v=73"></script>
-<script src="hme-cascade.js?v=73"></script>
-<script src="assets.js?v=73"></script>
-<script src="temp-limits.js?v=73"></script>
-<script src="wear.js?v=73"></script>
-<script src="wear-figs.js?v=73"></script>
-<script src="wear-map.js?v=73"></script>
-<script src="report-core.js?v=73"></script>
+<script src="native.js?v=74"></script>
+<script src="upload-defaults.js?v=74"></script>
+<script src="hme.js?v=74"></script>
+<script src="mp-fc.js?v=74"></script>
+<script src="hme-cascade.js?v=74"></script>
+<script src="assets.js?v=74"></script>
+<script src="temp-limits.js?v=74"></script>
+<script src="wear.js?v=74"></script>
+<script src="wear-figs.js?v=74"></script>
+<script src="wear-map.js?v=74"></script>
+<script src="report-core.js?v=74"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -1038,10 +1039,11 @@ const I18N = {
     ph_post_url:"paste your server endpoint here",
     set_gas:"Google Drive (Apps Script)", set_pa:"SharePoint / OneDrive (Power Automate)", set_post:"Plain HTTPS POST (multipart)",
     set_secret:"Shared secret (optional)",
-    set_px:"Photo size on upload", set_px_full:"Original — full detail (slowest)",
-    set_px_2000:"Large — 2000 px", set_px_1600:"Medium — 1600 px (much smaller, fastest)",
+    set_px:"Photo size", set_px_full:"Original — full detail, much slower to send",
+    set_px_2000:"Large — 2000 px", set_px_1600:"Medium — 1600 px (recommended)",
+    set_px_help:"Photos are shrunk as they are taken, so uploads are already small. The report and the dashboard never show more than this.",
     set_intro:"Turn on one or both destinations. With both on, an inspection only counts as uploaded once every destination has accepted it.",
-    set_folder_help:"Folder placeholders: {TYPE} (MP / FC / INSP / TEMP), {UNIT}, {YYYY} {MM} {DD} {YYYY-MM}. Sub-folders are created as needed, so {TYPE}/{YYYY-MM} files each inspection type separately, by month.",
+    set_folder_help:"Folder placeholders: {TYPE} (MP / FC / INSP / TEMP), {UNIT}, {YYYY} {MM} {DD} {YYYY-MM} {YYYY-MM-DD}. Sub-folders are created as needed, so {TYPE}/{UNIT}/{YYYY-MM-DD} gives one folder per machine, per round.",
     set_prov:"Set up the other phones",
     set_prov_hint:"Configure this phone once, then show the code to the next phone and tap Scan setup there. Nothing to type.",
     set_prov_warn:"⚠ This code and link contain your upload credentials. Share them on internal channels only.",
@@ -1051,7 +1053,7 @@ const I18N = {
     m_data_missing:"Some data did not load ({x}) — lists will be incomplete. Tap ⟳ while online.",
     m_cfg_bad:["Setup code not recognised","Ask the other phone to tap “Show setup code” again, and scan the whole square."],
     set_help_gas:"Google Drive: open script.google.com, paste docs/google-upload.gs, set ROOT_FOLDER_ID to your Drive folder, then Deploy → Web app with Execute as “Me” and Who has access “Anyone”. Copy the /exec URL here. Re-deploy a NEW VERSION after every edit or the old code keeps running.",
-    set_url:"Upload URL", set_hdr:"Secret header (optional)", set_folder:"Folder — e.g. {TYPE}/{YYYY-MM}",
+    set_url:"Upload URL", set_hdr:"Secret header (optional)", set_folder:"Folder — e.g. {TYPE}/{UNIT}/{YYYY-MM-DD}",
     set_test:"Test connection", set_save:"Save", set_testing:"Testing…", set_ok:"Connected — test file uploaded.",
     set_needurl:"Choose a mode and paste the URL first.",
     set_help:"Power Automate: create a flow with the trigger \u201cWhen an HTTP request is received\u201d, add \u201cCreate file\u201d (SharePoint) with name = triggerBody()?['name'] and content = base64ToBinary(triggerBody()?['file']), then copy the generated URL here.",
@@ -1263,10 +1265,11 @@ const I18N = {
     ph_post_url:"вставьте сюда адрес вашего сервера",
     set_gas:"Google Диск (Apps Script)", set_pa:"SharePoint / OneDrive (Power Automate)", set_post:"Обычный HTTPS POST (multipart)",
     set_secret:"Общий секрет (необяз.)",
-    set_px:"Размер фото при отправке", set_px_full:"Оригинал — полная детализация (медленнее всего)",
-    set_px_2000:"Крупный — 2000 px", set_px_1600:"Средний — 1600 px (намного меньше, быстрее всего)",
+    set_px:"Размер фото", set_px_full:"Оригинал — полная детализация, отправка намного дольше",
+    set_px_2000:"Крупный — 2000 px", set_px_1600:"Средний — 1600 px (рекомендуется)",
+    set_px_help:"Фото уменьшаются в момент съёмки, поэтому отправка уже небольшая. Отчёт и панель никогда не показывают больше.",
     set_intro:"Включите один или оба адресата. Если включены оба, осмотр считается отправленным только после подтверждения от каждого.",
-    set_folder_help:"Подстановки: {TYPE} (MP / FC / INSP / TEMP), {UNIT}, {YYYY} {MM} {DD} {YYYY-MM}. Вложенные папки создаются автоматически: {TYPE}/{YYYY-MM} раскладывает по типу осмотра и месяцам.",
+    set_folder_help:"Подстановки: {TYPE} (MP / FC / INSP / TEMP), {UNIT}, {YYYY} {MM} {DD} {YYYY-MM} {YYYY-MM-DD}. Вложенные папки создаются автоматически: {TYPE}/{UNIT}/{YYYY-MM-DD} — по папке на машину и на каждый осмотр.",
     set_prov:"Настроить остальные телефоны",
     set_prov_hint:"Настройте один телефон, затем покажите код следующему и нажмите там «Сканировать настройки». Ничего вводить не нужно.",
     set_prov_warn:"⚠ Код и ссылка содержат ваши учётные данные для загрузки. Передавайте только по внутренним каналам.",
@@ -1276,7 +1279,7 @@ const I18N = {
     m_data_missing:"Часть данных не загрузилась ({x}) — списки будут неполными. Нажмите ⟳ при интернете.",
     m_cfg_bad:["Код не распознан","Попросите показать код настроек ещё раз и снимите весь квадрат целиком."],
     set_help_gas:"Google Диск: откройте script.google.com, вставьте docs/google-upload.gs, укажите ROOT_FOLDER_ID вашей папки Диска, затем Deploy → Web app: «Execute as: Me», «Who has access: Anyone». Скопируйте URL /exec сюда. После каждой правки развёртывайте НОВУЮ ВЕРСИЮ, иначе работает старый код.",
-    set_url:"URL отправки", set_hdr:"Секретный заголовок (необяз.)", set_folder:"Папка — напр. {TYPE}/{YYYY-MM}",
+    set_url:"URL отправки", set_hdr:"Секретный заголовок (необяз.)", set_folder:"Папка — напр. {TYPE}/{UNIT}/{YYYY-MM-DD}",
     set_test:"Проверить соединение", set_save:"Сохранить", set_testing:"Проверка…", set_ok:"Успешно — тестовый файл отправлен.",
     set_needurl:"Сначала выберите режим и укажите URL.",
     set_help:"Power Automate: создайте поток с триггером \u201cWhen an HTTP request is received\u201d, добавьте \u201cCreate file\u201d (SharePoint): name = triggerBody()?['name'], content = base64ToBinary(triggerBody()?['file']), затем скопируйте URL сюда.",
@@ -1984,7 +1987,9 @@ async function takePhoto(){
       el.addEventListener("change",on); el.click(); }));
     if(!f) return;                                  // cancelled — not an error
     const p=curP(); (p.photos ||= []);
-    if(p.photos.length<MAX_PHOTOS) p.photos.push(f);
+    // Shrunk here, once, with the button still disabled — not at sync time, when
+    // the inspector has driven away and the link is the thing being waited on.
+    if(p.photos.length<MAX_PHOTOS) p.photos.push(await intake(f));
     renderMedia(); renderChips();
   } finally { renderMedia(); }                      // re-derives the disabled state
 }
@@ -1992,8 +1997,9 @@ $("takeBtn").onclick=takePhoto;
 $("videoBtn").onclick=()=>$("video").click();
 /* Still wired: the shell falls back to it if the Camera plugin is missing, and
    it is the whole implementation on the web. */
-$("camera").onchange=(e)=>{ const f=e.target.files[0]; e.target.value=""; if(!f) return;
-  const p=curP(); (p.photos ||= []); if(p.photos.length<MAX_PHOTOS) p.photos.push(f); renderMedia(); renderChips(); };
+$("camera").onchange=async (e)=>{ const f=e.target.files[0]; e.target.value=""; if(!f) return;
+  const s=await intake(f);
+  const p=curP(); (p.photos ||= []); if(p.photos.length<MAX_PHOTOS) p.photos.push(s); renderMedia(); renderChips(); };
 $("video").onchange=(e)=>{ const f=e.target.files[0]; e.target.value=""; if(!f) return;
   const v=document.createElement("video"); v.preload="metadata";
   v.onloadedmetadata=()=>{ if(v.duration && v.duration>MAX_VIDEO_SEC+0.8){ dlg(t("video_too_long")); }
@@ -3466,7 +3472,7 @@ function onScanned(text){
     const m=String(text).match(/[?&]cfg=([^&\s]+)/);
     const ok=m ? applyCfg(m[1]) : false;
     stopScan(); scanMode="unit";
-    if(ok){ destsToForm(loadDests()); $("upPx").value=localStorage.getItem("up_px")||"0"; renderSync(); syncThenArm(); }
+    if(ok){ destsToForm(loadDests()); $("upPx").value=pxSetting(); renderSync(); syncThenArm(); }
     dlg(t(ok?"m_cfg_ok":"m_cfg_bad"));
     return true;
   }
@@ -3536,7 +3542,14 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
    has accepted every one of its files. */
 const DEST_META={ gas:{label:"Google Drive"}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
 const DEST_IDS=["gas","pa","post"];
-const BUILD="73";
+/* Where a round lands on Drive: the inspection type, then the machine, then the
+   day it was done — MP/DZ004/2026-08-02. A month folder is every machine's
+   rounds in one pile; a unit folder is that machine's own history, which is how
+   anyone actually goes looking for a photograph. upload-defaults.js carries the
+   same string for a phone set up from scratch; this one is what the one-time
+   upgrade moves an existing phone to. */
+const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
+const BUILD="74";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -3606,6 +3619,15 @@ function loadDests(){
     d.forEach(x=>{ if(x && x.folder==="{YYYY-MM}") x.folder="{TYPE}/{YYYY-MM}"; });
     try{ localStorage.setItem("up_folder_v2","1"); }catch(e){}
   }
+  /* And once more, to type / unit / date. A month folder is a pile of every
+     machine's rounds mixed together; a unit folder is a machine's own history,
+     which is how anyone actually looks for a photograph — "what did DZ004's
+     plugs look like last time". Same rule as above: only the exact built-in
+     string is replaced, so a folder someone typed is never touched. */
+  if(!localStorage.getItem("up_folder_v3")){
+    d.forEach(x=>{ if(x && x.folder==="{TYPE}/{YYYY-MM}") x.folder=FOLDER_DEFAULT; });
+    try{ localStorage.setItem("up_folder_v3","1"); }catch(e){}
+  }
   // This used to write unconditionally, and loadDests() is reached from the UP.on
   // getter — so every renderSync() did a JSON.stringify plus a synchronous
   // localStorage write, and on a phone with no room left it threw from inside a
@@ -3633,7 +3655,9 @@ function expandFolder(f,ctx){ if(!f) return "";
   const d=new Date(), p=n=>String(n).padStart(2,"0");
   const Y=iso?iso[1]:String(d.getFullYear()), M=iso?iso[2]:p(d.getMonth()+1), D=iso?iso[3]:p(d.getDate());
   const clean=v=>String(v||"").replace(/[\\/:*?"<>|]/g,"-").trim();
-  return f.replace(/\{YYYY-MM\}/g,`${Y}-${M}`)
+  // longest first: {YYYY-MM-DD} contains {YYYY-MM}, which contains {YYYY}
+  return f.replace(/\{YYYY-MM-DD\}/g,`${Y}-${M}-${D}`)
+          .replace(/\{YYYY-MM\}/g,`${Y}-${M}`)
           .replace(/\{YYYY\}/g,Y).replace(/\{MM\}/g,M).replace(/\{DD\}/g,D)
           .replace(/\{TYPE\}/g,clean((TYPE_META[ctx.type]&&TYPE_META[ctx.type].suffix)||ctx.type||""))
           .replace(/\{TYPENAME\}/gi,clean(ctx.type?t("type_"+ctx.type):""))
@@ -3644,6 +3668,53 @@ function upHeaders(raw,extra){ const h=Object.assign({},extra||{});
   return h; }
 function blobToB64(b){ return new Promise((res,rej)=>{ const r=new FileReader();
   r.onload=()=>res(String(r.result).split(",")[1]); r.onerror=rej; r.readAsDataURL(b); }); }
+/* ================== how big a photograph needs to be ==================
+   Nothing downstream ever wants the full frame. The report prints 420 px
+   thumbnails; the dashboard's viewer fits a browser window. A phone hands us
+   3–5 MB of twelve-megapixel JPEG for a magnetic plug photographed at arm's
+   length, and every one of those bytes crosses a pit LTE link one at a time.
+
+   At 1600 px the same photograph is about 250 KB. A magnetic-plug round is
+   sixteen photographs: ~64 MB becomes ~4 MB, and an undercarriage round with
+   thirty-six drops from ~140 MB to ~9 MB. The detail that matters — swarf on
+   a plug, a cracked link, a gauge reading — survives 1600 px intact; it is
+   four times more than anything in the system ever displays.
+
+   It is not a question anyone is asked. The default is simply the right one,
+   and Original stays in ⚙ for the rare round that needs it. */
+const PHOTO_PX_DEFAULT=1600, PHOTO_Q=0.78;
+/* With the default in force the phone already holds shrunk photographs, so the
+   upload path has nothing left to do — but finding that out means decoding
+   every file again, which on thirty-six of them is real time for no gain.
+   Anything already this small is left alone without being opened. */
+const SHRINK_SKIP_BYTES=420*1024;
+/* An image the camera produced. The signature is a PNG and goes round this. */
+const isPhotoType=t=>/^image\/(jpe?g|png|webp|hei[cf])$/i.test(String(t||""));
+function photoPx(){
+  const v=localStorage.getItem("up_px");
+  const n=(v==null||v==="") ? PHOTO_PX_DEFAULT : parseInt(v,10);
+  if(!n) return 0;                       // "Original" — someone chose it on purpose
+  /* A link this weak cannot carry 250 KB in a sane time either, and the phone
+     knows what it is on. Going smaller is automatic and silent; nobody in the
+     pit should have to reason about their signal. */
+  const c=navigator.connection&&navigator.connection.effectiveType;
+  return (c==="slow-2g"||c==="2g") ? Math.min(n,1280) : n;
+}
+/* What ⚙ shows as selected: the stored choice, before the weak-link adjustment
+   photoPx() applies. Otherwise the menu would appear to change itself because
+   someone walked behind a dragline. */
+function pxSetting(){ const v=localStorage.getItem("up_px");
+  return (v==null||v==="") ? String(PHOTO_PX_DEFAULT) : v; }
+/* Every photograph enters a record through here, from the platform camera or
+   from the file input. It is re-encoded once, at the moment it is taken, while
+   the inspector is still standing at the machine and the phone has nothing else
+   to do — so the cost is invisible and sync becomes pure network. A photograph
+   is never lost to this: any failure keeps the original. */
+async function intake(blob){
+  const px=photoPx();
+  if(!px || !blob || !isPhotoType(blob.type) || blob.size<=SHRINK_SKIP_BYTES) return blob;
+  try{ return await shrinkImage(blob,px); }catch(e){ return blob; }
+}
 /* Shrink camera photos before upload — the single biggest lever on upload time.
    Skipped for the signature PNG and for anything already smaller than the limit. */
 async function shrinkImage(blob,max){
@@ -3653,13 +3724,51 @@ async function shrinkImage(blob,max){
   const s=max/big, w=Math.round(bmp.width*s), h=Math.round(bmp.height*s);
   const c=document.createElement("canvas"); c.width=w; c.height=h;
   c.getContext("2d").drawImage(bmp,0,0,w,h); bmp.close&&bmp.close();
-  const out=await new Promise(r=>c.toBlob(r,"image/jpeg",0.85));
+  const out=await new Promise(r=>c.toBlob(r,"image/jpeg",PHOTO_Q));
   return (out && out.size<blob.size) ? out : blob;
 }
+/* The upload path's own guard. Under the default it finds nothing to do —
+   intake() already shrank everything — but rounds captured before this build,
+   and anything that arrived in a merge bundle from another phone, still go out
+   small. The byte test comes first so the common case never decodes. */
 async function maybeShrink(blob,name){
-  const max=parseInt(localStorage.getItem("up_px")||"0",10);
-  if(!max || !/^image\/jpe?g$/i.test(blob.type||"") || /_SIGN\.png$/i.test(name)) return blob;
+  const max=photoPx();
+  if(!max || !isPhotoType(blob.type) || /_SIGN\.png$/i.test(name) || blob.size<=SHRINK_SKIP_BYTES) return blob;
   try{ return await shrinkImage(blob,max); }catch(e){ return blob; }   // never block the upload
+}
+/* ---- how many files to have in the air at once ----------------------------
+   One at a time was most of the wall clock, and almost none of it was the
+   bytes. On a pit link a 250 KB photograph is a few hundred milliseconds of
+   transfer sitting behind a second or more of round-trip, and sixteen of them
+   in series paid that latency sixteen times over. Three in flight overlaps it.
+   On a link the phone itself calls 2g, three in flight just produces three
+   timeouts, so there it stays at one. */
+function uploadLanes(){
+  const c=navigator.connection&&navigator.connection.effectiveType;
+  return (c==="slow-2g"||c==="2g") ? 1 : 3;
+}
+/* The first file of a record goes on its own. The Apps Script creates the
+   {TYPE}/{UNIT}/{YYYY-MM-DD} folder chain on demand by looking for it and making it if it
+   is missing, and Drive is happy to hold two folders with the same name — so
+   three requests arriving together on a month's first upload can each decide
+   the folder is missing and each create one. Sending one file first means the
+   chain exists before the rest arrive, and it needs no change to whatever
+   version of the script is deployed. */
+async function putAll(dest, files, rec){
+  if(!files.length) return;
+  await putOne(dest,files[0].name,files[0].blob,files[0].type,rec);
+  const rest=files.slice(1);
+  if(!rest.length) return;
+  let next=0, failed=null;
+  const lane=async()=>{ for(;;){
+    if(failed) return;                     // one failure ends this record's turn
+    const i=next++; if(i>=rest.length) return;
+    const f=rest[i];
+    try{ await putOne(dest,f.name,f.blob,f.type,rec); }
+    catch(e){ failed=failed||e; }
+  } };
+  await Promise.all(Array.from({length:Math.min(uploadLanes(),rest.length)},lane));
+  if(failed) throw failed;
 }
 async function putFile(name, blob, type){
   const dests=activeDests();
@@ -3760,7 +3869,11 @@ async function askPersist(){
 }
 /* Bytes free, in the terms a technician cares about: roughly how many more
    photos fit. Reported before it matters, not after a save has degraded. */
-const PHOTO_BYTES=450*1024;            // a shrunk field photo, near enough
+/* A 1600 px field photograph, measured on the plug and undercarriage rounds.
+   This has to match what the phone actually stores — it used to assume shrunk
+   photographs while intake kept the camera's full 4 MB frame, so ⚙ promised
+   about ten times more headroom than there was. */
+const PHOTO_BYTES=260*1024;
 async function storageInfo(){
   try{
     if(!navigator.storage || !navigator.storage.estimate) return null;
@@ -3798,19 +3911,23 @@ async function syncNow(manual){
       if(todo.length){
         try{
           // Shrink once, then send the same bytes to every destination.
-          payload=[];
+          // The sidecar goes first, and not only because it creates the folder:
+          // it is ten kilobytes and it is the whole round — findings, severities,
+          // actions, who and when. Once it lands the dashboard has the inspection
+          // and the team's due list is right, even if the photographs are still
+          // climbing out over the next ten minutes.
+          const meta={type:"cm-inspection-entries",version:2,records:[recToExport(rec)]};
+          payload=[{name:`${rec.equip}_${ddmmyyyy(rec.date)}_${rec.type}.json`,
+                    blob:new Blob([JSON.stringify(meta,null,2)],{type:"application/json"}),
+                    type:"application/json"}];
           for(const f of await filesForRecord(rec))
             payload.push({name:f.name, blob:await maybeShrink(f.blob,f.name), type:f.blob.type});
-          const meta={type:"cm-inspection-entries",version:2,records:[recToExport(rec)]};
-          payload.push({name:`${rec.equip}_${ddmmyyyy(rec.date)}_${rec.type}.json`,
-                        blob:new Blob([JSON.stringify(meta,null,2)],{type:"application/json"}),
-                        type:"application/json"});
         }catch(e){ lastErr="Could not read "+rec.equip+": "+(e.message||e); continue; }
       }
       const errs=[];
       let progressed=false;
       for(const d of todo){
-        try{ for(const f of payload) await putOne(d,f.name,f.blob,f.type,rec); done[d.id]=1; progressed=true; }
+        try{ await putAll(d,payload,rec); done[d.id]=1; progressed=true; }
         catch(e){ errs.push(DEST_META[d.id].label+": "+String(e.message||e)); }
       }
       // Re-read before writing. Putting back the copy we started with would
@@ -3908,7 +4025,7 @@ function markDestState(){ DEST_IDS.forEach(id=>{
   $(id+"Need").classList.toggle("hidden", !(cb.checked && !has)); }); }
 DEST_IDS.forEach(id=>{ $(id+"On").addEventListener("change",markDestState);
   $(id+"Url").addEventListener("input",markDestState); });
-function openSettings(){ destsToForm(loadDests()); $("upPx").value=localStorage.getItem("up_px")||"0";
+function openSettings(){ destsToForm(loadDests()); $("upPx").value=pxSetting();
   const n=DEFAULT_DESTS.filter(d=>d.url).length;
   const where=activeDests().map(d=>{
     const def=DEFAULT_DESTS.find(x=>x.id===d.id);

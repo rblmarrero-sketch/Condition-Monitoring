@@ -86,7 +86,7 @@ Script)** block:
 | **(tick the box)** | turns the destination on |
 | **Upload URL** | the `/exec` URL |
 | **Shared secret** | the `SECRET` value, or leave empty if you left it `''` |
-| **Folder** | `{TYPE}/{YYYY-MM}` — a folder per inspection type, per month |
+| **Folder** | `{TYPE}/{UNIT}/{YYYY-MM-DD}` — inspection type, then machine, then the day |
 | **Photo size on upload** | see below |
 
 Tap **Test connection** → *"✅ Google Drive"* and a `connection_test.txt` appears in
@@ -102,7 +102,7 @@ inspection type can have its own home instead of everything landing in one listi
 | `{TYPE}` | `MP` · `FC` · `INSP` · `TEMP` |
 | `{TYPENAME}` | `Magnetic Plug` · `Filter Cut` · `Inspection` · `Temperature` |
 | `{UNIT}` | the unit number, e.g. `TK146` |
-| `{YYYY}` `{MM}` `{DD}` `{YYYY-MM}` | parts of the **inspection** date |
+| `{YYYY}` `{MM}` `{DD}` `{YYYY-MM}` `{YYYY-MM-DD}` | parts of the **inspection** date |
 
 `{TYPE}/{YYYY-MM}` gives:
 
@@ -118,17 +118,41 @@ Date parts come from the **inspection date**, not from today, so a round entered
 days late still files under the month it was actually done. Each destination has its own
 folder setting, so Drive and SharePoint can be laid out differently.
 
-`{TYPE}/{YYYY-MM}` is the built-in default, so a phone set up from scratch files each type
-separately without anyone configuring it.
+`{TYPE}/{UNIT}/{YYYY-MM-DD}` is the built-in default, so a phone set up from scratch files
+everything without anyone configuring it:
 
-> **Upgrading from an older build.** The first build to ship a folder default used
-> `{YYYY-MM}`, which put all four types in one monthly folder. Phones on that exact
-> setting are moved to `{TYPE}/{YYYY-MM}` once, automatically. A folder you typed
-> yourself is never touched, and setting `{YYYY-MM}` back deliberately sticks.
+```
+MP/
+  DZ004/
+    2026-06-14/   DZ004_4C_14.06.2026_MP.jpg  …  DZ004_14.06.2026_MP.json
+    2026-08-02/   …
+  TK151/
+    2026-08-02/   …
+UC/
+  DZ004/
+    2026-07-19/   …
+```
 
-Files already in Drive are not moved — the split applies from the next upload. Drag the
-old ones into the new folders if you want the history tidy; nothing reads the folder
-layout, so it is cosmetic.
+A month folder is every machine's rounds in one pile. A unit folder is that machine's own
+history, which is how anyone actually goes looking — *what did DZ004's plugs look like last
+time?*
+
+> **Upgrading from an older build.** Two folder defaults shipped before this one:
+> `{YYYY-MM}`, which put all four types in one monthly folder, and `{TYPE}/{YYYY-MM}`.
+> A phone sitting on either of those exact strings is moved forward once, automatically.
+> A folder you typed yourself is never touched, and typing an old one back sticks.
+
+Files already in Drive are not moved — the new layout applies from the next upload, and the
+dashboard reads the whole tree, so old rounds keep working exactly as before. Drag them into
+the new folders if you want the history tidy; nothing reads the folder layout, so it is
+cosmetic.
+
+> **One thing to watch as this grows.** The dashboard's batch read walks every folder under
+> the root on each refresh. One folder per machine per round is a lot more folders than one
+> per month — a few hundred rounds is fine, but at a few thousand the read will start to
+> feel slow, and Apps Script gives a script six minutes. If that day comes, either point the
+> folder at `{TYPE}/{UNIT}/{YYYY-MM}` (one folder per machine per month, same shape, ~30×
+> fewer folders) or move to the REST backend in `server/`, which does not walk anything.
 
 ### Correcting, voiding and deleting an inspection
 
@@ -227,15 +251,22 @@ the phone and then strips it from the address bar.
 
 This is the biggest lever on upload time, and it works on **both** routes.
 
+Photos are shrunk **as they are taken**, not as they are sent, so this is already done
+before anyone presses anything and the phone never stores the full frame either.
+
 | Setting | What a typical camera photo becomes |
 |---|---|
-| **Original** | 3–5 MB — every pixel the camera captured |
+| **Medium — 1600 px** *(default)* | about 200 KB — roughly 14× less to send |
 | **Large — 2000 px** | a few hundred KB |
-| **Medium — 1600 px** | smallest and fastest |
+| **Original** | 3–5 MB — every pixel the camera captured |
 
-A magnetic-plug photo at 1600 px still resolves fuzz vs. chips vs. flakes clearly, so
-**Medium** is a reasonable default for routine rounds. Use **Original** when a photo is
-going into a warranty claim or a failure investigation, where full detail is evidence.
+A magnetic-plug photo at 1600 px still resolves fuzz vs. chips vs. flakes clearly, and it
+is four times more than the report (420 px thumbnails) or the dashboard viewer ever shows.
+Use **Original** when a photo is going into a warranty claim or a failure investigation,
+where full detail is evidence.
+
+Where the browser reports a 2g connection the phone drops to 1280 px and sends one file at
+a time on its own. The menu keeps showing the chosen setting.
 
 The signature image and the JSON sidecar are never resized.
 

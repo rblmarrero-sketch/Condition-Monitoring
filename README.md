@@ -1067,17 +1067,32 @@ A record is only marked uploaded once every enabled destination has taken every 
 
 ### Where the files land
 
-The **Folder** field in ⚙ takes placeholders and creates sub-folders as needed, so each
-inspection type gets its own: `{TYPE}/{YYYY-MM}` produces `MP/2026-07/`, `FC/2026-07/`,
-`TEMP/2026-07/`, `INSP/2026-07/`. Also available: `{TYPENAME}` (the readable name),
-`{UNIT}`, and `{YYYY} {MM} {DD}`. Date parts come from the **inspection** date, not from
-today, so a round entered late still files under the month it was done. Each destination
-has its own folder setting.
+The **Folder** field in ⚙ takes placeholders and creates sub-folders as needed. The shipped
+default is **`{TYPE}/{UNIT}/{YYYY-MM-DD}`** — inspection type, then the machine, then the day:
 
-`{TYPE}/{YYYY-MM}` is the shipped default, so a new phone splits by type with no setup.
-Phones still on the earlier `{YYYY-MM}` default — one folder for all four types — are
-upgraded once, automatically; a folder you typed yourself is left alone. Files already in
-Drive are not moved, so the split starts from the next upload.
+```
+MP/DZ004/2026-06-14/    DZ004_4C_14.06.2026_MP.jpg  …  DZ004_14.06.2026_MP.json
+MP/DZ004/2026-08-02/
+MP/TK151/2026-08-02/
+UC/DZ004/2026-07-19/
+```
+
+A month folder is every machine's rounds in one pile; a unit folder is that machine's own
+history, which is how anyone actually goes looking — *what did DZ004's plugs look like last
+time?* Also available: `{TYPENAME}` (the readable name) and `{YYYY} {MM} {DD} {YYYY-MM}`.
+Date parts come from the **inspection** date, not from today, so a round entered late still
+files under the day it was done. Each destination has its own folder setting.
+
+Two older defaults shipped before this one — `{YYYY-MM}` and `{TYPE}/{YYYY-MM}`. A phone on
+either of those exact strings is moved forward once, automatically; a folder you typed
+yourself is left alone. Files already in Drive are not moved, and the dashboard reads the
+whole tree, so old rounds keep working — the new layout starts from the next upload.
+
+One thing to watch as the archive grows: the Drive read walks every folder under the root on
+each refresh, and one folder per machine per round is many more folders than one per month.
+A few hundred rounds is fine; at a few thousand, either switch the folder to
+`{TYPE}/{UNIT}/{YYYY-MM}` — same shape, ~30× fewer folders — or move to the REST backend in
+`server/`, which walks nothing.
 
 A destination that is failing no longer holds up one that is working: upload state is
 tracked per destination, so with SharePoint down every record still reaches Drive, and
@@ -1085,8 +1100,34 @@ nothing is ever re-sent to a destination that already has it.
 
 ### Upload speed
 
-**Photo size on upload** (⚙ in the app) is the biggest lever, whichever route you use:
-*Original* keeps every pixel the camera captured (3–5 MB a photo); *Medium — 1600 px*
-sends a fraction of that and still resolves plug debris clearly. Use Original when a
-photo is evidence for a warranty claim or failure investigation. Signatures and the JSON
-sidecar are never resized.
+Photographs are the whole cost of an upload; everything else in a round is about ten
+kilobytes. Three things happen to make them cheap, and none of them asks anyone anything.
+
+**Photographs are shrunk as they are taken**, not as they are sent. A phone hands the app
+3–5 MB of twelve-megapixel JPEG; it is re-encoded to 1600 px on the spot, while the
+inspector is still standing at the machine and the phone has nothing else to do, and only
+the small one is ever stored. Measured on a five-photograph round: **13.9× fewer bytes on
+the wire**, and the same reduction in what the phone has to hold. By the time sync runs
+there is nothing left to compress — it is pure network.
+
+1600 px is not a compromise. The report prints 420 px thumbnails and the dashboard's
+viewer fits a browser window, so it is four times more than anything in the system ever
+displays, and it still resolves fuzz from chips from flakes on a magnetic plug.
+**Medium — 1600 px** is the default. *Large — 2000 px* and *Original* stay in ⚙ for a
+photograph that is evidence in a warranty claim or a failure investigation. Signatures and
+the JSON sidecar are never resized.
+
+**The sidecar goes up first.** It is the whole round — findings, severities, actions, who
+and when — and it is small. Once it lands the dashboard has the inspection and the team's
+due list is correct, even if the photographs are still climbing out over the next ten
+minutes. It also goes on its own, which means the `{TYPE}/{UNIT}/{YYYY-MM-DD}` folder chain exists
+before anything else arrives.
+
+**Then three files at a time.** On a pit link a 200 KB photograph is a few hundred
+milliseconds of transfer sitting behind a second or more of round-trip; sending them one
+after another paid that latency once per file. Three in flight overlaps it.
+
+**On a weak link the phone adjusts itself.** Where the browser reports a 2g connection,
+photographs go to 1280 px and uploads drop back to one at a time — three in flight on a
+saturated link only produces three timeouts. The ⚙ menu still shows the chosen setting,
+so it never looks as though it changed itself because someone walked behind a dragline.
