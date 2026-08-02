@@ -757,6 +757,44 @@ Once installed, everything works with no signal: the service worker precaches th
 shell, all the reference data, the icons and the manifest, so a cold start in a pit is the
 same app as a cold start on wifi.
 
+### The service worker may never be why the app fails to open
+
+An inspector at a machine with no signal has no way to clear website data, no console to
+read, and no second phone. If the offline layer cannot serve the page, the round does not
+get captured. That is the one rule this file is arranged around, and it was learned the
+hard way — a build reported from the field showed Safari's own error page:
+
+> FetchEvent.respondWith received an error: TimeoutError: network too slow
+
+That string was ours. Three decisions, each defensible alone, combined into it: `install`
+swallowed precache failures and took over anyway, `activate` then deleted the *previous*
+build's cache, and `fetch` threw when it found nothing. A flaky signal during an update was
+enough to leave a registered worker that intercepted every request and could only fail —
+until somebody cleared website data, which is not a thing you can do in a pit.
+
+Four rules now:
+
+- **An incomplete build does not take over.** `install` checks that the page, the register,
+  the defect reference, the wear limits and the report engine are all actually cached. If
+  any are missing it stays in waiting, the old worker keeps serving, and the app keeps
+  working on the old build. That is the correct outcome, not a degraded one.
+- **The old cache is not deleted until the new one is proven.** `caches.match()` searches
+  every cache, so last week's copy of the register is the fallback that makes a bad update
+  survivable. A week-old equipment list beats an empty picker.
+- **A page navigation is served from cache first.** Network-first put a timeout on the
+  critical path of every cold start in the field. Cache-first opens the app in about
+  150 ms with the radios off, and revalidates behind the reader — the half-hourly build
+  check is what tells anyone a new version exists.
+- **Nothing in `fetch` rejects.** Worst case it answers with a plain page that says the
+  download did not finish, that nothing captured has been lost, and offers a retry. An
+  honest offline page is recoverable; a browser error page is not.
+
+It also repairs itself. iOS evicts cached files under storage pressure, so if anything is
+found missing the worker quietly finishes the download the next time something happens.
+**⚙ System** reports the state plainly — *"Offline copy complete — all 12 files"* or
+*"⚠️ 11 of 12"* with a button to finish it. A phone that can say "11 of 12" is diagnosable
+over a radio; one that just fails is not.
+
 ### Telling people a new version is out
 
 The service worker serves the copy it has, so a stale phone looks exactly like a current

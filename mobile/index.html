@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=70">
+<link rel="manifest" href="manifest.webmanifest?v=71">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=70">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=70">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=70">
+<link rel="apple-touch-icon" href="icon-192.png?v=71">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=71">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=71">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -731,7 +731,7 @@
     <span id="staleTxt"></span>
     <button type="button" id="staleGo"></button>
   </div>
-  <div class="ver" id="verLine">build v<span id="verNum">?</span> · <span id="verNote">every round has a name</span> ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver" id="verLine">build v<span id="verNum">?</span> · <span id="verNote">it opens, whatever the link is doing</span> ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
 </main>
 
 <nav class="tabbar" id="tabbar">
@@ -808,6 +808,7 @@
     <div class="hint" id="setMsg" style="margin-top:12px"></div>
     <div class="hint" id="setStore" style="margin-top:10px"></div>
     <div class="hint" id="setDiag" style="margin-top:6px"></div>
+    <div class="hint" id="swHealth" style="margin-top:6px"></div>
 
     <div class="dest" style="margin-top:18px">
       <div class="dhead"><span data-i18n="set_prov">Set up the other phones</span></div>
@@ -847,17 +848,17 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="native.js?v=70"></script>
-<script src="upload-defaults.js?v=70"></script>
-<script src="hme.js?v=70"></script>
-<script src="mp-fc.js?v=70"></script>
-<script src="hme-cascade.js?v=70"></script>
-<script src="assets.js?v=70"></script>
-<script src="temp-limits.js?v=70"></script>
-<script src="wear.js?v=70"></script>
-<script src="wear-figs.js?v=70"></script>
-<script src="wear-map.js?v=70"></script>
-<script src="report-core.js?v=70"></script>
+<script src="native.js?v=71"></script>
+<script src="upload-defaults.js?v=71"></script>
+<script src="hme.js?v=71"></script>
+<script src="mp-fc.js?v=71"></script>
+<script src="hme-cascade.js?v=71"></script>
+<script src="assets.js?v=71"></script>
+<script src="temp-limits.js?v=71"></script>
+<script src="wear.js?v=71"></script>
+<script src="wear-figs.js?v=71"></script>
+<script src="wear-map.js?v=71"></script>
+<script src="report-core.js?v=71"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -1038,6 +1039,12 @@ const I18N = {
     lbl_date:"Date", lbl_smu:"SMU / machine hrs", ph_smu:"e.g. 6018",
     btn_take:"Add photo", btn_video:"Video", btn_retake:"Retake",
     media_hint:"Up to 4 photos + 1 video (max 1 min).", media_empty:"No photos yet.",
+    sw_checking:"Checking the offline copy…",
+    sw_ok:"Offline copy complete — all {n} files. This phone works with no signal.",
+    sw_partial:"⚠️ Offline copy incomplete — {n} of {of} files. The app may not open without signal until this is finished.",
+    sw_fix:"Finish downloading now", sw_fixing:"Downloading…",
+    sw_none:"Not installed for offline use yet — open this page once with signal.",
+    sw_noanswer:"Could not check the offline copy.",
     pick_search:"Search…", video_too_long:["Video too long","Please record a clip of 1 minute or less."],
     shot_placeholder:"No photo yet.",
     lbl_grade:"Grade / condition", lbl_particle:"Particle count", lbl_comp:"Component hrs", lbl_oil:"Oil hrs",
@@ -1251,6 +1258,12 @@ const I18N = {
     lbl_date:"Дата", lbl_smu:"Моточасы (SMU)", ph_smu:"напр. 6018",
     btn_take:"Добавить фото", btn_video:"Видео", btn_retake:"Переснять",
     media_hint:"До 4 фото + 1 видео (макс. 1 мин).", media_empty:"Пока нет фото.",
+    sw_checking:"Проверяем офлайн-копию…",
+    sw_ok:"Офлайн-копия полная — все файлы ({n}). Телефон работает без связи.",
+    sw_partial:"⚠️ Офлайн-копия неполная — {n} из {of}. Без связи приложение может не открыться, пока загрузка не завершена.",
+    sw_fix:"Дозагрузить сейчас", sw_fixing:"Загрузка…",
+    sw_none:"Офлайн-режим ещё не установлен — откройте страницу один раз при связи.",
+    sw_noanswer:"Не удалось проверить офлайн-копию.",
     pick_search:"Поиск…", video_too_long:["Видео слишком длинное","Запишите ролик не длиннее 1 минуты."],
     shot_placeholder:"Нет фото.",
     lbl_grade:"Степень / состояние", lbl_particle:"Количество частиц", lbl_comp:"Наработка компонента", lbl_oil:"Наработка масла",
@@ -3478,7 +3491,7 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
    has accepted every one of its files. */
 const DEST_META={ gas:{label:"Google Drive"}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
 const DEST_IDS=["gas","pa","post"];
-const BUILD="70";
+const BUILD="71";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -3860,7 +3873,45 @@ function openSettings(){ destsToForm(loadDests()); $("upPx").value=localStorage.
     : `no built-in destinations — upload-defaults.js has no URLs (or is a cached old copy)`)
     + ` · in use: ${where.join(", ")||"none"}`;
   renderStorage();
+  swHealth();
   $("setMsg").textContent=""; $("provBox").classList.add("hidden"); $("setOv").classList.remove("hidden"); }
+
+/* Is the offline copy actually complete?
+
+   The app can be running perfectly and still be one dropped request away from
+   not opening tomorrow — a file evicted under storage pressure, or an update
+   that landed on a thin link. That state used to be invisible until the moment
+   it mattered, which was always in the pit. Ask, and say.
+
+   A phone that reports "12 of 13 files" can be diagnosed over a radio. One that
+   just fails cannot. */
+function swHealth(){
+  const el=$("swHealth"); if(!el) return;
+  if(!("serviceWorker" in navigator) || !navigator.serviceWorker.controller){
+    el.textContent=t("sw_none"); el.className="hint"; return; }
+  el.textContent=t("sw_checking");
+  const ch=new MessageChannel();
+  const done=setTimeout(()=>{ el.textContent=t("sw_noanswer"); el.className="hint warn"; }, 4000);
+  ch.port1.onmessage=(ev)=>{
+    clearTimeout(done);
+    const d=ev.data||{};
+    if(d.ok){ el.textContent=t("sw_ok",{n:d.have}); el.className="hint"; return; }
+    el.textContent=t("sw_partial",{n:d.have,of:d.need});
+    el.className="hint warn";
+    /* Offer the repair rather than describing it. The button is the whole point
+       — an inspector with a bar of signal can fix this in one tap, before they
+       drive somewhere there is none. */
+    const b=document.createElement("button");
+    b.type="button"; b.className="btn"; b.style.marginTop="8px";
+    b.textContent=t("sw_fix");
+    b.onclick=()=>{ b.disabled=true; b.textContent=t("sw_fixing");
+      navigator.serviceWorker.controller.postMessage({type:"sw-heal"});
+      setTimeout(()=>{ swHealth(); }, 6000); };
+    el.appendChild(document.createElement("br")); el.appendChild(b);
+  };
+  try{ navigator.serviceWorker.controller.postMessage({type:"sw-health"},[ch.port2]); }
+  catch(e){ clearTimeout(done); el.textContent=t("sw_noanswer"); el.className="hint warn"; }
+}
 function persistSettings(){ saveDests(formToDests());
   try{ localStorage.setItem("up_px",$("upPx").value); }catch(e){} }
 $("setBtn").onclick=openSettings;

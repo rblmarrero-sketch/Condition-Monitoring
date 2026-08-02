@@ -355,6 +355,38 @@ Nothing in 0–3 is waiting on more code. Four things are waiting on you:
 | **C** | **Hosting** for `server/` + Postgres, and a decision on where photographs live | a bucket, a NAS, or the client's own tin. The `put/get/del` interface is three methods wide so this can change later |
 | **D** | **Six screenshots** on a real phone with real data | listed shot by shot in `docs/STORE-SUBMISSION.md` §4 |
 
+### The failure that matters most, and it was not in any of them
+
+Reported from an iPhone, in the field, on build 70:
+
+> Safari can't open the page. The error was: "FetchEvent.respondWith received an error:
+> TimeoutError: network too slow".
+
+That string was ours. The service worker timed out on the network, found nothing in the
+cache, and threw — and a rejected `respondWith()` is what puts a browser error page in
+front of somebody who has no way to clear website data and no second phone. The app
+refused to start.
+
+Three decisions, each defensible alone, combined into it: `install` swallowed precache
+failures and took over anyway, `activate` then deleted the previous build's cache, and
+`fetch` threw when it found nothing. A flaky signal *during an update* was enough to brick
+it.
+
+This is worth putting in a planning document because of what it says about the priorities
+above. **An offline-first app's single most important property is that it opens.** Not that
+it syncs quickly, not that the report is beautiful — that a person standing at a machine
+with no signal can open it and record what they found. Every phase in this plan is worth
+less than that one property, and it is the property least likely to be noticed missing,
+because it only fails where nobody is watching.
+
+It also sharpens item 8 in §4. Background sync is not a nice-to-have on the list with the
+others: the retry loop only runs while the app is open, and "the app is open" is exactly
+the assumption that failed here.
+
+Fixed in build 71, with a suite that stands the app up against a dead link, a link that
+connects and never answers, and an update that dies part-way — and requires it to open
+under all three. It does, in about 150 ms with the radios off.
+
 ### Two bugs the real database found
 
 Worth recording, because both would have passed against a mock and failed in production:

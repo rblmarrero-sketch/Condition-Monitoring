@@ -1,29 +1,55 @@
 /* Service worker for the Field Capture app.
-   The app must work with no signal at all — in the pit there often is none — and
-   it must not stall waiting for a network that is not there.
 
-   Two strategies, chosen by URL shape:
+   ONE RULE, above every other consideration here: **this file must never be the
+   reason the app fails to open.** An inspector standing at a machine with no
+   signal has no way to clear website data, no way to read a console, and no
+   second phone. If the service worker cannot serve the page, the round does not
+   get captured.
 
-   • ?v=<build>  — an immutable URL. A new build asks for a new URL, so a hit can
-     be served straight from the cache with no network round trip. This is what
-     makes the app instant offline AND online. All the big files (asset register,
-     defect taxonomy, component tree, PDF libraries) are versioned this way.
+   That rule was learned the hard way. A previous version of this file could
+   leave the app showing Safari's own error page —
 
-   • everything else (index.html, icons) — network first so a new build lands,
-     cache as the fallback.
+       FetchEvent.respondWith received an error: TimeoutError: network too slow
 
-   A miss must NEVER fall back to index.html for a script or image. Returning HTML
-   where JavaScript was expected leaves window.ASSETS / window.TAX2 undefined, and
-   the equipment, defect and cause lists come up blank with no error the inspector
-   can see. */
-const BUILD = "70";
+   — which is the app refusing to start, on a phone, in the field. Three
+   decisions each defensible on their own combined into it:
+
+     1. install() swallowed every precache failure and called skipWaiting()
+        regardless, so a bad link during an update activated a worker whose
+        cache was incomplete or empty;
+     2. activate() then deleted every other cache, throwing away the PREVIOUS
+        build's working copy;
+     3. fetch() threw when it found nothing, and a rejected respondWith() is
+        exactly what puts that message on the screen.
+
+   So a flaky signal during an update was enough to brick the app until somebody
+   cleared website data. Everything below is arranged so that cannot happen:
+
+     · A new build is not allowed to take over until it has actually cached what
+       the app needs to run. Until then the old one keeps serving, and the app
+       keeps working on the old build — which is the correct outcome, not a
+       degraded one.
+     · The old cache is not deleted until the new one is proven complete.
+     · A page navigation is served from cache FIRST, so a cold start in the pit
+       never waits on the network at all, and is revalidated behind the reader.
+     · No path in fetch() rejects. Ever. Worst case it answers with a page that
+       explains itself and offers a retry — because an honest offline page is
+       recoverable and a browser error page is not. */
+
+const BUILD = "71";
 const CACHE = "plug-capture-v" + BUILD;
-const SHELL = [
-  "./",
+
+/* Without these the app is not an app: no page, no equipment register, no
+   defect reference, no wear limits, no report. If they are not all in the
+   cache, this build does not take over. */
+const ESSENTIAL = [
+  /* "./" is deliberately NOT here. It is an alias for index.html that only
+     exists if the host serves directory indexes — GitHub Pages does, plenty of
+     hosts do not. Requiring it would mean one entry that can never be
+     satisfied, and since an incomplete build is not allowed to take over, that
+     is every future update blocked for ever. The page itself is index.html;
+     "./" is a convenience, and it is cached below as one. */
   "./index.html",
-  "./manifest.webmanifest?v=" + BUILD,
-  "./jsQR.js?v=" + BUILD,
-  "./qrcode.js?v=" + BUILD,
   "./native.js?v=" + BUILD,
   "./upload-defaults.js?v=" + BUILD,
   "./hme.js?v=" + BUILD,
@@ -35,93 +61,25 @@ const SHELL = [
   "./wear-figs.js?v=" + BUILD,
   "./wear-map.js?v=" + BUILD,
   "./report-core.js?v=" + BUILD,
+];
+
+/* Wanted, but the app starts and captures a full round without them. The PDF
+   engine is 850 KB and is only needed when somebody prints; the QR libraries
+   only when somebody scans. Letting these hold up an update would mean a phone
+   on a thin link never getting a fix to the capture code. */
+const OPTIONAL = [
+  "./",                          // see the note above
+  "./manifest.webmanifest?v=" + BUILD,
+  "./jsQR.js?v=" + BUILD,
+  "./qrcode.js?v=" + BUILD,
   "./jspdf.umd.min.js?v=" + BUILD,
   "./html2canvas.min.js?v=" + BUILD,
   "./icon-192.png",
   "./icon-512.png",
 ];
 
-self.addEventListener("install", (e) => {
-  e.waitUntil((async () => {
-    const c = await caches.open(CACHE);
-    // Per file, not addAll: addAll rejects as a whole, so one 404 would leave the
-    // cache completely empty and the app blank the first time it went offline.
-    const missed = [];
-    await Promise.all(SHELL.map((u) =>
-      c.add(new Request(u, { cache: "reload" })).catch(() => missed.push(u))));
-    if (missed.length) console.warn("[sw] not precached:", missed);
-    await self.skipWaiting();
-  })());
-});
+const NET_WAIT = 4000;          // how long a fetch may hold anything up
 
-self.addEventListener("activate", (e) => {
-  e.waitUntil((async () => {
-    const keys = await caches.keys();
-    await Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)));
-    await self.clients.claim();
-  })());
-});
-
-self.addEventListener("fetch", (e) => {
-  const req = e.request;
-  if (req.method !== "GET") return;
-  let url;
-  try { url = new URL(req.url); } catch (_) { return; }
-  if (url.origin !== self.location.origin) return;          // uploads etc. go straight out
-
-  const isDoc = req.mode === "navigate" || req.destination === "document";
-
-  if (url.searchParams.has("v") && !isDoc) {
-    e.respondWith((async () => {
-      const hit = await caches.match(req);
-      if (hit) return hit;                                  // immutable: no network needed
-      try {
-        const res = await fetch(req);
-        if (res && res.ok) (await caches.open(CACHE)).put(req, res.clone());
-        return res;
-      } catch (err) {
-        // Offline and this exact build is not cached — a previous build's copy of
-        // the same file is far better than a blank list.
-        const any = await caches.match(req, { ignoreSearch: true });
-        if (any) return any;
-        throw err;
-      }
-    })());
-    return;
-  }
-
-  e.respondWith((async () => {
-    // Network first, but not for ever. "Offline" is the easy case — the fetch
-    // fails at once. The pit's normal case is worse: a signal that connects and
-    // then delivers nothing, where an untimed fetch leaves the app on a blank
-    // screen. Give the network a short window, then serve what we have.
-    const cached = () => caches.match(req).then(h => h || caches.match(req, { ignoreSearch: true }));
-    try {
-      const res = await withTimeout(fetch(req, { cache: isDoc ? "reload" : "default" }), NET_WAIT);
-      if (res && res.ok) (await caches.open(CACHE)).put(req, res.clone());
-      return res;
-    } catch (err) {
-      const hit = await cached();
-      if (hit) {
-        // Served stale because the network was slow, not absent — refresh the
-        // copy in the background so the next start is current.
-        if (err && err.name === "TimeoutError") e.waitUntil(revalidate(req, isDoc));
-        return hit;
-      }
-      // Only a page navigation may fall back to the shell.
-      if (isDoc) {
-        const shell = await caches.match("./index.html") || await caches.match("./");
-        if (shell) return shell;
-      }
-      throw err;
-    }
-  })());
-});
-
-/* How long a slow network may hold up a start before the cache wins. Long
-   enough that a normal connection always beats it, short enough that a stalled
-   one is not felt as a hang. */
-const NET_WAIT = 3500;
 function withTimeout(p, ms) {
   return new Promise((resolve, reject) => {
     const t = setTimeout(() => {
@@ -131,9 +89,219 @@ function withTimeout(p, ms) {
            e => { clearTimeout(t); reject(e); });
   });
 }
-async function revalidate(req, isDoc) {
-  try {
-    const res = await fetch(req, { cache: isDoc ? "reload" : "default" });
-    if (res && res.ok) (await caches.open(CACHE)).put(req, res.clone());
-  } catch (_) { /* still no network — the cached copy stands */ }
+
+/* Two attempts per file, then give up on that one. A pit link drops single
+   requests constantly; retrying once turns most of those into a success and
+   costs nothing when the first try works. */
+async function fetchInto(cache, url, tries) {
+  for (let i = 0; i < (tries || 2); i++) {
+    try {
+      const res = await withTimeout(fetch(new Request(url, { cache: "reload" })), 15000);
+      if (res && res.ok) { await cache.put(url, res.clone()); return true; }
+    } catch (e) { /* try again, then move on */ }
+  }
+  return false;
 }
+
+async function missingEssentials() {
+  const c = await caches.open(CACHE);
+  const out = [];
+  for (const u of ESSENTIAL) if (!(await c.match(u))) out.push(u);
+  return out;
+}
+
+async function precache() {
+  const c = await caches.open(CACHE);
+  // Essentials first and in full, before spending the link on 850 KB of PDF engine.
+  for (const u of ESSENTIAL) if (!(await c.match(u))) await fetchInto(c, u);
+  const missing = await missingEssentials();
+  // Optional files only once the app is known to be able to run.
+  if (!missing.length) await Promise.all(OPTIONAL.map(u => c.match(u).then(h => h || fetchInto(c, u, 1))));
+  return missing;
+}
+
+self.addEventListener("install", (e) => {
+  e.waitUntil((async () => {
+    const missing = await precache();
+    if (missing.length) {
+      /* Do NOT skipWaiting. This build cannot run, so it must not be allowed to
+         take over from one that can. It stays in waiting; the old worker keeps
+         serving; the app keeps working. The next visit tries again, and the
+         page's own build check will still say a new version exists — which is
+         true, and honest, rather than a phone that will not open. */
+      console.warn("[sw] install incomplete, staying in waiting:", missing);
+      return;
+    }
+    await self.skipWaiting();
+  })());
+});
+
+self.addEventListener("activate", (e) => {
+  e.waitUntil((async () => {
+    /* Only sweep the old caches once this one is proven. If something went
+       wrong, the previous build's files are the only working copy on the phone
+       and deleting them is unrecoverable — caches.match() searches every cache,
+       so keeping them is what makes the fallback below possible. */
+    const missing = await missingEssentials();
+    if (!missing.length) {
+      const keys = await caches.keys();
+      await Promise.all(keys.filter(k => k !== CACHE && k.startsWith("plug-capture-v"))
+        .map(k => caches.delete(k)));
+    } else {
+      console.warn("[sw] keeping older caches, this build is incomplete:", missing);
+      healSoon();
+    }
+    await self.clients.claim();
+  })());
+});
+
+/* If a build activated incomplete — or a file was evicted under storage
+   pressure, which iOS does — quietly finish the job the next time anything
+   happens. Guarded so a hundred requests do not start a hundred repairs. */
+let healing = false;
+function healSoon() {
+  if (healing) return;
+  healing = true;
+  precache()
+    .then(m => { if (m.length) console.warn("[sw] still missing:", m); })
+    .catch(() => {})
+    .then(() => { setTimeout(() => { healing = false; }, 30000); });
+}
+
+/* The last thing standing between an inspector and a browser error page. It is
+   deliberately a whole page with no dependencies: if this needed a stylesheet
+   or a script, it would fail exactly when it is needed. */
+function offlinePage() {
+  return new Response(
+    '<!doctype html><html lang="en"><head><meta charset="utf-8">' +
+    '<meta name="viewport" content="width=device-width,initial-scale=1">' +
+    '<title>Condition Monitoring</title><style>' +
+    'body{margin:0;padding:32px 22px;font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;' +
+    'background:#0d0d0d;color:#e8e8e6;}h1{font-size:19px;margin:0 0 14px;}' +
+    'p{margin:0 0 12px;color:#b9bcbe;}b{color:#e8e8e6;}' +
+    'button{margin-top:18px;width:100%;min-height:52px;font:600 16px system-ui;' +
+    'background:#f0a202;color:#1a1a19;border:0;border-radius:10px;}' +
+    '</style></head><body>' +
+    '<h1>The app has not finished downloading</h1>' +
+    '<p>Nothing you captured has been lost — saved rounds are on this phone and ' +
+    'will upload when there is signal.</p>' +
+    '<p>This screen means the app was still downloading when the connection ' +
+    'dropped. It needs <b>signal once</b> to finish, then works offline again.</p>' +
+    '<p>Try somewhere with a bar or two, or on camp wifi.</p>' +
+    '<button onclick="location.reload()">Try again</button>' +
+    '</body></html>',
+    { status: 200, headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" } });
+}
+
+self.addEventListener("fetch", (e) => {
+  const req = e.request;
+  if (req.method !== "GET") return;
+  let url;
+  try { url = new URL(req.url); } catch (_) { return; }
+  if (url.origin !== self.location.origin) return;      // uploads go straight out
+
+  const isDoc = req.mode === "navigate" || req.destination === "document";
+
+  /* ---- a page navigation: cache first, always ------------------------------
+     Network-first here was the original mistake. It put a 3.5-second timeout on
+     the critical path of every cold start in the field, and when both the
+     network and the cache missed it threw — which is the error on the phone.
+
+     Cache-first is also simply better: the app opens instantly, offline or on,
+     and the page's own half-hourly build check is what tells somebody a new
+     version exists. The service worker does not need to race for it. */
+  if (isDoc) {
+    e.respondWith((async () => {
+      const hit = await caches.match("./index.html") || await caches.match("./")
+        || await caches.match(req, { ignoreSearch: true });
+      if (hit) {
+        e.waitUntil(revalidate("./index.html"));        // fresher next time
+        return hit;
+      }
+      // Nothing cached at all — a first visit, or a cache that never completed.
+      try {
+        const res = await withTimeout(fetch(req), NET_WAIT + 4000);
+        if (res && res.ok) (await caches.open(CACHE)).put("./index.html", res.clone());
+        healSoon();
+        return res;
+      } catch (err) {
+        healSoon();
+        return offlinePage();                            // never reject
+      }
+    })());
+    return;
+  }
+
+  /* ---- ?v=<build>: an immutable URL --------------------------------------- */
+  if (url.searchParams.has("v")) {
+    e.respondWith((async () => {
+      const hit = await caches.match(req);
+      if (hit) return hit;
+      try {
+        const res = await withTimeout(fetch(req), NET_WAIT + 6000);
+        if (res && res.ok) (await caches.open(CACHE)).put(req, res.clone());
+        return res;
+      } catch (err) {
+        /* This exact build is not cached and the network is gone. A previous
+           build's copy of the same file is far better than nothing: the
+           equipment list being a week old beats the picker being empty. This is
+           why activate() does not delete old caches until it is sure. */
+        const any = await caches.match(req, { ignoreSearch: true });
+        if (any) { healSoon(); return any; }
+        healSoon();
+        /* Still nothing. Answer, rather than reject: a 503 lets the page load
+           and the app's own checkData() name the missing file and offer the
+           one-tap repair. Rejecting takes the whole page down instead. */
+        return new Response("/* unavailable offline */", { status: 503,
+          headers: { "Content-Type": "text/plain" } });
+      }
+    })());
+    return;
+  }
+
+  /* ---- everything else on this origin: DO NOT TOUCH IT -----------------------
+     This worker's job is the app shell. Anything else same-origin is almost
+     certainly a live call — the team list, a conflict check, a pull from the
+     backend — and a cache-first shell strategy applied to those is silent
+     poison: the app shows last week's answer and has no way to know.
+
+     It is easy to write by accident, because "cache first, network as fallback"
+     reads like a safe default and the shell is the only place it is. This
+     branch caught five test suites the moment it existed; in the field it would
+     have been an inspector looking at a team list that stopped updating, with
+     nothing on screen suggesting why. The Apps Script endpoint is cross-origin
+     and returned above, but the Phase 3 backend can be same-origin, so this is
+     not hypothetical.
+
+     Returning without calling respondWith() hands the request back to the
+     browser, which is exactly right: normal HTTP, normal caching rules, and no
+     stale answer this file is responsible for. Static files that matter are
+     precached and served by name; nothing else needs us. */
+  return;
+});
+
+async function revalidate(reqOrUrl) {
+  try {
+    const res = await withTimeout(fetch(new Request(reqOrUrl, { cache: "reload" })), 10000);
+    if (res && res.ok) (await caches.open(CACHE)).put(reqOrUrl, res.clone());
+  } catch (_) { /* no network — the cached copy stands, which is the point */ }
+}
+
+/* The page asks about its own footing: the System screen shows this, and the
+   repair button uses it. A phone that says "12 of 13 files" is diagnosable over
+   a radio; one that just fails is not. */
+self.addEventListener("message", (e) => {
+  const d = e.data || {};
+  if (d.type === "sw-health") {
+    e.waitUntil((async () => {
+      const missing = await missingEssentials();
+      const port = e.ports && e.ports[0];
+      const msg = { type: "sw-health", build: BUILD, ok: missing.length === 0,
+                    have: ESSENTIAL.length - missing.length, need: ESSENTIAL.length, missing };
+      if (port) port.postMessage(msg);
+      else (await self.clients.matchAll()).forEach(c => c.postMessage(msg));
+    })());
+  }
+  if (d.type === "sw-heal") healSoon();
+  if (d.type === "sw-skip") self.skipWaiting();
+});
