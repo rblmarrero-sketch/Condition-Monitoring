@@ -52,6 +52,9 @@
   .tile .k{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);}
   .tile .v{font-size:28px;font-weight:640;margin-top:4px;font-variant-numeric:tabular-nums;}
   .tile .s{font-size:12px;color:var(--ink-2);margin-top:2px;}
+  .tile .s .voidhint{background:none;border:0;padding:0;font:inherit;color:var(--ink-2);
+    cursor:pointer;text-decoration:underline dotted;text-underline-offset:2px;}
+  .tile .s .voidhint:hover{color:var(--ink);}
   .tile .bar{display:flex;height:8px;border-radius:6px;overflow:hidden;margin-top:10px;gap:2px;background:var(--surface-2);}
   /* Severity mix reads as a legend, not a sentence — and each band filters the view. */
   .tile .legend{display:flex;flex-direction:column;gap:1px;margin-top:9px;}
@@ -519,6 +522,7 @@ const I18N={
   k_act:"Actions to plan", k_mix:"Severity mix",
   k_units:"{n} unit(s)", k_finds:"items with a record", k_attsub:"degraded + critical",
   k_actsub:"excluding “monitor”", k_none_here:"None in this view", k_only:"Show only {x}",
+  k_voidhid:"{n} voided, not counted", k_voidtip:"These rounds were withdrawn, not deleted. Click to show them.",
 
   sev_NOF:"No failure", sev_INC:"Incipient", sev_DEG:"Degraded", sev_CRI:"Critical",
   type_MP:"Magnetic Plug", type_FC:"Filter Cut", type_INSP:"Inspection", type_TEMP:"Temperature",
@@ -575,7 +579,7 @@ const I18N={
   ds_choose:"Choose file(s)…", ds_clear:"Clear imported data",
   ds_notset:"not set up", ds_notloaded:"set up — not loaded yet", ds_notopened:"not opened",
   ds_insp:"{n} inspection(s)", ds_indexed:"{n} files indexed", ds_inbrowser:"{n} record(s) in this browser",
-  ds_photosn:"{n} photos",
+  ds_photosn:"{n} photos", ds_voidn:"{n} voided",
 
   ed_title:"Edit inspection",
   ed_lede:"Corrections are saved beside the inspection, never over it — the phone that captured it still holds the original, and the photos and readings are never altered. Your change shows here and in the reports, with your name on it.",
@@ -677,6 +681,7 @@ const I18N={
   k_act:"Действий к планированию", k_mix:"Распределение",
   k_units:"ед.: {n}", k_finds:"позиций с записью", k_attsub:"ухудшено + критично",
   k_actsub:"без «наблюдать»", k_none_here:"Нет в этой выборке", k_only:"Только {x}",
+  k_voidhid:"отозвано: {n}, не учтено", k_voidtip:"Эти осмотры отозваны, а не удалены. Нажмите, чтобы показать.",
 
   sev_NOF:"Без отказа", sev_INC:"Начальный", sev_DEG:"Ухудшено", sev_CRI:"Критично",
   type_MP:"Магнитная пробка", type_FC:"Разрез фильтра", type_INSP:"Осмотр", type_TEMP:"Температура",
@@ -733,7 +738,7 @@ const I18N={
   ds_choose:"Выбрать файл(ы)…", ds_clear:"Очистить импортированное",
   ds_notset:"не настроено", ds_notloaded:"настроено — ещё не загружено", ds_notopened:"не открыто",
   ds_insp:"осмотров: {n}", ds_indexed:"файлов в индексе: {n}", ds_inbrowser:"записей в этом браузере: {n}",
-  ds_photosn:"фото: {n}",
+  ds_photosn:"фото: {n}", ds_voidn:"отозвано: {n}",
 
   ed_title:"Правка осмотра",
   ed_lede:"Правки сохраняются рядом с осмотром, а не поверх него — телефон, который его снял, хранит оригинал, а фото и замеры не изменяются. Ваше изменение видно здесь и в отчётах, с вашим именем.",
@@ -1059,11 +1064,13 @@ function matchesText(r,q){
     (r.items||[]).flatMap(i=>[i.key,i.label,i.defect,i.cause,i.comment,i.wo,i.actionLabel,i.prio]));
   return hay.some(v=>String(v||"").toLowerCase().includes(q));
 }
-function filtered(){
+/* inclVoid lets a caller ask the same question with the voided rounds put back,
+   which is the only honest way to say how many the void filter is holding out. */
+function filtered(inclVoid){
   const ty=$("fType").value, c=$("fClass").value, days=+$("fRange").value;   // not "t" — that is t()
   const cutoff=days? new Date(Date.now()-days*864e5).toISOString().slice(0,10):null;
   const q=($("fQ").value||"").trim().toLowerCase();
-  const showVoid=$("fVoid")&&$("fVoid").checked;
+  const showVoid=inclVoid||($("fVoid")&&$("fVoid").checked);
   return RECS.filter(r=>{
     // A voided inspection is withdrawn, not deleted: it must not reach any KPI,
     // Pareto, action row or report, but it is still there to look at on request.
@@ -1143,13 +1150,18 @@ function worstOf(rec){ let w="",n=-1; rec.items.forEach(i=>{ const s=sevOf(rec,i
 function renderKpis(){
   const recs=filtered(), f=findings(recs);
   const units=new Set(recs.map(r=>r.equip)).size;
+  /* Two counters that look like the same fact must never disagree in silence.
+     The source chip says how many rounds were loaded; this tile says how many
+     are being counted. When the void filter is what separates them, say so. */
+  const nVoidHid=($("fVoid")&&$("fVoid").checked)?0:filtered(true).length-recs.length;
   const cnt={NOF:0,INC:0,DEG:0,CRI:0};
   f.forEach(x=>{ const s=sevOf(x.r,x.i); if(cnt[s]!=null)cnt[s]++; });
   const attention=cnt.DEG+cnt.CRI;
   const openActions=f.filter(x=>x.i.action&&!["MON"].includes(x.i.action)).length;
   const bar=["CRI","DEG","INC","NOF"].map(s=>cnt[s]?`<span style="flex:${cnt[s]};background:${SEVC[s]}"></span>`:"").join("");
   $("kpis").innerHTML=`
-   <div class="tile"><div class="k">${t("k_insp")}</div><div class="v">${recs.length}</div><div class="s">${t("k_units",{n:units})}</div></div>
+   <div class="tile"><div class="k">${t("k_insp")}</div><div class="v">${recs.length}</div><div class="s">${t("k_units",{n:units})}${
+      nVoidHid?` · <button class="voidhint" id="kpiVoid" title="${esc(t("k_voidtip"))}">${esc(t("k_voidhid",{n:nVoidHid}))}</button>`:""}</div></div>
    <div class="tile"><div class="k">${t("k_find")}</div><div class="v">${f.length}</div><div class="s">${t("k_finds")}</div></div>
    <div class="tile"><div class="k">${t("k_att")}</div><div class="v">${attention}</div><div class="s">${t("k_attsub")}</div></div>
    <div class="tile"><div class="k">${t("k_act")}</div><div class="v">${openActions}</div><div class="s">${t("k_actsub")}</div></div>
@@ -1162,6 +1174,8 @@ function renderKpis(){
    </div>`;
   // the mix doubles as a filter — click a band to see only those findings
   $("kpis").querySelectorAll("[data-sev]").forEach(b=>b.onclick=()=>setDrill("sev",b.dataset.sev));
+  // one click to see what is being held out, rather than hunting for the checkbox
+  const kv=$("kpiVoid"); if(kv) kv.onclick=()=>{ $("fVoid").checked=true; renderAll(); };
 }
 
 /* ---------- fleet table ---------- */
@@ -1845,11 +1859,12 @@ $("dataOv").onclick=e=>{ if(e.target.id==="dataOv") $("dataOv").classList.add("h
 /* One line that always answers "what am I looking at, and from where?" */
 function refreshSources(){
   const units=new Set(RECS.map(r=>r.equip)).size;
+  const nVoid=RECS.filter(r=>r._void).length;
   const nPhotos=folderPhotos?Object.keys(folderPhotos).length:0;
   const where=[]; if(driveRecs.length) where.push("Drive"); if(folderName) where.push(folderName);
   if(imported.length && !where.length) where.push(t("src_imported"));
   $("srcText").textContent = RECS.length
-    ? `${t("ds_insp",{n:RECS.length})} · ${t("k_units",{n:units})}${nPhotos?" · "+t("ds_photosn",{n:nPhotos}):""}${where.length?` · ${where.join(" + ")}`:""}`
+    ? `${t("ds_insp",{n:RECS.length})} · ${t("k_units",{n:units})}${nVoid?" · "+t("ds_voidn",{n:nVoid}):""}${nPhotos?" · "+t("ds_photosn",{n:nPhotos}):""}${where.length?` · ${where.join(" + ")}`:""}`
     : t("srcnone");
   $("srcChip").classList.toggle("live", RECS.length>0);
   const set=(card,state,on,text)=>{ $(card).classList.toggle("on",!!on); $(state).textContent=text; };

@@ -942,6 +942,16 @@ reads the code and both languages, so an engineer working in Russian can still t
 English term or the code. Whatever is already recorded stays selectable however you filter.
 | **Choose a version** | When two phones sent the same round, both are offered with the inspector and position count. Picking one decides what the reports use; neither file is deleted and the choice can be changed. |
 | **Void** | Withdraws the round from every count, chart, action list and report, with a reason. Nothing is deleted; **Show voided** brings it back into view, and **Un-void** reverses it. |
+
+A voided round is why the two counters on screen can differ, and the page says so rather
+than leaving you to work it out. The **source chip** at the top counts everything loaded —
+`22 inspection(s) · 18 unit(s) · 2 voided · Drive`. The **Inspections** tile counts what is
+being counted in the view you are looking at, after every filter including the void one, and
+when the void filter is what separates the two it carries the difference: `20` over
+`17 unit(s) · 2 voided, not counted`. That note is a button — clicking it ticks **Show
+voided**, so the rounds being held out are one click away rather than a hunt for a checkbox.
+The count is always of the current view, so a search that matches only a voided round reads
+`0 · 1 voided, not counted`.
 | **Delete** | Sidecar, photos, signature and corrections to Drive's **trash** (30 days), logged with who and why. Off unless `ADMIN_SECRET` is set in the Apps Script. |
 
 Corrections are stored as their own files in `_meta/`, never written into the inspection's
