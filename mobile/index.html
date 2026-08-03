@@ -459,7 +459,7 @@
   .ucgroups button.on{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);}
   .ucgroups button.done i{background:var(--good);border-color:var(--good);color:#fff;}
   .ucgroups button.watch i{background:var(--warning);border-color:var(--warning);color:#3a2a00;}
-  .ucgroups button.act i{background:var(--bad);border-color:var(--bad);color:#fff;}
+  .ucgroups button.act i{background:var(--critical);border-color:var(--critical);color:#fff;}
   .ucgroups button.na i{background:var(--surface-3);border-style:dashed;}
   .ucmembers{flex:0 0 100%;display:flex;flex-wrap:wrap;gap:7px;margin:9px 0 0;}
   .ucmembers button{min-width:56px;min-height:44px;padding:6px 14px;border:1px solid var(--line);
@@ -467,14 +467,20 @@
   .ucmembers button.on{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);}
   .ucmembers button.done{border-color:var(--good);}
   .ucmembers button.watch{border-color:var(--warning);}
-  .ucmembers button.act{border-color:var(--bad);}
+  .ucmembers button.act{border-color:var(--critical);}
   .ucmembers button.na{border-style:dashed;}
   /* the numbers on the picture */
   .ucmap .um-num .um-puck{fill:var(--surface);stroke:var(--ink-2);stroke-width:1.6;}
   .ucmap .um-num .um-n{font:800 13px/1 inherit;fill:var(--ink);}
   .ucmap .um-num.done .um-puck{fill:var(--good);stroke:var(--good);}
   .ucmap .um-num.watch .um-puck{fill:var(--warning);stroke:var(--warning);}
-  .ucmap .um-num.act .um-puck{fill:var(--bad);stroke:var(--bad);}
+  /* --critical, not --bad. There is no --bad in the palette and never was, so
+     these three rules were dead: an SVG fill of an undefined variable is invalid
+     at computed-value time and falls back to inherited, which is black. The
+     number for a component past its condemn limit — the one state on this
+     screen that has to carry across a glance — was rendering the same dark puck
+     as everything else. */
+  .ucmap .um-num.act .um-puck{fill:var(--critical);stroke:var(--critical);}
   .ucmap .um-num.na .um-puck{stroke-dasharray:3 3;}
   .ucmap .um-num.done .um-n,.ucmap .um-num.act .um-n{fill:#fff;}
   .ucmap .um-num.sel .um-puck{stroke:var(--accent);stroke-width:3.4;}
@@ -588,6 +594,20 @@
   .dlg-in{padding:20px;} .dlg-in h3{margin:0 0 8px;} .dlg-in p{color:var(--ink-2);font-size:14px;}
   /* Stacked, not side by side: the two ways of getting a photograph are equals,
      and a row of three would put the labels back to two words each. */
+  /* The speed check reads as a short report, not a form: a column of
+     name/number rows, then one sentence that says what to do about them. */
+  .speed{margin-top:12px;padding:12px 14px;border-radius:12px;background:var(--surface-2);
+    border:1px solid var(--line);font-size:13px;}
+  .sp-r{display:flex;justify-content:space-between;gap:12px;padding:5px 0;
+    border-bottom:1px solid var(--line);}
+  .sp-r:last-of-type{border-bottom:none;}
+  .sp-r span{color:var(--muted);} .sp-r b{font-variant-numeric:tabular-nums;color:var(--ink);}
+  .sp-r.bad b{color:var(--critical);} .sp-r.warn b{color:var(--warning);}
+  .sp-h{margin:12px 0 2px;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--muted);font-weight:700;}
+  .sp-v{margin-top:12px;padding:10px 12px;border-radius:10px;background:var(--surface);
+    border:1px solid var(--line);}
+  .sp-v b{display:block;margin-bottom:3px;} .sp-v span{color:var(--ink-2);line-height:1.5;}
   .srcopts{display:grid;gap:10px;margin-top:14px;}
   .btn.quiet{background:none;color:var(--muted);border:none;font-weight:600;font-size:15px;padding:10px;}
   .scan-ov{position:fixed;inset:0;background:#000;z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;}
@@ -964,6 +984,11 @@
       <button class="btn ghost" id="testUp" data-i18n="set_test">Test connection</button>
       <button class="btn primary" id="saveSet" data-i18n="set_save">Save</button>
     </div>
+    <!-- Not the same thing as Test connection. That answers "is it wired up".
+         This answers "why is it slow", which is a different question and the one
+         nobody could answer from the yard. -->
+    <button class="btn ghost" id="speedBtn" style="margin-top:10px" data-i18n="sp_run">Why is uploading slow?</button>
+    <div class="speed hidden" id="speedOut"></div>
     <div class="hint" id="setMsg" style="margin-top:12px"></div>
     <div class="hint" id="setStore" style="margin-top:10px"></div>
     <div class="hint" id="setDiag" style="margin-top:6px"></div>
@@ -1213,6 +1238,24 @@ const I18N = {
     set_help_gas:"Google Drive: open script.google.com, paste docs/google-upload.gs, set ROOT_FOLDER_ID to your Drive folder, then Deploy → Web app with Execute as “Me” and Who has access “Anyone”. Copy the /exec URL here. Re-deploy a NEW VERSION after every edit or the old code keeps running.",
     set_url:"Upload URL", set_hdr:"Secret header (optional)", set_folder:"Folder — e.g. {TYPE}/{UNIT}/{YYYY-MM-DD}",
     set_test:"Test connection", set_save:"Save", set_testing:"Testing…", set_ok:"Connected — test file uploaded.",
+    sp_run:"Why is uploading slow?", sp_again:"Measure again", sp_running:"Measuring…",
+    sp_title:"Upload speed check", sp_origin:"This app's own host (not Google)",
+    sp_dest:"Destination", sp_nodest:"No destination is switched on — nothing to measure.",
+    sp_offline:"No signal. Try this where the phone has one.",
+    sp_unreachable:"cannot be reached", sp_failed:"failed",
+    sp_small_only:"answers in {n}, but would not take 200 KB",
+    sp_overhead:"cost per request", sp_rate:"speed once it starts",
+    sp_means:"what that means for a round",
+    sp_perphoto:"one photograph", sp_ten:"ten photographs",
+    sp_copy:"Copy this for IT", sp_copied:"Copied", sp_copyfail:"Could not copy — read it off the screen",
+    sp_v_host:"The destination is the slow part, not your signal.",
+    sp_v_host_d:"Every upload pays {o} before a single byte of photograph moves, while this app's own host answers in {c}. The link is fine. Sending smaller photographs will not help — the fix is fewer, larger requests, or a destination that is not being held up.",
+    sp_v_link:"The connection itself is slow, for everything.",
+    sp_v_link_d:"Even this app's own host takes {c}, and it is not Google. This is the link, the VPN or where the phone is standing, not the upload destination. Uploading fewer bytes is the only thing that helps here.",
+    sp_v_bytes:"There is bandwidth, but not much of it.",
+    sp_v_bytes_d:"{r} once a transfer is going. Requests are cheap and bytes are expensive, so the fix is bytes: smaller photographs, and dropping the third that base64 adds.",
+    sp_v_ok:"This connection is healthy.",
+    sp_v_ok_d:"Ten photographs should be gone in about {t}. If a round is still taking far longer than that, it is not the connection — say so and we will look elsewhere.",
     set_needurl:"Choose a mode and paste the URL first.",
     set_help:"Power Automate: create a flow with the trigger \u201cWhen an HTTP request is received\u201d, add \u201cCreate file\u201d (SharePoint) with name = triggerBody()?['name'] and content = base64ToBinary(triggerBody()?['file']), then copy the generated URL here.",
     lbl_inspector:"Inspected by", ph_inspector:"name / badge no.", lbl_sev:"Severity (ISO 14224)",
@@ -1450,6 +1493,24 @@ const I18N = {
     set_help_gas:"Google Диск: откройте script.google.com, вставьте docs/google-upload.gs, укажите ROOT_FOLDER_ID вашей папки Диска, затем Deploy → Web app: «Execute as: Me», «Who has access: Anyone». Скопируйте URL /exec сюда. После каждой правки развёртывайте НОВУЮ ВЕРСИЮ, иначе работает старый код.",
     set_url:"URL отправки", set_hdr:"Секретный заголовок (необяз.)", set_folder:"Папка — напр. {TYPE}/{UNIT}/{YYYY-MM-DD}",
     set_test:"Проверить соединение", set_save:"Сохранить", set_testing:"Проверка…", set_ok:"Успешно — тестовый файл отправлен.",
+    sp_run:"Почему загрузка медленная?", sp_again:"Измерить ещё раз", sp_running:"Измерение…",
+    sp_title:"Проверка скорости загрузки", sp_origin:"Собственный хост приложения (не Google)",
+    sp_dest:"Назначение", sp_nodest:"Ни одно назначение не включено — нечего измерять.",
+    sp_offline:"Нет сигнала. Повторите там, где он есть.",
+    sp_unreachable:"недоступно", sp_failed:"сбой",
+    sp_small_only:"отвечает за {n}, но не принял 200 КБ",
+    sp_overhead:"цена одного запроса", sp_rate:"скорость после старта",
+    sp_means:"что это значит для обхода",
+    sp_perphoto:"одна фотография", sp_ten:"десять фотографий",
+    sp_copy:"Скопировать для ИТ", sp_copied:"Скопировано", sp_copyfail:"Не удалось скопировать — перепишите с экрана",
+    sp_v_host:"Медленно работает назначение, а не ваш сигнал.",
+    sp_v_host_d:"Каждая загрузка тратит {o} до того, как уйдёт первый байт фотографии, тогда как собственный хост приложения отвечает за {c}. Со связью всё в порядке. Уменьшение фотографий не поможет — нужны более редкие и крупные запросы либо другое назначение.",
+    sp_v_link:"Медленно работает само соединение, для всего.",
+    sp_v_link_d:"Даже собственный хост приложения отвечает за {c}, и это не Google. Дело в канале, VPN или месте, где стоит телефон, а не в назначении. Здесь помогает только уменьшение объёма данных.",
+    sp_v_bytes:"Полоса есть, но узкая.",
+    sp_v_bytes_d:"{r} при идущей передаче. Запросы дёшевы, дороги байты — значит, уменьшать фотографии и убирать треть, которую добавляет base64.",
+    sp_v_ok:"Соединение в порядке.",
+    sp_v_ok_d:"Десять фотографий должны уйти примерно за {t}. Если обход всё равно идёт заметно дольше, дело не в связи — сообщите, будем искать в другом месте.",
     set_needurl:"Сначала выберите режим и укажите URL.",
     set_help:"Power Automate: создайте поток с триггером \u201cWhen an HTTP request is received\u201d, добавьте \u201cCreate file\u201d (SharePoint): name = triggerBody()?['name'], content = base64ToBinary(triggerBody()?['file']), затем скопируйте URL сюда.",
     lbl_inspector:"Осмотр выполнил", ph_inspector:"ФИО / табельный №", lbl_sev:"Категория (ISO 14224)",
@@ -4905,6 +4966,151 @@ function persistSettings(){ saveDests(formToDests());
 $("setBtn").onclick=openSettings;
 $("setClose").onclick=()=>$("setOv").classList.add("hidden");
 $("saveSet").onclick=()=>{ persistSettings(); $("setOv").classList.add("hidden"); renderSync(); syncThenArm(); };
+/* ===================== why is uploading slow? =====================
+   "Test connection" answers whether the endpoint is wired up. This answers a
+   different question, and it is the one nobody at the mine could answer: when
+   a round crawls, is it the link, the VPN, the endpoint, or Google in
+   particular? Those have opposite fixes — fewer bytes helps a slow link and
+   does nothing at all against a throttled host — so guessing wrong costs weeks.
+
+   The method is two probes of different sizes to the same place. Time is
+   overhead plus bytes over rate; measure at two sizes and you can solve for
+   both, which one number never lets you do. A high overhead with a healthy
+   rate means round trips are the enemy and the fix is fewer, bigger requests.
+   A low overhead with a poor rate means bytes are the enemy and the fix is
+   base64 and photo size.
+
+   Both probes go as {op:"ping"}, which the Apps Script answers without writing
+   anything — see doPost in docs/google-upload.gs. The padding rides along and
+   is discarded. That matters because it means this works against a deployment
+   nobody has touched: no redeploy, no new endpoint, nothing for IT to approve.
+
+   The control is the app's own origin, which is not Google. If Google is slow
+   and the origin is fine, that is interference with Google specifically and no
+   amount of shrinking photographs will help. If both are slow it is the link
+   or the VPN. That single comparison is the whole point of the screen. */
+const SP_PAD=200*1024;                   // big enough to measure, small enough to dare on a bad link
+function spFmt(ms){ return ms>=1000 ? (ms/1000).toFixed(1)+" s" : Math.round(ms)+" ms"; }
+function spRate(bps){                    // bytes/sec -> something an engineer can act on
+  const kb=bps/1024;
+  return kb>=1024 ? (kb/1024).toFixed(1)+" MB/s" : Math.round(kb)+" KB/s";
+}
+async function spTime(fn){ const t0=performance.now();
+  try{ const ok=await fn(); return { ms:performance.now()-t0, ok }; }
+  catch(e){ return { ms:performance.now()-t0, ok:false, err:(e&&e.message)||String(e) }; } }
+
+/* One destination, both sizes, three times each — a satellite link varies
+   enough that a single sample is a coin toss. The best of three is the honest
+   figure for "how fast can this go", because the slow ones are congestion and
+   the fast one is the link telling the truth about itself. */
+async function spProbe(url, pad){
+  let best=null;
+  for(let i=0;i<3;i++){
+    const body=JSON.stringify(pad?{op:"ping",pad:"x".repeat(pad)}:{op:"ping"});
+    const r=await spTime(async ()=>{
+      const res=await fetchT(url,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+                                  body}, 30000);
+      await res.text(); return res.ok;
+    });
+    if(!r.ok) return r;                                  // a failure is the answer, stop paying for it
+    if(!best || r.ms<best.ms) best=r;
+  }
+  return best;
+}
+/* The non-Google control. A GET of a file the app already ships, cache-busted
+   so it is a real round trip and not the service worker answering. */
+async function spOrigin(){
+  let best=null;
+  for(let i=0;i<3;i++){
+    const r=await spTime(async ()=>{
+      const res=await fetch("icon-192.png?sp="+Date.now(),{cache:"no-store"});
+      await res.blob(); return res.ok;
+    });
+    if(!r.ok) return r;
+    if(!best || r.ms<best.ms) best=r;
+  }
+  return best;
+}
+async function runSpeedCheck(){
+  const out=$("speedOut"), btn=$("speedBtn");
+  out.classList.remove("hidden");
+  btn.disabled=true; btn.textContent=t("sp_running");
+  const lines=[]; const say=()=>{ out.innerHTML=lines.join(""); };
+  const row=(k,v,cls)=>{ lines.push('<div class="sp-r'+(cls?" "+cls:"")+'"><span>'+esc(k)+'</span><b>'+esc(v)+'</b></div>'); say(); };
+  lines.length=0; say();
+
+  if(!navigator.onLine){
+    row(t("sp_link"), t("sp_offline"), "bad");
+    btn.disabled=false; btn.textContent=t("sp_run"); return;
+  }
+
+  /* The control first. If this is already dead there is nothing to compare
+     against and saying so beats a page of numbers about Google. */
+  const org=await spOrigin();
+  row(t("sp_origin"), org.ok? spFmt(org.ms) : t("sp_unreachable"), org.ok?"":"bad");
+
+  const dests=activeDests();
+  if(!dests.length){ row(t("sp_dest"), t("sp_nodest"), "bad");
+    btn.disabled=false; btn.textContent=t("sp_run"); return; }
+
+  const found=[];
+  for(const d of dests){
+    const label=DEST_META[d.id].label;
+    const small=await spProbe(d.url, 0);
+    if(!small.ok){ row(label, small.err? t("sp_failed")+" — "+small.err : t("sp_unreachable"), "bad"); continue; }
+    const big=await spProbe(d.url, SP_PAD);
+    if(!big.ok){ row(label, t("sp_small_only",{n:spFmt(small.ms)}), "warn"); continue; }
+    /* overhead = what a request costs before a single useful byte moves.
+       rate     = what the bytes themselves cost. */
+    const overhead=small.ms;
+    const dt=Math.max(1, big.ms-small.ms);
+    const rate=SP_PAD/(dt/1000);
+    found.push({ id:d.id, label, overhead, rate });
+    row(label+" — "+t("sp_overhead"), spFmt(overhead));
+    row(label+" — "+t("sp_rate"), spRate(rate));
+  }
+  if(!found.length){ btn.disabled=false; btn.textContent=t("sp_run"); return; }
+
+  /* What all of that means for a round, which is the only unit anybody cares
+     about. A photograph is PHOTO_BYTES on disk and a third more on the wire
+     because it travels as base64 — that inflation is part of the estimate
+     precisely because it is one of the things we may be about to remove. */
+  const f=found[0];
+  const perPhoto=f.overhead + (PHOTO_BYTES*4/3)/f.rate*1000;
+  const lanes=uploadLanes();
+  const ten=(perPhoto*10)/lanes;
+  lines.push('<div class="sp-h">'+esc(t("sp_means"))+'</div>'); say();
+  row(t("sp_perphoto"), spFmt(perPhoto));
+  row(t("sp_ten"), spFmt(ten));
+
+  /* The verdict. Three shapes, three different fixes, and the whole reason the
+     two sizes were measured separately. */
+  let verdict, detail;
+  if(org.ok && org.ms<1200 && f.overhead>4000){
+    verdict=t("sp_v_host"); detail=t("sp_v_host_d",{o:spFmt(f.overhead),c:spFmt(org.ms)});
+  } else if(!org.ok || org.ms>=1200){
+    verdict=t("sp_v_link"); detail=t("sp_v_link_d",{c:org.ok?spFmt(org.ms):t("sp_unreachable")});
+  } else if(f.rate < 60*1024){
+    verdict=t("sp_v_bytes"); detail=t("sp_v_bytes_d",{r:spRate(f.rate)});
+  } else {
+    verdict=t("sp_v_ok"); detail=t("sp_v_ok_d",{t:spFmt(ten)});
+  }
+  lines.push('<div class="sp-v"><b>'+esc(verdict)+'</b><span>'+esc(detail)+'</span></div>'); say();
+
+  /* Copyable, because the person who can act on this is not holding the phone. */
+  const txt=[t("sp_title"), new Date().toISOString(),
+    t("sp_origin")+": "+(org.ok?Math.round(org.ms)+" ms":"unreachable")]
+    .concat(found.map(x=>x.label+": overhead "+Math.round(x.overhead)+" ms, "+spRate(x.rate)))
+    .concat([t("sp_ten")+": "+spFmt(ten), verdict, detail]).join("\n");
+  lines.push('<button type="button" class="btn ghost" id="spCopy" style="margin-top:10px">'+esc(t("sp_copy"))+'</button>'); say();
+  $("spCopy").onclick=async ()=>{
+    try{ await navigator.clipboard.writeText(txt); $("spCopy").textContent=t("sp_copied"); }
+    catch(e){ $("spCopy").textContent=t("sp_copyfail"); }
+  };
+  btn.disabled=false; btn.textContent=t("sp_again");
+}
+$("speedBtn").onclick=runSpeedCheck;
+
 $("testUp").onclick=async ()=>{ const m=$("setMsg");
   if($("testUp").disabled) return;
   persistSettings();

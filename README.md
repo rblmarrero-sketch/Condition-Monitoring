@@ -1319,3 +1319,34 @@ at a time.
 The list is keyed to the revision and thrown away when the round completes. An edited round
 re-sends in full, which is right — the file behind a name may not be the file that name meant
 last time.
+
+### Why is uploading slow?
+
+⚙ has a second button next to **Test connection**. That one answers whether the endpoint is
+wired up. This one answers why a round crawls, which is a different question and the one
+nobody at the mine could answer from the yard.
+
+Four causes look identical to an inspector watching a progress bar, and they have opposite
+fixes:
+
+| What is actually wrong | What fixes it | What does nothing |
+|---|---|---|
+| The endpoint is slow per request | Fewer, larger requests | Smaller photographs |
+| The link or VPN is slow for everything | Fewer bytes | Changing endpoint |
+| Bandwidth is thin | Smaller photographs, dropping base64 | Batching |
+| Nothing — it is already healthy | — | Everything |
+
+The method is two probes of different sizes to the same place. Time is overhead plus bytes
+over rate; measure at two sizes and both terms fall out, which one number never gives you. A
+high overhead with a healthy rate means round trips are the enemy. A low overhead with a poor
+rate means bytes are.
+
+The control is the app's own host, which is not Google. **If Google is slow and the app's own
+host is fine, that is interference with Google specifically, and no amount of shrinking
+photographs will help.** That single comparison is the point of the screen.
+
+Both probes go as `{op:"ping"}`, which the Apps Script answers without writing anything — the
+padding rides along and is discarded. So this works against a deployment nobody has touched:
+no redeploy, no new endpoint, nothing for IT to approve. It ends with a plain-language verdict
+and a **Copy this for IT** button, because the person who can act on the numbers is not the
+one holding the phone.
