@@ -1254,6 +1254,15 @@ const I18N = {
     sp_v_link_d:"Even this app's own host takes {c}, and it is not Google. This is the link, the VPN or where the phone is standing, not the upload destination. Uploading fewer bytes is the only thing that helps here.",
     sp_v_bytes:"There is bandwidth, but not much of it.",
     sp_v_bytes_d:"{r} once a transfer is going. Requests are cheap and bytes are expensive, so the fix is bytes: smaller photographs, and dropping the third that base64 adds.",
+    sp_timeout:"no answer in {n} s",
+    sp_v_blocked:"Something is refusing to carry these requests.",
+    sp_v_blocked_d:"This app's own host answers in {c}, so the phone has a working connection — but the upload destinations were turned away before a reply came back. That is a block, not slowness: a firewall, the VPN, or a URL that is wrong. What came back: {w}",
+    sp_v_swallow:"The requests go out and nothing comes back.",
+    sp_v_swallow_d:"This app's own host answers in {c}, so there is a connection, but the destinations never reply at all — the traffic is being swallowed rather than refused. That is usually throttling or a route that drops it silently, and it will not improve with smaller photographs.",
+    sp_v_nothing:"Nothing is reachable, including this app's own host.",
+    sp_v_nothing_d:"The phone thinks it is online but nothing answers. Move to where there is real signal and run this again before reading anything into it.",
+    sp_v_refused:"The destinations answered, and said no.",
+    sp_v_refused_d:"These are replies, not silence — so the connection is fine and the setup is not. Check the URL, the secret, and that the Apps Script deployment is set to Anyone. What came back: {w}",
     sp_v_ok:"This connection is healthy.",
     sp_v_ok_d:"Ten photographs should be gone in about {t}. If a round is still taking far longer than that, it is not the connection — say so and we will look elsewhere.",
     set_needurl:"Choose a mode and paste the URL first.",
@@ -1509,6 +1518,15 @@ const I18N = {
     sp_v_link_d:"Даже собственный хост приложения отвечает за {c}, и это не Google. Дело в канале, VPN или месте, где стоит телефон, а не в назначении. Здесь помогает только уменьшение объёма данных.",
     sp_v_bytes:"Полоса есть, но узкая.",
     sp_v_bytes_d:"{r} при идущей передаче. Запросы дёшевы, дороги байты — значит, уменьшать фотографии и убирать треть, которую добавляет base64.",
+    sp_timeout:"нет ответа за {n} с",
+    sp_v_blocked:"Что-то не пропускает эти запросы.",
+    sp_v_blocked_d:"Собственный хост приложения отвечает за {c}, значит связь у телефона есть — но назначения отвергли запрос ещё до ответа. Это блокировка, а не медленная связь: межсетевой экран, VPN или неверный адрес. Ответ: {w}",
+    sp_v_swallow:"Запросы уходят, ответа нет.",
+    sp_v_swallow_d:"Собственный хост приложения отвечает за {c} — связь есть, но назначения не отвечают вовсе: трафик не отвергают, а поглощают. Обычно это ограничение скорости или маршрут, который молча всё теряет; уменьшение фотографий не поможет.",
+    sp_v_nothing:"Недоступно ничего, включая собственный хост приложения.",
+    sp_v_nothing_d:"Телефон считает себя в сети, но никто не отвечает. Перейдите туда, где есть реальный сигнал, и повторите проверку, прежде чем делать выводы.",
+    sp_v_refused:"Назначения ответили — отказом.",
+    sp_v_refused_d:"Это ответы, а не молчание: связь в порядке, а настройка — нет. Проверьте адрес, секрет и что развёртывание Apps Script открыто для «Все». Ответ: {w}",
     sp_v_ok:"Соединение в порядке.",
     sp_v_ok_d:"Десять фотографий должны уйти примерно за {t}. Если обход всё равно идёт заметно дольше, дело не в связи — сообщите, будем искать в другом месте.",
     set_needurl:"Сначала выберите режим и укажите URL.",
@@ -5003,17 +5021,36 @@ async function spTime(fn){ const t0=performance.now();
    enough that a single sample is a coin toss. The best of three is the honest
    figure for "how fast can this go", because the slow ones are congestion and
    the fast one is the link telling the truth about itself. */
+/* WHY it failed is the diagnosis, so it must survive to the screen. "Cannot be
+   reached" covering both "the network refused to carry this" and "the server
+   answered, and said no" is not a reading anybody can act on — the first is a
+   blocked route and the second is a misconfigured deployment, and they have
+   nothing in common. So: the HTTP status when there is one, the browser's own
+   words when the request never got that far, and "timed out" told apart from
+   both, because a route that swallows traffic silently is its own answer. */
 async function spProbe(url, pad){
   let best=null;
   for(let i=0;i<3;i++){
     const body=JSON.stringify(pad?{op:"ping",pad:"x".repeat(pad)}:{op:"ping"});
-    const r=await spTime(async ()=>{
+    const t0=performance.now();
+    let ms, ok=false, why="", kind="";
+    try{
       const res=await fetchT(url,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
                                   body}, 30000);
-      await res.text(); return res.ok;
-    });
-    if(!r.ok) return r;                                  // a failure is the answer, stop paying for it
-    if(!best || r.ms<best.ms) best=r;
+      await res.text();
+      ms=performance.now()-t0; ok=res.ok;
+      if(!ok){ why="HTTP "+res.status+(res.statusText?" "+res.statusText:""); kind="http"; }
+    }catch(e){
+      ms=performance.now()-t0;
+      const m=(e&&e.message)||String(e);
+      /* fetchT turns its own abort into the timeout string; anything else is the
+         browser refusing to make the request at all — blocked, no route, or a
+         reply with no CORS headers on it. */
+      if(m===t_up_timeout()||/abort/i.test(m)){ why=t("sp_timeout",{n:Math.round(ms/1000)}); kind="timeout"; }
+      else { why=m; kind="net"; }
+    }
+    if(!ok) return { ms, ok:false, why, kind };          // a failure is the answer, stop paying for it
+    if(!best || ms<best.ms) best={ ms, ok:true };
   }
   return best;
 }
@@ -5053,13 +5090,15 @@ async function runSpeedCheck(){
   if(!dests.length){ row(t("sp_dest"), t("sp_nodest"), "bad");
     btn.disabled=false; btn.textContent=t("sp_run"); return; }
 
-  const found=[];
+  const found=[], broke=[];
   for(const d of dests){
     const label=DEST_META[d.id].label;
     const small=await spProbe(d.url, 0);
-    if(!small.ok){ row(label, small.err? t("sp_failed")+" — "+small.err : t("sp_unreachable"), "bad"); continue; }
+    if(!small.ok){ broke.push({label, kind:small.kind, why:small.why});
+      row(label, small.why||t("sp_unreachable"), "bad"); continue; }
     const big=await spProbe(d.url, SP_PAD);
-    if(!big.ok){ row(label, t("sp_small_only",{n:spFmt(small.ms)}), "warn"); continue; }
+    if(!big.ok){ broke.push({label, kind:big.kind||"big", why:big.why});
+      row(label, t("sp_small_only",{n:spFmt(small.ms)})+(big.why?" — "+big.why:""), "warn"); continue; }
     /* overhead = what a request costs before a single useful byte moves.
        rate     = what the bytes themselves cost. */
     const overhead=small.ms;
@@ -5069,7 +5108,33 @@ async function runSpeedCheck(){
     row(label+" — "+t("sp_overhead"), spFmt(overhead));
     row(label+" — "+t("sp_rate"), spRate(rate));
   }
-  if(!found.length){ btn.disabled=false; btn.textContent=t("sp_run"); return; }
+  /* Nothing answered. This is not "no result" — it is the loudest result the
+     screen can produce, and leaving three red rows and no sentence under them
+     was the one case that sent somebody away with nothing. Say which kind of
+     nothing it is, because the three do not share a fix. */
+  if(!found.length){
+    let v, dd;
+    const allNet = broke.every(x=>x.kind==="net"), allTimeout = broke.every(x=>x.kind==="timeout");
+    if(org.ok && allNet){
+      v=t("sp_v_blocked"); dd=t("sp_v_blocked_d",{c:spFmt(org.ms), w:broke.map(x=>x.label+": "+x.why).join(" · ")});
+    } else if(org.ok && allTimeout){
+      v=t("sp_v_swallow"); dd=t("sp_v_swallow_d",{c:spFmt(org.ms)});
+    } else if(!org.ok){
+      v=t("sp_v_nothing"); dd=t("sp_v_nothing_d");
+    } else {
+      v=t("sp_v_refused"); dd=t("sp_v_refused_d",{w:broke.map(x=>x.label+": "+x.why).join(" · ")});
+    }
+    lines.push('<div class="sp-v"><b>'+esc(v)+'</b><span>'+esc(dd)+'</span></div>'); say();
+    const txt0=[t("sp_title"), new Date().toISOString(),
+      t("sp_origin")+": "+(org.ok?Math.round(org.ms)+" ms":"unreachable")]
+      .concat(broke.map(x=>x.label+": "+x.why)).concat([v, dd]).join("\n");
+    lines.push('<button type="button" class="btn ghost" id="spCopy" style="margin-top:10px">'+esc(t("sp_copy"))+'</button>'); say();
+    $("spCopy").onclick=async ()=>{
+      try{ await navigator.clipboard.writeText(txt0); $("spCopy").textContent=t("sp_copied"); }
+      catch(e){ $("spCopy").textContent=t("sp_copyfail"); }
+    };
+    btn.disabled=false; btn.textContent=t("sp_again"); return;
+  }
 
   /* What all of that means for a round, which is the only unit anybody cares
      about. A photograph is PHOTO_BYTES on disk and a third more on the wire

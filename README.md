@@ -1350,3 +1350,16 @@ padding rides along and is discarded. So this works against a deployment nobody 
 no redeploy, no new endpoint, nothing for IT to approve. It ends with a plain-language verdict
 and a **Copy this for IT** button, because the person who can act on the numbers is not the
 one holding the phone.
+
+Where a destination does not answer, the reason is the diagnosis, so it survives to the
+screen. "Cannot be reached" covering both *the network refused to carry this* and *the server
+answered, and said no* is not a reading anybody can act on — the first is a blocked route and
+the second is a misconfigured deployment, and they have nothing in common. So the screen
+distinguishes four kinds of nothing, each with its own verdict:
+
+- **Refused** — the browser would not make the request. A firewall, the VPN, or a wrong URL.
+- **Answered with an error** — HTTP 403 and the like. The connection is fine, the setup is not.
+- **Swallowed** — the request goes out and nothing ever comes back. Throttling, or a route
+  that drops it silently. Smaller photographs will not help.
+- **Everything unreachable, including the app's own host** — the phone is not really online.
+  Move and try again before reading anything into it.
