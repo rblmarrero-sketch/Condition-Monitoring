@@ -1404,3 +1404,37 @@ that batch as singles there and then and never asks again.
 Each file in a batch still succeeds or fails on its own. The phone marks off what landed by
 the name it asked for — not the name Drive used, which differs when another phone already owns
 it — so a half-delivered batch re-sends only the half that is missing.
+
+### How to measure it, drawn
+
+The GET round now carries a drawing per position, the way the undercarriage round already
+did. The photograph on the map shows what the part looks like; the drawing says the thing a
+photograph cannot — where to put the tool, which face is the datum, and which number to
+write down.
+
+The same four things every time, so reading one teaches you all twenty-two:
+
+| | |
+|---|---|
+| **dashed grey** | the profile when it was new — what has been lost |
+| **solid** | what is left |
+| **red** | the dimension to record, with extension lines to the faces it runs between |
+| **blue** | the tool, sitting where it should sit |
+
+Two positions are pass-or-fail rather than a number — retainer pins and edge bolts — and
+those are drawn as the two answers side by side, seated against standing proud, with a tick
+and a cross. No dimension, because there is nothing to measure.
+
+**Both languages are generated separately, not translated at render time.** Russian strings
+run about half as long again as the English, so a layout that fits one is exactly the layout
+that overlaps in the other — and it would overlap on the phones of the people who need it
+most. `figtext.cjs` lays out all forty-four in a real browser and measures every label: none
+may sit on another, none may be struck through by a tick or a centreline, none may hang off
+the frame, and none may fall below nine pixels at the width the panel actually gives it. It
+found three genuine collisions and one Russian label running off the edge, which is the
+whole reason it exists rather than a set of eyeballed drawings.
+
+It also checks every `var()` resolves to a colour the app defines. An undefined variable is
+not a slightly wrong colour — the browser throws the whole declaration away — and that is how
+the green tick and the crack's end marks came to be invisible on a screen nobody had looked
+at closely enough. Same failure as `--bad`, found the same way.

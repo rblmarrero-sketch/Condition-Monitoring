@@ -65,6 +65,7 @@ const ESSENTIAL = [
   "./get.js?v=" + BUILD,
   "./uc-points.js?v=" + BUILD,
   "./inspect-guide.js?v=" + BUILD,
+  "./get-figs.js?v=" + BUILD,
   "./report-core.js?v=" + BUILD,
 ];
 

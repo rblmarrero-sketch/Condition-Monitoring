@@ -746,6 +746,11 @@
         <div class="getread" id="getRead"></div>
       </div>
       <div class="getref" id="getRefLine"></div>
+      <!-- Where the tool goes and which number to write down. The photograph on
+           the map above shows what the part looks like; this shows how it is
+           measured, which is the thing a photograph cannot say. -->
+      <button type="button" class="ucfigtog" id="getFigTog"></button>
+      <div class="ucfig" id="getFig"></div>
       <div class="guide" id="getGuide"></div>
     </div>
     <div id="tempFields" class="hidden">
@@ -1059,6 +1064,7 @@
 <script src="get.js?v=77"></script>
 <script src="uc-points.js?v=77"></script>
 <script src="inspect-guide.js?v=77"></script>
+<script src="get-figs.js?v=77"></script>
 <script src="report-core.js?v=77"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
@@ -2631,6 +2637,7 @@ function renderGET(){
     ? esc(t("get_ref",{n:ref.n, c:ref.c})) +
       (ref.src==="generic"? ' · <span class="band b-watch">'+esc(t("get_generic"))+'</span>' : '')
     : "";
+  renderGETFig();
   renderGuide("getGuide", row?row[1]:"", getScope());
   const p=posRO(), mm=(p.mm==null?null:Number(p.mm));
   if(mm==null || !ref || !window.WEAR){ read.innerHTML=""; return; }
@@ -3039,6 +3046,21 @@ function renderUCFig(){
   box.innerHTML = svg + (meta?'<div class="cap">'+esc(meta.tool)+'</div>':"");
 }
 function renderUCGuide(){ renderGuide("ucGuide", ucSplit(curItem||"")[0], ""); }
+/* The GET round's drawing. Shares the undercarriage round's show/hide setting,
+   because "show me the diagram" is one preference about how somebody likes to
+   work and not two — an inspector who folds it away on a roller does not want
+   to fold it away again on a bucket. */
+function renderGETFig(){
+  const box=$("getFig"), tog=$("getFigTog"); if(!box||!tog) return;
+  const svg = window.GET_FIG ? GET_FIG.for(getCode(), getScope(), lang) : "";
+  tog.classList.toggle("hidden", !svg);
+  if(!svg){ box.style.display="none"; box.innerHTML=""; return; }
+  tog.textContent=(ucFigOpen?"▾ ":"▸ ")+t(ucFigOpen?"uc_fig_hide":"uc_fig_show");
+  tog.onclick=()=>{ ucFigOpen=!ucFigOpen; localStorage.setItem("uc_fig",ucFigOpen?"1":"0");
+    renderGETFig(); if(TYPE_META[type].wear) renderUCFig(); };
+  box.style.display = ucFigOpen ? "" : "none";
+  box.innerHTML = ucFigOpen ? svg : "";
+}
 /* What this position read last time. A transposed digit — 204 for 240 — passes
    every check the reference can make, and is only obvious next to the number the
    same point gave a month ago. Cheap to show, and the only moment it is cheap to
@@ -5589,7 +5611,7 @@ if("serviceWorker" in navigator && window.isSecureContext){ let reloaded=false;
 const SHELL_ASSETS=["index.html","manifest.webmanifest","native.js","jsQR.js","qrcode.js","upload-defaults.js",
   "hme.js","hme-cascade.js","mp-fc.js","assets.js","temp-limits.js",
   "wear.js","wear-figs.js","wear-map.js","machine-photos.js","machine-fig.js","get.js","uc-points.js","report-core.js",
-  "jspdf.umd.min.js","html2canvas.min.js","inspect-guide.js","sw.js"];
+  "jspdf.umd.min.js","html2canvas.min.js","inspect-guide.js","get-figs.js","sw.js"];
 /* "Am I on the latest build?" used to be unanswerable from inside the app: the
    service worker serves the copy it has, and a stale page looks exactly like a
    current one. So ask. sw.js carries the build number, it is tiny, and fetching
