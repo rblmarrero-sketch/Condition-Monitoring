@@ -1262,22 +1262,36 @@ file, because a limit in two places is a limit that drifts.
 
 ### Photographs the phone already has
 
-**Add photo** and **Video** go straight to the camera, as they always did. Underneath them
-is **Choose from gallery**, which opens what the phone already holds.
+**Add photo** and **Video** each ask where the file comes from — take one now, or choose one
+already on the phone. Both answers are offered every time, and neither is hidden behind the
+other.
 
-The whole difference is one attribute: the camera inputs carry `capture="environment"`, so
-the phone skips the picker and opens the lens; the gallery input does not, so the phone
-offers its library. The inspector who photographed the cracked lip before opening the app,
-or on the walk back to the ute, does not have to photograph it again — and telling them to
-is exactly the kind of instruction this app is built not to give.
+That is deliberate. Attaching a photograph the phone already holds is not an exception to be
+tucked away: it is what happens whenever somebody shot the machine before they could get the
+app open, which on a bad signal is most shifts. The whole mechanism is one attribute — the
+camera inputs carry `capture="environment"`, so the phone skips its picker and opens the
+lens; the gallery input does not, so the phone offers its library. The picker is narrowed to
+what was asked for, so choosing a photograph does not open a library full of clips.
 
-One control takes both photographs and clips, and takes several at once, so a position that
-was shot four times is four taps shorter. Everything picked goes through the same path as a
-photograph taken here: shrunk to 1600 px on the way in, because a 12-megapixel frame out of
-the gallery is the same four megabytes on the link otherwise. A clip out of the gallery
-clears the same one-minute bar, from the same piece of code, because a second copy of that
-rule is a copy that forgets.
+Several at once, so a position photographed five times is five taps shorter. Everything
+picked goes down the same path as something captured here: photographs shrunk to 1600 px on
+the way in, because a 12-megapixel frame out of the gallery is the same four megabytes on
+the link otherwise; clips through the same one-minute check the record button uses, from the
+same piece of code, because a second copy of that rule is a copy that forgets.
 
-A position still holds four photographs and one clip. Where more than that is picked, the
-ones that fitted are kept and the phone says how many were left out — silently dropping two
-of five is how an inspector comes to believe evidence is in the record when it is not.
+**Ten photographs per component, and one video clip.** Per component, not per machine — a
+magnetic-plug round is four positions, an undercarriage round thirty-six, and each has its
+own strip. Ten because a cracked bucket lip is not one photograph: it is the crack, the
+crack with a rule beside it, both ends of it, the weld it runs into, and one from far enough
+back that the office can tell which bucket it is. Four ran out on exactly the findings that
+most needed the evidence, and a limit that bites hardest on the worst defects is the wrong
+limit. It is a ceiling, not a target — nobody photographs a sound roller ten times.
+
+The printed report prints **all** of them: the first big as the establishing shot, the rest
+in a strip that wraps three to a row. It used to print four and end in a "+6" badge, which
+was the same failure in a different place — the badge appeared on the positions with the
+most photographs, which are the positions where something is wrong.
+
+Where more is picked than will fit, what fitted is kept and the phone says how many were
+not. Silently dropping two of five is how an inspector comes to believe evidence is in the
+record when it is not.
