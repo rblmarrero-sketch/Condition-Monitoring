@@ -68,64 +68,116 @@ function doPost(e) {
        together but fail apart — a version released before doPost existed still
        answers every GET — so the dashboard sends this to find out whether the
        half it needs is actually live. It writes nothing. */
-    if (b.op === 'ping')    return json({ ok: true, write: true, canDelete: !!ADMIN_SECRET });
+    if (b.op === 'ping')    return json({ ok: true, write: true, batch: true, canDelete: !!ADMIN_SECRET });
 
     if (b.op === 'edit')    return json(saveEdit_(b));
     if (b.op === 'delete')  return json(deleteRecord_(b));
     if (b.op === 'resolve') return json(resolveConflict_(b));
 
-    if (!b.name) return json({ ok: false, error: 'Missing file name' });
-    if (!b.file) return json({ ok: false, error: 'Missing file content' });
+    /* Several files in one request.
 
-    // A name may carry its own sub-path ("2026-07/TK146_...jpg") — honour it.
-    var parts = String(b.name).split('/').filter(String);
-    var fileName = parts.pop();
-    var path = [String(b.folder || '')].concat(parts).filter(String).join('/');
+       Every file used to be its own web-app invocation: a round trip, a script
+       start, and then three Drive operations inside it — look the name up,
+       trash a duplicate, create the file. Measured from the mine, that came to
+       3.8 s before a single byte of photograph moved, against 2.9 s actually
+       sending it. Ten photographs on one component paid it ten times over.
 
-    var root = rootFolder_();
-    var dir = path ? folderPath_(root, path) : root;
+       A batch pays it once, and resolves the folder once for the whole batch
+       rather than once per file — which is the other half of the saving, since
+       a three-level folder chain is three Drive lookups and they were being
+       repeated for every photograph of the same component.
 
-    // Two phones can inspect the same unit on the same day — a hand-over, or two
-    // people covering a big machine between them. Both name their sidecar
-    // <UNIT>_<DD.MM.YYYY>_<TYPE>.json, so the overwrite below used to throw the
-    // first inspector's round away without either of them ever being told.
-    // A rival now gets its own file and a marker; the office decides which stands.
-    var dev = cleanDev_(b.dev);
-    var plan = placeUpload_(dir, fileName, dev);
-    var wanted = fileName;
-    fileName = plan.name;
-
-    var blob = Utilities.newBlob(
-      Utilities.base64Decode(b.file),
-      b.contentType || 'application/octet-stream',
-      fileName
-    );
-
-    // Re-sending a record (after an edit, or a retry) must overwrite, not pile up
-    // "TK146_… (1).jpg" copies next to the original. placeUpload_ has already
-    // made sure this name belongs to us, so what we overwrite is our own.
-    var existing = dir.getFilesByName(fileName);
-    while (existing.hasNext()) existing.next().setTrashed(true);
-
-    var f = dir.createFile(blob);
-    // Who uploaded it, so the next phone to send this name can tell whether it is
-    // overwriting its own work or someone else's. Kept out of the bytes so the
-    // file itself is untouched, and out of the name so nothing has to parse it.
-    if (dev) { try { f.setDescription('cm-dev:' + dev); } catch (err) { /* not fatal */ } }
-
-    var out = { ok: true, id: f.getId(), name: f.getName(), url: f.getUrl(), folder: dir.getName() };
-    if (plan.rival) {
-      out.kept = true;                       // "we did not overwrite the other phone"
-      if (isSidecar_(wanted)) {
-        var c = markConflict_(wanted, plan.rival, dev);
-        if (c) { out.conflict = c.key; out.devices = c.devices; }
+       Each file still succeeds or fails on its own and says which. The phone
+       tracks what landed by name and re-sends only what did not, so a batch
+       that half works is not a batch that failed. */
+    if (b.op === 'batch') {
+      var list = b.files || [];
+      if (!list.length) return json({ ok: false, error: 'Batch with no files' });
+      var dirs = {}, saved = [], failed = [];
+      for (var bi = 0; bi < list.length; bi++) {
+        var one = list[bi];
+        if (one.folder === undefined) one.folder = b.folder;
+        if (one.dev === undefined) one.dev = b.dev;
+        try {
+          var r = saveOne_(one, dirs);
+          if (r.ok) saved.push(r); else failed.push({ name: one.name, error: r.error });
+        } catch (err2) {
+          failed.push({ name: one.name, error: String((err2 && err2.message) || err2) });
+        }
       }
+      return json({ ok: true, batch: true, saved: saved, failed: failed });
     }
-    return json(out);
+
+    return json(saveOne_(b, {}));
 
   } catch (err) {
     return json({ ok: false, error: String((err && err.message) || err) });
   }
+}
+
+/* One file onto Drive. Lifted out of doPost so a batch and a single upload run
+   the same code — two copies of "where does this file go" is two copies that
+   drift, and the one that drifts is the one nobody tests.
+
+   `dirs` caches resolved folders for the life of one request. */
+function saveOne_(b, dirs) {
+  dirs = dirs || {};
+  if (!b.name) return { ok: false, error: 'Missing file name' };
+  if (!b.file) return { ok: false, error: 'Missing file content' };
+
+  // A name may carry its own sub-path ("2026-07/TK146_...jpg") — honour it.
+  var parts = String(b.name).split('/').filter(String);
+  var fileName = parts.pop();
+  var path = [String(b.folder || '')].concat(parts).filter(String).join('/');
+
+  /* Keyed on the path, so every file of one component resolves the folder
+     chain once and the rest read it back out. On a single upload the cache is
+     empty and this costs nothing. */
+  var dir = dirs[path];
+  if (!dir) { var root = rootFolder_(); dir = dirs[path] = (path ? folderPath_(root, path) : root); }
+
+  // Two phones can inspect the same unit on the same day — a hand-over, or two
+  // people covering a big machine between them. Both name their sidecar
+  // <UNIT>_<DD.MM.YYYY>_<TYPE>.json, so the overwrite below used to throw the
+  // first inspector's round away without either of them ever being told.
+  // A rival now gets its own file and a marker; the office decides which stands.
+  var dev = cleanDev_(b.dev);
+  var plan = placeUpload_(dir, fileName, dev);
+  var wanted = fileName;
+  fileName = plan.name;
+
+  var blob = Utilities.newBlob(
+    Utilities.base64Decode(b.file),
+    b.contentType || 'application/octet-stream',
+    fileName
+  );
+
+  // Re-sending a record (after an edit, or a retry) must overwrite, not pile up
+  // "TK146_… (1).jpg" copies next to the original. placeUpload_ has already
+  // made sure this name belongs to us, so what we overwrite is our own.
+  var existing = dir.getFilesByName(fileName);
+  while (existing.hasNext()) existing.next().setTrashed(true);
+
+  var f = dir.createFile(blob);
+  // Who uploaded it, so the next phone to send this name can tell whether it is
+  // overwriting its own work or someone else's. Kept out of the bytes so the
+  // file itself is untouched, and out of the name so nothing has to parse it.
+  if (dev) { try { f.setDescription('cm-dev:' + dev); } catch (err) { /* not fatal */ } }
+
+  /* `req` is the name the phone ASKED for, which is not always the name on
+     Drive — placeUpload_ renames when another phone already owns that name. The
+     phone marks off what has landed by the name it sent, so without this a
+     renamed file would look like one that never arrived and be sent again for
+     ever. */
+  var out = { ok: true, req: b.name, id: f.getId(), name: f.getName(), url: f.getUrl(), folder: dir.getName() };
+  if (plan.rival) {
+    out.kept = true;                       // "we did not overwrite the other phone"
+    if (isSidecar_(wanted)) {
+      var c = markConflict_(wanted, plan.rival, dev);
+      if (c) { out.conflict = c.key; out.devices = c.devices; }
+    }
+  }
+  return out;
 }
 
 /**

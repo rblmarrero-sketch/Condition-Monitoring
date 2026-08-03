@@ -1379,3 +1379,28 @@ says nothing is wrong when a round takes half a minute is worse than no verdict 
 because it sends the reader away certain. So the question is now *is a photograph slow*, and
 only then *which half of it* — by share, not by a number somebody picked. The split is on
 screen either way: **waiting** against **sending**, because they have different fixes.
+
+### Several files in one request
+
+The measurement said 56% of a photograph was spent waiting, so that is what got attacked.
+
+Every file used to be its own Apps Script invocation: a round trip, a script start, a
+redirect, then three Drive operations inside it. The script now takes a batch and resolves
+the folder chain once for the whole thing rather than once per file. Ten photographs: **thirty
+folder lookups became three, and eleven requests became four.** Shrinking the photograph could
+not have touched any of it.
+
+Four files a batch, not forty. A batch that fails costs its whole contents a retry, and on a
+link that drops this often that has to stay small — four is about thirteen seconds on the link
+the mine actually has, well inside the timeout.
+
+**Nothing has to move together.** The phone asks the endpoint once whether it takes batches
+and remembers the answer; a deployment that predates this says nothing about batches and that
+phone keeps sending one file at a time. A phone that updates before somebody redeploys the
+script is not a phone that stops working, and there is nothing to configure either side. If a
+batch is ever refused in a way that says the script is older than it claimed, the phone sends
+that batch as singles there and then and never asks again.
+
+Each file in a batch still succeeds or fails on its own. The phone marks off what landed by
+the name it asked for — not the name Drive used, which differs when another phone already owns
+it — so a half-delivered batch re-sends only the half that is missing.

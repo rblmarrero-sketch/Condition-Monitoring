@@ -4570,6 +4570,75 @@ function uploadLanes(){
    photograph position at all, because every attempt spends itself re-sending
    what already arrived. That is not a slow upload, it is an upload that cannot
    converge, and from the yard the two look identical. */
+/* ---- several files in one request ----------------------------------------
+   Measured at the mine: 3.8 s of waiting before a byte of photograph moved,
+   against 2.9 s sending it. That wait is a web-app invocation plus a redirect
+   plus three Drive operations, and it was paid once per file — ten times for a
+   component with ten photographs. Sending four at a time pays it three times
+   instead, which is the only lever that touches the 56% of a round spent
+   waiting. Shrinking the photograph cannot.
+
+   Four, not forty. A batch that fails costs its whole contents a retry, and on
+   a link that drops this often that has to stay small; four is about thirteen
+   seconds on the link they actually have, well inside the timeout. */
+const BATCH_MAX_FILES=4, BATCH_MAX_BYTES=2*1024*1024;
+
+/* Whether this endpoint understands a batch, asked once and remembered.
+
+   Nobody is told to check, and nothing is configured. A deployment that has not
+   been updated answers the ping without a `batch` flag and that phone quietly
+   keeps sending one at a time — the fleet does not have to move together, and a
+   phone that updates before the script does is not a phone that stops working.
+   That is the whole reason this is negotiated rather than assumed. */
+let batchCap=null;
+function batchCaps(){ if(batchCap) return batchCap;
+  try{ batchCap=JSON.parse(localStorage.getItem("up_batch")||"{}"); }catch(e){ batchCap={}; }
+  return batchCap; }
+function setBatchCap(url,v){ const c=batchCaps(); c[url]=v;
+  try{ localStorage.setItem("up_batch",JSON.stringify(c)); }catch(e){} }
+async function canBatch(UP){
+  if(UP.id!=="gas") return false;               // the op is an Apps Script one
+  const c=batchCaps();
+  if(c[UP.url]!==undefined) return c[UP.url];
+  try{
+    const r=await fetchT(UP.url,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+      body:JSON.stringify({op:"ping",secret:UP.sec||""})}, 20000);
+    const j=JSON.parse(await r.text());
+    const v=!!(j&&j.batch);
+    setBatchCap(UP.url,v); return v;
+  }catch(e){ return false; }                    // a dead link is not an answer — do not remember it
+}
+async function putBatch(UP, files, rec, sent){
+  const folder=expandFolder(UP.folder||"", rec);
+  const body={ op:"batch", folder, secret:UP.sec||"", dev:(rec&&rec.dev)||DEVICE,
+    files: await Promise.all(files.map(async f=>({ name:f.name,
+      contentType:f.type||f.blob.type||"application/octet-stream",
+      file: await blobToB64(f.blob) }))) };
+  const r=await fetchT(UP.url,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+                               body:JSON.stringify(body)});
+  if(!r.ok) throw new Error(await httpErr(r));
+  let j=null; try{ j=JSON.parse(await r.text()); }catch(e){}
+  if(!j) throw new Error("Unexpected reply — check the deployment is set to “Anyone”.");
+  /* An older script has no batch branch, so the body falls through to its
+     single-file path and trips on the missing name. That is the signature of a
+     deployment that predates this, not of a failure: remember it, send this lot
+     one at a time, and never ask again. One wasted round trip, once, and no
+     round is lost over it. */
+  if(j.ok===false && /missing file name|batch with no files/i.test(j.error||"")){
+    setBatchCap(UP.url,false);
+    for(const f of files){ await putOne(UP,f.name,f.blob,f.type,rec); sent[f.name]=1; }
+    return;
+  }
+  if(j.ok===false) throw new Error(j.error||"Apps Script rejected the upload");
+  /* Mark by the name we ASKED for. Drive may hold it under another when a
+     second phone already owns that name. */
+  (j.saved||[]).forEach(x=>{ if(x&&(x.req||x.name)) sent[x.req||x.name]=1; });
+  const bad=(j.failed||[]);
+  /* Some landed and some did not: the ones that did are marked, the rest come
+     round again on the next attempt. Only raise it if the whole batch was
+     refused, since that is the case that says something is actually wrong. */
+  if(bad.length && bad.length===files.length) throw new Error(bad[0].error||"batch refused");
+}
 async function putAll(dest, files, rec, sent){
   if(!files.length) return;
   sent = sent || {};
@@ -4583,15 +4652,33 @@ async function putAll(dest, files, rec, sent){
     rest=files.slice(1);
   }
   if(!rest.length) return;
+
+  /* Chunk into batches where the endpoint takes them, and into single files
+     where it does not. Below this the two are the same shape — a pool of lanes
+     over a list of jobs — so nothing else has to know which happened. */
+  let jobs;
+  if(await canBatch(dest)){
+    const chunks=[]; let cur=[], bytes=0;
+    for(const f of rest){
+      const b=Math.ceil((f.blob.size||0)*4/3);          // base64, a third more
+      if(cur.length && (cur.length>=BATCH_MAX_FILES || bytes+b>BATCH_MAX_BYTES)){
+        chunks.push(cur); cur=[]; bytes=0; }
+      cur.push(f); bytes+=b;
+    }
+    if(cur.length) chunks.push(cur);
+    jobs=chunks.map(c=>()=>putBatch(dest,c,rec,sent));
+  } else {
+    jobs=rest.map(f=>async()=>{ await putOne(dest,f.name,f.blob,f.type,rec); sent[f.name]=1; });
+  }
+
   let next=0, failed=null;
   const lane=async()=>{ for(;;){
     if(failed) return;                     // one failure ends this record's turn
-    const i=next++; if(i>=rest.length) return;
-    const f=rest[i];
-    try{ await putOne(dest,f.name,f.blob,f.type,rec); sent[f.name]=1; }
+    const i=next++; if(i>=jobs.length) return;
+    try{ await jobs[i](); }
     catch(e){ failed=failed||e; }
   } };
-  await Promise.all(Array.from({length:Math.min(uploadLanes(),rest.length)},lane));
+  await Promise.all(Array.from({length:Math.min(uploadLanes(),jobs.length)},lane));
   if(failed) throw failed;
 }
 async function putFile(name, blob, type){

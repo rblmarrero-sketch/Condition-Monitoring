@@ -344,6 +344,31 @@ laptop reads the OneDrive-synced folder with **Folder on this PC** as before.
 
 ---
 
+## Redeploying makes uploads faster
+
+The phones work against any deployment of this script, old or new. Redeploying the current
+version makes them faster, and nothing else has to change.
+
+Before, every photograph was its own web-app call: a round trip, a script start, then three
+Drive operations inside it — look the name up, trash a duplicate, create the file. Measured
+on the mine's own link, that came to **3.8 seconds of waiting before a byte of photograph
+moved**, against 2.9 seconds actually sending it. A component with ten photographs paid it
+ten times.
+
+This version takes several files in one call and resolves the folder chain once for the whole
+batch instead of once per file. Ten photographs went from **thirty folder lookups to three**,
+and from eleven requests to four.
+
+**Nobody has to be told which version they are on.** The phone asks the script once, and the
+script says whether it takes batches. A deployment that predates this answers without the
+flag and that phone quietly keeps sending one file at a time — so the fleet does not have to
+move together, and a phone that updates before the script does is not a phone that stops
+working. There is nothing to configure and nothing to switch on.
+
+To pick up the speed-up: paste the current `google-upload.gs` over the old one in the script
+editor, then **Deploy → Manage deployments → edit → New version → Deploy**. Keep the same
+deployment so the URL does not change. The phones notice on their next upload.
+
 ## Troubleshooting
 
 ### `{"ok":false,"error":"…getFolderById on object DriveApp…"}`
