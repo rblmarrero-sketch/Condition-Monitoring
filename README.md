@@ -1100,80 +1100,55 @@ A destination that is failing no longer holds up one that is working: upload sta
 tracked per destination, so with SharePoint down every record still reaches Drive, and
 nothing is ever re-sent to a destination that already has it.
 
-### The machine at the top of the screen
+### The undercarriage map is this model
 
-An inspector standing at a dozer does not need to be told it is a dozer, so the side-view
-figure above the position picker is not decoration. It does two jobs.
+The measurement map is not a track frame in general. It is a side-on photograph of **this
+model's own undercarriage**, with the tap targets over it — 29 of them, one per model,
+WebP, about 21 KB each and 640 KB for the fleet, in `mobile/machine/uc/`.
 
-It says **which end is which**. "Left" and "Right" mean nothing until you know which way
-the machine is facing in the drawing; the figure faces the same way as the track frames
-below it — idler forward, sprocket back — so roller 1 on the screen is roller 1 on the
-ground.
+That is not decoration. The map is what an inspector matches against the machine they are
+standing at to work out which roller is roller one. The frame used to be a single drawing
+reused for every model, so a `CATERPILLAR D9R` — front and rear idlers on the ground with
+the drive sprocket lifted clear above them — came out looking exactly like a `KOMATSU
+PC800`. A picture that is wrong about where the sprocket is teaches the wrong end of the
+machine, and the whole point of tapping the picture instead of reading a list is lost.
 
-It says **what this round is about**. On an undercarriage round the track is lit and the
-rest of the machine drops back; on a GET round the bucket teeth or the blade edge are lit
-instead. Two rounds on the same machine look different from arm's length.
+**Where there is no photograph the frame is drawn, and the drawing follows the model too.**
+It is built from the wear profile rather than fixed: an elevated-sprocket dozer comes out as
+the triangle it is and an oval frame comes out oval, from one belt-around-wheels
+calculation rather than two drawings; the lower rollers **are** the model's roller count
+rather than a fixed rhythm; the carrier rollers are the count the model carries, on the run
+they actually sit on; and idler and sprocket sizes follow the family, with the bigger wheel
+riding higher so the bottom run stays flat the way it does on the ground.
 
-There is **one figure, not one per side**. The machine is the same machine whichever track
-you are standing at, and Left and Right are already on the two frames underneath — a second
-copy would only push the first roller off the screen.
+**The tap targets do not move either way.** Over a drawing they sit on the parts they name.
+Over a photograph they cannot — every model is framed differently and no fixed offset lands
+on the right wheel twice running — so they take the arrangement an inspector has already
+learned: idler at the front, carriers above, sprocket at the back, rollers 1..n in their own
+row underneath, chain points on the bracket below that. Same keys, same order, same reach;
+only the backdrop changed.
 
-It is drawn, not photographed, and that is a deliberate trade. Every byte of the figure is
-in the offline shell, and the shell has to install *completely* on a pit connection or the
-app will not open; a set of machine photographs is about a megabyte of the one thing that
-must never fail. The drawing is a few kilobytes, stays sharp on any screen, and — unlike a
-photograph — can be lit by the state of the round. Seven families are drawn: excavator,
-dozer, drill, wheel loader, grader, haul truck and drum compactor, with a generic plant box
-for anything else.
+**Picking a point still says which bit it is.** On a drawing the machine around the point
+fades. A photograph cannot be dimmed part by part and still read, so over one the tap targets
+carry it instead — the point in hand stays up and the rest drop back. Same question answered,
+different carrier.
 
-**A real photograph can still be used.** Put a file in `mobile/machine/` and name it in
-`window.MACHINE_PHOTOS`, keyed by family:
+**The report keeps the drawing.** It is printed, often in grey, and it has to carry the
+colour of every point — which is the whole reason the frame is drawn as parts rather than
+pictured.
 
-```js
-window.MACHINE_PHOTOS = { ex: "machine/excavator.jpg", dz: "machine/dozer.jpg" };
-```
+Adding or replacing a crop is a data change: put the file in `mobile/machine/uc/` and name
+it in `BY_MODEL_UC` in [`mobile/machine-photos.js`](mobile/machine-photos.js). Keys are the
+model as the register writes it, matching ignores case and punctuation, and aliases resolve
+in both directions so a table keyed on the supplier's spelling and a lookup using the
+register's still find each other.
 
-That family then uses the photograph and every other family keeps its drawing. Because a
-photograph cannot be dimmed part by part and still read, the highlight becomes a caption
-instead of a change of tone. Nothing else changes, and it is a data change, not a code one.
+### The machine figure on a GET round
 
-### Ground Engaging Tools (GET)
-
-GET is the fastest-wearing thing on a mine site and the least well recorded — bought by the
-pallet, changed on backshift, and the only number anyone can produce afterwards is how many
-teeth were ordered. Meanwhile a tooth lost into a crusher is a day, and an adapter run past
-its nose is a lip repair instead of a five-minute change.
-
-The round is built to be walked in two minutes and still leave a trend:
-
-- **Every position gets a grade.** A/B/C/X with a defect and an action — the same judgement
-  the walk-around already uses. **A round is complete on grades alone.**
-- **Any position may also get a millimetre.** Where a fitter has a tape, the remaining
-  length goes in and the app works out how far through its life that tooth is against new
-  and condemn, in the same bands and the same words as the undercarriage round. Where
-  nobody has a tape, nothing is blocked and nothing is invented.
-
-The walk comes from the machine, the way the roller count already does:
-
-| Family | Positions |
-|---|---|
-| Excavator / rock breaker | teeth 1..n, an adapter behind each, four lip shrouds, wing and heel shrouds, the lip |
-| Wheel loader | teeth 1..n, adapters, three cutting-edge segments, heel shrouds, the lip |
-| Dozer | three cutting-edge segments, two end bits, three ripper shanks, tips and side-bar protectors |
-| Grader | three cutting-edge segments, two end bits, the moldboard |
-| Blasthole drill | the bit and four stabiliser pads |
-
-Tooth count follows the model — an EX1200 bucket walks six, a ZX330 four — from
-`TEETH_BY_MODEL` in `mobile/get.js`. A machine with no ground engaging tools is told so and
-refused, the same way a wheeled excavator is refused an undercarriage round; offering an
-empty round is worse than offering none.
-
-> **The limits are generic, and say so.** Every reading against one is labelled
-> *generic limit* wherever it appears — on the capture screen, in the report and on the
-> dashboard. They are honest starting points so a trend exists from day one. The real
-> numbers come off the supplier's wear charts; when the client supplies them they replace
-> these in `mobile/get.js` and the label stops appearing. A generic limit is better than no
-> trend; a generic limit presented as measured fact is not.
+A GET round has no map of its own, so it keeps a small side-view figure of the machine at
+the top — lit at the bucket teeth or the blade edge, so a GET round and an undercarriage
+round on the same machine are told apart at arm's length. The undercarriage screen used to
+carry the same figure above its frames; now that the frames are the machine, it does not.
 
 ### Upload speed
 

@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=74">
+<link rel="manifest" href="manifest.webmanifest?v=75">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=74">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=74">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=74">
+<link rel="apple-touch-icon" href="icon-192.png?v=75">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=75">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=75">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -403,6 +403,11 @@
   .ucswipe{font-size:11.5px;color:var(--muted);text-align:center;margin:-4px 0 10px;}
   .ucmap{display:block;width:100%;height:auto;}
   .um-side{font:700 17px/1 inherit;fill:var(--muted);letter-spacing:.04em;}
+  /* A photograph of the model's own frame, dropped back far enough that the
+     numbers on top of it stay numbers. */
+  .ucmap .um-photo{opacity:1;}
+  .ucmap .um-scrim{fill:var(--surface-2);opacity:.16;}
+  .ucmap .um-frameline{fill:none;stroke:var(--line);stroke-width:1;}
   .ucmap .mf-body{fill:var(--surface-3);stroke:var(--ink-2);stroke-width:1.3;stroke-linejoin:round;}
   .ucmap .mf-part{fill:var(--surface-2);stroke:var(--ink-2);stroke-width:1.2;stroke-linejoin:round;}
   .ucmap .mf-rail{fill:none;stroke:var(--ink-2);stroke-width:1.3;}
@@ -424,7 +429,15 @@
   .ucmap[data-sel="BUSH"] [data-part="CHAIN"],
   .ucmap[data-sel="PITCH4"] [data-part="CHAIN"],
   .ucmap[data-sel="PITCH1"] [data-part="CHAIN"]{opacity:1;}
-  @media (prefers-reduced-motion:reduce){ .ucmap [data-part]{transition:none;} }
+  /* On a drawing, picking a point fades the machine around it. A photograph
+     cannot be dimmed part by part and still read, so the same question — which
+     bit is this? — is answered by the tap targets instead: the one in hand
+     stays up and the others drop back. Same information, different carrier. */
+  .ucmap.photo .um-spot{transition:opacity .18s ease;}
+  .ucmap.photo[data-sel] .um-spot{opacity:.4;}
+  .ucmap.photo[data-sel] .um-spot.sel{opacity:1;}
+  .ucmap.photo[data-sel] .um-spot.sel .um-puck{stroke-width:3;}
+  @media (prefers-reduced-motion:reduce){ .ucmap [data-part],.ucmap.photo .um-spot{transition:none;} }
   /* ---- GET: the optional millimetre ------------------------------------
      Sits under the grade, quiet. The round is complete on grades, so nothing
      here nags: no red, no "required", and an empty box is the normal state. */
@@ -930,19 +943,20 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="native.js?v=74"></script>
-<script src="upload-defaults.js?v=74"></script>
-<script src="hme.js?v=74"></script>
-<script src="mp-fc.js?v=74"></script>
-<script src="hme-cascade.js?v=74"></script>
-<script src="assets.js?v=74"></script>
-<script src="temp-limits.js?v=74"></script>
-<script src="wear.js?v=74"></script>
-<script src="wear-figs.js?v=74"></script>
-<script src="wear-map.js?v=74"></script>
-<script src="machine-fig.js?v=74"></script>
-<script src="get.js?v=74"></script>
-<script src="report-core.js?v=74"></script>
+<script src="native.js?v=75"></script>
+<script src="upload-defaults.js?v=75"></script>
+<script src="hme.js?v=75"></script>
+<script src="mp-fc.js?v=75"></script>
+<script src="hme-cascade.js?v=75"></script>
+<script src="assets.js?v=75"></script>
+<script src="temp-limits.js?v=75"></script>
+<script src="wear.js?v=75"></script>
+<script src="wear-figs.js?v=75"></script>
+<script src="wear-map.js?v=75"></script>
+<script src="machine-photos.js?v=75"></script>
+<script src="machine-fig.js?v=75"></script>
+<script src="get.js?v=75"></script>
+<script src="report-core.js?v=75"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2444,20 +2458,37 @@ function machineFig(part){
   if(!window.MFIG) return "";
   const a=ASSET_BY[curEquip]||{};
   const fam=MFIG.familyFor(curEquip, a.cat||a.cls||"");
-  return MFIG.svg(fam, { part:part, label:t(part==="GET"?"mf_get":"mf_uc"),
+  /* The same profile the track frames below are drawn from, so the little
+     machine and the big frame cannot disagree about how many rollers it has or
+     where its sprocket sits. */
+  const prof=(window.WEAR && a.m) ? WEAR.modelFor(a.m) : null;
+  return MFIG.svg(fam, { part:part, model:a.m||"", label:t(part==="GET"?"mf_get":"mf_uc"),
+                         rollers:(prof&&prof.rollers)||0, high:!!(prof&&prof.frame==="highdrive"),
                          alt:(curEquip||"")+" "+(a.m||"") });
 }
+/* What this model's track frame actually is: how many rollers, whether the
+   sprocket is on the ground with them or lifted clear above, and which family
+   the proportions come from. The drawing is built from this rather than being
+   one picture reused nineteen times — a D9R and a PC800 are not the same
+   shape, and the frame is what an inspector matches against the machine in
+   front of them to work out which roller is roller one. */
+function ucProfile(unit){
+  const st=ucStatus(unit), a=ASSET_BY[unit]||{};
+  return { rollers:(st.prof&&st.prof.rollers)||WEAR.rollersDefault,
+           high:!!(st.prof&&st.prof.frame==="highdrive"),
+           fam: window.MFIG ? MFIG.familyFor(unit, a.cat||a.cls||"") : "",
+           /* A photograph of this model's own track frame where the catalog has
+              one. Screen only — see rptMap for why the report keeps the drawing. */
+           photo: window.MACHINE_PHOTOS ? MACHINE_PHOTOS.ucUrlFor(a.m||"") : "" };
+}
 function renderUCMap(){
-  const st=ucStatus(curEquip);
-  const rollers=(st.prof&&st.prof.rollers)||WEAR.rollersDefault;
-  const high=!!(st.prof&&st.prof.frame==="highdrive");
+  const prof=ucProfile(curEquip);
   const side=s=>t(s==="L"?"uc_left":"uc_right");
   let h=ucViewsBar();
   h+=ucTally();
-  h+=machineFig("UC");
   h+='<div class="ucmaps">';
   ["L","R"].forEach(s=>{ h+='<div class="ucmapwrap" data-side="'+s+'">'+
-      WEAR.mapSVG(s, rollers, high, ucState, curItem, side(s))+'</div>'; });
+      WEAR.mapSVG(s, prof, null, ucState, curItem, side(s))+'</div>'; });
   h+='</div>';
   $("posnav").innerHTML=h;
   /* A track frame is three metres long and a phone is not. Rather than shrink the
@@ -3576,13 +3607,16 @@ function rptMap(rec,items){
   const by={}; items.forEach(it=>{ const w=it.w;
     by[it.key] = !w ? "" : w.mm==null ? (w.reason?"na":"") :
       w.band==="act" ? "act" : w.band==="watch" ? "watch" : "done"; });
-  const rollers=(st.prof&&st.prof.rollers)||WEAR.rollersDefault;
-  const high=!!(st.prof&&st.prof.frame==="highdrive");
+  /* The report keeps the DRAWING even where a photograph exists. It is printed,
+     often in grey, and it has to carry the colour of every point — which is the
+     whole reason the frame is drawn as parts rather than pictured. A photograph
+     would also have to survive html2canvas and the PDF encoder to get there. */
+  const prof=Object.assign({}, ucProfile(rec.equip), {photo:""});
   // the chain row carries short codes on screen too — same drawing, same labels
   const short = h => h.replace(/(<text class="um-n um-chain"[^>]*>)([A-Z0-9]+)(<\/text>)/g,
     (m,a,code,c)=>a+(WEAR.mapShort[code]||code)+c);
   return CMR.fitMap(["L","R"].map(side=>'<div class="ucmapwrap">'+
-    short(WEAR.mapSVG(side, rollers, high, k=>by[k]||"", "", t(side==="L"?"uc_left":"uc_right")))+
+    short(WEAR.mapSVG(side, prof, null, k=>by[k]||"", "", t(side==="L"?"uc_left":"uc_right")))+
     '</div>').join(""));
 }
 async function rptRecords(){
@@ -3752,7 +3786,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="74";
+const BUILD="75";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -4312,7 +4346,7 @@ function checkReady(){
   try{ navigator.serviceWorker.controller.postMessage({type:"sw-health"},[ch.port2]); }
   catch(e){ clearTimeout(giveUp); renderReady(null); }
 }
-let ESSENTIAL_N=14;   // the SW is the authority; this is only the first paint
+let ESSENTIAL_N=15;   // the SW is the authority; this is only the first paint
 /* Ask when the app opens and whenever it comes back to the front — the second
    is the one that catches a phone that has been sitting in a locker since the
    files were evicted. */
@@ -4594,8 +4628,24 @@ if("serviceWorker" in navigator && window.isSecureContext){ let reloaded=false;
      round is saved, the app comes back to the front, the dialog closes. They
      never do anything, and they never lose a measurement to a reload. */
   window.__updateWaiting=false;
+  /* The FIRST time the app is ever opened there is no controller at all, and
+     the worker takes charge as soon as it finishes installing. That fires
+     controllerchange too — and it is not an update. Reloading there means the
+     first open of the app flashes and restarts itself for no reason, and an
+     inspector who started typing in those few seconds watches the screen reset
+     under their thumb on the one occasion they have no idea the app even has
+     versions.
+
+     A controller that was null when this page loaded means "taken over for the
+     first time"; a controller that was already there and then changed means "a
+     new build is in charge". Only the second is worth a reload. */
+  let seenController = !!navigator.serviceWorker.controller;
   navigator.serviceWorker.addEventListener("controllerchange",()=>{
     if(reloaded) return;
+    // First takeover: note it and do nothing. A later change IS a new build,
+    // so this must not latch the handler off — a phone that installs the app
+    // and gets a fix five minutes later still takes the fix without a tap.
+    if(!seenController){ seenController = true; return; }
     if(!busy()){ reloaded=true; location.reload(); return; }
     window.__updateWaiting=true;
     const bar=document.getElementById("staleBar");
@@ -4623,7 +4673,7 @@ if("serviceWorker" in navigator && window.isSecureContext){ let reloaded=false;
    picks up the new files. */
 const SHELL_ASSETS=["index.html","manifest.webmanifest","native.js","jsQR.js","qrcode.js","upload-defaults.js",
   "hme.js","hme-cascade.js","mp-fc.js","assets.js","temp-limits.js",
-  "wear.js","wear-figs.js","wear-map.js","machine-fig.js","get.js","report-core.js",
+  "wear.js","wear-figs.js","wear-map.js","machine-photos.js","machine-fig.js","get.js","report-core.js",
   "jspdf.umd.min.js","html2canvas.min.js","sw.js"];
 /* "Am I on the latest build?" used to be unanswerable from inside the app: the
    service worker serves the copy it has, and a stale page looks exactly like a

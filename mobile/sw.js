@@ -36,7 +36,7 @@
        explains itself and offers a retry — because an honest offline page is
        recoverable and a browser error page is not. */
 
-const BUILD = "74";
+const BUILD = "75";
 const CACHE = "plug-capture-v" + BUILD;
 
 /* Without these the app is not an app: no page, no equipment register, no
@@ -60,6 +60,7 @@ const ESSENTIAL = [
   "./wear.js?v=" + BUILD,
   "./wear-figs.js?v=" + BUILD,
   "./wear-map.js?v=" + BUILD,
+  "./machine-photos.js?v=" + BUILD,
   "./machine-fig.js?v=" + BUILD,
   "./get.js?v=" + BUILD,
   "./report-core.js?v=" + BUILD,
@@ -69,6 +70,18 @@ const ESSENTIAL = [
    engine is 850 KB and is only needed when somebody prints; the QR libraries
    only when somebody scans. Letting these hold up an update would mean a phone
    on a thin link never getting a fix to the capture code. */
+/* Machine artwork, read from the same table the app uses so the two can never
+   disagree about which files exist. importScripts is synchronous and runs
+   before install, and the table hands back an empty list until its ON switch is
+   flipped — so a build with no artwork asks the network for nothing at all.
+   Optional by definition: a picture is a nicety, the figure falls back to its
+   drawing, and a missing one must never hold up an update to the capture code. */
+var PHOTOS = [];
+try {
+  importScripts("./machine-photos.js?v=" + BUILD);
+  PHOTOS = (self.MACHINE_PHOTOS && self.MACHINE_PHOTOS.all()) || [];
+} catch (e) { PHOTOS = []; }
+
 const OPTIONAL = [
   "./",                          // see the note above
   "./manifest.webmanifest?v=" + BUILD,
@@ -78,7 +91,7 @@ const OPTIONAL = [
   "./html2canvas.min.js?v=" + BUILD,
   "./icon-192.png",
   "./icon-512.png",
-];
+].concat(PHOTOS);
 
 const NET_WAIT = 4000;          // how long a fetch may hold anything up
 

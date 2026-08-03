@@ -14,16 +14,18 @@
      teeth or the blade edge are lit instead. Two rounds on the same machine
      look different from arm's length, which is the point.
 
-   Why drawn and not photographed. Every byte here is in the offline shell, and
-   the shell has to install completely on a pit connection or the app will not
-   open — five machine photographs is about a megabyte of the thing that must
-   never fail. The drawing is a few kilobytes, stays sharp on any screen, and,
-   unlike a photograph, can be lit by the state of the round.
+   Why drawn by default. Every byte here is in the offline shell, and the shell
+   has to install completely on a pit connection or the app will not open. The
+   drawing is a few kilobytes, stays sharp on any screen, and — unlike a
+   photograph — can be lit by the state of the round.
 
-   A real photograph is still welcome where one exists. Drop a file in
-   mobile/machine/<family>.jpg and list it in window.MACHINE_PHOTOS (see
-   photoFor below) and it is used instead, per family, with the drawing as the
-   fallback for every family that has none. Nothing else changes. */
+   Real artwork is still welcome where it exists, per MODEL — a ZX330 and an
+   EX1200 are not the same machine and should not share a picture. The table is
+   in machine-photos.js, which also tells the service worker what to cache; put
+   the files in mobile/machine/, flip its ON switch, and every machine with a
+   file uses it while every machine without keeps its drawing. A file that is
+   missing or fails to load falls back to the drawing rather than leaving a
+   hole. Nothing else changes. */
 (function () {
   'use strict';
 
@@ -43,8 +45,10 @@
     [/GRADER/i,               'gr'],
     [/TRUCK, (HAUL|DUMP|MINE)/i, 'tk'],
     [/COMPACTOR|ROLLER DRUM/i, 'cd'],
+    [/CRUSHER|SCREENER/i,     'cp'],   // tracked mobile plant: hopper, deck, conveyor
   ];
-  var BY_PREFIX = { EX: 'ex', RB: 'ex', DZ: 'dz', DR: 'dr', LD: 'ld', GR: 'gr', TK: 'tk', CD: 'cd' };
+  var BY_PREFIX = { EX: 'ex', RB: 'ex', DZ: 'dz', DR: 'dr', LD: 'ld', GR: 'gr', TK: 'tk',
+                    CD: 'cd', CR: 'cp', SN: 'cp' };
 
   function familyFor(unit, cls) {
     var c = String(cls || '');
@@ -102,9 +106,9 @@
      needing to know that highlighting exists. */
   var DRAW = {};
 
-  DRAW.ex = function () {                          // excavator, bucket curled under
+  DRAW.ex = function (o) {                         // excavator, bucket curled under
     return [
-      trackLoop(196, 404, 150, 22, 8, false),
+      trackLoop(196, 404, 150, 22, o.rollers, o.high),
       '<g class="mf-part" data-part="BODY">',
       '<path class="mf-body" d="M214,124 L214,96 Q214,88 222,88 L392,88 Q404,88 404,100 L404,124 Z"/>',
       '<path class="mf-body" d="M300,88 L300,44 Q300,36 310,36 L352,36 Q360,36 360,44 L360,88 Z"/>',
@@ -123,9 +127,9 @@
     ].join('');
   };
 
-  DRAW.dz = function (high) {                      // dozer, blade forward, ripper aft
+  DRAW.dz = function (o) {                         // dozer, blade forward, ripper aft
     return [
-      trackLoop(150, 360, 148, 24, 7, high !== false),
+      trackLoop(150, 360, 148, 24, o.rollers, o.high),
       '<g class="mf-part" data-part="BODY">',
       '<path class="mf-body" d="M158,124 L158,84 Q158,76 168,76 L338,76 Q350,76 350,90 L350,124 Z"/>',
       '<path class="mf-body" d="M236,76 L236,34 Q236,26 246,26 L306,26 Q314,26 314,34 L314,76 Z"/>',
@@ -142,9 +146,9 @@
     ].join('');
   };
 
-  DRAW.dr = function () {                          // blasthole drill, mast up
+  DRAW.dr = function (o) {                         // blasthole drill, mast up
     return [
-      trackLoop(150, 366, 152, 20, 6, false),
+      trackLoop(150, 366, 152, 20, o.rollers, o.high),
       '<g class="mf-part" data-part="BODY">',
       '<path class="mf-body" d="M156,130 L156,86 Q156,78 166,78 L356,78 Q368,78 368,90 L368,130 Z"/>',
       '<path class="mf-body" d="M290,78 L290,40 Q290,32 300,32 L346,32 Q354,32 354,40 L354,78 Z"/>',
@@ -232,6 +236,20 @@
     ].join('');
   };
 
+  DRAW.cp = function (o) {                         // tracked crusher / screener
+    return [
+      trackLoop(150, 340, 158, 16, o.rollers, false),
+      '<g class="mf-part" data-part="BODY">',
+      '<path class="mf-body" d="M150,142 L150,96 Q150,88 160,88 L340,88 Q352,88 352,102 L352,142 Z"/>',
+      '<path class="mf-arm" d="M186,88 L186,40 L268,40 L286,88 Z"/>',          // hopper
+      '<path class="mf-hair" d="M196,52 L262,52"/>',
+      '<path class="mf-arm" d="M340,104 L436,42 L444,56 L348,118 Z"/>',        // discharge conveyor
+      '<path class="mf-hair" d="M352,102 L432,50"/>',
+      '<path class="mf-body" d="M292,88 L292,58 L326,58 L326,88 Z"/>',         // power unit
+      '</g>',
+    ].join('');
+  };
+
   DRAW[''] = function () {                         // anything else: a plant box
     return [
       '<g class="mf-part" data-part="BODY">',
@@ -244,12 +262,14 @@
   };
 
   /* ---- a real photograph, if one was supplied -----------------------------
-     window.MACHINE_PHOTOS = { ex: "machine/excavator.jpg", dz: "..." }. Keys are
-     families; a family with no entry keeps the drawing. Kept out of this file so
-     that adding a photograph is a data change and never a code change. */
-  function photoFor(fam) {
+     The table lives in machine-photos.js — keyed on the model as the register
+     writes it, with the family as a fallback. Kept out of this file so that
+     adding artwork is a data change and never a code change, and so the service
+     worker can read the same list to decide what to cache. */
+  function photoFor(fam, model) {
     var reg = window.MACHINE_PHOTOS;
-    return (reg && typeof reg === 'object' && reg[fam]) ? String(reg[fam]) : '';
+    if (!reg || typeof reg.urlFor !== 'function') return '';
+    try { return reg.urlFor(model, fam) || ''; } catch (e) { return ''; }
   }
 
   /* ---- the figure ---------------------------------------------------------
@@ -263,31 +283,67 @@
     opts = opts || {};
     var draw = DRAW[fam] || DRAW[''];
     var part = String(opts.part || '').toUpperCase();
-    var body = draw();
-    var photo = photoFor(fam);
+    /* The drawing follows the model, not just the family. A D9R is an elevated
+       sprocket and a D155A is an oval frame — both are "a dozer", and drawing
+       them the same way would put the sprocket at the wrong height on half the
+       fleet, which is exactly the orientation the figure exists to give. Roller
+       count comes from the same place the track frame below it uses. */
+    var body = draw({ high: !!opts.high,
+                      rollers: opts.rollers || DEFAULT_ROLLERS[fam] || 7 });
+    var photo = photoFor(fam, opts.model);
     var alt = opts.alt || 'Machine, side view';
     var cls = 'mfig' + (opts.cls ? ' ' + opts.cls : '') + (part ? ' hi-' + part.toLowerCase() : '');
 
     if (photo) {
-      /* A photograph cannot be lit part by part, so the highlight becomes a band
-         across the region instead of a change of tone. Same information, drawn
-         over the top rather than into it. */
-      return '<figure class="' + cls + ' mfig-photo"' + (opts.side ? ' data-side="' + opts.side + '"' : '') + '>' +
-             '<img src="' + photo + '" alt="' + alt + '" loading="lazy" decoding="async">' +
+      /* A photograph cannot be dimmed part by part and still read, so the
+         highlight becomes a caption rather than a change of tone. Same
+         information, said instead of shown.
+
+         A missing or unloadable file falls back to the drawing rather than
+         leaving a broken-image hole in front of an inspector — the artwork is
+         a nicety and the figure is not allowed to depend on it. The handler
+         swaps the <img> for the same <svg> this function would have produced,
+         so the fallback is the real figure and not a placeholder. */
+      var id = 'mfig' + (++uid);
+      return '<figure class="' + cls + ' mfig-photo" id="' + id + '"' +
+             (opts.side ? ' data-side="' + opts.side + '"' : '') + '>' +
+             '<img src="' + photo + '" alt="' + alt + '" loading="lazy" decoding="async" ' +
+             'onerror="MFIG.fallback(\'' + id + '\')">' +
              (opts.label ? '<figcaption>' + opts.label + '</figcaption>' : '') +
+             '<template>' + drawnSVG(body, alt) + '</template>' +
              '</figure>';
     }
     return '<figure class="' + cls + '"' + (opts.side ? ' data-side="' + opts.side + '"' : '') + '>' +
-           '<svg viewBox="0 0 ' + VB_W + ' ' + VB_H + '" role="img" aria-label="' + alt + '">' +
-           body + '</svg>' +
+           drawnSVG(body, alt) +
            (opts.label ? '<figcaption>' + opts.label + '</figcaption>' : '') +
            '</figure>';
   }
+  var uid = 0;
+  function drawnSVG(body, alt) {
+    return '<svg viewBox="0 0 ' + VB_W + ' ' + VB_H + '" role="img" aria-label="' + alt + '">' +
+           body + '</svg>';
+  }
+  /* The photograph did not load. Put the drawing back, drop the photo styling
+     so the highlight works again, and do it once. */
+  function fallback(id) {
+    var fig = document.getElementById(id);
+    if (!fig || fig.dataset.fell) return;
+    fig.dataset.fell = '1';
+    var img = fig.querySelector('img'), tpl = fig.querySelector('template');
+    if (img && tpl) { img.insertAdjacentHTML('afterend', tpl.innerHTML); img.remove(); }
+    fig.classList.remove('mfig-photo');
+  }
+
+  /* Where the model is unknown. Not a guess at any particular machine — just a
+     plausible frame, so the figure still reads as a track rather than a blob. */
+  var DEFAULT_ROLLERS = { ex: 8, dz: 7, dr: 6, cp: 6 };
 
   window.MFIG = {
     familyFor: familyFor,
+    defaultRollers: DEFAULT_ROLLERS,
     svg: svg,
     photoFor: photoFor,
+    fallback: fallback,
     families: Object.keys(DRAW).filter(Boolean),
     VB: { w: VB_W, h: VB_H },
   };
