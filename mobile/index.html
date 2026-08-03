@@ -343,6 +343,17 @@
   .ucref.none{color:var(--warning);font-weight:600;}
   .uclast{font-size:12.5px;color:var(--muted);margin:-6px 0 10px;line-height:1.5;
     font-variant-numeric:tabular-nums;}
+  /* How to take the reading. Collapsed by default — an inspector who has done a
+     hundred of these does not need it in the way, and the one on their first
+     round needs it one tap away, not on another screen. */
+  .guide{margin:-4px 0 10px;}
+  .guide-t{display:flex;align-items:center;gap:6px;width:100%;background:none;border:0;
+    padding:6px 0;font:600 12.5px/1.3 inherit;color:var(--accent);cursor:pointer;text-align:left;}
+  .guide-b{display:grid;gap:8px;padding:10px 12px;margin-top:2px;border-radius:10px;
+    background:var(--surface-2);border:1px solid var(--line);}
+  .guide-b div{font-size:12.5px;line-height:1.55;color:var(--ink-2);}
+  .guide-b b{display:block;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--muted);font-weight:700;margin-bottom:2px;}
   .uclast b{color:var(--ink-2);font-weight:650;}
   .uclast.jump{color:var(--warning);}
   .ucread{font-size:13.5px;margin:-4px 0 12px;display:flex;flex-wrap:wrap;gap:6px 10px;
@@ -705,6 +716,7 @@
         <div class="getread" id="getRead"></div>
       </div>
       <div class="getref" id="getRefLine"></div>
+      <div class="guide" id="getGuide"></div>
     </div>
     <div id="tempFields" class="hidden">
       <div class="row">
@@ -734,6 +746,7 @@
         <button type="button" class="ucfigtog" id="ucFigTog"></button>
         <div class="ucfig" id="ucFig"></div>
         <div class="ucref" id="ucRefLine"></div>
+        <div class="guide" id="ucGuide"></div>
         <div class="uclast" id="ucLast"></div>
         <div class="ucna">
           <div class="ucna-h" data-i18n="uc_cannot">Could not measure it?</div>
@@ -998,6 +1011,7 @@
 <script src="machine-fig.js?v=77"></script>
 <script src="get.js?v=77"></script>
 <script src="uc-points.js?v=77"></script>
+<script src="inspect-guide.js?v=77"></script>
 <script src="report-core.js?v=77"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
@@ -1245,6 +1259,8 @@ const I18N = {
     upd_go:"Update now",
     unit_guess:"{u} is not in the asset register. Showing the standard {c} component list — check it fits the machine, and ask for the register to be updated.",
     uc_fig_hide:"Hide the diagram", uc_fig_show:"Show the diagram",
+    g_show:"How to check this", g_hide:"Hide how to check this",
+    g_tool:"Bring", g_how:"How to measure", g_check:"What to look at",
     uc_prevread:"last round {b}{v} mm{/b} · {d}",
     uc_sheet_pos:"point {i} of {of} · {done} taken",
     uc_prev:"‹ Back", uc_next:"Next ›", uc_last:"Done ✓",
@@ -1476,6 +1492,8 @@ const I18N = {
     upd_go:"Обновить",
     unit_guess:"{u} нет в реестре оборудования. Показан стандартный перечень узлов «{c}» — проверьте соответствие машине и запросите обновление реестра.",
     uc_fig_hide:"Скрыть схему", uc_fig_show:"Показать схему",
+    g_show:"Как проверять", g_hide:"Скрыть как проверять",
+    g_tool:"Взять с собой", g_how:"Как замерять", g_check:"На что смотреть",
     uc_prevread:"в прошлый раз {b}{v} мм{/b} · {d}",
     uc_sheet_pos:"точка {i} из {of} · снято {done}",
     uc_prev:"‹ Назад", uc_next:"Далее ›", uc_last:"Готово ✓",
@@ -2127,20 +2145,61 @@ function renderComponentNav(tree){
    nothing was ever marked selected, and — worse — draft.positions[undefined] is
    falsy, so each repaint STRIPPED the green dot off a component that had just
    been captured. Setting a grade made the evidence of it disappear. */
+/* Repaint the numbered map where it stands, rather than re-rendering it. Not a
+   micro-optimisation: a full render rebuilds the SVG, which throws the chip row
+   back to the start of its scroll and re-decodes the photograph — on every
+   keystroke in the millimetre box.
+
+   This used to key off ".um-spot", a class the numbered map replaced, so the
+   branch had quietly stopped running. Nothing looked wrong on an undercarriage
+   round, because its chips carry data-ucg and go through the number handler,
+   which re-renders the lot. A GET round's chips carry data-pos and go through
+   the delegated handler at the foot of this block, which only ever repainted
+   buttons — so tapping "Right side cutter" lit the chip and left the number on
+   the picture pointing at whatever was selected before. The map and the list
+   below it are the same control; they cannot disagree about what is selected.
+
+   Returns false when there is no map on screen, so the caller falls through to
+   the ordinary card repaint. */
+function repaintMap(){
+  if(ucView!=="map" || !curEquip) return false;
+  const nav=$("posnav");
+  if(!nav.querySelector(".ucmap")) return false;
+  let selN=0, stateOf=null, numOf=null;
+  if(wearType() && ucStatus(curEquip).ok){
+    selN=ucGroupOf(curItem)||0;
+    stateOf=ucGroupState;
+  }else if(getType() && getStatus(curEquip).ok){
+    const walk=getWalk(curEquip);
+    numOf={}; walk.forEach(w=>{ numOf[w.k]=w.n; });
+    stateOf=n=>getState((walk[n-1]||{}).k);
+    selN=numOf[curItem]||0;
+  }else return false;
+
+  nav.querySelectorAll(".ucmap [data-ucg]").forEach(g=>{
+    const n=+g.dataset.ucg;
+    g.setAttribute("class",["um-num",stateOf(n)||"",n===selN?"sel":""].filter(Boolean).join(" "));
+  });
+  /* The named chips, and — on an undercarriage round — the member row under a
+     number that covers two bands. All of them say the same thing the map says. */
+  nav.querySelectorAll(".ucgroups button").forEach(b=>{
+    const n=b.dataset.ucg?+b.dataset.ucg:(numOf?numOf[b.dataset.pos]:0);
+    if(!n) return;
+    b.className=[stateOf(n)||"",n===selN?"on":""].filter(Boolean).join(" ");
+  });
+  nav.querySelectorAll(".ucmembers button[data-pos]").forEach(b=>{
+    const k=b.dataset.pos;
+    b.className=[ucState(k)||"",k===curItem?"on":""].filter(Boolean).join(" ");
+  });
+  const tl=nav.querySelector(".uctally");
+  if(tl){ const tmp=document.createElement("div");
+    tmp.innerHTML=wearType()?ucTally():getTally();
+    if(tmp.firstChild) tl.innerHTML=tmp.firstChild.innerHTML; }
+  ucMarkSelectedPart();
+  return true;
+}
 function refreshChips(){
-  if(wearType() && ucView==="map" && $("posnav").querySelector(".um-spot")){
-    // repaint in place rather than re-rendering, so the frame does not jump back
-    // to the start of its scroll on every keystroke
-    $("posnav").querySelectorAll(".um-spot").forEach(el=>{
-      const k=el.dataset.uc;
-      el.setAttribute("class", "um-spot "+(ucState(k)||"")+(k===curItem?" sel":""));
-    });
-    ucMarkSelectedPart();
-    const tl=$("posnav").querySelector(".uctally");
-    if(tl){ const tmp=document.createElement("div"); tmp.innerHTML=ucTally();
-      tl.innerHTML=tmp.firstChild.innerHTML; }
-    return;
-  }
+  if(repaintMap()) return;
   const tr=currentTree();
   $("posnav").querySelectorAll("button").forEach(b=>{
     const d=b.dataset;
@@ -2295,7 +2354,7 @@ function renderUC(){
   renderUCFig();
   const st=curEquip?ucStatus(curEquip):null;
   if(st && !st.ok){ box.innerHTML=""; warn.classList.add("hidden"); return; }
-  renderUCRef(); renderUCLast();
+  renderUCRef(); renderUCGuide(); renderUCLast();
   const p=posRO(), ref=ucRef(), mm=(p.mm==null?null:Number(p.mm));
   // what the number means
   let h="";
@@ -2350,16 +2409,16 @@ function renderGET(){
   const a=ASSET_BY[curEquip]||{};
   const row=window.GET?GET.rowFor(curEquip,a.cat||a.cls||"",a.m||"",curItem):null;
   const ref=getRef();
-  const tool="";
   /* A visual check has nothing to measure, so it is not offered a box that
      looks like it wants a number. */
   const visual = row && row[4]==="visual";
   $("getFields").classList.toggle("novalue", !!visual);
   $("getLbl").textContent = t("get_mm");
   line.innerHTML = ref
-    ? esc(t("get_ref",{n:ref.n, c:ref.c})) + (tool? ' · '+esc(tool) : '') +
+    ? esc(t("get_ref",{n:ref.n, c:ref.c})) +
       (ref.src==="generic"? ' · <span class="band b-watch">'+esc(t("get_generic"))+'</span>' : '')
-    : (tool? esc(tool) : '');
+    : "";
+  renderGuide("getGuide", row?row[1]:"", getScope());
   const p=posRO(), mm=(p.mm==null?null:Number(p.mm));
   if(mm==null || !ref || !window.WEAR){ read.innerHTML=""; return; }
   const pct=WEAR.wear(ref, mm);
@@ -2367,6 +2426,48 @@ function renderGET(){
   const b=ucBand(pct);
   read.innerHTML='<b>'+Math.round(pct)+'%</b><span class="band b-'+b+'">'+esc(t("uc_band_"+b))+'</span>'+
     '<span class="src">'+esc(t("uc_toGo",{n:Math.abs(mm-ref.c).toFixed(1)}))+'</span>';
+}
+/* How to take the reading, shared by the undercarriage round and the GET round.
+   One renderer because it is one question — an inspector standing at a machine
+   asking "what do I bring, where exactly do I measure, and what else should I
+   be looking at while I am here". The answers live in inspect-guide.js; this
+   only decides whether they are on screen.
+
+   Collapsed by default, and the choice is remembered. Somebody on their
+   hundredth roller does not want three paragraphs between the reference and the
+   millimetre box; somebody on their first needs it one tap away rather than on
+   another screen or in a folder in the ute. */
+let guideOpen = localStorage.getItem("guide_open")==="1";
+function renderGuide(boxId, code, scope){
+  const box=$(boxId); if(!box) return;
+  const g = window.GUIDE ? GUIDE.for(code, scope, lang) : null;
+  if(!g){ box.innerHTML=""; return; }     // no method written for this point yet
+  box.innerHTML='<button type="button" class="guide-t">'+(guideOpen?"▾ ":"▸ ")+
+    esc(t(guideOpen?"g_hide":"g_show"))+'</button>'+
+    (guideOpen?'<div class="guide-b">'+
+      '<div><b>'+esc(t("g_tool"))+'</b>'+esc(g.tool)+'</div>'+
+      '<div><b>'+esc(t("g_how"))+'</b>'+esc(g.how)+'</div>'+
+      '<div><b>'+esc(t("g_check"))+'</b>'+esc(g.check)+'</div>'+
+    '</div>':"");
+  box.querySelector(".guide-t").onclick=()=>{
+    guideOpen=!guideOpen; localStorage.setItem("guide_open",guideOpen?"1":"0");
+    /* Repaint both, not just the one that was tapped: the two rounds share the
+       setting, and a stale arrow on the other screen is a lie about state. */
+    renderGuide("ucGuide", ucSplit(curItem||"")[0], "");
+    renderGuide("getGuide", getCode(), getScope());
+  };
+}
+/* The GET point's own code, and which tool it belongs to — CRACK on a bucket is
+   a different job from CRACK on a blade, so the scope has to travel with it. */
+function getCode(){
+  const a=ASSET_BY[curEquip]||{};
+  const row=window.GET?GET.rowFor(curEquip,a.cat||a.cls||"",a.m||"",curItem):null;
+  return row?row[1]:"";
+}
+function getScope(){
+  const a=ASSET_BY[curEquip]||{};
+  const pr=window.GET?GET.profileFor(curEquip,a.cat||a.cls||"",a.m||""):null;
+  return pr?pr.tool:"";
 }
 function ucReasonLabel(code,lg){
   const r=(window.WEAR&&WEAR.reasons||[]).find(x=>x.code===code);
@@ -2609,15 +2710,19 @@ function getState(k){
     return GRADE_SEV[p.grade]==="CRI"?"act" : GRADE_SEV[p.grade]==="DEG"?"watch" : "done";
   return "";
 }
+function getTally(){
+  const walk=getWalk(curEquip);
+  const c={ "":0, done:0, watch:0, act:0 };
+  walk.forEach(w=>{ c[getState(w.k)||""]++; });
+  const order=[["act","uc_leg_act"],["watch","uc_leg_watch"],["done","uc_leg_done"],["","uc_leg_none"]];
+  return '<div class="uctally">'+order.filter(([k])=>c[k]>0)
+    .map(([k,lab])=>'<span class="t '+(k||"non")+'"><i></i>'+c[k]+' '+esc(t(lab))+'</span>').join("")+'</div>';
+}
 function renderGETMap(){
   const st=getStatus(curEquip); if(!st.ok) return;
   const walk=getWalk(curEquip);
   let h=ucViewsBar();
-  const c={ "":0, done:0, watch:0, act:0 };
-  walk.forEach(w=>{ c[getState(w.k)||""]++; });
-  const order=[["act","uc_leg_act"],["watch","uc_leg_watch"],["done","uc_leg_done"],["","uc_leg_none"]];
-  h+='<div class="uctally">'+order.filter(([k])=>c[k]>0)
-      .map(([k,lab])=>'<span class="t '+(k||"non")+'"><i></i>'+c[k]+' '+esc(t(lab))+'</span>').join("")+'</div>';
+  h+=getTally();
   h+='<div class="ucmaps"><div class="ucmapwrap">'+
      WEAR.mapPhoto({ photo:st.prof.photo, aspect:st.prof.aspect, box:[0,0,100,100], lang:lang,
                      layout:walk.map(w=>[w.n,w.x/100,w.y/100]),
@@ -2720,6 +2825,7 @@ function renderUCFig(){
   if(!svg || !ucFigOpen) return;
   box.innerHTML = svg + (meta?'<div class="cap">'+esc(meta.tool)+'</div>':"");
 }
+function renderUCGuide(){ renderGuide("ucGuide", ucSplit(curItem||"")[0], ""); }
 /* What this position read last time. A transposed digit — 204 for 240 — passes
    every check the reference can make, and is only obvious next to the number the
    same point gave a month ago. Cheap to show, and the only moment it is cheap to
@@ -2789,7 +2895,12 @@ $("ucClose").onclick=ucCloseSheet;
 document.addEventListener("click", e=>{
   if(!ucSheetOn()) return;
   if(e.target.closest("#ucFields")) return;
-  if(e.target.closest(".um-spot")) return;        // the map is still the picker
+  /* The map is still the picker while the sheet is up. Both class names: the
+     drawn frame puts out .um-spot and the numbered photograph .um-num, and
+     listing only the first meant every tap on a number dismissed the sheet
+     before the number was read — closing and reopening it for what should have
+     been a step sideways. */
+  if(e.target.closest(".um-spot,.um-num")) return;
   if(e.target.closest(".ucviews")) return;
   ucCloseSheet();
 }, true);
@@ -3974,7 +4085,11 @@ function applyLang(){ document.documentElement.lang=lang;
     if(wearType() && ucStatus(curEquip).ok) renderUCMap();
     else if(getType() && getStatus(curEquip).ok) renderGETMap();
   }
+  /* Both wear panels, not just the undercarriage one. The GET panel's reference
+     line and its method block are built in code too, so the sweep above never
+     reaches them and a GET round kept its English after the switch. */
   if(TYPE_META[type].wear) renderUC();
+  if(TYPE_META[type].get) renderGET();
   document.querySelectorAll(".lang button").forEach(b=>b.classList.toggle("on", b.dataset.lang===lang)); }
 document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target.closest("button[data-lang]"); if(!b) return; lang=b.dataset.lang; localStorage.setItem("lang",lang); applyLang(); });
 
@@ -4912,7 +5027,7 @@ if("serviceWorker" in navigator && window.isSecureContext){ let reloaded=false;
 const SHELL_ASSETS=["index.html","manifest.webmanifest","native.js","jsQR.js","qrcode.js","upload-defaults.js",
   "hme.js","hme-cascade.js","mp-fc.js","assets.js","temp-limits.js",
   "wear.js","wear-figs.js","wear-map.js","machine-photos.js","machine-fig.js","get.js","uc-points.js","report-core.js",
-  "jspdf.umd.min.js","html2canvas.min.js","sw.js"];
+  "jspdf.umd.min.js","html2canvas.min.js","inspect-guide.js","sw.js"];
 /* "Am I on the latest build?" used to be unanswerable from inside the app: the
    service worker serves the copy it has, and a stale page looks exactly like a
    current one. So ask. sw.js carries the build number, it is tiny, and fetching

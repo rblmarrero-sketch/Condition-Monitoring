@@ -1226,3 +1226,36 @@ a model nobody has shot yet, or a genuine cache miss — the numbered map falls 
 drawn frame rather than putting eleven numbers over a blank rectangle. On a GET round it
 falls back to bare numbers instead, because a track frame under a missing bucket is not a
 fallback, it is a wrong answer.
+
+### How to take the reading
+
+A wear figure is only worth the method behind it. Two inspectors measuring the same track
+roller — one across the tread, one over the flange — produce numbers that trend against
+each other and mean nothing; the roller appears to be growing. The reference tables say
+what the limit is. Until now nothing said how the number was supposed to be taken, so the
+method lived in whoever trained the inspector, which at 1,128 units and a rotating crew is
+not a place to keep it.
+
+Every measurement point in both rounds — nine on the undercarriage, twenty-two across the
+bucket and the blade — now carries three things, in English and Russian, one tap under the
+reference line:
+
+- **Bring** — the tool. A caliper, a straightedge and depth rule, an ultrasonic gauge, a
+  torque wrench. Not knowing before walking out is how a position comes back "no tool for
+  it".
+- **How to measure** — where exactly, and which way the number moves. Idler tread *grows*
+  as it wears; link pitch must be taken over the same four links every round or the trend
+  invents stretch that is not there; UT through packed dirt reads thick.
+- **What to look at** — the finding beside the number. A cracked lip weld, a seized carrier
+  sawing into the link rail above it, a missing tooth already in the load and heading for
+  the crusher. The round asks for a millimetre; this is what else is in front of you while
+  you are down there with a torch.
+
+It is collapsed by default and the choice is remembered, so an inspector on their hundredth
+roller does not read three paragraphs between the reference and the millimetre box, and one
+on their first has it a tap away rather than in a folder in the ute.
+
+The method lives in `mobile/inspect-guide.js` and the limits do not — those stay in
+`wear.js` (per model, from the supplier's charts) and `get.js` (generic until the supplier's
+figures arrive). `guide.cjs` fails the sweep if a millimetre figure appears in the method
+file, because a limit in two places is a limit that drifts.
