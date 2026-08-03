@@ -695,10 +695,20 @@
     <div class="mediahint hint" id="mediaHint"></div>
     <input id="camera" type="file" accept="image/*" capture="environment" class="hidden">
     <input id="video" type="file" accept="video/*" capture="environment" class="hidden">
-    <div class="row" id="mediaRow" style="margin-bottom:14px">
+    <!-- No capture= on this one, and that is the whole difference: with the
+         attribute the phone goes straight to the camera, without it the phone
+         offers what it already has. Same control, both media types, and
+         multiple so a point that was photographed four times is four taps
+         shorter. -->
+    <input id="gallery" type="file" accept="image/*,video/*" multiple class="hidden">
+    <div class="row" id="mediaRow">
       <button class="btn primary" id="takeBtn" type="button">📷 <span data-i18n="btn_take">Add photo</span></button>
       <button class="btn ghost" id="videoBtn" type="button">🎥 <span data-i18n="btn_video">Video</span></button>
     </div>
+    <!-- On its own line rather than squeezed in beside them. It is the second
+         way to do the same job, not a third thing to do, and three buttons
+         across a 412 px phone start losing their labels. -->
+    <button class="btn ghost" id="galleryBtn" type="button" style="margin-bottom:14px">🖼 <span data-i18n="btn_gallery">Choose from gallery</span></button>
 
     <label class="fld"><span data-i18n="lbl_grade">Grade / condition</span>
       <div class="seg gradeseg" id="gradeSeg">
@@ -1202,6 +1212,8 @@ const I18N = {
     need_unit:"Choose the unit first — its real components will load here.", nav_systems:"Systems", nav_whole:"Inspect whole", nav_choose:"Choose a component to inspect ↑", opt_search_all:"Search all components",
     lbl_date:"Date", lbl_smu:"SMU / machine hrs", ph_smu:"e.g. 6018",
     btn_take:"Add photo", btn_video:"Video", btn_retake:"Retake",
+    btn_gallery:"Choose from gallery",
+    gal_full_t:"Not everything fitted", gal_full_b:"{n} of the files you chose were left out. A position holds up to {p} photographs and one video clip.",
     media_hint:"Up to 4 photos + 1 video (max 1 min).", media_empty:"No photos yet.",
     upd_ready:"A new version is ready. It will load by itself when you finish this round — or tap to load it now.",
     rdy_ok:"Ready to work offline",
@@ -1435,6 +1447,8 @@ const I18N = {
     need_unit:"Сначала выберите единицу техники — её узлы загрузятся здесь.", nav_systems:"Системы", nav_whole:"Осмотреть узел целиком", nav_choose:"Выберите узел для осмотра ↑", opt_search_all:"Поиск по всем узлам",
     lbl_date:"Дата", lbl_smu:"Моточасы (SMU)", ph_smu:"напр. 6018",
     btn_take:"Добавить фото", btn_video:"Видео", btn_retake:"Переснять",
+    btn_gallery:"Выбрать из галереи",
+    gal_full_t:"Поместилось не всё", gal_full_b:"Не добавлено файлов: {n}. На одну позицию — до {p} фотографий и один видеоролик.",
     media_hint:"До 4 фото + 1 видео (макс. 1 мин).", media_empty:"Пока нет фото.",
     upd_ready:"Новая версия готова. Загрузится сама, когда закончите осмотр — или нажмите, чтобы сейчас.",
     rdy_ok:"Готово к работе без связи",
@@ -2260,17 +2274,66 @@ async function takePhoto(){
 }
 $("takeBtn").onclick=takePhoto;
 $("videoBtn").onclick=()=>$("video").click();
+$("galleryBtn").onclick=()=>$("gallery").click();
 /* Still wired: the shell falls back to it if the Camera plugin is missing, and
    it is the whole implementation on the web. */
 $("camera").onchange=async (e)=>{ const f=e.target.files[0]; e.target.value=""; if(!f) return;
   const s=await intake(f);
   const p=curP(); (p.photos ||= []); if(p.photos.length<MAX_PHOTOS) p.photos.push(s); renderMedia(); renderChips(); };
-$("video").onchange=(e)=>{ const f=e.target.files[0]; e.target.value=""; if(!f) return;
-  const v=document.createElement("video"); v.preload="metadata";
-  v.onloadedmetadata=()=>{ if(v.duration && v.duration>MAX_VIDEO_SEC+0.8){ dlg(t("video_too_long")); }
-    else { curP().video=f; renderMedia(); renderChips(); } URL.revokeObjectURL(v.src); };
-  v.onerror=()=>{ curP().video=f; renderMedia(); renderChips(); };  // if metadata fails, accept
-  v.src=URL.createObjectURL(f); };
+/* One place that decides whether a clip is short enough, because a clip picked
+   out of the gallery has to clear the same bar as one taken here — and the way
+   that goes wrong is a second copy of the rule that forgets to. Resolves true
+   if it was taken, false if it was refused. */
+function acceptVideo(f){
+  return new Promise(res=>{
+    if(curP().video) return res(false);                 // one clip per position
+    const v=document.createElement("video"); v.preload="metadata";
+    const take=()=>{ curP().video=f; renderMedia(); renderChips(); res(true); };
+    v.onloadedmetadata=()=>{ const long = v.duration && v.duration>MAX_VIDEO_SEC+0.8;
+      URL.revokeObjectURL(v.src);
+      if(long){ dlg(t("video_too_long")); res(false); } else take(); };
+    v.onerror=()=>{ take(); };                          // if metadata fails, accept
+    v.src=URL.createObjectURL(f);
+  });
+}
+$("video").onchange=(e)=>{ const f=e.target.files[0]; e.target.value=""; if(f) acceptVideo(f); };
+/* Photographs and clips the phone already has. The inspector who shot the
+   cracked lip before opening the app, or on the walk back, should not have to
+   shoot it again — and telling them to is exactly the instruction this app is
+   built to avoid giving.
+
+   Sort by kind rather than trusting the order they were picked in, take
+   photographs until the position is full, and take at most one clip. Anything
+   that did not fit is said once, at the end, with a number — silently dropping
+   two of five is how an inspector believes evidence is in the record when it is
+   not. */
+$("gallery").onchange=async (e)=>{
+  const picked=[...(e.target.files||[])]; e.target.value="";
+  if(!picked.length) return;
+  const btn=$("galleryBtn"); btn.disabled=true;
+  try{
+    const p=curP(); (p.photos ||= []);
+    let room=MAX_PHOTOS-p.photos.length, skipped=0, vidSettled=!!p.video;
+    for(const f of picked){
+      const isVid = /^video\//.test(f.type) || (!f.type && /\.(mp4|mov|m4v|3gp|avi|mkv|webm)$/i.test(f.name||""));
+      if(isVid){
+        /* One clip per position, and one attempt: a clip refused for length has
+           already said so itself, and stacking a second dialog behind that one
+           explains nothing it did not already. */
+        if(vidSettled){ skipped++; continue; }
+        vidSettled=true; await acceptVideo(f);
+        continue;
+      }
+      if(room<=0){ skipped++; continue; }
+      /* Shrunk on the way in, exactly like a photograph taken here — a 12 MP
+         frame out of the gallery is the same 4 MB on the link otherwise. */
+      p.photos.push(await intake(f)); room--;
+    }
+    if(!p.photos.length) delete p.photos;
+    renderMedia(); renderChips();
+    if(skipped) dlg([t("gal_full_t"), t("gal_full_b",{n:skipped, p:MAX_PHOTOS})]);
+  } finally { renderMedia(); }
+};
 /* Blob URLs pin the whole photo in memory until revoked. These render functions
    run on every capture, delete and item switch, so without this a long round
    leaks every photo it has ever displayed. */
@@ -2287,6 +2350,9 @@ function renderMedia(){ const p=draft.positions[curItem]||{}; const ph=p.photos|
   $("mediaHint").textContent=t("media_hint");
   $("takeBtn").disabled = ph.length>=MAX_PHOTOS;
   $("videoBtn").disabled = !!p.video;
+  /* Only once there is nowhere left to put anything. While a photograph slot or
+     the clip slot is free the gallery is still worth opening. */
+  $("galleryBtn").disabled = ph.length>=MAX_PHOTOS && !!p.video;
   $("mediastrip").querySelectorAll(".mdel").forEach(btn=>btn.onclick=()=>{ const p=curP();
     if(btn.dataset.ph!==undefined){ p.photos.splice(+btn.dataset.ph,1); if(!p.photos.length) delete p.photos; }
     else { delete p.video; } renderMedia(); renderChips(); }); }

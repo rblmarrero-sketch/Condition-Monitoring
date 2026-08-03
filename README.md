@@ -1259,3 +1259,25 @@ The method lives in `mobile/inspect-guide.js` and the limits do not — those st
 `wear.js` (per model, from the supplier's charts) and `get.js` (generic until the supplier's
 figures arrive). `guide.cjs` fails the sweep if a millimetre figure appears in the method
 file, because a limit in two places is a limit that drifts.
+
+### Photographs the phone already has
+
+**Add photo** and **Video** go straight to the camera, as they always did. Underneath them
+is **Choose from gallery**, which opens what the phone already holds.
+
+The whole difference is one attribute: the camera inputs carry `capture="environment"`, so
+the phone skips the picker and opens the lens; the gallery input does not, so the phone
+offers its library. The inspector who photographed the cracked lip before opening the app,
+or on the walk back to the ute, does not have to photograph it again — and telling them to
+is exactly the kind of instruction this app is built not to give.
+
+One control takes both photographs and clips, and takes several at once, so a position that
+was shot four times is four taps shorter. Everything picked goes through the same path as a
+photograph taken here: shrunk to 1600 px on the way in, because a 12-megapixel frame out of
+the gallery is the same four megabytes on the link otherwise. A clip out of the gallery
+clears the same one-minute bar, from the same piece of code, because a second copy of that
+rule is a copy that forgets.
+
+A position still holds four photographs and one clip. Where more than that is picked, the
+ones that fitted are kept and the phone says how many were left out — silently dropping two
+of five is how an inspector comes to believe evidence is in the record when it is not.
