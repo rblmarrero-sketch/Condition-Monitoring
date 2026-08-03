@@ -4469,17 +4469,38 @@ function uploadLanes(){
    the folder is missing and each create one. Sending one file first means the
    chain exists before the rest arrive, and it needs no change to whatever
    version of the script is deployed. */
-async function putAll(dest, files, rec){
+/* `sent` is a set of file names this destination has already taken, and every
+   file that lands is written into it AS it lands — including on the way out of
+   a failure. That is the whole point: the caller keeps the object, saves it with
+   the record, and the next attempt starts from the first file that never
+   arrived.
+
+   Without it a link that dies part way through a round sent everything again
+   from the beginning. Measured on six photographs with the link dropping after
+   the fourth file: eleven uploads to deliver seven files. Worse than wasteful —
+   a link that reliably dies after three or four files never finishes a ten
+   photograph position at all, because every attempt spends itself re-sending
+   what already arrived. That is not a slow upload, it is an upload that cannot
+   converge, and from the yard the two look identical. */
+async function putAll(dest, files, rec, sent){
   if(!files.length) return;
-  await putOne(dest,files[0].name,files[0].blob,files[0].type,rec);
-  const rest=files.slice(1);
+  sent = sent || {};
+  /* The first file of a record goes on its own so the folder chain exists
+     before the rest arrive — but only when nothing has landed yet. On a resume
+     the folders are already there and the lone first file is just a lost lane. */
+  let rest=files;
+  if(!Object.keys(sent).length){
+    await putOne(dest,files[0].name,files[0].blob,files[0].type,rec);
+    sent[files[0].name]=1;
+    rest=files.slice(1);
+  }
   if(!rest.length) return;
   let next=0, failed=null;
   const lane=async()=>{ for(;;){
     if(failed) return;                     // one failure ends this record's turn
     const i=next++; if(i>=rest.length) return;
     const f=rest[i];
-    try{ await putOne(dest,f.name,f.blob,f.type,rec); }
+    try{ await putOne(dest,f.name,f.blob,f.type,rec); sent[f.name]=1; }
     catch(e){ failed=failed||e; }
   } };
   await Promise.all(Array.from({length:Math.min(uploadLanes(),rest.length)},lane));
@@ -4641,9 +4662,21 @@ async function syncNow(manual){
       }
       const errs=[];
       let progressed=false;
+      /* What each destination has already taken, carried across attempts. */
+      const sent=rec.sent||{};
       for(const d of todo){
-        try{ await putAll(d,payload,rec); done[d.id]=1; progressed=true; }
+        const already=(sent[d.id] ||= {});
+        const before=Object.keys(already).length;
+        /* Only what is still missing. On a first attempt that is everything; on
+           a resume it is the tail, and the tail is usually where the link died. */
+        const left=payload.filter(f=>!already[f.name]);
+        try{ await putAll(d,left,rec,already); done[d.id]=1; progressed=true; }
         catch(e){ errs.push(DEST_META[d.id].label+": "+String(e.message||e)); }
+        /* Files landing IS progress, even when the destination did not finish.
+           The breaker below gives up after three records that got nowhere;
+           without this a round crawling up a bad link three files at a time
+           looks like a record that got nowhere and stops the whole queue. */
+        if(Object.keys(already).length>before) progressed=true;
       }
       // Re-read before writing. Putting back the copy we started with would
       // silently discard an edit made during the upload — and mark it synced, so
@@ -4652,7 +4685,16 @@ async function syncNow(manual){
       if(fresh && (fresh.rev||0)===rev){
         fresh.upTo=done;
         fresh.up = dests.every(d=>done[d.id]) ? 1 : 0;
-        if(fresh.up) fresh.upAt=new Date().toISOString();
+        /* Saved with the record, in the write that was happening anyway — no
+           extra cost, and the photographs are not rewritten because this is the
+           same put that records upTo.
+
+           Keyed to nothing but this revision: once the round is through, or once
+           somebody edits it, the list is wrong and is thrown away. An edited
+           round re-sends in full, which is right — the file behind a name may
+           not be the file that name meant last time. */
+        if(fresh.up) { fresh.upAt=new Date().toISOString(); delete fresh.sent; }
+        else fresh.sent=sent;
         await dbPut(fresh);
       }
       if(errs.length) lastErr=errs.join(" · ");

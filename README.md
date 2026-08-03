@@ -1295,3 +1295,27 @@ most photographs, which are the positions where something is wrong.
 Where more is picked than will fit, what fitted is kept and the phone says how many were
 not. Silently dropping two of five is how an inspector comes to believe evidence is in the
 record when it is not.
+
+### A link that keeps dying
+
+The uploader used to have no memory of what had already arrived. Every attempt rebuilt the
+whole round and sent it from the first file, so a link that dropped part way through spent
+the next attempt re-sending what was already in Drive.
+
+Measured, six photographs, link dropping after the fourth file: **eleven uploads to deliver
+seven files**. That is the mild case. The severe one is a link that dies after two or three
+files every time — then the round *never completes at all*, because each attempt exhausts
+itself re-sending the sidecar and the first photograph. Measured on the old code: four
+attempts, eight uploads, two distinct files delivered, and the round still marked unsent.
+From the yard that is indistinguishable from a slow upload, and no amount of waiting fixes
+it.
+
+Each destination now remembers the file names it has taken, written as they land — including
+on the way out of a failure — and saved with the record in the write that was already
+happening. The next attempt sends only what is missing. Same test: **seven uploads for seven
+files, nothing sent twice**, and a round survives a link that never lasts more than two files
+at a time.
+
+The list is keyed to the revision and thrown away when the round completes. An edited round
+re-sends in full, which is right — the file behind a name may not be the file that name meant
+last time.
