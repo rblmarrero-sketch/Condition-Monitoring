@@ -1438,3 +1438,24 @@ It also checks every `var()` resolves to a colour the app defines. An undefined 
 not a slightly wrong colour — the browser throws the whole declaration away — and that is how
 the green tick and the crack's end marks came to be invisible on a screen nobody had looked
 at closely enough. Same failure as `--bad`, found the same way.
+
+The undercarriage set now runs on the same generator. It gained a header naming the point and
+the tool, a Russian set generated separately from the English one, and — the reason it needed
+doing at all — working arrowheads.
+
+**Every measurement arrow on all nine drawings had been rendering black.** The marker fills
+live in `<defs>`, not in the stylesheet, so the token substitution never reached them; they
+named a variable the app does not define, the fill was invalid, and it fell back to black. On
+the dark theme that is a red dimension arrow you cannot see, on the one screen whose whole job
+is to say which number to write down. Third instance of that same failure in a day, and the
+reason `figtext.cjs` now checks every `var()` in both sets against the palette.
+
+Two more it caught: a caliper jaw resting on the roller flange — the exact mistake the label
+beside it exists to warn against — and plain leader lines drawn in the dimension colour, which
+says "this is a measurement" about something that is a note.
+
+`figtext.cjs` covers both sets: 31 drawings, 62 layouts. It also had a bug of its own worth
+recording — it measured with `getBBox()`, which reports coordinates in each element's *own*
+user space, so a header outside a translated group and artwork inside one were compared in
+different frames and a clean layout was reported as a collision. Screen-space rectangles are
+the only honest way to ask whether two things overlap on a screen.

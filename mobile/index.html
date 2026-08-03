@@ -3037,13 +3037,16 @@ function renderUCFig(){
   const box=$("ucFig"), tog=$("ucFigTog"); if(!box) return;
   if(tog){ tog.textContent = (ucFigOpen?"▾ ":"▸ ")+t(ucFigOpen?"uc_fig_hide":"uc_fig_show");
     tog.onclick=()=>{ ucFigOpen=!ucFigOpen; localStorage.setItem("uc_fig",ucFigOpen?"1":"0");
-      renderUCFig(); }; }
+      renderUCFig(); if(TYPE_META[type].get) renderGETFig(); }; }
   const [pt]=ucSplit(curItem||"");
-  const svg=(window.WEAR_FIG||{})[pt];
-  const meta=(window.WEAR&&WEAR.points||[]).find(x=>x.code===pt);
+  const svg=window.WEAR_FIG ? WEAR_FIG.for(pt, lang) : "";
   box.style.display = (svg && ucFigOpen)?"":"none";
   if(!svg || !ucFigOpen) return;
-  box.innerHTML = svg + (meta?'<div class="cap">'+esc(meta.tool)+'</div>':"");
+  /* The tool used to be a caption bolted under the drawing, and only in English —
+     WEAR.points carries one string, not two. It is inside the drawing now, in
+     the same header band the GET set uses, so it follows the language and sits
+     where the eye already is. */
+  box.innerHTML = svg;
 }
 function renderUCGuide(){ renderGuide("ucGuide", ucSplit(curItem||"")[0], ""); }
 /* The GET round's drawing. Shares the undercarriage round's show/hide setting,
