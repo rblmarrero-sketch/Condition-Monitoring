@@ -1370,3 +1370,12 @@ no such thing — send it a ping and it rejects a body it does not recognise, wh
 endpoint working correctly and would be reported as the endpoint being broken. Those are
 skipped, and the screen says why, because a measurement that invents a fault is worse than
 no measurement.
+
+The verdict judges the round first and the cause second. An earlier version was a chain of
+absolute cutoffs — overhead over four seconds, rate under sixty kilobytes — and it called a
+link **healthy** that was taking seven seconds a photograph, because no single term crossed
+its line alone: 3806 ms of overhead came back fine for being under 4000. A threshold that
+says nothing is wrong when a round takes half a minute is worse than no verdict at all,
+because it sends the reader away certain. So the question is now *is a photograph slow*, and
+only then *which half of it* — by share, not by a number somebody picked. The split is on
+screen either way: **waiting** against **sending**, because they have different fixes.

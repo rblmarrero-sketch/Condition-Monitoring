@@ -1246,14 +1246,15 @@ const I18N = {
     sp_small_only:"answers in {n}, but would not take 200 KB",
     sp_overhead:"cost per request", sp_rate:"speed once it starts",
     sp_means:"what that means for a round",
-    sp_perphoto:"one photograph", sp_ten:"ten photographs",
+    sp_perphoto:"one photograph", sp_split:"of which", sp_split_v:"{w} waiting, {s} sending",
+    sp_ten:"ten photographs",
     sp_copy:"Copy this for IT", sp_copied:"Copied", sp_copyfail:"Could not copy — read it off the screen",
     sp_v_host:"The destination is the slow part, not your signal.",
-    sp_v_host_d:"Every upload pays {o} before a single byte of photograph moves, while this app's own host answers in {c}. The link is fine. Sending smaller photographs will not help — the fix is fewer, larger requests, or a destination that is not being held up.",
+    sp_v_host_d:"Every upload pays {o} before a single byte of photograph moves — {p}% of the time a photograph takes, against {s} actually sending it. This app's own host answers in {c}, so the link is not the problem. Smaller photographs will barely help. The fix is fewer requests: send several photographs in one, so that wait is paid once instead of once each.",
     sp_v_link:"The connection itself is slow, for everything.",
     sp_v_link_d:"Even this app's own host takes {c}, and it is not Google. This is the link, the VPN or where the phone is standing, not the upload destination. Uploading fewer bytes is the only thing that helps here.",
     sp_v_bytes:"There is bandwidth, but not much of it.",
-    sp_v_bytes_d:"{r} once a transfer is going. Requests are cheap and bytes are expensive, so the fix is bytes: smaller photographs, and dropping the third that base64 adds.",
+    sp_v_bytes_d:"{r} once a transfer is going, and {s} of every photograph is spent just moving bytes. Requests are cheap here and bytes are expensive, so the fix is bytes: smaller photographs, and dropping the third that base64 adds.",
     sp_timeout:"no answer in {n} s",
     sp_nomeasure:"cannot be timed without uploading a real file — not measured",
     sp_v_blocked:"Something is refusing to carry these requests.",
@@ -1511,14 +1512,15 @@ const I18N = {
     sp_small_only:"отвечает за {n}, но не принял 200 КБ",
     sp_overhead:"цена одного запроса", sp_rate:"скорость после старта",
     sp_means:"что это значит для обхода",
-    sp_perphoto:"одна фотография", sp_ten:"десять фотографий",
+    sp_perphoto:"одна фотография", sp_split:"из них", sp_split_v:"{w} ожидание, {s} передача",
+    sp_ten:"десять фотографий",
     sp_copy:"Скопировать для ИТ", sp_copied:"Скопировано", sp_copyfail:"Не удалось скопировать — перепишите с экрана",
     sp_v_host:"Медленно работает назначение, а не ваш сигнал.",
-    sp_v_host_d:"Каждая загрузка тратит {o} до того, как уйдёт первый байт фотографии, тогда как собственный хост приложения отвечает за {c}. Со связью всё в порядке. Уменьшение фотографий не поможет — нужны более редкие и крупные запросы либо другое назначение.",
+    sp_v_host_d:"Каждая загрузка тратит {o} до того, как уйдёт первый байт фотографии — это {p}% времени одной фотографии против {s} на саму передачу. Собственный хост приложения отвечает за {c}, значит дело не в канале. Уменьшение фотографий почти не поможет. Нужно меньше запросов: отправлять несколько фотографий за один, чтобы это ожидание оплачивалось один раз, а не каждый раз.",
     sp_v_link:"Медленно работает само соединение, для всего.",
     sp_v_link_d:"Даже собственный хост приложения отвечает за {c}, и это не Google. Дело в канале, VPN или месте, где стоит телефон, а не в назначении. Здесь помогает только уменьшение объёма данных.",
     sp_v_bytes:"Полоса есть, но узкая.",
-    sp_v_bytes_d:"{r} при идущей передаче. Запросы дёшевы, дороги байты — значит, уменьшать фотографии и убирать треть, которую добавляет base64.",
+    sp_v_bytes_d:"{r} при идущей передаче, и {s} каждой фотографии уходит на сами байты. Запросы здесь дёшевы, дороги байты — значит, уменьшать фотографии и убирать треть, которую добавляет base64.",
     sp_timeout:"нет ответа за {n} с",
     sp_nomeasure:"нельзя измерить, не загрузив реальный файл — не измерялось",
     sp_v_blocked:"Что-то не пропускает эти запросы.",
@@ -5152,24 +5154,43 @@ async function runSpeedCheck(){
      because it travels as base64 — that inflation is part of the estimate
      precisely because it is one of the things we may be about to remove. */
   const f=found[0];
-  const perPhoto=f.overhead + (PHOTO_BYTES*4/3)/f.rate*1000;
+  const wire=PHOTO_BYTES*4/3;                    // base64 is a third more than the photograph
+  const waiting=f.overhead;                      // before a byte of photograph moves
+  const sending=wire/f.rate*1000;                // the bytes themselves
+  const perPhoto=waiting+sending;
   const lanes=uploadLanes();
   const ten=(perPhoto*10)/lanes;
   lines.push('<div class="sp-h">'+esc(t("sp_means"))+'</div>'); say();
   row(t("sp_perphoto"), spFmt(perPhoto));
+  /* The split is the finding. One number for a photograph tells you it is slow;
+     this tells you which half to go after, and they have different fixes. */
+  row(t("sp_split"), t("sp_split_v",{w:spFmt(waiting), s:spFmt(sending)}));
   row(t("sp_ten"), spFmt(ten));
 
-  /* The verdict. Three shapes, three different fixes, and the whole reason the
-     two sizes were measured separately. */
+  /* The verdict.
+
+     This used to be a chain of absolute cutoffs — overhead over four seconds,
+     rate under sixty kilobytes — and it called a link healthy that was taking
+     seven seconds a photograph, because no single term crossed its line by
+     itself. 3806 ms of overhead came back "healthy" for being under 4000. An
+     arbitrary threshold that says nothing is wrong when a round takes half a
+     minute is worse than no verdict at all: it sends somebody away certain.
+
+     So: decide on the round first — is it actually slow? — and only then on
+     which half of it to blame, by share rather than by a number somebody
+     picked. A cause is worth naming when it is most of the cost. */
+  const SLOW_PHOTO=1500;                          // a photograph should not take longer
   let verdict, detail;
-  if(org.ok && org.ms<1200 && f.overhead>4000){
-    verdict=t("sp_v_host"); detail=t("sp_v_host_d",{o:spFmt(f.overhead),c:spFmt(org.ms)});
-  } else if(!org.ok || org.ms>=1200){
+  if(!org.ok || org.ms>=1500){
     verdict=t("sp_v_link"); detail=t("sp_v_link_d",{c:org.ok?spFmt(org.ms):t("sp_unreachable")});
-  } else if(f.rate < 60*1024){
-    verdict=t("sp_v_bytes"); detail=t("sp_v_bytes_d",{r:spRate(f.rate)});
-  } else {
+  } else if(perPhoto<SLOW_PHOTO){
     verdict=t("sp_v_ok"); detail=t("sp_v_ok_d",{t:spFmt(ten)});
+  } else if(waiting/perPhoto>=0.4){
+    verdict=t("sp_v_host");
+    detail=t("sp_v_host_d",{o:spFmt(waiting), c:spFmt(org.ms),
+                            p:Math.round(waiting/perPhoto*100), s:spFmt(sending)});
+  } else {
+    verdict=t("sp_v_bytes"); detail=t("sp_v_bytes_d",{r:spRate(f.rate), s:spFmt(sending)});
   }
   lines.push('<div class="sp-v"><b>'+esc(verdict)+'</b><span>'+esc(detail)+'</span></div>'); say();
 
