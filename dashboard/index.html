@@ -448,26 +448,28 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=78"></script>
-<script src="../mobile/hme.js?v=78"></script>
-<script src="../mobile/mp-fc.js?v=78"></script>
-<script src="../mobile/hme-cascade.js?v=78"></script>
-<script src="../mobile/temp-limits.js?v=78"></script>
+<script src="../data/magnetic_plug.js?v=79"></script>
+<script src="../mobile/hme.js?v=79"></script>
+<script src="../mobile/mp-fc.js?v=79"></script>
+<script src="../mobile/hme-cascade.js?v=79"></script>
+<script src="../mobile/temp-limits.js?v=79"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=78"></script>
-<script src="../mobile/wear.js?v=78"></script>
-<script src="../mobile/wear-map.js?v=78"></script>
-<script src="../mobile/machine-photos.js?v=78"></script>
-<script src="../mobile/machine-fig.js?v=78"></script>
-<script src="../mobile/get.js?v=78"></script>
-<script src="../mobile/uc-points.js?v=78"></script>
-<script src="../mobile/inspect-guide.js?v=78"></script>
-<script src="../mobile/get-figs.js?v=78"></script>
-<script src="../mobile/jspdf.umd.min.js?v=78"></script>
-<script src="../mobile/html2canvas.min.js?v=78"></script>
-<script src="../mobile/report-core.js?v=78"></script>
+<script src="../mobile/assets.js?v=79"></script>
+<script src="../mobile/wear.js?v=79"></script>
+<script src="../mobile/wear-map.js?v=79"></script>
+<script src="../mobile/machine-photos.js?v=79"></script>
+<script src="../mobile/machine-fig.js?v=79"></script>
+<script src="../mobile/get.js?v=79"></script>
+<script src="../mobile/uc-points.js?v=79"></script>
+<script src="../mobile/inspect-guide.js?v=79"></script>
+<script src="../mobile/get-figs.js?v=79"></script>
+<script src="../mobile/body-points.js?v=79"></script>
+<script src="../mobile/body-map.js?v=79"></script>
+<script src="../mobile/jspdf.umd.min.js?v=79"></script>
+<script src="../mobile/html2canvas.min.js?v=79"></script>
+<script src="../mobile/report-core.js?v=79"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* The 1C defect & cause matrix, the same file the phones carry. Records already
@@ -532,7 +534,7 @@ const I18N={
 
   sev_NOF:"No failure", sev_INC:"Incipient", sev_DEG:"Degraded", sev_CRI:"Critical",
   type_MP:"Magnetic Plug", type_FC:"Filter Cut", type_INSP:"Inspection", type_TEMP:"Temperature",
-  type_UC:"Undercarriage", type_GET:"Ground engaging tools",
+  type_UC:"Undercarriage", type_GET:"Ground engaging tools", type_TB:"Dump body liner",
   uc_th_point:"Point", uc_th_meas:"Measured", uc_th_worn:"Worn",
   uc_noref:"no reference for this model",
   uc_sum_act:"{n} points at or past condemn", uc_sum_watch:"{n} above 80%",
@@ -691,7 +693,7 @@ const I18N={
 
   sev_NOF:"Без отказа", sev_INC:"Начальный", sev_DEG:"Ухудшено", sev_CRI:"Критично",
   type_MP:"Магнитная пробка", type_FC:"Разрез фильтра", type_INSP:"Осмотр", type_TEMP:"Температура",
-  type_UC:"Ходовая часть", type_GET:"Рабочий инструмент",
+  type_UC:"Ходовая часть", type_GET:"Рабочий инструмент", type_TB:"Футеровка кузова",
   uc_th_point:"Точка", uc_th_meas:"Замер", uc_th_worn:"Износ",
   uc_noref:"нет эталона для этой модели",
   uc_sum_act:"{n} точек на пределе или за ним", uc_sum_watch:"{n} выше 80%",
@@ -868,14 +870,25 @@ const PRIORITIES=[
 const PRIO_BY={}; PRIORITIES.forEach(p=>PRIO_BY[p.k]=p);
 const prioName=(k,l)=>{ const p=PRIO_BY[String(k||"").toUpperCase()]; return p?(p[l||lang]||p.en):(k||""); };
 const prioClass=k=>{ const p=PRIO_BY[String(k||"").toUpperCase()]; return p?p.c:"n"; };
-const TYPE_ORDER=["MP","FC","INSP","TEMP","UC","GET"];
+const TYPE_ORDER=["MP","FC","INSP","TEMP","UC","GET","TB"];
 const TYPE_LABEL=new Proxy({},{ get:(_,k)=> TYPE_ORDER.indexOf(k)>=0?t("type_"+k):undefined });
 /* "Carries millimetres." Undercarriage demands them at every point; ground
    engaging tools accept them wherever somebody had a tape. Everything below
    this line — the bands, the severities, the Pareto, the action register —
    treats the two the same, because a percentage worn is a percentage worn. */
-const isWearType = ty => ty==="UC" || ty==="GET";
+const isWearType = ty => ty==="UC" || ty==="GET" || ty==="TB";
 const ASSET_BY={}; (window.ASSETS||[]).forEach(a=>ASSET_BY[a.n]=a);
+/* Which tray sheet a truck carries — the same rule the phone applies, kept
+   deliberately identical so the two ends never disagree about which model a
+   filed round belongs to. See bodyModelFor() in mobile/index.html. */
+const BODY_MATCH=[ {re:/HM.?-?400/i, id:"HM400"}, {re:/TR.?-?60/i, id:"TR60"} ];
+function bodyModelOf(unit){
+  const a=ASSET_BY[unit]; if(!a || !window.BODY) return null;
+  const s=((a.mk||"")+" "+(a.m||"")).trim();
+  for(const c of BODY_MATCH) if(c.re.test(s)) return c.id;
+  if(a.cls==="AT" && /KOMATSU/i.test(s)) return "HM400";
+  return null;
+}
 /* Wear judged here, not trusted from the file. The record carries the figures
    the phone resolved at export; if this build knows the machine's model it
    re-resolves against the same reference the phone used, so a reference
@@ -891,7 +904,21 @@ function wearOf(rec,it){
   const a=ASSET_BY[rec.equip];
   const i=String(it.key||"").indexOf("."), pt=i<0?it.key:String(it.key).slice(0,i),
         pos=i<0?"":String(it.key).slice(i+1);
-  if(rec.type==="GET" && window.GET && a){
+  if(rec.type==="TB"){
+    /* A tray station is a whole key — "F62", not "ROLLER.L6" — and its limits
+       live per model and zone in body-points.js. Where none is loaded there is
+       no percentage and no band, and the dashboard says the millimetre and
+       nothing more. It must not fall through to the undercarriage table below:
+       a track reference against a body plate would produce a confident,
+       completely wrong percentage. */
+    const bm = window.BODY ? bodyModelOf(rec.equip) : null;
+    const L  = bm ? BODY.limitFor(bm, it.key) : null;
+    if(L && mm!=null){ n=L.n; c=L.c; pct=Math.round(BODY.wear(bm, it.key, mm)); }
+    else if(L){ n=L.n; c=L.c; pct=null; }
+    else { n=null; c=null; pct=null; }
+    src = bm ? ("tray:"+bm) : "";
+  }
+  else if(rec.type==="GET" && window.GET && a){
     /* GET limits key on the machine family and the point, not on the model's
        undercarriage table. Same shape of answer, so everything downstream is
        unchanged. */
@@ -2099,8 +2126,8 @@ rebuild(); refreshControls(); renderAll(); refreshSources();
 applyLang();                          // paints the static markup and re-renders in the saved language
 if(!RECS.length) openData();          // first run: show where data comes from
 </script>
-<script src="drive.js?v=78"></script>
-<script src="sync-adapter.js?v=78"></script>
-<script src="report.js?v=78"></script>
+<script src="drive.js?v=79"></script>
+<script src="sync-adapter.js?v=79"></script>
+<script src="report.js?v=79"></script>
 </body>
 </html>

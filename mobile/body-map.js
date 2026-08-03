@@ -44,7 +44,10 @@
       var r = B.region(id, z);
       if (!r) return;
       var st = (o.zoneState ? o.zoneState(z) : '') || '';
-      s.push('<path class="bm-z ' + FILL[z] + (st ? ' ' + st : '') + (z === o.sel ? ' sel' : '') +
+      /* No selected state on the region. o.sel is a station key, so this could
+         never match a zone — and shading a whole zone as well as ringing the
+         dot inside it was noise on top of an answer already given. */
+      s.push('<path class="bm-z ' + FILL[z] + (st ? ' ' + st : '') +
              '" data-zone="' + z + '" d="' + poly(r) + '"/>');
     });
     B.points(id).forEach(function (p) {

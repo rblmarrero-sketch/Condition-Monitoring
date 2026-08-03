@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=78">
+<link rel="manifest" href="manifest.webmanifest?v=79">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=78">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=78">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=78">
+<link rel="apple-touch-icon" href="icon-192.png?v=79">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=79">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=79">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -486,6 +486,41 @@
   .ucgroups button.watch i{background:var(--warning);border-color:var(--warn-ink);color:#3a2a00;}
   .ucgroups button.act i{background:var(--critical);border-color:var(--critical);color:#fff;}
   .ucgroups button.na i{background:var(--surface-3);border-style:dashed;}
+  /* A tray zone counts its stations rather than carrying a catalog number, so
+     the badge is a tally and has to be able to hold "13/13" — not a puck. */
+  .ucgroups button i.cnt{width:auto;min-width:34px;padding:0 7px;border-radius:999px;
+    font-variant-numeric:tabular-nums;color:var(--muted);order:2;margin-left:2px;}
+  .ucgroups button{padding-right:6px;}
+  .ucgroups button.done i.cnt,.ucgroups button.act i.cnt{color:#fff;}
+  .ucgroups button.watch i.cnt{color:#3a2a00;}
+  /* ---- the tray, drawn ------------------------------------------------
+     Same vocabulary as the undercarriage map above — a station is a dot, its
+     state is its fill, the one you are on is ringed in the accent — so an
+     inspector who has done a track round can read this one on sight. */
+  .bm-shell{fill:var(--surface-2);stroke:var(--ink-2);stroke-width:2.4;stroke-linejoin:round;}
+  .bm-z{fill:var(--surface-3);stroke:var(--line);stroke-width:1.1;cursor:pointer;}
+  .bm-z.done{fill:color-mix(in srgb,var(--good) 22%,var(--surface-2));}
+  .bm-z.watch{fill:color-mix(in srgb,var(--warning) 26%,var(--surface-2));}
+  .bm-z.act{fill:color-mix(in srgb,var(--critical) 30%,var(--surface-2));}
+  .bm-hit{fill:transparent;cursor:pointer;}
+  .bm-dot{fill:var(--surface);stroke:var(--ink-2);stroke-width:1.5;}
+  .bm-p.done .bm-dot{fill:var(--good);stroke:var(--good);}
+  .bm-p.watch .bm-dot{fill:var(--warning);stroke:var(--warn-ink);}
+  .bm-p.act .bm-dot{fill:var(--critical);stroke:var(--critical);}
+  .bm-p.na .bm-dot{fill:var(--surface-3);stroke-dasharray:2.4 2.4;}
+  .bm-p.sel .bm-dot{stroke:var(--accent);stroke-width:3.4;}
+  .bm-p:focus-visible{outline:none;}
+  .bm-p:focus-visible .bm-dot{stroke:var(--accent);stroke-width:3.4;}
+  /* Sits beside its dot, which puts it over the neighbour's target — see
+     body-map.js, which also sets pointer-events on the element itself. */
+  .bm-tag{pointer-events:none;fill:var(--accent);font:800 15px/1 inherit;
+    paint-order:stroke fill;stroke:var(--surface-2);stroke-width:5px;stroke-linejoin:round;}
+  /* Said once, above the map: which sheet is in use, and that a millimetre here
+     has no verdict behind it yet. Both are things somebody must not discover
+     from a colour. */
+  .tbnote{flex:0 0 100%;background:var(--surface-2);border:1px solid var(--line);
+    border-left:3px solid var(--warn-ink);border-radius:10px;padding:9px 11px;
+    margin:0 0 9px;font-size:12px;line-height:1.5;color:var(--ink-2);}
   .ucmembers{flex:0 0 100%;display:flex;flex-wrap:wrap;gap:7px;margin:9px 0 0;}
   .ucmembers button{min-width:56px;min-height:44px;padding:6px 14px;border:1px solid var(--line);
     background:var(--surface);color:var(--ink);border-radius:12px;font:700 13px/1 inherit;cursor:pointer;}
@@ -1074,23 +1109,25 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="native.js?v=78"></script>
-<script src="upload-defaults.js?v=78"></script>
-<script src="hme.js?v=78"></script>
-<script src="mp-fc.js?v=78"></script>
-<script src="hme-cascade.js?v=78"></script>
-<script src="assets.js?v=78"></script>
-<script src="temp-limits.js?v=78"></script>
-<script src="wear.js?v=78"></script>
-<script src="wear-figs.js?v=78"></script>
-<script src="wear-map.js?v=78"></script>
-<script src="machine-photos.js?v=78"></script>
-<script src="machine-fig.js?v=78"></script>
-<script src="get.js?v=78"></script>
-<script src="uc-points.js?v=78"></script>
-<script src="inspect-guide.js?v=78"></script>
-<script src="get-figs.js?v=78"></script>
-<script src="report-core.js?v=78"></script>
+<script src="native.js?v=79"></script>
+<script src="upload-defaults.js?v=79"></script>
+<script src="hme.js?v=79"></script>
+<script src="mp-fc.js?v=79"></script>
+<script src="hme-cascade.js?v=79"></script>
+<script src="assets.js?v=79"></script>
+<script src="temp-limits.js?v=79"></script>
+<script src="wear.js?v=79"></script>
+<script src="wear-figs.js?v=79"></script>
+<script src="wear-map.js?v=79"></script>
+<script src="machine-photos.js?v=79"></script>
+<script src="machine-fig.js?v=79"></script>
+<script src="get.js?v=79"></script>
+<script src="uc-points.js?v=79"></script>
+<script src="inspect-guide.js?v=79"></script>
+<script src="get-figs.js?v=79"></script>
+<script src="body-points.js?v=79"></script>
+<script src="body-map.js?v=79"></script>
+<script src="report-core.js?v=79"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -1115,8 +1152,16 @@ const TYPE_META = {
      round is measurements" and would demand a reading or a reason at every
      position. A GET round is complete on grades. */
   GET:  { suffix:"GET",  showReadings:false, get:true, title:{en:"Tool position",ru:"Позиция инструмента"} },
+  /* Dump body liner thickness. `wear:true` because it is the same job as the
+     undercarriage round — walk a route, put a millimetre against a station —
+     and sharing that flag inherits the whole sheet: the reading box, the
+     could-not-measure reasons, the previous reading, prev/next, the map, the
+     report and the sync path. `body:true` is what swaps the reference data and
+     the drawing underneath it. Sixty-three stations is too many to have two of
+     anything. */
+  TB:   { suffix:"TB",   showReadings:false, wear:true, body:true, title:{en:"Measurement station",ru:"Точка замера"} },
 };
-const TYPE_ORDER = ["MP","FC","INSP","TEMP","UC","GET"];
+const TYPE_ORDER = ["MP","FC","INSP","TEMP","UC","GET","TB"];
 
 const COMP = {
   ENG:{en:"Engine",ru:"Двигатель"}, COOL:{en:"Cooling System",ru:"Система охлаждения"},
@@ -1342,7 +1387,7 @@ const I18N = {
     rep_unit:"Unit", rep_type:"Type", rep_date:"Date", rep_sev:"Severity", rep_action:"Action", rep_by_who:"Inspected by", rep_by:"Generated by the Truck Inspection app",
     pos_count:"item(s)", photo_count:"photo(s)",
     type_MP:"Magnetic Plug", type_FC:"Filter Cut", type_INSP:"Inspection", type_TEMP:"Temperature",
-    type_UC:"Undercarriage", type_GET:"Ground engaging tools",
+    type_UC:"Undercarriage", type_GET:"Ground engaging tools", type_TB:"Dump body liner",
     get_mm:"Remaining (mm) — optional", get_mm_of:"{x} (mm) — optional",
     get_ref:"New {n} mm · condemn {c} mm", get_generic:"generic limit",
     get_notool:"This machine has no ground engaging tools to walk.",
@@ -1380,6 +1425,21 @@ const I18N = {
     uc_swipe:"← swipe the frame to reach the sprocket end →",
     uc_v_map:"Tap the machine", uc_v_list:"Work down a list",
     uc_left:"LEFT", uc_right:"RIGHT",
+    /* ---- the dump body round ---- */
+    tb_no_body:"The dump body round is for the HM400 and TR60 haul trucks.",
+    tb_assumed:"The register does not record this truck's model. Using the {m} sheet — check it matches the body you are standing at.",
+    tb_nolimits:"No new or condemn thickness has been supplied yet, so no reading gets a verdict. Every millimetre is still recorded, and compared with this station last time.",
+    tb_noref:"No limit for this station — the reading is recorded and compared with last time.",
+    tb_recorded:"recorded",
+    tb_leg_taken:"taken",
+    tb_lost:"{n} mm thinner than last time",
+    tb_gained:"{n} mm thicker than last time",
+    tb_w_range:"{mm} mm is outside anything a liner plate reads. Check the decimal point.",
+    tb_w_grew:"This station read {p} mm last time and {mm} mm now. A liner does not get thicker — unless this plate has been replaced, or the probe is on a weld.",
+    tb_w_lost:"This station has gone from {p} mm to {mm} mm since the last round. That is a lot of metal — worth taking again.",
+    tb_w_odd:"The rest of this zone is reading around {p} mm and this station says {mm} mm. Check the decimal point, or that the probe is not on a doubler.",
+    tb_zone_worst:"thinnest: {k} at {n} mm",
+    tb_rpt_zone:"Zone", tb_rpt_taken:"Taken", tb_rpt_min:"Thinnest (mm)", tb_rpt_at:"At station",
     uc_leg_none:"not taken", uc_leg_done:"serviceable", uc_leg_watch:"watch",
     uc_leg_act:"at or past condemn", uc_leg_na:"could not measure",
     lbl_temp:"Temperature °C", lbl_amb:"Ambient °C", lbl_method:"Measurement method",
@@ -1608,7 +1668,7 @@ const I18N = {
     rep_unit:"Ед.", rep_type:"Тип", rep_date:"Дата", rep_sev:"Категория", rep_action:"Действие", rep_by_who:"Осмотр выполнил", rep_by:"Сформировано приложением осмотра",
     pos_count:"поз.", photo_count:"фото",
     type_MP:"Магнитная пробка", type_FC:"Разрез фильтра", type_INSP:"Осмотр", type_TEMP:"Температура",
-    type_UC:"Ходовая часть", type_GET:"Рабочий инструмент",
+    type_UC:"Ходовая часть", type_GET:"Рабочий инструмент", type_TB:"Футеровка кузова",
     get_mm:"Остаток (мм) — необязательно", get_mm_of:"{x} (мм) — необязательно",
     get_ref:"Новый {n} мм · предел {c} мм", get_generic:"типовой предел",
     get_notool:"У этой машины нет рабочего инструмента для обхода.",
@@ -1646,6 +1706,21 @@ const I18N = {
     uc_swipe:"← проведите по раме до звёздочки →",
     uc_v_map:"Нажать на машину", uc_v_list:"Идти по списку",
     uc_left:"ЛЕВАЯ", uc_right:"ПРАВАЯ",
+    /* ---- осмотр футеровки кузова ---- */
+    tb_no_body:"Осмотр футеровки кузова — для самосвалов HM400 и TR60.",
+    tb_assumed:"Модель этого самосвала не указана в реестре. Используется схема {m} — проверьте, что она соответствует кузову.",
+    tb_nolimits:"Толщина новой футеровки и предел износа пока не заданы, поэтому оценка не выводится. Все замеры записываются и сравниваются с прошлым разом.",
+    tb_noref:"Для этой точки нет предела — замер записывается и сравнивается с прошлым разом.",
+    tb_recorded:"записано",
+    tb_leg_taken:"снято",
+    tb_lost:"на {n} мм тоньше, чем в прошлый раз",
+    tb_gained:"на {n} мм толще, чем в прошлый раз",
+    tb_w_range:"{mm} мм — вне диапазона, в котором бывает лист футеровки. Проверьте запятую.",
+    tb_w_grew:"В прошлый раз здесь было {p} мм, сейчас {mm} мм. Футеровка не становится толще — если только лист не заменён и датчик не стоит на шве.",
+    tb_w_lost:"С прошлого осмотра точка ушла с {p} мм до {mm} мм. Это много металла — стоит перемерить.",
+    tb_w_odd:"Остальные точки этой зоны показывают около {p} мм, а здесь {mm} мм. Проверьте запятую или то, что датчик не стоит на накладке.",
+    tb_zone_worst:"минимум: {k} — {n} мм",
+    tb_rpt_zone:"Зона", tb_rpt_taken:"Снято", tb_rpt_min:"Минимум (мм)", tb_rpt_at:"Точка",
     uc_leg_none:"не снято", uc_leg_done:"годен", uc_leg_watch:"наблюдать",
     uc_leg_act:"достиг предела", uc_leg_na:"не удалось измерить",
     lbl_temp:"Температура °C", lbl_amb:"Окружающая среда °C", lbl_method:"Метод замера",
@@ -1984,8 +2059,18 @@ const dlgClose=()=>$("dlg").close();
 $("dlgOk").onclick=dlgClose;
 let cascL7=null, cascL8=null;   // component cascade selection
 // Inspection and Temperature both address real register components.
-function usesRegister(ty){ return ty==="INSP" || ty==="TEMP" || ty==="UC" || ty==="GET"; }
-const wearType = ty => (ty||type)==="UC";
+function usesRegister(ty){ return ty==="INSP" || ty==="TEMP" || ty==="UC" || ty==="GET" || ty==="TB"; }
+/* "This round is millimetres against a route." True of the undercarriage and of
+   the tray, which is why they share a sheet. Read off TYPE_META rather than
+   naming the two types here, so adding a third measured round is one line in
+   the table above and not a hunt through this file. */
+const wearType = ty => !!(TYPE_META[ty||type]||{}).wear;
+/* ...and the half of that which is the dump body, where the reference data,
+   the drawing and the direction of wear all differ. */
+const bodyType = ty => !!(TYPE_META[ty||type]||{}).body;
+/* The undercarriage specifically — every place that reaches into WEAR, the
+   track profiles or the L/R frames means this one, not "a measured round". */
+const ucOnly   = ty => wearType(ty) && !bodyType(ty);
 /* "This round takes millimetres." UC demands them, GET accepts them — the two
    are separated everywhere it matters, and joined only where the arithmetic is
    the same: percentage worn against new and condemn is one calculation. */
@@ -2024,6 +2109,7 @@ function getWalkTree(unit){
    unit prefix would happily ask an inspector to caliper the tracks on a machine
    that runs on tyres. */
 function ucStatus(unit){
+  if(bodyType()) return bodyStatus(unit);          // the tray round has its own reference
   const a=ASSET_BY[unit]; if(!a) return {ok:false, why:"unknown"};
   const m=a.m||"";
   if(!window.WEAR) return {ok:false, why:"unknown"};
@@ -2044,6 +2130,7 @@ const UC_EXTRA=[
 ];
 const UC_EXTRA_BY={}; UC_EXTRA.forEach(x=>UC_EXTRA_BY[x.code]=x);
 function ucWalkTree(unit){
+  if(bodyType()) return bodyWalkTree(unit);
   const st=ucStatus(unit); if(!st.ok) return null;
   const byPoint=new Map();
   WEAR.walk(st.model).forEach(w=>{
@@ -2065,7 +2152,8 @@ function ucPosLabel(pos,lg){
   if(m) return (lg==="ru"? (m[1]==="L"?"Слева":"Справа") : (m[1]==="L"?"Left":"Right"))+" "+m[2];
   return pos;
 }
-function ucLabel(k){
+function ucLabel(k, ty, unit){
+  if(bodyType(ty)) return bodyLabel(k, unit);
   const [pt,pos]=ucSplit(k);
   const x=UC_EXTRA_BY[pt];
   const p=x || (window.WEAR&&WEAR.points||[]).find(y=>y.code===pt);
@@ -2116,7 +2204,7 @@ function isGuessedUnit(unit){ return !!unit && !ASSET_BY[unit] && !!fallbackClas
 function currentTree(){
   if(!usesRegister(type) || !curEquip) return null;
   if(wearType()){
-    const key="UC|"+curEquip;
+    const key=type+"|"+curEquip;
     if(treeCache.key===key) return treeCache.tree;
     treeCache={key, tree:ucWalkTree(curEquip)};
     return treeCache.tree;
@@ -2167,9 +2255,136 @@ function items(){ const tr=currentTree(); if(tr) return flattenTree(tr);
   return CLASSES[eqClass][type].map(e=> typeof e==="string" ? {k:e, en:COMP[e].en, ru:COMP[e].ru} : e); }
 function itemLabel(k){ const it=items().find(i=>i.k===k); if(it) return it[lang]||it.en;
   if(getType()) return getLabel(k);
+  if(bodyType()) return bodyLabel(k);
   if(wearType()){ const [pt,pos]=ucSplit(k); const p=(window.WEAR&&WEAR.points||[]).find(x=>x.code===pt);
     return (p?(p[lang]||p.en):pt)+(pos?" — "+ucPosLabel(pos,lang):""); }
   return COMP_BY[k] ? compLabel(k) : k; }
+
+/* ===================== the dump body round ==============================
+   Sixty-three ultrasonic stations on an HM400, forty-four on a TR60, and the
+   thing that makes it work is that it is the SAME round as the undercarriage
+   from the inspector's side: a route, a map, and a millimetre against a named
+   station. Everything below is the reference data and the drawing; the sheet,
+   the reading box, the reasons, the prev/next and the sync path are shared.
+
+   The station codes are the client's own, off the printed forms, with eight
+   corrected — see body-points.js. */
+
+/* Which tray sits on this machine. Matched on the register's model string, and
+   `sure:false` when the register does not say — 27 of the 28 articulated trucks
+   are typed "KOMATSU" with the model missing, and the one that carries it is an
+   HM400, as is the truck the client's own filled-in HM400 sheet came from. So
+   the round runs, and the screen says out loud which sheet it is using, rather
+   than either refusing 27 machines or quietly assuming for them. */
+const BODY_MATCH=[ {re:/HM.?-?400/i, id:"HM400"}, {re:/TR.?-?60/i, id:"TR60"} ];
+function bodyModelFor(unit){
+  const a=ASSET_BY[unit]; if(!a) return null;
+  const s=((a.mk||"")+" "+(a.m||"")).trim();
+  for(const c of BODY_MATCH) if(c.re.test(s)) return {id:c.id, sure:true};
+  /* Nothing in the model string. An articulated Komatsu with no model recorded
+     is an HM400 on this site; anything else we do not guess at. */
+  if(a.cls==="AT" && /KOMATSU/i.test(s)) return {id:"HM400", sure:false};
+  return null;
+}
+function bodyStatus(unit){
+  const a=ASSET_BY[unit]; if(!a) return {ok:false, why:"unknown"};
+  if(!window.BODY) return {ok:false, why:"unknown"};
+  const hit=bodyModelFor(unit);
+  if(!hit) return {ok:false, why:"nobody", model:a.m||""};
+  return {ok:true, model:hit.id, sure:hit.sure, title:(BODY.of(hit.id)||{}).model||hit.id};
+}
+/* Zones, then the stations inside them — the same two-level shape the
+   undercarriage walk uses, so the cascade, the chips and Next all work already. */
+function bodyWalkTree(unit){
+  const st=bodyStatus(unit); if(!st.ok) return null;
+  const id=st.model;
+  return BODY.zones(id).map(z=>({
+    k:z.k, en:z.en, ru:z.ru,
+    /* Code first, name after: the code is what the plate and the paper sheet
+       carry, the name is what makes the first round possible. Same string
+       everywhere — chip, sheet header, report line — so nobody has to learn
+       that "H21" and "Canopy" are the same station. */
+    ch:BODY.inZone(id,z.k).map(p=>({k:p.k, en:p.k+" · "+p.en, ru:p.k+" · "+p.ru})),
+  }));
+}
+function bodyLabel(k, unit){
+  const st=bodyStatus(unit||curEquip); if(!st.ok) return k;
+  const z=BODY.zones(st.model).find(x=>x.k===k);
+  if(z) return z[lang]||z.en;                       // a zone chip, not a station
+  const p=BODY.get(st.model,k);
+  return p ? k+" · "+(p[lang]||p.en) : k;
+}
+/* What a station looks like from across the yard. With no limits loaded there
+   is no verdict to give, so a taken reading is "taken" and nothing more — the
+   one thing this must never do is show green for a plate nobody has a limit
+   for. See BODY.limits in body-points.js. */
+function bodyState(k){
+  const p=draft.positions[k]; if(!p) return "";
+  if(p.reason) return "na";
+  if(p.mm==null) return "";
+  const st=bodyStatus(curEquip); if(!st.ok) return "done";
+  return BODY.band(st.model, k, Number(p.mm)) || "done";
+}
+/* A zone is its THINNEST station, never its mean. On the survey this was built
+   from, one tail zone averages 6.24 mm and its worst station reads 3.50 — the
+   average is the number that lets a body through. */
+function bodyZoneState(z){
+  const st=bodyStatus(curEquip); if(!st.ok) return "";
+  const ks=BODY.inZone(st.model,z).map(p=>p.k);
+  const seen=ks.map(bodyState).filter(Boolean);
+  if(!seen.length) return "";
+  if(seen.includes("act")) return "act";
+  if(seen.includes("watch")) return "watch";
+  return seen.length===ks.length ? "done" : "";     // part-done is not done
+}
+function bodyOrder(){ const st=bodyStatus(curEquip); return st.ok?BODY.route(st.model):[]; }
+function bodyTally(){
+  const st=bodyStatus(curEquip); if(!st.ok) return "";
+  const ks=BODY.points(st.model).map(p=>p.k);
+  const c={ "":0, done:0, watch:0, act:0, na:0 };
+  ks.forEach(k=>{ c[bodyState(k)||""]++; });
+  const order=[["act","uc_leg_act"],["watch","uc_leg_watch"],["done","tb_leg_taken"],
+               ["na","uc_leg_na"],["","uc_leg_none"]];
+  return '<div class="uctally">'+order.filter(([k])=>c[k]>0)
+    .map(([k,lab])=>'<span class="t '+(k||"non")+'"><i></i>'+c[k]+' '+esc(t(lab))+'</span>').join("")+'</div>';
+}
+/* The tray, drawn, with every station on it and the one you are standing at
+   named. Same furniture as the other two maps — views bar, tally, picture,
+   named chips — so a round learned once is all three. */
+function renderBodyMap(){
+  const st=bodyStatus(curEquip); if(!st.ok) return;
+  const id=st.model, cur=BODY.get(id,curItem);
+  let h=ucViewsBar();
+  if(!st.sure) h+='<div class="tbnote">'+esc(t("tb_assumed",{m:st.title}))+'</div>';
+  if(!BODY.hasLimits(id)) h+='<div class="tbnote">'+esc(t("tb_nolimits"))+'</div>';
+  h+=bodyTally();
+  h+='<div class="ucmaps"><div class="ucmapwrap">'+
+     bodyMap({ model:id, lang:lang, sel:curItem, tag:true,
+               state:bodyState, zoneState:bodyZoneState })+'</div></div>';
+  bodyDrawnFor=id+"|"+curItem;
+  /* The zones, named. A code on the plate is quick once you know it; the name
+     is what makes the first round possible without the form in your hand. */
+  h+='<div class="ucgroups">'+BODY.zones(id).map(z=>{
+      const done=BODY.inZone(id,z.k).filter(p=>draft.positions[p.k]).length;
+      return '<button type="button" data-bz="'+esc(z.k)+'" class="'+
+        [bodyZoneState(z.k),(cur&&cur.z===z.k?"on":"")].filter(Boolean).join(" ")+'">'+
+        esc(z[lang]||z.en)+'<i class="cnt">'+done+'/'+z.n+'</i></button>';
+    }).join("")+'</div>';
+  $("posnav").innerHTML=h;
+  /* A zone opens on the first station still to be taken, so a half-done zone
+     resumes where it was left rather than starting again at the top. */
+  $("posnav").querySelectorAll("[data-bz]").forEach(b=>b.onclick=()=>{
+    const ks=BODY.inZone(id,b.dataset.bz).map(p=>p.k);
+    if(!ks.length) return;
+    saveCur(); curItem=ks.find(k=>!draft.positions[k]) || ks[0];
+    loadPos(); renderChips(); });
+  $("posnav").querySelectorAll("[data-pt]").forEach(g=>{
+    const go=()=>{ saveCur(); curItem=g.dataset.pt; loadPos(); renderChips(); };
+    g.onclick=go;
+    g.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } };
+  });
+  wireUCViews();
+}
 let draft={positions:{}}; let curItem=(items()[0]||{}).k||"";
 function curP(){ return (draft.positions[curItem] ||= {}); }   // WRITE path: creates the entry
 // READ path. curP() here would create an empty entry, and every "has data" check
@@ -2219,7 +2434,8 @@ function renderChips(){ const tr=currentTree();
     if(wearType()){
       // The unit is chosen but has nothing this round can measure. Say which, and stop.
       const st=ucStatus(curEquip);
-      const key = st.why==="wheeled" ? "uc_no_wheeled" : st.why==="unknown" ? "uc_no_unknown" : "uc_no_tracks";
+      const key = bodyType() ? (st.why==="unknown" ? "uc_no_unknown" : "tb_no_body")
+                : st.why==="wheeled" ? "uc_no_wheeled" : st.why==="unknown" ? "uc_no_unknown" : "uc_no_tracks";
       $("posnav").innerHTML='<div class="ucblock">'+esc(t(key))+
         (st.model?'<br><b>'+esc(st.model)+'</b>':"")+'</div>';
       curItem=""; toggleCapture(); return;
@@ -2308,6 +2524,46 @@ function renderComponentNav(tree){
 function repaintMap(){
   if(ucView!=="map" || !curEquip) return false;
   const nav=$("posnav");
+  /* The tray map is stations and zones, not the undercarriage's eleven numbered
+     pucks, so it repaints on its own terms. In place rather than redrawn,
+     because this runs on every keystroke in the reading box and a sixty-three
+     dot rebuild per digit is wasteful — and the selection, which is the only
+     thing that moves the name label, goes through the full render instead.
+     Everything the map can say is updated here; the suite proves it by
+     comparing this against a full re-render. */
+  if(bodyType()){
+    const st=bodyStatus(curEquip);
+    if(!st.ok || !nav.querySelector("[data-pt]")) return false;
+    const id=st.model;
+    /* The station name is drawn once, beside the dot it belongs to. Patching
+       classes cannot move it, so a changed selection is not a repaint job — say
+       so and let the caller redraw. */
+    if(bodyDrawnFor !== id+"|"+curItem) return false;
+    nav.querySelectorAll("[data-pt]").forEach(g=>{
+      const k=g.dataset.pt;
+      g.setAttribute("class", ["bm-p", bodyState(k)||"", k===curItem?"sel":""].filter(Boolean).join(" "));
+    });
+    /* The regions shade with their worst station — the same thing the chip
+       below says, and the one an inspector sees from across the yard. */
+    nav.querySelectorAll("[data-zone]").forEach(el=>{
+      const base=(el.getAttribute("class")||"").split(/\s+/)
+        .filter(c=>c && c!=="done" && c!=="watch" && c!=="act" && c!=="sel");
+      el.setAttribute("class", base.concat([bodyZoneState(el.dataset.zone)||""])
+        .filter(Boolean).join(" "));
+    });
+    const cur=BODY.get(id,curItem);
+    nav.querySelectorAll("[data-bz]").forEach(b=>{
+      const z=b.dataset.bz;
+      b.className=[bodyZoneState(z),(cur&&cur.z===z?"on":"")].filter(Boolean).join(" ");
+      const i=b.querySelector("i.cnt");
+      if(i) i.textContent=BODY.inZone(id,z).filter(p=>draft.positions[p.k]).length+"/"+
+                          BODY.inZone(id,z).length;
+    });
+    const tl=nav.querySelector(".uctally");
+    if(tl){ const tmp=document.createElement("div"); tmp.innerHTML=bodyTally();
+      if(tmp.firstChild) tl.innerHTML=tmp.firstChild.innerHTML; }
+    return true;
+  }
   if(!nav.querySelector(".ucmap")) return false;
   let selN=0, stateOf=null, numOf=null;
   if(wearType() && ucStatus(curEquip).ok){
@@ -2599,8 +2855,23 @@ function ucBand(pct){ return pct>=100?"act" : pct>=80?"watch" : "ok"; }
    gone back and taken the reading again after the app questioned it. */
 function wearOut(rec,k,p){
   const ty=rec.type||"";
-  if(ty!=="UC" && ty!=="GET") return null;
+  if(ty!=="UC" && ty!=="GET" && ty!=="TB") return null;
   if(p.mm==null && !p.reason) return null;
+  if(ty==="TB"){
+    const st=bodyStatus(rec.equip);
+    const L=st.ok?BODY.limitFor(st.model,k):null;
+    const pct=(st.ok && p.mm!=null)?BODY.wear(st.model,k,Number(p.mm)):null;
+    const pt=st.ok?BODY.get(st.model,k):null;
+    return { mm:(p.mm==null?"":Number(p.mm)), stood:p.stood?1:0, reason:p.reason||"",
+             reasonLabel:p.reason?ucReasonLabel(p.reason,"en"):"",
+             newMM:L?L.n:"", condemnMM:L?L.c:"",
+             wearPct:(pct==null?"":Math.round(pct)),
+             band:(pct==null?"":BODY.band(st.model,k,Number(p.mm))),
+             /* Which tray sheet the number was taken against, and its zone.
+                A millimetre with no zone is not a survey — it is a number. */
+             refSrc:st.ok?("tray:"+st.model+(st.sure?"":"?")):"",
+             zone:pt?pt.z:"", zoneLabel:pt?BODY.zoneLabel(st.model,pt.z,"en"):"" };
+  }
   const a=ASSET_BY[rec.equip]||{}, [pt,pos]=ucSplit(k);
   const ref = ty==="GET"
     ? (window.GET ? GET.refFor(rec.equip, a.cat||a.cls||"", a.m||"", pt) : null)
@@ -2613,12 +2884,97 @@ function wearOut(rec,k,p){
            band:(pct==null?"":ucBand(pct)),
            refSrc:ref?(ref.x?("x:"+ref.x):ref.src):"" };
 }
+/* The tray round's verdict, and the question it asks.
+
+   With no new/condemn loaded there is no percentage to give, and this refuses
+   to invent one — a number with a colour on it gets acted on. What it does
+   instead is the check that actually catches errors on a sixty-three station
+   round: the same station, last time. A liner cannot get thicker; a plate that
+   lost half its metal in a month is either news or a transposed digit; 85.0
+   where 8.5 was meant clears every limit test ever written and is obvious
+   against 8.7 last time.
+
+   Nothing here blocks. An inspector who has gone back and looked twice is
+   right and the app is not. */
+const TB_SANE_MIN=0.5, TB_SANE_MAX=120;    // a plate, in millimetres, not a typo
+const TB_GREW=0.5;                         // mm of growth that needs an explanation
+const TB_LOST=0.4;                         // fraction lost since last time
+const TB_PEERS=4, TB_ODD=3;                // how many neighbours, and how far out
+/* The stations either side of this one, this round. A body with no limits and
+   no history still has thirty other readings on it, and 85 next to a column of
+   8s is a decimal point — the machine's own data catches the error that a
+   missing reference table cannot. Median, not mean, so one bad neighbour does
+   not drag the comparison with it. */
+function bodyPeers(k){
+  const st=bodyStatus(curEquip); if(!st.ok) return null;
+  const p=BODY.get(st.model,k); if(!p) return null;
+  const v=BODY.inZone(st.model,p.z)
+    .filter(q=>q.k!==k)
+    .map(q=>(draft.positions[q.k]||{}).mm)
+    .filter(x=>x!=null && !isNaN(x)).map(Number).sort((a,b)=>a-b);
+  if(v.length<TB_PEERS) return null;
+  const mid=Math.floor(v.length/2);
+  return v.length%2 ? v[mid] : (v[mid-1]+v[mid])/2;
+}
+function bodyChallenge(mm, prev, k){
+  if(mm==null || isNaN(mm)) return null;
+  if(mm<TB_SANE_MIN || mm>TB_SANE_MAX) return {why:"range"};
+  if(prev && prev.mm){
+    if(mm - prev.mm > TB_GREW) return {why:"grew", prev:prev.mm};
+    if(prev.mm>0 && (prev.mm-mm)/prev.mm > TB_LOST) return {why:"lost", prev:prev.mm};
+  }
+  const med=bodyPeers(k==null?curItem:k);
+  if(med>0 && (mm > med*TB_ODD || mm < med/TB_ODD)) return {why:"odd", prev:med};
+  return null;
+}
+let tbPrev=null;                           // last round's rows, for the station on screen
+function renderBody(){
+  const box=$("ucRead"), warn=$("ucWarn");
+  renderUCRef(); renderUCGuide(); renderUCLast();
+  const p=posRO(), mm=(p.mm==null?null:Number(p.mm));
+  const st=bodyStatus(curEquip);
+  const prev=(tbPrev && tbPrev.unit===curEquip) ? tbPrev.rows[curItem] : null;
+  let h="";
+  if(mm==null){
+    h = p.reason ? '<span class="band b-watch">'+t("uc_notmeasured")+'</span>'+
+        '<span class="src">'+esc(ucReasonLabel(p.reason))+'</span>' : "";
+  } else {
+    const pct = st.ok ? BODY.wear(st.model, curItem, mm) : null;
+    if(pct!=null){
+      const b=BODY.band(st.model,curItem,mm), L=BODY.limitFor(st.model,curItem);
+      h += '<b>'+Math.round(pct)+'%</b>';
+      h += '<span class="band b-'+(b==="done"?"ok":b)+'">'+t("uc_band_"+(b==="done"?"ok":b))+'</span>';
+      h += '<span class="src">'+t("uc_toGo",{n:Math.max(0,mm-L.c).toFixed(1)})+'</span>';
+    } else {
+      /* No limit for this plate. Say what was recorded, and — where there is a
+         previous round — what it has lost since, which is the number a planner
+         can act on without a condemn figure at all. */
+      h += '<span class="band b-ok">'+t("tb_recorded")+'</span>';
+      if(prev && prev.mm){
+        const d=prev.mm-mm;
+        h += '<span class="src">'+t(d>=0?"tb_lost":"tb_gained",{n:Math.abs(d).toFixed(1)})+'</span>';
+      }
+    }
+  }
+  box.innerHTML=h;
+  const q=bodyChallenge(mm, prev, curItem);
+  if(q){ warn.classList.remove("hidden");
+    $("ucWarnText").textContent=t("tb_w_"+q.why,{mm:fmtMM(mm), p:fmtMM(q.prev)});
+  } else {
+    warn.classList.add("hidden");
+    $("ucStood").checked=false;
+    const rec=draft.positions[curItem]; if(rec && rec.stood) delete rec.stood;
+  }
+  renderUCReasons();
+  renderUCSheet();
+}
 function renderUC(){
   if(!TYPE_META[type].wear) return;
   const box=$("ucRead"), warn=$("ucWarn");
   renderUCFig();
   const st=curEquip?ucStatus(curEquip):null;
   if(st && !st.ok){ box.innerHTML=""; warn.classList.add("hidden"); return; }
+  if(bodyType()) return renderBody();
   renderUCRef(); renderUCGuide(); renderUCLast();
   const p=posRO(), ref=ucRef(), mm=(p.mm==null?null:Number(p.mm));
   // what the number means
@@ -2736,13 +3092,22 @@ function getScope(){
   return pr?pr.tool:"";
 }
 function ucReasonLabel(code,lg){
-  const r=(window.WEAR&&WEAR.reasons||[]).find(x=>x.code===code);
+  const r=measReasons().find(x=>x.code===code);
   return r?(r[lg||lang]||r.en):code;
 }
+const TB_REASONS=[
+  {code:"PACKED", en:"Packed with frozen ore",   ru:"Забито мёрзлой породой"},
+  {code:"WELD",   en:"Weld repair or doubler here", ru:"Здесь наплавка или накладка"},
+  {code:"ACCESS", en:"Cannot reach it",          ru:"Нет доступа"},
+  {code:"PARK",   en:"Body not tipped far enough", ru:"Кузов поднят недостаточно"},
+  {code:"TOOL",   en:"No gauge for it",          ru:"Нет прибора"},
+  {code:"OTHER",  en:"Other — see comment",      ru:"Другое — см. комментарий"},
+];
+function measReasons(){ return bodyType() ? TB_REASONS : (window.WEAR&&WEAR.reasons||[]); }
 function renderUCReasons(){
   const box=$("ucReasons"); if(!box) return;
   const cur=posRO().reason||"";
-  box.innerHTML=(window.WEAR&&WEAR.reasons||[]).map(r=>
+  box.innerHTML=measReasons().map(r=>
     '<button type="button" data-r="'+r.code+'" class="'+(r.code===cur?"on":"")+'">'+
     esc(r[lang]||r.en)+'</button>').join("");
   box.querySelectorAll("button").forEach(b=>b.onclick=()=>{
@@ -2753,10 +3118,12 @@ function renderUCReasons(){
     renderUC(); refreshChips();
   });
 }
+let bodyDrawnFor="";      // model|station the tray map on screen was drawn for
 let ucView = localStorage.getItem("uc_view")==="list" ? "list" : "map";
 /* What a position looks like from across the yard. A reason is a state of its
    own — "we looked and could not reach it" must not read the same as a blank. */
 function ucState(k){
+  if(bodyType()) return bodyState(k);
   const p=draft.positions[k]; if(!p) return "";
   if(p.reason) return "na";
   // a visual check is done when it has been graded; there is no millimetre to wait for
@@ -2789,7 +3156,8 @@ function wireUCViews(){
 /* An untouched round is all white pucks, which reads as "broken" rather than
    "nothing captured yet". Say the count, so the absence of colour is an answer. */
 /* The round in order, so Next means the next thing you walk to. */
-function ucOrder(){ const st=ucStatus(curEquip); return st.ok ? WEAR.walk(st.model).map(w=>w.k) : []; }
+function ucOrder(){ if(bodyType()) return bodyOrder();
+  const st=ucStatus(curEquip); return st.ok ? WEAR.walk(st.model).map(w=>w.k) : []; }
 function ucStep(d){
   const o=ucOrder(), i=o.indexOf(curItem);
   if(i<0) return;
@@ -2879,6 +3247,7 @@ function ucMemberLabel(k){
   return (WEAR.mapShort&&WEAR.mapShort[pt]) || pt;
 }
 function ucTally(){
+  if(bodyType()) return bodyTally();
   const w=WEAR.walk(ucStatus(curEquip).model);
   const c={ "":0, done:0, watch:0, act:0, na:0 };
   w.forEach(x=>{ c[ucState(x.k)||""]++; });
@@ -2891,6 +3260,7 @@ function ucTally(){
 /* The frame that owns the current reading dims everything except the part
    being measured; the other side is left alone. */
 function ucMarkSelectedPart(){
+  if(bodyType()) return;
   const [pt,pos]=ucSplit(curItem||"");
   const side=(pos||"").charAt(0);
   $("posnav").querySelectorAll(".ucmap").forEach(sv=>{
@@ -2951,6 +3321,7 @@ function ucGroupKeys(n){
 }
 const UC_RANK={ "":0, done:1, na:2, watch:3, act:4 };
 function ucGroupState(n){
+  if(bodyType()) return "";
   let worst="", none=true;
   ucGroupKeys(n).forEach(k=>{ const v=ucState(k)||"";
     if(v) none=false;
@@ -2958,6 +3329,7 @@ function ucGroupState(n){
   return none ? "" : worst;
 }
 function ucGroupOf(k){
+  if(bodyType()) return 0;
   for(let n=1;n<=11;n++) if(ucGroupKeys(n).indexOf(k)>=0) return n;
   return 0;
 }
@@ -3007,6 +3379,7 @@ function renderGETMap(){
   wireUCViews();
 }
 function renderUCMap(){
+  if(bodyType()) return renderBodyMap();
   const prof=ucProfile(curEquip);
   const a=ASSET_BY[curEquip]||{};
   const box=window.UCPTS?UCPTS.boxFor(a.m||""):null;
@@ -3081,11 +3454,19 @@ function renderUCMap(){
 let ucFigOpen = localStorage.getItem("uc_fig")!=="0";
 function renderUCFig(){
   const box=$("ucFig"), tog=$("ucFigTog"); if(!box) return;
+  if(tog) tog.style.display = bodyType() ? "none" : "";
   if(tog){ tog.textContent = (ucFigOpen?"▾ ":"▸ ")+t(ucFigOpen?"uc_fig_hide":"uc_fig_show");
     tog.onclick=()=>{ ucFigOpen=!ucFigOpen; localStorage.setItem("uc_fig",ucFigOpen?"1":"0");
       renderUCFig(); if(TYPE_META[type].get) renderGETFig(); }; }
   const [pt]=ucSplit(curItem||"");
-  const svg=window.WEAR_FIG ? WEAR_FIG.for(pt, lang) : "";
+  /* No drawing on a tray station, and that is the right answer rather than a
+     gap. The undercarriage sheet draws a roller because a roller has a shape
+     and you have to know where on it the caliper goes. A tray station is a spot
+     on a flat plate — the drawing that answers "which spot" is the map, and the
+     map is on screen above this sheet already. A second copy of it inside the
+     sheet duplicated all sixty-three station ids into the document, giving
+     every one of them a twin that looked tappable and was not. */
+  const svg = bodyType() ? "" : (window.WEAR_FIG ? WEAR_FIG.for(pt, lang) : "");
   box.style.display = (svg && ucFigOpen)?"":"none";
   if(!svg || !ucFigOpen) return;
   /* The tool used to be a caption bolted under the drawing, and only in English —
@@ -3094,7 +3475,10 @@ function renderUCFig(){
      where the eye already is. */
   box.innerHTML = svg;
 }
-function renderUCGuide(){ renderGuide("ucGuide", ucSplit(curItem||"")[0], ""); }
+function renderUCGuide(){
+  if(bodyType()){ const st=bodyStatus(curEquip), p=st.ok?BODY.get(st.model,curItem):null;
+    return renderGuide("ucGuide", p?p.z:"", "tray"); }
+  renderGuide("ucGuide", ucSplit(curItem||"")[0], ""); }
 /* The GET round's drawing. Shares the undercarriage round's show/hide setting,
    because "show me the diagram" is one preference about how somebody likes to
    work and not two — an inspector who folds it away on a roller does not want
@@ -3116,19 +3500,19 @@ function renderGETFig(){
    catch. */
 let ucPrevCache={key:"",ver:-1,rows:null};
 async function ucPrevReadings(unit){
-  const u=(unit||"").toUpperCase();
+  const u=(unit||"").toUpperCase(), ty=type;
   /* keyed on the store's version too — saving this round must not leave the
      line quoting the round before it as "last time". */
-  if(ucPrevCache.key===u && ucPrevCache.ver===dbVer) return ucPrevCache.rows;
+  if(ucPrevCache.key===u+"|"+ty && ucPrevCache.ver===dbVer) return ucPrevCache.rows;
   const out={};
   try{
-    const recs=(await dbAll()).filter(r=>(r.equip||"").toUpperCase()===u && r.type==="UC" && r.date);
+    const recs=(await dbAll()).filter(r=>(r.equip||"").toUpperCase()===u && r.type===ty && r.date);
     recs.sort((a,b)=>String(a.date).localeCompare(String(b.date)));
     recs.forEach(r=>Object.entries(r.positions||{}).forEach(([k,p])=>{
       if(p && p.mm!=null) out[k]={mm:Number(p.mm), d:r.date};
     }));
   }catch(e){ /* no history is not an error */ }
-  ucPrevCache={key:u, ver:dbVer, rows:out};
+  ucPrevCache={key:u+"|"+ty, ver:dbVer, rows:out};
   return out;
 }
 let ucLastRun=0;
@@ -3139,6 +3523,12 @@ async function renderUCLast(){
   if(!key || !unit) return;
   const rows=await ucPrevReadings(unit);
   if(run!==ucLastRun || key!==curItem) return;                 // moved on while we waited
+  /* The tray verdict compares against the same station last time, so it needs
+     these rows — which arrive after the first paint. Stash them and repaint
+     once, guarded on the unit so the repaint cannot call back into here. */
+  if(bodyType() && (!tbPrev || tbPrev.unit!==unit)){
+    tbPrev={unit:unit, rows:rows}; renderBody(); refreshChips(); return;
+  }
   const prev=rows[key];
   if(!prev) return;
   const now=posRO().mm;
@@ -3152,6 +3542,13 @@ async function renderUCLast(){
 }
 function renderUCRef(){
   const el=$("ucRefLine"); if(!el) return;
+  if(bodyType()){
+    const st=bodyStatus(curEquip);
+    const L=st.ok?BODY.limitFor(st.model,curItem):null;
+    if(!L){ el.textContent=t("tb_noref"); el.className="ucref none"; return; }
+    el.textContent=t("uc_ref_span",{n:fmtMM(L.n),c:fmtMM(L.c)})+" · "+t("uc_dir_down");
+    el.className="ucref"; return;
+  }
   const ref=ucRef();
   if(!ref){ el.textContent=t("uc_noref"); el.className="ucref none"; return; }
   if(ref.x){ el.textContent=t("uc_ref_span",{n:fmtMM(ref.n),c:fmtMM(ref.c)})+" · "+t("uc_x_"+ref.x);
@@ -4173,7 +4570,7 @@ function itemLabelFor(rec,k){
   /* An undercarriage point is named by the walk, not the component tree. Without
      this the app called it "Track roller — Left 6" on screen and exported a bare
      ROLLER.L6, so Drive, the CSV, the dashboard and 1C all lost the name. */
-  if(TYPE_META[rec.type] && TYPE_META[rec.type].wear) return ucLabel(k);
+  if(TYPE_META[rec.type] && TYPE_META[rec.type].wear) return ucLabel(k, rec.type, rec.equip);
   if(TYPE_META[rec.type] && TYPE_META[rec.type].get)  return getLabel(k);
   if(usesRegister(rec.type) && COMP_BY[upComp(k)]) return compLabel(k);
   const list=(CLASSES[rec.cls]&&CLASSES[rec.cls][rec.type])||[];
@@ -4198,12 +4595,50 @@ async function blobToThumb(blob,max){ const img=await new Promise((res,rej)=>{co
    its records into the shape that module reads. */
 function rptName(rec,k){
   const w=!!(TYPE_META[rec.type]&&TYPE_META[rec.type].wear);
-  const name=(w?ucLabel(k):itemLabelFor(rec,k))||k;
+  const name=(w?ucLabel(k, rec.type, rec.equip):itemLabelFor(rec,k))||k;
   return {name, code: name===k ? "" : k};
 }
 /* The two frames, coloured by what each point read. Same drawing as the capture
    screen; the state comes from the round rather than from the live draft. */
+/* The tray, printed, coloured by what each station read — plus the zone table
+   under it, because the drawing answers "where" and the table answers "how
+   bad", and a superintendent reads the second one. Every zone is named by its
+   THINNEST station, never its mean: on the survey this was built from, one tail
+   zone averages 6.24 mm and its worst station reads 3.50, and the average is
+   the number that lets a body through. */
+function rptBodyMap(rec,items){
+  const st=bodyStatus(rec.equip); if(!st.ok || !window.bodyMap) return "";
+  const id=st.model;
+  const by={}, mm={};
+  items.forEach(it=>{ const w=it.w;
+    by[it.key] = !w ? "" : w.mm==null ? (w.reason?"na":"") : (w.band||"done");
+    if(w && w.mm!=="" && w.mm!=null) mm[it.key]=Number(w.mm);
+  });
+  const zs=BODY.zones(id).map(z=>{
+    const worst=BODY.worst(id,z.k,mm);
+    const got=BODY.inZone(id,z.k).filter(p=>mm[p.k]!=null).length;
+    const state=(function(){ const seen=BODY.inZone(id,z.k).map(p=>by[p.k]).filter(Boolean);
+      if(!seen.length) return "";
+      if(seen.includes("act")) return "act";
+      if(seen.includes("watch")) return "watch";
+      return seen.length===BODY.inZone(id,z.k).length ? "done" : ""; })();
+    return {z, worst, got, state};
+  });
+  const rows=zs.map(r=>'<tr><td>'+esc(r.z[lang]||r.z.en)+'</td>'+
+    '<td class="num">'+r.got+'/'+r.z.n+'</td>'+
+    '<td class="num">'+(r.worst?fmtMM(r.worst.mm):"—")+'</td>'+
+    '<td>'+(r.worst?esc(r.worst.k):"—")+'</td></tr>').join("");
+  return CMR.fitMap('<div class="ucmapwrap">'+
+    bodyMap({ model:id, lang:lang, sel:"", tag:false,
+              state:k=>by[k]||"", zoneState:z=>(zs.find(x=>x.z.k===z)||{}).state||"" })+
+    '</div>')+
+    '<table class="tbzone"><thead><tr><th>'+esc(t("tb_rpt_zone"))+'</th>'+
+    '<th class="num">'+esc(t("tb_rpt_taken"))+'</th>'+
+    '<th class="num">'+esc(t("tb_rpt_min"))+'</th>'+
+    '<th>'+esc(t("tb_rpt_at"))+'</th></tr></thead><tbody>'+rows+'</tbody></table>';
+}
 function rptMap(rec,items){
+  if(rec.type==="TB") return rptBodyMap(rec,items);
   if(!window.WEAR || !window.WEAR.mapSVG) return "";
   const st=ucStatus(rec.equip); if(!st.ok) return "";
   const by={}; items.forEach(it=>{ const w=it.w;
@@ -4234,7 +4669,15 @@ async function rptRecords(){
          millimetres and no reason is a gap in the round, and the report has to
          count it rather than quietly leave it out. */
       let w=wearOut(rec,k,p);
-      if(!w && meta.wear){
+      if(!w && meta.wear && meta.body){
+        const st2=bodyStatus(rec.equip), L=st2.ok?BODY.limitFor(st2.model,k):null;
+        const pt2=st2.ok?BODY.get(st2.model,k):null;
+        w={ mm:"", stood:0, reason:"", reasonLabel:"",
+            newMM:L?L.n:"", condemnMM:L?L.c:"", wearPct:"", band:"",
+            refSrc:st2.ok?("tray:"+st2.model+(st2.sure?"":"?")):"",
+            zone:pt2?pt2.z:"", zoneLabel:pt2?BODY.zoneLabel(st2.model,pt2.z,"en"):"" };
+      }
+      else if(!w && meta.wear){
         const a2=ASSET_BY[rec.equip]||{}, [pt,pos]=ucSplit(k);
         const ref=(window.WEAR && a2.m) ? WEAR.refFor(rec.equip,a2.m,pt,pos,rec.date) : null;
         w={ mm:"", stood:0, reason:"", reasonLabel:"",
@@ -4402,7 +4845,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="78";
+const BUILD="79";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

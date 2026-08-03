@@ -138,6 +138,31 @@
 #rptRoot .ucmapwrap{background:#f6f8f9;border:1px solid #dfe4e9;border-radius:8px;padding:3px 2px;
   width:100%;margin:0;flex:0 0 auto;overflow:visible;}
 #rptRoot .ucmapwrap::after{content:none;}
+/* ---- the tray, printed ---------------------------------------------------
+   Often on a grey office printer, so the state is carried by the fill AND by
+   the outline weight — a body at the condemn limit has to read as different
+   from a serviceable one on a page with no colour in it at all. */
+#rptRoot .bodymap{display:block;width:100%;height:auto;max-height:330px;margin:0 auto;}
+#rptRoot .bm-shell{fill:#f2f5f7;stroke:#5b6670;stroke-width:2.2;stroke-linejoin:round;}
+#rptRoot .bm-z{fill:#f6f8f9;stroke:#c8d0d6;stroke-width:1;}
+#rptRoot .bm-z.done{fill:#e8f4ea;}
+#rptRoot .bm-z.watch{fill:#fdf1d6;}
+#rptRoot .bm-z.act{fill:#fbe3e1;}
+#rptRoot .bm-hit{fill:none;}
+#rptRoot .bm-dot{fill:#fff;stroke:#8b939b;stroke-width:1.2;}
+#rptRoot .bm-p.done .bm-dot{fill:#0ca30c;stroke:#0ca30c;}
+#rptRoot .bm-p.watch .bm-dot{fill:#fab219;stroke:#8a6300;stroke-width:1.6;}
+#rptRoot .bm-p.act .bm-dot{fill:#d03b3b;stroke:#8c1f1f;stroke-width:2;}
+#rptRoot .bm-p.na .bm-dot{fill:#fff;stroke:#8b939b;stroke-dasharray:2 2;}
+#rptRoot .bm-tag{display:none;}
+/* The drawing says where; this says how bad. Named by the THINNEST station in
+   each zone, never the mean — an average is the number that lets a body pass. */
+#rptRoot .tbzone{width:100%;max-width:470px;border-collapse:collapse;margin:8px 0 4px;
+  font-size:11px;font-variant-numeric:tabular-nums;}
+#rptRoot .tbzone th{text-align:left;font-weight:700;color:#5b6670;border-bottom:1px solid #c8d0d6;
+  padding:3px 6px 3px 0;}
+#rptRoot .tbzone td{padding:3px 6px 3px 0;border-bottom:1px solid #eef1f4;}
+#rptRoot .tbzone .num{text-align:right;padding-right:12px;}
 #rptRoot .ucmap{display:block;width:100%;height:auto;}
 #rptRoot .um-side{font:700 17px/1 inherit;fill:#8b939b;letter-spacing:.04em;}
 #rptRoot .ucmap .mf-body{fill:#e6eaee;stroke:#5b6670;stroke-width:1.3;stroke-linejoin:round;}

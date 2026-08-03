@@ -289,6 +289,71 @@
       'Отвал опущен и очищен. Осмотрите линии сварки отвала, крепления толкающих брусьев и проушины гидроцилиндров перекоса. Замера нет — опишите в комментарии.',
       'Трещины с длиной и расположением, погнутый отвал, скрученные толкающие брусья, люфт в шаровых опорах. Трещина в креплении толкающего бруса — это остановка, а не наблюдение.',
     ],
+
+    /* ---- dump body liner, by zone --------------------------------------
+       Ultrasonic thickness, so the method matters more here than anywhere else
+       in this file: the same plate reads 3 mm apart depending on couplant,
+       scale and whether the probe found the far wall or a lamination. Keyed on
+       the zone rather than the station, because the answer is the same for all
+       thirteen stations on a tail and writing it sixty-three times is how it
+       goes out of date in one place. Scoped "tray." so a floor zone here never
+       collides with a code in the undercarriage or GET sets. */
+    'tray.FRONT': [
+      'Ultrasonic thickness gauge, couplant, wire brush or scraper.',
+      'Body up and on the safety props, engine off, key out. Clean a palm-sized patch back to bare metal — scale reads as extra metal. Couplant on the probe, hold it flat and still, take three hits within a hand-span and RECORD THE LOWEST. On the canopy stations reach over the front wall, not up from inside a raised body.',
+      'Cracks along the front wall to floor weld, the canopy edge curling, and any plate that has torn away from its backing. A crack at the front wall root is a stop, not a watch.',
+      'Ультразвуковой толщиномер, контактная жидкость, щётка или скребок.',
+      'Кузов поднят и на упорах, двигатель заглушен, ключ вынут. Зачистите площадку размером с ладонь до металла — окалина читается как лишний металл. Нанесите жидкость, держите датчик ровно и неподвижно, сделайте три замера рядом и ЗАПИШИТЕ НАИМЕНЬШИЙ. Точки козырька мерьте снаружи через передний борт, а не изнутри поднятого кузова.',
+      'Трещины по шву переднего борта с полом, отгибание кромки козырька, отслоение листа от основы. Трещина в корне переднего борта — это остановка, а не наблюдение.',
+    ],
+    'tray.LEFT': [
+      'Ultrasonic thickness gauge, couplant, wire brush or scraper.',
+      'Work from outside the body where you can — the side skin is reachable from the ground on the lower rows. Clean to bare metal, three hits within a hand-span, record the lowest. Stay off weld seams and off any doubler plate: both read thick and neither is the plate you are grading.',
+      'Wear scars running fore-and-aft where the load slides on tipping, cracks at the side-to-floor corner weld, and any bulge that says the plate has let go behind.',
+      'Ультразвуковой толщиномер, контактная жидкость, щётка или скребок.',
+      'По возможности работайте снаружи — нижние ряды боковины достаются с земли. Зачистите до металла, три замера рядом, записывайте наименьший. Не ставьте датчик на сварной шов и на накладку: и то и другое даёт завышение, и это не тот лист, который вы оцениваете.',
+      'Продольные борозды износа от схода груза при разгрузке, трещины в угловом шве борта с полом, вздутие листа — признак того, что он отошёл от основы.',
+    ],
+    'tray.RIGHT': [
+      'Ultrasonic thickness gauge, couplant, wire brush or scraper.',
+      'Same as the left side, and take it in the same order every round — the right side is the one that gets skipped when the machine is parked against a bank. Clean to bare metal, three hits, record the lowest.',
+      'Compare with the left at the same row. A body that is thin down one side only is being loaded off-centre, which is a loading problem and not a liner problem.',
+      'Ультразвуковой толщиномер, контактная жидкость, щётка или скребок.',
+      'Так же, как левая сторона, и всегда в одном порядке — именно правую пропускают, когда машина стоит у отвала. Зачистите до металла, три замера, записывайте наименьший.',
+      'Сравните с левой стороной на том же ряду. Износ только с одной стороны — это перекос при загрузке, а не проблема футеровки.',
+    ],
+    'tray.FLR1': [
+      'Ultrasonic thickness gauge, couplant, wire brush or scraper.',
+      'Body up and PROPPED before anyone steps under or in. The floor carries packed fines — scrape the station clear, not just brushed. Three hits within a hand-span, record the lowest. If the plate is dented, measure the bottom of the dent: that is the thin part.',
+      'Impact dents from the first bucket, which is what this row takes, and cracks radiating from them.',
+      'Ультразвуковой толщиномер, контактная жидкость, щётка или скребок.',
+      'Кузов поднят и ОБЯЗАТЕЛЬНО на упорах, прежде чем кто-то зайдёт внутрь или под него. На полу спрессованная мелочь — точку нужно счистить, а не обмахнуть. Три замера рядом, записывайте наименьший. Если лист промят, мерьте дно вмятины: там тоньше всего.',
+      'Ударные вмятины от первого ковша — этот ряд принимает их на себя — и трещины, расходящиеся от них.',
+    ],
+    'tray.FLR2': [
+      'Ultrasonic thickness gauge, couplant, wire brush or scraper.',
+      'As the front floor. This row is usually the thickest left, so it is the one that tells you what the body started at when nobody recorded a new thickness — take it carefully.',
+      'Plate lifting at the seams, and wear that is heavier on one side of the centreline than the other.',
+      'Ультразвуковой толщиномер, контактная жидкость, щётка или скребок.',
+      'Как передняя часть пола. Обычно это самый толстый оставшийся ряд — именно он показывает исходную толщину кузова, если новую толщину никто не записал. Мерьте внимательно.',
+      'Отрыв листа по швам и износ, который сильнее с одной стороны от осевой линии.',
+    ],
+    'tray.FLR3': [
+      'Ultrasonic thickness gauge, couplant, wire brush or scraper.',
+      'As the rest of the floor. Scrape, three hits, lowest of the three.',
+      'The start of the slide path — long polished scars mean the load is leaving in one slab rather than flowing.',
+      'Ультразвуковой толщиномер, контактная жидкость, щётка или скребок.',
+      'Как остальной пол. Зачистить, три замера, записать наименьший.',
+      'Начало пути схода груза — длинные полированные борозды означают, что груз уходит пластом, а не течёт.',
+    ],
+    'tray.TAIL': [
+      'Ultrasonic thickness gauge, couplant, wire brush or scraper.',
+      'The thinnest metal on the body is here and it is worth the extra minute. Scrape each station properly, three hits, record the lowest. Include the stations right on the discharge lip — they are the ones that go first and the ones most often skipped because they are awkward.',
+      'The discharge lip itself: rolled edge, tears, and any plate you can flex by hand. A tail that has worn through drops rock onto the road and onto whatever is behind.',
+      'Ультразвуковой толщиномер, контактная жидкость, щётка или скребок.',
+      'Самый тонкий металл кузова — здесь, и лишняя минута того стоит. Тщательно зачистите каждую точку, три замера, записывайте наименьший. Обязательно снимите точки на самой разгрузочной кромке — они уходят первыми и их же чаще всего пропускают, потому что неудобно.',
+      'Сама разгрузочная кромка: завёрнутый край, надрывы, любой лист, который качается от руки. Протёртый насквозь хвост роняет породу на дорогу и на то, что едет сзади.',
+    ],
   };
 
   /* Scoped key first — "bucket.CRACK" is not the same job as "blade.CRACK" —
