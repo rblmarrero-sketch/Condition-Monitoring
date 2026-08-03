@@ -292,8 +292,9 @@
 
     /* ---- dump body liner, by zone --------------------------------------
        Ultrasonic thickness, so the method matters more here than anywhere else
-       in this file: the same plate reads 3 mm apart depending on couplant,
-       scale and whether the probe found the far wall or a lamination. Keyed on
+       in this file: the same plate reads a long way apart depending on
+       couplant, scale, and whether the probe found the far wall or a
+       lamination — far enough to swamp a season's wear. Keyed on
        the zone rather than the station, because the answer is the same for all
        thirteen stations on a tail and writing it sixty-three times is how it
        goes out of date in one place. Scoped "tray." so a floor zone here never
