@@ -35,42 +35,60 @@
      skipped when the inspector has forced light, and [data-theme] wins outright. */
   :root, :root[data-theme="light"]{ color-scheme:light;
     --page:#eceff1; --surface:#fff; --surface-2:#f3f6f7; --surface-3:#e4e9ec;
-    --ink:#11171a; --ink-2:#41505a; --muted:#616f76; --border:#d6dde1;
+    --ink:#11171a; --ink-2:#41505a; --muted:#5b686f; --border:#d6dde1;
     --line:#e7ecee; --shadow:0 1px 2px rgba(16,26,32,.05);
     --accent:#1f6fc4; --accent-ink:#fff; --accent-soft:#e8f1fb;
-    --good:#0c8a3e; --warning:#c07c07; --serious:#c95a2c; --critical:#c02f2f; --none:#8b969b; }
+    --good:#0c8a3e; --warning:#c07c07; --serious:#c95a2c; --critical:#c02f2f; --none:#8b969b; --warn-ink:#8a5a00; }
   @media (prefers-color-scheme: dark){ :root:where(:not([data-theme="light"])){ color-scheme:dark;
     --page:#0d1013; --surface:#171b1f; --surface-2:#1f252a; --surface-3:#2a3238;
     --ink:#eef2f4; --ink-2:#b3bec4; --muted:#828e95; --border:#2c353b;
     --line:#232a30; --shadow:none;
     --accent:#4d9bef; --accent-ink:#06131f; --accent-soft:#16283b;
-    --good:#3aad5c; --warning:#e0a52a; --serious:#e2825a; --critical:#e05a52; --none:#69757b; } }
+    --good:#3aad5c; --warning:#e0a52a; --serious:#e2825a; --critical:#e05a52; --none:#69757b; --warn-ink:#e0a52a; } }
   :root[data-theme="dark"]{ color-scheme:dark;
     --page:#0d1013; --surface:#171b1f; --surface-2:#1f252a; --surface-3:#2a3238;
     --ink:#eef2f4; --ink-2:#b3bec4; --muted:#828e95; --border:#2c353b;
     --line:#232a30; --shadow:none;
     --accent:#4d9bef; --accent-ink:#06131f; --accent-soft:#16283b;
-    --good:#3aad5c; --warning:#e0a52a; --serious:#e2825a; --critical:#e05a52; --none:#69757b; }
+    --good:#3aad5c; --warning:#e0a52a; --serious:#e2825a; --critical:#e05a52; --none:#69757b; --warn-ink:#e0a52a; }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
   html,body{margin:0;padding:0;}
   body{background:var(--page);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.4;padding-bottom:92px;}
   header{position:sticky;top:0;z-index:10;background:var(--surface);border-bottom:1px solid var(--border);
-    padding:calc(env(safe-area-inset-top) + 10px) 14px 10px;display:flex;align-items:center;gap:8px;}
-  header .t{font-weight:700;font-size:15.5px;letter-spacing:-.01em;margin-right:auto;}
-  .lang{display:flex;border:1px solid var(--border);border-radius:9px;overflow:hidden;}
-  .lang button{border:none;background:var(--surface-2);color:var(--ink-2);padding:7px 10px;font-size:12.5px;font-weight:700;cursor:pointer;letter-spacing:.02em;}
+    padding:calc(env(safe-area-inset-top) + 10px) 12px 10px;display:flex;align-items:center;gap:7px;}
+  /* The title is the one thing here that can afford to give. It shrinks with the
+     viewport so it still fits whole on a phone, and only truncates on something
+     narrower than anything in the fleet — rather than being the element that
+     gets squeezed because the controls beside it grew to a size a glove can
+     actually hit. */
+  header .t{font-weight:700;font-size:clamp(12.5px,3.3vw,15.5px);letter-spacing:-.01em;
+    margin-right:auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  /* 44 px, everywhere a thumb has to land. The header controls were 28 to 30 px
+     tall — fine for a mouse, and not fine for the glove this app is used in.
+     They are also the controls somebody reaches for when something is already
+     wrong: the language, the settings, and the pill that says whether the work
+     is safe. flex:none stops them being the things that give when the title is
+     long, which is what clipped "EN RU" to "ENRU" on a 360 px screen. */
+  .lang{display:flex;flex:none;border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+  .lang button{border:none;background:var(--surface-2);color:var(--ink-2);
+    min-width:44px;min-height:44px;padding:0 10px;font-size:13px;font-weight:700;
+    cursor:pointer;letter-spacing:.02em;}
   .lang button.on{background:var(--accent);color:var(--accent-ink);}
   /* The sync pill. It reports whether the work is safe, which is the only thing
      worth a permanent place in the header, and tapping it goes to the queue. */
-  header .st{font-size:12px;font-weight:650;padding:6px 11px;border-radius:999px;
+  header .st{font-size:12.5px;font-weight:650;padding:0 13px;border-radius:999px;
+    min-height:44px;display:inline-flex;align-items:center;flex:none;
     background:var(--surface-2);border:1px solid var(--border);color:var(--ink-2);
     cursor:pointer;white-space:nowrap;font-variant-numeric:tabular-nums;}
   header .st .d{display:inline-block;width:7px;height:7px;border-radius:50%;
     background:currentColor;margin-right:6px;vertical-align:1px;}
   header .st.on{color:var(--good);border-color:color-mix(in srgb,var(--good) 35%,var(--border));}
-  header .st.warn{color:var(--warning);border-color:color-mix(in srgb,var(--warning) 40%,var(--border));}
+  header .st.warn{color:var(--warn-ink);border-color:color-mix(in srgb,var(--warning) 40%,var(--border));}
   header .st.err{color:var(--critical);border-color:color-mix(in srgb,var(--critical) 40%,var(--border));}
-  header .st.off{color:var(--muted);}
+  /* --muted against the header's own surface is 3.16:1 in daylight, under the
+     4.5 the text needs. This state is the one that says the round has nowhere
+     to go yet, so it is the last one that should be hard to read. */
+  header .st.off{color:var(--ink-2);}
   main{padding:16px;max-width:640px;margin:0 auto;}
   .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:0 15px 15px;margin-bottom:14px;box-shadow:var(--shadow);}
   /* A rule under the heading gives each card a head, so the eye finds the start
@@ -98,14 +116,13 @@
   .iconbtn.rec{background:var(--critical);color:#fff;border-color:transparent;animation:pulse 1s infinite;}
   @keyframes pulse{50%{opacity:.55;}}
   .seg{display:flex;gap:8px;flex-wrap:wrap;}
-  .seg button{flex:1;min-width:56px;padding:12px 8px;border-radius:11px;border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);font-size:15px;font-weight:650;cursor:pointer;transition:background .1s,color .1s;}
+  .seg button{min-height:44px;flex:1;min-width:56px;padding:12px 8px;border-radius:11px;border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);font-size:15px;font-weight:650;cursor:pointer;transition:background .1s,color .1s;}
   .seg button.on{background:var(--accent);color:var(--accent-ink);border-color:transparent;}
   .seg button:active{background:var(--surface-3);}
   .seg button.on:active{opacity:.85;background:var(--accent);}
   .posnav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
-  .posnav button{flex:1 1 auto;min-width:56px;padding:11px 10px;border-radius:12px;border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);font-weight:700;font-size:14px;cursor:pointer;position:relative;}
+  .posnav button{flex:1 1 auto;min-width:56px;min-height:44px;padding:11px 10px;border-radius:12px;border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);font-weight:700;font-size:14px;cursor:pointer;position:relative;}
   .posnav button.on{background:var(--ink);color:var(--page);border-color:transparent;}
-  .posnav-pick{flex:1 1 100%;padding:11px;border-radius:12px;border:1px solid var(--accent);background:var(--surface-2);color:var(--accent);font-weight:700;font-size:14px;cursor:pointer;margin-bottom:2px;}
   /* component cascade (L7 cards -> L8 -> L9) */
   .casc{margin-bottom:14px;}
   .crumb{display:flex;flex-wrap:wrap;gap:4px;align-items:center;font-size:12.5px;color:var(--muted);margin-bottom:10px;}
@@ -124,14 +141,10 @@
   .clist button .r{color:var(--muted);font-size:13px;}
   .clist button.has{border-color:var(--good);}
   .searchall{width:100%;padding:9px;border:1px dashed var(--border);background:none;color:var(--accent);border-radius:10px;font-size:13px;font-weight:650;cursor:pointer;margin-bottom:10px;}
-  .prompt-pick{color:var(--muted);font-size:13px;text-align:center;padding:14px;}
   .needunit{width:100%;text-align:center;padding:12px 6px 4px;}
   .needunit .nu-t{color:var(--ink-2);font-size:14px;margin-bottom:12px;}
   .posnav button .dot{position:absolute;top:5px;right:6px;width:8px;height:8px;border-radius:50%;background:var(--good);display:none;}
   .posnav button.has .dot{display:block;}
-  .shot{width:100%;aspect-ratio:4/3;border-radius:14px;border:2px dashed var(--border);background:var(--surface-2);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:14px;overflow:hidden;margin-bottom:12px;position:relative;text-align:center;padding:10px;}
-  .shot img{width:100%;height:100%;object-fit:cover;}
-  .shot .retake{position:absolute;bottom:10px;right:10px;background:rgba(0,0,0,.6);color:#fff;border:none;border-radius:10px;padding:8px 12px;font-size:13px;}
   .gradeseg button.g-A.on{background:var(--good);} .gradeseg button.g-B.on{background:var(--warning);color:#111;}
   .gradeseg button.g-C.on{background:var(--serious);} .gradeseg button.g-X.on{background:var(--critical);}
   .btn{display:block;width:100%;padding:15px;border-radius:13px;border:none;font-size:16.5px;font-weight:700;cursor:pointer;
@@ -254,22 +267,27 @@
     #paneCapture > *:not(#cardComponent){grid-column:1;}
   }
   .hint{font-size:12.5px;color:var(--muted);margin-top:6px;} #setMsg{white-space:pre-wrap;word-break:break-word;user-select:text;}
-  .btn-set{border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);border-radius:9px;padding:5px 9px;font-size:15px;cursor:pointer;margin-left:auto;}
+  .btn-set{border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);
+    border-radius:10px;min-width:44px;min-height:44px;padding:0;font-size:17px;
+    cursor:pointer;margin-left:auto;flex:none;}
   .ver{text-align:center;color:var(--muted);font-size:11px;margin:2px 0 8px;}
   .syncbar{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--ink-2);background:var(--surface);
     border:1px solid var(--border);border-radius:12px;padding:10px 14px;margin-bottom:12px;}
   .syncbar .dot{width:9px;height:9px;border-radius:50%;background:var(--muted);flex:none;}
   .syncbar.on .dot{background:var(--good);} .syncbar.pend .dot{background:var(--warning);}
   .syncbar.err .dot{background:var(--critical);} .syncbar .sp{flex:1;}
-  .syncbar button{border:1px solid var(--border);background:var(--surface-2);color:var(--accent);border-radius:8px;
-    padding:6px 10px;font-size:12.5px;font-weight:650;cursor:pointer;}
+  .syncbar button{border:1px solid var(--border);background:var(--surface-2);color:var(--accent);border-radius:9px;
+    min-width:44px;min-height:44px;padding:0 14px;font-size:13px;font-weight:650;cursor:pointer;flex:none;}
+  .syncbar button#syncSet{padding:0;font-size:16px;}
   .editbar{display:flex;align-items:center;gap:10px;background:color-mix(in srgb,var(--accent) 16%,var(--surface));border:1px solid color-mix(in srgb,var(--accent) 45%,var(--border));border-radius:12px;padding:10px 14px;margin-bottom:10px;font-size:13.5px;}
-  .editbar span{flex:1;color:var(--ink);} .linkbtn{background:none;border:none;color:var(--accent);font-weight:700;font-size:14px;cursor:pointer;}
+  .editbar span{flex:1;color:var(--ink);}
+  .linkbtn{background:none;border:none;color:var(--accent);font-weight:700;font-size:15px;
+    cursor:pointer;min-width:44px;min-height:44px;padding:0 8px;}
   .hidden{display:none!important;}
   .dest{border:1px solid var(--border);border-radius:12px;padding:12px 12px 2px;margin-bottom:14px;background:var(--surface-2);}
   .dest.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--surface-2));}
-  .dest.needurl{border-color:var(--warning);}
-  .dest .need{color:var(--warning);font-size:12.5px;margin:-6px 0 12px;}
+  .dest.needurl{border-color:var(--warn-ink);}
+  .dest .need{color:var(--warn-ink);font-size:12.5px;margin:-6px 0 12px;}
   .dest .dhead{display:flex;align-items:center;gap:11px;font-weight:700;font-size:14px;margin-bottom:10px;
     cursor:pointer;user-select:none;-webkit-user-select:none;}
   /* Drawn by hand: the app strips native control styling, and a bare accent-color
@@ -340,7 +358,7 @@
   .ucfig .cap{font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.45;}
   .ucref{font-size:12.5px;font-weight:600;color:var(--ink-2);margin:-4px 0 10px;
     font-variant-numeric:tabular-nums;line-height:1.5;}
-  .ucref.none{color:var(--warning);font-weight:600;}
+  .ucref.none{color:var(--warn-ink);font-weight:600;}
   .uclast{font-size:12.5px;color:var(--muted);margin:-6px 0 10px;line-height:1.5;
     font-variant-numeric:tabular-nums;}
   /* How to take the reading. Collapsed by default — an inspector who has done a
@@ -355,14 +373,14 @@
   .guide-b b{display:block;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
     color:var(--muted);font-weight:700;margin-bottom:2px;}
   .uclast b{color:var(--ink-2);font-weight:650;}
-  .uclast.jump{color:var(--warning);}
+  .uclast.jump{color:var(--warn-ink);}
   .ucread{font-size:13.5px;margin:-4px 0 12px;display:flex;flex-wrap:wrap;gap:6px 10px;
     align-items:center;min-height:20px;}
   .ucread b{font-variant-numeric:tabular-nums;font-size:15px;}
   .ucread .band{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
     padding:4px 8px;border-radius:999px;}
   .ucread .b-ok{background:color-mix(in srgb,var(--good) 14%,var(--surface));color:var(--good);}
-  .ucread .b-watch{background:color-mix(in srgb,var(--warning) 16%,var(--surface));color:var(--warning);}
+  .ucread .b-watch{background:color-mix(in srgb,var(--warning) 16%,var(--surface));color:var(--warn-ink);}
   .ucread .b-act{background:color-mix(in srgb,var(--critical) 12%,var(--surface));color:var(--critical);}
   .ucread .src{color:var(--muted);font-size:12px;}
   .ucwarn{background:color-mix(in srgb,var(--critical) 12%,var(--surface));border:1px solid var(--critical);border-radius:12px;
@@ -390,12 +408,14 @@
   .chips{display:flex;flex-wrap:wrap;gap:7px;}
   .chips button{font:600 12.5px/1 inherit;color:var(--ink);background:var(--surface-2);
     border:1px solid var(--line);border-radius:999px;padding:9px 13px;cursor:pointer;}
-  .chips button.on{background:color-mix(in srgb,var(--warning) 16%,var(--surface));border-color:var(--warning);color:var(--warning);}
+  .chips button.on{background:color-mix(in srgb,var(--warning) 16%,var(--surface));border-color:var(--warn-ink);color:var(--warn-ink);}
   .stale{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between;
     background:var(--accent-soft);border:1px solid var(--accent);border-radius:12px;
     padding:12px 14px;margin:0 0 12px;font-size:13.5px;color:var(--ink);line-height:1.45;}
   .stale button{font:700 13px/1 inherit;color:var(--accent-ink);background:var(--accent);
-    border:0;border-radius:9px;padding:11px 16px;cursor:pointer;white-space:nowrap;}
+    border:0;display:inline-flex;align-items:center;border-radius:9px;min-height:44px;padding:0 16px;cursor:pointer;white-space:nowrap;}
+  .verlink{color:var(--accent);font-weight:700;text-decoration:none;
+    display:inline-flex;align-items:center;min-height:44px;padding:0 10px;margin:-10px 0;}
   .guess{background:color-mix(in srgb,var(--warning) 14%,var(--surface));
     border:1px solid var(--warning);border-radius:11px;padding:11px 13px;margin:0 0 10px;
     font-size:12.5px;line-height:1.5;color:var(--ink);}
@@ -458,7 +478,7 @@
     font-weight:800;font-size:11.5px;background:var(--surface-2);border:1px solid var(--line);}
   .ucgroups button.on{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);}
   .ucgroups button.done i{background:var(--good);border-color:var(--good);color:#fff;}
-  .ucgroups button.watch i{background:var(--warning);border-color:var(--warning);color:#3a2a00;}
+  .ucgroups button.watch i{background:var(--warning);border-color:var(--warn-ink);color:#3a2a00;}
   .ucgroups button.act i{background:var(--critical);border-color:var(--critical);color:#fff;}
   .ucgroups button.na i{background:var(--surface-3);border-style:dashed;}
   .ucmembers{flex:0 0 100%;display:flex;flex-wrap:wrap;gap:7px;margin:9px 0 0;}
@@ -466,7 +486,7 @@
     background:var(--surface);color:var(--ink);border-radius:12px;font:700 13px/1 inherit;cursor:pointer;}
   .ucmembers button.on{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);}
   .ucmembers button.done{border-color:var(--good);}
-  .ucmembers button.watch{border-color:var(--warning);}
+  .ucmembers button.watch{border-color:var(--warn-ink);}
   .ucmembers button.act{border-color:var(--critical);}
   .ucmembers button.na{border-style:dashed;}
   /* the numbers on the picture */
@@ -573,7 +593,7 @@
   .uctally i{width:11px;height:11px;border-radius:999px;flex:0 0 auto;
     background:var(--surface);border:2px solid var(--ink-2);}
   .uctally .done{color:var(--good);}      .uctally .done i{background:var(--good);border-color:var(--good);}
-  .uctally .watch{color:var(--warning);}  .uctally .watch i{background:var(--warning);border-color:var(--warning);}
+  .uctally .watch{color:var(--warn-ink);}  .uctally .watch i{background:var(--warning);border-color:var(--warn-ink);}
   .uctally .act{color:var(--critical);}   .uctally .act i{background:var(--critical);border-color:var(--critical);}
   .uctally .na i{background:var(--surface-3);border-color:var(--muted);border-style:dashed;}
   .ucblock{background:var(--surface-2);border:1px dashed var(--line);border-radius:12px;
@@ -585,7 +605,7 @@
   .duelist{display:flex;flex-direction:column;gap:8px;}
   .dueitem{display:flex;align-items:center;gap:10px;background:var(--surface-2);border:1px solid var(--border);
     border-left:4px solid var(--muted);border-radius:12px;padding:9px 12px;cursor:pointer;text-align:left;width:100%;color:var(--ink);font:inherit;}
-  .dueitem.ok{border-left-color:var(--good);} .dueitem.soon{border-left-color:var(--warning);}
+  .dueitem.ok{border-left-color:var(--good);} .dueitem.soon{border-left-color:var(--warn-ink);}
   .dueitem.over{border-left-color:var(--critical);}
   .dueitem .u{font-weight:700;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .dueitem .d{font-size:12.5px;color:var(--muted);flex:none;}
@@ -602,7 +622,7 @@
     border-bottom:1px solid var(--line);}
   .sp-r:last-of-type{border-bottom:none;}
   .sp-r span{color:var(--muted);} .sp-r b{font-variant-numeric:tabular-nums;color:var(--ink);}
-  .sp-r.bad b{color:var(--critical);} .sp-r.warn b{color:var(--warning);}
+  .sp-r.bad b{color:var(--critical);} .sp-r.warn b{color:var(--warn-ink);}
   .sp-h{margin:12px 0 2px;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
     color:var(--muted);font-weight:700;}
   .sp-v{margin-top:12px;padding:10px 12px;border-radius:10px;background:var(--surface);
@@ -914,7 +934,7 @@
     <span id="staleTxt"></span>
     <button type="button" id="staleGo"></button>
   </div>
-  <div class="ver" id="verLine">build v<span id="verNum">?</span> · <span id="verNote">updates itself, says when it is ready</span> ·   <a href="#" id="forceUpdate" style="color:var(--accent);font-weight:700;">⟳ Update</a></div>
+  <div class="ver" id="verLine">build v<span id="verNum">?</span> · <span id="verNote">updates itself, says when it is ready</span> ·   <a href="#" id="forceUpdate" class="verlink">⟳ Update</a></div>
 </main>
 
 <nav class="tabbar" id="tabbar">
@@ -1247,7 +1267,7 @@ const I18N = {
     sp_run:"Why is uploading slow?", sp_again:"Measure again", sp_running:"Measuring…",
     sp_title:"Upload speed check", sp_origin:"This app's own host (not Google)",
     sp_dest:"Destination", sp_nodest:"No destination is switched on — nothing to measure.",
-    sp_offline:"No signal. Try this where the phone has one.",
+    sp_link:"Connection", sp_offline:"No signal. Try this where the phone has one.",
     sp_unreachable:"cannot be reached", sp_failed:"failed",
     sp_small_only:"answers in {n}, but would not take 200 KB",
     sp_overhead:"cost per request", sp_rate:"speed once it starts",
@@ -1513,7 +1533,7 @@ const I18N = {
     sp_run:"Почему загрузка медленная?", sp_again:"Измерить ещё раз", sp_running:"Измерение…",
     sp_title:"Проверка скорости загрузки", sp_origin:"Собственный хост приложения (не Google)",
     sp_dest:"Назначение", sp_nodest:"Ни одно назначение не включено — нечего измерять.",
-    sp_offline:"Нет сигнала. Повторите там, где он есть.",
+    sp_link:"Соединение", sp_offline:"Нет сигнала. Повторите там, где он есть.",
     sp_unreachable:"недоступно", sp_failed:"сбой",
     sp_small_only:"отвечает за {n}, но не принял 200 КБ",
     sp_overhead:"цена одного запроса", sp_rate:"скорость после старта",
@@ -3792,7 +3812,7 @@ function renderTeam(){
     const age=daysBetween(r.d);
     const clash=cfHas(r);
     return `<button class="dueitem ${cls}" data-u="${esc(r.u)}">
-      <span class="u">${esc(r.u)}${r.g?` · <span style="color:${GRADE_TINT[r.g]||"var(--muted)"};font-weight:700">${esc(r.g)}</span>`:""}${clash?` · <span style="color:var(--warning);font-weight:700">⑂</span>`:""}</span>
+      <span class="u">${esc(r.u)}${r.g?` · <span style="color:${GRADE_TINT[r.g]||"var(--muted)"};font-weight:700">${esc(r.g)}</span>`:""}${clash?` · <span style="color:var(--warn-ink);font-weight:700">⑂</span>`:""}</span>
       <span class="d">${esc(r.d)}${age!=null?` · ${t("due_days").replace("{n}",age)}`:""}${r.by?` · ${esc(r.by)}`:""}${clash?` · ${esc(t("team_clash_one"))}`:""}</span></button>`;
   }).join("");
   box.querySelectorAll("[data-u]").forEach(b=>b.onclick=()=>{ selectEquip(b.dataset.u); showPane("paneCapture"); });
