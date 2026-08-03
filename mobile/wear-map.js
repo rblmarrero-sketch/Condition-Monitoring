@@ -412,6 +412,16 @@
      Where a model has no photograph the same numbers go over the drawn frame
      instead, so the screen is the same screen either way. */
   var PVB_W = 460;
+  /* The photograph did not load. Drop it and show the frame that was drawn
+     underneath it — silently, because there is nothing the inspector can do
+     about it and the round carries on unchanged. */
+  W.photoGone = function (img) {
+    if (!img || !img.parentNode) return;
+    var svg = img.parentNode, drawn = svg.querySelector('.um-drawn');
+    if (drawn) drawn.removeAttribute('style');
+    img.parentNode.removeChild(img);
+  };
+
   W.mapPhoto = function (o) {
     o = o || {};
     var box = o.box || [20, 55, 70, 40];
@@ -426,14 +436,33 @@
     PVB_H = Math.max(120, Math.min(360, PVB_H));
     s.push('<svg class="ucmap photo" viewBox="0 0 ' + PVB_W + ' ' + PVB_H +
            '" role="group" aria-label="' + (o.side === 'L' ? 'Left' : 'Right') + ' undercarriage">');
+    /* The drawn frame goes in either way, and hides behind the photograph when
+       there is one. It is the answer to the photograph not arriving — a cache
+       miss on a phone with no signal, a model whose picture has not been shot
+       yet — and the failure it prevents is the bad one: eleven numbers floating
+       over a blank rectangle, which tells an inspector nothing and looks like
+       the app is broken. Scaled into the same picture area, so a number lands
+       in the same place relative to the frame either way. */
+    /* Only where a track frame is the right thing to draw. A GET round calls
+       this for a bucket or a blade and passes no family; drawing rollers and
+       an idler under a missing bucket photograph would not be a fallback, it
+       would be a wrong answer. Better a bare set of numbers than the wrong
+       machine part. */
+    if (o.fam) {
+      var g = geom(o.fam, !!o.high, o.rollers, o.carriers);
+      /* The frame art was drawn for a 210-high box. A photograph sets the
+         height from its own aspect, so scale the drawing by the same ratio —
+         otherwise it keeps its old size in a taller box and the numbers, which
+         are placed as fractions of the box, sit below the frame they name. */
+      var k = PVB_H / 210;
+      s.push('<g class="um-drawn"' + (o.photo ? ' style="display:none"' : '') +
+             ' transform="translate(0,' + (-14 * k).toFixed(1) + ') scale(1,' +
+             (0.78 * k).toFixed(3) + ')">' + frameArt(layout(g, '')) + '</g>');
+    }
     if (o.photo) {
       s.push('<image class="um-photo" href="' + o.photo + '" x="0" y="0" width="' + PVB_W +
-             '" height="' + PVB_H + '" preserveAspectRatio="none"/>');
-    } else {
-      /* No photograph: the drawn frame, scaled into the same picture area so the
-         numbers land in the same places relative to the frame. */
-      var g = geom(o.fam || '', !!o.high, o.rollers, o.carriers);
-      s.push('<g transform="translate(0,-14) scale(1,0.78)">' + frameArt(layout(g, '')) + '</g>');
+             '" height="' + PVB_H + '" preserveAspectRatio="none"' +
+             ' onerror="WEAR.photoGone(this)"/>');
     }
     pts.forEach(function (q) {
       var n = q[0];

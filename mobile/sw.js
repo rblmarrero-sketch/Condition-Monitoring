@@ -36,7 +36,7 @@
        explains itself and offers a retry — because an honest offline page is
        recoverable and a browser error page is not. */
 
-const BUILD = "76";
+const BUILD = "77";
 const CACHE = "plug-capture-v" + BUILD;
 
 /* Without these the app is not an app: no page, no equipment register, no
@@ -298,6 +298,35 @@ self.addEventListener("fetch", (e) => {
            one-tap repair. Rejecting takes the whole page down instead. */
         return new Response("/* unavailable offline */", { status: 503,
           headers: { "Content-Type": "text/plain" } });
+      }
+    })());
+    return;
+  }
+
+  /* ---- machine artwork: cache first ---------------------------------------
+     The undercarriage and tool photographs carry no ?v=, so without this branch
+     they fell into the "do not touch" rule below, went straight to the network,
+     and failed in the pit — cached by install(), never served. The measurement
+     map would come up with its numbers over a blank space on exactly the shift
+     it is needed.
+
+     Cache-first is right for these and not a risk: they are static artwork
+     under a known folder, replaced only by a new build, and never a live call.
+     A miss falls through to the network and is kept for next time, so a
+     photograph added between builds still works. */
+  if (/\/machine\//.test(url.pathname)) {
+    e.respondWith((async () => {
+      const hit = await caches.match(req, { ignoreSearch: true });
+      if (hit) return hit;
+      try {
+        const res = await withTimeout(fetch(req), NET_WAIT + 4000);
+        if (res && res.ok) (await caches.open(CACHE)).put(req, res.clone());
+        return res;
+      } catch (err) {
+        /* No picture. The map falls back to its drawn frame, which is the whole
+           reason the drawing was kept — so answer rather than reject, and let
+           the page decide. */
+        return new Response("", { status: 504 });
       }
     })());
     return;

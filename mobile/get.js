@@ -30,7 +30,7 @@
    supplier's wear charts and replace these, at which point the label stops
    appearing. A generic limit is better than no trend. A generic limit presented
    as measured fact is not. */
-(function () {
+(function (G) {
   'use strict';
 
   /* [n, code, English, Russian, kind, x%, y%] */
@@ -154,7 +154,7 @@
     IX = { tool: {}, photo: {} };
     Object.keys(TOOL_BY_MODEL).forEach(function (k) { IX.tool[slug(k)] = TOOL_BY_MODEL[k]; });
     Object.keys(PHOTO_BY_MODEL).forEach(function (k) { IX.photo[slug(k)] = PHOTO_BY_MODEL[k]; });
-    var A = window.MACHINE_PHOTOS && window.MACHINE_PHOTOS.ALIAS;
+    var A = G.MACHINE_PHOTOS && G.MACHINE_PHOTOS.ALIAS;
     if (A) Object.keys(A).forEach(function (k) {
       var a = slug(k), b = slug(A[k]);
       ['tool', 'photo'].forEach(function (w) {
@@ -165,7 +165,7 @@
     return IX;
   }
 
-  function familyFor(unit, cls) { return (window.MFIG ? MFIG.familyFor(unit, cls) : ''); }
+  function familyFor(unit, cls) { return (G.MFIG ? G.MFIG.familyFor(unit, cls) : ''); }
 
   /* Is there a GET round to do on this machine at all? A haul truck, a light
      vehicle and a generator have none, and offering an empty round is worse
@@ -175,7 +175,7 @@
     var tool = ix.tool[s] || TOOL_BY_FAMILY[familyFor(unit, cls)] || '';
     var T = TOOLS[tool];
     if (!T) return null;
-    var base = (window.MACHINE_PHOTOS ? MACHINE_PHOTOS.BASE : 'machine/');
+    var base = (G.MACHINE_PHOTOS ? G.MACHINE_PHOTOS.BASE : 'machine/');
     var f = ix.photo[s] || '';
     return { tool: tool, en: T.en, ru: T.ru, pts: T.pts, lim: T.lim,
              photo: f ? base + f : '', aspect: (f && ASPECT[f]) || 0 };
@@ -225,15 +225,20 @@
 
   /* Everything the service worker should cache. */
   function all() {
-    var base = (window.MACHINE_PHOTOS ? MACHINE_PHOTOS.BASE : 'machine/'), seen = {}, out = [];
+    var base = (G.MACHINE_PHOTOS ? G.MACHINE_PHOTOS.BASE : 'machine/'), seen = {}, out = [];
     Object.keys(PHOTO_BY_MODEL).forEach(function (k) { seen[PHOTO_BY_MODEL[k]] = 1; });
     Object.keys(seen).forEach(function (f) { out.push(base + f); });
     return out;
   }
 
-  window.GET = {
+  G.GET = {
     tools: TOOLS, familyFor: familyFor, profileFor: profileFor, has: has,
     walk: walk, refFor: refFor, label: label, rowFor: rowFor, all: all, slug: slug,
     photos: PHOTO_BY_MODEL, toolByModel: TOOL_BY_MODEL,
   };
-})();
+/* `self`, not `window`. The service worker importScripts() this file to learn
+   which bucket and blade photographs to cache, and a service worker has no
+   window — so writing to `window` left GET undefined there and the worker
+   cached none of them. Every phone would have gone to the pit with no picture
+   on a GET round and no way to know why. */
+})(typeof self !== 'undefined' ? self : this);

@@ -1194,3 +1194,35 @@ after another paid that latency once per file. Three in flight overlaps it.
 photographs go to 1280 px and uploads drop back to one at a time — three in flight on a
 saturated link only produces three timeouts. The ⚙ menu still shows the chosen setting,
 so it never looks as though it changed itself because someone walked behind a dragline.
+
+### First open, and what it costs
+
+Everything above is about getting a round *out*. This is about getting the app *in* — the
+one moment a phone is on a network it may not see again for a shift.
+
+**249 KB to a usable screen, 1.4 MB for the whole app**, gzipped, as a host serves it.
+The screen an inspector can start capturing on needs 16 files; the other 47 are machine
+photographs and the tools that print a report, and they arrive behind it.
+
+The rule that keeps it that way is **order, not absence**. The service worker fetches
+everything eventually — that is the point of it, and it is why a report still prints in
+the pit — but it fetches the files the app cannot start without *first*, one at a time,
+and only then the optional 1.2 MB in parallel. A phone that loses signal halfway through
+install has a working app and no photographs, which is recoverable. The other way round
+is not.
+
+The easy way to break that is a page-side warm-up. The PDF engine, the QR reader and the
+QR writer are 228 KB between them and a round of measurements touches none of them, so
+they are fetched on the tap that needs them and warmed in quietly afterwards. "Afterwards"
+used to mean *once the browser looks idle*, which on a fresh install is about a second in —
+putting the PDF engine on the same socket as the files the app cannot start without, at
+the one moment the link is busiest. It now means *once the service worker is in control*,
+by which point the same warm-up is a cache read and costs nothing. `audit3.cjs` checks the
+ordering on the server's own request log, so it cannot drift back.
+
+**Nothing on the first screen waits for a photograph.** The 29 undercarriage pictures and
+18 tool pictures are cached by the worker and served from cache; where one is missing —
+a model nobody has shot yet, or a genuine cache miss — the numbered map falls back to the
+drawn frame rather than putting eleven numbers over a blank rectangle. On a GET round it
+falls back to bare numbers instead, because a track frame under a missing bucket is not a
+fallback, it is a wrong answer.

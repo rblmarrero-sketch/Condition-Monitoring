@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=76">
+<link rel="manifest" href="manifest.webmanifest?v=77">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=76">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=76">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=76">
+<link rel="apple-touch-icon" href="icon-192.png?v=77">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=77">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=77">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -984,21 +984,21 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="native.js?v=76"></script>
-<script src="upload-defaults.js?v=76"></script>
-<script src="hme.js?v=76"></script>
-<script src="mp-fc.js?v=76"></script>
-<script src="hme-cascade.js?v=76"></script>
-<script src="assets.js?v=76"></script>
-<script src="temp-limits.js?v=76"></script>
-<script src="wear.js?v=76"></script>
-<script src="wear-figs.js?v=76"></script>
-<script src="wear-map.js?v=76"></script>
-<script src="machine-photos.js?v=76"></script>
-<script src="machine-fig.js?v=76"></script>
-<script src="get.js?v=76"></script>
-<script src="uc-points.js?v=76"></script>
-<script src="report-core.js?v=76"></script>
+<script src="native.js?v=77"></script>
+<script src="upload-defaults.js?v=77"></script>
+<script src="hme.js?v=77"></script>
+<script src="mp-fc.js?v=77"></script>
+<script src="hme-cascade.js?v=77"></script>
+<script src="assets.js?v=77"></script>
+<script src="temp-limits.js?v=77"></script>
+<script src="wear.js?v=77"></script>
+<script src="wear-figs.js?v=77"></script>
+<script src="wear-map.js?v=77"></script>
+<script src="machine-photos.js?v=77"></script>
+<script src="machine-fig.js?v=77"></script>
+<script src="get.js?v=77"></script>
+<script src="uc-points.js?v=77"></script>
+<script src="report-core.js?v=77"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3998,7 +3998,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="76";
+const BUILD="77";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -4020,10 +4020,31 @@ async function needPdf(){ await Promise.all([loadLib("jspdf.umd.min.js"),loadLib
   return !!(window.jspdf&&window.jspdf.jsPDF&&window.html2canvas); }
 async function needScan(){ await loadLib("jsQR.js"); return !!window.jsQR; }
 async function needQRGen(){ await loadLib("qrcode.js"); return !!window.qrcode; }
-/* Warm them after the app has settled — idle time on the capture screen is free,
-   and it means the report button does not feel like it is fetching anything. */
+/* Warm them once the app has settled — idle time on the capture screen is free,
+   and it means the report button does not feel like it is fetching anything.
+
+   But wait for the service worker to be in control first. These four are 228 KB
+   on the wire, and the worker is already fetching them itself as part of its
+   optional pass — deliberately AFTER the essentials, so a phone on a bad link
+   gets a working app before it gets a PDF engine. Warming on a plain idle timer
+   throws that ordering away: it puts the PDF engine on the same socket as the
+   files the app cannot start without, at the one moment the link is busiest.
+   Held until the worker is controlling, the same warm-up costs nothing at all —
+   every one of these comes straight out of the cache. */
 function warmLibs(){ ["jsQR.js","qrcode.js","jspdf.umd.min.js","html2canvas.min.js"].forEach(loadLib); }
-(window.requestIdleCallback||(f=>setTimeout(f,3000)))(warmLibs,{timeout:6000});
+const idle=f=>(window.requestIdleCallback||(g=>setTimeout(g,3000)))(f,{timeout:6000});
+if("serviceWorker" in navigator){
+  /* 20 s is the backstop, not the plan: if the worker never takes control —
+     first-ever open on a dead link, or a browser that refuses to register —
+     warm anyway rather than leave the report button cold forever. */
+  let warmed=false;
+  const warmOnce=()=>{ if(!warmed){ warmed=true; idle(warmLibs); } };
+  navigator.serviceWorker.ready.then(()=>{
+    if(navigator.serviceWorker.controller) return warmOnce();
+    navigator.serviceWorker.addEventListener("controllerchange",warmOnce,{once:true});
+  }).catch(()=>{});
+  setTimeout(warmOnce,20000);
+}else idle(warmLibs);
 const DEFAULT_DESTS=((window.UPLOAD_DEFAULTS||{}).dests)||[];
 /* Parsed once and reused — see the note by the write below. */
 let destsCache=null, destsRaw=null;
@@ -4874,7 +4895,12 @@ if("serviceWorker" in navigator && window.isSecureContext){ let reloaded=false;
     window.__updTimer=setInterval(applyUpdateIfIdle, 1000);
   });
   window.__swBusy=busy;
-  navigator.serviceWorker.register("sw.js").then(reg=>{ reg.update&&reg.update(); }).catch(()=>{}); }
+  /* update() rejects when there is no signal. That is the ordinary state of a
+     phone in the pit, not a fault, so swallow it here — an uncaught rejection
+     would otherwise surface as a page error on every offline open. */
+  navigator.serviceWorker.register("sw.js")
+    .then(reg=>{ if(reg&&reg.update) return reg.update(); })
+    .catch(()=>{}); }
 
 /* ===================== force-update (clears cache + service worker) ===================== */
 /* Every asset the app loads. Listed here so "Update" can re-fetch each one:
@@ -4935,7 +4961,7 @@ async function checkForNewBuild(){
     if("serviceWorker" in navigator){
       try{
         const reg=await navigator.serviceWorker.getRegistration();
-        if(reg && reg.update) reg.update();
+        if(reg && reg.update) await reg.update();
       }catch(_){}
     }
     showUpdateBanner(m[1]);
