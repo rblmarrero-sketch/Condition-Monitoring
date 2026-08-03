@@ -86,6 +86,49 @@
     }
   }
 
+  /* Photographs the phone already has. Inside the shell this is the platform
+     picker, which hands back several at once and keeps the orientation the
+     WebView file input drops. Outside it — or with the plugin missing — it
+     returns null rather than a substitute, and the caller uses its own file
+     input. Two paths that both work beats one path that half works, and a null
+     here is the app's cue to take the other one.
+
+     Never resolves to a Blob the caller did not ask for: a cancelled picker and
+     an absent plugin both come back empty-handed, and they are told apart by
+     [] against null. */
+  async function nativePick(opts) {
+    var Camera = plug("Camera");
+    if (!NATIVE || !Camera || typeof Camera.pickImages !== "function") return null;
+    var limit = Math.max(1, (opts && opts.limit) || 10);
+    try {
+      var res = await Camera.pickImages({ quality: (opts && opts.quality) || 82, limit: limit });
+      var picked = (res && res.photos) || [];
+      var out = [];
+      for (var i = 0; i < picked.length && out.length < limit; i++) {
+        var b = await oneToBlob(picked[i]);
+        if (b) out.push(b);
+      }
+      return out;
+    } catch (e) {
+      return [];                                  // cancelled, or denied — not an error
+    }
+  }
+
+  /* pickImages hands back a webPath most of the time and base64 when the caller
+     asked for it; older builds do one or the other. Read whichever arrived. */
+  async function oneToBlob(ph) {
+    if (!ph) return null;
+    if (ph.base64String) return b64ToBlob(ph.base64String, "image/" + (ph.format || "jpeg"));
+    var src = ph.webPath || ph.path;
+    if (!src) return null;
+    try {
+      var r = await fetch(src);
+      if (!r.ok) return null;
+      var blob = await r.blob();
+      return blob.type ? blob : new Blob([blob], { type: "image/" + (ph.format || "jpeg") });
+    } catch (e) { return null; }
+  }
+
   function b64ToBlob(b64, type) {
     var bin = atob(b64), n = bin.length, u = new Uint8Array(n);
     for (var i = 0; i < n; i++) u[i] = bin.charCodeAt(i);
@@ -245,6 +288,7 @@
     get native() { return NATIVE; },
     where: where,
     photo: function (opts) { return NATIVE ? nativePhoto(opts) : webPhoto(); },
+    pick: nativePick,
     files: Files,
     net: Net,
     geo: Geo,

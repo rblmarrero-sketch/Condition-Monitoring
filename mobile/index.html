@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=77">
+<link rel="manifest" href="manifest.webmanifest?v=78">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=77">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=77">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=77">
+<link rel="apple-touch-icon" href="icon-192.png?v=78">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=78">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=78">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -243,7 +243,12 @@
      tab bar eating most of a 380px-tall screen. Everything chrome shrinks; Save
      stays where the thumb is. */
   @media (max-height: 500px) and (orientation: landscape){
-    header{padding:calc(env(safe-area-inset-top) + 6px) 12px 6px;gap:8px;}
+    /* Sideways there are 390 px of height and the header is competing with the
+       form for them. What gives is the padding around the controls, not the
+       controls: 44 px is what a gloved thumb needs whichever way the phone is
+       held, and the header still comes in under 50 px because there is now
+       almost nothing around them. */
+    header{padding:calc(env(safe-area-inset-top) + 2px) 12px 2px;gap:8px;}
     header .t{font-size:14px;}
     main{padding:10px 12px;}
     .card{padding:12px;margin-bottom:12px;border-radius:12px;}
@@ -1069,23 +1074,23 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="native.js?v=77"></script>
-<script src="upload-defaults.js?v=77"></script>
-<script src="hme.js?v=77"></script>
-<script src="mp-fc.js?v=77"></script>
-<script src="hme-cascade.js?v=77"></script>
-<script src="assets.js?v=77"></script>
-<script src="temp-limits.js?v=77"></script>
-<script src="wear.js?v=77"></script>
-<script src="wear-figs.js?v=77"></script>
-<script src="wear-map.js?v=77"></script>
-<script src="machine-photos.js?v=77"></script>
-<script src="machine-fig.js?v=77"></script>
-<script src="get.js?v=77"></script>
-<script src="uc-points.js?v=77"></script>
-<script src="inspect-guide.js?v=77"></script>
-<script src="get-figs.js?v=77"></script>
-<script src="report-core.js?v=77"></script>
+<script src="native.js?v=78"></script>
+<script src="upload-defaults.js?v=78"></script>
+<script src="hme.js?v=78"></script>
+<script src="mp-fc.js?v=78"></script>
+<script src="hme-cascade.js?v=78"></script>
+<script src="assets.js?v=78"></script>
+<script src="temp-limits.js?v=78"></script>
+<script src="wear.js?v=78"></script>
+<script src="wear-figs.js?v=78"></script>
+<script src="wear-map.js?v=78"></script>
+<script src="machine-photos.js?v=78"></script>
+<script src="machine-fig.js?v=78"></script>
+<script src="get.js?v=78"></script>
+<script src="uc-points.js?v=78"></script>
+<script src="inspect-guide.js?v=78"></script>
+<script src="get-figs.js?v=78"></script>
+<script src="report-core.js?v=78"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2433,19 +2438,32 @@ function chooseSource(kind){
    library full of clips. The change handler still sorts by type — the filter is
    a courtesy to the person scrolling, not the thing that keeps the round
    correct. */
-function openGallery(kind){
-  const g=$("gallery"), vid=kind==="video";
+async function openGallery(kind){
+  const vid = kind==="video";
+  /* Inside the shell, photographs come from the platform picker: it keeps the
+     orientation the WebView file input drops, and it can hand over several at
+     once. It answers null when it cannot do the job — no plugin, or a browser —
+     and then the file input below is not a fallback but the normal path.
+     Clips still go through the input; the picker is images only. */
+  if(!vid && window.CMNative && CMNative.pick){
+    const room = MAX_PHOTOS - ((posRO().photos||[]).length);
+    if(room<=0) return;
+    let got=null;
+    try{ got = await CMNative.pick({limit:room}); }catch(_){ got=null; }
+    if(got){ await addPicked(got); return; }   // [] means backed out, and is done
+  }
+  const g=$("gallery");
   g.accept = vid ? "video/*" : "image/*";
   g.multiple = !vid;                          // one clip per position either way
   g.click();
 }
 $("takeBtn").onclick=async ()=>{
   const s=await chooseSource("photo"); if(!s) return;
-  if(s==="live") takePhoto(); else openGallery("photo");
+  if(s==="live") await takePhoto(); else await openGallery("photo");
 };
 $("videoBtn").onclick=async ()=>{
   const s=await chooseSource("video"); if(!s) return;
-  if(s==="live") $("video").click(); else openGallery("video");
+  if(s==="live") $("video").click(); else await openGallery("video");
 };
 /* Still wired: the shell falls back to it if the Camera plugin is missing, and
    it is the whole implementation on the web. */
@@ -2481,7 +2499,15 @@ $("video").onchange=(e)=>{ const f=e.target.files[0]; e.target.value=""; if(f) a
    not. */
 $("gallery").onchange=async (e)=>{
   const picked=[...(e.target.files||[])]; e.target.value="";
-  if(!picked.length) return;
+  addPicked(picked);
+};
+/* One rule for everything that arrives already taken, whichever picker found
+   it. The shell's platform picker and the browser's file input hand over the
+   same thing — a list — and the limits, the shrinking and the sentence about
+   what did not fit have to be identical, or an inspector on Android and one on
+   a laptop end a round with different evidence. */
+async function addPicked(picked){
+  if(!picked || !picked.length) return;
   /* Both buttons are held down while ten frames are being shrunk, so a second
      tap cannot start a competing pass over the same position. */
   $("takeBtn").disabled=true; $("videoBtn").disabled=true;
@@ -2507,7 +2533,7 @@ $("gallery").onchange=async (e)=>{
     renderMedia(); renderChips();
     if(skipped) dlg([t("gal_full_t"), t("gal_full_b",{n:skipped, p:MAX_PHOTOS})]);
   } finally { renderMedia(); }
-};
+}
 /* Blob URLs pin the whole photo in memory until revoked. These render functions
    run on every capture, delete and item switch, so without this a long round
    leaks every photo it has ever displayed. */
@@ -4376,7 +4402,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="77";
+const BUILD="78";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
