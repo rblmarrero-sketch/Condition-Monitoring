@@ -400,6 +400,64 @@
     return s.join('');
   };
 
+
+  /* ---- the numbered walk over a photograph --------------------------------
+     One picture of this model's frame, eleven numbers on the parts they name.
+     The numbers come from the client's undercarriage catalog, so a number here
+     is the same number on the printed page in the ute; the positions come from
+     UCPTS — a shared layout inside a per-model box, which is what puts number 4
+     on a D9R's raised sprocket and on a PC800's ground-level one from a single
+     set of fractions.
+
+     Where a model has no photograph the same numbers go over the drawn frame
+     instead, so the screen is the same screen either way. */
+  var PVB_W = 460;
+  W.mapPhoto = function (o) {
+    o = o || {};
+    var box = o.box || [20, 55, 70, 40];
+    var s = [], pts = o.layout || (window.UCPTS && UCPTS.layout) || [];
+    var lang = o.lang || 'en';
+    /* The drawing area is the shape of the picture. Anything else letterboxes
+       it, and then a point given as a percentage of the picture lands in the
+       empty margin beside it rather than on the part it names — which is how
+       "left end bit" ended up floating off the edge of a blade. */
+    var asp = o.aspect || (window.MACHINE_PHOTOS && o.photo ? MACHINE_PHOTOS.aspectOf(o.photo) : 0);
+    var PVB_H = o.photo && asp ? Math.round(PVB_W / asp) : 210;
+    PVB_H = Math.max(120, Math.min(360, PVB_H));
+    s.push('<svg class="ucmap photo" viewBox="0 0 ' + PVB_W + ' ' + PVB_H +
+           '" role="group" aria-label="' + (o.side === 'L' ? 'Left' : 'Right') + ' undercarriage">');
+    if (o.photo) {
+      s.push('<image class="um-photo" href="' + o.photo + '" x="0" y="0" width="' + PVB_W +
+             '" height="' + PVB_H + '" preserveAspectRatio="none"/>');
+    } else {
+      /* No photograph: the drawn frame, scaled into the same picture area so the
+         numbers land in the same places relative to the frame. */
+      var g = geom(o.fam || '', !!o.high, o.rollers, o.carriers);
+      s.push('<g transform="translate(0,-14) scale(1,0.78)">' + frameArt(layout(g, '')) + '</g>');
+    }
+    pts.forEach(function (q) {
+      var n = q[0];
+      var x = (box[0] + q[1] * box[2]) / 100 * PVB_W;
+      var y = (box[1] + q[2] * box[3]) / 100 * PVB_H;
+      x = Math.max(18, Math.min(PVB_W - 18, x));
+      y = Math.max(18, Math.min(PVB_H - 18, y));
+      var st = (o.state ? o.state(n) : '') || '';
+      var cls = 'um-num' + (st ? ' ' + st : '') + (n === o.sel ? ' sel' : '');
+      s.push('<g class="' + cls + '" data-ucg="' + n + '" transform="translate(' +
+             x.toFixed(1) + ',' + y.toFixed(1) + ')" role="button" tabindex="0" aria-label="' +
+             n + '">');
+      /* 28 in a 460-wide viewBox, which is a 56 px circle scaled to about 46 on
+         a 412 px phone — over the 44 px floor a gloved thumb needs. 22 looked
+         generous in the drawing and measured 36 on the glass. */
+      s.push('<circle class="um-hit" r="28" fill="transparent"/>');
+      s.push('<circle class="um-puck" r="13"/>');
+      s.push('<text class="um-n" y="4.5" text-anchor="middle">' + n + '</text>');
+      s.push('</g>');
+    });
+    s.push('</svg>');
+    return s.join('');
+  };
+
   /* Short labels for the chain row: the full names do not fit and the drawing on
      the capture screen names the point again anyway. */
   W.mapShort = { LINKH: 'HGT', BUSH: 'BUSH', PITCH4: 'P×4', PITCH1: 'P×1', GROUSER: 'GRSR' };

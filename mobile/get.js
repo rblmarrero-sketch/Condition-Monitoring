@@ -6,200 +6,234 @@
    tooth lost into a crusher is a day, and an adapter run past its nose is a
    lip repair instead of a five-minute change.
 
-   So this round is built to be walked in two minutes and still leave a trend:
+   The round is the client's own, eleven numbered points per tool, taken from
+   their inspection catalog so a number on this screen is the number on the
+   printed page in the ute. Two tools, because two shapes of machine:
 
-     Every position always gets a grade. A/B/C/X, a defect and an action — the
-     same judgement the walk-around already uses, which every inspector on site
-     already knows. A round is complete on grades alone.
+     bucket — excavators, shovels and loaders: teeth, adapters, retainers, lip,
+              side cutters, corner shrouds, floor and sidewall wear plates.
+     blade  — dozers: end bits, three cutting-edge segments, blade corner, wear
+              strips, and the ripper behind it.
 
-     Any position may also get a millimetre. Where a fitter has a tape, the
-     remaining length goes in and the app works out how far through its life
-     that tooth is against new and condemn, exactly the way the undercarriage
-     round works. Where nobody has a tape, nothing is blocked and nothing is
-     invented.
+   Every position is graded — A/B/C/X with a defect and an action, the same
+   judgement the walk-around already uses — and a round is COMPLETE ON GRADES
+   ALONE. Where a fitter has a tape, a remaining measurement goes in as well and
+   the app works out how far through its life that part is, in the same bands
+   and the same words as the undercarriage round. Where nobody has a tape,
+   nothing is blocked and nothing is invented.
 
-   Positions come from the machine, not from a fixed list: a bucket's tooth
-   count is a property of the bucket, a dozer has cutting edges and a ripper,
-   a grader has a moldboard. Same idea as the roller count on the track frame.
+   x and y are percentages of the tool's photograph, so the numbers sit on the
+   parts they name rather than in a list beside them.
 
-   Limits are per family and generic, and say so — every reading against one is
-   labelled "generic limit" wherever it appears. They are honest starting points — the real numbers come off the
-   supplier's wear charts, and when the client supplies them they replace these
-   and lose the flag. A generic limit is better than no trend; a generic limit
-   presented as measured fact is not. */
+   The limits are generic and say so wherever a reading appears. They are honest
+   starting points so a trend exists from day one; the real figures come off the
+   supplier's wear charts and replace these, at which point the label stops
+   appearing. A generic limit is better than no trend. A generic limit presented
+   as measured fact is not. */
 (function () {
   'use strict';
 
-  /* ---- what a position is ------------------------------------------------
-     code — the item key that goes in the file name and to 1C
-     en/ru — what the inspector reads
-     tool  — what they need in their hand to measure it, if they measure it
-     n/c   — new and condemn, in mm, of the dimension named by `dim` */
-  var POINTS = {
-    TOOTH:   { en: 'Tooth',              ru: 'Зуб',                  dim: 'length remaining', tool: 'tape' },
-    ADAPTER: { en: 'Adapter / nose',     ru: 'Адаптер / носок',      dim: 'nose remaining',   tool: 'tape' },
-    SHROUD:  { en: 'Lip shroud',         ru: 'Защита кромки',        dim: 'thickness',        tool: 'caliper' },
-    WING:    { en: 'Wing shroud',        ru: 'Боковая защита',       dim: 'thickness',        tool: 'caliper' },
-    HEEL:    { en: 'Heel shroud',        ru: 'Пяточная защита',      dim: 'thickness',        tool: 'caliper' },
-    LIP:     { en: 'Bucket lip',         ru: 'Кромка ковша',         dim: 'thickness',        tool: 'caliper' },
-    EDGE:    { en: 'Cutting edge',       ru: 'Режущая кромка',       dim: 'height remaining', tool: 'rule' },
-    ENDBIT:  { en: 'End bit',            ru: 'Боковой нож',          dim: 'height remaining', tool: 'rule' },
-    SHANK:   { en: 'Ripper shank',       ru: 'Стойка рыхлителя',     dim: 'thickness',        tool: 'caliper' },
-    RTIP:    { en: 'Ripper tip',         ru: 'Наконечник рыхлителя', dim: 'length remaining', tool: 'tape' },
-    SIDEBAR: { en: 'Side bar protector', ru: 'Боковая защита стойки',dim: 'thickness',        tool: 'caliper' },
-    BIT:     { en: 'Drill bit',          ru: 'Буровая коронка',      dim: 'gauge diameter',   tool: 'caliper' },
-    STAB:    { en: 'Stabiliser pad',     ru: 'Опорный башмак',       dim: 'thickness',        tool: 'caliper' },
-    MOLD:    { en: 'Moldboard',          ru: 'Отвал',                dim: 'thickness',        tool: 'caliper' },
-  };
-
-  /* Position suffixes. A tooth is numbered from the left of the bucket looking
-     at it from the machine, because that is the order a fitter walks the lip.
-     Everything that comes in pairs is L/R. */
-  function num(n) { var a = [], i; for (i = 1; i <= n; i++) a.push(String(i)); return a; }
-
-  /* ---- the walk, per machine family --------------------------------------
-     Ordered the way the work is done: teeth left to right along the lip, then
-     the things behind them, then the sides, then the separate tool. */
-  var FAMILIES = {
-    ex: {                                  // excavator / rock breaker bucket
+  /* [n, code, English, Russian, kind, x%, y%] */
+  var TOOLS = {
+    bucket: {
       en: 'Bucket', ru: 'Ковш',
-      teeth: 5,
-      walk: [
-        { pt: 'TOOTH',   pos: 'n' },
-        { pt: 'ADAPTER', pos: 'n' },
-        { pt: 'SHROUD',  pos: ['1', '2', '3', '4'] },
-        { pt: 'WING',    pos: ['L', 'R'] },
-        { pt: 'HEEL',    pos: ['L', 'R'] },
-        { pt: 'LIP',     pos: [''] },
+      pts: [
+        [1,  'TOOTH',   'Tooth points',              'Зубья',                        'mm',     50, 90],
+        [2,  'ADAPTER', 'Adapters',                  'Адаптеры',                     'mm',     50, 80],
+        [3,  'PIN',     'Retainers / locking pins',  'Фиксаторы / пальцы',           'visual', 39, 80],
+        [4,  'LIP',     'Bucket lip / base edge',    'Кромка ковша',                 'mm',     50, 72],
+        [5,  'CUTL',    'Left side cutter',          'Левый боковой нож',            'mm',      9, 74],
+        [6,  'CUTR',    'Right side cutter',         'Правый боковой нож',           'mm',     91, 74],
+        [7,  'SHROUD',  'Corner shrouds',            'Угловые защиты',               'mm',     14, 54],
+        [8,  'FLOOR',   'Floor wear plates',         'Защита днища',                 'mm',     50, 52],
+        [9,  'WALLL',   'Left sidewall wear plates', 'Защита левой стенки',          'mm',     20, 43],
+        [10, 'WALLR',   'Right sidewall wear plates','Защита правой стенки',         'mm',     80, 43],
+        [11, 'CRACK',   'Cracks / missing GET',      'Трещины / утраченные элементы','visual', 50, 30],
       ],
-      lim: { TOOTH: { n: 320, c: 130 }, ADAPTER: { n: 250, c: 190 }, SHROUD: { n: 60, c: 25 },
-             WING: { n: 60, c: 25 }, HEEL: { n: 50, c: 20 }, LIP: { n: 90, c: 60 } },
+      lim: { TOOTH:{n:320,c:130}, ADAPTER:{n:250,c:190}, LIP:{n:90,c:60}, CUTL:{n:60,c:25},
+             CUTR:{n:60,c:25}, SHROUD:{n:60,c:25}, FLOOR:{n:25,c:10}, WALLL:{n:20,c:8}, WALLR:{n:20,c:8} },
     },
-    ld: {                                  // wheel loader bucket
-      en: 'Bucket', ru: 'Ковш',
-      teeth: 4,
-      walk: [
-        { pt: 'TOOTH',   pos: 'n' },
-        { pt: 'ADAPTER', pos: 'n' },
-        { pt: 'EDGE',    pos: ['L', 'C', 'R'] },
-        { pt: 'HEEL',    pos: ['L', 'R'] },
-        { pt: 'LIP',     pos: [''] },
-      ],
-      lim: { TOOTH: { n: 280, c: 115 }, ADAPTER: { n: 220, c: 165 }, EDGE: { n: 50, c: 20 },
-             HEEL: { n: 45, c: 18 }, LIP: { n: 80, c: 55 } },
-    },
-    dz: {                                  // dozer blade and ripper
+    blade: {
       en: 'Blade & ripper', ru: 'Отвал и рыхлитель',
-      walk: [
-        { pt: 'EDGE',    pos: ['L', 'C', 'R'] },
-        { pt: 'ENDBIT',  pos: ['L', 'R'] },
-        { pt: 'SHANK',   pos: ['1', '2', '3'] },
-        { pt: 'RTIP',    pos: ['1', '2', '3'] },
-        { pt: 'SIDEBAR', pos: ['1', '2', '3'] },
+      pts: [
+        [1,  'ENDL',    'Left end bit',          'Левый боковой нож',      'mm',      5, 80],
+        [2,  'EDGEL',   'Left cutting edge',     'Левая режущая кромка',   'mm',     28, 82],
+        [3,  'EDGEC',   'Centre cutting edge',   'Центральная кромка',     'mm',     50, 82],
+        [4,  'EDGER',   'Right cutting edge',    'Правая режущая кромка',  'mm',     72, 82],
+        [5,  'ENDR',    'Right end bit',         'Правый боковой нож',     'mm',     95, 80],
+        [6,  'CORNER',  'Blade corner / skin',   'Угол отвала / обшивка',  'mm',     10, 52],
+        [7,  'STRIP',   'Wear strips / liners',  'Износные накладки',      'mm',     50, 64],
+        [8,  'RTIP',    'Ripper point',          'Наконечник рыхлителя',   'mm',     93, 35],
+        [9,  'RSHANK',  'Ripper adapter / shank','Адаптер / стойка',       'mm',     93, 18],
+        [10, 'BOLT',    'Bolts / retainers',     'Болты / фиксаторы',      'visual', 50, 76],
+        [11, 'CRACK',   'Cracks / deformation',  'Трещины / деформация',   'visual', 50, 41],
       ],
-      lim: { EDGE: { n: 60, c: 25 }, ENDBIT: { n: 60, c: 25 }, SHANK: { n: 110, c: 80 },
-             RTIP: { n: 300, c: 150 }, SIDEBAR: { n: 40, c: 15 } },
-    },
-    gr: {                                  // motor grader moldboard
-      en: 'Moldboard', ru: 'Отвал грейдера',
-      walk: [
-        { pt: 'EDGE',   pos: ['L', 'C', 'R'] },
-        { pt: 'ENDBIT', pos: ['L', 'R'] },
-        { pt: 'MOLD',   pos: [''] },
-      ],
-      lim: { EDGE: { n: 50, c: 18 }, ENDBIT: { n: 50, c: 18 }, MOLD: { n: 20, c: 10 } },
-    },
-    dr: {                                  // blasthole drill
-      en: 'Drill tooling', ru: 'Буровой инструмент',
-      walk: [
-        { pt: 'BIT',  pos: [''] },
-        { pt: 'STAB', pos: ['1', '2', '3', '4'] },
-      ],
-      lim: { BIT: { n: 251, c: 244 }, STAB: { n: 40, c: 20 } },
+      lim: { ENDL:{n:60,c:25}, EDGEL:{n:60,c:25}, EDGEC:{n:60,c:25}, EDGER:{n:60,c:25},
+             ENDR:{n:60,c:25}, CORNER:{n:30,c:12}, STRIP:{n:25,c:10},
+             RTIP:{n:300,c:150}, RSHANK:{n:110,c:80} },
     },
   };
 
-  /* Tooth counts that are not the family default. A bucket is the thing that
-     has teeth, not the machine, so this is keyed on the model — the same shape
-     as the undercarriage table, and the same place a real figure goes when the
-     client supplies one. */
-  var TEETH_BY_MODEL = {
-    'HITACHI EX1200-6BH': 6, 'HITACHI EX1200-7BH': 6, 'KOMATSU PC2000-8 BH': 6,
-    'HITACHI ZX470LC-5G': 5, 'HITACHI ZX470LCR-5G': 5,
-    'HITACHI ZX330-5G RB': 4, 'HITACHI ZX280-5G': 4, 'CATERPILLAR 336-07': 4,
-    'LiuGong CLG990FHD': 5, 'LiuGong CLG970E': 5,
-    'KOMATSU PC800-8E0 (SE)': 5,
+  /* Which tool a model carries, and the photograph of it. Both from the
+     client's catalog, keyed on the model as the register writes it. */
+  var TOOL_BY_MODEL = {
+      'CATERPILLAR 336-07':        'bucket',
+      'CATERPILLAR D9R':           'blade',
+      'HITACHI EX1200-6BH':        'bucket',
+      'HITACHI EX1200-7BH':        'bucket',
+      'HITACHI ZX280-5G':          'bucket',
+      'HITACHI ZX470LC-5G':        'bucket',
+      'HITACHI ZX470LCR-5G':       'bucket',
+      'KOMATSU D155A.5':           'blade',
+      'KOMATSU D275.5D':           'blade',
+      'KOMATSU D375A.6':           'blade',
+      'KOMATSU PC2000-8 BH':       'bucket',
+      'KOMATSU PC800-8E0 (SE)':    'bucket',
+      'LiuGong CLG970E':           'bucket',
+      'LiuGong CLG990FHD':         'bucket',
+      'SHANTUI SD32':              'blade',
+      'SHANTUI SD34-B3':           'blade',
+      'SHANTUI SD60-C5':           'blade',
+      'SHANTUI SD90-C5':           'blade',
+  };
+  var PHOTO_BY_MODEL = {
+      'CATERPILLAR 336-07':          'get/caterpillar-336-07.webp',
+      'CATERPILLAR D9R':             'get/caterpillar-d9r.webp',
+      'HITACHI EX1200-6BH':          'get/hitachi-ex1200-6bh.webp',
+      'HITACHI EX1200-7BH':          'get/hitachi-ex1200-7bh.webp',
+      'HITACHI ZX280-5G':            'get/hitachi-zx280-5g.webp',
+      'HITACHI ZX470LC-5G':          'get/hitachi-zx470lc-5g.webp',
+      'HITACHI ZX470LCR-5G':         'get/hitachi-zx470lcr-5g.webp',
+      'KOMATSU D155A.5':             'get/komatsu-d155a-5.webp',
+      'KOMATSU D275.5D':             'get/komatsu-d275-5d.webp',
+      'KOMATSU D375A.6':             'get/komatsu-d375a-6.webp',
+      'KOMATSU PC2000-8 BH':         'get/komatsu-pc2000-8-bh.webp',
+      'KOMATSU PC800-8E0 (SE)':      'get/komatsu-pc800-8e0-se.webp',
+      'LiuGong CLG970E':             'get/liugong-clg970e.webp',
+      'LiuGong CLG990FHD':           'get/liugong-clg990fhd.webp',
+      'SHANTUI SD32':                'get/shantui-sd32.webp',
+      'SHANTUI SD34-B3':             'get/shantui-sd34-b3.webp',
+      'SHANTUI SD60-C5':             'get/shantui-sd60-c5.webp',
+      'SHANTUI SD90-C5':             'get/shantui-sd90-c5.webp',
+  };
+  /* Width divided by height of each tool photograph. The picker sizes its
+     drawing area to this so a point given as "93% across, 18% down" lands on
+     the ripper shank rather than in the empty margin beside the picture. */
+  var ASPECT = {
+      'get/caterpillar-336-07.webp':       1.501,
+      'get/caterpillar-d9r.webp':          1.501,
+      'get/hitachi-ex1200-6bh.webp':       1.501,
+      'get/hitachi-ex1200-7bh.webp':       1.501,
+      'get/hitachi-zx280-5g.webp':         1.501,
+      'get/hitachi-zx470lc-5g.webp':       1.501,
+      'get/hitachi-zx470lcr-5g.webp':      1.501,
+      'get/komatsu-d155a-5.webp':          1.501,
+      'get/komatsu-d275-5d.webp':          1.501,
+      'get/komatsu-d375a-6.webp':          1.501,
+      'get/komatsu-pc2000-8-bh.webp':      1.501,
+      'get/komatsu-pc800-8e0-se.webp':     1.501,
+      'get/liugong-clg970e.webp':          1.501,
+      'get/liugong-clg990fhd.webp':        1.501,
+      'get/shantui-sd32.webp':             1.501,
+      'get/shantui-sd34-b3.webp':          1.501,
+      'get/shantui-sd60-c5.webp':          1.501,
+      'get/shantui-sd90-c5.webp':          1.501,
   };
 
-  function familyFor(unit, cls) {
-    return (window.MFIG ? MFIG.familyFor(unit, cls) : '');
+  /* A machine with no entry above still gets a round if its family has an
+     obvious tool — an excavator has a bucket whether or not anyone has
+     photographed this particular one — and the picker falls back to a drawing. */
+  var TOOL_BY_FAMILY = { ex: 'bucket', ld: 'bucket', dz: 'blade' };
+
+  function slug(s) {
+    return String(s || '').toUpperCase().replace(/[^A-Z0-9]+/g, '-').replace(/^-|-$/g, '');
   }
+  var IX = null;
+  function index() {
+    if (IX) return IX;
+    IX = { tool: {}, photo: {} };
+    Object.keys(TOOL_BY_MODEL).forEach(function (k) { IX.tool[slug(k)] = TOOL_BY_MODEL[k]; });
+    Object.keys(PHOTO_BY_MODEL).forEach(function (k) { IX.photo[slug(k)] = PHOTO_BY_MODEL[k]; });
+    var A = window.MACHINE_PHOTOS && window.MACHINE_PHOTOS.ALIAS;
+    if (A) Object.keys(A).forEach(function (k) {
+      var a = slug(k), b = slug(A[k]);
+      ['tool', 'photo'].forEach(function (w) {
+        if (IX[w][a] && !IX[w][b]) IX[w][b] = IX[w][a];
+        if (IX[w][b] && !IX[w][a]) IX[w][a] = IX[w][b];
+      });
+    });
+    return IX;
+  }
+
+  function familyFor(unit, cls) { return (window.MFIG ? MFIG.familyFor(unit, cls) : ''); }
 
   /* Is there a GET round to do on this machine at all? A haul truck, a light
-     vehicle and a generator have no ground engaging tools, and offering an
-     empty round is worse than not offering one. */
+     vehicle and a generator have none, and offering an empty round is worse
+     than not offering one. */
   function profileFor(unit, cls, model) {
-    var fam = familyFor(unit, cls);
-    var f = FAMILIES[fam];
-    if (!f) return null;
-    var teeth = f.teeth ? (TEETH_BY_MODEL[model] || f.teeth) : 0;
-    return { fam: fam, en: f.en, ru: f.ru, teeth: teeth, lim: f.lim, walk: f.walk };
+    var ix = index(), s = slug(model);
+    var tool = ix.tool[s] || TOOL_BY_FAMILY[familyFor(unit, cls)] || '';
+    var T = TOOLS[tool];
+    if (!T) return null;
+    var base = (window.MACHINE_PHOTOS ? MACHINE_PHOTOS.BASE : 'machine/');
+    var f = ix.photo[s] || '';
+    return { tool: tool, en: T.en, ru: T.ru, pts: T.pts, lim: T.lim,
+             photo: f ? base + f : '', aspect: (f && ASPECT[f]) || 0 };
   }
+  function has(unit, cls, model) { return !!profileFor(unit, cls, model); }
 
-  /* Every position of the round, in walking order. k is "POINT.POS", the same
-     "point dot position" shape the undercarriage round uses, so the file
-     naming, the report and 1C all keep one rule. */
+  /* Every position of the round, in the catalog's order. k is the code, one per
+     numbered point — no left/right split the way the undercarriage has, because
+     a bucket is one bucket. */
   function walk(unit, cls, model) {
     var p = profileFor(unit, cls, model);
     if (!p) return [];
-    var out = [];
-    p.walk.forEach(function (step) {
-      var list = step.pos === 'n' ? num(p.teeth) : step.pos;
-      (list || []).forEach(function (pos) {
-        // A point that comes as one — a bucket lip, a moldboard — is keyed on
-        // the point alone. "LIP." would carry a dangling separator into the
-        // file name, the CSV and 1C for no reason.
-        out.push({ k: pos ? step.pt + '.' + pos : step.pt, point: step.pt, pos: pos });
-      });
+    return p.pts.map(function (r) {
+      return { n: r[0], k: r[1], point: r[1], en: r[2], ru: r[3], kind: r[4], x: r[5], y: r[6] };
     });
-    return out;
   }
 
-  /* The reference for one position, or null where there is none. Shaped exactly
-     like WEAR.refFor's result so the millimetre field, the wear bar and the
-     bands can be shared rather than reimplemented. GET always wears down, so
-     the direction is always "shrink". */
-  /* `src` and not `x`. In the undercarriage table `x` means "do not score this"
-     — a borrowed or disputed figure that would produce a false percentage. A
-     generic GET limit is not that: it is a real, plausible limit that simply did
-     not come off the supplier's chart. It is scored, and it says where it came
-     from, so a trend exists from day one and nobody mistakes it for gospel.
-     When the client supplies the real charts, `src` becomes the chart and the
-     word "generic" stops appearing. */
-  function refFor(unit, cls, model, point) {
+  /* The reference for one position, or null where it is a visual check with
+     nothing to measure against. Shaped exactly like WEAR.refFor's result so the
+     millimetre field, the bands and the arithmetic are shared rather than
+     reimplemented. GET always wears down. */
+  function refFor(unit, cls, model, code) {
     var p = profileFor(unit, cls, model);
-    var L = p && p.lim && p.lim[point];
+    var L = p && p.lim && p.lim[code];
     if (!L) return null;
     return { n: L.n, c: L.c, d: 'shrink', src: L.src || 'generic' };
   }
 
-  function label(point, lang) {
-    var P = POINTS[point];
-    return P ? (lang === 'ru' ? P.ru : P.en) : point;
+  function rowFor(unit, cls, model, code) {
+    var p = profileFor(unit, cls, model);
+    if (p) for (var i = 0; i < p.pts.length; i++) if (p.pts[i][1] === code) return p.pts[i];
+    return null;
   }
-  function toolFor(point) { return (POINTS[point] || {}).tool || ''; }
-  function dimFor(point) { return (POINTS[point] || {}).dim || ''; }
+  function label(unit, cls, model, code, lang) {
+    var r = rowFor(unit, cls, model, code);
+    if (r) return lang === 'ru' ? r[3] : r[2];
+    /* A record captured against a tool this machine no longer carries still has
+       to read as words rather than as a code. */
+    var keys = Object.keys(TOOLS), i, j;
+    for (i = 0; i < keys.length; i++) {
+      var pts = TOOLS[keys[i]].pts;
+      for (j = 0; j < pts.length; j++)
+        if (pts[j][1] === code) return lang === 'ru' ? pts[j][3] : pts[j][2];
+    }
+    return code;
+  }
+
+  /* Everything the service worker should cache. */
+  function all() {
+    var base = (window.MACHINE_PHOTOS ? MACHINE_PHOTOS.BASE : 'machine/'), seen = {}, out = [];
+    Object.keys(PHOTO_BY_MODEL).forEach(function (k) { seen[PHOTO_BY_MODEL[k]] = 1; });
+    Object.keys(seen).forEach(function (f) { out.push(base + f); });
+    return out;
+  }
 
   window.GET = {
-    points: POINTS,
-    families: FAMILIES,
-    familyFor: familyFor,
-    profileFor: profileFor,
-    walk: walk,
-    refFor: refFor,
-    label: label,
-    toolFor: toolFor,
-    dimFor: dimFor,
-    teethByModel: TEETH_BY_MODEL,
+    tools: TOOLS, familyFor: familyFor, profileFor: profileFor, has: has,
+    walk: walk, refFor: refFor, label: label, rowFor: rowFor, all: all, slug: slug,
+    photos: PHOTO_BY_MODEL, toolByModel: TOOL_BY_MODEL,
   };
 })();

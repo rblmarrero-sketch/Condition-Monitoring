@@ -1100,55 +1100,66 @@ A destination that is failing no longer holds up one that is working: upload sta
 tracked per destination, so with SharePoint down every record still reaches Drive, and
 nothing is ever re-sent to a destination that already has it.
 
-### The undercarriage map is this model
+### The undercarriage map, and the GET round
 
-The measurement map is not a track frame in general. It is a side-on photograph of **this
-model's own undercarriage**, with the tap targets over it — 29 of them, one per model,
-WebP, about 21 KB each and 640 KB for the fleet, in `mobile/machine/uc/`.
+Both screens are the same screen, because they answer the same question: which part of
+*this* machine am I standing at?
 
-That is not decoration. The map is what an inspector matches against the machine they are
-standing at to work out which roller is roller one. The frame used to be a single drawing
-reused for every model, so a `CATERPILLAR D9R` — front and rear idlers on the ground with
-the drive sprocket lifted clear above them — came out looking exactly like a `KOMATSU
-PC800`. A picture that is wrong about where the sprocket is teaches the wrong end of the
-machine, and the whole point of tapping the picture instead of reading a list is lost.
+**A photograph of this model, and the client's own eleven numbers on the parts they name.**
+Not a diagram, and not a track frame in general — a `CATERPILLAR D9R` with its sprocket
+lifted clear above two ground idlers looks nothing like a `KOMATSU PC800`, and a picture
+that is wrong about where the sprocket is teaches the wrong end of the machine. The
+numbering is the client's undercarriage catalog, so a number on the screen is the number on
+the printed page in the ute.
 
-**Where there is no photograph the frame is drawn, and the drawing follows the model too.**
-It is built from the wear profile rather than fixed: an elevated-sprocket dozer comes out as
-the triangle it is and an oval frame comes out oval, from one belt-around-wheels
-calculation rather than two drawings; the lower rollers **are** the model's roller count
-rather than a fixed rhythm; the carrier rollers are the count the model carries, on the run
-they actually sit on; and idler and sprocket sizes follow the family, with the bigger wheel
-riding higher so the bottom run stays flat the way it does on the ground.
+Three pieces of geometry put a number on a part. `LAYOUT` is where each number sits as a
+fraction of the track frame; `BOX` is where the track frame sits inside *this* model's
+photograph; `LABELS` is what it is called, in both languages. The middle one is what makes a
+single shared layout land correctly on twenty-nine different photographs — without it the
+numbers float somewhere near the machine. All three are in
+[`mobile/uc-points.js`](mobile/uc-points.js).
 
-**The tap targets do not move either way.** Over a drawing they sit on the parts they name.
-Over a photograph they cannot — every model is framed differently and no fixed offset lands
-on the right wheel twice running — so they take the arrangement an inspector has already
-learned: idler at the front, carriers above, sprocket at the back, rollers 1..n in their own
-row underneath, chain points on the bracket below that. Same keys, same order, same reach;
-only the backdrop changed.
+**One picture, with Left and Right as a choice above it.** There used to be two frames side
+by side; with photographs they were the same photograph twice, saying nothing and costing
+half the screen.
 
-**Picking a point still says which bit it is.** On a drawing the machine around the point
-fades. A photograph cannot be dimmed part by part and still read, so over one the tap targets
-carry it instead — the point in hand stays up and the rest drop back. Same question answered,
-different carrier.
+**A number is a place; the app measures more finely than that.** Number 6, *centre track
+rollers*, is six separate measurements on an eight-roller frame. Tapping a number opens what
+it covers as a row underneath and lands on the first one still to be taken, so a half-done
+group resumes where it stopped.
+
+**Three checks the catalog has and the caliper table never did** — track adjuster / recoil,
+track frame / guards, and track sag / top chain — are now in the round, graded rather than
+measured. Sag especially: it is the single biggest lever on undercarriage life and it costs
+nothing to look at. The round is 42 positions where the paper tab is 36.
+
+**GET gets the identical treatment.** A photograph of the machine's own bucket or blade with
+the catalog's eleven numbered points on it — teeth, adapters, retainers, lip, side cutters,
+shrouds and wear plates for a bucket; end bits, three cutting-edge segments, blade corner,
+wear strips and the ripper for a blade. Which tool a model carries comes from the catalog,
+with the family as a fallback. Every position is graded and **a round is complete on grades
+alone**; a millimetre is accepted wherever somebody had a tape, and a visual check is not
+offered a number box to invent a figure into.
+
+**The unit list only offers machines the round applies to.** Choosing Undercarriage narrows
+1,128 units to the 45 with tracks the app can measure; GET narrows it to the 71 with a bucket
+or a blade. Offering the whole fleet and refusing once a machine is chosen wasted the choice,
+and on a list that long it was a real hunt.
+
+**Where there is no photograph the frame is drawn**, with the same eleven numbers over it, so
+the screen is the same screen either way. The drawing follows the model too: the chain is a
+belt around real wheels, so an elevated sprocket comes out as the triangle it is; the lower
+rollers are the model's own count; and the bigger of the idler and sprocket rides higher so
+the bottom run stays flat, the way the machine stands on it.
 
 **The report keeps the drawing.** It is printed, often in grey, and it has to carry the
-colour of every point — which is the whole reason the frame is drawn as parts rather than
-pictured.
+colour of every point — which is why the frame is drawn as parts rather than pictured.
 
-Adding or replacing a crop is a data change: put the file in `mobile/machine/uc/` and name
-it in `BY_MODEL_UC` in [`mobile/machine-photos.js`](mobile/machine-photos.js). Keys are the
-model as the register writes it, matching ignores case and punctuation, and aliases resolve
-in both directions so a table keyed on the supplier's spelling and a lookup using the
-register's still find each other.
-
-### The machine figure on a GET round
-
-A GET round has no map of its own, so it keeps a small side-view figure of the machine at
-the top — lit at the bucket teeth or the blade edge, so a GET round and an undercarriage
-round on the same machine are told apart at arm's length. The undercarriage screen used to
-carry the same figure above its frames; now that the frames are the machine, it does not.
+Artwork lives in `mobile/machine/uc/` and `mobile/machine/get/` — WebP, about 20 KB each,
+900 KB for the fleet — and is named per model in
+[`mobile/machine-photos.js`](mobile/machine-photos.js) and [`mobile/get.js`](mobile/get.js).
+Keys are the model as the register writes it; matching ignores case and punctuation and
+aliases resolve both ways.
 
 ### Upload speed
 

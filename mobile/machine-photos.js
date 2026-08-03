@@ -115,36 +115,71 @@
        Keys are the model as the register writes it; the catalog's own spelling
        resolves through ALIAS and slug() like everything else here. */
     BY_MODEL_UC: {
-      'Caterpillar 336-07':       'uc/caterpillar-336-07.webp',
-      'Hitachi EX1200-6BH':       'uc/hitachi-ex1200-6bh.webp',
-      'Hitachi EX1200-7BH':       'uc/hitachi-ex1200-7bh.webp',
-      'Hitachi ZX280-5G':         'uc/hitachi-zx280-5g.webp',
-      'Hitachi ZX330-5G RB':      'uc/hitachi-zx330-5g-rb.webp',
-      'Hitachi ZX470LC-5G':       'uc/hitachi-zx470lc-5g.webp',
-      'Hitachi ZX470LCR-5G':      'uc/hitachi-zx470lcr-5g.webp',
-      'Komatsu PC800-8E0 (SE)':   'uc/komatsu-pc800-8e0-se.webp',
-      'Komatsu PC2000-8 BH':      'uc/komatsu-pc2000-8-bh.webp',
-      'LiuGong CLG970E':          'uc/liugong-clg970e.webp',
-      'LiuGong CLG990FHD':        'uc/liugong-clg990fhd.webp',
-      'Caterpillar D9R':          'uc/caterpillar-d9r.webp',
-      'Komatsu D155A-5':          'uc/komatsu-d155a-5.webp',
-      'Komatsu D275A-5D':         'uc/komatsu-d275a-5d.webp',
-      'Komatsu D375A-6':          'uc/komatsu-d375a-6.webp',
-      'Shantui SD32':             'uc/shantui-sd32.webp',
-      'Shantui SD34-B3':          'uc/shantui-sd34-b3.webp',
-      'Shantui SD60-C5':          'uc/shantui-sd60-c5.webp',
-      'Shantui SD90-C5':          'uc/shantui-sd90-c5.webp',
-      'Komatsu P&H 44XT':         'uc/komatsu-p-h-44xt.webp',
-      'Sunward SWDE165A':         'uc/sunward-swde165a.webp',
-      'McCloskey C38':            'uc/mccloskey-c38.webp',
-      'McCloskey C44':            'uc/mccloskey-c44.webp',
-      'McCloskey J45':            'uc/mccloskey-j45.webp',
-      'McCloskey J50V2':          'uc/mccloskey-j50v2.webp',
-      'McCloskey S190-3DT':       'uc/mccloskey-s190-3dt.webp',
-      'NMS MT1150JC':             'uc/nms-mt1150jc.webp',
-      'NMS MT300MC':              'uc/nms-mt300mc.webp',
-      'NMS MT1860SR':             'uc/nms-mt1860sr.webp',
+      'CATERPILLAR 336-07':          'uc/caterpillar-336-07.webp',
+      'CATERPILLAR D9R':             'uc/caterpillar-d9r.webp',
+      'HITACHI EX1200-6BH':          'uc/hitachi-ex1200-6bh.webp',
+      'HITACHI EX1200-7BH':          'uc/hitachi-ex1200-7bh.webp',
+      'HITACHI ZX280-5G':            'uc/hitachi-zx280-5g.webp',
+      'HITACHI ZX330-5G RB':         'uc/hitachi-zx330-5g-rb.webp',
+      'HITACHI ZX470LC-5G':          'uc/hitachi-zx470lc-5g.webp',
+      'HITACHI ZX470LCR-5G':         'uc/hitachi-zx470lcr-5g.webp',
+      'KOMATSU D155A.5':             'uc/komatsu-d155a-5.webp',
+      'KOMATSU D275.5D':             'uc/komatsu-d275-5d.webp',
+      'KOMATSU D375A.6':             'uc/komatsu-d375a-6.webp',
+      'KOMATSU P&H 44XT':            'uc/komatsu-p-h-44xt.webp',
+      'KOMATSU PC2000-8 BH':         'uc/komatsu-pc2000-8-bh.webp',
+      'KOMATSU PC800-8E0 (SE)':      'uc/komatsu-pc800-8e0-se.webp',
+      'LiuGong CLG970E':             'uc/liugong-clg970e.webp',
+      'LiuGong CLG990FHD':           'uc/liugong-clg990fhd.webp',
+      'MCCLOSKEY C38':               'uc/mccloskey-c38.webp',
+      'MCCLOSKEY C44':               'uc/mccloskey-c44.webp',
+      'MCCLOSKEY J45':               'uc/mccloskey-j45.webp',
+      'MCCLOSKEY J50V2':             'uc/mccloskey-j50v2.webp',
+      'MCCLOSKEY S190-3DT':          'uc/mccloskey-s190-3dt.webp',
+      'NMS MT1150JC':                'uc/nms-mt1150jc.webp',
+      'NMS MT1860SR':                'uc/nms-mt1860sr.webp',
+      'NMS MT300MC':                 'uc/nms-mt300mc.webp',
+      'SHANTUI SD32':                'uc/shantui-sd32.webp',
+      'SHANTUI SD34-B3':             'uc/shantui-sd34-b3.webp',
+      'SHANTUI SD60-C5':             'uc/shantui-sd60-c5.webp',
+      'SHANTUI SD90-C5':             'uc/shantui-sd90-c5.webp',
+      'SUNWARD SWDE165A':            'uc/sunward-swde165a.webp',
     },
+    /* How wide each picture is against its height. The map sizes its drawing
+       area to this, so a point given as "62% across, 86% down" lands on the
+       part it names instead of somewhere in the letterboxing beside it. */
+    ASPECT: {
+      'uc/caterpillar-336-07.webp':        2.0,
+      'uc/caterpillar-d9r.webp':           2.0,
+      'uc/hitachi-ex1200-6bh.webp':        1.824,
+      'uc/hitachi-ex1200-7bh.webp':        1.818,
+      'uc/hitachi-zx280-5g.webp':          2.0,
+      'uc/hitachi-zx330-5g-rb.webp':       1.824,
+      'uc/hitachi-zx470lc-5g.webp':        1.873,
+      'uc/hitachi-zx470lcr-5g.webp':       1.818,
+      'uc/komatsu-d155a-5.webp':           2.0,
+      'uc/komatsu-d275-5d.webp':           2.0,
+      'uc/komatsu-d375a-6.webp':           2.0,
+      'uc/komatsu-p-h-44xt.webp':          1.501,
+      'uc/komatsu-pc2000-8-bh.webp':       2.0,
+      'uc/komatsu-pc800-8e0-se.webp':      2.0,
+      'uc/liugong-clg970e.webp':           2.0,
+      'uc/liugong-clg990fhd.webp':         2.0,
+      'uc/mccloskey-c38.webp':             2.0,
+      'uc/mccloskey-c44.webp':             2.0,
+      'uc/mccloskey-j45.webp':             2.154,
+      'uc/mccloskey-j50v2.webp':           2.0,
+      'uc/mccloskey-s190-3dt.webp':        2.0,
+      'uc/nms-mt1150jc.webp':              2.0,
+      'uc/nms-mt1860sr.webp':              2.0,
+      'uc/nms-mt300mc.webp':               2.0,
+      'uc/shantui-sd32.webp':              2.0,
+      'uc/shantui-sd34-b3.webp':           2.0,
+      'uc/shantui-sd60-c5.webp':           2.0,
+      'uc/shantui-sd90-c5.webp':           2.0,
+      'uc/sunward-swde165a.webp':          1.501,
+    },
+
     /* One picture for a whole family, used when no model matched. Empty by
        default: a generic "an excavator" photograph is worse than the drawing,
        because the drawing is honest about being a diagram and can be lit. */
@@ -190,6 +225,11 @@
     if (!UC_SLUG) UC_SLUG = buildIndex(M.BY_MODEL_UC);
     var f = UC_SLUG[slug(model)];
     return f ? M.BASE + f : '';
+  };
+  /* width divided by height of a picture, or 0 if it is not one of ours. */
+  M.aspectOf = function (url) {
+    var f = String(url || '').replace(M.BASE, '');
+    return M.ASPECT[f] || 0;
   };
 
   /* Everything the service worker should try to cache. Empty while ON is

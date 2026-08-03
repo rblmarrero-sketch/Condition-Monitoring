@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=75">
+<link rel="manifest" href="manifest.webmanifest?v=76">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=75">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=75">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=75">
+<link rel="apple-touch-icon" href="icon-192.png?v=76">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=76">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=76">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -429,6 +429,44 @@
   .ucmap[data-sel="BUSH"] [data-part="CHAIN"],
   .ucmap[data-sel="PITCH4"] [data-part="CHAIN"],
   .ucmap[data-sel="PITCH1"] [data-part="CHAIN"]{opacity:1;}
+  /* ---- the numbered walk -------------------------------------------------
+     One side at a time, one picture, eleven numbers on the parts they name and
+     the same eleven named underneath. Two frames used to sit here and they were
+     the same photograph twice. */
+  .ucsides{flex:0 0 100%;display:flex;gap:8px;margin:0 0 9px;}
+  .ucsides button{flex:1 1 0;min-height:42px;border:1px solid var(--line);
+    background:var(--surface);color:var(--ink-2);border-radius:10px;font:700 13.5px/1 inherit;
+    letter-spacing:.04em;text-transform:uppercase;cursor:pointer;}
+  .ucsides button.on{background:var(--accent);border-color:var(--accent);color:#fff;}
+  .ucgroups{flex:0 0 100%;display:flex;flex-wrap:wrap;gap:7px;margin:10px 0 0;}
+  .ucgroups button{display:inline-flex;align-items:center;gap:7px;min-height:40px;
+    padding:6px 12px 6px 6px;border:1px solid var(--line);background:var(--surface);
+    color:var(--ink);border-radius:999px;font:600 12.5px/1.25 inherit;text-align:left;cursor:pointer;}
+  .ucgroups button i{flex:0 0 auto;width:22px;height:22px;border-radius:999px;
+    display:inline-flex;align-items:center;justify-content:center;font-style:normal;
+    font-weight:800;font-size:11.5px;background:var(--surface-2);border:1px solid var(--line);}
+  .ucgroups button.on{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);}
+  .ucgroups button.done i{background:var(--good);border-color:var(--good);color:#fff;}
+  .ucgroups button.watch i{background:var(--warning);border-color:var(--warning);color:#3a2a00;}
+  .ucgroups button.act i{background:var(--bad);border-color:var(--bad);color:#fff;}
+  .ucgroups button.na i{background:var(--surface-3);border-style:dashed;}
+  .ucmembers{flex:0 0 100%;display:flex;flex-wrap:wrap;gap:7px;margin:9px 0 0;}
+  .ucmembers button{min-width:56px;min-height:44px;padding:6px 14px;border:1px solid var(--line);
+    background:var(--surface);color:var(--ink);border-radius:12px;font:700 13px/1 inherit;cursor:pointer;}
+  .ucmembers button.on{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);}
+  .ucmembers button.done{border-color:var(--good);}
+  .ucmembers button.watch{border-color:var(--warning);}
+  .ucmembers button.act{border-color:var(--bad);}
+  .ucmembers button.na{border-style:dashed;}
+  /* the numbers on the picture */
+  .ucmap .um-num .um-puck{fill:var(--surface);stroke:var(--ink-2);stroke-width:1.6;}
+  .ucmap .um-num .um-n{font:800 13px/1 inherit;fill:var(--ink);}
+  .ucmap .um-num.done .um-puck{fill:var(--good);stroke:var(--good);}
+  .ucmap .um-num.watch .um-puck{fill:var(--warning);stroke:var(--warning);}
+  .ucmap .um-num.act .um-puck{fill:var(--bad);stroke:var(--bad);}
+  .ucmap .um-num.na .um-puck{stroke-dasharray:3 3;}
+  .ucmap .um-num.done .um-n,.ucmap .um-num.act .um-n{fill:#fff;}
+  .ucmap .um-num.sel .um-puck{stroke:var(--accent);stroke-width:3.4;}
   /* On a drawing, picking a point fades the machine around it. A photograph
      cannot be dimmed part by part and still read, so the same question — which
      bit is this? — is answered by the tap targets instead: the one in hand
@@ -441,6 +479,9 @@
   /* ---- GET: the optional millimetre ------------------------------------
      Sits under the grade, quiet. The round is complete on grades, so nothing
      here nags: no red, no "required", and an empty box is the normal state. */
+  /* A visual check has nothing to measure. Offering it an empty number box is
+     how a round ends up with somebody inventing a figure to fill it. */
+  #getFields.novalue .getrow{display:none;}
   .getrow{display:flex;gap:12px;align-items:flex-end;margin:0 0 6px;}
   .getrow .fld{flex:1 1 auto;margin-bottom:0;}
   .getread{flex:0 0 auto;display:flex;align-items:center;gap:7px;padding-bottom:11px;
@@ -943,20 +984,21 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="native.js?v=75"></script>
-<script src="upload-defaults.js?v=75"></script>
-<script src="hme.js?v=75"></script>
-<script src="mp-fc.js?v=75"></script>
-<script src="hme-cascade.js?v=75"></script>
-<script src="assets.js?v=75"></script>
-<script src="temp-limits.js?v=75"></script>
-<script src="wear.js?v=75"></script>
-<script src="wear-figs.js?v=75"></script>
-<script src="wear-map.js?v=75"></script>
-<script src="machine-photos.js?v=75"></script>
-<script src="machine-fig.js?v=75"></script>
-<script src="get.js?v=75"></script>
-<script src="report-core.js?v=75"></script>
+<script src="native.js?v=76"></script>
+<script src="upload-defaults.js?v=76"></script>
+<script src="hme.js?v=76"></script>
+<script src="mp-fc.js?v=76"></script>
+<script src="hme-cascade.js?v=76"></script>
+<script src="assets.js?v=76"></script>
+<script src="temp-limits.js?v=76"></script>
+<script src="wear.js?v=76"></script>
+<script src="wear-figs.js?v=76"></script>
+<script src="wear-map.js?v=76"></script>
+<script src="machine-photos.js?v=76"></script>
+<script src="machine-fig.js?v=76"></script>
+<script src="get.js?v=76"></script>
+<script src="uc-points.js?v=76"></script>
+<script src="report-core.js?v=76"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -1118,6 +1160,7 @@ const I18N = {
     set_gas:"Google Drive (Apps Script)", set_pa:"SharePoint / OneDrive (Power Automate)", set_post:"Plain HTTPS POST (multipart)",
     set_secret:"Shared secret (optional)",
     mf_uc:"Undercarriage", mf_get:"Ground engaging tools",
+    uc_band_out:"Outer", uc_band_in:"Inner",
     set_px:"Photo size", set_px_full:"Original — full detail, much slower to send",
     set_px_2000:"Large — 2000 px", set_px_1600:"Medium — 1600 px (recommended)",
     set_px_help:"Photos are shrunk as they are taken, so uploads are already small. The report and the dashboard never show more than this.",
@@ -1348,6 +1391,7 @@ const I18N = {
     set_gas:"Google Диск (Apps Script)", set_pa:"SharePoint / OneDrive (Power Automate)", set_post:"Обычный HTTPS POST (multipart)",
     set_secret:"Общий секрет (необяз.)",
     mf_uc:"Ходовая часть", mf_get:"Рабочий инструмент",
+    uc_band_out:"Наружная", uc_band_in:"Внутренняя",
     set_px:"Размер фото", set_px_full:"Оригинал — полная детализация, отправка намного дольше",
     set_px_2000:"Крупный — 2000 px", set_px_1600:"Средний — 1600 px (рекомендуется)",
     set_px_help:"Фото уменьшаются в момент съёмки, поэтому отправка уже небольшая. Отчёт и панель никогда не показывают больше.",
@@ -1795,26 +1839,19 @@ function getStatus(unit){
   if(!prof) return {ok:false, why:"notool", model:a.m||""};
   return {ok:true, model:a.m||"", prof};
 }
+function getWalk(unit){
+  const a=ASSET_BY[unit]||{};
+  return window.GET ? GET.walk(unit, a.cat||a.cls||"", a.m||"") : [];
+}
 function getLabel(k){
-  const [pt,pos]=ucSplit(k);
-  return (window.GET?GET.label(pt,lang):pt) + (pos? " "+getPosLabel(pos) : "");
+  const a=ASSET_BY[curEquip]||{};
+  return window.GET ? GET.label(curEquip, a.cat||a.cls||"", a.m||"", k, lang) : k;
 }
-function getPosLabel(pos){
-  if(UC_POS[pos]) return UC_POS[pos][lang];
-  if(pos==="C") return lang==="ru"?"Центр":"Centre";
-  return pos;
-}
-/* Grouped by point for the picker, so eight teeth sit under "Tooth" rather than
-   as eight siblings of "Bucket lip". */
+/* Eleven numbered points, flat — the catalog's own list, in its own order.
+   There is no tree to build: a bucket is one bucket. */
 function getWalkTree(unit){
   const st=getStatus(unit); if(!st.ok) return null;
-  const by=new Map();
-  GET.walk(unit,(ASSET_BY[unit]||{}).cat||"",(ASSET_BY[unit]||{}).m||"").forEach(w=>{
-    if(!by.has(w.point)) by.set(w.point,[]);
-    by.get(w.point).push({k:w.k, en:GET.label(w.point,"en")+(w.pos?" "+w.pos:""),
-                                ru:GET.label(w.point,"ru")+(w.pos?" "+w.pos:"")});
-  });
-  return [...by.keys()].map(pt=>({k:pt, en:GET.label(pt,"en"), ru:GET.label(pt,"ru"), ch:by.get(pt)}));
+  return getWalk(unit).map(w=>({k:w.k, en:w.en, ru:w.ru}));
 }
 
 /* Undercarriage: the walk comes from the model, not from the component tree.
@@ -1832,6 +1869,18 @@ function ucStatus(unit){
   if(!WEAR.map[m])    return {ok:false, why:"notracks", model:m};
   return {ok:true, model:m, ref:WEAR.map[m], prof:WEAR.modelFor(m)};
 }
+/* Three checks the measured table has no reference for, because they are not
+   caliper points: whether the adjuster and recoil are serviceable, whether the
+   frame and its guards are sound, and how much the top chain is sagging. They
+   are in the client's catalog, they are the cheap ones nobody records, and sag
+   in particular is the biggest single lever on undercarriage life. Carried
+   alongside the measured walk rather than inside WEAR, which is generated. */
+const UC_EXTRA=[
+  { code:"ADJUST", en:"Track adjuster / recoil", ru:"Натяжитель / амортизатор" },
+  { code:"FRAME",  en:"Track frame / guards",    ru:"Рама хода / защита" },
+  { code:"SAG",    en:"Track sag / top chain",   ru:"Провисание гусеницы" },
+];
+const UC_EXTRA_BY={}; UC_EXTRA.forEach(x=>UC_EXTRA_BY[x.code]=x);
 function ucWalkTree(unit){
   const st=ucStatus(unit); if(!st.ok) return null;
   const byPoint=new Map();
@@ -1839,8 +1888,11 @@ function ucWalkTree(unit){
     if(!byPoint.has(w.point)) byPoint.set(w.point,[]);
     byPoint.get(w.point).push({k:w.k, en:ucPosLabel(w.pos,"en"), ru:ucPosLabel(w.pos,"ru")});
   });
-  return WEAR.points.filter(p=>byPoint.has(p.code))
+  const out=WEAR.points.filter(p=>byPoint.has(p.code))
     .map(p=>({k:p.code, en:p.en, ru:p.ru, ch:byPoint.get(p.code)}));
+  UC_EXTRA.forEach(x=>out.push({ k:x.code, en:x.en, ru:x.ru,
+    ch:["L","R"].map(sd=>({ k:x.code+"."+sd, en:UC_POS[sd].en, ru:UC_POS[sd].ru })) }));
+  return out;
 }
 const UC_POS={ "L":{en:"Left",ru:"Слева"}, "R":{en:"Right",ru:"Справа"},
   "L-OUT":{en:"Left · outer",ru:"Слева · внешнее"}, "L-IN":{en:"Left · inner",ru:"Слева · внутренее"},
@@ -1853,7 +1905,8 @@ function ucPosLabel(pos,lg){
 }
 function ucLabel(k){
   const [pt,pos]=ucSplit(k);
-  const p=(window.WEAR&&WEAR.points||[]).find(x=>x.code===pt);
+  const x=UC_EXTRA_BY[pt];
+  const p=x || (window.WEAR&&WEAR.points||[]).find(y=>y.code===pt);
   return (p?(p[lang]||p.en):pt) + (pos? " — "+ucPosLabel(pos,lang) : "");
 }
 const ucSplit = k => { const i=String(k).indexOf("."); return i<0?[k,""]:[k.slice(0,i),k.slice(i+1)]; };
@@ -1992,6 +2045,7 @@ $("typeSel").onchange=(e)=>{ type=e.target.value; localStorage.setItem("insp_typ
   draft={positions:{}}; editing=null; curItem=""; applyForm(); setEditing(null); };
 function renderChips(){ const tr=currentTree();
   if(wearType() && curEquip && ucStatus(curEquip).ok && ucView==="map"){ renderUCMap(); return; }
+  if(getType() && curEquip && getStatus(curEquip).ok && ucView==="map"){ renderGETMap(); return; }
   if(tr){ renderComponentNav(tr); return; }         // registered unit -> L7/L8/L9 cascade cards
   const its=items();
   if(usesRegister(type)){
@@ -2287,16 +2341,21 @@ function renderUC(){
    and nothing says otherwise. */
 function getRef(){
   if(!window.GET || !curEquip || !curItem) return null;
-  const a=ASSET_BY[curEquip]||{}, [pt]=ucSplit(curItem);
-  return GET.refFor(curEquip, a.cat||a.cls||"", a.m||"", pt);
+  const a=ASSET_BY[curEquip]||{};
+  return GET.refFor(curEquip, a.cat||a.cls||"", a.m||"", curItem);
 }
 function renderGET(){
   if(!TYPE_META[type] || !TYPE_META[type].get) return;
   const line=$("getRefLine"), read=$("getRead"); if(!line||!read) return;
-  const [pt]=ucSplit(curItem||"");
+  const a=ASSET_BY[curEquip]||{};
+  const row=window.GET?GET.rowFor(curEquip,a.cat||a.cls||"",a.m||"",curItem):null;
   const ref=getRef();
-  const tool=window.GET?GET.toolFor(pt):"", dim=window.GET?GET.dimFor(pt):"";
-  $("getLbl").textContent = dim ? t("get_mm_of",{x:dim}) : t("get_mm");
+  const tool="";
+  /* A visual check has nothing to measure, so it is not offered a box that
+     looks like it wants a number. */
+  const visual = row && row[4]==="visual";
+  $("getFields").classList.toggle("novalue", !!visual);
+  $("getLbl").textContent = t("get_mm");
   line.innerHTML = ref
     ? esc(t("get_ref",{n:ref.n, c:ref.c})) + (tool? ' · '+esc(tool) : '') +
       (ref.src==="generic"? ' · <span class="band b-watch">'+esc(t("get_generic"))+'</span>' : '')
@@ -2333,6 +2392,11 @@ let ucView = localStorage.getItem("uc_view")==="list" ? "list" : "map";
 function ucState(k){
   const p=draft.positions[k]; if(!p) return "";
   if(p.reason) return "na";
+  // a visual check is done when it has been graded; there is no millimetre to wait for
+  const [pt0]=ucSplit(k);
+  if(UC_EXTRA_BY[pt0] && p.mm==null)
+    return (p.grade||p.sev||p.defect||p.comment)
+      ? (GRADE_SEV[p.grade]==="CRI"?"act" : GRADE_SEV[p.grade]==="DEG"?"watch" : "done") : "";
   if(p.mm==null) return "";
   const st=ucStatus(curEquip); if(!st.ok) return "done";
   const [pt,pos]=ucSplit(k);
@@ -2379,8 +2443,8 @@ function ucSheetOn(){ return wearType() && ucView==="map" && !!curItem && !!curE
 let ucScrollT=0;
 function ucKeepFrameInView(){
   if(!ucSheetOn()) return;
-  const g=$("posnav").querySelector('.um-spot[data-uc="'+cssEsc(curItem)+'"]');
-  const box=g && g.closest(".ucmapwrap");
+  // the map is one picture now, so the frame to keep in view is the picture
+  const box=$("posnav").querySelector(".ucmapwrap");
   if(!box) return;
   const top=$("ucFields").getBoundingClientRect().top, r=box.getBoundingClientRect();
   if(!r.height || !top) return;
@@ -2426,6 +2490,26 @@ function renderUCSheet(){
   prev.textContent = t("uc_prev");
   next.textContent = i>=o.length-1 ? t("uc_last") : t("uc_next");
   next.dataset.done = i>=o.length-1 ? "1" : "";
+}
+/* The short name of one measurement inside a numbered group: the band, the
+   roller number, the chain dimension. The number and its name are already above
+   this row, so repeating them here would only make the buttons too wide. */
+/* A number on the picture is an SVG group, so it gets no keyboard behaviour for
+   free the way a <button> does. It carries role="button" and tabindex, which
+   promises Enter and Space will work — so they have to. */
+function wireNums(root, pick){
+  root.querySelectorAll("[data-ucg]").forEach(g=>{
+    const go=()=>pick(+g.dataset.ucg);
+    g.onclick=go;
+    g.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } };
+  });
+}
+function ucMemberLabel(k){
+  const [pt,pos]=ucSplit(k);
+  if(/-OUT$/.test(pos)) return t("uc_band_out");
+  if(/-IN$/.test(pos))  return t("uc_band_in");
+  const m=/^[LR](\d+)$/.exec(pos); if(m) return m[1];
+  return (WEAR.mapShort&&WEAR.mapShort[pt]) || pt;
 }
 function ucTally(){
   const w=WEAR.walk(ucStatus(curEquip).model);
@@ -2481,16 +2565,119 @@ function ucProfile(unit){
               one. Screen only — see rptMap for why the report keeps the drawing. */
            photo: window.MACHINE_PHOTOS ? MACHINE_PHOTOS.ucUrlFor(a.m||"") : "" };
 }
+/* Which side is being walked. One at a time, not two: the two frames were the
+   same photograph twice over, which said nothing and cost half the screen.
+   The side is a choice at the top and everything below belongs to it. */
+let ucSide="L";
+/* A number covers one or more measurements. Its colour is the worst of them,
+   so a group with one point past condemn reads red even if the other five are
+   fine — which is the only reading that is any use at arm's length. */
+function ucGroupKeys(n){
+  const st=ucStatus(curEquip);
+  const rollers=(st.prof&&st.prof.rollers)||WEAR.rollersDefault;
+  /* Every key the walk defines, and no filtering. `missing` on a wear profile
+     means "no published limits for this point on this model", not "not fitted"
+     — the round still walks it and records the millimetres, it just cannot
+     score them. Filtering on it here made the sprocket on a D155A unreachable
+     from the map: in the walk, in the list, and on no number. */
+  return (window.UCPTS?UCPTS.keysFor(n, ucSide, rollers):[]);
+}
+const UC_RANK={ "":0, done:1, na:2, watch:3, act:4 };
+function ucGroupState(n){
+  let worst="", none=true;
+  ucGroupKeys(n).forEach(k=>{ const v=ucState(k)||"";
+    if(v) none=false;
+    if(UC_RANK[v]>UC_RANK[worst]) worst=v; });
+  return none ? "" : worst;
+}
+function ucGroupOf(k){
+  for(let n=1;n<=11;n++) if(ucGroupKeys(n).indexOf(k)>=0) return n;
+  return 0;
+}
+/* The tool, photographed, with the catalog's eleven numbers on the parts they
+   name and the same eleven named underneath. Identical treatment to the
+   undercarriage map on purpose: one way of reading a round, learned once. */
+function getState(k){
+  const p=draft.positions[k]; if(!p) return "";
+  if(p.mm!=null){
+    const ref=(function(){ const a=ASSET_BY[curEquip]||{};
+      return window.GET?GET.refFor(curEquip,a.cat||a.cls||"",a.m||"",k):null; })();
+    const pct=ref&&window.WEAR?WEAR.wear(ref,Number(p.mm)):null;
+    if(pct!=null) return pct>=100?"act" : pct>=80?"watch" : "done";
+  }
+  if(p.grade||p.sev||p.defect||p.comment)
+    return GRADE_SEV[p.grade]==="CRI"?"act" : GRADE_SEV[p.grade]==="DEG"?"watch" : "done";
+  return "";
+}
+function renderGETMap(){
+  const st=getStatus(curEquip); if(!st.ok) return;
+  const walk=getWalk(curEquip);
+  let h=ucViewsBar();
+  const c={ "":0, done:0, watch:0, act:0 };
+  walk.forEach(w=>{ c[getState(w.k)||""]++; });
+  const order=[["act","uc_leg_act"],["watch","uc_leg_watch"],["done","uc_leg_done"],["","uc_leg_none"]];
+  h+='<div class="uctally">'+order.filter(([k])=>c[k]>0)
+      .map(([k,lab])=>'<span class="t '+(k||"non")+'"><i></i>'+c[k]+' '+esc(t(lab))+'</span>').join("")+'</div>';
+  h+='<div class="ucmaps"><div class="ucmapwrap">'+
+     WEAR.mapPhoto({ photo:st.prof.photo, aspect:st.prof.aspect, box:[0,0,100,100], lang:lang,
+                     layout:walk.map(w=>[w.n,w.x/100,w.y/100]),
+                     numOf:n=>(walk[n-1]||{}).k,
+                     state:n=>getState((walk[n-1]||{}).k),
+                     sel:(walk.findIndex(w=>w.k===curItem)+1)||0 })+'</div></div>';
+  h+='<div class="ucgroups">'+walk.map(w=>
+      '<button type="button" data-pos="'+esc(w.k)+'" class="'+
+      [getState(w.k),(w.k===curItem?"on":"")].filter(Boolean).join(" ")+'"><i>'+w.n+'</i>'+
+      esc(w[lang]||w.en)+'</button>').join("")+'</div>';
+  $("posnav").innerHTML=h;
+  // the numbers on the picture; the named chips below are [data-pos], which
+  // #posnav already delegates
+  wireNums($("posnav"), n=>{ const w=walk[n-1]; if(!w) return;
+    saveCur(); curItem=w.k; loadPos(); renderChips(); });
+  wireUCViews();
+}
 function renderUCMap(){
   const prof=ucProfile(curEquip);
-  const side=s=>t(s==="L"?"uc_left":"uc_right");
+  const a=ASSET_BY[curEquip]||{};
+  const box=window.UCPTS?UCPTS.boxFor(a.m||""):null;
+  const g=ucGroupOf(curItem);
   let h=ucViewsBar();
   h+=ucTally();
-  h+='<div class="ucmaps">';
-  ["L","R"].forEach(s=>{ h+='<div class="ucmapwrap" data-side="'+s+'">'+
-      WEAR.mapSVG(s, prof, null, ucState, curItem, side(s))+'</div>'; });
-  h+='</div>';
+  h+='<div class="ucsides">'+["L","R"].map(sd=>
+      '<button type="button" data-ucside="'+sd+'"'+(sd===ucSide?' class="on"':'')+'>'+
+      esc(t(sd==="L"?"uc_left":"uc_right"))+'</button>').join("")+'</div>';
+  h+='<div class="ucmaps"><div class="ucmapwrap" data-side="'+ucSide+'">'+
+     WEAR.mapPhoto({ photo:prof.photo, box:box, fam:prof.fam, high:prof.high,
+                     rollers:prof.rollers, side:ucSide, lang:lang,
+                     state:ucGroupState, sel:g })+'</div></div>';
+  /* The same eleven, named. A number on the machine is quick once you know it;
+     the name is what makes the first round possible without the catalog open. */
+  h+='<div class="ucgroups">'+(window.UCPTS?UCPTS.labels:[]).map(row=>{
+      const n=row[0], keys=ucGroupKeys(n), st=ucGroupState(n);
+      if(!keys.length) return "";
+      return '<button type="button" data-ucg="'+n+'" class="'+
+        [st,(n===g?"on":"")].filter(Boolean).join(" ")+'"><i>'+n+'</i>'+
+        esc(UCPTS.label(n,lang))+'</button>';
+    }).join("")+'</div>';
+  /* A number that covers more than one measurement opens into them, right here,
+     rather than sending anyone to another screen for the second band. */
+  const mem=g?ucGroupKeys(g):[];
+  if(mem.length>1)
+    h+='<div class="ucmembers">'+mem.map(k=>
+        '<button type="button" data-pos="'+esc(k)+'" class="'+
+        [ucState(k),(k===curItem?"on":"")].filter(Boolean).join(" ")+'">'+
+        esc(ucMemberLabel(k))+'</button>').join("")+'</div>';
   $("posnav").innerHTML=h;
+  $("posnav").querySelectorAll("[data-ucside]").forEach(b=>b.onclick=()=>{
+    saveCur(); ucSide=b.dataset.ucside;
+    const k=(ucGroupKeys(ucGroupOf(curItem)||1)||[])[0];
+    curItem=k||""; loadPos(); renderChips(); });
+  wireUCViews();
+  wireNums($("posnav"), n=>{ const keys=ucGroupKeys(n);
+    if(!keys.length) return;
+    saveCur();
+    // land on the first one still to be taken, so a half-done group resumes
+    curItem = keys.find(k=>!ucState(k)) || keys[0];
+    loadPos(); renderChips(); });
   /* A track frame is three metres long and a phone is not. Rather than shrink the
      pucks under a gloved thumb, the frame scrolls — but silently off-screen is
      how a whole sprocket gets missed, so say so, and move both frames together
@@ -2712,13 +2899,33 @@ function selectEquip(n){ n=(n||"").trim().toUpperCase().replace(/\s+/g,""); curE
   draft={positions:{}}; editing=null; curItem=""; applyForm(); setEditing(null); updateEquipBtn();
   renderLastDone(); renderTrend(); }
 let pickMode=null, showAllDefects=false, showAllCauses=false;
+/* Can this round be done on this machine at all? Everything else — the picker,
+   the category counts, the "nothing here" message — is built on this one
+   answer, so there is one place to be right. */
+function eligible(unit, a){
+  a = a || ASSET_BY[unit] || {};
+  if(wearType()) return ucStatus(unit).ok;
+  if(getType())  return !!(window.GET && GET.has(unit, a.cat||a.cls||"", a.m||""));
+  return true;
+}
+function eligibleCount(cat){
+  const src = cat==="ALL" ? ASSETS : ASSETS.filter(a=>(a.cat||"— UNCATEGORISED —")===cat);
+  return src.filter(a=>eligible(a.n,a)).length;
+}
 function pickerSource(){
   if(pickMode==="cat"){
-    return [{k:"ALL",label:`${t("opt_all_equip")} (${ASSETS.length})`,group:""}]
-      .concat(CAT_LIST.map(c=>({k:c,label:`${c} (${CAT_COUNT[c]})`,group:""})));
+    // counted for THIS round, and a class with nothing in it is not offered
+    return [{k:"ALL",label:`${t("opt_all_equip")} (${eligibleCount("ALL")})`,group:""}]
+      .concat(CAT_LIST.map(c=>({k:c,n:eligibleCount(c)})).filter(x=>x.n>0)
+        .map(x=>({k:x.k,label:`${x.k} (${x.n})`,group:""})));
   }
   if(pickMode==="equip"){
-    const src = eqCat==="ALL" ? ASSETS : ASSETS.filter(a=>(a.cat||"— UNCATEGORISED —")===eqCat);
+    let src = eqCat==="ALL" ? ASSETS : ASSETS.filter(a=>(a.cat||"— UNCATEGORISED —")===eqCat);
+    /* An undercarriage round cannot be done on a haul truck and a GET round
+       cannot be done on a light tower. Offering all 1,128 units and refusing
+       once one is chosen wastes the choice — and on a list that long it is a
+       real hunt. Narrow it to the machines the round applies to. */
+    src = src.filter(a=>eligible(a.n, a));
     return src.map(a=>({k:a.n, label:a.n+(a.m?" · "+a.m:""), group:(a.cat||"— UNCATEGORISED —")}));
   }
   if(pickMode==="prio"){
@@ -3759,9 +3966,14 @@ function applyLang(){ document.documentElement.lang=lang;
      go/no-go check stuck in the language somebody just switched away from is
      the wrong one to leave on the screen. */
   checkReady();
-  // the machine map is drawn, not templated, so a [data-i18n] sweep never reaches
-  // its side names, its legend or its own view toggle — repaint it
-  if(wearType() && ucView==="map" && $("posnav").querySelector(".um-spot")) renderUCMap();
+  /* The map is built in code, so a [data-i18n] sweep never reaches its side
+     buttons, its eleven names, its legend or its own view toggle — repaint it.
+     The test used to be "does it contain a .um-spot", which stopped being true
+     the day the pucks became numbers, and the map quietly kept its English. */
+  if(curEquip && ucView==="map"){
+    if(wearType() && ucStatus(curEquip).ok) renderUCMap();
+    else if(getType() && getStatus(curEquip).ok) renderGETMap();
+  }
   if(TYPE_META[type].wear) renderUC();
   document.querySelectorAll(".lang button").forEach(b=>b.classList.toggle("on", b.dataset.lang===lang)); }
 document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target.closest("button[data-lang]"); if(!b) return; lang=b.dataset.lang; localStorage.setItem("lang",lang); applyLang(); });
@@ -3786,7 +3998,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="75";
+const BUILD="76";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -4346,7 +4558,7 @@ function checkReady(){
   try{ navigator.serviceWorker.controller.postMessage({type:"sw-health"},[ch.port2]); }
   catch(e){ clearTimeout(giveUp); renderReady(null); }
 }
-let ESSENTIAL_N=15;   // the SW is the authority; this is only the first paint
+let ESSENTIAL_N=16;   // the SW is the authority; this is only the first paint
 /* Ask when the app opens and whenever it comes back to the front — the second
    is the one that catches a phone that has been sitting in a locker since the
    files were evicted. */
@@ -4673,7 +4885,7 @@ if("serviceWorker" in navigator && window.isSecureContext){ let reloaded=false;
    picks up the new files. */
 const SHELL_ASSETS=["index.html","manifest.webmanifest","native.js","jsQR.js","qrcode.js","upload-defaults.js",
   "hme.js","hme-cascade.js","mp-fc.js","assets.js","temp-limits.js",
-  "wear.js","wear-figs.js","wear-map.js","machine-photos.js","machine-fig.js","get.js","report-core.js",
+  "wear.js","wear-figs.js","wear-map.js","machine-photos.js","machine-fig.js","get.js","uc-points.js","report-core.js",
   "jspdf.umd.min.js","html2canvas.min.js","sw.js"];
 /* "Am I on the latest build?" used to be unanswerable from inside the app: the
    service worker serves the copy it has, and a stale page looks exactly like a
