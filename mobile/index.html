@@ -1255,6 +1255,7 @@ const I18N = {
     sp_v_bytes:"There is bandwidth, but not much of it.",
     sp_v_bytes_d:"{r} once a transfer is going. Requests are cheap and bytes are expensive, so the fix is bytes: smaller photographs, and dropping the third that base64 adds.",
     sp_timeout:"no answer in {n} s",
+    sp_nomeasure:"cannot be timed without uploading a real file — not measured",
     sp_v_blocked:"Something is refusing to carry these requests.",
     sp_v_blocked_d:"This app's own host answers in {c}, so the phone has a working connection — but the upload destinations were turned away before a reply came back. That is a block, not slowness: a firewall, the VPN, or a URL that is wrong. What came back: {w}",
     sp_v_swallow:"The requests go out and nothing comes back.",
@@ -1519,6 +1520,7 @@ const I18N = {
     sp_v_bytes:"Полоса есть, но узкая.",
     sp_v_bytes_d:"{r} при идущей передаче. Запросы дёшевы, дороги байты — значит, уменьшать фотографии и убирать треть, которую добавляет base64.",
     sp_timeout:"нет ответа за {n} с",
+    sp_nomeasure:"нельзя измерить, не загрузив реальный файл — не измерялось",
     sp_v_blocked:"Что-то не пропускает эти запросы.",
     sp_v_blocked_d:"Собственный хост приложения отвечает за {c}, значит связь у телефона есть — но назначения отвергли запрос ещё до ответа. Это блокировка, а не медленная связь: межсетевой экран, VPN или неверный адрес. Ответ: {w}",
     sp_v_swallow:"Запросы уходят, ответа нет.",
@@ -4313,7 +4315,12 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
 /* Destinations are stored as one JSON list so Google Drive and SharePoint can both
    be on at once. A record is only marked uploaded when EVERY enabled destination
    has accepted every one of its files. */
-const DEST_META={ gas:{label:"Google Drive"}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
+/* `noop` says this destination has a request that costs a round trip and writes
+   nothing — the Apps Script's {op:"ping"}. Only that one can be timed honestly.
+   A Power Automate flow or a plain POST endpoint has no such thing: send it a
+   ping and it rejects a body it does not recognise, which is the endpoint
+   working correctly and would be reported as the endpoint being broken. */
+const DEST_META={ gas:{label:"Google Drive", noop:true}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
 const DEST_IDS=["gas","pa","post"];
 /* Where a round lands on Drive: the inspection type, then the machine, then the
    day it was done — MP/DZ004/2026-08-02. A month folder is every machine's
@@ -5093,6 +5100,10 @@ async function runSpeedCheck(){
   const found=[], broke=[];
   for(const d of dests){
     const label=DEST_META[d.id].label;
+    /* Skip, and say why. Timing this one would mean uploading a real file to
+       somebody's live folder, and a measurement that leaves litter behind is
+       not one you can ask an inspector to run whenever a round feels slow. */
+    if(!DEST_META[d.id].noop){ row(label, t("sp_nomeasure"), "warn"); continue; }
     const small=await spProbe(d.url, 0);
     if(!small.ok){ broke.push({label, kind:small.kind, why:small.why});
       row(label, small.why||t("sp_unreachable"), "bad"); continue; }

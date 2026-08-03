@@ -1363,3 +1363,10 @@ distinguishes four kinds of nothing, each with its own verdict:
   that drops it silently. Smaller photographs will not help.
 - **Everything unreachable, including the app's own host** — the phone is not really online.
   Move and try again before reading anything into it.
+
+Only the Apps Script destination is timed. It is the one with a request that costs a round
+trip and writes nothing (`{op:"ping"}`). A Power Automate flow or a plain POST endpoint has
+no such thing — send it a ping and it rejects a body it does not recognise, which is the
+endpoint working correctly and would be reported as the endpoint being broken. Those are
+skipped, and the screen says why, because a measurement that invents a fault is worse than
+no measurement.
