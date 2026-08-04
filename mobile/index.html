@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=82">
+<link rel="manifest" href="manifest.webmanifest?v=83">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=82">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=82">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=82">
+<link rel="apple-touch-icon" href="icon-192.png?v=83">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=83">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=83">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -373,6 +373,11 @@
   .ucref{font-size:12.5px;font-weight:600;color:var(--ink-2);margin:-4px 0 10px;
     font-variant-numeric:tabular-nums;line-height:1.5;}
   .ucref.none{color:var(--warn-ink);font-weight:600;}
+  /* On the undercarriage "no reference" is news — that model's chart is
+     missing. On the tray it is the standing state of every station until the
+     limits arrive, already said once above the map, so at full amber emphasis
+     on all sixty-three it is just noise competing with the reading. */
+  body.tbreading .ucref.none{color:var(--muted);font-weight:500;font-size:11.5px;}
   .uclast{font-size:12.5px;color:var(--muted);margin:-6px 0 10px;line-height:1.5;
     font-variant-numeric:tabular-nums;}
   /* How to take the reading. Collapsed by default — an inspector who has done a
@@ -517,7 +522,7 @@
   .bm-fold{fill:none;stroke:var(--bm-fold);stroke-width:1.6;stroke-dasharray:7 5;opacity:.85;}
   .bm-div{fill:none;stroke:var(--bm-edge);stroke-width:1;opacity:.7;}
   .bm-lip{fill:none;stroke:var(--warn-ink);stroke-width:5;stroke-linecap:round;opacity:.75;}
-  .bm-face{fill:var(--ink-2);font:700 11.5px/1 inherit;letter-spacing:.12em;
+  .bm-face{fill:var(--ink-2);font:700 11px/1 inherit;letter-spacing:.09em;
     paint-order:stroke fill;stroke:var(--surface);stroke-width:3.5px;stroke-linejoin:round;opacity:.9;}
   .bm-way{fill:var(--muted);font:700 10.5px/1 inherit;letter-spacing:.1em;opacity:.75;}
   /* The surface is the control, not the dot — 63 stations across a phone puts
@@ -547,9 +552,14 @@
      orientation note has been read by then, and seven zone chips over three rows
      are worth less than the map they were stealing. */
   body.tbreading .tbnote{display:none;}
-  body.tbreading .ucgroups{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;}
-  body.tbreading .ucgroups::-webkit-scrollbar{display:none;}
-  body.tbreading .ucgroups button{flex:0 0 auto;}
+  /* Seven zones wrapped to four rows took more height than the map they were
+     sitting under — 197 px of chips against 179 px of tray. One row that
+     scrolls sideways costs 50, and a row of chips reads as a row of chips
+     whether or not you can see the end of it. */
+  .tbchips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;
+    -webkit-overflow-scrolling:touch;}
+  .tbchips::-webkit-scrollbar{display:none;}
+  .tbchips button{flex:0 0 auto;}
   /* Shorter than the undercarriage sheet, on purpose. That one carries a
      technical drawing of the part; a tray station's drawing is the map above,
      so this is the number, the last reading and the way on — and every pixel
@@ -558,9 +568,21 @@
   body.tbreading .tbwrap{max-height:40vh;}
   @media (max-height:620px){ body.tbreading #ucFields.sheet{max-height:60vh;}
     body.tbreading .tbwrap{max-height:34vh;} }
+  /* Said once, and it must stay said — somebody must not learn from a colour
+     that a plate has no limit behind it. But three lines of it on every paint
+     of the map cost more than the warning is worth, so the short form carries
+     the point and the whole sentence is one tap away. */
   .tbnote{flex:0 0 100%;background:var(--surface-2);border:1px solid var(--line);
-    border-left:3px solid var(--warn-ink);border-radius:10px;padding:9px 11px;
-    margin:0 0 9px;font-size:12px;line-height:1.5;color:var(--ink-2);}
+    border-left:3px solid var(--warn-ink);border-radius:10px;padding:0;
+    margin:0 0 8px;font-size:12px;line-height:1.5;color:var(--ink-2);}
+  .tbnote button{display:flex;align-items:center;gap:8px;width:100%;min-height:38px;
+    padding:6px 11px;background:none;border:0;color:var(--ink-2);font:inherit;
+    text-align:left;cursor:pointer;}
+  .tbnote button b{flex:0 0 auto;color:var(--warn-ink);font-weight:800;}
+  .tbnote button span{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;
+    white-space:nowrap;}
+  .tbnote button i{flex:0 0 auto;font-style:normal;color:var(--muted);}
+  .tbnote.open button span{white-space:normal;overflow:visible;}
   .ucmembers{flex:0 0 100%;display:flex;flex-wrap:wrap;gap:7px;margin:9px 0 0;}
   .ucmembers button{min-width:56px;min-height:44px;padding:6px 14px;border:1px solid var(--line);
     background:var(--surface);color:var(--ink);border-radius:12px;font:700 13px/1 inherit;cursor:pointer;}
@@ -1149,25 +1171,25 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="native.js?v=82"></script>
-<script src="upload-defaults.js?v=82"></script>
-<script src="hme.js?v=82"></script>
-<script src="mp-fc.js?v=82"></script>
-<script src="hme-cascade.js?v=82"></script>
-<script src="assets.js?v=82"></script>
-<script src="temp-limits.js?v=82"></script>
-<script src="wear.js?v=82"></script>
-<script src="wear-figs.js?v=82"></script>
-<script src="wear-map.js?v=82"></script>
-<script src="machine-photos.js?v=82"></script>
-<script src="machine-fig.js?v=82"></script>
-<script src="get.js?v=82"></script>
-<script src="uc-points.js?v=82"></script>
-<script src="inspect-guide.js?v=82"></script>
-<script src="get-figs.js?v=82"></script>
-<script src="body-points.js?v=82"></script>
-<script src="body-map.js?v=82"></script>
-<script src="report-core.js?v=82"></script>
+<script src="native.js?v=83"></script>
+<script src="upload-defaults.js?v=83"></script>
+<script src="hme.js?v=83"></script>
+<script src="mp-fc.js?v=83"></script>
+<script src="hme-cascade.js?v=83"></script>
+<script src="assets.js?v=83"></script>
+<script src="temp-limits.js?v=83"></script>
+<script src="wear.js?v=83"></script>
+<script src="wear-figs.js?v=83"></script>
+<script src="wear-map.js?v=83"></script>
+<script src="machine-photos.js?v=83"></script>
+<script src="machine-fig.js?v=83"></script>
+<script src="get.js?v=83"></script>
+<script src="uc-points.js?v=83"></script>
+<script src="inspect-guide.js?v=83"></script>
+<script src="get-figs.js?v=83"></script>
+<script src="body-points.js?v=83"></script>
+<script src="body-map.js?v=83"></script>
+<script src="report-core.js?v=83"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -1467,7 +1489,9 @@ const I18N = {
     uc_left:"LEFT", uc_right:"RIGHT",
     /* ---- the dump body round ---- */
     tb_no_body:"The dump body round is for the HM400 and TR60 haul trucks.",
+    tb_assumed_s:"Model not in the register — check the sheet fits",
     tb_assumed:"The register does not record this truck's model. Using the {m} sheet — check it matches the body you are standing at.",
+    tb_nolimits_s:"No limits loaded — recorded, not graded",
     tb_nolimits:"No new or condemn thickness has been supplied yet, so no reading gets a verdict. Every millimetre is still recorded, and compared with this station last time.",
     tb_noref:"No limit for this station — the reading is recorded and compared with last time.",
     tb_recorded:"recorded",
@@ -1748,7 +1772,9 @@ const I18N = {
     uc_left:"ЛЕВАЯ", uc_right:"ПРАВАЯ",
     /* ---- осмотр футеровки кузова ---- */
     tb_no_body:"Осмотр футеровки кузова — для самосвалов HM400 и TR60.",
+    tb_assumed_s:"Модели нет в реестре — проверьте схему",
     tb_assumed:"Модель этого самосвала не указана в реестре. Используется схема {m} — проверьте, что она соответствует кузову.",
+    tb_nolimits_s:"Пределы не заданы — записываем, но не оцениваем",
     tb_nolimits:"Толщина новой футеровки и предел износа пока не заданы, поэтому оценка не выводится. Все замеры записываются и сравниваются с прошлым разом.",
     tb_noref:"Для этой точки нет предела — замер записывается и сравнивается с прошлым разом.",
     tb_recorded:"записано",
@@ -2377,6 +2403,16 @@ function bodyZoneState(z){
   if(seen.includes("watch")) return "watch";
   return seen.length===ks.length ? "done" : "";     // part-done is not done
 }
+/* One line by default, the whole of it on tap, and the choice is remembered —
+   an inspector on their tenth body does not need the paragraph again, and one
+   on their first needs it without going looking. */
+let tbNoteOpen = {};
+function tbNote(key, short, full){
+  const on = !!tbNoteOpen[key];
+  return '<div class="tbnote'+(on?' open':'')+'" data-tbn="'+esc(key)+'">'+
+    '<button type="button"><b>!</b><span>'+esc(on?full:short)+'</span>'+
+    '<i>'+(on?"\u25B4":"\u25BE")+'</i></button>'+'</div>';
+}
 function bodyOrder(){ const st=bodyStatus(curEquip); return st.ok?BODY.route(st.model):[]; }
 function bodyTally(){
   const st=bodyStatus(curEquip); if(!st.ok) return "";
@@ -2395,15 +2431,15 @@ function renderBodyMap(){
   const st=bodyStatus(curEquip); if(!st.ok) return;
   const id=st.model, cur=BODY.get(id,curItem);
   let h=ucViewsBar();
-  if(!st.sure) h+='<div class="tbnote">'+esc(t("tb_assumed",{m:st.title}))+'</div>';
-  if(!BODY.hasLimits(id)) h+='<div class="tbnote">'+esc(t("tb_nolimits"))+'</div>';
+  if(!st.sure) h+=tbNote("assumed", t("tb_assumed_s"), t("tb_assumed",{m:st.title}));
+  if(!BODY.hasLimits(id)) h+=tbNote("nolimits", t("tb_nolimits_s"), t("tb_nolimits"));
   h+=bodyTally();
   h+='<div class="tbwrap">'+
      bodyMap({ model:id, lang:lang, sel:curItem, tag:true,
                state:bodyState, zoneState:bodyZoneState })+'</div>';
   /* The zones, named. A code on the plate is quick once you know it; the name
      is what makes the first round possible without the form in your hand. */
-  h+='<div class="ucgroups">'+BODY.zones(id).map(z=>{
+  h+='<div class="ucgroups tbchips">'+BODY.zones(id).map(z=>{
       const done=BODY.inZone(id,z.k).filter(p=>draft.positions[p.k]).length;
       return '<button type="button" data-bz="'+esc(z.k)+'" class="'+
         [bodyZoneState(z.k),(cur&&cur.z===z.k?"on":"")].filter(Boolean).join(" ")+'">'+
@@ -2427,6 +2463,10 @@ function renderBodyMap(){
     saveCur(); curItem=ks.find(k=>!draft.positions[k]) || ks[0];
     loadPos(); renderChips();
   };
+  $("posnav").querySelectorAll("[data-tbn]").forEach(el=>{
+    const bt=el.querySelector("button"); if(!bt) return;
+    bt.onclick=()=>{ const k=el.dataset.tbn; tbNoteOpen[k]=!tbNoteOpen[k]; renderChips(); };
+  });
   $("posnav").querySelectorAll("[data-bz]").forEach(b=>b.onclick=()=>openZone(b.dataset.bz));
   $("posnav").querySelectorAll(".bm-hit[data-zone]").forEach(g=>{
     g.onclick=()=>openZone(g.dataset.zone);
@@ -3718,13 +3758,16 @@ function saveCur(){ if(!curItem) return; normDecAll(); const p=curP(); p.particl
    and its label. One rule, so the heading on the capture screen and the heading
    after a language switch cannot drift apart. */
 function posHeading(k){
-  if(!k) return t("nav_choose");
+  /* On the tray round the chips sit directly above with their own counts, so
+     an arrow pointing at them is a line of screen spent saying nothing. */
+  if(!k) return bodyType() ? "" : t("nav_choose");
   if(wearType()) return ucLabel(k);
   if(getType())  return getLabel(k);
   return `${k} — ${itemLabel(k)}`;
 }
 function loadPos(){
-  if(!curItem){ $("posLabel").textContent=t("nav_choose"); renderUCSheet(); toggleCapture(); return; }
+  if(!curItem){ $("posLabel").textContent=bodyType()?"":t("nav_choose");
+    renderUCSheet(); toggleCapture(); return; }
   $("posLabel").textContent = posHeading(curItem);
   const p=draft.positions[curItem]||{}; $("particle").value=p.particle||""; $("comp").value=p.comp||""; $("oil").value=p.oil||"";
   if(TYPE_META[type].wear){ $("ucMM").value = (p.mm==null?"":p.mm); $("ucStood").checked=!!p.stood; renderUC(); }
@@ -4910,7 +4953,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="82";
+const BUILD="83";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

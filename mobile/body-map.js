@@ -39,9 +39,17 @@
   /* Height off the floor, as a class. s0 is the ground plane. */
   var LIFT = { FLR1: 's0', FLR2: 's0', FLR3: 's0', TAIL: 's1', FRONT: 's3', LEFT: 's2', RIGHT: 's2' };
   var NAME = {
-    FRONT: { en: 'HEAD',       ru: 'ПЕРЁД',        at: 'tl' },
-    LEFT:  { en: 'LEFT SIDE',  ru: 'ЛЕВЫЙ БОРТ',   at: 'tl' },
-    RIGHT: { en: 'RIGHT SIDE', ru: 'ПРАВЫЙ БОРТ',  at: 'bl' },
+    /* Each caption sits in the lane its band keeps clear of stations — see
+       LANE in gen.py. The head has no room for a lane across only four columns,
+       so its caption goes under them instead, in the flare below the last row. */
+    FRONT: { en: 'HEAD',       ru: 'ПЕРЁД',        at: 'bl' },
+    /* One word. The caption only has to say WHICH SURFACE; the chip below it
+       carries the full name and the count. Keeping it to a word is also what
+       makes the lane wide enough in any language — "ПРАВЫЙ БОРТ" ran past the
+       first station column where "RIGHT SIDE" just cleared it, and sizing the
+       drawing around the longest translation is a bad trade for the grid. */
+    LEFT:  { en: 'LEFT',       ru: 'ЛЕВЫЙ',        at: 'tl' },
+    RIGHT: { en: 'RIGHT',      ru: 'ПРАВЫЙ',       at: 'bl' },
     FLR1:  { en: 'FLOOR',      ru: 'ПОЛ',          at: 'tl' },
     TAIL:  { en: 'TAIL',       ru: 'ХВОСТ',        at: 'tr' },
   };
@@ -174,9 +182,9 @@
       Object.keys(NAME).forEach(function (z) {
         var r = B.region(id, z); if (!r) return;
         var c = bbox(r), a = NAME[z].at, q, anc;
-        if (a === 'tl')      { q = px([c.x0, c.y0]); q = [q[0] + 8, q[1] + 15];  anc = 'start'; }
-        else if (a === 'bl') { q = px([c.x0, c.y1]); q = [q[0] + 8, q[1] - 7];   anc = 'start'; }
-        else if (a === 'tr') { q = px([c.x1, c.y0]); q = [q[0] - 8, q[1] + 15];  anc = 'end'; }
+        if (a === 'tl')      { q = px([c.x0, c.y0]); q = [q[0] + 3, q[1] + 15];  anc = 'start'; }
+        else if (a === 'bl') { q = px([c.x0, c.y1]); q = [q[0] + 3, q[1] - 7];   anc = 'start'; }
+        else if (a === 'tr') { q = px([c.x1, c.y0]); q = [q[0] - 3, q[1] + 15];  anc = 'end'; }
         else                 { q = px([(c.x0 + c.x1) / 2, c.y0]); q = [q[0], q[1] + 15]; anc = 'middle'; }
         s.push('<text class="bm-face" pointer-events="none" x="' + q[0].toFixed(1) +
                '" y="' + q[1].toFixed(1) + '" text-anchor="' + anc + '">' +
