@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=86">
+<link rel="manifest" href="manifest.webmanifest?v=87">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=86">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=86">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=86">
+<link rel="apple-touch-icon" href="icon-192.png?v=87">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=87">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=87">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -373,7 +373,11 @@
   /* The three disclosures share one look, and one habit: closed by default,
      and the choice is remembered across stations. Somebody on their hundredth
      roller does not want the method back on every point. */
-  #ucFields.dock .ucfigtog,#ucFields.dock .ucna-h{display:flex;align-items:center;gap:8px;
+  /* Both rounds, both views. The row used to be revealed only inside the dock,
+     which meant the GET round — whose copy lives in its own field block — and
+     the list view never got one at all. */
+  #ucFields .ucfigtog,#getFields .ucfigtog,
+  #ucFields.dock .ucna-h{display:flex;align-items:center;gap:8px;
     width:100%;min-height:42px;padding:6px 2px;background:none;border:0;
     border-top:1px solid var(--line);color:var(--ink-2);font:600 12.5px/1 inherit;
     text-align:left;cursor:pointer;}
@@ -414,10 +418,12 @@
     background:var(--surface-2);color:var(--ink);font:650 15px/1 inherit;cursor:pointer;}
   .sh-nav button.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);}
   .sh-nav button:disabled{opacity:.4;}
-  .ucfigtog{display:none;width:100%;font:600 12.5px/1 inherit;color:var(--muted);
+  /* Whether the row is on screen is the renderer's call, not the cascade's: it
+     is there when the point has a drawing behind it and gone when it has not.
+     A default of display:none here is what hid the GET round's copy outright. */
+  .ucfigtog{width:100%;font:600 12.5px/1 inherit;color:var(--muted);
     background:none;border:0;border-bottom:1px dashed var(--line);padding:9px 0 10px;
     margin:0 0 10px;cursor:pointer;text-align:left;}
-  #ucFields.sheet .ucfigtog{display:block;}
   .ucfig{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;
     padding:9px;margin-bottom:11px;text-align:center;}
   .ucfig svg{width:100%;max-width:340px;height:auto;display:block;margin:0 auto;}
@@ -1251,25 +1257,25 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="native.js?v=86"></script>
-<script src="upload-defaults.js?v=86"></script>
-<script src="hme.js?v=86"></script>
-<script src="mp-fc.js?v=86"></script>
-<script src="hme-cascade.js?v=86"></script>
-<script src="assets.js?v=86"></script>
-<script src="temp-limits.js?v=86"></script>
-<script src="wear.js?v=86"></script>
-<script src="wear-figs.js?v=86"></script>
-<script src="wear-map.js?v=86"></script>
-<script src="machine-photos.js?v=86"></script>
-<script src="machine-fig.js?v=86"></script>
-<script src="get.js?v=86"></script>
-<script src="uc-points.js?v=86"></script>
-<script src="inspect-guide.js?v=86"></script>
-<script src="get-figs.js?v=86"></script>
-<script src="body-points.js?v=86"></script>
-<script src="body-map.js?v=86"></script>
-<script src="report-core.js?v=86"></script>
+<script src="native.js?v=87"></script>
+<script src="upload-defaults.js?v=87"></script>
+<script src="hme.js?v=87"></script>
+<script src="mp-fc.js?v=87"></script>
+<script src="hme-cascade.js?v=87"></script>
+<script src="assets.js?v=87"></script>
+<script src="temp-limits.js?v=87"></script>
+<script src="wear.js?v=87"></script>
+<script src="wear-figs.js?v=87"></script>
+<script src="wear-map.js?v=87"></script>
+<script src="machine-photos.js?v=87"></script>
+<script src="machine-fig.js?v=87"></script>
+<script src="get.js?v=87"></script>
+<script src="uc-points.js?v=87"></script>
+<script src="inspect-guide.js?v=87"></script>
+<script src="get-figs.js?v=87"></script>
+<script src="body-points.js?v=87"></script>
+<script src="body-map.js?v=87"></script>
+<script src="report-core.js?v=87"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3784,10 +3790,6 @@ function renderUCMap(){
 let ucFigOpen = localStorage.getItem("uc_fig")==="1";
 function renderUCFig(){
   const box=$("ucFig"), tog=$("ucFigTog"); if(!box) return;
-  if(tog) tog.style.display = bodyType() ? "none" : "";
-  if(tog){ tog.textContent = (ucFigOpen?"▾ ":"▸ ")+t(ucFigOpen?"uc_fig_hide":"uc_fig_show");
-    tog.onclick=()=>{ ucFigOpen=!ucFigOpen; localStorage.setItem("uc_fig",ucFigOpen?"1":"0");
-      renderUCFig(); if(TYPE_META[type].get) renderGETFig(); }; }
   const [pt]=ucSplit(curItem||"");
   /* No drawing on a tray station, and that is the right answer rather than a
      gap. The undercarriage sheet draws a roller because a roller has a shape
@@ -3797,8 +3799,18 @@ function renderUCFig(){
      sheet duplicated all sixty-three station ids into the document, giving
      every one of them a twin that looked tappable and was not. */
   const svg = bodyType() ? "" : (window.WEAR_FIG ? WEAR_FIG.for(pt, lang) : "");
+  /* The row only exists where there is something behind it. Track sag, frame
+     alignment and adjuster travel are looked at, not measured, and WEAR_FIG has
+     no drawing for any of them — but the row was offered on every non-tray
+     point, so those three read "Hide the diagram" over empty space. Decide the
+     row from the drawing, the way the GET round already does. */
+  if(tog){ tog.classList.toggle("hidden", !svg);
+    tog.textContent = (ucFigOpen?"▾ ":"▸ ")+t(ucFigOpen?"uc_fig_hide":"uc_fig_show");
+    tog.onclick = !svg ? null : ()=>{ ucFigOpen=!ucFigOpen;
+      localStorage.setItem("uc_fig",ucFigOpen?"1":"0");
+      renderUCFig(); if(TYPE_META[type].get) renderGETFig(); }; }
   box.style.display = (svg && ucFigOpen)?"":"none";
-  if(!svg || !ucFigOpen) return;
+  if(!svg || !ucFigOpen){ box.innerHTML=""; return; }
   /* The tool used to be a caption bolted under the drawing, and only in English —
      WEAR.points carries one string, not two. It is inside the drawing now, in
      the same header band the GET set uses, so it follows the language and sits
@@ -5176,7 +5188,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="86";
+const BUILD="87";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
