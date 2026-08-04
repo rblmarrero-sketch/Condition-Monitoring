@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=88">
+<link rel="manifest" href="manifest.webmanifest?v=89">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=88">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=88">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=88">
+<link rel="apple-touch-icon" href="icon-192.png?v=89">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=89">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=89">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -387,19 +387,23 @@
   #ucFields.dock .ucref{order:3;margin:0 0 6px;}
   #ucFields.dock .mrow{order:4;}
   #ucFields.dock .ucwarn{order:6;}
-  #ucFields.dock .sh-nav{order:7;display:flex;gap:8px;margin-top:8px;}
+  /* Reading order in the dock: what it measured, what that means, anything
+     questionable about it, the evidence, then the way on. The way on stays
+     last — a camera below Next is a camera nobody reaches. */
+  #ucFields.dock #mediastrip{order:6;margin:2px 0 6px;}
+  #ucFields.dock #mediaRow{order:7;margin:0;}
+  #ucFields.dock .sh-nav{order:8;display:flex;gap:8px;margin-top:8px;}
   #ucFields.dock .sh-nav button{flex:1;min-width:0;min-height:44px;border-radius:11px;
     background:var(--surface-2);border:1px solid var(--border);color:var(--ink);
     font:650 14px/1 inherit;cursor:pointer;}
   #ucFields.dock .sh-nav button.pri{background:var(--accent);border-color:var(--accent);
     color:var(--accent-ink);}
-  #ucFields.dock .ucfigtog{order:8;}
-  #ucFields.dock .ucfig{order:9;}
-  #ucFields.dock .guide{order:10;}
-  #ucFields.dock .ucna{order:11;}
-  #ucFields.dock #ucExtraTog{order:11;}
-  #ucFields.dock #mediastrip{order:12;} #ucFields.dock #mediaHint{order:13;}
-  #ucFields.dock #mediaRow{order:14;} #ucFields.dock #commentFld{order:15;}
+  #ucFields.dock .ucfigtog{order:10;}
+  #ucFields.dock .ucfig{order:11;}
+  #ucFields.dock .guide{order:12;}
+  #ucFields.dock .ucna{order:13;}
+  #ucFields.dock #ucExtraTog{order:14;}
+  #ucFields.dock #mediaHint{order:15;} #ucFields.dock #commentFld{order:16;}
   /* The three disclosures share one look, and one habit: closed by default,
      and the choice is remembered across stations. Somebody on their hundredth
      roller does not want the method back on every point. */
@@ -498,6 +502,12 @@
      above the sheet is worth less than the reading, its verdict and the way
      out, so the sheet takes the room it needs and the drawing scrolls. */
   @media (max-height:620px){
+    /* 568 px tall, with a reading the app has challenged: the number, what it
+       means, the challenge, the camera and the way on do not all fit, and one
+       of them has to go below the fold. It is the camera. Back and Next are
+       how the round continues and there are forty-three more points after this
+       one; a photograph is one scroll away on the shortest screens only. */
+    #ucFields.dock #mediastrip,#ucFields.dock #mediaRow{order:9;}
     .ucwarn{padding:9px 11px;margin-bottom:9px;}
     .ucwarn .uw-t{font-size:12.5px;line-height:1.4;}
     .ucwarn .uw-ok{margin-top:7px;font-size:12.5px;}
@@ -1323,25 +1333,25 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="native.js?v=88"></script>
-<script src="upload-defaults.js?v=88"></script>
-<script src="hme.js?v=88"></script>
-<script src="mp-fc.js?v=88"></script>
-<script src="hme-cascade.js?v=88"></script>
-<script src="assets.js?v=88"></script>
-<script src="temp-limits.js?v=88"></script>
-<script src="wear.js?v=88"></script>
-<script src="wear-figs.js?v=88"></script>
-<script src="wear-map.js?v=88"></script>
-<script src="machine-photos.js?v=88"></script>
-<script src="machine-fig.js?v=88"></script>
-<script src="get.js?v=88"></script>
-<script src="uc-points.js?v=88"></script>
-<script src="inspect-guide.js?v=88"></script>
-<script src="get-figs.js?v=88"></script>
-<script src="body-points.js?v=88"></script>
-<script src="body-map.js?v=88"></script>
-<script src="report-core.js?v=88"></script>
+<script src="native.js?v=89"></script>
+<script src="upload-defaults.js?v=89"></script>
+<script src="hme.js?v=89"></script>
+<script src="mp-fc.js?v=89"></script>
+<script src="hme-cascade.js?v=89"></script>
+<script src="assets.js?v=89"></script>
+<script src="temp-limits.js?v=89"></script>
+<script src="wear.js?v=89"></script>
+<script src="wear-figs.js?v=89"></script>
+<script src="wear-map.js?v=89"></script>
+<script src="machine-photos.js?v=89"></script>
+<script src="machine-fig.js?v=89"></script>
+<script src="get.js?v=89"></script>
+<script src="uc-points.js?v=89"></script>
+<script src="inspect-guide.js?v=89"></script>
+<script src="get-figs.js?v=89"></script>
+<script src="body-points.js?v=89"></script>
+<script src="body-map.js?v=89"></script>
+<script src="report-core.js?v=89"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -1656,7 +1666,7 @@ const I18N = {
     tb_w_lost:"This station has gone from {p} mm to {mm} mm since the last round. That is a lot of metal — worth taking again.",
     tb_w_odd:"The rest of this zone is reading around {p} mm and this station says {mm} mm. Check the decimal point, or that the probe is not on a doubler.",
     tb_zone_worst:"thinnest: {k} at {n} mm",
-    tb_extra:"Photos and comment", tb_x_photos:"{n} photo(s)", tb_x_video:"video",
+    tb_note:"Add a comment", tb_note_hide:"Hide the comment",
     tb_x_comment:"comment",
     tb_rpt_zone:"Zone", tb_rpt_taken:"Taken", tb_rpt_min:"Thinnest (mm)", tb_rpt_at:"At station",
     uc_leg_none:"not taken", uc_leg_done:"serviceable", uc_leg_watch:"watch",
@@ -1942,7 +1952,7 @@ const I18N = {
     tb_w_lost:"С прошлого осмотра точка ушла с {p} мм до {mm} мм. Это много металла — стоит перемерить.",
     tb_w_odd:"Остальные точки этой зоны показывают около {p} мм, а здесь {mm} мм. Проверьте запятую или то, что датчик не стоит на накладке.",
     tb_zone_worst:"минимум: {k} — {n} мм",
-    tb_extra:"Фото и комментарий", tb_x_photos:"фото: {n}", tb_x_video:"видео",
+    tb_note:"Добавить комментарий", tb_note_hide:"Скрыть комментарий",
     tb_x_comment:"комментарий",
     tb_rpt_zone:"Зона", tb_rpt_taken:"Снято", tb_rpt_min:"Минимум (мм)", tb_rpt_at:"Точка",
     uc_leg_none:"не снято", uc_leg_done:"годен", uc_leg_watch:"наблюдать",
@@ -3391,19 +3401,36 @@ function measReasons(){ return bodyType() ? TB_REASONS : (window.WEAR&&WEAR.reas
    typed must never be hidden behind a closed row, or the next inspector adds a
    second one thinking there was none. */
 let ucExtraOpen = localStorage.getItem("uc_extra_open")==="1";
+/* The camera is not an extra.
+
+   Photos and the comment went behind one row together, and that row said
+   "Photos and comment" — three words, no camera, third in a list of three grey
+   disclosures. On a liner plate or a roller the photograph is half the record:
+   the number says 232 mm and the photograph says why. Reachable in two taps
+   behind a text label is, in practice, not offered at all.
+
+   So the buttons are out in the dock on every measurement round, under the
+   verdict and above the way on, and the thumbnails appear beside them the
+   moment there is something to show. What stays behind the row is the comment,
+   which is genuinely occasional, and the ten-photo hint, which is a rule
+   nobody needs read back on every station. */
+const UC_FOLD = ["mediaHint","commentFld"];
 function renderUCExtra(on){
   const tog=$("ucExtraTog"); if(!tog) return;
   tog.style.display = on ? "" : "none";
   if(!on){ UC_MOVE.forEach(id=>{ const el=$(id); if(el) el.style.display=""; }); return; }
   const p=posRO(), nPh=(p.photos||[]).length, hasC=!!(p.comment||"").trim(), vid=!!p.video;
-  const has = nPh || hasC || vid;
-  const show = ucExtraOpen || has;
-  const bits=[]; if(nPh) bits.push(t("tb_x_photos",{n:nPh}));
-  if(vid) bits.push(t("tb_x_video")); if(hasC) bits.push(t("tb_x_comment"));
-  tog.textContent=(show?"\u25BE ":"\u25B8 ")+t("tb_extra")+(bits.length?" \u00B7 "+bits.join(", "):"");
+  /* Always on screen: the way to take a photograph. The strip only when it has
+     something in it — "No photos yet." is 46 px of nothing on sixty-three
+     stations. */
+  const row=$("mediaRow"); if(row) row.style.display="";
+  const strip=$("mediastrip"); if(strip) strip.style.display=(nPh||vid)?"":"none";
+  const show = ucExtraOpen || hasC;
+  tog.textContent=(show?"\u25BE ":"\u25B8 ")+t(show?"tb_note_hide":"tb_note")
+    + (hasC && !show ? " \u00B7 " + t("tb_x_comment") : "");
   tog.onclick=()=>{ ucExtraOpen=!ucExtraOpen;
     localStorage.setItem("uc_extra_open",ucExtraOpen?"1":"0"); renderUCExtra(true); };
-  UC_MOVE.forEach(id=>{ const el=$(id); if(el) el.style.display = show ? "" : "none"; });
+  UC_FOLD.forEach(id=>{ const el=$(id); if(el) el.style.display = show ? "" : "none"; });
 }
 /* Closed by default and remembered, like the method above it. Six chips open on
    every one of sixty-three stations is the exception occupying the position of
@@ -5367,7 +5394,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="88";
+const BUILD="89";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
