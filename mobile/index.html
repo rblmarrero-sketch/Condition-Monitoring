@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=81">
+<link rel="manifest" href="manifest.webmanifest?v=82">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=81">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=81">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=81">
+<link rel="apple-touch-icon" href="icon-192.png?v=82">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=82">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=82">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -38,19 +38,28 @@
     --ink:#11171a; --ink-2:#41505a; --muted:#5b686f; --border:#d6dde1;
     --line:#e7ecee; --shadow:0 1px 2px rgba(16,26,32,.05);
     --accent:#1f6fc4; --accent-ink:#fff; --accent-soft:#e8f1fb;
-    --good:#0c8a3e; --warning:#c07c07; --serious:#c95a2c; --critical:#c02f2f; --none:#8b969b; --warn-ink:#8a5a00; }
+    --good:#0c8a3e; --warning:#c07c07; --serious:#c95a2c; --critical:#c02f2f; --none:#8b969b; --warn-ink:#8a5a00;
+    /* The tray's surfaces: one low-chroma family stepped by HEIGHT OFF THE
+       FLOOR, so the tint says "this panel is folded up" and leaves green, amber
+       and red to mean what they already mean. */
+    --bm-s0:#eef1f2; --bm-s1:#e4e9ee; --bm-s2:#dae2ec; --bm-s3:#d2dbeb;
+    --bm-edge:#c9d1d6; --bm-fold:#9fadc4; }
   @media (prefers-color-scheme: dark){ :root:where(:not([data-theme="light"])){ color-scheme:dark;
     --page:#0d1013; --surface:#171b1f; --surface-2:#1f252a; --surface-3:#2a3238;
     --ink:#eef2f4; --ink-2:#b3bec4; --muted:#828e95; --border:#2c353b;
     --line:#232a30; --shadow:none;
     --accent:#4d9bef; --accent-ink:#06131f; --accent-soft:#16283b;
-    --good:#3aad5c; --warning:#e0a52a; --serious:#e2825a; --critical:#e05a52; --none:#69757b; --warn-ink:#e0a52a; } }
+    --good:#3aad5c; --warning:#e0a52a; --serious:#e2825a; --critical:#e05a52; --none:#69757b; --warn-ink:#e0a52a;
+    --bm-s0:#232a30; --bm-s1:#28313a; --bm-s2:#2d3945; --bm-s3:#334154;
+    --bm-edge:#3a444c; --bm-fold:#55688a; } }
   :root[data-theme="dark"]{ color-scheme:dark;
     --page:#0d1013; --surface:#171b1f; --surface-2:#1f252a; --surface-3:#2a3238;
     --ink:#eef2f4; --ink-2:#b3bec4; --muted:#828e95; --border:#2c353b;
     --line:#232a30; --shadow:none;
     --accent:#4d9bef; --accent-ink:#06131f; --accent-soft:#16283b;
-    --good:#3aad5c; --warning:#e0a52a; --serious:#e2825a; --critical:#e05a52; --none:#69757b; --warn-ink:#e0a52a; }
+    --good:#3aad5c; --warning:#e0a52a; --serious:#e2825a; --critical:#e05a52; --none:#69757b; --warn-ink:#e0a52a;
+    --bm-s0:#232a30; --bm-s1:#28313a; --bm-s2:#2d3945; --bm-s3:#334154;
+    --bm-edge:#3a444c; --bm-fold:#55688a; }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
   html,body{margin:0;padding:0;}
   body{background:var(--page);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.4;padding-bottom:92px;}
@@ -475,7 +484,7 @@
     letter-spacing:.04em;text-transform:uppercase;cursor:pointer;}
   .ucsides button.on{background:var(--accent);border-color:var(--accent);color:#fff;}
   .ucgroups{flex:0 0 100%;display:flex;flex-wrap:wrap;gap:7px;margin:10px 0 0;}
-  .ucgroups button{display:inline-flex;align-items:center;gap:7px;min-height:40px;
+  .ucgroups button{display:inline-flex;align-items:center;gap:7px;min-height:44px;
     padding:6px 12px 6px 6px;border:1px solid var(--line);background:var(--surface);
     color:var(--ink);border-radius:999px;font:600 12.5px/1.25 inherit;text-align:left;cursor:pointer;}
   .ucgroups button i{flex:0 0 auto;width:22px;height:22px;border-radius:999px;
@@ -493,31 +502,62 @@
   .ucgroups button{padding-right:6px;}
   .ucgroups button.done i.cnt,.ucgroups button.act i.cnt{color:#fff;}
   .ucgroups button.watch i.cnt{color:#3a2a00;}
-  /* ---- the tray, drawn ------------------------------------------------
-     Same vocabulary as the undercarriage map above — a station is a dot, its
-     state is its fill, the one you are on is ringed in the accent — so an
-     inspector who has done a track round can read this one on sight. */
-  .bm-shell{fill:var(--surface-2);stroke:var(--ink-2);stroke-width:2.4;stroke-linejoin:round;}
-  .bm-z{fill:var(--surface-3);stroke:var(--line);stroke-width:1.1;cursor:pointer;}
-  .bm-z.done{fill:color-mix(in srgb,var(--good) 22%,var(--surface-2));}
-  .bm-z.watch{fill:color-mix(in srgb,var(--warning) 26%,var(--surface-2));}
-  .bm-z.act{fill:color-mix(in srgb,var(--critical) 30%,var(--surface-2));}
+  /* ---- the tray, drawn as an opened box -------------------------------
+     Colour carries HEIGHT OFF THE FLOOR, not category. Green, amber and red
+     already mean serviceable, watch and past the limit, and they must stay the
+     only saturated colours here — a red dot has to be the only red thing on the
+     drawing. So the surfaces step s0 (the floor, palest) through s3 (the head,
+     deepest), which reinforces the fold instead of competing with it. */
+  .bm-z{stroke:var(--bm-edge);stroke-width:1.1;stroke-linejoin:round;pointer-events:none;}
+  .bm-z.s0{fill:var(--bm-s0);} .bm-z.s1{fill:var(--bm-s1);}
+  .bm-z.s2{fill:var(--bm-s2);} .bm-z.s3{fill:var(--bm-s3);}
+  .bm-z.done{fill:color-mix(in srgb,var(--good) 17%,var(--bm-s0));}
+  .bm-z.watch{fill:color-mix(in srgb,var(--warning) 22%,var(--bm-s0));}
+  .bm-z.act{fill:color-mix(in srgb,var(--critical) 26%,var(--bm-s0));}
+  .bm-fold{fill:none;stroke:var(--bm-fold);stroke-width:1.6;stroke-dasharray:7 5;opacity:.85;}
+  .bm-div{fill:none;stroke:var(--bm-edge);stroke-width:1;opacity:.7;}
+  .bm-lip{fill:none;stroke:var(--warn-ink);stroke-width:5;stroke-linecap:round;opacity:.75;}
+  .bm-face{fill:var(--ink-2);font:700 11.5px/1 inherit;letter-spacing:.12em;
+    paint-order:stroke fill;stroke:var(--surface);stroke-width:3.5px;stroke-linejoin:round;opacity:.9;}
+  .bm-way{fill:var(--muted);font:700 10.5px/1 inherit;letter-spacing:.1em;opacity:.75;}
+  /* The surface is the control, not the dot — 63 stations across a phone puts
+     them about seven pixels apart, and nothing that small is a button. */
   .bm-hit{fill:transparent;cursor:pointer;}
-  .bm-dot{fill:var(--surface);stroke:var(--ink-2);stroke-width:1.5;}
+  .bm-hit:focus-visible{outline:2px solid var(--accent);outline-offset:-3px;}
+  .bm-dot{fill:var(--surface);stroke:var(--muted);stroke-width:1.6;}
   .bm-p.done .bm-dot{fill:var(--good);stroke:var(--good);}
   .bm-p.watch .bm-dot{fill:var(--warning);stroke:var(--warn-ink);}
   .bm-p.act .bm-dot{fill:var(--critical);stroke:var(--critical);}
-  .bm-p.na .bm-dot{fill:var(--surface-3);stroke-dasharray:2.4 2.4;}
-  .bm-p.sel .bm-dot{stroke:var(--accent);stroke-width:3.4;}
-  .bm-p:focus-visible{outline:none;}
-  .bm-p:focus-visible .bm-dot{stroke:var(--accent);stroke-width:3.4;}
-  /* Sits beside its dot, which puts it over the neighbour's target — see
-     body-map.js, which also sets pointer-events on the element itself. */
-  .bm-tag{pointer-events:none;fill:var(--accent);font:800 15px/1 inherit;
-    paint-order:stroke fill;stroke:var(--surface-2);stroke-width:5px;stroke-linejoin:round;}
-  /* Said once, above the map: which sheet is in use, and that a millimetre here
-     has no verdict behind it yet. Both are things somebody must not discover
-     from a colour. */
+  .bm-p.na .bm-dot{fill:var(--surface-3);stroke-dasharray:2.5 2.5;}
+  .bm-p.sel .bm-dot{stroke:var(--accent);stroke-width:3.6;}
+  /* A chip, not bare text: over a field of dots, unbacked type is unreadable at
+     exactly the moment it is needed. */
+  .bm-tag rect{fill:var(--accent);}
+  .bm-tag text{fill:var(--accent-ink);font:800 14px/1 inherit;}
+  /* Its own shape until the sheet wants the room, then it gives way and the
+     drawing scales down inside it — whole, never covered, never half scrolled.
+     This is what the old 300x640 portrait drawing could not do at any sheet
+     height, and why tapping a station used to bury the map. */
+  .bodymap{width:100%;height:100%;display:block;}
+  .tbwrap{background:var(--surface);border:1px solid var(--line);border-radius:13px;
+    padding:5px 4px;flex:0 0 auto;aspect-ratio:640/330;display:flex;align-items:center;
+    justify-content:center;width:100%;margin-bottom:9px;}
+  body.tbreading .tbwrap{flex:1 1 auto;aspect-ratio:auto;min-height:150px;}
+  /* Taking a reading is a different screen from choosing where to take it: the
+     orientation note has been read by then, and seven zone chips over three rows
+     are worth less than the map they were stealing. */
+  body.tbreading .tbnote{display:none;}
+  body.tbreading .ucgroups{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;}
+  body.tbreading .ucgroups::-webkit-scrollbar{display:none;}
+  body.tbreading .ucgroups button{flex:0 0 auto;}
+  /* Shorter than the undercarriage sheet, on purpose. That one carries a
+     technical drawing of the part; a tray station's drawing is the map above,
+     so this is the number, the last reading and the way on — and every pixel
+     it hands back is map that is not being covered. */
+  body.tbreading #ucFields.sheet{max-height:52vh;}
+  body.tbreading .tbwrap{max-height:40vh;}
+  @media (max-height:620px){ body.tbreading #ucFields.sheet{max-height:60vh;}
+    body.tbreading .tbwrap{max-height:34vh;} }
   .tbnote{flex:0 0 100%;background:var(--surface-2);border:1px solid var(--line);
     border-left:3px solid var(--warn-ink);border-radius:10px;padding:9px 11px;
     margin:0 0 9px;font-size:12px;line-height:1.5;color:var(--ink-2);}
@@ -1109,25 +1149,25 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="native.js?v=81"></script>
-<script src="upload-defaults.js?v=81"></script>
-<script src="hme.js?v=81"></script>
-<script src="mp-fc.js?v=81"></script>
-<script src="hme-cascade.js?v=81"></script>
-<script src="assets.js?v=81"></script>
-<script src="temp-limits.js?v=81"></script>
-<script src="wear.js?v=81"></script>
-<script src="wear-figs.js?v=81"></script>
-<script src="wear-map.js?v=81"></script>
-<script src="machine-photos.js?v=81"></script>
-<script src="machine-fig.js?v=81"></script>
-<script src="get.js?v=81"></script>
-<script src="uc-points.js?v=81"></script>
-<script src="inspect-guide.js?v=81"></script>
-<script src="get-figs.js?v=81"></script>
-<script src="body-points.js?v=81"></script>
-<script src="body-map.js?v=81"></script>
-<script src="report-core.js?v=81"></script>
+<script src="native.js?v=82"></script>
+<script src="upload-defaults.js?v=82"></script>
+<script src="hme.js?v=82"></script>
+<script src="mp-fc.js?v=82"></script>
+<script src="hme-cascade.js?v=82"></script>
+<script src="assets.js?v=82"></script>
+<script src="temp-limits.js?v=82"></script>
+<script src="wear.js?v=82"></script>
+<script src="wear-figs.js?v=82"></script>
+<script src="wear-map.js?v=82"></script>
+<script src="machine-photos.js?v=82"></script>
+<script src="machine-fig.js?v=82"></script>
+<script src="get.js?v=82"></script>
+<script src="uc-points.js?v=82"></script>
+<script src="inspect-guide.js?v=82"></script>
+<script src="get-figs.js?v=82"></script>
+<script src="body-points.js?v=82"></script>
+<script src="body-map.js?v=82"></script>
+<script src="report-core.js?v=82"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2358,10 +2398,9 @@ function renderBodyMap(){
   if(!st.sure) h+='<div class="tbnote">'+esc(t("tb_assumed",{m:st.title}))+'</div>';
   if(!BODY.hasLimits(id)) h+='<div class="tbnote">'+esc(t("tb_nolimits"))+'</div>';
   h+=bodyTally();
-  h+='<div class="ucmaps"><div class="ucmapwrap">'+
+  h+='<div class="tbwrap">'+
      bodyMap({ model:id, lang:lang, sel:curItem, tag:true,
-               state:bodyState, zoneState:bodyZoneState })+'</div></div>';
-  bodyDrawnFor=id+"|"+curItem;
+               state:bodyState, zoneState:bodyZoneState })+'</div>';
   /* The zones, named. A code on the plate is quick once you know it; the name
      is what makes the first round possible without the form in your hand. */
   h+='<div class="ucgroups">'+BODY.zones(id).map(z=>{
@@ -2370,21 +2409,37 @@ function renderBodyMap(){
         [bodyZoneState(z.k),(cur&&cur.z===z.k?"on":"")].filter(Boolean).join(" ")+'">'+
         esc(z[lang]||z.en)+'<i class="cnt">'+done+'/'+z.n+'</i></button>';
     }).join("")+'</div>';
+  /* And the stations of the open zone, at a size a thumb can hit. The map picks
+     the surface, the chips above pick the band, this picks the station — three
+     levels, because sixty-three dots on one screen can never each be a button. */
+  if(cur){
+    h+='<div class="ucmembers">'+BODY.inZone(id,cur.z).map(p=>
+      '<button type="button" data-pos="'+esc(p.k)+'" class="'+
+      [bodyState(p.k),(p.k===curItem?"on":"")].filter(Boolean).join(" ")+'">'+
+      esc(p.k)+'</button>').join("")+'</div>';
+  }
   $("posnav").innerHTML=h;
-  /* A zone opens on the first station still to be taken, so a half-done zone
-     resumes where it was left rather than starting again at the top. */
-  $("posnav").querySelectorAll("[data-bz]").forEach(b=>b.onclick=()=>{
-    const ks=BODY.inZone(id,b.dataset.bz).map(p=>p.k);
-    if(!ks.length) return;
+  bodyDrawnFor=id+"|"+curItem;
+  /* A surface opens on the first station in it still to be taken, so a half-done
+     wall resumes where it was left rather than starting again at the top. */
+  const openZone=z=>{
+    const ks=BODY.inZone(id,z).map(p=>p.k); if(!ks.length) return;
     saveCur(); curItem=ks.find(k=>!draft.positions[k]) || ks[0];
-    loadPos(); renderChips(); });
-  $("posnav").querySelectorAll("[data-pt]").forEach(g=>{
-    const go=()=>{ saveCur(); curItem=g.dataset.pt; loadPos(); renderChips(); };
-    g.onclick=go;
-    g.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } };
+    loadPos(); renderChips();
+  };
+  $("posnav").querySelectorAll("[data-bz]").forEach(b=>b.onclick=()=>openZone(b.dataset.bz));
+  $("posnav").querySelectorAll(".bm-hit[data-zone]").forEach(g=>{
+    g.onclick=()=>openZone(g.dataset.zone);
+    g.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); openZone(g.dataset.zone); } };
   });
+  /* The member chips are [data-pos], which #posnav already delegates. */
+  const onC=$("posnav").querySelector(".ucmembers button.on");
+  if(onC) onC.scrollIntoView({block:"nearest",inline:"nearest"});
+  const onZ=$("posnav").querySelector(".ucgroups button.on");
+  if(onZ) onZ.scrollIntoView({block:"nearest",inline:"nearest"});
   wireUCViews();
 }
+
 let draft={positions:{}}; let curItem=(items()[0]||{}).k||"";
 function curP(){ return (draft.positions[curItem] ||= {}); }   // WRITE path: creates the entry
 // READ path. curP() here would create an empty entry, and every "has data" check
@@ -2545,11 +2600,15 @@ function repaintMap(){
     });
     /* The regions shade with their worst station — the same thing the chip
        below says, and the one an inspector sees from across the yard. */
-    nav.querySelectorAll("[data-zone]").forEach(el=>{
+    nav.querySelectorAll("[data-band]").forEach(el=>{
       const base=(el.getAttribute("class")||"").split(/\s+/)
-        .filter(c=>c && c!=="done" && c!=="watch" && c!=="act" && c!=="sel");
-      el.setAttribute("class", base.concat([bodyZoneState(el.dataset.zone)||""])
+        .filter(c=>c && c!=="done" && c!=="watch" && c!=="act");
+      el.setAttribute("class", base.concat([bodyZoneState(el.dataset.band)||""])
         .filter(Boolean).join(" "));
+    });
+    nav.querySelectorAll(".ucmembers button[data-pos]").forEach(bt=>{
+      bt.className=[bodyState(bt.dataset.pos)||"",
+                    bt.dataset.pos===curItem?"on":""].filter(Boolean).join(" ");
     });
     const cur=BODY.get(id,curItem);
     nav.querySelectorAll("[data-bz]").forEach(b=>{
@@ -3179,7 +3238,7 @@ let ucScrollT=0;
 function ucKeepFrameInView(){
   if(!ucSheetOn()) return;
   // the map is one picture now, so the frame to keep in view is the picture
-  const box=$("posnav").querySelector(".ucmapwrap");
+  const box=$("posnav").querySelector(".ucmapwrap,.tbwrap");
   if(!box) return;
   const top=$("ucFields").getBoundingClientRect().top, r=box.getBoundingClientRect();
   if(!r.height || !top) return;
@@ -3208,6 +3267,9 @@ function ucMoveOut(){
 function renderUCSheet(){
   const on=ucSheetOn(), f=$("ucFields"), bd=$("ucBackdrop");
   if(!f||!bd) return;
+  /* Reading a station is a different screen from choosing one: the note has
+     been read, and the map is worth more than three rows of chips. */
+  document.body.classList.toggle("tbreading", on && bodyType());
   f.classList.toggle("sheet", on);
   bd.classList.toggle("hidden", !on);
   document.body.style.overflow = on ? "hidden" : "";
@@ -4848,7 +4910,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="81";
+const BUILD="82";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

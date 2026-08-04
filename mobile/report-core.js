@@ -142,13 +142,25 @@
    Often on a grey office printer, so the state is carried by the fill AND by
    the outline weight — a body at the condemn limit has to read as different
    from a serviceable one on a page with no colour in it at all. */
-#rptRoot .bodymap{display:block;width:100%;height:auto;max-height:330px;margin:0 auto;}
-#rptRoot .bm-shell{fill:#f2f5f7;stroke:#5b6670;stroke-width:2.2;stroke-linejoin:round;}
-#rptRoot .bm-z{fill:#f6f8f9;stroke:#c8d0d6;stroke-width:1;}
+#rptRoot .bodymap{display:block;width:100%;height:auto;max-height:300px;margin:0 auto;}
+#rptRoot .bm-z{stroke:#c8d0d6;stroke-width:1;pointer-events:none;}
+/* The surface tint rises with height off the floor, the same as on screen —
+   and on a grey office printer these four steps still separate. */
+#rptRoot .bm-z.s0{fill:#f7f9fa;} #rptRoot .bm-z.s1{fill:#eef2f5;}
+#rptRoot .bm-z.s2{fill:#e4eaf0;} #rptRoot .bm-z.s3{fill:#dbe3ec;}
 #rptRoot .bm-z.done{fill:#e8f4ea;}
 #rptRoot .bm-z.watch{fill:#fdf1d6;}
 #rptRoot .bm-z.act{fill:#fbe3e1;}
+#rptRoot .bm-fold{fill:none;stroke:#8b939b;stroke-width:1.4;stroke-dasharray:6 4;}
+#rptRoot .bm-div{fill:none;stroke:#c8d0d6;stroke-width:.9;}
+#rptRoot .bm-lip{fill:none;stroke:#8a6300;stroke-width:4;stroke-linecap:round;}
+#rptRoot .bm-face{fill:#5b6670;font:700 11px/1 inherit;letter-spacing:.12em;
+  paint-order:stroke fill;stroke:#fff;stroke-width:3px;stroke-linejoin:round;}
+#rptRoot .bm-way{fill:#8b939b;font:700 10px/1 inherit;letter-spacing:.1em;}
 #rptRoot .bm-hit{fill:none;}
+/* Printed, often in grey, so state is carried by the fill AND the outline
+   weight — a station at the limit has to read as different on a page with no
+   colour in it at all. */
 #rptRoot .bm-dot{fill:#fff;stroke:#8b939b;stroke-width:1.2;}
 #rptRoot .bm-p.done .bm-dot{fill:#0ca30c;stroke:#0ca30c;}
 #rptRoot .bm-p.watch .bm-dot{fill:#fab219;stroke:#8a6300;stroke-width:1.6;}
