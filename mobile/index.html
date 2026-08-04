@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=87">
+<link rel="manifest" href="manifest.webmanifest?v=88">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=87">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=87">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=87">
+<link rel="apple-touch-icon" href="icon-192.png?v=88">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=88">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=88">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -98,42 +98,72 @@
      4.5 the text needs. This state is the one that says the round has nowhere
      to go yet, so it is the last one that should be hard to read. */
   header .st.off{color:var(--ink-2);}
-  main{padding:16px;max-width:640px;margin:0 auto;}
-  .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:0 15px 15px;margin-bottom:14px;box-shadow:var(--shadow);}
+  main{padding:12px 12px 0;max-width:640px;margin:0 auto;}
+  .card{--cpad:13px;background:var(--surface);border:1px solid var(--border);border-radius:14px;
+    padding:0 var(--cpad) 12px;margin-bottom:10px;box-shadow:var(--shadow);}
   /* A rule under the heading gives each card a head, so the eye finds the start
      of a section instead of reading one long column of labels. */
-  .card h2{margin:0 -15px 14px;padding:13px 15px 11px;border-bottom:1px solid var(--line);
+  /* The folded header. It has to say enough that nobody opens it to check —
+     which unit, which date, whose name — and it is a button, because a summary
+     you cannot get back out of is a summary nobody trusts. */
+  .hdrsum{display:flex;align-items:center;gap:10px;width:100%;min-height:44px;
+    margin:0 0 2px;padding:2px 0;background:none;border:0;text-align:left;cursor:pointer;
+    font-family:inherit;color:var(--ink);}
+  .hdrsum .hs-t{flex:1 1 auto;min-width:0;}
+  .hdrsum b{display:block;font-size:15px;font-weight:700;line-height:1.25;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .hdrsum i{display:block;font-style:normal;font-size:12px;color:var(--muted);margin-top:1px;
+    font-variant-numeric:tabular-nums;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .hdrsum .hs-e{flex:0 0 auto;font-size:12.5px;font-weight:700;color:var(--accent);}
+  .hdrsum:active{opacity:.7;}
+  #cardInspection.folded{padding-bottom:8px;}
+  .foldrow{display:flex;align-items:center;gap:8px;width:100%;min-height:44px;
+    margin:0;padding:2px 0;background:none;border:0;text-align:left;cursor:pointer;
+    color:var(--ink-2);font:600 12.5px/1 inherit;font-family:inherit;}
+  .foldrow:active{opacity:.7;}
+  .card h2{margin:0 calc(-1 * var(--cpad)) 10px;padding:11px var(--cpad) 9px;border-bottom:1px solid var(--line);
     font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-2);
     display:flex;align-items:center;gap:8px;}
-  label.fld{display:block;margin-bottom:13px;}
+  label.fld{display:block;margin-bottom:10px;}
   label.fld > span{display:block;font-size:11px;font-weight:600;text-transform:uppercase;
-    letter-spacing:.07em;color:var(--muted);margin-bottom:6px;}
+    letter-spacing:.07em;color:var(--muted);margin-bottom:4px;}
+  /* 44 px: the floor a gloved thumb needs and, from here down, the only
+     control height in the app. Before this the same screen carried 27, 38, 44,
+     45, 47, 49, 50, 51, 56, 60 and 64 px controls — no two rows the same, and
+     nothing to read the hierarchy from because everything was emphatic. */
   input:not([type="checkbox"]):not([type="radio"]),select,textarea{width:100%;min-width:0;max-width:100%;
-    background:var(--surface-2);color:var(--ink);border:1px solid var(--border);
-    border-radius:11px;padding:12px 13px;font-size:16px;font-family:inherit;-webkit-appearance:none;appearance:none;}
+    min-height:44px;background:var(--surface-2);color:var(--ink);border:1px solid var(--border);
+    border-radius:11px;padding:10px 12px;font-size:16px;font-family:inherit;-webkit-appearance:none;appearance:none;}
   input[inputmode="numeric"],input[inputmode="decimal"],input[type="number"],input[type="date"]{font-variant-numeric:tabular-nums;}
   ::placeholder{color:var(--muted);opacity:1;}
   select{background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
-    background-position:calc(100% - 18px) 20px,calc(100% - 13px) 20px;background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:36px;}
+    background-position:calc(100% - 18px) calc(50% + 1px),calc(100% - 13px) calc(50% + 1px);background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:36px;}
   input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:1px;}
   textarea{resize:vertical;min-height:52px;}
-  .row{display:flex;gap:12px;} .row > *{flex:1 1 0;min-width:0;}
+  .row{display:flex;gap:8px;} .row > *{flex:1 1 0;min-width:0;}
   .withbtn{display:flex;gap:8px;align-items:stretch;}
-  .withbtn > input, .withbtn > textarea{flex:1;}
-  .iconbtn{flex:none;white-space:nowrap;background:var(--surface-3);color:var(--ink);border:1px solid var(--border);border-radius:12px;padding:0 14px;font-size:15px;font-weight:650;cursor:pointer;}
-  .withbtn > textarea + .iconbtn{align-self:flex-start;padding:12px;font-size:18px;}
+  .withbtn > input, .withbtn > textarea{flex:1;min-width:0;}
+  .iconbtn{flex:none;min-height:44px;white-space:nowrap;background:var(--surface-3);color:var(--ink);border:1px solid var(--border);border-radius:11px;padding:0 13px;font-size:14.5px;font-weight:650;cursor:pointer;}
+  .withbtn > textarea + .iconbtn{align-self:flex-start;width:44px;padding:0;font-size:18px;}
   .iconbtn.rec{background:var(--critical);color:#fff;border-color:transparent;animation:pulse 1s infinite;}
   @keyframes pulse{50%{opacity:.55;}}
-  .seg{display:flex;gap:8px;flex-wrap:wrap;}
-  .seg button{min-height:44px;flex:1;min-width:56px;padding:12px 8px;border-radius:11px;border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);font-size:15px;font-weight:650;cursor:pointer;transition:background .1s,color .1s;}
+  .seg{display:flex;gap:6px;flex-wrap:wrap;}
+  .seg button{min-height:44px;flex:1;min-width:56px;padding:10px 8px;border-radius:11px;border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);font-size:15px;font-weight:650;cursor:pointer;transition:background .1s,color .1s;}
+  /* Severity is the one row of four whose labels are words, and in Russian they
+     are long words with no space to break at — "Зарождающийся" is 133 px in an
+     81 px button, so three of the four choices were sliced off mid-word on the
+     commonest phone in the fleet, in the language most of the fleet reads. Two
+     across gives every label its full width, and a tablet still gets four. */
+  .sevseg{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:6px;}
+  .sevseg button{font-size:14px;line-height:1.2;white-space:normal;overflow-wrap:anywhere;}
   .seg button.on{background:var(--accent);color:var(--accent-ink);border-color:transparent;}
   .seg button:active{background:var(--surface-3);}
   .seg button.on:active{opacity:.85;background:var(--accent);}
-  .posnav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+  .posnav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;}
   .posnav button{flex:1 1 auto;min-width:56px;min-height:44px;padding:11px 10px;border-radius:12px;border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);font-weight:700;font-size:14px;cursor:pointer;position:relative;}
   .posnav button.on{background:var(--ink);color:var(--page);border-color:transparent;}
   /* component cascade (L7 cards -> L8 -> L9) */
-  .casc{margin-bottom:14px;}
+  .casc{margin-bottom:10px;}
   .crumb{display:flex;flex-wrap:wrap;gap:4px;align-items:center;font-size:12.5px;color:var(--muted);margin-bottom:10px;}
   .crumb button{background:none;border:none;color:var(--accent);font-weight:650;font-size:12.5px;cursor:pointer;padding:2px 0;}
   .crumb .sep{color:var(--muted);}
@@ -142,7 +172,11 @@
   .cards button:active{background:var(--surface-3);}
   .cards button.on{background:var(--accent-soft);}
   .cards button .cc{font-size:10.5px;color:var(--muted);font-weight:700;letter-spacing:.05em;}
-  .cards button .cn{font-size:14px;color:var(--ink);font-weight:600;line-height:1.2;}
+  /* Russian compounds one word where English uses two — "Электросистема",
+     "Пневмоуправление" — and a word with nowhere to break runs out of its own
+     card on a 320 px phone. Break inside the word rather than off the edge. */
+  .cards button .cn{font-size:14px;color:var(--ink);font-weight:600;line-height:1.2;
+    overflow-wrap:anywhere;}
   .cards button .dot{position:absolute;top:8px;right:9px;width:9px;height:9px;border-radius:50%;background:var(--good);display:none;}
   .cards button.has .dot{display:block;}
   .cards button.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent) inset;}
@@ -156,7 +190,7 @@
   .posnav button.has .dot{display:block;}
   .gradeseg button.g-A.on{background:var(--good);} .gradeseg button.g-B.on{background:var(--warning);color:#111;}
   .gradeseg button.g-C.on{background:var(--serious);} .gradeseg button.g-X.on{background:var(--critical);}
-  .btn{display:block;width:100%;padding:15px;border-radius:13px;border:none;font-size:16.5px;font-weight:700;cursor:pointer;
+  .btn{display:block;width:100%;min-height:44px;padding:10px 14px;border-radius:12px;border:none;font-size:15.5px;font-weight:700;cursor:pointer;
     font-family:inherit;transition:opacity .1s;}
   .btn:active{opacity:.86;}
   .btn.primary{background:var(--accent);color:var(--accent-ink);}
@@ -184,7 +218,7 @@
      stops being at the bottom of the screen and floats up into the page, with
      content visible below it. Set from the visualViewport API; see setVVB(). */
   :root{--vvb:0px;}
-  .bottombar{position:fixed;left:0;right:0;bottom:var(--vvb);background:var(--surface);border-top:1px solid var(--border);padding:12px 16px calc(env(safe-area-inset-bottom) + 12px);display:flex;gap:10px;z-index:10;}
+  .bottombar{position:fixed;left:0;right:0;bottom:var(--vvb);background:var(--surface);border-top:1px solid var(--border);padding:9px 12px calc(env(safe-area-inset-bottom) + 9px);display:flex;gap:8px;z-index:10;}
   .bottombar .btn{margin:0;}
 
   /* ── one job per screen ──────────────────────────────────────────────────
@@ -194,7 +228,7 @@
      now, switched from the bar at the bottom of the thumb's reach. */
   .pane{display:none;}
   .pane.on{display:block;}
-  #saveBtn{margin-bottom:16px;}
+  #saveBtn{margin-bottom:10px;}
   /* Save is the one control that must never be hunted for — least of all on a
      phone turned sideways, where the form is longer than three screens. It is
      pinned above the tab bar and, being a child of the capture pane, disappears
@@ -202,19 +236,19 @@
   /* Wherever the tab bar shows — a narrow screen OR a short one, since a phone
      turned sideways is 844 px wide and 390 px tall. */
   @media (max-width: 819px), (max-height: 559px){
-    #saveBtn{position:fixed;left:16px;right:16px;
-      bottom:calc(var(--vvb) + env(safe-area-inset-bottom) + 64px);
-      z-index:9;margin:0;width:auto;box-shadow:0 8px 24px rgba(0,0,0,.40);}
-    body{padding-bottom:150px;}
+    #saveBtn{position:fixed;left:12px;right:12px;
+      bottom:calc(var(--vvb) + env(safe-area-inset-bottom) + 54px);
+      z-index:9;margin:0;width:auto;box-shadow:0 6px 18px rgba(0,0,0,.32);}
+    body{padding-bottom:118px;}
   }
   .tabbar{position:fixed;left:0;right:0;bottom:var(--vvb);z-index:10;display:flex;
     background:var(--surface);border-top:1px solid var(--border);
     padding-bottom:env(safe-area-inset-bottom);}
-  .tabbar button{flex:1;min-height:56px;display:flex;flex-direction:column;align-items:center;
+  .tabbar button{flex:1;min-width:0;min-height:48px;display:flex;flex-direction:column;align-items:center;
     justify-content:center;gap:2px;position:relative;border:none;background:none;cursor:pointer;
     color:var(--muted);font-size:11px;font-weight:650;font-family:inherit;
-    text-transform:uppercase;letter-spacing:.4px;padding:6px 4px;}
-  .tabbar button .ti{font-size:19px;line-height:1;}
+    text-transform:uppercase;letter-spacing:.4px;padding:4px 4px;}
+  .tabbar button .ti{font-size:17px;line-height:1;}
   .tabbar button.on{color:var(--accent);}
   .tabbar button.on::before{content:"";position:absolute;top:0;left:18%;right:18%;height:3px;
     border-radius:0 0 3px 3px;background:var(--accent);}
@@ -269,8 +303,8 @@
     header{padding:calc(env(safe-area-inset-top) + 2px) 12px 2px;gap:8px;}
     header .t{font-size:14px;}
     main{padding:10px 12px;}
-    .card{padding:12px;margin-bottom:12px;border-radius:12px;}
-    .card h2{margin-bottom:8px;}
+    .card{--cpad:12px;padding:0 var(--cpad) 10px;margin-bottom:9px;border-radius:12px;}
+    .card h2{margin-bottom:8px;padding:9px var(--cpad) 7px;}
     label.fld{margin-bottom:8px;}
     .tabbar button{min-height:44px;font-size:10px;}
     .tabbar button .ti{font-size:16px;}
@@ -294,16 +328,16 @@
     border-radius:10px;min-width:44px;min-height:44px;padding:0;font-size:17px;
     cursor:pointer;margin-left:auto;flex:none;}
   .ver{text-align:center;color:var(--muted);font-size:11px;margin:2px 0 8px;}
-  .syncbar{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--ink-2);background:var(--surface);
+  .syncbar{display:flex;align-items:center;flex-wrap:wrap;gap:8px 10px;font-size:12.5px;color:var(--ink-2);background:var(--surface);
     border:1px solid var(--border);border-radius:12px;padding:10px 14px;margin-bottom:12px;}
   .syncbar .dot{width:9px;height:9px;border-radius:50%;background:var(--muted);flex:none;}
   .syncbar.on .dot{background:var(--good);} .syncbar.pend .dot{background:var(--warning);}
-  .syncbar.err .dot{background:var(--critical);} .syncbar .sp{flex:1;}
+  .syncbar.err .dot{background:var(--critical);} .syncbar .sp{flex:1 1 120px;min-width:0;}
   .syncbar button{border:1px solid var(--border);background:var(--surface-2);color:var(--accent);border-radius:9px;
     min-width:44px;min-height:44px;padding:0 14px;font-size:13px;font-weight:650;cursor:pointer;flex:none;}
   .syncbar button#syncSet{padding:0;font-size:16px;}
-  .editbar{display:flex;align-items:center;gap:10px;background:color-mix(in srgb,var(--accent) 16%,var(--surface));border:1px solid color-mix(in srgb,var(--accent) 45%,var(--border));border-radius:12px;padding:10px 14px;margin-bottom:10px;font-size:13.5px;}
-  .editbar span{flex:1;color:var(--ink);}
+  .editbar{display:flex;align-items:center;flex-wrap:wrap;gap:8px 10px;background:color-mix(in srgb,var(--accent) 16%,var(--surface));border:1px solid color-mix(in srgb,var(--accent) 45%,var(--border));border-radius:12px;padding:10px 14px;margin-bottom:10px;font-size:13.5px;}
+  .editbar span{flex:1 1 120px;min-width:0;color:var(--ink);}
   .linkbtn{background:none;border:none;color:var(--accent);font-weight:700;font-size:15px;
     cursor:pointer;min-width:44px;min-height:44px;padding:0 8px;}
   .hidden{display:none!important;}
@@ -333,8 +367,6 @@
      36 points cost a scroll down and a scroll back. The measurement comes to the
      inspector instead: a sheet over the machine, with the machine still visible
      above it, and Next walking the round without ever returning to the map. */
-  #ucBackdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:60;
-    pointer-events:none;}
   /* ---- the dock ---------------------------------------------------------
      The pop-up covered the map it existed to keep you beside, and it put "could
      not measure it?" — six chips, always open — above the number. An inspector
@@ -351,14 +383,12 @@
   #ucFields.dock{display:flex;flex-direction:column;background:var(--surface);
     border:1px solid var(--border);border-radius:14px;padding:12px;margin:2px 0 12px;}
   #ucFields.dock .sh-head{display:block;padding:0 0 4px;margin:0;order:1;}
-  #ucFields.dock .sh-grab{display:none;}
   #ucFields.dock .uclast{order:2;}
-  #ucFields.dock .ucref{order:3;margin:2px 0 8px;}
-  #ucFields.dock .sh-foot label.fld{order:4;margin-bottom:8px;}
-  #ucFields.dock .ucread{order:5;}
+  #ucFields.dock .ucref{order:3;margin:0 0 6px;}
+  #ucFields.dock .mrow{order:4;}
   #ucFields.dock .ucwarn{order:6;}
-  #ucFields.dock .sh-nav{order:7;display:flex;gap:9px;margin-top:10px;}
-  #ucFields.dock .sh-nav button{flex:1;min-height:50px;border-radius:11px;
+  #ucFields.dock .sh-nav{order:7;display:flex;gap:8px;margin-top:8px;}
+  #ucFields.dock .sh-nav button{flex:1;min-width:0;min-height:44px;border-radius:11px;
     background:var(--surface-2);border:1px solid var(--border);color:var(--ink);
     font:650 14px/1 inherit;cursor:pointer;}
   #ucFields.dock .sh-nav button.pri{background:var(--accent);border-color:var(--accent);
@@ -376,33 +406,24 @@
   /* Both rounds, both views. The row used to be revealed only inside the dock,
      which meant the GET round — whose copy lives in its own field block — and
      the list view never got one at all. */
+  /* Four disclosures in a row — the drawing, the method, the reasons, the
+     photos — and each used to arrive with its own margins, its own type size
+     and, in the method's case, its own colour. Four rows that do the same thing
+     look like four different things. One row, one rule, hairlines between. */
   #ucFields .ucfigtog,#getFields .ucfigtog,
-  #ucFields.dock .ucna-h{display:flex;align-items:center;gap:8px;
-    width:100%;min-height:42px;padding:6px 2px;background:none;border:0;
+  #ucFields.dock .ucna-h,#ucFields.dock .guide-t,#getFields .guide-t{
+    display:flex;align-items:center;gap:8px;
+    width:100%;min-height:44px;margin:0;padding:4px 2px;background:none;border:0;
     border-top:1px solid var(--line);color:var(--ink-2);font:600 12.5px/1 inherit;
     text-align:left;cursor:pointer;}
-  #ucFields.dock .ucna{border:0;background:none;padding:0;margin:0;}
-  #ucFields.sheet{position:fixed;left:0;right:0;bottom:var(--vvb);z-index:61;
-    background:var(--surface);border-radius:18px 18px 0 0;
-    box-shadow:0 -8px 40px rgba(0,0,0,.35);border-top:1px solid var(--line);
-    padding:0 16px calc(12px + env(safe-area-inset-bottom));
-    max-height:70vh;display:flex;flex-direction:column;overflow:hidden;
-    overscroll-behavior:contain;}
-  /* Off the sheet these two are nothing — the fields sit in the page as before. */
+  #ucFields.dock .ucna,#ucFields.dock .guide,#getFields .guide{
+    border:0;background:none;padding:0;margin:0;}
+  /* .sh-body and .sh-foot were the two halves of a scrolling modal: reference
+     above the fold, number and way out pinned below it. The dock has neither
+     half — everything is in the page, in reading order, so the wrappers carry
+     no box of their own and exist only to keep the markup grouped. */
   .sh-body,.sh-foot{display:contents;}
-  /* The body is cut off wherever the foot begins. A hard edge slices a line of
-     type in half and reads as a rendering fault; the fade says "there is more,
-     scroll". The matching padding means the last line is never left dimmed. */
-  #ucFields.sheet .sh-body{display:block;flex:1 1 auto;min-height:0;overflow-y:auto;
-    overscroll-behavior:contain;padding-bottom:18px;
-    -webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 18px),transparent);
-    mask-image:linear-gradient(to bottom,#000 calc(100% - 18px),transparent);}
-  #ucFields.sheet .sh-foot{display:block;flex:0 0 auto;background:var(--surface);
-    border-top:1px solid var(--line);padding-top:11px;margin-top:2px;}
   .sh-head{display:none;}
-  #ucFields.sheet .sh-head{display:block;position:sticky;top:0;z-index:2;
-    background:var(--surface);padding:8px 0 10px;margin:0 0 4px;}
-  .sh-grab{width:38px;height:4px;border-radius:999px;background:var(--line);margin:0 auto 10px;}
   .sh-row{display:flex;align-items:flex-start;gap:12px;}
   .sh-t{flex:1;min-width:0;}
   .sh-t b{display:block;font-size:16px;font-weight:650;line-height:1.25;}
@@ -412,11 +433,6 @@
   .sh-row button{flex:0 0 auto;width:44px;height:44px;border-radius:13px;border:1px solid var(--line);
     background:var(--surface-2);color:var(--ink-2);font-size:17px;cursor:pointer;}
   .sh-nav{display:none;}
-  #ucFields.sheet .sh-nav{display:flex;gap:9px;
-    background:var(--surface);padding:10px 0 2px;margin-top:6px;}
-  .sh-nav button{flex:1;min-height:52px;border-radius:13px;border:1px solid var(--line);
-    background:var(--surface-2);color:var(--ink);font:650 15px/1 inherit;cursor:pointer;}
-  .sh-nav button.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);}
   .sh-nav button:disabled{opacity:.4;}
   /* Whether the row is on screen is the renderer's call, not the cascade's: it
      is there when the point has a drawing behind it and gone when it has not.
@@ -428,8 +444,12 @@
     padding:9px;margin-bottom:11px;text-align:center;}
   .ucfig svg{width:100%;max-width:340px;height:auto;display:block;margin:0 auto;}
   .ucfig .cap{font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.45;}
-  .ucref{font-size:12.5px;font-weight:600;color:var(--ink-2);margin:-4px 0 10px;
-    font-variant-numeric:tabular-nums;line-height:1.5;}
+  /* Context for the number, not the headline above it. At 12.5 px semibold in
+     the body ink it outweighed the field it was explaining and took two lines
+     to do it. */
+  .ucref{font-size:11.5px;font-weight:500;color:var(--muted);margin:-4px 0 8px;
+    font-variant-numeric:tabular-nums;line-height:1.45;}
+  .ucref b,.ucref strong{font-weight:700;color:var(--ink-2);}
   .ucref.none{color:var(--warn-ink);font-weight:600;}
   /* On the undercarriage "no reference" is news — that model's chart is
      missing. On the tray it is the standing state of every station until the
@@ -441,8 +461,10 @@
   /* How to take the reading. Collapsed by default — an inspector who has done a
      hundred of these does not need it in the way, and the one on their first
      round needs it one tap away, not on another screen. */
-  .guide{margin:-4px 0 10px;}
-  .guide-t{display:flex;align-items:center;gap:6px;width:100%;background:none;border:0;
+  .guide{margin:-2px 0 8px;}
+  /* 44 px, like every other row you have to hit with a glove on. This one was
+     27 — the text's own line box and nothing more. */
+  .guide-t{display:flex;align-items:center;gap:6px;width:100%;min-height:44px;background:none;border:0;
     padding:6px 0;font:600 12.5px/1.3 inherit;color:var(--accent);cursor:pointer;text-align:left;}
   .guide-b{display:grid;gap:8px;padding:10px 12px;margin-top:2px;border-radius:10px;
     background:var(--surface-2);border:1px solid var(--line);}
@@ -451,7 +473,13 @@
     color:var(--muted);font-weight:700;margin-bottom:2px;}
   .uclast b{color:var(--ink-2);font-weight:650;}
   .uclast.jump{color:var(--warn-ink);}
-  .ucread{font-size:13.5px;margin:-4px 0 12px;display:flex;flex-wrap:wrap;gap:6px 10px;
+  /* The number and its verdict, side by side. The field is as wide as the
+     largest reading anyone takes plus room for a decimal; everything left over
+     goes to the verdict, which is the part that varies. */
+  .mrow{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;margin-bottom:2px;}
+  .mrow > label.fld{flex:0 0 132px;margin-bottom:0;}
+  .mrow > .ucread{flex:1 1 150px;min-width:0;margin:0 0 3px;}
+  .ucread{font-size:13.5px;margin:-4px 0 12px;display:flex;flex-wrap:wrap;gap:5px 9px;
     align-items:center;min-height:20px;}
   .ucread b{font-variant-numeric:tabular-nums;font-size:15px;}
   .ucread .band{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
@@ -469,19 +497,13 @@
   /* Short screens — an SE, or any phone turned on its side. The frame strip
      above the sheet is worth less than the reading, its verdict and the way
      out, so the sheet takes the room it needs and the drawing scrolls. */
-  @media (max-height:760px){ #ucFields.sheet{max-height:84vh;} }
   @media (max-height:620px){
-    #ucFields.sheet{max-height:93vh;}
-    #ucFields.sheet .ucfig{max-height:34vh;overflow:hidden;}
     .ucwarn{padding:9px 11px;margin-bottom:9px;}
     .ucwarn .uw-t{font-size:12.5px;line-height:1.4;}
     .ucwarn .uw-ok{margin-top:7px;font-size:12.5px;}
-    .sh-nav button{min-height:46px;}
-    #ucFields.sheet .sh-nav{padding:8px 0 2px;margin-top:4px;}
-    #ucFields.sheet .sh-foot{padding-top:9px;}
   }
-  .ucna{border-top:1px solid var(--line);padding-top:11px;margin-bottom:4px;}
-  .ucna-h{font-size:12.5px;color:var(--muted);margin-bottom:8px;}
+  .ucna{border-top:1px solid var(--line);padding-top:9px;margin-bottom:2px;}
+  .ucna-h{font-size:12.5px;color:var(--muted);margin-bottom:6px;}
   .chips{display:flex;flex-wrap:wrap;gap:7px;}
   .chips button{font:600 12.5px/1 inherit;color:var(--ink);background:var(--surface-2);
     border:1px solid var(--line);border-radius:999px;padding:9px 13px;cursor:pointer;}
@@ -542,7 +564,7 @@
      the same eleven named underneath. Two frames used to sit here and they were
      the same photograph twice. */
   .ucsides{flex:0 0 100%;display:flex;gap:8px;margin:0 0 9px;}
-  .ucsides button{flex:1 1 0;min-height:42px;border:1px solid var(--line);
+  .ucsides button{flex:1 1 0;min-height:44px;border:1px solid var(--line);
     background:var(--surface);color:var(--ink-2);border-radius:10px;font:700 13.5px/1 inherit;
     letter-spacing:.04em;text-transform:uppercase;cursor:pointer;}
   .ucsides button.on{background:var(--accent);border-color:var(--accent);color:#fff;}
@@ -645,18 +667,25 @@
      technical drawing of the part; a tray station's drawing is the map above,
      so this is the number, the last reading and the way on — and every pixel
      it hands back is map that is not being covered. */
-  body.tbreading #ucFields.sheet{max-height:52vh;}
   body.tbreading .tbwrap{max-height:40vh;}
-  @media (max-height:620px){ body.tbreading #ucFields.sheet{max-height:60vh;}
-    body.tbreading .tbwrap{max-height:34vh;} }
+  @media (max-height:620px){ body.tbreading .tbwrap{max-height:34vh;} }
   /* Said once, and it must stay said — somebody must not learn from a colour
      that a plate has no limit behind it. But three lines of it on every paint
      of the map cost more than the warning is worth, so the short form carries
      the point and the whole sentence is one tap away. */
-  .tbnote{flex:0 0 100%;background:var(--surface-2);border:1px solid var(--line);
+  /* min-width:0 or the note sets the width of the whole app. It is a flex item,
+     and a flex item's automatic minimum size is its content — one line of
+     nowrap text that cannot break. In Russian "Пределы не заданы — записываем,
+     но не оцениваем" is 387 px inside a 348 px column, so the note pushed the
+     document 11 px wider than the window, the browser zoomed the page out to
+     fit, and the tab bar and Save button — measured against the layout viewport
+     — floated into the middle of the screen. Same fault as the chip row in
+     build 85, three cards away from where it showed. */
+  .tbnote{flex:0 0 100%;min-width:0;max-width:100%;
+    background:var(--surface-2);border:1px solid var(--line);
     border-left:3px solid var(--warn-ink);border-radius:10px;padding:0;
     margin:0 0 8px;font-size:12px;line-height:1.5;color:var(--ink-2);}
-  .tbnote button{display:flex;align-items:center;gap:8px;width:100%;min-height:38px;
+  .tbnote button{display:flex;align-items:center;gap:8px;width:100%;min-height:44px;
     padding:6px 11px;background:none;border:0;color:var(--ink-2);font:inherit;
     text-align:left;cursor:pointer;}
   .tbnote button b{flex:0 0 auto;color:var(--warn-ink);font-weight:800;}
@@ -703,7 +732,7 @@
      how a round ends up with somebody inventing a figure to fill it. */
   #getFields.novalue .getrow{display:none;}
   .getrow{display:flex;gap:12px;align-items:flex-end;margin:0 0 6px;}
-  .getrow .fld{flex:1 1 auto;margin-bottom:0;}
+  .getrow .fld{flex:1 1 auto;min-width:0;margin-bottom:0;}
   .getread{flex:0 0 auto;display:flex;align-items:center;gap:7px;padding-bottom:11px;
     font-size:13px;white-space:nowrap;}
   .getread b{font-size:17px;font-variant-numeric:tabular-nums;}
@@ -767,7 +796,7 @@
   .um-spot:focus-visible{outline:none;}
   .um-spot:focus-visible .um-puck{stroke:var(--accent);stroke-width:4.5;}
   .ucviews{display:flex;gap:7px;margin:0 0 9px;}
-  .ucviews button{flex:1;font:600 13px/1 inherit;color:var(--muted);background:var(--surface-2);
+  .ucviews button{flex:1;min-width:0;font:600 13px/1 inherit;color:var(--muted);background:var(--surface-2);
     border:1px solid var(--line);border-radius:10px;padding:10px;cursor:pointer;}
   .ucviews button.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);}
   .uctally{display:flex;flex-wrap:wrap;gap:6px 14px;margin:0 0 10px;
@@ -824,11 +853,13 @@
   .mtile img,.mtile video{width:100%;height:100%;object-fit:cover;display:block;}
   .mtile .mdel{position:absolute;top:2px;right:2px;width:22px;height:22px;border-radius:50%;border:none;background:rgba(0,0,0,.65);color:#fff;font-size:13px;cursor:pointer;line-height:22px;padding:0;}
   .mtile .vbadge{position:absolute;left:0;right:0;bottom:0;background:rgba(0,0,0,.55);color:#fff;font-size:10px;text-align:center;padding:1px;}
-  .mediastrip .empty-m{color:var(--muted);font-size:13px;padding:14px 2px;}
-  .mediahint{margin:0 0 12px;}
+  .mediastrip .empty-m{color:var(--muted);font-size:13px;padding:10px 2px;}
+  .mediahint{margin:0 0 8px;}
+  #mediaRow{margin-bottom:10px;}
+  #videoBtn{flex:0 0 auto;width:auto;padding:0 14px;}
   /* Reads as a field, behaves as a button — the chevron is what says it opens. */
-  .picker-btn{width:100%;text-align:left;background:var(--surface-2);color:var(--ink);border:1px solid var(--border);
-    border-radius:11px;padding:12px 34px 12px 13px;font-size:16px;font-family:inherit;cursor:pointer;position:relative;
+  .picker-btn{width:100%;min-height:44px;text-align:left;background:var(--surface-2);color:var(--ink);border:1px solid var(--border);
+    border-radius:11px;padding:10px 34px 10px 12px;font-size:16px;font-family:inherit;cursor:pointer;position:relative;
     background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
     background-position:calc(100% - 17px) calc(50% + 1px),calc(100% - 12px) calc(50% + 1px);
     background-size:5px 5px,5px 5px;background-repeat:no-repeat;}
@@ -837,7 +868,7 @@
   .picker-btn:active{background-color:var(--surface-3);}
   .pick-ov{position:fixed;inset:0;background:var(--page);z-index:210;display:flex;flex-direction:column;}
   .pickhead{display:flex;gap:8px;align-items:center;padding:calc(env(safe-area-inset-top) + 12px) 14px 12px;background:var(--surface);border-bottom:1px solid var(--border);}
-  .pickhead input{flex:1;}
+  .pickhead input{flex:1;min-width:0;}
   .pickback{flex:none;width:44px;height:44px;border-radius:12px;border:1px solid var(--border);background:var(--surface-2);color:var(--accent);font-size:26px;line-height:1;cursor:pointer;}
   .picklist{flex:1;overflow-y:auto;padding:8px 14px calc(env(safe-area-inset-bottom) + 20px);}
   .pickitem{display:block;width:100%;text-align:left;background:none;border:none;border-bottom:1px solid var(--border);color:var(--ink);padding:13px 4px;font-size:15px;cursor:pointer;}
@@ -885,8 +916,17 @@
        question nobody thinks to ask is answered by a thing they have to go and
        look for exactly never. -->
   <div class="ready" id="readyBar" role="status" aria-live="polite"></div>
+  <!-- Which machine, when, and who — seven controls that are answered once and
+       then scrolled past on every one of forty-four points. Once a unit is
+       chosen the card folds to the line that names it; the heading is the way
+       back in. -->
   <div class="card" id="cardInspection">
     <h2 data-i18n="sec_inspection">Inspection</h2>
+    <button type="button" class="hdrsum hidden" id="hdrSum">
+      <span class="hs-t"><b id="hsUnit"></b><i id="hsMeta"></i></span>
+      <span class="hs-e" data-i18n="hdr_change">Change</span>
+    </button>
+    <div id="hdrBody">
     <label class="fld"><span data-i18n="lbl_type">Inspection type</span><select id="typeSel"></select></label>
     <label class="fld"><span data-i18n="lbl_class">Equipment</span>
       <button type="button" class="picker-btn" id="classBtn"></button>
@@ -897,9 +937,6 @@
         <button type="button" class="iconbtn" id="scanBtn">🔳 <span data-i18n="btn_scan">Scan</span></button>
       </div>
     </label>
-    <!-- Answers "has someone already done this one?" before the round is walked. -->
-    <div class="hint hidden" id="lastDone" style="margin:-4px 0 10px;font-weight:600;color:var(--accent)"></div>
-    <div class="trend hidden" id="trend"></div>
     <input id="qrPhoto" type="file" accept="image/*" capture="environment" class="hidden">
     <div class="row">
       <label class="fld"><span data-i18n="lbl_date">Date</span><input id="date" type="date"></label>
@@ -910,6 +947,13 @@
 
     <label class="fld" style="margin-bottom:0"><span data-i18n="lbl_gps">Location (GPS)</span>
       <button type="button" class="picker-btn act" id="gpsBtn"></button></label>
+    </div>
+    <!-- Outside the fold on purpose. These are not fields to fill in, they are
+         what the app knows about this machine — somebody did it last Tuesday,
+         it has been getting worse for five rounds — and folding the header away
+         is exactly the moment you still want them. -->
+    <div class="hint hidden" id="lastDone" style="margin:2px 0 0;font-weight:600;color:var(--accent)"></div>
+    <div class="trend hidden" id="trend"></div>
   </div>
 
   <div class="card" id="cardComponent">
@@ -928,7 +972,11 @@
          multiple so a point that was photographed four times is four taps
          shorter. -->
     <input id="gallery" type="file" accept="image/*,video/*" multiple class="hidden">
-    <div class="row" id="mediaRow" style="margin-bottom:14px">
+    <!-- Two buttons of equal weight said the two were an equal choice. Nearly
+         every record carries photographs and almost none carries a video, so
+         the photo button takes the row and the video sits beside it at the
+         width of its own label. -->
+    <div class="row" id="mediaRow">
       <button class="btn primary" id="takeBtn" type="button">📷 <span data-i18n="btn_take">Add photo</span></button>
       <button class="btn ghost" id="videoBtn" type="button">🎥 <span data-i18n="btn_video">Video</span></button>
     </div>
@@ -968,10 +1016,8 @@
         </select></label>
       <div class="tempbar" id="tempLim"></div>
     </div>
-    <div id="ucBackdrop" class="hidden"></div>
     <div id="ucFields" class="hidden">
       <div class="sh-head" id="ucSheetHead">
-        <div class="sh-grab"></div>
         <div class="sh-row">
           <div class="sh-t"><b id="ucSheetTitle"></b><span id="ucSheetCount"></span></div>
           <button type="button" id="ucClose" aria-label="close">✕</button>
@@ -997,9 +1043,16 @@
         <button type="button" class="ucna-h" id="ucExtraTog"></button>
       </div>
       <div class="sh-foot" id="ucSheetFoot">
-        <label class="fld"><span id="ucLbl" data-i18n="lbl_mm">Measured (mm)</span>
-          <input id="ucMM" type="text" inputmode="decimal" autocomplete="off"></label>
-        <div class="ucread" id="ucRead"></div>
+        <!-- A millimetre is three digits. The box was the full width of the
+             card, the verdict sat on a line of its own underneath it and the
+             way on was 42 px below that — so the two things an inspector looks
+             at together, the number and what it means, were the two furthest
+             apart. One row: type it, read it, move on. -->
+        <div class="mrow" id="ucMeasure">
+          <label class="fld"><span id="ucLbl" data-i18n="lbl_mm">Measured (mm)</span>
+            <input id="ucMM" type="text" inputmode="decimal" autocomplete="off"></label>
+          <div class="ucread" id="ucRead"></div>
+        </div>
         <div class="ucwarn hidden" id="ucWarn">
           <div class="uw-t" id="ucWarnText"></div>
           <label class="uw-ok"><input type="checkbox" id="ucStood">
@@ -1019,6 +1072,12 @@
         <button class="s-CRI" data-s="CRI" data-i18n="sev_CRI">Critical</button>
       </div>
     </label>
+    <!-- On a measurement round the answer is a number and the coded fields are
+         the exception: nearly every one of forty-four points is "no failure",
+         and 430 px of ISO 14224 pickers sat under every one of them. Behind one
+         row, and the row opens itself the moment there is anything to code. -->
+    <button type="button" class="foldrow hidden" id="isoTog"></button>
+    <div id="isoBody">
     <label class="fld"><span data-i18n="lbl_detect">How it was found (ISO 14224)</span>
       <button type="button" class="picker-btn" id="detectBtn"></button>
     </label>
@@ -1050,16 +1109,23 @@
     <label class="fld"><span data-i18n="lbl_wo">1C notification / WO no. (optional)</span>
       <input id="wo" type="text" autocomplete="off"></label>
     <div class="hint" data-i18n="hint_fields">Fields save automatically. Switch items with the buttons above.</div>
+    </div><!-- /isoBody -->
     </div><!-- /captureBox -->
   </div>
 
+  <!-- Optional, and used on a minority of records — but a 150 px signature
+       canvas sat open under every round whether or not a supervisor was within
+       a hundred kilometres. Behind a row, and the row says it is optional. -->
   <div class="card" id="cardSign">
     <h2 data-i18n="sec_sign">Supervisor sign-off</h2>
+    <button type="button" class="foldrow" id="signTog"></button>
+    <div id="signBody" class="hidden">
     <label class="fld"><span data-i18n="lbl_sup">Verified by (supervisor)</span>
       <input id="supName" type="text" data-i18n-ph="ph_sup" placeholder="name / badge no." autocomplete="name"></label>
     <div class="hint" style="margin-bottom:6px" data-i18n="sign_hint">Sign in the box (optional) — it is stored with the record and printed on the report.</div>
     <canvas id="signPad" class="signpad"></canvas>
     <button class="btn ghost" id="signClear" style="margin-top:8px">✕ <span data-i18n="btn_sign_clear">Clear signature</span></button>
+    </div>
   </div>
 
   <div id="dataWarn" class="editbar hidden" style="background:color-mix(in srgb,var(--critical) 16%,var(--surface));border-color:color-mix(in srgb,var(--critical) 45%,var(--border))"><span id="dataWarnText"></span><button type="button" id="dataWarnFix" class="linkbtn">⟳</button></div>
@@ -1257,25 +1323,25 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="native.js?v=87"></script>
-<script src="upload-defaults.js?v=87"></script>
-<script src="hme.js?v=87"></script>
-<script src="mp-fc.js?v=87"></script>
-<script src="hme-cascade.js?v=87"></script>
-<script src="assets.js?v=87"></script>
-<script src="temp-limits.js?v=87"></script>
-<script src="wear.js?v=87"></script>
-<script src="wear-figs.js?v=87"></script>
-<script src="wear-map.js?v=87"></script>
-<script src="machine-photos.js?v=87"></script>
-<script src="machine-fig.js?v=87"></script>
-<script src="get.js?v=87"></script>
-<script src="uc-points.js?v=87"></script>
-<script src="inspect-guide.js?v=87"></script>
-<script src="get-figs.js?v=87"></script>
-<script src="body-points.js?v=87"></script>
-<script src="body-map.js?v=87"></script>
-<script src="report-core.js?v=87"></script>
+<script src="native.js?v=88"></script>
+<script src="upload-defaults.js?v=88"></script>
+<script src="hme.js?v=88"></script>
+<script src="mp-fc.js?v=88"></script>
+<script src="hme-cascade.js?v=88"></script>
+<script src="assets.js?v=88"></script>
+<script src="temp-limits.js?v=88"></script>
+<script src="wear.js?v=88"></script>
+<script src="wear-figs.js?v=88"></script>
+<script src="wear-map.js?v=88"></script>
+<script src="machine-photos.js?v=88"></script>
+<script src="machine-fig.js?v=88"></script>
+<script src="get.js?v=88"></script>
+<script src="uc-points.js?v=88"></script>
+<script src="inspect-guide.js?v=88"></script>
+<script src="get-figs.js?v=88"></script>
+<script src="body-points.js?v=88"></script>
+<script src="body-map.js?v=88"></script>
+<script src="report-core.js?v=88"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -1432,7 +1498,8 @@ const $ = (id)=>document.getElementById(id);
 /* ===================== i18n ===================== */
 const I18N = {
   en:{ app_title:"Truck Inspection", net_online:"online", net_offline:"offline — OK",
-    sec_inspection:"Inspection", lbl_class:"Equipment", lbl_type:"Inspection type", lbl_truck:"Truck / Unit", ph_truck:"e.g. TK158", btn_scan:"Scan",
+    sec_inspection:"Inspection", hdr_change:"Change",
+    iso_show:"Report a finding", iso_hide:"Hide the finding fields", lbl_class:"Equipment", lbl_type:"Inspection type", lbl_truck:"Truck / Unit", ph_truck:"e.g. TK158", btn_scan:"Scan",
     lbl_defect:"Defect / failure mode", lbl_cause:"Direct cause",
     sync_off:"Auto-upload is off — findings stay on this phone.", sync_setup:"Set up",
     sync_ok:"All synced.", sync_pending:"{n} inspection(s) waiting to upload", sync_running:"Uploading…",
@@ -1639,7 +1706,7 @@ const I18N = {
     lbl_gps:"Location (GPS)", gps_none:"Tap to stamp the location", gps_getting:"Getting location…",
     m_gps_na:["Location not available","This browser can't provide GPS. The record still saves without it."],
     m_gps_fail:["Location failed","Allow location access for this site, or continue — the record still saves."],
-    sec_sign:"Supervisor sign-off", lbl_sup:"Verified by (supervisor)", ph_sup:"name / badge no.",
+    sec_sign:"Supervisor sign-off", sign_add:"Add a supervisor signature", sign_hide:"Hide the signature box", lbl_sup:"Verified by (supervisor)", ph_sup:"name / badge no.",
     sign_hint:"Sign in the box (optional) — it is stored with the record and printed on the report.",
     btn_sign_clear:"Clear signature", rep_sup:"Verified by", rep_gps:"Location",
     sec_due:"Inspection due", lbl_due_int:"Interval (days)", lbl_due_scope:"Show",
@@ -1717,7 +1784,8 @@ const I18N = {
     m_dictation:["Dictation","Tap the comment box, then tap the 🎤 microphone key on your phone's keyboard to dictate."],
   },
   ru:{ app_title:"Осмотр самосвала", net_online:"онлайн", net_offline:"офлайн — ОК",
-    sec_inspection:"Осмотр", lbl_class:"Оборудование", lbl_type:"Тип осмотра", lbl_truck:"Трак / Ед.", ph_truck:"напр. TK158", btn_scan:"Скан",
+    sec_inspection:"Осмотр", hdr_change:"Изменить",
+    iso_show:"Записать дефект", iso_hide:"Скрыть поля дефекта", lbl_class:"Оборудование", lbl_type:"Тип осмотра", lbl_truck:"Трак / Ед.", ph_truck:"напр. TK158", btn_scan:"Скан",
     lbl_defect:"Дефект / вид отказа", lbl_cause:"Прямая причина",
     sync_off:"Автозагрузка выключена — данные остаются на телефоне.", sync_setup:"Настроить",
     sync_ok:"Всё синхронизировано.", sync_pending:"Ожидает отправки: {n}", sync_running:"Отправка…",
@@ -1924,7 +1992,7 @@ const I18N = {
     lbl_gps:"Координаты (GPS)", gps_none:"Нажмите, чтобы записать координаты", gps_getting:"Определение координат…",
     m_gps_na:["Геолокация недоступна","Браузер не может дать GPS. Запись всё равно сохранится."],
     m_gps_fail:["Не удалось определить координаты","Разрешите доступ к геолокации для этого сайта или продолжайте — запись сохранится."],
-    sec_sign:"Подпись руководителя", lbl_sup:"Проверил (руководитель)", ph_sup:"ФИО / табельный №",
+    sec_sign:"Подпись руководителя", sign_add:"Добавить подпись руководителя", sign_hide:"Скрыть поле подписи", lbl_sup:"Проверил (руководитель)", ph_sup:"ФИО / табельный №",
     sign_hint:"Распишитесь в поле (необязательно) — подпись сохраняется с записью и печатается в отчёте.",
     btn_sign_clear:"Очистить подпись", rep_sup:"Проверил", rep_gps:"Координаты",
     sec_due:"Плановые осмотры", lbl_due_int:"Интервал (дней)", lbl_due_scope:"Показать",
@@ -2827,7 +2895,7 @@ function applyForm(){ $("secPosTitle").textContent=TYPE_META[type].title[lang]||
   const tr=currentTree(); const flat=items();
   if(tr){ if(curItem && !flat.some(i=>i.k===curItem)) curItem=""; }
   else { if(!curItem || !flat.some(i=>i.k===curItem)) curItem=(flat[0]||{k:""}).k; }
-  fillClassSel(); fillTypeSel(); renderChips(); loadPos(); }
+  fillClassSel(); fillTypeSel(); renderChips(); loadPos(); renderHdr(); }
 
 /* ===================== media: up to 10 photos + 1 video (<=60s) ===================== */
 /* Per component, not per machine: each position in the walk has its own strip.
@@ -3028,7 +3096,8 @@ function renderGrade(){
   const fld=$("gradeFld");
   if(fld) fld.classList.toggle("hidden", !gradeApplies());
   const g=posRO().grade; $("gradeSeg").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.g===g)); }
-function renderSev(){ const v=posRO().sev; $("sevSeg").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.s===v)); }
+function renderSev(){ const v=posRO().sev; $("sevSeg").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.s===v));
+  renderISOFold(); }   // anything but "no failure" needs the coded fields open
 $("sevSeg").addEventListener("click",(e)=>{ const b=e.target.closest("button[data-s]"); if(!b) return;
   const p=curP(); p.sev=(p.sev===b.dataset.s)?null:b.dataset.s; p.sevMan=1;   // manual choice wins over the temperature rule
   renderSev(); renderChips(); });
@@ -3457,16 +3526,29 @@ function ucKeepFrameInView(){
        happily call the field "visible" while it sits underneath it. Work out
        the move by hand against the real ceiling, and clamp it: keep a strip of
        the map on screen, because a map you have to scroll back for is only a
-       better version of a map that was covered. */
-    const r=mm.getBoundingClientRect();
+       better version of a map that was covered.
+
+       The target is the number AND the way on. Aiming at the field alone left
+       Back and Next just under the fold on every screen size — so a round was
+       type, scroll, tap Next, scroll back, forty-four times. The nav is 44 px
+       immediately below the verdict; asking for it costs a little of the map
+       and saves a scroll on every point. */
+    const nav=$("ucSheetNav");
+    const r0=mm.getBoundingClientRect();
+    const rn=(nav && nav.getClientRects().length) ? nav.getBoundingClientRect() : r0;
+    const r={ bottom: Math.max(r0.bottom, rn.bottom) };
     const sv=$("saveBtn"), tb=$("tabbar");
     let floor=window.innerHeight;
     [sv,tb].forEach(el=>{ if(el && el.getClientRects().length){
       const q=el.getBoundingClientRect(); if(q.top<floor) floor=q.top; } });
     let need=Math.ceil(r.bottom-(floor-10));
     if(need<=0) return;
+    /* The map keeps whatever is left over, and no more. On a 568 px screen with
+       the implausible-reading challenge open there is nothing left: the number
+       and the way on come first, because you can scroll back to a picture and
+       you cannot work without the buttons. */
     const map=$("posnav").querySelector(".tbwrap,.ucmapwrap");
-    if(map){ const keep=map.getBoundingClientRect().bottom-56; if(keep<need) need=Math.max(0,keep); }
+    if(map){ const keep=map.getBoundingClientRect().bottom-16; if(keep<need) need=Math.max(0,keep); }
     if(need>0) window.scrollBy({top:need});
     return;
   }
@@ -3526,18 +3608,15 @@ function ucMoveOut(){
   ucHome.forEach(h=>{ if(h.parent) h.parent.insertBefore(h.el, h.next); });
 }
 function renderUCSheet(){
-  const on=ucSheetOn(), f=$("ucFields"), bd=$("ucBackdrop");
-  if(!f||!bd) return;
+  const on=ucSheetOn(), f=$("ucFields");
+  if(!f) return;
   /* Reading a station is a different screen from choosing one: the note has
      been read, and the map is worth more than three rows of chips. */
   document.body.classList.toggle("tbreading", on && bodyType());
   /* A dock, not a modal. The map is context, and context you cannot see is not
-     context — so nothing covers it, the backdrop is gone and the page scrolls
-     the way every other screen does. */
+     context — so nothing covers it and the page scrolls the way every other
+     screen does. */
   f.classList.toggle("dock", on);
-  f.classList.remove("sheet");
-  bd.classList.add("hidden");
-  document.body.style.overflow = "";
   if(on) ucMoveIn(); else ucMoveOut();
   renderUCExtra(on);
   if(!on) return;
@@ -3951,6 +4030,7 @@ function updatePrioBtn(){ const p=draft.positions[curItem]||{};
   $("prioFld").classList.toggle("hidden", !on);
   $("prioBtn").textContent = p.prio ? prioLabel(p.prio) : t("opt_prio_none"); }
 $("prioBtn").onclick=()=>openPicker("prio");
+$("isoTog").onclick=()=>{ isoOpen=!(isoOpen||isoWanted()); renderISOFold(); };
 ["particle","comp","oil","comment","wo"].forEach(id=>$(id).addEventListener("input",()=>{ saveCur(); refreshChips(); }));
 ["tempV","tempA"].forEach(id=>$(id).addEventListener("input",()=>{ saveCur(); syncTempSev(); refreshChips(); }));
 $("tempM").onchange=()=>{ saveCur(); refreshChips(); };
@@ -4000,7 +4080,12 @@ function posHeading(k){
   if(getType())  return getLabel(k);
   return `${k} — ${itemLabel(k)}`;
 }
+/* Moving to a point is the signal that the header's job is done. Somebody who
+   opened it to correct the hours does not then want it sitting there for the
+   next thirty-five readings, and this is the moment the room is needed. */
+let hdrLastItem = null;
 function loadPos(){
+  if(curItem && curItem!==hdrLastItem){ hdrLastItem=curItem; if(hdrOpen){ hdrOpen=false; renderHdr(); } }
   if(!curItem){ $("posLabel").textContent=bodyType()?"":t("nav_choose");
     renderUCSheet(); toggleCapture(); return; }
   $("posLabel").textContent = posHeading(curItem);
@@ -4012,7 +4097,31 @@ function loadPos(){
   else renderUCSheet();
   $("comment").value=p.comment||""; $("wo").value=p.wo||"";
   $("tempV").value=p.tempV||""; $("tempA").value=p.tempA||""; $("tempM").value=p.tempM||"IR";
-  renderGrade(); renderSev(); updateActionBtn(); updatePrioBtn(); updateDetectBtn(); renderMedia(); updateDefectCauseBtns(); renderTempHint(); toggleCapture(); }
+  renderGrade(); renderSev(); updateActionBtn(); updatePrioBtn(); updateDetectBtn(); renderMedia(); updateDefectCauseBtns(); renderTempHint(); renderISOFold(); toggleCapture(); }
+/* The coded fields, folded away on a measurement round.
+
+   A magnetic-plug or component round IS the coding — severity, defect, cause,
+   action — so nothing folds there. An undercarriage or dump-body round is a
+   number against a limit, and the coding is what you reach for on the one
+   roller in forty that is wrong. It opens by itself the moment there is
+   anything in it or the severity stops being "no failure", so the fields are
+   never hidden at the moment they matter, and Save can never be refused for a
+   field that is not on the screen. */
+let isoOpen = false;
+function isoFoldable(){ return !!TYPE_META[type].wear; }
+function isoWanted(){
+  const p = draft.positions[curItem] || {};
+  return !!(p.defect || p.cause || p.action || p.wo || p.prio || p.detect)
+      || (!!p.sev && p.sev !== "NOF");
+}
+function renderISOFold(){
+  const tog=$("isoTog"), body=$("isoBody"); if(!tog||!body) return;
+  const fold = isoFoldable();
+  tog.classList.toggle("hidden", !fold);
+  const open = !fold || isoOpen || isoWanted();
+  body.classList.toggle("hidden", !open);
+  if(fold) tog.textContent = (open?"▾ ":"▸ ")+t(open?"iso_hide":"iso_show");
+}
 /* Blank means the default — a routine walk-around is a visual inspection. It is
    only written to the record on save, so an untouched position stays untouched. */
 function updateDetectBtn(){ const d=(draft.positions[curItem]||{}).detect;
@@ -4026,12 +4135,53 @@ function updateDefectCauseBtns(){ const p=draft.positions[curItem]||{};
 /* ===================== asset (unit) picker + defect / cause pickers ===================== */
 function updateEquipBtn(){ const a=ASSET_BY[curEquip];
   $("equipBtn").textContent = curEquip ? (a&&a.cat? `${curEquip} · ${a.cat}` : curEquip) : t("opt_pick_unit"); }
+/* ── the folded header ────────────────────────────────────────────────────
+   Which machine, which round, when, and who: seven controls, answered once,
+   and then 470 px of the first screen on every one of forty-four points. The
+   measurement was permanently below the fold — an inspector scrolled past the
+   answer to a question they had already settled, forty-four times a round.
+
+   It folds once there is a unit, because that is the moment the question is
+   answered, and the heading it folds into carries enough to check without
+   opening: the unit, the round, the date, the hours, the name. Open is the
+   state you are put in when something is missing, never a state you are left
+   in by accident. */
+let hdrOpen = false;
+/* Folded means settled, and it is not settled until every answer Save will
+   demand is in it. On a phone straight out of the box that is the name — fold
+   before it is typed and the first round of somebody's first shift ends at a
+   dialog pointing at a field they cannot see. The name is remembered, so this
+   costs the first round only. */
+function hdrFolded(){
+  return !!curEquip && !!$("inspector").value.trim() && !hdrOpen;
+}
+function renderHdr(){
+  const card=$("cardInspection"), sum=$("hdrSum"), body=$("hdrBody");
+  if(!card||!sum||!body) return;
+  const fold = hdrFolded();
+  card.classList.toggle("folded", fold);
+  sum.classList.toggle("hidden", !fold);
+  body.classList.toggle("hidden", fold);
+  if(!fold) return;
+  const a=ASSET_BY[curEquip]||{};
+  $("hsUnit").textContent = curEquip + (a.cat? " · "+a.cat : "");
+  /* The round, not the position heading — TYPE_META.title is "Measurement
+     point", which names a row on the next card and tells nobody which round
+     they are in. */
+  const bits=[ t("type_"+type) ];
+  const d=$("date").value; if(d) bits.push(d);
+  const smu=$("smu").value.trim(); if(smu) bits.push(smu+" h");
+  const by=$("inspector").value.trim(); if(by) bits.push(by);
+  $("hsMeta").textContent = bits.join(" · ");
+}
+function openHdr(){ hdrOpen=true; renderHdr(); }
 function selectEquip(n){ n=(n||"").trim().toUpperCase().replace(/\s+/g,""); curEquip=n;
   if(!gps) getGps(true);   // start the fix now so Save never has to wait
   const a=ASSET_BY[n];
   if(a){ eqCat=a.cat||"— UNCATEGORISED —"; localStorage.setItem("equip_cat",eqCat); }
   const cls=assetClassOf(n); if(cls){ eqClass=cls; localStorage.setItem("equip_class",eqClass); }
-  draft={positions:{}}; editing=null; curItem=""; applyForm(); setEditing(null); updateEquipBtn();
+  draft={positions:{}}; editing=null; curItem=""; hdrOpen=false;
+  applyForm(); setEditing(null); updateEquipBtn();
   renderLastDone(); renderTrend(); }
 let pickMode=null, showAllDefects=false, showAllCauses=false;
 /* Can this round be done on this machine at all? Everything else — the picker,
@@ -4195,6 +4345,16 @@ $("gpsBtn").onclick=()=>getGps(false);
 
 /* ===================== supervisor signature pad ===================== */
 const signPad=$("signPad"); let signDirty=false, signing=false;
+/* Open only when it is wanted. The canvas measures itself, and a canvas with no
+   box has no width — so it is sized the moment it appears, not before. */
+let signOpen=false;
+function renderSignFold(){
+  const tog=$("signTog"), body=$("signBody"); if(!tog||!body) return;
+  const on = signOpen || signDirty || !!$("supName").value.trim();
+  tog.textContent = (on?"▾ ":"▸ ")+t(on?"sign_hide":"sign_add");
+  body.classList.toggle("hidden", !on);
+  if(on) sizeSignPad();
+}
 function sizeSignPad(){ const r=Math.max(1,Math.min(3,window.devicePixelRatio||1));
   const w=signPad.clientWidth||300, h=signPad.clientHeight||132;
   if(signPad.width===Math.round(w*r) && signPad.height===Math.round(h*r)) return;
@@ -4210,22 +4370,36 @@ signPad.addEventListener("pointermove",e=>{ if(!signing) return; const c=signPad
   c.lineTo(...signXY(e)); c.stroke(); signDirty=true; e.preventDefault(); });
 ["pointerup","pointercancel","pointerleave"].forEach(ev=>signPad.addEventListener(ev,()=>{ signing=false; }));
 function clearSign(){ signDirty=false; const c=signPad.getContext("2d");
-  c.fillStyle="#fff"; c.fillRect(0,0,signPad.width,signPad.height); }
+  c.fillStyle="#fff"; c.fillRect(0,0,signPad.width,signPad.height); renderSignFold(); }
 $("signClear").onclick=clearSign;
 $("supName").value=localStorage.getItem("supervisor")||"";
 $("supName").addEventListener("input",()=>localStorage.setItem("supervisor",$("supName").value.trim()));
 function signBlob(){ return signDirty ? new Promise(r=>signPad.toBlob(r,"image/png")) : Promise.resolve(null); }
 function loadSign(blob){ clearSign(); if(!blob) return;
+  signOpen=true; renderSignFold();
   const i=new Image(); i.onload=()=>{ const r=Math.max(1,Math.min(3,window.devicePixelRatio||1));
     signPad.getContext("2d").drawImage(i,0,0,signPad.width/r,signPad.height/r); signDirty=true; URL.revokeObjectURL(i.src); };
   i.src=URL.createObjectURL(blob); }
 addEventListener("resize",sizeSignPad);
+$("signTog").onclick=()=>{ signOpen=!(signOpen||signDirty||$("supName").value.trim()); renderSignFold(); };
+$("supName").addEventListener("input",renderSignFold);
 
 /* ===================== date + edit ===================== */
 function todayISO(){ const d=new Date(),p=(n)=>String(n).padStart(2,"0"); return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`; }
 $("date").value=todayISO();
 $("inspector").value=localStorage.getItem("inspector")||"";
 $("inspector").addEventListener("input",()=>localStorage.setItem("inspector",$("inspector").value.trim()));
+$("hdrSum").onclick=openHdr;
+/* Folding is a thing that happens when you have finished with the card, not
+   while you are still in it. Re-rendering on every keystroke meant typing the
+   inspector's name folded the card mid-sentence and took the hours field away
+   with it — the next thing the same person was reaching for. So: fold when
+   focus leaves, and not before. The timeout is because focusout fires before
+   the next element has focus, and "did focus leave this card" cannot be
+   answered until it has landed. */
+$("cardInspection").addEventListener("focusout", ()=>setTimeout(()=>{
+  if(!$("cardInspection").contains(document.activeElement)) renderHdr();
+}, 0));
 function updateSaveLabel(){ $("saveBtn").textContent = editing ? t("btn_update") : t("btn_save"); }
 function setEditing(rec){ editing=rec||null;
   if(editing){ $("editBanner").classList.remove("hidden"); $("editBannerText").textContent=t("editing_hint").replace("{x}",editing.equip); }
@@ -4252,8 +4426,12 @@ $("cancelEdit").onclick=()=>resetForm();
 $("saveBtn").onclick=async ()=>{
   saveCur();
   const equip=(curEquip||"").trim().toUpperCase().replace(/\s+/g,""); const date=$("date").value;
-  if(!equip){ dlg(t("m_need_truck")); return; }
-  if(!$("inspector").value.trim()){ dlg(t("m_need_inspector")); return; }
+  /* Never refuse a save while the field that would fix it is folded away. */
+  if(!equip){ openHdr(); dlg(t("m_need_truck")); return; }
+  /* Unfold first, then say why. dlg() is showModal(), so everything behind it
+     is inert and focusing the field here would be thrown away — but it is on
+     screen and waiting the moment OK is pressed. */
+  if(!$("inspector").value.trim()){ openHdr(); dlg(t("m_need_inspector")); return; }
   if(!Object.keys(draft.positions).length){ dlg(t("m_nothing_save")); return; }
 
   /* A Critical finding has to say what is wrong and what to do about it.
@@ -5141,6 +5319,7 @@ function applyLang(){ document.documentElement.lang=lang;
   $("secPosTitle").textContent=TYPE_META[type].title[lang]||TYPE_META[type].title.en;
   $("posLabel").textContent = posHeading(curItem);
   updateDefectCauseBtns(); updateActionBtn(); renderSev(); renderMedia(); renderGps(); renderTempHint(); renderDue(); renderTeam(); renderLastDone(); renderTrend();
+  renderHdr();   // the summary names the round, so it changes language too
   updateSaveLabel(); if(editing) $("editBannerText").textContent=t("editing_hint").replace("{x}",editing.equip); $("cancelEdit").textContent=t("btn_cancel");
   setNet(); renderPending();
   /* Built in code, so the [data-i18n] sweep above never reaches it — and a
@@ -5188,7 +5367,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="87";
+const BUILD="88";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -6579,7 +6758,7 @@ function checkData(){
 /* ===================== init ===================== */
 updateEquipBtn(); renderGps(); checkData();
 $("dueScope").value=localStorage.getItem("due_scope")||"due";
-applyForm(); applyTheme(); applyLang(); sizeSignPad(); renderSync(); syncThenArm();
+applyForm(); applyTheme(); applyLang(); renderSignFold(); renderSync(); syncThenArm();
 /* Long-press the home-screen icon and Android offers the manifest's shortcuts.
    They have to land somewhere, or the promise is empty: "Upload queue" that
    opens the capture screen is worse than no shortcut. Honour them, then drop
