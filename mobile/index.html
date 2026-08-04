@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=83">
+<link rel="manifest" href="manifest.webmanifest?v=84">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=83">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=83">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=83">
+<link rel="apple-touch-icon" href="icon-192.png?v=84">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=84">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=84">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -176,7 +176,15 @@
   .pitem .del:active{background:color-mix(in srgb,var(--critical) 15%,transparent);}
   .empty{color:var(--muted);text-align:center;padding:20px;font-size:14px;}
   .hint.warn{color:var(--critical);font-weight:600;}
-  .bottombar{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--border);padding:12px 16px calc(env(safe-area-inset-bottom) + 12px);display:flex;gap:10px;z-index:10;}
+  /* --vvb: how far the bottom of what you can actually SEE sits above the
+     bottom of the layout viewport. Zero on a desktop browser and almost always
+     zero on a phone — but iOS positions fixed elements against the LAYOUT
+     viewport, and when the two diverge (pinch zoom, the keyboard, Safari's
+     collapsing bars, a web view that is not full height) the bottom chrome
+     stops being at the bottom of the screen and floats up into the page, with
+     content visible below it. Set from the visualViewport API; see setVVB(). */
+  :root{--vvb:0px;}
+  .bottombar{position:fixed;left:0;right:0;bottom:var(--vvb);background:var(--surface);border-top:1px solid var(--border);padding:12px 16px calc(env(safe-area-inset-bottom) + 12px);display:flex;gap:10px;z-index:10;}
   .bottombar .btn{margin:0;}
 
   /* ── one job per screen ──────────────────────────────────────────────────
@@ -194,11 +202,12 @@
   /* Wherever the tab bar shows — a narrow screen OR a short one, since a phone
      turned sideways is 844 px wide and 390 px tall. */
   @media (max-width: 819px), (max-height: 559px){
-    #saveBtn{position:fixed;left:16px;right:16px;bottom:calc(env(safe-area-inset-bottom) + 64px);
+    #saveBtn{position:fixed;left:16px;right:16px;
+      bottom:calc(var(--vvb) + env(safe-area-inset-bottom) + 64px);
       z-index:9;margin:0;width:auto;box-shadow:0 8px 24px rgba(0,0,0,.40);}
     body{padding-bottom:150px;}
   }
-  .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:10;display:flex;
+  .tabbar{position:fixed;left:0;right:0;bottom:var(--vvb);z-index:10;display:flex;
     background:var(--surface);border-top:1px solid var(--border);
     padding-bottom:env(safe-area-inset-bottom);}
   .tabbar button{flex:1;min-height:56px;display:flex;flex-direction:column;align-items:center;
@@ -326,7 +335,7 @@
      above it, and Next walking the round without ever returning to the map. */
   #ucBackdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:60;
     pointer-events:none;}
-  #ucFields.sheet{position:fixed;left:0;right:0;bottom:0;z-index:61;
+  #ucFields.sheet{position:fixed;left:0;right:0;bottom:var(--vvb);z-index:61;
     background:var(--surface);border-radius:18px 18px 0 0;
     box-shadow:0 -8px 40px rgba(0,0,0,.35);border-top:1px solid var(--line);
     padding:0 16px calc(12px + env(safe-area-inset-bottom));
@@ -556,8 +565,7 @@
      sitting under — 197 px of chips against 179 px of tray. One row that
      scrolls sideways costs 50, and a row of chips reads as a row of chips
      whether or not you can see the end of it. */
-  .tbchips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;
-    -webkit-overflow-scrolling:touch;}
+  .tbchips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;}
   .tbchips::-webkit-scrollbar{display:none;}
   .tbchips button{flex:0 0 auto;}
   /* Shorter than the undercarriage sheet, on purpose. That one carries a
@@ -1171,25 +1179,25 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="native.js?v=83"></script>
-<script src="upload-defaults.js?v=83"></script>
-<script src="hme.js?v=83"></script>
-<script src="mp-fc.js?v=83"></script>
-<script src="hme-cascade.js?v=83"></script>
-<script src="assets.js?v=83"></script>
-<script src="temp-limits.js?v=83"></script>
-<script src="wear.js?v=83"></script>
-<script src="wear-figs.js?v=83"></script>
-<script src="wear-map.js?v=83"></script>
-<script src="machine-photos.js?v=83"></script>
-<script src="machine-fig.js?v=83"></script>
-<script src="get.js?v=83"></script>
-<script src="uc-points.js?v=83"></script>
-<script src="inspect-guide.js?v=83"></script>
-<script src="get-figs.js?v=83"></script>
-<script src="body-points.js?v=83"></script>
-<script src="body-map.js?v=83"></script>
-<script src="report-core.js?v=83"></script>
+<script src="native.js?v=84"></script>
+<script src="upload-defaults.js?v=84"></script>
+<script src="hme.js?v=84"></script>
+<script src="mp-fc.js?v=84"></script>
+<script src="hme-cascade.js?v=84"></script>
+<script src="assets.js?v=84"></script>
+<script src="temp-limits.js?v=84"></script>
+<script src="wear.js?v=84"></script>
+<script src="wear-figs.js?v=84"></script>
+<script src="wear-map.js?v=84"></script>
+<script src="machine-photos.js?v=84"></script>
+<script src="machine-fig.js?v=84"></script>
+<script src="get.js?v=84"></script>
+<script src="uc-points.js?v=84"></script>
+<script src="inspect-guide.js?v=84"></script>
+<script src="get-figs.js?v=84"></script>
+<script src="body-points.js?v=84"></script>
+<script src="body-map.js?v=84"></script>
+<script src="report-core.js?v=84"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3287,6 +3295,34 @@ function ucKeepFrameInView(){
   const want = r.height <= top-2*pad ? (top-pad-r.height) : pad;
   window.scrollBy({top: Math.round(r.top-want), behavior:"smooth"});
 }
+/* Keep the bottom chrome at the bottom of what the inspector can SEE.
+
+   position:fixed is measured against the layout viewport. On iOS the visual
+   viewport is a different thing — it changes with pinch zoom, with the
+   keyboard, with Safari's collapsing bars, and inside a web view that is not
+   the full height of the screen. When the two diverge, a bar pinned to
+   bottom:0 sits at the bottom of the LAYOUT viewport, which can be some way up
+   the screen, and page content shows below it. That is what "the tab bar is
+   floating" looks like, and no amount of CSS fixes it on its own because the
+   CSS is doing exactly what it was told.
+
+   So measure the gap and hand it to the stylesheet. Zero everywhere it is
+   already right, which is a desktop browser and most of the time on a phone —
+   this only does anything when the two viewports actually disagree. */
+function setVVB(){
+  const vv = window.visualViewport;
+  if(!vv) return;
+  const gap = Math.max(0, Math.round(window.innerHeight - vv.height - vv.offsetTop));
+  document.documentElement.style.setProperty("--vvb", gap + "px");
+}
+if(window.visualViewport){
+  const vv = window.visualViewport;
+  vv.addEventListener("resize", setVVB);
+  vv.addEventListener("scroll", setVVB);
+  /* Rotation settles after the event, so measure again once it has. */
+  window.addEventListener("orientationchange", ()=>setTimeout(setVVB, 350));
+  setVVB();
+}
 const cssEsc = v => String(v).replace(/["\\]/g,"\\$&");
 const UC_MOVE = ["mediastrip","mediaHint","mediaRow","commentFld"];
 let ucHome = null;
@@ -4953,7 +4989,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="83";
+const BUILD="84";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
