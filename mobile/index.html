@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=85">
+<link rel="manifest" href="manifest.webmanifest?v=86">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=85">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=85">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=85">
+<link rel="apple-touch-icon" href="icon-192.png?v=86">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=86">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=86">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -927,7 +927,7 @@
       <button class="btn ghost" id="videoBtn" type="button">🎥 <span data-i18n="btn_video">Video</span></button>
     </div>
 
-    <label class="fld"><span data-i18n="lbl_grade">Grade / condition</span>
+    <label class="fld" id="gradeFld"><span data-i18n="lbl_grade">Grade / condition</span>
       <div class="seg gradeseg" id="gradeSeg">
         <button class="g-A" data-g="A">A</button><button class="g-B" data-g="B">B</button>
         <button class="g-C" data-g="C">C</button><button class="g-X" data-g="X">X</button>
@@ -1251,25 +1251,25 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="native.js?v=85"></script>
-<script src="upload-defaults.js?v=85"></script>
-<script src="hme.js?v=85"></script>
-<script src="mp-fc.js?v=85"></script>
-<script src="hme-cascade.js?v=85"></script>
-<script src="assets.js?v=85"></script>
-<script src="temp-limits.js?v=85"></script>
-<script src="wear.js?v=85"></script>
-<script src="wear-figs.js?v=85"></script>
-<script src="wear-map.js?v=85"></script>
-<script src="machine-photos.js?v=85"></script>
-<script src="machine-fig.js?v=85"></script>
-<script src="get.js?v=85"></script>
-<script src="uc-points.js?v=85"></script>
-<script src="inspect-guide.js?v=85"></script>
-<script src="get-figs.js?v=85"></script>
-<script src="body-points.js?v=85"></script>
-<script src="body-map.js?v=85"></script>
-<script src="report-core.js?v=85"></script>
+<script src="native.js?v=86"></script>
+<script src="upload-defaults.js?v=86"></script>
+<script src="hme.js?v=86"></script>
+<script src="mp-fc.js?v=86"></script>
+<script src="hme-cascade.js?v=86"></script>
+<script src="assets.js?v=86"></script>
+<script src="temp-limits.js?v=86"></script>
+<script src="wear.js?v=86"></script>
+<script src="wear-figs.js?v=86"></script>
+<script src="wear-map.js?v=86"></script>
+<script src="machine-photos.js?v=86"></script>
+<script src="machine-fig.js?v=86"></script>
+<script src="get.js?v=86"></script>
+<script src="uc-points.js?v=86"></script>
+<script src="inspect-guide.js?v=86"></script>
+<script src="get-figs.js?v=86"></script>
+<script src="body-points.js?v=86"></script>
+<script src="body-map.js?v=86"></script>
+<script src="report-core.js?v=86"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2783,6 +2783,13 @@ function repaintMap(){
 }
 function refreshChips(){
   if(repaintMap()) return;
+  /* The in-place repaint DECLINES when the selection has moved, because the
+     name label beside the selected dot cannot be patched — it has to be drawn
+     somewhere else. Falling through from there to the partial button pass was
+     the bug: the buttons updated, the map did not, and the label stayed on the
+     station you had just left. Tapping L12 left "L11" on the tray. Anything the
+     partial pass cannot finish is a full redraw. */
+  if($("posnav").querySelector(".bm-hit,.ucmap")){ renderChips(); return; }
   const tr=currentTree();
   $("posnav").querySelectorAll("button").forEach(b=>{
     const d=b.dataset;
@@ -3000,7 +3007,21 @@ $("gradeSeg").addEventListener("click",(e)=>{ const b=e.target.closest("button[d
   const p=curP(); p.grade=(p.grade===b.dataset.g)?null:b.dataset.g;
   if(p.grade && !p.sev){ const sug=GRADE_SEV[p.grade]; if(sug) p.sev=sug; }   // suggest ISO severity
   renderGrade(); renderSev(); renderChips(); });
-function renderGrade(){ const g=posRO().grade; $("gradeSeg").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.g===g)); }
+/* A/B/C/X is a walk-around's answer. A measured station's answer is a number,
+   and offering a grade beside it invites two answers to one question — which
+   then disagree in the report. The undercarriage is the exception that proves
+   it: its three visual checks (adjuster and recoil, frame and guards, chain
+   sag) have nothing to caliper, so they are graded and keep the control. */
+function gradeApplies(){
+  if(!wearType()) return true;
+  if(bodyType()) return false;                       // every tray station is measured
+  const [pt]=ucSplit(curItem||"");
+  return !!UC_EXTRA_BY[pt];
+}
+function renderGrade(){
+  const fld=$("gradeFld");
+  if(fld) fld.classList.toggle("hidden", !gradeApplies());
+  const g=posRO().grade; $("gradeSeg").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.g===g)); }
 function renderSev(){ const v=posRO().sev; $("sevSeg").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.s===v)); }
 $("sevSeg").addEventListener("click",(e)=>{ const b=e.target.closest("button[data-s]"); if(!b) return;
   const p=curP(); p.sev=(p.sev===b.dataset.s)?null:b.dataset.s; p.sevMan=1;   // manual choice wins over the temperature rule
@@ -3879,22 +3900,20 @@ $("ucMM").addEventListener("keydown", e=>{ if(e.key==="Enter"){ e.preventDefault
 $("ucPrev").onclick=()=>ucStep(-1);
 $("ucNext").onclick=()=>{ if($("ucNext").dataset.done==="1") ucCloseSheet(); else ucStep(1); };
 $("ucClose").onclick=ucCloseSheet;
-/* Tapping the machine while the sheet is up jumps to that point rather than
-   dismissing first — the frame stays live above the sheet on purpose. Anything
-   else outside the sheet closes it. */
-document.addEventListener("click", e=>{
-  if(!ucSheetOn()) return;
-  if(e.target.closest("#ucFields")) return;
-  /* The map is still the picker while the sheet is up. Both class names: the
-     drawn frame puts out .um-spot and the numbered photograph .um-num, and
-     listing only the first meant every tap on a number dismissed the sheet
-     before the number was read — closing and reopening it for what should have
-     been a step sideways. */
-  if(e.target.closest(".um-spot,.um-num")) return;
-  if(e.target.closest(".ucviews")) return;
-  ucCloseSheet();
-}, true);
-document.addEventListener("keydown", e=>{ if(e.key==="Escape" && ucSheetOn()) ucCloseSheet(); });
+/* THERE IS NO "OUTSIDE" ANY MORE, so there is nothing to dismiss.
+
+   A modal needs a way out: tap the backdrop, press Escape. A dock is part of
+   the page — the map above it is not "outside", it is the primary control, and
+   the ✕ in the header is the explicit way to clear the selection.
+
+   Leaving the dismiss listener in place did real damage, and the mechanism is
+   worth recording. It ran in the CAPTURE phase, so it fired before the tapped
+   element's own handler; ucCloseSheet() calls renderChips(), which rewrites
+   #posnav; the element that was tapped is detached before its onclick can run,
+   and the tap is lost. Selecting a surface on the tray map cleared the very
+   selection it had just made. It looked intermittent because chips reach their
+   handler through a delegated listener on #posnav, which survives the rewrite,
+   while the map's regions carry their own onclick, which does not. */
 
 function renderTempHint(){ if(!TYPE_META[type].temp) return;
   const lim=tempLimit(tempCtx()); const v=$("tempV").value, a=$("tempA").value;
@@ -5157,7 +5176,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="85";
+const BUILD="86";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

@@ -199,13 +199,31 @@
     if (o.sel && o.tag !== false) {
       var sp = B.get(id, o.sel);
       if (sp) {
-        var c2 = px([sp.x, sp.y]), left = c2[0] < VB_W / 2;
-        var w = 20 + String(o.sel).length * 10.5;
-        var bx = left ? c2[0] + 14 : c2[0] - 14 - w;
+        /* Put the chip where it covers nothing. Beside the dot is the obvious
+           place and it is wrong on the head, where the columns are twenty units
+           apart and the chip lands squarely on the next station — hiding what
+           that one read for as long as this one is selected. So try right,
+           left, above, below in that order and take the first that is clear of
+           every other station; if the tray is too tight for any of them, right
+           is still better than nothing. */
+        var c2 = px([sp.x, sp.y]);
+        var w = 20 + String(o.sel).length * 10.5, h = 26;
+        var others = B.points(id).filter(function (q) { return q.k !== o.sel; })
+                      .map(function (q) { return px([q.x, q.y]); });
+        var cand = [[c2[0] + 14, c2[1] - h / 2], [c2[0] - 14 - w, c2[1] - h / 2],
+                    [c2[0] - w / 2, c2[1] - 16 - h], [c2[0] - w / 2, c2[1] + 16]];
+        var bx = cand[0][0], by = cand[0][1];
+        for (var ci = 0; ci < cand.length; ci++) {
+          var X = cand[ci][0], Y = cand[ci][1];
+          if (X < 2 || X + w > VB_W - 2 || Y < 2 || Y + h > VB_H - 2) continue;
+          var clash = others.some(function (q) {
+            return q[0] > X - 7 && q[0] < X + w + 7 && q[1] > Y - 7 && q[1] < Y + h + 7; });
+          if (!clash) { bx = X; by = Y; break; }
+        }
         s.push('<g class="bm-tag" pointer-events="none">' +
-               '<rect x="' + bx.toFixed(1) + '" y="' + (c2[1] - 13).toFixed(1) +
-               '" width="' + w.toFixed(1) + '" height="26" rx="7"/>' +
-               '<text x="' + (bx + w / 2).toFixed(1) + '" y="' + (c2[1] + 6).toFixed(1) +
+               '<rect x="' + bx.toFixed(1) + '" y="' + by.toFixed(1) +
+               '" width="' + w.toFixed(1) + '" height="' + h + '" rx="7"/>' +
+               '<text x="' + (bx + w / 2).toFixed(1) + '" y="' + (by + 18).toFixed(1) +
                '" text-anchor="middle">' + o.sel + '</text></g>');
       }
     }
