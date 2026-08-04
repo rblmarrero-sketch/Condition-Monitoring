@@ -422,6 +422,57 @@
     img.parentNode.removeChild(img);
   };
 
+  /* ---- the tool, drawn, for when there is no photograph of it -------------
+     Thirty of the seventy-one machines that have a GET round have no photograph
+     for their model — every front loader, every skidsteer, both backhoes, the
+     rock breakers, and six excavators. On all of them the round drew eleven
+     numbered pucks over an empty rectangle, which tells an inspector nothing
+     and looks like a broken app.
+
+     The old note here was half right: it refused to draw a TRACK FRAME under a
+     missing bucket photograph, on the grounds that the wrong machine part is
+     worse than none. True — and the conclusion should have been to draw the
+     RIGHT part, not to draw nothing. So here are the two tools the round covers,
+     schematically, in the same orientation the numbers are laid out for: a
+     bucket square on from the front, teeth down; a blade from the front, cutting
+     edge down. Both fill the picture box, so a point given as a fraction of that
+     box lands on the same part whether it is over the drawing or the photograph.
+
+     This is a fallback and looks like one — a line drawing, no fill detail. It
+     is not pretending to be the machine; it is giving the numbers something
+     true to sit on. */
+  function toolArt(tool) {
+    var a = [];
+    var box = function (d, c) { return '<path class="' + (c || 'mf-part') + '" d="' + d + '"/>'; };
+    /* Laid out against the real point coordinates in get.js, not by eye: every
+       one of the eleven numbers has to land ON the part it names. Verified by
+       isPointInFill in the suite, so a future edit to either the art or the
+       catalog cannot quietly float a number off its part again. */
+    if (tool === 'blade') {
+      a.push(box('M40 40 L392 40 L392 160 L40 160 Z', 'mf-body'));   /* mouldboard */
+      a.push(box('M40 40 L392 40 L392 58 L40 58 Z'));                /* top rail */
+      a.push(box('M40 160 L392 160 L392 186 L40 186 Z'));            /* cutting edge */
+      a.push(box('M12 44 L60 44 L60 186 L12 186 Z'));                /* left end bit */
+      a.push(box('M394 100 L444 100 L444 186 L394 186 Z'));          /* right end bit */
+      a.push(box('M408 16 L446 16 L446 62 L408 62 Z'));              /* ripper shank */
+      a.push(box('M410 62 L444 62 L436 96 L418 96 Z'));              /* ripper point */
+      a.push('<path class="mf-line" d="M150 58 L150 160 M230 58 L230 160 M312 58 L312 160"/>');
+    } else {
+      a.push(box('M30 26 L430 26 L414 150 L46 150 Z', 'mf-body'));   /* shell */
+      a.push(box('M30 26 L74 26 L88 184 L30 184 Z'));                /* left cutter */
+      a.push(box('M386 26 L430 26 L430 184 L372 184 Z'));            /* right cutter */
+      a.push(box('M66 26 L132 26 L142 150 L80 150 Z'));              /* left sidewall */
+      a.push(box('M330 26 L394 26 L382 150 L320 150 Z'));            /* right sidewall */
+      a.push(box('M46 150 L414 150 L406 178 L54 178 Z'));            /* lip / adapters */
+      for (var i = 0; i < 5; i++) {
+        var x = 65 + i * 73;          /* so the middle tooth is centred on point 1 */
+        a.push(box('M' + x + ' 178 L' + (x + 38) + ' 178 L' + (x + 30) + ' 204 L' + (x + 8) + ' 204 Z'));
+      }
+      a.push('<path class="mf-line" d="M88 96 L372 96"/>');
+    }
+    return a.join('');
+  }
+
   W.mapPhoto = function (o) {
     o = o || {};
     var box = o.box || [20, 55, 70, 40];
@@ -458,6 +509,14 @@
       s.push('<g class="um-drawn"' + (o.photo ? ' style="display:none"' : '') +
              ' transform="translate(0,' + (-14 * k).toFixed(1) + ') scale(1,' +
              (0.78 * k).toFixed(3) + ')">' + frameArt(layout(g, '')) + '</g>');
+    }
+    /* The same slot the track frame uses, so a photograph that 404s on a phone
+       with no signal reveals this instead of nothing — photoGone() un-hides
+       whatever carries .um-drawn and does not care which drawing it is. */
+    if (!o.fam && o.tool) {
+      var k2 = PVB_H / 210;
+      s.push('<g class="um-drawn"' + (o.photo ? ' style="display:none"' : '') +
+             ' transform="scale(1,' + k2.toFixed(3) + ')">' + toolArt(o.tool) + '</g>');
     }
     if (o.photo) {
       s.push('<image class="um-photo" href="' + o.photo + '" x="0" y="0" width="' + PVB_W +
