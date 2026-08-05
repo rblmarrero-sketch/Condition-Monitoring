@@ -208,13 +208,20 @@ window.WEAR = '''
     var cat = null, m = W.modelFor(regModel);
     if (m && m.pts[point]) cat = m.pts[point];
     if (best) {
-      return { n: best.n, c: (best.c != null ? best.c : (cat ? cat.c : null)),
+      /* A baseline replaces "new" only, and it inherits the catalogue's condemn
+         where there is one worth inheriting. A FLAGGED one is not: the SD90
+         carries the SD32's whole row, so taking its condemn while replacing its
+         "new" would score a real measurement against a borrowed limit and print
+         "vs the baseline set" over it, which reads as though somebody checked.
+         Either the baseline carries its own condemn or there is still nothing
+         to score against, and the app says so. */
+      var inherit = (cat && !cat.x) ? cat.c : null;
+      var c = (best.c != null ? best.c : inherit);
+      return { n: best.n, c: c,
                d: cat ? cat.d : (best.c > best.n ? 'grow' : 'shrink'),
                src: best.why === 'override' ? 'override' : 'baseline',
                from: best.from, by: best.by,
-               /* a baseline replaces "new" only; without a condemn figure from
-                  somewhere there is still nothing to score against */
-               x: (best.c == null && !cat) ? 'nolimit' : null };
+               x: (c == null) ? 'nolimit' : null };
     }
     if (!cat) return null;
     return { n: cat.n, c: cat.c, d: cat.d, src: 'catalogue', x: cat.x || null,

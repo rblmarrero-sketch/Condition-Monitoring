@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=90">
+<link rel="manifest" href="manifest.webmanifest?v=91">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=90">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=90">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=90">
+<link rel="apple-touch-icon" href="icon-192.png?v=91">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=91">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=91">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -399,6 +399,8 @@
     font:650 14px/1 inherit;cursor:pointer;}
   #ucFields.dock .sh-nav button.pri{background:var(--accent);border-color:var(--accent);
     color:var(--accent-ink);}
+  #ucFields.dock #ucBaseTog{order:10;}
+  #ucFields.dock .ucbase{order:10;}
   #ucFields.dock .ucfigtog{order:11;}
   #ucFields.dock .ucfig{order:12;}
   #ucFields.dock .guide{order:13;}
@@ -490,6 +492,20 @@
     font-variant-numeric:tabular-nums;}
   .ucfcast.quiet{color:var(--muted);}
   .ucfcast.soonout{color:var(--warn-ink);font-weight:650;}
+  /* Setting a baseline changes how every later reading on this unit is judged.
+     That deserves a sentence saying so before the button, not a bare switch. */
+  .ucbase{background:var(--surface-2);border:1px solid var(--line);border-radius:11px;
+    padding:11px 12px;margin:0 0 8px;font-size:12.5px;line-height:1.5;color:var(--ink-2);}
+  .ucbase .bw{margin:0 0 9px;}
+  .ucbase .bw b{color:var(--ink);font-variant-numeric:tabular-nums;}
+  .ucbase .bset{display:flex;flex-wrap:wrap;gap:8px;}
+  .ucbase .bset button{flex:1 1 130px;min-height:44px;border-radius:10px;cursor:pointer;
+    border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);
+    font:650 13px/1.25 inherit;padding:6px 10px;}
+  .ucbase .bset button.off{background:var(--surface);color:var(--ink-2);border-color:var(--line);}
+  .ucbase .bset button:disabled{opacity:.45;cursor:default;}
+  .ucbase label.fld{margin:9px 0 0;}
+  .ucbase .done{color:var(--good);font-weight:650;}
   .ucread{font-size:13.5px;margin:-4px 0 12px;display:flex;flex-wrap:wrap;gap:5px 9px;
     align-items:center;min-height:20px;}
   .ucread b{font-variant-numeric:tabular-nums;font-size:15px;}
@@ -1073,6 +1089,11 @@
         <!-- Percent worn says where the part is. This says when to order the
              next one, which is the number planning actually rings up about. -->
         <div class="ucfcast" id="ucFcast"></div>
+        <!-- Somebody standing at a freshly fitted roller with a caliper is the
+             only person who will ever know what "new" is on this machine. This
+             is where they say so. -->
+        <button type="button" class="ucna-h" id="ucBaseTog"></button>
+        <div class="ucbase hidden" id="ucBase"></div>
         <div class="ucwarn hidden" id="ucWarn">
           <div class="uw-t" id="ucWarnText"></div>
           <label class="uw-ok"><input type="checkbox" id="ucStood">
@@ -1343,25 +1364,25 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="native.js?v=90"></script>
-<script src="upload-defaults.js?v=90"></script>
-<script src="hme.js?v=90"></script>
-<script src="mp-fc.js?v=90"></script>
-<script src="hme-cascade.js?v=90"></script>
-<script src="assets.js?v=90"></script>
-<script src="temp-limits.js?v=90"></script>
-<script src="wear.js?v=90"></script>
-<script src="wear-figs.js?v=90"></script>
-<script src="wear-map.js?v=90"></script>
-<script src="machine-photos.js?v=90"></script>
-<script src="machine-fig.js?v=90"></script>
-<script src="get.js?v=90"></script>
-<script src="uc-points.js?v=90"></script>
-<script src="inspect-guide.js?v=90"></script>
-<script src="get-figs.js?v=90"></script>
-<script src="body-points.js?v=90"></script>
-<script src="body-map.js?v=90"></script>
-<script src="report-core.js?v=90"></script>
+<script src="native.js?v=91"></script>
+<script src="upload-defaults.js?v=91"></script>
+<script src="hme.js?v=91"></script>
+<script src="mp-fc.js?v=91"></script>
+<script src="hme-cascade.js?v=91"></script>
+<script src="assets.js?v=91"></script>
+<script src="temp-limits.js?v=91"></script>
+<script src="wear.js?v=91"></script>
+<script src="wear-figs.js?v=91"></script>
+<script src="wear-map.js?v=91"></script>
+<script src="machine-photos.js?v=91"></script>
+<script src="machine-fig.js?v=91"></script>
+<script src="get.js?v=91"></script>
+<script src="uc-points.js?v=91"></script>
+<script src="inspect-guide.js?v=91"></script>
+<script src="get-figs.js?v=91"></script>
+<script src="body-points.js?v=91"></script>
+<script src="body-map.js?v=91"></script>
+<script src="report-core.js?v=91"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -1636,6 +1657,16 @@ const I18N = {
     uc_toGo:"{n} mm to condemn",
     uc_src_catalogue:"vs the model reference",
     uc_src_baseline:"vs the baseline set",
+    uc_base_tog:"This part is new / just fitted",
+    uc_base_is:"Recorded as new",
+    uc_base_needmm:"Measure it first — the number you type becomes the \u201Cnew\u201D figure.",
+    uc_base_what:"From today, {v} mm is \u201Cnew\u201D for {k} on this machine. Rounds already taken keep the reference they were judged against.",
+    uc_base_c:"Condemn at (mm) — no figure in the catalogue for this point",
+    uc_base_one:"Set as new — this one",
+    uc_base_all:"Set as new — all {n}",
+    uc_base_all_n:"all {n} of this point",
+    uc_base_done:"{v} mm is the new figure for this machine from today",
+    uc_base_undo:"Undo",
     uc_f_left:"about {h} h left · wearing {r} mm per 1,000 h",
     uc_f_far:"more than 50,000 h left at this rate",
     uc_f_calendar:"estimated from dates, no hour meter",
@@ -1929,6 +1960,16 @@ const I18N = {
     uc_toGo:"до предела {n} мм",
     uc_src_catalogue:"по эталону модели",
     uc_src_baseline:"по базовому замеру от",
+    uc_base_tog:"Деталь новая / только что установлена",
+    uc_base_is:"Записано как новое",
+    uc_base_needmm:"Сначала замерьте — введённое число станет значением «новое».",
+    uc_base_what:"С сегодняшнего дня {v} мм — это «новое» для {k} на этой машине. Ранее выполненные обходы сохранят прежний эталон.",
+    uc_base_c:"Предел (мм) — в справочнике для этой точки его нет",
+    uc_base_one:"Записать как новое — эту",
+    uc_base_all:"Записать как новое — все {n}",
+    uc_base_all_n:"все {n} этой точки",
+    uc_base_done:"{v} мм — значение «новое» для этой машины с сегодняшнего дня",
+    uc_base_undo:"Отменить",
     uc_f_left:"осталось ок. {h} ч · износ {r} мм на 1000 ч",
     uc_f_far:"при таком темпе более 50 000 ч",
     uc_f_calendar:"оценка по датам, наработка не указана",
@@ -3160,6 +3201,52 @@ function ucRef(){
   return WEAR.refFor(curEquip, st.model, pt, pos, $("date").value||todayISO());
 }
 function ucBand(pct){ return pct>=100?"act" : pct>=80?"watch" : "ok"; }
+/* ---- baselines, gathered from the rounds that set them --------------------
+
+   WEAR.refFor() has always known how to prefer a measured baseline over the
+   catalogue figure, dated, so history is never re-judged. Nothing ever called
+   WEAR.setBaselines(), so the branch was dead and every reading on the fleet
+   was scored against a workbook — including the four machines whose workbook
+   figures are known to be wrong.
+
+   This is the caller. Baselines live on the position that set them, so finding
+   them is a walk over rounds this phone holds plus the summaries the crew has
+   uploaded. Cheap, and it means a baseline set on one phone reaches the others
+   by the path everything else already uses. */
+let baseSaved=[];
+function baseRows(recs){
+  const out=[];
+  (recs||[]).forEach(r=>{
+    if((r.type||"")!=="UC" || !r.equip || !r.date) return;
+    Object.entries(r.positions||{}).forEach(([k,p])=>{
+      if(!p || !p.base || p.base.n==null) return;
+      const [pt,pos]=ucSplit(k);
+      out.push({ unit:(r.equip||"").toUpperCase(), point:pt,
+                 pos:(p.base.all?"":pos), n:Number(p.base.n),
+                 c:(p.base.c==null?null:Number(p.base.c)),
+                 from:r.date, by:r.by||"", why:"baseline" });
+    });
+  });
+  return out;
+}
+async function loadBaselines(){
+  if(!window.WEAR) return 0;
+  let rows=[];
+  try{ rows=baseRows(await dbAll()); }catch(e){ /* the catalogue still works */ }
+  /* Everything the crew has uploaded, carried on the team row so a baseline set
+     on one phone scores the same way on all of them. */
+  try{ teamAll().forEach(r=>{ (r.b||[]).forEach(b=>{
+    if(!b || b.n==null) return;
+    rows.push({ unit:(r.u||"").toUpperCase(), point:b.p, pos:b.s||"",
+                n:Number(b.n), c:(b.c==null?null:Number(b.c)),
+                from:r.d||"", by:r.by||"", why:"baseline" }); }); });
+  }catch(e){ /* ditto */ }
+  baseSaved=rows;
+  /* Layer whatever the round in progress has just declared on top. */
+  if(typeof loadBaselinesFromDraft==="function") loadBaselinesFromDraft();
+  else WEAR.setBaselines(rows);
+  return rows.length;
+}
 /* A saved record keeps only what the inspector did: the millimetres, whether the
    reading was re-taken after a challenge, and — if nothing was measured — why not. Every
    derived figure is resolved here, at read time, against the reference that
@@ -3195,7 +3282,13 @@ function wearOut(rec,k,p){
            newMM:(ref&&!ref.x)?ref.n:"", condemnMM:(ref&&!ref.x)?ref.c:"",
            wearPct:(pct==null?"":Math.round(pct)),
            band:(pct==null?"":ucBand(pct)),
-           refSrc:ref?(ref.x?("x:"+ref.x):ref.src):"" };
+           refSrc:ref?(ref.x?("x:"+ref.x):ref.src):"",
+           /* If this reading declared the part new, that has to leave the app
+              with it — every later reading on the unit is judged against it, so
+              a receiving system that cannot see it cannot reproduce the score. */
+           baseNew:(p.base&&p.base.n!=null)?Number(p.base.n):"",
+           baseCondemn:(p.base&&p.base.c!=null)?Number(p.base.c):"",
+           baseAll:(p.base&&p.base.all)?1:0 };
 }
 /* The tray round's verdict, and the question it asks.
 
@@ -3284,6 +3377,104 @@ function renderBody(){
 /* What the history says about how long this position has left. Held beside the
    readout rather than computed inside it, because the series arrives from the
    store asynchronously and the readout repaints on every keystroke. */
+/* ---- "this part is new" ---------------------------------------------------
+
+   The reference the app scores against comes from a workbook. On this fleet
+   that workbook is missing the sprocket on fifteen of sixteen models, carries
+   the SD32's figures under the SD90's name, and gives the ZX330 two different
+   link pitches because two undercarriage builds ship under one label. Two
+   hundred and forty positions record a millimetre and decline to score it.
+
+   No document is going to fix that. The person standing at a freshly fitted
+   roller with a caliper can, in one tap, and from that date forward every
+   reading on that position is judged against what was actually fitted. Older
+   rounds keep the reference they were taken against — refFor() picks the
+   newest baseline dated on or before the reading, so the history does not
+   silently re-score itself.
+
+   No permission gate. The app has no accounts, so a role check would be
+   theatre; what makes this safe is that it is an ordinary dated, attributed,
+   syncable, voidable record, exactly like the reading it rides on. */
+let ucBaseOpen=false;
+function ucBaseState(){
+  const p=draft.positions[curItem]||{};
+  return p.base||null;
+}
+function setUCBase(all){
+  const mm=posRO().mm; if(mm==null) return;
+  const cIn=$("ucBaseC"), ref=ucRef();
+  const c = (ref && !ref.x && ref.c!=null) ? null
+          : (cIn && cIn.value.trim()!=="" ? Number(cIn.value) : null);
+  const rec=draft.positions[curItem]=draft.positions[curItem]||{};
+  rec.base={ n:Number(mm), c:c, all:all?1:0 };
+  saveCur(); loadBaselinesFromDraft();
+  renderUC(); refreshChips();
+}
+function clearUCBase(){
+  const rec=draft.positions[curItem]; if(rec) delete rec.base;
+  saveCur(); loadBaselinesFromDraft();
+  renderUC(); refreshChips();
+}
+/* The round being typed is not in the store yet, so the baseline it is setting
+   has to be layered on top of the saved ones for the screen to show its effect
+   straight away. Re-derived from scratch each time — no incremental state to
+   drift. */
+function loadBaselinesFromDraft(){
+  if(!window.WEAR) return;
+  const live=baseRows([{ type:type, equip:curEquip, date:$("date").value||todayISO(),
+                         by:$("inspector").value.trim(), positions:draft.positions }]);
+  WEAR.setBaselines(baseSaved.concat(live));
+}
+function renderUCBase(){
+  const tog=$("ucBaseTog"), box=$("ucBase");
+  if(!tog||!box) return;
+  /* Tray stations have no per-position catalogue to override yet, and GET has
+     its own reference table — one round at a time. */
+  const on = TYPE_META[type].wear && !bodyType() && !!curItem && !!curEquip;
+  tog.style.display = on ? "" : "none";
+  if(!on){ box.classList.add("hidden"); return; }
+  const set=ucBaseState(), mm=posRO().mm, ref=ucRef();
+  tog.textContent = (ucBaseOpen?"\u25BE ":"\u25B8 ")
+    + t(set ? "uc_base_is" : "uc_base_tog");
+  tog.onclick=()=>{ ucBaseOpen=!ucBaseOpen; renderUCBase(); };
+  box.classList.toggle("hidden", !ucBaseOpen);
+  if(!ucBaseOpen) return;
+  const [pt]=ucSplit(curItem||"");
+  const st=ucStatus(curEquip);
+  const sibs = st.ok ? WEAR.walk(st.model).filter(w=>w.point===pt).length : 1;
+  const needC = !(ref && !ref.x && ref.c!=null);
+  let h="";
+  if(set){
+    h+='<div class="bw done">'+esc(t("uc_base_done",{v:fmtMM(set.n)}))
+      +(set.all?" \u00B7 "+esc(t("uc_base_all_n",{n:sibs})):"")+'</div>';
+    h+='<div class="bset"><button type="button" class="off" data-b="off">'
+      +esc(t("uc_base_undo"))+'</button></div>';
+  } else if(mm==null){
+    h+='<div class="bw">'+esc(t("uc_base_needmm"))+'</div>';
+  } else {
+    h+='<div class="bw">'+esc(t("uc_base_what",{v:fmtMM(mm),k:ucLabel(curItem)}))+'</div>';
+    /* Where there is no condemn figure to inherit, one has to be given here or
+       the baseline achieves nothing at all: wear() needs both ends of the span
+       and so does the forecast. Better to ask for it than to accept a record
+       that quietly changes no number on any screen. */
+    if(needC) h+='<label class="fld"><span>'+esc(t("uc_base_c"))+'</span>'
+      +'<input id="ucBaseC" type="text" inputmode="decimal" autocomplete="off"></label>';
+    const dis = needC ? ' disabled' : '';
+    h+='<div class="bset"><button type="button" data-b="one"'+dis+'>'+esc(t("uc_base_one"))+'</button>'
+      +(sibs>1?'<button type="button" class="off" data-b="all"'+dis+'>'
+        +esc(t("uc_base_all",{n:sibs}))+'</button>':'')+'</div>';
+  }
+  box.innerHTML=h;
+  box.querySelectorAll("[data-b]").forEach(btn=>{
+    btn.onclick=()=>{ const w=btn.dataset.b;
+      if(w==="off") clearUCBase(); else setUCBase(w==="all"); };
+  });
+  const cIn=$("ucBaseC");
+  if(cIn) cIn.addEventListener("input",()=>{
+    const okc = cIn.value.trim()!=="" && isFinite(Number(cIn.value)) && Number(cIn.value)!==Number(mm);
+    box.querySelectorAll('[data-b="one"],[data-b="all"]').forEach(x=>{ x.disabled=!okc; });
+  });
+}
 async function renderUCFcast(){
   const el=$("ucFcast"); if(!el) return;
   const key=curItem, unit=curEquip;
@@ -3317,6 +3508,11 @@ function renderUC(){
   if(!TYPE_META[type].wear) return;
   const box=$("ucRead"), warn=$("ucWarn");
   renderUCFig();
+  /* Before the early returns, not after them. Everything below this line is
+     skipped on a tray round and on a machine with no undercarriage — and a row
+     that is only ever hidden by code that does not run stays on screen from
+     whatever round was open last. */
+  renderUCBase();
   const st=curEquip?ucStatus(curEquip):null;
   if(st && !st.ok){ box.innerHTML=""; warn.classList.add("hidden"); return; }
   if(bodyType()) return renderBody();
@@ -4555,8 +4751,14 @@ $("saveBtn").onclick=async ()=>{
     rec.positions[k]={ grade:p.grade||null, sev:p.sev||"", sevMan:p.sevMan||0, action:p.action||"", wo:p.wo||"", particle:p.particle||"", comp:p.comp||"", oil:p.oil||"", defect:p.defect||"", cause:p.cause||"", comment:p.comment||"", tempV:p.tempV||"", tempA:p.tempA||"", tempM:p.tempM||"", detect:p.detect||DETECT_DEFAULT,
       prio:p.prio||"",
       mm:(p.mm==null?null:Number(p.mm)), stood:p.stood?1:0, reason:p.reason||"",
+      /* A baseline is not a separate kind of thing to sync. It is a marker on
+         the reading that set it, so it travels every path a round already
+         travels — Drive, the server, the ZIP, entries.json, the conflict
+         handling, the void — and needs nothing new at either end. */
+      base:(p.base?{n:Number(p.base.n), c:(p.base.c==null?null:Number(p.base.c)),
+                    all:p.base.all?1:0}:null),
       photos:(p.photos||[]).slice(), video:p.video||null };
-  await dbPut(rec); noteDone(rec); resetForm(); renderPending(); renderDue(); syncThenArm();
+  await dbPut(rec); noteDone(rec); await loadBaselines(); resetForm(); renderPending(); renderDue(); syncThenArm();
   /* The round is away and the form is clear: if an update has been waiting
      for somebody to stop working, this is that moment. */
   setTimeout(applyUpdateIfIdle, 400);
@@ -4703,8 +4905,16 @@ function teamRow(r){
   let worst="";
   (r.items||[]).forEach(i=>{ const g=i.grade||"";
     if(GRADE_RANK[g]!=null && (worst===""||GRADE_RANK[g]>GRADE_RANK[worst])) worst=g; });
+  /* Baselines change how every later reading on that unit is scored, so they
+     cannot stay on the phone that set them. They are rare, so carrying them on
+     the summary row costs nothing worth counting. */
+  const base=[];
+  (r.items||[]).forEach(i=>{ if(!i || !i.baseNew) return;
+    const k=String(i.key||""); const cut=k.indexOf(".");
+    base.push({ p:cut<0?k:k.slice(0,cut), s:(i.baseAll?"":(cut<0?"":k.slice(cut+1))),
+                n:Number(i.baseNew), c:(i.baseCondemn===""||i.baseCondemn==null)?null:Number(i.baseCondemn) }); });
   return { u:(r.equip||"").toUpperCase(), d:r.date||"", t:r.type||"MP",
-           by:r.by||"", g:worst };
+           by:r.by||"", g:worst, ...(base.length?{b:base}:{}) };
 }
 /* A round voided in the dashboard has been withdrawn. It must stop counting as
    "done" here too, or the due list keeps saying a unit was covered when the
@@ -4745,6 +4955,10 @@ function teamMerge(recs,replace){
     if(!h[hk]||h[hk]<row.d){ h[hk]=row.d; hist++; }
   }
   const saved=teamSave([...have.values()]); histSave(h);
+  /* A baseline another inspector set has just arrived. Until it is loaded, this
+     phone would score the same roller against the catalogue and the other
+     against what was fitted — two answers for one part. */
+  loadBaselines();
   return {added,hist,saved};
 }
 let teamBusy=false, teamAt=0, teamAbort=null, teamRun=0;
@@ -5467,7 +5681,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="90";
+const BUILD="91";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -6859,6 +7073,10 @@ function checkData(){
 updateEquipBtn(); renderGps(); checkData();
 $("dueScope").value=localStorage.getItem("due_scope")||"due";
 applyForm(); applyTheme(); applyLang(); renderSignFold(); renderSync(); syncThenArm();
+/* Baselines change how readings are scored, so they have to be in hand before
+   a number is judged. The catalogue answers correctly until they land, and the
+   round repaints once they do. */
+loadBaselines().then(n=>{ if(n) { renderUC(); refreshChips(); } });
 /* Long-press the home-screen icon and Android offers the manifest's shortcuts.
    They have to land somewhere, or the promise is empty: "Upload queue" that
    opens the capture screen is worse than no shortcut. Honour them, then drop
