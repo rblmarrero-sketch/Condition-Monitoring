@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=89">
+<link rel="manifest" href="manifest.webmanifest?v=90">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=89">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=89">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=89">
+<link rel="apple-touch-icon" href="icon-192.png?v=90">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=90">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=90">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -386,24 +386,25 @@
   #ucFields.dock .uclast{order:2;}
   #ucFields.dock .ucref{order:3;margin:0 0 6px;}
   #ucFields.dock .mrow{order:4;}
+  #ucFields.dock .ucfcast{order:5;}
   #ucFields.dock .ucwarn{order:6;}
   /* Reading order in the dock: what it measured, what that means, anything
      questionable about it, the evidence, then the way on. The way on stays
      last — a camera below Next is a camera nobody reaches. */
-  #ucFields.dock #mediastrip{order:6;margin:2px 0 6px;}
-  #ucFields.dock #mediaRow{order:7;margin:0;}
-  #ucFields.dock .sh-nav{order:8;display:flex;gap:8px;margin-top:8px;}
+  #ucFields.dock #mediastrip{order:7;margin:2px 0 6px;}
+  #ucFields.dock #mediaRow{order:8;margin:0;}
+  #ucFields.dock .sh-nav{order:9;display:flex;gap:8px;margin-top:8px;}
   #ucFields.dock .sh-nav button{flex:1;min-width:0;min-height:44px;border-radius:11px;
     background:var(--surface-2);border:1px solid var(--border);color:var(--ink);
     font:650 14px/1 inherit;cursor:pointer;}
   #ucFields.dock .sh-nav button.pri{background:var(--accent);border-color:var(--accent);
     color:var(--accent-ink);}
-  #ucFields.dock .ucfigtog{order:10;}
-  #ucFields.dock .ucfig{order:11;}
-  #ucFields.dock .guide{order:12;}
-  #ucFields.dock .ucna{order:13;}
-  #ucFields.dock #ucExtraTog{order:14;}
-  #ucFields.dock #mediaHint{order:15;} #ucFields.dock #commentFld{order:16;}
+  #ucFields.dock .ucfigtog{order:11;}
+  #ucFields.dock .ucfig{order:12;}
+  #ucFields.dock .guide{order:13;}
+  #ucFields.dock .ucna{order:14;}
+  #ucFields.dock #ucExtraTog{order:15;}
+  #ucFields.dock #mediaHint{order:16;} #ucFields.dock #commentFld{order:17;}
   /* The three disclosures share one look, and one habit: closed by default,
      and the choice is remembered across stations. Somebody on their hundredth
      roller does not want the method back on every point. */
@@ -483,6 +484,12 @@
   .mrow{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;margin-bottom:2px;}
   .mrow > label.fld{flex:0 0 132px;margin-bottom:0;}
   .mrow > .ucread{flex:1 1 150px;min-width:0;margin:0 0 3px;}
+  /* Quiet by default: it is a planning number, not a verdict, and the verdict
+     is on the line above it. It speaks up only when the answer is short. */
+  .ucfcast{font-size:12px;color:var(--ink-2);margin:0 0 6px;line-height:1.45;
+    font-variant-numeric:tabular-nums;}
+  .ucfcast.quiet{color:var(--muted);}
+  .ucfcast.soonout{color:var(--warn-ink);font-weight:650;}
   .ucread{font-size:13.5px;margin:-4px 0 12px;display:flex;flex-wrap:wrap;gap:5px 9px;
     align-items:center;min-height:20px;}
   .ucread b{font-variant-numeric:tabular-nums;font-size:15px;}
@@ -507,7 +514,7 @@
        of them has to go below the fold. It is the camera. Back and Next are
        how the round continues and there are forty-three more points after this
        one; a photograph is one scroll away on the shortest screens only. */
-    #ucFields.dock #mediastrip,#ucFields.dock #mediaRow{order:9;}
+    #ucFields.dock #mediastrip,#ucFields.dock #mediaRow{order:10;}
     .ucwarn{padding:9px 11px;margin-bottom:9px;}
     .ucwarn .uw-t{font-size:12.5px;line-height:1.4;}
     .ucwarn .uw-ok{margin-top:7px;font-size:12.5px;}
@@ -1063,6 +1070,9 @@
             <input id="ucMM" type="text" inputmode="decimal" autocomplete="off"></label>
           <div class="ucread" id="ucRead"></div>
         </div>
+        <!-- Percent worn says where the part is. This says when to order the
+             next one, which is the number planning actually rings up about. -->
+        <div class="ucfcast" id="ucFcast"></div>
         <div class="ucwarn hidden" id="ucWarn">
           <div class="uw-t" id="ucWarnText"></div>
           <label class="uw-ok"><input type="checkbox" id="ucStood">
@@ -1333,25 +1343,25 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="native.js?v=89"></script>
-<script src="upload-defaults.js?v=89"></script>
-<script src="hme.js?v=89"></script>
-<script src="mp-fc.js?v=89"></script>
-<script src="hme-cascade.js?v=89"></script>
-<script src="assets.js?v=89"></script>
-<script src="temp-limits.js?v=89"></script>
-<script src="wear.js?v=89"></script>
-<script src="wear-figs.js?v=89"></script>
-<script src="wear-map.js?v=89"></script>
-<script src="machine-photos.js?v=89"></script>
-<script src="machine-fig.js?v=89"></script>
-<script src="get.js?v=89"></script>
-<script src="uc-points.js?v=89"></script>
-<script src="inspect-guide.js?v=89"></script>
-<script src="get-figs.js?v=89"></script>
-<script src="body-points.js?v=89"></script>
-<script src="body-map.js?v=89"></script>
-<script src="report-core.js?v=89"></script>
+<script src="native.js?v=90"></script>
+<script src="upload-defaults.js?v=90"></script>
+<script src="hme.js?v=90"></script>
+<script src="mp-fc.js?v=90"></script>
+<script src="hme-cascade.js?v=90"></script>
+<script src="assets.js?v=90"></script>
+<script src="temp-limits.js?v=90"></script>
+<script src="wear.js?v=90"></script>
+<script src="wear-figs.js?v=90"></script>
+<script src="wear-map.js?v=90"></script>
+<script src="machine-photos.js?v=90"></script>
+<script src="machine-fig.js?v=90"></script>
+<script src="get.js?v=90"></script>
+<script src="uc-points.js?v=90"></script>
+<script src="inspect-guide.js?v=90"></script>
+<script src="get-figs.js?v=90"></script>
+<script src="body-points.js?v=90"></script>
+<script src="body-map.js?v=90"></script>
+<script src="report-core.js?v=90"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -1626,6 +1636,13 @@ const I18N = {
     uc_toGo:"{n} mm to condemn",
     uc_src_catalogue:"vs the model reference",
     uc_src_baseline:"vs the baseline set",
+    uc_f_left:"about {h} h left · wearing {r} mm per 1,000 h",
+    uc_f_far:"more than 50,000 h left at this rate",
+    uc_f_calendar:"estimated from dates, no hour meter",
+    uc_f_few:"one more reading and this will forecast a replacement date",
+    uc_f_soon:"too soon since the last reading to measure a rate",
+    uc_f_flat:"no measurable wear since the last reading",
+    uc_f_away:"reading has moved away from the limit — check it before trusting a trend",
     uc_src_override:"vs the corrected reference set",
     uc_x_borrowed:"this model's figures belong to another model",
     uc_x_rival:"two different references exist for this model",
@@ -1912,6 +1929,13 @@ const I18N = {
     uc_toGo:"до предела {n} мм",
     uc_src_catalogue:"по эталону модели",
     uc_src_baseline:"по базовому замеру от",
+    uc_f_left:"осталось ок. {h} ч · износ {r} мм на 1000 ч",
+    uc_f_far:"при таком темпе более 50 000 ч",
+    uc_f_calendar:"оценка по датам, наработка не указана",
+    uc_f_few:"ещё один замер — и появится прогноз замены",
+    uc_f_soon:"слишком мало времени с прошлого замера для расчёта темпа",
+    uc_f_flat:"с прошлого замера износ не измеряется",
+    uc_f_away:"замер удалился от предела — проверьте, прежде чем строить тренд",
     uc_src_override:"по исправленному эталону от",
     uc_x_borrowed:"эталон этой модели принадлежит другой модели",
     uc_x_rival:"для этой модели существуют два разных эталона",
@@ -3257,6 +3281,38 @@ function renderBody(){
   renderUCReasons();
   renderUCSheet();
 }
+/* What the history says about how long this position has left. Held beside the
+   readout rather than computed inside it, because the series arrives from the
+   store asynchronously and the readout repaints on every keystroke. */
+async function renderUCFcast(){
+  const el=$("ucFcast"); if(!el) return;
+  const key=curItem, unit=curEquip;
+  const done=(txt,cls)=>{ if(key!==curItem) return;
+    el.textContent=txt||""; el.className="ucfcast"+(cls?" "+cls:""); };
+  if(!key||!unit||bodyType()) return done("");
+  const ref=ucRef(); const mm=posRO().mm;
+  /* No condemn figure, nothing to forecast towards. Note that a BORROWED or
+     DISPUTED "new" does not stop this — the forecast never uses "new". */
+  if(!ref || ref.c==null || mm==null) return done("");
+  /* Never extrapolate from a reading the app is in the middle of questioning.
+     If 88 mm cannot be right on a point that was 80 mm new, the wear rate it
+     implies cannot be right either — and a confident "about 400 h left" under
+     a challenge is the app arguing with itself. Silence until the reading is
+     settled, one way or the other. */
+  if(WEAR.implausible(ref, mm)) return done("");
+  const rows=await ucPrevReadings(unit);
+  const series=(rows["#"+key]||[]).map(r=>({mm:r.mm, at:r.d, smu:r.smu}))
+    .concat([{mm:Number(mm), at:$("date").value, smu:$("smu").value.trim()}]);
+  const f=WEAR.forecast(ref, series);
+  if(f.why==="past") return done("");                 // the band already says so
+  if(f.why) return done(t("uc_f_"+f.why), "quiet");
+  const h=Math.round(f.hours/100)*100;
+  const txt = h>50000 ? t("uc_f_far")
+    : t("uc_f_left",{h:h.toLocaleString(lang==="ru"?"ru-RU":"en-GB"),
+                     r:(Math.round(f.rate*10)/10)});
+  done(txt + (f.basis==="days" ? " · "+t("uc_f_calendar") : ""),
+       h<=1000 ? "soonout" : "");
+}
 function renderUC(){
   if(!TYPE_META[type].wear) return;
   const box=$("ucRead"), warn=$("ucWarn");
@@ -3300,6 +3356,7 @@ function renderUC(){
     const rec=draft.positions[curItem]; if(rec && rec.stood) delete rec.stood;
   }
   renderUCReasons();
+  renderUCFcast();
   renderUCSheet();
 }
 /* ---- the optional millimetre on a GET position -------------------------
@@ -3957,7 +4014,14 @@ async function ucPrevReadings(unit){
     const recs=(await dbAll()).filter(r=>(r.equip||"").toUpperCase()===u && r.type===ty && r.date);
     recs.sort((a,b)=>String(a.date).localeCompare(String(b.date)));
     recs.forEach(r=>Object.entries(r.positions||{}).forEach(([k,p])=>{
-      if(p && p.mm!=null) out[k]={mm:Number(p.mm), d:r.date};
+      if(!p || p.mm==null) return;
+      /* The last reading answers "does this look right"; the SERIES answers
+         "how long has it got". Both come out of the same pass, and the series
+         carries the hour meter because parts are ordered against SMU, not
+         against the calendar — a machine parked for a month has not worn. */
+      const e={mm:Number(p.mm), d:r.date, smu:r.smu};
+      out[k]=e;
+      (out["#"+k]=out["#"+k]||[]).push(e);
     }));
   }catch(e){ /* no history is not an error */ }
   ucPrevCache={key:u+"|"+ty, ver:dbVer, rows:out};
@@ -4987,7 +5051,16 @@ $("mergeFile").onchange=async (e)=>{ const f=e.target.files[0]; e.target.value="
 /* ===================== pending ===================== */
 async function renderPending(){
   renderTabs(); renderNet();
-  const all=(await dbAll()).sort((a,b)=>b.created.localeCompare(a.created));
+  /* Sort defensively. Every round this app saves carries `created`, but not
+     everything in the store was saved by this app: rounds merged from another
+     phone, an entries.json import, and anything written by a build older than
+     the field all land here too. One record without it used to throw inside
+     the sort and take the whole Queue screen down — on an app whose promise is
+     "your work is safe in the queue", the screen that shows the queue is the
+     last one allowed to go blank. Fall back to the id, which is always set and
+     carries the date. */
+  const stamp = r => String((r && (r.created || r.id)) || "");
+  const all=(await dbAll()).sort((a,b)=>stamp(b).localeCompare(stamp(a)));
   $("qCount").textContent=all.length;
   if(!all.length){ $("pending").innerHTML=`<div class="empty">${t("empty_none")}</div>`; return; }
   $("pending").innerHTML=""; pendPool.free();
@@ -5394,7 +5467,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="89";
+const BUILD="90";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

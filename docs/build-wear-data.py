@@ -242,6 +242,89 @@ window.WEAR = '''
     return null;
   };
 
+  /* ---- how long has it got -------------------------------------------------
+
+     Percent worn says where a part is. It does not say when to order the
+     replacement, and that is the number planning actually needs. Two dated
+     readings and a condemn limit give it, and — this is the useful part — the
+     "new" figure is not required at all. A point whose catalogue figures are
+     missing, borrowed or disputed can still be forecast the moment somebody
+     supplies a condemn limit.
+
+     What it will not do is guess. It returns a reason instead of a number
+     whenever the honest answer is "not yet":
+
+       few       one reading is a dot, not a line
+       soon      the interval is too short for the caliper to out-measure itself
+       flat      no measurable movement — a rate of zero forecasts forever
+       away      moving away from the limit, which is a data problem, not a life
+       past      already at or past condemn; the band has said so
+
+     Hours are preferred over days because a machine parked for a month has not
+     worn, and SMU is what parts are ordered against. Calendar is the fallback
+     when the hour meter was not written down, converted at a stated assumption
+     so nobody mistakes it for a measured figure. */
+  W.MIN_HOURS = 100;          // below this the caliper's own error dominates
+  W.MIN_DAYS  = 14;
+  W.HOURS_PER_DAY = 12;       // one shift; only used when SMU is missing
+
+  /* series: [{mm, at, smu}] oldest first, INCLUDING the reading being taken.
+     `at` is an ISO date, `smu` the hour meter if it was recorded. */
+  W.forecast = function (ref, series) {
+    if (!ref || ref.c == null || !series || series.length < 2) return { why: 'few' };
+    var pts = series.filter(function (r) { return r && r.mm != null; });
+    if (pts.length < 2) return { why: 'few' };
+
+    /* One x axis for the whole series, in hours. SMU if every point has it and
+       it advances; otherwise calendar, flagged so the caller can say so. */
+    var useSmu = pts.every(function (r) { return r.smu != null && r.smu !== '' && isFinite(Number(r.smu)); });
+    if (useSmu) {
+      var s0 = Number(pts[0].smu);
+      for (var i = 1; i < pts.length; i++) if (Number(pts[i].smu) < s0) { useSmu = false; break; }
+    }
+    var x = pts.map(function (r) {
+      if (useSmu) return Number(r.smu) - Number(pts[0].smu);
+      return (Date.parse(r.at + 'T00:00:00Z') - Date.parse(pts[0].at + 'T00:00:00Z'))
+             / 86400000 * W.HOURS_PER_DAY;
+    });
+    var span = x[x.length - 1] - x[0];
+    if (!isFinite(span) || span <= 0) return { why: 'soon' };
+    if (useSmu ? span < W.MIN_HOURS : span < W.MIN_DAYS * W.HOURS_PER_DAY)
+      return { why: 'soon', basis: useSmu ? 'smu' : 'days' };
+
+    /* Least squares over three or more points, because a caliper on a cold
+       roller is worth about a millimetre and two points make that millimetre
+       the whole trend. Two points get the plain slope, which is all there is. */
+    var y = pts.map(function (r) { return Number(r.mm); }), slope;
+    if (pts.length >= 3) {
+      var n = pts.length, sx = 0, sy = 0, sxx = 0, sxy = 0;
+      for (var j = 0; j < n; j++) { sx += x[j]; sy += y[j]; sxx += x[j] * x[j]; sxy += x[j] * y[j]; }
+      var den = n * sxx - sx * sx;
+      if (!den) return { why: 'soon' };
+      slope = (n * sxy - sx * sy) / den;                 // mm per hour, signed
+    } else {
+      slope = (y[1] - y[0]) / (x[1] - x[0]);
+    }
+
+    var now = y[y.length - 1];
+    var down = ref.d !== 'grow';                          // most points wear down
+    var rate = down ? -slope : slope;                     // mm/h toward the limit
+    var left = down ? (now - ref.c) : (ref.c - now);      // mm still to go
+
+    if (left <= 0) return { why: 'past', basis: useSmu ? 'smu' : 'days' };
+    /* A rate under a hundredth of a millimetre per thousand hours is noise
+       wearing a decimal point. Treat it as no movement rather than 4,000,000 h. */
+    if (rate <= 0.00001) return { why: rate < -0.00001 ? 'away' : 'flat',
+                                  basis: useSmu ? 'smu' : 'days' };
+
+    return { hours: left / rate,
+             rate: rate * 1000,                           // mm per 1,000 hours
+             left: left,
+             basis: useSmu ? 'smu' : 'days',
+             pts: pts.length,
+             fit: pts.length >= 3 ? 'ls' : 'two' };
+  };
+
   /* Every position on one machine, in walk order. */
   W.walk = function (regModel) {
     var m = W.modelFor(regModel), out = [];
