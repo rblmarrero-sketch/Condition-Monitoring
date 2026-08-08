@@ -634,30 +634,56 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=98"></script>
-<script src="../mobile/hme.js?v=98"></script>
-<script src="../mobile/mp-fc.js?v=98"></script>
-<script src="../mobile/hme-cascade.js?v=98"></script>
-<script src="../mobile/temp-limits.js?v=98"></script>
+<script src="../data/magnetic_plug.js?v=99"></script>
+<script src="../mobile/hme.js?v=99"></script>
+<script src="../mobile/mp-fc.js?v=99"></script>
+<script src="../mobile/hme-cascade.js?v=99"></script>
+<script src="../mobile/temp-limits.js?v=99"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=98"></script>
-<script src="../mobile/wear.js?v=98"></script>
-<script src="../mobile/wear-map.js?v=98"></script>
-<script src="../mobile/machine-photos.js?v=98"></script>
-<script src="../mobile/machine-fig.js?v=98"></script>
-<script src="../mobile/get.js?v=98"></script>
-<script src="../mobile/uc-points.js?v=98"></script>
-<script src="../mobile/inspect-guide.js?v=98"></script>
-<script src="../mobile/get-figs.js?v=98"></script>
-<script src="../mobile/body-points.js?v=98"></script>
-<script src="../mobile/body-map.js?v=98"></script>
-<script src="../mobile/jspdf.umd.min.js?v=98"></script>
-<script src="../mobile/html2canvas.min.js?v=98"></script>
-<script src="../mobile/report-core.js?v=98"></script>
+<script src="../mobile/assets.js?v=99"></script>
+<script src="../mobile/wear.js?v=99"></script>
+<script src="../mobile/wear-map.js?v=99"></script>
+<!-- The same destinations file the phones read on first open, so one place
+     configures both and a new browser needs nothing typed into it. -->
+<script src="../mobile/upload-defaults.js?v=99"></script>
+<script src="../mobile/machine-photos.js?v=99"></script>
+<script src="../mobile/machine-fig.js?v=99"></script>
+<script src="../mobile/get.js?v=99"></script>
+<script src="../mobile/uc-points.js?v=99"></script>
+<script src="../mobile/inspect-guide.js?v=99"></script>
+<script src="../mobile/get-figs.js?v=99"></script>
+<script src="../mobile/body-points.js?v=99"></script>
+<script src="../mobile/body-map.js?v=99"></script>
+<script src="../mobile/jspdf.umd.min.js?v=99"></script>
+<script src="../mobile/html2canvas.min.js?v=99"></script>
+<script src="../mobile/report-core.js?v=99"></script>
 <script>
 const $=(id)=>document.getElementById(id);
+/* ---- settings handed over in the link ----
+   ?src=<exec url>&k=<secret> configures this browser once and then disappears
+   from the address bar, so the credential is not left sitting in history, in a
+   bookmark, or in the next screenshot somebody pastes into a chat. This is the
+   route to use when the site is not public: the link carries the settings
+   instead of a served file doing it.
+   Runs before anything reads the configuration, and before drive.js loads. */
+(function(){
+  try{
+    const q=new URLSearchParams(location.search);
+    const src=(q.get("src")||"").trim(), k=q.get("k");
+    if(!src) return;
+    /* Only an Apps Script /exec endpoint. Without this the link is an open
+       invitation to point somebody's dashboard at any URL at all. */
+    if(!/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(src)) return;
+    localStorage.setItem("cm_drive_url", src);
+    if(k!=null) localStorage.setItem("cm_drive_sec", k);
+    localStorage.removeItem("cm_drive_cursor");     // a different folder starts fresh
+    q.delete("src"); q.delete("k");
+    const rest=q.toString();
+    history.replaceState(null,"",location.pathname+(rest?"?"+rest:"")+location.hash);
+  }catch(e){}
+})();
 /* The 1C defect & cause matrix, the same file the phones carry. Records already
    in Drive hold the codes the app used before it — those are never rewritten;
    HME.legacy resolves them here, at read time, exactly as a correction or a void
@@ -3136,10 +3162,15 @@ document.querySelector(".lang").addEventListener("click",e=>{
 });
 rebuild(); refreshControls(); renderAll(); refreshSources();
 applyLang();                          // paints the static markup and re-renders in the saved language
-if(!RECS.length) openData();          // first run: show where data comes from
+/* First run shows where data comes from — but only when there is a question to
+   answer. A browser that picked its settings up from the defaults file or from
+   the link is already configured and is seconds away from filling itself, so
+   opening a setup panel over it asks somebody to solve a problem they do not
+   have. Deferred a beat so drive.js has loaded and can be asked. */
+setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=98"></script>
-<script src="sync-adapter.js?v=98"></script>
-<script src="report.js?v=98"></script>
+<script src="drive.js?v=99"></script>
+<script src="sync-adapter.js?v=99"></script>
+<script src="report.js?v=99"></script>
 </body>
 </html>

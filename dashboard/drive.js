@@ -37,8 +37,54 @@
   let fetched = {};                     // file name -> objectURL (or null if it failed)
   let legacy = false;                   // deployed script predates ?action=records
 
-  const cfg = () => ({ url: (localStorage.getItem(LS_URL) || "").trim(),
-                       sec: localStorage.getItem(LS_SEC) || "" });
+  /* ---- where a browser that has never been set up gets its settings ----
+
+     Opening the dashboard on a new machine used to mean somebody pasting an
+     /exec URL before a single inspection appeared — a step nobody remembers,
+     on a link handed round a mine site, and the reason "have you set it up?"
+     was the first question about every new laptop.
+
+     The phones have never had that problem: they read mobile/upload-defaults.js
+     on first open. The dashboard now reads the same file, so one place
+     configures both and a link is all anybody needs.
+
+     Two ways in, in order of precedence:
+
+       1. Settings already saved in THIS browser — always win, so a machine
+          pointed at a different folder stays pointed there.
+       2. ?src= / ?k= on the link — a one-time hand-off, stored and then wiped
+          from the address bar. This is the route that works when the site is
+          NOT public, because the credential travels in the link rather than in
+          a served file.
+       3. mobile/upload-defaults.js — whatever the phones are using.
+
+     Worth being plain about what (3) costs: that file is served to anyone who
+     opens the site, so the write credential in it is public — which is already
+     true today, because every phone fetches it. Reading it here adds no new
+     exposure, and the file says so at the top. If the site is ever put behind
+     an access gate, route (2) is the one to switch to. */
+  function builtIn() {
+    try {
+      const d = ((window.UPLOAD_DEFAULTS || {}).dests || [])
+        .find(x => x && x.id === "gas" && String(x.url || "").trim());
+      return d ? { url: String(d.url).trim(), sec: String(d.sec || "") } : null;
+    } catch (e) { return null; }
+  }
+  /* "Never set" and "deliberately turned off" are different answers and the
+     difference is load-bearing. The dashboard is usable with no Drive at all —
+     an entries.json imported from a phone, records held in this browser only —
+     and the first version of this could not express that: clearing the URL just
+     let the shared default reassert itself, so a machine that had been told to
+     work offline silently went back to talking to the live folder.
+
+     null  = nothing has ever been set here     → take the shared default
+     ""    = somebody cleared it on purpose     → no Drive, and it stays that way
+     a URL = this browser's own setting         → use it */
+  const cfg = () => {
+    const saved = localStorage.getItem(LS_URL);
+    if (saved !== null) return { url: saved.trim(), sec: localStorage.getItem(LS_SEC) || "" };
+    return builtIn() || { url: "", sec: "" };
+  };
   const configured = () => !!cfg().url;
   const cursor = () => Number(localStorage.getItem(LS_CUR) || 0) || 0;
 
