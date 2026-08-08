@@ -38,27 +38,24 @@
      The folder picker indexes by file name, so rebuild the names both ends
      agreed on; Drive records already carry a usable URL. */
   function photoSrcs(it, rec) {
-    const out = [];
-    const fp = folder();
-    if (fp && window.CMDash && window.CMDash.photoBase) {
-      const base = window.CMDash.photoBase(it, rec);
-      /* photoNames()'s third argument is a list of SUFFIXES — "", "_1", "_2" —
-         and it appends the extensions itself. Handing it the extension list
-         built names like "…_MP jpg.jpg", which matched nothing, and no report
-         from the dashboard has ever carried a photograph. One name per slot,
-         first hit wins, because the same photo exists under several extensions. */
-      ["", "_1", "_2", "_3", "_4"].forEach(sfx => {
-        const names = window.CMDash.photoNames(base, rec, [sfx]) || [];
-        for (const n of names) {
-          if (fp[n]) { if (out.indexOf(fp[n]) < 0) out.push(fp[n]); break; }
-        }
-      });
+    /* One source of truth with the history screen. This used to rebuild the
+       names itself and stopped at "_4", so a report could never carry more
+       than five of a position's ten photographs — and it knew nothing about a
+       photograph the office had removed, which would have put a withdrawn
+       picture into a signed PDF. CMDash.mediaOf answers both. */
+    if (window.CMDash && window.CMDash.mediaOf) {
+      const med = window.CMDash.mediaOf(it, rec) || [];
+      /* Stills only: a PDF cannot play a clip, and a black frame with no way
+         to press anything is worse than leaving it out. The history screen is
+         where a video is watched. */
+      const out = med.filter(m => m.kind !== "video").map(m => m.src);
+      if (out.length) return out;
     }
     // a record that carries its own URL (Drive, or an import that inlined it)
-    if (!out.length && it.photo) {
-      out.push(/^(data:|blob:|https?:|\/)/.test(it.photo) ? it.photo : "../" + it.photo);
+    if (it.photo) {
+      return [/^(data:|blob:|https?:|\/)/.test(it.photo) ? it.photo : "../" + it.photo];
     }
-    return out;
+    return [];
   }
 
   /* The two frames, coloured by what each point read — the same drawing the

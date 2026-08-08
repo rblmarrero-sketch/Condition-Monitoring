@@ -97,6 +97,42 @@
   .pfline{fill:none;stroke:var(--accent);stroke-width:2;stroke-linejoin:round;}
   .pfdot{fill:var(--accent);stroke:var(--surface);stroke-width:2;}
   .pfband{fill:var(--serious);opacity:.09;}
+  /* adding and removing a position's media */
+  .medit{padding:6px 12px 0;}
+  .medit .mtog{background:none;border:0;padding:2px 0;color:var(--accent);font:600 11.5px inherit;
+    font-family:inherit;cursor:pointer;}
+  .medit .mpanel{padding:6px 0 2px;}
+  .medit .mlist{display:flex;flex-wrap:wrap;gap:6px;align-items:center;}
+  .medit .mitem{position:relative;width:52px;height:40px;border:1px solid var(--border);
+    border-radius:5px;overflow:hidden;background:var(--surface-2);}
+  .medit .mitem img,.medit .mitem video{width:100%;height:100%;object-fit:cover;display:block;}
+  .medit .mitem.off{opacity:.35;filter:grayscale(1);}
+  .medit .mx{position:absolute;top:1px;right:1px;width:17px;height:17px;line-height:15px;
+    padding:0;border:0;border-radius:50%;background:rgba(0,0,0,.62);color:#fff;font-size:12px;
+    cursor:pointer;}
+  .medit .madd{width:52px;height:40px;border:1px dashed var(--border);border-radius:5px;
+    display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:19px;
+    cursor:pointer;}
+  .medit .madd:hover{border-color:var(--accent);color:var(--accent);}
+  .medit .mmsg{font-size:11px;color:var(--muted);min-height:14px;margin-top:4px;}
+  /* the follow-up panel and the tracker */
+  .kpi.bad .v{color:var(--critical);}
+  .tbar{height:12px;border-radius:999px;background:var(--surface-2);overflow:hidden;
+    box-shadow:inset 0 1px 2px rgba(0,0,0,.14);}
+  .tbar i{display:block;height:100%;border-radius:999px;background:var(--good);
+    transition:width .25s ease;}
+  .tbarl{font-size:11.5px;color:var(--muted);margin-top:4px;}
+  table.grid tr.over td{background:color-mix(in srgb,var(--critical) 7%,transparent);}
+  table.grid td.bad{color:var(--critical);font-weight:640;}
+  .rcaflag{display:inline-block;margin-top:3px;font-size:10px;font-weight:700;letter-spacing:.05em;
+    text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);
+    border-radius:4px;padding:0 4px;}
+  .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0 14px;}
+  .readback{padding:8px 10px;background:var(--surface-2);border:1px solid var(--border);
+    border-radius:8px;font-size:13px;color:var(--ink-2);}
+  .sbody h3{margin:18px 0 4px;font-size:12px;font-weight:700;text-transform:uppercase;
+    letter-spacing:.08em;color:var(--ink-2);}
+  .field.why label{font-variant-numeric:tabular-nums;}
   /* table */
   table.grid{width:100%;border-collapse:collapse;font-size:12.5px;}
   table.grid th{text-align:left;color:var(--ink-2);font-weight:600;border-bottom:1px solid var(--border);padding:8px 6px;white-space:nowrap;}
@@ -338,6 +374,56 @@
 </div>
 
 <!-- Correct, withdraw or remove one inspection -->
+<!-- What happens about it, and why it happened.
+
+     Two halves of one panel because they are two halves of one job: the plan is
+     what stops this machine failing next week, and the analysis is what stops
+     the same thing turning up on the other forty-three. Filling in only the
+     first is how a fleet ends up replacing the same part for ever. -->
+<div id="follOv" class="ov hidden">
+  <div class="sheet">
+    <div class="shead"><b id="follTitle">Follow-up</b><button class="x" id="follX">&times;</button></div>
+    <div class="sbody">
+      <div class="sub" id="follWhat"></div>
+
+      <h3 data-i18n="a_plan_h">The plan</h3>
+      <div class="grid2">
+        <div class="field"><label for="follOwner" data-i18n="th_owner">Responsible</label>
+          <input id="follOwner" type="text" data-i18n-ph="a_owner_ph" placeholder="who owns it"></div>
+        <div class="field"><label for="follDue" data-i18n="th_due">Due</label>
+          <input id="follDue" type="date"></div>
+        <div class="field"><label for="follStatus" data-i18n="th_status">Status</label>
+          <select id="follStatus"></select></div>
+        <div class="field"><label for="follWo" data-i18n="th_wo">WO</label>
+          <input id="follWo" type="text"></div>
+      </div>
+      <div class="field"><label for="follPlan" data-i18n="a_plan_what">What will be done</label>
+        <textarea id="follPlan" rows="2"></textarea></div>
+
+      <h3 data-i18n="rca_h">Why it happened</h3>
+      <div class="sub" data-i18n="rca_sub">The inspection already recorded the direct cause. This is the one behind it — ask why until the answer is something you can change. Stop as soon as it stops being useful; three whys that mean something beat five that do not.</div>
+      <div class="field"><label data-i18n="rca_direct">Direct cause, as recorded at inspection</label>
+        <div id="follDirect" class="readback"></div></div>
+      <div id="follWhys"></div>
+      <div class="field"><label for="follRoot" data-i18n="rca_root">Root cause</label>
+        <textarea id="follRoot" rows="2" data-i18n-ph="rca_root_ph" placeholder="the thing that, if changed, stops this recurring"></textarea></div>
+      <div class="grid2">
+        <div class="field"><label for="follCorr" data-i18n="rca_corr">Corrective — this machine</label>
+          <textarea id="follCorr" rows="2"></textarea></div>
+        <div class="field"><label for="follPrev" data-i18n="rca_prev">Preventive — the rest of the fleet</label>
+          <textarea id="follPrev" rows="2"></textarea></div>
+      </div>
+
+      <div class="field"><label for="follBy" data-i18n="ed_by">Your name</label>
+        <input id="follBy" type="text"></div>
+      <div class="row" style="margin-top:14px;gap:10px;align-items:center">
+        <button class="btn primary" id="follSave" data-i18n="a_save">Save the plan</button>
+        <span id="follMsg" class="muted"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="editOv" class="ov hidden">
   <div class="sheet">
     <div class="sheethead"><b id="edTitle" data-i18n="ed_title">Edit inspection</b><button class="btn" id="edClose" data-i18n="close">Close</button></div>
@@ -478,10 +564,20 @@
   </section>
 
   <section id="tab-actions" class="hidden">
+    <div class="kpis" id="actKpis"></div>
     <div class="section">
       <h2 data-i18n="s_act">Action register</h2>
-      <div class="sub" data-i18n="s_act_sub">Every finding that needs work, worst first. Export to CSV to hand to planning.</div>
-      <div style="margin-bottom:12px"><button class="btn" id="csvBtn" data-i18n="csv">⬇ Export CSV</button></div>
+      <div class="sub" data-i18n="s_act_sub">Every finding that needs work, worst first. Give it an owner and a date, and it stops being a list and starts being a plan.</div>
+      <div id="actBar" style="margin:2px 0 14px"></div>
+      <div class="row" style="margin-bottom:12px;gap:10px;align-items:end;flex-wrap:wrap">
+        <div class="field"><label for="aStatus" data-i18n="a_show">Show</label><select id="aStatus">
+          <option value="open" data-i18n="a_f_open">Still open</option>
+          <option value="over" data-i18n="a_f_over">Overdue</option>
+          <option value="mine" data-i18n="a_f_owned">Has an owner</option>
+          <option value="all" data-i18n="a_f_all">Everything</option>
+        </select></div>
+        <button class="btn" id="csvBtn" data-i18n="csv">⬇ Export CSV</button>
+      </div>
       <div class="tblwrap"><table class="grid" id="actionTbl"></table></div>
     </div>
   </section>
@@ -538,28 +634,28 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=96"></script>
-<script src="../mobile/hme.js?v=96"></script>
-<script src="../mobile/mp-fc.js?v=96"></script>
-<script src="../mobile/hme-cascade.js?v=96"></script>
-<script src="../mobile/temp-limits.js?v=96"></script>
+<script src="../data/magnetic_plug.js?v=98"></script>
+<script src="../mobile/hme.js?v=98"></script>
+<script src="../mobile/mp-fc.js?v=98"></script>
+<script src="../mobile/hme-cascade.js?v=98"></script>
+<script src="../mobile/temp-limits.js?v=98"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=96"></script>
-<script src="../mobile/wear.js?v=96"></script>
-<script src="../mobile/wear-map.js?v=96"></script>
-<script src="../mobile/machine-photos.js?v=96"></script>
-<script src="../mobile/machine-fig.js?v=96"></script>
-<script src="../mobile/get.js?v=96"></script>
-<script src="../mobile/uc-points.js?v=96"></script>
-<script src="../mobile/inspect-guide.js?v=96"></script>
-<script src="../mobile/get-figs.js?v=96"></script>
-<script src="../mobile/body-points.js?v=96"></script>
-<script src="../mobile/body-map.js?v=96"></script>
-<script src="../mobile/jspdf.umd.min.js?v=96"></script>
-<script src="../mobile/html2canvas.min.js?v=96"></script>
-<script src="../mobile/report-core.js?v=96"></script>
+<script src="../mobile/assets.js?v=98"></script>
+<script src="../mobile/wear.js?v=98"></script>
+<script src="../mobile/wear-map.js?v=98"></script>
+<script src="../mobile/machine-photos.js?v=98"></script>
+<script src="../mobile/machine-fig.js?v=98"></script>
+<script src="../mobile/get.js?v=98"></script>
+<script src="../mobile/uc-points.js?v=98"></script>
+<script src="../mobile/inspect-guide.js?v=98"></script>
+<script src="../mobile/get-figs.js?v=98"></script>
+<script src="../mobile/body-points.js?v=98"></script>
+<script src="../mobile/body-map.js?v=98"></script>
+<script src="../mobile/jspdf.umd.min.js?v=98"></script>
+<script src="../mobile/html2canvas.min.js?v=98"></script>
+<script src="../mobile/report-core.js?v=98"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* The 1C defect & cause matrix, the same file the phones carry. Records already
@@ -714,6 +810,30 @@ const I18N={
   ds_notset:"not set up", ds_notloaded:"set up — not loaded yet", ds_notopened:"not opened",
   ds_insp:"{n} inspection(s)", ds_indexed:"{n} files indexed", ds_inbrowser:"{n} record(s) in this browser",
   ds_photosn:"{n} photos", ds_voidn:"{n} voided",
+  th_owner:"Responsible", th_due:"Due", th_status:"Status",
+  a_show:"Show", a_f_open:"Still open", a_f_over:"Overdue", a_f_owned:"Has an owner", a_f_all:"Everything",
+  a_k_open:"STILL OPEN", a_k_open_s:"of {n} finding(s)",
+  a_k_overdue:"OVERDUE", a_k_overdue_s:"past the date, still open",
+  a_k_unowned:"NOBODY OWNS IT", a_k_unowned_s:"no name against the job",
+  a_k_oldest:"OLDEST OPEN", a_k_oldest_s:"since it was found",
+  a_k_done:"CLOSED OUT", a_k_done_s:"done, verified or not needed",
+  a_bar:"{d} of {n} closed out \u2014 {p}%",
+  a_late:"overdue", a_plan:"Plan", a_plan_h:"The plan", a_plan_what:"What will be done",
+  a_owner_ph:"who owns it", a_save:"Save the plan",
+  a_lastby:"Last set by {by} on {at}",
+  rca_h:"Why it happened",
+  rca_sub:"The inspection already recorded the direct cause. This is the one behind it \u2014 ask why until the answer is something you can change. Stop as soon as it stops being useful; three whys that mean something beat five that do not.",
+  rca_direct:"Direct cause, as recorded at inspection", rca_nodirect:"\u2014 none was coded \u2014",
+  rca_why:"Why {n}", rca_why1_ph:"why did the part get into this condition?",
+  rca_why_ph:"and why was that?",
+  rca_root:"Root cause", rca_root_ph:"the thing that, if changed, stops this recurring",
+  rca_corr:"Corrective \u2014 this machine", rca_prev:"Preventive \u2014 the rest of the fleet",
+  rca_flag:"RCA", rca_has:"A root-cause analysis has been recorded",
+  ph_edit:"\u270e Photos \u2014 add or remove", ph_add:"Add a photo or video",
+  ph_remove:"Remove from the record", ph_restore:"Put it back",
+  ph_who:"Your name \u2014 it is recorded with the change",
+  ph_adding:"Uploading {i} of {n}\u2026", ph_added:"{n} added",
+  ph_addfail:"Upload failed: {e}", ph_full:"This position already holds {n} — remove one first.",
   ph_none:"no photo", ph_video:"Video",
 
   ed_title:"Edit inspection",
@@ -910,6 +1030,31 @@ const I18N={
   ds_notset:"не настроено", ds_notloaded:"настроено — ещё не загружено", ds_notopened:"не открыто",
   ds_insp:"осмотров: {n}", ds_indexed:"файлов в индексе: {n}", ds_inbrowser:"записей в этом браузере: {n}",
   ds_photosn:"фото: {n}", ds_voidn:"отозвано: {n}",
+  th_owner:"Ответственный", th_due:"Срок", th_status:"Статус",
+  a_show:"Показать", a_f_open:"Открытые", a_f_over:"Просроченные",
+  a_f_owned:"С ответственным", a_f_all:"Все",
+  a_k_open:"ОТКРЫТО", a_k_open_s:"из {n}",
+  a_k_overdue:"ПРОСРОЧЕНО", a_k_overdue_s:"срок прошёл, ещё не закрыто",
+  a_k_unowned:"БЕЗ ОТВЕТСТВЕННОГО", a_k_unowned_s:"имя не назначено",
+  a_k_oldest:"САМОЕ СТАРОЕ", a_k_oldest_s:"с момента обнаружения",
+  a_k_done:"ЗАКРЫТО", a_k_done_s:"выполнено, проверено или не требуется",
+  a_bar:"Закрыто {d} из {n} — {p}%",
+  a_late:"просрочено", a_plan:"План", a_plan_h:"План",
+  a_plan_what:"Что будет сделано", a_owner_ph:"кто отвечает",
+  a_save:"Сохранить план", a_lastby:"Задал {by}, {at}",
+  rca_h:"Почему это произошло",
+  rca_sub:"Прямая причина уже записана при осмотре. Здесь — та, что за ней: спрашивайте «почему», пока ответ не станет тем, что можно изменить. Три содержательных «почему» лучше пяти пустых.",
+  rca_direct:"Прямая причина по осмотру", rca_nodirect:"— не закодирована —",
+  rca_why:"Почему {n}", rca_why1_ph:"почему деталь в таком состоянии?",
+  rca_why_ph:"а почему так?",
+  rca_root:"Корневая причина", rca_root_ph:"то, что надо изменить, чтобы не повторилось",
+  rca_corr:"Корректирующее — эта машина", rca_prev:"Предупреждающее — остальной парк",
+  rca_flag:"RCA", rca_has:"Анализ причин записан",
+  ph_edit:"✎ Фото — добавить или убрать", ph_add:"Добавить фото или видео",
+  ph_remove:"Убрать из записи", ph_restore:"Вернуть",
+  ph_who:"Ваше имя — оно запишется с изменением",
+  ph_adding:"Загрузка {i} из {n}…", ph_added:"Добавлено: {n}",
+  ph_addfail:"Ошибка загрузки: {e}", ph_full:"Здесь уже {n} — сначала уберите одно.",
   ph_none:"нет фото", ph_video:"Видео",
 
   ed_title:"Правка осмотра",
@@ -1584,21 +1729,92 @@ function actionRows(){
     .sort((a,b)=>sevRank(sevOf(b.r,b.i))-sevRank(sevOf(a.r,a.i))
       ||(b.r.date||"").localeCompare(a.r.date||""));
 }
+/* ---------- a finding has a life after it is found ----------
+
+   The register listed what needed work and stopped there. Nobody owned
+   anything, nothing had a date, and there was no way to answer the only
+   question a weekly meeting actually asks: of the eighty-two things we found,
+   what got done? A list that cannot answer that stops being read, and then the
+   inspections stop being done, because nothing visibly follows from them.
+
+   Owner, due date and state live in the same correction sidecar as every other
+   office-side change, keyed by record and point — so they sync through the
+   path that already exists, need nothing deployed, and carry the name of
+   whoever set them. */
+const FSTATUS=[
+  { k:"", en:"Open", ru:"Открыто", c:"n" },
+  { k:"PLAN", en:"Planned", ru:"Запланировано", c:"i" },
+  { k:"WIP", en:"In progress", ru:"В работе", c:"w" },
+  { k:"DONE", en:"Done", ru:"Выполнено", c:"g" },
+  { k:"VERIFIED", en:"Verified", ru:"Проверено", c:"g" },
+  { k:"NOACT", en:"No action needed", ru:"Действий не требуется", c:"n" },
+];
+const FST_BY={}; FSTATUS.forEach(x=>FST_BY[x.k]=x);
+const stName=k=>{ const x=FST_BY[String(k||"")]; return x?(x[lang]||x.en):k; };
+const stOpen=k=>!["DONE","VERIFIED","NOACT"].includes(String(k||""));
+const todayISO=()=>new Date().toISOString().slice(0,10);
+/* Overdue is only meaningful while something is still open — a job finished
+   late is finished, and colouring it red for ever teaches people to ignore red. */
+function fOverdue(i){ return !!(i.due && stOpen(i.status) && i.due < todayISO()); }
+function fAgeDays(r,i){
+  const from=Date.parse((r.date||"")+"T00:00:00Z");
+  return isFinite(from) ? Math.floor((Date.now()-from)/864e5) : null;
+}
 function renderActions(){
   const rows=actionRows();
-  if(!rows.length){ $("actionTbl").innerHTML=`<tr><td class="empty">${esc(t("e_nothing"))}</td></tr>`; return; }
-  let h=`<thead><tr>`+["th_sev","th_unit","th_comp","th_defect","th_cause","th_action","th_prio","th_wo","th_date","th_byshort"]
-    .map(k=>`<th>${esc(t(k))}</th>`).join("")+`</tr></thead><tbody>`;
-  rows.forEach(({r,i})=>{ const s=sevOf(r,i);
-    h+=`<tr><td>${s?`<span class="pill ${SEV[s].c}">${SEV[s].l}</span>`:""}</td>
+  /* The tracker answers the meeting's question before the table does. */
+  const cnt={}; FSTATUS.forEach(s=>cnt[s.k]=0);
+  let overdue=0, oldest=0, owned=0;
+  rows.forEach(({r,i})=>{ cnt[String(i.status||"")]=(cnt[String(i.status||"")]||0)+1;
+    if(fOverdue(i)) overdue++;
+    if(i.owner) owned++;
+    if(stOpen(i.status)){ const a=fAgeDays(r,i); if(a!=null&&a>oldest) oldest=a; } });
+  const open=rows.filter(({i})=>stOpen(i.status)).length;
+  const done=rows.length-open;
+  const kp=(lab,val,sub,cls)=>`<div class="kpi${cls?" "+cls:""}"><div class="k">${esc(lab)}</div>
+    <div class="v">${esc(String(val))}</div><div class="s">${esc(sub)}</div></div>`;
+  $("actKpis").innerHTML=
+      kp(t("a_k_open"), open, t("a_k_open_s",{n:rows.length}))
+    + kp(t("a_k_overdue"), overdue, t("a_k_overdue_s"), overdue?"bad":"")
+    + kp(t("a_k_unowned"), rows.length-owned, t("a_k_unowned_s"))
+    + kp(t("a_k_oldest"), oldest?oldest+" d":"—", t("a_k_oldest_s"))
+    + kp(t("a_k_done"), done, t("a_k_done_s"));
+  /* A bar, because "12 of 82" is a fraction people have to work out and a
+     filled strip is one they do not. */
+  const pc=rows.length?Math.round(done/rows.length*100):0;
+  $("actBar").innerHTML=rows.length
+    ? `<div class="tbar" role="progressbar" aria-valuenow="${done}" aria-valuemin="0" aria-valuemax="${rows.length}">
+         <i style="width:${pc}%"></i></div>
+       <div class="tbarl">${esc(t("a_bar",{d:done,n:rows.length,p:pc}))}</div>` : "";
+
+  const filt=($("aStatus")&&$("aStatus").value)||"open";
+  const shown = filt==="all" ? rows
+              : filt==="over" ? rows.filter(({i})=>fOverdue(i))
+              : filt==="mine" ? rows.filter(({i})=>i.owner)
+              : rows.filter(({i})=>stOpen(i.status));
+  if(!shown.length){ $("actionTbl").innerHTML=`<tr><td class="empty">${esc(t("e_nothing"))}</td></tr>`; return; }
+  let h=`<thead><tr>`+["th_sev","th_unit","th_comp","th_defect","th_action",
+      "th_owner","th_due","th_status","th_prio","th_wo","th_date"]
+    .map(k=>`<th>${esc(t(k))}</th>`).join("")+`<th></th></tr></thead><tbody>`;
+  shown.forEach(({r,i})=>{ const s=sevOf(r,i), od=fOverdue(i);
+    const st=FST_BY[String(i.status||"")]||FST_BY[""];
+    h+=`<tr${od?' class="over"':''}><td>${s?`<span class="pill ${SEV[s].c}">${SEV[s].l}</span>`:""}</td>
       <td><b>${esc(r.equip)}</b><div class="muted" style="font-size:11px">${esc(TYPE_LABEL[r.type]||r.type)}</div></td>
       <td>${esc(i.key)}<div class="muted" style="font-size:11px">${esc(i.label||"")}</div></td>
-      <td>${i.defect?esc(i.defect):'<span class="muted">—</span>'}${i.defectCode?`<div class="muted" style="font-size:11px">${esc(i.defectCode)}${i.iso?` · ISO ${esc(i.iso)}/${esc(i.isoMode)}`:""}</div>`:""}</td>
-      <td>${i.cause?esc(i.cause):'<span class="muted">—</span>'}</td>
+      <td>${i.defect?esc(i.defect):'<span class="muted">—</span>'}${i.defectCode?`<div class="muted" style="font-size:11px">${esc(i.defectCode)}${i.iso?` · ISO ${esc(i.iso)}/${esc(i.isoMode)}`:""}</div>`:""}
+        ${i.rca?`<div class="rcaflag" title="${esc(t("rca_has"))}">${esc(t("rca_flag"))}</div>`:""}</td>
       <td>${i.actionLabel?esc(i.actionLabel):'<span class="muted">—</span>'}</td>
+      <td>${i.owner?esc(i.owner):'<span class="muted">—</span>'}</td>
+      <td class="mono${od?" bad":""}">${i.due?esc(i.due):'<span class="muted">—</span>'}${
+        od?`<div class="muted" style="font-size:10.5px">${esc(t("a_late"))}</div>`:""}</td>
+      <td><span class="pill ${st.c}">${esc(stName(i.status))}</span></td>
       <td>${i.prio?`<span class="pill ${prioClass(i.prio)}" title="${esc(prioName(i.prio))}">${esc(i.prio)}</span>`:'<span class="muted">—</span>'}</td>
-      <td class="mono">${esc(i.wo||"")}</td><td class="mono">${esc(r.date||"")}</td><td class="muted">${esc(r.by||"")}</td></tr>`; });
+      <td class="mono">${esc(i.wo||"")}</td><td class="mono">${esc(r.date||"")}</td>
+      <td><button class="btn" style="padding:3px 9px;font-size:11.5px"
+        data-fu="${esc(recKey(r))}" data-fi="${esc(i.key)}">${esc(t("a_plan"))}</button></td></tr>`; });
   $("actionTbl").innerHTML=h+"</tbody>";
+  $("actionTbl").querySelectorAll("[data-fu]").forEach(b=>
+    b.onclick=()=>openFollow(b.dataset.fu, b.dataset.fi));
 }
 $("csvBtn").onclick=()=>{
   const rows=actionRows(); const q=s=>`"${String(s==null?"":s).replace(/"/g,'""')}"`;
@@ -1606,14 +1822,21 @@ $("csvBtn").onclick=()=>{
     /* Captured on the phone and, until now, dropped on the way out. The CSV
        is what planning and reliability actually load into a spreadsheet, so a
        field missing here is a field that does not exist to them. */
-    "FoundBy","ReMeasured","SMU","MeasuredMM","NewMM","CondemnMM","WornPct","BaselineNew","BaselineCondemn","BaselineGroup","NotMeasuredReason","Photos","Video","Voided"];
+    "FoundBy","ReMeasured","SMU","MeasuredMM","NewMM","CondemnMM","WornPct","BaselineNew","BaselineCondemn","BaselineGroup","NotMeasuredReason","Photos","Video","Voided",
+    /* The follow-up. A register that planning loads into a spreadsheet has to
+       carry who owns it and when it is due, or the plan lives only here. */
+    "Owner","Due","Status","Overdue","PlanNote","RootCause","Why1","Why2","Why3","Why4","Why5",
+    "Corrective","Preventive","PlanBy","PlanAt"];
   const body=rows.map(({r,i})=>[recId(r)||"",recRev(r)||"",SEV[sevOf(r,i)]?.l||"",r.equip,r.type,i.key,i.label,i.defectCode,i.defect,i.iso,i.isoMode,i.causeCode,i.cause,i.actionLabel,i.prio||"",i.prio?prioName(i.prio,"en"):"",i.wo,i.grade,i.tempC,i.ambC,i.tempMethod,r.date,r.by,r.sup||"",r.gps?`${r.gps.lat},${r.gps.lon}`:"",i.comment,
     i.detectionLabel||i.detection||"", i.stood?"yes":"", r.smu||"",
     (w=>w?[w.mm==null?"":w.mm, w.newMM==null?"":w.newMM, w.condemnMM==null?"":w.condemnMM,
            w.wearPct==null?"":w.wearPct]:["","","",""])(wearOf(r,i)),
     i.baseNew==null?"":i.baseNew, i.baseCondemn==null?"":i.baseCondemn, i.baseAll?"yes":"",
     i.reasonLabel||i.reason||"", mediaOf(i,r).filter(m=>m.kind==="photo").length,
-    mediaOf(i,r).some(m=>m.kind==="video")?"yes":"", r._void?"yes":""
+    mediaOf(i,r).some(m=>m.kind==="video")?"yes":"", r._void?"yes":"",
+    i.owner||"", i.due||"", stName(i.status), fOverdue(i)?"yes":"", i.plan||"", i.root||"",
+    (w=>[0,1,2,3,4].map(n=>w[n]||""))(Array.isArray(i.whys)?i.whys:[]),
+    i.corrective||"", i.preventive||"", i.planBy||"", i.planAt||""
   ].flat().map(q).join(","));
   const csv=[head.map(q).join(","),...body].join("\r\n");
   const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob(["﻿"+csv],{type:"text/csv"}));
@@ -1640,7 +1863,15 @@ const VIDEO_EXT=["mp4","mov","MP4","MOV","webm"];
    cold to capture did not exist as far as anybody at a desk was concerned.
 
    The suffix list runs the full range the phone can produce. */
-const PHOTO_SUF=["","_1","_2","_3","_4","_5","_6","_7","_8","_9","_10"];
+/* The phone allows ten per position; the office can add more from a desk, so
+   the range has to be wider than the phone's. ONE constant, and both the
+   finder and the allocator are derived from it — the first version hard-coded
+   the list at ten and let the allocator hand out _11, so a photograph uploaded
+   from the dashboard landed on Drive and was then invisible to the dashboard
+   that had just put it there. Every candidate is checked against the file
+   index before it becomes a request, so a longer list costs lookups only. */
+const MEDIA_MAX=20;
+const PHOTO_SUF=[""].concat(Array.from({length:MEDIA_MAX},(_,i)=>"_"+(i+1)));
 function photoNames(base,rec,sufs){
   const dev=String((rec&&rec.dev)||""), out=[];
   for(const s of (sufs||PHOTO_SUF))
@@ -1661,8 +1892,33 @@ function videoNames(base,rec){
 /* Every frame captured on this position, in the order it was taken, each tagged
    with what it is so the viewer can play a video rather than trying to draw it
    as a still. */
-function mediaOf(it,rec){
+/* Removing a photograph does not destroy it.
+
+   Everything else in this system works that way — a correction sits beside the
+   inspection, a void withdraws a round from every count without deleting a
+   byte — and a photograph should not be the one thing an office can erase from
+   a mine's record. So "remove" writes the file name into the same correction
+   sidecar as every other change, with who did it and when, and the picture
+   stops being shown. The bytes stay in Drive and it can be put back. */
+function hiddenSet(it){
+  const h=it&&it.hidden;
+  return new Set(Array.isArray(h)?h:(typeof h==="string"&&h?h.split("|"):[]));
+}
+function mediaOf(it,rec,withHidden){
+  const hid=hiddenSet(it);
+  const all=mediaAll(it,rec);
+  all.forEach(m=>{ m.hidden=hid.has(m.name); });
+  return withHidden ? all : all.filter(m=>!m.hidden);
+}
+function mediaAll(it,rec){
   const out=[], seen=new Set();
+  /* Keyed on the FILE NAME, which is what identifies a photograph here — the
+     URL is an accident of how it happened to be loaded. Deduping on the URL
+     looked equivalent and was not: two files that resolve to the same string
+     silently collapse into one, and the whole point of this pass is that
+     nothing an inspector captured quietly disappears. */
+  const add=(name,src,kind)=>{ if(!name||seen.has(name)) return;
+    seen.add(name); out.push({src,kind,name}); };
   if(folderPhotos){
     const base=photoBase(it,rec);
     /* When two phones inspected the same unit on the same day the script kept
@@ -1672,22 +1928,19 @@ function mediaOf(it,rec){
     for(const s of PHOTO_SUF){
       for(const n of photoNames(base,rec,[s])){
         const u=folderPhotos[n];
-        if(u && !seen.has(u)){ seen.add(u); out.push({src:u,kind:"photo",name:n}); break; }
+        if(u){ add(n,u,"photo"); break; }
       }
     }
     for(const n of videoNames(base,rec)){
       const u=folderPhotos[n];
-      if(u && !seen.has(u)){ seen.add(u); out.push({src:u,kind:"video",name:n}); break; }
+      if(u){ add(n,u,"video"); break; }
     }
   }
   /* A record carried in a file rather than a folder holds its own picture. */
-  if(it.photo){ const u=/^(data:|blob:|https?:|\/)/.test(it.photo)?it.photo:"../"+it.photo;
-    if(!seen.has(u)){ seen.add(u); out.push({src:u,kind:"photo",name:it.photo}); } }
-  if(Array.isArray(it.photos)) it.photos.forEach(ph=>{
-    const u=/^(data:|blob:|https?:|\/)/.test(ph)?ph:"../"+ph;
-    if(!seen.has(u)){ seen.add(u); out.push({src:u,kind:"photo",name:ph}); } });
-  if(it.video){ const u=/^(data:|blob:|https?:|\/)/.test(it.video)?it.video:"../"+it.video;
-    if(!seen.has(u)){ seen.add(u); out.push({src:u,kind:"video",name:it.video}); } }
+  if(it.photo) add(it.photo, /^(data:|blob:|https?:|\/)/.test(it.photo)?it.photo:"../"+it.photo, "photo");
+  if(Array.isArray(it.photos)) it.photos.forEach(ph=>
+    add(ph, /^(data:|blob:|https?:|\/)/.test(ph)?ph:"../"+ph, "photo"));
+  if(it.video) add(it.video, /^(data:|blob:|https?:|\/)/.test(it.video)?it.video:"../"+it.video, "video");
   return out;
 }
 /* Kept for the callers that only ask "is there anything to show". */
@@ -1826,8 +2079,29 @@ function renderHistory(){
                    : `<button class="th" data-i="${ix}"><img loading="lazy" src="${esc(m.src)}" alt=""></button>`
                ).join("")}</div>`:""}
            </div>`;
+        /* The office edits what the field captured: add the shot somebody
+           forgot, take down the one that came out as a thumb over the lens.
+           Only where Drive is configured, because both are writes. */
+        const shown=mediaOf(i,rec,true);
+        const edit = drvOn() ? `<div class="medit" data-rk="${esc(recKey(rec))}" data-ik="${esc(i.key)}">
+            <button class="mtog" type="button">${esc(t("ph_edit"))}</button>
+            <div class="mpanel hidden">
+              <div class="mlist">${shown.map(m=>`
+                <span class="mitem${m.hidden?" off":""}">
+                  ${m.kind==="video"?`<video preload="metadata" src="${esc(m.src)}"></video>`
+                                    :`<img loading="lazy" src="${esc(m.src)}" alt="">`}
+                  <button type="button" class="mx" data-name="${esc(m.name)}" data-on="${m.hidden?"0":"1"}"
+                    title="${esc(m.hidden?t("ph_restore"):t("ph_remove"))}">${m.hidden?"↺":"×"}</button>
+                </span>`).join("")||`<span class="muted" style="font-size:11.5px">${esc(t("ph_none"))}</span>`}
+                <label class="madd" title="${esc(t("ph_add"))}">+
+                  <input type="file" accept="image/*,video/*" multiple hidden></label>
+              </div>
+              <div class="mmsg"></div>
+            </div>
+          </div>` : "";
         return `<div class="pos" data-med='${esc(JSON.stringify(med.map(m=>[m.src,m.kind])))}' data-cap="${cap}">
           ${gal}
+          ${edit}
           <div class="body"><div class="pk">${esc(i.key)}${i.grade?` <span class="pill ${SEV[GRADE_SEV[i.grade]]?.c||'n'}">${esc(i.grade)}</span>`:""}
             ${s?`<span class="pill ${SEV[s].c}">${SEV[s].l}</span>`:""}</div>
             <div class="pl">${esc(i.label||"")}</div>
@@ -1861,7 +2135,175 @@ function renderHistory(){
   });
   // If the photos are in Drive rather than on disk, fetch this unit's and repaint once.
   $("history").querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>openEdit(b.dataset.edit));
+  wireMediaEdit();
   pullDrivePhotos(recs, renderHistory);
+}
+
+/* ---------- the follow-up panel ---------- */
+let follKey=null, follItem=null;
+const WHYS=5;
+function openFollow(rk, ik){
+  const rec=RECS.find(r=>recKey(r)===rk); if(!rec) return;
+  const it=(rec.items||[]).find(x=>x.key===ik); if(!it) return;
+  follKey=rk; follItem=ik;
+  $("follTitle").textContent=`${rec.equip} · ${it.key}`;
+  $("follWhat").textContent=[it.label, it.defect, rec.date].filter(Boolean).join(" · ");
+  $("follOwner").value=it.owner||"";
+  $("follDue").value=it.due||"";
+  $("follWo").value=it.wo||"";
+  $("follPlan").value=it.plan||"";
+  $("follStatus").innerHTML=FSTATUS.map(s=>
+    `<option value="${esc(s.k)}"${String(it.status||"")===s.k?" selected":""}>${esc(s[lang]||s.en)}</option>`).join("");
+  /* The direct cause is not re-asked. It was coded at the machine by somebody
+     who was looking at it, and re-typing it from an office is how a taxonomy
+     quietly fills up with near-duplicates. */
+  $("follDirect").textContent=[it.cause, it.causeCode].filter(Boolean).join("  ·  ")||t("rca_nodirect");
+  const whys=Array.isArray(it.whys)?it.whys:(typeof it.whys==="string"&&it.whys?it.whys.split("\n"):[]);
+  $("follWhys").innerHTML=Array.from({length:WHYS},(_,n)=>
+    `<div class="field why"><label for="follWhy${n}">${esc(t("rca_why",{n:n+1}))}</label>
+       <input id="follWhy${n}" type="text" value="${esc(whys[n]||"")}"
+         ${n>0?`data-i18n-ph="rca_why_ph"`:""} placeholder="${esc(n===0?t("rca_why1_ph"):t("rca_why_ph"))}"></div>`).join("");
+  $("follRoot").value=it.root||"";
+  $("follCorr").value=it.corrective||"";
+  $("follPrev").value=it.preventive||"";
+  let who=""; try{ who=localStorage.getItem("cm_dash_who")||""; }catch(e){}
+  $("follBy").value=who;
+  $("follMsg").textContent = it.planBy ? t("a_lastby",{by:it.planBy, at:(it.planAt||"").slice(0,10)}) : "";
+  $("follOv").classList.remove("hidden");
+}
+function closeFollow(){ $("follOv").classList.add("hidden"); follKey=null; }
+function saveFollow(){
+  if(!follKey) return;
+  const by=$("follBy").value.trim();
+  if(!by){ $("follMsg").textContent=t("ed_needname"); return; }
+  if(!drvOn()){ $("follMsg").textContent=t("ed_needdrive"); return; }
+  try{ localStorage.setItem("cm_dash_who",by); }catch(e){}
+  const whys=Array.from({length:WHYS},(_,n)=>($("follWhy"+n).value||"").trim());
+  while(whys.length && !whys[whys.length-1]) whys.pop();
+  const patch={
+    owner:$("follOwner").value.trim(),
+    due:$("follDue").value||"",
+    status:$("follStatus").value,
+    wo:$("follWo").value.trim(),
+    plan:$("follPlan").value.trim(),
+    whys, root:$("follRoot").value.trim(),
+    corrective:$("follCorr").value.trim(),
+    preventive:$("follPrev").value.trim(),
+    /* One flag the register can read without unpacking the analysis. */
+    rca:(whys.length || $("follRoot").value.trim()) ? 1 : 0,
+    planBy:by, planAt:new Date().toISOString(),
+  };
+  const prior=(edits[follKey]&&edits[follKey].items)||{};
+  const items={}; Object.keys(prior).forEach(k=>items[k]=Object.assign({},prior[k]));
+  items[follItem]=Object.assign({}, items[follItem]||{}, patch);
+  const keep=edits[follKey]||{};
+  const before=edits[follKey] ? JSON.parse(JSON.stringify(edits[follKey])) : null;
+  const doc={ key:follKey, by, at:new Date().toISOString(), void:!!keep.void,
+              reason:keep.reason||"", note:keep.note||"", items };
+  window.CMDash.setEdits([doc]);
+  $("follMsg").textContent=t("ed_sending");
+  saveEdits(); rebuild(); refreshControls(); renderAll();
+  window.CMDrive.saveEdit({ key:follKey, by, void:!!keep.void, reason:keep.reason||"",
+                            note:keep.note||"", items })
+    .then(()=>{ $("follMsg").textContent=t("ed_saved"); setTimeout(closeFollow,700); })
+    .catch(err=>{
+      if(before) edits[follKey]=before; else delete edits[follKey];
+      saveEdits(); rebuild(); refreshControls(); renderAll();
+      $("follMsg").textContent=t("ed_undone",{e:(err&&err.message)||err});
+    });
+}
+
+/* ---------- adding and removing a position's media ----------
+
+   Two different acts, deliberately given two different mechanisms.
+
+   ADDING writes a real file to Drive, through the same batch op the phones
+   use, under the next free _N the naming scheme allows. Nothing new has to be
+   deployed to the Apps Script for a photograph added from a desk.
+
+   REMOVING writes nothing to Drive at all. It records the file name in the
+   correction sidecar, next to every other change, with who and when. The
+   picture stops being shown and stops reaching the reports; the bytes stay
+   where the inspector put them and the act can be undone. An office that can
+   quietly delete the evidence from a mine's condition record is not a feature
+   anybody asked for, and it is not what "remove if not good" has to mean. */
+function mediaWho(){
+  let by=""; try{ by=localStorage.getItem("cm_dash_who")||""; }catch(e){}
+  if(by) return by;
+  by=(prompt(t("ph_who"))||"").trim();
+  if(by){ try{ localStorage.setItem("cm_dash_who",by); }catch(e){} }
+  return by;
+}
+/* Layer over whatever the sidecar already says for this record, exactly as the
+   correction panel does — a media change must not drop an earlier severity fix. */
+function mediaEditPost(rk, ik, hidden, msgEl){
+  const by=mediaWho();
+  if(!by){ if(msgEl) msgEl.textContent=t("ed_needname"); return; }
+  const prior=(edits[rk]&&edits[rk].items)||{};
+  const items={}; Object.keys(prior).forEach(k=>items[k]=Object.assign({},prior[k]));
+  items[ik]=Object.assign({}, items[ik]||{}, { hidden });
+  const at=new Date().toISOString();
+  const before=edits[rk] ? JSON.parse(JSON.stringify(edits[rk])) : null;
+  const keep=edits[rk]||{};
+  window.CMDash.setEdits([{ key:rk, by, at, void:!!keep.void, reason:keep.reason||"",
+                            note:keep.note||"", items }]);
+  if(msgEl) msgEl.textContent=t("ed_sending");
+  window.CMDrive.saveEdit({ key:rk, by, void:!!keep.void, reason:keep.reason||"",
+                            note:keep.note||"", items })
+    .then(()=>{ if(msgEl) msgEl.textContent=t("ed_saved"); })
+    .catch(err=>{
+      if(before) edits[rk]=before; else delete edits[rk];
+      saveEdits(); rebuild(); refreshControls(); renderAll();
+      alert(t("ed_undone",{e:(err&&err.message)||err}));
+    });
+}
+/* The next free suffix, asked of the index rather than of the record: a photo
+   added yesterday from another desk is on Drive but not in this item's list,
+   and reusing its number would overwrite it. */
+function nextMediaName(rec, it, file){
+  const base=photoBase(it,rec);
+  const vid=/^video\//i.test(file.type||"");
+  const ext=vid ? ((file.type||"").includes("quicktime")?"mov":"mp4")
+                : ((file.type||"").includes("png")?"png":(file.type||"").includes("webp")?"webp":"jpg");
+  const taken=n=>(folderPhotos&&folderPhotos[n])||window.CMDrive&&CMDrive.hasName&&CMDrive.hasName(n);
+  if(vid){ const n=`${base}.${ext}`; return taken(n)?`${base}_2.${ext}`:n; }
+  /* Never past what mediaAll() will look for, or the upload succeeds and the
+     picture is invisible. Full is full, and says so. */
+  for(let i=1;i<=MEDIA_MAX;i++)
+    if(!PHOTO_EXT.some(e=>taken(`${base}_${i}.${e}`))) return `${base}_${i}.${ext}`;
+  return null;
+}
+function wireMediaEdit(){
+  $("history").querySelectorAll(".medit").forEach(box=>{
+    const rk=box.dataset.rk, ik=box.dataset.ik;
+    const panel=box.querySelector(".mpanel"), msg=box.querySelector(".mmsg");
+    box.querySelector(".mtog").onclick=()=>panel.classList.toggle("hidden");
+    box.querySelectorAll(".mx").forEach(b=>b.onclick=()=>{
+      const rec=RECS.find(r=>recKey(r)===rk); if(!rec) return;
+      const it=(rec.items||[]).find(x=>x.key===ik); if(!it) return;
+      const cur=hiddenSet(it);
+      if(b.dataset.on==="1") cur.add(b.dataset.name); else cur.delete(b.dataset.name);
+      mediaEditPost(rk, ik, [...cur], msg);
+      saveEdits(); rebuild(); refreshControls(); renderHistory();
+    });
+    const inp=box.querySelector(".madd input");
+    if(inp) inp.onchange=async ()=>{
+      const files=[...(inp.files||[])]; inp.value="";
+      if(!files.length) return;
+      const rec=RECS.find(r=>recKey(r)===rk); if(!rec) return;
+      const it=(rec.items||[]).find(x=>x.key===ik); if(!it) return;
+      panel.classList.remove("hidden");
+      for(let n=0;n<files.length;n++){
+        msg.textContent=t("ph_adding",{i:n+1,n:files.length});
+        const name=nextMediaName(rec,it,files[n]);
+        if(!name){ msg.textContent=t("ph_full",{n:MEDIA_MAX}); return; }
+        try{ await CMDrive.putMedia(name, files[n]); }
+        catch(e){ msg.textContent=t("ph_addfail",{e:(e&&e.message)||e}); return; }
+      }
+      msg.textContent=t("ph_added",{n:files.length});
+      renderHistory();
+    };
+  });
 }
 
 /* ---------- correcting, voiding and deleting one inspection ---------- */
@@ -2680,6 +3122,10 @@ document.addEventListener("keydown",e=>{
 });
 $("equipSel").onchange=renderHistory;
 $("wBand").onchange=renderWearTab;
+$("aStatus").onchange=renderActions;
+$("follX").onclick=closeFollow;
+$("follSave").onclick=saveFollow;
+$("follOv").onclick=e=>{ if(e.target.id==="follOv") closeFollow(); };
 $("pfSel").onchange=e=>{ pfKey=e.target.value; renderPF(); };
 $("wearCsv").onclick=wearCsv;
 document.querySelector(".lang").addEventListener("click",e=>{
@@ -2692,8 +3138,8 @@ rebuild(); refreshControls(); renderAll(); refreshSources();
 applyLang();                          // paints the static markup and re-renders in the saved language
 if(!RECS.length) openData();          // first run: show where data comes from
 </script>
-<script src="drive.js?v=96"></script>
-<script src="sync-adapter.js?v=96"></script>
-<script src="report.js?v=96"></script>
+<script src="drive.js?v=98"></script>
+<script src="sync-adapter.js?v=98"></script>
+<script src="report.js?v=98"></script>
 </body>
 </html>

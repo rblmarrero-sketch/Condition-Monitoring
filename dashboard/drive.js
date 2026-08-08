@@ -305,6 +305,32 @@
   const remove = (key, admin, by, reason) =>
     post({ op: "delete", key, admin, by, reason });
 
+  /* Put one picture into Drive under a name the dashboard will find again.
+     The same `batch` op the phones use, so nothing new has to be deployed to
+     the Apps Script for a photograph added from a desk. */
+  async function putMedia(name, file) {
+    const data = await new Promise((res, rej) => {
+      const r = new FileReader();
+      r.onload = () => res(String(r.result).split(",")[1] || "");
+      r.onerror = () => rej(new Error("Could not read the file"));
+      r.readAsDataURL(file);
+    });
+    const j = await post({ op: "batch", files: [{ name, mime: file.type || "image/jpeg", data }] });
+    if (j && j.failed && j.failed.length) throw new Error(j.failed[0].error || "Upload refused");
+    /* Into the index and the cache at once, so it is on screen before the next
+       refresh rather than after it. */
+    /* Drive may hand back a different name than the one asked for — another
+       phone can already own it, and placeUpload_ renames rather than
+       overwriting somebody else's photograph. Index what actually landed. */
+    const rec = (j && j.saved && j.saved[0]) || {};
+    const real = rec.name || name;
+    const url = URL.createObjectURL(file);
+    if (rec.id) { index[real] = { id: rec.id, size: file.size }; cachePut(rec.id, file); }
+    fetched[real] = url;
+    window.CMDash.addPhoto(real, url);
+    return { name: real, url, id: rec.id || null };
+  }
+
   /* Two phones sent the same unit, date and type. Both versions are in Drive;
      this records which one the reports should use. Nothing is deleted, so the
      decision is as reversible as a void. */
@@ -348,7 +374,11 @@
   }
 
   window.CMDrive = {
-    load, ensurePhotos, configured, ping, saveEdit, remove, resolve,
+    load, ensurePhotos, configured, ping, saveEdit, remove, resolve, putMedia,
+    /* "Is this name already taken on Drive?" — asked before choosing the next
+       _N for an added photograph, so one added from another desk yesterday is
+       not overwritten by one added from this desk today. */
+    hasName: (n) => !!index[n],
     get url() { return cfg().url; },
     get secret() { return cfg().sec; },
     get legacy() { return legacy; },
