@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=94">
+<link rel="manifest" href="manifest.webmanifest?v=95">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=94">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=94">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=94">
+<link rel="apple-touch-icon" href="icon-192.png?v=95">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=95">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=95">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -181,6 +181,19 @@
   /* Only the card that holds the round is tinted, and only its head. Tinting
      the whole screen would put a wash behind every status pill on it. */
   #cardComponent > h2{background:var(--cat-bg);box-shadow:inset 3px 0 0 var(--cat);}
+  /* The round was announced once, on one heading, and then the eye travelled
+     four hundred pixels of identical white rectangles with nothing to say which
+     round it was in. The card that holds the work now carries the colour down
+     its whole left edge and sits a little higher than the ones around it, so
+     the screen has a subject instead of a stack. Cheap: a border and a shadow,
+     no new hue — the same --cat the badge already uses. */
+  #cardComponent{border-left:3px solid var(--cat);
+    box-shadow:0 2px 10px -2px rgba(0,0,0,.13), 0 1px 2px rgba(0,0,0,.06);}
+  /* Everything after the work itself is support — the sign-off, the notes —
+     and drawing it with the same weight as the measurement is what made the
+     column read as one long undifferentiated list. */
+  #cardSign{box-shadow:none;background:transparent;}
+  #cardSign > h2{border-bottom-color:transparent;}
   /* The badge is NOT a filled colour chip, and that is a measured decision.
      A filled chip is the exact form this app already uses for status — the
      wear band, the severity pill — so a green "UC" chip beside a green
@@ -261,6 +274,26 @@
   .posnav button.has .dot{display:block;}
   .gradeseg button.g-A.on{background:var(--good);} .gradeseg button.g-B.on{background:var(--warning);color:#111;}
   .gradeseg button.g-C.on{background:var(--serious);} .gradeseg button.g-X.on{background:var(--critical);}
+  /* Severity is a ramp — no failure, incipient, degraded, critical — and it was
+     drawn as four identical grey rectangles, so the escalation was carried by
+     reading four labels in Russian or English and knowing the order. The four
+     colours it needs are already reserved for exactly these four meanings, so
+     this spends no new colour: the selected one fills, and an unselected one
+     wears a rail of its own colour, which puts the ramp on screen before
+     anything is tapped. The rail is absolutely positioned, so it costs no
+     layout on a label as long as "Зарождающийся". */
+  .sevseg button, .gradeseg button{position:relative;overflow:hidden;}
+  .sevseg button::before, .gradeseg button::before{content:"";position:absolute;
+    left:0;top:0;bottom:0;width:4px;background:var(--rail,transparent);transition:opacity .12s;}
+  .sevseg button.on::before, .gradeseg button.on::before{opacity:0;}
+  .sevseg button.s-NOF, .gradeseg button.g-A{--rail:var(--good);}
+  .sevseg button.s-INC, .gradeseg button.g-B{--rail:var(--warning);}
+  .sevseg button.s-DEG, .gradeseg button.g-C{--rail:var(--serious);}
+  .sevseg button.s-CRI, .gradeseg button.g-X{--rail:var(--critical);}
+  .sevseg button.s-NOF.on{background:var(--good);color:#fff;border-color:transparent;}
+  .sevseg button.s-INC.on{background:var(--warning);color:#111;border-color:transparent;}
+  .sevseg button.s-DEG.on{background:var(--serious);color:#fff;border-color:transparent;}
+  .sevseg button.s-CRI.on{background:var(--critical);color:#fff;border-color:transparent;}
   .btn{display:block;width:100%;min-height:44px;padding:10px 14px;border-radius:12px;border:none;font-size:15.5px;font-weight:700;cursor:pointer;
     font-family:inherit;transition:opacity .1s;}
   .btn:active{opacity:.86;}
@@ -564,6 +597,9 @@
   .mrow{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;margin-bottom:2px;}
   .mrow > label.fld{flex:0 0 132px;margin-bottom:0;}
   .mrow > .ucread{flex:1 1 150px;min-width:0;margin:0 0 3px;}
+  /* Stated rather than left to source order: both selectors weigh the same, so
+     whichever came last would silently decide how wide the gauge is. */
+  .mrow > .ucread.wg{flex:1 1 100%;}
   /* Quiet by default: it is a planning number, not a verdict, and the verdict
      is on the line above it. It speaks up only when the answer is short. */
   .ucfcast{font-size:12px;color:var(--ink-2);margin:0 0 6px;line-height:1.45;
@@ -571,8 +607,13 @@
   .ucfcast.quiet{color:var(--muted);}
   .ucfcast.soonout{color:var(--warn-ink);font-weight:650;}
   .prog{flex:0 0 100%;display:flex;align-items:center;gap:10px;margin:0 0 8px;}
-  .prog .pb{flex:1 1 auto;min-width:0;height:8px;border-radius:999px;
-    background:var(--surface-3);overflow:hidden;}
+  /* It answers "am I nearly done", which is the question that decides whether
+     somebody finishes a thirty-six point round or drifts off it — and it was
+     an 8px grey sliver, the least visible thing on a screen full of buttons.
+     A recessed channel, tall enough to see from arm's length in a glove. */
+  .prog .pb{flex:1 1 auto;min-width:0;height:12px;border-radius:999px;
+    background:var(--surface-3);overflow:hidden;
+    box-shadow:inset 0 1px 2px rgba(0,0,0,.14);}
   /* Neutral, deliberately. The first version filled it with the round's own
      colour, which on the undercarriage put a green bar two centimetres above a
      green "19 serviceable" dot — and on temperature a bronze one above an amber
@@ -581,8 +622,8 @@
      one moment green means something here: finished. */
   .prog .pb i{display:block;height:100%;border-radius:999px;background:var(--ink-2);
     transition:width .18s ease;}
-  .prog b{flex:0 0 auto;font:700 12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
-    color:var(--ink-2);font-variant-numeric:tabular-nums;}
+  .prog b{flex:0 0 auto;font:800 14px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+    color:var(--ink-2);font-variant-numeric:tabular-nums;letter-spacing:-.02em;}
   /* Finishing a round is the only moment in this app worth marking. Not
      fireworks — the bar goes green and says so, once. */
   .prog.full .pb i{background:var(--good);}
@@ -610,6 +651,62 @@
   .ucread .b-watch{background:color-mix(in srgb,var(--warning) 16%,var(--surface));color:var(--warn-ink);}
   .ucread .b-act{background:color-mix(in srgb,var(--critical) 12%,var(--surface));color:var(--critical);}
   .ucread .src{color:var(--muted);font-size:12px;}
+  /* ── the wear gauge ───────────────────────────────────────────────────────
+     The whole job is one question: where is this part between new and scrap.
+     That was answered by three small separate things — a grey line of limits
+     above the field, a number in a box, and a percentage in the same 15px as
+     everything else — so the reading had no more presence on screen than the
+     optional work-order field at the bottom.
+
+     One instrument instead. The track runs new → condemn, the pin sits where
+     the reading landed, and the amber and red zones are drawn in place so the
+     inspector sees the part approaching the limit rather than being told a
+     number and left to know what 80% means. Full width on its own line: the
+     measured field keeps its 132px beside the label, and the gauge drops under
+     the row rather than being squeezed into what is left of it. */
+  .ucread.wg{flex:1 1 100%;display:grid;grid-template-columns:auto 1fr;
+    gap:5px 12px;align-items:center;margin:2px 0 12px;}
+  .wg-b{display:flex;flex-direction:column;gap:4px;min-width:0;}
+  .wg-f{grid-column:2;display:flex;flex-wrap:wrap;align-items:center;gap:5px 9px;min-width:0;}
+  .wg-n{grid-row:span 2;display:flex;align-items:baseline;gap:1px;line-height:1;}
+  .wg-n b{font:800 30px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+    font-variant-numeric:tabular-nums;letter-spacing:-.02em;}
+  .wg-n i{font:700 13px/1 system-ui,sans-serif;font-style:normal;color:var(--muted);}
+  .wg.b-ok .wg-n b{color:var(--good);}
+  .wg.b-watch .wg-n b{color:var(--warn-ink);}
+  .wg.b-act .wg-n b{color:var(--critical);}
+  /* The channel is drawn as a channel — recessed, with the two limit zones
+     painted into it — so it reads as a scale and not as a progress bar. The
+     two are different claims and they are eight millimetres apart on screen. */
+  .wg-t{position:relative;height:14px;border-radius:7px;overflow:hidden;
+    background:linear-gradient(90deg,
+      color-mix(in srgb,var(--good) 26%,var(--surface-2)) 0 80%,
+      color-mix(in srgb,var(--warning) 40%,var(--surface-2)) 80% 100%);
+    box-shadow:inset 0 1px 2px rgba(0,0,0,.16);}
+  /* Travelled, not filled. The first version put a 42% ink wash over the zones
+     and turned a green-to-amber scale into two shades of mud — the fill was
+     hiding the very thing it sat on. It is a shadow now: enough to read how far
+     along the part is, light enough that the zone under it still says which
+     zone it is. */
+  .wg-t u{position:absolute;inset:0 0 0 0;width:var(--w,0%);max-width:100%;
+    background:rgba(0,0,0,.13);border-radius:7px 0 0 7px;text-decoration:none;
+    transition:width .28s cubic-bezier(.2,.7,.3,1);}
+  /* Past condemn the pin would sit off the end of the track and say nothing.
+     It pins to the edge and the whole channel goes red instead. */
+  .wg.b-act .wg-t{background:color-mix(in srgb,var(--critical) 26%,var(--surface-2));}
+  /* The mark sits inside the channel, not over it. An overhanging pin was
+     clipped by the channel's own overflow anyway, and a mark flush with the
+     scale is what a scale actually looks like. */
+  .wg-t i{position:absolute;top:0;bottom:0;width:3px;
+    background:var(--ink);left:var(--p,0%);margin-left:-1.5px;
+    transition:left .28s cubic-bezier(.2,.7,.3,1);}
+  .wg-e{display:flex;justify-content:space-between;gap:8px;
+    font:600 10.5px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;
+    color:var(--muted);letter-spacing:.02em;text-transform:uppercase;}
+  .wg-e span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .wg .band{grid-column:2;justify-self:start;}
+  @media (prefers-reduced-motion:reduce){
+    .wg-t u,.wg-t i{transition:none;} }
   .ucwarn{background:color-mix(in srgb,var(--critical) 12%,var(--surface));border:1px solid var(--critical);border-radius:12px;
     padding:12px 13px;margin:0 0 12px;}
   .ucwarn .uw-t{font-size:13.5px;line-height:1.5;color:var(--critical);font-weight:600;}
@@ -1459,25 +1556,25 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="native.js?v=94"></script>
-<script src="upload-defaults.js?v=94"></script>
-<script src="hme.js?v=94"></script>
-<script src="mp-fc.js?v=94"></script>
-<script src="hme-cascade.js?v=94"></script>
-<script src="assets.js?v=94"></script>
-<script src="temp-limits.js?v=94"></script>
-<script src="wear.js?v=94"></script>
-<script src="wear-figs.js?v=94"></script>
-<script src="wear-map.js?v=94"></script>
-<script src="machine-photos.js?v=94"></script>
-<script src="machine-fig.js?v=94"></script>
-<script src="get.js?v=94"></script>
-<script src="uc-points.js?v=94"></script>
-<script src="inspect-guide.js?v=94"></script>
-<script src="get-figs.js?v=94"></script>
-<script src="body-points.js?v=94"></script>
-<script src="body-map.js?v=94"></script>
-<script src="report-core.js?v=94"></script>
+<script src="native.js?v=95"></script>
+<script src="upload-defaults.js?v=95"></script>
+<script src="hme.js?v=95"></script>
+<script src="mp-fc.js?v=95"></script>
+<script src="hme-cascade.js?v=95"></script>
+<script src="assets.js?v=95"></script>
+<script src="temp-limits.js?v=95"></script>
+<script src="wear.js?v=95"></script>
+<script src="wear-figs.js?v=95"></script>
+<script src="wear-map.js?v=95"></script>
+<script src="machine-photos.js?v=95"></script>
+<script src="machine-fig.js?v=95"></script>
+<script src="get.js?v=95"></script>
+<script src="uc-points.js?v=95"></script>
+<script src="inspect-guide.js?v=95"></script>
+<script src="get-figs.js?v=95"></script>
+<script src="body-points.js?v=95"></script>
+<script src="body-map.js?v=95"></script>
+<script src="report-core.js?v=95"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -1753,7 +1850,7 @@ const I18N = {
     uc_noscore:"Recorded, not scored",
     uc_noref:"No reference for this model",
     uc_band_ok:"Serviceable", uc_band_watch:"Watch", uc_band_act:"At or past condemn",
-    uc_toGo:"{n} mm to condemn",
+    uc_toGo:"{n} mm to condemn", uc_past:"{n} mm past condemn", uc_g_new:"new {n}", uc_g_cond:"condemn {n}",
     uc_src_catalogue:"vs the model reference",
     uc_src_baseline:"vs the baseline set",
     uc_base_tog:"This part is new / just fitted",
@@ -2060,7 +2157,7 @@ const I18N = {
     uc_noscore:"Записано, без оценки",
     uc_noref:"Нет эталона для этой модели",
     uc_band_ok:"Годен", uc_band_watch:"Наблюдать", uc_band_act:"Достиг предела износа",
-    uc_toGo:"до предела {n} мм",
+    uc_toGo:"до предела {n} мм", uc_past:"за пределом на {n} мм", uc_g_new:"новое {n}", uc_g_cond:"предел {n}",
     uc_src_catalogue:"по эталону модели",
     uc_src_baseline:"по базовому замеру от",
     uc_base_tog:"Деталь новая / только что установлена",
@@ -3649,6 +3746,10 @@ function renderUC(){
   const p=posRO(), ref=ucRef(), mm=(p.mm==null?null:Number(p.mm));
   // what the number means
   let h="";
+  /* The gauge is the only state that changes this element's shape, so the class
+     is set on every path rather than only where it turns on — a scale left
+     behind on a point with no reference was the first thing this got wrong. */
+  box.className="ucread";
   if(mm==null){ box.innerHTML = p.reason ? '<span class="band b-watch">'+t("uc_notmeasured")+'</span>'+
       '<span class="src">'+ucReasonLabel(p.reason)+'</span>' : "";
   } else {
@@ -3656,9 +3757,27 @@ function renderUC(){
     const pct = bad ? null : (ref ? WEAR.wear(ref, mm) : null);
     if(pct!=null){
       const b=ucBand(pct), left = ref.d==="grow" ? ref.c-mm : mm-ref.c;
-      h += '<b>'+Math.round(pct)+'%</b>';
-      h += '<span class="band b-'+b+'">'+t("uc_band_"+b)+'</span>';
-      h += '<span class="src">'+t("uc_toGo",{n:Math.abs(left).toFixed(1)})+'</span>';
+      /* The same three facts this line always carried — the percentage, the
+         verdict and the millimetres left — drawn as one scale instead of three
+         fragments, so "where is this part between new and scrap" is answered by
+         looking rather than by reading a number and knowing what 80% means.
+         The pin is clamped: past condemn it parks on the end of the track and
+         the whole channel turns, which says more than a marker floating
+         somewhere off the right-hand edge of the screen. */
+      const pin = Math.max(0, Math.min(100, pct));
+      h += '<div class="wg-n"><b>'+Math.round(pct)+'</b><i>%</i></div>';
+      h += '<div class="wg-b">'
+         +   '<div class="wg-t" style="--w:'+pin+'%;--p:'+pin+'%"><u></u><i></i></div>'
+         +   '<div class="wg-e"><span>'+esc(t("uc_g_new",{n:ref.n}))+'</span>'
+         +     '<span>'+esc(t("uc_g_cond",{n:ref.c}))+'</span></div>'
+         + '</div>';
+      /* "2.8 mm to condemn" on a part that is 2.8 mm PAST condemn — the
+         absolute value was hiding the sign, and the gauge put that sentence
+         next to a red 115% where it plainly contradicted itself. */
+      h += '<div class="wg-f"><span class="band b-'+b+'">'+t("uc_band_"+b)+'</span>'
+         + '<span class="src">'+t(left<0?"uc_past":"uc_toGo",{n:Math.abs(left).toFixed(1)})
+         + '</span></div>';
+      box.className = "ucread wg b-"+b;
     } else if(ref && ref.x){
       h += '<span class="band b-watch">'+t("uc_noscore")+'</span><span class="src">'+
            t("uc_x_"+ref.x)+'</span>';
@@ -4391,6 +4510,16 @@ async function renderUCLast(){
     if(ch>0.15) el.classList.add("jump");
   }
 }
+/* Is the gauge on screen right now. One answer, asked by the two places that
+   would otherwise drift: the gauge itself, and the reference line above it that
+   must not repeat the two numbers the gauge is already drawing. */
+function ucGaugeOn(){
+  if(bodyType() || !TYPE_META[type].wear) return false;
+  const p=posRO(), ref=ucRef(), mm=(p.mm==null?null:Number(p.mm));
+  if(mm==null || !ref || ref.x) return false;
+  if(WEAR.implausible(ref, mm)) return false;
+  return WEAR.wear(ref, mm) != null;
+}
 function renderUCRef(){
   const el=$("ucRefLine"); if(!el) return;
   if(bodyType()){
@@ -4405,8 +4534,12 @@ function renderUCRef(){
   if(ref.x){ el.textContent=t("uc_ref_span",{n:fmtMM(ref.n),c:fmtMM(ref.c)})+" · "+t("uc_x_"+ref.x);
     el.className="ucref none"; return; }
   const dir=t(ref.d==="grow"?"uc_dir_up":"uc_dir_down");
-  el.textContent=t("uc_ref_span",{n:fmtMM(ref.n),c:fmtMM(ref.c)})+" · "+dir
-    +" · "+t("uc_src_"+ref.src)+(ref.from?" "+ref.from:"");
+  /* Once the gauge is drawn it carries new and condemn on its own ends, and
+     printing them again here spent two lines of a small screen saying what the
+     inspector had just looked at. What is left is what the gauge cannot say:
+     which way the number moves, and where the limit came from. */
+  el.textContent=(ucGaugeOn() ? "" : t("uc_ref_span",{n:fmtMM(ref.n),c:fmtMM(ref.c)})+" · ")
+    +dir+" · "+t("uc_src_"+ref.src)+(ref.from?" "+ref.from:"");
   el.className="ucref";
 }
 const fmtMM = v => v==null ? "—" : String(Math.round(v*100)/100);
@@ -5924,7 +6057,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="94";
+const BUILD="95";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
