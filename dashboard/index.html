@@ -103,11 +103,25 @@
   .pos{border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--surface);}
   .pos .photo{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:var(--surface-2);cursor:zoom-in;}
   .pos .nophoto{width:100%;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;color:var(--muted);background:var(--surface-2);font-size:12px;}
+  /* The phone allows four photographs and a video per component. One of them is
+     downloaded; the badge says what else is there and the viewer fetches it when
+     somebody actually asks to see it. */
+  .shots{position:relative;cursor:zoom-in;}
+  .shots .cnt{position:absolute;right:7px;bottom:7px;display:flex;gap:5px;align-items:center;
+    background:rgba(12,16,20,.74);color:#fff;border-radius:999px;padding:2px 9px;
+    font-size:11px;font-weight:650;letter-spacing:.02em;pointer-events:none;}
+  .shots .cnt i{font-style:normal;}
+  .shots .pend{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    background:var(--surface-2);color:var(--muted);font-size:12px;}
+  /* the supervisor's signature, captured on the phone and printed on the report */
+  .sig{display:flex;align-items:center;gap:8px;}
+  .sig img{height:26px;max-width:120px;object-fit:contain;background:#fff;border-radius:4px;padding:1px 4px;}
   .pos .body{padding:10px 12px;} .pos .body .pk{font-weight:640;font-size:13px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
   .pos .body .pl{color:var(--muted);font-size:11.5px;margin-bottom:6px;}
   .pos dl{margin:6px 0 0;display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:12px;}
   .pos dt{color:var(--muted);} .pos dd{margin:0;text-align:right;}
   .pos .cm{margin-top:6px;font-size:12px;color:var(--ink-2);font-style:italic;}
+  .pos dd b.tbad{color:var(--critical);}
   .lang{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;}
   .lang button{background:var(--surface);color:var(--ink-2);border:0;padding:7px 11px;font:inherit;
     font-size:12px;font-weight:650;cursor:pointer;}
@@ -158,6 +172,8 @@
   .sheetbody .lede{margin:0 0 16px;color:var(--ink-2);font-size:13px;}
   .srccard{border:1px solid var(--border);border-radius:12px;margin-bottom:14px;overflow:hidden;background:var(--surface);}
   .srccard.on{border-color:var(--accent);}
+  .srccard.warn{border-color:var(--critical);}
+  .srccard.warn .srchead .state{color:var(--critical);font-weight:650;}
   .srchead{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;background:var(--surface-2);}
   .srchead .ico{font-size:20px;line-height:1;} .srchead b{font-size:14px;}
   .srchead .muted{font-size:12px;margin-top:3px;}
@@ -174,9 +190,19 @@
   .src .dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex:none;}
   .src.live .dot{background:var(--good);} .src.live{color:var(--ink);}
   .lb{position:fixed;inset:0;background:rgba(0,0,0,.86);display:none;align-items:center;justify-content:center;z-index:100;padding:30px;}
-  .lb.open{display:flex;} .lb img{max-width:100%;max-height:82vh;border-radius:8px;}
+  .lb.open{display:flex;} .lb img,.lb video{max-width:100%;max-height:82vh;border-radius:8px;}
   .lb .cap{position:absolute;bottom:20px;left:0;right:0;text-align:center;color:#eee;font-size:13px;}
   .lb .x{position:absolute;top:18px;right:22px;color:#fff;font-size:30px;background:none;border:none;cursor:pointer;}
+  /* four photographs and a video is a gallery, not a single image */
+  .lb .nav{position:absolute;top:50%;transform:translateY(-50%);color:#fff;font-size:34px;
+    background:rgba(255,255,255,.09);border:none;cursor:pointer;width:52px;height:76px;border-radius:8px;}
+  .lb .nav:hover{background:rgba(255,255,255,.2);} .lb .nav[disabled]{opacity:.22;cursor:default;}
+  .lb .nav.prev{left:14px;} .lb .nav.next{right:14px;}
+  .lb .thumbs{position:absolute;top:18px;left:0;right:0;display:flex;justify-content:center;gap:7px;}
+  .lb .thumbs button{width:44px;height:34px;border-radius:5px;border:2px solid transparent;padding:0;
+    background:rgba(255,255,255,.14);cursor:pointer;overflow:hidden;color:#fff;font-size:15px;line-height:30px;}
+  .lb .thumbs button.on{border-color:#fff;}
+  .lb .thumbs img{width:100%;height:100%;object-fit:cover;display:block;border-radius:0;}
   .hidden{display:none!important;}
   .legend{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;font-size:12.5px;color:var(--ink-2);margin-top:12px;}
   .legend .sw{width:13px;height:13px;border-radius:4px;display:inline-block;margin-right:5px;vertical-align:-2px;}
@@ -204,12 +230,21 @@
   .pill.w{color:#3d2c00;}
   .grade{display:inline-block;min-width:17px;text-align:center;color:#fff;font-size:10px;
     font-weight:800;border-radius:3px;padding:1px 5px;line-height:1.4;}
+  /* is it getting worse — a bar per round, oldest on the left */
+  .spark{display:inline-flex;align-items:center;gap:7px;font-size:11px;color:var(--muted);}
+  .spark .bars{display:inline-flex;align-items:flex-end;gap:2px;height:26px;}
+  .spark .bars i{width:5px;border-radius:1px;display:block;}
+  .spark b{font-weight:650;}
+  .spark.worse{color:var(--critical);}
   /* wear */
   .wb{display:block;height:5px;background:var(--surface-3);border-radius:3px;overflow:hidden;min-width:52px;}
   .wb i{display:block;height:5px;border-radius:3px;}
   .ucgrid{display:grid;grid-template-columns:1fr 1fr;gap:0 26px;padding:0 16px 16px;}
   @media (max-width:820px){ .ucgrid{grid-template-columns:1fr;} }
   table.grid.wear td{font-size:12px;padding:6px 8px;}
+  /* the forecast, under the point it belongs to */
+  .life{font-size:10.5px;color:var(--ink-2);margin-top:2px;}
+  .life.soon{color:var(--serious);font-weight:650;}
   .ucsum{margin:12px 16px 0;padding:8px 12px;border-radius:6px;font-size:12.5px;font-weight:650;}
   .ucsum .muted{font-weight:400;}
   .ucsum.ok{background:color-mix(in srgb,var(--good) 12%,var(--surface));color:var(--good);}
@@ -262,6 +297,23 @@
                here, once, instead of leaving it to a tooltip nobody hovers. -->
           <p class="sub" style="margin:10px 0 0" data-i18n="ds_btnhelp">This page checks Drive by itself every few minutes and when you come back to the tab, so a round uploaded from a phone appears on its own. “Load from Drive” asks now instead of waiting. “Reload everything” re-reads the whole folder from scratch — only needed after files are deleted or renamed in Drive, because a normal check asks “what is new?” and cannot notice something disappearing.</p>
           <div class="msg" id="drvMsg"></div>
+        </div>
+      </div>
+
+      <!-- The layout has changed twice and the old files never moved. Nothing
+           broke, because every reader matches on file names — which is exactly
+           why nobody noticed the folder had become unnavigable by hand. -->
+      <div class="srccard" id="cardOrg">
+        <div class="srchead"><span class="ico">🗂</span><div><b data-i18n="org_title">Tidy the Drive folder</b>
+          <div class="muted" data-i18n="org_sub">Files the phones sent under older layouts are still where those builds put them — the root, or a month folder. This re-files everything as inspection type → unit → date, which is how a person looks for a round. Files are moved and nothing else: nothing is renamed, nothing is trashed, and because every reader here and on the phones finds files by name, the dashboard shows exactly the same inspections afterwards.</div></div>
+          <span class="state" id="stOrg">—</span></div>
+        <div class="srcbody">
+          <div class="field"><label for="orgAdmin" data-i18n="org_admin">Admin password (only if one is set)</label>
+            <input id="orgAdmin" type="password" autocomplete="off" data-i18n-ph="org_adminph" placeholder="leave blank if ADMIN_SECRET is ''"></div>
+          <div class="row"><button class="btn primary" id="orgDry" data-i18n="org_dry">Preview what would move</button>
+            <button class="btn" id="orgGo" data-i18n="org_go">Move the files</button></div>
+          <div class="msg" id="orgMsg"></div>
+          <div class="msg" id="orgPlan"></div>
         </div>
       </div>
 
@@ -342,12 +394,17 @@
   </div>
 </div>
 
+<!-- Four people read this page and they do not read the same part of it. The
+     title on each tab says whose question it answers, because a maintenance
+     planner opening "Failure modes" and a reliability engineer opening "Action
+     register" have both gone to the wrong screen. -->
 <nav class="tabs" id="tabs">
-  <button data-tab="overview" class="active" data-i18n="tab_overview">Overview</button>
-  <button data-tab="failure" data-i18n="tab_failure">Failure modes</button>
-  <button data-tab="actions" data-i18n="tab_actions">Action register</button>
-  <button data-tab="equipment" data-i18n="tab_equipment">Equipment history</button>
-  <button data-tab="reports" data-i18n="tab_reports">Reports</button>
+  <button data-tab="overview" class="active" data-i18n="tab_overview" data-i18n-title="who_overview" title="Everyone — the fleet in one screen">Overview</button>
+  <button data-tab="equipment" data-i18n="tab_equipment" data-i18n-title="who_equipment" title="Inspectors — one machine, every round, every photograph">Equipment history</button>
+  <button data-tab="actions" data-i18n="tab_actions" data-i18n-title="who_actions" title="Maintenance — what needs work, worst first">Action register</button>
+  <button data-tab="coverage" data-i18n="tab_coverage" data-i18n-title="who_coverage" title="Planning — what is overdue and what is due soon">Coverage</button>
+  <button data-tab="failure" data-i18n="tab_failure" data-i18n-title="who_failure" title="Reliability — which failure modes to eliminate, and how findings are being detected">Failure modes</button>
+  <button data-tab="reports" data-i18n="tab_reports" data-i18n-title="who_reports" title="Management — the printed record">Reports</button>
 </nav>
 
 <main>
@@ -390,6 +447,11 @@
       <div class="sub" data-i18n="s_iso_sub">Table B.2 mechanism classes — comparable across sites and benchmarks.</div>
       <div class="pareto" id="paretoIso"></div>
     </div>
+    <div class="section">
+      <h2 data-i18n="s_detect">How the findings were detected</h2>
+      <div class="sub" data-i18n="s_detect_sub">ISO 14224 Table B.3. This is the programme's own scorecard: findings raised by oil analysis, thermography or vibration are condition monitoring working; findings raised after a breakdown are it being overtaken.</div>
+      <div class="pareto" id="paretoDetect"></div>
+    </div>
   </section>
 
   <section id="tab-actions" class="hidden">
@@ -398,6 +460,20 @@
       <div class="sub" data-i18n="s_act_sub">Every finding that needs work, worst first. Export to CSV to hand to planning.</div>
       <div style="margin-bottom:12px"><button class="btn" id="csvBtn" data-i18n="csv">⬇ Export CSV</button></div>
       <div class="tblwrap"><table class="grid" id="actionTbl"></table></div>
+    </div>
+  </section>
+
+  <!-- What the phone's System screen shows the inspector, from the desk: which
+       machines are overdue and which are about to be. Same intervals, same
+       arithmetic — a unit that reads "overdue" in the pit must not read "fine"
+       here, or the two ends are running different programmes. -->
+  <section id="tab-coverage" class="hidden">
+    <div class="kpis" id="covKpis"></div>
+    <div class="section">
+      <h2 data-i18n="s_cov">Inspection coverage</h2>
+      <div class="sub" data-i18n="s_cov_sub">Every unit with recorded history, against the interval set for its inspection type. Click a unit to open its history.</div>
+      <div class="controls" id="covIntervals"></div>
+      <div class="tblwrap"><table class="grid" id="covTbl"></table></div>
     </div>
   </section>
 
@@ -439,7 +515,12 @@
     </div>
   </section>
 
-<div class="lb" id="lb"><button class="x" id="lbx">&times;</button><img id="lbimg" alt=""><div class="cap" id="lbcap"></div></div>
+<div class="lb" id="lb"><button class="x" id="lbx">&times;</button>
+  <div class="thumbs" id="lbthumbs"></div>
+  <button class="nav prev" id="lbprev">&lsaquo;</button>
+  <img id="lbimg" alt=""><video id="lbvid" controls playsinline style="display:none"></video>
+  <button class="nav next" id="lbnext">&rsaquo;</button>
+  <div class="cap" id="lbcap"></div></div>
 
 <!-- ?v= on every shared file, and it is the phones' build number.
      index.html and report-core.js are one program split across two files: the
@@ -448,28 +529,28 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=95"></script>
-<script src="../mobile/hme.js?v=95"></script>
-<script src="../mobile/mp-fc.js?v=95"></script>
-<script src="../mobile/hme-cascade.js?v=95"></script>
-<script src="../mobile/temp-limits.js?v=95"></script>
+<script src="../data/magnetic_plug.js?v=96"></script>
+<script src="../mobile/hme.js?v=96"></script>
+<script src="../mobile/mp-fc.js?v=96"></script>
+<script src="../mobile/hme-cascade.js?v=96"></script>
+<script src="../mobile/temp-limits.js?v=96"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=95"></script>
-<script src="../mobile/wear.js?v=95"></script>
-<script src="../mobile/wear-map.js?v=95"></script>
-<script src="../mobile/machine-photos.js?v=95"></script>
-<script src="../mobile/machine-fig.js?v=95"></script>
-<script src="../mobile/get.js?v=95"></script>
-<script src="../mobile/uc-points.js?v=95"></script>
-<script src="../mobile/inspect-guide.js?v=95"></script>
-<script src="../mobile/get-figs.js?v=95"></script>
-<script src="../mobile/body-points.js?v=95"></script>
-<script src="../mobile/body-map.js?v=95"></script>
-<script src="../mobile/jspdf.umd.min.js?v=95"></script>
-<script src="../mobile/html2canvas.min.js?v=95"></script>
-<script src="../mobile/report-core.js?v=95"></script>
+<script src="../mobile/assets.js?v=96"></script>
+<script src="../mobile/wear.js?v=96"></script>
+<script src="../mobile/wear-map.js?v=96"></script>
+<script src="../mobile/machine-photos.js?v=96"></script>
+<script src="../mobile/machine-fig.js?v=96"></script>
+<script src="../mobile/get.js?v=96"></script>
+<script src="../mobile/uc-points.js?v=96"></script>
+<script src="../mobile/inspect-guide.js?v=96"></script>
+<script src="../mobile/get-figs.js?v=96"></script>
+<script src="../mobile/body-points.js?v=96"></script>
+<script src="../mobile/body-map.js?v=96"></script>
+<script src="../mobile/jspdf.umd.min.js?v=96"></script>
+<script src="../mobile/html2canvas.min.js?v=96"></script>
+<script src="../mobile/report-core.js?v=96"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* The 1C defect & cause matrix, the same file the phones carry. Records already
@@ -555,7 +636,7 @@ const I18N={
 
   th_unit:"Unit", th_type:"Type", th_date:"Date", th_worst:"Worst severity",
   th_find:"Findings", th_topdef:"Top defect", th_by:"Inspector",
-  th_sev:"Sev", th_comp:"Component", th_defect:"Defect", th_cause:"Direct cause",
+  th_sev:"Sev", th_comp:"Component", th_defect:"Defect", th_cause:"Direct cause", th_detect:"How found",
   th_action:"Action", th_prio:"Priority", th_wo:"WO", th_byshort:"By",
 
   e_nofilter:"No inspections match the filters.", e_nothing:"Nothing outstanding.",
@@ -566,6 +647,9 @@ const I18N={
   e_defect_tail:"defect. Inspectors pick one from the defect list in the app; older graded-only rounds have none.",
   e_cause_tail:"cause. A cause is recorded after a defect is chosen.",
   e_iso_tail:"ISO 14224 mechanism. It is derived from the defect, so coding defects fills this in too.",
+  e_detect_tail:"detection method. The app defaults every position to DM-02 Visual inspection, so blanks here are rounds captured before the field existed.",
+  s_detect:"How the findings were detected",
+  s_detect_sub:"ISO 14224 Table B.3. This is the programme's own scorecard: findings raised by oil analysis, thermography or vibration are condition monitoring working; findings raised after a breakdown are it being overtaken.",
 
   ds_lede1:"An inspection is", ds_records:"records", ds_lede2:"(readings, grades, defects) plus",
   ds_photos:"photos",
@@ -660,12 +744,71 @@ const I18N={
   dl_connected:"✅ Connected — folder “{x}”.", dl_needurl:"Paste the /exec URL first.",
   dl_readonly:"Reading works, writing does not — the deployed version is older than the code.",
   dl_noreader:"Drive reader did not load — reload the page.",
+  /* The folder walk hit its ceiling. This is not a warning about speed — it
+     means inspections that exist in Drive are NOT on this screen, so it has to
+     read as the data problem it is. */
+  dl_capped:" ⚠️ That folder holds more files than one read can walk, so some inspections are missing from this screen. Tidy the Drive folder below, or archive finished years into a separate folder.",
+
+  org_title:"Tidy the Drive folder",
+  org_sub:"Files the phones sent under older layouts are still where those builds put them — the root, or a month folder. This re-files everything as inspection type → unit → date, which is how a person looks for a round. Files are moved and nothing else: nothing is renamed, nothing is trashed, and because every reader here and on the phones finds files by name, the dashboard shows exactly the same inspections afterwards.",
+  org_admin:"Admin password (only if one is set)", org_adminph:"leave blank if ADMIN_SECRET is ''",
+  org_dry:"Preview what would move", org_go:"Move the files",
+  org_needdrive:"Set the /exec URL above first.",
+  org_checking:"Working out what would move…", org_moving:"Moving files…",
+  org_progress:"Moved {n}… {r} still to go.",
+  org_would:"{n} file(s) would move, out of {s} looked at. Nothing has been moved.",
+  org_moved:"✅ {n} file(s) moved, out of {s} looked at.",
+  org_failed:"{n} could not be moved.",
+  org_more:"{n} still to go — press again to continue.",
+  org_examples:"For example:", org_unknown:"Left alone — the name does not say where these belong:",
+  org_st_plan:"{n} to move", org_st_done:"{n} moved",
+  ds_capped:"folder too large to walk in one read — inspections are missing",
   fold_read:"{d}: {n} inspection(s) from {f} file(s), {p} photo(s).",
   fold_bad:" {n} json file(s) were not inspection data.",
   fold_nojson:" No .json sidecars found — this folder has photos only.",
   fold_fail:"Could not read that folder: {e}",
   month_insp:"{m} · {n} inspection(s)",
   hist_none:"No inspections recorded.",
+
+  th_trend:"Trend",
+  tab_coverage:"Coverage",
+  who_overview:"Everyone — the fleet in one screen",
+  who_equipment:"Inspectors — one machine, every round, every photograph",
+  who_actions:"Maintenance — what needs work, worst first",
+  who_coverage:"Planning — what is overdue and what is due soon",
+  who_failure:"Reliability — which failure modes to eliminate, and how findings are being detected",
+  who_reports:"Management — the printed record",
+  s_cov:"Inspection coverage",
+  s_cov_sub:"Every unit with recorded history, against the interval set for its inspection type. Click a unit to open its history. The Period filter is ignored here — a 30-day window would hide the very rounds this is measuring.",
+  th_lastdone:"Last done", th_age:"Age", th_interval:"Interval (d)", th_due:"Due",
+  f_days:"interval, days",
+  due_days:"{n} d ago", due_over:"overdue {n} d", due_in:"due in {n} d", due_ok:"in date",
+  k_cov:"In date", k_cov_sub:"{n} of {total} unit/type rounds",
+  k_over:"Overdue", k_over_sub:"past the interval",
+  k_soon:"Due soon", k_soon_sub:"last quarter of the interval",
+  k_watched:"Units with history", k_watched_sub:"{n} unit/type combinations tracked",
+  trend_hdr:"Last {n} rounds", trend_worse:"getting worse", trend_steady:"steady",
+  trend_better:"improving",
+
+  /* how long has it got — the same words the phone uses at the point of
+     measurement, so the office and the pit read one forecast, not two */
+  uc_th_life:"Life left",
+  uc_f_left:"about {h} h left · wearing {r} mm per 1,000 h",
+  uc_f_far:"more than 50,000 h left at this rate",
+  uc_f_calendar:"estimated from dates, no hour meter",
+  uc_f_few:"one more reading and this will forecast a replacement date",
+  uc_f_soon:"too soon since the last reading to measure a rate",
+  uc_f_flat:"no measurable wear since the last reading",
+  uc_f_away:"reading has moved away from the limit — check it before trusting a trend",
+  uc_f_past:"at or past condemn",
+  uc_sum_life:"{n} point(s) inside 1,000 h of condemn",
+
+  /* the position card, and the photo viewer */
+  d_temp:"Temp", d_particles:"Particles", d_comph:"Comp hrs", d_oilh:"Oil hrs",
+  d_found:"How found", d_limit:"warn {w} · alarm {a} °C",
+  d_signed:"signed off on the phone",
+  d_nophoto:"no photo", d_photopend:"{n} photo(s) in Drive",
+  d_fetching:"fetching the rest…",
  },
  ru:{
   sub:"Панель парка", srcnone:"Нет данных — нажмите, чтобы подключить",
@@ -714,7 +857,7 @@ const I18N={
 
   th_unit:"Ед.", th_type:"Тип", th_date:"Дата", th_worst:"Худшая степень",
   th_find:"Находок", th_topdef:"Основной дефект", th_by:"Инспектор",
-  th_sev:"Степ.", th_comp:"Узел", th_defect:"Дефект", th_cause:"Причина",
+  th_sev:"Степ.", th_comp:"Узел", th_defect:"Дефект", th_cause:"Причина", th_detect:"Как выявлено",
   th_action:"Действие", th_prio:"Приоритет", th_wo:"Заявка", th_byshort:"Кто",
 
   e_nofilter:"Нет осмотров по этим фильтрам.", e_nothing:"Нет открытых позиций.",
@@ -725,6 +868,9 @@ const I18N={
   e_defect_tail:"дефект. Инспектор выбирает его из списка в приложении; в старых обходах только степени.",
   e_cause_tail:"причина. Причина указывается после выбора дефекта.",
   e_iso_tail:"механизм ISO 14224. Он выводится из дефекта — закодируйте дефекты, и это заполнится.",
+  e_detect_tail:"метод выявления. Приложение по умолчанию ставит DM-02 «Визуальный осмотр», поэтому пропуски — это обходы до появления поля.",
+  s_detect:"Как выявлены находки",
+  s_detect_sub:"ISO 14224, таблица B.3. Это оценка самой программы: находки от анализа масла, тепловизора или вибрации — это работающий мониторинг состояния; находки после отказа — это мониторинг, который опоздал.",
 
   ds_lede1:"Осмотр — это", ds_records:"записи", ds_lede2:"(замеры, степени, дефекты) плюс",
   ds_photos:"фото",
@@ -819,12 +965,65 @@ const I18N={
   dl_connected:"✅ Связь есть — папка «{x}».", dl_needurl:"Сначала вставьте адрес /exec.",
   dl_readonly:"Чтение работает, запись — нет: опубликованная версия старее кода.",
   dl_noreader:"Модуль чтения Диска не загрузился — перезагрузите страницу.",
+  dl_capped:" ⚠️ В папке больше файлов, чем можно обойти за одно чтение, поэтому часть осмотров на экран не попала. Наведите порядок в папке (ниже) или вынесите завершённые годы в отдельную папку.",
+
+  org_title:"Навести порядок в папке Диска",
+  org_sub:"Файлы, отправленные телефонами при прежних схемах, лежат там, где их оставили те сборки — в корне или в папке месяца. Здесь всё раскладывается как тип осмотра → единица → дата, то есть так, как обход ищет человек. Файлы только перемещаются: ничего не переименовывается и не удаляется, а так как и панель, и телефоны находят файлы по имени, набор осмотров после этого тот же самый.",
+  org_admin:"Пароль администратора (если он задан)", org_adminph:"оставьте пустым, если ADMIN_SECRET = ''",
+  org_dry:"Показать, что будет перемещено", org_go:"Переместить файлы",
+  org_needdrive:"Сначала укажите /exec URL выше.",
+  org_checking:"Считаем, что нужно переместить…", org_moving:"Перемещаем файлы…",
+  org_progress:"Перемещено {n}… осталось {r}.",
+  org_would:"Будет перемещено файлов: {n} из {s} просмотренных. Пока ничего не перемещено.",
+  org_moved:"✅ Перемещено файлов: {n} из {s} просмотренных.",
+  org_failed:"Не удалось переместить: {n}.",
+  org_more:"Осталось {n} — нажмите ещё раз, чтобы продолжить.",
+  org_examples:"Например:", org_unknown:"Оставлено на месте — имя не говорит, куда они относятся:",
+  org_st_plan:"к перемещению: {n}", org_st_done:"перемещено: {n}",
+  ds_capped:"папку не обойти за одно чтение — часть осмотров отсутствует",
   fold_read:"{d}: осмотров {n} из файлов {f}, фото {p}.",
   fold_bad:" Не являются данными осмотра: {n} json-файл(ов).",
   fold_nojson:" Файлы .json не найдены — в папке только фото.",
   fold_fail:"Не удалось прочитать папку: {e}",
   month_insp:"{m} · осмотров: {n}",
   hist_none:"Осмотры не записаны.",
+
+  th_trend:"Динамика",
+  tab_coverage:"Периодичность",
+  who_overview:"Всем — парк на одном экране",
+  who_equipment:"Инспекторам — одна машина, все обходы, все фото",
+  who_actions:"Ремонту — что требует работ, худшее сверху",
+  who_coverage:"Планированию — что просрочено и что скоро",
+  who_failure:"Надёжности — какие отказы устранять и как выявляются находки",
+  who_reports:"Руководству — печатный отчёт",
+  s_cov:"Периодичность осмотров",
+  s_cov_sub:"Каждая единица с историей — против интервала для её типа осмотра. Нажмите на единицу, чтобы открыть историю. Фильтр периода здесь не действует: окно в 30 дней скрыло бы именно те обходы, которые здесь измеряются.",
+  th_lastdone:"Последний", th_age:"Давность", th_interval:"Интервал, дн.", th_due:"Срок",
+  f_days:"интервал, дней",
+  due_days:"{n} дн. назад", due_over:"просрочено {n} дн.", due_in:"через {n} дн.", due_ok:"в сроке",
+  k_cov:"В сроке", k_cov_sub:"{n} из {total} пар единица/тип",
+  k_over:"Просрочено", k_over_sub:"интервал превышен",
+  k_soon:"Скоро", k_soon_sub:"последняя четверть интервала",
+  k_watched:"Единиц с историей", k_watched_sub:"отслеживается пар единица/тип: {n}",
+  trend_hdr:"Последние осмотры: {n}", trend_worse:"ухудшается", trend_steady:"без изменений",
+  trend_better:"улучшается",
+
+  uc_th_life:"Остаток ресурса",
+  uc_f_left:"осталось ок. {h} ч · износ {r} мм на 1000 ч",
+  uc_f_far:"при таком темпе более 50 000 ч",
+  uc_f_calendar:"оценка по датам, наработка не указана",
+  uc_f_few:"ещё один замер — и появится прогноз замены",
+  uc_f_soon:"слишком мало времени с прошлого замера для расчёта темпа",
+  uc_f_flat:"с прошлого замера износ не измеряется",
+  uc_f_away:"замер удалился от предела — проверьте, прежде чем строить тренд",
+  uc_f_past:"на пределе или за ним",
+  uc_sum_life:"точек до предела менее 1000 ч: {n}",
+
+  d_temp:"Темп.", d_particles:"Частицы", d_comph:"Наработка узла", d_oilh:"Наработка масла",
+  d_found:"Как выявлено", d_limit:"предупр. {w} · авария {a} °C",
+  d_signed:"подписано на телефоне",
+  d_nophoto:"нет фото", d_photopend:"фото на Диске: {n}",
+  d_fetching:"загружаем остальные…",
  },
 };
 let lang=localStorage.getItem("cm_dash_lang")||"en";
@@ -870,6 +1069,26 @@ const PRIORITIES=[
 const PRIO_BY={}; PRIORITIES.forEach(p=>PRIO_BY[p.k]=p);
 const prioName=(k,l)=>{ const p=PRIO_BY[String(k||"").toUpperCase()]; return p?(p[l||lang]||p.en):(k||""); };
 const prioClass=k=>{ const p=PRIO_BY[String(k||"").toUpperCase()]; return p?p.c:"n"; };
+/* ISO 14224 Table B.3, the same list the phone offers beside the severity. It
+   is what separates a condition-monitoring finding from a breakdown: a
+   programme that cannot say its findings came from DM-08 oil analysis or DM-09
+   vibration analysis cannot show it is working. The phone has recorded it on
+   every position since build 60 and the dashboard never once displayed it. */
+const DETECT_BY={}; (HME.detection||[]).forEach(d=>DETECT_BY[d.code]=d);
+const detectName=(k,l)=>{ const d=DETECT_BY[String(k||"").toUpperCase()];
+  return d?(d[l||lang]||d.en):(k||""); };
+/* A temperature is a number until it is put beside a limit. The phone judges
+   every reading against TEMP_LIMITS — matched on the component's code and both
+   its names — and suggests the severity from it. temp-limits.js has been loaded
+   here all along; nothing on this page ever asked it anything, so 96 °C on a
+   final drive and 96 °C on an electrical panel read identically. */
+function tempOf(it){
+  if(it.tempC===""||it.tempC==null||!window.tempLimit) return null;
+  const v=parseFloat(it.tempC); if(!isFinite(v)) return null;
+  const lim=tempLimit(`${it.key||""} ${it.label||""}`);
+  return { v, lim, sev:tempSeverity(v,lim),
+           over: v>=lim.alarm ? "alarm" : v>=lim.warn ? "warn" : "" };
+}
 const TYPE_ORDER=["MP","FC","INSP","TEMP","UC","GET","TB"];
 const TYPE_LABEL=new Proxy({},{ get:(_,k)=> TYPE_ORDER.indexOf(k)>=0?t("type_"+k):undefined });
 /* "Carries millimetres." Undercarriage demands them at every point; ground
@@ -901,6 +1120,10 @@ function wearOf(rec,it){
   const mm = (it.mm===""||it.mm==null) ? null : Number(it.mm);
   let n=it.newMM, c=it.condemnMM, pct=(it.wearPct===""||it.wearPct==null)?null:Number(it.wearPct),
       src=it.refSrc||"";
+  /* The resolved reference, carried out with the answer. WEAR.forecast needs the
+     condemn figure and the direction of travel, and re-deriving them at the call
+     site is how the two ends end up forecasting against different limits. */
+  let REF=null;
   const a=ASSET_BY[rec.equip];
   const i=String(it.key||"").indexOf("."), pt=i<0?it.key:String(it.key).slice(0,i),
         pos=i<0?"":String(it.key).slice(i+1);
@@ -916,6 +1139,9 @@ function wearOf(rec,it){
     if(L && mm!=null){ n=L.n; c=L.c; pct=Math.round(BODY.wear(bm, it.key, mm)); }
     else if(L){ n=L.n; c=L.c; pct=null; }
     else { n=null; c=null; pct=null; }
+    // A plate that wears thin shrinks; the tray table states both figures and
+    // nothing else, so the direction is read off them rather than assumed.
+    if(L) REF={ n:L.n, c:L.c, d:(L.c<L.n?"shrink":"grow") };
     src = bm ? ("tray:"+bm) : "";
   }
   else if(rec.type==="GET" && window.GET && a){
@@ -923,7 +1149,7 @@ function wearOf(rec,it){
        undercarriage table. Same shape of answer, so everything downstream is
        unchanged. */
     const ref=GET.refFor(rec.equip, a.cat||a.cls||"", a.m||"", pt);
-    if(ref){ n=ref.n; c=ref.c; src=ref.src||"";
+    if(ref){ n=ref.n; c=ref.c; src=ref.src||""; REF=ref;
       const w = mm==null ? null : WEAR.wear(ref,mm);
       pct = (w==null?null:Math.round(w)); }
     else { n=null; c=null; pct=null; src=""; }
@@ -933,17 +1159,75 @@ function wearOf(rec,it){
        limits, and printing "no reference for this model" against one that has a
        perfectly good reference is a lie about the data. */
     const ref=WEAR.refFor(rec.equip, a.m, pt, pos, rec.date);
-    if(ref && !ref.x){ n=ref.n; c=ref.c; src=ref.src;
+    if(ref && !ref.x){ n=ref.n; c=ref.c; src=ref.src; REF=ref;
       const w = mm==null ? null : WEAR.wear(ref,mm);
       pct = (w==null?null:Math.round(w)); }
-    else if(ref && ref.x){ n=ref.n; c=ref.c; src="x:"+ref.x; pct=null; }
+    /* A borrowed or disputed "new" stops the percentage and nothing else. The
+       forecast never uses "new" — it needs two readings and a condemn limit —
+       so the reference still travels and the life still gets worked out. */
+    else if(ref && ref.x){ n=ref.n; c=ref.c; src="x:"+ref.x; pct=null; REF=ref; }
     else { n=null; c=null; pct=null; src=""; }
   }
-  if(mm==null) return { mm:null, newMM:n, condemnMM:c, wearPct:null, band:"", refSrc:src,
+  if(mm==null) return { mm:null, newMM:n, condemnMM:c, wearPct:null, band:"", refSrc:src, ref:REF,
                         reason:it.reason||"", reasonLabel:it.reasonLabel||"" };
   return { mm, newMM:n, condemnMM:c, wearPct:pct, band:(pct==null?"":UC_BAND(pct)),
-           refSrc:src, stood:!!it.stood, reason:"", reasonLabel:"" };
+           refSrc:src, ref:REF, stood:!!it.stood, reason:"", reasonLabel:"" };
 }
+/* ---------- how long has it got ---------------------------------------------
+   A percentage says where a part is. It does not say when to order the
+   replacement, and that is the number planning actually asks for. WEAR.forecast
+   works it out from two dated readings and a condemn limit — the phone has shown
+   it at the point of measurement since build 90, and the office, which is where
+   parts are actually ordered, could not see it at all.
+
+   The phone can only forecast from what that phone has stored. The dashboard
+   holds every round from every phone, so its series is the longer one and its
+   answer is the better one. Nothing is guessed: forecast returns a reason
+   instead of a number whenever the honest answer is "not yet". */
+function wearSeries(equip,type,key,upTo){
+  const k=String(key);
+  /* Never forecast a past round from readings taken after it. Scrolling down the
+     history and seeing the same "2,800 h left" against every round back to
+     January is not a trend, it is today's answer stamped on dates that could not
+     have known it. Each round forecasts from what had been measured by then —
+     which is what it would have said at the time, and lets you watch the
+     estimate move as the readings come in. */
+  return RECS.filter(r=>r.equip===equip && r.type===type && !r._void
+                        && (!upTo || String(r.date||"")<=String(upTo)))
+    .map(r=>{
+      const it=(r.items||[]).find(x=>String(x.key)===k);
+      if(!it) return null;
+      const mm=(it.mm===""||it.mm==null)?null:Number(it.mm);
+      if(mm==null||!isFinite(mm)) return null;
+      return { mm, at:r.date||"", smu:(r.smu===""||r.smu==null)?null:r.smu };
+    })
+    .filter(Boolean)
+    .sort((a,b)=>String(a.at).localeCompare(String(b.at)));
+}
+function lifeOf(rec,it){
+  if(!isWearType(rec.type)||!(window.WEAR&&WEAR.forecast)) return null;
+  const w=wearOf(rec,it); if(!w||!w.ref||w.ref.c==null) return null;
+  /* Never extrapolate from a reading the reference itself is questioning. A
+     wear rate off an impossible millimetre is an impossible wear rate, and a
+     confident "about 400 h left" under a challenged number is the dashboard
+     arguing with itself. */
+  if(w.mm!=null && WEAR.implausible && WEAR.implausible(w.ref,w.mm)) return null;
+  return WEAR.forecast(w.ref, wearSeries(rec.equip,rec.type,it.key,rec.date));
+}
+/* The forecast in words. Hours are rounded to the nearest hundred because the
+   input is a caliper and two dates — printing "1,437 h" claims a precision the
+   measurement never had. */
+function lifeText(f){
+  if(!f) return "";
+  if(f.why) return t("uc_f_"+f.why)||"";
+  const h=Math.round(f.hours/100)*100;
+  if(h>50000) return t("uc_f_far");
+  return t("uc_f_left",{h:h.toLocaleString(lang==="ru"?"ru-RU":"en-GB"),
+                        r:(Math.round(f.rate*10)/10)})
+       + (f.basis==="days" ? " · "+t("uc_f_calendar") : "");
+}
+const lifeSoon = f => !!(f && !f.why && f.hours<=1000);
+
 /* One severity scale across the whole dashboard: a wear band is an ISO severity
    like any other finding, so worn points count in the mix, rank in the action
    register and colour a machine in the fleet table without a special case at
@@ -1113,8 +1397,12 @@ function matchesText(r,q){
 }
 /* inclVoid lets a caller ask the same question with the voided rounds put back,
    which is the only honest way to say how many the void filter is holding out. */
-function filtered(inclVoid){
-  const ty=$("fType").value, c=$("fClass").value, days=+$("fRange").value;   // not "t" — that is t()
+/* `allTime` ignores the Period control on purpose. Coverage asks "when was this
+   last done?", and a 30-day window answers it by hiding every round older than
+   30 days — which makes a machine inspected 40 days ago look as though it has
+   never been inspected at all. Every other view wants the window. */
+function filtered(inclVoid,allTime){
+  const ty=$("fType").value, c=$("fClass").value, days=allTime?0:+$("fRange").value;   // not "t" — that is t()
   const cutoff=days? new Date(Date.now()-days*864e5).toISOString().slice(0,10):null;
   const q=($("fQ").value||"").trim().toLowerCase();
   const showVoid=inclVoid||($("fVoid")&&$("fVoid").checked);
@@ -1170,6 +1458,40 @@ function findings(recs){            // one row per item that has any content
   return out;
 }
 const sevRank=s=>SEV[s]?SEV[s].r:-1;
+/* ---------- is this machine getting worse? ---------------------------------
+   The phone asks this at the machine, before the round is written: a bar per
+   round, oldest on the left, and one word for the direction. It is the question
+   an inspector standing at the unit actually has, and the one a reliability
+   engineer asks of the fleet — and the dashboard, which holds every round from
+   every phone rather than one phone's share, could not answer it at all.
+
+   Compared against the BEST of what came before, not against the previous round
+   alone: one bad round after a run of clean ones is exactly what should be
+   called out, and a two-round comparison hides it half the time. */
+const TREND_MAX=8;
+function trendOf(equip,type){
+  const rows=RECS.filter(r=>r.equip===equip && (!type||r.type===type) && !r._void && r.date)
+    .sort((a,b)=>String(a.date).localeCompare(String(b.date)))
+    .slice(-TREND_MAX)
+    .map(r=>({d:r.date, s:worstOf(r)}));
+  if(rows.length<2) return null;
+  const rank=x=>sevRank(x.s);
+  const last=rank(rows[rows.length-1]);
+  const prev=rows.slice(0,-1).map(rank).filter(x=>x>=0);
+  const best=prev.length?Math.min(...prev):-1;
+  return { rows, n:rows.length,
+    dir: last<0||best<0 ? "" : last>best ? "worse" : last<best ? "better" : "steady" };
+}
+function sparkline(tr){
+  if(!tr) return "";
+  const bars=tr.rows.map(x=>{ const k=sevRank(x.s);
+    const h=k<0?4:6+k*5;                       // "no failure" is a stub, critical is full height
+    return `<i style="height:${h}px;background:${k<0?"var(--none)":SEVC[x.s]}" title="${esc(x.d)}${x.s?" · "+esc(SEV[x.s].l):""}"></i>`;
+  }).join("");
+  const w=tr.dir?t("trend_"+tr.dir):"";
+  return `<span class="spark${tr.dir==="worse"?" worse":""}" title="${esc(t("trend_hdr",{n:tr.n}))}">
+    <span class="bars">${bars}</span>${w?`<b>${esc(w)}</b>`:""}</span>`;
+}
 /* What a round found, and the one line that says it. An undercarriage round
    raises no defect codes — its finding is a number against a limit — so both
    have to ask the wear band as well as the grade. */
@@ -1230,8 +1552,14 @@ let fleetSort={k:"sev",dir:-1};
 function renderFleet(){
   const recs=filtered(); const byU={};
   recs.forEach(r=>{ const k=r.equip; if(!byU[k]||(r.date||"")>(byU[k].date||"")) byU[k]=r; });
+  /* Trend is per unit AND per type: comparing a magnetic-plug round against an
+     undercarriage round is not a direction, it is two different questions
+     plotted on one axis. The row's own type is the series it belongs to. */
+  const TREND={}; Object.values(byU).forEach(r=>{ TREND[r.equip]=trendOf(r.equip,r.type); });
+  const DIR_RANK={worse:3, steady:2, better:1};
   const val=(r,k)=>({ equip:r.equip, type:r.type, date:r.date||"",
     sev:sevRank(worstOf(r)), find:notable(r).length,
+    trend:(TREND[r.equip]&&DIR_RANK[TREND[r.equip].dir])||0,
     defect:topFinding(r), by:r.by||"" }[k]);
   const rows=Object.values(byU).sort((a,b)=>{
     const x=val(a,fleetSort.k), y=val(b,fleetSort.k);
@@ -1240,7 +1568,7 @@ function renderFleet(){
   });
   if(!rows.length){ $("fleetTbl").innerHTML=`<tr><td class="empty">${esc(t("e_nofilter"))}</td></tr>`; return; }
   const cols=[["equip",t("th_unit")],["type",t("th_type")],["date",t("th_date")],["sev",t("th_worst")],
-              ["find",t("th_find")],["defect",t("th_topdef")],["by",t("th_by")]];
+              ["trend",t("th_trend")],["find",t("th_find")],["defect",t("th_topdef")],["by",t("th_by")]];
   let h=`<thead><tr>`+cols.map(([k,l])=>
     `<th class="sortable${fleetSort.k===k?" on":""}" data-sort="${k}">${l}<span class="arrow">${fleetSort.k===k?(fleetSort.dir>0?"▲":"▼"):"↕"}</span></th>`).join("")+`</tr></thead><tbody>`;
   rows.forEach(r=>{
@@ -1249,6 +1577,7 @@ function renderFleet(){
       <td><b>${esc(r.equip)}</b></td><td><span class="tag">${esc(TYPE_LABEL[r.type]||r.type)}</span></td>
       <td class="mono">${esc(r.date||"")}</td>
       <td>${w?`<span class="pill ${SEV[w].c}">${SEV[w].l}</span>`:'<span class="muted">—</span>'}</td>
+      <td>${sparkline(TREND[r.equip])||'<span class="muted">—</span>'}</td>
       <td class="mono">${fs.length}</td><td>${top?esc(top):'<span class="muted">—</span>'}</td>
       <td class="muted">${esc(r.by||"")}</td></tr>`;
   });
@@ -1256,7 +1585,7 @@ function renderFleet(){
   $("fleetTbl").querySelectorAll("th[data-sort]").forEach(th=>th.onclick=()=>{
     const k=th.dataset.sort;
     // a new column starts on the reading people expect: worst/newest first
-    if(fleetSort.k===k) fleetSort.dir*=-1; else fleetSort={k,dir:(k==="sev"||k==="find"||k==="date")?-1:1};
+    if(fleetSort.k===k) fleetSort.dir*=-1; else fleetSort={k,dir:(k==="sev"||k==="find"||k==="date"||k==="trend")?-1:1};
     renderFleet(); });
   $("fleetTbl").querySelectorAll("tr[data-u]").forEach(tr=>tr.onclick=()=>{ showTab("equipment"); $("equipSel").value=tr.dataset.u; renderHistory(); });
 }
@@ -1288,6 +1617,13 @@ function renderFailure(){
     f.length ? src+t("e_cause_tail") : src);
   pareto($("paretoIso"),    cnt(x=>{ const m=ISO_BY[x.i.iso]; return x.i.iso?`${x.i.iso} ${m?(m[lang]||m.en||m):""}`:""; }), ()=>"var(--accent)", null,
     f.length ? src+t("e_iso_tail") : src);
+  /* How the finding was found. A condition-monitoring programme is judged on
+     this: findings raised by DM-08 oil analysis or DM-09 vibration analysis are
+     the programme working, and findings raised by DM-01 after a failure are the
+     programme being overtaken. The phone has recorded it on every position all
+     along and nothing here has ever counted it. */
+  pareto($("paretoDetect"), cnt(x=>x.i.detection?`${x.i.detection} ${detectName(x.i.detection)}`:""),
+    ()=>"var(--good)", null, f.length ? src+t("e_detect_tail") : src);
 }
 
 /* ---------- action register ---------- */
@@ -1300,7 +1636,7 @@ function actionRows(){
 function renderActions(){
   const rows=actionRows();
   if(!rows.length){ $("actionTbl").innerHTML=`<tr><td class="empty">${esc(t("e_nothing"))}</td></tr>`; return; }
-  let h=`<thead><tr>`+["th_sev","th_unit","th_comp","th_defect","th_cause","th_action","th_prio","th_wo","th_date","th_byshort"]
+  let h=`<thead><tr>`+["th_sev","th_unit","th_comp","th_defect","th_cause","th_detect","th_action","th_prio","th_wo","th_date","th_byshort"]
     .map(k=>`<th>${esc(t(k))}</th>`).join("")+`</tr></thead><tbody>`;
   rows.forEach(({r,i})=>{ const s=sevOf(r,i);
     h+=`<tr><td>${s?`<span class="pill ${SEV[s].c}">${SEV[s].l}</span>`:""}</td>
@@ -1308,6 +1644,7 @@ function renderActions(){
       <td>${esc(i.key)}<div class="muted" style="font-size:11px">${esc(i.label||"")}</div></td>
       <td>${i.defect?esc(i.defect):'<span class="muted">—</span>'}${i.defectCode?`<div class="muted" style="font-size:11px">${esc(i.defectCode)}${i.iso?` · ISO ${esc(i.iso)}/${esc(i.isoMode)}`:""}</div>`:""}</td>
       <td>${i.cause?esc(i.cause):'<span class="muted">—</span>'}</td>
+      <td>${i.detection?`${esc(i.detection)}<div class="muted" style="font-size:11px">${esc(detectName(i.detection))}</div>`:'<span class="muted">—</span>'}</td>
       <td>${i.actionLabel?esc(i.actionLabel):'<span class="muted">—</span>'}</td>
       <td>${i.prio?`<span class="pill ${prioClass(i.prio)}" title="${esc(prioName(i.prio))}">${esc(i.prio)}</span>`:'<span class="muted">—</span>'}</td>
       <td class="mono">${esc(i.wo||"")}</td><td class="mono">${esc(r.date||"")}</td><td class="muted">${esc(r.by||"")}</td></tr>`; });
@@ -1315,12 +1652,118 @@ function renderActions(){
 }
 $("csvBtn").onclick=()=>{
   const rows=actionRows(); const q=s=>`"${String(s==null?"":s).replace(/"/g,'""')}"`;
-  const head=["RecordId","Rev","Severity","Unit","Type","Component","ComponentName","DefectCode","Defect","ISOMechanism","ISOMode","CauseCode","Cause","Action","Priority","PriorityLabel","WO","Grade","TempC","AmbientC","Method","Date","Inspector","VerifiedBy","GPS","Comment"];
-  const body=rows.map(({r,i})=>[recId(r)||"",recRev(r)||"",SEV[sevOf(r,i)]?.l||"",r.equip,r.type,i.key,i.label,i.defectCode,i.defect,i.iso,i.isoMode,i.causeCode,i.cause,i.actionLabel,i.prio||"",i.prio?prioName(i.prio,"en"):"",i.wo,i.grade,i.tempC,i.ambC,i.tempMethod,r.date,r.by,r.sup||"",r.gps?`${r.gps.lat},${r.gps.lon}`:"",i.comment].map(q).join(","));
+  /* Every field the phone recorded, so the register that leaves this page and
+     the record that arrived from the pit hold the same facts. Detection method
+     and the wear forecast were captured or computed and then dropped on export,
+     which is how a planner ended up ordering parts from a percentage. */
+  const head=["RecordId","Rev","Severity","Unit","Type","Component","ComponentName","DefectCode","Defect","ISOMechanism","ISOMode","CauseCode","Cause","DetectionCode","DetectionMethod","Action","Priority","PriorityLabel","WO","Grade","MeasuredMM","NewMM","CondemnMM","WornPct","HoursToCondemn","WearPer1000h","TempC","AmbientC","TempWarnC","TempAlarmC","Method","Date","Inspector","VerifiedBy","GPS","Comment"];
+  const body=rows.map(({r,i})=>{
+    const w=wearOf(r,i)||{}, f2=lifeOf(r,i), tp=tempOf(i);
+    return [recId(r)||"",recRev(r)||"",SEV[sevOf(r,i)]?.l||"",r.equip,r.type,i.key,i.label,
+      i.defectCode,i.defect,i.iso,i.isoMode,i.causeCode,i.cause,
+      i.detection||"",i.detection?detectName(i.detection,"en"):"",
+      i.actionLabel,i.prio||"",i.prio?prioName(i.prio,"en"):"",i.wo,i.grade,
+      w.mm==null?"":w.mm, w.newMM==null?"":w.newMM, w.condemnMM==null?"":w.condemnMM,
+      w.wearPct==null?"":w.wearPct,
+      (f2&&!f2.why)?Math.round(f2.hours):"", (f2&&!f2.why)?(Math.round(f2.rate*10)/10):"",
+      i.tempC,i.ambC, tp?tp.lim.warn:"", tp?tp.lim.alarm:"", i.tempMethod,
+      r.date,r.by,r.sup||"",r.gps?`${r.gps.lat},${r.gps.lon}`:"",i.comment].map(q).join(",");
+  });
   const csv=[head.map(q).join(","),...body].join("\r\n");
   const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob(["﻿"+csv],{type:"text/csv"}));
   a.download=`cm_action_register_${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(a.href);
 };
+
+/* ---------- coverage: what is overdue, and what is about to be --------------
+   The phone has carried this since the due-list went in: a "last done" per unit
+   and type, measured against an interval, and a screen that says which machines
+   are overdue. It is the one question a planner asks that the dashboard could
+   not answer — and asking it from a phone means scrolling a list on a 390 px
+   screen for a fleet of a thousand.
+
+   The intervals are the phone's defaults, and editable here for the same reason
+   they are editable there: 90 days for a magnetic plug is a starting point, not
+   a standard. What must not differ is the arithmetic, or a unit reads "overdue"
+   in the pit and "fine" at the desk. */
+const DUE_DEFAULT={MP:90, FC:90, INSP:30, TEMP:30, UC:90, GET:30, TB:30};
+const DUE_STORE="cm_dash_due";
+const dueSaved=()=>{ try{ const v=JSON.parse(localStorage.getItem(DUE_STORE)); return (v&&typeof v==="object")?v:{}; }catch(e){ return {}; } };
+function dueDays(ty){
+  const v=Number(dueSaved()[ty]);
+  return (v>0)?v:(DUE_DEFAULT[ty]||30);
+}
+function setDueDays(ty,n){
+  const d=dueSaved(); if(n>0) d[ty]=n; else delete d[ty];
+  try{ localStorage.setItem(DUE_STORE,JSON.stringify(d)); }catch(e){}
+}
+const DAY=86400000;
+const daysSince=iso=>{ const t2=Date.parse((iso||"")+"T00:00:00Z"); return isFinite(t2)?Math.floor((Date.now()-t2)/DAY):null; };
+/* "Due soon" is the last quarter of the interval, so a 90-day round warns with
+   about three weeks left and a 30-day round with about a week — enough notice to
+   plan either one without the list crying wolf for a month. */
+function coverage(){
+  const last={};                    // "UNIT|TYPE" -> newest round
+  filtered(false,true).forEach(r=>{
+    if(!r.date) return;
+    const k=`${r.equip}|${r.type}`;
+    if(!last[k] || String(r.date)>String(last[k].date)) last[k]=r;
+  });
+  return Object.values(last).map(r=>{
+    const iv=dueDays(r.type), age=daysSince(r.date);
+    const over = age==null ? null : age-iv;
+    return { r, equip:r.equip, type:r.type, date:r.date, by:r.by||"", iv, age,
+             due: age==null ? "" : over>0 ? "over" : age>=iv*0.75 ? "soon" : "ok",
+             over: over==null?null:over, left: over==null?null:-over };
+  }).sort((a,b)=>(b.over==null?-1e9:b.over)-(a.over==null?-1e9:a.over)
+                 || a.equip.localeCompare(b.equip));
+}
+function renderCoverage(){
+  const rows=coverage();
+  const nOver=rows.filter(x=>x.due==="over").length;
+  const nSoon=rows.filter(x=>x.due==="soon").length;
+  const nOk=rows.filter(x=>x.due==="ok").length;
+  const units=new Set(rows.map(x=>x.equip)).size;
+  const pct=rows.length?Math.round(nOk*100/rows.length):0;
+  $("covKpis").innerHTML=`
+   <div class="tile"><div class="k">${esc(t("k_cov"))}</div><div class="v">${pct}%</div>
+     <div class="s">${esc(t("k_cov_sub",{n:nOk,total:rows.length}))}</div></div>
+   <div class="tile"><div class="k">${esc(t("k_over"))}</div><div class="v" style="color:${nOver?SEVC.CRI:"inherit"}">${nOver}</div>
+     <div class="s">${esc(t("k_over_sub"))}</div></div>
+   <div class="tile"><div class="k">${esc(t("k_soon"))}</div><div class="v" style="color:${nSoon?SEVC.DEG:"inherit"}">${nSoon}</div>
+     <div class="s">${esc(t("k_soon_sub"))}</div></div>
+   <div class="tile"><div class="k">${esc(t("k_watched"))}</div><div class="v">${units}</div>
+     <div class="s">${esc(t("k_watched_sub",{n:rows.length}))}</div></div>`;
+
+  // one interval box per type actually present, so the fleet's own mix is what
+  // gets configured rather than a fixed list of seven
+  const types=[...new Set(rows.map(x=>x.type))]
+    .sort((a,b)=>(TYPE_ORDER.indexOf(a)+1||99)-(TYPE_ORDER.indexOf(b)+1||99));
+  $("covIntervals").innerHTML=types.map(ty=>
+    `<div class="field"><label for="iv_${esc(ty)}">${esc(TYPE_LABEL[ty]||ty)} · ${esc(t("f_days"))}</label>
+      <input id="iv_${esc(ty)}" data-iv="${esc(ty)}" type="number" min="1" max="3650" value="${dueDays(ty)}" style="width:96px"></div>`).join("")
+    || `<div class="sub">${esc(t("e_nofilter"))}</div>`;
+  $("covIntervals").querySelectorAll("[data-iv]").forEach(inp=>inp.onchange=()=>{
+    setDueDays(inp.dataset.iv, Number(inp.value)); renderCoverage(); });
+
+  if(!rows.length){ $("covTbl").innerHTML=`<tr><td class="empty">${esc(t("e_nofilter"))}</td></tr>`; return; }
+  const cls={over:"c", soon:"s", ok:"n"};
+  let h=`<thead><tr>`+["th_unit","th_type","th_lastdone","th_age","th_interval","th_due","th_byshort"]
+    .map(k=>`<th>${esc(t(k))}</th>`).join("")+`</tr></thead><tbody>`;
+  rows.forEach(x=>{
+    h+=`<tr data-u="${esc(x.equip)}" style="cursor:pointer">
+      <td><b>${esc(x.equip)}</b></td>
+      <td><span class="tag">${esc(TYPE_LABEL[x.type]||x.type)}</span></td>
+      <td class="mono">${esc(x.date||"")}</td>
+      <td class="mono">${x.age==null?"—":esc(t("due_days",{n:x.age}))}</td>
+      <td class="mono">${x.iv}</td>
+      <td>${x.due?`<span class="pill ${cls[x.due]}">${esc(
+        x.due==="over" ? t("due_over",{n:x.over}) : x.due==="soon" ? t("due_in",{n:x.left}) : t("due_ok"))}</span>`:""}</td>
+      <td class="muted">${esc(x.by)}</td></tr>`;
+  });
+  $("covTbl").innerHTML=h+"</tbody>";
+  $("covTbl").querySelectorAll("tr[data-u]").forEach(tr=>tr.onclick=()=>{
+    showTab("equipment"); $("equipSel").value=tr.dataset.u; renderHistory(); });
+}
 
 /* ---------- equipment history ---------- */
 let folderPhotos=null;   // name -> objectURL, from the folder pick or from Drive
@@ -1333,6 +1776,12 @@ function photoBase(it,rec){
    because two phones inspected the same unit on the same day and the script kept
    both sets rather than letting the second overwrite the first. */
 const PHOTO_EXT=["jpg","jpeg","png","JPG","webp"];
+const VIDEO_EXT=["mp4","mov","MP4","MOV"];
+/* The phone writes one photograph under the bare name and two or more under
+   _1.._4 — see fileName() in mobile/index.html. Both spellings of the first slot
+   have to be asked for, because whether it exists depends on how many
+   photographs that component ended up with. */
+const PHOTO_SLOTS=["","_1","_2","_3","_4"];
 function photoNames(base,rec,sufs){
   const dev=String((rec&&rec.dev)||""), out=[];
   for(const s of (sufs||["","_1"]))
@@ -1342,21 +1791,70 @@ function photoNames(base,rec,sufs){
     }
   return out;
 }
-function photoSrc(it,rec){
-  if(folderPhotos){
-    const base=photoBase(it,rec);
-    // When two phones clashed, the second one's files were kept under "~DEVICE"
-    // so neither set was lost. Ask for this record's own copy first, or the photo
-    // shown would belong to the version that did NOT win.
-    for(const n of photoNames(base,rec)) { const u=folderPhotos[n]; if(u) return u; }
+function videoNames(base,rec){
+  const dev=String((rec&&rec.dev)||""), out=[];
+  for(const e of VIDEO_EXT){ if(dev) out.push(`${base}~${dev}.${e}`); out.push(`${base}.${e}`); }
+  return out;
+}
+const heldPhoto=n=>folderPhotos&&folderPhotos[n];
+/* One slot, or null if its bytes are not on this machine yet. When two phones
+   clashed the loser's files were kept under "~DEVICE" so neither set was lost —
+   ask for this record's own copy first, or the photo shown would belong to the
+   version that did NOT win. */
+function slotSrc(it,rec,sfx){
+  if(!folderPhotos) return null;
+  const base=photoBase(it,rec);
+  for(const n of photoNames(base,rec,[sfx])) { const u=heldPhoto(n); if(u) return u; }
+  return null;
+}
+/* -------- what a component actually carries, and what is downloaded ---------
+   The phone allows four photographs and one video per component, and it writes
+   the counts into the record — so how many exist is known from the sidecar
+   alone, before a single image has travelled.
+
+   The dashboard downloads ONE of them per component. A month of rounds is
+   hundreds of megabytes and a unit page that pulled every frame would be a
+   minute of blank cards; the badge on the card says what else is there and the
+   viewer fetches the rest at the moment somebody asks to see them.
+
+   `n` is what was captured, `shots` what is here, `pending` the difference. */
+function mediaOf(it,rec){
+  const shots=[];
+  for(const s of PHOTO_SLOTS){
+    const u=slotSrc(it,rec,s);
+    // the bare name and _1 are the same first photograph under two spellings
+    if(u && shots.indexOf(u)<0) shots.push(u);
   }
-  if(it.photo) return /^(data:|blob:|https?:|\/)/.test(it.photo)?it.photo:"../"+it.photo;
+  // a record that carries its own URL — the bundled data, or an import that inlined it
+  if(!shots.length && it.photo)
+    shots.push(/^(data:|blob:|https?:|\/)/.test(it.photo)?it.photo:"../"+it.photo);
+  let video=null;
+  if(folderPhotos){ const base=photoBase(it,rec);
+    for(const n of videoNames(base,rec)){ const u=heldPhoto(n); if(u){ video=u; break; } } }
+  const n=Math.max(Number(it.photos)||0, shots.length);
+  return { shots, video, n, hasVideo:!!(video||Number(it.video)),
+           pending:Math.max(0, n-shots.length) };
+}
+// the one photograph a card shows; kept for the callers that only want a thumbnail
+function photoSrc(it,rec){ const m=mediaOf(it,rec); return m.shots[0]||null; }
+/* The supervisor signed the round on the phone and it is printed on the PDF.
+   It never appeared on screen here, so the one place a reliability engineer
+   looks at a round could not tell a signed-off round from an unsigned one. */
+function signNames(rec){
+  const stem=`${rec.equip}_${(rec.date||"").split("-").reverse().join(".")}_${rec.type}_SIGN`;
+  const dev=String(rec.dev||"");
+  return dev?[`${stem}~${dev}.png`,`${stem}.png`]:[`${stem}.png`];
+}
+function signSrc(rec){
+  if(rec.signUrl) return rec.signUrl;
+  if(!folderPhotos) return null;
+  for(const n of signNames(rec)){ const u=heldPhoto(n); if(u) return u; }
   return null;
 }
 /* Bridge for drive.js — RECS, imported and folderPhotos are `let`s in this script,
    so they are not reachable as window properties from another file. */
 window.CMDash={
-  photoBase, photoNames,
+  photoBase, photoNames, videoNames, signNames, PHOTO_SLOTS,
   addPhoto(name,url){ (folderPhotos ||= {})[name]=url; },
   importRecords(recs){
     recs.forEach(r=>{ const k=`${r.equip}|${r.date}|${r.type}`;
@@ -1429,14 +1927,19 @@ function ucBlock(rec){
   const unread=rows.filter(([i,w])=>w.mm==null).length;
   const worst=rows.filter(([i,w])=>w.wearPct!=null).sort((a,b)=>b[1].wearPct-a[1].wearPct);
   const half=Math.ceil(rows.length/2);
+  /* Life left sits under the point's name rather than in a column of its own:
+     it is a sentence ("about 1,200 h left · wearing 0.4 mm per 1,000 h"), and a
+     sentence in a narrow numeric column wraps to three lines on every row. */
   const col=list=>`<table class="grid wear"><thead><tr>
       <th>${esc(t("uc_th_point"))}</th><th class="r">${esc(t("uc_th_meas"))}</th>
       <th class="r">${esc(t("uc_th_worn"))}</th><th style="width:62px"></th></tr></thead><tbody>`+
-    list.map(([i,w])=>`<tr><td>${esc(ucName(i,rec))}
-        <div class="muted" style="font-size:10.5px">${w.newMM!=null&&w.newMM!==""?esc(w.newMM)+" → "+esc(w.condemnMM)+" mm":esc(t("uc_noref"))}</div></td>
+    list.map(([i,w])=>{ const f=lifeOf(rec,i), lt=lifeText(f);
+      return `<tr><td>${esc(ucName(i,rec))}
+        <div class="muted" style="font-size:10.5px">${w.newMM!=null&&w.newMM!==""?esc(w.newMM)+" → "+esc(w.condemnMM)+" mm":esc(t("uc_noref"))}</div>
+        ${lt&&(!f.why||f.why==="few")?`<div class="life${lifeSoon(f)?" soon":""}">${esc(lt)}</div>`:""}</td>
       <td class="r mono">${w.mm!=null?`<b>${esc(w.mm)}</b>`:`<span class="muted" style="font-size:11px">${esc(w.reasonLabel||w.reason||"—")}</span>`}</td>
       <td class="r mono">${w.wearPct!=null?esc(w.wearPct)+"%":""}</td>
-      <td>${w.wearPct!=null?wearBar(w.wearPct):""}</td></tr>`).join("")+`</tbody></table>`;
+      <td>${w.wearPct!=null?wearBar(w.wearPct):""}</td></tr>`; }).join("")+`</tbody></table>`;
   const line = over.length
     ? `<div class="ucsum act">${esc(t("uc_sum_act",{n:over.length}))}${watch.length?" · "+esc(t("uc_sum_watch",{n:watch.length})):""}
         <span class="muted">${worst.slice(0,4).map(([i,w])=>esc(ucName(i,rec))+" "+w.wearPct+"%").join(" · ")}</span></div>`
@@ -1444,17 +1947,32 @@ function ucBlock(rec){
     ? `<div class="ucsum watch">${esc(t("uc_sum_watch",{n:watch.length}))}
         <span class="muted">${worst.slice(0,4).map(([i,w])=>esc(ucName(i,rec))+" "+w.wearPct+"%").join(" · ")}</span></div>`
     : `<div class="ucsum ok">${esc(t("uc_sum_ok",{n:rows.length-unread}))}</div>`;
+  /* Percent worn and hours left are different questions and a point can fail one
+     while passing the other: a roller at 62% that is losing a millimetre a week
+     is the one to order for, and the bands above will not mention it until it
+     reaches 80. Say it on its own line. */
+  const soon=rows.filter(([i,w])=>lifeSoon(lifeOf(rec,i)));
   return line
+    + (soon.length?`<div class="ucsum watch">${esc(t("uc_sum_life",{n:soon.length}))}
+        <span class="muted">${soon.slice(0,4).map(([i])=>esc(ucName(i,rec))).join(" · ")}</span></div>`:"")
     + (unread?`<div class="ucsum warnrow">${esc(t("uc_sum_unread",{n:unread}))}</div>`:"")
     + `<div class="ucgrid"><div>${col(rows.slice(0,half))}</div><div>${col(rows.slice(half))}</div></div>`;
 }
 function renderHistory(){
   const e=$("equipSel").value; const recs=RECS.filter(r=>r.equip===e);
   $("histTitle").textContent=t("hist_title",{x:e||""});
-  $("histSub").textContent=recs.length?t("hist_sub",{n:recs.length}):t("hist_none");
+  /* The direction, on the one screen that shows a machine on its own. Per type,
+     because a unit with a plug round and an undercarriage round has two
+     directions and averaging them would report neither. */
+  const trs=[...new Set(recs.map(r=>r.type))].map(ty=>[ty,trendOf(e,ty)]).filter(([,x])=>x);
+  $("histSub").innerHTML=recs.length
+    ? esc(t("hist_sub",{n:recs.length}))
+      + trs.map(([ty,tr])=>` &nbsp;·&nbsp; <span class="tag">${esc(TYPE_LABEL[ty]||ty)}</span>${sparkline(tr)}`).join("")
+    : esc(t("hist_none"));
   if(!recs.length){ $("history").innerHTML=`<div class="empty">${esc(t("e_nodata"))}</div>`; return; }
   // History deliberately shows voided rounds — this is where you look at one and
   // un-void it. Everywhere that counts things filters them out instead.
+  mediaReg=[];
   $("history").innerHTML=recs.map(rec=>`
     <div class="insp${rec._void?" voided":""}"><div class="head">
       <span class="date">${esc(rec.date||"")}</span>
@@ -1464,27 +1982,52 @@ function renderHistory(){
       ${rec._conflict?`<span class="voidflag" title="${esc(t("cf_hint"))}">${esc(t("cf_flag"))}</span>`:""}
       ${!rec._conflict&&rec._keep?`<span class="editflag" title="${esc(t("cf_kept",{d:rec._keep,by:rec._resolvedBy||"—"}))}">${esc(t("cf_resolved"))}</span>`:""}
       ${rec.smu?`<span class="meta">SMU <b>${esc(rec.smu)}</b></span>`:""}
-      <span class="spacer"></span>${rec.by?`<span class="meta">${esc(rec.by)}</span>`:""}${rec.sup?`<span class="meta">✍ ${esc(rec.sup)}</span>`:""}${rec.gps?`<a class="meta" href="https://www.google.com/maps?q=${rec.gps.lat},${rec.gps.lon}" target="_blank" rel="noopener">📍 ${rec.gps.lat.toFixed(4)}, ${rec.gps.lon.toFixed(4)}</a>`:""}
+      <span class="spacer"></span>${rec.by?`<span class="meta">${esc(rec.by)}</span>`:""}${sigTag(rec)}${rec.gps?`<a class="meta" href="https://www.google.com/maps?q=${rec.gps.lat},${rec.gps.lon}" target="_blank" rel="noopener">📍 ${rec.gps.lat.toFixed(4)}, ${rec.gps.lon.toFixed(4)}</a>`:""}
       <button class="btn" data-edit="${esc(recKey(rec))}" style="padding:3px 10px;font-size:12px">${esc(t("ed_edit"))}</button></div>
       ${rec._note?`<div class="sub" style="margin:2px 0 8px">📝 ${esc(rec._note)}</div>`:""}
       ${isWearType(rec.type)?ucBlock(rec):""}
-      <div class="pos-grid">${rec.items.filter(i=>!isWearType(rec.type)||photoSrc(i,rec)||i.comment||i.defect).map(i=>{
-        const s=sevOf(rec,i); const src=photoSrc(i,rec);
+      <div class="pos-grid">${rec.items.filter(i=>!isWearType(rec.type)||mediaOf(i,rec).n||i.comment||i.defect).map(i=>{
+        const s=sevOf(rec,i); const m=mediaOf(i,rec); const tp=tempOf(i);
         const cap=esc(`${rec.equip} · ${i.key} · ${rec.date}`);
+        const mi=mediaReg.push({rec,it:i,cap:`${rec.equip} · ${i.key} · ${rec.date}`})-1;
         return `<div class="pos">
-          ${src?`<img class="photo" loading="lazy" src="${esc(src)}" alt="${cap}" data-cap="${cap}">`:`<div class="nophoto">no photo</div>`}
+          ${shotStrip(m,mi,cap)}
           <div class="body"><div class="pk">${esc(i.key)}${i.grade?` <span class="pill ${SEV[GRADE_SEV[i.grade]]?.c||'n'}">${esc(i.grade)}</span>`:""}
             ${s?`<span class="pill ${SEV[s].c}">${SEV[s].l}</span>`:""}</div>
             <div class="pl">${esc(i.label||"")}</div>
-            ${i.defect?`<div style="font-size:12px"><b>${esc(i.defect)}</b> <span class="muted">${esc(i.defectCode)}</span></div>`:""}
-            ${i.cause?`<div style="font-size:12px" class="muted">Cause: ${esc(i.cause)}</div>`:""}
-            <dl>${i.tempC?`<dt>Temp</dt><dd><b>${esc(i.tempC)} °C</b>${i.ambC?` <span class="muted">(amb ${esc(i.ambC)})</span>`:""}${i.tempMethod?` <span class="muted">${esc(i.tempMethod)}</span>`:""}</dd>`:""}${i.particle?`<dt>Particles</dt><dd>${esc(i.particle)}</dd>`:""}${i.comp?`<dt>Comp hrs</dt><dd>${esc(i.comp)}</dd>`:""}${i.oil?`<dt>Oil hrs</dt><dd>${esc(i.oil)}</dd>`:""}${i.actionLabel?`<dt>Action</dt><dd>${esc(i.actionLabel)}</dd>`:""}${i.prio?`<dt>Priority</dt><dd>${esc(prioName(i.prio))}</dd>`:""}${i.wo?`<dt>WO</dt><dd>${esc(i.wo)}</dd>`:""}</dl>
+            ${i.defect?`<div style="font-size:12px"><b>${esc(i.defect)}</b> <span class="muted">${esc(i.defectCode)}${i.iso?` · ISO ${esc(i.iso)}`:""}</span></div>`:""}
+            ${i.cause?`<div style="font-size:12px" class="muted">${esc(t("th_cause"))}: ${esc(i.cause)}</div>`:""}
+            <dl>${tp?`<dt>${esc(t("d_temp"))}</dt><dd><b class="${tp.over?"tbad":""}">${esc(i.tempC)} °C</b>${i.ambC?` <span class="muted">(amb ${esc(i.ambC)})</span>`:""}
+              <div class="muted" style="font-size:10.5px">${esc(t("d_limit",{w:tp.lim.warn,a:tp.lim.alarm}))}${i.tempMethod?" · "+esc(i.tempMethod):""}</div></dd>`
+              :i.tempC?`<dt>${esc(t("d_temp"))}</dt><dd><b>${esc(i.tempC)} °C</b>${i.ambC?` <span class="muted">(amb ${esc(i.ambC)})</span>`:""}</dd>`:""
+            }${i.particle?`<dt>${esc(t("d_particles"))}</dt><dd>${esc(i.particle)}</dd>`:""}${i.comp?`<dt>${esc(t("d_comph"))}</dt><dd>${esc(i.comp)}</dd>`:""}${i.oil?`<dt>${esc(t("d_oilh"))}</dt><dd>${esc(i.oil)}</dd>`:""}${i.detection?`<dt>${esc(t("d_found"))}</dt><dd>${esc(detectName(i.detection))}</dd>`:""}${i.actionLabel?`<dt>${esc(t("th_action"))}</dt><dd>${esc(i.actionLabel)}</dd>`:""}${i.prio?`<dt>${esc(t("th_prio"))}</dt><dd>${esc(prioName(i.prio))}</dd>`:""}${i.wo?`<dt>WO</dt><dd>${esc(i.wo)}</dd>`:""}</dl>
             ${i.comment?`<div class="cm">“${esc(i.comment)}”</div>`:""}
           </div></div>`; }).join("")}</div></div>`).join("");
-  $("history").querySelectorAll("img.photo").forEach(img=>img.onclick=()=>{ $("lbimg").src=img.src; $("lbcap").textContent=img.dataset.cap; $("lb").classList.add("open"); });
-  // If the photos are in Drive rather than on disk, fetch this unit's and repaint once.
+  $("history").querySelectorAll("[data-m]").forEach(el=>el.onclick=()=>openMedia(+el.dataset.m));
   $("history").querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>openEdit(b.dataset.edit));
+  // If the photos are in Drive rather than on disk, fetch this unit's and repaint once.
   pullDrivePhotos(recs, renderHistory);
+}
+/* The signature is an image the supervisor drew on the phone. Show it where the
+   name is — a round signed off and a round with a name typed into a box are not
+   the same evidence, and only one of them prints a signature on the report. */
+function sigTag(rec){
+  if(!rec.sup) return "";
+  const s=signSrc(rec);
+  return `<span class="meta sig">✍ ${esc(rec.sup)}${s?`<img src="${esc(s)}" alt="${esc(t("d_signed"))}" title="${esc(t("d_signed"))}">`:""}</span>`;
+}
+/* One photograph, and an honest count of what else that component carries. The
+   badge is drawn from the record's own counts, so it is right before any image
+   has been fetched — and it is the thing that tells the reader there is more to
+   look at, which a single silent thumbnail never did. */
+function shotStrip(m,mi,cap){
+  if(!m.n && !m.hasVideo) return `<div class="nophoto">${esc(t("d_nophoto"))}</div>`;
+  const badge = (m.n>1||m.hasVideo)
+    ? `<span class="cnt">${m.n>1?`<i>▣ ${m.n}</i>`:""}${m.hasVideo?`<i>🎥</i>`:""}</span>` : "";
+  if(!m.shots.length)
+    return `<div class="shots" data-m="${mi}"><div class="nophoto"><div class="pend">${esc(t("d_photopend",{n:m.n}))}</div></div>${badge}</div>`;
+  return `<div class="shots" data-m="${mi}">
+    <img class="photo" loading="lazy" src="${esc(m.shots[0])}" alt="${cap}">${badge}</div>`;
 }
 
 /* ---------- correcting, voiding and deleting one inspection ---------- */
@@ -1924,10 +2467,14 @@ function refreshSources(){
   // An unresolved clash is not something to discover by opening the right unit —
   // it is two versions of a round, one of which is being counted and one ignored.
   const nCf=window.CMDash.conflictCount();
+  /* A capped walk means inspections are missing, and that must not be something
+     you only learn by pressing Load and reading a sentence that scrolls away. */
+  const cappedNow = !!(drv()&&drv().capped);
   set("cardDrive","stDrive",driveRecs.length>0,
     driveRecs.length ? t("ds_insp",{n:driveRecs.length})+(nIdx?" · "+t("ds_indexed",{n:nIdx}):"")
-      +(nCf?" · ⑂ "+t("cf_waiting",{n:nCf}):"")
+      +(nCf?" · ⑂ "+t("cf_waiting",{n:nCf}):"")+(cappedNow?" · ⚠️ "+t("ds_capped"):"")
     : drvOn() ? t("ds_notloaded") : t("ds_notset"));
+  $("cardDrive").classList.toggle("warn", cappedNow);
   set("cardFolder","stFolder",!!folderName,folderName?`${folderName} · ${t("ds_photosn",{n:nPhotos})}`:t("ds_notopened"));
   set("cardFile","stFile",imported.length>0,imported.length?t("ds_inbrowser",{n:imported.length}):"—");
 }
@@ -1969,6 +2516,7 @@ async function driveRun(mode){            // "test" | "load" | "full"
       + (r.photos?t("dl_photos",{n:r.photos}):".")
       + (r.failed?t("dl_failed",{n:r.failed}):"")
       + (r.truncated?t("dl_more"):"")
+      + (r.capped?t("dl_capped"):"")
       + (r.legacy?SLOW_HINT:"");
   }catch(err){ msg.textContent="❌ "+(err&&err.message||err); }
   finally{ btns.forEach(b=>$(b).disabled=false); refreshSources(); }
@@ -1976,6 +2524,49 @@ async function driveRun(mode){            // "test" | "load" | "full"
 $("drvGo").onclick=()=>driveRun("load");
 $("drvTest").onclick=()=>driveRun("test");
 $("drvFull").onclick=()=>driveRun("full");
+
+/* ---------- tidying the Drive folder ----------------------------------------
+   Two things make this safe enough to offer as a button rather than a support
+   ticket: the destination is read out of each file's OWN name, so a file whose
+   name does not follow the standard is left exactly where it is and reported;
+   and every reader on both ends finds files by name, never by path, so moving
+   one cannot hide it. The preview is still the first button, because "I will
+   move 4,812 files" is a sentence somebody should read before it happens. */
+async function orgRun(dry){
+  const msg=$("orgMsg"), plan=$("orgPlan");
+  if(!drvOn()){ msg.textContent=t("org_needdrive"); return; }
+  const btns=["orgDry","orgGo"]; btns.forEach(b=>$(b).disabled=true);
+  plan.innerHTML=""; msg.textContent=t(dry?"org_checking":"org_moving");
+  try{
+    const r=await drv().organize({dry, admin:$("orgAdmin").value},
+      p=>{ msg.textContent=t(dry?"org_checking":"org_progress",{n:p.moved,r:p.remaining}); });
+    const n = dry ? r.wouldMove : r.moved;
+    msg.textContent = (dry ? t("org_would",{n,s:r.scanned}) : t("org_moved",{n,s:r.scanned}))
+      + (r.failed?" "+t("org_failed",{n:r.failed}):"")
+      + (!dry && r.remaining?" "+t("org_more",{n:r.remaining}):"");
+    /* Name the files it will not touch. "Left 37 files alone" invites the reader
+       to assume they were rubbish; the list is usually one typo and a holiday
+       photograph, and both are worth seeing. */
+    const bits=[];
+    if(r.samples&&r.samples.length) bits.push(`<b>${esc(t("org_examples"))}</b><br>`
+      + r.samples.slice(0,8).map(x=>`<span class="mono">${esc(x.from)}</span> → <span class="mono">${esc(x.to)}/${esc(x.name)}</span>`).join("<br>"));
+    if(r.unknown&&r.unknown.length) bits.push(`<b>${esc(t("org_unknown"))}</b><br>`
+      + r.unknown.slice(0,8).map(x=>`<span class="mono">${esc(x)}</span>`).join("<br>"));
+    plan.innerHTML=bits.join("<br><br>");
+    $("stOrg").textContent = dry ? t("org_st_plan",{n}) : t("org_st_done",{n});
+    $("cardOrg").classList.toggle("on", !dry && n>0);
+    if(!dry && n){
+      /* The paths in the held index are now wrong. Nothing reads them — the
+         index is keyed by name and the ids did not change — but the sidecar
+         paths that scope a per-folder photo lookup did move, so drop the cursor
+         and let the next load re-read them rather than looking in the old place. */
+      localStorage.removeItem("cm_drive_cursor");
+    }
+  }catch(err){ msg.textContent="❌ "+(err&&err.message||err); }
+  finally{ btns.forEach(b=>$(b).disabled=false); }
+}
+$("orgDry").onclick=()=>orgRun(true);
+$("orgGo").onclick=()=>orgRun(false);
 
 /* ---------- keeping up with the phones on its own ----------------------------
    A round saved in the pit reaches Drive as soon as the phone has signal. The
@@ -2037,22 +2628,86 @@ window.addEventListener("online", ()=>autoRefresh("online"));
 /* On open: catch up first, then keep up. Deferred a beat so the page paints
    what it already holds rather than waiting on the network to show anything. */
 setTimeout(()=>{ autoRefresh("open"); startAuto(); }, 1200);
-/* Photos live in Drive, not on disk — pull the ones this view needs, then repaint. */
+/* Photos live in Drive, not on disk — pull the ones this view needs, then repaint.
+   ONE per component, which is what the cards show. Pulling all four for a unit
+   with a hundred and forty-four undercarriage points is half a gigabyte to paint
+   a page of thumbnails; the other three travel when the viewer is opened. */
 let drivePending=false;
 async function pullDrivePhotos(recs, after){
   // drive.js loads after this script, and renderAll() runs during init
   if(!drvOn() || drivePending || !recs.length) return;
   drivePending=true;
-  try{ if(await drv().ensurePhotos(recs)) after&&after(); }
+  try{ if(await drv().ensurePhotos(recs,null,{first:true})) after&&after(); }
   finally{ drivePending=false; }
 }
-$("lb").onclick=e=>{ if(e.target.id==="lb"||e.target.id==="lbx"){ $("lb").classList.remove("open"); $("lbimg").src=""; } };
-document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ $("lb").classList.remove("open"); } });
+
+/* ---------- the photo viewer ----------------------------------------------
+   A component can carry four photographs and a minute of video. Only the first
+   has been downloaded, so opening the viewer is also the moment the rest are
+   asked for: the frame that is already here paints immediately, the others
+   arrive behind it and the strip fills in. */
+let mediaReg=[], lbAt=0, lbShots=[], lbBusy=false, lbCur=-1;
+function lbList(m){
+  const out=m.shots.map(u=>({kind:"img",u}));
+  if(m.video) out.push({kind:"vid",u:m.video});
+  return out;
+}
+function paintMedia(){
+  const cur=lbShots[lbAt]||null;
+  const img=$("lbimg"), vid=$("lbvid");
+  vid.pause&&vid.pause();
+  img.style.display = cur&&cur.kind==="img" ? "" : "none";
+  vid.style.display = cur&&cur.kind==="vid" ? "" : "none";
+  if(cur&&cur.kind==="img"){ img.src=cur.u; vid.removeAttribute("src"); }
+  else if(cur&&cur.kind==="vid"){ vid.src=cur.u; img.removeAttribute("src"); }
+  const reg=mediaReg[lbCur]||null;
+  const total=lbShots.length;
+  $("lbcap").textContent=(reg?reg.cap:"")
+    + (total>1?`  ·  ${lbAt+1} / ${total}`:"")
+    + (lbBusy?"  ·  "+t("d_fetching"):"");
+  $("lbprev").disabled = lbAt<=0;
+  $("lbnext").disabled = lbAt>=total-1;
+  $("lbthumbs").innerHTML = total>1 ? lbShots.map((s,i)=>
+    `<button data-i="${i}" class="${i===lbAt?"on":""}">${s.kind==="vid"?"🎥":`<img src="${esc(s.u)}" alt="">`}</button>`).join("") : "";
+  $("lbthumbs").querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>{ lbAt=+b.dataset.i; paintMedia(); });
+}
+async function openMedia(i){
+  const reg=mediaReg[i]; if(!reg) return;
+  lbCur=i; lbAt=0;
+  lbShots=lbList(mediaOf(reg.it,reg.rec));
+  lbBusy=false;
+  $("lb").classList.add("open");
+  paintMedia();
+  // the rest of this component's photographs, and its video, on demand
+  if(drvOn()){
+    lbBusy=true; paintMedia();
+    try{
+      const got=await drv().ensureItem(reg.rec, reg.it);
+      if(got && lbCur===i){ lbShots=lbList(mediaOf(reg.it,reg.rec)); }
+    }catch(e){ /* the frame already on screen still shows */ }
+    finally{ if(lbCur===i){ lbBusy=false; paintMedia(); } }
+  }
+}
+function closeMedia(){
+  lbCur=-1; $("lb").classList.remove("open");
+  $("lbimg").removeAttribute("src");
+  const v=$("lbvid"); v.pause&&v.pause(); v.removeAttribute("src");
+}
+$("lb").onclick=e=>{ if(e.target.id==="lb"||e.target.id==="lbx") closeMedia(); };
+$("lbprev").onclick=e=>{ e.stopPropagation(); if(lbAt>0){ lbAt--; paintMedia(); } };
+$("lbnext").onclick=e=>{ e.stopPropagation(); if(lbAt<lbShots.length-1){ lbAt++; paintMedia(); } };
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){ closeMedia(); return; }
+  if(!$("lb").classList.contains("open")) return;
+  if(e.key==="ArrowLeft"&&lbAt>0){ lbAt--; paintMedia(); }
+  if(e.key==="ArrowRight"&&lbAt<lbShots.length-1){ lbAt++; paintMedia(); }
+});
 $("themeBtn").onclick=()=>{ const c=document.documentElement.getAttribute("data-theme");
   const dark=c?c==="dark":matchMedia("(prefers-color-scheme: dark)").matches;
   document.documentElement.setAttribute("data-theme",dark?"light":"dark"); };
+const TABS=["overview","failure","actions","coverage","equipment","reports"];
 function showTab(t){ $("tabs").querySelectorAll("button").forEach(b=>b.classList.toggle("active",b.dataset.tab===t));
-  ["overview","failure","actions","equipment","reports"].forEach(x=>$("tab-"+x).classList.toggle("hidden",x!==t)); }
+  TABS.forEach(x=>$("tab-"+x).classList.toggle("hidden",x!==t)); }
 $("tabs").onclick=e=>{ const b=e.target.closest("button[data-tab]"); if(b) showTab(b.dataset.tab); };
 
 /* ---------- reports ---------- */
@@ -2079,6 +2734,8 @@ $("rGo").onclick=async ()=>{
     if($("rPhotos").value==="1" && drvOn()){
       const recs=window.CMReport.recsForScope($("rScope").value, target);
       msg.textContent="Fetching photos from Drive…";
+      /* No {first:true} here on purpose: the report prints all four photographs
+         of a component, so this is the one path that wants every file. */
       await window.CMDrive.ensurePhotos(recs,(d,n)=>{ msg.textContent=`Fetching photos from Drive… ${d}/${n}`; });
     }
     const n=await window.CMReport.generate($("rScope").value, target,
@@ -2107,7 +2764,7 @@ function refreshControls(){
   $("sub").textContent=t("sub_count",{n:RECS.length,u:units.length})
     +(imported.length?t("sub_imported",{n:imported.length}):"");
 }
-function renderAll(){ renderChips(); renderKpis(); renderFleet(); renderFailure(); renderActions(); renderHistory(); }
+function renderAll(){ renderChips(); renderKpis(); renderFleet(); renderFailure(); renderActions(); renderCoverage(); renderHistory(); }
 ["fType","fClass","fRange"].forEach(id=>$(id).onchange=renderAll);
 let qTimer=null;
 $("fQ").oninput=()=>{ clearTimeout(qTimer); qTimer=setTimeout(renderAll,180); };   // debounce, the fleet table is big
@@ -2126,8 +2783,8 @@ rebuild(); refreshControls(); renderAll(); refreshSources();
 applyLang();                          // paints the static markup and re-renders in the saved language
 if(!RECS.length) openData();          // first run: show where data comes from
 </script>
-<script src="drive.js?v=95"></script>
-<script src="sync-adapter.js?v=95"></script>
-<script src="report.js?v=95"></script>
+<script src="drive.js?v=96"></script>
+<script src="sync-adapter.js?v=96"></script>
+<script src="report.js?v=96"></script>
 </body>
 </html>

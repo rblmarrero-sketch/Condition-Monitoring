@@ -61,6 +61,18 @@
     return out;
   }
 
+  /* The supervisor's signature is uploaded as its own PNG and the core prints it
+     on the sign-off line. Nothing here ever looked it up, so every report the
+     dashboard has produced printed the name over an empty line while the
+     signature sat in Drive under a name we already knew. */
+  function signSrc(rec) {
+    if (rec.signUrl) return rec.signUrl;
+    const fp = folder();
+    if (!fp || !window.CMDash || !window.CMDash.signNames) return "";
+    for (const n of window.CMDash.signNames(rec)) if (fp[n]) return fp[n];
+    return "";
+  }
+
   /* The two frames, coloured by what each point read — the same drawing the
      phone prints, from the same module, so a fitter sees one machine picture
      wherever the report came from. */
@@ -96,7 +108,7 @@
       date: rec.date || "",
       by: rec.by || "", sup: rec.sup || "", smu: rec.smu || "",
       gps: rec.gps || null,
-      signUrl: rec.signUrl || "",
+      signUrl: signSrc(rec),
       mapHTML: reportMap(rec),
       wear: typeof isWearType === "function" && isWearType(rec.type),
       temp: rec.type === "TEMP",

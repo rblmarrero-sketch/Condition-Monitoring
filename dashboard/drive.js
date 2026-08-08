@@ -7,7 +7,10 @@
 
      GET ?action=records[&after=<ms>]  → every inspection in ONE reply, plus an
                                          index of the photo file names
+     GET ?action=index&folder=<path>   → one folder's photo names, for when that
+                                         index came back capped
      GET ?action=file&id=…             → one file as base64, fetched on demand
+     POST {op:"organize"}              → re-file the folder as TYPE/UNIT/DATE
 
    Why one call and not one per file: the folder holds a sidecar per inspection,
    so the obvious "list, then fetch each" costs a few hundred round trips and a
@@ -21,7 +24,9 @@
 
    Photos are NOT pulled up front — a month of rounds is hundreds of megabytes.
    Only the names are indexed; bytes are fetched for the unit you open or the
-   report you generate.
+   report you generate. Even then it is ONE photograph per component, because
+   that is all a card shows; the other three and the video travel when somebody
+   opens the viewer, and everything travels for a report that asks for photos.
 
    Requests are plain GETs with no custom headers, so no CORS preflight — an
    Apps Script web app cannot answer one. The secret rides in the query string.
@@ -36,6 +41,8 @@
   let index = {};                       // file name -> {id, size}
   let fetched = {};                     // file name -> objectURL (or null if it failed)
   let legacy = false;                   // deployed script predates ?action=records
+  let capped = false;                   // the folder walk hit its ceiling — see topUp()
+  let scanned = {};                     // folder path -> true, folders already indexed one by one
 
   const cfg = () => ({ url: (localStorage.getItem(LS_URL) || "").trim(),
                        sec: localStorage.getItem(LS_SEC) || "" });
@@ -81,7 +88,7 @@
   async function load(onProgress, opts) {
     opts = opts || {};
     const say = (m) => onProgress && onProgress(m);
-    if (opts.full) { index = {}; fetched = {}; localStorage.removeItem(LS_CUR); }
+    if (opts.full) { index = {}; fetched = {}; scanned = {}; capped = false; localStorage.removeItem(LS_CUR); }
 
     const resuming = !opts.full && !!cursor();
     let at = opts.full ? 0 : cursor();
@@ -99,6 +106,10 @@
         (r.edits || []).forEach(x => eds.push(x));
         (r.conflicts || []).forEach(x => cons.push(x));
         (r.index || []).forEach(f => { index[f.name] = { id: f.id, size: f.size }; });
+        /* The script walked more files than one reply can carry. Some sidecars
+           were never opened, so records ARE missing — the panel has to say so
+           rather than reporting a short count as a complete one. */
+        if (r.capped) capped = true;
         failed += r.failed || 0;
         files = r.files || files;
         photos = r.photos || photos;
@@ -124,7 +135,7 @@
 
     const held = window.CMDash.driveCount();
     return { records: recs.length, edits: eds.length, conflicts: cons.length, held, files, photos, failed,
-             truncated, pending, pages, incremental: resuming,
+             truncated, pending, pages, incremental: resuming, capped,
              note: recs.length ? "" : (held ? "" : "No inspections (*.json) in that folder yet.") };
   }
 
@@ -162,29 +173,53 @@
              truncated: !!all.truncated };
   }
 
-  /* ---- 2. pull the photos a given set of records needs ---- */
-  function wanted(recs) {
+  /* ---- 2. pull the photos a given set of records needs --------------------
+     A component may carry four photographs and a video. Pulling all of them for
+     every component of every round on a unit page is hundreds of megabytes to
+     show a grid of thumbnails, so the caller says how much it needs:
+
+       {first:true}   one photograph per component — what the cards show
+       (default)      every photograph, the video and the signature — the report
+
+     `itemNames` is the single list both paths are built from, so "which file is
+     this component's second photograph" is answered in exactly one place. */
+  const SLOTS = ["", "_1", "_2", "_3", "_4"];
+
+  function itemNames(rec, it, opts) {
+    const D = window.CMDash;
+    const base = D.photoBase(it, rec);
+    const out = [];
+    // The same candidate list the history uses, so a record whose photos were
+    // kept under "~DEVICE" after a two-phone clash still gets them fetched.
+    for (const sfx of SLOTS) {
+      const hit = D.photoNames(base, rec, [sfx]).filter(nm => index[nm]);
+      if (!hit.length) continue;
+      out.push(hit[0]);                 // one file per slot; the rest are other extensions
+      /* The bare name and _1 are the same first photograph under two spellings —
+         whichever of them exists IS the thumbnail, so stop at the first hit. */
+      if (opts && opts.first) break;
+    }
+    if (!(opts && opts.first)) {
+      for (const nm of D.videoNames(base, rec)) if (index[nm]) { out.push(nm); break; }
+    }
+    return out;
+  }
+
+  function wanted(recs, opts) {
     const names = [];
     for (const rec of recs) {
       for (const it of (rec.items || [])) {
-        const base = window.CMDash.photoBase(it, rec);
-        // The same candidate list the history uses, so a record whose photos were
-        // kept under "~DEVICE" after a two-phone clash still gets them fetched.
-        for (const nm of window.CMDash.photoNames(base, rec, ["", "_1", "_2", "_3", "_4"])) {
-          if (index[nm] && !(nm in fetched)) names.push(nm);
-        }
+        for (const nm of itemNames(rec, it, opts)) if (!(nm in fetched)) names.push(nm);
       }
-      const stem = `${rec.equip}_${(rec.date || "").split("-").reverse().join(".")}_${rec.type}_SIGN`;
-      const dev = String(rec.dev || "");
-      for (const sig of (dev ? [`${stem}~${dev}.png`, `${stem}.png`] : [`${stem}.png`]))
+      /* The signature is a few kilobytes and it is shown in the round's header,
+         so it comes down with the thumbnails rather than waiting for a report. */
+      for (const sig of window.CMDash.signNames(rec))
         if (index[sig] && !(sig in fetched)) names.push(sig);
     }
     return [...new Set(names)];
   }
 
-  async function ensurePhotos(recs, onProgress) {
-    if (!configured()) return 0;
-    const names = wanted(recs);
+  async function fetchNames(names, onProgress) {
     if (!names.length) return 0;
     await pool(names, async (nm) => {
       try {
@@ -195,6 +230,60 @@
       } catch (e) { fetched[nm] = null; }          // remember the failure, don't retry forever
     }, onProgress);
     return names.length;
+  }
+
+  /* ---- 2b. the index, when one reply could not hold all of it --------------
+     The photo index that comes down with the records is capped: a site a year
+     into a fleet of a thousand machines has more files than fit in one Apps
+     Script reply. Past that cap a photograph exists in Drive, is on screen in
+     the phone that took it, and is simply invisible here — the worst kind of
+     missing, because nothing says so.
+
+     A record knows the folder it came from: the script returns the sidecar's
+     path in `_file`, and under {TYPE}/{UNIT}/{YYYY-MM-DD} that folder holds
+     exactly this round's photographs. So ask for that one folder. It is a small
+     reply, it is asked for once per folder per session, and it makes the global
+     cap stop mattering for anything anybody actually opens. */
+  /* A sidecar still sitting in the root has no "/" in its path, and the root is
+     a folder like any other — the layout it was uploaded under is exactly the
+     case this has to cope with. Returning "" for it and then filtering "" out
+     skipped the rounds most likely to need topping up. */
+  const ROOT_DIR = " root";
+  function folderOf(rec) {
+    const p = String(rec._file || "");
+    const cut = p.lastIndexOf("/");
+    return cut < 0 ? ROOT_DIR : p.slice(0, cut);
+  }
+  async function topUp(recs) {
+    if (!capped) return false;                  // the whole folder fitted; nothing is hiding
+    const dirs = [...new Set(recs.map(folderOf).filter(d => !scanned[d]))];
+    if (!dirs.length) return false;
+    let added = 0;
+    for (const d of dirs) {
+      scanned[d] = true;
+      try {
+        const r = await api({ action: "index", folder: d === ROOT_DIR ? "" : d });
+        (r.index || []).forEach(f => { if (!index[f.name]) { index[f.name] = { id: f.id, size: f.size }; added++; } });
+      } catch (e) {
+        // An /exec deployed before ?action=index simply has no answer for this.
+        // The capped index is still the best available; do not keep asking.
+        if (/unknown action/i.test((e && e.message) || "")) { capped = false; return added > 0; }
+      }
+    }
+    return added > 0;
+  }
+
+  async function ensurePhotos(recs, onProgress, opts) {
+    if (!configured()) return 0;
+    await topUp(recs);
+    return fetchNames(wanted(recs, opts), onProgress);
+  }
+
+  /* Everything one component carries, fetched because somebody opened it. */
+  async function ensureItem(rec, it) {
+    if (!configured()) return 0;
+    await topUp([rec]);
+    return fetchNames(itemNames(rec, it, null).filter(nm => !(nm in fetched)));
   }
 
   /* ---- 3. corrections, voids and deletion ----
@@ -258,6 +347,37 @@
      decision is as reversible as a void. */
   const resolve = (key, keep, by) => post({ op: "resolve", key, keep, by });
 
+  /* Re-file the folder as {TYPE}/{UNIT}/{YYYY-MM-DD}. Files are moved and
+     nothing else — not renamed, not trashed, not rewritten — and every reader
+     here and on the phones matches on file NAMES, so what the dashboard can see
+     is identical before and after. `dry` reports the plan and moves nothing.
+
+     It runs in batches against the script's six-minute limit, so keep calling
+     while `remaining` is above zero. The index a load built is keyed by name and
+     survives the move untouched; only the paths in it are stale, which nothing
+     reads. */
+  async function organize(opts, onProgress) {
+    opts = opts || {};
+    let moved = 0, scannedFiles = 0, failedMoves = 0, rounds = 0;
+    let last = null;
+    for (;;) {
+      const r = await post({ op: "organize", dry: !!opts.dry, admin: opts.admin || "" });
+      last = r;
+      moved += r.moved || 0;
+      failedMoves += r.failed || 0;
+      scannedFiles = r.scanned || scannedFiles;
+      rounds++;
+      if (onProgress) onProgress({ moved, remaining: r.remaining || 0, scanned: scannedFiles });
+      // A dry run reports the whole plan in one pass; only a real one repeats.
+      if (opts.dry || !r.remaining || rounds >= 40) break;
+    }
+    return { moved, failed: failedMoves, scanned: scannedFiles,
+             remaining: (last && last.remaining) || 0,
+             wouldMove: (last && last.wouldMove) || 0,
+             samples: (last && last.samples) || [], unknown: (last && last.unknown) || [],
+             dry: !!opts.dry, layout: last && last.layout };
+  }
+
   /* Health check without pulling anything: the bare /exec URL reports the folder.
      Also reports whether the fast path is deployed, since the usual reason it is
      not is an edit that was saved but never released as a new version. */
@@ -296,16 +416,21 @@
   }
 
   window.CMDrive = {
-    load, ensurePhotos, configured, ping, saveEdit, remove, resolve,
+    load, ensurePhotos, ensureItem, configured, ping, saveEdit, remove, resolve, organize,
     get url() { return cfg().url; },
     get secret() { return cfg().sec; },
     get legacy() { return legacy; },
+    /* True when the folder holds more files than one walk could carry. Records
+       past that point were never opened, so the count on screen is short and the
+       panel must say so. */
+    get capped() { return capped; },
     save(url, sec) {
       const changed = (url || "").trim() !== cfg().url;
       localStorage.setItem(LS_URL, (url || "").trim());
       localStorage.setItem(LS_SEC, sec || "");
       // A different folder's cursor means nothing — start that one from scratch.
-      if (changed) { localStorage.removeItem(LS_CUR); index = {}; fetched = {}; legacy = false; }
+      if (changed) { localStorage.removeItem(LS_CUR); index = {}; fetched = {}; scanned = {};
+                     legacy = false; capped = false; }
     },
     indexed() { return Object.keys(index).length; },
   };

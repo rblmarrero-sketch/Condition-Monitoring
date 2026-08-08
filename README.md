@@ -632,6 +632,23 @@ Drive**; **Test connection** checks the deployment — both halves of it, see be
 indexed by name but only downloaded when you open a unit or generate a PDF with photos — a
 month of rounds is hundreds of megabytes, so pulling it all up front would be pointless.
 
+And even then it is **one photograph per component**. A position can carry four photographs
+and a minute of video; a unit page that pulled all of them would be half a gigabyte to paint
+a grid of thumbnails, and an undercarriage round has a hundred and forty-four positions. So
+the card shows the first frame with a badge saying what else is there — `▣ 4 🎥`, read
+straight off the record, so it is right before any image has travelled — and clicking it
+opens the viewer, which is the moment the rest are fetched. Arrow keys or the thumbnail
+strip move between them. A report asking for photos still pulls every one, because it prints
+every one.
+
+> **If the folder is too large to walk in one read**, the panel says so in as many words and
+> the Drive card turns red. That matters more than it sounds: past that ceiling, inspections
+> that exist in Drive are simply *not on the screen*, and the reply from a folder with two
+> thousand unread rounds in it looks exactly like the reply from a folder with none. It used
+> to stop at four thousand files without a word. It now stops far later, says when it did,
+> and a unit you open still finds its own photographs — the dashboard asks for that one
+> folder by name rather than depending on the whole fleet fitting in one reply.
+
 Every inspection arrives in **one request**. The reading loop runs inside Apps Script,
 where Drive is local, and the dashboard sends back the last reply's cursor so a refresh
 only carries what is new:
@@ -647,10 +664,51 @@ spent about 5 of those minutes on every load. **Reload everything** re-reads fro
 use it after deleting files in Drive, since an incremental refresh asks "what is new?" and
 so cannot notice a deletion.
 
+### How the Drive folder is arranged, and tidying up an old one
+
+The phones file every upload as **inspection type → unit → date**:
+
+```
+Condition Monitoring/
+├── MP/
+│   ├── TK146/
+│   │   └── 2026-07-29/
+│   │       ├── TK146_29.07.2026_MP.json          ← the round
+│   │       ├── TK146_4C_29.07.2026_MP_1.jpg      ← four photographs per position
+│   │       ├── TK146_4C_29.07.2026_MP_2.jpg
+│   │       ├── TK146_4C_29.07.2026_MP.mp4        ← and one video
+│   │       └── TK146_29.07.2026_MP_SIGN.png      ← the supervisor's signature
+│   └── TK147/…
+├── UC/…
+└── _meta/                                        ← corrections, voids, conflict markers
+```
+
+That is the third layout. The first put everything in the root, the second in `{YYYY-MM}`,
+the third in `{TYPE}/{YYYY-MM}`. **Nothing ever broke when it changed**, because every
+reader — the dashboard, the phones' team view, the deletion code — walks the whole tree and
+matches on file *names*. Which is exactly why nobody noticed the folder had quietly become
+impossible for a human to navigate: three thousand files in one directory.
+
+**Data sources → 🗂 Tidy the Drive folder** re-files the lot. Press **Preview what would
+move** first — it reports the count and a sample and moves nothing. What it does:
+
+* Reads each file's destination out of the file's **own name**. A name that does not follow
+  the standard is **left where it is and listed**, never guessed at.
+* **Moves only.** Nothing is renamed, nothing is trashed, no bytes are touched. Because the
+  readers match on names, the dashboard shows the identical inspections afterwards — the
+  change is entirely about where a person finds a round.
+* Leaves `_meta/` alone. Corrections and conflict markers are addressed by path.
+* Runs in batches against Apps Script's six-minute limit; press again while it says there
+  is more to go.
+
+It needs the Apps Script redeployed (**Deploy → Manage deployments → ✏️ → Version: New
+version**). Where `ADMIN_SECRET` is set, it asks for it.
+
 ### Dropping photographs into Drive by hand
 
-You can. Put them in the same folder the phones upload to — the script files them under
-`YYYY-MM`, and a photo dropped into that month folder is found.
+You can. Put them in the folder for that round — `MP/TK152/2026-07-31` — or in the root, and
+run the tidy-up above afterwards to file them. A photo is found either way; the layout is
+for people, not for the software.
 
 The name is what matters, and it is not free-form:
 
@@ -977,6 +1035,68 @@ The dashboard has an **EN | RU** toggle in the header, matching the app. Everyth
 switches — tabs, filters, KPI tiles, table headings, severity and inspection-type names,
 the data-sources sheet and the edit panel — and the choice is remembered per browser. The
 PDF reports were already bilingual and print both languages side by side regardless.
+
+### Who each tab is for
+
+Four people read this page and they do not read the same part of it. Each tab says whose
+question it answers, on hover and in this table:
+
+| Tab | Whose | The question |
+|---|---|---|
+| **Overview** | everyone | What state is the fleet in, and which machines are getting worse? |
+| **Equipment history** | inspectors | One machine: every round, every reading, every photograph. |
+| **Action register** | maintenance | What needs work, worst first — and out to CSV for planning. |
+| **Coverage** | planning | What is overdue, and what is about to be? |
+| **Failure modes** | reliability | Which failure modes to eliminate, and is the programme catching things early? |
+| **Reports** | management | The printed record, bilingual, signed. |
+
+### What the dashboard shows that it used to leave on the phone
+
+The phone records more per position than the dashboard ever displayed. Everything below was
+captured in the pit, uploaded, and then not shown to the office:
+
+* **How the finding was found** — the ISO 14224 Table B.3 detection method, on every
+  position, in the register, in the CSV, and ranked in its own Pareto on **Failure modes**.
+  This is the condition-monitoring programme's own scorecard: findings raised by DM-08 oil
+  analysis or DM-09 vibration analysis are the programme working; findings raised by DM-01
+  after a breakdown are it being overtaken. Without it a reliability programme cannot show
+  it is working, which is the whole reason the field exists.
+* **A temperature against its limit.** `temp-limits.js` was loaded by the dashboard from the
+  day it was written and nothing on the page ever asked it anything, so 96 °C on a final
+  drive and 96 °C on an electrical panel read identically — one is fine and one is an alarm.
+  Readings now carry their warn/alarm pair and turn red when they are over it, matched on
+  the component the same way the phone matches it.
+* **How long has it got.** The wear forecast — hours to condemn and millimetres per
+  thousand hours — which the phone has shown at the point of measurement since build 90.
+  Percent worn says where a part is; this is the number planning orders against, and the
+  office is where parts are actually ordered. The dashboard holds every round from every
+  phone rather than one phone's share, so its series is the longer one and its answer is the
+  better one. It never guesses: with one reading, or too short an interval, it says so.
+* **Is it getting worse.** A bar per round with the direction called out, per unit *and per
+  type* — comparing a plug round against an undercarriage round is not a direction. Sortable
+  in the fleet table, so "which machines are deteriorating" is one click.
+* **The supervisor's signature**, beside the name in the round's header. A round signed off
+  and a round with a name typed into a box are not the same evidence. It was also never
+  looked up when printing, so every PDF this dashboard produced printed the name over an
+  empty line while the signature sat in Drive under a name we already knew.
+* **The other three photographs and the video.** See above.
+
+### Coverage — what is overdue
+
+The phone has carried a due-list since build 30: a "last done" per unit and type against an
+interval, and a screen saying which machines are overdue. It is the one question a planner
+asks that the dashboard could not answer at all — and asking it from a phone means scrolling
+a thousand machines on a 390 px screen.
+
+The **Coverage** tab is that list from the desk. Same intervals (MP/FC 90 days, INSP/TEMP/
+GET/TB 30), same arithmetic — a unit that reads "overdue" in the pit must not read "fine" at
+the desk, or the two ends are running different programmes. *Due soon* is the last quarter
+of the interval: about three weeks' notice on a 90-day round, about a week on a 30-day one.
+
+Edit an interval and the whole tab re-reads against it; the change is remembered per browser.
+The **Period** filter is deliberately ignored here — a 30-day window answers "when was this
+last done?" by hiding every round older than 30 days, which makes a machine inspected 40 days
+ago look as though it has never been inspected at all.
 
 ### Finding things once the data is in
 

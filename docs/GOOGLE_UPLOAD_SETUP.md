@@ -142,10 +142,24 @@ time?*
 > A phone sitting on either of those exact strings is moved forward once, automatically.
 > A folder you typed yourself is never touched, and typing an old one back sticks.
 
-Files already in Drive are not moved — the new layout applies from the next upload, and the
-dashboard reads the whole tree, so old rounds keep working exactly as before. Drag them into
-the new folders if you want the history tidy; nothing reads the folder layout, so it is
-cosmetic.
+Files already in Drive are not moved by that phone-side upgrade — the new layout applies
+from the next upload, and the dashboard reads the whole tree, so old rounds keep working
+exactly as before.
+
+**To move the old ones, use the dashboard**: *Data sources → 🗂 Tidy the Drive folder*.
+Press **Preview what would move** first; it reports the count and a sample and moves nothing.
+
+The destination for each file is read out of that file's **own name** — the naming standard
+(`<UNIT>…<DD.MM.YYYY>_<TYPE>`) both ends have always used — so it needs no index and no
+state, and a name that does not follow the standard is **left where it is and listed** rather
+than guessed at. Files are **moved and nothing else**: not renamed, not trashed, no bytes
+touched, and `_meta/` is skipped because corrections and conflict markers are addressed by
+path. Since every reader matches on names, the dashboard shows the identical inspections
+before and after — the layout is for people.
+
+It runs in batches against the six-minute limit; press again while it says there is more to
+go. Where `ADMIN_SECRET` is set, it asks for it. It needs this file redeployed as a new
+version, like every other change.
 
 > **One thing to watch as this grows.** The dashboard's batch read walks every folder under
 > the root on each refresh. One folder per machine per round is a lot more folders than one
@@ -153,6 +167,15 @@ cosmetic.
 > feel slow, and Apps Script gives a script six minutes. If that day comes, either point the
 > folder at `{TYPE}/{UNIT}/{YYYY-MM}` (one folder per machine per month, same shape, ~30×
 > fewer folders) or move to the REST backend in `server/`, which does not walk anything.
+>
+> The walk also has a hard ceiling on files, and what matters is that **it now says when it
+> hits one**. It used to stop at four thousand files in silence: every sidecar past that
+> point was an inspection that never reached the dashboard, and the reply looked exactly
+> like the reply from a folder holding nothing more. The ceiling is `LIST_CAP` in the script,
+> raised to 30,000; when a walk reaches it the dashboard turns the Drive card red and says
+> inspections are missing. Opening a unit still finds that unit's photographs regardless —
+> `?action=index&folder=…` asks for the one folder the round lives in, which under
+> `{TYPE}/{UNIT}/{YYYY-MM-DD}` is exactly this round's files.
 
 ### Correcting, voiding and deleting an inspection
 

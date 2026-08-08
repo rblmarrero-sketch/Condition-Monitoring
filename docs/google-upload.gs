@@ -68,11 +68,18 @@ function doPost(e) {
        together but fail apart — a version released before doPost existed still
        answers every GET — so the dashboard sends this to find out whether the
        half it needs is actually live. It writes nothing. */
-    if (b.op === 'ping')    return json({ ok: true, write: true, batch: true, canDelete: !!ADMIN_SECRET });
+    if (b.op === 'ping')    return json({ ok: true, write: true, batch: true,
+                                          canDelete: !!ADMIN_SECRET, canOrganize: true,
+                                          needsAdminToOrganize: !!ADMIN_SECRET });
 
     if (b.op === 'edit')    return json(saveEdit_(b));
     if (b.op === 'delete')  return json(deleteRecord_(b));
     if (b.op === 'resolve') return json(resolveConflict_(b));
+    /* Re-shapes the folder into {TYPE}/{UNIT}/{YYYY-MM-DD}. Moves only — nothing
+       is renamed, trashed or rewritten, and every reader matches on file names
+       rather than paths, so this cannot change what the dashboard or the phones
+       can see. See organize_ for why that is true. */
+    if (b.op === 'organize') return json(organize_(b));
 
     /* Several files in one request.
 
@@ -198,6 +205,11 @@ function doGet(e) {
   try {
     if (p.action === 'records') return json(readRecords_(p));
     if (p.action === 'list') return json(listFiles_(p.folder || '', p.ext || ''));
+    /* One folder's photographs, by name and id. The global index in ?action=records
+       is capped, and under {TYPE}/{UNIT}/{YYYY-MM-DD} a record's own folder is
+       known from its sidecar path — so the dashboard can ask for exactly the unit
+       it is showing instead of depending on the whole fleet fitting in one reply. */
+    if (p.action === 'index') return json(indexFolder_(p.folder || ''));
     if (p.action === 'file') return json(readFile_(p.id));
     return json({ ok: false, error: 'Unknown action: ' + p.action });
   } catch (err) {
@@ -414,6 +426,112 @@ function deleteRecord_(b) {
 }
 function esc_(s) { return String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
 
+/* ── tidying the folder ──────────────────────────────────────────────────────
+   The layout has changed twice. Files uploaded by the earliest builds went to
+   the root, then to {YYYY-MM}, then to {TYPE}/{YYYY-MM}; the phones now write
+   {TYPE}/{UNIT}/{YYYY-MM-DD}, which is the one an actual person can navigate —
+   pick the round, pick the machine, pick the day.
+
+   Nothing depended on the layout, because every reader walks the whole tree and
+   matches on file NAMES. That is exactly why the mess accumulated unnoticed, and
+   it is also why this is safe: moving a file changes where a human finds it and
+   nothing else. Nothing is renamed, nothing is trashed, no bytes are touched.
+
+   Where a file belongs is read out of its own name — <UNIT>…<DD.MM.YYYY>_<TYPE>,
+   the naming standard both ends have always used — so this needs no index, no
+   record and no state. A name that does not follow the standard is LEFT ALONE
+   and reported, never guessed at.
+
+   Runs in batches against the 6-minute limit: call again while `remaining` is
+   above zero. `dry:true` reports exactly what would move and moves nothing.
+   ──────────────────────────────────────────────────────────────────────────*/
+var ORG_MAX = 300;              // files moved per call
+var ORG_BUDGET_MS = 240000;     // stop at 4 min — Apps Script kills us at 6
+
+/* <UNIT>[_<KEY> | .<KEY>]_<DD.MM.YYYY>_<TYPE>[_<n> | _SIGN][~<DEVICE>].<ext>
+   The register types write "TK151.DRS.ENG_…", everything else "TK151_4C_…", and
+   a component's photographs are _1.._4. All of them start with the unit. */
+var ORG_RE = /^(.+)_(\d{2})\.(\d{2})\.(\d{4})_([A-Za-z0-9]+)(?:_\d+|_SIGN)?(?:~[A-Za-z0-9_-]{1,12})?\.[A-Za-z0-9]+$/;
+
+/** The folder this file belongs in, or '' when its name does not say. */
+function homeFor_(name) {
+  // Correction, conflict and deletion markers are addressed by path, not walked
+  // for by name — they belong in _meta and moving them would break the readers.
+  if (/\.(edit|conflict|deleted)\.json$/i.test(name)) return '';
+  var m = ORG_RE.exec(name);
+  if (!m) return '';
+  var head = m[1], dd = m[2], mm = m[3], yyyy = m[4], type = m[5].toUpperCase();
+  // The unit is the head up to the first separator: "TK151_4C" and
+  // "TK151.DRS.ENG" are both TK151. Unit numbers carry neither "." nor "_".
+  var cut = head.search(/[._]/);
+  var unit = (cut < 0 ? head : head.slice(0, cut)).toUpperCase();
+  if (!unit || !type) return '';
+  // A date that cannot be one is a name that only looks like a file name.
+  if (+mm < 1 || +mm > 12 || +dd < 1 || +dd > 31) return '';
+  return type + '/' + unit + '/' + yyyy + '-' + mm + '-' + dd;
+}
+
+/** Every file under the root with the folder it currently sits in. */
+function walkWithDirs_(dir, prefix, out, depth) {
+  if (depth > ORG_DEPTH) return;
+  // _meta is the readers' fixed address. Never walk into it, never move out of it.
+  if (prefix.indexOf(META_DIR + '/') === 0) return;
+  var fs = dir.getFiles();
+  while (fs.hasNext()) {
+    var f = fs.next();
+    out.push({ name: f.getName(), dir: prefix.replace(/\/$/, ''), file: f });
+  }
+  var ds = dir.getFolders();
+  while (ds.hasNext()) {
+    var d = ds.next(), n = d.getName();
+    if (!prefix && n === META_DIR) continue;
+    walkWithDirs_(d, prefix + n + '/', out, depth + 1);
+  }
+}
+var ORG_DEPTH = 8;
+
+function organize_(b) {
+  /* Moving files is a write, so it needs the shared secret like every other
+     POST. Where an admin password has been configured it is required too — a
+     site that has bothered to set one has said it wants writes gated, and
+     re-shaping the whole folder is not the exception to that. */
+  if (ADMIN_SECRET && String(b.admin || '') !== ADMIN_SECRET)
+    return { ok: false, error: 'Wrong admin password' };
+
+  var dry = !!b.dry;
+  var max = Math.min(Number(b.max || 0) || ORG_MAX, 1000);
+  var started = new Date().getTime();
+  var root = rootFolder_();
+
+  var all = [];
+  walkWithDirs_(root, '', all, 0);
+
+  var moved = [], unknown = [], dirs = {};
+  var todo = 0, done = 0, failed = 0, truncated = false;
+
+  for (var i = 0; i < all.length; i++) {
+    var f = all[i], home = homeFor_(f.name);
+    if (!home) { if (unknown.length < 25) unknown.push(f.dir ? f.dir + '/' + f.name : f.name); continue; }
+    if (f.dir === home) continue;                     // already where it belongs
+    todo++;
+    if (done >= max || new Date().getTime() - started > ORG_BUDGET_MS) { truncated = true; continue; }
+    if (moved.length < 25) moved.push({ from: f.dir || '/', to: home, name: f.name });
+    if (dry) { done++; continue; }
+    try {
+      var dest = dirs[home] || (dirs[home] = folderPath_(root, home));
+      f.file.moveTo(dest);
+      done++;
+    } catch (err) { failed++; }
+  }
+
+  return { ok: true, dry: dry, scanned: all.length,
+           moved: dry ? 0 : done, wouldMove: dry ? done : done,
+           remaining: Math.max(0, todo - done), failed: failed,
+           truncated: truncated || todo > done,
+           samples: moved, unknown: unknown, unknownShown: unknown.length,
+           layout: '{TYPE}/{UNIT}/{YYYY-MM-DD}' };
+}
+
 /* ── the batch read ──────────────────────────────────────────────────────────
    Reading the sidecars one HTTP request at a time meant a few hundred round
    trips — and a few hundred script invocations against a ~90 min/day quota —
@@ -474,6 +592,11 @@ function readRecords_(p) {
   var out = { ok: true, records: records, edits: edits, conflicts: conflicts, read: read, failed: bad,
               pending: Math.max(0, sidecars.length - read - bad),
               truncated: truncated, cursor: cursor, files: all.length,
+              /* The folder walk hit its ceiling: there are more files in Drive
+                 than this reply has looked at, so some inspections are missing
+                 and the client must say so rather than showing what it got as
+                 though it were everything. */
+              capped: !!all.capped, cap: LIST_CAP,
               photos: all.filter(function (f) { return MEDIA_RE.test(f.name); }).length };
   // The client needs name -> id to fetch a photo later. Sending it here saves a
   // second call; index=0 turns it off when only the records are wanted.
@@ -485,6 +608,37 @@ function readRecords_(p) {
 }
 var MEDIA_RE = /\.(jpe?g|png|webp|mp4|mov)$/i;
 
+/** The media under one folder — the photographs and video of a single round. */
+function indexFolder_(sub) {
+  var root = rootFolder_();
+  var dir;
+  /* Ask for a folder that is not there and the answer is "nothing", not a new
+     empty folder: folderPath_ CREATES what it cannot find, which would litter
+     the root with a directory per unit the moment a client guessed wrong. */
+  try { dir = sub ? findPath_(root, sub) : root; } catch (err) { dir = null; }
+  if (!dir) return { ok: true, folder: sub, found: false, index: [] };
+  /* This folder's OWN files, not the tree under it. One round is one folder, so
+     recursing buys nothing — and asked for the root of a site that has not been
+     tidied yet, it would walk the entire fleet and hit the same ceiling this
+     call exists to get around. */
+  var out = [], fs = dir.getFiles(), n = 0;
+  while (fs.hasNext() && n < LIST_CAP) {
+    var f = fs.next(), nm = f.getName();
+    n++;
+    if (MEDIA_RE.test(nm)) out.push({ name: nm, id: f.getId(), size: f.getSize() });
+  }
+  return { ok: true, folder: sub, found: true, capped: n >= LIST_CAP, index: out };
+}
+
+/** folderPath_ without the create — null when the path does not exist. */
+function findPath_(root, path) {
+  return String(path).split('/').filter(String).reduce(function (dir, part) {
+    if (!dir) return null;
+    var it = dir.getFoldersByName(part);
+    return it.hasNext() ? it.next() : null;
+  }, root);
+}
+
 /** Every file under the root, sub-folders included. `ext` filters by suffix. */
 function listFiles_(sub, ext) {
   var root = rootFolder_();
@@ -493,11 +647,25 @@ function listFiles_(sub, ext) {
   collect_(dir, '', out, 0, String(ext || '').toLowerCase());
   return { ok: true, count: out.length, truncated: out.length >= LIST_CAP, files: out };
 }
-var LIST_CAP = 4000;
+
+/* The walk stops somewhere — a run that never returns is an Apps Script that is
+   killed at six minutes and a dashboard that shows nothing at all. What it must
+   not do is stop QUIETLY: at 4,000 files, a site a year into a fleet of a
+   thousand machines passes the cap on photographs alone, and every sidecar after
+   it is a round that simply never appears. Nobody is told, because the reply
+   looks exactly like the reply for a folder that holds nothing more.
+
+   So the cap is raised to where a real site reaches it slowly, and — the part
+   that actually matters — hitting it is reported. The dashboard says so in the
+   Data sources panel and names the fix, rather than quietly showing nine tenths
+   of the fleet as if it were all of it. */
+var LIST_CAP = 30000;
+var WALK_DEPTH = 8;              // {TYPE}/{UNIT}/{DATE} is three; the old layouts were fewer
 function collect_(dir, prefix, out, depth, ext) {
-  if (depth > 5 || out.length >= LIST_CAP) return;
+  if (depth > WALK_DEPTH || out.length >= LIST_CAP) { out.capped = true; return; }
   var fs = dir.getFiles();
-  while (fs.hasNext() && out.length < LIST_CAP) {
+  while (fs.hasNext()) {
+    if (out.length >= LIST_CAP) { out.capped = true; return; }
     var f = fs.next(), n = f.getName();
     if (!ext || n.toLowerCase().slice(-ext.length) === ext) {
       // updated drives the incremental read — see readRecords_
