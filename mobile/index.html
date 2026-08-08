@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=93">
+<link rel="manifest" href="manifest.webmanifest?v=94">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=93">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=93">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=93">
+<link rel="apple-touch-icon" href="icon-192.png?v=94">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=94">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=94">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1459,25 +1459,25 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="native.js?v=93"></script>
-<script src="upload-defaults.js?v=93"></script>
-<script src="hme.js?v=93"></script>
-<script src="mp-fc.js?v=93"></script>
-<script src="hme-cascade.js?v=93"></script>
-<script src="assets.js?v=93"></script>
-<script src="temp-limits.js?v=93"></script>
-<script src="wear.js?v=93"></script>
-<script src="wear-figs.js?v=93"></script>
-<script src="wear-map.js?v=93"></script>
-<script src="machine-photos.js?v=93"></script>
-<script src="machine-fig.js?v=93"></script>
-<script src="get.js?v=93"></script>
-<script src="uc-points.js?v=93"></script>
-<script src="inspect-guide.js?v=93"></script>
-<script src="get-figs.js?v=93"></script>
-<script src="body-points.js?v=93"></script>
-<script src="body-map.js?v=93"></script>
-<script src="report-core.js?v=93"></script>
+<script src="native.js?v=94"></script>
+<script src="upload-defaults.js?v=94"></script>
+<script src="hme.js?v=94"></script>
+<script src="mp-fc.js?v=94"></script>
+<script src="hme-cascade.js?v=94"></script>
+<script src="assets.js?v=94"></script>
+<script src="temp-limits.js?v=94"></script>
+<script src="wear.js?v=94"></script>
+<script src="wear-figs.js?v=94"></script>
+<script src="wear-map.js?v=94"></script>
+<script src="machine-photos.js?v=94"></script>
+<script src="machine-fig.js?v=94"></script>
+<script src="get.js?v=94"></script>
+<script src="uc-points.js?v=94"></script>
+<script src="inspect-guide.js?v=94"></script>
+<script src="get-figs.js?v=94"></script>
+<script src="body-points.js?v=94"></script>
+<script src="body-map.js?v=94"></script>
+<script src="report-core.js?v=94"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -1726,7 +1726,7 @@ const I18N = {
     sw_fix:"Finish downloading now", sw_fixing:"Downloading…",
     sw_none:"Not installed for offline use yet — open this page once with signal.",
     sw_noanswer:"Could not check the offline copy.",
-    pick_search:"Search…", video_too_long:["Video too long","Please record a clip of 1 minute or less."],
+    pick_search:"Search…", pick_recent:"Recently on this phone", video_too_long:["Video too long","Please record a clip of 1 minute or less."],
     shot_placeholder:"No photo yet.",
     lbl_grade:"Grade / condition", lbl_particle:"Particle count", lbl_comp:"Component hrs", lbl_oil:"Oil hrs",
     lbl_prio:"Work request priority (1C)",
@@ -2033,7 +2033,7 @@ const I18N = {
     sw_fix:"Дозагрузить сейчас", sw_fixing:"Загрузка…",
     sw_none:"Офлайн-режим ещё не установлен — откройте страницу один раз при связи.",
     sw_noanswer:"Не удалось проверить офлайн-копию.",
-    pick_search:"Поиск…", video_too_long:["Видео слишком длинное","Запишите ролик не длиннее 1 минуты."],
+    pick_search:"Поиск…", pick_recent:"Недавние на этом телефоне", video_too_long:["Видео слишком длинное","Запишите ролик не длиннее 1 минуты."],
     shot_placeholder:"Нет фото.",
     lbl_grade:"Степень / состояние", lbl_particle:"Количество частиц", lbl_comp:"Наработка компонента", lbl_oil:"Наработка масла",
     lbl_prio:"Приоритет заявки (1С)",
@@ -4657,7 +4657,29 @@ function renderHdr(){
   $("hsMeta").textContent = bits.join(" · ");
 }
 function openHdr(){ hdrOpen=true; renderHdr(); }
+/* ── the machines this phone actually works on ────────────────────────────
+   The register holds 1,128 units. An inspector's working set on any given day
+   is a handful: the line they are walking, the truck they came back to because
+   the camera failed, the dozer they do MP on and then UC on. Each of those was
+   a hunt through a thousand others.
+
+   It also answers what happens after a save. The form clears — deliberately,
+   because a form that keeps its unit invites a second inspection filed against
+   a machine nobody re-checked — but the machine just filed is now the first row
+   of the picker instead of gone. Eight is the cap: past that it stops being a
+   shortcut and becomes a second fleet list. */
+const RECENT_MAX=8;
+function recentUnits(){
+  try{ const v=JSON.parse(localStorage.getItem("recent_units")||"[]");
+    return Array.isArray(v) ? v.filter(x=>typeof x==="string") : []; }catch(e){ return []; }
+}
+function noteRecent(n){
+  if(!n) return;
+  try{ const r=recentUnits().filter(x=>x!==n); r.unshift(n);
+    localStorage.setItem("recent_units", JSON.stringify(r.slice(0,RECENT_MAX))); }catch(e){}
+}
 function selectEquip(n){ n=(n||"").trim().toUpperCase().replace(/\s+/g,""); curEquip=n;
+  noteRecent(n);
   if(!gps) getGps(true);   // start the fix now so Save never has to wait
   const a=ASSET_BY[n];
   if(a){ eqCat=a.cat||"— UNCATEGORISED —"; localStorage.setItem("equip_cat",eqCat); }
@@ -4693,7 +4715,14 @@ function pickerSource(){
        once one is chosen wastes the choice — and on a list that long it is a
        real hunt. Narrow it to the machines the round applies to. */
     src = src.filter(a=>eligible(a.n, a));
-    return src.map(a=>({k:a.n, label:a.n+(a.m?" · "+a.m:""), group:(a.cat||"— UNCATEGORISED —")}));
+    /* Recently worked on sorts to the top under its own heading — one entry per
+       machine, never a duplicate row, and only machines this round applies to,
+       because the filter above has already run. Array.sort is stable, so
+       everything else keeps its register order. */
+    const rec=recentUnits(), ri=n=>{ const i=rec.indexOf(n); return i<0?1e9:i; };
+    return src.map(a=>({k:a.n, label:a.n+(a.m?" · "+a.m:""),
+        group:(ri(a.n)<1e9 ? t("pick_recent") : (a.cat||"— UNCATEGORISED —")), _r:ri(a.n)}))
+      .sort((x,y)=>x._r-y._r);
   }
   if(pickMode==="prio"){
     const sev=effSev(draft.positions[curItem]||{});
@@ -5895,7 +5924,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="93";
+const BUILD="94";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
