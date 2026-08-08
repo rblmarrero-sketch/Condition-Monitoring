@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=91">
+<link rel="manifest" href="manifest.webmanifest?v=92">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=91">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=91">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=91">
+<link rel="apple-touch-icon" href="icon-192.png?v=92">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=92">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=92">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -60,6 +60,63 @@
     --good:#3aad5c; --warning:#e0a52a; --serious:#e2825a; --critical:#e05a52; --none:#69757b; --warn-ink:#e0a52a;
     --bm-s0:#232a30; --bm-s1:#28313a; --bm-s2:#2d3945; --bm-s3:#334154;
     --bm-edge:#3a444c; --bm-fold:#55688a; }
+  /* ── which round am I in ─────────────────────────────────────────────────
+     Seven rounds, and an inspector switching between the undercarriage, the
+     GET and the dump body wants to know which one is on the screen without
+     reading a label.
+
+     Colour cannot carry that here, and this is measured rather than assumed.
+     Five colours are already spent on meaning — the action accent, plus good,
+     warning, serious and critical — and for a colour-blind reader they occupy
+     both ends of the only axis left after red and green collapse. Sweeping the
+     whole hue wheel at a usable lightness and chroma against those five: ZERO
+     of seventy-two hues clear both the CVD gate (ΔE 8) and the normal-vision
+     floor (ΔE 15). There is no eighth colour to hand out. Inventing one gives
+     roughly one man in twelve a badge he cannot tell from "Critical".
+
+     So identity rides on two channels that do not compete with status:
+
+       the CODE   a Latin two-to-four letter badge — UC, GET, TB — which is
+                  unambiguous, font-safe, greyscale-safe, and the same in both
+                  languages. This is the identity.
+       the TINT   a whisper of hue on the card head, chroma 0.02, far too pale
+                  to be mistaken for a status fill. This is the reinforcement,
+                  and it is what makes the screen feel different at a glance.
+
+     Checked, both modes: body ink on every tint ≥ 13.9:1, muted ink ≥ 4.67:1,
+     and every status pill still clears 3:1 against every tint. Same principle
+     as the tray's --bm-* surfaces: tint says where you are, and green, amber
+     and red keep meaning what they mean. */
+  body{--cat:var(--accent);--cat-bg:var(--surface-2);}
+  body[data-round="MP"]{--cat:#3c69aa;--cat-bg:#ecf5ff;}
+  body[data-round="FC"]{--cat:#7f5398;--cat-bg:#f9f1ff;}
+  body[data-round="INSP"]{--cat:#007c7e;--cat-bg:#e6f9f9;}
+  body[data-round="TEMP"]{--cat:#955902;--cat-bg:#fef2e7;}
+  body[data-round="UC"]{--cat:#4c772c;--cat-bg:#eff8ea;}
+  body[data-round="GET"]{--cat:#964b79;--cat-bg:#ffeff8;}
+  body[data-round="TB"]{--cat:#00749c;--cat-bg:#e7f8ff;}
+  /* Dark AFTER light, and in both scopes. These are single-class selectors, so
+     specificity cannot settle it — source order does, and the first attempt put
+     both dark blocks above the light one. Every round then wore its pale tint
+     on a black page and the badge went dark-on-dark. The media query covers the
+     OS setting; the data-theme scope covers the in-app toggle and has to win
+     over it in both directions. */
+  @media (prefers-color-scheme: dark){ :root:where(:not([data-theme="light"])){ color-scheme:dark; }
+    body[data-round="MP"]{--cat:#75a0df;--cat-bg:#1c232e;}
+    body[data-round="FC"]{--cat:#b48bce;--cat-bg:#26202b;}
+    body[data-round="INSP"]{--cat:#37b2b4;--cat-bg:#162626;}
+    body[data-round="TEMP"]{--cat:#cb9154;--cat-bg:#2a2118;}
+    body[data-round="UC"]{--cat:#83ad69;--cat-bg:#1e251a;}
+    body[data-round="GET"]{--cat:#cd83ae;--cat-bg:#2b1f25;}
+    body[data-round="TB"]{--cat:#4cabd2;--cat-bg:#17252b;}
+  }
+  :root[data-theme="dark"] body[data-round="MP"]{--cat:#75a0df;--cat-bg:#1c232e;}
+  :root[data-theme="dark"] body[data-round="FC"]{--cat:#b48bce;--cat-bg:#26202b;}
+  :root[data-theme="dark"] body[data-round="INSP"]{--cat:#37b2b4;--cat-bg:#162626;}
+  :root[data-theme="dark"] body[data-round="TEMP"]{--cat:#cb9154;--cat-bg:#2a2118;}
+  :root[data-theme="dark"] body[data-round="UC"]{--cat:#83ad69;--cat-bg:#1e251a;}
+  :root[data-theme="dark"] body[data-round="GET"]{--cat:#cd83ae;--cat-bg:#2b1f25;}
+  :root[data-theme="dark"] body[data-round="TB"]{--cat:#4cabd2;--cat-bg:#17252b;}
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
   html,body{margin:0;padding:0;}
   body{background:var(--page);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.4;padding-bottom:92px;}
@@ -121,6 +178,20 @@
     margin:0;padding:2px 0;background:none;border:0;text-align:left;cursor:pointer;
     color:var(--ink-2);font:600 12.5px/1 inherit;font-family:inherit;}
   .foldrow:active{opacity:.7;}
+  /* Only the card that holds the round is tinted, and only its head. Tinting
+     the whole screen would put a wash behind every status pill on it. */
+  #cardComponent > h2{background:var(--cat-bg);box-shadow:inset 3px 0 0 var(--cat);}
+  /* The badge is NOT a filled colour chip, and that is a measured decision.
+     A filled chip is the exact form this app already uses for status — the
+     wear band, the severity pill — so a green "UC" chip beside a green
+     "SERVICEABLE" pill invites the wrong read. Checking all 35 badge/status
+     pairs, 14 came in under the separation floors; UC green against `good` sat
+     at ΔE 3.4 for a deuteranope. So the letters are ink, the outline carries
+     the hint of hue, and the fill is left to the things that mean something. */
+  .rbadge{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
+    min-width:36px;height:21px;padding:0 7px;border-radius:6px;
+    background:var(--surface);border:1.5px solid var(--cat);color:var(--ink-2);
+    font:700 10.5px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.06em;}
   .card h2{margin:0 calc(-1 * var(--cpad)) 10px;padding:11px var(--cpad) 9px;border-bottom:1px solid var(--line);
     font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-2);
     display:flex;align-items:center;gap:8px;}
@@ -201,6 +272,13 @@
   .pitem .thumb{width:52px;height:52px;border-radius:9px;object-fit:cover;background:var(--surface-3);flex:none;}
   .pitem .meta{flex:1;min-width:0;} .pitem .meta .a{font-weight:700;} .pitem .meta .b{font-size:12.5px;color:var(--muted);}
   .tag{display:inline-block;font-size:10.5px;font-weight:700;padding:1px 6px;border-radius:6px;background:var(--accent);color:#fff;margin-right:6px;vertical-align:middle;}
+  /* A queue of nine rounds across four types is where the colour earns its
+     keep — it is the one screen that shows several categories at once. */
+  .tag{background:var(--surface);border:1.5px solid var(--muted);color:var(--ink-2);padding:0 6px;}
+  .tag[data-r="MP"]{border-color:#3c69aa;} .tag[data-r="FC"]{border-color:#7f5398;}
+  .tag[data-r="INSP"]{border-color:#007c7e;} .tag[data-r="TEMP"]{border-color:#955902;}
+  .tag[data-r="UC"]{border-color:#4c772c;} .tag[data-r="GET"]{border-color:#964b79;}
+  .tag[data-r="TB"]{border-color:#00749c;}
   /* 44px minimum, and a gap between them: these sat at ~34px side by side, so a
      gloved thumb aiming for Edit could hit Delete instead. */
   .pitem .edit,.pitem .del{background:none;border:1px solid transparent;border-radius:10px;
@@ -990,7 +1068,7 @@
   </div>
 
   <div class="card" id="cardComponent">
-    <h2 id="secPosTitle">Component</h2>
+    <h2><span class="rbadge" id="secBadge"></span><span id="secPosTitle">Component</span></h2>
     <div class="posnav" id="posnav"></div>
     <div class="posLabel hint" id="posLabel"></div>
 
@@ -1364,25 +1442,25 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="native.js?v=91"></script>
-<script src="upload-defaults.js?v=91"></script>
-<script src="hme.js?v=91"></script>
-<script src="mp-fc.js?v=91"></script>
-<script src="hme-cascade.js?v=91"></script>
-<script src="assets.js?v=91"></script>
-<script src="temp-limits.js?v=91"></script>
-<script src="wear.js?v=91"></script>
-<script src="wear-figs.js?v=91"></script>
-<script src="wear-map.js?v=91"></script>
-<script src="machine-photos.js?v=91"></script>
-<script src="machine-fig.js?v=91"></script>
-<script src="get.js?v=91"></script>
-<script src="uc-points.js?v=91"></script>
-<script src="inspect-guide.js?v=91"></script>
-<script src="get-figs.js?v=91"></script>
-<script src="body-points.js?v=91"></script>
-<script src="body-map.js?v=91"></script>
-<script src="report-core.js?v=91"></script>
+<script src="native.js?v=92"></script>
+<script src="upload-defaults.js?v=92"></script>
+<script src="hme.js?v=92"></script>
+<script src="mp-fc.js?v=92"></script>
+<script src="hme-cascade.js?v=92"></script>
+<script src="assets.js?v=92"></script>
+<script src="temp-limits.js?v=92"></script>
+<script src="wear.js?v=92"></script>
+<script src="wear-figs.js?v=92"></script>
+<script src="wear-map.js?v=92"></script>
+<script src="machine-photos.js?v=92"></script>
+<script src="machine-fig.js?v=92"></script>
+<script src="get.js?v=92"></script>
+<script src="uc-points.js?v=92"></script>
+<script src="inspect-guide.js?v=92"></script>
+<script src="get-figs.js?v=92"></script>
+<script src="body-points.js?v=92"></script>
+<script src="body-map.js?v=92"></script>
+<script src="report-core.js?v=92"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2745,7 +2823,10 @@ function selectCat(c){ eqCat=c; localStorage.setItem("equip_cat",eqCat);
   eqClass = eqCat==="ALL" ? "GEN" : classForCat(eqCat); localStorage.setItem("equip_class",eqClass);
   curEquip=""; updateEquipBtn(); draft={positions:{}}; editing=null; curItem=""; applyForm(); setEditing(null); }
 $("classBtn").onclick=()=>openPicker("cat");
-function fillTypeSel(){ $("typeSel").innerHTML=TYPE_ORDER.map(k=>`<option value="${k}">${t("type_"+k)}</option>`).join(""); $("typeSel").value=type; }
+/* The code in front of the name. An <option> cannot be tinted reliably on
+   either platform, and the code is the identity anyway — the colour is only
+   ever the reinforcement. */
+function fillTypeSel(){ $("typeSel").innerHTML=TYPE_ORDER.map(k=>`<option value="${k}">${k} · ${t("type_"+k)}</option>`).join(""); $("typeSel").value=type; }
 $("typeSel").onchange=(e)=>{ type=e.target.value; localStorage.setItem("insp_type",type);
   draft={positions:{}}; editing=null; curItem=""; applyForm(); setEditing(null); };
 function renderChips(){ const tr=currentTree();
@@ -2958,7 +3039,13 @@ function refreshChips(){
 }
 $("posnav").addEventListener("click",(e)=>{ const b=e.target.closest("button[data-pos]"); if(!b) return;
   saveCur(); curItem=b.dataset.pos; refreshChips(); loadPos(); });
-function applyForm(){ $("secPosTitle").textContent=TYPE_META[type].title[lang]||TYPE_META[type].title.en;
+/* One attribute drives every tint on the page. */
+function applyRoundSkin(){
+  document.body.dataset.round = type;
+  const b=$("secBadge"); if(b) b.textContent = type;
+}
+function applyForm(){ applyRoundSkin();
+  $("secPosTitle").textContent=TYPE_META[type].title[lang]||TYPE_META[type].title.en;
   $("mpFields").classList.toggle("hidden", !TYPE_META[type].showReadings);
   $("tempFields").classList.toggle("hidden", !TYPE_META[type].temp);
   $("ucFields").classList.toggle("hidden", !TYPE_META[type].wear);
@@ -4455,7 +4542,7 @@ function renderHdr(){
   /* The round, not the position heading — TYPE_META.title is "Measurement
      point", which names a row on the next card and tells nobody which round
      they are in. */
-  const bits=[ t("type_"+type) ];
+  const bits=[ type+" · "+t("type_"+type) ];
   const d=$("date").value; if(d) bits.push(d);
   const smu=$("smu").value.trim(); if(smu) bits.push(smu+" h");
   const by=$("inspector").value.trim(); if(by) bits.push(by);
@@ -5285,8 +5372,9 @@ async function renderPending(){
     const nVid=pos.filter(([,p])=>isBlob(p.video)).length; const nPos=pos.length;
     const row=document.createElement("div"); row.className="pitem";
     const thumb=first?`<img class="thumb" src="${pendPool.url(first)}">`:`<div class="thumb"></div>`;
-    const typeTag=`${rec.cls||""} ${rec.type||"MP"}`.trim();
-    row.innerHTML=`${thumb}<div class="meta"><div class="a"><span class="tag">${esc(typeTag)}</span>${esc(rec.equip)} · ${esc(rec.date)}</div>
+    const rty=rec.type||"MP";
+    const typeTag=`${rec.cls||""} ${rty}`.trim();
+    row.innerHTML=`${thumb}<div class="meta"><div class="a"><span class="tag" data-r="${esc(rty)}">${esc(typeTag)}</span>${esc(rec.equip)} · ${esc(rec.date)}</div>
       <div class="b">${nPos} ${t("pos_count")} · ${nPhotos} ${t("photo_count")}${nVid?` · ${nVid}🎥`:""}${rec.smu?` · SMU ${esc(rec.smu)}`:""}${rec.sign?" · ✍":""}${rec.gps?" · 📍":""}</div></div>
       <button class="edit" title="Edit">✎</button><button class="del" title="Delete">🗑</button>`;
     const openEdit=()=>editRecord(rec);
@@ -5681,7 +5769,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="91";
+const BUILD="92";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
