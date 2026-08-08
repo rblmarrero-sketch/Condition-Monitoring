@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=92">
+<link rel="manifest" href="manifest.webmanifest?v=93">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=92">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=92">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=92">
+<link rel="apple-touch-icon" href="icon-192.png?v=93">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=93">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=93">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -570,6 +570,23 @@
     font-variant-numeric:tabular-nums;}
   .ucfcast.quiet{color:var(--muted);}
   .ucfcast.soonout{color:var(--warn-ink);font-weight:650;}
+  .prog{flex:0 0 100%;display:flex;align-items:center;gap:10px;margin:0 0 8px;}
+  .prog .pb{flex:1 1 auto;min-width:0;height:8px;border-radius:999px;
+    background:var(--surface-3);overflow:hidden;}
+  /* Neutral, deliberately. The first version filled it with the round's own
+     colour, which on the undercarriage put a green bar two centimetres above a
+     green "19 serviceable" dot — and on temperature a bronze one above an amber
+     "watch". Progress is not a state. The round's colour is already carried by
+     the tint and the badge; the bar just fills up, and turns green once, at the
+     one moment green means something here: finished. */
+  .prog .pb i{display:block;height:100%;border-radius:999px;background:var(--ink-2);
+    transition:width .18s ease;}
+  .prog b{flex:0 0 auto;font:700 12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+    color:var(--ink-2);font-variant-numeric:tabular-nums;}
+  /* Finishing a round is the only moment in this app worth marking. Not
+     fireworks — the bar goes green and says so, once. */
+  .prog.full .pb i{background:var(--good);}
+  .prog.full b{color:var(--good);}
   /* Setting a baseline changes how every later reading on this unit is judged.
      That deserves a sentence saying so before the button, not a bare switch. */
   .ucbase{background:var(--surface-2);border:1px solid var(--line);border-radius:11px;
@@ -1442,25 +1459,25 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="native.js?v=92"></script>
-<script src="upload-defaults.js?v=92"></script>
-<script src="hme.js?v=92"></script>
-<script src="mp-fc.js?v=92"></script>
-<script src="hme-cascade.js?v=92"></script>
-<script src="assets.js?v=92"></script>
-<script src="temp-limits.js?v=92"></script>
-<script src="wear.js?v=92"></script>
-<script src="wear-figs.js?v=92"></script>
-<script src="wear-map.js?v=92"></script>
-<script src="machine-photos.js?v=92"></script>
-<script src="machine-fig.js?v=92"></script>
-<script src="get.js?v=92"></script>
-<script src="uc-points.js?v=92"></script>
-<script src="inspect-guide.js?v=92"></script>
-<script src="get-figs.js?v=92"></script>
-<script src="body-points.js?v=92"></script>
-<script src="body-map.js?v=92"></script>
-<script src="report-core.js?v=92"></script>
+<script src="native.js?v=93"></script>
+<script src="upload-defaults.js?v=93"></script>
+<script src="hme.js?v=93"></script>
+<script src="mp-fc.js?v=93"></script>
+<script src="hme-cascade.js?v=93"></script>
+<script src="assets.js?v=93"></script>
+<script src="temp-limits.js?v=93"></script>
+<script src="wear.js?v=93"></script>
+<script src="wear-figs.js?v=93"></script>
+<script src="wear-map.js?v=93"></script>
+<script src="machine-photos.js?v=93"></script>
+<script src="machine-fig.js?v=93"></script>
+<script src="get.js?v=93"></script>
+<script src="uc-points.js?v=93"></script>
+<script src="inspect-guide.js?v=93"></script>
+<script src="get-figs.js?v=93"></script>
+<script src="body-points.js?v=93"></script>
+<script src="body-map.js?v=93"></script>
+<script src="report-core.js?v=93"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -1618,6 +1635,10 @@ const $ = (id)=>document.getElementById(id);
 const I18N = {
   en:{ app_title:"Truck Inspection", net_online:"online", net_offline:"offline — OK",
     sec_inspection:"Inspection", hdr_change:"Change",
+    res_t:"Carry on where you left off?",
+    res_m:"{u} · {r} — {n} reading(s) taken on {d} and not yet saved.",
+    res_go:"Carry on",
+    prog_n:"{d}/{n}", prog_all:"{n}/{n} done",
     iso_show:"Report a finding", iso_hide:"Hide the finding fields", lbl_class:"Equipment", lbl_type:"Inspection type", lbl_truck:"Truck / Unit", ph_truck:"e.g. TK158", btn_scan:"Scan",
     lbl_defect:"Defect / failure mode", lbl_cause:"Direct cause",
     sync_off:"Auto-upload is off — findings stay on this phone.", sync_setup:"Set up",
@@ -1921,6 +1942,10 @@ const I18N = {
   },
   ru:{ app_title:"Осмотр самосвала", net_online:"онлайн", net_offline:"офлайн — ОК",
     sec_inspection:"Осмотр", hdr_change:"Изменить",
+    res_t:"Продолжить начатое?",
+    res_m:"{u} · {r} — замеров: {n}, дата {d}, ещё не сохранено.",
+    res_go:"Продолжить",
+    prog_n:"{d}/{n}", prog_all:"{n}/{n} готово",
     iso_show:"Записать дефект", iso_hide:"Скрыть поля дефекта", lbl_class:"Оборудование", lbl_type:"Тип осмотра", lbl_truck:"Трак / Ед.", ph_truck:"напр. TK158", btn_scan:"Скан",
     lbl_defect:"Дефект / вид отказа", lbl_cause:"Прямая причина",
     sync_off:"Автозагрузка выключена — данные остаются на телефоне.", sync_setup:"Настроить",
@@ -2429,7 +2454,11 @@ function ask(title,msg,okLabel,danger){
                     $("dlg").close(); res(v); };
     $("dlgOk").onclick=()=>done(true);
     $("dlgCancel").onclick=()=>done(false);
-    $("dlg").onclose=()=>res(false);      // Esc and the backdrop mean "keep it"
+    /* Esc and the backdrop mean "keep it" — which is NOT the same answer as
+       Cancel. Every caller treats both as falsy and does nothing, but one of
+       them destroys something on an explicit no, and a stray Esc must never
+       reach that path. null is the dismissal, false is the decision. */
+    $("dlg").onclose=()=>res(null);
   });
 }
 const dlgClose=()=>$("dlg").close();
@@ -2732,7 +2761,7 @@ function bodyTally(){
   ks.forEach(k=>{ c[bodyState(k)||""]++; });
   const order=[["act","uc_leg_act"],["watch","uc_leg_watch"],["done","tb_leg_taken"],
                ["na","uc_leg_na"],["","uc_leg_none"]];
-  return '<div class="uctally">'+order.filter(([k])=>c[k]>0)
+  return progBar(ks.length-c[""], ks.length)+'<div class="uctally">'+order.filter(([k])=>c[k]>0)
     .map(([k,lab])=>'<span class="t '+(k||"non")+'"><i></i>'+c[k]+' '+esc(t(lab))+'</span>').join("")+'</div>';
 }
 /* The tray, drawn, with every station on it and the one you are standing at
@@ -2812,7 +2841,13 @@ function idb(){ return dbConn ||= new Promise((res,rej)=>{ const r=indexedDB.ope
    went stale. One counter, bumped by the only two writers. */
 let dbVer=0;
 async function dbPut(rec){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); t.objectStore(STORE).put(rec); t.oncomplete=()=>{ dbVer++; res(); }; t.onerror=()=>rej(t.error); t.onabort=()=>rej(t.error||new Error("save aborted — storage may be full")); }); }
-async function dbAll(){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readonly"); const rq=t.objectStore(STORE).getAll(); rq.onsuccess=()=>res(rq.result||[]); rq.onerror=()=>rej(rq.error); }); }
+/* The round being typed lives in this store too, under a reserved id, so it
+   gets IndexedDB's durability and can hold photographs. It is NOT an
+   inspection: filtered out here, once, so that the queue, the sync, the
+   trend, the export and everything else are correct without each having to
+   remember. dbGet(DRAFT_ID) is the only way to reach it. */
+const DRAFT_ID="__draft__";
+async function dbAll(){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readonly"); const rq=t.objectStore(STORE).getAll(); rq.onsuccess=()=>res((rq.result||[]).filter(r=>r&&r.id!==DRAFT_ID)); rq.onerror=()=>rej(rq.error); }); }
 async function dbGet(id){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readonly"); const rq=t.objectStore(STORE).get(id); rq.onsuccess=()=>res(rq.result||null); rq.onerror=()=>rej(rq.error); }); }
 async function dbDel(id){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); t.objectStore(STORE).delete(id); t.oncomplete=()=>{ dbVer++; res(); }; t.onerror=()=>rej(t.error); }); }
 
@@ -3004,10 +3039,17 @@ function repaintMap(){
     const k=b.dataset.pos;
     b.className=[ucState(k)||"",k===curItem?"on":""].filter(Boolean).join(" ");
   });
+  /* Two blocks come back from the tally now — the progress bar and the state
+     counts — so patch them by name. Taking firstChild was right when there was
+     only one, and silently wrong the day the bar arrived: the bar's markup went
+     into the counts element and the bar itself was never repainted, so it sat
+     one point behind for the whole round. */
   const tl=nav.querySelector(".uctally");
   if(tl){ const tmp=document.createElement("div");
     tmp.innerHTML=wearType()?ucTally():getTally();
-    if(tmp.firstChild) tl.innerHTML=tmp.firstChild.innerHTML; }
+    const nt=tmp.querySelector(".uctally"); if(nt) tl.innerHTML=nt.innerHTML;
+    const ob=nav.querySelector(".prog"), nb=tmp.querySelector(".prog");
+    if(ob&&nb) ob.replaceWith(nb); else if(nb) tl.before(nb); else if(ob) ob.remove(); }
   ucMarkSelectedPart();
   return true;
 }
@@ -3640,6 +3682,7 @@ function renderUC(){
   }
   renderUCReasons();
   renderUCFcast();
+  updateSaveLabel();
   renderUCSheet();
 }
 /* ---- the optional millimetre on a GET position -------------------------
@@ -4020,6 +4063,19 @@ function ucMemberLabel(k){
   const m=/^[LR](\d+)$/.exec(pos); if(m) return m[1];
   return (WEAR.mapShort&&WEAR.mapShort[pt]) || pt;
 }
+/* How far through am I. The tally counts states — three serviceable, one to
+   watch — which answers "what did I find", not "how much is left". On a
+   thirty-six or sixty-three point round those are different questions, and the
+   second one is what decides whether somebody finishes or drifts off. One bar,
+   in the round's own colour, so the answer is there without being read. */
+function progBar(done,total){
+  if(!total) return "";
+  const pc=Math.round(done/total*100);
+  return '<div class="prog'+(done>=total?' full':'')+'" role="progressbar"'
+    + ' aria-valuenow="'+done+'" aria-valuemin="0" aria-valuemax="'+total+'">'
+    + '<div class="pb"><i style="width:'+pc+'%"></i></div>'
+    + '<b>'+t(done>=total?"prog_all":"prog_n",{d:done,n:total})+'</b></div>';
+}
 function ucTally(){
   if(bodyType()) return bodyTally();
   const w=WEAR.walk(ucStatus(curEquip).model);
@@ -4029,7 +4085,7 @@ function ucTally(){
                ["done","uc_leg_done"],["","uc_leg_none"]];
   const bits=order.filter(([k])=>c[k]>0).map(([k,lab])=>
     '<span class="t '+(k||"non")+'"><i></i>'+c[k]+' '+esc(t(lab))+'</span>');
-  return '<div class="uctally">'+bits.join("")+'</div>';
+  return progBar(w.length-c[""], w.length)+'<div class="uctally">'+bits.join("")+'</div>';
 }
 /* The frame that owns the current reading dims everything except the part
    being measured; the other side is left alone. */
@@ -4425,6 +4481,50 @@ function hasData(p){ return (p.mm!=null&&p.mm!=="")||p.reason||p.grade||p.sev||p
 /* The severity that actually applies: what the inspector set, or what the grade
    implies. Everything that reasons about how bad a finding is goes through here. */
 function effSev(p){ return (p&&(p.sev||GRADE_SEV[p.grade]))||""; }
+/* ---- the round in progress is never lost -----------------------------------
+
+   Before this, `draft` lived only in memory. A phone locking and being
+   reclaimed, a crash, a stray reload, the OS killing a backgrounded tab — any
+   of them took every reading with it. Thirty measurements on a machine the
+   inspector has already walked away from, and no way to know it happened until
+   the form comes back blank.
+
+   That is the failure that stops people using an app. Not a wrong number: a
+   lost afternoon. So the draft is written continuously, and the app offers to
+   carry on rather than assuming either answer. */
+let draftT=null, draftSig="";
+function draftSnapshot(){
+  return { id:DRAFT_ID, type, equip:curEquip, item:curItem,
+           date:$("date").value, smu:$("smu").value.trim(),
+           by:$("inspector").value.trim(), sup:$("supName").value.trim(),
+           positions:draft.positions, at:new Date().toISOString() };
+}
+/* Cheap signature so an idle screen is not rewriting blobs every second. */
+function draftSigOf(d){
+  try{ return d.type+"|"+d.equip+"|"+d.date+"|"+d.smu+"|"+d.by+"|"+
+    JSON.stringify(d.positions, (k,v)=> (k==="photos") ? (v||[]).length
+      : (k==="video") ? (v?1:0) : v); }catch(e){ return String(Math.random()); }
+}
+async function draftFlush(){
+  clearTimeout(draftT); draftT=null;
+  try{
+    const has = curEquip && Object.keys(draft.positions||{}).length;
+    /* An empty form deletes the draft ONLY if this session is the one that
+       wrote it. On a fresh boot the form is empty by definition, and any flush
+       that fires in the seconds before the resume question is answered would
+       otherwise destroy the very round it is about to offer back. */
+    if(!has){ if(draftSig){ draftSig=""; await dbDel(DRAFT_ID); } return; }
+    const snap=draftSnapshot(), sig=draftSigOf(snap);
+    if(sig===draftSig) return;
+    await dbPut(snap); draftSig=sig;
+  }catch(e){ /* the reading on screen is still the thing that matters */ }
+}
+function draftKeep(){ clearTimeout(draftT); draftT=setTimeout(draftFlush, 400); }
+/* The two moments the browser gives you before it may never run your code
+   again. pagehide fires where beforeunload does not, on iOS especially. */
+addEventListener("pagehide", ()=>{ draftFlush(); });
+addEventListener("visibilitychange", ()=>{ if(document.visibilityState==="hidden") draftFlush(); });
+
 function saveCur(){ if(!curItem) return; normDecAll(); const p=curP(); p.particle=$("particle").value.trim(); p.comp=$("comp").value.trim(); p.oil=$("oil").value.trim();
   p.comment=$("comment").value.trim(); p.wo=$("wo").value.trim();
   if(TYPE_META[type].temp){ p.tempV=$("tempV").value.trim(); p.tempA=$("tempA").value.trim(); p.tempM=p.tempV?$("tempM").value:""; }
@@ -4442,7 +4542,8 @@ function saveCur(){ if(!curItem) return; normDecAll(); const p=curP(); p.particl
     if(p.mm!=null && !isFinite(p.mm)) p.mm=null;
     if(p.mm==null) delete p.mm;      // no measurement is the norm here, not a gap
   }
-  if(!hasData(p)) delete draft.positions[curItem]; }
+  if(!hasData(p)) delete draft.positions[curItem];
+  draftKeep(); }
 /* A measurement point is named by its walk; a component is named by its code
    and its label. One rule, so the heading on the capture screen and the heading
    after a language switch cannot drift apart. */
@@ -4459,7 +4560,14 @@ function posHeading(k){
    next thirty-five readings, and this is the moment the room is needed. */
 let hdrLastItem = null;
 function loadPos(){
-  if(curItem && curItem!==hdrLastItem){ hdrLastItem=curItem; if(hdrOpen){ hdrOpen=false; renderHdr(); } }
+  if(curItem && curItem!==hdrLastItem){
+    hdrLastItem=curItem; if(hdrOpen){ hdrOpen=false; renderHdr(); }
+    /* Moving to the next point is the moment a reading is finished, and it is
+       the right checkpoint — a timer alone loses whatever was typed in the
+       last second, and `pagehide` cannot be relied on to outlive an async
+       IndexedDB write. Flush here and at most one point is ever at risk. */
+    draftFlush();
+  }
   if(!curItem){ $("posLabel").textContent=bodyType()?"":t("nav_choose");
     renderUCSheet(); toggleCapture(); return; }
   $("posLabel").textContent = posHeading(curItem);
@@ -4774,12 +4882,27 @@ $("hdrSum").onclick=openHdr;
 $("cardInspection").addEventListener("focusout", ()=>setTimeout(()=>{
   if(!$("cardInspection").contains(document.activeElement)) renderHdr();
 }, 0));
-function updateSaveLabel(){ $("saveBtn").textContent = editing ? t("btn_update") : t("btn_save"); }
+/* Filing 23 of 36 is not wrong — the machine may have been buried, the shift
+   may have ended — but it should never happen without being noticed. A modal
+   would notice it loudly, on a legitimate action, every time. The count on the
+   button says the same thing at the same moment and costs nobody a tap. */
+function saveCount(){
+  try{
+    if(!curEquip || !TYPE_META[type].wear) return "";
+    const o=ucOrder(); if(!o.length) return "";
+    const done=o.filter(k=>{const p=draft.positions[k]; return p&&hasData(p);}).length;
+    return done>=o.length ? " · "+t("prog_all",{n:o.length}) : " · "+done+"/"+o.length;
+  }catch(e){ return ""; }
+}
+function updateSaveLabel(){
+  $("saveBtn").textContent = (editing ? t("btn_update") : t("btn_save")) + saveCount(); }
 function setEditing(rec){ editing=rec||null;
   if(editing){ $("editBanner").classList.remove("hidden"); $("editBannerText").textContent=t("editing_hint").replace("{x}",editing.equip); }
   else $("editBanner").classList.add("hidden");
   $("cancelEdit").textContent=t("btn_cancel"); updateSaveLabel(); }
-function resetForm(){ draft={positions:{}}; curEquip=""; curItem=""; updateEquipBtn(); $("smu").value=""; $("date").value=todayISO();
+function resetForm(){ draft={positions:{}}; curEquip=""; curItem=""; draftSig="";
+  clearTimeout(draftT); draftT=null; try{ dbDel(DRAFT_ID); }catch(e){}
+  updateEquipBtn(); $("smu").value=""; $("date").value=todayISO();
   gps=null; renderGps(); clearSign();
   applyForm(); setEditing(null); }
 function editRecord(rec){ if(rec.cls && CLASSES[rec.cls]){ eqClass=rec.cls; localStorage.setItem("equip_class",eqClass); }
@@ -4845,7 +4968,10 @@ $("saveBtn").onclick=async ()=>{
       base:(p.base?{n:Number(p.base.n), c:(p.base.c==null?null:Number(p.base.c)),
                     all:p.base.all?1:0}:null),
       photos:(p.photos||[]).slice(), video:p.video||null };
-  await dbPut(rec); noteDone(rec); await loadBaselines(); resetForm(); renderPending(); renderDue(); syncThenArm();
+  await dbPut(rec); noteDone(rec); await loadBaselines();
+  clearTimeout(draftT); draftT=null; draftSig="";
+  try{ await dbDel(DRAFT_ID); }catch(e){}
+  resetForm(); renderPending(); renderDue(); syncThenArm();
   /* The round is away and the form is clear: if an update has been waiting
      for somebody to stop working, this is that moment. */
   setTimeout(applyUpdateIfIdle, 400);
@@ -5769,7 +5895,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="92";
+const BUILD="93";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -7165,6 +7291,39 @@ applyForm(); applyTheme(); applyLang(); renderSignFold(); renderSync(); syncThen
    a number is judged. The catalogue answers correctly until they land, and the
    round repaints once they do. */
 loadBaselines().then(n=>{ if(n) { renderUC(); refreshChips(); } });
+/* Offer the unfinished round back. Asked, never assumed: restoring silently
+   would put an inspector on a machine they are no longer standing at, and
+   discarding silently is the thing this exists to prevent. */
+async function offerDraft(){
+  let d=null;
+  try{ d=await dbGet(DRAFT_ID); }catch(e){ return; }
+  const n=d && d.positions ? Object.keys(d.positions).length : 0;
+  if(!n || !d.equip) return;
+  const ty=d.type||"MP";
+  const carry=await ask(t("res_t"),
+    t("res_m",{u:d.equip, r:t("type_"+ty), n:n, d:(d.date||"")}), t("res_go"));
+  if(!carry){
+    /* Only on an explicit no — carry===false. A dismissal (Esc, the backdrop,
+       the notification that pulled the phone away again) comes back null and
+       leaves the round alone, so it is still there to be offered next time.
+       The record also stays until the answer arrives, so a second crash during
+       this very question does not lose it either. */
+    if(carry===false){ try{ await dbDel(DRAFT_ID); }catch(e){} }
+    return;
+  }
+  if(TYPE_META[ty]){ type=ty; localStorage.setItem("insp_type",type); }
+  if(d.date) $("date").value=d.date;
+  if(d.smu) $("smu").value=d.smu;
+  if(d.by) $("inspector").value=d.by;
+  if(d.sup) $("supName").value=d.sup;
+  selectEquip(d.equip);
+  draft={positions:d.positions||{}};
+  curItem = (d.item && draft.positions[d.item]) ? d.item : "";
+  hdrOpen=false;
+  applyForm(); loadPos(); renderChips(); renderSignFold();
+  draftSig=draftSigOf(draftSnapshot());
+}
+setTimeout(offerDraft, 900);
 /* Long-press the home-screen icon and Android offers the manifest's shortcuts.
    They have to land somewhere, or the promise is empty: "Upload queue" that
    opens the capture screen is worse than no shortcut. Honour them, then drop
