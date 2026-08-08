@@ -69,12 +69,34 @@
   .section>h2{margin:0 0 3px;font-size:15px;font-weight:640;} .section>.sub{color:var(--muted);font-size:12.5px;margin-bottom:16px;}
   /* Pareto */
   .pareto{display:flex;flex-direction:column;gap:7px;}
-  .prow{display:grid;grid-template-columns:minmax(160px,2fr) 1fr auto;gap:10px;align-items:center;font-size:12.5px;}
+  .prow{display:grid;grid-template-columns:minmax(160px,2fr) 1fr auto auto;gap:10px;align-items:center;font-size:12.5px;}
   .prow .lbl{color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .prow .lbl small{color:var(--muted);}
   .ptrack{background:var(--surface-2);border-radius:5px;height:16px;overflow:hidden;}
   .pfill{height:100%;border-radius:5px;}
   .prow .n{font-variant-numeric:tabular-nums;color:var(--ink-2);min-width:34px;text-align:right;}
+  /* The running total, and the line where it crosses 80%. The rows above it are
+     the shortlist the whole chart exists to produce. */
+  .prow .cum{font-variant-numeric:tabular-nums;color:var(--muted);min-width:40px;text-align:right;
+    font-size:11.5px;}
+  .prow.vital .lbl{font-weight:640;}
+  .prow.vital .cum{color:var(--ink-2);}
+  .phead{font-size:11.5px;color:var(--ink-2);background:var(--surface-2);border-radius:6px;
+    padding:5px 9px;margin-bottom:2px;}
+  .pcut{display:flex;align-items:center;gap:8px;margin:1px 0 2px;
+    font:600 10px/1 system-ui,sans-serif;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);}
+  .pcut::before,.pcut::after{content:"";flex:1;height:0;border-top:1px dashed var(--border);}
+  /* the P-F diagram */
+  .pfwrap{overflow-x:auto;}
+  .pfsvg{width:100%;min-width:560px;height:auto;display:block;}
+  .pfax{stroke:var(--border);stroke-width:1;}
+  .pfl{fill:var(--muted);font:600 10px ui-monospace,SFMono-Regular,Menlo,monospace;}
+  .pff{stroke:var(--critical);stroke-width:1.5;stroke-dasharray:6 4;}
+  .pfp{stroke:var(--serious);stroke-width:1.5;stroke-dasharray:3 4;}
+  .pft{stroke:var(--ink-2);stroke-width:1.5;stroke-dasharray:2 4;opacity:.7;}
+  .pfline{fill:none;stroke:var(--accent);stroke-width:2;stroke-linejoin:round;}
+  .pfdot{fill:var(--accent);stroke:var(--surface);stroke-width:2;}
+  .pfband{fill:var(--serious);opacity:.09;}
   /* table */
   table.grid{width:100%;border-collapse:collapse;font-size:12.5px;}
   table.grid th{text-align:left;color:var(--ink-2);font-weight:600;border-bottom:1px solid var(--border);padding:8px 6px;white-space:nowrap;}
@@ -107,6 +129,7 @@
   .pos .body .pl{color:var(--muted);font-size:11.5px;margin-bottom:6px;}
   .pos dl{margin:6px 0 0;display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:12px;}
   .pos dt{color:var(--muted);} .pos dd{margin:0;text-align:right;}
+  .pos dd.warnv{color:var(--serious);font-weight:600;}
   .pos .cm{margin-top:6px;font-size:12px;color:var(--ink-2);font-style:italic;}
   .lang{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;}
   .lang button{background:var(--surface);color:var(--ink-2);border:0;padding:7px 11px;font:inherit;
@@ -174,9 +197,33 @@
   .src .dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex:none;}
   .src.live .dot{background:var(--good);} .src.live{color:var(--ink);}
   .lb{position:fixed;inset:0;background:rgba(0,0,0,.86);display:none;align-items:center;justify-content:center;z-index:100;padding:30px;}
-  .lb.open{display:flex;} .lb img{max-width:100%;max-height:82vh;border-radius:8px;}
-  .lb .cap{position:absolute;bottom:20px;left:0;right:0;text-align:center;color:#eee;font-size:13px;}
+  .lb.open{display:flex;} .lb img,.lb video{max-width:100%;max-height:82vh;border-radius:8px;}
+  .lb video{background:#000;}
+  .lb .cap{position:absolute;bottom:20px;left:0;right:0;text-align:center;color:#eee;font-size:13px;
+    font-variant-numeric:tabular-nums;}
   .lb .x{position:absolute;top:18px;right:22px;color:#fff;font-size:30px;background:none;border:none;cursor:pointer;}
+  /* Walking a set of ten needs somewhere to press that is not a keyboard —
+     this is opened on a laptop in a planning meeting as often as at a desk. */
+  .lb .nav{position:absolute;top:50%;transform:translateY(-50%);width:52px;height:76px;
+    display:flex;align-items:center;justify-content:center;font-size:34px;line-height:1;
+    color:#fff;background:rgba(0,0,0,.34);border:none;cursor:pointer;border-radius:8px;}
+  .lb .nav:hover{background:rgba(0,0,0,.6);}
+  .lb .prev{left:14px;} .lb .next{right:14px;}
+  /* ── every frame the round captured ──────────────────────────────────────
+     The lead frame stays the size it was; the rest sit under it as a strip.
+     A position that holds six photographs now looks like six photographs. */
+  .pos .shots{position:relative;}
+  .pos .shotn{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.66);color:#fff;
+    font:700 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;padding:4px 7px;border-radius:999px;}
+  .pos .strip{display:flex;gap:4px;padding:4px;overflow-x:auto;background:var(--surface-2);
+    scrollbar-width:thin;}
+  .pos .strip .th{flex:0 0 auto;width:46px;height:36px;padding:0;border:1px solid var(--border);
+    border-radius:5px;overflow:hidden;background:var(--surface);cursor:pointer;position:relative;}
+  .pos .strip .th img,.pos .strip .th video{width:100%;height:100%;object-fit:cover;display:block;}
+  .pos .strip .th.vid i{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    color:#fff;font-style:normal;font-size:15px;text-shadow:0 1px 3px rgba(0,0,0,.8);}
+  .pos video.photo{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;
+    background:#000;cursor:zoom-in;}
   .hidden{display:none!important;}
   .legend{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;font-size:12.5px;color:var(--ink-2);margin-top:12px;}
   .legend .sw{width:13px;height:13px;border-radius:4px;display:inline-block;margin-right:5px;vertical-align:-2px;}
@@ -345,6 +392,7 @@
 <nav class="tabs" id="tabs">
   <button data-tab="overview" class="active" data-i18n="tab_overview">Overview</button>
   <button data-tab="failure" data-i18n="tab_failure">Failure modes</button>
+  <button data-tab="wear" data-i18n="tab_wear">Wear &amp; life</button>
   <button data-tab="actions" data-i18n="tab_actions">Action register</button>
   <button data-tab="equipment" data-i18n="tab_equipment">Equipment history</button>
   <button data-tab="reports" data-i18n="tab_reports">Reports</button>
@@ -385,10 +433,47 @@
       <div class="sub" data-i18n="s_cause_sub">Why those defects occurred, as recorded at inspection.</div>
       <div class="pareto" id="paretoCause"></div>
     </div>
+    <!-- The Pareto says what fails. This says how long you have once it starts
+         — the interval between the point a fault becomes detectable and the
+         point the part is finished. It is the number that decides whether a
+         monthly round is often enough to catch anything at all. -->
+    <div class="section">
+      <h2 data-i18n="pf_title">P-F interval — detection to functional failure</h2>
+      <div class="sub" data-i18n="pf_sub">Measured wear against its limit. P is where the part becomes a finding (80% worn); F is condemn. The gap between them is the warning the round buys you — if it is shorter than the inspection interval, the round will miss it.</div>
+      <div class="row" style="margin-bottom:10px;gap:10px;align-items:end;flex-wrap:wrap">
+        <div class="field" style="min-width:280px"><label for="pfSel" data-i18n="pf_pick">Position</label>
+          <select id="pfSel"></select></div>
+      </div>
+      <div id="pfChart"></div>
+      <div class="sub" id="pfNote" style="margin-top:10px"></div>
+    </div>
     <div class="section">
       <h2 data-i18n="s_iso">ISO 14224 failure mechanism</h2>
       <div class="sub" data-i18n="s_iso_sub">Table B.2 mechanism classes — comparable across sites and benchmarks.</div>
       <div class="pareto" id="paretoIso"></div>
+    </div>
+  </section>
+
+  <!-- Every measured position on the fleet, worst first, with what it is doing
+       and when it runs out. The measurements were being captured, scored and
+       then read one machine at a time; nobody could see the fleet's wear at
+       once, and the hours-to-condemn the phone already computes never reached
+       the people who order the parts. -->
+  <section id="tab-wear" class="hidden">
+    <div class="kpis" id="wearKpis"></div>
+    <div class="section">
+      <h2 data-i18n="w_title">Wear and remaining life</h2>
+      <div class="sub" data-i18n="w_sub">Every measured position, latest reading first. Life is projected from this position's own history — two readings at least, and the app says so when it will not guess.</div>
+      <div class="row" style="margin-bottom:12px;gap:10px;align-items:end;flex-wrap:wrap">
+        <div class="field"><label for="wBand" data-i18n="w_show">Show</label><select id="wBand">
+          <option value="due" data-i18n="w_due">Needs planning — 80% worn or a life under 1,000 h</option>
+          <option value="act" data-i18n="w_act">At or past condemn</option>
+          <option value="all" data-i18n="w_all">Every measured position</option>
+        </select></div>
+        <button class="btn" id="wearCsv" data-i18n="w_csv">⬇ Export CSV</button>
+      </div>
+      <div class="tblwrap"><table class="grid" id="wearTbl"></table></div>
+      <div class="sub" id="wearNote" style="margin-top:10px"></div>
     </div>
   </section>
 
@@ -439,7 +524,12 @@
     </div>
   </section>
 
-<div class="lb" id="lb"><button class="x" id="lbx">&times;</button><img id="lbimg" alt=""><div class="cap" id="lbcap"></div></div>
+<div class="lb" id="lb"><button class="x" id="lbx">&times;</button>
+  <button class="nav prev" id="lbPrev" aria-label="Previous">&#8249;</button>
+  <img id="lbimg" alt="">
+  <video id="lbvid" controls playsinline></video>
+  <button class="nav next" id="lbNext" aria-label="Next">&#8250;</button>
+  <div class="cap" id="lbcap"></div></div>
 
 <!-- ?v= on every shared file, and it is the phones' build number.
      index.html and report-core.js are one program split across two files: the
@@ -448,28 +538,28 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=95"></script>
-<script src="../mobile/hme.js?v=95"></script>
-<script src="../mobile/mp-fc.js?v=95"></script>
-<script src="../mobile/hme-cascade.js?v=95"></script>
-<script src="../mobile/temp-limits.js?v=95"></script>
+<script src="../data/magnetic_plug.js?v=96"></script>
+<script src="../mobile/hme.js?v=96"></script>
+<script src="../mobile/mp-fc.js?v=96"></script>
+<script src="../mobile/hme-cascade.js?v=96"></script>
+<script src="../mobile/temp-limits.js?v=96"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=95"></script>
-<script src="../mobile/wear.js?v=95"></script>
-<script src="../mobile/wear-map.js?v=95"></script>
-<script src="../mobile/machine-photos.js?v=95"></script>
-<script src="../mobile/machine-fig.js?v=95"></script>
-<script src="../mobile/get.js?v=95"></script>
-<script src="../mobile/uc-points.js?v=95"></script>
-<script src="../mobile/inspect-guide.js?v=95"></script>
-<script src="../mobile/get-figs.js?v=95"></script>
-<script src="../mobile/body-points.js?v=95"></script>
-<script src="../mobile/body-map.js?v=95"></script>
-<script src="../mobile/jspdf.umd.min.js?v=95"></script>
-<script src="../mobile/html2canvas.min.js?v=95"></script>
-<script src="../mobile/report-core.js?v=95"></script>
+<script src="../mobile/assets.js?v=96"></script>
+<script src="../mobile/wear.js?v=96"></script>
+<script src="../mobile/wear-map.js?v=96"></script>
+<script src="../mobile/machine-photos.js?v=96"></script>
+<script src="../mobile/machine-fig.js?v=96"></script>
+<script src="../mobile/get.js?v=96"></script>
+<script src="../mobile/uc-points.js?v=96"></script>
+<script src="../mobile/inspect-guide.js?v=96"></script>
+<script src="../mobile/get-figs.js?v=96"></script>
+<script src="../mobile/body-points.js?v=96"></script>
+<script src="../mobile/body-map.js?v=96"></script>
+<script src="../mobile/jspdf.umd.min.js?v=96"></script>
+<script src="../mobile/html2canvas.min.js?v=96"></script>
+<script src="../mobile/report-core.js?v=96"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* The 1C defect & cause matrix, the same file the phones carry. Records already
@@ -514,6 +604,39 @@ const I18N={
   srctitle:"Where the dashboard is reading from",
 
   tab_overview:"Overview", tab_failure:"Failure modes", tab_actions:"Action register",
+  p_vital:"{k} of {n} account for {p}% of everything coded here \u2014 that is the shortlist.",
+  p_cum:"Running total", p_cut:"80% line", p_click:"Click to filter by this",
+  pf_title:"P\u2013F interval \u2014 detection to functional failure",
+  pf_sub:"Measured wear against its limit. P is where the part becomes a finding (80% worn); F is condemn. The gap between them is the warning the round buys you \u2014 if it is shorter than the inspection interval, the round will miss it.",
+  pf_pick:"Position", pf_p:"becomes a finding", pf_f:"condemn",
+  pf_h:"h on the meter", pf_hc:"h (from dates)",
+  pf_note:"{u} \u00b7 {p}: about {h} running hours \u2014 roughly {d} days \u2014 between the reading crossing P and the part reaching condemn. Inspect more often than that or the warning is missed.",
+  pf_note_no:"{u} \u00b7 {p}: not enough movement between readings to measure a P\u2013F interval yet.",
+  pf_none:"No P\u2013F interval to draw yet",
+  pf_none_s:"It needs a position measured at least twice, with a condemn figure. Undercarriage, GET and tray rounds produce these.",
+  tab_wear:"Wear & life",
+  w_title:"Wear and remaining life",
+  w_sub:"Every measured position, soonest to run out first. Life is projected from this position's own history — two readings at least, and it says so plainly when it will not guess.",
+  w_show:"Show", w_csv:"\u2b07 Export CSV",
+  w_due:"Needs planning \u2014 80% worn or under 1,000 h left",
+  w_act:"At or past condemn", w_all:"Every measured position",
+  w_k_meas:"MEASURED POSITIONS", w_k_meas_s:"on {n} unit(s)",
+  w_k_act:"AT OR PAST CONDEMN", w_k_act_s:"change now",
+  w_k_watch:"OVER 80% WORN", w_k_watch_s:"watch list",
+  w_k_soon:"UNDER {h} H LEFT", w_k_soon_s:"order the parts",
+  w_k_life:"WITH A LIFE", w_k_life_s:"the rest need a second reading",
+  w_th_unit:"Unit", w_th_point:"Position", w_th_meas:"mm", w_th_worn:"Worn",
+  w_th_left:"mm left", w_th_rate:"mm/1000h", w_th_life:"Life left", w_th_when:"Reaches condemn",
+  w_th_seen:"Readings",
+  w_basis_smu:"from the hour meter", w_basis_days:"from dates, at 12 h/day",
+  w_why_few:"one reading", w_why_few_t:"A single reading is a dot, not a line. Measure it again next round.",
+  w_why_soon:"too soon", w_why_soon_t:"The readings are too close together for a caliper to out-measure its own error.",
+  w_why_flat:"no movement", w_why_flat_t:"No measurable wear between readings \u2014 a rate of zero forecasts forever.",
+  w_why_away:"moving away", w_why_away_t:"The readings are moving away from the limit, which is a data problem rather than a life.",
+  w_why_past:"past condemn", w_why_past_t:"Already at or past the condemn figure.",
+  w_note:"Showing {s} of {n} measured position(s). A life needs two readings at least {h} hours or {d} days apart; until then the reason is given instead of a number.",
+  w_empty:"No measured positions in this selection. Undercarriage, GET and tray rounds produce these \u2014 check the inspection-type filter.",
+
   tab_equipment:"Equipment history", tab_reports:"Reports",
 
   f_type:"Inspection type", f_class:"Equipment class", f_period:"Period", f_search:"Search",
@@ -557,6 +680,9 @@ const I18N={
   th_find:"Findings", th_topdef:"Top defect", th_by:"Inspector",
   th_sev:"Sev", th_comp:"Component", th_defect:"Defect", th_cause:"Direct cause",
   th_action:"Action", th_prio:"Priority", th_wo:"WO", th_byshort:"By",
+  th_detect:"Found by", th_stood:"Re-measured", th_stood_v:"challenged, inspector stood by it",
+  th_base:"Baseline", th_base_all:"whole group",
+
 
   e_nofilter:"No inspections match the filters.", e_nothing:"Nothing outstanding.",
   e_nodata:"No data.", e_norank:"Nothing to rank yet",
@@ -588,6 +714,7 @@ const I18N={
   ds_notset:"not set up", ds_notloaded:"set up — not loaded yet", ds_notopened:"not opened",
   ds_insp:"{n} inspection(s)", ds_indexed:"{n} files indexed", ds_inbrowser:"{n} record(s) in this browser",
   ds_photosn:"{n} photos", ds_voidn:"{n} voided",
+  ph_none:"no photo", ph_video:"Video",
 
   ed_title:"Edit inspection",
   ed_lede:"Corrections are saved beside the inspection, never over it — the phone that captured it still holds the original, and the photos and readings are never altered. Your change shows here and in the reports, with your name on it.",
@@ -673,6 +800,39 @@ const I18N={
   srctitle:"Откуда панель читает данные",
 
   tab_overview:"Обзор", tab_failure:"Виды отказов", tab_actions:"Реестр действий",
+  p_vital:"{k} \u0438\u0437 {n} \u0434\u0430\u044e\u0442 {p}% \u0432\u0441\u0435\u0433\u043e \u043a\u043e\u0434\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u043e\u0433\u043e \u2014 \u044d\u0442\u043e \u043a\u043e\u0440\u043e\u0442\u043a\u0438\u0439 \u0441\u043f\u0438\u0441\u043e\u043a.",
+  p_cum:"\u041d\u0430\u043a\u043e\u043f\u043b\u0435\u043d\u043d\u044b\u0439 \u0438\u0442\u043e\u0433", p_cut:"\u041b\u0438\u043d\u0438\u044f 80%", p_click:"\u0424\u0438\u043b\u044c\u0442\u0440 \u043f\u043e \u044d\u0442\u043e\u043c\u0443",
+  pf_title:"\u0418\u043d\u0442\u0435\u0440\u0432\u0430\u043b P\u2013F \u2014 \u043e\u0442 \u043e\u0431\u043d\u0430\u0440\u0443\u0436\u0435\u043d\u0438\u044f \u0434\u043e \u043e\u0442\u043a\u0430\u0437\u0430",
+  pf_sub:"\u0418\u0437\u043c\u0435\u0440\u0435\u043d\u043d\u044b\u0439 \u0438\u0437\u043d\u043e\u0441 \u043e\u0442\u043d\u043e\u0441\u0438\u0442\u0435\u043b\u044c\u043d\u043e \u043f\u0440\u0435\u0434\u0435\u043b\u0430. P \u2014 \u0438\u0437\u043d\u043e\u0441 80%, F \u2014 \u043f\u0440\u0435\u0434\u0435\u043b. \u0420\u0430\u0437\u0440\u044b\u0432 \u043c\u0435\u0436\u0434\u0443 \u043d\u0438\u043c\u0438 \u2014 \u0437\u0430\u043f\u0430\u0441 \u0432\u0440\u0435\u043c\u0435\u043d\u0438, \u043a\u043e\u0442\u043e\u0440\u044b\u0439 \u0434\u0430\u0451\u0442 \u043e\u0431\u0445\u043e\u0434.",
+  pf_pick:"\u0422\u043e\u0447\u043a\u0430", pf_p:"\u0441\u0442\u0430\u043d\u043e\u0432\u0438\u0442\u0441\u044f \u0434\u0435\u0444\u0435\u043a\u0442\u043e\u043c", pf_f:"\u043f\u0440\u0435\u0434\u0435\u043b",
+  pf_h:"\u0447 \u043f\u043e \u0441\u0447\u0451\u0442\u0447\u0438\u043a\u0443", pf_hc:"\u0447 (\u043f\u043e \u0434\u0430\u0442\u0430\u043c)",
+  pf_note:"{u} \u00b7 {p}: \u043e\u043a\u043e\u043b\u043e {h} \u043c\u043e\u0442\u043e\u0447\u0430\u0441\u043e\u0432 (\u043f\u0440\u0438\u043c\u0435\u0440\u043d\u043e {d} \u0441\u0443\u0442) \u043c\u0435\u0436\u0434\u0443 P \u0438 \u043f\u0440\u0435\u0434\u0435\u043b\u043e\u043c. \u041e\u0431\u0445\u043e\u0434 \u0434\u043e\u043b\u0436\u0435\u043d \u0431\u044b\u0442\u044c \u0447\u0430\u0449\u0435.",
+  pf_note_no:"{u} \u00b7 {p}: \u0434\u0432\u0438\u0436\u0435\u043d\u0438\u044f \u043c\u0435\u0436\u0434\u0443 \u0437\u0430\u043c\u0435\u0440\u0430\u043c\u0438 \u043f\u043e\u043a\u0430 \u043d\u0435\u0434\u043e\u0441\u0442\u0430\u0442\u043e\u0447\u043d\u043e.",
+  pf_none:"\u0418\u043d\u0442\u0435\u0440\u0432\u0430\u043b P\u2013F \u043f\u043e\u043a\u0430 \u043d\u0435 \u043f\u043e\u0441\u0442\u0440\u043e\u0438\u0442\u044c",
+  pf_none_s:"\u041d\u0443\u0436\u043d\u0430 \u0442\u043e\u0447\u043a\u0430 \u0441 \u0434\u0432\u0443\u043c\u044f \u0437\u0430\u043c\u0435\u0440\u0430\u043c\u0438 \u0438 \u043f\u0440\u0435\u0434\u0435\u043b\u043e\u043c.",
+  tab_wear:"\u0418\u0437\u043d\u043e\u0441 \u0438 \u0440\u0435\u0441\u0443\u0440\u0441",
+  w_title:"\u0418\u0437\u043d\u043e\u0441 \u0438 \u043e\u0441\u0442\u0430\u0442\u043e\u0447\u043d\u044b\u0439 \u0440\u0435\u0441\u0443\u0440\u0441",
+  w_sub:"\u0412\u0441\u0435 \u0437\u0430\u043c\u0435\u0440\u0435\u043d\u043d\u044b\u0435 \u0442\u043e\u0447\u043a\u0438; \u0441\u043d\u0430\u0447\u0430\u043b\u0430 \u0442\u0435, \u0447\u0442\u043e \u0432\u044b\u0439\u0434\u0443\u0442 \u0440\u0430\u043d\u044c\u0448\u0435. \u0420\u0435\u0441\u0443\u0440\u0441 \u0441\u0447\u0438\u0442\u0430\u0435\u0442\u0441\u044f \u043f\u043e \u0438\u0441\u0442\u043e\u0440\u0438\u0438 \u0441\u0430\u043c\u043e\u0439 \u0442\u043e\u0447\u043a\u0438 \u2014 \u043d\u0443\u0436\u043d\u043e \u043d\u0435 \u043c\u0435\u043d\u0435\u0435 \u0434\u0432\u0443\u0445 \u0437\u0430\u043c\u0435\u0440\u043e\u0432.",
+  w_show:"\u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c", w_csv:"\u2b07 \u042d\u043a\u0441\u043f\u043e\u0440\u0442 CSV",
+  w_due:"\u0422\u0440\u0435\u0431\u0443\u0435\u0442 \u043f\u043b\u0430\u043d\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u044f \u2014 \u0438\u0437\u043d\u043e\u0441 \u043e\u0442 80% \u0438\u043b\u0438 \u043c\u0435\u043d\u0435\u0435 1000 \u0447",
+  w_act:"\u041d\u0430 \u043f\u0440\u0435\u0434\u0435\u043b\u0435 \u0438\u043b\u0438 \u0437\u0430 \u043d\u0438\u043c", w_all:"\u0412\u0441\u0435 \u0437\u0430\u043c\u0435\u0440\u0435\u043d\u043d\u044b\u0435 \u0442\u043e\u0447\u043a\u0438",
+  w_k_meas:"\u0417\u0410\u041c\u0415\u0420\u0415\u041d\u041d\u042b\u0425 \u0422\u041e\u0427\u0415\u041a", w_k_meas_s:"\u043d\u0430 {n} \u0435\u0434.",
+  w_k_act:"\u041d\u0410 \u041f\u0420\u0415\u0414\u0415\u041b\u0415", w_k_act_s:"\u043c\u0435\u043d\u044f\u0442\u044c \u0441\u0435\u0439\u0447\u0430\u0441",
+  w_k_watch:"\u0418\u0417\u041d\u041e\u0421 \u0421\u0412\u042b\u0428\u0415 80%", w_k_watch_s:"\u043f\u043e\u0434 \u043d\u0430\u0431\u043b\u044e\u0434\u0435\u043d\u0438\u0435\u043c",
+  w_k_soon:"\u041c\u0415\u041d\u0415\u0415 {h} \u0427", w_k_soon_s:"\u0437\u0430\u043a\u0430\u0437\u0430\u0442\u044c \u0437\u0430\u043f\u0447\u0430\u0441\u0442\u0438",
+  w_k_life:"\u0421 \u0420\u0410\u0421\u0427\u0401\u0422\u041d\u042b\u041c \u0420\u0415\u0421\u0423\u0420\u0421\u041e\u041c", w_k_life_s:"\u043e\u0441\u0442\u0430\u043b\u044c\u043d\u044b\u043c \u043d\u0443\u0436\u0435\u043d \u0432\u0442\u043e\u0440\u043e\u0439 \u0437\u0430\u043c\u0435\u0440",
+  w_th_unit:"\u0415\u0434.", w_th_point:"\u0422\u043e\u0447\u043a\u0430", w_th_meas:"\u043c\u043c", w_th_worn:"\u0418\u0437\u043d\u043e\u0441",
+  w_th_left:"\u043c\u043c \u0434\u043e \u043f\u0440\u0435\u0434\u0435\u043b\u0430", w_th_rate:"\u043c\u043c/1000\u0447", w_th_life:"\u041e\u0441\u0442\u0430\u0442\u043e\u043a", w_th_when:"\u0414\u043e\u0441\u0442\u0438\u0433\u043d\u0435\u0442 \u043f\u0440\u0435\u0434\u0435\u043b\u0430",
+  w_th_seen:"\u0417\u0430\u043c\u0435\u0440\u043e\u0432",
+  w_basis_smu:"\u043f\u043e \u0441\u0447\u0451\u0442\u0447\u0438\u043a\u0443 \u043c\u043e\u0442\u043e\u0447\u0430\u0441\u043e\u0432", w_basis_days:"\u043f\u043e \u0434\u0430\u0442\u0430\u043c, 12 \u0447/\u0441\u0443\u0442",
+  w_why_few:"\u043e\u0434\u0438\u043d \u0437\u0430\u043c\u0435\u0440", w_why_few_t:"\u041e\u0434\u0438\u043d \u0437\u0430\u043c\u0435\u0440 \u2014 \u044d\u0442\u043e \u0442\u043e\u0447\u043a\u0430, \u0430 \u043d\u0435 \u043b\u0438\u043d\u0438\u044f.",
+  w_why_soon:"\u0441\u043b\u0438\u0448\u043a\u043e\u043c \u0440\u0430\u043d\u043e", w_why_soon_t:"\u0417\u0430\u043c\u0435\u0440\u044b \u0441\u043b\u0438\u0448\u043a\u043e\u043c \u0431\u043b\u0438\u0437\u043a\u043e \u0434\u0440\u0443\u0433 \u043a \u0434\u0440\u0443\u0433\u0443.",
+  w_why_flat:"\u0431\u0435\u0437 \u0438\u0437\u043c\u0435\u043d\u0435\u043d\u0438\u0439", w_why_flat_t:"\u0418\u0437\u043c\u0435\u0440\u0438\u043c\u043e\u0433\u043e \u0438\u0437\u043d\u043e\u0441\u0430 \u043c\u0435\u0436\u0434\u0443 \u0437\u0430\u043c\u0435\u0440\u0430\u043c\u0438 \u043d\u0435\u0442.",
+  w_why_away:"\u0443\u0445\u043e\u0434\u0438\u0442 \u043e\u0442 \u043f\u0440\u0435\u0434\u0435\u043b\u0430", w_why_away_t:"\u0417\u0430\u043c\u0435\u0440\u044b \u0443\u0434\u0430\u043b\u044f\u044e\u0442\u0441\u044f \u043e\u0442 \u043f\u0440\u0435\u0434\u0435\u043b\u0430 \u2014 \u044d\u0442\u043e \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u0430 \u0434\u0430\u043d\u043d\u044b\u0445.",
+  w_why_past:"\u0437\u0430 \u043f\u0440\u0435\u0434\u0435\u043b\u043e\u043c", w_why_past_t:"\u0423\u0436\u0435 \u043d\u0430 \u043f\u0440\u0435\u0434\u0435\u043b\u0435 \u0438\u043b\u0438 \u0437\u0430 \u043d\u0438\u043c.",
+  w_note:"\u041f\u043e\u043a\u0430\u0437\u0430\u043d\u043e {s} \u0438\u0437 {n} \u0437\u0430\u043c\u0435\u0440\u0435\u043d\u043d\u044b\u0445 \u0442\u043e\u0447\u0435\u043a. \u0414\u043b\u044f \u0440\u0435\u0441\u0443\u0440\u0441\u0430 \u043d\u0443\u0436\u043d\u044b \u0434\u0432\u0430 \u0437\u0430\u043c\u0435\u0440\u0430 \u0441 \u0440\u0430\u0437\u043d\u0438\u0446\u0435\u0439 \u043e\u0442 {h} \u0447 \u0438\u043b\u0438 {d} \u0441\u0443\u0442.",
+  w_empty:"\u0412 \u044d\u0442\u043e\u0439 \u0432\u044b\u0431\u043e\u0440\u043a\u0435 \u043d\u0435\u0442 \u0437\u0430\u043c\u0435\u0440\u0435\u043d\u043d\u044b\u0445 \u0442\u043e\u0447\u0435\u043a.",
+
   tab_equipment:"История по технике", tab_reports:"Отчёты",
 
   f_type:"Тип осмотра", f_class:"Класс техники", f_period:"Период", f_search:"Поиск",
@@ -716,6 +876,9 @@ const I18N={
   th_find:"Находок", th_topdef:"Основной дефект", th_by:"Инспектор",
   th_sev:"Степ.", th_comp:"Узел", th_defect:"Дефект", th_cause:"Причина",
   th_action:"Действие", th_prio:"Приоритет", th_wo:"Заявка", th_byshort:"Кто",
+  th_detect:"Как обнаружено", th_stood:"Перезамер", th_stood_v:"оспорено, замер подтверждён",
+  th_base:"Базовый замер", th_base_all:"вся группа",
+
 
   e_nofilter:"Нет осмотров по этим фильтрам.", e_nothing:"Нет открытых позиций.",
   e_nodata:"Нет данных.", e_norank:"Пока нечего ранжировать",
@@ -747,6 +910,7 @@ const I18N={
   ds_notset:"не настроено", ds_notloaded:"настроено — ещё не загружено", ds_notopened:"не открыто",
   ds_insp:"осмотров: {n}", ds_indexed:"файлов в индексе: {n}", ds_inbrowser:"записей в этом браузере: {n}",
   ds_photosn:"фото: {n}", ds_voidn:"отозвано: {n}",
+  ph_none:"нет фото", ph_video:"Видео",
 
   ed_title:"Правка осмотра",
   ed_lede:"Правки сохраняются рядом с осмотром, а не поверх него — телефон, который его снял, хранит оригинал, а фото и замеры не изменяются. Ваше изменение видно здесь и в отчётах, с вашим именем.",
@@ -1264,30 +1428,153 @@ function renderFleet(){
 /* ---------- Pareto ---------- */
 /* Clicking a bar filters the whole dashboard by it — the obvious next question
    after "which failure mode is worst?" is "on which units?". */
-function pareto(el,pairs,colorFn,drillKey,why){
+/* A ranked bar chart is not a Pareto. The point of the analysis is the split —
+   which few causes carry most of the failures — and that needs the running
+   cumulative and the line drawn where it crosses 80%. Without it a reader has
+   to add the bars up in their head to find the shortlist, which is the one
+   number the whole chart exists to produce.
+
+   The cumulative is a figure per row and a shaded region, NOT a second y axis
+   over the bars. Two scales on one plot is the most misread chart there is,
+   and on a horizontal ranked list the running total reads better as a column
+   anyway — nothing is lost by refusing the dual axis. `total` is the count over
+   ALL categories, so the percentages stay honest when the list is capped at 15. */
+function pareto(el,pairs,colorFn,drillKey,why,total){
   // "No data" on its own reads like a fault. Say which field is missing and where it
   // comes from, because the usual cause is graded-only records with no defect coding.
   if(!pairs.length){ el.innerHTML=`<div class="empty"><b>${esc(t("e_norank"))}</b><span>${esc(why||t("e_nocoded"))}</span></div>`; return; }
   const max=pairs[0][1];
-  el.innerHTML=pairs.map(([label,n,sub])=>`
-    <div class="prow${drillKey&&drill[drillKey]===label?" sel":""}" ${drillKey?`data-drill="${esc(label)}" title="Click to filter by this"`:""}>
-      <div class="lbl" title="${esc(label)}">${esc(label)}${sub?` <small>${esc(sub)}</small>`:""}</div>
-      <div class="ptrack"><div class="pfill" style="width:${Math.max(2,n/max*100)}%;background:${colorFn?colorFn(label):"var(--accent)"}"></div></div>
-      <div class="n">${n}</div></div>`).join("");
+  const sum=total || pairs.reduce((a,[,n])=>a+n,0);
+  let run=0, cutAt=-1;
+  const rows=pairs.map(([label,n,sub],ix)=>{
+    run+=n; const cum=sum?run/sum*100:0;
+    const vital = cutAt<0;
+    if(cutAt<0 && cum>=80) cutAt=ix;             // the row that crosses 80%
+    return {label,n,sub,cum,vital};
+  });
+  const nVital = cutAt<0 ? rows.length : cutAt+1;
+  const head = sum ? `<div class="phead">${esc(t("p_vital",{k:nVital,n:rows.length,
+      p:Math.round(rows[Math.min(nVital,rows.length)-1].cum)}))}</div>` : "";
+  el.innerHTML = head + rows.map((r,ix)=>`
+    <div class="prow${drillKey&&drill[drillKey]===r.label?" sel":""}${r.vital?" vital":""}" ${drillKey?`data-drill="${esc(r.label)}" title="${esc(t("p_click"))}"`:""}>
+      <div class="lbl" title="${esc(r.label)}">${esc(r.label)}${r.sub?` <small>${esc(r.sub)}</small>`:""}</div>
+      <div class="ptrack"><div class="pfill" style="width:${Math.max(2,r.n/max*100)}%;background:${colorFn?colorFn(r.label):"var(--accent)"}"></div></div>
+      <div class="n">${r.n}</div>
+      <div class="cum" title="${esc(t("p_cum"))}">${Math.round(r.cum)}%</div></div>`
+    + (ix===cutAt && ix<rows.length-1 ? `<div class="pcut"><span>${esc(t("p_cut"))}</span></div>` : "")).join("");
   if(drillKey) el.querySelectorAll("[data-drill]").forEach(r=>r.onclick=()=>setDrill(drillKey,r.dataset.drill));
 }
 function renderFailure(){
   const f=findings(filtered());
-  const cnt=(keyFn,subFn)=>{ const m=new Map();
-    f.forEach(x=>{ const k=keyFn(x); if(!k) return; const e=m.get(k)||{n:0,sub:subFn?subFn(x):""}; e.n++; m.set(k,e); });
-    return [...m.entries()].map(([k,v])=>[k,v.n,v.sub]).sort((a,b)=>b[1]-a[1]).slice(0,15); };
+  /* The list is capped at fifteen but the cumulative must be a share of ALL
+     coded findings, not of the fifteen shown — otherwise the last visible row
+     always reads 100% and the chart claims the shortlist is the whole story. */
+  const cnt=(keyFn,subFn)=>{ const m=new Map(); let total=0;
+    f.forEach(x=>{ const k=keyFn(x); if(!k) return; total++;
+      const e=m.get(k)||{n:0,sub:subFn?subFn(x):""}; e.n++; m.set(k,e); });
+    const all=[...m.entries()].map(([k,v])=>[k,v.n,v.sub]).sort((a,b)=>b[1]-a[1]);
+    return { rows:all.slice(0,15), total, kinds:all.length };
+  };
   const src=f.length ? t("e_found",{n:f.length}) : t("e_found_none");
-  pareto($("paretoDefect"), cnt(x=>x.i.defect, x=>x.i.defectCode?`· ${x.i.defectCode}`:""), null, "defect",
-    f.length ? src+t("e_defect_tail") : src);
-  pareto($("paretoCause"),  cnt(x=>x.i.cause,  x=>x.i.causeCode?`· ${x.i.causeCode}`:""), ()=>"var(--serious)", "cause",
-    f.length ? src+t("e_cause_tail") : src);
-  pareto($("paretoIso"),    cnt(x=>{ const m=ISO_BY[x.i.iso]; return x.i.iso?`${x.i.iso} ${m?(m[lang]||m.en||m):""}`:""; }), ()=>"var(--accent)", null,
-    f.length ? src+t("e_iso_tail") : src);
+  const d=cnt(x=>x.i.defect, x=>x.i.defectCode?`· ${x.i.defectCode}`:"");
+  const c=cnt(x=>x.i.cause,  x=>x.i.causeCode?`· ${x.i.causeCode}`:"");
+  const i=cnt(x=>{ const m=ISO_BY[x.i.iso]; return x.i.iso?`${x.i.iso} ${m?(m[lang]||m.en||m):""}`:""; });
+  pareto($("paretoDefect"), d.rows, null, "defect",
+    f.length ? src+t("e_defect_tail") : src, d.total);
+  pareto($("paretoCause"),  c.rows, ()=>"var(--serious)", "cause",
+    f.length ? src+t("e_cause_tail") : src, c.total);
+  pareto($("paretoIso"),    i.rows, ()=>"var(--accent)", null,
+    f.length ? src+t("e_iso_tail") : src, i.total);
+  renderPF();
+}
+
+/* ---------- the P-F interval ----------
+
+   The classic reliability diagram, drawn from readings this fleet actually
+   produced rather than from a textbook curve. Condition on the y axis, running
+   hours on the x. Two horizontal lines: P, where the part first becomes a
+   finding, and F, where it is finished. The distance between them along the
+   trend is the warning the inspection round buys — and if that warning is
+   shorter than the interval between rounds, the round cannot catch it, which
+   is a scheduling decision nobody can make without seeing this.
+
+   One axis, one series, reference lines. No second y scale. */
+let pfKey=null;
+function pfCandidates(){
+  return wearRows(filtered()).filter(r=>r.n>=2 && r.w.condemnMM!=null && r.w.newMM!=null);
+}
+function renderPF(){
+  const cands=pfCandidates(), sel=$("pfSel");
+  if(!sel) return;
+  if(!cands.length){
+    sel.innerHTML=""; $("pfChart").innerHTML=
+      `<div class="empty"><b>${esc(t("pf_none"))}</b><span>${esc(t("pf_none_s"))}</span></div>`;
+    $("pfNote").textContent=""; return;
+  }
+  const keep = cands.some(c=>c.key===pfKey) ? pfKey : cands[0].key;
+  pfKey=keep;
+  sel.innerHTML=cands.map(c=>`<option value="${esc(c.key)}"${c.key===keep?" selected":""}>${
+    esc(c.equip+" · "+c.name+"  —  "+(c.pct!=null?c.pct+"%":""))}</option>`).join("");
+  const row=cands.find(c=>c.key===keep);
+  const list=wearSeries(filtered()).get(keep)||[];
+  const n=Number(row.w.newMM), c0=Number(row.w.condemnMM);
+  const grow=c0>n;
+  /* x in hours from the first reading, on the hour meter when every round
+     recorded it — a machine parked for a month has not worn. */
+  const useSmu=list.every(x=>x.smu!=null&&x.smu!==""&&isFinite(Number(x.smu)));
+  const x0=useSmu?Number(list[0].smu):Date.parse(list[0].at+"T00:00:00Z");
+  const hx=p=>useSmu?(Number(p.smu)-x0):((Date.parse(p.at+"T00:00:00Z")-x0)/864e5*12);
+  const pts=list.map(p=>({h:hx(p), mm:Number(p.w.mm), at:p.at}));
+  /* P is 80% of the span — the band this app already calls "watch", and the
+     first moment the round produces an action rather than a note. */
+  const pMM = n + (c0-n)*0.8;
+  const lastH=pts[pts.length-1].h;
+  const endH = row.hours!=null ? lastH+row.hours : lastH*1.15+1;
+  const rate = row.rate!=null ? row.rate/1000 : null;      // mm per hour toward the limit
+  /* Where the trend crossed (or will cross) P, so the interval is measured on
+     the same line as the forecast rather than guessed from the dots. */
+  let pH=null;
+  if(rate&&rate>0){ const nowMM=pts[pts.length-1].mm;
+    const toP = grow ? (pMM-nowMM) : (nowMM-pMM);
+    pH = lastH + toP/rate; }
+  const pfHours = (pH!=null && row.hours!=null) ? (lastH+row.hours)-pH : null;
+
+  const W=760,H=260,L=54,R=18,T=16,B=34;
+  const xs=h=>L+(h/Math.max(endH,1))*(W-L-R);
+  const lo=Math.min(n,c0,...pts.map(p=>p.mm)), hi=Math.max(n,c0,...pts.map(p=>p.mm));
+  const pad=(hi-lo)*0.12||1;
+  const ys=v=>T+(1-((v-(lo-pad))/((hi+pad)-(lo-pad))))*(H-T-B);
+  /* Labelled on the left, above the line. On the right they landed exactly
+     where the trend arrives at condemn — the two most important marks on the
+     chart printed on top of each other. */
+  const line=(y,cls,lab)=>`<line x1="${L}" x2="${W-R}" y1="${y}" y2="${y}" class="${cls}"/>
+    <text x="${L+6}" y="${y-5}" class="pfl">${esc(lab)}</text>`;
+  const trend = rate&&rate>0
+    ? `<line x1="${xs(lastH)}" y1="${ys(pts[pts.length-1].mm)}" x2="${xs(lastH+(row.hours||0))}" y2="${ys(c0)}" class="pft"/>` : "";
+  const band = pH!=null && pfHours!=null && pfHours>0
+    ? `<rect x="${xs(Math.max(0,pH))}" y="${T}" width="${Math.max(0,xs(lastH+row.hours)-xs(Math.max(0,pH)))}" height="${H-T-B}" class="pfband"/>` : "";
+  $("pfChart").innerHTML=
+   `<div class="pfwrap"><svg viewBox="0 0 ${W} ${H}" class="pfsvg" role="img"
+      aria-label="${esc(t("pf_title"))}">
+      ${band}
+      <line x1="${L}" y1="${H-B}" x2="${W-R}" y2="${H-B}" class="pfax"/>
+      <line x1="${L}" y1="${T}" x2="${L}" y2="${H-B}" class="pfax"/>
+      ${line(ys(c0),"pff","F · "+t("pf_f")+" "+c0+" mm")}
+      ${line(ys(pMM),"pfp","P · "+t("pf_p")+" "+pMM.toFixed(1)+" mm")}
+      ${trend}
+      <polyline class="pfline" points="${pts.map(p=>xs(p.h)+","+ys(p.mm)).join(" ")}"/>
+      ${pts.map(p=>`<circle cx="${xs(p.h)}" cy="${ys(p.mm)}" r="4.5" class="pfdot"><title>${
+        esc(p.at+" · "+p.mm+" mm")}</title></circle>`).join("")}
+      <text x="${L}" y="${H-10}" class="pfl">0</text>
+      <text x="${W-R}" y="${H-10}" text-anchor="end" class="pfl">${
+        esc(Math.round(endH).toLocaleString(lang==="ru"?"ru-RU":"en-GB"))} ${esc(t(useSmu?"pf_h":"pf_hc"))}</text>
+      <text x="6" y="${ys(hi)}" class="pfl">${esc(String(hi))}</text>
+      <text x="6" y="${ys(lo)}" class="pfl">${esc(String(lo))}</text>
+    </svg></div>`;
+  $("pfNote").textContent = pfHours!=null && pfHours>0
+    ? t("pf_note",{h:Math.round(pfHours).toLocaleString(lang==="ru"?"ru-RU":"en-GB"),
+                   d:Math.round(pfHours/12), u:row.equip, p:row.name})
+    : t("pf_note_no",{u:row.equip, p:row.name});
 }
 
 /* ---------- action register ---------- */
@@ -1315,8 +1602,19 @@ function renderActions(){
 }
 $("csvBtn").onclick=()=>{
   const rows=actionRows(); const q=s=>`"${String(s==null?"":s).replace(/"/g,'""')}"`;
-  const head=["RecordId","Rev","Severity","Unit","Type","Component","ComponentName","DefectCode","Defect","ISOMechanism","ISOMode","CauseCode","Cause","Action","Priority","PriorityLabel","WO","Grade","TempC","AmbientC","Method","Date","Inspector","VerifiedBy","GPS","Comment"];
-  const body=rows.map(({r,i})=>[recId(r)||"",recRev(r)||"",SEV[sevOf(r,i)]?.l||"",r.equip,r.type,i.key,i.label,i.defectCode,i.defect,i.iso,i.isoMode,i.causeCode,i.cause,i.actionLabel,i.prio||"",i.prio?prioName(i.prio,"en"):"",i.wo,i.grade,i.tempC,i.ambC,i.tempMethod,r.date,r.by,r.sup||"",r.gps?`${r.gps.lat},${r.gps.lon}`:"",i.comment].map(q).join(","));
+  const head=["RecordId","Rev","Severity","Unit","Type","Component","ComponentName","DefectCode","Defect","ISOMechanism","ISOMode","CauseCode","Cause","Action","Priority","PriorityLabel","WO","Grade","TempC","AmbientC","Method","Date","Inspector","VerifiedBy","GPS","Comment",
+    /* Captured on the phone and, until now, dropped on the way out. The CSV
+       is what planning and reliability actually load into a spreadsheet, so a
+       field missing here is a field that does not exist to them. */
+    "FoundBy","ReMeasured","SMU","MeasuredMM","NewMM","CondemnMM","WornPct","BaselineNew","BaselineCondemn","BaselineGroup","NotMeasuredReason","Photos","Video","Voided"];
+  const body=rows.map(({r,i})=>[recId(r)||"",recRev(r)||"",SEV[sevOf(r,i)]?.l||"",r.equip,r.type,i.key,i.label,i.defectCode,i.defect,i.iso,i.isoMode,i.causeCode,i.cause,i.actionLabel,i.prio||"",i.prio?prioName(i.prio,"en"):"",i.wo,i.grade,i.tempC,i.ambC,i.tempMethod,r.date,r.by,r.sup||"",r.gps?`${r.gps.lat},${r.gps.lon}`:"",i.comment,
+    i.detectionLabel||i.detection||"", i.stood?"yes":"", r.smu||"",
+    (w=>w?[w.mm==null?"":w.mm, w.newMM==null?"":w.newMM, w.condemnMM==null?"":w.condemnMM,
+           w.wearPct==null?"":w.wearPct]:["","","",""])(wearOf(r,i)),
+    i.baseNew==null?"":i.baseNew, i.baseCondemn==null?"":i.baseCondemn, i.baseAll?"yes":"",
+    i.reasonLabel||i.reason||"", mediaOf(i,r).filter(m=>m.kind==="photo").length,
+    mediaOf(i,r).some(m=>m.kind==="video")?"yes":"", r._void?"yes":""
+  ].flat().map(q).join(","));
   const csv=[head.map(q).join(","),...body].join("\r\n");
   const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob(["﻿"+csv],{type:"text/csv"}));
   a.download=`cm_action_register_${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(a.href);
@@ -1333,30 +1631,71 @@ function photoBase(it,rec){
    because two phones inspected the same unit on the same day and the script kept
    both sets rather than letting the second overwrite the first. */
 const PHOTO_EXT=["jpg","jpeg","png","JPG","webp"];
+const VIDEO_EXT=["mp4","mov","MP4","MOV","webm"];
+/* The phone allows ten photos and a video on every position, and names them
+   <base>.jpg when there is exactly one and <base>_1.jpg … <base>_10.jpg when
+   there is more than one. This asked for "" and "_1" only, and its caller kept
+   the first hit — so a position with six photos showed one of them and a video
+   was never reachable at all. Nine tenths of what an inspector stood in the
+   cold to capture did not exist as far as anybody at a desk was concerned.
+
+   The suffix list runs the full range the phone can produce. */
+const PHOTO_SUF=["","_1","_2","_3","_4","_5","_6","_7","_8","_9","_10"];
 function photoNames(base,rec,sufs){
   const dev=String((rec&&rec.dev)||""), out=[];
-  for(const s of (sufs||["","_1"]))
+  for(const s of (sufs||PHOTO_SUF))
     for(const e of PHOTO_EXT){
       if(dev) out.push(`${base}${s}~${dev}.${e}`);
       out.push(`${base}${s}.${e}`);
     }
   return out;
 }
-function photoSrc(it,rec){
+function videoNames(base,rec){
+  const dev=String((rec&&rec.dev)||""), out=[];
+  for(const e of VIDEO_EXT){
+    if(dev) out.push(`${base}~${dev}.${e}`);
+    out.push(`${base}.${e}`);
+  }
+  return out;
+}
+/* Every frame captured on this position, in the order it was taken, each tagged
+   with what it is so the viewer can play a video rather than trying to draw it
+   as a still. */
+function mediaOf(it,rec){
+  const out=[], seen=new Set();
   if(folderPhotos){
     const base=photoBase(it,rec);
-    // When two phones clashed, the second one's files were kept under "~DEVICE"
-    // so neither set was lost. Ask for this record's own copy first, or the photo
-    // shown would belong to the version that did NOT win.
-    for(const n of photoNames(base,rec)) { const u=folderPhotos[n]; if(u) return u; }
+    /* When two phones inspected the same unit on the same day the script kept
+       both sets, the loser under "~DEVICE". Ask for this record's own copy
+       first, or the picture shown belongs to the version that did NOT win.
+       One entry per suffix: the extension loop is a search, not a list. */
+    for(const s of PHOTO_SUF){
+      for(const n of photoNames(base,rec,[s])){
+        const u=folderPhotos[n];
+        if(u && !seen.has(u)){ seen.add(u); out.push({src:u,kind:"photo",name:n}); break; }
+      }
+    }
+    for(const n of videoNames(base,rec)){
+      const u=folderPhotos[n];
+      if(u && !seen.has(u)){ seen.add(u); out.push({src:u,kind:"video",name:n}); break; }
+    }
   }
-  if(it.photo) return /^(data:|blob:|https?:|\/)/.test(it.photo)?it.photo:"../"+it.photo;
-  return null;
+  /* A record carried in a file rather than a folder holds its own picture. */
+  if(it.photo){ const u=/^(data:|blob:|https?:|\/)/.test(it.photo)?it.photo:"../"+it.photo;
+    if(!seen.has(u)){ seen.add(u); out.push({src:u,kind:"photo",name:it.photo}); } }
+  if(Array.isArray(it.photos)) it.photos.forEach(ph=>{
+    const u=/^(data:|blob:|https?:|\/)/.test(ph)?ph:"../"+ph;
+    if(!seen.has(u)){ seen.add(u); out.push({src:u,kind:"photo",name:ph}); } });
+  if(it.video){ const u=/^(data:|blob:|https?:|\/)/.test(it.video)?it.video:"../"+it.video;
+    if(!seen.has(u)){ seen.add(u); out.push({src:u,kind:"video",name:it.video}); } }
+  return out;
 }
+/* Kept for the callers that only ask "is there anything to show". */
+function photoSrc(it,rec){ const m=mediaOf(it,rec); return m.length?m[0].src:null; }
 /* Bridge for drive.js — RECS, imported and folderPhotos are `let`s in this script,
    so they are not reachable as window properties from another file. */
 window.CMDash={
-  photoBase, photoNames,
+  photoBase, photoNames, videoNames, mediaOf,
   addPhoto(name,url){ (folderPhotos ||= {})[name]=url; },
   importRecords(recs){
     recs.forEach(r=>{ const k=`${r.equip}|${r.date}|${r.type}`;
@@ -1469,19 +1808,57 @@ function renderHistory(){
       ${rec._note?`<div class="sub" style="margin:2px 0 8px">📝 ${esc(rec._note)}</div>`:""}
       ${isWearType(rec.type)?ucBlock(rec):""}
       <div class="pos-grid">${rec.items.filter(i=>!isWearType(rec.type)||photoSrc(i,rec)||i.comment||i.defect).map(i=>{
-        const s=sevOf(rec,i); const src=photoSrc(i,rec);
+        const s=sevOf(rec,i); const med=mediaOf(i,rec);
         const cap=esc(`${rec.equip} · ${i.key} · ${rec.date}`);
-        return `<div class="pos">
-          ${src?`<img class="photo" loading="lazy" src="${esc(src)}" alt="${cap}" data-cap="${cap}">`:`<div class="nophoto">no photo</div>`}
+        /* Every frame, not the first one. The lead is shown large and the rest
+           as a strip under it, so a position with six photos looks like six
+           photos rather than like one. */
+        const lead=med[0];
+        const gal = !lead ? `<div class="nophoto">${esc(t("ph_none"))}</div>` :
+          `<div class="shots" data-n="${med.length}">
+             ${lead.kind==="video"
+               ? `<video class="photo" preload="metadata" src="${esc(lead.src)}" data-cap="${cap}" data-i="0"></video>`
+               : `<img class="photo" loading="lazy" src="${esc(lead.src)}" alt="${cap}" data-cap="${cap}" data-i="0">`}
+             ${med.length>1?`<span class="shotn">${med.length}</span>`:""}
+             ${med.length>1?`<div class="strip">${med.map((m,ix)=>
+                 m.kind==="video"
+                   ? `<button class="th vid" data-i="${ix}" title="${esc(t("ph_video"))}"><video preload="metadata" src="${esc(m.src)}"></video><i>▶</i></button>`
+                   : `<button class="th" data-i="${ix}"><img loading="lazy" src="${esc(m.src)}" alt=""></button>`
+               ).join("")}</div>`:""}
+           </div>`;
+        return `<div class="pos" data-med='${esc(JSON.stringify(med.map(m=>[m.src,m.kind])))}' data-cap="${cap}">
+          ${gal}
           <div class="body"><div class="pk">${esc(i.key)}${i.grade?` <span class="pill ${SEV[GRADE_SEV[i.grade]]?.c||'n'}">${esc(i.grade)}</span>`:""}
             ${s?`<span class="pill ${SEV[s].c}">${SEV[s].l}</span>`:""}</div>
             <div class="pl">${esc(i.label||"")}</div>
             ${i.defect?`<div style="font-size:12px"><b>${esc(i.defect)}</b> <span class="muted">${esc(i.defectCode)}</span></div>`:""}
             ${i.cause?`<div style="font-size:12px" class="muted">Cause: ${esc(i.cause)}</div>`:""}
-            <dl>${i.tempC?`<dt>Temp</dt><dd><b>${esc(i.tempC)} °C</b>${i.ambC?` <span class="muted">(amb ${esc(i.ambC)})</span>`:""}${i.tempMethod?` <span class="muted">${esc(i.tempMethod)}</span>`:""}</dd>`:""}${i.particle?`<dt>Particles</dt><dd>${esc(i.particle)}</dd>`:""}${i.comp?`<dt>Comp hrs</dt><dd>${esc(i.comp)}</dd>`:""}${i.oil?`<dt>Oil hrs</dt><dd>${esc(i.oil)}</dd>`:""}${i.actionLabel?`<dt>Action</dt><dd>${esc(i.actionLabel)}</dd>`:""}${i.prio?`<dt>Priority</dt><dd>${esc(prioName(i.prio))}</dd>`:""}${i.wo?`<dt>WO</dt><dd>${esc(i.wo)}</dd>`:""}</dl>
+            <dl>${i.tempC?`<dt>Temp</dt><dd><b>${esc(i.tempC)} °C</b>${i.ambC?` <span class="muted">(amb ${esc(i.ambC)})</span>`:""}${i.tempMethod?` <span class="muted">${esc(i.tempMethod)}</span>`:""}</dd>`:""}${i.particle?`<dt>Particles</dt><dd>${esc(i.particle)}</dd>`:""}${i.comp?`<dt>Comp hrs</dt><dd>${esc(i.comp)}</dd>`:""}${i.oil?`<dt>Oil hrs</dt><dd>${esc(i.oil)}</dd>`:""}${i.actionLabel?`<dt>Action</dt><dd>${esc(i.actionLabel)}</dd>`:""}${i.prio?`<dt>Priority</dt><dd>${esc(prioName(i.prio))}</dd>`:""}${i.wo?`<dt>WO</dt><dd>${esc(i.wo)}</dd>`:""}${
+              /* Captured on every position and shown on none of them. How a
+                 fault was found is half of whether the programme is working:
+                 a fleet whose findings all arrive by "operator report" is not
+                 being condition-monitored, it is being told. */
+              i.detectionLabel||i.detection?`<dt>${esc(t("th_detect"))}</dt><dd>${esc(i.detectionLabel||i.detection)}</dd>`:""}${
+              /* The app challenged this number and the inspector measured
+                 again and stood by it. That is exactly the reading a reliability
+                 engineer wants flagged, not hidden. */
+              i.stood?`<dt>${esc(t("th_stood"))}</dt><dd class="warnv">${esc(t("th_stood_v"))}</dd>`:""}${
+              /* Judged against a baseline somebody set at the machine rather
+                 than the catalogue — it changes what every percentage means. */
+              (i.baseNew!==""&&i.baseNew!=null)?`<dt>${esc(t("th_base"))}</dt><dd>${esc(i.baseNew)}${
+                (i.baseCondemn!==""&&i.baseCondemn!=null)?" → "+esc(i.baseCondemn):""} mm${
+                i.baseAll?" · "+esc(t("th_base_all")):""}</dd>`:""}</dl>
             ${i.comment?`<div class="cm">“${esc(i.comment)}”</div>`:""}
           </div></div>`; }).join("")}</div></div>`).join("");
-  $("history").querySelectorAll("img.photo").forEach(img=>img.onclick=()=>{ $("lbimg").src=img.src; $("lbcap").textContent=img.dataset.cap; $("lb").classList.add("open"); });
+  /* One handler on the card rather than one per picture: the lead image and
+     every thumbnail below it open the same set at the frame that was clicked,
+     so the arrows can walk the whole position without re-querying the DOM. */
+  $("history").querySelectorAll(".pos").forEach(card=>{
+    let med=[]; try{ med=JSON.parse(card.dataset.med||"[]"); }catch(e){}
+    if(!med.length) return;
+    card.querySelectorAll("[data-i]").forEach(el=>el.onclick=()=>
+      openLB(med, +el.dataset.i || 0, card.dataset.cap||""));
+  });
   // If the photos are in Drive rather than on disk, fetch this unit's and repaint once.
   $("history").querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>openEdit(b.dataset.edit));
   pullDrivePhotos(recs, renderHistory);
@@ -2043,11 +2420,53 @@ async function pullDrivePhotos(recs, after){
   // drive.js loads after this script, and renderAll() runs during init
   if(!drvOn() || drivePending || !recs.length) return;
   drivePending=true;
-  try{ if(await drv().ensurePhotos(recs)) after&&after(); }
+  /* Repaint while they arrive, not once they all have. A unit with forty
+     positions used to sit on "no photo" for the whole batch and then snap to
+     complete; the page now fills in as the pictures land. Throttled, because
+     redrawing the history on every one of four hundred files is its own kind
+     of slow — and a final repaint always runs, so the last few are never left
+     waiting on a tick that never comes. */
+  let last=0, timer=null;
+  const paint=()=>{ last=Date.now(); timer=null; after&&after(); };
+  const tick=()=>{ if(timer) return;
+    const wait=Math.max(0, 450-(Date.now()-last));
+    timer=setTimeout(paint, wait); };
+  try{ if(await drv().ensurePhotos(recs, tick)){ clearTimeout(timer); after&&after(); } }
   finally{ drivePending=false; }
 }
-$("lb").onclick=e=>{ if(e.target.id==="lb"||e.target.id==="lbx"){ $("lb").classList.remove("open"); $("lbimg").src=""; } };
-document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ $("lb").classList.remove("open"); } });
+/* ---------- the viewer ----------
+   A position can hold ten photographs and a video. Showing one of them and
+   calling it "the photo" threw away most of what the round captured, so the
+   viewer walks a set: arrows, arrow keys, and a counter that says how many
+   there are — the answer to "is that all of it?" has to be on the screen. */
+let lbSet=[], lbIx=0, lbCap="";
+function lbShow(){
+  const [src,kind]=lbSet[lbIx]||[];
+  const img=$("lbimg"), vid=$("lbvid");
+  vid.pause();
+  if(kind==="video"){ img.style.display="none"; img.src="";
+    vid.style.display=""; vid.src=src||""; }
+  else { vid.style.display="none"; vid.removeAttribute("src"); vid.load();
+    img.style.display=""; img.src=src||""; }
+  const many=lbSet.length>1;
+  $("lbPrev").style.display=$("lbNext").style.display=many?"":"none";
+  $("lbcap").textContent=lbCap+(many?`   ${lbIx+1} / ${lbSet.length}`:"");
+}
+function openLB(set,ix,cap){ lbSet=set||[]; lbIx=Math.max(0,Math.min(ix|0,lbSet.length-1));
+  lbCap=cap||""; lbShow(); $("lb").classList.add("open"); }
+function lbStep(d){ if(lbSet.length<2) return;
+  lbIx=(lbIx+d+lbSet.length)%lbSet.length; lbShow(); }
+function lbClose(){ $("lb").classList.remove("open"); $("lbimg").src="";
+  const v=$("lbvid"); v.pause(); v.removeAttribute("src"); v.load(); lbSet=[]; }
+$("lb").onclick=e=>{ if(e.target.id==="lb"||e.target.id==="lbx") lbClose(); };
+$("lbPrev").onclick=e=>{ e.stopPropagation(); lbStep(-1); };
+$("lbNext").onclick=e=>{ e.stopPropagation(); lbStep(1); };
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){ lbClose(); return; }
+  if(!$("lb").classList.contains("open")) return;
+  if(e.key==="ArrowLeft") lbStep(-1);
+  else if(e.key==="ArrowRight") lbStep(1);
+});
 $("themeBtn").onclick=()=>{ const c=document.documentElement.getAttribute("data-theme");
   const dark=c?c==="dark":matchMedia("(prefers-color-scheme: dark)").matches;
   document.documentElement.setAttribute("data-theme",dark?"light":"dark"); };
@@ -2107,7 +2526,151 @@ function refreshControls(){
   $("sub").textContent=t("sub_count",{n:RECS.length,u:units.length})
     +(imported.length?t("sub_imported",{n:imported.length}):"");
 }
-function renderAll(){ renderChips(); renderKpis(); renderFleet(); renderFailure(); renderActions(); renderHistory(); }
+/* ---------- wear and remaining life, across the fleet ----------
+
+   The measurements were already being captured, scored and stored. What was
+   missing was anybody being able to see them together: wearOf() fed one
+   machine's history page, and WEAR.forecast — the hours-to-condemn the phone
+   works out and shows the inspector standing at the roller — was loaded into
+   this page and never called. So planning could read that a part was 92% worn
+   and still had no idea whether that meant next week or next year.
+
+   A forecast needs a position's OWN history, not the fleet's: the series is
+   every reading ever taken on that exact point, oldest first, with the hour
+   meter where it was written down. Voided rounds are out, because a withdrawn
+   reading must not bend a trend line any more than it bends a count. */
+function wearSeries(recs){
+  const by=new Map();
+  recs.forEach(r=>{
+    if(!isWearType(r.type)) return;
+    (r.items||[]).forEach(i=>{
+      const w=wearOf(r,i); if(!w || w.mm==null) return;
+      const k=`${r.equip}|${r.type}|${i.key}`;
+      (by.get(k) || by.set(k,[]).get(k)).push({ rec:r, it:i, w,
+        at:r.date||"", smu:(r.smu===""||r.smu==null)?null:r.smu });
+    });
+  });
+  by.forEach(list=>list.sort((a,b)=>String(a.at).localeCompare(String(b.at))));
+  return by;
+}
+/* One row per measured position: where it is now, how fast it is going, and
+   when it arrives. `why` carries the app's own refusal to guess, unchanged —
+   "one reading is a dot, not a line" is a better answer than a number. */
+function wearRows(recs){
+  const out=[];
+  wearSeries(recs).forEach((list,k)=>{
+    const last=list[list.length-1], w=last.w;
+    /* Which way the number travels is not a field to be defaulted — it is a
+       fact about the two figures. Most points wear DOWN, so "down" looked like
+       a safe default until an idler, whose bore grows from 21 mm to 33.5 mm,
+       came out as 84% worn and "past condemn" in the same row. Read it off the
+       span and the two can never disagree again. */
+    const ref = (w.newMM!=null && w.condemnMM!=null)
+      ? { n:Number(w.newMM), c:Number(w.condemnMM),
+          d:(Number(w.condemnMM) > Number(w.newMM) ? "grow" : "down") } : null;
+    let f=null;
+    if(ref && ref.c!=null && window.WEAR && WEAR.forecast)
+      f=WEAR.forecast(ref, list.map(x=>({ mm:Number(x.w.mm), at:x.at, smu:x.smu })));
+    const [equip,type]=k.split("|");
+    out.push({ key:k, equip, type, itemKey:last.it.key, name:ucName(last.it,last.rec),
+               rec:last.rec, it:last.it, w, n:list.length, at:last.at, smu:last.smu,
+               pct:w.wearPct, band:w.band,
+               hours:(f&&f.hours!=null)?f.hours:null,
+               rate:(f&&f.rate!=null)?f.rate:null,
+               basis:(f&&f.basis)||"", why:(f&&f.why)||"" });
+  });
+  /* Worst first means soonest-to-run-out first, not highest percentage: a
+     roller at 95% that has not moved in a year is not the one to order. A
+     position with no life yet sorts on how worn it is, behind those that have
+     a number, because "unknown" is not "safe". */
+  const rank=r=> r.hours!=null ? r.hours : (r.pct!=null ? 1e7-r.pct*1000 : 1e9);
+  out.sort((a,b)=>rank(a)-rank(b));
+  return out;
+}
+const W_SOON=1000;                     // hours: about one month of a 12h shift
+function wearDue(r){ return r.band==="act" || (r.pct!=null&&r.pct>=80) || (r.hours!=null&&r.hours<W_SOON); }
+function fmtH(h){ return h==null?"" : h>=100000 ? "—" :
+  Math.round(h).toLocaleString(lang==="ru"?"ru-RU":"en-GB"); }
+/* Hours are what parts are ordered against, but a date is what a shutdown is
+   planned around, so say both. Twelve hours a day is the app's own assumption
+   and is stated rather than hidden. */
+function whenDate(h){
+  if(h==null||h>=100000) return "";
+  const d=new Date(Date.now()+ (h/12)*864e5);
+  return d.toISOString().slice(0,10);
+}
+function renderWearTab(){
+  const recs=filtered();
+  const all=wearRows(recs);
+  const mode=($("wBand")&&$("wBand").value)||"due";
+  const rows = mode==="all" ? all
+             : mode==="act" ? all.filter(r=>r.band==="act")
+             : all.filter(wearDue);
+  const act=all.filter(r=>r.band==="act").length;
+  const watch=all.filter(r=>r.band==="watch").length;
+  const soon=all.filter(r=>r.hours!=null&&r.hours<W_SOON).length;
+  const haveLife=all.filter(r=>r.hours!=null).length;
+  const kp=(lab,val,sub,cls)=>`<div class="kpi${cls?" "+cls:""}"><div class="k">${esc(lab)}</div>
+    <div class="v">${esc(String(val))}</div><div class="s">${esc(sub)}</div></div>`;
+  $("wearKpis").innerHTML =
+      kp(t("w_k_meas"), all.length, t("w_k_meas_s",{n:new Set(all.map(r=>r.equip)).size}))
+    + kp(t("w_k_act"), act, t("w_k_act_s"))
+    + kp(t("w_k_watch"), watch, t("w_k_watch_s"))
+    + kp(t("w_k_soon",{h:W_SOON.toLocaleString(lang==="ru"?"ru-RU":"en-GB")}), soon, t("w_k_soon_s"))
+    + kp(t("w_k_life"), haveLife+" / "+all.length, t("w_k_life_s"));
+  if(!all.length){
+    $("wearTbl").innerHTML=`<tbody><tr><td class="muted" style="padding:18px">${esc(t("w_empty"))}</td></tr></tbody>`;
+    $("wearNote").textContent=""; return;
+  }
+  const th=(k,cls)=>`<th${cls?` class="${cls}"`:""}>${esc(t(k))}</th>`;
+  $("wearTbl").innerHTML=`<thead><tr>
+      ${th("w_th_unit")}${th("w_th_point")}${th("w_th_meas","r")}${th("w_th_worn","r")}
+      <th style="width:70px"></th>${th("w_th_left","r")}${th("w_th_rate","r")}${th("w_th_life","r")}
+      ${th("w_th_when")}${th("w_th_seen","r")}</tr></thead><tbody>`
+    + rows.map(r=>{
+      const life = r.hours!=null
+        ? `<b class="${r.hours<W_SOON?"bad":""}">${esc(fmtH(r.hours))}</b> h`
+        : `<span class="muted" title="${esc(t("w_why_"+(r.why||"few")+"_t"))}">${esc(t("w_why_"+(r.why||"few")))}</span>`;
+      const when = r.hours!=null
+        ? `${esc(whenDate(r.hours))}<div class="muted" style="font-size:10.5px">${esc(t(r.basis==="smu"?"w_basis_smu":"w_basis_days"))}</div>`
+        : "";
+      const left = (r.w.condemnMM!=null&&r.w.mm!=null)
+        ? Math.abs(Number(r.w.mm)-Number(r.w.condemnMM)).toFixed(1) : "";
+      return `<tr data-unit="${esc(r.equip)}">
+        <td><b>${esc(r.equip)}</b> <span class="tag">${esc(TYPE_LABEL[r.type]||r.type)}</span></td>
+        <td>${esc(r.name)}<div class="muted" style="font-size:10.5px">${
+            r.w.newMM!=null?esc(r.w.newMM)+" → "+esc(r.w.condemnMM)+" mm":esc(t("uc_noref"))}</div></td>
+        <td class="r mono"><b>${esc(r.w.mm)}</b></td>
+        <td class="r mono">${r.pct!=null?esc(r.pct)+"%":""}</td>
+        <td>${r.pct!=null?wearBar(r.pct):""}</td>
+        <td class="r mono">${esc(left)}</td>
+        <td class="r mono">${r.rate!=null?esc(r.rate.toFixed(2)):""}</td>
+        <td class="r mono">${life}</td>
+        <td>${when}</td>
+        <td class="r mono">${r.n}<div class="muted" style="font-size:10.5px">${esc(r.at)}</div></td>
+      </tr>`;
+    }).join("")+`</tbody>`;
+  $("wearTbl").querySelectorAll("tr[data-unit]").forEach(tr=>tr.onclick=()=>{
+    $("equipSel").value=tr.dataset.unit; showTab("equipment"); renderHistory(); });
+  $("wearNote").textContent = t("w_note",{s:rows.length, n:all.length, h:WEAR.MIN_HOURS, d:WEAR.MIN_DAYS});
+}
+function wearCsv(){
+  const rows=wearRows(filtered());
+  const head=["Unit","Round","Point key","Point","Measured mm","New mm","Condemn mm",
+              "Worn %","mm to condemn","Rate mm/1000h","Hours to condemn","Projected date",
+              "Basis","Readings","Last seen","SMU","No forecast because"];
+  const q=v=>`"${String(v==null?"":v).replace(/"/g,'""')}"`;
+  const body=rows.map(r=>[r.equip,r.type,r.itemKey,r.name,r.w.mm,r.w.newMM,r.w.condemnMM,
+    r.pct,(r.w.condemnMM!=null&&r.w.mm!=null)?Math.abs(Number(r.w.mm)-Number(r.w.condemnMM)).toFixed(1):"",
+    r.rate!=null?r.rate.toFixed(3):"", r.hours!=null?Math.round(r.hours):"", whenDate(r.hours),
+    r.basis, r.n, r.at, r.smu==null?"":r.smu, r.why].map(q).join(","));
+  const blob=new Blob(["﻿"+[head.map(q).join(","),...body].join("\r\n")],
+    {type:"text/csv;charset=utf-8"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
+  a.download=`wear-and-life_${new Date().toISOString().slice(0,10)}.csv`; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+}
+function renderAll(){ renderChips(); renderKpis(); renderFleet(); renderFailure(); renderWearTab(); renderActions(); renderHistory(); }
 ["fType","fClass","fRange"].forEach(id=>$(id).onchange=renderAll);
 let qTimer=null;
 $("fQ").oninput=()=>{ clearTimeout(qTimer); qTimer=setTimeout(renderAll,180); };   // debounce, the fleet table is big
@@ -2116,6 +2679,9 @@ document.addEventListener("keydown",e=>{
   if(e.key==="Escape"&&document.activeElement===$("fQ")){ $("fQ").value=""; renderAll(); $("fQ").blur(); }
 });
 $("equipSel").onchange=renderHistory;
+$("wBand").onchange=renderWearTab;
+$("pfSel").onchange=e=>{ pfKey=e.target.value; renderPF(); };
+$("wearCsv").onclick=wearCsv;
 document.querySelector(".lang").addEventListener("click",e=>{
   const b=e.target.closest("button[data-lang]"); if(!b) return;
   lang=b.dataset.lang;
@@ -2126,8 +2692,8 @@ rebuild(); refreshControls(); renderAll(); refreshSources();
 applyLang();                          // paints the static markup and re-renders in the saved language
 if(!RECS.length) openData();          // first run: show where data comes from
 </script>
-<script src="drive.js?v=95"></script>
-<script src="sync-adapter.js?v=95"></script>
-<script src="report.js?v=95"></script>
+<script src="drive.js?v=96"></script>
+<script src="sync-adapter.js?v=96"></script>
+<script src="report.js?v=96"></script>
 </body>
 </html>

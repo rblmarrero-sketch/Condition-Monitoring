@@ -170,7 +170,15 @@
         const base = window.CMDash.photoBase(it, rec);
         // The same candidate list the history uses, so a record whose photos were
         // kept under "~DEVICE" after a two-phone clash still gets them fetched.
-        for (const nm of window.CMDash.photoNames(base, rec, ["", "_1", "_2", "_3", "_4"])) {
+        // The whole range the phone can produce, not the first five: it stopped
+        // at _4 and never asked for the video, so a position with eight photos
+        // and a clip had three photos and the clip left behind on Drive. Every
+        // candidate is checked against the index before it becomes a request,
+        // so a longer list costs lookups, not round trips.
+        for (const nm of window.CMDash.photoNames(base, rec)) {
+          if (index[nm] && !(nm in fetched)) names.push(nm);
+        }
+        for (const nm of window.CMDash.videoNames(base, rec)) {
           if (index[nm] && !(nm in fetched)) names.push(nm);
         }
       }
@@ -182,14 +190,58 @@
     return [...new Set(names)];
   }
 
+  /* ---- the media cache ----
+     A Drive file id names one immutable file, so anything fetched once never
+     needs fetching again — but `fetched` lived in memory and died with the tab.
+     Every reload re-pulled every photograph, base64-encoded through Apps
+     Script at a third over its real size, five at a time. Opening the same
+     unit twice in a morning cost the same minute twice.
+
+     Cache Storage survives the reload, so the second visit is disk-speed. It
+     is best-effort throughout: no secure context, no quota, a browser that
+     refuses — every path falls back to the network rather than failing. */
+  const MEDIA_CACHE = "cm-media-v1";
+  const MEDIA_CAP = 1500;                 // files; ~immutable, so FIFO is enough
+  async function cacheGet(id) {
+    try {
+      const c = await caches.open(MEDIA_CACHE);
+      const r = await c.match("/cm-media/" + id);
+      return r ? URL.createObjectURL(await r.blob()) : null;
+    } catch (e) { return null; }
+  }
+  async function cachePut(id, blob) {
+    try {
+      const c = await caches.open(MEDIA_CACHE);
+      await c.put("/cm-media/" + id, new Response(blob));
+      /* Bounded, or a year of rounds fills the disk quietly. Keys come back in
+         insertion order, so dropping from the front is oldest-first. */
+      const keys = await c.keys();
+      if (keys.length > MEDIA_CAP)
+        for (const k of keys.slice(0, keys.length - MEDIA_CAP)) await c.delete(k);
+    } catch (e) { /* a full disk must not stop the picture being shown */ }
+  }
+
   async function ensurePhotos(recs, onProgress) {
     if (!configured()) return 0;
     const names = wanted(recs);
     if (!names.length) return 0;
+    /* Lead frames first. A position's first photograph is the one on the card;
+       the other nine are behind a thumbnail nobody has clicked yet. Fetching
+       them in name order meant eight photographs of position one arrived before
+       the first photograph of position two, so the page filled top-down at one
+       card a second instead of showing every card at once. */
+    const lead = n => /(_1)?\.[A-Za-z0-9]+$/.test(n) && !/_(?:[2-9]|10)\./.test(n);
+    names.sort((a, b) => (lead(a) ? 0 : 1) - (lead(b) ? 0 : 1));
     await pool(names, async (nm) => {
       try {
-        const r = await api({ action: "file", id: index[nm].id });
-        const url = URL.createObjectURL(b64ToBlob(r.data, r.mime));
+        const id = index[nm].id;
+        let url = await cacheGet(id);
+        if (!url) {
+          const r = await api({ action: "file", id });
+          const blob = b64ToBlob(r.data, r.mime);
+          cachePut(id, blob);                      // not awaited: the picture goes up now
+          url = URL.createObjectURL(blob);
+        }
         fetched[nm] = url;
         window.CMDash.addPhoto(nm, url);
       } catch (e) { fetched[nm] = null; }          // remember the failure, don't retry forever
