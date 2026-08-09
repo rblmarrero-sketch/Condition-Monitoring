@@ -133,6 +133,23 @@
   .sbody h3{margin:18px 0 4px;font-size:12px;font-weight:700;text-transform:uppercase;
     letter-spacing:.08em;color:var(--ink-2);}
   .field.why label{font-variant-numeric:tabular-nums;}
+  /* coverage and direction */
+  .trend{display:flex;align-items:flex-end;gap:8px;overflow-x:auto;padding:6px 0 0;}
+  .tmon{flex:0 0 46px;display:flex;flex-direction:column;align-items:center;gap:3px;}
+  .tstack{width:100%;height:120px;display:flex;flex-direction:column;justify-content:flex-end;
+    background:var(--surface-2);border-radius:4px;overflow:hidden;}
+  .tstack i{display:block;width:100%;}
+  .tstack i.s-cri{background:var(--critical);} .tstack i.s-deg{background:var(--serious);}
+  .tstack i.s-inc{background:var(--warning);}
+  .tmon b{font:700 12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ink-2);min-height:12px;}
+  .tmon span{font-size:10.5px;color:var(--muted);font-variant-numeric:tabular-nums;}
+  .tmon u{font-size:10px;color:var(--muted);text-decoration:none;
+    border-top:1px solid var(--border);width:100%;text-align:center;padding-top:2px;}
+  .tlegend{display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px;color:var(--ink-2);margin-bottom:4px;}
+  .tlegend span{display:flex;align-items:center;gap:5px;}
+  .tlegend i{width:10px;height:10px;border-radius:2px;display:inline-block;}
+  .tlegend i.s-cri{background:var(--critical);} .tlegend i.s-deg{background:var(--serious);}
+  .tlegend i.s-inc{background:var(--warning);}
   /* table */
   table.grid{width:100%;border-collapse:collapse;font-size:12.5px;}
   table.grid th{text-align:left;color:var(--ink-2);font-weight:600;border-bottom:1px solid var(--border);padding:8px 6px;white-space:nowrap;}
@@ -500,6 +517,22 @@
 
   <section id="tab-overview">
     <div class="kpis" id="kpis"></div>
+    <!-- Counts with no denominator and no direction are the two things that
+         make a management page unreadable: 44 inspections is meaningless
+         without "of how many due", and 82 findings is meaningless without
+         "more or fewer than last month". Both, before the fleet table. -->
+    <div class="section">
+      <h2 data-i18n="cv_title">Coverage — was the round actually walked</h2>
+      <div class="sub" data-i18n="cv_sub">Machines this round applies to, against machines it reached, in the period selected above. A finding you never went to look for is not an absence of findings.</div>
+      <div class="tblwrap"><table class="grid" id="covTbl"></table></div>
+      <div class="sub" id="covNote" style="margin-top:10px"></div>
+    </div>
+    <div class="section">
+      <h2 data-i18n="tr_title">Direction — is the fleet getting better or worse</h2>
+      <div class="sub" data-i18n="tr_sub">Findings by month, worst on top. Read the shape, not the last bar: one month is a sample, three is a trend.</div>
+      <div id="trendChart"></div>
+      <div class="sub" id="trendNote" style="margin-top:10px"></div>
+    </div>
     <div class="section">
       <h2 data-i18n="s_fleet">Condition by equipment — latest inspection</h2>
       <div class="sub" data-i18n="s_fleet_sub">Worst severity found on each unit's most recent inspection. Click a unit to open its history.</div>
@@ -634,31 +667,31 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=99"></script>
-<script src="../mobile/hme.js?v=99"></script>
-<script src="../mobile/mp-fc.js?v=99"></script>
-<script src="../mobile/hme-cascade.js?v=99"></script>
-<script src="../mobile/temp-limits.js?v=99"></script>
+<script src="../data/magnetic_plug.js?v=100"></script>
+<script src="../mobile/hme.js?v=100"></script>
+<script src="../mobile/mp-fc.js?v=100"></script>
+<script src="../mobile/hme-cascade.js?v=100"></script>
+<script src="../mobile/temp-limits.js?v=100"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=99"></script>
-<script src="../mobile/wear.js?v=99"></script>
-<script src="../mobile/wear-map.js?v=99"></script>
+<script src="../mobile/assets.js?v=100"></script>
+<script src="../mobile/wear.js?v=100"></script>
+<script src="../mobile/wear-map.js?v=100"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=99"></script>
-<script src="../mobile/machine-photos.js?v=99"></script>
-<script src="../mobile/machine-fig.js?v=99"></script>
-<script src="../mobile/get.js?v=99"></script>
-<script src="../mobile/uc-points.js?v=99"></script>
-<script src="../mobile/inspect-guide.js?v=99"></script>
-<script src="../mobile/get-figs.js?v=99"></script>
-<script src="../mobile/body-points.js?v=99"></script>
-<script src="../mobile/body-map.js?v=99"></script>
-<script src="../mobile/jspdf.umd.min.js?v=99"></script>
-<script src="../mobile/html2canvas.min.js?v=99"></script>
-<script src="../mobile/report-core.js?v=99"></script>
+<script src="../mobile/upload-defaults.js?v=100"></script>
+<script src="../mobile/machine-photos.js?v=100"></script>
+<script src="../mobile/machine-fig.js?v=100"></script>
+<script src="../mobile/get.js?v=100"></script>
+<script src="../mobile/uc-points.js?v=100"></script>
+<script src="../mobile/inspect-guide.js?v=100"></script>
+<script src="../mobile/get-figs.js?v=100"></script>
+<script src="../mobile/body-points.js?v=100"></script>
+<script src="../mobile/body-map.js?v=100"></script>
+<script src="../mobile/jspdf.umd.min.js?v=100"></script>
+<script src="../mobile/html2canvas.min.js?v=100"></script>
+<script src="../mobile/report-core.js?v=100"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -836,6 +869,23 @@ const I18N={
   ds_notset:"not set up", ds_notloaded:"set up — not loaded yet", ds_notopened:"not opened",
   ds_insp:"{n} inspection(s)", ds_indexed:"{n} files indexed", ds_inbrowser:"{n} record(s) in this browser",
   ds_photosn:"{n} photos", ds_voidn:"{n} voided",
+  cv_title:"Coverage — was the round actually walked",
+  cv_sub:"Machines this round applies to, against machines it reached, in the period selected above. A finding you never went to look for is not an absence of findings.",
+  cv_th_round:"Round", cv_th_seen:"Units reached", cv_th_insp:"Inspections",
+  cv_th_never:"Never done", cv_th_over:"Overdue", cv_th_who:"Inspectors",
+  cv_every:"every {d} days", cv_scoped:"machines this round fits", cv_p_days:"the last {d} days", cv_p_all:"all time",
+  cv_note:"Against a register of {n} unit(s), over {p}. \u201cNever done\u201d and \u201coverdue\u201d look at the whole history, not just the period, because a machine is overdue whatever window you are reading.",
+  cv_empty:"Nothing to measure coverage against in this selection.",
+  tr_title:"Direction — is the fleet getting better or worse",
+  tr_sub:"Findings by month, worst on top. Read the shape, not the last bar: one month is a sample, three is a trend.",
+  tr_rounds:"the number under each bar is inspections that month",
+  tr_tip:"{f} finding(s) from {r} inspection(s) on {u} unit(s)",
+  tr_none:"Not enough months yet", tr_none_s:"Two months of inspections and this draws itself.",
+  tr_short:"Not enough history behind this month to call a direction yet.",
+  tr_thin:"{m}: {n} finding(s). Too few a month to read a direction from \u2014 a percentage on numbers this small is noise.",
+  tr_flat:"{m}: {n} finding(s) — about the same as the months before it.",
+  tr_worse:"{m}: {n} finding(s), {p}% above the previous three months (about {a}). Worth asking what changed.",
+  tr_better:"{m}: {n} finding(s), {p}% below the previous three months (about {a}). Check coverage held up before calling it an improvement.",
   th_owner:"Responsible", th_due:"Due", th_status:"Status",
   a_show:"Show", a_f_open:"Still open", a_f_over:"Overdue", a_f_owned:"Has an owner", a_f_all:"Everything",
   a_k_open:"STILL OPEN", a_k_open_s:"of {n} finding(s)",
@@ -1056,6 +1106,23 @@ const I18N={
   ds_notset:"не настроено", ds_notloaded:"настроено — ещё не загружено", ds_notopened:"не открыто",
   ds_insp:"осмотров: {n}", ds_indexed:"файлов в индексе: {n}", ds_inbrowser:"записей в этом браузере: {n}",
   ds_photosn:"фото: {n}", ds_voidn:"отозвано: {n}",
+  cv_title:"Охват — обход действительно выполнен?",
+  cv_sub:"Машины, к которым применим обход, против машин, до которых он дошёл, за выбранный период. Отсутствие дефектов там, где никто не смотрел, — это не отсутствие дефектов.",
+  cv_th_round:"Обход", cv_th_seen:"Охвачено единиц", cv_th_insp:"Осмотров",
+  cv_th_never:"Ни разу", cv_th_over:"Просрочено", cv_th_who:"Инспекторов",
+  cv_every:"каждые {d} сут", cv_scoped:"машины, к которым применим обход", cv_p_days:"последние {d} сут", cv_p_all:"всё время",
+  cv_note:"По реестру из {n} ед., за {p}. «Ни разу» и «просрочено» считаются по всей истории, а не только по периоду.",
+  cv_empty:"В этой выборке нечего сопоставить с охватом.",
+  tr_title:"Динамика — парк улучшается или ухудшается?",
+  tr_sub:"Дефекты по месяцам, худшее сверху. Смотрите на форму, а не на последний столбец: один месяц — это выборка, три — тенденция.",
+  tr_rounds:"число под столбцом — осмотров за месяц",
+  tr_tip:"дефектов: {f}, осмотров: {r}, единиц: {u}",
+  tr_none:"Пока мало месяцев", tr_none_s:"Двух месяцев осмотров достаточно, чтобы график построился.",
+  tr_short:"Истории пока недостаточно, чтобы говорить о направлении.",
+  tr_thin:"{m}: дефектов {n}. Слишком мало в месяц, чтобы говорить о динамике — процент на таких числах это шум.",
+  tr_flat:"{m}: дефектов {n} — примерно как в предыдущие месяцы.",
+  tr_worse:"{m}: дефектов {n}, на {p}% выше предыдущих трёх месяцев (около {a}). Стоит разобраться, что изменилось.",
+  tr_better:"{m}: дефектов {n}, на {p}% ниже предыдущих трёх месяцев (около {a}). Сначала проверьте, что охват не упал.",
   th_owner:"Ответственный", th_due:"Срок", th_status:"Статус",
   a_show:"Показать", a_f_open:"Открытые", a_f_over:"Просроченные",
   a_f_owned:"С ответственным", a_f_all:"Все",
@@ -2165,6 +2232,162 @@ function renderHistory(){
   pullDrivePhotos(recs, renderHistory);
 }
 
+/* ---------- coverage, and direction ----------
+
+   Two questions this page could not answer, and they are the two a manager
+   actually asks.
+
+   "Did the round happen?" Forty-four inspections means nothing on its own. Set
+   against the machines the round applies to, it is either 90% of the fleet or
+   4% of it, and those are different meetings. A round that was not walked
+   produces no findings, which on every chart here looks exactly like a machine
+   in good condition — the most dangerous confusion in condition monitoring,
+   and the reason coverage goes above the fleet table rather than below it.
+
+   "Are we getting better?" Every number on this page was a snapshot. Nobody
+   could see whether last month was worse than the one before. */
+const DUE_DAYS={MP:90, FC:90, INSP:30, TEMP:30, UC:90, GET:90, TB:90};
+/* Which machines a round can be done on at all. Returns null where the answer
+   is "all of them" — a magnetic plug round applies to anything with an oil
+   compartment — so the caller uses the whole register rather than a guess. */
+function elig(ty){
+  if(ty==="UC") return a=>!!(window.WEAR && WEAR.modelFor && WEAR.modelFor(a.m||""));
+  if(ty==="GET") return a=>!!(window.GET && GET.has && GET.has(a.n, a.cat||a.cls||"", a.m||""));
+  if(ty==="TB")  return a=>!!(window.BODY && BODY.modelFor && BODY.modelFor(a.m||""));
+  return null;
+}
+function coverageRows(){
+  const recs=filtered();
+  const days=+$("fRange").value;
+  const cls=$("fClass").value;
+  const tyFilter=$("fType").value;
+  /* The fleet this round could be walked on. The register is the denominator,
+     not the set of machines that happen to have a record — using the records
+     as the denominator is how coverage always reads 100%. */
+  const fleet=(window.ASSETS||[]).filter(a=>!cls || a.cls===cls);
+  const types = tyFilter ? [tyFilter] : [...new Set(recs.map(r=>r.type))].filter(Boolean).sort();
+  const out=[];
+  types.forEach(ty=>{
+    const mine=recs.filter(r=>r.type===ty);
+    const seen=new Set(mine.map(r=>r.equip));
+    /* The denominator has to be the machines the round can actually be done
+       on. Counting an undercarriage round against all 1,128 units — haul
+       trucks and light towers included — reports 2% coverage on a programme
+       that may be reaching every dozer it has, and 2% in front of a manager
+       is a decision. The reference tables the phones use are loaded here, so
+       ask them; where a round applies to everything, the whole register is
+       the right denominator and no guess is involved. */
+    const can=elig(ty);
+    const pool = can ? fleet.filter(a=>can(a)) : fleet;
+    const total=pool.length;
+    /* Last time each machine was done, so "overdue" is a fact about a machine
+       and not about the filter window. */
+    const last=new Map();
+    RECS.filter(r=>r.type===ty && !r._void).forEach(r=>{
+      const p=last.get(r.equip); if(!p || String(r.date)>String(p)) last.set(r.equip,r.date); });
+    const iv=DUE_DAYS[ty]||90;
+    const cutoff=new Date(Date.now()-iv*864e5).toISOString().slice(0,10);
+    /* The SAME pool the coverage fraction used. Counting these against the
+       whole register put "3 of 43 reached" next to "1125 never done" on one
+       row — two numbers about different populations, side by side, which is
+       how a management page loses its reader in a single glance. */
+    let never=0, overdue=0;
+    pool.forEach(a=>{ const d=last.get(a.n);
+      if(!d) never++; else if(d<cutoff) overdue++; });
+    out.push({ ty, seen:seen.size, total, inspections:mine.length,
+               pc: total?Math.round(seen.size/total*100):0,
+               never, overdue, iv, scoped:!!can,
+               people:new Set(mine.map(r=>r.by).filter(Boolean)).size });
+  });
+  return { rows:out, days, fleet:fleet.length };
+}
+function renderCoverage(){
+  const { rows, days, fleet } = coverageRows();
+  if(!rows.length){
+    $("covTbl").innerHTML=`<tbody><tr><td class="muted" style="padding:16px">${esc(t("cv_empty"))}</td></tr></tbody>`;
+    $("covNote").textContent=""; return; }
+  const th=k=>`<th>${esc(t(k))}</th>`;
+  $("covTbl").innerHTML=`<thead><tr>${th("cv_th_round")}${th("cv_th_seen")}
+      <th style="width:120px"></th>${th("cv_th_insp")}${th("cv_th_never")}${th("cv_th_over")}
+      ${th("cv_th_who")}</tr></thead><tbody>`
+    + rows.map(r=>{
+        const bad = r.pc<50;
+        return `<tr><td><b>${esc(TYPE_LABEL[r.ty]||r.ty)}</b>
+            <div class="muted" style="font-size:11px">${esc(t("cv_every",{d:r.iv}))}${
+              r.scoped?" · "+esc(t("cv_scoped")):""}</div></td>
+          <td class="mono${bad?" bad":""}"><b>${r.seen}</b> / ${r.total}
+            <div class="muted" style="font-size:11px">${r.pc}%</div></td>
+          <td>${wearBar(Math.min(100,r.pc))}</td>
+          <td class="mono">${r.inspections}</td>
+          <td class="mono${r.never?" bad":""}">${r.never}</td>
+          <td class="mono${r.overdue?" bad":""}">${r.overdue}</td>
+          <td class="mono">${r.people}</td></tr>`;
+      }).join("")+`</tbody>`;
+  $("covNote").textContent=t("cv_note",{n:fleet, p:days?t("cv_p_days",{d:days}):t("cv_p_all")});
+}
+/* Findings by month, stacked worst-on-top, with the number of inspections that
+   produced them underneath. Deliberately NOT one chart with two y scales: the
+   count of findings and the count of rounds are different things and drawing
+   them on one axis invites the reader to compare heights that do not compare. */
+function trendMonths(){
+  const recs=filtered();
+  const m=new Map();
+  recs.forEach(r=>{
+    const k=String(r.date||"").slice(0,7); if(!/^\d{4}-\d{2}$/.test(k)) return;
+    const e=m.get(k)||{k, rounds:0, units:new Set(), CRI:0, DEG:0, INC:0, NOF:0};
+    e.rounds++; e.units.add(r.equip);
+    (r.items||[]).forEach(i=>{ const s=sevOf(r,i); if(s && e[s]!=null) e[s]++; });
+    m.set(k,e);
+  });
+  return [...m.values()].sort((a,b)=>a.k.localeCompare(b.k)).slice(-12);
+}
+function renderTrend(){
+  const ms=trendMonths();
+  if(ms.length<2){
+    $("trendChart").innerHTML=`<div class="empty"><b>${esc(t("tr_none"))}</b><span>${esc(t("tr_none_s"))}</span></div>`;
+    $("trendNote").textContent=""; return; }
+  const worst=Math.max(1,...ms.map(x=>x.CRI+x.DEG+x.INC));
+  const bars=ms.map(x=>{
+    const tot=x.CRI+x.DEG+x.INC;
+    const h=v=>`${(v/worst*100).toFixed(1)}%`;
+    return `<div class="tmon" title="${esc(x.k+" · "+t("tr_tip",{f:tot,r:x.rounds,u:x.units.size}))}">
+      <div class="tstack">
+        <i class="s-cri" style="height:${h(x.CRI)}"></i>
+        <i class="s-deg" style="height:${h(x.DEG)}"></i>
+        <i class="s-inc" style="height:${h(x.INC)}"></i>
+      </div>
+      <b>${tot||""}</b>
+      <span>${esc(x.k.slice(2))}</span>
+      <u>${x.rounds}</u></div>`;
+  }).join("");
+  $("trendChart").innerHTML=`<div class="tlegend">
+      <span><i class="s-cri"></i>${esc(SEV.CRI?SEV.CRI.l:"Critical")}</span>
+      <span><i class="s-deg"></i>${esc(SEV.DEG?SEV.DEG.l:"Degraded")}</span>
+      <span><i class="s-inc"></i>${esc(SEV.INC?SEV.INC.l:"Incipient")}</span>
+      <span class="muted">${esc(t("tr_rounds"))}</span>
+    </div><div class="trend">${bars}</div>`;
+  /* One sentence of direction, because a chart nobody reads out loud is a
+     chart nobody acts on. Compares the last month with the average of the
+     three before it, and says plainly when there is not enough to say. */
+  const last=ms[ms.length-1], prior=ms.slice(-4,-1);
+  const f=x=>x.CRI+x.DEG+x.INC;
+  if(!prior.length){ $("trendNote").textContent=t("tr_short"); return; }
+  const avg=prior.reduce((a,x)=>a+f(x),0)/prior.length;
+  const now=f(last);
+  /* A percentage on a handful of findings is noise wearing a decimal point.
+     One month with a single finding and the next with none is "100% better",
+     and that sentence ends up in a report. Below a real baseline this says
+     what is actually true — the numbers are too small to carry a direction —
+     rather than computing one because it can. */
+  if(avg < 1 || Math.max(avg, now) < 5){
+    $("trendNote").textContent=t("tr_thin",{m:last.k, n:now}); return; }
+  const d = Math.round((now-avg)/avg*100);
+  $("trendNote").textContent = Math.abs(d)<10
+    ? t("tr_flat",{m:last.k, n:now})
+    : t(d>0?"tr_worse":"tr_better",{m:last.k, n:now, p:Math.abs(d),
+        a:Math.round(avg)});
+}
+
 /* ---------- the follow-up panel ---------- */
 let follKey=null, follItem=null;
 const WHYS=5;
@@ -3138,7 +3361,7 @@ function wearCsv(){
   a.download=`wear-and-life_${new Date().toISOString().slice(0,10)}.csv`; a.click();
   setTimeout(()=>URL.revokeObjectURL(a.href),4000);
 }
-function renderAll(){ renderChips(); renderKpis(); renderFleet(); renderFailure(); renderWearTab(); renderActions(); renderHistory(); }
+function renderAll(){ renderChips(); renderKpis(); renderCoverage(); renderTrend(); renderFleet(); renderFailure(); renderWearTab(); renderActions(); renderHistory(); }
 ["fType","fClass","fRange"].forEach(id=>$(id).onchange=renderAll);
 let qTimer=null;
 $("fQ").oninput=()=>{ clearTimeout(qTimer); qTimer=setTimeout(renderAll,180); };   // debounce, the fleet table is big
@@ -3169,8 +3392,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=99"></script>
-<script src="sync-adapter.js?v=99"></script>
-<script src="report.js?v=99"></script>
+<script src="drive.js?v=100"></script>
+<script src="sync-adapter.js?v=100"></script>
+<script src="report.js?v=100"></script>
 </body>
 </html>
