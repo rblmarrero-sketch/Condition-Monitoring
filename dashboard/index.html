@@ -324,6 +324,374 @@
   .tile .k{font-size:9px;letter-spacing:.13em;font-weight:700;}
   .tile .v{font-size:27px;font-weight:800;letter-spacing:-.02em;line-height:1.1;margin-top:5px;}
   .tile .s{font-size:10.5px;color:var(--muted);margin-top:1px;}
+  /* ═══════════════════════════════════════════════════════════════════════
+     THE SURFACE
+
+     Everything below is one system rather than a pile of one-off rules, and
+     it exists because three whole panels were rendering with no styling at
+     all: they asked for `.kpi` and `.shead`, and the sheet's classes are
+     `.tile` and `.sheethead`. Nothing errors when a class does not exist —
+     the browser draws unstyled divs and they look exactly like a page nobody
+     bothered with. Which is what they were.
+
+     The discipline: hierarchy from space and weight, not decoration. One
+     accent, spent sparingly. Numbers are the heroes and are set as numbers —
+     tabular, tight, heavy. Motion only where it explains something. Every
+     interactive thing looks interactive and says so on hover and on focus. */
+  :root{
+    --r-sm:8px; --r:12px; --r-lg:16px; --r-xl:22px;
+    --e1:0 1px 2px rgba(11,11,11,.05), 0 1px 3px rgba(11,11,11,.04);
+    --e2:0 2px 4px rgba(11,11,11,.05), 0 8px 24px -6px rgba(11,11,11,.10);
+    --e3:0 8px 16px -4px rgba(11,11,11,.10), 0 24px 60px -12px rgba(11,11,11,.22);
+    --ease:cubic-bezier(.32,.72,0,1);
+  }
+  @media (prefers-color-scheme:dark){ :root:where(:not([data-theme="light"])){
+    --e1:0 1px 2px rgba(0,0,0,.5); --e2:0 2px 6px rgba(0,0,0,.5),0 10px 28px -8px rgba(0,0,0,.6);
+    --e3:0 10px 20px -6px rgba(0,0,0,.6),0 30px 70px -14px rgba(0,0,0,.75); } }
+  :root[data-theme="dark"]{
+    --e1:0 1px 2px rgba(0,0,0,.5); --e2:0 2px 6px rgba(0,0,0,.5),0 10px 28px -8px rgba(0,0,0,.6);
+    --e3:0 10px 20px -6px rgba(0,0,0,.6),0 30px 70px -14px rgba(0,0,0,.75); }
+
+  :where(button,a,input,select,textarea):focus-visible{
+    outline:2px solid var(--accent); outline-offset:2px; border-radius:6px; }
+
+  /* ── stat cards ────────────────────────────────────────────────────────
+     Four numbers that answer a question each. They were a bare strip of text
+     with hairlines between; now they are objects you can press, because on
+     this page every number IS a filter — "2 overdue" that you cannot click is
+     a number you have to go and find again by hand. */
+  /* Cards hug their content. Stretching four short numbers to match the tall
+     severity card left each of them 60% empty, which reads as a layout that
+     was not finished rather than one that was spaced. */
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(178px,1fr));
+    gap:12px;margin:0 0 22px;border:0;background:none;box-shadow:none;border-radius:0;
+    align-items:start;}
+  .kpi,.tile{position:relative;display:flex;flex-direction:column;gap:1px;
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+    padding:14px 16px 15px;box-shadow:var(--e1);overflow:hidden;
+    text-align:left;font-family:inherit;color:inherit;
+    transition:transform .18s var(--ease), box-shadow .18s var(--ease), border-color .15s;}
+  .kpi::before,.tile::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
+    background:var(--kc,transparent);transition:width .18s var(--ease);}
+  button.kpi{cursor:pointer;}
+  button.kpi:hover{transform:translateY(-2px);box-shadow:var(--e2);}
+  button.kpi:hover::before{width:4px;}
+  button.kpi:active{transform:translateY(0);}
+  .kpi.on{border-color:var(--kc,var(--accent));box-shadow:var(--e2),0 0 0 1px var(--kc,var(--accent)) inset;}
+  .kpi .k,.tile .k{font:700 9.5px/1.2 inherit;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);}
+  .kpi .v,.tile .v{font:800 30px/1.05 ui-monospace,SFMono-Regular,Menlo,monospace;
+    letter-spacing:-.03em;font-variant-numeric:tabular-nums;margin-top:6px;color:var(--ink);}
+  .kpi .s,.tile .s{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.35;}
+  /* the severity-mix tile carries a bar rather than a number */
+  .tile .bar{margin-top:11px;height:9px;border-radius:999px;background:var(--surface-2);
+    box-shadow:inset 0 1px 2px rgba(0,0,0,.10);}
+  .tile .legend{margin-top:9px;}
+  .kpi.good{--kc:var(--good);} .kpi.warn{--kc:var(--warning);}
+  .kpi.bad{--kc:var(--critical);} .kpi.info{--kc:var(--accent);}
+  .kpi.bad .v{color:var(--critical);} .kpi.good .v{color:var(--good);}
+  /* Zero overdue is good news and should not be shouted in red. */
+  .kpi.bad.zero{--kc:var(--good);} .kpi.bad.zero .v{color:var(--ink);}
+
+  /* a coverage track that reads as a track even when nearly empty */
+  .cbar{display:block;width:100%;height:8px;border-radius:999px;background:var(--surface-3);
+    overflow:hidden;box-shadow:inset 0 1px 2px rgba(0,0,0,.12);}
+  .cbar i{display:block;height:100%;border-radius:999px;transition:width .3s var(--ease);}
+
+  /* ── folding a long register ───────────────────────────────────────────── */
+  .wlh{width:100%;text-align:left;font-family:inherit;color:inherit;cursor:pointer;
+    border:0;border-bottom:1px solid var(--border);transition:background .13s;}
+  .wlh:hover{background:var(--surface-3);}
+  .wlh .tw{flex:none;width:14px;color:var(--muted);font-size:13px;line-height:1;
+    transition:transform .16s var(--ease);}
+  .wlu.shut .wlh{border-bottom-color:transparent;}
+  .wlu.shut .wlr{display:none;}
+  .wlall{display:flex;justify-content:flex-end;margin:-4px 0 2px;}
+  .wlall button{border:0;background:none;color:var(--accent);font:600 12px inherit;
+    font-family:inherit;cursor:pointer;padding:4px 2px;}
+  .wlall button:hover{text-decoration:underline;}
+
+  /* 1C stoppage priority: what planning schedules against, so it stays on the
+     row. A chip rather than a column — it is a code, not a sentence. */
+  .prio{display:inline-block;margin-left:7px;font:700 10px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+    letter-spacing:.04em;padding:3px 5px;border-radius:4px;vertical-align:1px;
+    border:1px solid currentColor;}
+  .prio.c{color:var(--critical);} .prio.s{color:var(--serious);}
+  .prio.w{color:var(--warn-ink,var(--serious));} .prio.g{color:var(--good);}
+  .prio.n{color:var(--muted);}
+
+  /* ── segmented filter ──────────────────────────────────────────────────
+     A four-option filter was a full-width dropdown, which hides three of the
+     four answers and costs two clicks to change. All four, always visible. */
+  .seg{display:inline-flex;gap:2px;padding:3px;background:var(--surface-2);
+    border:1px solid var(--border);border-radius:10px;}
+  .seg button{border:0;background:none;color:var(--ink-2);font:600 12.5px/1 inherit;
+    font-family:inherit;padding:7px 12px;border-radius:7px;cursor:pointer;white-space:nowrap;
+    transition:background .15s, color .15s;}
+  .seg button:hover{color:var(--ink);}
+  .seg button.on{background:var(--surface);color:var(--ink);box-shadow:var(--e1);}
+  .seg button .n{font-variant-numeric:tabular-nums;opacity:.55;margin-left:5px;}
+  .seg button.on .n{opacity:.8;}
+
+  /* ── the worklist ──────────────────────────────────────────────────────
+     Sixty-four rows that each repeated the unit, the round and the date, with
+     a grey "Plan" button on every one — a wall with nowhere for the eye to
+     land. Grouped by machine now: one visit, one block. The button is gone
+     because the row itself is the button. */
+  .wl{display:flex;flex-direction:column;gap:10px;}
+  .wlu{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+    box-shadow:var(--e1);overflow:hidden;}
+  .wlh{display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--surface-2);
+    border-bottom:1px solid var(--border);}
+  .wlh .u{font:700 14px/1 inherit;letter-spacing:-.01em;}
+  .wlh .m{font-size:11.5px;color:var(--muted);}
+  .wlh .sp{flex:1;}
+  .wlh .cnt{font:700 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);
+    background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:4px 9px;}
+  .wlr{display:grid;grid-template-columns:4px minmax(150px,1.4fr) minmax(120px,1.1fr) 128px 104px 112px auto;
+    gap:12px;align-items:center;padding:0 14px 0 0;border-top:1px solid var(--border);
+    background:none;border-left:0;border-right:0;border-bottom:0;width:100%;
+    font-family:inherit;color:inherit;text-align:left;cursor:pointer;
+    transition:background .13s;}
+  .wlu > .wlr:first-of-type{border-top:0;}
+  .wlr:hover{background:color-mix(in srgb,var(--accent) 5%,var(--surface));}
+  .wlr .sev{align-self:stretch;background:var(--sc,var(--none));}
+  .wlr .cell{min-width:0;padding:11px 0;}
+  .wlr .t1{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .wlr .t2{font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    margin-top:1px;}
+  .wlr .go{color:var(--muted);font-size:15px;opacity:0;transition:opacity .13s,transform .13s;}
+  .wlr:hover .go{opacity:1;transform:translateX(2px);}
+  /* Who owns it, as a face-sized thing rather than a column of names. */
+  .who{display:inline-flex;align-items:center;gap:7px;min-width:0;}
+  .who i{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;
+    background:var(--surface-3);color:var(--ink-2);font:700 9.5px/1 inherit;font-style:normal;
+    letter-spacing:.02em;}
+  .who span{font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .who.none i{background:none;border:1px dashed var(--border);color:var(--muted);}
+  .who.none span{color:var(--muted);}
+  .due{display:inline-flex;align-items:baseline;gap:6px;font-variant-numeric:tabular-nums;}
+  .due b{font:600 12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;}
+  .due i{font-style:normal;font-size:10px;color:var(--muted);}
+  .due.late b{color:var(--critical);} .due.late i{color:var(--critical);font-weight:700;}
+  .due.soon b{color:var(--serious);}
+  .st{display:inline-flex;align-items:center;gap:6px;font:600 11.5px/1 inherit;color:var(--ink-2);}
+  .st::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--stc,var(--none));flex:none;}
+  .st.s-open{--stc:var(--muted);} .st.s-PLAN{--stc:var(--accent);}
+  .st.s-WIP{--stc:var(--warning);} .st.s-DONE{--stc:var(--good);}
+  .st.s-VERIFIED{--stc:var(--good);} .st.s-NOACT{--stc:var(--muted);}
+  .rcam{display:inline-block;font:700 9px/1 inherit;letter-spacing:.09em;color:var(--accent);
+    border:1px solid currentColor;border-radius:4px;padding:2px 4px;vertical-align:1px;margin-left:6px;}
+
+  /* progress, by state rather than one green nub */
+  .segbar{display:flex;height:10px;border-radius:999px;overflow:hidden;background:var(--surface-2);
+    gap:2px;box-shadow:inset 0 1px 2px rgba(0,0,0,.10);}
+  .segbar i{display:block;transition:flex-grow .3s var(--ease);}
+  .segbar i.s-open{background:var(--surface-3);} .segbar i.s-PLAN{background:var(--accent);}
+  .segbar i.s-WIP{background:var(--warning);} .segbar i.s-DONE{background:var(--good);}
+  .segkey{display:flex;flex-wrap:wrap;gap:12px;margin-top:7px;font-size:11px;color:var(--muted);}
+  .segkey span{display:inline-flex;align-items:center;gap:5px;}
+  .segkey b{color:var(--ink-2);font-variant-numeric:tabular-nums;}
+  .segkey i{width:8px;height:8px;border-radius:2px;display:inline-block;}
+  .segkey i.s-open{background:var(--surface-3);} .segkey i.s-PLAN{background:var(--accent);}
+  .segkey i.s-WIP{background:var(--warning);} .segkey i.s-DONE{background:var(--good);}
+
+  /* ── sheets ────────────────────────────────────────────────────────────
+     The plan panel had no styling at all: labels sat on top of the field
+     above them and the status control was clipped off the right edge. It is
+     a proper sheet now — the backdrop recedes, the sheet arrives, the header
+     and the action stay put while the middle scrolls. */
+  .ov{background:rgba(16,18,22,.42);backdrop-filter:blur(10px) saturate(120%);
+    -webkit-backdrop-filter:blur(10px) saturate(120%);align-items:center;padding:24px 16px;}
+  .ov:not(.hidden){animation:ovin .2s var(--ease);}
+  @keyframes ovin{from{opacity:0}to{opacity:1}}
+  .sheet{border-radius:var(--r-xl);box-shadow:var(--e3);border-color:transparent;
+    max-height:calc(100vh - 48px);display:flex;flex-direction:column;overflow:hidden;}
+  .ov:not(.hidden) .sheet{animation:shin .32s var(--ease);}
+  @keyframes shin{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){
+    .ov:not(.hidden), .ov:not(.hidden) .sheet{animation:none;} }
+  .sheethead{padding:16px 20px 14px;background:var(--surface);position:sticky;top:0;z-index:2;}
+  .sheethead .x{width:30px;height:30px;border-radius:50%;border:0;background:var(--surface-2);
+    color:var(--ink-2);font-size:17px;line-height:1;cursor:pointer;flex:none;
+    display:grid;place-items:center;transition:background .15s,color .15s;}
+  .sheethead .x:hover{background:var(--surface-3);color:var(--ink);}
+  .sheetbody{padding:4px 20px 20px;}
+  .sheetfoot{display:flex;align-items:center;gap:12px;padding:14px 20px;
+    border-top:1px solid var(--border);background:var(--surface);position:sticky;bottom:0;}
+  .sheetfoot .sp{flex:1;}
+  /* the sheet's own head, richer than a line of text */
+  .shx{display:flex;align-items:flex-start;gap:12px;}
+  .shx .id{flex:1;min-width:0;}
+  .shx .id b{display:block;font-size:17px;font-weight:700;letter-spacing:-.02em;}
+  .shx .id span{display:block;font-size:12px;color:var(--muted);margin-top:2px;
+    overflow:hidden;text-overflow:ellipsis;}
+
+  /* form controls, so a panel does not look like a 1998 form */
+  .sheet input[type=text],.sheet input[type=date],.sheet select,.sheet textarea{
+    width:100%;background:var(--surface-2);border:1px solid var(--border);border-radius:9px;
+    padding:9px 11px;font:inherit;font-size:13px;color:var(--ink);
+    transition:border-color .15s, background .15s, box-shadow .15s;}
+  .sheet textarea{resize:vertical;line-height:1.5;}
+  .sheet input:focus,.sheet select:focus,.sheet textarea:focus{
+    outline:none;background:var(--surface);border-color:var(--accent);
+    box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent);}
+  .sheet .field{gap:6px;margin-bottom:14px;}
+  .sheet .field label{font:700 9.5px/1.2 inherit;letter-spacing:.11em;color:var(--muted);}
+  .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:0 14px;}
+  .sbsec{margin-top:6px;padding-top:16px;border-top:1px solid var(--border);}
+  .sbsec:first-of-type{border-top:0;padding-top:4px;}
+  .sbsec > h3{margin:0 0 3px;font:700 10px/1.2 inherit;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--accent);}
+  .sbsec > .hint{font-size:12px;color:var(--muted);margin:0 0 13px;line-height:1.5;}
+  .readback{padding:9px 11px;background:var(--surface-2);border:1px solid var(--border);
+    border-radius:9px;font-size:13px;color:var(--ink-2);}
+
+  /* the five whys, drawn as the chain it is */
+  .whys{position:relative;padding-left:26px;}
+  .whys::before{content:"";position:absolute;left:9px;top:8px;bottom:22px;width:2px;
+    background:linear-gradient(var(--border),transparent);}
+  .whys .field{position:relative;margin-bottom:10px;}
+  .whys .field::before{content:attr(data-n);position:absolute;left:-26px;top:16px;
+    width:20px;height:20px;border-radius:50%;background:var(--surface-2);
+    border:1px solid var(--border);color:var(--muted);
+    font:700 10px/18px ui-monospace,SFMono-Regular,Menlo,monospace;text-align:center;}
+  .whys .field.has::before{background:var(--accent);border-color:transparent;color:#fff;}
+
+  @media (max-width:760px){
+    .wlr{grid-template-columns:4px 1fr auto;gap:8px;}
+    .wlr .cell.hide-s{display:none;}
+  }
+  /* ═══════════════════════════════════════════════════════════════════════
+     THE REST OF THE PAGE
+
+     The register and the sheet were rebuilt first because they were the worst,
+     but a redesign that stops there leaves five tabs in the old clothes and
+     the whole thing reads as half-finished. These are the shared pieces —
+     section, toolbar, table, pill, chart, empty state — so every remaining
+     tab moves at once and none of them drift apart later. */
+
+  /* ── page frame ────────────────────────────────────────────────────────
+     A control surface, not a document: the chrome recedes so the numbers can
+     be the loudest thing on screen. */
+  header.app{padding:13px 24px;border-bottom:0;box-shadow:0 1px 0 var(--border);}
+  header.app .t1{font-size:15.5px;font-weight:700;letter-spacing:-.015em;}
+  header.app .t2{font-size:11.5px;}
+  nav.tabs{padding:0 20px;border-bottom:1px solid var(--border);gap:2px;}
+  nav.tabs button{padding:12px 14px;font-size:13px;font-weight:600;position:relative;
+    border-bottom:0;transition:color .15s;}
+  nav.tabs button::after{content:"";position:absolute;left:12px;right:12px;bottom:0;height:2px;
+    background:var(--accent);border-radius:2px 2px 0 0;transform:scaleX(0);
+    transition:transform .18s var(--ease);}
+  nav.tabs button.active::after{transform:scaleX(1);}
+  main{padding:24px 22px 56px;}
+
+  /* ── section ───────────────────────────────────────────────────────────
+     A titled block of one idea. The heading and its sentence belong together
+     and are separated from the content, so the eye can skip the explanation
+     once it has been read the first time. */
+  .section{border-radius:var(--r-lg);padding:0;box-shadow:var(--e1);overflow:hidden;
+    margin-bottom:16px;}
+  .section > h2{margin:0;padding:16px 20px 0;font-size:15px;font-weight:700;
+    letter-spacing:-.015em;}
+  .section > .sub{padding:3px 20px 0;font-size:12.5px;color:var(--muted);line-height:1.5;
+    max-width:82ch;}
+  .section > h2 + .sub{padding-top:4px;}
+  .section > *:not(h2):not(.sub){margin-left:20px;margin-right:20px;}
+  .section > .tblwrap,.section > #trendChart,.section > #pfChart{margin-left:0;margin-right:0;}
+  .section > *:last-child{margin-bottom:18px;}
+  .section > h2:only-child,.section > .sub:last-child{padding-bottom:18px;}
+  .section .tblwrap{margin-top:14px;}
+
+  /* ── toolbar ───────────────────────────────────────────────────────────
+     Four raw selects floating on the page background looked like a form that
+     had not been laid out. One surface, one row, aligned. */
+  .controls{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+    box-shadow:var(--e1);padding:12px 16px;gap:16px;align-items:end;margin-bottom:16px;}
+  .controls .field{gap:5px;}
+  .controls .field label{font:700 9.5px/1.2 inherit;letter-spacing:.11em;color:var(--muted);}
+  .controls select,.controls input[type=search],.controls input[type=text]{
+    background:var(--surface-2);border:1px solid var(--border);border-radius:9px;
+    padding:8px 11px;font:inherit;font-size:13px;color:var(--ink);min-height:36px;
+    transition:border-color .15s,background .15s,box-shadow .15s;}
+  .controls select:focus,.controls input:focus{outline:none;background:var(--surface);
+    border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent);}
+  .voidtog{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--ink-2);
+    padding-bottom:8px;cursor:pointer;}
+
+  /* ── tables ────────────────────────────────────────────────────────────
+     Still tables, because a fleet list IS tabular — but tabular figures, a
+     header that stays put on a long list, and rows that answer the pointer. */
+  table.grid{font-size:12.5px;}
+  table.grid th{position:sticky;top:0;z-index:1;background:var(--surface);
+    font:700 9.5px/1.3 inherit;letter-spacing:.11em;text-transform:uppercase;
+    color:var(--muted);padding:11px 10px;border-bottom:1px solid var(--border);}
+  table.grid td{padding:11px 10px;border-bottom:1px solid var(--border);
+    font-variant-numeric:tabular-nums;}
+  table.grid tbody tr{transition:background .12s;}
+  table.grid tbody tr:hover td{background:color-mix(in srgb,var(--accent) 5%,var(--surface));}
+  table.grid tbody tr:last-child td{border-bottom:0;}
+  table.grid td.r,table.grid th.r{text-align:right;}
+  table.grid .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;}
+  /* a clickable row says so */
+  #fleetTbl tbody tr,#wearTbl tbody tr{cursor:pointer;}
+
+  /* ── pills ─────────────────────────────────────────────────────────────
+     Severity is the one thing on this page that must never be misread, so it
+     keeps a filled chip and gains a little air. */
+  .pill{padding:3px 8px;border-radius:5px;font:700 9.5px/1.3 inherit;letter-spacing:.08em;
+    text-transform:uppercase;}
+
+  /* ── the wear bar, as an instrument ────────────────────────────────────
+     A part between new and scrap. The zones are painted into the track so
+     "84%" and "where that is" are one glance, not two. */
+  .wb{display:block;position:relative;width:100%;height:9px;border-radius:999px;
+    background:linear-gradient(90deg,
+      color-mix(in srgb,var(--good) 20%,var(--surface-2)) 0 61.5%,
+      color-mix(in srgb,var(--warning) 30%,var(--surface-2)) 61.5% 77%,
+      color-mix(in srgb,var(--critical) 26%,var(--surface-2)) 77% 100%);
+    overflow:hidden;box-shadow:inset 0 1px 2px rgba(0,0,0,.13);}
+  .wb i{display:block;height:100%;border-radius:999px;
+    background:color-mix(in srgb,var(--ink) 42%,transparent);
+    transition:width .3s var(--ease);}
+
+  /* ── pareto ────────────────────────────────────────────────────────────*/
+  .prow{padding:2px 0;border-radius:7px;transition:background .12s;}
+  .prow[data-drill]{cursor:pointer;}
+  .prow[data-drill]:hover{background:color-mix(in srgb,var(--accent) 6%,transparent);}
+  .prow.sel{background:color-mix(in srgb,var(--accent) 11%,transparent);}
+  .ptrack{height:14px;border-radius:7px;box-shadow:inset 0 1px 2px rgba(0,0,0,.10);}
+  .pfill{border-radius:7px;transition:width .3s var(--ease);}
+  .phead{border-radius:8px;padding:7px 11px;font-size:11.5px;}
+
+  /* ── trend ─────────────────────────────────────────────────────────────*/
+  .tstack{border-radius:6px;box-shadow:inset 0 1px 2px rgba(0,0,0,.10);}
+  .tstack i:first-child{border-radius:5px 5px 0 0;}
+  .tmon{transition:transform .15s var(--ease);}
+  .tmon:hover{transform:translateY(-2px);}
+
+  /* ── empty states ──────────────────────────────────────────────────────
+     Where there is nothing, say what would put something there. */
+  .empty{padding:34px 24px;background:var(--surface-2);border-radius:var(--r);
+    border:1px dashed var(--border);}
+  .empty b{font-size:13.5px;}
+
+  /* ── equipment history ─────────────────────────────────────────────────*/
+  .pos{border-radius:var(--r);overflow:hidden;border:1px solid var(--border);
+    background:var(--surface);box-shadow:var(--e1);
+    transition:transform .16s var(--ease),box-shadow .16s var(--ease);}
+  .pos:hover{transform:translateY(-2px);box-shadow:var(--e2);}
+  .pos .photo{transition:transform .3s var(--ease);}
+  .pos:hover .photo{transform:scale(1.02);}
+
+  /* ── reports ───────────────────────────────────────────────────────────*/
+  #tab-reports .controls{margin-top:14px;}
+
+  @media (max-width:820px){
+    main{padding:16px 12px 48px;}
+    .section > h2,.section > .sub{padding-left:14px;padding-right:14px;}
+    .section > *:not(h2):not(.sub){margin-left:14px;margin-right:14px;}
+    .controls{padding:10px 12px;gap:10px;}
+  }
 </style>
 </head>
 <body>
@@ -399,44 +767,54 @@
      first is how a fleet ends up replacing the same part for ever. -->
 <div id="follOv" class="ov hidden">
   <div class="sheet">
-    <div class="shead"><b id="follTitle">Follow-up</b><button class="x" id="follX">&times;</button></div>
-    <div class="sbody">
-      <div class="sub" id="follWhat"></div>
-
-      <h3 data-i18n="a_plan_h">The plan</h3>
-      <div class="grid2">
-        <div class="field"><label for="follOwner" data-i18n="th_owner">Responsible</label>
-          <input id="follOwner" type="text" data-i18n-ph="a_owner_ph" placeholder="who owns it"></div>
-        <div class="field"><label for="follDue" data-i18n="th_due">Due</label>
-          <input id="follDue" type="date"></div>
-        <div class="field"><label for="follStatus" data-i18n="th_status">Status</label>
-          <select id="follStatus"></select></div>
-        <div class="field"><label for="follWo" data-i18n="th_wo">WO</label>
-          <input id="follWo" type="text"></div>
+    <div class="sheethead">
+      <div class="shx">
+        <div class="id"><b id="follTitle">Follow-up</b><span id="follWhat"></span></div>
+        <span id="follSev"></span>
+        <button class="x" id="follX" aria-label="Close">&times;</button>
       </div>
-      <div class="field"><label for="follPlan" data-i18n="a_plan_what">What will be done</label>
-        <textarea id="follPlan" rows="2"></textarea></div>
-
-      <h3 data-i18n="rca_h">Why it happened</h3>
-      <div class="sub" data-i18n="rca_sub">The inspection already recorded the direct cause. This is the one behind it — ask why until the answer is something you can change. Stop as soon as it stops being useful; three whys that mean something beat five that do not.</div>
-      <div class="field"><label data-i18n="rca_direct">Direct cause, as recorded at inspection</label>
-        <div id="follDirect" class="readback"></div></div>
-      <div id="follWhys"></div>
-      <div class="field"><label for="follRoot" data-i18n="rca_root">Root cause</label>
-        <textarea id="follRoot" rows="2" data-i18n-ph="rca_root_ph" placeholder="the thing that, if changed, stops this recurring"></textarea></div>
-      <div class="grid2">
-        <div class="field"><label for="follCorr" data-i18n="rca_corr">Corrective — this machine</label>
-          <textarea id="follCorr" rows="2"></textarea></div>
-        <div class="field"><label for="follPrev" data-i18n="rca_prev">Preventive — the rest of the fleet</label>
-          <textarea id="follPrev" rows="2"></textarea></div>
+    </div>
+    <div class="sheetbody">
+      <div class="sbsec">
+        <h3 data-i18n="a_plan_h">The plan</h3>
+        <div class="hint" data-i18n="a_plan_hint">Who owns it and when it is due. Everything else on this page is a description of a problem; this is the part that changes it.</div>
+        <div class="grid2">
+          <div class="field"><label for="follOwner" data-i18n="th_owner">Responsible</label>
+            <input id="follOwner" type="text" data-i18n-ph="a_owner_ph" placeholder="who owns it"></div>
+          <div class="field"><label for="follDue" data-i18n="th_due">Due</label>
+            <input id="follDue" type="date"></div>
+          <div class="field"><label for="follStatus" data-i18n="th_status">Status</label>
+            <select id="follStatus"></select></div>
+          <div class="field"><label for="follWo" data-i18n="th_wo">WO</label>
+            <input id="follWo" type="text"></div>
+        </div>
+        <div class="field"><label for="follPlan" data-i18n="a_plan_what">What will be done</label>
+          <textarea id="follPlan" rows="2"></textarea></div>
       </div>
 
-      <div class="field"><label for="follBy" data-i18n="ed_by">Your name</label>
+      <div class="sbsec">
+        <h3 data-i18n="rca_h">Why it happened</h3>
+        <div class="hint" data-i18n="rca_sub">The inspection already recorded the direct cause. This is the one behind it — ask why until the answer is something you can change. Stop as soon as it stops being useful; three whys that mean something beat five that do not.</div>
+        <div class="field"><label data-i18n="rca_direct">Direct cause, as recorded at inspection</label>
+          <div id="follDirect" class="readback"></div></div>
+        <div class="whys" id="follWhys"></div>
+        <div class="field"><label for="follRoot" data-i18n="rca_root">Root cause</label>
+          <textarea id="follRoot" rows="2" data-i18n-ph="rca_root_ph" placeholder="the thing that, if changed, stops this recurring"></textarea></div>
+        <div class="grid2">
+          <div class="field"><label for="follCorr" data-i18n="rca_corr">Corrective — this machine</label>
+            <textarea id="follCorr" rows="2"></textarea></div>
+          <div class="field"><label for="follPrev" data-i18n="rca_prev">Preventive — the rest of the fleet</label>
+            <textarea id="follPrev" rows="2"></textarea></div>
+        </div>
+      </div>
+    </div>
+    <div class="sheetfoot">
+      <div class="field" style="margin:0;flex:0 0 190px">
+        <label for="follBy" data-i18n="ed_by">Your name</label>
         <input id="follBy" type="text"></div>
-      <div class="row" style="margin-top:14px;gap:10px;align-items:center">
-        <button class="btn primary" id="follSave" data-i18n="a_save">Save the plan</button>
-        <span id="follMsg" class="muted"></span>
-      </div>
+      <span class="sp"></span>
+      <span id="follMsg" class="muted" style="font-size:12px"></span>
+      <button class="btn primary" id="follSave" data-i18n="a_save">Save the plan</button>
     </div>
   </div>
 </div>
@@ -583,14 +961,16 @@
     <div class="section">
       <h2 data-i18n="w_title">Wear and remaining life</h2>
       <div class="sub" data-i18n="w_sub">Every measured position, latest reading first. Life is projected from this position's own history — two readings at least, and the app says so when it will not guess.</div>
-      <div class="row" style="margin-bottom:12px;gap:10px;align-items:end;flex-wrap:wrap">
-        <div class="field"><label for="wBand" data-i18n="w_show">Show</label><select id="wBand">
-          <option value="due" data-i18n="w_due">Needs planning — 80% worn or a life under 1,000 h</option>
-          <option value="act" data-i18n="w_act">At or past condemn</option>
-          <option value="all" data-i18n="w_all">Every measured position</option>
-        </select></div>
+      <!-- The same segmented control the register uses. Two filters that do the
+           same job should not be two different shapes. -->
+      <div class="row" style="margin:14px 0 12px;gap:12px;align-items:center;flex-wrap:wrap">
+        <div class="seg" id="wSeg"></div>
+        <span style="flex:1"></span>
         <button class="btn" id="wearCsv" data-i18n="w_csv">⬇ Export CSV</button>
       </div>
+      <select id="wBand" class="hidden">
+        <option value="due"></option><option value="act"></option><option value="all"></option>
+      </select>
       <div class="tblwrap"><table class="grid" id="wearTbl"></table></div>
       <div class="sub" id="wearNote" style="margin-top:10px"></div>
     </div>
@@ -601,17 +981,15 @@
     <div class="section">
       <h2 data-i18n="s_act">Action register</h2>
       <div class="sub" data-i18n="s_act_sub">Every finding that needs work, worst first. Give it an owner and a date, and it stops being a list and starts being a plan.</div>
-      <div id="actBar" style="margin:2px 0 14px"></div>
-      <div class="row" style="margin-bottom:12px;gap:10px;align-items:end;flex-wrap:wrap">
-        <div class="field"><label for="aStatus" data-i18n="a_show">Show</label><select id="aStatus">
-          <option value="open" data-i18n="a_f_open">Still open</option>
-          <option value="over" data-i18n="a_f_over">Overdue</option>
-          <option value="mine" data-i18n="a_f_owned">Has an owner</option>
-          <option value="all" data-i18n="a_f_all">Everything</option>
-        </select></div>
+      <div id="actBar" style="margin:2px 0 16px"></div>
+      <div class="row" style="margin-bottom:14px;gap:12px;align-items:center;flex-wrap:wrap">
+        <!-- All four answers on screen. A four-option dropdown hides three of
+             them and costs two clicks to change one filter. -->
+        <div class="seg" id="aSeg"></div>
+        <span style="flex:1"></span>
         <button class="btn" id="csvBtn" data-i18n="csv">⬇ Export CSV</button>
       </div>
-      <div class="tblwrap"><table class="grid" id="actionTbl"></table></div>
+      <div class="wl" id="actionTbl"></div>
     </div>
   </section>
 
@@ -667,31 +1045,31 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=100"></script>
-<script src="../mobile/hme.js?v=100"></script>
-<script src="../mobile/mp-fc.js?v=100"></script>
-<script src="../mobile/hme-cascade.js?v=100"></script>
-<script src="../mobile/temp-limits.js?v=100"></script>
+<script src="../data/magnetic_plug.js?v=103"></script>
+<script src="../mobile/hme.js?v=103"></script>
+<script src="../mobile/mp-fc.js?v=103"></script>
+<script src="../mobile/hme-cascade.js?v=103"></script>
+<script src="../mobile/temp-limits.js?v=103"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=100"></script>
-<script src="../mobile/wear.js?v=100"></script>
-<script src="../mobile/wear-map.js?v=100"></script>
+<script src="../mobile/assets.js?v=103"></script>
+<script src="../mobile/wear.js?v=103"></script>
+<script src="../mobile/wear-map.js?v=103"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=100"></script>
-<script src="../mobile/machine-photos.js?v=100"></script>
-<script src="../mobile/machine-fig.js?v=100"></script>
-<script src="../mobile/get.js?v=100"></script>
-<script src="../mobile/uc-points.js?v=100"></script>
-<script src="../mobile/inspect-guide.js?v=100"></script>
-<script src="../mobile/get-figs.js?v=100"></script>
-<script src="../mobile/body-points.js?v=100"></script>
-<script src="../mobile/body-map.js?v=100"></script>
-<script src="../mobile/jspdf.umd.min.js?v=100"></script>
-<script src="../mobile/html2canvas.min.js?v=100"></script>
-<script src="../mobile/report-core.js?v=100"></script>
+<script src="../mobile/upload-defaults.js?v=103"></script>
+<script src="../mobile/machine-photos.js?v=103"></script>
+<script src="../mobile/machine-fig.js?v=103"></script>
+<script src="../mobile/get.js?v=103"></script>
+<script src="../mobile/uc-points.js?v=103"></script>
+<script src="../mobile/inspect-guide.js?v=103"></script>
+<script src="../mobile/get-figs.js?v=103"></script>
+<script src="../mobile/body-points.js?v=103"></script>
+<script src="../mobile/body-map.js?v=103"></script>
+<script src="../mobile/jspdf.umd.min.js?v=103"></script>
+<script src="../mobile/html2canvas.min.js?v=103"></script>
+<script src="../mobile/report-core.js?v=103"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -772,6 +1150,7 @@ const I18N={
   tab_wear:"Wear & life",
   w_title:"Wear and remaining life",
   w_sub:"Every measured position, soonest to run out first. Life is projected from this position's own history — two readings at least, and it says so plainly when it will not guess.",
+  w_due_s:"Needs planning", w_act_s:"At condemn", w_all_s:"All measured",
   w_show:"Show", w_csv:"\u2b07 Export CSV",
   w_due:"Needs planning \u2014 80% worn or under 1,000 h left",
   w_act:"At or past condemn", w_all:"Every measured position",
@@ -886,6 +1265,11 @@ const I18N={
   tr_flat:"{m}: {n} finding(s) — about the same as the months before it.",
   tr_worse:"{m}: {n} finding(s), {p}% above the previous three months (about {a}). Worth asking what changed.",
   tr_better:"{m}: {n} finding(s), {p}% below the previous three months (about {a}). Check coverage held up before calling it an improvement.",
+  a_plan_hint:"Who owns it and when it is due. Everything else on this page is a description of a problem; this is the part that changes it.",
+  a_fold:"Collapse all", a_unfold:"Expand all",
+  a_st_open:"Not started", a_st_PLAN:"Planned", a_st_WIP:"In progress", a_st_DONE:"Closed",
+  a_assign:"Assign", a_in_d:"in {d}d",
+  a_none:"Nothing here", a_none_s:"No finding matches this filter — try Everything.",
   th_owner:"Responsible", th_due:"Due", th_status:"Status",
   a_show:"Show", a_f_open:"Still open", a_f_over:"Overdue", a_f_owned:"Has an owner", a_f_all:"Everything",
   a_k_open:"STILL OPEN", a_k_open_s:"of {n} finding(s)",
@@ -1009,6 +1393,7 @@ const I18N={
   tab_wear:"\u0418\u0437\u043d\u043e\u0441 \u0438 \u0440\u0435\u0441\u0443\u0440\u0441",
   w_title:"\u0418\u0437\u043d\u043e\u0441 \u0438 \u043e\u0441\u0442\u0430\u0442\u043e\u0447\u043d\u044b\u0439 \u0440\u0435\u0441\u0443\u0440\u0441",
   w_sub:"\u0412\u0441\u0435 \u0437\u0430\u043c\u0435\u0440\u0435\u043d\u043d\u044b\u0435 \u0442\u043e\u0447\u043a\u0438; \u0441\u043d\u0430\u0447\u0430\u043b\u0430 \u0442\u0435, \u0447\u0442\u043e \u0432\u044b\u0439\u0434\u0443\u0442 \u0440\u0430\u043d\u044c\u0448\u0435. \u0420\u0435\u0441\u0443\u0440\u0441 \u0441\u0447\u0438\u0442\u0430\u0435\u0442\u0441\u044f \u043f\u043e \u0438\u0441\u0442\u043e\u0440\u0438\u0438 \u0441\u0430\u043c\u043e\u0439 \u0442\u043e\u0447\u043a\u0438 \u2014 \u043d\u0443\u0436\u043d\u043e \u043d\u0435 \u043c\u0435\u043d\u0435\u0435 \u0434\u0432\u0443\u0445 \u0437\u0430\u043c\u0435\u0440\u043e\u0432.",
+  w_due_s:"\u0422\u0440\u0435\u0431\u0443\u0435\u0442 \u043f\u043b\u0430\u043d\u0430", w_act_s:"\u041d\u0430 \u043f\u0440\u0435\u0434\u0435\u043b\u0435", w_all_s:"\u0412\u0441\u0435 \u0437\u0430\u043c\u0435\u0440\u044b",
   w_show:"\u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c", w_csv:"\u2b07 \u042d\u043a\u0441\u043f\u043e\u0440\u0442 CSV",
   w_due:"\u0422\u0440\u0435\u0431\u0443\u0435\u0442 \u043f\u043b\u0430\u043d\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u044f \u2014 \u0438\u0437\u043d\u043e\u0441 \u043e\u0442 80% \u0438\u043b\u0438 \u043c\u0435\u043d\u0435\u0435 1000 \u0447",
   w_act:"\u041d\u0430 \u043f\u0440\u0435\u0434\u0435\u043b\u0435 \u0438\u043b\u0438 \u0437\u0430 \u043d\u0438\u043c", w_all:"\u0412\u0441\u0435 \u0437\u0430\u043c\u0435\u0440\u0435\u043d\u043d\u044b\u0435 \u0442\u043e\u0447\u043a\u0438",
@@ -1123,6 +1508,11 @@ const I18N={
   tr_flat:"{m}: дефектов {n} — примерно как в предыдущие месяцы.",
   tr_worse:"{m}: дефектов {n}, на {p}% выше предыдущих трёх месяцев (около {a}). Стоит разобраться, что изменилось.",
   tr_better:"{m}: дефектов {n}, на {p}% ниже предыдущих трёх месяцев (около {a}). Сначала проверьте, что охват не упал.",
+  a_plan_hint:"Кто отвечает и к какому сроку. Всё остальное на этой странице описывает проблему; это — то, что её меняет.",
+  a_fold:"Свернуть все", a_unfold:"Развернуть все",
+  a_st_open:"Не начато", a_st_PLAN:"Запланировано", a_st_WIP:"В работе", a_st_DONE:"Закрыто",
+  a_assign:"Назначить", a_in_d:"через {d} сут",
+  a_none:"Здесь пусто", a_none_s:"Под этот фильтр ничего не подходит — попробуйте «Все».",
   th_owner:"Ответственный", th_due:"Срок", th_status:"Статус",
   a_show:"Показать", a_f_open:"Открытые", a_f_over:"Просроченные",
   a_f_owned:"С ответственным", a_f_all:"Все",
@@ -1856,59 +2246,144 @@ function fAgeDays(r,i){
 function renderActions(){
   const rows=actionRows();
   /* The tracker answers the meeting's question before the table does. */
-  const cnt={}; FSTATUS.forEach(s=>cnt[s.k]=0);
   let overdue=0, oldest=0, owned=0;
-  rows.forEach(({r,i})=>{ cnt[String(i.status||"")]=(cnt[String(i.status||"")]||0)+1;
+  const byState={open:0,PLAN:0,WIP:0,DONE:0};
+  rows.forEach(({r,i})=>{
+    const st=String(i.status||"");
+    byState[st==="VERIFIED"?"DONE":(st==="NOACT"?"DONE":(st||"open"))] ??= 0;
+    byState[st==="VERIFIED"||st==="NOACT"?"DONE":(st||"open")]++;
     if(fOverdue(i)) overdue++;
     if(i.owner) owned++;
     if(stOpen(i.status)){ const a=fAgeDays(r,i); if(a!=null&&a>oldest) oldest=a; } });
   const open=rows.filter(({i})=>stOpen(i.status)).length;
   const done=rows.length-open;
-  const kp=(lab,val,sub,cls)=>`<div class="kpi${cls?" "+cls:""}"><div class="k">${esc(lab)}</div>
-    <div class="v">${esc(String(val))}</div><div class="s">${esc(sub)}</div></div>`;
+  /* Every number here is also a filter. A card you cannot press is a number
+     you have to go and find again by hand. */
+  const filt=aFilt();
+  const card=(id,lab,val,sub,cls)=>
+    `<button type="button" class="kpi ${cls||""}${filt===id?" on":""}" data-af="${esc(id)}">
+       <span class="k">${esc(lab)}</span><span class="v">${esc(String(val))}</span>
+       <span class="s">${esc(sub)}</span></button>`;
   $("actKpis").innerHTML=
-      kp(t("a_k_open"), open, t("a_k_open_s",{n:rows.length}))
-    + kp(t("a_k_overdue"), overdue, t("a_k_overdue_s"), overdue?"bad":"")
-    + kp(t("a_k_unowned"), rows.length-owned, t("a_k_unowned_s"))
-    + kp(t("a_k_oldest"), oldest?oldest+" d":"—", t("a_k_oldest_s"))
-    + kp(t("a_k_done"), done, t("a_k_done_s"));
-  /* A bar, because "12 of 82" is a fraction people have to work out and a
-     filled strip is one they do not. */
-  const pc=rows.length?Math.round(done/rows.length*100):0;
-  $("actBar").innerHTML=rows.length
-    ? `<div class="tbar" role="progressbar" aria-valuenow="${done}" aria-valuemin="0" aria-valuemax="${rows.length}">
-         <i style="width:${pc}%"></i></div>
-       <div class="tbarl">${esc(t("a_bar",{d:done,n:rows.length,p:pc}))}</div>` : "";
+      card("open", t("a_k_open"), open, t("a_k_open_s",{n:rows.length}), "info")
+    + card("over", t("a_k_overdue"), overdue, t("a_k_overdue_s"), "bad"+(overdue?"":" zero"))
+    + card("noown", t("a_k_unowned"), rows.length-owned, t("a_k_unowned_s"), "warn")
+    + `<div class="kpi"><span class="k">${esc(t("a_k_oldest"))}</span>
+        <span class="v">${oldest?esc(oldest+" d"):"—"}</span>
+        <span class="s">${esc(t("a_k_oldest_s"))}</span></div>`
+    + card("done", t("a_k_done"), done, t("a_k_done_s"), "good");
+  $("actKpis").querySelectorAll("[data-af]").forEach(b=>b.onclick=()=>{
+    /* Pressing the card you are already in takes the filter off, which is the
+       behaviour anybody expects from a thing that looks pressed. */
+    setAFilt(b.dataset.af===filt ? "all" : b.dataset.af); });
 
-  const filt=($("aStatus")&&$("aStatus").value)||"open";
+  /* Progress by state, not one green nub: "planned" and "not looked at" are
+     different kinds of not-done and a single bar hides which you have. */
+  const order=[["open","segkey_open"],["PLAN","a_st_PLAN"],["WIP","a_st_WIP"],["DONE","a_st_DONE"]];
+  $("actBar").innerHTML = rows.length
+    ? `<div class="segbar">`+order.map(([k])=>byState[k]
+        ? `<i class="s-${k}" style="flex:${byState[k]}"></i>` : "").join("")+`</div>
+       <div class="segkey">`+order.filter(([k])=>byState[k]).map(([k,lab])=>
+        `<span><i class="s-${k}"></i>${esc(k==="open"?t("a_st_open"):t(lab))} <b>${byState[k]}</b></span>`).join("")
+       +`<span class="muted">${esc(t("a_bar",{d:done,n:rows.length,
+          p:Math.round(done/rows.length*100)}))}</span></div>` : "";
+
+  /* the segmented filter, with counts so the choice is informed */
+  const counts={ open, over:overdue, mine:owned, all:rows.length };
+  $("aSeg").innerHTML=[["open","a_f_open"],["over","a_f_over"],["mine","a_f_owned"],["all","a_f_all"]]
+    .map(([k,lab])=>`<button type="button" data-af="${k}"${filt===k?' class="on"':''}>${
+      esc(t(lab))}<span class="n">${counts[k]}</span></button>`).join("");
+  $("aSeg").querySelectorAll("[data-af]").forEach(b=>b.onclick=()=>setAFilt(b.dataset.af));
+
   const shown = filt==="all" ? rows
               : filt==="over" ? rows.filter(({i})=>fOverdue(i))
               : filt==="mine" ? rows.filter(({i})=>i.owner)
+              : filt==="done" ? rows.filter(({i})=>!stOpen(i.status))
               : rows.filter(({i})=>stOpen(i.status));
-  if(!shown.length){ $("actionTbl").innerHTML=`<tr><td class="empty">${esc(t("e_nothing"))}</td></tr>`; return; }
-  let h=`<thead><tr>`+["th_sev","th_unit","th_comp","th_defect","th_action",
-      "th_owner","th_due","th_status","th_prio","th_wo","th_date"]
-    .map(k=>`<th>${esc(t(k))}</th>`).join("")+`<th></th></tr></thead><tbody>`;
-  shown.forEach(({r,i})=>{ const s=sevOf(r,i), od=fOverdue(i);
-    const st=FST_BY[String(i.status||"")]||FST_BY[""];
-    h+=`<tr${od?' class="over"':''}><td>${s?`<span class="pill ${SEV[s].c}">${SEV[s].l}</span>`:""}</td>
-      <td><b>${esc(r.equip)}</b><div class="muted" style="font-size:11px">${esc(TYPE_LABEL[r.type]||r.type)}</div></td>
-      <td>${esc(i.key)}<div class="muted" style="font-size:11px">${esc(i.label||"")}</div></td>
-      <td>${i.defect?esc(i.defect):'<span class="muted">—</span>'}${i.defectCode?`<div class="muted" style="font-size:11px">${esc(i.defectCode)}${i.iso?` · ISO ${esc(i.iso)}/${esc(i.isoMode)}`:""}</div>`:""}
-        ${i.rca?`<div class="rcaflag" title="${esc(t("rca_has"))}">${esc(t("rca_flag"))}</div>`:""}</td>
-      <td>${i.actionLabel?esc(i.actionLabel):'<span class="muted">—</span>'}</td>
-      <td>${i.owner?esc(i.owner):'<span class="muted">—</span>'}</td>
-      <td class="mono${od?" bad":""}">${i.due?esc(i.due):'<span class="muted">—</span>'}${
-        od?`<div class="muted" style="font-size:10.5px">${esc(t("a_late"))}</div>`:""}</td>
-      <td><span class="pill ${st.c}">${esc(stName(i.status))}</span></td>
-      <td>${i.prio?`<span class="pill ${prioClass(i.prio)}" title="${esc(prioName(i.prio))}">${esc(i.prio)}</span>`:'<span class="muted">—</span>'}</td>
-      <td class="mono">${esc(i.wo||"")}</td><td class="mono">${esc(r.date||"")}</td>
-      <td><button class="btn" style="padding:3px 9px;font-size:11.5px"
-        data-fu="${esc(recKey(r))}" data-fi="${esc(i.key)}">${esc(t("a_plan"))}</button></td></tr>`; });
-  $("actionTbl").innerHTML=h+"</tbody>";
+  if(!shown.length){
+    $("actionTbl").innerHTML=`<div class="empty"><b>${esc(t("a_none"))}</b><span>${esc(t("a_none_s"))}</span></div>`;
+    return; }
+
+  /* One machine, one block. Four findings on TK151 were four rows repeating
+     the unit, the round and the date — the same visit, written out four
+     times, which is most of why the page read as a wall. */
+  const byUnit=new Map();
+  shown.forEach(x=>{ const k=x.r.equip;
+    (byUnit.get(k) || byUnit.set(k,[]).get(k)).push(x); });
+  /* Folded by default once the list stops being readable at a glance. The
+     header says worst severity, how many, and how many are late, which is
+     everything needed to decide whether this machine is worth opening. */
+  const bigList = byUnit.size > 6;
+  const initials=n=>String(n||"").split(/[\s.]+/).filter(Boolean)
+    .slice(0,2).map(w=>w[0]).join("").toUpperCase()||"?";
+  const daysTo=d=>Math.round((Date.parse(d+"T00:00:00Z")-Date.parse(todayISO()+"T00:00:00Z"))/864e5);
+  $("actionTbl").innerHTML=[...byUnit.entries()].map(([unit,list])=>{
+    const worst=list.map(({r,i})=>sevOf(r,i)).sort((a,b)=>sevRank(b)-sevRank(a))[0];
+    const a=ASSET_BY[unit]||{};
+    const late=list.filter(({i})=>fOverdue(i)).length;
+    /* A machine with something late, or something critical, is never folded:
+       the whole point of the page is that those are seen. */
+    const shut = bigList && !late && sevRank(worst) < 3 && !aOpenUnits.has(unit);
+    return `<div class="wlu${shut?" shut":""}" data-unit="${esc(unit)}">
+      <button type="button" class="wlh" data-unit="${esc(unit)}"
+        aria-expanded="${shut?"false":"true"}">
+        <span class="tw">${shut?"\u203a":"\u02c5"}</span>
+        ${worst?`<span class="pill ${SEV[worst].c}">${esc(SEV[worst].l)}</span>`:""}
+        <span class="u">${esc(unit)}</span>
+        <span class="m">${esc(a.cat||a.cls||TYPE_LABEL[list[0].r.type]||"")}</span>
+        <span class="sp"></span>
+        ${late?`<span class="pill c" title="${esc(t("a_late"))}">${late} ${esc(t("a_late"))}</span>`:""}
+        <span class="cnt">${list.length}</span>
+      </button>`
+    + list.map(({r,i})=>{
+        const s=sevOf(r,i), st=String(i.status||""), od=fOverdue(i);
+        const dd=i.due?daysTo(i.due):null;
+        return `<button type="button" class="wlr" data-fu="${esc(recKey(r))}" data-fi="${esc(i.key)}"
+            style="--sc:${s?`var(--${SEV[s].c==="c"?"critical":SEV[s].c==="s"?"serious":SEV[s].c==="w"?"warning":"good"})`:"var(--none)"}">
+          <span class="sev"></span>
+          <span class="cell"><span class="t1">${esc(i.label||i.key)}</span>
+            <span class="t2">${esc(i.key)} · ${esc(TYPE_LABEL[r.type]||r.type)} · ${esc(r.date||"")}</span></span>
+          <span class="cell hide-s"><span class="t1" style="font-weight:500">${
+              i.defect?esc(i.defect):'<span class="muted">—</span>'}${
+              i.rca?`<span class="rcam">RCA</span>`:""}</span>
+            <span class="t2">${i.actionLabel?esc(i.actionLabel):""}</span></span>
+          <span class="cell hide-s">${i.owner
+              ? `<span class="who"><i>${esc(initials(i.owner))}</i><span>${esc(i.owner)}</span></span>`
+              : `<span class="who none"><i>+</i><span>${esc(t("a_assign"))}</span></span>`}</span>
+          <span class="cell hide-s">${i.due
+              ? `<span class="due ${od?"late":(dd!=null&&dd<=7?"soon":"")}"><b>${esc(i.due.slice(5))}</b><i>${
+                  esc(od?t("a_late"):(dd!=null?t("a_in_d",{d:dd}):""))}</i></span>`
+              : `<span class="muted" style="font-size:12px">—</span>`}</span>
+          <span class="cell"><span class="st s-${esc(st||"open")}">${esc(stName(st))}</span>${
+              i.prio?`<span class="prio ${prioClass(i.prio)}" title="${esc(prioName(i.prio))}">${esc(i.prio)}</span>`:""}</span>
+          <span class="go">›</span>
+        </button>`;
+      }).join("") + `</div>`;
+  }).join("");
   $("actionTbl").querySelectorAll("[data-fu]").forEach(b=>
     b.onclick=()=>openFollow(b.dataset.fu, b.dataset.fi));
+  /* Opening a machine is remembered, so a save that repaints the list does not
+     fold everything the reader had just opened. */
+  $("actionTbl").querySelectorAll(".wlh[data-unit]").forEach(h=>h.onclick=()=>{
+    const u=h.dataset.unit;
+    if(aOpenUnits.has(u)) aOpenUnits.delete(u); else aOpenUnits.add(u);
+    renderActions();
+  });
+  if(bigList) $("actionTbl").insertAdjacentHTML("afterbegin",
+    `<div class="wlall"><button type="button" id="wlAll">${
+      esc(aOpenUnits.size ? t("a_fold") : t("a_unfold"))}</button></div>`);
+  const all=$("wlAll");
+  if(all) all.onclick=()=>{
+    if(aOpenUnits.size) aOpenUnits.clear(); else byUnit.forEach((_,u)=>aOpenUnits.add(u));
+    renderActions();
+  };
 }
+/* The register's filter lives in the URL-free state the rest of the page uses,
+   so the cards and the segmented control cannot disagree about it. */
+let aFilterState="open";
+const aOpenUnits=new Set();
+const aFilt=()=>aFilterState;
+function setAFilt(v){ aFilterState=v; renderActions(); }
 $("csvBtn").onclick=()=>{
   const rows=actionRows(); const q=s=>`"${String(s==null?"":s).replace(/"/g,'""')}"`;
   const head=["RecordId","Rev","Severity","Unit","Type","Component","ComponentName","DefectCode","Defect","ISOMechanism","ISOMode","CauseCode","Cause","Action","Priority","PriorityLabel","WO","Grade","TempC","AmbientC","Method","Date","Inspector","VerifiedBy","GPS","Comment",
@@ -2301,6 +2776,18 @@ function coverageRows(){
   });
   return { rows:out, days, fleet:fleet.length };
 }
+/* Coverage is not wear and must not borrow its bar. wearBar() scales to 130%
+   and vanishes below about 2%, so "reached 16 of 1128" drew as an empty track —
+   indistinguishable from a round nobody walked, on the one row whose job is to
+   tell those two apart. This one keeps a visible sliver for anything above
+   zero, and keeps zero honestly empty. */
+function covBar(pc){
+  const p=Math.max(0,Math.min(100,Number(pc)||0));
+  const w=p<=0?0:Math.max(3,p);
+  const c=p>=80?"var(--good)":p>=40?"var(--warning)":"var(--critical)";
+  return `<span class="cbar" role="img" aria-label="${p}%">`
+    +(w?`<i style="width:${w}%;background:${c}"></i>`:"")+`</span>`;
+}
 function renderCoverage(){
   const { rows, days, fleet } = coverageRows();
   if(!rows.length){
@@ -2317,7 +2804,7 @@ function renderCoverage(){
               r.scoped?" · "+esc(t("cv_scoped")):""}</div></td>
           <td class="mono${bad?" bad":""}"><b>${r.seen}</b> / ${r.total}
             <div class="muted" style="font-size:11px">${r.pc}%</div></td>
-          <td>${wearBar(Math.min(100,r.pc))}</td>
+          <td>${covBar(r.pc)}</td>
           <td class="mono">${r.inspections}</td>
           <td class="mono${r.never?" bad":""}">${r.never}</td>
           <td class="mono${r.overdue?" bad":""}">${r.overdue}</td>
@@ -2349,7 +2836,10 @@ function renderTrend(){
   const worst=Math.max(1,...ms.map(x=>x.CRI+x.DEG+x.INC));
   const bars=ms.map(x=>{
     const tot=x.CRI+x.DEG+x.INC;
-    const h=v=>`${(v/worst*100).toFixed(1)}%`;
+    /* A month with one finding beside a month with sixty-seven is 1.5% of the
+       track — an empty box, indistinguishable from a month with none. Anything
+       that happened gets a sliver you can see; nothing stays nothing. */
+    const h=v=>v<=0?"0":`${Math.max(4,(v/worst*100)).toFixed(1)}%`;
     return `<div class="tmon" title="${esc(x.k+" · "+t("tr_tip",{f:tot,r:x.rounds,u:x.units.size}))}">
       <div class="tstack">
         <i class="s-cri" style="height:${h(x.CRI)}"></i>
@@ -2397,6 +2887,8 @@ function openFollow(rk, ik){
   follKey=rk; follItem=ik;
   $("follTitle").textContent=`${rec.equip} · ${it.key}`;
   $("follWhat").textContent=[it.label, it.defect, rec.date].filter(Boolean).join(" · ");
+  const sv=sevOf(rec,it);
+  $("follSev").innerHTML = sv?`<span class="pill ${SEV[sv].c}">${esc(SEV[sv].l)}</span>`:"";
   $("follOwner").value=it.owner||"";
   $("follDue").value=it.due||"";
   $("follWo").value=it.wo||"";
@@ -2408,10 +2900,15 @@ function openFollow(rk, ik){
      quietly fills up with near-duplicates. */
   $("follDirect").textContent=[it.cause, it.causeCode].filter(Boolean).join("  ·  ")||t("rca_nodirect");
   const whys=Array.isArray(it.whys)?it.whys:(typeof it.whys==="string"&&it.whys?it.whys.split("\n"):[]);
+  /* Drawn as the chain it is: each answered why lights its node, so how far
+     the thinking actually got is visible without reading it. */
   $("follWhys").innerHTML=Array.from({length:WHYS},(_,n)=>
-    `<div class="field why"><label for="follWhy${n}">${esc(t("rca_why",{n:n+1}))}</label>
+    `<div class="field${whys[n]?" has":""}" data-n="${n+1}">
+       <label for="follWhy${n}">${esc(t("rca_why",{n:n+1}))}</label>
        <input id="follWhy${n}" type="text" value="${esc(whys[n]||"")}"
-         ${n>0?`data-i18n-ph="rca_why_ph"`:""} placeholder="${esc(n===0?t("rca_why1_ph"):t("rca_why_ph"))}"></div>`).join("");
+         placeholder="${esc(n===0?t("rca_why1_ph"):t("rca_why_ph"))}"></div>`).join("");
+  $("follWhys").querySelectorAll("input").forEach(el=>el.oninput=()=>
+    el.closest(".field").classList.toggle("has", !!el.value.trim()));
   $("follRoot").value=it.root||"";
   $("follCorr").value=it.corrective||"";
   $("follPrev").value=it.preventive||"";
@@ -3100,11 +3597,20 @@ function startAuto(){
 }
 /* Coming back to the tab is the moment somebody most wants it to be current —
    they have walked back to the desk to look at what came in. */
-document.addEventListener("visibilitychange", ()=>{ if(!document.hidden) autoRefresh("focus"); });
+/* Coming BACK to the tab, not arriving at it. A fresh load fires
+   visibilitychange too, and once every browser configures itself from the
+   shared defaults that turned page-open into an Apps Script request — ahead of
+   the deliberate one below, so opening the dashboard cost two round trips
+   against a ninety-minute daily quota instead of showing the cache instantly.
+   The cached rounds are on screen either way; the refresh happens on the
+   schedule it was designed to happen on. */
+let autoBooted = false;
+document.addEventListener("visibilitychange", ()=>{
+  if(!document.hidden && autoBooted) autoRefresh("focus"); });
 window.addEventListener("online", ()=>autoRefresh("online"));
 /* On open: catch up first, then keep up. Deferred a beat so the page paints
    what it already holds rather than waiting on the network to show anything. */
-setTimeout(()=>{ autoRefresh("open"); startAuto(); }, 1200);
+setTimeout(()=>{ autoBooted = true; autoRefresh("open"); startAuto(); }, 1200);
 /* Photos live in Drive, not on disk — pull the ones this view needs, then repaint. */
 let drivePending=false;
 async function pullDrivePhotos(recs, after){
@@ -3161,8 +3667,19 @@ document.addEventListener("keydown",e=>{
 $("themeBtn").onclick=()=>{ const c=document.documentElement.getAttribute("data-theme");
   const dark=c?c==="dark":matchMedia("(prefers-color-scheme: dark)").matches;
   document.documentElement.setAttribute("data-theme",dark?"light":"dark"); };
-function showTab(t){ $("tabs").querySelectorAll("button").forEach(b=>b.classList.toggle("active",b.dataset.tab===t));
-  ["overview","failure","actions","equipment","reports"].forEach(x=>$("tab-"+x).classList.toggle("hidden",x!==t)); }
+/* The tab list is read off the tab bar, never written down twice.
+
+   It used to be a hard-coded array, and "wear" was added to the nav and to the
+   markup but not to the array — so Wear & life hid every other section and
+   showed nothing at all. It shipped, and four full sweeps went green over it,
+   because the tests for that tab called renderWearTab() directly instead of
+   pressing the button a person presses. A test that drives the function cannot
+   see that nothing can reach the function. */
+function showTab(t){
+  const tabs=[...$("tabs").querySelectorAll("button[data-tab]")].map(b=>b.dataset.tab);
+  tabs.forEach(x=>{ const s=$("tab-"+x); if(s) s.classList.toggle("hidden", x!==t); });
+  $("tabs").querySelectorAll("button").forEach(b=>b.classList.toggle("active",b.dataset.tab===t));
+}
 $("tabs").onclick=e=>{ const b=e.target.closest("button[data-tab]"); if(b) showTab(b.dataset.tab); };
 
 /* ---------- reports ---------- */
@@ -3294,6 +3811,16 @@ function renderWearTab(){
   const recs=filtered();
   const all=wearRows(recs);
   const mode=($("wBand")&&$("wBand").value)||"due";
+  /* Counts on the control, so choosing a view is an informed choice rather
+     than a guess followed by a look. */
+  if($("wSeg")){
+    const c={ due:all.filter(wearDue).length, act:all.filter(r=>r.band==="act").length, all:all.length };
+    $("wSeg").innerHTML=[["due","w_due_s"],["act","w_act_s"],["all","w_all_s"]]
+      .map(([k,lab])=>`<button type="button" data-wb="${k}"${mode===k?' class="on"':''}>${
+        esc(t(lab))}<span class="n">${c[k]}</span></button>`).join("");
+    $("wSeg").querySelectorAll("[data-wb]").forEach(b=>b.onclick=()=>{
+      $("wBand").value=b.dataset.wb; renderWearTab(); });
+  }
   const rows = mode==="all" ? all
              : mode==="act" ? all.filter(r=>r.band==="act")
              : all.filter(wearDue);
@@ -3371,7 +3898,6 @@ document.addEventListener("keydown",e=>{
 });
 $("equipSel").onchange=renderHistory;
 $("wBand").onchange=renderWearTab;
-$("aStatus").onchange=renderActions;
 $("follX").onclick=closeFollow;
 $("follSave").onclick=saveFollow;
 $("follOv").onclick=e=>{ if(e.target.id==="follOv") closeFollow(); };
@@ -3392,8 +3918,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=100"></script>
-<script src="sync-adapter.js?v=100"></script>
-<script src="report.js?v=100"></script>
+<script src="drive.js?v=103"></script>
+<script src="sync-adapter.js?v=103"></script>
+<script src="report.js?v=103"></script>
 </body>
 </html>
