@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=103">
+<link rel="manifest" href="manifest.webmanifest?v=104">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=103">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=103">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=103">
+<link rel="apple-touch-icon" href="icon-192.png?v=104">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=104">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=104">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1556,25 +1556,25 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="native.js?v=103"></script>
-<script src="upload-defaults.js?v=103"></script>
-<script src="hme.js?v=103"></script>
-<script src="mp-fc.js?v=103"></script>
-<script src="hme-cascade.js?v=103"></script>
-<script src="assets.js?v=103"></script>
-<script src="temp-limits.js?v=103"></script>
-<script src="wear.js?v=103"></script>
-<script src="wear-figs.js?v=103"></script>
-<script src="wear-map.js?v=103"></script>
-<script src="machine-photos.js?v=103"></script>
-<script src="machine-fig.js?v=103"></script>
-<script src="get.js?v=103"></script>
-<script src="uc-points.js?v=103"></script>
-<script src="inspect-guide.js?v=103"></script>
-<script src="get-figs.js?v=103"></script>
-<script src="body-points.js?v=103"></script>
-<script src="body-map.js?v=103"></script>
-<script src="report-core.js?v=103"></script>
+<script src="native.js?v=104"></script>
+<script src="upload-defaults.js?v=104"></script>
+<script src="hme.js?v=104"></script>
+<script src="mp-fc.js?v=104"></script>
+<script src="hme-cascade.js?v=104"></script>
+<script src="assets.js?v=104"></script>
+<script src="temp-limits.js?v=104"></script>
+<script src="wear.js?v=104"></script>
+<script src="wear-figs.js?v=104"></script>
+<script src="wear-map.js?v=104"></script>
+<script src="machine-photos.js?v=104"></script>
+<script src="machine-fig.js?v=104"></script>
+<script src="get.js?v=104"></script>
+<script src="uc-points.js?v=104"></script>
+<script src="inspect-guide.js?v=104"></script>
+<script src="get-figs.js?v=104"></script>
+<script src="body-points.js?v=104"></script>
+<script src="body-map.js?v=104"></script>
+<script src="report-core.js?v=104"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2647,8 +2647,8 @@ function ucWalkTree(unit){
   return out;
 }
 const UC_POS={ "L":{en:"Left",ru:"Слева"}, "R":{en:"Right",ru:"Справа"},
-  "L-OUT":{en:"Left · outer",ru:"Слева · внешнее"}, "L-IN":{en:"Left · inner",ru:"Слева · внутренее"},
-  "R-OUT":{en:"Right · outer",ru:"Справа · внешнее"}, "R-IN":{en:"Right · inner",ru:"Справа · внутренее"} };
+  "L-OUT":{en:"Left · outer",ru:"Слева · внешнее"}, "L-IN":{en:"Left · inner",ru:"Слева · внутреннее"},
+  "R-OUT":{en:"Right · outer",ru:"Справа · внешнее"}, "R-IN":{en:"Right · inner",ru:"Справа · внутреннее"} };
 function ucPosLabel(pos,lg){
   if(UC_POS[pos]) return UC_POS[pos][lg];
   const m=/^([LR])(\d+)$/.exec(pos);
@@ -5810,10 +5810,21 @@ async function blobToThumb(blob,max){ const img=await new Promise((res,rej)=>{co
    The document itself lives in report-core.js, which the dashboard loads too —
    one stylesheet, one set of sections, one wording. All this end does is put
    its records into the shape that module reads. */
+/* The report prints both languages on every label, so a component name has to
+   arrive in both. Everything that names a part reads the module-level `lang`,
+   so the other rendering comes from asking again with it flipped — restored in
+   a finally, because a throw here would leave the whole app in the wrong
+   language with no way back short of a reload. */
+function inOtherLang(fn){
+  const was=lang;
+  try{ lang = (was==="ru") ? "en" : "ru"; return fn(); }
+  finally{ lang = was; }
+}
 function rptName(rec,k){
   const w=!!(TYPE_META[rec.type]&&TYPE_META[rec.type].wear);
-  const name=(w?ucLabel(k, rec.type, rec.equip):itemLabelFor(rec,k))||k;
-  return {name, code: name===k ? "" : k};
+  const of=()=>(w?ucLabel(k, rec.type, rec.equip):itemLabelFor(rec,k))||k;
+  const name=of();
+  return {name, nameAlt: inOtherLang(of), code: name===k ? "" : k};
 }
 /* The two frames, coloured by what each point read. Same drawing as the capture
    screen; the state comes from the round rather than from the live draft. */
@@ -5866,11 +5877,12 @@ function rptMap(rec,items){
      whole reason the frame is drawn as parts rather than pictured. A photograph
      would also have to survive html2canvas and the PDF encoder to get there. */
   const prof=Object.assign({}, ucProfile(rec.equip), {photo:""});
-  // the chain row carries short codes on screen too — same drawing, same labels
-  const short = h => h.replace(/(<text class="um-n um-chain"[^>]*>)([A-Z0-9]+)(<\/text>)/g,
-    (m,a,code,c)=>a+(WEAR.mapShort[code]||code)+c);
+  /* The point codes go to the report unrewritten. On screen the chain row is
+     lettered HGT / BUSH / P×4 / P×1 / GRSR and a thumb can tap one to find out
+     what it means; on a printed page that is jargon with no key, so the report
+     numbers them and names them underneath — which needs the codes intact. */
   return CMR.fitMap(["L","R"].map(side=>'<div class="ucmapwrap">'+
-    short(WEAR.mapSVG(side, prof, null, k=>by[k]||"", "", t(side==="L"?"uc_left":"uc_right")))+
+    WEAR.mapSVG(side, prof, null, k=>by[k]||"", "", t(side==="L"?"uc_left":"uc_right"))+
     '</div>').join(""));
 }
 async function rptRecords(){
@@ -5906,7 +5918,7 @@ async function rptRecords(){
       const photos=[];
       for(const b of (p.photos||(p.photoBlob?[p.photoBlob]:[])))
         { try{ photos.push(await blobToThumb(b,420)); }catch(e){} }
-      items.push({ key:k, name:nm.name, code:nm.code,
+      items.push({ key:k, name:nm.name, nameAlt:nm.nameAlt, code:nm.code,
         grade:p.grade||"", sev:effSev(p),
         defect:p.defect?defectLabel(p.defect):"", defectCode:p.defect?upDefect(p.defect):"",
         iso:d?d.iso14224:"", cause:p.cause?causeLabel(p.cause):"",
@@ -5926,15 +5938,18 @@ async function rptRecords(){
     const a0=ASSET_BY[rec.equip]||{};
     out.push({ equip:rec.equip, clsLabel:a0.cat||(CLASSES[rec.cls]?(CLASSES[rec.cls][lang]||CLASSES[rec.cls].en):(rec.cls||"")),
       model:a0.m||"",
-      type:rec.type, typeLabel:t("type_"+(rec.type||"MP")), date:rec.date||"",
+      type:rec.type, typeLabel:t("type_"+(rec.type||"MP")),
+      typeAlt:inOtherLang(()=>t("type_"+(rec.type||"MP"))), date:rec.date||"",
       by:rec.by||"", sup:rec.sup||"", smu:rec.smu||"", gps:rec.gps||null, signUrl,
       wear:!!meta.wear, temp:!!meta.temp, mapHTML, items });
   }
   return out;
 }
 async function buildReportSections(){
-  return CMR.sections({ lang, title:t("rep_title"), stamp:new Date(),
-    sevLabel:s=>t("sev_"+s), records: await rptRecords() });
+  return CMR.sections({ lang, title:t("rep_title"),
+    titleAlt:inOtherLang(()=>t("rep_title")), stamp:new Date(),
+    sevLabel:s=>t("sev_"+s), sevLabelAlt:s=>inOtherLang(()=>t("sev_"+s)),
+    records: await rptRecords() });
 }
 $("reportBtn").onclick=async ()=>{
   const all=await dbAll(); if(!all.length){ dlg(t("m_nothing_export")); return; }
@@ -6063,7 +6078,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="103";
+const BUILD="104";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

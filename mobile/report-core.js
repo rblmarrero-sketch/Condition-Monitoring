@@ -118,7 +118,21 @@
 
 /* undercarriage measurement grid — two columns of readings, not one long list */
 #rptRoot .meas{display:flex;gap:20px;}
-#rptRoot .meas > div{flex:1;}
+/* flex:1 alone leaves min-width:auto, so a half can never shrink below its own
+   min-content — and its min-content is set by a .code line that is nowrap and
+   now says "no reference for this model / нет эталона для этой модели". Two of
+   those and the grid came out 780px on a 760px page, with the wear bars off
+   the right edge of the paper and no error anywhere. */
+#rptRoot .meas > div{flex:1 1 0;min-width:0;}
+/* Fixed layout does not clip what will not fit, it overlaps it — MEASURED ran
+   straight over WORN. The numeric columns are sized for their own headings
+   and the padding is trimmed to buy them the room. */
+#rptRoot .meas table{table-layout:fixed;}
+#rptRoot .meas th{padding:0 4px 5px;}
+#rptRoot .meas td{padding:6px 4px;}
+#rptRoot .meas .code{white-space:normal;}
+#rptRoot .meas .wb{min-width:0;}
+#rptRoot .meas td{overflow-wrap:anywhere;}
 #rptRoot .wb{display:block;height:5px;background:#eef1f4;border-radius:3px;
   position:relative;overflow:hidden;min-width:52px;}
 #rptRoot .wb i{display:block;height:5px;border-radius:3px;}
@@ -135,6 +149,14 @@
    the last roller and the grouser row fell off the right edge of the page. */
 #rptRoot .ucmaps{display:flex;flex-direction:column;gap:7px;margin:9px 0 4px;
   width:100%;max-width:470px;flex:0 0 auto;}
+/* The frames at the size a puck stays readable, and everything that explains
+   them in the column of paper that was left over beside them. */
+#rptRoot .mapblock{display:flex;gap:18px;align-items:flex-start;}
+#rptRoot .mapblock .ucmaps{margin:9px 0 4px;flex:0 0 470px;}
+#rptRoot .mapside{flex:1 1 0;min-width:0;padding-top:11px;}
+#rptRoot .mapside .mapkey{flex-direction:column;gap:5px;margin-top:0;}
+#rptRoot .mapside .pkey{flex-direction:column;gap:4px;margin-top:9px;max-width:none;}
+#rptRoot .mapside .ckey{grid-template-columns:1fr;gap:4px;max-width:none;}
 #rptRoot .ucmapwrap{background:#f6f8f9;border:1px solid #dfe4e9;border-radius:8px;padding:3px 2px;
   width:100%;margin:0;flex:0 0 auto;overflow:visible;}
 #rptRoot .ucmapwrap::after{content:none;}
@@ -282,6 +304,75 @@
 #rptRoot .lgrow{display:flex;gap:9px;align-items:flex-start;margin-bottom:7px;}
 #rptRoot .lgrow .t{font-size:11px;line-height:1.4;}
 #rptRoot .body{font-size:11px;line-height:1.55;color:#2b333a;}
+
+/* ---- the same document in two languages ---------------------------------
+   Half the people who sign this page read Russian and half read English, and
+   until now each of them got a report they could only half read. Both go on
+   every label rather than two PDFs going in two directions, because the
+   inspector and the reliability engineer argue over the same sheet of paper.
+
+   A label is short, so its translation sits underneath in micro-type and
+   costs nothing — a column head is two lines tall in either language. A
+   sentence gets a second line at the same size but quieter, so a reader's eye
+   skips the half that is not theirs instead of wading through it. */
+#rptRoot .alt{display:block;font-weight:400;font-size:.84em;line-height:1.2;
+  letter-spacing:.02em;text-transform:none;color:#8b939b;}
+#rptRoot .altl{display:block;font-weight:inherit;font-size:.93em;line-height:1.35;
+  color:inherit;opacity:.62;margin-top:2px;}
+#rptRoot .verdict .altl,#rptRoot .allok .altl{opacity:.75;}
+/* Inline pairing, for the places a second line would break the row: the value
+   is one thing said twice, not two things. */
+#rptRoot .alti{color:#8b939b;font-weight:400;}
+/* Inside a coloured chip the translation cannot go grey — it borrows the
+   chip's own ink and steps back with weight and size instead. */
+#rptRoot .alt2{display:block;font-size:.85em;font-weight:600;letter-spacing:.04em;
+  opacity:.82;line-height:1.2;}
+
+/* ---- what the numbers on the chain row mean -----------------------------
+   The drawing used to letter that row HGT · BUSH · P×4 · P×1 · GRSR — five
+   abbreviations that appear nowhere else in the document, are in neither
+   language it is written in, and read as buttons on a printed page. They are
+   numbered now, and the numbers are spelled out here, in both. */
+#rptRoot .ckey{display:grid;grid-template-columns:repeat(3,1fr);gap:3px 14px;
+  margin:7px 0 2px;max-width:470px;}
+#rptRoot .ckey .i{display:flex;gap:6px;align-items:baseline;font-size:9.5px;line-height:1.25;}
+#rptRoot .ckey .n{flex:0 0 auto;min-width:13px;height:13px;border-radius:7px;background:#12161a;
+  color:#fff;font-size:8px;font-weight:800;text-align:center;line-height:13px;
+  font-variant-numeric:tabular-nums;}
+#rptRoot .ckey .t{color:#2b333a;}
+#rptRoot .ckey .t span{display:block;color:#8b939b;}
+/* The wheel pucks — O, I, S and 1–8 — on one line, because each is two words
+   and the drawing is right above it. */
+#rptRoot .pkey{display:flex;flex-wrap:wrap;gap:3px 16px;margin:6px 0 0;max-width:470px;
+  font-size:9.5px;line-height:1.3;color:#2b333a;}
+#rptRoot .pkey .i{display:inline-flex;gap:5px;align-items:baseline;}
+#rptRoot .pkey b{font-weight:800;color:#12161a;min-width:11px;}
+
+/* ---- the same machine, earlier -------------------------------------------
+   A unit report used to print one full sheet per round: the same masthead,
+   the same two frames and the same signature block, four times over, and the
+   one thing the reader came for — whether it is getting worse — was nowhere
+   on any of them. The rounds before the latest collapse into this. */
+#rptRoot .hist td.d{white-space:nowrap;font-variant-numeric:tabular-nums;}
+/* One column per round plus a name, a limit, a change and a bar is eight
+   columns of a 760px page, and every heading now carries a second language.
+   Left to size itself the table came out 939px wide and the last two columns
+   printed off the edge of the paper — silently, because an overflowing table
+   is not an error, it is just a column nobody sees. Fixed layout, declared
+   widths, and headings that wrap instead of pushing. */
+#rptRoot table.mh{table-layout:fixed;}
+#rptRoot table.mh th{padding:0 4px 5px;overflow-wrap:anywhere;}
+/* td.n is nowrap so a measurement never breaks across two lines. In a fixed
+   table that turns "no reference for this model" into a sentence printed
+   straight through the four columns to its right — legible, wrong, and not an
+   error anywhere. Numbers here are short enough to wrap safely. */
+#rptRoot table.mh td{padding:5px 4px;overflow-wrap:anywhere;}
+#rptRoot table.mh td.n{white-space:normal;}
+#rptRoot table.mh .wb{min-width:0;}
+#rptRoot .dlt{font-variant-numeric:tabular-nums;font-weight:700;font-size:10px;}
+#rptRoot .dlt.up{color:#98201a;} #rptRoot .dlt.dn{color:#146b2c;} #rptRoot .dlt.fl{color:#8b939b;}
+#rptRoot .vdot{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px;
+  vertical-align:0;}
 `;
 
   /* ---- the report's own vocabulary --------------------------------------
@@ -300,7 +391,7 @@
       c_action:"Action", c_reading:"Reading",
       common_n:"Same on all {n} points",
       mach:"Machines", ins:"Inspections", pts:"Points checked",
-      findings:"Findings raised", now:"Act now", now_s:"before the next shift",
+      findings:"Findings", now:"Act now", now_s:"before the next shift",
       head_none:"Nothing outstanding. Every point inspected is inside its limit.",
       head_some:"{n} findings need attention, {c} of them before the next shift.",
       cond:"Condition of everything graded", uc_cond:"Undercarriage wear",
@@ -339,7 +430,20 @@
       s_DEG:"Degraded — still working, but not to specification",
       s_CRI:"Critical — the item cannot do its job",
       noref:"no reference for this model",
+      /* The same fact, for a column two words wide. The long form stays where
+         there is room for it; four lines of it under every unreferenced point
+         was most of a table saying one thing. */
+      noref_s:"no reference",
       footer:"Generated by the Condition Monitoring system",
+      /* the rounds before the latest one, and how the machine moved between them */
+      hist:"Earlier rounds", hist_sub:"newest first",
+      trend_t:"Measurement history", trend_sub:"one row per point, oldest reading on the left",
+      c_state:"Result", c_worst:"Worst point", c_chg:"Change", c_now:"Latest", c_limit:"New → condemn",
+      v_ok:"Normal", v_watch:"Watch", v_act:"Act now",
+      rounds_n:"{n} earlier rounds are summarised below rather than reprinted in full.",
+      chain_key:"Chain and shoe measurements",
+      pk_out:"outer", pk_in:"inner",
+      lang_note:"Every heading in this report is given in English and Russian.",
     },
     ru: {
       sub:"Мониторинг состояния в поле", generated:"Сформировано",
@@ -353,7 +457,7 @@
       c_action:"\u0414\u0435\u0439\u0441\u0442\u0432\u0438\u0435", c_reading:"\u041f\u043e\u043a\u0430\u0437\u0430\u043d\u0438\u044f",
       common_n:"\u041e\u0434\u0438\u043d\u0430\u043a\u043e\u0432\u043e \u043d\u0430 \u0432\u0441\u0435\u0445 {n} \u0442\u043e\u0447\u043a\u0430\u0445",
       mach:"Машин", ins:"Осмотров", pts:"Точек проверено",
-      findings:"Выявлено", now:"Срочно", now_s:"до следующей смены",
+      findings:"Находок", now:"Срочно", now_s:"до следующей смены",
       head_none:"Нет открытых замечаний. Все проверенные точки в пределах нормы.",
       head_some:"{n} замечаний требуют внимания, из них {c} — до следующей смены.",
       cond:"Состояние по оценкам", uc_cond:"Износ ходовой",
@@ -384,15 +488,29 @@
       lg_wear:"Измерение износа", lg_iso:"Кодирование",
       lg_wear_d:"Износ — это доля пути от нового размера до предельного, в процентах. 100% означает, что деталь достигла предела и подлежит замене. Свыше 80% работу следует включить в ближайший ремонт. Каждая цифра сравнивается с эталоном для модели машины или с её собственной базой, если она была снята на новой ходовой.",
       lg_iso_d:"Виды отказов, причины и категории кодируются по ИСО 14224:2016, чтобы замечания можно было считать и сравнивать по всему парку, а не читать по одному отчёту.",
-      band_ok:"Годен", band_watch:"Наблюдать", band_act:"Достиг предела износа",
+      /* Word for word what the Wear & life screen calls this band. It read
+         "Достиг предела износа" here and "На пределе или за ним" there — one
+         band, two names, and a fitter comparing the page to the screen had to
+         work out they meant the same thing. */
+      band_ok:"Годен", band_watch:"Наблюдать", band_act:"На пределе или за ним",
       g_A:"Норма — действий не требуется", g_B:"Наблюдение — проверить в следующий раз",
       g_C:"Внимание — запланировать работы", g_X:"Критично — действовать сразу",
-      s_NOF:"Отказа нет — узел выполняет свою функцию",
+      s_NOF:"Без отказа — узел выполняет свою функцию",
       s_INC:"Зарождающийся — дефект начался, функция пока не затронута",
-      s_DEG:"Сниженный — работает, но не по требованиям",
+      s_DEG:"Частичный — работает, но не по требованиям",
       s_CRI:"Критический — узел не выполняет функцию",
       noref:"нет эталона для этой модели",
+      noref_s:"нет эталона",
       footer:"Сформировано системой мониторинга состояния",
+      hist:"Предыдущие обходы", hist_sub:"сначала новые",
+      trend_t:"История замеров", trend_sub:"строка на точку, слева — самый ранний замер",
+      c_state:"Итог", c_worst:"Худшая точка", c_chg:"Изменение", c_now:"Текущий",
+      c_limit:"Новый → предел",
+      v_ok:"Норма", v_watch:"Наблюдать", v_act:"Срочно",
+      rounds_n:"Ещё {n} обходов приведены сводкой ниже, а не полными листами.",
+      chain_key:"Замеры цепи и башмака",
+      pk_out:"внешнее", pk_in:"внутреннее",
+      lang_note:"Все заголовки отчёта приведены на английском и русском языках.",
     },
   };
 
@@ -404,15 +522,152 @@
     return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
   CMR.esc = esc;
 
+  /* ---- the report speaks both languages at once ---------------------------
+     One document, not two. The inspector who wrote it reads Russian, the
+     reliability engineer who acts on it reads English, and the supervisor
+     signs the bottom of the same sheet — so the sheet has to be readable by
+     all three without anybody choosing a version first.
+
+     T("k")   the plain string, primary language — for anywhere a bare value
+              is needed (a title attribute, a joined sentence fragment).
+     T.L("k") a LABEL in both: primary, translation underneath in micro-type.
+     T.S("k") a SENTENCE in both: primary, translation on a quieter line.
+     T.I("k") an INLINE pair, for a row that cannot grow a second line.
+     Each returns escaped HTML — call sites must not wrap them in esc(). */
+  function makeT(lang, bi) {
+    var D = S[lang] || S.en, D2 = (lang === "ru") ? S.en : S.ru;
+    function pick(dict, k, v) {
+      var s = dict[k] != null ? dict[k] : (S.en[k] != null ? S.en[k] : k);
+      if (v) Object.keys(v).forEach(function (x) { s = s.split("{" + x + "}").join(v[x]); });
+      return s;
+    }
+    var T = function (k, v) { return pick(D, k, v); };
+    T.bi = !!bi;
+    T.alt = function (k, v) { return pick(D2, k, v); };
+    function pair(k, v, cls, sep) {
+      var a = pick(D, k, v), b = pick(D2, k, v);
+      /* Identical in both — a model number, an ISO code — is said once. Saying
+         it twice is the kind of padding this pass exists to remove. */
+      if (!bi || !b || b === a) return esc(a);
+      return sep ? esc(a) + ' <span class="alti">/ ' + esc(b) + '</span>'
+                 : esc(a) + '<span class="' + cls + '">' + esc(b) + '</span>';
+    }
+    T.L = function (k, v) { return pair(k, v, "alt", false); };
+    T.S = function (k, v) { return pair(k, v, "altl", false); };
+    T.I = function (k, v) { return pair(k, v, "alti", true); };
+    /* The same treatment for a string that is not in the dictionary — a
+       component name the host translated, a reason code. The host hands over
+       the PRIMARY rendering first, because it already knows which language the
+       screen is in. */
+    T.both = function (a, b, cls) {
+      if (!bi || !b || b === a) return esc(a);
+      return esc(a) + '<span class="' + (cls || "alt") + '">' + esc(b) + '</span>';
+    };
+    /* For a pair the caller holds as English-and-Russian rather than
+       primary-and-other — the undercarriage reference, for one, which stores
+       them under fixed .en and .ru keys. Reading a Russian report and finding
+       its drawing key led in English was the whole reason this exists. */
+    T.enru = function (en, ru, cls) {
+      return lang === "ru" ? T.both(ru, en, cls) : T.both(en, ru, cls);
+    };
+    T.enruI = function (en, ru) {
+      var a = lang === "ru" ? ru : en, b = lang === "ru" ? en : ru;
+      if (!bi || !b || b === a) return esc(a);
+      return esc(a) + ' <span class="alti">/ ' + esc(b) + '</span>';
+    };
+    return T;
+  }
+  CMR.makeT = makeT;
+  /* Both dictionaries, so a guard can ask whether every string the report can
+     print exists in both halves. A key missing from the Russian side falls
+     back to the English one and prints as a finished label — the only way to
+     see it is to compare the two lists. */
+  CMR.dict = S;
+
+  /* ---- the chain row, lettered instead of abbreviated ----------------------
+     mapSVG letters the five chain and shoe measurements with their internal
+     codes, and every host was rewriting them into HGT / BUSH / P×4 / P×1 /
+     GRSR before printing. On a screen that is a picker and the reader can tap
+     one to find out; on paper it is five pieces of jargon with no key.
+
+     A..E, not 1..5: the track rollers on the same frame are already numbered
+     1..8, so a numbered chain row would put two different "1"s on one drawing
+     and a key that resolved neither of them.
+
+     The order is the order they appear on the frame and both frames share it,
+     so the same measurement is never B on the left and C on the right. */
+  var CHAIN_MARK = ["A", "B", "C", "D", "E", "F", "G", "H"];
+  CMR.markChain = function (html) {
+    var order = [];
+    var out = String(html || "").replace(
+      /(<text class="um-n um-chain"[^>]*>)([^<]+)(<\/text>)/g,
+      function (m, a, code, c) {
+        var i = order.indexOf(code);
+        if (i < 0) { order.push(code); i = order.length - 1; }
+        return a + (CHAIN_MARK[i] || (i + 1)) + c;
+      });
+    return { html: out, order: order };
+  };
+  CMR.chainMark = function (i) { return CHAIN_MARK[i] || String(i + 1); };
+
+  /* One key for the whole drawing. Names come from the undercarriage
+     reference both hosts already carry, so it cannot drift from the
+     measurement table above it.
+
+     The wheel pucks were the other half of the same problem: four of them
+     read O and I with nothing anywhere saying outer from inner, and the S on
+     the sprocket was a letter a reader had to guess at. */
+  CMR.drawingKey = function (T, order) {
+    var pts = (root.WEAR && root.WEAR.points) || [];
+    var name = function (code) {
+      var p = pts.filter(function (x) { return x.code === code; })[0];
+      return { en: p ? p.en : code, ru: p ? p.ru : "" };
+    };
+    var chain = (order || []).map(function (code, i) {
+      var n = name(code);
+      return '<span class="i"><span class="n">' + esc(CMR.chainMark(i)) + '</span>'
+        + '<span class="t">' + T.enru(n.en, n.ru) + '</span></span>';
+    }).join("");
+    var spr = name("SPROCKET"), rol = name("ROLLER");
+    var letters = [["O", T.I("pk_out")], ["I", T.I("pk_in")],
+                   ["S", T.enruI(spr.en, spr.ru)],
+                   ["1–8", T.enruI(rol.en, rol.ru)]]
+      .map(function (x) { return '<span class="i"><b>' + x[0] + '</b>' + x[1] + '</span>'; }).join("");
+    return '<div class="pkey">' + letters + '</div>'
+      + (chain ? '<div class="subhd" style="margin-top:8px;">' + T.L("chain_key") + '</div>'
+                 + '<div class="ckey">' + chain + '</div>' : "");
+  };
+
+  /* The drawing and everything that explains it, in one block.
+
+     The frames are drawn 470px wide because that is the size a roller puck is
+     still a thing you can read; the page is 760. That left a 290px column of
+     white paper down the right of every undercarriage round, with the colour
+     key and the drawing key stacked underneath eating vertical space instead.
+     They go in the gap. Same information, most of a page shorter over a
+     multi-round report, and nothing had to get smaller. */
+  CMR.mapBlock = function (T, mapHTML, topMargin) {
+    if (!mapHTML) return "";
+    var mp = CMR.markChain(mapHTML);
+    return '<div class="subhd" style="margin-top:' + (topMargin || 11) + 'px;">' + T.I("map_t") + '</div>'
+      + '<div class="mapblock"><div class="ucmaps">' + mp.html + '</div>'
+      + '<div class="mapside">' + mapKey(T) + CMR.drawingKey(T, mp.order) + '</div></div>';
+  };
+
   /* ---- chips and bars, drawn one way ------------------------------------ */
   /* White on the amber is barely legible in print; the amber chips take dark ink. */
   function ink(hex){ return hex===GRADE_HEX.B ? "#3d2c00" : "#fff"; }
   function gradeChip(g){ if(!g) return "";
     var c=GRADE_HEX[g]||"#8a939b";
     return '<span class="g" style="background:'+c+';color:'+ink(c)+'">'+esc(g)+'</span>'; }
+  /* The severity word is a technical term and gets both languages like every
+     other one — inside the chip, on a second line, rather than beside it: a
+     chip that says one thing in two words has to stay one chip. */
   function sevChip(ctx,s){ if(!s) return "";
-    var c=SEV_HEX[s]||"#8a939b";
-    return '<span class="sev" style="background:'+c+';color:'+ink(c)+'">'+esc(ctx.sevLabel(s))+'</span>'; }
+    var c=SEV_HEX[s]||"#8a939b", a=ctx.sevLabel(s);
+    var b=ctx.sevLabelAlt ? ctx.sevLabelAlt(s) : "";
+    return '<span class="sev" style="background:'+c+';color:'+ink(c)+'">'+esc(a)
+      + (b && b!==a ? '<span class="alt2">'+esc(b)+'</span>' : "") + '</span>'; }
   function wearBar(pct){
     var p=Math.max(0,Math.min(130,Number(pct)||0));
     var col = p>=100?GRADE_HEX.X : p>=80?GRADE_HEX.C : GRADE_HEX.A;
@@ -435,8 +690,11 @@
     var hot = it.prio === "P1" ? SEV_HEX.CRI : it.prio === "P2" ? SEV_HEX.DEG : "#5b6670";
     return ' <span class="prio" style="color:' + hot + '">' + esc(it.prio) + '</span>';
   }
-  function nameCell(it){
-    return esc(it.name||it.key)+(it.code?'<div class="code">'+esc(it.code)+'</div>':"");
+  /* A component name is a technical term, so it gets the same treatment as a
+     heading: the host hands over both renderings and both are printed. */
+  function nameCell(T, it){
+    return T.both(it.name||it.key, it.nameAlt)
+      + (it.code?'<div class="code">'+esc(it.code)+'</div>':"");
   }
 
   /* ---- what the whole export adds up to ---------------------------------- */
@@ -511,16 +769,17 @@
     if (!rows.length) return out;
     var cont = '<div class="sec"><div class="mach" style="border-top-width:1px;">'
       + '<div class="machhd"><span class="u" style="font-size:14px;">' + esc(rec.equip) + '</span>'
-      + '<span class="c">' + esc(T("cont")) + '</span></div>';
+      + '<span class="c">' + T.I("cont") + '</span></div>';
     var col = function (list) {
-      var x = '<table><tr><th>' + esc(T("c_item")) + '</th>'
-        + '<th class="r" style="width:52px">' + esc(T("c_meas")) + '</th>'
-        + '<th class="r" style="width:44px">' + esc(T("c_worn")) + '</th>'
-        + '<th style="width:60px"></th></tr>';
+      var x = '<table><tr><th>' + T.L("c_item") + '</th>'
+        + '<th class="r" style="width:64px">' + T.L("c_meas") + '</th>'
+        + '<th class="r" style="width:44px">' + T.L("c_worn") + '</th>'
+        + '<th style="width:48px"></th></tr>';
       list.forEach(function (it, i) { var w = it.w;
-        x += '<tr class="' + (i % 2 ? "zebra" : "") + '"><td style="padding-left:0;">' + esc(it.name || it.key)
-          + '<div class="code">' + esc(w.newMM != null && w.newMM !== ""
-              ? w.newMM + " → " + w.condemnMM + " mm" : T("noref")) + '</div></td>'
+        x += '<tr class="' + (i % 2 ? "zebra" : "") + '"><td style="padding-left:0;">'
+          + T.both(it.name || it.key, it.nameAlt)
+          + '<div class="code">' + (w.newMM != null && w.newMM !== ""
+              ? esc(w.newMM + " → " + w.condemnMM + " mm") : T.I("noref_s")) + '</div></td>'
           + '<td class="r n">' + (w.mm != null ? '<b>' + esc(w.mm) + '</b>'
               : '<span class="muted" style="font-size:9px">' + esc(w.reasonLabel || w.reason || "—") + '</span>') + '</td>'
           + '<td class="r n">' + (w.pct != null ? esc(w.pct) + "%" : "") + '</td>'
@@ -530,7 +789,7 @@
     for (var o = 0; o < rows.length; o += PER) {
       var chunk = rows.slice(o, o + PER), hf = Math.ceil(chunk.length / 2);
       out.push({ nb: false, html: cont
-        + '<div class="subhd" style="margin-top:11px;">' + esc(T("meas_t"))
+        + '<div class="subhd" style="margin-top:11px;">' + T.I("meas_t")
         + (parts > 1 ? ' <span class="muted">' + (o + 1) + "–" + Math.min(o + PER, rows.length)
             + " / " + rows.length + '</span>' : "")
         + '</div><div class="meas"><div>' + col(chunk.slice(0, hf)) + '</div><div>'
@@ -544,13 +803,13 @@
   }
 
   function notableTable(ctx, T, list) {
-    var h = '<div class="subhd" style="margin-top:13px;">' + esc(T("notable")) + '</div><table><tr>'
-      + '<th style="width:168px">' + esc(T("c_item")) + '</th>'
-      + '<th class="c" style="width:34px">' + esc(T("c_grade")) + '</th>'
-      + '<th style="width:74px">' + esc(T("c_sev")) + '</th>'
-      + '<th style="width:158px">' + esc(T("c_defect")) + '</th>'
-      + '<th style="width:130px">' + esc(T("c_cause")) + '</th>'
-      + '<th>' + esc(T("c_do")) + ' / ' + esc(T("c_read")) + '</th></tr>';
+    var h = '<div class="subhd" style="margin-top:13px;">' + T.I("notable") + '</div><table><tr>'
+      + '<th style="width:168px">' + T.L("c_item") + '</th>'
+      + '<th class="c" style="width:34px">' + T.L("c_grade") + '</th>'
+      + '<th style="width:74px">' + T.L("c_sev") + '</th>'
+      + '<th style="width:158px">' + T.L("c_defect") + '</th>'
+      + '<th style="width:130px">' + T.L("c_cause") + '</th>'
+      + '<th>' + T.L("c_do") + '</th></tr>';
     list.forEach(function (it, i) {
       var read = (it.readings || []).slice();
       if (it.w && it.w.mm != null) read.unshift(it.w.mm + " mm" + (it.w.pct != null ? " · " + it.w.pct + "%" : ""));
@@ -558,7 +817,7 @@
       if (it.comment) read.push(it.comment);
       h += '<tr class="' + (i % 2 ? "zebra" : "") + '">'
         + '<td class="stripe" style="border-left-color:' + (SEV_HEX[it.sev] || GRADE_HEX[it.grade] || "transparent") + '">'
-          + nameCell(it) + '</td>'
+          + nameCell(T, it) + '</td>'
         + '<td class="c">' + gradeChip(it.grade) + '</td>'
         + '<td>' + sevChip(ctx, it.sev) + '</td>'
         + '<td>' + (it.defect ? esc(it.defect) : "") + (it.iso ? '<div class="code">ISO ' + esc(it.iso) + '</div>' : "") + '</td>'
@@ -576,23 +835,53 @@
      which machine and why they opened it. */
   function unitSheets(ctx, T, recs) {
     var secs = [];
-    recs.forEach(function (rec, n) {
+    /* One full sheet per inspection TYPE, not per round.
+       A machine with four undercarriage rounds on it used to print four
+       mastheads, four pairs of track frames and four signature blocks — the
+       same 50 KB drawing rasterised four times for a document whose reader
+       already knows what the machine looks like. Worse, the one question they
+       opened it to answer, "is it getting worse?", appeared on none of the
+       four pages, because each page only knows about itself.
+
+       So: the latest round of each type is printed in full, and everything
+       before it becomes a history table that answers that question directly.
+       Nothing is dropped — every reading from every round is still in the
+       document, in the form that makes it comparable. */
+    var byType = {}, typeOrder = [];
+    recs.forEach(function (r) {
+      if (!byType[r.type]) { byType[r.type] = []; typeOrder.push(r.type); }
+      byType[r.type].push(r);
+    });
+    var older = [];
+    var latest = typeOrder.map(function (ty) {
+      var list = byType[ty];              // already newest-first
+      older = older.concat(list.slice(1));
+      return list[0];
+    });
+    older.sort(function (a, b) { return String(b.date || "").localeCompare(String(a.date || "")); });
+
+    latest.forEach(function (rec, n) {
       var isWear = !!rec.wear;
+      var mine = byType[rec.type] || [rec];
+      function fld(k, v) {
+        return '<span class="f"><i>' + k + '</i>' + v + '</span>';
+      }
       var head =
         '<div class="mast">'
-        + '<div class="eyebrow">' + esc(T("sub")) + '</div>'
-        + '<div class="m1">' + esc(T("method_" + rec.type) || rec.typeLabel) + '</div>'
+        + '<div class="eyebrow">' + T.I("sub") + '</div>'
+        + '<div class="m1">' + T.S("method_" + rec.type) + '</div>'
         + '<div class="m2">'
-          + fld(T("f_unit"), '<span class="unum">' + esc(rec.equip) + '</span>')
-          + fld(T("f_cat"), esc(rec.clsLabel || ""))
-          + (rec.model ? fld(T("f_model"), esc(rec.model)) : "")
-          + fld(T("f_date"), '<b>' + esc(rec.date || "") + '</b>')
-          + (rec.smu ? fld(T("f_smu"), '<b>' + esc(rec.smu) + '</b>') : "")
-          + fld(T("f_pts"), '<b>' + rec.items.length + '</b>')
-        + '</div></div>';
-      function fld(k, v) {
-        return '<span class="f"><i>' + esc(k) + '</i>' + v + '</span>';
-      }
+          + fld(T.I("f_unit"), '<span class="unum">' + esc(rec.equip) + '</span>')
+          + fld(T.I("f_cat"), esc(rec.clsLabel || ""))
+          + (rec.model ? fld(T.I("f_model"), esc(rec.model)) : "")
+          + fld(T.I("f_date"), '<b>' + esc(rec.date || "") + '</b>')
+          + (rec.smu ? fld(T.I("f_smu"), '<b>' + esc(rec.smu) + '</b>') : "")
+          + fld(T.I("f_pts"), '<b>' + rec.items.length + '</b>')
+        + '</div>'
+        + (mine.length > 1
+            ? '<div class="quiet" style="margin-top:7px;">'
+              + T.S("rounds_n", { n: mine.length - 1 }) + '</div>' : "")
+        + '</div>';
 
       /* A cell is earned by having something to show or something to say. A
          position with nothing but the machine's hours on it is not a finding,
@@ -611,7 +900,7 @@
 
       var body = "";
       if (!isWear && !board.length) {
-        body = '<div class="allok">' + esc(T("allok", { n: rec.items.length })) + '</div>'
+        body = '<div class="allok">' + T.S("allok", { n: rec.items.length }) + '</div>'
              + restLine(T, rest, true);
       } else if (board.length && board.length <= 12) {
         var cols = board.length >= 4 ? 4 : board.length === 3 ? 3 : board.length === 2 ? 2 : 1;
@@ -625,9 +914,9 @@
       }
 
       var sign = '<div class="shsign">'
-        + '<div><div class="rl">' + esc(T("f_by")) + '</div><div class="ln"></div>'
+        + '<div><div class="rl">' + T.L("f_by") + '</div><div class="ln"></div>'
           + '<div class="nm">' + esc(rec.by || "—") + '</div></div>'
-        + '<div><div class="rl">' + esc(T("f_sup")) + '</div>'
+        + '<div><div class="rl">' + T.L("f_sup") + '</div>'
           + '<div class="ln">' + (rec.signUrl ? '<img src="' + rec.signUrl + '">' : "") + '</div>'
           + '<div class="nm">' + esc(rec.sup || T("nosign")) + '</div></div></div>';
 
@@ -645,33 +934,135 @@
       var overAct = over.filter(function (it) { return it.w.band === "act"; });
       var unread = rec.items.filter(function (it) { return it.w && it.w.mm == null; }).length;
       var verd = (vc === "ok" && unread)
-        ? T("verdict_part", { m: rec.items.length - unread, of: rec.items.length, n: unread })
-        : T("verdict_" + vc, { n: over.length, of: rec.items.length })
-          + (unread ? " " + T("unread_n", { n: unread, of: rec.items.length }) : "");
+        ? T.S("verdict_part", { m: rec.items.length - unread, of: rec.items.length, n: unread })
+        : T.S("verdict_" + vc, { n: over.length, of: rec.items.length })
+          + (unread ? T.S("unread_n", { n: unread, of: rec.items.length }) : "");
+      var maps = CMR.mapBlock(T, rec.mapHTML, 13);
       var top = '<div class="sec">' + head
-        + '<div class="verdict v-' + ((vc === "ok" && unread) ? "watch" : vc) + '">' + esc(verd) + '</div>'
+        + '<div class="verdict v-' + ((vc === "ok" && unread) ? "watch" : vc) + '">' + verd + '</div>'
         + (over.length ? '<div class="verdict v-' + (overAct.length ? "act" : "watch") + '" style="margin-top:9px;">'
-            + (overAct.length ? esc(T("uc_over", { n: overAct.length })) + ". " : "")
-            + (over.length > overAct.length ? esc(T("uc_watch", { n: over.length - overAct.length })) + ". " : "")
+            + (overAct.length ? T.I("uc_over", { n: overAct.length }) + ". " : "")
+            + (over.length > overAct.length ? T.I("uc_watch", { n: over.length - overAct.length }) + ". " : "")
             + '<span style="font-weight:500;">' + over.slice(0, 6).map(function (it) {
                 return esc(it.name || it.key) + ' <span class="num">' + esc(it.w.pct) + '%</span>'; }).join(" · ")
             + (over.length > 6 ? " · +" + (over.length - 6) : "") + '</span></div>' : "")
-        + (rec.mapHTML
-            ? '<div class="subhd" style="margin-top:13px;">' + esc(T("map_t")) + '</div>'
-              + '<div class="ucmaps">' + rec.mapHTML + '</div>' + mapKey(T)
-            : "")
-        + '</div>';
+        + maps + '</div>';
       secs.push({ nb: n > 0, html: top });
       measSections(ctx, T, rec, sign).forEach(function (x) { secs.push(x); });
       if (told.filter(function (it) { return it.photos && it.photos.length; }).length) {
         var ph = told.filter(function (it) { return it.photos && it.photos.length; });
         secs.push({ nb: false, html: '<div class="sec">'
-          + '<div class="subhd">' + esc(T("photos")) + '</div>'
+          + '<div class="subhd">' + T.I("photos") + '</div>'
           + '<div class="board b' + (ph.length >= 4 ? 4 : ph.length) + '">'
           + ph.map(function (it) { return cell(ctx, T, it); }).join("") + '</div></div>' });
       }
     });
+
+    if (older.length) historySections(ctx, T, latest, older).forEach(function (x) { secs.push(x); });
     return secs;
+  }
+
+  /* ---- everything before the latest round ----------------------------------
+     Two tables instead of N sheets. The first says what each earlier round
+     concluded; the second puts every measured point on one row with its
+     readings in date order, so a part that is walking towards its limit shows
+     as a line of numbers going one way. That is the thing a reliability
+     engineer opens a unit report to see, and printing four snapshots of the
+     same machine never showed it once. */
+  function historySections(ctx, T, latest, older) {
+    var VC = { ok: ["v_ok", GRADE_HEX.A], watch: ["v_watch", GRADE_HEX.C], act: ["v_act", GRADE_HEX.X] };
+    var rows = older.map(function (rec, i) {
+      var vc = verdict(rec), v = VC[vc] || VC.ok;
+      var worst = rec.items.filter(function (it) { return it.w && it.w.pct != null; })
+        .sort(function (a, b) { return (Number(b.w.pct) || 0) - (Number(a.w.pct) || 0); })[0];
+      var said = rec.items.filter(function (it) { return it.defect; })
+        .map(function (it) { return it.defect; });
+      var note = worst ? esc(worst.name || worst.key) + ' <span class="num">' + esc(worst.w.pct) + '%</span>'
+        : said.length ? esc(said.slice(0, 2).join(" · ")) + (said.length > 2 ? ' <span class="muted">+' + (said.length - 2) + '</span>' : "")
+        : '<span class="muted">' + T.I("none_att") + '</span>';
+      return '<tr class="' + (i % 2 ? "zebra" : "") + '">'
+        + '<td class="d"><b>' + esc(rec.date || "") + '</b></td>'
+        + '<td>' + esc(rec.typeLabel || rec.type) + '</td>'
+        + '<td class="r n">' + esc(rec.smu || "—") + '</td>'
+        + '<td class="c n">' + rec.items.length + '</td>'
+        + '<td><span class="vdot" style="background:' + v[1] + '"></span>' + T.I(v[0]) + '</td>'
+        + '<td>' + note + '</td></tr>';
+    }).join("");
+
+    var out = [{ nb: true, html: '<div class="sec"><div class="sechd">'
+      + '<span class="h2">' + T.I("hist") + '</span>'
+      + '<span class="muted" style="font-size:10.5px;margin-left:auto;">' + T.I("hist_sub") + '</span></div>'
+      + '<table class="hist"><tr>'
+      + '<th style="width:72px">' + T.L("c_date") + '</th>'
+      + '<th style="width:120px">' + T.L("c_type") + '</th>'
+      + '<th class="r" style="width:58px">' + T.L("f_smu") + '</th>'
+      + '<th class="c" style="width:46px">' + T.L("pts") + '</th>'
+      + '<th style="width:96px">' + T.L("c_state") + '</th>'
+      + '<th>' + T.L("c_worst") + '</th></tr>' + rows + '</table></div>' }];
+
+    /* The measurement history, one row per point. Only for machines that were
+       measured — a plug round has nothing to line up in columns. */
+    var wearRuns = latest.filter(function (r) { return r.wear; });
+    var MAXCOL = 6;
+    wearRuns.forEach(function (cur) {
+      var all = [cur].concat(older.filter(function (r) { return r.type === cur.type; }))
+        .sort(function (a, b) { return String(a.date || "").localeCompare(String(b.date || "")); });
+      if (all.length < 2) return;
+      /* A machine measured monthly for two years is twenty-four columns, and
+         twenty-four columns do not fit on A4 in any type size worth reading.
+         The most recent six, and the table above still lists every round. */
+      var runs = all.slice(-MAXCOL), dropped = all.length - runs.length;
+      var keys = [], seen = {};
+      runs.forEach(function (r) { r.items.forEach(function (it) {
+        if (it.w && !seen[it.key]) { seen[it.key] = it; keys.push(it.key); } }); });
+      var read = runs.map(function (r) { var m = {};
+        r.items.forEach(function (it) { if (it.w) m[it.key] = it.w; }); return m; });
+      if (!keys.length) return;
+
+      var body = keys.map(function (k, i) {
+        var last = null, lastI = -1, firstV = null;
+        read.forEach(function (m, j) { var w = m[k];
+          if (w && w.mm != null) { if (firstV == null) firstV = Number(w.mm); last = w; lastI = j; } });
+        var cells = read.map(function (m, j) { var w = m[k];
+          if (!w) return '<td class="r n muted">—</td>';
+          if (w.mm == null) return '<td class="r n"><span class="muted" style="font-size:9px">'
+            + esc(w.reasonLabel || w.reason || "—") + '</span></td>';
+          return '<td class="r n"' + (j === lastI ? ' style="font-weight:700"' : "") + '>' + esc(w.mm) + '</td>';
+        }).join("");
+        /* The change over the whole series, signed. Which direction is BAD
+           depends on the part — an idler grows towards its limit and a roller
+           shrinks towards one — so the colour comes from the limits, never
+           from the sign. */
+        var d = (last && firstV != null) ? Number(last.mm) - firstV : null;
+        var grow = last && last.condemnMM != null && last.newMM != null
+          && Number(last.condemnMM) > Number(last.newMM);
+        var worse = d != null && d !== 0 && ((d > 0) === !!grow);
+        var dcls = d == null || Math.abs(d) < 0.05 ? "fl" : worse ? "up" : "dn";
+        var ref = seen[k];
+        return '<tr class="' + (i % 2 ? "zebra" : "") + '">'
+          + '<td style="padding-left:0">' + T.both(ref.name || k, ref.nameAlt) + '</td>'
+          + '<td class="n muted" style="font-size:9px">' + (last && last.newMM != null && last.newMM !== ""
+              ? esc(last.newMM + " → " + last.condemnMM) : T.I("noref_s")) + '</td>'
+          + cells
+          + '<td class="r"><span class="dlt ' + dcls + '">'
+            + (d == null ? "—" : (d > 0 ? "+" : "") + (Math.round(d * 10) / 10)) + '</span></td>'
+          + '<td class="r n">' + (last && last.pct != null ? '<b>' + esc(last.pct) + '%</b>' : "") + '</td>'
+          + '<td style="width:56px">' + (last && last.pct != null ? wearBar(last.pct) : "") + '</td></tr>';
+      }).join("");
+
+      out.push({ nb: false, html: '<div class="sec" style="margin-top:14px;">'
+        + '<div class="subhd">' + T.I("trend_t") + ' <span class="muted" style="font-weight:400;">'
+        + T.I("trend_sub") + (dropped ? ' · +' + dropped : "") + '</span></div>'
+        + '<table class="mh"><tr><th style="width:' + (232 - Math.max(0, runs.length - 4) * 22) + 'px">'
+        + T.L("c_item") + '</th>'
+        + '<th class="n" style="width:72px">' + T.L("c_limit") + '</th>'
+        + runs.map(function (r) { return '<th class="r n" style="width:46px">'
+            + esc(String(r.date || "").slice(5)) + '</th>'; }).join("")
+        + '<th class="r" style="width:58px">' + T.L("c_chg") + '</th>'
+        + '<th class="r" style="width:50px">' + T.L("c_worn") + '</th>'
+        + '<th style="width:54px"></th></tr>' + body + '</table></div>' });
+    });
+    return out;
   }
 
   /* The positions that were checked and had nothing to report. Named, so nobody
@@ -686,7 +1077,7 @@
     var reads = same ? first
       : rest.map(function (it) { return (it.readings || []).join(" · "); }).filter(Boolean).join(" · ");
     return '<div class="quiet">'
-      + (alreadySaid ? "" : esc(T("rest_n", { n: rest.length })) + " ")
+      + (alreadySaid ? "" : T.I("rest_n", { n: rest.length }) + " ")
       + '<b>' + esc(codes) + '</b>'
       + (reads ? ' <span class="num">· ' + esc(reads) + '</span>' : "")
       + '</div>';
@@ -706,12 +1097,12 @@
   function commonBand(T, sh, n) {
     if (!sh.defect && !sh.cause && !sh.action) return "";
     var rows = "";
-    if (sh.defect) rows += '<dt>' + esc(T("c_defect")) + '</dt><dd>' + esc(sh.defect)
+    if (sh.defect) rows += '<dt>' + T.L("c_defect") + '</dt><dd>' + esc(sh.defect)
       + (sh.iso ? ' <span class="code">ISO ' + esc(sh.iso) + '</span>' : "") + '</dd>';
-    if (sh.cause) rows += '<dt>' + esc(T("c_cause")) + '</dt><dd>' + esc(sh.cause) + '</dd>';
-    if (sh.action) rows += '<dt>' + esc(T("c_action")) + '</dt><dd><b>' + esc(sh.action) + '</b>'
+    if (sh.cause) rows += '<dt>' + T.L("c_cause") + '</dt><dd>' + esc(sh.cause) + '</dd>';
+    if (sh.action) rows += '<dt>' + T.L("c_action") + '</dt><dd><b>' + esc(sh.action) + '</b>'
       + (sh.prio ? prioTag({ prio: sh.prio }) : "") + '</dd>';
-    return '<div class="common"><div class="k">' + esc(T("common_n", { n: n })) + '</div>'
+    return '<div class="common"><div class="k">' + T.I("common_n", { n: n }) + '</div>'
       + '<dl>' + rows + '</dl></div>';
   }
 
@@ -741,23 +1132,24 @@
       }
     }
     var rows = "";
-    function row(k, v) { rows += '<dt>' + esc(k) + '</dt><dd>' + v + '</dd>'; }
-    if (it.defect && !sh.defect) row(T("c_defect"), esc(it.defect)
+    function row(k, v) { rows += '<dt>' + k + '</dt><dd>' + v + '</dd>'; }
+    if (it.defect && !sh.defect) row(T.L("c_defect"), esc(it.defect)
       + (it.iso ? ' <span class="code">ISO ' + esc(it.iso) + '</span>' : ""));
-    if (it.cause && !sh.cause) row(T("c_cause"), esc(it.cause));
-    if (it.action && !sh.action) row(T("c_action"), '<b>' + esc(it.action) + '</b>'
+    if (it.cause && !sh.cause) row(T.L("c_cause"), esc(it.cause));
+    if (it.action && !sh.action) row(T.L("c_action"), '<b>' + esc(it.action) + '</b>'
       + prioTag(it) + (it.wo ? ' <span class="code">' + esc(T("c_wo")) + ' ' + esc(it.wo) + '</span>' : ""));
-    else if (it.wo || (it.prio && !sh.prio)) row(T("c_wo"),
+    else if (it.wo || (it.prio && !sh.prio)) row(T.L("c_wo"),
       (it.prio && !sh.prio ? prioTag(it) + " " : "") + '<span class="num">' + esc(it.wo || "") + '</span>');
     var read = (it.readings || []).slice();
     if (it.w && it.w.mm != null) read.unshift(it.w.mm + " mm" + (it.w.pct != null ? " · " + it.w.pct + "%" : ""));
-    if (read.length) row(T("c_reading"), '<span class="num">' + esc(read.join(" · ")) + '</span>');
+    if (read.length) row(T.L("c_reading"), '<span class="num">' + esc(read.join(" · ")) + '</span>');
     return '<div class="cel">' + top + '<div class="bd">'
       /* The code first: it is what is stamped on the machine and what a fitter
-         navigates by. The name underneath says which one that is. */
+         navigates by. The name underneath says which one that is — in both
+         languages, because the fitter and the engineer read different ones. */
       + '<div class="pk">' + esc(it.code || it.key) + '</div>'
       + (it.code && it.name && it.name !== it.code
-          ? '<div class="pn">' + esc(it.name) + '</div>' : "")
+          ? '<div class="pn">' + T.both(it.name, it.nameAlt, "") + '</div>' : "")
       + ((it.grade || it.sev) ? '<div class="chips">' + gradeChip(it.grade) + sevChip(ctx, it.sev) + '</div>' : "")
       + (rows ? '<dl>' + rows + '</dl>' : "")
       + (it.comment ? '<div class="cm">' + esc(it.comment) + '</div>' : "")
@@ -765,20 +1157,22 @@
   }
 
   function mapKey(T) {
+    /* .mapkey .i is inline-flex, so each pair is wrapped: a loose translation
+       span would sit beside its label as a sibling flex item, not with it. */
+    var i = function (bg, dash, k) {
+      return '<span class="i"><span class="d" style="background:' + bg
+        + (dash ? ';border-style:dashed' : ';border-color:' + bg) + '"></span>'
+        + '<span>' + T.I(k) + '</span></span>';
+    };
     return '<div class="mapkey">'
-      + '<span class="i"><span class="d" style="background:' + GRADE_HEX.A + ';border-color:' + GRADE_HEX.A + '"></span>' + esc(T("band_ok")) + '</span>'
-      + '<span class="i"><span class="d" style="background:' + GRADE_HEX.C + ';border-color:' + GRADE_HEX.C + '"></span>' + esc(T("band_watch")) + '</span>'
-      + '<span class="i"><span class="d" style="background:' + GRADE_HEX.X + ';border-color:' + GRADE_HEX.X + '"></span>' + esc(T("band_act")) + '</span>'
-      + '<span class="i"><span class="d" style="background:#e6eaee;border-style:dashed"></span>' + esc(T("map_na")) + '</span>'
+      + i(GRADE_HEX.A, false, "band_ok") + i(GRADE_HEX.C, false, "band_watch")
+      + i(GRADE_HEX.X, false, "band_act") + i("#e6eaee", true, "map_na")
       + '</div>';
   }
 
   /* ======================================================================== */
   CMR.sections = function (ctx) {
-    var D = S[ctx.lang] || S.en;
-    function T(k, v){ var s=D[k]!=null?D[k]:(S.en[k]!=null?S.en[k]:k);
-      if(v) Object.keys(v).forEach(function(x){ s=s.split("{"+x+"}").join(v[x]); });
-      return s; }
+    var T = makeT(ctx.lang, ctx.bi !== false);
     var recs = ctx.records.slice().sort(function(a,b){
       return String(a.date||"").localeCompare(String(b.date||""))
         || String(a.equip).localeCompare(String(b.equip)); });
@@ -790,7 +1184,17 @@
     var mode = ctx.mode || (oneMachine ? "unit" : "fleet");
     if (mode === "unit") {
       var byNew = recs.slice().reverse();          // newest round first
-      return unitSheets(ctx, T, byNew).concat(ctx.extra || []);
+      var sheets = unitSheets(ctx, T, byNew);
+      /* A host section numbers itself by position — it cannot know what came
+         before it, so it writes __N__ and the caller fills it in. The fleet
+         path did; this one never did, and shipped a literal "__N__" as the
+         section number of every trend page in every single-machine PDF. */
+      var un = 0;
+      (ctx.extra || []).forEach(function (x) {
+        un++;
+        sheets.push({ nb: x.nb, html: String(x.html).split("__N__").join(p2(un)) });
+      });
+      return sheets;
     }
     // 8/1/2026 means one thing in Anadyr and another in Denver. Write it once.
     var stampTxt = st.getFullYear()+"-"+p2(st.getMonth()+1)+"-"+p2(st.getDate())
@@ -801,9 +1205,11 @@
     var graded = X.grade.A+X.grade.B+X.grade.C+X.grade.X;
     var bar = ["A","B","C","X"].map(function(g){ var n=X.grade[g]; if(!n) return "";
       return '<span style="width:'+(n/graded*100).toFixed(2)+'%;background:'+GRADE_HEX[g]+'"></span>'; }).join("");
+    /* Wrapped, not bare. .barkey .i is a flex row, so a loose translation span
+       would land BESIDE the label as its own flex item rather than under it. */
     var key = ["A","B","C","X"].map(function(g){ var n=X.grade[g]; if(!n) return "";
       return '<span class="i"><span class="sw" style="background:'+GRADE_HEX[g]+'"></span><b>'
-        +n+'</b> '+esc(T("g_"+g))+'</span>'; }).join("");
+        +n+'</b> <span>'+T.L("g_"+g)+'</span></span>'; }).join("");
     var typeLine = Object.keys(X.types).map(function(k){
       return X.types[k]+" "+esc(X.typeLabel[k]||k); }).join(" · ");
     var wearN = X.wear.ok+X.wear.watch+X.wear.act;
@@ -826,7 +1232,7 @@
         : '<span class="muted">'+esc(T("none_att"))+'</span>';
       return '<tr class="'+(i%2?"zebra":"")+'">'
         + '<td class="stripe" style="border-left-color:'+col+'"><span class="unit">'+esc(rec.equip)+'</span></td>'
-        + '<td>'+esc(rec.typeLabel||rec.type)+'</td>'
+        + '<td>'+T.both(rec.typeLabel||rec.type, rec.typeAlt)+'</td>'
         + '<td class="c n">'+esc(rec.date||"")+'</td>'
         + '<td class="c n">'+rec.items.length+'</td>'
         + '<td>'+words+'</td></tr>';
@@ -834,61 +1240,61 @@
 
     secs.push({nb:false, html:
       '<div class="sec">'
-      + '<div class="eyebrow">'+esc(ctx.sub||T("sub"))+'</div>'
-      + '<div class="h1">'+esc(ctx.title)+'</div>'
+      + '<div class="eyebrow">'+(ctx.sub?T.both(ctx.sub,ctx.subAlt,"alti"):T.I("sub"))+'</div>'
+      + '<div class="h1">'+T.both(ctx.title,ctx.titleAlt)+'</div>'
       + '<div class="rule" style="margin:13px 0 0"></div>'
-      + '<div class="muted num" style="font-size:10.5px;padding:7px 0 22px;">'
-        + esc(T("generated"))+' '+esc(stampTxt)+(typeLine?" · "+typeLine:"")+'</div>'
-      + '<div class="lede" style="margin-bottom:20px;">'
-        + esc(X.total ? T("head_some",{n:X.total,c:X.crit}) : T("head_none"))+'</div>'
+      + '<div class="muted num" style="font-size:10.5px;padding:7px 0 20px;">'
+        + T.I("generated")+' '+esc(stampTxt)+(typeLine?" · "+typeLine:"")+'</div>'
+      + '<div class="lede" style="margin-bottom:18px;">'
+        + (X.total ? T.S("head_some",{n:X.total,c:X.crit}) : T.S("head_none"))+'</div>'
       + '<div class="stats">'
-        + '<div class="stat"><div class="k">'+esc(T("mach"))+'</div><div class="v">'+X.unitN+'</div>'
-          + '<div class="s">'+esc(T("ins"))+': '+X.rounds+'</div></div>'
-        + '<div class="stat"><div class="k">'+esc(T("pts"))+'</div><div class="v">'+X.pts+'</div>'
+        + '<div class="stat"><div class="k">'+T.L("mach")+'</div><div class="v">'+X.unitN+'</div>'
+          + '<div class="s">'+T.I("ins")+': '+X.rounds+'</div></div>'
+        + '<div class="stat"><div class="k">'+T.L("pts")+'</div><div class="v">'+X.pts+'</div>'
           + '<div class="s">'+esc(X.first||"—")+(X.last&&X.last!==X.first?" → "+esc(X.last):"")+'</div></div>'
-        + '<div class="stat"><div class="k">'+esc(T("work"))+'</div>'
+        + '<div class="stat"><div class="k">'+T.L("work")+'</div>'
           + '<div class="v" style="color:'+(X.total?GRADE_HEX.C:GRADE_HEX.A)+'">'+X.total+'</div>'
-          + '<div class="s">'+esc(T("findings"))+'</div></div>'
-        + '<div class="stat"><div class="k">'+esc(T("now"))+'</div>'
+          + '<div class="s">'+T.I("findings")+'</div></div>'
+        + '<div class="stat"><div class="k">'+T.L("now")+'</div>'
           + '<div class="v" style="color:'+(X.crit?GRADE_HEX.X:GRADE_HEX.A)+'">'+X.crit+'</div>'
-          + '<div class="s">'+esc(T("now_s"))+'</div></div>'
+          + '<div class="s">'+T.I("now_s")+'</div></div>'
       + '</div>'
-      + (graded ? '<div style="margin-top:24px;"><div class="eyebrow" style="margin-bottom:8px;">'
-          + esc(T("cond"))+'</div><div class="bar">'+bar+'</div><div class="barkey">'+key+'</div></div>' : "")
-      + '<div style="margin-top:26px;"><div class="eyebrow" style="margin-bottom:9px;">'+esc(T("glance"))+'</div>'
-        + '<table><tr><th style="width:78px">'+esc(T("c_unit"))+'</th>'
-        + '<th style="width:118px">'+esc(T("c_type"))+'</th>'
-        + '<th class="c" style="width:60px">'+esc(T("c_date"))+'</th>'
-        + '<th class="c" style="width:52px">'+esc(T("pts"))+'</th>'
-        + '<th>'+esc(T("c_find"))+'</th></tr>'+glance+'</table></div>'
-      + (wearN ? '<div style="margin-top:22px;"><div class="eyebrow" style="margin-bottom:8px;">'
-          + esc(T("uc_cond"))+'</div><div class="barkey" style="margin-top:0;">'
-          + '<span class="i"><span class="sw" style="background:'+GRADE_HEX.A+'"></span><b>'+X.wear.ok+'</b> '+esc(T("band_ok"))+'</span>'
-          + '<span class="i"><span class="sw" style="background:'+GRADE_HEX.C+'"></span><b>'+X.wear.watch+'</b> '+esc(T("band_watch"))+'</span>'
-          + '<span class="i"><span class="sw" style="background:'+GRADE_HEX.X+'"></span><b>'+X.wear.act+'</b> '+esc(T("band_act"))+'</span>'
+      + (graded ? '<div style="margin-top:20px;"><div class="eyebrow" style="margin-bottom:8px;">'
+          + T.I("cond")+'</div><div class="bar">'+bar+'</div><div class="barkey">'+key+'</div></div>' : "")
+      + '<div style="margin-top:22px;"><div class="eyebrow" style="margin-bottom:9px;">'+T.I("glance")+'</div>'
+        + '<table><tr><th style="width:78px">'+T.L("c_unit")+'</th>'
+        + '<th style="width:118px">'+T.L("c_type")+'</th>'
+        + '<th class="c" style="width:62px">'+T.L("c_date")+'</th>'
+        + '<th class="c" style="width:54px">'+T.L("pts")+'</th>'
+        + '<th>'+T.L("c_find")+'</th></tr>'+glance+'</table></div>'
+      + (wearN ? '<div style="margin-top:20px;"><div class="eyebrow" style="margin-bottom:8px;">'
+          + T.I("uc_cond")+'</div><div class="barkey" style="margin-top:0;">'
+          + '<span class="i"><span class="sw" style="background:'+GRADE_HEX.A+'"></span><b>'+X.wear.ok+'</b> '+T.I("band_ok")+'</span>'
+          + '<span class="i"><span class="sw" style="background:'+GRADE_HEX.C+'"></span><b>'+X.wear.watch+'</b> '+T.I("band_watch")+'</span>'
+          + '<span class="i"><span class="sw" style="background:'+GRADE_HEX.X+'"></span><b>'+X.wear.act+'</b> '+T.I("band_act")+'</span>'
           + '</div></div>' : "")
       + '</div>'});
 
     /* ---------- 2. the work ---------- */
     var wl = '<div class="sec"><div class="sechd"><span class="n">01</span>'
-      + '<span class="h2">'+esc(T("work"))+'</span>'
-      + '<span class="muted" style="font-size:10.5px;margin-left:auto;">'+esc(T("work_sub"))+'</span></div>';
+      + '<span class="h2">'+T.I("work")+'</span>'
+      + '<span class="muted" style="font-size:10.5px;margin-left:auto;">'+T.I("work_sub")+'</span></div>';
     if(!X.act.length){
-      wl += '<div class="verdict v-ok">'+esc(T("work_none"))+'</div>';
+      wl += '<div class="verdict v-ok">'+T.S("work_none")+'</div>';
     } else {
       wl += '<table><tr>'
-        + '<th style="width:74px">'+esc(T("c_unit"))+'</th>'
-        + '<th style="width:150px">'+esc(T("c_comp"))+'</th>'
-        + '<th style="width:180px">'+esc(T("c_find"))+'</th>'
-        + '<th style="width:150px">'+esc(T("c_cause"))+'</th>'
-        + '<th style="width:130px">'+esc(T("c_do"))+'</th>'
-        + '<th class="c" style="width:52px">'+esc(T("c_date"))+'</th></tr>';
+        + '<th style="width:74px">'+T.L("c_unit")+'</th>'
+        + '<th style="width:150px">'+T.L("c_comp")+'</th>'
+        + '<th style="width:180px">'+T.L("c_find")+'</th>'
+        + '<th style="width:150px">'+T.L("c_cause")+'</th>'
+        + '<th style="width:130px">'+T.L("c_do")+'</th>'
+        + '<th class="c" style="width:54px">'+T.L("c_date")+'</th></tr>';
       X.act.forEach(function(f,i){
         var rec=f.rec, it=f.it||{}, col=SEV_HEX[f.sev]||GRADE_HEX[it.grade]||"#c9d0d6";
         var todo = it.action
           ? '<b>'+esc(it.action)+'</b>'+prioTag(it)
             +(it.wo?'<div class="code">'+esc(T("c_wo"))+' '+esc(it.wo)+'</div>':"")
-          : '<span class="muted">'+esc(T("do_tbd"))+'</span>';
+          : '<span class="muted">'+T.I("do_tbd")+'</span>';
         var head = '<tr class="'+(i%2?"zebra":"")+'">'
           + '<td class="stripe" style="border-left-color:'+col+'"><span class="unit">'+esc(rec.equip)+'</span>'
           + '<div class="code">'+esc(rec.typeLabel||rec.type)+'</div></td>';
@@ -897,24 +1303,24 @@
           var worst=f.act.concat(f.watch).slice(0,3).map(function(x){
             return esc(x.it.name||x.it.key)+' <span class="n">'+x.pct+'%</span>'; }).join("<br>");
           wl += head
-            + '<td><b>'+esc(T("uc_cond"))+'</b><div class="code">'
-              + esc(T("flagged",{n:f.act.length+f.watch.length}))+'</div></td>'
-            + '<td>'+(f.act.length?'<b>'+esc(T("uc_over",{n:f.act.length}))+'</b><br>':"")
-              + (f.watch.length?esc(T("uc_watch",{n:f.watch.length}))+'<br>':"")
+            + '<td><b>'+T.I("uc_cond")+'</b><div class="code">'
+              + T.I("flagged",{n:f.act.length+f.watch.length})+'</div></td>'
+            + '<td>'+(f.act.length?'<b>'+T.S("uc_over",{n:f.act.length})+'</b>':"")
+              + (f.watch.length?T.S("uc_watch",{n:f.watch.length}):"")
               + '<div style="margin-top:3px;">'+sevChip(ctx,f.sev)+'</div>'
               + '<div class="code" style="margin-top:4px;line-height:1.5;">'+worst+'</div></td>'
-            + '<td><span class="muted">'+esc(T("uc_cause"))+'</span></td>'
+            + '<td><span class="muted">'+T.S("uc_cause")+'</span></td>'
             + '<td>'+todo+'</td>' + tail;
           return;
         }
         var find=[ it.defect?esc(it.defect):"",
-                   (f.w&&f.w.pct!=null)?esc(f.w.pct)+"% "+esc(T("c_worn"))+" · "+esc(f.w.mm)+" mm":"",
+                   (f.w&&f.w.pct!=null)?esc(f.w.pct)+"% "+T.I("c_worn")+" · "+esc(f.w.mm)+" mm":"",
                    (!it.defect&&it.comment)?esc(it.comment):"" ].filter(Boolean).join("<br>");
         wl += head
-          + '<td>'+nameCell(it)+'</td>'
+          + '<td>'+nameCell(T,it)+'</td>'
           + '<td>'+(find||"—")+'<div style="margin-top:3px;">'+gradeChip(it.grade)+' '+sevChip(ctx,f.sev)+'</div>'
             + (it.defectCode?'<div class="code">'+esc(it.defectCode)+(it.iso?' · ISO '+esc(it.iso):"")+'</div>':"")+'</td>'
-          + '<td>'+(it.cause?esc(it.cause):'<span class="muted">'+esc(T("cause_tbd"))+'</span>')+'</td>'
+          + '<td>'+(it.cause?esc(it.cause):'<span class="muted">'+T.I("cause_tbd")+'</span>')+'</td>'
           + '<td>'+todo+'</td>' + tail;
       });
       wl += '</table>';
@@ -952,30 +1358,30 @@
 
       var m = '<div class="sec"><div class="mach">'
         + (first ? '<div class="sechd" style="border:0;padding:0;margin:0 0 11px;">'
-            + '<span class="n">'+p2(secN+1)+'</span><span class="h2">'+esc(T("detail"))+'</span></div>' : "")
+            + '<span class="n">'+p2(secN+1)+'</span><span class="h2">'+T.I("detail")+'</span></div>' : "")
         + '<div class="machhd"><span class="u">'+esc(rec.equip)+'</span>'
           + '<span class="c">'+esc(rec.clsLabel||"")+'</span>'
           + '<span class="c" style="margin-left:auto;">'+esc(rec.typeLabel||rec.type)+'</span></div>'
         + '<div class="meta">'
-          + '<span class="m"><i>'+esc(T("c_date"))+'</i><span class="num">'+esc(rec.date||"")+'</span></span>'
+          + '<span class="m"><i>'+T.I("c_date")+'</i><span class="num">'+esc(rec.date||"")+'</span></span>'
           + (rec.smu?'<span class="m"><i>SMU</i><span class="num">'+esc(rec.smu)+'</span></span>':"")
-          + (rec.by?'<span class="m"><i>'+esc(T("by_who"))+'</i>'+esc(rec.by)+'</span>':"")
-          + '<span class="m"><i>'+esc(T("pts"))+'</i><span class="num">'+rec.items.length+'</span></span>'
-          + (rec.gps?'<span class="m"><i>'+esc(T("gps"))+'</i><span class="num">'
+          + (rec.by?'<span class="m"><i>'+T.I("by_who")+'</i>'+esc(rec.by)+'</span>':"")
+          + '<span class="m"><i>'+T.I("pts")+'</i><span class="num">'+rec.items.length+'</span></span>'
+          + (rec.gps?'<span class="m"><i>'+T.I("gps")+'</i><span class="num">'
               + rec.gps.lat.toFixed(4)+', '+rec.gps.lon.toFixed(4)+'</span></span>':"")
         + '</div>'
         + '<div class="verdict v-'+((vc==="ok"&&unread)?"watch":vc)+'">'
           + ((vc==="ok"&&unread)
-              ? esc(T("verdict_part",{m:rec.items.length-unread,of:rec.items.length,n:unread}))
-              : esc(T("verdict_"+vc,{n:vn,of:rec.items.length}))
-                + (unread?" "+esc(T("unread_n",{n:unread,of:rec.items.length})):""))
+              ? T.S("verdict_part",{m:rec.items.length-unread,of:rec.items.length,n:unread})
+              : T.S("verdict_"+vc,{n:vn,of:rec.items.length})
+                + (unread?T.S("unread_n",{n:unread,of:rec.items.length}):""))
           + '</div>';
       first = false;
 
       if(notable.length) m += notableTable(ctx,T,notable);
       // the verdict already said "all N normal" — no need to say it twice
       if(quiet>0 && notable.length)
-        m += '<div class="muted" style="font-size:10.5px;margin-top:8px;">'+esc(T("normal_n",{n:quiet}))+'</div>';
+        m += '<div class="muted" style="font-size:10.5px;margin-top:8px;">'+T.S("normal_n",{n:quiet})+'</div>';
 
       /* A thirty-six point measurement grid plus four photographs is taller than
          a page. Anything that could overflow becomes its own section, headed
@@ -983,18 +1389,16 @@
       var extra=[];
       var cont = '<div class="sec"><div class="mach" style="border-top-width:1px;">'
         + '<div class="machhd"><span class="u" style="font-size:14px;">'+esc(rec.equip)+'</span>'
-        + '<span class="c">'+esc(T("cont"))+'</span></div>';
+        + '<span class="c">'+T.I("cont")+'</span></div>';
 
       if(isWear){
         /* The frames are their own section — one picture of the machine per
            round, and a page break lands between the drawing and the readings
            rather than through the middle of a track frame. */
-        if(rec.mapHTML) extra.push(cont
-          + '<div class="subhd" style="margin-top:11px;">'+esc(T("map_t"))+'</div>'
-          + '<div class="ucmaps">'+rec.mapHTML+'</div>'+mapKey(T)+'</div></div>');
+        if(rec.mapHTML) extra.push(cont + CMR.mapBlock(T, rec.mapHTML) + '</div></div>');
         if(over.length) m += '<div class="verdict v-'+(overAct.length?"act":"watch")+'" style="margin-top:12px;">'
-          + (overAct.length?esc(T("uc_over",{n:overAct.length}))+". ":"")
-          + (over.length>overAct.length?esc(T("uc_watch",{n:over.length-overAct.length}))+". ":"")
+          + (overAct.length?T.I("uc_over",{n:overAct.length})+". ":"")
+          + (over.length>overAct.length?T.I("uc_watch",{n:over.length-overAct.length})+". ":"")
           + '<span style="font-weight:500;">'+over.slice(0,6).map(function(it){
               return esc(it.name||it.key)+' <span class="num">'+esc(it.w.pct)+'%</span>'; }).join(" · ")
           + (over.length>6?" · +"+(over.length-6):"")+'</span></div>';
@@ -1004,16 +1408,16 @@
       var shots=[];
       rec.items.forEach(function(it){ (it.photos||[]).forEach(function(u){ shots.push({it:it,u:u}); }); });
       if(shots.length){
-        var ph=cont+'<div class="subhd" style="margin-top:11px;">'+esc(T("photos"))+'</div><div class="shots">';
+        var ph=cont+'<div class="subhd" style="margin-top:11px;">'+T.I("photos")+'</div><div class="shots">';
         shots.forEach(function(s){ ph+='<figure><img src="'+s.u+'"><figcaption>'
           + esc(s.it.name||s.it.key)+'</figcaption></figure>'; });
         extra.push(ph+'</div></div></div>');
       }
 
       var sign = '<div class="hair" style="margin:15px 0 11px;"></div><div class="sign">'
-        + '<div><div class="rl">'+esc(T("by_who"))+'</div><div class="ln"></div>'
+        + '<div><div class="rl">'+T.L("by_who")+'</div><div class="ln"></div>'
           + '<div class="nm">'+esc(rec.by||"—")+'</div></div>'
-        + '<div><div class="rl">'+esc(T("sup"))+'</div>'
+        + '<div><div class="rl">'+T.L("sup")+'</div>'
           + '<div class="ln">'+(rec.signUrl?'<img src="'+rec.signUrl+'">':"")+'</div>'
           + '<div class="nm">'+esc(rec.sup||T("nosign"))+'</div></div></div>';
       if(!extra.length){
@@ -1029,26 +1433,26 @@
 
     /* ---------- 4. how to read any of it ---------- */
     var gl=["A","B","C","X"].map(function(g){
-      return '<div class="lgrow">'+gradeChip(g)+'<div class="t">'+esc(T("g_"+g))+'</div></div>'; }).join("");
+      return '<div class="lgrow">'+gradeChip(g)+'<div class="t">'+T.S("g_"+g)+'</div></div>'; }).join("");
     var sl=["NOF","INC","DEG","CRI"].map(function(s){
-      return '<div class="lgrow">'+sevChip(ctx,s)+'<div class="t">'+esc(T("s_"+s))+'</div></div>'; }).join("");
+      return '<div class="lgrow">'+sevChip(ctx,s)+'<div class="t">'+T.S("s_"+s)+'</div></div>'; }).join("");
     secs.push({nb:true, html:'<div class="sec">'
-      + '<div class="sechd"><span class="n">'+p2(secN+2)+'</span><span class="h2">'+esc(T("legend"))+'</span></div>'
+      + '<div class="sechd"><span class="n">'+p2(secN+2)+'</span><span class="h2">'+T.I("legend")+'</span></div>'
       + '<div class="legend"><div>'
-        + '<div class="eyebrow" style="margin-bottom:9px;">'+esc(T("lg_grade"))+'</div>'+gl
-        + '<div class="eyebrow" style="margin:16px 0 9px;">'+esc(T("lg_sev"))+'</div>'+sl
+        + '<div class="eyebrow" style="margin-bottom:9px;">'+T.I("lg_grade")+'</div>'+gl
+        + '<div class="eyebrow" style="margin:16px 0 9px;">'+T.I("lg_sev")+'</div>'+sl
       + '</div><div>'
-        + '<div class="eyebrow" style="margin-bottom:9px;">'+esc(T("lg_wear"))+'</div>'
-        + '<div class="body">'+esc(T("lg_wear_d"))+'</div>'
+        + '<div class="eyebrow" style="margin-bottom:9px;">'+T.I("lg_wear")+'</div>'
+        + '<div class="body">'+T.S("lg_wear_d")+'</div>'
         + [[45,"band_ok"],[88,"band_watch"],[112,"band_act"]].map(function(x){
             return '<div style="display:flex;gap:9px;align-items:center;margin-top:'
               +(x[0]===45?10:5)+'px;">'+wearBar(x[0])+'<span class="body">'+x[0]+'% — '
-              +esc(T(x[1]))+'</span></div>'; }).join("")
-        + '<div class="eyebrow" style="margin:16px 0 9px;">'+esc(T("lg_iso"))+'</div>'
-        + '<div class="body">'+esc(T("lg_iso_d"))+'</div>'
+              +T.I(x[1])+'</span></div>'; }).join("")
+        + '<div class="eyebrow" style="margin:16px 0 9px;">'+T.I("lg_iso")+'</div>'
+        + '<div class="body">'+T.S("lg_iso_d")+'</div>'
       + '</div></div>'
       + '<div class="hair" style="margin:20px 0 8px;"></div>'
-      + '<div class="muted" style="font-size:9.5px;">'+esc(T("footer"))+' · '+esc(today)+'</div>'
+      + '<div class="muted" style="font-size:9.5px;">'+T.I("footer")+' · '+esc(today)+'</div>'
       + '</div>'});
 
     return secs;

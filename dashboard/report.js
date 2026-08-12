@@ -23,9 +23,23 @@
   const folder  = () => (typeof folderPhotos !== "undefined" ? folderPhotos : null);
   const L       = (k, v) => (typeof t === "function" ? t(k, v) : k);
   const esc     = s => window.CMR.esc(s);
+  /* The report prints both languages on every label, so it needs both
+     renderings of anything this file translates on the way in — a component
+     name, a round type. t() answers in whichever language the screen is in;
+     this asks for the other one. */
+  const OTHER   = () => ((typeof lang !== "undefined" && lang === "ru") ? "en" : "ru");
+  function inOther(fn) {
+    if (typeof lang === "undefined") return fn();
+    const was = lang;
+    try { lang = OTHER(); return fn(); } finally { lang = was; }
+  }
 
   function recsForScope(scope, target) {
     const R = allRecs().filter(r => !r._void);
+    /* One inspection, by its storage key — what the button on a history card
+       asks for. The card is the round; the report should be that round and
+       nothing else. */
+    if (scope === "one") return R.filter(r => `${r.equip}|${r.date}|${r.type}` === target);
     if (scope === "unit")  return R.filter(r => r.equip === target)
       .sort((a, b) => (a.date || "").localeCompare(b.date || ""));
     if (scope === "round") return R.filter(r => r.date === target)
@@ -72,24 +86,45 @@
       by[it.key] = !w ? "" : w.mm == null ? (w.reason ? "na" : "")
         : w.band === "act" ? "act" : w.band === "watch" ? "watch" : "done";
     });
-    const short = h => h.replace(/(<text class="um-n um-chain"[^>]*>)([A-Z0-9]+)(<\/text>)/g,
-      (m, x, code, y) => x + (WEAR.mapShort[code] || code) + y);
-    const side = s => L(s === "L" ? "uc_left_h" : "uc_right_h");
+    /* The raw point codes go through untouched. The screen rewrites them into
+       HGT / BUSH / P×4 / P×1 / GRSR because a puck is 80px wide and a finger
+       can tap one to find out what it is; on paper that is five abbreviations
+       with no key, in neither of the report's two languages. report-core
+       numbers them instead and prints the names underneath, and it needs the
+       real codes to look those names up. */
+    /* An SVG <text> is one line, so which side of the machine you are looking
+       at is the one label that pairs with a slash rather than stacking. */
+    const side = s => {
+      const k = s === "L" ? "uc_left_h" : "uc_right_h";
+      const a = L(k), b = inOther(() => L(k));
+      return b && b !== a ? `${a} / ${b}` : a;
+    };
     return window.CMR.fitMap(["L", "R"].map(s => '<div class="ucmapwrap">'
-      + short(WEAR.mapSVG(s, prof.rollers || WEAR.rollersDefault,
-          prof.frame === "highdrive", k => by[k] || "", "", side(s)))
+      + WEAR.mapSVG(s, prof.rollers || WEAR.rollersDefault,
+          prof.frame === "highdrive", k => by[k] || "", "", side(s))
       + '</div>').join(""));
   }
 
   /* ---- the dashboard's records, in the shape the core reads -------------- */
   function normalise(recs, opts) {
     const wantPhotos = !!(opts && opts.photos);
+    const nameFor = (rec, it) =>
+      (typeof ucName === "function" && rec.type === "UC") ? ucName(it) : (it.label || it.key);
+    /* Both renderings of every name, collected in ONE pass with the language
+       switched rather than flipping it twice per item. */
+    const altName = new Map(), altType = new Map();
+    inOther(() => recs.forEach(rec => {
+      altType.set(rec.type, (typeof TYPE_LABEL !== "undefined" && TYPE_LABEL[rec.type]) || rec.type);
+      (rec.items || []).forEach(it =>
+        altName.set(rec.type + "|" + it.key, nameFor(rec, it)));
+    }));
     return recs.map(rec => ({
       equip: rec.equip,
       clsLabel: ((typeof ASSET_BY !== "undefined" && ASSET_BY[rec.equip]) || {}).cat || rec.cls || "",
       model: ((typeof ASSET_BY !== "undefined" && ASSET_BY[rec.equip]) || {}).m || "",
       type: rec.type,
       typeLabel: (typeof TYPE_LABEL !== "undefined" && TYPE_LABEL[rec.type]) || rec.type,
+      typeAlt: altType.get(rec.type) || "",
       date: rec.date || "",
       by: rec.by || "", sup: rec.sup || "", smu: rec.smu || "",
       gps: rec.gps || null,
@@ -107,8 +142,9 @@
         ].filter(Boolean);
         return {
           key: it.key,
-          name: (typeof ucName === "function" && rec.type === "UC") ? ucName(it) : (it.label || it.key),
-          code: ((typeof ucName === "function" && rec.type === "UC") ? ucName(it) : (it.label || it.key)) === it.key ? "" : it.key,
+          name: nameFor(rec, it),
+          nameAlt: altName.get(rec.type + "|" + it.key) || "",
+          code: nameFor(rec, it) === it.key ? "" : it.key,
           grade: it.grade || "",
           sev: typeof sevOf === "function" ? sevOf(rec, it) : (it.sev || ""),
           defect: it.defect || "", defectCode: it.defectCode || "", iso: it.iso || "",
@@ -130,35 +166,13 @@
      bars — so these read as part of the report rather than bolted onto it. */
   const HEX = () => window.CMR.SEV_HEX;
 
-  function trendSection(recs) {
-    const byU = {};
-    recs.forEach(r => { (byU[r.equip] = byU[r.equip] || []).push(r); });
-    const units = Object.keys(byU).filter(u => byU[u].length > 1);
-    if (!units.length) return null;
-    const rank = { NOF: 0, INC: 1, DEG: 2, CRI: 3 };
-    let h = '<div class="sec"><div class="sechd"><span class="n">__N__</span>'
-      + `<span class="h2">${esc(L("rpt_trend"))}</span>`
-      + `<span class="muted" style="font-size:10.5px;margin-left:auto;">${esc(L("rpt_trend_sub"))}</span></div>`
-      + `<table><tr><th style="width:86px">${esc(L("c_unit_h"))}</th>`
-      + `<th style="width:96px">${esc(L("rpt_type_h"))}</th><th>${esc(L("rpt_rounds_h"))}</th></tr>`;
-    units.forEach((u, n) => {
-      const rows = byU[u].slice().sort((a, b) => (a.date || "").localeCompare(b.date || ""));
-      const dots = rows.map(r => {
-        const w = typeof worstOf === "function" ? worstOf(r) : "";
-        const c = HEX()[w] || "#c9d0d6";
-        const pct = (r.items || []).map(it => (typeof wearOf === "function" ? wearOf(r, it) : null))
-          .filter(x => x && x.wearPct != null).sort((a, b) => b.wearPct - a.wearPct)[0];
-        return `<span class="tdot"><i style="background:${c}"></i>`
-          + `<span>${esc(String(r.date || "").slice(5))}</span>`
-          + (pct ? `<b>${esc(pct.wearPct)}%</b>` : "") + `</span>`;
-      }).join("");
-      h += `<tr class="${n % 2 ? "zebra" : ""}">`
-        + `<td><span class="unit">${esc(u)}</span></td>`
-        + `<td>${esc((typeof TYPE_LABEL !== "undefined" && TYPE_LABEL[rows[0].type]) || rows[0].type)}</td>`
-        + `<td><div class="tline">${dots}</div></td></tr>`;
-    });
-    return { nb: true, html: h + "</table></div>" };
-  }
+  /* The unit report used to bolt a trend strip on the end: a row per machine
+     with one coloured dot per round. On a single-machine report that is one
+     row of dots, and it could tell you a round happened but never what moved.
+     report-core prints a real measurement history now — every point on its own
+     row with its readings in date order and the change over the series — so
+     this was two ways of saying less. Deleted rather than kept in parallel:
+     two trend renderers is how the two of them drift. */
 
   function paretoSection(recs) {
     const cnt = {}, sev = {};
@@ -185,13 +199,45 @@
     return { nb: false, html: h + "</table></div>" };
   }
 
+  /* The document title carries both languages too, at a size that reads as a
+     subtitle rather than a second headline. */
   const EXTRA_CSS = `
-#rptRoot .tline{display:flex;flex-wrap:wrap;gap:5px 9px;}
-#rptRoot .tdot{display:inline-flex;align-items:center;gap:4px;font-size:9.5px;color:#5b6670;
-  font-variant-numeric:tabular-nums;}
-#rptRoot .tdot i{width:9px;height:9px;border-radius:2px;display:block;}
-#rptRoot .tdot b{color:#12161a;font-weight:700;}
+#rptRoot .h1 .alt{font-size:14.5px;font-weight:600;line-height:1.2;margin-top:4px;
+  letter-spacing:0;color:#5b6670;}
 `;
+
+  /* Everything report-core needs, assembled in ONE place.
+
+     This used to be written inline inside generate(), and the suite that
+     compares the phone's report against the dashboard's kept its own copy so
+     it could hand over an arbitrary set of rounds. The copy drifted the moment
+     the report went bilingual — it stopped passing the second-language
+     severity labels, so the two legends stopped matching and the suite whose
+     whole job is to catch that reported it as a defect in the code.
+
+     A caller that needs this context asks for it. There is no second copy to
+     go stale. */
+  function ctxFor(recs, opts) {
+    opts = opts || {};
+    const scope = opts.scope || "";
+    const target = opts.target == null ? "" : opts.target;
+    const sev = s => (typeof SEV !== "undefined" && SEV[s] ? SEV[s].l : s);
+    return {
+      lang: typeof lang !== "undefined" ? lang : "en",
+      /* A single inspection is a unit report with one round in it — the same
+         sheet, no cover and no triage list, which is what "one" means. */
+      mode: (scope === "one" || scope === "unit") ? "unit" : undefined,
+      title: L("rep_title_doc"),
+      titleAlt: inOther(() => L("rep_title_doc")),
+      sub: scope ? `${L("r_" + scope)} — ${target}` : "",
+      subAlt: scope ? `${inOther(() => L("r_" + scope))} — ${target}` : "",
+      stamp: opts.stamp || new Date(),
+      sevLabel: sev,
+      sevLabelAlt: s => inOther(() => sev(s)),
+      records: normalise(recs, opts),
+      extra: opts.extra || [],
+    };
+  }
 
   /* ---------------------------------------------------------------------- */
   async function generate(scope, target, opts, onProgress) {
@@ -202,24 +248,16 @@
     const recs = recsForScope(scope, target);
     if (!recs.length) throw new Error("No inspections match that selection.");
 
-    const scopeName = L("r_" + scope);
-    const norm = normalise(recs, opts);
     const extra = [];
-    if (scope === "unit")  { const s = trendSection(recs);  if (s) extra.push(s); }
-    if (scope !== "unit")  { const s = paretoSection(recs); if (s) extra.push(s); }
+    /* A Pareto needs a population to rank. One machine, or one round of one
+       machine, is not one — the measurement history in the core says more. */
+    if (scope !== "unit" && scope !== "one") { const s = paretoSection(recs); if (s) extra.push(s); }
 
     const st = document.createElement("style"); st.textContent = EXTRA_CSS;
     document.head.appendChild(st);
     try {
-      const sections = window.CMR.sections({
-        lang: typeof lang !== "undefined" ? lang : "en",
-        title: L("rep_title_doc"),
-        sub: `${scopeName} — ${target}`,
-        stamp: new Date(),
-        sevLabel: s => (typeof SEV !== "undefined" && SEV[s] ? SEV[s].l : s),
-        records: norm,
-        extra,
-      });
+      const sections = window.CMR.sections(
+        ctxFor(recs, Object.assign({}, opts, { scope, target, extra })));
       const stamp = new Date().toISOString().slice(0, 10);
       const doc = await window.CMR.paginate({
         sections, jsPDF: window.jspdf.jsPDF, html2canvas: window.html2canvas,
@@ -233,5 +271,5 @@
     } finally { st.remove(); }
   }
 
-  window.CMReport = { generate, recsForScope, normalise };
+  window.CMReport = { generate, recsForScope, normalise, ctxFor };
 })();

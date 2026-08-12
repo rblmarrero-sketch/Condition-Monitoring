@@ -685,6 +685,12 @@
 
   /* ── reports ───────────────────────────────────────────────────────────*/
   #tab-reports .controls{margin-top:14px;}
+  /* The section heading and the thing you do with the section, on one line. */
+  .hhd{display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap;}
+  .hhd > div:first-child{flex:1 1 260px;min-width:0;}
+  .hhd .btn{flex:0 0 auto;}
+  .insp .head .btn[data-rpt]{opacity:.85;}
+  .insp .head .btn[data-rpt]:hover{opacity:1;}
 
   @media (max-width:820px){
     main{padding:16px 12px 48px;}
@@ -998,8 +1004,14 @@
       <div class="field"><label for="equipSel" data-i18n="tab_equipment">Equipment</label><select id="equipSel"></select></div>
     </div>
     <div class="section">
-      <h2 id="histTitle">Inspection history</h2>
-      <div class="sub" id="histSub"></div>
+      <!-- The report belongs where the inspection is. Reaching it used to mean
+           leaving this screen for the Reports tab and picking, from a list of
+           1,128, the machine you were already looking at. -->
+      <div class="hhd">
+        <div><h2 id="histTitle">Inspection history</h2>
+          <div class="sub" id="histSub"></div></div>
+        <button class="btn primary" id="histRpt" data-i18n="r_unit_go">📄 Report on this machine</button>
+      </div>
       <div id="history"></div>
     </div>
   </section>
@@ -1011,7 +1023,8 @@
       <div class="sub" data-i18n="r_sub">Bilingual EN / RU. Each inspection type prints its own layout.</div>
       <div class="controls">
         <div class="field"><label for="rScope" data-i18n="r_scope">Report</label><select id="rScope">
-          <option value="unit" data-i18n="r_unit">Equipment — one machine + trend</option>
+          <option value="one" data-i18n="r_one">This inspection</option>
+          <option value="unit" data-i18n="r_unit" selected>Equipment — one machine + trend</option>
           <option value="round" data-i18n="r_round">Round — one date, all units</option>
           <option value="month" data-i18n="r_month">Fleet summary — one month</option>
         </select></div>
@@ -1045,31 +1058,31 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=103"></script>
-<script src="../mobile/hme.js?v=103"></script>
-<script src="../mobile/mp-fc.js?v=103"></script>
-<script src="../mobile/hme-cascade.js?v=103"></script>
-<script src="../mobile/temp-limits.js?v=103"></script>
+<script src="../data/magnetic_plug.js?v=104"></script>
+<script src="../mobile/hme.js?v=104"></script>
+<script src="../mobile/mp-fc.js?v=104"></script>
+<script src="../mobile/hme-cascade.js?v=104"></script>
+<script src="../mobile/temp-limits.js?v=104"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=103"></script>
-<script src="../mobile/wear.js?v=103"></script>
-<script src="../mobile/wear-map.js?v=103"></script>
+<script src="../mobile/assets.js?v=104"></script>
+<script src="../mobile/wear.js?v=104"></script>
+<script src="../mobile/wear-map.js?v=104"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=103"></script>
-<script src="../mobile/machine-photos.js?v=103"></script>
-<script src="../mobile/machine-fig.js?v=103"></script>
-<script src="../mobile/get.js?v=103"></script>
-<script src="../mobile/uc-points.js?v=103"></script>
-<script src="../mobile/inspect-guide.js?v=103"></script>
-<script src="../mobile/get-figs.js?v=103"></script>
-<script src="../mobile/body-points.js?v=103"></script>
-<script src="../mobile/body-map.js?v=103"></script>
-<script src="../mobile/jspdf.umd.min.js?v=103"></script>
-<script src="../mobile/html2canvas.min.js?v=103"></script>
-<script src="../mobile/report-core.js?v=103"></script>
+<script src="../mobile/upload-defaults.js?v=104"></script>
+<script src="../mobile/machine-photos.js?v=104"></script>
+<script src="../mobile/machine-fig.js?v=104"></script>
+<script src="../mobile/get.js?v=104"></script>
+<script src="../mobile/uc-points.js?v=104"></script>
+<script src="../mobile/inspect-guide.js?v=104"></script>
+<script src="../mobile/get-figs.js?v=104"></script>
+<script src="../mobile/body-points.js?v=104"></script>
+<script src="../mobile/body-map.js?v=104"></script>
+<script src="../mobile/jspdf.umd.min.js?v=104"></script>
+<script src="../mobile/html2canvas.min.js?v=104"></script>
+<script src="../mobile/report-core.js?v=104"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -1357,6 +1370,10 @@ const I18N={
   r_month:"Fleet summary — one month", r_target:"Which",
   r_photos:"Photos", r_withphotos:"Include photos", r_nophotos:"No photos (smaller file)",
   r_scale:"Quality", r_go:"📄 Generate PDF", r_nodata:"— no data —",
+  r_one:"This inspection", r_one_go:"📄 Report", r_unit_go:"📄 Report on this machine",
+  r_none:"Nothing to report on yet.", r_building:"Building…",
+  r_fetching:"Photos {d}/{n}…", r_rendering:"Page {i} of {n}…",
+  r_done:"Downloaded — {n} page(s)", r_failed:"Failed: {e}",
   r_hint:"Photos and supervisor signatures come from whichever data source is loaded — set one up under Data sources first if you want them in the report. Google Drive fetches just the photos this report needs.",
   hist_title:"Inspection history — {x}", hist_sub:"{n} inspection(s) · newest first",
   src_imported:"imported file",
@@ -1432,7 +1449,13 @@ const I18N={
   k_actsub:"без «наблюдать»", k_none_here:"Нет в этой выборке", k_only:"Только {x}",
   k_voidhid:"отозвано: {n}, не учтено", k_voidtip:"Эти осмотры отозваны, а не удалены. Нажмите, чтобы показать.",
 
-  sev_NOF:"Без отказа", sev_INC:"Начальный", sev_DEG:"Ухудшено", sev_CRI:"Критично",
+  /* Word for word what the phone shows the inspector who graded it. These read
+     "Начальный / Ухудшено / Критично" here and "Зарождающийся / Частичный /
+     Критический" on the phone — the same four ISO 14224 categories under three
+     different sets of Russian words across the app, this screen and the
+     printed legend. The field's wording wins: it is the one people have
+     already been trained on. */
+  sev_NOF:"Без отказа", sev_INC:"Зарождающийся", sev_DEG:"Частичный", sev_CRI:"Критический",
   type_MP:"Магнитная пробка", type_FC:"Разрез фильтра", type_INSP:"Осмотр", type_TEMP:"Температура",
   type_UC:"Ходовая часть", type_GET:"Рабочий инструмент", type_TB:"Футеровка кузова",
   uc_th_point:"Точка", uc_th_meas:"Замер", uc_th_worn:"Износ",
@@ -1601,6 +1624,10 @@ const I18N={
   r_month:"Сводка по парку — месяц", r_target:"Что именно",
   r_photos:"Фото", r_withphotos:"С фото", r_nophotos:"Без фото (меньше файл)",
   r_scale:"Качество", r_go:"📄 Сформировать PDF", r_nodata:"— нет данных —",
+  r_one:"Этот осмотр", r_one_go:"📄 Отчёт", r_unit_go:"📄 Отчёт по этой машине",
+  r_none:"Пока не о чем отчитываться.", r_building:"Формирую…",
+  r_fetching:"Фото {d}/{n}…", r_rendering:"Страница {i} из {n}…",
+  r_done:"Скачано — страниц: {n}", r_failed:"Ошибка: {e}",
   r_hint:"Фото и подписи берутся из подключённого источника — сначала настройте его в «Источники данных». Google Диск скачивает только те фото, что нужны отчёту.",
   hist_title:"История осмотров — {x}", hist_sub:"осмотров: {n} · сначала новые",
   src_imported:"импортированный файл",
@@ -2625,6 +2652,7 @@ function renderHistory(){
       ${!rec._conflict&&rec._keep?`<span class="editflag" title="${esc(t("cf_kept",{d:rec._keep,by:rec._resolvedBy||"—"}))}">${esc(t("cf_resolved"))}</span>`:""}
       ${rec.smu?`<span class="meta">SMU <b>${esc(rec.smu)}</b></span>`:""}
       <span class="spacer"></span>${rec.by?`<span class="meta">${esc(rec.by)}</span>`:""}${rec.sup?`<span class="meta">✍ ${esc(rec.sup)}</span>`:""}${rec.gps?`<a class="meta" href="https://www.google.com/maps?q=${rec.gps.lat},${rec.gps.lon}" target="_blank" rel="noopener">📍 ${rec.gps.lat.toFixed(4)}, ${rec.gps.lon.toFixed(4)}</a>`:""}
+      <button class="btn" data-rpt="${esc(recKey(rec))}" style="padding:3px 10px;font-size:12px">${esc(t("r_one_go"))}</button>
       <button class="btn" data-edit="${esc(recKey(rec))}" style="padding:3px 10px;font-size:12px">${esc(t("ed_edit"))}</button></div>
       ${rec._note?`<div class="sub" style="margin:2px 0 8px">📝 ${esc(rec._note)}</div>`:""}
       ${isWearType(rec.type)?ucBlock(rec):""}
@@ -2703,6 +2731,7 @@ function renderHistory(){
   });
   // If the photos are in Drive rather than on disk, fetch this unit's and repaint once.
   $("history").querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>openEdit(b.dataset.edit));
+  $("history").querySelectorAll("[data-rpt]").forEach(b=>b.onclick=()=>runReport("one",b.dataset.rpt,b));
   wireMediaEdit();
   pullDrivePhotos(recs, renderHistory);
 }
@@ -3686,7 +3715,14 @@ $("tabs").onclick=e=>{ const b=e.target.closest("button[data-tab]"); if(b) showT
 function refreshReportTargets(){
   const scope=$("rScope").value, sel=$("rTarget"); const prev=sel.value;
   let opts=[];
-  if(scope==="unit"){ $("rTargetLbl").textContent="Equipment";
+  if(scope==="one"){ $("rTargetLbl").textContent=t("r_target");
+    /* Newest first: somebody picking a single round in a list is almost always
+       after the one that just came in. */
+    opts=RECS.filter(r=>!r._void).slice()
+      .sort((a,b)=>(b.date||"").localeCompare(a.date||"")||a.equip.localeCompare(b.equip))
+      .slice(0,400)
+      .map(r=>[recKey(r), `${r.equip} · ${r.date} · ${TYPE_LABEL[r.type]||r.type}`]); }
+  else if(scope==="unit"){ $("rTargetLbl").textContent="Equipment";
     opts=[...new Set(RECS.map(r=>r.equip))].sort().map(u=>[u,u]); }
   else if(scope==="round"){ $("rTargetLbl").textContent="Inspection date";
     opts=[...new Set(RECS.map(r=>r.date).filter(Boolean))].sort().reverse()
@@ -3698,23 +3734,48 @@ function refreshReportTargets(){
   if(opts.some(o=>o[0]===prev)) sel.value=prev;
 }
 $("rScope").onchange=refreshReportTargets;
-$("rGo").onclick=async ()=>{
-  const go=$("rGo"), msg=$("rMsg"), target=$("rTarget").value;
-  if(!target){ msg.textContent="No inspections to report on yet — import an entries.json first."; return; }
-  go.disabled=true; msg.textContent="Building report…";
+
+/* One way to build a report, called from three places.
+
+   The Reports tab was the only door, and it asked a reader who was already
+   looking at DZ002's history to go to another screen and find DZ002 in a list
+   of 1,128. So the same job now hangs off the history header (this machine)
+   and off every inspection card (this round), and all three run through here
+   so a report built from a card is byte-for-byte the one built from the tab.
+
+   Progress goes on whatever asked for it: the tab has a message line, a button
+   on a card has only itself, so the button becomes the message line. */
+async function runReport(scope, target, btn, opts){
+  opts = opts || {};
+  const msg  = opts.msg || null;
+  const label = btn ? btn.textContent : "";
+  const say = s => { if(msg) msg.textContent = s; else if(btn) btn.textContent = s; };
+  if(!target){ say(t("r_none")); return 0; }
+  const photos = opts.photos !== false, scale = opts.scale || 1.8;
+  if(btn) btn.disabled = true;
+  say(t("r_building"));
   try{
-    if($("rPhotos").value==="1" && drvOn()){
-      const recs=window.CMReport.recsForScope($("rScope").value, target);
-      msg.textContent="Fetching photos from Drive…";
-      await window.CMDrive.ensurePhotos(recs,(d,n)=>{ msg.textContent=`Fetching photos from Drive… ${d}/${n}`; });
+    if(photos && drvOn()){
+      const recs = window.CMReport.recsForScope(scope, target);
+      await window.CMDrive.ensurePhotos(recs, (d,n)=>say(t("r_fetching",{d,n})));
     }
-    const n=await window.CMReport.generate($("rScope").value, target,
-      {photos:$("rPhotos").value==="1", scale:parseFloat($("rScale").value)},
-      (i,total)=>{ msg.textContent=`Rendering page ${i} of ${total}…`; });
-    msg.textContent=`Done — ${n} page(s) downloaded.`;
-  }catch(err){ msg.textContent="Report failed: "+(err&&err.message||err); }
-  finally{ go.disabled=false; }
-};
+    const n = await window.CMReport.generate(scope, target, {photos, scale},
+      (i,total)=>say(t("r_rendering",{i,n:total})));
+    say(t("r_done",{n}));
+    /* The button says "Report" again after a moment. Leaving "Done — 3 pages"
+       on it turns a control into a status light nobody can press. */
+    if(btn && !msg) setTimeout(()=>{ btn.textContent = label; }, 2600);
+    return n;
+  }catch(err){
+    say(t("r_failed",{e:(err&&err.message)||err}));
+    if(btn && !msg) setTimeout(()=>{ btn.textContent = label; }, 4000);
+    return 0;
+  }
+  finally{ if(btn) btn.disabled=false; }
+}
+$("rGo").onclick=()=>runReport($("rScope").value, $("rTarget").value, $("rGo"),
+  { msg:$("rMsg"), photos:$("rPhotos").value==="1", scale:parseFloat($("rScale").value) });
+$("histRpt").onclick=()=>runReport("unit", $("equipSel").value, $("histRpt"));
 
 /* ---------- init ---------- */
 function refreshControls(){
@@ -3918,8 +3979,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=103"></script>
-<script src="sync-adapter.js?v=103"></script>
-<script src="report.js?v=103"></script>
+<script src="drive.js?v=104"></script>
+<script src="sync-adapter.js?v=104"></script>
+<script src="report.js?v=104"></script>
 </body>
 </html>
