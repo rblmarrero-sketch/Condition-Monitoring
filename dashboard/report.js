@@ -154,9 +154,28 @@
       const a = L(k), b = inOther(() => L(k));
       return b && b !== a ? `${a} / ${b}` : a;
     };
+    /* The WHOLE profile, the same object the phone builds.
+
+       mapSVG takes either a profile or — for callers older than the profile —
+       a bare roller count, and this passed the bare count. Which meant it
+       silently took the legacy path with no machine family, and geom() draws a
+       family-less frame: idler and sprocket the same size, on every machine.
+       A dozer drives through a sprocket bigger than its idler and an excavator
+       is the other way round; that is the difference you see standing at the
+       machine, and the dashboard was printing neither. The phone printed the
+       right one all along, so the same round came out as two different
+       drawings depending on which end made the PDF. */
+    const fam = (window.MFIG && MFIG.familyFor)
+      ? MFIG.familyFor(rec.equip, (a.cat || a.cls || "")) : "";
+    const shape = { rollers: prof.rollers || WEAR.rollersDefault,
+                    high: prof.frame === "highdrive",
+                    carriers: prof.carriers,
+                    fam,
+                    /* Drawing, never the catalogue photograph: this renders in
+                       grey on paper and has to carry the colour of every point. */
+                    photo: "" };
     return window.CMR.fitMap(["L", "R"].map(s => '<div class="ucmapwrap">'
-      + WEAR.mapSVG(s, prof.rollers || WEAR.rollersDefault,
-          prof.frame === "highdrive", k => by[k] || "", "", side(s))
+      + WEAR.mapSVG(s, shape, null, k => by[k] || "", "", side(s))
       + '</div>').join(""));
   }
 
