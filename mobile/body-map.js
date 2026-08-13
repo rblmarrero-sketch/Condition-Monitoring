@@ -53,6 +53,10 @@
     FLR1:  { en: 'FLOOR',      ru: 'ПОЛ',          at: 'tl' },
     TAIL:  { en: 'TAIL',       ru: 'ХВОСТ',        at: 'tr' },
   };
+  /* Both renderings of every caption on the drawing, so a printed copy can
+     resolve its own words without a second drawing. The captions themselves
+     stay one word for the reason above — the key goes beside the picture. */
+  W.bodyFaces = NAME;
 
   function px(p) { return [p[0] / 100 * VB_W, p[1] / 100 * VB_H]; }
   function poly(pts) {

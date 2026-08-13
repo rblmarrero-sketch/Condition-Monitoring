@@ -75,7 +75,62 @@
   /* The two frames, coloured by what each point read — the same drawing the
      phone prints, from the same module, so a fitter sees one machine picture
      wherever the report came from. */
+  /* ---- the truck body, printed ------------------------------------------
+     The phone has drawn this since the tray round shipped. This file did not:
+     reportMap returned "" for anything that was not an undercarriage, so a
+     dump-body report came out of the dashboard with no picture of the machine
+     at all — forty-four thickness readings and nothing saying where on the
+     body any of them were taken.
+
+     Same module the app uses, so the plan view a superintendent reads on paper
+     is the one the inspector tapped in the pit. */
+  function bodyMapHTML(rec) {
+    const bm = (typeof bodyModelOf === "function") ? bodyModelOf(rec.equip) : null;
+    if (!bm || !window.BODY || !window.bodyMap) return "";
+    const by = {}, mm = {};
+    (rec.items || []).forEach(it => {
+      const w = typeof wearOf === "function" ? wearOf(rec, it) : null;
+      by[it.key] = !w ? "" : w.mm == null ? (w.reason ? "na" : "") : (w.band || "done");
+      if (w && w.mm !== "" && w.mm != null) mm[it.key] = Number(w.mm);
+    });
+    const state = z => {
+      const seen = BODY.inZone(bm, z).map(p => by[p.k]).filter(Boolean);
+      if (!seen.length) return "";
+      if (seen.includes("act")) return "act";
+      if (seen.includes("watch")) return "watch";
+      return seen.length === BODY.inZone(bm, z).length ? "done" : "";
+    };
+    return window.CMR.fitMap('<div class="ucmapwrap">'
+      + bodyMap({ model: bm, lang: (typeof lang !== "undefined" ? lang : "en"),
+                  sel: "", tag: false,
+                  state: k => by[k] || "", zoneState: state })
+      + '</div>');
+  }
+  /* The zones, worst first, for the table report-core prints beside the
+     drawing. Named by the THINNEST station in each, never the mean. */
+  function bodyZones(rec) {
+    const bm = (typeof bodyModelOf === "function") ? bodyModelOf(rec.equip) : null;
+    if (!bm || !window.BODY) return null;
+    const mm = {};
+    (rec.items || []).forEach(it => {
+      const w = typeof wearOf === "function" ? wearOf(rec, it) : null;
+      if (w && w.mm !== "" && w.mm != null) mm[it.key] = Number(w.mm);
+    });
+    const rows = BODY.zones(bm).map(z => {
+      const worst = BODY.worst(bm, z.k, mm);
+      return { name: z.en, nameAlt: z.ru,
+               got: BODY.inZone(bm, z.k).filter(p => mm[p.k] != null).length,
+               of: BODY.inZone(bm, z.k).length,
+               thin: worst ? worst.mm : null, at: worst ? worst.k : "" };
+    });
+    /* Thinnest first: the zone a superintendent has to read is the one that
+       has least metal left, not the one that happens to be listed first. */
+    return rows.sort((a, b) => (a.thin == null) - (b.thin == null)
+      || (a.thin ?? 0) - (b.thin ?? 0));
+  }
+
   function reportMap(rec) {
+    if (rec.type === "TB") return bodyMapHTML(rec);
     if (rec.type !== "UC" || !(window.WEAR && WEAR.mapSVG)) return "";
     const a = (typeof ASSET_BY !== "undefined" && ASSET_BY[rec.equip]) || null;
     const prof = a && a.m && WEAR.modelFor ? WEAR.modelFor(a.m) : null;
@@ -108,8 +163,19 @@
   /* ---- the dashboard's records, in the shape the core reads -------------- */
   function normalise(recs, opts) {
     const wantPhotos = !!(opts && opts.photos);
+    /* Every round type names its points from a reference that holds BOTH
+       languages — except that this only ever asked the undercarriage one.
+       A dump-body round fell through to `it.label`, which is whatever single
+       string the phone wrote at capture time, so every station on a TR60
+       printed in Russian and nothing anywhere could produce the English. Same
+       for a GET round: ucName's GET branch needs the record, and this called
+       it without one, so it never fired.
+
+       The names are keyed by language, so asking again with `lang` flipped is
+       what makes the report bilingual — see inOther below. */
     const nameFor = (rec, it) =>
-      (typeof ucName === "function" && rec.type === "UC") ? ucName(it) : (it.label || it.key);
+      (typeof ucRefName === "function" && ucRefName(it.key, rec))
+      || it.label || it.key;
     /* Both renderings of every name, collected in ONE pass with the language
        switched rather than flipping it twice per item. */
     const altName = new Map(), altType = new Map();
@@ -130,6 +196,7 @@
       gps: rec.gps || null,
       signUrl: rec.signUrl || "",
       mapHTML: reportMap(rec),
+      zones: rec.type === "TB" ? bodyZones(rec) : null,
       wear: typeof isWearType === "function" && isWearType(rec.type),
       temp: rec.type === "TEMP",
       items: (rec.items || []).map(it => {

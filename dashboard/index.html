@@ -1058,31 +1058,31 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=104"></script>
-<script src="../mobile/hme.js?v=104"></script>
-<script src="../mobile/mp-fc.js?v=104"></script>
-<script src="../mobile/hme-cascade.js?v=104"></script>
-<script src="../mobile/temp-limits.js?v=104"></script>
+<script src="../data/magnetic_plug.js?v=105"></script>
+<script src="../mobile/hme.js?v=105"></script>
+<script src="../mobile/mp-fc.js?v=105"></script>
+<script src="../mobile/hme-cascade.js?v=105"></script>
+<script src="../mobile/temp-limits.js?v=105"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=104"></script>
-<script src="../mobile/wear.js?v=104"></script>
-<script src="../mobile/wear-map.js?v=104"></script>
+<script src="../mobile/assets.js?v=105"></script>
+<script src="../mobile/wear.js?v=105"></script>
+<script src="../mobile/wear-map.js?v=105"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=104"></script>
-<script src="../mobile/machine-photos.js?v=104"></script>
-<script src="../mobile/machine-fig.js?v=104"></script>
-<script src="../mobile/get.js?v=104"></script>
-<script src="../mobile/uc-points.js?v=104"></script>
-<script src="../mobile/inspect-guide.js?v=104"></script>
-<script src="../mobile/get-figs.js?v=104"></script>
-<script src="../mobile/body-points.js?v=104"></script>
-<script src="../mobile/body-map.js?v=104"></script>
-<script src="../mobile/jspdf.umd.min.js?v=104"></script>
-<script src="../mobile/html2canvas.min.js?v=104"></script>
-<script src="../mobile/report-core.js?v=104"></script>
+<script src="../mobile/upload-defaults.js?v=105"></script>
+<script src="../mobile/machine-photos.js?v=105"></script>
+<script src="../mobile/machine-fig.js?v=105"></script>
+<script src="../mobile/get.js?v=105"></script>
+<script src="../mobile/uc-points.js?v=105"></script>
+<script src="../mobile/inspect-guide.js?v=105"></script>
+<script src="../mobile/get-figs.js?v=105"></script>
+<script src="../mobile/body-points.js?v=105"></script>
+<script src="../mobile/body-map.js?v=105"></script>
+<script src="../mobile/jspdf.umd.min.js?v=105"></script>
+<script src="../mobile/html2canvas.min.js?v=105"></script>
+<script src="../mobile/report-core.js?v=105"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -2602,12 +2602,51 @@ function wearBar(pct){
 /* The phone sends the label with the record, so this only runs for a round
    captured by an older build — or for a point whose name was added after that
    round was walked. Ask whichever taxonomy owns the point. */
-function ucName(it,rec){
-  if(it.label) return it.label;
-  const k=String(it.key||""), i=k.indexOf("."), pt=i<0?k:k.slice(0,i), pos=i<0?"":k.slice(i+1);
-  if(rec && rec.type==="GET" && window.GET) return GET.label(pt,lang)+(pos?" "+pos:"");
+/* Where on the machine, in words. The phone has carried this table since the
+   undercarriage round shipped; this page printed the raw code — "Idler tread
+   — L-OUT" against the phone's "Idler tread — Left · outer" — so the two ends
+   named the same point differently. */
+const UC_POS={ "L":{en:"Left",ru:"Слева"}, "R":{en:"Right",ru:"Справа"},
+  "L-OUT":{en:"Left · outer",ru:"Слева · внешнее"}, "L-IN":{en:"Left · inner",ru:"Слева · внутреннее"},
+  "R-OUT":{en:"Right · outer",ru:"Справа · внешнее"}, "R-IN":{en:"Right · inner",ru:"Справа · внутреннее"} };
+function ucPosLabel(pos,lg){
+  lg=lg||lang;
+  if(UC_POS[pos]) return UC_POS[pos][lg]||UC_POS[pos].en;
+  const m=/^([LR])(\d+)$/.exec(pos);
+  if(m) return (lg==="ru"?(m[1]==="L"?"Слева":"Справа"):(m[1]==="L"?"Left":"Right"))+" "+m[2];
+  return pos;
+}
+/* The CATALOGUE name for a point, ignoring whatever label the phone happened
+   to store beside it.
+
+   That precedence used to run the other way, and it is why the PDF came out in
+   one language. A stored label is a snapshot of what one screen said on one
+   day in whichever language that phone was set to; the reference behind it
+   holds both languages and is the thing corrections are made to. A document
+   that prints English and Russian side by side cannot be built out of frozen
+   single-language strings — so the reference wins, and the stored label is the
+   fallback for a key the reference has never heard of.
+
+   Returns "" when nothing is known, so the caller can fall back. */
+function ucRefName(key,rec,lg){
+  lg=lg||lang;
+  const k=String(key||""), i=k.indexOf("."), pt=i<0?k:k.slice(0,i), pos=i<0?"":k.slice(i+1);
+  if(rec && rec.type==="TB" && window.BODY){
+    const bm=bodyModelOf(rec.equip); if(!bm) return "";
+    const z=BODY.zones(bm).find(x=>x.k===k);
+    if(z) return z[lg]||z.en;                        // a whole zone, not a station
+    const p=BODY.get(bm,k);
+    return p ? k+" · "+(p[lg]||p.en) : "";
+  }
+  if(rec && rec.type==="GET" && window.GET){
+    const g=GET.label(pt,lg);
+    return g && g!==pt ? g+(pos?" "+pos:"") : "";
+  }
   const p=(window.WEAR&&WEAR.points||[]).find(x=>x.code===pt);
-  return (p?(p[lang]||p.en):pt)+(pos?" — "+pos:"");
+  return p ? (p[lg]||p.en)+(pos?" — "+ucPosLabel(pos,lg):"") : "";
+}
+function ucName(it,rec){
+  return ucRefName(it.key,rec) || it.label || it.key;
 }
 function ucBlock(rec){
   const rows=(rec.items||[]).map(i=>[i,wearOf(rec,i)]).filter(([i,w])=>w&&(w.mm!=null||w.reason));
@@ -3979,8 +4018,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=104"></script>
-<script src="sync-adapter.js?v=104"></script>
-<script src="report.js?v=104"></script>
+<script src="drive.js?v=105"></script>
+<script src="sync-adapter.js?v=105"></script>
+<script src="report.js?v=105"></script>
 </body>
 </html>
