@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=111">
+<link rel="manifest" href="manifest.webmanifest?v=112">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=111">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=111">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=111">
+<link rel="apple-touch-icon" href="icon-192.png?v=112">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=112">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=112">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1597,25 +1597,25 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=111"></script>
-<script src="upload-defaults.js?v=111"></script>
-<script src="hme.js?v=111"></script>
-<script src="mp-fc.js?v=111"></script>
-<script src="hme-cascade.js?v=111"></script>
-<script src="assets.js?v=111"></script>
-<script src="temp-limits.js?v=111"></script>
-<script src="wear.js?v=111"></script>
-<script src="wear-figs.js?v=111"></script>
-<script src="wear-map.js?v=111"></script>
-<script src="machine-photos.js?v=111"></script>
-<script src="machine-fig.js?v=111"></script>
-<script src="get.js?v=111"></script>
-<script src="uc-points.js?v=111"></script>
-<script src="inspect-guide.js?v=111"></script>
-<script src="get-figs.js?v=111"></script>
-<script src="body-points.js?v=111"></script>
-<script src="body-map.js?v=111"></script>
-<script src="report-core.js?v=111"></script>
+<script src="native.js?v=112"></script>
+<script src="upload-defaults.js?v=112"></script>
+<script src="hme.js?v=112"></script>
+<script src="mp-fc.js?v=112"></script>
+<script src="hme-cascade.js?v=112"></script>
+<script src="assets.js?v=112"></script>
+<script src="temp-limits.js?v=112"></script>
+<script src="wear.js?v=112"></script>
+<script src="wear-figs.js?v=112"></script>
+<script src="wear-map.js?v=112"></script>
+<script src="machine-photos.js?v=112"></script>
+<script src="machine-fig.js?v=112"></script>
+<script src="get.js?v=112"></script>
+<script src="uc-points.js?v=112"></script>
+<script src="inspect-guide.js?v=112"></script>
+<script src="get-figs.js?v=112"></script>
+<script src="body-points.js?v=112"></script>
+<script src="body-map.js?v=112"></script>
+<script src="report-core.js?v=112"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2014,7 +2014,11 @@ const I18N = {
     /* a round somebody else uploaded, opened here */
     rd_owned:"Someone else's round — {by}. Shown as it was uploaded; it cannot be changed on this phone.",
     rd_empty:"This round has no positions recorded.",
-    rd_gone:"That round is not on this phone. Press Reload all to fetch it again.",
+    /* dlg() takes [title, body] — a bare string prints its first two letters. */
+    rd_gone:["Round not available","It could not be fetched. It may have been withdrawn, or be older than the folder keeps."],
+    rd_fetching:["Fetching that round…","Reading it from the folder. This takes a moment on a weak signal."],
+    rd_offline:["No signal","This round has not been downloaded to this phone yet. Open it once you are back in range."],
+    rd_nodrive:["No data source","No data source is set up on this phone, so rounds cannot be fetched. Set one up under Sync."],
     team_hint:"Everything the whole team has uploaded, not just this phone. Refreshes itself after each upload and is kept for offline — so the due list below knows about rounds someone else did.",
     team_none:"Nothing pulled yet — tap “Check for new”.",
     team_nodrive:"Set up Google Drive in ⚙ to see the team's inspections.",
@@ -2324,7 +2328,10 @@ const I18N = {
     sec_team:"В системе", btn_team_refresh:"Проверить новые",
     rd_owned:"Обход другого инспектора — {by}. Показан как загружен; изменить его на этом телефоне нельзя.",
     rd_empty:"В этом обходе нет записанных точек.",
-    rd_gone:"Этого обхода нет на телефоне. Нажмите «Загрузить всё», чтобы получить его снова.",
+    rd_gone:["Обход недоступен","Не удалось его получить. Возможно, он отозван или старше, чем хранит папка."],
+    rd_fetching:["Загружаю обход…","Читаю из папки. При слабом сигнале это занимает время."],
+    rd_offline:["Нет связи","Этот обход ещё не скачан на телефон. Откройте его, когда появится сигнал."],
+    rd_nodrive:["Нет источника данных","На телефоне не настроен источник данных, обходы получить нельзя. Настройте его в разделе «Синхронизация»."],
     team_hint:"Всё, что загрузила вся бригада, а не только этот телефон. Обновляется после каждой выгрузки и хранится офлайн — поэтому список плановых осмотров знает об обходах, сделанных другими.",
     team_none:"Пока ничего не загружено — нажмите «Проверить новые».",
     team_nodrive:"Настройте Google Drive в ⚙, чтобы видеть осмотры бригады.",
@@ -5386,6 +5393,11 @@ function teamVoid(eds){
    fills up in a month. */
 const TEAM_KEEP=250;
 const teamFullId=r=>TEAM_ID+(r.equip||"").toUpperCase()+"|"+(r.date||"")+"|"+(r.type||"");
+/* The round somebody is waiting on, if any. Trimming keeps the newest, and a
+   round being opened is by definition one the phone did not have — often an old
+   one. Without this it would be written and deleted inside the same call, and
+   the screen would say the folder no longer has it. */
+let teamPin="";
 async function teamStash(recs){
   if(!recs || !recs.length) return;
   try{
@@ -5398,7 +5410,7 @@ async function teamStash(recs){
     const all=await dbTeam();
     if(all.length>TEAM_KEEP){
       all.sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));
-      for(const old of all.slice(TEAM_KEEP)) await dbDel(old.id);
+      for(const old of all.slice(TEAM_KEEP)) if(old.id!==teamPin) await dbDel(old.id);
     }
   }catch(e){ /* out of room, or the store is gone — the summary still works */ }
 }
@@ -5417,35 +5429,37 @@ function teamMerge(recs,replace){
     if(!h[hk]||h[hk]<row.d){ h[hk]=row.d; hist++; }
   }
   const saved=teamSave([...have.values()]); histSave(h);
-  /* Keep the rounds themselves, not just the line about them. Fire-and-forget:
-     the list must paint whether or not the write lands, and a phone that is
-     out of room should still get the summary it has always had. */
-  teamStash(recs);
+  /* Keep the rounds themselves, not just the line about them. Not awaited here:
+     the list must paint whether or not the write lands, and a phone that is out
+     of room should still get the summary it has always had. The promise is
+     handed back so a caller that is about to OPEN one of these rounds can wait
+     for the write instead of reading the store a moment too early. */
+  const stash=teamStash(recs);
   /* A baseline another inspector set has just arrived. Until it is loaded, this
      phone would score the same roller against the catalogue and the other
      against what was fitted — two answers for one part. */
   loadBaselines();
-  return {added,hist,saved};
+  return {added,hist,saved,stash};
 }
 let teamBusy=false, teamAt=0, teamAbort=null, teamRun=0;
 const TEAM_MIN_GAP=60000;    // automatic pulls only; the button always goes
 const TEAM_TIMEOUT=20000;    // pit signal can leave a fetch hanging for ever
 async function teamPull(manual,full){
-  const msg=$("teamMsg"); if(!msg) return;
+  const msg=$("teamMsg"); if(!msg) return false;
   if(teamBusy){
     // A hung request must never wedge the button. fetch() has no timeout of its
     // own, so on weak signal the startup pull could sit open indefinitely and
     // every later press returned here — doing nothing, silently.
-    if(!manual) return;
+    if(!manual) return false;
     if(teamAbort){ try{ teamAbort.abort(); }catch(_){ } }
   }
   // syncNow() calls this whenever it finishes, and a dead destination can make
   // that happen repeatedly — don't turn a retry loop into a request storm.
-  if(!manual && Date.now()-teamAt < TEAM_MIN_GAP) return;
+  if(!manual && Date.now()-teamAt < TEAM_MIN_GAP) return false;
   teamAt=Date.now();
   const g=loadDests().find(d=>d.id==="gas" && d.url);
-  if(!g){ if(manual) msg.textContent=t("team_nodrive"); return; }
-  if(!navigator.onLine){ if(manual) msg.textContent=t("team_offline"); return; }
+  if(!g){ if(manual) msg.textContent=t("team_nodrive"); return false; }
+  if(!navigator.onLine){ if(manual) msg.textContent=t("team_offline"); return false; }
 
   // Pressing a button must visibly do something, even before the reply lands.
   if(manual) msg.textContent=t("team_checking");
@@ -5468,16 +5482,16 @@ async function teamPull(manual,full){
     const res=await fetch(g.url+(g.url.indexOf("?")<0?"?":"&")+q.toString(),
                           {method:"GET", signal:ac.signal});
     const txt=await res.text();
-    if(!mine()) return;
+    if(!mine()) return false;
     let j=null; try{ j=JSON.parse(txt); }catch(e){}
-    if(!j){ if(manual) msg.textContent="⚠ "+txt.slice(0,90); return; }
+    if(!j){ if(manual) msg.textContent="⚠ "+txt.slice(0,90); return false; }
     if(j.ok===false){
       // The usual reason: the script was edited but never released as a new version.
       if(manual) msg.textContent=/unknown action/i.test(j.error||"") ? t("team_old") : "⚠ "+j.error;
-      return;
+      return false;
     }
     netSeen(true);                                  // Drive answered — that is "online"
-    const {added,saved}=teamMerge(j.records||[], !!full);
+    const {added,saved,stash}=teamMerge(j.records||[], !!full);
     const voided=teamVoid(j.edits||[]);   // after the merge, so a re-uploaded record is voided too
     const clash=cfMerge(j.conflicts||[]);
     // Only claim to have them once they are actually stored. Advancing the
@@ -5491,8 +5505,13 @@ async function teamPull(manual,full){
       // A truncated reply means the folder holds more than one call returns.
       +(saved&&j.truncated?" "+t("team_more"):"");
     renderTeam(); renderDue(); renderLastDone(); renderTrend();
+    /* Only now. openTeamRow() asks for a round the moment this resolves, and
+       IndexedDB is slower than the paint — returning before the write lands
+       makes a round that did arrive look like one the folder no longer has. */
+    try{ await stash; }catch(_){ }
+    return true;                               // the folder actually answered
   }catch(e){
-    if(!mine()) return;                      // superseded by a newer press
+    if(!mine()) return false;                      // superseded by a newer press
     netSeen(false);
     if(e && e.name==="AbortError"){ if(manual) msg.textContent=t("team_timeout"); }
     // fetch() reports every network and CORS failure as the opaque "Failed to
@@ -5533,14 +5552,59 @@ function renderTeam(){
   /* Tapping a row used to start a NEW round on that machine, which is the one
      thing an inspector looking at "TK152, 4 days ago, Хасенов" does not want.
      It opens THAT round now — every measurement, read-only — and offers its
-     PDF. Where the full record did not survive (it aged out of the cache, or
-     it arrived before this build), fall back to what the row could always do
-     rather than doing nothing. */
-  box.querySelectorAll("[data-k]").forEach(b=>b.onclick=async()=>{
-    const k=b.dataset.k;
-    if(await dbGet(TEAM_ID+k)) openRound(k);
-    else { selectEquip(b.dataset.u); showPane("paneCapture"); }
-  });
+     PDF. Where the record is not held, openTeamRow fetches it; where it cannot
+     be fetched, it says so. Never a silent jump to an empty form. */
+  box.querySelectorAll("[data-k]").forEach(b=>b.onclick=()=>openTeamRow(b.dataset.k));
+}
+/* Pressing a row must open THAT round, or say why it cannot.
+
+   The first cut fell back to "start a new round on this machine" whenever the
+   record was not held — silently, which on a phone that had been syncing for
+   weeks was every single row. The summary rows come from earlier pulls and the
+   cursor says "I hold everything up to here", so Check for new returns nothing
+   and the rounds already listed were never stored. Tapping DZ007 dropped the
+   inspector into a blank capture screen with no measurements and no report,
+   and nothing anywhere said what had happened.
+
+   So: fetch it. A full re-read is the only call that returns records already
+   behind the cursor, and it is the same one the Reload all button makes. */
+let teamHealed=false;
+async function openTeamRow(k){
+  if(!k) return;
+  if(await dbGet(TEAM_ID+k)) return openRound(k);
+  const g=loadDests().find(d=>d.id==="gas" && d.url);
+  if(!g){ dlg(t("rd_nodrive")); return; }
+  if(!navigator.onLine){ dlg(t("rd_offline")); return; }
+  dlg(t("rd_fetching"));
+  teamPin=TEAM_ID+k;                           // spare it from the trim it is about to trigger
+  try{
+    await teamPull(true,true);                 // after=0 — everything, and stash it
+    $("dlg").close();
+  }catch(e){ $("dlg").close(); }
+  finally{ teamPin=""; }
+  if(await dbGet(TEAM_ID+k)) openRound(k);
+  else dlg(t("rd_gone"));                       // withdrawn, or older than the folder holds
+}
+/* And heal it without waiting to be asked. A phone upgraded into this build
+   holds rows and no records; one full re-read fixes every one of them. Once,
+   flagged, so a genuinely empty folder does not re-read on every launch. */
+const TEAM_HEAL="cm_team_full_v1";
+async function teamHealOnce(){
+  if(teamHealed || localStorage.getItem(TEAM_HEAL)) return;
+  if(!teamAll().length) return;                          // nothing listed, nothing to heal
+  if((await dbTeam()).length) { localStorage.setItem(TEAM_HEAL,"1"); return; }
+  const g=loadDests().find(d=>d.id==="gas" && d.url);
+  if(!g || !navigator.onLine) return;                    // try again next launch
+  teamHealed=true;
+  // A full re-read is the only call that returns records already behind the
+  // cursor. It goes as a manual pull on purpose: the ordinary boot pull has
+  // just run, and the automatic-pull gap would otherwise swallow this one and
+  // leave the phone flagged as healed without ever having asked.
+  try{
+    if(await teamPull(true,true)) localStorage.setItem(TEAM_HEAL,"1");
+    else teamHealed=false;                               // never reached Drive — try next launch
+  }
+  catch(e){ teamHealed=false; }
 }
 /* The point-of-capture answer: standing at TK146, has it just been done? */
 function renderLastDone(){
@@ -6345,7 +6409,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="111";
+const BUILD="112";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -7833,8 +7897,12 @@ function openUnit(unit, type){
 })();
 // syncNow() pulls the team list when it finishes, but it returns early with
 // nothing queued or no signal — so ask once here too. Both paths are guarded.
-teamPull(false);
-window.addEventListener("online",()=>teamPull(false));
+/* A phone upgraded into the build that keeps whole rounds holds summary rows
+   and no records. Heal that once, on the first launch that has a signal, so
+   the list is openable without anybody being told to press Reload all — and
+   only after the ordinary pull has answered, so the two do not race. */
+teamPull(false).then(teamHealOnce).catch(()=>{});
+window.addEventListener("online",()=>teamPull(false).then(teamHealOnce).catch(()=>{}));
 </script>
 </body>
 </html>
