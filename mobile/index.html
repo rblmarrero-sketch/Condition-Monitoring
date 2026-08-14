@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=106">
+<link rel="manifest" href="manifest.webmanifest?v=107">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=106">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=106">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=106">
+<link rel="apple-touch-icon" href="icon-192.png?v=107">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=107">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=107">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1556,25 +1556,25 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="native.js?v=106"></script>
-<script src="upload-defaults.js?v=106"></script>
-<script src="hme.js?v=106"></script>
-<script src="mp-fc.js?v=106"></script>
-<script src="hme-cascade.js?v=106"></script>
-<script src="assets.js?v=106"></script>
-<script src="temp-limits.js?v=106"></script>
-<script src="wear.js?v=106"></script>
-<script src="wear-figs.js?v=106"></script>
-<script src="wear-map.js?v=106"></script>
-<script src="machine-photos.js?v=106"></script>
-<script src="machine-fig.js?v=106"></script>
-<script src="get.js?v=106"></script>
-<script src="uc-points.js?v=106"></script>
-<script src="inspect-guide.js?v=106"></script>
-<script src="get-figs.js?v=106"></script>
-<script src="body-points.js?v=106"></script>
-<script src="body-map.js?v=106"></script>
-<script src="report-core.js?v=106"></script>
+<script src="native.js?v=107"></script>
+<script src="upload-defaults.js?v=107"></script>
+<script src="hme.js?v=107"></script>
+<script src="mp-fc.js?v=107"></script>
+<script src="hme-cascade.js?v=107"></script>
+<script src="assets.js?v=107"></script>
+<script src="temp-limits.js?v=107"></script>
+<script src="wear.js?v=107"></script>
+<script src="wear-figs.js?v=107"></script>
+<script src="wear-map.js?v=107"></script>
+<script src="machine-photos.js?v=107"></script>
+<script src="machine-fig.js?v=107"></script>
+<script src="get.js?v=107"></script>
+<script src="uc-points.js?v=107"></script>
+<script src="inspect-guide.js?v=107"></script>
+<script src="get-figs.js?v=107"></script>
+<script src="body-points.js?v=107"></script>
+<script src="body-map.js?v=107"></script>
+<script src="report-core.js?v=107"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -5865,25 +5865,36 @@ function rptBodyMap(rec,items){
     '<th class="num">'+esc(t("tb_rpt_min"))+'</th>'+
     '<th>'+esc(t("tb_rpt_at"))+'</th></tr></thead><tbody>'+rows+'</tbody></table>';
 }
-function rptMap(rec,items){
-  if(rec.type==="TB") return rptBodyMap(rec,items);
-  if(!window.WEAR || !window.WEAR.mapSVG) return "";
-  const st=ucStatus(rec.equip); if(!st.ok) return "";
+/* The report prints the screen. The old note here argued the other way — keep
+   the DRAWING because a photograph "would have to survive html2canvas and the
+   PDF encoder". It would, and it does: the picture is inlined as bytes before
+   anything is laid out, which is what CMR.inlinePhoto is for. What the note
+   missed is the cost of being right about the encoder — the inspector walked a
+   photograph of the machine with eleven numbers on it, and the page that went
+   to the customer showed a lettered abstraction of a track frame that appears
+   nowhere in the app.
+
+   Same builders as the dashboard, so a PDF made at either end is the same
+   document, and the same builders as the capture screen underneath them. */
+function rptMap(rec,items,photo){
+  if(rec.type==="TB") return { html:rptBodyMap(rec,items), key:null };
+  if(!window.WEAR) return { html:"", key:null };
   const by={}; items.forEach(it=>{ const w=it.w;
     by[it.key] = !w ? "" : w.mm==null ? (w.reason?"na":"") :
       w.band==="act" ? "act" : w.band==="watch" ? "watch" : "done"; });
-  /* The report keeps the DRAWING even where a photograph exists. It is printed,
-     often in grey, and it has to carry the colour of every point — which is the
-     whole reason the frame is drawn as parts rather than pictured. A photograph
-     would also have to survive html2canvas and the PDF encoder to get there. */
-  const prof=Object.assign({}, ucProfile(rec.equip), {photo:""});
-  /* The point codes go to the report unrewritten. On screen the chain row is
-     lettered HGT / BUSH / P×4 / P×1 / GRSR and a thumb can tap one to find out
-     what it means; on a printed page that is jargon with no key, so the report
-     numbers them and names them underneath — which needs the codes intact. */
-  return CMR.fitMap(["L","R"].map(side=>'<div class="ucmapwrap">'+
-    WEAR.mapSVG(side, prof, null, k=>by[k]||"", "", t(side==="L"?"uc_left":"uc_right"))+
-    '</div>').join(""));
+  const state=k=>by[k]||"";
+  const a=ASSET_BY[rec.equip]||{};
+  if(rec.type==="GET"){
+    const g=WEAR.reportGETMap && WEAR.reportGETMap({ unit:rec.equip,
+      cat:a.cat||a.cls||"", model:a.m||"", photo, lang, state });
+    return g ? { html:CMR.fitMap(g.html), key:g.key } : { html:"", key:null };
+  }
+  const st=ucStatus(rec.equip); if(!st.ok) return { html:"", key:null };
+  const prof=ucProfile(rec.equip);
+  const u=WEAR.reportUCMap && WEAR.reportUCMap({ model:a.m||"",
+    rollers:prof.rollers, high:prof.high, fam:prof.fam, photo, lang, state,
+    sideLabel:sd=>WEAR.escMap(t(sd==="L"?"uc_left":"uc_right")) });
+  return u ? { html:CMR.fitMap(u.html), key:u.key } : { html:"", key:null };
 }
 async function rptRecords(){
   const all=await dbAll();
@@ -5934,14 +5945,24 @@ async function rptRecords(){
     let signUrl=""; if(rec.sign){ try{ signUrl=await blobToThumb(rec.sign,400); }catch(e){} }
     /* One picture of the machine per round. A red puck at roller 6 is a place a
        fitter can walk to; a row in a table is a place they have to look up. */
-    let mapHTML=""; if(meta.wear) mapHTML=rptMap(rec,items);
     const a0=ASSET_BY[rec.equip]||{};
+    /* The machine's own photograph, as bytes, before the drawing is built —
+       an <image href> inside an inline SVG does not survive html2canvas. */
+    let mapHTML="", mapKey=null;
+    if(meta.wear || meta.get){
+      const url = WEAR.reportPhotoFor
+        ? WEAR.reportPhotoFor({ type:rec.type, equip:rec.equip, model:a0.m||"",
+                                cat:a0.cat||a0.cls||"" }) : "";
+      const art = url ? await CMR.inlinePhoto(url) : "";
+      const m = rptMap(rec, items, art);
+      mapHTML = m.html; mapKey = m.key;
+    }
     out.push({ equip:rec.equip, clsLabel:a0.cat||(CLASSES[rec.cls]?(CLASSES[rec.cls][lang]||CLASSES[rec.cls].en):(rec.cls||"")),
       model:a0.m||"",
       type:rec.type, typeLabel:t("type_"+(rec.type||"MP")),
       typeAlt:inOtherLang(()=>t("type_"+(rec.type||"MP"))), date:rec.date||"",
       by:rec.by||"", sup:rec.sup||"", smu:rec.smu||"", gps:rec.gps||null, signUrl,
-      wear:!!meta.wear, temp:!!meta.temp, mapHTML, items });
+      wear:!!meta.wear, temp:!!meta.temp, mapHTML, mapKey, items });
   }
   return out;
 }
@@ -6078,7 +6099,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="106";
+const BUILD="107";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

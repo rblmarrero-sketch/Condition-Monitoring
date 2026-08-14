@@ -198,6 +198,23 @@
 #rptRoot .tbzone td{padding:3px 6px 3px 0;border-bottom:1px solid #eef1f4;}
 #rptRoot .tbzone .num{text-align:right;padding-right:12px;}
 #rptRoot .ucmap{display:block;width:100%;height:auto;}
+/* ---- the photographed walk, printed ------------------------------------
+   The same picture the inspector tapped: the machine's own photograph with
+   the catalogue's numbers on the parts they name. The pucks are smaller than
+   on glass because nothing here has to survive a gloved thumb, and the
+   numbers read at 470px on paper at any size a finger needed. */
+#rptRoot .ucmap.photo .um-photo{opacity:1;}
+#rptRoot .um-num .um-puck{fill:#fff;stroke:#12161a;stroke-width:1.6;}
+#rptRoot .um-num .um-n{font:700 12px/1 inherit;fill:#12161a;}
+#rptRoot .um-num.done .um-puck{fill:#0ca30c;stroke:#0ca30c;}
+#rptRoot .um-num.watch .um-puck{fill:#ec835a;stroke:#ec835a;}
+#rptRoot .um-num.act .um-puck{fill:#d03b3b;stroke:#d03b3b;}
+#rptRoot .um-num.na .um-puck{fill:#e6eaee;stroke:#a9b2ba;stroke-dasharray:3 2;}
+#rptRoot .um-num.done .um-n,#rptRoot .um-num.watch .um-n,
+#rptRoot .um-num.act .um-n{fill:#fff;}
+#rptRoot .um-num .um-hit{display:none;}
+#rptRoot .umside{font-size:9px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;
+  color:#5b6670;text-align:center;padding:1px 0 3px;}
 #rptRoot .um-side{font:700 17px/1 inherit;fill:#8b939b;letter-spacing:.04em;}
 #rptRoot .ucmap .mf-body{fill:#e6eaee;stroke:#5b6670;stroke-width:1.3;stroke-linejoin:round;}
 #rptRoot .ucmap .mf-part{fill:#f2f5f7;stroke:#5b6670;stroke-width:1.2;stroke-linejoin:round;}
@@ -454,8 +471,7 @@
       c_state:"Result", c_worst:"Worst point", c_chg:"Change", c_now:"Latest", c_limit:"New → condemn",
       v_ok:"Normal", v_watch:"Watch", v_act:"Act now",
       rounds_n:"{n} earlier rounds are summarised below rather than reprinted in full.",
-      chain_key:"Chain and shoe measurements",
-      pk_out:"outer", pk_in:"inner",
+      walk_key:"The numbers on the machine",
       lang_note:"Every heading in this report is given in English and Russian.",
     },
     ru: {
@@ -527,8 +543,7 @@
       c_limit:"Новый → предел",
       v_ok:"Норма", v_watch:"Наблюдать", v_act:"Срочно",
       rounds_n:"Ещё {n} обходов приведены сводкой ниже, а не полными листами.",
-      chain_key:"Замеры цепи и башмака",
-      pk_out:"внешнее", pk_in:"внутреннее",
+      walk_key:"Номера на машине",
       lang_note:"Все заголовки отчёта приведены на английском и русском языках.",
     },
   };
@@ -601,65 +616,57 @@
     return T;
   }
   CMR.makeT = makeT;
+
+  /* ---- artwork that survives the PDF --------------------------------------
+     html2canvas renders an inline <svg> by serialising it and drawing it as an
+     image. Inside that serialised copy every relative reference is dead — so
+     <image href="machine/d375a.jpg"> comes out blank, and the machine the
+     inspector photographed is simply absent from the page. It has to already
+     be the bytes.
+
+     Cached per URL: one report prints the same machine on several sheets, and
+     re-encoding a 200 KB photograph for each of them is the difference between
+     a report that takes two seconds and one that takes ten. */
+  var PHOTO = {};
+  CMR.inlinePhoto = function (url) {
+    if (!url) return Promise.resolve("");
+    if (PHOTO[url]) return PHOTO[url];
+    PHOTO[url] = new Promise(function (res) {
+      var img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onload = function () {
+        try {
+          /* Downscaled on the way in. The page prints it about 470 px wide;
+             carrying a 2000 px original into a base64 string costs four times
+             the bytes in the PDF for detail no paper can hold. */
+          var w = Math.min(img.naturalWidth || 900, 900);
+          var h = Math.round(w * (img.naturalHeight || 1) / (img.naturalWidth || 1));
+          var c = document.createElement("canvas");
+          c.width = w; c.height = h;
+          c.getContext("2d").drawImage(img, 0, 0, w, h);
+          res(c.toDataURL("image/jpeg", 0.82));
+        } catch (e) { res(""); }        // tainted or unreadable — draw the frame
+      };
+      /* A model whose picture has not been shot yet, or a phone with no
+         signal and a cold cache. mapPhoto draws the frame underneath instead,
+         which is the same fallback the capture screen uses. */
+      img.onerror = function () { res(""); };
+      img.src = url;
+    });
+    return PHOTO[url];
+  };
   /* Both dictionaries, so a guard can ask whether every string the report can
      print exists in both halves. A key missing from the Russian side falls
      back to the English one and prints as a finished label — the only way to
      see it is to compare the two lists. */
   CMR.dict = S;
 
-  /* ---- the chain row, lettered instead of abbreviated ----------------------
-     mapSVG letters the five chain and shoe measurements with their internal
-     codes, and every host was rewriting them into HGT / BUSH / P×4 / P×1 /
-     GRSR before printing. On a screen that is a picker and the reader can tap
-     one to find out; on paper it is five pieces of jargon with no key.
-
-     A..E, not 1..5: the track rollers on the same frame are already numbered
-     1..8, so a numbered chain row would put two different "1"s on one drawing
-     and a key that resolved neither of them.
-
-     The order is the order they appear on the frame and both frames share it,
-     so the same measurement is never B on the left and C on the right. */
-  var CHAIN_MARK = ["A", "B", "C", "D", "E", "F", "G", "H"];
-  CMR.markChain = function (html) {
-    var order = [];
-    var out = String(html || "").replace(
-      /(<text class="um-n um-chain"[^>]*>)([^<]+)(<\/text>)/g,
-      function (m, a, code, c) {
-        var i = order.indexOf(code);
-        if (i < 0) { order.push(code); i = order.length - 1; }
-        return a + (CHAIN_MARK[i] || (i + 1)) + c;
-      });
-    return { html: out, order: order };
-  };
-  CMR.chainMark = function (i) { return CHAIN_MARK[i] || String(i + 1); };
-
-  /* One key for the whole drawing. Names come from the undercarriage
-     reference both hosts already carry, so it cannot drift from the
-     measurement table above it.
-
-     The wheel pucks were the other half of the same problem: four of them
-     read O and I with nothing anywhere saying outer from inner, and the S on
-     the sprocket was a letter a reader had to guess at. */
-  CMR.drawingKey = function (T, order) {
-    var pts = (root.WEAR && root.WEAR.points) || [];
-    var name = function (code) {
-      var p = pts.filter(function (x) { return x.code === code; })[0];
-      return { en: p ? p.en : code, ru: p ? p.ru : "" };
-    };
-    var chain = (order || []).map(function (code, i) {
-      var n = name(code);
-      return '<span class="i"><span class="n">' + esc(CMR.chainMark(i)) + '</span>'
-        + '<span class="t">' + T.enru(n.en, n.ru) + '</span></span>';
-    }).join("");
-    var spr = name("SPROCKET"), rol = name("ROLLER");
-    var letters = [["O", T.I("pk_out")], ["I", T.I("pk_in")],
-                   ["S", T.enruI(spr.en, spr.ru)],
-                   ["1–8", T.enruI(rol.en, rol.ru)]]
-      .map(function (x) { return '<span class="i"><b>' + x[0] + '</b>' + x[1] + '</span>'; }).join("");
-    return '<div class="pkey">' + letters + '</div>'
-      + (chain ? '<div class="subhd" style="margin-top:8px;">' + T.L("chain_key") + '</div>'
-                 + '<div class="ckey">' + chain + '</div>' : "");
-  };
+  /* The chain row was lettered A–E over the old abstract frame, with one key
+     naming those five measurements and another naming the O / I / S pucks
+     beside them. Both are gone with the frame: the report draws the
+     photographed walk the capture screen draws, and its eleven numbers name
+     themselves through the key the host hands over. Two renderers for one
+     picture is how the two of them disagree. */
 
   /* The drawing and everything that explains it, in one block.
 
@@ -711,7 +718,19 @@
         }).join("") + '</table>';
   }
 
-  CMR.mapBlock = function (T, mapHTML, topMargin, zones) {
+  /* The numbers on the machine, named — the chip row that sits under the
+     drawing on the capture screen, printed. The host hands over the walk it
+     drew, so the key cannot name a number the picture does not carry. */
+  function walkKey(T, key) {
+    if (!key || !key.length) return "";
+    return '<div class="subhd" style="margin-top:9px;">' + T.L("walk_key") + '</div>'
+      + '<div class="ckey">' + key.map(function (p) {
+          return '<span class="i"><span class="n">' + esc(p.n) + '</span>'
+            + '<span class="t">' + (T.bi ? T.both(p.en, p.ru, "") : esc(p.en)) + '</span></span>';
+        }).join("") + '</div>';
+  }
+
+  CMR.mapBlock = function (T, mapHTML, topMargin, zones, key) {
     if (!mapHTML) return "";
     /* Two different machines are drawn here. A track frame carries a chain row
        and pucks lettered O, I and S; a truck body carries neither, and hanging
@@ -720,12 +739,13 @@
        anchored, because BOTH drawings sit inside a .ucmapwrap and a loose test
        for "ucmap" is true of a dump body too. */
     var isUC = /class="ucmap[\s"]/.test(mapHTML);
-    var mp = isUC ? CMR.markChain(mapHTML) : { html: mapHTML, order: [] };
+    /* A numbered walk names itself through the key the host passed. */
+    var side = mapKey(T)
+      + (key ? walkKey(T, key) : isUC ? "" : bodyFaceKey(T, mapHTML))
+      + zoneTable(T, zones);
     return '<div class="subhd" style="margin-top:' + (topMargin || 11) + 'px;">' + T.I("map_t") + '</div>'
-      + '<div class="mapblock"><div class="ucmaps">' + mp.html + '</div>'
-      + '<div class="mapside">' + mapKey(T)
-        + (isUC ? CMR.drawingKey(T, mp.order) : bodyFaceKey(T, mapHTML))
-        + zoneTable(T, zones) + '</div></div>';
+      + '<div class="mapblock"><div class="ucmaps">' + mapHTML + '</div>'
+      + '<div class="mapside">' + side + '</div></div>';
   };
 
   /* ---- chips and bars, drawn one way ------------------------------------ */
@@ -1027,7 +1047,7 @@
         ? T.S("verdict_part", { m: rec.items.length - unread, of: rec.items.length, n: unread })
         : T.S("verdict_" + vc, { n: over.length, of: rec.items.length })
           + (unread ? T.S("unread_n", { n: unread, of: rec.items.length }) : "");
-      var maps = CMR.mapBlock(T, rec.mapHTML, 13, rec.zones);
+      var maps = CMR.mapBlock(T, rec.mapHTML, 13, rec.zones, rec.mapKey);
       var top = '<div class="sec">' + head
         + '<div class="verdict v-' + ((vc === "ok" && unread) ? "watch" : vc) + '">' + verd + '</div>'
         + (over.length ? '<div class="verdict v-' + (overAct.length ? "act" : "watch") + '" style="margin-top:9px;">'
@@ -1485,7 +1505,7 @@
         /* The frames are their own section — one picture of the machine per
            round, and a page break lands between the drawing and the readings
            rather than through the middle of a track frame. */
-        if(rec.mapHTML) extra.push(cont + CMR.mapBlock(T, rec.mapHTML, 11, rec.zones) + "</div></div>");
+        if(rec.mapHTML) extra.push(cont + CMR.mapBlock(T, rec.mapHTML, 11, rec.zones, rec.mapKey) + "</div></div>");
         if(over.length) m += '<div class="verdict v-'+(overAct.length?"act":"watch")+'" style="margin-top:12px;">'
           + (overAct.length?T.I("uc_over",{n:overAct.length})+". ":"")
           + (over.length>overAct.length?T.I("uc_watch",{n:over.length-overAct.length})+". ":"")

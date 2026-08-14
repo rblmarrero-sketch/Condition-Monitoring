@@ -1058,31 +1058,39 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=106"></script>
-<script src="../mobile/hme.js?v=106"></script>
-<script src="../mobile/mp-fc.js?v=106"></script>
-<script src="../mobile/hme-cascade.js?v=106"></script>
-<script src="../mobile/temp-limits.js?v=106"></script>
+<script src="../data/magnetic_plug.js?v=107"></script>
+<script src="../mobile/hme.js?v=107"></script>
+<script src="../mobile/mp-fc.js?v=107"></script>
+<script src="../mobile/hme-cascade.js?v=107"></script>
+<script src="../mobile/temp-limits.js?v=107"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=106"></script>
-<script src="../mobile/wear.js?v=106"></script>
-<script src="../mobile/wear-map.js?v=106"></script>
+<script src="../mobile/assets.js?v=107"></script>
+<script src="../mobile/wear.js?v=107"></script>
+<script src="../mobile/wear-map.js?v=107"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=106"></script>
-<script src="../mobile/machine-photos.js?v=106"></script>
-<script src="../mobile/machine-fig.js?v=106"></script>
-<script src="../mobile/get.js?v=106"></script>
-<script src="../mobile/uc-points.js?v=106"></script>
-<script src="../mobile/inspect-guide.js?v=106"></script>
-<script src="../mobile/get-figs.js?v=106"></script>
-<script src="../mobile/body-points.js?v=106"></script>
-<script src="../mobile/body-map.js?v=106"></script>
-<script src="../mobile/jspdf.umd.min.js?v=106"></script>
-<script src="../mobile/html2canvas.min.js?v=106"></script>
-<script src="../mobile/report-core.js?v=106"></script>
+<script src="../mobile/upload-defaults.js?v=107"></script>
+<script src="../mobile/machine-photos.js?v=107"></script>
+<script>
+/* The artwork lives beside the app, and both modules build their URLs from
+   this one base. Left as "machine/" it resolves against /dashboard/ and every
+   machine photograph 404s here while working perfectly on the phone — which is
+   how a report printed from the office ended up with no picture of the machine
+   on it. GET reads the same property, so this fixes both rounds. */
+if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
+</script>
+<script src="../mobile/machine-fig.js?v=107"></script>
+<script src="../mobile/get.js?v=107"></script>
+<script src="../mobile/uc-points.js?v=107"></script>
+<script src="../mobile/inspect-guide.js?v=107"></script>
+<script src="../mobile/get-figs.js?v=107"></script>
+<script src="../mobile/body-points.js?v=107"></script>
+<script src="../mobile/body-map.js?v=107"></script>
+<script src="../mobile/jspdf.umd.min.js?v=107"></script>
+<script src="../mobile/html2canvas.min.js?v=107"></script>
+<script src="../mobile/report-core.js?v=107"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -2639,8 +2647,15 @@ function ucRefName(key,rec,lg){
     return p ? k+" · "+(p[lg]||p.en) : "";
   }
   if(rec && rec.type==="GET" && window.GET){
-    const g=GET.label(pt,lg);
-    return g && g!==pt ? g+(pos?" "+pos:"") : "";
+    /* GET.label is (unit, class, model, code, lang) — five arguments. This
+       called it with two, so `unit` got the point code and `code` got nothing:
+       the lookup missed, the sweep behind it matched nothing either, and every
+       tooth on every bucket printed as a bare code. The key beside the drawing
+       named them correctly the whole time, which is what made it look like a
+       styling problem rather than a wrong call. */
+    const a=ASSET_BY[rec.equip]||{};
+    const g=GET.label(rec.equip, a.cat||a.cls||"", a.m||"", k, lg);
+    return g && g!==k ? g : "";
   }
   const p=(window.WEAR&&WEAR.points||[]).find(x=>x.code===pt);
   return p ? (p[lg]||p.en)+(pos?" — "+ucPosLabel(pos,lg):"") : "";
@@ -4018,8 +4033,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=106"></script>
-<script src="sync-adapter.js?v=106"></script>
-<script src="report.js?v=106"></script>
+<script src="drive.js?v=107"></script>
+<script src="sync-adapter.js?v=107"></script>
+<script src="report.js?v=107"></script>
 </body>
 </html>

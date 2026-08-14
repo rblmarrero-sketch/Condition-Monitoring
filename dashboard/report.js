@@ -129,54 +129,51 @@
       || (a.thin ?? 0) - (b.thin ?? 0));
   }
 
-  function reportMap(rec) {
-    if (rec.type === "TB") return bodyMapHTML(rec);
-    if (rec.type !== "UC" || !(window.WEAR && WEAR.mapSVG)) return "";
-    const a = (typeof ASSET_BY !== "undefined" && ASSET_BY[rec.equip]) || null;
-    const prof = a && a.m && WEAR.modelFor ? WEAR.modelFor(a.m) : null;
-    if (!prof) return "";
+  /* The state of one measured point, in the words the drawings colour by. */
+  function stateOf(rec) {
     const by = {};
     (rec.items || []).forEach(it => {
       const w = typeof wearOf === "function" ? wearOf(rec, it) : null;
       by[it.key] = !w ? "" : w.mm == null ? (w.reason ? "na" : "")
         : w.band === "act" ? "act" : w.band === "watch" ? "watch" : "done";
     });
-    /* The raw point codes go through untouched. The screen rewrites them into
-       HGT / BUSH / P×4 / P×1 / GRSR because a puck is 80px wide and a finger
-       can tap one to find out what it is; on paper that is five abbreviations
-       with no key, in neither of the report's two languages. report-core
-       numbers them instead and prints the names underneath, and it needs the
-       real codes to look those names up. */
-    /* An SVG <text> is one line, so which side of the machine you are looking
-       at is the one label that pairs with a slash rather than stacking. */
-    const side = s => {
-      const k = s === "L" ? "uc_left_h" : "uc_right_h";
-      const a = L(k), b = inOther(() => L(k));
-      return b && b !== a ? `${a} / ${b}` : a;
-    };
-    /* The WHOLE profile, the same object the phone builds.
+    return k => by[k] || "";
+  }
+  /* Both sides of the machine, captioned, in both languages. */
+  function sideLabel(sd) {
+    const k = sd === "L" ? "uc_left_h" : "uc_right_h";
+    const x = L(k), y = inOther(() => L(k));
+    return WEAR.escMap(y && y !== x ? `${x} / ${y}` : x);
+  }
 
-       mapSVG takes either a profile or — for callers older than the profile —
-       a bare roller count, and this passed the bare count. Which meant it
-       silently took the legacy path with no machine family, and geom() draws a
-       family-less frame: idler and sprocket the same size, on every machine.
-       A dozer drives through a sprocket bigger than its idler and an excavator
-       is the other way round; that is the difference you see standing at the
-       machine, and the dashboard was printing neither. The phone printed the
-       right one all along, so the same round came out as two different
-       drawings depending on which end made the PDF. */
-    const fam = (window.MFIG && MFIG.familyFor)
-      ? MFIG.familyFor(rec.equip, (a.cat || a.cls || "")) : "";
-    const shape = { rollers: prof.rollers || WEAR.rollersDefault,
-                    high: prof.frame === "highdrive",
-                    carriers: prof.carriers,
-                    fam,
-                    /* Drawing, never the catalogue photograph: this renders in
-                       grey on paper and has to carry the colour of every point. */
-                    photo: "" };
-    return window.CMR.fitMap(["L", "R"].map(s => '<div class="ucmapwrap">'
-      + WEAR.mapSVG(s, shape, null, k => by[k] || "", "", side(s))
-      + '</div>').join(""));
+  function reportMap(rec, photo) {
+    if (rec.type === "TB") return { html: bodyMapHTML(rec), key: null };
+    const a = (typeof ASSET_BY !== "undefined" && ASSET_BY[rec.equip]) || null;
+    if (!a || !window.WEAR) return { html: "", key: null };
+    /* The GET round's own tool, numbered — the screen the inspector walked.
+       The report drew nothing here at all. */
+    if (rec.type === "GET") {
+      const g = WEAR.reportGETMap && WEAR.reportGETMap({
+        unit: rec.equip, cat: a.cat || a.cls || "", model: a.m || "", photo,
+        lang: (typeof lang !== "undefined" ? lang : "en"), state: stateOf(rec) });
+      return g ? { html: window.CMR.fitMap(g.html), key: g.key } : { html: "", key: null };
+    }
+    if (rec.type !== "UC") return { html: "", key: null };
+    const prof = a.m && WEAR.modelFor ? WEAR.modelFor(a.m) : null;
+    if (!prof) return { html: "", key: null };
+    /* The photographed walk, exactly as the capture screen draws it — same
+       module, same numbering, same eleven names underneath. */
+    const u = WEAR.reportUCMap && WEAR.reportUCMap({
+      model: a.m || "", rollers: prof.rollers, high: prof.frame === "highdrive",
+      fam: (window.MFIG && MFIG.familyFor) ? MFIG.familyFor(rec.equip, a.cat || a.cls || "") : "",
+      photo, lang: (typeof lang !== "undefined" ? lang : "en"),
+      state: stateOf(rec), sideLabel });
+    if (u) return { html: window.CMR.fitMap(u.html), key: u.key };
+    /* No fallback to mapSVG. mapPhoto already draws the frame underneath when
+       a model has no photograph — that is the same fallback the capture screen
+       uses — so a second renderer here would only be a second picture of the
+       same machine, waiting to disagree with the first. */
+    return { html: "", key: null };
   }
 
   /* ---- the dashboard's records, in the shape the core reads -------------- */
@@ -214,7 +211,8 @@
       by: rec.by || "", sup: rec.sup || "", smu: rec.smu || "",
       gps: rec.gps || null,
       signUrl: rec.signUrl || "",
-      mapHTML: reportMap(rec),
+      ...(() => { const m = reportMap(rec, (opts && opts.art && opts.art[rec.equip + "|" + rec.type]) || "");
+                  return { mapHTML: m.html, mapKey: m.key }; })(),
       zones: rec.type === "TB" ? bodyZones(rec) : null,
       wear: typeof isWearType === "function" && isWearType(rec.type),
       temp: rec.type === "TEMP",
@@ -325,6 +323,32 @@
     };
   }
 
+  /* The machine photographs this set of rounds needs, fetched once and turned
+     into bytes. Has to happen before anything is laid out: the drawing carries
+     the picture inside an inline <svg>, and html2canvas serialises that SVG —
+     a relative href inside it resolves against nothing and comes out blank.
+
+     Keyed by machine and round type, because one report prints the same dozer
+     on several sheets and the encode is the expensive part. A URL that fails
+     resolves to "", and mapPhoto draws the frame underneath instead — the same
+     fallback the capture screen uses when a photo has not been shot yet. */
+  async function artFor(recs) {
+    if (!(window.WEAR && WEAR.reportPhotoFor && window.CMR)) return {};
+    const want = new Map();
+    recs.forEach(r => {
+      const a = (typeof ASSET_BY !== "undefined" && ASSET_BY[r.equip]) || {};
+      const k = r.equip + "|" + r.type;
+      if (want.has(k)) return;
+      want.set(k, WEAR.reportPhotoFor({ type: r.type, equip: r.equip,
+        model: a.m || "", cat: a.cat || a.cls || "" }));
+    });
+    const art = {};
+    await Promise.all([...want].map(async ([k, url]) => {
+      art[k] = url ? await window.CMR.inlinePhoto(url) : "";
+    }));
+    return art;
+  }
+
   /* ---------------------------------------------------------------------- */
   async function generate(scope, target, opts, onProgress) {
     if (!(window.jspdf && window.jspdf.jsPDF) || !window.html2canvas)
@@ -339,11 +363,13 @@
        machine, is not one — the measurement history in the core says more. */
     if (scope !== "unit" && scope !== "one") { const s = paretoSection(recs); if (s) extra.push(s); }
 
+    const art = await artFor(recs);
+
     const st = document.createElement("style"); st.textContent = EXTRA_CSS;
     document.head.appendChild(st);
     try {
       const sections = window.CMR.sections(
-        ctxFor(recs, Object.assign({}, opts, { scope, target, extra })));
+        ctxFor(recs, Object.assign({}, opts, { scope, target, extra, art })));
       const stamp = new Date().toISOString().slice(0, 10);
       const doc = await window.CMR.paginate({
         sections, jsPDF: window.jspdf.jsPDF, html2canvas: window.html2canvas,
@@ -357,5 +383,5 @@
     } finally { st.remove(); }
   }
 
-  window.CMReport = { generate, recsForScope, normalise, ctxFor };
+  window.CMReport = { generate, recsForScope, normalise, ctxFor, artFor };
 })();

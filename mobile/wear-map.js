@@ -546,6 +546,101 @@
     return s.join('');
   };
 
+  /* ---- the same machine on paper as on the glass --------------------------
+     The capture screen shows a photograph of the actual machine with the walk
+     numbered on the parts it names, and the eleven numbers named underneath.
+     The report drew mapSVG's abstract track frame instead — a different
+     picture of the same round, lettered O / I / S / 1–8 / A–E, which appears
+     nowhere in the app. The copy that left the building was the one nobody in
+     the pit had ever seen.
+
+     A GET round had it worse: the screen draws the bucket or the blade with
+     its teeth numbered, and the report drew nothing at all.
+
+     Both hosts call these, so the page and the screen cannot drift apart
+     again — and a guard can render one and compare it to the other. */
+  var GRP_RANK = { '': 0, done: 1, na: 2, watch: 3, act: 4 };
+  function esc1(s) { return String(s == null ? '' : s)
+    .replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+  /* o.model, o.rollers, o.fam, o.high   the machine
+     o.photo                             a data: URI, or "" for the drawn frame
+     o.state(key)                        "" | done | watch | act | na
+     o.sideLabel(side)                   already-escaped caption HTML
+     -> { html, key:[{n,en,ru}] }  or null when this model has no walk */
+  W.reportUCMap = function (o) {
+    o = o || {};
+    var UP = window.UCPTS;
+    if (!UP || !W.mapPhoto) return null;
+    var lang = o.lang === 'ru' ? 'ru' : 'en';
+    var rollers = o.rollers || W.rollersDefault;
+    var keys = function (n, sd) { return UP.keysFor(n, sd, rollers) || []; };
+    /* A number covers one or more measurements; it takes the worst of them,
+       exactly as ucGroupState does on the capture screen. */
+    var groupState = function (n, sd) {
+      var worst = '', none = true;
+      keys(n, sd).forEach(function (k) {
+        var v = (o.state ? o.state(k) : '') || '';
+        if (v) none = false;
+        if (GRP_RANK[v] > GRP_RANK[worst]) worst = v; });
+      return none ? '' : worst; };
+    var box = UP.boxFor(o.model || '');
+    var sides = (o.sides || ['L', 'R']).filter(function (sd) {
+      return (UP.labels || []).some(function (r) { return keys(r[0], sd).length; }); });
+    if (!sides.length) return null;
+    var html = sides.map(function (sd) {
+      return '<div class="ucmapwrap" data-side="' + sd + '">'
+        + W.mapPhoto({ photo: o.photo || '', box: box, fam: o.fam, high: o.high,
+                       rollers: rollers, side: sd, lang: lang, sel: 0,
+                       state: function (n) { return groupState(n, sd); } })
+        + (o.sideLabel ? '<div class="umside">' + o.sideLabel(sd) + '</div>' : '')
+        + '</div>'; }).join('');
+    var used = (UP.labels || []).filter(function (r) {
+      return sides.some(function (sd) { return keys(r[0], sd).length; }); });
+    return { html: html, key: used.map(function (r) {
+      return { n: r[0], en: UP.label(r[0], 'en'), ru: UP.label(r[0], 'ru') }; }) };
+  };
+
+  /* The bucket or the blade, teeth numbered — the GET screen, printed.
+     o.unit, o.cat, o.model, o.photo (data: URI), o.state(key) */
+  W.reportGETMap = function (o) {
+    o = o || {};
+    var GT = window.GET;
+    if (!GT || !W.mapPhoto) return null;
+    var prof = GT.profileFor(o.unit, o.cat || '', o.model || '');
+    if (!prof) return null;
+    var walk = GT.walk(o.unit, o.cat || '', o.model || '') || [];
+    if (!walk.length) return null;
+    var lang = o.lang === 'ru' ? 'ru' : 'en';
+    return {
+      html: '<div class="ucmapwrap">' + W.mapPhoto({
+        photo: o.photo || '', aspect: prof.aspect, box: [0, 0, 100, 100],
+        lang: lang, tool: prof.tool, sel: 0,
+        layout: walk.map(function (w) { return [w.n, w.x / 100, w.y / 100]; }),
+        numOf: function (n) { return (walk[n - 1] || {}).k; },
+        state: function (n) {
+          return (o.state ? o.state((walk[n - 1] || {}).k) : '') || ''; },
+      }) + (o.caption ? '<div class="umside">' + o.caption + '</div>' : '') + '</div>',
+      key: walk.map(function (w) { return { n: w.n, en: w.en, ru: w.ru }; }),
+      photoUrl: prof.photo,
+    };
+  };
+  /* Which artwork each round needs, so a host can fetch and inline it before
+     it builds anything — an <image href> inside an inline SVG does not survive
+     html2canvas, which serialises the SVG and loses every relative reference
+     in it. The picture has to already BE the bytes. */
+  W.reportPhotoFor = function (rec) {
+    var MP = window.MACHINE_PHOTOS, GT = window.GET;
+    if (rec.type === 'UC') return MP ? MP.ucUrlFor(rec.model || '') : '';
+    if (rec.type === 'GET' && GT) {
+      var p = GT.profileFor(rec.equip, rec.cat || '', rec.model || '');
+      return p ? p.photo : '';
+    }
+    return '';
+  };
+  W.escMap = esc1;
+
   /* Short labels for the chain row: the full names do not fit and the drawing on
      the capture screen names the point again anyway. */
   W.mapShort = { LINKH: 'HGT', BUSH: 'BUSH', PITCH4: 'P×4', PITCH1: 'P×1', GROUSER: 'GRSR' };
