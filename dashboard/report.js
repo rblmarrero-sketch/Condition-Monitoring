@@ -34,6 +34,13 @@
     try { lang = OTHER(); return fn(); } finally { lang = was; }
   }
 
+  /* Sections built HERE print through the core's translator too. The bilingual
+     pass covered report-core's own strings and stopped at the section
+     boundary, so the Pareto page came out in one language inside a document
+     where every other heading carried both. */
+  const RT = () => window.CMR.makeT(typeof lang !== "undefined" ? lang : "en", true);
+  const B = (T, k, v) => T.both(L(k, v), inOther(() => L(k, v)));
+
   function recsForScope(scope, target) {
     const R = allRecs().filter(r => !r._void);
     /* One inspection, by its storage key — what the button on a history card
@@ -268,12 +275,12 @@
     }));
     const rows = Object.keys(cnt).map(k => [k, cnt[k]]).sort((a, b) => b[1] - a[1]).slice(0, 12);
     if (!rows.length) return null;
-    const top = rows[0][1];
+    const top = rows[0][1], T = RT();
     let h = '<div class="sec"><div class="sechd"><span class="n">__N__</span>'
-      + `<span class="h2">${esc(L("rpt_pareto"))}</span>`
-      + `<span class="muted" style="font-size:10.5px;margin-left:auto;">${esc(L("rpt_pareto_sub"))}</span></div>`
-      + `<table><tr><th>${esc(L("rpt_mode_h"))}</th><th style="width:250px"></th>`
-      + `<th class="r" style="width:44px">${esc(L("rpt_count_h"))}</th></tr>`;
+      + `<span class="h2">${B(T, "rpt_pareto")}</span>`
+      + `<span class="muted" style="font-size:10.5px;margin-left:auto;">${B(T, "rpt_pareto_sub")}</span></div>`
+      + `<table><tr><th>${B(T, "rpt_mode_h")}</th><th style="width:250px"></th>`
+      + `<th class="r" style="width:44px">${B(T, "rpt_count_h")}</th></tr>`;
     rows.forEach(([k, n], i) => {
       const c = HEX()[sev[k]] || "#8a939b";
       h += `<tr class="${i % 2 ? "zebra" : ""}"><td>${esc(k)}</td>`
@@ -281,6 +288,178 @@
         + `<td class="r n"><b>${n}</b></td></tr>`;
     });
     return { nb: false, html: h + "</table></div>" };
+  }
+
+  /* ---- ground engaging tools, analysed ------------------------------------
+     Written down so nobody has to work it out twice.
+
+     A GET programme is judged on four questions. This round's data answers
+     three of them honestly, and the fourth it cannot:
+
+       WHICH POSITION EATS THE MONEY — wear rate per position, in millimetres
+       per 1,000 machine hours. Needs two readings and an hour meter, and the
+       round takes both. This is the number that says whether the money is
+       going into teeth or into sidewall plate, which are different problems
+       with different answers.
+
+       WHEN TO ORDER — hours to condemn, from that rate. The Wear & life screen
+       already forecasts every measured point on the fleet; what a GET report
+       adds is the ranking within one tool.
+
+       IS IT THE MACHINE OR THE OPERATOR — left against right on the paired
+       positions: end bits, side cutters, sidewall plates. A blade run cocked,
+       or a bucket always dug from the same side, shows up as a persistent
+       imbalance long before either side is near its limit. It is the only
+       finding on this page that changes behaviour instead of raising a parts
+       order, which is what makes it worth the space.
+
+       WHAT IS ACTUALLY BEING REPLACED — findings ranked by position.
+
+     The fourth question a GET programme usually asks — cost per hour, or per
+     tonne moved — is absent on purpose rather than estimated. Nothing in this
+     system carries a part price or a payload figure. A cost-per-tonne chart
+     built on neither would be the most quoted number in the report and the
+     least true one in it; it needs the parts catalogue and the production
+     figures joined in first. Until then the wear rate is the honest proxy,
+     and saying so is better than a plausible invention. */
+  const GET_PAIRS = [["ENDL", "ENDR"], ["EDGEL", "EDGER"], ["CUTL", "CUTR"], ["WALLL", "WALLR"]];
+  const GET_IMBAL = 1.3;          // 30% apart is past anything a tape explains
+
+  function getStats(recs) {
+    const R = recs.filter(r => r.type === "GET" && !r._void);
+    if (!R.length || !window.GET) return null;
+    const ser = new Map();
+    R.slice().sort((a, b) => (a.date || "").localeCompare(b.date || "")).forEach(r => {
+      const a = (typeof ASSET_BY !== "undefined" && ASSET_BY[r.equip]) || {};
+      (r.items || []).forEach(it => {
+        const w = typeof wearOf === "function" ? wearOf(r, it) : null;
+        if (!w || w.mm == null || w.mm === "") return;
+        const k = r.equip + "|" + it.key;
+        if (!ser.has(k)) ser.set(k, []);
+        ser.get(k).push({ mm: Number(w.mm), smu: Number(r.smu) || null, w,
+                          equip: r.equip, code: it.key, cat: a.cat || a.cls || "", model: a.m || "" });
+      });
+    });
+    const rate = [], now = new Map();
+    ser.forEach(list => {
+      const last = list[list.length - 1];
+      now.set(last.equip + "|" + last.code, last);
+      if (list.length < 2) return;
+      const first = list[0];
+      /* Against the hour meter, never the calendar. A machine parked for a
+         month has not worn, and a rate per day would say it had. */
+      if (first.smu == null || last.smu == null) return;
+      const dh = last.smu - first.smu, dmm = first.mm - last.mm;
+      if (dh <= 0 || dmm <= 0) return;
+      rate.push({ equip: last.equip, code: last.code, cat: last.cat, model: last.model,
+                  per1k: dmm / dh * 1000, hours: dh, w: last.w });
+    });
+    /* Left against right, on the positions that come in pairs. Compared on
+       how much metal each has LOST, not on what is left — two parts that
+       started different sizes are not comparable any other way. */
+    const bal = [];
+    const byUnit = new Map();
+    now.forEach(v => { if (!byUnit.has(v.equip)) byUnit.set(v.equip, new Map());
+                       byUnit.get(v.equip).set(v.code, v); });
+    byUnit.forEach((m, equip) => GET_PAIRS.forEach(([a, b]) => {
+      const A = m.get(a), Bv = m.get(b);
+      if (!A || !Bv) return;
+      const lost = x => (x.w.newMM == null || x.w.newMM === "") ? null : Number(x.w.newMM) - x.mm;
+      const la = lost(A), lb = lost(Bv);
+      if (la == null || lb == null || la <= 0 || lb <= 0) return;
+      /* Guarded against a near-zero denominator: one side barely touched and
+         the other worn is a real finding, but 40 ÷ 0.02 is not a ratio, it is
+         a division artefact that would sort to the top of the table for ever. */
+      const ratio = Math.max(la, lb) / Math.max(0.5, Math.min(la, lb));
+      bal.push({ equip, a, b, la, lb, ratio, worse: la >= lb ? a : b,
+                 cat: A.cat, model: A.model });
+    }));
+    const pareto = {};
+    R.forEach(r => (r.items || []).forEach(it => {
+      const w = typeof wearOf === "function" ? wearOf(r, it) : null;
+      const bad = it.grade === "C" || it.grade === "X" || it.defect
+        || (w && (w.band === "act" || w.band === "watch"));
+      if (bad) pareto[it.key] = (pareto[it.key] || 0) + 1;
+    }));
+    rate.sort((x, y) => y.per1k - x.per1k);
+    bal.sort((x, y) => y.ratio - x.ratio);
+    return { rate, bal, pareto, units: byUnit.size,
+             generic: R.some(r => (r.items || []).some(it => {
+               const w = typeof wearOf === "function" ? wearOf(r, it) : null;
+               return w && /generic/.test(w.refSrc || ""); })) };
+  }
+
+  function getSection(recs) {
+    const s = getStats(recs);
+    if (!s) return null;
+    const T = RT();
+    const nameOf = (equip, code) => {
+      const a = (typeof ASSET_BY !== "undefined" && ASSET_BY[equip]) || {};
+      const en = GET.label(equip, a.cat || a.cls || "", a.m || "", code, "en");
+      const ru = GET.label(equip, a.cat || a.cls || "", a.m || "", code, "ru");
+      return T.both(en, ru);
+    };
+    let h = '<div class="sec"><div class="sechd"><span class="n">__N__</span>'
+      + `<span class="h2">${B(T, "g_an")}</span>`
+      + `<span class="muted" style="font-size:10.5px;margin-left:auto;">${B(T, "g_an_sub")}</span></div>`;
+
+    if (s.rate.length) {
+      const top = s.rate[0].per1k;
+      h += `<div class="subhd">${B(T, "g_rate")}</div>`
+        + `<table class="mh"><tr><th style="width:70px">${B(T, "c_unit_h")}</th>`
+        + `<th>${B(T, "g_pos")}</th><th style="width:196px"></th>`
+        + `<th class="r" style="width:76px">${B(T, "g_mm1k")}</th>`
+        + `<th class="r" style="width:70px">${B(T, "g_over")}</th></tr>`;
+      s.rate.slice(0, 10).forEach((x, i) => {
+        h += `<tr class="${i % 2 ? "zebra" : ""}"><td><span class="unit">${esc(x.equip)}</span></td>`
+          + `<td>${nameOf(x.equip, x.code)}</td>`
+          + `<td><span class="wb" style="min-width:0"><i style="width:${(x.per1k / top * 100).toFixed(1)}%;background:${HEX().DEG || "#ec835a"}"></i></span></td>`
+          + `<td class="r n"><b>${x.per1k.toFixed(1)}</b></td>`
+          + `<td class="r n">${Math.round(x.hours)} h</td></tr>`;
+      });
+      h += "</table>";
+    }
+
+    if (s.bal.length) {
+      const bad = s.bal.filter(x => x.ratio >= GET_IMBAL);
+      h += `<div class="subhd" style="margin-top:13px;">${B(T, "g_bal")}</div>`
+        + `<div class="quiet" style="margin:0 0 5px;">${B(T, bad.length ? "g_bal_bad" : "g_bal_ok",
+             { n: bad.length })}</div>`;
+      if (bad.length) {
+        h += `<table class="mh"><tr><th style="width:70px">${B(T, "c_unit_h")}</th>`
+          + `<th>${B(T, "g_pair")}</th>`
+          + `<th class="r" style="width:70px">${B(T, "g_lost_l")}</th>`
+          + `<th class="r" style="width:70px">${B(T, "g_lost_r")}</th>`
+          + `<th class="r" style="width:78px">${B(T, "g_ratio")}</th></tr>`;
+        bad.slice(0, 8).forEach((x, i) => {
+          h += `<tr class="${i % 2 ? "zebra" : ""}"><td><span class="unit">${esc(x.equip)}</span></td>`
+            + `<td>${nameOf(x.equip, x.a)} <span class="muted">/</span> ${nameOf(x.equip, x.b)}</td>`
+            + `<td class="r n">${x.la.toFixed(1)}</td><td class="r n">${x.lb.toFixed(1)}</td>`
+            + `<td class="r n"><b style="color:${HEX().DEG || "#ec835a"}">${x.ratio.toFixed(1)}×</b></td></tr>`;
+        });
+        h += "</table>";
+      }
+    }
+
+    const pk = Object.keys(s.pareto).sort((a, b) => s.pareto[b] - s.pareto[a]).slice(0, 8);
+    if (pk.length) {
+      const top = s.pareto[pk[0]], any = s.rate[0] || { equip: "" };
+      h += `<div class="subhd" style="margin-top:13px;">${B(T, "g_top")}</div>`
+        + `<table class="mh"><tr><th>${B(T, "g_pos")}</th><th style="width:250px"></th>`
+        + `<th class="r" style="width:50px">${B(T, "rpt_count_h")}</th></tr>`;
+      pk.forEach((k, i) => {
+        h += `<tr class="${i % 2 ? "zebra" : ""}"><td>${nameOf(any.equip, k)}</td>`
+          + `<td><span class="wb" style="min-width:0"><i style="width:${(s.pareto[k] / top * 100).toFixed(1)}%;background:${HEX().CRI || "#d03b3b"}"></i></span></td>`
+          + `<td class="r n"><b>${s.pareto[k]}</b></td></tr>`;
+      });
+      h += "</table>";
+    }
+    /* Said once, at the bottom, where the numbers above it can be read in the
+       light of it: these limits are starting points, not the supplier's. */
+    if (s.generic) h += `<div class="quiet" style="margin-top:10px;">${B(T, "g_generic")}</div>`;
+    /* And what this page deliberately does not claim. */
+    h += `<div class="quiet" style="margin-top:6px;">${B(T, "g_nocost")}</div>`;
+    return { nb: true, html: h + "</div>" };
   }
 
   /* The document title carries both languages too, at a size that reads as a
@@ -362,6 +541,11 @@
     /* A Pareto needs a population to rank. One machine, or one round of one
        machine, is not one — the measurement history in the core says more. */
     if (scope !== "unit" && scope !== "one") { const s = paretoSection(recs); if (s) extra.push(s); }
+    /* GET is analysed wherever there is a GET round to analyse — including on
+       one machine, because the questions it answers (which position is eating
+       the metal, is one side wearing harder) are about that machine and do not
+       need a fleet behind them. */
+    { const g = getSection(recs); if (g) extra.push(g); }
 
     const art = await artFor(recs);
 
@@ -383,5 +567,5 @@
     } finally { st.remove(); }
   }
 
-  window.CMReport = { generate, recsForScope, normalise, ctxFor, artFor };
+  window.CMReport = { generate, recsForScope, normalise, ctxFor, artFor, getSection, getStats };
 })();

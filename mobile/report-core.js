@@ -378,7 +378,10 @@
    is not an error, it is just a column nobody sees. Fixed layout, declared
    widths, and headings that wrap instead of pushing. */
 #rptRoot table.mh{table-layout:fixed;}
-#rptRoot table.mh th{padding:0 4px 5px;overflow-wrap:anywhere;}
+/* break-word, not anywhere: "anywhere" splits a heading mid-word — MEASURED
+   OVER came out as "MEASURE D OVER" — where break-word only breaks a single
+   word that genuinely cannot fit, and wraps between words first. */
+#rptRoot table.mh th{padding:0 4px 5px;overflow-wrap:break-word;}
 /* td.n is nowrap so a measurement never breaks across two lines. In a fixed
    table that turns "no reference for this model" into a sentence printed
    straight through the four columns to its right — legible, wrong, and not an

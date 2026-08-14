@@ -1058,21 +1058,21 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=107"></script>
-<script src="../mobile/hme.js?v=107"></script>
-<script src="../mobile/mp-fc.js?v=107"></script>
-<script src="../mobile/hme-cascade.js?v=107"></script>
-<script src="../mobile/temp-limits.js?v=107"></script>
+<script src="../data/magnetic_plug.js?v=108"></script>
+<script src="../mobile/hme.js?v=108"></script>
+<script src="../mobile/mp-fc.js?v=108"></script>
+<script src="../mobile/hme-cascade.js?v=108"></script>
+<script src="../mobile/temp-limits.js?v=108"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=107"></script>
-<script src="../mobile/wear.js?v=107"></script>
-<script src="../mobile/wear-map.js?v=107"></script>
+<script src="../mobile/assets.js?v=108"></script>
+<script src="../mobile/wear.js?v=108"></script>
+<script src="../mobile/wear-map.js?v=108"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=107"></script>
-<script src="../mobile/machine-photos.js?v=107"></script>
+<script src="../mobile/upload-defaults.js?v=108"></script>
+<script src="../mobile/machine-photos.js?v=108"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -1081,16 +1081,16 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=107"></script>
-<script src="../mobile/get.js?v=107"></script>
-<script src="../mobile/uc-points.js?v=107"></script>
-<script src="../mobile/inspect-guide.js?v=107"></script>
-<script src="../mobile/get-figs.js?v=107"></script>
-<script src="../mobile/body-points.js?v=107"></script>
-<script src="../mobile/body-map.js?v=107"></script>
-<script src="../mobile/jspdf.umd.min.js?v=107"></script>
-<script src="../mobile/html2canvas.min.js?v=107"></script>
-<script src="../mobile/report-core.js?v=107"></script>
+<script src="../mobile/machine-fig.js?v=108"></script>
+<script src="../mobile/get.js?v=108"></script>
+<script src="../mobile/uc-points.js?v=108"></script>
+<script src="../mobile/inspect-guide.js?v=108"></script>
+<script src="../mobile/get-figs.js?v=108"></script>
+<script src="../mobile/body-points.js?v=108"></script>
+<script src="../mobile/body-map.js?v=108"></script>
+<script src="../mobile/jspdf.umd.min.js?v=108"></script>
+<script src="../mobile/html2canvas.min.js?v=108"></script>
+<script src="../mobile/report-core.js?v=108"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -1372,6 +1372,16 @@ const I18N={
   rpt_pareto:"Failure modes, ranked", rpt_pareto_sub:"the defect-elimination shortlist",
   c_unit_h:"Machine", rpt_type_h:"Type", rpt_rounds_h:"Rounds",
   rpt_mode_h:"Failure mode", rpt_count_h:"Count",
+  /* ground engaging tools, analysed */
+  g_an:"Ground engaging tools", g_an_sub:"what is wearing, how fast, and whether evenly",
+  g_rate:"Wear rate by position", g_pos:"Position", g_mm1k:"mm / 1000 h",
+  g_over:"Hours", g_bal:"Left against right",
+  g_bal_ok:"Both sides of every paired position are wearing evenly. Nothing here points at how the machine is being set up or run.",
+  g_bal_bad:"{n} paired position(s) are wearing more than 30% harder on one side. That is a machine or a technique, not a part — check blade set-up, bucket alignment and which way the machine is being loaded before ordering more metal.",
+  g_pair:"Pair", g_lost_l:"Lost, first", g_lost_r:"Lost, second", g_ratio:"Imbalance",
+  g_top:"Positions raising the most work",
+  g_generic:"Some limits shown are generic starting points, not the supplier's wear charts. The trend is real; the percentages move when the real figures are loaded.",
+  g_nocost:"No cost per hour or per tonne is given. This system holds neither part prices nor payload, and a cost figure built on neither would be the most quoted number here and the least true.",
   r_title:"PDF report",
   r_sub:"Bilingual EN / RU. Each inspection type prints its own layout —",
   r_scope:"Scope", r_unit:"Equipment — one machine + trend", r_round:"Round — one date, all units",
@@ -1626,6 +1636,15 @@ const I18N={
   rpt_pareto:"Виды отказов по частоте", rpt_pareto_sub:"список на устранение",
   c_unit_h:"Машина", rpt_type_h:"Тип", rpt_rounds_h:"Обходы",
   rpt_mode_h:"Вид отказа", rpt_count_h:"Кол-во",
+  g_an:"Рабочие органы", g_an_sub:"что изнашивается, как быстро и равномерно ли",
+  g_rate:"Скорость износа по позициям", g_pos:"Позиция", g_mm1k:"мм / 1000 ч",
+  g_over:"Наработка", g_bal:"Левая сторона против правой",
+  g_bal_ok:"Обе стороны всех парных позиций изнашиваются равномерно. Признаков влияния настройки или манеры работы нет.",
+  g_bal_bad:"Парных позиций с перекосом более 30%: {n}. Это машина или манера работы, а не деталь — проверьте установку отвала, соосность ковша и сторону загрузки, прежде чем заказывать металл.",
+  g_pair:"Пара", g_lost_l:"Съём, первая", g_lost_r:"Съём, вторая", g_ratio:"Перекос",
+  g_top:"Позиции, дающие больше всего работы",
+  g_generic:"Часть пределов — типовые ориентиры, а не карты износа поставщика. Тенденция реальна; проценты изменятся, когда будут загружены настоящие цифры.",
+  g_nocost:"Стоимость за час или за тонну не приводится. В системе нет ни цен на детали, ни объёмов, а цифра, построенная ни на чём, стала бы самым цитируемым и самым недостоверным числом в отчёте.",
   r_title:"PDF-отчёт",
   r_sub:"Двуязычный EN / RU. Каждый тип осмотра печатается по-своему —",
   r_scope:"Объём", r_unit:"Техника — одна машина + тренд", r_round:"Обход — одна дата, все единицы",
@@ -4033,8 +4052,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=107"></script>
-<script src="sync-adapter.js?v=107"></script>
-<script src="report.js?v=107"></script>
+<script src="drive.js?v=108"></script>
+<script src="sync-adapter.js?v=108"></script>
+<script src="report.js?v=108"></script>
 </body>
 </html>
