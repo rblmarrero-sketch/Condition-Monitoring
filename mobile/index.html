@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=110">
+<link rel="manifest" href="manifest.webmanifest?v=111">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=110">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=110">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=110">
+<link rel="apple-touch-icon" href="icon-192.png?v=111">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=111">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=111">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1121,8 +1121,6 @@
   .rdrow.act .rv,.rdrow.act .rp{color:var(--critical);}
   .rdrow.watch .rv,.rdrow.watch .rp{color:var(--serious);}
   .rdrow .na{font-weight:500;font-size:12px;color:var(--muted);}
-  .rdgrp{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);
-    margin:16px 0 4px;font-weight:700;}
   /* Somebody else's round, and it says so before anything else on the page. */
   .rdown{background:var(--accent-soft);color:var(--ink);border:1px solid var(--border);
     border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.45;margin:4px 0 6px;}
@@ -1599,25 +1597,25 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=110"></script>
-<script src="upload-defaults.js?v=110"></script>
-<script src="hme.js?v=110"></script>
-<script src="mp-fc.js?v=110"></script>
-<script src="hme-cascade.js?v=110"></script>
-<script src="assets.js?v=110"></script>
-<script src="temp-limits.js?v=110"></script>
-<script src="wear.js?v=110"></script>
-<script src="wear-figs.js?v=110"></script>
-<script src="wear-map.js?v=110"></script>
-<script src="machine-photos.js?v=110"></script>
-<script src="machine-fig.js?v=110"></script>
-<script src="get.js?v=110"></script>
-<script src="uc-points.js?v=110"></script>
-<script src="inspect-guide.js?v=110"></script>
-<script src="get-figs.js?v=110"></script>
-<script src="body-points.js?v=110"></script>
-<script src="body-map.js?v=110"></script>
-<script src="report-core.js?v=110"></script>
+<script src="native.js?v=111"></script>
+<script src="upload-defaults.js?v=111"></script>
+<script src="hme.js?v=111"></script>
+<script src="mp-fc.js?v=111"></script>
+<script src="hme-cascade.js?v=111"></script>
+<script src="assets.js?v=111"></script>
+<script src="temp-limits.js?v=111"></script>
+<script src="wear.js?v=111"></script>
+<script src="wear-figs.js?v=111"></script>
+<script src="wear-map.js?v=111"></script>
+<script src="machine-photos.js?v=111"></script>
+<script src="machine-fig.js?v=111"></script>
+<script src="get.js?v=111"></script>
+<script src="uc-points.js?v=111"></script>
+<script src="inspect-guide.js?v=111"></script>
+<script src="get-figs.js?v=111"></script>
+<script src="body-points.js?v=111"></script>
+<script src="body-map.js?v=111"></script>
+<script src="report-core.js?v=111"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -6069,6 +6067,25 @@ async function rptRecords(){
   }
   return out;
 }
+/* What a PDF made ON THE PHONE is encoded at.
+
+   The office prints over wi-fi and can afford detail; a phone sends over a
+   Chukotka satellite link and cannot. Measured on a one-round undercarriage
+   report rather than guessed:
+
+     2.0 @ 0.92   490 KB   what this used to do
+     1.8 @ 0.92   429 KB   -12%   scale alone is the small lever
+     1.8 @ 0.82   313 KB   -36%   here
+     1.8 @ 0.72   257 KB   -48%   ringing shows on the type
+
+   A page of this report is type, rules and flat fills, which JPEG encodes
+   cheaply, plus one photograph, which is the only part that softens. 0.82 is
+   the last step before that softening reaches the measurement tables.
+
+   The dashboard is untouched and keeps its Standard/High selector: High is
+   the office's to choose. */
+const PHONE_PDF = { scale: 1.8, jpeg: 0.82 };
+
 /* ===================== a round somebody else uploaded =====================
 
    The whole point of this screen is that the phone does not need the
@@ -6187,6 +6204,7 @@ $("roundRpt").onclick=async ()=>{
         sevLabel:s=>t("sev_"+s), sevLabelAlt:s=>inOtherLang(()=>t("sev_"+s)),
         records:[norm] }),
       jsPDF:window.jspdf.jsPDF, html2canvas:window.html2canvas,
+      scale:PHONE_PDF.scale, jpeg:PHONE_PDF.jpeg,
       docId:`CM-${rec.equip}-${rec.date}` });
     $("dlg").close();
     doc.save(`CM_${rec.equip}_${rec.type}_${rec.date}.pdf`);
@@ -6205,7 +6223,8 @@ $("reportBtn").onclick=async ()=>{
   dlg(t("rep_building"));
   try{
     const doc=await CMR.paginate({ sections:await buildReportSections(),
-      jsPDF:window.jspdf.jsPDF, html2canvas:window.html2canvas, docId:"CM-"+todayISO() });
+      jsPDF:window.jspdf.jsPDF, html2canvas:window.html2canvas,
+      scale:PHONE_PDF.scale, jpeg:PHONE_PDF.jpeg, docId:"CM-"+todayISO() });
     $("dlg").close();
     doc.save(`CM_report_${todayISO()}.pdf`);
   }catch(err){ $("dlg").close(); dlg(["Report error", String(err&&err.message||err)]); }
@@ -6326,7 +6345,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="110";
+const BUILD="111";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

@@ -1630,7 +1630,12 @@
           var cx=c2.getContext("2d");
           cx.fillStyle="#ffffff"; cx.fillRect(0,0,c2.width,c2.height);
           cx.drawImage(c,0,sY,c.width,sliceH,0,0,c.width,sliceH);
-          doc.addImage(c2.toDataURL("image/jpeg",0.92),"JPEG",M,y,cw,sliceH*k);
+          /* The single biggest lever on the file size, and it was a literal.
+             A page of this report is type, rules and flat fills — the things
+             JPEG encodes cheaply — plus one photograph, which is the only part
+             that suffers. A phone sending a PDF off a Chukotka satellite link
+             wants a different point on that curve from an office printing it. */
+          doc.addImage(c2.toDataURL("image/jpeg",opts.jpeg||0.92),"JPEG",M,y,cw,sliceH*k);
           y+=sliceH*k; sY+=sliceH; drew=true;
           if(sY<c.height){ doc.addPage(); y=top; }
         }
