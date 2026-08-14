@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=112">
+<link rel="manifest" href="manifest.webmanifest?v=113">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=112">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=112">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=112">
+<link rel="apple-touch-icon" href="icon-192.png?v=113">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=113">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=113">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1597,25 +1597,25 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=112"></script>
-<script src="upload-defaults.js?v=112"></script>
-<script src="hme.js?v=112"></script>
-<script src="mp-fc.js?v=112"></script>
-<script src="hme-cascade.js?v=112"></script>
-<script src="assets.js?v=112"></script>
-<script src="temp-limits.js?v=112"></script>
-<script src="wear.js?v=112"></script>
-<script src="wear-figs.js?v=112"></script>
-<script src="wear-map.js?v=112"></script>
-<script src="machine-photos.js?v=112"></script>
-<script src="machine-fig.js?v=112"></script>
-<script src="get.js?v=112"></script>
-<script src="uc-points.js?v=112"></script>
-<script src="inspect-guide.js?v=112"></script>
-<script src="get-figs.js?v=112"></script>
-<script src="body-points.js?v=112"></script>
-<script src="body-map.js?v=112"></script>
-<script src="report-core.js?v=112"></script>
+<script src="native.js?v=113"></script>
+<script src="upload-defaults.js?v=113"></script>
+<script src="hme.js?v=113"></script>
+<script src="mp-fc.js?v=113"></script>
+<script src="hme-cascade.js?v=113"></script>
+<script src="assets.js?v=113"></script>
+<script src="temp-limits.js?v=113"></script>
+<script src="wear.js?v=113"></script>
+<script src="wear-figs.js?v=113"></script>
+<script src="wear-map.js?v=113"></script>
+<script src="machine-photos.js?v=113"></script>
+<script src="machine-fig.js?v=113"></script>
+<script src="get.js?v=113"></script>
+<script src="uc-points.js?v=113"></script>
+<script src="inspect-guide.js?v=113"></script>
+<script src="get-figs.js?v=113"></script>
+<script src="body-points.js?v=113"></script>
+<script src="body-map.js?v=113"></script>
+<script src="report-core.js?v=113"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2019,6 +2019,7 @@ const I18N = {
     rd_fetching:["Fetching that round…","Reading it from the folder. This takes a moment on a weak signal."],
     rd_offline:["No signal","This round has not been downloaded to this phone yet. Open it once you are back in range."],
     rd_nodrive:["No data source","No data source is set up on this phone, so rounds cannot be fetched. Set one up under Sync."],
+    rd_unreach:["Could not reach the folder","The round is in the system — this phone could not get to it. Weak signal, or the /exec address in ⚙ is wrong. Try again in coverage."],
     team_hint:"Everything the whole team has uploaded, not just this phone. Refreshes itself after each upload and is kept for offline — so the due list below knows about rounds someone else did.",
     team_none:"Nothing pulled yet — tap “Check for new”.",
     team_nodrive:"Set up Google Drive in ⚙ to see the team's inspections.",
@@ -2030,7 +2031,7 @@ const I18N = {
     team_full:"⚠ No room left on this phone — export or clear old inspections, then reload.",
     m_storage_full:["No room left","This phone's storage is full. Export and clear some inspections, then try again."],
     up_timeout:"timed out — signal too weak to finish the upload",
-    team_timeout:"Google Drive did not answer in 20 s — weak signal. Try again in coverage.",
+    team_timeout:"Google Drive did not answer in time — weak signal. Try again in coverage.",
     team_more:"More is waiting — tap again.",
     team_voided:"{n} withdrawn by the office.",
     team_clash:"⑂ {n} sent twice — the office must pick which one stands.",
@@ -2332,6 +2333,7 @@ const I18N = {
     rd_fetching:["Загружаю обход…","Читаю из папки. При слабом сигнале это занимает время."],
     rd_offline:["Нет связи","Этот обход ещё не скачан на телефон. Откройте его, когда появится сигнал."],
     rd_nodrive:["Нет источника данных","На телефоне не настроен источник данных, обходы получить нельзя. Настройте его в разделе «Синхронизация»."],
+    rd_unreach:["Нет связи с папкой","Обход есть в системе — телефон не смог до него добраться. Слабый сигнал или неверный адрес /exec в ⚙. Повторите в зоне покрытия."],
     team_hint:"Всё, что загрузила вся бригада, а не только этот телефон. Обновляется после каждой выгрузки и хранится офлайн — поэтому список плановых осмотров знает об обходах, сделанных другими.",
     team_none:"Пока ничего не загружено — нажмите «Проверить новые».",
     team_nodrive:"Настройте Google Drive в ⚙, чтобы видеть осмотры бригады.",
@@ -2343,7 +2345,7 @@ const I18N = {
     team_full:"⚠ На телефоне нет места — выгрузите или очистите старые осмотры и повторите.",
     m_storage_full:["Нет места","Память телефона заполнена. Выгрузите и очистите часть осмотров и повторите."],
     up_timeout:"истекло время — слишком слабый сигнал для выгрузки",
-    team_timeout:"Google Drive не ответил за 20 с — слабый сигнал. Повторите в зоне покрытия.",
+    team_timeout:"Google Drive не ответил вовремя — слабый сигнал. Повторите в зоне покрытия.",
     team_more:"Есть ещё — нажмите ещё раз.",
     team_voided:"Отозвано офисом: {n}.",
     team_clash:"⑂ Прислано дважды: {n} — офис выберет верную версию.",
@@ -5444,6 +5446,12 @@ function teamMerge(recs,replace){
 let teamBusy=false, teamAt=0, teamAbort=null, teamRun=0;
 const TEAM_MIN_GAP=60000;    // automatic pulls only; the button always goes
 const TEAM_TIMEOUT=20000;    // pit signal can leave a fetch hanging for ever
+/* A full re-read is a different kind of request: the script walks every file in
+   the folder and gives itself four minutes to do it. Aborting that at twenty
+   seconds means Reload all — and every round fetched on demand — fails on any
+   folder with a season's work in it, and reports weak signal for a link that is
+   fine. The incremental pull keeps the short leash; it returns almost nothing. */
+const TEAM_TIMEOUT_FULL=150000;
 async function teamPull(manual,full){
   const msg=$("teamMsg"); if(!msg) return false;
   if(teamBusy){
@@ -5466,7 +5474,7 @@ async function teamPull(manual,full){
   const run=++teamRun;                       // a superseded pull must not clobber
   const mine=()=>teamRun===run;
   const ac=new AbortController(); teamAbort=ac;
-  const timer=setTimeout(()=>{ try{ ac.abort(); }catch(_){ } }, TEAM_TIMEOUT);
+  const timer=setTimeout(()=>{ try{ ac.abort(); }catch(_){ } }, full?TEAM_TIMEOUT_FULL:TEAM_TIMEOUT);
   teamBusy=true; $("teamRefresh").disabled=true;
   try{
     // The cursor means "I already hold everything up to here". If the cache is
@@ -5566,9 +5574,70 @@ function renderTeam(){
    inspector into a blank capture screen with no measurements and no report,
    and nothing anywhere said what had happened.
 
-   So: fetch it. A full re-read is the only call that returns records already
-   behind the cursor, and it is the same one the Reload all button makes. */
+   So: fetch it — and fetch THAT ONE.
+
+   The first attempt pulled the whole folder, which is how the dashboard reads
+   it. On a phone that is the wrong request: a season of rounds is megabytes
+   over a satellite link, the script caps a single read at 600 sidecars, and
+   anything that does not arrive inside the timeout comes back as "that round
+   is not there" for a round that is plainly on the list. Every row failed the
+   same way, which is the signature of a transport problem, not a missing file.
+
+   A round is one JSON file with a name this app chose when it uploaded it:
+   UNIT_DD.MM.YYYY_TYPE.json. So ask for the folder's index (names and ids
+   only), find that name, and fetch that single file. Two small requests
+   instead of one enormous one. */
 let teamHealed=false;
+/* Ask Drive one question, with its own leash. Returns the parsed reply, or null
+   for anything that did not arrive — the caller distinguishes "not there" from
+   "could not get there", because telling an inspector a round was withdrawn
+   when the truth is weak signal sends them looking for the wrong problem. */
+async function teamAsk(g,params,ms){
+  const q=new URLSearchParams(params);
+  if(g.sec) q.set("secret",g.sec);
+  const ac=new AbortController();
+  const timer=setTimeout(()=>{ try{ ac.abort(); }catch(_){ } }, ms||60000);
+  try{
+    const res=await fetch(g.url+(g.url.indexOf("?")<0?"?":"&")+q.toString(),
+                          {method:"GET", signal:ac.signal});
+    const j=JSON.parse(await res.text());
+    return (j && j.ok===false) ? null : j;
+  }catch(e){ return null; }
+  finally{ clearTimeout(timer); }
+}
+/* -> "ok" | "gone" | "unreachable" */
+async function teamFetchOne(g,k){
+  const parts=String(k).split("|"), u=parts[0]||"", d=parts[1]||"", ty=parts[2]||"";
+  if(!u||!d||!ty) return "gone";
+  const idx=await teamAsk(g,{action:"list", ext:".json"},TEAM_TIMEOUT_FULL);
+  if(!idx) return "unreachable";
+  const want=(u+"_"+ddmmyyyy(d)+"_"+ty+".json").toLowerCase();
+  const lo=s2=>String(s2||"").toLowerCase();
+  let hits=(idx.files||[]).filter(f=>lo(f.name)===want);
+  /* A record uploaded by an older build, or renamed by Drive because a file of
+     that name was already there, still belongs to this round. Match on the
+     three things that identify it rather than on the exact string. */
+  if(!hits.length) hits=(idx.files||[]).filter(f=>{
+    const n=lo(f.name);
+    return n.indexOf(lo(u)+"_")===0 && n.slice(-(ty.length+6))==="_"+lo(ty)+".json"
+        && (n.indexOf(ddmmyyyy(d))>=0 || n.indexOf(lo(d))>=0);
+  });
+  if(!hits.length) return "gone";
+  hits.sort((a2,b2)=>(b2.updated||0)-(a2.updated||0));   // a re-upload wins
+  const f=await teamAsk(g,{action:"file", id:hits[0].id},TEAM_TIMEOUT_FULL);
+  if(!f || !f.data) return "unreachable";
+  let rec=null;
+  try{
+    // The sidecar carries Cyrillic names. atob gives bytes, not characters.
+    const bin=atob(f.data), bytes=new Uint8Array(bin.length);
+    for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
+    const o=JSON.parse(new TextDecoder().decode(bytes));
+    rec=(o.records||[])[0]||null;
+  }catch(e){ return "unreachable"; }
+  if(!rec || !rec.equip || !rec.date) return "gone";
+  await teamStash([rec]);
+  return "ok";
+}
 async function openTeamRow(k){
   if(!k) return;
   if(await dbGet(TEAM_ID+k)) return openRound(k);
@@ -5576,14 +5645,20 @@ async function openTeamRow(k){
   if(!g){ dlg(t("rd_nodrive")); return; }
   if(!navigator.onLine){ dlg(t("rd_offline")); return; }
   dlg(t("rd_fetching"));
-  teamPin=TEAM_ID+k;                           // spare it from the trim it is about to trigger
+  teamPin=TEAM_ID+k;                           // spare it from the trim it may trigger
+  let why="unreachable";
   try{
-    await teamPull(true,true);                 // after=0 — everything, and stash it
-    $("dlg").close();
-  }catch(e){ $("dlg").close(); }
-  finally{ teamPin=""; }
-  if(await dbGet(TEAM_ID+k)) openRound(k);
-  else dlg(t("rd_gone"));                       // withdrawn, or older than the folder holds
+    why=await teamFetchOne(g,k);
+    /* Only if the folder says it does not have that file. The folder may hold
+       it under a name this build cannot predict — a full re-read is slow, but
+       it is the reading that cannot miss, and by here somebody is already
+       waiting. A transport failure is NOT retried this way: it would just fail
+       again, more slowly. */
+    if(why==="gone" && await teamPull(true,true)) why="gone";
+  }catch(e){ }
+  finally{ teamPin=""; $("dlg").close(); }
+  if(await dbGet(TEAM_ID+k)) return openRound(k);
+  dlg(why==="gone" ? t("rd_gone") : t("rd_unreach"));
 }
 /* And heal it without waiting to be asked. A phone upgraded into this build
    holds rows and no records; one full re-read fixes every one of them. Once,
@@ -6409,7 +6484,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="112";
+const BUILD="113";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
