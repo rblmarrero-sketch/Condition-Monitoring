@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=109">
+<link rel="manifest" href="manifest.webmanifest?v=110">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=109">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=109">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=109">
+<link rel="apple-touch-icon" href="icon-192.png?v=110">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=110">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=110">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1111,6 +1111,21 @@
   .picklist{flex:1;overflow-y:auto;padding:8px 14px calc(env(safe-area-inset-bottom) + 20px);}
   .pickitem{display:block;width:100%;text-align:left;background:none;border:none;border-bottom:1px solid var(--border);color:var(--ink);padding:13px 4px;font-size:15px;cursor:pointer;}
   .pickitem .pickgrp{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);margin-bottom:2px;}
+  /* ---- a round somebody else did, read on this phone --------------------- */
+  .rdrow{display:flex;gap:10px;align-items:baseline;padding:9px 2px;border-bottom:1px solid var(--border);}
+  .rdrow .rk{flex:1;min-width:0;font-size:14px;}
+  .rdrow .rk b{display:block;font-weight:650;}
+  .rdrow .rk span{display:block;font-size:11.5px;color:var(--muted);}
+  .rdrow .rv{flex:none;font-variant-numeric:tabular-nums;font-weight:700;font-size:15px;text-align:right;}
+  .rdrow .rp{flex:none;width:52px;text-align:right;font-variant-numeric:tabular-nums;font-size:13px;}
+  .rdrow.act .rv,.rdrow.act .rp{color:var(--critical);}
+  .rdrow.watch .rv,.rdrow.watch .rp{color:var(--serious);}
+  .rdrow .na{font-weight:500;font-size:12px;color:var(--muted);}
+  .rdgrp{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);
+    margin:16px 0 4px;font-weight:700;}
+  /* Somebody else's round, and it says so before anything else on the page. */
+  .rdown{background:var(--accent-soft);color:var(--ink);border:1px solid var(--border);
+    border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.45;margin:4px 0 6px;}
   /* Two states, two weights, on purpose.
 
      Ready is a slim line — present enough to glance at and trust, quiet enough
@@ -1569,25 +1584,40 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="native.js?v=109"></script>
-<script src="upload-defaults.js?v=109"></script>
-<script src="hme.js?v=109"></script>
-<script src="mp-fc.js?v=109"></script>
-<script src="hme-cascade.js?v=109"></script>
-<script src="assets.js?v=109"></script>
-<script src="temp-limits.js?v=109"></script>
-<script src="wear.js?v=109"></script>
-<script src="wear-figs.js?v=109"></script>
-<script src="wear-map.js?v=109"></script>
-<script src="machine-photos.js?v=109"></script>
-<script src="machine-fig.js?v=109"></script>
-<script src="get.js?v=109"></script>
-<script src="uc-points.js?v=109"></script>
-<script src="inspect-guide.js?v=109"></script>
-<script src="get-figs.js?v=109"></script>
-<script src="body-points.js?v=109"></script>
-<script src="body-map.js?v=109"></script>
-<script src="report-core.js?v=109"></script>
+<!-- A round somebody else uploaded, opened on this phone. Read-only on
+     purpose: it is their work and their signature, and the one thing this
+     screen must never become is a way to quietly edit it. -->
+<div id="roundOv" class="pick-ov hidden">
+  <div class="pickhead">
+    <button id="roundClose" class="pickback" aria-label="Back">‹</button>
+    <div style="flex:1;min-width:0">
+      <div id="roundTitle" style="font-weight:700;font-size:16px;line-height:1.2"></div>
+      <div id="roundSub" class="hint" style="margin:2px 0 0"></div>
+    </div>
+    <button class="btn primary" id="roundRpt" style="flex:none;padding:10px 12px">📄</button>
+  </div>
+  <div id="roundBody" class="picklist"></div>
+</div>
+
+<script src="native.js?v=110"></script>
+<script src="upload-defaults.js?v=110"></script>
+<script src="hme.js?v=110"></script>
+<script src="mp-fc.js?v=110"></script>
+<script src="hme-cascade.js?v=110"></script>
+<script src="assets.js?v=110"></script>
+<script src="temp-limits.js?v=110"></script>
+<script src="wear.js?v=110"></script>
+<script src="wear-figs.js?v=110"></script>
+<script src="wear-map.js?v=110"></script>
+<script src="machine-photos.js?v=110"></script>
+<script src="machine-fig.js?v=110"></script>
+<script src="get.js?v=110"></script>
+<script src="uc-points.js?v=110"></script>
+<script src="inspect-guide.js?v=110"></script>
+<script src="get-figs.js?v=110"></script>
+<script src="body-points.js?v=110"></script>
+<script src="body-map.js?v=110"></script>
+<script src="report-core.js?v=110"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -1983,6 +2013,10 @@ const I18N = {
     due_hint:"Built from what this phone has recorded plus everything in the system above. Load an entries.json exported from the dashboard to seed the whole fleet's last-done dates.",
     m_due_loaded:["History loaded ✔","{n} unit/type dates added to the due list."],
     sec_team:"In the system", btn_team_refresh:"Check for new",
+    /* a round somebody else uploaded, opened here */
+    rd_owned:"Someone else's round — {by}. Shown as it was uploaded; it cannot be changed on this phone.",
+    rd_empty:"This round has no positions recorded.",
+    rd_gone:"That round is not on this phone. Press Reload all to fetch it again.",
     team_hint:"Everything the whole team has uploaded, not just this phone. Refreshes itself after each upload and is kept for offline — so the due list below knows about rounds someone else did.",
     team_none:"Nothing pulled yet — tap “Check for new”.",
     team_nodrive:"Set up Google Drive in ⚙ to see the team's inspections.",
@@ -2290,6 +2324,9 @@ const I18N = {
     due_hint:"Строится по данным этого телефона и по всему, что есть в системе выше. Загрузите entries.json из дашборда, чтобы подтянуть даты по всему парку.",
     m_due_loaded:["История загружена ✔","Добавлено дат: {n}."],
     sec_team:"В системе", btn_team_refresh:"Проверить новые",
+    rd_owned:"Обход другого инспектора — {by}. Показан как загружен; изменить его на этом телефоне нельзя.",
+    rd_empty:"В этом обходе нет записанных точек.",
+    rd_gone:"Этого обхода нет на телефоне. Нажмите «Загрузить всё», чтобы получить его снова.",
     team_hint:"Всё, что загрузила вся бригада, а не только этот телефон. Обновляется после каждой выгрузки и хранится офлайн — поэтому список плановых осмотров знает об обходах, сделанных другими.",
     team_none:"Пока ничего не загружено — нажмите «Проверить новые».",
     team_nodrive:"Настройте Google Drive в ⚙, чтобы видеть осмотры бригады.",
@@ -2957,7 +2994,23 @@ async function dbPut(rec){ const d=await idb(); return new Promise((res,rej)=>{ 
    trend, the export and everything else are correct without each having to
    remember. dbGet(DRAFT_ID) is the only way to reach it. */
 const DRAFT_ID="__draft__";
-async function dbAll(){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readonly"); const rq=t.objectStore(STORE).getAll(); rq.onsuccess=()=>res((rq.result||[]).filter(r=>r&&r.id!==DRAFT_ID)); rq.onerror=()=>rej(rq.error); }); }
+/* Rounds somebody ELSE uploaded, kept whole so this phone can open them.
+
+   The team pull already receives complete records — every measurement, every
+   grade — and threw all of it away, keeping a one-line summary for the list.
+   So "In the system" could tell you TK152 was done on the 4th and nothing
+   about what was found, and the only way to read it was a laptop.
+
+   They live in this store under a reserved prefix, the way the draft does,
+   and dbAll() filters them out in one place. That is deliberate: a team round
+   is NOT this phone's work. It must never reach the queue, the sync, the ZIP
+   or the "unsent" count — and the single filter is what makes that true
+   everywhere without every caller having to remember. */
+const TEAM_ID="__team__";
+const isTeamId=id=>String(id||"").indexOf(TEAM_ID)===0;
+async function dbAll(){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readonly"); const rq=t.objectStore(STORE).getAll(); rq.onsuccess=()=>res((rq.result||[]).filter(r=>r&&r.id!==DRAFT_ID&&!isTeamId(r.id))); rq.onerror=()=>rej(rq.error); }); }
+/* The team rounds only — the other side of that same filter. */
+async function dbTeam(){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readonly"); const rq=t.objectStore(STORE).getAll(); rq.onsuccess=()=>res((rq.result||[]).filter(r=>r&&isTeamId(r.id))); rq.onerror=()=>rej(rq.error); }); }
 async function dbGet(id){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readonly"); const rq=t.objectStore(STORE).get(id); rq.onsuccess=()=>res(rq.result||null); rq.onerror=()=>rej(rq.error); }); }
 async function dbDel(id){ const d=await idb(); return new Promise((res,rej)=>{ const t=d.transaction(STORE,"readwrite"); t.objectStore(STORE).delete(id); t.oncomplete=()=>{ dbVer++; res(); }; t.onerror=()=>rej(t.error); }); }
 
@@ -5328,6 +5381,29 @@ function teamVoid(eds){
   if(n){ teamSave([...have.values()]); histSave(h); }
   return n;
 }
+/* How many whole rounds this phone keeps. They carry no photographs — a Drive
+   record names its pictures rather than embedding them — so one is a few KB of
+   JSON and a couple of hundred is nothing next to the photo queue. Bounded
+   anyway, because "unbounded on someone else's upload rate" is how a phone
+   fills up in a month. */
+const TEAM_KEEP=250;
+const teamFullId=r=>TEAM_ID+(r.equip||"").toUpperCase()+"|"+(r.date||"")+"|"+(r.type||"");
+async function teamStash(recs){
+  if(!recs || !recs.length) return;
+  try{
+    for(const r of recs){
+      if(!r || !r.equip || !r.date) continue;
+      /* Stored as it arrived. Interpreting it here would mean a second copy of
+         the scoring rules that could disagree with the one the report uses. */
+      await dbPut(Object.assign({}, r, { id:teamFullId(r), _team:1, _at:Date.now() }));
+    }
+    const all=await dbTeam();
+    if(all.length>TEAM_KEEP){
+      all.sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));
+      for(const old of all.slice(TEAM_KEEP)) await dbDel(old.id);
+    }
+  }catch(e){ /* out of room, or the store is gone — the summary still works */ }
+}
 function teamMerge(recs,replace){
   // replace = a full re-read, so rows deleted in Drive should disappear too.
   // The due-list index is deliberately NOT reset: a last-done date is worth
@@ -5343,6 +5419,10 @@ function teamMerge(recs,replace){
     if(!h[hk]||h[hk]<row.d){ h[hk]=row.d; hist++; }
   }
   const saved=teamSave([...have.values()]); histSave(h);
+  /* Keep the rounds themselves, not just the line about them. Fire-and-forget:
+     the list must paint whether or not the write lands, and a phone that is
+     out of room should still get the summary it has always had. */
+  teamStash(recs);
   /* A baseline another inspector set has just arrived. Until it is loaded, this
      phone would score the same roller against the catalogue and the other
      against what was fitted — two answers for one part. */
@@ -5448,11 +5528,21 @@ function renderTeam(){
     const cls=sev==="CRI"?"over":sev==="DEG"?"soon":"";
     const age=daysBetween(r.d);
     const clash=cfHas(r);
-    return `<button class="dueitem ${cls}" data-u="${esc(r.u)}">
+    return `<button class="dueitem ${cls}" data-u="${esc(r.u)}" data-k="${esc(r.u+"|"+r.d+"|"+r.t)}">
       <span class="u">${esc(r.u)}${r.g?` · <span style="color:${GRADE_TINT[r.g]||"var(--muted)"};font-weight:700">${esc(r.g)}</span>`:""}${clash?` · <span style="color:var(--warn-ink);font-weight:700">⑂</span>`:""}</span>
       <span class="d">${esc(r.d)}${age!=null?` · ${t("due_days").replace("{n}",age)}`:""}${r.by?` · ${esc(r.by)}`:""}${clash?` · ${esc(t("team_clash_one"))}`:""}</span></button>`;
   }).join("");
-  box.querySelectorAll("[data-u]").forEach(b=>b.onclick=()=>{ selectEquip(b.dataset.u); showPane("paneCapture"); });
+  /* Tapping a row used to start a NEW round on that machine, which is the one
+     thing an inspector looking at "TK152, 4 days ago, Хасенов" does not want.
+     It opens THAT round now — every measurement, read-only — and offers its
+     PDF. Where the full record did not survive (it aged out of the cache, or
+     it arrived before this build), fall back to what the row could always do
+     rather than doing nothing. */
+  box.querySelectorAll("[data-k]").forEach(b=>b.onclick=async()=>{
+    const k=b.dataset.k;
+    if(await dbGet(TEAM_ID+k)) openRound(k);
+    else { selectEquip(b.dataset.u); showPane("paneCapture"); }
+  });
 }
 /* The point-of-capture answer: standing at TK146, has it just been done? */
 function renderLastDone(){
@@ -5979,6 +6069,130 @@ async function rptRecords(){
   }
   return out;
 }
+/* ===================== a round somebody else uploaded =====================
+
+   The whole point of this screen is that the phone does not need the
+   dashboard. An inspector standing at TK152 can open the round the other
+   shift did on it, read every measurement, and hand a PDF to the supervisor
+   from the same device — with no laptop, and offline, because the record was
+   stored when it arrived rather than fetched when it is wanted.
+
+   A Drive record is already in the shape the dashboard reads: items with
+   grades, defects and millimetres. What it does not carry is the scoring —
+   that is worked out from the model's reference, here, the same way the
+   capture screen does it, so a limit corrected since the upload shows
+   corrected on this page too. */
+function teamRecToReport(rec){
+  const meta=TYPE_META[rec.type]||{};
+  const a=ASSET_BY[rec.equip]||{};
+  const items=(rec.items||[]).map(it=>{
+    const nm=rptName(rec,it.key);
+    const read=[ it.particle&&`PC ${it.particle}`, it.comp&&`comp ${it.comp} h`,
+                 it.oil&&`oil ${it.oil} h`,
+                 (meta.temp&&it.tempC)&&`${it.tempC} °C${it.ambC?` / ${it.ambC}`:""}` ].filter(Boolean);
+    let w=null;
+    if(meta.wear || meta.get){
+      const mm=(it.mm===""||it.mm==null)?null:Number(it.mm);
+      const ref=teamRefFor(rec,it.key);
+      const pct=(ref&&mm!=null&&window.WEAR) ? Math.round(WEAR.wear(ref,mm)) : null;
+      w={ mm, newMM:ref?ref.n:null, condemnMM:ref?ref.c:null, pct,
+          band:(pct==null?"":(pct>=100?"act":pct>=80?"watch":"done")),
+          refSrc:ref?(ref.src||""):"", reason:it.reason||"",
+          reasonLabel:it.reasonLabel||it.reason||"", stood:!!it.stood };
+    }
+    return { key:it.key, name:nm.name, nameAlt:nm.nameAlt, code:nm.code,
+             grade:it.grade||"", sev:it.sev||"",
+             defect:it.defect||"", defectCode:it.defectCode||"", iso:it.iso||"",
+             cause:it.cause||"", action:it.actionLabel||it.action||"",
+             prio:it.prio||"", prioLabel:it.prioLabel||"", wo:it.wo||"",
+             comment:it.comment||"", readings:read,
+             /* No photographs. They live in Drive under names this record
+                only references, and fetching them would make an offline
+                screen depend on a signal. The readings are the record. */
+             photos:[], w };
+  });
+  return { equip:rec.equip, clsLabel:a.cat||rec.cls||"", model:a.m||"",
+           type:rec.type, typeLabel:t("type_"+(rec.type||"MP")),
+           typeAlt:inOtherLang(()=>t("type_"+(rec.type||"MP"))),
+           date:rec.date||"", by:rec.by||"", sup:rec.sup||"", smu:rec.smu||"",
+           gps:rec.gps||null, signUrl:"",
+           wear:!!meta.wear, temp:!!meta.temp, items };
+}
+/* The limits for one point, from whichever reference the round type uses. */
+function teamRefFor(rec,key){
+  const a=ASSET_BY[rec.equip]||{};
+  if(rec.type==="TB" && window.BODY){
+    const st=bodyStatus(rec.equip); if(!st.ok) return null;
+    const L=BODY.limitFor(st.model,key); return L?{n:L.n,c:L.c,d:"shrink",src:"tray:"+st.model}:null;
+  }
+  if(rec.type==="GET" && window.GET)
+    return GET.refFor(rec.equip, a.cat||a.cls||"", a.m||"", key);
+  if(window.WEAR && a.m){
+    const [pt,pos]=ucSplit(key);
+    const r=WEAR.refFor(rec.equip, a.m, pt, pos, rec.date);
+    return (r && !r.x) ? r : null;
+  }
+  return null;
+}
+
+let roundRec=null;
+async function openRound(key){
+  const rec=await dbGet(TEAM_ID+key);
+  if(!rec){ dlg(t("rd_gone")); return; }
+  roundRec=rec;
+  const a=ASSET_BY[rec.equip]||{};
+  $("roundTitle").textContent=`${rec.equip} · ${t("type_"+(rec.type||"MP"))}`;
+  $("roundSub").textContent=[rec.date, rec.smu?`SMU ${rec.smu}`:"", rec.by||""]
+    .filter(Boolean).join(" · ");
+  const meta=TYPE_META[rec.type]||{};
+  const rows=(rec.items||[]).map(it=>{
+    const nm=rptName(rec,it.key);
+    const mm=(it.mm===""||it.mm==null)?null:Number(it.mm);
+    const ref=(meta.wear||meta.get)?teamRefFor(rec,it.key):null;
+    const pct=(ref&&mm!=null&&window.WEAR)?Math.round(WEAR.wear(ref,mm)):null;
+    const band=pct==null?"":(pct>=100?"act":pct>=80?"watch":"");
+    const val = mm!=null ? esc(String(mm))
+      : it.reason ? `<span class="na">${esc(it.reasonLabel||it.reason)}</span>`
+      : it.grade ? esc(it.grade) : `<span class="na">—</span>`;
+    const sub=[ ref?`${ref.n} → ${ref.c} mm`:"", it.defect||"", it.comment||"" ]
+      .filter(Boolean).join(" · ");
+    return `<div class="rdrow ${band}">
+      <span class="rk"><b>${esc(nm.name)}</b>${sub?`<span>${esc(sub)}</span>`:""}</span>
+      <span class="rv">${val}</span>
+      <span class="rp">${pct!=null?esc(pct)+"%":""}</span></div>`;
+  }).join("");
+  $("roundBody").innerHTML =
+    `<div class="rdown">${esc(t("rd_owned",{by:rec.by||"—"}))}</div>`
+    + (rows || `<div class="empty">${esc(t("rd_empty"))}</div>`);
+  $("roundOv").classList.remove("hidden");
+}
+$("roundClose").onclick=()=>{ $("roundOv").classList.add("hidden"); roundRec=null; };
+/* One round, one PDF, from the phone. Same engine and same layout as the
+   dashboard's — CMR.sections is the document, wherever it is built. */
+$("roundRpt").onclick=async ()=>{
+  const rec=roundRec; if(!rec) return;
+  if(!await needPdf()){ dlg(t("m_lib_pdf")); return; }
+  dlg(t("rep_building"));
+  try{
+    const norm=teamRecToReport(rec);
+    const url=WEAR.reportPhotoFor
+      ? WEAR.reportPhotoFor({ type:rec.type, equip:rec.equip,
+          model:(ASSET_BY[rec.equip]||{}).m||"", cat:(ASSET_BY[rec.equip]||{}).cat||"" }) : "";
+    const art=url?await CMR.inlinePhoto(url):"";
+    const m=rptMap(rec, norm.items, art);
+    norm.mapHTML=m.html; norm.mapKey=m.key;
+    const doc=await CMR.paginate({
+      sections:CMR.sections({ lang, mode:"unit", title:t("rep_title"),
+        titleAlt:inOtherLang(()=>t("rep_title")), stamp:new Date(),
+        sevLabel:s=>t("sev_"+s), sevLabelAlt:s=>inOtherLang(()=>t("sev_"+s)),
+        records:[norm] }),
+      jsPDF:window.jspdf.jsPDF, html2canvas:window.html2canvas,
+      docId:`CM-${rec.equip}-${rec.date}` });
+    $("dlg").close();
+    doc.save(`CM_${rec.equip}_${rec.type}_${rec.date}.pdf`);
+  }catch(err){ $("dlg").close(); dlg(["Report error", String(err&&err.message||err)]); }
+};
+
 async function buildReportSections(){
   return CMR.sections({ lang, title:t("rep_title"),
     titleAlt:inOtherLang(()=>t("rep_title")), stamp:new Date(),
@@ -6112,7 +6326,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="109";
+const BUILD="110";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
