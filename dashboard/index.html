@@ -19,19 +19,27 @@
 <style>
   :root{
     color-scheme:light;
-    --page:#f9f9f7; --surface:#fcfcfb; --surface-2:#f2f2ef; --surface-3:#e9e9e4;
-    --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781; --grid:#e1e0d9; --axis:#c3c2b7;
-    --border:rgba(11,11,11,.10); --accent:#2a78d6;
+    /* ---- Baimskaya ------------------------------------------------------
+       Copper is what the mine is for; the neutrals are where it is. Chukotka
+       reads cold, so the greys carry a blue-green cast and the accent is the
+       one warm thing on the page — which is also what keeps it maximally far
+       from the reserved status colours below. Deep oxidised copper rather than
+       a bright one, for exactly that reason: measured at dE 24.9 from the
+       "serious" orange, where a brighter copper collides with it. 7.09:1 on
+       white, both as ink and as a filled control. */
+    --page:#eef1f3; --surface:#ffffff; --surface-2:#f3f6f7; --surface-3:#e4e9ec;
+    --ink:#16242c; --ink-2:#41505a; --muted:#5a6b76; --grid:#e2e8ec; --axis:#c2ccd2;
+    --border:rgba(22,36,44,.10); --accent:#8a4526;
     --good:#0ca30c; --warning:#fab219; --serious:#ec835a; --critical:#d03b3b; --none:#898781;
-    --shadow:0 1px 2px rgba(11,11,11,.06),0 4px 16px rgba(11,11,11,.05);
+    --shadow:0 1px 2px rgba(22,36,44,.06),0 4px 16px rgba(22,36,44,.05);
   }
   @media (prefers-color-scheme:dark){ :root:where(:not([data-theme="light"])){
-    color-scheme:dark; --page:#0d0d0d; --surface:#1a1a19; --surface-2:#232321; --surface-3:#2c2c2a;
-    --ink:#fff; --ink-2:#c3c2b7; --muted:#898781; --grid:#2c2c2a; --axis:#383835;
-    --border:rgba(255,255,255,.10); --accent:#3987e5; --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 20px rgba(0,0,0,.4); } }
-  :root[data-theme="dark"]{ color-scheme:dark; --page:#0d0d0d; --surface:#1a1a19; --surface-2:#232321; --surface-3:#2c2c2a;
-    --ink:#fff; --ink-2:#c3c2b7; --muted:#898781; --grid:#2c2c2a; --axis:#383835;
-    --border:rgba(255,255,255,.10); --accent:#3987e5; --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 20px rgba(0,0,0,.4); }
+    color-scheme:dark; --page:#0b1116; --surface:#141c22; --surface-2:#1b252c; --surface-3:#243039;
+    --ink:#fff; --ink-2:#b6c3cb; --muted:#8a979e; --grid:#243039; --axis:#31414b;
+    --border:rgba(255,255,255,.10); --accent:#ce8256; --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 20px rgba(0,0,0,.4); } }
+  :root[data-theme="dark"]{ color-scheme:dark; --page:#0b1116; --surface:#141c22; --surface-2:#1b252c; --surface-3:#243039;
+    --ink:#fff; --ink-2:#b6c3cb; --muted:#8a979e; --grid:#243039; --axis:#31414b;
+    --border:rgba(255,255,255,.10); --accent:#ce8256; --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 20px rgba(0,0,0,.4); }
   *{box-sizing:border-box;} html,body{margin:0;padding:0;}
   body{background:var(--page);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased;}
   header.app{display:flex;align-items:center;gap:12px;padding:14px 22px;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:20;}
@@ -1058,21 +1066,21 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=108"></script>
-<script src="../mobile/hme.js?v=108"></script>
-<script src="../mobile/mp-fc.js?v=108"></script>
-<script src="../mobile/hme-cascade.js?v=108"></script>
-<script src="../mobile/temp-limits.js?v=108"></script>
+<script src="../data/magnetic_plug.js?v=109"></script>
+<script src="../mobile/hme.js?v=109"></script>
+<script src="../mobile/mp-fc.js?v=109"></script>
+<script src="../mobile/hme-cascade.js?v=109"></script>
+<script src="../mobile/temp-limits.js?v=109"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=108"></script>
-<script src="../mobile/wear.js?v=108"></script>
-<script src="../mobile/wear-map.js?v=108"></script>
+<script src="../mobile/assets.js?v=109"></script>
+<script src="../mobile/wear.js?v=109"></script>
+<script src="../mobile/wear-map.js?v=109"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=108"></script>
-<script src="../mobile/machine-photos.js?v=108"></script>
+<script src="../mobile/upload-defaults.js?v=109"></script>
+<script src="../mobile/machine-photos.js?v=109"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -1081,16 +1089,16 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=108"></script>
-<script src="../mobile/get.js?v=108"></script>
-<script src="../mobile/uc-points.js?v=108"></script>
-<script src="../mobile/inspect-guide.js?v=108"></script>
-<script src="../mobile/get-figs.js?v=108"></script>
-<script src="../mobile/body-points.js?v=108"></script>
-<script src="../mobile/body-map.js?v=108"></script>
-<script src="../mobile/jspdf.umd.min.js?v=108"></script>
-<script src="../mobile/html2canvas.min.js?v=108"></script>
-<script src="../mobile/report-core.js?v=108"></script>
+<script src="../mobile/machine-fig.js?v=109"></script>
+<script src="../mobile/get.js?v=109"></script>
+<script src="../mobile/uc-points.js?v=109"></script>
+<script src="../mobile/inspect-guide.js?v=109"></script>
+<script src="../mobile/get-figs.js?v=109"></script>
+<script src="../mobile/body-points.js?v=109"></script>
+<script src="../mobile/body-map.js?v=109"></script>
+<script src="../mobile/jspdf.umd.min.js?v=109"></script>
+<script src="../mobile/html2canvas.min.js?v=109"></script>
+<script src="../mobile/report-core.js?v=109"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4052,8 +4060,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=108"></script>
-<script src="sync-adapter.js?v=108"></script>
-<script src="report.js?v=108"></script>
+<script src="drive.js?v=109"></script>
+<script src="sync-adapter.js?v=109"></script>
+<script src="report.js?v=109"></script>
 </body>
 </html>

@@ -39,7 +39,7 @@
 
   CMR.CSS = `
 #rptRoot{font:400 12px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
-  color:#12161a;width:760px;background:#fff;letter-spacing:0;}
+  color:#16242c;width:760px;background:#fff;letter-spacing:0;}
 #rptRoot *{box-sizing:border-box;margin:0;padding:0;}
 #rptRoot .sec{width:760px;background:#fff;}
 #rptRoot .eyebrow{font-size:9.5px;font-weight:700;letter-spacing:.16em;
@@ -48,12 +48,14 @@
 #rptRoot .h2{font-size:16px;font-weight:750;letter-spacing:-.01em;}
 #rptRoot .lede{font-size:15px;line-height:1.45;font-weight:500;color:#12161a;}
 #rptRoot .muted{color:#5b6670;}
-#rptRoot .rule{height:2.5px;background:#12161a;}
+#rptRoot .rule{height:2.5px;background:#16242c;}
 #rptRoot .hair{height:1px;background:#dfe4e9;}
 #rptRoot .num{font-variant-numeric:tabular-nums;}
 #rptRoot .sechd{display:flex;align-items:baseline;gap:10px;
-  border-bottom:2.5px solid #12161a;padding-bottom:6px;margin-bottom:13px;}
-#rptRoot .sechd .n{font-size:9.5px;font-weight:800;letter-spacing:.16em;color:#1f5fa8;}
+  border-bottom:2.5px solid #16242c;padding-bottom:6px;margin-bottom:13px;}
+/* Copper — the one identity colour on a printed page that otherwise stays
+   black on white so the data is never tinted by a brand. */
+#rptRoot .sechd .n{font-size:9.5px;font-weight:800;letter-spacing:.16em;color:#8a4526;}
 
 /* the four numbers on the cover */
 #rptRoot .stats{display:flex;gap:0;border-top:1px solid #dfe4e9;border-bottom:1px solid #dfe4e9;}
@@ -102,7 +104,7 @@
   text-transform:uppercase;color:#fff;border-radius:3px;padding:2px 6px;line-height:1.25;}
 
 /* the machine block */
-#rptRoot .mach{border-top:2.5px solid #12161a;padding-top:9px;}
+#rptRoot .mach{border-top:2.5px solid #16242c;padding-top:9px;}
 #rptRoot .machhd{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;}
 #rptRoot .machhd .u{font-size:19px;font-weight:800;letter-spacing:-.02em;}
 #rptRoot .machhd .c{font-size:11.5px;color:#5b6670;}
@@ -204,12 +206,23 @@
    on glass because nothing here has to survive a gloved thumb, and the
    numbers read at 470px on paper at any size a finger needed. */
 #rptRoot .ucmap.photo .um-photo{opacity:1;}
-#rptRoot .um-num .um-puck{fill:#fff;stroke:#12161a;stroke-width:1.6;}
-#rptRoot .um-num .um-n{font:700 12px/1 inherit;fill:#12161a;}
-#rptRoot .um-num.done .um-puck{fill:#0ca30c;stroke:#0ca30c;}
-#rptRoot .um-num.watch .um-puck{fill:#ec835a;stroke:#ec835a;}
-#rptRoot .um-num.act .um-puck{fill:#d03b3b;stroke:#d03b3b;}
-#rptRoot .um-num.na .um-puck{fill:#e6eaee;stroke:#a9b2ba;stroke-dasharray:3 2;}
+/* State is carried by the FILL and by the RING, never by the fill alone.
+
+   Measured, not assumed: serviceable green against watch orange is dE 5.6
+   under protanopia and green against red is dE 4.1 under deuteranopia — the
+   same colour to roughly one man in twelve. The number on a puck is its
+   POSITION, not its state, so nothing else on the drawing disambiguates it,
+   and the drawing exists precisely so nobody has to read the table.
+
+   A darker ring, thickening with severity, fixes it for colour-blind readers
+   and for the grey office printer at the same time. The tray map has done it
+   this way since it shipped; this is the same treatment, not a new idea. */
+#rptRoot .um-num .um-puck{fill:#fff;stroke:#16242c;stroke-width:1.6;}
+#rptRoot .um-num .um-n{font:700 12px/1 inherit;fill:#16242c;}
+#rptRoot .um-num.done .um-puck{fill:#0ca30c;stroke:#0a6b0a;stroke-width:1.2;}
+#rptRoot .um-num.watch .um-puck{fill:#ec835a;stroke:#8a3d16;stroke-width:2.4;}
+#rptRoot .um-num.act .um-puck{fill:#d03b3b;stroke:#5e1010;stroke-width:3.4;}
+#rptRoot .um-num.na .um-puck{fill:#eef1f4;stroke:#8a979e;stroke-width:1.4;stroke-dasharray:3 2;}
 #rptRoot .um-num.done .um-n,#rptRoot .um-num.watch .um-n,
 #rptRoot .um-num.act .um-n{fill:#fff;}
 #rptRoot .um-num .um-hit{display:none;}
@@ -245,7 +258,7 @@
    brought with them. So a single-machine report drops the cover, the work list
    and the legend, and prints the round the way the workbook does — the positions
    across, the photograph at the top of each, and what was found underneath. */
-#rptRoot .mast{border-bottom:2.5px solid #12161a;padding-bottom:9px;margin-bottom:13px;}
+#rptRoot .mast{border-bottom:2.5px solid #16242c;padding-bottom:9px;margin-bottom:13px;}
 #rptRoot .mast .m1{font-size:22px;font-weight:800;letter-spacing:-.02em;line-height:1.1;}
 #rptRoot .mast .m2{display:flex;flex-wrap:wrap;gap:3px 18px;margin-top:7px;}
 #rptRoot .mast .m2 .f{font-size:10.5px;}
@@ -604,6 +617,15 @@
       if (!bi || !b || b === a) return esc(a);
       return esc(a) + '<span class="' + (cls || "alt") + '">' + esc(b) + '</span>';
     };
+    /* A pair the host supplies as a fixed en/ru couple rather than as
+       primary-and-other — a walk-key name, a body zone. T.both would print
+       them in the order given, which puts English first in a Russian report
+       while every other line on the page leads in Russian. */
+    /* NOT T.name — every function already owns a read-only `name`, and
+       assigning to it throws under "use strict" rather than being ignored. */
+    T.pair = function (en, ru, cls) {
+      return T.lang === "ru" ? T.both(ru, en, cls) : T.both(en, ru, cls);
+    };
     /* For a pair the caller holds as English-and-Russian rather than
        primary-and-other — the undercarriage reference, for one, which stores
        them under fixed .en and .ru keys. Reading a Russian report and finding
@@ -714,7 +736,7 @@
       + '<th class="num">' + T.L("c_thin") + '</th>'
       + '<th>' + T.L("c_at") + '</th></tr>'
       + zones.map(function (z) {
-          return '<tr><td>' + T.both(z.name, z.nameAlt) + '</td>'
+          return '<tr><td>' + T.pair(z.name, z.nameAlt) + '</td>'
             + '<td class="num">' + z.got + '/' + z.of + '</td>'
             + '<td class="num">' + (z.thin == null ? "—" : esc(z.thin)) + '</td>'
             + '<td>' + esc(z.at || "—") + '</td></tr>';
@@ -729,7 +751,7 @@
     return '<div class="subhd" style="margin-top:9px;">' + T.L("walk_key") + '</div>'
       + '<div class="ckey">' + key.map(function (p) {
           return '<span class="i"><span class="n">' + esc(p.n) + '</span>'
-            + '<span class="t">' + (T.bi ? T.both(p.en, p.ru, "") : esc(p.en)) + '</span></span>';
+            + '<span class="t">' + (T.bi ? T.pair(p.en, p.ru, "") : esc(p.en)) + '</span></span>';
         }).join("") + '</div>';
   }
 

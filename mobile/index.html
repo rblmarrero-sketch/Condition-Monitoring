@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=108">
+<link rel="manifest" href="manifest.webmanifest?v=109">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=108">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=108">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=108">
+<link rel="apple-touch-icon" href="icon-192.png?v=109">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=109">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=109">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -37,7 +37,10 @@
     --page:#eceff1; --surface:#fff; --surface-2:#f3f6f7; --surface-3:#e4e9ec;
     --ink:#11171a; --ink-2:#41505a; --muted:#5b686f; --border:#d6dde1;
     --line:#e7ecee; --shadow:0 1px 2px rgba(16,26,32,.05);
-    --accent:#1f6fc4; --accent-ink:#fff; --accent-soft:#e8f1fb;
+    /* Baimskaya: deep oxidised copper. Warm against cold Arctic neutrals, and
+       far enough from the reserved status colours that it can never be read as
+       a severity — measured, not eyeballed. */
+    --accent:#8a4526; --accent-ink:#fff; --accent-soft:#f6ebe4;
     --good:#0c8a3e; --warning:#c07c07; --serious:#c95a2c; --critical:#c02f2f; --none:#8b969b; --warn-ink:#8a5a00;
     /* The tray's surfaces: one low-chroma family stepped by HEIGHT OFF THE
        FLOOR, so the tint says "this panel is folded up" and leaves green, amber
@@ -48,7 +51,7 @@
     --page:#0d1013; --surface:#171b1f; --surface-2:#1f252a; --surface-3:#2a3238;
     --ink:#eef2f4; --ink-2:#b3bec4; --muted:#828e95; --border:#2c353b;
     --line:#232a30; --shadow:none;
-    --accent:#4d9bef; --accent-ink:#06131f; --accent-soft:#16283b;
+    --accent:#ce8256; --accent-ink:#2a1409; --accent-soft:#2a1a12;
     --good:#3aad5c; --warning:#e0a52a; --serious:#e2825a; --critical:#e05a52; --none:#69757b; --warn-ink:#e0a52a;
     --bm-s0:#232a30; --bm-s1:#28313a; --bm-s2:#2d3945; --bm-s3:#334154;
     --bm-edge:#3a444c; --bm-fold:#55688a; } }
@@ -56,7 +59,7 @@
     --page:#0d1013; --surface:#171b1f; --surface-2:#1f252a; --surface-3:#2a3238;
     --ink:#eef2f4; --ink-2:#b3bec4; --muted:#828e95; --border:#2c353b;
     --line:#232a30; --shadow:none;
-    --accent:#4d9bef; --accent-ink:#06131f; --accent-soft:#16283b;
+    --accent:#ce8256; --accent-ink:#2a1409; --accent-soft:#2a1a12;
     --good:#3aad5c; --warning:#e0a52a; --serious:#e2825a; --critical:#e05a52; --none:#69757b; --warn-ink:#e0a52a;
     --bm-s0:#232a30; --bm-s1:#28313a; --bm-s2:#2d3945; --bm-s3:#334154;
     --bm-edge:#3a444c; --bm-fold:#55688a; }
@@ -929,15 +932,25 @@
   /* the numbers on the picture */
   .ucmap .um-num .um-puck{fill:var(--surface);stroke:var(--ink-2);stroke-width:1.6;}
   .ucmap .um-num .um-n{font:800 13px/1 inherit;fill:var(--ink);}
-  .ucmap .um-num.done .um-puck{fill:var(--good);stroke:var(--good);}
-  .ucmap .um-num.watch .um-puck{fill:var(--warning);stroke:var(--warning);}
+  /* State in the FILL and in the RING. Serviceable green against watch orange
+     measures dE 5.6 under protanopia, and green against red dE 4.1 under
+     deuteranopia — the same colour to about one man in twelve. The number on
+     the puck is the POSITION, not the state, so colour was carrying it alone
+     on the one screen built so nobody has to read the list. The ring darkens
+     and thickens with severity, which also survives a monochrome print and a
+     phone held in bright snow glare. */
+  .ucmap .um-num.done .um-puck{fill:var(--good);
+    stroke:color-mix(in srgb,var(--good) 55%,#000);stroke-width:1.4;}
+  .ucmap .um-num.watch .um-puck{fill:var(--warning);
+    stroke:color-mix(in srgb,var(--warning) 45%,#000);stroke-width:2.6;}
   /* --critical, not --bad. There is no --bad in the palette and never was, so
      these three rules were dead: an SVG fill of an undefined variable is invalid
      at computed-value time and falls back to inherited, which is black. The
      number for a component past its condemn limit — the one state on this
      screen that has to carry across a glance — was rendering the same dark puck
      as everything else. */
-  .ucmap .um-num.act .um-puck{fill:var(--critical);stroke:var(--critical);}
+  .ucmap .um-num.act .um-puck{fill:var(--critical);
+    stroke:color-mix(in srgb,var(--critical) 42%,#000);stroke-width:3.6;}
   .ucmap .um-num.na .um-puck{stroke-dasharray:3 3;}
   .ucmap .um-num.done .um-n,.ucmap .um-num.act .um-n{fill:#fff;}
   .ucmap .um-num.sel .um-puck{stroke:var(--accent);stroke-width:3.4;}
@@ -1556,25 +1569,25 @@
   <div id="pickList" class="picklist"></div>
 </div>
 
-<script src="native.js?v=108"></script>
-<script src="upload-defaults.js?v=108"></script>
-<script src="hme.js?v=108"></script>
-<script src="mp-fc.js?v=108"></script>
-<script src="hme-cascade.js?v=108"></script>
-<script src="assets.js?v=108"></script>
-<script src="temp-limits.js?v=108"></script>
-<script src="wear.js?v=108"></script>
-<script src="wear-figs.js?v=108"></script>
-<script src="wear-map.js?v=108"></script>
-<script src="machine-photos.js?v=108"></script>
-<script src="machine-fig.js?v=108"></script>
-<script src="get.js?v=108"></script>
-<script src="uc-points.js?v=108"></script>
-<script src="inspect-guide.js?v=108"></script>
-<script src="get-figs.js?v=108"></script>
-<script src="body-points.js?v=108"></script>
-<script src="body-map.js?v=108"></script>
-<script src="report-core.js?v=108"></script>
+<script src="native.js?v=109"></script>
+<script src="upload-defaults.js?v=109"></script>
+<script src="hme.js?v=109"></script>
+<script src="mp-fc.js?v=109"></script>
+<script src="hme-cascade.js?v=109"></script>
+<script src="assets.js?v=109"></script>
+<script src="temp-limits.js?v=109"></script>
+<script src="wear.js?v=109"></script>
+<script src="wear-figs.js?v=109"></script>
+<script src="wear-map.js?v=109"></script>
+<script src="machine-photos.js?v=109"></script>
+<script src="machine-fig.js?v=109"></script>
+<script src="get.js?v=109"></script>
+<script src="uc-points.js?v=109"></script>
+<script src="inspect-guide.js?v=109"></script>
+<script src="get-figs.js?v=109"></script>
+<script src="body-points.js?v=109"></script>
+<script src="body-map.js?v=109"></script>
+<script src="report-core.js?v=109"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -6099,7 +6112,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="108";
+const BUILD="109";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
