@@ -249,6 +249,37 @@ const PHONE = o => {
     await ctx.close();
   }
 
+  console.log('\nand the dashboard says which reader is deployed');
+  {
+    /* Somebody who has just pasted a new script has no way to see whether the
+       deploy took — "Version: New version" is one dropdown in a dialog, and
+       saving alone changes nothing. The difference is a thousand Drive round
+       trips per refresh, so it has to be visible where they are already
+       standing. */
+    for (const [what, port, want] of [
+      ['a current deployment', PORT, /fast index/i],
+      ['one nobody redeployed', OLDPORT, /does not have the fast index/i],
+    ]) {
+      const ctx = await b.newContext({ viewport: { width: 1440, height: 1000 } });
+      const p = await ctx.newPage();
+      p.on('pageerror', e => fails.push('PAGEERROR ' + e.message));
+      await p.goto('http://127.0.0.1:' + port + '/dashboard/index.html', { waitUntil: 'load' });
+      await p.waitForFunction(() => window.CMDash && window.CMDrive, null, { timeout: 25000 });
+      await p.evaluate(u => { openData();
+        document.getElementById('drvUrl').value = u;
+        document.getElementById('drvSec').value = ''; }, 'http://127.0.0.1:' + port + '/exec');
+      await p.click('#drvTest');
+      await p.waitForFunction(() => /^(✅|❌|⚠)/.test(
+        document.getElementById('drvMsg').textContent.trim()), null, { timeout: 25000 }).catch(() => {});
+      const msg = (await p.textContent('#drvMsg')).trim();
+      note(what, msg.slice(0, 150));
+      ok('Test connection names the reader on ' + what, want.test(msg), msg.slice(0, 90));
+      /* And it still says the thing it always said. */
+      ok('  alongside the folder it is connected to', /Connected|folder/i.test(msg));
+      await ctx.close();
+    }
+  }
+
   await b.close();
   console.log(fails.length ? '\nFAILED ' + fails.length + ': ' + fails.join(' | ') : '\nall passed');
   process.exit(fails.length ? 1 : 0);

@@ -560,9 +560,25 @@
       // a refusal is an answer: the script is there and it spoke
       if (/older version|web page instead of data|sign in/i.test(m)) { write = false; writeErr = m; }
     }
+    /* And whether the fast read is there at all.
+
+       Somebody who has just pasted a new version of the script has no way to
+       see whether the deploy took — "Version: New version" is easy to miss in
+       that dialog, and a save alone changes nothing. Ask the deployment
+       directly, here, where they are already looking. `built` is the second
+       half of the answer: the actions exist, but the folder has not been walked
+       into an index yet, which the next load does by itself. */
+    let index = false, built = false;
+    try {
+      const r2 = await api({ action: "index", slim: 1, since: 1 });
+      index = !!r2.v;
+      built = index && !r2.needsRebuild;
+    } catch (e) { index = false; }
+
     // A deployment older than this flag reports undefined, which the dashboard
     // reads as "cannot tell" rather than as "off".
-    return { folder: j.folder || "(unnamed)", batch, canDelete: j.canDelete, write, writeErr };
+    return { folder: j.folder || "(unnamed)", batch, canDelete: j.canDelete, write, writeErr,
+             index, built };
   }
 
   window.CMDrive = {

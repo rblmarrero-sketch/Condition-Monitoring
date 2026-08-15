@@ -1054,21 +1054,21 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=117"></script>
-<script src="../mobile/hme.js?v=117"></script>
-<script src="../mobile/mp-fc.js?v=117"></script>
-<script src="../mobile/hme-cascade.js?v=117"></script>
-<script src="../mobile/temp-limits.js?v=117"></script>
+<script src="../data/magnetic_plug.js?v=118"></script>
+<script src="../mobile/hme.js?v=118"></script>
+<script src="../mobile/mp-fc.js?v=118"></script>
+<script src="../mobile/hme-cascade.js?v=118"></script>
+<script src="../mobile/temp-limits.js?v=118"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=117"></script>
-<script src="../mobile/wear.js?v=117"></script>
-<script src="../mobile/wear-map.js?v=117"></script>
+<script src="../mobile/assets.js?v=118"></script>
+<script src="../mobile/wear.js?v=118"></script>
+<script src="../mobile/wear-map.js?v=118"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=117"></script>
-<script src="../mobile/machine-photos.js?v=117"></script>
+<script src="../mobile/upload-defaults.js?v=118"></script>
+<script src="../mobile/machine-photos.js?v=118"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -1077,16 +1077,16 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=117"></script>
-<script src="../mobile/get.js?v=117"></script>
-<script src="../mobile/uc-points.js?v=117"></script>
-<script src="../mobile/inspect-guide.js?v=117"></script>
-<script src="../mobile/get-figs.js?v=117"></script>
-<script src="../mobile/body-points.js?v=117"></script>
-<script src="../mobile/body-map.js?v=117"></script>
-<script src="../mobile/jspdf.umd.min.js?v=117"></script>
-<script src="../mobile/html2canvas.min.js?v=117"></script>
-<script src="../mobile/report-core.js?v=117"></script>
+<script src="../mobile/machine-fig.js?v=118"></script>
+<script src="../mobile/get.js?v=118"></script>
+<script src="../mobile/uc-points.js?v=118"></script>
+<script src="../mobile/inspect-guide.js?v=118"></script>
+<script src="../mobile/get-figs.js?v=118"></script>
+<script src="../mobile/body-points.js?v=118"></script>
+<script src="../mobile/body-map.js?v=118"></script>
+<script src="../mobile/jspdf.umd.min.js?v=118"></script>
+<script src="../mobile/html2canvas.min.js?v=118"></script>
+<script src="../mobile/report-core.js?v=118"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -1396,6 +1396,9 @@ const I18N={
   dl_photos:", {n} photo/video file(s) indexed (they download as you open a unit).",
   dl_failed:" {n} file(s) could not be read.", dl_more:" More is waiting — click Load again to continue.",
   dl_connected:"✅ Connected — folder “{x}”.", dl_needurl:"Paste the /exec URL first.",
+  dl_index:"Fast index is live — a refresh costs one small request.",
+  dl_indexnew:"Fast index is deployed but this folder has not been indexed yet — the next Load will build it, once.",
+  dl_noindex:"⚠️ This /exec does not have the fast index. Re-paste docs/google-upload.gs, then Deploy → Manage deployments → ✏️ → Version: New version.",
   dl_readonly:"Reading works, writing does not — the deployed version is older than the code.",
   dl_noreader:"Drive reader did not load — reload the page.",
   fold_read:"{d}: {n} inspection(s) from {f} file(s), {p} photo(s).",
@@ -1659,6 +1662,9 @@ const I18N={
   dl_photos:", фото/видео в индексе: {n} (скачиваются при открытии единицы).",
   dl_failed:" Не удалось прочитать файлов: {n}.", dl_more:" Есть ещё — нажмите «Загрузить» снова.",
   dl_connected:"✅ Связь есть — папка «{x}».", dl_needurl:"Сначала вставьте адрес /exec.",
+  dl_index:"Быстрый индекс работает — обновление стоит одного небольшого запроса.",
+  dl_indexnew:"Быстрый индекс развёрнут, но папка ещё не проиндексирована — следующая загрузка построит его один раз.",
+  dl_noindex:"⚠️ На этом /exec нет быстрого индекса. Вставьте docs/google-upload.gs заново, затем Deploy → Manage deployments → ✏️ → Version: New version.",
   dl_readonly:"Чтение работает, запись — нет: опубликованная версия старее кода.",
   dl_noreader:"Модуль чтения Диска не загрузился — перезагрузите страницу.",
   fold_read:"{d}: осмотров {n} из файлов {f}, фото {p}.",
@@ -3621,9 +3627,16 @@ async function driveRun(mode){            // "test" | "load" | "full"
          that cannot take a correction is the message that sent somebody to
          the delete panel to find out. */
       try{ localStorage.setItem(CANWRITE, p.write===false?"0":"1"); }catch(e){}
+      /* Say which reader is deployed. Without this there is no way to tell a
+         deploy that took from one that did not — and the difference is a
+         thousand Drive round trips per refresh against a script with about
+         ninety minutes of execution a day. */
+      const reader = p.index===false ? " "+t("dl_noindex")
+                   : p.built===false ? " "+t("dl_indexnew")
+                   : " "+t("dl_index");
       msg.textContent = p.write===false
         ? "⚠️ "+t("dl_connected",{x:p.folder})+" "+t("dl_readonly")+" "+(p.writeErr||"")
-        : t("dl_connected",{x:p.folder})+(p.batch?"":SLOW_HINT);
+        : t("dl_connected",{x:p.folder})+reader+(p.batch?"":SLOW_HINT);
       return;
     }
     const r=await drv().load(m=>{ msg.textContent=m; }, {full:mode==="full"});
@@ -4050,8 +4063,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=117"></script>
-<script src="sync-adapter.js?v=117"></script>
-<script src="report.js?v=117"></script>
+<script src="drive.js?v=118"></script>
+<script src="sync-adapter.js?v=118"></script>
+<script src="report.js?v=118"></script>
 </body>
 </html>
