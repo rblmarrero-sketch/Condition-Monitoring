@@ -76,6 +76,12 @@ const META_DIR = '_meta';
    ──────────────────────────────────────────────────────────────────────────*/
 const INDEX_DIR = META_DIR + '/index';
 const INDEX_AT = 'cm_at';               // script property: last change, ms
+/* Set ONLY by a completed rebuild. An upload creates a shard as a side effect
+   of arriving, and "a shard exists" is not "the index covers this folder" — a
+   folder with a season in it and one new round would have answered every read
+   with that one round, and everything older would simply have stopped being
+   there. Nothing quieter than that, and nothing worse. */
+const INDEX_BUILT = 'cm_built';
 const INDEX_V = 1;
 // ────────────────────────────────────────────────────────────────────────────
 
@@ -217,7 +223,7 @@ function saveOne_(b, dirs) {
         if (!rs[si]) continue;
         rs[si]._file = (path ? path + '/' : '') + fileName;
         rs[si]._id = f.getId();
-        indexPut_(rs[si], f.getId());
+        indexPut_(rs[si], f.getId(), dev);
       }
     } catch (err) { /* not our shape — the file still stands, ?rebuild reconciles */ }
   }
@@ -368,6 +374,7 @@ function keyFromSidecar_(fileName) {
    office has already made. A genuinely new device does re-open it, because that
    is a version nobody has looked at. */
 function markConflict_(sidecarName, rivalDev, dev) {
+  indexTouch_();      // two versions of one round is the most urgent kind of news
   var key = keyFromSidecar_(sidecarName);
   if (!key) return null;
   var name = sidecarName.replace(/\.json$/i, '') + '.conflict.json';
@@ -395,6 +402,7 @@ function markConflict_(sidecarName, rivalDev, dev) {
 /* The office's decision. Both versions stay in Drive — this only records which
    one the reports should use, so it is as reversible as a void. */
 function resolveConflict_(b) {
+  indexTouch_();     // the office has decided; every phone must stop warning
   var stem = keyFile_(b.key, '');
   if (!stem) return { ok: false, error: 'Bad record key: ' + b.key };
   var name = stem + '.conflict.json';
@@ -469,6 +477,7 @@ function deleteRecord_(b) {
                       stampSafe + '_' + stem + '.deleted.json'));
 
   indexDrop_(b.key);          // or the list keeps offering a round that is gone
+  indexTouch_();              // even if it was never indexed, this IS a change
   return { ok: true, deleted: gone.length, files: gone, trashed: true };
 }
 function esc_(s) { return String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
@@ -491,7 +500,16 @@ function shardOf_(iso) {
   var m = /^(\d{4})-(\d{2})/.exec(String(iso || ''));
   return m ? m[1] + '-' + m[2] : 'undated';
 }
+/* Two phones can inspect the same unit on the same day — a hand-over, or two
+   people covering a big machine between them. Both versions are kept on Drive
+   under different names on purpose, and the office decides which stands. So the
+   device belongs in the key: without it the second upload would quietly replace
+   the first IN THE INDEX while both files sat in the folder, and the clash the
+   conflict marker exists to surface would never reach anybody. */
 var RECKEY_ = function (r) {
+  return ROUNDKEY_(r) + '|' + cleanDev_(r.dev || '');
+};
+var ROUNDKEY_ = function (r) {
   return String(r.equip || '').toUpperCase() + '|' + (r.date || '') + '|' + (r.type || 'MP');
 };
 
@@ -522,8 +540,13 @@ function shardWrite_(dir, name, records) {
    shard, each add their own round, and the second write would lose the first.
    A lock that cannot be taken is not a reason to fail the upload; the file is
    on Drive either way and a rebuild puts the index right. */
-function indexPut_(rec, fileId) {
+function indexPut_(rec, fileId, dev) {
   if (!rec || !rec.equip || !rec.date) return;
+  /* Which phone sent it. Usually inside the record, but a client that leaves it
+     out still sends it alongside the upload — and without it two phones' copies
+     of one round key the same, so the second silently replaces the first in the
+     index while both files sit in the folder. */
+  if (!rec.dev && dev) rec = Object.assign({}, rec, { dev: dev });
   var lock = null;
   try { lock = LockService.getScriptLock(); lock.waitLock(20000); } catch (err) { lock = null; }
   try {
@@ -553,9 +576,11 @@ function indexDrop_(key) {
     var dir = folderPath_(rootFolder_(), INDEX_DIR);
     var name = shardOf_(p[1]);
     var cur = shardRead_(dir, name);
+    // Deleting a round deletes every version of it — both phones' — the same
+    // way the file sweep below does. Keyed without the device for that reason.
     var want = p[0].toUpperCase() + '|' + p[1] + '|' + p[2], out = [];
     for (var i = 0; i < cur.records.length; i++)
-      if (RECKEY_(cur.records[i]) !== want) out.push(cur.records[i]);
+      if (ROUNDKEY_(cur.records[i]) !== want) out.push(cur.records[i]);
     if (out.length !== cur.records.length) { shardWrite_(dir, name, out); indexTouch_(); }
   } catch (err) { /* as above */ }
   finally { if (lock) { try { lock.releaseLock(); } catch (err2) {} } }
@@ -611,6 +636,17 @@ function readIndex_(p) {
              records: [], rows: [], edits: [], conflicts: [] };
   }
 
+  /* Until a rebuild has walked this folder once, the index is not an answer to
+     "what is in it" — only to "what has arrived since the script gained one".
+     Say so, and let the client read the records the old way meanwhile. */
+  var built = '';
+  try { built = PropertiesService.getScriptProperties().getProperty(INDEX_BUILT) || ''; }
+  catch (err) { built = ''; }
+  if (!built) {
+    return { ok: true, v: INDEX_V, at: at, needsRebuild: true,
+             records: [], rows: [], edits: [], conflicts: [] };
+  }
+
   var root = rootFolder_();
   var it = folderPath_(root, INDEX_DIR).getFiles();
   var shards = [];
@@ -620,9 +656,7 @@ function readIndex_(p) {
     shards.push({ f: f, name: f.getName(), updated: f.getLastUpdated().getTime() });
   }
   if (!shards.length) {
-    // Nothing indexed yet. Say so rather than silently answering "no rounds" —
-    // the client falls back to ?action=records and asks for a rebuild.
-    return { ok: true, v: INDEX_V, at: at, empty: true, needsRebuild: true,
+    return { ok: true, v: INDEX_V, at: at, empty: true,
              records: [], rows: [], edits: [], conflicts: [] };
   }
 
@@ -730,6 +764,12 @@ function rebuildIndex_(p) {
     shardWrite_(dir, name, keep);
   }
   indexTouch_();
+  /* Only when the walk actually finished. A rebuild that stopped for time is a
+     rebuild that has not covered the folder, and marking it done would leave
+     every reader looking at half of it. */
+  if (!more) {
+    try { PropertiesService.getScriptProperties().setProperty(INDEX_BUILT, '1'); } catch (err) {}
+  }
   return { ok: true, building: more, done: done, cursor: cursor,
            pending: Math.max(0, sidecars.length - done), shards: order.length, at: indexAt_() };
 }
@@ -799,8 +839,14 @@ function readRecords_(p) {
   // Oldest first, so a truncated run resumes cleanly from its cursor. Records
   // and correction markers share one cursor: they interleave by write time, and
   // two cursors would let an edit arrive before the record it corrects.
-  var sidecars = all.filter(function (f) { return /\.json$/i.test(f.name) && f.updated > after; })
-                    .sort(function (a, b) { return a.updated - b.updated; });
+  /* The index shards are .json files under _meta/index, and their shape is a
+     records array — so the old filter read them back as inspections and every
+     round arrived twice. Nothing errors when that happens; the fleet simply
+     doubles. The type check below is the belt to this braces. */
+  var sidecars = all.filter(function (f) {
+    return /\.json$/i.test(f.name) && f.updated > after &&
+           f.path.indexOf(INDEX_DIR + '/') !== 0;
+  }).sort(function (a, b) { return a.updated - b.updated; });
 
   var records = [], edits = [], conflicts = [], read = 0, bad = 0, truncated = false;
   var cursor = after;
@@ -813,7 +859,7 @@ function readRecords_(p) {
         if (j && j.key) edits.push(j);
       } else if (/\.conflict\.json$/i.test(f.name) || (j && j.type === 'cm-record-conflict')) {
         if (j && j.key) conflicts.push(j);
-      } else if (!/\.deleted\.json$/i.test(f.name)) {
+      } else if (!/\.deleted\.json$/i.test(f.name) && !(j && j.type === 'cm-index-shard')) {
         var rs = (j && j.records) || [];
         for (var k = 0; k < rs.length; k++) { rs[k]._file = f.path; records.push(rs[k]); }
       }

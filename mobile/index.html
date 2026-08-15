@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=115">
+<link rel="manifest" href="manifest.webmanifest?v=116">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=115">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=115">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=115">
+<link rel="apple-touch-icon" href="icon-192.png?v=116">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=116">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=116">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1605,25 +1605,25 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=115"></script>
-<script src="upload-defaults.js?v=115"></script>
-<script src="hme.js?v=115"></script>
-<script src="mp-fc.js?v=115"></script>
-<script src="hme-cascade.js?v=115"></script>
-<script src="assets.js?v=115"></script>
-<script src="temp-limits.js?v=115"></script>
-<script src="wear.js?v=115"></script>
-<script src="wear-figs.js?v=115"></script>
-<script src="wear-map.js?v=115"></script>
-<script src="machine-photos.js?v=115"></script>
-<script src="machine-fig.js?v=115"></script>
-<script src="get.js?v=115"></script>
-<script src="uc-points.js?v=115"></script>
-<script src="inspect-guide.js?v=115"></script>
-<script src="get-figs.js?v=115"></script>
-<script src="body-points.js?v=115"></script>
-<script src="body-map.js?v=115"></script>
-<script src="report-core.js?v=115"></script>
+<script src="native.js?v=116"></script>
+<script src="upload-defaults.js?v=116"></script>
+<script src="hme.js?v=116"></script>
+<script src="mp-fc.js?v=116"></script>
+<script src="hme-cascade.js?v=116"></script>
+<script src="assets.js?v=116"></script>
+<script src="temp-limits.js?v=116"></script>
+<script src="wear.js?v=116"></script>
+<script src="wear-figs.js?v=116"></script>
+<script src="wear-map.js?v=116"></script>
+<script src="machine-photos.js?v=116"></script>
+<script src="machine-fig.js?v=116"></script>
+<script src="get.js?v=116"></script>
+<script src="uc-points.js?v=116"></script>
+<script src="inspect-guide.js?v=116"></script>
+<script src="get-figs.js?v=116"></script>
+<script src="body-points.js?v=116"></script>
+<script src="body-map.js?v=116"></script>
+<script src="report-core.js?v=116"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -5576,14 +5576,14 @@ async function teamPull(manual,full){
       return false;
     }
     netSeen(true);                                  // Drive answered — that is "online"
-    /* Nothing has changed since this phone last looked, and the script knew it
-       without opening a single file. This is the answer most checks get. */
-    if(viaIndex && j.upToDate){
-      if(j.at) localStorage.setItem(TEAM_CUR,String(j.at));
-      if(manual) msg.textContent=t("team_upto").replace("{t}",teamAll().length);
-      return true;
-    }
-    const {added,saved,stash}= viaIndex ? teamMergeRows(j.rows||[], !!full)
+    /* When the script says nothing has changed it has answered without opening
+       a single file, and j.rows is empty — but the reply still goes through the
+       whole tail below rather than returning here. A clash that two phones
+       created days ago is still standing today, and cfMerge() reports what is
+       HELD, not what arrived. Short-circuiting the message meant the warning
+       stopped being shown the moment the folder went quiet, which is precisely
+       when nobody would think to look. */
+    const {added,saved,stash}= viaIndex ? teamMergeRows(j.rows||[], !!full && !j.upToDate)
                                         : teamMerge(j.records||[], !!full);
     const voided=teamVoid(j.edits||[]);   // after the merge, so a re-uploaded record is voided too
     const clash=cfMerge(j.conflicts||[]);
@@ -6591,7 +6591,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="115";
+const BUILD="116";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
