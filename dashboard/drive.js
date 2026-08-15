@@ -123,11 +123,94 @@
     return new Blob([u], { type: mime || "application/octet-stream" });
   };
 
-  /* ---- 1. pull the inspections ---- */
+  /* ---- 1. pull the inspections ----
+
+     Two ways in. The fast one asks the script for its index — a file it keeps
+     up to date as rounds arrive — and gets every inspection back in one reply.
+     Measured against a season of Baimskaya (900 rounds, 2700 photographs): the
+     old read cost 1236 Drive round trips for the first page alone, was
+     truncated at 600 records, and needed a second page for 634 more. The index
+     answers the whole thing in 11, and answers "nothing new" in none at all.
+
+     The slow one is exactly what shipped before, kept because a deployment
+     that has not been redeployed must keep working. */
+  const LS_IDX = "cm_drive_index";     // "1" / "0": does this /exec have an index?
+  const idxCap = () => { const v = localStorage.getItem(LS_IDX); return v === null ? null : v === "1"; };
+  const setIdxCap = v => { try { v === null ? localStorage.removeItem(LS_IDX)
+                                            : localStorage.setItem(LS_IDX, v ? "1" : "0"); } catch (e) {} };
+
+  async function loadViaIndex(onProgress, opts) {
+    const say = (m) => onProgress && onProgress(m);
+    let at = opts.full ? 0 : cursor();
+    const recs = [], eds = [], cons = [];
+    let pages = 0, shards = 0;
+    for (;;) {
+      const r = await api({ action: "index", since: at });
+      if (!r.v) return null;                       // not an index reply — older deployment
+      if (r.needsRebuild) return { needsRebuild: true };
+      pages++;
+      (r.records || []).forEach(x => recs.push(x));
+      (r.edits || []).forEach(x => eds.push(x));
+      (r.conflicts || []).forEach(x => cons.push(x));
+      shards = r.shards || shards;
+      if (r.upToDate) { at = r.at || at; break; }
+      if (!r.truncated) { at = r.at || at; break; }
+      at = r.cursor;
+      if (pages >= MAX_PAGES) break;
+      say(`Reading inspections… ${recs.length} so far`);
+    }
+    /* The index carries the file ids, so the photo index no longer needs its own
+       download: a record knows which file it is, and its pictures are found by
+       name against the folder listing only when a unit is actually opened. */
+    if (recs.length || opts.full) window.CMDash.setDriveRecords(recs, { replace: !!opts.full });
+    if (eds.length || opts.full) window.CMDash.setEdits(eds, { replace: !!opts.full });
+    if (cons.length || opts.full) window.CMDash.setConflicts(cons, { replace: !!opts.full });
+    try { localStorage.setItem(LS_CUR, String(at)); } catch (e) {}
+    return { records: recs.length, edits: eds.length, conflicts: cons.length,
+             held: window.CMDash.driveCount(), shards, pages, viaIndex: true,
+             incremental: !opts.full && pages > 0 };
+  }
+
+  /* Build the index for a folder that predates it. This is the expensive read
+     the index abolishes, run once — and run HERE, on a desk with mains power
+     and a real link, never on a phone in the pit. Resumable because 900 rounds
+     is more Drive work than one Apps Script execution is allowed. */
+  async function buildIndex(onProgress) {
+    const say = (m) => onProgress && onProgress(m);
+    let after = 0, done = 0, calls = 0;
+    for (;;) {
+      const r = await api({ action: "index", rebuild: 1, after });
+      calls++; done += r.done || 0; after = r.cursor || after;
+      say(`Indexing the folder… ${done} rounds` + (r.pending ? `, ${r.pending} to go` : ""));
+      if (!r.building) break;
+      if (calls >= 60) break;                      // a folder this size is a different problem
+    }
+    setIdxCap(true);
+    return { indexed: done, calls };
+  }
+
   async function load(onProgress, opts) {
     opts = opts || {};
     const say = (m) => onProgress && onProgress(m);
     if (opts.full) { index = {}; fetched = {}; localStorage.removeItem(LS_CUR); }
+
+    if (idxCap() !== false && !legacy) {
+      try {
+        say(cursor() && !opts.full ? "Checking Drive for new inspections…" : "Reading the index…");
+        let r = await loadViaIndex(onProgress, opts);
+        if (r && r.needsRebuild) {
+          await buildIndex(onProgress);
+          r = await loadViaIndex(onProgress, opts);
+        }
+        if (r && !r.needsRebuild) { setIdxCap(true); return Object.assign({ files: 0, photos: 0 }, r); }
+        setIdxCap(false);
+      } catch (e) {
+        // An /exec without the index says "Unknown action". Anything else is a
+        // real failure and must not be hidden behind a slower path that will
+        // hit it too — but the slow path is strictly more compatible, so try it.
+        setIdxCap(false);
+      }
+    }
 
     const resuming = !opts.full && !!cursor();
     let at = opts.full ? 0 : cursor();
@@ -246,6 +329,13 @@
      Cache Storage survives the reload, so the second visit is disk-speed. It
      is best-effort throughout: no secure context, no quota, a browser that
      refuses — every path falls back to the network rather than failing. */
+  /* How many files this deployment will hand over in one request, learned by
+     asking and remembered. 1 means "one at a time", which is what every /exec
+     did before this. */
+  const LS_MB = "cm_drive_media_batch";
+  const mediaBatch = () => Math.max(1, Number(localStorage.getItem(LS_MB) || 8) || 1);
+  const setMediaBatch = n => { try { localStorage.setItem(LS_MB, String(n)); } catch (e) {} };
+
   const MEDIA_CACHE = "cm-media-v1";
   const MEDIA_CAP = 1500;                 // files; ~immutable, so FIFO is enough
   async function cacheGet(id) {
@@ -267,8 +357,32 @@
     } catch (e) { /* a full disk must not stop the picture being shown */ }
   }
 
+  /* Which file is which photograph.
+
+     The old read shipped this with every load — 2700 names and ids for a season,
+     downloaded to a browser that will open four units. The index path leaves it
+     out and fetches it here instead: once, the first time somebody actually
+     opens a unit, and never on a visit that only reads the charts. */
+  let mediaIndexAt = 0;
+  const MEDIA_INDEX_TTL = 5 * 60 * 1000;
+  async function ensureMediaIndex() {
+    /* The records path brings its own index down with the first page, and has
+       always done. Only the index path arrives without one — so this must not
+       re-fetch what a load already provided, or every dashboard pays a folder
+       listing it does not need. */
+    const have = Object.keys(index).length;
+    if (have && !mediaIndexAt) return;                       // came with the records
+    if (have && Date.now() - mediaIndexAt < MEDIA_INDEX_TTL) return;
+    try {
+      const all = await api({ action: "list" });
+      (all.files || []).forEach(f => { index[f.name] = { id: f.id, size: f.size }; });
+      mediaIndexAt = Date.now();
+    } catch (e) { /* no index means no pictures, not a broken page */ }
+  }
+
   async function ensurePhotos(recs, onProgress) {
     if (!configured()) return 0;
+    await ensureMediaIndex();
     const names = wanted(recs);
     if (!names.length) return 0;
     /* Lead frames first. A position's first photograph is the one on the card;
@@ -278,20 +392,52 @@
        card a second instead of showing every card at once. */
     const lead = n => /(_1)?\.[A-Za-z0-9]+$/.test(n) && !/_(?:[2-9]|10)\./.test(n);
     names.sort((a, b) => (lead(a) ? 0 : 1) - (lead(b) ? 0 : 1));
-    await pool(names, async (nm) => {
-      try {
-        const id = index[nm].id;
-        let url = await cacheGet(id);
-        if (!url) {
-          const r = await api({ action: "file", id });
-          const blob = b64ToBlob(r.data, r.mime);
+
+    /* What is already on this disk costs nothing and should not be queued
+       behind what is not. Separating them also means the batch below carries
+       only real misses, so a unit opened twice in a morning makes no requests
+       at all the second time. */
+    const miss = [];
+    for (const nm of names) {
+      const url = await cacheGet(index[nm].id);
+      if (url) { fetched[nm] = url; window.CMDash.addPhoto(nm, url); }
+      else miss.push(nm);
+    }
+    if (!miss.length) { if (onProgress) onProgress(names.length, names.length); return names.length; }
+
+    /* Several photographs to a request where the deployment allows it. Each one
+       used to be its own Apps Script invocation — a script start and a round
+       trip for a thumbnail — which is why the pool that limits it to five at a
+       time exists. Asked for together they cost one of each. */
+    const per = mediaBatch();
+    let done = names.length - miss.length;
+    const groups = [];
+    for (let i = 0; i < miss.length; i += per) groups.push(miss.slice(i, i + per));
+
+    await pool(groups, async (grp) => {
+      const ids = grp.map(nm => index[nm].id);
+      let got = null;
+      if (per > 1) {
+        try {
+          const r = await api({ action: "files", ids: ids.join(",") });
+          got = {};
+          (r.files || []).forEach(f => { if (f.ok) got[f.id] = f; });
+        } catch (e) { got = null; setMediaBatch(1); }   // older deployment; stop asking
+      }
+      for (let k = 0; k < grp.length; k++) {
+        const nm = grp[k], id = ids[k];
+        try {
+          const f = got ? got[id] : await api({ action: "file", id });
+          if (!f || !f.data) { fetched[nm] = null; continue; }
+          const blob = b64ToBlob(f.data, f.mime);
           cachePut(id, blob);                      // not awaited: the picture goes up now
-          url = URL.createObjectURL(blob);
-        }
-        fetched[nm] = url;
-        window.CMDash.addPhoto(nm, url);
-      } catch (e) { fetched[nm] = null; }          // remember the failure, don't retry forever
-    }, onProgress);
+          const url = URL.createObjectURL(blob);
+          fetched[nm] = url;
+          window.CMDash.addPhoto(nm, url);
+        } catch (e) { fetched[nm] = null; }        // remember the failure, don't retry forever
+        if (onProgress) onProgress(++done, names.length);
+      }
+    });
     return names.length;
   }
 

@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=114">
+<link rel="manifest" href="manifest.webmanifest?v=115">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=114">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=114">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=114">
+<link rel="apple-touch-icon" href="icon-192.png?v=115">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=115">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=115">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1605,25 +1605,25 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=114"></script>
-<script src="upload-defaults.js?v=114"></script>
-<script src="hme.js?v=114"></script>
-<script src="mp-fc.js?v=114"></script>
-<script src="hme-cascade.js?v=114"></script>
-<script src="assets.js?v=114"></script>
-<script src="temp-limits.js?v=114"></script>
-<script src="wear.js?v=114"></script>
-<script src="wear-figs.js?v=114"></script>
-<script src="wear-map.js?v=114"></script>
-<script src="machine-photos.js?v=114"></script>
-<script src="machine-fig.js?v=114"></script>
-<script src="get.js?v=114"></script>
-<script src="uc-points.js?v=114"></script>
-<script src="inspect-guide.js?v=114"></script>
-<script src="get-figs.js?v=114"></script>
-<script src="body-points.js?v=114"></script>
-<script src="body-map.js?v=114"></script>
-<script src="report-core.js?v=114"></script>
+<script src="native.js?v=115"></script>
+<script src="upload-defaults.js?v=115"></script>
+<script src="hme.js?v=115"></script>
+<script src="mp-fc.js?v=115"></script>
+<script src="hme-cascade.js?v=115"></script>
+<script src="assets.js?v=115"></script>
+<script src="temp-limits.js?v=115"></script>
+<script src="wear.js?v=115"></script>
+<script src="wear-figs.js?v=115"></script>
+<script src="wear-map.js?v=115"></script>
+<script src="machine-photos.js?v=115"></script>
+<script src="machine-fig.js?v=115"></script>
+<script src="get.js?v=115"></script>
+<script src="uc-points.js?v=115"></script>
+<script src="inspect-guide.js?v=115"></script>
+<script src="get-figs.js?v=115"></script>
+<script src="body-points.js?v=115"></script>
+<script src="body-map.js?v=115"></script>
+<script src="report-core.js?v=115"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -5424,6 +5424,36 @@ async function teamStash(recs){
     }
   }catch(e){ /* out of room, or the store is gone — the summary still works */ }
 }
+/* The script can summarise the rounds itself, and when it can, it should.
+
+   A phone asking "what has the team done?" was answered with every inspection
+   in the folder — measured at 1236 Drive round trips and 1.6 MB for a season of
+   Baimskaya, to draw a list of two dozen lines. The index answers the same
+   question from a file the script maintains as rounds arrive: 11 operations and
+   68 KB for that same season, and nothing at all when nothing has changed.
+
+   These rows ARE teamRow()'s output, built by the same rules at the other end.
+   The suite feeds both the same records and fails if they part company, because
+   two copies of "which grade is worst" is two copies that drift. */
+function teamMergeRows(rows,replace){
+  const have=replace ? new Map() : new Map(teamAll().map(x=>[teamKey(x),x]));
+  const h=histAll(); let added=0, hist=0;
+  for(const row of rows){
+    if(!row || !row.u || !row.d) continue;
+    const k=teamKey(row);
+    if(!have.has(k)) added++;
+    have.set(k,row);                                  // a re-upload replaces
+    const hk=row.t+"|"+row.u;
+    if(!h[hk]||h[hk]<row.d){ h[hk]=row.d; hist++; }
+  }
+  const saved=teamSave([...have.values()]); histSave(h);
+  loadBaselines();
+  /* Deliberately no stash: a row is not a round. The round itself is one
+     request away by the id the row carries, made when somebody actually opens
+     it. Downloading nine hundred inspections nobody will read is the cost this
+     whole path exists to remove. */
+  return {added,hist,saved,stash:null};
+}
 function teamMerge(recs,replace){
   // replace = a full re-read, so rows deleted in Drive should disappear too.
   // The due-list index is deliberately NOT reset: a last-done date is worth
@@ -5451,6 +5481,20 @@ function teamMerge(recs,replace){
   loadBaselines();
   return {added,hist,saved,stash};
 }
+/* Whether this deployment has the index, asked by using it and remembered.
+
+   The same negotiation the upload batch uses: nothing to configure, nothing to
+   announce, and a fleet that does not have to move together. null means "ask
+   again next time" — used when the deployment HAS the index but the folder has
+   not been built into one yet. */
+let idxCache=null;
+function idxCaps(){ if(idxCache) return idxCache;
+  try{ idxCache=JSON.parse(localStorage.getItem("up_index")||"{}"); }catch(e){ idxCache={}; }
+  return idxCache; }
+function idxCap(url){ const v=idxCaps()[url]; return v===undefined?undefined:v; }
+function setIdxCap(url,v){ const c=idxCaps();
+  if(v===null) delete c[url]; else c[url]=v;
+  try{ localStorage.setItem("up_index",JSON.stringify(c)); }catch(e){} }
 let teamBusy=false, teamAt=0, teamAbort=null, teamRun=0;
 const TEAM_MIN_GAP=60000;    // automatic pulls only; the button always goes
 const TEAM_TIMEOUT=20000;    // pit signal can leave a fetch hanging for ever
@@ -5493,13 +5537,38 @@ async function teamPull(manual,full){
     // it is rewritten below from the reply, and only if the save stuck.
     let after=Number(localStorage.getItem(TEAM_CUR)||0)||0;
     if(full || (after && !teamAll().length)) after=0;
-    const q=new URLSearchParams({action:"records", after:String(after), index:"0"});
-    if(g.sec) q.set("secret",g.sec);
-    const res=await fetch(g.url+(g.url.indexOf("?")<0?"?":"&")+q.toString(),
-                          {method:"GET", signal:ac.signal});
-    const txt=await res.text();
-    if(!mine()) return false;
-    let j=null; try{ j=JSON.parse(txt); }catch(e){}
+
+    const ask=async p2=>{
+      const q=new URLSearchParams(p2);
+      if(g.sec) q.set("secret",g.sec);
+      const res=await fetch(g.url+(g.url.indexOf("?")<0?"?":"&")+q.toString(),
+                            {method:"GET", signal:ac.signal});
+      const body=await res.text();
+      let out=null; try{ out=JSON.parse(body); }catch(e){}
+      return {j:out, txt:body};
+    };
+    /* Ask for the index first. A deployment that has one answers the whole list
+       in a single small reply, and answers "nothing new" without touching Drive
+       at all. One that does not says so, once, and this falls back to reading
+       every record the way it always has — so nobody has to be told which
+       deployment they are on, and a phone updated before the script is not a
+       phone that stops working. */
+    let j=null, txt="", viaIndex=false;
+    if(idxCap(g.url)!==false){
+      const r2=await ask({action:"index", slim:"1", since:String(after)});
+      if(!mine()) return false;
+      if(r2.j && r2.j.ok!==false && r2.j.v){
+        // Indexed deployment, but the folder predates the index. Read it the
+        // long way this time; the dashboard is what builds it.
+        if(r2.j.needsRebuild){ setIdxCap(g.url,null); }
+        else { j=r2.j; viaIndex=true; setIdxCap(g.url,true); }
+      } else setIdxCap(g.url,false);
+    }
+    if(!j){
+      const r3=await ask({action:"records", after:String(after), index:"0"});
+      if(!mine()) return false;
+      j=r3.j; txt=r3.txt;
+    }
     if(!j){ if(manual) msg.textContent="⚠ "+txt.slice(0,90); return false; }
     if(j.ok===false){
       // The usual reason: the script was edited but never released as a new version.
@@ -5507,12 +5576,23 @@ async function teamPull(manual,full){
       return false;
     }
     netSeen(true);                                  // Drive answered — that is "online"
-    const {added,saved,stash}=teamMerge(j.records||[], !!full);
+    /* Nothing has changed since this phone last looked, and the script knew it
+       without opening a single file. This is the answer most checks get. */
+    if(viaIndex && j.upToDate){
+      if(j.at) localStorage.setItem(TEAM_CUR,String(j.at));
+      if(manual) msg.textContent=t("team_upto").replace("{t}",teamAll().length);
+      return true;
+    }
+    const {added,saved,stash}= viaIndex ? teamMergeRows(j.rows||[], !!full)
+                                        : teamMerge(j.records||[], !!full);
     const voided=teamVoid(j.edits||[]);   // after the merge, so a re-uploaded record is voided too
     const clash=cfMerge(j.conflicts||[]);
     // Only claim to have them once they are actually stored. Advancing the
     // cursor after a failed write loses those inspections permanently.
-    if(saved && j.cursor) localStorage.setItem(TEAM_CUR,String(j.cursor));
+    /* The index reports where the folder is, not where this reply stopped —
+       unless it did stop, in which case the next call resumes from there. */
+    const nextCur = viaIndex ? (j.truncated ? j.cursor : j.at) : j.cursor;
+    if(saved && nextCur) localStorage.setItem(TEAM_CUR,String(nextCur));
     const total=teamAll().length;
     msg.textContent=(!saved ? t("team_full")
       : (added?t("team_new").replace("{n}",added):t("team_upto")).replace("{t}",total))
@@ -5617,6 +5697,21 @@ async function teamAsk(g,params,ms){
 async function teamFetchOne(g,k){
   const parts=String(k).split("|"), u=parts[0]||"", d=parts[1]||"", ty=parts[2]||"";
   if(!u||!d||!ty) return "gone";
+
+  /* The row usually knows which file it is — the index puts the id on it when
+     the round is uploaded. Then opening a round is one request by id: no
+     listing, no search, nothing read that nobody asked for. The name-matching
+     below is for rows that predate the index, and for a folder that has not
+     been built into one. */
+  const row=teamAll().find(r=>r.u===u.toUpperCase() && r.d===d && r.t===ty);
+  if(row && row.f){
+    const one=await teamAsk(g,{action:"file", id:row.f},TEAM_TIMEOUT_FULL);
+    const got=one && one.data ? await teamStashFile(one) : null;
+    if(got) return "ok";
+    if(one && one.ok===false) return "gone";        // the folder answered: not there
+    if(one===null) return "unreachable";
+  }
+
   const idx=await teamAsk(g,{action:"list", ext:".json"},TEAM_TIMEOUT_FULL);
   if(!idx) return "unreachable";
   const want=(u+"_"+ddmmyyyy(d)+"_"+ty+".json").toLowerCase();
@@ -5634,6 +5729,10 @@ async function teamFetchOne(g,k){
   hits.sort((a2,b2)=>(b2.updated||0)-(a2.updated||0));   // a re-upload wins
   const f=await teamAsk(g,{action:"file", id:hits[0].id},TEAM_TIMEOUT_FULL);
   if(!f || !f.data) return "unreachable";
+  return await teamStashFile(f) ? "ok" : "gone";
+}
+/** One sidecar, as the script hands it over, into the store. */
+async function teamStashFile(f){
   let rec=null;
   try{
     // The sidecar carries Cyrillic names. atob gives bytes, not characters.
@@ -5641,10 +5740,10 @@ async function teamFetchOne(g,k){
     for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
     const o=JSON.parse(new TextDecoder().decode(bytes));
     rec=(o.records||[])[0]||null;
-  }catch(e){ return "unreachable"; }
-  if(!rec || !rec.equip || !rec.date) return "gone";
+  }catch(e){ return false; }
+  if(!rec || !rec.equip || !rec.date) return false;
   await teamStash([rec]);
-  return "ok";
+  return true;
 }
 async function openTeamRow(k){
   if(!k) return;
@@ -6492,7 +6591,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="114";
+const BUILD="115";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

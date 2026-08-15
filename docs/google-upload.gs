@@ -50,6 +50,33 @@ const ADMIN_SECRET = '';        // leave empty HERE. Fill it in the script edito
 
 /** Where the audit trail and the dashboard's edits live, inside ROOT_FOLDER_ID. */
 const META_DIR = '_meta';
+
+/* ── the index: why reading is no longer a walk ──────────────────────────────
+   Every read used to answer its question by opening the folder and then opening
+   every inspection in it. Measured against a season of Baimskaya — 900 rounds,
+   2700 photographs — one full read cost 1236 Drive round trips, returned 1.6 MB
+   and was still truncated; the second page cost 634 more. Two Drive round trips
+   per record, paid again by every phone, every browser, every refresh, against
+   a script that gets about 90 minutes of execution a day.
+
+   Nothing about that work is new work. The record was in memory when it was
+   uploaded — the script decoded it to write it. So the summary is written then,
+   into a shard, and reading becomes reading the shard.
+
+     _meta/index/2026-08.json     one shard per month of inspection dates
+     ScriptProperties.cm_at       when anything last changed
+
+   A shard per month bounds the read-modify-write: a busy month is a few hundred
+   rounds, not a career. And cm_at is a property, not a file, so "has anything
+   changed since I last looked?" costs zero Drive operations — the answer most
+   requests get, and the one that used to cost a full folder walk.
+
+   Everything here is additive. ?action=records still works exactly as before,
+   so a phone or a dashboard older than this deployment notices nothing.
+   ──────────────────────────────────────────────────────────────────────────*/
+const INDEX_DIR = META_DIR + '/index';
+const INDEX_AT = 'cm_at';               // script property: last change, ms
+const INDEX_V = 1;
 // ────────────────────────────────────────────────────────────────────────────
 
 function doPost(e) {
@@ -68,7 +95,8 @@ function doPost(e) {
        together but fail apart — a version released before doPost existed still
        answers every GET — so the dashboard sends this to find out whether the
        half it needs is actually live. It writes nothing. */
-    if (b.op === 'ping')    return json({ ok: true, write: true, batch: true, canDelete: !!ADMIN_SECRET });
+    if (b.op === 'ping')    return json({ ok: true, write: true, batch: true, canDelete: !!ADMIN_SECRET,
+                                          index: true, media: MEDIA_MAX, at: indexAt_() });
 
     if (b.op === 'edit')    return json(saveEdit_(b));
     if (b.op === 'delete')  return json(deleteRecord_(b));
@@ -170,6 +198,30 @@ function saveOne_(b, dirs) {
      renamed file would look like one that never arrived and be sent again for
      ever. */
   var out = { ok: true, req: b.name, id: f.getId(), name: f.getName(), url: f.getUrl(), folder: dir.getName() };
+
+  /* The round is on Drive; now make it findable without anyone having to open
+     it. This is the only place a record enters the folder, and the JSON is
+     already decoded in `blob` — so the index is maintained for the cost of the
+     shard write alone, and no read anywhere else ever has to walk the folder
+     to discover this round exists. */
+  if (isSidecar_(fileName)) {
+    try {
+      /* Read it back off the file that was just written, not off the blob that
+         was handed to createFile. Indexing what actually landed is the only
+         version worth indexing — and a blob built in memory is not guaranteed
+         to be readable as text on every runtime. One Drive operation, once per
+         round, against the hundreds it saves every reader. */
+      var side = JSON.parse(f.getBlob().getDataAsString());
+      var rs = (side && side.records) || [];
+      for (var si = 0; si < rs.length; si++) {
+        if (!rs[si]) continue;
+        rs[si]._file = (path ? path + '/' : '') + fileName;
+        rs[si]._id = f.getId();
+        indexPut_(rs[si], f.getId());
+      }
+    } catch (err) { /* not our shape — the file still stands, ?rebuild reconciles */ }
+  }
+
   if (plan.rival) {
     out.kept = true;                       // "we did not overwrite the other phone"
     if (isSidecar_(wanted)) {
@@ -197,8 +249,13 @@ function doGet(e) {
   if (SECRET && p.secret !== SECRET) return json({ ok: false, error: 'Bad or missing secret' });
   try {
     if (p.action === 'records') return json(readRecords_(p));
+    /* The fast read. ?action=records is left exactly as it was so a client
+       older than this deployment keeps working; this is what a current one
+       asks for first. */
+    if (p.action === 'index') return json(p.rebuild ? rebuildIndex_(p) : readIndex_(p));
     if (p.action === 'list') return json(listFiles_(p.folder || '', p.ext || ''));
     if (p.action === 'file') return json(readFile_(p.id));
+    if (p.action === 'files') return json(readFiles_(p.ids));
     return json({ ok: false, error: 'Unknown action: ' + p.action });
   } catch (err) {
     return json({ ok: false, error: String((err && err.message) || err) });
@@ -230,6 +287,7 @@ function keyFile_(key, ext) {
 function saveEdit_(b) {
   var name = keyFile_(b.key, '.edit.json');
   if (!name) return { ok: false, error: 'Bad record key: ' + b.key };
+  indexTouch_();               // a correction is a change; clients must come and look
   var dir = folderPath_(rootFolder_(), META_DIR);
   var doc = {
     type: 'cm-record-edit', version: 1,
@@ -410,9 +468,302 @@ function deleteRecord_(b) {
     Utilities.newBlob(JSON.stringify(log, null, 2), 'application/json',
                       stampSafe + '_' + stem + '.deleted.json'));
 
+  indexDrop_(b.key);          // or the list keeps offering a round that is gone
   return { ok: true, deleted: gone.length, files: gone, trashed: true };
 }
 function esc_(s) { return String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   THE INDEX
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/** ms the folder last changed. A property, not a file — zero Drive operations. */
+function indexAt_() {
+  try { return Number(PropertiesService.getScriptProperties().getProperty(INDEX_AT) || 0) || 0; }
+  catch (err) { return 0; }
+}
+function indexTouch_(ms) {
+  try { PropertiesService.getScriptProperties().setProperty(INDEX_AT, String(ms || new Date().getTime())); }
+  catch (err) { /* a property that will not save is not worth failing an upload over */ }
+}
+/** '2026-08' from an inspection date. The shard a record belongs to. */
+function shardOf_(iso) {
+  var m = /^(\d{4})-(\d{2})/.exec(String(iso || ''));
+  return m ? m[1] + '-' + m[2] : 'undated';
+}
+var RECKEY_ = function (r) {
+  return String(r.equip || '').toUpperCase() + '|' + (r.date || '') + '|' + (r.type || 'MP');
+};
+
+/** One shard, read whole. 2 Drive operations, or 1 if it does not exist yet. */
+function shardRead_(dir, name) {
+  var it = dir.getFilesByName(name + '.json');
+  if (!it.hasNext()) return { records: [], file: null };
+  var f = it.next();
+  try {
+    var j = JSON.parse(f.getBlob().getDataAsString());
+    return { records: (j && j.records) || [], file: f };
+  } catch (err) { return { records: [], file: f }; }   // corrupt shard rebuilds itself below
+}
+function shardWrite_(dir, name, records) {
+  var body = JSON.stringify({ type: 'cm-index-shard', version: INDEX_V,
+                              at: new Date().getTime(), n: records.length, records: records });
+  var blob = Utilities.newBlob(body, 'application/json', name + '.json');
+  var it = dir.getFilesByName(name + '.json');
+  while (it.hasNext()) it.next().setTrashed(true);
+  return dir.createFile(blob);
+}
+
+/* A round has landed. Put it in its shard.
+
+   Called from saveOne_, which has just decoded this exact JSON in order to
+   write it — so the record costs nothing to obtain. The lock matters: two
+   phones finishing a round in the same second would otherwise read the same
+   shard, each add their own round, and the second write would lose the first.
+   A lock that cannot be taken is not a reason to fail the upload; the file is
+   on Drive either way and a rebuild puts the index right. */
+function indexPut_(rec, fileId) {
+  if (!rec || !rec.equip || !rec.date) return;
+  var lock = null;
+  try { lock = LockService.getScriptLock(); lock.waitLock(20000); } catch (err) { lock = null; }
+  try {
+    var dir = folderPath_(rootFolder_(), INDEX_DIR);
+    var name = shardOf_(rec.date);
+    var cur = shardRead_(dir, name);
+    var key = RECKEY_(rec), out = [], put = false;
+    for (var i = 0; i < cur.records.length; i++) {
+      if (RECKEY_(cur.records[i]) === key) { if (put) continue; out.push(rec); put = true; }
+      else out.push(cur.records[i]);
+    }
+    if (!put) out.push(rec);
+    shardWrite_(dir, name, out);
+    indexTouch_();
+  } catch (err) {
+    // Never fail an upload because the index could not be updated. The bytes
+    // are safe on Drive; ?action=index&rebuild=1 reconciles.
+  } finally { if (lock) { try { lock.releaseLock(); } catch (err2) {} } }
+}
+/** A round has been deleted. Take it out, so the list stops offering it. */
+function indexDrop_(key) {
+  var p = String(key || '').split('|');
+  if (p.length !== 3) return;
+  var lock = null;
+  try { lock = LockService.getScriptLock(); lock.waitLock(20000); } catch (err) { lock = null; }
+  try {
+    var dir = folderPath_(rootFolder_(), INDEX_DIR);
+    var name = shardOf_(p[1]);
+    var cur = shardRead_(dir, name);
+    var want = p[0].toUpperCase() + '|' + p[1] + '|' + p[2], out = [];
+    for (var i = 0; i < cur.records.length; i++)
+      if (RECKEY_(cur.records[i]) !== want) out.push(cur.records[i]);
+    if (out.length !== cur.records.length) { shardWrite_(dir, name, out); indexTouch_(); }
+  } catch (err) { /* as above */ }
+  finally { if (lock) { try { lock.releaseLock(); } catch (err2) {} } }
+}
+
+/* The summary a phone needs, and nothing else.
+
+   "In the system" wants who did what, when, and how bad — six fields. Sending
+   the whole record to answer that is sending a megabyte to draw a list. Built
+   here from the shard already in memory, so it costs nothing to offer both. */
+var GRADE_RANK_ = { A: 0, B: 1, C: 2, X: 3 };
+function slimRow_(r) {
+  var worst = '', base = [];
+  var items = r.items || [];
+  for (var i = 0; i < items.length; i++) {
+    var it = items[i] || {}, g = it.grade;
+    if (GRADE_RANK_[g] != null && (worst === '' || GRADE_RANK_[g] > GRADE_RANK_[worst])) worst = g;
+    /* A baseline changes how every later reading on that unit is scored, so it
+       cannot stay on the phone that set it. Rare, and a few bytes when present.
+       This must stay identical to teamRow() in the app — the suite compares the
+       two on the same records so they cannot drift apart unnoticed. */
+    if (it.baseNew) {
+      var k = String(it.key || ''), cut = k.indexOf('.');
+      base.push({ p: cut < 0 ? k : k.slice(0, cut),
+                  s: it.baseAll ? '' : (cut < 0 ? '' : k.slice(cut + 1)),
+                  n: Number(it.baseNew),
+                  c: (it.baseCondemn === '' || it.baseCondemn == null) ? null : Number(it.baseCondemn) });
+    }
+  }
+  var row = { u: String(r.equip || '').toUpperCase(), d: r.date || '', t: r.type || 'MP',
+              by: r.by || '', g: worst };
+  if (base.length) row.b = base;
+  /* The one thing the row carries that the app could not work out for itself:
+     which file this round is. Opening it becomes a single request by id — no
+     folder listing, no search, no re-read of anything else. */
+  if (r._id) row.f = r._id;
+  return row;
+}
+
+/* Read the index.
+
+   The common case — a phone asking "anything new?" — is answered out of a
+   script property without touching Drive at all. When something HAS changed,
+   only the shards that changed are read: a month of work is one file, not three
+   hundred round trips. */
+function readIndex_(p) {
+  var since = Number(p.since || 0) || 0;
+  var at = indexAt_();
+  var slim = String(p.slim || '') === '1';
+
+  if (since && at && since >= at) {
+    return { ok: true, v: INDEX_V, at: at, upToDate: true,
+             records: [], rows: [], edits: [], conflicts: [] };
+  }
+
+  var root = rootFolder_();
+  var it = folderPath_(root, INDEX_DIR).getFiles();
+  var shards = [];
+  while (it.hasNext()) {
+    var f = it.next();
+    if (!/\.json$/i.test(f.getName())) continue;
+    shards.push({ f: f, name: f.getName(), updated: f.getLastUpdated().getTime() });
+  }
+  if (!shards.length) {
+    // Nothing indexed yet. Say so rather than silently answering "no rounds" —
+    // the client falls back to ?action=records and asks for a rebuild.
+    return { ok: true, v: INDEX_V, at: at, empty: true, needsRebuild: true,
+             records: [], rows: [], edits: [], conflicts: [] };
+  }
+
+  /* Oldest month first, so a reply that has to stop can be resumed from where
+     it stopped. A slim reply is ~90 bytes a round and never needs to; a full
+     one is a few kilobytes a round, and a folder large enough to matter would
+     otherwise build a reply too big to send. */
+  shards.sort(function (a2, b2) { return a2.updated - b2.updated; });
+
+  var recs = [], read = 0, bytes = 0, truncated = false, cursor = since;
+  var budget = slim ? INDEX_SLIM_BYTES : INDEX_FULL_BYTES;
+  for (var i = 0; i < shards.length; i++) {
+    if (since && shards[i].updated <= since) continue;      // untouched month
+    if (bytes > budget) { truncated = true; break; }
+    read++;
+    try {
+      var raw = shards[i].f.getBlob().getDataAsString();
+      bytes += raw.length;
+      var j = JSON.parse(raw);
+      var rs = (j && j.records) || [];
+      for (var k = 0; k < rs.length; k++) recs.push(rs[k]);
+    } catch (err) { /* one bad shard must not lose the others */ }
+    cursor = shards[i].updated;
+  }
+
+  var out = { ok: true, v: INDEX_V, at: at || new Date().getTime(),
+              shards: shards.length, readShards: read, n: recs.length };
+  if (truncated) { out.truncated = true; out.cursor = cursor; }
+  if (slim) {
+    out.rows = recs.map(slimRow_);
+  } else {
+    out.records = recs;
+  }
+  // Corrections and voids are few and small, and a client that has the records
+  // without them shows figures somebody has already withdrawn.
+  var meta = metaSince_(since);
+  out.edits = meta.edits; out.conflicts = meta.conflicts;
+  return out;
+}
+
+/** The _meta corrections, which are small enough to read whole. */
+function metaSince_(since) {
+  var edits = [], conflicts = [];
+  try {
+    var dir = folderPath_(rootFolder_(), META_DIR);
+    var it = dir.getFiles();
+    while (it.hasNext()) {
+      var f = it.next(), n = f.getName();
+      if (!/\.(edit|conflict)\.json$/i.test(n)) continue;
+      if (since && f.getLastUpdated().getTime() <= since) continue;
+      try {
+        var j = JSON.parse(f.getBlob().getDataAsString());
+        if (!j || !j.key) continue;
+        if (/\.conflict\.json$/i.test(n)) conflicts.push(j); else edits.push(j);
+      } catch (err) { /* skip */ }
+    }
+  } catch (err) { /* no _meta yet */ }
+  return { edits: edits, conflicts: conflicts };
+}
+
+/* Build the index for a folder that predates it.
+
+   This is the expensive read the index exists to abolish, run once. It is
+   resumable on purpose: 900 rounds is more Drive operations than one execution
+   is allowed, so it returns where it got to and the client calls again. */
+var INDEX_FULL_BYTES = 6 * 1024 * 1024;   // ContentService will not carry much more
+var INDEX_SLIM_BYTES = 24 * 1024 * 1024;  // ~90 bytes a round: a decade of them
+var REBUILD_MAX = 250;
+function rebuildIndex_(p) {
+  var started = new Date().getTime();
+  var after = Number(p.after || 0) || 0;
+  var all = [];
+  collect_(rootFolder_(), '', all, 0, '');
+  var sidecars = all.filter(function (f) {
+    return isSidecar_(f.name) && f.path.indexOf(META_DIR + '/') !== 0 && f.updated > after;
+  }).sort(function (a, b) { return a.updated - b.updated; });
+
+  var dir = folderPath_(rootFolder_(), INDEX_DIR);
+  var open = {}, order = [], done = 0, cursor = after, more = false;
+  for (var i = 0; i < sidecars.length; i++) {
+    if (done >= REBUILD_MAX || new Date().getTime() - started > 200000) { more = true; break; }
+    var f = sidecars[i];
+    try {
+      var j = JSON.parse(DriveApp.getFileById(f.id).getBlob().getDataAsString());
+      var rs = (j && j.records) || [];
+      for (var k = 0; k < rs.length; k++) {
+        var r = rs[k];
+        if (!r || !r.equip || !r.date) continue;
+        r._file = f.path; r._id = f.id;
+        var sh = shardOf_(r.date);
+        if (!open[sh]) { open[sh] = {}; order.push(sh); }
+        open[sh][RECKEY_(r)] = r;
+      }
+      done++;
+    } catch (err) { done++; }
+    cursor = f.updated;
+  }
+
+  // Merge each touched shard once, at the end — not once per record.
+  for (var s = 0; s < order.length; s++) {
+    var name = order[s], cur = shardRead_(dir, name), map = {}, keep = [];
+    for (var c = 0; c < cur.records.length; c++) map[RECKEY_(cur.records[c])] = cur.records[c];
+    for (var kk in open[name]) map[kk] = open[name][kk];
+    for (var mk in map) keep.push(map[mk]);
+    shardWrite_(dir, name, keep);
+  }
+  indexTouch_();
+  return { ok: true, building: more, done: done, cursor: cursor,
+           pending: Math.max(0, sidecars.length - done), shards: order.length, at: indexAt_() };
+}
+
+/* Several files in one reply.
+
+   The dashboard opens a unit and wants its photographs. One invocation each
+   meant five round trips and five script starts for five thumbnails; the pool
+   that limits it to five at a time exists precisely because that is expensive.
+   Asked for together they cost one. */
+var MEDIA_MAX = 8;
+function readFiles_(ids) {
+  var list = String(ids || '').split(',').filter(String).slice(0, MEDIA_MAX);
+  var out = [], known = {};
+  for (var i = 0; i < list.length; i++) {
+    try {
+      var f = DriveApp.getFileById(list[i]);
+      /* The files of one component share a folder. Checking each one's parents
+         separately walks the same chain eight times for eight photographs. */
+      var pid = '';
+      try { var ps = f.getParents(); if (ps.hasNext()) pid = ps.next().getId(); } catch (err0) { pid = ''; }
+      var okHere = pid && known[pid] !== undefined ? known[pid] : underRoot_(f);
+      if (pid) known[pid] = okHere;
+      if (!okHere) { out.push({ id: list[i], ok: false, error: 'outside the folder' }); continue; }
+      var b = f.getBlob();
+      out.push({ id: list[i], ok: true, name: f.getName(), mime: b.getContentType(),
+                 data: Utilities.base64Encode(b.getBytes()) });
+    } catch (err) {
+      out.push({ id: list[i], ok: false, error: String((err && err.message) || err) });
+    }
+  }
+  return { ok: true, files: out };
+}
+
 
 /* ── the batch read ──────────────────────────────────────────────────────────
    Reading the sidecars one HTTP request at a time meant a few hundred round
