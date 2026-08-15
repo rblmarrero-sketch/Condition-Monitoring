@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=116">
+<link rel="manifest" href="manifest.webmanifest?v=117">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=116">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=116">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=116">
+<link rel="apple-touch-icon" href="icon-192.png?v=117">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=117">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=117">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -267,9 +267,6 @@
   .cards button .dot{position:absolute;top:8px;right:9px;width:9px;height:9px;border-radius:50%;background:var(--good);display:none;}
   .cards button.has .dot{display:block;}
   .cards button.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent) inset;}
-  .clist button{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:left;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:12px 13px;margin-bottom:7px;cursor:pointer;color:var(--ink);font-size:14px;}
-  .clist button .r{color:var(--muted);font-size:13px;}
-  .clist button.has{border-color:var(--good);}
   .searchall{width:100%;padding:9px;border:1px dashed var(--border);background:none;color:var(--accent);border-radius:10px;font-size:13px;font-weight:650;cursor:pointer;margin-bottom:10px;}
   .needunit{width:100%;text-align:center;padding:12px 6px 4px;}
   .needunit .nu-t{color:var(--ink-2);font-size:14px;margin-bottom:12px;}
@@ -332,8 +329,6 @@
      stops being at the bottom of the screen and floats up into the page, with
      content visible below it. Set from the visualViewport API; see setVVB(). */
   :root{--vvb:0px;}
-  .bottombar{position:fixed;left:0;right:0;bottom:var(--vvb);background:var(--surface);border-top:1px solid var(--border);padding:9px 12px calc(env(safe-area-inset-bottom) + 9px);display:flex;gap:8px;z-index:10;}
-  .bottombar .btn{margin:0;}
 
   /* ── one job per screen ──────────────────────────────────────────────────
      The app used to be one long scroll: capture, then the queue, then what the
@@ -564,7 +559,6 @@
   .ucfig{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;
     padding:9px;margin-bottom:11px;text-align:center;}
   .ucfig svg{width:100%;max-width:340px;height:auto;display:block;margin:0 auto;}
-  .ucfig .cap{font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.45;}
   /* Context for the number, not the headline above it. At 12.5 px semibold in
      the body ink it outweighed the field it was explaining and took two lines
      to do it. */
@@ -1161,7 +1155,7 @@
   <span class="t" data-i18n="app_title">Truck Inspection</span>
   <span class="lang"><button data-lang="en" class="on">EN</button><button data-lang="ru">RU</button></span>
   <button class="btn-set" id="setBtn" data-i18n-title="set_title" title="Settings">⚙</button>
-  <button type="button" class="st" id="netStatus">…</button>
+  <button type="button" class="st" id="netStatus" data-i18n-title="net_title" title="Connection">…</button>
 </header>
 
 <main>
@@ -1364,7 +1358,7 @@
     <label class="fld" id="commentFld"><span data-i18n="lbl_comment">Comment</span>
       <div class="withbtn">
         <textarea id="comment" rows="2" data-i18n-ph="ph_comment" placeholder="notes…"></textarea>
-        <button type="button" class="iconbtn" id="micBtn" title="Dictate">🎤</button>
+        <button type="button" class="iconbtn" id="micBtn" data-i18n-title="mic_title" title="Dictate">🎤</button>
       </div>
     </label>
     <label class="fld"><span data-i18n="lbl_action">Recommended action</span>
@@ -1395,7 +1389,7 @@
     </div>
   </div>
 
-  <div id="dataWarn" class="editbar hidden" style="background:color-mix(in srgb,var(--critical) 16%,var(--surface));border-color:color-mix(in srgb,var(--critical) 45%,var(--border))"><span id="dataWarnText"></span><button type="button" id="dataWarnFix" class="linkbtn">⟳</button></div>
+  <div id="dataWarn" class="editbar hidden" style="background:color-mix(in srgb,var(--critical) 16%,var(--surface));border-color:color-mix(in srgb,var(--critical) 45%,var(--border))"><span id="dataWarnText"></span><button type="button" id="dataWarnFix" class="linkbtn" data-i18n-title="reload_title" title="Reload">⟳</button></div>
 <div id="editBanner" class="editbar hidden"><span id="editBannerText"></span><button type="button" id="cancelEdit" class="linkbtn"></button></div>
   <button class="btn primary" id="saveBtn">✔ Save</button>
 </div><!-- /paneCapture -->
@@ -1465,7 +1459,7 @@
 </nav>
 
 <div id="setOv" class="pick-ov hidden">
-  <div class="pickhead"><button id="setClose" class="pickback">‹</button>
+  <div class="pickhead"><button id="setClose" class="pickback" data-i18n-title="back_title" title="Back">‹</button>
     <b style="align-self:center" data-i18n="set_title">Upload settings</b></div>
   <div class="picklist">
     <label class="fld" style="margin-bottom:18px"><span data-i18n="set_theme">Appearance</span>
@@ -1605,25 +1599,25 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=116"></script>
-<script src="upload-defaults.js?v=116"></script>
-<script src="hme.js?v=116"></script>
-<script src="mp-fc.js?v=116"></script>
-<script src="hme-cascade.js?v=116"></script>
-<script src="assets.js?v=116"></script>
-<script src="temp-limits.js?v=116"></script>
-<script src="wear.js?v=116"></script>
-<script src="wear-figs.js?v=116"></script>
-<script src="wear-map.js?v=116"></script>
-<script src="machine-photos.js?v=116"></script>
-<script src="machine-fig.js?v=116"></script>
-<script src="get.js?v=116"></script>
-<script src="uc-points.js?v=116"></script>
-<script src="inspect-guide.js?v=116"></script>
-<script src="get-figs.js?v=116"></script>
-<script src="body-points.js?v=116"></script>
-<script src="body-map.js?v=116"></script>
-<script src="report-core.js?v=116"></script>
+<script src="native.js?v=117"></script>
+<script src="upload-defaults.js?v=117"></script>
+<script src="hme.js?v=117"></script>
+<script src="mp-fc.js?v=117"></script>
+<script src="hme-cascade.js?v=117"></script>
+<script src="assets.js?v=117"></script>
+<script src="temp-limits.js?v=117"></script>
+<script src="wear.js?v=117"></script>
+<script src="wear-figs.js?v=117"></script>
+<script src="wear-map.js?v=117"></script>
+<script src="machine-photos.js?v=117"></script>
+<script src="machine-fig.js?v=117"></script>
+<script src="get.js?v=117"></script>
+<script src="uc-points.js?v=117"></script>
+<script src="inspect-guide.js?v=117"></script>
+<script src="get-figs.js?v=117"></script>
+<script src="body-points.js?v=117"></script>
+<script src="body-map.js?v=117"></script>
+<script src="report-core.js?v=117"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -1860,6 +1854,10 @@ const I18N = {
     src_gallery:"🖼 Choose from the gallery", src_cancel:"Not now",
     gal_full_t:"Not everything fitted", gal_full_b:"{n} of the files you chose were left out. A position holds up to {p} photographs and one video clip.",
     media_hint:"Up to {p} photos + 1 video (max {s} sec).", media_empty:"No photos yet.",
+    media_photo_n:"Photo {n}", media_del:"Remove",
+    m_oops_t:"That did not work",
+    mic_title:"Dictate", reload_title:"Reload the app", back_title:"Back",
+    net_title:"Connection", edit_title:"Edit this round", del_title:"Delete this round",
     upd_ready:"A new version is ready. It will load by itself when you finish this round — or tap to load it now.",
     rdy_ok:"Ready to work offline",
     rdy_checking:"Checking…",
@@ -2176,6 +2174,10 @@ const I18N = {
     src_gallery:"🖼 Выбрать из галереи", src_cancel:"Не сейчас",
     gal_full_t:"Поместилось не всё", gal_full_b:"Не добавлено файлов: {n}. На одну позицию — до {p} фотографий и один видеоролик.",
     media_hint:"До {p} фото + 1 видео (макс. {s} сек).", media_empty:"Пока нет фото.",
+    media_photo_n:"Фото {n}", media_del:"Удалить",
+    m_oops_t:"Не получилось",
+    mic_title:"Диктовать", reload_title:"Перезагрузить приложение", back_title:"Назад",
+    net_title:"Связь", edit_title:"Изменить обход", del_title:"Удалить обход",
     upd_ready:"Новая версия готова. Загрузится сама, когда закончите осмотр — или нажмите, чтобы сейчас.",
     rdy_ok:"Готово к работе без связи",
     rdy_checking:"Проверка…",
@@ -2601,6 +2603,24 @@ const DEVICE = (()=>{ let d=localStorage.getItem("cm_dev");
 const dlg=(pair)=>{ $("dlgTitle").textContent=pair[0]; $("dlgMsg").textContent=pair[1];
   $("dlgCancel").classList.add("hidden"); $("dlgOk").className="btn primary";
   $("dlgOk").textContent=t("dlg_ok"); $("dlg").showModal(); };
+/* A handler that rejects is a control that does nothing at all — no message, no
+   log an inspector can see, just a button that seems dead. It is the failure
+   this project has shipped most often, and every async handler is one await
+   away from it: a photograph the browser cannot decode, a picker the platform
+   refuses, a store that is full.
+
+   So every async handler goes through here. A cancelled picker is silence,
+   because cancelling is an answer. Anything else is a sentence on screen. */
+function guard(fn){
+  return async function(...args){
+    try{ return await fn.apply(this,args); }
+    catch(e){
+      const name=(e&&e.name)||"", msg=String((e&&e.message)||e||"");
+      if(name==="AbortError" || /abort|cancell?ed/i.test(msg)) return;   // they said no
+      try{ dlg([t("m_oops_t"), msg.slice(0,300)]); }catch(_){ }
+    }
+  };
+}
 /* A question, not a notice. Used where the answer destroys something: the caller
    waits for a real choice instead of assuming one. */
 function ask(title,msg,okLabel,danger){
@@ -3324,9 +3344,10 @@ async function takePhoto(){
 function chooseSource(kind){
   const vid = kind==="video";
   $("srcTitle").textContent = t(vid?"src_t_video":"src_t_photo");
-  $("srcLive").textContent  = t(vid?"src_record":"src_take");
-  $("srcGal").textContent   = t("src_gallery");
-  $("srcCancel").textContent= t("src_cancel");
+  const label=(id,key)=>{ const el=$(id); el.textContent=t(key); el.setAttribute("aria-label",t(key)); };
+  label("srcLive", vid?"src_record":"src_take");
+  label("srcGal", "src_gallery");
+  label("srcCancel", "src_cancel");
   $("srcDlg").showModal();
   return new Promise(res=>{
     const done=v=>{ $("srcDlg").onclose=null; $("srcDlg").close(); res(v); };
@@ -3359,19 +3380,19 @@ async function openGallery(kind){
   g.multiple = !vid;                          // one clip per position either way
   g.click();
 }
-$("takeBtn").onclick=async ()=>{
+$("takeBtn").onclick=guard(async ()=>{
   const s=await chooseSource("photo"); if(!s) return;
   if(s==="live") await takePhoto(); else await openGallery("photo");
-};
-$("videoBtn").onclick=async ()=>{
+});
+$("videoBtn").onclick=guard(async ()=>{
   const s=await chooseSource("video"); if(!s) return;
   if(s==="live") $("video").click(); else await openGallery("video");
-};
+});
 /* Still wired: the shell falls back to it if the Camera plugin is missing, and
    it is the whole implementation on the web. */
-$("camera").onchange=async (e)=>{ const f=e.target.files[0]; e.target.value=""; if(!f) return;
+$("camera").onchange=guard(async (e)=>{ const f=e.target.files[0]; e.target.value=""; if(!f) return;
   const s=await intake(f);
-  const p=curP(); (p.photos ||= []); if(p.photos.length<MAX_PHOTOS) p.photos.push(s); renderMedia(); renderChips(); };
+  const p=curP(); (p.photos ||= []); if(p.photos.length<MAX_PHOTOS) p.photos.push(s); renderMedia(); renderChips(); });
 /* One place that decides whether a clip is short enough, because a clip picked
    out of the gallery has to clear the same bar as one taken here — and the way
    that goes wrong is a second copy of the rule that forgets to. Resolves true
@@ -3445,8 +3466,12 @@ function urlPool(){ let held=[];
 const mediaPool=urlPool(), pendPool=urlPool();
 function renderMedia(){ const p=draft.positions[curItem]||{}; const ph=p.photos||[]; let h="";
   mediaPool.free();
-  ph.forEach((b,i)=>{ h+=`<div class="mtile"><img src="${mediaPool.url(b)}"><button class="mdel" data-ph="${i}">✕</button></div>`; });
-  if(p.video) h+=`<div class="mtile"><video src="${mediaPool.url(p.video)}" muted playsinline></video><span class="vbadge">▶ video</span><button class="mdel" data-vid="1">✕</button></div>`;
+  /* alt is not decoration here: a blob URL that has been revoked, or a photo
+     that failed to decode, leaves a blank tile with nothing to say what it was
+     — and an inspector counting photographs cannot tell an empty strip from a
+     broken one. */
+  ph.forEach((b,i)=>{ h+=`<div class="mtile"><img src="${mediaPool.url(b)}" alt="${esc(t("media_photo_n",{n:i+1}))}"><button class="mdel" data-ph="${i}" aria-label="${esc(t("media_del"))}">✕</button></div>`; });
+  if(p.video) h+=`<div class="mtile"><video src="${mediaPool.url(p.video)}" muted playsinline></video><span class="vbadge">▶ video</span><button class="mdel" data-vid="1" aria-label="${esc(t("media_del"))}">✕</button></div>`;
   if(!ph.length && !p.video) h=`<div class="empty-m">${t("media_empty")}</div>`;
   $("mediastrip").innerHTML=h;
   /* From the constants, so raising the cap cannot leave the sentence under
@@ -6006,12 +6031,12 @@ async function renderPending(){
     const nPhotos=pos.reduce((s,[,p])=>s+photosOf(p).length,0);
     const nVid=pos.filter(([,p])=>isBlob(p.video)).length; const nPos=pos.length;
     const row=document.createElement("div"); row.className="pitem";
-    const thumb=first?`<img class="thumb" src="${pendPool.url(first)}">`:`<div class="thumb"></div>`;
+    const thumb=first?`<img class="thumb" src="${pendPool.url(first)}" alt="${esc(rec.equip||"")}">`:`<div class="thumb"></div>`;
     const rty=rec.type||"MP";
     const typeTag=`${rec.cls||""} ${rty}`.trim();
     row.innerHTML=`${thumb}<div class="meta"><div class="a"><span class="tag" data-r="${esc(rty)}">${esc(typeTag)}</span>${esc(rec.equip)} · ${esc(rec.date)}</div>
       <div class="b">${nPos} ${t("pos_count")} · ${nPhotos} ${t("photo_count")}${nVid?` · ${nVid}🎥`:""}${rec.smu?` · SMU ${esc(rec.smu)}`:""}${rec.sign?" · ✍":""}${rec.gps?" · 📍":""}</div></div>
-      <button class="edit" title="Edit">✎</button><button class="del" title="Delete">🗑</button>`;
+      <button class="edit" title="${esc(t("edit_title"))}" aria-label="${esc(t("edit_title"))}">✎</button><button class="del" title="${esc(t("del_title"))}" aria-label="${esc(t("del_title"))}">🗑</button>`;
     const openEdit=()=>editRecord(rec);
     row.querySelector(".edit").onclick=(ev)=>{ev.stopPropagation();openEdit();};
     row.querySelector(".meta").onclick=openEdit; row.querySelector(".thumb").onclick=openEdit;
@@ -6119,12 +6144,12 @@ async function buildPackage(){
     {type:"cm-inspection-entries",version:2,exported:todayISO(),records,grades,notes},null,2))});
   return {files, count:all.length};
 }
-$("exportBtn").onclick=async ()=>{ const {files,count}=await buildPackage(); if(!count){ dlg(t("m_nothing_export")); return; }
+$("exportBtn").onclick=guard(async ()=>{ const {files,count}=await buildPackage(); if(!count){ dlg(t("m_nothing_export")); return; }
   const url=URL.createObjectURL(new Blob([makeZip(files)],{type:"application/zip"}));
-  const a=document.createElement("a"); a.href=url; a.download=`truck_inspection_${$("date").value||"export"}.zip`; a.click(); URL.revokeObjectURL(url); dlg(t("m_exported")); };
-$("shareBtn").onclick=async ()=>{ const {files,count}=await buildPackage(); if(!count){ dlg(t("m_nothing_share")); return; }
+  const a=document.createElement("a"); a.href=url; a.download=`truck_inspection_${$("date").value||"export"}.zip`; a.click(); URL.revokeObjectURL(url); dlg(t("m_exported")); });
+$("shareBtn").onclick=guard(async ()=>{ const {files,count}=await buildPackage(); if(!count){ dlg(t("m_nothing_share")); return; }
   const zf=new File([makeZip(files)],`truck_inspection_${$("date").value||"export"}.zip`,{type:"application/zip"});
-  if(navigator.canShare && navigator.canShare({files:[zf]})){ try{ await navigator.share({files:[zf],title:"Truck inspection"}); }catch(e){} } else dlg(t("m_share_na")); };
+  if(navigator.canShare && navigator.canShare({files:[zf]})){ try{ await navigator.share({files:[zf],title:"Truck inspection"}); }catch(e){} } else dlg(t("m_share_na")); });
 
 /* ===================== PDF condition-monitoring report ===================== */
 const GRADE_HEX={A:"#0ca30c",B:"#fab219",C:"#ec835a",X:"#d03b3b"};
@@ -6517,12 +6542,12 @@ async function startScan(){ if(!await needScan()){ dlg(t("m_lib_scan")); return;
 function stopScan(){ if(scanRAF)cancelAnimationFrame(scanRAF); scanRAF=null; if(scanStream){ scanStream.getTracks().forEach(t=>t.stop()); scanStream=null; } $("scanVideo").srcObject=null; $("scanOverlay").classList.add("hidden"); }
 $("scanBtn").onclick=()=>{ scanMode="unit"; startScan(); };
 $("scanCancel").onclick=()=>{ scanMode="unit"; stopScan(); };
-$("qrPhoto").onchange=async (e)=>{ const f=e.target.files[0]; e.target.value=""; if(!f) return;
+$("qrPhoto").onchange=guard(async (e)=>{ const f=e.target.files[0]; e.target.value=""; if(!f) return;
   const img=await new Promise((res,rej)=>{ const i=new Image(); i.onload=()=>res(i); i.onerror=rej; i.src=URL.createObjectURL(f); });
   qrCanvas.width=img.width; qrCanvas.height=img.height; qctx.drawImage(img,0,0);
   if(!await needScan()){ dlg(t("m_lib_scan")); return; }
   const id=qctx.getImageData(0,0,img.width,img.height); const code=window.jsQR(id.data,id.width,id.height);
-  if(code&&code.data){ onScanned(code.data); } else dlg(t("m_no_qr")); };
+  if(code&&code.data){ onScanned(code.data); } else dlg(t("m_no_qr")); });
 
 /* ===================== dictation ===================== */
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
@@ -6538,7 +6563,11 @@ if(SR){ let rec=null, listening=false;
 function applyLang(){ document.documentElement.lang=lang;
   document.querySelectorAll("[data-i18n]").forEach(el=>el.textContent=t(el.dataset.i18n));
   document.querySelectorAll("[data-i18n-ph]").forEach(el=>el.placeholder=t(el.dataset.i18nPh));
-  document.querySelectorAll("[data-i18n-title]").forEach(el=>el.title=t(el.dataset.i18nTitle));
+  /* Both, from one key. `title` is a hover tooltip, which on a phone nobody
+     ever sees; aria-label is what is actually announced. An icon-only button
+     with neither is a button that reads as "button". */
+  document.querySelectorAll("[data-i18n-title]").forEach(el=>{
+    const s2=t(el.dataset.i18nTitle); el.title=s2; el.setAttribute("aria-label",s2); });
   fillClassSel(); fillTypeSel();
   $("secPosTitle").textContent=TYPE_META[type].title[lang]||TYPE_META[type].title.en;
   $("posLabel").textContent = posHeading(curItem);
@@ -6591,7 +6620,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="116";
+const BUILD="117";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -7195,7 +7224,7 @@ async function renderSync(){
   else { cls+=" on"; txt=t("sync_ok"); }
   bar.className=cls;
   bar.innerHTML=`<span class="dot"></span><span class="sp">${txt}</span>
-    <button id="syncGo">${t("sync_now")}</button><button id="syncSet">⚙</button>`;
+    <button id="syncGo">${t("sync_now")}</button><button id="syncSet" title="${esc(t("set_title"))}" aria-label="${esc(t("set_title"))}">⚙</button>`;
   const g=$("syncGo"); if(g)g.onclick=()=>{ retryAt=RETRY_MIN; syncThenArm(true); };
   const st=$("syncSet"); if(st)st.onclick=openSettings;
 }
@@ -7598,11 +7627,11 @@ function drawQR(text){
   x.fillStyle="#fff"; x.fillRect(0,0,c.width,c.height); x.fillStyle="#000";
   for(let r=0;r<n;r++) for(let col=0;col<n;col++) if(q.isDark(r,col)) x.fillRect(pad+col*px,pad+r*px,px,px);
 }
-$("provShow").onclick=async ()=>{
+$("provShow").onclick=guard(async ()=>{
   persistSettings();
   if(!formToDests().some(d=>d.url)){ $("setMsg").textContent=t("set_needurl"); return; }
   if(!await needQRGen()){ dlg(t("m_lib_qr")); return; }
-  drawQR(cfgLink()); $("provBox").classList.remove("hidden"); };
+  drawQR(cfgLink()); $("provBox").classList.remove("hidden"); });
 $("provCopy").onclick=async ()=>{
   try{ await navigator.clipboard.writeText(cfgLink()); $("setMsg").textContent=t("set_copied"); }
   catch(e){ $("setMsg").textContent=cfgLink(); } };

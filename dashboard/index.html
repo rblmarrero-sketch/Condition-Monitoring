@@ -125,21 +125,11 @@
   .medit .mmsg{font-size:11px;color:var(--muted);min-height:14px;margin-top:4px;}
   /* the follow-up panel and the tracker */
   .kpi.bad .v{color:var(--critical);}
-  .tbar{height:12px;border-radius:999px;background:var(--surface-2);overflow:hidden;
-    box-shadow:inset 0 1px 2px rgba(0,0,0,.14);}
-  .tbar i{display:block;height:100%;border-radius:999px;background:var(--good);
-    transition:width .25s ease;}
-  .tbarl{font-size:11.5px;color:var(--muted);margin-top:4px;}
   table.grid tr.over td{background:color-mix(in srgb,var(--critical) 7%,transparent);}
   table.grid td.bad{color:var(--critical);font-weight:640;}
-  .rcaflag{display:inline-block;margin-top:3px;font-size:10px;font-weight:700;letter-spacing:.05em;
-    text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);
-    border-radius:4px;padding:0 4px;}
   .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0 14px;}
   .readback{padding:8px 10px;background:var(--surface-2);border:1px solid var(--border);
     border-radius:8px;font-size:13px;color:var(--ink-2);}
-  .sbody h3{margin:18px 0 4px;font-size:12px;font-weight:700;text-transform:uppercase;
-    letter-spacing:.08em;color:var(--ink-2);}
   .field.why label{font-variant-numeric:tabular-nums;}
   /* coverage and direction */
   .trend{display:flex;align-items:flex-end;gap:8px;overflow-x:auto;padding:6px 0 0;}
@@ -224,8 +214,6 @@
   .prow.sel .pfill{outline:2px solid var(--ink);outline-offset:1px;}
   table.grid th.sortable{cursor:pointer;user-select:none;} table.grid th.sortable:hover{color:var(--ink);}
   table.grid th .arrow{opacity:.35;font-size:10px;margin-left:3px;} table.grid th.on .arrow{opacity:1;}
-  .tile.clickable{cursor:pointer;transition:border-color .12s,transform .06s;}
-  .tile.clickable:hover{border-color:var(--accent);} .tile.clickable:active{transform:translateY(1px);}
   .note{font-size:12px;color:var(--ink-2);background:color-mix(in srgb,var(--warning) 14%,var(--surface));border:1px solid color-mix(in srgb,var(--warning) 45%,var(--border));border-radius:8px;padding:8px 11px;margin-top:12px;}
   /* data-source sheet */
   .ov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:60;display:flex;align-items:flex-start;justify-content:center;padding:40px 16px;overflow:auto;}
@@ -1066,21 +1054,21 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=116"></script>
-<script src="../mobile/hme.js?v=116"></script>
-<script src="../mobile/mp-fc.js?v=116"></script>
-<script src="../mobile/hme-cascade.js?v=116"></script>
-<script src="../mobile/temp-limits.js?v=116"></script>
+<script src="../data/magnetic_plug.js?v=117"></script>
+<script src="../mobile/hme.js?v=117"></script>
+<script src="../mobile/mp-fc.js?v=117"></script>
+<script src="../mobile/hme-cascade.js?v=117"></script>
+<script src="../mobile/temp-limits.js?v=117"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=116"></script>
-<script src="../mobile/wear.js?v=116"></script>
-<script src="../mobile/wear-map.js?v=116"></script>
+<script src="../mobile/assets.js?v=117"></script>
+<script src="../mobile/wear.js?v=117"></script>
+<script src="../mobile/wear-map.js?v=117"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=116"></script>
-<script src="../mobile/machine-photos.js?v=116"></script>
+<script src="../mobile/upload-defaults.js?v=117"></script>
+<script src="../mobile/machine-photos.js?v=117"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -1089,16 +1077,16 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=116"></script>
-<script src="../mobile/get.js?v=116"></script>
-<script src="../mobile/uc-points.js?v=116"></script>
-<script src="../mobile/inspect-guide.js?v=116"></script>
-<script src="../mobile/get-figs.js?v=116"></script>
-<script src="../mobile/body-points.js?v=116"></script>
-<script src="../mobile/body-map.js?v=116"></script>
-<script src="../mobile/jspdf.umd.min.js?v=116"></script>
-<script src="../mobile/html2canvas.min.js?v=116"></script>
-<script src="../mobile/report-core.js?v=116"></script>
+<script src="../mobile/machine-fig.js?v=117"></script>
+<script src="../mobile/get.js?v=117"></script>
+<script src="../mobile/uc-points.js?v=117"></script>
+<script src="../mobile/inspect-guide.js?v=117"></script>
+<script src="../mobile/get-figs.js?v=117"></script>
+<script src="../mobile/body-points.js?v=117"></script>
+<script src="../mobile/body-map.js?v=117"></script>
+<script src="../mobile/jspdf.umd.min.js?v=117"></script>
+<script src="../mobile/html2canvas.min.js?v=117"></script>
+<script src="../mobile/report-core.js?v=117"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -1692,7 +1680,9 @@ function applyLang(){
   document.documentElement.lang=lang;
   document.querySelectorAll("[data-i18n]").forEach(el=>el.textContent=t(el.dataset.i18n));
   document.querySelectorAll("[data-i18n-ph]").forEach(el=>el.placeholder=t(el.dataset.i18nPh));
-  document.querySelectorAll("[data-i18n-title]").forEach(el=>el.title=t(el.dataset.i18nTitle));
+  /* Both, from one key — a title is a tooltip, aria-label is what is read. */
+  document.querySelectorAll("[data-i18n-title]").forEach(el=>{
+    const s2=t(el.dataset.i18nTitle); el.title=s2; el.setAttribute("aria-label",s2); });
   document.querySelectorAll(".lang button").forEach(b=>b.classList.toggle("on",b.dataset.lang===lang));
   // Everything built in code has to be repainted, not just the static markup.
   refreshControls(); renderAll(); refreshSources(); refreshReportTargets();
@@ -2004,7 +1994,7 @@ function renderChips(){
   if(drill.cause)  add(t("c_cause"), drill.cause, ()=>setDrill("cause",drill.cause));
   const box=$("chips");
   if(!c.length){ box.innerHTML=""; return; }
-  box.innerHTML=c.map((x,i)=>`<span class="chip"><span class="muted">${esc(x.label)}</span> <b>${esc(x.val)}</b><button data-x="${i}" title="${esc(t("remove"))}">×</button></span>`).join("")
+  box.innerHTML=c.map((x,i)=>`<span class="chip"><span class="muted">${esc(x.label)}</span> <b>${esc(x.val)}</b><button data-x="${i}" title="${esc(t("remove"))}" aria-label="${esc(t("remove"))}">×</button></span>`).join("")
     +`<button class="chip clearall" id="chipClear">${esc(t("clearall"))}</button>`;
   box.querySelectorAll("[data-x]").forEach(b=>b.onclick=()=>c[+b.dataset.x].onX());
   const ca=$("chipClear"); if(ca) ca.onclick=()=>{
@@ -4060,8 +4050,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=116"></script>
-<script src="sync-adapter.js?v=116"></script>
-<script src="report.js?v=116"></script>
+<script src="drive.js?v=117"></script>
+<script src="sync-adapter.js?v=117"></script>
+<script src="report.js?v=117"></script>
 </body>
 </html>
