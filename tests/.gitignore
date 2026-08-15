@@ -1,0 +1,7 @@
+# What a run leaves behind, not what a run needs.
+srv*.log
+sweep*.log
+out/
+shots/
+*.pdf
+*.png
