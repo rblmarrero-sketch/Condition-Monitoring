@@ -65,9 +65,79 @@ const FEED = () => {
   ok('and none of it reaches this phone\'s own queue', stored.leakedIntoQueue === 0,
      stored.leakedIntoQueue + ' in dbAll()');
 
+  console.log('\nthe list shows every type, and reading one does not arm it');
+  await p.evaluate(() => { showPane('paneSystem'); renderTeam(); });
+  await p.waitForTimeout(300);
+  {
+    /* Two rounds were seeded, of two different types. Before this, the card
+       filtered on the CAPTURE type — so one of them was invisible until you
+       walked back to Capture and changed the picker, which also changed what
+       you were about to inspect. */
+    const v = await p.evaluate(() => ({
+      rows: document.querySelectorAll('#teamList [data-k]').length,
+      types: [...document.querySelectorAll('#teamList .tag')].map(e => e.textContent),
+      chips: [...document.querySelectorAll('#teamFilter [data-ty]')].map(e => e.dataset.ty),
+      on: (document.querySelector('#teamFilter .on') || {}).dataset?.ty,
+      scope: (document.getElementById('teamScope') || {}).textContent || '',
+      captureType: type }));
+    note('unfiltered', JSON.stringify(v));
+    ok('both rounds are listed without touching anything', v.rows === 2, v.rows + ' rows');
+    ok('  each saying which type it is', v.types.sort().join(',') === 'MP,UC', v.types.join(','));
+    /* In the register's own order, not the order rounds happened to arrive —
+       a chip that moves between visits is a chip a thumb has to hunt for. */
+    ok('  with a chip for every type present, and All first', v.chips.join(',') === ',MP,UC',
+       v.chips.join(','));
+    ok('  All selected to begin with, so the common case needs no taps', v.on === '');
+    ok('  and it says so', /every type/i.test(v.scope), v.scope);
+
+    /* Narrowing is one tap, and it is local to this card. */
+    const before = await p.evaluate(() => type);
+    await p.click('#teamFilter [data-ty="MP"]');
+    await p.waitForTimeout(250);
+    const f = await p.evaluate(() => ({
+      rows: document.querySelectorAll('#teamList [data-k]').length,
+      unit: (document.querySelector('#teamList [data-k]') || {}).dataset?.k || '',
+      captureType: type }));
+    note('filtered to MP', JSON.stringify(f));
+    ok('one tap narrows it', f.rows === 1 && /TK152/.test(f.unit), JSON.stringify(f));
+    /* THE point. Looking is not arming. */
+    ok('  and the round this phone is about to capture is untouched',
+       f.captureType === before, before + ' -> ' + f.captureType);
+
+    await p.click('#teamFilter [data-ty=""]');
+    await p.waitForTimeout(250);
+    ok('  and All brings them back',
+       (await p.evaluate(() => document.querySelectorAll('#teamList [data-k]').length)) === 2);
+
+    /* The machine number is what the row is FOR. It had the flexible half of
+       the row and the date had the fixed one, so adding a type tag turned
+       "EX001 · B" into "EX001…" — and at 320px the two halves drew on top of
+       each other. Whatever else gives up room, this may not. */
+    for (const w of [320, 412]) {
+      await p.setViewportSize({ width: w, height: 720 });
+      await p.waitForTimeout(200);
+      const bad = await p.evaluate(() => {
+        const out = [];
+        document.querySelectorAll('#teamList .dueitem').forEach(row => {
+          const u = row.querySelector('.u'), d = row.querySelector('.d');
+          if (!u) return;
+          if (u.scrollWidth > u.clientWidth + 1) out.push('clipped ' + u.textContent.trim());
+          /* Two spans in one flex row that draw over each other is not a
+             layout, it is two layouts. */
+          if (d) { const a2 = u.getBoundingClientRect(), b2 = d.getBoundingClientRect();
+            if (b2.left < a2.right - 1) out.push('overlap ' + u.textContent.trim()); }
+        });
+        return out;
+      });
+      ok('  the machine number is whole at ' + w + 'px', bad.length === 0,
+         bad.slice(0, 3).join(' | ') || 'all whole');
+    }
+    await p.setViewportSize({ width: 412, height: 915 });
+    await p.waitForTimeout(200);
+  }
+
   console.log('\npressing the row opens THAT round, not a new one');
-  await p.evaluate(() => { showPane('paneSystem'); const s = document.getElementById('typeSel');
-    s.value = 'UC'; s.dispatchEvent(new Event('change')); renderTeam(); });
+  await p.click('#teamFilter [data-ty="UC"]');
   await p.waitForTimeout(400);
   const rows = await p.$$('#teamList [data-k]');
   ok('the list offers a row to press', rows.length > 0, rows.length + ' rows');

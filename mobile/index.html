@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=118">
+<link rel="manifest" href="manifest.webmanifest?v=119">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=118">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=118">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=118">
+<link rel="apple-touch-icon" href="icon-192.png?v=119">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=119">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=119">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -312,6 +312,18 @@
   .tag[data-r="INSP"]{border-color:#007c7e;} .tag[data-r="TEMP"]{border-color:#955902;}
   .tag[data-r="UC"]{border-color:#4c772c;} .tag[data-r="GET"]{border-color:#964b79;}
   .tag[data-r="TB"]{border-color:#00749c;}
+  /* Which rounds this card is showing. Its own control, on purpose: the type
+     picker on the Capture tab decides what you are about to INSPECT, and using
+     it to decide what you are about to READ armed the wrong round for whoever
+     walked back to Capture afterwards. */
+  .tfilter{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px;}
+  .tfilter button{flex:0 0 auto;min-height:34px;padding:5px 10px;border-radius:999px;
+    border:1.5px solid var(--border);background:var(--surface-2);color:var(--ink-2);
+    font-size:12.5px;font-weight:650;font-family:inherit;cursor:pointer;line-height:1.2;}
+  .tfilter button .n{color:var(--muted);font-weight:600;margin-left:4px;}
+  .tfilter button.on{border-color:var(--accent);background:var(--accent);color:var(--accent-ink);}
+  .tfilter button.on .n{color:var(--accent-ink);opacity:.75;}
+  .dueitem .tag{margin-right:6px;}
   /* 44px minimum, and a gap between them: these sat at ~34px side by side, so a
      gloved thumb aiming for Edit could hit Delete instead. */
   .pitem .edit,.pitem .del{background:none;border:1px solid transparent;border-radius:10px;
@@ -1051,8 +1063,14 @@
     border-left:4px solid var(--muted);border-radius:12px;padding:9px 12px;cursor:pointer;text-align:left;width:100%;color:var(--ink);font:inherit;}
   .dueitem.ok{border-left-color:var(--good);} .dueitem.soon{border-left-color:var(--warn-ink);}
   .dueitem.over{border-left-color:var(--critical);}
-  .dueitem .u{font-weight:700;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .dueitem .d{font-size:12.5px;color:var(--muted);flex:none;}
+  /* The machine number is what the row is FOR. It had the flexible half and
+     the date had the fixed one, so adding a type tag pushed "EX001 · B" into
+     "EX001…" — the one string on the line nobody can do without. Turned round:
+     the unit and its tag never shrink, and "9 d ago · Хасенов" is what gives up
+     room on a narrow screen. */
+  .dueitem .u{font-weight:700;flex:0 0 auto;max-width:62%;overflow:hidden;white-space:nowrap;}
+  .dueitem .d{font-size:12.5px;color:var(--muted);flex:1 1 auto;min-width:0;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right;}
   dialog{border:none;border-radius:16px;background:var(--surface);color:var(--ink);max-width:92vw;width:420px;padding:0;}
   dialog::backdrop{background:rgba(0,0,0,.6);}
   .dlg-in{padding:20px;} .dlg-in h3{margin:0 0 8px;} .dlg-in p{color:var(--ink-2);font-size:14px;}
@@ -1417,7 +1435,8 @@
 <div class="pane" id="paneSystem">
   <div class="card">
     <h2><span data-i18n="sec_team">In the system</span> <span class="count-badge" id="teamCount">0</span></h2>
-    <div class="hint" id="teamScope" style="margin:-4px 0 10px"></div>
+    <div class="hint" id="teamScope" style="margin:-4px 0 8px"></div>
+    <div class="tfilter" id="teamFilter"></div>
     <div class="duelist" id="teamList"></div>
     <div class="row" style="margin-top:12px">
       <button class="btn ghost" id="teamRefresh">⟳ <span data-i18n="btn_team_refresh">Check for new</span></button>
@@ -1599,25 +1618,25 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=118"></script>
-<script src="upload-defaults.js?v=118"></script>
-<script src="hme.js?v=118"></script>
-<script src="mp-fc.js?v=118"></script>
-<script src="hme-cascade.js?v=118"></script>
-<script src="assets.js?v=118"></script>
-<script src="temp-limits.js?v=118"></script>
-<script src="wear.js?v=118"></script>
-<script src="wear-figs.js?v=118"></script>
-<script src="wear-map.js?v=118"></script>
-<script src="machine-photos.js?v=118"></script>
-<script src="machine-fig.js?v=118"></script>
-<script src="get.js?v=118"></script>
-<script src="uc-points.js?v=118"></script>
-<script src="inspect-guide.js?v=118"></script>
-<script src="get-figs.js?v=118"></script>
-<script src="body-points.js?v=118"></script>
-<script src="body-map.js?v=118"></script>
-<script src="report-core.js?v=118"></script>
+<script src="native.js?v=119"></script>
+<script src="upload-defaults.js?v=119"></script>
+<script src="hme.js?v=119"></script>
+<script src="mp-fc.js?v=119"></script>
+<script src="hme-cascade.js?v=119"></script>
+<script src="assets.js?v=119"></script>
+<script src="temp-limits.js?v=119"></script>
+<script src="wear.js?v=119"></script>
+<script src="wear-figs.js?v=119"></script>
+<script src="wear-map.js?v=119"></script>
+<script src="machine-photos.js?v=119"></script>
+<script src="machine-fig.js?v=119"></script>
+<script src="get.js?v=119"></script>
+<script src="uc-points.js?v=119"></script>
+<script src="inspect-guide.js?v=119"></script>
+<script src="get-figs.js?v=119"></script>
+<script src="body-points.js?v=119"></script>
+<script src="body-map.js?v=119"></script>
+<script src="report-core.js?v=119"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2042,8 +2061,8 @@ const I18N = {
     team_voided:"{n} withdrawn by the office.",
     team_clash:"⑂ {n} sent twice — the office must pick which one stands.",
     team_clash_one:"sent twice",
-    team_oftype:"{n} × {ty}", team_other:"· {n} more under other types — switch type above.",
-    team_none_type:"None of this type yet — switch type above to see the others.",
+    team_oftype:"{n} × {ty}", team_all:"All", team_alltypes:"{n} round(s), every type — newest first.",
+    team_none_type:"None of this type yet — tap All to see the rest.",
     team_old:"Update the Google script to use this (Deploy → Manage deployments → New version).",
     team_new:"{n} new · {t} in the system", team_upto:"Up to date · {t} in the system",
     team_by:"by {n}", team_you:"this phone",
@@ -2360,8 +2379,8 @@ const I18N = {
     team_voided:"Отозвано офисом: {n}.",
     team_clash:"⑂ Прислано дважды: {n} — офис выберет верную версию.",
     team_clash_one:"прислано дважды",
-    team_oftype:"{n} × {ty}", team_other:"· ещё {n} других типов — переключите тип выше.",
-    team_none_type:"Этого типа пока нет — переключите тип выше.",
+    team_oftype:"{n} × {ty}", team_all:"Все", team_alltypes:"{n} обход(ов), все типы — новые сверху.",
+    team_none_type:"Этого типа пока нет — нажмите «Все», чтобы увидеть остальные.",
     team_old:"Обновите скрипт Google (Deploy → Manage deployments → New version).",
     team_new:"Новых: {n} · всего в системе: {t}", team_upto:"Актуально · в системе: {t}",
     team_by:"— {n}", team_you:"этот телефон",
@@ -5645,18 +5664,48 @@ async function teamPull(manual,full){
     if(mine()){ teamBusy=false; teamAbort=null; $("teamRefresh").disabled=false; }
   }
 }
+/* Which types this card is showing. "" is all of them, and it is the default
+   on purpose: "what has the team been doing?" is the question somebody opens
+   this tab to answer, and it should need no taps at all.
+
+   Deliberately NOT the capture type. This list used to filter on it, so an
+   inspector who changed it to look at undercarriage rounds walked back to
+   Capture armed for an undercarriage round — a trap, and the reason looking at
+   another type meant going back and forth in the first place. */
+let teamShow="";
 function renderTeam(){
   const box=$("teamList"); if(!box) return;
-  const all=teamAll(), rows=all.filter(r=>r.t===type);
+  const all=teamAll();
+  const rows=teamShow ? all.filter(r=>r.t===teamShow) : all;
   $("teamCount").textContent=String(rows.length);
-  // The list only ever showed the CURRENT type, which reads as "only 2 in the
-  // whole system" when the other 40 are simply under another type.
-  const other=all.length-rows.length;
-  $("teamScope").textContent = all.length
-    ? t("team_oftype").replace("{n}",rows.length)
-        .replace("{ty}",t("type_"+type))     // the type name, not the section heading
-      +(other?" "+t("team_other").replace("{n}",other):"")
-    : "";
+
+  /* One chip per type that actually has rounds. A chip for a type nobody has
+     inspected is a control that does nothing; a chip that appears and vanishes
+     as rounds arrive is a control that moves under a thumb — so the set is
+     rebuilt from what is there, in a fixed order, and All is always first. */
+  const fbox=$("teamFilter");
+  if(fbox){
+    const counts=new Map();
+    all.forEach(r=>counts.set(r.t,(counts.get(r.t)||0)+1));
+    const order=Object.keys(TYPE_META).filter(k=>counts.has(k));
+    fbox.innerHTML = all.length<2 ? "" :
+      [`<button type="button" data-ty="" class="${teamShow?"":"on"}">${esc(t("team_all"))}<span class="n">${all.length}</span></button>`]
+      .concat(order.map(k=>
+        /* The code, not the full name: "Ground engaging tools" pushed the row
+           of chips to three lines above a list of seven, which is more chrome
+           than content. The code is the same badge the rows and the queue use,
+           and the full name is one tap away on the round itself. */
+        `<button type="button" data-ty="${esc(k)}" class="${teamShow===k?"on":""}" title="${esc(t("type_"+k))}">${esc(k)}<span class="n">${counts.get(k)}</span></button>`))
+      .join("");
+    fbox.querySelectorAll("[data-ty]").forEach(btn=>btn.onclick=()=>{
+      teamShow=btn.dataset.ty; renderTeam();
+    });
+  }
+
+  $("teamScope").textContent = !all.length ? ""
+    : teamShow ? t("team_oftype").replace("{n}",rows.length).replace("{ty}",t("type_"+teamShow))
+    : t("team_alltypes").replace("{n}",all.length);
+
   if(!rows.length){
     box.innerHTML=`<div class="empty">${esc(all.length?t("team_none_type"):t("team_none"))}</div>`;
     return;
@@ -5666,8 +5715,12 @@ function renderTeam(){
     const cls=sev==="CRI"?"over":sev==="DEG"?"soon":"";
     const age=daysBetween(r.d);
     const clash=cfHas(r);
+    /* The type on the row, so one list of everything is still readable. It is
+       the same tag and the same colour the queue uses — a second vocabulary for
+       the same thing is one more thing to learn. */
+    const tag=teamShow?"":`<span class="tag" data-r="${esc(r.t)}">${esc(r.t)}</span>`;
     return `<button class="dueitem ${cls}" data-u="${esc(r.u)}" data-k="${esc(r.u+"|"+r.d+"|"+r.t)}">
-      <span class="u">${esc(r.u)}${r.g?` · <span style="color:${GRADE_TINT[r.g]||"var(--muted)"};font-weight:700">${esc(r.g)}</span>`:""}${clash?` · <span style="color:var(--warn-ink);font-weight:700">⑂</span>`:""}</span>
+      <span class="u">${tag}${esc(r.u)}${r.g?` · <span style="color:${GRADE_TINT[r.g]||"var(--muted)"};font-weight:700">${esc(r.g)}</span>`:""}${clash?` · <span style="color:var(--warn-ink);font-weight:700">⑂</span>`:""}</span>
       <span class="d">${esc(r.d)}${age!=null?` · ${t("due_days").replace("{n}",age)}`:""}${r.by?` · ${esc(r.by)}`:""}${clash?` · ${esc(t("team_clash_one"))}`:""}</span></button>`;
   }).join("");
   /* Tapping a row used to start a NEW round on that machine, which is the one
@@ -6620,7 +6673,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="118";
+const BUILD="119";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

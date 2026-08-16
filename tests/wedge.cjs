@@ -44,17 +44,33 @@ const msg = p => p.textContent('#teamMsg').then(s=>s.trim());
   ok('all five are stored', (await p.evaluate(()=>teamAll().length))===5,
      String(await p.evaluate(()=>teamAll().length)));
 
-  console.log('\n"only 2" — the list is filtered by inspection type');
+  console.log('\nthe list shows every type, and narrowing it is its own control');
+  /* This card used to filter on the CAPTURE type, so three of five rounds were
+     invisible until somebody walked back to Capture and changed the picker —
+     which also changed what they were about to inspect. Reading is not arming. */
   const scope = (await p.textContent('#teamScope')).replace(/\s+/g,' ').trim();
-  ok('the badge counts only this type', (await p.textContent('#teamCount'))==='2',
+  ok('the badge counts everything the team has done', (await p.textContent('#teamCount'))==='5',
      await p.textContent('#teamCount'));
-  ok('but the card now says so', /2 ×/.test(scope) && /3 more under other types/.test(scope), scope);
+  ok('and the card says which it is showing', /every type/i.test(scope), scope);
   await p.screenshot({path:OUT+'/team-scope.png'});
 
-  await p.selectOption('#typeSel','FC').catch(()=>p.evaluate(()=>{type='FC';applyForm();}));
-  await p.waitForTimeout(400);
-  ok('switching type shows the others', (await p.textContent('#teamCount'))==='2',
-     `FC count=${await p.textContent('#teamCount')}`);
+  const chips = await p.$$eval('#teamFilter [data-ty]', els => els.map(e => e.dataset.ty));
+  ok('there is a chip for each type present, and All', chips.length >= 2 && chips[0] === '',
+     chips.join(','));
+
+  const captureBefore = await p.evaluate(()=>type);
+  const narrow = chips.find(c => c) || '';
+  await p.click(`#teamFilter [data-ty="${narrow}"]`);
+  await p.waitForTimeout(300);
+  const n = Number(await p.textContent('#teamCount'));
+  ok('one tap narrows it to that type', n > 0 && n < 5, `${narrow} count=${n}`);
+  ok('  without arming a different round on the capture screen',
+     (await p.evaluate(()=>type)) === captureBefore, `${captureBefore} -> ${await p.evaluate(()=>type)}`);
+
+  await p.click('#teamFilter [data-ty=""]');
+  await p.waitForTimeout(300);
+  ok('  and All brings all five back', (await p.textContent('#teamCount'))==='5',
+     await p.textContent('#teamCount'));
 
   console.log(fails.length?'\nFAILURES:\n  '+[...new Set(fails)].join('\n  '):'\nwedge + scope checks passed');
   await b.close(); process.exit(fails.length?1:0);
