@@ -654,10 +654,10 @@
   .ucread{font-size:13.5px;margin:-4px 0 12px;display:flex;flex-wrap:wrap;gap:5px 9px;
     align-items:center;min-height:20px;}
   .ucread b{font-variant-numeric:tabular-nums;font-size:15px;}
-  .ucread .band{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+  .ucread .band,.luberead .band,.luberef .band{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
     padding:4px 8px;border-radius:999px;}
-  .ucread .b-ok{background:color-mix(in srgb,var(--good) 14%,var(--surface));color:var(--good);}
-  .ucread .b-watch{background:color-mix(in srgb,var(--warning) 16%,var(--surface));color:var(--warn-ink);}
+  .ucread .b-ok,.luberead .b-ok{background:color-mix(in srgb,var(--good) 14%,var(--surface));color:var(--good);}
+  .ucread .b-watch,.luberead .b-watch,.luberef .b-watch{background:color-mix(in srgb,var(--warning) 16%,var(--surface));color:var(--warn-ink);}
   .ucread .b-act{background:color-mix(in srgb,var(--critical) 12%,var(--surface));color:var(--critical);}
   .ucread .src{color:var(--muted);font-size:12px;}
   /* ── the wear gauge ───────────────────────────────────────────────────────
@@ -975,6 +975,25 @@
   /* A visual check has nothing to measure. Offering it an empty number box is
      how a round ends up with somebody inventing a figure to fill it. */
   #getFields.novalue .getrow{display:none;}
+
+  /* The lubrication panel. The verdict is the loudest thing on it because it is
+     the only thing on it the fitter did not type — everything else is their own
+     answer read back, and a form that shouts your own input at you teaches
+     people to stop reading it. */
+  #lubeFields .luberef{font-size:13px;color:var(--ink-2);margin:0 0 10px;line-height:1.45;}
+  #lubeFields .luberef .src{display:block;color:var(--muted);font-size:12px;margin-top:2px;}
+  #lubeFields .luberead{margin-top:10px;min-height:26px;}
+  #lubeFields .luberead .src{color:var(--muted);font-size:12.5px;}
+  #lubeFields .chk{display:flex;align-items:center;gap:10px;margin-top:12px;font-size:14px;}
+  #lubeFields .chk input{width:22px;height:22px;flex:none;}
+  /* Evidence wraps rather than shrinking: three choices at 320px is two rows,
+     and a shrunk-to-fit tap target in a glove is not a tap target. */
+  #lubeEvid{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;}
+  #lubeEvid button{flex:1 1 auto;min-width:96px;min-height:44px;padding:8px 12px;
+    border:1px solid var(--border);border-radius:10px;background:var(--surface-2);
+    color:var(--ink);font:inherit;font-size:13.5px;}
+  #lubeEvid button.on{background:var(--accent);color:var(--accent-ink);
+    border-color:var(--accent);font-weight:700;}
   .getrow{display:flex;gap:12px;align-items:flex-end;margin:0 0 6px;}
   .getrow .fld{flex:1 1 auto;min-width:0;margin-bottom:0;}
   .getread{flex:0 0 auto;display:flex;align-items:center;gap:7px;padding-bottom:11px;
@@ -1274,6 +1293,26 @@
       <button type="button" class="ucfigtog" id="getFigTog"></button>
       <div class="ucfig" id="getFig"></div>
       <div class="guide" id="getGuide"></div>
+    </div>
+    <!-- The lubrication round. Two questions per compartment and they are not
+         the same question: what is in it, and how do you know. The second is
+         not paperwork — an audit whose evidence is "the fitter said so" is a
+         lead, and counting it as a finding is how a programme reports full
+         coverage and still has the wrong oil in a powershift. -->
+    <div id="lubeFields" class="hidden">
+      <div class="luberef" id="lubeRef"></div>
+      <label class="fld"><span data-i18n="lube_prod">Product in service</span>
+        <select id="lubeProd"></select></label>
+      <label class="fld hidden" id="lubeOtherWrap">
+        <span data-i18n="lube_other">Name it as printed on the label</span>
+        <input id="lubeOther" type="text" autocomplete="off"></label>
+      <div class="fld">
+        <span data-i18n="lube_evid">How do you know?</span>
+        <div class="seg" id="lubeEvid"></div>
+      </div>
+      <label class="chk"><input type="checkbox" id="lubeSamp">
+        <span data-i18n="lube_samp">Oil sample taken</span></label>
+      <div class="luberead" id="lubeRead"></div>
     </div>
     <div id="tempFields" class="hidden">
       <div class="row">
@@ -1670,8 +1709,15 @@ const TYPE_META = {
      the drawing underneath it. Sixty-three stations is too many to have two of
      anything. */
   TB:   { suffix:"TB",   showReadings:false, wear:true, body:true, title:{en:"Measurement station",ru:"Точка замера"} },
+  /* Lubrication audit. Not a measurement round and not a graded walk-around:
+     the question at every compartment is "what is in it, and how do you know",
+     so `lube:true` turns on a product picker and an evidence choice instead of
+     a millimetre box. A grade would be the wrong shape — a compartment is not
+     A/B/C/X, it either holds what the standard says or it does not, and that
+     verdict is computed from the product rather than typed by the fitter. */
+  LUBE: { suffix:"LUBE", showReadings:false, lube:true, title:{en:"Compartment",ru:"Узел"} },
 };
-const TYPE_ORDER = ["MP","FC","INSP","TEMP","UC","GET","TB"];
+const TYPE_ORDER = ["MP","FC","INSP","TEMP","UC","GET","TB","LUBE"];
 
 const COMP = {
   ENG:{en:"Engine",ru:"Двигатель"}, COOL:{en:"Cooling System",ru:"Система охлаждения"},
@@ -1907,6 +1953,20 @@ const I18N = {
     pos_count:"item(s)", photo_count:"photo(s)",
     type_MP:"Magnetic Plug", type_FC:"Filter Cut", type_INSP:"Inspection", type_TEMP:"Temperature",
     type_UC:"Undercarriage", type_GET:"Ground engaging tools", type_TB:"Dump body liner",
+    type_LUBE:"Lubrication audit",
+    lube_prod:"Product in service", lube_other:"Name it as printed on the label",
+    lube_evid:"How do you know?", lube_samp:"Oil sample taken",
+    lube_pick:"— choose —", lube_fits:"Satisfies this compartment",
+    lube_others:"Everything else on the shelf", lube_notlisted:"Not on this list…",
+    lube_ref:"Refill {cap} L · every {iv} h",
+    lube_unsourced:"No capacity or specification sourced yet",
+    lube_v_none:"Nothing recorded yet",
+    lube_v_nospec:"Recorded — no specification to judge it against",
+    lube_v_unknown:"Not a catalogued product — needs checking",
+    lube_v_bad:"Does not meet the specification",
+    lube_v_cold:"Right specification, too thick for −40",
+    lube_v_unlisted:"Meets the specification, grade not listed here",
+    lube_v_ok:"Conforms",
     get_mm:"Remaining (mm) — optional", get_mm_of:"{x} (mm) — optional",
     get_ref:"New {n} mm · condemn {c} mm", get_generic:"generic limit",
     get_notool:"This machine has no ground engaging tools to walk.",
@@ -2227,6 +2287,20 @@ const I18N = {
     pos_count:"поз.", photo_count:"фото",
     type_MP:"Магнитная пробка", type_FC:"Разрез фильтра", type_INSP:"Осмотр", type_TEMP:"Температура",
     type_UC:"Ходовая часть", type_GET:"Рабочий инструмент", type_TB:"Футеровка кузова",
+    type_LUBE:"Аудит смазочных материалов",
+    lube_prod:"Продукт в узле", lube_other:"Название как на этикетке",
+    lube_evid:"Откуда известно?", lube_samp:"Проба масла отобрана",
+    lube_pick:"— выберите —", lube_fits:"Подходит для этого узла",
+    lube_others:"Остальное на складе", lube_notlisted:"Нет в списке…",
+    lube_ref:"Заправка {cap} л · каждые {iv} ч",
+    lube_unsourced:"Объём и спецификация ещё не подтверждены",
+    lube_v_none:"Ничего не записано",
+    lube_v_nospec:"Записано — не с чем сравнить",
+    lube_v_unknown:"Нет в каталоге — требует проверки",
+    lube_v_bad:"Не соответствует спецификации",
+    lube_v_cold:"Спецификация верна, слишком густое для −40",
+    lube_v_unlisted:"Спецификация выполнена, вязкость не указана для узла",
+    lube_v_ok:"Соответствует",
     get_mm:"Остаток (мм) — необязательно", get_mm_of:"{x} (мм) — необязательно",
     get_ref:"Новый {n} мм · предел {c} мм", get_generic:"типовой предел",
     get_notool:"У этой машины нет рабочего инструмента для обхода.",
@@ -2667,7 +2741,7 @@ const dlgClose=()=>$("dlg").close();
 $("dlgOk").onclick=dlgClose;
 let cascL7=null, cascL8=null;   // component cascade selection
 // Inspection and Temperature both address real register components.
-function usesRegister(ty){ return ty==="INSP" || ty==="TEMP" || ty==="UC" || ty==="GET" || ty==="TB"; }
+function usesRegister(ty){ return ty==="INSP" || ty==="TEMP" || ty==="UC" || ty==="GET" || ty==="TB" || ty==="LUBE"; }
 /* "This round is millimetres against a route." True of the undercarriage and of
    the tray, which is why they share a sheet. Read off TYPE_META rather than
    naming the two types here, so adding a third measured round is one line in
@@ -2683,6 +2757,7 @@ const ucOnly   = ty => wearType(ty) && !bodyType(ty);
    are separated everywhere it matters, and joined only where the arithmetic is
    the same: percentage worn against new and condemn is one calculation. */
 const getType  = ty => (ty||type)==="GET";
+const lubeType = ty => !!(TYPE_META[ty||type]||{}).lube;
 const measType = ty => wearType(ty) || getType(ty);
 /* The ground-engaging walk for a machine, or null where the machine has none.
    A haul truck, a light tower and a generator have no GET, and offering an
@@ -2823,6 +2898,12 @@ function currentTree(){
     treeCache={key, tree:getWalkTree(curEquip)};
     return treeCache.tree;
   }
+  if(lubeType()){
+    const key="LUBE|"+curEquip;
+    if(treeCache.key===key) return treeCache.tree;
+    treeCache={key, tree:lubeWalkTree(curEquip)};
+    return treeCache.tree;
+  }
   const key=curEquip;
   if(treeCache.key===key) return treeCache.tree;
   const codes=componentsForUnit(curEquip);
@@ -2856,11 +2937,50 @@ function flattenTree(nodes,out){ out=out||[];
     if(n.ch) flattenTree(n.ch,out);
   }
   return out; }
+/* ── the lubrication round ────────────────────────────────────────────────
+   The compartments a machine has, from lube.js. Flat on purpose: a machine has
+   four or five of them, and a grouping layer over five items is a tap that buys
+   nothing. Class is always passed — "KOMATSU" is on the register as both an
+   articulated truck and a loader, and resolving on the model string alone hands
+   over the wrong compartment list with nothing on screen to say so. */
+function lubeAsset(unit){ const a=ASSET_BY[unit]||{}; return {m:a.m||"", cls:a.cls||""}; }
+function lubeComps(unit){
+  if(!window.LUBE) return [];
+  const a=lubeAsset(unit); return LUBE.comps(a.m, a.cls);
+}
+function lubeWalkTree(unit){
+  const cs=lubeComps(unit);
+  if(!cs.length) return null;
+  return cs.map(c=>({k:c.k, en:c.en, ru:c.ru}));
+}
+function lubeComp(k){
+  if(!window.LUBE || !curEquip) return null;
+  const a=lubeAsset(curEquip); return LUBE.comp(a.m, k, a.cls);
+}
+/* What the picker offers, in the order it offers it: first what actually
+   satisfies this compartment at this site's design minimum, then everything
+   else in the catalogue, then whatever somebody types. The off-spec products
+   are NOT hidden — the audit exists to record what is really in there, and a
+   picker that only lists correct answers cannot record a wrong one. */
+function lubeChoices(k){
+  if(!window.LUBE || !curEquip) return {fit:[], rest:[]};
+  const a=lubeAsset(curEquip);
+  const fit=LUBE.fitFor(a.m, k, a.cls).map(p=>p.p);
+  const rest=LUBE.catalog.map(p=>p.p).filter(n=>fit.indexOf(n)<0);
+  return {fit, rest};
+}
 function nodeByCode(tree,code){ let f=null; (function rec(ns){ for(const n of ns){ if(n.k===code){f=n;return;} if(n.ch)rec(n.ch);} })(tree); return f; }
 function hasUnder(node){ if(!node) return false; if(draft.positions[node.k]) return true; return node.ch? node.ch.some(hasUnder):false; }
 function items(){ const tr=currentTree(); if(tr) return flattenTree(tr);
   if(measType()) return [];              // no walk without an eligible, registered machine
-  return CLASSES[eqClass][type].map(e=> typeof e==="string" ? {k:e, en:COMP[e].en, ru:COMP[e].ru} : e); }
+  /* Same rule for the lubrication round, and it has to be said explicitly:
+     CLASSES has a column for every round that is built from the component
+     table and none for the rounds built from a reference file. Falling through
+     to it does not return an empty walk, it throws — which takes the whole
+     screen out rather than showing "no reference for this machine". */
+  if(lubeType()) return [];
+  const byClass=CLASSES[eqClass]||{};
+  return (byClass[type]||[]).map(e=> typeof e==="string" ? {k:e, en:COMP[e].en, ru:COMP[e].ru} : e); }
 function itemLabel(k){ const it=items().find(i=>i.k===k); if(it) return it[lang]||it.en;
   if(getType()) return getLabel(k);
   if(bodyType()) return bodyLabel(k);
@@ -3310,6 +3430,7 @@ function applyForm(){ applyRoundSkin();
   $("tempFields").classList.toggle("hidden", !TYPE_META[type].temp);
   $("ucFields").classList.toggle("hidden", !TYPE_META[type].wear);
   $("getFields").classList.toggle("hidden", !TYPE_META[type].get);
+  $("lubeFields").classList.toggle("hidden", !TYPE_META[type].lube);
   if(TYPE_META[type].wear) renderUCReasons();
   if(TYPE_META[type].get) renderGET();
   $("dueInt").value=dueInterval(type); renderDue(); renderTeam(); renderLastDone(); renderTrend();
@@ -3514,6 +3635,7 @@ $("gradeSeg").addEventListener("click",(e)=>{ const b=e.target.closest("button[d
    it: its three visual checks (adjuster and recoil, frame and guards, chain
    sag) have nothing to caliper, so they are graded and keep the control. */
 function gradeApplies(){
+  if(lubeType()) return false;
   if(!wearType()) return true;
   if(bodyType()) return false;                       // every tray station is measured
   const [pt]=ucSplit(curItem||"");
@@ -3525,6 +3647,17 @@ function renderGrade(){
   const g=posRO().grade; $("gradeSeg").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.g===g)); }
 function renderSev(){ const v=posRO().sev; $("sevSeg").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.s===v));
   renderISOFold(); }   // anything but "no failure" needs the coded fields open
+/* Evidence is a toggle, not a required field: tapping the chosen one again
+   clears it, because a fitter who taps by accident must be able to undo it
+   without a verdict quietly hardening around the wrong answer. */
+$("lubeEvid").addEventListener("click",(e)=>{ const b=e.target.closest("button[data-e]"); if(!b) return;
+  const p=curP(); p.evid=(p.evid===b.dataset.e)?null:b.dataset.e;
+  if(!p.evid) delete p.evid;
+  renderLube(); renderChips(); draftKeep(); });
+$("lubeProd").addEventListener("change",()=>{ saveCur(); renderLube(); renderChips(); });
+$("lubeOther").addEventListener("input",()=>{ saveCur(); renderLube(); renderChips(); });
+$("lubeSamp").addEventListener("change",()=>{ saveCur(); renderChips(); });
+
 $("sevSeg").addEventListener("click",(e)=>{ const b=e.target.closest("button[data-s]"); if(!b) return;
   const p=curP(); p.sev=(p.sev===b.dataset.s)?null:b.dataset.s; p.sevMan=1;   // manual choice wins over the temperature rule
   renderSev(); renderChips(); });
@@ -3966,6 +4099,64 @@ function renderGET(){
   read.innerHTML='<b>'+Math.round(pct)+'%</b><span class="band b-'+b+'">'+esc(t("uc_band_"+b))+'</span>'+
     '<span class="src">'+esc(t("uc_toGo",{n:Math.abs(mm-ref.c).toFixed(1)}))+'</span>';
 }
+/* ── the lubrication panel ────────────────────────────────────────────────
+   The verdict is COMPUTED, never typed. A fitter records what is in the
+   compartment and how they know; whether that satisfies the manufacturer and
+   the site standard is arithmetic on the specification, and asking a person to
+   decide it at the machine is asking them to carry twenty manuals. */
+function lubeVerdict(k){
+  const c=lubeComp(k); const p=draft.positions[k]||{};
+  const name=p.prod==="__other" ? (p.other||"") : (p.prod||"");
+  if(!name) return {b:"none", k:"lube_v_none"};
+  if(!c || !c.spec) return {b:"none", k:"lube_v_nospec"};
+  const prod=window.LUBE?LUBE.product(name):null;
+  /* Typed in by hand: we have the name and nothing else. That is a real
+     finding — somebody put something in that is not on the shelf — and it must
+     not be dressed up as a pass or as a failure. */
+  if(!prod) return {b:"watch", k:"lube_v_unknown"};
+  if(!LUBE.meetsSpec(prod.s.split(/,\s*/), c.spec)) return {b:"act", k:"lube_v_bad"};
+  const cold=LUBE.coldOK(c.gr, prod.g);
+  if(cold===false) return {b:"act", k:"lube_v_cold"};
+  if(cold===null)  return {b:"watch", k:"lube_v_unlisted"};
+  return {b:"ok", k:"lube_v_ok"};
+}
+function renderLube(){
+  if(!lubeType()) return;
+  const sel=$("lubeProd"), seg=$("lubeEvid"), ref=$("lubeRef"), read=$("lubeRead");
+  if(!sel||!seg||!ref||!read) return;
+  const c=lubeComp(curItem), p=draft.positions[curItem]||{};
+
+  /* An unsourced compartment is not an error and is not hidden. It says so,
+     because "nobody has opened the manual for this one" is a fact the fitter
+     should see and the dashboard counts. */
+  ref.innerHTML = !c ? ""
+    : (c.cap!=null
+        ? esc(t("lube_ref",{cap:c.cap, iv:c.iv||"—"})) +
+          '<span class="src">'+esc(c.spec||"")+'</span>'
+        : '<span class="band b-watch">'+esc(t("lube_unsourced"))+'</span>');
+
+  const ch=lubeChoices(curItem);
+  sel.innerHTML =
+    '<option value="">'+esc(t("lube_pick"))+'</option>'+
+    (ch.fit.length? '<optgroup label="'+esc(t("lube_fits"))+'">'+
+      ch.fit.map(n=>'<option value="'+esc(n)+'">'+esc(n)+'</option>').join("")+'</optgroup>' : '')+
+    (ch.rest.length? '<optgroup label="'+esc(t("lube_others"))+'">'+
+      ch.rest.map(n=>'<option value="'+esc(n)+'">'+esc(n)+'</option>').join("")+'</optgroup>' : '')+
+    '<option value="__other">'+esc(t("lube_notlisted"))+'</option>';
+  sel.value = p.prod||"";
+  $("lubeOtherWrap").classList.toggle("hidden", p.prod!=="__other");
+  $("lubeOther").value = p.other||"";
+  $("lubeSamp").checked = !!p.samp;
+
+  seg.innerHTML = (window.LUBE?LUBE.EVID:[]).map(e=>
+    '<button type="button" data-e="'+esc(e.k)+'"'+(p.evid===e.k?' class="on"':'')+'>'+
+      esc(lang==="ru"?e.ru:e.en)+'</button>').join("");
+
+  const v=lubeVerdict(curItem);
+  read.innerHTML = v.b==="none" ? '<span class="src">'+esc(t(v.k))+'</span>'
+    : '<span class="band b-'+v.b+'">'+esc(t(v.k))+'</span>';
+}
+
 /* How to take the reading, shared by the undercarriage round and the GET round.
    One renderer because it is one question — an inspector standing at a machine
    asking "what do I bring, where exactly do I measure, and what else should I
@@ -4736,7 +4927,12 @@ function normDec(el){
 /* Called from saveCur — the one choke point every one of these fields passes
    through — so it does not matter which input listener was registered first. */
 function normDecAll(){ ["ucMM","tempV","tempA"].forEach(id=>{ const el=$(id); if(el) normDec(el); }); }
-function hasData(p){ return (p.mm!=null&&p.mm!=="")||p.reason||p.grade||p.sev||p.action||p.prio||p.wo||(p.photos&&p.photos.length)||p.video||p.particle||p.comp||p.oil||p.comment||p.defect||p.cause||p.tempV; }
+/* What counts as "somebody answered this position". Anything not on this list
+   is thrown away by saveCur, so a field added to a round and forgotten here
+   disappears the moment the inspector moves to the next compartment — the
+   reading was taken, it was on screen, and it is gone with nothing to say so.
+   p.prod / p.other are the lubrication round's whole answer. */
+function hasData(p){ return (p.mm!=null&&p.mm!=="")||p.reason||p.grade||p.sev||p.action||p.prio||p.wo||(p.photos&&p.photos.length)||p.video||p.particle||p.comp||p.oil||p.comment||p.defect||p.cause||p.tempV||p.prod||p.other||p.samp; }
 /* The severity that actually applies: what the inspector set, or what the grade
    implies. Everything that reasons about how bad a finding is goes through here. */
 function effSev(p){ return (p&&(p.sev||GRADE_SEV[p.grade]))||""; }
@@ -4801,6 +4997,16 @@ function saveCur(){ if(!curItem) return; normDecAll(); const p=curP(); p.particl
     if(p.mm!=null && !isFinite(p.mm)) p.mm=null;
     if(p.mm==null) delete p.mm;      // no measurement is the norm here, not a gap
   }
+  if(TYPE_META[type].lube){
+    p.prod = $("lubeProd").value || "";
+    p.other = p.prod==="__other" ? $("lubeOther").value.trim() : "";
+    p.samp = !!$("lubeSamp").checked;
+    if(!p.prod)  { delete p.prod; delete p.other; }
+    if(!p.other) delete p.other;
+    if(!p.samp)  delete p.samp;
+    /* Evidence with nothing recorded is not evidence of anything. */
+    if(!p.prod && !p.other) delete p.evid;
+  }
   if(!hasData(p)) delete draft.positions[curItem];
   draftKeep(); }
 /* A measurement point is named by its walk; a component is named by its code
@@ -4833,6 +5039,7 @@ function loadPos(){
   const p=draft.positions[curItem]||{}; $("particle").value=p.particle||""; $("comp").value=p.comp||""; $("oil").value=p.oil||"";
   if(TYPE_META[type].wear){ $("ucMM").value = (p.mm==null?"":p.mm); $("ucStood").checked=!!p.stood; renderUC(); }
   if(TYPE_META[type].get){ $("getMM").value = (p.mm==null?"":p.mm); renderGET(); }
+  if(TYPE_META[type].lube){ renderLube(); }
   /* Always — leaving a wear type with the sheet up strands the media controls
      inside #ucFields and leaves the body unscrollable behind a live backdrop. */
   else renderUCSheet();
@@ -4849,7 +5056,7 @@ function loadPos(){
    never hidden at the moment they matter, and Save can never be refused for a
    field that is not on the screen. */
 let isoOpen = false;
-function isoFoldable(){ return !!TYPE_META[type].wear; }
+function isoFoldable(){ return !!TYPE_META[type].wear || !!TYPE_META[type].lube; }
 function isoWanted(){
   const p = draft.positions[curItem] || {};
   return !!(p.defect || p.cause || p.action || p.wo || p.prio || p.detect)
