@@ -181,6 +181,14 @@
   .pos dl{margin:6px 0 0;display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:12px;}
   .pos dt{color:var(--muted);} .pos dd{margin:0;text-align:right;}
   .pos dd.warnv{color:var(--serious);font-weight:600;}
+  /* The verdict is the one thing on this card nobody typed, so it is the one
+     thing that has to look computed rather than written. */
+  .pos .band{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.05em;
+    text-transform:uppercase;padding:3px 8px;border-radius:999px;}
+  .pos .b-ok{background:color-mix(in srgb,var(--good) 14%,var(--surface));color:var(--good);}
+  .pos .b-watch{background:color-mix(in srgb,var(--warning) 16%,var(--surface));color:var(--warning);}
+  .pos .b-act{background:color-mix(in srgb,var(--critical) 14%,var(--surface));color:var(--critical);}
+  .pos .b-none{background:color-mix(in srgb,var(--muted) 12%,var(--surface));color:var(--muted);}
   .pos .cm{margin-top:6px;font-size:12px;color:var(--ink-2);font-style:italic;}
   .lang{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;}
   .lang button{background:var(--surface);color:var(--ink-2);border:0;padding:7px 11px;font:inherit;
@@ -1844,6 +1852,8 @@ function fromBundled(){
     items:(r.positions||[]).map(p=>({key:p.key,label:p.label||"",grade:p.grade||"",sev:GRADE_SEV[p.grade]||"",
       action:"",actionLabel:"",wo:"",defectCode:"",defect:"",iso:"",isoMode:"",causeCode:"",cause:"",
       particle:p.particleCount||"",comp:p.componentHours||"",oil:p.oilHours||"",comment:p.comment||"",
+      lubeProduct:p.lubeProduct||"",lubeUnlisted:p.lubeUnlisted||0,
+      lubeEvidence:p.lubeEvidence||"",lubeSampled:p.lubeSampled||0,
       photo:p.photo||"",photos:p.photo?1:0,video:0})),src:"bundled"}));
 }
 /* A store that parses but is not the shape we expect is worse than one that does
@@ -1900,6 +1910,40 @@ function applyEdits(r){
   });
   return out;
 }
+/* ── the lubrication answer on a position card ────────────────────────────
+   The verdict is COMPUTED here from lube.js, never read off the record. The
+   record carries the product, which is the fact; whether it conforms is
+   arithmetic on the specification, and if the standard changes the answer must
+   change with it rather than defending a frozen "conforms". */
+function lubeVerdictOf(rec, i){
+  const name=String(i.lubeProduct||"");
+  if(!name) return null;
+  if(!window.LUBE) return {b:"", k:"lube_v_nospec"};
+  const a=ASSET_BY[rec.equip]||{};
+  const c=LUBE.comp(a.m||"", i.key, a.cls||"");
+  if(!c || !c.spec) return {b:"", k:"lube_v_nospec"};
+  const prod=LUBE.product(name);
+  /* Typed in by hand: a real finding, and neither a pass nor a failure. */
+  if(!prod) return {b:"watch", k:"lube_v_unknown"};
+  if(!LUBE.meetsSpec(prod.s.split(/,\s*/), c.spec)) return {b:"act", k:"lube_v_bad"};
+  const cold=LUBE.coldOK(c.gr, prod.g);
+  if(cold===false) return {b:"act", k:"lube_v_cold"};
+  if(cold===null)  return {b:"watch", k:"lube_v_unlisted"};
+  return {b:"ok", k:"lube_v_ok"};
+}
+function lubeDL(rec, i){
+  if(rec.type!=="LUBE" || !i.lubeProduct) return "";
+  const v=lubeVerdictOf(rec,i);
+  const ev=i.lubeEvidence ? t("lube_ev_"+i.lubeEvidence) : "";
+  return `<dl class="kv">`+
+    `<dt>${esc(t("lube_product"))}</dt><dd>${esc(i.lubeProduct)}${
+      i.lubeUnlisted?` <span class="warnv">${esc(t("lube_unlisted"))}</span>`:""}</dd>`+
+    (ev?`<dt>${esc(t("lube_evidence"))}</dt><dd>${esc(ev)}</dd>`:"")+
+    (i.lubeSampled?`<dt>${esc(t("lube_sampled"))}</dt><dd>${esc(t("lube_sampled"))}</dd>`:"")+
+    (v?`<dt>&nbsp;</dt><dd><span class="band b-${esc(v.b||"none")}">${esc(t(v.k))}</span></dd>`:"")+
+    `</dl>`;
+}
+
 /* One record per key, plus what was set aside to get there. The office's choice
    decides when there is one; until then the newest stands so the dashboard is
    never empty, and it is flagged so nobody trusts it by accident. */
@@ -2814,6 +2858,7 @@ function renderHistory(){
               (i.baseNew!==""&&i.baseNew!=null)?`<dt>${esc(t("th_base"))}</dt><dd>${esc(i.baseNew)}${
                 (i.baseCondemn!==""&&i.baseCondemn!=null)?" → "+esc(i.baseCondemn):""} mm${
                 i.baseAll?" · "+esc(t("th_base_all")):""}</dd>`:""}</dl>
+            ${lubeDL(rec,i)}
             ${i.comment?`<div class="cm">“${esc(i.comment)}”</div>`:""}
           </div></div>`; }).join("")}</div></div>`).join("");
   /* One handler on the card rather than one per picture: the lead image and

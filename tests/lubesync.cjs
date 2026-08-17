@@ -141,6 +141,23 @@ const eq = (g, w, what) => ok(JSON.stringify(g) === JSON.stringify(w),
   ok(dash.split("type_LUBE:").length === 3, "and in Russian");
   ok(/lube\.js\?v=/.test(dash), "the dashboard loads the reference it needs to judge a product");
 
+  console.log("── and the dashboard DRAWS it");
+  /* Knowing the type exists is not the same as showing the answer. These are
+     the three places a captured value can still end up invisible: no renderer,
+     no styling for the verdict, or a whitelist on the way to the screen. */
+  ok(/function lubeDL\(/.test(dash), "there is a renderer for the lube answer");
+  ok(/\$\{lubeDL\(rec, ?i\)\}/.test(dash) || /lubeDL\(rec,i\)/.test(dash),
+     "and the position card actually calls it");
+  ok(/function lubeVerdictOf\(/.test(dash), "the verdict is derived on the dashboard");
+  ok(/\.pos \.band\{/.test(dash),
+     "the verdict pill has styling — without it the computed answer renders as prose");
+  ["b-ok", "b-watch", "b-act", "b-none"].forEach(b =>
+    ok(new RegExp("\\.pos \\." + b + "\\{").test(dash), "  and a " + b + " colour"));
+  ok(/lubeProduct:p\.lubeProduct/.test(dash),
+     "the bundled path carries it too — the same whitelist bug, one layer further in");
+  ok(!/lubeVerdict/.test(dash.replace(/lubeVerdictOf/g, "")),
+     "the dashboard never reads a stored verdict, it computes one");
+
   console.log("── the console stayed quiet");
   ok(errs.length === 0, "no page errors: " + errs.slice(0, 2).join(" | "));
 
