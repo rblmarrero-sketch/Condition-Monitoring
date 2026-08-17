@@ -1065,6 +1065,7 @@
 <script src="../mobile/assets.js?v=120"></script>
 <script src="../mobile/wear.js?v=120"></script>
 <script src="../mobile/wear-map.js?v=120"></script>
+<script src="../mobile/lube.js?v=120"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
 <script src="../mobile/upload-defaults.js?v=120"></script>
@@ -1209,6 +1210,15 @@ const I18N={
   sev_NOF:"No failure", sev_INC:"Incipient", sev_DEG:"Degraded", sev_CRI:"Critical",
   type_MP:"Magnetic Plug", type_FC:"Filter Cut", type_INSP:"Inspection", type_TEMP:"Temperature",
   type_UC:"Undercarriage", type_GET:"Ground engaging tools", type_TB:"Dump body liner",
+  type_LUBE:"Lubrication audit",
+  lube_product:"Product in service", lube_evidence:"Evidence", lube_sampled:"Sampled",
+  lube_unlisted:"Not on the catalogue",
+  lube_ev_label:"Label photographed", lube_ev_batch:"Tank / pump batch",
+  lube_ev_told:"Reported, not shown",
+  lube_v_none:"Nothing recorded", lube_v_nospec:"No specification to judge it against",
+  lube_v_unknown:"Not a catalogued product", lube_v_bad:"Does not meet the specification",
+  lube_v_cold:"Too thick for \u221240", lube_v_unlisted:"Grade not listed for this compartment",
+  lube_v_ok:"Conforms",
   uc_th_point:"Point", uc_th_meas:"Measured", uc_th_worn:"Worn",
   uc_noref:"no reference for this model",
   uc_sum_act:"{n} points at or past condemn", uc_sum_watch:"{n} above 80%",
@@ -1475,6 +1485,15 @@ const I18N={
   sev_NOF:"Без отказа", sev_INC:"Зарождающийся", sev_DEG:"Частичный", sev_CRI:"Критический",
   type_MP:"Магнитная пробка", type_FC:"Разрез фильтра", type_INSP:"Осмотр", type_TEMP:"Температура",
   type_UC:"Ходовая часть", type_GET:"Рабочий инструмент", type_TB:"Футеровка кузова",
+  type_LUBE:"Аудит смазочных материалов",
+  lube_product:"Продукт в узле", lube_evidence:"Подтверждение", lube_sampled:"Проба отобрана",
+  lube_unlisted:"Нет в каталоге",
+  lube_ev_label:"Фото этикетки", lube_ev_batch:"Партия из ёмкости",
+  lube_ev_told:"Со слов",
+  lube_v_none:"Ничего не записано", lube_v_nospec:"Не с чем сравнить",
+  lube_v_unknown:"Нет в каталоге", lube_v_bad:"Не соответствует спецификации",
+  lube_v_cold:"Слишком густое для \u221240", lube_v_unlisted:"Вязкость не указана для узла",
+  lube_v_ok:"Соответствует",
   uc_th_point:"Точка", uc_th_meas:"Замер", uc_th_worn:"Износ",
   uc_noref:"нет эталона для этой модели",
   uc_sum_act:"{n} точек на пределе или за ним", uc_sum_watch:"{n} выше 80%",
@@ -1720,7 +1739,7 @@ const PRIORITIES=[
 const PRIO_BY={}; PRIORITIES.forEach(p=>PRIO_BY[p.k]=p);
 const prioName=(k,l)=>{ const p=PRIO_BY[String(k||"").toUpperCase()]; return p?(p[l||lang]||p.en):(k||""); };
 const prioClass=k=>{ const p=PRIO_BY[String(k||"").toUpperCase()]; return p?p.c:"n"; };
-const TYPE_ORDER=["MP","FC","INSP","TEMP","UC","GET","TB"];
+const TYPE_ORDER=["MP","FC","INSP","TEMP","UC","GET","TB","LUBE"];
 const TYPE_LABEL=new Proxy({},{ get:(_,k)=> TYPE_ORDER.indexOf(k)>=0?t("type_"+k):undefined });
 /* "Carries millimetres." Undercarriage demands them at every point; ground
    engaging tools accept them wherever somebody had a tape. Everything below
@@ -2835,6 +2854,10 @@ function elig(ty){
   if(ty==="UC") return a=>!!(window.WEAR && WEAR.modelFor && WEAR.modelFor(a.m||""));
   if(ty==="GET") return a=>!!(window.GET && GET.has && GET.has(a.n, a.cat||a.cls||"", a.m||""));
   if(ty==="TB")  return a=>!!(window.BODY && BODY.modelFor && BODY.modelFor(a.m||""));
+  /* Class as well as model: "KOMATSU" is on the register as an articulated
+     truck and as a loader, and resolving on the model alone answers for the
+     wrong machine. */
+  if(ty==="LUBE") return a=>!!(window.LUBE && LUBE.of(a.m||"", a.cls||""));
   return null;
 }
 function coverageRows(){

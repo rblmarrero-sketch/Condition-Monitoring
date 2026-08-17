@@ -6353,6 +6353,17 @@ async function buildPackage(){
       if(p.sev)n.severity=p.sev; if(p.action)n.action=actionLabel(p.action,"en"); if(p.wo)n.workOrder=p.wo;
       if(p.prio){ n.priority=p.prio; n.priorityLabel=prioLabel(p.prio,"en"); }
       if(p.tempV){ n.temperatureC=p.tempV; if(p.tempA)n.ambientC=p.tempA; if(p.tempM)n.tempMethod=p.tempM; }
+      /* The lubrication round's whole answer. The PRODUCT is sent, never the
+         verdict: the verdict is derived from the specification, both ends read
+         the same lube.js, and storing a derived value is how the office ends up
+         defending a "conforms" that the current standard no longer agrees with.
+         The product is the fact; everything else is arithmetic on it. */
+      if(p.prod || p.other){
+        n.lubeProduct = p.prod==="__other" ? (p.other||"") : (p.prod||"");
+        if(p.prod==="__other") n.lubeUnlisted = 1;
+      }
+      if(p.evid) n.lubeEvidence = p.evid;
+      if(p.samp) n.lubeSampled = 1;
       const wo_=wearOut(rec,k,p);
       if(wo_){ if(wo_.mm!=="")n.measuredMM=wo_.mm; if(wo_.newMM!=="")n.newMM=wo_.newMM;
         if(wo_.condemnMM!=="")n.condemnMM=wo_.condemnMM; if(wo_.wearPct!=="")n.wearPct=wo_.wearPct;
@@ -6390,6 +6401,8 @@ async function buildPackage(){
         iso:d?d.iso14224:"", isoMode:d?d.iso14224:"",
         causeCode:p.cause||"", cause:p.cause?causeLabel(p.cause,"en"):"",
         particle:p.particle||"", comp:p.comp||"", oil:p.oil||"", comment:p.comment||"",
+        lubeProduct:(p.prod==="__other"?(p.other||""):(p.prod||"")),
+        lubeUnlisted:(p.prod==="__other"?1:0), lubeEvidence:p.evid||"", lubeSampled:p.samp?1:0,
         tempC:p.tempV||"", ambC:p.tempA||"", tempMethod:p.tempM||"",
         /* How it was found. The server path has always sent this; the ZIP did
            not, so a coded ISO 14224 detection method the inspector chose on
@@ -7455,6 +7468,8 @@ function recToExport(rec){
         prio:p.prio||"", prioLabel:p.prio?prioLabel(p.prio,"en"):"", defectCode:p.defect||"",
         defectIso:p.defect?upDefect(p.defect):"",
         defect:p.defect?defectLabel(p.defect,"en"):"", iso:d?d.iso14224:"", isoMode:d?d.iso14224:"",
+        lubeProduct:(p.prod==="__other"?(p.other||""):(p.prod||"")),
+        lubeUnlisted:(p.prod==="__other"?1:0), lubeEvidence:p.evid||"", lubeSampled:p.samp?1:0,
         causeCode:p.cause||"", causeIso:p.cause?upCause(p.cause):"",
         cause:p.cause?causeLabel(p.cause,"en"):"", particle:p.particle||"",
         detection:det, detectionLabel:detectLabel(det,"en"),
