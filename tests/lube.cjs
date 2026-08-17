@@ -24,8 +24,10 @@ const ASSETS = {};
 new Function("window", fs.readFileSync(path.join(ROOT, "mobile/assets.js"), "utf8"))(ASSETS);
 
 let fail = 0;
+let pass = 0;
 const ok = (cond, what) => {
   if (!cond) { fail++; console.log("  FAIL  " + what); }
+  else { pass++; console.log("  PASS  " + what); }
   return cond;
 };
 const eq = (got, want, what) => ok(

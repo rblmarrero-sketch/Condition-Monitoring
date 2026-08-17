@@ -29,7 +29,11 @@ const srv = http.createServer((rq, rs) => {
 });
 
 let fail = 0;
-const ok = (c, w) => { if (!c) { fail++; console.log("  FAIL  " + w); } return c; };
+let pass = 0;
+const ok = (c, w) => {
+  if (!c) { fail++; console.log("  FAIL  " + w); } else { pass++; console.log("  PASS  " + w); }
+  return c;
+};
 const eq = (g, w, what) => ok(JSON.stringify(g) === JSON.stringify(w),
   what + "  (got " + JSON.stringify(g) + ", wanted " + JSON.stringify(w) + ")");
 
