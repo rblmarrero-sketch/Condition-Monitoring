@@ -125,7 +125,36 @@ ok(L.evidRank("label") === 2 && L.evidRank("batch") === 2, "a photo or a batch i
 ok(L.evidRank("told") === 1, "a verbal answer ranks below it");
 ok(L.evidRank("") === 0 && L.evidRank("nonsense") === 0, "and nothing ranks nothing");
 
+console.log("── an identified make-only record gets its figures, and only it");
+/* R. Marrero confirmed the 27 articulated trucks filed as "KOMATSU" are HM400s.
+   The alias applies that model's figures without editing the register, and
+   without touching the FIVE LOADERS that share the same make-only string — the
+   collision that caused the original bug is still live, so an alias that
+   resolved on the model alone would hand a loader a truck's capacities. */
+const aliased = L.of("KOMATSU", "AT");
+ok(aliased && aliased.alias, "the articulated-truck record carries an alias");
+eq(aliased.alias.is, "KOMATSU HM400", "and says what the machine actually is");
+ok(aliased.alias.who && aliased.alias.when,
+   "with a name and a date against it — an unattributed alias is a rumour");
+eq(L.comp("KOMATSU", "ENG", "AT").cap, 38, "the engine now has the HM400 capacity");
+eq(L.comp("KOMATSU", "TRN", "AT").cap, 60, "and the transmission");
+ok(L.fitFor("KOMATSU", "TRN", "AT").length > 0,
+   "so the picker can offer something for it, which it could not before");
+const loader = L.of("KOMATSU", "LDR");
+ok(loader && !loader.alias, "the loader on the same make-only string is NOT aliased");
+eq(L.comp("KOMATSU", "ENG", "LDR").cap, undefined,
+   "and did not quietly inherit a truck's capacity");
+
 console.log("── register gaps are named, not dropped");
+/* Identified is not the same as recorded. The alias makes the app work today;
+   the register is still wrong, and the gap list has to keep saying so or the
+   fix never happens. */
+const aliasedGap = L.gaps.filter(g => g.alias)[0];
+ok(aliasedGap, "an aliased record still appears in the gap list");
+eq(aliasedGap.alias.is, "KOMATSU HM400", "carrying what it was identified as");
+ok(L.gaps.filter(g => !g.alias).length > 0,
+   "and the ones nobody has identified yet are still there: " +
+   JSON.stringify(L.gaps.filter(g => !g.alias).map(g => g.cls + " " + g.as)));
 ok(L.gaps.length > 0, "the make-only records are listed: " + JSON.stringify(L.gaps.map(g => g.cls + " " + g.as)));
 
 console.log(fail ? "\n" + fail + " FAILED" : "\nall lube reference checks pass");

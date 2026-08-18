@@ -134,6 +134,19 @@ FIG = {
  },
 }
 
+# ── register aliases: a make-only record somebody has identified ─────────
+# The register records these by make alone, which cannot carry a capacity. An
+# alias here says what the machine ACTUALLY is, on somebody's authority, with
+# their name against it — so the figures apply today without pretending the
+# register is fixed. It still is not: the gap list below keeps naming these
+# until the model is recorded in 1C, because an alias is a patch over a data
+# fault, not a repair of it.
+ALIAS = {
+ ("AT", "KOMATSU"): {"is": "KOMATSU HM400", "who": "R. Marrero", "when": "2026-08-18",
+                     "why": "27 units filed by make; confirmed HM400 alongside the one "
+                            "already recorded as KOMATSU HM400"},
+}
+
 # ── the catalogue: what can be bought, not what has been chosen ──────────
 CATALOG = [
  {"p":"Mobil Delvac 1 5W-40",        "g":"5W-40 synth",        "s":"API CK-4, Cat ECF-3, Komatsu EO-DH", "lo":-40,"hi":30,"st":"Approved"},
@@ -162,7 +175,10 @@ for a in assets:
 
 for (cls, mod), n in sorted(counts.items(), key=lambda x: (-x[1], x[0])):
     tmpl = TEMPLATE.get(cls, [])
-    fig  = FIG.get(mod, {})
+    al   = ALIAS.get((cls, mod))
+    # Figures come from what the machine IS, labels stay as the register spells
+    # it — so a fitter still recognises the name on the screen.
+    fig  = FIG.get(al["is"] if al else mod, {})
     comps = []
     for t in tmpl:
         c = {"k":t["k"], "en":t["en"], "ru":t["ru"], "risk":t["risk"]}
@@ -179,8 +195,10 @@ for (cls, mod), n in sorted(counts.items(), key=lambda x: (-x[1], x[0])):
     # Keyed by CLASS|MODEL, never by the model string alone. "KOMATSU" is on
     # the register as both an articulated truck and a loader; collapsing those
     # onto one key gives a loader a truck's compartments, silently.
-    models[cls + "|" + mod] = {"cls":cls, "m":mod, "n":n, "comps":comps,
-                               "sourced": sum(1 for c in comps if "cap" in c)}
+    rec = {"cls":cls, "m":mod, "n":n, "comps":comps,
+           "sourced": sum(1 for c in comps if "cap" in c)}
+    if al: rec["alias"] = al
+    models[cls + "|" + mod] = rec
 
 gaps = sorted({(a["cls"], a.get("m") or "(blank)") for a in assets
                if a.get("cls") in PRIMARY and not any(ch.isdigit() for ch in (a.get("m") or ""))})
@@ -362,7 +380,9 @@ with open(OUT, "w", encoding="utf-8") as f:
             "     to \"KOMATSU\" — these are outside every number until the model is\n"
             "     recorded, and the dashboard says so rather than quietly dropping them. */\n")
     f.write("  var GAPS = " + json.dumps(
-        [{"cls":c, "as":m} for (c, m) in gaps], ensure_ascii=False) + ";\n\n")
+        [dict({"cls":c, "as":m},
+              **({"alias":ALIAS[(c,m)]} if (c,m) in ALIAS else {}))
+         for (c, m) in gaps], ensure_ascii=False) + ";\n\n")
     f.write("  /* What can be BOUGHT — not what has been chosen. The site standard is a\n"
             "     decision made on the dashboard; this is the shelf it is chosen from. */\n")
     f.write("  var CATALOG = " + json.dumps(CATALOG, ensure_ascii=False) + ";\n\n")
