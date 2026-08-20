@@ -153,7 +153,7 @@
   table.grid th{text-align:left;color:var(--ink-2);font-weight:600;border-bottom:1px solid var(--border);padding:8px 6px;white-space:nowrap;}
   table.grid td{border-bottom:1px solid var(--border);padding:8px 6px;vertical-align:top;}
   table.grid tr:hover td{background:var(--surface-2);}
-  .tblwrap{overflow-x:auto;}
+  .tblwrap{overflow-x:auto;max-width:100%;min-width:0;}
   /* Background refresh: a breathing chip while it asks, a line that fades when
      something arrived. Neither takes a click to dismiss — news this small does
      not deserve a dialog. */
@@ -181,6 +181,81 @@
   .pos dl{margin:6px 0 0;display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:12px;}
   .pos dt{color:var(--muted);} .pos dd{margin:0;text-align:right;}
   .pos dd.warnv{color:var(--serious);font-weight:600;}
+
+  /* ── the lubrication tab ──────────────────────────────────────────────
+     Progress is magnitude, so the bars are one hue at varying weight. They must
+     NOT borrow the product palette below, where a hue already means "which
+     drum" — a bar in one of those colours would be saying something it does
+     not mean. */
+  .pgnote{background:var(--surface-2,#f1f4f5);border:1px solid var(--line,#e3e8ea);
+    border-radius:10px;padding:12px 14px;font-size:13px;color:var(--ink-2);line-height:1.5;}
+  .pgrid{display:flex;flex-direction:column;gap:2px;margin:14px 0 4px;}
+  .pgrow{display:grid;grid-template-columns:200px 1fr 116px;gap:12px;align-items:center;
+    padding:10px 12px;border-radius:8px;}
+  .pgrow:nth-child(odd){background:var(--surface-2,#f7f9fa);}
+  .pglab b{display:block;font-size:13.5px;line-height:1.2;}
+  .pgbar{height:12px;border-radius:6px;background:var(--line,#e3e8ea);overflow:hidden;}
+  .pgbar span{display:block;height:100%;border-radius:6px;background:var(--accent,#8a4526);}
+  .pgnum{text-align:right;font-variant-numeric:tabular-nums;}
+  .pgnum b{font-size:17px;}
+  .pgnum i{display:block;font-style:normal;font-size:11.5px;color:var(--muted);font-weight:600;}
+  /* The reason a row exists sits under it, not in a tooltip nobody opens. */
+  .pgwhy{grid-column:1 / -1;font-size:12.5px;color:var(--ink-2);line-height:1.5;padding-top:2px;}
+  .pgwhy .from{display:inline-block;margin-left:8px;padding:1px 7px;border-radius:20px;
+    background:var(--line,#e3e8ea);color:var(--muted);font-size:11px;font-weight:700;
+    white-space:nowrap;}
+
+  /* overflow-x:auto on the wrapper scrolls the table, but on this layout it did
+     NOT stop the table contributing its full 2,716px to the document's scroll
+     width — the page really did slide sideways, 1,221px of it, and only in the
+     all-classes view. contain:paint is what actually clips it. Scoped to this
+     wrapper rather than every .tblwrap, because containment has side effects
+     and the other tables never had the problem. */
+  .mtxwrap{contain:paint;}
+  table.mtx{--h:#8b969c;table-layout:auto;}
+  table.mtx td{vertical-align:top;padding:0;}
+  table.mtx tr.clsrow td{border:none;padding:14px 0 5px;font-size:11px;font-weight:800;
+    letter-spacing:.09em;text-transform:uppercase;color:var(--accent,#8a4526);background:none;}
+  table.mtx td.mdl{padding:8px 12px 8px 0;}
+  table.mtx td.mdl b{display:block;font-size:13.5px;line-height:1.2;}
+  table.mtx td.mdl i{display:block;font-style:normal;font-size:11px;color:var(--muted);
+    font-weight:600;margin-top:1px;}
+  table.mtx td.cell{position:relative;padding:7px 8px 7px 13px;
+    background:color-mix(in srgb, var(--h) 13%, var(--surface,#fff));}
+  table.mtx td.cell .sw{position:absolute;left:0;top:0;bottom:0;width:7px;background:var(--h);}
+  table.mtx td.cell b{display:block;font-size:13px;line-height:1.2;}
+  table.mtx td.cell i.num{display:block;font-style:normal;font-size:11.5px;color:var(--ink-2);
+    font-weight:700;font-variant-numeric:tabular-nums;margin-top:3px;}
+  table.mtx td.cell i.warnv{display:block;font-style:normal;font-size:11px;
+    color:var(--serious);font-weight:700;margin-top:3px;}
+  /* Hatched, never red. Red is a product on this sheet. */
+  table.grid.mtx tbody tr td.unset,
+  table.grid.mtx tbody tr:nth-child(even) td.unset,
+  table.grid.mtx tbody tr:hover td.unset{padding:9px 8px;text-align:center;
+    background:repeating-linear-gradient(135deg,
+      color-mix(in srgb,var(--surface-2) 30%,var(--surface)) 0 6px,
+      color-mix(in srgb,var(--surface-2) 90%,var(--surface)) 6px 12px);}
+  /* Same reason: a coloured cell must not be tinted differently on odd and
+     even rows, or the colour stops meaning one product. */
+  table.grid.mtx tbody tr td.cell,
+  table.grid.mtx tbody tr:nth-child(even) td.cell,
+  table.grid.mtx tbody tr:hover td.cell{
+    background:color-mix(in srgb, var(--h) 13%, var(--surface,#fff));}
+  table.mtx td.unset b{display:block;font-size:11.5px;font-weight:800;color:var(--muted);}
+  table.mtx td.na{text-align:center;color:var(--line,#c9d2d6);font-size:16px;padding:9px 0;}
+  .lgnd{display:flex;flex-wrap:wrap;gap:9px 20px;margin-top:14px;padding-top:12px;
+    border-top:1px solid var(--line,#e3e8ea);}
+  .lg{display:flex;align-items:center;gap:7px;font-size:12.5px;}
+  .lg .sw{width:16px;height:16px;border-radius:3px;flex:none;background:var(--h);
+    border:1px solid rgba(0,0,0,.18);}
+  .lg .sw.none{background:repeating-linear-gradient(135deg,var(--surface,#fff) 0 4px,var(--line,#e6ebee) 4px 8px);}
+  .lg .sw.na{background:var(--surface,#fff);}
+  .vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
+    clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0;}
+  @media (max-width:820px){
+    .pgrow{grid-template-columns:1fr 100px;}
+    .pgbar{grid-column:1 / -1;order:3;} .pgwhy{order:4;}
+  }
   /* The verdict is the one thing on this card nobody typed, so it is the one
      thing that has to look computed rather than written. */
   .pos .band{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.05em;
@@ -886,6 +961,7 @@
   <button data-tab="wear" data-i18n="tab_wear">Wear &amp; life</button>
   <button data-tab="actions" data-i18n="tab_actions">Action register</button>
   <button data-tab="equipment" data-i18n="tab_equipment">Equipment history</button>
+  <button data-tab="lube" data-i18n="tab_lube">Lubrication</button>
   <button data-tab="reports" data-i18n="tab_reports">Reports</button>
 </nav>
 
@@ -1020,6 +1096,29 @@
     </div>
   </section>
 </main>
+
+  <section id="tab-lube" class="hidden">
+    <div class="kpis" id="lubeKpis"></div>
+
+    <div class="section">
+      <h2 data-i18n="lp_title">The programme, honestly counted</h2>
+      <div class="sub" data-i18n="lp_sub">How much of the fleet is audited, verified and standardised — against the register, not against the machines somebody happened to visit. Every number states its denominator, because those two get mistaken for each other and that is how a programme reports 90% and means 90% of eleven machines.</div>
+      <div id="lubeProg"></div>
+    </div>
+
+    <div class="section">
+      <h2 data-i18n="lm_title">Fleet matrix</h2>
+      <div class="sub" data-i18n="lm_sub">Every asset class on one sheet — compartment, capacity, interval, and the oil that belongs in it. Colour is identity and nothing else: which product, never how good it is.</div>
+      <div class="row" style="margin:14px 0 12px;gap:12px;align-items:center;flex-wrap:wrap">
+        <div class="seg" id="lmSeg"></div>
+        <span style="flex:1"></span>
+        <button class="btn" id="lubeCsv" data-i18n="lm_csv">⬇ Export CSV</button>
+      </div>
+      <div class="tblwrap mtxwrap"><table class="grid mtx" id="lubeMtx"></table></div>
+      <div id="lubeLegend" class="lgnd"></div>
+      <div class="sub" id="lubeNote" style="margin-top:10px"></div>
+    </div>
+  </section>
 
   <section id="tab-reports" class="hidden">
     <div class="section">
@@ -1197,7 +1296,29 @@ const I18N={
   w_note:"Showing {s} of {n} measured position(s). A life needs two readings at least {h} hours or {d} days apart; until then the reason is given instead of a number.",
   w_empty:"No measured positions in this selection. Undercarriage, GET and tray rounds produce these \u2014 check the inspection-type filter.",
 
-  tab_equipment:"Equipment history", tab_reports:"Reports",
+  tab_equipment:"Equipment history", tab_reports:"Reports", tab_lube:"Lubrication",
+  cls_HT:"Rigid dump truck", cls_AT:"Articulated truck", cls_EXC:"Excavator",
+  cls_DOZ:"Track dozer", cls_LDR:"Loader", cls_GRD:"Grader", cls_DRB:"Blast drill",
+  cls_DRE:"Exploration drill", cls_HRB:"Rock breaker", cls_CRJ:"Jaw crusher",
+  cls_CRC:"Cone crusher", cls_SCR:"Screener", cls_GEN:"Support equipment",
+  lp_title:"The programme, honestly counted",
+  lp_sub:"How much of the fleet is audited, verified and standardised — against the register, not against the machines somebody happened to visit.",
+  lp_note:"Below this line counts THE FLEET: {n} compartments across {u} units the reference covers, out of a site register of {s}. Everything above counts what was found when somebody looked. The two get mistaken for each other constantly.",
+  lp_of:"of {n}",
+  lp_covered:"Fleet in the reference", lp_covered_w:"Units whose model has a reference entry at all. A machine outside this line is not failing, it is unseen.",
+  lp_sourced:"Reference sourced", lp_sourced_w:"Capacity and specification traced to a manual page, per model — so this one is short and finishable.",
+  lp_audited:"Ever audited", lp_audited_w:"Somebody opened the compartment and recorded what was in it, at any time.",
+  lp_current:"Audit still current", lp_current_w:"Recorded within one drain interval at this site's utilisation. Older than that and it describes oil that has been drained since.",
+  lp_verified:"Verified, not reported", lp_verified_w:"Backed by a photographed label or a tank batch. A verbal answer is a lead, not a finding.",
+  lp_conform:"Conformant on evidence", lp_conform_w:"On specification, rated for −40, and proven rather than assumed.",
+  lp_sampled:"Oil analysis current", lp_sampled_w:"Sampled within six months. The audit asks what went in; the analysis asks what it has become.",
+  lp_src_ref:"Reference", lp_src_app:"App · lube round", lp_src_calc:"Computed", lp_src_lab:"Lab",
+  lp_k_models:"Models covered", lp_k_units:"Units covered", lp_k_comps:"Compartments", lp_k_audited:"Audited",
+  lm_title:"Fleet matrix",
+  lm_sub:"Every asset class on one sheet. Colour is identity and nothing else: which product, never how good it is.",
+  lm_all:"All classes", lm_machine:"Machine", lm_notset:"Not audited", lm_nocomp:"No such compartment",
+  lm_alias:"recorded by make; identified as {m}", lm_csv:"⬇ Export CSV",
+  lm_note:"Colour is the product, nothing else — it does not mean good or bad. Capacity is a refill, not a dry fill. A blank cell is a compartment nobody has audited yet, not a compartment with nothing in it.",
 
   f_type:"Inspection type", f_class:"Equipment class", f_period:"Period", f_search:"Search",
   f_alltime:"All time", f_30:"Last 30 days", f_90:"Last 90 days", f_365:"Last 12 months",
@@ -1466,7 +1587,29 @@ const I18N={
   w_note:"\u041f\u043e\u043a\u0430\u0437\u0430\u043d\u043e {s} \u0438\u0437 {n} \u0437\u0430\u043c\u0435\u0440\u0435\u043d\u043d\u044b\u0445 \u0442\u043e\u0447\u0435\u043a. \u0414\u043b\u044f \u0440\u0435\u0441\u0443\u0440\u0441\u0430 \u043d\u0443\u0436\u043d\u044b \u0434\u0432\u0430 \u0437\u0430\u043c\u0435\u0440\u0430 \u0441 \u0440\u0430\u0437\u043d\u0438\u0446\u0435\u0439 \u043e\u0442 {h} \u0447 \u0438\u043b\u0438 {d} \u0441\u0443\u0442.",
   w_empty:"\u0412 \u044d\u0442\u043e\u0439 \u0432\u044b\u0431\u043e\u0440\u043a\u0435 \u043d\u0435\u0442 \u0437\u0430\u043c\u0435\u0440\u0435\u043d\u043d\u044b\u0445 \u0442\u043e\u0447\u0435\u043a.",
 
-  tab_equipment:"История по технике", tab_reports:"Отчёты",
+  tab_equipment:"История по технике", tab_reports:"Отчёты", tab_lube:"Смазочные материалы",
+  cls_HT:"Карьерный самосвал", cls_AT:"Сочленённый самосвал", cls_EXC:"Экскаватор",
+  cls_DOZ:"Бульдозер", cls_LDR:"Погрузчик", cls_GRD:"Автогрейдер", cls_DRB:"Буровой станок",
+  cls_DRE:"Разведочное бурение", cls_HRB:"Гидромолот", cls_CRJ:"Щековая дробилка",
+  cls_CRC:"Конусная дробилка", cls_SCR:"Грохот", cls_GEN:"Вспомогательная техника",
+  lp_title:"Программа в честных цифрах",
+  lp_sub:"Какая часть парка проверена, подтверждена и стандартизована — относительно реестра, а не тех машин, куда кто-то дошёл.",
+  lp_note:"Ниже этой строки считается ПАРК: {n} узлов на {u} единицах, охваченных справочником, из {s} единиц реестра. Выше — то, что нашли, когда смотрели. Эти два числа постоянно путают.",
+  lp_of:"из {n}",
+  lp_covered:"Парк в справочнике", lp_covered_w:"Единицы, модель которых вообще есть в справочнике. Машина вне этой строки не «плохая» — её просто не видно.",
+  lp_sourced:"Справочник подтверждён", lp_sourced_w:"Объём и спецификация со ссылкой на страницу руководства, по модели — поэтому список короткий и его можно закончить.",
+  lp_audited:"Когда-либо проверено", lp_audited_w:"Кто-то открыл узел и записал, что в нём было.",
+  lp_current:"Проверка актуальна", lp_current_w:"Записано в пределах одного интервала замены при этой наработке. Старше — описывает масло, которое давно слито.",
+  lp_verified:"Подтверждено, не со слов", lp_verified_w:"Фото этикетки или партия из ёмкости. Устный ответ — это зацепка, а не факт.",
+  lp_conform:"Соответствует по факту", lp_conform_w:"По спецификации, до −40, и доказано, а не предположено.",
+  lp_sampled:"Анализ масла актуален", lp_sampled_w:"Проба за последние полгода. Аудит спрашивает, что залили; анализ — во что оно превратилось.",
+  lp_src_ref:"Справочник", lp_src_app:"Приложение · обход", lp_src_calc:"Расчёт", lp_src_lab:"Лаборатория",
+  lp_k_models:"Моделей охвачено", lp_k_units:"Единиц охвачено", lp_k_comps:"Узлов", lp_k_audited:"Проверено",
+  lm_title:"Карта парка",
+  lm_sub:"Все классы техники на одном листе. Цвет — это только продукт, а не оценка.",
+  lm_all:"Все классы", lm_machine:"Машина", lm_notset:"Не проверено", lm_nocomp:"Нет такого узла",
+  lm_alias:"записано по марке; определено как {m}", lm_csv:"⬇ Экспорт CSV",
+  lm_note:"Цвет — это продукт, и только; он не означает «хорошо» или «плохо». Объём — заправочный, не сухой. Пустая ячейка — узел, который ещё не проверяли, а не пустой узел.",
 
   f_type:"Тип осмотра", f_class:"Класс техники", f_period:"Период", f_search:"Поиск",
   f_alltime:"За всё время", f_30:"Последние 30 дней", f_90:"Последние 90 дней", f_365:"Последние 12 мес.",
@@ -4010,6 +4153,8 @@ function wearRows(recs){
 }
 const W_SOON=1000;                     // hours: about one month of a 12h shift
 function wearDue(r){ return r.band==="act" || (r.pct!=null&&r.pct>=80) || (r.hours!=null&&r.hours<W_SOON); }
+function fmtN(n){ return (n==null||isNaN(n)) ? "—" :
+  Math.round(n).toLocaleString(lang==="ru"?"ru-RU":"en-GB"); }
 function fmtH(h){ return h==null?"" : h>=100000 ? "—" :
   Math.round(h).toLocaleString(lang==="ru"?"ru-RU":"en-GB"); }
 /* Hours are what parts are ordered against, but a date is what a shutdown is
@@ -4101,7 +4246,304 @@ function wearCsv(){
   a.download=`wear-and-life_${new Date().toISOString().slice(0,10)}.csv`; a.click();
   setTimeout(()=>URL.revokeObjectURL(a.href),4000);
 }
-function renderAll(){ renderChips(); renderKpis(); renderCoverage(); renderTrend(); renderFleet(); renderFailure(); renderWearTab(); renderActions(); renderHistory(); }
+/* ══ the lubrication programme ═══════════════════════════════════════════
+
+   The tiles elsewhere on this dashboard count FINDINGS OVER OBSERVATIONS,
+   which is the right number for "what did we find" and the wrong one for "how
+   far along are we". There are a handful of lube rounds and thousands of
+   compartments on the register, so a tile reading "8 conform" is 8 of what was
+   looked at, not 8 of the fleet. Stating the denominator is most of the
+   honesty here.
+
+   The states are not one ladder. A compartment can conform and never have been
+   looked at, because conformance was assumed from the model. Each is counted
+   against its own denominator. */
+const LUBE_SAMPLE_DAYS = 180;
+function lubeDays(d){
+  if(!d) return null;
+  const ms = Date.parse(d); if(isNaN(ms)) return null;
+  return Math.round((Date.now() - ms) / 86400000);
+}
+/* An audit is CURRENT while the oil it describes is still in the machine. One
+   drain interval later it describes oil that has been gone a while, and the
+   fact somebody wrote it down does not bring it back. A utilisation clock, not
+   a calendar one: the same 500-hour engine goes stale in five weeks here and in
+   five months on a standby set. */
+function lubeWindowDays(c){
+  const hrsPerDay = (window.LUBE && LUBE.site.hoursPerYear ? LUBE.site.hoursPerYear : 5000) / 365;
+  return Math.max(1, Math.round((c && c.iv ? c.iv : 2000) / hrsPerDay));
+}
+function lubeProgramme(){
+  const out = { units:0, instances:0, byComp:{}, covered:0, siteUnits:(window.ASSETS||[]).length,
+                audited:0, current:0, verified:0, conformant:0, sampled:0,
+                refKnown:0, refTotal:0, models:0 };
+  if(!window.LUBE) return out;
+
+  /* The denominator: every compartment on every unit the reference covers. */
+  const seenModel = {};
+  (window.ASSETS||[]).forEach(a=>{
+    const r = LUBE.of(a.m||"", a.cls||"");
+    if(!r) return;
+    out.covered++;
+    const key = r.cls + "|" + r.m;
+    if(!seenModel[key]){
+      seenModel[key] = 1; out.models++;
+      r.comps.forEach(c=>{ out.refTotal++; if(c.cap!=null) out.refKnown++; });
+    }
+    r.comps.forEach(c=>{
+      out.instances++;
+      const B = out.byComp[c.k] || (out.byComp[c.k] = { k:c.k, en:c.en, ru:c.ru, n:0, win:1e9 });
+      B.n++; B.win = Math.min(B.win, lubeWindowDays(c));
+    });
+  });
+
+  /* What has actually been walked. Deduplicated per unit+compartment, because
+     a compartment audited four times this year is covered once, not four. */
+  const seen = {}, cur = {}, ver = {}, con = {}, samp = {};
+  filtered().filter(r=>r.type==="LUBE").forEach(r=>{
+    const a = ASSET_BY[r.equip] || {};
+    (r.items||[]).forEach(i=>{
+      if(!i.lubeProduct) return;
+      const c = LUBE.comp(a.m||"", i.key, a.cls||"");
+      if(!c) return;
+      const id = r.equip + "|" + i.key;
+      seen[id] = 1;
+      const age = lubeDays(r.date);
+      const isCur = age!=null && age <= lubeWindowDays(c);
+      if(isCur){
+        cur[id] = 1;
+        /* "The fitter said it is TO-4" is a lead, not a finding. Counting it as
+           one is how a programme reports full coverage and still has the wrong
+           oil in a powershift. */
+        if(LUBE.evidRank(i.lubeEvidence) >= 2){
+          ver[id] = 1;
+          const v = lubeVerdictOf(r, i);
+          if(v && v.k === "lube_v_ok") con[id] = 1;
+        }
+      }
+      if(i.lubeSampled && age!=null && age <= LUBE_SAMPLE_DAYS) samp[id] = 1;
+    });
+  });
+  out.audited    = Object.keys(seen).length;
+  out.current    = Object.keys(cur).length;
+  out.verified   = Object.keys(ver).length;
+  out.conformant = Object.keys(con).length;
+  out.sampled    = Object.keys(samp).length;
+  return out;
+}
+
+function renderLubeProg(){
+  const P = lubeProgramme();
+  const stage = (n, d, key, note, from) => {
+    const pc = d ? (n / d * 100) : 0;
+    return `<div class="pgrow">
+      <div class="pglab"><b>${esc(t(key))}</b></div>
+      <div class="pgbar"><span style="width:${Math.max(pc,0.6).toFixed(2)}%"></span></div>
+      <div class="pgnum"><b>${fmtN(n)}</b><i>${esc(t("lp_of",{n:fmtN(d)}))} · ${
+        pc>0&&pc<1?"<1":Math.round(pc)}%</i></div>
+      <div class="pgwhy">${esc(t(note))}<span class="from">${esc(t(from))}</span></div>
+    </div>`;
+  };
+  $("lubeProg").innerHTML =
+    `<div class="pgnote">${esc(t("lp_note",{n:fmtN(P.instances), u:fmtN(P.covered),
+       s:fmtN(P.siteUnits)}))}</div>` +
+    `<div class="pgrid">` +
+      stage(P.covered,    P.siteUnits, "lp_covered",  "lp_covered_w",  "lp_src_ref") +
+      stage(P.refKnown,   P.refTotal,  "lp_sourced",  "lp_sourced_w",  "lp_src_ref") +
+      stage(P.audited,    P.instances, "lp_audited",  "lp_audited_w",  "lp_src_app") +
+      stage(P.current,    P.instances, "lp_current",  "lp_current_w",  "lp_src_app") +
+      stage(P.verified,   P.instances, "lp_verified", "lp_verified_w", "lp_src_app") +
+      stage(P.conformant, P.instances, "lp_conform",  "lp_conform_w",  "lp_src_calc") +
+      stage(P.sampled,    P.instances, "lp_sampled",  "lp_sampled_w",  "lp_src_lab") +
+    `</div>`;
+  $("lubeKpis").innerHTML = [
+    ["lp_k_models", P.models],
+    ["lp_k_units",  P.covered],
+    ["lp_k_comps",  P.instances],
+    ["lp_k_audited",P.audited],
+  ].map(([k,v])=>`<div class="kpi"><div class="k">${esc(t(k))}</div><div class="v">${fmtN(v)}</div></div>`).join("");
+}
+
+/* ── the fleet matrix ─────────────────────────────────────────────────────
+   Rows are models grouped by asset class, columns are compartments. Colour
+   means ONE thing — which product — never how good it is, so red stays free to
+   be a drum rather than a warning. A cell with no decision is hatched, not red.
+
+   The colour is assigned on first sight and never reassigned, so filtering the
+   view cannot repaint the survivors. Past the eighth product there is no ninth
+   hue: it goes grey and reads by name, and the sheet says why. */
+const LUBE_HUE = ["#2a78d6","#eb6834","#1baf7a","#eda100",
+                  "#e87ba4","#008300","#4a3aa7","#e34948"];
+const LUBE_NOHUE = "#8b969c";
+const lubeHueAt = {}; let lubeHueNext = 0;
+function lubeHue(name){
+  if(!name) return null;
+  if(!(name in lubeHueAt))
+    lubeHueAt[name] = lubeHueNext < LUBE_HUE.length ? LUBE_HUE[lubeHueNext++] : null;
+  return lubeHueAt[name];
+}
+function lubeShort(n){
+  return String(n||"").replace(/\b(universal tractor fluid|arctic synth|arctic|synth)\b/gi,"")
+    .replace(/\s+/g," ").trim();
+}
+/* What is actually IN each compartment, newest round wins. This is the matrix's
+   whole input: it draws the fleet as audited, not as intended. */
+function lubeSeenByModel(){
+  const out = {};
+  filtered().filter(r=>r.type==="LUBE").forEach(r=>{
+    const a = ASSET_BY[r.equip] || {};
+    const ref = window.LUBE ? LUBE.of(a.m||"", a.cls||"") : null;
+    if(!ref) return;
+    const mk = ref.cls + "|" + ref.m;
+    (r.items||[]).forEach(i=>{
+      if(!i.lubeProduct) return;
+      const key = mk + "|" + i.key;
+      const prev = out[key];
+      if(!prev || String(r.date||"") >= String(prev.date||""))
+        out[key] = { product:i.lubeProduct, date:r.date, unit:r.equip,
+                     rec:r, item:i, unlisted:i.lubeUnlisted };
+    });
+  });
+  return out;
+}
+/* Set on first render to the class with the most units — the readable default.
+   "" is still every class, and the chip is still there; it is just not what you
+   land on. */
+let lubeShow = null;
+function lubeBiggestClass(){
+  const n = {};
+  (window.ASSETS||[]).forEach(a=>{
+    const r = window.LUBE ? LUBE.of(a.m||"", a.cls||"") : null;
+    if(r) n[r.cls] = (n[r.cls]||0) + 1;
+  });
+  const best = Object.keys(n).sort((a,b)=> n[b]-n[a] || (a<b?-1:1))[0];
+  return best || "";
+}
+function renderLubeMtx(){
+  const tbl = $("lubeMtx"); if(!tbl) return;
+  if(!window.LUBE){ tbl.innerHTML = ""; return; }
+
+  /* One row per model the reference covers, with the unit count from the
+     register — not one row per machine. Forty identical trucks are one
+     decision, and forty rows of it is a sheet nobody reads. */
+  const rows = {};
+  (window.ASSETS||[]).forEach(a=>{
+    const r = LUBE.of(a.m||"", a.cls||""); if(!r) return;
+    const k = r.cls + "|" + r.m;
+    if(!rows[k]) rows[k] = { cls:r.cls, m:r.m, n:0, comps:r.comps, alias:r.alias };
+    rows[k].n++;
+  });
+  const list = Object.values(rows)
+    .filter(r=>!lubeShow || r.cls === lubeShow)
+    .sort((a,b)=> a.cls===b.cls ? b.n - a.n : (a.cls<b.cls?-1:1));
+
+  /* Columns are the compartments that actually occur in what is on screen. A
+     column no machine here has is a column about somebody else's fleet, and its
+     only effect is to make every other column narrower. */
+  const colSet = [];
+  list.forEach(r=>r.comps.forEach(c=>{ if(!colSet.some(x=>x.k===c.k)) colSet.push(c); }));
+
+  const seen = lubeSeenByModel();
+  const used = [];
+  let lastCls = null, body = "";
+  list.forEach(r=>{
+    if(r.cls !== lastCls){
+      lastCls = r.cls;
+      body += `<tr class="clsrow"><td colspan="${colSet.length+1}">${
+        esc(t("cls_"+r.cls) || r.cls)}</td></tr>`;
+    }
+    const cells = colSet.map(col=>{
+      const c = r.comps.filter(x=>x.k===col.k)[0];
+      /* No such compartment is not a gap. It must not look like an unanswered
+         question sitting beside the ones that are. */
+      if(!c) return `<td class="na"><span aria-hidden="true">·</span><span class="vh">${
+        esc(t("lm_nocomp"))}</span></td>`;
+      const hit = seen[r.cls+"|"+r.m+"|"+c.k];
+      if(!hit) return `<td class="unset"><b>${esc(t("lm_notset"))}</b></td>`;
+      if(used.indexOf(hit.product) < 0) used.push(hit.product);
+      const hue = lubeHue(hit.product) || LUBE_NOHUE;
+      const v = lubeVerdictOf(hit.rec, hit.item);
+      return `<td class="cell" style="--h:${esc(hue)}"><span class="sw"></span>`+
+        `<b>${esc(lubeShort(hit.product))}</b>`+
+        `<i class="num">${c.cap!=null?esc(c.cap)+" L":"—"} · ${
+          c.iv?esc(c.iv)+" h":"—"}</i>`+
+        (v && v.k!=="lube_v_ok" ? `<i class="warnv">${esc(t(v.k))}</i>` : "")+
+        `</td>`;
+    }).join("");
+    body += `<tr><td class="mdl"><b>${esc(r.m)}</b><i>×${r.n}${
+      r.alias?` · ${esc(t("lm_alias",{m:r.alias.is}))}`:""}</i></td>${cells}</tr>`;
+  });
+
+  tbl.innerHTML =
+    `<thead><tr><th>${esc(t("lm_machine"))}</th>${
+      colSet.map(c=>`<th>${esc(lang==="ru"?c.ru:c.en)}</th>`).join("")
+    }</tr></thead><tbody>${body}</tbody>`;
+
+  $("lubeLegend").innerHTML = used.sort().map(n=>{
+    const hue = lubeHue(n) || LUBE_NOHUE;
+    return `<span class="lg"><span class="sw" style="--h:${esc(hue)}"></span><b>${
+      esc(lubeShort(n))}</b></span>`;
+  }).join("") +
+    `<span class="lg"><span class="sw none"></span><b>${esc(t("lm_notset"))}</b></span>` +
+    `<span class="lg"><span class="sw na"></span><b>${esc(t("lm_nocomp"))}</b></span>`;
+  $("lubeNote").textContent = t("lm_note");
+}
+
+/* One row per model x compartment, which is the shape somebody puts in front of
+   a supplier — not the shape on screen. Unsourced and unaudited rows are IN the
+   export, because the gaps are the actionable half of this data and an export
+   that quietly drops them reads as a complete standard. */
+function lubeCsv(){
+  const rows = {};
+  (window.ASSETS||[]).forEach(a=>{
+    const r = window.LUBE ? LUBE.of(a.m||"", a.cls||"") : null; if(!r) return;
+    const k = r.cls + "|" + r.m;
+    if(!rows[k]) rows[k] = { cls:r.cls, m:r.m, n:0, comps:r.comps, alias:r.alias };
+    rows[k].n++;
+  });
+  const seen = lubeSeenByModel();
+  const head = ["Class","Model","Units","Identified as","Compartment code","Compartment",
+                "Refill L","OEM specification","Interval h","Product in service",
+                "Off catalogue","Verdict","Last audited","Seen on unit"];
+  const q = v => `"${String(v==null?"":v).replace(/"/g,'""')}"`;
+  const body = [];
+  Object.values(rows).sort((a,b)=> a.cls===b.cls ? b.n-a.n : (a.cls<b.cls?-1:1))
+    .forEach(r=>r.comps.forEach(c=>{
+      const hit = seen[r.cls+"|"+r.m+"|"+c.k];
+      const v = hit ? lubeVerdictOf(hit.rec, hit.item) : null;
+      body.push([r.cls, r.m, r.n, r.alias?r.alias.is:"", c.k, c.en,
+                 c.cap==null?"":c.cap, c.spec||"", c.iv==null?"":c.iv,
+                 hit?hit.product:"", hit&&hit.unlisted?"yes":"",
+                 v?t(v.k):"", hit?hit.date:"", hit?hit.unit:""].map(q).join(","));
+    }));
+  const blob = new Blob(["\ufeff"+[head.map(q).join(","), ...body].join("\r\n")],
+    {type:"text/csv;charset=utf-8"});
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
+  a.download = `lubrication-matrix_${new Date().toISOString().slice(0,10)}.csv`; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 4000);
+}
+
+function renderLubeTab(){
+  if(lubeShow === null) lubeShow = lubeBiggestClass();
+  /* The class filter, built from what the reference actually covers so a chip
+     can never lead to an empty sheet. */
+  const cls = [];
+  (window.ASSETS||[]).forEach(a=>{
+    const r = window.LUBE ? LUBE.of(a.m||"", a.cls||"") : null;
+    if(r && cls.indexOf(r.cls) < 0) cls.push(r.cls);
+  });
+  cls.sort();
+  $("lmSeg").innerHTML = [["", t("lm_all")]].concat(cls.map(c=>[c, t("cls_"+c) || c]))
+    .map(([v,l])=>`<button type="button" data-c="${esc(v)}"${
+      lubeShow===v?' class="on"':''}>${esc(l)}</button>`).join("");
+  $("lmSeg").querySelectorAll("button[data-c]").forEach(b=>{
+    b.onclick = ()=>{ lubeShow = b.dataset.c; renderLubeTab(); };
+  });
+  renderLubeProg();
+  renderLubeMtx();
+}
+
+function renderAll(){ renderChips(); renderKpis(); renderCoverage(); renderTrend(); renderFleet(); renderFailure(); renderWearTab(); renderActions(); renderHistory(); renderLubeTab(); }
 ["fType","fClass","fRange"].forEach(id=>$(id).onchange=renderAll);
 let qTimer=null;
 $("fQ").oninput=()=>{ clearTimeout(qTimer); qTimer=setTimeout(renderAll,180); };   // debounce, the fleet table is big
@@ -4116,6 +4558,7 @@ $("follSave").onclick=saveFollow;
 $("follOv").onclick=e=>{ if(e.target.id==="follOv") closeFollow(); };
 $("pfSel").onchange=e=>{ pfKey=e.target.value; renderPF(); };
 $("wearCsv").onclick=wearCsv;
+$("lubeCsv").onclick=lubeCsv;
 document.querySelector(".lang").addEventListener("click",e=>{
   const b=e.target.closest("button[data-lang]"); if(!b) return;
   lang=b.dataset.lang;
