@@ -212,6 +212,24 @@
      wrapper rather than every .tblwrap, because containment has side effects
      and the other tables never had the problem. */
   .mtxwrap{contain:paint;}
+  /* The reference editor. Inputs sized to what goes in them: a capacity is
+     three digits, a specification is a sentence, and a box that fits neither
+     invites the wrong one. */
+  #lrTbl input.lrin,
+  #lrTbl tbody tr:nth-child(even) input.lrin,
+  #lrTbl tbody tr:hover input.lrin{width:100%;min-width:0;font:inherit;font-size:13px;
+    padding:6px 8px;border-radius:8px;color:var(--ink);
+    background:var(--surface);
+    border:1px solid color-mix(in srgb,var(--muted) 42%,transparent);}
+  input.lrin:focus{outline:2px solid var(--accent);outline-offset:1px;}
+  input.lrin.num{text-align:right;font-variant-numeric:tabular-nums;}
+  #lrTbl td{vertical-align:middle;}
+  #lrTbl td i.sub{display:block;font-style:normal;font-size:11px;color:var(--muted);}
+  #lrTbl th:nth-child(2),#lrTbl th:nth-child(4),#lrTbl th:nth-child(6){width:88px;}
+  #lrTbl th:nth-child(3){width:24%;}
+  /* An edited row is marked, because "did I already change this one" is the
+     question somebody asks on the fortieth model. */
+  #lrTbl tr.edited td:first-child{box-shadow:inset 3px 0 0 var(--accent);}
   table.mtx{--h:#8b969c;table-layout:auto;}
   table.mtx td{vertical-align:top;padding:0;}
   table.mtx tr.clsrow td{border:none;padding:14px 0 5px;font-size:11px;font-weight:800;
@@ -1107,6 +1125,24 @@
     </div>
 
     <div class="section">
+      <h2 data-i18n="lr_title">Machine reference</h2>
+      <div class="sub" data-i18n="lr_sub">Capacities, specifications and intervals, per model. A capacity is the one number here that causes a failure on its own — an under-filled final drive seizes, an over-filled one blows a seal — so changing it asks where the figure came from.</div>
+      <div class="row" style="margin:14px 0 12px;gap:12px;align-items:flex-end;flex-wrap:wrap">
+        <label class="fld"><span data-i18n="lr_model">Model</span>
+          <select id="lrModel"></select></label>
+        <span style="flex:1"></span>
+        <button class="btn" id="lrExport" data-i18n="lr_export">⬇ Export overrides</button>
+      </div>
+      <div class="tblwrap"><table class="grid" id="lrTbl"></table></div>
+      <div class="row" style="margin-top:12px;gap:12px;align-items:center;flex-wrap:wrap">
+        <button class="btn primary" id="lrSave" data-i18n="lr_save">Save the reference</button>
+        <button class="btn" id="lrReset" data-i18n="lr_reset">Undo my edits to this model</button>
+        <span class="sub" id="lrSaved" style="margin:0"></span>
+      </div>
+      <div class="sub" id="lrNote" style="margin-top:10px"></div>
+    </div>
+
+    <div class="section">
       <h2 data-i18n="lm_title">Fleet matrix</h2>
       <div class="sub" data-i18n="lm_sub">Every asset class on one sheet — compartment, capacity, interval, and the oil that belongs in it. Colour is identity and nothing else: which product, never how good it is.</div>
       <div class="row" style="margin:14px 0 12px;gap:12px;align-items:center;flex-wrap:wrap">
@@ -1318,6 +1354,19 @@ const I18N={
   lm_sub:"Every asset class on one sheet. Colour is identity and nothing else: which product, never how good it is.",
   lm_all:"All classes", lm_machine:"Machine", lm_notset:"Not audited", lm_nocomp:"No such compartment",
   lm_alias:"recorded by make; identified as {m}", lm_csv:"⬇ Export CSV",
+  lr_title:"Machine reference",
+  lr_sub:"Capacities, specifications and intervals, per model.",
+  lr_model:"Model", lr_comp:"Compartment", lr_cap:"Refill L", lr_spec:"OEM specification",
+  lr_iv:"Interval h", lr_doc:"Manual", lr_page:"Page", lr_who:"Checked by", lr_state:"State",
+  lr_spec_ph:"copy it word for word", lr_doc_ph:"document number", lr_who_ph:"your name",
+  lr_page_ph:"e.g. 4-12",
+  lr_sourced:"Sourced", lr_unsourced:"Unsourced",
+  lr_save:"Save the reference", lr_reset:"Undo my edits to this model",
+  lr_export:"⬇ Export overrides",
+  lr_saved:"Saved — the matrix and the coverage above have been redrawn.",
+  lr_undone:"Your edits to this model have been removed.",
+  lr_note:"A capacity is a REFILL, not a dry fill. Edits are saved in this browser and redraw everything above; use Export to send them back into the app so every phone gets them.",
+  lr_alias:"The register records these as {as}. Identified as {is} by {who}, so the figures below are that model's — the register itself still needs correcting.",
   lm_note:"Colour is the product, nothing else — it does not mean good or bad. Capacity is a refill, not a dry fill. A blank cell is a compartment nobody has audited yet, not a compartment with nothing in it.",
 
   f_type:"Inspection type", f_class:"Equipment class", f_period:"Period", f_search:"Search",
@@ -1609,6 +1658,19 @@ const I18N={
   lm_sub:"Все классы техники на одном листе. Цвет — это только продукт, а не оценка.",
   lm_all:"Все классы", lm_machine:"Машина", lm_notset:"Не проверено", lm_nocomp:"Нет такого узла",
   lm_alias:"записано по марке; определено как {m}", lm_csv:"⬇ Экспорт CSV",
+  lr_title:"Справочник по технике",
+  lr_sub:"Объёмы, спецификации и интервалы по моделям.",
+  lr_model:"Модель", lr_comp:"Узел", lr_cap:"Заправка, л", lr_spec:"Спецификация OEM",
+  lr_iv:"Интервал, ч", lr_doc:"Руководство", lr_page:"Стр.", lr_who:"Проверил", lr_state:"Статус",
+  lr_spec_ph:"скопируйте дословно", lr_doc_ph:"номер документа", lr_who_ph:"ваше имя",
+  lr_page_ph:"напр. 4-12",
+  lr_sourced:"Подтверждено", lr_unsourced:"Не подтверждено",
+  lr_save:"Сохранить справочник", lr_reset:"Отменить мои правки по этой модели",
+  lr_export:"⬇ Экспорт правок",
+  lr_saved:"Сохранено — карта и охват выше перерисованы.",
+  lr_undone:"Ваши правки по этой модели удалены.",
+  lr_note:"Объём — ЗАПРАВОЧНЫЙ, не сухой. Правки хранятся в этом браузере и перерисовывают всё выше; экспорт нужен, чтобы они дошли до телефонов.",
+  lr_alias:"В реестре записано как {as}. Определено как {is} ({who}), поэтому ниже показаны данные этой модели — сам реестр всё равно нужно исправить.",
   lm_note:"Цвет — это продукт, и только; он не означает «хорошо» или «плохо». Объём — заправочный, не сухой. Пустая ячейка — узел, который ещё не проверяли, а не пустой узел.",
 
   f_type:"Тип осмотра", f_class:"Класс техники", f_period:"Период", f_search:"Поиск",
@@ -4364,6 +4426,167 @@ function renderLubeProg(){
   ].map(([k,v])=>`<div class="kpi"><div class="k">${esc(t(k))}</div><div class="v">${fmtN(v)}</div></div>`).join("");
 }
 
+/* ── the machine reference, and editing it ────────────────────────────────
+   Overrides live in one place and are applied ON TOP of lube.js rather than
+   into it. Two reasons, and both have bitten this project before:
+
+   · Undo has to be possible. Editing the loaded table in place makes the
+     original unrecoverable, so "I typed 380 instead of 38" becomes permanent
+     the moment somebody reloads.
+   · Everything downstream — the matrix, the programme panel, the verdict —
+     reads LUBE. Applying the override into those objects means none of them
+     needs to know overrides exist, which is one seam instead of four. */
+const LUBE_OV_KEY = "cm_lube_ref";
+let LUBE_BASE = null;
+function lubeBase(){
+  if(LUBE_BASE || !window.LUBE) return LUBE_BASE || {};
+  LUBE_BASE = {};
+  LUBE.models.forEach(k=>{
+    const i = k.indexOf("|");
+    const r = LUBE.of(k.slice(i+1), k.slice(0,i));
+    if(r) LUBE_BASE[k] = JSON.parse(JSON.stringify(r.comps));
+  });
+  return LUBE_BASE;
+}
+function lubeOverrides(){ return asMap(LUBE_OV_KEY); }
+/* Rebuilt from the pristine copy every time, so removing an override actually
+   removes it rather than leaving the last value stuck in memory. */
+function lubeApplyOverrides(){
+  if(!window.LUBE) return;
+  const base = lubeBase(), ov = lubeOverrides();
+  LUBE.models.forEach(k=>{
+    const i = k.indexOf("|");
+    const r = LUBE.of(k.slice(i+1), k.slice(0,i));
+    if(!r || !base[k]) return;
+    r.comps = JSON.parse(JSON.stringify(base[k]));
+    const o = ov[k]; if(!o) return;
+    r.comps.forEach(c=>{
+      const e = o[c.k]; if(!e) return;
+      /* An empty string is a deliberate clearing — "this figure was wrong and I
+         do not have the right one" is a real answer, and it must not silently
+         leave the old number in place. undefined means untouched. */
+      if(e.cap !== undefined){ if(e.cap === "") delete c.cap; else c.cap = Number(e.cap); }
+      if(e.iv  !== undefined){ if(e.iv  === "") delete c.iv;  else c.iv  = Number(e.iv);  }
+      if(e.spec!== undefined){ if(e.spec=== "") delete c.spec;else c.spec = e.spec; }
+      if(e.gr) c.gr = e.gr;
+      if(e.src){ c.src = e.src; } else if(e.src === null) delete c.src;
+    });
+  });
+}
+
+let lrModel = null;
+function lubeModelKeys(){
+  const keys = {};
+  (window.ASSETS||[]).forEach(a=>{
+    const r = window.LUBE ? LUBE.of(a.m||"", a.cls||"") : null;
+    if(!r) return;
+    const k = r.cls + "|" + r.m;
+    keys[k] = (keys[k]||0) + 1;
+  });
+  return keys;
+}
+function renderLubeRef(){
+  if(!window.LUBE) return;
+  const counts = lubeModelKeys();
+  const keys = Object.keys(counts).sort((a,b)=> counts[b]-counts[a] || (a<b?-1:1));
+  if(!keys.length){ $("lrTbl").innerHTML = ""; return; }
+  if(!lrModel || keys.indexOf(lrModel) < 0) lrModel = keys[0];
+
+  const ov = lubeOverrides();
+  $("lrModel").innerHTML = keys.map(k=>{
+    const i = k.indexOf("|");
+    const edited = ov[k] && Object.keys(ov[k]).length ? " ·" : "";
+    return `<option value="${esc(k)}"${k===lrModel?" selected":""}>${
+      esc(k.slice(i+1))} · ${counts[k]}${esc(edited)}</option>`;
+  }).join("");
+
+  const i = lrModel.indexOf("|");
+  const cls = lrModel.slice(0, i), m = lrModel.slice(i+1);
+  const r = LUBE.of(m, cls);
+  const o = ov[lrModel] || {};
+  const cell = (k, f, v, ph, num) =>
+    `<input class="lrin${num?" num":""}" data-k="${esc(k)}" data-f="${esc(f)}" ` +
+    `value="${esc(v==null?"":v)}" placeholder="${esc(ph||"")}"` +
+    (num?' inputmode="decimal"':'') + `>`;
+  $("lrTbl").innerHTML =
+    `<thead><tr>
+       <th>${esc(t("lr_comp"))}</th><th>${esc(t("lr_cap"))}</th>
+       <th>${esc(t("lr_spec"))}</th><th>${esc(t("lr_iv"))}</th>
+       <th>${esc(t("lr_doc"))}</th><th>${esc(t("lr_page"))}</th>
+       <th>${esc(t("lr_who"))}</th><th>${esc(t("lr_state"))}</th>
+     </tr></thead><tbody>` +
+    r.comps.map(c=>{
+      const e = o[c.k] || {}, src = c.src || {};
+      const sourced = c.cap != null && c.spec && src.doc;
+      return `<tr${e && Object.keys(e).length ? ' class="edited"' : ''}>
+        <td><b>${esc(lang==="ru"?c.ru:c.en)}</b><i class="sub">${esc(c.k)}</i></td>
+        <td>${cell(c.k,"cap",c.cap,"",1)}</td>
+        <td>${cell(c.k,"spec",c.spec,t("lr_spec_ph"))}</td>
+        <td>${cell(c.k,"iv",c.iv,"",1)}</td>
+        <td>${cell(c.k,"doc",src.doc,t("lr_doc_ph"))}</td>
+        <td>${cell(c.k,"page",src.page,t("lr_page_ph"))}</td>
+        <td>${cell(c.k,"who",src.who,t("lr_who_ph"))}</td>
+        <td>${sourced
+          ? `<span class="band b-ok">${esc(t("lr_sourced"))}</span>`
+          : `<span class="band b-none">${esc(t("lr_unsourced"))}</span>`}</td>
+      </tr>`;
+    }).join("") + `</tbody>`;
+
+  $("lrNote").textContent = r.alias
+    ? t("lr_alias", {as:m, is:r.alias.is, who:r.alias.who})
+    : t("lr_note");
+}
+
+/* Read the boxes, not a shadow copy of them. A save that writes from state the
+   user cannot see is a save that loses the last thing they typed. */
+function lubeRefSave(){
+  const ov = lubeOverrides();
+  const o = {};
+  $("lrTbl").querySelectorAll("input.lrin").forEach(el=>{
+    const k = el.dataset.k, f = el.dataset.f, v = el.value.trim();
+    const i = lrModel.indexOf("|");
+    const c = LUBE.comp(lrModel.slice(i+1), k, lrModel.slice(0,i));
+    const base = (lubeBase()[lrModel]||[]).filter(x=>x.k===k)[0] || {};
+    const was = f==="doc"||f==="page"||f==="who"
+      ? String((base.src||{})[f]==null?"":(base.src||{})[f])
+      : String(base[f]==null?"":base[f]);
+    if(v === was) return;                       /* unchanged: not an override */
+    o[k] = o[k] || {};
+    if(f==="doc"||f==="page"||f==="who"){
+      o[k].src = Object.assign({}, base.src||{}, o[k].src||{});
+      o[k].src[f] = v;
+      o[k].src.when = new Date().toISOString().slice(0,10);
+    } else {
+      o[k][f] = v;
+    }
+  });
+  if(Object.keys(o).length) ov[lrModel] = o; else delete ov[lrModel];
+  localStorage.setItem(LUBE_OV_KEY, JSON.stringify(ov));
+  lubeApplyOverrides();
+  renderAll();
+  const n = $("lrSaved"); n.textContent = t("lr_saved");
+  setTimeout(()=>{ if(n.textContent===t("lr_saved")) n.textContent=""; }, 2600);
+}
+function lubeRefReset(){
+  const ov = lubeOverrides();
+  delete ov[lrModel];
+  localStorage.setItem(LUBE_OV_KEY, JSON.stringify(ov));
+  lubeApplyOverrides();
+  renderAll();
+  $("lrSaved").textContent = t("lr_undone");
+}
+/* The browser is not where a reference lives. This is the file that goes back
+   into the generator so every phone gets it — the editor is for deciding, the
+   export is for shipping, and pretending the first does the second is how a
+   fleet ends up with two different reference tables. */
+function lubeRefExport(){
+  const blob = new Blob([JSON.stringify(lubeOverrides(), null, 1)],
+    {type:"application/json"});
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
+  a.download = `lube-overrides_${new Date().toISOString().slice(0,10)}.json`; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 4000);
+}
+
 /* ── the fleet matrix ─────────────────────────────────────────────────────
    Rows are models grouped by asset class, columns are compartments. Colour
    means ONE thing — which product — never how good it is, so red stays free to
@@ -4540,6 +4763,7 @@ function renderLubeTab(){
     b.onclick = ()=>{ lubeShow = b.dataset.c; renderLubeTab(); };
   });
   renderLubeProg();
+  renderLubeRef();
   renderLubeMtx();
 }
 
@@ -4559,6 +4783,13 @@ $("follOv").onclick=e=>{ if(e.target.id==="follOv") closeFollow(); };
 $("pfSel").onchange=e=>{ pfKey=e.target.value; renderPF(); };
 $("wearCsv").onclick=wearCsv;
 $("lubeCsv").onclick=lubeCsv;
+$("lrModel").onchange=()=>{ lrModel=$("lrModel").value; renderLubeRef(); };
+$("lrSave").onclick=lubeRefSave;
+$("lrReset").onclick=lubeRefReset;
+$("lrExport").onclick=lubeRefExport;
+/* Before the first render, so nothing on the page is ever drawn from figures
+   the office has already corrected. */
+lubeApplyOverrides();
 document.querySelector(".lang").addEventListener("click",e=>{
   const b=e.target.closest("button[data-lang]"); if(!b) return;
   lang=b.dataset.lang;
