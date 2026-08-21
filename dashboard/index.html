@@ -212,6 +212,109 @@
      wrapper rather than every .tblwrap, because containment has side effects
      and the other tables never had the problem. */
   .mtxwrap{contain:paint;}
+
+  /* ── the shop poster ──────────────────────────────────────────────────
+     Read at arm's length in a cold workshop by somebody in gloves holding a
+     drum pump. Large type, both languages stacked rather than run together,
+     and the row with no answer shouting rather than sitting quietly blank. */
+  .posterbox{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;
+    padding:16px;overflow-x:auto;contain:paint;}
+  .poster{background:#fff;color:#11171a;min-width:820px;padding:22px 26px;border-radius:6px;
+    box-shadow:0 1px 3px rgba(0,0,0,.18);}
+  /* The poster is PAPER. It is white in both themes, so everything on it takes
+     paper ink — and it has to be said element by element, because the page's
+     own td colour rules outrank a colour set on the container. Without this
+     the whole sheet renders white on white in dark mode: every value present,
+     none of them readable. :where() keeps it at class weight so the deliberate
+     greys below still win. */
+  .poster :where(h1,h2,h3,h4,p,span,b,i,em,strong,th,td,li){color:#11171a;}
+  .poster .phd{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;
+    border-bottom:3px solid #8a4526;padding-bottom:12px;margin-bottom:14px;}
+  .poster h3{margin:0;font-size:26px;letter-spacing:-.01em;}
+  .poster .phd p{margin:2px 0 0;font-size:13.5px;color:#41505a;}
+  .poster .pmeta{text-align:right;font-size:11.5px;color:#41505a;display:flex;
+    flex-direction:column;gap:1px;}
+  .poster .pmeta b{font-size:13.5px;color:#8a4526;letter-spacing:.04em;text-transform:uppercase;}
+  .poster table{width:100%;border-collapse:collapse;font-size:14px;}
+  .poster th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;
+    color:#41505a;border-bottom:2px solid #11171a;padding:0 8px 6px 0;vertical-align:bottom;}
+  .poster th i{display:block;font-style:normal;font-weight:600;color:#5b686f;
+    text-transform:none;letter-spacing:0;font-size:10px;}
+  .poster td{padding:9px 8px 9px 0;border-bottom:1px solid #d6dde1;vertical-align:top;}
+  .poster td i{display:block;font-style:normal;font-size:11px;color:#5b686f;font-weight:600;}
+  .poster td.pc b{font-size:15px;}
+  .poster td.pp b{font-size:15px;color:#8a4526;}
+  .poster td.big{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;
+    white-space:nowrap;}
+  .poster td.big i{font-size:10.5px;font-weight:600;}
+  .poster td.pa{font-size:12.5px;color:#41505a;}
+  .poster .miss{color:#c02f2f;}
+  .poster .pfoot{margin-top:14px;padding-top:10px;border-top:1px solid #d6dde1;
+    font-size:11.5px;color:#41505a;}
+  /* The poster reuses the screen matrix's classes, and those rules colour text
+     from THEME TOKENS — var(--muted), var(--ink-2), var(--accent). On white
+     paper in dark mode that is grey-on-white at 3:1 and copper that nobody
+     chose. They also outrank the paper-ink rule above, so each one has to be
+     answered at its own weight. Every colour on this sheet is a paper colour.  */
+  .poster table.mtx td.mdl i{color:#5b686f;}
+  .poster table.mtx td.cell i.num{color:#41505a;}
+  .poster table.mtx td.cell i.warnv{color:#c02f2f;}
+  .poster table.mtx td.cell i.want{color:#5b686f;}
+  .poster table.mtx tr.clsrow td{color:#8a4526;}
+  .poster table.mtx td.cell{background:color-mix(in srgb,var(--h) 13%,#fff);}
+  .poster table.mtx td.unset{background:repeating-linear-gradient(135deg,#fff 0 6px,#e6ebee 6px 12px);}
+  .poster table.mtx td.unset b{color:#11171a;}
+  .poster table.mtx td.na{color:#aab4ba;background:#fafbfb;}
+  .poster .lgnd{border-top-color:#d6dde1;}
+  .poster .lg i{font-style:normal;color:#5b686f;font-weight:600;}
+  .poster tr.clsrow td{font-size:11px;font-weight:800;letter-spacing:.09em;
+    text-transform:uppercase;color:#8a4526;border:none;padding:14px 0 5px;}
+  .poster tr.clsrow.brk td{padding-top:20px;}
+  @media print{ .poster tr.clsrow.brk{break-before:page;page-break-before:always;} }
+
+  @media print{
+    @page{ size:A3 landscape; margin:12mm; }
+    /* Only the poster goes on paper. Everything else here is a screen. */
+    body.printing-poster > *{display:none !important;}
+    body.printing-poster .posterbox{display:block !important;background:none;border:none;
+      padding:0;overflow:visible;position:absolute;left:0;top:0;width:100%;}
+    body.printing-poster .poster{box-shadow:none;border-radius:0;min-width:0;padding:0;
+      width:100%;}
+    body.printing-poster .poster table{font-size:16px;}
+    body.printing-poster .poster h3{font-size:32px;}
+    body.printing-poster .poster td.big{font-size:24px;}
+    body.printing-poster .poster td.pc b,
+    body.printing-poster .poster td.pp b{font-size:17px;}
+    /* The colour IS the content on this sheet — it must survive the printer's
+       ink-saving default. */
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  }
+  /* One requirement per row: what needs it, how much it costs a year, and the
+     one choice. Volume is on the row because the argument for consolidating is
+     a number, not a feeling. */
+  .reqrow{display:grid;grid-template-columns:1fr 120px 260px;gap:14px;align-items:center;
+    padding:12px;border-radius:10px;}
+  .reqrow:nth-child(odd){background:var(--surface-2);}
+  .reqwhat b{display:block;font-size:14px;}
+  .reqwhat i{display:block;font-style:normal;font-size:11.5px;color:var(--muted);
+    font-weight:600;margin-top:1px;}
+  .reqwhat .spec{display:block;font-size:11.5px;color:var(--ink-2);margin-top:4px;}
+  .reqvol{text-align:right;font-variant-numeric:tabular-nums;}
+  .reqvol b{font-size:17px;}
+  .reqvol i{display:block;font-style:normal;font-size:11px;color:var(--muted);font-weight:600;}
+  .reqpick select{width:100%;font:inherit;font-size:13px;padding:7px 8px;border-radius:8px;
+    border:1px solid color-mix(in srgb,var(--muted) 42%,transparent);
+    background:var(--surface);color:var(--ink);}
+  /* A cell showing the STANDARD rather than an audit is drawn hollow: the
+     colour is right, the fill is not, because nobody has been to the machine.
+     A solid cell must always mean somebody looked. */
+  table.grid.mtx tbody tr td.cell.want,
+  table.grid.mtx tbody tr:nth-child(even) td.cell.want,
+  table.grid.mtx tbody tr:hover td.cell.want{background:var(--surface);}
+  table.mtx td.cell.want .sw{opacity:.45;}
+  table.mtx td.cell i.want{display:block;font-style:normal;font-size:11px;
+    color:var(--muted);font-weight:600;margin-top:3px;}
+  @media (max-width:900px){ .reqrow{grid-template-columns:1fr 100px;} .reqpick{grid-column:1/-1;} }
   /* The reference editor. Inputs sized to what goes in them: a capacity is
      three digits, a specification is a sentence, and a box that fits neither
      invites the wrong one. */
@@ -1125,6 +1228,13 @@
     </div>
 
     <div class="section">
+      <h2 data-i18n="ls_title">Deciding the standard</h2>
+      <div class="sub" data-i18n="ls_sub">Not product by product — requirement by requirement. Machines that need the same thing are one decision, however many badges are on them. Choose, and the matrix and the posters re-read.</div>
+      <div id="lsList"></div>
+      <div class="sub" id="lsNote" style="margin-top:12px"></div>
+    </div>
+
+    <div class="section">
       <h2 data-i18n="lr_title">Machine reference</h2>
       <div class="sub" data-i18n="lr_sub">Capacities, specifications and intervals, per model. A capacity is the one number here that causes a failure on its own — an under-filled final drive seizes, an over-filled one blows a seal — so changing it asks where the figure came from.</div>
       <div class="row" style="margin:14px 0 12px;gap:12px;align-items:flex-end;flex-wrap:wrap">
@@ -1153,6 +1263,26 @@
       <div class="tblwrap mtxwrap"><table class="grid mtx" id="lubeMtx"></table></div>
       <div id="lubeLegend" class="lgnd"></div>
       <div class="sub" id="lubeNote" style="margin-top:10px"></div>
+    </div>
+
+    <div class="section">
+      <h2 data-i18n="lpo_title">Shop posters</h2>
+      <div class="sub" data-i18n="lpo_sub">The sheet that goes on the workshop wall. A standard that lives only in a database is not a standard — this is the version a fitter reads at arm's length with a head-torch, so it is bilingual, it is large, and it says what to do when the right drum is empty.</div>
+      <div class="row" style="margin:14px 0 12px;gap:12px;align-items:flex-end;flex-wrap:wrap">
+        <label class="fld"><span data-i18n="lpo_which">Sheet</span>
+          <select id="lpoWhich">
+            <option value="class" data-i18n="lpo_class">One asset class</option>
+            <option value="model" data-i18n="lpo_model">One model</option>
+            <option value="fleet" data-i18n="lpo_fleet">Whole fleet</option>
+          </select></label>
+        <label class="fld hidden" id="lpoClassWrap"><span data-i18n="lpo_cls">Class</span>
+          <select id="lpoClass"></select></label>
+        <label class="fld hidden" id="lpoModelWrap"><span data-i18n="lr_model">Model</span>
+          <select id="lpoModel"></select></label>
+        <span style="flex:1"></span>
+        <button class="btn primary" id="lpoPrint" data-i18n="lpo_print">🖨 Print</button>
+      </div>
+      <div class="posterbox"><div class="poster" id="lpoSheet"></div></div>
     </div>
   </section>
 
@@ -1354,6 +1484,26 @@ const I18N={
   lm_sub:"Every asset class on one sheet. Colour is identity and nothing else: which product, never how good it is.",
   lm_all:"All classes", lm_machine:"Machine", lm_notset:"Not audited", lm_nocomp:"No such compartment",
   lm_alias:"recorded by make; identified as {m}", lm_csv:"⬇ Export CSV",
+  lpo_title:"Shop posters", lpo_sub:"The sheet that goes on the workshop wall.",
+  lpo_which:"Sheet", lpo_fleet:"Whole fleet", lpo_model:"One model", lpo_print:"🖨 Print",
+  lpo_class:"One asset class", lpo_cls:"Class",
+  lpo_class_sub:"{n} unit(s) on the register · единиц в реестре",
+  lpo_site:"Baimskaya", lpo_design:"Design minimum {d} °C · Расчётный минимум",
+  lpo_issued:"Issued {d} · Выдано",
+  lpo_fleet_title:"Lubricant matrix — whole fleet",
+  lpo_fleet_sub:"Карта смазочных материалов · весь парк",
+  lpo_model_sub:"{n} unit(s) on the register · единиц в реестре",
+  lpo_use:"Use this", lpo_use_ru:"Заливать",
+  lpo_undecided:"NOT DECIDED", lpo_undecided_ru:"НЕ УТВЕРЖДЕНО",
+  lpo_foot:"This sheet prints the SITE STANDARD — what belongs in the compartment, not what was last found in it. Colour is the product and nothing else. Capacity is a refill, not a dry fill. Anything not on this sheet goes to the reliability engineer before it goes in a machine. · Здесь напечатан СТАНДАРТ ПРЕДПРИЯТИЯ. Цвет — это продукт. Объём — заправочный, не сухой. Всё, чего нет в карте — сначала к инженеру по надёжности.",
+  lr_comp_ru:"Узел", lr_cap_ru:"Заправка, л", lr_iv_ru:"Интервал, ч", lr_spec_ru:"Спецификация",
+  ls_title:"Deciding the standard",
+  ls_sub:"Not product by product — requirement by requirement.",
+  ls_on:"{m} model(s) · {u} unit(s)", ls_lyr:"L / year", ls_choose:"— choose —",
+  ls_nofit:"Nothing on the shelf qualifies at −40",
+  ls_note:"{d} of {n} requirements decided · {p} products on the standard. Fewer products is the point: every extra one is a drum, a shelf, a pump and a way to put the wrong thing in a machine.",
+  lm_wanted:"standard · not yet audited",
+  lm_offstd:"off standard — should be {p}",
   lr_title:"Machine reference",
   lr_sub:"Capacities, specifications and intervals, per model.",
   lr_model:"Model", lr_comp:"Compartment", lr_cap:"Refill L", lr_spec:"OEM specification",
@@ -1658,6 +1808,26 @@ const I18N={
   lm_sub:"Все классы техники на одном листе. Цвет — это только продукт, а не оценка.",
   lm_all:"Все классы", lm_machine:"Машина", lm_notset:"Не проверено", lm_nocomp:"Нет такого узла",
   lm_alias:"записано по марке; определено как {m}", lm_csv:"⬇ Экспорт CSV",
+  lpo_title:"Плакаты для мастерской", lpo_sub:"Лист, который вешается на стену цеха.",
+  lpo_which:"Лист", lpo_fleet:"Весь парк", lpo_model:"Одна модель", lpo_print:"🖨 Печать",
+  lpo_class:"Один класс техники", lpo_cls:"Класс",
+  lpo_class_sub:"{n} ед. в реестре · unit(s) on the register",
+  lpo_site:"Баимская", lpo_design:"Расчётный минимум {d} °C · Design minimum",
+  lpo_issued:"Выдано {d} · Issued",
+  lpo_fleet_title:"Карта смазочных материалов — весь парк",
+  lpo_fleet_sub:"Lubricant matrix · whole fleet",
+  lpo_model_sub:"{n} ед. в реестре · unit(s) on the register",
+  lpo_use:"Заливать", lpo_use_ru:"Use this",
+  lpo_undecided:"НЕ УТВЕРЖДЕНО", lpo_undecided_ru:"NOT DECIDED",
+  lpo_foot:"Здесь напечатан СТАНДАРТ ПРЕДПРИЯТИЯ — что должно быть в узле, а не что нашли в прошлый раз. Цвет — это продукт. Объём — заправочный, не сухой. Всё, чего нет в карте — сначала к инженеру по надёжности. · This sheet prints the SITE STANDARD. Colour is the product. Capacity is a refill, not a dry fill.",
+  lr_comp_ru:"Compartment", lr_cap_ru:"Refill L", lr_iv_ru:"Interval h", lr_spec_ru:"Specification",
+  ls_title:"Утверждение стандарта",
+  ls_sub:"Не по продуктам, а по требованиям.",
+  ls_on:"{m} мод. · {u} ед.", ls_lyr:"л / год", ls_choose:"— выберите —",
+  ls_nofit:"Ничего на складе не подходит при −40",
+  ls_note:"Решено {d} из {n} требований · {p} продуктов в стандарте. Меньше продуктов — это и есть цель: каждый лишний — это бочка, полка, насос и способ залить не то.",
+  lm_wanted:"стандарт · ещё не проверено",
+  lm_offstd:"вне стандарта — должно быть {p}",
   lr_title:"Справочник по технике",
   lr_sub:"Объёмы, спецификации и интервалы по моделям.",
   lr_model:"Модель", lr_comp:"Узел", lr_cap:"Заправка, л", lr_spec:"Спецификация OEM",
@@ -4426,6 +4596,105 @@ function renderLubeProg(){
   ].map(([k,v])=>`<div class="kpi"><div class="k">${esc(t(k))}</div><div class="v">${fmtN(v)}</div></div>`).join("");
 }
 
+/* ── deciding the site standard ───────────────────────────────────────────
+   A requirement is not a specification string. Two compartments belong to the
+   same DECISION when the same products can serve them — an HM400 transmission,
+   a D375 powertrain and a TR60 transmission are three manufacturers and one
+   requirement, and buying three products for it is a decision nobody actually
+   made. Grouping on the spec text instead gives almost as many groups as
+   compartments, which is no help at all.
+
+   Grouping on what QUALIFIES also gets the hierarchy right for free: a CK-4
+   engine oil satisfies a CI-4 requirement and not the other way round, so the
+   two do not collapse and the standard lands on the higher one. */
+const LUBE_STD_KEY = "cm_lube_std";
+function lubeQualifiers(spec){
+  if(!window.LUBE || !spec) return [];
+  return LUBE.catalog.filter(pr =>
+    LUBE.meetsSpec(pr.s.split(/,\s*/), spec) && pr.lo <= LUBE.site.design
+  ).map(pr => pr.p).sort();
+}
+function lubeReqKey(c){
+  const q = lubeQualifiers(c.spec);
+  /* Nothing qualifies: those are one group only in the sense that they are all
+     unanswered, so the spec has to stay in the key or two different gaps read
+     as one problem. */
+  return q.length ? q.join("|")
+                  : "none:" + (window.LUBE ? LUBE.specTokens(c.spec).sort().join("+") : c.spec);
+}
+function lubeRequirements(){
+  const g = {};
+  const counts = lubeModelKeys();
+  Object.keys(counts).forEach(mk=>{
+    const i = mk.indexOf("|");
+    const r = LUBE.of(mk.slice(i+1), mk.slice(0,i));
+    if(!r) return;
+    r.comps.forEach(c=>{
+      if(!c.spec) return;                 /* nothing to decide against yet */
+      const k = lubeReqKey(c);
+      const G = g[k] || (g[k] = { key:k, specs:{}, names:{}, models:{}, units:0,
+                                  litres:0, qualifiers:lubeQualifiers(c.spec) });
+      G.specs[c.spec] = 1;
+      G.names[lang==="ru"?c.ru:c.en] = 1;
+      G.models[mk] = 1;
+      G.units += counts[mk];
+      /* Volume, so the argument for consolidating is a number rather than a
+         feeling. One drum of the wrong thing is a nuisance; forty is a
+         stockholding problem. */
+      if(c.cap != null && c.iv)
+        G.litres += c.cap * counts[mk] * ((LUBE.site.hoursPerYear||5000) / c.iv);
+    });
+  });
+  return Object.values(g).sort((a,b)=> b.litres - a.litres || b.units - a.units);
+}
+function lubeStandard(){ return asMap(LUBE_STD_KEY); }
+/* The product this site has chosen for the requirement a compartment belongs
+   to — the thing the poster prints and the matrix compares against. */
+function lubeChosenFor(c){
+  if(!c || !c.spec) return null;
+  const n = lubeStandard()[lubeReqKey(c)];
+  return n ? (LUBE.product(n) || { p:n }) : null;
+}
+function renderLubeStd(){
+  if(!window.LUBE){ $("lsList").innerHTML = ""; return; }
+  const reqs = lubeRequirements(), chosen = lubeStandard();
+  const decided = reqs.filter(R => chosen[R.key]).length;
+  $("lsList").innerHTML = reqs.map(R=>{
+    const names = Object.keys(R.names).slice(0,3).join(", ");
+    const specs = Object.keys(R.specs);
+    const pick = chosen[R.key] || "";
+    const opts = R.qualifiers.length
+      ? R.qualifiers.map(n=>`<option value="${esc(n)}"${n===pick?" selected":""}>${esc(n)}</option>`).join("")
+      : "";
+    return `<div class="reqrow">
+      <div class="reqwhat">
+        <b>${esc(names)}</b>
+        <i>${esc(t("ls_on",{m:Object.keys(R.models).length, u:R.units}))}</i>
+        <span class="spec">${specs.map(x=>esc(x)).join(" · ")}</span>
+      </div>
+      <div class="reqvol"><b>${fmtN(R.litres)}</b><i>${esc(t("ls_lyr"))}</i></div>
+      <div class="reqpick">${
+        R.qualifiers.length
+          ? `<select data-req="${esc(R.key)}">
+               <option value="">${esc(t("ls_choose"))}</option>${opts}</select>`
+          : `<span class="band b-act">${esc(t("ls_nofit"))}</span>`
+      }</div>
+    </div>`;
+  }).join("");
+  $("lsList").querySelectorAll("select[data-req]").forEach(sel=>{
+    sel.onchange = ()=>{
+      const st = lubeStandard();
+      if(sel.value) st[sel.dataset.req] = sel.value; else delete st[sel.dataset.req];
+      localStorage.setItem(LUBE_STD_KEY, JSON.stringify(st));
+      renderLubeTab();
+    };
+  });
+  const prods = {};
+  Object.values(chosen).forEach(n=>{ if(n) prods[n] = 1; });
+  $("lsNote").textContent = t("ls_note",
+    { d:decided, n:reqs.length, p:Object.keys(prods).length });
+}
+
 /* ── the machine reference, and editing it ────────────────────────────────
    Overrides live in one place and are applied ON TOP of lube.js rather than
    into it. Two reasons, and both have bitten this project before:
@@ -4606,8 +4875,12 @@ function lubeHue(name){
   return lubeHueAt[name];
 }
 function lubeShort(n){
-  return String(n||"").replace(/\b(universal tractor fluid|arctic synth|arctic|synth)\b/gi,"")
-    .replace(/\s+/g," ").trim();
+  return String(n||"")
+    .replace(/\b(universal tractor fluid|arctic synth|arctic|synth)\b/gi,"")
+    .replace(/\(\s*\)/g,"")          /* the stripped word was the only thing in them */
+    .replace(/\s+/g," ")
+    .replace(/\s+([),.])/g,"$1")
+    .trim();
 }
 /* What is actually IN each compartment, newest round wins. This is the matrix's
    whole input: it draws the fleet as audited, not as intended. */
@@ -4682,15 +4955,36 @@ function renderLubeMtx(){
       if(!c) return `<td class="na"><span aria-hidden="true">·</span><span class="vh">${
         esc(t("lm_nocomp"))}</span></td>`;
       const hit = seen[r.cls+"|"+r.m+"|"+c.k];
-      if(!hit) return `<td class="unset"><b>${esc(t("lm_notset"))}</b></td>`;
+      const std = lubeChosenFor(c);
+      /* Nothing audited. If a standard has been decided the cell still has
+         something to say — this is what SHOULD be in it — and saying so is the
+         difference between a blank sheet and a work list. */
+      if(!hit){
+        if(std){
+          if(used.indexOf(std.p) < 0) used.push(std.p);
+          const h = lubeHue(std.p) || LUBE_NOHUE;
+          return `<td class="cell want" style="--h:${esc(h)}"><span class="sw"></span>`+
+            `<b>${esc(lubeShort(std.p))}</b>`+
+            `<i class="num">${c.cap!=null?esc(c.cap)+" L":"—"} · ${
+              c.iv?esc(c.iv)+" h":"—"}</i>`+
+            `<i class="want">${esc(t("lm_wanted"))}</i></td>`;
+        }
+        return `<td class="unset"><b>${esc(t("lm_notset"))}</b></td>`;
+      }
       if(used.indexOf(hit.product) < 0) used.push(hit.product);
       const hue = lubeHue(hit.product) || LUBE_NOHUE;
       const v = lubeVerdictOf(hit.rec, hit.item);
+      /* On standard is the quiet case and gets no words. Off standard is the
+         finding: right specification, wrong drum, and the only person who can
+         act on it is the one reading this sheet. */
+      const off = std && LUBE.product(hit.product) !== std &&
+                  String(std.p||"") !== String(hit.product||"");
       return `<td class="cell" style="--h:${esc(hue)}"><span class="sw"></span>`+
         `<b>${esc(lubeShort(hit.product))}</b>`+
         `<i class="num">${c.cap!=null?esc(c.cap)+" L":"—"} · ${
           c.iv?esc(c.iv)+" h":"—"}</i>`+
         (v && v.k!=="lube_v_ok" ? `<i class="warnv">${esc(t(v.k))}</i>` : "")+
+        (off ? `<i class="warnv">${esc(t("lm_offstd",{p:lubeShort(std.p)}))}</i>` : "")+
         `</td>`;
     }).join("");
     body += `<tr><td class="mdl"><b>${esc(r.m)}</b><i>×${r.n}${
@@ -4746,6 +5040,155 @@ function lubeCsv(){
   setTimeout(()=>URL.revokeObjectURL(a.href), 4000);
 }
 
+/* ── the shop poster ──────────────────────────────────────────────────────
+   Printed, so nothing on it may depend on hovering, scrolling or a filter that
+   is not on the paper. It prints the STANDARD — what should be in a
+   compartment — because that is what a fitter with a drum pump needs. What was
+   found belongs on the screen; a wall sheet that shows last month's audit
+   tells somebody to put the wrong thing in. */
+let lpoWhich = "class", lpoModel = null, lpoClass = null;
+function lpoRows(cls){
+  const counts = lubeModelKeys();
+  return Object.keys(counts).map(k=>{
+    const i = k.indexOf("|");
+    const r = LUBE.of(k.slice(i+1), k.slice(0,i));
+    return r ? { key:k, cls:r.cls, m:r.m, n:counts[k], comps:r.comps, alias:r.alias } : null;
+  }).filter(r => r && (!cls || r.cls === cls))
+    .sort((a,b)=> a.cls === b.cls ? (b.n - a.n || (a.m < b.m ? -1 : 1))
+                                  : (a.cls < b.cls ? -1 : 1));
+}
+function lpoCellText(c){
+  const std = lubeChosenFor(c);
+  return { product: std ? std.p : null,
+           grade: std ? std.g : null,
+           cap: c.cap, iv: c.iv, spec: c.spec };
+}
+function renderLubePoster(){
+  const box = $("lpoSheet"); if(!box || !window.LUBE) return;
+  const every = lpoRows();
+  if(!every.length){ box.innerHTML = ""; return; }
+  const classes = [];
+  every.forEach(r=>{ if(classes.indexOf(r.cls) < 0) classes.push(r.cls); });
+  if(!lpoClass || classes.indexOf(lpoClass) < 0){
+    /* Default to the class with the most machines — the sheet most walls need. */
+    const n = {}; every.forEach(r=>{ n[r.cls] = (n[r.cls]||0) + r.n; });
+    lpoClass = classes.slice().sort((a,b)=> n[b]-n[a])[0];
+  }
+  if(!lpoModel || !every.some(r=>r.key===lpoModel)) lpoModel = every[0].key;
+  $("lpoClass").innerHTML = classes.map(c=>{
+    const n = every.filter(r=>r.cls===c).reduce((x,r)=>x+r.n,0);
+    return `<option value="${esc(c)}"${c===lpoClass?" selected":""}>${
+      esc(t("cls_"+c)||c)} · ${n}</option>`;
+  }).join("");
+  $("lpoModel").innerHTML = every.map(r=>{
+    const i = r.key.indexOf("|");
+    return `<option value="${esc(r.key)}"${r.key===lpoModel?" selected":""}>${
+      esc(r.key.slice(i+1))} · ${r.n}</option>`;
+  }).join("");
+  $("lpoModelWrap").classList.toggle("hidden", lpoWhich !== "model");
+  $("lpoClassWrap").classList.toggle("hidden", lpoWhich !== "class");
+  /* One class is the sheet that goes on a wall. Fifty-four models and twenty
+     columns is not a poster, it is a spreadsheet somebody printed by accident —
+     so the whole-fleet sheet breaks between classes rather than pretending to
+     be one page. */
+  const all = lpoWhich === "class" ? lpoRows(lpoClass) : every;
+
+  const head = (title, sub) => `<div class="phd"><div><h3>${esc(title)}</h3>
+      <p>${esc(sub)}</p></div>
+      <div class="pmeta"><b>${esc(t("lpo_site"))}</b>
+        <span>${esc(t("lpo_design",{d:LUBE.site.design}))}</span>
+        <span>${esc(t("lpo_issued",{d:new Date().toISOString().slice(0,10)}))}</span>
+      </div></div>`;
+  const foot = `<div class="pfoot">${esc(t("lpo_foot"))}</div>`;
+
+  if(lpoWhich === "model"){
+    const r = every.filter(x=>x.key===lpoModel)[0];
+    box.innerHTML = head(r.m, t("lpo_model_sub",{n:r.n})) +
+      `<table class="ptbl"><thead><tr>
+         <th>${esc(t("lr_comp"))}<i>${esc(t("lr_comp_ru"))}</i></th>
+         <th>${esc(t("lpo_use"))}<i>${esc(t("lpo_use_ru"))}</i></th>
+         <th>${esc(t("lr_cap"))}<i>${esc(t("lr_cap_ru"))}</i></th>
+         <th>${esc(t("lr_iv"))}<i>${esc(t("lr_iv_ru"))}</i></th>
+         <th>${esc(t("lr_spec"))}<i>${esc(t("lr_spec_ru"))}</i></th>
+       </tr></thead><tbody>` +
+      r.comps.map(c=>{
+        const x = lpoCellText(c);
+        return `<tr>
+          <td class="pc"><b>${esc(c.en)}</b><i>${esc(c.ru)}</i></td>
+          <td class="pp">${x.product
+            ? `<b>${esc(x.product)}</b><i>${esc(x.grade||"")}</i>`
+            : `<b class="miss">${esc(t("lpo_undecided"))}</b><i>${esc(t("lpo_undecided_ru"))}</i>`}</td>
+          <td class="big">${x.cap!=null?esc(x.cap):"—"}<i>L / л</i></td>
+          <td class="big">${x.iv!=null?esc(x.iv):"—"}<i>h / ч</i></td>
+          <td class="pa">${esc(x.spec||"—")}</td>
+        </tr>`;
+      }).join("") + `</tbody></table>` + foot;
+    return;
+  }
+
+  /* Whole fleet: one row per model, one column per compartment that occurs. */
+  const cols = [];
+  all.forEach(r=>r.comps.forEach(c=>{ if(!cols.some(x=>x.k===c.k)) cols.push(c); }));
+  let lastCls = null, body = "";
+  all.forEach(r=>{
+    if(r.cls !== lastCls){
+      /* The PREVIOUS class decides whether this heading starts a new page, and
+         lastCls was being overwritten first — so every heading including the
+         first carried a page break, and the sheet opened on a blank page. */
+      const first = lastCls === null;
+      lastCls = r.cls;
+      /* On a one-class sheet the heading would repeat the title word for word.
+         The title already says which class this is. */
+      if(lpoWhich !== "class")
+        body += `<tr class="clsrow${first?"":" brk"}"><td colspan="${
+          cols.length+1}">${esc(t("cls_"+r.cls) || r.cls)}</td></tr>`;
+    }
+    body += `<tr><td class="mdl"><b>${esc(r.m)}</b><i>×${r.n}</i></td>` +
+      cols.map(col=>{
+        const c = r.comps.filter(x=>x.k===col.k)[0];
+        if(!c) return `<td class="na"><span aria-hidden="true">·</span></td>`;
+        const x = lpoCellText(c);
+        if(!x.product) return `<td class="unset"><b>${esc(t("lpo_undecided"))}</b>` +
+                              `<i>${esc(t("lpo_undecided_ru"))}</i></td>`;
+        const hue = lubeHue(x.product) || LUBE_NOHUE;
+        return `<td class="cell" style="--h:${esc(hue)}"><span class="sw"></span>` +
+          `<b>${esc(lubeShort(x.product))}</b>` +
+          `<i class="num">${x.cap!=null?esc(x.cap)+" L":"—"} · ${
+            x.iv!=null?esc(x.iv)+" h":"—"}</i></td>`;
+      }).join("") + `</tr>`;
+  });
+  const used = [];
+  all.forEach(r=>r.comps.forEach(c=>{
+    const x = lpoCellText(c);
+    if(x.product && used.indexOf(x.product) < 0) used.push(x.product);
+  }));
+  box.innerHTML = head(
+      lpoWhich === "class" ? (t("cls_"+lpoClass) || lpoClass) : t("lpo_fleet_title"),
+      lpoWhich === "class" ? t("lpo_class_sub",{n:all.reduce((x,r)=>x+r.n,0)})
+                           : t("lpo_fleet_sub")) +
+    `<table class="mtx ptbl"><thead><tr><th>${esc(t("lm_machine"))}</th>` +
+      cols.map(c=>`<th>${esc(c.en)}<i>${esc(c.ru)}</i></th>`).join("") +
+    `</tr></thead><tbody>${body}</tbody></table>` +
+    `<div class="lgnd">` + used.sort().map(n=>{
+      const pr = LUBE.product(n) || {};
+      return `<span class="lg"><span class="sw" style="--h:${esc(lubeHue(n)||LUBE_NOHUE)}"></span>` +
+        `<b>${esc(lubeShort(n))}</b><i>${esc(pr.g||"")}${
+          pr.lo!=null?` · to ${pr.lo}°`:""}</i></span>`;
+    }).join("") +
+    `<span class="lg"><span class="sw none"></span><b>${esc(t("lpo_undecided"))}</b></span>` +
+    `<span class="lg"><span class="sw na"></span><b>${esc(t("lm_nocomp"))}</b></span></div>` +
+    foot;
+}
+/* Only the poster goes on the paper. Everything else on this page is a screen. */
+function lubePrint(){
+  document.body.classList.add("printing-poster");
+  const done = ()=>{ document.body.classList.remove("printing-poster");
+                     window.removeEventListener("afterprint", done); };
+  window.addEventListener("afterprint", done);
+  window.print();
+  setTimeout(done, 2000);
+}
+
 function renderLubeTab(){
   if(lubeShow === null) lubeShow = lubeBiggestClass();
   /* The class filter, built from what the reference actually covers so a chip
@@ -4763,8 +5206,10 @@ function renderLubeTab(){
     b.onclick = ()=>{ lubeShow = b.dataset.c; renderLubeTab(); };
   });
   renderLubeProg();
+  renderLubeStd();
   renderLubeRef();
   renderLubeMtx();
+  renderLubePoster();
 }
 
 function renderAll(){ renderChips(); renderKpis(); renderCoverage(); renderTrend(); renderFleet(); renderFailure(); renderWearTab(); renderActions(); renderHistory(); renderLubeTab(); }
@@ -4787,6 +5232,10 @@ $("lrModel").onchange=()=>{ lrModel=$("lrModel").value; renderLubeRef(); };
 $("lrSave").onclick=lubeRefSave;
 $("lrReset").onclick=lubeRefReset;
 $("lrExport").onclick=lubeRefExport;
+$("lpoWhich").onchange=()=>{ lpoWhich=$("lpoWhich").value; renderLubePoster(); };
+$("lpoModel").onchange=()=>{ lpoModel=$("lpoModel").value; renderLubePoster(); };
+$("lpoClass").onchange=()=>{ lpoClass=$("lpoClass").value; renderLubePoster(); };
+$("lpoPrint").onclick=lubePrint;
 /* Before the first render, so nothing on the page is ever drawn from figures
    the office has already corrected. */
 lubeApplyOverrides();
