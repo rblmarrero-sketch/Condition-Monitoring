@@ -289,9 +289,16 @@
   @media print{
     @page{ size:A3 landscape; margin:12mm; }
     /* Only the poster goes on paper. Everything else here is a screen. */
-    body.printing-poster > *{display:none !important;}
+    body.printing-poster .printhide{display:none !important;}
+    body.printing-poster .printkeep{display:block !important;visibility:visible;
+      margin:0;padding:0;border:none;background:none;box-shadow:none;
+      max-width:none;width:auto;overflow:visible;position:static;}
+    /* Static, not absolute. An absolutely-positioned box in paged media is laid
+       out against the page area rather than flowing through it: the right-hand
+       column came off the edge ("BAIMSKAY", "4A") and anything past the first
+       page had nowhere to go. Normal flow paginates. */
     body.printing-poster .posterbox{display:block !important;background:none;border:none;
-      padding:0;overflow:visible;position:absolute;left:0;top:0;width:100%;}
+      padding:0;margin:0;overflow:visible;position:static;width:auto;}
     body.printing-poster .poster{box-shadow:none;border-radius:0;min-width:0;padding:0;
       width:100%;}
     body.printing-poster .poster table{font-size:16px;}
@@ -5286,13 +5293,44 @@ function renderLubePoster(){
     foot;
 }
 /* Only the poster goes on the paper. Everything else on this page is a screen. */
-function lubePrint(){
+/* The sheet is three levels down inside a <section>, and the print stylesheet
+   used to hide every direct child of <body>. A descendant of a display:none
+   ancestor cannot be un-hidden by any rule, so the paper came out blank with
+   every value still sitting in the DOM — the worst failure this project has, a
+   real value rendered as nothing, on the sheet a fitter carries to the machine.
+
+   So the ancestors are kept and their SIBLINGS are hidden, walking up from the
+   sheet itself. That works wherever the poster is moved to, which a rule naming
+   one selector does not. */
+function lubePrintPrep(){
+  const box = document.querySelector(".posterbox");
+  if(!box) return false;
+  for(let el = box; el && el.parentElement; el = el.parentElement){
+    el.classList.add("printkeep");
+    for(const sib of el.parentElement.children)
+      if(sib !== el) sib.classList.add("printhide");
+    if(el.parentElement === document.body) break;
+  }
   document.body.classList.add("printing-poster");
-  const done = ()=>{ document.body.classList.remove("printing-poster");
-                     window.removeEventListener("afterprint", done); };
-  window.addEventListener("afterprint", done);
+  return true;
+}
+function lubePrintDone(){
+  document.body.classList.remove("printing-poster");
+  document.querySelectorAll(".printkeep,.printhide")
+    .forEach(e => e.classList.remove("printkeep","printhide"));
+}
+function lubePrint(){
+  if(!lubePrintPrep()) return;
+  /* Some browsers fire afterprint the instant print() is called rather than
+     when the dialog closes. Undoing on that signal alone stripped the print
+     layout out from under the snapshot and printed the whole screen instead. A
+     frame of delay costs nothing and survives both behaviours. */
+  const done = ()=>{ window.removeEventListener("afterprint", late);
+                     lubePrintDone(); };
+  const late = ()=> setTimeout(done, 60);
+  window.addEventListener("afterprint", late);
   window.print();
-  setTimeout(done, 2000);
+  setTimeout(done, 3000);
 }
 
 function renderLubeTab(){
