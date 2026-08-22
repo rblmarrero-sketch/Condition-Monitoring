@@ -393,8 +393,25 @@
   table.mtx td.cell .sw{position:absolute;left:0;top:0;bottom:0;width:7px;background:var(--h);
     box-shadow:inset -1px 0 0 rgba(0,0,0,.22),inset 1px 0 0 rgba(0,0,0,.22);}
   table.mtx td.cell b{display:block;font-size:13px;line-height:1.25;font-weight:600;}
-  table.mtx td.cell i.num{display:block;font-style:normal;font-size:11.5px;color:var(--muted);
-    font-weight:500;font-variant-numeric:tabular-nums;margin-top:3px;}
+  /* The numbers are what a matrix is FOR - they are the thing that differs
+     from one machine to the next - so they are the loudest thing in a cell
+     that has nothing else to say. Where a product name is present the numbers
+     step back under it again. */
+  table.mtx td.cell i.num{display:block;font-style:normal;font-size:13px;color:var(--ink);
+    font-weight:600;font-variant-numeric:tabular-nums;margin-top:0;}
+  table.mtx td.cell b + i.num{font-size:11.5px;color:var(--muted);
+    font-weight:500;margin-top:3px;}
+  /* The column says its product once, at the top, with the colour beside it. */
+  table.mtx th i.colp{display:flex;align-items:center;gap:5px;font-style:normal;
+    font-weight:500;font-size:10.5px;color:var(--muted);margin-top:4px;
+    text-transform:none;letter-spacing:0;}
+  table.mtx th i.colp .sw{width:9px;height:9px;border-radius:2px;flex:none;
+    background:var(--h);box-shadow:inset 0 0 0 1px rgba(0,0,0,.22);}
+  /* The name must not widen the column - a matrix that pushes itself off the
+     screen to label a colour has traded the whole sheet for one caption. The
+     full name is in the tooltip and in the legend below. */
+  table.mtx th i.colp .nm{min-width:0;max-width:118px;overflow:hidden;
+    text-overflow:ellipsis;white-space:nowrap;}
   table.mtx td.cell i.warnv{display:block;font-style:normal;font-size:11px;
     color:var(--serious);font-weight:650;margin-top:3px;}
   /* Hatched, never red. Red is a product on this sheet. */
@@ -5247,6 +5264,29 @@ function renderLubeMtx(){
 
   const seen = lubeSeenByModel();
   const used = [];
+
+  /* Which columns carry MORE THAN ONE product?
+
+     "EXSOIL HD TRUCK ARCTIC 0W-40" printed twenty times down the engine column
+     is not information, it is wallpaper - and it was set in the loudest type on
+     the sheet while the capacity and the interval, the only things that differ
+     from one machine to the next, sat underneath it in small grey. A matrix
+     exists to show variation.
+
+     So the name appears where it VARIES. Where a column holds one product the
+     colour and the legend already say which, and the cell is free to show the
+     numbers. Where a column holds two, the colour is ambiguous and the name
+     earns its place back. */
+  const colProd = {};
+  list.forEach(r => colSet.forEach(col => {
+    const c = r.comps.filter(x => x.k === col.k)[0];
+    if(!c) return;
+    const hit = seen[r.cls+"|"+r.m+"|"+c.k], std = lubeChosenFor(c);
+    const n = hit ? hit.product : (std ? std.p : "");
+    if(n) (colProd[col.k] || (colProd[col.k] = {}))[n] = 1;
+  }));
+  const mixed = k => Object.keys(colProd[k] || {}).length > 1;
+
   let lastCls = null, body = "";
   list.forEach(r=>{
     if(r.cls !== lastCls){
@@ -5269,8 +5309,12 @@ function renderLubeMtx(){
         if(std){
           if(used.indexOf(std.p) < 0) used.push(std.p);
           const h = lubeHue(std.p) || LUBE_NOHUE;
-          return `<td class="cell want" style="--h:${esc(h)}"><span class="sw"></span>`+
-            `<b>${esc(lubeShort(std.p))}</b>`+
+          /* The name is not always PRINTED now, so the cell carries it as data:
+             the sheet stays self-describing for a person inspecting it and for
+             anything that reads the table back. */
+          return `<td class="cell want" style="--h:${esc(h)}" data-p="${esc(std.p)}">`+
+            `<span class="sw"></span>`+
+            (mixed(c.k) ? `<b>${esc(lubeShort(std.p))}</b>` : "")+
             `<i class="num">${c.cap!=null?esc(c.cap)+" L":"—"} · ${
               c.iv?esc(c.iv)+" h":"—"}</i>`+
             `</td>`;
@@ -5285,8 +5329,9 @@ function renderLubeMtx(){
          act on it is the one reading this sheet. */
       const off = std && LUBE.product(hit.product) !== std &&
                   String(std.p||"") !== String(hit.product||"");
-      return `<td class="cell" style="--h:${esc(hue)}"><span class="sw"></span>`+
-        `<b>${esc(lubeShort(hit.product))}</b>`+
+      return `<td class="cell" style="--h:${esc(hue)}" data-p="${esc(hit.product)}">`+
+        `<span class="sw"></span>`+
+        (mixed(c.k) ? `<b>${esc(lubeShort(hit.product))}</b>` : "")+
         `<i class="num">${c.cap!=null?esc(c.cap)+" L":"—"} · ${
           c.iv?esc(c.iv)+" h":"—"}</i>`+
         (v && v.k!=="lube_v_ok" ? `<i class="warnv">${esc(t(v.k))}</i>` : "")+
@@ -5299,8 +5344,18 @@ function renderLubeMtx(){
 
   tbl.innerHTML =
     `<thead><tr><th>${esc(t("lm_machine"))}</th>${
-      colSet.map(c=>`<th><b class="ck">${esc(c.k)}</b>${
-        esc(lang==="ru"?c.ru:c.en)}</th>`).join("")
+      colSet.map(c=>{
+        /* A single-product column names its product once, at the top, with the
+           colour beside it - so the reader learns the colour here and reads
+           numbers all the way down. */
+        const only = Object.keys(colProd[c.k]||{});
+        const one = only.length===1 ? only[0] : "";
+        return `<th><b class="ck">${esc(c.k)}</b>${esc(lang==="ru"?c.ru:c.en)}`+
+          (one ? `<i class="colp" title="${esc(one)}"><span class="sw" style="--h:${
+            esc(lubeHue(one)||LUBE_NOHUE)}"></span><span class="nm">${
+            esc(lubeShort(one))}</span></i>` : "")+
+          `</th>`;
+      }).join("")
     }</tr></thead><tbody>${body}</tbody>`;
 
   $("lubeLegend").innerHTML = used.sort().map(n=>{

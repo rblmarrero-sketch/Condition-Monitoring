@@ -135,7 +135,10 @@ const SEED = (n) => {
      repaint the survivors, or the colour stops being an identity. */
   const hues = await p.evaluate(() => {
     const grab = () => [...document.querySelectorAll("#lubeMtx td.cell")]
-      .map(td => td.querySelector("b").textContent.trim() + "=" + td.style.getPropertyValue("--h"));
+      /* The product name is only PRINTED where a column carries more than one,
+         so identity is read off the cell's data attribute - which is there
+         precisely so that dropping the caption did not drop the fact. */
+      .map(td => (td.dataset.p || "") + "=" + td.style.getPropertyValue("--h"));
     const before = grab();
     lubeShow = "";            /* widen to every class */
     renderLubeTab();
@@ -148,6 +151,37 @@ const SEED = (n) => {
   });
   const drifted = Object.entries(map).filter(([, set]) => set.size > 1).map(([n]) => n);
   eq(drifted, [], "no product changed colour when the filter widened");
+
+  /* A matrix exists to show VARIATION. "EXSOIL HD TRUCK ARCTIC 0W-40" printed
+     twenty times down the engine column is wallpaper, and it was set in the
+     loudest type on the sheet while the capacity and the interval - the only
+     things that differ machine to machine - sat under it in small grey. */
+  console.log("── the name appears where it varies, and the numbers everywhere");
+  const emph = await p.evaluate(() => {
+    const cols = {}, out = { named: [], quiet: [], numbers: 0, cells: 0 };
+    [...document.querySelectorAll("#lubeMtx tbody tr")].forEach(tr => {
+      [...tr.querySelectorAll("td.cell")].forEach((td, i) => {
+        out.cells++;
+        if (td.querySelector("i.num")) out.numbers++;
+        (cols[i] || (cols[i] = { named: 0, n: 0 })).n++;
+        if (td.querySelector("b")) cols[i].named++;
+      });
+    });
+    Object.keys(cols).forEach(i => {
+      (cols[i].named ? out.named : out.quiet).push(Number(i));
+    });
+    /* and the column has to say its product SOMEWHERE, or the colour is a
+       riddle - the heading carries it when every cell agrees. */
+    out.captions = document.querySelectorAll("#lubeMtx thead .colp").length;
+    return out;
+  });
+  ok(emph.numbers === emph.cells,
+     "every cell carries its capacity and interval: " + emph.numbers + "/" + emph.cells);
+  ok(emph.quiet.length > 0,
+     "a column where one product serves every machine does not repeat its name: "
+     + emph.quiet.length + " of " + (emph.quiet.length + emph.named.length));
+  ok(emph.captions > 0,
+     "it is named once at the top of the column instead: " + emph.captions);
 
   console.log("── the wide view does not take the page sideways");
   /* 25 columns across twelve asset classes is a real state, reachable in one
