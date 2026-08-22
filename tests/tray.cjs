@@ -68,21 +68,56 @@ const put = (p, k, v) => p.evaluate(a => { pickComponent(a[0]);
   ok('an excavator is turned away', await p.evaluate(() => !ucStatus(curEquip).ok));
   ok('and told why', (await p.textContent('#posnav')).length > 20,
     (await p.textContent('#posnav')).trim().slice(0, 52));
-  /* 27 of the 28 articulated trucks have no model in the register. The round
-     runs on the HM400 sheet and SAYS SO — the alternative is either refusing 27
-     machines or assuming silently. */
+  /* 27 of the 28 articulated trucks have no model in the register — and every
+     one of them is an HM400, which the register itself shows: the one unit that
+     does carry a model carries that one, and no other model appears in the
+     class. So the sheet is not a guess and the round must not say it is. A
+     warning raised on something already settled is the kind people learn to tap
+     past, and that costs the warnings that matter. */
   await openTray(p, 'TK125');
-  const guessed = await p.evaluate(() => ucStatus(curEquip));
-  ok('a truck with no model recorded still gets a round', guessed.ok && guessed.model === 'HM400');
-  ok('and the screen says the model is a guess', guessed.sure === false &&
-    /register/i.test(await p.textContent('.tbnote')), (await p.textContent('.tbnote')).trim().slice(0, 52));
-  /* The note is one line by default and the whole of it is one tap away — a
-     warning worth 74 px on every paint of the map is not, but it must still be
-     reachable and it must still name the sheet being assumed. */
+  const settled = await p.evaluate(() => ucStatus(curEquip));
+  ok('a truck with no model recorded still gets a round',
+    settled.ok && settled.model === 'HM400');
+  ok('and it is not called a guess, because the register settles it',
+    settled.sure === true && settled.sole === true, JSON.stringify(settled));
+  ok('the sheet in use is still named, quietly',
+    /HM400|Komatsu/i.test(await p.textContent('.tbnote')) &&
+    await p.evaluate(() => !!document.querySelector('.tbnote.info')),
+    (await p.textContent('.tbnote')).trim().slice(0, 52));
+  ok('and it does not wear a warning marker',
+    await p.evaluate(() => {
+      const n = document.querySelector('.tbnote.info button b');
+      return !!n && n.textContent.trim() !== '!';
+    }));
   await p.locator('.tbnote button').first().click();
   await p.waitForTimeout(300);
-  ok('and tapping it names which sheet', /HM400|Komatsu/i.test(await p.textContent('.tbnote')),
-    (await p.textContent('.tbnote')).trim().slice(0, 64));
+  ok('tapping it explains why one sheet covers all of them',
+    /28|all/i.test(await p.textContent('.tbnote')),
+    (await p.textContent('.tbnote')).trim().slice(0, 72));
+  await p.locator('.tbnote button').first().click();
+  await p.waitForTimeout(300);
+
+  /* The reason it is COMPUTED and not typed in: the day the class stops being
+     one model, the warning has to come back on its own. Both directions are
+     checked, because a rule that only ever says yes is not a rule. */
+  const future = await p.evaluate(() => {
+    const out = { today: bodyStatus('TK125').sure };
+    ASSETS.push({ n:'TK199', cls:'AT', cat:'TRUCK, ARTICULATED',
+                  m:'KOMATSU HM300', mk:'KOMATSU|HM300' });
+    delete _soleBody.AT;
+    const st = bodyStatus('TK125');
+    out.afterASecondModel = st.sure;
+    /* and it must still RUN — refusing 27 machines is the outcome this whole
+       fallback exists to avoid. */
+    out.stillRuns = st.ok && st.model === 'HM400';
+    ASSETS.pop(); delete _soleBody.AT;
+    out.backToSettled = bodyStatus('TK125').sure;
+    return out;
+  });
+  ok('a second articulated model brings the warning back by itself',
+    future.today === true && future.afterASecondModel === false &&
+    future.backToSettled === true, JSON.stringify(future));
+  ok('and the round still runs while it is unsure', future.stillRuns === true);
 
   /* ---- 2. the floor is graded; the structure is not ---------------------- */
   /* The site has supplied one figure — every liner on 20 mm, off at 8 mm — and

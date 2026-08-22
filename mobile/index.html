@@ -923,6 +923,8 @@
     padding:6px 11px;background:none;border:0;color:var(--ink-2);font:inherit;
     text-align:left;cursor:pointer;}
   .tbnote button b{flex:0 0 auto;color:var(--warn-ink);font-weight:800;}
+  .tbnote.info{border-left-color:var(--line);background:var(--surface-2);}
+  .tbnote.info button b{color:var(--muted);font-weight:600;}
   .tbnote button span{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;
     white-space:nowrap;}
   .tbnote button i{flex:0 0 auto;font-style:normal;color:var(--muted);}
@@ -2034,6 +2036,8 @@ const I18N = {
     uc_left:"LEFT", uc_right:"RIGHT",
     /* ---- the dump body round ---- */
     tb_no_body:"The dump body round is for the HM400 and TR60 haul trucks.",
+    tb_sheet_s:"{m} sheet",
+    tb_sheet:"All {n} articulated trucks on the register are {m}, so this is the sheet for every one of them. The register does not repeat the model on each unit.",
     tb_assumed_s:"Model not in the register — check the sheet fits",
     tb_assumed:"The register does not record this truck's model. Using the {m} sheet — check it matches the body you are standing at.",
     tb_partlimits_s:"Some of this body is recorded, not graded",
@@ -2372,6 +2376,8 @@ const I18N = {
     uc_left:"ЛЕВАЯ", uc_right:"ПРАВАЯ",
     /* ---- осмотр футеровки кузова ---- */
     tb_no_body:"Осмотр футеровки кузова — для самосвалов HM400 и TR60.",
+    tb_sheet_s:"Схема {m}",
+    tb_sheet:"Все {n} сочленённых самосвалов в реестре — {m}, поэтому схема одна для всех. В реестре модель указана не у каждой машины.",
     tb_assumed_s:"Модели нет в реестре — проверьте схему",
     tb_assumed:"Модель этого самосвала не указана в реестре. Используется схема {m} — проверьте, что она соответствует кузову.",
     tb_partlimits_s:"Часть кузова записываем, но не оцениваем",
@@ -3023,21 +3029,72 @@ function itemLabel(k){ const it=items().find(i=>i.k===k); if(it) return it[lang]
    the round runs, and the screen says out loud which sheet it is using, rather
    than either refusing 27 machines or quietly assuming for them. */
 const BODY_MATCH=[ {re:/HM.?-?400/i, id:"HM400"}, {re:/TR.?-?60/i, id:"TR60"} ];
+/* The register writes make and model as "MAKE|MODEL" in mk, and leaves mk off
+   entirely when nobody typed a model. That absence is the signal: a unit with
+   no designation cannot contradict anything, and a unit carrying one we have
+   no sheet for means the class is mixed. */
+function bodyDesignation(a){
+  const i=String(a&&a.mk||"").indexOf("|");
+  return i<0 ? "" : String(a.mk).slice(i+1).trim();
+}
+/* Does this whole class run on ONE body sheet?
+
+   "All the articulated trucks are HM400" is the client's statement, and the
+   register bears it out: 27 filed as bare "KOMATSU", one as "KOMATSU HM400",
+   no other model in the class. So using the HM400 sheet on the 27 is not a
+   guess, and telling an inspector to go and verify something already settled
+   is the kind of warning people learn to tap past - which costs the warnings
+   that matter.
+
+   It is CHECKED rather than believed, and checked against the register rather
+   than typed in here. The day a Komatsu HM300 joins the class the answer goes
+   back to null and the warning returns with no code change. The make has to
+   agree too: a VOLVO filed with no model is not quietly an HM400. */
+const _soleBody={};
+function bodySoleModel(cls){
+  if(cls in _soleBody) return _soleBody[cls];
+  let id=null, ok=true; const makes={};
+  (window.ASSETS||[]).forEach(a=>{
+    if(!ok || a.cls!==cls) return;
+    const s=((a.mk||"").replace("|"," ")+" "+(a.m||"")).trim();
+    const hit=BODY_MATCH.filter(c=>c.re.test(s))[0];
+    if(hit){
+      if(id && id!==hit.id) ok=false;
+      else { id=hit.id; makes[String(a.m||"").trim().split(/\s+/)[0].toUpperCase()]=1; }
+      return;
+    }
+    /* No sheet matched it. Harmless when the model was never recorded; fatal
+       to the whole idea when a model IS recorded and we have no sheet for it. */
+    if(bodyDesignation(a)) ok=false;
+  });
+  return (_soleBody[cls] = (ok && id) ? {id:id, makes:makes} : null);
+}
 function bodyModelFor(unit){
   const a=ASSET_BY[unit]; if(!a) return null;
   const s=((a.mk||"")+" "+(a.m||"")).trim();
   for(const c of BODY_MATCH) if(c.re.test(s)) return {id:c.id, sure:true};
-  /* Nothing in the model string. An articulated Komatsu with no model recorded
-     is an HM400 on this site; anything else we do not guess at. */
+  if(bodyDesignation(a)) return null;      /* a model we have no sheet for */
+  const sole=bodySoleModel(a.cls);
+  const make=String(a.m||"").trim().split(/\s+/)[0].toUpperCase();
+  if(sole && sole.makes[make]) return {id:sole.id, sure:true, sole:true};
+  /* The class is mixed and this unit's model was never typed. Still run the
+     round on the sheet the site most likely means, and SAY it is a guess -
+     refusing twenty-seven machines outright is the outcome this fallback
+     exists to avoid, and it is the outcome the check above would otherwise
+     produce the day a second Komatsu model arrives. */
   if(a.cls==="AT" && /KOMATSU/i.test(s)) return {id:"HM400", sure:false};
   return null;
+}
+function bodyClassCount(cls){
+  return (window.ASSETS||[]).filter(a=>a.cls===cls).length;
 }
 function bodyStatus(unit){
   const a=ASSET_BY[unit]; if(!a) return {ok:false, why:"unknown"};
   if(!window.BODY) return {ok:false, why:"unknown"};
   const hit=bodyModelFor(unit);
   if(!hit) return {ok:false, why:"nobody", model:a.m||""};
-  return {ok:true, model:hit.id, sure:hit.sure, title:(BODY.of(hit.id)||{}).model||hit.id};
+  return {ok:true, model:hit.id, sure:hit.sure, sole:!!hit.sole, cls:a.cls,
+          title:(BODY.of(hit.id)||{}).model||hit.id};
 }
 /* Zones, then the stations inside them — the same two-level shape the
    undercarriage walk uses, so the cascade, the chips and Next all work already. */
@@ -3087,10 +3144,14 @@ function bodyZoneState(z){
    an inspector on their tenth body does not need the paragraph again, and one
    on their first needs it without going looking. */
 let tbNoteOpen = {};
-function tbNote(key, short, full){
+/* tone "info" is a statement of fact, tone "warn" (the default) is something
+   the inspector has to act on. They must not look alike: an amber "!" beside a
+   settled fact is how people learn that the amber "!" means nothing. */
+function tbNote(key, short, full, tone){
   const on = !!tbNoteOpen[key];
-  return '<div class="tbnote'+(on?' open':'')+'" data-tbn="'+esc(key)+'">'+
-    '<button type="button"><b>!</b><span>'+esc(on?full:short)+'</span>'+
+  const info = tone === "info";
+  return '<div class="tbnote'+(on?' open':'')+(info?' info':'')+'" data-tbn="'+esc(key)+'">'+
+    '<button type="button"><b>'+(info?"\u2139":"!")+'</b><span>'+esc(on?full:short)+'</span>'+
     '<i>'+(on?"\u25B4":"\u25BE")+'</i></button>'+'</div>';
 }
 function bodyOrder(){ const st=bodyStatus(curEquip); return st.ok?BODY.route(st.model):[]; }
@@ -3111,7 +3172,12 @@ function renderBodyMap(){
   const st=bodyStatus(curEquip); if(!st.ok) return;
   const id=st.model, cur=BODY.get(id,curItem);
   let h=ucViewsBar();
+  /* Which sheet is in use is worth knowing on every round. Whether it was
+     GUESSED is the only part that deserves a warning, so the two are separate:
+     an assumption gets the amber note, a settled fact gets a quiet line. */
   if(!st.sure) h+=tbNote("assumed", t("tb_assumed_s"), t("tb_assumed",{m:st.title}));
+  else if(st.sole) h+=tbNote("sheet", t("tb_sheet_s",{m:st.title}),
+                             t("tb_sheet",{m:st.title, n:bodyClassCount(st.cls)}), "info");
   /* Either nothing is graded, or only part of it is. Saying nothing in the
      second case is the worse failure: the floor lights up with verdicts, the
      side skins quietly do not, and the inspector is left to guess whether the
