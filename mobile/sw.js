@@ -69,6 +69,8 @@ const ESSENTIAL = [
   "./body-points.js?v=" + BUILD,
   "./body-map.js?v=" + BUILD,
   "./lube.js?v=" + BUILD,
+  "./lube2027.js?v=" + BUILD,
+  "./lube-tds.js?v=" + BUILD,
   "./report-core.js?v=" + BUILD,
 ];
 

@@ -224,6 +224,60 @@ def read_products(ws):
                     "brand": br, "bhue": BRAND_HUE.get(br) if br else None})
     return out
 
+# ── the Legend, which is where the curated English names live ──────────────
+# The header row of the frequency sheet carries whatever was typed when the
+# column was added, and for twelve components that is Russian in the English
+# field, one truncated word, and one with a space broken into the middle of a
+# word ("Направля ющее колесо"). The Legend tab has a proper English name for
+# every one of them and nobody was reading it.
+def read_legend(wb):
+    if "Lube Legend" not in wb.sheetnames:
+        return {}
+    ws, out = wb["Lube Legend"], {}
+    for r in range(1, ws.max_row + 1):
+        code = str(ws.cell(r, 1).value or "").strip()
+        name = str(ws.cell(r, 2).value or "").strip()
+        if not code or not name:
+            continue
+        if not re.match(r"^\d{1,2}[A-Z]{0,2}$", code):
+            continue                        # headings, colour keys, prose
+        name = re.sub(r"\s*\*+\s*$", "", name)          # "newly added" marker
+        name = re.sub(r"\s*\([^)]*[А-Яа-яЁё][^)]*\)", "", name)  # RU gloss
+        name = re.sub(r"\s*\(unified[^)]*\)", "", name, flags=re.I)
+        name = re.sub(r"\s+", " ", name).strip()
+        if name:
+            out[code] = name
+    return out
+
+
+# Fuel is code 10 and it is NOT imported. The Legend says so itself - "Fuel,
+# not a lubricant, tracked for volume only" - and putting a fuel tank in front
+# of a fitter doing an oil audit is how the round stops being an oil audit.
+SINGLETON = {"9": "coolant"}
+
+
+def read_singletons(ws):
+    """Coolant is a lone capacity column with no interval and no OEM beside it,
+       so the triple rule below skips it - and it has been skipping it since the
+       first import. Forty-one machines carry a coolant capacity in this sheet,
+       there is an antifreeze on the shelf and a hundred thousand litres of it
+       on the 2027 specification, and not one compartment existed to record it
+       against. Found by its own heading rather than by column letter, because
+       the Legend's column letters are already three out of date."""
+    out = []
+    for c in range(1, ws.max_column + 1):
+        code = str(ws.cell(2, c).value or "").strip()
+        if code not in SINGLETON:
+            continue
+        name = str(ws.cell(1, c).value or "").replace("\n", " ").strip()
+        if not name:
+            continue
+        en, ru = split_bilingual(name)
+        out.append({"k": code, "en": en, "ru": ru, "col": c,
+                    "t": SINGLETON[code], "single": True})
+    return out
+
+
 def read_components(ws):
     """Every component triple: the code is in row 2 over the CAPACITY column,
        the next column is the interval and the one after is the OEM string."""
@@ -259,7 +313,22 @@ def main():
     wv, wf = wbv[SHEET], wbf[SHEET]
 
     products = read_products(wv)
-    comps    = read_components(wv)
+    comps    = read_components(wv) + read_singletons(wv)
+    legend   = read_legend(wbv)
+    # An English field with Cyrillic in it, or empty, is not an English name.
+    # Those get the Legend's; anything else keeps what the sheet says and is
+    # REPORTED instead, because silently rewriting a name somebody typed on
+    # purpose is how a reference stops matching the paper in the ute.
+    renamed, differ = [], []
+    for cp in comps:
+        want = legend.get(cp["k"])
+        if not want:
+            continue
+        if CYR.search(cp["en"] or "") or not (cp["en"] or "").strip():
+            renamed.append((cp["k"], cp["en"], want))
+            cp["en"] = want
+        elif cp["en"].strip().lower() != want.strip().lower():
+            differ.append((cp["k"], cp["en"], want))
     notes, questions = [], []
 
     # the register, so masterlist rows can be tied to real machines
@@ -283,9 +352,13 @@ def main():
 
         got = []
         for cp in comps:
+            single = cp.get("single")
             cap  = wv.cell(r, cp["col"]).value
-            freq = wv.cell(r, cp["col"] + 1).value
-            oem  = wv.cell(r, cp["col"] + 2).value
+            # A singleton has no interval and no OEM column beside it - reading
+            # cp["col"]+1 would pick up whatever the next component's capacity
+            # happens to be and call it a change interval.
+            freq = None if single else wv.cell(r, cp["col"] + 1).value
+            oem  = None if single else wv.cell(r, cp["col"] + 2).value
             if cap in (None, 0, "") and not oem: continue
             fill = wf.cell(r, cp["col"]).fill
             rgb  = fill.fgColor.rgb if (fill and fill.fgColor) else None
@@ -296,7 +369,7 @@ def main():
             if isinstance(cap, (int, float)) and cap: c["cap"] = round(float(cap), 2)
             if isinstance(freq, (int, float)) and freq: c["iv"] = int(freq)
             if oem: c["oem"] = re.sub(r"\s+", " ", str(oem)).strip()
-            ty = LEGEND_TYPE.get(cp["k"])
+            ty = cp.get("t") or LEGEND_TYPE.get(cp["k"])
             if ty: c["t"] = ty
             # The site's own flags, carried across as data instead of as a fill
             # colour nobody outside Excel can see.
@@ -346,6 +419,9 @@ def main():
             if c.get("oem"): oems[c["oem"]] += 1
             verify += c.get("verify", 0); noiv += c.get("noiv", 0); ask += c.get("ask", 0)
 
+    used_codes = {c["k"] for m in models.values() for c in m["comps"]}
+    unused_codes = sorted(k for k in legend if k not in used_codes)
+
     with open(REPORT, "w", encoding="utf-8") as f:
         f.write("LUBRICATION MASTERLIST — IMPORT REPORT\n")
         f.write("=" * 62 + "\n\n")
@@ -357,6 +433,33 @@ def main():
         f.write("flagged VERIFY             %5d\n" % verify)
         f.write("missing change interval    %5d\n" % noiv)
         f.write("OEM contradicts the type  %5d\n\n" % ask)
+
+        f.write("COMPONENT NAMES REPAIRED FROM THE LEGEND (%d)\n" % len(renamed)
+                + "-" * 62 + "\n")
+        f.write("The header row of the frequency sheet had Russian in the English\n"
+                "field for these, one truncated word, and one with a space broken\n"
+                "into the middle of a word. The Legend tab has had a proper English\n"
+                "name for every one of them all along and nobody was reading it.\n\n")
+        for k, was, now in renamed:
+            f.write("  %-5s %-42s -> %s\n" % (k, was[:42], now))
+
+        f.write("\nNAMES THE SHEET AND THE LEGEND DISAGREE ON (%d)\n" % len(differ)
+                + "-" * 62 + "\n")
+        f.write("Kept as the sheet has them. Neither is broken, so neither is\n"
+                "rewritten - but two names for one component is two names on two\n"
+                "pieces of paper, and somebody should pick one.\n\n")
+        for k, sheet_name, leg in differ:
+            f.write("  %-5s sheet: %-36s legend: %s\n" % (k, sheet_name[:36], leg))
+
+        f.write("\nCODES THE LEGEND DEFINES THAT NO MACHINE USES (%d)\n"
+                % len(unused_codes) + "-" * 62 + "\n")
+        f.write("Either the fleet genuinely has none, or a column is missing from\n"
+                "the frequency sheet. Code 10 (fuel) is deliberate - the Legend\n"
+                "itself says fuel is not a lubricant.\n\n")
+        for k in unused_codes:
+            f.write("  %-5s %s\n" % (k, legend.get(k, "")))
+        f.write("\n")
+
         f.write("MODELS IN THE MASTERLIST WITH NO MACHINE ON THE REGISTER (%d)\n" % len(unmatched))
         f.write("They are imported and carry no unit count, so they cost nothing\n")
         f.write("and appear the moment a matching machine is registered.\n")

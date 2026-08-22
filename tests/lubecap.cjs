@@ -195,6 +195,64 @@ const eq = (g, w, what) => ok(JSON.stringify(g) === JSON.stringify(w),
     await new Promise(r => setTimeout(r, 400));
   }, unit);
 
+  /* TWO product lists, no string in common. The masterlist names the eight
+     EXSOIL products in the machines today; Specification 02 rev CO-05 names the
+     twenty-four Lemarc/Teboil/Lukoil ones bought for 2027. That is a change of
+     supplier, and the audit has to survive it in both directions: a fitter must
+     be able to record the drum actually in front of him, and neither answer may
+     be called a fault. */
+  console.log("── the picker knows both lists, and says which is which");
+  const preg = await p.evaluate(() => {
+    const r = lubeRegister();
+    return { n: r.length,
+             field: r.filter(x => x.src === "field").length,
+             spec:  r.filter(x => x.src === "2027").length,
+             both:  r.filter(x => x.src === "both").length };
+  });
+  ok(preg.field > 0, "the products in service are offered: " + preg.field);
+  ok(preg.spec > 0, "so are the ones bought for 2027: " + preg.spec);
+  ok(preg.n === preg.field + preg.spec + preg.both,
+     "and nothing is counted twice: " + preg.n + " in the register");
+  const srcTags = await p.evaluate(() =>
+    [...document.querySelectorAll("#lubeProd option")].map(o => o.textContent));
+  ok(srcTags.some(o => /in service now|сейчас/.test(o)),
+     "an option says when it is the incumbent");
+  ok(srcTags.some(o => /2027/.test(o)), "and when it is the replacement");
+
+  /* The verdict has to judge the JOB, not the string, or the day the new drums
+     land every compartment on the property reads as wrong. */
+  console.log("── and the verdict survives the supplier changing");
+  const V = await p.evaluate(() => {
+    /* The register-round excursion above cleared the selection, so pick one
+       here rather than assuming the screen is where it was. */
+    if (!curItem) pickComponent(items()[0].k);
+    const k = curItem;
+    const set = n => { (draft.positions[k] = draft.positions[k] || {}).prod = n;
+                       return lubeVerdict(k).k; };
+    const r = lubeRegister();
+    const c = lubeComp(k), ty = c && c.t;
+    const of = (t, src) => (r.filter(x => x.t === t && x.src === src)[0] || {}).p;
+    const other = (r.filter(x => x.t && x.t !== ty)[0] || {}).p;
+    const out = {
+      ty: ty, unit: curEquip, comp: k,
+      names: { inc: of(ty, "field"), rep: of(ty, "2027"), other: other },
+      incumbent: set(of(ty, "field")),
+      replacement: set(of(ty, "2027")),
+      wrongJob: set(other),
+      unlisted: set("SOME DRUM FROM THE BACK OF THE SHED"),
+      nothing: set(""),
+    };
+    delete draft.positions[k].prod;
+    return out;
+  });
+  ok(V.incumbent === "lube_v_ok", "what is in there today is not a finding: " + V.incumbent);
+  ok(V.replacement === "lube_v_ok", "nor is what replaces it: " + V.replacement);
+  ok(V.wrongJob === "lube_v_wrong",
+     "the wrong KIND of oil still is — which is the one that wrecks it: " + V.wrongJob);
+  ok(V.unlisted === "lube_v_unknown",
+     "a drum on neither list is unjudged, not passed and not failed: " + V.unlisted);
+  ok(V.nothing === "lube_v_none", "and an empty answer is no verdict at all");
+
   console.log("── recording a product actually survives");
   const first = walk.ks[0];
   await p.evaluate(k => pickComponent(k), first);

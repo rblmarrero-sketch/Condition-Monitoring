@@ -1687,6 +1687,7 @@
 <script src="body-points.js?v=120"></script>
 <script src="body-map.js?v=120"></script>
 <script src="lube.js?v=120"></script>
+<script src="lube2027.js?v=120"></script>
 <script src="report-core.js?v=120"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
@@ -1965,6 +1966,8 @@ const I18N = {
     type_MP:"Magnetic Plug", type_FC:"Filter Cut", type_INSP:"Inspection", type_TEMP:"Temperature",
     type_UC:"Undercarriage", type_GET:"Ground engaging tools", type_TB:"Dump body liner",
     type_LUBE:"Lubrication audit",
+    lube_src_field:"in service now", lube_src_2027:"2027 specification",
+    lube_src_both:"in service · 2027",
     lube_prod:"Product in service", lube_other:"Name it as printed on the label",
     lube_evid:"How do you know?", lube_samp:"Oil sample taken",
     lube_pick:"— choose —", lube_fits:"Satisfies this compartment",
@@ -2305,6 +2308,8 @@ const I18N = {
     type_MP:"Магнитная пробка", type_FC:"Разрез фильтра", type_INSP:"Осмотр", type_TEMP:"Температура",
     type_UC:"Ходовая часть", type_GET:"Рабочий инструмент", type_TB:"Футеровка кузова",
     type_LUBE:"Аудит смазочных материалов",
+    lube_src_field:"сейчас в эксплуатации", lube_src_2027:"спецификация 2027",
+    lube_src_both:"в эксплуатации · 2027",
     lube_prod:"Продукт в узле", lube_other:"Название как на этикетке",
     lube_evid:"Откуда известно?", lube_samp:"Проба масла отобрана",
     lube_pick:"— выберите —", lube_fits:"Подходит для этого узла",
@@ -2985,12 +2990,46 @@ function lubeComp(k){
    else in the catalogue, then whatever somebody types. The off-spec products
    are NOT hidden — the audit exists to record what is really in there, and a
    picker that only lists correct answers cannot record a wrong one. */
+/* Every product a fitter could truthfully find on a drum.
+
+   There are TWO lists and they do not overlap by a single string. The
+   masterlist names eight EXSOIL products - what is in the machines today - and
+   Specification 02 rev CO-05 names twenty-four Lemarc, Teboil and Lukoil ones,
+   which is what the site is buying for 2027. That is a change of supplier, not
+   a rename, so both are real: one is what you will find, the other is what
+   will replace it.
+
+   A picker that offered only one of them would force the wrong answer. Offer
+   only the 2027 list and every drum in the yard is "not listed"; offer only
+   the masterlist and nothing bought for next season can be recorded at all.
+   The audit exists to record what is REALLY in there. */
+function lubeRegister(){
+  const out=[], at={};
+  const key=n=>String(n||"").toUpperCase().replace(/[^A-Z0-9]+/g,"");
+  const add=(p,t,src)=>{
+    if(!p) return;
+    const k=key(p);
+    if(at[k]){ if(at[k].src!==src) at[k].src="both"; return; }
+    at[k]={p:p, t:t||"", src:src};
+    out.push(at[k]);
+  };
+  (window.LUBE ? LUBE.catalog : []).forEach(x=>add(x.p, x.t, "field"));
+  (window.LUBE2027 ? LUBE2027.shelf : []).forEach(x=>add(x.p, x.t, "2027"));
+  return out;
+}
 function lubeChoices(k){
   if(!window.LUBE || !curEquip) return {fit:[], rest:[]};
   const a=lubeAsset(curEquip);
   const want=LUBE.forComp(a.m, k, a.cls);
-  const fit=want?[want.p]:[];
-  const rest=LUBE.catalog.map(p=>p.p).filter(n=>fit.indexOf(n)<0);
+  const reg=lubeRegister();
+  const c=lubeComp(k), ty=(c&&c.t)||(want&&want.t)||"";
+  /* What FITS is what serves this compartment's job, from either list - the
+     incumbent and its 2027 replacement are both correct answers to "what
+     should be in here", and which one is in there is the finding. */
+  const fit=reg.filter(x=>ty && x.t===ty);
+  if(want && !fit.some(x=>x.p===want.p)) fit.unshift({p:want.p, t:ty, src:"field"});
+  const seen={}; fit.forEach(x=>seen[x.p]=1);
+  const rest=reg.filter(x=>!seen[x.p]);
   return {fit, rest};
 }
 function nodeByCode(tree,code){ let f=null; (function rec(ns){ for(const n of ns){ if(n.k===code){f=n;return;} if(n.ch)rec(n.ch);} })(tree); return f; }
@@ -4262,11 +4301,27 @@ function lubeReportBlock(model, cls, key, o){
     evid: e ? { en:e.en, ru:e.ru } : null,
     samp: samp,
     want: want ? want.p : "",
-    /* Off standard only when BOTH are known. An unlisted product is not
-       "wrong", it is unjudged, and a compartment with no standard decided
-       cannot be departed from. */
-    off: !!(want && product && norm(product) !== norm(want.p))
+    /* Off standard only when BOTH are known, and judged on the JOB rather than
+       the name: the site is changing supplier for 2027, so the incumbent and
+       its replacement are both right answers and neither is a finding. An
+       unlisted product is not "wrong", it is unjudged, and a compartment with
+       no standard decided cannot be departed from. */
+    off: (function(){
+      if(!want || !product) return false;
+      if(norm(product) === norm(want.p)) return false;
+      const reg = (typeof lubeRegister === "function") ? lubeRegister() : [];
+      const hit = reg.filter(function(x){ return norm(x.p) === norm(product); })[0];
+      if(!hit || !hit.t || !want.t) return true;   /* unknown: say so, loudly */
+      return hit.t !== want.t;
+    })()
   };
+}
+/* The name is the value; where it came from is a note beside it, so a fitter
+   holding a drum can tell at a glance whether it is the old one or the new. */
+function lubeOpt(x){
+  const tag = x.src==="2027" ? t("lube_src_2027")
+            : x.src==="both" ? t("lube_src_both") : t("lube_src_field");
+  return '<option value="'+esc(x.p)+'">'+esc(x.p)+' · '+esc(tag)+'</option>';
 }
 function lubeVerdict(k){
   const p=draft.positions[k]||{};
@@ -4278,11 +4333,25 @@ function lubeVerdict(k){
      are both still "(verify product)" on the site's own legend. Recording what
      is in there is still worth doing; pretending we can judge it is not. */
   if(!want) return {b:"none", k:"lube_v_nostd"};
-  const prod=LUBE.product(name);
+  /* The test is the JOB, not the string.
+
+     Comparing the recorded name with one product name was right while there
+     was one list. There are two now - the EXSOIL products in the machines
+     today and the Lemarc/Teboil ones bought for 2027 - and they share no
+     string at all, so string equality would have called every compartment on
+     the property wrong the day the new drums landed.
+
+     What actually destroys a machine is the wrong KIND of oil: engine oil in a
+     final drive, GL-5 in a wet brake. A product that serves this compartment's
+     job is right whichever supplier it came from; one that serves a different
+     job is the finding. */
+  const c=lubeComp(k), ty=(c&&c.t)||want.t||"";
+  const prod=lubeRegister().filter(x=>String(x.p)===String(name))[0];
   /* Typed in by hand: a real finding — somebody put something in that is not
-     on the shelf — and it must not be dressed up as a pass or as a failure. */
+     on either list — and it must not be dressed up as a pass or as a failure. */
   if(!prod) return {b:"watch", k:"lube_v_unknown"};
-  if(prod.p !== want.p) return {b:"act", k:"lube_v_wrong"};
+  if(ty && prod.t && prod.t !== ty) return {b:"act", k:"lube_v_wrong"};
+  if(!ty || !prod.t) return {b:"watch", k:"lube_v_unknown"};
   return {b:"ok", k:"lube_v_ok"};
 }
 function renderLube(){
@@ -4308,9 +4377,9 @@ function renderLube(){
   sel.innerHTML =
     '<option value="">'+esc(t("lube_pick"))+'</option>'+
     (ch.fit.length? '<optgroup label="'+esc(t("lube_fits"))+'">'+
-      ch.fit.map(n=>'<option value="'+esc(n)+'">'+esc(n)+'</option>').join("")+'</optgroup>' : '')+
+      ch.fit.map(x=>lubeOpt(x)).join("")+'</optgroup>' : '')+
     (ch.rest.length? '<optgroup label="'+esc(t("lube_others"))+'">'+
-      ch.rest.map(n=>'<option value="'+esc(n)+'">'+esc(n)+'</option>').join("")+'</optgroup>' : '')+
+      ch.rest.map(x=>lubeOpt(x)).join("")+'</optgroup>' : '')+
     '<option value="__other">'+esc(t("lube_notlisted"))+'</option>';
   sel.value = p.prod||"";
   $("lubeOtherWrap").classList.toggle("hidden", p.prod!=="__other");
@@ -8345,6 +8414,10 @@ if("serviceWorker" in navigator && window.isSecureContext){ let reloaded=false;
 const SHELL_ASSETS=["index.html","manifest.webmanifest","native.js","jsQR.js","qrcode.js","upload-defaults.js",
   "hme.js","hme-cascade.js","mp-fc.js","assets.js","temp-limits.js",
   "wear.js","wear-figs.js","wear-map.js","machine-photos.js","machine-fig.js","get.js","uc-points.js","report-core.js",
+  /* The lubrication reference was never on this list, so a rebuilt lube.js
+     could be served from the HTTP cache after an update - the app would say it
+     was current and hand a fitter last month's capacities. */
+  "lube.js","lube2027.js","lube-tds.js","body-points.js","body-map.js",
   "jspdf.umd.min.js","html2canvas.min.js","inspect-guide.js","get-figs.js","sw.js"];
 /* "Am I on the latest build?" used to be unanswerable from inside the app: the
    service worker serves the copy it has, and a stale page looks exactly like a
