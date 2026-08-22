@@ -127,23 +127,45 @@ const eq = (g, w, what) => ok(JSON.stringify(g) === JSON.stringify(w),
      the failure — an unrated oil that looks approved is how a −15 product ends
      up in a machine on a −45 morning. */
   const cold = await p.evaluate(() => {
-    const design = (window.LUBE && LUBE.site && LUBE.site.design) || -40;
-    const out = { warm: [], unmarked: [], rated: 0, unrated: 0 };
+    const out = { silent: [], approved: [], byKind: {} };
     lubeRequirements().forEach(R => R.shelf.forEach(x => {
-      if (x.lo == null) out.unrated++; else out.rated++;
-      if (x.lo != null && x.lo > design) out.warm.push(x.p + " stops at " + x.lo);
+      const k = (x.cold && x.cold.k) || "nosheet";
+      out.byKind[k] = (out.byKind[k] || 0) + 1;
     }));
     [...document.querySelectorAll(".reqpick select option")].forEach(o => {
       if (!o.value) return;
-      if (!/rated to|no data sheet|до |нет спецификации/.test(o.textContent))
-        out.unmarked.push(o.textContent.trim());
+      const s = o.textContent;
+      /* Every option states where it stands. Silence is the failure: an oil
+         with no sheet, shown like one with a sheet, is how a −15 product ends
+         up in a machine on a −45 morning. */
+      if (!/no data sheet|pour point|states no pour|нет спецификации|застывание/.test(s))
+        out.silent.push(s.trim());
+      /* And no phrasing anywhere may amount to a pass. A pour point below the
+         design minimum clears one hurdle; only a person clears the field. */
+      if (/\b(approved|rated to|fit for|suitable|допущен|пригоден)\b/i.test(s)
+          && !/DISQUALIFIED|НЕ ПРИГОДЕН/.test(s))
+        out.approved.push(s.trim());
     });
     return out;
   });
-  eq(cold.warm, [], "nothing is offered that stops short of the design minimum");
-  eq(cold.unmarked, [],
-     "and every option says its cold rating, or says it has none: " +
-     cold.rated + " rated, " + cold.unrated + " with no data sheet");
+  eq(cold.silent, [], "every option states where it stands on the cold: " +
+     JSON.stringify(cold.byKind));
+  eq(cold.approved, [],
+     "and nothing in the picker tells an engineer a product is approved");
+
+  /* A label saying DISQUALIFIED beside an option somebody can still choose is
+     a warning, and warnings get clicked past. Verified against the state where
+     it was selectable: the option must be disabled. */
+  const locked = await p.evaluate(() => {
+    const bad = [];
+    [...document.querySelectorAll(".reqpick select option")].forEach(o => {
+      if (!o.value) return;
+      const dead = /DISQUALIFIED|НЕ ПРИГОДЕН/.test(o.textContent);
+      if (dead && !o.disabled && !o.selected) bad.push(o.textContent.trim());
+    });
+    return bad;
+  });
+  eq(locked, [], "an oil disqualified by its own data sheet cannot be chosen");
 
   console.log("── a requirement nothing can serve says so instead of offering nothing");
   const nofit = await p.evaluate(() =>

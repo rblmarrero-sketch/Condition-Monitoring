@@ -1,0 +1,13 @@
+DATA SHEETS ON FILE
+==========================================================================
+
+read from docs/source/tds/   0 sheet(s)
+products with figures       0
+site design minimum         -40 C
+
+product                                       KV40   KV100    VI  pour C   NLGI
+--------------------------------------------------------------------------
+
+A pour point is not an operating limit. It says where the oil stops
+pouring in a test jar, not the coldest morning the machine may be
+started on. It disqualifies a product; it never approves one.

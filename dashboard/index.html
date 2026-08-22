@@ -1411,6 +1411,7 @@
 <script src="../mobile/wear-map.js?v=120"></script>
 <script src="../mobile/lube.js?v=120"></script>
 <script src="../mobile/lube2027.js?v=120"></script>
+<script src="../mobile/lube-tds.js?v=120"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
 <script src="../mobile/upload-defaults.js?v=120"></script>
@@ -1578,7 +1579,9 @@ const I18N={
   lm_wanted:"standard · not yet audited",
   ls_specs:"{n} OEM specification(s) behind this",
   ls_onspec:"On the 2027 specification", ls_offspec:"Recommended, not bought",
-  ls_rated:"rated to {d}°", ls_unrated:"no data sheet",
+  ls_c_nosheet:"no data sheet", ls_c_nopour:"sheet states no pour point",
+  ls_c_pourbelow:"pour point {d}° — clears the design minimum, not the field",
+  ls_c_toowarm:"pour point {d}° — DISQUALIFIED at this site",
   lc_title:"The 2027 shelf against the recommendations",
   lc_sub:"Specification 02 rev CO-05 is what the site may actually buy. The fleet matrices say what should go in each compartment. Where the two do not line up, somebody has either told a fitter to use an oil nobody ordered, or ordered an oil for nothing — and the season is a third answer neither of them can show.",
   lc_shelf:"On the specification", lc_shelf_s:"products bought for 2027",
@@ -1923,7 +1926,9 @@ const I18N={
   lm_wanted:"стандарт · ещё не проверено",
   ls_specs:"{n} спецификаций OEM за этим",
   ls_onspec:"В спецификации 2027", ls_offspec:"Рекомендовано, не закуплено",
-  ls_rated:"до {d}°", ls_unrated:"нет спецификации",
+  ls_c_nosheet:"нет спецификации", ls_c_nopour:"застывание не указано",
+  ls_c_pourbelow:"застывание {d}° — ниже расчётного минимума, но не допуск",
+  ls_c_toowarm:"застывание {d}° — НЕ ПРИГОДЕН на этой площадке",
   lc_title:"Спецификация 2027 против рекомендаций",
   lc_sub:"Спецификация 02 ред. CO-05 — то, что действительно можно закупить. Матрицы говорят, что заливать. Где они расходятся — либо механику назвали масло, которого не заказали, либо заказали масло, которое никуда не идёт.",
   lc_shelf:"В спецификации", lc_shelf_s:"продуктов закуплено на 2027",
@@ -4798,22 +4803,41 @@ function lubeShelf(type){
     if(!o.p || seen[k]) return;
     seen[k] = 1; out.push(o);
   };
-  /* `lo` is the coldest temperature the product is rated for, and it is null
-     for everything on the 2027 specification because not one data sheet has
-     been attached to it — the column exists in both fleet matrices and is
-     empty in all 249 rows. A null here is not "fine", it is "nobody has
-     checked", and the picker says so rather than letting it read as approved.
+  /* Whether a product is fit for the cold is not something this screen may
+     assert. It reports what the data sheet says, and what follows necessarily
+     from it, and nothing else:
+
+       nosheet     no data sheet has been read for this product
+       nopour      there is a sheet and it does not state a pour point
+       toowarm     the pour point is at or above the design minimum — the oil
+                   stops pouring in a test jar before the coldest morning gets
+                   here, which disqualifies it without further argument
+       pourbelow   the pour point is below the design minimum. NOT approval.
+                   A pour point is not an operating limit: cold-crank and
+                   pumpability decide it for an engine oil, whether the oil
+                   throws for a splash gearbox, whether the pump can draw for a
+                   hydraulic system. It clears one hurdle, not the field.
+
      The site designs to −40 and sees −45. */
+  const cold = p => window.LUBETDS ? LUBETDS.coldVerdict(p) : { k:"nosheet" };
   if(window.LUBE2027)
     LUBE2027.shelf.forEach(pr=>{ if(!type || pr.t === type)
-      add({ p:pr.p, t:pr.t, on:true, q:pr.q, u:pr.u, lo:pr.lo==null?null:pr.lo }); });
+      add({ p:pr.p, t:pr.t, on:true, q:pr.q, u:pr.u, cold:cold(pr.p) }); });
   if(window.LUBE)
     LUBE.catalog.forEach(pr=>{ if(!type || pr.t === type)
-      add({ p:pr.p, t:pr.t, on:false, lo:pr.lo==null?null:pr.lo }); });
+      add({ p:pr.p, t:pr.t, on:false, cold:cold(pr.p) }); });
   return out;
 }
 function lubeQualifiers(type){
   return lubeShelf(type).map(x => x.p);
+}
+/* One phrase per verdict, and none of them is "approved". */
+function lubeColdWords(v){
+  if(!v) return t("ls_c_nosheet");
+  if(v.k === "toowarm")   return t("ls_c_toowarm",  {d:v.pour});
+  if(v.k === "pourbelow") return t("ls_c_pourbelow",{d:v.pour});
+  if(v.k === "nopour")    return t("ls_c_nopour");
+  return t("ls_c_nosheet");
 }
 function lubeReqKey(c){
   return c && c.t ? c.t : "none:" + ((c && c.k) || "?");
@@ -4884,9 +4908,14 @@ function renderLubeStd(){
     const on  = R.shelf.filter(x=>x.on), off = R.shelf.filter(x=>!x.on);
     const grp = (list, lbl) => list.length
       ? `<optgroup label="${esc(lbl)}">` + list.map(x=>
-          `<option value="${esc(x.p)}"${x.p===pick?" selected":""}>${esc(x.p)}${
-            x.lo != null ? ` · ${esc(t("ls_rated",{d:x.lo}))}`
-                         : ` · ${esc(t("ls_unrated"))}`}${
+          /* A product whose pour point is at or above the design minimum stays
+             ON the list and cannot be picked. Hiding it would be worse: it is
+             on the signed specification, at 636,688 litres in one case, and
+             somebody has to see WHY it is not the answer. */
+          `<option value="${esc(x.p)}"${x.p===pick?" selected":""}${
+            x.cold && x.cold.k === "toowarm" && x.p !== pick ? " disabled" : ""
+          }>${esc(x.p)} · ${
+            esc(lubeColdWords(x.cold))}${
             x.q ? ` · ${fmtN(x.q)} ${esc(x.u)}` : ""}</option>`).join("") + `</optgroup>`
       : "";
     const opts = grp(on, t("ls_onspec")) + grp(off, t("ls_offspec"));
