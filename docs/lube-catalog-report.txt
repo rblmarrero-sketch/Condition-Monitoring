@@ -1,0 +1,208 @@
+THE 2027 LUBRICANT CATALOGUE — what is bought, and what it is for
+==========================================================================
+
+Sources, all in docs/source:
+  Specification_02_rev_CO-05.xlsx
+  Lub_Matrix_fleet_2027_V3.1.xlsx
+  Lube_audit_20082026.xlsx
+  supplier_reply_for_GDK.xlsx
+
+PRODUCTS ON SPECIFICATION 02 rev CO-05           24
+recommended for at least one compartment          13
+bought but recommended for nothing                11
+recommended but NOT on the specification          17
+recommendation rows read                         213
+machines whose lubricant is not bought at all     36
+compartments answered summer AND winter           12
+compartments the two matrices disagree on         11
+SPECIFICATION SHEETS ATTACHED                      0  <- of 249 rows
+
+total litres     1,453,762
+total kg           154,506
+total spend    749,204,693 RUB, ex VAT
+
+
+THE SHELF
+--------------------------------------------------------------------------
+product                                               2027     job        
+LEMARC LEGUARD 40 0W40                             636,688 L   engine     
+LEMARC HYDRARD HVLP-ZF LT 32                       285,584 L   hydraulic  
+TEBOIL HYPOID 75W90                                147,159 L   gear         SPLIT gear,powertrain
+LEMARC LEGUARD AC 5W30                             105,664 L   powertrain   SPLIT gear,hydraulic,powertrain
+LEMARC FROSTGUARD G12+ Extra                       100,464 L   coolant    
+ЛУКОЙЛ ПОЛИФЛЕКС ЕР 1-160                           61,824 kg  ?          
+LEMARC LEGUARD MPV LT                               48,880 L   ?          
+LEMARC GEAPARD X5 75W140                            44,304 L   gear       
+ЛУКОЙЛ СИНТОФЛЕКС АРКТИК 1-100 HD                   39,582 kg  grease     
+LEMARC CARTERRA SH 150                              26,832 L   gear       
+LEMARC AEROGUARD SH 46                              20,176 L   compressor 
+ЛУКОЙЛ КАРБОФЛЕКС OG 000-1500 HD                    20,160 kg  opengear   
+ЛУКОЙЛ ПОЛИФЛЕКС ЕР 0-160                           19,260 kg  ?          
+TEBOIL SYPRES EXTRA 680                             14,206 L   gear       
+ЛУКОЙЛ КАРБОФЛЕКС OG 0-4000 HD                      12,780 kg  opengear   
+LEMARC CARTERRA SH 220                               7,072 L   gear       
+LEMARC GEAPARD DVI LV                                6,448 L   ?          
+LEMARC PNEUMOGUARD 32                                4,160 L   ?          
+LEMARC HYDRARD XV32                                  1,872 L   ?          
+LEMARC PNEUMOGUARD 100                               1,664 L   ?          
+LEMARC DOT4 Low Temp                                 1,489 L   ?          
+LEMARC WINDGUARD 50                                  1,000 L   ?          
+ЛУКОЙЛ ПОЛИФЛЕКС ЕР 2-160 HD                           900 kg  ?          
+LEMARC FFD                                             100 L   ?          
+
+
+RECOMMENDED BUT NOT BOUGHT (17)
+--------------------------------------------------------------------------
+Each of these is an oil somebody has told a fitter to use and
+procurement has not ordered.
+
+  TEBOIL FLUID ES-MAX                                  x23  audit,extra,matrix2027
+  Teboil Super HPD Plus 15W-40                         x14  audit,matrix2027
+  TEBOIL FLUID TO-4 SYNTHETIC SAE 5W-30                x10  audit,matrix2027
+  LUKOIL SYNTHOFLEX EP 1,5-460                         x9   audit,extra,matrix2027
+  TEBOIL HYPOID M SAE 75W-140                          x8   audit,matrix2027
+  Teboil Hydraulic Polar 32ZF                          x8   audit,matrix2027
+  Teboil Hydraulic 32S                                 x8   audit,matrix2027
+  Teboil Fluid TO-4 Synt 5W-30                         x7   audit
+  LEMARC HYDRARD XV 32                                 x6   audit,matrix2027
+  TEBOIL COMPRESSOR OIL SHV 46                         x6   audit,extra,matrix2027
+  LUKOIL SYNTHOFLEX 2-100                              x6   audit,extra,matrix2027
+  Teboil Wetol W 5W-30                                 x4   audit,matrix2027
+  Teboil Sypres Extra 68                               x4   audit,matrix2027
+  TEBOIL SYPRES EXTRA 460                              x4   audit,extra
+  TEBOIL DIAMOND CARAT III 0W-30                       x3   audit,extra,matrix2027
+  TEBOIL FLUID S                                       x3   audit,extra,matrix2027
+  Teboil Hypoid M 80W-90LS                             x2   audit,extra
+
+
+BOUGHT BUT RECOMMENDED FOR NOTHING (11)
+--------------------------------------------------------------------------
+  ЛУКОЙЛ ПОЛИФЛЕКС ЕР 1-160                                 61,824 kg
+  LEMARC LEGUARD MPV LT                                     48,880 L
+  ЛУКОЙЛ ПОЛИФЛЕКС ЕР 0-160                                 19,260 kg
+  LEMARC GEAPARD DVI LV                                      6,448 L
+  LEMARC PNEUMOGUARD 32                                      4,160 L
+  LEMARC HYDRARD XV32                                        1,872 L
+  LEMARC PNEUMOGUARD 100                                     1,664 L
+  LEMARC DOT4 Low Temp                                       1,489 L
+  LEMARC WINDGUARD 50                                        1,000 L
+  ЛУКОЙЛ ПОЛИФЛЕКС ЕР 2-160 HD                                 900 kg
+  LEMARC FFD                                                   100 L
+
+
+SUMMER AND WINTER ARE DIFFERENT PRODUCTS HERE (12)
+--------------------------------------------------------------------------
+The site runs -45 C to +28 C. One fill cannot be right at both ends,
+and a matrix with one product per compartment cannot say so.
+
+  WK-35 — Grease open gears
+      summer  LUKOIL CARBOFLEX OG 0-4000 HD
+      winter  LUKOIL CARBOFLEX OG 000-1500 HD
+  WK-55 — Grease open gears
+      summer  LUKOIL CARBOFLEX OG 0-4000 HD
+      winter  LUKOIL CARBOFLEX OG 000-1500 HD
+  NHL NTE 150 — Electric wheel reductor
+      summer  TEBOIL SYPRES EXTRA 680
+      winter  TEBOIL SYPRES EXTRA 460
+  NHL NTE 150 — Hydraulic system
+      summer  Teboil Fluid TO-4 Synt 5W-30
+      winter  TEBOIL FLUID ES-MAX
+  NHL NTE 150 — Suspention cylinders
+      summer  Teboil Fluid TO-4 Synt 5W-30
+      winter  TEBOIL FLUID ES-MAX
+  NHL NTE 360 — Electric wheel reductor
+      summer  TEBOIL SYPRES EXTRA 680
+      winter  TEBOIL SYPRES EXTRA 460
+  NHL NTE 360 — Hydraulic system
+      summer  Teboil Fluid TO-4 Synt 5W-30
+      winter  TEBOIL FLUID ES-MAX
+  NHL NTE 360 — Suspention cylinders
+      summer  Teboil Fluid TO-4 Synt 5W-30
+      winter  TEBOIL FLUID ES-MAX
+  NHL TR60 — Transmission
+      summer  Teboil Fluid TO-4 Synt 5W-30
+      winter  TEBOIL FLUID ES-MAX
+  NHL TR60 — Hydraulic system
+      summer  Teboil Fluid TO-4 Synt 5W-30
+      winter  TEBOIL FLUID ES-MAX
+  NHL TR60 — Differential planetary gears power takeoff
+      summer  Teboil Hypoid M 80W-90LS
+      winter  Teboil Hypoid 75W-90
+  NHL TR60 — Ride cylinders
+      summer  Teboil Fluid TO-4 Synt 5W-30
+      winter  TEBOIL FLUID ES-MAX
+
+
+THE TWO MATRICES DISAGREE (11)
+--------------------------------------------------------------------------
+  WK-35 — Compressor
+      V3.1   ?
+      audit  Teboil Compressor oil SHV 46
+  NHL NTE 150 — Electric wheel reductor
+      V3.1   TEBOIL SYPRES EXTRA 680
+      audit  summer: TEBOIL SYPRES EXTRA 680 winter -60C-18C: TEBOIL SYPR
+  NHL NTE 150 — Hydraulic system
+      V3.1   TEBOIL FLUID ES-MAX
+      audit  Summer: Teboil Fluid TO-4 Synt 5W-30 winter -60C-18C: TEBOIL
+  NHL NTE 150 — Suspention cylinders
+      V3.1   TEBOIL FLUID ES-MAX
+      audit  Summer: Teboil Fluid TO-4 Synt 5W-30 winter -60C-18C: TEBOIL
+  NHL NTE 360 — Electric wheel reductor
+      V3.1   TEBOIL SYPRES EXTRA 680
+      audit  summer: TEBOIL SYPRES EXTRA 680 winter -60C-18C: TEBOIL SYPR
+  NHL NTE 360 — Hydraulic system
+      V3.1   TEBOIL FLUID ES-MAX
+      audit  Summer: Teboil Fluid TO-4 Synt 5W-30 winter -60C-18C: TEBOIL
+  NHL NTE 360 — Suspention cylinders
+      V3.1   TEBOIL FLUID ES-MAX
+      audit  Summer: Teboil Fluid TO-4 Synt 5W-30 winter -60C-18C: TEBOIL
+  NHL TR60 — Transmission
+      V3.1   TEBOIL FLUID ES-MAX
+      audit  Summer: Teboil Fluid TO-4 Synt 5W-30 winter -60C-18C: TEBOIL
+  NHL TR60 — Hydraulic system
+      V3.1   TEBOIL FLUID ES-MAX
+      audit  Summer: Teboil Fluid TO-4 Synt 5W-30 winter -60C-18C: TEBOIL
+  NHL TR60 — Differential planetary gears power takeoff
+      V3.1   there is no 75w90 with LS additives product in portfolio
+      audit  summer: Teboil Hypoid M 80W-90LS. Winter -60C-18C: Teboil Hy
+  NHL TR60 — Ride cylinders
+      V3.1   TEBOIL FLUID ES-MAX
+      audit  Summer: Teboil Fluid TO-4 Synt 5W-30 winter -60C-18C: TEBOIL
+
+
+THE SUPPLIER'S OWN CAVEATS (17)
+--------------------------------------------------------------------------
+  [Taiyuan Heavy Industry WK35] Reducer Lubricating Oil
+      Lemarc Carterra SH 220
+  [Taiyuan Heavy Industry WK35] Air compressor oil
+      Ingersoll Rand. Ultra Coolant is PAG based product with ester added therefore Is not compatible with anything else and can be very sensitive to top up by different oil. FOR your reference: We checked with Polyus Gold what specified lubs do they use for WK 35 instead of IR Ultra Coolant and for NHL i
+  [Taiyuan Heavy Industry WK35] Mist generator
+      ISO VG 32 при Pour Point -45С – LEMARC HYDRARD HVLP-ZF LT
+  [Taiyuan Heavy Industry WK35] For open gear:
+      winter ЛУКОЙЛ КАРБОФЛЕКС OG 000-1500 HD, summer ЛУКОЙЛ КАРБОФЛЕКС OG 0-4000 HD. These greases fully complince with OEM requirements and moreover recommended by this OEM for waranty period.
+  [Taiyuan Heavy Industry WK35] For closed units
+      all-season grease ЛУКОЙЛ СИНТОФЛЕКС АРКТИК 1-100 HD. Covered temperature range from -50 to +50 degrees.
+  [Terex NHL NTE 150] Engine Oil
+      Leguard 0W-40* In OEM recommendations not directly mentioned SAE Grade 0W-40. Nevetheless this option is OK due to universall all-season coverage by one product grade (due to the involved in our product best-in-class share stable VM (Viscosity Modifier) from Top Tier import additive producer. OEM re
+  [Terex NHL NTE 150] Gear oil
+      ISO VG 460 - Teboil Sypres Extra 460 - new
+  [Terex NHL NTE 150] Hydraulic oil
+      from -60 to -18 recommended Chevron Texamatic 1888 from approval Voith Turbo H55.6335 G607 list. Clarification is required on the units, as the official TEREX bulletins have information that is different from the one provided to us. If the product was selected by analogy and you choose LEGUARD AC 5W
+  [Terex NHL NTE 150] Central lubrication system
+      NLGI 2 – ЛУКОЙЛ ПОЛИФЛЕКС ЕР 2-160 – new NLGI 1 – ЛУКОЙЛ ПОЛИФЛЕКС ЕР 1-160 NLGI 0 – recommended mobil SHC 007 – ЛУКОЙЛ СИНТОФЛЕКС ЕР 00-460 - new (as possible alternative -ЛУКОЙЛ ПОЛИФЛЕКС ЕР 0-160) NLGI 00 – recommended mobil SHC 007 – ЛУКОЙЛ СИНТОФЛЕКС ЕР 00-460 - new
+  [Terex NHL NTE 150] Front Wheel
+      recomended Chevron Ulti-plex grease EP – ЛУКОЙЛ СИНТОФЛЕКС ЕР 1,5-460 – new
+  [Terex NHL NTE 150] Electic drive system motor
+      Recommended mobil SHC 100 – ЛУКОЙЛ СИНТОФЛЕКС 2-100 – new
+  [Hanjin Drills] ENGINE OIL
+      API CH-4 0W-30; API CH-4 15W-40 - LEMARC LEGUARD 40 0W40 is OK (as all-season solution)
+  [Hanjin Drills] Hydraulic oil
+      ISO VG 32 - LEMARC HYDRARD XV 32
+  [Hanjin Drills] Rotation Gear box oil
+      MOBIL SHC626 (-51C) - Teboil Sypres Extra 68 - new
+  [Hanjin Drills] Separator tank oil
+      MOBIL RARUS SHC1025(-44C) - LEMARC AEROGUARD SH 46 / TEBOIL COMPRESSOR OIL SHV 46 - new
+  [Hanjin Drills] Engine Gear box oil
+      -
+  [Hanjin Drills] Lubricating oil
+      MOBIL ALMO 525/ ROCK Drill Lubricant 46 (winter) – ISO VG 46 – Would it be possible to review application of compressor oil like LEMARC AEROGUARD SH 46 (TEBOIL COMPRESSOR OIL SHV 46)? Or apply VG 32? Should be considered with OEM by Baimskaya. MOBIL ALMO 527/ ROCK Drill Lubricant 100 (spring & autum
