@@ -26,23 +26,34 @@
   function m(id){ return M[id] || null; }
 
   /* ---- what a millimetre MEANS ------------------------------------------
-     Deliberately empty. Neither inspection form carries a new thickness or a
-     condemn limit — they are record sheets, and the survey they came with is
-     bare millimetres. Nothing here is going to invent them: an amber puck
-     backed by a guess is worse than no colour at all, because it is acted on.
+     This was deliberately empty for a long time: neither inspection form
+     carries a new thickness or a condemn limit, and an amber puck backed by a
+     guess is worse than no colour at all, because it is acted on.
 
-     So the round records the number and compares it with what the same station
-     read last time, which is the check that actually catches things — a
-     transposed digit, a plate that lost 3 mm in a month. The moment the client
-     supplies new/condemn, fill LIM in and every band, tally and dashboard
-     rollup lights up with no other change:
+     The site has now supplied the figure. R. Marrero: every liner goes on at
+     20 mm and comes off at 8 mm, across the property. So the FLOOR is filled
+     in — FLR1, FLR2, FLR3 and the tail, which is the floor at its discharge
+     end — and every band, tally and dashboard rollup lights up for them.
 
-       LIM.HM400 = { FLR1:{n:20,c:8}, TAIL:{n:20,c:8}, ... }   // per zone
-       LIM.HM400 = { "*":{n:20,c:8}, F62:{n:25,c:10} }         // or per station
+     The side skins and the front wall are NOT filled in and must not be. They
+     are structural body plate, not a bolt-on wear liner; they go on thinner
+     than 20 mm, and a 20/8 limit applied to them would condemn every truck on
+     the register the first time one was measured. They keep doing what the
+     whole body round did until now — record the millimetre and compare it with
+     what the same station read last time, which is the check that actually
+     catches things: a transposed digit, a plate that lost 3 mm in a month.
 
      Station beats zone beats "*", so one odd plate can be named without
-     restating the rest. */
-  var LIM = { HM400:{}, TR60:{} };
+     restating the rest:
+
+       LIM.HM400 = { "*":{n:20,c:8}, F62:{n:25,c:10} }
+
+     Both models carry the same figure because the liner is the same plate. */
+  var LINER = { n:20, c:8, src:'site' };
+  var LIM = {
+    HM400: { FLR1:LINER, FLR2:LINER, FLR3:LINER, TAIL:LINER },
+    TR60:  { FLR1:LINER, FLR2:LINER, FLR3:LINER, TAIL:LINER }
+  };
 
   function limFor(id, k){
     var tab = LIM[id]; if (!tab) return null;
@@ -94,6 +105,19 @@
     hasLimits: function (id) {
       var tab = LIM[id];
       return !!tab && Object.keys(tab).length > 0;
+    },
+    /* Whether a whole zone can be graded. The floor can and the side skins
+       cannot, so "does this model have limits" is no longer the question the
+       screen needs answered — it needs to know WHICH parts are graded, or an
+       inspector standing at a side skin gets a reading with no verdict and
+       nothing on screen saying why. */
+    zoneHasLimit: function (id, z) {
+      var pts = this.inZone(id, z);
+      return pts.length > 0 && pts.every(function (p) { return !!limFor(id, p.k); });
+    },
+    ungradedZones: function (id) {
+      var self = this;
+      return this.zones(id).filter(function (z) { return !self.zoneHasLimit(id, z.k); });
     },
     corrections: FIX,
   };

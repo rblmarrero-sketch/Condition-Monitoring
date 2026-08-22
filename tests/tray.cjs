@@ -84,43 +84,69 @@ const put = (p, k, v) => p.evaluate(a => { pickComponent(a[0]);
   ok('and tapping it names which sheet', /HM400|Komatsu/i.test(await p.textContent('.tbnote')),
     (await p.textContent('.tbnote')).trim().slice(0, 64));
 
-  /* ---- 2. no limits means no verdict ------------------------------------ */
-  console.log('\nwith no condemn limit supplied, nothing gets a verdict');
+  /* ---- 2. the floor is graded; the structure is not ---------------------- */
+  /* The site has supplied one figure — every liner on 20 mm, off at 8 mm — and
+     it applies to the FLOOR. The side skins and front wall are structural
+     plate, thinner than 20 mm from new, and a 20/8 limit on them would condemn
+     the whole register the first time anybody measured one. So half this body
+     grades and half does not, and the half that does not has to say so. */
+  console.log('\nthe floor gets a verdict, the structure gets a record');
   await openTray(p, 'TK143');
   const noteTxt = () => p.$$eval('.tbnote', a => a.map(e => e.textContent).join(' '));
-  ok('the round says so, once, above the map',
-    /not graded|no verdict|No new or condemn/i.test(await noteTxt()),
+  ok('the round says which parts are not graded, above the map',
+    /not graded|structural/i.test(await noteTxt()),
     (await noteTxt()).trim().slice(0, 52));
   /* Short by default, whole on tap — and the short form has to carry the point
      on its own, because that is the one most inspectors will ever read. */
   await p.locator('.tbnote button').first().click();
   await p.waitForTimeout(300);
-  ok('and the whole of it is one tap away',
-    /No new or condemn thickness/i.test(await noteTxt()), (await noteTxt()).trim().slice(0, 60));
+  ok('and naming them is one tap away',
+    /Left side|Right side|Front wall/i.test(await noteTxt()),
+    (await noteTxt()).trim().slice(0, 72));
   await p.locator('.tbnote button').first().click();
   await p.waitForTimeout(300);
+
   await put(p, 'F62', 3.5);
   await p.waitForTimeout(250);
-  ok('a very thin plate does not come back green',
-    await p.evaluate(() => bodyState('F62') === 'done' && BODY.band('HM400','F62',3.5) === null),
+  /* 3.5 mm of a 20 mm liner is past condemn and must never read as fine. This
+     is the assertion the whole section exists for. */
+  ok('a floor liner worn past condemn comes back red, not green', await p.evaluate(() =>
+    bodyState('F62') === 'act' && Math.round(BODY.wear('HM400','F62',3.5)) === 138),
     await p.evaluate(() => document.getElementById('ucRead').textContent));
-  ok('and the reference line says there is no limit',
-    /no limit/i.test(await p.textContent('#ucRefLine')), (await p.textContent('#ucRefLine')).slice(0, 44));
-  ok('the exported row carries no percentage and no band', await p.evaluate(() => {
-    const rec = { type:'TB', equip:'TK143', date:'2026-08-03' };
-    const w = wearOut(rec, 'F62', { mm:3.5 });
-    return w.wearPct === '' && w.band === '' && w.newMM === '' && w.condemnMM === '';
+  ok('and the reference line states the figure it judged against',
+    /20/.test(await p.textContent('#ucRefLine')) && /8/.test(await p.textContent('#ucRefLine')),
+    (await p.textContent('#ucRefLine')).slice(0, 48));
+  ok('the exported row carries the percentage and the band', await p.evaluate(() => {
+    const w = wearOut({ type:'TB', equip:'TK143', date:'2026-08-03' }, 'F62', { mm:3.5 });
+    return w.band === 'act' && String(w.newMM) === '20' && String(w.condemnMM) === '8'
+        && w.wearPct !== '';
   }));
-  ok('but it does carry which sheet, and the zone', await p.evaluate(() => {
+  ok('and still carries which sheet, and the zone', await p.evaluate(() => {
     const w = wearOut({ type:'TB', equip:'TK143' }, 'F62', { mm:3.5 });
     return w.refSrc === 'tray:HM400' && w.zone === 'TAIL';
   }));
-  /* The moment the client supplies figures, the same code lights up. */
-  ok('supplying limits turns the verdict on with no other change', await p.evaluate(() => {
-    BODY.limits.HM400 = { '*': { n:20, c:8 } };
-    const band = bodyState('F62'), pct = Math.round(BODY.wear('HM400','F62',3.5));
-    delete BODY.limits.HM400['*'];
-    return band === 'act' && pct === 138;   // (20-3.5)/(20-8)
+
+  /* The other half. A side skin has no thickness supplied, so a reading on it
+     gets recorded and compared with last time and gets NO verdict — and the
+     absence has to be visible, not silent. */
+  await put(p, 'L21', 3.5);
+  await p.waitForTimeout(250);
+  ok('the same 3.5 mm on a side skin gets no verdict, because none is known',
+    await p.evaluate(() => BODY.band('HM400','L21',3.5) === null
+                        && BODY.limitFor('HM400','L21') === null));
+  ok('and the export carries no invented numbers for it', await p.evaluate(() => {
+    const w = wearOut({ type:'TB', equip:'TK143' }, 'L21', { mm:3.5 });
+    return w.wearPct === '' && w.band === '' && w.newMM === '' && w.condemnMM === '';
+  }));
+
+  /* Station beats zone, so one odd plate can be named without restating the
+     rest — the mechanism the reference comment promises. */
+  ok('a station-level figure overrides the zone it sits in', await p.evaluate(() => {
+    BODY.limits.HM400.F62 = { n:25, c:10 };
+    const pct = Math.round(BODY.wear('HM400','F62',3.5));
+    delete BODY.limits.HM400.F62;
+    const back = Math.round(BODY.wear('HM400','F62',3.5));
+    return pct === 143 && back === 138;     // (25-3.5)/15 then (20-3.5)/12
   }));
 
   /* ---- 3. the questions a round can ask without a reference table ------- */
@@ -328,7 +354,10 @@ const put = (p, k, v) => p.evaluate(a => { pickComponent(a[0]);
   await p.waitForTimeout(200);
   ok('and the method', /толщиномер/i.test(await p.textContent('#ucGuide')),
     (await p.textContent('#ucGuide')).slice(20, 70));
-  ok('the no-limits warning too', /предел|толщин/i.test(await p.textContent('.tbnote')),
+  /* The short form is the one most inspectors read, so it is the one checked.
+     "оцениваем" is the word that carries the point — recorded, not graded. */
+  ok('the not-graded warning too',
+    /оценива|предел|толщин/i.test(await p.textContent('.tbnote')),
     (await p.textContent('.tbnote')).slice(0, 50));
   await p.click('.lang button[data-lang="en"]');
   await p.waitForTimeout(400);

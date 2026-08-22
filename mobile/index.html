@@ -2036,6 +2036,8 @@ const I18N = {
     tb_no_body:"The dump body round is for the HM400 and TR60 haul trucks.",
     tb_assumed_s:"Model not in the register — check the sheet fits",
     tb_assumed:"The register does not record this truck's model. Using the {m} sheet — check it matches the body you are standing at.",
+    tb_partlimits_s:"Some of this body is recorded, not graded",
+    tb_partlimits:"The floor liner is 20 mm new and condemned at 8 mm, so those readings get a verdict. These are structural plate with no thickness supplied, and get recorded and compared with last time instead: {z}.",
     tb_nolimits_s:"No limits loaded — recorded, not graded",
     tb_nolimits:"No new or condemn thickness has been supplied yet, so no reading gets a verdict. Every millimetre is still recorded, and compared with this station last time.",
     tb_noref:"No limit for this station — the reading is recorded and compared with last time.",
@@ -2372,6 +2374,8 @@ const I18N = {
     tb_no_body:"Осмотр футеровки кузова — для самосвалов HM400 и TR60.",
     tb_assumed_s:"Модели нет в реестре — проверьте схему",
     tb_assumed:"Модель этого самосвала не указана в реестре. Используется схема {m} — проверьте, что она соответствует кузову.",
+    tb_partlimits_s:"Часть кузова записываем, но не оцениваем",
+    tb_partlimits:"Футеровка пола — 20 мм новая, предел 8 мм, по ней выводится оценка. Здесь конструкционный лист, толщина не задана: замеры записываются и сравниваются с прошлым разом — {z}.",
     tb_nolimits_s:"Пределы не заданы — записываем, но не оцениваем",
     tb_nolimits:"Толщина новой футеровки и предел износа пока не заданы, поэтому оценка не выводится. Все замеры записываются и сравниваются с прошлым разом.",
     tb_noref:"Для этой точки нет предела — замер записывается и сравнивается с прошлым разом.",
@@ -3108,7 +3112,16 @@ function renderBodyMap(){
   const id=st.model, cur=BODY.get(id,curItem);
   let h=ucViewsBar();
   if(!st.sure) h+=tbNote("assumed", t("tb_assumed_s"), t("tb_assumed",{m:st.title}));
-  if(!BODY.hasLimits(id)) h+=tbNote("nolimits", t("tb_nolimits_s"), t("tb_nolimits"));
+  /* Either nothing is graded, or only part of it is. Saying nothing in the
+     second case is the worse failure: the floor lights up with verdicts, the
+     side skins quietly do not, and the inspector is left to guess whether the
+     app is broken or the plate is fine. */
+  const ungraded = BODY.ungradedZones(id);
+  if(!BODY.hasLimits(id))
+    h+=tbNote("nolimits", t("tb_nolimits_s"), t("tb_nolimits"));
+  else if(ungraded.length)
+    h+=tbNote("nolimits", t("tb_partlimits_s"),
+              t("tb_partlimits",{z:ungraded.map(z=>z[lang]||z.en).join(", ")}));
   h+=bodyTally();
   h+='<div class="tbwrap">'+
      bodyMap({ model:id, lang:lang, sel:curItem, tag:true,
