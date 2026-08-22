@@ -319,6 +319,27 @@
   .reqwhat b{display:block;font-size:14px;}
   .reqwhat i{display:block;font-style:normal;font-size:11.5px;color:var(--muted);
     font-weight:600;margin-top:1px;}
+  /* The reconciliation lists. Each one is a disagreement between two of the
+     site's own documents, so it is folded shut with its count showing: the
+     number is the finding, the rows are the evidence. */
+  details.cat{border-top:1px solid var(--line);}
+  details.cat:last-child{border-bottom:1px solid var(--line);}
+  details.cat>summary{cursor:pointer;list-style:none;display:flex;
+    align-items:center;gap:10px;padding:11px 2px;font-size:13.5px;}
+  details.cat>summary::-webkit-details-marker{display:none;}
+  details.cat>summary::before{content:"▸";color:var(--muted);font-size:11px;width:10px;}
+  details.cat[open]>summary::before{content:"▾";}
+  details.cat>summary b{font-weight:600;}
+  details.cat>summary i{font-style:normal;margin-left:auto;color:var(--muted);
+    font-size:12px;font-variant-numeric:tabular-nums;}
+  .catbody{padding:2px 0 12px 20px;display:grid;gap:9px;}
+  .catrow b{display:block;font-size:13px;font-weight:600;line-height:1.3;}
+  .catrow i{display:block;font-style:normal;font-size:11.5px;color:var(--muted);
+    margin-top:2px;line-height:1.45;}
+  .catrow i.prose{color:var(--ink-2);max-width:78ch;}
+  .kpi .s{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.3;}
+  .kpi.t-warn .v{color:var(--warning,#b26a00);}
+  .kpi.t-bad .v{color:var(--serious,#c02f2f);}
   .reqwhat .spec{display:block;font-size:11.5px;color:var(--ink-2);margin-top:4px;}
   .reqwhat .spec>summary{cursor:pointer;color:var(--muted);font-size:11.5px;
     list-style:none;width:max-content;}
@@ -415,6 +436,20 @@
   .pos .b-act{background:color-mix(in srgb,var(--critical) 14%,var(--surface));color:var(--critical);}
   .pos .b-none{background:color-mix(in srgb,var(--muted) 12%,var(--surface));color:var(--muted);}
   .pos .cm{margin-top:6px;font-size:12px;color:var(--ink-2);font-style:italic;}
+  /* A band is a pill wherever it is put. These rules were scoped to .pos, so
+     the two bands on the standard panel — "nothing qualifies at −40" and the
+     count of compartments whose OEM code contradicts their type — rendered as
+     unstyled prose in the middle of a form: the loudest statements on the
+     screen, drawn quieter than the labels around them. Scoped rules keep
+     winning where they apply; these are the fallback for everywhere else. */
+  .band{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.05em;
+    text-transform:uppercase;padding:3px 8px;border-radius:999px;line-height:1.35;
+    white-space:normal;}
+  .b-ok{background:color-mix(in srgb,var(--good) 14%,var(--surface));color:var(--good);}
+  .b-watch{background:color-mix(in srgb,var(--warning) 16%,var(--surface));color:var(--warning);}
+  .b-act{background:color-mix(in srgb,var(--critical) 14%,var(--surface));color:var(--critical);}
+  .b-none{background:color-mix(in srgb,var(--muted) 12%,var(--surface));color:var(--muted);}
+  .reqwhat .band{margin-top:6px;}
   .lang{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;}
   .lang button{background:var(--surface);color:var(--ink-2);border:0;padding:7px 11px;font:inherit;
     font-size:12px;font-weight:650;cursor:pointer;}
@@ -1264,6 +1299,13 @@
     </div>
 
     <div class="section">
+      <h2 data-i18n="lc_title">The 2027 shelf against the recommendations</h2>
+      <div class="sub" data-i18n="lc_sub">Specification 02 rev CO-05 is what the site may actually buy. The fleet matrices say what should go in each compartment. Where the two do not line up, somebody has either told a fitter to use an oil nobody ordered, or ordered an oil for nothing — and the season is a third answer neither of them can show.</div>
+      <div class="kpis" id="lcKpis"></div>
+      <div id="lcLists"></div>
+    </div>
+
+    <div class="section">
       <h2 data-i18n="lr_title">Machine reference</h2>
       <div class="sub" data-i18n="lr_sub">Capacities, specifications and intervals, per model. A capacity is the one number here that causes a failure on its own — an under-filled final drive seizes, an over-filled one blows a seal — so changing it asks where the figure came from.</div>
       <div class="row" style="margin:14px 0 12px;gap:12px;align-items:flex-end;flex-wrap:wrap">
@@ -1368,6 +1410,7 @@
 <script src="../mobile/wear.js?v=120"></script>
 <script src="../mobile/wear-map.js?v=120"></script>
 <script src="../mobile/lube.js?v=120"></script>
+<script src="../mobile/lube2027.js?v=120"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
 <script src="../mobile/upload-defaults.js?v=120"></script>
@@ -1534,6 +1577,23 @@ const I18N={
   ls_note:"{d} of {n} requirements decided · {p} products on the standard. Fewer products is the point: every extra one is a drum, a shelf, a pump and a way to put the wrong thing in a machine.",
   lm_wanted:"standard · not yet audited",
   ls_specs:"{n} OEM specification(s) behind this",
+  ls_onspec:"On the 2027 specification", ls_offspec:"Recommended, not bought",
+  ls_rated:"rated to {d}°", ls_unrated:"no data sheet",
+  lc_title:"The 2027 shelf against the recommendations",
+  lc_sub:"Specification 02 rev CO-05 is what the site may actually buy. The fleet matrices say what should go in each compartment. Where the two do not line up, somebody has either told a fitter to use an oil nobody ordered, or ordered an oil for nothing — and the season is a third answer neither of them can show.",
+  lc_shelf:"On the specification", lc_shelf_s:"products bought for 2027",
+  lc_off:"Recommended, not bought", lc_off_s:"an oil somebody was told to use",
+  lc_un:"Bought, used for nothing", lc_un_s:"no compartment names it",
+  lc_season:"Summer ≠ winter", lc_season_s:"compartments answered twice",
+  lc_disp:"The matrices disagree", lc_disp_s:"same compartment, two answers",
+  lc_tds:"Data sheets on file", lc_tds_s:"of {n} recommendation rows",
+  lc_hdr_off:"Told to use it, nobody bought it",
+  lc_hdr_un:"Bought, and recommended for nothing",
+  lc_hdr_season:"Answered with a summer product and a winter one",
+  lc_hdr_disp:"The two matrices answer the same compartment differently",
+  lc_hdr_notes:"The supplier's own caveats",
+  lc_summer:"summer", lc_winter:"winter", lc_named:"named {n}×",
+  ls_ask:"{n} compartment(s) here where the OEM code contradicts the type",
   lm_offstd:"off standard — should be {p}",
   lr_title:"Machine reference",
   lr_sub:"Capacities, specifications and intervals, per model.",
@@ -1862,6 +1922,23 @@ const I18N={
   ls_note:"Решено {d} из {n} требований · {p} продуктов в стандарте. Меньше продуктов — это и есть цель: каждый лишний — это бочка, полка, насос и способ залить не то.",
   lm_wanted:"стандарт · ещё не проверено",
   ls_specs:"{n} спецификаций OEM за этим",
+  ls_onspec:"В спецификации 2027", ls_offspec:"Рекомендовано, не закуплено",
+  ls_rated:"до {d}°", ls_unrated:"нет спецификации",
+  lc_title:"Спецификация 2027 против рекомендаций",
+  lc_sub:"Спецификация 02 ред. CO-05 — то, что действительно можно закупить. Матрицы говорят, что заливать. Где они расходятся — либо механику назвали масло, которого не заказали, либо заказали масло, которое никуда не идёт.",
+  lc_shelf:"В спецификации", lc_shelf_s:"продуктов закуплено на 2027",
+  lc_off:"Рекомендовано, не закуплено", lc_off_s:"масло, которое назвали механику",
+  lc_un:"Закуплено, не используется", lc_un_s:"ни один узел его не называет",
+  lc_season:"Лето ≠ зима", lc_season_s:"узлов с двумя ответами",
+  lc_disp:"Матрицы расходятся", lc_disp_s:"один узел, два ответа",
+  lc_tds:"Спецификации приложены", lc_tds_s:"из {n} строк рекомендаций",
+  lc_hdr_off:"Назвали механику, но не закупили",
+  lc_hdr_un:"Закуплено и никуда не назначено",
+  lc_hdr_season:"Ответ дан летним и зимним продуктом",
+  lc_hdr_disp:"Две матрицы отвечают по-разному",
+  lc_hdr_notes:"Замечания поставщика",
+  lc_summer:"лето", lc_winter:"зима", lc_named:"названо {n}×",
+  ls_ask:"{n} узл. — код OEM противоречит типу",
   lm_offstd:"вне стандарта — должно быть {p}",
   lr_title:"Справочник по технике",
   lr_sub:"Объёмы, спецификации и интервалы по моделям.",
@@ -4636,6 +4713,58 @@ function renderLubeProg(){
   ].map(([k,v])=>`<div class="kpi"><div class="k">${esc(t(k))}</div><div class="v">${fmtN(v)}</div></div>`).join("");
 }
 
+/* ── the 2027 shelf against the recommendations ───────────────────────────
+   Four documents, four ways of disagreeing. None of these numbers is a
+   judgement — each one is a pair of the site's own documents saying different
+   things, and each one has somebody who can settle it in an afternoon. */
+function renderLubeCat(){
+  const box = $("lcLists"), kp = $("lcKpis");
+  if(!box || !kp) return;
+  if(!window.LUBE2027){ kp.innerHTML = ""; box.innerHTML = ""; return; }
+  const C = LUBE2027, rows = C.plan.length + C.extra.length;
+  const tds = C.plan.concat(C.extra).filter(r => r.att).length;
+  kp.innerHTML = [
+    ["lc_shelf",  C.shelf.length,     "lc_shelf_s",  ""],
+    /* Spelled out rather than built from a variable, so the stylesheet linter
+       can see that these classes are used. A class assembled at runtime reads
+       to every tool as a rule painting nothing. */
+    ["lc_off",    C.offShelf.length,  "lc_off_s",    C.offShelf.length ? "t-warn" : ""],
+    ["lc_un",     C.unassigned.length,"lc_un_s",     C.unassigned.length ? "t-warn" : ""],
+    ["lc_season", C.seasons.length,   "lc_season_s", C.seasons.length ? "t-warn" : ""],
+    ["lc_disp",   C.disputed.length,  "lc_disp_s",   C.disputed.length ? "t-warn" : ""],
+    /* Zero of two hundred and forty-nine. The column exists in both matrices
+       and is empty in every row of both, so nothing in this standard is
+       currently traceable to a data sheet. */
+    ["lc_tds",    tds,                "lc_tds_s",    tds ? "" : "t-bad"],
+  ].map(([k,v,sub,tone])=>
+    `<div class="kpi ${tone}"><div class="k">${esc(t(k))}</div>` +
+    `<div class="v">${fmtN(v)}</div>` +
+    `<div class="s">${esc(t(sub,{n:rows}))}</div></div>`).join("");
+
+  const list = (key, items, render) => items.length
+    ? `<details class="cat"><summary><b>${esc(t(key))}</b>` +
+      `<i>${items.length}</i></summary><div class="catbody">` +
+      items.map(render).join("") + `</div></details>`
+    : "";
+  const vol = x => x.q ? `<i>${fmtN(x.q)} ${esc(x.u)}</i>` : "";
+  box.innerHTML =
+    list("lc_hdr_off", C.offShelf, x =>
+      `<div class="catrow"><b>${esc(x.as)}</b><i>${
+        esc(t("lc_named",{n:x.n}))} · ${esc(x.where.join(", "))}</i></div>`) +
+    list("lc_hdr_un", C.unassigned, x =>
+      `<div class="catrow"><b>${esc(x.p)}</b>${vol(x)}</div>`) +
+    list("lc_hdr_season", C.seasons, x =>
+      `<div class="catrow"><b>${esc(x.model)} — ${esc(x.comp)}</b>` +
+      `<i>${esc(t("lc_summer"))}: ${esc(x.by.summer||"—")} · ` +
+      `${esc(t("lc_winter"))}: ${esc(x.by.winter||"—")}</i></div>`) +
+    list("lc_hdr_disp", C.disputed, x =>
+      `<div class="catrow"><b>${esc(x.model)} — ${esc(x.comp)}</b>` +
+      `<i>V3.1: ${esc(x.matrix||"—")}</i><i>audit: ${esc(x.audit||"—")}</i></div>`) +
+    list("lc_hdr_notes", C.notes, x =>
+      `<div class="catrow"><b>${esc(x.m)} — ${esc(x.comp)}</b>` +
+      `<i class="prose">${esc(x.text)}</i></div>`);
+}
+
 /* ── deciding the site standard ───────────────────────────────────────────
    A requirement is not a specification string. Two compartments belong to the
    same DECISION when the same products can serve them — an HM400 transmission,
@@ -4653,9 +4782,38 @@ const LUBE_STD_KEY = "cm_lube_std";
    right grain: it collapses 389 compartments to eight decisions, and it does
    not depend on how somebody typed a spec string in Excel. Grouping on the OEM
    text would give 89 groups, which is the problem rather than the answer. */
+/* What may be offered for this job.
+
+   The panel used to offer the eight products the old masterlist knew, filtered
+   by type, and for two of the eight requirements that came to nothing at all —
+   an engineer looking at a decision with no options and no explanation. The
+   shelf is Specification 02 rev CO-05: twenty-four products procurement has
+   actually signed for. Anything the supplier recommended that is NOT on it is
+   offered too, and said to be off it, because choosing one is a purchase order
+   somebody has to raise. */
+function lubeShelf(type){
+  const out = [], seen = {};
+  const add = (o) => {
+    const k = String(o.p||"").toUpperCase().replace(/[^A-Z0-9]+/g,"");
+    if(!o.p || seen[k]) return;
+    seen[k] = 1; out.push(o);
+  };
+  /* `lo` is the coldest temperature the product is rated for, and it is null
+     for everything on the 2027 specification because not one data sheet has
+     been attached to it — the column exists in both fleet matrices and is
+     empty in all 249 rows. A null here is not "fine", it is "nobody has
+     checked", and the picker says so rather than letting it read as approved.
+     The site designs to −40 and sees −45. */
+  if(window.LUBE2027)
+    LUBE2027.shelf.forEach(pr=>{ if(!type || pr.t === type)
+      add({ p:pr.p, t:pr.t, on:true, q:pr.q, u:pr.u, lo:pr.lo==null?null:pr.lo }); });
+  if(window.LUBE)
+    LUBE.catalog.forEach(pr=>{ if(!type || pr.t === type)
+      add({ p:pr.p, t:pr.t, on:false, lo:pr.lo==null?null:pr.lo }); });
+  return out;
+}
 function lubeQualifiers(type){
-  if(!window.LUBE || !type) return [];
-  return LUBE.catalog.filter(pr => pr.t === type).map(pr => pr.p).sort();
+  return lubeShelf(type).map(x => x.p);
 }
 function lubeReqKey(c){
   return c && c.t ? c.t : "none:" + ((c && c.k) || "?");
@@ -4671,8 +4829,10 @@ function lubeRequirements(){
       if(!c.t) return;                    /* no lubricant type on this one yet */
       const k = lubeReqKey(c);
       const G = g[k] || (g[k] = { key:k, specs:{}, names:{}, models:{}, units:0,
-                                  litres:0, qualifiers:lubeQualifiers(c.t),
-                                  type:c.t });
+                                  litres:0, shelf:lubeShelf(c.t),
+                                  qualifiers:lubeQualifiers(c.t),
+                                  type:c.t, ask:0 });
+      if(c.ask) G.ask++;
       /* The OEM strings are shown here and ONLY here — this screen is where an
          engineer decides, and seeing that one decision is covering eleven
          different ways of writing the same requirement is the argument. */
@@ -4718,9 +4878,18 @@ function renderLubeStd(){
     const names = Object.keys(R.names).slice(0,3).join(", ");
     const specs = Object.keys(R.specs);
     const pick = chosen[R.key] || "";
-    const opts = R.qualifiers.length
-      ? R.qualifiers.map(n=>`<option value="${esc(n)}"${n===pick?" selected":""}>${esc(n)}</option>`).join("")
+    /* Two groups, because "which of these can I actually get" is the first
+       question anybody asks of this list. On the specification means a drum
+       exists; off it means choosing this raises a purchase order. */
+    const on  = R.shelf.filter(x=>x.on), off = R.shelf.filter(x=>!x.on);
+    const grp = (list, lbl) => list.length
+      ? `<optgroup label="${esc(lbl)}">` + list.map(x=>
+          `<option value="${esc(x.p)}"${x.p===pick?" selected":""}>${esc(x.p)}${
+            x.lo != null ? ` · ${esc(t("ls_rated",{d:x.lo}))}`
+                         : ` · ${esc(t("ls_unrated"))}`}${
+            x.q ? ` · ${fmtN(x.q)} ${esc(x.u)}` : ""}</option>`).join("") + `</optgroup>`
       : "";
+    const opts = grp(on, t("ls_onspec")) + grp(off, t("ls_offspec"));
     return `<div class="reqrow">
       <div class="reqwhat">
         <b>${esc(names)}</b>
@@ -4728,6 +4897,7 @@ function renderLubeStd(){
         ${specs.length ? `<details class="spec"><summary>${
           esc(t("ls_specs",{n:specs.length}))}</summary><span>${
           specs.map(x=>esc(x)).join(" · ")}</span></details>` : ""}
+        ${R.ask ? `<span class="band b-act">${esc(t("ls_ask",{n:R.ask}))}</span>` : ""}
       </div>
       <div class="reqvol"><b>${fmtN(R.litres)}</b><i>${esc(t("ls_lyr"))}</i></div>
       <div class="reqpick">${
@@ -5351,6 +5521,7 @@ function renderLubeTab(){
   });
   renderLubeProg();
   renderLubeStd();
+  renderLubeCat();
   renderLubeRef();
   renderLubeMtx();
   renderLubePoster();

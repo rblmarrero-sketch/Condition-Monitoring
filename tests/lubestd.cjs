@@ -104,23 +104,46 @@ const eq = (g, w, what) => ok(JSON.stringify(g) === JSON.stringify(w),
   const unsafe = await p.evaluate(() => {
     const bad = [];
     lubeRequirements().forEach(R => {
-      Object.keys(R.specs).forEach(spec => {
-        R.qualifiers.forEach(name => {
-          const pr = LUBE.product(name);
-          if (!pr) { bad.push(name + " is not on the shelf"); return; }
-          /* A requirement IS a lubricant type now, so the safety property is
-             that everything offered for it is of that type — an engine oil can
-             never be offered for a hydraulic system. */
-          if (pr.t !== R.type)
-            bad.push(pr.p + " (" + pr.t + ") offered for a " + R.type + " requirement");
-        });
+      R.shelf.forEach(x => {
+        /* Two catalogues feed this picker now — the masterlist's eight and the
+           twenty-four on Specification 02 rev CO-05 — so the check resolves the
+           way the screen does. Resolving through one of them only would have
+           reported every 2027 product as "not on the shelf", which is a check
+           that fails for the wrong reason and teaches people to ignore it. */
+        if (!x.p) { bad.push("an option with no name"); return; }
+        if (x.t !== R.type)
+          bad.push(x.p + " (" + x.t + ") offered for a " + R.type + " requirement");
       });
     });
     return bad;
   });
   eq(unsafe, [],
-     "every product offered for a requirement satisfies EVERY specification in it, " +
-     "and is rated for the coldest morning of the year");
+     "every product offered for a requirement is of that requirement's type");
+
+  /* The old title of the check above claimed the cold rating too, and nothing
+     in its body looked at one. It is a separate property and it is the one
+     that bites at Baimskaya, so it gets its own check: an option is either
+     rated at or below the design minimum, or it is VISIBLY unrated. Silence is
+     the failure — an unrated oil that looks approved is how a −15 product ends
+     up in a machine on a −45 morning. */
+  const cold = await p.evaluate(() => {
+    const design = (window.LUBE && LUBE.site && LUBE.site.design) || -40;
+    const out = { warm: [], unmarked: [], rated: 0, unrated: 0 };
+    lubeRequirements().forEach(R => R.shelf.forEach(x => {
+      if (x.lo == null) out.unrated++; else out.rated++;
+      if (x.lo != null && x.lo > design) out.warm.push(x.p + " stops at " + x.lo);
+    }));
+    [...document.querySelectorAll(".reqpick select option")].forEach(o => {
+      if (!o.value) return;
+      if (!/rated to|no data sheet|до |нет спецификации/.test(o.textContent))
+        out.unmarked.push(o.textContent.trim());
+    });
+    return out;
+  });
+  eq(cold.warm, [], "nothing is offered that stops short of the design minimum");
+  eq(cold.unmarked, [],
+     "and every option says its cold rating, or says it has none: " +
+     cold.rated + " rated, " + cold.unrated + " with no data sheet");
 
   console.log("── a requirement nothing can serve says so instead of offering nothing");
   const nofit = await p.evaluate(() =>
