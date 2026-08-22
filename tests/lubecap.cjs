@@ -93,6 +93,47 @@ const eq = (g, w, what) => ok(JSON.stringify(g) === JSON.stringify(w),
   }, unit);
   eq(walk.ks, fromRef, "and they are exactly what lube.js says this model has");
 
+  /* Everything below this line calls pickComponent() directly, which is how a
+     dead control went unnoticed for as long as it did: the fields, the verdict,
+     the evidence and the save were all verified while NOTHING ON SCREEN COULD
+     REACH THEM. The lubrication tree is flat, and the top level of the cascade
+     descended into every card instead of picking it — nine compartments, nine
+     empty screens, curItem never set. So the walk is driven by tapping first,
+     and only then by calling. */
+  console.log("── a thumb can reach a compartment at all");
+  const tap = async () => p.evaluate(() => ({
+    cur: curItem || "",
+    cards: document.querySelectorAll("#posnav .cards button").length,
+    fields: (document.getElementById("captureBox") || {}).style.display !== "none",
+  }));
+  const before = await tap();
+  ok(before.cards > 0, "the cascade offers cards to tap: " + before.cards);
+  await p.locator("#posnav .cards button").first().click();
+  await p.waitForTimeout(200);
+  const after = await tap();
+  ok(after.cur !== "", "ONE tap selects a compartment: " + JSON.stringify(after.cur));
+  ok(after.fields, "and the fields to fill in are on screen");
+  ok(after.cards > 0, "and the other compartments are still one tap away: " + after.cards);
+  /* The card you are on has to look like the card you are on. */
+  ok(await p.evaluate(() => !!document.querySelector("#posnav .cards button.on")),
+     "the selected card is marked as selected");
+  /* Every compartment, not just the first: a flat tree that works for one card
+     and traps the rest is the same bug with a smaller blast radius. */
+  const reach = await (async () => {
+    const n = await p.locator("#posnav .cards button").count();
+    const got = [];
+    for (let i = 0; i < n; i++) {
+      await p.locator("#posnav .cards button").nth(i).click();
+      await p.waitForTimeout(90);
+      got.push(await p.evaluate(() => curItem || ""));
+    }
+    return got;
+  })();
+  eq(reach.filter(x => x === "").length, 0,
+     "every compartment on the machine is reachable by tapping it");
+  eq(new Set(reach).size, reach.length,
+     "and each card selects a different one");
+
   console.log("── recording a product actually survives");
   const first = walk.ks[0];
   await p.evaluate(k => pickComponent(k), first);

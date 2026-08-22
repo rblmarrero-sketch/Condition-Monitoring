@@ -3350,7 +3350,14 @@ function renderComponentNav(tree){
   h+='</div>';
   h+='<button class="searchall" id="searchAllBtn">🔍 '+t("opt_search_all")+'</button>';
   if(!cascL7){
-    h+='<div class="cards">'+tree.map(n=>`<button data-l7="${n.k}" class="${hasUnder(n)?'has':''}"><span class="cc">${n.k}</span><span class="cn">${n[lang]||n.en}</span><span class="dot"></span></button>`).join('')+'</div>';
+    /* Selected state belongs on a leaf here too. Level two marks the chosen
+       card; this level never did, so on a flat tree nothing on screen said
+       which compartment you were filling in. */
+    h+='<div class="cards">'+tree.map(n=>{
+      const leaf=!(n.ch&&n.ch.length);
+      const cls=[hasUnder(n)?'has':'', (leaf&&n.k===curItem)?'on':''].filter(Boolean).join(' ');
+      return `<button data-l7="${n.k}" class="${cls}"><span class="cc">${n.k}</span><span class="cn">${n[lang]||n.en}</span><span class="dot"></span></button>`;
+    }).join('')+'</div>';
   } else if(!cascL8){
     const n7=nodeByCode(tree,cascL7); const kids=(n7&&n7.ch)||[];
     h+='<div class="cards">'+kids.map(n=>{ const hk=n.ch&&n.ch.length;
@@ -3366,7 +3373,18 @@ function renderComponentNav(tree){
   $("posnav").innerHTML=h;
   $("posnav").querySelectorAll('[data-nav]').forEach(b=>b.onclick=()=>{ if(b.dataset.nav==='root'){cascL7=null;cascL8=null;} else if(b.dataset.nav==='l7'){cascL8=null;} renderChips(); });
   const sa=$("searchAllBtn"); if(sa) sa.onclick=()=>openPicker("item");
-  $("posnav").querySelectorAll('[data-l7]').forEach(b=>b.onclick=()=>{cascL7=b.dataset.l7;cascL8=null;renderChips();});
+  /* A top-level card that has nothing under it is a COMPONENT, not a folder.
+     The level below already knew that — it picks a childless node instead of
+     descending into it — and this level did not. On a lubrication round the
+     whole tree is flat, so every card descended into an empty level: nine
+     compartments, nine dead ends, and curItem never set at all. The only way
+     out was the breadcrumb or the search button, which is what "I have to
+     select the component twice" was. */
+  $("posnav").querySelectorAll('[data-l7]').forEach(b=>b.onclick=()=>{
+    const n=nodeByCode(tree,b.dataset.l7);
+    if(n && n.ch && n.ch.length){ cascL7=b.dataset.l7; cascL8=null; renderChips(); }
+    else pickComponent(b.dataset.l7);
+  });
   $("posnav").querySelectorAll('[data-l8]').forEach(b=>b.onclick=()=>{ const n=nodeByCode(tree,b.dataset.l8); if(n&&n.ch&&n.ch.length){cascL8=b.dataset.l8;renderChips();} else pickComponent(b.dataset.l8); });
   $("posnav").querySelectorAll('[data-pick]').forEach(b=>b.onclick=()=>pickComponent(b.dataset.pick));
   $("posnav").querySelectorAll('[data-pos]').forEach(b=>b.onclick=()=>pickComponent(b.dataset.pos));
@@ -3496,10 +3514,17 @@ function refreshChips(){
   const tr=currentTree();
   $("posnav").querySelectorAll("button").forEach(b=>{
     const d=b.dataset;
-    if(d.l7){                                   // a system: only "something under here"
+    if(d.l7){
+      /* A top-level card is USUALLY a system, and on a flat tree it is a
+         component. This branch assumed the first and stripped "on" from every
+         card unconditionally — so the render marked the selected compartment
+         and the repaint that runs immediately after it took the mark straight
+         back off. The same shape as the dot that used to vanish when you
+         graded a component, three functions further down. */
       const n=tr&&nodeByCode(tr,d.l7);
-      b.classList.toggle("has", !!(n&&hasUnder(n)));
-      b.classList.remove("on");
+      const group=!!(n&&n.ch&&n.ch.length);
+      b.classList.toggle("has", group ? hasUnder(n) : !!draft.positions[d.l7]);
+      b.classList.toggle("on", !group && d.l7===curItem);
       return;
     }
     const code=d.pos||d.pick||d.l8;
