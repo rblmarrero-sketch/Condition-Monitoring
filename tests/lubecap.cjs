@@ -134,6 +134,67 @@ const eq = (g, w, what) => ok(JSON.stringify(g) === JSON.stringify(w),
   eq(new Set(reach).size, reach.length,
      "and each card selects a different one");
 
+  /* Nine buttons do not need a breadcrumb, a search box over a list you can
+     already see, or a second copy of themselves at the foot. What they do need
+     is how far through the round you are, which none of that furniture said. */
+  console.log("── and the screen carries nothing it does not need");
+  const furniture = await p.evaluate(() => ({
+    crumb: !!document.querySelector("#posnav .crumb"),
+    search: !!document.getElementById("searchAllBtn"),
+    chiprow: !!document.querySelector("#posnav .posnav"),
+    prog: (document.querySelector("#posnav .prog b") || {}).textContent || "",
+    cards: document.querySelectorAll("#posnav .cards button").length,
+  }));
+  ok(!furniture.crumb, "no breadcrumb: there is nowhere to navigate to");
+  ok(!furniture.search, "no search box over a list already on screen");
+  ok(!furniture.chiprow, "and the cards are not repeated underneath themselves");
+  ok(/\d+\s*\/\s*\d+/.test(furniture.prog) || /\d/.test(furniture.prog),
+     "how far through the round is on screen instead: " + furniture.prog);
+  /* The count has to MOVE, or it is decoration. */
+  const moved = await p.evaluate(async () => {
+    const was = (document.querySelector("#posnav .prog b") || {}).textContent || "";
+    const sel = document.getElementById("lubeProd");
+    sel.value = sel.options[1].value;
+    sel.dispatchEvent(new Event("change"));
+    await new Promise(r => setTimeout(r, 250));
+    return { was, now: (document.querySelector("#posnav .prog b") || {}).textContent || "" };
+  });
+  ok(moved.was !== moved.now,
+     "and it moves when a compartment is recorded: " + moved.was + " -> " + moved.now);
+
+  /* The rule is "a flat tree needs no navigation", not "lubrication is
+     special". A register round has a thousand components behind those cards and
+     must keep every one of these controls. */
+  console.log("── a register round keeps its navigation");
+  const reg = await p.evaluate(async () => {
+    const s = document.getElementById("typeSel");
+    if (![...s.options].some(o => o.value === "TEMP")) return null;
+    s.value = "TEMP"; s.dispatchEvent(new Event("change"));
+    await new Promise(r => setTimeout(r, 250));
+    const u = (window.ASSETS || []).find(a => a.cls === "HT");
+    if (!u) return null;
+    selectEquip(u.n);
+    await new Promise(r => setTimeout(r, 500));
+    return { crumb: !!document.querySelector("#posnav .crumb"),
+             search: !!document.getElementById("searchAllBtn"),
+             cards: document.querySelectorAll("#posnav .cards button").length };
+  });
+  if (reg) {
+    ok(reg.crumb && reg.search,
+       "the breadcrumb and the search box are still there where they earn their place");
+    ok(reg.cards > 0, "and it still offers systems to open: " + reg.cards);
+  } else {
+    ok(true, "no register round available on this build to contrast against");
+  }
+  /* Back to where the rest of the file expects to be. */
+  await p.evaluate(async o => {
+    const s = document.getElementById("typeSel");
+    s.value = "LUBE"; s.dispatchEvent(new Event("change"));
+    await new Promise(r => setTimeout(r, 250));
+    selectEquip(o);
+    await new Promise(r => setTimeout(r, 400));
+  }, unit);
+
   console.log("── recording a product actually survives");
   const first = walk.ks[0];
   await p.evaluate(k => pickComponent(k), first);

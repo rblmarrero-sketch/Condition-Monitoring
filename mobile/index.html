@@ -3344,11 +3344,26 @@ function toggleCapture(){ const tr=currentTree();
 function pickComponent(code){ saveCur(); curItem=code; loadPos(); renderChips(); }
 function renderComponentNav(tree){
   const cap=items().filter(it=>draft.positions[it.k]);
-  let h=guessNote()+ucViewsBar()+(getType()?machineFig("GET"):"")+'<div class="casc"><div class="crumb"><button data-nav="root">'+t("nav_systems")+'</button>';
-  if(cascL7){ const n=nodeByCode(tree,cascL7); h+='<span class="sep">›</span><button data-nav="l7">'+(n?(n[lang]||n.en):cascL7)+'</button>'; }
-  if(cascL8){ const n=nodeByCode(tree,cascL8); h+='<span class="sep">›</span><button data-nav="l8">'+(n?(n[lang]||n.en):cascL8)+'</button>'; }
-  h+='</div>';
-  h+='<button class="searchall" id="searchAllBtn">🔍 '+t("opt_search_all")+'</button>';
+  /* A FLAT tree has nothing to navigate. Every card is a compartment, there are
+     nine of them, and they are all on screen at once — so the breadcrumb leads
+     nowhere, "Search all components" searches a list you can already see, and
+     the captured-chip row at the foot repeats the cards above it. Three
+     controls that exist to make a thousand-component register tractable, on a
+     screen with nine buttons on it.
+
+     What an inspector wants there instead is how far through they are, which
+     none of that furniture was telling them. */
+  const flat = tree.length && tree.every(n=>!(n.ch&&n.ch.length));
+  let h=guessNote()+ucViewsBar()+(getType()?machineFig("GET"):"")+'<div class="casc">';
+  if(flat){
+    h+=progBar(cap.length, tree.length);
+  } else {
+    h+='<div class="crumb"><button data-nav="root">'+t("nav_systems")+'</button>';
+    if(cascL7){ const n=nodeByCode(tree,cascL7); h+='<span class="sep">›</span><button data-nav="l7">'+(n?(n[lang]||n.en):cascL7)+'</button>'; }
+    if(cascL8){ const n=nodeByCode(tree,cascL8); h+='<span class="sep">›</span><button data-nav="l8">'+(n?(n[lang]||n.en):cascL8)+'</button>'; }
+    h+='</div>';
+    h+='<button class="searchall" id="searchAllBtn">🔍 '+t("opt_search_all")+'</button>';
+  }
   if(!cascL7){
     /* Selected state belongs on a leaf here too. Level two marks the chosen
        card; this level never did, so on a flat tree nothing on screen said
@@ -3368,7 +3383,7 @@ function renderComponentNav(tree){
     h+='<div class="cards"><button data-pick="'+n8.k+'" class="'+[draft.positions[n8.k]?'has':'',n8.k===curItem?'on':''].filter(Boolean).join(' ')+'"><span class="cc">▶</span><span class="cn">'+t("nav_whole")+'</span><span class="dot"></span></button>';
     h+=kids.map(n=>`<button data-pick="${n.k}" class="${[draft.positions[n.k]?'has':'',n.k===curItem?'on':''].filter(Boolean).join(' ')}"><span class="cc">${String(n.k).split('.').pop()}</span><span class="cn">${n[lang]||n.en}</span><span class="dot"></span></button>`).join('')+'</div>';
   }
-  if(cap.length) h+='<div class="posnav" style="margin-top:6px">'+cap.map(it=>`<button data-pos="${it.k}" title="${itemLabel(it.k)}"><span>${String(it.k).split('.').pop()}</span><span class="dot"></span></button>`).join('')+'</div>';
+  if(cap.length && !flat) h+='<div class="posnav" style="margin-top:6px">'+cap.map(it=>`<button data-pos="${it.k}" title="${itemLabel(it.k)}"><span>${String(it.k).split('.').pop()}</span><span class="dot"></span></button>`).join('')+'</div>';
   h+='</div>';
   $("posnav").innerHTML=h;
   $("posnav").querySelectorAll('[data-nav]').forEach(b=>b.onclick=()=>{ if(b.dataset.nav==='root'){cascL7=null;cascL8=null;} else if(b.dataset.nav==='l7'){cascL8=null;} renderChips(); });
