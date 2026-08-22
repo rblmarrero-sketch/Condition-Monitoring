@@ -52,16 +52,17 @@ const eq = (g, w, what) => ok(JSON.stringify(g) === JSON.stringify(w),
   console.log("── walk a real lube round and record real answers");
   const walked = await p.evaluate(() => {
     const A = (window.ASSETS || []).find(a =>
-      a.m && LUBE.of(a.m, a.cls) && LUBE.comps(a.m, a.cls).some(c => c.spec));
+      a.m && LUBE.of(a.m, a.cls) &&
+      LUBE.comps(a.m, a.cls).some(c => LUBE.forComp(a.m, c.k, a.cls)));
     document.getElementById("typeSel").value = "LUBE";
     document.getElementById("typeSel").dispatchEvent(new Event("change"));
     selectEquip(A.n);
     const cs = LUBE.comps(A.m, A.cls);
-    const sourced = cs.find(c => c.spec);
+    const sourced = cs.find(c => LUBE.forComp(A.m, c.k, A.cls));
     /* Three answers of different shapes, because they take different routes
        through the payload: a catalogued product, a typed-in one, and a
        compartment answered with evidence and a sample. */
-    const cat = LUBE.fitFor(A.m, sourced.k, A.cls)[0] || LUBE.catalog[0];
+    const cat = LUBE.forComp(A.m, sourced.k, A.cls) || LUBE.catalog[0];
     draft.positions[sourced.k] = { prod: cat.p, evid: "label", samp: true };
     const other = cs.find(c => c.k !== sourced.k);
     if (other) draft.positions[other.k] = { prod: "__other", other: "Unlabelled drum, bay 4", evid: "told" };

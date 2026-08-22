@@ -111,10 +111,27 @@ const eq = (g, w, what) => ok(JSON.stringify(g) === JSON.stringify(w),
      had a capacity leaves the count where it was, and a check that compares a
      number to itself with >= passes for ever without ever meaning anything. */
   const cov = await p.evaluate(() => {
-    const k = $("lrModel").value, i = k.indexOf("|");
+    /* Switch to a model that ACTUALLY has a gap rather than assuming the one
+       the screen opened on does. The default is the biggest class, and after
+       the masterlist import that happens to be fully sourced — a check that
+       depended on it would fail for a reason that has nothing to do with the
+       editor. */
+    /* From the models the EDITOR OFFERS, not from every model in the
+       reference. Sixty-odd masterlist models have no machine on the register
+       yet; the picker leaves them out, so setting lrModel to one of those
+       silently keeps the previous model on screen and the edit lands on the
+       wrong machine. */
+    const offered = [...document.querySelectorAll("#lrModel option")].map(o => o.value);
+    const withGap = offered.find(kk => {
+      const j = kk.indexOf("|");
+      return LUBE.comps(kk.slice(j+1), kk.slice(0,j))
+                 .some(x => x.cap == null || x.verify);
+    });
+    if(!withGap) return { skipped: true };
+    lrModel = withGap; renderLubeRef();
+    const k = withGap, i = k.indexOf("|");
     const m = k.slice(i+1), cls = k.slice(0,i);
-    const gap = LUBE.comps(m, cls).find(x => x.cap == null);
-    if(!gap) return { skipped: true };
+    const gap = LUBE.comps(m, cls).find(x => x.cap == null || x.verify);
     const was = lubeProgramme().refKnown;
     document.querySelector(`#lrTbl input.lrin[data-k="${gap.k}"][data-f="cap"]`).value = "123";
     lubeRefSave();
@@ -126,6 +143,12 @@ const eq = (g, w, what) => ok(JSON.stringify(g) === JSON.stringify(w),
     eq(cov.now, cov.was + 1,
        `and 'reference sourced' went up by exactly one (${cov.was} → ${cov.now})`);
   }
+
+  /* The coverage step switched the picker to a model that had a gap. Put it
+     back, or undo and export run against a different machine than the one the
+     edit was made on. */
+  await p.evaluate(k => { lrModel = k; renderLubeRef(); }, before.key);
+  await p.waitForTimeout(200);
 
   console.log("── undo really undoes");
   /* The reason overrides sit on top of the reference rather than in it. */

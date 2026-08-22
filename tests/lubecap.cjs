@@ -143,18 +143,20 @@ const eq = (g, w, what) => ok(JSON.stringify(g) === JSON.stringify(w),
      this check pass for the wrong reason and then never fail again. */
   const sourced = await p.evaluate(() => {
     const A = (window.ASSETS || []).find(a =>
-      a.m && LUBE.of(a.m, a.cls) && LUBE.comps(a.m, a.cls).some(c => c.spec));
+      a.m && LUBE.of(a.m, a.cls) &&
+      LUBE.comps(a.m, a.cls).some(c => LUBE.forComp(a.m, c.k, a.cls)));
     if (!A) return null;
-    return { unit: A.n, k: LUBE.comps(A.m, A.cls).find(c => c.spec).k };
+    return { unit: A.n,
+             k: LUBE.comps(A.m, A.cls).find(c => LUBE.forComp(A.m, c.k, A.cls)).k };
   });
-  ok(sourced, "there is a sourced compartment to judge against: " + JSON.stringify(sourced));
+  ok(sourced, "there is a compartment with a site product to judge against: " + JSON.stringify(sourced));
   await p.evaluate(o => { selectEquip(o.unit); pickComponent(o.k); }, sourced);
   await p.waitForTimeout(200);
   const verdicts = await p.evaluate(k => {
     const out = {};
     const set = n => { draft.positions[k] = Object.assign(draft.positions[k] || {}, { prod: n }); };
     const c = lubeComp(k);
-    out.spec = c && c.spec || null;
+    out.spec = c && c.t || null;
     LUBE.catalog.forEach(pr => { set(pr.p); out[pr.p] = lubeVerdict(k).k; });
     delete draft.positions[k].prod;
     out.__empty = lubeVerdict(k).k;
@@ -174,9 +176,10 @@ const eq = (g, w, what) => ok(JSON.stringify(g) === JSON.stringify(w),
   console.log("── an unsourced compartment still works");
   const unsourced = await p.evaluate(() => {
     const A = (window.ASSETS || []).find(a =>
-      a.m && LUBE.of(a.m, a.cls) && LUBE.comps(a.m, a.cls).some(c => c.cap == null));
+      a.m && LUBE.of(a.m, a.cls) &&
+      LUBE.comps(a.m, a.cls).some(c => c.cap == null || c.verify));
     if (!A) return null;
-    const c = LUBE.comps(A.m, A.cls).find(x => x.cap == null);
+    const c = LUBE.comps(A.m, A.cls).find(x => x.cap == null || x.verify);
     return { unit: A.n, k: c.k };
   });
   if (ok(unsourced, "there is a compartment nobody has sourced yet")) {

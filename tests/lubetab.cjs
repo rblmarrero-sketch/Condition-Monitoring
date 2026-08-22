@@ -37,8 +37,8 @@ const SEED = (n) => {
   pick.forEach((x, i) => {
     const items = [];
     x.comps.slice(0, 2).forEach((c, j) => {
-      const fit = LUBE.fitFor(x.m, c.k, x.cls);
-      const prod = (fit[0] || LUBE.catalog[(i + j) % LUBE.catalog.length]).p;
+      const fit = LUBE.forComp(x.m, c.k, x.cls);
+      const prod = (fit || LUBE.catalog[(i + j) % LUBE.catalog.length]).p;
       items.push({ key: c.k, lubeProduct: prod,
                    lubeEvidence: j === 0 ? "label" : "told",
                    lubeSampled: j === 0 ? 1 : 0 });

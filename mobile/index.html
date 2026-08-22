@@ -980,8 +980,17 @@
      the only thing on it the fitter did not type — everything else is their own
      answer read back, and a form that shouts your own input at you teaches
      people to stop reading it. */
-  #lubeFields .luberef{font-size:13px;color:var(--ink-2);margin:0 0 10px;line-height:1.45;}
-  #lubeFields .luberef .src{display:block;color:var(--muted);font-size:12px;margin-top:2px;}
+  #lubeFields .luberef{font-size:13px;color:var(--ink-2);margin:0 0 10px;line-height:1.6;}
+  #lubeFields .luberef .lcode{display:inline-block;margin-right:8px;padding:2px 8px;
+    border-radius:6px;background:var(--surface-3);color:var(--ink);
+    font-weight:800;font-size:12.5px;letter-spacing:.04em;}
+  /* The one thing the fitter has to get right, so it is the loudest thing on
+     the panel and it carries the colour that is on the drum. */
+  #lubeFields .luberef .lwant{display:flex;align-items:center;gap:8px;margin-top:8px;
+    padding:9px 11px;border-radius:10px;font-weight:700;font-size:14px;color:var(--ink);
+    background:color-mix(in srgb, var(--h) 14%, var(--surface));
+    border-left:6px solid var(--h);}
+  #lubeFields .luberef .lwant .sw{display:none;}
   #lubeFields .luberead{margin-top:10px;min-height:26px;}
   #lubeFields .luberead .src{color:var(--muted);font-size:12.5px;}
   #lubeFields .chk{display:flex;align-items:center;gap:10px;margin-top:12px;font-size:14px;}
@@ -1961,7 +1970,9 @@ const I18N = {
     lube_ref:"Refill {cap} L · every {iv} h",
     lube_unsourced:"No capacity or specification sourced yet",
     lube_v_none:"Nothing recorded yet",
-    lube_v_nospec:"Recorded — no specification to judge it against",
+    lube_v_nostd:"Recorded — no site product chosen for this yet",
+    lube_v_wrong:"Not the product for this compartment",
+    lube_verify:"Capacity to be confirmed against the manual",
     lube_v_unknown:"Not a catalogued product — needs checking",
     lube_v_bad:"Does not meet the specification",
     lube_v_cold:"Right specification, too thick for −40",
@@ -2295,7 +2306,9 @@ const I18N = {
     lube_ref:"Заправка {cap} л · каждые {iv} ч",
     lube_unsourced:"Объём и спецификация ещё не подтверждены",
     lube_v_none:"Ничего не записано",
-    lube_v_nospec:"Записано — не с чем сравнить",
+    lube_v_nostd:"Записано — продукт для этого узла ещё не выбран",
+    lube_v_wrong:"Не тот продукт для этого узла",
+    lube_verify:"Объём требует подтверждения по руководству",
     lube_v_unknown:"Нет в каталоге — требует проверки",
     lube_v_bad:"Не соответствует спецификации",
     lube_v_cold:"Спецификация верна, слишком густое для −40",
@@ -2965,7 +2978,8 @@ function lubeComp(k){
 function lubeChoices(k){
   if(!window.LUBE || !curEquip) return {fit:[], rest:[]};
   const a=lubeAsset(curEquip);
-  const fit=LUBE.fitFor(a.m, k, a.cls).map(p=>p.p);
+  const want=LUBE.forComp(a.m, k, a.cls);
+  const fit=want?[want.p]:[];
   const rest=LUBE.catalog.map(p=>p.p).filter(n=>fit.indexOf(n)<0);
   return {fit, rest};
 }
@@ -4105,19 +4119,20 @@ function renderGET(){
    the site standard is arithmetic on the specification, and asking a person to
    decide it at the machine is asking them to carry twenty manuals. */
 function lubeVerdict(k){
-  const c=lubeComp(k); const p=draft.positions[k]||{};
+  const p=draft.positions[k]||{};
   const name=p.prod==="__other" ? (p.other||"") : (p.prod||"");
   if(!name) return {b:"none", k:"lube_v_none"};
-  if(!c || !c.spec) return {b:"none", k:"lube_v_nospec"};
-  const prod=window.LUBE?LUBE.product(name):null;
-  /* Typed in by hand: we have the name and nothing else. That is a real
-     finding — somebody put something in that is not on the shelf — and it must
-     not be dressed up as a pass or as a failure. */
+  const a=lubeAsset(curEquip);
+  const want=window.LUBE?LUBE.forComp(a.m, k, a.cls):null;
+  /* No product decided for this compartment type yet — wire rope and open gear
+     are both still "(verify product)" on the site's own legend. Recording what
+     is in there is still worth doing; pretending we can judge it is not. */
+  if(!want) return {b:"none", k:"lube_v_nostd"};
+  const prod=LUBE.product(name);
+  /* Typed in by hand: a real finding — somebody put something in that is not
+     on the shelf — and it must not be dressed up as a pass or as a failure. */
   if(!prod) return {b:"watch", k:"lube_v_unknown"};
-  if(!LUBE.meetsSpec(prod.s.split(/,\s*/), c.spec)) return {b:"act", k:"lube_v_bad"};
-  const cold=LUBE.coldOK(c.gr, prod.g);
-  if(cold===false) return {b:"act", k:"lube_v_cold"};
-  if(cold===null)  return {b:"watch", k:"lube_v_unlisted"};
+  if(prod.p !== want.p) return {b:"act", k:"lube_v_wrong"};
   return {b:"ok", k:"lube_v_ok"};
 }
 function renderLube(){
@@ -4129,11 +4144,15 @@ function renderLube(){
   /* An unsourced compartment is not an error and is not hidden. It says so,
      because "nobody has opened the manual for this one" is a fact the fitter
      should see and the dashboard counts. */
+  const want=(window.LUBE&&curEquip)?LUBE.forComp(lubeAsset(curEquip).m,curItem,lubeAsset(curEquip).cls):null;
   ref.innerHTML = !c ? ""
-    : (c.cap!=null
-        ? esc(t("lube_ref",{cap:c.cap, iv:c.iv||"—"})) +
-          '<span class="src">'+esc(c.spec||"")+'</span>'
-        : '<span class="band b-watch">'+esc(t("lube_unsourced"))+'</span>');
+    : '<span class="lcode">'+esc(c.k)+'</span>' +
+      (c.cap!=null
+        ? esc(t("lube_ref",{cap:c.cap, iv:c.iv||"—"}))
+        : '<span class="band b-watch">'+esc(t("lube_unsourced"))+'</span>') +
+      (want ? '<span class="lwant" style="--h:'+esc(want.hue)+'">'+
+              '<i class="sw"></i>'+esc(want.p)+'</span>' : "") +
+      (c.verify ? '<span class="band b-watch">'+esc(t("lube_verify"))+'</span>' : "");
 
   const ch=lubeChoices(curItem);
   sel.innerHTML =

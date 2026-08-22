@@ -1543,7 +1543,9 @@ const I18N={
   lube_unlisted:"Not on the catalogue",
   lube_ev_label:"Label photographed", lube_ev_batch:"Tank / pump batch",
   lube_ev_told:"Reported, not shown",
-  lube_v_none:"Nothing recorded", lube_v_nospec:"No specification to judge it against",
+  lube_v_none:"Nothing recorded", lube_v_nospec:"No reference loaded",
+  lube_v_nostd:"No site product chosen for this yet",
+  lube_v_wrong:"Not the product for this compartment",
   lube_v_unknown:"Not a catalogued product", lube_v_bad:"Does not meet the specification",
   lube_v_cold:"Too thick for \u221240", lube_v_unlisted:"Grade not listed for this compartment",
   lube_v_ok:"Conforms",
@@ -1873,7 +1875,9 @@ const I18N={
   lube_unlisted:"Нет в каталоге",
   lube_ev_label:"Фото этикетки", lube_ev_batch:"Партия из ёмкости",
   lube_ev_told:"Со слов",
-  lube_v_none:"Ничего не записано", lube_v_nospec:"Не с чем сравнить",
+  lube_v_none:"Ничего не записано", lube_v_nospec:"Справочник не загружен",
+  lube_v_nostd:"Продукт для этого узла ещё не выбран",
+  lube_v_wrong:"Не тот продукт для этого узла",
   lube_v_unknown:"Нет в каталоге", lube_v_bad:"Не соответствует спецификации",
   lube_v_cold:"Слишком густое для \u221240", lube_v_unlisted:"Вязкость не указана для узла",
   lube_v_ok:"Соответствует",
@@ -2296,14 +2300,12 @@ function lubeVerdictOf(rec, i){
   if(!window.LUBE) return {b:"", k:"lube_v_nospec"};
   const a=ASSET_BY[rec.equip]||{};
   const c=LUBE.comp(a.m||"", i.key, a.cls||"");
-  if(!c || !c.spec) return {b:"", k:"lube_v_nospec"};
+  const want=LUBE.forComp(a.m||"", i.key, a.cls||"");
+  if(!want) return {b:"", k:"lube_v_nostd"};
   const prod=LUBE.product(name);
   /* Typed in by hand: a real finding, and neither a pass nor a failure. */
   if(!prod) return {b:"watch", k:"lube_v_unknown"};
-  if(!LUBE.meetsSpec(prod.s.split(/,\s*/), c.spec)) return {b:"act", k:"lube_v_bad"};
-  const cold=LUBE.coldOK(c.gr, prod.g);
-  if(cold===false) return {b:"act", k:"lube_v_cold"};
-  if(cold===null)  return {b:"watch", k:"lube_v_unlisted"};
+  if(prod.p !== want.p) return {b:"act", k:"lube_v_wrong"};
   return {b:"ok", k:"lube_v_ok"};
 }
 function lubeDL(rec, i){
@@ -4520,7 +4522,12 @@ function lubeProgramme(){
     const key = r.cls + "|" + r.m;
     if(!seenModel[key]){
       seenModel[key] = 1; out.models++;
-      r.comps.forEach(c=>{ out.refTotal++; if(c.cap!=null) out.refKnown++; });
+      r.comps.forEach(c=>{
+      out.refTotal++;
+      /* Not "has a number" — the masterlist flags placeholders that were filled
+         in to make the totals work, and those are still an open question. */
+      if(c.cap!=null && !c.verify) out.refKnown++;
+    });
     }
     r.comps.forEach(c=>{
       out.instances++;
@@ -4608,19 +4615,17 @@ function renderLubeProg(){
    engine oil satisfies a CI-4 requirement and not the other way round, so the
    two do not collapse and the standard lands on the higher one. */
 const LUBE_STD_KEY = "cm_lube_std";
-function lubeQualifiers(spec){
-  if(!window.LUBE || !spec) return [];
-  return LUBE.catalog.filter(pr =>
-    LUBE.meetsSpec(pr.s.split(/,\s*/), spec) && pr.lo <= LUBE.site.design
-  ).map(pr => pr.p).sort();
+/* A requirement is a LUBRICANT TYPE. The site's own legend already works this
+   way — component 3 takes hydraulic oil, 4AL takes gear oil — and it is the
+   right grain: it collapses 389 compartments to eight decisions, and it does
+   not depend on how somebody typed a spec string in Excel. Grouping on the OEM
+   text would give 89 groups, which is the problem rather than the answer. */
+function lubeQualifiers(type){
+  if(!window.LUBE || !type) return [];
+  return LUBE.catalog.filter(pr => pr.t === type).map(pr => pr.p).sort();
 }
 function lubeReqKey(c){
-  const q = lubeQualifiers(c.spec);
-  /* Nothing qualifies: those are one group only in the sense that they are all
-     unanswered, so the spec has to stay in the key or two different gaps read
-     as one problem. */
-  return q.length ? q.join("|")
-                  : "none:" + (window.LUBE ? LUBE.specTokens(c.spec).sort().join("+") : c.spec);
+  return c && c.t ? c.t : "none:" + ((c && c.k) || "?");
 }
 function lubeRequirements(){
   const g = {};
@@ -4630,11 +4635,15 @@ function lubeRequirements(){
     const r = LUBE.of(mk.slice(i+1), mk.slice(0,i));
     if(!r) return;
     r.comps.forEach(c=>{
-      if(!c.spec) return;                 /* nothing to decide against yet */
+      if(!c.t) return;                    /* no lubricant type on this one yet */
       const k = lubeReqKey(c);
       const G = g[k] || (g[k] = { key:k, specs:{}, names:{}, models:{}, units:0,
-                                  litres:0, qualifiers:lubeQualifiers(c.spec) });
-      G.specs[c.spec] = 1;
+                                  litres:0, qualifiers:lubeQualifiers(c.t),
+                                  type:c.t });
+      /* The OEM strings are shown here and ONLY here — this screen is where an
+         engineer decides, and seeing that one decision is covering eleven
+         different ways of writing the same requirement is the argument. */
+      if(c.oem) G.specs[c.oem] = 1;
       G.names[lang==="ru"?c.ru:c.en] = 1;
       G.models[mk] = 1;
       G.units += counts[mk];
@@ -4651,9 +4660,13 @@ function lubeStandard(){ return asMap(LUBE_STD_KEY); }
 /* The product this site has chosen for the requirement a compartment belongs
    to — the thing the poster prints and the matrix compares against. */
 function lubeChosenFor(c){
-  if(!c || !c.spec) return null;
+  if(!c || !c.t) return null;
+  /* An explicit choice wins; otherwise the site's own legend already answers
+     it, so the matrix and the poster are useful from the first minute rather
+     than after somebody has clicked eight dropdowns. */
   const n = lubeStandard()[lubeReqKey(c)];
-  return n ? (LUBE.product(n) || { p:n }) : null;
+  if(n) return LUBE.product(n) || { p:n };
+  return LUBE.catalog.filter(p => p.t === c.t)[0] || null;
 }
 function renderLubeStd(){
   if(!window.LUBE){ $("lsList").innerHTML = ""; return; }
@@ -4734,7 +4747,17 @@ function lubeApplyOverrides(){
       /* An empty string is a deliberate clearing — "this figure was wrong and I
          do not have the right one" is a real answer, and it must not silently
          leave the old number in place. undefined means untouched. */
-      if(e.cap !== undefined){ if(e.cap === "") delete c.cap; else c.cap = Number(e.cap); }
+      if(e.cap !== undefined){
+        if(e.cap === "") delete c.cap;
+        else {
+          c.cap = Number(e.cap);
+          /* The masterlist flagged this as a typical figure to confirm. Somebody
+             has now been to the manual and typed a real one, so the flag goes —
+             otherwise the work list never goes down, and the person who did the
+             work watches the number stay where it was. */
+          delete c.verify;
+        }
+      }
       if(e.iv  !== undefined){ if(e.iv  === "") delete c.iv;  else c.iv  = Number(e.iv);  }
       if(e.spec!== undefined){ if(e.spec=== "") delete c.spec;else c.spec = e.spec; }
       if(e.gr) c.gr = e.gr;

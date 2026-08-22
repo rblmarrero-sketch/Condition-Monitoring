@@ -40,7 +40,7 @@ const eq = (g, w, what) => ok(JSON.stringify(g) === JSON.stringify(w),
     let comps = 0;
     Object.keys(lubeModelKeys()).forEach(k => {
       const i = k.indexOf("|");
-      comps += LUBE.comps(k.slice(i+1), k.slice(0,i)).filter(c => c.spec).length;
+      comps += LUBE.comps(k.slice(i+1), k.slice(0,i)).filter(c => c.t).length;
     });
     return { reqs: reqs.length, comps,
              rows: document.querySelectorAll(".reqrow").length,
@@ -65,23 +65,31 @@ const eq = (g, w, what) => ok(JSON.stringify(g) === JSON.stringify(w),
     const set = new Set();
     Object.keys(lubeModelKeys()).forEach(k => {
       const i = k.indexOf("|");
-      LUBE.comps(k.slice(i+1), k.slice(0,i)).forEach(c => { if (c.spec) set.add(c.spec); });
+      LUBE.comps(k.slice(i+1), k.slice(0,i)).forEach(c => { if (c.oem) set.add(c.oem); });
     });
     return set.size;
   });
-  ok(R.reqs < specGroups,
-     `grouping on qualifiers beats grouping on spec text (${R.reqs} vs ${specGroups})`);
+  /* This is the whole argument, in two numbers. The masterlist carries dozens
+     of distinct OEM spec strings — Japanese full-width, Russian, brand names,
+     multi-line — for what the site actually stocks as eight products. Grouping
+     on that text is the problem; grouping on lubricant type is the answer. */
+  ok(specGroups > 30, "the masterlist really does carry dozens of spec strings: " + specGroups);
+  ok(R.reqs * 4 < specGroups,
+     `grouping on lubricant type collapses them (${R.reqs} decisions vs ${specGroups} spec strings)`);
 
   console.log("── and it does NOT collapse things that must stay apart");
   const apart = await p.evaluate(() => ({
     /* A gear oil requirement and an engine oil requirement can never be one
-       decision, however similar the strings look. */
-    gl:  lubeReqKey({ spec: "API GL-5" }),
-    eng: lubeReqKey({ spec: "API CK-4 / Komatsu EO-DH" }),
-    hyd: lubeReqKey({ spec: "ISO VG, anti-wear" }),
+       decision, however the OEM string was typed. */
+    gl:  lubeReqKey({ t: "gear" }),
+    eng: lubeReqKey({ t: "engine" }),
+    hyd: lubeReqKey({ t: "hydraulic" }),
+    none: lubeReqKey({ k: "15" }),
   }));
   ok(apart.gl !== apart.eng, "a gear oil requirement is not an engine oil requirement");
   ok(apart.hyd !== apart.eng, "nor is a hydraulic one");
+  ok(/^none:/.test(apart.none),
+     "a compartment with no lubricant type is an unanswered question, not a group");
 
   console.log("── the safety property: one decision only where one product serves both");
   /* CK-4 and CI-4 DO land in one group here, and that is correct rather than a
@@ -99,11 +107,12 @@ const eq = (g, w, what) => ok(JSON.stringify(g) === JSON.stringify(w),
       Object.keys(R.specs).forEach(spec => {
         R.qualifiers.forEach(name => {
           const pr = LUBE.product(name);
-          if (!pr) return;
-          if (!LUBE.meetsSpec(pr.s.split(/,\s*/), spec))
-            bad.push(name + " offered for " + spec);
-          if (pr.lo > LUBE.site.design)
-            bad.push(name + " offered but only rated to " + pr.lo + "°");
+          if (!pr) { bad.push(name + " is not on the shelf"); return; }
+          /* A requirement IS a lubricant type now, so the safety property is
+             that everything offered for it is of that type — an engine oil can
+             never be offered for a hydraulic system. */
+          if (pr.t !== R.type)
+            bad.push(pr.p + " (" + pr.t + ") offered for a " + R.type + " requirement");
         });
       });
     });

@@ -1,161 +1,142 @@
-/* The lubrication reference.
+/* The lubrication reference, imported from the site's own masterlist.
 
-   Three things this has to get right, and each of them has already been wrong
-   once in development:
-
-   · A model string is NOT a key. "KOMATSU" is on the register as both an
-     articulated truck and a loader; keying on the string alone gave a loader a
-     truck's compartments with nothing to show anything had happened.
-   · Matching a specification on shared words recommends transmission oil for
-     hydraulics, because "API" and "KES" are in nearly every string.
-   · The API diesel C-sequence is a ladder. Without it the round says NOT SET
-     for an engine that has the correct arctic oil in the bulk tank.
+   The data is the client's — their component codes, their capacities, their
+   intervals. So these checks are not about the numbers being right; they are
+   about the import not QUIETLY CHANGING anything, and about the one thing the
+   whole exercise exists for: that a fitter is told one product and never sees
+   the 89 OEM spec strings behind it.
 
    Run: node tests/lube.cjs */
 const fs = require("fs");
 const path = require("path");
 const ROOT = path.join(__dirname, "..");
 
-const G = {};
+const G = {}, A = {};
 new Function("window", fs.readFileSync(path.join(ROOT, "mobile/lube.js"), "utf8"))(G);
-const L = G.LUBE;
+new Function("window", fs.readFileSync(path.join(ROOT, "mobile/assets.js"), "utf8"))(A);
+const L = G.LUBE, ASSETS = A.ASSETS;
 
-const ASSETS = {};
-new Function("window", fs.readFileSync(path.join(ROOT, "mobile/assets.js"), "utf8"))(ASSETS);
+let fail = 0, pass = 0;
+const ok = (c, w) => { if (!c) { fail++; console.log("  FAIL  " + w); }
+                       else { pass++; console.log("  PASS  " + w); } return c; };
+const eq = (g, w, what) => ok(JSON.stringify(g) === JSON.stringify(w),
+  what + "  (got " + JSON.stringify(g) + ", wanted " + JSON.stringify(w) + ")");
 
-let fail = 0;
-let pass = 0;
-const ok = (cond, what) => {
-  if (!cond) { fail++; console.log("  FAIL  " + what); }
-  else { pass++; console.log("  PASS  " + what); }
-  return cond;
-};
-const eq = (got, want, what) => ok(
-  JSON.stringify(got) === JSON.stringify(want),
-  what + "  (got " + JSON.stringify(got) + ", wanted " + JSON.stringify(want) + ")");
-
-console.log("── the reference loads");
+console.log("── the masterlist loaded");
 ok(L, "window.LUBE exists");
-ok(L.models.length > 40, "the whole primary fleet is present, not a sample: " + L.models.length);
-ok(L.catalog.length > 8, "the catalogue has products: " + L.catalog.length);
+ok(L.models.length > 100, "models imported: " + L.models.length);
+eq(L.catalog.length, 8, "the eight products actually on site");
 eq(L.site.design, -40, "site design minimum");
 
-console.log("── a model string is not a key");
-/* The bug this exists for: "KOMATSU" is an articulated truck AND a loader. */
-ok(L.ambiguous("KOMATSU"), "KOMATSU is known to be ambiguous");
-eq(L.of("KOMATSU"), null, "an ambiguous model with no class resolves to NOTHING, not a coin flip");
-const at = L.of("KOMATSU", "AT"), ldr = L.of("KOMATSU", "LDR");
-ok(at && ldr, "with a class, both resolve");
-ok(at.cls === "AT" && ldr.cls === "LDR", "and to the right class");
-ok(at.comps.some(c => c.k === "TCASE"), "the articulated truck has a transfer case");
-ok(!ldr.comps.some(c => c.k === "TCASE"), "the loader does not");
-ok(ldr.comps.some(c => c.k === "AXF"), "the loader has a front axle");
-ok(!at.comps.some(c => c.k === "AXF"), "the articulated truck does not");
-ok(!L.ambiguous("KOMATSU HM400"), "a real model number is not ambiguous");
-ok(L.of("KOMATSU HM400"), "and resolves with no class given");
+console.log("── the site's own eight products, by type");
+const types = L.catalog.map(p => p.t).sort();
+eq(new Set(types).size, 8, "one product per lubricant type, no duplicates");
+["engine","hydraulic","gear","grease","coolant","compressor","rockdrill","powertrain"]
+  .forEach(t => ok(L.catalog.some(p => p.t === t), "  a " + t + " product exists"));
+ok(L.catalog.every(p => /^#[0-9a-f]{6}$/i.test(p.hue)),
+   "every product carries the site's own type colour");
+/* Colour must be by TYPE, not per product, or it has to be relearned the day a
+   drum changes supplier. */
+const hueByType = {};
+L.catalog.forEach(p => { hueByType[p.t] = p.hue; });
+eq(new Set(Object.values(hueByType)).size, 8, "eight distinct type colours");
 
-console.log("── every machine on the register can be walked");
+console.log("── HM400-3MO is one machine, however the register spells it");
+/* The register spells the same truck three ways. Keeping one entry per
+   spelling means the canonical name resolves to two rivals and therefore to
+   neither, and splits the unit count across them. */
+const spellings = [["KOMATSU","AT"], ["KOMATSU HM400","AT"],
+                   ["Komatsu HM400-3MO","AT"], ["Komatsu HM400-3MO",null]];
+const seen = spellings.map(([m, c]) => L.of(m, c));
+ok(seen.every(Boolean), "every spelling resolves");
+eq([...new Set(seen.map(r => r && r.m))], ["Komatsu HM400-3MO"],
+   "and all of them to the masterlist's name");
+eq([...new Set(seen.map(r => r && r.n))], [28],
+   "with the unit count added up, not split");
+eq([...new Set(seen.map(r => r && r.comps.length))].length, 1,
+   "and one set of compartments");
+
+console.log("── the codes and figures are the client's, unaltered");
+const hm = L.of("Komatsu HM400-3MO", "AT");
+const byK = {}; hm.comps.forEach(c => byK[c.k] = c);
+/* Straight off the masterlist row for Komatsu HM400-3MO. If the importer ever
+   starts "improving" a figure, this is where it shows. */
+eq(byK["1"] && byK["1"].cap, 58,   "component 1 engine: 58 L");
+eq(byK["1"] && byK["1"].iv, 250,   "  every 250 h");
+eq(byK["2"] && byK["2"].cap, 257,  "component 2 transmission: 257 L");
+eq(byK["3"] && byK["3"].cap, 245,  "component 3 hydraulic: 245 L");
+eq(byK["4AL"] && byK["4AL"].cap, 7.8, "component 4AL front-left final drive: 7.8 L");
+ok(byK["1"], "the codes are the site's own (1, 2, 3, 4AL …), not invented ones");
+ok(!hm.comps.some(c => /^(ENG|TRN|HYD|FDL)$/.test(c.k)),
+   "and none of my invented codes survived the import");
+
+console.log("── every compartment is bilingual");
+const noRu = [];
+L.models.forEach(k => {
+  const i = k.indexOf("|");
+  (L.comps(k.slice(i+1), k.slice(0,i)) || []).forEach(c => {
+    if (!c.en || !c.ru) noRu.push(k + " " + c.k);
+  });
+});
+eq(noRu.slice(0, 5), [], "no compartment lost a language in the import");
+
+console.log("── the field is told ONE product, never a spec string");
+/* The whole point. 89 different OEM strings — Japanese full-width, Russian,
+   brand names, multi-line — for eight products. A fitter in gloves cannot read
+   that, and being asked to is how the wrong oil goes in. */
+let withOem = 0, resolved = 0, unmapped = [];
+L.models.forEach(k => {
+  const i = k.indexOf("|"), m = k.slice(i+1), cls = k.slice(0,i);
+  L.comps(m, cls).forEach(c => {
+    if (c.oem) withOem++;
+    const p = L.forComp(m, c.k, cls);
+    if (p) resolved++; else if (c.t) unmapped.push(c.k + " (" + c.t + ")");
+  });
+});
+ok(withOem > 200, "the OEM strings are kept for the engineer: " + withOem + " entries");
+ok(resolved > withOem * 0.8,
+   `and nearly all resolve to one of the eight products (${resolved})`);
+/* Two types have no product on the shelf, and the Lube Legend says so itself:
+   wire rope lube and open gear grease are both marked "(verify product)".
+   That is an outstanding purchasing question, not an import fault — so it is
+   named here rather than tolerated, and any NEW unmapped type fails. */
+eq([...new Set(unmapped)].sort(), ["15 (wirerope)", "16 (opengear)"],
+   "the only compartments with no product are the two the masterlist itself " +
+   "has not chosen one for");
+const p1 = L.forComp("Komatsu HM400-3MO", "1", "AT");
+ok(p1 && /EXSOIL HD TRUCK ARCTIC/.test(p1.p),
+   "the HM400 engine is told the site's engine oil, not 'EOS0W30': " + (p1 && p1.p));
+ok(p1 && p1.hue, "with the colour a fitter matches against the drum");
+
+console.log("── the masterlist's own flags survived as data, not cell colour");
+const gaps = L.gaps();
+ok(gaps.verify.length > 50,
+   "placeholder figures to confirm are a work list: " + gaps.verify.length);
+ok(gaps.noiv.length > 20,
+   "capacities with no change interval too: " + gaps.noiv.length);
+ok(gaps.ask.length > 0,
+   "and the transmission-oil question is raised, not silently answered: " + gaps.ask.length);
+/* A purple cell is a typical figure somebody filled in to make the totals
+   work. Counting it as known is how a guess becomes a fact. */
+const v = gaps.verify[0];
+ok(v && !L.sourced(v.m, v.k), "a flagged placeholder does NOT count as sourced");
+
+console.log("── the register can be walked");
 const PRIMARY = ["HT","AT","EXC","DOZ","LDR","GRD","DRB","DRE","HRB","CRJ","CRC","SCR"];
-const prim = ASSETS.ASSETS.filter(a => PRIMARY.includes(a.cls) && a.m);
-const noRef = prim.filter(a => !L.of(a.m, a.cls));
-eq(noRef.length, 0, "no primary unit is left without a compartment list");
-const noComps = prim.filter(a => L.comps(a.m, a.cls).length === 0);
-eq(noComps.length, 0, "and none has an empty one");
-
-console.log("── figures are separate from the compartment list");
-/* The whole point of the split: a compartment can be audited before anybody
-   has sourced its capacity. If this ever becomes false, field work starts
-   waiting on a spreadsheet. */
-const unsourced = L.comps("KOMATSU", "LDR").filter(c => c.cap == null);
-ok(unsourced.length > 0, "a model nobody has sourced still lists its compartments");
-ok(!L.sourced("KOMATSU", "ENG", "LDR"), "and reports them as unsourced");
-ok(L.sourced("KOMATSU HM400", "TRN"), "a sourced compartment reports sourced");
-eq(L.comp("KOMATSU HM400", "TRN").cap, 60, "with its capacity");
-ok(L.comp("KOMATSU HM400", "TRN").src, "and a source, because a figure without one is a guess");
-
-console.log("── specification matching");
-const CASES = [
-  [["API CK-4"],             "API CI-4 or better",       true,  "CK-4 supersedes CI-4"],
-  [["API CK-4"],             "API CI-4",                 true,  "ladder, no 'or better' needed"],
-  [["Cat ECF-3","API CK-4"], "API CI-4",                 true,  "ladder found among several claims"],
-  [["API CI-4"],             "API CK-4 / Komatsu EO-DH", false, "an older oil does NOT serve a newer spec"],
-  [["API CI-4"],             "API CI-4",                 true,  "exact"],
-  [["API GL-5"],             "API GL-4",                 false, "no GL ladder: EP attacks yellow metal"],
-  [["API CK-4"],             "API GL-5 / KES 07.869",    false, "engine oil is not a gear oil"],
-  [["CAT TO-4"],             "KES 07.868.1 (TO-4 class)",true,  "TO-4 inside a Komatsu spec"],
-  [["CAT TO-4"],             "Cat HYDO Advanced",        false, "powertrain is not hydraulic"],
-  [["CAT TO-4"],             "ISO VG, anti-wear",        false, "powertrain is not hydraulic, other way round"],
-  [["DIN 51524-3","ISO VG 22","ISO VG 32","Hitachi Super EX"],
-                             "Hitachi Super EX / ISO VG",true,  "bare ISO VG family"],
-  [["Wet brake WB-101"],     "Cat TO-4 / TO-4M",         false, "UTTO is not TO-4"],
-  [[],                       "API CK-4",                 false, "no claims satisfies nothing"],
-  [["API CK-4"],             "",                         false, "an unreadable spec matches nothing"],
-];
-CASES.forEach(([claims, spec, want, why]) =>
-  eq(L.meetsSpec(claims, spec), want, why));
-
-console.log("── the ladder is load-bearing");
-/* A check that cannot fail is worse than no check: prove the ladder is what
-   makes the CI-4 cases pass, rather than something else. */
-const tok = L.specTokens("API CI-4 or better");
-ok(tok.indexOf("apici4") >= 0, "the tokeniser produces the shape the ladder is written in: " + JSON.stringify(tok));
-
-console.log("── cold");
-const trn = L.comp("KOMATSU HM400", "TRN");
-eq(L.coldOK(trn.gr, "SAE 10W"), true,  "10W is rated past the design minimum");
-eq(L.coldOK(trn.gr, "SAE 30"),  false, "SAE 30 is not");
-eq(L.coldOK(trn.gr, "SAE 50"),  null,  "a grade the manufacturer never lists is not a NO, it is unknown");
-
-console.log("── what the picker offers");
-const fit = L.fitFor("KOMATSU HM400", "TRN").map(p => p.p);
-ok(fit.length > 0, "something qualifies for the HM400 transmission: " + JSON.stringify(fit));
-ok(fit.every(n => {
-  const p = L.product(n);
-  return p.lo <= L.site.design;
-}), "everything offered is rated for the coldest morning of the year");
-ok(!fit.includes("HLP 46"), "a hydraulic oil is not offered for a transmission");
-ok(!fit.includes("Generic TO-4 SAE 30"), "a TO-4 that stops at -10 is not offered at a -40 site");
-const engFit = L.fitFor("NHL TR60", "ENG").map(p => p.p);
-ok(engFit.includes("Mobil Delvac 1 5W-40"),
-   "the CK-4 arctic oil IS offered for the CI-4 engine — the ladder, at the picker");
-eq(L.fitFor("KOMATSU", "ENG", "LDR"), [], "an unsourced compartment has no spec, so offers nothing");
+const prim = ASSETS.filter(a => PRIMARY.includes(a.cls) && a.m);
+const covered = prim.filter(a => L.of(a.m, a.cls));
+ok(covered.length / prim.length > 0.8,
+   `most primary units have a reference: ${covered.length} of ${prim.length}`);
+/* Never across a class boundary: the make-only records are still a hazard. */
+const ldr = L.of("KOMATSU", "LDR");
+ok(!ldr || ldr.cls === "LDR",
+   "a loader never resolves onto the articulated truck's entry");
 
 console.log("── evidence is ranked");
 ok(L.evidRank("label") === 2 && L.evidRank("batch") === 2, "a photo or a batch is evidence");
 ok(L.evidRank("told") === 1, "a verbal answer ranks below it");
 ok(L.evidRank("") === 0 && L.evidRank("nonsense") === 0, "and nothing ranks nothing");
 
-console.log("── an identified make-only record gets its figures, and only it");
-/* R. Marrero confirmed the 27 articulated trucks filed as "KOMATSU" are HM400s.
-   The alias applies that model's figures without editing the register, and
-   without touching the FIVE LOADERS that share the same make-only string — the
-   collision that caused the original bug is still live, so an alias that
-   resolved on the model alone would hand a loader a truck's capacities. */
-const aliased = L.of("KOMATSU", "AT");
-ok(aliased && aliased.alias, "the articulated-truck record carries an alias");
-eq(aliased.alias.is, "KOMATSU HM400", "and says what the machine actually is");
-ok(aliased.alias.who && aliased.alias.when,
-   "with a name and a date against it — an unattributed alias is a rumour");
-eq(L.comp("KOMATSU", "ENG", "AT").cap, 38, "the engine now has the HM400 capacity");
-eq(L.comp("KOMATSU", "TRN", "AT").cap, 60, "and the transmission");
-ok(L.fitFor("KOMATSU", "TRN", "AT").length > 0,
-   "so the picker can offer something for it, which it could not before");
-const loader = L.of("KOMATSU", "LDR");
-ok(loader && !loader.alias, "the loader on the same make-only string is NOT aliased");
-eq(L.comp("KOMATSU", "ENG", "LDR").cap, undefined,
-   "and did not quietly inherit a truck's capacity");
-
-console.log("── register gaps are named, not dropped");
-/* Identified is not the same as recorded. The alias makes the app work today;
-   the register is still wrong, and the gap list has to keep saying so or the
-   fix never happens. */
-const aliasedGap = L.gaps.filter(g => g.alias)[0];
-ok(aliasedGap, "an aliased record still appears in the gap list");
-eq(aliasedGap.alias.is, "KOMATSU HM400", "carrying what it was identified as");
-ok(L.gaps.filter(g => !g.alias).length > 0,
-   "and the ones nobody has identified yet are still there: " +
-   JSON.stringify(L.gaps.filter(g => !g.alias).map(g => g.cls + " " + g.as)));
-ok(L.gaps.length > 0, "the make-only records are listed: " + JSON.stringify(L.gaps.map(g => g.cls + " " + g.as)));
-
-console.log(fail ? "\n" + fail + " FAILED" : "\nall lube reference checks pass");
+console.log(fail ? "\n" + fail + " FAILED"
+                 : "\nthe masterlist imported unaltered, and the field sees one product");
 process.exit(fail ? 1 : 0);

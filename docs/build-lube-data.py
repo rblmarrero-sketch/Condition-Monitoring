@@ -1,319 +1,378 @@
-"""Generate mobile/lube.js — the lubrication reference.
+"""Generate mobile/lube.js from the site's own Lubrication Masterlist.
 
-Two things live here and they are deliberately separate:
+   docs/source/Lube_Matrix_Oil_Analysis_Sampling.xlsm  ->  mobile/lube.js
 
-  · the COMPARTMENT LIST per model — which compartments a machine has. Known
-    today, for the whole primary fleet, from the class it belongs to.
-  · the FIGURES for each — capacity, specification, interval. Known only where
-    somebody has opened the manual, which is a much shorter list.
+THE CODES AND THE FIGURES ARE THE CLIENT'S, NOT OURS.
+The component codes (1, 2, 3, 3A, 4A, 4AL … 16) are already on the printed
+forms in the ute, on the per-machine sampling sheets, and in the fitters'
+heads. An invented scheme would have bought nothing and cost all three. Same
+for the capacities and the change intervals: they came out of OEM manuals, and
+anything this script "improves" is a number somebody will later have to defend.
 
-Keeping them apart is what lets a fitter audit a compartment before anybody has
-sourced its capacity. The audit asks what is IN it; the capacity is for topping
-up. Tying the two together would have blocked every round on a spreadsheet.
+WHAT THIS SCRIPT DOES NOT DO is decide anything. Where the masterlist is
+ambiguous or self-contradictory it carries the contradiction through and flags
+it, because a generator that quietly resolves the client's data is a generator
+that hides the one thing they need to see.
+
+Run: python3 docs/build-lube-data.py
 """
-import json, collections, re, os
+import json, os, re, sys, warnings, collections
+warnings.filterwarnings("ignore")
+from openpyxl import load_workbook
 
-# Anchored to the repo, not to whatever directory this was launched from —
-# a generator that only works from one cwd is a generator that silently
-# writes nothing the day somebody runs it from somewhere else.
-ROOT   = os.environ.get("CM_ROOT", "/home/user/Condition-Monitoring")
+ROOT = os.environ.get("CM_ROOT", "/home/user/Condition-Monitoring")
+SRC  = os.path.join(ROOT, "docs/source/Lube_Matrix_Oil_Analysis_Sampling.xlsm")
 ASSETS = os.path.join(ROOT, "mobile/assets.js")
-OUT    = os.path.join(ROOT, "mobile/lube.js")
+OUT  = os.path.join(ROOT, "mobile/lube.js")
+REPORT = os.path.join(ROOT, "docs/lube-import-report.txt")
+SHEET = "Lube Frequency BMSK"
 
-# ── the register ─────────────────────────────────────────────────────────
-raw = open(ASSETS, encoding="utf-8").read()
-m = re.search(r"window\.ASSETS\s*=\s*(\[.*?\]);", raw, re.S)
-assets = json.loads(m.group(1))
-PRIMARY = ["HT","AT","EXC","DOZ","LDR","GRD","DRB","DRE","HRB","CRJ","CRC","SCR"]
-
-# ── compartment templates per class ──────────────────────────────────────
-# What that kind of machine carries. A starting point the dashboard can edit —
-# never a claim that this particular model has exactly these.
-T = lambda k, en, ru, risk: {"k":k, "en":en, "ru":ru, "risk":risk}
-TEMPLATE = {
- "HT": [T("ENG","Engine","Двигатель","med"), T("TRN","Transmission","Трансмиссия","high"),
-        T("HYD","Hydraulic — hoist / steering","Гидравлика — подъём / рулевое","med"),
-        T("FDL","Final drive / wheel motor","Бортовой редуктор","high"),
-        T("DIFF","Differential","Дифференциал","high")],
- "AT": [T("ENG","Engine","Двигатель","med"), T("TRN","Transmission","Трансмиссия","high"),
-        T("HYD","Hydraulic","Гидравлика","med"),
-        T("FDL","Final drive","Бортовой редуктор","high"),
-        T("DIFF","Differential","Дифференциал","high"),
-        T("TCASE","Transfer case","Раздаточная коробка","high")],
- "EXC":[T("ENG","Engine","Двигатель","med"), T("HYD","Hydraulic tank","Гидробак","med"),
-        T("SWG","Swing drive","Механизм поворота","high"),
-        T("TRV","Travel / final drive","Ход / бортовой редуктор","high"),
-        T("PTO","Pump drive gearbox","Редуктор привода насосов","high")],
- "DOZ":[T("ENG","Engine","Двигатель","med"),
-        T("TRN","Powertrain / torque converter","Трансмиссия / гидротрансформатор","high"),
-        T("HYD","Hydraulic","Гидравлика","med"),
-        T("FDL","Final drive","Бортовой редуктор","high"),
-        T("PIV","Pivot shaft","Ось качания","low")],
- "LDR":[T("ENG","Engine","Двигатель","med"), T("TRN","Transmission","Трансмиссия","high"),
-        T("HYD","Hydraulic","Гидравлика","med"),
-        T("AXF","Front axle","Передний мост","high"), T("AXR","Rear axle","Задний мост","high")],
- "GRD":[T("ENG","Engine","Двигатель","med"), T("TRN","Transmission","Трансмиссия","high"),
-        T("HYD","Hydraulic","Гидравлика","med"),
-        T("TAN","Tandem case","Балансир","high"),
-        T("CIR","Circle / drawbar","Поворотный круг","low"),
-        T("DIFF","Differential","Дифференциал","high")],
- "DRB":[T("ENG","Engine","Двигатель","med"), T("HYD","Hydraulic","Гидравлика","med"),
-        T("CMP","Compressor","Компрессор","high"), T("ROT","Rotary head","Вращатель","high"),
-        T("FED","Feed / pulldown","Подача","med")],
- "DRE":[T("ENG","Engine","Двигатель","med"), T("HYD","Hydraulic","Гидравлика","med"),
-        T("ROT","Rotation unit","Вращатель","high"), T("PMP","Mud pump","Промывочный насос","med")],
- "HRB":[T("HYD","Hydraulic — own circuit","Гидравлика — собственный контур","med"),
-        T("GAS","Percussion service","Обслуживание ударной части","high")],
- "CRJ":[T("ENG","Engine","Двигатель","med"), T("HYD","Hydraulic","Гидравлика","med"),
-        T("ECC","Eccentric / jaw oil","Эксцентрик / масло дробилки","high"),
-        T("DRV","Drive gearbox","Редуктор привода","high"),
-        T("LUB","Lube tank","Бак смазки","high")],
- "CRC":[T("ENG","Engine","Двигатель","med"), T("HYD","Hydraulic","Гидравлика","med"),
-        T("MSH","Main shaft / cone oil","Главный вал / масло конуса","high"),
-        T("DRV","Drive gearbox","Редуктор привода","high"),
-        T("LUB","Lube tank","Бак смазки","high")],
- "SCR":[T("ENG","Engine","Двигатель","med"), T("HYD","Hydraulic","Гидравлика","med"),
-        T("DRV","Drive gearbox","Редуктор привода","high"),
-        T("VIB","Vibrator / screen box","Вибратор / короб грохота","high")],
+# ── the site's products ──────────────────────────────────────────────────
+# Read from row 1 of the masterlist, columns M..T. NOT from the Lube Legend
+# tab: its column letters are stale — it calls column N the hydraulic oil, and
+# column N is the TO-4. The sheet is the live document, so the sheet wins.
+#
+# TYPE is what the fitter sees on the wall. The site already colour-codes by
+# type — blue engine, red hydraulic, yellow compressor, green rock-drill, cream
+# grease — and that is the right choice for a poster: eight colours to learn,
+# and the colour survives a change of supplier. Colour by PRODUCT would have to
+# be relearned the day a drum changes.
+PRODUCT_COL = list(range(13, 21))            # M..T
+TYPE_BY_CODE = {
+    "0W40":       ("engine",     "Engine oil",      "Моторное"),
+    "5W30":       ("powertrain", "Powertrain / TO-4","Трансмиссионное TO-4"),
+    "NEXVG32":    ("hydraulic",  "Hydraulic",       "Гидравлическое"),
+    "75W140":     ("gear",       "Gear oil",        "Трансмиссионное"),
+    "EXVG32":     ("rockdrill",  "Rock-drill oil",  "Буровое"),
+    "Grease":     ("grease",     "Grease",          "Смазка"),
+    "Coolant":    ("coolant",    "Coolant",         "Антифриз"),
+    "Compressor": ("compressor", "Compressor oil",  "Компрессорное"),
+}
+# The site's own colours, taken from the fills already used on the sheet.
+# Kept as data because they are the client's convention, not a design choice.
+TYPE_HUE = {
+    "engine":     "#0070c0",   # blue   — the fill on the Engine column
+    "hydraulic":  "#e34948",   # red    — the fill on the Hydraulic column
+    "compressor": "#eda100",   # yellow — the fill on the Compressor column
+    "rockdrill":  "#00b050",   # green  — the fill on the DTH hammer column
+    "grease":     "#8a6d3b",   # cream on the sheet, darkened so it reads on paper
+    "gear":       "#4a3aa7",
+    "powertrain": "#1baf7a",
+    "coolant":    "#2a78d6",
 }
 
-# ── figures, where somebody has actually opened the manual ───────────────
-# Everything here carries a source. Anything without one is not in this table —
-# it appears on the round with a null capacity and reads as unsourced, which is
-# the truth and is counted that way on the dashboard.
-FIG = {
- "KOMATSU HM400": {
-   "ENG":  {"cap":38, "spec":"API CK-4 / Komatsu EO-DH", "iv":500,
-            "gr":[["15W-40",-15,50],["5W-40 synth",-40,30]]},
-   "TRN":  {"cap":60, "spec":"KES 07.868.1 (TO-4 class)", "iv":2000,
-            "gr":[["SAE 10W",-40,10],["SAE 30",-10,45]],
-            "src":{"who":"R. Marrero","doc":"Komatsu SEN06084-01 p.4-12","when":"2026-08-14"}},
-   "HYD":  {"cap":150,"spec":"KES 07.859 / ISO VG", "iv":4000,
-            "gr":[["ISO VG 32",-35,25],["ISO VG 46",-10,45]]},
-   "FDL":  {"cap":22, "spec":"API GL-5 / KES 07.869", "iv":2000,
-            "gr":[["75W-90 synth",-45,35],["80W-90",-20,45]]},
- },
- "NHL TR60": {
-   "ENG":  {"cap":45, "spec":"API CI-4 or better", "iv":500,
-            "gr":[["15W-40",-15,50],["5W-40 synth",-40,30]]},
-   "TRN":  {"cap":75, "spec":"CAT TO-4 / Allison C-4", "iv":2000,
-            "gr":[["SAE 10W",-40,10],["SAE 30",-10,45]]},
-   "HYD":  {"cap":230,"spec":"ISO VG, anti-wear", "iv":4000,
-            "gr":[["ISO VG 32",-35,25],["ISO VG 46",-10,45]]},
- },
- "KOMATSU D375A.6": {
-   "ENG":  {"cap":60, "spec":"API CK-4 / Komatsu EO-DH", "iv":500,
-            "gr":[["15W-40",-15,50],["5W-40 synth",-40,30]]},
-   "TRN":  {"cap":110,"spec":"KES 07.868.1 (TO-4 class)", "iv":2000,
-            "gr":[["SAE 10W",-40,10],["SAE 30",-10,45]]},
-   "FDL":  {"cap":38, "spec":"KES 07.868.1", "iv":2000,
-            "gr":[["SAE 30",-20,45],["SAE 10W",-40,0]]},
- },
- "CATERPILLAR D9R": {
-   "ENG":  {"cap":38, "spec":"Cat ECF-3 / API CK-4", "iv":500,
-            "gr":[["15W-40",-15,50],["0W-40 arctic synth",-45,25]]},
-   "TRN":  {"cap":95, "spec":"Cat TO-4 / TO-4M", "iv":2000,
-            "gr":[["TDTO SAE 10W",-35,10],["TDTO-TMS (arctic)",-45,20],["TDTO SAE 30",-10,45]],
-            "src":{"who":"R. Marrero","doc":"Cat SEBU7695 p.112","when":"2026-08-15"}},
-   "HYD":  {"cap":170,"spec":"Cat HYDO Advanced", "iv":4000,
-            "gr":[["HYDO Adv 10",-30,30],["HYDO Adv 30",0,50]]},
- },
- "HITACHI EX1200-6BH": {
-   "ENG":  {"cap":95, "spec":"API CK-4", "iv":500,
-            "gr":[["15W-40",-15,50],["5W-40 synth",-40,30]]},
-   "HYD":  {"cap":660,"spec":"Hitachi Super EX / ISO VG", "iv":4000,
-            "gr":[["ISO VG 32",-35,25],["ISO VG 46",-10,45]]},
-   "SWG":  {"cap":36, "spec":"API GL-5", "iv":4000,
-            "gr":[["75W-90 synth",-45,35],["80W-90",-20,45]]},
- },
- "SHANTUI SD32": {
-   "ENG":  {"cap":32, "spec":"API CI-4", "iv":500,
-            "gr":[["15W-40",-15,50],["5W-40 synth",-40,30]]},
-   "TRN":  {"cap":85, "spec":"SAE 30 powertrain (TO-4 class)", "iv":2000,
-            "gr":[["SAE 10W",-40,10],["SAE 30",-10,45]]},
- },
+# ── which product serves which component ─────────────────────────────────
+# From the Lube Legend tab's own component table, by TYPE rather than by its
+# stale column letters.
+LEGEND_TYPE = {
+    "1":"engine", "2":"gear", "3":"hydraulic", "3A":"gear",
+    "4":"gear","4A":"gear","4B":"gear","4C":"gear","4E":"gear","4F":"gear",
+    "4AL":"gear","4AR":"gear","4BL":"gear","4BR":"gear","4CL":"gear","4CR":"gear",
+    "4I":"gear","4J":"gear","4K":"gear","4L":"gear","4M":"gear","4N":"gear",
+    "4O":"gear","4P":"grease",
+    "5":"gear","5A":"gear","5B":"gear",
+    "6":"gear","6A":"gear","6B":"gear","6C":"gear","6D":"gear","6E":"grease",
+    "7":"gear","7B":"gear",
+    "8":"compressor", "9":"coolant", "10":None,
+    "11A":"gear","11B":"gear","11C":"gear","11D":"rockdrill","11E":"grease",
+    "12A":"gear","12B":"gear","12C":"gear","12D":"gear","12E":"gear",
+    "12F":"gear","12G":"gear","12H":"gear",
+    "13":"grease",
+    "14A":"gear","14B":"gear","14C":"gear","14E":"gear",
+    "15":"wirerope", "16":"opengear",
+}
+# Flagged, not resolved. The Legend files the transmission under gear oil, but
+# the OEM codes on the sheet for those same compartments read TO10 / TO-4 SAE
+# 50, and the site stocks a TO-4. Transmission and final drive are different
+# friction chemistry — a wet clutch needs the TO-4 frictional properties and a
+# gear set does not — so this is an engineer's decision, not an importer's.
+QUESTION_TYPES = {"2"}
+
+# ── model names ──────────────────────────────────────────────────────────
+# One canonical name per machine, and it is the MASTERLIST's, because that is
+# the name on the sampling forms. The register's spellings are aliases onto it.
+# Confirmed by R. Marrero: the 27 articulated trucks filed as "KOMATSU", and
+# the one filed as "KOMATSU HM400", are all HM400-3MO.
+CANON = {
+    "KOMATSU":            {"AT": "Komatsu HM400-3MO"},
+    "KOMATSU HM400":      {"AT": "Komatsu HM400-3MO"},
 }
 
-# ── register aliases: a make-only record somebody has identified ─────────
-# The register records these by make alone, which cannot carry a capacity. An
-# alias here says what the machine ACTUALLY is, on somebody's authority, with
-# their name against it — so the figures apply today without pretending the
-# register is fixed. It still is not: the gap list below keeps naming these
-# until the model is recorded in 1C, because an alias is a patch over a data
-# fault, not a repair of it.
+# Register spelling -> masterlist spelling, where the two documents name the
+# same machine differently and no general rule can safely bridge them.
+#
+# EVERY LINE HERE IS A JUDGEMENT, not a rule, and every one is printed in
+# docs/lube-import-report.txt so it can be argued with. They are here rather
+# than in the matcher because a fuzzy rule loose enough to catch "D275.5D" =
+# "D275A-5" is loose enough to catch things that are not the same machine, and
+# this project has already put a loader on a truck's compartments once.
 ALIAS = {
- ("AT", "KOMATSU"): {"is": "KOMATSU HM400", "who": "R. Marrero", "when": "2026-08-18",
-                     "why": "27 units filed by make; confirmed HM400 alongside the one "
-                            "already recorded as KOMATSU HM400"},
+    "KOMATSU D275.5D":          "Komatsu D275A-5",
+    "Boart Longyear LF-90D":    "Boart Longyear LF90D Drill",
+    "HITACHI ZX330-5G RB":      "Hitachi ZX 330-5G",
+    "HITACHI ZX470LC-5G":       "Hitachi ZX 470",
+    "HITACHI ZX470LCR-5G":      "Hitachi ZX 470",
+    "KOMATSU PC2000-8 BH":      "KOMATSU PC2000-8",
+    "KOMATSU PC800-8E0 (SE)":   "Komatsu PC800-8EO",
+    "LiuGong CLG990FHD":        "Luigong 990FHD",
+    "TLP-4M":                   "TLP-4M-030 (ТЛП-4М-030)",
+    "CHSDM DZ-98V.00100-111":   "CHSDM DZ-98V",
+    # NOT aliased on purpose, and listed so the omission is visible:
+    #   CATERPILLAR 336-07  vs  CAT 336D — a 336-07 is not a 336D.
+    #   HITROCK HMB4500 / HB3500 / HB4500+ — no breaker in the masterlist yet.
 }
 
-# ── the catalogue: what can be bought, not what has been chosen ──────────
-CATALOG = [
- {"p":"Mobil Delvac 1 5W-40",        "g":"5W-40 synth",        "s":"API CK-4, Cat ECF-3, Komatsu EO-DH", "lo":-40,"hi":30,"st":"Approved"},
- {"p":"Cat Arctic DEO SYN 0W-40",    "g":"0W-40 arctic synth", "s":"Cat ECF-3, API CK-4",                "lo":-45,"hi":25,"st":"Approved"},
- {"p":"Lukoil Avangard Ultra 15W-40","g":"15W-40",             "s":"API CI-4",                           "lo":-15,"hi":50,"st":"Meets spec"},
- {"p":"Shell Spirax S4 TXM",         "g":"SAE 10W",            "s":"CAT TO-4, KES 07.868.1, Allison C-4","lo":-40,"hi":10,"st":"Approved"},
- {"p":"Komatsu Powertrain TO-10",    "g":"SAE 10W",            "s":"KES 07.868.1, CAT TO-4",             "lo":-40,"hi":10,"st":"Approved"},
- {"p":"Cat TDTO-TMS (arctic)",       "g":"TDTO-TMS (arctic)",  "s":"CAT TO-4, TO-4M",                    "lo":-45,"hi":20,"st":"Approved"},
- {"p":"Generic TO-4 SAE 30",         "g":"SAE 30",             "s":"CAT TO-4",                           "lo":-10,"hi":45,"st":"Meets spec"},
- {"p":"Cat HYDO Advanced 10",        "g":"HYDO Adv 10",        "s":"Cat HYDO Advanced, ISO VG 32",       "lo":-30,"hi":30,"st":"Approved"},
- {"p":"HVLP 32 arctic",              "g":"ISO VG 32",          "s":"DIN 51524-3, ISO VG 32",             "lo":-35,"hi":25,"st":"Meets spec"},
- {"p":"HVLP 22 arctic synth",        "g":"ISO VG 22",          "s":"DIN 51524-3, ISO VG 22, ISO VG 32, Hitachi Super EX","lo":-45,"hi":20,"st":"Meets spec"},
- {"p":"HLP 46",                      "g":"ISO VG 46",          "s":"DIN 51524-2, ISO VG 46",             "lo":-10,"hi":50,"st":"Meets spec"},
- {"p":"Mobilube SHC 75W-90",         "g":"75W-90 synth",       "s":"API GL-5",                           "lo":-45,"hi":35,"st":"Approved"},
- {"p":"Gear oil 80W-90",             "g":"80W-90",             "s":"API GL-5",                           "lo":-20,"hi":45,"st":"Meets spec"},
- {"p":"UTTO universal tractor fluid","g":"SAE 10W",            "s":"Wet brake WB-101",                   "lo":-25,"hi":35,"st":"Unverified"},
+# ── matching a masterlist name to a register name ────────────────────────
+# The same machine is spelled several ways across the two documents:
+# Liugong / LiuGong / Luigong, CAT / CATERPILLAR, PC800-8EO with a letter O
+# against PC800-8E0 with a zero, LF90D against LF-90D, and a trailing
+# description ("Dump Truck", "Excavator") on one side and not the other.
+#
+# Guessing across those is how a loader gets a truck's compartments, so the
+# rule is narrow: strip punctuation, fold the manufacturer synonyms, drop the
+# words that describe what a machine IS rather than which model it is, and
+# treat letter-O and zero as the same character. What survives has to match
+# EXACTLY. Anything that does not is reported, never guessed.
+MAKE_SYN = {
+    "CATERPILLAR": "CAT", "LUIGONG": "LIUGONG", "KOMATSU": "KOMATSU",
+    "HITACHI": "HITACHI", "SHANTUI": "SHANTUI", "BOARTLONGYEAR": "LONGYEAR",
+    "BOART": "", "MCCLOSKEY": "MCCLOSKEY", "NHL": "NHL",
+}
+DESCRIPTORS = [
+    "DUMPTRUCK","TRACTORTRUCK","TRUCKDUMP","TRUCKTRACTOR","TRUCKBOOM",
+    "TRUCKWATER","TRUCKTANKER","TRUCKMECHANIC","TRACKDRILL","TRACKLOADER",
+    "SKIDSTEERLOADER","SKIDSTEER","TELESCOPICHANDLER","TYREHANDLER",
+    "CYLINDERHANDLER","WHEELCRANE","TRUCKCRANE","CRANEMOBILE","MOBILECRANE",
+    "ALLTERRAINVEHICLE","WHEELDOZER","STEAMGENERATOR","INDUSTRIALHEATER",
+    "WELDINGMACHINE","KONTAINERLOADER","CONTAINERLOADER","EMERGENCYEQUIPMENT",
+    "EXCAVATOR","COMPACTOR","ROLLERDRUM","MANLIFT","GENERATOR","GENSET",
+    "CRANE","LOADER","DOZER","DRILL","TRUCK","PICKUP","CREWBUS","BUS",
+    "FIRETRUCK","FORKLIFT","TRACTOR",
 ]
+def _base(s):
+    s = re.sub(r"[^A-Z0-9]", "", str(s or "").upper())
+    for k, v in MAKE_SYN.items():
+        if s.startswith(k): s = v + s[len(k):]; break
+    return s
+def keys(s):
+    """Every normal form this name could legitimately be written as."""
+    b = _base(s)
+    out = {b}
+    for d in DESCRIPTORS:
+        if b.endswith(d) and len(b) > len(d) + 2: out.add(b[:-len(d)])
+        if b.startswith(d) and len(b) > len(d) + 2: out.add(b[len(d):])
+    more = set()
+    for k in out:
+        more.add(k.replace("O", "0"))          # PC800-8EO  vs  PC800-8E0
+    out |= more
+    return {k for k in out if len(k) >= 4}
 
-# ── build the model table ────────────────────────────────────────────────
-models, counts = {}, collections.Counter()
-for a in assets:
-    if a.get("cls") not in PRIMARY: continue
-    mod = a.get("m") or ""
-    if not mod: continue
-    counts[(a["cls"], mod)] += 1
+def norm(s):
+    return _base(s)
 
-for (cls, mod), n in sorted(counts.items(), key=lambda x: (-x[1], x[0])):
-    tmpl = TEMPLATE.get(cls, [])
-    al   = ALIAS.get((cls, mod))
-    # Figures come from what the machine IS, labels stay as the register spells
-    # it — so a fitter still recognises the name on the screen.
-    fig  = FIG.get(al["is"] if al else mod, {})
+def read_products(ws):
+    out = []
+    for c in PRODUCT_COL:
+        name = str(ws.cell(1, c).value or "").strip()
+        code = str(ws.cell(2, c).value or "").strip()
+        if not name or not code: continue
+        t = TYPE_BY_CODE.get(code)
+        if not t:
+            print("  ! unknown product code in row 2:", code); continue
+        out.append({"p": name, "code": code, "t": t[0], "en": t[1], "ru": t[2],
+                    "hue": TYPE_HUE.get(t[0], "#8b969c")})
+    return out
+
+def read_components(ws):
+    """Every component triple: the code is in row 2 over the CAPACITY column,
+       the next column is the interval and the one after is the OEM string."""
     comps = []
-    for t in tmpl:
-        c = {"k":t["k"], "en":t["en"], "ru":t["ru"], "risk":t["risk"]}
-        f = fig.get(t["k"])
-        if f:
-            c["cap"]  = f["cap"]
-            c["spec"] = f["spec"]
-            c["iv"]   = f["iv"]
-            c["gr"]   = [{"g":g, "lo":lo, "hi":hi} for (g, lo, hi) in f["gr"]]
-            if "src" in f: c["src"] = f["src"]
-        comps.append(c)
-    # A model whose class template lists a compartment the FIG table does not
-    # mention is NOT wrong — it means nobody has sourced that one yet.
-    # Keyed by CLASS|MODEL, never by the model string alone. "KOMATSU" is on
-    # the register as both an articulated truck and a loader; collapsing those
-    # onto one key gives a loader a truck's compartments, silently.
-    rec = {"cls":cls, "m":mod, "n":n, "comps":comps,
-           "sourced": sum(1 for c in comps if "cap" in c)}
-    if al: rec["alias"] = al
-    models[cls + "|" + mod] = rec
+    for c in range(23, ws.max_column + 1):
+        code = ws.cell(2, c).value
+        if code is None: continue
+        name = str(ws.cell(1, c).value or "").replace("\n", " ").strip()
+        if not name or name.lower().startswith("none"): continue
+        if str(ws.cell(1, c + 1).value or "").strip().lower() != "frequency of replacements":
+            continue                       # not a component triple
+        en, ru = split_bilingual(name)
+        comps.append({"k": str(code).strip(), "en": en, "ru": ru, "col": c})
+    return comps
 
-gaps = sorted({(a["cls"], a.get("m") or "(blank)") for a in assets
-               if a.get("cls") in PRIMARY and not any(ch.isdigit() for ch in (a.get("m") or ""))})
+CYR = re.compile(r"[А-Яа-яЁё]")
+def split_bilingual(s):
+    """The headers carry both languages in one cell: "Engine/ORS Двигатель".
+       Split on the first Cyrillic character so each language gets its own
+       field, rather than every label being shown twice on a bilingual app."""
+    s = re.sub(r"\s+", " ", s).strip()
+    m = CYR.search(s)
+    if not m: return s, s
+    en = s[:m.start()].strip(" /–-—")
+    ru = s[m.start():].strip()
+    return (en or s), (ru or s)
 
-HEAD = '''/* Lubrication reference — compartments, figures, products.
+def main():
+    if not os.path.exists(SRC):
+        sys.exit("masterlist not found: " + SRC)
+    wbv = load_workbook(SRC, data_only=True)
+    wbf = load_workbook(SRC)                      # a second pass, for the fills
+    wv, wf = wbv[SHEET], wbf[SHEET]
 
-   TWO TABLES, KEPT APART ON PURPOSE.
+    products = read_products(wv)
+    comps    = read_components(wv)
+    notes, questions = [], []
 
-   MODELS[model].comps is the compartment LIST: which compartments a machine
-   has. Known today for every primary model, derived from its class, so a lube
-   round can be walked on any machine on the register from the first build.
+    # the register, so masterlist rows can be tied to real machines
+    raw = open(ASSETS, encoding="utf-8").read()
+    assets = json.loads(re.search(r"window\.ASSETS\s*=\s*(\[.*?\]);", raw, re.S).group(1))
+    reg = collections.defaultdict(set)            # normal form -> {(cls, model)}
+    counts = collections.Counter()
+    for a in assets:
+        m, cls = a.get("m") or "", a.get("cls") or ""
+        if not m: continue
+        canon = CANON.get(m.upper(), {}).get(cls) or ALIAS.get(m)
+        for k in keys(canon or m): reg[k].add((cls, m))
+        counts[(cls, m)] += 1
 
-   The FIGURES on each compartment — cap (refill litres), spec, iv (interval
-   hours), gr (grade against ambient) — exist only where somebody has opened the
-   manual. A compartment without them is not broken and not hidden: it appears
-   on the round, records what is in it, and reads as unsourced everywhere it is
-   counted. That is the honest state, and it is why field work does not have to
-   wait for a spreadsheet to come back.
+    PURPLE, TEAL = "FFCC99FF", "FF00B0B0"
+    models, unmatched, matched = {}, [], []
+    for r in range(3, wv.max_row + 1):
+        label = wv.cell(r, 2).value
+        if not label or str(label).strip() in ("Fleet", "TOTAL"): continue
+        label = re.sub(r"\s+", " ", str(label)).strip()
 
-   Capacity is the REFILL quantity, not the dry fill — they differ by up to 20%
-   and the wrong one over-fills a final drive and blows the seal.
+        got = []
+        for cp in comps:
+            cap  = wv.cell(r, cp["col"]).value
+            freq = wv.cell(r, cp["col"] + 1).value
+            oem  = wv.cell(r, cp["col"] + 2).value
+            if cap in (None, 0, "") and not oem: continue
+            fill = wf.cell(r, cp["col"]).fill
+            rgb  = fill.fgColor.rgb if (fill and fill.fgColor) else None
+            rgb  = rgb if isinstance(rgb, str) else None
+            cm   = wf.cell(r, cp["col"]).comment
 
-   GENERATED by scratchpad/gen_lube.py from the app's own asset register, so
-   the model strings here and the ones on the machines can never drift apart.
-   Editing a figure by hand here is fine; adding a model is not — add it to the
-   register and re-run. */
+            c = {"k": cp["k"], "en": cp["en"], "ru": cp["ru"]}
+            if isinstance(cap, (int, float)) and cap: c["cap"] = round(float(cap), 2)
+            if isinstance(freq, (int, float)) and freq: c["iv"] = int(freq)
+            if oem: c["oem"] = re.sub(r"\s+", " ", str(oem)).strip()
+            ty = LEGEND_TYPE.get(cp["k"])
+            if ty: c["t"] = ty
+            # The site's own flags, carried across as data instead of as a fill
+            # colour nobody outside Excel can see.
+            if rgb == PURPLE or (cm and "VERIFY" in str(cm.text).upper()):
+                c["verify"] = 1
+            if rgb == TEAL or ("cap" in c and "iv" not in c):
+                c["noiv"] = 1
+            if str(c.get("oem", "")).upper() == "VERIFY":
+                c["verify"] = 1
+            if cp["k"] in QUESTION_TYPES and c.get("oem"):
+                c["ask"] = 1
+            got.append(c)
+        if not got: continue
+
+        hits = set()
+        for k in keys(label): hits |= reg.get(k, set())
+        seen = sorted(hits)
+        if seen: matched.append((label, sorted({r for _, r in seen})))
+        if not seen:
+            unmatched.append(label)
+            models["?|" + label] = {"cls": "?", "m": label, "n": 0, "regs": [], "comps": got,
+                                    "sourced": sum(1 for c in got if "cap" in c)}
+            continue
+        # ONE entry per class per machine, keyed by the MASTERLIST's name.
+        # The register spells the same truck three ways — "KOMATSU", "KOMATSU
+        # HM400", and nothing at all — and keeping one entry per spelling means
+        # the canonical name resolves to two rivals and therefore to neither,
+        # while the unit count is split across them. They are one machine, so
+        # they are one row, and every spelling is an alias onto it.
+        by_cls = collections.defaultdict(list)
+        for (cls, regname) in seen: by_cls[cls].append(regname)
+        for cls, regnames in by_cls.items():
+            key = cls + "|" + label
+            n = sum(counts[(cls, rn)] for rn in regnames)
+            models[key] = {"cls": cls, "m": label, "regs": sorted(regnames),
+                           "n": n, "comps": got,
+                           "sourced": sum(1 for c in got if "cap" in c)}
+
+    # ── what the import could not answer ─────────────────────────────────
+    oems = collections.Counter()
+    verify = noiv = ask = 0
+    for M in models.values():
+        for c in M["comps"]:
+            if c.get("oem"): oems[c["oem"]] += 1
+            verify += c.get("verify", 0); noiv += c.get("noiv", 0); ask += c.get("ask", 0)
+
+    with open(REPORT, "w", encoding="utf-8") as f:
+        f.write("LUBRICATION MASTERLIST — IMPORT REPORT\n")
+        f.write("=" * 62 + "\n\n")
+        f.write("Generated by docs/build-lube-data.py. Everything here is a question\n")
+        f.write("for the reliability engineer, not a fault in the import.\n\n")
+        f.write("models imported            %5d\n" % len(models))
+        f.write("compartment entries        %5d\n" % sum(len(m["comps"]) for m in models.values()))
+        f.write("distinct OEM spec strings  %5d   <- the standardisation problem\n" % len(oems))
+        f.write("flagged VERIFY             %5d\n" % verify)
+        f.write("missing change interval    %5d\n" % noiv)
+        f.write("transmission oil to decide %5d\n\n" % ask)
+        f.write("MODELS IN THE MASTERLIST WITH NO MACHINE ON THE REGISTER (%d)\n" % len(unmatched))
+        f.write("They are imported and carry no unit count, so they cost nothing\n")
+        f.write("and appear the moment a matching machine is registered.\n")
+        for u in sorted(unmatched): f.write("   " + u + "\n")
+        f.write("\nEXPLICIT ALIASES — every one a judgement, check them (%d)\n" % len(ALIAS))
+        for k, v in sorted(ALIAS.items()):
+            f.write("   register %-28s = masterlist %s\n" % (k, v))
+        f.write("\nNAMES MATCHED ACROSS THE TWO DOCUMENTS (%d)\n" % len(matched))
+        f.write("Every one of these is a judgement the importer made. Check them.\n")
+        for lab, regs in sorted(matched):
+            if [lab] != regs:
+                f.write("   %-42s = %s\n" % (lab, ", ".join(regs)))
+        f.write("\nOEM SPEC STRINGS, MOST USED FIRST\n")
+        for k, v in oems.most_common(): f.write("  %4d  %s\n" % (v, k))
+
+    HEAD = '''/* Lubrication reference — GENERATED from the site's own masterlist.
+
+   Source: docs/source/Lube_Matrix_Oil_Analysis_Sampling.xlsm, sheet
+   "Lube Frequency BMSK". Rebuild with docs/build-lube-data.py.
+   Import questions: docs/lube-import-report.txt
+
+   THE CODES AND THE FIGURES ARE THE CLIENT'S. The component codes (1, 2, 3,
+   3A, 4AL … 16) are on the printed sampling forms and in the fitters' heads;
+   the capacities and intervals came out of OEM manuals. Nothing here is
+   invented, and where the masterlist contradicts itself the contradiction is
+   carried through and flagged rather than quietly resolved.
+
+   FLAGS, which were cell colours in Excel and are data here:
+     verify  the figure is a placeholder to confirm against the manual (purple)
+     noiv    a capacity with no change interval, so it totals nothing (teal)
+     ask     the Legend files this under gear oil but the OEM code reads TO-4;
+             wet-clutch friction chemistry is an engineer's decision
+
+   THE FIELD NEVER SEES `oem`. It is 91 different strings for eight products —
+   Japanese full-width, Russian, brand names, multi-line — and asking a fitter
+   in gloves to read it is how the wrong oil goes in. It is kept because it is
+   what the standard is DECIDED against, on the dashboard, once. */
 (function (G) {
 '''
 
-TAIL = '''
-  /* ── specification matching ────────────────────────────────────────────
-     A product satisfies a compartment when what it CLAIMS covers what the
-     manual DEMANDS. Matching on shared words does not work: "API" and "KES"
-     appear in nearly every string, so a loose match recommends transmission
-     oil for hydraulics. So specifications are tokenised to identifiers and
-     matched as identifiers. */
-  var SPEC_PAT = [
-    /\\bapi\\s*[a-z]{1,2}-?\\s*\\d+\\b/g,      /* API CK-4, API CI-4, API GL-5 */
-    /\\bgl-?\\s*\\d\\b/g,                     /* GL-5 written on its own      */
-    /\\bkes\\s*[\\d.]+\\b/g,                   /* KES 07.868.1                 */
-    /\\bto-?\\s*4[a-z]?\\b/g,                  /* TO-4, TO-4M                  */
-    /\\becf-?\\s*\\d\\b/g,                     /* Cat ECF-3                    */
-    /\\biso\\s*vg(?:\\s*\\d+)?\\b/g,            /* ISO VG, ISO VG 32            */
-    /\\bdin\\s*[\\d-]+\\b/g,                   /* DIN 51524-3                  */
-    /\\ballison\\s*c-?\\s*\\d\\b/g,             /* Allison C-4                  */
-    /\\bhydo(?:\\s*advanced)?\\b/g,           /* Cat HYDO Advanced            */
-    /\\bsuper\\s*ex\\b/g,                     /* Hitachi Super EX             */
-    /\\beo-?\\s*dh\\b/g,                       /* Komatsu EO-DH                */
-    /\\bwb-?\\s*\\d+\\b/g                       /* wet-brake WB-101             */
-  ];
-  /* Punctuation is part of an identifier here: strip the dots out of
-     "KES 07.868.1" and it stops being a number anybody can match on. */
-  function specNorm(x){ return String(x||"").toLowerCase().replace(/[^a-z0-9.\\-]+/g," ").trim(); }
-  function specTokens(text){
-    var t = specNorm(text), out = [];
-    SPEC_PAT.forEach(function(re){
-      var m; re.lastIndex = 0;
-      while((m = re.exec(t))) out.push(m[0].replace(/[\\s.\\-]/g, ""));
-    });
-    return out;
-  }
-  /* The API diesel C-sequence is a ladder — each category supersedes the ones
-     below it, so a CK-4 oil serves an engine whose plate says CI-4. Without
-     this the round tells a fitter NOT SET for an engine that has the correct
-     arctic oil in the bulk tank.
-     Two deliberate omissions:
-     · FA-4 is NOT on this ladder. It is a low-HTHS category, not a newer CK-4,
-       and putting it in a CI-4 engine is a warranty conversation.
-     · API GL has no ladder. GL-5 is not a drop-in for every GL-4 application —
-       the EP additives attack yellow metal in synchronisers — so that stays an
-       exact match and an engineer's decision. */
-  var API_C = ["apicf4","apicg4","apich4","apici4","apicj4","apick4"];
-  /* One family legitimately appears without a grade: an OEM that asks for "an
-     ISO VG hydraulic oil" and leaves the grade to the temperature table, which
-     is a separate check. Everywhere else a bare family is not a requirement
-     anybody can satisfy, and must not match. */
-  function tokenMatch(want, have){
-    if(want === have) return true;
-    if(want === "isovg" && have.indexOf("isovg") === 0) return true;
-    if(have === "isovg" && want.indexOf("isovg") === 0) return true;
-    var w = API_C.indexOf(want), h = API_C.indexOf(have);
-    if(w >= 0 && h >= 0) return h >= w;
-    return false;
-  }
-  function meetsSpec(claims, oemSpec){
-    var want = specTokens(oemSpec);
-    if(!want.length) return false;            /* an unreadable spec matches nothing */
-    var have = [];
-    (claims||[]).forEach(function(c){ have = have.concat(specTokens(c)); });
-    return want.some(function(w){
-      return have.some(function(h){ return tokenMatch(w, h); });
-    });
+    TAIL = '''
+  /* Colour is by LUBRICANT TYPE, which is the site's own convention: blue
+     engine, red hydraulic, yellow compressor, green rock-drill. Eight colours
+     to learn, and they survive a change of supplier — colouring by product
+     would have to be relearned the day a drum changes. */
+  function typeOf(k){ return (COMP_TYPE[k] || null); }
+  function productFor(k){
+    var t = typeOf(k); if(!t) return null;
+    return CATALOG.filter(function(p){ return p.t === t; })[0] || null;
   }
   function norm(s){ return String(s||"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim(); }
-  /* Is this grade good for the coldest morning of the year? null means the
-     manufacturer does not list this grade for this compartment at all, which is
-     a different answer from "no". */
-  function coldOK(grades, grade){
-    var hit = (grades||[]).filter(function(g){ return norm(g.g) === norm(grade); })[0];
-    if(!hit) return null;
-    return hit.lo <= SITE.design;
-  }
-
-  /* Keys are CLASS|MODEL. Resolve generously on the way in — the register is
-     not tidy — but never guess across a class boundary: "KOMATSU" is both an
-     articulated truck and a loader, and picking the wrong one hands a fitter
-     the wrong compartment list with no sign anything went wrong. Given no
-     class, an ambiguous model resolves to nothing rather than to a coin flip. */
   function resolve(model, cls){
     if(!model) return null;
     if(cls && MODELS[cls + "|" + model]) return cls + "|" + model;
     var n = norm(model), hits = [];
     Object.keys(MODELS).forEach(function(k){
       var r = MODELS[k];
-      if(norm(r.m) !== n) return;
+      /* The canonical name, or any spelling the register uses for it. */
+      var names = [r.m].concat(r.regs || []);
+      if(!names.some(function(x){ return norm(x) === n; })) return;
       if(cls && r.cls !== cls) return;
       hits.push(k);
     });
@@ -322,12 +381,13 @@ TAIL = '''
 
   G.LUBE = {
     models:   Object.keys(MODELS),
-    /* Every call takes an optional class. Pass it wherever you have it — the
-       app always does, because a machine on the register carries both. */
     of:       function(model, cls){ var k = resolve(model, cls); return k ? MODELS[k] : null; },
     ambiguous:function(model){
                 var n = norm(model), c = 0;
-                Object.keys(MODELS).forEach(function(k){ if(norm(MODELS[k].m) === n) c++; });
+                Object.keys(MODELS).forEach(function(k){
+                  var r = MODELS[k];
+                  if([r.m].concat(r.regs || []).some(function(x){ return norm(x) === n; })) c++;
+                });
                 return c > 1;
               },
     comps:    function(model, cls){ var r = this.of(model, cls); return r ? r.comps : []; },
@@ -336,29 +396,39 @@ TAIL = '''
     label:    function(model, k, lang, cls){
                 var c = this.comp(model, k, cls);
                 return c ? (lang === "ru" ? c.ru : c.en) : k; },
-    /* Has anybody sourced this compartment's figures? The round shows the
-       compartment either way; the dashboard counts the difference. */
-    sourced:  function(model, k, cls){ var c = this.comp(model, k, cls); return !!(c && c.cap != null); },
+    /* Sourced means a capacity that is not a placeholder. A purple cell in the
+       masterlist is a typical figure somebody filled in to make the totals
+       work, and counting it as known is how a guess becomes a fact. */
+    sourced:  function(model, k, cls){
+                var c = this.comp(model, k, cls);
+                return !!(c && c.cap != null && !c.verify); },
     catalog:  CATALOG,
     product:  function(name){
                 return CATALOG.filter(function(p){ return norm(p.p) === norm(name); })[0] || null; },
-    /* Every catalogued product that satisfies this compartment AND is rated for
-       the site's design minimum. The order the picker offers them in. */
-    fitFor:   function(model, k, cls){
+    /* What belongs in this compartment: one product, by type. The whole point
+       of the exercise — the fitter is never offered a choice of eight. */
+    forComp:  function(model, k, cls){
                 var c = this.comp(model, k, cls);
-                if(!c || !c.spec) return [];
-                return CATALOG.filter(function(p){
-                  return meetsSpec(p.s.split(/,\\s*/), c.spec) && p.lo <= SITE.design;
-                });
-              },
+                return c ? productFor(c.k) : null; },
+    typeOf:   typeOf,
+    types:    TYPES,
+    hue:      function(t){ return (TYPES[t] && TYPES[t].hue) || "#8b969c"; },
     site:     SITE,
-    gaps:     GAPS,
-    meetsSpec: meetsSpec,
-    specTokens: specTokens,
-    coldOK:   coldOK,
-    /* Evidence, ranked. "The fitter said it is TO-4" is a lead, not a finding —
-       counting it as an audit is how a programme reports full coverage and
-       still has the wrong oil in a powershift. */
+    /* Everything the masterlist could not answer, as a work list rather than a
+       cell colour: figures to confirm, intervals that are missing, and the
+       transmission-oil question. */
+    gaps:     function(){
+                var out = { verify:[], noiv:[], ask:[] };
+                Object.keys(MODELS).forEach(function(k){
+                  MODELS[k].comps.forEach(function(c){
+                    ["verify","noiv","ask"].forEach(function(f){
+                      if(c[f]) out[f].push({ key:k, m:MODELS[k].m, k:c.k,
+                                             en:c.en, cap:c.cap, oem:c.oem });
+                    });
+                  });
+                });
+                return out;
+              },
     EVID: [
       { k:"label", rank:2, en:"Label photographed", ru:"Фото этикетки" },
       { k:"batch", rank:2, en:"Tank / pump batch",  ru:"Партия из ёмкости" },
@@ -372,26 +442,33 @@ TAIL = '''
 })(window);
 '''
 
-with open(OUT, "w", encoding="utf-8") as f:
-    f.write(HEAD)
-    f.write("  var SITE = " + json.dumps(
-        {"design":-40, "winter":-45, "summer":28, "hoursPerYear":5000}) + ";\n\n")
-    f.write("  /* Units the register records by make only. A capacity cannot be attached\n"
-            "     to \"KOMATSU\" — these are outside every number until the model is\n"
-            "     recorded, and the dashboard says so rather than quietly dropping them. */\n")
-    f.write("  var GAPS = " + json.dumps(
-        [dict({"cls":c, "as":m},
-              **({"alias":ALIAS[(c,m)]} if (c,m) in ALIAS else {}))
-         for (c, m) in gaps], ensure_ascii=False) + ";\n\n")
-    f.write("  /* What can be BOUGHT — not what has been chosen. The site standard is a\n"
-            "     decision made on the dashboard; this is the shelf it is chosen from. */\n")
-    f.write("  var CATALOG = " + json.dumps(CATALOG, ensure_ascii=False) + ";\n\n")
-    f.write("  var MODELS = " + json.dumps(models, ensure_ascii=False, separators=(",", ":")) + ";\n")
-    f.write(TAIL)
+    comp_type = {k: v for k, v in LEGEND_TYPE.items() if v}
+    types = {}
+    for p in products:
+        types[p["t"]] = {"en": p["en"], "ru": p["ru"], "hue": p["hue"]}
+    types.setdefault("wirerope", {"en":"Wire rope lube","ru":"Смазка канатов","hue":"#5b686f"})
+    types.setdefault("opengear", {"en":"Open gear grease","ru":"Смазка открытых передач","hue":"#8c5a2b"})
 
-n_sourced = sum(1 for r in models.values() if r["sourced"])
-print("models:", len(models),
-      "| with figures:", n_sourced,
-      "| compartment rows:", sum(len(r["comps"]) for r in models.values()),
-      "| gaps:", len(gaps))
-print("bytes:", len(open(OUT, encoding="utf-8").read()))
+    with open(OUT, "w", encoding="utf-8") as f:
+        f.write(HEAD)
+        f.write("  var SITE = " + json.dumps(
+            {"design": -40, "winter": -45, "summer": 28, "hoursPerYear": 5000,
+             "units": len(assets)}) + ";\n\n")
+        f.write("  /* The eight products actually on site, from row 1 of the masterlist. */\n")
+        f.write("  var CATALOG = " + json.dumps(products, ensure_ascii=False) + ";\n\n")
+        f.write("  var TYPES = " + json.dumps(types, ensure_ascii=False) + ";\n\n")
+        f.write("  var COMP_TYPE = " + json.dumps(comp_type, ensure_ascii=False) + ";\n\n")
+        f.write("  var MODELS = " + json.dumps(models, ensure_ascii=False,
+                                               separators=(",", ":")) + ";\n")
+        f.write(TAIL)
+
+    print("models          %5d" % len(models))
+    print("entries         %5d" % sum(len(m["comps"]) for m in models.values()))
+    print("products        %5d" % len(products))
+    print("OEM strings     %5d" % len(oems))
+    print("VERIFY flags    %5d" % verify)
+    print("missing interval%5d" % noiv)
+    print("unmatched models%5d  (see docs/lube-import-report.txt)" % len(unmatched))
+    print("bytes           %5d" % len(open(OUT, encoding="utf-8").read()))
+
+main()
