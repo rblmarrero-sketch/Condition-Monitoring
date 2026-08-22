@@ -4197,6 +4197,37 @@ function renderGET(){
    compartment and how they know; whether that satisfies the manufacturer and
    the site standard is arithmetic on the specification, and asking a person to
    decide it at the machine is asking them to carry twenty manuals. */
+/* What the report needs to know about one lubrication answer.
+
+   Written once and used by both item builders — the one that reads this
+   phone's own records and the one that reads the team's — because the two
+   drifting apart is how a field ends up on one report and not the other. It
+   takes the model and class rather than reading curEquip, so it works on a
+   record from any machine and not only the one on screen.
+
+   Both languages come out of here, because report-core is deliberately
+   ignorant of LUBE and a label baked in one language at the host is exactly
+   what left the report bilingual for undercarriage rounds only. */
+function lubeReportBlock(model, cls, key, o){
+  if(!window.LUBE) return null;
+  const product = String(o.product||"").trim();
+  const evidKey = o.evid || "";
+  const samp = o.samp == null ? null : !!o.samp;
+  if(!product && !evidKey && samp == null) return null;
+  const e = LUBE.EVID.filter(x=>x.k===evidKey)[0];
+  const want = LUBE.forComp(model, key, cls);
+  const norm = x => String(x||"").toUpperCase().replace(/[^A-Z0-9]+/g,"");
+  return {
+    product: product,
+    evid: e ? { en:e.en, ru:e.ru } : null,
+    samp: samp,
+    want: want ? want.p : "",
+    /* Off standard only when BOTH are known. An unlisted product is not
+       "wrong", it is unjudged, and a compartment with no standard decided
+       cannot be departed from. */
+    off: !!(want && product && norm(product) !== norm(want.p))
+  };
+}
 function lubeVerdict(k){
   const p=draft.positions[k]||{};
   const name=p.prod==="__other" ? (p.other||"") : (p.prod||"");
@@ -6533,6 +6564,17 @@ function itemLabelFor(rec,k){
      ROLLER.L6, so Drive, the CSV, the dashboard and 1C all lost the name. */
   if(TYPE_META[rec.type] && TYPE_META[rec.type].wear) return ucLabel(k, rec.type, rec.equip);
   if(TYPE_META[rec.type] && TYPE_META[rec.type].get)  return getLabel(k);
+  /* A lubrication compartment is named by the masterlist, and nothing below
+     knows about it: the fall-through returned the bare code, so every lube
+     compartment reached the report, the CSV and the dashboard as "4AL" with no
+     word beside it. The code is what a fitter says out loud and what the oil
+     sample will be labelled with; the name is what makes the sheet readable by
+     anyone who has not learnt them yet. Both, or neither is much use. */
+  if(TYPE_META[rec.type] && TYPE_META[rec.type].lube && window.LUBE){
+    const a=ASSET_BY[rec.equip]||{};
+    const c=LUBE.comp(a.m||"", k, a.cls||rec.cls||"");
+    if(c) return (lang==="ru" ? c.ru : c.en) || c.en || "";
+  }
   if(usesRegister(rec.type) && COMP_BY[upComp(k)]) return compLabel(k);
   const list=(CLASSES[rec.cls]&&CLASSES[rec.cls][rec.type])||[];
   for(const e of list){ if(typeof e==="string"){ if(e===k) return COMP[e]?(COMP[e][lang]||COMP[e].en):k; } else if(e.k===k){ return e[lang]||e.en; } } return ""; }
@@ -6673,7 +6715,13 @@ async function rptRecords(){
       const photos=[];
       for(const b of (p.photos||(p.photoBlob?[p.photoBlob]:[])))
         { try{ photos.push(await blobToThumb(b,420)); }catch(e){} }
-      items.push({ key:k, name:nm.name, nameAlt:nm.nameAlt, code:nm.code,
+      const a1=ASSET_BY[rec.equip]||{};
+      const lube = meta.lube
+        ? lubeReportBlock(a1.m||"", a1.cls||"", k,
+            { product:(p.prod==="__other"?(p.other||""):(p.prod||"")),
+              evid:p.evid||"", samp:(p.samp?1:0) })
+        : null;
+      items.push({ key:k, name:nm.name, nameAlt:nm.nameAlt, code:nm.code, lube,
         grade:p.grade||"", sev:effSev(p),
         defect:p.defect?defectLabel(p.defect):"", defectCode:p.defect?upDefect(p.defect):"",
         iso:d?d.iso14224:"", cause:p.cause?causeLabel(p.cause):"",
@@ -6760,7 +6808,12 @@ function teamRecToReport(rec){
           refSrc:ref?(ref.src||""):"", reason:it.reason||"",
           reasonLabel:it.reasonLabel||it.reason||"", stood:!!it.stood };
     }
-    return { key:it.key, name:nm.name, nameAlt:nm.nameAlt, code:nm.code,
+    const lube = meta.lube
+      ? lubeReportBlock(a.m||"", a.cls||rec.cls||"", it.key,
+          { product:it.lubeProduct||"", evid:it.lubeEvidence||"",
+            samp:it.lubeSampled?1:0 })
+      : null;
+    return { key:it.key, name:nm.name, nameAlt:nm.nameAlt, code:nm.code, lube,
              grade:it.grade||"", sev:it.sev||"",
              defect:it.defect||"", defectCode:it.defectCode||"", iso:it.iso||"",
              cause:it.cause||"", action:it.actionLabel||it.action||"",

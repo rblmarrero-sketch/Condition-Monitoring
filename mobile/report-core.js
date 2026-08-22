@@ -30,7 +30,8 @@
      gps:{lat,lon}|null, signUrl:""|dataURI, wear:bool, temp:bool,
      items:[{ key, name, code, grade, sev, defect, defectCode, iso,
               cause, action, wo, comment, readings:[str], photos:[url],
-              w:{mm,newMM,condemnMM,pct,band,refSrc,reason,reasonLabel,stood}|null }]
+              w:{mm,newMM,condemnMM,pct,band,refSrc,reason,reasonLabel,stood}|null,
+              lube:{product, evid:{en,ru}, samp:bool, want, off:bool}|null }]
    }
    ========================================================================== */
 (function (root) {
@@ -426,7 +427,7 @@
          whatever had been measured — including a truck body, which has no
          undercarriage in it at all. */
       meas_UC:"Undercarriage measurements", meas_TB:"Dump body thickness",
-      meas_GET:"Ground engaging tools",
+      meas_GET:"Ground engaging tools", meas_LUBE:"Lubricant found in each compartment",
       map_TB:"Where the wear is", zone_t:"By zone",
       c_zone:"Zone", c_taken:"Read", c_thin:"Thinnest", c_at:"At",
       f_date:"Date", f_cat:"Equipment", f_model:"Model", f_unit:"Unit",
@@ -434,6 +435,10 @@
       allok:"All {n} points normal. Nothing to do on this machine.",
       rest_n:"Also checked, nothing to report —",
       c_action:"Action", c_reading:"Reading",
+      c_lube_prod:"In service", c_lube_evid:"Evidence", c_lube_samp:"Oil sample",
+      c_lube_want:"Site standard", c_lube_off:"OFF STANDARD",
+      lube_off_n:"{n} compartment(s) hold something other than the site standard.",
+      c_taken:"taken", c_nottaken:"not taken",
       common_n:"Same on all {n} points",
       mach:"Machines", ins:"Inspections", pts:"Points checked",
       findings:"Findings", now:"Act now", now_s:"before the next shift",
@@ -497,6 +502,7 @@
       method_UC:"\u0417\u0430\u043c\u0435\u0440\u044b \u0445\u043e\u0434\u043e\u0432\u043e\u0439 \u0447\u0430\u0441\u0442\u0438",
       method_TB:"\u0417\u0430\u043c\u0435\u0440\u044b \u0442\u043e\u043b\u0449\u0438\u043d\u044b \u043a\u0443\u0437\u043e\u0432\u0430", method_GET:"\u0420\u0430\u0431\u043e\u0447\u0438\u0435 \u043e\u0440\u0433\u0430\u043d\u044b",
       meas_UC:"\u0417\u0430\u043c\u0435\u0440\u044b \u0445\u043e\u0434\u043e\u0432\u043e\u0439 \u0447\u0430\u0441\u0442\u0438", meas_TB:"\u0417\u0430\u043c\u0435\u0440\u044b \u0442\u043e\u043b\u0449\u0438\u043d\u044b \u043a\u0443\u0437\u043e\u0432\u0430",
+      meas_LUBE:"\u041c\u0430\u0441\u043b\u043e, \u043d\u0430\u0439\u0434\u0435\u043d\u043d\u043e\u0435 \u0432 \u0443\u0437\u043b\u0430\u0445",
       meas_GET:"\u0417\u0430\u043c\u0435\u0440\u044b \u0440\u0430\u0431\u043e\u0447\u0438\u0445 \u043e\u0440\u0433\u0430\u043d\u043e\u0432",
       map_TB:"\u0413\u0434\u0435 \u0438\u0437\u043d\u043e\u0441", zone_t:"\u041f\u043e \u0437\u043e\u043d\u0430\u043c",
       c_zone:"\u0417\u043e\u043d\u0430", c_taken:"\u0417\u0430\u043c\u0435\u0440\u0435\u043d\u043e", c_thin:"\u041c\u0438\u043d\u0438\u043c\u0443\u043c", c_at:"\u0422\u043e\u0447\u043a\u0430",
@@ -505,6 +511,10 @@
       allok:"\u0412\u0441\u0435 {n} \u0442\u043e\u0447\u0435\u043a \u0432 \u043d\u043e\u0440\u043c\u0435. \u0414\u0435\u0439\u0441\u0442\u0432\u0438\u0439 \u043d\u0435 \u0442\u0440\u0435\u0431\u0443\u0435\u0442\u0441\u044f.",
       rest_n:"\u0422\u0430\u043a\u0436\u0435 \u043f\u0440\u043e\u0432\u0435\u0440\u0435\u043d\u043e, \u0431\u0435\u0437 \u0437\u0430\u043c\u0435\u0447\u0430\u043d\u0438\u0439 \u2014",
       c_action:"\u0414\u0435\u0439\u0441\u0442\u0432\u0438\u0435", c_reading:"\u041f\u043e\u043a\u0430\u0437\u0430\u043d\u0438\u044f",
+      c_lube_prod:"\u0417\u0430\u043b\u0438\u0442\u043e", c_lube_evid:"\u041f\u043e\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043d\u0438\u0435", c_lube_samp:"\u041f\u0440\u043e\u0431\u0430 \u043c\u0430\u0441\u043b\u0430",
+      c_lube_want:"\u0421\u0442\u0430\u043d\u0434\u0430\u0440\u0442 \u043f\u0440\u0435\u0434\u043f\u0440\u0438\u044f\u0442\u0438\u044f", c_lube_off:"\u041d\u0415 \u041f\u041e \u0421\u0422\u0410\u041d\u0414\u0410\u0420\u0422\u0423",
+      lube_off_n:"\u0412 {n} \u0443\u0437\u043b. \u0437\u0430\u043b\u0438\u0442\u043e \u043d\u0435 \u0442\u043e, \u0447\u0442\u043e \u043f\u0440\u0435\u0434\u0443\u0441\u043c\u043e\u0442\u0440\u0435\u043d\u043e \u0441\u0442\u0430\u043d\u0434\u0430\u0440\u0442\u043e\u043c.",
+      c_taken:"\u043e\u0442\u043e\u0431\u0440\u0430\u043d\u0430", c_nottaken:"\u043d\u0435 \u043e\u0442\u043e\u0431\u0440\u0430\u043d\u0430",
       common_n:"\u041e\u0434\u0438\u043d\u0430\u043a\u043e\u0432\u043e \u043d\u0430 \u0432\u0441\u0435\u0445 {n} \u0442\u043e\u0447\u043a\u0430\u0445",
       mach:"Машин", ins:"Осмотров", pts:"Точек проверено",
       findings:"Находок", now:"Срочно", now_s:"до следующей смены",
@@ -882,10 +892,71 @@
   /* The measurement grid and the "worth reading" table are wanted by both the
      fleet detail and the single-machine sheet, so they live out here rather
      than being written twice and drifting. */
+  /* A lubrication round has nothing to measure, so measSections returns
+     nothing for it and the whole round used to reach the paper as a heading and
+     a grade — the product, the evidence and the sample all recorded on the
+     phone and none of them printed. The audit IS the table below: one row per
+     compartment, whether or not anything was wrong with it, because coverage
+     and conformance are the questions being asked and neither can be answered
+     from a list of exceptions. */
+  function lubeSections(ctx, T, rec, tailHTML) {
+    var out = [];
+    var rows = rec.items.filter(function (it) { return it.lube; });
+    if (!rows.length) return out;
+    var anyWant = rows.some(function (it) { return !!it.lube.want; });
+    var cont = '<div class="sec"><div class="mach" style="border-top-width:1px;">'
+      + '<div class="machhd"><span class="u" style="font-size:14px;">' + esc(rec.equip) + '</span>'
+      + '<span class="c">' + T.I("cont") + '</span></div>';
+    var tbl = function (list) {
+      var x = '<table><tr><th>' + T.L("c_comp") + '</th>'
+        + '<th>' + T.L("c_lube_prod") + '</th>'
+        + '<th style="width:96px">' + T.L("c_lube_evid") + '</th>'
+        + '<th class="c" style="width:40px">' + T.L("c_lube_samp") + '</th></tr>';
+      list.forEach(function (it, i) {
+        var L = it.lube;
+        x += '<tr class="' + (i % 2 ? "zebra" : "") + '">'
+          + '<td style="padding-left:0;"><b>' + esc(it.code || it.key) + '</b>'
+            + (it.name && it.name !== (it.code || it.key)
+                ? ' ' + T.both(it.name, it.nameAlt) : "") + '</td>'
+          /* Off standard is the finding this round exists to produce, so it is
+             stated on the row next to what should have been there - not left to
+             be worked out by comparing this table with the poster on the wall. */
+          + '<td>' + (L.product ? esc(L.product) : '<span class="muted">—</span>')
+            + (L.off && L.want
+                ? '<div class="code">' + esc(T("c_lube_off")) + ': ' + esc(L.want) + '</div>'
+                : "") + '</td>'
+          + '<td>' + (L.evid ? T.both(L.evid.en, L.evid.ru, "") : '<span class="muted">—</span>') + '</td>'
+          + '<td class="c">' + (L.samp ? "\u25CF" : "\u25CB") + '</td>'
+          + '</tr>'; });
+      return x + '</table>'; };
+    var off = rows.filter(function (it) { return it.lube.off; });
+    var MAX = 34, parts = Math.ceil(rows.length / MAX), PER = Math.ceil(rows.length / parts);
+    for (var o = 0; o < rows.length; o += PER) {
+      var chunk = rows.slice(o, o + PER);
+      out.push({ nb: false, html: cont
+        + '<div class="subhd" style="margin-top:11px;">' + T.I("meas_LUBE")
+        + (parts > 1 ? ' <span class="muted">' + (o + 1) + "\u2013"
+            + Math.min(o + PER, rows.length) + " / " + rows.length + '</span>' : "")
+        + '</div>'
+        + (o === 0 && anyWant && off.length
+            ? '<div class="verdict v-act" style="margin:5px 0 0;">'
+              + T.I("lube_off_n", { n: off.length }) + '</div>' : "")
+        + tbl(chunk) + '</div></div>' });
+    }
+    if (tailHTML) {
+      var last = out.pop();
+      out.push({ nb: false, html: last.html.replace(/<\/div><\/div>$/, tailHTML + '</div></div>') });
+    }
+    return out;
+  }
+
   function measSections(ctx, T, rec, tailHTML) {
     var out = [];
     var rows = rec.items.filter(function (it) { return it.w && (it.w.mm != null || it.w.reason); });
-    if (!rows.length) return out;
+    /* The signature has to land somewhere. On a lubrication round the grid
+       below produces nothing, so it rides on the lube table instead of being
+       dropped with it. */
+    if (!rows.length) return lubeSections(ctx, T, rec, tailHTML);
     var cont = '<div class="sec"><div class="mach" style="border-top-width:1px;">'
       + '<div class="machhd"><span class="u" style="font-size:14px;">' + esc(rec.equip) + '</span>'
       + '<span class="c">' + T.I("cont") + '</span></div>';
@@ -945,6 +1016,10 @@
       var read = (it.readings || []).slice();
       if (it.w && it.w.mm != null) read.unshift(it.w.mm + " mm" + (it.w.pct != null ? " · " + it.w.pct + "%" : ""));
       if (it.w && it.w.reason) read.unshift(it.w.reasonLabel || it.w.reason);
+      /* The product belongs on the summary row too. A superintendent scanning
+         the table for "what is actually in these machines" must not have to
+         open every detail cell to find out. */
+      if (it.lube && it.lube.product) read.unshift(it.lube.product);
       if (it.comment) read.push(it.comment);
       h += '<tr class="' + (i % 2 ? "zebra" : "") + '">'
         + '<td class="stripe" style="border-left-color:' + (SEV_HEX[it.sev] || GRADE_HEX[it.grade] || "transparent") + '">'
@@ -1033,10 +1108,20 @@
       var board = isWear ? [] : told;
       var vc = verdict(rec);
 
+      /* "All points normal" cannot be printed above "5 compartments hold
+         something other than the site standard" - and it was, because normal is
+         computed from grades and severities, and off-standard is neither. A
+         compartment holding the wrong oil is graded A by a fitter who correctly
+         recorded what he found; the finding is the comparison, not the grade. */
+      var offStd = rec.items.filter(function (it) { return it.lube && it.lube.off; });
       var body = "";
-      if (!isWear && !board.length) {
+      if (!isWear && !board.length && !offStd.length) {
         body = '<div class="allok">' + T.S("allok", { n: rec.items.length }) + '</div>'
              + restLine(T, rest, true);
+      } else if (!isWear && !board.length) {
+        /* Everything the fitter graded is fine; what is wrong is what is IN
+           them, and the table below says which. */
+        body = restLine(T, rest, true);
       } else if (board.length && board.length <= 12) {
         var cols = board.length >= 4 ? 4 : board.length === 3 ? 3 : board.length === 2 ? 2 : 1;
         var sh = shared(board);
@@ -1055,6 +1140,18 @@
           + '<div class="ln">' + (rec.signUrl ? '<img src="' + rec.signUrl + '">' : "") + '</div>'
           + '<div class="nm">' + esc(rec.sup || T("nosign")) + '</div></div></div>';
 
+      /* A lubrication round has nothing to MEASURE and is still not one page.
+         The audit is the compartment table - what is actually in each one, how
+         the fitter knows, whether a sample went with it - and every clean round
+         was collapsing to "all points normal" and throwing that away. Which is
+         most of them: a compartment holding the right oil is the ordinary case
+         and still the thing being reported on. */
+      var isLube = rec.items.some(function (it) { return it.lube; });
+      if (!isWear && isLube) {
+        secs.push({ nb: n > 0, html: '<div class="sec">' + head + body + '</div>' });
+        lubeSections(ctx, T, rec, sign).forEach(function (x) { secs.push(x); });
+        return;
+      }
       /* A round with nothing to measure is one page: masthead, board, names. */
       if (!isWear) {
         secs.push({ nb: n > 0, html: '<div class="sec">' + head + body + sign + '</div>' });
@@ -1084,6 +1181,10 @@
         + maps + '</div>';
       secs.push({ nb: n > 0, html: top });
       measSections(ctx, T, rec, sign).forEach(function (x) { secs.push(x); });
+      /* A round that has BOTH gets both. Only the wear-less case is folded into
+         measSections above, so this must not double-render it. */
+      if (rec.items.some(function (it) { return it.w && it.w.mm != null; }))
+        lubeSections(ctx, T, rec, "").forEach(function (x) { secs.push(x); });
       if (told.filter(function (it) { return it.photos && it.photos.length; }).length) {
         var ph = told.filter(function (it) { return it.photos && it.photos.length; });
         secs.push({ nb: false, html: '<div class="sec">'
@@ -1275,6 +1376,28 @@
       + prioTag(it) + (it.wo ? ' <span class="code">' + esc(T("c_wo")) + ' ' + esc(it.wo) + '</span>' : ""));
     else if (it.wo || (it.prio && !sh.prio)) row(T.L("c_wo"),
       (it.prio && !sh.prio ? prioTag(it) + " " : "") + '<span class="num">' + esc(it.wo || "") + '</span>');
+    /* The lubrication round's whole answer. It is NOT a reading: a reading is
+       a figure and gets tabular numerals, while this is a product name, how the
+       fitter knows it, and whether a sample went with it. Folding it into the
+       reading line was how it came out as nothing at all.
+
+       The host passes both languages for anything translatable, because this
+       module is deliberately ignorant of LUBE and of the register — and because
+       a label baked in one language at the host is exactly what left this
+       report bilingual only for undercarriage rounds. */
+    if (it.lube) {
+      var Lb = it.lube;
+      if (Lb.product) row(T.L("c_lube_prod"), '<b>' + esc(Lb.product) + '</b>');
+      if (Lb.evid) row(T.L("c_lube_evid"), T.both(Lb.evid.en, Lb.evid.ru, ""));
+      if (Lb.samp != null) row(T.L("c_lube_samp"),
+        T.I(Lb.samp ? "c_taken" : "c_nottaken"));
+      /* The finding. Right specification, wrong drum is the thing this round
+         exists to catch, so it is stated rather than left to be worked out by
+         comparing two lines. */
+      if (Lb.want && Lb.off)
+        row(T.L("c_lube_want"), '<b>' + esc(Lb.want) + '</b> '
+          + '<span class="code">' + esc(T("c_lube_off")) + '</span>');
+    }
     var read = (it.readings || []).slice();
     if (it.w && it.w.mm != null) read.unshift(it.w.mm + " mm" + (it.w.pct != null ? " · " + it.w.pct + "%" : ""));
     if (read.length) row(T.L("c_reading"), '<span class="num">' + esc(read.join(" · ")) + '</span>');
@@ -1538,6 +1661,8 @@
               return esc(it.name||it.key)+' <span class="num">'+esc(it.w.pct)+'%</span>'; }).join(" · ")
           + (over.length>6?" · +"+(over.length-6):"")+'</span></div>';
         measSections(ctx,T,rec,"").forEach(function(x){ extra.push(x.html); });
+        if (rec.items.some(function (it) { return it.w && it.w.mm != null; }))
+          lubeSections(ctx,T,rec,"").forEach(function(x){ extra.push(x.html); });
       }
 
       var shots=[];
