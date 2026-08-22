@@ -9,7 +9,7 @@ compartment entries          389
 distinct OEM spec strings     89   <- the standardisation problem
 flagged VERIFY                99
 missing change interval       79
-transmission oil to decide    27
+OEM contradicts the type     87
 
 MODELS IN THE MASTERLIST WITH NO MACHINE ON THE REGISTER (61)
 They are imported and carry no unit count, so they cost nothing

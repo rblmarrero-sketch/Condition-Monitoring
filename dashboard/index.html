@@ -247,7 +247,21 @@
   .poster td.big{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;
     white-space:nowrap;}
   .poster td.big i{font-size:10.5px;font-weight:600;}
-  .poster td.pa{font-size:12.5px;color:#41505a;}
+  /* The component code. On the masterlist it is the column heading and on the
+     machine it is what the fitter says out loud — "number four left". It is the
+     identifier here for a duller reason: one man in twelve cannot separate the
+     purple from the tan, and a photocopier separates neither. */
+  .ck{display:inline-block;min-width:20px;padding:1px 5px;margin:0 6px 2px 0;
+    border-radius:4px;background:var(--surface-3,#eef2f4);color:var(--ink,#11171a);
+    font-size:10.5px;font-weight:700;letter-spacing:.03em;
+    font-variant-numeric:tabular-nums;text-transform:none;}
+  .poster .ck{background:#eef2f4;color:#11171a;border:1px solid #d6dde1;}
+  .poster td.pcode b{font-size:15px;font-variant-numeric:tabular-nums;}
+  .poster th.pcode,.poster td.pcode{text-align:right;padding-right:0;}
+  /* A row on the machine sheet carries the same colour as its cell in the
+     matrix and the same colour as the drum. One lubricant, one colour, wherever
+     it is drawn. */
+  .poster tr.lrow td.pc{border-left:6px solid var(--h);padding-left:9px;}
   .poster .miss{color:#c02f2f;}
   .poster .pfoot{margin-top:14px;padding-top:10px;border-top:1px solid #d6dde1;
     font-size:11.5px;color:#41505a;}
@@ -299,6 +313,12 @@
   .reqwhat i{display:block;font-style:normal;font-size:11.5px;color:var(--muted);
     font-weight:600;margin-top:1px;}
   .reqwhat .spec{display:block;font-size:11.5px;color:var(--ink-2);margin-top:4px;}
+  .reqwhat .spec>summary{cursor:pointer;color:var(--muted);font-size:11.5px;
+    list-style:none;width:max-content;}
+  .reqwhat .spec>summary::-webkit-details-marker{display:none;}
+  .reqwhat .spec>summary::before{content:"▸ ";}
+  .reqwhat .spec[open]>summary::before{content:"▾ ";}
+  .reqwhat .spec>span{display:block;margin-top:4px;line-height:1.5;}
   .reqvol{text-align:right;font-variant-numeric:tabular-nums;}
   .reqvol b{font-size:17px;}
   .reqvol i{display:block;font-style:normal;font-size:11px;color:var(--muted);font-weight:600;}
@@ -312,8 +332,7 @@
   table.grid.mtx tbody tr:nth-child(even) td.cell.want,
   table.grid.mtx tbody tr:hover td.cell.want{background:var(--surface);}
   table.mtx td.cell.want .sw{opacity:.45;}
-  table.mtx td.cell i.want{display:block;font-style:normal;font-size:11px;
-    color:var(--muted);font-weight:600;margin-top:3px;}
+  table.mtx td.cell i.want{display:none;}
   @media (max-width:900px){ .reqrow{grid-template-columns:1fr 100px;} .reqpick{grid-column:1/-1;} }
   /* The reference editor. Inputs sized to what goes in them: a capacity is
      three digits, a specification is a sentence, and a box that fits neither
@@ -338,17 +357,18 @@
   table.mtx tr.clsrow td{border:none;padding:14px 0 5px;font-size:11px;font-weight:800;
     letter-spacing:.09em;text-transform:uppercase;color:var(--accent,#8a4526);background:none;}
   table.mtx td.mdl{padding:8px 12px 8px 0;}
-  table.mtx td.mdl b{display:block;font-size:13.5px;line-height:1.2;}
+  table.mtx td.mdl b{display:block;font-size:13.5px;line-height:1.25;font-weight:600;}
   table.mtx td.mdl i{display:block;font-style:normal;font-size:11px;color:var(--muted);
-    font-weight:600;margin-top:1px;}
+    font-weight:500;margin-top:1px;}
   table.mtx td.cell{position:relative;padding:7px 8px 7px 13px;
     background:color-mix(in srgb, var(--h) 13%, var(--surface,#fff));}
-  table.mtx td.cell .sw{position:absolute;left:0;top:0;bottom:0;width:7px;background:var(--h);}
-  table.mtx td.cell b{display:block;font-size:13px;line-height:1.2;}
-  table.mtx td.cell i.num{display:block;font-style:normal;font-size:11.5px;color:var(--ink-2);
-    font-weight:700;font-variant-numeric:tabular-nums;margin-top:3px;}
+  table.mtx td.cell .sw{position:absolute;left:0;top:0;bottom:0;width:7px;background:var(--h);
+    box-shadow:inset -1px 0 0 rgba(0,0,0,.22),inset 1px 0 0 rgba(0,0,0,.22);}
+  table.mtx td.cell b{display:block;font-size:13px;line-height:1.25;font-weight:600;}
+  table.mtx td.cell i.num{display:block;font-style:normal;font-size:11.5px;color:var(--muted);
+    font-weight:500;font-variant-numeric:tabular-nums;margin-top:3px;}
   table.mtx td.cell i.warnv{display:block;font-style:normal;font-size:11px;
-    color:var(--serious);font-weight:700;margin-top:3px;}
+    color:var(--serious);font-weight:650;margin-top:3px;}
   /* Hatched, never red. Red is a product on this sheet. */
   table.grid.mtx tbody tr td.unset,
   table.grid.mtx tbody tr:nth-child(even) td.unset,
@@ -362,13 +382,15 @@
   table.grid.mtx tbody tr:nth-child(even) td.cell,
   table.grid.mtx tbody tr:hover td.cell{
     background:color-mix(in srgb, var(--h) 13%, var(--surface,#fff));}
-  table.mtx td.unset b{display:block;font-size:11.5px;font-weight:800;color:var(--muted);}
+  table.mtx td.unset b{display:block;font-size:11.5px;font-weight:600;color:var(--muted);}
   table.mtx td.na{text-align:center;color:var(--line,#c9d2d6);font-size:16px;padding:9px 0;}
   .lgnd{display:flex;flex-wrap:wrap;gap:9px 20px;margin-top:14px;padding-top:12px;
     border-top:1px solid var(--line,#e3e8ea);}
   .lg{display:flex;align-items:center;gap:7px;font-size:12.5px;}
   .lg .sw{width:16px;height:16px;border-radius:3px;flex:none;background:var(--h);
     border:1px solid rgba(0,0,0,.18);}
+  .lg .sw.want{background:var(--surface,#fff);
+    box-shadow:inset 0 0 0 4px color-mix(in srgb,var(--muted) 30%,transparent);}
   .lg .sw.none{background:repeating-linear-gradient(135deg,var(--surface,#fff) 0 4px,var(--line,#e6ebee) 4px 8px);}
   .lg .sw.na{background:var(--surface,#fff);}
   .vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
@@ -1494,6 +1516,7 @@ const I18N={
   lpo_fleet_sub:"Карта смазочных материалов · весь парк",
   lpo_model_sub:"{n} unit(s) on the register · единиц в реестре",
   lpo_use:"Use this", lpo_use_ru:"Заливать",
+  lpo_code:"Code", lpo_code_ru:"Код",
   lpo_undecided:"NOT DECIDED", lpo_undecided_ru:"НЕ УТВЕРЖДЕНО",
   lpo_foot:"This sheet prints the SITE STANDARD — what belongs in the compartment, not what was last found in it. Colour is the product and nothing else. Capacity is a refill, not a dry fill. Anything not on this sheet goes to the reliability engineer before it goes in a machine. · Здесь напечатан СТАНДАРТ ПРЕДПРИЯТИЯ. Цвет — это продукт. Объём — заправочный, не сухой. Всё, чего нет в карте — сначала к инженеру по надёжности.",
   lr_comp_ru:"Узел", lr_cap_ru:"Заправка, л", lr_iv_ru:"Интервал, ч", lr_spec_ru:"Спецификация",
@@ -1503,6 +1526,7 @@ const I18N={
   ls_nofit:"Nothing on the shelf qualifies at −40",
   ls_note:"{d} of {n} requirements decided · {p} products on the standard. Fewer products is the point: every extra one is a drum, a shelf, a pump and a way to put the wrong thing in a machine.",
   lm_wanted:"standard · not yet audited",
+  ls_specs:"{n} OEM specification(s) behind this",
   lm_offstd:"off standard — should be {p}",
   lr_title:"Machine reference",
   lr_sub:"Capacities, specifications and intervals, per model.",
@@ -1820,6 +1844,7 @@ const I18N={
   lpo_fleet_sub:"Lubricant matrix · whole fleet",
   lpo_model_sub:"{n} ед. в реестре · unit(s) on the register",
   lpo_use:"Заливать", lpo_use_ru:"Use this",
+  lpo_code:"Код", lpo_code_ru:"Code",
   lpo_undecided:"НЕ УТВЕРЖДЕНО", lpo_undecided_ru:"NOT DECIDED",
   lpo_foot:"Здесь напечатан СТАНДАРТ ПРЕДПРИЯТИЯ — что должно быть в узле, а не что нашли в прошлый раз. Цвет — это продукт. Объём — заправочный, не сухой. Всё, чего нет в карте — сначала к инженеру по надёжности. · This sheet prints the SITE STANDARD. Colour is the product. Capacity is a refill, not a dry fill.",
   lr_comp_ru:"Compartment", lr_cap_ru:"Refill L", lr_iv_ru:"Interval h", lr_spec_ru:"Specification",
@@ -1829,6 +1854,7 @@ const I18N={
   ls_nofit:"Ничего на складе не подходит при −40",
   ls_note:"Решено {d} из {n} требований · {p} продуктов в стандарте. Меньше продуктов — это и есть цель: каждый лишний — это бочка, полка, насос и способ залить не то.",
   lm_wanted:"стандарт · ещё не проверено",
+  ls_specs:"{n} спецификаций OEM за этим",
   lm_offstd:"вне стандарта — должно быть {p}",
   lr_title:"Справочник по технике",
   lr_sub:"Объёмы, спецификации и интервалы по моделям.",
@@ -4666,6 +4692,15 @@ function lubeChosenFor(c){
      than after somebody has clicked eight dropdowns. */
   const n = lubeStandard()[lubeReqKey(c)];
   if(n) return LUBE.product(n) || { p:n };
+  /* Except where the masterlist contradicts itself. The Legend files the
+     HM400 transmission under gear oil and the OEM column says TO10, which is a
+     TO-4 wet-clutch oil; the front finals say HO-MVK, a hydraulic oil; the
+     brake says TOS5w30. Falling back to "first gear oil in the catalogue"
+     would print GL-5 on a shop sheet for a wet brake, and GL-5 glazes the
+     discs. A question is not a default. It prints as a question until a person
+     answers it in the panel above — where answering it IS an explicit choice
+     and the branch above then applies. */
+  if(c.ask) return null;
   return LUBE.catalog.filter(p => p.t === c.t)[0] || null;
 }
 function renderLubeStd(){
@@ -4683,7 +4718,9 @@ function renderLubeStd(){
       <div class="reqwhat">
         <b>${esc(names)}</b>
         <i>${esc(t("ls_on",{m:Object.keys(R.models).length, u:R.units}))}</i>
-        <span class="spec">${specs.map(x=>esc(x)).join(" · ")}</span>
+        ${specs.length ? `<details class="spec"><summary>${
+          esc(t("ls_specs",{n:specs.length}))}</summary><span>${
+          specs.map(x=>esc(x)).join(" · ")}</span></details>` : ""}
       </div>
       <div class="reqvol"><b>${fmtN(R.litres)}</b><i>${esc(t("ls_lyr"))}</i></div>
       <div class="reqpick">${
@@ -4759,7 +4796,10 @@ function lubeApplyOverrides(){
         }
       }
       if(e.iv  !== undefined){ if(e.iv  === "") delete c.iv;  else c.iv  = Number(e.iv);  }
-      if(e.spec!== undefined){ if(e.spec=== "") delete c.spec;else c.spec = e.spec; }
+      /* The masterlist calls this the OEM code. It IS the specification, but
+         it is written the way the manual writes it — EOS0W30, TO10, HO-MVK —
+         so it keeps that name everywhere rather than being half-renamed. */
+      if(e.oem !== undefined){ if(e.oem === "") delete c.oem; else c.oem = e.oem; }
       if(e.gr) c.gr = e.gr;
       if(e.src){ c.src = e.src; } else if(e.src === null) delete c.src;
     });
@@ -4809,11 +4849,11 @@ function renderLubeRef(){
      </tr></thead><tbody>` +
     r.comps.map(c=>{
       const e = o[c.k] || {}, src = c.src || {};
-      const sourced = c.cap != null && c.spec && src.doc;
+      const sourced = c.cap != null && !c.verify && c.oem && src.doc;
       return `<tr${e && Object.keys(e).length ? ' class="edited"' : ''}>
         <td><b>${esc(lang==="ru"?c.ru:c.en)}</b><i class="sub">${esc(c.k)}</i></td>
         <td>${cell(c.k,"cap",c.cap,"",1)}</td>
-        <td>${cell(c.k,"spec",c.spec,t("lr_spec_ph"))}</td>
+        <td>${cell(c.k,"oem",c.oem,t("lr_spec_ph"))}</td>
         <td>${cell(c.k,"iv",c.iv,"",1)}</td>
         <td>${cell(c.k,"doc",src.doc,t("lr_doc_ph"))}</td>
         <td>${cell(c.k,"page",src.page,t("lr_page_ph"))}</td>
@@ -4887,15 +4927,52 @@ function lubeRefExport(){
    The colour is assigned on first sight and never reassigned, so filtering the
    view cannot repaint the survivors. Past the eighth product there is no ninth
    hue: it goes grey and reads by name, and the sheet says why. */
-const LUBE_HUE = ["#2a78d6","#eb6834","#1baf7a","#eda100",
-                  "#e87ba4","#008300","#4a3aa7","#e34948"];
-const LUBE_NOHUE = "#8b969c";
-const lubeHueAt = {}; let lubeHueNext = 0;
+/* The colours are NOT mine to choose. Every drum on this site, and every cell
+   of the masterlist the store already works from, is already coded by what the
+   lubricant DOES — engine blue, transmission green, hydraulic red, gear purple,
+   coolant cyan, compressor yellow. Inventing a prettier eight would mean the
+   sheet on the wall disagreed with the drum in the yard, which is how the wrong
+   oil goes in. So the fill comes from LUBE, which reads it off the masterlist.
+
+   Colour is by FUNCTION, never by brand and never by grade. Brand changes with
+   the next tender; grade is open-ended (you would need thirty). Function is a
+   closed set of eight and it is the thing that wrecks the machine — engine oil
+   in a final drive destroys it whatever the label says.
+
+   And colour is never the only thing on a cell. Simulated, five of the eight
+   pairs collide under red-green colour blindness (gear/grease, engine/grease,
+   engine/gear, engine/coolant, powertrain/rockdrill) — roughly one man in
+   twelve on this site cannot separate them, and a photocopy separates none of
+   them. So the component CODE is the identifier and the colour is the fast
+   path. Anyone who can see the colour reads it in a glance; anyone who cannot
+   still reads the sheet correctly. */
 function lubeHue(name){
-  if(!name) return null;
-  if(!(name in lubeHueAt))
-    lubeHueAt[name] = lubeHueNext < LUBE_HUE.length ? LUBE_HUE[lubeHueNext++] : null;
-  return lubeHueAt[name];
+  if(!name || !window.LUBE) return null;
+  const pr = LUBE.product(name);
+  return pr ? LUBE.hue(pr.t) : null;
+}
+const LUBE_NOHUE = "#8b969c";
+/* Which ink survives on that fill. Gear purple takes 2.6:1 with black and 8:1
+   with white; hydraulic red is the other way round. Deciding this by eye is how
+   a label ends up invisible on one row of the sheet only. */
+function lubeInk(hex){
+  const h = String(hex||"").trim();
+  if(!/^#[0-9a-f]{6}$/i.test(h)) return "#101418";
+  const c = [1,3,5].map(i=>{ const v = parseInt(h.substr(i,2),16)/255;
+    return v <= .04045 ? v/12.92 : Math.pow((v+.055)/1.055, 2.4); });
+  const L = .2126*c[0] + .7152*c[1] + .0722*c[2];
+  return (L + .05) / .05 >= 4.5 ? "#101418" : "#ffffff";
+}
+/* Brand is shown only while it still matters — that is, while more than one
+   brand serves the same job. A permanent brand mark would teach the mess the
+   site is trying to leave; an edge that appears only on a split type makes the
+   standardisation gap the visible thing, and it disappears on its own the day
+   they converge. Today nothing is split, so nothing is drawn. */
+function lubeEdge(name){
+  if(!name || !window.LUBE) return null;
+  const pr = LUBE.product(name);
+  if(!pr || !pr.brand || !LUBE.brandMatters(pr.t)) return null;
+  return LUBE.brandHue(pr.brand);
 }
 function lubeShort(n){
   return String(n||"")
@@ -4990,7 +5067,7 @@ function renderLubeMtx(){
             `<b>${esc(lubeShort(std.p))}</b>`+
             `<i class="num">${c.cap!=null?esc(c.cap)+" L":"—"} · ${
               c.iv?esc(c.iv)+" h":"—"}</i>`+
-            `<i class="want">${esc(t("lm_wanted"))}</i></td>`;
+            `</td>`;
         }
         return `<td class="unset"><b>${esc(t("lm_notset"))}</b></td>`;
       }
@@ -5016,14 +5093,17 @@ function renderLubeMtx(){
 
   tbl.innerHTML =
     `<thead><tr><th>${esc(t("lm_machine"))}</th>${
-      colSet.map(c=>`<th>${esc(lang==="ru"?c.ru:c.en)}</th>`).join("")
+      colSet.map(c=>`<th><b class="ck">${esc(c.k)}</b>${
+        esc(lang==="ru"?c.ru:c.en)}</th>`).join("")
     }</tr></thead><tbody>${body}</tbody>`;
 
   $("lubeLegend").innerHTML = used.sort().map(n=>{
     const hue = lubeHue(n) || LUBE_NOHUE;
+    const pr = LUBE.product(n), ty = pr && LUBE.types[pr.t];
     return `<span class="lg"><span class="sw" style="--h:${esc(hue)}"></span><b>${
-      esc(lubeShort(n))}</b></span>`;
+      esc(lubeShort(n))}</b>${ty?`<i>${esc(lang==="ru"?ty.ru:ty.en)}</i>`:""}</span>`;
   }).join("") +
+    `<span class="lg"><span class="sw want"></span><b>${esc(t("lm_wanted"))}</b></span>` +
     `<span class="lg"><span class="sw none"></span><b>${esc(t("lm_notset"))}</b></span>` +
     `<span class="lg"><span class="sw na"></span><b>${esc(t("lm_nocomp"))}</b></span>`;
   $("lubeNote").textContent = t("lm_note");
@@ -5052,7 +5132,7 @@ function lubeCsv(){
       const hit = seen[r.cls+"|"+r.m+"|"+c.k];
       const v = hit ? lubeVerdictOf(hit.rec, hit.item) : null;
       body.push([r.cls, r.m, r.n, r.alias?r.alias.is:"", c.k, c.en,
-                 c.cap==null?"":c.cap, c.spec||"", c.iv==null?"":c.iv,
+                 c.cap==null?"":c.cap, c.oem||"", c.iv==null?"":c.iv,
                  hit?hit.product:"", hit&&hit.unlisted?"yes":"",
                  v?t(v.k):"", hit?hit.date:"", hit?hit.unit:""].map(q).join(","));
     }));
@@ -5084,7 +5164,7 @@ function lpoCellText(c){
   const std = lubeChosenFor(c);
   return { product: std ? std.p : null,
            grade: std ? std.g : null,
-           cap: c.cap, iv: c.iv, spec: c.spec };
+           cap: c.cap, iv: c.iv, spec: c.oem };
 }
 function renderLubePoster(){
   const box = $("lpoSheet"); if(!box || !window.LUBE) return;
@@ -5132,18 +5212,19 @@ function renderLubePoster(){
          <th>${esc(t("lpo_use"))}<i>${esc(t("lpo_use_ru"))}</i></th>
          <th>${esc(t("lr_cap"))}<i>${esc(t("lr_cap_ru"))}</i></th>
          <th>${esc(t("lr_iv"))}<i>${esc(t("lr_iv_ru"))}</i></th>
-         <th>${esc(t("lr_spec"))}<i>${esc(t("lr_spec_ru"))}</i></th>
+         <th class="pcode">${esc(t("lpo_code"))}<i>${esc(t("lpo_code_ru"))}</i></th>
        </tr></thead><tbody>` +
       r.comps.map(c=>{
         const x = lpoCellText(c);
-        return `<tr>
+        const h = lubeHue(x.product) || LUBE_NOHUE;
+        return `<tr${x.product?` class="lrow" style="--h:${esc(h)}"`:""}>
           <td class="pc"><b>${esc(c.en)}</b><i>${esc(c.ru)}</i></td>
           <td class="pp">${x.product
             ? `<b>${esc(x.product)}</b><i>${esc(x.grade||"")}</i>`
             : `<b class="miss">${esc(t("lpo_undecided"))}</b><i>${esc(t("lpo_undecided_ru"))}</i>`}</td>
           <td class="big">${x.cap!=null?esc(x.cap):"—"}<i>L / л</i></td>
           <td class="big">${x.iv!=null?esc(x.iv):"—"}<i>h / ч</i></td>
-          <td class="pa">${esc(x.spec||"—")}</td>
+          <td class="pcode"><b>${esc(c.k)}</b></td>
         </tr>`;
       }).join("") + `</tbody></table>` + foot;
     return;
@@ -5190,13 +5271,15 @@ function renderLubePoster(){
       lpoWhich === "class" ? t("lpo_class_sub",{n:all.reduce((x,r)=>x+r.n,0)})
                            : t("lpo_fleet_sub")) +
     `<table class="mtx ptbl"><thead><tr><th>${esc(t("lm_machine"))}</th>` +
-      cols.map(c=>`<th>${esc(c.en)}<i>${esc(c.ru)}</i></th>`).join("") +
+      cols.map(c=>`<th><b class="ck">${esc(c.k)}</b>${esc(c.en)}<i>${
+        esc(c.ru)}</i></th>`).join("") +
     `</tr></thead><tbody>${body}</tbody></table>` +
     `<div class="lgnd">` + used.sort().map(n=>{
       const pr = LUBE.product(n) || {};
+      const ty = pr.t ? LUBE.types[pr.t] : null;
       return `<span class="lg"><span class="sw" style="--h:${esc(lubeHue(n)||LUBE_NOHUE)}"></span>` +
-        `<b>${esc(lubeShort(n))}</b><i>${esc(pr.g||"")}${
-          pr.lo!=null?` · to ${pr.lo}°`:""}</i></span>`;
+        `<b>${esc(lubeShort(n))}</b><i>${ty?esc(ty.en)+" / "+esc(ty.ru):""}${
+          pr.g?" · "+esc(pr.g):""}</i></span>`;
     }).join("") +
     `<span class="lg"><span class="sw none"></span><b>${esc(t("lpo_undecided"))}</b></span>` +
     `<span class="lg"><span class="sw na"></span><b>${esc(t("lm_nocomp"))}</b></span></div>` +

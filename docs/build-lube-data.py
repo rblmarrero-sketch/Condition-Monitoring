@@ -51,15 +51,41 @@ TYPE_BY_CODE = {
 # The site's own colours, taken from the fills already used on the sheet.
 # Kept as data because they are the client's convention, not a design choice.
 TYPE_HUE = {
-    "engine":     "#0070c0",   # blue   — the fill on the Engine column
-    "hydraulic":  "#e34948",   # red    — the fill on the Hydraulic column
-    "compressor": "#eda100",   # yellow — the fill on the Compressor column
-    "rockdrill":  "#00b050",   # green  — the fill on the DTH hammer column
-    "grease":     "#8a6d3b",   # cream on the sheet, darkened so it reads on paper
-    "gear":       "#4a3aa7",
-    "powertrain": "#1baf7a",
-    "coolant":    "#2a78d6",
+    # THE SITE'S OWN COLOURS, read off the "Template indicator" and "Indicator"
+    # tabs. Not approximations of them — these are the exact fills, so the
+    # workshop wall, the workbook and the app agree.
+    "gearbox":    "#7030A0",   # purple
+    "gear":       "#7030A0",   # the masterlist's gear oil IS the gearbox colour
+    "powertrain": "#00B050",   # green  — "transmission" on their sheet
+    "coolant":    "#00B0F0",   # cyan
+    "engine":     "#0070C0",   # blue
+    "hydraulic":  "#FF0000",   # red
+    "compressor": "#FFFF00",   # yellow
+    # Two the workbook draws but does not fill; taken from the rendered sheet.
+    "grease":     "#C4BD97",   # tan
+    "torque":     "#E36C09",   # orange
+    "rockdrill":  "#948A54",   # no colour assigned yet on their sheet
 }
+
+# Brand is a SECOND dimension, and on their sheet it is the cell border rather
+# than the fill. That is the right way round and worth saying why: the failure
+# you are preventing is engine oil in a final drive, and that destroys the final
+# drive whichever brand it came out of. Consequence follows FUNCTION, so
+# function gets the fill. Brand changes when a tender is won, so it gets the
+# edge — and it should disappear as the site converges on one brand per
+# function, which is what the standardisation programme is for.
+BRAND_HUE = {
+    "Exsoil": "#FFC000",   # amber   (from the workbook)
+    "Lemarc": "#D24E51",   # red     (from the workbook)
+    "Shell":  "#4BACC6",   # blue    (from the rendered sheet)
+    "Nexxol": "#000000",   # black   (from the rendered sheet)
+    "Katana": "#808080",   # grey    (from the rendered sheet)
+}
+def brand_of(name):
+    u = str(name or "").upper()
+    for b in BRAND_HUE:
+        if b.upper() in u: return b
+    return None
 
 # ── which product serves which component ─────────────────────────────────
 # From the Lube Legend tab's own component table, by TYPE rather than by its
@@ -87,6 +113,19 @@ LEGEND_TYPE = {
 # friction chemistry — a wet clutch needs the TO-4 frictional properties and a
 # gear set does not — so this is an engineer's decision, not an importer's.
 QUESTION_TYPES = {"2"}
+
+# The Legend types a compartment by where it sits on the machine. The OEM code
+# in the next column says what the maker actually wants in it, and sometimes
+# the two disagree — a "gear" compartment whose OEM code is a TO-4 wet-clutch
+# oil, or a Komatsu hydraulic oil. That disagreement is not something to average
+# out: TO-4 friction chemistry and GL-5 EP chemistry are different oils for
+# different reasons, and GL-5 in a wet brake glazes the discs. Where the two
+# columns disagree the compartment becomes a question for the engineer, and
+# nothing prints a product for it until a person has answered.
+CONTRADICTS = {
+    "gear": re.compile(r"\bTO-?\s?4\b|\bTO\s?10\b|\bTO\s?30\b|\bTOS|"
+                       r"\bHO-|\bHVLP\b|\bHYDRAUL", re.I),
+}
 
 # ── model names ──────────────────────────────────────────────────────────
 # One canonical name per machine, and it is the MASTERLIST's, because that is
@@ -179,8 +218,10 @@ def read_products(ws):
         t = TYPE_BY_CODE.get(code)
         if not t:
             print("  ! unknown product code in row 2:", code); continue
+        br = brand_of(name)
         out.append({"p": name, "code": code, "t": t[0], "en": t[1], "ru": t[2],
-                    "hue": TYPE_HUE.get(t[0], "#8b969c")})
+                    "hue": TYPE_HUE.get(t[0], "#8b969c"),
+                    "brand": br, "bhue": BRAND_HUE.get(br) if br else None})
     return out
 
 def read_components(ws):
@@ -267,6 +308,9 @@ def main():
                 c["verify"] = 1
             if cp["k"] in QUESTION_TYPES and c.get("oem"):
                 c["ask"] = 1
+            rx = CONTRADICTS.get(c.get("t"))
+            if rx and c.get("oem") and rx.search(c["oem"]):
+                c["ask"] = 1
             got.append(c)
         if not got: continue
 
@@ -312,7 +356,7 @@ def main():
         f.write("distinct OEM spec strings  %5d   <- the standardisation problem\n" % len(oems))
         f.write("flagged VERIFY             %5d\n" % verify)
         f.write("missing change interval    %5d\n" % noiv)
-        f.write("transmission oil to decide %5d\n\n" % ask)
+        f.write("OEM contradicts the type  %5d\n\n" % ask)
         f.write("MODELS IN THE MASTERLIST WITH NO MACHINE ON THE REGISTER (%d)\n" % len(unmatched))
         f.write("They are imported and carry no unit count, so they cost nothing\n")
         f.write("and appear the moment a matching machine is registered.\n")
@@ -413,6 +457,18 @@ def main():
     typeOf:   typeOf,
     types:    TYPES,
     hue:      function(t){ return (TYPES[t] && TYPES[t].hue) || "#8b969c"; },
+    brands:   BRANDS,
+    brandHue: function(b){ return (BRANDS[b] && BRANDS[b].hue) || null; },
+    /* Brand is shown only where it still MATTERS — that is, where more than one
+       brand serves the same job. The point of standardising is to end with one
+       brand per lubricant type, so a permanent brand mark teaches the mess. Let
+       it fade as the site converges and the edge becomes the gap, visible. */
+    brandsFor: function(type){
+      var out = {};
+      CATALOG.forEach(function(p){ if(p.t === type && p.brand) out[p.brand] = 1; });
+      return Object.keys(out);
+    },
+    brandMatters: function(type){ return this.brandsFor(type).length > 1; },
     site:     SITE,
     /* Everything the masterlist could not answer, as a work list rather than a
        cell colour: figures to confirm, intervals that are missing, and the
@@ -448,6 +504,7 @@ def main():
         types[p["t"]] = {"en": p["en"], "ru": p["ru"], "hue": p["hue"]}
     types.setdefault("wirerope", {"en":"Wire rope lube","ru":"Смазка канатов","hue":"#5b686f"})
     types.setdefault("opengear", {"en":"Open gear grease","ru":"Смазка открытых передач","hue":"#8c5a2b"})
+    brands = {b: {"hue": h} for b, h in BRAND_HUE.items()}
 
     with open(OUT, "w", encoding="utf-8") as f:
         f.write(HEAD)
@@ -457,6 +514,8 @@ def main():
         f.write("  /* The eight products actually on site, from row 1 of the masterlist. */\n")
         f.write("  var CATALOG = " + json.dumps(products, ensure_ascii=False) + ";\n\n")
         f.write("  var TYPES = " + json.dumps(types, ensure_ascii=False) + ";\n\n")
+        f.write("  /* Brand is the EDGE, not the fill — see build-lube-data.py. */\n")
+        f.write("  var BRANDS = " + json.dumps(brands, ensure_ascii=False) + ";\n\n")
         f.write("  var COMP_TYPE = " + json.dumps(comp_type, ensure_ascii=False) + ";\n\n")
         f.write("  var MODELS = " + json.dumps(models, ensure_ascii=False,
                                                separators=(",", ":")) + ";\n")
