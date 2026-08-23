@@ -17,8 +17,11 @@ const ok = (n, c, d) => { if (!c) { fail++; console.log('  FAIL  ' + n + (d !== 
                           else console.log('  PASS  ' + n + (d !== undefined ? '   ' + d : '')); return c; };
 const note = (n, d) => console.log('  ....  ' + n + (d !== undefined ? '   ' + d : ''));
 
-const ready = p => p.evaluate(() => [...document.querySelectorAll('.readyrow')].map(r => ({
-  k: r.className.replace('readyrow ', '').trim(),
+const ready = p => p.evaluate(() => [...document.querySelectorAll('.yardrow')].map(r => ({
+  /* The verdict class, whatever the row's own class is called — read the state
+     rather than string-surgery on the markup, or a rename turns every row into
+     a silent failure that quotes the right text beside it. */
+  k: ['ok','warn','bad'].find(c => r.classList.contains(c)) || '?',
   t: r.querySelector('b').textContent,
   s: r.querySelector('.w span').textContent })));
 
@@ -151,7 +154,7 @@ const ready = p => p.evaluate(() => [...document.querySelectorAll('.readyrow')].
      (safe.title || '') + ' / ' + (safe.msg || '').slice(0, 50));
 
   /* ---- 5. and the yard check goes quiet --------------------------------- */
-  await p.evaluate(() => renderReady());
+  await p.evaluate(() => yardCheck());
   await p.waitForTimeout(5500);
   const end = await ready(p);
   ok('the readiness card is green once the work is away',

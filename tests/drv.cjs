@@ -21,12 +21,29 @@ async function act(p, sel, ms) {
   await settled(p, ms);
 }
 
+/* Open, wait out the boot catch-up with the endpoint refused, then let it
+   through. Everything after this point is a cost the test actually asked for. */
+const open = async (p, url) => {
+  await p.goto(url, { waitUntil: 'load' });
+  await p.waitForTimeout(1700);
+  await p.unroute('**/exec*');
+};
 async function newPage(b) {
   const ctx = await b.newContext({ viewport: { width: 1440, height: 1000 } });
   const p = await ctx.newPage();
   p.on('pageerror', e => fails.push('PAGEERROR ' + e.message));
   p.on('console', m => { if (m.type() === 'error' && !/ERR_|Failed to load resource/.test(m.text())) fails.push('CONSOLE ' + m.text()); });
   p.ctx = ctx;                       // the offline switch belongs to the context
+  /* Refuse the script's URL until the page has finished opening.
+
+     quiet() clears the three-minute poller and cannot reach the boot catch-up,
+     which is a setTimeout armed at parse time and fires 1200 ms after load —
+     deliberately, so a dashboard left open overnight is current when somebody
+     walks up to it. Every counted window in this suite therefore races it, and
+     four passes in five is what that looks like. Blocked at the browser, the
+     boot catch-up costs nothing it can be blamed for; open() lifts it once the
+     window has passed. */
+  await p.route('**/exec*', r => r.abort());
   return p;
 }
 /* Stop the page checking Drive on its own for the duration of a counted
@@ -55,7 +72,7 @@ const connect = (p, path) => p.evaluate(u => {
   console.log('first load');
   await reset('?n=40');
   let p = await newPage(b);
-  await p.goto(BASE + '/dashboard/index.html', { waitUntil: 'load' });
+  await open(p, BASE + '/dashboard/index.html');
   await connect(p, '/exec');
   await act(p, '#drvGo', 15000);
   let s = await stats();
@@ -151,7 +168,7 @@ const connect = (p, path) => p.evaluate(u => {
   console.log('\na folder too big for one reply');
   await reset('?n=1500');
   p = await newPage(b);
-  await p.goto(BASE + '/dashboard/index.html', { waitUntil: 'load' });
+  await open(p, BASE + '/dashboard/index.html');
   await connect(p, '/exec');
   await act(p, '#drvGo', 60000);
   s = await stats();
@@ -167,7 +184,7 @@ const connect = (p, path) => p.evaluate(u => {
   await quiet(p).catch(()=>{});
   await reset('?n=12');
   p = await newPage(b);
-  await p.goto(BASE + '/dashboard/index.html', { waitUntil: 'load' });
+  await open(p, BASE + '/dashboard/index.html');
   await connect(p, '/old');
   await act(p, '#drvGo', 30000);
   s = await stats(); msg = await p.textContent('#drvMsg');

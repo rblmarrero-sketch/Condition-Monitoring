@@ -344,18 +344,18 @@
   /* A word, not an icon. A tick and a clock are two shapes an inspector has to
      have been taught; "In the cloud" and "Waiting to send" are not. The colour
      is the fast read and the word is the accurate one. */
-  .readylist{display:flex;flex-direction:column;gap:2px;}
-  .readyrow{display:flex;gap:9px;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--border);}
-  .readyrow:last-child{border-bottom:0;}
-  .readyrow .m{flex:none;width:16px;text-align:center;font-weight:800;line-height:1.35;}
-  .readyrow.ok .m{color:var(--good);} .readyrow.warn .m{color:var(--warn-ink);}
-  .readyrow.bad .m{color:var(--critical);}
-  .readyrow .w{flex:1;min-width:0;}
-  .readyrow .w b{display:block;font-size:13px;font-weight:700;}
-  .readyrow .w span{display:block;font-size:11.5px;color:var(--muted);line-height:1.35;}
-  .readyrow button{margin-top:5px;min-height:38px;padding:0 12px;font-size:12px;}
-  #readyBadge.ok{background:var(--good);color:#fff;}
-  #readyBadge.warn{background:var(--warn-ink);color:#fff;}
+  .yardlist{display:flex;flex-direction:column;gap:2px;}
+  .yardrow{display:flex;gap:9px;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--border);}
+  .yardrow:last-child{border-bottom:0;}
+  .yardrow .m{flex:none;width:16px;text-align:center;font-weight:800;line-height:1.35;}
+  .yardrow.ok .m{color:var(--good);} .yardrow.warn .m{color:var(--warn-ink);}
+  .yardrow.bad .m{color:var(--critical);}
+  .yardrow .w{flex:1;min-width:0;}
+  .yardrow .w b{display:block;font-size:13px;font-weight:700;}
+  .yardrow .w span{display:block;font-size:11.5px;color:var(--muted);line-height:1.35;}
+  .yardrow button{margin-top:5px;min-height:38px;padding:0 12px;font-size:12px;}
+  #yardBadge.ok{background:var(--good);color:#fff;}
+  #yardBadge.warn{background:var(--warn-ink);color:#fff;}
   .pitem .up{font-size:11.5px;font-weight:700;margin-top:3px;display:flex;align-items:center;gap:5px;}
   .pitem .up::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor;flex:none;}
   .pitem .up.ok{color:var(--good);}
@@ -1511,11 +1511,11 @@
        quota, the queue knows what is unsent — but every one of them lived
        inside the settings overlay, which nobody opens until something has
        already gone wrong. In the pit there is no signal to fix any of it. -->
-  <div class="card" id="readyCard">
-    <h2><span data-i18n="sec_ready">Ready for the field</span> <span class="count-badge" id="readyBadge">…</span></h2>
-    <div id="readyList" class="readylist"></div>
+  <div class="card" id="yardCard">
+    <h2><span data-i18n="sec_ready">Ready for the field</span> <span class="count-badge" id="yardBadge">…</span></h2>
+    <div id="yardList" class="yardlist"></div>
     <div class="row" style="margin-top:10px">
-      <button class="btn ghost" id="readyGo">⟳ <span data-i18n="btn_ready_again">Check again</span></button>
+      <button class="btn ghost" id="yardGo">⟳ <span data-i18n="btn_ready_again">Check again</span></button>
     </div>
     <div class="hint" style="margin-top:8px" data-i18n="ready_hint">Run this while you still have signal. Anything amber here is something you cannot fix at the machine.</div>
   </div>
@@ -6683,10 +6683,10 @@ function showPane(id){
   /* The readiness list is about to be looked at, so it has to be about NOW —
      a storage figure or a queue count from ten minutes ago is exactly the kind
      of stale reassurance this card exists to replace. */
-  if(id==="paneQueue" && typeof renderReady==="function") renderReady();
+  if(id==="paneQueue" && typeof yardCheck==="function") yardCheck();
 }
 document.addEventListener("DOMContentLoaded",()=>{
-  const g=$("readyGo"); if(g) g.onclick=guard(async()=>{ await renderReady(); });
+  const g=$("yardGo"); if(g) g.onclick=guard(async()=>{ await yardCheck(); });
 });
 $("tabbar").addEventListener("click",e=>{
   const b=e.target.closest("button[data-pane]"); if(!b) return;
@@ -8371,10 +8371,15 @@ function swAsk(){
     catch(e){ clearTimeout(t0); res({slow:true}); }
   });
 }
-let readyBusy=false;
-async function renderReady(){
-  const list=$("readyList"); if(!list || readyBusy) return;
-  readyBusy=true;
+let yardBusy=false;
+/* NOT renderReady(). There is already one of those, and it drives the one-line
+   bar at the top of the capture screen — declared later in the file, so mine
+   silently replaced it and the bar stopped speaking at all. Two answers to two
+   different questions: that bar is the alarm an inspector cannot miss while
+   capturing, this card is the list they work through before leaving. */
+async function yardCheck(){
+  const list=$("yardList"); if(!list || yardBusy) return;
+  yardBusy=true;
   const rows=[];
   const add=(k,title,text,fix)=>rows.push({k,title,text,fix});
   try{
@@ -8422,22 +8427,22 @@ async function renderReady(){
     if(units>100 && refs) add("ok",t("rdy_ref_t"),t("rdy_ref_ok",{n:units}));
     else add("bad",t("rdy_ref_t"),t("rdy_ref_bad"));
   }catch(e){ }
-  readyBusy=false;
+  yardBusy=false;
 
   const bad=rows.filter(r=>r.k!=="ok").length;
-  const badge=$("readyBadge");
+  const badge=$("yardBadge");
   if(badge){ badge.textContent = bad ? t("ready_n",{n:bad}) : t("ready_ok");
              badge.className = "count-badge "+(bad?"warn":"ok"); }
   list.innerHTML="";
   rows.forEach(r=>{
     const el=document.createElement("div");
-    el.className="readyrow "+r.k;
+    el.className="yardrow "+r.k;
     el.innerHTML='<span class="m">'+(r.k==="ok"?"✓":r.k==="warn"?"!":"✕")+'</span>'
       +'<div class="w"><b>'+esc(r.title)+'</b><span>'+esc(r.text)+'</span></div>';
     if(r.fix){
       const btn=document.createElement("button");
       btn.type="button"; btn.className="btn ghost"; btn.textContent=r.fix.label;
-      btn.onclick=guard(async()=>{ btn.disabled=true; await r.fix.run(); await renderReady(); });
+      btn.onclick=guard(async()=>{ btn.disabled=true; await r.fix.run(); await yardCheck(); });
       el.querySelector(".w").appendChild(btn);
     }
     list.appendChild(el);
@@ -8448,7 +8453,7 @@ async function renderReady(){
    bar of signal and came back is exactly who this is for. */
 document.addEventListener("visibilitychange",()=>{
   if(!document.hidden && document.getElementById("paneQueue")
-     && document.getElementById("paneQueue").classList.contains("on")) renderReady(); });
+     && document.getElementById("paneQueue").classList.contains("on")) yardCheck(); });
 function swHealth(){
   const el=$("swHealth"); if(!el) return;
   if(!("serviceWorker" in navigator) || !navigator.serviceWorker.controller){

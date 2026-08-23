@@ -23,8 +23,13 @@ done
 echo
 echo "───── across all $N passes ─────"
 awk -v n="$N" '
+  # The suite name, however long it is. runall.sh pads to 13 characters and
+  # teamphoto.cjs is 13, so its name ran straight into the "ok" and $1 came
+  # back as "teamphoto.cjsok" — a suite that passed every pass, reported as
+  # broken 0/5. A tally nobody can trust is worse than no tally.
   /^[a-z0-9_.-]+\.cjs/ {
     suite=$1
+    sub(/(ok|FAIL).*$/, "", suite)
     if ($0 ~ / ok /) good[suite]++
     seen[suite]=1
   }

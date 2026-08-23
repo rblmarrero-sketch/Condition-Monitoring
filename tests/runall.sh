@@ -32,7 +32,10 @@ pkill -f 'ed-srv.cjs|mock.cjs|stab-srv.cjs|hang.cjs|up-srv.cjs' 2>/dev/null
 sleep 0.5
 ensure; sleep 1
 BAD=0
-run(){ ensure; printf "%-13s" "$1"; if out=$(node "$1" 2>&1); then
+# 15, not 13: teamphoto.cjs is exactly 13 characters and ran into the status
+# word, which made the five-pass tally read it as a suite called
+# "teamphoto.cjsok" that failed every time. It had passed every time.
+run(){ ensure; printf "%-15s" "$1"; if out=$(node "$1" 2>&1); then
     echo "ok   $(echo "$out" | grep -c PASS) pass";
   else echo "FAIL"; echo "$out" | grep -E 'FAIL|Error|error:' | head -8; BAD=1; fi; }
 for t in lint.cjs rate.cjs rptphoto.cjs teamphoto.cjs field.cjs lube.cjs lubecap.cjs lubesync.cjs lubetab.cjs luberef.cjs lubestd.cjs lubrpt.cjs pdfprint.cjs teamheal.cjs live.cjs index.cjs teamopen.cjs hdrfit.cjs rptbi.cjs cssvar.cjs skin2.cjs tabs.cjs cover.cjs setup.cjs follow.cjs media.cjs reach.cjs gauge.cjs draft.cjs recent.cjs fit.cjs hdr.cjs iso.cjs cam.cjs fcast.cjs base.cjs skin.cjs bodychk.cjs tray.cjs getart.cjs fe.cjs static.cjs alldev.cjs figtext.cjs batch.cjs batchup.cjs audit3.cjs resume.cjs speed.cjs figfall.cjs mapsel.cjs guide.cjs pickgal.cjs getfig.cjs upfast.cjs folder3.cjs voidcnt.cjs theme.cjs autoupd.cjs swfail.cjs seam.cjs ident.cjs pwa.cjs autosync.cjs deloff.cjs stale404.cjs flow.cjs orphan.cjs prio.cjs photos4.cjs rt5.cjs edit5.cjs rpt2.cjs e2e.cjs dashrpt.cjs sizes.cjs perfuc.cjs cold2.cjs \
