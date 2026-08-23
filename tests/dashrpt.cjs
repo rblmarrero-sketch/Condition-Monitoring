@@ -4,6 +4,7 @@ const { chromium } = require(require('./pw.cjs'));
 const fs=require('fs');
 const B='http://127.0.0.1:8093';
 const fails=[]; const ok=(n,c,d)=>{console.log((c?'  PASS  ':'  FAIL  ')+n+(d!==undefined?'   '+d:''));if(!c)fails.push(n);};
+const note=(n,d)=>console.log('  ....  '+n+(d!==undefined?'   '+d:''));
 const SEED=fs.readFileSync('e2e.cjs','utf8').match(/const SEED = `([\s\S]*?)`;/)[1];
 (async()=>{
   const b=await chromium.launch();
@@ -185,6 +186,113 @@ const SEED=fs.readFileSync('e2e.cjs','utf8').match(/const SEED = `([\s\S]*?)`;/)
     ok('and nothing is left in the page afterwards',
       await dash.evaluate(()=>!document.getElementById('rptRoot')));
   }
+  /* Last, deliberately: this section seeds a round of every type into both
+     ends, which changes how many rounds each machine has. Anything asserted
+     about the fixture's shape has to have been asserted before it lands. */
+  /* ---- the name a photograph is filed under, at both ends ----------------
+     The phone writes every frame into the upload package under a name it
+     builds; the dashboard finds it again by rebuilding that name from the
+     record. Two functions in two files, and nothing between them — if they
+     ever disagree the picture is on Drive, the report is fine, and the
+     photograph simply is not on it. Nobody is told.
+
+     They can disagree in two ways today. The phone takes the suffix from
+     TYPE_META and the dashboard takes it from rec.type (equal for all eight
+     types, but only by hand). And for a register round the phone writes
+     UNIT.KEY only when that unit actually HAS components, while the dashboard
+     writes UNIT.KEY for the round type regardless — a machine with no register
+     entry files its pictures under one name and has them looked for under the
+     other.
+
+     So this asks the phone to build the real package and reads the real names
+     out of it, then asks the dashboard what it would look for. A test that
+     built the names itself would agree with itself and catch neither. */
+  console.log('\n  a photograph is filed and found under the same name');
+  const named = await app.evaluate(async (TYPES) => {
+    const made = [], missed = [];
+    for (const ty of TYPES) {
+      const s = document.getElementById('typeSel');
+      if (![...s.options].some(o => o.value === ty)) continue;
+      s.value = ty; s.dispatchEvent(new Event('change'));
+      /* A unit that actually has this round: the measured rounds need a wear
+         reference, a tray or a set of teeth, so the known ones are tried first
+         and the register is scanned only if none of them fits. Skipping a type
+         because the test could not find it a machine would be the suite quietly
+         narrowing itself. */
+      const KNOWN = { UC:['DZ002','DZ001'], TB:['TK143','TK146'],
+        /* Teeth are on excavators and loaders, and neither is anywhere near
+           the front of a register sorted by truck number. */
+        GET:(window.ASSETS||[]).filter(a=>/EXC|LOAD|WL|FEL/i.test(a.cls||''))
+              .slice(0,4).map(a=>a.n) };
+      let pick = null, ks = [];
+      const tryUnit = async (n) => {
+        selectEquip(n);
+        await new Promise(r => setTimeout(r, 350));
+        const got = items().map(x => x.k);
+        return got.length ? got : null;
+      };
+      for (const n of (KNOWN[ty] || [])) { const g = await tryUnit(n); if (g) { pick = n; ks = g; break; } }
+      if (!pick) for (const a of (window.ASSETS || []).slice(0, 60)) {
+        const g = await tryUnit(a.n); if (g) { pick = a.n; ks = g; break; } }
+      if (!pick) { missed.push(ty); continue; }
+      /* two frames on the first position, one on the second: the multi-photo
+         suffix is where the two ends have gone wrong before */
+      const png = () => { const c = document.createElement('canvas'); c.width = c.height = 8;
+        c.getContext('2d').fillRect(0, 0, 8, 8);
+        return new Promise(r => c.toBlob(r, 'image/jpeg', 0.8)); };
+      const pos = {};
+      pos[ks[0]] = { grade:'A', sev:'NOF', photos:[await png(), await png()], video:null };
+      if (ks[1]) pos[ks[1]] = { grade:'A', sev:'NOF', photos:[await png()], video:null };
+      await dbPut({ id:'nm-' + ty, type:ty, equip:pick, date:'2026-08-20',
+        by:'S. Volkov', sup:'A. Sokolov', smu:'100', cls:(ASSET_BY[pick]||{}).cls||'',
+        gps:null, dev:'PH-01', sign:null, positions:pos,
+        created:'2026-08-20T06:00:00.000Z', up:0, upTo:{}, rev:1 });
+      made.push({ ty, unit:pick, keys:[ks[0], ks[1]].filter(Boolean) });
+    }
+    const { files } = await buildPackage();
+    return { made, missed, files: files.map(f => f.name).filter(n => /\.(jpe?g|png|webp)$/i.test(n)),
+             payload: (await dbAll()).map(recToExport) };
+  }, ['MP','FC','INSP','TEMP','UC','GET','TB','LUBE']);
+  note('rounds named', named.made.map(m => m.ty + ':' + m.unit).join(' '));
+  ok('every round type this build offers got a round to name',
+     named.missed.length === 0, named.missed.join(',') || 'all eight');
+  ok('the phone wrote a file for every frame it holds', named.files.length >= named.made.length * 3,
+     named.files.length + ' image files');
+  await dash.evaluate(p => window.CMDash.importRecords(p), named.payload);
+  await dash.waitForTimeout(800);
+  const lost = await dash.evaluate(names => {
+    const want = new Set(names);
+    const found = [];
+    window.CMDash.allRecs().forEach(rec => {
+      (rec.items || []).forEach(it => {
+        const base = window.CMDash.photoBase(it, rec);
+        window.CMDash.photoNames(base, rec).forEach(n => { if (want.has(n)) found.push(n); });
+      });
+    });
+    return names.filter(n => found.indexOf(n) < 0);
+  }, named.files);
+  ok('and the dashboard looks for every one of them', lost.length === 0,
+     lost.length ? 'never looked for: ' + lost.slice(0, 6).join(', ') : named.files.length + ' names agree');
+
+  /* Looking for the right name is necessary and not sufficient — put the files
+     in the folder under the names the phone actually wrote and check they come
+     out the other end, on the pages, for every round type. */
+  const reached = await dash.evaluate(names => {
+    names.forEach(n => window.CMDash.addPhoto(n, 'data:image/jpeg;base64,/9j/AAA='));
+    const recs = window.CMDash.allRecs().filter(r => /^nm-/.test(r.id || ''));
+    const norm = window.CMReport.normalise(recs, { photos: true });
+    const html = CMR.sections(window.CMReport.ctxFor(norm, { photos: true }))
+      .map(s => s.html).join('');
+    return { byType: norm.map(r => r.type + ':' +
+               (r.items || []).reduce((n, it) => n + ((it.photos || []).length), 0)),
+             onPaper: (html.match(/<img[^>]+src="data:image/g) || []).length,
+             want: names.length };
+  }, named.files);
+  ok('and every one of them reaches the record it belongs to',
+     reached.byType.every(x => Number(x.split(':')[1]) === 3), reached.byType.join(' '));
+  ok('  and is printed on the pages', reached.onPaper >= reached.want,
+     reached.onPaper + ' of ' + reached.want);
+
   console.log(fails.length?'\nFAILED: '+fails.length+'\n'+fails.join('\n'):'\nall green');
   await b.close(); process.exit(fails.length?1:0);
 })().catch(e=>{console.log('FAIL harness: '+e.message);process.exit(1);});

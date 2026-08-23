@@ -70,7 +70,10 @@ const note = (n, d) => console.log('  ....  ' + n + (d !== undefined ? '   ' + d
       mp[k] = { grade: i === 1 ? 'C' : 'A', sev: i === 1 ? 'DEG' : 'NOF',
         defect: i === 1 ? 'DT14-03' : '', cause:'', action:'', wo:'', comment:'',
         particle:'', comp:'3120', oil:'250', detect:'VI',
-        photos: await shoot(), video: null };
+        /* Three frames on the first point: the phone allows ten per position
+           and "the first one" is what a report quietly settles for. */
+        photos: i === 0 ? [...await shoot(), ...await shoot(), ...await shoot()]
+                        : await shoot(), video: null };
     await put({ id:'r-ph-mp', type:'MP', equip:'TK149', date:'2026-08-22',
       smu:'19004', cls:(ASSET_BY['TK149']||{}).cls||'', positions:mp });
 
