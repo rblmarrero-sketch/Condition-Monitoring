@@ -166,6 +166,61 @@ const note = (n, d) => console.log('  ....  ' + n + (d !== undefined ? '   ' + d
   ok('  and each is carried as bytes, not a link a printer cannot follow',
      imgs.longest > 2000, imgs.longest + ' chars');
 
+  /* ---- one round out of five, which is the actual ask -------------------
+     A shift ends with several rounds in the queue and the office wants ONE of
+     them — this undercarriage, on this machine. The whole-queue button prints
+     all five, and the only per-round sheet the app had was the team overlay's,
+     which reads a round back from Drive and carries no photographs on purpose.
+     Neither is what was asked for, so this is: the round is on the phone and so
+     are its pictures, and it prints on its own with no signal in the way. */
+  console.log('\none round out of the five, with its own photographs');
+  await ctx.setOffline(true);
+  /* The rounds were put straight into the store, which is how they get there
+     from a merge or an import as well — the list is drawn from the store, so
+     ask it to draw. */
+  await p.evaluate(() => renderPending());
+  await p.waitForTimeout(400);
+  const rows = await p.evaluate(() => [...document.querySelectorAll('#pending .pitem')]
+    .map(r => (r.querySelector('.meta .a') || {}).textContent || ''));
+  const ucRow = rows.findIndex(x => /UC/.test(x));
+  ok('the queue lists the rounds, undercarriage among them', ucRow >= 0, rows.join(' | '));
+  const one = p.waitForEvent('download', { timeout: 180000 });
+  await p.locator('#pending .pitem').nth(ucRow).locator('.rpt1').click();
+  const oneFile = await one;
+  const oneSize = require('fs').statSync(await oneFile.path()).size;
+  ok('it prints on its own, with the network gone', oneSize > 20000,
+     (oneSize / 1024).toFixed(0) + ' KB');
+  ok('  and the file is named for that round, not for the day',
+     /^CM_DZ002_UC_2026-08-22\.pdf$/.test(oneFile.suggestedFilename()),
+     oneFile.suggestedFilename());
+  await ctx.setOffline(false);
+
+  /* The sheet is that round and nothing else, and the photographs on it are
+     that round's. A one-round report that quietly printed all five would still
+     download, still weigh something, and still be wrong. */
+  const solo = await p.evaluate(async () => {
+    const all = await dbAll();
+    const uc = all.find(r => r.type === 'UC');
+    const secs = await buildReportSections(uc.id);
+    const html = secs.map(s => s.html).join('');
+    const shot = r => Object.values(r.positions || {})
+      .reduce((n, q) => n + ((q.photos || []).length), 0);
+    return { imgs: (html.match(/<img[^>]+src="data:image\/jpeg;base64,/g) || []).length,
+             mine: shot(uc), unit: uc.equip,
+             /* Named, not matched on a class: a report that renamed its machine
+                heading would make a class-based check pass by finding nothing,
+                which is the check that cannot fail. Count the machines. */
+             onIt: (html.match(new RegExp(uc.equip, 'g')) || []).length,
+             strays: all.filter(r => r.id !== uc.id).map(r => r.equip)
+               .map(e => e + ':' + (html.match(new RegExp(e, 'g')) || []).length) };
+  });
+  ok('the sheet carries that round\'s photographs', solo.imgs === solo.mine,
+     solo.imgs + ' of ' + solo.mine);
+  ok('  the machine it is about is named on it', solo.onIt > 0,
+     solo.unit + ' appears ' + solo.onIt + ' times');
+  ok('  and no other machine in the queue is',
+     solo.strays.every(x => /:0$/.test(x)), solo.strays.join(' | '));
+
   /* ---- the screen is not left in a dialog -------------------------------- */
   const after = await p.evaluate(() => !!(document.getElementById('dlg') || {}).open);
   ok('the dialog closes when the file is saved', !after);

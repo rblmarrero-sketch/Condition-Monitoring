@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=123">
+<link rel="manifest" href="manifest.webmanifest?v=124">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=123">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=123">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=123">
+<link rel="apple-touch-icon" href="icon-192.png?v=124">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=124">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=124">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -301,9 +301,20 @@
   .btn.ghost{background:var(--surface-2);color:var(--ink);border:1px solid var(--border);}
   .btn.ghost:active{background:var(--surface-3);opacity:1;}
   .pending{display:flex;flex-direction:column;gap:10px;}
-  .pitem{display:flex;align-items:center;gap:12px;background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:10px 12px;cursor:pointer;}
+  /* Thumbnail on the left, what the round IS above what you can do to it.
+     Three 44 px targets and a 52 px thumbnail on one line left the machine and
+     its date about ninety pixels to sit in, which wrapped "DZ002 · 2026-08-22"
+     onto three lines and made the row taller than putting the buttons on their
+     own line ever does. The targets keep their size; the text gets the width. */
+  .pitem{display:grid;grid-template-columns:auto minmax(0,1fr);
+    grid-template-areas:"thumb meta" "thumb acts";gap:2px 12px;align-items:center;
+    background:var(--surface-2);border:1px solid var(--border);border-radius:12px;
+    padding:10px 12px;cursor:pointer;}
+  .pitem .thumb{grid-area:thumb;align-self:start;}
+  .pitem .meta{grid-area:meta;}
+  .pitem .acts{grid-area:acts;display:flex;justify-content:flex-end;align-items:center;}
   .pitem .thumb{width:52px;height:52px;border-radius:9px;object-fit:cover;background:var(--surface-3);flex:none;}
-  .pitem .meta{flex:1;min-width:0;} .pitem .meta .a{font-weight:700;} .pitem .meta .b{font-size:12.5px;color:var(--muted);}
+  .pitem .meta{min-width:0;} .pitem .meta .a{font-weight:700;} .pitem .meta .b{font-size:12.5px;color:var(--muted);}
   .tag{display:inline-block;font-size:10.5px;font-weight:700;padding:1px 6px;border-radius:6px;background:var(--accent);color:#fff;margin-right:6px;vertical-align:middle;}
   /* A queue of nine rounds across four types is where the colour earns its
      keep — it is the one screen that shows several categories at once. */
@@ -326,8 +337,11 @@
   .dueitem .tag{margin-right:6px;}
   /* 44px minimum, and a gap between them: these sat at ~34px side by side, so a
      gloved thumb aiming for Edit could hit Delete instead. */
-  .pitem .edit,.pitem .del{background:none;border:1px solid transparent;border-radius:10px;
+  .pitem .rpt1,.pitem .edit,.pitem .del{background:none;border:1px solid transparent;border-radius:10px;
     min-width:44px;min-height:44px;display:grid;place-items:center;font-size:19px;cursor:pointer;flex:none;}
+  /* Three targets and a thumbnail on a 412 px row. They keep their 44 px and
+     the gaps come off the text beside them, which can wrap; a target cannot. */
+  .pitem .rpt1{color:var(--muted);}
   .pitem .edit{color:var(--accent);}
   .pitem .del{color:var(--critical);margin-left:8px;border-color:color-mix(in srgb,var(--critical) 30%,transparent);}
   .pitem .del:active{background:color-mix(in srgb,var(--critical) 15%,transparent);}
@@ -1676,27 +1690,27 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=123"></script>
-<script src="upload-defaults.js?v=123"></script>
-<script src="hme.js?v=123"></script>
-<script src="mp-fc.js?v=123"></script>
-<script src="hme-cascade.js?v=123"></script>
-<script src="assets.js?v=123"></script>
-<script src="temp-limits.js?v=123"></script>
-<script src="wear.js?v=123"></script>
-<script src="wear-figs.js?v=123"></script>
-<script src="wear-map.js?v=123"></script>
-<script src="machine-photos.js?v=123"></script>
-<script src="machine-fig.js?v=123"></script>
-<script src="get.js?v=123"></script>
-<script src="uc-points.js?v=123"></script>
-<script src="inspect-guide.js?v=123"></script>
-<script src="get-figs.js?v=123"></script>
-<script src="body-points.js?v=123"></script>
-<script src="body-map.js?v=123"></script>
-<script src="lube.js?v=123"></script>
-<script src="lube2027.js?v=123"></script>
-<script src="report-core.js?v=123"></script>
+<script src="native.js?v=124"></script>
+<script src="upload-defaults.js?v=124"></script>
+<script src="hme.js?v=124"></script>
+<script src="mp-fc.js?v=124"></script>
+<script src="hme-cascade.js?v=124"></script>
+<script src="assets.js?v=124"></script>
+<script src="temp-limits.js?v=124"></script>
+<script src="wear.js?v=124"></script>
+<script src="wear-figs.js?v=124"></script>
+<script src="wear-map.js?v=124"></script>
+<script src="machine-photos.js?v=124"></script>
+<script src="machine-fig.js?v=124"></script>
+<script src="get.js?v=124"></script>
+<script src="uc-points.js?v=124"></script>
+<script src="inspect-guide.js?v=124"></script>
+<script src="get-figs.js?v=124"></script>
+<script src="body-points.js?v=124"></script>
+<script src="body-map.js?v=124"></script>
+<script src="lube.js?v=124"></script>
+<script src="lube2027.js?v=124"></script>
+<script src="report-core.js?v=124"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -1965,7 +1979,9 @@ const I18N = {
     hint_fields:"Fields save automatically. Switch items with the buttons above.",
     btn_save:"✔ Save", btn_update:"✔ Update", editing_hint:"Editing {x} — change fields, then Update.",
     sec_onphone:"On this phone", empty_none:"Nothing captured yet.",
-    btn_share:"Share", btn_export:"Export ZIP", btn_report:"PDF report", scan_hint:"Point at the unit's QR code", btn_cancel:"Cancel", dlg_ok:"OK",
+    btn_share:"Share", btn_export:"Export ZIP", btn_report:"PDF report",
+    /* Five rounds in the queue and a superintendent who wants one of them. */
+    rpt1_title:"PDF for this round only", scan_hint:"Point at the unit's QR code", btn_cancel:"Cancel", dlg_ok:"OK",
     rep_title:"Condition Monitoring Inspection Report", rep_generated:"Generated", rep_building:["Building report…","Preparing the PDF — this can take a few seconds."],
     /* Rasterising is about a second a page on a warm handset and several times
        that on a cold one, and the old message said "a few seconds" and then sat
@@ -2312,7 +2328,8 @@ const I18N = {
     hint_fields:"Поля сохраняются автоматически. Переключайте пункты кнопками выше.",
     btn_save:"✔ Сохранить", btn_update:"✔ Обновить", editing_hint:"Редактирование {x} — измените поля и нажмите «Обновить».",
     sec_onphone:"На этом телефоне", empty_none:"Пока ничего не снято.",
-    btn_share:"Поделиться", btn_export:"Экспорт ZIP", btn_report:"PDF-отчёт", scan_hint:"Наведите на QR-код трака", btn_cancel:"Отмена", dlg_ok:"ОК",
+    btn_share:"Поделиться", btn_export:"Экспорт ZIP", btn_report:"PDF-отчёт",
+    rpt1_title:"PDF только по этому обходу", scan_hint:"Наведите на QR-код трака", btn_cancel:"Отмена", dlg_ok:"ОК",
     rep_title:"Отчёт по мониторингу состояния", rep_generated:"Сформировано", rep_building:["Формирование отчёта…","Готовится PDF — это может занять несколько секунд."],
     rep_page:"Формирование… {i} из {n}",
     rep_summary:"Сводка по состоянию", rep_attention:"Требуют внимания", rep_none_att:"Не отмечено.",
@@ -6577,8 +6594,9 @@ async function renderPending(){
     const typeTag=`${rec.cls||""} ${rty}`.trim();
     row.innerHTML=`${thumb}<div class="meta"><div class="a"><span class="tag" data-r="${esc(rty)}">${esc(typeTag)}</span>${esc(rec.equip)} · ${esc(rec.date)}</div>
       <div class="b">${nPos} ${t("pos_count")} · ${nPhotos} ${t("photo_count")}${nVid?` · ${nVid}🎥`:""}${rec.smu?` · SMU ${esc(rec.smu)}`:""}${rec.sign?" · ✍":""}${rec.gps?" · 📍":""}</div></div>
-      <button class="edit" title="${esc(t("edit_title"))}" aria-label="${esc(t("edit_title"))}">✎</button><button class="del" title="${esc(t("del_title"))}" aria-label="${esc(t("del_title"))}">🗑</button>`;
+      <div class="acts"><button class="rpt1" title="${esc(t("rpt1_title"))}" aria-label="${esc(t("rpt1_title"))}">📄</button><button class="edit" title="${esc(t("edit_title"))}" aria-label="${esc(t("edit_title"))}">✎</button><button class="del" title="${esc(t("del_title"))}" aria-label="${esc(t("del_title"))}">🗑</button></div>`;
     const openEdit=()=>editRecord(rec);
+    row.querySelector(".rpt1").onclick=guard(async(ev)=>{ev.stopPropagation();await reportOne(rec);});
     row.querySelector(".edit").onclick=(ev)=>{ev.stopPropagation();openEdit();};
     row.querySelector(".meta").onclick=openEdit; row.querySelector(".thumb").onclick=openEdit;
     /* Deleting here is final — the record lives nowhere else until it has been
@@ -6839,8 +6857,13 @@ function rptMap(rec,items,photo){
     sideLabel:sd=>WEAR.escMap(t(sd==="L"?"uc_left":"uc_right")) });
   return u ? { html:CMR.fitMap(u.html), key:u.key } : { html:"", key:null };
 }
-async function rptRecords(){
-  const all=await dbAll();
+/* Every round in the store, or one of them.
+   Filtering here rather than after the fact is not tidiness: normalising a
+   round reads every photograph back out of the store and shrinks it, so a
+   one-round sheet that built all five and threw four away would cost five
+   times what it needs to on the phone that can least afford it. */
+async function rptRecords(onlyId){
+  const all=(await dbAll()).filter(r=>!onlyId || r.id===onlyId);
   const out=[];
   for(const rec of all){
     const meta=TYPE_META[rec.type]||{};
@@ -7077,14 +7100,32 @@ $("roundRpt").onclick=async ()=>{
 function rptSay(i,n){
   const el=$("dlgMsg"); if(el) el.textContent=t("rep_page",{i,n});
 }
-async function buildReportSections(){
-  return CMR.sections({ lang, title:t("rep_title"),
+async function buildReportSections(onlyId){
+  return CMR.sections({ lang, mode:onlyId?"unit":undefined, title:t("rep_title"),
     titleAlt:inOtherLang(()=>t("rep_title")), stamp:new Date(),
     sevLabel:s=>t("sev_"+s), sevLabelAlt:s=>inOtherLang(()=>t("sev_"+s)),
     /* Both call sites, or the fleet report and the single-machine sheet quote
        different hours for the same part - the drift this module exists to stop. */
     forecast:(ref,series)=>(window.WEAR?WEAR.forecast(ref,series):null),
-    records: await rptRecords() });
+    records: await rptRecords(onlyId) });
+}
+/* One round on this phone, as its own sheet — the thing an inspector asks for
+   in the office after a shift of five. It is NOT the round overlay's report:
+   that one prints a team round pulled from Drive and deliberately carries no
+   photographs, because the pictures live in the folder and fetching them would
+   put a signal in the way of an offline screen. This round is on the phone, and
+   so are its photographs, so they go on the sheet. */
+async function reportOne(rec){
+  if(!await needPdf()){ dlg(t("m_lib_pdf")); return; }
+  dlg(t("rep_building"));
+  try{
+    const doc=await CMR.paginate({ sections:await buildReportSections(rec.id),
+      jsPDF:window.jspdf.jsPDF, html2canvas:window.html2canvas,
+      scale:PHONE_PDF.scale, jpeg:PHONE_PDF.jpeg, onProgress:rptSay,
+      docId:`CM-${rec.equip}-${rec.date}` });
+    $("dlg").close();
+    doc.save(`CM_${rec.equip}_${rec.type||"MP"}_${rec.date}.pdf`);
+  }catch(err){ $("dlg").close(); dlg(["Report error", String(err&&err.message||err)]); }
 }
 $("reportBtn").onclick=async ()=>{
   const all=await dbAll(); if(!all.length){ dlg(t("m_nothing_export")); return; }
@@ -7219,7 +7260,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="123";
+const BUILD="124";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
