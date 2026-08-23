@@ -111,7 +111,11 @@ const SEED=fs.readFileSync('e2e.cjs','utf8').match(/const SEED = `([\s\S]*?)`;/)
   await dash.waitForTimeout(700);
   const trayOf = h => {
     const n = (h.match(/class="bm-val"/g) || []).length;
-    const vb = (h.match(/viewBox="0 0 \d+ (\d+)"/) || [])[1];
+    /* The TRAY's own box. Matching the first viewBox in the document picked up
+       whichever drawing happened to come first — on the app side that is every
+       machine in the store, on the dashboard side only the one asked for, so
+       the two were being compared on different pictures. */
+    const vb = (h.match(/<svg class="bodymap"[^>]*viewBox="0 0 \d+ (\d+)"/) || [])[1];
     const v = [...h.matchAll(/class="bm-val"[^>]*>([^<]*)</g)].map(m => m[1]);
     return { n, vb, v };
   };

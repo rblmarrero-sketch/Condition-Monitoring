@@ -187,6 +187,76 @@ async function phone(b, withDrive) {
   const onSize = fs.statSync(await dlOn.path()).size;
   ok("the round's own PDF button produces a file", onSize > 20000, (onSize / 1024).toFixed(0) + ' KB');
 
+  /* ---- filed under the other name, and still found ----------------------
+     The uploader picks between "UNIT.KEY" and "UNIT_KEY" on whether the round
+     walks the register AND whether that unit has components. The phone asking
+     for the pictures is not the phone that filed them, and may not be on the
+     build that had that rule. Here the sending phone is made to answer the
+     second question the other way — an older rule, or a unit the register did
+     not know that day — and the receiving phone still has to find its work. */
+  console.log('\nfiled under the other rule, and still found');
+  const A2 = await phone(b, true);
+  await A2.p.evaluate(async () => {
+    /* the register says this unit has no components, so the flat name is used */
+    window.componentsForUnit = () => null;
+    const s = document.getElementById('typeSel');
+    s.value = 'UC'; s.dispatchEvent(new Event('change'));
+    selectEquip('DZ002');
+    await new Promise(r => setTimeout(r, 600));
+    document.getElementById('inspector').value = 'S. Volkov';
+    const shot = async () => { const c = document.createElement('canvas');
+      c.width = 600; c.height = 450; const x = c.getContext('2d');
+      x.fillStyle = '#3b4a55'; x.fillRect(0, 0, 600, 450);
+      return new Promise(r => c.toBlob(r, 'image/jpeg', 0.7)); };
+    const ks = items().map(i => i.k);
+    pickComponent(ks[0]);
+    const pos = curP(); pos.mm = 30; pos.photos = [await shot(), await shot()];
+    renderMedia(); renderChips();
+  });
+  await A2.p.click('#saveBtn');
+  await A2.p.waitForTimeout(7000);
+  const filed = await (await fetch(`${EXEC}?action=list&ext=.jpg`)).json();
+  const flat = (filed.files || []).filter(f => /^DZ002_/.test(f.name));
+  note('filed as', flat.map(f => f.name).join('  ') || '(nothing)');
+  ok('the sending phone filed them under the flat name', flat.length === 2,
+     flat.length + ' files');
+  await A2.ctx.close();
+
+  const C2 = await phone(b, true);
+  const found = await C2.p.evaluate(async () => {
+    await teamPull(true, true);
+    await new Promise(r => setTimeout(r, 900));
+    const row = teamAll().find(r => r.u === 'DZ002');
+    if (!row) return { err:'no row' };
+    await openTeamRow(row.u + '|' + row.d + '|' + row.t);
+    await new Promise(r => setTimeout(r, 700));
+    const g = loadDests().find(d => d.id === 'gas' && d.url);
+    const map = await teamPhotosFor(g, roundRec, null);
+    return { n: map ? Object.values(map).reduce((s, a) => s + a.length, 0) : -1 };
+  });
+  ok('and the receiving phone finds them anyway', found.n === 2,
+     found.n + ' of 2' + (found.err ? '  ' + found.err : ''));
+
+  /* This one is an undercarriage round, so it HAS a drawing — and the drawing
+     is built from files this phone already holds. Cut the link and it must
+     still be there: layout on a weak connection, pictures too on a good one,
+     in that order. The handler builds it before it asks the folder for
+     anything, which is what makes that order true rather than lucky. */
+  await C2.ctx.setOffline(true);
+  const dark = await C2.p.evaluate(async () => {
+    await needMap();
+    const n = teamRecToReport(roundRec);
+    const m = rptMap(roundRec, n.items, "");
+    n.mapHTML = m.html; n.mapKey = m.key;
+    const html = CMR.sections({ lang, mode:'unit', title:'x', titleAlt:'x', stamp:new Date(),
+      sevLabel:s => s, sevLabelAlt:s => s, records:[n] }).map(s => s.html).join('');
+    return { built: (m.html || '').length, why: m.why || '', on: /class="ucmap/.test(html) };
+  });
+  ok('with the link cut the machine is still drawn', dark.built > 1000 && dark.on,
+     dark.built + ' chars' + (dark.why ? '  why=' + dark.why : ''));
+  await C2.ctx.setOffline(false);
+  await C2.ctx.close();
+
   /* ---- and when there is no signal, it SAYS so --------------------------- */
   /* The failure that matters is not a missing photograph, it is a sheet that
      looks exactly like a round where nobody took one. */
@@ -206,13 +276,23 @@ async function phone(b, withDrive) {
      reasons that had nothing to do with whether a picture was on the page. */
   const gone = await C.p.evaluate(async () => {
     const g = loadDests().find(d => d.id === 'gas' && d.url);
-    const map = await teamPhotosFor(g, roundRec, null);      // offline: no answer
     const n = teamRecToReport(roundRec);
+    /* The drawing first and offline, which is the order the handler uses: it is
+       built from files this phone already holds, so it must not wait on — or be
+       lost to — a folder that never answers. */
+    await needMap();
+    const drawn = rptMap(roundRec, n.items, "");
+    n.mapHTML = drawn.html; n.mapKey = drawn.key;
+    const map = await teamPhotosFor(g, roundRec, null);      // offline: no answer
     if (map) n.items.forEach(it => { if (map[it.key]) it.photos = map[it.key]; });
     else { n.note = t('rep_nophoto_off'); n.noteAlt = inOtherLang(() => t('rep_nophoto_off')); }
     const html = CMR.sections({ lang, mode:'unit', title:'x', titleAlt:'x', stamp:new Date(),
       sevLabel:s => s, sevLabelAlt:s => s, records:[n] }).map(s => s.html).join('');
     return { reached: map !== null, imgs: (html.match(/<img[^>]+src="data:image/g) || []).length,
+             /* The drawing is built from files this phone already holds. It has
+                no business waiting on a folder, and it must survive one that
+                never answers — layout on a weak link, pictures too on a good
+                one, in that order. */
              en: /offline/i.test(html), ru: /офлайн/.test(html) };
   });
   ok('with no signal the folder simply does not answer', gone.reached === false);

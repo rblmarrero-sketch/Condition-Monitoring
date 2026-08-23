@@ -269,6 +269,50 @@ const enter = async (p, v) => { await p.fill('#ucMM', String(v)); await p.waitFo
   ok('  in both languages, like everything else on it', mute.en && mute.ru);
   await paper.ctx.close();
 
+  /* ---- the picker does not decide what a report says ---------------------
+     A sheet came back from the field reading "no wear reference is loaded for
+     this model" for a machine whose references are plainly loaded — its wear
+     percentages were printed two inches below the sentence saying they were
+     not. ucStatus() asked bodyType() with no argument, which reads the round
+     the CAPTURE PICKER is sitting on. So a phone left on the tray round printed
+     every undercarriage sheet through bodyStatus(), which correctly says an
+     excavator has no tray, and the drawing went with it.
+
+     The picker is the right question on screen and the wrong one on paper. This
+     prints the same record with the picker parked on each round type in turn:
+     the sheet has to come out the same every time. */
+  console.log('\nthe report reads the record, not the dropdown');
+  const stray = await app(b, undefined);
+  const byPicker = await stray.p.evaluate(async () => {
+    const sel = document.getElementById('typeSel');
+    sel.value = 'UC'; sel.dispatchEvent(new Event('change'));
+    selectEquip('EX006');
+    await new Promise(r => setTimeout(r, 700));
+    const pos = {};
+    items().map(i => i.k).forEach((k, i) => { pos[k] = { mm: 20 + (i % 5), stood:0,
+      reason:'', photos:[], video:null }; });
+    await dbPut({ id:'pick', type:'UC', equip:'EX006', date:'2026-08-16', by:'S. Volkov',
+      sup:'A. Sokolov', smu:'33549', cls:'EXC', gps:null, dev:'PH-01', sign:null,
+      positions:pos, created:'2026-08-16T06:00:00.000Z', up:0, upTo:{}, rev:1 });
+    const out = [];
+    for (const ty of [...sel.options].map(o => o.value)) {
+      sel.value = ty; sel.dispatchEvent(new Event('change'));
+      await new Promise(r => setTimeout(r, 200));
+      const html = (await buildReportSections('pick')).map(x => x.html).join('');
+      out.push({ picker: ty, drew: /class="ucmap/.test(html),
+                 saysNoRef: /no wear reference is loaded/i.test(html) });
+    }
+    return out;
+  });
+  byPicker.forEach(r => console.log('   ·      picker on ' + r.picker + '   '
+    + (r.drew ? 'drawing' : 'NO DRAWING') + (r.saysNoRef ? '  ("no wear reference")' : '')));
+  ok('the same undercarriage round draws whatever the picker is set to',
+     byPicker.every(r => r.drew),
+     byPicker.filter(r => !r.drew).map(r => r.picker).join(',') || 'all of them');
+  ok('  and never claims a loaded reference is missing',
+     byPicker.every(r => !r.saysNoRef));
+  await stray.ctx.close();
+
   /* ---- a drawing that was built is never dropped -------------------------
      Not "the undercarriage sheet has a picture" — that check passed for months
      while the GET sheet had none. The host builds a drawing, puts it on the
