@@ -1152,6 +1152,15 @@
         + (mine.length > 1
             ? '<div class="quiet" style="margin-top:7px;">'
               + T.S("rounds_n", { n: mine.length - 1 }) + '</div>' : "")
+        /* Something the host knows about this sheet that the readings cannot
+           say. It exists for one case and the case matters: a round pulled from
+           the folder prints its photographs by fetching them, and a phone with
+           no signal cannot. Without a line here that sheet is indistinguishable
+           from a round where nobody took a picture — a real value rendered as
+           nothing, which is the failure this project keeps having to fix. Both
+           renderings come from the host, already translated. */
+        + (rec.note ? '<div class="quiet" style="margin-top:7px;">'
+              + T.both(rec.note, rec.noteAlt, "altl") + '</div>' : "")
         + '</div>';
 
       /* A cell is earned by having something to show or something to say. A

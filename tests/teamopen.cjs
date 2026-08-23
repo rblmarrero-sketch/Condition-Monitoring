@@ -247,13 +247,18 @@ const FEED = () => {
      the office's to choose. */
   const q = await p.evaluate(() => {
     const src = String(document.documentElement.innerHTML);
+    /* EVERY place the phone makes a PDF, not a count somebody has to keep in
+       step: pinned at "2" this failed the day a third report button was added,
+       which is the check editing itself away rather than finding anything. */
     return { scale: PHONE_PDF.scale, jpeg: PHONE_PDF.jpeg,
+             makes: (src.match(/CMR\.paginate\(/g) || []).length,
              uses: (src.match(/scale:PHONE_PDF\.scale/g) || []).length };
   });
   note('phone pdf', JSON.stringify(q));
   ok('the phone encodes at Standard, not the office setting', q.scale === 1.8, String(q.scale));
   ok('  and at the quality measured to hold the type', q.jpeg === 0.82, String(q.jpeg));
-  ok('  on both report paths, not one', q.uses === 2, q.uses + ' call sites');
+  ok('  on every report path the phone has, not one of them',
+     q.makes > 1 && q.uses === q.makes, q.uses + ' of ' + q.makes + ' call sites');
 
   console.log('\nclosing it puts the phone back where it was');
   await p.click('#roundClose');

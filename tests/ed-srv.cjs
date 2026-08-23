@@ -18,14 +18,24 @@ function mkDrive(){
   const props={};
   const byId={}, trashed=[];
   const it=a=>{let i=0;return{hasNext:()=>i<a.length,next:()=>a[i++]};};
+  /* Bytes, not a string. A photograph decoded out of an upload is binary, and
+     String(buffer) mangles every byte over 0x7F — so the fake Drive handed back
+     a JPEG that no decoder would open, and every test that went near a real
+     image passed by never looking at one. Keep the buffer; hand out text only
+     when text is what is asked for. */
+  const MIMES={'.jpg':'image/jpeg','.jpeg':'image/jpeg','.png':'image/png',
+               '.webp':'image/webp','.mp4':'video/mp4','.mov':'video/quicktime'};
   function mkFile(name,body,dir,full){
-    const f={_id:'f'+(++seq),_name:name,_body:body,_updated:stamp(),_path:full,_desc:'',
-      getId:()=>f._id,getName:()=>f._name,getSize:()=>f._body.length,
+    const buf=Buffer.isBuffer(body)?body:Buffer.from(String(body));
+    const ext=String(name).slice(String(name).lastIndexOf('.')).toLowerCase();
+    const f={_id:'f'+(++seq),_name:name,_buf:buf,_updated:stamp(),_path:full,_desc:'',
+      get _body(){ return f._buf.toString('utf8'); },
+      getId:()=>f._id,getName:()=>f._name,getSize:()=>f._buf.length,
       getUrl:()=>'https://drive/'+f._id,
       getDescription:()=>f._desc,setDescription:d=>{f._desc=d;return f;},
       getLastUpdated:()=>new Date(f._updated),
-      getBlob:()=>({getDataAsString:()=>f._body,getBytes:()=>Buffer.from(f._body),
-                    getContentType:()=>/\.jpg$/.test(name)?'image/jpeg':'application/json'}),
+      getBlob:()=>({getDataAsString:()=>f._buf.toString('utf8'),getBytes:()=>f._buf,
+                    getContentType:()=>MIMES[ext]||'application/json'}),
       getParents:()=>it(dir?[dir]:[]),
       setTrashed:v=>{ if(v){ trashed.push(full); delete dir._files[name]; } }};
     byId[f._id]=f; return f;
@@ -38,7 +48,7 @@ function mkDrive(){
       getFoldersByName:n=>it(subs[n]?[subs[n]]:[]),
       getFilesByName:n=>it(files[n]?[files[n]]:[]),
       createFolder:n=>subs[n]=mkFolder(n,(full?full+'/':'')+n,dir),
-      createFile:b=>files[b.name]=mkFile(b.name,String(b.bytes),dir,(full?full+'/':'')+b.name)};
+      createFile:b=>files[b.name]=mkFile(b.name,b.bytes,dir,(full?full+'/':'')+b.name)};
     byId[dir._id]=dir; return dir;
   }
   const root=mkFolder('Condition Monitoring','',null);
