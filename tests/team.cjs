@@ -124,9 +124,19 @@ const reset = q => fetch(BASE + '/__reset' + (q || '')).then(r => r.text());
   await p.waitForTimeout(800);
   await p.evaluate(() => showPane('paneSystem'));
   await p.click('#teamRefresh');
-  await p.waitForFunction(() => document.getElementById('teamMsg').textContent.trim().length > 0, null, { timeout: 15000 });
-  ok('tells the user to redeploy instead of erroring', /Deploy|New version/.test(await p.textContent('#teamMsg')),
-     (await p.textContent('#teamMsg')).trim());
+  /* Wait for the ANSWER, not for the first thing that appears. The card says
+     "checking…" the instant it is pressed, so waiting for non-empty text and
+     then reading it twice — once to test, once to print — raced the reply: the
+     test read the interim message and the printout read the real one, so this
+     failed roughly once in five WITH THE CORRECT MESSAGE quoted beside it,
+     which is the worst kind of red there is. One read, of the state that was
+     actually being asserted. */
+  const said = await p.waitForFunction(() => {
+    const s = document.getElementById('teamMsg').textContent.trim();
+    return /Deploy|New version/.test(s) ? s : false;
+  }, null, { timeout: 15000 }).then(h => h.jsonValue())
+    .catch(async () => (await p.textContent('#teamMsg')).trim());
+  ok('tells the user to redeploy instead of erroring', /Deploy|New version/.test(said), said);
 
   console.log(fails.length ? '\nFAILURES:\n  ' + [...new Set(fails)].join('\n  ') : '\nall team-sync checks passed');
   await b.close();

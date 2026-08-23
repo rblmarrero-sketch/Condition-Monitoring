@@ -26,6 +26,7 @@ async function newPage(b) {
   const p = await ctx.newPage();
   p.on('pageerror', e => fails.push('PAGEERROR ' + e.message));
   p.on('console', m => { if (m.type() === 'error' && !/ERR_|Failed to load resource/.test(m.text())) fails.push('CONSOLE ' + m.text()); });
+  p.ctx = ctx;                       // the offline switch belongs to the context
   return p;
 }
 /* Stop the page checking Drive on its own for the duration of a counted
@@ -93,6 +94,20 @@ const connect = (p, path) => p.evaluate(u => {
   console.log('\nreopening the dashboard');
   await quiet(p).catch(()=>{});
   await reset();
+  /* The dashboard deliberately catches up 1200 ms after open, and quiet() only
+     clears the three-minute poller — the boot catch-up is a setTimeout armed
+     at parse time and nothing here could reach it. Every previous attempt to
+     time the read against it (load + 500 ms, then "wait for the cache to
+     land") lost on a busy machine and reported a deliberate request as a
+     defect: three passes green and the fourth red, with nothing wrong.
+
+     So the counted window is enforced instead of timed. The script's own URL
+     is refused at the browser, which is what a reload with no signal looks
+     like — it never reaches the server, so the counters cannot move, and the
+     cache still has to be on screen underneath. Cutting the whole context
+     offline would have been simpler and does not work: the dashboard is not
+     a service-worker app, so the reload itself fails. */
+  await p.route('**/exec*', r => r.abort());
   await p.reload({ waitUntil: 'load' });
   /* Measure the instant the cache is on screen, not after an arbitrary sleep.
      The scheduled catch-up is armed at script-parse time, which is BEFORE
@@ -111,6 +126,7 @@ const connect = (p, path) => p.evaluate(u => {
      JSON.stringify(s));
   ok('the status chip credits Drive', /Drive/.test(await p.textContent('#srcText')),
      (await p.textContent('#srcText')).trim());
+  await p.unroute('**/exec*');
   await p.screenshot({ path: OUT + '/drv-loaded.png' });
 
   /* ---------- 5. Reload everything ---------- */
