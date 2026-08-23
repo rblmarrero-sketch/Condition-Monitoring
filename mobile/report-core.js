@@ -385,6 +385,12 @@
    one thing the reader came for — whether it is getting worse — was nowhere
    on any of them. The rounds before the latest collapse into this. */
 #rptRoot .hist td.d{white-space:nowrap;font-variant-numeric:tabular-nums;}
+/* Hours over rate, in one column. The hours are the number a planner acts on
+   and the rate is what makes them believable, so they travel together or the
+   hours read like a promise. */
+#rptRoot td.life b{display:block;font-size:11px;white-space:nowrap;}
+#rptRoot td.life i{display:block;font-style:normal;font-size:8.5px;color:#5b6670;
+  white-space:nowrap;}
 /* One column per round plus a name, a limit, a change and a bar is eight
    columns of a 760px page, and every heading now carries a second language.
    Left to size itself the table came out 939px wide and the last two columns
@@ -435,6 +441,7 @@
       allok:"All {n} points normal. Nothing to do on this machine.",
       rest_n:"Also checked, nothing to report —",
       c_action:"Action", c_reading:"Reading",
+      c_life:"Life left", c_permm:"mm/1000h", c_h:"h",
       c_lube_prod:"In service", c_lube_evid:"Evidence", c_lube_samp:"Oil sample",
       c_lube_want:"Site standard", c_lube_off:"OFF STANDARD",
       lube_off_n:"{n} compartment(s) hold something other than the site standard.",
@@ -511,6 +518,7 @@
       allok:"\u0412\u0441\u0435 {n} \u0442\u043e\u0447\u0435\u043a \u0432 \u043d\u043e\u0440\u043c\u0435. \u0414\u0435\u0439\u0441\u0442\u0432\u0438\u0439 \u043d\u0435 \u0442\u0440\u0435\u0431\u0443\u0435\u0442\u0441\u044f.",
       rest_n:"\u0422\u0430\u043a\u0436\u0435 \u043f\u0440\u043e\u0432\u0435\u0440\u0435\u043d\u043e, \u0431\u0435\u0437 \u0437\u0430\u043c\u0435\u0447\u0430\u043d\u0438\u0439 \u2014",
       c_action:"\u0414\u0435\u0439\u0441\u0442\u0432\u0438\u0435", c_reading:"\u041f\u043e\u043a\u0430\u0437\u0430\u043d\u0438\u044f",
+      c_life:"\u041e\u0441\u0442\u0430\u0442\u043e\u043a", c_permm:"\u043c\u043c/1000\u0447", c_h:"\u0447",
       c_lube_prod:"\u0417\u0430\u043b\u0438\u0442\u043e", c_lube_evid:"\u041f\u043e\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043d\u0438\u0435", c_lube_samp:"\u041f\u0440\u043e\u0431\u0430 \u043c\u0430\u0441\u043b\u0430",
       c_lube_want:"\u0421\u0442\u0430\u043d\u0434\u0430\u0440\u0442 \u043f\u0440\u0435\u0434\u043f\u0440\u0438\u044f\u0442\u0438\u044f", c_lube_off:"\u041d\u0415 \u041f\u041e \u0421\u0422\u0410\u041d\u0414\u0410\u0420\u0422\u0423",
       lube_off_n:"\u0412 {n} \u0443\u0437\u043b. \u0437\u0430\u043b\u0438\u0442\u043e \u043d\u0435 \u0442\u043e, \u0447\u0442\u043e \u043f\u0440\u0435\u0434\u0443\u0441\u043c\u043e\u0442\u0440\u0435\u043d\u043e \u0441\u0442\u0430\u043d\u0434\u0430\u0440\u0442\u043e\u043c.",
@@ -1276,6 +1284,28 @@
            depends on the part — an idler grows towards its limit and a roller
            shrinks towards one — so the colour comes from the limits, never
            from the sign. */
+        /* How fast, and how long left.
+
+           The arithmetic is NOT done here. It lives in one place - the same
+           function the phone shows at the point of capture - and the host hands
+           it in, so the report and the screen can never quote different numbers
+           for the same part. report-core stays ignorant of it, the way it stays
+           ignorant of the register and of IndexedDB.
+
+           The series is the readings this table is already showing, with each
+           round's date and hour meter beside them. */
+        var f = null;
+        if (typeof ctx.forecast === "function" && last
+            && last.newMM != null && last.condemnMM != null) {
+          var series = [];
+          read.forEach(function (m, j) { var w = m[k];
+            if (w && w.mm != null) series.push({ mm: Number(w.mm),
+              at: runs[j].date, smu: runs[j].smu }); });
+          if (series.length >= 2) {
+            try { f = ctx.forecast({ n: Number(last.newMM), c: Number(last.condemnMM) },
+                                   series); } catch (e) { f = null; }
+          }
+        }
         var d = (last && firstV != null) ? Number(last.mm) - firstV : null;
         var grow = last && last.condemnMM != null && last.newMM != null
           && Number(last.condemnMM) > Number(last.newMM);
@@ -1290,19 +1320,28 @@
           + '<td class="r"><span class="dlt ' + dcls + '">'
             + (d == null ? "—" : (d > 0 ? "+" : "") + (Math.round(d * 10) / 10)) + '</span></td>'
           + '<td class="r n">' + (last && last.pct != null ? '<b>' + esc(last.pct) + '%</b>' : "") + '</td>'
+          /* One column, two lines: the hours are what a planner acts on, the
+             rate is what makes the hours believable. A forecast that cannot be
+             made prints nothing rather than a dash that reads as zero. */
+          + '<td class="r n life">' + (f && f.hours != null
+              ? '<b>' + esc(Math.round(f.hours / 100) * 100) + ' ' + esc(T("c_h")) + '</b>'
+                + (f.rate != null ? '<i>' + esc(Math.round(f.rate * 10) / 10)
+                    + ' ' + esc(T("c_permm")) + '</i>' : "")
+              : "") + '</td>'
           + '<td style="width:56px">' + (last && last.pct != null ? wearBar(last.pct) : "") + '</td></tr>';
       }).join("");
 
       out.push({ nb: false, html: '<div class="sec" style="margin-top:14px;">'
         + '<div class="subhd">' + T.I("trend_t") + ' <span class="muted" style="font-weight:400;">'
         + T.I("trend_sub") + (dropped ? ' · +' + dropped : "") + '</span></div>'
-        + '<table class="mh"><tr><th style="width:' + (232 - Math.max(0, runs.length - 4) * 22) + 'px">'
+        + '<table class="mh"><tr><th style="width:' + (200 - Math.max(0, runs.length - 4) * 22) + 'px">'
         + T.L("c_item") + '</th>'
         + '<th class="n" style="width:72px">' + T.L("c_limit") + '</th>'
         + runs.map(function (r) { return '<th class="r n" style="width:46px">'
             + esc(String(r.date || "").slice(5)) + '</th>'; }).join("")
         + '<th class="r" style="width:58px">' + T.L("c_chg") + '</th>'
         + '<th class="r" style="width:50px">' + T.L("c_worn") + '</th>'
+        + '<th class="r" style="width:64px">' + T.L("c_life") + '</th>'
         + '<th style="width:54px"></th></tr>' + body + '</table></div>' });
     });
     return out;

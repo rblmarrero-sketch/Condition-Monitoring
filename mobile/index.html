@@ -1305,6 +1305,7 @@
         <div class="getread" id="getRead"></div>
       </div>
       <div class="getref" id="getRefLine"></div>
+      <div class="ucfcast" id="getFcast"></div>
       <!-- Where the tool goes and which number to write down. The photograph on
            the map above shows what the part looks like; this shows how it is
            measured, which is the thing a photograph cannot say. -->
@@ -4144,23 +4145,29 @@ function renderUCBase(){
     box.querySelectorAll('[data-b="one"],[data-b="all"]').forEach(x=>{ x.disabled=!okc; });
   });
 }
+/* The condemn reference for whatever is being measured, whichever round it is.
+
+   Three rounds measure a thickness against a limit and all three want the same
+   two numbers out of it - how fast, and how long left. They differ only in
+   where the limit comes from, so that is the only thing this decides. */
+function fcastRef(unit, key){
+  if(bodyType()){ const st=bodyStatus(unit);
+    return st.ok ? BODY.limitFor(st.model, key) : null; }
+  if(getType()) return getRef();
+  return ucRef();
+}
 async function renderUCFcast(){
-  const el=$("ucFcast"); if(!el) return;
+  /* One line, one function, three rounds. The undercarriage had it, the dump
+     body was excluded outright, and ground engaging tools never had it at all -
+     which is the one round where the parts are bought by the pallet and the
+     rate is the whole procurement argument. */
+  const el = getType() ? $("getFcast") : $("ucFcast");
+  if(!el) return;
   const key=curItem, unit=curEquip;
   const done=(txt,cls)=>{ if(key!==curItem) return;
     el.textContent=txt||""; el.className="ucfcast"+(cls?" "+cls:""); };
   if(!key||!unit) return done("");
-  /* The dump body was excluded from this outright, back when it had no condemn
-     limit to forecast towards. It has one now - 20 mm on, not serviceable
-     below 3 - and a liner is the fastest-wearing steel on the property, so it
-     is the one place a wear RATE earns its keep: how many millimetres went
-     since the last measurement, and how many hours are left at that rate.
-     WEAR.forecast never knew anything about undercarriage; it takes a limit
-     and a series of readings, and the body has both. */
-  const ref = bodyType()
-    ? (function(){ const st=bodyStatus(unit);
-        return st.ok ? BODY.limitFor(st.model, key) : null; })()
-    : ucRef();
+  const ref = fcastRef(unit, key);
   const mm=posRO().mm;
   /* No condemn figure, nothing to forecast towards. Note that a BORROWED or
      DISPUTED "new" does not stop this — the forecast never uses "new". */
@@ -4171,8 +4178,8 @@ async function renderUCFcast(){
      a challenge is the app arguing with itself. Silence until the reading is
      settled, one way or the other. */
   /* implausible() is the undercarriage's own sanity rule and knows its
-     reference shape. A body reading is checked by the round itself. */
-  if(!bodyType() && WEAR.implausible(ref, mm)) return done("");
+     reference shape. The body round checks its readings itself. */
+  if(!bodyType() && !getType() && WEAR.implausible(ref, mm)) return done("");
   const rows=await ucPrevReadings(unit);
   const series=(rows["#"+key]||[]).map(r=>({mm:r.mm, at:r.d, smu:r.smu}))
     .concat([{mm:Number(mm), at:$("date").value, smu:$("smu").value.trim()}]);
@@ -4289,6 +4296,10 @@ function renderGET(){
   renderGETFig();
   renderGuide("getGuide", row?row[1]:"", getScope());
   const p=posRO(), mm=(p.mm==null?null:Number(p.mm));
+  /* GET is bought by the pallet and changed on backshift, so "how fast" is the
+     whole procurement argument - and it was the one measured round with no
+     forecast at all. */
+  renderUCFcast();
   if(mm==null || !ref || !window.WEAR){ read.innerHTML=""; return; }
   const pct=WEAR.wear(ref, mm);
   if(pct==null){ read.innerHTML=""; return; }
@@ -7032,6 +7043,10 @@ $("roundRpt").onclick=async ()=>{
       sections:CMR.sections({ lang, mode:"unit", title:t("rep_title"),
         titleAlt:inOtherLang(()=>t("rep_title")), stamp:new Date(),
         sevLabel:s=>t("sev_"+s), sevLabelAlt:s=>inOtherLang(()=>t("sev_"+s)),
+        /* The report asks for the forecast rather than working one out, so the
+           sheet and the screen can never quote different hours for the same
+           part. One implementation, in wear.js. */
+        forecast:(ref,series)=>(window.WEAR?WEAR.forecast(ref,series):null),
         records:[norm] }),
       jsPDF:window.jspdf.jsPDF, html2canvas:window.html2canvas,
       scale:PHONE_PDF.scale, jpeg:PHONE_PDF.jpeg,
@@ -7045,6 +7060,9 @@ async function buildReportSections(){
   return CMR.sections({ lang, title:t("rep_title"),
     titleAlt:inOtherLang(()=>t("rep_title")), stamp:new Date(),
     sevLabel:s=>t("sev_"+s), sevLabelAlt:s=>inOtherLang(()=>t("sev_"+s)),
+    /* Both call sites, or the fleet report and the single-machine sheet quote
+       different hours for the same part - the drift this module exists to stop. */
+    forecast:(ref,series)=>(window.WEAR?WEAR.forecast(ref,series):null),
     records: await rptRecords() });
 }
 $("reportBtn").onclick=async ()=>{
