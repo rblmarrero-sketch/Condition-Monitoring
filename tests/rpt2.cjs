@@ -208,6 +208,47 @@ const SEED = `(async () => {
   ok('a magnetic plug round draws no machine',
     !(sec.filter(h => h.includes('TK149') && /class="machhd"/.test(h))[0] || '').includes('ucmaps'));
 
+  console.log('\n  the numbers on it are numbers it can defend');
+  /* Two things a sheet said that were not true.
+
+     "0 of 11 points worth watching. Plan the work." The verdict counts grades,
+     severities AND wear bands; the number in the sentence counted only wear
+     bands. A graded round with nothing over a limit announced zero findings and
+     told the reader to plan work for them.
+
+     And "-688 %", printed beside a millimetre. A percentage below zero is a
+     part thicker than new — the wrong reference, the wrong point, or a typo —
+     and the sheet stated it as a fact in a document that goes to a customer. */
+  const nums = await p.evaluate(async () => {
+    const one = (over) => ({
+      equip:'TK149', clsLabel:'HAUL TRUCK', model:'M', type:'GET', typeLabel:'GET',
+      date:'2026-08-20', by:'S', sup:'A', smu:'1', wear:true, items:[
+        /* graded, and nowhere near a limit: the verdict is "watch" and the
+           count has to agree with it */
+        { key:'A', name:'Tooth 1', grade:'C', sev:'DEG', w:{ mm:200, newMM:320,
+          condemnMM:130, pct:63, band:'done' } },
+        { key:'B', name:'Tooth 2', grade:'A', sev:'NOF', w:{ mm:300, newMM:320,
+          condemnMM:130, pct:10, band:'done' } },
+        /* thicker than new */
+        { key:'C', name:'Shroud', grade:'A', sev:'NOF', w:{ mm:158, newMM:60,
+          condemnMM:25, pct:over, band:'done' } } ] });
+    const html = CMR.sections({ lang:'en', mode:'unit', title:'x', titleAlt:'x',
+      stamp:new Date(), sevLabel:s => s, sevLabelAlt:s => s,
+      records:[one(-280)] }).map(s => s.html).join('');
+    return { verdict: (html.match(/class="verdict[^"]*"[^>]*>([\s\S]*?)<\/div>/) || [])[1]
+                        .replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim(),
+             neg: /-\s*\d+\s*%/.test(html),
+             mm: html.indexOf('158') >= 0,
+             ref: html.indexOf('60 → 25 mm') >= 0,
+             good: html.indexOf('63%') >= 0 };
+  });
+  ok('a graded round counts its findings, not zero of them',
+     /1 of 3/.test(nums.verdict), nums.verdict.slice(0, 60));
+  ok('no percentage below zero reaches the paper', !nums.neg);
+  ok('  but the millimetre does, with the reference beside it',
+     nums.mm && nums.ref, 'reading and limits kept');
+  ok('  and a percentage that means something still prints', nums.good);
+
   console.log('\n  the sections are numbered in the order they are read');
   const numbered = sec.map(h => (h.match(/class="n">(\d+)<\/span><span class="h2">([^<]+)/) || []))
     .filter(m => m.length).map(m => m[1] + ' ' + m[2].trim());

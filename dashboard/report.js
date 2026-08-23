@@ -152,7 +152,16 @@
     return WEAR.escMap(y && y !== x ? `${x} / ${y}` : x);
   }
 
+  /* Same reasoning as the phone's rptMap: a drawing is the best part of the
+     sheet and it is not worth the sheet. Every branch below reads a register
+     entry, a wear profile or a body model, any of which can be absent on a
+     browser holding a half-loaded cache — and thrown, that used to take the
+     whole export down. */
   function reportMap(rec, photo) {
+    try { return reportMapInner(rec, photo); }
+    catch (e) { return { html: "", key: null }; }
+  }
+  function reportMapInner(rec, photo) {
     if (rec.type === "TB") return { html: bodyMapHTML(rec), key: null };
     const a = (typeof ASSET_BY !== "undefined" && ASSET_BY[rec.equip]) || null;
     if (!a || !window.WEAR) return { html: "", key: null };

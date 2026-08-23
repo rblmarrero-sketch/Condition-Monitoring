@@ -942,12 +942,22 @@
   CMR.scan = scan;
 
   /* The one line a machine gets in its own header — what this round concluded. */
+  /* ONE definition of "this point is a finding", because the verdict and the
+     number in the verdict were computed from two different ones. The sentence
+     counted only points with a wear band, while the verdict itself also counts
+     grades and severities — so a graded round with no measurement over its
+     limit announced "0 of 11 points worth watching. Plan the work." Zero of
+     eleven, and plan the work. */
+  function isAct(it){ return it.grade==="X"||it.sev==="CRI"||(it.w&&it.w.band==="act"); }
+  function isWatch(it){ return it.grade==="C"||it.grade==="B"||it.sev==="DEG"
+                            ||it.sev==="INC"||(it.w&&it.w.band==="watch"); }
+  function flagged(rec){ return (rec.items||[]).filter(function(it){
+    return isAct(it)||isWatch(it); }); }
   function verdict(rec){
     return rec.items.reduce(function(a,it){
-      if(it.grade==="X"||it.sev==="CRI"||(it.w&&it.w.band==="act")) return "act";
+      if(isAct(it)) return "act";
       if(a==="act") return a;
-      if(it.grade==="C"||it.grade==="B"||it.sev==="DEG"||it.sev==="INC"
-         ||(it.w&&it.w.band==="watch")) return "watch";
+      if(isWatch(it)) return "watch";
       return a; }, "ok");
   }
 
@@ -1261,7 +1271,7 @@
       var unread = rec.items.filter(function (it) { return it.w && it.w.mm == null; }).length;
       var verd = (vc === "ok" && unread)
         ? T.S("verdict_part", { m: rec.items.length - unread, of: rec.items.length, n: unread })
-        : T.S("verdict_" + vc, { n: over.length, of: rec.items.length })
+        : T.S("verdict_" + vc, { n: flagged(rec).length, of: rec.items.length })
           + (unread ? T.S("unread_n", { n: unread, of: rec.items.length }) : "");
       var maps = CMR.mapBlock(T, rec.mapHTML, 8, rec.zones, rec.mapKey);
       var top = '<div class="sec">' + head
@@ -1593,9 +1603,38 @@
   }
 
   /* ======================================================================== */
+  /* A percentage below zero is a part thicker than new, which is not wear —
+     it is a reading against the wrong reference, or the wrong point measured,
+     or a typo. The sheet printed it: "-688 %" beside a millimetre, in a
+     document that goes to a customer.
+
+     Nulled rather than clamped, deliberately. Clamping to 0 % would print "no
+     wear" for a reading that is plainly wrong, which is a confident lie where
+     this is only an absence — and every consumer downstream already guards on
+     `pct != null`, so one change here makes the column, the bar, the banner and
+     the history table all do the right thing. The MILLIMETRE still prints, with
+     the reference beside it, so nothing is hidden from whoever reads the row. */
+  function sane(recs) {
+    return recs.map(function (rec) {
+      if (!(rec.items || []).some(function (it) {
+            return it.w && it.w.pct != null && Number(it.w.pct) < 0; })) return rec;
+      var copy = {}, k;
+      for (k in rec) copy[k] = rec[k];
+      copy.items = rec.items.map(function (it) {
+        if (!it.w || it.w.pct == null || Number(it.w.pct) >= 0) return it;
+        var w = {}, c = {}, x;
+        for (x in it.w) w[x] = it.w[x];
+        w.pct = null;
+        for (x in it) c[x] = it[x];
+        c.w = w;
+        return c;
+      });
+      return copy;
+    });
+  }
   CMR.sections = function (ctx) {
     var T = makeT(ctx.lang, ctx.bi !== false);
-    var recs = ctx.records.slice().sort(function(a,b){
+    var recs = sane(ctx.records).sort(function(a,b){
       return String(a.date||"").localeCompare(String(b.date||""))
         || String(a.equip).localeCompare(String(b.equip)); });
     var X = scan(recs), secs = [];
@@ -1776,7 +1815,9 @@
       var over = isWear ? rec.items.filter(function(it){ return it.w && (it.w.band==="act"||it.w.band==="watch"); })
         .sort(function(a,b){ return (Number(b.w.pct)||0)-(Number(a.w.pct)||0); }) : [];
       var overAct = over.filter(function(it){ return it.w.band==="act"; });
-      var vn = isWear ? over.length : notable.length;
+      /* Same count the verdict itself is made of — see flagged(). A measured
+         round that is graded rather than over a limit used to report zero. */
+      var vn = flagged(rec).length;
 
       var m = '<div class="sec"><div class="mach">'
         + (first ? '<div class="sechd" style="border:0;padding:0;margin:0 0 11px;">'

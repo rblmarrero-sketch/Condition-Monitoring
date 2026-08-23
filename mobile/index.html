@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=129">
+<link rel="manifest" href="manifest.webmanifest?v=130">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=129">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=129">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=129">
+<link rel="apple-touch-icon" href="icon-192.png?v=130">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=130">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=130">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1690,27 +1690,27 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=129"></script>
-<script src="upload-defaults.js?v=129"></script>
-<script src="hme.js?v=129"></script>
-<script src="mp-fc.js?v=129"></script>
-<script src="hme-cascade.js?v=129"></script>
-<script src="assets.js?v=129"></script>
-<script src="temp-limits.js?v=129"></script>
-<script src="wear.js?v=129"></script>
-<script src="wear-figs.js?v=129"></script>
-<script src="wear-map.js?v=129"></script>
-<script src="machine-photos.js?v=129"></script>
-<script src="machine-fig.js?v=129"></script>
-<script src="get.js?v=129"></script>
-<script src="uc-points.js?v=129"></script>
-<script src="inspect-guide.js?v=129"></script>
-<script src="get-figs.js?v=129"></script>
-<script src="body-points.js?v=129"></script>
-<script src="body-map.js?v=129"></script>
-<script src="lube.js?v=129"></script>
-<script src="lube2027.js?v=129"></script>
-<script src="report-core.js?v=129"></script>
+<script src="native.js?v=130"></script>
+<script src="upload-defaults.js?v=130"></script>
+<script src="hme.js?v=130"></script>
+<script src="mp-fc.js?v=130"></script>
+<script src="hme-cascade.js?v=130"></script>
+<script src="assets.js?v=130"></script>
+<script src="temp-limits.js?v=130"></script>
+<script src="wear.js?v=130"></script>
+<script src="wear-figs.js?v=130"></script>
+<script src="wear-map.js?v=130"></script>
+<script src="machine-photos.js?v=130"></script>
+<script src="machine-fig.js?v=130"></script>
+<script src="get.js?v=130"></script>
+<script src="uc-points.js?v=130"></script>
+<script src="inspect-guide.js?v=130"></script>
+<script src="get-figs.js?v=130"></script>
+<script src="body-points.js?v=130"></script>
+<script src="body-map.js?v=130"></script>
+<script src="lube.js?v=130"></script>
+<script src="lube2027.js?v=130"></script>
+<script src="report-core.js?v=130"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -6336,28 +6336,42 @@ async function teamPhotosFor(g,rec,say){
   /* The uploader's own rule, because the uploader is this same app. */
   const isComp = usesRegister(rec.type) && rec.equip && !!componentsForUnit(rec.equip);
   const dev=String(rec.dev||"");
-  const want={};                                   // lowercased name -> {key, n}
-  (rec.items||[]).forEach(it=>{
-    /* BOTH forms of the name, not the one this phone would write.
+  /* Index the RECORD, then read the folder against it — not the other way
+     round. Building every name a photograph could have meant, per position,
+     eleven suffixes times four extensions times two device variants times two
+     naming rules: on a sixty-three station tray round that is eleven thousand
+     strings to compare against a listing of about sixty files. Two base names
+     per position and a parse per file is the same answer for a hundredth of
+     the work, and it is the phone doing it.
 
-       The uploader decides between "UNIT.KEY" and "UNIT_KEY" on whether the
-       round walks the register AND whether that unit has components — and the
-       phone asking is not the phone that filed them, on a build that may not
-       have had the same rule. Finding a file is a lookup, not a contract: the
-       folder listing is already in hand, so offering both costs a string
-       compare and finds the picture whichever rule wrote it. The dashboard was
-       fixed the same way and for the same reason. */
-    for(const comp of [isComp, !isComp])
-      for(let n=0;n<=10;n++) for(const ext of ["jpg","jpeg","png","webp"]){
-        const base=fileName(rec.equip,it.key,rec.date,ext,suffix,comp);
-        const nm = n===0 ? base : base.replace("."+ext,"_"+n+"."+ext);
-        if(!want[nm.toLowerCase()]) want[nm.toLowerCase()]={key:it.key,n};
-        /* Two phones on the same unit on the same day: the folder keeps both,
-           the loser under "~DEVICE". Ask for this record's own copy too. */
-        if(dev){ const d=nm.replace("."+ext,"~"+dev+"."+ext).toLowerCase();
-                 if(!want[d]) want[d]={key:it.key,n}; }
-      }
+     BOTH base forms where both are possible. The uploader chooses between
+     "UNIT.KEY" and "UNIT_KEY" on whether the round walks the register AND
+     whether that unit has components — and the phone asking is not the phone
+     that filed them, on a build that may not have had the same rule. Finding a
+     file is a lookup, not a contract. The dashboard was fixed the same way. */
+  const byBase={};                                  // lowercased base -> key
+  (rec.items||[]).forEach(it=>{
+    for(const comp of (usesRegister(rec.type) ? [isComp, !isComp] : [false])){
+      const b=fileName(rec.equip,it.key,rec.date,"x",suffix,comp).slice(0,-2);
+      if(!(b.toLowerCase() in byBase)) byBase[b.toLowerCase()]=it.key;
+    }
   });
+  /* <base>[_n][~DEVICE].<ext> — the shape buildPackage() writes. The device
+     copy exists because two phones inspected the same unit on the same day and
+     the script kept both rather than letting the second overwrite the first. */
+  const EXT=/\.(jpe?g|png|webp)$/i;
+  const match=name=>{
+    const s0=String(name||"");
+    if(!EXT.test(s0)) return null;
+    let b=s0.replace(EXT,"");
+    const at=b.lastIndexOf("~");
+    if(at>0) b=b.slice(0,at);                       // ~DEVICE
+    let n=0;
+    const m=/_(\d{1,2})$/.exec(b);
+    if(m){ n=Number(m[1]); b=b.slice(0,m.index); }
+    const key=byBase[b.toLowerCase()];
+    return key===undefined ? null : {key,n};
+  };
   /* The round's OWN folder first, and only that. The destination template puts
      one round in one folder — {TYPE}/{UNIT}/{YYYY-MM-DD} — so this is a listing
      of four or five files instead of every photograph the site has ever taken,
@@ -6369,7 +6383,7 @@ async function teamPhotosFor(g,rec,say){
     if(!idx) return null;
     const out=[], seen={};
     (idx.files||[]).forEach(f=>{
-      const w=want[String(f.name||"").toLowerCase()];
+      const w=match(f.name);
       if(w && !seen[f.name]){ seen[f.name]=1; out.push({...w,id:f.id,name:f.name}); }
     });
     return out;
@@ -6973,7 +6987,17 @@ async function needMap(){
   await loadLib("wear-map.js");
   return !!(window.WEAR && WEAR.reportUCMap);
 }
+/* A drawing is the best part of the sheet and it is not worth the sheet.
+   Every branch below is data-driven — a register entry, a wear profile, a body
+   model — and any of them can be absent or malformed on a phone that synced
+   half a build. Thrown, that took the whole report down and the inspector got
+   "Report error" and no document at all. Caught, they get every reading, every
+   photograph, and a line saying the picture could not be built. */
 function rptMap(rec,items,photo){
+  try{ return rptMapInner(rec,items,photo); }
+  catch(e){ return { html:"", key:null, why:"nodata" }; }
+}
+function rptMapInner(rec,items,photo){
   if(rec.type==="TB"){ const h=rptBodyMap(rec,items);
     return { html:h, key:null, why:h?"":"nodata" }; }
   if(!window.WEAR) return { html:"", key:null, why:"nomodule" };
@@ -6997,12 +7021,21 @@ function rptMap(rec,items,photo){
     sideLabel:sd=>WEAR.escMap(t(sd==="L"?"uc_left":"uc_right")) });
   return u ? { html:CMR.fitMap(u.html), key:u.key } : { html:"", key:null, why:"nodata" };
 }
-/* One line, in both languages, for a sheet that could not draw its machine. */
+/* Everything the sheet has to admit about itself, in both languages.
+
+   ADDS, never replaces. A round can be missing its drawing AND its
+   photographs — a phone that could not load the map module is exactly the
+   phone that cannot reach the folder — and the second note used to overwrite
+   the first, so the sheet confessed to one of the two and the reader had no
+   idea about the other. */
+function addNote(o,key){
+  if(!key) return;
+  o.note=[o.note,t(key)].filter(Boolean).join(" ");
+  o.noteAlt=[o.noteAlt,inOtherLang(()=>t(key))].filter(Boolean).join(" ");
+}
 function mapNote(o,why){
   if(!why) return;
-  const k="rep_nomap_"+(why==="noref"?"noref":why==="nomodule"?"nomodule":"nodata");
-  o.note=[o.note,t(k)].filter(Boolean).join(" ");
-  o.noteAlt=[o.noteAlt,inOtherLang(()=>t(k))].filter(Boolean).join(" ");
+  addNote(o,"rep_nomap_"+(why==="noref"?"noref":why==="nomodule"?"nomodule":"nodata"));
 }
 /* Every round in the store, or one of them.
    Filtering here rather than after the fact is not tidiness: normalising a
@@ -7247,14 +7280,17 @@ $("roundRpt").onclick=async ()=>{
        taken, or the office quietly concludes the inspector took none. */
     const gas=loadDests().find(d=>d.id==="gas" && d.url);
     if(gas && navigator.onLine){
-      const got=await teamPhotosFor(gas, rec,
-        (i,n)=>{ const el=$("dlgMsg"); if(el) el.textContent=t("rep_photo",{i:Math.min(i+1,n),n}); });
+      /* Same reasoning as rptMap: the pictures are worth fetching and not worth
+         the document. A malformed reply, a blob the decoder will not take —
+         none of that is a reason for the inspector to get no sheet. */
+      let got=null;
+      try{
+        got=await teamPhotosFor(gas, rec,
+          (i,n)=>{ const el=$("dlgMsg"); if(el) el.textContent=t("rep_photo",{i:Math.min(i+1,n),n}); });
+      }catch(e){ got=null; }
       if(got) norm.items.forEach(it=>{ if(got[it.key]&&got[it.key].length) it.photos=got[it.key]; });
-      else { norm.note=t("rep_nophoto_net"); norm.noteAlt=inOtherLang(()=>t("rep_nophoto_net")); }
-    } else {
-      const k=gas ? "rep_nophoto_off" : "rep_nophoto_nodrive";
-      norm.note=t(k); norm.noteAlt=inOtherLang(()=>t(k));
-    }
+      else addNote(norm,"rep_nophoto_net");
+    } else addNote(norm, gas ? "rep_nophoto_off" : "rep_nophoto_nodrive");
     $("dlgMsg").textContent=t("rep_building")[1];
     const doc=await CMR.paginate({
       sections:CMR.sections({ lang, mode:"unit", title:t("rep_title"),
@@ -7442,7 +7478,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="129";
+const BUILD="130";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

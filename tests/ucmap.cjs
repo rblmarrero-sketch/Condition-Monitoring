@@ -265,6 +265,25 @@ const enter = async (p, v) => { await p.fill('#ucMM', String(v)); await p.waitFo
              ru: /схем/i.test(html) };
   });
   ok('with the drawing module gone there is no drawing', !mute.map);
+  /* And a drawing that THROWS — a half-synced register, a body model that is
+     not there — must cost the drawing and nothing else. Before, it took the
+     whole report with it: "Report error" and no document at all, when every
+     reading and every photograph was sitting right there ready to print. */
+  const blew = await paper.p.evaluate(async () => {
+    const real = window.ucStatus;
+    window.ucStatus = () => { throw new Error('half a build'); };
+    let secs = null, err = '';
+    try { secs = await buildReportSections('ucm'); } catch (e) { err = String(e.message || e); }
+    window.ucStatus = real;
+    const html = secs ? secs.map(x => x.html).join('') : '';
+    return { err, pages: secs ? secs.length : 0,
+             readings: (html.match(/class="meas"/g) || []).length,
+             said: /machine drawing could not be built/i.test(html) };
+  });
+  ok('a drawing that throws does not take the report with it',
+     !blew.err && blew.pages > 0, blew.err || blew.pages + ' sections');
+  ok('  the readings still print', blew.readings > 0, blew.readings + ' grids');
+  ok('  and the sheet says the picture could not be built', blew.said);
   ok('  and the sheet says so, instead of losing it quietly', mute.en, 'note printed');
   ok('  in both languages, like everything else on it', mute.en && mute.ru);
   await paper.ctx.close();
