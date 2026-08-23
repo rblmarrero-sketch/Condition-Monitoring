@@ -33,6 +33,16 @@
 (function (W) {
   'use strict';
   var VB_W = 640, VB_H = 330;
+  /* The phone draws this landscape at 640x330 because it has to fit the slot
+     above the reading sheet. On PAPER there is no such slot, and the drawing is
+     the thing a superintendent actually reads - so the report asks for a taller
+     box (o.vh) and for the millimetres to be printed INSIDE each station
+     (o.values). Nothing about the phone's map changes.
+
+     Height is what buys the room: the stations are 3.6% apart vertically and
+     3.1% apart horizontally, so at 330 tall a station has under 12 units of
+     vertical space and a 6-unit dot already fills it edge to edge. Stretching
+     the box vertically is the only axis that opens up. */
   /* Drawn back to front: floor, then the panels folded off it, so a panel's
      edge overlaps the floor's rather than the other way round. */
   var ORDER = ['FLR1', 'FLR2', 'FLR3', 'TAIL', 'FRONT', 'LEFT', 'RIGHT'];
@@ -58,7 +68,11 @@
      stay one word for the reason above — the key goes beside the picture. */
   W.bodyFaces = NAME;
 
-  function px(p) { return [p[0] / 100 * VB_W, p[1] / 100 * VB_H]; }
+  /* The drawing's own height, for the one call that asks for a taller box.
+     Set at the top of each render and read by px(); single-threaded rendering,
+     one drawing at a time, so a closure per call would buy nothing but noise. */
+  var vbH = VB_H;
+  function px(p) { return [p[0] / 100 * VB_W, p[1] / 100 * vbH]; }
   function poly(pts) {
     return pts.map(function (p, i) { var q = px(p);
       return (i ? 'L' : 'M') + q[0].toFixed(1) + ' ' + q[1].toFixed(1); }).join(' ') + ' Z';
@@ -82,8 +96,9 @@
     var B = G.BODY, id = o.model || 'HM400';
     if (!B || !B.of(id)) return '';
     var s = [], lang = o.lang || 'en';
+    vbH = Number(o.vh) > 0 ? Number(o.vh) : VB_H;
 
-    s.push('<svg class="bodymap" viewBox="0 0 ' + VB_W + ' ' + VB_H +
+    s.push('<svg class="bodymap" viewBox="0 0 ' + VB_W + ' ' + vbH +
            '" preserveAspectRatio="xMidYMid meet" role="group" aria-label="' +
            (lang === 'ru' ? 'Кузов и точки замера' : 'Tray and its measurement stations') + '">');
 
@@ -171,7 +186,20 @@
          undercarriage round already uses for a number covering two bands. */
       s.push('<g class="bm-p' + (st ? ' ' + st : '') + (p.k === o.sel ? ' sel' : '') +
              '" data-pt="' + p.k + '" pointer-events="none" aria-hidden="true">');
-      s.push('<circle class="bm-dot" cx="' + q[0].toFixed(1) + '" cy="' + q[1].toFixed(1) + '" r="6"/>');
+      var val = o.values ? o.values[p.k] : null;
+      s.push('<circle class="bm-dot" cx="' + q[0].toFixed(1) + '" cy="' + q[1].toFixed(1)
+             + '" r="' + (val == null ? 6 : 8.6) + '"/>');
+      /* The number goes in the dot, not beside it: sixty-three labels floating
+         over a field of dots is the diagram nobody can read, and that is why
+         there were none. Inside, each one is anchored to the thing it measures.
+         Whole millimetres - a decimal doubles the width of every station for
+         precision the drawing is not the place for. The table keeps the exact
+         figure, and the COLOUR is computed from the exact figure too, so
+         rounding never moves a station across the limit. */
+      if (val != null)
+        s.push('<text class="bm-val" pointer-events="none" x="' + q[0].toFixed(1)
+               + '" y="' + (q[1] + 3.1).toFixed(1) + '" text-anchor="middle">'
+               + val + '</text>');
       s.push('</g>');
     });
 
@@ -219,7 +247,7 @@
         var bx = cand[0][0], by = cand[0][1];
         for (var ci = 0; ci < cand.length; ci++) {
           var X = cand[ci][0], Y = cand[ci][1];
-          if (X < 2 || X + w > VB_W - 2 || Y < 2 || Y + h > VB_H - 2) continue;
+          if (X < 2 || X + w > VB_W - 2 || Y < 2 || Y + h > vbH - 2) continue;
           var clash = others.some(function (q) {
             return q[0] > X - 7 && q[0] < X + w + 7 && q[1] > Y - 7 && q[1] < Y + h + 7; });
           if (!clash) { bx = X; by = Y; break; }

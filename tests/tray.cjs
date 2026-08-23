@@ -484,6 +484,54 @@ const put = (p, k, v) => p.evaluate(a => { pickComponent(a[0]);
   ok('naming the tail by its thinnest station', rpt && /3\.5/.test(rpt.row) && /F62/.test(rpt.row),
     rpt && rpt.row.replace(/\|+/g, ' ').trim());
 
+  /* ---- 8b. and the printed drawing can actually be read ----------------- */
+  /* A tray is sixty-three stations on one picture. Beside a column of legend
+     it came out 464 px wide, which put the millimetre inside each station at
+     under 5 px tall - printed, present, and useless. So the drawing owns the
+     width of the sheet and the key goes under it, and these four checks are
+     what stops that quietly reverting: the numbers are there, they are whole
+     millimetres, the drawing is most of the page, and no two stations overlap.
+
+     The width check is the one that fails on the old layout, so it is written
+     against the sheet rather than a pixel count nobody would maintain. */
+  console.log('\nthe printed tray is big enough to read');
+  const paper = await p.evaluate(async () => {
+    const recs = (await rptRecords()).filter(r => r.type === 'TB');
+    const secs = CMR.sections({ lang:'en', title:'x', titleAlt:'x', stamp:new Date(),
+      mode:'unit', sevLabel:s => s, sevLabelAlt:s => s,
+      forecast:(ref, series) => WEAR.forecast(ref, series), records:recs });
+    const st = document.createElement('style'); st.textContent = CMR.CSS;
+    const host = document.createElement('div');
+    host.id = 'rptRoot';
+    host.style.cssText = 'position:absolute;left:-4000px;top:0;width:760px;background:#fff';
+    document.body.appendChild(st); document.body.appendChild(host);
+    host.innerHTML = secs.map(x => x.html).join('\n');
+    const svg = host.querySelector('svg.bodymap');
+    const dots = [...host.querySelectorAll('.bm-dot')].map(c => {
+      const r = c.getBoundingClientRect();
+      return [r.x + r.width / 2, r.y + r.height / 2, r.width]; });
+    let near = 1e9, dia = 0;
+    for (let i = 0; i < dots.length; i++) { dia = Math.max(dia, dots[i][2]);
+      for (let j = i + 1; j < dots.length; j++) {
+        const dx = dots[i][0] - dots[j][0], dy = dots[i][1] - dots[j][1];
+        near = Math.min(near, Math.sqrt(dx * dx + dy * dy)); } }
+    const vals = [...host.querySelectorAll('.bm-val')].map(t => t.textContent);
+    const out = { w: svg ? svg.getBoundingClientRect().width : 0, sheet: host.clientWidth,
+                  dots: dots.length, vals: vals.length, dia, near,
+                  decimal: vals.filter(v => /[.,]/.test(v)).length,
+                  measured: recs[0].items.filter(it => it.w && it.w.mm != null && it.w.mm !== '').length };
+    host.remove(); st.remove();
+    return out;
+  });
+  ok('every station that was measured prints its millimetres inside itself',
+    paper.vals > 0 && paper.vals === paper.measured, paper.vals + ' of ' + paper.measured);
+  ok('  as whole millimetres, because a decimal doubles the width of a dot',
+    paper.vals > 0 && paper.decimal === 0, paper.decimal + ' with a decimal point');
+  ok('the drawing gets the width of the sheet, not a column beside a legend',
+    paper.w / paper.sheet >= 0.75, (paper.w / paper.sheet).toFixed(2) + ' of the sheet');
+  ok('and no two stations sit on top of each other',
+    paper.near >= paper.dia, paper.near.toFixed(1) + ' px apart, ' + paper.dia.toFixed(1) + ' px across');
+
   /* ---- 9. history is per round, not per machine ------------------------- */
   console.log('\nlast time means last time on THIS round');
   ok('a tray round does not read an undercarriage round as its own history',

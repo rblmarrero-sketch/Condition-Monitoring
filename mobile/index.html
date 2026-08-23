@@ -6787,8 +6787,17 @@ function rptBodyMap(rec,items){
     '<td class="num">'+r.got+'/'+r.z.n+'</td>'+
     '<td class="num">'+(r.worst?fmtMM(r.worst.mm):"—")+'</td>'+
     '<td>'+(r.worst?esc(r.worst.k):"—")+'</td></tr>').join("");
+  /* On paper the drawing IS the report - a superintendent reads the shape of
+     the wear before they read any table - so it gets a taller box and the
+     millimetres printed inside every station. Whole millimetres: a decimal
+     doubles the width of every dot for precision that belongs in the table,
+     and the colour is still computed from the exact figure, so rounding can
+     never move a plate across the condemn limit. */
+  const vals={};
+  Object.keys(mm).forEach(k=>{ const v=Number(mm[k]);
+    if(isFinite(v)) vals[k]=String(Math.round(v)); });
   return CMR.fitMap('<div class="ucmapwrap">'+
-    bodyMap({ model:id, lang:lang, sel:"", tag:false,
+    bodyMap({ model:id, lang:lang, sel:"", tag:false, vh:540, values:vals,
               state:k=>by[k]||"", zoneState:z=>(zs.find(x=>x.z.k===z)||{}).state||"" })+
     '</div>')+
     '<table class="tbzone"><thead><tr><th>'+esc(t("tb_rpt_zone"))+'</th>'+
@@ -7197,7 +7206,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="120";
+const BUILD="121";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
