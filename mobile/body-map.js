@@ -42,7 +42,15 @@
      Height is what buys the room: the stations are 3.6% apart vertically and
      3.1% apart horizontally, so at 330 tall a station has under 12 units of
      vertical space and a 6-unit dot already fills it edge to edge. Stretching
-     the box vertically is the only axis that opens up. */
+     the box vertically is the only axis that opens up.
+
+     And it opens up only so far. Past about 640 the closest pair of stations
+     stops being a vertical one and becomes H11/F11, which sit 19.71 units
+     apart ACROSS the drawing - a distance the box height cannot change. That
+     is the ceiling on every dot on this map: 9.85 units of radius, less the
+     stroke, which is why the dot is 8.6 and not larger however tall the box
+     is asked to be. A taller box past that point buys air between the rows,
+     not a bigger station. */
   /* Drawn back to front: floor, then the panels folded off it, so a panel's
      edge overlaps the floor's rather than the other way round. */
   var ORDER = ['FLR1', 'FLR2', 'FLR3', 'TAIL', 'FRONT', 'LEFT', 'RIGHT'];

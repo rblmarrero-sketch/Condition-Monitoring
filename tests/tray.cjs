@@ -505,7 +505,7 @@ const put = (p, k, v) => p.evaluate(a => { pickComponent(a[0]);
     host.id = 'rptRoot';
     host.style.cssText = 'position:absolute;left:-4000px;top:0;width:760px;background:#fff';
     document.body.appendChild(st); document.body.appendChild(host);
-    host.innerHTML = secs.map(x => x.html).join('\n');
+    host.innerHTML = secs.map(x => '<div class="secwrap">' + x.html + '</div>').join('');
     const svg = host.querySelector('svg.bodymap');
     const dots = [...host.querySelectorAll('.bm-dot')].map(c => {
       const r = c.getBoundingClientRect();
@@ -516,9 +516,28 @@ const put = (p, k, v) => p.evaluate(a => { pickComponent(a[0]);
         const dx = dots[i][0] - dots[j][0], dy = dots[i][1] - dots[j][1];
         near = Math.min(near, Math.sqrt(dx * dx + dy * dy)); } }
     const vals = [...host.querySelectorAll('.bm-val')].map(t => t.textContent);
-    const out = { w: svg ? svg.getBoundingClientRect().width : 0, sheet: host.clientWidth,
+    /* The number has to sit INSIDE the station it belongs to. Widest digits
+       against the dot they are drawn in — over 1 and the figure is spilling
+       onto the plate next door, which is how a drawing starts lying about
+       which station is thin. */
+    let spill = 0;
+    [...host.querySelectorAll('.bm-p')].forEach(g => {
+      const c = g.querySelector('.bm-dot'), t = g.querySelector('.bm-val');
+      if (!c || !t) return;
+      const cw = c.getBoundingClientRect().width, tw = t.getBoundingClientRect().width;
+      if (cw > 0) spill = Math.max(spill, tw / cw); });
+    /* The paginator's own arithmetic, not a number copied out of it: A4 at
+       595x842 pt, 38 pt of margin, 22 pt of footer, rendered from a 760 px
+       holder. A section taller than what is left of a page gets SLICED on
+       pixels — through a table row, through the colour key, through whatever
+       is at the fold. So the section carrying the tray has to fit a page. */
+    const PW = 595, PH = 842, M = 38, FOOT = 22;
+    const budget = ((PH - M - FOOT) - M) / ((PW - 2 * M) / host.clientWidth);
+    const sec = svg && svg.closest('.secwrap');
+    const out = { budget, secH: sec ? sec.getBoundingClientRect().height : 0,
+                  w: svg ? svg.getBoundingClientRect().width : 0, sheet: host.clientWidth,
                   dots: dots.length, vals: vals.length, dia, near,
-                  decimal: vals.filter(v => /[.,]/.test(v)).length,
+                  decimal: vals.filter(v => /[.,]/.test(v)).length, spill,
                   measured: recs[0].items.filter(it => it.w && it.w.mm != null && it.w.mm !== '').length };
     host.remove(); st.remove();
     return out;
@@ -529,6 +548,11 @@ const put = (p, k, v) => p.evaluate(a => { pickComponent(a[0]);
     paper.vals > 0 && paper.decimal === 0, paper.decimal + ' with a decimal point');
   ok('the drawing gets the width of the sheet, not a column beside a legend',
     paper.w / paper.sheet >= 0.75, (paper.w / paper.sheet).toFixed(2) + ' of the sheet');
+  ok('  and the figure fits inside the station it belongs to',
+    paper.spill > 0 && paper.spill <= 1, (paper.spill * 100).toFixed(0) + '% of the dot');
+  ok('  and the page it is on still fits A4, so nothing is sliced at the fold',
+    paper.secH > 0 && paper.secH <= paper.budget,
+    paper.secH.toFixed(0) + ' px of ' + paper.budget.toFixed(0));
   ok('and no two stations sit on top of each other',
     paper.near >= paper.dia, paper.near.toFixed(1) + ' px apart, ' + paper.dia.toFixed(1) + ' px across');
 

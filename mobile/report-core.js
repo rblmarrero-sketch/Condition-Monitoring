@@ -171,11 +171,13 @@
    The zone table follows the key rather than the drawing, because the key is
    what makes the drawing readable and the table is what you check afterwards. */
 #rptRoot .mapblock.wide{display:block;}
-#rptRoot .mapblock.wide .ucmaps{flex:none;width:100%;max-width:none;margin:9px 0 3px;}
+#rptRoot .mapblock.wide .ucmaps{flex:none;width:100%;max-width:none;margin:6px 0 2px;}
+#rptRoot .mapblock.wide .ucmapwrap{padding:2px;}
 #rptRoot .mapblock.wide .bodymap{max-height:none;}
-#rptRoot .mapblock.wide .mapside{padding-top:0;}
-#rptRoot .mapblock.wide .mapside .mapkey{flex-direction:row;flex-wrap:wrap;gap:4px 18px;}
-#rptRoot .mapblock.wide .mapside .pkey{flex-direction:row;flex-wrap:wrap;gap:3px 16px;}
+#rptRoot .mapblock.wide .mapfoot{display:flex;gap:20px;align-items:flex-start;}
+#rptRoot .mapblock.wide .mapside{flex:0 0 208px;padding-top:1px;}
+#rptRoot .mapblock.wide .mapzone{flex:1 1 0;min-width:0;}
+#rptRoot .mapblock.wide .mapzone .tbzone{margin:0;}
 /* ---- the tray, printed ---------------------------------------------------
    Often on a grey office printer, so the state is carried by the fill AND by
    the outline weight — a body at the condemn limit has to read as different
@@ -207,7 +209,7 @@
 /* The millimetres, inside the station they belong to. White on the filled
    states and dark on the hollow one — a number is only useful if it can be
    read on the colour underneath it, and three of the four states are filled. */
-#rptRoot .bm-val{font:700 9px/1 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+#rptRoot .bm-val{font:700 11px/1 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
   fill:#fff;letter-spacing:-.02em;}
 #rptRoot .bm-p.na .bm-val,#rptRoot .bm-p .bm-val{fill:#fff;}
 #rptRoot .bm-p:not(.done):not(.watch):not(.act) .bm-val{fill:#16242c;}
@@ -823,9 +825,14 @@
       var cut  = mapHTML.indexOf('<table class="tbzone"');
       var draw = cut < 0 ? mapHTML : mapHTML.slice(0, cut);
       var tail = cut < 0 ? "" : mapHTML.slice(cut);
+      /* Under the drawing, not beside it, and the key and the zone table share
+         that strip rather than stacking. A full-width tray plus a machine
+         header is already most of an A4 page; stacking them put the fold
+         through a table row, and the paginator cuts on pixels, not on rows. */
       return hd + '<div class="mapblock wide"><div class="ucmaps">' + draw + '</div>'
-        + '<div class="mapside">' + mapKey(T) + bodyFaceKey(T, mapHTML) + '</div>'
-        + tail + zoneTable(T, zones) + '</div>';
+        + '<div class="mapfoot"><div class="mapside">'
+        + mapKey(T) + bodyFaceKey(T, mapHTML) + '</div>'
+        + '<div class="mapzone">' + tail + zoneTable(T, zones) + '</div></div></div>';
     }
     return hd
       + '<div class="mapblock"><div class="ucmaps">' + mapHTML + '</div>'
@@ -1223,7 +1230,7 @@
         ? T.S("verdict_part", { m: rec.items.length - unread, of: rec.items.length, n: unread })
         : T.S("verdict_" + vc, { n: over.length, of: rec.items.length })
           + (unread ? T.S("unread_n", { n: unread, of: rec.items.length }) : "");
-      var maps = CMR.mapBlock(T, rec.mapHTML, 13, rec.zones, rec.mapKey);
+      var maps = CMR.mapBlock(T, rec.mapHTML, 8, rec.zones, rec.mapKey);
       var top = '<div class="sec">' + head
         + '<div class="verdict v-' + ((vc === "ok" && unread) ? "watch" : vc) + '">' + verd + '</div>'
         + (over.length ? '<div class="verdict v-' + (overAct.length ? "act" : "watch") + '" style="margin-top:9px;">'
