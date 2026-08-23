@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=131">
+<link rel="manifest" href="manifest.webmanifest?v=132">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=131">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=131">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=131">
+<link rel="apple-touch-icon" href="icon-192.png?v=132">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=132">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=132">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -341,6 +341,26 @@
     min-width:44px;min-height:44px;display:grid;place-items:center;font-size:19px;cursor:pointer;flex:none;}
   /* Three targets and a thumbnail on a 412 px row. They keep their 44 px and
      the gaps come off the text beside them, which can wrap; a target cannot. */
+  /* A word, not an icon. A tick and a clock are two shapes an inspector has to
+     have been taught; "In the cloud" and "Waiting to send" are not. The colour
+     is the fast read and the word is the accurate one. */
+  .readylist{display:flex;flex-direction:column;gap:2px;}
+  .readyrow{display:flex;gap:9px;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--border);}
+  .readyrow:last-child{border-bottom:0;}
+  .readyrow .m{flex:none;width:16px;text-align:center;font-weight:800;line-height:1.35;}
+  .readyrow.ok .m{color:var(--good);} .readyrow.warn .m{color:var(--warn-ink);}
+  .readyrow.bad .m{color:var(--critical);}
+  .readyrow .w{flex:1;min-width:0;}
+  .readyrow .w b{display:block;font-size:13px;font-weight:700;}
+  .readyrow .w span{display:block;font-size:11.5px;color:var(--muted);line-height:1.35;}
+  .readyrow button{margin-top:5px;min-height:38px;padding:0 12px;font-size:12px;}
+  #readyBadge.ok{background:var(--good);color:#fff;}
+  #readyBadge.warn{background:var(--warn-ink);color:#fff;}
+  .pitem .up{font-size:11.5px;font-weight:700;margin-top:3px;display:flex;align-items:center;gap:5px;}
+  .pitem .up::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor;flex:none;}
+  .pitem .up.ok{color:var(--good);}
+  .pitem .up.wait,.pitem .up.part{color:var(--warn-ink);}
+  .pitem .up.never{color:var(--critical);}
   .pitem .rpt1{color:var(--muted);}
   .pitem .edit{color:var(--accent);}
   .pitem .del{color:var(--critical);margin-left:8px;border-color:color-mix(in srgb,var(--critical) 30%,transparent);}
@@ -1485,6 +1505,21 @@
 </div><!-- /paneCapture -->
 
 <div class="pane" id="paneQueue">
+  <!-- Everything that has to be true BEFORE the truck leaves the yard, in the
+       one place an inspector already opens. Each of these was already knowable
+       — the service worker answers a health ping, the storage API answers a
+       quota, the queue knows what is unsent — but every one of them lived
+       inside the settings overlay, which nobody opens until something has
+       already gone wrong. In the pit there is no signal to fix any of it. -->
+  <div class="card" id="readyCard">
+    <h2><span data-i18n="sec_ready">Ready for the field</span> <span class="count-badge" id="readyBadge">…</span></h2>
+    <div id="readyList" class="readylist"></div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn ghost" id="readyGo">⟳ <span data-i18n="btn_ready_again">Check again</span></button>
+    </div>
+    <div class="hint" style="margin-top:8px" data-i18n="ready_hint">Run this while you still have signal. Anything amber here is something you cannot fix at the machine.</div>
+  </div>
+
   <div class="card">
     <h2><span data-i18n="sec_onphone">On this phone</span> <span class="count-badge" id="qCount">0</span></h2>
     <div class="pending" id="pending"></div>
@@ -1690,27 +1725,27 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=131"></script>
-<script src="upload-defaults.js?v=131"></script>
-<script src="hme.js?v=131"></script>
-<script src="mp-fc.js?v=131"></script>
-<script src="hme-cascade.js?v=131"></script>
-<script src="assets.js?v=131"></script>
-<script src="temp-limits.js?v=131"></script>
-<script src="wear.js?v=131"></script>
-<script src="wear-figs.js?v=131"></script>
-<script src="wear-map.js?v=131"></script>
-<script src="machine-photos.js?v=131"></script>
-<script src="machine-fig.js?v=131"></script>
-<script src="get.js?v=131"></script>
-<script src="uc-points.js?v=131"></script>
-<script src="inspect-guide.js?v=131"></script>
-<script src="get-figs.js?v=131"></script>
-<script src="body-points.js?v=131"></script>
-<script src="body-map.js?v=131"></script>
-<script src="lube.js?v=131"></script>
-<script src="lube2027.js?v=131"></script>
-<script src="report-core.js?v=131"></script>
+<script src="native.js?v=132"></script>
+<script src="upload-defaults.js?v=132"></script>
+<script src="hme.js?v=132"></script>
+<script src="mp-fc.js?v=132"></script>
+<script src="hme-cascade.js?v=132"></script>
+<script src="assets.js?v=132"></script>
+<script src="temp-limits.js?v=132"></script>
+<script src="wear.js?v=132"></script>
+<script src="wear-figs.js?v=132"></script>
+<script src="wear-map.js?v=132"></script>
+<script src="machine-photos.js?v=132"></script>
+<script src="machine-fig.js?v=132"></script>
+<script src="get.js?v=132"></script>
+<script src="uc-points.js?v=132"></script>
+<script src="inspect-guide.js?v=132"></script>
+<script src="get-figs.js?v=132"></script>
+<script src="body-points.js?v=132"></script>
+<script src="body-map.js?v=132"></script>
+<script src="lube.js?v=132"></script>
+<script src="lube2027.js?v=132"></script>
+<script src="report-core.js?v=132"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2215,6 +2250,33 @@ const I18N = {
     st_evictable:"not protected — add the app to the home screen so the browser stops evicting it",
     st_unasked:"protection not requested yet",
     del_sign:"the signature", del_readings:"the readings",
+    /* Per round, on its own row. The bar at the top of the queue says how many
+       are waiting; it cannot say WHICH, and "which" is the only question that
+       matters when somebody is about to delete one to free space. */
+    sec_ready:"Ready for the field", btn_ready_again:"Check again",
+    ready_hint:"Run this while you still have signal. Anything amber here is something you cannot fix at the machine.",
+    ready_ok:"Ready", ready_n:"{n} to fix",
+    rdy_off_t:"Works with no signal", rdy_off_ok:"The whole app is on the phone — {n} files.",
+    rdy_off_part:"{n} of {of} files are here. Fix this before you go.",
+    rdy_off_none:"Not installed for offline use yet. Open the app once with signal.",
+    rdy_off_slow:"The offline copy did not answer. Try again in a moment.",
+    rdy_bld_t:"Up to date", rdy_bld_ok:"Build {n}, the newest there is.",
+    rdy_bld_new:"A newer build is downloading. Keep signal until it finishes.",
+    rdy_bld_off:"Cannot check without signal — running build {n}.",
+    rdy_sto_t:"Room for photographs", rdy_sto_ok:"About {n} more photographs fit ({p}% used).",
+    rdy_sto_low:"Only about {n} photographs fit ({p}% used). Delete rounds already in the cloud.",
+    rdy_sto_evict:"The phone may clear this app's storage. Tap to ask it not to.",
+    rdy_sto_unknown:"This phone will not say how much room is left.",
+    rdy_up_t:"Somewhere to send rounds", rdy_up_ok:"{n} destination(s) switched on.",
+    rdy_up_none:"No destination set. Rounds will stay on this phone only.",
+    rdy_q_t:"Nothing left over", rdy_q_ok:"Everything captured is in the cloud.",
+    rdy_q_pend:"{n} round(s) still on this phone. Send them before you go.",
+    rdy_ref_t:"Machines and limits loaded", rdy_ref_ok:"{n} units, wear limits and lubricants.",
+    rdy_ref_bad:"Reference data is missing. Reload the app with signal.",
+    rdy_fix_persist:"Ask", rdy_fix_send:"Send now", rdy_fix_heal:"Repair",
+    up_yes:"In the cloud", up_wait:"Waiting to send", up_part:"Sending {n}/{of}",
+    up_missing:"waiting for {d}",
+    up_never:"Only on this phone", up_at:"sent {t}",
     del_t_unsent:"This has not been uploaded",
     del_m_unsent:"{x} is only on this phone. Deleting it destroys {d} for good — there is no copy anywhere else and it cannot be undone.",
     del_t_sent:"Delete from this phone?",
@@ -2564,6 +2626,30 @@ const I18N = {
     st_evictable:"без защиты — добавьте приложение на главный экран, чтобы браузер не удалял данные",
     st_unasked:"защита ещё не запрошена",
     del_sign:"подпись", del_readings:"замеры",
+    sec_ready:"Готовность к выезду", btn_ready_again:"Проверить снова",
+    ready_hint:"Проверьте, пока есть связь. Всё, что здесь жёлтым, в поле уже не исправить.",
+    ready_ok:"Готов", ready_n:"Исправить: {n}",
+    rdy_off_t:"Работает без связи", rdy_off_ok:"Всё приложение на телефоне — {n} файлов.",
+    rdy_off_part:"На телефоне {n} из {of} файлов. Исправьте до выезда.",
+    rdy_off_none:"Ещё не установлено для работы без связи. Откройте приложение при связи.",
+    rdy_off_slow:"Офлайн-копия не ответила. Повторите через мгновение.",
+    rdy_bld_t:"Актуальная версия", rdy_bld_ok:"Сборка {n}, новее нет.",
+    rdy_bld_new:"Загружается новая сборка. Не теряйте связь до конца.",
+    rdy_bld_off:"Без связи проверить нельзя — сборка {n}.",
+    rdy_sto_t:"Место под фотографии", rdy_sto_ok:"Поместится ещё около {n} фото ({p}% занято).",
+    rdy_sto_low:"Поместится всего около {n} фото ({p}% занято). Удалите обходы, которые уже в облаке.",
+    rdy_sto_evict:"Телефон может очистить память приложения. Нажмите, чтобы запретить.",
+    rdy_sto_unknown:"Телефон не сообщает, сколько места осталось.",
+    rdy_up_t:"Есть куда отправлять", rdy_up_ok:"Включено назначений: {n}.",
+    rdy_up_none:"Назначение не задано. Обходы останутся только на телефоне.",
+    rdy_q_t:"Ничего не осталось", rdy_q_ok:"Всё записанное — в облаке.",
+    rdy_q_pend:"На телефоне ещё обходов: {n}. Отправьте до выезда.",
+    rdy_ref_t:"Техника и пределы загружены", rdy_ref_ok:"Единиц: {n}, пределы износа и смазки.",
+    rdy_ref_bad:"Справочные данные отсутствуют. Перезагрузите приложение при связи.",
+    rdy_fix_persist:"Запросить", rdy_fix_send:"Отправить", rdy_fix_heal:"Восстановить",
+    up_yes:"В облаке", up_wait:"Ожидает отправки", up_part:"Отправка {n}/{of}",
+    up_missing:"ждёт {d}",
+    up_never:"Только на телефоне", up_at:"отправлено {t}",
     del_t_unsent:"Это ещё не выгружено",
     del_m_unsent:"{x} есть только на этом телефоне. Удаление уничтожит {d} безвозвратно — копии нигде нет, отменить нельзя.",
     del_t_sent:"Удалить с этого телефона?",
@@ -6594,7 +6680,14 @@ function showPane(id){
   // The signature canvas cannot be measured while its pane is display:none, so a
   // pad sized then would come back one pixel tall.
   if(id==="paneCapture") sizeSignPad();
+  /* The readiness list is about to be looked at, so it has to be about NOW —
+     a storage figure or a queue count from ten minutes ago is exactly the kind
+     of stale reassurance this card exists to replace. */
+  if(id==="paneQueue" && typeof renderReady==="function") renderReady();
 }
+document.addEventListener("DOMContentLoaded",()=>{
+  const g=$("readyGo"); if(g) g.onclick=guard(async()=>{ await renderReady(); });
+});
 $("tabbar").addEventListener("click",e=>{
   const b=e.target.closest("button[data-pane]"); if(!b) return;
   showPane(b.dataset.pane);
@@ -6721,6 +6814,36 @@ async function renderPending(){
      "your work is safe in the queue", the screen that shows the queue is the
      last one allowed to go blank. Fall back to the id, which is always set and
      carries the date. */
+  /* What has actually reached the cloud, for ONE round.
+
+     The record already knows: `up` is set only after every enabled destination
+     has confirmed every file, `upTo` names the ones that have, and `upAt` is
+     when it finished. All of that was invisible on the list — the bar said
+     "3 waiting" and the rows said nothing, so an inspector clearing space had
+     to guess which three. Deleting the wrong one destroys the round; the
+     confirmation has warned about that for a while, but a warning at the moment
+     of deletion is late. This says it before the thumb goes near the bin. */
+  const upState = rec => {
+    const dests = (typeof activeDests === "function") ? activeDests() : [];
+    if (rec.up) return { k:"ok", txt:t("up_yes") + (rec.upAt
+      ? " · " + t("up_at", { t:String(rec.upAt).slice(0,16).replace("T"," ") }) : "") };
+    if (!UP.on || !dests.length) return { k:"never", txt:t("up_never") };
+    const done = Object.keys(rec.upTo || {}).length;
+    /* NAME the one that has not taken it. "Sending 1 of 2" is a number an
+       inspector can watch for a week without learning anything; "waiting for
+       SharePoint" is the sentence that gets the flow looked at. A phone here
+       ships with two destinations switched on, and a round is only "in the
+       cloud" when BOTH have accepted it — so one dead endpoint holds every
+       round on every phone, for ever, and the only symptom used to be a queue
+       that never emptied. */
+    if (done) {
+      const miss = dests.filter(d => !(rec.upTo || {})[d.id])
+        .map(d => (DEST_META[d.id] || {}).label || d.id).join(", ");
+      return { k:"part", txt:t("up_part", { n:done, of:dests.length })
+        + (miss ? " · " + t("up_missing", { d:miss }) : "") };
+    }
+    return { k:"wait", txt:t("up_wait") };
+  };
   const stamp = r => String((r && (r.created || r.id)) || "");
   const all=(await dbAll()).sort((a,b)=>stamp(b).localeCompare(stamp(a)));
   $("qCount").textContent=all.length;
@@ -6734,9 +6857,11 @@ async function renderPending(){
     const row=document.createElement("div"); row.className="pitem";
     const thumb=first?`<img class="thumb" src="${pendPool.url(first)}" alt="${esc(rec.equip||"")}">`:`<div class="thumb"></div>`;
     const rty=rec.type||"MP";
+    const up=upState(rec);
     const typeTag=`${rec.cls||""} ${rty}`.trim();
     row.innerHTML=`${thumb}<div class="meta"><div class="a"><span class="tag" data-r="${esc(rty)}">${esc(typeTag)}</span>${esc(rec.equip)} · ${esc(rec.date)}</div>
-      <div class="b">${nPos} ${t("pos_count")} · ${nPhotos} ${t("photo_count")}${nVid?` · ${nVid}🎥`:""}${rec.smu?` · SMU ${esc(rec.smu)}`:""}${rec.sign?" · ✍":""}${rec.gps?" · 📍":""}</div></div>
+      <div class="b">${nPos} ${t("pos_count")} · ${nPhotos} ${t("photo_count")}${nVid?` · ${nVid}🎥`:""}${rec.smu?` · SMU ${esc(rec.smu)}`:""}${rec.sign?" · ✍":""}${rec.gps?" · 📍":""}</div>
+      <div class="up ${up.k}">${esc(up.txt)}</div></div>
       <div class="acts"><button class="rpt1" title="${esc(t("rpt1_title"))}" aria-label="${esc(t("rpt1_title"))}">📄</button><button class="edit" title="${esc(t("edit_title"))}" aria-label="${esc(t("edit_title"))}">✎</button><button class="del" title="${esc(t("del_title"))}" aria-label="${esc(t("del_title"))}">🗑</button></div>`;
     const openEdit=()=>editRecord(rec);
     row.querySelector(".rpt1").onclick=guard(async(ev)=>{ev.stopPropagation();await reportOne(rec);});
@@ -6751,7 +6876,13 @@ async function renderPending(){
       const bits=[]; if(nPhotos) bits.push(nPhotos+" "+t("photo_count"));
       if(nVid) bits.push(nVid+" 🎥"); if(rec.sign) bits.push(t("del_sign"));
       const detail=bits.length?bits.join(", "):t("del_readings");
-      const gone=!rec.up;
+      /* "Only on this phone" has to be TRUE. A round that Drive has taken and
+         SharePoint has not is not marked up, but it is emphatically not
+         nowhere — and telling somebody clearing space that they are about to
+         destroy the only copy, when they are not, is how a warning stops being
+         read. Partly-sent counts as sent for this question. */
+      const anywhere = rec.up || Object.keys(rec.upTo||{}).length > 0;
+      const gone=!anywhere;
       const okd=await ask(t(gone?"del_t_unsent":"del_t_sent"),
         (gone ? t("del_m_unsent",{x:what,d:detail}) : t("del_m_sent",{x:what})),
         t("del_go"), gone);
@@ -7501,7 +7632,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="131";
+const BUILD="132";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -8220,6 +8351,104 @@ let ESSENTIAL_N=16;   // the SW is the authority; this is only the first paint
 document.addEventListener("visibilitychange",()=>{ if(!document.hidden) checkReady(); });
 setTimeout(checkReady, 2200);
 
+/* ===================== ready for the field =====================
+   Six questions, asked where the answer is still fixable.
+
+   Every one of these was already knowable and every one of them was in the
+   settings overlay, which an inspector opens after something has gone wrong.
+   The whole value is the timing: at the machine there is no signal to install
+   a missing file, no bar to finish an upload, and no way to make room except
+   by deleting work. So the list lives on the queue screen, runs itself when
+   that screen opens, and each row that is not green offers the one tap that
+   fixes it. */
+function swAsk(){
+  return new Promise(res=>{
+    if(!("serviceWorker" in navigator) || !navigator.serviceWorker.controller) return res(null);
+    const ch=new MessageChannel();
+    const t0=setTimeout(()=>res({slow:true}), 4000);
+    ch.port1.onmessage=ev=>{ clearTimeout(t0); res(ev.data||{}); };
+    try{ navigator.serviceWorker.controller.postMessage({type:"sw-health"},[ch.port2]); }
+    catch(e){ clearTimeout(t0); res({slow:true}); }
+  });
+}
+let readyBusy=false;
+async function renderReady(){
+  const list=$("readyList"); if(!list || readyBusy) return;
+  readyBusy=true;
+  const rows=[];
+  const add=(k,title,text,fix)=>rows.push({k,title,text,fix});
+  try{
+    /* 1. is the whole app on the phone */
+    const h=await swAsk();
+    if(!h) add("warn",t("rdy_off_t"),t("rdy_off_none"));
+    else if(h.slow) add("warn",t("rdy_off_t"),t("rdy_off_slow"));
+    else if(h.ok) add("ok",t("rdy_off_t"),t("rdy_off_ok",{n:h.have}));
+    else add("bad",t("rdy_off_t"),t("rdy_off_part",{n:h.have,of:h.need}),
+      { label:t("rdy_fix_heal"), run:async()=>{ try{
+          navigator.serviceWorker.controller.postMessage({type:"sw-heal"}); }catch(e){}
+        await new Promise(r=>setTimeout(r,6000)); } });
+
+    /* 2. is it the newest build */
+    if(!navigator.onLine) add("warn",t("rdy_bld_t"),t("rdy_bld_off",{n:BUILD}));
+    else if(window.__updTimer) add("warn",t("rdy_bld_t"),t("rdy_bld_new"));
+    else add("ok",t("rdy_bld_t"),t("rdy_bld_ok",{n:BUILD}));
+
+    /* 3. room for the photographs the shift will take */
+    const st=await storageInfo();
+    if(!st) add("warn",t("rdy_sto_t"),t("rdy_sto_unknown"));
+    else if(st.pct>=80 || st.photos<60)
+      add("bad",t("rdy_sto_t"),t("rdy_sto_low",{n:st.photos,p:st.pct}));
+    else if(persistState===false)
+      add("warn",t("rdy_sto_t"),t("rdy_sto_evict"),
+        { label:t("rdy_fix_persist"), run:async()=>{ try{ await askPersist(); }catch(e){} } });
+    else add("ok",t("rdy_sto_t"),t("rdy_sto_ok",{n:st.photos,p:st.pct}));
+
+    /* 4. somewhere for the work to go */
+    const dests=(typeof activeDests==="function")?activeDests():[];
+    if(!UP.on || !dests.length) add("bad",t("rdy_up_t"),t("rdy_up_none"),
+      { label:t("set_title"), run:async()=>openSettings() });
+    else add("ok",t("rdy_up_t"),t("rdy_up_ok",{n:dests.length}));
+
+    /* 5. nothing left over from the last shift */
+    const pend=(await dbAll()).filter(r=>!r.up).length;
+    if(pend && UP.on && dests.length) add("bad",t("rdy_q_t"),t("rdy_q_pend",{n:pend}),
+      { label:t("rdy_fix_send"), run:async()=>{ retryAt=RETRY_MIN; await syncThenArm(true); } });
+    else if(pend) add("bad",t("rdy_q_t"),t("rdy_q_pend",{n:pend}));
+    else add("ok",t("rdy_q_t"),t("rdy_q_ok"));
+
+    /* 6. the machines, the limits and the lubricants */
+    const units=(window.ASSETS||[]).length;
+    const refs=!!(window.WEAR&&WEAR.map)&&!!window.BODY&&!!window.LUBE;
+    if(units>100 && refs) add("ok",t("rdy_ref_t"),t("rdy_ref_ok",{n:units}));
+    else add("bad",t("rdy_ref_t"),t("rdy_ref_bad"));
+  }catch(e){ }
+  readyBusy=false;
+
+  const bad=rows.filter(r=>r.k!=="ok").length;
+  const badge=$("readyBadge");
+  if(badge){ badge.textContent = bad ? t("ready_n",{n:bad}) : t("ready_ok");
+             badge.className = "count-badge "+(bad?"warn":"ok"); }
+  list.innerHTML="";
+  rows.forEach(r=>{
+    const el=document.createElement("div");
+    el.className="readyrow "+r.k;
+    el.innerHTML='<span class="m">'+(r.k==="ok"?"✓":r.k==="warn"?"!":"✕")+'</span>'
+      +'<div class="w"><b>'+esc(r.title)+'</b><span>'+esc(r.text)+'</span></div>';
+    if(r.fix){
+      const btn=document.createElement("button");
+      btn.type="button"; btn.className="btn ghost"; btn.textContent=r.fix.label;
+      btn.onclick=guard(async()=>{ btn.disabled=true; await r.fix.run(); await renderReady(); });
+      el.querySelector(".w").appendChild(btn);
+    }
+    list.appendChild(el);
+  });
+}
+/* Run it where it is useful: when the screen that carries it opens, and again
+   when the app comes back to the front — an inspector who walked outside, got a
+   bar of signal and came back is exactly who this is for. */
+document.addEventListener("visibilitychange",()=>{
+  if(!document.hidden && document.getElementById("paneQueue")
+     && document.getElementById("paneQueue").classList.contains("on")) renderReady(); });
 function swHealth(){
   const el=$("swHealth"); if(!el) return;
   if(!("serviceWorker" in navigator) || !navigator.serviceWorker.controller){
