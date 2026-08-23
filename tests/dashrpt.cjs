@@ -81,6 +81,53 @@ const SEED=fs.readFileSync('e2e.cjs','utf8').match(/const SEED = `([\s\S]*?)`;/)
   ok('the legend is the same document section',
     appSec[appSec.length-1].replace(/\s+/g,' ') === dashAll[dashAll.length-1].replace(/\s+/g,' '));
 
+  /* ---- the tray, printed from the office --------------------------------
+     Both ends draw this from the same module, and for a while only one of them
+     knew what to ask for: the dashboard called bodyMap() with no readings and
+     no box height, so a report printed from the office carried sixty-three
+     empty dots while the same round printed from the pit carried every
+     millimetre. Nothing in either file said they had to match — this does.
+
+     A tray round is seeded here rather than in the shared SEED because the
+     seed's record count is asserted elsewhere; a round added there would be
+     read as a change in those suites rather than as coverage in this one. */
+  console.log('\n  the tray prints the same at both ends');
+  const tbPay = await app.evaluate(async () => {
+    const s = document.getElementById('typeSel');
+    s.value = 'TB'; s.dispatchEvent(new Event('change'));
+    selectEquip('TK143');
+    await new Promise(r => setTimeout(r, 500));
+    const o = {};
+    items().forEach((x, i) => { o[x.k] = { mm: Math.round((4 + (i % 11) * 1.3) * 10) / 10,
+      stood: 0, reason: '', photos: [], video: null }; });
+    await dbPut({ id:'r-tray', type:'TB', equip:'TK143', date:'2026-08-22',
+      by:'S. Volkov', sup:'A. Sokolov', smu:'7000', cls:(ASSET_BY['TK143']||{}).cls||'',
+      gps:null, dev:'PH-01', sign:null, positions:o,
+      created:'2026-08-22T06:00:00.000Z', up:0, upTo:{}, rev:1 });
+    return (await dbAll()).map(recToExport);
+  });
+  await dash.evaluate(p => window.CMDash.importRecords(p), tbPay);
+  await dash.waitForTimeout(700);
+  const trayOf = h => {
+    const n = (h.match(/class="bm-val"/g) || []).length;
+    const vb = (h.match(/viewBox="0 0 \d+ (\d+)"/) || [])[1];
+    const v = [...h.matchAll(/class="bm-val"[^>]*>([^<]*)</g)].map(m => m[1]);
+    return { n, vb, v };
+  };
+  const appTray = trayOf(await app.evaluate(async () =>
+    (await buildReportSections()).map(x => x.html).join('')));
+  const dashTray = trayOf(await dash.evaluate(() => {
+    const recs = window.CMReport.recsForScope('unit', 'TK143');
+    return CMR.sections(window.CMReport.ctxFor(recs, { photos:false })).map(x => x.html).join('');
+  }));
+  ok('the app prints the millimetres inside the stations', appTray.n > 40, appTray.n + ' stations');
+  ok('and so does the dashboard', dashTray.n === appTray.n,
+    dashTray.n + ' vs ' + appTray.n);
+  ok('  the same figures, in the same order', JSON.stringify(dashTray.v) === JSON.stringify(appTray.v),
+    (dashTray.v.slice(0, 8).join(' ') || '(none)') + ' vs ' + appTray.v.slice(0, 8).join(' '));
+  ok('  and drawn in the same box, so one is not a shrunken copy',
+    dashTray.vb === appTray.vb, dashTray.vb + ' vs ' + appTray.vb);
+
   console.log('\n  the dashboard prints the photographs too');
   /* photoNames()'s third argument is a list of suffixes, not extensions. Handing
      it extensions built names that matched nothing, and no report the dashboard

@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=120">
+<link rel="manifest" href="manifest.webmanifest?v=122">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=120">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=120">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=120">
+<link rel="apple-touch-icon" href="icon-192.png?v=122">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=122">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=122">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1676,27 +1676,27 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=120"></script>
-<script src="upload-defaults.js?v=120"></script>
-<script src="hme.js?v=120"></script>
-<script src="mp-fc.js?v=120"></script>
-<script src="hme-cascade.js?v=120"></script>
-<script src="assets.js?v=120"></script>
-<script src="temp-limits.js?v=120"></script>
-<script src="wear.js?v=120"></script>
-<script src="wear-figs.js?v=120"></script>
-<script src="wear-map.js?v=120"></script>
-<script src="machine-photos.js?v=120"></script>
-<script src="machine-fig.js?v=120"></script>
-<script src="get.js?v=120"></script>
-<script src="uc-points.js?v=120"></script>
-<script src="inspect-guide.js?v=120"></script>
-<script src="get-figs.js?v=120"></script>
-<script src="body-points.js?v=120"></script>
-<script src="body-map.js?v=120"></script>
-<script src="lube.js?v=120"></script>
-<script src="lube2027.js?v=120"></script>
-<script src="report-core.js?v=120"></script>
+<script src="native.js?v=122"></script>
+<script src="upload-defaults.js?v=122"></script>
+<script src="hme.js?v=122"></script>
+<script src="mp-fc.js?v=122"></script>
+<script src="hme-cascade.js?v=122"></script>
+<script src="assets.js?v=122"></script>
+<script src="temp-limits.js?v=122"></script>
+<script src="wear.js?v=122"></script>
+<script src="wear-figs.js?v=122"></script>
+<script src="wear-map.js?v=122"></script>
+<script src="machine-photos.js?v=122"></script>
+<script src="machine-fig.js?v=122"></script>
+<script src="get.js?v=122"></script>
+<script src="uc-points.js?v=122"></script>
+<script src="inspect-guide.js?v=122"></script>
+<script src="get-figs.js?v=122"></script>
+<script src="body-points.js?v=122"></script>
+<script src="body-map.js?v=122"></script>
+<script src="lube.js?v=122"></script>
+<script src="lube2027.js?v=122"></script>
+<script src="report-core.js?v=122"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -6793,11 +6793,8 @@ function rptBodyMap(rec,items){
      doubles the width of every dot for precision that belongs in the table,
      and the colour is still computed from the exact figure, so rounding can
      never move a plate across the condemn limit. */
-  const vals={};
-  Object.keys(mm).forEach(k=>{ const v=Number(mm[k]);
-    if(isFinite(v)) vals[k]=String(Math.round(v)); });
   return CMR.fitMap('<div class="ucmapwrap">'+
-    bodyMap({ model:id, lang:lang, sel:"", tag:false, vh:500, values:vals,
+    bodyMapReport({ model:id, lang:lang, mm:mm,
               state:k=>by[k]||"", zoneState:z=>(zs.find(x=>x.z.k===z)||{}).state||"" })+
     '</div>')+
     '<table class="tbzone"><thead><tr><th>'+esc(t("tb_rpt_zone"))+'</th>'+

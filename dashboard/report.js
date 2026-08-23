@@ -108,9 +108,8 @@
       return seen.length === BODY.inZone(bm, z).length ? "done" : "";
     };
     return window.CMR.fitMap('<div class="ucmapwrap">'
-      + bodyMap({ model: bm, lang: (typeof lang !== "undefined" ? lang : "en"),
-                  sel: "", tag: false,
-                  state: k => by[k] || "", zoneState: state })
+      + bodyMapReport({ model: bm, lang: (typeof lang !== "undefined" ? lang : "en"),
+                  mm: mm, state: k => by[k] || "", zoneState: state })
       + '</div>');
   }
   /* The zones, worst first, for the table report-core prints beside the

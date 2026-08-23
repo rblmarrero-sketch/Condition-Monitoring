@@ -270,4 +270,37 @@
     s.push('</svg>');
     return s.join('');
   };
+
+  /* ---- the tray as PAPER draws it ---------------------------------------
+     Two programs print this report - the phone and the dashboard - and for a
+     while only one of them knew about any of this. The dashboard called
+     bodyMap() with no box height and no readings, so a superintendent printing
+     from the office got the phone-sized drawing with sixty-three empty dots on
+     it while the same round printed from the pit carried every millimetre.
+     Nothing in either file said they had to agree.
+
+     So the report's own call lives here, once, and both hosts make it. The
+     caller passes the exact millimetres; the rounding to whole numbers happens
+     on this side of the line, because a station's COLOUR is computed from the
+     exact figure and only the printed digit is rounded - if the two ever came
+     from different places, a plate could read "3" and be green.
+
+     RPT_VH is 500 rather than something taller for a reason worth keeping:
+     the drawing's scale is set by the width of the page, and past about 640
+     the closest pair of stations is H11/F11 at 19.71 units ACROSS the sheet,
+     which no box height can change. 500 is the least that keeps every station
+     clear of its neighbour, and the page keeps the rest. */
+  var RPT_VH = 500;
+  W.bodyMapReport = function (o) {
+    o = o || {};
+    var vals = {}, mm = o.mm || {};
+    Object.keys(mm).forEach(function (k) {
+      var v = Number(mm[k]);
+      if (isFinite(v)) vals[k] = String(Math.round(v));
+    });
+    var a = {};
+    for (var x in o) if (Object.prototype.hasOwnProperty.call(o, x)) a[x] = o[x];
+    a.sel = ''; a.tag = false; a.vh = RPT_VH; a.values = vals;
+    return W.bodyMap(a);
+  };
 })(typeof self !== 'undefined' ? self : this);
