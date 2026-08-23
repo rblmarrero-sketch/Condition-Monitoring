@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=130">
+<link rel="manifest" href="manifest.webmanifest?v=131">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=130">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=130">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=130">
+<link rel="apple-touch-icon" href="icon-192.png?v=131">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=131">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=131">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1690,27 +1690,27 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=130"></script>
-<script src="upload-defaults.js?v=130"></script>
-<script src="hme.js?v=130"></script>
-<script src="mp-fc.js?v=130"></script>
-<script src="hme-cascade.js?v=130"></script>
-<script src="assets.js?v=130"></script>
-<script src="temp-limits.js?v=130"></script>
-<script src="wear.js?v=130"></script>
-<script src="wear-figs.js?v=130"></script>
-<script src="wear-map.js?v=130"></script>
-<script src="machine-photos.js?v=130"></script>
-<script src="machine-fig.js?v=130"></script>
-<script src="get.js?v=130"></script>
-<script src="uc-points.js?v=130"></script>
-<script src="inspect-guide.js?v=130"></script>
-<script src="get-figs.js?v=130"></script>
-<script src="body-points.js?v=130"></script>
-<script src="body-map.js?v=130"></script>
-<script src="lube.js?v=130"></script>
-<script src="lube2027.js?v=130"></script>
-<script src="report-core.js?v=130"></script>
+<script src="native.js?v=131"></script>
+<script src="upload-defaults.js?v=131"></script>
+<script src="hme.js?v=131"></script>
+<script src="mp-fc.js?v=131"></script>
+<script src="hme-cascade.js?v=131"></script>
+<script src="assets.js?v=131"></script>
+<script src="temp-limits.js?v=131"></script>
+<script src="wear.js?v=131"></script>
+<script src="wear-figs.js?v=131"></script>
+<script src="wear-map.js?v=131"></script>
+<script src="machine-photos.js?v=131"></script>
+<script src="machine-fig.js?v=131"></script>
+<script src="get.js?v=131"></script>
+<script src="uc-points.js?v=131"></script>
+<script src="inspect-guide.js?v=131"></script>
+<script src="get-figs.js?v=131"></script>
+<script src="body-points.js?v=131"></script>
+<script src="body-map.js?v=131"></script>
+<script src="lube.js?v=131"></script>
+<script src="lube2027.js?v=131"></script>
+<script src="report-core.js?v=131"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3774,7 +3774,9 @@ function acceptVideo(f){
     v.onloadedmetadata=()=>{ const long = v.duration && v.duration>MAX_VIDEO_SEC+0.8;
       URL.revokeObjectURL(v.src);
       if(long){ dlg(t("video_too_long")); res(false); } else take(); };
-    v.onerror=()=>{ take(); };                          // if metadata fails, accept
+    /* Accepted anyway if the metadata will not read — but the URL still has
+       to go, or a clip the phone could not probe pins its own bytes. */
+    v.onerror=()=>{ try{ URL.revokeObjectURL(v.src); }catch(_){ } take(); };
     v.src=URL.createObjectURL(f);
   });
 }
@@ -5676,9 +5678,13 @@ $("supName").addEventListener("input",()=>localStorage.setItem("supervisor",$("s
 function signBlob(){ return signDirty ? new Promise(r=>signPad.toBlob(r,"image/png")) : Promise.resolve(null); }
 function loadSign(blob){ clearSign(); if(!blob) return;
   signOpen=true; renderSignFold();
-  const i=new Image(); i.onload=()=>{ const r=Math.max(1,Math.min(3,window.devicePixelRatio||1));
-    signPad.getContext("2d").drawImage(i,0,0,signPad.width/r,signPad.height/r); signDirty=true; URL.revokeObjectURL(i.src); };
-  i.src=URL.createObjectURL(blob); }
+  const url=URL.createObjectURL(blob);
+  const done=()=>{ try{ URL.revokeObjectURL(url); }catch(_){ } };
+  const i=new Image();
+  i.onload=()=>{ const r=Math.max(1,Math.min(3,window.devicePixelRatio||1));
+    signPad.getContext("2d").drawImage(i,0,0,signPad.width/r,signPad.height/r); signDirty=true; done(); };
+  i.onerror=done;                       // a signature that will not decode still frees its bytes
+  i.src=url; }
 addEventListener("resize",sizeSignPad);
 $("signTog").onclick=()=>{ signOpen=!(signOpen||signDirty||$("supName").value.trim()); renderSignFold(); };
 $("supName").addEventListener("input",renderSignFold);
@@ -6884,9 +6890,24 @@ function itemLabelFor(rec,k){
   if(usesRegister(rec.type) && COMP_BY[upComp(k)]) return compLabel(k);
   const list=(CLASSES[rec.cls]&&CLASSES[rec.cls][rec.type])||[];
   for(const e of list){ if(typeof e==="string"){ if(e===k) return COMP[e]?(COMP[e][lang]||COMP[e].en):k; } else if(e.k===k){ return e[lang]||e.en; } } return ""; }
-async function blobToThumb(blob,max){ const img=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=URL.createObjectURL(blob);});
-  const s=Math.min(1,max/Math.max(img.width,img.height)); const w=Math.round(img.width*s),h=Math.round(img.height*s);
-  const c=document.createElement("canvas");c.width=w;c.height=h;c.getContext("2d").drawImage(img,0,0,w,h); return c.toDataURL("image/jpeg",0.7); }
+/* Revoked, whichever way this ends.
+
+   A blob URL pins its blob until the URL is released, and this one is called
+   once per photograph on every report build. A thirty-photograph export leaked
+   thirty full-size camera frames, and an inspector who builds a report twice
+   leaked them twice — on the phone least able to spare the memory, during the
+   one operation that already needs the most of it. The capture screen has had
+   urlPool() for exactly this reason since it shipped; this path never used it
+   because it converts once and throws the URL away. It just never threw it. */
+async function blobToThumb(blob,max){
+  const url=URL.createObjectURL(blob);
+  try{
+    const img=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=url;});
+    const s=Math.min(1,max/Math.max(img.width,img.height)); const w=Math.round(img.width*s),h=Math.round(img.height*s);
+    const c=document.createElement("canvas");c.width=w;c.height=h;c.getContext("2d").drawImage(img,0,0,w,h);
+    return c.toDataURL("image/jpeg",0.7);
+  } finally { try{ URL.revokeObjectURL(url); }catch(_){ } }
+}
 /* ===================== the report =====================
    Three people open this file and none of them want the same thing.
 
@@ -7401,7 +7422,9 @@ function stopScan(){ if(scanRAF)cancelAnimationFrame(scanRAF); scanRAF=null; if(
 $("scanBtn").onclick=()=>{ scanMode="unit"; startScan(); };
 $("scanCancel").onclick=()=>{ scanMode="unit"; stopScan(); };
 $("qrPhoto").onchange=guard(async (e)=>{ const f=e.target.files[0]; e.target.value=""; if(!f) return;
-  const img=await new Promise((res,rej)=>{ const i=new Image(); i.onload=()=>res(i); i.onerror=rej; i.src=URL.createObjectURL(f); });
+  const qurl=URL.createObjectURL(f);
+  const img=await new Promise((res,rej)=>{ const i=new Image(); i.onload=()=>res(i); i.onerror=rej; i.src=qurl; })
+    .finally(()=>{ try{ URL.revokeObjectURL(qurl); }catch(_){ } });
   qrCanvas.width=img.width; qrCanvas.height=img.height; qctx.drawImage(img,0,0);
   if(!await needScan()){ dlg(t("m_lib_scan")); return; }
   const id=qctx.getImageData(0,0,img.width,img.height); const code=window.jsQR(id.data,id.width,id.height);
@@ -7478,7 +7501,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="130";
+const BUILD="131";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

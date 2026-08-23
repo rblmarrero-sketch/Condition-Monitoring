@@ -272,6 +272,37 @@ const note = (n, d) => console.log('  ....  ' + n + (d !== undefined ? '   ' + d
      grid.n > 3 && grid.cols > 1 && grid.orphans === 0,
      grid.n + ' across ' + grid.cols + ' columns');
 
+  /* ---- and it gives the memory back -------------------------------------
+     A blob URL pins its blob until it is released. blobToThumb() made one per
+     photograph on every report build and released none, so a thirty-frame
+     export pinned thirty full-size camera frames, and an inspector who built
+     the report twice pinned them twice — on the device least able to spare it,
+     during the operation that already needs the most. The capture screen has
+     had urlPool() for this since it shipped; this path never used it, because
+     it converts once and throws the URL away. It just never threw it.
+
+     Counted rather than reasoned about: wrap both halves of the API and check
+     the books balance after a build with photographs in it. */
+  console.log('\nand it gives the memory back');
+  const urls = await p.evaluate(async () => {
+    const mk = URL.createObjectURL, rv = URL.revokeObjectURL;
+    let made = 0, freed = 0;
+    URL.createObjectURL = function (b) { made++; return mk.call(URL, b); };
+    URL.revokeObjectURL = function (u) { freed++; return rv.call(URL, u); };
+    try {
+      const all = await dbAll();
+      const uc = all.find(r => r.type === 'UC');
+      await buildReportSections(uc.id);              // reads every photo out of the store
+      await buildReportSections(uc.id);              // twice, because inspectors do
+    } finally {
+      URL.createObjectURL = mk; URL.revokeObjectURL = rv;
+    }
+    return { made, freed };
+  });
+  ok('every blob URL the report opens is closed again',
+     urls.made > 0 && urls.freed >= urls.made,
+     urls.made + ' opened, ' + urls.freed + ' closed');
+
   /* ---- the screen is not left in a dialog -------------------------------- */
   const after = await p.evaluate(() => !!(document.getElementById('dlg') || {}).open);
   ok('the dialog closes when the file is saved', !after);
