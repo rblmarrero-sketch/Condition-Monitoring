@@ -46,10 +46,15 @@
      Station beats zone beats "*", so one odd plate can be named without
      restating the rest:
 
-       LIM.HM400 = { "*":{n:20,c:8}, F62:{n:25,c:10} }
+       LIM.HM400 = { "*":{n:20,c:3}, F62:{n:25,c:5} }
 
      Both models carry the same figure because the liner is the same plate. */
-  var LINER = { n:20, c:8, src:'site' };
+  // 20 mm on, 3 mm off. R. Marrero revised the condemn limit from 8 mm: a
+  // liner is not serviceable below 3 mm, and that figure is the same for every
+  // liner on the property, dump body and GET alike. It widens the usable band
+  // from 12 mm to 17 mm, so a plate that read 97% worn against the old limit
+  // now reads what it actually is.
+  var LINER = { n:20, c:3, src:'site' };
   var LIM = {
     HM400: { FLR1:LINER, FLR2:LINER, FLR3:LINER, TAIL:LINER },
     TR60:  { FLR1:LINER, FLR2:LINER, FLR3:LINER, TAIL:LINER }

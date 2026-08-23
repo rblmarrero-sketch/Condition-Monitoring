@@ -141,19 +141,38 @@ const put = (p, k, v) => p.evaluate(a => { pickComponent(a[0]);
   await p.locator('.tbnote button').first().click();
   await p.waitForTimeout(300);
 
+  /* A liner goes on at 20 mm and is not serviceable below 3 mm. BOTH sides of
+     that line are pinned, because a limit is only a limit if something falls on
+     each side of it - and this figure has already moved once (the condemn was
+     8 mm), which is exactly when a test written against a single value quietly
+     stops meaning anything. */
+  await put(p, 'F62', 2.5);
+  await p.waitForTimeout(250);
+  ok('a floor liner past condemn comes back red, not green', await p.evaluate(() =>
+    bodyState('F62') === 'act' && Math.round(BODY.wear('HM400','F62',2.5)) === 103),
+    await p.evaluate(() => document.getElementById('ucRead').textContent));
   await put(p, 'F62', 3.5);
   await p.waitForTimeout(250);
-  /* 3.5 mm of a 20 mm liner is past condemn and must never read as fine. This
-     is the assertion the whole section exists for. */
-  ok('a floor liner worn past condemn comes back red, not green', await p.evaluate(() =>
-    bodyState('F62') === 'act' && Math.round(BODY.wear('HM400','F62',3.5)) === 138),
+  ok('and half a millimetre above it is a warning, not a condemnation',
+    await p.evaluate(() => bodyState('F62') === 'watch'
+      && Math.round(BODY.wear('HM400','F62',3.5)) === 97),
     await p.evaluate(() => document.getElementById('ucRead').textContent));
-  ok('and the reference line states the figure it judged against',
-    /20/.test(await p.textContent('#ucRefLine')) && /8/.test(await p.textContent('#ucRefLine')),
-    (await p.textContent('#ucRefLine')).slice(0, 48));
+  await put(p, 'F62', 2.5);
+  await p.waitForTimeout(200);
+  /* Read the limit out of the reference rather than typing it here. The literal
+     "8" in this assertion was the old condemn figure, and it went stale the
+     moment the site revised it - a check pinned to a number nobody updates is
+     a check that fails for the wrong reason and gets edited away. */
+  const refOK = await p.evaluate(() => {
+    const L = BODY.limitFor('HM400', 'F62');
+    const t = (document.getElementById('ucRefLine') || {}).textContent || '';
+    return { L, t, ok: !!L && t.indexOf(String(L.n)) >= 0 && t.indexOf(String(L.c)) >= 0 };
+  });
+  ok(refOK.ok, 'and the reference line states the figures it judged against',
+     refOK.t.slice(0, 48));
   ok('the exported row carries the percentage and the band', await p.evaluate(() => {
-    const w = wearOut({ type:'TB', equip:'TK143', date:'2026-08-03' }, 'F62', { mm:3.5 });
-    return w.band === 'act' && String(w.newMM) === '20' && String(w.condemnMM) === '8'
+    const w = wearOut({ type:'TB', equip:'TK143', date:'2026-08-03' }, 'F62', { mm:2.5 });
+    return w.band === 'act' && String(w.newMM) === '20' && String(w.condemnMM) === '3'
         && w.wearPct !== '';
   }));
   ok('and still carries which sheet, and the zone', await p.evaluate(() => {
@@ -177,12 +196,53 @@ const put = (p, k, v) => p.evaluate(a => { pickComponent(a[0]);
   /* Station beats zone, so one odd plate can be named without restating the
      rest — the mechanism the reference comment promises. */
   ok('a station-level figure overrides the zone it sits in', await p.evaluate(() => {
-    BODY.limits.HM400.F62 = { n:25, c:10 };
-    const pct = Math.round(BODY.wear('HM400','F62',3.5));
+    BODY.limits.HM400.F62 = { n:25, c:5 };
+    const pct = Math.round(BODY.wear('HM400','F62',2.5));
     delete BODY.limits.HM400.F62;
-    const back = Math.round(BODY.wear('HM400','F62',3.5));
-    return pct === 143 && back === 138;     // (25-3.5)/15 then (20-3.5)/12
+    const back = Math.round(BODY.wear('HM400','F62',2.5));
+    return pct === 113 && back === 103;     // (25-2.5)/20 then (20-2.5)/17
   }));
+
+  /* ---- 2b. the rate, which is what a liner is measured FOR --------------- */
+  /* A thickness on its own says where you are. Two of them say how fast you are
+     getting there, and that is the number a planner orders steel against. The
+     dump body was excluded from the forecast outright, back when it had no
+     condemn limit to forecast towards - it has one now. */
+  console.log('\nhow fast it is going, not just where it is');
+  const rate = await p.evaluate(async () => {
+    await dbPut({ id:'tb-hist', type:'TB', equip:'TK143', date:'2026-05-01',
+      by:'S. Volkov', sup:'A. Sokolov', smu:'6000', cls:'AT', gps:null,
+      dev:'PH-01', sign:null, positions:{ F62:{ mm:12.0, photos:[], video:null } },
+      created:'2026-05-01T06:00:00.000Z', up:0, upTo:{}, rev:1 });
+    type = 'TB'; selectEquip('TK143');
+    await new Promise(r => setTimeout(r, 600));
+    document.getElementById('smu').value = '7000';
+    document.getElementById('date').value = '2026-08-22';
+    pickComponent('F62');
+    await new Promise(r => setTimeout(r, 200));
+    const e = document.getElementById('ucMM');
+    e.value = '9'; e.dispatchEvent(new Event('input'));
+    await new Promise(r => setTimeout(r, 900));
+    return (document.getElementById('ucFcast') || {}).textContent || '';
+  });
+  ok('two readings a thousand hours apart produce a rate', /\d/.test(rate), rate);
+  /* 12 mm to 9 mm over 1000 h is 3 mm/1000 h; 9 mm with condemn at 3 leaves
+     6 mm, which is 2000 h. Both numbers are checked, because a rate with the
+     wrong life beside it is worse than no rate. */
+  ok('and it is the right rate — 3 mm per 1,000 h', /3\s*mm/.test(rate), rate);
+  ok('and the right life left — about 2,000 h', /2[,.]?000/.test(rate), rate);
+  /* Put the round back where the sections below expect it: no reading in the
+     box, no seeded history, nothing selected. A test that leaves state behind
+     makes the next one fail for a reason that has nothing to do with it. */
+  await p.evaluate(async () => {
+    delete draft.positions.F62;
+    try { await dbDel('tb-hist'); } catch (e) {}
+    document.getElementById('smu').value = '';
+    ucPrevCache = { key:'', ver:-1, rows:{} };
+    selectEquip('TK143');
+    await new Promise(r => setTimeout(r, 400));
+  });
+  await p.waitForTimeout(300);
 
   /* ---- 3. the questions a round can ask without a reference table ------- */
   console.log('\nthe checks that need no limits at all');
@@ -249,7 +309,7 @@ const put = (p, k, v) => p.evaluate(a => { pickComponent(a[0]);
              reading: document.body.classList.contains('tbreading') };
   });
   ok('taking a reading does not cover the map', !lay.covered && !lay.offTop,
-    'map ' + lay.h + ' px, sheet starts below it');
+    'map ' + lay.h + ' px, sheet starts below it, tray still on screen');
   ok('and the whole tray is still on screen, not scrolled half off', lay.h > 120, lay.h + ' px');
   ok('the round knows it is in reading mode', lay.reading);
 

@@ -91,7 +91,11 @@ def brand_of(name):
 # From the Lube Legend tab's own component table, by TYPE rather than by its
 # stale column letters.
 LEGEND_TYPE = {
-    "1":"engine", "2":"gear", "3":"hydraulic", "3A":"gear",
+    # 3A Steering: the Legend files it under gear oil (column O). Confirmed by
+    # R. Marrero that steering is hydraulic - which is what the one machine
+    # carrying it, an NHL TR60 with a 72 L steering circuit, would want. Left as
+    # gear oil, the app would have offered a fitter a 75W90 for a steering pump.
+    "1":"engine", "2":"gear", "3":"hydraulic", "3A":"hydraulic",
     "4":"gear","4A":"gear","4B":"gear","4C":"gear","4E":"gear","4F":"gear",
     "4AL":"gear","4AR":"gear","4BL":"gear","4BR":"gear","4CL":"gear","4CR":"gear",
     "4I":"gear","4J":"gear","4K":"gear","4L":"gear","4M":"gear","4N":"gear",
@@ -113,6 +117,21 @@ LEGEND_TYPE = {
 # friction chemistry — a wet clutch needs the TO-4 frictional properties and a
 # gear set does not — so this is an engineer's decision, not an importer's.
 QUESTION_TYPES = {"2"}
+
+# ── the rotary head ────────────────────────────────────────────────────────
+# Code 7 is in the Legend and no machine uses it, because the frequency sheet
+# has no column for it. Confirmed by R. Marrero that the drills do have one, so
+# the compartment is real and the FIGURES are what is missing - a different
+# thing from the compartment not existing. A rotary head can be audited without
+# knowing its capacity; it cannot be audited if it is not on the list.
+#
+# Which machines get one is derived rather than typed: any model the masterlist
+# already gives a drill-rig drivetrain code. 11E is deliberately NOT in this
+# set - a thread-lube container sits on an excavator-mounted attachment too,
+# and an excavator has no rotary head.
+DRILL_CODES = {"11A", "11B", "11C", "11D", "7B"}
+ROTARY_HEAD = {"k": "7", "en": "Rotary Head", "ru": "\u0412\u0440\u0430\u0449\u0430\u0442\u0435\u043b\u044c",
+               "t": "gear", "verify": 1}
 
 # The Legend types a compartment by where it sits on the machine. The OEM code
 # in the next column says what the maker actually wants in it, and sometimes
@@ -319,7 +338,7 @@ def main():
     # Those get the Legend's; anything else keeps what the sheet says and is
     # REPORTED instead, because silently rewriting a name somebody typed on
     # purpose is how a reference stops matching the paper in the ute.
-    renamed, differ = [], []
+    renamed, differ, rotary = [], [], []
     for cp in comps:
         want = legend.get(cp["k"])
         if not want:
@@ -387,6 +406,13 @@ def main():
             got.append(c)
         if not got: continue
 
+        # No capacity and no interval, VERIFY set, so it lands on the work list
+        # as figures to confirm rather than as a fact nobody supplied.
+        if any(c["k"] in DRILL_CODES for c in got) and \
+           not any(c["k"] == "7" for c in got):
+            got.append(dict(ROTARY_HEAD))
+            rotary.append(label)
+
         hits = set()
         for k in keys(label): hits |= reg.get(k, set())
         seen = sorted(hits)
@@ -450,6 +476,18 @@ def main():
                 "pieces of paper, and somebody should pick one.\n\n")
         for k, sheet_name, leg in differ:
             f.write("  %-5s sheet: %-36s legend: %s\n" % (k, sheet_name[:36], leg))
+
+        f.write("\nROTARY HEAD ADDED, FIGURES STILL MISSING (%d)\n" % len(rotary)
+                + "-" * 62 + "\n")
+        f.write("Code 7 is in the Legend and the frequency sheet has no column\n"
+                "for it. These are drill rigs, so the compartment is real: it is\n"
+                "carried with no capacity and no interval, flagged to confirm.\n"
+                "Derived from the drill-rig codes the masterlist already gives a\n"
+                "model (%s), so it grows with the sheet -\n"
+                "a drill whose row carries none of those gets no rotary head and\n"
+                "is worth a look.\n\n" % ", ".join(sorted(DRILL_CODES)))
+        for m in rotary:
+            f.write("  %s\n" % m)
 
         f.write("\nCODES THE LEGEND DEFINES THAT NO MACHINE USES (%d)\n"
                 % len(unused_codes) + "-" * 62 + "\n")

@@ -51,14 +51,15 @@
         [11, 'CRACK',   'Cracks / missing GET',      'Трещины / утраченные элементы','visual', 50, 30],
       ],
       /* The wear plates are the site's own figure now, not a starting point:
-         R. Marrero, 20 mm on and off at 8 mm, every liner on the property. So
+         R. Marrero, 20 mm on and not serviceable below 3 mm, every liner on
+         the property - dump body and ground engaging tools alike. So
          they carry src:'site' and the "generic limit" flag stops appearing
          beside their readings. Everything else here is still generic and still
          says so. */
       lim: { TOOTH:{n:320,c:130}, ADAPTER:{n:250,c:190}, LIP:{n:90,c:60}, CUTL:{n:60,c:25},
              CUTR:{n:60,c:25}, SHROUD:{n:60,c:25},
-             FLOOR:{n:20,c:8,src:'site'}, WALLL:{n:20,c:8,src:'site'},
-             WALLR:{n:20,c:8,src:'site'} },
+             FLOOR:{n:20,c:3,src:'site'}, WALLL:{n:20,c:3,src:'site'},
+             WALLR:{n:20,c:3,src:'site'} },
     },
     blade: {
       en: 'Blade & ripper', ru: 'Отвал и рыхлитель',
@@ -76,7 +77,7 @@
         [11, 'CRACK',   'Cracks / deformation',  'Трещины / деформация',   'visual', 50, 41],
       ],
       lim: { ENDL:{n:60,c:25}, EDGEL:{n:60,c:25}, EDGEC:{n:60,c:25}, EDGER:{n:60,c:25},
-             ENDR:{n:60,c:25}, CORNER:{n:30,c:12}, STRIP:{n:20,c:8,src:'site'},
+             ENDR:{n:60,c:25}, CORNER:{n:30,c:12}, STRIP:{n:20,c:3,src:'site'},
              RTIP:{n:300,c:150}, RSHANK:{n:110,c:80} },
     },
   };

@@ -865,7 +865,14 @@
   /* Taking a reading is a different screen from choosing where to take it: the
      orientation note has been read by then, and seven zone chips over three rows
      are worth less than the map they were stealing. */
-  body.tbreading .tbnote{display:none;}
+  /* Reading mode keeps the drawing and the number box on screen and nothing
+     else. The forecast line joined the notes here for the same reason they are
+     here: on a 412 px phone it added just enough height to push the tray off
+     the top of the viewport while a thumb was on the number, and a fitter who
+     cannot see which station they are standing at is measuring blind. It is
+     back the moment they stop typing, which is when it is read anyway. */
+  body.tbreading .tbnote,
+  body.tbreading .ucfcast{display:none;}
   /* A ROW YOU WALK SCROLLS; A SET YOU BROWSE WRAPS.
      Seven tray zones wrapped to four rows took more height than the map they
      sat under — 197 px of chips against 179 px of tray. One row that scrolls
@@ -4029,6 +4036,11 @@ function renderBody(){
     const rec=draft.positions[curItem]; if(rec && rec.stood) delete rec.stood;
   }
   renderUCReasons();
+  /* The body round has a condemn limit now, so it gets the same wear rate the
+     undercarriage has always had: millimetres since the last measurement, and
+     hours left at that rate. It was reaching renderUC's call site through a
+     branch that returns before it. */
+  renderUCFcast();
   renderUCSheet();
 }
 /* What the history says about how long this position has left. Held beside the
@@ -4137,8 +4149,19 @@ async function renderUCFcast(){
   const key=curItem, unit=curEquip;
   const done=(txt,cls)=>{ if(key!==curItem) return;
     el.textContent=txt||""; el.className="ucfcast"+(cls?" "+cls:""); };
-  if(!key||!unit||bodyType()) return done("");
-  const ref=ucRef(); const mm=posRO().mm;
+  if(!key||!unit) return done("");
+  /* The dump body was excluded from this outright, back when it had no condemn
+     limit to forecast towards. It has one now - 20 mm on, not serviceable
+     below 3 - and a liner is the fastest-wearing steel on the property, so it
+     is the one place a wear RATE earns its keep: how many millimetres went
+     since the last measurement, and how many hours are left at that rate.
+     WEAR.forecast never knew anything about undercarriage; it takes a limit
+     and a series of readings, and the body has both. */
+  const ref = bodyType()
+    ? (function(){ const st=bodyStatus(unit);
+        return st.ok ? BODY.limitFor(st.model, key) : null; })()
+    : ucRef();
+  const mm=posRO().mm;
   /* No condemn figure, nothing to forecast towards. Note that a BORROWED or
      DISPUTED "new" does not stop this — the forecast never uses "new". */
   if(!ref || ref.c==null || mm==null) return done("");
@@ -4147,7 +4170,9 @@ async function renderUCFcast(){
      implies cannot be right either — and a confident "about 400 h left" under
      a challenge is the app arguing with itself. Silence until the reading is
      settled, one way or the other. */
-  if(WEAR.implausible(ref, mm)) return done("");
+  /* implausible() is the undercarriage's own sanity rule and knows its
+     reference shape. A body reading is checked by the round itself. */
+  if(!bodyType() && WEAR.implausible(ref, mm)) return done("");
   const rows=await ucPrevReadings(unit);
   const series=(rows["#"+key]||[]).map(r=>({mm:r.mm, at:r.d, smu:r.smu}))
     .concat([{mm:Number(mm), at:$("date").value, smu:$("smu").value.trim()}]);

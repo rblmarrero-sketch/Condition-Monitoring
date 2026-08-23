@@ -1238,7 +1238,14 @@
 
     /* The measurement history, one row per point. Only for machines that were
        measured — a plug round has nothing to line up in columns. */
-    var wearRuns = latest.filter(function (r) { return r.wear; });
+    /* Gated on the DATA, not on the round's flag. A dump body round is
+       deliberately not marked `wear` - it has no machine drawing and no
+       walk-the-frames layout - so this table skipped it, and the one question a
+       liner is measured to answer is "how fast is it going". Any round whose
+       items carry millimetres has a history worth lining up in columns. */
+    var wearRuns = latest.filter(function (r) {
+      return r.items.some(function (it) { return it.w && it.w.mm != null; });
+    });
     var MAXCOL = 6;
     wearRuns.forEach(function (cur) {
       var all = [cur].concat(older.filter(function (r) { return r.type === cur.type; }))
