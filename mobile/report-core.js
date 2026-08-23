@@ -1230,9 +1230,25 @@
         lubeSections(ctx, T, rec, sign).forEach(function (x) { secs.push(x); });
         return;
       }
-      /* A round with nothing to measure is one page: masthead, board, names. */
+      /* A round with nothing to measure is one page: masthead, board, names.
+
+         Unless it brought a drawing. "Nothing to measure" is rec.wear, which
+         the host sets from the round type's `wear` flag — and a GET round is
+         graded rather than measured, so it does not carry that flag. It DOES
+         carry a picture of the machine with its tool positions numbered on it:
+         the host built one, put it on the record, and this branch dropped it on
+         the floor. Forty kilobytes of drawing, printed as nothing, with no
+         error anywhere — which is this project's oldest failure shape and the
+         reason the inspector's GET sheets had no picture on them.
+
+         Its own section so the fold falls between the board and the drawing
+         rather than through either, and the signatures stay at the end. */
       if (!isWear) {
-        secs.push({ nb: n > 0, html: '<div class="sec">' + head + body + sign + '</div>' });
+        var oneMap = rec.mapHTML
+          ? CMR.mapBlock(T, rec.mapHTML, 11, rec.zones, rec.mapKey) : "";
+        secs.push({ nb: n > 0, html: '<div class="sec">' + head + body
+          + (oneMap ? "" : sign) + '</div>' });
+        if (oneMap) secs.push({ nb: false, html: '<div class="sec">' + oneMap + sign + '</div>' });
         return;
       }
 

@@ -269,6 +269,57 @@ const enter = async (p, v) => { await p.fill('#ucMM', String(v)); await p.waitFo
   ok('  in both languages, like everything else on it', mute.en && mute.ru);
   await paper.ctx.close();
 
+  /* ---- a drawing that was built is never dropped -------------------------
+     Not "the undercarriage sheet has a picture" — that check passed for months
+     while the GET sheet had none. The host builds a drawing, puts it on the
+     record, and the report decides whether to print it; the decision was made
+     on rec.wear, which a GET round does not carry because teeth are graded
+     rather than measured. Forty kilobytes of drawing, printed as nothing.
+
+     So the property is about the ROUND, not about a type somebody remembered
+     to list: whatever the host drew has to appear. A ninth round type inherits
+     this the day it is added. */
+  console.log('\nevery round that builds a drawing prints it');
+  const every = await app(b, undefined);
+  const built = await every.p.evaluate(async () => {
+    const out = [];
+    const KNOWN = { UC:['DZ002','EX006'], TB:['TK143','TK146'],
+      GET:(window.ASSETS||[]).filter(a => /EXC|LOAD/i.test(a.cls || '')).slice(0,4).map(a => a.n) };
+    const sel = document.getElementById('typeSel');
+    for (const ty of [...sel.options].map(o => o.value)) {
+      sel.value = ty; sel.dispatchEvent(new Event('change'));
+      let unit = null, ks = [];
+      const tryOne = async n => { selectEquip(n); await new Promise(r => setTimeout(r, 350));
+        const g = items().map(x => x.k); return g.length ? g : null; };
+      for (const n of (KNOWN[ty] || [])) { const g = await tryOne(n); if (g) { unit = n; ks = g; break; } }
+      if (!unit) for (const a of (window.ASSETS || []).slice(0, 40)) {
+        const g = await tryOne(a.n); if (g) { unit = a.n; ks = g; break; } }
+      if (!unit) { out.push({ ty, skip:'no machine carries this round' }); continue; }
+      const pos = {};
+      ks.forEach((k, i) => { pos[k] = { mm: 20 + (i % 7), grade:'A', sev:'NOF',
+        stood:0, reason:'', photos:[], video:null }; });
+      const id = 'draw-' + ty;
+      await dbPut({ id, type:ty, equip:unit, date:'2026-08-20', by:'S. Volkov', sup:'A. Sokolov',
+        smu:'100', cls:(ASSET_BY[unit]||{}).cls||'', gps:null, dev:'PH-01', sign:null,
+        positions:pos, created:'2026-08-20T06:00:00.000Z', up:0, upTo:{}, rev:1 });
+      const rec = (await rptRecords(id))[0] || {};
+      const html = (await buildReportSections(id)).map(x => x.html).join('');
+      const drew = (rec.mapHTML || '').length;
+      out.push({ ty, unit, drew, printed: drew ? html.indexOf(rec.mapHTML.slice(0, 120)) >= 0 : null });
+    }
+    return out;
+  });
+  built.forEach(r => console.log('   ·      ' + r.ty + '   '
+    + (r.skip || (r.unit + '  ' + (r.drew ? r.drew + ' chars, ' + (r.printed ? 'printed' : 'DROPPED')
+                                          : 'no drawing for this round type')))));
+  const drewAny = built.filter(r => r.drew);
+  ok('more than one kind of round draws its machine', drewAny.length >= 3,
+     drewAny.map(r => r.ty).join(' '));
+  ok('and every drawing that was built is on its sheet',
+     drewAny.every(r => r.printed),
+     drewAny.filter(r => !r.printed).map(r => r.ty).join(',') || 'all of them');
+  await every.ctx.close();
+
   await b.close();
   console.log(fails.length ? `\n${fails.length} FAILED: ` + fails.join(' | ') : '\nall passed');
   process.exit(fails.length ? 1 : 0);
