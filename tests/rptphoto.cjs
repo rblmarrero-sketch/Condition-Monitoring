@@ -89,8 +89,12 @@ const note = (n, d) => console.log('  ....  ' + n + (d !== undefined ? '   ' + d
       const ref = WEAR.refFor('DZ002', (ASSET_BY['DZ002']||{}).m, pt, pos, '2026-08-22');
       if (!ref || ref.x) { uc[k] = { mm:null, reason:'', stood:0, photos:[], video:null }; continue; }
       const mm = Math.round((ref.n + (ref.c - ref.n) * Math.min(1.1, 0.6 + (i % 7) * 0.06)) * 10) / 10;
-      uc[k] = { mm, stood:0, reason:'',
-                photos: (shotUC < 6 && i % 7 === 0) ? (shotUC++, await shoot()) : [], video:null };
+      /* All six on ONE position, which is what a worn roller looks like in the
+         field and what the printed sheet has to lay out — six frames of one
+         thing, not six positions with one frame each. */
+      const many = [];
+      if (shotUC === 0) { for (let q = 0; q < 6; q++) many.push(...await shoot()); shotUC = 6; }
+      uc[k] = { mm, stood:0, reason:'', photos: many, video:null };
     }
     await put({ id:'r-ph-uc', type:'UC', equip:'DZ002', date:'2026-08-22',
       smu:'7410', cls:(ASSET_BY['DZ002']||{}).cls||'', positions:uc });
@@ -223,6 +227,50 @@ const note = (n, d) => console.log('  ....  ' + n + (d !== undefined ? '   ' + d
      solo.unit + ' appears ' + solo.onIt + ' times');
   ok('  and no other machine in the queue is',
      solo.strays.every(x => /:0$/.test(x)), solo.strays.join(' | '));
+
+  /* ---- and they are laid out like a sheet, not like an afterthought ------
+     One position with photographs came out as a 340 px column in the corner of
+     an empty page, with the first frame four times the size of the rest and a
+     ragged last row. The 340 px cap is right on a findings board — a card of
+     text should not stretch across A4 — and wrong on a page that is nothing but
+     pictures. */
+  console.log('\nthe photographs are laid out across the sheet');
+  const grid = await p.evaluate(async () => {
+    const all = await dbAll();
+    /* The undercarriage round: a measured round puts its photographs on their
+       own sheet, which is the layout that was wrong. A plug round prints them
+       inside the findings board, which is a different thing and still right. */
+    const uc = all.find(r => r.type === 'UC');
+    const secs = await buildReportSections(uc.id);
+    const st = document.createElement('style'); st.textContent = CMR.CSS;
+    const host = document.createElement('div');
+    host.id = 'rptRoot';
+    host.style.cssText = 'position:absolute;left:-4000px;top:0;width:760px;background:#fff';
+    document.head.appendChild(st); document.body.appendChild(host);
+    host.innerHTML = secs.map(x => x.html).join('');
+    const board = host.querySelector('.board.gal');
+    const cel = board && board.querySelector('.cel');
+    const imgs = [...host.querySelectorAll('.board.gal .cel img')]
+      .map(i => i.getBoundingClientRect());
+    const w = imgs.map(r => Math.round(r.width)), h = imgs.map(r => Math.round(r.height));
+    /* how many sit on the first row — the grid's real column count */
+    const tops = imgs.map(r => Math.round(r.top));
+    const cols = tops.filter(t => t === tops[0]).length;
+    const out = { sheet: host.clientWidth, board: board ? Math.round(board.getBoundingClientRect().width) : 0,
+                  cel: cel ? Math.round(cel.getBoundingClientRect().width) : 0,
+                  n: imgs.length, sameW: new Set(w).size, sameH: new Set(h).size,
+                  cols, one: w[0] || 0, orphans: imgs.length % (cols || 1) };
+    host.remove(); st.remove();
+    return out;
+  });
+  ok('the photographs take the width of the sheet, not a column in the corner',
+     grid.board / grid.sheet > 0.9, grid.board + ' px of ' + grid.sheet);
+  ok('  every frame the same size, so none of them reads as the important one',
+     grid.n > 3 && grid.sameW === 1 && grid.sameH === 1,
+     grid.n + ' frames, ' + grid.sameW + ' width(s), ' + grid.sameH + ' height(s)');
+  ok('  and the last row is full, not one picture and a hole',
+     grid.n > 3 && grid.cols > 1 && grid.orphans === 0,
+     grid.n + ' across ' + grid.cols + ' columns');
 
   /* ---- the screen is not left in a dialog -------------------------------- */
   const after = await p.evaluate(() => !!(document.getElementById('dlg') || {}).open);

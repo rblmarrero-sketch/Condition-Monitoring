@@ -333,6 +333,14 @@
 #rptRoot .b3{grid-template-columns:repeat(3,1fr);}
 #rptRoot .b2{grid-template-columns:repeat(2,1fr);}
 #rptRoot .b1{grid-template-columns:1fr;max-width:340px;}
+/* The photographs sheet. Same board, but the cells hold pictures rather than a
+   paragraph, so they take the width of the paper — and the frames inside them
+   are one size, in rows, rather than one big and a strip of stamps. */
+#rptRoot .board.gal{gap:14px 12px;}
+#rptRoot .board.gal.b1{max-width:none;}
+#rptRoot .cel .phg{display:grid;gap:2px;background:#dfe4e9;}
+#rptRoot .cel .phg img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;
+  background:#f2f5f7;}
 #rptRoot .allok{background:#eef6ef;color:#146b2c;font-size:12px;font-weight:650;
   padding:8px 12px;border-radius:4px;margin-top:12px;}
 #rptRoot .quiet{font-size:10px;color:#5b6670;margin-top:10px;line-height:1.5;}
@@ -1257,10 +1265,14 @@
         lubeSections(ctx, T, rec, "").forEach(function (x) { secs.push(x); });
       if (told.filter(function (it) { return it.photos && it.photos.length; }).length) {
         var ph = told.filter(function (it) { return it.photos && it.photos.length; });
+        /* One position with photographs is not one narrow card in the corner
+           of an empty page. The findings board caps a single cell at 340px so a
+           card of text does not stretch across A4 — right there, wrong here,
+           where the cell holds the pictures and the page is theirs. */
         secs.push({ nb: false, html: '<div class="sec">'
           + '<div class="subhd">' + T.I("photos") + '</div>'
-          + '<div class="board b' + (ph.length >= 4 ? 4 : ph.length) + '">'
-          + ph.map(function (it) { return cell(ctx, T, it); }).join("") + '</div></div>' });
+          + '<div class="board gal b' + (ph.length >= 2 ? 2 : 1) + '">'
+          + ph.map(function (it) { return cell(ctx, T, it, null, true); }).join("") + '</div></div>' });
       }
     });
 
@@ -1453,7 +1465,22 @@
   /* One position: what it looked like, then what it was. Rows appear only when
      there is something in them — an empty "Cause —" line is a line of nothing,
      and anything the band above already said is not said again here. */
-  function cell(ctx, T, it, sh) {
+  /* How many across, so the last row is not one photograph and a hole.
+
+     Eight in a 3-wide strip is two rows and two orphans; the same eight at four
+     across is two full rows. Try the widths that stay legible on A4 and take
+     the one that wastes least, preferring the wider — which is also the one
+     that keeps each frame biggest. */
+  function gridCols(n) {
+    if (n <= 3) return n;
+    var best = 4, waste = 99;
+    [4, 3, 2].forEach(function (c) {
+      var w = (c - (n % c)) % c;
+      if (w < waste || (w === waste && c > best)) { waste = w; best = c; }
+    });
+    return best;
+  }
+  function cell(ctx, T, it, sh, gallery) {
     sh = sh || {};
     /* EVERY photograph the inspector took. Somebody walked to the machine for
        each one, and a report that quietly prints half is a report that loses
@@ -1467,12 +1494,25 @@
     var ph = it.photos || [];
     var top = "";
     if (ph.length) {
-      top = '<img class="ph" src="' + ph[0] + '">';
-      var rest = ph.slice(1);
-      if (rest.length) {
-        top += '<div class="phx">'
-          + rest.map(function (u) { return '<img src="' + u + '">'; }).join("")
+      /* On the PHOTOGRAPHS sheet every frame is the same size, in rows across
+         the page. The establishing-shot-plus-strip below is right on a findings
+         board, where the card is a narrow column beside three others and the
+         first picture has to carry it — but on a page that is nothing but
+         photographs it made one frame four times the size of the rest for no
+         reason, and left the right half of the sheet empty. */
+      if (gallery) {
+        top = '<div class="phg" style="grid-template-columns:repeat('
+          + gridCols(ph.length) + ',1fr)">'
+          + ph.map(function (u) { return '<img src="' + u + '">'; }).join("")
           + '</div>';
+      } else {
+        top = '<img class="ph" src="' + ph[0] + '">';
+        var rest = ph.slice(1);
+        if (rest.length) {
+          top += '<div class="phx">'
+            + rest.map(function (u) { return '<img src="' + u + '">'; }).join("")
+            + '</div>';
+        }
       }
     }
     var rows = "";

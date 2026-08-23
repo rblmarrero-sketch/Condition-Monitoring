@@ -187,14 +187,14 @@
      NOT borrow the product palette below, where a hue already means "which
      drum" — a bar in one of those colours would be saying something it does
      not mean. */
-  .pgnote{background:var(--surface-2,#f1f4f5);border:1px solid var(--line,#e3e8ea);
+  .pgnote{background:var(--surface-2,#f1f4f5);border:1px solid var(--border);
     border-radius:10px;padding:12px 14px;font-size:13px;color:var(--ink-2);line-height:1.5;}
   .pgrid{display:flex;flex-direction:column;gap:2px;margin:14px 0 4px;}
   .pgrow{display:grid;grid-template-columns:200px 1fr 116px;gap:12px;align-items:center;
     padding:10px 12px;border-radius:8px;}
   .pgrow:nth-child(odd){background:var(--surface-2,#f7f9fa);}
   .pglab b{display:block;font-size:13.5px;line-height:1.2;}
-  .pgbar{height:12px;border-radius:6px;background:var(--line,#e3e8ea);overflow:hidden;}
+  .pgbar{height:12px;border-radius:6px;background:var(--border);overflow:hidden;}
   .pgbar span{display:block;height:100%;border-radius:6px;background:var(--accent,#8a4526);}
   .pgnum{text-align:right;font-variant-numeric:tabular-nums;}
   .pgnum b{font-size:17px;}
@@ -202,7 +202,7 @@
   /* The reason a row exists sits under it, not in a tooltip nobody opens. */
   .pgwhy{grid-column:1 / -1;font-size:12.5px;color:var(--ink-2);line-height:1.5;padding-top:2px;}
   .pgwhy .from{display:inline-block;margin-left:8px;padding:1px 7px;border-radius:20px;
-    background:var(--line,#e3e8ea);color:var(--muted);font-size:11px;font-weight:700;
+    background:var(--border);color:var(--muted);font-size:11px;font-weight:700;
     white-space:nowrap;}
 
   /* overflow-x:auto on the wrapper scrolls the table, but on this layout it did
@@ -217,7 +217,7 @@
      Read at arm's length in a cold workshop by somebody in gloves holding a
      drum pump. Large type, both languages stacked rather than run together,
      and the row with no answer shouting rather than sitting quietly blank. */
-  .posterbox{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;
+  .posterbox{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;
     padding:16px;overflow-x:auto;contain:paint;}
   .poster{background:#fff;color:#11171a;min-width:820px;padding:22px 26px;border-radius:6px;
     box-shadow:0 1px 3px rgba(0,0,0,.18);}
@@ -322,8 +322,8 @@
   /* The reconciliation lists. Each one is a disagreement between two of the
      site's own documents, so it is folded shut with its count showing: the
      number is the finding, the rows are the evidence. */
-  details.cat{border-top:1px solid var(--line);}
-  details.cat:last-child{border-bottom:1px solid var(--line);}
+  details.cat{border-top:1px solid var(--border);}
+  details.cat:last-child{border-bottom:1px solid var(--border);}
   details.cat>summary{cursor:pointer;list-style:none;display:flex;
     align-items:center;gap:10px;padding:11px 2px;font-size:13.5px;}
   details.cat>summary::-webkit-details-marker{display:none;}
@@ -428,15 +428,15 @@
   table.grid.mtx tbody tr:hover td.cell{
     background:color-mix(in srgb, var(--h) 13%, var(--surface,#fff));}
   table.mtx td.unset b{display:block;font-size:11.5px;font-weight:600;color:var(--muted);}
-  table.mtx td.na{text-align:center;color:var(--line,#c9d2d6);font-size:16px;padding:9px 0;}
+  table.mtx td.na{text-align:center;color:var(--border);font-size:16px;padding:9px 0;}
   .lgnd{display:flex;flex-wrap:wrap;gap:9px 20px;margin-top:14px;padding-top:12px;
-    border-top:1px solid var(--line,#e3e8ea);}
+    border-top:1px solid var(--border);}
   .lg{display:flex;align-items:center;gap:7px;font-size:12.5px;}
   .lg .sw{width:16px;height:16px;border-radius:3px;flex:none;background:var(--h);
     border:1px solid rgba(0,0,0,.18);}
   .lg .sw.want{background:var(--surface,#fff);
     box-shadow:inset 0 0 0 4px color-mix(in srgb,var(--muted) 30%,transparent);}
-  .lg .sw.none{background:repeating-linear-gradient(135deg,var(--surface,#fff) 0 4px,var(--line,#e6ebee) 4px 8px);}
+  .lg .sw.none{background:repeating-linear-gradient(135deg,var(--surface,#fff) 0 4px,var(--border) 4px 8px);}
   .lg .sw.na{background:var(--surface,#fff);}
   .vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
     clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0;}
@@ -1415,24 +1415,24 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=126"></script>
-<script src="../mobile/hme.js?v=126"></script>
-<script src="../mobile/mp-fc.js?v=126"></script>
-<script src="../mobile/hme-cascade.js?v=126"></script>
-<script src="../mobile/temp-limits.js?v=126"></script>
+<script src="../data/magnetic_plug.js?v=127"></script>
+<script src="../mobile/hme.js?v=127"></script>
+<script src="../mobile/mp-fc.js?v=127"></script>
+<script src="../mobile/hme-cascade.js?v=127"></script>
+<script src="../mobile/temp-limits.js?v=127"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=126"></script>
-<script src="../mobile/wear.js?v=126"></script>
-<script src="../mobile/wear-map.js?v=126"></script>
-<script src="../mobile/lube.js?v=126"></script>
-<script src="../mobile/lube2027.js?v=126"></script>
-<script src="../mobile/lube-tds.js?v=126"></script>
+<script src="../mobile/assets.js?v=127"></script>
+<script src="../mobile/wear.js?v=127"></script>
+<script src="../mobile/wear-map.js?v=127"></script>
+<script src="../mobile/lube.js?v=127"></script>
+<script src="../mobile/lube2027.js?v=127"></script>
+<script src="../mobile/lube-tds.js?v=127"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=126"></script>
-<script src="../mobile/machine-photos.js?v=126"></script>
+<script src="../mobile/upload-defaults.js?v=127"></script>
+<script src="../mobile/machine-photos.js?v=127"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -1441,16 +1441,16 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=126"></script>
-<script src="../mobile/get.js?v=126"></script>
-<script src="../mobile/uc-points.js?v=126"></script>
-<script src="../mobile/inspect-guide.js?v=126"></script>
-<script src="../mobile/get-figs.js?v=126"></script>
-<script src="../mobile/body-points.js?v=126"></script>
-<script src="../mobile/body-map.js?v=126"></script>
-<script src="../mobile/jspdf.umd.min.js?v=126"></script>
-<script src="../mobile/html2canvas.min.js?v=126"></script>
-<script src="../mobile/report-core.js?v=126"></script>
+<script src="../mobile/machine-fig.js?v=127"></script>
+<script src="../mobile/get.js?v=127"></script>
+<script src="../mobile/uc-points.js?v=127"></script>
+<script src="../mobile/inspect-guide.js?v=127"></script>
+<script src="../mobile/get-figs.js?v=127"></script>
+<script src="../mobile/body-points.js?v=127"></script>
+<script src="../mobile/body-map.js?v=127"></script>
+<script src="../mobile/jspdf.umd.min.js?v=127"></script>
+<script src="../mobile/html2canvas.min.js?v=127"></script>
+<script src="../mobile/report-core.js?v=127"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -5678,8 +5678,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=126"></script>
-<script src="sync-adapter.js?v=126"></script>
-<script src="report.js?v=126"></script>
+<script src="drive.js?v=127"></script>
+<script src="sync-adapter.js?v=127"></script>
+<script src="report.js?v=127"></script>
 </body>
 </html>

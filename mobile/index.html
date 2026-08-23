@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=126">
+<link rel="manifest" href="manifest.webmanifest?v=127">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=126">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=126">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=126">
+<link rel="apple-touch-icon" href="icon-192.png?v=127">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=127">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=127">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1690,27 +1690,27 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=126"></script>
-<script src="upload-defaults.js?v=126"></script>
-<script src="hme.js?v=126"></script>
-<script src="mp-fc.js?v=126"></script>
-<script src="hme-cascade.js?v=126"></script>
-<script src="assets.js?v=126"></script>
-<script src="temp-limits.js?v=126"></script>
-<script src="wear.js?v=126"></script>
-<script src="wear-figs.js?v=126"></script>
-<script src="wear-map.js?v=126"></script>
-<script src="machine-photos.js?v=126"></script>
-<script src="machine-fig.js?v=126"></script>
-<script src="get.js?v=126"></script>
-<script src="uc-points.js?v=126"></script>
-<script src="inspect-guide.js?v=126"></script>
-<script src="get-figs.js?v=126"></script>
-<script src="body-points.js?v=126"></script>
-<script src="body-map.js?v=126"></script>
-<script src="lube.js?v=126"></script>
-<script src="lube2027.js?v=126"></script>
-<script src="report-core.js?v=126"></script>
+<script src="native.js?v=127"></script>
+<script src="upload-defaults.js?v=127"></script>
+<script src="hme.js?v=127"></script>
+<script src="mp-fc.js?v=127"></script>
+<script src="hme-cascade.js?v=127"></script>
+<script src="assets.js?v=127"></script>
+<script src="temp-limits.js?v=127"></script>
+<script src="wear.js?v=127"></script>
+<script src="wear-figs.js?v=127"></script>
+<script src="wear-map.js?v=127"></script>
+<script src="machine-photos.js?v=127"></script>
+<script src="machine-fig.js?v=127"></script>
+<script src="get.js?v=127"></script>
+<script src="uc-points.js?v=127"></script>
+<script src="inspect-guide.js?v=127"></script>
+<script src="get-figs.js?v=127"></script>
+<script src="body-points.js?v=127"></script>
+<script src="body-map.js?v=127"></script>
+<script src="lube.js?v=127"></script>
+<script src="lube2027.js?v=127"></script>
+<script src="report-core.js?v=127"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -1989,6 +1989,11 @@ const I18N = {
        the phone has hung. */
     rep_page:"Building… {i} of {n}",
     rep_photo:"Fetching photograph {i} of {n}…",
+    /* A sheet with no picture of the machine on it used to be silent about it,
+       so the same round printed twice looked like two different documents. */
+    rep_nomap_nomodule:"The machine drawing could not be loaded on this phone, so this sheet has none. Print it again with a connection, or from the dashboard.",
+    rep_nomap_noref:"No wear reference is loaded for this model, so the machine drawing and the wear percentages are not on this sheet.",
+    rep_nomap_nodata:"The machine drawing could not be built for this round, so this sheet has none.",
     rep_nophoto_net:"Photographs could not be fetched from the shared folder, so this sheet has none. The round may still have them.",
     rep_nophoto_off:"This phone is offline, so the photographs in the shared folder could not be put on this sheet. The round may still have them.",
     rep_nophoto_nodrive:"No shared folder is configured on this phone, so any photographs taken on this round are not on this sheet.",
@@ -2337,6 +2342,9 @@ const I18N = {
     rep_title:"Отчёт по мониторингу состояния", rep_generated:"Сформировано", rep_building:["Формирование отчёта…","Готовится PDF — это может занять несколько секунд."],
     rep_page:"Формирование… {i} из {n}",
     rep_photo:"Загрузка фотографии {i} из {n}…",
+    rep_nomap_nomodule:"Не удалось загрузить модуль схемы на этом телефоне, поэтому схемы машины на листе нет. Повторите при связи или сформируйте отчёт на дашборде.",
+    rep_nomap_noref:"Для этой модели не загружены предельные величины, поэтому схемы машины и процентов износа на листе нет.",
+    rep_nomap_nodata:"Не удалось построить схему машины для этого обхода, поэтому её нет на листе.",
     rep_nophoto_net:"Не удалось загрузить фотографии из общей папки, поэтому их нет на этом листе. В обходе они могут быть.",
     rep_nophoto_off:"Телефон офлайн, поэтому фотографии из общей папки не попали на этот лист. В обходе они могут быть.",
     rep_nophoto_nodrive:"На этом телефоне не настроена общая папка, поэтому фотографии этого обхода на лист не попали.",
@@ -6922,25 +6930,48 @@ function rptBodyMap(rec,items){
 
    Same builders as the dashboard, so a PDF made at either end is the same
    document, and the same builders as the capture screen underneath them. */
+/* The drawing modules, if they are not already here.
+
+   wear-map.js is a plain script tag, so on a good load it is always present and
+   this costs nothing. On a bad one it is not, and the report used to answer
+   that by returning an empty string: a sheet with no picture of the machine on
+   it, no error, no line saying anything was missing. An inspector printed the
+   same round twice and got two different documents. Re-inject and wait before
+   giving up — and if it still will not come, SAY so on the sheet. */
+async function needMap(){
+  if(window.WEAR && WEAR.reportUCMap && WEAR.reportGETMap) return true;
+  await loadLib("wear-map.js");
+  return !!(window.WEAR && WEAR.reportUCMap);
+}
 function rptMap(rec,items,photo){
-  if(rec.type==="TB") return { html:rptBodyMap(rec,items), key:null };
-  if(!window.WEAR) return { html:"", key:null };
+  if(rec.type==="TB"){ const h=rptBodyMap(rec,items);
+    return { html:h, key:null, why:h?"":"nodata" }; }
+  if(!window.WEAR) return { html:"", key:null, why:"nomodule" };
   const by={}; items.forEach(it=>{ const w=it.w;
     by[it.key] = !w ? "" : w.mm==null ? (w.reason?"na":"") :
       w.band==="act" ? "act" : w.band==="watch" ? "watch" : "done"; });
   const state=k=>by[k]||"";
   const a=ASSET_BY[rec.equip]||{};
   if(rec.type==="GET"){
-    const g=WEAR.reportGETMap && WEAR.reportGETMap({ unit:rec.equip,
+    if(!WEAR.reportGETMap) return { html:"", key:null, why:"nomodule" };
+    const g=WEAR.reportGETMap({ unit:rec.equip,
       cat:a.cat||a.cls||"", model:a.m||"", photo, lang, state });
-    return g ? { html:CMR.fitMap(g.html), key:g.key } : { html:"", key:null };
+    return g ? { html:CMR.fitMap(g.html), key:g.key } : { html:"", key:null, why:"nodata" };
   }
-  const st=ucStatus(rec.equip); if(!st.ok) return { html:"", key:null };
+  const st=ucStatus(rec.equip); if(!st.ok) return { html:"", key:null, why:"noref" };
+  if(!WEAR.reportUCMap) return { html:"", key:null, why:"nomodule" };
   const prof=ucProfile(rec.equip);
-  const u=WEAR.reportUCMap && WEAR.reportUCMap({ model:a.m||"",
+  const u=WEAR.reportUCMap({ model:a.m||"",
     rollers:prof.rollers, high:prof.high, fam:prof.fam, photo, lang, state,
     sideLabel:sd=>WEAR.escMap(t(sd==="L"?"uc_left":"uc_right")) });
-  return u ? { html:CMR.fitMap(u.html), key:u.key } : { html:"", key:null };
+  return u ? { html:CMR.fitMap(u.html), key:u.key } : { html:"", key:null, why:"nodata" };
+}
+/* One line, in both languages, for a sheet that could not draw its machine. */
+function mapNote(o,why){
+  if(!why) return;
+  const k="rep_nomap_"+(why==="noref"?"noref":why==="nomodule"?"nomodule":"nodata");
+  o.note=[o.note,t(k)].filter(Boolean).join(" ");
+  o.noteAlt=[o.noteAlt,inOtherLang(()=>t(k))].filter(Boolean).join(" ");
 }
 /* Every round in the store, or one of them.
    Filtering here rather than after the fact is not tidiness: normalising a
@@ -7005,13 +7036,15 @@ async function rptRecords(onlyId){
     const a0=ASSET_BY[rec.equip]||{};
     /* The machine's own photograph, as bytes, before the drawing is built —
        an <image href> inside an inline SVG does not survive html2canvas. */
-    let mapHTML="", mapKey=null;
+    let mapHTML="", mapKey=null, mapWhy="";
     if(meta.wear || meta.get){
+      await needMap();
       const url = WEAR.reportPhotoFor
         ? WEAR.reportPhotoFor({ type:rec.type, equip:rec.equip, model:a0.m||"",
                                 cat:a0.cat||a0.cls||"" }) : "";
       const art = url ? await CMR.inlinePhoto(url) : "";
       const m = rptMap(rec, items, art);
+      mapWhy = m.why || "";
       mapHTML = m.html; mapKey = m.key;
     }
     out.push({ equip:rec.equip, clsLabel:a0.cat||(CLASSES[rec.cls]?(CLASSES[rec.cls][lang]||CLASSES[rec.cls].en):(rec.cls||"")),
@@ -7020,6 +7053,7 @@ async function rptRecords(onlyId){
       typeAlt:inOtherLang(()=>t("type_"+(rec.type||"MP"))), date:rec.date||"",
       by:rec.by||"", sup:rec.sup||"", smu:rec.smu||"", gps:rec.gps||null, signUrl,
       wear:!!meta.wear, temp:!!meta.temp, mapHTML, mapKey, items });
+    if(mapWhy) mapNote(out[out.length-1], mapWhy);
   }
   return out;
 }
@@ -7174,8 +7208,9 @@ $("roundRpt").onclick=async ()=>{
       ? WEAR.reportPhotoFor({ type:rec.type, equip:rec.equip,
           model:(ASSET_BY[rec.equip]||{}).m||"", cat:(ASSET_BY[rec.equip]||{}).cat||"" }) : "";
     const art=url?await CMR.inlinePhoto(url):"";
+    await needMap();
     const m=rptMap(rec, norm.items, art);
-    norm.mapHTML=m.html; norm.mapKey=m.key;
+    norm.mapHTML=m.html; norm.mapKey=m.key; mapNote(norm, m.why);
     const doc=await CMR.paginate({
       sections:CMR.sections({ lang, mode:"unit", title:t("rep_title"),
         titleAlt:inOtherLang(()=>t("rep_title")), stamp:new Date(),
@@ -7362,7 +7397,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="126";
+const BUILD="127";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

@@ -224,6 +224,51 @@ const enter = async (p, v) => { await p.fill('#ucMM', String(v)); await p.waitFo
     [...document.querySelectorAll('.ucmapwrap')].every(e => e.scrollWidth <= e.clientWidth + 2)));
   await wide.close();
 
+  /* ---- and it is on the printed sheet, or the sheet says why -------------
+     A round came back from the field with no picture of the machine on it and
+     nothing anywhere saying one was missing — the same round printed later had
+     it, so the two documents did not agree and nobody could tell which was
+     right. rptMap returned an empty string from four different branches and
+     none of them said a word.
+
+     Two properties: an excavator round DRAWS, and a round that cannot draw
+     SAYS SO. The second is the one that matters, because the first can only
+     fail loudly. */
+  console.log('\nthe drawing reaches the paper, or the paper says why not');
+  const paper = await app(b, undefined);
+  const drew = await paper.p.evaluate(async () => {
+    const s = document.getElementById('typeSel');
+    s.value = 'UC'; s.dispatchEvent(new Event('change'));
+    selectEquip('EX006');
+    await new Promise(r => setTimeout(r, 700));
+    const pos = {};
+    items().map(i => i.k).forEach((k, i) => { pos[k] = { mm: 20 + (i % 5), stood:0,
+      reason:'', photos:[], video:null }; });
+    await dbPut({ id:'ucm', type:'UC', equip:'EX006', date:'2026-08-16', by:'S. Volkov',
+      sup:'A. Sokolov', smu:'33549', cls:'EXC', gps:null, dev:'PH-01', sign:null,
+      positions:pos, created:'2026-08-16T06:00:00.000Z', up:0, upTo:{}, rev:1 });
+    const html = (await buildReportSections('ucm')).map(x => x.html).join('');
+    return { map: /class="ucmap/.test(html), note: /quiet/.test(html) && /drawing|схем/i.test(html) };
+  });
+  ok('an excavator round prints the machine it was walked on', drew.map);
+  ok('  and says nothing about a missing drawing, because none is', !drew.note);
+
+  /* Take the module away and block it coming back — a phone on a weak link that
+     never received it. The sheet must not simply lose the picture. */
+  const mute = await paper.p.evaluate(async () => {
+    delete WEAR.reportUCMap;
+    loadLib = () => Promise.resolve(false);            // and it cannot be fetched
+    const secs = await buildReportSections('ucm');
+    const html = secs.map(x => x.html).join('');
+    return { map: /class="ucmap/.test(html),
+             en: /machine drawing could not be loaded/i.test(html),
+             ru: /схем/i.test(html) };
+  });
+  ok('with the drawing module gone there is no drawing', !mute.map);
+  ok('  and the sheet says so, instead of losing it quietly', mute.en, 'note printed');
+  ok('  in both languages, like everything else on it', mute.en && mute.ru);
+  await paper.ctx.close();
+
   await b.close();
   console.log(fails.length ? `\n${fails.length} FAILED: ` + fails.join(' | ') : '\nall passed');
   process.exit(fails.length ? 1 : 0);
