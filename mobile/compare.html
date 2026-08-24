@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Backend comparison</title>
+<style>
+  :root{ color-scheme:light;
+    --page:#eceff1; --surface:#fff; --surface-2:#f3f6f7; --border:#d6dde1;
+    --ink:#11171a; --ink-2:#41505a; --muted:#5b686f;
+    --accent:#8a4526; --good:#0a7134; --warn:#8a5a00; --bad:#c02f2f; }
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){ color-scheme:dark;
+    --page:#0d1013; --surface:#171b1f; --surface-2:#1f252a; --border:#2c353b;
+    --ink:#eef3f6; --ink-2:#b6c3cb; --muted:#8a979e;
+    --accent:#ce8256; --good:#3aad5c; --warn:#e0a52a; --bad:#e46a61; } }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--page);color:var(--ink);
+    font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    padding:14px 12px calc(env(safe-area-inset-bottom) + 24px);}
+  main{max-width:640px;margin:0 auto}
+  h1{font-size:19px;margin:0 0 4px}
+  .sub{color:var(--muted);font-size:13px;margin:0 0 16px}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;
+    padding:12px;margin-bottom:12px}
+  label{display:block;font-size:12.5px;font-weight:650;color:var(--ink-2);margin:8px 0 4px}
+  input{width:100%;min-height:44px;padding:8px 10px;border:1px solid var(--border);
+    border-radius:9px;background:var(--surface-2);color:var(--ink);font-size:15px}
+  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  button{min-height:46px;padding:0 16px;border-radius:10px;border:1px solid transparent;
+    background:var(--accent);color:#fff;font-size:15px;font-weight:650;cursor:pointer}
+  button.ghost{background:var(--surface-2);color:var(--ink);border-color:var(--border)}
+  button[disabled]{opacity:.55}
+  table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:13.5px}
+  th,td{padding:7px 6px;text-align:right;border-bottom:1px solid var(--border)}
+  th:first-child,td:first-child{text-align:left}
+  thead th{color:var(--muted);font-weight:650;font-size:12px}
+  .ok{color:var(--good);font-weight:650}
+  .bad{color:var(--bad);font-weight:650}
+  .warn{color:var(--warn);font-weight:650}
+  .win{background:color-mix(in srgb,var(--good) 12%,transparent)}
+  .verdict{margin-top:12px;padding:11px;border-radius:10px;background:var(--surface-2);
+    border:1px solid var(--border);font-size:14px}
+  .verdict b{font-size:15px}
+  .note{color:var(--muted);font-size:12.5px;margin-top:8px}
+  .wrap{overflow-x:auto}
+  progress{width:100%;height:6px}
+</style>
+</head>
+<body>
+<main>
+  <h1>Which backend is faster from here?</h1>
+  <p class="sub">Runs the same probes against both, alternating between them so a
+     link that changes mid-test affects each equally. Do this on the phone, on
+     the network the inspectors actually use.</p>
+
+  <div class="card">
+    <label for="a">A — first endpoint</label>
+    <input id="a" type="url" placeholder="https://…/exec" autocomplete="off">
+    <label for="b">B — second endpoint</label>
+    <input id="b" type="url" placeholder="https://…" autocomplete="off">
+    <label for="n">Rounds (each one probes both)</label>
+    <input id="n" type="number" min="1" max="9" value="3">
+    <div class="row" style="margin-top:12px">
+      <button id="go">Run</button>
+      <button id="clear" class="ghost" type="button">Clear</button>
+    </div>
+    <p class="note">Uploads a small test photograph to each, under unit
+       <b>ZZTEST</b>, so it measures a real write rather than a ping. Delete that
+       folder afterwards if you like — nothing else touches it.</p>
+  </div>
+
+  <div class="card" id="outCard" hidden>
+    <progress id="bar" max="100" value="0"></progress>
+    <div class="wrap"><table id="tbl">
+      <thead><tr><th>What</th><th>A</th><th>B</th><th>Faster</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+    <div class="verdict" id="verdict"></div>
+  </div>
+</main>
+<script>
+const $=i=>document.getElementById(i);
+const LS="cmp_urls";
+try{ const s=JSON.parse(localStorage.getItem(LS)||"{}");
+     if(s.a)$("a").value=s.a; if(s.b)$("b").value=s.b; }catch(e){}
+
+/* Median, not mean. One satellite hiccup in five rounds would drag an average
+   somewhere neither endpoint ever was. */
+const median=a=>{ const s=a.filter(x=>x!=null).sort((x,y)=>x-y);
+  if(!s.length) return null;
+  return s.length%2 ? s[(s.length-1)/2] : Math.round((s[s.length/2-1]+s[s.length/2])/2); };
+
+const ms=v=>v==null?"—":v>=1000?(v/1000).toFixed(1)+" s":Math.round(v)+" ms";
+
+async function timed(fn){ const t=performance.now();
+  try{ const r=await fn(); return {ms:performance.now()-t, ok:true, r}; }
+  catch(e){ return {ms:null, ok:false, err:String(e&&e.message||e)}; } }
+
+/* There is no reading Access-Control-Allow-Origin from JavaScript: on a
+   cross-origin response the browser exposes only the safelisted headers, so
+   headers.get() returns null whether the header is there or not. The first
+   version of this page checked it that way and reported a perfectly good
+   endpoint as unreadable — while the same-origin one passed, which is exactly
+   the pattern that makes the mistake look like a real finding.
+
+   The honest test is the fetch itself. Without the header the browser rejects
+   the response before this code ever runs, so an answer in hand IS the proof. */
+const jget=(u,q)=>fetch(u+q,{cache:"no-store"}).then(async r=>{
+  const j=await r.json(); return {j,cors:true,status:r.status}; });
+
+/* text/plain on purpose: it is what the app sends, so the request stays a
+   "simple" one and never triggers a preflight. Measuring with a different
+   content type would measure a different request. */
+const jpost=(u,body)=>fetch(u,{method:"POST",
+    headers:{"Content-Type":"text/plain;charset=utf-8"},
+    body:JSON.stringify(body)}).then(async r=>({j:await r.json(),status:r.status}));
+
+async function shot(){
+  /* Sized and compressed like the thing being measured. The app shrinks every
+     photograph to 1600 px on its longest side at JPEG quality 0.78 before it
+     uploads (PHOTO_PX_DEFAULT / PHOTO_Q in the app), so those are the numbers
+     used here — anything else times a file the inspectors never send.
+
+     The CONTENT matters as much as the size. A tidy synthetic image compresses
+     to a few KB and produced a 17 KB "photograph" in the first version of this
+     page; pure per-pixel noise is the opposite mistake and lands near a
+     megabyte, which no real photograph of a final drive does. So: broad shapes
+     for the areas JPEG handles well, fine detail for the areas it does not,
+     which lands in the few-hundred-KB band a real one occupies. */
+  const W=1600,H=1200;
+  const c=document.createElement("canvas"); c.width=W; c.height=H;
+  const x=c.getContext("2d");
+  const g=x.createLinearGradient(0,0,W,H);
+  g.addColorStop(0,"#3b332b"); g.addColorStop(.5,"#6b7076"); g.addColorStop(1,"#20242a");
+  x.fillStyle=g; x.fillRect(0,0,W,H);
+  for(let i=0;i<900;i++){                       // the machine, roughly
+    x.fillStyle="hsla("+(20+Math.random()*40)+","+(10+Math.random()*30)+"%,"+
+                (15+Math.random()*60)+"%,"+(0.15+Math.random()*0.5)+")";
+    const w=8+Math.random()*260, h=8+Math.random()*200;
+    x.fillRect(Math.random()*W,Math.random()*H,w,h);
+  }
+  for(let i=0;i<26000;i++){                     // swarf, pitting, texture
+    x.fillStyle="rgba("+(Math.random()*255|0)+","+(Math.random()*255|0)+","+
+                (Math.random()*255|0)+","+(0.25+Math.random()*0.6)+")";
+    x.fillRect(Math.random()*W,Math.random()*H,1+Math.random()*4,1+Math.random()*4);
+  }
+  const b=await new Promise(r=>c.toBlob(r,"image/jpeg",0.78));
+  const d=await new Promise(r=>{ const f=new FileReader(); f.onload=()=>r(f.result); f.readAsDataURL(b); });
+  return {b64:String(d).split(",")[1], bytes:b.size};
+}
+
+const P=[
+  {k:"reach",  label:"Reachable (health)"},
+  {k:"cors",   label:"Readable by the page"},
+  {k:"read",   label:"Read the record list"},
+  {k:"probe",  label:"Write probe"},
+  {k:"photo",  label:"Upload one photograph"},
+];
+
+async function probe(url,pic,stamp){
+  const o={};
+  const h=await timed(()=>jget(url,""));
+  o.reach=h.ms; o.reachOk=h.ok&&h.r&&h.r.j&&h.r.j.ok!==false; o.err=h.err;
+  const rd=await timed(()=>jget(url,"?action=records"));
+  o.read=rd.ms; o.cors=rd.ok?rd.r.cors:null;
+  o.records=rd.ok&&rd.r.j&&Array.isArray(rd.r.j.records)?rd.r.j.records.length:null;
+  const pr=await timed(()=>jpost(url,{op:"ping"}));
+  o.probe=pr.ms; o.probeOk=pr.ok&&pr.r&&pr.r.j&&pr.r.j.ok!==false;
+  /* The app's own batch payload, field for field. Sending something of the
+     same size in a shape the backend does not recognise measures the round
+     trip of a rejection — which is fast, and means nothing. The first version
+     of this page used `data` and `mime`; both backends answered "Missing file
+     content" in a few milliseconds and the table reported it as a win. */
+  const up=await timed(()=>jpost(url,{ op:"batch", folder:"ZZTEST", secret:"", dev:"CMP",
+    files:[{ name:"ZZTEST_CMP_"+stamp+".jpg", contentType:"image/jpeg", file:pic.b64 }] }));
+  o.photo=up.ms; o.photoOk=up.ok&&up.r&&up.r.j&&up.r.j.ok!==false;
+  o.photoErr=up.ok?((up.r.j&&up.r.j.error)||((up.r.j&&up.r.j.failed||[])[0]||{}).error||""):up.err;
+  return o;
+}
+
+$("clear").onclick=()=>{ $("a").value=""; $("b").value="";
+  try{ localStorage.removeItem(LS); }catch(e){} $("outCard").hidden=true; };
+
+$("go").onclick=async ()=>{
+  const A=$("a").value.trim().replace(/\/+$/,""), B=$("b").value.trim().replace(/\/+$/,"");
+  if(!A||!B){ alert("Both endpoints are needed — that is the point."); return; }
+  try{ localStorage.setItem(LS,JSON.stringify({a:A,b:B})); }catch(e){}
+  const N=Math.max(1,Math.min(9,Number($("n").value)||3));
+  $("go").disabled=true; $("outCard").hidden=false;
+  $("verdict").textContent="Making a test photograph…";
+  const pic=await shot();
+  const runs={A:[],B:[]};
+  for(let i=0;i<N;i++){
+    /* Alternate, and alternate WHICH GOES FIRST. Always probing A first would
+       hand it every warm cache and hand B every cold one. */
+    const stamp=Date.now()+"_"+i;
+    const first=i%2===0?"A":"B";
+    const order=first==="A"?[["A",A],["B",B]]:[["B",B],["A",A]];
+    for(const [k,u] of order){ runs[k].push(await probe(u,pic,stamp+"_"+k)); }
+    $("bar").value=Math.round((i+1)/N*100);
+    $("verdict").textContent="Round "+(i+1)+" of "+N+"…";
+  }
+  render(runs,pic,N);
+  $("go").disabled=false;
+};
+
+function render(runs,pic,N){
+  const tb=$("tbl").querySelector("tbody"); tb.innerHTML="";
+  const med={A:{},B:{}};
+  for(const side of ["A","B"]) for(const p of P)
+    med[side][p.k]=median(runs[side].map(r=>r[p.k]));
+
+  for(const p of P){
+    const a=med.A[p.k], b=med.B[p.k];
+    let av,bv,win="—";
+    if(p.k==="cors"){
+      const ac=runs.A.every(r=>r.cors===true), bc=runs.B.every(r=>r.cors===true);
+      av=`<span class="${ac?"ok":"bad"}">${ac?"yes":"NO"}</span>`;
+      bv=`<span class="${bc?"ok":"bad"}">${bc?"yes":"NO"}</span>`;
+      win = ac===bc ? "—" : (ac?"A":"B");
+    }else{
+      const aFail=runs.A.some(r=>r[p.k]==null), bFail=runs.B.some(r=>r[p.k]==null);
+      av=(aFail?'<span class="bad">failed</span> ':"")+ms(a);
+      bv=(bFail?'<span class="bad">failed</span> ':"")+ms(b);
+      if(a!=null&&b!=null&&!aFail&&!bFail){
+        const d=Math.abs(a-b)/Math.max(a,b);
+        win = d<0.10 ? "about equal" : (a<b?"A":"B");
+      }
+    }
+    tb.insertAdjacentHTML("beforeend",
+      `<tr><td>${p.label}</td><td class="${win==="A"?"win":""}">${av}</td>`+
+      `<td class="${win==="B"?"win":""}">${bv}</td><td>${win}</td></tr>`);
+  }
+
+  /* The photograph is the number that decides this. A round is one small record
+     and up to eight photographs, so whichever endpoint moves an image faster
+     wins the day regardless of how the small requests compare. */
+  const a=med.A.photo, b=med.B.photo;
+  const aOk=runs.A.every(r=>r.photoOk), bOk=runs.B.every(r=>r.photoOk);
+  let v;
+  if(!aOk||!bOk){
+    /* Said the right way round. This read "A accepted the photograph" when A
+       was the one that failed — a verdict that names the broken endpoint as the
+       working one is worse than no verdict, and the sort of thing a test that
+       greps for "accepted" will happily pass. */
+    const who = (!aOk&&!bOk) ? "Neither endpoint accepted the photograph"
+              : (!aOk ? "A did not accept the photograph"
+                      : "B did not accept the photograph");
+    const why=(runs.A.find(r=>!r.photoOk)||{}).photoErr||(runs.B.find(r=>!r.photoOk)||{}).photoErr||"";
+    v=`<b>${who}.</b> Speed does not matter until that works.`+
+      (why?`<br><span class="note">${why.replace(/[<>]/g,"")}</span>`:"");
+  }else{
+    const d=Math.abs(a-b)/Math.max(a,b);
+    v = d<0.10
+      ? `<b>Too close to call.</b> Both moved a ${Math.round(pic.bytes/1024)} KB photograph in about ${ms(Math.min(a,b))}. Choose on other grounds — where the data should live, and what the pit can reach.`
+      : `<b>${a<b?"A":"B"} is faster.</b> ${ms(Math.min(a,b))} against ${ms(Math.max(a,b))} for a ${Math.round(pic.bytes/1024)} KB photograph — about ${(Math.max(a,b)/Math.min(a,b)).toFixed(1)}× . A round of eight photographs would differ by roughly ${ms(Math.abs(a-b)*8)}.`;
+  }
+  $("verdict").innerHTML = v +
+    `<div class="note">Median of ${N} round${N>1?"s":""}, alternating which endpoint went first.`+
+    ` Test files are under <b>ZZTEST</b> in each destination.</div>`;
+}
+</script>
+</body>
+</html>
