@@ -33,10 +33,22 @@ const arg = (n, d) => { const i = process.argv.indexOf('--' + n);
   return i > 0 && process.argv[i + 1] && !process.argv[i + 1].startsWith('--') ? process.argv[i + 1] : d; };
 const has = n => process.argv.indexOf('--' + n) > 0;
 
-const FROM = (arg('from', '') || '').replace(/\/+$/, '');
-const TO   = (arg('to', '')   || '').replace(/\/+$/, '');
-const FROM_SEC = arg('from-secret', '');
-const TO_SEC   = arg('to-secret', '');
+/* Trimmed before anything else is done with them.
+
+   A URL pasted between quotes picks up a space at one end more often than not,
+   and the two ends fail differently: fetch() strips a LEADING space per the URL
+   spec, so that one works and teaches nothing — while a trailing one survives
+   into "…/exec ?action=list", where the space becomes %20 in the path and the
+   answer is 404. Four retries and a "source listing failed" against an endpoint
+   that is perfectly healthy.
+
+   Exactly the mistake a space in front of KEY_SECRET makes: an invisible
+   character, an error message pointing somewhere else entirely. */
+const clean = v => String(v || '').trim().replace(/\/+$/, '');
+const FROM = clean(arg('from', ''));
+const TO   = clean(arg('to', ''));
+const FROM_SEC = String(arg('from-secret', '') || '').trim();
+const TO_SEC   = String(arg('to-secret', '') || '').trim();
 const DRY  = has('dry');
 const ONLY = (arg('only', '') || '').split(',').map(s => s.trim()).filter(Boolean);
 const BATCH = Math.max(1, Math.min(8, Number(arg('batch', 4)) || 4));

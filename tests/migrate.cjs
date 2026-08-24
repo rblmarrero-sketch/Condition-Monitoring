@@ -32,7 +32,12 @@ const bye = () => srv.forEach(s => { try { s.kill(); } catch (e) {} });
 process.on('exit', bye); process.on('SIGINT', () => { bye(); process.exit(1); });
 
 const keys = b => fetch(b + '/__keys').then(r => r.json()).then(j => j.keys.sort());
-const run = a => { try { return execFileSync(process.execPath, [MIG, '--from', S + '/exec', '--to', D + '/exec', ...a],
+/* Spaces around the URLs, deliberately, because that is how they arrive: a URL
+   pasted between quotes picks one up at one end or the other, and a trailing
+   space survives into "…/exec ?action=list" as %20 and comes back 404 against a
+   healthy endpoint. A leading one is stripped by fetch() and would prove
+   nothing, so both ends are dirtied here. */
+const run = a => { try { return execFileSync(process.execPath, [MIG, '--from', ' ' + S + '/exec ', '--to', ' ' + D + '/exec ', ...a],
     { encoding: 'utf8', timeout: 180000 }); }
   catch (e) { return String(e.stdout || '') + String(e.stderr || ''); } };
 const put = (base, folder, name, body, type) => fetch(base + '/exec', { method: 'POST',
