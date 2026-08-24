@@ -283,6 +283,11 @@ minute, and the alternative is a credential that grants read and delete on every
 photograph of every machine to whoever saw it.
 
 `S3_REGION=kz1` and `S3_ENDPOINT=storage.yandexcloud.kz` are the Kazakh ones.
+**Confirmed against the live endpoint**, which is worth saying because Yandex
+documents neither: their S3 pages give `ru-central1` and warn that another value
+"may lead to an authorization error", and say nothing at all about the Kazakh
+host. `kz1` is right — verified by a request that came back `ok:true`, not by
+inference.
 Left at the Russian defaults the function signs for the wrong region against the
 wrong host and Yandex answers **403** — which looks exactly like a bad key, and
 sends you back to regenerate one that was fine.
@@ -366,9 +371,12 @@ configuration.
 |---|---|
 | connection refused / times out | Security group — step 7 |
 | a certificate warning | DNS is not pointing at the VM yet, or port 80 is shut |
-| `S3 403` | The key is wrong, or `S3_REGION`/`S3_ENDPOINT` are not the Kazakh pair |
+| `SignatureDoesNotMatch` | The key id and the secret are from **different keys** — the likeliest cause by far. Create a new key and read BOTH values off the one screen that shows them together. If a fresh matched pair still fails, run `checkkey.js` (below), which asks the endpoint which region it wants instead of guessing |
+| `InvalidAccessKeyId` | That key id does not exist — deleted, or mistyped |
+| `S3 403` otherwise | The service account has no role on the bucket |
 | `S3 404` | `BUCKET` is misspelled |
-| nothing at all | `sudo systemctl status cm` and `sudo journalctl -u cm -n 50` |
+| nothing at all | `sudo systemctl status cm` and **`sudo journalctl -u cm -n 50`** — the `sudo` matters: without it journalctl prints "No entries" and hides the very error you are looking for |
+| `Failed to load environment files` | `cm.env` was never written. `ls -l /opt/cm` — if it is not there, run the settings command again, in the terminal |
 
 ---
 
