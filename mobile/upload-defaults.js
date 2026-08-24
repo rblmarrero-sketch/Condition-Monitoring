@@ -56,4 +56,37 @@ window.UPLOAD_DEFAULTS = {
   ],
   // Photo size is deliberately NOT defaulted here — it stays on "Original" so no
   // inspector silently loses evidence detail. Change it per phone in ⚙.
+
+  /* ------------------------------------------------------------------
+     ONE-TIME BACKEND CHANGEOVER
+
+     Updating the build does not move a phone's destinations: a slot that
+     already has a URL is deliberately left alone, so a fleet in the field
+     stays where it is through any number of updates. Editing `dests` above
+     reaches nobody already carrying a URL, for exactly the same reason.
+
+     This is how a fleet is moved. Fill in `to` and give it an `id`, and each
+     phone does the change once, on its next open with signal:
+
+        the URL it uses now  →  slides into the second copy (write only)
+        `to`                 →  takes the main slot (read and write)
+        both                 →  ticked, so nothing is stranded on one side
+
+     Then every round lands in BOTH from that moment, and switching back is
+     swapping two fields rather than hunting for what was missed.
+
+     `id` is a name you choose, not a version. A phone that has done this one is
+     never asked again; the next changeover is a NEW id, not an edit to this one.
+
+     ⚠️ Same warning as the URLs above: this file is served to anyone who opens
+     the app, so `to` is published the moment you fill it in. If that is not
+     acceptable, leave it empty and use ⚙ → Show setup code instead — the phones
+     have to be opened once for the update anyway, and scanning takes seconds.
+     ------------------------------------------------------------------ */
+  swap: {
+    id:  "",                           // e.g. "yandex-2026-08"
+    to:  "",                           // the new main endpoint
+    sec: "",                           // its shared secret, if it has one
+    folder: ""                         // leave empty to keep the folder pattern
+  },
 };

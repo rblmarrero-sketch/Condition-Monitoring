@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=135">
+<link rel="manifest" href="manifest.webmanifest?v=136">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=135">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=135">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=135">
+<link rel="apple-touch-icon" href="icon-192.png?v=136">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=136">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=136">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1758,27 +1758,27 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=135"></script>
-<script src="upload-defaults.js?v=135"></script>
-<script src="hme.js?v=135"></script>
-<script src="mp-fc.js?v=135"></script>
-<script src="hme-cascade.js?v=135"></script>
-<script src="assets.js?v=135"></script>
-<script src="temp-limits.js?v=135"></script>
-<script src="wear.js?v=135"></script>
-<script src="wear-figs.js?v=135"></script>
-<script src="wear-map.js?v=135"></script>
-<script src="machine-photos.js?v=135"></script>
-<script src="machine-fig.js?v=135"></script>
-<script src="get.js?v=135"></script>
-<script src="uc-points.js?v=135"></script>
-<script src="inspect-guide.js?v=135"></script>
-<script src="get-figs.js?v=135"></script>
-<script src="body-points.js?v=135"></script>
-<script src="body-map.js?v=135"></script>
-<script src="lube.js?v=135"></script>
-<script src="lube2027.js?v=135"></script>
-<script src="report-core.js?v=135"></script>
+<script src="native.js?v=136"></script>
+<script src="upload-defaults.js?v=136"></script>
+<script src="hme.js?v=136"></script>
+<script src="mp-fc.js?v=136"></script>
+<script src="hme-cascade.js?v=136"></script>
+<script src="assets.js?v=136"></script>
+<script src="temp-limits.js?v=136"></script>
+<script src="wear.js?v=136"></script>
+<script src="wear-figs.js?v=136"></script>
+<script src="wear-map.js?v=136"></script>
+<script src="machine-photos.js?v=136"></script>
+<script src="machine-fig.js?v=136"></script>
+<script src="get.js?v=136"></script>
+<script src="uc-points.js?v=136"></script>
+<script src="inspect-guide.js?v=136"></script>
+<script src="get-figs.js?v=136"></script>
+<script src="body-points.js?v=136"></script>
+<script src="body-map.js?v=136"></script>
+<script src="lube.js?v=136"></script>
+<script src="lube2027.js?v=136"></script>
+<script src="report-core.js?v=136"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -7692,7 +7692,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="135";
+const BUILD="136";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -7818,6 +7818,52 @@ function loadDests(){
   if(!localStorage.getItem("up_gas_only_v1")){
     d.forEach(x=>{ if(x && x.id!=="gas") x.on=false; });
     try{ localStorage.setItem("up_gas_only_v1","1"); }catch(e){}
+  }
+
+  /* CHANGING BACKEND ON A FLEET THAT IS ALREADY IN THE FIELD
+     ------------------------------------------------------------------
+     Updating the build ships new code and nothing else. Destination URLs live
+     in this phone's own storage, and a destination that already has one is
+     deliberately left alone — so a fleet on Google stays on Google through any
+     number of updates, which is correct and is also exactly the problem when
+     the backend has to move.
+
+     Emptying or changing the URL in upload-defaults.js reaches nobody for the
+     same reason. So a changeover is stated as an instruction instead: put the
+     new endpoint in `swap.to`, give it an `id`, and every phone does the move
+     once — the URL it is using now slides into the second copy, the new one
+     takes the main slot, and both end up ticked. Nothing is stranded on one
+     side, because both keep receiving every round.
+
+     Runs AFTER the gas-only correction above, deliberately: that one switches
+     off everything but the main slot, and on a phone where both run for the
+     first time it would otherwise turn off the mirror this just filled in.
+
+     Keyed by `id`, not a version number, so the next changeover is a new id
+     rather than an edit to this code. A phone that has done this one is never
+     asked again. */
+  const SWAP=(window.UPLOAD_DEFAULTS||{}).swap;
+  if(SWAP && SWAP.to && SWAP.id && !localStorage.getItem("up_swap_"+SWAP.id)){
+    const main=d.find(x=>x && x.id==="gas");
+    /* The mirror may not be in the stored list yet — this list holds whatever
+       the phone last saved, and the missing slots are filled in further down,
+       AFTER this runs. So make it here rather than reading undefined and
+       silently doing half the swap: the new endpoint would land in the main
+       slot and the old one would simply be dropped, which is the one outcome
+       this whole mechanism exists to prevent. */
+    let mir=d.find(x=>x && x.id==="mirror");
+    if(!mir){ mir={id:"mirror", on:false, url:"", sec:"", folder:""}; d.push(mir); }
+    if(main && main.url!==SWAP.to){
+      /* Only into an EMPTY second copy. If somebody has already set one up by
+         hand, overwriting it would throw away a destination they chose — and
+         the round would then be marked away with nothing sent to it. */
+      if(mir && !mir.url && main.url){
+        mir.url=main.url; mir.sec=main.sec||""; mir.folder=main.folder||""; mir.on=true;
+      }
+      main.url=SWAP.to; main.sec=SWAP.sec||""; main.on=true;
+      if(SWAP.folder) main.folder=SWAP.folder;
+    }
+    try{ localStorage.setItem("up_swap_"+SWAP.id,"1"); }catch(e){}
   }
   // This used to write unconditionally, and loadDests() is reached from the UP.on
   // getter — so every renderSync() did a JSON.stringify plus a synchronous
