@@ -122,6 +122,17 @@ function shape(v, depth) {
   ok('left alone it is the Russia region, as the Apps Script folder was',
      ru.host === 'storage.yandexcloud.net' && /\/ru-central1\/s3\//.test(ru.scope),
      ru.host + '  ' + ru.scope);
+  /* And the same values with a stray space in front, which is what an
+     environment file written by hand actually contains. `KEY_SECRET= abc` looks
+     identical to `KEY_SECRET=abc` on screen; the space goes into the signing
+     key and comes back 403, indistinguishable from a wrong credential. This has
+     already cost this deployment one key that was correct. */
+  const sloppy = probe({ S3_ENDPOINT: ' storage.yandexcloud.kz', S3_REGION: ' kz1 ',
+                         BUCKET: ' b ', KEY_ID: ' k ', KEY_SECRET: ' s ' });
+  ok('a stray space in the settings file is not a 403 three hours long',
+     sloppy.host === 'storage.yandexcloud.kz' && /\/kz1\/s3\//.test(sloppy.scope),
+     sloppy.host + '  ' + sloppy.scope);
+
   const kz = probe({ S3_ENDPOINT: 'storage.yandexcloud.kz', S3_REGION: 'kz1' });
   ok('and a Kazakh account gets the Kazakh host, not a 403 that looks like a bad key',
      kz.host === 'storage.yandexcloud.kz', kz.host);

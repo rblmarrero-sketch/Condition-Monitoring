@@ -45,18 +45,30 @@
 const crypto = require('crypto');
 const https = require('https');
 
-const ENDPOINT = process.env.S3_ENDPOINT || 'storage.yandexcloud.net';
-const REGION   = process.env.S3_REGION   || 'ru-central1';
-const BUCKET   = process.env.BUCKET      || '';
-const KEY_ID   = process.env.KEY_ID      || '';
-const KEY_SEC  = process.env.KEY_SECRET  || '';
+/* Trimmed, every one of them.
+
+   `KEY_SECRET= abc` in an environment file is one keystroke away from
+   `KEY_SECRET=abc` and looks identical on screen, but the leading space goes
+   into the SigV4 signing key and the request comes back 403 — which reads as a
+   wrong key and sends somebody to delete a credential that was correct. The
+   same space in BUCKET produces a 404 on a bucket that exists, and in
+   S3_ENDPOINT a DNS failure for a host that resolves.
+
+   A credential with a space on the end of it is never what anybody meant, so
+   there is nothing to preserve by keeping it. */
+const env = k => String(process.env[k] == null ? '' : process.env[k]).trim();
+const ENDPOINT = env('S3_ENDPOINT') || 'storage.yandexcloud.net';
+const REGION   = env('S3_REGION')   || 'ru-central1';
+const BUCKET   = env('BUCKET');
+const KEY_ID   = env('KEY_ID');
+const KEY_SEC  = env('KEY_SECRET');
 /* Read secret: what the phone and the dashboard send as ?secret=. Empty means
    the folder is open to anyone with the URL, exactly as the Apps Script's is. */
-const SECRET   = process.env.SECRET || '';
+const SECRET   = env('SECRET');
 /* Deletion is off unless this is set, and it is never the read secret. The app
    ships with it empty and says so plainly rather than pretending deletion is
    available and failing at the moment somebody presses it. */
-const ADMIN    = process.env.ADMIN_SECRET || '';
+const ADMIN    = env('ADMIN_SECRET');
 
 const META_DIR  = '_meta';
 const INDEX_DIR = '_meta/index';
