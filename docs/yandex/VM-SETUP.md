@@ -255,24 +255,32 @@ sudo curl -fsSLO https://raw.githubusercontent.com/rblmarrero-sketch/Condition-M
 ls -l                   # both files, non-zero
 ```
 
-**The settings.** This file holds the bucket's key, so it is readable only by
-root:
+**The settings.** This asks for the three values and writes them itself:
 
 ```
-sudo tee /opt/cm/cm.env >/dev/null <<'ENV'
-BUCKET=baimskaya-cm
-KEY_ID=PUT_THE_KEY_ID_HERE
-KEY_SECRET=PUT_THE_SECRET_HERE
-S3_REGION=kz1
-S3_ENDPOINT=storage.yandexcloud.kz
-SECRET=
-ADMIN_SECRET=
-PORT=8080
-HOST=127.0.0.1
-ENV
-sudo chmod 600 /opt/cm/cm.env
-sudo nano /opt/cm/cm.env      # put the real key values in, Ctrl+O, Enter, Ctrl+X
+sudo bash -c 'read -rp "Bucket: " B; read -rp "Key ID: " K; read -rsp "Secret key: " S; echo; printf "BUCKET=%s\nKEY_ID=%s\nKEY_SECRET=%s\nS3_REGION=kz1\nS3_ENDPOINT=storage.yandexcloud.kz\nSECRET=\nADMIN_SECRET=\nPORT=8080\nHOST=127.0.0.1\n" "$B" "$K" "$S" > /opt/cm/cm.env; chmod 600 /opt/cm/cm.env; echo written'
 ```
+
+Prompted, not pasted, and deliberately so. This step used to be a template with
+`PUT_THE_SECRET_HERE` in it, to be filled in and pasted — which means the secret
+exists as text in a clipboard, a Notepad window and a terminal scrollback, and
+from there it reaches a chat window or a screenshot. That is not a hypothetical:
+it is the single most likely way this deployment leaks, and it has already
+happened on this project more than once.
+
+`read -rsp` does not echo what you type, so the secret never appears on screen
+and there is nothing to copy. Typing it by hand is a small price.
+
+Two things it also fixes for free: `chmod 600` is applied in the same breath
+rather than a step later, and `printf` cannot pick up the stray space that
+`KEY_SECRET= abc` introduces — a leading space in the secret produces a
+signature that fails as **403**, indistinguishable from a wrong key.
+
+**If a secret is ever exposed** — pasted into a chat, caught in a screenshot,
+committed — treat it as spent. *IAM → Service accounts → `cm-function` → the
+key → Delete*, create a new one, and run the line above again. It costs a
+minute, and the alternative is a credential that grants read and delete on every
+photograph of every machine to whoever saw it.
 
 `S3_REGION=kz1` and `S3_ENDPOINT=storage.yandexcloud.kz` are the Kazakh ones.
 Left at the Russian defaults the function signs for the wrong region against the
