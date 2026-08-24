@@ -71,32 +71,21 @@ function handle(req, res, handler) {
   req.on('data', c => {
     size += c.length;
     if (size > MAX_BODY) {
-      over = true;
-      chunks.length = 0;                       // let the partial upload go now
-      /* Refused WITH the CORS header. Without it the browser will not let the
-         page read the refusal, and a rejection the phone could act on becomes
-         indistinguishable from a dead link it should retry for ever. */
-      res.writeHead(413, { 'Content-Type': 'application/json',
-                           'Access-Control-Allow-Origin': '*' });
-      res.end(JSON.stringify({ ok: false, error: 'Body too large' }));
-      /* And then KEEP READING, discarding as it comes.
+      if (!over) { over = true; chunks.length = 0; }   // let the partial upload go now
+      /* Read on, and throw it away.
 
-         The first version destroyed the socket here, which is the obvious move
-         and the wrong one: the client is still sending, so tearing the
-         connection down mid-upload reaches it as ECONNRESET and it never gets
-         to read the 413 that was already written. The suite caught it as an
-         intermittent failure, which is what it looks like — it depends on how
-         much was still in flight.
+         The obvious move is to answer 413 here and destroy the socket, and it
+         is wrong twice over. The client is still sending, so tearing the
+         connection down reaches it as ECONNRESET and it never reads the
+         refusal — and even answering WITHOUT destroying loses the race, because
+         a response that completes while the request body is still arriving lets
+         Node close the socket underneath it. Both leave the caller unable to
+         tell a refusal from a dead link, and a dead link is retried for ever,
+         which is the loop this limit exists to prevent.
 
-         That failure is precisely the one this check exists to prevent. A
-         refusal the phone cannot read is a dead link as far as it can tell, and
-         a dead link is retried for ever. So spend the bandwidth, let the upload
-         finish into nothing, and let the client read its answer. */
-      return;
-    }
-    if (over) {
-      /* Unless it is not a phone at all. Nothing legitimate sends four times
-         the limit after being told no; past that, the connection goes. */
+         So the reply waits for 'end'. The bandwidth is spent either way; what
+         is bought is an answer the caller can act on. Memory is safe, which was
+         the actual point — the buffer went at the first byte over. */
       if (size > MAX_BODY * 4) { try { req.destroy(); } catch (e) {} }
       return;
     }
@@ -104,14 +93,21 @@ function handle(req, res, handler) {
   });
   req.on('error', () => { try { req.destroy(); } catch (e) {} });
   req.on('end', async () => {
-    if (over) return;
+    if (over) {
+      /* Refused WITH the CORS header. Without it the browser will not let the
+         page read the refusal, and a rejection the phone could act on becomes
+         indistinguishable from a dead link. */
+      return send(res, { statusCode: 413,
+        headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+        body: JSON.stringify({ ok: false, error: 'Body too large' }) });
+    }
     try {
       send(res, await handler(toEvent(req, Buffer.concat(chunks).toString('utf8'))));
     } catch (e) {
-      /* The handler already catches its own errors and answers ok:false, so
-         reaching here means the wrapper itself broke. Still answer, and still
-         with the header — a bare socket close is the one reply the phone cannot
-         tell apart from no signal. */
+      /* The handler catches its own errors and answers ok:false, so reaching
+         here means the wrapper itself broke. Still answer, and still with the
+         header — a bare socket close is the one reply the phone cannot tell
+         apart from no signal. */
       send(res, { statusCode: 500,
         headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
         body: JSON.stringify({ ok: false, error: String((e && e.message) || e) }) });
