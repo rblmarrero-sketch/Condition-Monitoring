@@ -39,7 +39,16 @@ window.UPLOAD_DEFAULTS = {
     },
     {
       id: "pa",                        // SharePoint / OneDrive via Power Automate
-      on: true,
+      /* OFF, so a phone opened for the first time does not pick it up ticked.
+
+         Nothing in this system reads SharePoint back — the dashboard, the team
+         list and the photographs on a report all come from Drive — and a round
+         only counted as safely away once EVERY ticked destination had taken
+         every file, so one unreachable mirror held every round on every phone
+         for ever. The URL stays: tick it in ⚙ and it works exactly as before,
+         as a second copy. See up_gas_only_v1 in index.html for the one-time
+         correction that unticks it on phones that already have it. */
+      on: false,
       url: "https://defaultcdec65183a8e4078a165704f2b7e42.df.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/18/workflows/6f45fe051c4e47429c9759483834044a/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=yiQSUSpmsqOe1LYqTqNYmDJ6bAczA4ungMZkYI68aFI",                         // ← paste the flow's HTTP POST URL here
       sec: "",                         // the sig= in that URL is the authentication
       folder: "{TYPE}/{UNIT}/{YYYY-MM-DD}",

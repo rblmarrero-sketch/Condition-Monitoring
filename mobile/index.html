@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=132">
+<link rel="manifest" href="manifest.webmanifest?v=133">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=132">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=132">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=132">
+<link rel="apple-touch-icon" href="icon-192.png?v=133">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=133">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=133">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1725,27 +1725,27 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=132"></script>
-<script src="upload-defaults.js?v=132"></script>
-<script src="hme.js?v=132"></script>
-<script src="mp-fc.js?v=132"></script>
-<script src="hme-cascade.js?v=132"></script>
-<script src="assets.js?v=132"></script>
-<script src="temp-limits.js?v=132"></script>
-<script src="wear.js?v=132"></script>
-<script src="wear-figs.js?v=132"></script>
-<script src="wear-map.js?v=132"></script>
-<script src="machine-photos.js?v=132"></script>
-<script src="machine-fig.js?v=132"></script>
-<script src="get.js?v=132"></script>
-<script src="uc-points.js?v=132"></script>
-<script src="inspect-guide.js?v=132"></script>
-<script src="get-figs.js?v=132"></script>
-<script src="body-points.js?v=132"></script>
-<script src="body-map.js?v=132"></script>
-<script src="lube.js?v=132"></script>
-<script src="lube2027.js?v=132"></script>
-<script src="report-core.js?v=132"></script>
+<script src="native.js?v=133"></script>
+<script src="upload-defaults.js?v=133"></script>
+<script src="hme.js?v=133"></script>
+<script src="mp-fc.js?v=133"></script>
+<script src="hme-cascade.js?v=133"></script>
+<script src="assets.js?v=133"></script>
+<script src="temp-limits.js?v=133"></script>
+<script src="wear.js?v=133"></script>
+<script src="wear-figs.js?v=133"></script>
+<script src="wear-map.js?v=133"></script>
+<script src="machine-photos.js?v=133"></script>
+<script src="machine-fig.js?v=133"></script>
+<script src="get.js?v=133"></script>
+<script src="uc-points.js?v=133"></script>
+<script src="inspect-guide.js?v=133"></script>
+<script src="get-figs.js?v=133"></script>
+<script src="body-points.js?v=133"></script>
+<script src="body-map.js?v=133"></script>
+<script src="lube.js?v=133"></script>
+<script src="lube2027.js?v=133"></script>
+<script src="report-core.js?v=133"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -7632,7 +7632,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="132";
+const BUILD="133";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -7731,6 +7731,33 @@ function loadDests(){
   if(!localStorage.getItem("up_folder_v3")){
     d.forEach(x=>{ if(x && x.folder==="{TYPE}/{YYYY-MM}") x.folder=FOLDER_DEFAULT; });
     try{ localStorage.setItem("up_folder_v3","1"); }catch(e){}
+  }
+  /* ONE DESTINATION DECIDES, and it is the one everything reads from.
+     ------------------------------------------------------------------
+     A round counted as safely away only once EVERY ticked destination had
+     accepted every one of its files, and phones here shipped with two ticked —
+     the Apps Script and a Power Automate flow. Only the first is ever read
+     back: the dashboard, the team list, and the photographs on a colleague's
+     report all come from Drive. The flow is a write-only mirror.
+
+     So the rule had it backwards, and one unreachable mirror held every round
+     on every phone for ever — the queue never emptied, storage filled with
+     work that was already safe, and the delete warning told inspectors their
+     round existed nowhere when Drive had it all along. It also sent every
+     photograph twice over a satellite link, which is the scarcest thing in
+     this chain.
+
+     Emptying the URL in upload-defaults.js would not have reached a single
+     phone already carrying it: a destination with a URL counts as configured,
+     and configured destinations are deliberately left alone — tick included,
+     because overriding a real choice was a bug here once already. So the
+     correction is applied to the stored list, once, and records that it ran.
+
+     Once, and never again: an inspector who turns SharePoint back on
+     afterwards keeps it. This is a correction, not a policy. */
+  if(!localStorage.getItem("up_gas_only_v1")){
+    d.forEach(x=>{ if(x && x.id!=="gas") x.on=false; });
+    try{ localStorage.setItem("up_gas_only_v1","1"); }catch(e){}
   }
   // This used to write unconditionally, and loadDests() is reached from the UP.on
   // getter — so every renderSync() did a JSON.stringify plus a synchronous
