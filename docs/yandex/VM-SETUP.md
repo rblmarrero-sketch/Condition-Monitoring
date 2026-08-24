@@ -38,12 +38,38 @@ inspector; it blocks the request, and the round sits in the queue looking like
 no signal. A Cloud Function comes with HTTPS. A bare virtual machine has an IP
 address and no certificate — and certificates are not issued to bare IPs.
 
-So: any domain or subdomain you control. A `.kz` costs a few dollars a year.
-If you already own one for the mine, a subdomain like `cm.example.kz` is free
-and takes two minutes.
+So: any domain or subdomain you control. If you already own one for the mine, a
+subdomain like `cm.example.kz` is free and takes two minutes.
+
+### If you do not own one
+
+**Buy one. Recommended.** Not a `.kz` — that zone wants a Kazakh administrative
+contact and some registrars charge for a local-presence service to satisfy it,
+which is expense and paperwork for nothing. A plain `.com`, `.org`, `.site` or
+`.xyz` has no residency rules at all, costs between one and fifteen dollars a
+year, and takes about five minutes with a card. Cloudflare Registrar, Porkbun
+and Namecheap all work fine from Kazakhstan.
+
+Buying it has a second payoff worth having. Your region includes **Cloud DNS**,
+so the zone can live in the same Yandex Kazakhstan that the pit already reaches
+— endpoint, storage and name resolution all inside one network you have
+tested, with no third party in the path.
+
+**Or start today at no cost: [DuckDNS](https://www.duckdns.org).** Sign in,
+pick a name, and you have `something.duckdns.org` pointing at any IP you give
+it. Free, and everything below works unchanged — a plain Caddy gets a
+certificate for it the same way, because Let's Encrypt only needs the name to
+resolve to the machine and port 80 to be open.
+
+The trade is honest: DuckDNS is a free service run by volunteers, and it sits in
+the path between an inspector's phone and the mine's data. If it is down or
+gone, the endpoint is unreachable until you move — which you can, because
+switching costs one line in the Caddyfile and re-scanning the setup code on the
+phones. Fine for proving the whole thing works this week. Buy the domain before
+1,128 units depend on it.
 
 Pick the name now — everything below uses it. This guide writes it as
-**`cm.example.kz`**.
+**`cm.example.kz`**; substitute yours everywhere, DuckDNS name included.
 
 ---
 
@@ -84,11 +110,20 @@ Exactly [SETUP.md steps 1 to 4](SETUP.md). Nothing changes. Come back here with:
 
 ## 6. Point the domain at it
 
-Wherever your domain is registered, add an **A record**:
+**A domain you bought** — wherever it is registered, add an **A record**:
 
 | Type | Name | Value |
 |---|---|---|
 | A | `cm` | the public IP from step 5 |
+
+**DuckDNS** — open your [duckdns.org](https://www.duckdns.org) page, put the
+public IP from step 5 in the box next to your name, and press **update ip**.
+That is the whole of it.
+
+> DuckDNS is built for addresses that change. Yours does not — take a **static**
+> public IP in step 5 and you never touch this again. On an ephemeral IP the
+> address changes when the VM is stopped and started, and the endpoint quietly
+> stops answering until somebody updates that box.
 
 Give it a few minutes. Check it took, from your own machine:
 
