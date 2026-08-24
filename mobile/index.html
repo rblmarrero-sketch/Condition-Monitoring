@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=136">
+<link rel="manifest" href="manifest.webmanifest?v=137">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=136">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=136">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=136">
+<link rel="apple-touch-icon" href="icon-192.png?v=137">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=137">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=137">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1758,27 +1758,27 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=136"></script>
-<script src="upload-defaults.js?v=136"></script>
-<script src="hme.js?v=136"></script>
-<script src="mp-fc.js?v=136"></script>
-<script src="hme-cascade.js?v=136"></script>
-<script src="assets.js?v=136"></script>
-<script src="temp-limits.js?v=136"></script>
-<script src="wear.js?v=136"></script>
-<script src="wear-figs.js?v=136"></script>
-<script src="wear-map.js?v=136"></script>
-<script src="machine-photos.js?v=136"></script>
-<script src="machine-fig.js?v=136"></script>
-<script src="get.js?v=136"></script>
-<script src="uc-points.js?v=136"></script>
-<script src="inspect-guide.js?v=136"></script>
-<script src="get-figs.js?v=136"></script>
-<script src="body-points.js?v=136"></script>
-<script src="body-map.js?v=136"></script>
-<script src="lube.js?v=136"></script>
-<script src="lube2027.js?v=136"></script>
-<script src="report-core.js?v=136"></script>
+<script src="native.js?v=137"></script>
+<script src="upload-defaults.js?v=137"></script>
+<script src="hme.js?v=137"></script>
+<script src="mp-fc.js?v=137"></script>
+<script src="hme-cascade.js?v=137"></script>
+<script src="assets.js?v=137"></script>
+<script src="temp-limits.js?v=137"></script>
+<script src="wear.js?v=137"></script>
+<script src="wear-figs.js?v=137"></script>
+<script src="wear-map.js?v=137"></script>
+<script src="machine-photos.js?v=137"></script>
+<script src="machine-fig.js?v=137"></script>
+<script src="get.js?v=137"></script>
+<script src="uc-points.js?v=137"></script>
+<script src="inspect-guide.js?v=137"></script>
+<script src="get-figs.js?v=137"></script>
+<script src="body-points.js?v=137"></script>
+<script src="body-map.js?v=137"></script>
+<script src="lube.js?v=137"></script>
+<script src="lube2027.js?v=137"></script>
+<script src="report-core.js?v=137"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -7692,7 +7692,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="136";
+const BUILD="137";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -7843,7 +7843,14 @@ function loadDests(){
      rather than an edit to this code. A phone that has done this one is never
      asked again. */
   const SWAP=(window.UPLOAD_DEFAULTS||{}).swap;
-  if(SWAP && SWAP.to && SWAP.id && !localStorage.getItem("up_swap_"+SWAP.id)){
+  /* `up_swap_off` holds a phone where it is, whatever the file says. It exists
+     for two callers: a suite that points this app at 127.0.0.1 and then watches
+     for uploads — which is not a phone being migrated, and would otherwise
+     measure a URL nobody set — and a single phone somebody needs to keep on the
+     old backend while a changeover runs. Deliberate on both counts; nothing
+     sets it by accident. */
+  if(SWAP && SWAP.to && SWAP.id && !localStorage.getItem("up_swap_off")
+     && !localStorage.getItem("up_swap_"+SWAP.id)){
     const main=d.find(x=>x && x.id==="gas");
     /* The mirror may not be in the stored list yet — this list holds whatever
        the phone last saved, and the missing slots are filled in further down,
