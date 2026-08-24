@@ -379,6 +379,14 @@ const eq = (g, w, what) => ok(JSON.stringify(g) === JSON.stringify(w),
   }
 
   console.log("── nothing scrolls sideways, in either language");
+  /* Put a covered machine back on screen first. The section above deliberately
+     leaves a NO-REFERENCE unit selected, and the capture form is now correctly
+     hidden for one of those — there are no compartments, so there is nothing
+     for a finding to attach to. Measuring the evidence buttons in that state
+     measures a form that is not supposed to be visible, and reports a layout
+     fault where there is none. */
+  await p.evaluate(o => { selectEquip(o.unit); pickComponent(o.k); }, sourced);
+  await p.waitForTimeout(300);
   for (const lg of ["en", "ru"]) {
     await p.evaluate(l => { window.lang = l; if (window.applyLang) applyLang(); if (window.loadPos) loadPos(); }, lg);
     await p.waitForTimeout(200);
