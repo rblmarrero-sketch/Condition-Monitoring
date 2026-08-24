@@ -389,6 +389,36 @@ for `MP/TK149/…`. Then the dashboard, then the rest of the phones by
 
 ---
 
+## 11. Move what is already in Drive
+
+The Drive folder and the bucket are the SAME level. `Condition Monitoring/` in
+Drive holds `MP/TK149/2026-08-24/…`; the bucket holds exactly that, at its root.
+The bucket replaces the folder — do not make a folder called "Condition
+Monitoring" inside it, or everything sits one level too deep and the app finds
+nothing at all.
+
+Both endpoints speak the same JSON, so this needs no Drive credentials, no S3
+keys, and no downloading a season's photographs to a laptop. On the VM:
+
+```
+cd /opt/cm
+sudo curl -fsSLO https://raw.githubusercontent.com/rblmarrero-sketch/Condition-Monitoring/claude/magnetic-plug-dashboard-llv4wc/docs/yandex/migrate.js
+node migrate.js --from "<the old /exec URL>" --to "https://<your endpoint>" --dry
+```
+
+`--dry` lists what would move and writes nothing. Then run it again without it.
+
+**Safe to run twice.** It matches on full path, skips whatever the destination
+already holds, and retries a bad minute rather than dying on it — so a run that
+stops is resumed by repeating the command, not restarted from nothing at 90%.
+
+**Run it once more at the very end.** While the changeover is under way some
+phones are still uploading to the old backend only; their rounds land there and
+are invisible to everything reading the new one. The last run has to come after
+the last phone has moved across.
+
+---
+
 ## What this costs you that a function did not
 
 **Money:** a few dollars a month instead of near-zero. Small.
