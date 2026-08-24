@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=143">
+<link rel="manifest" href="manifest.webmanifest?v=144">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=143">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=143">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=143">
+<link rel="apple-touch-icon" href="icon-192.png?v=144">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=144">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=144">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1758,27 +1758,27 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=143"></script>
-<script src="upload-defaults.js?v=143"></script>
-<script src="hme.js?v=143"></script>
-<script src="mp-fc.js?v=143"></script>
-<script src="hme-cascade.js?v=143"></script>
-<script src="assets.js?v=143"></script>
-<script src="temp-limits.js?v=143"></script>
-<script src="wear.js?v=143"></script>
-<script src="wear-figs.js?v=143"></script>
-<script src="wear-map.js?v=143"></script>
-<script src="machine-photos.js?v=143"></script>
-<script src="machine-fig.js?v=143"></script>
-<script src="get.js?v=143"></script>
-<script src="uc-points.js?v=143"></script>
-<script src="inspect-guide.js?v=143"></script>
-<script src="get-figs.js?v=143"></script>
-<script src="body-points.js?v=143"></script>
-<script src="body-map.js?v=143"></script>
-<script src="lube.js?v=143"></script>
-<script src="lube2027.js?v=143"></script>
-<script src="report-core.js?v=143"></script>
+<script src="native.js?v=144"></script>
+<script src="upload-defaults.js?v=144"></script>
+<script src="hme.js?v=144"></script>
+<script src="mp-fc.js?v=144"></script>
+<script src="hme-cascade.js?v=144"></script>
+<script src="assets.js?v=144"></script>
+<script src="temp-limits.js?v=144"></script>
+<script src="wear.js?v=144"></script>
+<script src="wear-figs.js?v=144"></script>
+<script src="wear-map.js?v=144"></script>
+<script src="machine-photos.js?v=144"></script>
+<script src="machine-fig.js?v=144"></script>
+<script src="get.js?v=144"></script>
+<script src="uc-points.js?v=144"></script>
+<script src="inspect-guide.js?v=144"></script>
+<script src="get-figs.js?v=144"></script>
+<script src="body-points.js?v=144"></script>
+<script src="body-map.js?v=144"></script>
+<script src="lube.js?v=144"></script>
+<script src="lube2027.js?v=144"></script>
+<script src="report-core.js?v=144"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2105,6 +2105,7 @@ const I18N = {
     uc_notmeasured:"Not measured",
     uc_noscore:"Recorded, not scored",
     uc_noref:"No reference for this model",
+    lube_noref:"No lubrication reference for this model, so there are no compartments to audit here. Report the model below so its capacities and intervals can be added.",
     uc_band_ok:"Serviceable", uc_band_watch:"Watch", uc_band_act:"At or past condemn",
     uc_toGo:"{n} mm to condemn", uc_past:"{n} mm past condemn", uc_g_new:"new {n}", uc_g_cond:"condemn {n}",
     uc_src_catalogue:"vs the model reference",
@@ -2486,6 +2487,7 @@ const I18N = {
     uc_notmeasured:"Не измерено",
     uc_noscore:"Записано, без оценки",
     uc_noref:"Нет эталона для этой модели",
+    lube_noref:"Для этой модели нет карты смазки, поэтому здесь нечего проверять. Сообщите модель ниже, чтобы добавить ёмкости и интервалы.",
     uc_band_ok:"Годен", uc_band_watch:"Наблюдать", uc_band_act:"Достиг предела износа",
     uc_toGo:"до предела {n} мм", uc_past:"за пределом на {n} мм", uc_g_new:"новое {n}", uc_g_cond:"предел {n}",
     uc_src_catalogue:"по эталону модели",
@@ -3549,6 +3551,21 @@ function renderChips(){ const tr=currentTree();
         curItem=""; toggleCapture(); return;
       }
     }
+    if(lubeType() && !lubeComps(curEquip).length){
+      /* The lubrication reference is keyed by MODEL, and 901 units on this
+         fleet have a model the masterlist has never heard of. Until now that
+         arrived as an empty screen: no compartments, no message, nothing to
+         distinguish "this machine needs no audit" from "the app is broken" —
+         and a fitter standing at a drill with an empty phone concludes the
+         second one.
+
+         Name the model, because the model is the thing that has to be added,
+         and a gap somebody can quote is a work item rather than a mystery. */
+      const a=lubeAsset(curEquip);
+      $("posnav").innerHTML='<div class="ucblock">'+esc(t("lube_noref"))+
+        (a.m?'<br><b>'+esc(a.m)+'</b>':"")+'</div>';
+      curItem=""; toggleCapture(); return;
+    }
     renderFlatCards(its); return;                    // unit has no register tree -> generic cards
   }
   // Magnetic Plug / Filter Cut -> compact chip row (few items)
@@ -3564,6 +3581,10 @@ function renderFlatCards(its){
 function toggleCapture(){ const tr=currentTree();
   let show = (usesRegister(type) && !curEquip) ? false : (!tr || !!curItem);
   if(wearType() && (!curEquip || !ucStatus(curEquip).ok)) show=false;
+  /* A lubrication audit with no reference has no compartments, so the form
+     below has nothing to attach a finding to. Leaving it open invites a round
+     that grades a machine against nothing and files it as real work. */
+  if(lubeType() && curEquip && !lubeComps(curEquip).length) show=false;
   $("captureBox").style.display=show?"":"none"; }
 function pickComponent(code){ saveCur(); curItem=code; loadPos(); renderChips(); }
 function renderComponentNav(tree){
@@ -7700,7 +7721,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="143";
+const BUILD="144";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
