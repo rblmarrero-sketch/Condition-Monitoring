@@ -37,8 +37,16 @@ The Yandex ID is the same on both sides; the *account* is what is regional. If
 the console will not let you in at all, [CLI-SETUP.md](CLI-SETUP.md) starts by
 working out whether that is the console or the account.
 
-You need a **billing account** linked, even to use the free tier. If the console
-nags about this, deal with it first — nothing below will save without it.
+You need a **billing account** linked, even to use the free tier. The console
+says so in the top right — **"Billing account not linked"**, with a red dot —
+and until you fix it every **Create** button below fails. Deal with it first.
+
+Click that message. A Kazakh account settles in **KZT** and takes a card from a
+non-Russian bank; linking one puts a small hold on it that is released, not
+charged. A first billing account also comes with a starting grant, and this
+fleet costs cents a month — a round is a few megabytes — so the grant will cover
+the trial comfortably. If you would rather not link a card at all, there is a
+minimum top-up instead (1,500 ₸).
 
 At the top you will see a **cloud**, and inside it a **folder** (usually called
 `default`). Everything below goes in that folder. Note its name; you will pick
