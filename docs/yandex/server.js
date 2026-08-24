@@ -69,17 +69,35 @@ function handle(req, res, handler) {
   const chunks = [];
   let size = 0, over = false;
   req.on('data', c => {
-    if (over) return;
     size += c.length;
     if (size > MAX_BODY) {
       over = true;
+      chunks.length = 0;                       // let the partial upload go now
       /* Refused WITH the CORS header. Without it the browser will not let the
          page read the refusal, and a rejection the phone could act on becomes
          indistinguishable from a dead link it should retry for ever. */
       res.writeHead(413, { 'Content-Type': 'application/json',
                            'Access-Control-Allow-Origin': '*' });
       res.end(JSON.stringify({ ok: false, error: 'Body too large' }));
-      req.destroy();
+      /* And then KEEP READING, discarding as it comes.
+
+         The first version destroyed the socket here, which is the obvious move
+         and the wrong one: the client is still sending, so tearing the
+         connection down mid-upload reaches it as ECONNRESET and it never gets
+         to read the 413 that was already written. The suite caught it as an
+         intermittent failure, which is what it looks like — it depends on how
+         much was still in flight.
+
+         That failure is precisely the one this check exists to prevent. A
+         refusal the phone cannot read is a dead link as far as it can tell, and
+         a dead link is retried for ever. So spend the bandwidth, let the upload
+         finish into nothing, and let the client read its answer. */
+      return;
+    }
+    if (over) {
+      /* Unless it is not a phone at all. Nothing legitimate sends four times
+         the limit after being told no; past that, the connection goes. */
+      if (size > MAX_BODY * 4) { try { req.destroy(); } catch (e) {} }
       return;
     }
     chunks.push(c);
