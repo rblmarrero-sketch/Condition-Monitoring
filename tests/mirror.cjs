@@ -49,9 +49,13 @@ const keys = base => fetch(base + '/__keys').then(r => r.json()).then(j => j.key
       { id: 'mirror', on: true,  url: r, sec: '', folder: '{TYPE}/{UNIT}/{YYYY-MM-DD}' },
       { id: 'pa',     on: false, url: '', sec: '', folder: '' },
       { id: 'post',   on: false, url: '', sec: '', folder: '' }]));
-    /* This phone's inspector turned the mirror on deliberately; the one-time
-       gas-only correction must not switch it back off underneath them. */
+    /* This phone's inspector turned the mirror on deliberately, and the two
+       one-time corrections in upload-defaults.js must not move it underneath
+       them: gas-only would untick it, and an armed `retire` — which is what
+       ends a changeover — would switch off the very destination this suite
+       exists to watch. Held explicitly, which is what up_swap_off is for. */
     localStorage.setItem('up_gas_only_v1', '1');
+    localStorage.setItem('up_swap_off', '1');
   }, [M + '/exec', R + '/exec']);
   const p = await ctx.newPage();
   p.on('pageerror', e => ok('page error', false, e.message));

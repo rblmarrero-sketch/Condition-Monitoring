@@ -41,7 +41,12 @@ async function phone(b, { dests, swap, retire, flags }) {
     if (d) localStorage.setItem('up_dests', JSON.stringify(d));
     (fl || []).forEach(k => localStorage.setItem(k, '1'));
     const wait = () => {
-      const put = o => { o.swap = sw; if (ret) o.retire = ret; return o; };
+      /* Always set BOTH, even to null. Setting only what a case passes leaves
+         the other one at whatever upload-defaults.js currently ships — so
+         arming an instruction silently rewrote every earlier fixture, which is
+         how arming the swap broke the suite the first time and how arming
+         retire broke it the second. A fixture states its whole world. */
+      const put = o => { o.swap = sw || null; o.retire = ret || null; return o; };
       if (window.UPLOAD_DEFAULTS) { put(window.UPLOAD_DEFAULTS); return; }
       /* upload-defaults.js has not run yet at init-script time, so catch the
          assignment rather than racing it. */
@@ -223,6 +228,36 @@ const GAS_ONLY = ['up_gas_only_v1'];
   d = await read(p);
   ok('  and somebody who turns it back on keeps it', one(d, 'mirror').on);
   await ctx.close();
+
+  /* ---- and the retire instruction as it actually ships -------------------
+     Same reason as the swap above: an armed instruction is right or wrong on
+     every phone at once. This one switches a destination OFF, so getting the
+     name wrong is a fleet that keeps paying for a second upload nobody wanted,
+     and getting the destination wrong is a fleet that stops uploading at all. */
+  console.log('\nthe retire instruction as it actually ships');
+  const shippedRet = JSON.parse(execSync(process.execPath + ' -e ' + JSON.stringify(
+    'global.window={};require(' + JSON.stringify(path.join(__dirname, '../mobile/upload-defaults.js')) +
+    ');process.stdout.write(JSON.stringify(window.UPLOAD_DEFAULTS.retire||{}))'), { encoding: 'utf8' }));
+
+  if (!shippedRet.id) {
+    console.log('  ....  nothing is being retired — nothing to verify');
+  } else {
+    ok('it names a destination that exists, and never the main one',
+       ['mirror', 'pa', 'post'].indexOf(shippedRet.dest) >= 0,
+       shippedRet.dest + (shippedRet.dest === 'gas' ? '  — this would stop the fleet uploading' : ''));
+    ({ ctx, p } = await phone(b, { flags: GAS_ONLY, swap: shipped, retire: shippedRet,
+      dests: [{ id: 'gas',    on: true, url: shipped.to || NEW, sec: '', folder: '{TYPE}/{UNIT}' },
+              { id: 'mirror', on: true, url: shipped.from || OLD, sec: '', folder: '{TYPE}/{UNIT}' }] }));
+    d = await read(p);
+    ok('  a phone writing to both stops writing to the retired one',
+       !one(d, shippedRet.dest).on, 'ticked ' + one(d, shippedRet.dest).on);
+    /* The one that must never break: a phone left with nothing ticked uploads
+       nowhere, and says "not syncing" rather than anything about a changeover. */
+    ok('  and is still writing SOMEWHERE afterwards',
+       d.some(x => x.on && x.url), d.filter(x => x.on && x.url).map(x => x.id).join(' ') || '(NOTHING — rounds would not leave the phone)');
+    ok('  which is the main backend', one(d, 'gas').on && !!one(d, 'gas').url, one(d, 'gas').url);
+    await ctx.close();
+  }
 
   await b.close(); bye();
   console.log(fail ? `\n${fail} FAILED` : '\nthe fleet moves once, and keeps what it is told');

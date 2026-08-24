@@ -107,7 +107,7 @@ window.UPLOAD_DEFAULTS = {
      second copy, or "pa" / "post" for the others.
      ------------------------------------------------------------------ */
   retire: {
-    id:   "",                          // e.g. "google-off-2026-09"
-    dest: "mirror"
+    id:   "google-off-2026-08",        // ARMED — every phone does this once
+    dest: "mirror"                     // the Google second copy
   },
 };
