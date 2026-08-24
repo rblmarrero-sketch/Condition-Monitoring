@@ -109,17 +109,31 @@ Exactly [SETUP.md steps 1 to 4](SETUP.md). Nothing changes. Come back here with:
 |---|---|---|
 | Image | **Ubuntu 24.04 LTS** | Anything current is fine; the commands below are Ubuntu's |
 | Availability zone | `kz1-a` | The only one there is |
-| Platform | the cheapest offered | |
-| vCPU | 2, **guaranteed share 5%** | Bursts to full when a round arrives, costs almost nothing while idle |
+| Tab | **Shared-core**, not Custom | Custom starts at a 20% guaranteed share and prices accordingly. This machine is idle between rounds and busy for seconds at a time, which is exactly what shared-core is for |
+| vCPU | 2, **guaranteed share 5% or 20%** | It bursts above the guarantee when a round arrives |
 | RAM | 1 GB | |
-| Disk | 10 GB SSD | The bucket holds the photographs, not this |
-| Public IP | **yes** — take an ephemeral one, or a static one if you prefer | The phones have to reach it |
+| Preemptible | **unchecked** | A preemptible VM is stopped after 24 hours. Cheaper, and useless as an endpoint |
+| Disk | 10 GB — **network HDD** if offered | Cheaper than SSD and fast enough: the photographs are in the bucket, this disk holds four files |
+| Public IP | **Auto** | Then make it static straight after — see below |
 | Service account | `cm-function` | So the machine can use the bucket. It still needs the static key below, but this keeps the machine inside your own IAM |
 | Login | **`cmadmin`** | The console rejects anything under three characters, so `cm` will not do |
 | SSH key | paste your **public** key | See the note after this table |
 | Backup | **off** | See below — it blocks creation and you do not want it |
 
 **Create.** Note the **public IP** it gives you.
+
+**Then pin that address.** *Virtual Private Cloud → IP addresses →* the new
+address *→ Make static.* An automatic address is released when the VM is
+stopped and started, and the next boot comes back on a different one — at which
+point the name points at nothing and every phone in the pit reports no signal,
+with nothing in any log to say why. It costs a little to reserve. Pay it.
+
+**On cost:** watch the estimate panel on the right of the create form; it is
+live and it is the only number that matters. Expect something in the region of
+a few thousand tenge a month — meaningfully more than a Cloud Function would
+have cost, and the price of kz1 having no serverless. If the figure looks high,
+the three levers are the shared-core tab, network HDD instead of SSD, and not
+reserving more RAM than 1 GB.
 
 > **No SSH key?** On your own computer — PowerShell on Windows, Terminal on Mac
 > or Linux:
