@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=144">
+<link rel="manifest" href="manifest.webmanifest?v=145">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=144">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=144">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=144">
+<link rel="apple-touch-icon" href="icon-192.png?v=145">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=145">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=145">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1758,27 +1758,28 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=144"></script>
-<script src="upload-defaults.js?v=144"></script>
-<script src="hme.js?v=144"></script>
-<script src="mp-fc.js?v=144"></script>
-<script src="hme-cascade.js?v=144"></script>
-<script src="assets.js?v=144"></script>
-<script src="temp-limits.js?v=144"></script>
-<script src="wear.js?v=144"></script>
-<script src="wear-figs.js?v=144"></script>
-<script src="wear-map.js?v=144"></script>
-<script src="machine-photos.js?v=144"></script>
-<script src="machine-fig.js?v=144"></script>
-<script src="get.js?v=144"></script>
-<script src="uc-points.js?v=144"></script>
-<script src="inspect-guide.js?v=144"></script>
-<script src="get-figs.js?v=144"></script>
-<script src="body-points.js?v=144"></script>
-<script src="body-map.js?v=144"></script>
-<script src="lube.js?v=144"></script>
-<script src="lube2027.js?v=144"></script>
-<script src="report-core.js?v=144"></script>
+<script src="native.js?v=145"></script>
+<script src="upload-defaults.js?v=145"></script>
+<script src="hme.js?v=145"></script>
+<script src="mp-fc.js?v=145"></script>
+<script src="hme-cascade.js?v=145"></script>
+<script src="assets.js?v=145"></script>
+<script src="temp-limits.js?v=145"></script>
+<script src="wear.js?v=145"></script>
+<script src="wear-figs.js?v=145"></script>
+<script src="wear-map.js?v=145"></script>
+<script src="machine-photos.js?v=145"></script>
+<script src="machine-fig.js?v=145"></script>
+<script src="get.js?v=145"></script>
+<script src="uc-points.js?v=145"></script>
+<script src="inspect-guide.js?v=145"></script>
+<script src="get-figs.js?v=145"></script>
+<script src="body-points.js?v=145"></script>
+<script src="body-map.js?v=145"></script>
+<script src="lube.js?v=145"></script>
+<script src="lube-overrides.js?v=145"></script>
+<script src="lube2027.js?v=145"></script>
+<script src="report-core.js?v=145"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3159,9 +3160,30 @@ function flattenTree(nodes,out){ out=out||[];
    articulated truck and a loader, and resolving on the model string alone hands
    over the wrong compartment list with nothing on screen to say so. */
 function lubeAsset(unit){ const a=ASSET_BY[unit]||{}; return {m:a.m||"", cls:a.cls||""}; }
+/* One machine that is not like the others — see mobile/lube-overrides.js.
+   The model plan is right for every other unit of that model, so editing the
+   model to fix one machine would quietly change the figures for twenty. */
+function lubeOverride(unit){
+  const o=(window.LUBE_OVERRIDES||{})[String(unit||"").toUpperCase()];
+  return (o && typeof o==="object") ? o : null;
+}
 function lubeComps(unit){
   if(!window.LUBE) return [];
-  const a=lubeAsset(unit); return LUBE.comps(a.m, a.cls);
+  const a=lubeAsset(unit);
+  const base=LUBE.comps(a.m, a.cls) || [];
+  const o=lubeOverride(unit);
+  if(!o) return base;
+  const drop={}; (o.drop||[]).forEach(k=>{ drop[String(k)]=1; });
+  /* Copied, never mutated. LUBE.comps() hands back the model's own array, and
+     writing an override into it would change every other unit of that model for
+     the rest of the session — the exact harm this file exists to avoid, arrived
+     at by accident. */
+  const out=base.filter(c=>!drop[String(c.k)]).map(c=>{
+    const patch=(o.set||{})[String(c.k)];
+    return patch ? Object.assign({}, c, patch, {ovr:1}) : c;
+  });
+  (o.add||[]).forEach(c=>{ if(c && c.k!=null && !drop[String(c.k)]) out.push(Object.assign({}, c, {ovr:1})); });
+  return out;
 }
 function lubeWalkTree(unit){
   const cs=lubeComps(unit);
@@ -7721,7 +7743,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="144";
+const BUILD="145";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
