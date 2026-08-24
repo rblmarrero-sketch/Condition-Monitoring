@@ -65,11 +65,50 @@
      an access gate, route (2) is the one to switch to. */
   function builtIn() {
     try {
+      /* A changeover in progress outranks the built-in list. `swap` names an
+         endpoint being retired and the one replacing it, and the phones act on
+         it themselves — so a dashboard reading `dests` would be the last thing
+         in the system still pointed at the old backend, which on the
+         measurements that prompted the move is a 72-second read against 315 ms.
+         Nobody would call that a misconfiguration; they would call the
+         dashboard slow. */
+      const sw = (window.UPLOAD_DEFAULTS || {}).swap;
+      if (sw && sw.to && sw.id) return { url: String(sw.to).trim(), sec: String(sw.sec || "") };
       const d = ((window.UPLOAD_DEFAULTS || {}).dests || [])
         .find(x => x && x.id === "gas" && String(x.url || "").trim());
       return d ? { url: String(d.url).trim(), sec: String(d.sec || "") } : null;
     } catch (e) { return null; }
   }
+
+  /* And a dashboard somebody already pointed at the old endpoint moves too,
+     once, exactly as a phone does — same `from` so it only touches a browser
+     actually on the retired URL, same "remember only once it happened", so a
+     machine deliberately left on the old backend during the changeover still
+     moves when it is put back.
+
+     Without this the browsers that were configured are the ones left behind:
+     the office machines somebody set up carefully, which are precisely the
+     ones people judge the system by. */
+  (function swapSaved() {
+    try {
+      const sw = (window.UPLOAD_DEFAULTS || {}).swap;
+      if (!sw || !sw.to || !sw.id) return;
+      if (localStorage.getItem("cm_swap_off") || localStorage.getItem("cm_swap_" + sw.id)) return;
+      const saved = localStorage.getItem(LS_URL);
+      if (saved === null) return;                       // never set — builtIn() covers it
+      const cur = String(saved).trim();
+      if (!cur || cur === String(sw.to).trim()) return; // cleared on purpose, or already there
+      if (sw.from && cur.indexOf(String(sw.from)) !== 0) return;
+      localStorage.setItem(LS_URL, String(sw.to).trim());
+      localStorage.setItem(LS_SEC, String(sw.sec || ""));
+      /* The cursor counts from the OLD folder's clock. Carrying it across means
+         the first read asks for "everything since a moment that never happened
+         here" and quietly returns nothing — an empty dashboard on a backend
+         holding every round. */
+      localStorage.removeItem(LS_CUR);
+      localStorage.setItem("cm_swap_" + sw.id, "1");
+    } catch (e) {}
+  })();
   /* "Never set" and "deliberately turned off" are different answers and the
      difference is load-bearing. The dashboard is usable with no Drive at all —
      an entries.json imported from a phone, records held in this browser only —
