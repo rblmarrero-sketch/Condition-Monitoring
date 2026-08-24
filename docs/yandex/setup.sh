@@ -16,6 +16,24 @@ FN_NAME="${FN_NAME:-cm-endpoint}"
 RUNTIME="${RUNTIME:-nodejs18}"
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# Which Yandex. There are two, they are separate clouds, and a bucket in one
+# does not exist in the other — so this decides the console you signed up in,
+# the host the function talks to, and the region it signs its requests for. A
+# function pointed at the Russian host with a Kazakh key does not fail with
+# "wrong region": it 403s, which reads as a bad key and sends you looking in
+# the wrong place for an afternoon.
+#
+#   REGION=kz1  bash docs/yandex/setup.sh <bucket>
+#
+REGION="${REGION:-ru-central1}"
+case "$REGION" in
+  ru-central1) S3_HOST="storage.yandexcloud.net"; YC_API="api.cloud.yandex.net:443";
+               CONSOLE="https://console.yandex.cloud";;
+  kz1)         S3_HOST="storage.yandexcloud.kz";  YC_API="api.yandexcloud.kz:443";
+               CONSOLE="https://kz.console.yandex.cloud";;
+  *) echo "✗ REGION must be ru-central1 or kz1, not $REGION" >&2; exit 1;;
+esac
+
 die(){ echo "✗ $*" >&2; exit 1; }
 say(){ echo; echo "── $*"; }
 
@@ -26,7 +44,14 @@ command -v yc >/dev/null || die "yc is not installed — see docs/yandex/CLI-SET
 yc config get folder-id >/dev/null 2>&1 || die "yc is not signed in — see docs/yandex/CLI-SETUP.md step 2"
 
 FOLDER="$(yc config get folder-id)"
-echo "folder $FOLDER"
+echo "folder $FOLDER  ·  region $REGION  ·  $CONSOLE"
+# yc talks to the Russian API unless told otherwise, so a kz1 run against a
+# default profile would create the bucket in the wrong cloud and succeed doing it.
+if [ "$REGION" = kz1 ] && [ "$(yc config get endpoint 2>/dev/null)" != "$YC_API" ]; then
+  die "yc is pointed at the Russia API, but REGION=kz1. Fix it with:
+     yc config set endpoint $YC_API
+   then sign in again for that cloud:  yc init"
+fi
 
 # ---- 1. the bucket -----------------------------------------------------------
 # Private. Nothing about the app needs it public, and public is the one setting
@@ -88,10 +113,11 @@ yc serverless function version create \
   --environment "BUCKET=$BUCKET" \
   --environment "KEY_ID=$KEY_ID" \
   --environment "KEY_SECRET=$KEY_SEC" \
-  --environment "S3_REGION=ru-central1" \
+  --environment "S3_REGION=$REGION" \
+  --environment "S3_ENDPOINT=$S3_HOST" \
   --environment "SECRET=" \
   --environment "ADMIN_SECRET=" >/dev/null
-echo "   version created on $RUNTIME"
+echo "   version created on $RUNTIME, talking to $S3_HOST"
 
 # ADMIN_SECRET is deliberately empty: it is the password that permits deleting
 # inspections, and empty means deletion is switched off and the dashboard says

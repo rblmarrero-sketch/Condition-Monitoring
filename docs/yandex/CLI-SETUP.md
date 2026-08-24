@@ -20,6 +20,43 @@ tell you which one it is.
 
 ---
 
+## If your account is `@yandex.kz` — read this first
+
+There are **two Yandex Clouds**, not one, and which one you belong to is decided
+by the console you signed up in. They are separate: a bucket in one does not
+exist in the other.
+
+| | Russia | Kazakhstan |
+|---|---|---|
+| Console | `console.yandex.cloud` | **`kz.console.yandex.cloud`** |
+| Region | `ru-central1` | **`kz1`** |
+| Object Storage | `storage.yandexcloud.net` | **`storage.yandexcloud.kz`** |
+| `yc` API | `api.cloud.yandex.net:443` | **`api.yandexcloud.kz:443`** |
+| Billing | `center.yandex.cloud/billing` | **`kz.center.yandex.cloud/billing`** |
+
+So the first thing to try is **the other console**. A `.kz` account that
+registered on the Kazakh side and is signing in at `console.yandex.cloud` gets
+in and finds nothing — or does not get in at all — and neither looks like "you
+are at the wrong address".
+
+The Yandex ID works in both. The *account* is what is regional.
+
+If you are on the Kazakh side, everything below takes one extra setting:
+
+```
+yc config set endpoint api.yandexcloud.kz:443
+yc init
+REGION=kz1 bash docs/yandex/setup.sh baimskaya-cm
+```
+
+`REGION=kz1` is not cosmetic. SigV4 signs the region into every single request,
+so a function built with the Russian defaults against a Kazakh key **does not
+fail with "wrong region" — it 403s**, which reads as a bad key and sends you
+looking in the wrong place for an afternoon. `tests/yandex.cjs` now proves both
+regions come out of the environment and neither is baked in.
+
+---
+
 ## 1. Install `yc`
 
 **Mac or Linux**
@@ -76,7 +113,8 @@ yc config set folder-id <folder id>
 ## 3. Run the setup
 
 ```
-bash docs/yandex/setup.sh baimskaya-cm
+bash docs/yandex/setup.sh baimskaya-cm            # Russia
+REGION=kz1 bash docs/yandex/setup.sh baimskaya-cm # Kazakhstan
 ```
 
 One argument: the bucket name. Lowercase, digits and hyphens, globally unique

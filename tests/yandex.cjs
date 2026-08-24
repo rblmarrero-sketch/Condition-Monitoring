@@ -95,6 +95,39 @@ function shape(v, depth) {
   ok('and a preflight is answered, for the day something needs one',
      pre.status < 400 && !!pre.headers.get('access-control-allow-origin'), String(pre.status));
 
+  /* ---- 1c. the region it is actually talking to -------------------------
+     There are two Yandex clouds. A bucket in the Russia region does not exist
+     in the Kazakhstan one, the hosts are different, and SigV4 signs the region
+     into every request — so a function deployed for a .kz account against the
+     Russian defaults does not fail with "wrong region". It 403s, which reads as
+     a bad key and sends somebody looking in the wrong place for an afternoon.
+
+     Both values come from the environment, which is only worth anything if
+     nothing downstream has quietly hard-coded the Russian one. So: load the
+     real file with the Kazakh values set, catch the request on its way out, and
+     read the host it dialled and the scope it signed. */
+  console.log('\nthe cloud it is actually dialling');
+  const probe = env => JSON.parse(require('child_process').execFileSync(process.execPath,
+    ['-e', `
+      const https = require('https');
+      https.request = (o) => { console.log(JSON.stringify(
+        { host: o.host, scope: (String(o.headers.Authorization || '').match(/Credential=[^/]*\\/([^,]*)/) || [])[1] || '' }));
+        process.exit(0); };
+      require(${JSON.stringify(path.join(__dirname, '../docs/yandex/function.js'))})
+        ._internals.listAll('').catch(() => process.exit(3));
+    `], { env: Object.assign({}, process.env, { BUCKET: 'b', KEY_ID: 'k', KEY_SECRET: 's' }, env),
+          encoding: 'utf8' }));
+
+  const ru = probe({ S3_ENDPOINT: '', S3_REGION: '' });
+  ok('left alone it is the Russia region, as the Apps Script folder was',
+     ru.host === 'storage.yandexcloud.net' && /\/ru-central1\/s3\//.test(ru.scope),
+     ru.host + '  ' + ru.scope);
+  const kz = probe({ S3_ENDPOINT: 'storage.yandexcloud.kz', S3_REGION: 'kz1' });
+  ok('and a Kazakh account gets the Kazakh host, not a 403 that looks like a bad key',
+     kz.host === 'storage.yandexcloud.kz', kz.host);
+  ok('  signed for kz1 — SigV4 puts the region in the signature, so the host alone is not enough',
+     /\/kz1\/s3\//.test(kz.scope), kz.scope);
+
   /* ---- 2. the write probe ------------------------------------------------ */
   console.log('\nthe write probe both clients send before trusting an endpoint');
   const pg = await post(G, { op: 'ping' }), py = await post(Y, { op: 'ping' });

@@ -45,6 +45,8 @@ Paste `function.js` as the only file, entry point `index.handler`, and set:
 | `KEY_SECRET` | the static key secret |
 | `SECRET` | a password of your choosing, or leave empty |
 | `ADMIN_SECRET` | **leave empty** unless you want deletion enabled |
+| `S3_REGION` | `ru-central1`, or `kz1` if the account is Kazakh |
+| `S3_ENDPOINT` | unset, or `storage.yandexcloud.kz` if the account is Kazakh |
 
 Attach the service account. Set the trigger to **HTTPS, public**. Timeout 60 s,
 memory 256 MB.

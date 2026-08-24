@@ -22,6 +22,21 @@ to). Then paste one URL into the app.
 
 Go to **console.yandex.cloud** and sign in.
 
+**Unless your account is Kazakh** — a `@yandex.kz` address, or you registered in
+Kazakhstan. Then it is **kz.console.yandex.cloud**, and it is a genuinely
+separate cloud: different console, different storage host, different region
+name. Use these values throughout instead:
+
+| | Russia | Kazakhstan |
+|---|---|---|
+| Console | `console.yandex.cloud` | `kz.console.yandex.cloud` |
+| `S3_REGION` | `ru-central1` | `kz1` |
+| `S3_ENDPOINT` | leave unset | `storage.yandexcloud.kz` |
+
+The Yandex ID is the same on both sides; the *account* is what is regional. If
+the console will not let you in at all, [CLI-SETUP.md](CLI-SETUP.md) starts by
+working out whether that is the console or the account.
+
 You need a **billing account** linked, even to use the free tier. If the console
 nags about this, deal with it first — nothing below will save without it.
 
@@ -101,7 +116,7 @@ bucket.
    `handler`". If you renamed the file, this has to match.
 8. **Timeout**: `60` seconds. **Memory**: `256 MB`.
 9. **Service account**: pick `cm-function`.
-10. **Environment variables** — click add, six times:
+10. **Environment variables** — click add, six or seven times:
 
 | Name | Value |
 |---|---|
@@ -110,7 +125,8 @@ bucket.
 | `KEY_SECRET` | the Secret key from step 3 |
 | `SECRET` | a password you invent, or leave empty |
 | `ADMIN_SECRET` | **leave empty** |
-| `S3_REGION` | `ru-central1` |
+| `S3_REGION` | `ru-central1` — or `kz1` on the Kazakh side |
+| `S3_ENDPOINT` | leave empty — or `storage.yandexcloud.kz` on the Kazakh side |
 
 **About `SECRET`:** this is what the app sends as `?secret=`. Empty means anyone
 with the URL can read and write. The URL is long and unguessable, and it is what
