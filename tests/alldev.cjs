@@ -71,6 +71,11 @@ srv.listen(8078,async()=>{
      {id:'gas', on:true, url:u+'/exec', sec:'', folder:'{TYPE}/{UNIT}/{YYYY-MM-DD}'},
      {id:'pa',  on:true, url:u+'/pa',   sec:'x-api-key: k', folder:'{TYPE}/{UNIT}'},
      {id:'post',on:true, url:u+'/post', sec:'', folder:'{TYPE}'}]));
+     /* This phone's inspector has deliberately turned all three on, so mark the
+        one-time gas-only correction as already applied. Without this the app
+        does what it is supposed to do on first load — switch off everything but
+        Google — and the suite reports the correction as three broken uploads. */
+     localStorage.setItem('up_gas_only_v1','1');
      localStorage.removeItem('up_batch'); }, B);
    await p.goto(B+'/mobile/index.html',{waitUntil:'load'});
    await p.waitForTimeout(1200);

@@ -158,6 +158,29 @@ http.createServer((q,r)=>{const u=new URL(q.url,'http://x');const p=path.join(RO
    });
    ok(theme+': every label clears the contrast floor', !bad.length,
       bad.length?bad.slice(0,5).join(' | '):'all pass');
+
+   /* The sweep above only measures what happens to be on screen, and the sync
+      pill's colour depends on what the phone believes about the network — so
+      "Synced" in unreadable green was caught on one pass in five and passed on
+      the other four. A check that finds a real defect one time in five is worse
+      than no check: it gets read as noise. So drive the pill through all four
+      of its states deliberately and measure each. */
+   const pill=await p.evaluate(()=>{
+     const lum=c=>{const [r,g,b]=c.map(v=>{v/=255;return v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4);});
+       return 0.2126*r+0.7152*g+0.0722*b;};
+     const parse=s=>{const m=s.match(/[\d.]+/g);return m?m.slice(0,3).map(Number):null;};
+     const el=document.getElementById('netStatus');
+     const out=[];
+     for(const cls of ['on','warn','err','off']){
+       el.className='st '+cls; el.textContent='Synced';
+       const s=getComputedStyle(el);
+       const L1=lum(parse(s.color))+0.05, L2=lum(parse(s.backgroundColor))+0.05;
+       out.push({cls, r:+(Math.max(L1,L2)/Math.min(L1,L2)).toFixed(2)});
+     }
+     return out;
+   });
+   ok(theme+': the sync pill is readable in every state it can be in',
+      pill.every(x=>x.r>=4.5), pill.map(x=>x.cls+' '+x.r+':1').join(' · '));
    await ctx.close();
  }
 

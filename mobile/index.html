@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=133">
+<link rel="manifest" href="manifest.webmanifest?v=134">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=133">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=133">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=133">
+<link rel="apple-touch-icon" href="icon-192.png?v=134">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=134">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=134">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -41,7 +41,13 @@
        far enough from the reserved status colours that it can never be read as
        a severity — measured, not eyeballed. */
     --accent:#8a4526; --accent-ink:#fff; --accent-soft:#f6ebe4;
-    --good:#0c8a3e; --warning:#c07c07; --serious:#c95a2c; --critical:#c02f2f; --none:#8b969b; --warn-ink:#8a5a00;
+    /* Green is darker than it looks like it needs to be, on purpose. Green does
+       three jobs here — ink on the pale surface, ink on its own 14% tint, and a
+       filled chip under white — and #0c8a3e failed the 4.5 body-text floor on
+       all three: 4.10:1, 3.99:1 and 4.45:1. In a lit cab at −40 that is the
+       difference between reading "Synced" and assuming it. #0a7134 measures
+       5.65 / 4.98 / 6.13, and the eye cannot tell the two greens apart. */
+    --good:#0a7134; --warning:#c07c07; --serious:#c95a2c; --critical:#c02f2f; --none:#8b969b; --warn-ink:#8a5a00; --crit-ink:#c02f2f;
     /* The tray's surfaces: one low-chroma family stepped by HEIGHT OFF THE
        FLOOR, so the tint says "this panel is folded up" and leaves green, amber
        and red to mean what they already mean. */
@@ -53,6 +59,12 @@
     --line:#232a30; --shadow:none;
     --accent:#ce8256; --accent-ink:#2a1409; --accent-soft:#2a1a12;
     --good:#3aad5c; --warning:#e0a52a; --serious:#e2825a; --critical:#e05a52; --none:#69757b; --warn-ink:#e0a52a;
+    /* Critical as INK, which needs more light than critical as a fill.
+       #e05a52 on --surface-2 is 4.24:1 in the dark — and the pill it is
+       carrying says "Upload failing", so the one state that has to be read
+       on the night shift was the hardest one to read. Only the ink moves:
+       lightening the fill would have cost the white sitting on it. */
+    --crit-ink:#e46a61;
     --bm-s0:#232a30; --bm-s1:#28313a; --bm-s2:#2d3945; --bm-s3:#334154;
     --bm-edge:#3a444c; --bm-fold:#55688a; } }
   :root[data-theme="dark"]{ color-scheme:dark;
@@ -61,6 +73,12 @@
     --line:#232a30; --shadow:none;
     --accent:#ce8256; --accent-ink:#2a1409; --accent-soft:#2a1a12;
     --good:#3aad5c; --warning:#e0a52a; --serious:#e2825a; --critical:#e05a52; --none:#69757b; --warn-ink:#e0a52a;
+    /* Critical as INK, which needs more light than critical as a fill.
+       #e05a52 on --surface-2 is 4.24:1 in the dark — and the pill it is
+       carrying says "Upload failing", so the one state that has to be read
+       on the night shift was the hardest one to read. Only the ink moves:
+       lightening the fill would have cost the white sitting on it. */
+    --crit-ink:#e46a61;
     --bm-s0:#232a30; --bm-s1:#28313a; --bm-s2:#2d3945; --bm-s3:#334154;
     --bm-edge:#3a444c; --bm-fold:#55688a; }
   /* ── which round am I in ─────────────────────────────────────────────────
@@ -153,7 +171,7 @@
     background:currentColor;margin-right:6px;vertical-align:1px;}
   header .st.on{color:var(--good);border-color:color-mix(in srgb,var(--good) 35%,var(--border));}
   header .st.warn{color:var(--warn-ink);border-color:color-mix(in srgb,var(--warning) 40%,var(--border));}
-  header .st.err{color:var(--critical);border-color:color-mix(in srgb,var(--critical) 40%,var(--border));}
+  header .st.err{color:var(--crit-ink);border-color:color-mix(in srgb,var(--critical) 40%,var(--border));}
   /* --muted against the header's own surface is 3.16:1 in daylight, under the
      4.5 the text needs. This state is the one that says the round has nowhere
      to go yet, so it is the last one that should be hard to read. */
@@ -1725,27 +1743,27 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=133"></script>
-<script src="upload-defaults.js?v=133"></script>
-<script src="hme.js?v=133"></script>
-<script src="mp-fc.js?v=133"></script>
-<script src="hme-cascade.js?v=133"></script>
-<script src="assets.js?v=133"></script>
-<script src="temp-limits.js?v=133"></script>
-<script src="wear.js?v=133"></script>
-<script src="wear-figs.js?v=133"></script>
-<script src="wear-map.js?v=133"></script>
-<script src="machine-photos.js?v=133"></script>
-<script src="machine-fig.js?v=133"></script>
-<script src="get.js?v=133"></script>
-<script src="uc-points.js?v=133"></script>
-<script src="inspect-guide.js?v=133"></script>
-<script src="get-figs.js?v=133"></script>
-<script src="body-points.js?v=133"></script>
-<script src="body-map.js?v=133"></script>
-<script src="lube.js?v=133"></script>
-<script src="lube2027.js?v=133"></script>
-<script src="report-core.js?v=133"></script>
+<script src="native.js?v=134"></script>
+<script src="upload-defaults.js?v=134"></script>
+<script src="hme.js?v=134"></script>
+<script src="mp-fc.js?v=134"></script>
+<script src="hme-cascade.js?v=134"></script>
+<script src="assets.js?v=134"></script>
+<script src="temp-limits.js?v=134"></script>
+<script src="wear.js?v=134"></script>
+<script src="wear-figs.js?v=134"></script>
+<script src="wear-map.js?v=134"></script>
+<script src="machine-photos.js?v=134"></script>
+<script src="machine-fig.js?v=134"></script>
+<script src="get.js?v=134"></script>
+<script src="uc-points.js?v=134"></script>
+<script src="inspect-guide.js?v=134"></script>
+<script src="get-figs.js?v=134"></script>
+<script src="body-points.js?v=134"></script>
+<script src="body-map.js?v=134"></script>
+<script src="lube.js?v=134"></script>
+<script src="lube2027.js?v=134"></script>
+<script src="report-core.js?v=134"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -7632,7 +7650,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="133";
+const BUILD="134";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

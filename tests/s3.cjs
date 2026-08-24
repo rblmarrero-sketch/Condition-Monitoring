@@ -101,10 +101,28 @@ const pane = p => p.evaluate(() => [...document.querySelectorAll('main > .pane')
   ok('nothing waiting, no queue badge', (await badge(p, 'tabQ')) === '', await badge(p, 'tabQ'));
   await p.evaluate(() => { document.querySelector('#gradeSeg [data-g="C"]'); });
   await p.evaluate(() => { draft.positions[curItem].defect = 'DT14-03'; draft.positions[curItem].action = 'MON'; });
+  /* Offline for the save, deliberately.
+
+     The badge counts rounds that have NOT gone. This suite talks to a real
+     endpoint on localhost, so saving online uploads inside the same second and
+     the badge is correctly empty — the check was reading the app's speed as a
+     missing badge and had been red for a long time for that reason. What it
+     exists to prove is that a round with nowhere to go SAYS SO on the tab bar,
+     which is the state an inspector is actually in: in the pit, with no signal.
+     So take the signal away first. */
+  await ctx.setOffline(true);
   await p.click('#saveBtn'); await p.waitForTimeout(600);
   if (await p.evaluate(() => document.getElementById('dlg').open)) { await p.click('#dlgOk'); await p.waitForTimeout(200); }
   await p.waitForTimeout(400);
-  ok('one saved round shows on the queue tab', (await badge(p, 'tabQ')) === '1', await badge(p, 'tabQ'));
+  ok('a round saved with no signal shows on the queue tab', (await badge(p, 'tabQ')) === '1', await badge(p, 'tabQ'));
+  /* And it stops saying so once the round is away — a badge that never clears
+     is a badge nobody looks at. */
+  await ctx.setOffline(false);
+  await p.evaluate(() => { retryAt = RETRY_MIN; return syncThenArm(true); });
+  await p.waitForFunction(() => dbAll().then(a => a.every(r => r.up)), null, { timeout: 30000 }).catch(() => {});
+  await p.waitForTimeout(300);
+  ok('  and clears once the signal comes back and it goes', (await badge(p, 'tabQ')) === '',
+     await badge(p, 'tabQ') || '(no badge)');
   ok('overdue units show on the system tab', /^[1-9]/.test(await badge(p, 'tabS')), await badge(p, 'tabS'));
 
   console.log('\n  the two lists on that tab go to two different places');

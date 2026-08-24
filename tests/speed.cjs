@@ -36,10 +36,15 @@ http.createServer(async (req,res)=>{
  const ctx=await b.newContext({viewport:{width:412,height:915},isMobile:true,hasTouch:true,serviceWorkers:'block'});
  const p=await ctx.newPage();
  p.on('pageerror',e=>fails.push('PAGEERROR '+e.message));
- await p.addInitScript(u=>localStorage.setItem('up_dests',JSON.stringify([
+ await p.addInitScript(u=>{ localStorage.setItem('up_dests',JSON.stringify([
    {id:'gas',on:true,url:u,sec:'',folder:'{TYPE}/{UNIT}/{YYYY-MM-DD}'},
    {id:'pa',on:true,url:'https://off.invalid/',sec:'',folder:''},
-   {id:'post',on:false,url:'https://off.invalid/',sec:'',folder:''}])), B+'/exec');
+   {id:'post',on:false,url:'https://off.invalid/',sec:'',folder:''}]));
+     /* This phone's inspector has deliberately turned SharePoint on, so mark the
+        one-time gas-only correction as already applied. Without this the app
+        does what it is supposed to do on first load — switch off everything but
+        Google — and the suite reports the correction as three broken uploads. */
+   localStorage.setItem('up_gas_only_v1','1'); }, B+'/exec');
  await p.goto(B+'/mobile/index.html',{waitUntil:'load'});
  await p.waitForTimeout(1200);
 

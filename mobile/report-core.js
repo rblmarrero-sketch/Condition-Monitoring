@@ -202,7 +202,7 @@
    weight — a station at the limit has to read as different on a page with no
    colour in it at all. */
 #rptRoot .bm-dot{fill:#fff;stroke:#8b939b;stroke-width:1.2;}
-#rptRoot .bm-p.done .bm-dot{fill:#0ca30c;stroke:#0ca30c;}
+#rptRoot .bm-p.done .bm-dot{fill:#0a7134;stroke:#0a7134;}
 #rptRoot .bm-p.watch .bm-dot{fill:#fab219;stroke:#8a6300;stroke-width:1.6;}
 #rptRoot .bm-p.act .bm-dot{fill:#d03b3b;stroke:#8c1f1f;stroke-width:2;}
 #rptRoot .bm-p.na .bm-dot{fill:#fff;stroke:#8b939b;stroke-dasharray:2 2;}
@@ -243,7 +243,7 @@
    this way since it shipped; this is the same treatment, not a new idea. */
 #rptRoot .um-num .um-puck{fill:#fff;stroke:#16242c;stroke-width:1.6;}
 #rptRoot .um-num .um-n{font:700 12px/1 inherit;fill:#16242c;}
-#rptRoot .um-num.done .um-puck{fill:#0ca30c;stroke:#0a6b0a;stroke-width:1.2;}
+#rptRoot .um-num.done .um-puck{fill:#0a7134;stroke:#075025;stroke-width:1.2;}
 #rptRoot .um-num.watch .um-puck{fill:#ec835a;stroke:#8a3d16;stroke-width:2.4;}
 #rptRoot .um-num.act .um-puck{fill:#d03b3b;stroke:#5e1010;stroke-width:3.4;}
 #rptRoot .um-num.na .um-puck{fill:#eef1f4;stroke:#8a979e;stroke-width:1.4;stroke-dasharray:3 2;}
@@ -264,7 +264,7 @@
 #rptRoot .um-spot .um-puck{fill:#fff;stroke:#5b6670;stroke-width:2.4;}
 #rptRoot .um-spot .um-n{font:700 16px/1 inherit;fill:#5b6670;}
 #rptRoot .um-spot .um-n.um-chain{font-size:14px;letter-spacing:.02em;}
-#rptRoot .um-spot.done .um-puck{fill:#0ca30c;stroke:#0ca30c;}
+#rptRoot .um-spot.done .um-puck{fill:#0a7134;stroke:#0a7134;}
 #rptRoot .um-spot.watch .um-puck{fill:#ec835a;stroke:#ec835a;}
 #rptRoot .um-spot.act .um-puck{fill:#d03b3b;stroke:#d03b3b;}
 #rptRoot .um-spot.done .um-n,#rptRoot .um-spot.act .um-n,
@@ -619,8 +619,13 @@
     },
   };
 
-  var GRADE_HEX = { A:"#0ca30c", B:"#fab219", C:"#ec835a", X:"#d03b3b" };
-  var SEV_HEX   = { NOF:"#0ca30c", INC:"#fab219", DEG:"#ec835a", CRI:"#d03b3b" };
+  /* Green was #0ca30c, which carries white text on the grade chip at 3.36:1 —
+     under the 4.5 body text needs on a screen, and worse than that on a laser
+     print that has been in a cab. #0a7134 is 6.13:1 under the same white, reads
+     as the same colour, and is now the one green the phone, the dashboard and
+     this sheet all use. */
+  var GRADE_HEX = { A:"#0a7134", B:"#fab219", C:"#ec835a", X:"#d03b3b" };
+  var SEV_HEX   = { NOF:"#0a7134", INC:"#fab219", DEG:"#ec835a", CRI:"#d03b3b" };
   CMR.GRADE_HEX = GRADE_HEX; CMR.SEV_HEX = SEV_HEX;
 
   function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g, function(c){
