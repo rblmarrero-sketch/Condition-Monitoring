@@ -90,4 +90,24 @@ window.UPLOAD_DEFAULTS = {
     sec:  "",                          // the endpoint has no shared secret set
     folder: ""                         // keep whatever folder pattern is there
   },
+
+  /* ------------------------------------------------------------------
+     SWITCHING THE OLD DESTINATION OFF AGAIN
+
+     The other half of a changeover. While both are ticked every file goes to
+     both, and they are uploaded IN SEQUENCE — so a round is not away until the
+     slowest has taken it, and the slow one is the backend being retired.
+
+     Fill this in when you are satisfied the new backend is carrying the fleet,
+     and each phone switches the second copy off once, on its next open. The URL
+     stays behind, so turning it back on is one tick rather than a hunt for a
+     string nobody wrote down.
+
+     `id` is a name you choose, exactly like swap's. `dest` is "mirror" for the
+     second copy, or "pa" / "post" for the others.
+     ------------------------------------------------------------------ */
+  retire: {
+    id:   "",                          // e.g. "google-off-2026-09"
+    dest: "mirror"
+  },
 };

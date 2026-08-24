@@ -35,24 +35,25 @@ process.on('exit', bye); process.on('SIGINT', () => { bye(); process.exit(1); })
 /* The swap lives in upload-defaults.js, which ships empty. Rather than edit a
    file the repo serves, hand the page its own defaults before it boots — the
    same object, from the same global, which is all loadDests() ever reads. */
-async function phone(b, { dests, swap, flags }) {
+async function phone(b, { dests, swap, retire, flags }) {
   const ctx = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true });
-  await ctx.addInitScript(([d, sw, fl]) => {
+  await ctx.addInitScript(([d, sw, fl, ret]) => {
     if (d) localStorage.setItem('up_dests', JSON.stringify(d));
     (fl || []).forEach(k => localStorage.setItem(k, '1'));
     const wait = () => {
-      if (window.UPLOAD_DEFAULTS) { window.UPLOAD_DEFAULTS.swap = sw; return; }
+      const put = o => { o.swap = sw; if (ret) o.retire = ret; return o; };
+      if (window.UPLOAD_DEFAULTS) { put(window.UPLOAD_DEFAULTS); return; }
       /* upload-defaults.js has not run yet at init-script time, so catch the
          assignment rather than racing it. */
       let v;
       Object.defineProperty(window, 'UPLOAD_DEFAULTS', {
         configurable: true,
         get: () => v,
-        set: n => { v = n; if (n) n.swap = sw; },
+        set: n => { v = n; if (n) put(n); },
       });
     };
     wait();
-  }, [dests, swap, flags || []]);
+  }, [dests, swap, flags || [], retire || null]);
   const p = await ctx.newPage();
   p.on('pageerror', e => ok('page error', false, e.message));
   await p.goto(B + '/mobile/index.html', { waitUntil: 'load' });
@@ -198,6 +199,30 @@ const GAS_ONLY = ['up_gas_only_v1'];
        (await p.evaluate(() => (loadDests().find(x => x.id === 'gas') || {}).folder)) === '{TYPE}/{UNIT}/{YYYY-MM-DD}');
     await ctx.close();
   }
+
+  /* ---- and switching the old one off again ------------------------------
+     The other half of a changeover, and the one that gives the speed back:
+     destinations upload IN SEQUENCE, so while both are ticked a round is not
+     away until the slower one has taken it. */
+  console.log('\nand later, switching the second copy off');
+  const RET = { id: 'google-off-test', dest: 'mirror' };
+  ({ ctx, p } = await phone(b, { flags: GAS_ONLY, swap: SW, retire: RET,
+    dests: [{ id: 'gas',    on: true, url: NEW, sec: '', folder: '' },
+            { id: 'mirror', on: true, url: OLD, sec: '', folder: '' }] }));
+  d = await read(p);
+  ok('the second copy is switched off', !one(d, 'mirror').on, 'ticked ' + one(d, 'mirror').on);
+  /* The URL stays. Switching off is reversible in one tick; clearing the URL
+     too makes turning it back on a hunt for a string nobody wrote down. */
+  ok('  but its URL is kept, so it can be switched back on', one(d, 'mirror').url === OLD,
+     one(d, 'mirror').url || '(cleared)');
+  ok('  and the main backend is untouched', one(d, 'gas').on && one(d, 'gas').url === NEW);
+  await p.evaluate(() => { const l = loadDests().map(x => x.id === 'mirror' ? Object.assign({}, x, { on: true }) : x);
+    saveDests(l); });
+  await p.reload({ waitUntil: 'load' });
+  await p.waitForTimeout(500);
+  d = await read(p);
+  ok('  and somebody who turns it back on keeps it', one(d, 'mirror').on);
+  await ctx.close();
 
   await b.close(); bye();
   console.log(fail ? `\n${fail} FAILED` : '\nthe fleet moves once, and keeps what it is told');
