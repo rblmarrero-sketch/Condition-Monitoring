@@ -109,6 +109,36 @@ const put = (base, folder, name, body, type) => fetch(base + '/exec', { method: 
      /nothing to do|to copy\s+0/.test(res), (res.match(/to copy\s+\d+/) || [''])[0]);
   ok('  and left the destination exactly as it was', (await keys(D)).length === dstBefore);
 
+  /* ---- and the check that a name match is not proof ---------------------
+     "Both sides hold a file of that name" is the weakest possible statement
+     about a copy. A truncated or re-encoded image passes it and then renders
+     as nothing — no error anywhere, just a report with the layout and the
+     measurements and no photographs. */
+  console.log('\nverifying by size, not by name');
+  /* Copy first. An earlier case seeds a file at the source deliberately and
+     never copies it, so verifying straight after correctly reports it missing
+     — a true answer to a question this section is not asking. */
+  run([]);
+  const vOK = run(['--verify']);
+  ok('a good copy verifies clean', /same size on both sides/.test(vOK),
+     (vOK.match(/Every file[^\n]*|different size \d+/) || [''])[0]);
+
+  /* Now break one file at the destination exactly as a bad copy would: same
+     name, same place, fewer bytes. Planted directly, because saveOne() never
+     overwrites — it renames the loser — so uploading over a file leaves the
+     original intact and proves nothing. */
+  const victim = (await keys(D)).find(k => /TK900_4C_01\.07\.2026_MP\.jpg$/.test(k));
+  ok('the destination has the photograph to spoil', !!victim, victim || '(not found)');
+  await fetch(D + '/__put?key=' + encodeURIComponent(victim || 'x') + '&type=image%2Fjpeg',
+              { method: 'POST', body: 'X' });
+
+  const vBad = run(['--verify']);
+  ok('  and a truncated one is caught, by name and by size', /different size 1\b/.test(vBad) ||
+     /present but a different size 1/.test(vBad),
+     (vBad.match(/present but a different size \d+/) || ['(not caught)'])[0]);
+  ok('    naming the file and both sizes', /TK900_4C_01\.07\.2026_MP\.jpg\s+\d+ → \d+/.test(vBad),
+     (vBad.match(/size\s+MP[^\n]*/) || [''])[0].trim());
+
   bye();
   console.log(fail ? `\n${fail} FAILED` : '\nevery file moved, and only once');
   process.exit(fail ? 1 : 0);

@@ -107,6 +107,20 @@ http.createServer(async (req, res) => {
   const u = new URL(req.url, 'http://x');
   if (req.method === 'OPTIONS') { res.writeHead(204, cors); return res.end(); }
   if (u.pathname === '/__seed') { seed(); res.writeHead(200, cors); return res.end('ok'); }
+  /* Plant a file exactly as it is, bypassing the function.
+
+     saveOne() deliberately never overwrites — two phones can file the same
+     round on the same day and the loser is renamed rather than lost — so a
+     test cannot produce a corrupted copy by uploading over one. This can, and
+     that is the only state in which a name-only comparison passes while the
+     photograph is gone. */
+  if (u.pathname === '/__put') {
+    let raw = Buffer.alloc(0);
+    for await (const c of req) raw = Buffer.concat([raw, c]);
+    B.put(u.searchParams.get('key') || 'x', raw,
+          u.searchParams.get('type') || 'application/octet-stream', '');
+    res.writeHead(200, cors); return res.end('ok');
+  }
   if (u.pathname === '/__keys') {
     res.writeHead(200, Object.assign({ 'Content-Type': 'application/json' }, cors));
     return res.end(JSON.stringify({ keys: B.keys() }));

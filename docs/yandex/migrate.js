@@ -11,6 +11,7 @@
      --from-secret X   the source's shared secret, if it has one
      --to-secret X     the destination's
      --dry             list what WOULD move, send nothing
+     --verify          compare both sides by name AND size, write nothing
      --only MP,FC      only these round types (folder prefixes)
      --batch 4         files per upload request (default 4)
 
@@ -50,6 +51,7 @@ const TO   = clean(arg('to', ''));
 const FROM_SEC = String(arg('from-secret', '') || '').trim();
 const TO_SEC   = String(arg('to-secret', '') || '').trim();
 const DRY  = has('dry');
+const VERIFY = has('verify');
 const ONLY = (arg('only', '') || '').split(',').map(s => s.trim()).filter(Boolean);
 const BATCH = Math.max(1, Math.min(8, Number(arg('batch', 4)) || 4));
 
@@ -124,6 +126,40 @@ const listOf = (base, sec) =>
   const there = new Set(dst.map(f => (f.path || f.name)));
   let todo = src.filter(f => !there.has(f.path || f.name));
   if (ONLY.length) todo = todo.filter(f => ONLY.some(p => String(f.path || '').indexOf(p) === 0));
+
+  /* --verify: is what arrived the same SIZE as what was sent?
+
+     "Both sides hold a file of that name" is the weakest possible statement
+     about a copy, and it is the one a name-only comparison makes. A truncated
+     or re-encoded image passes it and then renders as nothing — no error
+     anywhere, just a report with the layout and the measurements and no
+     photographs, which is exactly what a missing photograph looks like when
+     nobody can tell the two apart. */
+  if (VERIFY) {
+    const byPath = new Map(dst.map(f => [(f.path || f.name), f]));
+    const gone = [], wrong = [];
+    for (const f of src) {
+      const k = f.path || f.name;
+      const d = byPath.get(k);
+      if (!d) { gone.push(k); continue; }
+      const a = Number(f.size) || 0, bsz = Number(d.size) || 0;
+      /* Exact, not approximate. Object Storage stores what it is given, so a
+         difference of one byte is a difference, and a percentage tolerance
+         here would hide precisely the near-miss worth finding. */
+      if (a && bsz && a !== bsz) wrong.push(k + '  ' + a + ' → ' + bsz);
+    }
+    console.log('\n  missing at the destination  ' + gone.length);
+    console.log('  present but a different size ' + wrong.length);
+    gone.slice(0, 10).forEach(k => console.log('    missing  ' + k));
+    wrong.slice(0, 10).forEach(k => console.log('    size     ' + k));
+    if (gone.length || wrong.length) {
+      console.log('\nRun without --verify to copy the missing ones. For the wrong sizes,');
+      console.log('delete them at the destination first — this tool never overwrites.');
+      process.exit(2);
+    }
+    console.log('\nEvery file is present and the same size on both sides.');
+    return;
+  }
 
   const bytes = todo.reduce((n, f) => n + (Number(f.size) || 0), 0);
   console.log('\n  already there ' + (src.length - todo.length));
