@@ -148,10 +148,16 @@ const ready = p => p.evaluate(() => [...document.querySelectorAll('.yardrow')].m
     window.ask = realAsk;
     return seen;
   });
-  ok('and deleting one now says the copy in Drive is untouched',
+  /* The reassurance, not the vendor. This matched "Drive is not touched",
+     which was true only while there was one backend behind that word — and
+     after the changeover the phone correctly said "the copy in the system is
+     not touched" and the check went red on wording it had pinned. What has to
+     hold is that an inspector deleting an uploaded round is told the uploaded
+     copy survives; which company holds it is not the point being made. */
+  ok('and deleting one now says the uploaded copy is untouched',
      /already been uploaded|уже выгружено/i.test(safe.title || '')
-     || /Drive is not touched|копия в Drive/i.test(safe.msg || ''),
-     (safe.title || '') + ' / ' + (safe.msg || '').slice(0, 50));
+     || /is not touched|не затрагивается|не тронут/i.test(safe.msg || ''),
+     (safe.title || '') + ' / ' + (safe.msg || '').slice(0, 60));
 
   /* ---- 5. and the yard check goes quiet --------------------------------- */
   await p.evaluate(() => yardCheck());
