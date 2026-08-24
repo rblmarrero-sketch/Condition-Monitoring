@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=137">
+<link rel="manifest" href="manifest.webmanifest?v=138">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=137">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=137">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=137">
+<link rel="apple-touch-icon" href="icon-192.png?v=138">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=138">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=138">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1758,27 +1758,27 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=137"></script>
-<script src="upload-defaults.js?v=137"></script>
-<script src="hme.js?v=137"></script>
-<script src="mp-fc.js?v=137"></script>
-<script src="hme-cascade.js?v=137"></script>
-<script src="assets.js?v=137"></script>
-<script src="temp-limits.js?v=137"></script>
-<script src="wear.js?v=137"></script>
-<script src="wear-figs.js?v=137"></script>
-<script src="wear-map.js?v=137"></script>
-<script src="machine-photos.js?v=137"></script>
-<script src="machine-fig.js?v=137"></script>
-<script src="get.js?v=137"></script>
-<script src="uc-points.js?v=137"></script>
-<script src="inspect-guide.js?v=137"></script>
-<script src="get-figs.js?v=137"></script>
-<script src="body-points.js?v=137"></script>
-<script src="body-map.js?v=137"></script>
-<script src="lube.js?v=137"></script>
-<script src="lube2027.js?v=137"></script>
-<script src="report-core.js?v=137"></script>
+<script src="native.js?v=138"></script>
+<script src="upload-defaults.js?v=138"></script>
+<script src="hme.js?v=138"></script>
+<script src="mp-fc.js?v=138"></script>
+<script src="hme-cascade.js?v=138"></script>
+<script src="assets.js?v=138"></script>
+<script src="temp-limits.js?v=138"></script>
+<script src="wear.js?v=138"></script>
+<script src="wear-figs.js?v=138"></script>
+<script src="wear-map.js?v=138"></script>
+<script src="machine-photos.js?v=138"></script>
+<script src="machine-fig.js?v=138"></script>
+<script src="get.js?v=138"></script>
+<script src="uc-points.js?v=138"></script>
+<script src="inspect-guide.js?v=138"></script>
+<script src="get-figs.js?v=138"></script>
+<script src="body-points.js?v=138"></script>
+<script src="body-map.js?v=138"></script>
+<script src="lube.js?v=138"></script>
+<script src="lube2027.js?v=138"></script>
+<script src="report-core.js?v=138"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -6881,7 +6881,7 @@ async function renderPending(){
        that never emptied. */
     if (done) {
       const miss = dests.filter(d => !(rec.upTo || {})[d.id])
-        .map(d => (DEST_META[d.id] || {}).label || d.id).join(", ");
+        .map(d => destLabel(d.id)).join(", ");
       return { k:"part", txt:t("up_part", { n:done, of:dests.length })
         + (miss ? " · " + t("up_missing", { d:miss }) : "") };
     }
@@ -7666,7 +7666,15 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
    A Power Automate flow or a plain POST endpoint has no such thing: send it a
    ping and it rejects a body it does not recognise, which is the endpoint
    working correctly and would be reported as the endpoint being broken. */
-const DEST_META={ gas:{label:"Google Drive", noop:true}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
+const DEST_META={ gas:{label:"Main backend", noop:true}, mirror:{label:"Second copy", noop:true},
+                  pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
+/* Never index this table bare. Six call sites read DEST_META[id].label with no
+   fallback, so adding a fourth destination and forgetting one row here threw
+   "Cannot read properties of undefined" the moment Settings was opened — the
+   whole sheet, dead, on a build that had already gone out. A missing label is
+   worth showing as an id; it is not worth taking a screen down for. */
+function destLabel(id){ return (DEST_META[id]||{}).label || id; }
+function destMeta(id){ return DEST_META[id]||{label:id}; }
 /* "mirror" speaks the SAME protocol as "gas" and is never read from.
 
    The three original slots each speak a different one — gas is text/plain JSON
@@ -7692,7 +7700,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="137";
+const BUILD="138";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -7852,6 +7860,19 @@ function loadDests(){
   if(SWAP && SWAP.to && SWAP.id && !localStorage.getItem("up_swap_off")
      && !localStorage.getItem("up_swap_"+SWAP.id)){
     const main=d.find(x=>x && x.id==="gas");
+    /* Move a phone off a NAMED endpoint, not off whatever it happens to hold.
+       `from` is the URL being retired; a phone pointing anywhere else is left
+       alone. Without it this instruction hijacks every phone it reaches — a
+       phone somebody deliberately pointed at a different deployment, a spare
+       set up for another site, and a test harness pointed at 127.0.0.1, which
+       is how the arming of it was noticed: uploads went to the mirror and the
+       main destination read zero files, which reads as a broken uploader and
+       not as a config that moved underneath it.
+
+       Empty `from` keeps the old behaviour of moving anything, which is fine
+       for a fleet where every phone is known to be on one endpoint — but naming
+       it costs one line and removes the whole class of surprise. */
+    const fromOK = !SWAP.from || String((main&&main.url)||"").indexOf(SWAP.from)===0;
     /* The mirror may not be in the stored list yet — this list holds whatever
        the phone last saved, and the missing slots are filled in further down,
        AFTER this runs. So make it here rather than reading undefined and
@@ -7860,7 +7881,7 @@ function loadDests(){
        this whole mechanism exists to prevent. */
     let mir=d.find(x=>x && x.id==="mirror");
     if(!mir){ mir={id:"mirror", on:false, url:"", sec:"", folder:""}; d.push(mir); }
-    if(main && main.url!==SWAP.to){
+    if(main && fromOK && main.url!==SWAP.to){
       /* Only into an EMPTY second copy. If somebody has already set one up by
          hand, overwriting it would throw away a destination they chose — and
          the round would then be marked away with nothing sent to it. */
@@ -7869,8 +7890,11 @@ function loadDests(){
       }
       main.url=SWAP.to; main.sec=SWAP.sec||""; main.on=true;
       if(SWAP.folder) main.folder=SWAP.folder;
+      /* Remembered only once it has actually moved. Recording it regardless
+         would mean a phone that was briefly on some other endpoint during the
+         changeover never moves at all — and nothing would ever say so. */
+      try{ localStorage.setItem("up_swap_"+SWAP.id,"1"); }catch(e){}
     }
-    try{ localStorage.setItem("up_swap_"+SWAP.id,"1"); }catch(e){}
   }
   // This used to write unconditionally, and loadDests() is reached from the UP.on
   // getter — so every renderSync() did a JSON.stringify plus a synchronous
@@ -8130,7 +8154,7 @@ async function putFile(name, blob, type){
   const errs=[];
   for(const d of dests){
     try{ await putOne(d,name,blob,type); }
-    catch(e){ errs.push(DEST_META[d.id].label+": "+(e.message||e)); }
+    catch(e){ errs.push(destLabel(d.id)+": "+(e.message||e)); }
   }
   if(errs.length) throw new Error(errs.join(" · "));
   return true;
@@ -8288,7 +8312,7 @@ async function syncNow(manual){
            a resume it is the tail, and the tail is usually where the link died. */
         const left=payload.filter(f=>!already[f.name]);
         try{ await putAll(d,left,rec,already); done[d.id]=1; progressed=true; }
-        catch(e){ errs.push(DEST_META[d.id].label+": "+String(e.message||e)); }
+        catch(e){ errs.push(destLabel(d.id)+": "+String(e.message||e)); }
         /* Files landing IS progress, even when the destination did not finish.
            The breaker below gives up after three records that got nowhere;
            without this a round crawling up a bad link three files at a time
@@ -8411,7 +8435,7 @@ function openSettings(){ destsToForm(loadDests()); $("upPx").value=pxSetting();
   const n=DEFAULT_DESTS.filter(d=>d.url).length;
   const where=activeDests().map(d=>{
     const def=DEFAULT_DESTS.find(x=>x.id===d.id);
-    return `${DEST_META[d.id].label} (${def&&def.url===d.url?"built-in":"set on this phone"})`; });
+    return `${destLabel(d.id)} (${def&&def.url===d.url?"built-in":"set on this phone"})`; });
   $("setDiag").textContent = `build v${BUILD} · `+(n
     ? `${n} built-in destination(s) available`
     : `no built-in destinations — upload-defaults.js has no URLs (or is a cached old copy)`)
@@ -8741,11 +8765,11 @@ async function runSpeedCheck(){
 
   const found=[], broke=[];
   for(const d of dests){
-    const label=DEST_META[d.id].label;
+    const label=destLabel(d.id);
     /* Skip, and say why. Timing this one would mean uploading a real file to
        somebody's live folder, and a measurement that leaves litter behind is
        not one you can ask an inspector to run whenever a round feels slow. */
-    if(!DEST_META[d.id].noop){ row(label, t("sp_nomeasure"), "warn"); continue; }
+    if(!destMeta(d.id).noop){ row(label, t("sp_nomeasure"), "warn"); continue; }
     const small=await spProbe(d.url, 0);
     if(!small.ok){ broke.push({label, kind:small.kind, why:small.why});
       row(label, small.why||t("sp_unreachable"), "bad"); continue; }
@@ -8858,8 +8882,8 @@ $("testUp").onclick=async ()=>{ const m=$("setMsg");
   const blob=new Blob(["Condition Monitoring upload test "+new Date().toISOString()],{type:"text/plain"});
   const out=[];
   for(const d of on){
-    try{ await putOne(d,"connection_test.txt",blob,"text/plain"); out.push("✅ "+DEST_META[d.id].label); }
-    catch(e){ out.push("❌ "+DEST_META[d.id].label+" — "+String(e.message||e)); }
+    try{ await putOne(d,"connection_test.txt",blob,"text/plain"); out.push("✅ "+destLabel(d.id)); }
+    catch(e){ out.push("❌ "+destLabel(d.id)+" — "+String(e.message||e)); }
   }
   m.textContent=out.join("\n");
   } finally { $("testUp").disabled=false; } };

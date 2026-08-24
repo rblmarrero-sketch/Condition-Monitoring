@@ -63,7 +63,7 @@ async function phone(b, { dests, swap, flags }) {
 const read = p => p.evaluate(() => loadDests().map(d => ({ id: d.id, on: !!d.on, url: d.url })));
 const one = (d, id) => d.find(x => x.id === id) || {};
 
-const SW = { id: 'yandex-test', to: NEW, sec: '' };
+const SW = { id: 'yandex-test', from: OLD, to: NEW, sec: '' };
 const GAS_ONLY = ['up_gas_only_v1'];
 
 (async () => {
@@ -112,8 +112,16 @@ const GAS_ONLY = ['up_gas_only_v1'];
   await ctx.close();
 
   /* ---- a phone out of the box ------------------------------------------- */
+  /* Its main URL comes from upload-defaults.js, so the instruction has to name
+     THAT one to reach it — which is what the shipped config does. Using the
+     fake `from` here would prove only that a mismatch is ignored, which the
+     case below already covers. */
   console.log('\na phone that was never set up');
-  ({ ctx, p } = await phone(b, { flags: GAS_ONLY, swap: SW, dests: [] }));
+  const builtIn = execSync(process.execPath + ' -e ' + JSON.stringify(
+    'global.window={};require(' + JSON.stringify(path.join(__dirname, '../mobile/upload-defaults.js')) +
+    ');const d=(window.UPLOAD_DEFAULTS.dests||[]).find(x=>x.id==="gas")||{};process.stdout.write(d.url||"")'),
+    { encoding: 'utf8' });
+  ({ ctx, p } = await phone(b, { flags: GAS_ONLY, swap: Object.assign({}, SW, { from: builtIn }), dests: [] }));
   d = await read(p);
   ok('takes the new endpoint', one(d, 'gas').url === NEW, one(d, 'gas').url);
   /* And ends up in the same state as the rest of the fleet, not a special one.
@@ -129,6 +137,26 @@ const GAS_ONLY = ['up_gas_only_v1'];
   await ctx.close();
 
   /* ---- and no swap configured at all ------------------------------------ */
+  /* ---- a phone on some other endpoint entirely -------------------------- */
+  console.log('\na phone pointed somewhere the changeover does not name');
+  ({ ctx, p } = await phone(b, { flags: GAS_ONLY, swap: SW,
+    dests: [{ id: 'gas', on: true, url: 'http://127.0.0.1:8110/exec', sec: '', folder: '' }] }));
+  d = await read(p);
+  /* The instruction retires ONE endpoint. A phone somebody deliberately pointed
+     elsewhere — another site's deployment, a spare, a test harness on
+     localhost — is not part of that and must be left exactly where it is.
+     Without this the arming of a changeover quietly moves every phone it
+     reaches, and the only symptom is uploads arriving somewhere nobody chose. */
+  ok('is left exactly where it is', one(d, 'gas').url === 'http://127.0.0.1:8110/exec',
+     one(d, 'gas').url);
+  ok('  and nothing is put in its second copy', !one(d, 'mirror').url,
+     one(d, 'mirror').url || '(empty)');
+  /* And it is not marked done, so it still moves if it is ever put on the
+     endpoint being retired. */
+  ok('  and it is not recorded as having moved',
+     !(await p.evaluate(() => localStorage.getItem('up_swap_yandex-test'))));
+  await ctx.close();
+
   console.log('\nand a fleet nobody is moving');
   ({ ctx, p } = await phone(b, { flags: GAS_ONLY, swap: { id: '', to: '' },
     dests: [{ id: 'gas', on: true, url: OLD, sec: '', folder: '' }] }));
@@ -154,13 +182,17 @@ const GAS_ONLY = ['up_gas_only_v1'];
   } else {
     ok('an armed swap has an id, or it does nothing at all and says nothing',
        !!shipped.id, shipped.id || '(EMPTY — this swap would never run)');
+    /* Starting from the endpoint the shipped config actually names, because
+       that is the phone this is for. Starting anywhere else would now
+       correctly do nothing, and prove nothing. */
+    const start = shipped.from || OLD;
     ({ ctx, p } = await phone(b, { flags: GAS_ONLY, swap: shipped,
-      dests: [{ id: 'gas', on: true, url: OLD, sec: '', folder: '{TYPE}/{UNIT}/{YYYY-MM-DD}' }] }));
+      dests: [{ id: 'gas', on: true, url: start, sec: '', folder: '{TYPE}/{UNIT}/{YYYY-MM-DD}' }] }));
     d = await read(p);
     ok('  a phone on the old backend moves to the shipped endpoint',
        one(d, 'gas').url === shipped.to, one(d, 'gas').url);
     ok('  and keeps the old one as its second copy, ticked',
-       one(d, 'mirror').url === OLD && one(d, 'mirror').on,
+       one(d, 'mirror').url === start && one(d, 'mirror').on,
        (one(d, 'mirror').url || '(empty)') + ' · ticked ' + one(d, 'mirror').on);
     ok('  and the folder pattern survives the move',
        (await p.evaluate(() => (loadDests().find(x => x.id === 'gas') || {}).folder)) === '{TYPE}/{UNIT}/{YYYY-MM-DD}');
