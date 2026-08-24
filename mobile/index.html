@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=134">
+<link rel="manifest" href="manifest.webmanifest?v=135">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=134">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=134">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=134">
+<link rel="apple-touch-icon" href="icon-192.png?v=135">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=135">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=135">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1618,15 +1618,30 @@
     <div class="hint" style="margin-bottom:14px" data-i18n="set_folder_help">Folder placeholders: {TYPE} (MP / FC / INSP / TEMP), {UNIT}, {YYYY} {MM} {DD} {YYYY-MM} {YYYY-MM-DD}. Sub-folders are created as needed, so {TYPE}/{UNIT}/{YYYY-MM-DD} gives one folder per machine, per round.</div>
 
     <div class="dest">
-      <label class="dhead"><input type="checkbox" id="gasOn"><span data-i18n="set_gas">Google Drive (Apps Script)</span></label>
+      <label class="dhead"><input type="checkbox" id="gasOn"><span data-i18n="set_gas">Main backend — read and write</span></label>
+      <div class="hint" data-i18n="set_gas_help">Google Apps Script or a Yandex endpoint — both speak the same language, so either can go here. This is the ONLY destination the app reads from: the dashboard, the team list, and every photograph a report fetches all come from this one.</div>
       <label class="fld"><span data-i18n="set_url">Upload URL</span>
-        <input id="gasUrl" type="url" data-i18n-ph="ph_gas_url" placeholder="paste the Apps Script /exec URL here" autocomplete="off"></label>
+        <input id="gasUrl" type="url" data-i18n-ph="ph_gas_url" placeholder="the /exec or endpoint URL" autocomplete="off"></label>
         <div class="need hidden" id="gasNeed" data-i18n="set_need_url">Ticked, but no URL — this destination will not upload.</div>
       <div class="row">
         <label class="fld"><span data-i18n="set_secret">Shared secret (optional)</span>
           <input id="gasSec" type="text" autocomplete="off"></label>
         <label class="fld"><span data-i18n="set_folder">Folder / prefix</span>
           <input id="gasFolder" type="text" placeholder="{TYPE}/{UNIT}/{YYYY-MM-DD}" autocomplete="off"></label>
+      </div>
+    </div>
+
+    <div class="dest">
+      <label class="dhead"><input type="checkbox" id="mirrorOn"><span data-i18n="set_mirror">Second copy — same format (write only)</span></label>
+      <div class="hint" data-i18n="set_mirror_help">A backup destination that speaks the same language as the one above. Nothing is ever read from it — it exists so that while you are moving from one backend to the other, both stay complete. Every photograph is uploaded twice, so switch it off once the move is done.</div>
+      <label class="fld"><span data-i18n="set_url">Upload URL</span>
+        <input id="mirrorUrl" type="url" data-i18n-ph="ph_gas_url" placeholder="the /exec or endpoint URL" autocomplete="off"></label>
+        <div class="need hidden" id="mirrorNeed" data-i18n="set_need_url">Ticked, but no URL — this destination will not upload.</div>
+      <div class="row">
+        <label class="fld"><span data-i18n="set_secret">Shared secret (optional)</span>
+          <input id="mirrorSec" type="text" autocomplete="off"></label>
+        <label class="fld"><span data-i18n="set_folder">Folder / prefix</span>
+          <input id="mirrorFolder" type="text" placeholder="{TYPE}/{UNIT}/{YYYY-MM-DD}" autocomplete="off"></label>
       </div>
     </div>
 
@@ -1743,27 +1758,27 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=134"></script>
-<script src="upload-defaults.js?v=134"></script>
-<script src="hme.js?v=134"></script>
-<script src="mp-fc.js?v=134"></script>
-<script src="hme-cascade.js?v=134"></script>
-<script src="assets.js?v=134"></script>
-<script src="temp-limits.js?v=134"></script>
-<script src="wear.js?v=134"></script>
-<script src="wear-figs.js?v=134"></script>
-<script src="wear-map.js?v=134"></script>
-<script src="machine-photos.js?v=134"></script>
-<script src="machine-fig.js?v=134"></script>
-<script src="get.js?v=134"></script>
-<script src="uc-points.js?v=134"></script>
-<script src="inspect-guide.js?v=134"></script>
-<script src="get-figs.js?v=134"></script>
-<script src="body-points.js?v=134"></script>
-<script src="body-map.js?v=134"></script>
-<script src="lube.js?v=134"></script>
-<script src="lube2027.js?v=134"></script>
-<script src="report-core.js?v=134"></script>
+<script src="native.js?v=135"></script>
+<script src="upload-defaults.js?v=135"></script>
+<script src="hme.js?v=135"></script>
+<script src="mp-fc.js?v=135"></script>
+<script src="hme-cascade.js?v=135"></script>
+<script src="assets.js?v=135"></script>
+<script src="temp-limits.js?v=135"></script>
+<script src="wear.js?v=135"></script>
+<script src="wear-figs.js?v=135"></script>
+<script src="wear-map.js?v=135"></script>
+<script src="machine-photos.js?v=135"></script>
+<script src="machine-fig.js?v=135"></script>
+<script src="get.js?v=135"></script>
+<script src="uc-points.js?v=135"></script>
+<script src="inspect-guide.js?v=135"></script>
+<script src="get-figs.js?v=135"></script>
+<script src="body-points.js?v=135"></script>
+<script src="body-map.js?v=135"></script>
+<script src="lube.js?v=135"></script>
+<script src="lube2027.js?v=135"></script>
+<script src="report-core.js?v=135"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -1940,9 +1955,16 @@ const I18N = {
     sync_err:"Upload failed", sync_now:"Sync now",
     set_title:"Settings",
     set_need_url:"Ticked, but no URL — this destination will not upload.",
-    ph_gas_url:"paste the Apps Script /exec URL here", ph_pa_url:"paste the Power Automate flow URL here",
+    ph_gas_url:"the /exec or endpoint URL", ph_pa_url:"paste the Power Automate flow URL here",
     ph_post_url:"paste your server endpoint here",
-    set_gas:"Google Drive (Apps Script)", set_pa:"SharePoint / OneDrive (Power Automate)", set_post:"Plain HTTPS POST (multipart)",
+    /* Named for the JOB, not the vendor. It read "Google Drive (Apps Script)"
+       until a Yandex endpoint went into it, at which point the label said one
+       thing and the field held another — and a setting that lies about itself
+       is how somebody later puts the wrong URL in the wrong box. */
+    set_gas:"Main backend — read and write",
+    set_gas_help:"Google Apps Script or a Yandex endpoint — both speak the same language, so either can go here. This is the ONLY destination the app reads from: the dashboard, the team list, and every photograph a report fetches all come from this one.", set_pa:"SharePoint / OneDrive (Power Automate)", set_post:"Plain HTTPS POST (multipart)",
+    set_mirror:"Second copy — same format (write only)",
+    set_mirror_help:"A backup destination that speaks the same language as the one above. Nothing is ever read from it — it exists so that while you are moving from one backend to the other, both stay complete. Every photograph is uploaded twice, so switch it off once the move is done.",
     set_secret:"Shared secret (optional)",
     mf_uc:"Undercarriage", mf_get:"Ground engaging tools",
     uc_band_out:"Outer", uc_band_in:"Inner",
@@ -2325,9 +2347,12 @@ const I18N = {
     sync_err:"Ошибка отправки", sync_now:"Отправить",
     set_title:"Настройки",
     set_need_url:"Отмечено, но нет URL — сюда ничего не отправится.",
-    ph_gas_url:"вставьте сюда URL /exec из Apps Script", ph_pa_url:"вставьте сюда URL потока Power Automate",
+    ph_gas_url:"URL /exec или адрес хранилища", ph_pa_url:"вставьте сюда URL потока Power Automate",
     ph_post_url:"вставьте сюда адрес вашего сервера",
-    set_gas:"Google Диск (Apps Script)", set_pa:"SharePoint / OneDrive (Power Automate)", set_post:"Обычный HTTPS POST (multipart)",
+    set_gas:"Основное хранилище — чтение и запись",
+    set_gas_help:"Google Apps Script или адрес Yandex — протокол одинаковый, подходит любой. Это единственное назначение, откуда приложение читает: панель, список бригады и все фотографии в отчётах берутся отсюда.", set_pa:"SharePoint / OneDrive (Power Automate)", set_post:"Обычный HTTPS POST (multipart)",
+    set_mirror:"Вторая копия — тот же формат (только запись)",
+    set_mirror_help:"Резервное назначение с тем же протоколом, что и выше. Оттуда ничего не читается — оно нужно, чтобы во время перехода с одного хранилища на другое оба оставались полными. Каждое фото отправляется дважды, поэтому выключите его, когда переход завершён.",
     set_secret:"Общий секрет (необяз.)",
     mf_uc:"Ходовая часть", mf_get:"Рабочий инструмент",
     uc_band_out:"Наружная", uc_band_in:"Внутренняя",
@@ -7642,7 +7667,24 @@ document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target
    ping and it rejects a body it does not recognise, which is the endpoint
    working correctly and would be reported as the endpoint being broken. */
 const DEST_META={ gas:{label:"Google Drive", noop:true}, pa:{label:"SharePoint"}, post:{label:"HTTPS POST"} };
-const DEST_IDS=["gas","pa","post"];
+/* "mirror" speaks the SAME protocol as "gas" and is never read from.
+
+   The three original slots each speak a different one — gas is text/plain JSON
+   with the secret in the body, pa is application/json with custom headers, post
+   is multipart — so an Apps Script cannot be put in pa or post: pa's
+   application/json triggers a CORS preflight, which an Apps Script web app
+   cannot answer, and post's shape is wrong entirely.
+
+   That mattered the moment Yandex took over the gas slot, because it left
+   nowhere for Google to go, and "we can switch back by changing a URL" is only
+   true while the old destination is still receiving rounds. A mirror keeps both
+   sides complete during the changeover, at the cost of uploading twice — a cost
+   worth paying for a month and not for ever.
+
+   Deliberately write-only. Every read in this app goes to `gas` by name, and
+   that stays true: a second readable source would mean deciding which one is
+   right when they disagree, and there is no honest answer to that. */
+const DEST_IDS=["gas","mirror","pa","post"];
 /* Where a round lands on Drive: the inspection type, then the machine, then the
    day it was done — MP/DZ004/2026-08-02. A month folder is every machine's
    rounds in one pile; a unit folder is that machine's own history, which is how
@@ -7650,7 +7692,7 @@ const DEST_IDS=["gas","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="134";
+const BUILD="135";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -7943,7 +7985,8 @@ function batchCaps(){ if(batchCap) return batchCap;
 function setBatchCap(url,v){ const c=batchCaps(); c[url]=v;
   try{ localStorage.setItem("up_batch",JSON.stringify(c)); }catch(e){} }
 async function canBatch(UP){
-  if(UP.id!=="gas") return false;               // the op is an Apps Script one
+  // The batch op belongs to this protocol, which is gas's and the mirror's.
+  if(UP.id!=="gas" && UP.id!=="mirror") return false;
   const c=batchCaps();
   if(c[UP.url]!==undefined) return c[UP.url];
   try{
@@ -8056,7 +8099,7 @@ const t_up_timeout=()=>t("up_timeout");
 
 async function putOne(UP, name, blob, type, ctx){
   const folder=expandFolder(UP.folder||"", ctx);
-  if(UP.id==="gas"){
+  if(UP.id==="gas" || UP.id==="mirror"){
     // Apps Script web apps cannot answer a CORS preflight, so this must stay a
     // "simple" request: text/plain body, no custom headers, secret inside the JSON.
     // dev lets the script tell "this phone re-sending its own record" from "another
@@ -8287,15 +8330,21 @@ async function renderSync(){
   const g=$("syncGo"); if(g)g.onclick=()=>{ retryAt=RETRY_MIN; syncThenArm(true); };
   const st=$("syncSet"); if(st)st.onclick=openSettings;
 }
+/* Which destinations carry a shared secret in the body rather than a header.
+   This was written twice as `id==="gas"`, once in each direction, and adding a
+   second body-secret destination would have left the mirror reading its secret
+   out of a field that does not exist — silently, because $() on a missing id
+   returns null and .value.trim() on null throws inside a save nobody watches. */
+const SECRET_DEST={gas:1, mirror:1};
 /* settings sheet — one block per destination */
 function formToDests(){ return DEST_IDS.map(id=>({ id,
   on: $(id+"On").checked,
   url: $(id+"Url").value.trim(),
-  sec: $(id+(id==="gas"?"Sec":"Hdr")).value.trim(),
+  sec: $(id+(SECRET_DEST[id]?"Sec":"Hdr")).value.trim(),
   folder: $(id+"Folder").value.trim() })); }
 function destsToForm(d){ d.forEach(x=>{
   $(x.id+"On").checked=!!x.on; $(x.id+"Url").value=x.url||"";
-  $(x.id+(x.id==="gas"?"Sec":"Hdr")).value=x.sec||""; $(x.id+"Folder").value=x.folder||""; });
+  $(x.id+(SECRET_DEST[x.id]?"Sec":"Hdr")).value=x.sec||""; $(x.id+"Folder").value=x.folder||""; });
   markDestState(); }
 // Ticked with an empty URL uploads nothing, so it must not look configured.
 function markDestState(){ DEST_IDS.forEach(id=>{
