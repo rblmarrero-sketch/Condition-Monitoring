@@ -43,12 +43,30 @@ subdomain like `cm.example.kz` is free and takes two minutes.
 
 ### If you do not own one
 
-**Buy one. Recommended.** Not a `.kz` — that zone wants a Kazakh administrative
+**Ask whoever runs the company's IT for a subdomain. Try this first.**
+
+The mine already owns a domain — it is in everybody's e-mail address. A
+subdomain of it, `cm.thecompany.kz`, costs nothing, takes one e-mail, and is the
+only option on this page that belongs to the ORGANISATION rather than to a
+person. That matters more than it sounds: a system 1,128 units depend on should
+not reach the field through a name registered to one engineer's personal card,
+renewable from one engineer's personal inbox. Ask for an A record pointing at
+the VM's IP address — that is the whole request, and any IT department will
+recognise it.
+
+**Otherwise, buy one.** Not a `.kz` — that zone wants a Kazakh administrative
 contact and some registrars charge for a local-presence service to satisfy it,
-which is expense and paperwork for nothing. A plain `.com`, `.org`, `.site` or
-`.xyz` has no residency rules at all, costs between one and fifteen dollars a
-year, and takes about five minutes with a card. Cloudflare Registrar, Porkbun
-and Namecheap all work fine from Kazakhstan.
+which is expense and paperwork for nothing. A plain `.com` or `.org` has no residency rules at
+all, costs ten to fifteen dollars a year, and takes about five minutes with a
+card. Cloudflare Registrar, Porkbun and Namecheap all work fine from
+Kazakhstan.
+
+Take `.com` over the one-dollar novelty endings. Those are cheap for the first
+year and dear afterwards — `.xyz` and `.site` renew at several times what they
+advertise — and the failure they set up is a renewal notice missed in a personal
+inbox, after which the endpoint stops resolving and every phone in the pit
+reports no signal. Fifteen dollars a year, flat and forever, is the cheaper
+number.
 
 Buying it has a second payoff worth having. Your region includes **Cloud DNS**,
 so the zone can live in the same Yandex Kazakhstan that the pit already reaches
