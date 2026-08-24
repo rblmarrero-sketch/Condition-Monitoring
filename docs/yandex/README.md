@@ -28,6 +28,31 @@ Cloud Functions — the bucket half is identical and the function runs on a smal
 machine instead. You need a domain name for that one; the reason is HTTPS, and
 it is explained there.
 
+## What it measured, on the site's own network
+
+`mobile/compare.html` put both endpoints through the same five probes,
+alternating, median of three rounds:
+
+| | Apps Script | Yandex | |
+|---|---|---|---|
+| Reachable | 2.2 s | 1.1 s | 2× |
+| Read the record list | **72.0 s** | **315 ms** | **229×** |
+| Write probe | 1.5 s | 321 ms | 4.7× |
+| Upload one 299 KB photograph | 7.4 s | 1.3 s | 5.8× |
+
+A round is up to eight photographs, so on upload alone that is about **49
+seconds a round**.
+
+**The 72-second read is the interesting number**, because it is not a
+preference — it is a bug with a name. `PHOTO_DEADLINE` in the app is 40
+seconds: a report gives up fetching photographs after that and prints what it
+has. A record list that takes 72 seconds to arrive has already spent the whole
+budget before the first image is asked for, which is exactly the report that
+came back after 60 seconds with no drawing and no photographs. Not a rendering
+fault. The read never finished.
+
+---
+
 ## What you set up, once
 
 **1. A bucket** — Object Storage → Create bucket.
