@@ -201,11 +201,26 @@ two **incoming** rules:
 
 | Port | Protocol | Source | For |
 |---|---|---|---|
+| 22 | TCP | `0.0.0.0/0` | **you**, to log in at all |
 | 443 | TCP | `0.0.0.0/0` | the phones |
-| 80 | TCP | `0.0.0.0/0` | Let's Encrypt's check, once |
+| 80 | TCP | `0.0.0.0/0` | Let's Encrypt's check |
 
-Port 80 is not for the app — Caddy only needs it to prove it owns the domain.
+Port 22 is on that list because a security group with no ingress rules blocks
+SSH too, and the symptom — a connection that hangs rather than refuses — reads
+exactly like a machine that failed to boot. Add it first, before concluding
+anything about the VM.
+
+Port 80 is not for the app: Caddy uses it to prove it owns the name, at first
+request and at every renewal. Shut it afterwards and the certificate expires
+silently about two months later.
+
 Leave outgoing traffic allowed, or the machine cannot reach the bucket.
+
+> Tighter, if you want it: the phones' rule could be limited to the mine's
+> public ranges instead of `0.0.0.0/0`. Only do that once you know those ranges
+> and know they are stable — an endpoint that works in the office and not in the
+> pit is a worse problem than an open port on a machine whose only job is to
+> answer this one URL.
 
 ---
 
