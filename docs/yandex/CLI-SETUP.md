@@ -34,7 +34,8 @@ exist in the other.
 | `yc` API | `api.cloud.yandex.net:443` | **`api.yandexcloud.kz:443`** |
 | Billing | `center.yandex.cloud/billing` | **`kz.center.yandex.cloud/billing`** |
 
-So the first thing to try is **the other console**. A `.kz` account that
+So the first thing to try is **the other console** — one click, and if it works
+none of the CLI below is needed. A `.kz` account that
 registered on the Kazakh side and is signing in at `console.yandex.cloud` gets
 in and finds nothing — or does not get in at all — and neither looks like "you
 are at the wrong address".
@@ -78,13 +79,31 @@ Check it: `yc --version`.
 
 ## 2. Sign in — the part that is not the console
 
+> **You do not need to register an application.** If you have landed on
+> `oauth.yandex.ru/client/new` — a four-step form asking for a Redirect URI and
+> app platforms — close it. That form is for building your own product that logs
+> people in with Yandex ID. `yc` is already registered with Yandex; all you are
+> doing is granting it access to your account.
+
 ```
 yc init
 ```
 
-It prints a link and waits. **That link is `oauth.yandex.ru`, not the console.**
-Open it, approve, and paste the token back into the terminal. Then it asks you
-to pick your cloud and folder from a list.
+It prints a link and waits. **Open the link it prints** — not a page you
+navigated to yourself. Click through, and it hands you a token; paste that back
+into the terminal. Then it asks you to pick your cloud and folder from a list.
+
+If you want to see the page before installing anything, this is the same link —
+`client_id` is Yandex's own for the CLI, and there is nothing to fill in:
+
+```
+https://oauth.yandex.com/authorize?response_type=token&client_id=1a6990aa636648e9b2ef855fa7bec2fb
+```
+
+**The token it gives you is a credential** — it is your whole cloud, in one
+string. It goes in the terminal and nowhere else: not a chat, not a ticket, not
+a screenshot. If one ever leaks, revoke it at
+[id.yandex.ru/security/apps](https://id.yandex.ru/security/apps).
 
 Three things that go wrong here:
 
