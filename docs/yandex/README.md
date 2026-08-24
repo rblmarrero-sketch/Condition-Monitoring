@@ -23,6 +23,11 @@ thirty minutes. The summary below is for someone who already knows the console.
 the console will not let you in. `bash docs/yandex/setup.sh <bucket>` does all
 five steps and prints the URL.
 
+**[VM-SETUP.md](VM-SETUP.md)** is for the **Kazakhstan region**, which has no
+Cloud Functions — the bucket half is identical and the function runs on a small
+machine instead. You need a domain name for that one; the reason is HTTPS, and
+it is explained there.
+
 ## What you set up, once
 
 **1. A bucket** — Object Storage → Create bucket.

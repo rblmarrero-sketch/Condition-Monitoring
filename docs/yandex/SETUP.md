@@ -25,7 +25,15 @@ Go to **console.yandex.cloud** and sign in.
 **Unless your account is Kazakh** — a `@yandex.kz` address, or you registered in
 Kazakhstan. Then it is **kz.console.yandex.cloud**, and it is a genuinely
 separate cloud: different console, different storage host, different region
-name. Use these values throughout instead:
+name.
+
+> **Kazakhstan has no Cloud Functions.** Steps 1 to 4 below are still exactly
+> right — the bucket, the service account and the key are all there. Step 5 is
+> not: search the service list for `serverless` and only Message Queue comes
+> back. Follow **[VM-SETUP.md](VM-SETUP.md)** from step 5 onward, which runs the
+> same code on a small machine.
+
+Use these values throughout:
 
 | | Russia | Kazakhstan |
 |---|---|---|

@@ -45,6 +45,7 @@ function mkBucket() {
   };
 }
 const B = mkBucket();
+const WRAP = require(path.join(ROOT, 'docs/yandex/server.js'));
 
 /* ---- load the real function, with S3 replaced ---------------------------
    The file is required normally so its logic is the deployed logic; only the
@@ -111,22 +112,24 @@ http.createServer(async (req, res) => {
     return res.end(JSON.stringify({ keys: B.keys() }));
   }
   if (u.pathname === '/exec') {
-    let raw = '';
-    for await (const c of req) raw += c;
-    const q = {}; u.searchParams.forEach((v, k) => { q[k] = v; });
-    const out = await real.handler({ httpMethod: req.method, queryStringParameters: q, body: raw });
-    /* The function's OWN headers, verbatim — nothing added.
+    /* Through the REAL wrapper, not a copy of it.
 
-       This server injected its own CORS here, which meant the suite could not
-       see whether the function returns any. It does not matter in a test
-       harness and it matters enormously in Yandex, where the gateway returns
-       exactly what the function returns: without the header the upload
-       succeeds, the file lands, and the browser then refuses to let the page
-       read the reply, so the phone counts it as a failure and sends it again
-       for ever. A double that is more generous than production hides the one
-       thing it was built to catch. */
-    res.writeHead(out.statusCode || 200, out.headers || { 'Content-Type': 'application/json' });
-    return res.end(out.body);
+       Kazakhstan has no Cloud Functions, so on that side the thing that turns
+       an HTTP request into the handler's event object is docs/yandex/server.js
+       — a file that ships and can therefore be wrong. Re-implementing those two
+       steps here would leave the deployed pair untested while every suite
+       reported green, which is the same mistake this file was written to avoid
+       one layer down.
+
+       handle() reads the body under its own size cap and passes the handler's
+       headers back verbatim, CORS included. Both matter: this server used to
+       read the body itself, so a request far over the production limit sailed
+       through one that would have refused it — and it used to inject its own
+       CORS, so the suite could not see whether the function returns any. A
+       double more generous than production hides the thing it exists to
+       catch. */
+    WRAP.handle(req, res, real.handler);
+    return;
   }
   /* Everything else is the app itself, so one server can host the pages and the
      endpoint exactly as GitHub Pages plus the function will. */

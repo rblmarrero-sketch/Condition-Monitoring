@@ -128,6 +128,26 @@ function shape(v, depth) {
   ok('  signed for kz1 — SigV4 puts the region in the signature, so the host alone is not enough',
      /\/kz1\/s3\//.test(kz.scope), kz.scope);
 
+  /* ---- 1d. the wrapper, which is only on the Kazakh side -----------------
+     kz1 has no Cloud Functions, so there the thing answering HTTP is
+     server.js rather than Yandex's gateway. Everything above already runs
+     through it — ya-srv.cjs uses its translation rather than a copy — so what
+     is left is the behaviour that is the wrapper's alone. On a function the
+     platform enforces a request size; on a VM nothing does, and a process
+     holding an unbounded body in memory is a machine that falls over with no
+     one watching. */
+  console.log('\nand on a machine, the limits the platform used to enforce');
+  const big = await fetch(Y + '/exec', { method: 'POST',
+    headers: { 'Content-Type': 'text/plain' }, body: 'x'.repeat(70 * 1024 * 1024) })
+    .then(r => r.json().then(j => ({ s: r.status, j, cors: r.headers.get('access-control-allow-origin') })))
+    .catch(e => ({ s: 0, j: { error: String(e.message || e) }, cors: null }));
+  ok('an oversized body is refused, not swallowed into memory', big.s === 413,
+     big.s + ' ' + (big.j.error || ''));
+  /* Refused WITH the header, or the phone cannot read the refusal and treats a
+     rejection it could act on as a dead link it should retry for ever. */
+  ok('  and the refusal is one the page is allowed to read', big.cors === '*',
+     big.cors || '(no header)');
+
   /* ---- 2. the write probe ------------------------------------------------ */
   console.log('\nthe write probe both clients send before trusting an endpoint');
   const pg = await post(G, { op: 'ping' }), py = await post(Y, { op: 'ping' });
