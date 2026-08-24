@@ -19,6 +19,10 @@ the phones, no code in the dashboard, and every existing test still applies.
 account, key, function, and the one URL that comes out the other end. About
 thirty minutes. The summary below is for someone who already knows the console.
 
+**[CLI-SETUP.md](CLI-SETUP.md)** is the same thing without the console, for when
+the console will not let you in. `bash docs/yandex/setup.sh <bucket>` does all
+five steps and prints the URL.
+
 ## What you set up, once
 
 **1. A bucket** — Object Storage → Create bucket.

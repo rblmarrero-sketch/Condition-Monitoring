@@ -11,6 +11,11 @@ to). Then paste one URL into the app.
 > named exactly as below, look for the nearest thing that means the same — the
 > **order** and the **values** are what matter, not the labels.
 
+> **Cannot get into the console at all?** The console is one door, not the only
+> one. [CLI-SETUP.md](CLI-SETUP.md) does all of this from a terminal, signing in
+> through a different page — and it starts by working out whether the problem is
+> the console or the account, because only one of those the CLI can get past.
+
 ---
 
 ## Before you start
