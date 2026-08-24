@@ -13,6 +13,12 @@ the phones, no code in the dashboard, and every existing test still applies.
 
 ---
 
+## Never done this before?
+
+**[SETUP.md](SETUP.md)** is the click-by-click version — bucket, service
+account, key, function, and the one URL that comes out the other end. About
+thirty minutes. The summary below is for someone who already knows the console.
+
 ## What you set up, once
 
 **1. A bucket** — Object Storage → Create bucket.

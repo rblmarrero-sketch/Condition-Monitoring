@@ -115,7 +115,17 @@ http.createServer(async (req, res) => {
     for await (const c of req) raw += c;
     const q = {}; u.searchParams.forEach((v, k) => { q[k] = v; });
     const out = await real.handler({ httpMethod: req.method, queryStringParameters: q, body: raw });
-    res.writeHead(out.statusCode || 200, Object.assign({ 'Content-Type': 'application/json' }, cors));
+    /* The function's OWN headers, verbatim — nothing added.
+
+       This server injected its own CORS here, which meant the suite could not
+       see whether the function returns any. It does not matter in a test
+       harness and it matters enormously in Yandex, where the gateway returns
+       exactly what the function returns: without the header the upload
+       succeeds, the file lands, and the browser then refuses to let the page
+       read the reply, so the phone counts it as a failure and sends it again
+       for ever. A double that is more generous than production hides the one
+       thing it was built to catch. */
+    res.writeHead(out.statusCode || 200, out.headers || { 'Content-Type': 'application/json' });
     return res.end(out.body);
   }
   /* Everything else is the app itself, so one server can host the pages and the

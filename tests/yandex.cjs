@@ -77,6 +77,24 @@ function shape(v, depth) {
       : 'google only: [' + only(sa, sb).join(' ') + ']  yandex only: [' + only(sb, sa).join(' ') + ']');
   }
 
+  /* ---- 1b. the header without which none of it reaches the page ---------
+     The app is on GitHub Pages and the endpoint is not, so every call is
+     cross-origin. Apps Script gets this from Google's infrastructure and nobody
+     had to think about it. A function returns exactly what it returns — and
+     without the header the upload SUCCEEDS, the file lands, and the browser
+     then refuses to let the page read the reply, so the phone counts it as a
+     failure and sends it again for ever. */
+  console.log('\nand the browser is allowed to read the answer');
+  for (const [what, base] of [['google', G], ['yandex', Y]]) {
+    const r = await fetch(base + '/exec?action=records');
+    ok(what + ' allows a cross-origin read',
+       !!r.headers.get('access-control-allow-origin'),
+       r.headers.get('access-control-allow-origin') || '(no header — the page cannot read this)');
+  }
+  const pre = await fetch(Y + '/exec', { method: 'OPTIONS' });
+  ok('and a preflight is answered, for the day something needs one',
+     pre.status < 400 && !!pre.headers.get('access-control-allow-origin'), String(pre.status));
+
   /* ---- 2. the write probe ------------------------------------------------ */
   console.log('\nthe write probe both clients send before trusting an endpoint');
   const pg = await post(G, { op: 'ping' }), py = await post(Y, { op: 'ping' });

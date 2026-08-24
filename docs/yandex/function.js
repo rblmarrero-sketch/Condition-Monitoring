@@ -157,7 +157,26 @@ const delObj  = key => s3('DELETE', key, null, '');
 /* ---- the contract -------------------------------------------------------
    Everything below returns the shape docs/google-upload.gs returns. Where a
    field looks redundant it is not: something reads it. */
-const json = o => ({ statusCode: 200, headers: { 'Content-Type': 'application/json' },
+/* CORS on every reply, without exception.
+
+   The app is served from GitHub Pages and this function answers on
+   functions.yandexcloud.net, so every single call is cross-origin. Apps Script
+   gets this header from Google's own infrastructure and nobody had to think
+   about it; a Cloud Function gets exactly what it returns. Without it the
+   request still reaches the bucket and the file still lands — and the browser
+   then refuses to let the page read the reply, so the phone counts a
+   successful upload as a failure and sends it again, for ever.
+
+   Both clients deliberately send text/plain with the secret inside the body,
+   which keeps every request "simple" and means no preflight is needed. OPTIONS
+   is answered anyway: it costs four lines, and the day something adds a header
+   is not the day to discover this. */
+const CORS = { 'Access-Control-Allow-Origin': '*',
+               'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+               'Access-Control-Allow-Headers': 'Content-Type',
+               'Access-Control-Max-Age': '3600' };
+const json = o => ({ statusCode: 200,
+                     headers: Object.assign({ 'Content-Type': 'application/json' }, CORS),
                      body: JSON.stringify(o) });
 const isSidecar = n => /\.json$/i.test(n) && !/\.(edit|conflict|deleted)\.json$/i.test(n);
 
@@ -356,6 +375,7 @@ async function diagnose() {
 exports.handler = async function (event) {
   const q = (event && (event.queryStringParameters || event.params)) || {};
   const method = String((event && (event.httpMethod || event.method)) || 'GET').toUpperCase();
+  if (method === 'OPTIONS') return { statusCode: 204, headers: CORS, body: '' };
   try {
     if (method === 'GET') {
       if (!q.action) return json(await diagnose());       // health needs no secret
