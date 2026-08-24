@@ -63,7 +63,21 @@ async function open(b, url, pre, noDefaults) {
   console.log('a browser that has never been set up');
   let r = await open(b, B);
   ok('is already configured, with nothing typed into it', r.configured);
-  ok('using the same destinations file the phones read', /script\.google\.com\/macros\/s\/.+\/exec$/.test(r.inUse), mask(r.inUse));
+  /* The same ENDPOINT the phones end up on — which is not always the same line
+     of upload-defaults.js. While a changeover is armed the phones move
+     themselves and the dashboard follows; this used to pin the Apps Script URL
+     specifically, so arming one made a correctly-following dashboard look
+     broken. What matters is that both ends agree, whichever line decides it. */
+  const want = (function () {
+    const g = require('child_process').execSync(process.execPath + ' -e ' + JSON.stringify(
+      'global.window={};require(' + JSON.stringify(require('path').join(__dirname, '../mobile/upload-defaults.js')) +
+      ');const u=window.UPLOAD_DEFAULTS,s=u.swap||{};' +
+      'process.stdout.write(s.to&&s.id?s.to:((u.dests||[]).find(x=>x.id==="gas")||{}).url||"")'),
+      { encoding: 'utf8' }).trim();
+    return g;
+  })();
+  ok('using the endpoint the phones are on, from the same file they read',
+     !!want && r.inUse === want, mask(r.inUse) + (r.inUse === want ? '' : '  — expected ' + mask(want)));
   ok('and is not asked to set anything up', r.panel === false);
   /* The default is READ, not written into this browser: change the file and
      every machine follows, instead of each one being frozen at whatever the
