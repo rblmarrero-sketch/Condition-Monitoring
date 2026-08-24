@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=140">
+<link rel="manifest" href="manifest.webmanifest?v=141">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=140">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=140">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=140">
+<link rel="apple-touch-icon" href="icon-192.png?v=141">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=141">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=141">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1758,27 +1758,27 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=140"></script>
-<script src="upload-defaults.js?v=140"></script>
-<script src="hme.js?v=140"></script>
-<script src="mp-fc.js?v=140"></script>
-<script src="hme-cascade.js?v=140"></script>
-<script src="assets.js?v=140"></script>
-<script src="temp-limits.js?v=140"></script>
-<script src="wear.js?v=140"></script>
-<script src="wear-figs.js?v=140"></script>
-<script src="wear-map.js?v=140"></script>
-<script src="machine-photos.js?v=140"></script>
-<script src="machine-fig.js?v=140"></script>
-<script src="get.js?v=140"></script>
-<script src="uc-points.js?v=140"></script>
-<script src="inspect-guide.js?v=140"></script>
-<script src="get-figs.js?v=140"></script>
-<script src="body-points.js?v=140"></script>
-<script src="body-map.js?v=140"></script>
-<script src="lube.js?v=140"></script>
-<script src="lube2027.js?v=140"></script>
-<script src="report-core.js?v=140"></script>
+<script src="native.js?v=141"></script>
+<script src="upload-defaults.js?v=141"></script>
+<script src="hme.js?v=141"></script>
+<script src="mp-fc.js?v=141"></script>
+<script src="hme-cascade.js?v=141"></script>
+<script src="assets.js?v=141"></script>
+<script src="temp-limits.js?v=141"></script>
+<script src="wear.js?v=141"></script>
+<script src="wear-figs.js?v=141"></script>
+<script src="wear-map.js?v=141"></script>
+<script src="machine-photos.js?v=141"></script>
+<script src="machine-fig.js?v=141"></script>
+<script src="get.js?v=141"></script>
+<script src="uc-points.js?v=141"></script>
+<script src="inspect-guide.js?v=141"></script>
+<script src="get-figs.js?v=141"></script>
+<script src="body-points.js?v=141"></script>
+<script src="body-map.js?v=141"></script>
+<script src="lube.js?v=141"></script>
+<script src="lube2027.js?v=141"></script>
+<script src="report-core.js?v=141"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2241,16 +2241,16 @@ const I18N = {
     rd_unreach:["Could not reach the folder","The round is in the system — this phone could not get to it. Weak signal, or the /exec address in ⚙ is wrong. Try again in coverage."],
     team_hint:"Everything the whole team has uploaded, not just this phone. Refreshes itself after each upload and is kept for offline — so the due list below knows about rounds someone else did.",
     team_none:"Nothing pulled yet — tap “Check for new”.",
-    team_nodrive:"Set up Google Drive in ⚙ to see the team's inspections.",
+    team_nodrive:"Set up the main backend in ⚙ to see the team's inspections.",
     team_offline:"Offline — showing what was last pulled.",
-    team_unreach:"Could not reach Google Drive — weak signal, or the /exec URL in ⚙ is wrong.",
-    team_checking:"Checking Google Drive…",
+    team_unreach:"Could not reach the system — weak signal, or the URL in ⚙ is wrong.",
+    team_checking:"Checking the system…",
     btn_team_reload:"Reload all",
     team_reload_hint:"Forget what is stored here and read the whole folder again.",
     team_full:"⚠ No room left on this phone — export or clear old inspections, then reload.",
     m_storage_full:["No room left","This phone's storage is full. Export and clear some inspections, then try again."],
     up_timeout:"timed out — signal too weak to finish the upload",
-    team_timeout:"Google Drive did not answer in time — weak signal. Try again in coverage.",
+    team_timeout:"The system did not answer in time — weak signal. Try again in coverage.",
     team_more:"More is waiting — tap again.",
     team_voided:"{n} withdrawn by the office.",
     team_clash:"⑂ {n} sent twice — the office must pick which one stands.",
@@ -2320,7 +2320,7 @@ const I18N = {
     del_t_unsent:"This has not been uploaded",
     del_m_unsent:"{x} is only on this phone. Deleting it destroys {d} for good — there is no copy anywhere else and it cannot be undone.",
     del_t_sent:"Delete from this phone?",
-    del_m_sent:"{x} has already been uploaded. Removing it here frees space on the phone; the copy in Drive is not touched.",
+    del_m_sent:"{x} has already been uploaded. Removing it here frees space on the phone; the copy in the system is not touched.",
     m_saved:["Saved ✔","{x} saved on this phone. Capture the next one, then Share/Export when you have internet."],
     m_nothing_export:["Nothing to export","Capture at least one item first."],
     m_exported:["Exported ✔","A ZIP with correctly-named photos + entries.json was downloaded. Put the photos in your N: drive folder."],
@@ -2620,16 +2620,16 @@ const I18N = {
     rd_unreach:["Нет связи с папкой","Обход есть в системе — телефон не смог до него добраться. Слабый сигнал или неверный адрес /exec в ⚙. Повторите в зоне покрытия."],
     team_hint:"Всё, что загрузила вся бригада, а не только этот телефон. Обновляется после каждой выгрузки и хранится офлайн — поэтому список плановых осмотров знает об обходах, сделанных другими.",
     team_none:"Пока ничего не загружено — нажмите «Проверить новые».",
-    team_nodrive:"Настройте Google Drive в ⚙, чтобы видеть осмотры бригады.",
+    team_nodrive:"Настройте основное хранилище в ⚙, чтобы видеть осмотры бригады.",
     team_offline:"Нет сети — показано последнее загруженное.",
-    team_unreach:"Не удалось связаться с Google Drive — слабый сигнал или неверный адрес /exec в ⚙.",
-    team_checking:"Проверяем Google Drive…",
+    team_unreach:"Не удалось связаться с хранилищем — слабый сигнал или неверный адрес в ⚙.",
+    team_checking:"Проверяем хранилище…",
     btn_team_reload:"Загрузить всё",
     team_reload_hint:"Забыть сохранённое здесь и перечитать всю папку.",
     team_full:"⚠ На телефоне нет места — выгрузите или очистите старые осмотры и повторите.",
     m_storage_full:["Нет места","Память телефона заполнена. Выгрузите и очистите часть осмотров и повторите."],
     up_timeout:"истекло время — слишком слабый сигнал для выгрузки",
-    team_timeout:"Google Drive не ответил вовремя — слабый сигнал. Повторите в зоне покрытия.",
+    team_timeout:"Хранилище не ответило вовремя — слабый сигнал. Повторите в зоне покрытия.",
     team_more:"Есть ещё — нажмите ещё раз.",
     team_voided:"Отозвано офисом: {n}.",
     team_clash:"⑂ Прислано дважды: {n} — офис выберет верную версию.",
@@ -7700,7 +7700,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="140";
+const BUILD="141";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
