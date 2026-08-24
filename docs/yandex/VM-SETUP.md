@@ -115,14 +115,39 @@ Exactly [SETUP.md steps 1 to 4](SETUP.md). Nothing changes. Come back here with:
 | Disk | 10 GB SSD | The bucket holds the photographs, not this |
 | Public IP | **yes** — take an ephemeral one, or a static one if you prefer | The phones have to reach it |
 | Service account | `cm-function` | So the machine can use the bucket. It still needs the static key below, but this keeps the machine inside your own IAM |
-| SSH | paste your public key, login `cm` | See the note after this table |
+| Login | **`cmadmin`** | The console rejects anything under three characters, so `cm` will not do |
+| SSH key | paste your **public** key | See the note after this table |
+| Backup | **off** | See below — it blocks creation and you do not want it |
 
 **Create.** Note the **public IP** it gives you.
 
-> **No SSH key?** On your own computer: `ssh-keygen -t ed25519` (press Enter at
-> every prompt), then paste the contents of `~/.ssh/id_ed25519.pub` — the `.pub`
-> one. The file WITHOUT `.pub` is the private half and never leaves your
-> machine, exactly like the bucket's secret key.
+> **No SSH key?** On your own computer — PowerShell on Windows, Terminal on Mac
+> or Linux:
+>
+> ```
+> ssh-keygen -t ed25519
+> ```
+>
+> Press Enter at every prompt. Then print the public half and copy it:
+>
+> ```
+> cat ~/.ssh/id_ed25519.pub                       # Mac / Linux
+> type $env:USERPROFILE\.ssh\id_ed25519.pub       # Windows PowerShell
+> ```
+>
+> One line beginning `ssh-ed25519`. Paste that into **Add key**.
+>
+> The file WITHOUT `.pub` is the private half. It never leaves your computer and
+> is never pasted anywhere — same rule as the bucket's secret key. Yandex warns
+> that losing it means losing access to the VM, and that is true: back it up
+> somewhere you will still have in a year.
+
+> **Turn Backup OFF.** It defaults on, wants a service activated in the folder,
+> and shows a red error until you do — so it will stop you creating the machine.
+> You do not want it either. Nothing on this VM is worth restoring: the
+> photographs and the records are in the bucket, and the machine itself is four
+> files and ten minutes of this guide. Backing it up would cost money to protect
+> something rebuildable.
 
 ---
 
@@ -175,7 +200,7 @@ Leave outgoing traffic allowed, or the machine cannot reach the bucket.
 SSH in:
 
 ```
-ssh cm@cm.example.kz
+ssh cmadmin@cm.example.kz
 ```
 
 Then, one block at a time.
@@ -326,7 +351,7 @@ for `MP/TK149/…`. Then the dashboard, then the rest of the phones by
 **Attention:** this is a machine, and machines need patching. Once a month:
 
 ```
-ssh cm@cm.example.kz 'sudo apt update && sudo apt upgrade -y && sudo systemctl restart cm'
+ssh cmadmin@cm.example.kz 'sudo apt update && sudo apt upgrade -y && sudo systemctl restart cm'
 ```
 
 Or switch on unattended upgrades and forget it:
