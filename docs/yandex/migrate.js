@@ -162,9 +162,16 @@ const listOf = (base, sec) =>
       const pct = Math.round((done + failed.length) / todo.length * 100);
       const rate = done / Math.max(1, (Date.now() - t0) / 1000);
       const left = rate > 0 ? Math.round((todo.length - done - failed.length) / rate) : 0;
-      process.stdout.write('\r  ' + pct + '%  ' + done + '/' + todo.length +
+      /* Padded to a fixed width. A carriage return moves the cursor back but
+         clears nothing, so a shorter line leaves the tail of a longer one
+         behind it — which is how the last line of a finished copy read
+         "100%  227/227     s left": a fragment of an earlier estimate, sitting
+         there like a number that failed to print, at exactly the moment
+         somebody is checking whether 227 files really moved. */
+      const line = '  ' + pct + '%  ' + done + '/' + todo.length +
         (failed.length ? '  (' + failed.length + ' failed)' : '') +
-        (left ? '  ~' + (left > 90 ? Math.round(left / 60) + ' min' : left + ' s') + ' left' : '') + '     ');
+        (left ? '  ~' + (left > 90 ? Math.round(left / 60) + ' min' : left + ' s') + ' left' : '');
+      process.stdout.write('\r' + line + ' '.repeat(Math.max(0, 62 - line.length)));
     }
   }
   console.log('\n');
