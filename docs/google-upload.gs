@@ -612,6 +612,12 @@ function slimRow_(r) {
   }
   var row = { u: String(r.equip || '').toUpperCase(), d: r.date || '', t: r.type || 'MP',
               by: r.by || '', g: worst };
+  /* The hour meter. The inspection schedule is in hours, so a round somebody
+     else walked has to move the due date the same way the phone's own does —
+     and two readings of it are what tell a machine its own hours per day.
+     Identical to teamRow() in the app, and the suite compares them. */
+  var smu = (r.smu === '' || r.smu == null) ? null : Number(r.smu);
+  if (smu != null && isFinite(smu)) row.s = smu;
   if (base.length) row.b = base;
   /* The one thing the row carries that the app could not work out for itself:
      which file this round is. Opening it becomes a single request by id — no

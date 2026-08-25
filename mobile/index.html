@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=149">
+<link rel="manifest" href="manifest.webmanifest?v=150">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=149">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=149">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=149">
+<link rel="apple-touch-icon" href="icon-192.png?v=150">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=150">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=150">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1160,6 +1160,10 @@
   .dueitem .u{font-weight:700;flex:0 0 auto;max-width:62%;overflow:hidden;white-space:nowrap;}
   .dueitem .d{font-size:12.5px;color:var(--muted);flex:1 1 auto;min-width:0;
     overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right;}
+  /* A unit brought forward by wear rather than by the interval. It has to read
+     as a reason and not as decoration: the fitter is being asked to walk a
+     machine early, and "why" is the first thing they will ask. */
+  .dueitem .duewhy{color:var(--warn-ink);font-weight:650;}
   dialog{border:none;border-radius:16px;background:var(--surface);color:var(--ink);max-width:92vw;width:420px;padding:0;}
   dialog::backdrop{background:rgba(0,0,0,.6);}
   .dlg-in{padding:20px;} .dlg-in h3{margin:0 0 8px;} .dlg-in p{color:var(--ink-2);font-size:14px;}
@@ -1574,14 +1578,15 @@
   <div class="card">
     <h2><span data-i18n="sec_due">Inspection due</span> <span class="count-badge" id="dueCount">0</span></h2>
     <div class="row" style="margin-bottom:12px">
-      <label class="fld" style="margin:0"><span data-i18n="lbl_due_int">Interval (days)</span>
-        <input id="dueInt" type="number" inputmode="numeric" min="1"></label>
+      <label class="fld" style="margin:0"><span data-i18n="lbl_due_int">Interval (hours)</span>
+        <input id="dueInt" type="number" inputmode="numeric" min="1" step="50"></label>
       <label class="fld" style="margin:0"><span data-i18n="lbl_due_scope">Show</span>
         <select id="dueScope">
           <option value="due" data-i18n="due_overdue">Overdue &amp; due soon</option>
           <option value="all" data-i18n="due_all">All units with history</option>
         </select></label>
     </div>
+    <div class="quiet" id="dueBasis" style="margin:-4px 0 10px"></div>
     <div class="duelist" id="dueList"></div>
     <button class="btn ghost" id="dueImport" style="margin-top:12px">📥 <span data-i18n="btn_due_import">Load history file</span></button>
     <div class="hint" style="margin-top:8px" data-i18n="due_hint">Built from what this phone has recorded. Load an entries.json exported from the dashboard to seed the whole fleet's last-done dates.</div>
@@ -1758,28 +1763,29 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=149"></script>
-<script src="upload-defaults.js?v=149"></script>
-<script src="hme.js?v=149"></script>
-<script src="mp-fc.js?v=149"></script>
-<script src="hme-cascade.js?v=149"></script>
-<script src="assets.js?v=149"></script>
-<script src="temp-limits.js?v=149"></script>
-<script src="wear.js?v=149"></script>
-<script src="wear-figs.js?v=149"></script>
-<script src="wear-map.js?v=149"></script>
-<script src="machine-photos.js?v=149"></script>
-<script src="machine-fig.js?v=149"></script>
-<script src="get.js?v=149"></script>
-<script src="uc-points.js?v=149"></script>
-<script src="inspect-guide.js?v=149"></script>
-<script src="get-figs.js?v=149"></script>
-<script src="body-points.js?v=149"></script>
-<script src="body-map.js?v=149"></script>
-<script src="lube.js?v=149"></script>
-<script src="lube-overrides.js?v=149"></script>
-<script src="lube2027.js?v=149"></script>
-<script src="report-core.js?v=149"></script>
+<script src="native.js?v=150"></script>
+<script src="upload-defaults.js?v=150"></script>
+<script src="hme.js?v=150"></script>
+<script src="mp-fc.js?v=150"></script>
+<script src="hme-cascade.js?v=150"></script>
+<script src="assets.js?v=150"></script>
+<script src="temp-limits.js?v=150"></script>
+<script src="due.js?v=150"></script>
+<script src="wear.js?v=150"></script>
+<script src="wear-figs.js?v=150"></script>
+<script src="wear-map.js?v=150"></script>
+<script src="machine-photos.js?v=150"></script>
+<script src="machine-fig.js?v=150"></script>
+<script src="get.js?v=150"></script>
+<script src="uc-points.js?v=150"></script>
+<script src="inspect-guide.js?v=150"></script>
+<script src="get-figs.js?v=150"></script>
+<script src="body-points.js?v=150"></script>
+<script src="body-map.js?v=150"></script>
+<script src="lube.js?v=150"></script>
+<script src="lube-overrides.js?v=150"></script>
+<script src="lube2027.js?v=150"></script>
+<script src="report-core.js?v=150"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2225,7 +2231,12 @@ const I18N = {
     sec_sign:"Supervisor sign-off", sign_add:"Add a supervisor signature", sign_hide:"Hide the signature box", lbl_sup:"Verified by (supervisor)", ph_sup:"name / badge no.",
     sign_hint:"Sign in the box (optional) — it is stored with the record and printed on the report.",
     btn_sign_clear:"Clear signature", rep_sup:"Verified by", rep_gps:"Location",
-    sec_due:"Inspection due", lbl_due_int:"Interval (days)", lbl_due_scope:"Show",
+    sec_due:"Inspection due", lbl_due_int:"Interval (hours)", lbl_due_scope:"Show",
+    due_h:"{n} h",
+    due_basis:"Every {h} h · {r} h/day assumed",
+    due_basis_cal:"Every {n} days · this round is not scheduled on hours",
+    due_basis_own:"{n} on the machine's own rate",
+    due_why_wear:"wear, not the interval",
     due_overdue:"Overdue & due soon", due_all:"All units with history",
     btn_due_import:"Load history file", due_days:"{n} d ago", due_over:"overdue {n} d", due_in:"in {n} d",
     due_never:"never done", due_empty:"Nothing due — or no history on this phone yet.",
@@ -2607,7 +2618,12 @@ const I18N = {
     sec_sign:"Подпись руководителя", sign_add:"Добавить подпись руководителя", sign_hide:"Скрыть поле подписи", lbl_sup:"Проверил (руководитель)", ph_sup:"ФИО / табельный №",
     sign_hint:"Распишитесь в поле (необязательно) — подпись сохраняется с записью и печатается в отчёте.",
     btn_sign_clear:"Очистить подпись", rep_sup:"Проверил", rep_gps:"Координаты",
-    sec_due:"Плановые осмотры", lbl_due_int:"Интервал (дней)", lbl_due_scope:"Показать",
+    sec_due:"Плановые осмотры", lbl_due_int:"Интервал (часов)", lbl_due_scope:"Показать",
+    due_h:"{n} ч",
+    due_basis:"Каждые {h} ч · принято {r} ч/сутки",
+    due_basis_cal:"Каждые {n} суток · этот осмотр не планируется по часам",
+    due_basis_own:"{n} — по фактической наработке",
+    due_why_wear:"по износу, не по интервалу",
     due_overdue:"Просроченные и скоро", due_all:"Все ед. с историей",
     btn_due_import:"Загрузить историю", due_days:"{n} дн. назад", due_over:"просрочено {n} дн.", due_in:"через {n} дн.",
     due_never:"не проводился", due_empty:"Ничего не требуется — или на телефоне ещё нет истории.",
@@ -3833,7 +3849,7 @@ function applyForm(){ applyRoundSkin();
   $("lubeFields").classList.toggle("hidden", !TYPE_META[type].lube);
   if(TYPE_META[type].wear) renderUCReasons();
   if(TYPE_META[type].get) renderGET();
-  $("dueInt").value=dueInterval(type); renderDue(); renderTeam(); renderLastDone(); renderTrend();
+  $("dueInt").value=dueHours(type); renderDue(); renderTeam(); renderLastDone(); renderTrend();
   cascL7=null; cascL8=null;
   const tr=currentTree(); const flat=items();
   if(tr){ if(curItem && !flat.some(i=>i.k===curItem)) curItem=""; }
@@ -4140,6 +4156,18 @@ async function loadBaselines(){
    record's own date sees. Correcting a bad reference must not need the history
    rewritten, so nothing derived is ever stored. `stood` is the inspector having
    gone back and taken the reading again after the app questioned it. */
+/* The condemn reference for a position, resolved from the RECORD rather than
+   from whatever the form happens to be showing. wearOut() needs it to score a
+   reading and noteWear() needs it to forecast one; two copies of this would be
+   two copies that drift. */
+function wearRefOf(rec,k){
+  const ty=rec.type||"";
+  if(ty==="TB"){ const st=bodyStatus(rec.equip);
+    return st.ok ? BODY.limitFor(st.model,k) : null; }
+  const a=ASSET_BY[rec.equip]||{}, [pt,pos]=ucSplit(k);
+  if(ty==="GET") return window.GET ? GET.refFor(rec.equip, a.cat||a.cls||"", a.m||"", pt) : null;
+  return (window.WEAR && a.m) ? WEAR.refFor(rec.equip, a.m, pt, pos, rec.date) : null;
+}
 function wearOut(rec,k,p){
   const ty=rec.type||"";
   if(ty!=="UC" && ty!=="GET" && ty!=="TB") return null;
@@ -4159,10 +4187,7 @@ function wearOut(rec,k,p){
              refSrc:st.ok?("tray:"+st.model+(st.sure?"":"?")):"",
              zone:pt?pt.z:"", zoneLabel:pt?BODY.zoneLabel(st.model,pt.z,"en"):"" };
   }
-  const a=ASSET_BY[rec.equip]||{}, [pt,pos]=ucSplit(k);
-  const ref = ty==="GET"
-    ? (window.GET ? GET.refFor(rec.equip, a.cat||a.cls||"", a.m||"", pt) : null)
-    : ((window.WEAR && a.m) ? WEAR.refFor(rec.equip, a.m, pt, pos, rec.date) : null);
+  const ref = wearRefOf(rec,k);
   const pct=(ref && p.mm!=null) ? WEAR.wear(ref, Number(p.mm)) : null;
   return { mm:(p.mm==null?"":Number(p.mm)), stood:p.stood?1:0, reason:p.reason||"",
            reasonLabel:p.reason?ucReasonLabel(p.reason,"en"):"",
@@ -5963,7 +5988,7 @@ $("saveBtn").onclick=async ()=>{
       base:(p.base?{n:Number(p.base.n), c:(p.base.c==null?null:Number(p.base.c)),
                     all:p.base.all?1:0}:null),
       photos:(p.photos||[]).slice(), video:p.video||null };
-  await dbPut(rec); noteDone(rec); await loadBaselines();
+  await dbPut(rec); noteDone(rec); noteWear(rec); await loadBaselines();
   clearTimeout(draftT); draftT=null; draftSig="";
   try{ await dbDel(DRAFT_ID); }catch(e){}
   resetForm(); renderPending(); renderDue(); syncThenArm();
@@ -5981,9 +6006,80 @@ $("saveBtn").onclick=async ()=>{
    entries.json exported from the dashboard. Interval is per inspection type. */
 // Undercarriage is a quarterly round on this fleet, not a monthly one — a 30-day
 // default would put all 1,085 units in the due list every month for nothing.
-const DUE_DEFAULT={MP:90, FC:90, INSP:30, TEMP:30, UC:90};
-function dueInterval(ty){ const v=parseInt(localStorage.getItem("due_int_"+ty),10);
-  return (v>0)?v:(DUE_DEFAULT[ty]||30); }
+/* The interval in HOURS, from due.js — the fleet's figures, in the unit the
+   fleet uses. A phone that has been given its own figure for a round keeps it;
+   the box on the screen is in hours now too, so an old value in DAYS would read
+   as a round due every fortnight of running rather than every quarter. Stored
+   under a new key, so the old one is simply left behind rather than
+   misinterpreted. */
+function dueHours(ty){ const v=parseInt(localStorage.getItem("due_h_"+ty),10);
+  if(v>0) return v;
+  const h=DUE.hours(ty);
+  return h!=null ? h : Math.round(DUE.spec(ty).d*DUE.HOURS_PER_DAY); }
+/* Calendar rounds are shown in days and decided in days. Asking for their
+   interval in hours is a rendering, not a schedule. */
+function dueIsCalendar(ty){ return !localStorage.getItem("due_h_"+ty) && DUE.hours(ty)==null; }
+
+/* ---- what "last done" means now -----------------------------------------
+   cm_hist was TYPE|UNIT -> "YYYY-MM-DD". It now carries what the machine had
+   done as well:
+
+     d   the date the round was walked
+     h   the hour meter at the time, where it was written down
+     f   hours to the soonest condemn this round could forecast, once two
+         readings made one possible
+
+   Old entries are plain strings and stay readable. An inspector who has not
+   opened the app since is not going to lose their due list to a format. */
+function histEntry(v){
+  if(v==null) return null;
+  if(typeof v==="string") return v?{d:v}:null;
+  return (v && v.d) ? v : null;
+}
+function histDate(v){ const e=histEntry(v); return e?e.d:null; }
+/* A newer round replaces. The SAME round merges, because the date and the hour
+   meter arrive by different paths — this phone's own save knows both, a team
+   row may know only the date. An older one is ignored outright: a round from
+   last month arriving late does not un-inspect a machine. */
+function histPut(h,k,e){
+  if(!e || !e.d) return false;
+  const cur=histEntry(h[k]);
+  if(cur && cur.d>e.d) return false;
+  const same=!!(cur && cur.d===e.d);
+  const out={d:e.d};
+  const hv=(e.h!=null&&e.h!=="")?Number(e.h):(same&&cur.h!=null?Number(cur.h):null);
+  const fv=(e.f!=null&&e.f!=="")?Number(e.f):(same&&cur.f!=null?Number(cur.f):null);
+  if(hv!=null&&isFinite(hv)) out.h=hv;
+  if(fv!=null&&isFinite(fv)) out.f=fv;
+  h[k]=out;
+  return !same;
+}
+
+/* ---- the machine's own hours per day ------------------------------------
+   Every hour meter reading this phone has seen for a unit, oldest first, a few
+   of them. Two is all DUE.rateFrom needs; more makes the rate steadier and
+   costs a few bytes. Kept per UNIT and not per round type, because the hour
+   meter belongs to the machine — an undercarriage round and a plug round on
+   the same truck are two readings of one meter. */
+const SMU_KEY="cm_smu", SMU_KEEP=6;
+let smuCache=null;
+function smuAll(){ return smuCache || (smuCache=(()=>{
+  try{ return JSON.parse(localStorage.getItem(SMU_KEY)||"{}"); }catch(e){ return {}; }
+})()); }
+function smuSave(m){ smuCache=m; try{ localStorage.setItem(SMU_KEY,JSON.stringify(m)); }catch(e){} }
+function smuNote(unit,date,smu){
+  const u=(unit||"").toUpperCase(), n=Number(smu);
+  if(!u||!date||smu==null||smu===""||!isFinite(n)) return;
+  const m=smuAll();
+  const list=(m[u]||[]).filter(r=>r&&r.d&&r.d!==date);
+  list.push({d:date,h:n});
+  list.sort((a,b)=>String(a.d).localeCompare(String(b.d)));
+  m[u]=list.slice(-SMU_KEEP);
+  smuSave(m);
+}
+/* The unit's measured rate, or nothing — and nothing is an honest answer that
+   the caller renders as the fleet assumption, said out loud. */
+function unitRate(unit){ return DUE.rateFrom(smuAll()[(unit||"").toUpperCase()]||[]); }
 /* Up to one entry per unit per type — ~4000 on this fleet. renderDue() runs it
    on every keystroke in the interval box, so re-parsing it each time was real,
    felt lag. Parsed once, replaced on write. */
@@ -5997,7 +6093,53 @@ function histAll(){ return histCache || (histCache=(()=>{
    IndexedDB is the thing that matters. */
 function histSave(h){ histCache=h; try{ localStorage.setItem("cm_hist",JSON.stringify(h)); }catch(e){} }
 function noteDone(rec){ if(!rec.equip||!rec.date) return; const h=histAll();
-  const k=(rec.type||"MP")+"|"+rec.equip; if(!h[k]||h[k]<rec.date) h[k]=rec.date; histSave(h); }
+  histPut(h,(rec.type||"MP")+"|"+rec.equip,{d:rec.date, h:rec.smu});
+  histSave(h);
+  smuNote(rec.equip, rec.date, rec.smu); }
+
+/* ---- what this round says about when the next one is due ----------------
+   A measured round with two readings behind it already knows how fast the part
+   is going and how much of it is left. That number is worth more than the
+   schedule: a machine whose worst point reaches its condemn limit in 300 hours
+   is due in 300 hours, whatever the interval says, and one whose points have
+   barely moved does not need to be walked early because a calendar says so.
+
+   Computed once, at save, and carried on the history entry — the due list runs
+   over a thousand units and cannot forecast each of them on every keystroke.
+
+   Never allowed to fail a save. The round is in the store by the time this
+   runs; a forecast that cannot be made is a due date computed the ordinary way,
+   not a lost inspection. */
+async function noteWear(rec){
+  try{
+    if(!rec || !rec.equip || !rec.date) return;
+    const meta=TYPE_META[rec.type]||{};
+    if(!meta.wear && !meta.get) return;
+    const u=(rec.equip||"").toUpperCase();
+    const recs=(await dbAll())
+      .filter(r=>(r.equip||"").toUpperCase()===u && r.type===rec.type && r.date && !r._void)
+      .sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+    if(recs.length<2) return;
+    const series={};
+    recs.forEach(r=>Object.entries(r.positions||{}).forEach(([k,pp])=>{
+      if(!pp || pp.mm==null) return;
+      (series[k]=series[k]||[]).push({mm:Number(pp.mm), at:r.date, smu:r.smu}); }));
+    let soonest=null;
+    for(const k of Object.keys(series)){
+      if(series[k].length<2) continue;
+      const ref=wearRefOf(rec,k);
+      if(!ref || ref.c==null || ref.x) continue;
+      const f=WEAR.forecast(ref, series[k]);
+      if(f.why || !isFinite(f.hours)) continue;
+      if(soonest==null || f.hours<soonest) soonest=f.hours;
+    }
+    if(soonest==null) return;
+    const h=histAll();
+    histPut(h,(rec.type||"MP")+"|"+rec.equip,{d:rec.date, h:rec.smu, f:Math.round(soonest)});
+    histSave(h);
+    renderDue();
+  }catch(e){ /* a forecast that cannot be made is not a failed save */ }
+}
 function daysBetween(iso){ const d=new Date(iso+"T00:00:00"); if(isNaN(d)) return null;
   return Math.floor((new Date(todayISO()+"T00:00:00")-d)/86400000); }
 // Typing "90" fired three full re-renders of a 1000-row list. Coalesce them.
@@ -6005,35 +6147,65 @@ let dueT=null;
 $("dueInt").addEventListener("input",()=>{
   clearTimeout(dueT);
   dueT=setTimeout(()=>{ const v=parseInt($("dueInt").value,10);
-    if(v>0) try{ localStorage.setItem("due_int_"+type,String(v)); }catch(e){}
+    if(v>0) try{ localStorage.setItem("due_h_"+type,String(v)); }catch(e){}
     renderDue(); }, 250);
 });
 $("dueScope").onchange=()=>{ localStorage.setItem("due_scope",$("dueScope").value); renderDue(); };
 function renderDue(){
   renderTabs();
   const box=$("dueList"); if(!box) return;
-  const iv=dueInterval(type), soon=Math.max(3,Math.round(iv*0.2)), h=histAll();
+  const h=histAll(), cal=dueIsCalendar(type), iv=dueHours(type);
+  /* "Soon" is a fifth of the interval, and at least a shift. On a 250-hour
+     plug round that is 50 hours — two and a half days at the fleet's rate,
+     which is a round you can plan rather than one you are already late for. */
+  const soonH=Math.max(20, Math.round(iv*0.2));
   const rows=[];
-  for(const [k,date] of Object.entries(h)){
+  for(const k of Object.keys(h)){
     const [ty,unit]=k.split("|"); if(ty!==type) continue;
-    const age=daysBetween(date); if(age==null) continue;
-    const left=iv-age;
-    rows.push({unit,date,age,left,st: left<0?"over" : left<=soon?"soon" : "ok"});
+    const last=histEntry(h[k]); if(!last) continue;
+    /* The machine's own hours per day where two readings have measured it,
+       the fleet's assumption where they have not. */
+    const n=DUE.next({type:ty, last:last, today:todayISO(), rate:unitRate(unit)});
+    if(!n) continue;
+    rows.push({unit, last, n,
+      st: n.over ? "over" : (n.dueInHours<=soonH ? "soon" : "ok")});
   }
-  rows.sort((a,b)=>a.left-b.left || a.unit.localeCompare(b.unit));
+  rows.sort((a,b)=>a.n.dueInHours-b.n.dueInHours || a.unit.localeCompare(b.unit));
   const scope=$("dueScope").value;
   const show = scope==="all" ? rows : rows.filter(r=>r.st!=="ok");
   const nOver=rows.filter(r=>r.st==="over").length, nSoon=rows.filter(r=>r.st==="soon").length;
   const badge=$("dueCount"); badge.textContent=nOver+nSoon;
   badge.className="count-badge"+(nOver?" crit":(nSoon?" warn":""));
   if(!show.length){ box.innerHTML=`<div class="empty">${t("due_empty")}</div>`; return; }
+  const num=n=>Math.abs(n).toLocaleString(lang==="ru"?"ru-RU":"en-GB");
   box.innerHTML=show.slice(0,200).map(r=>{
-    const a=ASSET_BY[r.unit];
-    const when = r.left<0 ? t("due_over").replace("{n}",-r.left) : t("due_in").replace("{n}",r.left);
+    const a=ASSET_BY[r.unit], n=r.n;
+    /* Days, because a fitter's week is in days — and the hours beside them,
+       because that is what the interval is and what the hour meter reads. A
+       calendar round says days only: printing "600 h" against a walk-around
+       nobody schedules on hours would be inventing a precision. */
+    const days = n.over ? t("due_over").replace("{n}",num(n.dueInDays))
+                        : t("due_in").replace("{n}",num(n.dueInDays));
+    const hrs = cal && !n.why ? "" : " · "+t("due_h").replace("{n}",num(n.dueInHours));
+    /* Why this unit is on the list. The interval is the ordinary answer and
+       goes unsaid; wear is not, and a due list that cannot say which is which
+       is one nobody trusts twice. */
+    const why = n.why==="wear" ? ` <span class="duewhy">${esc(t("due_why_wear"))}</span>` : "";
     return `<button class="dueitem ${r.st}" data-u="${esc(r.unit)}">
       <span class="u">${esc(r.unit)}${a&&a.cat?` · <span style="color:var(--muted);font-weight:400">${esc(a.cat)}</span>`:""}</span>
-      <span class="d">${t("due_days").replace("{n}",r.age)} · ${when}</span></button>`; }).join("");
+      <span class="d">${t("due_days").replace("{n}",num(n.daysSince))} · ${days}${hrs}${why}</span></button>`; }).join("");
   box.querySelectorAll("[data-u]").forEach(b=>b.onclick=()=>{ selectEquip(b.dataset.u); showPane("paneCapture"); });
+  /* What the box above is actually counting in, and at whose rate. Never left
+     to be inferred: "in 12 d" from a 250-hour interval only makes sense once
+     somebody has been told the machine is assumed to run 20 hours a day. */
+  const note=$("dueBasis");
+  if(note){
+    const measured=rows.filter(r=>r.n.measured).length;
+    note.textContent = cal
+      ? t("due_basis_cal").replace("{n}",iv/DUE.HOURS_PER_DAY)
+      : t("due_basis").replace("{h}",num(iv)).replace("{r}",DUE.HOURS_PER_DAY)
+        + (measured ? " · "+t("due_basis_own").replace("{n}",measured) : "");
+  }
 }
 /* ===================== what the whole team has uploaded =====================
    The due list only ever knew what THIS phone had recorded, so a unit another
@@ -6121,8 +6293,15 @@ function teamRow(r){
     const k=String(i.key||""); const cut=k.indexOf(".");
     base.push({ p:cut<0?k:k.slice(0,cut), s:(i.baseAll?"":(cut<0?"":k.slice(cut+1))),
                 n:Number(i.baseNew), c:(i.baseCondemn===""||i.baseCondemn==null)?null:Number(i.baseCondemn) }); });
+  /* The hour meter, because the schedule is in hours and a round somebody else
+     walked has to move the due date the same way this phone's own does. Two
+     readings of it are also what gives a machine its measured hours per day.
+     This must stay identical to indexRow_() in the Apps Script — the suite
+     compares the two on the same records so they cannot drift apart. */
+  const smu=(r.smu==null||r.smu==="")?null:Number(r.smu);
   return { u:(r.equip||"").toUpperCase(), d:r.date||"", t:r.type||"MP",
-           by:r.by||"", g:worst, ...(base.length?{b:base}:{}) };
+           by:r.by||"", g:worst, ...(smu!=null&&isFinite(smu)?{s:smu}:{}),
+           ...(base.length?{b:base}:{}) };
 }
 /* A round voided in the dashboard has been withdrawn. It must stop counting as
    "done" here too, or the due list keeps saying a unit was covered when the
@@ -6141,8 +6320,13 @@ function teamVoid(eds){
       // round would keep a unit looking inspected.
       const hk=p[2]+"|"+p[0].toUpperCase();
       const rest=[...have.values()].filter(x=>x.t===p[2]&&x.u===p[0].toUpperCase())
-                  .map(x=>x.d).sort();
-      if(rest.length) h[hk]=rest[rest.length-1]; else delete h[hk];
+                  .sort((a,b)=>String(a.d).localeCompare(String(b.d)));
+      /* Rebuilt, not patched: the entry being replaced belongs to the round
+         that has just been withdrawn, and its hour meter and its forecast go
+         with it. */
+      if(rest.length){ const w=rest[rest.length-1];
+        h[hk]={d:w.d, ...(w.s!=null?{h:Number(w.s)}:{})}; }
+      else delete h[hk];
     }
   }
   if(n){ teamSave([...have.values()]); histSave(h); }
@@ -6195,8 +6379,8 @@ function teamMergeRows(rows,replace){
     const k=teamKey(row);
     if(!have.has(k)) added++;
     have.set(k,row);                                  // a re-upload replaces
-    const hk=row.t+"|"+row.u;
-    if(!h[hk]||h[hk]<row.d){ h[hk]=row.d; hist++; }
+    if(histPut(h,row.t+"|"+row.u,{d:row.d, h:row.s})) hist++;
+    smuNote(row.u,row.d,row.s);
   }
   const saved=teamSave([...have.values()]); histSave(h);
   loadBaselines();
@@ -6217,8 +6401,8 @@ function teamMerge(recs,replace){
     const k=teamKey(row);
     if(!have.has(k)) added++;
     have.set(k,row);                                  // a re-upload replaces
-    const hk=row.t+"|"+row.u;
-    if(!h[hk]||h[hk]<row.d){ h[hk]=row.d; hist++; }
+    if(histPut(h,row.t+"|"+row.u,{d:row.d, h:row.s})) hist++;
+    smuNote(row.u,row.d,row.s);
   }
   const saved=teamSave([...have.values()]); histSave(h);
   /* Keep the rounds themselves, not just the line about them. Not awaited here:
@@ -6786,10 +6970,12 @@ function renderTabs(){
     el.textContent=n>99?"99+":String(n);
     el.className="tb"+(warn?" warn":"")+(n?"":" hidden"); };
   dbAll().then(all=>set($("tabQ"),all.filter(r=>!r.up).length,!!lastErr)).catch(()=>{});
-  const iv=dueInterval(type), h=histAll(); let over=0;
-  for(const [k,date] of Object.entries(h)){
-    const [ty]=k.split("|"); if(ty!==type) continue;
-    const age=daysBetween(date); if(age!=null && iv-age<0) over++;
+  const h=histAll(); let over=0;
+  for(const k of Object.keys(h)){
+    const [ty,unit]=k.split("|"); if(ty!==type) continue;
+    const last=histEntry(h[k]); if(!last) continue;
+    const n=DUE.next({type:ty, last:last, today:todayISO(), rate:unitRate(unit)});
+    if(n && n.over) over++;
   }
   set($("tabS"),over,true);
 }
@@ -6809,7 +6995,9 @@ $("dueFile").onchange=async (e)=>{ const f=e.target.files[0]; e.target.value="";
   let j; try{ j=JSON.parse(await f.text()); }catch(err){ dlg(t("m_merge_bad")); return; }
   const recs=(j&&(j.records||j.inspections))||[]; const h=histAll(); let n=0;
   for(const r of recs){ const u=(r.equip||r.equipment||"").toUpperCase(), d=r.date, ty=r.type||"MP";
-    if(!u||!d) continue; const k=ty+"|"+u; if(!h[k]||h[k]<d){ h[k]=d; n++; } }
+    if(!u||!d) continue;
+    if(histPut(h,ty+"|"+u,{d:d, h:r.smu})) n++;
+    smuNote(u,d,r.smu); }
   histSave(h); renderDue(); const m=t("m_due_loaded"); dlg([m[0], m[1].replace("{n}",n)]); };
 
 /* ===================== multi-device merge =====================
@@ -7743,7 +7931,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="149";
+const BUILD="150";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -9234,7 +9422,7 @@ if("serviceWorker" in navigator && window.isSecureContext){ let reloaded=false;
    picks up the new files. */
 const SHELL_ASSETS=["index.html","manifest.webmanifest","native.js","jsQR.js","qrcode.js","upload-defaults.js",
   "hme.js","hme-cascade.js","mp-fc.js","assets.js","temp-limits.js",
-  "wear.js","wear-figs.js","wear-map.js","machine-photos.js","machine-fig.js","get.js","uc-points.js","report-core.js",
+  "due.js","wear.js","wear-figs.js","wear-map.js","machine-photos.js","machine-fig.js","get.js","uc-points.js","report-core.js",
   /* The lubrication reference was never on this list, so a rebuilt lube.js
      could be served from the HTTP cache after an update - the app would say it
      was current and hand a fitter last month's capacities. */
