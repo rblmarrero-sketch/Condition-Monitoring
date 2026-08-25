@@ -966,6 +966,33 @@ Voids reach the phones too: a withdrawn round drops out of the phones' **System*
 counting as done in the due list, so nobody skips a unit on the strength of a round the
 office has retracted.
 
+### What is due, and what we missed
+
+Rounds come round on **hours**, not days — `mobile/due.js` holds the intervals in one
+place and both the phone and the dashboard compute from it, so the two can never drift:
+
+| Round | Every |
+|---|---|
+| Magnetic plug | 250 h |
+| Filter cut | 500 h engine, 1000 h everything else |
+| Undercarriage, GET, general inspection | 500 h |
+| Dump body | 1000 h |
+
+The calendar is a rendering of those at 20 h/day — two ten-hour shifts. Where a machine
+has been inspected twice its hour meter has told us what it actually does, and it is
+scheduled on **its own** rate instead, so a light vehicle doing eight hours a day is not
+called overdue on a haul truck's calendar. The row says which of the two it used. And
+where two undercarriage readings have forecast a condemn limit, that forecast wins when
+it is sooner than the interval — a machine whose worst point reaches its limit in 300
+hours is due in 300 hours, whatever the schedule says.
+
+A round that is due and not walked is not the same as a round nobody noticed. The phone
+asks for a reason and a date, writes it to `_meta/deferrals/`, and the dashboard's **Due &
+missed** tab shows it on the row — so *"nobody has been to this machine"* and *"this
+machine is in the workshop until Friday"* are two different counts instead of one red
+line. The reason expires by being answered: once the round is actually recorded, it stops
+excusing the machine, and nothing is deleted for that to be true.
+
 > Prefer Void to Delete. Inspection photos are evidence for warranty claims and failure
 > investigations. Delete is for test records and mistakes that should never have existed —
 > and it needs a password that is deliberately **not** the one the phones carry, because

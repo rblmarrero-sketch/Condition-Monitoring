@@ -199,6 +199,34 @@ type the unit number to confirm.
 > have with no answer. Delete is for test records and mistakes that should never have
 > existed.
 
+### What was due, and what was missed
+
+The phone works out what is due from `mobile/due.js` — hours, not days, because a
+machine parked for three weeks has not worn. When an inspector decides not to walk a
+round that is due, the app makes them say why, and that reason is written to
+`_meta/deferrals/<UNIT>_<TYPE>.defer.json`:
+
+```json
+{ "u": "DZ001", "t": "UC", "until": "2026-09-05",
+  "why": "on a low-loader to the workshop",
+  "by": "S. Volkov", "at": "2026-08-25" }
+```
+
+One file per unit and round — a machine put off twice is one deferral in two states, and
+the later statement is the one that stands. The dashboard's **Due & missed** tab reads
+them on the same pull as everything else and shows the reason on the row that would
+otherwise just be red.
+
+A reason expires by being answered, not by being deleted: once a round of that type is
+actually recorded with a later date than `at`, the deferral stops excusing the machine
+and the row goes back to being counted. Nothing is removed for that to happen, so the
+record of who put what off, and why, survives.
+
+That is what makes the two counts on the tab different questions. **Past due** is
+machines nobody has been to and nobody has explained. **Put off** is a decision somebody
+made and signed. A planner needs those separated; a folder full of inspections cannot
+separate them.
+
 ### What the rest of the team has uploaded
 
 The phones read that same endpoint, so every inspector sees the whole team's work, not

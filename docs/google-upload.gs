@@ -655,7 +655,7 @@ function readIndex_(p) {
     var mR = metaSince_(since);
     return { ok: true, v: INDEX_V, at: at, needsRebuild: true,
              records: [], rows: [], edits: mR.edits, conflicts: mR.conflicts,
-             deleted: mR.deleted };
+             deleted: mR.deleted, deferrals: mR.deferrals };
   }
 
   var root = rootFolder_();
@@ -674,7 +674,7 @@ function readIndex_(p) {
     var m0 = metaSince_(since);
     return { ok: true, v: INDEX_V, at: at, empty: true,
              records: [], rows: [], edits: m0.edits, conflicts: m0.conflicts,
-             deleted: m0.deleted };
+             deleted: m0.deleted, deferrals: m0.deferrals };
   }
 
   /* Oldest month first, so a reply that has to stop can be resumed from where
@@ -711,6 +711,7 @@ function readIndex_(p) {
   // without them shows figures somebody has already withdrawn.
   var meta = metaSince_(since);
   out.edits = meta.edits; out.conflicts = meta.conflicts; out.deleted = meta.deleted;
+  out.deferrals = meta.deferrals;
   return out;
 }
 
@@ -723,17 +724,21 @@ function readIndex_(p) {
     the summary row aged out of the phone's cache, and the last-done date it had
     already written stayed exactly where it was. */
 function metaSince_(since) {
-  var edits = [], conflicts = [], deleted = [];
+  var edits = [], conflicts = [], deleted = [], deferrals = [];
   var take = function (it) {
     while (it.hasNext()) {
       var f = it.next(), n = f.getName();
-      if (!/\.(edit|conflict|deleted)\.json$/i.test(n)) continue;
+      if (!/\.(edit|conflict|deleted|defer)\.json$/i.test(n)) continue;
       if (since && f.getLastUpdated().getTime() <= since) continue;
       try {
         var j = JSON.parse(f.getBlob().getDataAsString());
-        if (!j || !j.key) continue;
+        /* A deferral is keyed by unit and round, not by a round key — it is
+           about a round that has not happened and so has none. */
+        if (!j || (!j.key && !(j.u && j.t))) continue;
         if (/\.conflict\.json$/i.test(n)) conflicts.push(j);
         else if (/\.deleted\.json$/i.test(n)) deleted.push({ key: j.key, by: j.by || '', at: j.at || '' });
+        else if (/\.defer\.json$/i.test(n)) deferrals.push({ u: j.u, t: j.t, until: j.until || null,
+          why: j.why || '', by: j.by || '', at: j.at || '' });
         else edits.push(j);
       } catch (err) { /* skip */ }
     }
@@ -744,7 +749,9 @@ function metaSince_(since) {
      per key would lose the earlier one. A reader that lists only _meta itself
      finds none of them — which is exactly how this shipped not working. */
   try { take(folderPath_(rootFolder_(), META_DIR + '/deletions').getFiles()); } catch (err) { /* none yet */ }
-  return { edits: edits, conflicts: conflicts, deleted: deleted };
+  /* The phones file theirs here — see syncDefer() in the app. */
+  try { take(folderPath_(rootFolder_(), META_DIR + '/deferrals').getFiles()); } catch (err) { /* none yet */ }
+  return { edits: edits, conflicts: conflicts, deleted: deleted, deferrals: deferrals };
 }
 
 /* Build the index for a folder that predates it.
@@ -878,7 +885,8 @@ function readRecords_(p) {
            f.path.indexOf(INDEX_DIR + '/') !== 0;
   }).sort(function (a, b) { return a.updated - b.updated; });
 
-  var records = [], edits = [], conflicts = [], deleted = [], read = 0, bad = 0, truncated = false;
+  var records = [], edits = [], conflicts = [], deleted = [], deferrals = [],
+      read = 0, bad = 0, truncated = false;
   var cursor = after;
   for (var i = 0; i < sidecars.length; i++) {
     if (read >= max || new Date().getTime() - started > TIME_BUDGET_MS) { truncated = true; break; }
@@ -889,6 +897,13 @@ function readRecords_(p) {
         if (j && j.key) edits.push(j);
       } else if (/\.conflict\.json$/i.test(f.name) || (j && j.type === 'cm-record-conflict')) {
         if (j && j.key) conflicts.push(j);
+      } else if (/\.defer\.json$/i.test(f.name) || (j && j.type === 'cm-round-deferred')) {
+        /* A round somebody decided NOT to walk, and why. Not a record — the
+           round did not happen — and not a correction either. It is the other
+           half of the due list: without it the office sees a machine that is
+           overdue and cannot tell "nobody went" from "it was on a low-loader". */
+        if (j && j.u && j.t) deferrals.push({ u: j.u, t: j.t, until: j.until || null,
+          why: j.why || '', by: j.by || '', at: j.at || '' });
       } else if (/\.deleted\.json$/i.test(f.name) || (j && j.type === 'cm-record-deleted')) {
         /* The round was deleted from the office. Its files are already gone, so
            this marker is the only thing left that says so — and a phone that
@@ -906,7 +921,7 @@ function readRecords_(p) {
   }
 
   var out = { ok: true, records: records, edits: edits, conflicts: conflicts,
-              deleted: deleted, read: read, failed: bad,
+              deleted: deleted, deferrals: deferrals, read: read, failed: bad,
               pending: Math.max(0, sidecars.length - read - bad),
               truncated: truncated, cursor: cursor, files: all.length,
               photos: all.filter(function (f) { return MEDIA_RE.test(f.name); }).length };

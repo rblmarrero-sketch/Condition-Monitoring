@@ -159,6 +159,30 @@
   table.grid td{border-bottom:1px solid var(--border);padding:8px 6px;vertical-align:top;}
   table.grid tr:hover td{background:var(--surface-2);}
   .tblwrap{overflow-x:auto;max-width:100%;min-width:0;}
+  /* The due tab's own controls. Inline label + control rather than the stacked
+     .field the global bar uses: this row sits inside a section under a
+     paragraph of prose, and a second column of uppercase eyebrow labels there
+     reads as a second filter bar rather than as this section's own. */
+  /* `.row` in this page is a block, not a flex utility — laying the controls out
+     on it left every label on its own line the moment .fld became a flex box.
+     The bar owns its own layout instead of borrowing one that means something
+     else here. */
+  .ddbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin:10px 0 16px;}
+  .fld{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--ink-2);}
+  .fld select,.fld input[type=search]{min-width:0;padding:7px 10px;font-size:13px;}
+  .fld select{min-width:150px;} .fld input[type=search]{width:140px;}
+  /* Due & missed — the state a row is in, carried by a left edge rather than a
+     wash across the whole row. A tint behind twelve columns makes the numbers
+     harder to read, which is the opposite of what a red row is for; the stripe
+     is visible at a glance down the left margin and never sits under text.
+     Colour is never the only signal: every row also says its state in words in
+     the Due and Why columns. */
+  table.grid tr.dd-over td:first-child{box-shadow:inset 3px 0 0 var(--critical);}
+  table.grid tr.dd-soon td:first-child{box-shadow:inset 3px 0 0 var(--warning);}
+  table.grid tr.dd-put  td:first-child{box-shadow:inset 3px 0 0 var(--accent);}
+  table.grid tr.dd-off  td:first-child{box-shadow:inset 3px 0 0 var(--none);}
+  /* Put off on purpose is not a failure, and should not shout like one. */
+  table.grid tr.dd-put td,table.grid tr.dd-off td{color:var(--ink-2);}
   /* Background refresh: a breathing chip while it asks, a line that fades when
      something arrived. Neither takes a click to dismiss — news this small does
      not deserve a dialog. */
@@ -1167,6 +1191,7 @@
   <button data-tab="failure" data-i18n="tab_failure">Failure modes</button>
   <button data-tab="wear" data-i18n="tab_wear">Wear &amp; life</button>
   <button data-tab="actions" data-i18n="tab_actions">Action register</button>
+  <button data-tab="due" data-i18n="tab_due">Due &amp; missed</button>
   <button data-tab="equipment" data-i18n="tab_equipment">Equipment history</button>
   <button data-tab="lube" data-i18n="tab_lube">Lubrication</button>
   <button data-tab="reports" data-i18n="tab_reports">Reports</button>
@@ -1302,7 +1327,34 @@
       <div id="history"></div>
     </div>
   </section>
-</main>
+
+  <!-- What is due, and what was missed.
+
+       The phone has always known this and the office never has. A folder can
+       say when a machine was last inspected; it cannot say whether the reason
+       nobody went last week was that the machine was on a low-loader or that
+       nobody read the list. Both halves are here: the schedule, computed from
+       the same due.js the phones use, and the reasons the inspectors gave. -->
+  <section id="tab-due" class="hidden">
+    <div class="kpis" id="dueKpis"></div>
+    <div class="section">
+      <h2 data-i18n="dd_title">Every round, against the clock it is scheduled on</h2>
+      <div class="sub" data-i18n="dd_sub">Hours, not days — a machine parked for three weeks has not worn. Each row is one unit and one round, counted from the last one recorded anywhere in the system and at the machine's own operating rate where two hour-meter readings have measured it. A round somebody chose not to walk says so, with the reason they gave.</div>
+      <div class="ddbar">
+        <label class="fld"><span data-i18n="dd_round">Round</span><select id="ddType"></select></label>
+        <label class="fld"><span data-i18n="dd_show">Show</span><select id="ddScope">
+          <option value="over" data-i18n="dd_missed">Missed</option>
+          <option value="due" data-i18n="dd_due">Missed &amp; due soon</option>
+          <option value="put" data-i18n="dd_put">Put off, with a reason</option>
+          <option value="all" data-i18n="dd_all">Everything with history</option>
+        </select></label>
+        <label class="fld"><span data-i18n="dd_find">Unit</span>
+          <input id="ddQ" type="search" data-i18n-ph="dd_findph" placeholder="unit number"></label>
+        <button class="btn ghost" id="ddCsv" data-i18n="dd_csv">Export CSV</button>
+      </div>
+      <div id="ddList"></div>
+    </div>
+  </section>
 
   <section id="tab-lube" class="hidden">
     <div class="kpis" id="lubeKpis"></div>
@@ -1405,6 +1457,7 @@
       <div class="sub" style="margin-top:14px" data-i18n="r_hint">Photos and supervisor signatures come from whichever data source is loaded.</div>
     </div>
   </section>
+</main>
 
 <div class="lb" id="lb"><button class="x" id="lbx">&times;</button>
   <button class="nav prev" id="lbPrev" aria-label="Previous">&#8249;</button>
@@ -1420,26 +1473,26 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=154"></script>
-<script src="../mobile/hme.js?v=154"></script>
-<script src="../mobile/mp-fc.js?v=154"></script>
-<script src="../mobile/hme-cascade.js?v=154"></script>
-<script src="../mobile/temp-limits.js?v=154"></script>
+<script src="../data/magnetic_plug.js?v=155"></script>
+<script src="../mobile/hme.js?v=155"></script>
+<script src="../mobile/mp-fc.js?v=155"></script>
+<script src="../mobile/hme-cascade.js?v=155"></script>
+<script src="../mobile/temp-limits.js?v=155"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=154"></script>
-<script src="../mobile/due.js?v=154"></script>
-<script src="../mobile/wear.js?v=154"></script>
-<script src="../mobile/wear-map.js?v=154"></script>
-<script src="../mobile/lube.js?v=154"></script>
-<script src="../mobile/lube-overrides.js?v=154"></script>
-<script src="../mobile/lube2027.js?v=154"></script>
-<script src="../mobile/lube-tds.js?v=154"></script>
+<script src="../mobile/assets.js?v=155"></script>
+<script src="../mobile/due.js?v=155"></script>
+<script src="../mobile/wear.js?v=155"></script>
+<script src="../mobile/wear-map.js?v=155"></script>
+<script src="../mobile/lube.js?v=155"></script>
+<script src="../mobile/lube-overrides.js?v=155"></script>
+<script src="../mobile/lube2027.js?v=155"></script>
+<script src="../mobile/lube-tds.js?v=155"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=154"></script>
-<script src="../mobile/machine-photos.js?v=154"></script>
+<script src="../mobile/upload-defaults.js?v=155"></script>
+<script src="../mobile/machine-photos.js?v=155"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -1448,16 +1501,16 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=154"></script>
-<script src="../mobile/get.js?v=154"></script>
-<script src="../mobile/uc-points.js?v=154"></script>
-<script src="../mobile/inspect-guide.js?v=154"></script>
-<script src="../mobile/get-figs.js?v=154"></script>
-<script src="../mobile/body-points.js?v=154"></script>
-<script src="../mobile/body-map.js?v=154"></script>
-<script src="../mobile/jspdf.umd.min.js?v=154"></script>
-<script src="../mobile/html2canvas.min.js?v=154"></script>
-<script src="../mobile/report-core.js?v=154"></script>
+<script src="../mobile/machine-fig.js?v=155"></script>
+<script src="../mobile/get.js?v=155"></script>
+<script src="../mobile/uc-points.js?v=155"></script>
+<script src="../mobile/inspect-guide.js?v=155"></script>
+<script src="../mobile/get-figs.js?v=155"></script>
+<script src="../mobile/body-points.js?v=155"></script>
+<script src="../mobile/body-map.js?v=155"></script>
+<script src="../mobile/jspdf.umd.min.js?v=155"></script>
+<script src="../mobile/html2canvas.min.js?v=155"></script>
+<script src="../mobile/report-core.js?v=155"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -1865,6 +1918,27 @@ const I18N={
   fold_fail:"Could not read that folder: {e}",
   month_insp:"{m} · {n} inspection(s)",
   hist_none:"No inspections recorded.",
+  /* Due & missed. The wording is deliberately about PEOPLE and MACHINES, not
+     about records: an office reading "12 rows in state over" learns nothing,
+     and an office reading "12 machines nobody has been to" acts. */
+  tab_due:"Due & missed",
+  dd_title:"Every round, against the clock it is scheduled on",
+  dd_sub:"Hours, not days — a machine parked for three weeks has not worn. Each row is one unit and one round, counted from the last one recorded anywhere in the system and at the machine's own operating rate where two hour-meter readings have measured it. A round somebody chose not to walk says so, with the reason they gave.",
+  dd_round:"Round", dd_show:"Show", dd_find:"Unit", dd_findph:"unit number",
+  dd_missed:"Missed", dd_due:"Missed & due soon",
+  dd_put:"Put off, with a reason", dd_all:"Everything with history",
+  dd_all_rounds:"All rounds", dd_csv:"Export CSV",
+  dd_k_missed:"Past due", dd_k_missed_s:"of {n} unit-rounds with history",
+  dd_k_soon:"Due soon", dd_k_soon_s:"inside the last fifth of the interval",
+  dd_k_put:"Put off", dd_k_put_s:"deferred by an inspector, reason recorded",
+  dd_k_why:"Explained", dd_k_why_s:"of {n} past due carry a reason",
+  dd_none:"Nothing in this view.",
+  dd_c_unit:"Unit", dd_c_round:"Round", dd_c_last:"Last done",
+  dd_c_due:"Due", dd_c_rate:"h/day", dd_c_why:"Why it was not walked",
+  dd_put_to:"put off to {d}", dd_not_doing:"not being done",
+  dd_foot:"h/day is the machine's own measured rate; * marks the fleet assumption of {r} h/day, used until two hour-meter readings have measured that machine. \u201cDue\u201d counts hours, and the days beside it are those hours at that rate.",
+  due_over:"overdue {n} d", due_in:"in {n} d", due_h:"{n} h", due_days:"{n} d ago",
+  due_why_wear:"wear, not the interval",
  },
  ru:{
   sub:"Панель парка", srcnone:"Нет данных — нажмите, чтобы подключить",
@@ -2218,6 +2292,24 @@ const I18N={
   fold_fail:"Не удалось прочитать папку: {e}",
   month_insp:"{m} · осмотров: {n}",
   hist_none:"Осмотры не записаны.",
+  tab_due:"Срок и пропуски",
+  dd_title:"Каждый обход — по тому счётчику, на котором он назначен",
+  dd_sub:"Часы, а не дни: машина, простоявшая три недели, не износилась. Строка — это одна единица и один обход, отсчитанный от последнего, записанного где угодно в системе, и по собственной наработке машины, если её измерили два показания счётчика. Если обход решили не делать — здесь написано, почему.",
+  dd_round:"Обход", dd_show:"Показать", dd_find:"Единица", dd_findph:"номер единицы",
+  dd_missed:"Пропущено", dd_due:"Пропущено и скоро",
+  dd_put:"Отложено с причиной", dd_all:"Всё, где есть история",
+  dd_all_rounds:"Все обходы", dd_csv:"Выгрузить CSV",
+  dd_k_missed:"Просрочено", dd_k_missed_s:"из {n} пар «единица — обход» с историей",
+  dd_k_soon:"Скоро срок", dd_k_soon_s:"в последней пятой части интервала",
+  dd_k_put:"Отложено", dd_k_put_s:"отложено инспектором, причина записана",
+  dd_k_why:"С причиной", dd_k_why_s:"из {n} просроченных объяснены",
+  dd_none:"В этом представлении пусто.",
+  dd_c_unit:"Единица", dd_c_round:"Обход", dd_c_last:"Последний раз",
+  dd_c_due:"Срок", dd_c_rate:"ч/сут", dd_c_why:"Почему не сделан",
+  dd_put_to:"отложено до {d}", dd_not_doing:"не выполняется",
+  dd_foot:"ч/сут — собственная измеренная наработка машины; * означает допущение по парку в {r} ч/сут, которое действует, пока машину не измерили два показания счётчика. «Срок» считается в часах, дни рядом — это те же часы при этой наработке.",
+  due_over:"просрочено {n} дн.", due_in:"через {n} дн.", due_h:"{n} ч", due_days:"{n} дн. назад",
+  due_why_wear:"по износу, не по интервалу",
  },
 };
 let lang=localStorage.getItem("cm_dash_lang")||"en";
@@ -2397,6 +2489,15 @@ let edits=asMap(ESTORE);
    same day and both versions are in Drive. Keyed the same way, and holding the
    device chosen once somebody here has decided. */
 let conflicts=asMap(CSTORE);
+/* Rounds an inspector decided NOT to walk, and why — keyed UNIT|TYPE.
+
+   The other half of the due list, and the half that only a person can supply.
+   The folder can say when a machine was last inspected; it cannot say whether
+   the reason nobody went last week was that it was on a low-loader or that
+   nobody looked at the list. Without these the office sees an overdue machine
+   and has to go and ask. */
+const FSTORE="cm_dash_defer";
+let deferrals=asMap(FSTORE);
 let RECS=[];
 /* Two different things, deliberately not merged.
 
@@ -2530,6 +2631,11 @@ function saveEdits(){
   try{ localStorage.setItem(ESTORE,JSON.stringify(edits)); }
   catch(e){ localStorage.removeItem("cm_drive_cursor");   // re-read them next time
             console.warn("Edit cache too big for localStorage."); }
+}
+function saveDefer(){
+  try{ localStorage.setItem(FSTORE,JSON.stringify(deferrals)); }
+  catch(e){ localStorage.removeItem("cm_drive_cursor");
+            console.warn("Deferral cache too big for localStorage."); }
 }
 
 /* ---------- filters ---------- */
@@ -3209,6 +3315,17 @@ window.CMDash={
     saveEdits(); rebuild(); refreshControls(); renderAll(); refreshSources();
   },
   editCount(){ return Object.keys(edits).length; },
+  setDeferrals(list,opts){
+    if(opts&&opts.replace) deferrals={};
+    /* One per unit and round. A machine put off twice is one deferral in two
+       states, and the later statement is the one that stands. */
+    (list||[]).forEach(d=>{ if(!d||!d.u||!d.t) return;
+      const k=(d.t+"|"+String(d.u).toUpperCase());
+      const cur=deferrals[k];
+      if(!cur || String(d.at||"")>=String(cur.at||"")) deferrals[k]=d; });
+    saveDefer(); rebuild(); refreshControls(); renderAll(); refreshSources();
+  },
+  deferrals(){ return deferrals; },
   setConflicts(list,opts){
     if(opts&&opts.replace) conflicts={};
     (list||[]).forEach(c=>{ if(!c||!c.key) return;
@@ -4429,6 +4546,17 @@ function showTab(t){
   const tabs=[...$("tabs").querySelectorAll("button[data-tab]")].map(b=>b.dataset.tab);
   tabs.forEach(x=>{ const s=$("tab-"+x); if(s) s.classList.toggle("hidden", x!==t); });
   $("tabs").querySelectorAll("button").forEach(b=>b.classList.toggle("active",b.dataset.tab===t));
+  /* The bar at the top narrows the RECORDS being analysed — a type, a class, a
+     period. The due list is not about records, it is about the fleet as it
+     stands now, and a period filter applied to it would be actively wrong: a
+     round walked 60 days ago, excluded by a 30-day window, would make a
+     machine that IS up to date look like one nobody has ever been to. So the
+     tab carries its own controls and the global bar is put away while it is
+     open, rather than sitting there inert above a list it does not touch. */
+  const own = t==="due";
+  const bar = document.querySelector("main > .controls");
+  if(bar) bar.classList.toggle("hidden", own);
+  if($("chips")) $("chips").classList.toggle("hidden", own);
 }
 $("tabs").onclick=e=>{ const b=e.target.closest("button[data-tab]"); if(b) showTab(b.dataset.tab); };
 
@@ -5647,6 +5775,153 @@ function lubePrint(){
   setTimeout(done, 3000);
 }
 
+/* ---------- what is due, and what was missed ----------------------------
+   The same arithmetic the phones run, on the same file — due.js — so the office
+   and the pit cannot disagree about whether a machine is overdue. That matters
+   more than it sounds: two schedules is how a fitter gets told off for missing
+   a round that was never due.
+
+   Last done comes from every round in the system, not from one phone. The rate
+   is the machine's own where two hour-meter readings have measured it, and the
+   fleet assumption where they have not — and the row says which, because "due
+   in 3 days" computed at 20 h/day for a light vehicle doing eight is a number
+   somebody will plan around and should not.
+
+   And a round nobody walked is not the same as a round nobody could walk. The
+   inspectors' reasons arrive on the same read as everything else and sit on the
+   row that would otherwise just be red. */
+function dueTabRows(){
+  const last={}, out=[];
+  RECS.forEach(r=>{
+    if(!r || r._void || !r.equip || !r.date) return;
+    const k=(r.type||"MP")+"|"+String(r.equip).toUpperCase();
+    const cur=last[k];
+    if(!cur || String(r.date)>String(cur.d)) last[k]={d:r.date, h:r.smu};
+  });
+  /* Two hour-meter readings on one machine measure what it actually does. */
+  const trail={};
+  RECS.forEach(r=>{ if(!r || r._void || !r.equip || !r.date) return;
+    if(r.smu==null || r.smu==="") return;
+    const u=String(r.equip).toUpperCase();
+    (trail[u]=trail[u]||[]).push({d:r.date, h:r.smu}); });
+  const today=new Date().toISOString().slice(0,10);
+  Object.keys(last).forEach(k=>{
+    const [ty,unit]=k.split("|");
+    const rate=window.DUE ? DUE.rateFrom(trail[unit]||[]) : null;
+    const n=window.DUE ? DUE.next({type:ty, last:last[k], today, rate}) : null;
+    if(!n) return;
+    const iv=DUE.hours(ty)||Math.round(DUE.spec(ty).d*n.rate);
+    const soonH=Math.max(20, Math.round(iv*0.2));
+    const d=deferrals[k];
+    /* A deferral is answered by a round of that type walked after it. Nothing
+       is deleted for it to stop being true. */
+    const live = d && String(d.at||"") >= String(last[k].d||"");
+    let st = n.over ? "over" : (n.dueInHours<=soonH ? "soon" : "ok");
+    if(live && d.until){ const left=DUE.dayDiff(today, d.until);
+      if(left!=null && left>0) st="put"; }
+    else if(live) st="off";
+    /* `late` is the arithmetic and `st` is the judgement. A machine past its
+       interval that somebody put off is still past its interval — it is just
+       not a machine anybody missed. Keeping both means the tiles can say "2
+       missed" and "1 of 3 past due carries a reason" without one of the two
+       being a lie about the other. */
+    out.push({ty, unit, last:last[k], n, d:live?d:null, st, late:!!n.over});
+  });
+  out.sort((a,b)=>a.n.dueInHours-b.n.dueInHours || a.unit.localeCompare(b.unit)
+                || a.ty.localeCompare(b.ty));
+  return out;
+}
+function renderDueTab(){
+  const box=$("ddList"); if(!box) return;
+  const sel=$("ddType");
+  if(sel && !sel.options.length){
+    sel.innerHTML=`<option value="">${esc(t("dd_all_rounds"))}</option>`
+      + TYPE_ORDER.map(k=>`<option value="${esc(k)}">${esc(k)} · ${esc(t("type_"+k))}</option>`).join("");
+  }
+  const only=sel?sel.value:"";
+  const scope=($("ddScope")||{}).value||"over";
+  const q=(($("ddQ")||{}).value||"").trim().toUpperCase();
+  const all=dueTabRows().filter(r=>(!only || r.ty===only) && (!q || r.unit.indexOf(q)>=0));
+  const nOver=all.filter(r=>r.st==="over").length;
+  const nSoon=all.filter(r=>r.st==="soon").length;
+  const nPut =all.filter(r=>r.st==="put").length;
+  const nOff =all.filter(r=>r.st==="off").length;
+  const nLate=all.filter(r=>r.late).length;
+  const withWhy=all.filter(r=>r.late&&r.d).length;
+  /* Each tile is also the filter for what it counts. A number somebody wants to
+     act on should be one press from the list behind it, not a number they then
+     have to go and reproduce in a dropdown. */
+  const card=(sc,lab,val,sub,cls)=>
+    `<button type="button" class="kpi ${cls||""}${scope===sc?" on":""}" data-dd="${esc(sc)}">
+       <span class="k">${esc(lab)}</span><span class="v">${esc(String(val))}</span>
+       <span class="s">${esc(sub)}</span></button>`;
+  $("dueKpis").innerHTML=
+      card("over", t("dd_k_missed"), nOver, t("dd_k_missed_s",{n:all.length}), "bad"+(nOver?"":" zero"))
+    + card("due",  t("dd_k_soon"),   nSoon, t("dd_k_soon_s"),  "warn"+(nSoon?"":" zero"))
+    + card("put",  t("dd_k_put"),    nPut+nOff, t("dd_k_put_s"), "info"+(nPut+nOff?"":" zero"))
+    /* Not a filter: it counts the same rows the first tile does, and two tiles
+       that lead to one list is a tile nobody presses twice. */
+    + `<div class="kpi ${withWhy>=nLate?"good":"warn"}"><span class="k">${esc(t("dd_k_why"))}</span>
+        <span class="v">${withWhy}</span>
+        <span class="s">${esc(t("dd_k_why_s",{n:nLate}))}</span></div>`;
+  $("dueKpis").querySelectorAll("[data-dd]").forEach(b=>b.onclick=()=>{
+    if($("ddScope")) $("ddScope").value=b.dataset.dd;
+    renderDueTab();
+  });
+  const show = scope==="all" ? all
+             : scope==="put" ? all.filter(r=>r.st==="put"||r.st==="off")
+             : scope==="due" ? all.filter(r=>r.st==="over"||r.st==="soon")
+             : all.filter(r=>r.st==="over");
+  if(!show.length){ box.innerHTML=`<div class="sub">${esc(t("dd_none"))}</div>`; return; }
+  const num=n=>Math.abs(n).toLocaleString(lang==="ru"?"ru-RU":"en-GB");
+  box.innerHTML=`<div class="tblwrap"><table class="grid"><thead><tr>
+    <th>${esc(t("dd_c_unit"))}</th><th>${esc(t("dd_c_round"))}</th><th>${esc(t("dd_c_last"))}</th>
+    <th class="r">${esc(t("dd_c_due"))}</th><th class="r">${esc(t("dd_c_rate"))}</th>
+    <th>${esc(t("dd_c_why"))}</th></tr></thead><tbody>`
+    + show.slice(0,500).map(r=>{
+      const n=r.n;
+      const when = n.over ? `<b style="color:var(--critical)">${esc(t("due_over",{n:num(n.dueInDays)}))}</b>`
+                          : esc(t("due_in",{n:num(n.dueInDays)}));
+      const why = r.d
+        ? `${esc(r.d.until?t("dd_put_to",{d:r.d.until}):t("dd_not_doing"))} — ${esc(r.d.why||"")}${
+            r.d.by?` <span class="muted">· ${esc(r.d.by)}</span>`:""}`
+        : (n.why==="wear" ? `<span class="muted">${esc(t("due_why_wear"))}</span>` : "");
+      return `<tr class="dd-${esc(r.st)}">
+        <td><b>${esc(r.unit)}</b></td>
+        <td>${esc(r.ty)} · <span class="muted">${esc(t("type_"+r.ty)||r.ty)}</span></td>
+        <td>${esc(r.last.d)} <span class="muted">· ${esc(t("due_days",{n:num(n.daysSince)}))}</span></td>
+        <td class="r">${when}<span class="muted"> · ${esc(t("due_h",{n:num(n.dueInHours)}))}</span></td>
+        <td class="r">${n.rate}${n.measured?"":"*"}</td>
+        <td>${why}</td></tr>`; }).join("")
+    + `</tbody></table></div><div class="sub" style="margin-top:8px">${esc(t("dd_foot",{r:DUE.HOURS_PER_DAY}))}</div>`;
+}
+/* The sheet somebody takes to the planning meeting has to be the list they were
+   looking at when they pressed the button. An export that quietly widens back
+   to the whole fleet is how a filtered screen becomes an unfiltered spreadsheet
+   with nobody noticing. */
+function dueCsv(){
+  const rows=[["unit","round","last_done","days_since","due_in_days","due_in_hours",
+               "rate_h_per_day","rate_measured","state","reason","reason_by","put_off_to"]];
+  const only=($("ddType")||{}).value||"";
+  const q=(($("ddQ")||{}).value||"").trim().toUpperCase();
+  const scope=($("ddScope")||{}).value||"over";
+  dueTabRows()
+    .filter(r=>(!only || r.ty===only) && (!q || r.unit.indexOf(q)>=0))
+    .filter(r=> scope==="all" ? true
+              : scope==="put" ? (r.st==="put"||r.st==="off")
+              : scope==="due" ? (r.st==="over"||r.st==="soon")
+              : r.st==="over")
+    .forEach(r=>rows.push([r.unit, r.ty, r.last.d, r.n.daysSince, r.n.dueInDays,
+    r.n.dueInHours, r.n.rate, r.n.measured?1:0, r.st,
+    (r.d&&r.d.why)||"", (r.d&&r.d.by)||"", (r.d&&r.d.until)||""]));
+  const csv=rows.map(r=>r.map(v=>{ const x=String(v==null?"":v);
+    return /[",\n]/.test(x) ? '"'+x.replace(/"/g,'""')+'"' : x; }).join(",")).join("\n");
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"}));
+  a.download="due-and-missed.csv"; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+}
+
 function renderLubeTab(){
   if(lubeShow === null) lubeShow = lubeBiggestClass();
   /* The class filter, built from what the reference actually covers so a chip
@@ -5671,7 +5946,7 @@ function renderLubeTab(){
   renderLubePoster();
 }
 
-function renderAll(){ renderChips(); renderKpis(); renderCoverage(); renderTrend(); renderFleet(); renderFailure(); renderWearTab(); renderActions(); renderHistory(); renderLubeTab(); }
+function renderAll(){ renderChips(); renderKpis(); renderCoverage(); renderTrend(); renderFleet(); renderFailure(); renderWearTab(); renderActions(); renderHistory(); renderLubeTab(); renderDueTab(); }
 ["fType","fClass","fRange"].forEach(id=>$(id).onchange=renderAll);
 let qTimer=null;
 $("fQ").oninput=()=>{ clearTimeout(qTimer); qTimer=setTimeout(renderAll,180); };   // debounce, the fleet table is big
@@ -5680,6 +5955,9 @@ document.addEventListener("keydown",e=>{
   if(e.key==="Escape"&&document.activeElement===$("fQ")){ $("fQ").value=""; renderAll(); $("fQ").blur(); }
 });
 $("equipSel").onchange=renderHistory;
+$("ddType").onchange=renderDueTab; $("ddScope").onchange=renderDueTab;
+$("ddQ").oninput=renderDueTab;
+$("ddCsv").onclick=dueCsv;
 $("wBand").onchange=renderWearTab;
 $("follX").onclick=closeFollow;
 $("follSave").onclick=saveFollow;
@@ -5713,8 +5991,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=154"></script>
-<script src="sync-adapter.js?v=154"></script>
-<script src="report.js?v=154"></script>
+<script src="drive.js?v=155"></script>
+<script src="sync-adapter.js?v=155"></script>
+<script src="report.js?v=155"></script>
 </body>
 </html>

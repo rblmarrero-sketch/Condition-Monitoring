@@ -181,7 +181,7 @@
   async function loadViaIndex(onProgress, opts) {
     const say = (m) => onProgress && onProgress(m);
     let at = opts.full ? 0 : cursor();
-    const recs = [], eds = [], cons = [];
+    const recs = [], eds = [], cons = [], defs = [];
     let pages = 0, shards = 0;
     for (;;) {
       const r = await api({ action: "index", since: at });
@@ -191,6 +191,7 @@
       (r.records || []).forEach(x => recs.push(x));
       (r.edits || []).forEach(x => eds.push(x));
       (r.conflicts || []).forEach(x => cons.push(x));
+      (r.deferrals || []).forEach(x => defs.push(x));
       shards = r.shards || shards;
       if (r.upToDate) { at = r.at || at; break; }
       if (!r.truncated) { at = r.at || at; break; }
@@ -204,6 +205,10 @@
     if (recs.length || opts.full) window.CMDash.setDriveRecords(recs, { replace: !!opts.full });
     if (eds.length || opts.full) window.CMDash.setEdits(eds, { replace: !!opts.full });
     if (cons.length || opts.full) window.CMDash.setConflicts(cons, { replace: !!opts.full });
+    /* Rounds nobody walked, and why. They arrive on the same read as the
+       corrections because they are the same kind of thing: something somebody
+       said ABOUT a round, filed beside it rather than inside it. */
+    if (defs.length || opts.full) window.CMDash.setDeferrals(defs, { replace: !!opts.full });
     try { localStorage.setItem(LS_CUR, String(at)); } catch (e) {}
     return { records: recs.length, edits: eds.length, conflicts: cons.length,
              held: window.CMDash.driveCount(), shards, pages, viaIndex: true,
@@ -255,7 +260,7 @@
     let at = opts.full ? 0 : cursor();
     say(resuming ? "Checking Drive for new inspections…" : "Reading inspections from Drive…");
 
-    const recs = [], eds = [], cons = [];
+    const recs = [], eds = [], cons = [], defs = [];
     let pages = 0, failed = 0, files = 0, photos = 0, truncated = false, pending = 0;
 
     try {
@@ -266,6 +271,7 @@
         (r.records || []).forEach(x => recs.push(x));
         (r.edits || []).forEach(x => eds.push(x));
         (r.conflicts || []).forEach(x => cons.push(x));
+        (r.deferrals || []).forEach(x => defs.push(x));
         (r.index || []).forEach(f => { index[f.name] = { id: f.id, size: f.size }; });
         failed += r.failed || 0;
         files = r.files || files;
@@ -288,6 +294,10 @@
     if (recs.length || opts.full) window.CMDash.setDriveRecords(recs, { replace: !!opts.full });
     if (eds.length || opts.full) window.CMDash.setEdits(eds, { replace: !!opts.full });
     if (cons.length || opts.full) window.CMDash.setConflicts(cons, { replace: !!opts.full });
+    /* Rounds nobody walked, and why. They arrive on the same read as the
+       corrections because they are the same kind of thing: something somebody
+       said ABOUT a round, filed beside it rather than inside it. */
+    if (defs.length || opts.full) window.CMDash.setDeferrals(defs, { replace: !!opts.full });
     try { localStorage.setItem(LS_CUR, String(at)); } catch (e) {}
 
     const held = window.CMDash.driveCount();

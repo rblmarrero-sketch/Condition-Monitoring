@@ -203,7 +203,7 @@ async function readRecords(p) {
   const cars = all.filter(f => /\.json$/i.test(f.name) && f.updated > after
                             && f.path.indexOf(INDEX_DIR + '/') !== 0)
                   .sort((a, b) => a.updated - b.updated);
-  const records = [], edits = [], conflicts = [], deleted = [];
+  const records = [], edits = [], conflicts = [], deleted = [], deferrals = [];
   let read = 0, bad = 0, truncated = false, cursor = after;
   for (const f of cars) {
     if (read >= max) { truncated = true; break; }
@@ -213,6 +213,13 @@ async function readRecords(p) {
         if (j && j.key) edits.push(j);
       } else if (/\.conflict\.json$/i.test(f.name) || (j && j.type === 'cm-record-conflict')) {
         if (j && j.key) conflicts.push(j);
+      } else if (/\.defer\.json$/i.test(f.name) || (j && j.type === 'cm-round-deferred')) {
+        /* A round somebody decided NOT to walk, and why. Not a record — the
+           round did not happen — and not a correction either. It is the other
+           half of the due list: without it the office sees a machine that is
+           overdue and cannot tell "nobody went" from "it was on a low-loader". */
+        if (j && j.u && j.t) deferrals.push({ u: j.u, t: j.t, until: j.until || null,
+          why: j.why || '', by: j.by || '', at: j.at || '' });
       } else if (/\.deleted\.json$/i.test(f.name) || (j && j.type === 'cm-record-deleted')) {
         /* The round was deleted from the office. The files are already gone —
            this marker is the only thing left that says so, and a phone that
@@ -227,7 +234,7 @@ async function readRecords(p) {
     } catch (e) { bad++; }
     cursor = f.updated;            // advance even on a bad file, or it blocks the queue
   }
-  const out = { ok: true, records, edits, conflicts, deleted, read, failed: bad,
+  const out = { ok: true, records, edits, conflicts, deleted, deferrals, read, failed: bad,
                 pending: Math.max(0, cars.length - read - bad),
                 truncated, cursor, files: all.length,
                 photos: all.filter(f => MEDIA_RE.test(f.name)).length };

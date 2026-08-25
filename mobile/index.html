@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=154">
+<link rel="manifest" href="manifest.webmanifest?v=155">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=154">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=154">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=154">
+<link rel="apple-touch-icon" href="icon-192.png?v=155">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=155">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=155">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1814,29 +1814,29 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=154"></script>
-<script src="upload-defaults.js?v=154"></script>
-<script src="hme.js?v=154"></script>
-<script src="mp-fc.js?v=154"></script>
-<script src="hme-cascade.js?v=154"></script>
-<script src="assets.js?v=154"></script>
-<script src="temp-limits.js?v=154"></script>
-<script src="due.js?v=154"></script>
-<script src="wear.js?v=154"></script>
-<script src="wear-figs.js?v=154"></script>
-<script src="wear-map.js?v=154"></script>
-<script src="machine-photos.js?v=154"></script>
-<script src="machine-fig.js?v=154"></script>
-<script src="get.js?v=154"></script>
-<script src="uc-points.js?v=154"></script>
-<script src="inspect-guide.js?v=154"></script>
-<script src="get-figs.js?v=154"></script>
-<script src="body-points.js?v=154"></script>
-<script src="body-map.js?v=154"></script>
-<script src="lube.js?v=154"></script>
-<script src="lube-overrides.js?v=154"></script>
-<script src="lube2027.js?v=154"></script>
-<script src="report-core.js?v=154"></script>
+<script src="native.js?v=155"></script>
+<script src="upload-defaults.js?v=155"></script>
+<script src="hme.js?v=155"></script>
+<script src="mp-fc.js?v=155"></script>
+<script src="hme-cascade.js?v=155"></script>
+<script src="assets.js?v=155"></script>
+<script src="temp-limits.js?v=155"></script>
+<script src="due.js?v=155"></script>
+<script src="wear.js?v=155"></script>
+<script src="wear-figs.js?v=155"></script>
+<script src="wear-map.js?v=155"></script>
+<script src="machine-photos.js?v=155"></script>
+<script src="machine-fig.js?v=155"></script>
+<script src="get.js?v=155"></script>
+<script src="uc-points.js?v=155"></script>
+<script src="inspect-guide.js?v=155"></script>
+<script src="get-figs.js?v=155"></script>
+<script src="body-points.js?v=155"></script>
+<script src="body-map.js?v=155"></script>
+<script src="lube.js?v=155"></script>
+<script src="lube-overrides.js?v=155"></script>
+<script src="lube2027.js?v=155"></script>
+<script src="report-core.js?v=155"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -6175,7 +6175,8 @@ function deferSave(m){ deferCache=m; try{ localStorage.setItem(DEFER_KEY,JSON.st
 function deferOf(ty,unit){ return deferAll()[ty+"|"+(unit||"").toUpperCase()]||null; }
 function deferPut(ty,unit,d){
   const m=deferAll(); const k=ty+"|"+(unit||"").toUpperCase();
-  if(d) m[k]=d; else delete m[k];
+  /* Written now, sent when there is signal. `up` is what syncDefer() clears. */
+  if(d) m[k]=Object.assign({up:0}, d); else delete m[k];
   deferSave(m);
 }
 /* A round actually walked answers the deferral, whatever it said. */
@@ -8171,7 +8172,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="154";
+const BUILD="155";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -8845,12 +8846,54 @@ async function syncNow(manual){
       if(progressed) consecutive=0;
       else if(errs.length && ++consecutive>=3) break;
     }
+    /* And the rounds that were NOT done. They are a hundred bytes each and they
+       answer the question the whole due list exists for, so they go up with
+       everything else rather than sitting on one phone where nobody but the
+       inspector who wrote them can read them. */
+    try{ await syncDefer(dests); }catch(e){ /* never fails a round's upload */ }
   } finally {
     syncing=false; renderSync(); renderPending(); renderNet();
     // Whatever this phone just pushed, someone else has pushed something too.
     // One request, and it keeps the due list honest across the whole team.
     teamPull(false);
   }
+}
+
+/* ---- the rounds that were not done, sent to the office ------------------
+   A deferral is a statement about a round that has NOT happened, so it cannot
+   travel as one. It goes as its own small marker, one per unit and round, in
+   _meta/deferrals — the same shelf the office's own corrections and deletions
+   sit on, because that is where this folder keeps things said ABOUT rounds
+   rather than rounds themselves.
+
+   One file per unit+round, overwritten. A machine put off twice is one
+   deferral in two states, not two deferrals; and the marker carries the date it
+   was given, so the reading end can tell a live one from a spent one - a
+   deferral is answered by a round of that type walked after it, wherever that
+   round was recorded. Nothing has to be deleted for it to stop being true. */
+async function syncDefer(dests){
+  const m=deferAll(); const keys=Object.keys(m);
+  if(!keys.length || !dests.length) return;
+  let touched=false;
+  for(const k of keys){
+    const d=m[k]; if(!d || d.up) continue;
+    const [ty,unit]=k.split("|");
+    const body={ type:"cm-round-deferred", version:1,
+                 u:unit, t:ty, until:d.until||null, why:d.why||"",
+                 by:d.by||"", at:d.at||todayISO(), dev:DEVICE };
+    const blob=new Blob([JSON.stringify(body,null,2)],{type:"application/json"});
+    const name=`${unit}_${ty}.defer.json`;
+    let all=true;
+    for(const dest of dests){
+      /* A fixed folder, not the destination's own pattern: these are not
+         rounds and must not be filed by month among them. */
+      try{ await putOne(Object.assign({},dest,{folder:"_meta/deferrals"}),
+                        name, blob, "application/json", {dev:DEVICE}); }
+      catch(e){ all=false; }
+    }
+    if(all){ d.up=1; touched=true; }
+  }
+  if(touched) deferSave(m);
 }
 function recToExport(rec){
   // id + rev travel with every record — see the note in buildEntriesJson().
