@@ -142,12 +142,29 @@
      downstream mistakes them for a calipered point with a missing limit. */
   var EXTRA = { ADJUST: 'visual', FRAME: 'visual', SAG: 'mm' };
 
+  /* ...and what they are CALLED. This lived in the phone's own source, so the
+     office had no way to look them up: an adjuster measured on a dozer printed
+     as "ADJUST" on the dashboard's sheet and "Track adjuster / recoil" on the
+     phone's, from the same round. They are not in WEAR - that file is
+     generated from the manufacturers' wear tables and these three are visual
+     checks - so they belong here, beside the walk that offers them, where both
+     surfaces can read them. */
+  var EXTRA_PT = [
+    { code: 'ADJUST', en: 'Track adjuster / recoil', ru: '\u041d\u0430\u0442\u044f\u0436\u0438\u0442\u0435\u043b\u044c / \u0430\u043c\u043e\u0440\u0442\u0438\u0437\u0430\u0442\u043e\u0440' },
+    { code: 'FRAME',  en: 'Track frame / guards',    ru: '\u0420\u0430\u043c\u0430 \u0445\u043e\u0434\u0430 / \u0437\u0430\u0449\u0438\u0442\u0430' },
+    { code: 'SAG',    en: 'Track sag / top chain',   ru: '\u041f\u0440\u043e\u0432\u0438\u0441\u0430\u043d\u0438\u0435 \u0433\u0443\u0441\u0435\u043d\u0438\u0446\u044b' }
+  ];
+  var EXTRA_BY = {};
+  EXTRA_PT.forEach(function (x) { EXTRA_BY[x.code] = x; });
+
   window.UCPTS = {
     labels: LABELS,
     layout: LAYOUT,
     boxFor: boxFor,
     keysFor: keysFor,
     extra: EXTRA,
+    extraPoints: EXTRA_PT,
+    extraPoint: function (code) { return EXTRA_BY[code] || null; },
     label: function (n, lang) {
       var row = LABELS[n - 1];
       return row ? (lang === 'ru' ? row[2] : row[1]) : String(n);

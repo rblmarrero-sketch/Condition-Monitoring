@@ -30,7 +30,7 @@
      gps:{lat,lon}|null, signUrl:""|dataURI, wear:bool, temp:bool,
      items:[{ key, name, code, grade, sev, defect, defectCode, iso,
               cause, action, wo, comment, readings:[str], photos:[url],
-              w:{mm,newMM,condemnMM,pct,band,refSrc,reason,reasonLabel,stood}|null,
+              w:{mm,newMM,condemnMM,pct,band,refSrc,reason,reasonLabel,reasonAlt,stood}|null,
               lube:{product, evid:{en,ru}, samp:bool, want, off:bool}|null }]
    }
    ========================================================================== */
@@ -888,16 +888,36 @@
         }).join("") + '</div>';
   }
 
+  /* Why there is no millimetre here, in the reader's language.
+
+     The host used to hand this over already rendered, in English, whichever
+     language the sheet was in — because the code was resolved at capture and
+     frozen there. Both vocabularies (wear.js for a track frame, body-points.js
+     for a tray) carry en and ru, so both hosts can supply both now and the
+     line reads like the rest of the sheet. */
+  function reasonText(T, w) {
+    if (!w || !w.reason) return esc((w && w.reasonLabel) || "\u2014");
+    return T.both(w.reasonLabel || w.reason, w.reasonAlt || "", "alti");
+  }
+
   function zoneTable(T, zones) {
     if (!zones || !zones.length) return "";
-    return '<div class="subhd" style="margin-top:9px;">' + T.L("zone_t") + '</div>'
-      + '<table class="tbzone"><tr>'
+    /* No heading over it. The table's own first column is headed "Zone", so a
+       line above it reading "By zone" says the same word twice - and the line
+       it costs is the line that stopped the tray sheet fitting one page, which
+       put the paginator's cut through the drawing. */
+    return '<table class="tbzone"><tr>'
       + '<th>' + T.L("c_zone") + '</th>'
       + '<th class="num">' + T.L("c_taken") + '</th>'
       + '<th class="num">' + T.L("c_thin") + '</th>'
       + '<th>' + T.L("c_at") + '</th></tr>'
       + zones.map(function (z) {
-          return '<tr><td>' + T.pair(z.name, z.nameAlt) + '</td>'
+          /* Inline, not stacked. The zone name and its translation on two
+             lines doubled the height of all seven rows, and the tray sheet is
+             a full-width drawing plus a machine header already - the section
+             stopped fitting one page and the paginator, which slices a bitmap
+             at a pixel row, cut the DRAWING in half. */
+          return '<tr><td>' + T.pair(z.name, z.nameAlt, "alti") + '</td>'
             + '<td class="num">' + z.got + '/' + z.of + '</td>'
             + '<td class="num">' + (z.thin == null ? "—" : esc(z.thin)) + '</td>'
             + '<td>' + esc(z.at || "—") + '</td></tr>';
@@ -1264,7 +1284,7 @@
             ? esc(w.newMM + " → " + w.condemnMM + " mm") : "—") + '</div>' : "")
         + '</td>'
         + '<td class="r n">' + (w.mm != null ? '<b>' + esc(w.mm) + '</b>'
-            : '<span class="muted" style="font-size:9px">' + esc(w.reasonLabel || w.reason || "—") + '</span>') + '</td>'
+            : '<span class="muted" style="font-size:9px">' + reasonText(T, w) + '</span>') + '</td>'
         + (anyRef ? '<td class="r n">' + (w.pct != null ? esc(w.pct) + "%" : "") + '</td>'
             + '<td>' + (w.pct != null ? wearBar(w.pct) : "") + '</td>' : ""); };
     var col = function (list) {
@@ -1286,7 +1306,7 @@
         + (anyRef ? '<td class="r n"></td><td></td>' : "");
       var w = it.w;
       return '<td class="r n">' + (w.mm != null ? '<b>' + esc(w.mm) + '</b>'
-          : '<span class="muted" style="font-size:9px">' + esc(w.reasonLabel || w.reason || "—") + '</span>') + '</td>'
+          : '<span class="muted" style="font-size:9px">' + reasonText(T, w) + '</span>') + '</td>'
         + (anyRef ? '<td class="r n">' + (w.pct != null ? esc(w.pct) + "%" : "") + '</td>'
             + '<td>' + (w.pct != null ? wearBar(w.pct) : "") + '</td>' : ""); };
     /* Wider than the running grid's columns, because there is width to spend:
@@ -1703,7 +1723,7 @@
         var cells = read.map(function (m, j) { var w = m[k];
           if (!w) return '<td class="r n muted">—</td>';
           if (w.mm == null) return '<td class="r n"><span class="muted" style="font-size:9px">'
-            + esc(w.reasonLabel || w.reason || "—") + '</span></td>';
+            + reasonText(T, w) + '</span></td>';
           return '<td class="r n"' + (j === lastI ? ' style="font-weight:700"' : "") + '>' + esc(w.mm) + '</td>';
         }).join("");
         /* The change over the whole series, signed. Which direction is BAD

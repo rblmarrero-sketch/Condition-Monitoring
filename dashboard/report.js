@@ -191,6 +191,30 @@
     return { html: "", key: null };
   }
 
+  /* What is in this compartment, how we know, and whether it belongs there.
+
+     The report engine draws the lubrication table from `it.lube` and prints
+     NOTHING when it is absent - and this never set it. Every lubrication round
+     exported from the dashboard came out as a header, a signature and no
+     table: the one round whose entire content is this field. The phone built
+     the same block from the same reference; only the office's copy was blank.
+
+     The verdict comes from lube.js, so the sheet and the position card cannot
+     disagree about the same compartment. */
+  function lubeBlock(rec, it) {
+    if (rec.type !== "LUBE" || !window.LUBE) return null;
+    const product = String(it.lubeProduct || "").trim();
+    const evidKey = it.lubeEvidence || "";
+    const samp = it.lubeSampled ? true : false;
+    if (!product && !evidKey && !samp) return null;
+    const e = LUBE.EVID.filter(x => x.k === evidKey)[0];
+    const a = (typeof ASSET_BY !== "undefined" && ASSET_BY[rec.equip]) || {};
+    const v = LUBE.verdict(a.m || "", a.cls || "", it.key, product);
+    return { product, evid: e ? { en: e.en, ru: e.ru } : null, samp,
+             want: v.want || "", band: v.b || "", verdictKey: v.k || "",
+             off: !!(product && v.off) };
+  }
+
   /* ---- the dashboard's records, in the shape the core reads -------------- */
   function normalise(recs, opts) {
     const wantPhotos = !!(opts && opts.photos);
@@ -250,10 +274,12 @@
           cause: it.cause || "", action: it.actionLabel || "",
           prio: it.prio || "", prioLabel: it.prioLabel || "", wo: it.wo || "",
           comment: it.comment || "", readings: read,
+          lube: lubeBlock(rec, it),
           photos: wantPhotos ? photoSrcs(it, rec) : [],
           w: w ? { mm: w.mm, newMM: w.newMM, condemnMM: w.condemnMM, pct: w.wearPct,
                    band: w.band || "", refSrc: w.refSrc || "",
                    reason: w.reason || "", reasonLabel: w.reasonLabel || "",
+                   reasonAlt: w.reasonAlt || "",
                    stood: !!w.stood } : null,
         };
       }),
@@ -505,6 +531,15 @@
       stamp: opts.stamp || new Date(),
       sevLabel: sev,
       sevLabelAlt: s => inOther(() => sev(s)),
+      /* The millimetre table's last column is "hours left on it", and the
+         engine asks the HOST for it rather than working it out - so that the
+         phone's sheet and the dashboard's sheet cannot quote different hours
+         for the same part. The phone passed it. This did not, so every row of
+         that column came off the dashboard empty while the same round printed
+         a figure on the phone: not a wrong number, an absent one, which is the
+         harder kind to notice. */
+      forecast: (ref, series) =>
+        (window.WEAR && WEAR.forecast ? WEAR.forecast(ref, series) : null),
       records: normalise(recs, opts),
       extra: opts.extra || [],
     };

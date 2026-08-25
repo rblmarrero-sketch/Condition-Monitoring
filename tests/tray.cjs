@@ -472,15 +472,26 @@ const put = (p, k, v) => p.evaluate(a => { pickComponent(a[0]);
   ok('with a stable id on it', saved && saved.id);
   ok('and each station keeps its name for Drive and the CSV',
     saved && /F62/.test(saved.label) && saved.label.length > 6, saved && saved.label);
+  /* The zone summary is HANDED TO THE ENGINE now, not stitched into the
+     drawing's HTML — the phone used to append a table of its own here, in one
+     language, while the dashboard passed `zones` and let report-core draw it
+     bilingually, so the same seven zones printed twice over, worded two ways,
+     depending which surface exported the round. So this asks for the summary
+     where it now lives, and then for the table in the DOCUMENT. */
   const rpt = await p.evaluate(async () => {
     const r = (await rptRecords()).find(x => x.type === 'TB');
     if (!r) return null;
-    const m = r.mapHTML || '';
-    const row = (m.match(/<tr><td>Floor — tail<\/td>[\s\S]*?<\/tr>/) || [''])[0].replace(/<[^>]+>/g, '|');
-    return { map: /bodymap/.test(m), table: /tbzone/.test(m), row };
+    const secs = CMR.sections({ lang: 'en', mode: 'unit', title: 'x', stamp: new Date(),
+      sevLabel: s2 => s2, records: [r] });
+    const doc = secs.map(x => x.html).join('');
+    const row = (doc.match(/<tr><td>Floor — tail[\s\S]*?<\/tr>/) || [''])[0].replace(/<[^>]+>/g, '|');
+    return { map: /bodymap/.test(r.mapHTML || ''),
+             zones: (r.zones || []).length,
+             table: /tbzone/.test(doc), row };
   });
   ok('the report draws the tray', rpt && rpt.map);
-  ok('and tables every zone beside it', rpt && rpt.table);
+  ok('and hands the engine a summary of every zone', rpt && rpt.zones >= 7, rpt && rpt.zones);
+  ok('which the document tables beside the drawing', rpt && rpt.table);
   ok('naming the tail by its thinnest station', rpt && /3\.5/.test(rpt.row) && /F62/.test(rpt.row),
     rpt && rpt.row.replace(/\|+/g, ' ').trim());
 

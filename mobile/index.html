@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=160">
+<link rel="manifest" href="manifest.webmanifest?v=161">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=160">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=160">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=160">
+<link rel="apple-touch-icon" href="icon-192.png?v=161">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=161">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=161">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1909,30 +1909,30 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=160"></script>
-<script src="upload-defaults.js?v=160"></script>
-<script src="hme.js?v=160"></script>
-<script src="mp-fc.js?v=160"></script>
-<script src="hme-cascade.js?v=160"></script>
-<script src="assets.js?v=160"></script>
-<script src="temp-limits.js?v=160"></script>
-<script src="due.js?v=160"></script>
-<script src="wear.js?v=160"></script>
-<script src="wear-figs.js?v=160"></script>
-<script src="wear-map.js?v=160"></script>
-<script src="machine-photos.js?v=160"></script>
-<script src="machine-fig.js?v=160"></script>
-<script src="get.js?v=160"></script>
-<script src="points.js?v=160"></script>
-<script src="uc-points.js?v=160"></script>
-<script src="inspect-guide.js?v=160"></script>
-<script src="get-figs.js?v=160"></script>
-<script src="body-points.js?v=160"></script>
-<script src="body-map.js?v=160"></script>
-<script src="lube.js?v=160"></script>
-<script src="lube-overrides.js?v=160"></script>
-<script src="lube2027.js?v=160"></script>
-<script src="report-core.js?v=160"></script>
+<script src="native.js?v=161"></script>
+<script src="upload-defaults.js?v=161"></script>
+<script src="hme.js?v=161"></script>
+<script src="mp-fc.js?v=161"></script>
+<script src="hme-cascade.js?v=161"></script>
+<script src="assets.js?v=161"></script>
+<script src="temp-limits.js?v=161"></script>
+<script src="due.js?v=161"></script>
+<script src="wear.js?v=161"></script>
+<script src="wear-figs.js?v=161"></script>
+<script src="wear-map.js?v=161"></script>
+<script src="machine-photos.js?v=161"></script>
+<script src="machine-fig.js?v=161"></script>
+<script src="get.js?v=161"></script>
+<script src="points.js?v=161"></script>
+<script src="uc-points.js?v=161"></script>
+<script src="inspect-guide.js?v=161"></script>
+<script src="get-figs.js?v=161"></script>
+<script src="body-points.js?v=161"></script>
+<script src="body-map.js?v=161"></script>
+<script src="lube.js?v=161"></script>
+<script src="lube-overrides.js?v=161"></script>
+<script src="lube2027.js?v=161"></script>
+<script src="report-core.js?v=161"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2234,7 +2234,6 @@ const I18N = {
     tb_zone_worst:"thinnest: {k} at {n} mm",
     tb_note:"Add a comment", tb_note_hide:"Hide the comment",
     tb_x_comment:"comment",
-    tb_rpt_zone:"Zone", tb_rpt_taken:"Taken", tb_rpt_min:"Thinnest (mm)", tb_rpt_at:"At station",
     uc_leg_none:"not taken", uc_leg_done:"serviceable", uc_leg_watch:"watch",
     uc_leg_act:"at or past condemn", uc_leg_na:"could not measure",
     lbl_temp:"Temperature °C", lbl_amb:"Ambient °C", lbl_method:"Measurement method",
@@ -2636,7 +2635,6 @@ const I18N = {
     tb_zone_worst:"минимум: {k} — {n} мм",
     tb_note:"Добавить комментарий", tb_note_hide:"Скрыть комментарий",
     tb_x_comment:"комментарий",
-    tb_rpt_zone:"Зона", tb_rpt_taken:"Снято", tb_rpt_min:"Минимум (мм)", tb_rpt_at:"Точка",
     uc_leg_none:"не снято", uc_leg_done:"годен", uc_leg_watch:"наблюдать",
     uc_leg_act:"достиг предела", uc_leg_na:"не удалось измерить",
     lbl_temp:"Температура °C", lbl_amb:"Окружающая среда °C", lbl_method:"Метод замера",
@@ -3119,11 +3117,11 @@ function ucStatus(unit, ty){
    are in the client's catalog, they are the cheap ones nobody records, and sag
    in particular is the biggest single lever on undercarriage life. Carried
    alongside the measured walk rather than inside WEAR, which is generated. */
-const UC_EXTRA=[
-  { code:"ADJUST", en:"Track adjuster / recoil", ru:"Натяжитель / амортизатор" },
-  { code:"FRAME",  en:"Track frame / guards",    ru:"Рама хода / защита" },
-  { code:"SAG",    en:"Track sag / top chain",   ru:"Провисание гусеницы" },
-];
+/* Names for the three, from uc-points.js — the file that already offers them
+   in the walk, and the one the dashboard also loads. They were listed here,
+   which is why the office's sheet printed "ADJUST" where the phone's printed
+   "Track adjuster / recoil" for the same reading. */
+const UC_EXTRA=(window.UCPTS&&UCPTS.extraPoints)||[];
 const UC_EXTRA_BY={}; UC_EXTRA.forEach(x=>UC_EXTRA_BY[x.code]=x);
 function ucWalkTree(unit){
   if(bodyType()) return bodyWalkTree(unit);
@@ -3309,20 +3307,9 @@ function lubeComp(k){
    only the 2027 list and every drum in the yard is "not listed"; offer only
    the masterlist and nothing bought for next season can be recorded at all.
    The audit exists to record what is REALLY in there. */
-function lubeRegister(){
-  const out=[], at={};
-  const key=n=>String(n||"").toUpperCase().replace(/[^A-Z0-9]+/g,"");
-  const add=(p,t,src)=>{
-    if(!p) return;
-    const k=key(p);
-    if(at[k]){ if(at[k].src!==src) at[k].src="both"; return; }
-    at[k]={p:p, t:t||"", src:src};
-    out.push(at[k]);
-  };
-  (window.LUBE ? LUBE.catalog : []).forEach(x=>add(x.p, x.t, "field"));
-  (window.LUBE2027 ? LUBE2027.shelf : []).forEach(x=>add(x.p, x.t, "2027"));
-  return out;
-}
+/* Both product lists as one. Lived here; moved into lube.js so the dashboard
+   reads the same shelf the phone does. */
+function lubeRegister(){ return window.LUBE ? LUBE.register() : []; }
 function lubeChoices(k){
   if(!window.LUBE || !curEquip) return {fit:[], rest:[]};
   const a=lubeAsset(curEquip);
@@ -4259,7 +4246,8 @@ function wearOut(rec,k,p){
     const pct=(st.ok && p.mm!=null)?BODY.wear(st.model,k,Number(p.mm)):null;
     const pt=st.ok?BODY.get(st.model,k):null;
     return { mm:(p.mm==null?"":Number(p.mm)), stood:p.stood?1:0, reason:p.reason||"",
-             reasonLabel:p.reason?ucReasonLabel(p.reason,"en"):"",
+             reasonLabel:p.reason?ucReasonLabel(p.reason,"en",ty):"",
+             reasonRu:p.reason?ucReasonLabel(p.reason,"ru",ty):"",
              newMM:L?L.n:"", condemnMM:L?L.c:"",
              wearPct:(pct==null?"":Math.round(pct)),
              band:(pct==null?"":BODY.band(st.model,k,Number(p.mm))),
@@ -4271,7 +4259,8 @@ function wearOut(rec,k,p){
   const ref = wearRefOf(rec,k);
   const pct=(ref && p.mm!=null) ? WEAR.wear(ref, Number(p.mm)) : null;
   return { mm:(p.mm==null?"":Number(p.mm)), stood:p.stood?1:0, reason:p.reason||"",
-           reasonLabel:p.reason?ucReasonLabel(p.reason,"en"):"",
+           reasonLabel:p.reason?ucReasonLabel(p.reason,"en",ty):"",
+             reasonRu:p.reason?ucReasonLabel(p.reason,"ru",ty):"",
            newMM:(ref&&!ref.x)?ref.n:"", condemnMM:(ref&&!ref.x)?ref.c:"",
            wearPct:(pct==null?"":Math.round(pct)),
            band:(pct==null?"":ucBand(pct)),
@@ -4658,26 +4647,18 @@ function lubeReportBlock(model, cls, key, o){
   const samp = o.samp == null ? null : !!o.samp;
   if(!product && !evidKey && samp == null) return null;
   const e = LUBE.EVID.filter(x=>x.k===evidKey)[0];
-  const want = LUBE.forComp(model, key, cls);
-  const norm = x => String(x||"").toUpperCase().replace(/[^A-Z0-9]+/g,"");
+  /* Same judgement the capture screen showed the inspector and the same one
+     the dashboard shows the office. This function used to carry a fourth
+     rule of its own. */
+  const v = LUBE.verdict(model, cls, key, product);
   return {
     product: product,
     evid: e ? { en:e.en, ru:e.ru } : null,
     samp: samp,
-    want: want ? want.p : "",
-    /* Off standard only when BOTH are known, and judged on the JOB rather than
-       the name: the site is changing supplier for 2027, so the incumbent and
-       its replacement are both right answers and neither is a finding. An
-       unlisted product is not "wrong", it is unjudged, and a compartment with
-       no standard decided cannot be departed from. */
-    off: (function(){
-      if(!want || !product) return false;
-      if(norm(product) === norm(want.p)) return false;
-      const reg = (typeof lubeRegister === "function") ? lubeRegister() : [];
-      const hit = reg.filter(function(x){ return norm(x.p) === norm(product); })[0];
-      if(!hit || !hit.t || !want.t) return true;   /* unknown: say so, loudly */
-      return hit.t !== want.t;
-    })()
+    want: v.want || "",
+    band: v.b || "",
+    verdictKey: v.k || "",
+    off: !!(product && v.off)
   };
 }
 /* The name is the value; where it came from is a note beside it, so a fitter
@@ -4687,36 +4668,14 @@ function lubeOpt(x){
             : x.src==="both" ? t("lube_src_both") : t("lube_src_field");
   return '<option value="'+esc(x.p)+'">'+esc(x.p)+' · '+esc(tag)+'</option>';
 }
+/* One compartment, judged. The rule itself lives in lube.js so the capture
+   screen, the report and the dashboard cannot drift into three answers. */
 function lubeVerdict(k){
   const p=draft.positions[k]||{};
   const name=p.prod==="__other" ? (p.other||"") : (p.prod||"");
-  if(!name) return {b:"none", k:"lube_v_none"};
+  if(!window.LUBE) return {b:"none", k:name?"lube_v_nostd":"lube_v_none"};
   const a=lubeAsset(curEquip);
-  const want=window.LUBE?LUBE.forComp(a.m, k, a.cls):null;
-  /* No product decided for this compartment type yet — wire rope and open gear
-     are both still "(verify product)" on the site's own legend. Recording what
-     is in there is still worth doing; pretending we can judge it is not. */
-  if(!want) return {b:"none", k:"lube_v_nostd"};
-  /* The test is the JOB, not the string.
-
-     Comparing the recorded name with one product name was right while there
-     was one list. There are two now - the EXSOIL products in the machines
-     today and the Lemarc/Teboil ones bought for 2027 - and they share no
-     string at all, so string equality would have called every compartment on
-     the property wrong the day the new drums landed.
-
-     What actually destroys a machine is the wrong KIND of oil: engine oil in a
-     final drive, GL-5 in a wet brake. A product that serves this compartment's
-     job is right whichever supplier it came from; one that serves a different
-     job is the finding. */
-  const c=lubeComp(k), ty=(c&&c.t)||want.t||"";
-  const prod=lubeRegister().filter(x=>String(x.p)===String(name))[0];
-  /* Typed in by hand: a real finding — somebody put something in that is not
-     on either list — and it must not be dressed up as a pass or as a failure. */
-  if(!prod) return {b:"watch", k:"lube_v_unknown"};
-  if(ty && prod.t && prod.t !== ty) return {b:"act", k:"lube_v_wrong"};
-  if(!ty || !prod.t) return {b:"watch", k:"lube_v_unknown"};
-  return {b:"ok", k:"lube_v_ok"};
+  return LUBE.verdict(a.m, a.cls, k, name);
 }
 function renderLube(){
   if(!lubeType()) return;
@@ -4801,19 +4760,32 @@ function getScope(){
   const pr=window.GET?GET.profileFor(curEquip,a.cat||a.cls||"",a.m||""):null;
   return pr?pr.tool:"";
 }
-function ucReasonLabel(code,lg){
-  const r=measReasons().find(x=>x.code===code);
+/* THE ROUND'S OWN REASONS, NEVER THE PICKER'S.
+
+   `ty` is the type of the RECORD being labelled. Without it this asked
+   measReasons(), which asks the picker — so a queued dump body round exported
+   while the picker sat on any other type had its reason resolved against the
+   undercarriage list. The codes overlap: PARK came out "Machine parked wrong"
+   instead of "Body not tipped far enough", PACKED came out "mud or ice"
+   instead of "frozen ore", and WELD, which the other list does not carry,
+   printed as the bare word WELD. One record, two sentences, decided by a
+   dropdown nobody had touched. */
+/* The reason in the reader's language and in the other, for the sheet. */
+function reasonPair(ty, code){
+  if(!code) return { label:"", alt:"" };
+  const a=ucReasonLabel(code, lang, ty);
+  const b=ucReasonLabel(code, lang==="ru"?"en":"ru", ty);
+  return { label:a, alt:(b && b!==a) ? b : "" };
+}
+function ucReasonLabel(code,lg,ty){
+  const r=measReasons(ty).find(x=>x.code===code);
   return r?(r[lg||lang]||r.en):code;
 }
-const TB_REASONS=[
-  {code:"PACKED", en:"Packed with frozen ore",   ru:"Забито мёрзлой породой"},
-  {code:"WELD",   en:"Weld repair or doubler here", ru:"Здесь наплавка или накладка"},
-  {code:"ACCESS", en:"Cannot reach it",          ru:"Нет доступа"},
-  {code:"PARK",   en:"Body not tipped far enough", ru:"Кузов поднят недостаточно"},
-  {code:"TOOL",   en:"No gauge for it",          ru:"Нет прибора"},
-  {code:"OTHER",  en:"Other — see comment",      ru:"Другое — см. комментарий"},
-];
-function measReasons(){ return bodyType() ? TB_REASONS : (window.WEAR&&WEAR.reasons||[]); }
+/* Both lists live beside the stations they explain — body-points.js and
+   wear.js — so the office can read them too. */
+function measReasons(ty){ return bodyType(ty)
+  ? ((window.BODY&&BODY.reasons)||[])
+  : ((window.WEAR&&WEAR.reasons)||[]); }
 /* The evidence rows — the photo strip, its hint, the buttons and the comment —
    behind one disclosure, closed, remembered. They were two hundred pixels of
    always-open strip sitting between the number and the way on.
@@ -6012,6 +5984,11 @@ function editRecord(rec){ if(rec.cls && CLASSES[rec.cls]){ eqClass=rec.cls; loca
   for(const [k,pp] of Object.entries(rec.positions)) draft.positions[k]={grade:pp.grade,sev:pp.sev,sevMan:pp.sevMan||0,action:pp.action,wo:pp.wo,particle:pp.particle,comp:pp.comp,oil:pp.oil,comment:pp.comment,defect:pp.defect,cause:pp.cause,tempV:pp.tempV||"",tempA:pp.tempA||"",tempM:pp.tempM||"",
     prio:pp.prio||"",
     mm:(pp.mm==null?null:Number(pp.mm)),stood:pp.stood?1:0,reason:pp.reason||"",detect:pp.detect||"",
+    /* Same four fields, coming back. Reopening a lubrication round to fix a
+       typo used to empty it: the draft was rebuilt from this list, the list did
+       not mention them, and the next Save wrote the blanks back over the
+       record. */
+    prod:pp.prod||"",other:pp.other||"",evid:pp.evid||"",samp:pp.samp?1:0,
     photos:(pp.photos?pp.photos.slice():(pp.photoBlob?[pp.photoBlob]:[])),video:pp.video||null};
   curEquip=rec.equip||""; updateEquipBtn(); $("date").value=rec.date; $("smu").value=rec.smu||""; if(rec.by) $("inspector").value=rec.by;
   gps=rec.gps||null; renderGps(); $("supName").value=rec.sup||""; loadSign(rec.sign||null);
@@ -6061,6 +6038,15 @@ $("saveBtn").onclick=async ()=>{
   for(const [k,p] of Object.entries(draft.positions))
     rec.positions[k]={ grade:p.grade||null, sev:p.sev||"", sevMan:p.sevMan||0, action:p.action||"", wo:p.wo||"", particle:p.particle||"", comp:p.comp||"", oil:p.oil||"", defect:p.defect||"", cause:p.cause||"", comment:p.comment||"", tempV:p.tempV||"", tempA:p.tempA||"", tempM:p.tempM||"", detect:p.detect||DETECT_DEFAULT,
       prio:p.prio||"",
+      /* The lubrication round's WHOLE answer, and it was not on this list.
+         Every other field a compartment can hold was copied out of the draft
+         here; these four were not, so the moment an inspector pressed Save the
+         product, the evidence and the sample flag stopped existing. The round
+         still saved, still queued, still uploaded and still printed - with
+         nothing in it. Downstream reads them off the RECORD (the report, the
+         server payload, the ZIP, the dashboard), so all four routes carried an
+         empty round and none of them could tell. */
+      prod:p.prod||"", other:p.other||"", evid:p.evid||"", samp:p.samp?1:0,
       mm:(p.mm==null?null:Number(p.mm)), stood:p.stood?1:0, reason:p.reason||"",
       /* A baseline is not a separate kind of thing to sync. It is a marker on
          the reading that set it, so it travels every path a round already
@@ -7697,7 +7683,7 @@ function rptName(rec,k){
    zone averages 6.24 mm and its worst station reads 3.50, and the average is
    the number that lets a body through. */
 function rptBodyMap(rec,items){
-  const st=bodyStatus(rec.equip); if(!st.ok || !window.bodyMap) return "";
+  const st=bodyStatus(rec.equip); if(!st.ok || !window.bodyMap) return {html:"", zones:null};
   const id=st.model;
   const by={}, mm={};
   items.forEach(it=>{ const w=it.w;
@@ -7714,24 +7700,31 @@ function rptBodyMap(rec,items){
       return seen.length===BODY.inZone(id,z.k).length ? "done" : ""; })();
     return {z, worst, got, state};
   });
-  const rows=zs.map(r=>'<tr><td>'+esc(r.z[lang]||r.z.en)+'</td>'+
-    '<td class="num">'+r.got+'/'+r.z.n+'</td>'+
-    '<td class="num">'+(r.worst?fmtMM(r.worst.mm):"—")+'</td>'+
-    '<td>'+(r.worst?esc(r.worst.k):"—")+'</td></tr>').join("");
+  /* The zone summary is HANDED TO THE ENGINE, not drawn here.
+
+     This used to append a <table class="tbzone"> of its own, in one language,
+     under headings this file alone knew - while the dashboard passed `zones`
+     and let report-core draw the same summary bilingually. Two tables of the
+     same seven zones, differently worded, on the same round. One table now,
+     drawn once, in the file both surfaces load.
+
+     Thinnest first: the zone a superintendent has to read is the one with the
+     least metal left, not the one listed first. */
+  const zones=zs.map(r=>({
+      name:r.z.en, nameAlt:r.z.ru,
+      got:r.got, of:BODY.inZone(id,r.z.k).length,
+      thin:r.worst?r.worst.mm:null, at:r.worst?r.worst.k:"" }))
+    .sort((a,b)=>(a.thin==null)-(b.thin==null) || (a.thin??0)-(b.thin??0));
   /* On paper the drawing IS the report - a superintendent reads the shape of
      the wear before they read any table - so it gets a taller box and the
      millimetres printed inside every station. Whole millimetres: a decimal
      doubles the width of every dot for precision that belongs in the table,
      and the colour is still computed from the exact figure, so rounding can
      never move a plate across the condemn limit. */
-  return CMR.fitMap('<div class="ucmapwrap">'+
-    bodyMapReport({ model:id, lang:lang, mm:mm,
-              state:k=>by[k]||"", zoneState:z=>(zs.find(x=>x.z.k===z)||{}).state||"" })+
-    '</div>')+
-    '<table class="tbzone"><thead><tr><th>'+esc(t("tb_rpt_zone"))+'</th>'+
-    '<th class="num">'+esc(t("tb_rpt_taken"))+'</th>'+
-    '<th class="num">'+esc(t("tb_rpt_min"))+'</th>'+
-    '<th>'+esc(t("tb_rpt_at"))+'</th></tr></thead><tbody>'+rows+'</tbody></table>';
+  return { html: CMR.fitMap('<div class="ucmapwrap">'+
+      bodyMapReport({ model:id, lang:lang, mm:mm,
+                state:k=>by[k]||"", zoneState:z=>(zs.find(x=>x.z.k===z)||{}).state||"" })+
+      '</div>'), zones: zones };
 }
 /* The report prints the screen. The old note here argued the other way — keep
    the DRAWING because a photograph "would have to survive html2canvas and the
@@ -7767,9 +7760,21 @@ function rptMap(rec,items,photo){
   try{ return rptMapInner(rec,items,photo); }
   catch(e){ return { html:"", key:null, why:"nodata" }; }
 }
+/* LEFT and RIGHT under the two track frames, in both languages.
+
+   The sheet is bilingual everywhere else, and the dashboard already captioned
+   these frames "LEFT / ЛЕВАЯ". This one printed whichever language the
+   phone happened to be set to, so the SAME machine came off the two surfaces
+   with two different drawings - and the caption is the one word on that
+   drawing that tells a fitter which side of the machine to walk to. */
+function ucSideCaption(sd){
+  const k = sd==="L" ? "uc_left" : "uc_right";
+  const a = t(k), b = inOtherLang(()=>t(k));
+  return WEAR.escMap(b && b!==a ? a+" / "+b : a);
+}
 function rptMapInner(rec,items,photo){
-  if(rec.type==="TB"){ const h=rptBodyMap(rec,items);
-    return { html:h, key:null, why:h?"":"nodata" }; }
+  if(rec.type==="TB"){ const b=rptBodyMap(rec,items);
+    return { html:b.html, key:null, zones:b.zones, why:b.html?"":"nodata" }; }
   if(!window.WEAR) return { html:"", key:null, why:"nomodule" };
   const by={}; items.forEach(it=>{ const w=it.w;
     by[it.key] = !w ? "" : w.mm==null ? (w.reason?"na":"") :
@@ -7788,7 +7793,7 @@ function rptMapInner(rec,items,photo){
   const prof=ucProfile(rec.equip, rec.type);
   const u=WEAR.reportUCMap({ model:a.m||"",
     rollers:prof.rollers, high:prof.high, fam:prof.fam, photo, lang, state,
-    sideLabel:sd=>WEAR.escMap(t(sd==="L"?"uc_left":"uc_right")) });
+    sideLabel:ucSideCaption });
   return u ? { html:CMR.fitMap(u.html), key:u.key } : { html:"", key:null, why:"nodata" };
 }
 /* Everything the sheet has to admit about itself, in both languages.
@@ -7861,7 +7866,12 @@ async function rptRecords(onlyId){
         w: w ? { mm:(w.mm===""?null:w.mm), newMM:(w.newMM===""?null:w.newMM),
                  condemnMM:(w.condemnMM===""?null:w.condemnMM),
                  pct:(w.wearPct===""?null:w.wearPct), band:w.band||"",
-                 refSrc:w.refSrc||"", reason:w.reason||"", reasonLabel:w.reasonLabel||"",
+                 refSrc:w.refSrc||"", reason:w.reason||"",
+                 /* In the READER'S language, with the other beside it. The
+                    sheet used to print the English one whichever language it
+                    was in, because the code had been resolved at capture. */
+                 reasonLabel:reasonPair(rec.type, w.reason).label,
+                 reasonAlt:reasonPair(rec.type, w.reason).alt,
                  stood:!!w.stood } : null });
     }
     let signUrl=""; if(rec.sign){ try{ signUrl=await blobToThumb(rec.sign,400); }catch(e){} }
@@ -7870,7 +7880,7 @@ async function rptRecords(onlyId){
     const a0=ASSET_BY[rec.equip]||{};
     /* The machine's own photograph, as bytes, before the drawing is built —
        an <image href> inside an inline SVG does not survive html2canvas. */
-    let mapHTML="", mapKey=null, mapWhy="";
+    let mapHTML="", mapKey=null, mapWhy="", mapZones=null;
     if(meta.wear || meta.get){
       await needMap();
       const url = WEAR.reportPhotoFor
@@ -7879,7 +7889,7 @@ async function rptRecords(onlyId){
       const art = url ? await CMR.inlinePhoto(url) : "";
       const m = rptMap(rec, items, art);
       mapWhy = m.why || "";
-      mapHTML = m.html; mapKey = m.key;
+      mapHTML = m.html; mapKey = m.key; mapZones = m.zones || null;
     }
     out.push({ equip:rec.equip, clsLabel:a0.cat||(CLASSES[rec.cls]?(CLASSES[rec.cls][lang]||CLASSES[rec.cls].en):(rec.cls||"")),
       model:a0.m||"",
@@ -7893,7 +7903,8 @@ async function rptRecords(onlyId){
          as a one-page walk-around and throw away the drawing the host had just
          built for it. The dashboard has always said isWearType = UC|GET|TB, so
          the two ends printed different documents from the same round. */
-      wear:!!(meta.wear||meta.get), temp:!!meta.temp, mapHTML, mapKey, items });
+      wear:!!(meta.wear||meta.get), temp:!!meta.temp, mapHTML, mapKey,
+      zones:mapZones, items });
     if(mapWhy) mapNote(out[out.length-1], mapWhy);
   }
   return out;
@@ -7939,14 +7950,22 @@ function teamRecToReport(rec){
                  it.oil&&`oil ${it.oil} h`,
                  (meta.temp&&it.tempC)&&`${it.tempC} °C${it.ambC?` / ${it.ambC}`:""}` ].filter(Boolean);
     let w=null;
-    if(meta.wear || meta.get){
+    /* No reading and no reason given: nothing to report about this point. The
+       report counts a w with no millimetre as one that COULD NOT BE MEASURED,
+       so building one here out of the reference alone made a finished GET
+       round — graded, tape optional, every tooth walked — announce "6 of 6
+       points could not be measured" across the top of its own sheet. Same
+       test wearOut() applies on this phone's own rounds. */
+    if((meta.wear || meta.get) && !((it.mm===""||it.mm==null) && !it.reason)){
       const mm=(it.mm===""||it.mm==null)?null:Number(it.mm);
       const ref=teamRefFor(rec,it.key);
       const pct=(ref&&mm!=null&&window.WEAR) ? Math.round(WEAR.wear(ref,mm)) : null;
+      const rp=reasonPair(rec.type, it.reason||"");
       w={ mm, newMM:ref?ref.n:null, condemnMM:ref?ref.c:null, pct,
           band:(pct==null?"":(pct>=100?"act":pct>=80?"watch":"done")),
           refSrc:ref?(ref.src||""):"", reason:it.reason||"",
-          reasonLabel:it.reasonLabel||it.reason||"", stood:!!it.stood };
+          reasonLabel:rp.label||it.reasonLabel||it.reason||"", reasonAlt:rp.alt,
+          stood:!!it.stood };
     }
     const lube = meta.lube
       ? lubeReportBlock(a.m||"", a.cls||rec.cls||"", it.key,
@@ -8275,7 +8294,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="160";
+const BUILD="161";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

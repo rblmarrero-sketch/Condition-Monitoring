@@ -125,5 +125,28 @@
       return this.zones(id).filter(function (z) { return !self.zoneHasLimit(id, z.k); });
     },
     corrections: FIX,
+
+    /* Why a station has no millimetre against it.
+
+       A dump body's reasons are not a track frame's: ore freezes into a tray,
+       a tray is measured with the body tipped, and a weld repair or a doubler
+       plate is a place where the thickness is not the thing being asked about.
+       They lived in the phone's own source with codes that OVERLAP the
+       undercarriage list — PARK, PACKED, TOOL, ACCESS, OTHER — and the label
+       was resolved through whatever round type the PICKER happened to be
+       showing at export, not the type of the record being exported. Same
+       station, same code, two different sentences on the report: "Body not
+       tipped far enough" or "Machine parked wrong", depending on a dropdown.
+       WELD is on neither the other list nor this one, so it printed as "WELD".
+
+       Here, beside the stations they explain, and readable by the office. */
+    reasons: [
+      { code: "PACKED", en: "Packed with frozen ore",        ru: "\u0417\u0430\u0431\u0438\u0442\u043e \u043c\u0451\u0440\u0437\u043b\u043e\u0439 \u043f\u043e\u0440\u043e\u0434\u043e\u0439" },
+      { code: "WELD",   en: "Weld repair or doubler here",   ru: "\u0417\u0434\u0435\u0441\u044c \u043d\u0430\u043f\u043b\u0430\u0432\u043a\u0430 \u0438\u043b\u0438 \u043d\u0430\u043a\u043b\u0430\u0434\u043a\u0430" },
+      { code: "ACCESS", en: "Cannot reach it",               ru: "\u041d\u0435\u0442 \u0434\u043e\u0441\u0442\u0443\u043f\u0430" },
+      { code: "PARK",   en: "Body not tipped far enough",    ru: "\u041a\u0443\u0437\u043e\u0432 \u043f\u043e\u0434\u043d\u044f\u0442 \u043d\u0435\u0434\u043e\u0441\u0442\u0430\u0442\u043e\u0447\u043d\u043e" },
+      { code: "TOOL",   en: "No gauge for it",               ru: "\u041d\u0435\u0442 \u043f\u0440\u0438\u0431\u043e\u0440\u0430" },
+      { code: "OTHER",  en: "Other \u2014 see comment",         ru: "\u0414\u0440\u0443\u0433\u043e\u0435 \u2014 \u0441\u043c. \u043a\u043e\u043c\u043c\u0435\u043d\u0442\u0430\u0440\u0438\u0439" }
+    ],
   };
 })(typeof self !== "undefined" ? self : this);
