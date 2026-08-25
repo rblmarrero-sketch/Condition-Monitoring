@@ -82,6 +82,18 @@ const openHist = async (p, unit) => {
   console.log('\nchoosing which one stands');
   await p.click(`[data-edit="${KEY}"]`); await p.waitForTimeout(300);
   ok('the edit panel shows the choice', !(await p.getAttribute('#edCfCard', 'class')).includes('hidden'));
+  /* And shows it FIRST. It used to sit under the note field, below every
+     position card — 2,900 px down a 3,700 px panel. The office is told a round
+     needs a decision, opens the round to make it, and the decision is the last
+     thing in the sheet, past a hundred fields that only mean anything once it
+     has been made. Which version stands changes every one of them. */
+  const cfTop = await p.evaluate(() => {
+    const c = document.getElementById('edCfCard');
+    const panel = c.closest('.sheetbody') || c.parentElement;
+    return { at: c.offsetTop, of: panel.scrollHeight };
+  });
+  ok('and shows it first, above the readings it decides',
+    cfTop.at < cfTop.of * 0.15, cfTop.at + ' px into ' + cfTop.of);
   const devBtns = await p.$$eval('#edCfList [data-keep]', bs => bs.map(x => x.dataset.keep).sort());
   ok('both devices are offered', JSON.stringify(devBtns) === '["DAAAA","DBBBB"]', JSON.stringify(devBtns));
   ok('neither is marked in use yet', !/in use/.test(await p.textContent('#edCfList')));

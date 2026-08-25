@@ -1141,6 +1141,20 @@
     <div class="sheetbody">
       <p class="lede" data-i18n="ed_lede">Corrections are saved beside the inspection, never over it.</p>
 
+      <!-- FIRST, when there is one.
+
+           This sat below the note field, under every position card — 2,900 px
+           down a 3,700 px panel. The office is told a round needs a decision,
+           opens it to make that decision, and the decision is the last thing
+           in the sheet, past a hundred fields that only make sense once it has
+           been made. Which version stands changes every number below it, so it
+           belongs above them. -->
+      <div class="srccard hidden" id="edCfCard" style="margin-bottom:14px;border-color:var(--warning)">
+        <div class="srchead"><span class="ico">⑂</span><div><b data-i18n="cf_title">Two phones sent this inspection</b>
+          <div class="muted" data-i18n="cf_sub">Both versions are in Drive and nothing has been deleted. Choose the one the reports should use — you can change it later.</div></div></div>
+        <div class="srcbody"><div id="edCfList"></div></div>
+      </div>
+
       <div class="field"><label for="edBy" data-i18n="ed_by">Your name</label>
         <input id="edBy" type="text" data-i18n-ph="ed_byph" placeholder="who is making this change"></div>
 
@@ -1173,11 +1187,6 @@
       <div class="field"><label for="edNote" data-i18n="ed_note">Note on this inspection (optional)</label>
         <input id="edNote" type="text" data-i18n-ph="ed_noteph" placeholder="e.g. plug re-read under magnification"></div>
 
-      <div class="srccard hidden" id="edCfCard" style="margin-top:16px;border-color:var(--warning)">
-        <div class="srchead"><span class="ico">⑂</span><div><b data-i18n="cf_title">Two phones sent this inspection</b>
-          <div class="muted" data-i18n="cf_sub">Both versions are in Drive and nothing has been deleted. Choose the one the reports should use — you can change it later.</div></div></div>
-        <div class="srcbody"><div id="edCfList"></div></div>
-      </div>
 
       <div class="srccard" style="margin-top:16px">
         <div class="srchead"><span class="ico">⊘</span><div><b data-i18n="ed_void">Void this inspection</b>
