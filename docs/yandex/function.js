@@ -292,9 +292,22 @@ function keyFile(key, ext) {
 async function saveEdit(b) {
   const name = keyFile(b.key, '.edit.json');
   if (!name) return { ok: false, error: 'Bad record key: ' + b.key };
+  /* `note` was in the Apps Script's marker and not in this one, so an office
+     that typed a note against a round and happened to be on Yandex lost it on
+     save with no error anywhere. `fields` was the mirror image: a slot here
+     that nothing wrote to, and no slot at all on the other side. Both ends
+     keep both now — two backends for one document have to agree on what the
+     document IS. */
   const doc = { type: 'cm-record-edit', version: 1, key: b.key,
                 by: b.by || '', at: new Date().toISOString(),
-                void: !!b.void, reason: b.reason || '', fields: b.fields || {},
+                void: !!b.void, reason: b.reason || '',
+                note: String(b.note || '').slice(0, 2000),
+                /* Round-level corrections: the hour meter, who walked it, who
+                   verified it. NOT the unit, the date or the round type —
+                   those three ARE this record's identity, and changing one
+                   here would leave the correction filed against a round that
+                   no longer exists. */
+                fields: (b.fields && typeof b.fields === 'object') ? b.fields : {},
                 items: b.items || null };
   await putObj(META_DIR + '/' + name, Buffer.from(JSON.stringify(doc, null, 2)), 'application/json');
   await touchIndex();

@@ -1040,42 +1040,34 @@ expat and local staff. Three scopes share one section library:
 
 ### What it was last time
 
-An **Equipment** report on a machine with more than one round does not reprint each visit
-as its own set of sheets. The rounds before the latest collapse into two tables:
+An **Equipment** report on a machine with more than one round prints the latest round in
+full, and then **every earlier round the way the dashboard shows it**: a one-line header —
+date, round type, hour meter, inspector, verdict — and under it the photographs, with what
+each point was written beneath its own picture. Grade, severity, reading, finding. Nothing
+else.
 
-* **Earlier rounds** — one line per visit: date, type, hour meter, points checked, verdict,
-  worst point.
-* **Point by point** (or **Measurement history** where the round is measured in millimetres)
-  — one row per position, one column per round, oldest on the left. This is the table a
-  reliability engineer opens the report for: *4C was A with twelve particles in July and is
-  C with forty-six today* reads across in one line.
+There is no summary table and no point-by-point grid. There were both, and they were struck
+out on a returned sheet as redundant, which they were: every fact in them is on a card.
+Three renderings of one truth is not thoroughness, it is three places for them to disagree.
 
-Every round type gets it, in whatever it was recorded in — millimetres for undercarriage,
-dump body and GET; grade, particle count and coded defect for the plug, filter cut and
-general inspection. Readings that belong to the machine rather than the position —
-component and oil hours, identical on every point — are shown once and not repeated down
-the column.
-
-The last four rounds become columns (six for a measured round); anything older is counted
-beside the heading as `· +2` and still appears in full in the table above it.
-
-Then each earlier round is printed again in full — its findings, its grades and **its
-photographs**, in the same cards the latest round uses, so a reader comparing two rounds
-does not also have to translate between two layouts. What is *not* reprinted is the
-furniture: one masthead, one drawing of the machine, one signature block per document. That
-was the point of collapsing them in the first place — a two-round report that ran to six
-sheets and said nothing new on four of them.
+The blocks are compact on purpose — about a fifth of a sheet each, so **four or five rounds
+fit on a page**. What is *not* reprinted is the furniture: one masthead, one drawing of the
+machine, one signature block per document. That was the point of collapsing the rounds in
+the first place — a two-round report that ran to six sheets and said nothing new on four of
+them.
 
 Two exceptions, both deliberate:
 
 * An earlier round where every point was fine and nobody photographed anything gets no
-  section. There is nothing to show, and a header with no evidence under it is a section
-  that exists to hold its own heading. It is still a line in the summary table.
-* An **undercarriage or dump-body** round is not reprinted: its record is millimetres, and
-  those are lined up for comparison in the table above. Its photographs still are.
+  block. There is nothing to show, and a header with no evidence under it is a section that
+  exists to hold its own heading.
+* An **undercarriage or dump-body** round is not reprinted: its record is millimetres.
+  Its photographs still are.
 
-At most six earlier rounds are reprinted; any beyond that are counted in a line saying so,
-and all of them remain in the summary table.
+One table survives, and only for rounds recorded in millimetres — **Measurement history**,
+one row per point, one column per round, oldest on the left, with the condemn limit, the
+change over the series, the percentage worn and the hours left. None of that is on a card
+and none of it can be reconstructed by looking, so it is not redundant.
 
 A single-round report is deliberately one round: the button on a history card asks for that
 inspection, and gets that inspection.

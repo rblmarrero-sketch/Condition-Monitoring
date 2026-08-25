@@ -303,6 +303,13 @@ function saveEdit_(b) {
     void: !!b.void,
     reason: String(b.reason || '').slice(0, 400),
     note: String(b.note || '').slice(0, 2000),
+    /* Round-level corrections — the hour meter, who walked it, who verified
+       it. The other backend has had this slot since it was written and this
+       one did not, so a correction to an hour meter saved here vanished with
+       no error. NOT the unit, the date or the round type: those three ARE the
+       record's identity, and changing one would leave this marker filed
+       against a round that no longer exists. */
+    fields: (b.fields && typeof b.fields === 'object') ? b.fields : {},
     items: (b.items && typeof b.items === 'object') ? b.items : {},
   };
   var old = dir.getFilesByName(name);

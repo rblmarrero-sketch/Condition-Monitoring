@@ -257,10 +257,15 @@ const LAY = (secs) => {
     const one = build('one', 'DZ002|2026-08-11|UC');
     const html = u.map(s => s.html).join('');
     return {
-      sections: u.length, chars: html.length,
+      sections: u.length, chars: html.length, html: html.slice(0, 400),
       maps: (html.match(/class="ucmap[ "]/g) || []).length,
       signs: (html.match(/class="shsign"/g) || []).length,
-      hist: /class="hist"/.test(html), mh: /class="mh"/.test(html),
+      mh: /class="mh"/.test(html),
+      /* Each earlier round reprinted as the office screen shows it. */
+      older: (html.match(/class="sec olderr"/g) || []).length,
+      /* The dated columns of the measurement history — how an undercarriage
+         round with no photographs is still accounted for. */
+      cols: (html.match(/class="r n" style="width:46px">\d\d-\d\d/g) || []).length,
       oneSections: one.length,
       oneMaps: (one.map(s => s.html).join('').match(/class="ucmap[ "]/g) || []).length,
     };
@@ -272,9 +277,17 @@ const LAY = (secs) => {
   ok('and signed once per type', size.signs <= 2, size.signs + ' signature blocks');
   ok('the document stays small', size.chars < 100000, Math.round(size.chars / 1024) + ' KB');
   ok('the sections stay few', size.sections <= 6, size.sections + '');
-  /* Nothing is dropped: the rounds that are not printed in full are still in
-     the document, as rows. */
-  ok('every earlier round is still accounted for', size.hist);
+  /* Nothing is dropped, and there is no longer a summary table saying so.
+
+     There used to be one — a line per earlier round — and it was struck out on
+     a returned sheet as redundant, which it was: every fact on it is on the
+     cards of the round it describes. What accounts for an earlier round now is
+     the round itself, reprinted; and where a round is measured rather than
+     graded and carries no photographs, its dated column in the measurement
+     history. One of the two, never neither. */
+  ok('no summary table survives', !/class="hist"/.test(size.html || ''), 'gone');
+  ok('every earlier round is accounted for', size.older > 0 || size.cols >= 4,
+     size.older + ' reprinted, ' + size.cols + ' dated column(s)');
   ok('and every reading is still comparable', size.mh);
   ok('a single-inspection report is a single sheet', size.oneSections <= 3, size.oneSections + '');
   ok('  with one drawing on it', size.oneMaps === 2, size.oneMaps + '');

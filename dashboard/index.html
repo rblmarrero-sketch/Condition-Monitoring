@@ -1144,6 +1144,30 @@
       <div class="field"><label for="edBy" data-i18n="ed_by">Your name</label>
         <input id="edBy" type="text" data-i18n-ph="ed_byph" placeholder="who is making this change"></div>
 
+      <!-- The round itself, before its points.
+
+           An hour meter that came back blank or mistyped had no remedy but
+           voiding the round and re-walking the machine, and it is the one
+           field the schedule is computed from: the due list counts in hours,
+           the wear forecast projects in hours, and a machine's own operating
+           rate is measured from two of them. -->
+      <div class="srccard" style="margin-bottom:14px">
+        <div class="srchead"><span class="ico">⏱</span><div><b data-i18n="ed_round">The round itself</b>
+          <div class="muted" data-i18n="ed_round_sub">The unit, the date and the round type are what this record is filed under and cannot be changed here — void it and re-capture instead.</div></div></div>
+        <div class="srcbody">
+          <div class="row">
+            <div class="field"><label for="edSmu" data-i18n="ed_smu">Hour meter</label>
+              <input id="edSmu" data-rf="smu" type="text" inputmode="numeric"
+                     data-i18n-ph="ed_smuph" placeholder="SMU at this inspection"></div>
+            <div class="field"><label for="edWho" data-i18n="ed_who">Inspected by</label>
+              <input id="edWho" data-rf="by" type="text"></div>
+            <div class="field"><label for="edSup" data-i18n="ed_sup">Verified by</label>
+              <input id="edSup" data-rf="sup" type="text"></div>
+          </div>
+          <div class="muted" id="edSmuHint" style="font-size:11.5px;margin-top:2px"></div>
+        </div>
+      </div>
+
       <div id="edItems"></div>
 
       <div class="field"><label for="edNote" data-i18n="ed_note">Note on this inspection (optional)</label>
@@ -1473,26 +1497,26 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=157"></script>
-<script src="../mobile/hme.js?v=157"></script>
-<script src="../mobile/mp-fc.js?v=157"></script>
-<script src="../mobile/hme-cascade.js?v=157"></script>
-<script src="../mobile/temp-limits.js?v=157"></script>
+<script src="../data/magnetic_plug.js?v=158"></script>
+<script src="../mobile/hme.js?v=158"></script>
+<script src="../mobile/mp-fc.js?v=158"></script>
+<script src="../mobile/hme-cascade.js?v=158"></script>
+<script src="../mobile/temp-limits.js?v=158"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=157"></script>
-<script src="../mobile/due.js?v=157"></script>
-<script src="../mobile/wear.js?v=157"></script>
-<script src="../mobile/wear-map.js?v=157"></script>
-<script src="../mobile/lube.js?v=157"></script>
-<script src="../mobile/lube-overrides.js?v=157"></script>
-<script src="../mobile/lube2027.js?v=157"></script>
-<script src="../mobile/lube-tds.js?v=157"></script>
+<script src="../mobile/assets.js?v=158"></script>
+<script src="../mobile/due.js?v=158"></script>
+<script src="../mobile/wear.js?v=158"></script>
+<script src="../mobile/wear-map.js?v=158"></script>
+<script src="../mobile/lube.js?v=158"></script>
+<script src="../mobile/lube-overrides.js?v=158"></script>
+<script src="../mobile/lube2027.js?v=158"></script>
+<script src="../mobile/lube-tds.js?v=158"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=157"></script>
-<script src="../mobile/machine-photos.js?v=157"></script>
+<script src="../mobile/upload-defaults.js?v=158"></script>
+<script src="../mobile/machine-photos.js?v=158"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -1501,16 +1525,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=157"></script>
-<script src="../mobile/get.js?v=157"></script>
-<script src="../mobile/uc-points.js?v=157"></script>
-<script src="../mobile/inspect-guide.js?v=157"></script>
-<script src="../mobile/get-figs.js?v=157"></script>
-<script src="../mobile/body-points.js?v=157"></script>
-<script src="../mobile/body-map.js?v=157"></script>
-<script src="../mobile/jspdf.umd.min.js?v=157"></script>
-<script src="../mobile/html2canvas.min.js?v=157"></script>
-<script src="../mobile/report-core.js?v=157"></script>
+<script src="../mobile/machine-fig.js?v=158"></script>
+<script src="../mobile/get.js?v=158"></script>
+<script src="../mobile/points.js?v=158"></script>
+<script src="../mobile/uc-points.js?v=158"></script>
+<script src="../mobile/inspect-guide.js?v=158"></script>
+<script src="../mobile/get-figs.js?v=158"></script>
+<script src="../mobile/body-points.js?v=158"></script>
+<script src="../mobile/body-map.js?v=158"></script>
+<script src="../mobile/jspdf.umd.min.js?v=158"></script>
+<script src="../mobile/html2canvas.min.js?v=158"></script>
+<script src="../mobile/report-core.js?v=158"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -1918,6 +1943,12 @@ const I18N={
   fold_fail:"Could not read that folder: {e}",
   month_insp:"{m} · {n} inspection(s)",
   hist_none:"No inspections recorded.",
+  ed_round:"The round itself",
+  ed_round_sub:"The unit, the date and the round type are what this record is filed under and cannot be changed here — void it and re-capture instead.",
+  ed_smu:"Hour meter", ed_smuph:"SMU at this inspection",
+  ed_who:"Inspected by", ed_sup:"Verified by",
+  ed_smu_rate:"This machine has {n} hour-meter readings and runs {r} h/day by its own record — the due list uses that instead of the fleet assumption.",
+  ed_smu_norate:"{n} hour-meter reading(s) on this machine. Two, far enough apart, and the due list schedules it on what it actually does rather than on the fleet's 20 h/day.",
   /* Due & missed. The wording is deliberately about PEOPLE and MACHINES, not
      about records: an office reading "12 rows in state over" learns nothing,
      and an office reading "12 machines nobody has been to" acts. */
@@ -2292,6 +2323,12 @@ const I18N={
   fold_fail:"Не удалось прочитать папку: {e}",
   month_insp:"{m} · осмотров: {n}",
   hist_none:"Осмотры не записаны.",
+  ed_round:"Сам обход",
+  ed_round_sub:"Единица, дата и тип обхода — это то, под чем записан документ; здесь их изменить нельзя. Аннулируйте обход и запишите заново.",
+  ed_smu:"Счётчик наработки", ed_smuph:"наработка на момент осмотра",
+  ed_who:"Осмотр выполнил", ed_sup:"Проверил",
+  ed_smu_rate:"У машины {n} показаний счётчика, по ним наработка {r} ч/сут — план строится по ней, а не по допущению для парка.",
+  ed_smu_norate:"Показаний счётчика у машины: {n}. Если их два и с достаточным интервалом, план строится по фактической наработке, а не по 20 ч/сут для парка.",
   tab_due:"Срок и пропуски",
   dd_title:"Каждый обход — по тому счётчику, на котором он назначен",
   dd_sub:"Часы, а не дни: машина, простоявшая три недели, не износилась. Строка — это одна единица и один обход, отсчитанный от последнего, записанного где угодно в системе, и по собственной наработке машины, если её измерили два показания счётчика. Если обход решили не делать — здесь написано, почему.",
@@ -2520,6 +2557,19 @@ function applyEdits(r){
   const out=Object.assign({},r);
   out._void=!!e.void; out._reason=e.reason||""; out._editBy=e.by||""; out._editAt=e.at||"";
   out._note=e.note||"";
+  /* Round-level corrections. The hour meter is the one that matters most and
+     was the one with no way to fix it: the due list schedules on hours, the
+     wear forecast projects on hours, and a machine's own operating rate is
+     measured from two of them. A round that came back with the meter blank or
+     mistyped put a wrong date in front of a planner, and the only remedy was
+     to void the round and re-walk the machine.
+
+     Never the unit, the date or the round type. Those three are this record's
+     identity — the correction is filed under `equip|date|type` — so changing
+     one here would orphan the very marker doing the changing. */
+  const F=e.fields||{};
+  ["smu","by","sup"].forEach(function(k){
+    if(F[k]!==undefined && F[k]!==null){ out[k]=F[k]; out["_f_"+k]=1; } });
   const per=e.items||{};
   out._edited=Object.keys(per);
   out.items=(r.items||[]).map(i=>{
@@ -3402,7 +3452,29 @@ function ucRefName(key,rec,lg){
     return g && g!==k ? g : "";
   }
   const p=(window.WEAR&&WEAR.points||[]).find(x=>x.code===pt);
-  return p ? (p[lg]||p.en)+(pos?" — "+ucPosLabel(pos,lg):"") : "";
+  if(p) return (p[lg]||p.en)+(pos?" — "+ucPosLabel(pos,lg):"");
+  /* And every other round: the plug, the filter cut, the walk-around, the
+     thermal survey.
+
+     This used to stop at the wear reference and return "", so the caller fell
+     back to `it.label` — the single string the capturing phone wrote, in
+     whichever language that phone was set to. On a unit report comparing two
+     rounds of the same four plugs that printed "4C LEFT REAR FINAL DRIVE"
+     above "Левый задний бортовой редуктор": both records correct, neither
+     rendered in the reader's language, because the name had been frozen at
+     capture instead of looked up. points.js is the same reference the app
+     names them from, so now both ends agree and either language is available
+     on demand. */
+  const a=ASSET_BY[rec&&rec.equip]||{};
+  const cls=(rec&&rec.cls)||a.cls||"";
+  if(window.PTS && rec && rec.type){
+    /* A thermal survey walks the inspection's points; it has no list of its
+       own and never did. */
+    const ty = rec.type==="TEMP" ? "INSP" : rec.type;
+    const n = PTS.label(cls, ty, k, lg);
+    if(n) return n;
+  }
+  return "";
 }
 function ucName(it,rec){
   return ucRefName(it.key,rec) || it.label || it.key;
@@ -3966,6 +4038,25 @@ function openEdit(key,keepMsg){
   $("edVoid").style.display=rec._void?"none":"";
   renderConflict(rec);
 
+  /* The round's own fields. `data-init` is what the control opened with, so an
+     untouched box is never written and one cleared on purpose still is. */
+  [["edSmu","smu"],["edWho","by"],["edSup","sup"]].forEach(([id,f])=>{
+    const el=$(id); if(!el) return;
+    el.value=String(rec[f]==null?"":rec[f]);
+    el.dataset.init=el.value;
+  });
+  /* Why the hour meter is worth typing in. A machine with two readings is
+     scheduled on what it actually does; one with none is scheduled on the
+     fleet's assumption, and the difference is days. */
+  const hint=$("edSmuHint");
+  if(hint){
+    const trail=RECS.filter(x=>!x._void && x.equip===rec.equip && x.smu!=null && x.smu!=="")
+      .map(x=>({d:x.date,h:x.smu}));
+    const rate=window.DUE?DUE.rateFrom(trail):null;
+    hint.textContent = rate ? t("ed_smu_rate",{r:rate,n:trail.length})
+      : t("ed_smu_norate",{n:trail.length});
+  }
+
 
   $("edItems").innerHTML=(rec.items||[]).map((i,n)=>{
     const sev=sevOf(rec,i);
@@ -4093,6 +4184,20 @@ $("editOv").onclick=e=>{ if(e.target.id==="editOv") $("editOv").classList.add("h
 /* Only what actually moved. Comparing against the value the control opened with
    means an untouched field is never written, and clearing one on purpose still
    is — "" differs from what it started as. */
+/* The round's own fields, by the same rule as the items: only what moved. */
+function collectFields(){
+  const out={};
+  [["edSmu","smu"],["edWho","by"],["edSup","sup"]].forEach(([id,f])=>{
+    const el=$(id); if(!el) return;
+    const v=(el.value||"").trim();
+    if(v===(el.dataset.init||"")) return;
+    out[f]=v;
+  });
+  return out;
+}
+function mergedFields(){
+  return Object.assign({}, (edits[edKey]&&edits[edKey].fields)||{}, collectFields());
+}
 function collectEdit(){
   const items={};
   $("edItems").querySelectorAll("[data-f]").forEach(el=>{
@@ -4158,16 +4263,18 @@ function edPost(extra){
 }
 $("edSave").onclick=()=>{
   const rec=RECS.find(r=>recKey(r)===edKey);
-  if(edPost({ items:mergedItems(), note:$("edNote").value.trim(),
+  if(edPost({ items:mergedItems(), fields:mergedFields(), note:$("edNote").value.trim(),
               void:!!(rec&&rec._void), reason:(rec&&rec._reason)||"" })) openEdit(edKey,true);
 };
 $("edVoid").onclick=()=>{
   const reason=$("edReason").value.trim();
   if(!reason){ $("edMsg").textContent=t("ed_needreason"); return; }
-  if(edPost({ void:true, reason, items:mergedItems(), note:$("edNote").value.trim() })) openEdit(edKey,true);
+  if(edPost({ void:true, reason, items:mergedItems(), fields:mergedFields(),
+              note:$("edNote").value.trim() })) openEdit(edKey,true);
 };
 $("edUnvoid").onclick=()=>{
-  if(edPost({ void:false, reason:"", items:mergedItems(), note:$("edNote").value.trim() })) openEdit(edKey,true);
+  if(edPost({ void:false, reason:"", items:mergedItems(), fields:mergedFields(),
+              note:$("edNote").value.trim() })) openEdit(edKey,true);
 };
 /* Where a round is actually held here. Note this says nothing about Drive: a
    record the dashboard holds as "imported" may well be in Drive too — the phone
@@ -5991,8 +6098,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=157"></script>
-<script src="sync-adapter.js?v=157"></script>
-<script src="report.js?v=157"></script>
+<script src="drive.js?v=158"></script>
+<script src="sync-adapter.js?v=158"></script>
+<script src="report.js?v=158"></script>
 </body>
 </html>

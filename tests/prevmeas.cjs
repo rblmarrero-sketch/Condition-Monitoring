@@ -1,23 +1,27 @@
-/* What it was last time, and how many sheets it takes to say so.
+/* What it was last time — as the office screen shows it, and nothing else.
 
-   Two complaints about one report, and they turn out to be the same report
-   telling the reader less than it holds.
+   Three rounds of the same complaint, and the answer got simpler each time.
 
-   ONE — the previous reading was missing. A magnetic plug report on a truck
-   with an earlier visit printed a summary line — "2026-07-29 · Magnetic Plug ·
-   4 points · Watch · None flagged" — and nothing else about that visit. What
-   each POINT was is in the data and was printed nowhere: 4C was A with twelve
-   particles in July and is C with forty-six today, which is the entire reason
-   somebody opens a unit report, and it was a real value rendered as nothing.
-   The code said so out loud — "only for machines that were measured, a plug
-   round has nothing to line up in columns" — and that was simply wrong. A plug
-   round IS measured. It is measured in grades and particle counts.
+   FIRST, the previous reading was missing. A magnetic plug report on a truck
+   with an earlier visit printed one summary line — "2026-07-29 · Magnetic Plug
+   · 4 points · Watch" — and nothing about what each POINT was. That was in the
+   data and printed nowhere: a real value rendered as nothing.
 
-   TWO — it took two sheets. Page one was 45% white and the earlier-rounds
-   table, one row of it, started page two, because the history section carried
-   an unconditional page break. Right for a unit report holding eight rounds of
-   undercarriage; pure waste for the ordinary case, which is a short round and a
-   short history. Times a fleet of 1,128, printed and filed.
+   SECOND, the photographs were missing. They had been fetched with everything
+   else and attached to the record; only the printing was absent. A reader
+   looking at "4C was C in July and is B today" wants to see July's plug.
+
+   THIRD — and this is what the sheet came back with, struck through in red —
+   the two comparison tables were redundant. They were. Every fact in them is
+   on a card: the grade, the severity, the reading, the finding, and the date
+   and hour meter in the header above them. Three renderings of one truth is
+   not thoroughness, it is three places for them to disagree.
+
+   So what a unit report is now: the latest round, then every earlier round as
+   the office screen shows it — photographs, with what that point was under
+   each — compact enough that four or five fit a page. One table survives, and
+   only for rounds recorded in millimetres, because a condemn limit, a rate of
+   wear and a forecast are on no card and cannot be reconstructed by looking.
 
    Run: node tests/prevmeas.cjs   (needs tests/mock.cjs on 8099) */
 const { chromium } = require(require('./pw.cjs'));
@@ -112,29 +116,38 @@ const LAY = `(secs) => {
   document.head.appendChild(st);
   const d = document.createElement('div'); d.id = 'rptProbe'; d.className = 'rp';
   d.innerHTML = '<div id="rptRoot" style="width:760px;background:#fff">'
-    + secs.map(s => '<div class="secwrap" data-nb="' + (s.nb ? 1 : 0) + '">' + s.html + '</div>').join('')
+    + secs.map(s => '<div class="secwrap" data-nb="' + (s.nb ? 1 : 0) + '"'
+        + ' data-gap="' + (s.gap != null ? s.gap : 14) + '">' + s.html + '</div>').join('')
     + '</div>';
   document.body.insertBefore(d, document.body.firstChild);
   const PH = 842, M = 38, FOOT = 22, top = M, bottom = PH - M - FOOT, cw = 595 - 2 * M;
   let y = top, page = 1, drew = false;
-  [...document.querySelectorAll('#rptProbe .secwrap')].forEach(el => {
+  const blocks = [];
+  [...document.querySelectorAll('#rptProbe .secwrap')].forEach((el, i) => {
     const hh = el.getBoundingClientRect().height * (cw / 760);
     if (el.dataset.nb === '1' && drew) { page++; y = top; }
     else if (drew && hh <= bottom - top && y + hh > bottom) { page++; y = top; }
+    const start = page;
     let rem = hh;
     while (rem > 0) { const take = Math.min(bottom - y, rem); y += take; rem -= take;
       drew = true; if (rem > 0.5) { page++; y = top; } else break; }
-    y += 14;
+    /* The gap the paginator actually leaves after this section, not a literal
+       14 — an earlier round asks for less, and that is the difference between
+       four to a page and five. A harness that assumes the old number measures
+       a document that never prints. */
+    y += Number(el.dataset.gap);
+    blocks.push({ i, h: Math.round(hh), page: start,
+                  olderr: el.querySelector('.olderr') ? 1 : 0 });
   });
   const wide = [...document.querySelectorAll('#rptRoot table')]
     .map(t => Math.round(t.getBoundingClientRect().width)).filter(w => w > 762);
   const root = document.getElementById('rptRoot');
-  return { pages: page, wide,
+  return { pages: page, wide, blocks,
            html: root.innerHTML,
            text: root.textContent.replace(/\\s+/g, ' '),
            /* Every section that is one of the earlier rounds reprinted: a
               .machhd inside a .sec that is not the masthead. */
-           full: [...root.querySelectorAll('.sec.olderr .machhd')].map(h => ({
+           full: [...root.querySelectorAll('.sec.olderr .ohd')].map(h => ({
              head: h.textContent.replace(/\\s+/g, ' ').trim(),
              cards: h.closest('.sec').querySelectorAll('.cel').length,
              shots: h.closest('.sec').querySelectorAll('img.ph,.phg img').length,
@@ -173,133 +186,101 @@ const run = async (p, recs, unit, want, photos) => {
   await p.goto(B, { waitUntil: 'load' });
   await p.waitForTimeout(1200);
 
-  console.log('the plug round says what each point was last time');
-  let r = await run(p, TWO, 'TK160');
-  ok('there is a point-by-point table at all', /point by point/i.test(r.text), r.text.slice(-90));
-  /* The whole complaint, in one line: July's reading for 4C. */
-  ok('the earlier grade for a named point is printed', /PC 12/.test(r.text),
-     (r.text.match(/Point by point.{0,140}/i) || [""])[0]);
-  ok('and today\'s beside it', /PC 46/.test(r.text));
-  ok('every point carries its earlier reading, not just the first',
-     ['PC 12', 'PC 10', 'PC 22', 'PC 9'].every(x => r.text.indexOf(x) >= 0),
-     ['PC 12', 'PC 10', 'PC 22', 'PC 9'].filter(x => r.text.indexOf(x) < 0).join(' ') || 'all four');
-  /* A grade with no reason behind it is half a record. */
-  ok('a defect raised at a point shows on that point\'s cell',
-     (r.html.match(/class="gr-d"/g) || []).length === 4,
-     String((r.html.match(/class="gr-d"/g) || []).length));
-  ok('the earlier column is dated and carries its hour meter',
-     /2026-07-29/.test(r.text) && /7180/.test(r.text));
-  ok('and the reader is told which column is today',
-     /this round/i.test(r.text) && /gr-now/.test(r.html));
-
-  console.log('\nthe machine\'s readings are not repeated down every row');
-  /* comp and oil hours belong to the compartment, not the plug. Printed on all
-     four rows they are four times the ink for one fact, and they crowd out the
-     particle count, which is the number that differs. */
-  const pbp = r.html.slice(r.html.search(/class="mh gh"/));
-  ok('shared component hours are dropped from the cells', !/comp 7725/.test(pbp),
-     (pbp.match(/comp[^<]*/) || ["none"])[0]);
-  ok('but the reading that differs between points is kept',
-     /PC 46/.test(pbp) && /PC 52/.test(pbp));
-
-  console.log('\nand the comparison does not demand a sheet of its own');
-  /* The original complaint: a page 45% white, followed by a second holding a
-     table of one row. State it about the TABLES — a report that also reprints
-     an earlier round in full is longer because it carries more, which is not
-     the same defect and is the thing that was asked for. */
-  ok('nothing runs off the right-hand edge', !r.wide.length, r.wide.join(' ') || 'all within 760px');
-  r = await run(p, TWO_QUIET, 'TK160');
-  ok('an earlier round with nothing to show is not reprinted', !r.full.length,
-     r.full.map(x => x.head).join(' | ') || 'no full reprint');
-  ok('and its summary and comparison sit on the page above, not a new one',
-     r.pages === 1, r.pages + ' page(s)');
-  ok('while still being counted and listed', /2026-07-29/.test(r.text));
-
-  console.log('\na long history is capped, and says so');
-  r = await run(p, SIX, 'TK160');
-  const cols = (r.html.slice(r.html.search(/class="mh gh"/)).match(/class="gr-dt"/g) || []).length;
-  ok('at most four rounds become columns', cols === 4, cols + ' columns');
-  ok('and the rounds left out are counted rather than dropped silently',
-     /\+ ?2/.test(r.text), (r.text.match(/Point by point[^·]*·[^A-Za-zА-Яа-я]*\d/i) || [""])[0]);
-  ok('the table above still lists every one of them',
-     ['2026-03-04', '2026-04-08', '2026-05-13', '2026-06-17', '2026-07-29']
-       .every(d => r.text.indexOf(d) >= 0));
-  ok('six columns of history still fit the paper', !r.wide.length, r.wide.join(' ') || 'within 760px');
-
-  console.log('\na measured round keeps the table it already had');
-  r = await run(p, UC, 'DZ002');
-  ok('millimetres are still lined up in columns', /measurement history/i.test(r.text));
-  ok('and are not repeated as a second table in grades', !/point by point/i.test(r.text),
-     (r.text.match(/Point by point/i) || ["absent"])[0]);
-  ok('the millimetre readings are the ones printed', /29/.test(r.text) && /220/.test(r.text));
-  /* The six-sheet report this collapse exists to prevent: the same drawing of
-     the same dozer, once per round. The millimetres are compared in the table
-     above, which is where an undercarriage round's record belongs. */
-  ok('and its earlier round does not reprint the drawing and the grid',
-     !r.full.length, r.full.map(x => x.head).join(' | ') || 'not reprinted');
-
-  console.log('\nthe earlier round, as it was reported');
-  /* The second complaint, in the reader's own words: "we should be seeing the
-     previous round with photo and same format". The photographs were fetched
-     with everything else and attached to the record; only the printing was
-     missing. */
-  r = await run(p, TWO_SHOT, 'TK160', '', true);
-  ok('the earlier round gets a section of its own', r.full.length === 1,
+  console.log('the earlier round, as the office screen shows it');
+  let r = await run(p, TWO_SHOT, 'TK160', '', true);
+  ok('it gets a block of its own', r.full.length === 1,
      r.full.map(x => x.head).join(' | ') || 'none');
   const jul = r.full[0] || {};
   ok('headed by its date, type, hour meter and inspector',
      /2026-07-29/.test(jul.head || '') && /7180/.test(jul.head || '')
      && /Хасенов/.test(jul.head || ''), jul.head);
-  ok('and its verdict, in the same words the summary table uses',
+  ok('and its verdict, in the same words the latest round uses',
      /Watch/i.test(jul.head || ''), jul.head);
+  /* T.both's block variants put the translation on its own line, which is
+     right in a table cell and wrong on a header — it printed "Magnetic
+     PlugМагнитная пробка", two words run together with nothing between. */
+  ok('with the two languages separated rather than run together',
+     !/PlugМагнитная/.test(jul.head || ''), jul.head);
   ok('one card per point, the same cards the latest round uses', jul.cards === 4, String(jul.cards));
   ok('with the photographs the inspector took', jul.shots === 4, String(jul.shots));
-  ok('and the grade and severity chips on each', jul.chips === 4, String(jul.chips));
-  /* What collapsing the earlier rounds was FOR. */
-  ok('but not a second masthead', (r.html.match(/class="mast"/g) || []).length === 1,
-     String((r.html.match(/class="mast"/g) || []).length) + ' masthead(s)');
-  ok('nor a second signature block', (r.html.match(/class="shsign"/g) || []).length === 1,
-     String((r.html.match(/class="shsign"/g) || []).length) + ' signature block(s)');
-  ok('and the masthead does not still claim the round was left out',
-     !/rather than reprinted/i.test(r.text), (r.text.match(/earlier round[^.]*\./i) || [""])[0]);
+  ok('and the grade and severity on each', jul.chips === 4, String(jul.chips));
+
+  console.log('\nwhat each point was, on the card and not in a table');
+  ok('July\'s reading for a named point is printed', /PC 34/.test(r.text),
+     (r.text.match(/2026-07-29.{0,120}/) || [""])[0]);
+  ok('every point carries its own, not just the first',
+     ['PC 34', 'PC 37', 'PC 40', 'PC 43'].every(x => r.text.indexOf(x) >= 0),
+     ['PC 34', 'PC 37', 'PC 40', 'PC 43'].filter(x => r.text.indexOf(x) < 0).join(' ') || 'all four');
+  ok('and today\'s beside it', /PC 21/.test(r.text));
+
+  console.log('\nthe tables that said it a third time are gone');
+  ok('no earlier-rounds summary table', !/earlier rounds/i.test(r.text),
+     (r.text.match(/Earlier rounds/i) || ["absent"])[0]);
+  ok('no point-by-point grid', !/point by point/i.test(r.text),
+     (r.text.match(/Point by point/i) || ["absent"])[0]);
+  ok('and a plug report carries no table at all',
+     !/<table/.test(r.html), String((r.html.match(/<table/g) || []).length) + ' table(s)');
+
+  console.log('\nbut not the furniture');
+  ok('one masthead, not one per round', (r.html.match(/class="mast"/g) || []).length === 1,
+     String((r.html.match(/class="mast"/g) || []).length));
+  ok('one signature block', (r.html.match(/class="shsign"/g) || []).length === 1,
+     String((r.html.match(/class="shsign"/g) || []).length));
 
   console.log('\nthe things that were being said twice');
-  /* "Ferrous debris — moderate · Ferrous debris — moderate +2" reads as four
-     different findings until you read it twice. */
-  const worst = (r.text.match(/Ferrous debris — moderate/g) || []).length;
-  ok('one defect on four points is named once in the summary row',
-     !/moderate · Ferrous debris/.test(r.text), (r.text.match(/Watch[^|]{0,90}/) || [""])[0]);
-  /* Names on this fleet are written "4C LEFT REAR FINAL DRIVE" and the card
-     prints the code above the name in its own line. */
   ok('a point code is not printed above a name that already starts with it',
-     !/4C<\/div><div class="pn">4C/.test(r.html) && !/>4C 4C</.test(r.html),
+     !/class="pk">4C<\/div><div class="pn">4C/.test(r.html),
      (r.html.match(/class="pk">[^<]*<\/div><div class="pn">[^<]{0,30}/) || [""])[0]);
-  ok('and not appended to it in the comparison table either',
-     !/4C LEFT REAR FINAL DRIVE[^<]*<span class="code">4C/.test(r.html));
+  /* One finding on four points, repeated once per point, reads as four
+     different findings until you read it twice. */
+  ok('one finding shared by every point is stated once, above them',
+     /class="ocommon"/.test(r.html) && !/moderate · Ferrous debris/.test(r.text),
+     (r.text.match(/Same on all[^P]{0,70}/i) || [""])[0]);
 
-  console.log('\na machine with a long history is capped, and says so');
-  r = await run(p, NINE, 'TK160');
-  ok('at most six earlier rounds are reprinted in full', r.full.length === 6,
+  console.log('\nfour or five rounds to a page');
+  /* The number that was asked for, measured on the document that prints. */
+  r = await run(p, NINE, 'TK160', '', true);
+  ok('eight earlier rounds are all reprinted — no silent cap', r.full.length === 8,
      r.full.length + ' reprinted');
-  ok('and the ones that were not are counted, not dropped silently',
-     /further round/i.test(r.text), (r.text.match(/\d+ further round[^.]*\./i) || [""])[0]);
-  ok('every one of them is still listed in the table above',
-     ['2026-01-07', '2026-02-11', '2026-07-01'].every(d => r.text.indexOf(d) >= 0));
+  const perPage = {};
+  r.blocks.filter(x => x.olderr).forEach(x => { perPage[x.page] = (perPage[x.page] || 0) + 1; });
+  const most = Math.max(...Object.values(perPage));
+  ok('a page of history holds at least four of them', most >= 4,
+     Object.entries(perPage).map(([k, v]) => `p${k}:${v}`).join(' '));
+  ok('and no more than five, so each one is still readable', most <= 5, String(most));
+  ok('nine rounds come to a handful of sheets, not one each', r.pages <= 4,
+     r.pages + ' page(s) for 9 rounds');
+  ok('nothing runs off the right-hand edge', !r.wide.length, r.wide.join(' ') || 'within 760px');
+
+  console.log('\na round with nothing to show gets no block');
+  r = await run(p, TWO_QUIET, 'TK160');
+  ok('no header standing over an empty space', !r.full.length,
+     r.full.map(x => x.head).join(' | ') || 'none');
+  ok('and the sheet is one page', r.pages === 1, r.pages + ' page(s)');
+
+  console.log('\na measured round keeps the one table that cannot be looked at');
+  r = await run(p, UC, 'DZ002');
+  ok('millimetres are still lined up in columns', /measurement history/i.test(r.text));
+  ok('the readings are the ones printed', /29/.test(r.text) && /220/.test(r.text));
+  ok('and it is not repeated as a second table in grades', !/point by point/i.test(r.text));
+  /* The six-sheet report this collapse exists to prevent: the same drawing of
+     the same dozer, once per round. */
+  ok('its earlier round does not reprint the drawing and the grid', !r.full.length,
+     r.full.map(x => x.head).join(' | ') || 'not reprinted');
 
   console.log('\nRussian');
   r = await run(p, TWO, 'TK160', 'ru');
-  ok('the new table is translated, not left in English',
-     /По точкам/.test(r.text), (r.text.match(/По точкам.{0,40}/) || [""])[0]);
+  ok('the earlier round is headed in Russian', /Магнитная пробка/.test(r.text),
+     (r.full[0] || {}).head);
   ok('the inspector\'s own readings are not translated away', /PC 12/.test(r.text));
   ok('with nothing off the edge', !r.wide.length, r.wide.join(' ') || 'within 760px');
-  ok('and the earlier round is headed in Russian too',
-     /Магнитная пробка/.test((r.full[0] || {}).head || ''), (r.full[0] || {}).head);
+  ok('and the point names come from the reference, in the reader\'s language',
+     /редуктор/.test(r.text), (r.text.match(/[А-Яа-я ]*редуктор/) || [""])[0]);
 
   console.log('\none round has no history to show');
   r = await run(p, TWO.slice(1), 'TK160');
-  ok('a single round prints no earlier-rounds section', !/earlier rounds/i.test(r.text));
-  ok('and no empty point-by-point table', !/point by point/i.test(r.text));
-  ok('and nothing is reprinted below it', !r.full.length, r.full.length + ' section(s)');
+  ok('nothing is reprinted below it', !r.full.length, r.full.length + ' section(s)');
+  ok('and no table appears with nothing to put in it', !/<table/.test(r.html));
   ok('and is one page', r.pages === 1, r.pages + ' page(s)');
 
   console.log(fails.length ? '\nFAILURES:\n  ' + [...new Set(fails)].join('\n  ')
