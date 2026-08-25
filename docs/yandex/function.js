@@ -203,7 +203,7 @@ async function readRecords(p) {
   const cars = all.filter(f => /\.json$/i.test(f.name) && f.updated > after
                             && f.path.indexOf(INDEX_DIR + '/') !== 0)
                   .sort((a, b) => a.updated - b.updated);
-  const records = [], edits = [], conflicts = [];
+  const records = [], edits = [], conflicts = [], deleted = [];
   let read = 0, bad = 0, truncated = false, cursor = after;
   for (const f of cars) {
     if (read >= max) { truncated = true; break; }
@@ -213,14 +213,21 @@ async function readRecords(p) {
         if (j && j.key) edits.push(j);
       } else if (/\.conflict\.json$/i.test(f.name) || (j && j.type === 'cm-record-conflict')) {
         if (j && j.key) conflicts.push(j);
-      } else if (!/\.deleted\.json$/i.test(f.name) && !(j && j.type === 'cm-index-shard')) {
+      } else if (/\.deleted\.json$/i.test(f.name) || (j && j.type === 'cm-record-deleted')) {
+        /* The round was deleted from the office. The files are already gone —
+           this marker is the only thing left that says so, and a phone that
+           never sees it goes on counting the unit as inspected forever. It was
+           being skipped here, which is why a machine deleted in the dashboard
+           stayed on the due list. */
+        if (j && j.key) deleted.push({ key: j.key, by: j.by || '', at: j.at || '' });
+      } else if (!(j && j.type === 'cm-index-shard')) {
         for (const r of ((j && j.records) || [])) { r._file = f.path; records.push(r); }
       }
       read++;
     } catch (e) { bad++; }
     cursor = f.updated;            // advance even on a bad file, or it blocks the queue
   }
-  const out = { ok: true, records, edits, conflicts, read, failed: bad,
+  const out = { ok: true, records, edits, conflicts, deleted, read, failed: bad,
                 pending: Math.max(0, cars.length - read - bad),
                 truncated, cursor, files: all.length,
                 photos: all.filter(f => MEDIA_RE.test(f.name)).length };

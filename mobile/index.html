@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=152">
+<link rel="manifest" href="manifest.webmanifest?v=153">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=152">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=152">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=152">
+<link rel="apple-touch-icon" href="icon-192.png?v=153">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=153">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=153">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1771,29 +1771,29 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=152"></script>
-<script src="upload-defaults.js?v=152"></script>
-<script src="hme.js?v=152"></script>
-<script src="mp-fc.js?v=152"></script>
-<script src="hme-cascade.js?v=152"></script>
-<script src="assets.js?v=152"></script>
-<script src="temp-limits.js?v=152"></script>
-<script src="due.js?v=152"></script>
-<script src="wear.js?v=152"></script>
-<script src="wear-figs.js?v=152"></script>
-<script src="wear-map.js?v=152"></script>
-<script src="machine-photos.js?v=152"></script>
-<script src="machine-fig.js?v=152"></script>
-<script src="get.js?v=152"></script>
-<script src="uc-points.js?v=152"></script>
-<script src="inspect-guide.js?v=152"></script>
-<script src="get-figs.js?v=152"></script>
-<script src="body-points.js?v=152"></script>
-<script src="body-map.js?v=152"></script>
-<script src="lube.js?v=152"></script>
-<script src="lube-overrides.js?v=152"></script>
-<script src="lube2027.js?v=152"></script>
-<script src="report-core.js?v=152"></script>
+<script src="native.js?v=153"></script>
+<script src="upload-defaults.js?v=153"></script>
+<script src="hme.js?v=153"></script>
+<script src="mp-fc.js?v=153"></script>
+<script src="hme-cascade.js?v=153"></script>
+<script src="assets.js?v=153"></script>
+<script src="temp-limits.js?v=153"></script>
+<script src="due.js?v=153"></script>
+<script src="wear.js?v=153"></script>
+<script src="wear-figs.js?v=153"></script>
+<script src="wear-map.js?v=153"></script>
+<script src="machine-photos.js?v=153"></script>
+<script src="machine-fig.js?v=153"></script>
+<script src="get.js?v=153"></script>
+<script src="uc-points.js?v=153"></script>
+<script src="inspect-guide.js?v=153"></script>
+<script src="get-figs.js?v=153"></script>
+<script src="body-points.js?v=153"></script>
+<script src="body-map.js?v=153"></script>
+<script src="lube.js?v=153"></script>
+<script src="lube-overrides.js?v=153"></script>
+<script src="lube2027.js?v=153"></script>
+<script src="report-core.js?v=153"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2278,6 +2278,7 @@ const I18N = {
     team_timeout:"The system did not answer in time — weak signal. Try again in coverage.",
     team_more:"More is waiting — tap again.",
     team_voided:"{n} withdrawn by the office.",
+    team_deleted:"{n} deleted by the office.",
     team_clash:"⑂ {n} sent twice — the office must pick which one stands.",
     team_clash_one:"sent twice",
     team_oftype:"{n} × {ty}", team_all:"All", team_alltypes:"{n} round(s), every type — newest first.",
@@ -2667,6 +2668,7 @@ const I18N = {
     team_timeout:"Хранилище не ответило вовремя — слабый сигнал. Повторите в зоне покрытия.",
     team_more:"Есть ещё — нажмите ещё раз.",
     team_voided:"Отозвано офисом: {n}.",
+    team_deleted:"Удалено офисом: {n}.",
     team_clash:"⑂ Прислано дважды: {n} — офис выберет верную версию.",
     team_clash_one:"прислано дважды",
     team_oftype:"{n} × {ty}", team_all:"Все", team_alltypes:"{n} обход(ов), все типы — новые сверху.",
@@ -6386,6 +6388,42 @@ function teamVoid(eds){
   if(n){ teamSave([...have.values()]); histSave(h); }
   return n;
 }
+/* A round deleted in the dashboard. The office did not withdraw it, it removed
+   it — the sidecar, the photographs, the lot — and left one marker behind.
+
+   This is not the same as a void and it used to be handled worse: the marker
+   was read off the folder and thrown away at both ends, so the only thing that
+   ever changed on a phone was that the summary row stopped coming back on a
+   full re-read. The last-done date, which is what the due list runs on, stayed
+   exactly where it was. A test unit deleted in the office therefore sat on the
+   due list for ever, getting later every day.
+
+   Keyed UNIT|DATE|TYPE, the same as everything else here. */
+function teamGone(dels){
+  if(!dels || !dels.length) return 0;
+  const have=new Map(teamAll().map(x=>[teamKey(x),x]));
+  const h=histAll(); let n=0, touched=false;
+  for(const d of dels){
+    const p=String((d&&d.key)||"").split("|"); if(p.length!==3) continue;
+    const u=p[0].toUpperCase(), date=p[1], ty=p[2];
+    /* Every device's copy of the round: a delete takes the round, not one
+       phone's upload of it. */
+    for(const [k,row] of [...have]) if(row.u===u && row.d===date && row.t===ty){ have.delete(k); n++; }
+    touched=true;
+    /* And the last-done date, recomputed from what is actually left rather
+       than patched — the entry being replaced belongs to the round that has
+       just been removed, and its hour meter and its forecast go with it. */
+    const hk=ty+"|"+u;
+    const rest=[...have.values()].filter(x=>x.t===ty && x.u===u)
+                .sort((a,b)=>String(a.d).localeCompare(String(b.d)));
+    if(rest.length){ const w=rest[rest.length-1];
+      h[hk]={d:w.d, ...(w.s!=null?{h:Number(w.s)}:{})}; }
+    else delete h[hk];
+  }
+  if(touched){ teamSave([...have.values()]); histSave(h); }
+  return n;
+}
+
 /* How many whole rounds this phone keeps. They carry no photographs — a Drive
    record names its pictures rather than embedding them — so one is a few KB of
    JSON and a couple of hundred is nothing next to the photo queue. Bounded
@@ -6576,6 +6614,12 @@ async function teamPull(manual,full){
     const {added,saved,stash}= viaIndex ? teamMergeRows(j.rows||[], !!full && !j.upToDate)
                                         : teamMerge(j.records||[], !!full);
     const voided=teamVoid(j.edits||[]);   // after the merge, so a re-uploaded record is voided too
+    /* A round DELETED from the office, not withdrawn. Its files are gone from
+       the folder, so nothing arrives to contradict what this phone already
+       wrote down — only the marker says it went. Applied the same way a void
+       is, because the effect on a phone is the same: the round no longer
+       counts, and the unit is due again. */
+    const wiped=teamGone(j.deleted||[]);
     const clash=cfMerge(j.conflicts||[]);
     // Only claim to have them once they are actually stored. Advancing the
     // cursor after a failed write loses those inspections permanently.
@@ -6587,6 +6631,7 @@ async function teamPull(manual,full){
     msg.textContent=(!saved ? t("team_full")
       : (added?t("team_new").replace("{n}",added):t("team_upto")).replace("{t}",total))
       +(voided?" "+t("team_voided").replace("{n}",voided):"")
+      +(wiped?" "+t("team_deleted").replace("{n}",wiped):"")
       +(clash?" "+t("team_clash").replace("{n}",clash):"")
       // A truncated reply means the folder holds more than one call returns.
       +(saved&&j.truncated?" "+t("team_more"):"");
@@ -7985,7 +8030,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="152";
+const BUILD="153";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

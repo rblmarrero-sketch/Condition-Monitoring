@@ -649,8 +649,13 @@ function readIndex_(p) {
   try { built = PropertiesService.getScriptProperties().getProperty(INDEX_BUILT) || ''; }
   catch (err) { built = ''; }
   if (!built) {
+    /* The client will read the records the old way and get the markers with
+       them — but sending them here too costs one small folder listing and
+       means no reply from this endpoint is ever silent about a withdrawal. */
+    var mR = metaSince_(since);
     return { ok: true, v: INDEX_V, at: at, needsRebuild: true,
-             records: [], rows: [], edits: [], conflicts: [] };
+             records: [], rows: [], edits: mR.edits, conflicts: mR.conflicts,
+             deleted: mR.deleted };
   }
 
   var root = rootFolder_();
@@ -662,8 +667,14 @@ function readIndex_(p) {
     shards.push({ f: f, name: f.getName(), updated: f.getLastUpdated().getTime() });
   }
   if (!shards.length) {
+    /* No shards is not the same as nothing to say. A correction, a void or a
+       deletion lives in _meta and needs no shard to exist — and this branch was
+       returning empty arrays for all three, so a folder that had not been
+       indexed yet swallowed every one of them. */
+    var m0 = metaSince_(since);
     return { ok: true, v: INDEX_V, at: at, empty: true,
-             records: [], rows: [], edits: [], conflicts: [] };
+             records: [], rows: [], edits: m0.edits, conflicts: m0.conflicts,
+             deleted: m0.deleted };
   }
 
   /* Oldest month first, so a reply that has to stop can be resumed from where
@@ -699,28 +710,41 @@ function readIndex_(p) {
   // Corrections and voids are few and small, and a client that has the records
   // without them shows figures somebody has already withdrawn.
   var meta = metaSince_(since);
-  out.edits = meta.edits; out.conflicts = meta.conflicts;
+  out.edits = meta.edits; out.conflicts = meta.conflicts; out.deleted = meta.deleted;
   return out;
 }
 
-/** The _meta corrections, which are small enough to read whole. */
+/** The _meta markers, which are small enough to read whole.
+
+    Deletions belong here with the corrections. The files of a deleted round are
+    gone from the folder, so its marker is the ONLY thing left that says it ever
+    existed — and this is the path every phone actually uses. Leaving deletions
+    out of it is why a machine deleted in the dashboard stayed on the due list:
+    the summary row aged out of the phone's cache, and the last-done date it had
+    already written stayed exactly where it was. */
 function metaSince_(since) {
-  var edits = [], conflicts = [];
-  try {
-    var dir = folderPath_(rootFolder_(), META_DIR);
-    var it = dir.getFiles();
+  var edits = [], conflicts = [], deleted = [];
+  var take = function (it) {
     while (it.hasNext()) {
       var f = it.next(), n = f.getName();
-      if (!/\.(edit|conflict)\.json$/i.test(n)) continue;
+      if (!/\.(edit|conflict|deleted)\.json$/i.test(n)) continue;
       if (since && f.getLastUpdated().getTime() <= since) continue;
       try {
         var j = JSON.parse(f.getBlob().getDataAsString());
         if (!j || !j.key) continue;
-        if (/\.conflict\.json$/i.test(n)) conflicts.push(j); else edits.push(j);
+        if (/\.conflict\.json$/i.test(n)) conflicts.push(j);
+        else if (/\.deleted\.json$/i.test(n)) deleted.push({ key: j.key, by: j.by || '', at: j.at || '' });
+        else edits.push(j);
       } catch (err) { /* skip */ }
     }
-  } catch (err) { /* no _meta yet */ }
-  return { edits: edits, conflicts: conflicts };
+  };
+  try { take(folderPath_(rootFolder_(), META_DIR).getFiles()); } catch (err) { /* no _meta yet */ }
+  /* Deletion markers are filed in _meta/deletions, one per round and stamped,
+     because a round can be deleted more than once over its life and one file
+     per key would lose the earlier one. A reader that lists only _meta itself
+     finds none of them — which is exactly how this shipped not working. */
+  try { take(folderPath_(rootFolder_(), META_DIR + '/deletions').getFiles()); } catch (err) { /* none yet */ }
+  return { edits: edits, conflicts: conflicts, deleted: deleted };
 }
 
 /* Build the index for a folder that predates it.
@@ -854,7 +878,7 @@ function readRecords_(p) {
            f.path.indexOf(INDEX_DIR + '/') !== 0;
   }).sort(function (a, b) { return a.updated - b.updated; });
 
-  var records = [], edits = [], conflicts = [], read = 0, bad = 0, truncated = false;
+  var records = [], edits = [], conflicts = [], deleted = [], read = 0, bad = 0, truncated = false;
   var cursor = after;
   for (var i = 0; i < sidecars.length; i++) {
     if (read >= max || new Date().getTime() - started > TIME_BUDGET_MS) { truncated = true; break; }
@@ -865,7 +889,14 @@ function readRecords_(p) {
         if (j && j.key) edits.push(j);
       } else if (/\.conflict\.json$/i.test(f.name) || (j && j.type === 'cm-record-conflict')) {
         if (j && j.key) conflicts.push(j);
-      } else if (!/\.deleted\.json$/i.test(f.name) && !(j && j.type === 'cm-index-shard')) {
+      } else if (/\.deleted\.json$/i.test(f.name) || (j && j.type === 'cm-record-deleted')) {
+        /* The round was deleted from the office. Its files are already gone, so
+           this marker is the only thing left that says so — and a phone that
+           never sees it goes on counting the unit as inspected for ever. It was
+           being skipped here, which is why a machine deleted in the dashboard
+           stayed on the due list. */
+        if (j && j.key) deleted.push({ key: j.key, by: j.by || '', at: j.at || '' });
+      } else if (!(j && j.type === 'cm-index-shard')) {
         var rs = (j && j.records) || [];
         for (var k = 0; k < rs.length; k++) { rs[k]._file = f.path; records.push(rs[k]); }
       }
@@ -874,7 +905,8 @@ function readRecords_(p) {
     cursor = f.updated;          // advance even on a bad file, or it blocks the queue
   }
 
-  var out = { ok: true, records: records, edits: edits, conflicts: conflicts, read: read, failed: bad,
+  var out = { ok: true, records: records, edits: edits, conflicts: conflicts,
+              deleted: deleted, read: read, failed: bad,
               pending: Math.max(0, sidecars.length - read - bad),
               truncated: truncated, cursor: cursor, files: all.length,
               photos: all.filter(function (f) { return MEDIA_RE.test(f.name); }).length };
