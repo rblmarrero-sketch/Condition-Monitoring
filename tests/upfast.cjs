@@ -191,9 +191,17 @@ const dims = `(async (blob) => {
 
   /* ---------------------------------------------------------------- 5 */
   console.log('\nnobody was asked to do anything');
+  /* And nothing is left on screen saying so twice. The bar used to read "All
+     synced." beside a header pill reading "Synced"; it is silent now while
+     there is nothing queued and nothing failing, and the pill carries the
+     answer. What matters is that neither of them asks for a press. */
   const bar = ((await p.textContent('#syncBar')) || '').replace(/\s+/g, ' ').trim();
-  ok('the round went up on its own and the bar just says so',
-     /synced|отправлено/i.test(bar) && !/press|tap|нажм/i.test(bar), bar.slice(0, 70));
+  const pill = ((await p.textContent('#netStatus')) || '').replace(/\s+/g, ' ').trim();
+  ok('the round went up on its own', /synced|отправлено/i.test(pill), pill);
+  ok('  and nothing on screen asks anybody to press anything',
+     !/press|tap|нажм/i.test(bar + ' ' + pill), (bar || '(bar silent)') + ' | ' + pill);
+  ok('  the bar stays out of the way while there is nothing to report',
+     bar === '', bar || '(silent)');
 
   await b.close();
   console.log(fails.length ? '\nFAILURES:\n' + fails.join('\n') : '\nall green');

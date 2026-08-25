@@ -48,7 +48,9 @@ const ready = p => p.evaluate(() => [...document.querySelectorAll('.yardrow')].m
 
   /* ---- 1. before the truck leaves the yard ------------------------------ */
   console.log('\nin the yard, with signal');
-  await p.click('#tabbar [data-pane="paneQueue"]');
+  /* "Is this phone fit to work" is System's question — the card sat on the
+     queue, which left System holding one card above a screen of blank. */
+  await p.click('#tabbar [data-pane="paneSystem"]');
   await p.waitForTimeout(5500);
   const yard = await ready(p);
   yard.forEach(r => note(r.k.padEnd(4), r.t + ' — ' + r.s));

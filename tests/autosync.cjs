@@ -101,9 +101,14 @@ const pend = p => p.evaluate(async () => (await dbAll()).filter(r => !r.up).leng
   ok('and the retry disarms once the queue is empty',
     await p.evaluate(async () => { for (let i = 0; i < 20; i++) { if (!retryTimer) return true; await new Promise(r => setTimeout(r, 250)); } return !retryTimer; }));
 
-  const bar2 = await p.textContent('#syncBar');
-  ok('the bar says everything is away', /synced/i.test(bar2 || ''),
-    (bar2 || '').replace(/\s+/g, ' ').trim().slice(0, 70));
+  /* The bar answered "All synced." next to a header pill reading "Synced". It
+     goes quiet now once there is nothing queued and nothing failing — the one
+     state where it had nothing the pill had not already said — and the pill is
+     what reports the all-clear. */
+  const bar2 = (await p.textContent('#syncBar') || '').replace(/\s+/g, ' ').trim();
+  const pill2 = (await p.textContent('#netStatus') || '').replace(/\s+/g, ' ').trim();
+  ok('the all-clear is reported', /synced/i.test(pill2), pill2);
+  ok('  by the pill, not by a bar repeating it', bar2 === '', bar2 || '(silent)');
 
   console.log('\n  the backoff lengthens while it keeps failing, and resets on progress');
   const grew = await p.evaluate(async () => {
