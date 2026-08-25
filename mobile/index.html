@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=153">
+<link rel="manifest" href="manifest.webmanifest?v=154">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=153">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=153">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=153">
+<link rel="apple-touch-icon" href="icon-192.png?v=154">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=154">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=154">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1160,6 +1160,15 @@
   .dueitem .u{font-weight:700;flex:0 0 auto;max-width:62%;overflow:hidden;white-space:nowrap;}
   .dueitem .d{font-size:12.5px;color:var(--muted);flex:1 1 auto;min-width:0;
     overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right;}
+  /* Two lines in the DUE list only, and scoped to it because the team list
+     above is built from the same row and does not want them. A due row carries
+     a round badge, a unit and a category on one line and the schedule on the
+     next; sharing one line cut the category off mid-word — "EXCAVA" — which is
+     the sort of thing nobody reports and everybody squints at. The team list
+     says less per row and reads better as it already was. */
+  #dueList .dueitem{flex-wrap:wrap;}
+  #dueList .dueitem .u{flex:1 1 100%;max-width:100%;min-width:0;text-overflow:ellipsis;}
+  #dueList .dueitem .d{flex:1 1 100%;margin-top:2px;}
   /* A unit brought forward by wear rather than by the interval. It has to read
      as a reason and not as decoration: the fitter is being asked to walk a
      machine early, and "why" is the first thing they will ask. */
@@ -1170,8 +1179,15 @@
   .duerow{display:flex;align-items:stretch;gap:6px;}
   .duerow .dueitem{flex:1 1 auto;min-width:0;}
   .dueforget{flex:0 0 auto;width:44px;border:1px solid var(--border);border-radius:12px;
-    background:var(--surface-2);color:var(--muted);font-size:15px;line-height:1;cursor:pointer;}
-  .dueforget:hover{color:var(--critical);border-color:var(--critical);}
+    background:var(--surface-2);color:var(--muted);font-size:18px;line-height:1;cursor:pointer;}
+  .dueforget:hover{color:var(--ink);border-color:var(--ink-2);}
+  /* Put off, or not being done. Neither is an error and neither is fine, so
+     they take the quiet border rather than the red one — the reason underneath
+     is the part worth reading. */
+  .dueitem.put{border-left-color:var(--ink-2);} .dueitem.off{border-left-color:var(--muted);}
+  #dueList .dueput{flex:1 1 100%;font-size:11.5px;color:var(--ink-2);text-align:left;margin-top:4px;
+    white-space:normal;line-height:1.35;}
+  .chipbtn{padding:8px 12px;font-size:13px;min-width:0;}
   dialog{border:none;border-radius:16px;background:var(--surface);color:var(--ink);max-width:92vw;width:420px;padding:0;}
   dialog::backdrop{background:rgba(0,0,0,.6);}
   .dlg-in{padding:20px;} .dlg-in h3{margin:0 0 8px;} .dlg-in p{color:var(--ink-2);font-size:14px;}
@@ -1585,12 +1601,22 @@
 
   <div class="card">
     <h2><span data-i18n="sec_due">Inspection due</span> <span class="count-badge" id="dueCount">0</span></h2>
+    <!-- A round filter, not an interval box.
+
+         The box used to hold the interval for whatever round the capture screen
+         happened to be set to, which made it look like the control for this
+         list. It was not: to see what undercarriage rounds were due you had to
+         go and change the round type at the top of the app, and an interval
+         somebody retyped here quietly put that phone out of step with the
+         fleet. The schedule is the fleet's now — due.js — and this list shows
+         EVERY round unless you narrow it. -->
     <div class="row" style="margin-bottom:12px">
-      <label class="fld" style="margin:0"><span data-i18n="lbl_due_int">Interval (hours)</span>
-        <input id="dueInt" type="number" inputmode="numeric" min="1" step="50"></label>
+      <label class="fld" style="margin:0"><span data-i18n="lbl_due_round">Round</span>
+        <select id="dueType"></select></label>
       <label class="fld" style="margin:0"><span data-i18n="lbl_due_scope">Show</span>
         <select id="dueScope">
           <option value="due" data-i18n="due_overdue">Overdue &amp; due soon</option>
+          <option value="over" data-i18n="due_missed">Missed only</option>
           <option value="all" data-i18n="due_all">All units with history</option>
         </select></label>
     </div>
@@ -1731,6 +1757,23 @@
 </div>
 <canvas id="qrCanvas" class="hidden"></canvas>
 
+<!-- Not doing a round, and saying why.
+
+     A machine can be due and still not get walked: it is in the workshop, it
+     is off site, nobody could get to it this shift. That is ordinary, and it
+     is not the same as forgetting — but a list that offers only "remove" turns
+     both into the same silent gesture, and then nobody can answer "what did we
+     miss, and why". So the two are separated and both carry a reason. -->
+<dialog id="dueDlg"><div class="dlg-in"><h3 id="dueDlgT"></h3>
+  <p class="hint" id="dueDlgSub" style="margin:0 0 12px"></p>
+  <div class="row" id="dueWhen" style="gap:6px;flex-wrap:wrap"></div>
+  <label class="fld" style="margin:12px 0 0"><span data-i18n="due_why">Reason</span>
+    <input id="dueWhy" type="text" data-i18n-ph="due_why_ph" placeholder="why it is not being done"></label>
+  <div class="hint" id="dueDlgMsg" style="margin-top:8px"></div>
+  <div class="row" style="margin-top:14px">
+    <button class="btn" id="dueDlgCancel" data-i18n="dlg_cancel">Keep</button>
+    <button class="btn primary" id="dueDlgOk" data-i18n="dlg_ok">OK</button></div></div></dialog>
+
 <dialog id="dlg"><div class="dlg-in"><h3 id="dlgTitle"></h3><p id="dlgMsg"></p>
   <div class="row" style="margin-top:14px">
     <button class="btn hidden" id="dlgCancel" data-i18n="dlg_cancel">Keep</button>
@@ -1771,29 +1814,29 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=153"></script>
-<script src="upload-defaults.js?v=153"></script>
-<script src="hme.js?v=153"></script>
-<script src="mp-fc.js?v=153"></script>
-<script src="hme-cascade.js?v=153"></script>
-<script src="assets.js?v=153"></script>
-<script src="temp-limits.js?v=153"></script>
-<script src="due.js?v=153"></script>
-<script src="wear.js?v=153"></script>
-<script src="wear-figs.js?v=153"></script>
-<script src="wear-map.js?v=153"></script>
-<script src="machine-photos.js?v=153"></script>
-<script src="machine-fig.js?v=153"></script>
-<script src="get.js?v=153"></script>
-<script src="uc-points.js?v=153"></script>
-<script src="inspect-guide.js?v=153"></script>
-<script src="get-figs.js?v=153"></script>
-<script src="body-points.js?v=153"></script>
-<script src="body-map.js?v=153"></script>
-<script src="lube.js?v=153"></script>
-<script src="lube-overrides.js?v=153"></script>
-<script src="lube2027.js?v=153"></script>
-<script src="report-core.js?v=153"></script>
+<script src="native.js?v=154"></script>
+<script src="upload-defaults.js?v=154"></script>
+<script src="hme.js?v=154"></script>
+<script src="mp-fc.js?v=154"></script>
+<script src="hme-cascade.js?v=154"></script>
+<script src="assets.js?v=154"></script>
+<script src="temp-limits.js?v=154"></script>
+<script src="due.js?v=154"></script>
+<script src="wear.js?v=154"></script>
+<script src="wear-figs.js?v=154"></script>
+<script src="wear-map.js?v=154"></script>
+<script src="machine-photos.js?v=154"></script>
+<script src="machine-fig.js?v=154"></script>
+<script src="get.js?v=154"></script>
+<script src="uc-points.js?v=154"></script>
+<script src="inspect-guide.js?v=154"></script>
+<script src="get-figs.js?v=154"></script>
+<script src="body-points.js?v=154"></script>
+<script src="body-map.js?v=154"></script>
+<script src="lube.js?v=154"></script>
+<script src="lube-overrides.js?v=154"></script>
+<script src="lube2027.js?v=154"></script>
+<script src="report-core.js?v=154"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2245,10 +2288,15 @@ const I18N = {
     due_basis_cal:"Every {n} days · this round is not scheduled on hours",
     due_basis_own:"{n} on the machine's own rate",
     due_why_wear:"wear, not the interval",
-    due_forget:"Remove from this list",
-    due_forget_t:"Remove {u} from the due list?",
-    due_forget_m:"Clears what this phone remembers about {u} · {ty}. Nothing is deleted from the system — and if the round is still there, the next full refresh brings it back.",
-    due_forget_go:"Remove",
+    lbl_due_round:"Round", due_all_rounds:"All rounds", due_missed:"Missed only",
+    due_n_over:"{n} missed", due_n_soon:"{n} due soon", due_n_put:"{n} put off",
+    due_every:"every {h} h", due_at_rate:"{r} h/day assumed",
+    due_not:"Not doing this one",
+    due_not_t:"{u} — not doing this round?",
+    due_not_m:"{ty}. Put it off to a date, or say it is not being done at all. Either way the reason is kept, so the office can see what was missed and why.",
+    due_put_n:"+{n} d", due_put_to:"put off to {d}", due_off:"Not being done",
+    due_why:"Reason", due_why_ph:"in the workshop · off site · no access",
+    due_why_need:"Say why — this is the part somebody will read later.",
     due_overdue:"Overdue & due soon", due_all:"All units with history",
     btn_due_import:"Load history file", due_days:"{n} d ago", due_over:"overdue {n} d", due_in:"in {n} d",
     due_never:"never done", due_empty:"Nothing due — or no history on this phone yet.",
@@ -2637,10 +2685,15 @@ const I18N = {
     due_basis_cal:"Каждые {n} суток · этот осмотр не планируется по часам",
     due_basis_own:"{n} — по фактической наработке",
     due_why_wear:"по износу, не по интервалу",
-    due_forget:"Убрать из списка",
-    due_forget_t:"Убрать {u} из плановых осмотров?",
-    due_forget_m:"Очистит то, что этот телефон помнит про {u} · {ty}. Из системы ничего не удаляется — и если осмотр там всё ещё есть, полное обновление вернёт его.",
-    due_forget_go:"Убрать",
+    lbl_due_round:"Осмотр", due_all_rounds:"Все виды", due_missed:"Только пропущенные",
+    due_n_over:"пропущено: {n}", due_n_soon:"скоро: {n}", due_n_put:"отложено: {n}",
+    due_every:"каждые {h} ч", due_at_rate:"принято {r} ч/сутки",
+    due_not:"Не выполняем",
+    due_not_t:"{u} — не выполняем этот осмотр?",
+    due_not_m:"{ty}. Отложите на срок или укажите, что осмотр не будет выполнен. В обоих случаях причина сохраняется — офис увидит, что пропущено и почему.",
+    due_put_n:"+{n} сут", due_put_to:"отложено до {d}", due_off:"Не выполняется",
+    due_why:"Причина", due_why_ph:"в ремонте · вне участка · нет доступа",
+    due_why_need:"Укажите причину — её будут читать позже.",
     due_overdue:"Просроченные и скоро", due_all:"Все ед. с историей",
     btn_due_import:"Загрузить историю", due_days:"{n} дн. назад", due_over:"просрочено {n} дн.", due_in:"через {n} дн.",
     due_never:"не проводился", due_empty:"Ничего не требуется — или на телефоне ещё нет истории.",
@@ -3867,7 +3920,7 @@ function applyForm(){ applyRoundSkin();
   $("lubeFields").classList.toggle("hidden", !TYPE_META[type].lube);
   if(TYPE_META[type].wear) renderUCReasons();
   if(TYPE_META[type].get) renderGET();
-  $("dueInt").value=dueHours(type); renderDue(); renderTeam(); renderLastDone(); renderTrend();
+  renderDue(); renderTeam(); renderLastDone(); renderTrend();
   cascL7=null; cascL8=null;
   const tr=currentTree(); const flat=items();
   if(tr){ if(curItem && !flat.some(i=>i.k===curItem)) curItem=""; }
@@ -6024,19 +6077,17 @@ $("saveBtn").onclick=async ()=>{
    entries.json exported from the dashboard. Interval is per inspection type. */
 // Undercarriage is a quarterly round on this fleet, not a monthly one — a 30-day
 // default would put all 1,085 units in the due list every month for nothing.
-/* The interval in HOURS, from due.js — the fleet's figures, in the unit the
-   fleet uses. A phone that has been given its own figure for a round keeps it;
-   the box on the screen is in hours now too, so an old value in DAYS would read
-   as a round due every fortnight of running rather than every quarter. Stored
-   under a new key, so the old one is simply left behind rather than
-   misinterpreted. */
-function dueHours(ty){ const v=parseInt(localStorage.getItem("due_h_"+ty),10);
-  if(v>0) return v;
-  const h=DUE.hours(ty);
-  return h!=null ? h : Math.round(DUE.spec(ty).d*DUE.HOURS_PER_DAY); }
-/* Calendar rounds are shown in days and decided in days. Asking for their
-   interval in hours is a rendering, not a schedule. */
-function dueIsCalendar(ty){ return !localStorage.getItem("due_h_"+ty) && DUE.hours(ty)==null; }
+/* The intervals come from due.js and nowhere else.
+
+   There used to be a box on the due card holding the interval for whatever
+   round the capture screen was set to, and a per-phone override behind it. Two
+   things were wrong with that. It read as the control for the list — it is not,
+   the list has its own filter now — and an interval somebody retyped put that
+   one phone quietly out of step with the fleet, which is the worst way for a
+   schedule to disagree: silently, on one device, in the pit.
+
+   The schedule is the fleet's. Nothing here reads a stored override, so an old
+   one on somebody's phone stops mattering the moment they update. */
 
 /* ---- what "last done" means now -----------------------------------------
    cm_hist was TYPE|UNIT -> "YYYY-MM-DD". It now carries what the machine had
@@ -6098,6 +6149,37 @@ function smuNote(unit,date,smu){
 /* The unit's measured rate, or nothing — and nothing is an honest answer that
    the caller renders as the fleet assumption, said out loud. */
 function unitRate(unit){ return DUE.rateFrom(smuAll()[(unit||"").toUpperCase()]||[]); }
+
+/* ---- a round that is due and is not being done --------------------------
+   A machine can be due and still not get walked: it is in the workshop, it is
+   off site, nobody could get to it this shift. That is ordinary and it is not
+   the same as forgetting — but it has to be SAID, because the question the due
+   list exists to answer is "what did we miss", and an answer that cannot
+   distinguish "nobody went" from "it was on a low-loader" is not one.
+
+   Two kinds, one shape:
+
+     until  a date  the round is put off to then, and comes back on its own
+     until  null    the round is not going to be done at all
+
+   Both carry a reason and who gave it. Kept as TYPE|UNIT -> {until, why, by,
+   at}, cleared the moment a round of that type is actually recorded for the
+   unit, because a deferral is a statement about a round that has not happened
+   and it stops being true the moment one does. */
+const DEFER_KEY="cm_due_defer";
+let deferCache=null;
+function deferAll(){ return deferCache || (deferCache=(()=>{
+  try{ return JSON.parse(localStorage.getItem(DEFER_KEY)||"{}"); }catch(e){ return {}; }
+})()); }
+function deferSave(m){ deferCache=m; try{ localStorage.setItem(DEFER_KEY,JSON.stringify(m)); }catch(e){} }
+function deferOf(ty,unit){ return deferAll()[ty+"|"+(unit||"").toUpperCase()]||null; }
+function deferPut(ty,unit,d){
+  const m=deferAll(); const k=ty+"|"+(unit||"").toUpperCase();
+  if(d) m[k]=d; else delete m[k];
+  deferSave(m);
+}
+/* A round actually walked answers the deferral, whatever it said. */
+function deferClear(ty,unit){ if(deferOf(ty,unit)) deferPut(ty,unit,null); }
 /* Up to one entry per unit per type — ~4000 on this fleet. renderDue() runs it
    on every keystroke in the interval box, so re-parsing it each time was real,
    felt lag. Parsed once, replaced on write. */
@@ -6113,7 +6195,9 @@ function histSave(h){ histCache=h; try{ localStorage.setItem("cm_hist",JSON.stri
 function noteDone(rec){ if(!rec.equip||!rec.date) return; const h=histAll();
   histPut(h,(rec.type||"MP")+"|"+rec.equip,{d:rec.date, h:rec.smu});
   histSave(h);
-  smuNote(rec.equip, rec.date, rec.smu); }
+  smuNote(rec.equip, rec.date, rec.smu);
+  /* "It could not be done" stops being true the moment it is done. */
+  deferClear(rec.type||"MP", rec.equip); }
 
 /* ---- what this round says about when the next one is due ----------------
    A measured round with two readings behind it already knows how fast the part
@@ -6160,108 +6244,165 @@ async function noteWear(rec){
 }
 function daysBetween(iso){ const d=new Date(iso+"T00:00:00"); if(isNaN(d)) return null;
   return Math.floor((new Date(todayISO()+"T00:00:00")-d)/86400000); }
-// Typing "90" fired three full re-renders of a 1000-row list. Coalesce them.
-let dueT=null;
-$("dueInt").addEventListener("input",()=>{
-  clearTimeout(dueT);
-  dueT=setTimeout(()=>{ const v=parseInt($("dueInt").value,10);
-    if(v>0) try{ localStorage.setItem("due_h_"+type,String(v)); }catch(e){}
-    renderDue(); }, 250);
-});
 $("dueScope").onchange=()=>{ localStorage.setItem("due_scope",$("dueScope").value); renderDue(); };
-function renderDue(){
-  renderTabs();
-  const box=$("dueList"); if(!box) return;
-  const h=histAll(), cal=dueIsCalendar(type), iv=dueHours(type);
-  /* "Soon" is a fifth of the interval, and at least a shift. On a 250-hour
-     plug round that is 50 hours — two and a half days at the fleet's rate,
-     which is a round you can plan rather than one you are already late for. */
-  const soonH=Math.max(20, Math.round(iv*0.2));
-  const rows=[];
+$("dueType").onchange=()=>{ localStorage.setItem("due_type",$("dueType").value); renderDue(); };
+function fillDueType(){
+  const sel=$("dueType"); if(!sel) return;
+  sel.innerHTML=`<option value="">${esc(t("due_all_rounds"))}</option>`
+    + TYPE_ORDER.map(k=>`<option value="${k}">${esc(k)} · ${esc(t("type_"+k))}</option>`).join("");
+  sel.value=localStorage.getItem("due_type")||"";
+}
+
+/* ---- what is due, and what was missed -----------------------------------
+   Every round, not the one the capture screen happens to be set to. An
+   inspector asking "what is due" is asking about the machine in front of them
+   and the shift in front of them, not about magnetic plugs specifically — and
+   the old list could only answer for one round type at a time, so the only way
+   to see the undercarriage rounds was to go and change the capture type.
+
+   Missed is not a separate list either. It is this one, sorted worst first,
+   with a count at the top: overdue, due soon, and put off with a reason. */
+function dueRows(only){
+  const h=histAll(), out=[];
   for(const k of Object.keys(h)){
-    const [ty,unit]=k.split("|"); if(ty!==type) continue;
+    const [ty,unit]=k.split("|");
+    if(only && ty!==only) continue;
+    if(!DUE.EVERY[ty] && !TYPE_META[ty]) continue;
     const last=histEntry(h[k]); if(!last) continue;
     /* The machine's own hours per day where two readings have measured it,
        the fleet's assumption where they have not. */
     const n=DUE.next({type:ty, last:last, today:todayISO(), rate:unitRate(unit)});
     if(!n) continue;
-    rows.push({unit, last, n,
-      st: n.over ? "over" : (n.dueInHours<=soonH ? "soon" : "ok")});
+    /* "Soon" is a fifth of the interval and at least a shift. On a 250-hour
+       plug round that is 50 hours — two and a half days at the fleet's rate,
+       which is a round you can still plan rather than one you are late for. */
+    const iv=DUE.hours(ty)||Math.round(DUE.spec(ty).d*n.rate);
+    const soonH=Math.max(20, Math.round(iv*0.2));
+    const d=deferOf(ty,unit);
+    let st = n.over ? "over" : (n.dueInHours<=soonH ? "soon" : "ok");
+    /* A deferral does not hide a machine. Put off to a date, it waits until
+       that date and then comes back on its own; cancelled, it drops out of the
+       working list but is still counted and still there under "All", because a
+       round nobody is going to do is exactly the thing somebody should be able
+       to find later. */
+    if(d && d.until){ const left=DUE.dayDiff(todayISO(), d.until);
+      if(left!=null && left>0) st="put"; }
+    else if(d) st="off";
+    out.push({ty, unit, last, n, d, st});
   }
-  rows.sort((a,b)=>a.n.dueInHours-b.n.dueInHours || a.unit.localeCompare(b.unit));
-  const scope=$("dueScope").value;
-  const show = scope==="all" ? rows : rows.filter(r=>r.st!=="ok");
-  const nOver=rows.filter(r=>r.st==="over").length, nSoon=rows.filter(r=>r.st==="soon").length;
-  const badge=$("dueCount"); badge.textContent=nOver+nSoon;
+  out.sort((a,b)=>a.n.dueInHours-b.n.dueInHours || a.unit.localeCompare(b.unit)
+                || a.ty.localeCompare(b.ty));
+  return out;
+}
+
+function renderDue(){
+  renderTabs();
+  const box=$("dueList"); if(!box) return;
+  const only=($("dueType")||{}).value||"";
+  const rows=dueRows(only);
+  const scope=($("dueScope")||{}).value||"due";
+  const nOver=rows.filter(r=>r.st==="over").length;
+  const nSoon=rows.filter(r=>r.st==="soon").length;
+  const nPut =rows.filter(r=>r.st==="put"||r.st==="off").length;
+  const show = scope==="all" ? rows
+             : scope==="over" ? rows.filter(r=>r.st==="over")
+             : rows.filter(r=>r.st==="over"||r.st==="soon");
+  const badge=$("dueCount");
+  badge.textContent=nOver+nSoon;
   badge.className="count-badge"+(nOver?" crit":(nSoon?" warn":""));
-  if(!show.length){ box.innerHTML=`<div class="empty">${t("due_empty")}</div>`; return; }
+
   const num=n=>Math.abs(n).toLocaleString(lang==="ru"?"ru-RU":"en-GB");
-  box.innerHTML=show.slice(0,200).map(r=>{
-    const a=ASSET_BY[r.unit], n=r.n;
-    /* Days, because a fitter's week is in days — and the hours beside them,
-       because that is what the interval is and what the hour meter reads. A
-       calendar round says days only: printing "600 h" against a walk-around
-       nobody schedules on hours would be inventing a precision. */
-    const days = n.over ? t("due_over").replace("{n}",num(n.dueInDays))
-                        : t("due_in").replace("{n}",num(n.dueInDays));
-    const hrs = cal && !n.why ? "" : " · "+t("due_h").replace("{n}",num(n.dueInHours));
-    /* Why this unit is on the list. The interval is the ordinary answer and
-       goes unsaid; wear is not, and a due list that cannot say which is which
-       is one nobody trusts twice. */
-    const why = n.why==="wear" ? ` <span class="duewhy">${esc(t("due_why_wear"))}</span>` : "";
-    return `<div class="duerow">
-      <button class="dueitem ${r.st}" data-u="${esc(r.unit)}">
-      <span class="u">${esc(r.unit)}${a&&a.cat?` · <span style="color:var(--muted);font-weight:400">${esc(a.cat)}</span>`:""}</span>
-      <span class="d">${t("due_days").replace("{n}",num(n.daysSince))} · ${days}${hrs}${why}</span></button>
-      <button class="dueforget" data-f="${esc(r.unit)}" aria-label="${esc(t("due_forget"))}"
-        title="${esc(t("due_forget"))}">✕</button></div>`; }).join("");
-  box.querySelectorAll("[data-u]").forEach(b=>b.onclick=()=>{ selectEquip(b.dataset.u); showPane("paneCapture"); });
-  box.querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>dueForget(type,b.dataset.f));
-  /* What the box above is actually counting in, and at whose rate. Never left
-     to be inferred: "in 12 d" from a 250-hour interval only makes sense once
-     somebody has been told the machine is assumed to run 20 hours a day. */
+  /* The answer to "what did we miss" is a count, not a list to be measured by
+     eye. It goes above the rows, in the same three words every time. */
   const note=$("dueBasis");
   if(note){
     const measured=rows.filter(r=>r.n.measured).length;
-    note.textContent = cal
-      ? t("due_basis_cal").replace("{n}",iv/DUE.HOURS_PER_DAY)
-      : t("due_basis").replace("{h}",num(iv)).replace("{r}",DUE.HOURS_PER_DAY)
-        + (measured ? " · "+t("due_basis_own").replace("{n}",measured) : "");
+    note.textContent=[
+      t("due_n_over").replace("{n}",nOver),
+      t("due_n_soon").replace("{n}",nSoon),
+      nPut ? t("due_n_put").replace("{n}",nPut) : "",
+      only ? t("due_every").replace("{h}",num(DUE.hours(only)||0))
+             .replace("{d}",DUE.spec(only).d||"") : "",
+      t("due_at_rate").replace("{r}",DUE.HOURS_PER_DAY),
+      measured ? t("due_basis_own").replace("{n}",measured) : "",
+    ].filter(Boolean).join(" · ");
   }
+
+  if(!show.length){ box.innerHTML=`<div class="empty">${t("due_empty")}</div>`; return; }
+  box.innerHTML=show.slice(0,200).map(r=>{
+    const a=ASSET_BY[r.unit], n=r.n;
+    const cal = DUE.hours(r.ty)==null && !n.why;
+    const days = n.over ? t("due_over").replace("{n}",num(n.dueInDays))
+                        : t("due_in").replace("{n}",num(n.dueInDays));
+    const hrs = cal ? "" : " · "+t("due_h").replace("{n}",num(n.dueInHours));
+    const why = n.why==="wear" ? ` <span class="duewhy">${esc(t("due_why_wear"))}</span>` : "";
+    /* Put off, and by whom. The reason is the whole point of having asked for
+       one, so it is on the row rather than behind a tap. */
+    const put = r.d ? `<div class="dueput">${esc(r.d.until
+        ? t("due_put_to").replace("{d}",r.d.until) : t("due_off"))} — ${esc(r.d.why||"")}${
+        r.d.by?` · ${esc(r.d.by)}`:""}</div>` : "";
+    return `<div class="duerow">
+      <button class="dueitem ${r.st}" data-u="${esc(r.unit)}" data-t="${esc(r.ty)}">
+        <span class="u"><span class="tag t-${esc(r.ty)}">${esc(r.ty)}</span> ${esc(r.unit)}${
+          a&&a.cat?` · <span style="color:var(--muted);font-weight:400">${esc(a.cat)}</span>`:""}</span>
+        <span class="d">${t("due_days").replace("{n}",num(n.daysSince))} · ${days}${hrs}${why}</span>
+        ${put}</button>
+      <button class="dueforget" data-f="${esc(r.unit)}" data-ft="${esc(r.ty)}"
+        aria-label="${esc(t("due_not"))}" title="${esc(t("due_not"))}">⋯</button></div>`; }).join("");
+  box.querySelectorAll("[data-u]").forEach(b=>b.onclick=()=>{
+    /* Open the machine ON the round that is due, not on whatever the capture
+       screen was last set to — the list is now all rounds, so the row has to
+       carry its own. */
+    const sel=$("typeSel");
+    if(b.dataset.t && sel && sel.value!==b.dataset.t){ sel.value=b.dataset.t; sel.dispatchEvent(new Event("change")); }
+    selectEquip(b.dataset.u); showPane("paneCapture"); });
+  box.querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>dueNotDoing(b.dataset.ft,b.dataset.f));
 }
-/* A unit that should not be on this list.
 
-   Two ways it happens, and neither of them is the app being wrong. A test unit
-   somebody typed once — "1111" — is on the due list forever, because a round
-   was recorded against it and nothing ever un-records one. And a round deleted
-   straight out of the bucket leaves no marker behind: a void raised in the
-   dashboard reaches every phone and clears the date, but a file removed by hand
-   in the storage console is simply not there any more, and there is nothing to
-   tell a phone that it went.
-
-   So: an explicit way off the list. It clears what THIS PHONE remembers — the
-   last-done date and the summary rows it has cached — and touches nothing in
-   the system. If the round really is still there, the next full refresh brings
-   it straight back, which is the correct answer: the round was done. */
-async function dueForget(ty,unit){
-  const u=(unit||"").toUpperCase(); if(!u) return;
-  const okd=await ask(t("due_forget_t",{u}), t("due_forget_m",{u, ty:t("type_"+ty)}),
-                      t("due_forget_go"), true);
-  if(!okd) return;
-  const h=histAll(); delete h[ty+"|"+u]; histSave(h);
-  /* The cached summary rows too, or the next merge reads one of them and puts
-     the date straight back. They are a copy of what is in the system, and a
-     copy of something that is no longer there is stale, not evidence. */
-  const rest=teamAll().filter(r=>!(r && r.u===u && r.t===ty));
-  if(rest.length!==teamAll().length) teamSave(rest);
-  /* The hour trail is the machine's, not the round's — kept unless nothing at
-     all is left that refers to the unit. */
-  if(!Object.keys(histAll()).some(k=>k.split("|")[1]===u)
-     && !teamAll().some(r=>r&&r.u===u)){
-    const m=smuAll(); delete m[u]; smuSave(m);
+/* ---- "we are not doing this one, and here is why" -----------------------
+   Put off to a date, or not being done at all. Both need a reason: a list that
+   lets a round vanish without one cannot answer the question it exists for. */
+const DUE_PUT=[1,3,7,30];
+async function dueNotDoing(ty,unit){
+  const u=(unit||"").toUpperCase(); if(!u||!ty) return;
+  const dlg=$("dueDlg"); let until=String(DUE_PUT[0]);
+  $("dueDlgT").textContent=t("due_not_t",{u});
+  $("dueDlgSub").textContent=t("due_not_m",{ty:t("type_"+ty)});
+  $("dueWhy").value=(deferOf(ty,u)||{}).why||"";
+  $("dueDlgMsg").textContent="";
+  const paint=()=>{ $("dueWhen").innerHTML=
+      DUE_PUT.map(n=>`<button class="btn chipbtn ${String(n)===until?"primary":""}" data-w="${n}">${
+        esc(t("due_put_n").replace("{n}",n))}</button>`).join("")
+      + `<button class="btn chipbtn ${until==="off"?"danger":""}" data-w="off">${esc(t("due_off"))}</button>`;
+    $("dueWhen").querySelectorAll("[data-w]").forEach(b=>b.onclick=()=>{ until=b.dataset.w; paint(); }); };
+  paint();
+  dlg.showModal();
+  const done=await new Promise(res=>{
+    $("dueDlgCancel").onclick=()=>res(null);
+    $("dueDlgOk").onclick=()=>{
+      const why=$("dueWhy").value.trim();
+      /* Refused, not defaulted. "No reason given" recorded a hundred times is
+         the same as having no record at all. */
+      if(why.length<3){ $("dueDlgMsg").textContent=t("due_why_need"); $("dueWhy").focus(); return; }
+      res({until, why});
+    };
+  });
+  dlg.close();
+  if(!done) return;
+  const by=($("inspector")||{}).value ? $("inspector").value.trim() : "";
+  if(done.until==="off"){
+    deferPut(ty,u,{until:null, why:done.why, by, at:todayISO()});
+  }else{
+    const d=new Date(todayISO()+"T00:00:00Z");
+    d.setUTCDate(d.getUTCDate()+Number(done.until));
+    deferPut(ty,u,{until:d.toISOString().slice(0,10), why:done.why, by, at:todayISO()});
   }
-  renderDue(); renderTeam(); renderLastDone();
+  renderDue();
 }
+
+/* Rounds that are gone rather than put off — a unit deleted in the office, a
+   test unit somebody typed once — leave the list through teamGone() and
+   deferrals, not through a bare cross. See dueNotDoing(). */
 
 /* ===================== what the whole team has uploaded =====================
    The due list only ever knew what THIS phone had recorded, so a unit another
@@ -8030,7 +8171,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="153";
+const BUILD="154";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -9659,6 +9800,7 @@ function checkData(){
 /* ===================== init ===================== */
 updateEquipBtn(); renderGps(); checkData();
 $("dueScope").value=localStorage.getItem("due_scope")||"due";
+fillDueType();
 applyForm(); applyTheme(); applyLang(); renderSignFold(); renderSync(); syncThenArm();
 /* Baselines change how readings are scored, so they have to be in hand before
    a number is judged. The catalogue answers correctly until they land, and the
