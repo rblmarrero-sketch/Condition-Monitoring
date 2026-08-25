@@ -974,6 +974,23 @@ list that says what to walk meant scrolling past forty-two rounds of archive. Th
 and the worklist are different questions, and one of them is asked at the start of every
 shift.
 
+Each screen answers one question, and shows only the controls that can act on it:
+
+| | asks | holds |
+|---|---|---|
+| **Capture** | what am I recording? | the round in progress |
+| **Due** | what do I walk next? | the schedule, filtered by pills |
+| **Queue** | is my work off this phone? | what is on it, and the ways to send it by hand |
+| **System** | is this phone fit, and what has the team done? | the readiness checks, and everything uploaded |
+
+A control appears when it can do something. The sync bar is silent while there
+is nothing queued and nothing failing — the header pill already says *Synced* in
+one word — and returns the moment there is a queue or an error, carrying what the
+pill cannot: the count, the server's own message, and the promise that it will
+keep trying. Share, Export ZIP and the PDF wait until there is a round to hand
+off. The readiness card folds to one line when all six checks pass and opens
+itself the moment one does not.
+
 **Capture · Due · Queue · System.** Due is second: after the app's own job, before
 everything that is about looking backwards. It carries a red badge with the number of
 machines nobody has been to — *missed*, not missed-and-due-soon, because a badge is a call

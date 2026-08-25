@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=159">
+<link rel="manifest" href="manifest.webmanifest?v=160">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=159">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=159">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=159">
+<link rel="apple-touch-icon" href="icon-192.png?v=160">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=160">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=160">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -390,6 +390,22 @@
     scrollbar-width:none;padding-bottom:2px;}
   .tfrounds::-webkit-scrollbar{display:none;}
   .dfilter:empty{display:none;margin:0;}
+  /* A bar with nothing to say takes no room at all — not even its margin. */
+  .syncbar:empty{display:none;}
+  /* A recovery action, offered as a line of text rather than a second button
+     of the same weight as the one used every day. */
+  .linkrow{display:block;width:100%;text-align:left;background:none;border:0;padding:10px 0 2px;
+    min-height:44px;font:inherit;font-size:12.5px;color:var(--muted);
+    text-decoration:underline;text-underline-offset:3px;cursor:pointer;}
+  .linkrow:hover{color:var(--ink-2);}
+  /* Folded: the six rows and the Check-again button stand down, and one line
+     says they all passed. Nothing is hidden that is not good news — the moment
+     a row is amber the card opens itself. */
+  .yardsum{display:none;width:100%;text-align:left;background:none;border:0;padding:6px 0 2px;
+    font:inherit;font-size:12.5px;color:var(--muted);cursor:pointer;min-height:44px;}
+  .yardsum::after{content:"  ▾";color:var(--ink-2);}
+  #yardCard.folded .yardsum{display:block;}
+  #yardCard.folded .yardlist,#yardCard.folded .row,#yardCard.folded .hint{display:none;}
   .dueitem .tag{margin-right:6px;}
   /* 44px minimum, and a gap between them: these sat at ~34px side by side, so a
      gloved thumb aiming for Edit could hit Delete instead. */
@@ -1594,21 +1610,6 @@
 </div><!-- /paneCapture -->
 
 <div class="pane" id="paneQueue">
-  <!-- Everything that has to be true BEFORE the truck leaves the yard, in the
-       one place an inspector already opens. Each of these was already knowable
-       — the service worker answers a health ping, the storage API answers a
-       quota, the queue knows what is unsent — but every one of them lived
-       inside the settings overlay, which nobody opens until something has
-       already gone wrong. In the pit there is no signal to fix any of it. -->
-  <div class="card" id="yardCard">
-    <h2><span data-i18n="sec_ready">Ready for the field</span> <span class="count-badge" id="yardBadge">…</span></h2>
-    <div id="yardList" class="yardlist"></div>
-    <div class="row" style="margin-top:10px">
-      <button class="btn ghost" id="yardGo">⟳ <span data-i18n="btn_ready_again">Check again</span></button>
-    </div>
-    <div class="hint" style="margin-top:8px" data-i18n="ready_hint">Run this while you still have signal. Anything amber here is something you cannot fix at the machine.</div>
-  </div>
-
   <div class="card">
     <h2><span data-i18n="sec_onphone">On this phone</span> <span class="count-badge" id="qCount">0</span></h2>
     <div class="pending" id="pending"></div>
@@ -1621,25 +1622,62 @@
   </div>
 
   <div class="syncbar" id="syncBar"></div>
-  <div class="row" style="margin-bottom:16px">
-    <button class="btn ghost" id="shareBtn">📤 <span data-i18n="btn_share">Share</span></button>
-    <button class="btn primary" id="exportBtn">⬇ <span data-i18n="btn_export">Export ZIP</span></button>
+  <!-- Three ways of taking this phone's work somewhere by hand, and all three
+       need work to be here. With an empty phone every one of them answered a
+       tap with "nothing to export" — three controls whose only possible reply
+       was that they should not have been pressed. The card above already says
+       "Nothing captured yet"; this row simply goes away until there is. -->
+  <div id="handoff" class="hidden">
+    <div class="row" style="margin-bottom:16px">
+      <button class="btn ghost" id="shareBtn">📤 <span data-i18n="btn_share">Share</span></button>
+      <button class="btn primary" id="exportBtn">⬇ <span data-i18n="btn_export">Export ZIP</span></button>
+    </div>
+    <!-- Named for what it is. "PDF report" beside a per-round report button on
+         the round card read as the same document; it is not. That one is one
+         round on one machine, this is every round still on this phone —
+         a shift's work as one sheet, with the cross-machine list on the front. -->
+    <button class="btn ghost" id="reportBtn" style="margin-bottom:16px">📄 <span data-i18n="btn_report">PDF · every round on this phone</span></button>
   </div>
-  <button class="btn ghost" id="reportBtn" style="margin-bottom:16px">📄 <span data-i18n="btn_report">PDF report</span></button>
 </div><!-- /paneQueue -->
 
 <div class="pane" id="paneSystem">
+  <!-- Everything that has to be true BEFORE the truck leaves the yard, in the
+       one place an inspector already opens. Each of these was already knowable
+       — the service worker answers a health ping, the storage API answers a
+       quota, the queue knows what is unsent — but every one of them lived
+       inside the settings overlay, which nobody opens until something has
+       already gone wrong. In the pit there is no signal to fix any of it. -->
+  <div class="card" id="yardCard">
+    <h2><span data-i18n="sec_ready">Ready for the field</span> <span class="count-badge" id="yardBadge">…</span></h2>
+    <button type="button" class="yardsum" id="yardSum"></button>
+    <div id="yardList" class="yardlist"></div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn ghost" id="yardGo">⟳ <span data-i18n="btn_ready_again">Check again</span></button>
+    </div>
+    <div class="hint" style="margin-top:8px" data-i18n="ready_hint">Run this while you still have signal. Anything amber here is something you cannot fix at the machine.</div>
+  </div>
+
   <div class="card">
     <h2><span data-i18n="sec_team">In the system</span> <span class="count-badge" id="teamCount">0</span></h2>
     <div class="hint" id="teamScope" style="margin:-4px 0 8px"></div>
     <div class="tfilter" id="teamFilter"></div>
     <div class="duelist" id="teamList"></div>
+    <!-- One button, and one link.
+
+         These were two buttons of equal weight carrying ⟳ and ↻ — glyphs that
+         differ by the direction of an arrowhead and nothing a reader can name.
+         They are not equal jobs: the first is the ordinary "anything new?",
+         which the app also does after every upload, and the second is a
+         recovery action for the rare case where two devices hold different
+         subsets and only a clean re-read of the whole folder can reconcile
+         them. Same weight, indistinguishable icons, opposite frequencies. -->
     <div class="row" style="margin-top:12px">
       <button class="btn ghost" id="teamRefresh">⟳ <span data-i18n="btn_team_refresh">Check for new</span></button>
-      <button class="btn ghost" id="teamReload" data-i18n-title="team_reload_hint">↻ <span data-i18n="btn_team_reload">Reload all</span></button>
     </div>
+    <button type="button" class="linkrow" id="teamReload" data-i18n-title="team_reload_hint"
+      ><span data-i18n="btn_team_reload">Read the whole folder again</span></button>
     <div class="hint" id="teamMsg" style="margin-top:8px"></div>
-    <div class="hint" style="margin-top:8px" data-i18n="team_hint">Everything the whole team has uploaded, not just this phone. Refreshes itself after each upload and is kept for offline — so the due list below knows about rounds someone else did.</div>
+    <div class="hint" style="margin-top:8px" data-i18n="team_hint">Everything the whole team has uploaded, not just this phone. Refreshes itself after each upload and is kept for offline — so the Due tab knows about rounds someone else did.</div>
   </div>
 
 </div><!-- /paneSystem -->
@@ -1871,30 +1909,30 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=159"></script>
-<script src="upload-defaults.js?v=159"></script>
-<script src="hme.js?v=159"></script>
-<script src="mp-fc.js?v=159"></script>
-<script src="hme-cascade.js?v=159"></script>
-<script src="assets.js?v=159"></script>
-<script src="temp-limits.js?v=159"></script>
-<script src="due.js?v=159"></script>
-<script src="wear.js?v=159"></script>
-<script src="wear-figs.js?v=159"></script>
-<script src="wear-map.js?v=159"></script>
-<script src="machine-photos.js?v=159"></script>
-<script src="machine-fig.js?v=159"></script>
-<script src="get.js?v=159"></script>
-<script src="points.js?v=159"></script>
-<script src="uc-points.js?v=159"></script>
-<script src="inspect-guide.js?v=159"></script>
-<script src="get-figs.js?v=159"></script>
-<script src="body-points.js?v=159"></script>
-<script src="body-map.js?v=159"></script>
-<script src="lube.js?v=159"></script>
-<script src="lube-overrides.js?v=159"></script>
-<script src="lube2027.js?v=159"></script>
-<script src="report-core.js?v=159"></script>
+<script src="native.js?v=160"></script>
+<script src="upload-defaults.js?v=160"></script>
+<script src="hme.js?v=160"></script>
+<script src="mp-fc.js?v=160"></script>
+<script src="hme-cascade.js?v=160"></script>
+<script src="assets.js?v=160"></script>
+<script src="temp-limits.js?v=160"></script>
+<script src="due.js?v=160"></script>
+<script src="wear.js?v=160"></script>
+<script src="wear-figs.js?v=160"></script>
+<script src="wear-map.js?v=160"></script>
+<script src="machine-photos.js?v=160"></script>
+<script src="machine-fig.js?v=160"></script>
+<script src="get.js?v=160"></script>
+<script src="points.js?v=160"></script>
+<script src="uc-points.js?v=160"></script>
+<script src="inspect-guide.js?v=160"></script>
+<script src="get-figs.js?v=160"></script>
+<script src="body-points.js?v=160"></script>
+<script src="body-map.js?v=160"></script>
+<script src="lube.js?v=160"></script>
+<script src="lube-overrides.js?v=160"></script>
+<script src="lube2027.js?v=160"></script>
+<script src="report-core.js?v=160"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2077,7 +2115,7 @@ const I18N = {
     hint_fields:"Fields save automatically. Switch items with the buttons above.",
     btn_save:"✔ Save", btn_update:"✔ Update", editing_hint:"Editing {x} — change fields, then Update.",
     sec_onphone:"On this phone", empty_none:"Nothing captured yet.",
-    btn_share:"Share", btn_export:"Export ZIP", btn_report:"PDF report",
+    btn_share:"Share", btn_export:"Export ZIP", btn_report:"PDF · every round on this phone",
     /* Five rounds in the queue and a superintendent who wants one of them. */
     rpt1_title:"PDF for this round only", scan_hint:"Point at the unit's QR code", btn_cancel:"Cancel", dlg_ok:"OK",
     rep_title:"Condition Monitoring Inspection Report", rep_generated:"Generated", rep_building:["Building report…","Preparing the PDF — this can take a few seconds."],
@@ -2281,13 +2319,13 @@ const I18N = {
     rd_offline:["No signal","This round has not been downloaded to this phone yet. Open it once you are back in range."],
     rd_nodrive:["No data source","No data source is set up on this phone, so rounds cannot be fetched. Set one up under Sync."],
     rd_unreach:["Could not reach the folder","The round is in the system — this phone could not get to it. Weak signal, or the /exec address in ⚙ is wrong. Try again in coverage."],
-    team_hint:"Everything the whole team has uploaded, not just this phone. Refreshes itself after each upload and is kept for offline — so the due list below knows about rounds someone else did.",
+    team_hint:"Everything the whole team has uploaded, not just this phone. Refreshes itself after each upload and is kept for offline — so the Due tab knows about rounds someone else did.",
     team_none:"Nothing pulled yet — tap “Check for new”.",
     team_nodrive:"Set up the main backend in ⚙ to see the team's inspections.",
     team_offline:"Offline — showing what was last pulled.",
     team_unreach:"Could not reach the system — weak signal, or the URL in ⚙ is wrong.",
     team_checking:"Checking the system…",
-    btn_team_reload:"Reload all",
+    btn_team_reload:"Read the whole folder again",
     team_reload_hint:"Forget what is stored here and read the whole folder again.",
     team_full:"⚠ No room left on this phone — export or clear old inspections, then reload.",
     m_storage_full:["No room left","This phone's storage is full. Export and clear some inspections, then try again."],
@@ -2339,6 +2377,7 @@ const I18N = {
     sec_ready:"Ready for the field", btn_ready_again:"Check again",
     ready_hint:"Run this while you still have signal. Anything amber here is something you cannot fix at the machine.",
     ready_ok:"Ready", ready_n:"{n} to fix",
+    ready_all:"All {n} checks passed — tap to read them",
     rdy_off_t:"Works with no signal", rdy_off_ok:"The whole app is on the phone — {n} files.",
     rdy_off_part:"{n} of {of} files are here. Fix this before you go.",
     rdy_off_none:"Not installed for offline use yet. Open the app once with signal.",
@@ -2485,7 +2524,7 @@ const I18N = {
     hint_fields:"Поля сохраняются автоматически. Переключайте пункты кнопками выше.",
     btn_save:"✔ Сохранить", btn_update:"✔ Обновить", editing_hint:"Редактирование {x} — измените поля и нажмите «Обновить».",
     sec_onphone:"На этом телефоне", empty_none:"Пока ничего не снято.",
-    btn_share:"Поделиться", btn_export:"Экспорт ZIP", btn_report:"PDF-отчёт",
+    btn_share:"Поделиться", btn_export:"Экспорт ZIP", btn_report:"PDF · все обходы на телефоне",
     rpt1_title:"PDF только по этому обходу", scan_hint:"Наведите на QR-код трака", btn_cancel:"Отмена", dlg_ok:"ОК",
     rep_title:"Отчёт по мониторингу состояния", rep_generated:"Сформировано", rep_building:["Формирование отчёта…","Готовится PDF — это может занять несколько секунд."],
     rep_page:"Формирование… {i} из {n}",
@@ -2677,13 +2716,13 @@ const I18N = {
     rd_offline:["Нет связи","Этот обход ещё не скачан на телефон. Откройте его, когда появится сигнал."],
     rd_nodrive:["Нет источника данных","На телефоне не настроен источник данных, обходы получить нельзя. Настройте его в разделе «Синхронизация»."],
     rd_unreach:["Нет связи с папкой","Обход есть в системе — телефон не смог до него добраться. Слабый сигнал или неверный адрес /exec в ⚙. Повторите в зоне покрытия."],
-    team_hint:"Всё, что загрузила вся бригада, а не только этот телефон. Обновляется после каждой выгрузки и хранится офлайн — поэтому список плановых осмотров знает об обходах, сделанных другими.",
+    team_hint:"Всё, что загрузила вся бригада, а не только этот телефон. Обновляется после каждой выгрузки и хранится офлайн — поэтому вкладка «Срок» знает об обходах, сделанных другими.",
     team_none:"Пока ничего не загружено — нажмите «Проверить новые».",
     team_nodrive:"Настройте основное хранилище в ⚙, чтобы видеть осмотры бригады.",
     team_offline:"Нет сети — показано последнее загруженное.",
     team_unreach:"Не удалось связаться с хранилищем — слабый сигнал или неверный адрес в ⚙.",
     team_checking:"Проверяем хранилище…",
-    btn_team_reload:"Загрузить всё",
+    btn_team_reload:"Перечитать всю папку",
     team_reload_hint:"Забыть сохранённое здесь и перечитать всю папку.",
     team_full:"⚠ На телефоне нет места — выгрузите или очистите старые осмотры и повторите.",
     m_storage_full:["Нет места","Память телефона заполнена. Выгрузите и очистите часть осмотров и повторите."],
@@ -2732,6 +2771,7 @@ const I18N = {
     sec_ready:"Готовность к выезду", btn_ready_again:"Проверить снова",
     ready_hint:"Проверьте, пока есть связь. Всё, что здесь жёлтым, в поле уже не исправить.",
     ready_ok:"Готов", ready_n:"Исправить: {n}",
+    ready_all:"Все проверки пройдены ({n}) — нажмите, чтобы посмотреть",
     rdy_off_t:"Работает без связи", rdy_off_ok:"Всё приложение на телефоне — {n} файлов.",
     rdy_off_part:"На телефоне {n} из {of} файлов. Исправьте до выезда.",
     rdy_off_none:"Ещё не установлено для работы без связи. Откройте приложение при связи.",
@@ -7231,10 +7271,14 @@ function showPane(id){
   // The signature canvas cannot be measured while its pane is display:none, so a
   // pad sized then would come back one pixel tall.
   if(id==="paneCapture") sizeSignPad();
-  /* The readiness list is about to be looked at, so it has to be about NOW —
-     a storage figure or a queue count from ten minutes ago is exactly the kind
-     of stale reassurance this card exists to replace. */
-  if(id==="paneQueue" && typeof yardCheck==="function") yardCheck();
+  /* Each screen refreshed on the way in, because every one of them shows a
+     figure that goes stale: a storage reading, a queue count, a last-done date.
+     Stale reassurance is the thing all three of these cards exist to replace.
+
+     The readiness card moved to System with the rest of "is this phone fit to
+     work", so it is checked when THAT screen opens, not the queue's. */
+  if(id==="paneSystem" && typeof yardCheck==="function") yardCheck();
+  if(id==="paneQueue" && typeof renderPending==="function") renderPending();
   /* Rebuilt on the way in rather than left as it was when the tab was last
      open: a round walked five minutes ago has to be off this list before an
      inspector walks it again. */
@@ -7242,6 +7286,10 @@ function showPane(id){
 }
 document.addEventListener("DOMContentLoaded",()=>{
   const g=$("yardGo"); if(g) g.onclick=guard(async()=>{ await yardCheck(); });
+  /* Opened by hand stays open for the rest of the session: somebody who wanted
+     to read the six checks does not want them folding away behind them. */
+  const ys=$("yardSum"); if(ys) ys.onclick=()=>{ const c=$("yardCard");
+    if(c){ c.dataset.opened="1"; c.classList.remove("folded"); } };
 });
 $("tabbar").addEventListener("click",e=>{
   const b=e.target.closest("button[data-pane]"); if(!b) return;
@@ -7372,6 +7420,10 @@ $("mergeFile").onchange=async (e)=>{ const f=e.target.files[0]; e.target.value="
 /* ===================== pending ===================== */
 async function renderPending(){
   renderTabs(); renderNet();
+  /* Share, Export ZIP and the PDF all need rounds to act on. */
+  try{ const h=$("handoff");
+    if(h) h.classList.toggle("hidden", !(await dbAll()).length);
+  }catch(e){}
   /* Sort defensively. Every round this app saves carries `created`, but not
      everything in the store was saved by this app: rounds merged from another
      phone, an entries.json import, and anything written by a build older than
@@ -8223,7 +8275,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="159";
+const BUILD="160";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -8991,12 +9043,25 @@ async function renderSync(){
   else if(pend){ cls+=" pend"; txt=t("sync_pending").replace("{n}",pend)
       +(navigator.onLine?"":" · "+t("net_offline"))
       +(retryTimer?" · "+t("sync_auto"):""); }
-  else { cls+=" on"; txt=t("sync_ok"); }
+  /* Nothing queued, nothing failing, nothing in flight — so this bar has
+     nothing the header pill has not already said in one word. It carried
+     "All synced." beside a pill reading "Synced", plus a button for work that
+     happens on its own and a gear that opened the same sheet as the gear two
+     centimetres above it.
+
+     It earns its place when something is wrong: then it names the error off
+     the wire, counts what is waiting, and — the sentence that matters most in
+     a pit — promises the retry. Silent otherwise. */
+  else { bar.className="syncbar"; bar.innerHTML=""; return; }
   bar.className=cls;
+  /* No gear. It called openSettings, and so does the one in the header, which
+     is on every screen rather than only this one — the same function behind
+     two icons a thumb's width apart. The labelled "Set up" in the
+     not-configured branch above stays: that is a call to action with a word on
+     it, not a second copy of an icon. */
   bar.innerHTML=`<span class="dot"></span><span class="sp">${txt}</span>
-    <button id="syncGo">${t("sync_now")}</button><button id="syncSet" title="${esc(t("set_title"))}" aria-label="${esc(t("set_title"))}">⚙</button>`;
+    <button id="syncGo">${t("sync_now")}</button>`;
   const g=$("syncGo"); if(g)g.onclick=()=>{ retryAt=RETRY_MIN; syncThenArm(true); };
-  const st=$("syncSet"); if(st)st.onclick=openSettings;
 }
 /* Which destinations carry a shared secret in the body rather than a header.
    This was written twice as `id==="gas"`, once in each direction, and adding a
@@ -9195,6 +9260,18 @@ async function yardCheck(){
   const badge=$("yardBadge");
   if(badge){ badge.textContent = bad ? t("ready_n",{n:bad}) : t("ready_ok");
              badge.className = "count-badge "+(bad?"warn":"ok"); }
+  /* Six green ticks is a wall of good news, and this card exists to surface the
+     one row that is NOT. When they all pass it collapses to a line saying so,
+     openable by anyone who wants to read them; the moment anything is amber it
+     opens itself and stays open. A card that looks the same whether or not
+     there is a problem is a card nobody reads. */
+  const card=$("yardCard");
+  if(card){
+    if(bad) card.classList.remove("folded");
+    else if(!card.dataset.opened) card.classList.add("folded");
+    const sum=$("yardSum");
+    if(sum) sum.textContent = bad ? "" : t("ready_all",{n:rows.length});
+  }
   list.innerHTML="";
   rows.forEach(r=>{
     const el=document.createElement("div");
@@ -9214,8 +9291,8 @@ async function yardCheck(){
    when the app comes back to the front — an inspector who walked outside, got a
    bar of signal and came back is exactly who this is for. */
 document.addEventListener("visibilitychange",()=>{
-  if(!document.hidden && document.getElementById("paneQueue")
-     && document.getElementById("paneQueue").classList.contains("on")) yardCheck(); });
+  if(!document.hidden && document.getElementById("paneSystem")
+     && document.getElementById("paneSystem").classList.contains("on")) yardCheck(); });
 function swHealth(){
   const el=$("swHealth"); if(!el) return;
   if(!("serviceWorker" in navigator) || !navigator.serviceWorker.controller){

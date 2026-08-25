@@ -53,7 +53,10 @@ const pane = p => p.evaluate(() => [...document.querySelectorAll('main > .pane')
 
   console.log('one job per screen');
   let { ctx, p } = await app(b, [412, 915]);
-  ok('three panes exist', (await p.$$eval('main > .pane', e => e.length)) === 3);
+  /* Four. The due list used to sit at the bottom of System, under every round
+     the team had ever uploaded; it is its own screen now. */
+  ok('four panes exist', (await p.$$eval('main > .pane', e => e.length)) === 4,
+    String(await p.$$eval('main > .pane', e => e.map(x => x.id).join(' '))));
   ok('only the capture pane is showing', JSON.stringify(await pane(p)) === '["paneCapture"]',
     JSON.stringify(await pane(p)));
   ok('the tab bar is there', await vis(p, '#tabbar'));
@@ -65,12 +68,23 @@ const pane = p => p.evaluate(() => [...document.querySelectorAll('main > .pane')
   ok('the queue pane takes over', JSON.stringify(await pane(p)) === '["paneQueue"]', JSON.stringify(await pane(p)));
   ok('the pending list is reachable', await vis(p, '#pending'));
   ok('and the capture form is not in the way', !(await vis(p, '#cardInspection')));
-  ok('share and export moved with it', await vis(p, '#shareBtn') && await vis(p, '#exportBtn'));
-  ok('so did the sync bar', await vis(p, '#syncBar'));
+  /* Share, Export and the PDF are all ways of taking THIS PHONE's work
+     somewhere by hand, so they need work to be here. With an empty phone all
+     three could only answer a tap with "nothing to export". */
+  ok('the hand-off row waits until there is something to hand off',
+    !(await vis(p, '#shareBtn')), 'hidden while the phone is empty');
+
+  await p.click('#tabbar [data-pane="paneDue"]');
+  await p.waitForTimeout(200);
+  ok('the due list is a screen of its own now', await vis(p, '#dueList'));
+  ok('and nothing else is on it', JSON.stringify(await pane(p)) === '["paneDue"]');
 
   await p.click('#tabbar [data-pane="paneSystem"]');
-  await p.waitForTimeout(200);
-  ok('the system pane shows what the team did', await vis(p, '#teamList') && await vis(p, '#dueList'));
+  await p.waitForTimeout(400);
+  ok('the system pane shows what the team did', await vis(p, '#teamList'));
+  /* "Is this phone fit to work" is System's question, not the queue's — and
+     with the due list gone System was one card above a screen of blank. */
+  ok('and whether this phone is fit to work', await vis(p, '#yardCard'));
   ok('nothing else is on screen', JSON.stringify(await pane(p)) === '["paneSystem"]');
 
   console.log('\n  a half-finished round survives the trip');
@@ -123,7 +137,10 @@ const pane = p => p.evaluate(() => [...document.querySelectorAll('main > .pane')
   await p.waitForTimeout(300);
   ok('  and clears once the signal comes back and it goes', (await badge(p, 'tabQ')) === '',
      await badge(p, 'tabQ') || '(no badge)');
-  ok('overdue units show on the system tab', /^[1-9]/.test(await badge(p, 'tabS')), await badge(p, 'tabS'));
+  /* Overdue moved to the tab that shows it. System's badge answers a different
+     question now — a round two phones both sent, which is the only thing in an
+     archive that needs somebody to decide. */
+  ok('overdue units show on the due tab', /^[1-9]/.test(await badge(p, 'tabD')), await badge(p, 'tabD'));
 
   console.log('\n  the two lists on that tab go to two different places');
   await p.click('#tabbar [data-pane="paneSystem"]'); await p.waitForTimeout(300);
@@ -149,7 +166,9 @@ const pane = p => p.evaluate(() => [...document.querySelectorAll('main > .pane')
   }
 
   /* "Inspection due" is the list of work still to do, so its rows DO take you
-     to the machine with the form open. */
+     to the machine with the form open — on its own tab now, beside the archive
+     rather than buried under it. */
+  await p.click('#tabbar [data-pane="paneDue"]'); await p.waitForTimeout(300);
   const dueRow = await p.$('#dueList [data-u]');
   ok('the due list offers a unit to go and inspect', !!dueRow);
   if (dueRow) {
@@ -227,8 +246,12 @@ const pane = p => p.evaluate(() => [...document.querySelectorAll('main > .pane')
   for (const [name, vp] of [['portrait', [834, 1112, false]], ['landscape', [1194, 834, false]]]) {
     ({ ctx, p } = await app(b, vp));
     ok(`iPad ${name}: no tab bar`, !(await vis(p, '#tabbar')));
+    /* All four, and the ORDER is the DOM's, not the tab bar's — the due pane
+       is written after System in the markup and placed by the grid. On a
+       tablet there is room for everything, so nothing is behind a tab. */
     ok(`iPad ${name}: every pane at once`,
-      JSON.stringify(await pane(p)) === '["paneCapture","paneQueue","paneSystem"]',
+      (await pane(p)).slice().sort().join() ===
+        ['paneCapture','paneDue','paneQueue','paneSystem'].join(),
       JSON.stringify(await pane(p)));
     ok(`iPad ${name}: two columns`, await p.evaluate(() => {
       const a = document.getElementById('cardInspection').getBoundingClientRect();
