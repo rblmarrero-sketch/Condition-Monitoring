@@ -589,10 +589,12 @@
          "Point by point", not "grade history": what a reader wants from it is
          one point read across the visits, and the heading should say so. */
       pbp_t:"Point by point", pbp_sub:"oldest round on the left",
+      older_more:"{n} further round(s) are in the table above; their sheets are not reprinted here.",
+      graded_n:"{n} of {of} point(s)",
       pbp_now:"this round",
       c_state:"Result", c_worst:"Worst point", c_chg:"Change", c_now:"Latest", c_limit:"New → condemn",
       v_ok:"Normal", v_watch:"Watch", v_act:"Act now",
-      rounds_n:"{n} earlier rounds are summarised below rather than reprinted in full.",
+      rounds_n:"{n} earlier round(s) on this machine follow, compared first and then in full.",
       walk_key:"The numbers on the machine",
       lang_note:"Every heading in this report is given in English and Russian.",
     },
@@ -670,11 +672,13 @@
       hist:"Предыдущие обходы", hist_sub:"сначала новые",
       trend_t:"История замеров", trend_sub:"строка на точку, слева — самый ранний замер",
       pbp_t:"По точкам", pbp_sub:"слева — ранние обходы",
+      older_more:"Ещё обходов: {n} — они есть в таблице выше, отдельными листами не печатаются.",
+      graded_n:"точек: {n} из {of}",
       pbp_now:"этот обход",
       c_state:"Итог", c_worst:"Худшая точка", c_chg:"Изменение", c_now:"Текущий",
       c_limit:"Новый → предел",
       v_ok:"Норма", v_watch:"Наблюдать", v_act:"Срочно",
-      rounds_n:"Ещё {n} обходов приведены сводкой ниже, а не полными листами.",
+      rounds_n:"Предыдущих обходов на этой машине: {n} — сначала сравнение, затем полностью.",
       walk_key:"Номера на машине",
       lang_note:"Все заголовки отчёта приведены на английском и русском языках.",
     },
@@ -686,6 +690,9 @@
      as the same colour, and is now the one green the phone, the dashboard and
      this sheet all use. */
   var GRADE_HEX = { A:"#0a7134", B:"#fab219", C:"#ec835a", X:"#d03b3b" };
+  /* Worst wins. X is the worst on this fleet's scale, confirmed with the
+     reliability team, and A is not a finding at all. */
+  var GRADE_RANK = { A:0, B:1, C:2, X:3 };
   var SEV_HEX   = { NOF:"#0a7134", INC:"#fab219", DEG:"#ec835a", CRI:"#d03b3b" };
   CMR.GRADE_HEX = GRADE_HEX; CMR.SEV_HEX = SEV_HEX;
 
@@ -958,6 +965,17 @@
   function nameCell(T, it){
     return T.both(it.name||it.key, it.nameAlt)
       + (it.code?'<div class="code">'+esc(it.code)+'</div>':"");
+  }
+  /* Half this fleet's point names are written with the code in front of them —
+     "4C LEFT REAR FINAL DRIVE" — and the card prints the code above the name in
+     its own line, so the code came out twice, one above the other. Strip a
+     LEADING code only: a code that appears in the middle of a name is part of
+     the name, and this must never quietly eat a word that happens to match. */
+  function dropCode(code, name) {
+    var n = String(name == null ? "" : name);
+    if (!code) return n;
+    var esc2 = String(code).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return n.replace(new RegExp("^\\s*" + esc2 + "\\s*[-—:.]?\\s+", "i"), "") || n;
   }
 
   /* ---- what the whole export adds up to ---------------------------------- */
@@ -1515,8 +1533,92 @@
       }
     });
 
-    if (older.length) historySections(ctx, T, latest, older).forEach(function (x) { secs.push(x); });
+    if (older.length) {
+      historySections(ctx, T, latest, older).forEach(function (x) { secs.push(x); });
+      earlierRoundSections(ctx, T, older).forEach(function (x) { secs.push(x); });
+    }
     return secs;
+  }
+
+  /* ---- the earlier rounds, as they were reported ---------------------------
+     The tables above compare; this shows. A reliability engineer looking at
+     "4C was A in July and is C today" wants to see July's plug, and the
+     photograph of it was in the document all along — fetched with everything
+     else, attached to the record, and printed nowhere.
+
+     What collapsing the earlier rounds was FOR was the furniture: the same
+     masthead, the same drawing of the same machine and the same signature
+     block, reprinted once per round, which is how a two-round report became
+     six sheets and said nothing new on four of them. None of that is here. A
+     one-line header says which round this is, and then the evidence, in the
+     same cards the latest round uses — because a reader comparing two rounds
+     should not also have to translate between two layouts.
+
+     A round with nothing to show is not given a section for its header to sit
+     in. It is still a line in the summary table above, which is where "we went
+     and everything was fine" belongs. */
+  var MAX_FULL = 6;
+  function earlierRoundSections(ctx, T, older) {
+    var out = [], shown = 0, skipped = 0;
+    older.forEach(function (rec) {
+      /* Anything a reader would come looking for. Photographs count on their
+         own: somebody walked to the machine and took one. */
+      var told = rec.items.filter(function (it) {
+        return it.grade === "B" || it.grade === "C" || it.grade === "X" || it.defect
+          || it.action || it.comment || it.sev === "DEG" || it.sev === "CRI"
+          || (it.photos && it.photos.length);
+      });
+      /* A measured round's record is its millimetres, and those are lined up in
+         the table above where they can be compared. Reprinting the drawing and
+         the grid per round is exactly the six-sheet report this collapse
+         exists to prevent — but its photographs are still evidence. */
+      if (rec.wear) told = told.filter(function (it) { return it.photos && it.photos.length; });
+      if (!told.length) return;
+      if (shown >= MAX_FULL) { skipped++; return; }
+      shown++;
+
+      var rest = rec.items.filter(function (it) { return told.indexOf(it) < 0; });
+      var vc = verdict(rec);
+      var sh = shared(told);
+      var cols = told.length >= 4 ? 4 : told.length === 3 ? 3 : told.length === 2 ? 2 : 1;
+      /* `olderr` is a name, not a style: it says which sections are earlier
+         rounds reprinted, so a check can ask for exactly those. Without it the
+         only way to find them is `.sec .machhd`, which also matches the
+         continuation blocks the latest round's own pages carry. */
+      out.push({ nb: false, html: '<div class="sec olderr" style="margin-top:16px;">'
+        + '<div class="mach" style="border-top-width:1px;padding-top:8px;">'
+        + '<div class="machhd">'
+          + '<span class="u" style="font-size:15px;">' + esc(rec.date || "") + '</span>'
+          /* Two spans, not one. T.both puts the second language on its own
+             line, so an SMU appended inside it began the next line with the
+             separator — a bullet hanging off the left margin under the type. */
+          + '<span class="c">' + T.both(rec.typeLabel || rec.type, rec.typeAlt) + '</span>'
+          + ((rec.smu || rec.by) ? '<span class="c">'
+              + [rec.smu ? T.I("f_smu") + ' ' + esc(rec.smu) : "",
+                 rec.by ? esc(rec.by) : ""].filter(Boolean).join(" · ") + '</span>' : "")
+          + '<span style="margin-left:auto;">' + verdictChip(ctx, T, vc) + '</span>'
+        + '</div>'
+        + commonBand(T, sh, told.length)
+        + '<div class="board b' + cols + '">'
+        + told.map(function (it) { return cell(ctx, T, it, sh); }).join("")
+        + '</div>'
+        + restLine(T, rest, false)
+        + '</div></div>' });
+    });
+    /* Never a silent truncation. A report that quietly stops at six rounds
+       reads as a machine with six rounds. */
+    if (skipped) out.push({ nb: false, html: '<div class="sec"><div class="quiet">'
+      + T.S("older_more", { n: skipped }) + '</div></div>' });
+    return out;
+  }
+
+  /* The round's verdict as a chip, in the vocabulary the summary table already
+     uses, so the two cannot say different things about one round. */
+  function verdictChip(ctx, T, vc) {
+    var VC = { ok: ["v_ok", GRADE_HEX.A], watch: ["v_watch", GRADE_HEX.C], act: ["v_act", GRADE_HEX.X] };
+    var v = VC[vc] || VC.ok;
+    return '<span class="c"><span class="vdot" style="background:' + v[1] + '"></span>'
+      + T.I(v[0]) + '</span>';
   }
 
   /* ---- everything before the latest round ----------------------------------
@@ -1532,10 +1634,30 @@
       var vc = verdict(rec), v = VC[vc] || VC.ok;
       var worst = rec.items.filter(function (it) { return it.w && it.w.pct != null; })
         .sort(function (a, b) { return (Number(b.w.pct) || 0) - (Number(a.w.pct) || 0); })[0];
-      var said = rec.items.filter(function (it) { return it.defect; })
-        .map(function (it) { return it.defect; });
+      /* Distinct defects, not one per point. Four plugs with the same finding
+         printed "Ferrous debris — moderate · Ferrous debris — moderate +2",
+         which reads as four different things until you read it twice. */
+      var said = [];
+      rec.items.forEach(function (it) {
+        if (it.defect && said.indexOf(it.defect) < 0) said.push(it.defect); });
+      /* "None flagged" against a round where all four plugs were graded C.
+
+         The column was written for wear percentages and coded defects, and a
+         round that has neither fell through to "nothing to report" — while the
+         RESULT column beside it said Watch, from those same grades. One row
+         contradicting itself, and the half a reader believes is the half in
+         plain words. A grade is a finding; where nobody typed a defect, the
+         grades are what this round found. */
+      var gr = {}, worstG = "";
+      rec.items.forEach(function (it) {
+        if (!it.grade || it.grade === "A") return;
+        gr[it.grade] = (gr[it.grade] || 0) + 1;
+        if (GRADE_RANK[it.grade] > (GRADE_RANK[worstG] || 0)) worstG = it.grade;
+      });
       var note = worst ? esc(worst.name || worst.key) + ' <span class="num">' + esc(worst.w.pct) + '%</span>'
         : said.length ? esc(said.slice(0, 2).join(" · ")) + (said.length > 2 ? ' <span class="muted">+' + (said.length - 2) + '</span>' : "")
+        : worstG ? gradeChip(worstG) + ' <span class="muted">'
+            + T.S("graded_n", { n: gr[worstG], of: rec.items.length }) + '</span>'
         : '<span class="muted">' + T.I("none_att") + '</span>';
       return '<tr class="' + (i % 2 ? "zebra" : "") + '">'
         + '<td class="d"><b>' + esc(rec.date || "") + '</b></td>'
@@ -1752,9 +1874,15 @@
           return '<td' + (j === runs.length - 1 ? ' class="gr-now"' : "") + '>'
             + chip + bits.join("") + '</td>';
         }).join("");
+        /* The code, unless the name already opens with it. Half the fleet's
+           point names are written "4C LEFT REAR FINAL DRIVE" and appending the
+           key to those printed "4C LEFT REAR FINAL DRIVE 4C" — noise in the
+           one column a reader scans down. */
+        var code = ref.code && !new RegExp("(^|\\W)" + ref.code.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "(\\W|$)", "i")
+          .test(String(ref.name || "") + " " + String(ref.nameAlt || "")) ? ref.code : "";
         return '<tr class="' + (i % 2 ? "zebra" : "") + '">'
           + '<td style="padding-left:0">' + T.both(ref.name || k, ref.nameAlt)
-          + (ref.code ? ' <span class="code">' + esc(ref.code) + '</span>' : "")
+          + (code ? ' <span class="code">' + esc(code) + '</span>' : "")
           + '</td>' + cells + '</tr>';
       }).join("");
 
@@ -1914,7 +2042,8 @@
          languages, because the fitter and the engineer read different ones. */
       + '<div class="pk">' + esc(it.code || it.key) + '</div>'
       + (it.code && it.name && it.name !== it.code
-          ? '<div class="pn">' + T.both(it.name, it.nameAlt, "") + '</div>' : "")
+          ? '<div class="pn">' + T.both(dropCode(it.code, it.name),
+              dropCode(it.code, it.nameAlt), "") + '</div>' : "")
       + ((it.grade || it.sev) ? '<div class="chips">' + gradeChip(it.grade) + sevChip(ctx, it.sev) + '</div>' : "")
       + (rows ? '<dl>' + rows + '</dl>' : "")
       + (it.comment ? '<div class="cm">' + esc(it.comment) + '</div>' : "")

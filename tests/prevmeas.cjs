@@ -26,16 +26,23 @@ const B = (process.env.CMPORT ? 'http://127.0.0.1:' + process.env.CMPORT : 'http
 const fails = [];
 const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !== undefined ? '   ' + d : '')); if (!c) fails.push(n); };
 
+/* A one-pixel PNG standing in for a plug photograph — enough for the report to
+   have something real to place, and small enough that a page count means what
+   it says. */
+const SHOT = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
+
 /* TK160's own case, from the sheet the inspector sent back. Four plug points,
-   two visits, all four walking from A/B to C. The component and oil hours are
-   the MACHINE's and are recorded identically on every point — which is what
-   makes them the thing that must not be repeated down every row. */
-const PLUG = (dates) => dates.map(([d, smu, grades, pcs], n) => ({
+   the names written the way this fleet writes them — with the point code in
+   front — and the component and oil hours identical on every point, because
+   they are the MACHINE's. That is what makes them the thing that must not be
+   repeated down every row. */
+const PLUG = (dates, opts) => dates.map(([d, smu, grades, pcs], n) => ({
   equip: 'TK160', date: d, type: 'MP', cls: 'TRUCK, DUMP', by: 'Хасенов', smu: String(smu),
   items: ['4C', '4D', '4E', '4F'].map((k, i) => ({
-    key: k, label: (i % 2 ? 'Right' : 'Left') + ' Rear Final Drive',
+    key: k, label: k + ' ' + (i % 2 ? 'RIGHT' : 'LEFT') + ' REAR FINAL DRIVE',
     grade: grades[i], particle: String(pcs[i]),
     comp: String(smu), oil: '500',
+    photo: (opts && opts.photos) ? SHOT : '',
     defect: grades[i] === 'C' ? 'Ferrous debris — moderate' : '',
     defectCode: grades[i] === 'C' ? 'DT14-03' : '',
     cause: grades[i] === 'C' ? 'Gear wear' : '',
@@ -47,6 +54,22 @@ const TWO = PLUG([
   ['2026-07-29', 7180, ['A', 'A', 'B', 'A'], [12, 10, 22, 9]],
   ['2026-08-25', 7725, ['C', 'C', 'C', 'C'], [46, 41, 52, 44]],
 ]);
+/* The same two rounds with the photographs the inspector actually took. */
+const TWO_SHOT = PLUG([
+  ['2026-07-29', 7180, ['C', 'C', 'C', 'C'], [34, 37, 40, 43]],
+  ['2026-08-25', 7725, ['B', 'B', 'B', 'B'], [21, 24, 27, 30]],
+], { photos: true });
+/* An earlier round where every point was fine and nobody photographed
+   anything. There is nothing to reprint, and a header with no evidence under
+   it is a section that exists to hold its own heading. */
+const TWO_QUIET = PLUG([
+  ['2026-07-29', 7180, ['A', 'A', 'A', 'A'], [4, 5, 6, 4]],
+  ['2026-08-25', 7725, ['C', 'C', 'C', 'C'], [46, 41, 52, 44]],
+]);
+/* Eight earlier rounds, all with something to show, so the cap is real. */
+const NINE = PLUG(['2026-01-07', '2026-02-11', '2026-03-04', '2026-04-08', '2026-05-13',
+                   '2026-06-17', '2026-07-01', '2026-07-29', '2026-08-25']
+  .map((d, n) => [d, 5100 + n * 340, ['C', 'C', 'C', 'C'], [20 + n, 21 + n, 22 + n, 23 + n]]));
 /* Six visits, so the four-column cap and the "+2" that admits to it are real. */
 const SIX = PLUG([
   ['2026-03-04', 5100, ['A', 'A', 'A', 'A'], [4, 5, 6, 4]],
@@ -66,7 +89,7 @@ const UC = ['2026-06-16', '2026-08-11'].map((d, n) => ({
 
 /* Build through exactly the context the report button hands over, so this
    cannot pass on a report nobody generates. */
-const BUILD = `(unit) => {
+const BUILD = `(unit, withPhotos) => {
   const other = f => { const was = lang; try { lang = was === 'ru' ? 'en' : 'ru'; return f(); }
                        finally { lang = was; } };
   const recs = CMReport.recsForScope('unit', unit);
@@ -74,7 +97,7 @@ const BUILD = `(unit) => {
     lang, mode: 'unit',
     title: t('rep_title_doc'), titleAlt: other(() => t('rep_title_doc')),
     sub: unit, subAlt: unit, stamp: new Date(),
-    records: CMReport.normalise(recs, { photos: false }),
+    records: CMReport.normalise(recs, { photos: !!withPhotos }),
     sevLabel: s => (SEV[s] ? SEV[s].l : s),
     sevLabelAlt: s => other(() => (SEV[s] ? SEV[s].l : s)),
   });
@@ -105,9 +128,18 @@ const LAY = `(secs) => {
   });
   const wide = [...document.querySelectorAll('#rptRoot table')]
     .map(t => Math.round(t.getBoundingClientRect().width)).filter(w => w > 762);
+  const root = document.getElementById('rptRoot');
   return { pages: page, wide,
-           html: document.getElementById('rptRoot').innerHTML,
-           text: document.getElementById('rptRoot').textContent.replace(/\\s+/g, ' ') };
+           html: root.innerHTML,
+           text: root.textContent.replace(/\\s+/g, ' '),
+           /* Every section that is one of the earlier rounds reprinted: a
+              .machhd inside a .sec that is not the masthead. */
+           full: [...root.querySelectorAll('.sec.olderr .machhd')].map(h => ({
+             head: h.textContent.replace(/\\s+/g, ' ').trim(),
+             cards: h.closest('.sec').querySelectorAll('.cel').length,
+             shots: h.closest('.sec').querySelectorAll('img.ph,.phg img').length,
+             chips: h.closest('.sec').querySelectorAll('.chips').length,
+           })) };
 }`;
 
 /* A fresh page per case, and the storage cleared BEFORE the page reads it.
@@ -120,16 +152,16 @@ const LAY = `(secs) => {
    which is precisely the defect class it exists to catch. An init script runs
    before the page's own scripts on every navigation, so each case starts from
    an empty machine. */
-const run = async (p, recs, unit, want) => {
+const run = async (p, recs, unit, want, photos) => {
   await p.goto(B, { waitUntil: 'load' });
   await p.waitForTimeout(900);
-  return p.evaluate(({ recs, unit, want, BUILD, LAY }) => {
+  return p.evaluate(({ recs, unit, want, photos, BUILD, LAY }) => {
     window.CM_DATA = null;
     if (want) { lang = want; applyLang(); }
     CMDash.importRecords(recs);
     document.getElementById('dataOv').classList.add('hidden');
-    return eval('(' + LAY + ')')(eval('(' + BUILD + ')')(unit));
-  }, { recs, unit, want: want || "", BUILD, LAY });
+    return eval('(' + LAY + ')')(eval('(' + BUILD + ')')(unit, photos));
+  }, { recs, unit, want: want || "", photos: !!photos, BUILD, LAY });
 };
 
 (async () => {
@@ -170,9 +202,18 @@ const run = async (p, recs, unit, want) => {
   ok('but the reading that differs between points is kept',
      /PC 46/.test(pbp) && /PC 52/.test(pbp));
 
-  console.log('\nand it fits on one sheet');
-  ok('a short round with one earlier round is one page, not two', r.pages === 1, r.pages + ' page(s)');
+  console.log('\nand the comparison does not demand a sheet of its own');
+  /* The original complaint: a page 45% white, followed by a second holding a
+     table of one row. State it about the TABLES — a report that also reprints
+     an earlier round in full is longer because it carries more, which is not
+     the same defect and is the thing that was asked for. */
   ok('nothing runs off the right-hand edge', !r.wide.length, r.wide.join(' ') || 'all within 760px');
+  r = await run(p, TWO_QUIET, 'TK160');
+  ok('an earlier round with nothing to show is not reprinted', !r.full.length,
+     r.full.map(x => x.head).join(' | ') || 'no full reprint');
+  ok('and its summary and comparison sit on the page above, not a new one',
+     r.pages === 1, r.pages + ' page(s)');
+  ok('while still being counted and listed', /2026-07-29/.test(r.text));
 
   console.log('\na long history is capped, and says so');
   r = await run(p, SIX, 'TK160');
@@ -191,19 +232,74 @@ const run = async (p, recs, unit, want) => {
   ok('and are not repeated as a second table in grades', !/point by point/i.test(r.text),
      (r.text.match(/Point by point/i) || ["absent"])[0]);
   ok('the millimetre readings are the ones printed', /29/.test(r.text) && /220/.test(r.text));
+  /* The six-sheet report this collapse exists to prevent: the same drawing of
+     the same dozer, once per round. The millimetres are compared in the table
+     above, which is where an undercarriage round's record belongs. */
+  ok('and its earlier round does not reprint the drawing and the grid',
+     !r.full.length, r.full.map(x => x.head).join(' | ') || 'not reprinted');
+
+  console.log('\nthe earlier round, as it was reported');
+  /* The second complaint, in the reader's own words: "we should be seeing the
+     previous round with photo and same format". The photographs were fetched
+     with everything else and attached to the record; only the printing was
+     missing. */
+  r = await run(p, TWO_SHOT, 'TK160', '', true);
+  ok('the earlier round gets a section of its own', r.full.length === 1,
+     r.full.map(x => x.head).join(' | ') || 'none');
+  const jul = r.full[0] || {};
+  ok('headed by its date, type, hour meter and inspector',
+     /2026-07-29/.test(jul.head || '') && /7180/.test(jul.head || '')
+     && /Хасенов/.test(jul.head || ''), jul.head);
+  ok('and its verdict, in the same words the summary table uses',
+     /Watch/i.test(jul.head || ''), jul.head);
+  ok('one card per point, the same cards the latest round uses', jul.cards === 4, String(jul.cards));
+  ok('with the photographs the inspector took', jul.shots === 4, String(jul.shots));
+  ok('and the grade and severity chips on each', jul.chips === 4, String(jul.chips));
+  /* What collapsing the earlier rounds was FOR. */
+  ok('but not a second masthead', (r.html.match(/class="mast"/g) || []).length === 1,
+     String((r.html.match(/class="mast"/g) || []).length) + ' masthead(s)');
+  ok('nor a second signature block', (r.html.match(/class="shsign"/g) || []).length === 1,
+     String((r.html.match(/class="shsign"/g) || []).length) + ' signature block(s)');
+  ok('and the masthead does not still claim the round was left out',
+     !/rather than reprinted/i.test(r.text), (r.text.match(/earlier round[^.]*\./i) || [""])[0]);
+
+  console.log('\nthe things that were being said twice');
+  /* "Ferrous debris — moderate · Ferrous debris — moderate +2" reads as four
+     different findings until you read it twice. */
+  const worst = (r.text.match(/Ferrous debris — moderate/g) || []).length;
+  ok('one defect on four points is named once in the summary row',
+     !/moderate · Ferrous debris/.test(r.text), (r.text.match(/Watch[^|]{0,90}/) || [""])[0]);
+  /* Names on this fleet are written "4C LEFT REAR FINAL DRIVE" and the card
+     prints the code above the name in its own line. */
+  ok('a point code is not printed above a name that already starts with it',
+     !/4C<\/div><div class="pn">4C/.test(r.html) && !/>4C 4C</.test(r.html),
+     (r.html.match(/class="pk">[^<]*<\/div><div class="pn">[^<]{0,30}/) || [""])[0]);
+  ok('and not appended to it in the comparison table either',
+     !/4C LEFT REAR FINAL DRIVE[^<]*<span class="code">4C/.test(r.html));
+
+  console.log('\na machine with a long history is capped, and says so');
+  r = await run(p, NINE, 'TK160');
+  ok('at most six earlier rounds are reprinted in full', r.full.length === 6,
+     r.full.length + ' reprinted');
+  ok('and the ones that were not are counted, not dropped silently',
+     /further round/i.test(r.text), (r.text.match(/\d+ further round[^.]*\./i) || [""])[0]);
+  ok('every one of them is still listed in the table above',
+     ['2026-01-07', '2026-02-11', '2026-07-01'].every(d => r.text.indexOf(d) >= 0));
 
   console.log('\nRussian');
   r = await run(p, TWO, 'TK160', 'ru');
   ok('the new table is translated, not left in English',
      /По точкам/.test(r.text), (r.text.match(/По точкам.{0,40}/) || [""])[0]);
   ok('the inspector\'s own readings are not translated away', /PC 12/.test(r.text));
-  ok('and the Russian sheet is one page too', r.pages === 1, r.pages + ' page(s)');
   ok('with nothing off the edge', !r.wide.length, r.wide.join(' ') || 'within 760px');
+  ok('and the earlier round is headed in Russian too',
+     /Магнитная пробка/.test((r.full[0] || {}).head || ''), (r.full[0] || {}).head);
 
   console.log('\none round has no history to show');
   r = await run(p, TWO.slice(1), 'TK160');
   ok('a single round prints no earlier-rounds section', !/earlier rounds/i.test(r.text));
   ok('and no empty point-by-point table', !/point by point/i.test(r.text));
+  ok('and nothing is reprinted below it', !r.full.length, r.full.length + ' section(s)');
   ok('and is one page', r.pages === 1, r.pages + ' page(s)');
 
   console.log(fails.length ? '\nFAILURES:\n  ' + [...new Set(fails)].join('\n  ')

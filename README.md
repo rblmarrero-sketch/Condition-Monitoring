@@ -1059,6 +1059,24 @@ the column.
 The last four rounds become columns (six for a measured round); anything older is counted
 beside the heading as `· +2` and still appears in full in the table above it.
 
+Then each earlier round is printed again in full — its findings, its grades and **its
+photographs**, in the same cards the latest round uses, so a reader comparing two rounds
+does not also have to translate between two layouts. What is *not* reprinted is the
+furniture: one masthead, one drawing of the machine, one signature block per document. That
+was the point of collapsing them in the first place — a two-round report that ran to six
+sheets and said nothing new on four of them.
+
+Two exceptions, both deliberate:
+
+* An earlier round where every point was fine and nobody photographed anything gets no
+  section. There is nothing to show, and a header with no evidence under it is a section
+  that exists to hold its own heading. It is still a line in the summary table.
+* An **undercarriage or dump-body** round is not reprinted: its record is millimetres, and
+  those are lined up for comparison in the table above. Its photographs still are.
+
+At most six earlier rounds are reprinted; any beyond that are counted in a line saying so,
+and all of them remain in the summary table.
+
 A single-round report is deliberately one round: the button on a history card asks for that
 inspection, and gets that inspection.
 
