@@ -7950,13 +7950,14 @@ function teamRecToReport(rec){
                  it.oil&&`oil ${it.oil} h`,
                  (meta.temp&&it.tempC)&&`${it.tempC} °C${it.ambC?` / ${it.ambC}`:""}` ].filter(Boolean);
     let w=null;
-    /* No reading and no reason given: nothing to report about this point. The
-       report counts a w with no millimetre as one that COULD NOT BE MEASURED,
-       so building one here out of the reference alone made a finished GET
-       round — graded, tape optional, every tooth walked — announce "6 of 6
-       points could not be measured" across the top of its own sheet. Same
-       test wearOut() applies on this phone's own rounds. */
-    if((meta.wear || meta.get) && !((it.mm===""||it.mm==null) && !it.reason)){
+    /* Same split this phone applies to its OWN rounds, a few lines up: on a
+       measurement round every position in the walk gets a slot even when
+       nobody filled it, because an unmeasured point with no reason is a gap
+       the sheet has to count. On a GET round it is not — a tooth is scored on
+       its grade and a tape is optional — and building a reading for it out of
+       the reference alone made a finished round announce "6 of 6 points could
+       not be measured" across the top of its own sheet. */
+    if(meta.wear || (meta.get && !((it.mm===""||it.mm==null) && !it.reason))){
       const mm=(it.mm===""||it.mm==null)?null:Number(it.mm);
       const ref=teamRefFor(rec,it.key);
       const pct=(ref&&mm!=null&&window.WEAR) ? Math.round(WEAR.wear(ref,mm)) : null;

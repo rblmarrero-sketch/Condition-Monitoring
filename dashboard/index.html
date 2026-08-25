@@ -2422,17 +2422,22 @@ const UC_BAND = pct => pct>=100 ? "act" : pct>=80 ? "watch" : "ok";
 const UC_SEV  = {act:"CRI", watch:"DEG", ok:"NOF"};
 function wearOf(rec,it){
   if(!isWearType(rec.type)) return null;
-  /* No reading, and no reason given for not taking one: there is nothing to
-     report about this point, and the phone says so - wearOut() returns null on
-     exactly this test, so nothing is even put on the wire for it.
+  /* A GET round with no reading and no reason given: there is nothing to
+     report about that tooth, and it must NOT get a reading built for it out of
+     the reference. The report counts a reading with no millimetre as a point
+     that COULD NOT BE MEASURED, so a finished GET round - graded, tape
+     optional, six of six teeth walked and scored - printed "6 of 6 points
+     could not be measured" across the top of the office's copy while the
+     phone's copy of the same round said nothing of the kind.
 
-     This built a reading anyway, out of the reference: mm null, limits filled
-     in. The report counts a point with a w and no millimetre as one that COULD
-     NOT BE MEASURED, so a finished GET round - which is graded, where a tape is
-     optional and six of six teeth had been walked and scored - printed
-     "6 of 6 points could not be measured" across the top of the office's copy.
-     The phone's copy of the same round said nothing of the kind. */
-  if((it.mm===""||it.mm==null) && !it.reason) return null;
+     UC and TB are the other way round, and deliberately so: on a MEASUREMENT
+     round every position in the walk gets a slot even when nobody filled it,
+     because a point with no millimetre and no reason is a gap in the round and
+     the sheet has to count it rather than quietly leave it out. That is the
+     rule the phone applies (rptRecords, on meta.wear), and applying the GET
+     rule to all three made the office undercount the gaps: 4 unread where the
+     phone said 11 on the same dozer. */
+  if(rec.type==="GET" && (it.mm===""||it.mm==null) && !it.reason) return null;
   const mm = (it.mm===""||it.mm==null) ? null : Number(it.mm);
   let n=it.newMM, c=it.condemnMM, pct=(it.wearPct===""||it.wearPct==null)?null:Number(it.wearPct),
       src=it.refSrc||"";

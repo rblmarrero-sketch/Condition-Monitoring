@@ -131,6 +131,18 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
           if ((ty === 'UC' || ty === 'TB') && i === spec.keys.length - 1) {
             p.mm = null; p.reason = 'PARK';
           }
+          /* And one point with NEITHER a reading nor a reason — on every round
+             that can carry a measurement. The two surfaces must treat this the
+             same way, and they do not treat it the same way as each other's
+             opposite: on a MEASUREMENT round (UC, TB) an unexplained gap in the
+             walk is a fact the sheet counts; on a GET round, where a tooth is
+             scored on its grade and a tape is optional, it is not a gap at all.
+             Without this fixture a blanket rule passes on both surfaces and
+             quietly stops the office counting gaps — 4 where the phone said 11
+             on the same dozer. */
+          if ((ty === 'UC' || ty === 'TB' || ty === 'GET') && i === 0 && n === 2) {
+            p.mm = null; p.reason = '';
+          }
           if (ty === 'LUBE') { p.prod = spec.prod; p.evid = 'label'; p.samp = i === 0 ? 1 : 0; }
           positions[k] = p;
         });
@@ -172,6 +184,24 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
        onlyP.slice(0, 4).map(x => x.slice(0, 50)).join(' | '));
     ok(ty + ': the round printed something at all', a.length > 6 && c.length > 6,
        a.length + ' / ' + c.length + ' text runs');
+    /* The one sentence a wrong gap rule changes, checked by its own words so a
+       regression names itself. A measurement round must own up to its gaps; a
+       graded round must not invent any. */
+    /* Two wordings, because a round that is otherwise clean says it the other
+       way round: "N of M measured and all inside limits, K could not be
+       reached". Either sentence names the same number. */
+    const unread = h => (h.match(/(\d+) of \d+ points could not be measured/)
+      || h.match(/of \d+ points measured and all inside limits\. (\d+) could not be reached/)
+      || [])[1] || '';
+    if (ty === 'UC' || ty === 'TB') {
+      ok(ty + ': both sheets count the same unread points', unread(dash.html) === unread(phone.html)
+         && unread(dash.html) !== '', unread(dash.html) + ' / ' + unread(phone.html));
+    }
+    if (ty === 'GET') {
+      ok('GET: neither sheet claims a graded tooth could not be measured',
+         !unread(dash.html) && !unread(phone.html),
+         (unread(dash.html) || '-') + ' / ' + (unread(phone.html) || '-'));
+    }
   }
 
   /* The unmeasured station's reason: the RECORD's vocabulary, in the reader's
