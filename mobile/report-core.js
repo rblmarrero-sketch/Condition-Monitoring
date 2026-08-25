@@ -119,14 +119,14 @@
 #rptRoot .v-watch{background:#fdf5e3;color:#8a6100;}
 #rptRoot .v-act{background:#fcecea;color:#98201a;}
 
-/* undercarriage measurement grid — two columns of readings, not one long list */
-#rptRoot .meas{display:flex;gap:20px;}
-/* flex:1 alone leaves min-width:auto, so a half can never shrink below its own
-   min-content — and its min-content is set by a .code line that is nowrap and
-   now says "no reference for this model / нет эталона для этой модели". Two of
-   those and the grid came out 780px on a 760px page, with the wear bars off
-   the right edge of the paper and no error anywhere. */
-#rptRoot .meas > div{flex:1 1 0;min-width:0;}
+/* undercarriage measurement grid — two columns of readings, not one long list,
+   and both halves in ONE table so a row is a full-width band. See the comment
+   on col() for why that is not a detail: it is the only thing that stops the
+   page cut falling through the middle of a station. */
+#rptRoot .meas{display:block;}
+/* The gutter between the halves is a column of the table now, not a flex gap. */
+#rptRoot .meas th.sp,#rptRoot .meas td.sp{width:20px;padding:0;border-bottom:0;
+  background:#fff;}
 /* Fixed layout does not clip what will not fit, it overlaps it — MEASURED ran
    straight over WORN. The numeric columns are sized for their own headings
    and the padding is trimmed to buy them the room. */
@@ -151,15 +151,37 @@
    nothing to scroll, so the width is reclaimed here explicitly — without this
    the last roller and the grouser row fell off the right edge of the page. */
 #rptRoot .ucmaps{display:flex;flex-direction:column;gap:7px;margin:9px 0 4px;
-  width:100%;max-width:470px;flex:0 0 auto;}
+  width:100%;max-width:none;flex:0 0 auto;}
 /* The frames at the size a puck stays readable, and everything that explains
    them in the column of paper that was left over beside them. */
-#rptRoot .mapblock{display:flex;gap:18px;align-items:flex-start;}
-#rptRoot .mapblock .ucmaps{margin:9px 0 4px;flex:0 0 470px;}
+/* The drawing gets the whole page, and everything that explains it goes
+   UNDERNEATH.
+
+   It used to sit in a 470 px column with the key beside it, which put a
+   machine the length of a dozer into a third of the paper it had — and the
+   drawing is the part somebody stands in front of the machine holding. Its
+   scale is set by WIDTH, not height: a numbered puck on a track frame is only
+   readable if the frame is wide enough to separate the pucks. Full width is
+   worth more than a tidy column.
+
+   The key loses nothing by moving down. It is a list, and a list reads as well
+   in three columns across the foot of the page as in one column up the side. */
+#rptRoot .mapblock{display:block;}
+#rptRoot .mapblock .ucmaps{margin:9px auto 4px;flex:0 0 auto;max-width:none;width:100%;}
+#rptRoot .mapfoot{margin-top:10px;padding-top:9px;border-top:1px solid #e6eaee;}
+/* Three across, so the numbers list does not become a metre of paper. The
+   columns break inside a page, never across one. */
+#rptRoot .mapfoot .mapkey{flex-direction:row;flex-wrap:wrap;gap:6px 16px;margin-top:0;}
+#rptRoot .mapfoot .pkey{columns:3;column-gap:18px;display:block;margin-top:9px;max-width:none;}
+#rptRoot .mapfoot .pkey > *{break-inside:avoid;page-break-inside:avoid;}
+#rptRoot .mapfoot .ckey{grid-template-columns:repeat(3,1fr);gap:4px 18px;max-width:none;}
+/* The tray keeps a genuine side column inside its foot strip, so the list
+   rules above have to be undone there — three columns inside a 208 px strip is
+   three columns of one word each. Scoped tighter, so it wins on specificity. */
 #rptRoot .mapside{flex:1 1 0;min-width:0;padding-top:11px;}
-#rptRoot .mapside .mapkey{flex-direction:column;gap:5px;margin-top:0;}
-#rptRoot .mapside .pkey{flex-direction:column;gap:4px;margin-top:9px;max-width:none;}
-#rptRoot .mapside .ckey{grid-template-columns:1fr;gap:4px;max-width:none;}
+#rptRoot .mapblock.wide .mapside .mapkey{flex-direction:column;gap:5px;margin-top:0;}
+#rptRoot .mapblock.wide .mapside .pkey{columns:auto;display:flex;flex-direction:column;gap:4px;margin-top:9px;max-width:none;}
+#rptRoot .mapblock.wide .mapside .ckey{grid-template-columns:1fr;gap:4px;max-width:none;}
 #rptRoot .ucmapwrap{background:#f6f8f9;border:1px solid #dfe4e9;border-radius:8px;padding:3px 2px;
   width:100%;margin:0;flex:0 0 auto;overflow:visible;}
 #rptRoot .ucmapwrap::after{content:none;}
@@ -223,7 +245,12 @@
   padding:3px 6px 3px 0;}
 #rptRoot .tbzone td{padding:3px 6px 3px 0;border-bottom:1px solid #eef1f4;}
 #rptRoot .tbzone .num{text-align:right;padding-right:12px;}
-#rptRoot .ucmap{display:block;width:100%;height:auto;}
+/* Width is what makes a numbered puck readable, and height is what decides
+   whether the drawing shares its page with the readings. Capping the HEIGHT and
+   letting the width follow gives the widest frame that still leaves room for
+   the key underneath it — on any machine, without a per-model number. */
+#rptRoot .ucmap{display:block;width:auto;height:auto;max-width:100%;
+  max-height:300px;margin:0 auto;}
 /* ---- the photographed walk, printed ------------------------------------
    The same picture the inspector tapped: the machine's own photograph with
    the catalogue's numbers on the parts they name. The pucks are smaller than
@@ -847,9 +874,13 @@
         + mapKey(T) + bodyFaceKey(T, mapHTML) + '</div>'
         + '<div class="mapzone">' + tail + zoneTable(T, zones) + '</div></div></div>';
     }
+    /* A track frame gets the same treatment the tray got, and for the same
+       reason: the drawing is what somebody carries to the machine, and a
+       dozer squeezed into a 470 px column is a drawing nobody can use. Full
+       width for the frames, the key across the foot underneath them. */
     return hd
       + '<div class="mapblock"><div class="ucmaps">' + mapHTML + '</div>'
-      + '<div class="mapside">' + side + '</div></div>';
+      + '<div class="mapfoot">' + side + '</div></div>';
   };
 
   /* ---- chips and bars, drawn one way ------------------------------------ */
@@ -1024,12 +1055,21 @@
     }
     if (tailHTML) {
       var last = out.pop();
-      out.push({ nb: false, html: last.html.replace(/<\/div><\/div>$/, tailHTML + '</div></div>') });
+      /* Splicing the signature onto the last part must not reset that part's
+         own page flag — with a single chunk the last part IS the first, and
+         dropping its flag put the readings back onto the drawing's page. */
+      out.push({ nb: !!last.nb, html: last.html.replace(/<\/div><\/div>$/, tailHTML + '</div></div>') });
     }
     return out;
   }
 
-  function measSections(ctx, T, rec, tailHTML) {
+  /* `ownPage` starts the measurements on a fresh sheet.
+
+     The drawing is the thing somebody carries to the machine, and sharing its
+     page with the first eleven rows of a sixty-three row table left it with a
+     third of the paper and the table with an orphaned header. One page of
+     drawing and key; the readings begin overleaf. */
+  function measSections(ctx, T, rec, tailHTML, ownPage) {
     var out = [];
     var rows = rec.items.filter(function (it) { return it.w && (it.w.mm != null || it.w.reason); });
     /* The signature has to land somewhere. On a lubrication round the grid
@@ -1046,22 +1086,39 @@
        station to report the absence of one fact. */
     var anyRef = rows.some(function (it) {
       return it.w.newMM != null && it.w.newMM !== ""; });
+    /* TWO COLUMNS, ONE TABLE.
+       They used to be two independent tables side by side, and that is what
+       cut "Sprocket — Right / Звёздочка — Справа" in half across a page. The PDF
+       is built by rasterising a section and slicing the bitmap, so every CSS
+       page-break rule in this stylesheet is inert — the only thing deciding
+       where the paper ends is a pixel row. Two tables tiling at different row
+       heights leave no pixel row that misses both, so SOME station was always
+       going to be sliced.
+       Paired into one table there is such a row: a band the full width of the
+       paper, with a gap above and below it that the cut can be snapped to. The
+       page looks the same — two columns of readings at the same density. */
+    var half = function (it) {
+      if (!it) return '<td></td><td></td>' + (anyRef ? '<td></td><td></td>' : "");
+      var w = it.w, ref = w.newMM != null && w.newMM !== "";
+      return '<td style="padding-left:0;">'
+        + T.both(it.name || it.key, it.nameAlt)
+        + (anyRef ? '<div class="code">' + (ref
+            ? esc(w.newMM + " → " + w.condemnMM + " mm") : "—") + '</div>' : "")
+        + '</td>'
+        + '<td class="r n">' + (w.mm != null ? '<b>' + esc(w.mm) + '</b>'
+            : '<span class="muted" style="font-size:9px">' + esc(w.reasonLabel || w.reason || "—") + '</span>') + '</td>'
+        + (anyRef ? '<td class="r n">' + (w.pct != null ? esc(w.pct) + "%" : "") + '</td>'
+            + '<td>' + (w.pct != null ? wearBar(w.pct) : "") + '</td>' : ""); };
     var col = function (list) {
-      var x = '<table><tr><th>' + T.L("c_item") + '</th>'
+      var hd = '<th>' + T.L("c_item") + '</th>'
         + '<th class="r" style="width:64px">' + T.L("c_meas") + '</th>'
         + (anyRef ? '<th class="r" style="width:44px">' + T.L("c_worn") + '</th>'
-                  + '<th style="width:48px"></th>' : "") + '</tr>';
-      list.forEach(function (it, i) { var w = it.w;
-        var ref = w.newMM != null && w.newMM !== "";
-        x += '<tr class="' + (i % 2 ? "zebra" : "") + '"><td style="padding-left:0;">'
-          + T.both(it.name || it.key, it.nameAlt)
-          + (anyRef ? '<div class="code">' + (ref
-              ? esc(w.newMM + " → " + w.condemnMM + " mm") : "—") + '</div>' : "")
-          + '</td>'
-          + '<td class="r n">' + (w.mm != null ? '<b>' + esc(w.mm) + '</b>'
-              : '<span class="muted" style="font-size:9px">' + esc(w.reasonLabel || w.reason || "—") + '</span>') + '</td>'
-          + (anyRef ? '<td class="r n">' + (w.pct != null ? esc(w.pct) + "%" : "") + '</td>'
-              + '<td>' + (w.pct != null ? wearBar(w.pct) : "") + '</td>' : "") + '</tr>'; });
+                  + '<th style="width:48px"></th>' : "");
+      var hf = Math.ceil(list.length / 2);
+      var x = '<table><tr>' + hd + '<th class="sp"></th>' + hd + '</tr>';
+      for (var i = 0; i < hf; i++) {
+        x += '<tr class="' + (i % 2 ? "zebra" : "") + '">' + half(list[i])
+          + '<td class="sp"></td>' + half(list[hf + i]) + '</tr>'; }
       return x + '</table>'; };
     var bare = rows.filter(function (it) {
       return !(it.w.newMM != null && it.w.newMM !== ""); }).length;
@@ -1072,18 +1129,20 @@
       : "";
     var MAX = 44, parts = Math.ceil(rows.length / MAX), PER = Math.ceil(rows.length / parts);
     for (var o = 0; o < rows.length; o += PER) {
-      var chunk = rows.slice(o, o + PER), hf = Math.ceil(chunk.length / 2);
-      out.push({ nb: false, html: cont
+      var chunk = rows.slice(o, o + PER);
+      out.push({ nb: !!ownPage && o === 0, html: cont
         + '<div class="subhd" style="margin-top:11px;">' + T.I(T.key("meas_" + rec.type, "meas_t"))
         + (parts > 1 ? ' <span class="muted">' + (o + 1) + "–" + Math.min(o + PER, rows.length)
             + " / " + rows.length + '</span>' : "")
         + '</div>' + (o === 0 ? noRefNote : "")
-        + '<div class="meas"><div>' + col(chunk.slice(0, hf)) + '</div><div>'
-        + col(chunk.slice(hf)) + '</div></div></div></div>' });
+        + '<div class="meas">' + col(chunk) + '</div></div></div>' });
     }
     if (tailHTML) {
       var last = out.pop();
-      out.push({ nb: false, html: last.html.replace(/<\/div><\/div>$/, tailHTML + '</div></div>') });
+      /* Splicing the signature onto the last part must not reset that part's
+         own page flag — with a single chunk the last part IS the first, and
+         dropping its flag put the readings back onto the drawing's page. */
+      out.push({ nb: !!last.nb, html: last.html.replace(/<\/div><\/div>$/, tailHTML + '</div></div>') });
     }
     return out;
   }
@@ -1289,7 +1348,7 @@
             + (over.length > 6 ? " · +" + (over.length - 6) : "") + '</span></div>' : "")
         + maps + '</div>';
       secs.push({ nb: n > 0, html: top });
-      measSections(ctx, T, rec, sign).forEach(function (x) { secs.push(x); });
+      measSections(ctx, T, rec, sign, !!maps).forEach(function (x) { secs.push(x); });
       /* A round that has BOTH gets both. Only the wear-less case is folded into
          measSections above, so this must not double-render it. */
       if (rec.items.some(function (it) { return it.w && it.w.mm != null; }))
@@ -1863,16 +1922,17 @@
         /* The frames are their own section — one picture of the machine per
            round, and a page break lands between the drawing and the readings
            rather than through the middle of a track frame. */
-        if(rec.mapHTML) extra.push(cont + CMR.mapBlock(T, rec.mapHTML, 11, rec.zones, rec.mapKey) + "</div></div>");
+        if(rec.mapHTML) extra.push({nb:false,
+          html:cont + CMR.mapBlock(T, rec.mapHTML, 11, rec.zones, rec.mapKey) + "</div></div>"});
         if(over.length) m += '<div class="verdict v-'+(overAct.length?"act":"watch")+'" style="margin-top:12px;">'
           + (overAct.length?T.I("uc_over",{n:overAct.length})+". ":"")
           + (over.length>overAct.length?T.I("uc_watch",{n:over.length-overAct.length})+". ":"")
           + '<span style="font-weight:500;">'+over.slice(0,6).map(function(it){
               return esc(it.name||it.key)+' <span class="num">'+esc(it.w.pct)+'%</span>'; }).join(" · ")
           + (over.length>6?" · +"+(over.length-6):"")+'</span></div>';
-        measSections(ctx,T,rec,"").forEach(function(x){ extra.push(x.html); });
+        measSections(ctx,T,rec,"",!!rec.mapHTML).forEach(function(x){ extra.push(x); });
         if (rec.items.some(function (it) { return it.w && it.w.mm != null; }))
-          lubeSections(ctx,T,rec,"").forEach(function(x){ extra.push(x.html); });
+          lubeSections(ctx,T,rec,"").forEach(function(x){ extra.push(x); });
       }
 
       var shots=[];
@@ -1881,7 +1941,7 @@
         var ph=cont+'<div class="subhd" style="margin-top:11px;">'+T.I("photos")+'</div><div class="shots">';
         shots.forEach(function(s){ ph+='<figure><img src="'+s.u+'"><figcaption>'
           + esc(s.it.name||s.it.key)+'</figcaption></figure>'; });
-        extra.push(ph+'</div></div></div>');
+        extra.push({nb:false, html:ph+'</div></div></div>'});
       }
 
       var sign = '<div class="hair" style="margin:15px 0 11px;"></div><div class="sign">'
@@ -1894,10 +1954,10 @@
         secs.push({nb:false, html:m+sign+'</div></div>'});   // a short round stays whole
       } else {
         secs.push({nb:false, html:m+'</div></div>'});
-        extra.forEach(function(x){ secs.push({nb:false, html:x}); });
+        extra.forEach(function(x){ secs.push({nb:!!x.nb, html:x.html}); });
         // the names go with the last part, never alone on a page of their own
         var last=secs.pop();
-        secs.push({nb:false, html:last.html.replace(/<\/div><\/div>$/, sign+'</div></div>')});
+        secs.push({nb:!!last.nb, html:last.html.replace(/<\/div><\/div>$/, sign+'</div></div>')});
       }
     });
 
@@ -1933,6 +1993,35 @@
      cut tables through the middle of a row and split a machine's header from
      its findings. A section that will not fit the room left on a page starts
      the next one. */
+  /* html2canvas paints; it does not paginate. A section reaches the loop below
+     as ONE bitmap and is cut at whatever pixel row the paper runs out on, which
+     is why every `page-break-inside` rule in the stylesheet above buys exactly
+     nothing — and why a measurement came out with its name at the foot of one
+     page and its number at the head of the next.
+     So the cut is told where it may not fall. Every row, key entry and figure
+     reports the band it occupies; a cut landing inside one is lifted to the top
+     of that band. A band taller than the room left is skipped rather than
+     honoured, because a cut that cannot advance is a document that never ends. */
+  function atomBands(el, sc) {
+    var er = el.getBoundingClientRect(), out = [];
+    var q = el.querySelectorAll("tr,.lgrow,.pkey > div,.ckey > div,figure,.cell");
+    for (var i = 0; i < q.length; i++) {
+      var r = q[i].getBoundingClientRect();
+      if (r.height <= 0 || r.height > 520) continue;
+      out.push([(r.top - er.top) * sc, (r.bottom - er.top) * sc]);
+    }
+    return out;
+  }
+  function liftCut(bands, cut, floor) {
+    /* Nested bands (a table inside a cell) nest their ranges too, so the lowest
+       conflicting top is the one that clears all of them. */
+    var best = cut;
+    for (var i = 0; i < bands.length; i++)
+      if (cut > bands[i][0] + 0.5 && cut < bands[i][1] - 0.5 && bands[i][0] < best)
+        best = bands[i][0];
+    return best > floor ? Math.floor(best) : cut;
+  }
+
   CMR.paginate = async function (opts) {
     var holder = document.createElement("div");
     holder.id = "rptRoot";
@@ -1954,6 +2043,8 @@
         var c = await opts.html2canvas(els[i], h2c);
         if(!c.width||!c.height) continue;
         var k = cw/c.width, hh = c.height*k;
+        var sc = c.width / (els[i].getBoundingClientRect().width || c.width);
+        var bands = atomBands(els[i], sc);
         if(opts.sections[i].nb && drew){ doc.addPage(); y=top; }
         else if(drew && hh<=bottom-top && y+hh>bottom){ doc.addPage(); y=top; }
         var sY=0;
@@ -1961,6 +2052,10 @@
           var roomPt=bottom-y;
           if(roomPt<46){ doc.addPage(); y=top; continue; }
           var sliceH=Math.min(Math.floor(roomPt/k), c.height-sY);
+          if(sY+sliceH < c.height){
+            var cut=liftCut(bands, sY+sliceH, sY+60*sc);
+            if(cut>sY) sliceH=cut-sY;
+          }
           var c2=document.createElement("canvas"); c2.width=c.width; c2.height=sliceH;
           var cx=c2.getContext("2d");
           cx.fillStyle="#ffffff"; cx.fillRect(0,0,c2.width,c2.height);
