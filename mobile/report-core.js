@@ -473,6 +473,25 @@
 #rptRoot table.mh td{padding:5px 4px;overflow-wrap:anywhere;}
 #rptRoot table.mh td.n{white-space:normal;}
 #rptRoot table.mh .wb{min-width:0;}
+/* ---- one row per point, for a round measured in grades --------------------
+   The millimetre table puts four digits in a 46px column. This one puts a
+   chip and a line of words in each cell, so the columns are wide, the rows
+   are tall, and the type inside them is small — which is the right trade:
+   the reader is comparing DOWN a column and ACROSS a row, and neither works
+   if the cell has to be decoded first. */
+#rptRoot table.gh th{vertical-align:bottom;text-align:left;padding-bottom:6px;}
+#rptRoot table.gh td{vertical-align:top;line-height:1.35;}
+#rptRoot .gr-dt{display:block;font-variant-numeric:tabular-nums;letter-spacing:0;
+  text-transform:none;font-size:10px;color:#12161a;}
+#rptRoot .gr-smu{display:block;font-variant-numeric:tabular-nums;letter-spacing:0;
+  text-transform:none;font-weight:400;font-size:8.5px;color:#5b6670;}
+/* Which column is today. Without it the reader counts along the dates to find
+   out where they are, every single row. */
+#rptRoot .gr-tag{display:block;font-size:8px;font-weight:800;letter-spacing:.7px;
+  color:#8a4526;margin-top:2px;}
+#rptRoot table.gh td.gr-now{background:#faf6f3;}
+#rptRoot .gr-r{font-variant-numeric:tabular-nums;font-size:9px;color:#2b333a;margin-top:3px;}
+#rptRoot .gr-d{font-size:9px;color:#5b6670;margin-top:2px;}
 #rptRoot .dlt{font-variant-numeric:tabular-nums;font-weight:700;font-size:10px;}
 #rptRoot .dlt.up{color:#98201a;} #rptRoot .dlt.dn{color:#146b2c;} #rptRoot .dlt.fl{color:#8b939b;}
 #rptRoot .vdot{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px;
@@ -566,6 +585,11 @@
       /* the rounds before the latest one, and how the machine moved between them */
       hist:"Earlier rounds", hist_sub:"newest first",
       trend_t:"Measurement history", trend_sub:"one row per point, oldest reading on the left",
+      /* The same idea for a round recorded in grades rather than millimetres.
+         "Point by point", not "grade history": what a reader wants from it is
+         one point read across the visits, and the heading should say so. */
+      pbp_t:"Point by point", pbp_sub:"oldest round on the left",
+      pbp_now:"this round",
       c_state:"Result", c_worst:"Worst point", c_chg:"Change", c_now:"Latest", c_limit:"New → condemn",
       v_ok:"Normal", v_watch:"Watch", v_act:"Act now",
       rounds_n:"{n} earlier rounds are summarised below rather than reprinted in full.",
@@ -645,6 +669,8 @@
       footer:"Сформировано системой мониторинга состояния",
       hist:"Предыдущие обходы", hist_sub:"сначала новые",
       trend_t:"История замеров", trend_sub:"строка на точку, слева — самый ранний замер",
+      pbp_t:"По точкам", pbp_sub:"слева — ранние обходы",
+      pbp_now:"этот обход",
       c_state:"Итог", c_worst:"Худшая точка", c_chg:"Изменение", c_now:"Текущий",
       c_limit:"Новый → предел",
       v_ok:"Норма", v_watch:"Наблюдать", v_act:"Срочно",
@@ -1520,7 +1546,21 @@
         + '<td>' + note + '</td></tr>';
     }).join("");
 
-    var out = [{ nb: true, html: '<div class="sec"><div class="sechd">'
+    /* nb:false, and this was nb:true.
+
+       A magnetic plug round on a truck with one earlier visit came out as two
+       sheets: a first page not quite half full, and a second holding a table
+       of ONE ROW. The break was unconditional — "the history starts a new
+       page" — which is the right instinct for a unit report carrying eight
+       rounds of undercarriage and pure waste for the ordinary case, which is
+       a short round and a short history.
+
+       The paginator already knows how to do this properly: a section that
+       will not fit the room left starts the next page, and one that fits does
+       not. Handing it the decision costs a sheet of paper on the long reports
+       and saves one on nearly all of them. The section carries its own
+       heading and rule, so it is never mistaken for part of the round above.  */
+    var out = [{ nb: false, html: '<div class="sec" style="margin-top:14px;"><div class="sechd">'
       + '<span class="h2">' + T.I("hist") + '</span>'
       + '<span class="muted" style="font-size:10.5px;margin-left:auto;">' + T.I("hist_sub") + '</span></div>'
       + '<table class="hist"><tr>'
@@ -1531,15 +1571,32 @@
       + '<th style="width:96px">' + T.L("c_state") + '</th>'
       + '<th>' + T.L("c_worst") + '</th></tr>' + rows + '</table></div>' }];
 
-    /* The measurement history, one row per point. Only for machines that were
-       measured — a plug round has nothing to line up in columns. */
-    /* Gated on the DATA, not on the round's flag. A dump body round is
+    /* The measurement history, one row per point.
+       Gated on the DATA, not on the round's flag. A dump body round is
        deliberately not marked `wear` - it has no machine drawing and no
        walk-the-frames layout - so this table skipped it, and the one question a
        liner is measured to answer is "how fast is it going". Any round whose
        items carry millimetres has a history worth lining up in columns. */
     var wearRuns = latest.filter(function (r) {
       return r.items.some(function (it) { return it.w && it.w.mm != null; });
+    });
+    /* ...and every OTHER round gets the same treatment in the currency it was
+       recorded in.
+
+       This used to read "only for machines that were measured — a plug round
+       has nothing to line up in columns", and that was simply wrong. A plug
+       round is measured. It is measured in grades and particle counts rather
+       than millimetres, and "4C was A in July and is C today" is exactly the
+       reading a reliability engineer opens the sheet for. What actually
+       happened is that the summary table above said "2026-07-29 · 4 points ·
+       Watch · None flagged" and the previous reading FOR EACH POINT was
+       nowhere in the document — present in the data, printed as nothing,
+       which is this project's oldest failure shape.
+
+       So the same idea, one row per point, one column per round, in whatever
+       the round records: millimetres above, grade and readings here. */
+    var gradeRuns = latest.filter(function (r) {
+      return !r.items.some(function (it) { return it.w && it.w.mm != null; });
     });
     var MAXCOL = 6;
     wearRuns.forEach(function (cur) {
@@ -1630,6 +1687,95 @@
         + '<th class="r" style="width:50px">' + T.L("c_worn") + '</th>'
         + '<th class="r" style="width:64px">' + T.L("c_life") + '</th>'
         + '<th style="width:54px"></th></tr>' + body + '</table></div>' });
+    });
+
+    /* ---- the same table for a round measured in grades ---------------------
+       One row per point, one column per round, newest on the right. The cell
+       is what that point WAS on that visit: the grade it was given, the
+       readings taken at it, and — because a grade with no reason behind it is
+       half a record — the defect if one was raised.
+
+       Machine-level readings are dropped from the cell rather than repeated
+       down every row. Component and oil hours belong to the compartment, not
+       to the plug: printing "comp 8,400 h" four times in a column four
+       positions deep is four times the ink for one fact, and it crowds out the
+       particle count, which is the number that differs between them and the
+       reason the column exists. Where a reading is NOT the same on every point
+       it stays, because then it is a reading of the point. */
+    gradeRuns.forEach(function (cur) {
+      var all = [cur].concat(older.filter(function (r) { return r.type === cur.type; }))
+        .sort(function (a, b) { return String(a.date || "").localeCompare(String(b.date || "")); });
+      if (all.length < 2) return;
+      /* Fewer columns than the millimetre table: a cell here is a chip and a
+         line of words rather than four digits, and six of them across A4 is a
+         column too narrow to read either. The table above still lists every
+         round. */
+      var GMAX = 4;
+      var runs = all.slice(-GMAX), dropped = all.length - runs.length;
+      var keys = [], seen = {};
+      runs.forEach(function (r) { r.items.forEach(function (it) {
+        if (!seen[it.key]) { seen[it.key] = it; keys.push(it.key); } }); });
+      if (!keys.length) return;
+
+      /* Per round: the item by key, and the readings every point of that round
+         shares — which are the machine's, not the point's. */
+      var read = runs.map(function (r) {
+        var m = {}, common = null;
+        r.items.forEach(function (it) {
+          m[it.key] = it;
+          var rd = (it.readings || []).slice();
+          common = common == null ? rd : common.filter(function (x) { return rd.indexOf(x) >= 0; });
+        });
+        /* Shared only counts as the machine's when there is more than one
+           point to share it. One position tells you nothing about what is
+           common to all of them, and dropping its readings on that reasoning
+           would print a real value as nothing. */
+        return { m: m, common: r.items.length > 1 && common ? common : [] };
+      });
+
+      var gbody = keys.map(function (k, i) {
+        var ref = seen[k];
+        var cells = runs.map(function (r, j) {
+          var it = read[j].m[k];
+          if (!it) return '<td class="muted">—</td>';
+          var mine = (it.readings || []).filter(function (x) {
+            return read[j].common.indexOf(x) < 0; });
+          var bits = [];
+          if (mine.length) bits.push('<div class="gr-r">' + esc(mine.join(" · ")) + '</div>');
+          if (it.defect) bits.push('<div class="gr-d">' + esc(it.defect) + '</div>');
+          /* A point that was checked and had nothing on it is not an empty
+             cell — an empty cell reads as "not inspected", which is a
+             different and much worse statement. */
+          var chip = it.grade ? gradeChip(it.grade)
+            : (it.sev ? sevChip(ctx, it.sev)
+                      : '<span class="muted">' + T.I("none_att") + '</span>');
+          return '<td' + (j === runs.length - 1 ? ' class="gr-now"' : "") + '>'
+            + chip + bits.join("") + '</td>';
+        }).join("");
+        return '<tr class="' + (i % 2 ? "zebra" : "") + '">'
+          + '<td style="padding-left:0">' + T.both(ref.name || k, ref.nameAlt)
+          + (ref.code ? ' <span class="code">' + esc(ref.code) + '</span>' : "")
+          + '</td>' + cells + '</tr>';
+      }).join("");
+
+      /* Two rounds given a quarter of the sheet each put the July chip and the
+         August chip 220px apart, which is exactly the comparison this table
+         exists to make and the worst possible distance to make it over. Cap
+         the column and let the name take the slack, so the readings sit side
+         by side however few rounds there are. */
+      var gw = Math.min(170, Math.floor((760 - 210) / runs.length));
+      var nameW = 760 - gw * runs.length;
+      out.push({ nb: false, html: '<div class="sec" style="margin-top:14px;">'
+        + '<div class="subhd">' + T.I("pbp_t") + ' <span class="muted" style="font-weight:400;">'
+        + T.I("pbp_sub") + (dropped ? ' · +' + dropped : "") + '</span></div>'
+        + '<table class="mh gh"><tr><th style="width:' + nameW + 'px">' + T.L("c_item") + '</th>'
+        + runs.map(function (r, j) { return '<th style="width:' + gw + 'px">'
+            + '<span class="gr-dt">' + esc(r.date || "") + '</span>'
+            + (r.smu ? '<span class="gr-smu">' + esc(r.smu) + ' '
+                + esc(T("c_h")) + '</span>' : "")
+            + (j === runs.length - 1 ? '<span class="gr-tag">' + T.I("pbp_now")
+                + '</span>' : "") + '</th>'; }).join("")
+        + '</tr>' + gbody + '</table></div>' });
     });
     return out;
   }

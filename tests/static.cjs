@@ -89,10 +89,21 @@ for(const [name,src] of [['app',app],['dashboard',dash]]){
   let iEn=src.indexOf('\n  en:{'), iRu=src.indexOf('\n  ru:{');
   if(iEn<0||iRu<0){ iEn=src.search(/\n\s*en\s*:\s*\{/); iRu=src.search(/\n\s*ru\s*:\s*\{/); }
   const defined={};
-  /* Strip the values before looking for keys. A phrase like "Uploading: 3 of 5"
-     contains something that looks exactly like a key, and counting those made
-     the English side appear to have entries the Russian side lacked. */
-  const keysOf=t=>new Set([...t.replace(/"(?:[^"\\]|\\.)*"/g,'""')
+  /* Strip the values AND the comments before looking for keys.
+
+     A phrase like "Uploading: 3 of 5" contains something that looks exactly
+     like a key, and counting those made the English side appear to have
+     entries the Russian side lacked. So did ordinary prose in a comment above
+     a block of keys — "the wording is about people, not about records: ..."
+     was read as a key called `records` that Russian had failed to translate.
+     Both are the same mistake: this check is about the DICTIONARY, and neither
+     a value nor a comment is a key. Reading English prose as code and then
+     reporting a translation gap is a red that costs somebody an afternoon and
+     was never true. */
+  const keysOf=t=>new Set([...t
+      .replace(/\/\*[\s\S]*?\*\//g,' ')
+      .replace(/(^|[\s;{}])\/\/[^\n]*/g,'$1 ')
+      .replace(/"(?:[^"\\]|\\.)*"/g,'""')
     .matchAll(/[\s{,]([a-z][\w]*)\s*:/g)].map(m=>m[1]).filter(k=>k!=='en'&&k!=='ru'));
   if(iEn>=0&&iRu>iEn){
     defined.en=keysOf(src.slice(iEn,iRu));

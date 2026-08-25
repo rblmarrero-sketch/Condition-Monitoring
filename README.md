@@ -1038,8 +1038,33 @@ expat and local staff. Three scopes share one section library:
 * **Temperature** — reading, ambient, rise, and a **limit bar** showing the reading against
   that component's warn/alarm thresholds, with exceedances called out above the table.
 
+### What it was last time
+
+An **Equipment** report on a machine with more than one round does not reprint each visit
+as its own set of sheets. The rounds before the latest collapse into two tables:
+
+* **Earlier rounds** — one line per visit: date, type, hour meter, points checked, verdict,
+  worst point.
+* **Point by point** (or **Measurement history** where the round is measured in millimetres)
+  — one row per position, one column per round, oldest on the left. This is the table a
+  reliability engineer opens the report for: *4C was A with twelve particles in July and is
+  C with forty-six today* reads across in one line.
+
+Every round type gets it, in whatever it was recorded in — millimetres for undercarriage,
+dump body and GET; grade, particle count and coded defect for the plug, filter cut and
+general inspection. Readings that belong to the machine rather than the position —
+component and oil hours, identical on every point — are shown once and not repeated down
+the column.
+
+The last four rounds become columns (six for a measured round); anything older is counted
+beside the heading as `· +2` and still appears in full in the table above it.
+
+A single-round report is deliberately one round: the button on a history card asks for that
+inspection, and gets that inspection.
+
 Pages are laid out as real A4 boxes and flowed block by block, so a table row is never
-sliced in half and a section heading never strands at the foot of a page. Photos and
+sliced in half and a section heading never strands at the foot of a page. Nothing takes a
+sheet it does not need — a short round with a short history is one page, not two. Photos and
 supervisor signatures come from whichever data source is loaded — **Folder on this PC**, or
 Google Drive, which fetches just the photos that report needs. Set one up before generating
 if you want them included.
