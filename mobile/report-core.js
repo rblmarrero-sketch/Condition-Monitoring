@@ -521,6 +521,7 @@
       work_none:"No action outstanding on any machine in this report.",
       c_unit:"Machine", c_comp:"Component", c_find:"Finding", c_cause:"Direct cause",
       c_do:"What to do", c_wo:"WO", c_meas:"Measured", c_worn:"worn",
+      c_left:"Left", c_right:"Right",
       c_item:"Item", c_grade:"Grade", c_sev:"Severity", c_defect:"Defect",
       c_read:"Readings / comment", c_date:"Date", c_type:"Type",
       cause_tbd:"cause not yet set", do_tbd:"not yet decided",
@@ -603,6 +604,7 @@
       work_none:"Ни по одной машине в отчёте действий не требуется.",
       c_unit:"Машина", c_comp:"Узел", c_find:"Замечание", c_cause:"Прямая причина",
       c_do:"Что делать", c_wo:"ЗН", c_meas:"Замер", c_worn:"износ",
+      c_left:"Слева", c_right:"Справа",
       c_item:"Узел", c_grade:"Степень", c_sev:"Категория", c_defect:"Дефект",
       c_read:"Показания / комментарий", c_date:"Дата", c_type:"Тип",
       cause_tbd:"причина не указана", do_tbd:"не определено",
@@ -1069,6 +1071,79 @@
     return out;
   }
 
+  /* ---- left and right, on one row -----------------------------------------
+     Every position on an undercarriage exists twice. A D275 carries 21 on each
+     side and not one of them is unpaired, and the number a reliability
+     engineer actually wants is the DIFFERENCE: uneven wear between the sides
+     is track tension, or alignment, or a machine that works a camber all
+     shift. Splitting the readings down the middle of a list put "Track roller
+     — Left 8" at the foot of one column and "Track roller — Right 1" at the
+     head of the other, so which column a reading sat in told nobody anything.
+
+     Only where the pairing is REAL, and that is decided from the keys rather
+     than from the round's type: a dump body has sixty-three stations and no
+     sides at all, and a blade has two end bits either side of a centre edge
+     that has no twin. Those keep the running split, because inventing a pair
+     is worse than not having one. */
+  function sideOf(key) {
+    var m = /^([^.]+)\.([LR])([-0-9].*|)$/.exec(String(key == null ? "" : key));
+    return m ? { part: m[1] + "|" + m[3], side: m[2] } : null;
+  }
+  /* [[left, right], ...] in the order the parts were walked, or null when the
+     round is not sided. A position measured on one side only still makes a
+     row — the empty cell is the honest rendering of "not on this sheet", and
+     losing the whole layout because one reading is missing would be a worse
+     answer than showing the gap. */
+  function pairBySide(rows) {
+    var by = {}, order = [], i;
+    for (i = 0; i < rows.length; i++) {
+      var sd = sideOf(rows[i].key);
+      if (!sd) return null;                       // not a sided round
+      if (!by[sd.part]) { by[sd.part] = {}; order.push(sd.part); }
+      if (by[sd.part][sd.side]) return null;      // two of the same side: not a pair
+      by[sd.part][sd.side] = rows[i];
+    }
+    var out = [];
+    for (i = 0; i < order.length; i++) out.push([by[order[i]].L || null, by[order[i]].R || null]);
+    return out.length ? out : null;
+  }
+  /* The part, named once.
+
+     The two labels differ by one word and which word it is depends on the
+     language — "Left"/"Right", "Слева"/"Справа" — so the difference is found
+     rather than known: split both into words, and if they differ in exactly
+     one place, drop it. Anything else and the left-hand label is printed
+     whole, which is redundant next to a column headed LEFT but never wrong.
+
+     Not a character-by-character diff. "Track roller — Left 1" and "Track
+     roller — Right 1" share the trailing "t 1", and trimming on that produces
+     "Track roller — t 1". */
+  function nameBoth(a, b) {
+    if (!a || !b) return a || b || "";
+    if (a === b) return a;
+    var x = String(a).split(" "), y = String(b).split(" ");
+    if (x.length !== y.length) return a;
+    var at = -1;
+    for (var i = 0; i < x.length; i++) {
+      if (x[i] === y[i]) continue;
+      if (at >= 0) return a;                       // more than one word apart
+      at = i;
+    }
+    if (at < 0) return a;
+    x.splice(at, 1);
+    /* A separator with nothing left to separate: "Idler tread — · outer". */
+    var out = [];
+    for (var j = 0; j < x.length; j++) {
+      var w = x[j];
+      if ((w === "\u2014" || w === "-" || w === "\u00b7") &&
+          (!out.length || j === x.length - 1 ||
+           out[out.length - 1] === "\u2014" || out[out.length - 1] === "\u00b7")) continue;
+      out.push(w);
+    }
+    var t = out.join(" ").replace(/\s+/g, " ").trim();
+    return t || a;
+  }
+
   /* `ownPage` starts the measurements on a fresh sheet.
 
      The drawing is the thing somebody carries to the machine, and sharing its
@@ -1126,6 +1201,44 @@
         x += '<tr class="' + (i % 2 ? "zebra" : "") + '">' + half(list[i])
           + '<td class="sp"></td>' + half(list[hf + i]) + '</tr>'; }
       return x + '</table>'; };
+
+    /* The same grid, except the two halves are the two sides of the machine
+       and the part is named once between them. */
+    var num = function (it) {
+      if (!it) return '<td class="r n"><span class="muted">—</span></td>'
+        + (anyRef ? '<td class="r n"></td><td></td>' : "");
+      var w = it.w;
+      return '<td class="r n">' + (w.mm != null ? '<b>' + esc(w.mm) + '</b>'
+          : '<span class="muted" style="font-size:9px">' + esc(w.reasonLabel || w.reason || "—") + '</span>') + '</td>'
+        + (anyRef ? '<td class="r n">' + (w.pct != null ? esc(w.pct) + "%" : "") + '</td>'
+            + '<td>' + (w.pct != null ? wearBar(w.pct) : "") + '</td>' : ""); };
+    /* Wider than the running grid's columns, because there is width to spend:
+       the part is named once instead of twice, and the reading a reliability
+       engineer compares is the one in the next column but two. */
+    var sideHd = function (lbl) {
+      return '<th class="r" style="width:72px">' + lbl + '</th>'
+        + (anyRef ? '<th class="r" style="width:48px">' + T.L("c_worn") + '</th>'
+                  + '<th style="width:72px"></th>' : ""); };
+    var paired = function (list) {
+      var x = '<table class="pair"><tr><th>' + T.L("c_item") + '</th>'
+        + sideHd(T.L("c_left")) + '<th class="sp"></th>' + sideHd(T.L("c_right")) + '</tr>';
+      list.forEach(function (pr, i) {
+        var L = pr[0], R = pr[1], any = L || R, w = any.w;
+        var ref = w.newMM != null && w.newMM !== "";
+        x += '<tr class="' + (i % 2 ? "zebra" : "") + '">'
+          + '<td style="padding-left:0;">'
+          + T.both(nameBoth(L && L.name, R && R.name) || any.key,
+                   nameBoth(L && L.nameAlt, R && R.nameAlt))
+          /* One reference line serves both sides: it is the same part on the
+             same model, and printing "21 → 33.5 mm" twice on one row is two
+             thirds of a line of paper saying one thing. */
+          + (anyRef ? '<div class="code">' + (ref
+              ? esc(w.newMM + " → " + w.condemnMM + " mm") : "—") + '</div>' : "")
+          + '</td>'
+          + num(L) + '<td class="sp"></td>' + num(R) + '</tr>'; });
+      return x + '</table>'; };
+    var sides = pairBySide(rows);
+
     var bare = rows.filter(function (it) {
       return !(it.w.newMM != null && it.w.newMM !== ""); }).length;
     var noRefNote = !anyRef
@@ -1133,15 +1246,19 @@
       : bare ? '<div class="quiet" style="margin:5px 0 0;">'
                + T.S("noref_some", { n: bare }) + '</div>'
       : "";
-    var MAX = 44, parts = Math.ceil(rows.length / MAX), PER = Math.ceil(rows.length / parts);
-    for (var o = 0; o < rows.length; o += PER) {
-      var chunk = rows.slice(o, o + PER);
+    /* Chunked on what a page holds, which is ROWS — and a sided round puts two
+       readings on every row, so it fits twice as many readings per chunk. */
+    var units = sides || rows;
+    var parts = Math.ceil(units.length / (sides ? 22 : 44));
+    var PER = Math.ceil(units.length / parts);
+    for (var o = 0; o < units.length; o += PER) {
+      var chunk = units.slice(o, o + PER);
       out.push({ nb: !!ownPage && o === 0, html: cont
         + '<div class="subhd" style="margin-top:11px;">' + T.I(T.key("meas_" + rec.type, "meas_t"))
-        + (parts > 1 ? ' <span class="muted">' + (o + 1) + "–" + Math.min(o + PER, rows.length)
-            + " / " + rows.length + '</span>' : "")
+        + (parts > 1 ? ' <span class="muted">' + (o + 1) + "–" + Math.min(o + PER, units.length)
+            + " / " + units.length + '</span>' : "")
         + '</div>' + (o === 0 ? noRefNote : "")
-        + '<div class="meas">' + col(chunk) + '</div></div></div>' });
+        + '<div class="meas">' + (sides ? paired(chunk) : col(chunk)) + '</div></div></div>' });
     }
     if (tailHTML) {
       var last = out.pop();

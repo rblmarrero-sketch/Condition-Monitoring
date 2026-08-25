@@ -33,12 +33,22 @@ const reset = q => fetch(BASE + '/__reset' + (q || '')).then(r => r.text());
      (await p.textContent('#teamList')).trim().slice(0, 60));
   await p.evaluate(() => showPane('paneSystem'));
   await p.click('#teamRefresh'); await p.waitForTimeout(300);
-  // upload-defaults.js ships a built-in Drive URL, so "no destination" is not the
-  // state a real phone starts in — what matters is that an unreachable one explains
-  // itself instead of surfacing fetch()'s opaque "Failed to fetch".
-  ok('an unreachable Drive explains itself',
-     /Could not reach Google Drive|Set up Google Drive/.test(await p.textContent('#teamMsg')),
-     (await p.textContent('#teamMsg')).trim());
+  /* upload-defaults.js ships a built-in endpoint, so "no destination" is not the
+     state a real phone starts in — what matters is that an unreachable one
+     explains itself instead of surfacing fetch()'s opaque "Failed to fetch".
+
+     Asked against the app's own dictionary rather than against a sentence
+     copied out of it. This line used to read /Could not reach Google Drive/,
+     and when the fleet moved off Google it went red — not because the app had
+     stopped explaining itself, but because it had stopped naming a vendor it
+     no longer uses. A test that pins the supplier's name fails on the day the
+     supplier changes and passes on the day the message goes missing. */
+  const teamMsg = (await p.textContent('#teamMsg')).trim();
+  const teamWords = await p.evaluate(() => [t('team_unreach'), t('team_nodrive'), t('team_timeout')]);
+  ok('an unreachable backend explains itself in words',
+     teamMsg.length > 20 && !/Failed to fetch|undefined|\[object/.test(teamMsg)
+       && teamWords.some(w => w && teamMsg.indexOf(w) >= 0),
+     teamMsg);
   ok('and nothing was pulled from the mock', (await stats()).records === 0);
 
   /* point the app at the mock, the way ⚙ would */

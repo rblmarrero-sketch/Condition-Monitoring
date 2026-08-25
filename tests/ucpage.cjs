@@ -147,7 +147,11 @@ const HARNESS = `(async (sections) => {
       if (hit) bad.push(who + ' sec ' + i + ' cut at ' + Math.round(acc) + 'px through "' + hit.x + '"');
     }
   }));
-  ok('the two documents give the cut plenty of chances', cuts >= 3, cuts + ' cuts');
+  /* Three when this was written; one now. Pairing the grid by side halved the
+     readings sheet — twenty-one rows carrying two numbers each instead of
+     eighteen carrying two unrelated ones — so there is simply less document to
+     cut. The number is not the point; having a cut to get wrong is. */
+  ok('there is a cut to get wrong', cuts >= 1, cuts + ' cuts');
   ok('and every one of them fell between rows, not through one',
     bad.length === 0, bad.slice(0, 4).join(' | ') || 'clean');
 
