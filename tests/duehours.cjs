@@ -51,6 +51,7 @@ const mk = `((id,ty,u,d,smu,pos)=>({id,type:ty,equip:u,date:d,by:'S. Volkov',sup
     GET: [DUE.hours('GET'), DUE.days('GET')],
     TB: [DUE.hours('TB'), DUE.days('TB')],
     INSP: [DUE.hours('INSP'), DUE.days('INSP')],
+    TEMP: [DUE.hours('TEMP'), DUE.days('TEMP')],
     at500: DUE.partsDue('FC', 600), at1000: DUE.partsDue('FC', 1100),
   }));
   ok('a machine is assumed to run 20 hours a day', iv.hpd === 20, iv.hpd + ' h/day');
@@ -66,10 +67,13 @@ const mk = `((id,ty,u,d,smu,pos)=>({id,type:ty,equip:u,date:d,by:'S. Volkov',sup
     JSON.stringify(iv.at500) === '["ENG"]', JSON.stringify(iv.at500));
   ok('and an 1100-hour visit is all of them',
     iv.at1000.length === 5, JSON.stringify(iv.at1000));
-  /* Nobody gave the walk-arounds an hour figure. Carrying the calendar they
-     already used is the honest answer; inventing 600 h for them is not. */
+  ok('the walk-around every 500 h', iv.INSP[0] === 500 && iv.INSP[1] === 25,
+    iv.INSP.join(' h → ') + ' d');
+  /* Nobody has given the temperature round or the lubrication audit an hour
+     figure. Carrying the calendar they already ran on is the honest answer;
+     inventing 600 h for them is not. */
   ok('a round with no hour figure keeps its calendar and says so',
-    iv.INSP[0] === null && iv.INSP[1] === 30, 'INSP ' + iv.INSP[1] + ' d');
+    iv.TEMP[0] === null && iv.TEMP[1] === 30, 'TEMP ' + iv.TEMP[1] + ' d');
 
   console.log('\n  the due list counts in hours');
   const one = await p.evaluate(async ([MK]) => {

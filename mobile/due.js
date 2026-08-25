@@ -65,7 +65,10 @@
       UC:   { h: 500 },
       GET:  { h: 500 },
       TB:   { h: 1000 },
-      INSP: { d: 30, carried: 1 },
+      INSP: { h: 500 },
+      /* Still no hour figure for these two, so they keep the calendar the
+         fleet already ran them on. Carried forward rather than converted: 30
+         days is what somebody chose, and 600 h is a number nobody has said. */
       TEMP: { d: 30, carried: 1 },
       LUBE: { d: 30, carried: 1 },
     },
