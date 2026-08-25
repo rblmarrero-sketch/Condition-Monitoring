@@ -75,7 +75,9 @@ const reset = q => fetch(BASE + '/__reset' + (q || '')).then(r => r.text());
   // empty "overdue & due soon" list is the correct answer — switch to "all units
   // with history" to prove the team's rounds really did land in it.
   await p.evaluate(() => showPane('paneSystem'));
-  await p.selectOption('#dueScope', 'all'); await p.waitForTimeout(300);
+  /* A pill now, not a dropdown — pressed the way an inspector would. */
+  await p.evaluate(() => showPane('paneDue'));
+  await p.click('#dueScopeF [data-sc="all"]'); await p.waitForTimeout(300);
   const dueTxt = await p.textContent('#dueList');
   ok('team rounds appear in the due list', /TK1\d\d/.test(dueTxt) && !/Nothing due/.test(dueTxt),
      dueTxt.trim().replace(/\s+/g, ' ').slice(0, 70));

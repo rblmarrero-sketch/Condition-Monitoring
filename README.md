@@ -968,6 +968,31 @@ office has retracted.
 
 ### What is due, and what we missed
 
+The due list has its own tab. It used to sit at the bottom of **System**, under
+"In the system" — so on a phone that had pulled the whole team's work, reaching the one
+list that says what to walk meant scrolling past forty-two rounds of archive. The archive
+and the worklist are different questions, and one of them is asked at the start of every
+shift.
+
+**Capture · Due · Queue · System.** Due is second: after the app's own job, before
+everything that is about looking backwards. It carries a red badge with the number of
+machines nobody has been to — *missed*, not missed-and-due-soon, because a badge is a call
+to action and a round due next Tuesday is not one. Queue badges what is waiting to upload;
+System badges a round two phones both sent, which is the only thing in an archive that
+needs a decision.
+
+Its filters are pills, not dropdowns — the same pills the card above it uses:
+
+`Missed 5` `Due soon 1` `Put off 1` `All 9`
+`All rounds 5` `MP 1` `INSP 1` `UC 3`
+
+The count rides on the control that filters to it, so "how bad is it" and "show me" are one
+glance and one tap. A dropdown could do neither: it hides its options until opened and
+cannot carry a number, which is why the counts used to be printed again as a sentence
+underneath. A round type with nothing in the current scope gets no pill, so a pill can never
+lead to an empty list — and the one you are standing on stays put even when the scope you
+switch to empties it, or the control that got you there would vanish.
+
 Rounds come round on **hours**, not days — `mobile/due.js` holds the intervals in one
 place and both the phone and the dashboard compute from it, so the two can never drift:
 

@@ -31,9 +31,9 @@ const SEED = `(() => {
   histSave({ 'MP|TK146':'2026-08-01', 'UC|DZ001':'2026-06-20', 'FC|EX005':'2026-08-18',
              'INSP|TK150':'2026-07-01', 'TB|TK101':'2026-05-01' });
   deferSave({}); smuSave({});
-  document.getElementById('dueType').value = '';
-  document.getElementById('dueScope').value = 'due';
-  showPane('paneSystem'); renderDue();
+  dueType = '';
+  dueScope = 'over';
+  showPane('paneDue'); renderDue();
 })()`;
 
 (async () => {
@@ -66,30 +66,48 @@ const SEED = `(() => {
   ok('the tray round is the most overdue of them', /^TB TK101/.test(all[0]), all[0]);
 
   console.log('\n  and it says how many were missed');
-  const basis = await p.evaluate(() => document.getElementById('dueBasis').textContent);
+  /* The count sits ON the control that filters to it. It used to be a sentence
+     under the controls — "7 missed · 3 due soon" — which answered "how bad is
+     it" in one place and "show me" in another, two taps apart. */
+  const pills = await p.$$eval('#dueScopeF button',
+    a => a.map(b => b.textContent.replace(/\s+/g, ' ').trim()));
   ok('the count is on the screen, not left to be measured by eye',
-    /\d+ missed/.test(basis) && /due soon/.test(basis), basis);
+    pills.some(x => /Missed ?\d/.test(x)) && pills.some(x => /Due soon ?\d/.test(x)),
+    pills.join(' | '));
+  ok('and pressing one narrows the list to exactly what it counted',
+    await (async () => {
+      const n = Number((pills.find(x => /^Missed/.test(x)) || '').replace(/\D+/g, ''));
+      await p.click('#dueScopeF [data-sc="over"]'); await p.waitForTimeout(250);
+      const got = await p.$$eval('#dueList .duerow', a => a.length);
+      await p.click('#dueScopeF [data-sc="over"]'); await p.waitForTimeout(250);
+      return got === n;
+    })(), pills.find(x => /^Missed/.test(x)));
   const badge = await p.evaluate(() => document.getElementById('dueCount').textContent);
-  ok('and on the badge', Number(badge) === all.length, badge + ' vs ' + all.length + ' rows');
+  const nMissed = Number((pills.find(x => /^Missed/.test(x)) || '').replace(/\D+/g, ''));
+  /* One number, one meaning. The badge counted overdue-and-due-soon while the
+     tab beside it counted overdue, so the same card carried two totals for
+     itself and nothing said which was which. */
+  ok('and the badge says the same thing the tab does', Number(badge) === nMissed,
+    badge + ' vs ' + nMissed + ' missed');
 
   console.log('\n  narrowed to one round when that is what you want');
-  const uc = await p.evaluate(async () => { document.getElementById('dueType').value = 'UC';
+  const uc = await p.evaluate(async () => { dueType = 'UC';
     renderDue(); await new Promise(r => setTimeout(r, 150));
     return [...document.querySelectorAll('.dueitem')].map(x => x.textContent.replace(/\s+/g, ' ').trim()); });
   ok('only that round is listed', uc.length && uc.every(r => /^UC /.test(r)), uc.join(' | ') || 'none');
   ok('and its own interval is named', /500 h/.test(
     await p.evaluate(() => document.getElementById('dueBasis').textContent)),
     await p.evaluate(() => document.getElementById('dueBasis').textContent));
-  await p.evaluate(async () => { document.getElementById('dueType').value = '';
+  await p.evaluate(async () => { dueType = '';
     renderDue(); await new Promise(r => setTimeout(r, 150)); });
 
   console.log('\n  "missed only" is the same list, without the ones still in hand');
-  const missed = await p.evaluate(async () => { document.getElementById('dueScope').value = 'over';
+  const missed = await p.evaluate(async () => { dueScope = 'over';
     renderDue(); await new Promise(r => setTimeout(r, 150));
     return [...document.querySelectorAll('.dueitem')].map(x => x.textContent.replace(/\s+/g, ' ').trim()); });
   ok('every row on it is overdue', missed.length && missed.every(r => /overdue/.test(r)),
     missed.length + ' rows');
-  await p.evaluate(async () => { document.getElementById('dueScope').value = 'due';
+  await p.evaluate(async () => { dueScope = 'over';
     renderDue(); await new Promise(r => setTimeout(r, 150)); });
 
   console.log('\n  a round that is not being done says why');
@@ -121,6 +139,8 @@ const SEED = `(() => {
   const put = await p.evaluate(() => ({
     defer: JSON.parse(localStorage.getItem('cm_due_defer') || '{}'),
     basis: document.getElementById('dueBasis').textContent,
+    pills: [...document.querySelectorAll('#dueScopeF button')]
+             .map(x => x.textContent.replace(/\s+/g, ' ').trim()),
     rows: [...document.querySelectorAll('.dueitem')].map(x => x.textContent.replace(/\s+/g, ' ').trim()) }));
   const d = put.defer['TB|TK101'];
   ok('the reason is kept', d && d.why === 'in the workshop, wheel motor out', JSON.stringify(d));
@@ -128,10 +148,12 @@ const SEED = `(() => {
   ok('and a date to come back on', d && /^\d{4}-\d{2}-\d{2}$/.test(d.until || ''), String(d && d.until));
   ok('the machine leaves the working list', !put.rows.some(r => /TK101/.test(r)),
     put.rows.length + ' rows');
-  /* Counted, not forgotten. The whole reason for asking is that somebody can
-     find out later what was put off and why. */
-  ok('but it is still counted, as put off', /put off/.test(put.basis), put.basis);
-  const shown = await p.evaluate(async () => { document.getElementById('dueScope').value = 'all';
+  /* Counted, not forgotten — and the count is a control. The whole reason for
+     asking for a reason is that somebody can find out later what was put off
+     and why, so the number is on the pill that shows them. */
+  ok('but it is still counted, as put off',
+    put.pills.some(x => /Put off ?[1-9]/.test(x)), put.pills.join(' | '));
+  const shown = await p.evaluate(async () => { dueScope = 'all';
     renderDue(); await new Promise(r => setTimeout(r, 150));
     const r = [...document.querySelectorAll('.dueitem')].find(x => /TK101/.test(x.textContent));
     return r ? r.textContent.replace(/\s+/g, ' ').trim() : ''; });
@@ -149,7 +171,7 @@ const SEED = `(() => {
   ok('and the date it was put off over is the round\'s', cleared.last === '2026-08-24', cleared.last);
 
   console.log('\n  a round nobody is going to do at all');
-  await p.evaluate(async () => { document.getElementById('dueScope').value = 'due';
+  await p.evaluate(async () => { dueScope = 'over';
     renderDue(); await new Promise(r => setTimeout(r, 150)); });
   await p.click('.dueforget');
   await p.waitForTimeout(250);
@@ -165,8 +187,8 @@ const SEED = `(() => {
   ok('and its reason', anyOff && /unit sold/.test(anyOff.why), anyOff && anyOff.why);
 
   console.log('\n  the row opens the round it is due for');
-  await p.evaluate(async () => { document.getElementById('dueScope').value = 'due';
-    document.getElementById('dueType').value = '';
+  await p.evaluate(async () => { dueScope = 'over';
+    dueType = '';
     renderDue(); await new Promise(r => setTimeout(r, 150)); });
   const want = await p.evaluate(() => {
     const el = document.querySelector('.dueitem'); return el ? el.dataset.t : ''; });

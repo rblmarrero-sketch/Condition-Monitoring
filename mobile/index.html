@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=158">
+<link rel="manifest" href="manifest.webmanifest?v=159">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=158">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=158">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=158">
+<link rel="apple-touch-icon" href="icon-192.png?v=159">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=159">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=159">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -346,12 +346,50 @@
      it to decide what you are about to READ armed the wrong round for whoever
      walked back to Capture afterwards. */
   .tfilter{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px;}
-  .tfilter button{flex:0 0 auto;min-height:34px;padding:5px 10px;border-radius:999px;
+  /* 44, not 34. This is the app's own floor everywhere else — a gloved thumb
+     at −40 needs it — and these pills sat under it since they shipped, unseen
+     because they only render when there are rounds to filter and no screenshot
+     test had any. The due list gave them one. */
+  .tfilter button{flex:0 0 auto;min-height:44px;padding:6px 12px;border-radius:999px;
     border:1.5px solid var(--border);background:var(--surface-2);color:var(--ink-2);
     font-size:12.5px;font-weight:650;font-family:inherit;cursor:pointer;line-height:1.2;}
   .tfilter button .n{color:var(--muted);font-weight:600;margin-left:4px;}
   .tfilter button.on{border-color:var(--accent);background:var(--accent);color:var(--accent-ink);}
   .tfilter button.on .n{color:var(--accent-ink);opacity:.75;}
+  /* The due filters. Same pill as the card above — one shape for "narrow this
+     list" across the app — but the SELECTED state takes the colour of the
+     thing it selects, because on this screen the filter and the severity are
+     the same fact. Missed is critical red, due soon is warning amber, put off
+     is the accent, and All stays neutral because "everything" is not a state.
+
+     Unselected pills stay grey on purpose. Four coloured chips in a row is a
+     traffic light with no green in it and nothing to look at first; the colour
+     appears when it means "this is what you are looking at". */
+  /* One line each, scrolling, not two lines that wrap. Four scope pills and
+     eight round codes wrap to four rows on a 412px phone — more control than
+     content above a list of seven machines, and the row that matters most
+     ends up furthest from the thumb. The order puts the default and the
+     urgent leftmost, so what scrolls out of reach is "All". */
+  .dfilter{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;
+    scrollbar-width:none;padding-bottom:2px;margin-bottom:8px;}
+  .dfilter::-webkit-scrollbar{display:none;}
+  .dfilter button{padding:6px 11px;}
+  .dfilter button.on.over{border-color:var(--critical);background:var(--critical);color:#fff;}
+  .dfilter button.on.soon{border-color:var(--warning);background:var(--warning);color:#111;}
+  .dfilter button.on.put{border-color:var(--accent);background:var(--accent);color:var(--accent-ink);}
+  .dfilter button.on.over .n,.dfilter button.on.soon .n,.dfilter button.on.put .n{
+    color:inherit;opacity:.72;}
+  /* A count of nothing is quieter than a count of six, so the eye lands on the
+     row that has something in it. */
+  .dfilter button:not(.on) .n{font-variant-numeric:tabular-nums;}
+  /* Round codes on one line that scrolls, not three lines that wrap. Eight
+     round types wrapped to three rows above a list of seven machines, which is
+     more control than content — and a row that changes height as rounds arrive
+     moves everything under it. */
+  .tfrounds{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;
+    scrollbar-width:none;padding-bottom:2px;}
+  .tfrounds::-webkit-scrollbar{display:none;}
+  .dfilter:empty{display:none;margin:0;}
   .dueitem .tag{margin-right:6px;}
   /* 44px minimum, and a gap between them: these sat at ~34px side by side, so a
      gloved thumb aiming for Edit could hit Delete instead. */
@@ -430,6 +468,10 @@
     border-radius:999px;background:var(--accent);color:#fff;font-size:10px;line-height:17px;
     text-align:center;letter-spacing:0;}
   .tabbar .tb.warn{background:var(--warning);color:#111;}
+  /* Missed is not a warning, it is a miss. The queue's badge is the accent
+     because work waiting to upload is normal; this one is red because a
+     machine nobody has been to is not. */
+  .tabbar .tb.miss{background:var(--critical);color:#fff;}
 
   /* The unit's recent history, at the moment of standing in front of it. */
   .trend{display:flex;align-items:center;gap:8px;margin:-2px 0 12px;}
@@ -452,9 +494,10 @@
     main{max-width:1180px;padding:20px;display:grid;gap:0 20px;
          grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start;}
     .pane{display:block;}                      /* the tab state stops applying */
-    #paneCapture{grid-column:1;grid-row:1 / span 3;}
-    #paneQueue{grid-column:2;grid-row:1;}
-    #paneSystem{grid-column:2;grid-row:2;}
+    #paneCapture{grid-column:1;grid-row:1 / span 4;}
+    #paneDue{grid-column:2;grid-row:1;}
+    #paneQueue{grid-column:2;grid-row:2;}
+    #paneSystem{grid-column:2;grid-row:3;}
     main > .ver{grid-column:1 / -1;}
     .tabbar{display:none;}
     .card{padding:20px;}
@@ -1599,6 +1642,15 @@
     <div class="hint" style="margin-top:8px" data-i18n="team_hint">Everything the whole team has uploaded, not just this phone. Refreshes itself after each upload and is kept for offline — so the due list below knows about rounds someone else did.</div>
   </div>
 
+</div><!-- /paneSystem -->
+
+<!-- What to walk next, on a tab of its own.
+
+     It used to sit under "In the system", which meant scrolling past every
+     round the whole team had ever uploaded to reach the one list that says
+     what to do now. The archive and the worklist are different questions and
+     one of them is asked at the start of every shift. -->
+<div class="pane" id="paneDue">
   <div class="card">
     <h2><span data-i18n="sec_due">Inspection due</span> <span class="count-badge" id="dueCount">0</span></h2>
     <!-- A round filter, not an interval box.
@@ -1610,23 +1662,22 @@
          somebody retyped here quietly put that phone out of step with the
          fleet. The schedule is the fleet's now — due.js — and this list shows
          EVERY round unless you narrow it. -->
-    <div class="row" style="margin-bottom:12px">
-      <label class="fld" style="margin:0"><span data-i18n="lbl_due_round">Round</span>
-        <select id="dueType"></select></label>
-      <label class="fld" style="margin:0"><span data-i18n="lbl_due_scope">Show</span>
-        <select id="dueScope">
-          <option value="due" data-i18n="due_overdue">Overdue &amp; due soon</option>
-          <option value="over" data-i18n="due_missed">Missed only</option>
-          <option value="all" data-i18n="due_all">All units with history</option>
-        </select></label>
-    </div>
+    <!-- Pills, not dropdowns, and the same pills the card above uses.
+
+         A dropdown hides its options until you open it and still cannot tell
+         you how many rounds are behind each one. These carry the count on the
+         control that filters to it, so "how bad is it" and "show me" are the
+         same glance and the same tap. A state nobody is in gets no pill: a
+         control that leads to an empty list is a control that lies. -->
+    <div class="tfilter dfilter" id="dueScopeF"></div>
+    <div class="tfilter dfilter tfrounds" id="dueTypeF"></div>
     <div class="quiet" id="dueBasis" style="margin:-4px 0 10px"></div>
     <div class="duelist" id="dueList"></div>
     <button class="btn ghost" id="dueImport" style="margin-top:12px">📥 <span data-i18n="btn_due_import">Load history file</span></button>
     <div class="hint" style="margin-top:8px" data-i18n="due_hint">Built from what this phone has recorded. Load an entries.json exported from the dashboard to seed the whole fleet's last-done dates.</div>
     <input id="dueFile" type="file" accept=".json,application/json" class="hidden">
   </div>
-</div><!-- /paneSystem -->
+</div><!-- /paneDue -->
 
   <div class="stale hidden" id="staleBar" role="status">
     <span id="staleTxt"></span>
@@ -1635,8 +1686,14 @@
   <div class="ver" id="verLine">build v<span id="verNum">?</span> · <span id="verNote">updates itself, says when it is ready</span> ·   <a href="#" id="forceUpdate" class="verlink">⟳ Update</a></div>
 </main>
 
+<!-- Four, in the order of the shift: what is due, then walking it, then
+     watching it go up, then the archive. Capture stays first because it is the
+     app's job and the place a phone should open on; Due is second because it
+     is the question asked before the first round of the day and the one that
+     was previously three screens down. -->
 <nav class="tabbar" id="tabbar">
   <button type="button" data-pane="paneCapture" class="on"><span class="ti">✎</span><span data-i18n="tab_capture">Capture</span></button>
+  <button type="button" data-pane="paneDue"><span class="ti">⏱</span><span data-i18n="tab_due">Due</span><span class="tb hidden" id="tabD"></span></button>
   <button type="button" data-pane="paneQueue"><span class="ti">📤</span><span data-i18n="tab_queue">Queue</span><span class="tb hidden" id="tabQ"></span></button>
   <button type="button" data-pane="paneSystem"><span class="ti">🗂</span><span data-i18n="tab_system">System</span><span class="tb hidden" id="tabS"></span></button>
 </nav>
@@ -1814,30 +1871,30 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=158"></script>
-<script src="upload-defaults.js?v=158"></script>
-<script src="hme.js?v=158"></script>
-<script src="mp-fc.js?v=158"></script>
-<script src="hme-cascade.js?v=158"></script>
-<script src="assets.js?v=158"></script>
-<script src="temp-limits.js?v=158"></script>
-<script src="due.js?v=158"></script>
-<script src="wear.js?v=158"></script>
-<script src="wear-figs.js?v=158"></script>
-<script src="wear-map.js?v=158"></script>
-<script src="machine-photos.js?v=158"></script>
-<script src="machine-fig.js?v=158"></script>
-<script src="get.js?v=158"></script>
-<script src="points.js?v=158"></script>
-<script src="uc-points.js?v=158"></script>
-<script src="inspect-guide.js?v=158"></script>
-<script src="get-figs.js?v=158"></script>
-<script src="body-points.js?v=158"></script>
-<script src="body-map.js?v=158"></script>
-<script src="lube.js?v=158"></script>
-<script src="lube-overrides.js?v=158"></script>
-<script src="lube2027.js?v=158"></script>
-<script src="report-core.js?v=158"></script>
+<script src="native.js?v=159"></script>
+<script src="upload-defaults.js?v=159"></script>
+<script src="hme.js?v=159"></script>
+<script src="mp-fc.js?v=159"></script>
+<script src="hme-cascade.js?v=159"></script>
+<script src="assets.js?v=159"></script>
+<script src="temp-limits.js?v=159"></script>
+<script src="due.js?v=159"></script>
+<script src="wear.js?v=159"></script>
+<script src="wear-figs.js?v=159"></script>
+<script src="wear-map.js?v=159"></script>
+<script src="machine-photos.js?v=159"></script>
+<script src="machine-fig.js?v=159"></script>
+<script src="get.js?v=159"></script>
+<script src="points.js?v=159"></script>
+<script src="uc-points.js?v=159"></script>
+<script src="inspect-guide.js?v=159"></script>
+<script src="get-figs.js?v=159"></script>
+<script src="body-points.js?v=159"></script>
+<script src="body-map.js?v=159"></script>
+<script src="lube.js?v=159"></script>
+<script src="lube-overrides.js?v=159"></script>
+<script src="lube2027.js?v=159"></script>
+<script src="report-core.js?v=159"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -1883,9 +1940,22 @@ const TYPE_ORDER = ["MP","FC","INSP","TEMP","UC","GET","TB","LUBE"];
 /* The plug, filter and inspection vocabulary now lives in points.js, with the
    vocabularies for every other round type, so the dashboard can name a position
    from the same reference this app does instead of falling back to whatever
-   string a phone happened to write at capture time. Same names, one copy. */
-const COMP = PTS.COMP, CLASSES = PTS.CLASSES;
-const mk = PTS.mk;
+   string a phone happened to write at capture time. Same names, one copy.
+
+   Guarded, and that is not defensive habit — it is a bug this move introduced
+   and a test caught. Written as a bare `PTS.COMP` these are the FIRST
+   statements in the app's own script, so a points.js that did not arrive threw
+   a ReferenceError before anything else ran: no app, no offline page, a white
+   screen on a phone with no signal. Every other reference file on this page
+   already degrades — assets.js missing means an incomplete list and a line
+   saying so, not a dead app — and checkData() below names whichever one did
+   not come. This one now joins them. */
+const PTS_ = (typeof PTS !== "undefined" && PTS) ? PTS : { COMP:{}, CLASSES:{ALL:{}},
+  mk:function(k,en,ru){ return {k:k,en:en,ru:ru}; },
+  label:function(){ return ""; }, classLabel:function(){ return ""; },
+  classOf:function(){ return ""; } };
+const COMP = PTS_.COMP, CLASSES = PTS_.CLASSES;
+const mk = PTS_.mk;
 // Thermal survey points = the same components as the walk-around inspection. Registered
 // units use their real L7/L8/L9 tree instead (see currentTree), so this is the fallback list.
 Object.keys(CLASSES).forEach(k=>{ CLASSES[k].TEMP = CLASSES[k].INSP; });
@@ -2183,7 +2253,7 @@ const I18N = {
     due_basis_cal:"Every {n} days · this round is not scheduled on hours",
     due_basis_own:"{n} on the machine's own rate",
     due_why_wear:"wear, not the interval",
-    lbl_due_round:"Round", due_all_rounds:"All rounds", due_missed:"Missed only",
+    lbl_due_round:"Round", due_all_rounds:"All rounds", due_missed:"Missed",
     due_n_over:"{n} missed", due_n_soon:"{n} due soon", due_n_put:"{n} put off",
     due_every:"every {h} h", due_at_rate:"{r} h/day assumed",
     due_not:"Not doing this one",
@@ -2192,7 +2262,11 @@ const I18N = {
     due_put_n:"+{n} d", due_put_to:"put off to {d}", due_off:"Not being done",
     due_why:"Reason", due_why_ph:"in the workshop · off site · no access",
     due_why_need:"Say why — this is the part somebody will read later.",
-    due_overdue:"Overdue & due soon", due_all:"All units with history",
+    due_overdue:"Overdue & due soon", due_all:"All",
+    /* On a pill, not in a dropdown: the count beside it says how many, so the
+       label only has to say which. "Missed only" and "All units with history"
+       were written to be read one at a time with the others hidden. */
+    due_soon:"Due soon", due_putoff:"Put off",
     btn_due_import:"Load history file", due_days:"{n} d ago", due_over:"overdue {n} d", due_in:"in {n} d",
     due_never:"never done", due_empty:"Nothing due — or no history on this phone yet.",
     due_hint:"Built from what this phone has recorded plus everything in the system above. Load an entries.json exported from the dashboard to seed the whole fleet's last-done dates.",
@@ -2236,7 +2310,7 @@ const I18N = {
     m_merge_sent:["Round exported ✔","Send the file to the other phone (AirDrop / WhatsApp / e-mail), then tap “Receive round” there."],
     m_merge_bad:["Not a round file","Choose a file created by “Send round” on the other phone."],
     m_merged:["Merged ✔","{a} new inspection(s), {b} item(s) added to existing ones, {c} already present."],
-    tab_capture:"Capture", tab_queue:"Queue", tab_system:"System",
+    tab_capture:"Capture", tab_queue:"Queue", tab_system:"System", tab_due:"Due",
     set_theme:"Appearance", theme_auto:"Auto", theme_light:"Light", theme_dark:"Dark",
     theme_hint:"Auto follows the phone. Night shift in a dark cab and a bright bench are different problems.",
     net_synced:"Synced", net_waiting:"{n} waiting", net_off:"Offline",
@@ -2580,7 +2654,7 @@ const I18N = {
     due_basis_cal:"Каждые {n} суток · этот осмотр не планируется по часам",
     due_basis_own:"{n} — по фактической наработке",
     due_why_wear:"по износу, не по интервалу",
-    lbl_due_round:"Осмотр", due_all_rounds:"Все виды", due_missed:"Только пропущенные",
+    lbl_due_round:"Осмотр", due_all_rounds:"Все виды", due_missed:"Пропущено",
     due_n_over:"пропущено: {n}", due_n_soon:"скоро: {n}", due_n_put:"отложено: {n}",
     due_every:"каждые {h} ч", due_at_rate:"принято {r} ч/сутки",
     due_not:"Не выполняем",
@@ -2589,7 +2663,8 @@ const I18N = {
     due_put_n:"+{n} сут", due_put_to:"отложено до {d}", due_off:"Не выполняется",
     due_why:"Причина", due_why_ph:"в ремонте · вне участка · нет доступа",
     due_why_need:"Укажите причину — её будут читать позже.",
-    due_overdue:"Просроченные и скоро", due_all:"Все ед. с историей",
+    due_overdue:"Просроченные и скоро", due_all:"Все",
+    due_soon:"Скоро срок", due_putoff:"Отложено",
     btn_due_import:"Загрузить историю", due_days:"{n} дн. назад", due_over:"просрочено {n} дн.", due_in:"через {n} дн.",
     due_never:"не проводился", due_empty:"Ничего не требуется — или на телефоне ещё нет истории.",
     due_hint:"Строится по данным этого телефона и по всему, что есть в системе выше. Загрузите entries.json из дашборда, чтобы подтянуть даты по всему парку.",
@@ -2631,7 +2706,7 @@ const I18N = {
     m_merge_sent:["Обход выгружен ✔","Передайте файл на второй телефон (AirDrop / WhatsApp / почта) и нажмите там «Принять обход»."],
     m_merge_bad:["Неверный файл","Выберите файл, созданный кнопкой «Отправить обход» на другом телефоне."],
     m_merged:["Объединено ✔","Новых осмотров: {a}, добавлено позиций: {b}, уже было: {c}."],
-    tab_capture:"Осмотр", tab_queue:"Очередь", tab_system:"Система",
+    tab_capture:"Осмотр", tab_queue:"Очередь", tab_system:"Система", tab_due:"Срок",
     set_theme:"Оформление", theme_auto:"Авто", theme_light:"Светлое", theme_dark:"Тёмное",
     theme_hint:"«Авто» — как на телефоне. Ночная смена в тёмной кабине и яркий стол — разные задачи.",
     net_synced:"Синхронизировано", net_waiting:"Ожидает: {n}", net_off:"Офлайн",
@@ -6140,14 +6215,12 @@ async function noteWear(rec){
 }
 function daysBetween(iso){ const d=new Date(iso+"T00:00:00"); if(isNaN(d)) return null;
   return Math.floor((new Date(todayISO()+"T00:00:00")-d)/86400000); }
-$("dueScope").onchange=()=>{ localStorage.setItem("due_scope",$("dueScope").value); renderDue(); };
-$("dueType").onchange=()=>{ localStorage.setItem("due_type",$("dueType").value); renderDue(); };
-function fillDueType(){
-  const sel=$("dueType"); if(!sel) return;
-  sel.innerHTML=`<option value="">${esc(t("due_all_rounds"))}</option>`
-    + TYPE_ORDER.map(k=>`<option value="${k}">${esc(k)} · ${esc(t("type_"+k))}</option>`).join("");
-  sel.value=localStorage.getItem("due_type")||"";
-}
+/* The two <select>s that used to be here are pills now, built inside
+   renderDue() from the rounds that actually exist — so there is nothing to
+   fill in advance and nothing to change-handle. The scope survives a restart;
+   the round filter deliberately does not. A phone that opens tomorrow morning
+   already narrowed to filter cuts is a phone showing an inspector a shorter
+   list than the one they are answerable for. */
 
 /* ---- what is due, and what was missed -----------------------------------
    Every round, not the one the capture screen happens to be set to. An
@@ -6174,7 +6247,13 @@ function dueRows(only){
        which is a round you can still plan rather than one you are late for. */
     const iv=DUE.hours(ty)||Math.round(DUE.spec(ty).d*n.rate);
     const soonH=Math.max(20, Math.round(iv*0.2));
-    const d=deferOf(ty,unit);
+    /* A deferral is answered by a round of that type actually being walked
+       after it, and nothing is deleted for that to be true. The office has
+       always read them this way; this end did not, so a machine put off in
+       July and inspected in August still showed as put off here while the
+       dashboard had it back on the list. One rule, both ends. */
+    const d0=deferOf(ty,unit);
+    const d=(d0 && String(d0.at||"") >= String(last.d||"")) ? d0 : null;
     let st = n.over ? "over" : (n.dueInHours<=soonH ? "soon" : "ok");
     /* A deferral does not hide a machine. Put off to a date, it waits until
        that date and then comes back on its own; cancelled, it drops out of the
@@ -6191,21 +6270,85 @@ function dueRows(only){
   return out;
 }
 
+/* Which slice of the due list is on screen. Held here rather than read off a
+   control, because the controls are now rebuilt on every render — a pill for a
+   state nobody is in is a control that leads to an empty list. */
+/* MISSED by default, and each pill a state no other pill also contains.
+
+   The default used to be "overdue & due soon" — the union of the first two —
+   which as a pill would sit next to both of the things it contains and
+   highlight none of them. A ladder of disjoint states needs no explaining:
+   Missed, Due soon, Put off, and All. The default is the one the badge counts
+   and the tab shows, so opening the tab and reading the badge give the same
+   list. `due` is the value phones already have in storage; it maps to the
+   nearest pill rather than leaving somebody on a scope with no pill lit. */
+let dueScope=(localStorage.getItem("due_scope")||"over").replace(/^due$/,"over");
+let dueType="";
+const DUE_SCOPES=[["over","due_missed","over"],["soon","due_soon","soon"],
+                  ["put","due_putoff","put"],["all","due_all","" ]];
 function renderDue(){
   renderTabs();
   const box=$("dueList"); if(!box) return;
-  const only=($("dueType")||{}).value||"";
-  const rows=dueRows(only);
-  const scope=($("dueScope")||{}).value||"due";
+  /* Counted BEFORE the round filter, so the scope pills say how much there is
+     on the machine and not how much survives the other filter. Two filters
+     whose counts each move when the other is touched cannot be read. */
+  const every=dueRows("");
+  const rows=dueRows(dueType);
+  const scope=dueScope;
   const nOver=rows.filter(r=>r.st==="over").length;
   const nSoon=rows.filter(r=>r.st==="soon").length;
   const nPut =rows.filter(r=>r.st==="put"||r.st==="off").length;
-  const show = scope==="all" ? rows
-             : scope==="over" ? rows.filter(r=>r.st==="over")
-             : rows.filter(r=>r.st==="over"||r.st==="soon");
+  const inScope=(list,sc)=> sc==="all" ? list
+    : sc==="over" ? list.filter(r=>r.st==="over")
+    : sc==="soon" ? list.filter(r=>r.st==="soon")
+    : sc==="put"  ? list.filter(r=>r.st==="put"||r.st==="off")
+    : list.filter(r=>r.st==="over"||r.st==="soon");
+  const show = inScope(rows, scope);
+
+  /* ---- the scope pills ------------------------------------------------
+     Missed and Due soon are always offered: zero of either is news worth
+     seeing on the control that would show them. Put off appears only when
+     somebody has actually put something off. */
+  const sbox=$("dueScopeF");
+  if(sbox){
+    const cnt={over:nOver, soon:nSoon, put:nPut, all:rows.length};
+    sbox.innerHTML=DUE_SCOPES
+      .filter(([k])=> k!=="put" || nPut>0)
+      .map(([k,lab,cls])=>`<button type="button" data-sc="${esc(k)}" class="${
+        (scope===k?"on ":"")+(cls||"")}">${esc(t(lab))}<span class="n">${cnt[k]}</span></button>`)
+      .join("");
+    sbox.querySelectorAll("[data-sc]").forEach(b=>b.onclick=()=>{
+      dueScope=b.dataset.sc;
+      try{ localStorage.setItem("due_scope",dueScope); }catch(e){}
+      renderDue();
+    });
+  }
+  /* ---- the round pills ------------------------------------------------
+     Built from the rounds that are actually due, in the fixed TYPE_ORDER, so
+     the row never reorders under a thumb. Only when there is more than one
+     type to choose between — a single-type chip row is chrome for nothing. */
+  const tbox=$("dueTypeF");
+  if(tbox){
+    const counts=new Map();
+    inScope(every, scope).forEach(r=>counts.set(r.ty,(counts.get(r.ty)||0)+1));
+    /* A type the user has narrowed to keeps its pill even at zero, or the
+       control that got them here vanishes and the list looks broken. */
+    if(dueType && !counts.has(dueType)) counts.set(dueType,0);
+    const order=Object.keys(TYPE_META).filter(k=>counts.has(k));
+    tbox.innerHTML = order.length<2 ? "" :
+      [`<button type="button" data-dt="" class="${dueType?"":"on"}">${esc(t("due_all_rounds"))
+        }<span class="n">${inScope(every,scope).length}</span></button>`]
+      .concat(order.map(k=>`<button type="button" data-dt="${esc(k)}" class="${
+        dueType===k?"on":""}" title="${esc(t("type_"+k))}">${esc(k)}<span class="n">${counts.get(k)}</span></button>`))
+      .join("");
+    tbox.querySelectorAll("[data-dt]").forEach(b=>b.onclick=()=>{ dueType=b.dataset.dt; renderDue(); });
+  }
+  /* MISSED, the same number the tab shows. It used to be missed-and-due-soon
+     while the tab counted missed, so one card carried two totals for itself
+     and neither said which it was. */
   const badge=$("dueCount");
-  badge.textContent=nOver+nSoon;
-  badge.className="count-badge"+(nOver?" crit":(nSoon?" warn":""));
+  badge.textContent=nOver;
+  badge.className="count-badge"+(nOver?" crit":"");
 
   const num=n=>Math.abs(n).toLocaleString(lang==="ru"?"ru-RU":"en-GB");
   /* The answer to "what did we miss" is a count, not a list to be measured by
@@ -6213,12 +6356,14 @@ function renderDue(){
   const note=$("dueBasis");
   if(note){
     const measured=rows.filter(r=>r.n.measured).length;
+    /* The counts moved onto the pills, which is where the tap is. What is left
+       here is what a count cannot say: the interval this round is walked on,
+       the rate the days were computed at, and how many machines were measured
+       rather than assumed. Repeating "7 missed" under a pill reading
+       "Missed 7" is a line of the sheet spent saying nothing new. */
     note.textContent=[
-      t("due_n_over").replace("{n}",nOver),
-      t("due_n_soon").replace("{n}",nSoon),
-      nPut ? t("due_n_put").replace("{n}",nPut) : "",
-      only ? t("due_every").replace("{h}",num(DUE.hours(only)||0))
-             .replace("{d}",DUE.spec(only).d||"") : "",
+      dueType ? t("due_every").replace("{h}",num(DUE.hours(dueType)||0))
+             .replace("{d}",DUE.spec(dueType).d||"") : "",
       t("due_at_rate").replace("{r}",DUE.HOURS_PER_DAY),
       measured ? t("due_basis_own").replace("{n}",measured) : "",
     ].filter(Boolean).join(" · ");
@@ -7090,6 +7235,10 @@ function showPane(id){
      a storage figure or a queue count from ten minutes ago is exactly the kind
      of stale reassurance this card exists to replace. */
   if(id==="paneQueue" && typeof yardCheck==="function") yardCheck();
+  /* Rebuilt on the way in rather than left as it was when the tab was last
+     open: a round walked five minutes ago has to be off this list before an
+     inspector walks it again. */
+  if(id==="paneDue" && typeof renderDue==="function") renderDue();
 }
 document.addEventListener("DOMContentLoaded",()=>{
   const g=$("yardGo"); if(g) g.onclick=guard(async()=>{ await yardCheck(); });
@@ -7098,22 +7247,29 @@ $("tabbar").addEventListener("click",e=>{
   const b=e.target.closest("button[data-pane]"); if(!b) return;
   showPane(b.dataset.pane);
 });
-/* Badges say "there is something here for you". The queue's is what is waiting
-   to go out; the system's is what is overdue — the two reasons to leave the
-   capture screen. */
+/* Badges say "there is something here for you", and each tab answers for its
+   own screen: the queue's is what is waiting to go out, Due's is what nobody
+   has been to, and the system's is a round two phones both sent — which needs
+   a decision from the office and is the only thing in an archive that does.
+
+   Due counts MISSED, not missed-and-due-soon. A badge is a call to action and
+   a round that is due next Tuesday is not one; a number that includes it can
+   never reach zero, and a badge that never clears stops being read. */
 function renderTabs(){
-  const set=(el,n,warn)=>{ if(!el) return;
+  const set=(el,n,cls)=>{ if(!el) return;
     el.textContent=n>99?"99+":String(n);
-    el.className="tb"+(warn?" warn":"")+(n?"":" hidden"); };
-  dbAll().then(all=>set($("tabQ"),all.filter(r=>!r.up).length,!!lastErr)).catch(()=>{});
-  const h=histAll(); let over=0;
-  for(const k of Object.keys(h)){
-    const [ty,unit]=k.split("|"); if(ty!==type) continue;
-    const last=histEntry(h[k]); if(!last) continue;
-    const n=DUE.next({type:ty, last:last, today:todayISO(), rate:unitRate(unit)});
-    if(n && n.over) over++;
-  }
-  set($("tabS"),over,true);
+    el.className="tb"+(cls?" "+cls:"")+(n?"":" hidden"); };
+  dbAll().then(all=>set($("tabQ"),all.filter(r=>!r.up).length,lastErr?"warn":"")).catch(()=>{});
+  /* From the list itself, not from a second copy of its arithmetic.
+
+     There WAS a second copy, and it filtered on `ty !== type` — so the badge
+     counted magnetic plugs while the list beside it counted eight
+     undercarriage rounds. One number on the tab, a different one on the card
+     it opens, and no way to tell which was lying. */
+  try{
+    set($("tabD"), dueRows("").filter(r=>r.st==="over").length, "miss");
+    set($("tabS"), Object.keys(cfAll()).length, "warn");
+  }catch(e){}
 }
 $("teamRefresh").onclick=()=>teamPull(true);
 /* Two phones can hold different subsets: an installed app and a browser tab do
@@ -8067,7 +8223,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="158";
+const BUILD="159";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -9718,6 +9874,11 @@ function checkData(){
   if(!ASSETS.length)                       missing.push("assets.js");
   if(!(HME.defectTypes||[]).length)        missing.push("hme.js");
   if(!Object.keys(CX.c).length)            missing.push("hme-cascade.js");
+  /* Not "is PTS defined" — a stub stands in for it so the app still opens, and
+     the stub is indistinguishable from the real thing except that it is
+     empty. Ask the question the inspector cares about: are there any round
+     types to pick points from. */
+  if(!Object.keys(CLASSES).length || !CLASSES.HT) missing.push("points.js");
   /* The ?v= on each <script> is what makes an asset cacheable-forever, and it has
      to equal BUILD or the service worker precaches one URL while the page asks
      for another — every asset then misses the cache on every load. They were
@@ -9737,8 +9898,6 @@ function checkData(){
 
 /* ===================== init ===================== */
 updateEquipBtn(); renderGps(); checkData();
-$("dueScope").value=localStorage.getItem("due_scope")||"due";
-fillDueType();
 applyForm(); applyTheme(); applyLang(); renderSignFold(); renderSync(); syncThenArm();
 /* Baselines change how readings are scored, so they have to be in hand before
    a number is judged. The catalogue answers correctly until they land, and the
@@ -9785,6 +9944,7 @@ setTimeout(offerDraft, 900);
   const q=new URLSearchParams(location.search);
   const pane=q.get("pane");
   if(pane==="queue")  showPane("paneQueue");
+  if(pane==="due")    showPane("paneDue");
   if(pane==="system") showPane("paneSystem");
   if(q.get("new")==="1"){ showPane("paneCapture"); resetForm(); }
   /* ?unit=TK151 — the web half of the QR deep link. The same handler serves a
