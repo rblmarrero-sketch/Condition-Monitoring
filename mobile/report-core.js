@@ -248,9 +248,15 @@
 /* Width is what makes a numbered puck readable, and height is what decides
    whether the drawing shares its page with the readings. Capping the HEIGHT and
    letting the width follow gives the widest frame that still leaves room for
-   the key underneath it — on any machine, without a per-model number. */
+   the key underneath it — on any machine, without a per-model number.
+   The cap is the page's arithmetic, not a preference: a masthead, a verdict and
+   a key are about 390px of an A4 column's 1090, so the drawings get the rest.
+   A track frame comes in a pair and takes half of that each; a blade, a bucket
+   or a tooth diagram comes alone and takes the lot — which is the difference
+   between a 451px drawing and a 754px one on a page with the same room on it. */
 #rptRoot .ucmap{display:block;width:auto;height:auto;max-width:100%;
   max-height:300px;margin:0 auto;}
+#rptRoot .ucmaps .ucmapwrap:only-child .ucmap{max-height:620px;}
 /* ---- the photographed walk, printed ------------------------------------
    The same picture the inspector tapped: the machine's own photograph with
    the catalogue's numbers on the parts they name. The pucks are smaller than
@@ -2004,11 +2010,33 @@
      honoured, because a cut that cannot advance is a document that never ends. */
   function atomBands(el, sc) {
     var er = el.getBoundingClientRect(), out = [];
+    /* Units of MEANING: a reading and its number, a card and its caption, a key
+       entry and its label. Anything a reader has to hold in one glance belongs
+       on this list. */
     var q = el.querySelectorAll("tr,.lgrow,.pkey > div,.ckey > div,figure,.cell");
     for (var i = 0; i < q.length; i++) {
       var r = q[i].getBoundingClientRect();
       if (r.height <= 0 || r.height > 520) continue;
       out.push([(r.top - er.top) * sc, (r.bottom - er.top) * sc]);
+    }
+    /* And units of LEGIBILITY: the lines. A running paragraph is allowed to
+       continue overleaf — that is ordinary typography — but a cut through the
+       middle of a line prints the top half of the letters on one page and the
+       bottom half on the next, which is how a Russian sheet came out with a
+       row of component codes sheared through the x-height. A Range reports one
+       rectangle per rendered line, so these are the browser's own line boxes
+       rather than a guess from line-height, and lifting a cut to the top of the
+       line it landed in costs a few pixels of paper and nothing else. */
+    var wk = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null, false);
+    var rg = document.createRange(), tn;
+    while ((tn = wk.nextNode())) {
+      if (!String(tn.nodeValue || "").trim()) continue;
+      rg.selectNodeContents(tn);
+      var rs = rg.getClientRects();
+      for (var j = 0; j < rs.length; j++) {
+        if (rs[j].height <= 1 || rs[j].height > 90) continue;
+        out.push([(rs[j].top - er.top) * sc, (rs[j].bottom - er.top) * sc]);
+      }
     }
     return out;
   }
