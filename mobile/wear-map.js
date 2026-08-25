@@ -473,6 +473,61 @@
     return a.join('');
   }
 
+  /* Eleven numbers do not always fit on the frame they name.
+
+     A dozer's track loop is about a third as tall as it is long and an
+     excavator's a quarter; on a tracked screener it is less again, and the
+     numbered walk that reads clearly on a D275 comes out on an MT1150JC with
+     "track sag" printed through "track adjuster" and "shoe / grouser"
+     underneath "track frame". Two numbers in the same place are worse than one
+     number in roughly the right place: on paper it is unreadable, and on the
+     glass the puck on top eats the other one's tap.
+
+     So the numbers are placed on their parts first, and then any pair close
+     enough to touch is pushed apart along the line between them — a few fixed
+     passes, no randomness, and never further from where it belongs than about
+     a puck and a half. A number that has to move still names the same part; it
+     just stands beside it rather than on top of its neighbour. */
+  var PUCK_R = 13;
+  function spread(pts, w, h) {
+    var MIN = PUCK_R * 2 + 2, CAP = PUCK_R * 1.7, i, j, pass;
+    /* Bring every number inside the paper BEFORE looking for collisions.
+       Doing it the other way round is how this shipped not working the first
+       time: number 9 sits on the shoes at the very bottom of the box, its
+       placed position was below the drawing, and the pass found no overlap
+       because it was measuring a point that would never be printed. The edge
+       moved it up onto number 10 afterwards, and the loop had already
+       finished. */
+    function settle() {
+      for (var k = 0; k < pts.length; k++) {
+        var t = pts[k], ax = t.x - t.x0, ay = t.y - t.y0;
+        var ad = Math.sqrt(ax * ax + ay * ay);
+        if (ad > CAP) { t.x = t.x0 + ax / ad * CAP; t.y = t.y0 + ay / ad * CAP; }
+        t.x = Math.max(18, Math.min(w - 18, t.x));
+        t.y = Math.max(18, Math.min(h - 18, t.y));
+      }
+    }
+    settle();
+    for (pass = 0; pass < 30; pass++) {
+      var moved = false;
+      for (i = 0; i < pts.length; i++) for (j = i + 1; j < pts.length; j++) {
+        var p = pts[i], q = pts[j];
+        var dx = q.x - p.x, dy = q.y - p.y, d = Math.sqrt(dx * dx + dy * dy);
+        if (d >= MIN) continue;
+        /* Exactly on top of each other has no direction in it, so give the
+           pair one — the same one every time, or the drawing changes between
+           two renders of the same round. */
+        if (d < 0.01) { dx = (j % 2 ? 1 : -1); dy = 0.6; d = 1.166; }
+        var f = (MIN - d) / 2 / d;
+        p.x -= dx * f; p.y -= dy * f;
+        q.x += dx * f; q.y += dy * f;
+        moved = true;
+      }
+      if (!moved) break;
+      settle();
+    }
+  }
+
   W.mapPhoto = function (o) {
     o = o || {};
     var box = o.box || [20, 55, 70, 40];
@@ -523,12 +578,14 @@
              '" height="' + PVB_H + '" preserveAspectRatio="none"' +
              ' onerror="WEAR.photoGone(this)"/>');
     }
-    pts.forEach(function (q) {
-      var n = q[0];
+    var placed = pts.map(function (q) {
       var x = (box[0] + q[1] * box[2]) / 100 * PVB_W;
       var y = (box[1] + q[2] * box[3]) / 100 * PVB_H;
-      x = Math.max(18, Math.min(PVB_W - 18, x));
-      y = Math.max(18, Math.min(PVB_H - 18, y));
+      return { n: q[0], x: x, y: y, x0: x, y0: y };
+    });
+    spread(placed, PVB_W, PVB_H);
+    placed.forEach(function (q) {
+      var n = q.n, x = q.x, y = q.y;
       var st = (o.state ? o.state(n) : '') || '';
       var cls = 'um-num' + (st ? ' ' + st : '') + (n === o.sel ? ' sel' : '');
       s.push('<g class="' + cls + '" data-ucg="' + n + '" transform="translate(' +
@@ -586,13 +643,22 @@
         if (GRP_RANK[v] > GRP_RANK[worst]) worst = v; });
       return none ? '' : worst; };
     var box = UP.boxFor(o.model || '');
+    /* The picture's true shape, fetched from the model rather than from the
+       photograph, because by the time it reaches here the photograph is a
+       data: URI — the host has to inline it or html2canvas loses the
+       reference. Without this the drawing fell back to a fixed 460x210 box and
+       every machine was squashed to fit it: a D275 whose crop is 2.46 wide for
+       1 tall printed at 2.19, an eleven percent squeeze that nothing reported
+       because the numbers were squeezed with it. */
+    var MP = window.MACHINE_PHOTOS;
+    var asp = o.aspect || (MP ? MP.aspectOf(MP.ucUrlFor(o.model || '')) : 0);
     var sides = (o.sides || ['L', 'R']).filter(function (sd) {
       return (UP.labels || []).some(function (r) { return keys(r[0], sd).length; }); });
     if (!sides.length) return null;
     var html = sides.map(function (sd) {
       return '<div class="ucmapwrap" data-side="' + sd + '">'
         + W.mapPhoto({ photo: o.photo || '', box: box, fam: o.fam, high: o.high,
-                       rollers: rollers, side: sd, lang: lang, sel: 0,
+                       aspect: asp, rollers: rollers, side: sd, lang: lang, sel: 0,
                        state: function (n) { return groupState(n, sd); } })
         + (o.sideLabel ? '<div class="umside">' + o.sideLabel(sd) + '</div>' : '')
         + '</div>'; }).join('');

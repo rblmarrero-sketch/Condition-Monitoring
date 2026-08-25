@@ -41,11 +41,20 @@
     [11, 'Track sag / top chain',    'Провисание гусеницы',        'mm'],
   ];
 
-  /* Fraction of the track-frame box: [n, x, y]. */
+  /* Fraction of the track-frame box: [n, x, y].
+
+     Two rules, and the second is not a nicety. Each number sits on the part it
+     names — 1 on the idler at the front of the loop, 4 on the sprocket at the
+     back, 5/6/7 along the lower rollers, 3 and 11 up on the top run, 9 on the
+     shoes at the floor. And no two of them touch: a puck is 26 units across in
+     a 460-wide drawing, so two numbers a tenth of a short box apart print as
+     one number with a bite out of it, which is how "centre track rollers"
+     disappeared behind "track link" on the D275 sheet. tests/ucbox.cjs
+     measures both against every model's own box. */
   var LAYOUT = [
-    [1, 0.08, 0.52], [2, 0.22, 0.38], [3, 0.48, 0.12], [4, 0.91, 0.54],
-    [5, 0.28, 0.72], [6, 0.48, 0.72], [7, 0.68, 0.72], [8, 0.45, 0.86],
-    [9, 0.57, 0.96], [10, 0.55, 0.46], [11, 0.66, 0.06],
+    [1, 0.06, 0.56], [2, 0.21, 0.36], [3, 0.46, 0.13], [4, 0.94, 0.56],
+    [5, 0.16, 0.84], [6, 0.50, 0.84], [7, 0.84, 0.84], [8, 0.71, 0.15],
+    [9, 0.34, 0.99], [10, 0.36, 0.56], [11, 0.30, 0.14],
   ];
 
   /* Where the track frame sits inside the model's photograph:
@@ -53,38 +62,38 @@
      it. A model with no entry falls back to a sensible middle band, which is
      wrong by a little rather than absent. */
   var BOX = {
-    'CATERPILLAR 336-07':      [38,66,59,27],
-    'CATERPILLAR D9R':         [25,43,68,48],
-    'HITACHI EX1200-6BH':      [33,63,63,29],
-    'HITACHI EX1200-7BH':      [39,65,57,27],
-    'HITACHI ZX280-5G':        [38,66,59,25],
-    'HITACHI ZX330-5G RB':     [37,66,58,27],
-    'HITACHI ZX470LC-5G':      [40,66,56,26],
-    'HITACHI ZX470LCR-5G':     [39,66,57,26],
-    'KOMATSU D155A.5':         [31,55,60,37],
-    'KOMATSU D275.5D':         [32,55,60,37],
-    'KOMATSU D375A.6':         [29,54,64,38],
-    'KOMATSU P&H 44XT':        [52,75,37,19],
-    'KOMATSU PC2000-8 BH':     [34,64,60,28],
-    'KOMATSU PC800-8E0 (SE)':  [47,66,49,27],
-    'LiuGong CLG970E':         [39,66,56,25],
-    'LiuGong CLG990FHD':       [41,67,55,25],
-    'MCCLOSKEY C38':           [18,69,60,20],
-    'MCCLOSKEY C44':           [22,67,60,22],
-    'MCCLOSKEY J45':           [24,70,55,20],
-    'MCCLOSKEY J50V2':         [20,68,52,20],
-    'MCCLOSKEY S190-3DT':      [27,74,47,16],
-    'NMS MT1150JC':            [24,69,55,20],
-    'NMS MT1860SR':            [24,73,43,17],
-    'NMS MT300MC':             [22,69,68,20],
+    'CATERPILLAR 336-07':     [38.8,71.1,55.8,26.8],
+    'CATERPILLAR D9R':        [29.4,58.8,50.9,37.8],
+    'HITACHI EX1200-6BH':     [30.8,58.7,58.9,37.7],
+    'HITACHI EX1200-7BH':     [36.5,67.3,56.7,29.5],
+    'HITACHI ZX280-5G':       [38.8,67.8,53.7,29.5],
+    'HITACHI ZX330-5G RB':    [36.8,73.9,55.2,20.3],
+    'HITACHI ZX470LC-5G':     [31.9,72.4,63.2,25.2],
+    'HITACHI ZX470LCR-5G':    [36.3,73.9,58.7,23.9],
+    'KOMATSU D155A.5':        [29,54.6,53.1,40.4],
+    'KOMATSU D275.5D':        [26.7,55.1,51.5,40.1],
+    'KOMATSU D375A.6':        [29.1,57.9,49.1,37.6],
+    'KOMATSU P&H 44XT':       [19.3,77.3,62.4,21.6],
+    'KOMATSU PC2000-8 BH':    [35.9,68.2,55.5,30.2],
+    'KOMATSU PC800-8E0 (SE)': [44.1,68.7,45.7,28.6],
+    'LiuGong CLG970E':        [40.7,72.6,51.4,24],
+    'LiuGong CLG990FHD':      [37.8,66.5,51.6,31.4],
+    'MCCLOSKEY C38':          [22.7,55.4,46.5,41.7],
+    'MCCLOSKEY C44':          [22.4,54.9,56.9,43],
+    'MCCLOSKEY J45':          [18.2,56.4,37,41.8],
+    'MCCLOSKEY J50V2':        [18.7,58.1,46,38.5],
+    'MCCLOSKEY S190-3DT':     [26.1,67,42.4,30.7],
+    'NMS MT1150JC':           [18.2,55.2,41.7,41.8],
+    'NMS MT1860SR':           [26.6,58.3,38.9,38.7],
+    'NMS MT300MC':            [19.5,54.2,48,42.3],
     /* The catalog files this one under DZ015_10112024 — a unit number with a
        date welded onto it, which is a fault in the register export rather than
        a machine. The register's own spelling is DZ015 / SHANTUI SD32. */
-    'SHANTUI SD32':            [36,53,58,38],
-    'SHANTUI SD34-B3':         [31,52,60,39],
-    'SHANTUI SD60-C5':         [33,50,61,41],
-    'SHANTUI SD90-C5':         [31,55,60,36],
-    'SUNWARD SWDE165A':        [19,75,55,20],
+    'SHANTUI SD32':           [27.3,60.5,49,35.6],
+    'SHANTUI SD34-B3':        [28.4,57.1,52.5,38.4],
+    'SHANTUI SD60-C5':        [32.2,62.4,48.3,35.8],
+    'SHANTUI SD90-C5':        [29.5,58.6,47.9,36.4],
+    'SUNWARD SWDE165A':       [13.4,69.3,69.8,29.5],
   };
   var BOX_DEFAULT = [20, 55, 70, 40];
 
