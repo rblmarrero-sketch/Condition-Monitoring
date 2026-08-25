@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=151">
+<link rel="manifest" href="manifest.webmanifest?v=152">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=151">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=151">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=151">
+<link rel="apple-touch-icon" href="icon-192.png?v=152">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=152">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=152">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1164,6 +1164,14 @@
      as a reason and not as decoration: the fitter is being asked to walk a
      machine early, and "why" is the first thing they will ask. */
   .dueitem .duewhy{color:var(--warn-ink);font-weight:650;}
+  /* The row and the way off it. The ✕ is deliberately not part of the row
+     button: a thumb reaching for "open this machine" must not land on
+     "forget it". */
+  .duerow{display:flex;align-items:stretch;gap:6px;}
+  .duerow .dueitem{flex:1 1 auto;min-width:0;}
+  .dueforget{flex:0 0 auto;width:44px;border:1px solid var(--border);border-radius:12px;
+    background:var(--surface-2);color:var(--muted);font-size:15px;line-height:1;cursor:pointer;}
+  .dueforget:hover{color:var(--critical);border-color:var(--critical);}
   dialog{border:none;border-radius:16px;background:var(--surface);color:var(--ink);max-width:92vw;width:420px;padding:0;}
   dialog::backdrop{background:rgba(0,0,0,.6);}
   .dlg-in{padding:20px;} .dlg-in h3{margin:0 0 8px;} .dlg-in p{color:var(--ink-2);font-size:14px;}
@@ -1763,29 +1771,29 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=151"></script>
-<script src="upload-defaults.js?v=151"></script>
-<script src="hme.js?v=151"></script>
-<script src="mp-fc.js?v=151"></script>
-<script src="hme-cascade.js?v=151"></script>
-<script src="assets.js?v=151"></script>
-<script src="temp-limits.js?v=151"></script>
-<script src="due.js?v=151"></script>
-<script src="wear.js?v=151"></script>
-<script src="wear-figs.js?v=151"></script>
-<script src="wear-map.js?v=151"></script>
-<script src="machine-photos.js?v=151"></script>
-<script src="machine-fig.js?v=151"></script>
-<script src="get.js?v=151"></script>
-<script src="uc-points.js?v=151"></script>
-<script src="inspect-guide.js?v=151"></script>
-<script src="get-figs.js?v=151"></script>
-<script src="body-points.js?v=151"></script>
-<script src="body-map.js?v=151"></script>
-<script src="lube.js?v=151"></script>
-<script src="lube-overrides.js?v=151"></script>
-<script src="lube2027.js?v=151"></script>
-<script src="report-core.js?v=151"></script>
+<script src="native.js?v=152"></script>
+<script src="upload-defaults.js?v=152"></script>
+<script src="hme.js?v=152"></script>
+<script src="mp-fc.js?v=152"></script>
+<script src="hme-cascade.js?v=152"></script>
+<script src="assets.js?v=152"></script>
+<script src="temp-limits.js?v=152"></script>
+<script src="due.js?v=152"></script>
+<script src="wear.js?v=152"></script>
+<script src="wear-figs.js?v=152"></script>
+<script src="wear-map.js?v=152"></script>
+<script src="machine-photos.js?v=152"></script>
+<script src="machine-fig.js?v=152"></script>
+<script src="get.js?v=152"></script>
+<script src="uc-points.js?v=152"></script>
+<script src="inspect-guide.js?v=152"></script>
+<script src="get-figs.js?v=152"></script>
+<script src="body-points.js?v=152"></script>
+<script src="body-map.js?v=152"></script>
+<script src="lube.js?v=152"></script>
+<script src="lube-overrides.js?v=152"></script>
+<script src="lube2027.js?v=152"></script>
+<script src="report-core.js?v=152"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2237,6 +2245,10 @@ const I18N = {
     due_basis_cal:"Every {n} days · this round is not scheduled on hours",
     due_basis_own:"{n} on the machine's own rate",
     due_why_wear:"wear, not the interval",
+    due_forget:"Remove from this list",
+    due_forget_t:"Remove {u} from the due list?",
+    due_forget_m:"Clears what this phone remembers about {u} · {ty}. Nothing is deleted from the system — and if the round is still there, the next full refresh brings it back.",
+    due_forget_go:"Remove",
     due_overdue:"Overdue & due soon", due_all:"All units with history",
     btn_due_import:"Load history file", due_days:"{n} d ago", due_over:"overdue {n} d", due_in:"in {n} d",
     due_never:"never done", due_empty:"Nothing due — or no history on this phone yet.",
@@ -2624,6 +2636,10 @@ const I18N = {
     due_basis_cal:"Каждые {n} суток · этот осмотр не планируется по часам",
     due_basis_own:"{n} — по фактической наработке",
     due_why_wear:"по износу, не по интервалу",
+    due_forget:"Убрать из списка",
+    due_forget_t:"Убрать {u} из плановых осмотров?",
+    due_forget_m:"Очистит то, что этот телефон помнит про {u} · {ty}. Из системы ничего не удаляется — и если осмотр там всё ещё есть, полное обновление вернёт его.",
+    due_forget_go:"Убрать",
     due_overdue:"Просроченные и скоро", due_all:"Все ед. с историей",
     btn_due_import:"Загрузить историю", due_days:"{n} дн. назад", due_over:"просрочено {n} дн.", due_in:"через {n} дн.",
     due_never:"не проводился", due_empty:"Ничего не требуется — или на телефоне ещё нет истории.",
@@ -6191,10 +6207,14 @@ function renderDue(){
        goes unsaid; wear is not, and a due list that cannot say which is which
        is one nobody trusts twice. */
     const why = n.why==="wear" ? ` <span class="duewhy">${esc(t("due_why_wear"))}</span>` : "";
-    return `<button class="dueitem ${r.st}" data-u="${esc(r.unit)}">
+    return `<div class="duerow">
+      <button class="dueitem ${r.st}" data-u="${esc(r.unit)}">
       <span class="u">${esc(r.unit)}${a&&a.cat?` · <span style="color:var(--muted);font-weight:400">${esc(a.cat)}</span>`:""}</span>
-      <span class="d">${t("due_days").replace("{n}",num(n.daysSince))} · ${days}${hrs}${why}</span></button>`; }).join("");
+      <span class="d">${t("due_days").replace("{n}",num(n.daysSince))} · ${days}${hrs}${why}</span></button>
+      <button class="dueforget" data-f="${esc(r.unit)}" aria-label="${esc(t("due_forget"))}"
+        title="${esc(t("due_forget"))}">✕</button></div>`; }).join("");
   box.querySelectorAll("[data-u]").forEach(b=>b.onclick=()=>{ selectEquip(b.dataset.u); showPane("paneCapture"); });
+  box.querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>dueForget(type,b.dataset.f));
   /* What the box above is actually counting in, and at whose rate. Never left
      to be inferred: "in 12 d" from a 250-hour interval only makes sense once
      somebody has been told the machine is assumed to run 20 hours a day. */
@@ -6207,6 +6227,40 @@ function renderDue(){
         + (measured ? " · "+t("due_basis_own").replace("{n}",measured) : "");
   }
 }
+/* A unit that should not be on this list.
+
+   Two ways it happens, and neither of them is the app being wrong. A test unit
+   somebody typed once — "1111" — is on the due list forever, because a round
+   was recorded against it and nothing ever un-records one. And a round deleted
+   straight out of the bucket leaves no marker behind: a void raised in the
+   dashboard reaches every phone and clears the date, but a file removed by hand
+   in the storage console is simply not there any more, and there is nothing to
+   tell a phone that it went.
+
+   So: an explicit way off the list. It clears what THIS PHONE remembers — the
+   last-done date and the summary rows it has cached — and touches nothing in
+   the system. If the round really is still there, the next full refresh brings
+   it straight back, which is the correct answer: the round was done. */
+async function dueForget(ty,unit){
+  const u=(unit||"").toUpperCase(); if(!u) return;
+  const okd=await ask(t("due_forget_t",{u}), t("due_forget_m",{u, ty:t("type_"+ty)}),
+                      t("due_forget_go"), true);
+  if(!okd) return;
+  const h=histAll(); delete h[ty+"|"+u]; histSave(h);
+  /* The cached summary rows too, or the next merge reads one of them and puts
+     the date straight back. They are a copy of what is in the system, and a
+     copy of something that is no longer there is stale, not evidence. */
+  const rest=teamAll().filter(r=>!(r && r.u===u && r.t===ty));
+  if(rest.length!==teamAll().length) teamSave(rest);
+  /* The hour trail is the machine's, not the round's — kept unless nothing at
+     all is left that refers to the unit. */
+  if(!Object.keys(histAll()).some(k=>k.split("|")[1]===u)
+     && !teamAll().some(r=>r&&r.u===u)){
+    const m=smuAll(); delete m[u]; smuSave(m);
+  }
+  renderDue(); renderTeam(); renderLastDone();
+}
+
 /* ===================== what the whole team has uploaded =====================
    The due list only ever knew what THIS phone had recorded, so a unit another
    inspector covered yesterday still read as overdue, and two people could walk
@@ -7931,7 +7985,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="151";
+const BUILD="152";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

@@ -201,6 +201,53 @@ const mk = `((id,ty,u,d,smu,pos)=>({id,type:ty,equip:u,date:d,by:'S. Volkov',sup
     wear.withF.why === 'wear' && /wear, not the interval/.test(wear.list),
     wear.list.slice(0, 110));
 
+  console.log('\n  a unit that should not be on the list can be taken off it');
+  /* A test unit somebody typed once is on the due list forever: a round was
+     recorded against it and nothing ever un-records one. And a round deleted
+     straight out of the storage console leaves no void marker, so no phone
+     ever hears that it went. */
+  const forgetBefore = await p.evaluate(async () => {
+    histSave({ 'MP|1111': '2026-06-01', 'MP|TK146': '2026-08-20' });
+    teamSave([{ u: '1111', d: '2026-06-01', t: 'MP', by: 'S', g: '' }]);
+    smuSave({ '1111': [{ d: '2026-06-01', h: 10 }] });
+    const s = document.getElementById('typeSel'); s.value = 'MP'; s.dispatchEvent(new Event('change'));
+    await new Promise(r => setTimeout(r, 300));
+    showPane('paneSystem'); renderDue();
+    await new Promise(r => setTimeout(r, 200));
+    return { list: document.getElementById('dueList').textContent.replace(/\s+/g, ' ').trim(),
+             btn: !!document.querySelector('[data-f="1111"]') };
+  });
+  ok('the stray unit is on the list, overdue', /1111/.test(forgetBefore.list),
+    forgetBefore.list.slice(0, 70));
+  ok('and the row carries a way off it', forgetBefore.btn);
+  await p.click('[data-f="1111"]');
+  await p.waitForTimeout(250);
+  const dlg = await p.evaluate(() => ({ t: document.getElementById('dlgTitle').textContent,
+                                        m: document.getElementById('dlgMsg').textContent }));
+  ok('it asks first, and names the unit and the round', /1111/.test(dlg.t) && /Magnetic Plug/.test(dlg.m),
+    dlg.t);
+  /* The scope matters more than the wording: an inspector clearing a test unit
+     must not believe they have deleted an inspection from the system. */
+  ok('and says plainly that nothing leaves the system',
+    /Nothing is deleted from the system/.test(dlg.m), dlg.m.slice(0, 80));
+  await p.click('#dlgOk');
+  await p.waitForTimeout(250);
+  const gone = await p.evaluate(() => ({
+    list: document.getElementById('dueList').textContent.replace(/\s+/g, ' ').trim(),
+    hist: JSON.parse(localStorage.getItem('cm_hist') || '{}'),
+    team: JSON.parse(localStorage.getItem('cm_team') || '[]'),
+    smu: JSON.parse(localStorage.getItem('cm_smu') || '{}') }));
+  ok('the unit leaves the list', !/1111/.test(gone.list), gone.list.slice(0, 60));
+  ok('and the date it was on', !gone.hist['MP|1111'] && !!gone.hist['MP|TK146'],
+    JSON.stringify(gone.hist));
+  /* The cached summary row too, or the next merge reads it and puts the date
+     straight back — which is how this would have looked fixed and not been. */
+  ok('and the cached row that would have put it back',
+    !gone.team.some(r => r && r.u === '1111'), gone.team.length + ' rows left');
+  ok('and the hour trail, once nothing refers to the unit', !gone.smu['1111'],
+    JSON.stringify(gone.smu));
+  ok('while the machine that IS on the list is untouched', !!gone.hist['MP|TK146']);
+
   console.log('\n  and a round somebody else walked moves the date too');
   const team = await p.evaluate(async ([MK]) => {
     const mk = eval(MK);

@@ -196,9 +196,14 @@ const openHist = async (p,unit) => {
     await ph.waitForTimeout(1200);
     ok('the phone sees the team rounds',(await ph.evaluate(()=>teamAll().length))===3,
        String(await ph.evaluate(()=>teamAll().length)));
+    /* Asked through the app's own accessor, not by reading the shape out of
+       storage. This line used to compare the stored value with a date string,
+       and it went red the day the index started carrying the hour meter
+       alongside the date — not because the phone had forgotten TK146 was
+       inspected, but because it now remembers more about it. */
     ok('and TK146 counts as done',
-       (await ph.evaluate(()=>histAll()['MP|TK146']))==='2026-03-09',
-       String(await ph.evaluate(()=>histAll()['MP|TK146'])));
+       (await ph.evaluate(()=>histDate(histAll()['MP|TK146'])))==='2026-03-09',
+       String(await ph.evaluate(()=>JSON.stringify(histAll()['MP|TK146']))));
 
     // the office voids it
     await fetch(B+'/exec',{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},
@@ -213,10 +218,11 @@ const openHist = async (p,unit) => {
     ok('and says the office withdrew it',/withdrawn/.test(await ph.textContent('#teamMsg')),
        (await ph.textContent('#teamMsg')).trim());
     ok('TK146 no longer counts as inspected',
-       !(await ph.evaluate(()=>histAll()['MP|TK146'])),
-       String(await ph.evaluate(()=>histAll()['MP|TK146'])));
+       !(await ph.evaluate(()=>histDate(histAll()['MP|TK146']))),
+       String(await ph.evaluate(()=>JSON.stringify(histAll()['MP|TK146']))));
     ok('the other units are unaffected',
-       (await ph.evaluate(()=>histAll()['MP|TK147']))==='2026-03-10');
+       (await ph.evaluate(()=>histDate(histAll()['MP|TK147'])))==='2026-03-10',
+       String(await ph.evaluate(()=>JSON.stringify(histAll()['MP|TK147']))));
     await ph.evaluate(()=>selectEquip('TK146')); await ph.waitForTimeout(300);
     ok('and the capture screen stops claiming it was just done',
        await ph.evaluate(()=>document.getElementById('lastDone').classList.contains('hidden')));
