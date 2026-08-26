@@ -566,7 +566,14 @@
     font-size:14px;line-height:1;padding:0 4px;border-radius:50%;} .chip button:hover{color:var(--critical);}
   .chip.clearall{background:var(--surface-2);border-style:dashed;cursor:pointer;padding:4px 12px;}
   /* interactive affordances */
-  .prow{cursor:pointer;border-radius:6px;} .prow:hover{background:var(--surface-2);}
+  /* Only the rows that can be pressed look pressable. The pointer and the
+     hover were on every .prow, but the handler is attached only where the
+     chart HAS something to drill into — so a Pareto with no drill target
+     followed the cursor around promising an interaction that did not exist.
+     One control that lies about itself is enough to make a reader stop
+     trusting the ones that do work. */
+  .prow[data-drill]{cursor:pointer;border-radius:6px;}
+  .prow[data-drill]:hover{background:var(--surface-2);}
   .prow.sel .pfill{outline:2px solid var(--ink);outline-offset:1px;}
   table.grid th.sortable{cursor:pointer;user-select:none;} table.grid th.sortable:hover{color:var(--ink);}
   table.grid th .arrow{opacity:.35;font-size:10px;margin-left:3px;} table.grid th.on .arrow{opacity:1;}

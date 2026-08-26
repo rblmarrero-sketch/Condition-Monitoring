@@ -113,6 +113,20 @@ const TABS = ['overview', 'failure', 'wear', 'actions', 'due', 'equipment', 'lub
   ok('and pressing one filters the register beneath it',
     moved && moved.after !== moved.before, JSON.stringify(moved));
 
+  console.log('\n  and nothing looks pressable that is not');
+  await p.evaluate(() => showTab('failure'));
+  await p.waitForTimeout(400);
+  const par = await p.evaluate(() => {
+    const rows = [...document.querySelectorAll('.prow')];
+    const ptr = r => getComputedStyle(r).cursor === 'pointer';
+    return { n: rows.length,
+             honest: rows.filter(r => ptr(r) && r.dataset.drill).length,
+             lying:  rows.filter(r => ptr(r) && !r.dataset.drill).length };
+  });
+  ok('the Pareto has rows to press', par.n > 0, par.n + ' rows');
+  ok('and only the ones that drill follow the cursor', par.lying === 0,
+    par.lying + ' promise a click they cannot honour');
+
   console.log('\n  a headline answers "compared to what?"');
   await p.evaluate(() => showTab('overview'));
   await p.waitForTimeout(350);
