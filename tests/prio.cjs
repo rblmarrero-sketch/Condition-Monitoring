@@ -147,9 +147,12 @@ const dismiss = async p => { for (let i = 0; i < 3; i++) {
      own language. The redesign dropped it for space and this caught it. */
   const reg = await dash.evaluate(() => {
     showTab('actions');
-    const row = document.querySelector('#actionTbl .wlr');
-    const chip = row && row.querySelector('.prio');
-    return { rows: document.querySelectorAll('#actionTbl .wlr').length,
+    /* Any row's chip, not the first row's. The register is sorted worst-first
+       now, so which row leads depends on the fixture's severities — and the
+       guarantee this file is about is "a planner scanning the register sees
+       the 1C priority on the row", not "on row one". */
+    const chip = document.querySelector('#actionTbl [data-fu] .prio');
+    return { rows: document.querySelectorAll('#actionTbl [data-fu]').length,
              chip: chip ? chip.textContent.trim() : null,
              title: chip ? chip.getAttribute('title') : null };
   });
@@ -159,7 +162,7 @@ const dismiss = async p => { for (let i = 0; i < 3; i++) {
 
   await dash.click('button[data-lang="ru"]'); await dash.waitForTimeout(600);
   const ruT = await dash.evaluate(() => {
-    const c = document.querySelector('#actionTbl .wlr .prio');
+    const c = document.querySelector('#actionTbl [data-fu] .prio');
     return c ? c.getAttribute('title') : ''; });
   ok('Russian names it too', /[А-Яа-я]/.test(ruT || ''), String(ruT));
   await dash.click('button[data-lang="en"]'); await dash.waitForTimeout(600);

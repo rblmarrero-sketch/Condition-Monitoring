@@ -119,7 +119,7 @@ const SEED = `(async () => {
   ok('and says what could not be reached', /could not be measured/i.test(hist.unread), hist.unread.slice(0,60));
 
   console.log('\n  the action register picks the work up');
-  await dash.evaluate(()=>showTab('actions'));
+  await dash.evaluate(()=>(actView='unit', renderActions(), showTab('actions')));
   await dash.waitForTimeout(500);
   /* Grouped worklist: the unit lives on the block header, the finding on the
      rows under it, so a row's text is read together with its group's. */

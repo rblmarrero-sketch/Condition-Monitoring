@@ -80,7 +80,7 @@ const rowsOf = () => [...document.querySelectorAll('#actionTbl .wlu')].flatMap(u
        against a bundled record and then looked for it on TK801. */
     const q = document.getElementById('fQ'); q.value = 'TK80';
     q.dispatchEvent(new Event('input'));
-    showTab('actions');
+    (actView='unit', renderActions(), showTab('actions'));
   }, RECS);
   await p.waitForTimeout(900);
 
@@ -220,7 +220,7 @@ const rowsOf = () => [...document.querySelectorAll('#actionTbl .wlu')].flatMap(u
   await p.reload({ waitUntil: 'load' });
   await p.waitForTimeout(1500);
   const back = await p.evaluate(() => {
-    showTab('actions');
+    actView='unit'; renderActions(); showTab('actions');
     const q = document.getElementById('fQ'); q.value = 'TK80'; q.dispatchEvent(new Event('input'));
     setAFilt('all');
     return document.getElementById('actionTbl').innerText.replace(/\s+/g, ' ');

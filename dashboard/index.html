@@ -1829,6 +1829,15 @@
              them and costs two clicks to change one filter. -->
         <div class="seg" id="aSeg"></div>
         <span style="flex:1"></span>
+        <div class="hview" id="actView" role="group" data-i18n-title="av_group" title="How to show the register">
+          <button type="button" data-av="table" class="on">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3.5 6.5h17M3.5 12h17M3.5 17.5h17M9 6.5v11"/></svg>
+            <span data-i18n="av_table">Table</span></button>
+          <button type="button" data-av="unit">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="6" rx="1.5"/><rect x="3.5" y="13.5" width="17" height="6" rx="1.5"/></svg>
+            <span data-i18n="av_unit">By machine</span></button>
+        </div>
+        <span style="flex:1"></span>
         <button class="btn" id="csvBtn" data-i18n="csv">⬇ Export CSV</button>
       </div>
       <div class="scrollbox" style="--sb:640px;border-top:0"><div class="wl" id="actionTbl"></div></div>
@@ -2247,6 +2256,14 @@ const I18N={
   lt_matrix:"Fleet matrix",
   lt_exc:"Exceptions",
   lt_shop:"Shop materials",
+  a_th_comp:"Component",
+  a_th_owner:"Owner",
+  a_th_due:"Due",
+  a_th_age:"Age",
+  a_th_status:"Status",
+  av_table:"Table",
+  av_unit:"By machine",
+  av_group:"How to show the register",
   lm_all:"All classes", lm_machine:"Machine", lm_notset:"Not audited", lm_nocomp:"No such compartment",
   lm_alias:"recorded by make; identified as {m}", lm_csv:"⬇ Export CSV",
   lg_title:"Not on the sheet",
@@ -2680,6 +2697,14 @@ const I18N={
   lt_matrix:"Карта парка",
   lt_exc:"Исключения",
   lt_shop:"Материалы цеха",
+  a_th_comp:"Узел",
+  a_th_owner:"Ответственный",
+  a_th_due:"Срок",
+  a_th_age:"Дней",
+  a_th_status:"Статус",
+  av_table:"Таблица",
+  av_unit:"По машинам",
+  av_group:"Как показать реестр",
   lm_all:"Все классы", lm_machine:"Машина", lm_notset:"Не проверено", lm_nocomp:"Нет такого узла",
   lm_alias:"записано по марке; определено как {m}", lm_csv:"⬇ Экспорт CSV",
   lg_title:"Не попало на лист",
@@ -3842,6 +3867,13 @@ function fAgeDays(r,i){
   const from=Date.parse((r.date||"")+"T00:00:00Z");
   return isFinite(from) ? Math.floor((Date.now()-from)/864e5) : null;
 }
+/* Which shape the register is in, and how the table is sorted. Remembered:
+   a planner who sorts by owner is sorting by owner tomorrow too. */
+const AVK="cm_dash_actview";
+let actView=(function(){ try{ return localStorage.getItem(AVK)==="unit"?"unit":"table"; }
+                         catch(e){ return "table"; } })();
+let actSort={k:"sev", dir:-1};
+
 function renderActions(){
   const rows=actionRows();
   /* The tracker answers the meeting's question before the table does. */
@@ -3893,6 +3925,12 @@ function renderActions(){
     .map(([k,lab])=>`<button type="button" data-af="${k}"${filt===k?' class="on"':''}>${
       esc(t(lab))}<span class="n">${counts[k]}</span></button>`).join("");
   $("aSeg").querySelectorAll("[data-af]").forEach(b=>b.onclick=()=>setAFilt(b.dataset.af));
+  document.querySelectorAll("#actView button[data-av]").forEach(b=>{
+    b.classList.toggle("on", b.dataset.av===actView);
+    b.onclick=()=>{ actView=b.dataset.av;
+      try{ localStorage.setItem(AVK,actView); }catch(e){}
+      renderActions(); };
+  });
 
   const shown = filt==="all" ? rows
               : filt==="over" ? rows.filter(({i})=>fOverdue(i))
@@ -3902,6 +3940,75 @@ function renderActions(){
   if(!shown.length){
     $("actionTbl").innerHTML=`<div class="empty"><b>${esc(t("a_none"))}</b><span>${esc(t("a_none_s"))}</span></div>`;
     return; }
+
+  const initials0=n=>String(n||"").split(/[\s.]+/).filter(Boolean)
+    .slice(0,2).map(w=>w[0]).join("").toUpperCase()||"?";
+  const daysTo0=d=>Math.round((Date.parse(d+"T00:00:00Z")-Date.parse(todayISO()+"T00:00:00Z"))/864e5);
+  if($("actShown")) $("actShown").innerHTML=
+    `<span>${esc(t("shown_n",{n:shown.length, of:rows.length}))}</span>`;
+
+  /* TABLE, by default. Grouping four findings under one machine stops the
+     unit, the round and the date being written out four times — which is real
+     — but it also means the register cannot be sorted by what a planner
+     actually plans against: what is latest, what is oldest, what has nobody's
+     name on it. Both shapes, and the sortable one opens. */
+  if(actView==="table"){
+    const val=(x,k)=>({ sev:sevRank(sevOf(x.r,x.i)), unit:x.r.equip, comp:x.i.label||x.i.key,
+      date:x.r.date||"", act:x.i.actionLabel||"", owner:x.i.owner||"",
+      due:x.i.due||"9999-99-99", age:(fAgeDays(x.r,x.i)||0), st:stName(x.i.status) }[k]);
+    const list=shown.slice().sort((a,b)=>{
+      const p1=val(a,actSort.k), p2=val(b,actSort.k);
+      const c=typeof p1==="number"?p1-p2:String(p1).localeCompare(String(p2));
+      return (c || a.r.equip.localeCompare(b.r.equip))*actSort.dir;
+    });
+    const cols=[["sev",t("th_sev")],["unit",t("th_unit")],["comp",t("a_th_comp")],
+                ["date",t("th_date")],["act",t("hh_action")],["owner",t("a_th_owner")],
+                ["due",t("a_th_due")],["age",t("a_th_age")],["st",t("a_th_status")]];
+    $("actionTbl").innerHTML=`<div class="tblwrap scrollbox" style="--sb:520px"><table class="grid">
+      <thead><tr>${cols.map(([k,l])=>
+        `<th class="sortable${actSort.k===k?" on":""}" data-asort="${k}">${esc(l)}<span class="arrow">${
+          actSort.k===k?(actSort.dir>0?"▲":"▼"):"↕"}</span></th>`).join("")}</tr></thead><tbody>`
+      + list.map(({r,i})=>{
+          const sv=sevOf(r,i), od=fOverdue(i), dd=i.due?daysTo0(i.due):null, age=fAgeDays(r,i);
+          const sc=sv?`var(--${SEV[sv].c==="c"?"critical":SEV[sv].c==="s"?"serious":SEV[sv].c==="w"?"warning":"good"})`:"";
+          return `<tr class="hrow" tabindex="0" data-fu="${esc(recKey(r))}" data-fi="${esc(i.key)}">
+            <td>${sv?`<span class="sevcell" style="--sc:${sc}"><i></i>${esc(SEV[sv].l)}</span>`
+                    :'<span class="muted">—</span>'}</td>
+            <td><b>${esc(r.equip)}</b></td>
+            <!-- One line per cell. A second line under the component and
+                 another under the action put the rows at 57px; the register is
+                 scanned, and what those lines carried is on the title and in
+                 the drawer a click away. -->
+            <td title="${esc((i.label||i.key)+" · "+i.key+" · "+(TYPE_LABEL[r.type]||r.type))}">
+              <span class="trunc">${esc(i.label||i.key)}
+                <span class="muted">${esc(i.key)}</span></span></td>
+            <td class="mono">${esc(r.date||"")}</td>
+            <td title="${esc((i.actionLabel||"")+(i.defect?" — "+i.defect:""))}"><span class="trunc">${
+              esc(i.actionLabel||"—")}</span></td>
+            <td>${i.owner?`<span class="who"><i>${esc(initials0(i.owner))}</i><span>${esc(i.owner)}</span></span>`
+                        :`<span class="who none"><i>+</i><span>${esc(t("a_assign"))}</span></span>`}</td>
+            <td class="mono">${i.due?`<span class="due ${od?"late":(dd!=null&&dd<=7?"soon":"")}"><b>${
+              esc(i.due.slice(5))}</b></span>`:'<span class="muted">—</span>'}</td>
+            <td class="num mono">${age==null?"":age}</td>
+            <td><span class="st s-${esc(String(i.status||"open"))}">${esc(stName(i.status))}</span>${
+              i.prio?` <span class="prio ${prioClass(i.prio)}" title="${esc(prioName(i.prio))}">${esc(i.prio)}</span>`:""}</td>
+          </tr>`;
+        }).join("")+`</tbody></table></div>`;
+    $("actionTbl").querySelectorAll("tr.hrow").forEach(tr=>{
+      const go=()=>openFollow(tr.dataset.fu, tr.dataset.fi);
+      tr.onclick=go;
+      tr.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } };
+    });
+    $("actionTbl").querySelectorAll("th[data-asort]").forEach(th=>th.onclick=()=>{
+      const k=th.dataset.asort;
+      /* A new column starts on the reading people expect: worst, latest,
+         oldest, most overdue — never alphabetical-ascending by accident. */
+      if(actSort.k===k) actSort.dir=-actSort.dir;
+      else { actSort.k=k; actSort.dir=(k==="sev"||k==="age")?-1:1; }
+      renderActions();
+    });
+    return;
+  }
 
   /* One machine, one block. Four findings on TK151 were four rows repeating
      the unit, the round and the date — the same visit, written out four
