@@ -28,14 +28,18 @@ const recs = () => UNITS.map((u, n) => ({
   await p.evaluate(() => document.getElementById('dataOv').classList.add('hidden'));
   await p.waitForTimeout(300);
   // the page ships with bundled records; every count below is a delta on those
-  const BASE = +(await p.$eval('#kpis .tile .v', e => e.textContent.trim()));
+  /* By NAME, not by position. This reached the inspection count as "the first
+     .tile in #kpis", which made it a test about the order of the strip as much
+     as about void counting — so it broke the day that tile became pressable
+     and moved. #kpiInsp is the contract. */
+  const BASE = +(await p.$eval('#kpiInsp .v', e => e.textContent.trim()));
   await p.evaluate(r => CMDash.importRecords(r), recs());
   await p.evaluate(() => document.getElementById('dataOv').classList.add('hidden'));
   await p.waitForTimeout(300);
 
   const chip = () => p.textContent('#srcText');
-  const tileV = () => p.$eval('#kpis .tile .v', e => e.textContent.trim());
-  const tileS = () => p.$eval('#kpis .tile .s', e => e.textContent.trim());
+  const tileV = () => p.$eval('#kpiInsp .v', e => e.textContent.trim());
+  const tileS = () => p.$eval('#kpiInsp .s', e => e.textContent.trim());
   const hint = async () => (await p.$('#kpiVoid')) ? (await p.textContent('#kpiVoid')).trim() : null;
 
   const chipN = async () => +(await chip()).match(/(\d+)/)[1];
@@ -83,7 +87,7 @@ const recs = () => UNITS.map((u, n) => ({
   await p.fill('#fQ', '');
   await p.click('button[data-lang="ru"]');
   await p.waitForTimeout(400);
-  const ru = await p.$eval('#kpis .tile .s', e => e.textContent.trim()).catch(() => '');
+  const ru = await p.$eval('#kpiInsp .s', e => e.textContent.trim()).catch(() => '');
   ok('the note is translated', /отозвано: 2/.test(ru), ru);
   ok('the chip is translated', /отозвано: 2/.test(await chip()), await chip());
 

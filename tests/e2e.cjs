@@ -70,15 +70,20 @@ const SEED = `(async () => {
     await dash.evaluate(()=>[...document.getElementById('fType').options].find(o=>o.value==='UC').textContent));
 
   const num = await dash.evaluate(()=>{
-    const tiles=[...document.querySelectorAll('#kpis .tile')].map(el=>({
-      k:el.querySelector('.k').textContent.trim(), v:el.querySelector('.v')?el.querySelector('.v').textContent.trim():'' }));
     const mix={}; document.querySelectorAll('#kpis .legend button').forEach(b=>{
       mix[b.dataset.sev]=Number(b.querySelector('b').textContent); });
-    return {tiles, mix};
+    /* The findings total, read off the severity mix rather than off a tile in
+       a fixed slot. This used to be "#kpis .tile" indexed at [1], which is a
+       claim about the ORDER of the headline strip — not what this suite is
+       about, and it broke the day the strip was re-ordered around a compliance
+       figure. The mix counts the same findings and cannot drift from them. */
+    const total=Object.values(mix).reduce((a,b)=>a+b,0);
+    const att=(document.querySelector('#kpiAtt .v')||{}).textContent||'';
+    return {mix, total, att:att.trim()};
   });
   console.log('  ' + JSON.stringify(num));
   ok('worn points count as findings, not as nothing',
-    Number(num.tiles[1].v) >= uc.DZ001.meas + uc.DZ002.meas, num.tiles[1].v);
+    num.total >= uc.DZ001.meas + uc.DZ002.meas, String(num.total));
   ok('a point past condemn is a Critical finding here too',
     num.mix.CRI >= uc.DZ002.act, num.mix.CRI+' critical, '+uc.DZ002.act+' past condemn on DZ002');
   ok('a point above 80% is Degraded', num.mix.DEG >= uc.DZ001.watch+uc.DZ002.watch,

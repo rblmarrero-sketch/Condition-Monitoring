@@ -36,15 +36,34 @@
        same way: 6.13:1 on white, 4.98:1 on its own 14% chip tint. One product
        showing one grade in two different greens was its own small bug. */
     --good:#0a7134; --warning:#fab219; --serious:#ec835a; --critical:#d03b3b; --none:#898781;
+    /* ── STATUS AS FILL, AND STATUS AS INK ────────────────────────────────
+       They are not the same colour and cannot be. A fill sits in a bar or a
+       chip where a saturated hue is exactly right; the same hue as TEXT on the
+       card behind it can be unreadable. Measured against the card each one
+       actually sits on:
+
+         fill        as ink, light   as ink, dark
+         good        6.13 ✓          2.81 ✗ → #3fbf6a  7.28
+         warning     1.83 ✗ → #8a5a00  5.93     9.39 ✓
+         serious     2.64 ✗ → #a94d1c  5.58     6.53 ✓
+         critical    4.80 ✓          3.59 ✗ → #ef6a6a  5.69
+
+       Three of the eight fail as text where they are used as text, and the one
+       that fails hardest — amber at 1.83:1 — is the one a "watch" number wears.
+       The page led with a red compliance figure at 3.59:1 in dark mode until a
+       contrast check caught it. */
+    --good-ink:#0a7134; --warn-ink:#8a5a00; --serious-ink:#a94d1c; --crit-ink:#d03b3b;
     --shadow:0 1px 2px rgba(22,36,44,.06),0 4px 16px rgba(22,36,44,.05);
   }
   @media (prefers-color-scheme:dark){ :root:where(:not([data-theme="light"])){
     color-scheme:dark; --page:#0b1116; --surface:#141c22; --surface-2:#1b252c; --surface-3:#243039;
     --ink:#fff; --ink-2:#b6c3cb; --muted:#8a979e; --grid:#243039; --axis:#31414b;
-    --border:rgba(255,255,255,.10); --accent:#ce8256; --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 20px rgba(0,0,0,.4); } }
+    --border:rgba(255,255,255,.10); --accent:#ce8256; --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 20px rgba(0,0,0,.4);
+    --good-ink:#3fbf6a; --warn-ink:#fab219; --serious-ink:#ec835a; --crit-ink:#ef6a6a; } }
   :root[data-theme="dark"]{ color-scheme:dark; --page:#0b1116; --surface:#141c22; --surface-2:#1b252c; --surface-3:#243039;
     --ink:#fff; --ink-2:#b6c3cb; --muted:#8a979e; --grid:#243039; --axis:#31414b;
-    --border:rgba(255,255,255,.10); --accent:#ce8256; --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 20px rgba(0,0,0,.4); }
+    --border:rgba(255,255,255,.10); --accent:#ce8256; --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 20px rgba(0,0,0,.4);
+    --good-ink:#3fbf6a; --warn-ink:#fab219; --serious-ink:#ec835a; --crit-ink:#ef6a6a; }
   *{box-sizing:border-box;} html,body{margin:0;padding:0;}
   body{background:var(--page);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased;}
   header.app{display:flex;align-items:center;gap:12px;padding:14px 22px;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:20;}
@@ -409,8 +428,8 @@
     margin-top:2px;line-height:1.45;}
   .catrow i.prose{color:var(--ink-2);max-width:78ch;}
   .kpi .s{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.3;}
-  .kpi.t-warn .v{color:var(--warning,#b26a00);}
-  .kpi.t-bad .v{color:var(--serious,#c02f2f);}
+  .kpi.t-warn .v{color:var(--warn-ink);}
+  .kpi.t-bad .v{color:var(--serious-ink);}
   .reqwhat .spec{display:block;font-size:11.5px;color:var(--ink-2);margin-top:4px;}
   .reqwhat .spec>summary{cursor:pointer;color:var(--muted);font-size:11.5px;
     list-style:none;width:max-content;}
@@ -795,21 +814,38 @@
   .tile .legend{margin-top:9px;}
   .kpi.good{--kc:var(--good);} .kpi.warn{--kc:var(--warning);}
   .kpi.bad{--kc:var(--critical);} .kpi.info{--kc:var(--accent);}
-  .kpi.bad .v{color:var(--critical);} .kpi.good .v{color:var(--good);}
+  .kpi.bad .v{color:var(--crit-ink);} .kpi.good .v{color:var(--good-ink);}
+  .kpi.warn .v{color:var(--warn-ink);}
   /* Zero overdue is good news and should not be shouted in red. */
   .kpi.bad.zero{--kc:var(--good);} .kpi.bad.zero .v{color:var(--ink);}
   /* "compared to what" — the line every headline carries. Up is not always
      bad, so the arrow says direction and the colour says whether that
      direction is the wrong one. */
   .dlt{font-weight:700;font-variant-numeric:tabular-nums;}
-  .dlt.up{color:var(--critical);} .dlt.dn{color:var(--good);} .dlt.flat{color:var(--muted);}
+  .dlt.up{color:var(--crit-ink);} .dlt.dn{color:var(--good-ink);} .dlt.flat{color:var(--muted);}
   /* Segments of one bar are adjacent fills; a 2px gap of the surface keeps the
      boundary readable where two of the four hues sit close together. */
   .tile .bar span{border-radius:2px;}
   .tile .bar{gap:2px;display:flex;overflow:hidden;}
 
   /* a coverage track that reads as a track even when nearly empty */
-  .cbar{display:block;width:100%;height:8px;border-radius:999px;background:var(--surface-3);
+  /* the breakdown of a headline, inside its own card */
+  .lcparts{display:flex;flex-wrap:wrap;gap:var(--s1) var(--s2);margin-top:var(--s3);
+    padding-top:var(--s2);border-top:1px solid var(--border);}
+  .lcpart{border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);
+    border-radius:99px;padding:3px 9px;font:inherit;font-size:var(--t-tiny);cursor:pointer;
+    font-family:inherit;}
+  .lcpart b{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ink);}
+  .lcpart:hover{border-color:var(--accent);color:var(--ink);}
+  .lcpart.off{cursor:default;opacity:.55;}
+  .kpi .v .of{font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0;}
+    .covcell{min-width:180px;}
+  .covrow{display:flex;align-items:center;gap:9px;}
+  .covpc{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:700;
+    font-variant-numeric:tabular-nums;min-width:38px;text-align:right;color:var(--ink);}
+  .covpc.bad{color:var(--crit-ink);}
+  .covrow .cbar{flex:1;}
+    .cbar{display:block;width:100%;height:8px;border-radius:999px;background:var(--surface-3);
     overflow:hidden;box-shadow:inset 0 1px 2px rgba(0,0,0,.12);}
   .cbar i{display:block;height:100%;border-radius:999px;transition:width .3s var(--ease);}
 
@@ -1522,7 +1558,7 @@
   </section>
 
   <section id="tab-lube" class="hidden">
-    <div class="kpis" id="lubeKpis"></div>
+
 
     <div class="section">
       <h2 data-i18n="lp_title">The programme, honestly counted</h2>
@@ -1873,6 +1909,8 @@ const I18N={
   k_same:"no change", k_vsprev:"vs the period before",
   w_k_go:"Show these in the register below",
   lc_go:"Open this list",
+  lc_settle:"Waiting to be settled",
+  lc_settle_s:"one compartment, two of the site\u2019s documents disagreeing \u2014 each one an afternoon\u2019s work",
   k_act:"Actions to plan", k_mix:"Severity mix",
   k_units:"{n} unit(s)", k_finds:"items with a record", k_attsub:"degraded + critical",
   k_actsub:"excluding “monitor”", k_none_here:"None in this view", k_only:"Show only {x}",
@@ -2261,6 +2299,8 @@ const I18N={
   k_same:"без изменений", k_vsprev:"к предыдущему периоду",
   w_k_go:"Показать их в списке ниже",
   lc_go:"Открыть список",
+  lc_settle:"Ждут решения",
+  lc_settle_s:"один узел, два документа площадки расходятся \u2014 каждый случай на полдня работы",
   k_act:"Действий к планированию", k_mix:"Распределение",
   k_units:"ед.: {n}", k_finds:"позиций с записью", k_attsub:"ухудшено + критично",
   k_actsub:"без «наблюдать»", k_none_here:"Нет в этой выборке", k_only:"Только {x}",
@@ -3044,7 +3084,12 @@ function renderKpis(){
   const bar=["CRI","DEG","INC","NOF"].map(s=>cnt[s]
     ? `<span style="flex:${cnt[s]};background:${SEVC[s]}" title="${esc(SEV[s].l)}: ${cnt[s]}"></span>` : "").join("");
 
-  const tile=(o)=>`<${o.go?"button type=\"button\"":"div"} class="kpi ${o.cls||""}"${
+  /* A stable hook on each headline. Two suites used to reach these by their
+     POSITION in the strip — "#kpis .tile" and then [1] — so re-ordering the
+     page, or turning a div into a button because it became pressable, broke a
+     test that was not about ordering at all. A name is the contract; the order
+     is a layout decision and has to stay free to change. */
+  const tile=(o)=>`<${o.go?"button type=\"button\"":"div"} id="${esc(o.id)}" class="kpi ${o.cls||""}"${
       o.go?` data-kgo="${esc(o.go)}"`:""}${o.title?` title="${esc(o.title)}"`:""}>
       <span class="k">${esc(o.k)}</span>
       <span class="v">${o.v}</span>
@@ -3052,20 +3097,20 @@ function renderKpis(){
     </${o.go?"button":"div"}>`;
 
   $("kpis").innerHTML=
-      tile({ k:t("k_comp"), v:comp.pct==null?"—":comp.pct+"%",
+      tile({ id:"kpiComp", k:t("k_comp"), v:comp.pct==null?"—":comp.pct+"%",
              s: comp.pct==null ? esc(t("k_comp_none"))
                 : esc(t("k_comp_s",{n:comp.onTime, of:comp.due})),
              cls: comp.pct==null ? "" : comp.pct>=90 ? "good" : comp.pct>=75 ? "warn" : "bad",
              go:"due", title:t("k_comp_t") })
-    + tile({ k:t("k_att"), v:attention, s:(deltaLine(attention,pAtt,true)||esc(t("k_attsub"))),
+    + tile({ id:"kpiAtt", k:t("k_att"), v:attention, s:(deltaLine(attention,pAtt,true)||esc(t("k_attsub"))),
              cls:attention?"bad":"good", go:"attention", title:t("k_att_t") })
-    + tile({ k:t("k_act"), v:openActions, s:esc(t("k_actsub")), cls:openActions?"warn":"good",
+    + tile({ id:"kpiAct", k:t("k_act"), v:openActions, s:esc(t("k_actsub")), cls:openActions?"warn":"good",
              go:"actions", title:t("k_act_t") })
-    + tile({ k:t("k_insp"), v:recs.length,
+    + tile({ id:"kpiInsp", k:t("k_insp"), v:recs.length,
              s:esc(t("k_units",{n:units}))+(nVoidHid
                ? ` · <button class="voidhint" id="kpiVoid" title="${esc(t("k_voidtip"))}">${esc(t("k_voidhid",{n:nVoidHid}))}</button>`
                : "") + (pFind!=null?" · "+deltaLine(f.length,pFind,true):"") })
-    + `<div class="tile"><div class="k">${t("k_mix")}</div>
+    + `<div class="tile" id="kpiMix"><div class="k">${t("k_mix")}</div>
      <div class="bar" style="margin-top:8px">${bar}</div>
      <div class="legend">${["CRI","DEG","INC","NOF"].map(s=>
        `<button data-sev="${s}" class="${drill.sev===s?"on":""}"${cnt[s]?"":" disabled"}
@@ -4094,17 +4139,24 @@ function renderCoverage(){
     $("covTbl").innerHTML=`<tbody><tr><td class="muted" style="padding:16px">${esc(t("cv_empty"))}</td></tr></tbody>`;
     $("covNote").textContent=""; return; }
   const th=k=>`<th>${esc(t(k))}</th>`;
-  $("covTbl").innerHTML=`<thead><tr>${th("cv_th_round")}${th("cv_th_seen")}
-      <th style="width:120px"></th>${th("cv_th_insp")}${th("cv_th_never")}${th("cv_th_over")}
+  /* ONE NUMBER, ENCODED ONCE. Coverage used three columns and three encodings
+     to say a single thing: the fraction "18 / 1128", the percentage "2%" under
+     it, and then a bar in a column of its own. Three readings of one fact,
+     spread over two columns, and the eye has to reconcile them before it can
+     move on. The bar IS the percentage, so the percentage rides on it and the
+     fraction sits beneath as the audit trail. */
+  $("covTbl").innerHTML=`<thead><tr>${th("cv_th_round")}
+      <th style="min-width:190px">${esc(t("cv_th_seen"))}</th>
+      ${th("cv_th_insp")}${th("cv_th_never")}${th("cv_th_over")}
       ${th("cv_th_who")}</tr></thead><tbody>`
     + rows.map(r=>{
         const bad = r.pc<50;
         return `<tr><td><b>${esc(TYPE_LABEL[r.ty]||r.ty)}</b>
             <div class="muted" style="font-size:11px">${esc(t("cv_every",{d:r.iv}))}${
               r.scoped?" · "+esc(t("cv_scoped")):""}</div></td>
-          <td class="mono${bad?" bad":""}"><b>${r.seen}</b> / ${r.total}
-            <div class="muted" style="font-size:11px">${r.pc}%</div></td>
-          <td>${covBar(r.pc)}</td>
+          <td class="covcell">
+            <div class="covrow"><span class="covpc${bad?" bad":""}">${r.pc}%</span>${covBar(r.pc)}</div>
+            <div class="muted mono" style="font-size:11px">${r.seen} / ${r.total}</div></td>
           <td class="mono">${r.inspections}</td>
           <td class="mono${r.never?" bad":""}">${r.never}</td>
           <td class="mono${r.overdue?" bad":""}">${r.overdue}</td>
@@ -5434,12 +5486,12 @@ function renderLubeProg(){
       stage(P.conformant, P.instances, "lp_conform",  "lp_conform_w",  "lp_src_calc") +
       stage(P.sampled,    P.instances, "lp_sampled",  "lp_sampled_w",  "lp_src_lab") +
     `</div>`;
-  $("lubeKpis").innerHTML = [
-    ["lp_k_models", P.models],
-    ["lp_k_units",  P.covered],
-    ["lp_k_comps",  P.instances],
-    ["lp_k_audited",P.audited],
-  ].map(([k,v])=>`<div class="kpi"><div class="k">${esc(t(k))}</div><div class="v">${fmtN(v)}</div></div>`).join("");
+  /* The four tiles that used to sit above this — models, units, compartments,
+     audited — are gone. Two of them were the funnel's first and third rows
+     restated without their denominators, and the other two are in the sentence
+     directly above it. Four numbers repeating what the thing beneath them says
+     better is not a summary; it is the reader reading the same fact twice and
+     wondering which one to believe. */
 }
 
 /* ── the 2027 shelf against the recommendations ───────────────────────────
@@ -5452,34 +5504,43 @@ function renderLubeCat(){
   if(!window.LUBE2027){ kp.innerHTML = ""; box.innerHTML = ""; return; }
   const C = LUBE2027, rows = C.plan.length + C.extra.length;
   const tds = C.plan.concat(C.extra).filter(r => r.att).length;
-  kp.innerHTML = [
-    ["lc_shelf",  C.shelf.length,     "lc_shelf_s",  ""],
-    /* Spelled out rather than built from a variable, so the stylesheet linter
-       can see that these classes are used. A class assembled at runtime reads
-       to every tool as a rule painting nothing. */
-    ["lc_off",    C.offShelf.length,  "lc_off_s",    C.offShelf.length ? "t-warn" : ""],
-    ["lc_un",     C.unassigned.length,"lc_un_s",     C.unassigned.length ? "t-warn" : ""],
-    ["lc_season", C.seasons.length,   "lc_season_s", C.seasons.length ? "t-warn" : ""],
-    ["lc_disp",   C.disputed.length,  "lc_disp_s",   C.disputed.length ? "t-warn" : ""],
-    /* Zero of two hundred and forty-nine. The column exists in both matrices
-       and is empty in every row of both, so nothing in this standard is
-       currently traceable to a data sheet. */
-    ["lc_tds",    tds,                "lc_tds_s",    tds ? "" : "t-bad"],
-  ].map(([k,v,sub,tone])=>{
-    /* The four that name a set open the set. The two that do not — how many
-       products are on the shelf, how many data sheets are on file — stay plain
-       numbers, because a control that appears when it cannot act is how a
-       reader learns to stop pressing any of them. */
-    const go={lc_off:"lc_hdr_off", lc_un:"lc_hdr_un",
-              lc_season:"lc_hdr_season", lc_disp:"lc_hdr_disp"}[k];
-    const body=`<span class="k">${esc(t(k))}</span>`
-      + `<span class="v">${fmtN(v)}</span>`
-      + `<span class="s">${esc(t(sub,{n:rows}))}</span>`;
-    return go && v
-      ? `<button type="button" class="kpi ${tone}" data-lcgo="${esc(go)}"
-           title="${esc(t("lc_go"))}">${body}</button>`
-      : `<div class="kpi ${tone}">${body}</div>`;
-  }).join("");
+  /* ONE HEADLINE, THEN ITS PARTS.
+
+     This was six tiles of equal weight, and six peers is not a summary — the
+     reader has to add them up to find out whether the afternoon is going to be
+     busy. Four of them are the same KIND of thing: two of the site's own
+     documents saying different things about one compartment, each settleable
+     by somebody in an afternoon. So they total into one number, and stay
+     underneath it as the breakdown, still pressable.
+
+     The other two — how many products are on the 2027 shelf, how many data
+     sheets are on file — are context for that number, not rivals to it, so
+     they are a line beneath rather than cards beside. */
+  const settle = C.offShelf.length + C.unassigned.length + C.seasons.length + C.disputed.length;
+  const part = (k, n, go) => n
+    ? `<button type="button" class="lcpart" data-lcgo="${esc(go)}" title="${esc(t("lc_go"))}">
+         <b>${fmtN(n)}</b> ${esc(t(k))}</button>`
+    : `<span class="lcpart off"><b>0</b> ${esc(t(k))}</span>`;
+  kp.innerHTML =
+    `<div class="kpi ${settle ? "warn" : "good"}" id="lcSettle" style="grid-column:span 2">
+       <span class="k">${esc(t("lc_settle"))}</span>
+       <span class="v">${fmtN(settle)}</span>
+       <span class="s">${esc(t("lc_settle_s", {n: rows}))}</span>
+       <div class="lcparts">
+         ${part("lc_off",    C.offShelf.length,   "lc_hdr_off")}
+         ${part("lc_un",     C.unassigned.length, "lc_hdr_un")}
+         ${part("lc_season", C.seasons.length,    "lc_hdr_season")}
+         ${part("lc_disp",   C.disputed.length,   "lc_hdr_disp")}
+       </div>
+     </div>
+     <div class="kpi ${tds ? "" : "bad"}">
+       <span class="k">${esc(t("lc_tds"))}</span>
+       <span class="v">${fmtN(tds)}<span class="of"> / ${fmtN(rows)}</span></span>
+       <span class="s">${esc(t("lc_tds_s", {n: rows}))}</span></div>
+     <div class="kpi">
+       <span class="k">${esc(t("lc_shelf"))}</span>
+       <span class="v">${fmtN(C.shelf.length)}</span>
+       <span class="s">${esc(t("lc_shelf_s", {n: rows}))}</span></div>`;
 
   const list = (key, items, render) => items.length
     ? `<details class="cat" data-lclist="${esc(key)}"><summary><b>${esc(t(key))}</b>` +
@@ -5505,7 +5566,8 @@ function renderLubeCat(){
       `<i class="prose">${esc(x.text)}</i></div>`);
 
   /* Pressing the count opens the list it counts and puts it on screen. */
-  kp.querySelectorAll("[data-lcgo]").forEach(b=>b.onclick=()=>{
+  kp.querySelectorAll("[data-lcgo]").forEach(b=>b.onclick=(e)=>{
+    e.stopPropagation();
     const d=box.querySelector(`[data-lclist="${b.dataset.lcgo}"]`);
     if(!d) return;
     box.querySelectorAll("details.cat").forEach(x=>{ if(x!==d) x.open=false; });

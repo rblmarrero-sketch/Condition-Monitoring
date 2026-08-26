@@ -170,6 +170,96 @@ const TABS = ['overview', 'failure', 'wear', 'actions', 'due', 'equipment', 'lub
   ok('and where the two sides disagree, the row says so', !!paired && paired.deltas > 0,
     paired && paired.deltas + ' flagged');
 
+  console.log('\n  one fact is encoded once');
+  await p.evaluate(() => showTab('overview'));
+  await p.waitForTimeout(350);
+  /* The bar IS the percentage, so they belong in one cell. They used to be in
+     two, with the fraction in a third reading of the same fact — one number
+     spread over two columns in three encodings, which the eye has to
+     reconcile before it can move on. */
+  const covCell = await p.evaluate(() => {
+    const row = document.querySelector('#covTbl tbody tr');
+    if (!row) return null;
+    const bar = row.querySelector('.cbar');
+    const cell = bar && bar.closest('td');
+    const txt = row.innerText;
+    return { cells: row.children.length,
+             pcts: (txt.match(/\d+%/g) || []).length,
+             hasFraction: /\d+\s*\/\s*\d+/.test(txt),
+             /* is the percentage in the SAME cell as the bar it describes? */
+             together: !!cell && /\d+%/.test(cell.innerText) };
+  });
+  ok('a coverage row states its percentage once', covCell && covCell.pcts === 1,
+    covCell && covCell.pcts + ' percentages');
+  ok('the bar and the percentage it IS share one cell', covCell && covCell.together,
+    covCell && (covCell.together ? 'one cell' : 'split across cells'));
+  ok('and the fraction sits with them as the audit trail', covCell && covCell.hasFraction);
+
+  console.log('\n  a strip of peers is not a summary');
+  await p.evaluate(() => showTab('lube'));
+  await p.waitForTimeout(600);
+  const lube = await p.evaluate(() => ({
+    strips: document.querySelectorAll('#tab-lube .kpis').length,
+    lcTiles: document.querySelectorAll('#lcKpis > *').length,
+    parts: document.querySelectorAll('.lcpart').length,
+    pressable: document.querySelectorAll('.lcpart[data-lcgo]').length,
+    funnelRows: document.querySelectorAll('#lubeProg .pgrow').length,
+  }));
+  ok('the lubrication tab leads with a funnel, not a tile strip',
+    lube.funnelRows >= 6, lube.funnelRows + ' stages');
+  ok('and no strip restates what the funnel says', lube.strips === 1, lube.strips + ' strips');
+  ok('the disagreements total into one headline', lube.lcTiles <= 3, lube.lcTiles + ' tiles');
+  ok('with their breakdown under it, still pressable',
+    lube.parts === 4 && lube.pressable === lube.parts,
+    lube.pressable + ' of ' + lube.parts);
+
+  console.log('\n  a status colour used as text can be read as text');
+  const inks = await p.evaluate(() => {
+    const lum = c => { const m = (c.match(/[\d.]+/g) || []).slice(0, 3).map(Number);
+      const f = v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+      return 0.2126 * f(m[0]) + 0.7152 * f(m[1]) + 0.0722 * f(m[2]); };
+    const cr = (a, b) => { const x = lum(a), y = lum(b);
+      return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
+    const probe = document.createElement('div');
+    probe.className = 'kpi';
+    probe.style.cssText = 'position:absolute;left:-9999px';
+    probe.innerHTML = '<span class="v">0</span>';
+    document.body.appendChild(probe);
+    const bg = getComputedStyle(probe).backgroundColor;
+    const out = {};
+    ['good', 'warn', 'bad'].forEach(cls => {
+      probe.className = 'kpi ' + cls;
+      out[cls] = +cr(getComputedStyle(probe.querySelector('.v')).color, bg).toFixed(2);
+    });
+    probe.remove();
+    return out;
+  });
+  ok('every state colour reads as a number, light', Object.values(inks).every(v => v >= 4.5),
+    JSON.stringify(inks));
+  await p.evaluate(() => document.documentElement.setAttribute('data-theme', 'dark'));
+  await p.waitForTimeout(250);
+  const inksD = await p.evaluate(() => {
+    const lum = c => { const m = (c.match(/[\d.]+/g) || []).slice(0, 3).map(Number);
+      const f = v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+      return 0.2126 * f(m[0]) + 0.7152 * f(m[1]) + 0.0722 * f(m[2]); };
+    const cr = (a, b) => { const x = lum(a), y = lum(b);
+      return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
+    const probe = document.createElement('div');
+    probe.className = 'kpi'; probe.style.cssText = 'position:absolute;left:-9999px';
+    probe.innerHTML = '<span class="v">0</span>';
+    document.body.appendChild(probe);
+    const bg = getComputedStyle(probe).backgroundColor;
+    const out = {};
+    ['good', 'warn', 'bad'].forEach(cls => { probe.className = 'kpi ' + cls;
+      out[cls] = +cr(getComputedStyle(probe.querySelector('.v')).color, bg).toFixed(2); });
+    probe.remove();
+    return out;
+  });
+  ok('and in dark, where three of the four used to fail',
+    Object.values(inksD).every(v => v >= 4.5), JSON.stringify(inksD));
+  await p.evaluate(() => document.documentElement.removeAttribute('data-theme'));
+  await p.waitForTimeout(200);
+
   console.log('\n  it holds together at every width, in both themes');
   for (const w of [1600, 1280, 1024]) {
     await p.setViewportSize({ width: w, height: 900 });
