@@ -530,6 +530,15 @@
   table.grid th .arrow{opacity:.35;font-size:10px;margin-left:3px;} table.grid th.on .arrow{opacity:1;}
   .note{font-size:12px;color:var(--ink-2);background:color-mix(in srgb,var(--warning) 14%,var(--surface));border:1px solid color-mix(in srgb,var(--warning) 45%,var(--border));border-radius:8px;padding:8px 11px;margin-top:12px;}
   /* data-source sheet */
+  .cfbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;
+    margin:14px 18px 0;padding:10px 14px;border:1px solid var(--warning);
+    border-left-width:4px;border-radius:8px;
+    background:color-mix(in srgb,var(--warning) 14%,var(--surface));}
+  .cfbar.hidden{display:none;}
+  .cfbar .cfw{font-weight:700;color:var(--ink);}
+  .cfbar .cfsub{color:var(--ink-2);font-size:12.5px;}
+  .cfbar .spacer{flex:1 1 auto;}
+  .cfbar button{padding:4px 11px;font-size:12.5px;}
   .ov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:60;display:flex;align-items:flex-start;justify-content:center;padding:40px 16px;overflow:auto;}
   .ov.hidden{display:none;}
   /* The sheet is the scroller, not the overlay: a sticky header inside a
@@ -1020,6 +1029,22 @@
   <div class="lang"><button data-lang="en">EN</button><button data-lang="ru">RU</button></div>
   <button class="btn" id="themeBtn" data-i18n-title="theme" title="Light / dark">◐</button>
 </header>
+
+<!-- A round two phones both sent, waiting for somebody to say which one counts.
+
+     This was reported in exactly two places, and both of them were places you
+     had to already know to look: a count inside the Data sources MODAL, which
+     the office opens when it is setting up a connection and never again, and a
+     CONFLICT flag on the Equipment history tab — visible only after picking,
+     from a list of over a thousand machines, the one it happens to be on.
+     Meanwhile the phone in the pit puts a red badge on its System tab and
+     tells the inspector that the office will decide.
+
+     An unresolved clash means two versions of a round exist and the dashboard
+     is counting one of them, arbitrarily, in every chart on every tab. So it
+     is said on every tab, until it is answered, with the way to answer it
+     attached. -->
+<div id="cfBar" class="cfbar hidden"></div>
 
 <!-- One place that answers "where does the dashboard get its data?" -->
 <div id="dataOv" class="ov hidden">
@@ -1896,6 +1921,11 @@ const I18N={
   ed_del_bundled:"This round is bundled sample data built into the page, not a record in Drive or an import. It cannot be deleted from here.",
   ed_voided:"VOID", ed_corrected:"corrected",
   cf_flag:"CONFLICT", cf_resolved:"resolved",
+  cf_bar_one:"One round was sent by two phones.",
+  cf_bar_n:"{n} rounds were sent by two phones.",
+  cf_bar_sub:"Until you say which version counts, the charts are using one of them and ignoring the other.",
+  cf_bar_absent:"{n} more waiting on a machine whose file has not arrived yet.",
+  cf_bar_go:"Decide",
   cf_waiting:"{n} need a decision",
   cf_hint:"Two phones sent this inspection. Open Edit to choose which one stands.",
   cf_kept:"Using device {d} · chosen by {by}",
@@ -2277,6 +2307,11 @@ const I18N={
   ed_del_bundled:"Это встроенные демонстрационные данные страницы, а не запись в Google Диске или импорт. Отсюда их удалить нельзя.",
   ed_voided:"ОТОЗВАН", ed_corrected:"исправлено",
   cf_flag:"КОНФЛИКТ", cf_resolved:"решено",
+  cf_bar_one:"Один обход прислали два телефона.",
+  cf_bar_n:"Обходов, присланных двумя телефонами: {n}.",
+  cf_bar_sub:"Пока не выбрана верная версия, графики считают одну из них и не учитывают вторую.",
+  cf_bar_absent:"Ещё ждут решения: {n} — файл машины пока не пришёл.",
+  cf_bar_go:"Решить",
   cf_waiting:"ждут решения: {n}",
   cf_hint:"Осмотр прислали два телефона. Откройте «Правка» и выберите, какой считать верным.",
   cf_kept:"Используется устройство {d} · выбрал {by}",
@@ -6119,7 +6154,30 @@ function renderLubeTab(){
   renderLubePoster();
 }
 
-function renderAll(){ renderChips(); renderKpis(); renderCoverage(); renderTrend(); renderFleet(); renderFailure(); renderWearTab(); renderActions(); renderHistory(); renderLubeTab(); renderDueTab(); }
+/* The clashes that are still open, named, with the decision one click away.
+
+   Only the ones whose records are actually here get a button: a marker can
+   arrive before the second phone's file does, and a button that opens nothing
+   is worse than a sentence saying so. */
+function renderConflictBar(){
+  const bar=$("cfBar"); if(!bar) return;
+  const open=Object.values(conflicts).filter(c=>c&&!c.resolved&&c.key);
+  if(!open.length){ bar.className="cfbar hidden"; bar.innerHTML=""; return; }
+  const here=[], absent=[];
+  open.forEach(c=>{ (RECS.some(r=>recKey(r)===c.key) ? here : absent).push(c.key); });
+  bar.className="cfbar";
+  bar.innerHTML='<span class="cfw">\u2442 '
+    + esc(open.length===1 ? t("cf_bar_one") : t("cf_bar_n",{n:open.length})) + '</span>'
+    + '<span class="cfsub">' + esc(t("cf_bar_sub")) + '</span>'
+    + '<span class="spacer"></span>'
+    + here.map(k=>{ const [u,d,ty]=k.split("|");
+        return '<button class="btn primary" data-cfgo="'+esc(k)+'">'
+          + esc(t("cf_bar_go")) + ' \u00b7 ' + esc(u) + ' \u00b7 '
+          + esc(TYPE_LABEL[ty]||ty) + ' \u00b7 ' + esc(d) + '</button>'; }).join("")
+    + (absent.length ? '<span class="cfsub">'+esc(t("cf_bar_absent",{n:absent.length}))+'</span>' : "");
+  bar.querySelectorAll("[data-cfgo]").forEach(b=>{ b.onclick=()=>openEdit(b.dataset.cfgo); });
+}
+function renderAll(){ renderChips(); renderConflictBar(); renderKpis(); renderCoverage(); renderTrend(); renderFleet(); renderFailure(); renderWearTab(); renderActions(); renderHistory(); renderLubeTab(); renderDueTab(); }
 ["fType","fClass","fRange"].forEach(id=>$(id).onchange=renderAll);
 let qTimer=null;
 $("fQ").oninput=()=>{ clearTimeout(qTimer); qTimer=setTimeout(renderAll,180); };   // debounce, the fleet table is big

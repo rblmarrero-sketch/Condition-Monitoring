@@ -79,6 +79,49 @@ const openHist = async (p, unit) => {
   const hist = await p.textContent('#history');
   ok('the history row is flagged', /CONFLICT/.test(hist));
 
+  /* Findable without knowing where to look.
+
+     A clash used to be reported in two places only, and both of them were
+     places you had to already know: a count inside the Data sources MODAL,
+     which the office opens to set up a connection and never again, and a
+     CONFLICT flag on the Equipment history tab, visible only after picking the
+     right machine out of more than a thousand. The phone, meanwhile, puts a red
+     badge on its System tab and tells the inspector the office will decide. */
+  console.log('\nfindable without knowing where to look');
+  /* No element at all is the state this exists to catch, so it has to come
+     back as a failed claim rather than a thrown evaluate. */
+  const bar = async () => p.evaluate(() => {
+    const b2 = document.getElementById('cfBar');
+    if (!b2) return { on: false, text: 'no #cfBar on the page', go: [] };
+    return { on: !b2.classList.contains('hidden'),
+             text: (b2.innerText || '').replace(/\s+/g, ' ').trim(),
+             go: [...b2.querySelectorAll('[data-cfgo]')].map(x => x.dataset.cfgo) };
+  });
+  const b0 = await bar();
+  ok('a bar on the page says a round is waiting', b0.on, b0.text.slice(0, 60));
+  ok('and names the round it means', b0.go.includes(KEY), JSON.stringify(b0.go));
+  const missing = [];
+  for (const tab of ['failure', 'wear', 'actions', 'due', 'equipment', 'lube', 'reports']) {
+    await p.evaluate(x => showTab(x), tab);
+    await p.waitForTimeout(80);
+    if (!(await bar()).on) missing.push(tab);
+  }
+  ok('on every tab, not just the one that happened to be open',
+    missing.length === 0, missing.join(',') || 'all 8');
+  await p.evaluate(() => showTab('overview'));
+  await p.waitForTimeout(80);
+  const go1 = await p.$('[data-cfgo]');
+  if (go1) { await go1.click(); await p.waitForTimeout(400); }
+  ok('and its button opens the decision itself',
+    !!go1 && !(await p.getAttribute('#edCfCard', 'class')).includes('hidden'),
+    go1 ? '' : 'nothing to click');
+  if (go1) { await p.click('#edClose'); await p.waitForTimeout(200); }
+  /* Put the page back where this suite found it — the steps below click a row
+     on the Equipment history tab, and Playwright will not click what is not on
+     screen. */
+  await p.evaluate(() => showTab('equipment'));
+  await p.waitForTimeout(150);
+
   console.log('\nchoosing which one stands');
   await p.click(`[data-edit="${KEY}"]`); await p.waitForTimeout(300);
   ok('the edit panel shows the choice', !(await p.getAttribute('#edCfCard', 'class')).includes('hidden'));
