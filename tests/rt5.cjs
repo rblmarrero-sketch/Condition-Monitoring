@@ -193,20 +193,32 @@ const PLAN = [
 
   /* A network error message is text, never markup.
 
-     The retry timer has to be stopped first: an upload attempt starting is
-     entitled to clear the last error — that is correct behaviour — and if one
-     fires between setting lastErr and reading the bar, this is asserting
-     against "Uploading…" and fails for a reason that has nothing to do with
-     escaping. Deterministic here, exercised properly in autosync.cjs. */
-  await p.evaluate(() => {
+     Stopping the retry timer is not enough on its own, and this used to fail
+     about one sweep in ten. An upload attempt starting is entitled to clear the
+     last error — that is correct behaviour — and the 200ms wait between setting
+     lastErr and reading the bar was long enough for the periodic sync, which
+     retryTimer is not, to fire and repaint it as "Uploading…". The assertion
+     then failed for a reason with nothing to do with escaping. In a sweep of
+     137 suites a guard that cries wolf is worse than no guard: it is the noise
+     a real failure hides in.
+
+     renderSync() is ASYNC — it awaits dbAll() before it paints anything. The
+     test called it without awaiting and slept 200ms instead, which is the whole
+     flake: usually long enough, sometimes not, and long enough for a periodic
+     sync to repaint the bar underneath it. Await it and read in the SAME
+     evaluate, and there is no sleep and no window for anything to intervene.
+     Only escaping is under test here; autosync.cjs exercises the timers. */
+  const inj = await p.evaluate(async () => {
     if (typeof retryTimer !== 'undefined' && retryTimer) { clearTimeout(retryTimer); retryTimer = null; }
-    lastErr = '<img src=x onerror="window.__x=1">'; renderSync();
+    lastErr = '<img src=x onerror="window.__x=1">';
+    await renderSync();
+    const bar = document.getElementById('syncBar');
+    return { x: window.__x, imgs: bar.querySelectorAll('img').length,
+             shown: (bar.textContent || '').indexOf('onerror') >= 0,
+             text: (bar.textContent || '').slice(0, 80) };
   });
-  await p.waitForTimeout(200);
-  const inj = await p.evaluate(() => ({ x: window.__x, imgs: document.querySelectorAll('#syncBar img').length,
-    shown: (document.getElementById('syncBar').textContent || '').indexOf('onerror') >= 0 }));
   ok('a sync error cannot inject markup', !inj.x && inj.imgs === 0);
-  ok('and is shown as the text it is', inj.shown);
+  ok('and is shown as the text it is', inj.shown, inj.text);
 
   // a comma decimal is a decimal
   await setType(p, 'UC');

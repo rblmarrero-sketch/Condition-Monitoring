@@ -76,9 +76,12 @@ const vis = (p, sel) => p.evaluate(s => { const e = document.querySelector(s);
     await dbPut({ id: 'q-1', equip: 'TK999', date: todayISO(), type: 'MP', cls: 'HT',
       by: 'R. Marrero', smu: '1000', rev: 1, up: 0, created: Date.now(),
       positions: {}, photos: {}, sign: null });
-    renderPending(); renderSync(); renderNet();
+    /* Both of these are async — they await dbAll() before they paint. Called
+       without await, the sleep below is the only thing making this work, which
+       is how rt5.cjs's escaping check came to fail about one sweep in ten. */
+    await renderPending(); await renderSync(); renderNet();
   });
-  await p.waitForTimeout(600);
+  await p.waitForTimeout(300);
   ok('the sync bar comes back', await vis(p, '#syncBar'));
   const bar = (await p.textContent('#syncBar')).replace(/\s+/g, ' ').trim();
   ok('counting what is waiting', /1/.test(bar), bar);
