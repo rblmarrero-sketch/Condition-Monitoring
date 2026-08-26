@@ -89,7 +89,7 @@ itself says fuel is not a lubricant.
   6D    Swing Rear-Right
   6E    Boom slew-ring grease
 
-MODELS IN THE MASTERLIST WITH NO MACHINE ON THE REGISTER (61)
+MODELS IN THE MASTERLIST WITH NO MACHINE ON THE REGISTER (48)
 They are imported and carry no unit count, so they cost nothing
 and appear the moment a matching machine is registered.
    AMUR LYR560 Wheel Dozer (XCMG DL560)
@@ -99,32 +99,22 @@ and appear the moment a matching machine is registered.
    DENYO DLW-400LSW WELDING MACHINE
    Dongfeng Pickup
    ELAZ-BL 888 Backhoe Loader
-   Elcos Genset GE.CU.030/027.SS+011
    FORD TRANSIT DE-ICER VAN
    GAZ SADKO NEXT TRUCK, BAGGAGE
    Generac CUBE+ Super Lighting Tower
    Hanjin D&B-16GT
    Hyundai HL770-9S
    IVECO AA10,0-100 EMERGENCY EQUIPMENT FIRE-TRUCK
-   IVECO AMT 473916 EMERGENCY EQUIPMENT FIRE-TRUCK
    IVECO-AMT 653910 Tractor Truck
-   IVECO-AMT MTGE3 Tractor Truck
-   JCB VM200D COMPACTOR, ROLLER DRUM
    Komatsu WA470-6 8?
-   LiuGong CLGF330
    MAZ misc trucks
    Manitou MHT-X 10135 Tyre Handler
    NHL NTE150
    NHL NTE360
    SHINDAIWA DGW 400 Welding machine
-   SINOMACH TTC025G2 Truck Crane
    Sany SRC1200C Wheel Crane
    Shantui SG18-4
    Sunward SWDR T250
-   TEREX DEMAG AC220-5 CRANE, MOBILE
-   TEREX DEMAG AC350-6 CRANE, MOBILE
-   TEREX GENIE SX-105XC Manlift
-   TEREX GENIE SX-125XC Manlift
    TREKOL 39294 ALL-TERRAIN VEHICLE
    TRUCK , CONCRETE PUMP MERCEDES-BENZ 3340
    TRUCK, CONCRETE TRANSMIXER KAMAZ 6520-6041-43
@@ -149,24 +139,34 @@ and appear the moment a matching machine is registered.
    URAL NEXT 4320 Mechanical Truck (1891AA-0001103)
    URAL СШР-1 Snow blower Truck
    URB-2D3
-   ZOOMLION ZCC2600 260 TON
-   ZOOMLION ZRS4531 KONTAINER LOADER
-   ZOOMLION ZRT400
    ZOOMLION ZT42J
 
-EXPLICIT ALIASES — every one a judgement, check them (10)
+EXPLICIT ALIASES — every one a judgement, check them (23)
    register Boart Longyear LF-90D        = masterlist Boart Longyear LF90D Drill
    register CHSDM DZ-98V.00100-111       = masterlist CHSDM DZ-98V
+   register CLGF330                      = masterlist LiuGong CLGF330
+   register ELCOS GE.CU.030/027.SS+011   = masterlist Elcos Genset GE.CU.030/027.SS+011
    register HITACHI ZX330-5G RB          = masterlist Hitachi ZX 330-5G
    register HITACHI ZX470LC-5G           = masterlist Hitachi ZX 470
    register HITACHI ZX470LCR-5G          = masterlist Hitachi ZX 470
+   register IVECO 473916                 = masterlist IVECO AMT 473916 EMERGENCY EQUIPMENT FIRE-TRUCK
+   register JCB VM200D                   = masterlist JCB VM200D COMPACTOR, ROLLER DRUM
    register KOMATSU D275.5D              = masterlist Komatsu D275A-5
    register KOMATSU PC2000-8 BH          = masterlist KOMATSU PC2000-8
    register KOMATSU PC800-8E0 (SE)       = masterlist Komatsu PC800-8EO
    register LiuGong CLG990FHD            = masterlist LiuGong 990FHD
+   register MTGE3                        = masterlist IVECO-AMT MTGE3 Tractor Truck
+   register SX-105XC                     = masterlist TEREX GENIE SX-105XC Manlift
+   register SX-125XC                     = masterlist TEREX GENIE SX-125XC Manlift
+   register Sinomach TTC025G2-V          = masterlist SINOMACH TTC025G2 Truck Crane
+   register TEREX AC220-5                = masterlist TEREX DEMAG AC220-5 CRANE, MOBILE
+   register TEREX AC350-6                = masterlist TEREX DEMAG AC350-6 CRANE, MOBILE
    register TLP-4M                       = masterlist TLP-4M-030 (ТЛП-4М-030)
+   register ZOOMLION ZCC2600             = masterlist ZOOMLION ZCC2600 260 TON
+   register ZRS4531                      = masterlist ZOOMLION ZRS4531 KONTAINER LOADER
+   register ZRT400                       = masterlist ZOOMLION ZRT400
 
-NAMES MATCHED ACROSS THE TWO DOCUMENTS (67)
+NAMES MATCHED ACROSS THE TWO DOCUMENTS (80)
 Every one of these is a judgement the importer made. Check them.
    BOART LONGYEAR LF90D Track Drill           = Boart Longyear LF-90D
    Belarus 82.1 Tractor                       = BELARUS 82.1
@@ -177,6 +177,7 @@ Every one of these is a judgement the importer made. Check them.
    Bobcat T590 Track Loader                   = BOBCAT T590
    CAT D9R                                    = CATERPILLAR D9R
    Cat 160K                                   = CATERPILLAR 160K
+   Elcos Genset GE.CU.030/027.SS+011          = ELCOS GE.CU.030/027.SS+011
    GAZ 340901-0000012 ALL TERRAIN VEHICLE     = GAZ 340901-0000012
    HITACHI ZX210W-5A EXCAVATOR                = HITACHI ZX210W-5A
    HITACHI ZX280-5G EXCAVATOR                 = HITACHI ZX280-5G
@@ -184,7 +185,10 @@ Every one of these is a judgement the importer made. Check them.
    Hitachi EX 1200-7BH                        = HITACHI EX1200-7BH
    Hitachi ZX 330-5G                          = HITACHI ZX330-5G RB
    Hitachi ZX 470                             = HITACHI ZX470LC-5G, HITACHI ZX470LCR-5G
+   IVECO AMT 473916 EMERGENCY EQUIPMENT FIRE-TRUCK = IVECO 473916
    IVECO-AMT 653900 Dump Truck                = IVECO AMT 653900
+   IVECO-AMT MTGE3 Tractor Truck              = MTGE3
+   JCB VM200D COMPACTOR, ROLLER DRUM          = JCB VM200D
    JLG 520AJ Manlift                          = JLG 520AJ
    KOHLER J165 GENERATOR                      = KOHLER J165
    KOMATSU PC2000-8                           = KOMATSU PC2000-8 BH
@@ -196,6 +200,7 @@ Every one of these is a judgement the importer made. Check them.
    Komatsu P&H 44XT                           = KOMATSU P&H 44XT
    Komatsu PC800-8EO                          = KOMATSU PC800-8E0 (SE)
    LiuGong 990FHD                             = LiuGong CLG990FHD
+   LiuGong CLGF330                            = CLGF330
    Longyear LF-90D                            = Boart Longyear LF-90D
    Manitou M-X-50-4 Forklift                  = MANITOU M-X 50-4
    Manitou MHT-X 10180 Cylinder Handler       = MANITOU MHT-X 10180
@@ -207,6 +212,7 @@ Every one of these is a judgement the importer made. Check them.
    McCloskey J45                              = MCCLOSKEY J45
    McCloskey J50V2                            = MCCLOSKEY J50V2
    New Holland LM1345 Telescopic Handler      = New Holland LM1345
+   SINOMACH TTC025G2 Truck Crane              = Sinomach TTC025G2-V
    Sany SRC600A Wheel Crane                   = SANY SRC600A
    Shantui SD32                               = SHANTUI SD32
    Shantui SD34-B3                            = SHANTUI SD34-B3
@@ -219,7 +225,11 @@ Every one of these is a judgement the importer made. Check them.
    Shantui SR26-C5                            = SHANTUI SR26-C5
    Sunward SWDE165A                           = SUNWARD SWDE165A
    TEREX 1075L CRANE, MOBILE                  = TEREX 1075L
+   TEREX DEMAG AC220-5 CRANE, MOBILE          = TEREX AC220-5
+   TEREX DEMAG AC350-6 CRANE, MOBILE          = TEREX AC350-6
    TEREX GENIE S-60 Manlift                   = Terex - Genie S-60
+   TEREX GENIE SX-105XC Manlift               = SX-105XC
+   TEREX GENIE SX-125XC Manlift               = SX-125XC
    TEREX RT100 CRANE, MOBILE                  = TEREX RT100
    TRUCK , BOOM KAMAZ 65117-776010-19         = KAMAZ 65117-776010-19
    TRUCK , DUMP KAMAZ 65201-6010-49(B5)       = KAMAZ 65201-6010-49(B5)
@@ -227,6 +237,9 @@ Every one of these is a judgement the importer made. Check them.
    URAL 32551-5013-71 Crew bus                = URAL 32551-5013-71
    URAL 43441C-10 АЦ 6.0-70 Fire-truck        = URAL 43441C-10 АЦ 6.0-70
    URAL 58498А-0000020 Crew bus               = URAL 58498А-0000020
+   ZOOMLION ZCC2600 260 TON                   = ZOOMLION ZCC2600
+   ZOOMLION ZRS4531 KONTAINER LOADER          = ZRS4531
+   ZOOMLION ZRT400                            = ZRT400
 
 OEM SPEC STRINGS, MOST USED FIRST
     87  15W-40

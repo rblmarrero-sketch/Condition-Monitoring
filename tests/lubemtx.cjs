@@ -99,8 +99,13 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
 
   console.log("\n── what the matrix cannot draw is listed, not dropped");
   const gaps = await p.evaluate(() => {
+    /* The "nothing to report" placeholder is the one row that spans the table;
+       every other row is a real one. Filtering on .muted used to do this, and
+       broke silently the day a column gained a muted dash for "no suggestion" —
+       the guard then counted 4 of 162 while every other assertion still passed.
+       A structural test, not a cosmetic one. */
     const rows = id => [...document.querySelectorAll("#" + id + " tbody tr")]
-      .filter(tr => !tr.querySelector(".muted"));
+      .filter(tr => !tr.querySelector("td[colspan]"));
     const noRef = rows("lgNoRef"), noMach = rows("lgNoMach");
     const unitsOf = trs => trs.reduce((a, tr) =>
       a + Number((tr.lastElementChild.textContent || "0").replace(/[^\d]/g, "") || 0), 0);
@@ -131,6 +136,44 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
      "the guard is exercising a real gap, not an empty one",
      `${gaps.dark} dark refs, ${gaps.missUnits} uncovered machines`);
   ok(/\d/.test(gaps.note), "and a sentence says how big it is", gaps.note.slice(0, 120));
+
+  console.log("\n── the gap list is a work list, not a complaint");
+  /* Beside each uncovered machine, the reference we hold that resembles it —
+     so 162 names become an afternoon for one person instead of a wall. It has
+     to stay a QUESTION: the moment a resemblance reads as a decision, somebody
+     puts a loader on a truck's compartments. */
+  const sug = await p.evaluate(() => {
+    const rows = [...document.querySelectorAll("#lgNoRef tbody tr")]
+      .filter(tr => !tr.querySelector("td[colspan]"));
+    const withOne = rows.filter(tr => tr.querySelector(".maybe"));
+    return {
+      rows: rows.length,
+      offered: withOne.length,
+      cells: rows[0] ? rows[0].children.length : 0,
+      /* Every suggestion must name a reference that is genuinely unused —
+         suggesting one already in service would be pointing at the wrong row. */
+      allDark: withOne.every(tr => {
+        const m = tr.querySelector(".maybe").textContent.trim();
+        return LUBE.models.some(k => {
+          const cls = k.slice(0, k.indexOf("|")), name = k.slice(cls.length + 1);
+          const r = LUBE.of(name, cls);
+          return name === m && !(r && r.n);
+        });
+      }),
+      titled: withOne.every(tr => (tr.querySelector(".maybe").title || "").length > 20),
+      biggest: withOne.map(tr => [tr.children[1].textContent.trim(),
+        Number(tr.lastElementChild.textContent.replace(/[^0-9]/g, "") || 0)])
+        .sort((a, b) => b[1] - a[1])[0] || null,
+    };
+  });
+  ok(sug.cells === 4, "the table carries the suggestion column", String(sug.cells));
+  ok(sug.offered > 0, "and offers at least one", `${sug.offered} of ${sug.rows}`);
+  ok(sug.offered < sug.rows, "without pretending to answer them all",
+     `${sug.offered} of ${sug.rows}`);
+  ok(sug.allDark, "every suggestion names a reference nobody is using");
+  ok(sug.titled, "and says on hover that it is a resemblance, not a decision");
+  ok(sug.biggest && sug.biggest[1] >= 10,
+     "the largest fleet with a suggestion is worth chasing", JSON.stringify(sug.biggest));
 
   /* The panel must not be a second, quieter copy of the coverage funnel. */
   const prog = await p.evaluate(() => lubeProgramme());

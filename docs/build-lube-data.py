@@ -194,6 +194,28 @@ ALIAS = {
     "LiuGong CLG990FHD":        "LiuGong 990FHD",
     "TLP-4M":                   "TLP-4M-030 (ТЛП-4М-030)",
     "CHSDM DZ-98V.00100-111":   "CHSDM DZ-98V",
+
+    # Same model code on both sides; the register drops the make, or the
+    # masterlist appends what the machine IS. Category agrees on every one
+    # (loader/loader, crane/crane, manlift/manlift, compactor/compactor), and
+    # the code is unique in both documents — so these are the same machine, not
+    # a resemblance. 32 machines that had no lubrication standard now have one.
+    "CLGF330":                             "LiuGong CLGF330",
+    "ELCOS GE.CU.030/027.SS+011":          "Elcos Genset GE.CU.030/027.SS+011",
+    "TEREX AC220-5":                       "TEREX DEMAG AC220-5 CRANE, MOBILE",
+    "TEREX AC350-6":                       "TEREX DEMAG AC350-6 CRANE, MOBILE",
+    "ZRT400":                              "ZOOMLION ZRT400",
+    "IVECO 473916":                        "IVECO AMT 473916 EMERGENCY EQUIPMENT FIRE-TRUCK",
+    "MTGE3":                               "IVECO-AMT MTGE3 Tractor Truck",
+    "JCB VM200D":                          "JCB VM200D COMPACTOR, ROLLER DRUM",
+    "SX-105XC":                            "TEREX GENIE SX-105XC Manlift",
+    "SX-125XC":                            "TEREX GENIE SX-125XC Manlift",
+    "ZRS4531":                             "ZOOMLION ZRS4531 KONTAINER LOADER",
+    # Two more where the codes differ by a suffix rather than by the make. Same
+    # class of judgement as the HITACHI ZX330-5G RB and KOMATSU D275.5D lines
+    # above, and marked here for the same reason: somebody should confirm them.
+    "ZOOMLION ZCC2600":                    "ZOOMLION ZCC2600 260 TON",
+    "Sinomach TTC025G2-V":                 "SINOMACH TTC025G2 Truck Crane",
     # NOT aliased on purpose, and listed so the omission is visible:
     #   CATERPILLAR 336-07  vs  CAT 336D — a 336-07 is not a 336D.
     #   HITROCK HMB4500 / HB3500 / HB4500+ — no breaker in the masterlist yet.
