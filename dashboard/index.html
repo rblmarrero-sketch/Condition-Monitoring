@@ -188,6 +188,19 @@
      than one wide one. */
   /* A title line that can carry its own legend or denominator, so neither
      needs a row of its own. */
+  /* Sub-navigation inside a tab. Quieter than the rail — it is a view of one
+     subject, not a different destination — and it scrolls sideways only on a
+     phone, where seven names cannot fit any other way. */
+  .subtabs{display:flex;gap:2px;margin-bottom:var(--s3);padding-bottom:2px;
+    border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;}
+  .subtabs::-webkit-scrollbar{display:none;}
+  .subtabs button{flex:none;border:0;background:none;color:var(--muted);cursor:pointer;
+    font:600 12.5px inherit;font-family:inherit;padding:6px 12px;border-radius:7px 7px 0 0;
+    border-bottom:2px solid transparent;margin-bottom:-3px;white-space:nowrap;}
+  .subtabs button:hover{color:var(--ink-2);background:var(--surface-2);}
+  .subtabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent);}
+  .subtabs button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;}
+  .lsub.hidden{display:none;}
   .secthd{display:flex;align-items:baseline;gap:var(--s2);margin-bottom:var(--s2);min-width:0;}
   .secthd .spacer{flex:1;}
   .secthd .hint{font-size:var(--t-tiny);color:var(--muted);white-space:nowrap;}
@@ -1852,14 +1865,25 @@
   </section>
 
   <section id="tab-lube" class="hidden">
+    <!-- Seven panels of a lubrication programme, which as one continuous page
+         ran to several thousand pixels and behaved like a report rather than a
+         screen: to reach the fleet matrix you scrolled past the funnel, the
+         standard, the 2027 shelf and the machine reference. They are seven
+         views of one subject, so they are seven tabs. Every one still renders
+         on every refresh — nothing here changes what is counted, only what is
+         in front of you. -->
+    <div class="subtabs" id="lubeSub" role="tablist" aria-label="Lubrication"></div>
 
 
+    <div class="lsub" data-lsub="cover">
     <div class="section">
       <h2 data-i18n="lp_title">The programme, honestly counted</h2>
       <div class="sub" data-i18n="lp_sub">How much of the fleet is audited, verified and standardised — against the register, not against the machines somebody happened to visit. Every number states its denominator, because those two get mistaken for each other and that is how a programme reports 90% and means 90% of eleven machines.</div>
       <div id="lubeProg"></div>
     </div>
 
+    </div>
+    <div class="lsub" data-lsub="std">
     <div class="section">
       <h2 data-i18n="ls_title">Deciding the standard</h2>
       <div class="sub" data-i18n="ls_sub">Not product by product — requirement by requirement. Machines that need the same thing are one decision, however many badges are on them. Choose, and the matrix and the posters re-read.</div>
@@ -1867,6 +1891,8 @@
       <div class="sub" id="lsNote" style="margin-top:12px"></div>
     </div>
 
+    </div>
+    <div class="lsub" data-lsub="rec">
     <div class="section">
       <h2 data-i18n="lc_title">The 2027 shelf against the recommendations</h2>
       <div class="sub" data-i18n="lc_sub">Specification 02 rev CO-05 is what the site may actually buy. The fleet matrices say what should go in each compartment. Where the two do not line up, somebody has either told a fitter to use an oil nobody ordered, or ordered an oil for nothing — and the season is a third answer neither of them can show.</div>
@@ -1874,6 +1900,8 @@
       <div class="scrollbox" style="--sb:480px;border-top:0"><div id="lcLists"></div></div>
     </div>
 
+    </div>
+    <div class="lsub" data-lsub="ref">
     <div class="section">
       <h2 data-i18n="lr_title">Machine reference</h2>
       <div class="sub" data-i18n="lr_sub">Capacities, specifications and intervals, per model. A capacity is the one number here that causes a failure on its own — an under-filled final drive seizes, an over-filled one blows a seal — so changing it asks where the figure came from.</div>
@@ -1892,6 +1920,8 @@
       <div class="sub" id="lrNote" style="margin-top:10px"></div>
     </div>
 
+    </div>
+    <div class="lsub" data-lsub="matrix">
     <div class="section">
       <h2 data-i18n="lm_title">Fleet matrix</h2>
       <div class="sub" data-i18n="lm_sub">Every asset class on one sheet — compartment, capacity, interval, and the oil that belongs in it. Colour is identity and nothing else: which product, never how good it is.</div>
@@ -1911,6 +1941,8 @@
          above, because the matrix can only draw where the two lists meet. The
          import has always known about both and wrote them to a text file in the
          repository, which is to say nowhere. -->
+    </div>
+    <div class="lsub" data-lsub="exc">
     <div class="section">
       <h2 data-i18n="lg_title">Not on the sheet</h2>
       <div class="sub" data-i18n="lg_sub">The matrix can only show a machine where the register's spelling of its model and the reference's spelling of its model meet. Where they miss each other, the machine has no lubrication standard and nothing above says so. Both halves are listed here: nothing is dropped quietly.</div>
@@ -1928,6 +1960,8 @@
       <div class="sub" id="lgNote" style="margin-top:10px"></div>
     </div>
 
+    </div>
+    <div class="lsub" data-lsub="shop">
     <div class="section">
       <h2 data-i18n="lpo_title">Shop posters</h2>
       <div class="sub" data-i18n="lpo_sub">The sheet that goes on the workshop wall. A standard that lives only in a database is not a standard — this is the version a fitter reads at arm's length with a head-torch, so it is bilingual, it is large, and it says what to do when the right drum is empty.</div>
@@ -1946,6 +1980,7 @@
         <button class="btn primary" id="lpoPrint" data-i18n="lpo_print">🖨 Print</button>
       </div>
       <div class="posterbox"><div class="poster" id="lpoSheet"></div></div>
+    </div>
     </div>
   </section>
 
@@ -2172,6 +2207,13 @@ const I18N={
   cv_less:"Show fewer",
   cv_fleet:"of {n} machines",
   s_fleet2:"Condition by equipment",
+  lt_cover:"Programme coverage",
+  lt_std:"Standards",
+  lt_rec:"Recommendations",
+  lt_ref:"Machine reference",
+  lt_matrix:"Fleet matrix",
+  lt_exc:"Exceptions",
+  lt_shop:"Shop materials",
   lm_all:"All classes", lm_machine:"Machine", lm_notset:"Not audited", lm_nocomp:"No such compartment",
   lm_alias:"recorded by make; identified as {m}", lm_csv:"⬇ Export CSV",
   lg_title:"Not on the sheet",
@@ -2598,6 +2640,13 @@ const I18N={
   cv_less:"Свернуть",
   cv_fleet:"из {n} машин",
   s_fleet2:"Состояние по технике",
+  lt_cover:"Охват программы",
+  lt_std:"Нормативы",
+  lt_rec:"Рекомендации",
+  lt_ref:"Справочник машин",
+  lt_matrix:"Карта парка",
+  lt_exc:"Исключения",
+  lt_shop:"Материалы цеха",
   lm_all:"Все классы", lm_machine:"Машина", lm_notset:"Не проверено", lm_nocomp:"Нет такого узла",
   lm_alias:"записано по марке; определено как {m}", lm_csv:"⬇ Экспорт CSV",
   lg_title:"Не попало на лист",
@@ -7226,6 +7275,51 @@ function dueCsv(){
   setTimeout(()=>URL.revokeObjectURL(a.href),4000);
 }
 
+/* Which of the seven is showing. Remembered, because somebody working through
+   the fleet matrix on Tuesday is working through the fleet matrix on Wednesday. */
+const LSUBK="cm_dash_lubesub";
+const LSUBS=[["cover","lt_cover"],["std","lt_std"],["rec","lt_rec"],["ref","lt_ref"],
+             ["matrix","lt_matrix"],["exc","lt_exc"],["shop","lt_shop"]];
+let lubeSub=(function(){ try{ const v=localStorage.getItem(LSUBK);
+  return LSUBS.some(x=>x[0]===v)?v:"cover"; }catch(e){ return "cover"; } })();
+function renderLubeSub(){
+  const bar=$("lubeSub"); if(!bar) return;
+  bar.innerHTML=LSUBS.map(([k,lab])=>
+    `<button type="button" role="tab" data-lsub="${k}" aria-selected="${k===lubeSub}"
+      aria-controls="lsub-${k}">${esc(t(lab))}</button>`).join("");
+  bar.querySelectorAll("button[data-lsub]").forEach(b=>{
+    b.onclick=()=>{ lubeSub=b.dataset.lsub;
+      try{ localStorage.setItem(LSUBK,lubeSub); }catch(e){}
+      renderLubeSub(); };
+    /* Arrow keys walk a tablist. Without it the only way to the seventh panel
+       is a mouse, which is not a way for everybody. */
+    b.onkeydown=e=>{
+      const d=e.key==="ArrowRight"?1:e.key==="ArrowLeft"?-1:0; if(!d) return;
+      e.preventDefault();
+      const ix=LSUBS.findIndex(x=>x[0]===lubeSub);
+      lubeSub=LSUBS[(ix+d+LSUBS.length)%LSUBS.length][0];
+      try{ localStorage.setItem(LSUBK,lubeSub); }catch(err){}
+      renderLubeSub();
+      const nb=bar.querySelector('button[aria-selected="true"]'); if(nb) nb.focus();
+    };
+  });
+  document.querySelectorAll("#tab-lube .lsub").forEach(d=>{
+    d.id="lsub-"+d.dataset.lsub;
+    d.setAttribute("role","tabpanel");
+    d.classList.toggle("hidden", d.dataset.lsub!==lubeSub);
+  });
+}
+
+/* One way in, for a deep link, a test, or anything that needs to put a reader
+   in front of a particular panel rather than describing where to click. */
+function lubeGo(k){
+  if(!LSUBS.some(x=>x[0]===k)) return false;
+  lubeSub=k;
+  try{ localStorage.setItem(LSUBK,k); }catch(e){}
+  renderLubeSub(); return true;
+}
+window.lubeGo=lubeGo;
+
 function renderLubeTab(){
   /* It used to open filtered to the BIGGEST class, and the biggest class is GEN
      — 940 of the 1,128 machines on site, which is every light vehicle, genset,
@@ -7259,6 +7353,7 @@ function renderLubeTab(){
   renderLubeMtx();
   renderLubeGaps();
   renderLubePoster();
+  renderLubeSub();
 }
 
 /* The clashes that are still open, named, with the decision one click away.

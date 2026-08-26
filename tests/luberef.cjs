@@ -31,6 +31,11 @@ const eq = (g, w, what) => ok(JSON.stringify(g) === JSON.stringify(w),
   await p.goto(URL, { waitUntil: "load" });
   await p.waitForTimeout(2200);
   await p.click('#tabs [data-tab="lube"]');
+  /* Lubrication is seven panels behind sub-tabs now — as one page it ran to
+     several thousand pixels and you scrolled past four subjects to reach the
+     fifth. A test has to ask for the panel it is testing, the same way a
+     reader clicks for it. lubeGo() is the one way in. */
+  await p.evaluate(k => lubeGo(k), 'ref');
   await p.waitForTimeout(500);
 
   console.log("── the editor is on screen and offers every model");

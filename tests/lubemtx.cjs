@@ -40,6 +40,11 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
   await p.goto(URL, { waitUntil: "load" });
   await p.waitForTimeout(2200);
   await p.click('#tabs [data-tab="lube"]');
+  /* Lubrication is seven panels behind sub-tabs now — as one page it ran to
+     several thousand pixels and you scrolled past four subjects to reach the
+     fifth. A test has to ask for the panel it is testing, the same way a
+     reader clicks for it. lubeGo() is the one way in. */
+  await p.evaluate(k => lubeGo(k), 'matrix');
   await p.waitForTimeout(600);
 
   console.log("\n── the sheet the tab lands on");

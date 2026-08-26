@@ -50,7 +50,7 @@ const SEED = (n) => {
     RECS.push({ id: "seed" + i, equip: x.u, type: "LUBE",
                 date: "2026-08-18", by: "Test", items });
   });
-  renderAll(); showTab("lube");
+  renderAll(); showTab("lube"); lubeGo("matrix");
   return pick;
 };
 
@@ -68,6 +68,11 @@ const SEED = (n) => {
   ok(await p.$eval("#tabs", el => !!el.querySelector('[data-tab="lube"]')),
      "there is a Lubrication tab a person can click");
   await p.click('#tabs [data-tab="lube"]');
+  /* Lubrication is seven panels behind sub-tabs now — as one page it ran to
+     several thousand pixels and you scrolled past four subjects to reach the
+     fifth. A test has to ask for the panel it is testing, the same way a
+     reader clicks for it. lubeGo() is the one way in. */
+  await p.evaluate(k => lubeGo(k), 'matrix');
   await p.waitForTimeout(400);
   ok(await p.$eval("#tab-lube", el => !el.classList.contains("hidden")),
      "clicking it shows the panel");
