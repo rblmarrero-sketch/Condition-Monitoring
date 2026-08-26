@@ -186,6 +186,30 @@
      Twelve columns; a section says how many it wants. Below 1180px everything
      is full width again, because two narrow columns of dense table are worse
      than one wide one. */
+  /* A title line that can carry its own legend or denominator, so neither
+     needs a row of its own. */
+  .secthd{display:flex;align-items:baseline;gap:var(--s2);margin-bottom:var(--s2);min-width:0;}
+  .secthd .spacer{flex:1;}
+  .secthd .hint{font-size:var(--t-tiny);color:var(--muted);white-space:nowrap;}
+  .secthd .lgnd{display:flex;gap:var(--s2);font-size:var(--t-tiny);color:var(--muted);flex-wrap:wrap;}
+  .secthd .lgnd i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px;
+    vertical-align:-1px;background:var(--c,var(--none));}
+  /* Methodology, on demand. It used to be two lines of prose above every table
+     — true, useful once, and read past every day after that. */
+  .method{margin-top:var(--s2);border-top:1px solid var(--border);padding-top:var(--s2);}
+  .method>summary{cursor:pointer;font-size:var(--t-tiny);color:var(--muted);
+    list-style:none;display:inline-flex;align-items:center;gap:5px;}
+  .method>summary::-webkit-details-marker{display:none;}
+  .method>summary::before{content:"›";display:inline-block;transition:transform .15s var(--ease);}
+  .method[open]>summary::before{transform:rotate(90deg);}
+  .method>summary:hover{color:var(--ink-2);}
+  .method .sub{margin-top:var(--s2);}
+  /* One sentence, where a paragraph used to be. */
+  .insight{margin-top:var(--s2);padding:var(--s2) var(--s3);border-radius:8px;
+    background:var(--surface-2);border-left:3px solid var(--accent);
+    font-size:var(--t-small);color:var(--ink-2);line-height:1.4;}
+  .insight:empty{display:none;}
+  table.grid td.num,table.grid th.num{text-align:right;font-variant-numeric:tabular-nums;}
   .grid12{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--s4);align-items:start;}
   .g4{grid-column:span 4;} .g5{grid-column:span 5;} .g6{grid-column:span 6;}
   .g7{grid-column:span 7;} .g8{grid-column:span 8;}
@@ -887,7 +911,8 @@
   .pos video.photo{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;
     background:#000;cursor:zoom-in;}
   .hidden{display:none!important;}
-  .legend{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;font-size:12.5px;color:var(--ink-2);margin-top:12px;}
+  .legend{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;font-size:var(--t-tiny);color:var(--ink-2);margin-top:12px;}
+  .secthd .legend{margin-top:0;justify-content:flex-end;}
   .legend .sw{width:13px;height:13px;border-radius:4px;display:inline-block;margin-right:5px;vertical-align:-2px;}
 
   /* ---- one visual language with the printed report ----------------------
@@ -1064,6 +1089,10 @@
   /* the breakdown of a headline, inside its own card */
   .lcparts{display:flex;flex-wrap:wrap;gap:var(--s1) var(--s2);margin-top:var(--s3);
     padding-top:var(--s2);border-top:1px solid var(--border);}
+  .minibtn{border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);
+    border-radius:99px;padding:2px 9px;font:inherit;font-size:var(--t-tiny);cursor:pointer;
+    font-family:inherit;}
+  .minibtn:hover{color:var(--ink);border-color:var(--axis);}
   .lcpart{border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);
     border-radius:99px;padding:3px 9px;font:inherit;font-size:var(--t-tiny);cursor:pointer;
     font-family:inherit;}
@@ -1654,25 +1683,42 @@
          full-width slabs, which is why this tab ran to four and a half
          thousand pixels on a 1600px monitor with 360px of it unused. -->
     <div class="grid12">
+      <!-- Two panels that answer one question between them: is the programme
+           being walked, and is it working. Their titles were sentences —
+           "Coverage — was the round actually walked" — which is a caption, not
+           a name. The sentence is still true and still worth reading, so it is
+           behind "How this is counted" rather than deleted: methodology on
+           demand, the number always. -->
       <div class="section g7">
-        <h2 data-i18n="cv_title">Coverage — was the round actually walked</h2>
-        <div class="sub" data-i18n="cv_sub">Machines this round applies to, against machines it reached, in the period selected above. A finding you never went to look for is not an absence of findings.</div>
+        <div class="secthd"><h2 data-i18n="cv_title2">Inspection coverage</h2>
+          <span class="spacer"></span><span class="hint" id="covFleet"></span></div>
         <div class="tblwrap"><table class="grid" id="covTbl"></table></div>
-        <div class="sub" id="covNote" style="margin-top:10px"></div>
+        <div class="shown" id="covMore"></div>
+        <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
+          <div class="sub" data-i18n="cv_sub">Machines this round applies to, against machines it reached, in the period selected above. A finding you never went to look for is not an absence of findings.</div>
+          <div class="sub" id="covNote" style="margin-top:6px"></div></details>
       </div>
       <div class="section g5">
-        <h2 data-i18n="tr_title">Direction — is the fleet getting better or worse</h2>
-        <div class="sub" data-i18n="tr_sub">Findings by month, worst on top. Read the shape, not the last bar: one month is a sample, three is a trend.</div>
+        <div class="secthd"><h2 data-i18n="tr_title2">Condition trend</h2>
+          <span class="spacer"></span><span class="lgnd" id="trendKey"></span></div>
         <div id="trendChart"></div>
-        <div class="sub" id="trendNote" style="margin-top:10px"></div>
+        <div class="insight" id="trendNote"></div>
+        <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
+          <div class="sub" data-i18n="tr_sub">Findings by month, worst on top. One month is a sample; three is a trend.</div></details>
       </div>
     </div>
+    <!-- The operational table. It was 701px with a 560px viewport inside it,
+         which put its first row below the fold on a 768 screen — the one table
+         a reliability engineer opens the page to read. 340px starts it in view
+         and leaves the next section showing, which is what tells a reader
+         there IS a next section. -->
     <div class="section">
-      <h2 data-i18n="s_fleet">Condition by equipment — latest inspection</h2>
-      <div class="sub" data-i18n="s_fleet_sub">Worst severity found on each unit's most recent inspection. Click a unit to open its history.</div>
-      <div class="tblwrap scrollbox" style="--sb:560px"><table class="grid" id="fleetTbl"></table></div>
+      <div class="secthd"><h2 data-i18n="s_fleet2">Condition by equipment</h2>
+        <span class="spacer"></span><span class="legend" id="sevLegend"></span></div>
+      <div class="tblwrap scrollbox" style="--sb:340px"><table class="grid" id="fleetTbl"></table></div>
       <div class="shown" id="fleetShown"></div>
-      <div class="legend" id="sevLegend"></div>
+      <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
+        <div class="sub" data-i18n="s_fleet_sub">Worst severity found on each unit's most recent inspection. Click a unit to open its history.</div></details>
     </div>
   </section>
 
@@ -2119,6 +2165,13 @@ const I18N={
   hh_by:"By",
   hv_none:"Nothing recorded on this round",
   hv_open:"Open the full record",
+  cv_title2:"Inspection coverage",
+  tr_title2:"Condition trend",
+  how_counted:"How this is counted",
+  cv_all:"Show all {n} rounds",
+  cv_less:"Show fewer",
+  cv_fleet:"of {n} machines",
+  s_fleet2:"Condition by equipment",
   lm_all:"All classes", lm_machine:"Machine", lm_notset:"Not audited", lm_nocomp:"No such compartment",
   lm_alias:"recorded by make; identified as {m}", lm_csv:"⬇ Export CSV",
   lg_title:"Not on the sheet",
@@ -2538,6 +2591,13 @@ const I18N={
   hh_by:"Кто",
   hv_none:"По этому обходу ничего не записано",
   hv_open:"Открыть полную запись",
+  cv_title2:"Охват осмотров",
+  tr_title2:"Динамика состояния",
+  how_counted:"Как это считается",
+  cv_all:"Показать все обходы: {n}",
+  cv_less:"Свернуть",
+  cv_fleet:"из {n} машин",
+  s_fleet2:"Состояние по технике",
   lm_all:"Все классы", lm_machine:"Машина", lm_notset:"Не проверено", lm_nocomp:"Нет такого узла",
   lm_alias:"записано по марке; определено как {m}", lm_csv:"⬇ Экспорт CSV",
   lg_title:"Не попало на лист",
@@ -4567,25 +4627,39 @@ function renderCoverage(){
      spread over two columns, and the eye has to reconcile them before it can
      move on. The bar IS the percentage, so the percentage rides on it and the
      fraction sits beneath as the audit trail. */
+  const thn=k=>`<th class="num">${esc(t(k))}</th>`;
+  /* Five rows, then the rest on request. Eight rounds is eight rows and this
+     panel shares a screen with four others; the two that matter are always the
+     worst-covered, and they are sorted to the top already. */
+  const CAP=5, all=covOpen||rows.length<=CAP, show=all?rows:rows.slice(0,CAP);
   $("covTbl").innerHTML=`<thead><tr>${th("cv_th_round")}
-      <th style="min-width:132px">${esc(t("cv_th_seen"))}</th>
-      ${th("cv_th_insp")}${th("cv_th_never")}${th("cv_th_over")}
-      ${th("cv_th_who")}</tr></thead><tbody>`
-    + rows.map(r=>{
+      <th style="min-width:126px">${esc(t("cv_th_seen"))}</th>
+      ${thn("cv_th_insp")}${thn("cv_th_never")}${thn("cv_th_over")}
+      ${thn("cv_th_who")}</tr></thead><tbody>`
+    + show.map(r=>{
         const bad = r.pc<50;
+        /* A zero is quiet unless it is the wrong kind of zero. "Never done: 0"
+           is good news and should not shout; "never done: 1,112" is the largest
+           gap in the programme and should. */
+        const n=(v,warn)=>`<td class="num mono${v&&warn?" bad":!v?" muted":""}">${v}</td>`;
         return `<tr><td><b>${esc(TYPE_LABEL[r.ty]||r.ty)}</b>
             <div class="muted" style="font-size:11px">${esc(t("cv_every",{d:r.iv}))}${
               r.scoped?" · "+esc(t("cv_scoped")):""}</div></td>
           <td class="covcell">
             <div class="covrow"><span class="covpc${bad?" bad":""}">${r.pc}%</span>${covBar(r.pc)}</div>
             <div class="muted mono" style="font-size:11px">${r.seen} / ${r.total}</div></td>
-          <td class="mono">${r.inspections}</td>
-          <td class="mono${r.never?" bad":""}">${r.never}</td>
-          <td class="mono${r.overdue?" bad":""}">${r.overdue}</td>
-          <td class="mono">${r.people}</td></tr>`;
+          ${n(r.inspections,0)}${n(r.never,1)}${n(r.overdue,1)}${n(r.people,0)}</tr>`;
       }).join("")+`</tbody>`;
+  $("covFleet").textContent=t("cv_fleet",{n:fmtN(fleet)});
+  $("covMore").innerHTML = rows.length>CAP
+    ? `<span>${esc(t("shown_n",{n:show.length,of:rows.length}))}</span><span class="spacer"></span>
+       <button class="minibtn" id="covToggle">${esc(all?t("cv_less"):t("cv_all",{n:rows.length}))}</button>`
+    : "";
+  const tg=$("covToggle");
+  if(tg) tg.onclick=()=>{ covOpen=!covOpen; renderCoverage(); };
   $("covNote").textContent=t("cv_note",{n:fleet, p:days?t("cv_p_days",{d:days}):t("cv_p_all")});
 }
+let covOpen=false;
 /* Findings by month, stacked worst-on-top, with the number of inspections that
    produced them underneath. Deliberately NOT one chart with two y scales: the
    count of findings and the count of rounds are different things and drawing
@@ -4606,7 +4680,7 @@ function renderTrend(){
   const ms=trendMonths();
   if(ms.length<2){
     $("trendChart").innerHTML=`<div class="empty"><b>${esc(t("tr_none"))}</b><span>${esc(t("tr_none_s"))}</span></div>`;
-    $("trendNote").textContent=""; return; }
+    $("trendKey").innerHTML=""; $("trendNote").textContent=""; return; }
   const worst=Math.max(1,...ms.map(x=>x.CRI+x.DEG+x.INC));
   const bars=ms.map(x=>{
     const tot=x.CRI+x.DEG+x.INC;
@@ -4624,12 +4698,15 @@ function renderTrend(){
       <span>${esc(x.k.slice(2))}</span>
       <u>${x.rounds}</u></div>`;
   }).join("");
-  $("trendChart").innerHTML=`<div class="tlegend">
-      <span><i class="s-cri"></i>${esc(SEV.CRI?SEV.CRI.l:"Critical")}</span>
-      <span><i class="s-deg"></i>${esc(SEV.DEG?SEV.DEG.l:"Degraded")}</span>
-      <span><i class="s-inc"></i>${esc(SEV.INC?SEV.INC.l:"Incipient")}</span>
-      <span class="muted">${esc(t("tr_rounds"))}</span>
-    </div><div class="trend">${bars}</div>`;
+  /* The key rides on the title line. A legend of its own cost a row of the
+     panel and pushed the columns into a shorter box — a chart that spends its
+     height explaining its colours is a chart with less chart in it. */
+  $("trendKey").innerHTML=
+      `<span><i style="--c:var(--critical)"></i>${esc(SEV.CRI?SEV.CRI.l:"Critical")}</span>`
+    + `<span><i style="--c:var(--serious)"></i>${esc(SEV.DEG?SEV.DEG.l:"Degraded")}</span>`
+    + `<span><i style="--c:var(--warning)"></i>${esc(SEV.INC?SEV.INC.l:"Incipient")}</span>`
+    + `<span>${esc(t("tr_rounds"))}</span>`;
+  $("trendChart").innerHTML=`<div class="trend">${bars}</div>`;
   /* One sentence of direction, because a chart nobody reads out loud is a
      chart nobody acts on. Compares the last month with the average of the
      three before it, and says plainly when there is not enough to say. */

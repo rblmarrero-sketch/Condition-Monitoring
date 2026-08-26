@@ -101,7 +101,11 @@ const cov = () => [...document.querySelectorAll('#covTbl tbody tr')].map(tr => {
   const tr = await p.evaluate(() => ({
     months: [...document.querySelectorAll('#trendChart .tmon')].length,
     stacks: [...document.querySelectorAll('#trendChart .tstack')].length,
-    legend: [...document.querySelectorAll('#trendChart .tlegend span')].length,
+    /* The key rides on the panel's title line now, not inside the plot. A
+       legend of its own cost a row of chart height, and a chart that spends
+       its height explaining its colours has less chart in it. Same guarantee,
+       same panel, one line up. */
+    legend: [...document.querySelectorAll('#trendKey span')].length,
     note: document.getElementById('trendNote').textContent,
   }));
   ok('a bar per month', tr.months >= 3, tr.months + ' month(s)');
