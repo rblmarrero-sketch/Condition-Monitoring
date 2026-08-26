@@ -1454,8 +1454,8 @@
 
       <div class="srccard" id="edDelCard" style="margin-top:14px;border-color:var(--critical)">
         <div class="srchead"><span class="ico">🗑</span><div><b data-i18n="ed_del">Delete permanently</b>
-          <div class="muted"><span data-i18n="ed_del_sub1">Removes the sidecar, every photo, the signature and any correction. Files go to Drive's</span>
-            <b data-i18n="ed_trash">trash</b> <span data-i18n="ed_del_sub2">— recoverable for 30 days — and the deletion is logged.</span>
+          <div class="muted"><span id="edDelSub"><span data-i18n="ed_del_sub1">Removes the sidecar, every photo, the signature and any correction. Files go to Drive's</span>
+            <b data-i18n="ed_trash">trash</b> <span data-i18n="ed_del_sub2">— recoverable for 30 days — and the deletion is logged.</span></span>
             <div class="note" id="edDelOff" style="margin-top:9px"></div></div></div></div>
         <div class="srcbody">
           <div class="field"><label for="edAdmin" data-i18n="ed_admin">Admin password</label>
@@ -2145,6 +2145,7 @@ const I18N={
   ed_del_sub1:"Removes the sidecar, every photo, the signature and any correction. Files go to Drive's",
   ed_trash:"trash",
   ed_del_sub2:"— recoverable for 30 days — and the deletion is logged with your name and reason.",
+  ed_del_sub_srv:"Removes the sidecar, every photo, the signature and any correction from the bucket — permanently. There is no trash on this server: what is deleted is gone. The deletion is logged with your name, and a marker stops the phones re-uploading the round.",
   ed_del_off:"Deletion is switched off. An admin has to set ADMIN_SECRET in the Apps Script and deploy a new version. Until then use Void above — it withdraws the round from every count, chart and report, keeps the photos, and can be undone.",
   ed_del_off_srv:"Deletion is switched off. An admin has to set ADMIN_SECRET on the upload server — on the VM: add it to /opt/cm/cm.env, then sudo systemctl restart cm. Until then use Void above — it withdraws the round from every count, chart and report, keeps the photos, and can be undone.",
   ed_del_on:"Deletion is switched on. The password is the one set in the Apps Script — it is never stored here.",
@@ -2543,6 +2544,7 @@ const I18N={
   ed_del_sub1:"Удаляет запись, все фото, подпись и правки. Файлы уходят в",
   ed_trash:"корзину Диска",
   ed_del_sub2:"— восстановимо 30 дней — и удаление фиксируется с вашим именем и причиной.",
+  ed_del_sub_srv:"Удаляет запись, все фото, подпись и правки из бакета — безвозвратно. Корзины на этом сервере нет: удалённое не вернуть. Удаление фиксируется с вашим именем, и метка не даёт телефонам загрузить осмотр заново.",
   ed_del_off:"Удаление выключено. Администратор должен задать ADMIN_SECRET в Apps Script и опубликовать новую версию. До этого пользуйтесь «Отозвать» выше — осмотр исключается из всех подсчётов, графиков и отчётов, фото сохраняются, действие обратимо.",
   ed_del_off_srv:"Удаление выключено. Администратор должен задать ADMIN_SECRET на сервере загрузки — на ВМ: добавить в /opt/cm/cm.env и выполнить sudo systemctl restart cm. До этого пользуйтесь «Отозвать» выше — осмотр исключается из всех подсчётов, графиков и отчётов, фото сохраняются, действие обратимо.",
   ed_del_on:"Удаление включено. Пароль — тот, что задан в Apps Script; здесь он не сохраняется.",
@@ -4584,6 +4586,14 @@ function openEdit(key,keepMsg){
      script.google.com to configure a machine that Google has never heard of.
      The URL in use says which world we are in. */
   const gasBackend=/script\.google\.com/.test((window.CMDrive&&CMDrive.url)||"");
+  /* And what deleting DOES differs with it. On Drive the files go to a trash
+     that holds them for thirty days; on the site's own server delObj removes
+     them from the bucket outright and nothing brings them back. The panel used
+     to promise the Drive behaviour on both — which is the one sentence in this
+     product that must never overpromise. */
+  const sub=$("edDelSub");
+  if(sub && !gasBackend){ sub.textContent=""; const sp=document.createElement("span");
+    sp.dataset.i18n="ed_del_sub_srv"; sp.textContent=t("ed_del_sub_srv"); sub.appendChild(sp); }
   if(note){ note.textContent = cw==="0" ? t("ed_del_stale")
               : cd==="0" ? t(gasBackend?"ed_del_off":"ed_del_off_srv")
               : cd==="1" ? t("ed_del_on") : t("ed_del_unknown");
