@@ -161,9 +161,22 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
         });
       }),
       titled: withOne.every(tr => (tr.querySelector(".maybe").title || "").length > 20),
-      biggest: withOne.map(tr => [tr.children[1].textContent.trim(),
-        Number(tr.lastElementChild.textContent.replace(/[^0-9]/g, "") || 0)])
+      /* Either kind of answer counts: a resemblance to confirm, or a reason it
+         cannot be confirmed. What must never happen is the biggest fleet on the
+         list carrying neither. */
+      biggestDecided: rows.filter(tr => tr.querySelector(".maybe, .settled"))
+        .map(tr => [tr.children[1].textContent.trim(),
+          Number(tr.lastElementChild.textContent.replace(/[^0-9]/g, "") || 0)])
         .sort((a, b) => b[1] - a[1])[0] || null,
+      /* The 70 Hilux are the case this exists for: the register cannot tell an
+         automatic from a manual, so the panel must show the REASON and must not
+         offer a reference to alias by eye. */
+      hilux: (() => {
+        const tr = rows.find(x => /HILUX/i.test(x.children[1].textContent));
+        if (!tr) return null;
+        return { settled: !!tr.querySelector(".settled"), maybe: !!tr.querySelector(".maybe"),
+                 why: (tr.querySelector(".settled") || {}).title || "" };
+      })(),
     };
   });
   ok(sug.cells === 4, "the table carries the suggestion column", String(sug.cells));
@@ -172,8 +185,14 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
      `${sug.offered} of ${sug.rows}`);
   ok(sug.allDark, "every suggestion names a reference nobody is using");
   ok(sug.titled, "and says on hover that it is a resemblance, not a decision");
-  ok(sug.biggest && sug.biggest[1] >= 10,
-     "the largest fleet with a suggestion is worth chasing", JSON.stringify(sug.biggest));
+  ok(sug.biggestDecided && sug.biggestDecided[1] >= 10,
+     "the largest uncovered fleet carries an answer of some kind",
+     JSON.stringify(sug.biggestDecided));
+  ok(sug.hilux && sug.hilux.settled && !sug.hilux.maybe,
+     "a question already settled shows its reason, not a resemblance",
+     JSON.stringify(sug.hilux && { settled: sug.hilux.settled, maybe: sug.hilux.maybe }));
+  ok(sug.hilux && /transmission/i.test(sug.hilux.why) && /register/i.test(sug.hilux.why),
+     "and the reason says what would settle it", (sug.hilux && sug.hilux.why || "").slice(0, 90));
 
   /* The panel must not be a second, quieter copy of the coverage funnel. */
   const prog = await p.evaluate(() => lubeProgramme());

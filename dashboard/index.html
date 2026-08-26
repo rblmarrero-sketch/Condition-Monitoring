@@ -182,6 +182,8 @@
   .shown .spacer{flex:1;}
   /* A question, not an answer: dotted underline, the colour of a note. */
   .maybe{border-bottom:1px dotted var(--warn-ink);cursor:help;}
+  /* An answer, not a question — so it must not wear the question's colour. */
+  .settled{color:var(--muted);border-bottom:1px dotted var(--border);cursor:help;}
   .controls{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;margin-bottom:18px;}
   .field{display:flex;flex-direction:column;gap:5px;}
   .field label{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);}
@@ -1727,6 +1729,7 @@
         <div class="g6">
           <div class="fld"><span data-i18n="lg_nomach">References reaching no machine</span></div>
           <div class="tblwrap scrollbox" style="--sb:360px"><table class="grid" id="lgNoMach"></table></div>
+          <div class="sub" data-i18n="lg_ahead" style="margin-top:8px">A reference with no machine is not always a fault: several are for equipment specified or on order but not yet on site. It is listed so the reference and the fleet can be read against each other, not as a defect list.</div>
         </div>
       </div>
       <div class="sub" id="lgNote" style="margin-top:10px"></div>
@@ -1965,6 +1968,9 @@ const I18N={
   lg_maybe:"Might be this reference",
   lg_maybe_t:"A resemblance, not a decision. This reference has {n} compartments and covers no machine. If it is the same machine, add the register's spelling as an alias in docs/build-lube-data.py and rebuild — nothing here applies it.",
   lg_note2:"{n} of them resemble a reference nobody is using; each one confirmed puts a standard on real machines.",
+  lg_note3:"{n} have been asked about and cannot be settled from the register — hover to see what is needed.",
+  lg_settled:"asked — cannot be told apart", lg_need:"needs {n}",
+  lg_ahead:"A reference with no machine is not always a fault: several are for equipment specified or on order but not yet on site. It is listed so the reference and the fleet can be read against each other, not as a defect list.",
   lg_note:"{a} machines across {b} register models have no lubrication reference. {c} references cover no machine in the register. Most of both are the same problem seen from two sides: the two documents spell the model differently. Each one settled adds a standard to real machines — send the pairs to whoever maintains the reference.",
   lg_hidden:"{n} hidden by the class filter",
   lpo_title:"Shop posters", lpo_sub:"The sheet that goes on the workshop wall. The preview is shown reduced \u2014 it prints at full size.",
@@ -2367,6 +2373,9 @@ const I18N={
   lg_maybe:"Возможно, этот справочник",
   lg_maybe_t:"Сходство, а не решение. В этом справочнике {n} узлов, и он не относится ни к одной машине. Если это та же машина — добавьте написание из реестра как псевдоним в docs/build-lube-data.py и пересоберите; здесь ничего не применяется автоматически.",
   lg_note2:"Из них {n} похожи на неиспользуемый справочник; каждое подтверждение даёт норматив реальным машинам.",
+  lg_note3:"По {n} вопрос задан, и по реестру его решить нельзя — наведите курсор, чтобы увидеть, чего не хватает.",
+  lg_settled:"спрошено — не различить", lg_need:"нужно: {n}",
+  lg_ahead:"Справочник без машины — не всегда ошибка: часть относится к технике, которая заказана, но ещё не на площадке. Список нужен, чтобы сверять справочник с парком, а не как перечень дефектов.",
   lg_note:"{a} машин по {b} моделям реестра не имеют норматива смазки. {c} справочников не относятся ни к одной машине реестра. В основном это одна и та же проблема с двух сторон: два документа пишут модель по-разному. Каждая решённая пара даёт норматив реальным машинам — передайте пары тому, кто ведёт справочник.",
   lg_hidden:"{n} скрыто фильтром класса",
   lpo_title:"Плакаты для мастерской", lpo_sub:"Лист, который вешается на стену цеха. Предпросмотр уменьшен \u2014 печатается в полном размере.",
@@ -6386,21 +6395,34 @@ function renderLubeGaps(){
 
   const hd = (a,b,c,d) => `<thead><tr><th>${esc(t(a))}</th><th>${esc(t(b))}</th>${
     d?`<th>${esc(t(d))}</th>`:""}<th class="num">${esc(t(c))}</th></tr></thead>`;
-  let suggested = 0;
+  let suggested = 0, settled = 0;
+  /* Where the question has been asked and answered, the ANSWER goes here — not
+     a resemblance. Offering "Toyota Hilux AT Pickup" beside 70 machines the
+     register cannot tell apart is an invitation to alias them by eye and put
+     the wrong transmission oil in half the fleet. A stated reason also stops
+     the same question being re-argued every few months. */
+  const cell = (r) => {
+    const u = window.LUBE && LUBE.undecidedFor ? LUBE.undecidedFor(r.m) : null;
+    if(u){ settled++;
+      return `<span class="settled" title="${esc(u.why + " \u2014 " + t("lg_need",{n:u.need})
+        + " (" + (u.by||"?") + ", " + (u.at||"") + ")")}">${esc(t("lg_settled"))}</span>`; }
+    const n = near(r.m);
+    if(!n) return `<span class="muted">\u2014</span>`;
+    suggested++;
+    return `<span class="maybe" title="${esc(t("lg_maybe_t",{n:n.comps}))}">${esc(n.m)}</span>`;
+  };
   noRef.innerHTML = hd("lg_class","lg_model","lg_units","lg_maybe") + (mrows.length
-    ? `<tbody>${mrows.map(r=>{
-        const n = near(r.m); if(n) suggested++;
-        return `<tr><td>${esc(t("cls_"+r.cls)||r.cls||"\u2014")}</td><td>${esc(r.m)}</td><td>${
-          n ? `<span class="maybe" title="${esc(t("lg_maybe_t",{n:n.comps}))}">${esc(n.m)}</span>`
-            : `<span class="muted">\u2014</span>`}</td><td class="num">${esc(fmtN(r.n))}</td></tr>`;
-      }).join("")}</tbody>`
+    ? `<tbody>${mrows.map(r=>
+        `<tr><td>${esc(t("cls_"+r.cls)||r.cls||"\u2014")}</td><td>${esc(r.m)}</td><td>${
+          cell(r)}</td><td class="num">${esc(fmtN(r.n))}</td></tr>`).join("")}</tbody>`
     : `<tbody><tr><td colspan="4" class="muted">${esc(t("lg_none"))}</td></tr></tbody>`);
   noMach.innerHTML = hd("lg_class","lg_model","lg_comps") + (drows.length
     ? `<tbody>${drows.map(r=>`<tr><td>${esc(r.cls==="?"?"\u2014":(t("cls_"+r.cls)||r.cls))}</td><td>${
         esc(r.m)}</td><td class="num">${esc(fmtN(r.comps))}</td></tr>`).join("")}</tbody>`
     : `<tbody><tr><td colspan="3" class="muted">${esc(t("lg_none2"))}</td></tr></tbody>`);
   $("lgNote").textContent = t("lg_note",{a:fmtN(missUnits), b:fmtN(mrows.length), c:fmtN(drows.length)})
-    + (suggested ? " " + t("lg_note2",{n:fmtN(suggested)}) : "");
+    + (suggested ? " " + t("lg_note2",{n:fmtN(suggested)}) : "")
+    + (settled ? " " + t("lg_note3",{n:fmtN(settled)}) : "");
 }
 
 /* One row per model x compartment, which is the shape somebody puts in front of

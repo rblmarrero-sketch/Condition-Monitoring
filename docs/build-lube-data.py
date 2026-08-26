@@ -221,6 +221,24 @@ ALIAS = {
     #   HITROCK HMB4500 / HB3500 / HB4500+ — no breaker in the masterlist yet.
 }
 
+# Register spellings that CANNOT be aliased, and why — answers, not omissions.
+#
+# The difference between this and the two commented lines above is that these
+# were asked and settled. A machine left uncovered for a stated reason is a
+# decision; the same machine uncovered for no stated reason is an oversight
+# waiting to be re-argued every few months. The dashboard prints the reason
+# beside the machine instead of offering a resemblance, so nobody aliases it by
+# eye and puts the wrong oil in.
+UNDECIDED = {
+    "TOYOTA HILUX": {
+        "why": "The register files 70 of them under one name and does not say "
+               "which are automatic; the masterlist splits AT from MT. Aliasing "
+               "either way puts the wrong transmission oil in some of them.",
+        "need": "the transmission recorded per unit in the register",
+        "by": "R. Marrero", "at": "2026-08-26",
+    },
+}
+
 # ── matching a masterlist name to a register name ────────────────────────
 # The same machine is spelled several ways across the two documents:
 # Liugong / LiuGong / Luigong, CAT / CATERPILLAR, PC800-8EO with a letter O
@@ -630,6 +648,15 @@ def main():
                 var c = this.comp(model, k, cls);
                 return !!(c && c.cap != null && !c.verify); },
     catalog:  CATALOG,
+    /* Why a machine has no reference, where somebody has answered that
+       question. Keyed by the REGISTER's spelling, because that is the name the
+       office is looking at when it asks. */
+    undecided: UNDECIDED,
+    undecidedFor: function(regModel){
+      var n = norm(regModel), hit = null;
+      Object.keys(UNDECIDED).forEach(function(k){ if(norm(k) === n) hit = UNDECIDED[k]; });
+      return hit;
+    },
     product:  function(name){
                 return CATALOG.filter(function(p){ return norm(p.p) === norm(name); })[0] || null; },
     /* What belongs in this compartment: one product, by type. The whole point
@@ -764,6 +791,10 @@ def main():
         f.write("  /* Brand is the EDGE, not the fill — see build-lube-data.py. */\n")
         f.write("  var BRANDS = " + json.dumps(brands, ensure_ascii=False) + ";\n\n")
         f.write("  var COMP_TYPE = " + json.dumps(comp_type, ensure_ascii=False) + ";\n\n")
+        f.write("  /* Asked, answered, and not aliasable — see UNDECIDED in the\n"
+                "     build script. The dashboard prints the reason where it would\n"
+                "     otherwise offer a resemblance. */\n")
+        f.write("  var UNDECIDED = " + json.dumps(UNDECIDED, ensure_ascii=False) + ";\n\n")
         f.write("  var MODELS = " + json.dumps(models, ensure_ascii=False,
                                                separators=(",", ":")) + ";\n")
         f.write(TAIL)
