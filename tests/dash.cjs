@@ -78,14 +78,18 @@ const recs = () => {
   const chips2 = (await p.textContent('#chips')).replace(/\s+/g, ' ');
   ok('clicking a failure mode filters the dashboard', /Defect/.test(chips2), chips2.trim());
   await p.click('nav.tabs button[data-tab="actions"]'); await p.waitForTimeout(250);
-  /* Grouped worklist, not a table: the defect sits in the second cell of a row. */
-  /* nth-of-type counts SPANS, not .cell spans — the row also holds .sev and
-     .go, so nth-of-type(2) was the wrong element. Take the cells properly. */
-  const actDefects = await p.$$eval('#actionTbl .wlr',
-    rows => rows.map(r => { const c = r.querySelectorAll('.cell');
-      return c[1] ? (c[1].querySelector('.t1') || c[1]).textContent.trim() : ''; }));
+  /* The register has two shapes — a sortable table, which is what it opens on,
+     and the grouped worklist. A row is a row in both, and in both the defect is
+     the text the drill-down filtered ON, so the check is: every row names it.
+     Reading the row's whole text rather than one cell's position means this
+     keeps working when a column moves, which is the thing that broke it. */
+  const actDefects = await p.$$eval('#actionTbl [data-fu]',
+    rows => rows.map(r => r.textContent.replace(/\s+/g, ' ').trim()));
   ok('the action register follows the drill-down',
-     actDefects.length > 0 && actDefects.every(d => d.startsWith(barLabel.slice(0, 12))),
+     /* Contains, not starts-with: the row now leads with its severity word.
+        The guarantee is that every row in the register names the defect the
+        drill-down filtered on, wherever in the row that lands. */
+     actDefects.length > 0 && actDefects.every(d => d.includes(barLabel.slice(0, 12))),
      `${actDefects.length} rows, all "${barLabel.slice(0, 20)}"`);
   await p.click('#chipClear'); await p.waitForTimeout(300);
 

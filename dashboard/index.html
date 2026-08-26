@@ -2270,6 +2270,7 @@ const I18N={
   av_table:"Table",
   av_unit:"By machine",
   av_group:"How to show the register",
+  a_th_find:"Finding → action",
   lm_all:"All classes", lm_machine:"Machine", lm_notset:"Not audited", lm_nocomp:"No such compartment",
   lm_alias:"recorded by make; identified as {m}", lm_csv:"⬇ Export CSV",
   lg_title:"Not on the sheet",
@@ -2711,6 +2712,7 @@ const I18N={
   av_table:"Таблица",
   av_unit:"По машинам",
   av_group:"Как показать реестр",
+  a_th_find:"Находка → действие",
   lm_all:"Все классы", lm_machine:"Машина", lm_notset:"Не проверено", lm_nocomp:"Нет такого узла",
   lm_alias:"записано по марке; определено как {m}", lm_csv:"⬇ Экспорт CSV",
   lg_title:"Не попало на лист",
@@ -3960,7 +3962,7 @@ function renderActions(){
      name on it. Both shapes, and the sortable one opens. */
   if(actView==="table"){
     const val=(x,k)=>({ sev:sevRank(sevOf(x.r,x.i)), unit:x.r.equip, comp:x.i.label||x.i.key,
-      date:x.r.date||"", act:x.i.actionLabel||"", owner:x.i.owner||"",
+      date:x.r.date||"", act:(x.i.defect||"")+" "+(x.i.actionLabel||""), owner:x.i.owner||"",
       due:x.i.due||"9999-99-99", age:(fAgeDays(x.r,x.i)||0), st:stName(x.i.status) }[k]);
     const list=shown.slice().sort((a,b)=>{
       const p1=val(a,actSort.k), p2=val(b,actSort.k);
@@ -3968,7 +3970,7 @@ function renderActions(){
       return (c || a.r.equip.localeCompare(b.r.equip))*actSort.dir;
     });
     const cols=[["sev",t("th_sev")],["unit",t("th_unit")],["comp",t("a_th_comp")],
-                ["date",t("th_date")],["act",t("hh_action")],["owner",t("a_th_owner")],
+                ["date",t("th_date")],["act",t("a_th_find")],["owner",t("a_th_owner")],
                 ["due",t("a_th_due")],["age",t("a_th_age")],["st",t("a_th_status")]];
     $("actionTbl").innerHTML=`<div class="tblwrap scrollbox" style="--sb:520px"><table class="grid">
       <thead><tr>${cols.map(([k,l])=>
@@ -3989,8 +3991,15 @@ function renderActions(){
               <span class="trunc">${esc(i.label||i.key)}
                 <span class="muted">${esc(i.key)}</span></span></td>
             <td class="mono">${esc(r.date||"")}</td>
-            <td title="${esc((i.actionLabel||"")+(i.defect?" — "+i.defect:""))}"><span class="trunc">${
-              esc(i.actionLabel||"—")}</span></td>
+            <!-- The finding, then what to do about it, on one line. The
+                 defect was moved to the title to buy row height and that was
+                 wrong twice over: it is what the Pareto drill-down filters on,
+                 so a register following a drill-down showed no evidence of it,
+                 and it is the thing a planner is scanning for. It leads the
+                 cell; the action follows it, muted. -->
+            <td title="${esc((i.defect||"")+(i.actionLabel?" \u2192 "+i.actionLabel:""))}">
+              <span class="trunc">${i.defect?esc(i.defect):'<span class="muted">\u2014</span>'}${
+                i.actionLabel?` <span class="muted">\u2192 ${esc(i.actionLabel)}</span>`:""}</span></td>
             <td>${i.owner?`<span class="who"><i>${esc(initials0(i.owner))}</i><span>${esc(i.owner)}</span></span>`
                         :`<span class="who none"><i>+</i><span>${esc(t("a_assign"))}</span></span>`}</td>
             <td class="mono">${i.due?`<span class="due ${od?"late":(dd!=null&&dd<=7?"soon":"")}"><b>${
