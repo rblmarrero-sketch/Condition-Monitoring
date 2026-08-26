@@ -1865,6 +1865,7 @@ const I18N={
   k_att_t:"Show only these findings", k_act_t:"Open the action register",
   k_same:"no change", k_vsprev:"vs the period before",
   w_k_go:"Show these in the register below",
+  lc_go:"Open this list",
   k_act:"Actions to plan", k_mix:"Severity mix",
   k_units:"{n} unit(s)", k_finds:"items with a record", k_attsub:"degraded + critical",
   k_actsub:"excluding “monitor”", k_none_here:"None in this view", k_only:"Show only {x}",
@@ -2252,6 +2253,7 @@ const I18N={
   k_att_t:"Показать только эти находки", k_act_t:"Открыть реестр действий",
   k_same:"без изменений", k_vsprev:"к предыдущему периоду",
   w_k_go:"Показать их в списке ниже",
+  lc_go:"Открыть список",
   k_act:"Действий к планированию", k_mix:"Распределение",
   k_units:"ед.: {n}", k_finds:"позиций с записью", k_attsub:"ухудшено + критично",
   k_actsub:"без «наблюдать»", k_none_here:"Нет в этой выборке", k_only:"Только {x}",
@@ -5456,13 +5458,24 @@ function renderLubeCat(){
        and is empty in every row of both, so nothing in this standard is
        currently traceable to a data sheet. */
     ["lc_tds",    tds,                "lc_tds_s",    tds ? "" : "t-bad"],
-  ].map(([k,v,sub,tone])=>
-    `<div class="kpi ${tone}"><div class="k">${esc(t(k))}</div>` +
-    `<div class="v">${fmtN(v)}</div>` +
-    `<div class="s">${esc(t(sub,{n:rows}))}</div></div>`).join("");
+  ].map(([k,v,sub,tone])=>{
+    /* The four that name a set open the set. The two that do not — how many
+       products are on the shelf, how many data sheets are on file — stay plain
+       numbers, because a control that appears when it cannot act is how a
+       reader learns to stop pressing any of them. */
+    const go={lc_off:"lc_hdr_off", lc_un:"lc_hdr_un",
+              lc_season:"lc_hdr_season", lc_disp:"lc_hdr_disp"}[k];
+    const body=`<span class="k">${esc(t(k))}</span>`
+      + `<span class="v">${fmtN(v)}</span>`
+      + `<span class="s">${esc(t(sub,{n:rows}))}</span>`;
+    return go && v
+      ? `<button type="button" class="kpi ${tone}" data-lcgo="${esc(go)}"
+           title="${esc(t("lc_go"))}">${body}</button>`
+      : `<div class="kpi ${tone}">${body}</div>`;
+  }).join("");
 
   const list = (key, items, render) => items.length
-    ? `<details class="cat"><summary><b>${esc(t(key))}</b>` +
+    ? `<details class="cat" data-lclist="${esc(key)}"><summary><b>${esc(t(key))}</b>` +
       `<i>${items.length}</i></summary><div class="catbody">` +
       items.map(render).join("") + `</div></details>`
     : "";
@@ -5483,6 +5496,15 @@ function renderLubeCat(){
     list("lc_hdr_notes", C.notes, x =>
       `<div class="catrow"><b>${esc(x.m)} — ${esc(x.comp)}</b>` +
       `<i class="prose">${esc(x.text)}</i></div>`);
+
+  /* Pressing the count opens the list it counts and puts it on screen. */
+  kp.querySelectorAll("[data-lcgo]").forEach(b=>b.onclick=()=>{
+    const d=box.querySelector(`[data-lclist="${b.dataset.lcgo}"]`);
+    if(!d) return;
+    box.querySelectorAll("details.cat").forEach(x=>{ if(x!==d) x.open=false; });
+    d.open=true;
+    d.scrollIntoView({block:"nearest", behavior:"smooth"});
+  });
 }
 
 /* ── deciding the site standard ───────────────────────────────────────────
