@@ -108,12 +108,46 @@ const EXPECT = [
   console.log('every captured field reaches the history screen');
   /* The whole tab, not just the list: the unit code is in the section heading
      above the cards, which is where a reader sees it. Scoping to #history alone
-     reported a missing unit on a screen that was showing it in 20px type. */
-  const screen = await p.evaluate(() =>
+     reported a missing unit on a screen that was showing it in 20px type.
+
+     And the drawer, opened from the first row. History now leads with a table —
+     eleven rounds scannable in one screen instead of one photo card per
+     position — and a table row cannot carry a work order, a priority, a
+     particle count and a baseline as well. They are one click away, on the same
+     machine, without navigating anywhere: that is still "it reaches a person",
+     which is what this file is for. What it must never become is "it is in the
+     export", so the drawer is opened HERE, by clicking a row the way a reader
+     would, and the assertion fails if the click does not produce it. */
+  const openRow = async () => {
+    const row = await p.$('#history tr.hrow');
+    ok('a history row opens the full record', !!row);
+    if (!row) return '';
+    await row.click();
+    await p.waitForTimeout(350);
+    const open = await p.evaluate(() => !document.getElementById('drw').classList.contains('hidden'));
+    ok('and the drawer is what opens', open);
+    return p.evaluate(() => document.getElementById('drw').innerText.replace(/\s+/g, ' '));
+  };
+  const tab = await p.evaluate(() =>
     document.getElementById('tab-equipment').innerText.replace(/\s+/g, ' '));
+  const screen = tab + ' ' + (await openRow());
   note('screen holds', screen.length + ' characters');
   EXPECT.forEach(([name, re]) => ok(name + ' is on screen', re.test(screen),
     re.test(screen) ? '' : 'not found'));
+
+  /* The other view has to carry them too, or a reader who prefers photographs
+     is reading a different, smaller record than a reader who prefers the list. */
+  console.log('\nand the photo view is not a poorer record');
+  const photo = await p.evaluate(async () => {
+    document.getElementById('drwClose').click();
+    document.querySelector('#histView button[data-hv="photo"]').click();
+    await new Promise(r => setTimeout(r, 500));
+    return document.getElementById('tab-equipment').innerText.replace(/\s+/g, ' ');
+  });
+  const missing = EXPECT.filter(([, re]) => !re.test(photo)).map(([n]) => n);
+  ok('every field is in the photo view as well', missing.length === 0, missing.join(', '));
+  await p.evaluate(() => document.querySelector('#histView button[data-hv="list"]').click());
+  await p.waitForTimeout(400);
 
   console.log('\nand the reason a point could not be measured');
   ok('a skipped point says why', /Packed with mud|packed/i.test(screen));

@@ -75,6 +75,11 @@ const state = () => ({
     showTab('equipment');
     const s = document.getElementById('equipSel'); s.value = 'TK900';
     s.dispatchEvent(new Event('change'));
+    /* This file is about the photo VIEW — every frame on the card, the clip
+       marked as a clip, the strip that shows there are ten. History opens on
+       the list now, which is a table of findings and deliberately carries a
+       count rather than the frames themselves. Ask for the view under test. */
+    document.querySelector('#histView button[data-hv="photo"]').click();
   }, BASE);
   await p.waitForTimeout(900);
 

@@ -65,6 +65,12 @@
        label ("Equipment history") without the 34px of dead gutter the old
        232 carried. */
     --sbw:198px; --sbw-shut:54px;
+    /* main's horizontal padding, as a token — the sticky filter bar cancels it
+       with a negative margin so the bar reaches the edges, and the two have to
+       be the same number. They were not below 900px, where main drops to 12px
+       and the bar was still pulling 16, which put 4px of the page off the
+       right edge on a tablet. */
+    --mainpad:var(--s4);
     --rail:#16242c; --rail-ink:#f2f6f8; --rail-muted:#9db0ba;
     --rail-hov:rgba(255,255,255,.07); --rail-on:rgba(255,255,255,.12);
     --rail-line:rgba(255,255,255,.12);
@@ -134,7 +140,7 @@
     background:var(--critical);color:#fff;}
   nav.tabs .nb.warn{background:var(--warning);color:#3a2a00;}
   nav.tabs .nb:empty{display:none;}
-  main{max-width:var(--page-max);margin:0 0 0 var(--sbw);padding:var(--s3) var(--s4) var(--s6);}
+  main{max-width:var(--page-max);margin:0 0 0 var(--sbw);padding:var(--s3) var(--mainpad) var(--s6);}
   /* The rail folds twice: to an icon rail on a laptop, to a top strip on a
      phone — the same buttons, never a second navigation. */
   /* One set of rules for the folded rail, reached two ways: the reader
@@ -172,7 +178,7 @@
       font-size:10.5px;line-height:1.4;}
     header.app{margin-left:0;position:static;}
   }
-  @media (max-width:900px){ main{padding:var(--s4) var(--s3) var(--s6);} }
+  @media (max-width:900px){ :root{--mainpad:var(--s3);} main{padding:var(--s3) var(--mainpad) var(--s6);} }
 
   /* ── THE GRID ────────────────────────────────────────────────────────────
      Sections were full-width slabs in one column, so a wide screen showed one
@@ -218,7 +224,7 @@
      Sticky under the header, because a filter you have scrolled past is a
      filter you have forgotten you set. */
   .controls{display:flex;flex-wrap:wrap;gap:var(--s2) var(--s3);align-items:center;
-    padding:var(--s2) var(--s4);margin:0 calc(-1 * var(--s4)) var(--s3);
+    padding:var(--s2) var(--mainpad);margin:0 calc(-1 * var(--mainpad)) var(--s3);
     background:var(--surface);border-bottom:1px solid var(--border);
     position:sticky;top:40px;z-index:19;}
   .controls .field{flex-direction:row;align-items:center;gap:var(--s2);}
@@ -296,8 +302,8 @@
   .pfdot{fill:var(--accent);stroke:var(--surface);stroke-width:2;}
   .pfband{fill:var(--serious);opacity:.09;}
   /* adding and removing a position's media */
-  .medit{padding:6px 12px 0;}
-  .medit .mtog{background:none;border:0;padding:2px 0;color:var(--accent);font:600 11.5px inherit;
+  .medit{padding:4px 8px 0;}
+  .medit .mtog{background:none;border:0;padding:2px 0;color:var(--accent);font:600 11px inherit;
     font-family:inherit;cursor:pointer;}
   .medit .mpanel{padding:6px 0 2px;}
   .medit .mlist{display:flex;flex-wrap:wrap;gap:6px;align-items:center;}
@@ -405,7 +411,56 @@
   .insp{border:1px solid var(--border);border-radius:12px;margin-bottom:16px;overflow:hidden;}
   .insp .head{display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:12px 16px;background:var(--surface-2);border-bottom:1px solid var(--border);}
   .insp .head .date{font-weight:640;} .insp .head .meta{color:var(--ink-2);font-size:12.5px;} .insp .head .spacer{flex:1;}
-  .pos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;padding:16px;}
+  /* FOUR, at desktop. auto-fill with a 230px floor put three across and left
+     the fourth alone on a row of its own — a machine with four final drives is
+     four positions, and it should read as one row of four. Explicit columns,
+     minmax(0,1fr) so a long defect name shrinks the cell instead of widening
+     it, and min-width:0 all the way down for the same reason. */
+  .pos-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--s2);padding:var(--s3);}
+  .pos-grid>*{min-width:0;}
+  @media (max-width:1500px){ .pos-grid{grid-template-columns:repeat(4,minmax(0,1fr));} }
+  @media (max-width:1100px){ .pos-grid{grid-template-columns:repeat(2,minmax(0,1fr));} }
+  @media (max-width:640px){ .pos-grid{grid-template-columns:minmax(0,1fr);} }
+  /* One photograph is one photograph. Stretching it across the page was how a
+     single frame came to occupy half a screen. */
+  .pos-grid.one{grid-template-columns:minmax(0,320px);}
+
+  /* ── the two views of a machine's history ──────────────────────────────
+     A photograph is evidence, not a layout unit. Scanning eleven rounds for
+     "what is getting worse on this truck" is a table job; looking at the swarf
+     is a picture job. Both, and the table is what opens. */
+  .hview{display:flex;gap:2px;background:var(--surface-2);border:1px solid var(--border);
+    border-radius:8px;padding:2px;}
+  .hview button{border:0;background:none;color:var(--muted);font:600 12px inherit;font-family:inherit;
+    padding:4px 10px;border-radius:6px;cursor:pointer;display:flex;align-items:center;gap:5px;}
+  .hview button.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.10);}
+  .hview svg{width:14px;height:14px;}
+  table.grid tr.hrow{cursor:pointer;}
+  table.grid tr.hrow:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;}
+  td.phc{white-space:nowrap;color:var(--muted);font-variant-numeric:tabular-nums;}
+  td.phc svg{width:12px;height:12px;vertical-align:-2px;margin-right:3px;}
+  /* Severity is never colour alone: a dot, then the word. */
+  .sevcell{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;}
+  .sevcell i{width:8px;height:8px;border-radius:2px;flex:none;background:var(--sc,var(--none));}
+  .trunc{display:block;max-width:0;min-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+  /* ── the detail drawer ─────────────────────────────────────────────────
+     Everything a row could not hold, without leaving the list to get it. */
+  .drwscrim{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:59;}
+  .drwscrim.hidden{display:none;}
+  .drw{position:fixed;top:0;right:0;bottom:0;width:min(460px,100vw);z-index:61;
+    background:var(--surface);border-left:1px solid var(--border);
+    box-shadow:-12px 0 40px rgba(0,0,0,.18);display:flex;flex-direction:column;
+    transform:translateX(0);transition:transform .18s var(--ease);}
+  .drw.hidden{transform:translateX(102%);pointer-events:none;}
+  .drwhd{display:flex;align-items:center;gap:var(--s2);padding:var(--s3) var(--s4);
+    border-bottom:1px solid var(--border);flex:none;}
+  .drwhd b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .drwbody{padding:var(--s3) var(--s4) var(--s6);overflow:auto;flex:1;}
+  .drwshots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s2);margin-bottom:var(--s3);}
+  .drwshots img,.drwshots video{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:6px;
+    background:var(--surface-2);cursor:zoom-in;display:block;}
+  @media (prefers-reduced-motion:reduce){ .drw{transition:none;} }
   .pos{border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--surface);}
   .pos .photo{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:var(--surface-2);cursor:zoom-in;}
   .pos .nophoto{width:100%;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;color:var(--muted);background:var(--surface-2);font-size:12px;}
@@ -819,7 +874,10 @@
   .pos .shots{position:relative;}
   .pos .shotn{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.66);color:#fff;
     font:700 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;padding:4px 7px;border-radius:999px;}
-  .pos .strip{display:flex;gap:4px;padding:4px;overflow-x:auto;background:var(--surface-2);
+  /* Was overflow-x:auto — a horizontal slider inside a card, which is the one
+     thing this redesign forbids. It wraps now; a position with nine frames
+     shows nine, on as many rows as it needs. */
+  .pos .strip{display:flex;flex-wrap:wrap;gap:3px;padding:4px;background:var(--surface-2);
     scrollbar-width:thin;}
   .pos .strip .th{flex:0 0 auto;width:46px;height:36px;padding:0;border:1px solid var(--border);
     border-radius:5px;overflow:hidden;background:var(--surface);cursor:pointer;position:relative;}
@@ -1345,6 +1403,16 @@
 <div id="cfBar" class="cfbar hidden"></div>
 
 <!-- One place that answers "where does the dashboard get its data?" -->
+<!-- One position, in full, without leaving the list that named it. -->
+<div id="drwScrim" class="drwscrim hidden"></div>
+<aside id="drw" class="drw hidden" role="dialog" aria-modal="true" aria-labelledby="drwTitle">
+  <div class="drwhd"><b id="drwTitle"></b>
+    <button class="btn" id="drwRpt" data-i18n="r_one_go">Report</button>
+    <button class="btn" id="drwEdit" data-i18n="ed_edit">Edit</button>
+    <button class="btn" id="drwClose" data-i18n-title="close" title="Close" aria-label="Close">✕</button></div>
+  <div class="drwbody" id="drwBody"></div>
+</aside>
+
 <div id="dataOv" class="ov hidden">
   <div class="sheet">
     <div class="sheethead"><b data-i18n="datasources">Data sources</b><button class="btn" id="dataClose" data-i18n="close">Close</button></div>
@@ -1695,6 +1763,14 @@
       <div class="hhd">
         <div><h2 id="histTitle">Inspection history</h2>
           <div class="sub" id="histSub"></div></div>
+        <div class="hview" id="histView" role="group" data-i18n-title="hv_group" title="How to show this history">
+          <button type="button" data-hv="list" class="on" data-i18n-title="hv_list" title="List">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg>
+            <span data-i18n="hv_list">List</span></button>
+          <button type="button" data-hv="photo" data-i18n-title="hv_photo" title="Photos">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="m4.5 17 4.8-4.3 3.4 3 2.6-2.2 4.2 3.5"/></svg>
+            <span data-i18n="hv_photo">Photos</span></button>
+        </div>
         <button class="btn primary" id="histRpt" data-i18n="r_unit_go">📄 Report on this machine</button>
       </div>
       <div id="history"></div>
@@ -2033,6 +2109,16 @@ const I18N={
   rail_open:"Expand the menu",
   f_type_s:"Type",
   f_class_s:"Class",
+  hv_group:"How to show this history",
+  hv_list:"List",
+  hv_photo:"Photos",
+  hh_point:"Point",
+  hh_finding:"Finding",
+  hh_action:"Action",
+  hh_photos:"Photos",
+  hh_by:"By",
+  hv_none:"Nothing recorded on this round",
+  hv_open:"Open the full record",
   lm_all:"All classes", lm_machine:"Machine", lm_notset:"Not audited", lm_nocomp:"No such compartment",
   lm_alias:"recorded by make; identified as {m}", lm_csv:"⬇ Export CSV",
   lg_title:"Not on the sheet",
@@ -2442,6 +2528,16 @@ const I18N={
   rail_open:"Развернуть меню",
   f_type_s:"Тип",
   f_class_s:"Класс",
+  hv_group:"Как показать историю",
+  hv_list:"Список",
+  hv_photo:"Фото",
+  hh_point:"Точка",
+  hh_finding:"Находка",
+  hh_action:"Действие",
+  hh_photos:"Фото",
+  hh_by:"Кто",
+  hv_none:"По этому обходу ничего не записано",
+  hv_open:"Открыть полную запись",
   lm_all:"Все классы", lm_machine:"Машина", lm_notset:"Не проверено", lm_nocomp:"Нет такого узла",
   lm_alias:"записано по марке; определено как {m}", lm_csv:"⬇ Экспорт CSV",
   lg_title:"Не попало на лист",
@@ -4173,11 +4269,103 @@ function ucBlock(rec){
     + (unread?`<div class="ucsum warnrow">${esc(t("uc_sum_unread",{n:unread}))}</div>`:"")
     + table;
 }
+/* ── how a machine's history is shown ───────────────────────────────────
+   Two jobs, two views. "Is this truck getting worse" is a table question —
+   eleven rounds, sixty positions, scanned in one screen. "What does the swarf
+   look like" is a picture question. The page used to answer only the second,
+   at 470px of card per position, so answering the first meant scrolling past
+   photographs of everything.
+
+   The list opens, because the table question is the one asked most and the
+   pictures are one click away. Remembered per browser. */
+const HVK="cm_dash_histview";
+let histView=(function(){ try{ return localStorage.getItem(HVK)==="photo"?"photo":"list"; }
+                          catch(e){ return "list"; } })();
+
+/* One row per POSITION, newest round first — the unit of a finding is a
+   position on a machine, not a round, and a round with eleven plugs read is
+   eleven things that might be getting worse. */
+function histRows(recs){
+  const out=[];
+  recs.forEach(rec=>rec.items.forEach(i=>{
+    const med=mediaOf(i,rec);
+    out.push({ rec, i, sev:sevOf(rec,i), n:med.length });
+  }));
+  return out;
+}
+function renderHistList(recs){
+  if(!recs.length) return `<div class="empty">${esc(t("hv_none"))}</div>`;
+  const th=k=>`<th>${esc(t(k))}</th>`;
+  let n=0;
+  /* Grouped by round, not flattened. A round is a visit — who went, on what
+     hour meter, whether it was corrected, whether two phones sent it — and
+     those facts belong to the visit, not to any one plug in it. Flattening
+     them away is how the first cut of this view lost the conflict flag and the
+     supervisor's name: eleven rows of finding and nothing saying who walked
+     them. One line per round, then its positions as rows. */
+  const blocks=recs.map(rec=>{
+    const items=rec.items||[];
+    n+=items.length;
+    const rows=items.map(i=>{
+      const sev=sevOf(rec,i), med=mediaOf(i,rec);
+      const sc=sev?`var(--${SEV[sev].c==="c"?"critical":SEV[sev].c==="s"?"serious":SEV[sev].c==="w"?"warning":"good"})`:"";
+      /* Colour AND the word. A dot alone tells a colour-blind reader nothing,
+         and this is the column the page is about. */
+      const sevCell=sev?`<span class="sevcell" style="--sc:${sc}"><i></i>${esc(SEV[sev].l)}</span>`
+                       :`<span class="muted">—</span>`;
+      return `<tr class="hrow" tabindex="0" data-rk="${esc(recKey(rec))}" data-ik="${esc(i.key)}">
+        <td><b>${esc(i.key)}</b>${i.grade?` <span class="pill ${SEV[GRADE_SEV[i.grade]]?.c||'n'}">${esc(i.grade)}</span>`:""}</td>
+        <td title="${esc(i.label||"")}"><span class="trunc">${esc(i.label||"—")}</span></td>
+        <td>${sevCell}</td>
+        <td title="${esc(i.defect||"")}"><span class="trunc">${esc(i.defect||"—")}${
+          i.defectCode?` <span class="muted">${esc(i.defectCode)}</span>`:""}</span></td>
+        <td title="${esc(i.cause||"")}"><span class="trunc">${esc(i.cause||"—")}</span></td>
+        <td title="${esc(i.actionLabel||"")}"><span class="trunc">${esc(i.actionLabel||"—")}</span></td>
+        <td class="phc">${med.length?`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="m4.5 17 4.8-4.3 3.4 3 2.6-2.2 4.2 3.5"/></svg>${med.length}`:""}</td>
+        <td title="${esc(i.comment||"")}"><span class="trunc">${i.comment?"“"+esc(i.comment)+"”":"—"}</span></td></tr>`;
+    }).join("");
+    return `<div class="insp${rec._void?" voided":""}"><div class="head">
+      <span class="date">${esc(rec.date||"")}</span>
+      <span class="tag">${esc(TYPE_LABEL[rec.type]||rec.type)}</span>
+      ${rec._void?`<span class="voidflag" title="${esc(rec._reason||"")}">${esc(t("ed_voided"))}${rec._reason?" · "+esc(rec._reason):""}</span>`:""}
+      ${!rec._void&&rec._editAt?`<span class="editflag" title="${esc(rec._editAt)} · ${esc(rec._editBy||"—")}">${esc(t("ed_corrected"))}</span>`:""}
+      ${rec._conflict?`<span class="voidflag" title="${esc(t("cf_hint"))}">${esc(t("cf_flag"))}</span>`:""}
+      ${!rec._conflict&&rec._keep?`<span class="editflag" title="${esc(t("cf_kept",{d:rec._keep,by:rec._resolvedBy||"—"}))}">${esc(t("cf_resolved"))}</span>`:""}
+      ${rec.smu?`<span class="meta">SMU <b>${esc(rec.smu)}</b></span>`:""}
+      <span class="spacer"></span>${rec.by?`<span class="meta">${esc(rec.by)}</span>`:""}${
+      rec.sup?`<span class="meta">✍ ${esc(rec.sup)}</span>`:""}${
+      rec.gps?`<a class="meta" href="https://www.google.com/maps?q=${rec.gps.lat},${rec.gps.lon}" target="_blank" rel="noopener">📍 ${rec.gps.lat.toFixed(4)}, ${rec.gps.lon.toFixed(4)}</a>`:""}
+      <button class="btn" data-rpt="${esc(recKey(rec))}" style="padding:2px 9px;font-size:11.5px">${esc(t("r_one_go"))}</button>
+      <button class="btn" data-edit="${esc(recKey(rec))}" style="padding:2px 9px;font-size:11.5px">${esc(t("ed_edit"))}</button></div>
+      ${rec._note?`<div class="sub" style="margin:6px 12px 0">📝 ${esc(rec._note)}</div>`:""}
+      ${isWearType(rec.type)?ucBlock(rec):""}
+      ${rows?`<div class="tblwrap"><table class="grid"><thead><tr>${
+        th("hh_point")}${th("th_point")}${th("th_sev")}${th("th_defect")}${th("th_cause")}${
+        th("hh_action")}${th("hh_photos")}${th("hh_finding")}</tr></thead><tbody>${rows}</tbody></table></div>`:""}
+    </div>`;
+  }).join("");
+  return blocks + `<div class="shown"><span>${esc(t("shown_n",{n,of:n}))}</span>
+      <span class="spacer"></span><span>${esc(t("hv_open"))}</span></div>`;
+}
+
 function renderHistory(){
   const e=$("equipSel").value; const recs=RECS.filter(r=>r.equip===e);
   $("histTitle").textContent=t("hist_title",{x:e||""});
   $("histSub").textContent=recs.length?t("hist_sub",{n:recs.length}):t("hist_none");
+  document.querySelectorAll("#histView button[data-hv]").forEach(b=>
+    b.classList.toggle("on", b.dataset.hv===histView));
   if(!recs.length){ $("history").innerHTML=`<div class="empty">${esc(t("e_nodata"))}</div>`; return; }
+  if(histView==="list"){
+    $("history").innerHTML=renderHistList(recs);
+    $("history").querySelectorAll("tr.hrow").forEach(tr=>{
+      const open=()=>openPos(tr.dataset.rk, tr.dataset.ik);
+      tr.onclick=open;
+      tr.onkeydown=ev=>{ if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); open(); } };
+    });
+    $("history").querySelectorAll("[data-rpt]").forEach(b=>b.onclick=()=>runReport("one",b.dataset.rpt,b));
+    $("history").querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>openEdit(b.dataset.edit));
+    return;
+  }
   // History deliberately shows voided rounds — this is where you look at one and
   // un-void it. Everywhere that counts things filters them out instead.
   $("history").innerHTML=recs.map(rec=>`
@@ -4194,7 +4382,7 @@ function renderHistory(){
       <button class="btn" data-edit="${esc(recKey(rec))}" style="padding:3px 10px;font-size:12px">${esc(t("ed_edit"))}</button></div>
       ${rec._note?`<div class="sub" style="margin:2px 0 8px">📝 ${esc(rec._note)}</div>`:""}
       ${isWearType(rec.type)?ucBlock(rec):""}
-      <div class="pos-grid">${rec.items.filter(i=>!isWearType(rec.type)||photoSrc(i,rec)||i.comment||i.defect).map(i=>{
+      <div class="pos-grid${rec.items.filter(i=>!isWearType(rec.type)||photoSrc(i,rec)||i.comment||i.defect).length===1?" one":""}">${rec.items.filter(i=>!isWearType(rec.type)||photoSrc(i,rec)||i.comment||i.defect).map(i=>{
         const s=sevOf(rec,i); const med=mediaOf(i,rec);
         const cap=esc(`${rec.equip} · ${i.key} · ${rec.date}`);
         /* Every frame, not the first one. The lead is shown large and the rest
@@ -4218,7 +4406,7 @@ function renderHistory(){
            Only where Drive is configured, because both are writes. */
         const shown=mediaOf(i,rec,true);
         const edit = drvOn() ? `<div class="medit" data-rk="${esc(recKey(rec))}" data-ik="${esc(i.key)}">
-            <button class="mtog" type="button">${esc(t("ph_edit"))}</button>
+            <button class="mtog" type="button" title="${esc(t("ph_edit"))}" aria-label="${esc(t("ph_edit"))}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true" style="width:12px;height:12px;vertical-align:-2px"><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="m4.5 17 4.8-4.3 3.4 3 2.6-2.2 4.2 3.5"/></svg> ${shown.length}</button>
             <div class="mpanel hidden">
               <div class="mlist">${shown.map(m=>`
                 <span class="mitem${m.hidden?" off":""}">
@@ -5302,6 +5490,80 @@ async function pullDrivePhotos(recs, after){
     if(next) pullDrivePhotos(next.recs, next.after);
   }
 }
+/* ── the detail drawer ─────────────────────────────────────────────────
+   A list row can carry nine columns; a position carries thirty fields, its
+   photographs, its baseline, its lubricant and the office's own note. The
+   drawer is where the rest lives — opened from the row, closed with Escape,
+   and it never takes the reader off the machine they are looking at. */
+let drwKey=null;
+function drwClose(){
+  $("drw").classList.add("hidden"); $("drwScrim").classList.add("hidden");
+  drwKey=null;
+  /* Focus goes back where it came from, or it goes nowhere and the keyboard
+     reader is stranded at the top of the document. */
+  if(drwFrom && document.contains(drwFrom)) drwFrom.focus();
+  drwFrom=null;
+}
+let drwFrom=null;
+function openPos(rk, ik){
+  const rec=RECS.find(r=>recKey(r)===rk); if(!rec) return;
+  const i=(rec.items||[]).find(x=>x.key===ik); if(!i) return;
+  drwFrom=document.activeElement;
+  drwKey={rk,ik};
+  const med=mediaOf(i,rec), sev=sevOf(rec,i);
+  const cap=`${rec.equip} · ${i.key} · ${rec.date}`;
+  $("drwTitle").textContent=`${rec.equip} · ${i.key} · ${rec.date}`;
+  const row=(k,v)=>v==null||v===""?"":`<dt>${esc(k)}</dt><dd>${v}</dd>`;
+  const shots=med.length?`<div class="drwshots">${med.map((m,ix)=>
+      m.kind==="video"
+        ? `<video preload="metadata" src="${esc(m.src)}" data-i="${ix}"></video>`
+        : `<img loading="lazy" src="${esc(m.src)}" alt="${esc(cap)}" data-i="${ix}">`
+    ).join("")}</div>`:"";
+  $("drwBody").innerHTML = shots +
+    `<div class="pk" style="margin-bottom:6px">${esc(i.key)}${
+      i.grade?` <span class="pill ${SEV[GRADE_SEV[i.grade]]?.c||'n'}">${esc(i.grade)}</span>`:""}${
+      sev?` <span class="pill ${SEV[sev].c}">${esc(SEV[sev].l)}</span>`:""}${
+      rec._void?` <span class="voidflag">${esc(t("ed_voided"))}</span>`:""}</div>
+     <div class="pl">${esc(i.label||"")}</div>
+     <dl>${
+       row(t("th_type"), esc(TYPE_LABEL[rec.type]||rec.type)) +
+       row(t("th_date"), esc(rec.date||"")) +
+       row("SMU", rec.smu?esc(rec.smu):"") +
+       row(t("th_defect"), i.defect?`<b>${esc(i.defect)}</b> <span class="muted">${esc(i.defectCode||"")}</span>`:"") +
+       row("Cause", esc(i.cause||"")) +
+       row("Temp", i.tempC?`<b>${esc(i.tempC)} °C</b>${i.ambC?` <span class="muted">(amb ${esc(i.ambC)})</span>`:""}`:"") +
+       row("Particles", esc(i.particle||"")) +
+       row("Comp hrs", esc(i.comp||"")) +
+       row("Oil hrs", esc(i.oil||"")) +
+       row(t("hh_action"), esc(i.actionLabel||"")) +
+       row("Priority", i.prio?esc(prioName(i.prio)):"") +
+       row("WO", esc(i.wo||"")) +
+       row(t("th_detect"), esc(i.detectionLabel||i.detection||"")) +
+       /* The app challenged this reading and the inspector measured again and
+          stood by it — exactly the number a reliability engineer wants flagged,
+          not hidden. And a baseline set at the machine changes what every
+          percentage on that position means. Both were captured, exported, and
+          shown nowhere until tests/reach.cjs went looking. */
+       row(t("th_stood"), i.stood?`<span class="warnv">${esc(t("th_stood_v"))}</span>`:"") +
+       row(t("th_base"), (i.baseNew!==""&&i.baseNew!=null)
+            ? `${esc(i.baseNew)}${(i.baseCondemn!==""&&i.baseCondemn!=null)?" → "+esc(i.baseCondemn):""} mm${
+               i.baseAll?" · "+esc(t("th_base_all")):""}` : "") +
+       row(t("hh_by"), esc(rec.by||"")) +
+       row("✍", esc(rec.sup||""))
+     }</dl>${lubeDL(rec,i)}${
+       i.comment?`<div class="cm">“${esc(i.comment)}”</div>`:""}${
+       rec._note?`<div class="sub" style="margin-top:8px">📝 ${esc(rec._note)}</div>`:""}`;
+  $("drwBody").querySelectorAll("[data-i]").forEach(el=>{
+    el.onclick=()=>openLB(med.map(m=>[m.src,m.kind]), Number(el.dataset.i)||0, cap);
+  });
+  $("drw").classList.remove("hidden"); $("drwScrim").classList.remove("hidden");
+  $("drwClose").focus();
+}
+$("drwClose").onclick=drwClose;
+$("drwScrim").onclick=drwClose;
+$("drwRpt").onclick=()=>{ if(drwKey) runReport("one",drwKey.rk,$("drwRpt")); };
+$("drwEdit").onclick=()=>{ if(drwKey){ const k=drwKey.rk; drwClose(); openEdit(k); } };
+
 /* ---------- the viewer ----------
    A position can hold ten photographs and a video. Showing one of them and
    calling it "the photo" threw away most of what the round captured, so the
@@ -5326,6 +5588,18 @@ function lbStep(d){ if(lbSet.length<2) return;
   lbIx=(lbIx+d+lbSet.length)%lbSet.length; lbShow(); }
 function lbClose(){ $("lb").classList.remove("open"); $("lbimg").src="";
   const v=$("lbvid"); v.pause(); v.removeAttribute("src"); v.load(); lbSet=[]; }
+document.querySelectorAll("#histView button[data-hv]").forEach(b=>{
+  b.onclick=()=>{ histView=b.dataset.hv;
+    try{ localStorage.setItem(HVK,histView); }catch(e){}
+    renderHistory(); };
+});
+/* Escape closes the drawer, but only when the lightbox above it has not
+   already claimed the key — otherwise one press shuts both. */
+document.addEventListener("keydown",e=>{
+  if(e.key!=="Escape") return;
+  if($("lb").classList.contains("open")) return;
+  if(!$("drw").classList.contains("hidden")) drwClose();
+});
 $("lb").onclick=e=>{ if(e.target.id==="lb"||e.target.id==="lbx") lbClose(); };
 $("lbPrev").onclick=e=>{ e.stopPropagation(); lbStep(-1); };
 $("lbNext").onclick=e=>{ e.stopPropagation(); lbStep(1); };
