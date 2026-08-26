@@ -18,13 +18,17 @@ const ok = (c, w) => { if (!c) { fail++; console.log("  FAIL  " + w); }
 const eq = (g, w, what) => ok(JSON.stringify(g) === JSON.stringify(w),
   what + "  (got " + JSON.stringify(g) + ", wanted " + JSON.stringify(w) + ")");
 
-/* Seed rounds into the class the tab actually lands on, so the assertions are
-   about what a person sees rather than about a view nobody opens. */
+/* Seed rounds into what the tab actually lands on, so the assertions are about
+   what a person sees rather than about a view nobody opens. That used to mean
+   one class — the biggest — because the tab opened filtered to it. It opens on
+   every class now (a filter the reader did not choose hid four fifths of the
+   fleet, and an engineer reported a truck as missing from the reference because
+   of it), so the seed spreads across classes too. */
 const SEED = (n) => {
-  const want = lubeBiggestClass(), pick = [];
+  const pick = [];
   for (const a of ASSETS) {
     const r = LUBE.of(a.m || "", a.cls || "");
-    if (!r || r.cls !== want || pick.some(x => x.m === r.m)) continue;
+    if (!r || pick.some(x => x.m === r.m)) continue;
     pick.push({ u: a.n, m: r.m, cls: r.cls, comps: r.comps });
     if (pick.length >= n) break;
   }
@@ -70,7 +74,7 @@ const SEED = (n) => {
 
   const seeded = await p.evaluate(SEED, 4);
   await p.waitForTimeout(400);
-  ok(seeded.length > 0, "seeded rounds in the class the tab lands on: " + seeded.length);
+  ok(seeded.length > 0, "seeded rounds on the sheet the tab lands on: " + seeded.length);
 
   console.log("── the programme counts THE FLEET, not the rounds");
   const P = await p.evaluate(() => lubeProgramme());
@@ -133,18 +137,22 @@ const SEED = (n) => {
   console.log("── colour follows the product, not the row it lands on");
   /* The rule that makes the sheet readable: filtering the view must not
      repaint the survivors, or the colour stops being an identity. */
-  const hues = await p.evaluate(() => {
+  const hues = await p.evaluate((cls) => {
     const grab = () => [...document.querySelectorAll("#lubeMtx td.cell")]
       /* The product name is only PRINTED where a column carries more than one,
          so identity is read off the cell's data attribute - which is there
          precisely so that dropping the caption did not drop the fact. */
       .map(td => (td.dataset.p || "") + "=" + td.style.getPropertyValue("--h"));
+    /* NARROW first, then widen. The tab now opens on every class, so widening
+       from where it lands changes nothing and the check would pass without ever
+       having exercised a filter — a guard that cannot fail. */
+    lubeShow = cls; renderLubeTab();
     const before = grab();
     lubeShow = "";            /* widen to every class */
     renderLubeTab();
     const after = grab();
     return { before, after };
-  });
+  }, seeded[0].cls);
   const map = {};
   hues.before.concat(hues.after).forEach(x => {
     const [n, h] = x.split("="); (map[n] = map[n] || new Set()).add(h);

@@ -1703,9 +1703,31 @@
         <span style="flex:1"></span>
         <button class="btn" id="lubeCsv" data-i18n="lm_csv">⬇ Export CSV</button>
       </div>
+      <div class="shown" id="lmShown"></div>
       <div class="tblwrap mtxwrap scrollbox" style="--sb:600px"><table class="grid mtx" id="lubeMtx"></table></div>
       <div id="lubeLegend" class="lgnd"></div>
       <div class="sub" id="lubeNote" style="margin-top:10px"></div>
+    </div>
+
+    <!-- The two halves of the same wound. A reference that reaches no machine and
+         a machine that reaches no reference are both invisible on the matrix
+         above, because the matrix can only draw where the two lists meet. The
+         import has always known about both and wrote them to a text file in the
+         repository, which is to say nowhere. -->
+    <div class="section">
+      <h2 data-i18n="lg_title">Not on the sheet</h2>
+      <div class="sub" data-i18n="lg_sub">The matrix can only show a machine where the register's spelling of its model and the reference's spelling of its model meet. Where they miss each other, the machine has no lubrication standard and nothing above says so. Both halves are listed here: nothing is dropped quietly.</div>
+      <div class="grid12" style="margin-top:14px">
+        <div class="g6">
+          <div class="fld"><span data-i18n="lg_nomodel">Machines with no reference</span></div>
+          <div class="tblwrap scrollbox" style="--sb:360px"><table class="grid" id="lgNoRef"></table></div>
+        </div>
+        <div class="g6">
+          <div class="fld"><span data-i18n="lg_nomach">References reaching no machine</span></div>
+          <div class="tblwrap scrollbox" style="--sb:360px"><table class="grid" id="lgNoMach"></table></div>
+        </div>
+      </div>
+      <div class="sub" id="lgNote" style="margin-top:10px"></div>
     </div>
 
     <div class="section">
@@ -1771,26 +1793,26 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=161"></script>
-<script src="../mobile/hme.js?v=161"></script>
-<script src="../mobile/mp-fc.js?v=161"></script>
-<script src="../mobile/hme-cascade.js?v=161"></script>
-<script src="../mobile/temp-limits.js?v=161"></script>
+<script src="../data/magnetic_plug.js?v=162"></script>
+<script src="../mobile/hme.js?v=162"></script>
+<script src="../mobile/mp-fc.js?v=162"></script>
+<script src="../mobile/hme-cascade.js?v=162"></script>
+<script src="../mobile/temp-limits.js?v=162"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=161"></script>
-<script src="../mobile/due.js?v=161"></script>
-<script src="../mobile/wear.js?v=161"></script>
-<script src="../mobile/wear-map.js?v=161"></script>
-<script src="../mobile/lube.js?v=161"></script>
-<script src="../mobile/lube-overrides.js?v=161"></script>
-<script src="../mobile/lube2027.js?v=161"></script>
-<script src="../mobile/lube-tds.js?v=161"></script>
+<script src="../mobile/assets.js?v=162"></script>
+<script src="../mobile/due.js?v=162"></script>
+<script src="../mobile/wear.js?v=162"></script>
+<script src="../mobile/wear-map.js?v=162"></script>
+<script src="../mobile/lube.js?v=162"></script>
+<script src="../mobile/lube-overrides.js?v=162"></script>
+<script src="../mobile/lube2027.js?v=162"></script>
+<script src="../mobile/lube-tds.js?v=162"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=161"></script>
-<script src="../mobile/machine-photos.js?v=161"></script>
+<script src="../mobile/upload-defaults.js?v=162"></script>
+<script src="../mobile/machine-photos.js?v=162"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -1799,17 +1821,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=161"></script>
-<script src="../mobile/get.js?v=161"></script>
-<script src="../mobile/points.js?v=161"></script>
-<script src="../mobile/uc-points.js?v=161"></script>
-<script src="../mobile/inspect-guide.js?v=161"></script>
-<script src="../mobile/get-figs.js?v=161"></script>
-<script src="../mobile/body-points.js?v=161"></script>
-<script src="../mobile/body-map.js?v=161"></script>
-<script src="../mobile/jspdf.umd.min.js?v=161"></script>
-<script src="../mobile/html2canvas.min.js?v=161"></script>
-<script src="../mobile/report-core.js?v=161"></script>
+<script src="../mobile/machine-fig.js?v=162"></script>
+<script src="../mobile/get.js?v=162"></script>
+<script src="../mobile/points.js?v=162"></script>
+<script src="../mobile/uc-points.js?v=162"></script>
+<script src="../mobile/inspect-guide.js?v=162"></script>
+<script src="../mobile/get-figs.js?v=162"></script>
+<script src="../mobile/body-points.js?v=162"></script>
+<script src="../mobile/body-map.js?v=162"></script>
+<script src="../mobile/jspdf.umd.min.js?v=162"></script>
+<script src="../mobile/html2canvas.min.js?v=162"></script>
+<script src="../mobile/report-core.js?v=162"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -1933,6 +1955,13 @@ const I18N={
   lm_sub:"Every asset class on one sheet. Colour is identity and nothing else: which product, never how good it is.",
   lm_all:"All classes", lm_machine:"Machine", lm_notset:"Not audited", lm_nocomp:"No such compartment",
   lm_alias:"recorded by make; identified as {m}", lm_csv:"⬇ Export CSV",
+  lg_title:"Not on the sheet",
+  lg_sub:"The matrix can only show a machine where the register's spelling of its model and the reference's spelling of its model meet. Where they miss each other, the machine has no lubrication standard and nothing above says so. Both halves are listed here: nothing is dropped quietly.",
+  lg_nomodel:"Machines with no reference", lg_nomach:"References reaching no machine",
+  lg_model:"Model", lg_units:"Machines", lg_class:"Class", lg_comps:"Compartments",
+  lg_none:"None — every machine is covered", lg_none2:"None — every reference is in use",
+  lg_note:"{a} machines across {b} register models have no lubrication reference. {c} references cover no machine in the register. Most of both are the same problem seen from two sides: the two documents spell the model differently. Each one settled adds a standard to real machines — send the pairs to whoever maintains the reference.",
+  lg_hidden:"{n} hidden by the class filter",
   lpo_title:"Shop posters", lpo_sub:"The sheet that goes on the workshop wall. The preview is shown reduced \u2014 it prints at full size.",
   lpo_which:"Sheet", lpo_fleet:"Whole fleet", lpo_model:"One model", lpo_print:"🖨 Print",
   lpo_class:"One asset class", lpo_cls:"Class",
@@ -2325,6 +2354,13 @@ const I18N={
   lm_sub:"Все классы техники на одном листе. Цвет — это только продукт, а не оценка.",
   lm_all:"Все классы", lm_machine:"Машина", lm_notset:"Не проверено", lm_nocomp:"Нет такого узла",
   lm_alias:"записано по марке; определено как {m}", lm_csv:"⬇ Экспорт CSV",
+  lg_title:"Не попало на лист",
+  lg_sub:"Карта показывает машину только там, где написание модели в реестре и в справочнике совпадают. Где они расходятся, у машины нет норматива смазки, и выше об этом ничего не сказано. Здесь перечислены обе половины: ничего не теряется молча.",
+  lg_nomodel:"Машины без справочника", lg_nomach:"Справочники без машин",
+  lg_model:"Модель", lg_units:"Машин", lg_class:"Класс", lg_comps:"Узлов",
+  lg_none:"Нет — все машины охвачены", lg_none2:"Нет — все справочники используются",
+  lg_note:"{a} машин по {b} моделям реестра не имеют норматива смазки. {c} справочников не относятся ни к одной машине реестра. В основном это одна и та же проблема с двух сторон: два документа пишут модель по-разному. Каждая решённая пара даёт норматив реальным машинам — передайте пары тому, кто ведёт справочник.",
+  lg_hidden:"{n} скрыто фильтром класса",
   lpo_title:"Плакаты для мастерской", lpo_sub:"Лист, который вешается на стену цеха. Предпросмотр уменьшен \u2014 печатается в полном размере.",
   lpo_which:"Лист", lpo_fleet:"Весь парк", lpo_model:"Одна модель", lpo_print:"🖨 Печать",
   lpo_class:"Один класс техники", lpo_cls:"Класс",
@@ -6130,19 +6166,9 @@ function lubeSeenByModel(){
   });
   return out;
 }
-/* Set on first render to the class with the most units — the readable default.
-   "" is still every class, and the chip is still there; it is just not what you
-   land on. */
+/* "" is every class, and it is what the tab lands on. See renderLubeTab for why
+   it is no longer set to the biggest class on first render. */
 let lubeShow = null;
-function lubeBiggestClass(){
-  const n = {};
-  (window.ASSETS||[]).forEach(a=>{
-    const r = window.LUBE ? LUBE.of(a.m||"", a.cls||"") : null;
-    if(r) n[r.cls] = (n[r.cls]||0) + 1;
-  });
-  const best = Object.keys(n).sort((a,b)=> n[b]-n[a] || (a<b?-1:1))[0];
-  return best || "";
-}
 function renderLubeMtx(){
   const tbl = $("lubeMtx"); if(!tbl) return;
   if(!window.LUBE){ tbl.innerHTML = ""; return; }
@@ -6273,6 +6299,71 @@ function renderLubeMtx(){
     `<span class="lg"><span class="sw none"></span><b>${esc(t("lm_notset"))}</b></span>` +
     `<span class="lg"><span class="sw na"></span><b>${esc(t("lm_nocomp"))}</b></span>`;
   $("lubeNote").textContent = t("lm_note");
+
+  /* A table that shows some of its rows must say so. The count is in MACHINES as
+     well as models, because "12 models" and "312 machines" are different answers
+     to "how much of the fleet am I looking at". */
+  const all = Object.values(rows), shownN = list.reduce((a,r)=>a+r.n,0),
+        allN = all.reduce((a,r)=>a+r.n,0);
+  $("lmShown").innerHTML =
+    `<span>${esc(t("shown_n",{n:list.length, of:all.length}))} \u00b7 ${
+      esc(t("lg_units"))} ${esc(fmtN(shownN))}</span>` +
+    (list.length < all.length
+      ? `<span class="spacer"></span><span>${esc(t("lg_hidden",{n:allN-shownN}))}</span>`
+      : "");
+}
+
+/* ===================== what the matrix cannot draw =====================
+
+   The matrix is the intersection of two lists: machines in the register, and
+   models in the lubrication reference. It draws where they meet. Where they miss
+   — the register spells a model one way and the reference another — the machine
+   simply is not on the sheet, and neither is the reference, and NOTHING says a
+   word. Both halves are the same wound seen from either side, and both were
+   invisible.
+
+   The import has always known. build-lube-data.py writes every unmatched name to
+   docs/lube-import-report.txt, a text file in a repository, which for a
+   reliability engineer at Baimskaya is the same as not writing it at all. */
+function renderLubeGaps(){
+  const noRef = $("lgNoRef"), noMach = $("lgNoMach");
+  if(!noRef || !noMach) return;
+  if(!window.LUBE){ noRef.innerHTML = noMach.innerHTML = ""; return; }
+
+  /* Half one: machines whose model resolves to nothing. Grouped by model — 70
+     Hilux are one decision, not seventy rows. */
+  const miss = {};
+  (window.ASSETS||[]).forEach(a=>{
+    if(LUBE.of(a.m||"", a.cls||"")) return;
+    const m = (a.m||"").trim() || "\u2014", k = (a.cls||"") + "|" + m;
+    (miss[k] || (miss[k] = { cls:a.cls||"", m, n:0 })).n++;
+  });
+  const mrows = Object.values(miss).sort((a,b)=> b.n - a.n || (a.m<b.m?-1:1));
+  const missUnits = mrows.reduce((a,r)=>a+r.n,0);
+
+  /* Half two: references that reach no machine at all. The import marks these
+     with class "?" and a count of zero, which is exactly the state of knowing
+     and not telling. */
+  /* Keyed "CLS|Model", and LUBE.of(model, cls) takes that exact pair straight to
+     the entry — including the "?" class the import uses for a name it could not
+     place, which is the population this half is about. */
+  const drows = LUBE.models.map(k=>{
+    const cls = k.slice(0, k.indexOf("|")), m = k.slice(cls.length + 1);
+    const r = LUBE.of(m, cls);
+    return { cls, m, n:(r && r.n) || 0, comps:(r && r.comps ? r.comps.length : 0) };
+  }).filter(r=>!r.n).sort((a,b)=> b.comps - a.comps || (a.m<b.m?-1:1));
+
+  const hd = (a,b,c) => `<thead><tr><th>${esc(t(a))}</th><th>${esc(t(b))}</th><th class="num">${
+    esc(t(c))}</th></tr></thead>`;
+  noRef.innerHTML = hd("lg_class","lg_model","lg_units") + (mrows.length
+    ? `<tbody>${mrows.map(r=>`<tr><td>${esc(t("cls_"+r.cls)||r.cls||"\u2014")}</td><td>${
+        esc(r.m)}</td><td class="num">${esc(fmtN(r.n))}</td></tr>`).join("")}</tbody>`
+    : `<tbody><tr><td colspan="3" class="muted">${esc(t("lg_none"))}</td></tr></tbody>`);
+  noMach.innerHTML = hd("lg_class","lg_model","lg_comps") + (drows.length
+    ? `<tbody>${drows.map(r=>`<tr><td>${esc(r.cls==="?"?"\u2014":(t("cls_"+r.cls)||r.cls))}</td><td>${
+        esc(r.m)}</td><td class="num">${esc(fmtN(r.comps))}</td></tr>`).join("")}</tbody>`
+    : `<tbody><tr><td colspan="3" class="muted">${esc(t("lg_none2"))}</td></tr></tbody>`);
+  $("lgNote").textContent = t("lg_note",{a:fmtN(missUnits), b:fmtN(mrows.length), c:fmtN(drows.length)});
 }
 
 /* One row per model x compartment, which is the shape somebody puts in front of
@@ -6646,7 +6737,17 @@ function dueCsv(){
 }
 
 function renderLubeTab(){
-  if(lubeShow === null) lubeShow = lubeBiggestClass();
+  /* It used to open filtered to the BIGGEST class, and the biggest class is GEN
+     — 940 of the 1,128 machines on site, which is every light vehicle, genset,
+     trailer and manlift. So the sheet a reliability engineer opened was the one
+     sheet with no mining equipment on it, and the haul trucks, dozers and
+     excavators were behind a chip nobody had been told to press. An engineer
+     reported the TR60 as missing from the reference. It was never missing: 16
+     machines, ten compartments, all of it there, on a tab that had silently
+     filtered it away. A filter the reader did not choose is not a default, it is
+     a hidden state — and hiding four fifths of the fleet behind one is the worst
+     version of it. Everything, and the chips narrow it. */
+  if(lubeShow === null) lubeShow = "";
   /* The class filter, built from what the reference actually covers so a chip
      can never lead to an empty sheet. */
   const cls = [];
@@ -6666,6 +6767,7 @@ function renderLubeTab(){
   renderLubeCat();
   renderLubeRef();
   renderLubeMtx();
+  renderLubeGaps();
   renderLubePoster();
 }
 
@@ -6749,8 +6851,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=161"></script>
-<script src="sync-adapter.js?v=161"></script>
-<script src="report.js?v=161"></script>
+<script src="drive.js?v=162"></script>
+<script src="sync-adapter.js?v=162"></script>
+<script src="report.js?v=162"></script>
 </body>
 </html>
