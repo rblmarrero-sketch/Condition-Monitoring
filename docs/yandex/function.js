@@ -370,11 +370,31 @@ async function deleteRecord(b) {
   if (!stem) return { ok: false, error: 'Bad record key: ' + b.key };
   const all = await listAll('');
   /* Everything that belongs to this round: the sidecar, its photographs, its
-     video, its signature — matched on the stem the naming standard guarantees.
-     A marker is left behind so a phone that still holds the round does not
-     simply upload it again on its next sync. */
-  const mine = all.filter(f => f.name.indexOf(stem.split('_')[0]) === 0
-    && f.name.indexOf(stem.split('_')[1]) >= 0);
+     video, its signature, and any correction marker — matched on the naming
+     standard, <UNIT>...<DD.MM.YYYY>_<TYPE>.<ext>, so a photo that carries its
+     own component prefix (TK146.4C_...) is still caught.
+
+     This used to be two indexOf tests: name starts with the unit, name contains
+     the date. The TYPE was never in the match and neither was any separator, so
+     deleting one round on TK146 took every OTHER round walked on TK146 that day
+     with it — the undercarriage sidecar, its photographs, its edit marker, its
+     conflict marker — and took TK1465's rounds too, because "TK1465..." starts
+     with "TK146". Only ONE marker is written, naming the round the office asked
+     about, so nothing tells a phone the others went: they sit in every team
+     cache as done, against files that no longer exist, and the machine stops
+     being due for a round nobody has walked.
+
+     The type has to be followed by "." or "_" or nothing: "_2" marks the second
+     photo of a position and "_SIGN" the signature, and requiring a separator is
+     also what stops type "MP" matching an "MPX" suffix. "~" is there for the
+     second device's copy of a clashing round — that is part of the same record
+     and must go with it. Character for character the Apps Script's rule; two
+     backends deleting one record have to agree on what the record IS. */
+  const esc = x => String(x).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const p = String(b.key).split('|'), dmy = stem.split('_')[1];
+  const re = new RegExp('^' + esc(p[0]) + '[._-].*?' + esc(dmy) + '_' + esc(p[2]) + '([._~]|$)', 'i');
+  const mine = all.filter(f => re.test(f.name));
+  if (!mine.length) return { ok: false, error: 'Nothing found for ' + b.key };
   let gone = 0;
   for (const f of mine) { try { await delObj(f.key); gone++; } catch (e) {} }
   await putObj(META_DIR + '/' + stem + '.deleted.json',
