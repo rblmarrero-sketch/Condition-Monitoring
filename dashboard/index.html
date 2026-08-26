@@ -60,7 +60,11 @@
        not content, and holding it dark while the canvas flips is what makes
        the page read as an application. The copper mark is the one warm thing
        on it, same as on the canvas. */
-    --sbw:232px;
+    /* The rail folds three ways now: a manual toggle the reader controls, an
+       icon rail on a laptop, a top strip on a phone. 198px fits the longest
+       label ("Equipment history") without the 34px of dead gutter the old
+       232 carried. */
+    --sbw:198px; --sbw-shut:54px;
     --rail:#16242c; --rail-ink:#f2f6f8; --rail-muted:#9db0ba;
     --rail-hov:rgba(255,255,255,.07); --rail-on:rgba(255,255,255,.12);
     --rail-line:rgba(255,255,255,.12);
@@ -85,26 +89,38 @@
      An application frame, not a web page. Identity and navigation live in a
      fixed rail on the left; the top bar keeps only the live things — source,
      language, theme; the numbers own everything else. */
-  header.app{display:flex;align-items:center;gap:12px;padding:10px 22px;
+  /* Chrome was 138px before a single number: a 54px header, then an 84px
+     filter row with every label stacked above its control. Both are one sticky
+     band now, 40px + 38px, and it stays put while the data scrolls under it. */
+  header.app{display:flex;align-items:center;gap:var(--s2);padding:0 var(--s4);height:40px;
     margin-left:var(--sbw);background:var(--surface);
-    border-bottom:1px solid var(--border);position:sticky;top:0;z-index:20;}
+    border-bottom:1px solid var(--border);position:sticky;top:0;z-index:21;}
+  header.app .btn{padding:4px 10px;font-size:12px;}
+  /* The toggle lives with the thing it moves. */
+  .railtog{position:absolute;right:8px;top:12px;width:24px;height:24px;padding:0;
+    border:1px solid var(--rail-line);background:none;color:var(--rail-muted);
+    border-radius:6px;cursor:pointer;display:grid;place-items:center;line-height:0;}
+  .railtog:hover{color:var(--rail-ink);background:var(--rail-hov);}
+  .railtog svg{width:14px;height:14px;transition:transform .16s var(--ease);}
+  body.railshut .railtog svg{transform:rotate(180deg);}
+  body.railshut{--sbw:var(--sbw-shut);}
   header.app .spacer{flex:1;}
   .btn{border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);border-radius:8px;padding:8px 12px;cursor:pointer;font-size:13px;font-family:inherit;}
   .btn:hover{color:var(--ink);} .btn.primary{background:var(--accent);color:#fff;border-color:transparent;font-weight:600;}
   nav.tabs{position:fixed;left:0;top:0;bottom:0;width:var(--sbw);z-index:25;
-    display:flex;flex-direction:column;gap:2px;padding:14px 12px;
+    display:flex;flex-direction:column;gap:1px;padding:10px 8px;
     background:var(--rail);border-right:1px solid var(--border);overflow-y:auto;}
-  nav.tabs .brand{display:flex;align-items:center;gap:10px;padding:4px 6px 15px;
-    border-bottom:1px solid var(--rail-line);margin-bottom:12px;}
+  nav.tabs .brand{position:relative;display:flex;align-items:center;gap:9px;padding:2px 4px 10px;
+    border-bottom:1px solid var(--rail-line);margin-bottom:8px;}
   nav.tabs .brand .bmark{width:34px;height:34px;flex:none;border-radius:9px;
     background:var(--accent);color:#fff;display:grid;place-items:center;
     font:800 13px/1 ui-monospace,SFMono-Regular,Menlo,monospace;}
   nav.tabs .brand .t1{font-weight:750;font-size:13.5px;letter-spacing:-.01em;
     color:var(--rail-ink);line-height:1.2;}
   nav.tabs .brand .t2{color:var(--rail-muted);font-size:10.5px;margin-top:2px;}
-  nav.tabs button{position:relative;display:flex;align-items:center;gap:11px;width:100%;
-    border:0;background:none;color:var(--rail-muted);padding:10px 11px;
-    border-radius:9px;cursor:pointer;font-size:13px;font-weight:600;
+  nav.tabs button{position:relative;display:flex;align-items:center;gap:10px;width:100%;
+    border:0;background:none;color:var(--rail-muted);padding:6px 9px;
+    border-radius:7px;cursor:pointer;font-size:12.5px;font-weight:600;
     font-family:inherit;text-align:left;white-space:nowrap;
     transition:background .13s,color .13s;}
   nav.tabs button svg{width:18px;height:18px;flex:none;}
@@ -118,17 +134,30 @@
     background:var(--critical);color:#fff;}
   nav.tabs .nb.warn{background:var(--warning);color:#3a2a00;}
   nav.tabs .nb:empty{display:none;}
-  main{max-width:var(--page-max);margin:0 0 0 var(--sbw);padding:var(--s5) var(--s5) var(--s7);}
+  main{max-width:var(--page-max);margin:0 0 0 var(--sbw);padding:var(--s3) var(--s4) var(--s6);}
   /* The rail folds twice: to an icon rail on a laptop, to a top strip on a
      phone — the same buttons, never a second navigation. */
+  /* One set of rules for the folded rail, reached two ways: the reader
+     pressed the toggle, or the window is too narrow to afford the labels. The
+     count survives the fold as a dot — what is waiting must not disappear
+     because somebody wanted more room. Every button keeps a title, set from
+     its own label in applyLang(), so the icon is never unexplained. */
+  body.railshut nav.tabs .brand>div:last-child,
+  body.railshut nav.tabs button span[data-i18n]{display:none;}
+  body.railshut nav.tabs .brand{justify-content:center;padding:2px 0 10px;}
+  body.railshut .railtog{position:static;margin:0 auto;}
+  body.railshut nav.tabs button{justify-content:center;padding:8px 0;gap:0;}
+  body.railshut nav.tabs .nb{position:absolute;top:3px;right:7px;min-width:8px;height:8px;
+    padding:0;font-size:0;line-height:0;}
   @media (max-width:1100px){
-    :root{--sbw:64px;}
-    nav.tabs{padding:12px 8px;}
-    nav.tabs .brand{justify-content:center;padding:4px 0 13px;}
+    :root{--sbw:var(--sbw-shut);}
+    nav.tabs{padding:10px 6px;}
+    nav.tabs .brand{justify-content:center;padding:2px 0 10px;}
     nav.tabs .brand>div:last-child{display:none;}
-    nav.tabs button{justify-content:center;padding:11px 0;gap:0;}
+    .railtog{display:none;}
+    nav.tabs button{justify-content:center;padding:8px 0;gap:0;}
     nav.tabs button span[data-i18n]{display:none;}
-    nav.tabs .nb{position:absolute;top:5px;right:9px;min-width:9px;height:9px;
+    nav.tabs .nb{position:absolute;top:3px;right:7px;min-width:8px;height:8px;
       padding:0;font-size:0;line-height:0;}
   }
   @media (max-width:820px){
@@ -184,9 +213,26 @@
   .maybe{border-bottom:1px dotted var(--warn-ink);cursor:help;}
   /* An answer, not a question — so it must not wear the question's colour. */
   .settled{color:var(--muted);border-bottom:1px dotted var(--border);cursor:help;}
-  .controls{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;margin-bottom:18px;}
+  /* A filter bar, not a form. Label BESIDE its control rather than stacked
+     above it: same information, same accessible name, 38px instead of 84.
+     Sticky under the header, because a filter you have scrolled past is a
+     filter you have forgotten you set. */
+  .controls{display:flex;flex-wrap:wrap;gap:var(--s2) var(--s3);align-items:center;
+    padding:var(--s2) var(--s4);margin:0 calc(-1 * var(--s4)) var(--s3);
+    background:var(--surface);border-bottom:1px solid var(--border);
+    position:sticky;top:40px;z-index:19;}
+  .controls .field{flex-direction:row;align-items:center;gap:var(--s2);}
+  .controls .field label{white-space:nowrap;}
+  .controls select,.controls input{padding:5px 8px;font-size:12.5px;}
+  .controls input[type=search]{min-width:180px;flex:1 1 180px;max-width:320px;}
+  /* Present to a screen reader, absent from the layout. The toolbar labels are
+     shortened to fit one line; where even a short one costs more than it
+     explains, the full name lives here instead of nowhere. */
+  .vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
+    clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0;}
+  @media (max-width:820px){ .controls{position:static;margin:0 0 var(--s3);padding:var(--s2) 0;} }
   .field{display:flex;flex-direction:column;gap:5px;}
-  .field label{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);}
+  .field label{font-size:var(--t-micro);text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:700;}
   select,input[type=search]{background:var(--surface);color:var(--ink);border:1px solid var(--border);border-radius:8px;padding:9px 11px;font-size:14px;min-width:190px;font-family:inherit;}
   /* The tile block that used to live here \u2014 .kpis, .tile and its three text
      rules \u2014 is gone. It was overridden in full by the stat-card system further
@@ -203,7 +249,11 @@
      it. It was a four-row list, which made one card in the strip half as tall
      again as the rest — a strip whose members are different sizes is not a
      strip, it is five cards that happen to be in a row. */
-  .tile .legend{display:grid;grid-template-columns:1fr 1fr;gap:1px 10px;margin-top:9px;}
+  .tile .legend{display:grid;grid-template-columns:1fr 1fr;gap:1px 8px;margin-top:9px;}
+  /* A grid child will not shrink below its content unless it is told it may,
+     which is how "No failure 761" pushed the severity tile 11px wider than the
+     card it sits in. */
+  .tile .legend>*{min-width:0;}
   .tile .legend button{display:flex;align-items:center;gap:7px;width:100%;padding:2px 4px;margin-left:-4px;
     background:none;border:0;border-radius:6px;cursor:pointer;font:inherit;font-size:12px;color:var(--ink-2);text-align:left;}
   .tile .legend button:hover:not(:disabled){background:var(--surface-2);color:var(--ink);}
@@ -211,7 +261,9 @@
   .tile .legend button:disabled{opacity:.4;cursor:default;}
   .tile .legend i{width:9px;height:9px;border-radius:2px;flex:none;}
   .tile .legend b{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--ink);}
-  .section{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 20px;margin-bottom:22px;box-shadow:var(--shadow);}
+  .section{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+    padding:var(--s3) var(--s4) var(--s4);margin-bottom:var(--s3);box-shadow:var(--shadow);
+    min-width:0;}
   .section>h2{margin:0 0 3px;font-size:15px;font-weight:640;} .section>.sub{color:var(--muted);font-size:12.5px;margin-bottom:16px;}
   /* Pareto */
   .pareto{display:flex;flex-direction:column;gap:7px;}
@@ -288,10 +340,21 @@
   .tlegend i.s-inc{background:var(--warning);}
   /* table */
   table.grid{width:100%;border-collapse:collapse;font-size:12.5px;}
-  table.grid th{text-align:left;color:var(--ink-2);font-weight:600;border-bottom:1px solid var(--border);padding:8px 6px;white-space:nowrap;}
-  table.grid td{border-bottom:1px solid var(--border);padding:8px 6px;vertical-align:top;}
+  table.grid th{text-align:left;color:var(--ink-2);font-weight:600;border-bottom:1px solid var(--border);padding:5px 7px;white-space:nowrap;}
+  table.grid td{border-bottom:1px solid var(--border);padding:5px 7px;vertical-align:top;}
   table.grid tr:hover td{background:var(--surface-2);}
   .tblwrap{overflow-x:auto;max-width:100%;min-width:0;}
+  /* A table in a half-width column has to fit that column. Headers are
+     nowrap everywhere else because a wrapped heading over a full-width table
+     looks broken — but inside a grid cell, nowrap is what produced a 9px
+     horizontal slider on the coverage card at 1366, and dragging a card
+     sideways to read its last column is the thing the whole redesign is
+     against. Where it still cannot fit, the first column stays put so the row
+     never loses its name. */
+  .grid12 .tblwrap table.grid th{white-space:normal;}
+  .grid12 .tblwrap table.grid th:first-child,
+  .grid12 .tblwrap table.grid td:first-child{position:sticky;left:0;background:var(--surface);}
+  .grid12 .tblwrap table.grid thead th:first-child{background:var(--surface-2);z-index:3;}
   /* The due tab's own controls. Inline label + control rather than the stacked
      .field the global bar uses: this row sits inside a section under a
      paragraph of prose, and a second column of uppercase eyebrow labels there
@@ -901,7 +964,7 @@
     align-items:stretch;}
   .kpi,.tile{position:relative;display:flex;flex-direction:column;gap:1px;
     background:var(--surface);border:0;border-radius:0;
-    padding:16px 18px 17px;box-shadow:none;overflow:hidden;
+    padding:var(--s2) var(--s3) var(--s3);box-shadow:none;overflow:hidden;
     text-align:left;font-family:inherit;color:inherit;
     transition:background .15s;}
   .kpi::before,.tile::before{content:"";position:absolute;left:0;top:0;right:0;height:3px;
@@ -912,14 +975,17 @@
   .kpi.on{background:var(--surface-2);
     box-shadow:0 0 0 1px var(--kc,var(--accent)) inset;}
   .kpi .k,.tile .k{font:700 9.5px/1.2 inherit;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);}
-  .kpi .v,.tile .v{font:800 34px/1.05 ui-monospace,SFMono-Regular,Menlo,monospace;
-    letter-spacing:-.03em;font-variant-numeric:tabular-nums;margin-top:7px;color:var(--ink);}
-  #kpiComp .v{font-size:var(--t-hero);}
-  .kpi .s,.tile .s{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.35;}
+  /* 34px and 42px were the sizes of a marketing page. A number a reliability
+     engineer reads fifty times a day needs to be unmistakable, not enormous —
+     and the four lines under it are what make it mean anything. */
+  .kpi .v,.tile .v{font:800 var(--t-num)/1.05 ui-monospace,SFMono-Regular,Menlo,monospace;
+    letter-spacing:-.03em;font-variant-numeric:tabular-nums;margin-top:3px;color:var(--ink);}
+  #kpiComp .v{font-size:34px;}
+  .kpi .s,.tile .s{font-size:var(--t-tiny);color:var(--muted);margin-top:2px;line-height:1.3;}
   /* the severity-mix tile carries a bar rather than a number */
-  .tile .bar{margin-top:11px;height:9px;border-radius:999px;background:var(--surface-2);
+  .tile .bar{margin-top:7px;height:8px;border-radius:999px;background:var(--surface-2);
     box-shadow:inset 0 1px 2px rgba(0,0,0,.10);}
-  .tile .legend{margin-top:9px;}
+  .tile .legend{margin-top:6px;}
   .kpi.good{--kc:var(--good);} .kpi.warn{--kc:var(--warning);}
   .kpi.bad{--kc:var(--critical);} .kpi.info{--kc:var(--accent);}
   .kpi.bad .v{color:var(--crit-ink);} .kpi.good .v{color:var(--good-ink);}
@@ -1478,7 +1544,12 @@
 
 <nav class="tabs" id="tabs">
   <div class="brand"><div class="bmark">CM</div>
-    <div><div class="t1">Condition Monitoring</div><div class="t2" id="sub" data-i18n="sub">Fleet dashboard</div></div></div>
+    <div><div class="t1">Condition Monitoring</div><div class="t2" id="sub" data-i18n="sub">Fleet dashboard</div></div>
+    <button class="railtog" id="railTog" type="button" aria-expanded="true"
+            data-i18n-title="rail_tog" title="Collapse the menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 6 8.5 12l6 6"/></svg>
+    </button></div>
   <button data-tab="overview" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg><span data-i18n="tab_overview">Overview</span></button>
   <button data-tab="failure"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4 21.5 20h-19Z"/><path d="M12 10.5v4"/><path d="M12 17.6h.01"/></svg><span data-i18n="tab_failure">Failure modes</span></button>
   <button data-tab="wear"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 15a7.5 7.5 0 1 1 15 0"/><path d="m12 15 3.5-4"/><path d="M4.5 19h15"/></svg><span data-i18n="tab_wear">Wear &amp; life</span></button>
@@ -1491,12 +1562,12 @@
 
 <main>
   <div class="controls">
-    <div class="field"><label for="fType" data-i18n="f_type">Inspection type</label><select id="fType"></select></div>
-    <div class="field"><label for="fClass" data-i18n="f_class">Equipment class</label><select id="fClass"></select></div>
+    <div class="field"><label for="fType" data-i18n="f_type_s" data-i18n-title="f_type" title="Inspection type">Type</label><select id="fType"></select></div>
+    <div class="field"><label for="fClass" data-i18n="f_class_s" data-i18n-title="f_class" title="Equipment class">Class</label><select id="fClass"></select></div>
     <div class="field"><label for="fRange" data-i18n="f_period">Period</label><select id="fRange">
       <option value="0" data-i18n="f_alltime">All time</option><option value="30" data-i18n="f_30">Last 30 days</option>
       <option value="90" data-i18n="f_90">Last 90 days</option><option value="365" data-i18n="f_365">Last 12 months</option></select></div>
-    <div class="field"><label for="fQ" data-i18n="f_search">Search</label>
+    <div class="field"><label class="vh" for="fQ" data-i18n="f_search">Search</label>
       <input id="fQ" type="search" data-i18n-ph="f_qph" placeholder="unit, defect, cause, comment…  ( / )"></div>
     <label class="voidtog" data-i18n-title="f_voidtip" title="Voided inspections are withdrawn from every count, but nothing is deleted">
       <input type="checkbox" id="fVoid"><span data-i18n="f_void">Show voided</span></label>
@@ -1958,6 +2029,10 @@ const I18N={
   lp_k_models:"Models covered", lp_k_units:"Units covered", lp_k_comps:"Compartments", lp_k_audited:"Audited",
   lm_title:"Fleet matrix",
   lm_sub:"Every asset class on one sheet. Colour is identity and nothing else: which product, never how good it is.",
+  rail_tog:"Collapse the menu",
+  rail_open:"Expand the menu",
+  f_type_s:"Type",
+  f_class_s:"Class",
   lm_all:"All classes", lm_machine:"Machine", lm_notset:"Not audited", lm_nocomp:"No such compartment",
   lm_alias:"recorded by make; identified as {m}", lm_csv:"⬇ Export CSV",
   lg_title:"Not on the sheet",
@@ -2127,8 +2202,8 @@ const I18N={
   ds_photosn:"{n} photos", ds_voidn:"{n} voided",
   cv_title:"Coverage — was the round actually walked",
   cv_sub:"Machines this round applies to, against machines it reached, in the period selected above. A finding you never went to look for is not an absence of findings.",
-  cv_th_round:"Round", cv_th_seen:"Units reached", cv_th_insp:"Inspections",
-  cv_th_never:"Never done", cv_th_over:"Overdue", cv_th_who:"Inspectors",
+  cv_th_round:"Round", cv_th_seen:"Reached", cv_th_insp:"Insp.",
+  cv_th_never:"Never", cv_th_over:"Overdue", cv_th_who:"By",
   cv_every:"every {d} days", cv_scoped:"machines this round fits", cv_p_days:"the last {d} days", cv_p_all:"all time",
   cv_note:"Against a register of {n} unit(s), over {p}. \u201cNever done\u201d and \u201coverdue\u201d look at the whole history, not just the period, because a machine is overdue whatever window you are reading.",
   cv_empty:"Nothing to measure coverage against in this selection.",
@@ -2363,6 +2438,10 @@ const I18N={
   lp_k_models:"Моделей охвачено", lp_k_units:"Единиц охвачено", lp_k_comps:"Узлов", lp_k_audited:"Проверено",
   lm_title:"Карта парка",
   lm_sub:"Все классы техники на одном листе. Цвет — это только продукт, а не оценка.",
+  rail_tog:"Свернуть меню",
+  rail_open:"Развернуть меню",
+  f_type_s:"Тип",
+  f_class_s:"Класс",
   lm_all:"Все классы", lm_machine:"Машина", lm_notset:"Не проверено", lm_nocomp:"Нет такого узла",
   lm_alias:"записано по марке; определено как {m}", lm_csv:"⬇ Экспорт CSV",
   lg_title:"Не попало на лист",
@@ -2538,8 +2617,8 @@ const I18N={
   ds_photosn:"фото: {n}", ds_voidn:"отозвано: {n}",
   cv_title:"Охват — обход действительно выполнен?",
   cv_sub:"Машины, к которым применим обход, против машин, до которых он дошёл, за выбранный период. Отсутствие дефектов там, где никто не смотрел, — это не отсутствие дефектов.",
-  cv_th_round:"Обход", cv_th_seen:"Охвачено единиц", cv_th_insp:"Осмотров",
-  cv_th_never:"Ни разу", cv_th_over:"Просрочено", cv_th_who:"Инспекторов",
+  cv_th_round:"Обход", cv_th_seen:"Охват", cv_th_insp:"Осм.",
+  cv_th_never:"Ни разу", cv_th_over:"Просроч.", cv_th_who:"Кто",
   cv_every:"каждые {d} сут", cv_scoped:"машины, к которым применим обход", cv_p_days:"последние {d} сут", cv_p_all:"всё время",
   cv_note:"По реестру из {n} ед., за {p}. «Ни разу» и «просрочено» считаются по всей истории, а не только по периоду.",
   cv_empty:"В этой выборке нечего сопоставить с охватом.",
@@ -2727,6 +2806,7 @@ function applyLang(){
   document.querySelectorAll("[data-i18n-title]").forEach(el=>{
     const s2=t(el.dataset.i18nTitle); el.title=s2; el.setAttribute("aria-label",s2); });
   document.querySelectorAll(".lang button").forEach(b=>b.classList.toggle("on",b.dataset.lang===lang));
+  railApply(document.body.classList.contains("railshut"));
   // Everything built in code has to be repainted, not just the static markup.
   refreshControls(); renderAll(); refreshSources(); refreshReportTargets();
   // The edit panel is built when it opens, so a switch made with it open leaves
@@ -4300,7 +4380,7 @@ function renderCoverage(){
      move on. The bar IS the percentage, so the percentage rides on it and the
      fraction sits beneath as the audit trail. */
   $("covTbl").innerHTML=`<thead><tr>${th("cv_th_round")}
-      <th style="min-width:190px">${esc(t("cv_th_seen"))}</th>
+      <th style="min-width:132px">${esc(t("cv_th_seen"))}</th>
       ${th("cv_th_insp")}${th("cv_th_never")}${th("cv_th_over")}
       ${th("cv_th_who")}</tr></thead><tbody>`
     + rows.map(r=>{
@@ -6895,6 +6975,29 @@ $("lpoPrint").onclick=lubePrint;
 /* Before the first render, so nothing on the page is ever drawn from figures
    the office has already corrected. */
 lubeApplyOverrides();
+/* The rail folds and stays folded. A reader who wants the width back for a
+   wide engineering table should not have to ask for it again every morning. */
+const RAILK="cm_dash_rail";
+function railApply(shut){
+  document.body.classList.toggle("railshut", !!shut);
+  const b=$("railTog");
+  if(b){ b.setAttribute("aria-expanded", shut?"false":"true");
+         b.title=t(shut?"rail_open":"rail_tog"); }
+  /* Folded, the label is gone and the icon is all there is. Its accessible
+     name has to come from somewhere, and the somewhere is the label itself —
+     so it is translated for free and can never drift from what it opens. */
+  document.querySelectorAll("nav.tabs button[data-tab]").forEach(btn=>{
+    const lab=btn.querySelector("span[data-i18n]");
+    if(lab) btn.title = lab.textContent.trim();
+  });
+}
+$("railTog").onclick=()=>{
+  const shut=!document.body.classList.contains("railshut");
+  try{ localStorage.setItem(RAILK, shut?"1":"0"); }catch(e){}
+  railApply(shut);
+};
+try{ railApply(localStorage.getItem(RAILK)==="1"); }catch(e){ railApply(false); }
+
 document.querySelector(".lang").addEventListener("click",e=>{
   const b=e.target.closest("button[data-lang]"); if(!b) return;
   lang=b.dataset.lang;
