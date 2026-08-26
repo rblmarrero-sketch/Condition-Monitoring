@@ -284,6 +284,55 @@ function keyFile(key, ext) {
   return p[0] + '_' + d[2] + '.' + d[1] + '.' + d[0] + '_' + p[2] + ext;
 }
 
+/** "TK146_09.03.2026_MP.json" -> "TK146|2026-03-09|MP", '' if it is not one. */
+function keyFromSidecar(fileName) {
+  const m = /^(.+)_(\d{2})\.(\d{2})\.(\d{4})_([^_.]+)\.json$/i.exec(String(fileName || ''));
+  return m ? (m[1] + '|' + m[4] + '-' + m[3] + '-' + m[2] + '|' + m[5]) : '';
+}
+/** The loser's own name, so both versions can sit in the folder side by side. */
+function variantName(name, dev) {
+  const i = name.lastIndexOf('.');
+  return i > 0 ? name.slice(0, i) + '~' + dev + name.slice(i) : name + '~' + dev;
+}
+/** Markers written before this file listed devices as bare strings. */
+const devList = doc => (doc && Array.isArray(doc.devices) ? doc.devices : [])
+  .map(d => (typeof d === 'string' ? { dev: d, file: '' } : d))
+  .filter(d => d && d.dev);
+
+/* One marker per record, listing every device that has sent a version.
+
+   This used to be four lines inline in saveOne(), and all four were wrong. The
+   marker went out with an EMPTY key — and readRecords() only forwards a marker
+   that has one, so every clash this backend recorded was written to a file that
+   no phone and no dashboard was ever handed. It listed devices as bare strings
+   where the rest of the system reads {dev, file}. It carried no resolved/keep/by,
+   so there was nowhere for a decision to be written down. And it overwrote
+   itself on every retry, which re-opens a question the office has already
+   answered. The Apps Script had all four right; a second backend for one
+   document has to agree on what the document IS. */
+async function markConflict(fileName, rival, dev) {
+  const key = keyFromSidecar(fileName);
+  if (!key) return null;
+  const name = META_DIR + '/' + fileName.replace(/\.json$/i, '.conflict.json');
+  let doc = null;
+  try { doc = JSON.parse((await getObj(name)).body.toString('utf8')); } catch (e) { doc = null; }
+  const devices = devList(doc);
+  const known = {};
+  devices.forEach(d => { known[d.dev] = 1; });
+  let fresh = false;
+  if (!known[rival]) { devices.push({ dev: rival, file: fileName }); fresh = true; }
+  if (!known[dev])   { devices.push({ dev: dev, file: variantName(fileName, dev) }); fresh = true; }
+  /* A re-send of a copy already listed changes nothing. A genuinely new device
+     does re-open it, because that is a version nobody has looked at. */
+  if (doc && !fresh) return { key, devices };
+  const out = { type: 'cm-record-conflict', version: 1, key,
+                at: new Date().toISOString(), devices,
+                resolved: false, keep: '', by: '' };
+  try { await putObj(name, Buffer.from(JSON.stringify(out, null, 2)), 'application/json'); }
+  catch (e) { return null; }
+  return { key, devices };
+}
+
 /* A correction is its own small file that nothing else ever touches.
 
    NOT written back into the inspection's own sidecar: the phone that captured
@@ -335,12 +384,38 @@ async function deleteRecord(b) {
   return { ok: true, deleted: gone };
 }
 
+/* The office's decision. Both versions stay in the bucket — this only records
+   which one the reports should use, so it is as reversible as a void.
+
+   It used to DELETE the marker, and read the kept device out of `b.dev` when
+   the dashboard sends `b.keep`. Between them that meant the decision was never
+   written down anywhere at all: it lived in the localStorage of the one browser
+   that made it, so the other computer still asked, and a phone — which learns a
+   clash is settled only by being handed a marker that says so — went on warning
+   for ever, because an object that is gone is handed to nobody. The marker
+   stays now and is stamped. */
 async function resolveConflict(b) {
-  const name = keyFile(b.key, '.conflict.json');
-  if (!name) return { ok: false, error: 'Bad record key: ' + b.key };
-  try { await delObj(META_DIR + '/' + name); } catch (e) {}
+  const file = keyFile(b.key, '.conflict.json');
+  if (!file) return { ok: false, error: 'Bad record key: ' + b.key };
+  const keep = String(b.keep || b.dev || '').replace(/[^A-Za-z0-9_-]+/g, '').slice(0, 24);
+  if (!keep) return { ok: false, error: 'No device named to keep for ' + b.key };
+  const name = META_DIR + '/' + file;
+  let doc = null;
+  try { doc = JSON.parse((await getObj(name)).body.toString('utf8')); } catch (e) { doc = null; }
+  const devices = devList(doc);
+  /* The Apps Script refuses a device the marker does not name. Here the marker
+     may legitimately be missing — the dashboard also raises the question when
+     it simply holds two copies of one round, which is how every clash this
+     backend recorded before today reached the office. Refusing would leave
+     those undecidable for ever, so the decision is recorded rather than
+     rejected, and the kept device joins the list. */
+  if (!devices.some(d => d.dev === keep)) devices.push({ dev: keep, file: '' });
+  const out = { type: 'cm-record-conflict', version: 1, key: String(b.key),
+                at: new Date().toISOString(), devices,
+                resolved: true, keep, by: String(b.by || '').slice(0, 80) };
+  await putObj(name, Buffer.from(JSON.stringify(out, null, 2)), 'application/json');
   await touchIndex();
-  return { ok: true, resolved: b.key, keep: b.dev || '' };
+  return { ok: true, key: out.key, resolved: out.key, keep, at: out.at };
 }
 
 /* When the folder last changed, so a client can ask "anything new?" for the
@@ -376,7 +451,7 @@ async function saveOne(b) {
     const owner = String(head.headers['x-amz-meta-cm-dev'] || '');
     if (owner && dev && owner !== dev) {
       rival = owner;
-      name = fileName.replace(/(\.[^.]+)$/, '~' + dev + '$1');
+      name = variantName(fileName, dev);
     }
   }
   const key = (path ? path + '/' : '') + name;
@@ -386,13 +461,8 @@ async function saveOne(b) {
   if (rival) {
     out.kept = true;
     if (isSidecar(fileName)) {
-      const cname = fileName.replace(/\.json$/i, '.conflict.json');
-      const doc = { type: 'cm-record-conflict', version: 1,
-                    key: '', file: fileName, devices: [rival, dev],
-                    at: new Date().toISOString() };
-      try { await putObj(META_DIR + '/' + cname,
-        Buffer.from(JSON.stringify(doc, null, 2)), 'application/json'); } catch (e) {}
-      out.conflict = fileName; out.devices = doc.devices;
+      const c = await markConflict(fileName, rival, dev);
+      if (c) { out.conflict = c.key; out.devices = c.devices; }
     }
   }
   if (isSidecar(name)) await touchIndex();
@@ -468,4 +538,5 @@ exports.handler = async function (event) {
 /* Exported for tests/ya-srv.cjs, which runs this file against an in-memory
    bucket so the suite that proves the Apps Script proves this too. */
 exports._internals = { listAll, saveOne, readRecords, listFiles, readFile, readFiles,
-                       saveEdit, deleteRecord, resolveConflict, diagnose, keyFile, isSidecar };
+                       saveEdit, deleteRecord, resolveConflict, diagnose, keyFile, keyFromSidecar,
+                       markConflict, isSidecar };

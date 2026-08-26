@@ -419,6 +419,40 @@ the last phone has moved across.
 
 ---
 
+## 12. When the server code changes
+
+The phone and the dashboard update themselves — they are pages on GitHub, and a
+push puts the new version in front of everybody. **The server does not.**
+`function.js` and `server.js` were copied onto this machine once, in step 6, and
+they stay exactly as they were until somebody copies them again. So a fix that
+touches the backend is not live when it is pushed; it is live when you run this.
+
+Three lines, in the same PowerShell window you use for everything else:
+
+```
+ssh cmadmin@baimskaya-cm.duckdns.org
+```
+
+then
+
+```
+cd /opt/cm
+sudo curl -fsSLO https://raw.githubusercontent.com/rblmarrero-sketch/Condition-Monitoring/claude/magnetic-plug-dashboard-llv4wc/docs/yandex/function.js
+sudo curl -fsSLO https://raw.githubusercontent.com/rblmarrero-sketch/Condition-Monitoring/claude/magnetic-plug-dashboard-llv4wc/docs/yandex/server.js
+sudo systemctl restart cm
+sudo systemctl status cm --no-pager
+```
+
+The last line should say **active (running)**. If it says `failed`, the new file
+did not start — put the old one back with `sudo systemctl stop cm`, tell whoever
+made the change, and read the reason with `sudo journalctl -u cm -n 50`.
+
+Nothing in the bucket is touched by this, and `cm.env` — the file with the keys
+and the admin password in it — is not one of the files being replaced. Restarting
+takes about a second, during which a phone that happens to be syncing retries.
+
+---
+
 ## What this costs you that a function did not
 
 **Money:** a few dollars a month instead of near-zero. Small.

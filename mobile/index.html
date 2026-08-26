@@ -6496,24 +6496,51 @@ function cfAll(){
    batch. A marker only travels once — the pull after it advances past the cursor
    and brings nothing — so counting the batch would mention the clash on one sync
    and never again, while it is still sitting there unanswered. */
-function cfMerge(list){
+function cfMerge(list, complete){
   const have=cfAll();
   let touched=false;
+  const seen=Object.create(null);
   for(const c of (list||[])){
     if(!c || !c.key) continue;
+    seen[c.key]=1;
     const cur=have[c.key];
     if(cur && String(c.at||"")<String(cur.at||"")) continue;   // a stale marker must not re-open a decision
     if(c.resolved){ if(cur){ delete have[c.key]; touched=true; } }
     else { have[c.key]={at:c.at||""}; touched=true; }
   }
+  /* A listing that read the WHOLE folder is also a statement about what is not
+     in it. The office settles a clash by stamping the marker, so a settled one
+     normally arrives saying so — but a marker an older backend simply DELETED
+     arrives as nothing at all, and a phone that only ever adds goes on warning
+     about a decision made weeks ago. Never on an incremental pull, which is
+     silent about everything before the cursor and would wipe every open clash. */
+  if(complete){
+    for(const k of Object.keys(have)) if(!seen[k]){ delete have[k]; touched=true; }
+  }
   if(touched){
     try{ localStorage.setItem(TEAM_CF,JSON.stringify(have)); }catch(e){ /* not worth failing a sync over */ }
     cfCache=have;
   }
-  return Object.keys(have).length;
+  return cfOpen().length;
 }
 const cfKey=r=>`${r.u}|${r.d}|${r.t}`;              // markers arrive as UNIT|DATE|TYPE
 function cfHas(row){ return Object.prototype.hasOwnProperty.call(cfAll(),cfKey(row)); }
+/* The clashes this phone can actually SHOW.
+
+   A held key names a unit, a date and a round type. The list under the badge is
+   built from the rounds this phone holds, and marks the clashing ones — so a
+   key matching none of them paints a number on the tab with nothing behind it.
+   An inspector opened SYSTEM on a badge of 1 and found an empty list, which is
+   the same lie as a blank where a reading should be, told the other way round.
+   Count what can be opened; a key with no round left is not news, it is a
+   leftover, and the reconcile above clears it on the next full pull. */
+function cfOpen(){
+  const have=cfAll();
+  const keys=Object.keys(have);
+  if(!keys.length) return [];
+  const live=new Set(teamAll().map(cfKey));
+  return keys.filter(k=>live.has(k));
+}
 /* Parsing the whole cache on every call was costing a JSON.parse of up to a
    megabyte each time a unit was picked — renderLastDone, renderTeam and
    teamMerge all call this. Hold it in memory and invalidate on write. */
@@ -6828,7 +6855,10 @@ async function teamPull(manual,full){
        is, because the effect on a phone is the same: the round no longer
        counts, and the unit is due again. */
     const wiped=teamGone(j.deleted||[]);
-    const clash=cfMerge(j.conflicts||[]);
+    /* Complete only when this reply listed the whole folder: the cursor started
+       at zero, nothing was cut short, and it came the long way — the index path
+       reports records, not markers. */
+    const clash=cfMerge(j.conflicts||[], !viaIndex && after===0 && !j.truncated);
     // Only claim to have them once they are actually stored. Advancing the
     // cursor after a failed write loses those inspections permanently.
     /* The index reports where the folder is, not where this reply stopped —
@@ -7302,7 +7332,7 @@ function renderTabs(){
      it opens, and no way to tell which was lying. */
   try{
     set($("tabD"), dueRows("").filter(r=>r.st==="over").length, "miss");
-    set($("tabS"), Object.keys(cfAll()).length, "warn");
+    set($("tabS"), cfOpen().length, "warn");
   }catch(e){}
 }
 $("teamRefresh").onclick=()=>teamPull(true);
@@ -8295,7 +8325,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="161";
+const BUILD="162";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
