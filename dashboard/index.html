@@ -297,9 +297,17 @@
      The bar owns its own layout instead of borrowing one that means something
      else here. */
   .ddbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin:10px 0 16px;}
-  .fld{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--ink-2);}
+  /* The SAME field the global bar uses: eyebrow label above the control.
+     These used to be inline label-beside-control, which meant two different
+     field anatomies on one page — and the moment a row wrapped, "Sheet" and
+     "Class" were different widths, the selects under them stopped lining up,
+     and the whole toolbar read as furniture that had been bumped. One
+     pattern; a wrapped row still ranges left. */
+  .fld{display:flex;flex-direction:column;align-items:flex-start;gap:5px;color:var(--ink-2);}
+  .fld>span{font:700 9.5px/1.2 inherit;letter-spacing:.11em;text-transform:uppercase;
+    color:var(--muted);}
   .fld select,.fld input[type=search]{min-width:0;padding:7px 10px;font-size:13px;}
-  .fld select{min-width:150px;} .fld input[type=search]{width:140px;}
+  .fld select{min-width:150px;} .fld input[type=search]{width:150px;}
   /* Due & missed — the state a row is in, carried by a left edge rather than a
      wash across the whole row. A tint behind twelve columns makes the numbers
      harder to read, which is the opposite of what a red row is for; the stripe
@@ -345,20 +353,27 @@
      NOT borrow the product palette below, where a hue already means "which
      drum" — a bar in one of those colours would be saying something it does
      not mean. */
+  /* Compact on purpose. Each stage was a small card — 13.5px label, 17px
+     number, a full sentence wrapping under a 12px bar — and seven of them
+     made a wall of prose out of what is one glance's worth of information.
+     One tight line per stage; the sentence rides underneath at footnote size,
+     one line, whole text in the tooltip. */
   .pgnote{background:var(--surface-2,#f1f4f5);border:1px solid var(--border);
-    border-radius:10px;padding:12px 14px;font-size:13px;color:var(--ink-2);line-height:1.5;}
-  .pgrid{display:flex;flex-direction:column;gap:2px;margin:14px 0 4px;}
-  .pgrow{display:grid;grid-template-columns:200px 1fr 116px;gap:12px;align-items:center;
-    padding:10px 12px;border-radius:8px;}
+    border-radius:8px;padding:8px 12px;font-size:11.5px;color:var(--ink-2);line-height:1.45;}
+  .pgrid{display:flex;flex-direction:column;gap:1px;margin:12px 0 4px;}
+  .pgrow{display:grid;grid-template-columns:170px 1fr 118px;gap:2px 12px;align-items:center;
+    padding:6px 10px;border-radius:7px;}
   .pgrow:nth-child(odd){background:var(--surface-2,#f7f9fa);}
-  .pglab b{display:block;font-size:13.5px;line-height:1.2;}
-  .pgbar{height:12px;border-radius:6px;background:var(--border);overflow:hidden;}
+  .pglab b{display:block;font-size:12px;line-height:1.2;}
+  .pgbar{height:7px;border-radius:6px;background:var(--border);overflow:hidden;}
   .pgbar span{display:block;height:100%;border-radius:6px;background:var(--accent,#8a4526);}
-  .pgnum{text-align:right;font-variant-numeric:tabular-nums;}
-  .pgnum b{font-size:17px;}
-  .pgnum i{display:block;font-style:normal;font-size:11.5px;color:var(--muted);font-weight:600;}
+  .pgnum{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .pgnum b{font-size:13.5px;}
+  .pgnum i{font-style:normal;font-size:10.5px;color:var(--muted);font-weight:600;margin-left:4px;}
   /* The reason a row exists sits under it, not in a tooltip nobody opens. */
-  .pgwhy{grid-column:1 / -1;font-size:12.5px;color:var(--ink-2);line-height:1.5;padding-top:2px;}
+  .pgwhy{grid-column:1 / -1;display:flex;align-items:center;gap:8px;
+    font-size:10.5px;color:var(--muted);line-height:1.35;}
+  .pgwhy .w{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .pgwhy .from{display:inline-block;margin-left:8px;padding:1px 7px;border-radius:20px;
     background:var(--border);color:var(--muted);font-size:11px;font-weight:700;
     white-space:nowrap;}
@@ -377,6 +392,13 @@
      and the row with no answer shouting rather than sitting quietly blank. */
   .posterbox{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;
     padding:16px;overflow-x:auto;contain:paint;}
+  /* The poster is sized for a wall — 26px headings, 15px product names read at
+     arm's length. At full size ON SCREEN it dwarfed the page around it, so the
+     preview is shown at 62% and the print path puts it back: what the fitter
+     reads does not shrink, only the thumbnail of it. */
+  .posterbox .poster{zoom:.62;}
+  body.printing-poster .posterbox .poster{zoom:1;}
+  @media print{ .posterbox .poster{zoom:1;} }
   .poster{background:#fff;color:#11171a;min-width:820px;padding:22px 26px;border-radius:6px;
     box-shadow:0 1px 3px rgba(0,0,0,.18);}
   /* The poster is PAPER. It is white in both themes, so everything on it takes
@@ -694,7 +716,15 @@
   .srchead .state{margin-left:auto;font-size:11px;color:var(--muted);white-space:nowrap;padding-top:2px;}
   .srccard.on .srchead .state{color:var(--good);font-weight:650;}
   .srcbody{padding:14px 16px;display:flex;flex-direction:column;gap:10px;}
-  .srcbody .row{display:flex;gap:10px;flex-wrap:wrap;}
+  /* THE TOOLBAR RULE THAT NEVER EXISTED. Twelve blocks on this page carry
+     class="row" with inline gap and align-items — and .row was only ever
+     defined as a flex container INSIDE the Data sources modal. Everywhere
+     else those inline styles applied to a plain block and did nothing:
+     buttons sat on accidental inline flow, and the moment a row held a
+     block-level child (a labelled select), the "row" became a ragged stack.
+     That is what "out of place buttons" was. One rule, page-wide. */
+  .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;min-width:0;}
+  .row>.field{flex:1 1 160px;min-width:0;}
   .srcbody input{width:100%;min-width:0;}
   .srcbody .msg{font-size:12px;color:var(--muted);min-height:16px;white-space:pre-wrap;}
   .btn.danger{color:var(--critical);}
@@ -1053,7 +1083,7 @@
     overflow:hidden;text-overflow:ellipsis;}
 
   /* form controls, so a panel does not look like a 1998 form */
-  .sheet input[type=text],.sheet input[type=date],.sheet select,.sheet textarea{
+  .sheet input[type=text],.sheet input[type=password],.sheet input[type=date],.sheet select,.sheet textarea{
     width:100%;background:var(--surface-2);border:1px solid var(--border);border-radius:9px;
     padding:9px 11px;font:inherit;font-size:13px;color:var(--ink);
     transition:border-color .15s, background .15s, box-shadow .15s;}
@@ -1903,7 +1933,7 @@ const I18N={
   lm_sub:"Every asset class on one sheet. Colour is identity and nothing else: which product, never how good it is.",
   lm_all:"All classes", lm_machine:"Machine", lm_notset:"Not audited", lm_nocomp:"No such compartment",
   lm_alias:"recorded by make; identified as {m}", lm_csv:"⬇ Export CSV",
-  lpo_title:"Shop posters", lpo_sub:"The sheet that goes on the workshop wall.",
+  lpo_title:"Shop posters", lpo_sub:"The sheet that goes on the workshop wall. The preview is shown reduced \u2014 it prints at full size.",
   lpo_which:"Sheet", lpo_fleet:"Whole fleet", lpo_model:"One model", lpo_print:"🖨 Print",
   lpo_class:"One asset class", lpo_cls:"Class",
   lpo_class_sub:"{n} unit(s) on the register · единиц в реестре",
@@ -2293,7 +2323,7 @@ const I18N={
   lm_sub:"Все классы техники на одном листе. Цвет — это только продукт, а не оценка.",
   lm_all:"Все классы", lm_machine:"Машина", lm_notset:"Не проверено", lm_nocomp:"Нет такого узла",
   lm_alias:"записано по марке; определено как {m}", lm_csv:"⬇ Экспорт CSV",
-  lpo_title:"Плакаты для мастерской", lpo_sub:"Лист, который вешается на стену цеха.",
+  lpo_title:"Плакаты для мастерской", lpo_sub:"Лист, который вешается на стену цеха. Предпросмотр уменьшен \u2014 печатается в полном размере.",
   lpo_which:"Лист", lpo_fleet:"Весь парк", lpo_model:"Одна модель", lpo_print:"🖨 Печать",
   lpo_class:"Один класс техники", lpo_cls:"Класс",
   lpo_class_sub:"{n} ед. в реестре · unit(s) on the register",
@@ -5533,12 +5563,12 @@ function renderLubeProg(){
   const P = lubeProgramme();
   const stage = (n, d, key, note, from) => {
     const pc = d ? (n / d * 100) : 0;
-    return `<div class="pgrow">
+    return `<div class="pgrow" title="${esc(t(note))}">
       <div class="pglab"><b>${esc(t(key))}</b></div>
       <div class="pgbar"><span style="width:${Math.max(pc,0.6).toFixed(2)}%"></span></div>
       <div class="pgnum"><b>${fmtN(n)}</b><i>${esc(t("lp_of",{n:fmtN(d)}))} · ${
         pc>0&&pc<1?"<1":Math.round(pc)}%</i></div>
-      <div class="pgwhy">${esc(t(note))}<span class="from">${esc(t(from))}</span></div>
+      <div class="pgwhy"><span class="w">${esc(t(note))}</span><span class="from">${esc(t(from))}</span></div>
     </div>`;
   };
   $("lubeProg").innerHTML =
