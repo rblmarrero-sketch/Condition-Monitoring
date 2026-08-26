@@ -292,13 +292,31 @@
      it. It was a four-row list, which made one card in the strip half as tall
      again as the rest — a strip whose members are different sizes is not a
      strip, it is five cards that happen to be in a row. */
-  .tile .legend{display:grid;grid-template-columns:1fr 1fr;gap:1px 8px;margin-top:9px;}
+  /* Four severities in two columns, at label size. It carried body text and
+     an 11px gap, which made this the tallest tile on the strip — and equal
+     heights mean the tallest tile is the height of the whole band. */
+  /* Four severities, packed. Two fixed columns forced "Critical 8" onto two
+     lines each, so the legend came to 62px and — tiles being equal height by
+     design — that made 62px the height of every tile on the strip. Let them
+     flow and they take two rows of one line. */
+  .tile .legend{display:flex;flex-wrap:wrap;gap:1px 10px;margin-top:5px;
+    font-size:var(--t-micro);line-height:1.45;}
+  /* Each entry is a BUTTON — pressing "Critical" filters the page to it — and
+     it was wearing a button's default border and padding, which is why four
+     short words needed 89px of tile. Chrome off, target still 20px tall. */
   /* A grid child will not shrink below its content unless it is told it may,
      which is how "No failure 761" pushed the severity tile 11px wider than the
      card it sits in. */
   .tile .legend>*{min-width:0;}
-  .tile .legend button{display:flex;align-items:center;gap:7px;width:100%;padding:2px 4px;margin-left:-4px;
-    background:none;border:0;border-radius:6px;cursor:pointer;font:inherit;font-size:12px;color:var(--ink-2);text-align:left;}
+  /* Each entry is a button — pressing "Critical" filters the page to it — and
+     it was width:100%, so four short words took four rows and 89px of tile.
+     Tiles are equal height by design, which made that 89px the height of the
+     whole strip. Two per row now, and the strip fits its budget. */
+  .tile .legend button{display:inline-flex;flex:0 0 auto;align-items:center;gap:5px;
+    padding:2px 4px;margin-left:-4px;white-space:nowrap;
+    background:none;border:0;border-radius:6px;cursor:pointer;font:inherit;
+    font-size:var(--t-micro);color:var(--ink-2);text-align:left;}
+  .tile .legend button b{font-variant-numeric:tabular-nums;color:var(--ink);}
   .tile .legend button:hover:not(:disabled){background:var(--surface-2);color:var(--ink);}
   .tile .legend button.on{background:var(--surface-2);color:var(--ink);font-weight:650;}
   .tile .legend button:disabled{opacity:.4;cursor:default;}
@@ -1012,7 +1030,7 @@
     --t-body:13px;     /* the default                                   */
     --t-lead:15px;     /* a card title                                  */
     --t-head:19px;     /* a section title                               */
-    --t-num:30px;      /* a KPI                                         */
+    --t-num:26px;      /* a KPI                                         */
     --t-hero:42px;     /* the three numbers that lead the page          */
     --mono:ui-monospace,SFMono-Regular,Menlo,monospace;
     /* How wide the page is allowed to get. It was pinned at 1240px, so a
@@ -1060,7 +1078,7 @@
     align-items:stretch;}
   .kpi,.tile{position:relative;display:flex;flex-direction:column;gap:1px;
     background:var(--surface);border:0;border-radius:0;
-    padding:var(--s2) var(--s3) var(--s3);box-shadow:none;overflow:hidden;
+    padding:7px var(--s3) 9px;box-shadow:none;overflow:hidden;
     text-align:left;font-family:inherit;color:inherit;
     transition:background .15s;}
   .kpi::before,.tile::before{content:"";position:absolute;left:0;top:0;right:0;height:3px;
@@ -1076,8 +1094,12 @@
      and the four lines under it are what make it mean anything. */
   .kpi .v,.tile .v{font:800 var(--t-num)/1.05 ui-monospace,SFMono-Regular,Menlo,monospace;
     letter-spacing:-.03em;font-variant-numeric:tabular-nums;margin-top:3px;color:var(--ink);}
-  #kpiComp .v{font-size:34px;}
-  .kpi .s,.tile .s{font-size:var(--t-tiny);color:var(--muted);margin-top:2px;line-height:1.3;}
+  #kpiComp .v{font-size:30px;}
+  /* Two lines of context, clamped. "37 of 52 rounds walked before they were
+     overdue" is the sentence that makes 71% mean something and it must not be
+     allowed to become four lines on a narrow tile. */
+  .kpi .s,.tile .s{font-size:var(--t-micro);color:var(--muted);margin-top:2px;line-height:1.35;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
   /* the severity-mix tile carries a bar rather than a number */
   .tile .bar{margin-top:7px;height:8px;border-radius:999px;background:var(--surface-2);
     box-shadow:inset 0 1px 2px rgba(0,0,0,.10);}
@@ -1752,7 +1774,8 @@
          monthly round is often enough to catch anything at all. -->
     <div class="section">
       <h2 data-i18n="pf_title">P-F interval — detection to functional failure</h2>
-      <div class="sub" data-i18n="pf_sub">Measured wear against its limit. P is where the part becomes a finding (80% worn); F is condemn. The gap between them is the warning the round buys you — if it is shorter than the inspection interval, the round will miss it.</div>
+      <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
+        <div class="sub" data-i18n="pf_sub">Measured wear against its limit. P is where the part becomes a finding (80% worn); F is condemn. The gap between them is the warning the round buys you — if it is shorter than the inspection interval, the round will miss it.</div></details>
       <div class="row" style="margin-bottom:10px;gap:10px;align-items:end;flex-wrap:wrap">
         <div class="field" style="min-width:280px"><label for="pfSel" data-i18n="pf_pick">Position</label>
           <select id="pfSel"></select></div>
@@ -1776,7 +1799,8 @@
     <div class="kpis" id="wearKpis"></div>
     <div class="section">
       <h2 data-i18n="w_title">Wear and remaining life</h2>
-      <div class="sub" data-i18n="w_sub">Every measured position, latest reading first. Life is projected from this position's own history — two readings at least, and the app says so when it will not guess.</div>
+      <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
+        <div class="sub" data-i18n="w_sub">Every measured position, latest reading first. Life is projected from this position's own history — two readings at least, and the app says so when it will not guess.</div></details>
       <!-- The same segmented control the register uses. Two filters that do the
            same job should not be two different shapes. -->
       <div class="row" style="margin:14px 0 12px;gap:12px;align-items:center;flex-wrap:wrap">
@@ -1797,7 +1821,8 @@
     <div class="kpis" id="actKpis"></div>
     <div class="section">
       <h2 data-i18n="s_act">Action register</h2>
-      <div class="sub" data-i18n="s_act_sub">Every finding that needs work, worst first. Give it an owner and a date, and it stops being a list and starts being a plan.</div>
+      <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
+        <div class="sub" data-i18n="s_act_sub">Every finding that needs work, worst first. Give it an owner and a date, and it stops being a list and starts being a plan.</div></details>
       <div id="actBar" style="margin:2px 0 16px"></div>
       <div class="row" style="margin-bottom:14px;gap:12px;align-items:center;flex-wrap:wrap">
         <!-- All four answers on screen. A four-option dropdown hides three of
@@ -1847,7 +1872,8 @@
     <div class="kpis" id="dueKpis"></div>
     <div class="section">
       <h2 data-i18n="dd_title">Every round, against the clock it is scheduled on</h2>
-      <div class="sub" data-i18n="dd_sub">Hours, not days — a machine parked for three weeks has not worn. Each row is one unit and one round, counted from the last one recorded anywhere in the system and at the machine's own operating rate where two hour-meter readings have measured it. A round somebody chose not to walk says so, with the reason they gave.</div>
+      <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
+        <div class="sub" data-i18n="dd_sub">Hours, not days — a machine parked for three weeks has not worn. Each row is one unit and one round, counted from the last one recorded anywhere in the system and at the machine's own operating rate where two hour-meter readings have measured it. A round somebody chose not to walk says so, with the reason they gave.</div></details>
       <div class="ddbar">
         <label class="fld"><span data-i18n="dd_round">Round</span><select id="ddType"></select></label>
         <label class="fld"><span data-i18n="dd_show">Show</span><select id="ddScope">
@@ -1878,7 +1904,8 @@
     <div class="lsub" data-lsub="cover">
     <div class="section">
       <h2 data-i18n="lp_title">The programme, honestly counted</h2>
-      <div class="sub" data-i18n="lp_sub">How much of the fleet is audited, verified and standardised — against the register, not against the machines somebody happened to visit. Every number states its denominator, because those two get mistaken for each other and that is how a programme reports 90% and means 90% of eleven machines.</div>
+      <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
+        <div class="sub" data-i18n="lp_sub">How much of the fleet is audited, verified and standardised — against the register, not against the machines somebody happened to visit. Every number states its denominator, because those two get mistaken for each other and that is how a programme reports 90% and means 90% of eleven machines.</div></details>
       <div id="lubeProg"></div>
     </div>
 
@@ -1886,7 +1913,8 @@
     <div class="lsub" data-lsub="std">
     <div class="section">
       <h2 data-i18n="ls_title">Deciding the standard</h2>
-      <div class="sub" data-i18n="ls_sub">Not product by product — requirement by requirement. Machines that need the same thing are one decision, however many badges are on them. Choose, and the matrix and the posters re-read.</div>
+      <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
+        <div class="sub" data-i18n="ls_sub">Not product by product — requirement by requirement. Machines that need the same thing are one decision, however many badges are on them. Choose, and the matrix and the posters re-read.</div></details>
       <div class="scrollbox" style="--sb:520px;border-top:0"><div id="lsList"></div></div>
       <div class="sub" id="lsNote" style="margin-top:12px"></div>
     </div>
@@ -1895,7 +1923,8 @@
     <div class="lsub" data-lsub="rec">
     <div class="section">
       <h2 data-i18n="lc_title">The 2027 shelf against the recommendations</h2>
-      <div class="sub" data-i18n="lc_sub">Specification 02 rev CO-05 is what the site may actually buy. The fleet matrices say what should go in each compartment. Where the two do not line up, somebody has either told a fitter to use an oil nobody ordered, or ordered an oil for nothing — and the season is a third answer neither of them can show.</div>
+      <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
+        <div class="sub" data-i18n="lc_sub">Specification 02 rev CO-05 is what the site may actually buy. The fleet matrices say what should go in each compartment. Where the two do not line up, somebody has either told a fitter to use an oil nobody ordered, or ordered an oil for nothing — and the season is a third answer neither of them can show.</div></details>
       <div class="kpis" id="lcKpis"></div>
       <div class="scrollbox" style="--sb:480px;border-top:0"><div id="lcLists"></div></div>
     </div>
@@ -1904,7 +1933,8 @@
     <div class="lsub" data-lsub="ref">
     <div class="section">
       <h2 data-i18n="lr_title">Machine reference</h2>
-      <div class="sub" data-i18n="lr_sub">Capacities, specifications and intervals, per model. A capacity is the one number here that causes a failure on its own — an under-filled final drive seizes, an over-filled one blows a seal — so changing it asks where the figure came from.</div>
+      <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
+        <div class="sub" data-i18n="lr_sub">Capacities, specifications and intervals, per model. A capacity is the one number here that causes a failure on its own — an under-filled final drive seizes, an over-filled one blows a seal — so changing it asks where the figure came from.</div></details>
       <div class="row" style="margin:14px 0 12px;gap:12px;align-items:flex-end;flex-wrap:wrap">
         <label class="fld"><span data-i18n="lr_model">Model</span>
           <select id="lrModel"></select></label>
@@ -1924,7 +1954,8 @@
     <div class="lsub" data-lsub="matrix">
     <div class="section">
       <h2 data-i18n="lm_title">Fleet matrix</h2>
-      <div class="sub" data-i18n="lm_sub">Every asset class on one sheet — compartment, capacity, interval, and the oil that belongs in it. Colour is identity and nothing else: which product, never how good it is.</div>
+      <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
+        <div class="sub" data-i18n="lm_sub">Every asset class on one sheet — compartment, capacity, interval, and the oil that belongs in it. Colour is identity and nothing else: which product, never how good it is.</div></details>
       <div class="row" style="margin:14px 0 12px;gap:12px;align-items:center;flex-wrap:wrap">
         <div class="seg" id="lmSeg"></div>
         <span style="flex:1"></span>
@@ -1945,7 +1976,8 @@
     <div class="lsub" data-lsub="exc">
     <div class="section">
       <h2 data-i18n="lg_title">Not on the sheet</h2>
-      <div class="sub" data-i18n="lg_sub">The matrix can only show a machine where the register's spelling of its model and the reference's spelling of its model meet. Where they miss each other, the machine has no lubrication standard and nothing above says so. Both halves are listed here: nothing is dropped quietly.</div>
+      <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
+        <div class="sub" data-i18n="lg_sub">The matrix can only show a machine where the register's spelling of its model and the reference's spelling of its model meet. Where they miss each other, the machine has no lubrication standard and nothing above says so. Both halves are listed here: nothing is dropped quietly.</div></details>
       <div class="grid12" style="margin-top:14px">
         <div class="g6">
           <div class="fld"><span data-i18n="lg_nomodel">Machines with no reference</span></div>
@@ -1964,7 +1996,8 @@
     <div class="lsub" data-lsub="shop">
     <div class="section">
       <h2 data-i18n="lpo_title">Shop posters</h2>
-      <div class="sub" data-i18n="lpo_sub">The sheet that goes on the workshop wall. A standard that lives only in a database is not a standard — this is the version a fitter reads at arm's length with a head-torch, so it is bilingual, it is large, and it says what to do when the right drum is empty.</div>
+      <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
+        <div class="sub" data-i18n="lpo_sub">The sheet that goes on the workshop wall. A standard that lives only in a database is not a standard — this is the version a fitter reads at arm's length with a head-torch, so it is bilingual, it is large, and it says what to do when the right drum is empty.</div></details>
       <div class="row" style="margin:14px 0 12px;gap:12px;align-items:flex-end;flex-wrap:wrap">
         <label class="fld"><span data-i18n="lpo_which">Sheet</span>
           <select id="lpoWhich">
