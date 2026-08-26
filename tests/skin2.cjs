@@ -57,7 +57,12 @@ const SEED = () => {
     await p.waitForTimeout(1000);
     await p.evaluate(t => { document.documentElement.setAttribute('data-theme', t); }, theme);
     await p.evaluate(SEED);
-    await p.evaluate(() => showTab('actions'));
+    /* The register opens as a table now, with grouping by machine as the other
+       view. Everything below measures the GROUPED block — its own background,
+       its row ink, its two-line rows — so it asks for that view. The table's
+       rows are ordinary table.grid rows and are covered by the page-wide pass
+       above; what is checked here is the shape this file was written for. */
+    await p.evaluate(() => { actView = 'unit'; renderActions(); showTab('actions'); });
     await p.waitForTimeout(700);
 
     const r = await p.evaluate(C => {
@@ -146,7 +151,12 @@ const SEED = () => {
     await p.goto(B, { waitUntil: 'load' });
     await p.waitForTimeout(900);
     await p.evaluate(SEED);
-    await p.evaluate(() => showTab('actions'));
+    /* The register opens as a table now, with grouping by machine as the other
+       view. Everything below measures the GROUPED block — its own background,
+       its row ink, its two-line rows — so it asks for that view. The table's
+       rows are ordinary table.grid rows and are covered by the page-wide pass
+       above; what is checked here is the shape this file was written for. */
+    await p.evaluate(() => { actView = 'unit'; renderActions(); showTab('actions'); });
     await p.waitForTimeout(600);
     const r = await p.evaluate(() => {
       const over = document.documentElement.scrollWidth > window.innerWidth + 1;

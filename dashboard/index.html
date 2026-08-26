@@ -1758,12 +1758,17 @@
   </section>
 
   <section id="tab-failure" class="hidden">
-    <div class="section">
+    <!-- Four analyses of one subject, stacked full-width, so a 1920 monitor
+         showed one at a time and the tab ran past a thousand pixels with 700
+         of them unused on either side. What fails and why it failed are read
+         together; so are how long you have and which mechanism it was. -->
+    <div class="grid12">
+    <div class="section g7">
       <h2 data-i18n="s_pareto">Top failure modes (Pareto)</h2>
       <div class="sub" data-i18n="s_pareto_sub">Coded defect types ranked by frequency — this is your defect-elimination shortlist.</div>
       <div class="pareto" id="paretoDefect"></div>
     </div>
-    <div class="section">
+    <div class="section g5">
       <h2 data-i18n="s_cause">Direct causes</h2>
       <div class="sub" data-i18n="s_cause_sub">Why those defects occurred, as recorded at inspection.</div>
       <div class="pareto" id="paretoCause"></div>
@@ -1772,7 +1777,7 @@
          — the interval between the point a fault becomes detectable and the
          point the part is finished. It is the number that decides whether a
          monthly round is often enough to catch anything at all. -->
-    <div class="section">
+    <div class="section g6">
       <h2 data-i18n="pf_title">P-F interval — detection to functional failure</h2>
       <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
         <div class="sub" data-i18n="pf_sub">Measured wear against its limit. P is where the part becomes a finding (80% worn); F is condemn. The gap between them is the warning the round buys you — if it is shorter than the inspection interval, the round will miss it.</div></details>
@@ -1783,10 +1788,11 @@
       <div id="pfChart"></div>
       <div class="sub" id="pfNote" style="margin-top:10px"></div>
     </div>
-    <div class="section">
+    <div class="section g6">
       <h2 data-i18n="s_iso">ISO 14224 failure mechanism</h2>
       <div class="sub" data-i18n="s_iso_sub">Table B.2 mechanism classes — comparable across sites and benchmarks.</div>
       <div class="pareto" id="paretoIso"></div>
+    </div>
     </div>
   </section>
 
