@@ -199,8 +199,23 @@ async function readRecords(p) {
   const all = await listAll('');
   /* Index shards are .json under _meta/index and their shape is a records
      array, so reading them back as inspections doubles the fleet silently.
-     Excluded by path, and by type below — belt and braces, same as the script. */
-  const cars = all.filter(f => /\.json$/i.test(f.name) && f.updated > after
+     Excluded by path, and by type below — belt and braces, same as the script.
+
+     `>=`, not `>`. The Apps Script reads Drive's last-modified in MILLISECONDS,
+     so no two files share a timestamp and an exclusive cursor loses nothing.
+     Object Storage reports LastModified to the SECOND. Six rounds uploaded in
+     the same second all carry the same number, the cursor advances to it, and
+     `> after` means every one of them after the first is never delivered to
+     anybody again — not to the office, not to a phone — while read, pending and
+     truncated all report a complete read. A batch upload at the end of a shift
+     is exactly when several sidecars land inside one second.
+
+     Inclusive costs one re-read of the newest second on each sync, and the
+     clients are already idempotent about it: the dashboard de-dups records by
+     equip|date|type|dev, edits and deferrals are last-write-wins, and teamGone
+     on a key already applied does nothing. A round arriving twice is invisible.
+     A round arriving never is what we had. */
+  const cars = all.filter(f => /\.json$/i.test(f.name) && f.updated >= after
                             && f.path.indexOf(INDEX_DIR + '/') !== 0)
                   .sort((a, b) => a.updated - b.updated);
   const records = [], edits = [], conflicts = [], deleted = [], deferrals = [];
