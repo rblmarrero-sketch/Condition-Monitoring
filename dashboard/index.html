@@ -2146,6 +2146,7 @@ const I18N={
   ed_trash:"trash",
   ed_del_sub2:"— recoverable for 30 days — and the deletion is logged with your name and reason.",
   ed_del_off:"Deletion is switched off. An admin has to set ADMIN_SECRET in the Apps Script and deploy a new version. Until then use Void above — it withdraws the round from every count, chart and report, keeps the photos, and can be undone.",
+  ed_del_off_srv:"Deletion is switched off. An admin has to set ADMIN_SECRET on the upload server — on the VM: add it to /opt/cm/cm.env, then sudo systemctl restart cm. Until then use Void above — it withdraws the round from every count, chart and report, keeps the photos, and can be undone.",
   ed_del_on:"Deletion is switched on. The password is the one set in the Apps Script — it is never stored here.",
   ed_del_unknown:"Deletion needs the admin password set in the Apps Script. Use Test connection in Data sources to find out whether it is switched on.",
   ed_del_stale:"This deployment answers reads but not writes — corrections, voids and deletions cannot reach it. In the Apps Script editor: Deploy → Manage deployments → ✏️ Edit → Version: New version → Deploy. The URL does not change.",
@@ -2543,6 +2544,7 @@ const I18N={
   ed_trash:"корзину Диска",
   ed_del_sub2:"— восстановимо 30 дней — и удаление фиксируется с вашим именем и причиной.",
   ed_del_off:"Удаление выключено. Администратор должен задать ADMIN_SECRET в Apps Script и опубликовать новую версию. До этого пользуйтесь «Отозвать» выше — осмотр исключается из всех подсчётов, графиков и отчётов, фото сохраняются, действие обратимо.",
+  ed_del_off_srv:"Удаление выключено. Администратор должен задать ADMIN_SECRET на сервере загрузки — на ВМ: добавить в /opt/cm/cm.env и выполнить sudo systemctl restart cm. До этого пользуйтесь «Отозвать» выше — осмотр исключается из всех подсчётов, графиков и отчётов, фото сохраняются, действие обратимо.",
   ed_del_on:"Удаление включено. Пароль — тот, что задан в Apps Script; здесь он не сохраняется.",
   ed_del_unknown:"Для удаления нужен пароль администратора из Apps Script. Нажмите «Проверить связь» в «Источниках данных», чтобы узнать, включено ли оно.",
   ed_del_stale:"Эта публикация отвечает на чтение, но не на запись — исправления, отзыв и удаление до неё не доходят. В редакторе Apps Script: «Развернуть» → «Управление развёртываниями» → ✏️ → Версия: «Новая версия» → «Развернуть». Адрес не изменится.",
@@ -4576,8 +4578,15 @@ function openEdit(key,keepMsg){
      the first two can be answered before the button is pressed — so answer
      them, rather than offering a password box that cannot succeed. */
   const cd=canDelete(), cw=canWrite(), note=$("edDelOff");
+  /* The instruction has to match the backend the dashboard is actually
+     talking to. This always said "Apps Script", which was written before the
+     site moved to its own server — and it sent an administrator to
+     script.google.com to configure a machine that Google has never heard of.
+     The URL in use says which world we are in. */
+  const gasBackend=/script\.google\.com/.test((window.CMDrive&&CMDrive.url)||"");
   if(note){ note.textContent = cw==="0" ? t("ed_del_stale")
-              : cd==="0" ? t("ed_del_off") : cd==="1" ? t("ed_del_on") : t("ed_del_unknown");
+              : cd==="0" ? t(gasBackend?"ed_del_off":"ed_del_off_srv")
+              : cd==="1" ? t("ed_del_on") : t("ed_del_unknown");
             note.className = (cd==="1"&&cw!=="0") ? "sub" : "note"; }
   $("edUnvoid").style.display=rec._void?"":"none";
   $("edVoid").style.display=rec._void?"none":"";
