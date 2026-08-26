@@ -63,8 +63,8 @@ MODEL_MAP = {
     'KOMATSU D275.5D':        ('Komatsu 275A',     'exact'),
     'KOMATSU D375A.6':        ('Komatsu D375A',    'exact'),
     'KOMATSU PC800-8E0 (SE)': ('Komatsu PC800SE',  'exact'),
-    'LiuGong CLG970E':        ('liuGong 970Е',     'exact'),
-    'LiuGong CLG990FHD':      ('liuGong 990F',     'exact'),
+    'LiuGong CLG970E':        ('LiuGong 970E',     'exact'),
+    'LiuGong CLG990FHD':      ('LiuGong 990F',     'exact'),
     'SHANTUI SD32':           ('Shantui SD32',     'exact'),
     'SHANTUI SD34-B3':        ('Shantui SD34',     'exact'),
     'SHANTUI SD60-C5':        ('Shantui SD60',     'exact'),
@@ -273,7 +273,12 @@ window.WEAR = '''
      so nobody mistakes it for a measured figure. */
   W.MIN_HOURS = 100;          // below this the caliper's own error dominates
   W.MIN_DAYS  = 14;
-  W.HOURS_PER_DAY = 12;       // one shift; only used when SMU is missing
+  /* Only used when the hour meter was not written down. It said 12 — one
+     shift — and this fleet runs two, so every calendar-based forecast was
+     reporting a machine as wearing at half the rate it does. One number, in
+     due.js, shared with the inspection schedule: a forecast that disagrees with
+     the interval it is scheduled against is two answers to one question. */
+  W.HOURS_PER_DAY = (window.DUE && window.DUE.HOURS_PER_DAY) || 20;
 
   /* series: [{mm, at, smu}] oldest first, INCLUDING the reading being taken.
      `at` is an ISO date, `smu` the hour meter if it was recorded. */

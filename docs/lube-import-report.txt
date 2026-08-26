@@ -111,7 +111,7 @@ and appear the moment a matching machine is registered.
    IVECO-AMT MTGE3 Tractor Truck
    JCB VM200D COMPACTOR, ROLLER DRUM
    Komatsu WA470-6 8?
-   Luigong CLGF330
+   LiuGong CLGF330
    MAZ misc trucks
    Manitou MHT-X 10135 Tyre Handler
    NHL NTE150
@@ -163,7 +163,7 @@ EXPLICIT ALIASES — every one a judgement, check them (10)
    register KOMATSU D275.5D              = masterlist Komatsu D275A-5
    register KOMATSU PC2000-8 BH          = masterlist KOMATSU PC2000-8
    register KOMATSU PC800-8E0 (SE)       = masterlist Komatsu PC800-8EO
-   register LiuGong CLG990FHD            = masterlist Luigong 990FHD
+   register LiuGong CLG990FHD            = masterlist LiuGong 990FHD
    register TLP-4M                       = masterlist TLP-4M-030 (ТЛП-4М-030)
 
 NAMES MATCHED ACROSS THE TWO DOCUMENTS (67)
@@ -195,11 +195,8 @@ Every one of these is a judgement the importer made. Check them.
    Komatsu HM400-3MO                          = KOMATSU, KOMATSU HM400
    Komatsu P&H 44XT                           = KOMATSU P&H 44XT
    Komatsu PC800-8EO                          = KOMATSU PC800-8E0 (SE)
-   LIUGONG CPCD30                             = LiuGong CPCD30
+   LiuGong 990FHD                             = LiuGong CLG990FHD
    Longyear LF-90D                            = Boart Longyear LF-90D
-   Luigong 990FHD                             = LiuGong CLG990FHD
-   Luigong CLG4260D                           = LiuGong CLG4260D
-   Luigong CLG970E                            = LiuGong CLG970E
    Manitou M-X-50-4 Forklift                  = MANITOU M-X 50-4
    Manitou MHT-X 10180 Cylinder Handler       = MANITOU MHT-X 10180
    Manitou MHT-X 790 Telescopic Handler       = MANITOU MHT-X790

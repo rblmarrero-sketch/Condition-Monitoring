@@ -156,6 +156,25 @@ CANON = {
     "KOMATSU HM400":      {"AT": "Komatsu HM400-3MO"},
 }
 
+# How a MAKE is spelled on screen.
+#
+# Not a matching rule — MAKE_SYN below already folds the variants for matching,
+# so nothing here changes which machine an entry lands on. This is only what a
+# fitter reads. The masterlist writes "Luigong" with the u and the i the wrong
+# way round, and shouts "LIUGONG" in another row; because the masterlist's name
+# is the canonical one, that typo was the name on the fleet matrix, on the shop
+# poster and in the report.
+#
+# Applied to whole words only, so a model code that happens to contain the
+# letters is untouched.
+SPELL = {
+    "LUIGONG": "LiuGong",
+    "LIUGONG": "LiuGong",
+}
+def spell(label):
+    return re.sub(r"[A-Za-z]+",
+                  lambda m: SPELL.get(m.group(0).upper(), m.group(0)), label)
+
 # Register spelling -> masterlist spelling, where the two documents name the
 # same machine differently and no general rule can safely bridge them.
 #
@@ -172,7 +191,7 @@ ALIAS = {
     "HITACHI ZX470LCR-5G":      "Hitachi ZX 470",
     "KOMATSU PC2000-8 BH":      "KOMATSU PC2000-8",
     "KOMATSU PC800-8E0 (SE)":   "Komatsu PC800-8EO",
-    "LiuGong CLG990FHD":        "Luigong 990FHD",
+    "LiuGong CLG990FHD":        "LiuGong 990FHD",
     "TLP-4M":                   "TLP-4M-030 (ТЛП-4М-030)",
     "CHSDM DZ-98V.00100-111":   "CHSDM DZ-98V",
     # NOT aliased on purpose, and listed so the omission is visible:
@@ -367,7 +386,7 @@ def main():
     for r in range(3, wv.max_row + 1):
         label = wv.cell(r, 2).value
         if not label or str(label).strip() in ("Fleet", "TOTAL"): continue
-        label = re.sub(r"\s+", " ", str(label)).strip()
+        label = spell(re.sub(r"\s+", " ", str(label)).strip())
 
         got = []
         for cp in comps:
@@ -549,6 +568,7 @@ def main():
     return CATALOG.filter(function(p){ return p.t === t; })[0] || null;
   }
   function norm(s){ return String(s||"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim(); }
+  var REG = null;                      /* register(), built once — see below */
   function resolve(model, cls){
     if(!model) return null;
     if(cls && MODELS[cls + "|" + model]) return cls + "|" + model;
@@ -634,6 +654,70 @@ def main():
     evidRank: function(k){
       var e = this.EVID.filter(function(x){ return x.k === k; })[0];
       return e ? e.rank : 0;
+    },
+
+    /* ---- what is on the property, and whether it belongs where it is -------
+
+       Both lists as one, deduplicated by name: the EXSOIL products in the
+       machines today and the Lemarc/Teboil ones bought for 2027. `src` says
+       which list a product came from, "both" when it is on each of them.
+
+       Built once. It is asked per compartment, and a lubrication round on a
+       haul truck asks eighteen times. */
+    register: function(){
+      if (REG) return REG;
+      var out = [], at = {};
+      var add = function(p, t, src){
+        if (!p) return;
+        var k = norm(p);
+        if (at[k]) { if (at[k].src !== src) at[k].src = "both"; return; }
+        at[k] = { p: p, t: t || "", src: src };
+        out.push(at[k]);
+      };
+      CATALOG.forEach(function(x){ add(x.p, x.t, "field"); });
+      ((G.LUBE2027 && G.LUBE2027.shelf) || []).forEach(function(x){ add(x.p, x.t, "2027"); });
+      return (REG = out);
+    },
+    registered: function(name){
+      var n = norm(name);
+      return this.register().filter(function(x){ return norm(x.p) === n; })[0] || null;
+    },
+
+    /* ONE judgement of one compartment, for every screen that asks.
+
+       It used to be three: the capture screen judged by lubricant TYPE, the
+       dashboard's position card compared product names as strings, and the
+       report had a fourth rule of its own. The site is changing supplier for
+       2027, so name equality calls a correctly-filled compartment wrong the
+       day the new drums land - which is what the dashboard did while the phone
+       standing at the same machine said it conformed.
+
+       What destroys a machine is the wrong KIND of oil: engine oil in a final
+       drive, GL-5 in a wet brake. A product that serves this compartment's job
+       is right whichever supplier it came from; one that serves a different job
+       is the finding; one on neither list is unjudged and says so. */
+    verdict: function(model, cls, key, name){
+      var nm = String(name == null ? "" : name).trim();
+      if (!nm) return { b:"none", k:"lube_v_none", want:"", product:"" };
+      var want = this.forComp(model, key, cls);
+      /* Wire rope and open gear are both still "(verify product)" on the
+         site's own legend. Recording what is in there is worth doing;
+         pretending it can be judged is not. */
+      if (!want) return { b:"none", k:"lube_v_nostd", want:"", product:nm };
+      var c = this.comp(model, key, cls), ty = (c && c.t) || want.t || "";
+      var prod = this.registered(nm);
+      var r = { want: want.p || "", product: nm };
+      /* Typed in by hand: a real finding - somebody put something in that is on
+         neither list - and it must not be dressed up as a pass or a failure. */
+      if (!prod)                     { r.b = "watch"; r.k = "lube_v_unknown"; }
+      else if (ty && prod.t && prod.t !== ty) { r.b = "act"; r.k = "lube_v_wrong"; }
+      else if (!ty || !prod.t)       { r.b = "watch"; r.k = "lube_v_unknown"; }
+      else                           { r.b = "ok";    r.k = "lube_v_ok"; }
+      /* "Holds something other than the site standard" - the count the report
+         puts above the table. Anything not judged conforming belongs in it;
+         an unlisted product is exactly the case somebody has to go and look at. */
+      r.off = r.b !== "ok";
+      return r;
     }
   };
 })(window);
