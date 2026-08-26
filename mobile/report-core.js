@@ -997,6 +997,15 @@
     return '<span class="wb"><i style="width:'+Math.round(p/130*100)+'%;background:'+col+'"></i></span>';
   }
   CMR.wearBar = wearBar;
+  /* The side-pairing the printed sheet uses, exported so the office's screen
+     can lay an undercarriage round out the same way instead of keeping a second
+     copy of the rule. The screen used to split the readings down the middle of
+     the list, which put "Track roller — Left 8" beside "Track roller — Right 1"
+     and made the one comparison the round exists for — left against right —
+     impossible to make. */
+  CMR.sideOf = sideOf;
+  CMR.pairBySide = pairBySide;
+  CMR.nameBoth = nameBoth;
 
   /* The drawing is laid out a few units outside its own viewBox — harmless on a
      screen that scrolls it, a shaved idler on paper. Both hosts pass their map

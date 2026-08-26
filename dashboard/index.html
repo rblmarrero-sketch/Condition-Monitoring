@@ -628,6 +628,19 @@
   .wb i{display:block;height:5px;border-radius:3px;}
   .ucgrid{display:grid;grid-template-columns:1fr 1fr;gap:0 26px;padding:0 16px 16px;}
   @media (max-width:820px){ .ucgrid{grid-template-columns:1fr;} }
+  /* Left and right on one row: the two triplets are a pair, so the rule the eye
+     needs is the boundary BETWEEN the sides, not between every cell. */
+  table.paired th:nth-child(2),table.paired td:nth-child(2),
+  table.paired th:nth-child(5),table.paired td:nth-child(5){
+    padding-left:13px;border-left:1px solid var(--border);}
+  table.paired col.cpt{width:auto;}
+  table.paired col.cmm{width:78px;}
+  table.paired col.cpc{width:52px;}
+  table.paired col.cbar{width:62px;}
+  table.paired th.side{text-align:center;letter-spacing:.1em;}
+    .sidegap{display:inline-block;margin-left:6px;padding:0 5px;border-radius:4px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px;font-weight:600;line-height:1.65;
+    background:color-mix(in srgb,var(--warning) 24%,var(--surface));color:var(--ink);}
   table.grid.wear td{font-size:12px;padding:6px 8px;}
   .ucsum{margin:12px 16px 0;padding:8px 12px;border-radius:6px;font-size:12.5px;font-weight:650;}
   .ucsum .muted{font-weight:400;}
@@ -1780,6 +1793,8 @@ const I18N={
   lube_v_cold:"Too thick for \u221240", lube_v_unlisted:"Grade not listed for this compartment",
   lube_v_ok:"Conforms",
   uc_th_point:"Point", uc_th_meas:"Measured", uc_th_worn:"Worn",
+  uc_th_left:"Left", uc_th_right:"Right",
+  uc_gap_t:"The two sides disagree by this many points of wear \u2014 look at tension and alignment, not only the part.",
   uc_noref:"no reference for this model",
   uc_sum_act:"{n} points at or past condemn", uc_sum_watch:"{n} above 80%",
   uc_sum_ok:"All {n} measured points inside limits.",
@@ -2165,6 +2180,8 @@ const I18N={
   lube_v_cold:"Слишком густое для \u221240", lube_v_unlisted:"Вязкость не указана для узла",
   lube_v_ok:"Соответствует",
   uc_th_point:"Точка", uc_th_meas:"Замер", uc_th_worn:"Износ",
+  uc_th_left:"Левая", uc_th_right:"Правая",
+  uc_gap_t:"Стороны расходятся на столько пунктов износа \u2014 смотрите натяжение и развал, а не только деталь.",
   uc_noref:"нет эталона для этой модели",
   uc_sum_act:"{n} точек на пределе или за ним", uc_sum_watch:"{n} выше 80%",
   uc_sum_ok:"Все {n} измеренных точек в пределах нормы.",
@@ -3580,21 +3597,101 @@ function ucRefName(key,rec,lg){
 function ucName(it,rec){
   return ucRefName(it.key,rec) || it.label || it.key;
 }
+/* An undercarriage round, laid out the way the printed sheet lays it out:
+   LEFT against RIGHT on one row, the part named once.
+
+   It used to cut the reading list down the middle and put each half in its own
+   table, so column one held the first half of the walk and column two the
+   second — "Track roller — Left 8" at the foot of one and "Track roller —
+   Right 1" at the head of the other. The one comparison a track frame exists
+   to make is left against right: uneven wear between the sides is tension, or
+   alignment, or a machine that works a camber all shift. Split by count, that
+   comparison cannot be made at all, and the office's screen disagreed with the
+   sheet the same round printed on.
+
+   The pairing rule is report-core's own (CMR.pairBySide / CMR.nameBoth), not a
+   second copy of it, so the two cannot drift. A round with no sides — a dump
+   body's sixty-three stations, a blade's centre edge — comes back unpaired and
+   keeps the running split, because inventing a pair is worse than not having
+   one. */
 function ucBlock(rec){
   const rows=(rec.items||[]).map(i=>[i,wearOf(rec,i)]).filter(([i,w])=>w&&(w.mm!=null||w.reason));
   if(!rows.length) return "";
   const over=rows.filter(([i,w])=>w.band==="act"), watch=rows.filter(([i,w])=>w.band==="watch");
   const unread=rows.filter(([i,w])=>w.mm==null).length;
   const worst=rows.filter(([i,w])=>w.wearPct!=null).sort((a,b)=>b[1].wearPct-a[1].wearPct);
-  const half=Math.ceil(rows.length/2);
-  const col=list=>`<table class="grid wear"><thead><tr>
-      <th>${esc(t("uc_th_point"))}</th><th class="r">${esc(t("uc_th_meas"))}</th>
-      <th class="r">${esc(t("uc_th_worn"))}</th><th style="width:62px"></th></tr></thead><tbody>`+
-    list.map(([i,w])=>`<tr><td>${esc(ucName(i,rec))}
-        <div class="muted" style="font-size:10.5px">${w.newMM!=null&&w.newMM!==""?esc(w.newMM)+" → "+esc(w.condemnMM)+" mm":esc(t("uc_noref"))}</div></td>
-      <td class="r mono">${w.mm!=null?`<b>${esc(w.mm)}</b>`:`<span class="muted" style="font-size:11px">${esc(w.reasonLabel||w.reason||"—")}</span>`}</td>
+
+  /* one reading: millimetre, per cent, bar — the same three the sheet prints */
+  const cell=pair=>{
+    if(!pair) return `<td class="r mono muted">—</td><td class="r mono"></td><td></td>`;
+    const w=pair[1];
+    return `<td class="r mono">${w.mm!=null?`<b>${esc(w.mm)}</b>`
+        :`<span class="muted" style="font-size:11px">${esc(w.reasonLabel||w.reason||"—")}</span>`}</td>
       <td class="r mono">${w.wearPct!=null?esc(w.wearPct)+"%":""}</td>
-      <td>${w.wearPct!=null?wearBar(w.wearPct):""}</td></tr>`).join("")+`</tbody></table>`;
+      <td style="width:58px">${w.wearPct!=null?wearBar(w.wearPct):""}</td>`;
+  };
+  const limits=(a,b)=>{
+    const w=(a&&a[1])||(b&&b[1]); if(!w) return "";
+    return w.newMM!=null&&w.newMM!==""
+      ? esc(w.newMM)+" → "+esc(w.condemnMM)+" mm" : esc(t("uc_noref"));
+  };
+  /* the difference between the sides, which is the number the pairing is for */
+  const gap=(a,b)=>{
+    const x=a&&a[1], y=b&&b[1];
+    if(!x||!y||x.wearPct==null||y.wearPct==null) return "";
+    const d=Math.abs(x.wearPct-y.wearPct);
+    if(d<8) return "";
+    return `<span class="sidegap" title="${esc(t("uc_gap_t"))}">Δ${d}</span>`;
+  };
+
+  const paired = window.CMR && CMR.pairBySide
+    ? CMR.pairBySide(rows.map(([i,w])=>({key:i.key, it:i, w})))
+    : null;
+  /* The part, named once, even when only one side was measured.
+
+     nameBoth() strips the word the two names differ by, so it needs BOTH of
+     them — hand it only the left one and it prints "Track adjuster / recoil —
+     Left" as the row label for a row whose other cell is empty. So the pair of
+     names is built from the KEY rather than from the readings: swap the side
+     letter, ask the same reference, and the difference is always there to
+     strip. */
+  const partName=(L,R)=>{
+    const k=(L&&L.key)||(R&&R.key)||"";
+    const m=/^([^.]+)\.([LR])([-0-9].*|)$/.exec(k);
+    if(!m) return k;
+    const nm=sd=>ucRefName(m[1]+"."+sd+m[3], rec) || k;
+    return CMR.nameBoth(nm("L"), nm("R"));
+  };
+
+  let table;
+  if(paired){
+    const find=k=>rows.find(([i])=>i.key===k);
+    table = `<table class="grid wear paired"><colgroup><col class="cpt">
+        <col class="cmm"><col class="cpc"><col class="cbar">
+        <col class="cmm"><col class="cpc"><col class="cbar"></colgroup>
+      <thead><tr>
+        <th>${esc(t("uc_th_point"))}</th>
+        <th class="side" colspan="3">${esc(t("uc_th_left"))}</th>
+        <th class="side" colspan="3">${esc(t("uc_th_right"))}</th></tr></thead><tbody>`
+      + paired.map(([L,R])=>{
+          const a=L?find(L.key):null, b=R?find(R.key):null;
+          return `<tr><td>${esc(partName(L,R))} ${gap(a,b)}
+              <div class="muted" style="font-size:10.5px">${limits(a,b)}</div></td>
+            ${cell(a)}${cell(b)}</tr>`;
+        }).join("") + `</tbody></table>`;
+  } else {
+    const half=Math.ceil(rows.length/2);
+    const col=list=>`<table class="grid wear"><thead><tr>
+        <th>${esc(t("uc_th_point"))}</th><th class="r">${esc(t("uc_th_meas"))}</th>
+        <th class="r">${esc(t("uc_th_worn"))}</th><th style="width:58px"></th></tr></thead><tbody>`+
+      list.map(([i,w])=>`<tr><td>${esc(ucName(i,rec))}
+          <div class="muted" style="font-size:10.5px">${w.newMM!=null&&w.newMM!==""?esc(w.newMM)+" → "+esc(w.condemnMM)+" mm":esc(t("uc_noref"))}</div></td>
+        <td class="r mono">${w.mm!=null?`<b>${esc(w.mm)}</b>`:`<span class="muted" style="font-size:11px">${esc(w.reasonLabel||w.reason||"—")}</span>`}</td>
+        <td class="r mono">${w.wearPct!=null?esc(w.wearPct)+"%":""}</td>
+        <td>${w.wearPct!=null?wearBar(w.wearPct):""}</td></tr>`).join("")+`</tbody></table>`;
+    table = `<div class="ucgrid"><div>${col(rows.slice(0,half))}</div><div>${col(rows.slice(half))}</div></div>`;
+  }
+
   const line = over.length
     ? `<div class="ucsum act">${esc(t("uc_sum_act",{n:over.length}))}${watch.length?" · "+esc(t("uc_sum_watch",{n:watch.length})):""}
         <span class="muted">${worst.slice(0,4).map(([i,w])=>esc(ucName(i,rec))+" "+w.wearPct+"%").join(" · ")}</span></div>`
@@ -3604,7 +3701,7 @@ function ucBlock(rec){
     : `<div class="ucsum ok">${esc(t("uc_sum_ok",{n:rows.length-unread}))}</div>`;
   return line
     + (unread?`<div class="ucsum warnrow">${esc(t("uc_sum_unread",{n:unread}))}</div>`:"")
-    + `<div class="ucgrid"><div>${col(rows.slice(0,half))}</div><div>${col(rows.slice(half))}</div></div>`;
+    + table;
 }
 function renderHistory(){
   const e=$("equipSel").value; const recs=RECS.filter(r=>r.equip===e);
@@ -3729,7 +3826,14 @@ const DUE_DAYS={MP:90, FC:90, INSP:30, TEMP:30, UC:90, GET:90, TB:90};
 function elig(ty){
   if(ty==="UC") return a=>!!(window.WEAR && WEAR.modelFor && WEAR.modelFor(a.m||""));
   if(ty==="GET") return a=>!!(window.GET && GET.has && GET.has(a.n, a.cat||a.cls||"", a.m||""));
-  if(ty==="TB")  return a=>!!(window.BODY && BODY.modelFor && BODY.modelFor(a.m||""));
+  /* Keyed on the UNIT, not the model string. BODY has no modelFor() — it never
+     has — so this predicate was false for every machine on the register, the
+     tray round's denominator was zero, and the coverage table printed
+     "6 / 0 · 0%" for a round that had in fact reached 6 of the 44 machines that
+     carry a tray sheet. Never done and overdue read 0 for the same reason: they
+     count over the same empty pool. bodyModelOf() is the resolver this file
+     already uses everywhere else, and it answers for 44. */
+  if(ty==="TB")  return a=>!!(window.BODY && bodyModelOf(a.n));
   /* Class as well as model: "KOMATSU" is on the register as an articulated
      truck and as a loader, and resolving on the model alone answers for the
      wrong machine. */
