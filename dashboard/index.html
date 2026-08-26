@@ -55,22 +55,64 @@
   nav.tabs{display:flex;gap:4px;padding:0 18px;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:57px;z-index:19;overflow-x:auto;}
   nav.tabs button{border:none;background:none;color:var(--muted);padding:11px 15px;cursor:pointer;font-size:13.5px;font-weight:550;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;}
   nav.tabs button.active{color:var(--ink);border-bottom-color:var(--accent);} nav.tabs button:hover{color:var(--ink-2);}
-  main{max-width:1240px;margin:0 auto;padding:22px;}
+  main{max-width:var(--page-max);margin:0 auto;padding:var(--s5) var(--s5) var(--s7);}
+  @media (max-width:900px){ main{padding:var(--s4) var(--s3) var(--s6);} }
+
+  /* ── THE GRID ────────────────────────────────────────────────────────────
+     Sections were full-width slabs in one column, so a wide screen showed one
+     of them at a time and the page ran to four and a half thousand pixels.
+     Twelve columns; a section says how many it wants. Below 1180px everything
+     is full width again, because two narrow columns of dense table are worse
+     than one wide one. */
+  .grid12{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--s4);align-items:start;}
+  .g4{grid-column:span 4;} .g5{grid-column:span 5;} .g6{grid-column:span 6;}
+  .g7{grid-column:span 7;} .g8{grid-column:span 8;} .g12{grid-column:span 12;}
+  @media (max-width:1180px){ .grid12>*{grid-column:span 12;} }
+
+  /* ── A BOUNDED SURFACE ───────────────────────────────────────────────────
+     No list on this page had a height. On a real month — 265 rounds, 48
+     machines — the action register came out 44,308px tall and the wear
+     register 26,843px. Nobody scrolls forty-four screens; they stop reading,
+     which makes the whole page decorative.
+
+     So a long list gets a viewport of its own, its header stays put while the
+     rows move under it, and the count says what is being shown out of what
+     exists. The rows are all still there — this bounds the VIEW, never the
+     data, because a list that silently stops at fifty is a worse lie than one
+     that scrolls. */
+  .scrollbox{max-height:var(--sb,520px);overflow:auto;overscroll-behavior:contain;
+    border-top:1px solid var(--border);}
+  .scrollbox table{margin:0;}
+  .scrollbox thead th{position:sticky;top:0;z-index:2;background:var(--surface-2);
+    box-shadow:0 1px 0 var(--border);}
+  .scrollbox::-webkit-scrollbar{width:11px;height:11px;}
+  .scrollbox::-webkit-scrollbar-thumb{background:var(--surface-3);border-radius:99px;
+    border:3px solid var(--surface);}
+  .scrollbox::-webkit-scrollbar-thumb:hover{background:var(--axis);}
+  .shown{display:flex;align-items:center;gap:var(--s2);padding:var(--s2) var(--s4);
+    border-top:1px solid var(--border);font-size:var(--t-tiny);color:var(--muted);
+    font-variant-numeric:tabular-nums;}
+  .shown .spacer{flex:1;}
   .controls{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;margin-bottom:18px;}
   .field{display:flex;flex-direction:column;gap:5px;}
   .field label{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);}
   select,input[type=search]{background:var(--surface);color:var(--ink);border:1px solid var(--border);border-radius:8px;padding:9px 11px;font-size:14px;min-width:190px;font-family:inherit;}
-  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:12px;margin-bottom:22px;}
-  .tile{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow);}
-  .tile .k{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);}
-  .tile .v{font-size:28px;font-weight:640;margin-top:4px;font-variant-numeric:tabular-nums;}
-  .tile .s{font-size:12px;color:var(--ink-2);margin-top:2px;}
+  /* The tile block that used to live here \u2014 .kpis, .tile and its three text
+     rules \u2014 is gone. It was overridden in full by the stat-card system further
+     down, and a dead rule that still parses is how a page ends up with three
+     definitions of one component and nobody able to say which is in force.
+     Only the two that still contribute survive: this hint, and the flex the
+     severity bar is built on. */
   .tile .s .voidhint{background:none;border:0;padding:0;font:inherit;color:var(--ink-2);
     cursor:pointer;text-decoration:underline dotted;text-underline-offset:2px;}
   .tile .s .voidhint:hover{color:var(--ink);}
   .tile .bar{display:flex;height:8px;border-radius:6px;overflow:hidden;margin-top:10px;gap:2px;background:var(--surface-2);}
   /* Severity mix reads as a legend, not a sentence — and each band filters the view. */
-  .tile .legend{display:flex;flex-direction:column;gap:1px;margin-top:9px;}
+  /* Two columns, so the mix tile is the same height as the four numbers beside
+     it. It was a four-row list, which made one card in the strip half as tall
+     again as the rest — a strip whose members are different sizes is not a
+     strip, it is five cards that happen to be in a row. */
+  .tile .legend{display:grid;grid-template-columns:1fr 1fr;gap:1px 10px;margin-top:9px;}
   .tile .legend button{display:flex;align-items:center;gap:7px;width:100%;padding:2px 4px;margin-left:-4px;
     background:none;border:0;border-radius:6px;cursor:pointer;font:inherit;font-size:12px;color:var(--ink-2);text-align:left;}
   .tile .legend button:hover:not(:disabled){background:var(--surface-2);color:var(--ink);}
@@ -648,14 +690,11 @@
   .ucsum.watch{background:color-mix(in srgb,var(--serious) 13%,var(--surface));color:var(--serious);}
   .ucsum.act{background:color-mix(in srgb,var(--critical) 12%,var(--surface));color:var(--critical);}
   .ucsum.warnrow{background:var(--surface-2);color:var(--ink-2);font-weight:550;}
-  /* KPI tiles as one strip, the way the report's cover states its four numbers */
-  .kpis{gap:0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);
-    background:var(--surface);border-radius:0;box-shadow:none;}
-  .tile{border:0;border-right:1px solid var(--border);border-radius:0;box-shadow:none;padding:13px 16px 14px;}
-  .tile:last-child{border-right:0;}
-  .tile .k{font-size:9px;letter-spacing:.13em;font-weight:700;}
-  .tile .v{font-size:27px;font-weight:800;letter-spacing:-.02em;line-height:1.1;margin-top:5px;}
-  .tile .s{font-size:10.5px;color:var(--muted);margin-top:1px;}
+  /* A second tile pass lived here \u2014 the one that drew them as a single strip
+     with hairlines between. Superseded by the cards below, with one exception
+     that was NOT dead and was quietly wrong: `.tile:last-child{border-right:0}`
+     outranks the card rule on specificity whatever the order, so the last tile
+     in every strip was drawn with three borders and the others with four. */
   /* ═══════════════════════════════════════════════════════════════════════
      THE SURFACE
 
@@ -671,6 +710,29 @@
      tabular, tight, heavy. Motion only where it explains something. Every
      interactive thing looks interactive and says so on hover and on focus. */
   :root{
+    /* ── THE SCALE ──────────────────────────────────────────────────────
+       Every gap on this page is one of these seven numbers, and every size is
+       one of these seven. The page had fourteen distinct paddings and nine
+       type sizes when this was measured — not a system, a hundred separate
+       decisions that happened to land near each other. A reliability engineer
+       reads this screen for eight hours; the rhythm has to be a rhythm.
+
+       4px base. Type steps ~1.22, tabular figures throughout, because on this
+       page numbers line up in columns far more often than words do. */
+    --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --s7:48px;
+    --t-micro:9.5px;   /* the uppercase label above a number            */
+    --t-tiny:11px;     /* a note under one                              */
+    --t-small:12px;    /* table meta, secondary                         */
+    --t-body:13px;     /* the default                                   */
+    --t-lead:15px;     /* a card title                                  */
+    --t-head:19px;     /* a section title                               */
+    --t-num:30px;      /* a KPI                                         */
+    --t-hero:42px;     /* the three numbers that lead the page          */
+    --mono:ui-monospace,SFMono-Regular,Menlo,monospace;
+    /* How wide the page is allowed to get. It was pinned at 1240px, so a
+       1600px screen — the one every office actually has — spent 360px on
+       nothing while the tables below scrolled for forty screens. */
+    --page-max:1680px;
     --r-sm:8px; --r:12px; --r-lg:16px; --r-xl:22px;
     --e1:0 1px 2px rgba(11,11,11,.05), 0 1px 3px rgba(11,11,11,.04);
     --e2:0 2px 4px rgba(11,11,11,.05), 0 8px 24px -6px rgba(11,11,11,.10);
@@ -696,8 +758,14 @@
      severity card left each of them 60% empty, which reads as a layout that
      was not finished rather than one that was spaced. */
   .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(178px,1fr));
-    gap:12px;margin:0 0 22px;border:0;background:none;box-shadow:none;border-radius:0;
-    align-items:start;}
+    gap:var(--s3);margin:0 0 var(--s5);border:0;background:none;box-shadow:none;border-radius:0;
+    /* Equal height. The note that used to sit here argued for hugging the
+       content, and it was right when one card was a tall severity list beside
+       four short numbers — stretching them left each 60% empty. The mix tile
+       is two columns now and the four numbers all carry a comparison line, so
+       they are the same object at the same size, and a row of five equal cards
+       reads as one instrument rather than as five. */
+    align-items:stretch;}
   .kpi,.tile{position:relative;display:flex;flex-direction:column;gap:1px;
     background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
     padding:14px 16px 15px;box-shadow:var(--e1);overflow:hidden;
@@ -723,6 +791,15 @@
   .kpi.bad .v{color:var(--critical);} .kpi.good .v{color:var(--good);}
   /* Zero overdue is good news and should not be shouted in red. */
   .kpi.bad.zero{--kc:var(--good);} .kpi.bad.zero .v{color:var(--ink);}
+  /* "compared to what" — the line every headline carries. Up is not always
+     bad, so the arrow says direction and the colour says whether that
+     direction is the wrong one. */
+  .dlt{font-weight:700;font-variant-numeric:tabular-nums;}
+  .dlt.up{color:var(--critical);} .dlt.dn{color:var(--good);} .dlt.flat{color:var(--muted);}
+  /* Segments of one bar are adjacent fills; a 2px gap of the surface keeps the
+     boundary readable where two of the four hues sit close together. */
+  .tile .bar span{border-radius:2px;}
+  .tile .bar{gap:2px;display:flex;overflow:hidden;}
 
   /* a coverage track that reads as a track even when nearly empty */
   .cbar{display:block;width:100%;height:8px;border-radius:999px;background:var(--surface-3);
@@ -1288,22 +1365,30 @@
          make a management page unreadable: 44 inspections is meaningless
          without "of how many due", and 82 findings is meaningless without
          "more or fewer than last month". Both, before the fleet table. -->
-    <div class="section">
-      <h2 data-i18n="cv_title">Coverage — was the round actually walked</h2>
-      <div class="sub" data-i18n="cv_sub">Machines this round applies to, against machines it reached, in the period selected above. A finding you never went to look for is not an absence of findings.</div>
-      <div class="tblwrap"><table class="grid" id="covTbl"></table></div>
-      <div class="sub" id="covNote" style="margin-top:10px"></div>
-    </div>
-    <div class="section">
-      <h2 data-i18n="tr_title">Direction — is the fleet getting better or worse</h2>
-      <div class="sub" data-i18n="tr_sub">Findings by month, worst on top. Read the shape, not the last bar: one month is a sample, three is a trend.</div>
-      <div id="trendChart"></div>
-      <div class="sub" id="trendNote" style="margin-top:10px"></div>
+    <!-- Coverage and direction answer one question between them — is the
+         programme being walked, and is it working — so on a screen wide enough
+         they are read together instead of one under the other. They were two
+         full-width slabs, which is why this tab ran to four and a half
+         thousand pixels on a 1600px monitor with 360px of it unused. -->
+    <div class="grid12">
+      <div class="section g7">
+        <h2 data-i18n="cv_title">Coverage — was the round actually walked</h2>
+        <div class="sub" data-i18n="cv_sub">Machines this round applies to, against machines it reached, in the period selected above. A finding you never went to look for is not an absence of findings.</div>
+        <div class="tblwrap"><table class="grid" id="covTbl"></table></div>
+        <div class="sub" id="covNote" style="margin-top:10px"></div>
+      </div>
+      <div class="section g5">
+        <h2 data-i18n="tr_title">Direction — is the fleet getting better or worse</h2>
+        <div class="sub" data-i18n="tr_sub">Findings by month, worst on top. Read the shape, not the last bar: one month is a sample, three is a trend.</div>
+        <div id="trendChart"></div>
+        <div class="sub" id="trendNote" style="margin-top:10px"></div>
+      </div>
     </div>
     <div class="section">
       <h2 data-i18n="s_fleet">Condition by equipment — latest inspection</h2>
       <div class="sub" data-i18n="s_fleet_sub">Worst severity found on each unit's most recent inspection. Click a unit to open its history.</div>
-      <div class="tblwrap"><table class="grid" id="fleetTbl"></table></div>
+      <div class="tblwrap scrollbox" style="--sb:560px"><table class="grid" id="fleetTbl"></table></div>
+      <div class="shown" id="fleetShown"></div>
       <div class="legend" id="sevLegend"></div>
     </div>
   </section>
@@ -1360,7 +1445,8 @@
       <select id="wBand" class="hidden">
         <option value="due"></option><option value="act"></option><option value="all"></option>
       </select>
-      <div class="tblwrap"><table class="grid" id="wearTbl"></table></div>
+      <div class="tblwrap scrollbox" style="--sb:620px"><table class="grid" id="wearTbl"></table></div>
+      <div class="shown" id="wearShown"></div>
       <div class="sub" id="wearNote" style="margin-top:10px"></div>
     </div>
   </section>
@@ -1378,7 +1464,8 @@
         <span style="flex:1"></span>
         <button class="btn" id="csvBtn" data-i18n="csv">⬇ Export CSV</button>
       </div>
-      <div class="wl" id="actionTbl"></div>
+      <div class="scrollbox" style="--sb:640px;border-top:0"><div class="wl" id="actionTbl"></div></div>
+      <div class="shown" id="actShown"></div>
     </div>
   </section>
 
@@ -1439,7 +1526,7 @@
     <div class="section">
       <h2 data-i18n="ls_title">Deciding the standard</h2>
       <div class="sub" data-i18n="ls_sub">Not product by product — requirement by requirement. Machines that need the same thing are one decision, however many badges are on them. Choose, and the matrix and the posters re-read.</div>
-      <div id="lsList"></div>
+      <div class="scrollbox" style="--sb:520px;border-top:0"><div id="lsList"></div></div>
       <div class="sub" id="lsNote" style="margin-top:12px"></div>
     </div>
 
@@ -1447,7 +1534,7 @@
       <h2 data-i18n="lc_title">The 2027 shelf against the recommendations</h2>
       <div class="sub" data-i18n="lc_sub">Specification 02 rev CO-05 is what the site may actually buy. The fleet matrices say what should go in each compartment. Where the two do not line up, somebody has either told a fitter to use an oil nobody ordered, or ordered an oil for nothing — and the season is a third answer neither of them can show.</div>
       <div class="kpis" id="lcKpis"></div>
-      <div id="lcLists"></div>
+      <div class="scrollbox" style="--sb:480px;border-top:0"><div id="lcLists"></div></div>
     </div>
 
     <div class="section">
@@ -1459,7 +1546,7 @@
         <span style="flex:1"></span>
         <button class="btn" id="lrExport" data-i18n="lr_export">⬇ Export overrides</button>
       </div>
-      <div class="tblwrap"><table class="grid" id="lrTbl"></table></div>
+      <div class="tblwrap scrollbox" style="--sb:520px"><table class="grid" id="lrTbl"></table></div>
       <div class="row" style="margin-top:12px;gap:12px;align-items:center;flex-wrap:wrap">
         <button class="btn primary" id="lrSave" data-i18n="lr_save">Save the reference</button>
         <button class="btn" id="lrReset" data-i18n="lr_reset">Undo my edits to this model</button>
@@ -1476,7 +1563,7 @@
         <span style="flex:1"></span>
         <button class="btn" id="lubeCsv" data-i18n="lm_csv">⬇ Export CSV</button>
       </div>
-      <div class="tblwrap mtxwrap"><table class="grid mtx" id="lubeMtx"></table></div>
+      <div class="tblwrap mtxwrap scrollbox" style="--sb:600px"><table class="grid mtx" id="lubeMtx"></table></div>
       <div id="lubeLegend" class="lgnd"></div>
       <div class="sub" id="lubeNote" style="margin-top:10px"></div>
     </div>
@@ -1773,6 +1860,11 @@ const I18N={
   c_unit:"Unit", c_sev:"Severity", c_defect:"Defect", c_cause:"Cause",
 
   k_insp:"Inspections", k_find:"Findings", k_att:"Needs attention",
+  k_comp:"On-time compliance", k_comp_s:"{n} of {of} rounds walked before they were overdue",
+  k_comp_none:"no rounds scheduled yet", k_comp_t:"Open the due list",
+  k_att_t:"Show only these findings", k_act_t:"Open the action register",
+  k_same:"no change", k_vsprev:"vs the period before",
+  w_k_go:"Show these in the register below",
   k_act:"Actions to plan", k_mix:"Severity mix",
   k_units:"{n} unit(s)", k_finds:"items with a record", k_attsub:"degraded + critical",
   k_actsub:"excluding “monitor”", k_none_here:"None in this view", k_only:"Show only {x}",
@@ -2021,6 +2113,7 @@ const I18N={
   dd_c_unit:"Unit", dd_c_round:"Round", dd_c_last:"Last done",
   dd_c_due:"Due", dd_c_rate:"h/day", dd_c_why:"Why it was not walked",
   dd_put_to:"put off to {d}", dd_not_doing:"not being done",
+  shown_n:"Showing {n} of {of}",
   dd_foot:"h/day is the machine's own measured rate; * marks the fleet assumption of {r} h/day, used until two hour-meter readings have measured that machine. \u201cDue\u201d counts hours, and the days beside it are those hours at that rate.",
   due_over:"overdue {n} d", due_in:"in {n} d", due_h:"{n} h", due_days:"{n} d ago",
   due_why_wear:"wear, not the interval",
@@ -2154,6 +2247,11 @@ const I18N={
   c_unit:"Ед.", c_sev:"Степень", c_defect:"Дефект", c_cause:"Причина",
 
   k_insp:"Осмотров", k_find:"Находок", k_att:"Требует внимания",
+  k_comp:"Выполнено в срок", k_comp_s:"{n} из {of} обходов пройдены до просрочки",
+  k_comp_none:"обходы ещё не запланированы", k_comp_t:"Открыть список сроков",
+  k_att_t:"Показать только эти находки", k_act_t:"Открыть реестр действий",
+  k_same:"без изменений", k_vsprev:"к предыдущему периоду",
+  w_k_go:"Показать их в списке ниже",
   k_act:"Действий к планированию", k_mix:"Распределение",
   k_units:"ед.: {n}", k_finds:"позиций с записью", k_attsub:"ухудшено + критично",
   k_actsub:"без «наблюдать»", k_none_here:"Нет в этой выборке", k_only:"Только {x}",
@@ -2405,6 +2503,7 @@ const I18N={
   dd_c_unit:"Единица", dd_c_round:"Обход", dd_c_last:"Последний раз",
   dd_c_due:"Срок", dd_c_rate:"ч/сут", dd_c_why:"Почему не сделан",
   dd_put_to:"отложено до {d}", dd_not_doing:"не выполняется",
+  shown_n:"Показано {n} из {of}",
   dd_foot:"ч/сут — собственная измеренная наработка машины; * означает допущение по парку в {r} ч/сут, которое действует, пока машину не измерили два показания счётчика. «Срок» считается в часах, дни рядом — это те же часы при этой наработке.",
   due_over:"просрочено {n} дн.", due_in:"через {n} дн.", due_h:"{n} ч", due_days:"{n} дн. назад",
   due_why_wear:"по износу, не по интервалу",
@@ -2879,35 +2978,114 @@ const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;"
 function worstOf(rec){ let w="",n=-1; rec.items.forEach(i=>{ const s=sevOf(rec,i); if(sevRank(s)>n){n=sevRank(s);w=s;} }); return w; }
 
 /* ---------- KPIs ---------- */
+/* ── THE FOUR NUMBERS THAT LEAD THE PAGE ────────────────────────────────────
+   Every metric here answers "compared to what?", because a number with no
+   denominator and no direction is not a metric — it is a digit. 281
+   inspections is meaningless without "of how many were due"; 933 needing
+   attention is meaningless without "more or fewer than last month". Both tiles
+   used to carry neither.
+
+   And every tile that names a subset is the way INTO that subset. Fifteen of
+   the twenty-nine tiles on this dashboard were dead numbers, and a tile that
+   does nothing teaches the reader that none of them do — which costs the ones
+   that work. */
+function prevWindow(){
+  /* The same length of time, immediately before the one on screen. With no
+     period chosen there is nothing to compare against and the tiles say so
+     rather than inventing a baseline. */
+  const days=+$("fRange").value;
+  if(!days) return null;
+  const now=Date.now();
+  const a=new Date(now-days*2*864e5).toISOString().slice(0,10);
+  const b=new Date(now-days*864e5).toISOString().slice(0,10);
+  return RECS.filter(r=>!r._void && String(r.date||"")>=a && String(r.date||"")<b);
+}
+/* "12 more than the month before", in the reader's language, coloured by
+   whether more is worse. Nothing at all when there is no baseline. */
+function deltaLine(now, before, worseUp){
+  if(before==null) return "";
+  const d=now-before;
+  if(!d) return `<span class="dlt flat">${esc(t("k_same"))}</span>`;
+  const bad = worseUp ? d>0 : d<0;
+  return `<span class="dlt ${bad?"up":"dn"}">${d>0?"▲":"▼"} ${Math.abs(d)}</span>`
+    + ` <span class="muted">${esc(t("k_vsprev"))}</span>`;
+}
 function renderKpis(){
   const recs=filtered(), f=findings(recs);
   const units=new Set(recs.map(r=>r.equip)).size;
-  /* Two counters that look like the same fact must never disagree in silence.
-     The source chip says how many rounds were loaded; this tile says how many
-     are being counted. When the void filter is what separates them, say so. */
   const nVoidHid=($("fVoid")&&$("fVoid").checked)?0:filtered(true).length-recs.length;
   const cnt={NOF:0,INC:0,DEG:0,CRI:0};
   f.forEach(x=>{ const s=sevOf(x.r,x.i); if(cnt[s]!=null)cnt[s]++; });
   const attention=cnt.DEG+cnt.CRI;
   const openActions=f.filter(x=>x.i.action&&!["MON"].includes(x.i.action)).length;
-  const bar=["CRI","DEG","INC","NOF"].map(s=>cnt[s]?`<span style="flex:${cnt[s]};background:${SEVC[s]}"></span>`:"").join("");
-  $("kpis").innerHTML=`
-   <div class="tile"><div class="k">${t("k_insp")}</div><div class="v">${recs.length}</div><div class="s">${t("k_units",{n:units})}${
-      nVoidHid?` · <button class="voidhint" id="kpiVoid" title="${esc(t("k_voidtip"))}">${esc(t("k_voidhid",{n:nVoidHid}))}</button>`:""}</div></div>
-   <div class="tile"><div class="k">${t("k_find")}</div><div class="v">${f.length}</div><div class="s">${t("k_finds")}</div></div>
-   <div class="tile"><div class="k">${t("k_att")}</div><div class="v">${attention}</div><div class="s">${t("k_attsub")}</div></div>
-   <div class="tile"><div class="k">${t("k_act")}</div><div class="v">${openActions}</div><div class="s">${t("k_actsub")}</div></div>
-   <div class="tile"><div class="k">${t("k_mix")}</div>
+
+  /* Was the round walked when it was due — the one number a reliability
+     manager is held to, and the dashboard had it nowhere. Computed from the
+     same due engine the phone and the Due tab use, so all three agree. */
+  const comp=complianceNow();
+
+  const prev=prevWindow();
+  let pAtt=null, pFind=null;
+  if(prev){
+    const pf=findings(prev);
+    pFind=pf.length;
+    pAtt=pf.filter(x=>{ const sv=sevOf(x.r,x.i); return sv==="DEG"||sv==="CRI"; }).length;
+  }
+
+  const bar=["CRI","DEG","INC","NOF"].map(s=>cnt[s]
+    ? `<span style="flex:${cnt[s]};background:${SEVC[s]}" title="${esc(SEV[s].l)}: ${cnt[s]}"></span>` : "").join("");
+
+  const tile=(o)=>`<${o.go?"button type=\"button\"":"div"} class="kpi ${o.cls||""}"${
+      o.go?` data-kgo="${esc(o.go)}"`:""}${o.title?` title="${esc(o.title)}"`:""}>
+      <span class="k">${esc(o.k)}</span>
+      <span class="v">${o.v}</span>
+      <span class="s">${o.s||""}</span>
+    </${o.go?"button":"div"}>`;
+
+  $("kpis").innerHTML=
+      tile({ k:t("k_comp"), v:comp.pct==null?"—":comp.pct+"%",
+             s: comp.pct==null ? esc(t("k_comp_none"))
+                : esc(t("k_comp_s",{n:comp.onTime, of:comp.due})),
+             cls: comp.pct==null ? "" : comp.pct>=90 ? "good" : comp.pct>=75 ? "warn" : "bad",
+             go:"due", title:t("k_comp_t") })
+    + tile({ k:t("k_att"), v:attention, s:(deltaLine(attention,pAtt,true)||esc(t("k_attsub"))),
+             cls:attention?"bad":"good", go:"attention", title:t("k_att_t") })
+    + tile({ k:t("k_act"), v:openActions, s:esc(t("k_actsub")), cls:openActions?"warn":"good",
+             go:"actions", title:t("k_act_t") })
+    + tile({ k:t("k_insp"), v:recs.length,
+             s:esc(t("k_units",{n:units}))+(nVoidHid
+               ? ` · <button class="voidhint" id="kpiVoid" title="${esc(t("k_voidtip"))}">${esc(t("k_voidhid",{n:nVoidHid}))}</button>`
+               : "") + (pFind!=null?" · "+deltaLine(f.length,pFind,true):"") })
+    + `<div class="tile"><div class="k">${t("k_mix")}</div>
      <div class="bar" style="margin-top:8px">${bar}</div>
      <div class="legend">${["CRI","DEG","INC","NOF"].map(s=>
        `<button data-sev="${s}" class="${drill.sev===s?"on":""}"${cnt[s]?"":" disabled"}
           title="${cnt[s]?esc(t("k_only",{x:SEV[s].l})):esc(t("k_none_here"))}"
         ><i style="background:${SEVC[s]}"></i>${esc(SEV[s].l)}<b>${cnt[s]}</b></button>`).join("")}</div>
    </div>`;
-  // the mix doubles as a filter — click a band to see only those findings
   $("kpis").querySelectorAll("[data-sev]").forEach(b=>b.onclick=()=>setDrill("sev",b.dataset.sev));
-  // one click to see what is being held out, rather than hunting for the checkbox
-  const kv=$("kpiVoid"); if(kv) kv.onclick=()=>{ $("fVoid").checked=true; renderAll(); };
+  /* Each headline is a door into what it counts. */
+  $("kpis").querySelectorAll("[data-kgo]").forEach(b=>b.onclick=()=>{
+    const g=b.dataset.kgo;
+    if(g==="due"){ showTab("due"); return; }
+    if(g==="actions"){ showTab("actions"); return; }
+    if(g==="attention"){ setDrill("sev", drill.sev==="CRI"?"DEG":"CRI"); }
+  });
+  const kv=$("kpiVoid"); if(kv) kv.onclick=(e)=>{ e.stopPropagation();
+    $("fVoid").checked=true; renderAll(); };
+}
+
+/* Rounds walked on time, against rounds that came due — over the whole
+   register, not over the rounds that happen to have a record, because
+   measuring compliance against the work that got done always reads 100%. */
+function complianceNow(){
+  try{
+    const rows=dueTabRows();
+    if(!rows.length) return {pct:null,onTime:0,due:0};
+    const due=rows.length;
+    const onTime=rows.filter(r=>r.st!=="over").length;
+    return { pct:Math.round(onTime/due*100), onTime, due };
+  }catch(e){ return {pct:null,onTime:0,due:0}; }
 }
 
 /* ---------- fleet table ---------- */
@@ -2938,6 +3116,8 @@ function renderFleet(){
       <td class="muted">${esc(r.by||"")}</td></tr>`;
   });
   $("fleetTbl").innerHTML=h+"</tbody>";
+  if($("fleetShown")) $("fleetShown").innerHTML=
+    `<span>${esc(t("shown_n",{n:rows.length, of:rows.length}))}</span>`;
   $("fleetTbl").querySelectorAll("th[data-sort]").forEach(th=>th.onclick=()=>{
     const k=th.dataset.sort;
     // a new column starts on the reading people expect: worst/newest first
@@ -3210,6 +3390,8 @@ function renderActions(){
   const initials=n=>String(n||"").split(/[\s.]+/).filter(Boolean)
     .slice(0,2).map(w=>w[0]).join("").toUpperCase()||"?";
   const daysTo=d=>Math.round((Date.parse(d+"T00:00:00Z")-Date.parse(todayISO()+"T00:00:00Z"))/864e5);
+  if($("actShown")) $("actShown").innerHTML=
+    `<span>${esc(t("shown_n",{n:byUnit.size, of:byUnit.size}))} \u00b7 ${esc(String(rows.length))}</span>`;
   $("actionTbl").innerHTML=[...byUnit.entries()].map(([unit,list])=>{
     const worst=list.map(({r,i})=>sevOf(r,i)).sort((a,b)=>sevRank(b)-sevRank(a))[0];
     const a=ASSET_BY[unit]||{};
@@ -5045,21 +5227,35 @@ function renderWearTab(){
     $("wSeg").querySelectorAll("[data-wb]").forEach(b=>b.onclick=()=>{
       $("wBand").value=b.dataset.wb; renderWearTab(); });
   }
-  const rows = mode==="all" ? all
-             : mode==="act" ? all.filter(r=>r.band==="act")
+  /* Two more views, so that every tile above has somewhere to lead. They were
+     five numbers and three views: "over 80% worn" and "under 1,000 h left"
+     counted a set the reader could not then look at, which is a number you
+     have to go and reproduce by hand. */
+  const rows = mode==="all"   ? all
+             : mode==="act"   ? all.filter(r=>r.band==="act")
+             : mode==="watch" ? all.filter(r=>r.pct!=null&&r.pct>=80)
+             : mode==="soon"  ? all.filter(r=>r.hours!=null&&r.hours<W_SOON)
+             : mode==="life"  ? all.filter(r=>r.hours!=null)
              : all.filter(wearDue);
   const act=all.filter(r=>r.band==="act").length;
   const watch=all.filter(r=>r.band==="watch").length;
   const soon=all.filter(r=>r.hours!=null&&r.hours<W_SOON).length;
   const haveLife=all.filter(r=>r.hours!=null).length;
-  const kp=(lab,val,sub,cls)=>`<div class="kpi${cls?" "+cls:""}"><div class="k">${esc(lab)}</div>
-    <div class="v">${esc(String(val))}</div><div class="s">${esc(sub)}</div></div>`;
+  /* Every tile is the way into the set it counts. All five were inert. */
+  const kp=(go,lab,val,sub,cls)=>`<button type="button" data-wgo="${esc(go)}"
+      class="kpi${cls?" "+cls:""}${mode===go?" on":""}" title="${esc(t("w_k_go"))}">
+    <span class="k">${esc(lab)}</span>
+    <span class="v">${esc(String(val))}</span><span class="s">${esc(sub)}</span></button>`;
   $("wearKpis").innerHTML =
-      kp(t("w_k_meas"), all.length, t("w_k_meas_s",{n:new Set(all.map(r=>r.equip)).size}))
-    + kp(t("w_k_act"), act, t("w_k_act_s"))
-    + kp(t("w_k_watch"), watch, t("w_k_watch_s"))
-    + kp(t("w_k_soon",{h:W_SOON.toLocaleString(lang==="ru"?"ru-RU":"en-GB")}), soon, t("w_k_soon_s"))
-    + kp(t("w_k_life"), haveLife+" / "+all.length, t("w_k_life_s"));
+      kp("all",  t("w_k_meas"), all.length, t("w_k_meas_s",{n:new Set(all.map(r=>r.equip)).size}))
+    + kp("act",  t("w_k_act"), act, t("w_k_act_s"), act?"bad":"good")
+    + kp("watch",t("w_k_watch"), watch, t("w_k_watch_s"), watch?"warn":"good")
+    + kp("soon", t("w_k_soon",{h:W_SOON.toLocaleString(lang==="ru"?"ru-RU":"en-GB")}), soon,
+         t("w_k_soon_s"), soon?"warn":"good")
+    + kp("life", t("w_k_life"), haveLife+" / "+all.length, t("w_k_life_s"), "info");
+  $("wearKpis").querySelectorAll("[data-wgo]").forEach(b=>b.onclick=()=>{
+    if($("wBand")) $("wBand").value=b.dataset.wgo;
+    renderWearTab(); });
   if(!all.length){
     $("wearTbl").innerHTML=`<tbody><tr><td class="muted" style="padding:18px">${esc(t("w_empty"))}</td></tr></tbody>`;
     $("wearNote").textContent=""; return;
@@ -5095,6 +5291,8 @@ function renderWearTab(){
   $("wearTbl").querySelectorAll("tr[data-unit]").forEach(tr=>tr.onclick=()=>{
     $("equipSel").value=tr.dataset.unit; showTab("equipment"); renderHistory(); });
   $("wearNote").textContent = t("w_note",{s:rows.length, n:all.length, h:WEAR.MIN_HOURS, d:WEAR.MIN_DAYS});
+  if($("wearShown")) $("wearShown").innerHTML=
+    `<span>${esc(t("shown_n",{n:rows.length, of:all.length}))}</span>`;
 }
 function wearCsv(){
   const rows=wearRows(filtered());
@@ -6186,11 +6384,12 @@ function renderDueTab(){
              : all.filter(r=>r.st==="over");
   if(!show.length){ box.innerHTML=`<div class="sub">${esc(t("dd_none"))}</div>`; return; }
   const num=n=>Math.abs(n).toLocaleString(lang==="ru"?"ru-RU":"en-GB");
-  box.innerHTML=`<div class="tblwrap"><table class="grid"><thead><tr>
+  const CAP=500, kept=show.slice(0,CAP);
+  box.innerHTML=`<div class="tblwrap scrollbox" style="--sb:560px"><table class="grid"><thead><tr>
     <th>${esc(t("dd_c_unit"))}</th><th>${esc(t("dd_c_round"))}</th><th>${esc(t("dd_c_last"))}</th>
     <th class="r">${esc(t("dd_c_due"))}</th><th class="r">${esc(t("dd_c_rate"))}</th>
     <th>${esc(t("dd_c_why"))}</th></tr></thead><tbody>`
-    + show.slice(0,500).map(r=>{
+    + kept.map(r=>{
       const n=r.n;
       const when = n.over ? `<b style="color:var(--critical)">${esc(t("due_over",{n:num(n.dueInDays)}))}</b>`
                           : esc(t("due_in",{n:num(n.dueInDays)}));
@@ -6205,7 +6404,12 @@ function renderDueTab(){
         <td class="r">${when}<span class="muted"> · ${esc(t("due_h",{n:num(n.dueInHours)}))}</span></td>
         <td class="r">${n.rate}${n.measured?"":"*"}</td>
         <td>${why}</td></tr>`; }).join("")
-    + `</tbody></table></div><div class="sub" style="margin-top:8px">${esc(t("dd_foot",{r:DUE.HOURS_PER_DAY}))}</div>`;
+    + `</tbody></table></div>`
+    /* What is on screen out of what exists. The list was capped at 500 rows in
+       silence, which on a fleet this size reads as "that is all of them". */
+    + `<div class="shown"><span>${esc(t("shown_n",{n:kept.length, of:show.length}))}</span>
+        <span class="spacer"></span>
+        <span>${esc(t("dd_foot",{r:DUE.HOURS_PER_DAY}))}</span></div>`;
 }
 /* The sheet somebody takes to the planning meeting has to be the list they were
    looking at when they pressed the button. An export that quietly widens back
