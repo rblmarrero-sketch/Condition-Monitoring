@@ -16,6 +16,9 @@
     3) Folder on PC  — showDirectoryPicker(), reads .json AND images, recursing
     4) Import a file — a single entries.json; records only, kept in localStorage
 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
     color-scheme:light;
@@ -53,28 +56,93 @@
        The page led with a red compliance figure at 3.59:1 in dark mode until a
        contrast check caught it. */
     --good-ink:#0a7134; --warn-ink:#8a5a00; --serious-ink:#a94d1c; --crit-ink:#d03b3b;
+    /* The rail. Deep Chukotka blue-grey in BOTH themes — navigation is chrome,
+       not content, and holding it dark while the canvas flips is what makes
+       the page read as an application. The copper mark is the one warm thing
+       on it, same as on the canvas. */
+    --sbw:232px;
+    --rail:#16242c; --rail-ink:#f2f6f8; --rail-muted:#9db0ba;
+    --rail-hov:rgba(255,255,255,.07); --rail-on:rgba(255,255,255,.12);
+    --rail-line:rgba(255,255,255,.12);
     --shadow:0 1px 2px rgba(22,36,44,.06),0 4px 16px rgba(22,36,44,.05);
   }
   @media (prefers-color-scheme:dark){ :root:where(:not([data-theme="light"])){
     color-scheme:dark; --page:#0b1116; --surface:#141c22; --surface-2:#1b252c; --surface-3:#243039;
     --ink:#fff; --ink-2:#b6c3cb; --muted:#8a979e; --grid:#243039; --axis:#31414b;
     --border:rgba(255,255,255,.10); --accent:#ce8256; --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 20px rgba(0,0,0,.4);
-    --good-ink:#3fbf6a; --warn-ink:#fab219; --serious-ink:#ec835a; --crit-ink:#ef6a6a; } }
+    --good-ink:#3fbf6a; --warn-ink:#fab219; --serious-ink:#ec835a; --crit-ink:#ef6a6a;
+    --rail:#0d151b; } }
   :root[data-theme="dark"]{ color-scheme:dark; --page:#0b1116; --surface:#141c22; --surface-2:#1b252c; --surface-3:#243039;
     --ink:#fff; --ink-2:#b6c3cb; --muted:#8a979e; --grid:#243039; --axis:#31414b;
     --border:rgba(255,255,255,.10); --accent:#ce8256; --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 20px rgba(0,0,0,.4);
-    --good-ink:#3fbf6a; --warn-ink:#fab219; --serious-ink:#ec835a; --crit-ink:#ef6a6a; }
+    --good-ink:#3fbf6a; --warn-ink:#fab219; --serious-ink:#ec835a; --crit-ink:#ef6a6a;;
+    --rail:#0d151b; }
   *{box-sizing:border-box;} html,body{margin:0;padding:0;}
-  body{background:var(--page);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased;}
-  header.app{display:flex;align-items:center;gap:12px;padding:14px 22px;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:20;}
-  header.app .t1{font-weight:650;font-size:16px;} header.app .t2{color:var(--muted);font-size:12px;}
+  body{background:var(--page);color:var(--ink);
+    font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+    font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased;}
+  /* ═══ THE SHELL ═════════════════════════════════════════════════════════
+     An application frame, not a web page. Identity and navigation live in a
+     fixed rail on the left; the top bar keeps only the live things — source,
+     language, theme; the numbers own everything else. */
+  header.app{display:flex;align-items:center;gap:12px;padding:10px 22px;
+    margin-left:var(--sbw);background:var(--surface);
+    border-bottom:1px solid var(--border);position:sticky;top:0;z-index:20;}
   header.app .spacer{flex:1;}
   .btn{border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);border-radius:8px;padding:8px 12px;cursor:pointer;font-size:13px;font-family:inherit;}
   .btn:hover{color:var(--ink);} .btn.primary{background:var(--accent);color:#fff;border-color:transparent;font-weight:600;}
-  nav.tabs{display:flex;gap:4px;padding:0 18px;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:57px;z-index:19;overflow-x:auto;}
-  nav.tabs button{border:none;background:none;color:var(--muted);padding:11px 15px;cursor:pointer;font-size:13.5px;font-weight:550;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;}
-  nav.tabs button.active{color:var(--ink);border-bottom-color:var(--accent);} nav.tabs button:hover{color:var(--ink-2);}
-  main{max-width:var(--page-max);margin:0 auto;padding:var(--s5) var(--s5) var(--s7);}
+  nav.tabs{position:fixed;left:0;top:0;bottom:0;width:var(--sbw);z-index:25;
+    display:flex;flex-direction:column;gap:2px;padding:14px 12px;
+    background:var(--rail);border-right:1px solid var(--border);overflow-y:auto;}
+  nav.tabs .brand{display:flex;align-items:center;gap:10px;padding:4px 6px 15px;
+    border-bottom:1px solid var(--rail-line);margin-bottom:12px;}
+  nav.tabs .brand .bmark{width:34px;height:34px;flex:none;border-radius:9px;
+    background:var(--accent);color:#fff;display:grid;place-items:center;
+    font:800 13px/1 ui-monospace,SFMono-Regular,Menlo,monospace;}
+  nav.tabs .brand .t1{font-weight:750;font-size:13.5px;letter-spacing:-.01em;
+    color:var(--rail-ink);line-height:1.2;}
+  nav.tabs .brand .t2{color:var(--rail-muted);font-size:10.5px;margin-top:2px;}
+  nav.tabs button{position:relative;display:flex;align-items:center;gap:11px;width:100%;
+    border:0;background:none;color:var(--rail-muted);padding:10px 11px;
+    border-radius:9px;cursor:pointer;font-size:13px;font-weight:600;
+    font-family:inherit;text-align:left;white-space:nowrap;
+    transition:background .13s,color .13s;}
+  nav.tabs button svg{width:18px;height:18px;flex:none;}
+  nav.tabs button span[data-i18n]{flex:1;overflow:hidden;text-overflow:ellipsis;}
+  nav.tabs button:hover{background:var(--rail-hov);color:var(--rail-ink);}
+  nav.tabs button.active{background:var(--rail-on);color:var(--rail-ink);
+    box-shadow:inset 3px 0 0 var(--accent);}
+  /* what is waiting, on the door to it — set by renderNavCounts() */
+  nav.tabs .nb{flex:none;min-width:20px;padding:2px 6px;border-radius:99px;text-align:center;
+    font:700 10.5px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;
+    background:var(--critical);color:#fff;}
+  nav.tabs .nb.warn{background:var(--warning);color:#3a2a00;}
+  nav.tabs .nb:empty{display:none;}
+  main{max-width:var(--page-max);margin:0 0 0 var(--sbw);padding:var(--s5) var(--s5) var(--s7);}
+  /* The rail folds twice: to an icon rail on a laptop, to a top strip on a
+     phone — the same buttons, never a second navigation. */
+  @media (max-width:1100px){
+    :root{--sbw:64px;}
+    nav.tabs{padding:12px 8px;}
+    nav.tabs .brand{justify-content:center;padding:4px 0 13px;}
+    nav.tabs .brand>div:last-child{display:none;}
+    nav.tabs button{justify-content:center;padding:11px 0;gap:0;}
+    nav.tabs button span[data-i18n]{display:none;}
+    nav.tabs .nb{position:absolute;top:5px;right:9px;min-width:9px;height:9px;
+      padding:0;font-size:0;line-height:0;}
+  }
+  @media (max-width:820px){
+    :root{--sbw:0px;}
+    nav.tabs{position:sticky;top:0;right:0;bottom:auto;width:auto;z-index:22;
+      flex-direction:row;overflow-x:auto;overflow-y:hidden;
+      border-right:0;padding:8px 10px;}
+    nav.tabs .brand{display:none;}
+    nav.tabs button{width:auto;justify-content:flex-start;gap:8px;padding:8px 12px;}
+    nav.tabs button span[data-i18n]{display:inline;}
+    nav.tabs .nb{position:static;min-width:20px;height:auto;padding:2px 6px;
+      font-size:10.5px;line-height:1.4;}
+    header.app{margin-left:0;position:static;}
+  }
   @media (max-width:900px){ main{padding:var(--s4) var(--s3) var(--s6);} }
 
   /* ── THE GRID ────────────────────────────────────────────────────────────
@@ -85,7 +153,7 @@
      than one wide one. */
   .grid12{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--s4);align-items:start;}
   .g4{grid-column:span 4;} .g5{grid-column:span 5;} .g6{grid-column:span 6;}
-  .g7{grid-column:span 7;} .g8{grid-column:span 8;} .g12{grid-column:span 12;}
+  .g7{grid-column:span 7;} .g8{grid-column:span 8;}
   @media (max-width:1180px){ .grid12>*{grid-column:span 12;} }
 
   /* ── A BOUNDED SURFACE ───────────────────────────────────────────────────
@@ -428,8 +496,7 @@
     margin-top:2px;line-height:1.45;}
   .catrow i.prose{color:var(--ink-2);max-width:78ch;}
   .kpi .s{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.3;}
-  .kpi.t-warn .v{color:var(--warn-ink);}
-  .kpi.t-bad .v{color:var(--serious-ink);}
+
   .reqwhat .spec{display:block;font-size:11.5px;color:var(--ink-2);margin-top:4px;}
   .reqwhat .spec>summary{cursor:pointer;color:var(--muted);font-size:11.5px;
     list-style:none;width:max-content;}
@@ -599,7 +666,7 @@
   .note{font-size:12px;color:var(--ink-2);background:color-mix(in srgb,var(--warning) 14%,var(--surface));border:1px solid color-mix(in srgb,var(--warning) 45%,var(--border));border-radius:8px;padding:8px 11px;margin-top:12px;}
   /* data-source sheet */
   .cfbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;
-    margin:14px 18px 0;padding:10px 14px;border:1px solid var(--warning);
+    margin:14px 18px 0 calc(var(--sbw) + 18px);padding:10px 14px;border:1px solid var(--warning);
     border-left-width:4px;border-radius:8px;
     background:color-mix(in srgb,var(--warning) 14%,var(--surface));}
   .cfbar.hidden{display:none;}
@@ -783,8 +850,14 @@
   /* Cards hug their content. Stretching four short numbers to match the tall
      severity card left each of them 60% empty, which reads as a layout that
      was not finished rather than one that was spaced. */
-  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(178px,1fr));
-    gap:var(--s3);margin:0 0 var(--s5);border:0;background:none;box-shadow:none;border-radius:0;
+  /* One instrument, not five white boxes. The tiles join into a single
+     elevated panel with hairlines between the cells — the joins come from a
+     1px grid gap over the border colour, so there is no last-child rule to
+     get wrong — and each cell wears its state as a bar across its top. */
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(196px,1fr));
+    gap:1px;margin:0 0 var(--s5);border:1px solid var(--border);
+    background:var(--border);box-shadow:var(--e2);border-radius:var(--r-lg);
+    overflow:hidden;
     /* Equal height. The note that used to sit here argued for hugging the
        content, and it was right when one card was a tall severity list beside
        four short numbers — stretching them left each 60% empty. The mix tile
@@ -793,20 +866,21 @@
        reads as one instrument rather than as five. */
     align-items:stretch;}
   .kpi,.tile{position:relative;display:flex;flex-direction:column;gap:1px;
-    background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
-    padding:14px 16px 15px;box-shadow:var(--e1);overflow:hidden;
+    background:var(--surface);border:0;border-radius:0;
+    padding:16px 18px 17px;box-shadow:none;overflow:hidden;
     text-align:left;font-family:inherit;color:inherit;
-    transition:transform .18s var(--ease), box-shadow .18s var(--ease), border-color .15s;}
-  .kpi::before,.tile::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
-    background:var(--kc,transparent);transition:width .18s var(--ease);}
+    transition:background .15s;}
+  .kpi::before,.tile::before{content:"";position:absolute;left:0;top:0;right:0;height:3px;
+    background:var(--kc,transparent);transition:height .18s var(--ease);}
   button.kpi{cursor:pointer;}
-  button.kpi:hover{transform:translateY(-2px);box-shadow:var(--e2);}
-  button.kpi:hover::before{width:4px;}
-  button.kpi:active{transform:translateY(0);}
-  .kpi.on{border-color:var(--kc,var(--accent));box-shadow:var(--e2),0 0 0 1px var(--kc,var(--accent)) inset;}
+  button.kpi:hover{background:var(--surface-2);}
+  button.kpi:hover::before{height:5px;}
+  .kpi.on{background:var(--surface-2);
+    box-shadow:0 0 0 1px var(--kc,var(--accent)) inset;}
   .kpi .k,.tile .k{font:700 9.5px/1.2 inherit;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);}
-  .kpi .v,.tile .v{font:800 30px/1.05 ui-monospace,SFMono-Regular,Menlo,monospace;
-    letter-spacing:-.03em;font-variant-numeric:tabular-nums;margin-top:6px;color:var(--ink);}
+  .kpi .v,.tile .v{font:800 34px/1.05 ui-monospace,SFMono-Regular,Menlo,monospace;
+    letter-spacing:-.03em;font-variant-numeric:tabular-nums;margin-top:7px;color:var(--ink);}
+  #kpiComp .v{font-size:var(--t-hero);}
   .kpi .s,.tile .s{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.35;}
   /* the severity-mix tile carries a bar rather than a number */
   .tile .bar{margin-top:11px;height:9px;border-radius:999px;background:var(--surface-2);
@@ -1025,17 +1099,9 @@
   /* ── page frame ────────────────────────────────────────────────────────
      A control surface, not a document: the chrome recedes so the numbers can
      be the loudest thing on screen. */
-  header.app{padding:13px 24px;border-bottom:0;box-shadow:0 1px 0 var(--border);}
-  header.app .t1{font-size:15.5px;font-weight:700;letter-spacing:-.015em;}
-  header.app .t2{font-size:11.5px;}
-  nav.tabs{padding:0 20px;border-bottom:1px solid var(--border);gap:2px;}
-  nav.tabs button{padding:12px 14px;font-size:13px;font-weight:600;position:relative;
-    border-bottom:0;transition:color .15s;}
-  nav.tabs button::after{content:"";position:absolute;left:12px;right:12px;bottom:0;height:2px;
-    background:var(--accent);border-radius:2px 2px 0 0;transform:scaleX(0);
-    transition:transform .18s var(--ease);}
-  nav.tabs button.active::after{transform:scaleX(1);}
-  main{padding:24px 22px 56px;}
+  /* The horizontal-tab refinements that lived here — the sliding underline,
+     the padded top strip — went with the top strip itself. One shell, defined
+     once, above. */
 
   /* ── section ───────────────────────────────────────────────────────────
      A titled block of one idea. The heading and its sentence belong together
@@ -1154,7 +1220,6 @@
 </head>
 <body>
 <header class="app">
-  <div><div class="t1">Condition Monitoring</div><div class="t2" id="sub" data-i18n="sub">Fleet dashboard</div></div>
   <div class="spacer"></div>
   <input type="file" id="importFile" accept=".json,application/json" hidden multiple>
   <button class="src" id="srcChip" data-i18n-title="srctitle" title="Where the dashboard is reading from"><span class="dot"></span><span id="srcText">No data yet</span></button><span class="syncflash" id="syncFlash"></span>
@@ -1378,14 +1443,16 @@
 </div>
 
 <nav class="tabs" id="tabs">
-  <button data-tab="overview" class="active" data-i18n="tab_overview">Overview</button>
-  <button data-tab="failure" data-i18n="tab_failure">Failure modes</button>
-  <button data-tab="wear" data-i18n="tab_wear">Wear &amp; life</button>
-  <button data-tab="actions" data-i18n="tab_actions">Action register</button>
-  <button data-tab="due" data-i18n="tab_due">Due &amp; missed</button>
-  <button data-tab="equipment" data-i18n="tab_equipment">Equipment history</button>
-  <button data-tab="lube" data-i18n="tab_lube">Lubrication</button>
-  <button data-tab="reports" data-i18n="tab_reports">Reports</button>
+  <div class="brand"><div class="bmark">CM</div>
+    <div><div class="t1">Condition Monitoring</div><div class="t2" id="sub" data-i18n="sub">Fleet dashboard</div></div></div>
+  <button data-tab="overview" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg><span data-i18n="tab_overview">Overview</span></button>
+  <button data-tab="failure"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4 21.5 20h-19Z"/><path d="M12 10.5v4"/><path d="M12 17.6h.01"/></svg><span data-i18n="tab_failure">Failure modes</span></button>
+  <button data-tab="wear"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 15a7.5 7.5 0 1 1 15 0"/><path d="m12 15 3.5-4"/><path d="M4.5 19h15"/></svg><span data-i18n="tab_wear">Wear &amp; life</span></button>
+  <button data-tab="actions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5.5" y="4.5" width="13" height="16" rx="2"/><path d="M9 4.5a3 3 0 0 1 6 0"/><path d="m8.8 13.5 2.2 2.2 4.2-4.4"/></svg><span data-i18n="tab_actions">Action register</span><span class="nb warn" id="nbAct"></span></button>
+  <button data-tab="due"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span data-i18n="tab_due">Due &amp; missed</span><span class="nb" id="nbDue"></span></button>
+  <button data-tab="equipment"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3L4.5 8.9"/><path d="M4.5 4.5v4.4h4.4"/></svg><span data-i18n="tab_equipment">Equipment history</span></button>
+  <button data-tab="lube"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5s5.8 6.3 5.8 10.2a5.8 5.8 0 0 1-11.6 0C6.2 9.8 12 3.5 12 3.5Z"/></svg><span data-i18n="tab_lube">Lubrication</span></button>
+  <button data-tab="reports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3.5h6.5L18 8v12.5H7Z"/><path d="M13.5 3.5V8H18"/></svg><span data-i18n="tab_reports">Reports</span></button>
 </nav>
 
 <main>
@@ -6576,7 +6643,19 @@ function renderConflictBar(){
     + (absent.length ? '<span class="cfsub">'+esc(t("cf_bar_absent",{n:absent.length}))+'</span>' : "");
   bar.querySelectorAll("[data-cfgo]").forEach(b=>{ b.onclick=()=>openEdit(b.dataset.cfgo); });
 }
-function renderAll(){ renderChips(); renderConflictBar(); renderKpis(); renderCoverage(); renderTrend(); renderFleet(); renderFailure(); renderWearTab(); renderActions(); renderHistory(); renderLubeTab(); renderDueTab(); }
+/* What is waiting, on the door to it. A rail button with a count is the same
+   promise a phone app makes: you do not have to open every room to find out
+   which one needs you. Overdue rounds in red, open actions in amber; empty
+   means empty, and an empty badge does not render at all. */
+function renderNavCounts(){
+  const nb=(id,n)=>{ const el=$(id); if(el) el.textContent=n>0?(n>99?"99+":String(n)):""; };
+  try{ nb("nbDue", dueTabRows().filter(r=>r.st==="over").length); }catch(e){}
+  try{
+    const f=findings(filtered());
+    nb("nbAct", f.filter(x=>x.i.action&&!["MON"].includes(x.i.action)).length);
+  }catch(e){}
+}
+function renderAll(){ renderChips(); renderConflictBar(); renderKpis(); renderCoverage(); renderTrend(); renderFleet(); renderFailure(); renderWearTab(); renderActions(); renderHistory(); renderLubeTab(); renderDueTab(); renderNavCounts(); }
 ["fType","fClass","fRange"].forEach(id=>$(id).onchange=renderAll);
 let qTimer=null;
 $("fQ").oninput=()=>{ clearTimeout(qTimer); qTimer=setTimeout(renderAll,180); };   // debounce, the fleet table is big
