@@ -1016,7 +1016,11 @@
   details.danger>summary{cursor:pointer;list-style:none;display:flex;align-items:center;
     gap:var(--s2);flex-wrap:wrap;padding:11px var(--s4);border-radius:9px;}
   details.danger>summary::-webkit-details-marker{display:none;}
-  details.danger>summary::before{content:"\u203a";display:inline-block;color:var(--crit-ink);
+  /* The character itself, as every other disclosure in this file writes it.
+     CSS escapes are \203a — a bare hex code point, no "u" — so "\u203a" parses
+     as an escaped letter u followed by 203a, and the arrow rendered as the
+     text "u203a" on the one control that guards deleting an inspection. */
+  details.danger>summary::before{content:"›";display:inline-block;color:var(--crit-ink);
     font-weight:700;transition:transform .15s var(--ease);}
   details.danger[open]>summary::before{transform:rotate(90deg);}
   details.danger>summary b{color:var(--crit-ink);font-size:var(--t-small);}
@@ -1052,6 +1056,23 @@
   .synone{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;}
   .synone li{font-weight:400;font-size:var(--t-small);line-height:1.45;font-family:inherit;
     color:var(--muted);}
+  .pxstage{position:relative;display:inline-block;max-width:100%;overflow:hidden;
+    touch-action:none;}
+  .lb.editing .pxstage{cursor:grab;}
+  .lb.editing .pxstage.grabbing{cursor:grabbing;}
+  .lb.cropping .pxstage{cursor:crosshair;}
+  /* Everything outside the box is dimmed by the box's own giant shadow, so
+     there is no second overlay to keep in step with it. */
+  .pxcrop{position:absolute;border:1px solid #fff;box-shadow:0 0 0 9999px rgba(0,0,0,.55);
+    cursor:move;}
+  .pxcrop.hidden{display:none;}
+  .pxcrop i{position:absolute;width:14px;height:14px;background:#fff;border-radius:2px;
+    box-shadow:0 0 0 1px rgba(0,0,0,.4);}
+  .pxcrop i[data-h="nw"]{left:-7px;top:-7px;cursor:nwse-resize;}
+  .pxcrop i[data-h="ne"]{right:-7px;top:-7px;cursor:nesw-resize;}
+  .pxcrop i[data-h="sw"]{left:-7px;bottom:-7px;cursor:nesw-resize;}
+  .pxcrop i[data-h="se"]{right:-7px;bottom:-7px;cursor:nwse-resize;}
+  .pxsp2{width:1px;height:22px;background:var(--border);}
   .pxopen{position:absolute;right:56px;top:12px;z-index:2;}
   .pxpanel{position:absolute;left:0;right:0;bottom:0;z-index:3;
     background:color-mix(in srgb,var(--surface) 94%,transparent);
@@ -2508,7 +2529,14 @@
 
 <div class="lb" id="lb"><button class="x" id="lbx">&times;</button>
   <button class="nav prev" id="lbPrev" aria-label="Previous">&#8249;</button>
-  <img id="lbimg" alt="">
+  <div class="pxstage" id="pxStage"><img id="lbimg" alt="">
+    <!-- The crop box lives on the picture, in fractions of it, which is exactly
+         how the recipe stores it — so what is dragged IS what is saved, with no
+         second coordinate system to disagree with the first. -->
+    <div class="pxcrop hidden" id="pxCrop">
+      <i data-h="nw"></i><i data-h="ne"></i><i data-h="sw"></i><i data-h="se"></i>
+    </div>
+  </div>
   <video id="lbvid" controls playsinline></video>
   <button class="nav next" id="lbNext" aria-label="Next">&#8250;</button>
   <div class="cap" id="lbcap"></div>
@@ -2520,6 +2548,10 @@
     <div class="pxrow">
       <button class="btn" id="pxRotL" data-i18n-title="px_rotl" title="Rotate left">⟲</button>
       <button class="btn" id="pxRotR" data-i18n-title="px_rotr" title="Rotate right">⟳</button>
+      <span class="pxsp2"></span>
+      <label class="pxstr"><span data-i18n="px_zoom">Zoom</span>
+        <input id="pxZoom" type="range" min="100" max="400" step="10" value="100">
+        <b id="pxZoomV">100%</b></label>
       <label class="pxstr"><span data-i18n="px_straighten">Straighten</span>
         <input id="pxStr" type="range" min="-8" max="8" step="0.5" value="0">
         <b id="pxStrV">0°</b></label>
@@ -2886,7 +2918,7 @@ const I18N={
   sy_u_dupe:"Duplicate retries suppressed — counted by the server that suppressed them.",
   sy_u_receipt:"Proof a record is queryable through the production path — needs read-after-write verification.",
   px_edit:"Edit photo", px_rotl:"Rotate left", px_rotr:"Rotate right",
-  px_straighten:"Straighten", px_crop:"Crop", px_r_none:"Full frame",
+  px_straighten:"Straighten", px_zoom:"Zoom", px_crop:"Crop", px_r_none:"Full frame",
   px_r_free:"Freeform", px_r_1:"1:1", px_r_43:"4:3", px_r_169:"16:9",
   px_caption:"Caption", px_prefer:"Use in the report",
   px_compare:"Show original", px_compare_off:"Show edit",
@@ -3433,7 +3465,7 @@ const I18N={
   sy_u_dupe:"Подавленные повторы — их считает сервер, который их подавил.",
   sy_u_receipt:"Доказательство доступности записи через рабочий путь — нужна проверка чтением после записи.",
   px_edit:"Правка фото", px_rotl:"Повернуть влево", px_rotr:"Повернуть вправо",
-  px_straighten:"Выравнивание", px_crop:"Кадрирование", px_r_none:"Весь кадр",
+  px_straighten:"Выравнивание", px_zoom:"Масштаб", px_crop:"Кадрирование", px_r_none:"Весь кадр",
   px_r_free:"Произвольно", px_r_1:"1:1", px_r_43:"4:3", px_r_169:"16:9",
   px_caption:"Подпись", px_prefer:"Использовать в отчёте",
   px_compare:"Показать оригинал", px_compare_off:"Показать правку",
@@ -5851,7 +5883,15 @@ function renderHistory(){
               <div class="mmsg"></div>
             </div>
           </div>` : "";
-        return `<div class="pos" data-med='${esc(JSON.stringify(med.map(m=>[m.src,m.kind])))}' data-cap="${cap}">
+        /* The card carries which record and which FILES it is showing, because
+           the editor needs to store a recipe against the evidence rather than
+           against a picture. Without this the Photos view opened the lightbox
+           with no context and the Edit button stayed hidden — the editor was
+           reachable only from the position drawer, which is not where anybody
+           looks at photographs. */
+        return `<div class="pos" data-med='${esc(JSON.stringify(med.map(m=>[m.src,m.kind])))}' data-cap="${cap}"
+          data-rk="${esc(recKey(rec))}" data-ik="${esc(i.key)}"
+          data-names='${esc(JSON.stringify(med.map(m=>m.name||"")))}'>
           ${gal}
           ${edit}
           <div class="body"><div class="pk">${esc(i.key)}${i.grade?` <span class="pill ${SEV[GRADE_SEV[i.grade]]?.c||'n'}">${esc(i.grade)}</span>`:""}
@@ -5883,8 +5923,12 @@ function renderHistory(){
   $("history").querySelectorAll(".pos").forEach(card=>{
     let med=[]; try{ med=JSON.parse(card.dataset.med||"[]"); }catch(e){}
     if(!med.length) return;
-    card.querySelectorAll("[data-i]").forEach(el=>el.onclick=()=>
-      openLB(med, +el.dataset.i || 0, card.dataset.cap||""));
+    let names=[]; try{ names=JSON.parse(card.dataset.names||"[]"); }catch(e){}
+    card.querySelectorAll("[data-i]").forEach(el=>el.onclick=()=>{
+      const ix=+el.dataset.i || 0;
+      openLB(med, ix, card.dataset.cap||"",
+        card.dataset.rk ? {rk:card.dataset.rk, ik:card.dataset.ik, names, name:names[ix]||""} : null);
+    });
   });
   // If the photos are in Drive rather than on disk, fetch this unit's and repaint once.
   $("history").querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>openEdit(b.dataset.edit));
@@ -7495,6 +7539,7 @@ function pxSync(){
 }
 function pxOpenPanel(){
   if($("pxOpen").hidden) return;
+  pxZoomReset();
   if(pxPending()){ $("pxMsg").textContent=t("px_pending"); }
   $("pxPanel").classList.remove("hidden");
   $("lb").classList.add("editing");
@@ -7506,10 +7551,14 @@ function pxOpenPanel(){
   const busy=pxPending();
   ["pxRotL","pxRotR","pxStr","pxRatio","pxCap","pxPref","pxSave"].forEach(id=>{
     const el=$(id); if(el) el.disabled=busy; });
+  pxCropSync();
 }
 function pxClosePanel(){
-  $("pxPanel").classList.add("hidden"); $("lb").classList.remove("editing");
+  $("pxPanel").classList.add("hidden");
+  $("lb").classList.remove("editing"); $("lb").classList.remove("cropping");
+  $("pxCrop").classList.add("hidden");
   $("pxMsg").textContent="";
+  pxZoomReset();
 }
 /* Is the original still on its way up? Then there is nothing to edit yet. */
 function pxPending(){
@@ -7545,11 +7594,133 @@ document.addEventListener("keydown",e=>{
   if(!$("drw").classList.contains("hidden")) drwClose();
 });
 $("lb").onclick=e=>{ if(e.target.id==="lb"||e.target.id==="lbx") lbClose(); };
+/* ── DRAG THE CROP, AND LOOK CLOSER ─────────────────────────────────────────
+
+   The ratio presets put a centred rectangle on the picture, which is a start
+   and is not a crop: a crop is somebody deciding where the evidence is. The box
+   is draggable and its corners resize it, in FRACTIONS of the frame — the same
+   coordinates the recipe stores, so what is dragged is literally what is saved
+   and there is no second coordinate system to fall out of step with the first.
+
+   Zoom and pan are for looking, not for cropping. They change nothing about the
+   recipe: a fitter zooming to 300% to read a part number has not edited the
+   photograph, and the saved rendition is identical whether they did or not. */
+let pxZ=1, pxPanX=0, pxPanY=0;
+function pxApplyZoom(){
+  const img=$("lbimg");
+  if(!img) return;
+  img.style.transformOrigin="center center";
+  img.style.transform=`scale(${pxZ}) translate(${pxPanX}px, ${pxPanY}px)`;
+  const v=$("pxZoomV"); if(v) v.textContent=Math.round(pxZ*100)+"%";
+  const r=$("pxZoom"); if(r && Math.abs(+r.value-pxZ*100)>1) r.value=String(Math.round(pxZ*100));
+}
+function pxZoomReset(){ pxZ=1; pxPanX=0; pxPanY=0; pxApplyZoom(); }
+/* The crop box, drawn from the recipe onto whatever size the image is being
+   displayed at. */
+function pxCropSync(){
+  const box=$("pxCrop"), img=$("lbimg");
+  if(!box||!img) return;
+  const c=pxDraft&&pxDraft.crop;
+  const on=!!c && !pxCompare;
+  box.classList.toggle("hidden", !on);
+  $("lb").classList.toggle("cropping", on);
+  if(!on) return;
+  box.style.left=(c.x*100)+"%";
+  box.style.top=(c.y*100)+"%";
+  box.style.width=(c.w*100)+"%";
+  box.style.height=(c.h*100)+"%";
+}
+/* Pointer work on the stage: a corner resizes, the box moves, and anywhere else
+   pans when zoomed in. One handler, because they are the same gesture with
+   different targets. */
+(function(){
+  const stage=$("pxStage"); if(!stage) return;
+  let mode=null, handle=null, start=null;
+  const frac=e=>{
+    const img=$("lbimg").getBoundingClientRect();
+    return { x:(e.clientX-img.left)/img.width, y:(e.clientY-img.top)/img.height };
+  };
+  const clamp=v=>Math.max(0,Math.min(1,v));
+  stage.addEventListener("pointerdown",e=>{
+    if($("pxPanel").classList.contains("hidden")) return;   // not editing
+    const h=e.target.closest("[data-h]");
+    const inBox=e.target.closest(".pxcrop");
+    if(h){ mode="resize"; handle=h.dataset.h; }
+    else if(inBox){ mode="move"; }
+    else if(pxZ>1){ mode="pan"; }
+    else return;
+    start={ p:frac(e), crop:pxDraft.crop?Object.assign({},pxDraft.crop):null,
+            panX:pxPanX, panY:pxPanY, cx:e.clientX, cy:e.clientY };
+    stage.setPointerCapture(e.pointerId);
+    stage.classList.toggle("grabbing", mode==="pan");
+    e.preventDefault();
+  });
+  stage.addEventListener("pointermove",e=>{
+    if(!mode||!start) return;
+    if(mode==="pan"){
+      pxPanX=start.panX+(e.clientX-start.cx)/pxZ;
+      pxPanY=start.panY+(e.clientY-start.cy)/pxZ;
+      pxApplyZoom(); return;
+    }
+    if(!start.crop) return;
+    const p=frac(e), dx=p.x-start.p.x, dy=p.y-start.p.y;
+    let c=Object.assign({},start.crop);
+    if(mode==="move"){
+      c.x=clamp(Math.min(start.crop.x+dx, 1-start.crop.w));
+      c.y=clamp(Math.min(start.crop.y+dy, 1-start.crop.h));
+    }else{
+      /* Resizing from a corner moves the two edges that corner touches and
+         leaves the opposite two where they are. */
+      const MIN=0.05;
+      let x1=start.crop.x, y1=start.crop.y;
+      let x2=start.crop.x+start.crop.w, y2=start.crop.y+start.crop.h;
+      if(handle.indexOf("w")>=0) x1=clamp(Math.min(x1+dx, x2-MIN));
+      if(handle.indexOf("e")>=0) x2=clamp(Math.max(x2+dx, x1+MIN));
+      if(handle.indexOf("n")>=0) y1=clamp(Math.min(y1+dy, y2-MIN));
+      if(handle.indexOf("s")>=0) y2=clamp(Math.max(y2+dy, y1+MIN));
+      c.x=x1; c.y=y1; c.w=x2-x1; c.h=y2-y1;
+      /* A dragged box is the operator's own framing, so it stops being one of
+         the presets and says so. */
+      c.ratio="free";
+      const sel=$("pxRatio"); if(sel && sel.value!=="free") sel.value="free";
+    }
+    pxDraft.crop=c;
+    pxCropSync();
+  });
+  const end=e=>{
+    if(!mode) return;
+    const wasCrop = mode!=="pan";
+    mode=null; handle=null; start=null;
+    stage.classList.remove("grabbing");
+    try{ stage.releasePointerCapture(e.pointerId); }catch(err){}
+    /* Repaint the preview from the recipe only once the gesture is finished —
+       re-rendering a canvas on every pointermove is how a drag turns to glue. */
+    if(wasCrop) pxPaint();
+  };
+  stage.addEventListener("pointerup",end);
+  stage.addEventListener("pointercancel",end);
+  /* Wheel and pinch. Passive:false because zooming the picture must not also
+     scroll the page behind it. */
+  stage.addEventListener("wheel",e=>{
+    if($("pxPanel").classList.contains("hidden")) return;
+    e.preventDefault();
+    const step = e.deltaY<0 ? 1.12 : 1/1.12;
+    pxZ=Math.max(1,Math.min(4,pxZ*step));
+    if(pxZ===1){ pxPanX=0; pxPanY=0; }
+    pxApplyZoom();
+  },{passive:false});
+})();
+$("pxZoom").oninput=()=>{
+  pxZ=Math.max(1,Math.min(4,(parseFloat($("pxZoom").value)||100)/100));
+  if(pxZ===1){ pxPanX=0; pxPanY=0; }
+  pxApplyZoom();
+};
 $("pxOpen").onclick=e=>{ e.stopPropagation(); pxOpenPanel(); };
 $("pxPanel").onclick=e=>e.stopPropagation();
-$("pxCancel").onclick=()=>{ pxDraft=pxNorm(pxRecipe); pxCompare=false; pxPaint(); pxClosePanel(); };
-$("pxRotL").onclick=()=>{ pxDraft.rot=(((pxDraft.rot-90)%360)+360)%360; pxPaint(); };
-$("pxRotR").onclick=()=>{ pxDraft.rot=(((pxDraft.rot+90)%360)+360)%360; pxPaint(); };
+$("pxCancel").onclick=()=>{ pxDraft=pxNorm(pxRecipe); pxCompare=false;
+  pxPaint(); pxCropSync(); pxClosePanel(); };
+$("pxRotL").onclick=()=>{ pxDraft.rot=(((pxDraft.rot-90)%360)+360)%360; pxPaint(); pxCropSync(); };
+$("pxRotR").onclick=()=>{ pxDraft.rot=(((pxDraft.rot+90)%360)+360)%360; pxPaint(); pxCropSync(); };
 $("pxStr").oninput=()=>{
   /* Capped in the control and again here: presentation, not re-framing. */
   const v=Math.max(-PX_STRAIGHTEN_MAX,Math.min(PX_STRAIGHTEN_MAX,parseFloat($("pxStr").value)||0));
@@ -7569,8 +7740,9 @@ function pxFrame(cb){
 }
 $("pxRatio").onchange=()=>{
   const v=$("pxRatio").value;
-  if(!v){ pxDraft.crop=null; pxPaint(); return; }
-  if(v==="free"){ pxDraft.crop={x:0.08,y:0.08,w:0.84,h:0.84,ratio:"free"}; pxPaint(); return; }
+  if(!v){ pxDraft.crop=null; pxPaint(); pxCropSync(); return; }
+  if(v==="free"){ pxDraft.crop={x:0.08,y:0.08,w:0.84,h:0.84,ratio:"free"};
+                  pxPaint(); pxCropSync(); return; }
   const r=parseFloat(v)||1;
   /* The crop is stored in FRACTIONS of the frame, so a 1:1 crop of a 4:3
      photograph is not w=1,h=1 — that is the whole frame, which is what this
@@ -7578,12 +7750,12 @@ $("pxRatio").onchange=()=>{
      (bw·w)/(bh·h) = r, so w/h = r·bh/bw. Take the largest centred rectangle
      that satisfies it. */
   pxFrame(f=>{
-    if(!f){ pxDraft.crop=null; pxPaint(); return; }
+    if(!f){ pxDraft.crop=null; pxPaint(); pxCropSync(); return; }
     const k=r*f.bh/f.bw;              // w/h in fractional terms
     let w=1, h=1/k;
     if(h>1){ h=1; w=k; }
     pxDraft.crop={x:(1-w)/2, y:(1-h)/2, w, h, ratio:v};
-    pxPaint();
+    pxPaint(); pxCropSync();
   });
 };
 $("pxCap").oninput=()=>{ pxDraft.caption=$("pxCap").value; };
@@ -7592,13 +7764,13 @@ $("pxCompare").onclick=()=>{
   pxCompare=!pxCompare;
   $("pxCompare").setAttribute("aria-pressed", pxCompare?"true":"false");
   $("pxCompare").textContent = pxCompare ? t("px_compare_off") : t("px_compare");
-  pxPaint();
+  pxPaint(); pxCropSync();
 };
 $("pxReset").onclick=()=>{
   pxDraft=pxNorm(null); pxCompare=false;
   $("pxStr").value="0"; $("pxStrV").textContent="0°"; $("pxRatio").value="";
   $("pxCap").value=""; $("pxPref").checked=false;
-  pxPaint();
+  pxZoomReset(); pxPaint(); pxCropSync();
 };
 $("pxSave").onclick=()=>{
   if(!lbCtx) return;

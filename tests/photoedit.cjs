@@ -71,6 +71,78 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
   ["pxRotL", "pxRotR", "pxStr", "pxRatio", "pxCap", "pxPref", "pxCompare", "pxReset"].forEach(id =>
     ok(ctrls.includes(id), `it has ${id}`, ctrls.join(",")));
 
+  console.log("\n── the editor is reachable from where people look at photos");
+  /* It was wired only to the position drawer. The Photos view of Equipment
+     History — the four-across grid somebody actually browses — opened the
+     lightbox with no record context, so the Edit button stayed hidden and the
+     whole editor was unreachable from the one place it is wanted. */
+  const gallery = await p.evaluate(() => {
+    lbClose();
+    const rec = RECS.find(r => (r.items || []).some(i => mediaOf(i, r).length));
+    showTab("equipment"); $("equipSel").value = rec.equip;
+    histView = "photos"; renderHistory();
+    return { cards: document.querySelectorAll("#history .pos").length,
+             withCtx: document.querySelectorAll("#history .pos[data-rk]").length };
+  });
+  await p.waitForTimeout(600);
+  ok(gallery.cards > 0, "the Photos view has cards", gallery.cards + "");
+  ok(gallery.withCtx === gallery.cards,
+     "and every one carries its record and file names",
+     `${gallery.withCtx} of ${gallery.cards}`);
+  await p.evaluate(() => document.querySelector("#history .pos [data-i]").click());
+  await p.waitForTimeout(400);
+  const fromGallery = await p.evaluate(() => ({
+    edit: !document.getElementById("pxOpen").hidden,
+    name: lbCtx ? lbCtx.name : null }));
+  ok(fromGallery.edit, "Edit photo is offered from the gallery too");
+  ok(!!fromGallery.name, "with the file it is looking at", fromGallery.name);
+  await p.click("#pxOpen"); await p.waitForTimeout(300);
+
+  console.log("\n── zoom is for looking, and changes nothing");
+  const zoom = await p.evaluate(() => {
+    const before = JSON.stringify(pxDraft);
+    $("pxZoom").value = "250"; $("pxZoom").dispatchEvent(new Event("input", { bubbles: true }));
+    return { z: pxZ, transform: $("lbimg").style.transform,
+             label: $("pxZoomV").textContent, recipeUnchanged: JSON.stringify(pxDraft) === before };
+  });
+  ok(Math.abs(zoom.z - 2.5) < 0.01, "the slider zooms", zoom.label);
+  ok(/scale\(2\.5\)/.test(zoom.transform), "the picture actually scales", zoom.transform);
+  /* A fitter zooming to read a part number has not edited the photograph. */
+  ok(zoom.recipeUnchanged, "and the recipe is untouched by it");
+  await p.evaluate(() => { $("pxZoom").value = "100";
+    $("pxZoom").dispatchEvent(new Event("input", { bubbles: true })); });
+
+  console.log("\n── the crop is dragged, not just chosen");
+  await p.selectOption("#pxRatio", "free"); await p.waitForTimeout(300);
+  const shown = await p.evaluate(() => ({
+    visible: !$("pxCrop").classList.contains("hidden"),
+    left: $("pxCrop").style.left, width: $("pxCrop").style.width,
+    crop: pxDraft.crop }));
+  ok(shown.visible, "the box appears on the picture");
+  /* The box is drawn from the recipe in fractions — the same coordinates it is
+     saved in — so what is dragged IS what is saved. */
+  ok(shown.left === (shown.crop.x * 100) + "%" && shown.width === (shown.crop.w * 100) + "%",
+     "drawn straight from the recipe, in its own coordinates",
+     `${shown.left} / ${shown.width}`);
+  const handle = await p.$("#pxCrop i[data-h='se']");
+  const bb = await handle.boundingBox();
+  const before = shown.crop;
+  await p.mouse.move(bb.x + bb.width / 2, bb.y + bb.height / 2);
+  await p.mouse.down();
+  await p.mouse.move(bb.x - 60, bb.y - 40, { steps: 8 });
+  await p.mouse.up();
+  await p.waitForTimeout(400);
+  const after = await p.evaluate(() => ({ crop: pxDraft.crop, sel: $("pxRatio").value }));
+  ok(after.crop.w < before.w && after.crop.h < before.h,
+     "dragging a corner resizes it",
+     `${before.w.toFixed(2)}×${before.h.toFixed(2)} → ${after.crop.w.toFixed(2)}×${after.crop.h.toFixed(2)}`);
+  ok(after.crop.x === before.x && after.crop.y === before.y,
+     "leaving the opposite corner where it was",
+     `x ${after.crop.x.toFixed(2)} y ${after.crop.y.toFixed(2)}`);
+  ok(after.sel === "free", "and it is the operator's framing now, not a preset", after.sel);
+  await p.evaluate(() => { $("pxReset").click(); });
+  await p.waitForTimeout(200);
+
   console.log("\n── straighten is capped: presentation, not re-framing");
   const capped = await p.evaluate(() => {
     const r = $("pxStr");
