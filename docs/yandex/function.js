@@ -372,6 +372,21 @@ async function saveEdit(b) {
                    here would leave the correction filed against a round that
                    no longer exists. */
                 fields: (b.fields && typeof b.fields === 'object') ? b.fields : {},
+                /* THE ROUND WAS FILED AGAINST THE WRONG MACHINE, DAY OR ROUND.
+                   Not a field edit — the three of them ARE the record's filing
+                   address, so the correction stays filed under the address the
+                   round arrived with and names where it should read instead.
+                   That is what lets a re-read of the folder re-apply the move
+                   rather than undo it. null puts the round back. */
+                move: (b.move && typeof b.move === 'object') ? b.move : null,
+                /* Both of these were being written by the dashboard and thrown
+                   away here, which is the worst kind of silence: the save
+                   succeeded, the panel said so, and the crop or the issued
+                   report was gone the next time the folder was read. A
+                   whitelist is the right shape for this document; it was simply
+                   missing two of the things the document actually carries. */
+                media: (b.media && typeof b.media === 'object') ? b.media : null,
+                reports: Array.isArray(b.reports) ? b.reports.slice(-20) : null,
                 items: b.items || null };
   await putObj(META_DIR + '/' + name, Buffer.from(JSON.stringify(doc, null, 2)), 'application/json');
   await touchIndex();

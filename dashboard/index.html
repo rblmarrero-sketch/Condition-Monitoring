@@ -1995,7 +1995,7 @@
            rate is measured from two of them. -->
       <div class="srccard" style="margin-bottom:14px">
         <div class="srchead"><span class="ico">⏱</span><div><b data-i18n="ed_round">The round itself</b>
-          <div class="muted" data-i18n="ed_round_sub">The unit, the date and the round type are what this record is filed under and cannot be changed here — void it and re-capture instead.</div></div></div>
+          <div class="muted" data-i18n="ed_round_sub">The hour meter and the two names. The unit, the date and the round type are what this record is filed under — correcting those is a re-file, at the bottom of this panel.</div></div></div>
         <div class="srcbody">
           <div class="row">
             <div class="field"><label for="edSmu" data-i18n="ed_smu">Hour meter</label>
@@ -2036,6 +2036,40 @@
             <input id="edReason" type="text" data-i18n-ph="ed_reasonph" placeholder="e.g. duplicate of the round on the 10th"></div>
           <div class="row"><button class="btn" id="edVoid" data-i18n="ed_dovoid">Void inspection</button>
             <button class="btn" id="edUnvoid" data-i18n="ed_unvoid">Un-void</button></div>
+        </div>
+      </div>
+
+      <!-- RE-FILING A ROUND ONTO THE MACHINE IT WAS ACTUALLY TAKEN ON.
+
+           A round entered against TK151 while the inspector was standing at
+           TK158 had exactly one remedy: void it and walk the machine again. On
+           this site that is a shift, a truck held, and a coat in −40 — so in
+           practice nobody did it, and the wrong record stayed, counted in the
+           coverage and put a due date in front of a planner.
+
+           It is not a field edit. The three of them ARE the record's filing
+           address, so this writes a move against the address the round arrived
+           with and leaves a trail of where it came from. It is reversible —
+           move it back — which is why it sits with the void rather than with
+           the deletion, and why it asks for a reason rather than a password. -->
+      <div class="srccard" id="edMoveCard" style="margin-top:14px;border-color:var(--warning)">
+        <div class="srchead"><span class="ico">⇄</span><div><b data-i18n="ed_mv">Re-file this round</b>
+          <div class="muted" data-i18n="ed_mv_sub">For a round captured against the wrong machine, on the wrong day, or under the wrong round type. The findings, photographs and corrections travel with it, and it can be moved back.</div></div></div>
+        <div class="srcbody">
+          <div class="row">
+            <div class="field"><label for="edMvUnit" data-i18n="ed_mv_unit">Unit</label>
+              <input id="edMvUnit" type="text" autocomplete="off" list="edMvUnits"></div>
+            <div class="field"><label for="edMvDate" data-i18n="ed_mv_date">Date</label>
+              <input id="edMvDate" type="date"></div>
+            <div class="field"><label for="edMvType" data-i18n="ed_mv_type">Round type</label>
+              <select id="edMvType"></select></div>
+          </div>
+          <datalist id="edMvUnits"></datalist>
+          <div class="field"><label for="edMvWhy" data-i18n="ed_mv_why">Why (recorded on the record)</label>
+            <input id="edMvWhy" type="text" autocomplete="off" data-i18n-ph="ed_mv_whyph" placeholder="e.g. captured against TK151, inspector was at TK158"></div>
+          <div class="note" id="edMvNote" style="margin-top:9px"></div>
+          <div class="row" style="margin-top:10px"><button class="btn" id="edMove" data-i18n="ed_mv_go">Re-file it</button>
+            <button class="btn hidden" id="edMoveBack" data-i18n="ed_mv_back">Put it back</button></div>
         </div>
       </div>
 
@@ -3204,7 +3238,22 @@ const I18N={
   month_insp:"{m} · {n} inspection(s)",
   hist_none:"No inspections recorded.",
   ed_round:"The round itself",
-  ed_round_sub:"The unit, the date and the round type are what this record is filed under and cannot be changed here — void it and re-capture instead.",
+  ed_round_sub:"The hour meter and the two names. The unit, the date and the round type are what this record is filed under — correcting those is a re-file, at the bottom of this panel.",
+  ed_mv:"Re-file this round",
+  ed_mv_sub:"For a round captured against the wrong machine, on the wrong day, or under the wrong round type. The findings, photographs and corrections travel with it, and it can be moved back.",
+  ed_mv_unit:"Unit", ed_mv_date:"Date", ed_mv_type:"Round type",
+  ed_mv_why:"Why (recorded on the record)",
+  ed_mv_whyph:"e.g. captured against TK151, inspector was at TK158",
+  ed_mv_go:"Re-file it", ed_mv_back:"Put it back",
+  ed_mv_same:"Nothing to change — this is where it already is.",
+  ed_mv_clash:"{k} already exists. Two rounds cannot share a unit, a date and a round type — re-file one of them to a different day first.",
+  ed_mv_nounit:"Give it a unit.",
+  ed_mv_nowhy:"Say why. It goes on the record, and a re-file nobody can explain is one nobody can check.",
+  ed_mv_badunit:"{u} is not on the fleet list. Check the number, or import the machine first.",
+  ed_mv_baddate:"That date is in the future.",
+  ed_mv_ok:"Re-filed as {k}.",
+  ed_mv_was:"Re-filed from {k}",
+  ed_mv_by:"by {b} on {d}",
   ed_smu:"Hour meter", ed_smuph:"SMU at this inspection",
   ed_who:"Inspected by", ed_sup:"Verified by",
   ed_smu_rate:"This machine has {n} hour-meter readings and runs {r} h/day by its own record — the due list uses that instead of the fleet assumption.",
@@ -3759,7 +3808,22 @@ const I18N={
   month_insp:"{m} · осмотров: {n}",
   hist_none:"Осмотры не записаны.",
   ed_round:"Сам обход",
-  ed_round_sub:"Единица, дата и тип обхода — это то, под чем записан документ; здесь их изменить нельзя. Аннулируйте обход и запишите заново.",
+  ed_round_sub:"Моточасы и две фамилии. Единица, дата и тип обхода — это адрес документа; их правка — это перенос, внизу этой панели.",
+  ed_mv:"Перенести обход",
+  ed_mv_sub:"Для обхода, записанного не на ту машину, не на тот день или не под тем типом. Находки, фотографии и правки переносятся вместе с ним, и его можно вернуть обратно.",
+  ed_mv_unit:"Единица", ed_mv_date:"Дата", ed_mv_type:"Тип обхода",
+  ed_mv_why:"Причина (сохраняется в документе)",
+  ed_mv_whyph:"напр.: записан на TK151, инспектор был у TK158",
+  ed_mv_go:"Перенести", ed_mv_back:"Вернуть обратно",
+  ed_mv_same:"Менять нечего — он уже здесь.",
+  ed_mv_clash:"{k} уже существует. Два обхода не могут совпадать по единице, дате и типу — сначала перенесите один из них на другой день.",
+  ed_mv_nounit:"Укажите единицу.",
+  ed_mv_nowhy:"Укажите причину. Она сохраняется в документе, а перенос без объяснения проверить невозможно.",
+  ed_mv_badunit:"{u} нет в списке парка. Проверьте номер или сначала добавьте машину.",
+  ed_mv_baddate:"Эта дата в будущем.",
+  ed_mv_ok:"Перенесён как {k}.",
+  ed_mv_was:"Перенесён из {k}",
+  ed_mv_by:"— {b}, {d}",
   ed_smu:"Счётчик наработки", ed_smuph:"наработка на момент осмотра",
   ed_who:"Осмотр выполнил", ed_sup:"Проверил",
   ed_smu_rate:"У машины {n} показаний счётчика, по ним наработка {r} ч/сут — план строится по ней, а не по допущению для парка.",
@@ -4027,12 +4091,37 @@ let RECS=[];
    phones inspecting one unit on one day produce one recKey and two recIds.
    Anything that has to be certain two rows are the same round asks this. */
 const recKey=r=>`${r.equip}|${r.date}|${r.type}`;
+/* THE KEY A CORRECTION IS FILED UNDER, WHICH IS NOT ALWAYS THE KEY IT READS
+   UNDER NOW.
+
+   `equip|date|type` was this record's identity and its filing address at the
+   same time, which is exactly why the three of them could not be corrected: a
+   round entered against TK151 when the inspector was standing at TK158 had no
+   remedy but voiding it and walking the machine again, in a pit, at −40.
+
+   They are separated here. The correction stays filed against the identity the
+   round arrived with — the one Drive knows, the one the phone will send again
+   on the next refresh, so re-reading the folder re-applies the move instead of
+   undoing it — and `_ek` carries that address forward onto the corrected
+   record. Everything downstream addresses records by `ekOf`, so a moved round
+   is edited, reported on and voided through the same address it always had,
+   while reading as the machine it was actually taken on.
+
+   For every record that has never been moved this is `recKey` exactly. */
+const ekOf=r=>(r&&r._ek)||recKey(r);
 const recId=r=>String((r&&r.id)||"")||null;
 const recRev=r=>Number((r&&r.rev)||0)||0;
 function applyEdits(r){
-  const e=edits[recKey(r)];
+  const ek=ekOf(r);
+  const e=edits[ek];
   if(!e) return r;
   const out=Object.assign({},r);
+  /* The address this correction is filed under, carried onto the corrected
+     record so the next edit, report or void goes to the same place — see ekOf.
+     Set unconditionally, not only on a move: a record that acquires a move
+     later must already be answering to its filing address, or the write that
+     adds the move would go somewhere else. */
+  out._ek=ek;
   out._void=!!e.void; out._reason=e.reason||""; out._editBy=e.by||""; out._editAt=e.at||"";
   out._note=e.note||"";
   /* Round-level corrections. The hour meter is the one that matters most and
@@ -4042,12 +4131,30 @@ function applyEdits(r){
      mistyped put a wrong date in front of a planner, and the only remedy was
      to void the round and re-walk the machine.
 
-     Never the unit, the date or the round type. Those three are this record's
-     identity — the correction is filed under `equip|date|type` — so changing
-     one here would orphan the very marker doing the changing. */
+     The unit, the date and the round type are a MOVE, not a field edit, and
+     they go through `e.move` below — a correction that changed them in place
+     would orphan the very marker doing the changing, because the marker is
+     filed under the three of them. */
   const F=e.fields||{};
   ["smu","by","sup"].forEach(function(k){
     if(F[k]!==undefined && F[k]!==null){ out[k]=F[k]; out["_f_"+k]=1; } });
+  /* ---- the round was filed against the wrong machine, day or round --------
+     A move rewrites the identity and leaves a trail of what it used to be, so
+     the change is visible on the record rather than being a silent rename.
+     Only the three parts that are actually different count as moved; a "move"
+     that changes nothing is not one, and must not put a badge on a record. */
+  const mv=e.move||null;
+  if(mv){
+    const was={equip:out.equip, date:out.date, type:out.type};
+    ["equip","date","type"].forEach(function(k){
+      if(mv[k] && mv[k]!==out[k]) out[k]=mv[k]; });
+    const changed=["equip","date","type"].filter(function(k){ return was[k]!==out[k]; });
+    if(changed.length){
+      out._moved=changed; out._wasKey=recKey(was);
+      out._moveBy=mv.by||e.by||""; out._moveAt=mv.at||e.at||"";
+      out._moveWhy=mv.why||"";
+    }
+  }
   const per=e.items||{};
   out._edited=Object.keys(per);
   out.items=(r.items||[]).map(i=>{
@@ -4097,7 +4204,7 @@ function lubeDL(rec, i){
    never empty, and it is flagged so nobody trusts it by accident. */
 function groupRivals(list){
   const groups=new Map();
-  list.forEach(r=>{ const k=recKey(r); if(!groups.has(k)) groups.set(k,[]); groups.get(k).push(r); });
+  list.forEach(r=>{ const k=ekOf(r); if(!groups.has(k)) groups.set(k,[]); groups.get(k).push(r); });
   const out=new Map();
   groups.forEach((rivals0,k)=>{
     let rivals=rivals0;
@@ -4877,7 +4984,7 @@ function askDisposition(targets, done, extra){
   if(!list.length) return;
   dispCtx={list, done, extra:extra||{}};
   const one = list.length===1
-    ? (()=>{ const r=RECS.find(x=>recKey(x)===list[0].rk);
+    ? (()=>{ const r=RECS.find(x=>ekOf(x)===list[0].rk);
              const i=r&&(r.items||[]).find(x=>x.key===list[0].ik);
              return r? `${r.equip} · ${i?(i.label||i.key):list[0].ik}` : ""; })()
     : t("a_sel_n",{n:list.length});
@@ -5059,7 +5166,7 @@ function renderActions(){
        is SHOWN, not to the whole register — a select-all that silently reaches
        past the filter is how somebody reassigns four hundred findings meaning to
        reassign nine. */
-    const allOn = !!list.length && list.every(({r,i})=>aSel.has(selId(recKey(r),i.key)));
+    const allOn = !!list.length && list.every(({r,i})=>aSel.has(selId(ekOf(r),i.key)));
     const owners=ownerList();
     $("actionTbl").innerHTML=`<div class="tblwrap scrollbox" style="--sb:520px"><table class="grid seltbl">
       <thead><tr><th class="selcol"><input type="checkbox" id="aAll"${allOn?" checked":""}
@@ -5071,8 +5178,8 @@ function renderActions(){
           const sv=sevOf(r,i), od=fOverdue(i), dd=i.due?daysTo0(i.due):null, age=fAgeDays(r,i);
           const ast=actionState(r,i);
           const sc=sv?`var(--${SEV[sv].c==="c"?"critical":SEV[sv].c==="s"?"serious":SEV[sv].c==="w"?"warning":"good"})`:"";
-          const sid=selId(recKey(r),i.key);
-          return `<tr class="hrow${aSel.has(sid)?" picked":""}" tabindex="0" data-fu="${esc(recKey(r))}" data-fi="${esc(i.key)}">
+          const sid=selId(ekOf(r),i.key);
+          return `<tr class="hrow${aSel.has(sid)?" picked":""}" tabindex="0" data-fu="${esc(ekOf(r))}" data-fi="${esc(i.key)}">
             <td class="selcol"><input type="checkbox" class="asel"${
               aSel.has(sid)?" checked":""} aria-label="${esc(t("a_sel_one",{u:r.equip}))}"></td>
             <td>${sv?`<span class="sevcell" style="--sc:${sc}"><i></i>${esc(SEV[sv].l)}</span>`
@@ -5208,7 +5315,7 @@ function renderActions(){
     + list.map(({r,i})=>{
         const s=sevOf(r,i), st=String(i.status||""), od=fOverdue(i);
         const dd=i.due?daysTo(i.due):null;
-        return `<button type="button" class="wlr" data-fu="${esc(recKey(r))}" data-fi="${esc(i.key)}"
+        return `<button type="button" class="wlr" data-fu="${esc(ekOf(r))}" data-fi="${esc(i.key)}"
             style="--sc:${s?`var(--${SEV[s].c==="c"?"critical":SEV[s].c==="s"?"serious":SEV[s].c==="w"?"warning":"good"})`:"var(--none)"}">
           <span class="sev"></span>
           <span class="cell"><span class="t1">${ptLabelHTML(r,i)}</span>
@@ -5443,8 +5550,22 @@ window.CMDash={
            still wins outright, which is what makes "reset to original" able to
            remove a recipe. */
         const keep=cur||{};
-        if(!("media" in e) && keep.media) e.media=keep.media;
-        if(!("reports" in e) && keep.reports) e.reports=keep.reports;
+        /* NULL SAYS NOTHING, THE SAME AS SAYING NOTHING.
+
+           Both backends whitelist the fields of this document, so they answer
+           with an explicit `media:null` for a record that has no recipes —
+           which `"media" in e` reads as "the writer means to remove them", and
+           one refresh from Drive would strip every crop in the office. A writer
+           removes a block by sending an empty object; null is the shape of "not
+           mentioned", and is treated as such. */
+        const said=k=>(e[k]!==undefined && e[k]!==null);
+        if(!said("media") && keep.media) e.media=keep.media;
+        if(!said("reports") && keep.reports) e.reports=keep.reports;
+        /* A move is the same: null is how a re-file is undone, and the panel
+           writes that deliberately — but a backend that has not been updated
+           yet answers with no `move` field at all, and that must not silently
+           put a re-filed round back where it came from. */
+        if(!("move" in e) && keep.move) e.move=keep.move;
         edits[e.key]=e;
       } });
     saveEdits(); rebuild(); refreshControls(); renderAll(); refreshSources();
@@ -5779,7 +5900,7 @@ function renderHistList(recs){
          and this is the column the page is about. */
       const sevCell=sev?`<span class="sevcell" style="--sc:${sc}"><i></i>${esc(SEV[sev].l)}</span>`
                        :`<span class="muted">—</span>`;
-      return `<tr class="hrow" tabindex="0" data-rk="${esc(recKey(rec))}" data-ik="${esc(i.key)}">
+      return `<tr class="hrow" tabindex="0" data-rk="${esc(ekOf(rec))}" data-ik="${esc(i.key)}">
         <td><b>${esc(i.key)}</b>${i.grade?` <span class="pill ${SEV[GRADE_SEV[i.grade]]?.c||'n'}">${esc(i.grade)}</span>`:""}</td>
         <td title="${esc(i.label||"")}"><span class="trunc">${esc(i.label||"—")}</span></td>
         <td>${sevCell}</td>
@@ -5801,8 +5922,8 @@ function renderHistList(recs){
       <span class="spacer"></span>${rec.by?`<span class="meta">${esc(rec.by)}</span>`:""}${
       rec.sup?`<span class="meta">✍ ${esc(rec.sup)}</span>`:""}${
       rec.gps?`<a class="meta" href="https://www.google.com/maps?q=${rec.gps.lat},${rec.gps.lon}" target="_blank" rel="noopener">📍 ${rec.gps.lat.toFixed(4)}, ${rec.gps.lon.toFixed(4)}</a>`:""}
-      <button class="btn" data-rpt="${esc(recKey(rec))}" style="padding:2px 9px;font-size:11.5px">${esc(t("r_one_go"))}</button>
-      <button class="btn" data-edit="${esc(recKey(rec))}" style="padding:2px 9px;font-size:11.5px">${esc(t("ed_edit"))}</button></div>
+      <button class="btn" data-rpt="${esc(ekOf(rec))}" style="padding:2px 9px;font-size:11.5px">${esc(t("r_one_go"))}</button>
+      <button class="btn" data-edit="${esc(ekOf(rec))}" style="padding:2px 9px;font-size:11.5px">${esc(t("ed_edit"))}</button></div>
       ${rec._note?`<div class="sub" style="margin:6px 12px 0">📝 ${esc(rec._note)}</div>`:""}
       ${isWearType(rec.type)?ucBlock(rec):""}
       ${rows?`<div class="tblwrap"><table class="grid"><thead><tr>${
@@ -5844,8 +5965,8 @@ function renderHistory(){
       ${!rec._conflict&&rec._keep?`<span class="editflag" title="${esc(t("cf_kept",{d:rec._keep,by:rec._resolvedBy||"—"}))}">${esc(t("cf_resolved"))}</span>`:""}
       ${rec.smu?`<span class="meta">SMU <b>${esc(rec.smu)}</b></span>`:""}
       <span class="spacer"></span>${rec.by?`<span class="meta">${esc(rec.by)}</span>`:""}${rec.sup?`<span class="meta">✍ ${esc(rec.sup)}</span>`:""}${rec.gps?`<a class="meta" href="https://www.google.com/maps?q=${rec.gps.lat},${rec.gps.lon}" target="_blank" rel="noopener">📍 ${rec.gps.lat.toFixed(4)}, ${rec.gps.lon.toFixed(4)}</a>`:""}
-      <button class="btn" data-rpt="${esc(recKey(rec))}" style="padding:3px 10px;font-size:12px">${esc(t("r_one_go"))}</button>
-      <button class="btn" data-edit="${esc(recKey(rec))}" style="padding:3px 10px;font-size:12px">${esc(t("ed_edit"))}</button></div>
+      <button class="btn" data-rpt="${esc(ekOf(rec))}" style="padding:3px 10px;font-size:12px">${esc(t("r_one_go"))}</button>
+      <button class="btn" data-edit="${esc(ekOf(rec))}" style="padding:3px 10px;font-size:12px">${esc(t("ed_edit"))}</button></div>
       ${rec._note?`<div class="sub" style="margin:2px 0 8px">📝 ${esc(rec._note)}</div>`:""}
       ${isWearType(rec.type)?ucBlock(rec):""}
       <div class="pos-grid${rec.items.filter(i=>!isWearType(rec.type)||photoSrc(i,rec)||i.comment||i.defect).length===1?" one":""}">${rec.items.filter(i=>!isWearType(rec.type)||photoSrc(i,rec)||i.comment||i.defect).map(i=>{
@@ -5871,7 +5992,7 @@ function renderHistory(){
            forgot, take down the one that came out as a thumb over the lens.
            Only where Drive is configured, because both are writes. */
         const shown=mediaOf(i,rec,true);
-        const edit = drvOn() ? `<div class="medit" data-rk="${esc(recKey(rec))}" data-ik="${esc(i.key)}">
+        const edit = drvOn() ? `<div class="medit" data-rk="${esc(ekOf(rec))}" data-ik="${esc(i.key)}">
             <button class="mtog" type="button" title="${esc(t("ph_edit"))}" aria-label="${esc(t("ph_edit"))}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true" style="width:12px;height:12px;vertical-align:-2px"><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="m4.5 17 4.8-4.3 3.4 3 2.6-2.2 4.2 3.5"/></svg> ${shown.length}</button>
             <div class="mpanel hidden">
               <div class="mlist">${shown.map(m=>`
@@ -5894,7 +6015,7 @@ function renderHistory(){
            reachable only from the position drawer, which is not where anybody
            looks at photographs. */
         return `<div class="pos" data-med='${esc(JSON.stringify(med.map(m=>[m.src,m.kind])))}' data-cap="${cap}"
-          data-rk="${esc(recKey(rec))}" data-ik="${esc(i.key)}"
+          data-rk="${esc(ekOf(rec))}" data-ik="${esc(i.key)}"
           data-names='${esc(JSON.stringify(med.map(m=>m.name||"")))}'>
           ${gal}
           ${edit}
@@ -6245,7 +6366,7 @@ function renderTrend(){
 let follKey=null, follItem=null;
 const WHYS=5;
 function openFollow(rk, ik){
-  const rec=RECS.find(r=>recKey(r)===rk); if(!rec) return;
+  const rec=RECS.find(r=>ekOf(r)===rk); if(!rec) return;
   const it=(rec.items||[]).find(x=>x.key===ik); if(!it) return;
   follKey=rk; follItem=ik;
   $("follTitle").textContent=`${rec.equip} · ${it.key}`;
@@ -6448,7 +6569,7 @@ function wireMediaEdit(){
     const panel=box.querySelector(".mpanel"), msg=box.querySelector(".mmsg");
     box.querySelector(".mtog").onclick=()=>panel.classList.toggle("hidden");
     box.querySelectorAll(".mx").forEach(b=>b.onclick=()=>{
-      const rec=RECS.find(r=>recKey(r)===rk); if(!rec) return;
+      const rec=RECS.find(r=>ekOf(r)===rk); if(!rec) return;
       const it=(rec.items||[]).find(x=>x.key===ik); if(!it) return;
       const cur=hiddenSet(it);
       if(b.dataset.on==="1") cur.add(b.dataset.name); else cur.delete(b.dataset.name);
@@ -6459,7 +6580,7 @@ function wireMediaEdit(){
     if(inp) inp.onchange=async ()=>{
       const files=[...(inp.files||[])]; inp.value="";
       if(!files.length) return;
-      const rec=RECS.find(r=>recKey(r)===rk); if(!rec) return;
+      const rec=RECS.find(r=>ekOf(r)===rk); if(!rec) return;
       const it=(rec.items||[]).find(x=>x.key===ik); if(!it) return;
       panel.classList.remove("hidden");
       for(let n=0;n<files.length;n++){
@@ -6494,7 +6615,7 @@ let edKey=null;
    phone uses. Falling back to everything only when there is no component to key
    on, because an empty picker is worse than a long one. */
 function optsFor(f,key){
-  const rec=RECS.find(r=>recKey(r)===edKey);
+  const rec=RECS.find(r=>ekOf(r)===edKey);
   const it=rec&&(rec.items||[]).find(x=>x.key===key);
   const mp=rec&&mpfcType(rec.type);
   if(f==="defectCode"){
@@ -6537,7 +6658,7 @@ function fillPicker(f,key,q){
    re-render wiped the "Saved" line the user had just earned, so a successful
    correction looked like nothing had happened. */
 function openEdit(key,keepMsg){
-  const rec=RECS.find(r=>recKey(r)===key); if(!rec) return;
+  const rec=RECS.find(r=>ekOf(r)===key); if(!rec) return;
   edKey=key;
   const held=keepMsg?$("edMsg").textContent:"";
   $("edTitle").textContent=`${rec.equip} · ${TYPE_LABEL[rec.type]||rec.type} · ${rec.date}`;
@@ -6582,6 +6703,7 @@ function openEdit(key,keepMsg){
   /* Why the hour meter is worth typing in. A machine with two readings is
      scheduled on what it actually does; one with none is scheduled on the
      fleet's assumption, and the difference is days. */
+  mvFill(rec);
   const hint=$("edSmuHint");
   if(hint){
     const trail=RECS.filter(x=>!x._void && x.equip===rec.equip && x.smu!=null && x.smu!=="")
@@ -6748,7 +6870,7 @@ async function keepVersion(dev){
     if(edKey===key){ openEdit(key,true); $("edMsg").textContent="❌ "+((err&&err.message)||err); }
   }
 }
-const rec_devs=k=>{ const r=RECS.find(x=>recKey(x)===k); return r&&r._devs; };
+const rec_devs=k=>{ const r=RECS.find(x=>ekOf(x)===k); return r&&r._devs; };
 $("edClose").onclick=()=>$("editOv").classList.add("hidden");
 $("editOv").onclick=e=>{ if(e.target.id==="editOv") $("editOv").classList.add("hidden"); };
 
@@ -6872,7 +6994,7 @@ function edPost(extra){
   return true;
 }
 $("edSave").onclick=()=>{
-  const rec=RECS.find(r=>recKey(r)===edKey);
+  const rec=RECS.find(r=>ekOf(r)===edKey);
   const items=mergedItems();
   /* An engineer may overrule the mapping. They may not do it silently: a saved
      X · Critical showing Incipient with no reason is indistinguishable from a
@@ -6881,6 +7003,76 @@ $("edSave").onclick=()=>{
   if(gaps.length){ $("edMsg").textContent=t("ed_ovr_need",{k:gaps.slice(0,3).join(", ")}); return; }
   if(edPost({ items, fields:mergedFields(), note:$("edNote").value.trim(),
               void:!!(rec&&rec._void), reason:(rec&&rec._reason)||"" })) openEdit(edKey,true);
+};
+/* ---- re-filing a round onto the machine it was actually taken on ---------
+   The three identity fields, filled from where the round currently reads and
+   validated against the same things the rest of the dashboard trusts: the
+   fleet list for the unit, today for the date, and the record set for a clash.
+
+   The clash check is the one that matters. `equip|date|type` is a filing
+   address, and two rounds at one address is not a merge — it is one of them
+   disappearing behind the other in `rebuild`'s map, silently, which is this
+   project's worst defect class with a new hat on. */
+function mvFill(rec){
+  const u=$("edMvUnit"), d=$("edMvDate"), ty=$("edMvType"), why=$("edMvWhy");
+  if(!u||!d||!ty) return;
+  u.value=rec.equip||""; d.value=rec.date||"";
+  /* Only the round types this site actually runs, named as the rest of the UI
+     names them — a free-text box here would put "mp " in a filing address. */
+  const types=[...new Set(RECS.map(r=>r.type).concat(Object.keys(TYPE_LABEL||{})))].filter(Boolean).sort();
+  ty.innerHTML=types.map(k=>`<option value="${esc(k)}">${esc((TYPE_LABEL&&TYPE_LABEL[k])||k)}</option>`).join("");
+  ty.value=rec.type||"";
+  if(why) why.value="";
+  const list=$("edMvUnits");
+  if(list) list.innerHTML=[...new Set(Object.keys(ASSET_BY||{}))].sort()
+    .map(k=>`<option value="${esc(k)}">`).join("");
+  const back=$("edMoveBack");
+  if(back) back.classList.toggle("hidden", !rec._moved);
+  const note=$("edMvNote");
+  if(note) note.textContent = rec._moved
+    ? t("ed_mv_was",{k:rec._wasKey||""}) + (rec._moveBy
+        ? " · " + t("ed_mv_by",{b:rec._moveBy,d:String(rec._moveAt||"").slice(0,10)}) : "")
+      + (rec._moveWhy ? " · " + rec._moveWhy : "")
+    : "";
+}
+/* Everything that must be true before a round changes address. Returns the
+   message to show, or null when the move is allowed — kept apart from the
+   handler so the suite can ask it directly rather than through six controls. */
+function mvCheck(rec, to, why){
+  if(!to.equip) return t("ed_mv_nounit");
+  if(to.equip===rec.equip && to.date===rec.date && to.type===rec.type) return t("ed_mv_same");
+  if(!why) return t("ed_mv_nowhy");
+  if(!(ASSET_BY||{})[to.equip]) return t("ed_mv_badunit",{u:to.equip});
+  if(to.date && to.date > new Date().toISOString().slice(0,10)) return t("ed_mv_baddate");
+  const k=recKey(to);
+  /* Against the record it would land beside, not against itself. */
+  if(RECS.some(r=>ekOf(r)!==edKey && recKey(r)===k)) return t("ed_mv_clash",{k});
+  return null;
+}
+$("edMove").onclick=()=>{
+  const rec=RECS.find(r=>ekOf(r)===edKey); if(!rec) return;
+  const to={ equip:($("edMvUnit").value||"").trim().toUpperCase(),
+             date:($("edMvDate").value||"").trim(),
+             type:($("edMvType").value||"").trim() };
+  const why=($("edMvWhy").value||"").trim();
+  const bad=mvCheck(rec,to,why);
+  if(bad){ $("edMvNote").textContent=bad; return; }
+  const by=$("edBy").value.trim();
+  if(edPost({ move:Object.assign({},to,{why,by,at:new Date().toISOString()}),
+              items:mergedItems(), fields:mergedFields(), note:$("edNote").value.trim(),
+              void:!!rec._void, reason:rec._reason||"" })){
+    /* The panel is addressed by the FILING key, which a move does not change —
+       so it reopens on the same round, now reading as the machine it was taken
+       on. */
+    openEdit(edKey,true);
+    $("edMvNote").textContent=t("ed_mv_ok",{k:recKey(to)});
+  }
+};
+$("edMoveBack").onclick=()=>{
+  const rec=RECS.find(r=>ekOf(r)===edKey); if(!rec||!rec._moved) return;
+  if(edPost({ move:null, items:mergedItems(), fields:mergedFields(),
+              note:$("edNote").value.trim(), void:!!rec._void, reason:rec._reason||"" }))
+    openEdit(edKey,true);
 };
 $("edVoid").onclick=()=>{
   const reason=$("edReason").value.trim();
@@ -6897,21 +7089,21 @@ $("edUnvoid").onclick=()=>{
    uploaded it and this end simply has not pulled it yet. Only the script can
    answer for Drive, so only the script is allowed to. */
 function heldIn(key){
-  return { drive: driveRecs.some(x=>recKey(x)===key),
-           imported: imported.some(x=>recKey(x)===key),
-           bundled: fromBundled().some(x=>recKey(x)===key) };
+  return { drive: driveRecs.some(x=>ekOf(x)===key),
+           imported: imported.some(x=>ekOf(x)===key),
+           bundled: fromBundled().some(x=>ekOf(x)===key) };
 }
 /* Forget this dashboard's copy. The Drive files, if there are any, are not
    touched — Reload everything brings the round back if they exist. */
 function dropLocal(key){
-  driveRecs=driveRecs.filter(x=>recKey(x)!==key);
-  imported=imported.filter(x=>recKey(x)!==key);
+  driveRecs=driveRecs.filter(x=>ekOf(x)!==key);
+  imported=imported.filter(x=>ekOf(x)!==key);
   delete edits[key]; delete conflicts[key];
   saveDrive(); saveImported(); saveEdits(); saveConflicts();
   rebuild(); refreshControls(); renderAll(); refreshSources();
 }
 $("edDelete").onclick=async ()=>{
-  const msg=$("edMsg"), rec=RECS.find(r=>recKey(r)===edKey);
+  const msg=$("edMsg"), rec=RECS.find(r=>ekOf(r)===edKey);
   if(!rec) return;
   const by=$("edBy").value.trim();
   if(!by){ msg.textContent=t("ed_needname"); return; }
@@ -7240,7 +7432,7 @@ function drwClose(){
 }
 let drwFrom=null;
 function openPos(rk, ik){
-  const rec=RECS.find(r=>recKey(r)===rk); if(!rec) return;
+  const rec=RECS.find(r=>ekOf(r)===rk); if(!rec) return;
   const i=(rec.items||[]).find(x=>x.key===ik); if(!i) return;
   drwFrom=document.activeElement;
   drwKey={rk,ik};
@@ -7312,7 +7504,7 @@ function openUnit(unit){
     .sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));
   if(!recs.length) return;
   drwFrom=document.activeElement;
-  drwKey={rk:recKey(recs[0]), unit};
+  drwKey={rk:ekOf(recs[0]), unit};
   const a=ASSET_BY[unit]||{};
   $("drwTitle").textContent=unit;
   $("drwEdit").hidden=true;                     // there is no one record to edit here
@@ -7350,7 +7542,7 @@ function openUnit(unit){
         const sup=reportsSuperseded(latest);
         const cur=reportCurrent(latest);
         const badge=`<span class="rst ${esc(st.status)}">${esc(t("rs_"+st.status))}</span>`;
-        if(!reportLog(recKey(latest)).length)
+        if(!reportLog(ekOf(latest)).length)
           return badge+` <span class="muted">${esc(t("rs_none"))}</span>`;
         if(cur) return badge+` <span class="muted">${esc(t("rs_issued",{d:String(cur.at).slice(0,10)}))}</span>`;
         /* Something material changed after the last issue. Say so where the
@@ -7363,7 +7555,7 @@ function openUnit(unit){
       ? `<h3 class="drwh">${esc(t("u_open"))}</h3><div class="ulist">`
         + open.slice(0,12).map(({r,i,as})=>{
             const sv=sevOf(r,i), od=fOverdue(i);
-            return `<button type="button" class="urow" data-fu="${esc(recKey(r))}" data-fi="${esc(i.key)}"
+            return `<button type="button" class="urow" data-fu="${esc(ekOf(r))}" data-fi="${esc(i.key)}"
               style="--sc:${sv?`var(--${SEV[sv].c==="c"?"critical":SEV[sv].c==="s"?"serious":SEV[sv].c==="w"?"warning":"good"})`:"var(--none)"}">
               <span class="sev"></span>
               <span class="ut"><b>${ptLabelHTML(r,i)}</b>
@@ -7379,7 +7571,7 @@ function openUnit(unit){
   + `<h3 class="drwh">${esc(t("u_recent"))}</h3><div class="ulist">`
     + recs.slice(0,6).map(r=>{
         const w=worstOf(r);
-        return `<button type="button" class="urow" data-rk="${esc(recKey(r))}"
+        return `<button type="button" class="urow" data-rk="${esc(ekOf(r))}"
           style="--sc:${w?`var(--${SEV[w].c==="c"?"critical":SEV[w].c==="s"?"serious":SEV[w].c==="w"?"warning":"good"})`:"var(--none)"}">
           <span class="sev"></span>
           <span class="ut"><b>${esc(TYPE_LABEL[r.type]||r.type)} \u00b7 ${esc(r.date||"")}</b>
@@ -7913,7 +8105,7 @@ function refreshReportTargets(){
     opts=RECS.filter(r=>!r._void).slice()
       .sort((a,b)=>(b.date||"").localeCompare(a.date||"")||a.equip.localeCompare(b.equip))
       .slice(0,400)
-      .map(r=>[recKey(r), `${r.equip} · ${r.date} · ${TYPE_LABEL[r.type]||r.type}`]); }
+      .map(r=>[ekOf(r), `${r.equip} · ${r.date} · ${TYPE_LABEL[r.type]||r.type}`]); }
   else if(scope==="unit"){ $("rTargetLbl").textContent="Equipment";
     opts=[...new Set(RECS.map(r=>r.equip))].sort().map(u=>[u,u]); }
   else if(scope==="round"){ $("rTargetLbl").textContent="Inspection date";
@@ -7971,7 +8163,7 @@ function recRevision(rec){
       i.mm==null?"":i.mm, i.reason||"", (i.hidden||[]).join(","));
   });
   /* Photo recipes count: a crop or a caption changes the document. */
-  const med=(()=>{ try{ return CMDash.mediaEdits(recKey(rec)); }catch(e){ return {}; } })();
+  const med=(()=>{ try{ return CMDash.mediaEdits(ekOf(rec)); }catch(e){ return {}; } })();
   Object.keys(med).sort().forEach(k=>{ const m=med[k];
     parts.push(k,m.rot||0,m.straighten||0,JSON.stringify(m.crop||null),m.caption||"",m.preferred||0); });
   const str=parts.join("\u0001");
@@ -8007,17 +8199,17 @@ function reportLog(rk){
 /* Which issued reports no longer describe the record as it now stands. */
 function reportsSuperseded(rec){
   const now=recRevision(rec);
-  return reportLog(recKey(rec)).filter(r=>r.rev && r.rev!==now);
+  return reportLog(ekOf(rec)).filter(r=>r.rev && r.rev!==now);
 }
 function reportCurrent(rec){
   const now=recRevision(rec);
-  return reportLog(recKey(rec)).find(r=>r.rev===now) || null;
+  return reportLog(ekOf(rec)).find(r=>r.rev===now) || null;
 }
 /* Record that a report was issued. Written to the same sidecar as every other
    office-side fact, so the audit trail travels with the record rather than
    living in one browser. */
 function logReport(rk, pages, status, rev){
-  const rec=RECS.find(r=>recKey(r)===rk); if(!rec) return;
+  const rec=RECS.find(r=>ekOf(r)===rk); if(!rec) return;
   let by=""; try{ by=localStorage.getItem("cm_dash_who")||""; }catch(e){}
   const keep=edits[rk]||{};
   const log=reportLog(rk).slice(-19);          // keep the last twenty issues
@@ -8050,7 +8242,7 @@ async function runReport(scope, target, btn, opts){
        A fleet or scope report is not about one record and is not logged against
        one. */
     if(scope==="one"){
-      const rec=RECS.find(r=>recKey(r)===target);
+      const rec=RECS.find(r=>ekOf(r)===target);
       if(rec){ const st=reportStatus(rec);
                logReport(target, n, st.status, st.rev);
                say(t(st.status==="final"?"r_done_final":"r_done_prov",{n, m:st.need-st.have}));
@@ -9448,9 +9640,14 @@ function dueTabRows(){
   Object.keys(last).forEach(k=>{
     const [ty,unit]=k.split("|");
     const rate=window.DUE ? DUE.rateFrom(trail[unit]||[]) : null;
-    const n=window.DUE ? DUE.next({type:ty, last:last[k], today, rate}) : null;
+    /* The machine, not only the round — see the note on the phone's copy of
+       this. Both surfaces schedule from due.js and both were asking it the
+       narrower question, so both walked every excavator on the dozer's
+       1,000 h instead of the 4,000 h the fleet actually stated. */
+    const cls=(ASSET_BY[unit]||{}).cls||null;
+    const n=window.DUE ? DUE.next({type:ty, last:last[k], today, rate, cls}) : null;
     if(!n) return;
-    const iv=DUE.hours(ty)||Math.round(DUE.spec(ty).d*n.rate);
+    const iv=DUE.hours(ty,null,cls)||Math.round(DUE.spec(ty,cls).d*n.rate);
     const soonH=Math.max(20, Math.round(iv*0.2));
     const d=deferrals[k];
     /* A deferral is answered by a round of that type walked after it. Nothing
@@ -9737,7 +9934,7 @@ function renderConflictBar(){
   const open=Object.values(conflicts).filter(c=>c&&!c.resolved&&c.key);
   if(!open.length){ bar.className="cfbar hidden"; bar.innerHTML=""; return; }
   const here=[], absent=[];
-  open.forEach(c=>{ (RECS.some(r=>recKey(r)===c.key) ? here : absent).push(c.key); });
+  open.forEach(c=>{ (RECS.some(r=>ekOf(r)===c.key) ? here : absent).push(c.key); });
   bar.className="cfbar";
   bar.innerHTML='<span class="cfw">\u2442 '
     + esc(open.length===1 ? t("cf_bar_one") : t("cf_bar_n",{n:open.length})) + '</span>'
@@ -9885,7 +10082,7 @@ function renderSync(){
       <th>${esc(t("sy_c_which"))}</th></tr></thead><tbody>`
       + s.gaps.slice(0,CAP).map(({r,miss})=>{
           const crit=(r.items||[]).some(i=>sevOf(r,i)==="CRI");
-          return `<tr class="hrow" tabindex="0" data-sygo="${esc(recKey(r))}">
+          return `<tr class="hrow" tabindex="0" data-sygo="${esc(ekOf(r))}">
             <td><b>${esc(r.equip)}</b>${crit?` <span class="pill c">${esc(SEV.CRI.l)}</span>`:""}</td>
             <td class="mono">${esc(r.date||"")}</td>
             <td><span class="tag">${esc(TYPE_LABEL[r.type]||r.type)}</span></td>
@@ -9895,7 +10092,7 @@ function renderSync(){
         }).join("")+`</tbody>`;
     $("syGapShown").innerHTML=`<span>${esc(t("shown_n",{n:Math.min(CAP,s.gaps.length), of:s.gaps.length}))}</span>`;
     $("syGapTbl").querySelectorAll("[data-sygo]").forEach(tr=>{
-      const go=()=>{ const rec=RECS.find(x=>recKey(x)===tr.dataset.sygo);
+      const go=()=>{ const rec=RECS.find(x=>ekOf(x)===tr.dataset.sygo);
                      if(!rec) return; showTab("equipment"); $("equipSel").value=rec.equip; renderHistory(); };
       tr.onclick=go;
       tr.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } };

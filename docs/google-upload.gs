@@ -310,6 +310,17 @@ function saveEdit_(b) {
        record's identity, and changing one would leave this marker filed
        against a round that no longer exists. */
     fields: (b.fields && typeof b.fields === 'object') ? b.fields : {},
+    /* THE ROUND WAS FILED AGAINST THE WRONG MACHINE, DAY OR ROUND. Not a field
+       edit — the three of them ARE the record's filing address, so this marker
+       stays filed under the address the round arrived with and names where it
+       should read instead. A re-read of the folder then re-applies the move
+       instead of undoing it. null puts the round back. */
+    move: (b.move && typeof b.move === 'object') ? b.move : null,
+    /* Both of these were written by the dashboard and thrown away here. The
+       save succeeded, the panel said so, and the crop or the issued report was
+       gone the next time the folder was read. */
+    media: (b.media && typeof b.media === 'object') ? b.media : null,
+    reports: (b.reports && b.reports.length) ? b.reports.slice(-20) : null,
     items: (b.items && typeof b.items === 'object') ? b.items : {},
   };
   var old = dir.getFilesByName(name);

@@ -6374,12 +6374,21 @@ function dueRows(only){
     const last=histEntry(h[k]); if(!last) continue;
     /* The machine's own hours per day where two readings have measured it,
        the fleet's assumption where they have not. */
-    const n=DUE.next({type:ty, last:last, today:todayISO(), rate:unitRate(unit)});
+    /* THE INTERVAL IS A PROPERTY OF THE ROUND AND THE MACHINE.
+
+       due.js has carried both figures since the fleet stated them — a dozer's
+       undercarriage at 1,000 h, an excavator's at 4,000 — and nothing here
+       asked for the second one. So every excavator on site was scheduled on
+       the dozer's number and walked four times more often than anybody asked
+       for, with the correct figure sitting one argument away. A number that
+       exists and is never read is the same as a number that does not exist. */
+    const cls=assetClassOf(unit);
+    const n=DUE.next({type:ty, last:last, today:todayISO(), rate:unitRate(unit), cls:cls});
     if(!n) continue;
     /* "Soon" is a fifth of the interval and at least a shift. On a 250-hour
        plug round that is 50 hours — two and a half days at the fleet's rate,
        which is a round you can still plan rather than one you are late for. */
-    const iv=DUE.hours(ty)||Math.round(DUE.spec(ty).d*n.rate);
+    const iv=DUE.hours(ty,null,cls)||Math.round(DUE.spec(ty,cls).d*n.rate);
     const soonH=Math.max(20, Math.round(iv*0.2));
     /* A deferral is answered by a round of that type actually being walked
        after it, and nothing is deleted for that to be true. The office has

@@ -30,18 +30,31 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
 const ago = n => new Date(Date.now() - n * 86400000).toISOString().slice(0, 10);
 const on  = n => new Date(Date.now() + n * 86400000).toISOString().slice(0, 10);
 
-/* A shift's worth of history across four round types, placed against the real
-   intervals: MP 250 h, UC/INSP 500 h, TB 1000 h, at 20 h/day. */
+/* A shift's worth of history across four round types, placed against the
+   intervals the fleet actually stated, at 20 h/day:
+
+     MP    250 h   magnetic plugs, every machine
+     INSP  500 h
+     UC   1000 h   dozers       ·  4000 h  excavators
+     TB   4000 h   articulated  ·  1000 h  everything else, carried forward
+
+   UC and TB are TWO figures each, not one, and EX005 is here to prove it: at
+   2,400 hours it is comfortably inside an excavator's 4,000 and comfortably
+   past a dozer's 1,000. A build that reads the ROUND's interval without asking
+   which MACHINE it is walking puts EX005 on the missed list — which is how
+   every excavator on this site came to be scheduled four times too often, with
+   the correct figure sitting one argument away in due.js. */
 const HIST = {
-  'UC|EX004':   { d: ago(54), h: '4100' },   // 1080 h on a 500 h round — missed
-  'UC|EX005':   { d: ago(53), h: '3900' },   // missed
-  'UC|DZ001':   { d: ago(42), h: '8800' },   // missed
-  'UC|DZ004':   { d: ago(31), h: '6100' },   // missed, but put off
-  'UC|EX003':   { d: ago(6),  h: '5200' },   // fine
-  'MP|TK160':   { d: ago(14), h: '7725' },   // 280 h on a 250 h round — missed
-  'MP|TK154':   { d: ago(5),  h: '7300' },   // fine
-  'TB|TK105':   { d: ago(48), h: '12400' },  // 960 h on 1000 — due soon
-  'INSP|TK101': { d: ago(26), h: '10200' },  // missed
+  'UC|EX004':   { d: ago(210), h: '4100' },  // 4200 h on an excavator's 4000 — missed
+  'UC|EX005':   { d: ago(120), h: '3900' },  // 2400 h — fine on 4000, missed on 1000
+  'UC|DZ001':   { d: ago(60),  h: '8800' },  // 1200 h on a dozer's 1000 — missed
+  'UC|DZ004':   { d: ago(55),  h: '6100' },  // 1100 h — missed, but put off
+  'UC|EX003':   { d: ago(6),   h: '5200' },  // fine
+  'MP|TK160':   { d: ago(14),  h: '7725' },  // 280 h on a 250 h round — missed
+  'MP|TK158':   { d: ago(20),  h: '7900' },  // 400 h — missed
+  'MP|TK154':   { d: ago(5),   h: '7300' },  // fine
+  'TB|TK105':   { d: ago(170), h: '12400' }, // 3400 h on an ADT's 4000 — due soon
+  'INSP|TK101': { d: ago(26),  h: '10200' }, // 520 h on a 500 h round — missed
 };
 const DEFER = { 'UC|DZ004': { u: 'DZ004', t: 'UC', until: on(6),
   why: 'on a low-loader to the workshop', by: 'S. Volkov', at: ago(2) } };
@@ -89,7 +102,8 @@ const rows = p => p.$$eval('#dueList .duerow', a => a.length);
   const badge = await p.evaluate(() => document.getElementById('tabD').textContent.trim());
   const head  = await p.evaluate(() => document.getElementById('dueCount').textContent.trim());
   /* Six machines are past their interval; one of them was put off on purpose,
-     which is a decision and not a miss. */
+     which is a decision and not a miss. EX005 is deliberately NOT among the
+     six — see the note on the fixture. */
   ok('the missed pill counts what nobody explained away', missed.n === 5,
      missed.txt + '  (expected 5)');
   ok('the tab badge says the same', Number(badge) === missed.n, badge + ' vs ' + missed.n);
@@ -103,6 +117,22 @@ const rows = p => p.$$eval('#dueList .duerow', a => a.length);
        await p.waitForTimeout(350);
        return (await p.evaluate(() => document.getElementById('tabD').textContent.trim())) === badge;
      })(), 'still ' + badge);
+
+  /* THE ONE THAT NAMES THE BUG. EX005 is 2,400 hours into an undercarriage
+     round. On the excavator figure the fleet stated — 4,000 h — it is fine; on
+     the dozer's 1,000 it is 1,400 hours late. Both figures have been in due.js
+     since the fleet gave them, and neither due list asked which machine it was
+     scheduling, so every excavator on site was walked on the dozer's number.
+     A count of five catches that too, but only this says which machine and
+     why, which is the difference between a failing test and a fixed bug. */
+  await p.click('#dueScopeF [data-sc="over"]'); await p.waitForTimeout(300);
+  const missedUnits = await p.$$eval('#dueList .duerow',
+    a => a.map(x => x.textContent.replace(/\s+/g, ' ').trim()));
+  ok('an excavator inside its own 4,000 h is not on the missed list',
+     !missedUnits.some(t => /EX005/.test(t)),
+     missedUnits.map(t => (t.match(/[A-Z]{2}\d{3}|TK\d{3}/) || [t])[0]).join(' '));
+  ok('and the excavator that is genuinely past 4,000 h is',
+     missedUnits.some(t => /EX004/.test(t)));
 
   console.log('\npills, not dropdowns');
   ok('the two <select>s are gone',

@@ -37,8 +37,14 @@ const on  = n => new Date(Date.now() + n * 86400000).toISOString().slice(0, 10);
 const RECS = [
   // 40 days on a 12.5-day round: badly overdue, and nobody has said why.
   { equip: 'TK101', date: ago(40), type: 'MP', by: 'R. Marrero', smu: '9000', items: [] },
-  // 40 days on a 25-day round: overdue, and deferred to next week with a reason.
-  { equip: 'TK102', date: ago(40), type: 'UC', by: 'R. Marrero', smu: '8000', items: [] },
+  /* 70 days on a 50-day round: overdue, and deferred to next week with a
+     reason. These are articulated trucks, and an undercarriage round on a
+     class the fleet has not given a figure for keeps the round's own 1,000 h
+     — 50 days at 20 h/day — rather than inheriting a dozer's or an
+     excavator's. The suite was written when UC was a flat 500 h for every
+     machine on site, which is the number that walked the excavators eight
+     times more often than anybody asked for. */
+  { equip: 'TK102', date: ago(70), type: 'UC', by: 'R. Marrero', smu: '8000', items: [] },
   // 2 days on a 12.5-day round: nowhere near due.
   { equip: 'TK103', date: ago(2),  type: 'MP', by: 'B. Ivanov',  smu: '7000', items: [] },
   // 12 days on a 12.5-day round: inside the last fifth — due soon, not missed.
@@ -56,7 +62,7 @@ const RECS = [
   /* A second machine past due with nobody's reason on it, so "explained" is
      one of two rather than one of one. A tile that can only ever read 100%
      is a tile that has never been read. */
-  { equip: 'TK107', date: ago(60), type: 'UC', by: 'R. Marrero', smu: '4000', items: [] },
+  { equip: 'TK107', date: ago(65), type: 'UC', by: 'R. Marrero', smu: '4000', items: [] },
 ];
 
 const DEFS = [
@@ -143,7 +149,7 @@ const rows = p => p.$$eval('#ddList tbody tr', a => a.map(tr => ({
   const kpi = await p.$$eval('#dueKpis .kpi', a => a.map(x => x.textContent.replace(/\s+/g, ' ').trim()));
   ok('four tiles, each a number with a denominator', kpi.length === 4, kpi.join(' | '));
   /* Seven seeded unit-rounds. Two are past due and unexcused — TK101's plug at
-     40 days on a 12.5-day round and TK107's undercarriage at 60 on a 25-day
+     40 days on a 12.5-day round and TK107's undercarriage at 65 on a 50-day
      one. TK102 is past due too but was put off with a reason, and a machine
      somebody made a decision about is not a machine anybody missed: it belongs
      in the put-off count, not this one. TK103 is fresh, TK104 and TK106 are
