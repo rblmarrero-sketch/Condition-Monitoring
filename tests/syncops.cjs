@@ -59,8 +59,13 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
   const dashes = cold.tiles.filter(x => /=—$/.test(x)).length;
   ok(dashes >= 3, "the delivery tiles read as unknown, not as failures",
      cold.tiles.join("  "));
-  ok(/backend/i.test(cold.empty), "and the table explains which question is unanswered",
-     cold.empty.slice(0, 60));
+  /* The wording moved from "no backend attached" to "nothing to compare against
+     yet", because an empty index is not only a missing backend — it is also a
+     backend whose file list has not arrived, which is what produced a false
+     "0 of 63 attachments arrived" on a dashboard that was displaying those very
+     photographs. Match the meaning, not the sentence. */
+  ok(/compare|backend|file list/i.test(cold.empty),
+     "and the table explains which question is unanswered", cold.empty.slice(0, 70));
   ok(cold.badge === "", "nothing is escalated on the strength of not having asked",
      `badge="${cold.badge}"`);
 

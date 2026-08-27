@@ -1671,7 +1671,7 @@
        inside the settings overlay, which nobody opens until something has
        already gone wrong. In the pit there is no signal to fix any of it. -->
   <div class="card" id="yardCard">
-    <h2><span data-i18n="sec_ready">Ready for the field</span> <span class="count-badge" id="yardBadge">…</span></h2>
+    <h2><span data-i18n="sec_ready">Ready for the field</span> <span class="count-badge" id="yardBadge" data-i18n="rdy_v_checking">Checking…</span></h2>
     <button type="button" class="yardsum" id="yardSum"></button>
     <div id="yardList" class="yardlist"></div>
     <div class="row" style="margin-top:10px">
@@ -2401,6 +2401,19 @@ const I18N = {
     sec_ready:"Ready for the field", btn_ready_again:"Check again",
     ready_hint:"Run this while you still have signal. Anything amber here is something you cannot fix at the machine.",
     ready_ok:"Ready", ready_n:"{n} to fix",
+    /* The verdicts, in the words a technician needs before walking out of
+       signal. One of these is always shown — never an ellipsis. */
+    rdy_v_checking:"Checking…",
+    rdy_v_ready:"Ready for the field",
+    rdy_v_old:"Ready — some data is old",
+    rdy_v_setup:"Setup needed before you go",
+    rdy_v_storage:"Phone storage is almost full",
+    rdy_v_update:"Update not finished",
+    rdy_v_photos:"Photos still to send",
+    rdy_fix_retry:"Check again",
+    rdy_q_unknown:"Could not read the queue on this phone. Your work is not lost — check again.",
+    rdy_err_t:"Check did not finish",
+    rdy_err_sub:"Something stopped the check. Your inspections are safe. Tap to try again.",
     ready_all:"All {n} checks passed — tap to read them",
     rdy_off_t:"Works with no signal", rdy_off_ok:"The whole app is on the phone — {n} files.",
     rdy_off_part:"{n} of {of} files are here. Fix this before you go.",
@@ -2796,6 +2809,17 @@ const I18N = {
     sec_ready:"Готовность к выезду", btn_ready_again:"Проверить снова",
     ready_hint:"Проверьте, пока есть связь. Всё, что здесь жёлтым, в поле уже не исправить.",
     ready_ok:"Готов", ready_n:"Исправить: {n}",
+    rdy_v_checking:"Проверка…",
+    rdy_v_ready:"Готов к выезду",
+    rdy_v_old:"Готов — часть данных устарела",
+    rdy_v_setup:"Нужна настройка перед выездом",
+    rdy_v_storage:"Память телефона почти заполнена",
+    rdy_v_update:"Обновление не завершено",
+    rdy_v_photos:"Фото ещё не отправлены",
+    rdy_fix_retry:"Проверить снова",
+    rdy_q_unknown:"Не удалось прочитать очередь на телефоне. Работа не потеряна — проверьте снова.",
+    rdy_err_t:"Проверка не завершилась",
+    rdy_err_sub:"Проверка прервалась. Осмотры в безопасности. Нажмите, чтобы повторить.",
     ready_all:"Все проверки пройдены ({n}) — нажмите, чтобы посмотреть",
     rdy_off_t:"Работает без связи", rdy_off_ok:"Всё приложение на телефоне — {n} файлов.",
     rdy_off_part:"На телефоне {n} из {of} файлов. Исправьте до выезда.",
@@ -9320,6 +9344,37 @@ function swAsk(){
   });
 }
 let yardBusy=false;
+/* ── NOTHING HERE MAY HANG ───────────────────────────────────────────────────
+
+   A technician reads this card, sees whether the phone is ready, and walks out
+   of signal. So the one thing it must never do is fail to answer — and it did:
+   every step below was an unbounded await, and a storage estimate or an
+   IndexedDB read that never settles leaves the badge on the "…" it ships with,
+   for ever, with no error to catch because nothing ever rejected.
+
+   Every step is now bounded. A step that does not answer in time says so and
+   the check carries on to the next one, because "I could not check the storage"
+   is a useful answer and a spinner is not. */
+function within(ms, work, onTimeout){
+  return Promise.race([
+    Promise.resolve().then(work).catch(e=>onTimeout),
+    new Promise(r=>setTimeout(()=>r(onTimeout), ms)),
+  ]);
+}
+/* The whole card's verdict, in the words a technician needs. Worst wins: a
+   phone with old reference data AND no room is told about the room. */
+function yardVerdict(rows){
+  const has=k=>rows.some(r=>r.k===k);
+  const hasKey=key=>rows.some(r=>r.key===key && r.k!=="ok");
+  if(hasKey("storage"))  return {k:"bad",  s:"rdy_v_storage"};
+  if(hasKey("offline"))  return {k:"bad",  s:"rdy_v_setup"};
+  if(hasKey("dest"))     return {k:"bad",  s:"rdy_v_setup"};
+  if(hasKey("refs"))     return {k:"bad",  s:"rdy_v_setup"};
+  if(hasKey("queue"))    return {k:"warn", s:"rdy_v_photos"};
+  if(hasKey("build"))    return {k:"warn", s:"rdy_v_update"};
+  if(has("warn"))        return {k:"warn", s:"rdy_v_old"};
+  return {k:"ok", s:"rdy_v_ready"};
+}
 /* NOT renderReady(). There is already one of those, and it drives the one-line
    bar at the top of the capture screen — declared later in the file, so mine
    silently replaced it and the bar stopped speaking at all. Two answers to two
@@ -9328,59 +9383,78 @@ let yardBusy=false;
 async function yardCheck(){
   const list=$("yardList"); if(!list || yardBusy) return;
   yardBusy=true;
+  /* A watchdog, because a stuck flag is the same bug in a different place: if
+     anything below still manages to hang, the next open of this screen has to
+     be able to run the check again rather than inheriting the jam. */
+  const unstick=setTimeout(()=>{ yardBusy=false; }, 20000);
   const rows=[];
-  const add=(k,title,text,fix)=>rows.push({k,title,text,fix});
+  const add=(k,title,text,fix,key)=>rows.push({k,title,text,fix,key});
   try{
     /* 1. is the whole app on the phone */
-    const h=await swAsk();
-    if(!h) add("warn",t("rdy_off_t"),t("rdy_off_none"));
-    else if(h.slow) add("warn",t("rdy_off_t"),t("rdy_off_slow"));
-    else if(h.ok) add("ok",t("rdy_off_t"),t("rdy_off_ok",{n:h.have}));
+    const h=await within(5000, ()=>swAsk(), {slow:true});
+    if(!h) add("warn",t("rdy_off_t"),t("rdy_off_none"),null,"offline");
+    else if(h.slow) add("warn",t("rdy_off_t"),t("rdy_off_slow"),
+      { label:t("rdy_fix_retry"), run:async()=>{} },"offline");
+    else if(h.ok) add("ok",t("rdy_off_t"),t("rdy_off_ok",{n:h.have}),null,"offline");
     else add("bad",t("rdy_off_t"),t("rdy_off_part",{n:h.have,of:h.need}),
       { label:t("rdy_fix_heal"), run:async()=>{ try{
           navigator.serviceWorker.controller.postMessage({type:"sw-heal"}); }catch(e){}
-        await new Promise(r=>setTimeout(r,6000)); } });
+        await new Promise(r=>setTimeout(r,6000)); } },"offline");
 
     /* 2. is it the newest build */
-    if(!navigator.onLine) add("warn",t("rdy_bld_t"),t("rdy_bld_off",{n:BUILD}));
-    else if(window.__updTimer) add("warn",t("rdy_bld_t"),t("rdy_bld_new"));
-    else add("ok",t("rdy_bld_t"),t("rdy_bld_ok",{n:BUILD}));
+    if(!navigator.onLine) add("warn",t("rdy_bld_t"),t("rdy_bld_off",{n:BUILD}),null,"build");
+    else if(window.__updTimer) add("warn",t("rdy_bld_t"),t("rdy_bld_new"),null,"build");
+    else add("ok",t("rdy_bld_t"),t("rdy_bld_ok",{n:BUILD}),null,"build");
 
     /* 3. room for the photographs the shift will take */
-    const st=await storageInfo();
-    if(!st) add("warn",t("rdy_sto_t"),t("rdy_sto_unknown"));
+    const st=await within(5000, ()=>storageInfo(), null);
+    if(!st) add("warn",t("rdy_sto_t"),t("rdy_sto_unknown"),
+      { label:t("rdy_fix_retry"), run:async()=>{} },"storage_unknown");
     else if(st.pct>=80 || st.photos<60)
-      add("bad",t("rdy_sto_t"),t("rdy_sto_low",{n:st.photos,p:st.pct}));
+      add("bad",t("rdy_sto_t"),t("rdy_sto_low",{n:st.photos,p:st.pct}),null,"storage");
     else if(persistState===false)
       add("warn",t("rdy_sto_t"),t("rdy_sto_evict"),
-        { label:t("rdy_fix_persist"), run:async()=>{ try{ await askPersist(); }catch(e){} } });
-    else add("ok",t("rdy_sto_t"),t("rdy_sto_ok",{n:st.photos,p:st.pct}));
+        { label:t("rdy_fix_persist"), run:async()=>{ try{ await askPersist(); }catch(e){} } },"evict");
+    else add("ok",t("rdy_sto_t"),t("rdy_sto_ok",{n:st.photos,p:st.pct}),null,"storage");
 
     /* 4. somewhere for the work to go */
     const dests=(typeof activeDests==="function")?activeDests():[];
     if(!UP.on || !dests.length) add("bad",t("rdy_up_t"),t("rdy_up_none"),
-      { label:t("set_title"), run:async()=>openSettings() });
-    else add("ok",t("rdy_up_t"),t("rdy_up_ok",{n:dests.length}));
+      { label:t("set_title"), run:async()=>openSettings() },"dest");
+    else add("ok",t("rdy_up_t"),t("rdy_up_ok",{n:dests.length}),null,"dest");
 
     /* 5. nothing left over from the last shift */
-    const pend=(await dbAll()).filter(r=>!r.up).length;
-    if(pend && UP.on && dests.length) add("bad",t("rdy_q_t"),t("rdy_q_pend",{n:pend}),
-      { label:t("rdy_fix_send"), run:async()=>{ retryAt=RETRY_MIN; await syncThenArm(true); } });
-    else if(pend) add("bad",t("rdy_q_t"),t("rdy_q_pend",{n:pend}));
-    else add("ok",t("rdy_q_t"),t("rdy_q_ok"));
+    const all=await within(6000, ()=>dbAll(), null);
+    if(all===null) add("warn",t("rdy_q_t"),t("rdy_q_unknown"),
+      { label:t("rdy_fix_retry"), run:async()=>{} },"queue_unknown");
+    else{
+      const pend=all.filter(r=>!r.up).length;
+      if(pend && UP.on && dests.length) add("bad",t("rdy_q_t"),t("rdy_q_pend",{n:pend}),
+        { label:t("rdy_fix_send"), run:async()=>{ retryAt=RETRY_MIN; await syncThenArm(true); } },"queue");
+      else if(pend) add("bad",t("rdy_q_t"),t("rdy_q_pend",{n:pend}),null,"queue");
+      else add("ok",t("rdy_q_t"),t("rdy_q_ok"),null,"queue");
+    }
 
     /* 6. the machines, the limits and the lubricants */
     const units=(window.ASSETS||[]).length;
     const refs=!!(window.WEAR&&WEAR.map)&&!!window.BODY&&!!window.LUBE;
-    if(units>100 && refs) add("ok",t("rdy_ref_t"),t("rdy_ref_ok",{n:units}));
-    else add("bad",t("rdy_ref_t"),t("rdy_ref_bad"));
-  }catch(e){ }
+    if(units>100 && refs) add("ok",t("rdy_ref_t"),t("rdy_ref_ok",{n:units}),null,"refs");
+    else add("bad",t("rdy_ref_t"),t("rdy_ref_bad"),null,"refs");
+  }catch(e){
+    /* Even a thrown check has to leave the technician with a sentence. */
+    add("bad",t("rdy_err_t"),t("rdy_err_sub"),
+      { label:t("rdy_fix_retry"), run:async()=>{} },"error");
+  }
+  clearTimeout(unstick);
   yardBusy=false;
 
   const bad=rows.filter(r=>r.k!=="ok").length;
+  /* The verdict in one line, in the words the brief asked for, so a technician
+     never has to read six rows to learn whether they can leave. */
+  const v=yardVerdict(rows);
   const badge=$("yardBadge");
-  if(badge){ badge.textContent = bad ? t("ready_n",{n:bad}) : t("ready_ok");
-             badge.className = "count-badge "+(bad?"warn":"ok"); }
+  if(badge){ badge.textContent = t(v.s);
+             badge.className = "count-badge "+(v.k==="ok"?"ok":v.k==="warn"?"warn":"bad"); }
   /* Six green ticks is a wall of good news, and this card exists to surface the
      one row that is NOT. When they all pass it collapses to a line saying so,
      openable by anyone who wants to read them; the moment anything is amber it

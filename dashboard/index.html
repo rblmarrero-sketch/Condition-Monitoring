@@ -2901,7 +2901,7 @@ const I18N={
   sy_h_files:"Files on the server", sy_h_last:"Last asked",
   sy_h_att:"Attachments accounted for", sy_h_held:"Held back",
   sy_notlinked:"no backend attached — nothing to compare against",
-  sy_nolink:"No backend attached", sy_nolink_s:"Attach a data source and this will compare every attachment these records name against the files the server actually holds. Until then it has nothing to check, and reporting 0% would describe this browser rather than the field.",
+  sy_nolink:"Nothing to compare against yet", sy_nolink_s:"The file list has not arrived from the server. Until it does there is nothing to check these attachments against, and reporting 0% would describe this browser rather than the field. It fills in when the data source refreshes.",
   sy_never:"never", sy_justnow:"just now", sy_min:"{n} min ago",
   sy_hr:"{n} h ago", sy_day:"{n} days ago",
   sy_c_missing:"Missing", sy_c_which:"Points", sy_c_why:"Why",
@@ -3448,7 +3448,7 @@ const I18N={
   sy_h_files:"Файлов на сервере", sy_h_last:"Последний запрос",
   sy_h_att:"Вложений учтено", sy_h_held:"Отложено",
   sy_notlinked:"хранилище не подключено — не с чем сравнивать",
-  sy_nolink:"Хранилище не подключено", sy_nolink_s:"Подключите источник данных, и здесь появится сверка всех вложений с файлами на сервере. Пока сверять не с чем, а «0%» описывал бы этот браузер, а не работу в поле.",
+  sy_nolink:"Пока не с чем сравнивать", sy_nolink_s:"Список файлов ещё не получен с сервера. Пока его нет, сверять вложения не с чем, а «0%» описывал бы этот браузер, а не работу в поле. Данные появятся после обновления источника.",
   sy_never:"никогда", sy_justnow:"только что", sy_min:"{n} мин назад",
   sy_hr:"{n} ч назад", sy_day:"{n} дн. назад",
   sy_c_missing:"Не хватает", sy_c_which:"Точки", sy_c_why:"Причина",
@@ -9759,8 +9759,18 @@ function syncScan(){
      the field — it is a fact about this browser never having asked. Reporting
      it as a delivery failure would be the same lie as reporting zero hash
      failures on a store that cannot compute a hash. */
+  /* Attached is not the same as ANSWERED. The file index is fetched lazily, so
+     a scan that runs before it arrives sees an empty list and concludes every
+     attachment on site is missing — which is exactly what it reported: "0 of 63
+     arrived, 63 missing, 2 Critical without evidence", on a dashboard whose
+     Equipment History was showing those very photographs at the time.
+
+     A false alarm is the same failure as a false reassurance: both are the
+     panel claiming to know something it does not. An empty index means the
+     question is unanswered, not answered badly. */
   const linked=(()=>{ try{ return !!(window.CMDrive&&CMDrive.configured&&CMDrive.configured()); }
-                      catch(e){ return false; } })();
+                      catch(e){ return false; } })()
+                && (held.size>0 || Object.keys(local).length>0);
   return { gaps, quar, expected, present, held:held.size, cursorAt, linked,
            critWaiting:gaps.filter(g=>critOf(g.r)).length,
            conflicts:(()=>{ try{ return CMDash.conflictCount(); }catch(e){ return 0; } })() };
