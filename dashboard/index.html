@@ -107,7 +107,7 @@
     background:var(--surface-2);border:1px solid var(--border);cursor:help;
     white-space:nowrap;}
   /* The toggle lives with the thing it moves. */
-  .railtog{position:absolute;right:8px;top:12px;width:24px;height:24px;padding:0;
+  .railtog{position:absolute;right:7px;top:10px;width:28px;height:28px;padding:0;
     border:1px solid var(--rail-line);background:none;color:var(--rail-muted);
     border-radius:6px;cursor:pointer;display:grid;place-items:center;line-height:0;}
   .railtog:hover{color:var(--rail-ink);background:var(--rail-hov);}
@@ -263,8 +263,13 @@
   /* Methodology, on demand. It used to be two lines of prose above every table
      — true, useful once, and read past every day after that. */
   .method{margin-top:6px;border-top:1px solid var(--border);padding-top:6px;}
-  .method>summary{cursor:pointer;font-size:var(--t-tiny);color:var(--muted);
-    list-style:none;display:inline-flex;align-items:center;gap:5px;}
+  /* A disclosure is a control. At 11.5px with no padding it was a 17px-tall
+     target sitting under every panel on the dashboard — readable, and awkward
+     to hit. */
+  .method>summary{cursor:pointer;font-size:var(--t-small);color:var(--muted);
+    list-style:none;display:inline-flex;align-items:center;gap:5px;
+    padding:4px 7px 4px 5px;margin-left:-5px;border-radius:6px;min-height:24px;}
+  .method>summary:focus-visible{outline:2px solid var(--accent);outline-offset:1px;}
   .method>summary::-webkit-details-marker{display:none;}
   .method>summary::before{content:"›";display:inline-block;transition:transform .15s var(--ease);}
   .method[open]>summary::before{transform:rotate(90deg);}
@@ -330,6 +335,14 @@
      second row. The full option text is still in the list when it opens; the
      closed control only has to be readable. */
   .controls .field select{min-width:0;max-width:154px;text-overflow:ellipsis;}
+  /* Below 1500 the three selects, their labels, the void toggle and Reset left
+     the search box at 220px — narrower than the placeholder it holds. Search is
+     the control that has to carry a sentence, so it keeps its width and the
+     fixed-width neighbours give theirs up. */
+  @media (max-width:1500px){
+    .controls .field select{max-width:112px;}
+    .resetb{padding:0 10px;}
+  }
   /* The field was 194px holding a 35-character placeholder, so the hint was
      clipped before it was read and a typed query scrolled inside its own box.
      It takes the row's slack now, up to a limit — a search field the width of
@@ -1000,7 +1013,9 @@
   .idue.late{color:var(--crit-ink);font-weight:600;}
   .idue.soon{color:var(--warn-ink);font-weight:600;}
   .ist{-webkit-appearance:none;appearance:none;font-weight:600;cursor:pointer;}
-  .resetb{margin-left:auto;flex:0 0 auto;}
+  /* Same height as the selects it sits beside. A toolbar of controls that do
+     not line up reads as three toolbars. */
+  .resetb{margin-left:auto;flex:0 0 auto;min-height:36px;padding:0 13px;}
   .resetb[disabled]{opacity:.4;cursor:default;}
   @media (max-width:1500px){ .hide-m{display:none !important;} }
   .chip{display:inline-flex;align-items:center;gap:7px;background:color-mix(in srgb,var(--accent) 14%,var(--surface));
@@ -1020,7 +1035,7 @@
   .prow[data-drill]:hover{background:var(--surface-2);}
   .prow.sel .pfill{outline:2px solid var(--ink);outline-offset:1px;}
   table.grid th.sortable{cursor:pointer;user-select:none;} table.grid th.sortable:hover{color:var(--ink);}
-  table.grid th .arrow{opacity:.35;font-size:10px;margin-left:3px;} table.grid th.on .arrow{opacity:1;}
+  table.grid th .arrow{opacity:.4;font-size:11px;margin-left:3px;} table.grid th.on .arrow{opacity:1;}
   .note{font-size:12px;color:var(--ink-2);background:color-mix(in srgb,var(--warning) 14%,var(--surface));border:1px solid color-mix(in srgb,var(--warning) 45%,var(--border));border-radius:8px;padding:8px 11px;margin-top:12px;}
   /* data-source sheet */
   .cfbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;
@@ -1229,7 +1244,10 @@
      elevated panel with hairlines between the cells — the joins come from a
      1px grid gap over the border colour, so there is no last-child rule to
      get wrong — and each cell wears its state as a bar across its top. */
-  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(196px,1fr));
+  /* Six tiles, one row. The floor was 196px, which fits five across the main
+     column on a 1366 screen — so adding "Due this week" wrapped the strip onto
+     a second row and doubled the chrome above the first fact. */
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(152px,1fr));
     gap:1px;margin:0 0 var(--s5);border:1px solid var(--border);
     background:var(--border);box-shadow:var(--e2);border-radius:var(--r-lg);
     overflow:hidden;
@@ -1267,7 +1285,10 @@
   /* the severity-mix tile carries a bar rather than a number */
   .tile .bar{margin-top:7px;height:8px;border-radius:999px;background:var(--surface-2);
     box-shadow:inset 0 1px 2px rgba(0,0,0,.10);}
-  .tile .legend{margin-top:6px;}
+  /* Two by two, deterministically. Left to wrap it was two rows at 1440 and
+     four at 1366, and the tallest tile sets the height of the whole strip —
+     so a 74px difference in one tile moved every headline down the page. */
+  .tile .legend{margin-top:6px;display:grid;grid-template-columns:1fr 1fr;gap:3px 8px;}
   .kpi.good{--kc:var(--good);} .kpi.warn{--kc:var(--warning);}
   .kpi.bad{--kc:var(--critical);} .kpi.info{--kc:var(--accent);}
   .kpi.bad .v{color:var(--crit-ink);} .kpi.good .v{color:var(--good-ink);}
@@ -2560,7 +2581,7 @@ const I18N={
   c_unit:"Unit", c_sev:"Severity", c_defect:"Defect", c_cause:"Cause",
 
   k_insp:"Inspections", k_find:"Findings", k_att:"Needs attention",
-  k_comp:"On-time compliance", k_comp_s:"{n} of {of} rounds walked before they were overdue",
+  k_comp:"Compliance", k_comp_s:"{n} of {of} rounds walked before they were overdue",
   u_rounds:"Inspections", u_open:"Open work", u_recent:"Recent rounds",
   u_noopen:"Nothing open on this machine.", u_nofind:"nothing raised",
   u_more:"and {n} more", u_hist:"Full history", u_acts:"In the register",
@@ -3036,7 +3057,7 @@ const I18N={
   c_unit:"Ед.", c_sev:"Степень", c_defect:"Дефект", c_cause:"Причина",
 
   k_insp:"Осмотров", k_find:"Находок", k_att:"Требует внимания",
-  k_comp:"Выполнено в срок", k_comp_s:"{n} из {of} обходов пройдены до просрочки",
+  k_comp:"В срок", k_comp_s:"{n} из {of} обходов пройдены до просрочки",
   u_rounds:"Осмотров", u_open:"Открытые работы", u_recent:"Последние обходы",
   u_noopen:"По этой машине ничего не открыто.", u_nofind:"замечаний нет",
   u_more:"и ещё {n}", u_hist:"Вся история", u_acts:"В реестре",

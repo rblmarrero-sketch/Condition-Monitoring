@@ -242,24 +242,33 @@ function proseUnderTitles() {
   console.log("\n── the register opens as a work queue");
   await p.evaluate(() => { showTab("actions"); actView = "table"; renderActions(); });
   await p.waitForTimeout(600);
+  /* Read the severity by its class, never by column index. This asked for
+     children[0] and got the answer right until the register grew a select
+     column in front of it — at which point it was reading an empty cell and
+     reporting the queue unsorted. A column's position is a layout decision;
+     what the cell IS is the contract. */
   const reg = await p.evaluate(() => {
     const rows = [...document.querySelectorAll("#actionTbl tbody tr")];
-    const none = rows.find(r => r.querySelector(".who.none"));
+    const none = rows.find(r => r.querySelector(".iown") && !r.querySelector(".iown").value);
+    const ph = none ? none.querySelector(".iown") : null;
     return { sort: actSort.k, n: rows.length,
-             firstSev: rows.length ? rows[0].children[0].textContent.trim() : "",
-             ownerInk: none ? getComputedStyle(none.querySelector(".who.none span")).color : "",
-             ownerText: none ? none.querySelector(".who.none span").textContent.trim() : "" };
+             firstSev: rows.length ? (rows[0].querySelector(".sevcell") || {}).textContent || "" : "",
+             sel: rows.length ? !!rows[0].querySelector(".selcol .asel") : false,
+             edits: rows.length ? ["iown", "idue", "ist"].filter(c => rows[0].querySelector("." + c)).length : 0,
+             ownerInk: ph ? getComputedStyle(ph, "::placeholder").color : "",
+             ownerText: ph ? ph.placeholder.trim() : "" };
   });
   ok(reg.sort === "queue", "sorted as a queue, not by one column", reg.sort);
-  if (reg.n) ok(/crit/i.test(reg.firstSev), "critical work is at the top", reg.firstSev);
-  /* An unowned action must not be the quietest thing in its row, and the word
-     has to carry it as well as the colour. */
-  if (reg.ownerInk) {
-    const grey = /rgb\((\d+), *(\d+), *(\d+)\)/.exec(reg.ownerInk);
-    const isGrey = grey && Math.abs(+grey[1] - +grey[3]) < 18;
-    ok(!isGrey, "an unowned action is not grey", reg.ownerInk);
-    ok(reg.ownerText.length > 2, "and says so in words", reg.ownerText);
+  if (reg.n) ok(/crit/i.test(reg.firstSev.trim()), "critical work is at the top", reg.firstSev.trim());
+  /* A register you can only read is a list. Owner, date and status are edited
+     where they are read, and a tick-box column makes a week's planning one
+     gesture instead of eighty-two. */
+  if (reg.n) {
+    ok(reg.sel, "every row can be selected");
+    ok(reg.edits === 3, "owner, due date and status are editable in the row", reg.edits + " of 3");
   }
+  /* An unassigned action has to say so in words, not only by being empty. */
+  if (reg.ownerText) ok(reg.ownerText.length > 2, "an unassigned action says so in words", reg.ownerText);
 
   await b.close();
   console.log(fail ? `\n${fail} FAILED` : "\nall passed");
