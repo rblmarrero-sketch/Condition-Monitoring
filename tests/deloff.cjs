@@ -64,6 +64,11 @@ async function open(p, unit){
 
   await p.evaluate(()=>{ document.getElementById('edBy').value='R. Marrero';
     document.getElementById('edConfirm').value='TK146'; });
+  /* Voiding and deleting live behind a deliberate opening now — they are not
+     corrections and they were sitting in the flow of an ordinary edit. Open the
+     danger zone the way a person has to. */
+  await p.evaluate(() => { const d = document.getElementById('edDanger'); if (d) d.open = true; });
+  await p.waitForTimeout(120);
   await p.click('#edDelete');
   await p.waitForTimeout(1500);
   const msg = await p.evaluate(()=>document.getElementById('edMsg').textContent||'');
@@ -76,6 +81,8 @@ async function open(p, unit){
 
   console.log('\n  the unit-number confirmation still guards a mis-click');
   await p.evaluate(()=>{ document.getElementById('edConfirm').value='WRONG'; });
+  await p.evaluate(() => { const d = document.getElementById('edDanger'); if (d) d.open = true; });
+  await p.waitForTimeout(120);
   await p.click('#edDelete');
   await p.waitForTimeout(600);
   ok('a wrong unit number stops it before the request',

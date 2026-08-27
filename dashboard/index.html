@@ -998,6 +998,21 @@
     background:none;border:0;padding:0;}
   button.prow:focus-visible,.tmon:focus-visible,.covr:focus-visible{
     outline:2px solid var(--accent);outline-offset:2px;}
+  /* The danger zone. Shut by default, unmistakable when open, and never in the
+     path of an ordinary correction. */
+  details.danger{margin-top:var(--s6);border:1px solid var(--critical);border-radius:10px;
+    background:color-mix(in srgb,var(--critical) 5%,var(--surface));}
+  details.danger>summary{cursor:pointer;list-style:none;display:flex;align-items:center;
+    gap:var(--s2);flex-wrap:wrap;padding:11px var(--s4);border-radius:9px;}
+  details.danger>summary::-webkit-details-marker{display:none;}
+  details.danger>summary::before{content:"\u203a";display:inline-block;color:var(--crit-ink);
+    font-weight:700;transition:transform .15s var(--ease);}
+  details.danger[open]>summary::before{transform:rotate(90deg);}
+  details.danger>summary b{color:var(--crit-ink);font-size:var(--t-small);}
+  details.danger>summary .muted{font-size:var(--t-micro);}
+  details.danger>summary:focus-visible{outline:2px solid var(--critical);outline-offset:2px;}
+  .dangerbody{padding:0 var(--s4) var(--s4);}
+  .dangerbody .srccard{margin-top:var(--s3) !important;}
   .ddact{white-space:nowrap;display:flex;gap:5px;justify-content:flex-end;}
   .ddact .minibtn{text-decoration:none;}
   .tgap{display:inline-flex;align-items:baseline;gap:5px;}
@@ -1957,6 +1972,18 @@
         <input id="edNote" type="text" data-i18n-ph="ed_noteph" placeholder="e.g. plug re-read under magnification"></div>
 
 
+      <div class="msg" id="edMsg"></div>
+      <div class="row" style="margin-top:14px"><button class="btn primary" id="edSave" data-i18n="ed_save">Save correction</button></div>
+
+      <!-- Withdrawing an inspection and destroying one are not corrections, and
+           they were sitting in the working surface between the notes field and
+           Save — two irreversible controls in the flow of an ordinary edit. They
+           are behind a deliberate opening now, below the save, and the panel
+           says what it is before it says what the buttons do. -->
+      <details class="danger" id="edDanger">
+        <summary><span class="ico">⚠</span><b data-i18n="ed_danger">Withdraw or destroy this inspection</b>
+          <span class="muted" data-i18n="ed_danger_sub">Not corrections. Open only if that is what you mean to do.</span></summary>
+        <div class="dangerbody">
       <div class="srccard" style="margin-top:16px">
         <div class="srchead"><span class="ico">⊘</span><div><b data-i18n="ed_void">Void this inspection</b>
           <div class="muted" data-i18n="ed_void_sub">Withdraws it from every count, chart, action list and report.</div></div></div>
@@ -1982,8 +2009,8 @@
         </div>
       </div>
 
-      <div class="msg" id="edMsg"></div>
-      <div class="row" style="margin-top:14px"><button class="btn primary" id="edSave" data-i18n="ed_save">Save correction</button></div>
+        </div>
+      </details>
     </div>
   </div>
 </div>
@@ -2983,6 +3010,8 @@ const I18N={
   ed_title:"Edit inspection",
   ed_lede:"Corrections are saved beside the inspection, never over it — the phone that captured it still holds the original, and the photos and readings are never altered. Your change shows here and in the reports, with your name on it.",
   ed_by:"Your name", ed_byph:"who is making this change",
+  ed_danger:"Withdraw or destroy this inspection",
+  ed_danger_sub:"Not corrections. Open only if that is what you mean to do.",
   ed_note:"Note on this inspection (optional)", ed_noteph:"e.g. plug re-read under magnification",
   ed_void:"Void this inspection",
   ed_void_sub:"Withdraws it from every count, chart, action list and report. Nothing is deleted — the photos and readings stay exactly as captured.",
@@ -3530,6 +3559,8 @@ const I18N={
   ed_title:"Правка осмотра",
   ed_lede:"Правки сохраняются рядом с осмотром, а не поверх него — телефон, который его снял, хранит оригинал, а фото и замеры не изменяются. Ваше изменение видно здесь и в отчётах, с вашим именем.",
   ed_by:"Ваше имя", ed_byph:"кто вносит изменение",
+  ed_danger:"Отозвать или уничтожить осмотр",
+  ed_danger_sub:"Это не исправления. Открывайте, только если действительно это имеете в виду.",
   ed_note:"Примечание к осмотру (необязательно)", ed_noteph:"напр. пробка пересмотрена под увеличением",
   ed_void:"Отозвать осмотр",
   ed_void_sub:"Исключает его из всех подсчётов, графиков, реестра и отчётов. Ничего не удаляется — фото и замеры остаются как сняты.",

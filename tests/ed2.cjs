@@ -119,9 +119,18 @@ const openHist = async (p,unit) => {
   await openHist(p,'TK146');
   await p.click('[data-edit="TK146|2026-03-09|MP"]'); await p.waitForTimeout(300);
   await p.fill('#edBy','R. Marrero');
+  /* Voiding and deleting live behind a deliberate opening now — they are not
+     corrections and they were sitting in the flow of an ordinary edit. Open the
+     danger zone the way a person has to. */
+  await p.evaluate(() => { const d = document.getElementById('edDanger'); if (d) d.open = true; });
+  await p.waitForTimeout(120);
   await p.click('#edVoid'); await edSettled(p);
   ok('a reason is required',/reason/i.test(await edMsg(p)), await edMsg(p));
+  await p.evaluate(() => { const d = document.getElementById('edDanger'); if (d) d.open = true; });
+  await p.waitForTimeout(120);
   await p.fill('#edReason','duplicate of the round on the 10th');
+  await p.evaluate(() => { const d = document.getElementById('edDanger'); if (d) d.open = true; });
+  await p.waitForTimeout(120);
   await p.click('#edVoid'); await edSettled(p);
   ok('the void saves',/✅/.test(await edMsg(p)), await edMsg(p));
   await p.click('#edClose'); await p.waitForTimeout(300);
@@ -150,12 +159,16 @@ const openHist = async (p,unit) => {
   console.log('\nun-void');
   await p.click('[data-edit="TK146|2026-03-09|MP"]'); await p.waitForTimeout(300);
   await p.fill('#edBy','R. Marrero');
+  await p.evaluate(() => { const d = document.getElementById('edDanger'); if (d) d.open = true; });
+  await p.waitForTimeout(120);
   await p.click('#edUnvoid'); await edSettled(p);
   ok('it counts again', !(await rec(p))._void);
   ok('and the WO correction survived the round trip',(await item0(p)).wo==='N-771');
 
   console.log('\ndeletion refuses without the right things');
   await p.fill('#edBy','R. Marrero');
+  await p.evaluate(() => { const d = document.getElementById('edDanger'); if (d) d.open = true; });
+  await p.waitForTimeout(120);
   await p.click('#edDelete'); await edSettled(p);
   ok('no typed confirmation -> refused',/Type “TK146”/.test(await edMsg(p)), await edMsg(p));
   /* An empty password is NOT refused by the page any more. On the shipped
@@ -163,29 +176,55 @@ const openHist = async (p,unit) => {
      with "the admin password is required" sent people hunting for a password
      that does not exist. The request goes, and the script answers — here with
      a secret set, that answer is "wrong password". */
+  await p.evaluate(() => { const d = document.getElementById('edDanger'); if (d) d.open = true; });
+  await p.waitForTimeout(120);
   await p.fill('#edConfirm','TK146');
+  await p.evaluate(() => { const d = document.getElementById('edDanger'); if (d) d.open = true; });
+  await p.waitForTimeout(120);
   await p.click('#edDelete'); await edSettled(p);
   ok('an empty password reaches the script rather than the page refusing it',
     !/admin password is required/i.test(await edMsg(p)), await edMsg(p));
   ok('and the script rejects it', /wrong admin password/i.test(await edMsg(p)), await edMsg(p));
   ok('nothing was deleted', (await p.evaluate(()=>RECS.length))>0);
+  await p.evaluate(() => { const d = document.getElementById('edDanger'); if (d) d.open = true; });
+  await p.waitForTimeout(120);
   await p.fill('#edAdmin','letmein');
+  await p.evaluate(() => { const d = document.getElementById('edDanger'); if (d) d.open = true; });
+  await p.waitForTimeout(120);
   await p.fill('#edConfirm','');
+  await p.evaluate(() => { const d = document.getElementById('edDanger'); if (d) d.open = true; });
+  await p.waitForTimeout(120);
   await p.click('#edDelete'); await edSettled(p);
   ok('no typed confirmation, even with the password -> refused',
     /Type “TK146”/.test(await edMsg(p)), await edMsg(p));
+  await p.evaluate(() => { const d = document.getElementById('edDanger'); if (d) d.open = true; });
+  await p.waitForTimeout(120);
   await p.fill('#edConfirm','TK999');
+  await p.evaluate(() => { const d = document.getElementById('edDanger'); if (d) d.open = true; });
+  await p.waitForTimeout(120);
   await p.click('#edDelete'); await edSettled(p);
   ok('the wrong unit typed -> refused',/Type “TK146”/.test(await edMsg(p)), await edMsg(p));
+  await p.evaluate(() => { const d = document.getElementById('edDanger'); if (d) d.open = true; });
+  await p.waitForTimeout(120);
   await p.fill('#edConfirm','TK146');
+  await p.evaluate(() => { const d = document.getElementById('edDanger'); if (d) d.open = true; });
+  await p.waitForTimeout(120);
   await p.fill('#edAdmin','wrong-password');
+  await p.evaluate(() => { const d = document.getElementById('edDanger'); if (d) d.open = true; });
+  await p.waitForTimeout(120);
   await p.click('#edDelete'); await edSettled(p);
   ok('a wrong admin password -> refused by the server',/Wrong admin password/.test(await edMsg(p)), await edMsg(p));
   ok('and nothing was removed',(await files()).files.includes('MP/2026-03/TK146_09.03.2026_MP.json'));
 
   console.log('\ndeleting for real');
+  await p.evaluate(() => { const d = document.getElementById('edDanger'); if (d) d.open = true; });
+  await p.waitForTimeout(120);
   await p.fill('#edAdmin','letmein');
+  await p.evaluate(() => { const d = document.getElementById('edDanger'); if (d) d.open = true; });
+  await p.waitForTimeout(120);
   await p.fill('#edReason','test data');
+  await p.evaluate(() => { const d = document.getElementById('edDanger'); if (d) d.open = true; });
+  await p.waitForTimeout(120);
   await p.click('#edDelete'); await edSettled(p);
   ok('it reports what went to the trash',/moved to Drive's trash/.test(await edMsg(p)), await edMsg(p));
   f=await files();
