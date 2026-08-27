@@ -1013,6 +1013,17 @@
   details.danger>summary:focus-visible{outline:2px solid var(--critical);outline-offset:2px;}
   .dangerbody{padding:0 var(--s4) var(--s4);}
   .dangerbody .srccard{margin-top:var(--s3) !important;}
+  .controls .dqf select{max-width:170px;}
+  .controls .dqf.hidden{display:none;}
+  .dqtog{flex:0 0 auto;min-height:36px;padding:0 10px;line-height:1;}
+  /* Below 1330 the round and class options are short enough to give the search
+     field back the width of its own placeholder. */
+  @media (max-width:1330px){
+    .controls{gap:8px;}
+    .controls .field select{max-width:104px;}
+  }
+  .dqtog.on{border-color:var(--accent);color:var(--accent);
+    background:color-mix(in srgb,var(--accent) 10%,var(--surface-2));}
   .ddact{white-space:nowrap;display:flex;gap:5px;justify-content:flex-end;}
   .ddact .minibtn{text-decoration:none;}
   .tgap{display:inline-flex;align-items:baseline;gap:5px;}
@@ -2046,6 +2057,27 @@
          inside a 200px box. The label is visually hidden either way. -->
     <label class="vh" for="fQ" data-i18n="f_search">Search</label>
     <input id="fQ" type="search" data-i18n-ph="f_qph" placeholder="Unit, defect, action, inspector…">
+    <!-- Not a filter on what was found, but on what is MISSING from what was
+         found. Several Overview rows carried a findings count with no worst
+         severity and no top defect, which reads as a clean machine and is
+         actually a record nobody can act on. -->
+    <!-- The eighth control on a bar whose whole point is that it stays one row.
+         A full-width select fitted, but only by taking the search field below
+         the width of its own placeholder — so the newcomer yields: at rest it
+         is a 34px toggle, and it opens into the select when somebody wants it
+         or whenever it is actually filtering something. -->
+    <button type="button" class="btn dqtog" id="fDqTog" aria-expanded="false"
+      data-i18n-title="f_dq" title="Data quality — what is missing from what was found">⚑</button>
+    <label class="vh" for="fDq" data-i18n="f_dq_s">Quality</label>
+    <div class="field dqf hidden"><select id="fDq" data-i18n-title="f_dq" title="Data quality — what is missing from what was found">
+        <option value="" data-i18n="dq_all">Everything</option>
+        <option value="any" data-i18n="dq_any">Anything missing</option>
+        <option value="cond" data-i18n="dq_cond">Condition missing</option>
+        <option value="defect" data-i18n="dq_defect">Defect missing</option>
+        <option value="action" data-i18n="dq_action">Action missing</option>
+        <option value="owner" data-i18n="dq_owner">Owner missing</option>
+        <option value="due" data-i18n="dq_due">Due date missing</option>
+      </select></div>
     <span class="fcount" id="fCount"></span>
     <label class="voidtog" data-i18n-title="f_voidtip" title="Voided inspections are withdrawn from every count, but nothing is deleted">
       <input type="checkbox" id="fVoid"><span data-i18n="f_void">Show voided</span></label>
@@ -2868,6 +2900,10 @@ const I18N={
   a_ed_owner:"Type or pick a name. Saves when you leave the field.",
   a_ed_due:"Set the date this is due. Saves on change.",
   a_ed_st:"Move it along. Saves on change.",
+  f_dq:"Data quality — what is missing from what was found", f_dq_s:"Quality",
+  dq_all:"Everything", dq_any:"Anything missing", dq_cond:"Condition missing",
+  dq_defect:"Defect missing", dq_action:"Action missing", dq_owner:"Owner missing",
+  dq_due:"Due date missing", c_dq:"Quality",
   f_reset:"Reset", f_reset_n:"Reset ({n})",
   f_reset_t:"Clear every filter and drill-down and go back to the whole fleet",
   k_week:"Due this week", k_week_clear:"Nothing past due", k_week_over:"{n} already overdue",
@@ -3410,6 +3446,10 @@ const I18N={
   a_ed_owner:"Введите или выберите имя. Сохраняется при уходе из поля.",
   a_ed_due:"Укажите срок. Сохраняется сразу.",
   a_ed_st:"Изменить статус. Сохраняется сразу.",
+  f_dq:"Качество данных — чего не хватает в том, что нашли", f_dq_s:"Качество",
+  dq_all:"Всё", dq_any:"Чего-либо не хватает", dq_cond:"Нет состояния",
+  dq_defect:"Нет дефекта", dq_action:"Нет действия", dq_owner:"Нет ответственного",
+  dq_due:"Нет срока", c_dq:"Качество",
   f_reset:"Сброс", f_reset_n:"Сброс ({n})",
   f_reset_t:"Снять все фильтры и уточнения и вернуться ко всему парку",
   k_week:"Срок на этой неделе", k_week_clear:"Просрочек нет", k_week_over:"{n} уже просрочено",
@@ -4085,6 +4125,7 @@ function matchesText(r,q){
    which is the only honest way to say how many the void filter is holding out. */
 function filtered(inclVoid){
   const ty=$("fType").value, c=$("fClass").value, days=+$("fRange").value;   // not "t" — that is t()
+  const dq=($("fDq")&&$("fDq").value)||"";
   const cutoff=days? new Date(Date.now()-days*864e5).toISOString().slice(0,10):null;
   const q=($("fQ").value||"").trim().toLowerCase();
   const showVoid=inclVoid||($("fVoid")&&$("fVoid").checked);
@@ -4096,6 +4137,10 @@ function filtered(inclVoid){
     if(c&&r.cls!==c) return false;
     if(cutoff&&(r.date||"")<cutoff) return false;
     if(drill.unit&&r.equip!==drill.unit) return false;
+    /* A record survives if ANY of its findings has the gap being asked about —
+       the register, which lists findings, narrows it the rest of the way. */
+    if(dq && !(r.items||[]).some(i=>{ const m=dqMissing(r,i);
+        return dq==="any" ? m.length>0 : m.includes(dq); })) return false;
     if(drill.month&&String(r.date||"").slice(0,7)!==drill.month) return false;
     /* Owner is per finding, so a record survives if any of its findings is
        theirs — and the register, which lists findings, narrows the rest. */
@@ -4111,6 +4156,35 @@ function filtered(inclVoid){
     return true;
   });
 }
+/* ── WHAT IS MISSING FROM WHAT WAS FOUND ────────────────────────────────────
+
+   The audit found Overview rows carrying a findings count with no worst
+   severity and no top defect. That reads as a clean machine, and it is actually
+   a record nobody can act on: something was seen, and what it was did not
+   survive into the system.
+
+   Only asked of findings — a point graded A with nothing else is a normal
+   point, not an incomplete one. */
+function dqMissing(rec,i){
+  if(!i) return [];
+  const sv=sevOf(rec,i);
+  const w=wearOf(rec,i);
+  const measured = w && (w.mm!=null);
+  const anything = sv||i.grade||i.defect||i.defectCode||i.comment||i.action||measured;
+  if(!anything) return [];
+  const out=[];
+  if(!sv && !i.grade) out.push("cond");
+  /* An exception with no defect code is the gap that matters; a normal point
+     needs no defect and a measurement IS the finding. */
+  if((sv==="CRI"||sv==="DEG"||sv==="INC") && !i.defect && !i.defectCode && !measured) out.push("defect");
+  if(actionRequired(rec,i)){
+    const st=actionState(rec,i);
+    if(st.miss.includes("action")) out.push("action");
+    if(st.miss.includes("owner"))  out.push("owner");
+    if(st.miss.includes("due"))    out.push("due");
+  }
+  return out;
+}
 function renderChips(){
   const c=[];
   const add=(label,val,onX)=>c.push({label,val,onX});
@@ -4118,6 +4192,8 @@ function renderChips(){
   if($("fClass").value) add(t("c_class"), $("fClass").value, ()=>{ $("fClass").value=""; renderAll(); });
   if(+$("fRange").value) add(t("c_period"), $("fRange").selectedOptions[0].textContent, ()=>{ $("fRange").value="0"; renderAll(); });
   if(($("fQ").value||"").trim()) add(t("c_search"), $("fQ").value.trim(), ()=>{ $("fQ").value=""; renderAll(); });
+  if($("fDq")&&$("fDq").value) add(t("c_dq"), $("fDq").selectedOptions[0].textContent,
+    ()=>{ $("fDq").value=""; renderAll(); });
   if(drill.unit)   add(t("c_unit"), drill.unit, ()=>setDrill("unit",drill.unit));
   if(drill.owner)  add(t("c_owner"), drill.owner, ()=>setDrill("owner",drill.owner));
   if(drill.month)  add(t("c_month"), drill.month, ()=>setDrill("month",drill.month));
@@ -4125,6 +4201,7 @@ function renderChips(){
   if(drill.defect) add(t("c_defect"), drill.defect, ()=>setDrill("defect",drill.defect));
   if(drill.cause)  add(t("c_cause"), drill.cause, ()=>setDrill("cause",drill.cause));
   const box=$("chips");
+  dqSync();
   const rb=$("fReset");
   if(rb){
     rb.disabled=!c.length;
@@ -4140,6 +4217,7 @@ function renderChips(){
    toolbar. Two clear controls that clear different amounts is worse than one. */
 function clearFilters(){
   $("fType").value=""; $("fClass").value=""; $("fRange").value="0"; $("fQ").value="";
+  if($("fDq")) $("fDq").value="";
   clearDrill();                        // ends with renderAll(), so the cleared controls take effect
 }
 function findings(recs){            // one row per item that has any content
@@ -9538,7 +9616,28 @@ function renderAll(){
       el.textContent = n===of ? "" : t("f_count",{n:fmtN(n), of:fmtN(of)}); }
   }catch(e){}
   renderChips(); renderConflictBar(); renderKpis(); renderCoverage(); renderTrend(); renderFleet(); renderFailure(); renderWearTab(); renderActions(); renderHistory(); renderLubeTab(); renderDueTab(); renderSync(); renderNavCounts(); }
-["fType","fClass","fRange"].forEach(id=>$(id).onchange=renderAll);
+["fType","fClass","fRange","fDq"].forEach(id=>{ const el=$(id); if(el) el.onchange=renderAll; });
+/* Open it, and keep it open while it is filtering: a control that hides itself
+   while it is still narrowing the page is how somebody spends ten minutes
+   wondering where half the fleet went. */
+function dqSync(){
+  const on=!!($("fDq")&&$("fDq").value);
+  const box=document.querySelector(".dqf");
+  const tog=$("fDqTog");
+  if(!box||!tog) return;
+  const open = on || tog.getAttribute("aria-expanded")==="true";
+  box.classList.toggle("hidden", !open);
+  tog.classList.toggle("on", on);
+  tog.setAttribute("aria-expanded", open?"true":"false");
+}
+$("fDqTog").onclick=()=>{
+  const tog=$("fDqTog");
+  const open=tog.getAttribute("aria-expanded")==="true";
+  if(open && $("fDq").value){ $("fDq").value=""; renderAll(); }      // shutting it clears it
+  tog.setAttribute("aria-expanded", open?"false":"true");
+  dqSync();
+  if(!open) $("fDq").focus();
+};
 $("fReset").onclick=clearFilters;
 $("dfCancel").onclick=dfClose;
 $("dfScrim").onclick=dfClose;
