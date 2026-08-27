@@ -7038,7 +7038,11 @@ function pxRender(img, recipe, maxW){
    WHICH rendition a report used. Not a cryptographic hash — it identifies a
    rendition, it does not protect one. */
 /* Show the recipe on the frame that is open, or the original when comparing.
-   Nothing here writes anything: it paints a canvas and points the <img> at it. */
+   Nothing here writes anything: it paints a canvas and points the lightbox
+   image element at it. (Spelling that tag out in full here trips lint.cjs,
+   which reads the file as text and cannot tell a comment from markup — and it
+   is right to be blunt about that: a missing alt is worth more than my
+   phrasing.) */
 function pxPaint(){
   const img=$("lbimg");
   if(!lbCtx || !pxDraft || pxCompare){ if(pxOrigSrc) img.src=pxOrigSrc; return; }
