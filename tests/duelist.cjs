@@ -95,7 +95,10 @@ const SEED = `(() => {
     renderDue(); await new Promise(r => setTimeout(r, 150));
     return [...document.querySelectorAll('.dueitem')].map(x => x.textContent.replace(/\s+/g, ' ').trim()); });
   ok('only that round is listed', uc.length && uc.every(r => /^UC /.test(r)), uc.join(' | ') || 'none');
-  ok('and its own interval is named', /500 h/.test(
+  /* Undercarriage is 1,000 h on a dozer and 4,000 on an excavator now, so the
+     header names whichever the fixture's machine is walked on rather than one
+     figure that was wrong for half the fleet. */
+  ok('and its own interval is named', /(1,?000|4,?000) h/.test(
     await p.evaluate(() => document.getElementById('dueBasis').textContent)),
     await p.evaluate(() => document.getElementById('dueBasis').textContent));
   await p.evaluate(async () => { dueType = '';

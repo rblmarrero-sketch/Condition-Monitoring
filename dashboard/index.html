@@ -3018,7 +3018,7 @@ const I18N={
   cv_sub:"Machines this round applies to, against machines it reached, in the period selected above. A finding you never went to look for is not an absence of findings.",
   cv_th_round:"Round", cv_th_seen:"Reached", cv_th_insp:"Insp.",
   cv_th_never:"Never", cv_th_over:"Overdue", cv_th_who:"By",
-  cv_every:"every {d} days", cv_scoped:"machines this round fits", cv_p_days:"the last {d} days", cv_p_all:"all time",
+  cv_every:"every {d} days", cv_every_h:"every {h} h", cv_every_h_cls:"{h} h {c}", cv_carried:"(carried forward)", cv_scoped:"machines this round fits", cv_p_days:"the last {d} days", cv_p_all:"all time",
   cv_note:"Against a register of {n} unit(s), over {p}. \u201cNever done\u201d and \u201coverdue\u201d look at the whole history, not just the period, because a machine is overdue whatever window you are reading.",
   cv_empty:"Nothing to measure coverage against in this selection.",
   tr_title:"Direction — is the fleet getting better or worse",
@@ -3571,7 +3571,7 @@ const I18N={
   cv_sub:"Машины, к которым применим обход, против машин, до которых он дошёл, за выбранный период. Отсутствие дефектов там, где никто не смотрел, — это не отсутствие дефектов.",
   cv_th_round:"Обход", cv_th_seen:"Охват", cv_th_insp:"Осм.",
   cv_th_never:"Ни разу", cv_th_over:"Просроч.", cv_th_who:"Кто",
-  cv_every:"каждые {d} сут", cv_scoped:"машины, к которым применим обход", cv_p_days:"последние {d} сут", cv_p_all:"всё время",
+  cv_every:"каждые {d} сут", cv_every_h:"каждые {h} ч", cv_every_h_cls:"{h} ч — {c}", cv_carried:"(перенесено)", cv_scoped:"машины, к которым применим обход", cv_p_days:"последние {d} сут", cv_p_all:"всё время",
   cv_note:"По реестру из {n} ед., за {p}. «Ни разу» и «просрочено» считаются по всей истории, а не только по периоду.",
   cv_empty:"В этой выборке нечего сопоставить с охватом.",
   tr_title:"Динамика — парк улучшается или ухудшается?",
@@ -5907,7 +5907,24 @@ function renderHistory(){
 
    "Are we getting better?" Every number on this page was a snapshot. Nobody
    could see whether last month was worse than the one before. */
-const DUE_DAYS={MP:90, FC:90, INSP:30, TEMP:30, UC:90, GET:90, TB:90};
+/* The interval belongs to due.js — the phones, the due list and this page all
+   have to be walking the same schedule. There used to be a second table here
+   saying 90 days for the magnetic plug round, which the engine has at 250 h
+   (12.5 days at this fleet's two ten-hour shifts). Coverage was measuring
+   "overdue" against a window seven times too wide, so machines a week past
+   their plug round were counted as reached.
+
+   The interval is also per CLASS: a dozer's undercarriage is due at 1,000 h and
+   an excavator's at 4,000, and one number cannot be both. */
+const HPD=()=>(window.DUE&&DUE.HOURS_PER_DAY)||20;
+/* This round's interval for THIS machine, in days. */
+function ivDaysFor(ty,a){
+  if(!window.DUE) return 30;
+  const h=DUE.hours(ty,null,a&&a.cls);
+  if(h!=null) return h/HPD();
+  const sp=DUE.spec(ty,a&&a.cls);
+  return (sp&&sp.d)||30;
+}
 /* Which machines a round can be done on at all. Returns null where the answer
    is "all of them" — a magnetic plug round applies to anything with an oil
    compartment — so the caller uses the whole register rather than a guess. */
@@ -5957,18 +5974,36 @@ function coverageRows(){
     const last=new Map();
     RECS.filter(r=>r.type===ty && !r._void).forEach(r=>{
       const p=last.get(r.equip); if(!p || String(r.date)>String(p)) last.set(r.equip,r.date); });
-    const iv=DUE_DAYS[ty]||90;
-    const cutoff=new Date(Date.now()-iv*864e5).toISOString().slice(0,10);
+    /* Per machine, because per class. A dozer at 1,000 h and an excavator at
+       4,000 are not overdue on the same date, and one cutoff for both reports
+       one of them wrongly. */
+    const ivh=window.DUE?DUE.hours(ty):null;
+    const ivBy=window.DUE&&DUE.byClass?DUE.byClass(ty):null;
+    const iv=Math.round(ivDaysFor(ty,null));
     /* The SAME pool the coverage fraction used. Counting these against the
        whole register put "3 of 43 reached" next to "1125 never done" on one
        row — two numbers about different populations, side by side, which is
        how a management page loses its reader in a single glance. */
     let never=0, overdue=0;
+    const cutOf={};
     pool.forEach(a=>{ const d=last.get(a.n);
-      if(!d) never++; else if(d<cutoff) overdue++; });
+      if(!d){ never++; return; }
+      const k=a.cls||"";
+      if(!cutOf[k]) cutOf[k]=new Date(Date.now()-ivDaysFor(ty,a)*864e5).toISOString().slice(0,10);
+      if(d<cutOf[k]) overdue++; });
+    /* Which of the classes this round actually fits carry a stated figure, so
+       the row can name them instead of printing one number for both. */
+    /* Every class this round fits, with the figure each is actually walked on
+       and whether that figure was stated for it or carried forward. */
+    const poolCls=[...new Set(pool.map(a=>a.cls).filter(Boolean))].sort();
+    const perCls=poolCls.map(c=>({
+      cls:c,
+      h:(window.DUE?DUE.hours(ty,null,c):null),
+      stated:!!(ivBy||[]).some(x=>x.cls===c),
+    }));
     out.push({ ty, seen:seen.size, total, inspections:mine.length,
                pc: total?Math.round(seen.size/total*100):0,
-               never, overdue, iv, scoped:!!can,
+               never, overdue, iv, ivh, perCls, scoped:!!can,
                people:new Set(mine.map(r=>r.by).filter(Boolean)).size });
   });
   return { rows:out, days, fleet:fleet.length };
@@ -5984,6 +6019,29 @@ function covBar(pc){
   const c=p>=80?"var(--good)":p>=40?"var(--warning)":"var(--critical)";
   return `<span class="cbar" role="img" aria-label="${p}%">`
     +(w?`<i style="width:${w}%;background:${c}"></i>`:"")+`</span>`;
+}
+/* "every 250 h", or "1,000 h dozers · 4,000 h excavators" where the round is
+   walked at different rates on different machines. The days it works out to
+   ride on the title, because hours are what the machine wears in and the
+   calendar is a rendering of them. */
+function cvEvery(r){
+  const num=n=>Number(n).toLocaleString(lang==="ru"?"ru-RU":"en-GB");
+  const per=r.perCls||[];
+  const hrs=[...new Set(per.map(x=>x.h).filter(h=>h!=null))];
+  /* One figure for every machine it fits: say it once. */
+  if(hrs.length<=1){
+    const h=hrs.length?hrs[0]:r.ivh;
+    return h!=null ? t("cv_every_h",{h:num(h)}) : t("cv_every",{d:r.iv});
+  }
+  /* Otherwise name them. A round walked at 4,000 h on the articulated trucks
+     and 1,000 h on the rigids has to say both — printing the base figure alone
+     hides the one somebody actually stated. A class still on a carried-forward
+     number is marked, so the gap is visible rather than passing as policy. */
+  return per.filter(x=>x.h!=null)
+    .sort((a,b)=>b.h-a.h)
+    .map(x=>t("cv_every_h_cls",{h:num(x.h), c:t("cls_"+x.cls)||x.cls})
+            + (x.stated?"":" "+t("cv_carried")))
+    .join(" · ");
 }
 function renderCoverage(){
   const { rows, days, fleet } = coverageRows();
@@ -6020,7 +6078,7 @@ function renderCoverage(){
         const on = $("fType").value===r.ty;
         return `<tr class="covr${on?" on":""}" data-cvty="${esc(r.ty)}" tabindex="0"
             title="${esc(on?t("cv_off"):t("cv_on"))}"><td><b>${esc(TYPE_LABEL[r.ty]||r.ty)}</b>
-            <div class="muted" style="font-size:11px">${esc(t("cv_every",{d:r.iv}))}${
+            <div class="muted" style="font-size:11px">${esc(cvEvery(r))}${
               r.scoped?" · "+esc(t("cv_scoped")):""}</div></td>
           <td class="covcell">
             <div class="covrow"><span class="covpc${bad?" bad":""}">${r.pc}%</span>${covBar(r.pc)}</div>

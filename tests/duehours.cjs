@@ -49,6 +49,12 @@ const mk = `((id,ty,u,d,smu,pos)=>({id,type:ty,equip:u,date:d,by:'S. Volkov',sup
     FCh: [DUE.hours('FC', 'HYD'), DUE.days('FC', 'HYD')],
     UC: [DUE.hours('UC'), DUE.days('UC')],
     GET: [DUE.hours('GET'), DUE.days('GET')],
+    UCd: [DUE.hours('UC', null, 'DOZ'), DUE.days('UC', null, null, 'DOZ')],
+    UCe: [DUE.hours('UC', null, 'EXC'), DUE.days('UC', null, null, 'EXC')],
+    TBa: [DUE.hours('TB', null, 'AT')],
+    TBh: [DUE.hours('TB', null, 'HT')],
+    TBhCarried: !!DUE.spec('TB', 'HT').carriedClass,
+    UCby: DUE.byClass('UC'),
     TB: [DUE.hours('TB'), DUE.days('TB')],
     INSP: [DUE.hours('INSP'), DUE.days('INSP')],
     TEMP: [DUE.hours('TEMP'), DUE.days('TEMP')],
@@ -56,9 +62,33 @@ const mk = `((id,ty,u,d,smu,pos)=>({id,type:ty,equip:u,date:d,by:'S. Volkov',sup
   }));
   ok('a machine is assumed to run 20 hours a day', iv.hpd === 20, iv.hpd + ' h/day');
   ok('magnetic plug every 250 h', iv.MP[0] === 250 && iv.MP[1] === 12.5, iv.MP.join(' h → ') + ' d');
-  ok('undercarriage and ground engaging tools every 500 h',
-    iv.UC[0] === 500 && iv.GET[0] === 500 && iv.UC[1] === 25, 'UC ' + iv.UC.join('/') + ' GET ' + iv.GET.join('/'));
-  ok('dump body every 1000 h', iv.TB[0] === 1000 && iv.TB[1] === 50, iv.TB.join(' h → ') + ' d');
+  ok('ground engaging tools every 500 h', iv.GET[0] === 500, iv.GET.join(' h → ') + ' d');
+  /* THE INTERVAL IS A PROPERTY OF THE ROUND AND THE MACHINE.
+
+     Undercarriage used to be one number for both, and whichever number was
+     chosen was wrong for one of them: a dozer's chain is in the ground every
+     hour it works, an excavator's carries the machine and turns far less.
+     Running both at 500 h walked the excavators eight times more often than
+     anybody asked for. Both figures are stated and between them they cover
+     every machine the round fits — 22 dozers and 21 excavators. */
+  ok('a dozer undercarriage every 1,000 h',
+    iv.UCd[0] === 1000 && iv.UCd[1] === 50, iv.UCd.join(' h → ') + ' d');
+  ok('an excavator undercarriage every 4,000 h',
+    iv.UCe[0] === 4000 && iv.UCe[1] === 200, iv.UCe.join(' h → ') + ' d');
+  ok('and the round can name both', JSON.stringify(iv.UCby) ===
+    '[{"cls":"DOZ","h":1000},{"cls":"EXC","h":4000}]', JSON.stringify(iv.UCby));
+  /* Body inspection is stated for the Komatsu HM400 articulated trucks only.
+     The rigid trucks the round also fits keep what they were walked on and are
+     FLAGGED as carried — inheriting the ADTs' figure would be inventing a
+     policy nobody set, on sixteen machines. */
+  ok('an articulated truck body every 4,000 h', iv.TBa[0] === 4000, iv.TBa[0] + ' h');
+  ok('a rigid truck body keeps its carried figure', iv.TBh[0] === 1000, iv.TBh[0] + ' h');
+  ok('and is marked as carried rather than stated', iv.TBhCarried === true,
+    String(iv.TBhCarried));
+  /* Asked without a class, a round still answers — every existing caller in
+     the phone, the dashboard and the report does exactly that. */
+  ok('the round still answers without a class', iv.UC[0] === 1000 && iv.TB[0] === 1000,
+    'UC ' + iv.UC[0] + ' · TB ' + iv.TB[0]);
   ok('the engine filter every 500 h and the rest every 1000',
     iv.FCe[0] === 500 && iv.FCh[0] === 1000, 'ENG ' + iv.FCe[0] + ' · HYD ' + iv.FCh[0]);
   ok('and the round itself comes due at the shortest of them',
