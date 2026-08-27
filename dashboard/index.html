@@ -991,6 +991,35 @@
   .ovr.hidden{display:none;}
   .ovrwarn{margin-top:4px;font-weight:600;font-size:var(--t-micro);line-height:1.4;
     font-family:inherit;color:var(--warn-ink);}
+  .pxopen{position:absolute;right:56px;top:12px;z-index:2;}
+  .pxpanel{position:absolute;left:0;right:0;bottom:0;z-index:3;
+    background:color-mix(in srgb,var(--surface) 94%,transparent);
+    border-top:1px solid var(--border);padding:var(--s3) var(--s4);
+    display:flex;flex-direction:column;gap:var(--s2);}
+  .pxpanel.hidden{display:none;}
+  .pxrow{display:flex;align-items:center;gap:var(--s3);flex-wrap:wrap;}
+  .pxsp{flex:1;}
+  .pxpanel label{display:flex;align-items:center;gap:7px;
+    font-weight:600;font-size:var(--t-micro);line-height:1;font-family:inherit;
+    color:var(--muted);text-transform:uppercase;letter-spacing:.04em;}
+  .pxpanel input[type=text],.pxpanel select{font-weight:500;font-size:var(--t-small);
+    line-height:1.3;font-family:inherit;padding:6px 8px;border:1px solid var(--border);
+    border-radius:6px;background:var(--surface);color:var(--ink);text-transform:none;
+    letter-spacing:0;}
+  .pxcap{flex:1;min-width:220px;}
+  .pxcap input{flex:1;min-width:0;}
+  .pxstr input[type=range]{width:120px;}
+  .pxstr b{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    font-size:var(--t-micro);color:var(--ink-2);min-width:34px;text-align:right;}
+  .pxpref{text-transform:none;letter-spacing:0;color:var(--ink-2);}
+  .pxpref input{accent-color:var(--accent);width:15px;height:15px;}
+  .pxmsg{font-weight:500;font-size:var(--t-small);line-height:1.4;font-family:inherit;
+    color:var(--muted);}
+  .lb.editing #lbimg{max-height:calc(100vh - 210px);}
+  .pxbadge{display:inline-flex;align-items:center;gap:4px;padding:1px 6px;
+    border-radius:999px;font-weight:600;font-size:var(--t-micro);line-height:1.6;
+    font-family:inherit;color:var(--accent);
+    background:color-mix(in srgb,var(--accent) 14%,transparent);}
   .tri{display:inline-flex;align-items:center;gap:5px;margin-left:6px;
     padding:1px 7px;border-radius:999px;white-space:nowrap;
     font-weight:600;font-size:var(--t-micro);line-height:1.6;font-family:inherit;
@@ -2328,7 +2357,43 @@
   <img id="lbimg" alt="">
   <video id="lbvid" controls playsinline></video>
   <button class="nav next" id="lbNext" aria-label="Next">&#8250;</button>
-  <div class="cap" id="lbcap"></div></div>
+  <div class="cap" id="lbcap"></div>
+  <!-- Editing evidence, without altering it. Everything here is a recipe
+       applied to the original in a canvas; the file the inspector took is
+       never written to. -->
+  <button class="btn pxopen" id="pxOpen" hidden data-i18n="px_edit">Edit photo</button>
+  <div class="pxpanel hidden" id="pxPanel" role="group" data-i18n-label="px_edit">
+    <div class="pxrow">
+      <button class="btn" id="pxRotL" data-i18n-title="px_rotl" title="Rotate left">⟲</button>
+      <button class="btn" id="pxRotR" data-i18n-title="px_rotr" title="Rotate right">⟳</button>
+      <label class="pxstr"><span data-i18n="px_straighten">Straighten</span>
+        <input id="pxStr" type="range" min="-8" max="8" step="0.5" value="0">
+        <b id="pxStrV">0°</b></label>
+      <span class="pxsp"></span>
+      <label class="pxratio"><span data-i18n="px_crop">Crop</span>
+        <select id="pxRatio">
+          <option value="" data-i18n="px_r_none">Full frame</option>
+          <option value="free" data-i18n="px_r_free">Freeform</option>
+          <option value="1" data-i18n="px_r_1">1:1</option>
+          <option value="1.3333" data-i18n="px_r_43">4:3</option>
+          <option value="1.7778" data-i18n="px_r_169">16:9</option>
+        </select></label>
+    </div>
+    <div class="pxrow">
+      <label class="pxcap"><span data-i18n="px_caption">Caption</span>
+        <input id="pxCap" type="text"></label>
+      <label class="pxpref"><input type="checkbox" id="pxPref">
+        <span data-i18n="px_prefer">Use in the report</span></label>
+    </div>
+    <div class="pxrow">
+      <button class="btn" id="pxCompare" aria-pressed="false" data-i18n="px_compare">Show original</button>
+      <button class="btn" id="pxReset" data-i18n="px_reset">Reset to original</button>
+      <span class="pxsp"></span>
+      <span class="pxmsg" id="pxMsg"></span>
+      <button class="btn" id="pxCancel" data-i18n="px_cancel">Cancel</button>
+      <button class="btn primary" id="pxSave" data-i18n="px_save">Save edit</button>
+    </div>
+  </div></div>
 
 <!-- ?v= on every shared file, and it is the phones' build number.
      index.html and report-core.js are one program split across two files: the
@@ -2633,6 +2698,13 @@ const I18N={
   ed_ovr:"Override reason", ed_ovr_ph:"Why this severity, not the mapped one",
   ed_ovr_warn:"{g} maps to {m}. Saving {e} is a deliberate override.",
   ed_ovr_need:"A severity that differs from its grade needs a reason ({k}).",
+  px_edit:"Edit photo", px_rotl:"Rotate left", px_rotr:"Rotate right",
+  px_straighten:"Straighten", px_crop:"Crop", px_r_none:"Full frame",
+  px_r_free:"Freeform", px_r_1:"1:1", px_r_43:"4:3", px_r_169:"16:9",
+  px_caption:"Caption", px_prefer:"Use in the report",
+  px_compare:"Show original", px_compare_off:"Show edit",
+  px_reset:"Reset to original", px_cancel:"Cancel", px_save:"Save edit",
+  px_edited:"edited", px_pending:"The original is still uploading. The edit will wait for it.",
   as_open:"Open", as_triage:"Needs triage", as_closed:"Closed",
   as_noaction:"No action required", as_none:"\u2014",
   as_triage_t:"Cannot be planned yet \u2014 missing: {f}",
@@ -3128,6 +3200,13 @@ const I18N={
   ed_ovr:"Обоснование отклонения", ed_ovr_ph:"Почему эта категория, а не сопоставленная",
   ed_ovr_warn:"{g} соответствует «{m}». Сохранение «{e}» — осознанное отклонение.",
   ed_ovr_need:"Для категории, отличной от кода состояния, нужно обоснование ({k}).",
+  px_edit:"Правка фото", px_rotl:"Повернуть влево", px_rotr:"Повернуть вправо",
+  px_straighten:"Выравнивание", px_crop:"Кадрирование", px_r_none:"Весь кадр",
+  px_r_free:"Произвольно", px_r_1:"1:1", px_r_43:"4:3", px_r_169:"16:9",
+  px_caption:"Подпись", px_prefer:"Использовать в отчёте",
+  px_compare:"Показать оригинал", px_compare_off:"Показать правку",
+  px_reset:"Вернуть оригинал", px_cancel:"Отмена", px_save:"Сохранить правку",
+  px_edited:"с правкой", px_pending:"Оригинал ещё загружается. Правка дождётся его.",
   as_open:"Открыто", as_triage:"Требует разбора", as_closed:"Закрыто",
   as_noaction:"Действий не требуется", as_none:"\u2014",
   as_triage_t:"Пока нельзя запланировать \u2014 не хватает: {f}",
@@ -5034,6 +5113,9 @@ window.CMDash={
     saveEdits(); rebuild(); refreshControls(); renderAll(); refreshSources();
   },
   editCount(){ return Object.keys(edits).length; },
+  /* Read access for the report engine and the tests: which renditions this
+     record's photographs should be presented as. */
+  mediaEdits(key){ const e=edits[key]; return (e&&e.media)||{}; },
   setDeferrals(list,opts){
     if(opts&&opts.replace) deferrals={};
     /* One per unit and round. A machine put off twice is one deferral in two
@@ -6756,7 +6838,11 @@ function openPos(rk, ik){
        i.comment?`<div class="cm">“${esc(i.comment)}”</div>`:""}${
        rec._note?`<div class="sub" style="margin-top:8px">📝 ${esc(rec._note)}</div>`:""}`;
   $("drwBody").querySelectorAll("[data-i]").forEach(el=>{
-    el.onclick=()=>openLB(med.map(m=>[m.src,m.kind]), Number(el.dataset.i)||0, cap);
+    /* The editor needs to know which record and which FILE it is looking at,
+       or a recipe would be stored against a picture rather than against the
+       evidence it belongs to. */
+    el.onclick=()=>openLB(med.map(m=>[m.src,m.kind]), Number(el.dataset.i)||0, cap,
+      { rk, ik, names:med.map(m=>m.name||m.file||""), name:(med[Number(el.dataset.i)||0]||{}).name||"" });
   });
   $("drw").classList.remove("hidden"); $("drwScrim").classList.remove("hidden");
   $("drwClose").focus();
@@ -6870,11 +6956,160 @@ function lbShow(){
   $("lbPrev").style.display=$("lbNext").style.display=many?"":"none";
   $("lbcap").textContent=lbCap+(many?`   ${lbIx+1} / ${lbSet.length}`:"");
 }
-function openLB(set,ix,cap){ lbSet=set||[]; lbIx=Math.max(0,Math.min(ix|0,lbSet.length-1));
-  lbCap=cap||""; lbShow(); $("lb").classList.add("open"); }
+function openLB(set,ix,cap,ctx){ lbSet=set||[]; lbIx=Math.max(0,Math.min(ix|0,lbSet.length-1));
+  lbCap=cap||""; lbCtx=ctx||null; lbShow(); $("lb").classList.add("open");
+  pxSync(); }
+
+/* ── NON-DESTRUCTIVE PHOTO EDITING ──────────────────────────────────────────
+
+   Evidence is not editable. A photograph of a cracked GET tooth is the reason a
+   part gets ordered and, if it ever comes to it, the reason a warranty claim is
+   paid — so nothing here writes over the file the inspector took.
+
+   What is stored is a RECIPE: rotate, straighten, crop, and which rendition the
+   report should use. The picture you see is that recipe applied to the original
+   in a canvas, computed fresh every time. The original is always one press away
+   and always byte-identical, because it was never touched. The recipe rides the
+   same correction sidecar as every other office-side change, so it carries who
+   did it and when, and it syncs through a path that already exists.
+
+   Straighten is capped deliberately. This is presentation, not alteration: you
+   may level a horizon, you may not re-frame a photograph until it shows
+   something else. */
+const PX_STRAIGHTEN_MAX=8;                 // degrees, either way
+let lbCtx=null;                            // {rk, ik, name} for the current frame
+let pxRecipe=null, pxDraft=null, pxCompare=false;
+
+function pxKey(name){ return String(name||""); }
+/* Every recipe stored against this record, from the sidecar. */
+function pxAll(rk){
+  const e=edits[rk]; return (e && e.media) || {};
+}
+function pxGet(rk,name){
+  const r=pxAll(rk)[pxKey(name)];
+  return r ? JSON.parse(JSON.stringify(r)) : null;
+}
+const PX_BLANK={rot:0, straighten:0, crop:null, caption:"", preferred:0};
+function pxNorm(r){ return Object.assign({},PX_BLANK,r||{}); }
+/* Is this recipe actually asking for anything? An "edit" that changes nothing
+   must not create a derivative or an audit entry. */
+function pxTouched(r){
+  const n=pxNorm(r);
+  return !!(n.rot || n.straighten || n.crop || n.caption || n.preferred);
+}
+/* The recipe, applied. Rotation in 90° steps swaps the axes; straighten is a
+   small rotation about the centre with the frame kept full; crop is in
+   fractions of the straightened frame so it survives a later rotation. */
+function pxRender(img, recipe, maxW){
+  const r=pxNorm(recipe);
+  const rot=((r.rot%360)+360)%360;
+  const swap=(rot===90||rot===270);
+  const sw=img.naturalWidth||img.width, sh=img.naturalHeight||img.height;
+  if(!sw||!sh) return null;
+  /* Step 1 — rotate and straighten onto a canvas the size of the result. */
+  const rad=(rot+ (r.straighten||0))*Math.PI/180;
+  const bw=swap?sh:sw, bh=swap?sw:sh;
+  const c1=document.createElement("canvas");
+  c1.width=bw; c1.height=bh;
+  const x1=c1.getContext("2d");
+  x1.translate(bw/2,bh/2); x1.rotate(rad); x1.drawImage(img,-sw/2,-sh/2);
+  /* Step 2 — crop, in fractions, so the same recipe survives a re-render at a
+     different size and a later rotation. */
+  let out=c1;
+  if(r.crop){
+    const cx=Math.max(0,Math.min(1,r.crop.x)), cy=Math.max(0,Math.min(1,r.crop.y));
+    const cw=Math.max(0.02,Math.min(1-cx,r.crop.w)), ch=Math.max(0.02,Math.min(1-cy,r.crop.h));
+    const c2=document.createElement("canvas");
+    c2.width=Math.round(bw*cw); c2.height=Math.round(bh*ch);
+    c2.getContext("2d").drawImage(c1, Math.round(bw*cx), Math.round(bh*cy),
+      c2.width, c2.height, 0, 0, c2.width, c2.height);
+    out=c2;
+  }
+  /* Step 3 — a report rendition is not a full-resolution original. */
+  if(maxW && out.width>maxW){
+    const c3=document.createElement("canvas");
+    c3.width=maxW; c3.height=Math.round(out.height*maxW/out.width);
+    c3.getContext("2d").drawImage(out,0,0,c3.width,c3.height);
+    out=c3;
+  }
+  return out;
+}
+/* A cheap stable fingerprint of the derivative, so the audit trail can say
+   WHICH rendition a report used. Not a cryptographic hash — it identifies a
+   rendition, it does not protect one. */
+/* Show the recipe on the frame that is open, or the original when comparing.
+   Nothing here writes anything: it paints a canvas and points the <img> at it. */
+function pxPaint(){
+  const img=$("lbimg");
+  if(!lbCtx || !pxDraft || pxCompare){ if(pxOrigSrc) img.src=pxOrigSrc; return; }
+  if(!pxTouched(pxDraft)){ if(pxOrigSrc) img.src=pxOrigSrc; return; }
+  const probe=new Image();
+  probe.onload=()=>{
+    const c=pxRender(probe,pxDraft,2000);
+    if(c) try{ img.src=c.toDataURL("image/jpeg",0.92); }catch(e){}
+  };
+  probe.onerror=()=>{};
+  probe.src=pxOrigSrc;
+}
+let pxOrigSrc="";
+/* The panel offers itself only where there is something to edit and an original
+   safely in place. A photo still uploading has no original to be
+   non-destructive ABOUT, so the edit is deferred rather than half-applied. */
+function pxSync(){
+  const [src,kind]=lbSet[lbIx]||[];
+  pxOrigSrc=src||"";
+  const editable = !!lbCtx && kind!=="video" && !!src;
+  $("pxOpen").hidden=!editable;
+  pxClosePanel();
+  if(!editable){ pxRecipe=null; pxDraft=null; return; }
+  pxRecipe=pxGet(lbCtx.rk, lbCtx.name) || null;
+  pxDraft=pxNorm(pxRecipe);
+  pxCompare=false;
+  pxPaint();
+  /* A frame that already carries an edit says so, so nobody mistakes a
+     derivative for the photograph that was taken. */
+  if(pxTouched(pxRecipe))
+    $("lbcap").innerHTML=esc($("lbcap").textContent)
+      +` <span class="pxbadge">${esc(t("px_edited"))}</span>`;
+}
+function pxOpenPanel(){
+  if($("pxOpen").hidden) return;
+  if(pxPending()){ $("pxMsg").textContent=t("px_pending"); }
+  $("pxPanel").classList.remove("hidden");
+  $("lb").classList.add("editing");
+  $("pxStr").value=String(pxDraft.straighten||0);
+  $("pxStrV").textContent=(pxDraft.straighten||0)+"°";
+  $("pxCap").value=pxDraft.caption||"";
+  $("pxPref").checked=!!pxDraft.preferred;
+  $("pxRatio").value=pxDraft.crop?(pxDraft.crop.ratio||"free"):"";
+  const busy=pxPending();
+  ["pxRotL","pxRotR","pxStr","pxRatio","pxCap","pxPref","pxSave"].forEach(id=>{
+    const el=$(id); if(el) el.disabled=busy; });
+}
+function pxClosePanel(){
+  $("pxPanel").classList.add("hidden"); $("lb").classList.remove("editing");
+  $("pxMsg").textContent="";
+}
+/* Is the original still on its way up? Then there is nothing to edit yet. */
+function pxPending(){
+  try{
+    if(!lbCtx || !window.CMDrive || !CMDrive.hasName) return false;
+    return !CMDrive.hasName(lbCtx.name);
+  }catch(e){ return false; }
+}
+function pxFingerprint(canvas){
+  try{
+    const d=canvas.toDataURL("image/jpeg",0.6);
+    let h=5381; for(let i=0;i<d.length;i+=7) h=((h*33)^d.charCodeAt(i))>>>0;
+    return h.toString(16)+"-"+canvas.width+"x"+canvas.height;
+  }catch(e){ return ""; }
+}
 function lbStep(d){ if(lbSet.length<2) return;
-  lbIx=(lbIx+d+lbSet.length)%lbSet.length; lbShow(); }
-function lbClose(){ $("lb").classList.remove("open"); $("lbimg").src="";
+  lbIx=(lbIx+d+lbSet.length)%lbSet.length; lbShow();
+  if(lbCtx && lbCtx.names) lbCtx.name=lbCtx.names[lbIx]||lbCtx.name;
+  pxSync(); }
+function lbClose(){ $("lb").classList.remove("open"); pxClosePanel();
+  lbCtx=null; pxRecipe=null; pxDraft=null; pxOrigSrc=""; $("lbimg").src="";
   const v=$("lbvid"); v.pause(); v.removeAttribute("src"); v.load(); lbSet=[]; }
 document.querySelectorAll("#histView button[data-hv]").forEach(b=>{
   b.onclick=()=>{ histView=b.dataset.hv;
@@ -6889,6 +7124,101 @@ document.addEventListener("keydown",e=>{
   if(!$("drw").classList.contains("hidden")) drwClose();
 });
 $("lb").onclick=e=>{ if(e.target.id==="lb"||e.target.id==="lbx") lbClose(); };
+$("pxOpen").onclick=e=>{ e.stopPropagation(); pxOpenPanel(); };
+$("pxPanel").onclick=e=>e.stopPropagation();
+$("pxCancel").onclick=()=>{ pxDraft=pxNorm(pxRecipe); pxCompare=false; pxPaint(); pxClosePanel(); };
+$("pxRotL").onclick=()=>{ pxDraft.rot=(((pxDraft.rot-90)%360)+360)%360; pxPaint(); };
+$("pxRotR").onclick=()=>{ pxDraft.rot=(((pxDraft.rot+90)%360)+360)%360; pxPaint(); };
+$("pxStr").oninput=()=>{
+  /* Capped in the control and again here: presentation, not re-framing. */
+  const v=Math.max(-PX_STRAIGHTEN_MAX,Math.min(PX_STRAIGHTEN_MAX,parseFloat($("pxStr").value)||0));
+  pxDraft.straighten=v; $("pxStrV").textContent=v+"°"; pxPaint();
+};
+/* The frame the crop is measured against: the picture AFTER rotation, because
+   turning a photograph on its side swaps which edge is long. */
+function pxFrame(cb){
+  const probe=new Image();
+  probe.onload=()=>{
+    const rot=((pxDraft.rot%360)+360)%360, swap=(rot===90||rot===270);
+    const w=probe.naturalWidth||probe.width, h=probe.naturalHeight||probe.height;
+    cb(swap?{bw:h,bh:w}:{bw:w,bh:h});
+  };
+  probe.onerror=()=>cb(null);
+  probe.src=pxOrigSrc;
+}
+$("pxRatio").onchange=()=>{
+  const v=$("pxRatio").value;
+  if(!v){ pxDraft.crop=null; pxPaint(); return; }
+  if(v==="free"){ pxDraft.crop={x:0.08,y:0.08,w:0.84,h:0.84,ratio:"free"}; pxPaint(); return; }
+  const r=parseFloat(v)||1;
+  /* The crop is stored in FRACTIONS of the frame, so a 1:1 crop of a 4:3
+     photograph is not w=1,h=1 — that is the whole frame, which is what this
+     produced before it asked the image how wide it actually is. In pixels:
+     (bw·w)/(bh·h) = r, so w/h = r·bh/bw. Take the largest centred rectangle
+     that satisfies it. */
+  pxFrame(f=>{
+    if(!f){ pxDraft.crop=null; pxPaint(); return; }
+    const k=r*f.bh/f.bw;              // w/h in fractional terms
+    let w=1, h=1/k;
+    if(h>1){ h=1; w=k; }
+    pxDraft.crop={x:(1-w)/2, y:(1-h)/2, w, h, ratio:v};
+    pxPaint();
+  });
+};
+$("pxCap").oninput=()=>{ pxDraft.caption=$("pxCap").value; };
+$("pxPref").onchange=()=>{ pxDraft.preferred=$("pxPref").checked?1:0; };
+$("pxCompare").onclick=()=>{
+  pxCompare=!pxCompare;
+  $("pxCompare").setAttribute("aria-pressed", pxCompare?"true":"false");
+  $("pxCompare").textContent = pxCompare ? t("px_compare_off") : t("px_compare");
+  pxPaint();
+};
+$("pxReset").onclick=()=>{
+  pxDraft=pxNorm(null); pxCompare=false;
+  $("pxStr").value="0"; $("pxStrV").textContent="0°"; $("pxRatio").value="";
+  $("pxCap").value=""; $("pxPref").checked=false;
+  pxPaint();
+};
+$("pxSave").onclick=()=>{
+  if(!lbCtx) return;
+  if(pxPending()){ $("pxMsg").textContent=t("px_pending"); return; }
+  const by=mediaWho();
+  if(!by){ $("pxMsg").textContent=t("ed_needname"); return; }
+  const rk=lbCtx.rk, name=pxKey(lbCtx.name);
+  const prior=pxAll(rk);
+  const media={}; Object.keys(prior).forEach(k=>media[k]=Object.assign({},prior[k]));
+  if(!pxTouched(pxDraft)){
+    /* Reset to original: remove the recipe rather than store an empty one, so
+       "no edit" and "an edit that happens to do nothing" cannot diverge. */
+    delete media[name];
+  }else{
+    /* The fingerprint identifies which rendition a report used. Computed from
+       the derivative, recorded beside the recipe that produced it. */
+    const probe=new Image(); probe.src=pxOrigSrc;
+    let fp="";
+    try{ const c=pxRender(probe,pxDraft,1600); if(c) fp=pxFingerprint(c); }catch(e){}
+    media[name]=Object.assign({}, pxNorm(pxDraft), {
+      src:name, by, at:new Date().toISOString(), fp });
+  }
+  const keep=edits[rk]||{};
+  const before=edits[rk] ? JSON.parse(JSON.stringify(edits[rk])) : null;
+  const at=new Date().toISOString();
+  const doc={ key:rk, by, at, void:!!keep.void, reason:keep.reason||"",
+              note:keep.note||"", items:keep.items||{}, media };
+  window.CMDash.setEdits([doc]);
+  saveEdits(); rebuild(); refreshControls(); renderAll();
+  $("pxMsg").textContent=t("ed_sending");
+  window.CMDrive.saveEdit({ key:rk, by, void:!!keep.void, reason:keep.reason||"",
+                            note:keep.note||"", items:keep.items||{}, media })
+    .then(()=>{ $("pxMsg").textContent=t("ed_saved");
+                pxRecipe=pxGet(rk,name); pxDraft=pxNorm(pxRecipe);
+                setTimeout(pxClosePanel,600); })
+    .catch(err=>{
+      if(before) edits[rk]=before; else delete edits[rk];
+      saveEdits(); rebuild(); refreshControls(); renderAll();
+      $("pxMsg").textContent=t("ed_undone",{e:(err&&err.message)||err});
+    });
+};
 $("lbPrev").onclick=e=>{ e.stopPropagation(); lbStep(-1); };
 $("lbNext").onclick=e=>{ e.stopPropagation(); lbStep(1); };
 document.addEventListener("keydown",e=>{
