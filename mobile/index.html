@@ -45,7 +45,7 @@
        three jobs here — ink on the pale surface, ink on its own 14% tint, and a
        filled chip under white — and #0c8a3e failed the 4.5 body-text floor on
        all three: 4.10:1, 3.99:1 and 4.45:1. In a lit cab at −40 that is the
-       difference between reading "Synced" and assuming it. #0a7134 measures
+       difference between reading "All sent" and assuming it. #0a7134 measures
        5.65 / 4.98 / 6.13, and the eye cannot tell the two greens apart. */
     --good:#0a7134; --warning:#c07c07; --serious:#c95a2c; --critical:#c02f2f; --none:#8b969b; --warn-ink:#8a5a00; --crit-ink:#c02f2f;
     /* The tray's surfaces: one low-chroma family stepped by HEIGHT OFF THE
@@ -2034,7 +2034,7 @@ const I18N = {
     iso_show:"Report a finding", iso_hide:"Hide the finding fields", lbl_class:"Equipment", lbl_type:"Inspection type", lbl_truck:"Truck / Unit", ph_truck:"e.g. TK158", btn_scan:"Scan",
     lbl_defect:"Defect / failure mode", lbl_cause:"Direct cause",
     sync_off:"Auto-upload is off — findings stay on this phone.", sync_setup:"Set up",
-    sync_ok:"All synced.", sync_pending:"{n} inspection(s) waiting to upload", sync_running:"Uploading…",
+    sync_ok:"All sent.", sync_pending:"{n} inspection(s) waiting to upload", sync_running:"Sending automatically…",
     sync_auto:"will retry by itself",
     sync_err:"Upload failed", sync_now:"Sync now",
     set_title:"Settings",
@@ -2375,7 +2375,10 @@ const I18N = {
     tab_capture:"Capture", tab_queue:"Queue", tab_system:"System", tab_due:"Due",
     set_theme:"Appearance", theme_auto:"Auto", theme_light:"Light", theme_dark:"Dark",
     theme_hint:"Auto follows the phone. Night shift in a dark cab and a bright bench are different problems.",
-    net_synced:"Synced", net_waiting:"{n} waiting", net_off:"Offline",
+    /* "Synced" is a claim about a system this phone cannot see. What it can
+       see is that every round it holds has been accepted, file by file, by every
+       destination that is switched on — so that is what the pill says. */
+    net_synced:"All sent", net_waiting:"{n} waiting", net_off:"Offline",
     net_nosignal:"No signal", net_failing:"Upload failing", net_nosync:"Not syncing",
     lbl_detect:"How it was found (ISO 14224)",
     opt_more_causes:"▾ More causes — general",
@@ -2433,9 +2436,23 @@ const I18N = {
     rdy_ref_t:"Machines and limits loaded", rdy_ref_ok:"{n} units, wear limits and lubricants.",
     rdy_ref_bad:"Reference data is missing. Reload the app with signal.",
     rdy_fix_persist:"Ask", rdy_fix_send:"Send now", rdy_fix_heal:"Repair",
-    up_yes:"In the cloud", up_wait:"Waiting to send", up_part:"Sending {n}/{of}",
+    /* WHAT IS TRUE, NOT WHAT IS HOPED. "In the cloud" was a claim about a place
+       nobody on this phone can see. What the phone actually knows is narrower and
+       more useful: which destination accepted which file. So the row says that,
+       and stops there — "confirmed in the dashboard" is a different sentence and
+       needs a read back from the server, which this build does not do. */
+    up_yes:"Sent — every file accepted", up_wait:"Waiting to send", up_part:"Sending {n}/{of}",
     up_missing:"waiting for {d}",
-    up_never:"Only on this phone", up_at:"sent {t}",
+    /* The state the list used to hide. The round's findings go up first, on
+       their own, in ten kilobytes; the photographs follow over the next several
+       minutes. Between those two moments the office already has the inspection
+       — and this row said "Waiting to send", which is how an inspector comes to
+       believe nothing has left the phone when the finding is already on a
+       screen in the office. */
+    up_rec:"Findings sent — photos still going",
+    up_sending:"Sending now",
+    up_err:"Needs attention",
+    up_never:"Saved on this phone only", up_at:"sent {t}",
     del_t_unsent:"This has not been uploaded",
     del_m_unsent:"{x} is only on this phone. Deleting it destroys {d} for good — there is no copy anywhere else and it cannot be undone.",
     del_t_sent:"Delete from this phone?",
@@ -2461,7 +2478,7 @@ const I18N = {
     iso_show:"Записать дефект", iso_hide:"Скрыть поля дефекта", lbl_class:"Оборудование", lbl_type:"Тип осмотра", lbl_truck:"Трак / Ед.", ph_truck:"напр. TK158", btn_scan:"Скан",
     lbl_defect:"Дефект / вид отказа", lbl_cause:"Прямая причина",
     sync_off:"Автозагрузка выключена — данные остаются на телефоне.", sync_setup:"Настроить",
-    sync_ok:"Всё синхронизировано.", sync_pending:"Ожидает отправки: {n}", sync_running:"Отправка…",
+    sync_ok:"Всё отправлено.", sync_pending:"Ожидает отправки: {n}", sync_running:"Идёт автоматическая отправка…",
     sync_auto:"повторит сам",
     sync_err:"Ошибка отправки", sync_now:"Отправить",
     set_title:"Настройки",
@@ -2786,7 +2803,7 @@ const I18N = {
     tab_capture:"Осмотр", tab_queue:"Очередь", tab_system:"Система", tab_due:"Срок",
     set_theme:"Оформление", theme_auto:"Авто", theme_light:"Светлое", theme_dark:"Тёмное",
     theme_hint:"«Авто» — как на телефоне. Ночная смена в тёмной кабине и яркий стол — разные задачи.",
-    net_synced:"Синхронизировано", net_waiting:"Ожидает: {n}", net_off:"Офлайн",
+    net_synced:"Всё отправлено", net_waiting:"Ожидает: {n}", net_off:"Офлайн",
     net_nosignal:"Нет связи", net_failing:"Ошибка отправки", net_nosync:"Без отправки",
     lbl_detect:"Как обнаружено (ИСО 14224)",
     opt_more_causes:"▾ Другие причины — общие",
@@ -2839,9 +2856,12 @@ const I18N = {
     rdy_ref_t:"Техника и пределы загружены", rdy_ref_ok:"Единиц: {n}, пределы износа и смазки.",
     rdy_ref_bad:"Справочные данные отсутствуют. Перезагрузите приложение при связи.",
     rdy_fix_persist:"Запросить", rdy_fix_send:"Отправить", rdy_fix_heal:"Восстановить",
-    up_yes:"В облаке", up_wait:"Ожидает отправки", up_part:"Отправка {n}/{of}",
+    up_yes:"Отправлено — все файлы приняты", up_wait:"Ожидает отправки", up_part:"Отправка {n}/{of}",
     up_missing:"ждёт {d}",
-    up_never:"Только на телефоне", up_at:"отправлено {t}",
+    up_rec:"Данные отправлены — фото ещё идут",
+    up_sending:"Идёт отправка",
+    up_err:"Требует внимания",
+    up_never:"Только на этом телефоне", up_at:"отправлено {t}",
     del_t_unsent:"Это ещё не выгружено",
     del_m_unsent:"{x} есть только на этом телефоне. Удаление уничтожит {d} безвозвратно — копии нигде нет, отменить нельзя.",
     del_t_sent:"Удалить с этого телефона?",
@@ -7552,11 +7572,31 @@ async function renderPending(){
      to guess which three. Deleting the wrong one destroys the round; the
      confirmation has warned about that for a while, but a warning at the moment
      of deletion is late. This says it before the thumb goes near the bin. */
-  const upState = rec => {
+  /* `nAtt` is how many photographs and videos this round carries — the sidecar
+     is not one of them. It comes in from the caller because the row has already
+     counted them, and counting them twice is how two numbers on one screen come
+     to disagree. */
+  const upState = (rec, nAtt) => {
     const dests = (typeof activeDests === "function") ? activeDests() : [];
     if (rec.up) return { k:"ok", txt:t("up_yes") + (rec.upAt
       ? " · " + t("up_at", { t:String(rec.upAt).slice(0,16).replace("T"," ") }) : "") };
+    /* WHAT HAS LEFT THE PHONE IS ASKED BEFORE WHETHER SENDING IS SWITCHED ON.
+
+       `up:1` was already above this line for exactly this reason, and the two
+       partial states belong with it: a round whose findings the office is
+       already reading has not stopped being sent just because somebody turned
+       the switch off afterwards, and calling it "Saved on this phone only" —
+       in red, next to a bin — is a false alarm, which is the same failure as a
+       false reassurance wearing the other coat. */
+    const partial = sentState(rec, dests, nAtt);
+    if (partial) return partial;
     if (!UP.on || !dests.length) return { k:"never", txt:t("up_never") };
+    if (syncingId === rec.id) return { k:"part", txt:t("up_sending") };
+    return { k:"wait", txt:t("up_wait") };
+  };
+  /* Everything that is demonstrably part-way out of the phone, or null when
+     nothing is. Split out only so it can be asked before the switch is. */
+  const sentState = (rec, dests, nAtt) => {
     const done = Object.keys(rec.upTo || {}).length;
     /* NAME the one that has not taken it. "Sending 1 of 2" is a number an
        inspector can watch for a week without learning anything; "waiting for
@@ -7571,7 +7611,23 @@ async function renderPending(){
       return { k:"part", txt:t("up_part", { n:done, of:dests.length })
         + (miss ? " · " + t("up_missing", { d:miss }) : "") };
     }
-    return { k:"wait", txt:t("up_wait") };
+    /* NOT YET FINISHED WITH ANY DESTINATION IS NOT THE SAME AS NOTHING SENT.
+       `sent` is the per-file record of what each destination has already taken,
+       and the sidecar — the round itself, every finding, severity, action, owner
+       — is deliberately the first file in the payload. Once it is in there the
+       office has the inspection; what is still climbing is photographs.
+
+       Both cases landed on this one line as "Waiting to send", which is the
+       understatement that makes an inspector re-send a round that is already
+       in the dashboard, or worse, decide the app is not working. */
+    const landed = Object.values(rec.sent || {})
+      .some(m => Object.keys(m || {}).some(n => /\.json$/i.test(n)));
+    if (landed) {
+      const n = Object.values(rec.sent || {})
+        .reduce((x, m) => Math.max(x, Object.keys(m || {}).length - 1), 0);
+      return { k:"part", txt:t("up_rec") + (nAtt ? " · " + n + "/" + nAtt : "") };
+    }
+    return null;
   };
   const stamp = r => String((r && (r.created || r.id)) || "");
   const all=(await dbAll()).sort((a,b)=>stamp(b).localeCompare(stamp(a)));
@@ -7586,7 +7642,7 @@ async function renderPending(){
     const row=document.createElement("div"); row.className="pitem";
     const thumb=first?`<img class="thumb" src="${pendPool.url(first)}" alt="${esc(rec.equip||"")}">`:`<div class="thumb"></div>`;
     const rty=rec.type||"MP";
-    const up=upState(rec);
+    const up=upState(rec, nPhotos+nVid);
     const typeTag=`${rec.cls||""} ${rty}`.trim();
     row.innerHTML=`${thumb}<div class="meta"><div class="a"><span class="tag" data-r="${esc(rty)}">${esc(typeTag)}</span>${esc(rec.equip)} · ${esc(rec.date)}</div>
       <div class="b">${nPos} ${t("pos_count")} · ${nPhotos} ${t("photo_count")}${nVid?` · ${nVid}🎥`:""}${rec.smu?` · SMU ${esc(rec.smu)}`:""}${rec.sign?" · ✍":""}${rec.gps?" · 📍":""}</div>
@@ -9017,7 +9073,11 @@ async function renderStorage(){
     +" · "+t(persistState===true?"st_kept":persistState===false?"st_evictable":"st_unasked");
 }
 
-let syncing=false, lastErr="";
+/* Which round is on the wire right now, so the queue can say "Sending now" on
+   the one it is true of rather than on all of them. Cleared in the finally
+   below, because a row left saying "sending" after the sync ended is the same
+   class of lie as "Synced". */
+let syncing=false, lastErr="", syncingId=null;
 async function syncNow(manual){
   if(syncing) return; if(!UP.on){ renderSync(); return; }
   if(!navigator.onLine){ renderSync(); return; }
@@ -9027,6 +9087,12 @@ async function syncNow(manual){
     const all=(await dbAll()).filter(r=>!r.up);
     let consecutive=0;
     for(const rec of all){
+      /* Only when somebody is looking at the queue. renderPending() rebuilds
+         every row and recycles the thumbnail blob URLs, so running it once per
+         record on a fifty-round queue nobody has open is fifty rebuilds paid
+         for a screen that is not on. */
+      syncingId=rec.id;
+      if(document.getElementById("paneQueue").classList.contains("on")) renderPending();
       const rev=rec.rev||0;                       // what we are about to upload
       const done=Object.assign({},rec.upTo||{});  // destinations that already have it
       const todo=dests.filter(d=>!done[d.id]);
@@ -9100,7 +9166,7 @@ async function syncNow(manual){
        inspector who wrote them can read them. */
     try{ await syncDefer(dests); }catch(e){ /* never fails a round's upload */ }
   } finally {
-    syncing=false; renderSync(); renderPending(); renderNet();
+    syncing=false; syncingId=null; renderSync(); renderPending(); renderNet();
     // Whatever this phone just pushed, someone else has pushed something too.
     // One request, and it keeps the due list honest across the whole team.
     teamPull(false);
