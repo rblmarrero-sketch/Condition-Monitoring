@@ -991,6 +991,17 @@
   .ovr.hidden{display:none;}
   .ovrwarn{margin-top:4px;font-weight:600;font-size:var(--t-micro);line-height:1.4;
     font-family:inherit;color:var(--warn-ink);}
+  /* A translation gap, shown rather than papered over. */
+  /* .prow is a button now. Reset what a button brings with it so the bar reads
+     exactly as it did, and give it the focus ring a div never had. */
+  button.prow{width:100%;text-align:left;font:inherit;font-family:inherit;color:inherit;
+    background:none;border:0;padding:0;}
+  button.prow:focus-visible,.tmon:focus-visible,.covr:focus-visible{
+    outline:2px solid var(--accent);outline-offset:2px;}
+  .tgap{display:inline-flex;align-items:baseline;gap:5px;}
+  .tgap i{font-style:normal;font-weight:600;font-size:var(--t-micro);
+    color:var(--warn-ink);background:color-mix(in srgb,var(--warning) 16%,transparent);
+    border-radius:4px;padding:0 5px;}
   .rst{display:inline-flex;align-items:center;gap:4px;padding:1px 7px;border-radius:999px;
     font-weight:600;font-size:var(--t-micro);line-height:1.6;font-family:inherit;
     white-space:nowrap;}
@@ -2743,6 +2754,7 @@ const I18N={
   ed_ovr:"Override reason", ed_ovr_ph:"Why this severity, not the mapped one",
   ed_ovr_warn:"{g} maps to {m}. Saving {e} is a deliberate override.",
   ed_ovr_need:"A severity that differs from its grade needs a reason ({k}).",
+  tg_flag:"no EN name", tg_title:"This point has no name in the reference table for the selected language. Captured as: {v}",
   u_report:"Report",
   rs_final:"Controlled final", rs_provisional:"Provisional", rs_field:"Field",
   rs_none:"none issued", rs_issued:"issued {d}", rs_super:"superseded",
@@ -3277,6 +3289,7 @@ const I18N={
   ed_ovr:"Обоснование отклонения", ed_ovr_ph:"Почему эта категория, а не сопоставленная",
   ed_ovr_warn:"{g} соответствует «{m}». Сохранение «{e}» — осознанное отклонение.",
   ed_ovr_need:"Для категории, отличной от кода состояния, нужно обоснование ({k}).",
+  tg_flag:"нет RU названия", tg_title:"Для выбранного языка в справочнике нет названия этой точки. Записано как: {v}",
   u_report:"Отчёт",
   rs_final:"Итоговый", rs_provisional:"Предварительный", rs_field:"Полевой",
   rs_none:"не выпускался", rs_issued:"выпущен {d}", rs_super:"устарел",
@@ -4204,7 +4217,8 @@ function renderKpis(){
     + `<div class="tile" id="kpiMix"><div class="k">${t("k_mix")}</div>
      <div class="bar" style="margin-top:8px">${bar}</div>
      <div class="legend">${["CRI","DEG","INC","NOF"].map(s=>
-       `<button data-sev="${s}" class="${drill.sev===s?"on":""}"${cnt[s]?"":" disabled"}
+       `<button type="button" data-sev="${s}" class="${drill.sev===s?"on":""}"${cnt[s]?"":" disabled"}
+          aria-pressed="${drill.sev===s?"true":"false"}"
           title="${cnt[s]?esc(t("k_only",{x:SEV[s].l})):esc(t("k_none_here"))}"
         ><i style="background:${SEVC[s]}"></i>${esc(SEV[s].l)}<b>${cnt[s]}</b></button>`).join("")}</div>
    </div>`;
@@ -4398,12 +4412,18 @@ function pareto(el,pairs,colorFn,drillKey,why,total){
   const nVital = cutAt<0 ? rows.length : cutAt+1;
   const head = sum ? `<div class="phead">${esc(t("p_vital",{k:nVital,n:rows.length,
       p:Math.round(rows[Math.min(nVital,rows.length)-1].cum)}))}</div>` : "";
+  /* A Pareto bar that filters the dashboard is a control, so it is a button —
+     focusable, operable with Enter and Space, and announcing whether it is the
+     one currently selected. It was a div with a click handler, which a keyboard
+     cannot reach and a screen reader announces as text. */
   el.innerHTML = head + rows.map((r,ix)=>`
-    <div class="prow${drillKey&&drill[drillKey]===r.label?" sel":""}${r.vital?" vital":""}" ${drillKey?`data-drill="${esc(r.label)}" title="${esc(t("p_click"))}"`:""}>
+    <${drillKey?"button type=\"button\"":"div"} class="prow${drillKey&&drill[drillKey]===r.label?" sel":""}${r.vital?" vital":""}" ${
+      drillKey?`data-drill="${esc(r.label)}" title="${esc(t("p_click"))}" aria-pressed="${
+        drill[drillKey]===r.label?"true":"false"}"`:""}>
       <div class="lbl" title="${esc(r.label)}">${esc(r.label)}${r.sub?` <small>${esc(r.sub)}</small>`:""}</div>
       <div class="ptrack"><div class="pfill" style="width:${Math.max(2,r.n/max*100)}%;background:${colorFn?colorFn(r.label):"var(--accent)"}"></div></div>
       <div class="n">${r.n}</div>
-      <div class="cum" title="${esc(t("p_cum"))}">${Math.round(r.cum)}%</div></div>`
+      <div class="cum" title="${esc(t("p_cum"))}">${Math.round(r.cum)}%</div></${drillKey?"button":"div"}>`
     + (ix===cutAt && ix<rows.length-1 ? `<div class="pcut"><span>${esc(t("p_cut"))}</span></div>` : "")).join("");
   if(drillKey) el.querySelectorAll("[data-drill]").forEach(r=>r.onclick=()=>setDrill(drillKey,r.dataset.drill));
 }
@@ -4866,8 +4886,8 @@ function renderActions(){
                  another under the action put the rows at 57px; the register is
                  scanned, and what those lines carried is on the title and in
                  the drawer a click away. -->
-            <td title="${esc((i.label||i.key)+" · "+i.key+" · "+(TYPE_LABEL[r.type]||r.type))}">
-              <span class="trunc">${esc(i.label||i.key)}
+            <td title="${esc((ptLabel(r,i)||i.key)+" · "+i.key+" · "+(TYPE_LABEL[r.type]||r.type))}">
+              <span class="trunc">${ptLabelHTML(r,i)}
                 <span class="muted">${esc(i.key)}</span></span></td>
             <td class="mono">${esc(r.date||"")}</td>
             <!-- The finding, then what to do about it, on one line. The
@@ -4995,7 +5015,7 @@ function renderActions(){
         return `<button type="button" class="wlr" data-fu="${esc(recKey(r))}" data-fi="${esc(i.key)}"
             style="--sc:${s?`var(--${SEV[s].c==="c"?"critical":SEV[s].c==="s"?"serious":SEV[s].c==="w"?"warning":"good"})`:"var(--none)"}">
           <span class="sev"></span>
-          <span class="cell"><span class="t1">${esc(i.label||i.key)}</span>
+          <span class="cell"><span class="t1">${ptLabelHTML(r,i)}</span>
             <span class="t2">${esc(i.key)} · ${esc(TYPE_LABEL[r.type]||r.type)} · ${esc(r.date||"")}</span></span>
           <span class="cell hide-s"><span class="t1" style="font-weight:500">${
               i.defect?esc(i.defect):'<span class="muted">—</span>'}${
@@ -5369,6 +5389,46 @@ function ucRefName(key,rec,lg){
     if(n) return n;
   }
   return "";
+}
+/* ── ONE LANGUAGE ON THE PAGE ───────────────────────────────────────────────
+
+   A point's name arrives on the record frozen in whatever language the
+   capturing phone was set to. The audit found the register in English with
+   component labels still in Russian, which is not a translation problem — it is
+   two languages in one operational table, and a planner reading down it cannot
+   tell which rows they have actually understood.
+
+   points.js, lube.js, uc-points.js and the rest hold both languages, so the
+   canonical name is looked up first and the frozen string is only a fallback.
+   When there is no canonical name AND the frozen one is in the other script,
+   showing it anyway would be the leak; showing nothing would lose the point. So
+   the point CODE is shown, flagged, with the original on the title — the reader
+   can see there is a gap rather than quietly mis-reading a row. */
+const CYRILLIC=/[\u0400-\u04FF]/;
+const LATIN=/[A-Za-z]/;
+function wrongScript(str,lg){
+  const v=String(str||"");
+  if(!v) return false;
+  return lg==="ru" ? (LATIN.test(v) && !CYRILLIC.test(v))
+                   : (CYRILLIC.test(v) && !LATIN.test(v));
+}
+/* The name to print for a point, in the language on screen. */
+function ptLabel(rec,it,lg){
+  const l=lg||lang;
+  const canon=ucRefName(it.key,rec,l);
+  if(canon) return canon;
+  const frozen=it.label||"";
+  if(!frozen) return it.key;
+  if(!wrongScript(frozen,l)) return frozen;
+  return null;                       // caller renders the gap
+}
+/* The same, as markup: either the name, or the code with the gap flagged. */
+function ptLabelHTML(rec,it,lg){
+  const l=lg||lang;
+  const n=ptLabel(rec,it,l);
+  if(n!=null) return esc(n);
+  return `<span class="tgap" title="${esc(t("tg_title",{v:it.label||""}))}">${esc(it.key)}`
+       + `<i>${esc(t("tg_flag"))}</i></span>`;
 }
 function ucName(it,rec){
   return ucRefName(it.key,rec) || it.label || it.key;
@@ -5872,6 +5932,7 @@ function renderTrend(){
        that happened gets a sliver you can see; nothing stays nothing. */
     const h=v=>v<=0?"0":`${Math.max(4,(v/worst*100)).toFixed(1)}%`;
     return `<button type="button" class="tmon${drill.month===x.k?" on":""}" data-tm="${esc(x.k)}"
+      aria-pressed="${drill.month===x.k?"true":"false"}"
       title="${esc(x.k+" · "+t("tr_tip",{f:tot,r:x.rounds,u:x.units.size})+" · "+t("tr_click"))}">
       <div class="tstack">
         <i class="s-cri" style="height:${h(x.CRI)}"></i>
@@ -7039,7 +7100,7 @@ function openUnit(unit){
             return `<button type="button" class="urow" data-fu="${esc(recKey(r))}" data-fi="${esc(i.key)}"
               style="--sc:${sv?`var(--${SEV[sv].c==="c"?"critical":SEV[sv].c==="s"?"serious":SEV[sv].c==="w"?"warning":"good"})`:"var(--none)"}">
               <span class="sev"></span>
-              <span class="ut"><b>${esc(i.label||i.key)}</b>
+              <span class="ut"><b>${ptLabelHTML(r,i)}</b>
                 <i>${esc([i.defect,i.actionLabel].filter(Boolean).join(" \u2192 "))||esc(r.date||"")}</i></span>
               <span class="um">${as.k==="triage"
                   ? `<span class="tri" title="${esc(t("as_triage_t",{f:actionMissText(as.miss)}))}">${esc(t("as_triage"))}</span>`
