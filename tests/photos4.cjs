@@ -132,9 +132,22 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
   console.log('        images printed for ' + (CAP*3) + ' captured: ' + imgs);
   ok('every photograph taken reaches the page, not the first four',
     imgs === CAP*3, imgs + ' of ' + CAP*3);
-  ok('the first is the big one, the rest are a strip',
-    (html.match(/class="phx"/g) || []).length === 3,
-    (html.match(/class="phx"/g) || []).length + ' strips for 3 components');
+  /* ONE SIZE, IN ROWS. This used to require the opposite — a lead frame four
+     times the size of the rest with the remainder in a strip beneath — and that
+     hierarchy is one nobody meant: the first photograph an inspector happened to
+     take is not the important one. On a filter cut, where six frames are the
+     same filter from six angles, it printed one big picture and a ragged
+     three-then-two strip with an empty cell in it. */
+  ok('every frame is the same size, in rows',
+    (html.match(/class="phg"/g) || []).length === 3 && !/class="phx"/.test(html),
+    (html.match(/class="phg"/g) || []).length + ' grids, '
+      + (html.match(/class="phx"/g) || []).length + ' strips');
+  /* And the rows are chosen for the least waste, so a set never ends in a gap
+     where a photograph should be. */
+  const cols = [...html.matchAll(/grid-template-columns:repeat\((\d+),1fr\)/g)].map(m => +m[1]);
+  ok('laid out with no empty cell left over',
+    cols.length > 0 && cols.every(c => CAP % c === 0 || CAP % c === 0),
+    CAP + ' photos into ' + [...new Set(cols)].join('/') + ' columns');
   /* The "+6" badge was the failure mode, not the fallback: it turned up on
      exactly the positions with the most photographs, which are the positions
      where something is wrong. */

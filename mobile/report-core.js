@@ -366,6 +366,8 @@
 #rptRoot .b3{grid-template-columns:repeat(3,1fr);}
 #rptRoot .b2{grid-template-columns:repeat(2,1fr);}
 #rptRoot .b1{grid-template-columns:1fr;max-width:340px;}
+/* One position, several photographs: the sheet is theirs. */
+#rptRoot .board.b1.wide{max-width:none;}
 /* The photographs sheet. Same board, but the cells hold pictures rather than a
    paragraph, so they take the width of the paper — and the frames inside them
    are one size, in rows, rather than one big and a strip of stamps. */
@@ -1505,9 +1507,15 @@
         body = restLine(T, rest, true);
       } else if (board.length && board.length <= 12) {
         var cols = board.length >= 4 ? 4 : board.length === 3 ? 3 : board.length === 2 ? 2 : 1;
+        /* A single position holding several photographs is not a narrow column.
+           b1 caps the cell at 340px so one graded point with a sentence in it
+           does not stretch across the paper — right for a paragraph, wrong for
+           six photographs, which it squeezed into the left third of the sheet
+           and left the rest of the page empty. */
+        var wide = board.length === 1 && ((board[0].photos || []).length > 1);
         var sh = shared(board);
         body = commonBand(T, sh, board.length)
-          + '<div class="board b' + cols + '">'
+          + '<div class="board b' + cols + (wide ? ' wide' : '') + '">'
           + board.map(function (it) { return cell(ctx, T, it, sh); }).join("") + '</div>'
           + restLine(T, rest, false);
       } else if (board.length) {
@@ -1894,14 +1902,23 @@
           + gridCols(ph.length) + ',1fr)">'
           + ph.map(function (u) { return '<img src="' + u + '">'; }).join("")
           + '</div>';
+      } else if (ph.length > 1) {
+        /* ONE SIZE, IN ROWS — the layout the magnetic plug sheet already used,
+           now used wherever a position carries more than one frame.
+
+           A lead frame four times the size of the rest, with the remainder in a
+           strip beneath, reads as a hierarchy nobody meant: the first
+           photograph an inspector happened to take is not the important one. On
+           a filter cut, where all six frames are the same filter from six
+           angles, it produced one big picture and a ragged 3-then-2 strip with
+           an empty cell in it. gridCols picks the row width with the least
+           waste, so six go three-and-three rather than three-and-two-and-a-gap. */
+        top = '<div class="phg" style="grid-template-columns:repeat('
+          + gridCols(ph.length) + ',1fr)">'
+          + ph.map(function (u) { return '<img src="' + u + '">'; }).join("")
+          + '</div>';
       } else {
         top = '<img class="ph" src="' + ph[0] + '">';
-        var rest = ph.slice(1);
-        if (rest.length) {
-          top += '<div class="phx">'
-            + rest.map(function (u) { return '<img src="' + u + '">'; }).join("")
-            + '</div>';
-        }
       }
     }
     var rows = "";
