@@ -201,15 +201,62 @@
   .subtabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent);}
   .subtabs button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;}
   .lsub.hidden{display:none;}
-  .secthd{display:flex;align-items:baseline;gap:var(--s2);margin-bottom:var(--s2);min-width:0;}
+  .secthd{display:flex;align-items:baseline;gap:var(--s2);margin-bottom:6px;min-width:0;flex-wrap:wrap;}
+  /* The h2 is inside .secthd, so ".section > h2" never reached it and it fell
+     back to the browser's own heading margins — 65px of title line for 20px of
+     title. It is the same title either way and wears the same rule. */
+  .secthd>h2{margin:0;padding:0;font-size:15px;font-weight:700;line-height:1.3;
+    letter-spacing:-.01em;}
   .secthd .spacer{flex:1;}
   .secthd .hint{font-size:var(--t-tiny);color:var(--muted);white-space:nowrap;}
+  /* The three denominators, on the title line instead of in a sentence. */
+  .hdfacts{display:flex;gap:var(--s3);font-size:var(--t-small);color:var(--muted);flex-wrap:wrap;}
+  .hdfacts b{color:var(--ink);font-variant-numeric:tabular-nums;}
+
+  /* ── a scorecard ────────────────────────────────────────────────────────
+     One row per metric: how far it has got, the count behind it, where the
+     number came from, and how much is left. It replaced seven stacked blocks
+     that each carried their own explanatory sentence — 1,100px of panel to say
+     what fits in 340. */
+  /* A ROW header names the row; a COLUMN header labels a column. The global
+     th rule dresses every th as an uppercase eyebrow, which turned the metric
+     names — the most important words in this table — into 8.5px capitals. */
+  table.grid.scorecard th[scope="row"]{font-size:var(--t-body);font-weight:600;color:var(--ink);
+    text-transform:none;letter-spacing:0;white-space:nowrap;padding-right:var(--s3);}
+  /* The count, its denominator and its percentage are one fact and must not
+     wrap into two lines — which is what made these rows 46px. */
+  table.grid.scorecard td.num{white-space:nowrap;}
+  /* 36px rows: seven metrics visible together without scrolling, which is the
+     whole point of a scorecard. */
+  table.grid.scorecard td,table.grid.scorecard th{padding:7px;line-height:1.5;}
+  table.grid.scorecard tr.scrow{cursor:pointer;}
+  table.grid.scorecard tr.scrow.on td,table.grid.scorecard tr.scrow.on th{background:var(--surface-2);
+    box-shadow:inset 3px 0 0 var(--accent);}
+  table.grid.scorecard tr.scrow:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;}
+  .scorecard .dot{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:7px;
+    vertical-align:0;background:var(--none);}
+  .scorecard .dot.good{background:var(--good);} .scorecard .dot.warn{background:var(--warning);}
+  .scorecard .scbar{width:34%;min-width:110px;}
+  .scorecard .track{display:block;height:5px;border-radius:99px;background:var(--surface-3);overflow:hidden;}
+  .scorecard .track i{display:block;height:100%;border-radius:99px;background:var(--none);}
+  .scorecard .track i.good{background:var(--good);} .scorecard .track i.warn{background:var(--warning);}
+  .scorecard .of{color:var(--muted);}
+  .scorecard .pcv{display:inline-block;min-width:38px;margin-left:var(--s2);color:var(--ink-2);}
+  .scorecard .gap{font-weight:650;}
+  .scorecard .gap.zero{color:var(--muted);font-weight:400;}
+  /* Where the number comes from, in one word. A count the app produced and a
+     count a laboratory produced are not the same kind of fact.
+
+     Named .srcb, not .src: the header's data-source chip already owns .src,
+     and inheriting a 40px control's padding is what made these rows 46px. */
+  .srcb{display:inline-block;padding:1px 7px;border-radius:4px;font-size:var(--t-tiny);
+    font-weight:650;background:var(--surface-3);color:var(--ink-2);white-space:nowrap;}
   .secthd .lgnd{display:flex;gap:var(--s2);font-size:var(--t-tiny);color:var(--muted);flex-wrap:wrap;}
   .secthd .lgnd i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px;
     vertical-align:-1px;background:var(--c,var(--none));}
   /* Methodology, on demand. It used to be two lines of prose above every table
      — true, useful once, and read past every day after that. */
-  .method{margin-top:var(--s2);border-top:1px solid var(--border);padding-top:var(--s2);}
+  .method{margin-top:6px;border-top:1px solid var(--border);padding-top:6px;}
   .method>summary{cursor:pointer;font-size:var(--t-tiny);color:var(--muted);
     list-style:none;display:inline-flex;align-items:center;gap:5px;}
   .method>summary::-webkit-details-marker{display:none;}
@@ -218,7 +265,7 @@
   .method>summary:hover{color:var(--ink-2);}
   .method .sub{margin-top:var(--s2);}
   /* One sentence, where a paragraph used to be. */
-  .insight{margin-top:var(--s2);padding:var(--s2) var(--s3);border-radius:8px;
+  .insight{margin-top:6px;padding:6px var(--s3);border-radius:8px;
     background:var(--surface-2);border-left:3px solid var(--accent);
     font-size:var(--t-small);color:var(--ink-2);line-height:1.4;}
   .insight:empty{display:none;}
@@ -323,7 +370,7 @@
   .tile .legend i{width:9px;height:9px;border-radius:2px;flex:none;}
   .tile .legend b{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--ink);}
   .section{background:var(--surface);border:1px solid var(--border);border-radius:10px;
-    padding:var(--s3) var(--s4) var(--s4);margin-bottom:var(--s3);box-shadow:var(--shadow);
+    padding:var(--s3) var(--s4);margin-bottom:var(--s3);box-shadow:var(--shadow);
     min-width:0;}
   .section>h2{margin:0 0 3px;font-size:15px;font-weight:640;} .section>.sub{color:var(--muted);font-size:12.5px;margin-bottom:16px;}
   /* Pareto */
@@ -391,8 +438,8 @@
   .tstack i.s-cri{background:var(--critical);} .tstack i.s-deg{background:var(--serious);}
   .tstack i.s-inc{background:var(--warning);}
   .tmon b{font:700 12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ink-2);min-height:12px;}
-  .tmon span{font-size:10.5px;color:var(--muted);font-variant-numeric:tabular-nums;}
-  .tmon u{font-size:10px;color:var(--muted);text-decoration:none;
+  .tmon span{font-size:var(--t-micro);color:var(--muted);font-variant-numeric:tabular-nums;}
+  .tmon u{font-size:var(--t-micro);color:var(--muted);text-decoration:none;
     border-top:1px solid var(--border);width:100%;text-align:center;padding-top:2px;}
   .tlegend{display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px;color:var(--ink-2);margin-bottom:4px;}
   .tlegend span{display:flex;align-items:center;gap:5px;}
@@ -460,7 +507,7 @@
   .pill{display:inline-block;padding:1px 8px;border-radius:999px;font-size:11px;font-weight:650;color:#fff;}
   .pill.g{background:var(--good);} .pill.w{background:var(--warning);color:#111;}
   .pill.s{background:var(--serious);} .pill.c{background:var(--critical);} .pill.n{background:var(--none);}
-  .tag{display:inline-block;font-size:10.5px;font-weight:700;padding:1px 6px;border-radius:6px;background:var(--surface-3);color:var(--ink-2);margin-right:5px;}
+  .tag{display:inline-block;font-size:var(--t-micro);font-weight:700;padding:1px 6px;border-radius:6px;background:var(--surface-3);color:var(--ink-2);margin-right:5px;}
   .muted{color:var(--muted);} .mono{font-variant-numeric:tabular-nums;}
   /* history */
   .insp{border:1px solid var(--border);border-radius:12px;margin-bottom:16px;overflow:hidden;}
@@ -836,7 +883,7 @@
   .insp.voided{opacity:.55;}
   .voidflag{display:inline-block;padding:1px 8px;border-radius:999px;font-size:11px;font-weight:650;
     background:var(--surface-3);color:var(--ink-2);border:1px dashed var(--border);}
-  .editflag{display:inline-block;padding:1px 7px;border-radius:999px;font-size:10.5px;font-weight:650;
+  .editflag{display:inline-block;padding:1px 7px;border-radius:999px;font-size:var(--t-micro);font-weight:650;
     background:color-mix(in srgb,var(--accent) 18%,transparent);color:var(--accent);}
   .empty{color:var(--muted);text-align:center;padding:26px 34px;}
   .empty b{display:block;color:var(--ink-2);font-size:13px;font-weight:640;margin-bottom:4px;}
@@ -953,10 +1000,10 @@
      row rather than a colour buried in a column, tabular figures, and one wear
      bar drawn the same way in both. Anything a reader learns here they can read
      on paper without relearning it. */
-  .eyebrow{font-size:9.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  .eyebrow{font-size:var(--t-micro);font-weight:700;letter-spacing:.16em;text-transform:uppercase;
     color:var(--muted);}
   .section>h2{letter-spacing:-.01em;}
-  table.grid th{font-size:8.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;
+  table.grid th{font-size:var(--t-micro);font-weight:700;letter-spacing:.08em;text-transform:uppercase;
     color:var(--muted);border-bottom:1px solid var(--ink);padding:0 8px 5px;vertical-align:bottom;}
   table.grid td{border-bottom:1px solid var(--border);padding:7px 8px;}
   table.grid td.r,table.grid th.r{text-align:right;}
@@ -965,9 +1012,9 @@
   table.grid tbody tr:hover td{background:var(--surface-2);}
   table.grid td.stripe{border-left:3px solid transparent;}
   /* the report's chips, to the pixel: amber takes dark ink or it cannot be read */
-  .pill{border-radius:3px;padding:2px 7px;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;}
+  .pill{border-radius:3px;padding:2px 7px;font-size:var(--t-micro);letter-spacing:.05em;text-transform:uppercase;}
   .pill.w{color:#3d2c00;}
-  .grade{display:inline-block;min-width:17px;text-align:center;color:#fff;font-size:10px;
+  .grade{display:inline-block;min-width:17px;text-align:center;color:#fff;font-size:var(--t-micro);
     font-weight:800;border-radius:3px;padding:1px 5px;line-height:1.4;}
   /* wear */
   .wb{display:block;height:5px;background:var(--surface-3);border-radius:3px;overflow:hidden;min-width:52px;}
@@ -1024,9 +1071,14 @@
        4px base. Type steps ~1.22, tabular figures throughout, because on this
        page numbers line up in columns far more often than words do. */
     --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --s7:48px;
-    --t-micro:9.5px;   /* the uppercase label above a number            */
-    --t-tiny:11px;     /* a note under one                              */
-    --t-small:12px;    /* table meta, secondary                         */
+    /* 11px is the floor for anything a person is meant to READ. The scale ran
+       to 9.5 and 8.5 for labels, column headings and the sentence under a KPI —
+       all meaningful, none of it decoration. Density bought that way is density
+       nobody can use, and the two smallest steps were carrying the words that
+       make the numbers mean anything. */
+    --t-micro:11px;    /* the uppercase label above a number            */
+    --t-tiny:11.5px;   /* a note under one                              */
+    --t-small:12.5px;  /* table meta, secondary                         */
     --t-body:13px;     /* the default                                   */
     --t-lead:15px;     /* a card title                                  */
     --t-head:19px;     /* a section title                               */
@@ -1088,7 +1140,7 @@
   button.kpi:hover::before{height:5px;}
   .kpi.on{background:var(--surface-2);
     box-shadow:0 0 0 1px var(--kc,var(--accent)) inset;}
-  .kpi .k,.tile .k{font:700 9.5px/1.2 inherit;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);}
+  .kpi .k,.tile .k{font:700 var(--t-micro)/1.2 inherit;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);}
   /* 34px and 42px were the sizes of a marketing page. A number a reliability
      engineer reads fifty times a day needs to be unmistakable, not enormous —
      and the four lines under it are what make it mean anything. */
@@ -1212,14 +1264,14 @@
   /* Who owns it, as a face-sized thing rather than a column of names. */
   .who{display:inline-flex;align-items:center;gap:7px;min-width:0;}
   .who i{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;
-    background:var(--surface-3);color:var(--ink-2);font:700 9.5px/1 inherit;font-style:normal;
+    background:var(--surface-3);color:var(--ink-2);font:700 var(--t-micro)/1 inherit;font-style:normal;
     letter-spacing:.02em;}
   .who span{font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .who.none i{background:none;border:1px dashed var(--border);color:var(--muted);}
   .who.none span{color:var(--muted);}
   .due{display:inline-flex;align-items:baseline;gap:6px;font-variant-numeric:tabular-nums;}
   .due b{font:600 12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;}
-  .due i{font-style:normal;font-size:10px;color:var(--muted);}
+  .due i{font-style:normal;font-size:var(--t-micro);color:var(--muted);}
   .due.late b{color:var(--critical);} .due.late i{color:var(--critical);font-weight:700;}
   .due.soon b{color:var(--serious);}
   .st{display:inline-flex;align-items:center;gap:6px;font:600 11.5px/1 inherit;color:var(--ink-2);}
@@ -1284,7 +1336,7 @@
     outline:none;background:var(--surface);border-color:var(--accent);
     box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent);}
   .sheet .field{gap:6px;margin-bottom:14px;}
-  .sheet .field label{font:700 9.5px/1.2 inherit;letter-spacing:.11em;color:var(--muted);}
+  .sheet .field label{font:700 var(--t-micro)/1.2 inherit;letter-spacing:.08em;color:var(--muted);}
   .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:0 14px;}
   .sbsec{margin-top:6px;padding-top:16px;border-top:1px solid var(--border);}
   .sbsec:first-of-type{border-top:0;padding-top:4px;}
@@ -1348,7 +1400,7 @@
   .controls{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
     box-shadow:var(--e1);padding:12px 16px;gap:16px;align-items:end;margin-bottom:16px;}
   .controls .field{gap:5px;}
-  .controls .field label{font:700 9.5px/1.2 inherit;letter-spacing:.11em;color:var(--muted);}
+  .controls .field label{font:700 var(--t-micro)/1.2 inherit;letter-spacing:.08em;color:var(--muted);}
   .controls select,.controls input[type=search],.controls input[type=text]{
     background:var(--surface-2);border:1px solid var(--border);border-radius:9px;
     padding:8px 11px;font:inherit;font-size:13px;color:var(--ink);min-height:36px;
@@ -1363,7 +1415,7 @@
      header that stays put on a long list, and rows that answer the pointer. */
   table.grid{font-size:12.5px;}
   table.grid th{position:sticky;top:0;z-index:1;background:var(--surface);
-    font:700 9.5px/1.3 inherit;letter-spacing:.11em;text-transform:uppercase;
+    font:700 var(--t-micro)/1.3 inherit;letter-spacing:.08em;text-transform:uppercase;
     color:var(--muted);padding:11px 10px;border-bottom:1px solid var(--border);}
   table.grid td{padding:11px 10px;border-bottom:1px solid var(--border);
     font-variant-numeric:tabular-nums;}
@@ -1378,7 +1430,7 @@
   /* ── pills ─────────────────────────────────────────────────────────────
      Severity is the one thing on this page that must never be misread, so it
      keeps a filled chip and gains a little air. */
-  .pill{padding:3px 8px;border-radius:5px;font:700 9.5px/1.3 inherit;letter-spacing:.08em;
+  .pill{padding:3px 8px;border-radius:5px;font:700 var(--t-micro)/1.3 inherit;letter-spacing:.06em;
     text-transform:uppercase;}
 
   /* ── the wear bar, as an instrument ────────────────────────────────────
@@ -1918,10 +1970,15 @@
 
     <div class="lsub" data-lsub="cover">
     <div class="section">
-      <h2 data-i18n="lp_title">The programme, honestly counted</h2>
-      <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
-        <div class="sub" data-i18n="lp_sub">How much of the fleet is audited, verified and standardised — against the register, not against the machines somebody happened to visit. Every number states its denominator, because those two get mistaken for each other and that is how a programme reports 90% and means 90% of eleven machines.</div></details>
+      <!-- "The programme, honestly counted" is a good sentence about a table
+           and a poor name for one. The counts that used to be a paragraph are
+           the header; the paragraph is behind Methodology. -->
+      <div class="secthd"><h2 data-i18n="lp_title2">Programme coverage</h2>
+        <span class="spacer"></span><span class="hdfacts" id="lubeProgHd"></span></div>
       <div id="lubeProg"></div>
+      <div class="insight" id="lubeProgNote"></div>
+      <details class="method"><summary data-i18n="methodology">Methodology</summary>
+        <div class="sub" data-i18n="lp_sub">How much of the fleet is audited, verified and standardised — against the register, not against the machines somebody happened to visit. Every number states its denominator, because those two get mistaken for each other and that is how a programme reports 90% and means 90% of eleven machines.</div></details>
     </div>
 
     </div>
@@ -2271,6 +2328,17 @@ const I18N={
   av_unit:"By machine",
   av_group:"How to show the register",
   a_th_find:"Finding → action",
+  lp_title2:"Programme coverage",
+  methodology:"Methodology",
+  lp_th_metric:"Metric",
+  lp_th_cov:"Coverage",
+  lp_th_result:"Result",
+  lp_th_src:"Source",
+  lp_th_gap:"Gap",
+  lp_hd_comp:"compartments",
+  lp_hd_ref:"referenced units",
+  lp_hd_reg:"registered units",
+  lp_insight:"Largest gap: {n} still to reach on “{m}”. Start with critical equipment and the high-volume lubricant systems.",
   lm_all:"All classes", lm_machine:"Machine", lm_notset:"Not audited", lm_nocomp:"No such compartment",
   lm_alias:"recorded by make; identified as {m}", lm_csv:"⬇ Export CSV",
   lg_title:"Not on the sheet",
@@ -2713,6 +2781,17 @@ const I18N={
   av_unit:"По машинам",
   av_group:"Как показать реестр",
   a_th_find:"Находка → действие",
+  lp_title2:"Охват программы",
+  methodology:"Методика",
+  lp_th_metric:"Показатель",
+  lp_th_cov:"Охват",
+  lp_th_result:"Результат",
+  lp_th_src:"Источник",
+  lp_th_gap:"Осталось",
+  lp_hd_comp:"узлов",
+  lp_hd_ref:"машин со справочником",
+  lp_hd_reg:"машин в реестре",
+  lp_insight:"Наибольший разрыв: {n} по показателю «{m}». Начните с критичной техники и систем с наибольшим расходом.",
   lm_all:"Все классы", lm_machine:"Машина", lm_notset:"Не проверено", lm_nocomp:"Нет такого узла",
   lm_alias:"записано по марке; определено как {m}", lm_csv:"⬇ Экспорт CSV",
   lg_title:"Не попало на лист",
@@ -6268,35 +6347,70 @@ function lubeProgramme(){
 
 function renderLubeProg(){
   const P = lubeProgramme();
-  const stage = (n, d, key, note, from) => {
-    const pc = d ? (n / d * 100) : 0;
-    return `<div class="pgrow" title="${esc(t(note))}">
-      <div class="pglab"><b>${esc(t(key))}</b></div>
-      <div class="pgbar"><span style="width:${Math.max(pc,0.6).toFixed(2)}%"></span></div>
-      <div class="pgnum"><b>${fmtN(n)}</b><i>${esc(t("lp_of",{n:fmtN(d)}))} · ${
-        pc>0&&pc<1?"<1":Math.round(pc)}%</i></div>
-      <div class="pgwhy"><span class="w">${esc(t(note))}</span><span class="from">${esc(t(from))}</span></div>
-    </div>`;
-  };
+  /* A SCORECARD, not seven stacked blocks each carrying its own sentence.
+     Every row is one metric: how far it has got, the count behind that, where
+     the number comes from, and — the column that was missing — how much is
+     left. The sentence each row used to carry is on the metric's own tooltip,
+     which is where a definition belongs: available to whoever does not know it,
+     invisible to everybody who does. */
+  const ROWS = [
+    ["lp_covered",  P.covered,    P.siteUnits, "lp_src_ref",  "lp_covered_w",  "cover"],
+    ["lp_sourced",  P.refKnown,   P.refTotal,  "lp_src_ref",  "lp_sourced_w",  "sourced"],
+    ["lp_audited",  P.audited,    P.instances, "lp_src_app",  "lp_audited_w",  "audited"],
+    ["lp_current",  P.current,    P.instances, "lp_src_app",  "lp_current_w",  "current"],
+    ["lp_verified", P.verified,   P.instances, "lp_src_app",  "lp_verified_w", "verified"],
+    ["lp_conform",  P.conformant, P.instances, "lp_src_calc", "lp_conform_w",  "conform"],
+    ["lp_sampled",  P.sampled,    P.instances, "lp_src_lab",  "lp_sampled_w",  "sampled"],
+  ];
+  const SRC = { lp_src_ref:"ref", lp_src_app:"app", lp_src_calc:"calc", lp_src_lab:"lab" };
+  /* Red is for something that is urgent, and "nobody has started" is not
+     urgent — it is unstarted. Painting every low percentage red teaches a
+     reader to stop seeing red, which is the one colour that has to keep
+     working. Grey where nothing has begun, amber where it has begun and is
+     incomplete, green where it is essentially done. */
+  const band = (n,d) => !d ? "none" : n===0 ? "none"
+                      : (n/d)>=0.9 ? "good" : "warn";
+  const body = ROWS.map(([lab,n,d,src,why,key])=>{
+    const pc = d ? (n/d*100) : 0, gap = Math.max(0, d-n), bd = band(n,d);
+    return `<tr class="scrow${lubeProgSel===key?" on":""}" tabindex="0" data-lpk="${key}"
+        title="${esc(t(why))}">
+      <th scope="row"><span class="dot ${bd}"></span>${esc(t(lab))}</th>
+      <td class="scbar"><span class="track"><i class="${bd}" style="width:${
+        Math.max(pc, n?1.5:0).toFixed(2)}%"></i></span></td>
+      <td class="num"><b>${fmtN(n)}</b><span class="of"> / ${fmtN(d)}</span>
+        <span class="pcv">${pc>0&&pc<1?"<1":Math.round(pc)}%</span></td>
+      <td><span class="srcb ${SRC[src]}">${esc(t(src))}</span></td>
+      <td class="num gap${gap?"":" zero"}">${fmtN(gap)}</td></tr>`;
+  }).join("");
   $("lubeProg").innerHTML =
-    `<div class="pgnote">${esc(t("lp_note",{n:fmtN(P.instances), u:fmtN(P.covered),
-       s:fmtN(P.siteUnits)}))}</div>` +
-    `<div class="pgrid">` +
-      stage(P.covered,    P.siteUnits, "lp_covered",  "lp_covered_w",  "lp_src_ref") +
-      stage(P.refKnown,   P.refTotal,  "lp_sourced",  "lp_sourced_w",  "lp_src_ref") +
-      stage(P.audited,    P.instances, "lp_audited",  "lp_audited_w",  "lp_src_app") +
-      stage(P.current,    P.instances, "lp_current",  "lp_current_w",  "lp_src_app") +
-      stage(P.verified,   P.instances, "lp_verified", "lp_verified_w", "lp_src_app") +
-      stage(P.conformant, P.instances, "lp_conform",  "lp_conform_w",  "lp_src_calc") +
-      stage(P.sampled,    P.instances, "lp_sampled",  "lp_sampled_w",  "lp_src_lab") +
-    `</div>`;
-  /* The four tiles that used to sit above this — models, units, compartments,
-     audited — are gone. Two of them were the funnel's first and third rows
-     restated without their denominators, and the other two are in the sentence
-     directly above it. Four numbers repeating what the thing beneath them says
-     better is not a summary; it is the reader reading the same fact twice and
-     wondering which one to believe. */
+    `<table class="grid scorecard"><thead><tr>
+        <th scope="col">${esc(t("lp_th_metric"))}</th>
+        <th scope="col">${esc(t("lp_th_cov"))}</th>
+        <th scope="col" class="num">${esc(t("lp_th_result"))}</th>
+        <th scope="col">${esc(t("lp_th_src"))}</th>
+        <th scope="col" class="num">${esc(t("lp_th_gap"))}</th>
+      </tr></thead><tbody>${body}</tbody></table>`;
+  /* One line, naming the biggest actionable gap and what to do about it. It
+     replaces seven sentences, one under each metric, that between them said
+     the same thing seven times. */
+  const worst = ROWS.map(([lab,n,d])=>({lab, gap:Math.max(0,(d||0)-n)}))
+                    .sort((x,y)=>y.gap-x.gap)[0];
+  $("lubeProgNote").textContent = worst && worst.gap
+    ? t("lp_insight", { n: fmtN(worst.gap), m: t(worst.lab).toLowerCase() }) : "";
+  $("lubeProgHd").innerHTML =
+      `<span><b>${fmtN(P.instances)}</b> ${esc(t("lp_hd_comp"))}</span>`
+    + `<span><b>${fmtN(P.covered)}</b> ${esc(t("lp_hd_ref"))}</span>`
+    + `<span><b>${fmtN(P.siteUnits)}</b> ${esc(t("lp_hd_reg"))}</span>`;
+  /* A row is a filter. "0 of 1,218 ever audited" is a number until it is the
+     list of what those 1,218 are. */
+  $("lubeProg").querySelectorAll("tr[data-lpk]").forEach(tr=>{
+    const go=()=>{ lubeProgSel = lubeProgSel===tr.dataset.lpk ? "" : tr.dataset.lpk;
+                   renderLubeProg(); renderLubeRef(); };
+    tr.onclick=go;
+    tr.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } };
+  });
 }
+let lubeProgSel="";
 
 /* ── the 2027 shelf against the recommendations ───────────────────────────
    Four documents, four ways of disagreeing. None of these numbers is a

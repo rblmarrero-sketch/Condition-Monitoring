@@ -203,7 +203,12 @@ const TABS = ['overview', 'failure', 'wear', 'actions', 'due', 'equipment', 'lub
     lcTiles: document.querySelectorAll('#lcKpis > *').length,
     parts: document.querySelectorAll('.lcpart').length,
     pressable: document.querySelectorAll('.lcpart[data-lcgo]').length,
-    funnelRows: document.querySelectorAll('#lubeProg .pgrow').length,
+    /* The funnel is a scorecard TABLE now — one row per metric, with its
+       coverage bar, its count against its denominator, where the number came
+       from and how much is left. Same seven stages, same denominators, 1,100px
+       of stacked blocks down to 390. What this line has always checked is that
+       the tab leads with the stages and not with a strip of tiles. */
+    funnelRows: document.querySelectorAll('#lubeProg tbody tr').length,
   }));
   ok('the lubrication tab leads with a funnel, not a tile strip',
     lube.funnelRows >= 6, lube.funnelRows + ' stages');
