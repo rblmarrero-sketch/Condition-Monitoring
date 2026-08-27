@@ -94,7 +94,17 @@ const attr = p => p.evaluate(() => document.documentElement.getAttribute('data-t
 
   console.log('\nthe pill says whether the work is safe');
   ({ ctx, p } = await app(b));
-  ok('Drive answered, so it says synced', (await pill(p)).t === 'Synced', JSON.stringify(await pill(p)));
+  /* READ THE APP'S OWN WORD FOR IT. This was the literal string 'Synced',
+     which the pill no longer says — it claims only what the phone can actually
+     know, that every file was accepted. What this line is testing is the
+     SETTLED STATE after Drive answered, so it asks for the state and takes the
+     label from the app's own dictionary rather than keeping a second copy of
+     it here that has to be found and edited every time the wording improves. */
+  const settledPill = await pill(p);
+  const settledWord = await p.evaluate(() => I18N.en.net_synced);
+  ok('Drive answered, so it says settled',
+     settledPill.c.split(/\s+/).indexOf('on') >= 0 && settledPill.t === settledWord,
+     JSON.stringify(settledPill));
   ok('and it is green', (await pill(p)).c.includes('on'));
 
   await p.evaluate(async () => { await dbPut({ id: 'Q1', cls: 'HT', type: 'MP', equip: 'TK900',
@@ -116,7 +126,9 @@ const attr = p => p.evaluate(() => document.documentElement.getAttribute('data-t
   ok('the app never claims "online" anywhere in the header',
     !/online/i.test(await p.textContent('header')), await p.textContent('header'));
   await p.evaluate(() => netSeen(true)); await p.waitForTimeout(300);
-  ok('Drive answering restores it', (await pill(p)).t === 'Synced');
+  const back = await pill(p);
+  ok('Drive answering restores it',
+     back.c.split(/\s+/).indexOf('on') >= 0 && back.t === settledWord, JSON.stringify(back));
 
   console.log('\n  the other states');
   await ctx.setOffline(true);
