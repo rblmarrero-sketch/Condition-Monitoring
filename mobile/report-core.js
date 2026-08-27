@@ -216,9 +216,9 @@
 #rptRoot .bm-fold{fill:none;stroke:#8b939b;stroke-width:1.4;stroke-dasharray:6 4;}
 #rptRoot .bm-div{fill:none;stroke:#c8d0d6;stroke-width:.9;}
 #rptRoot .bm-lip{fill:none;stroke:#8a6300;stroke-width:4;stroke-linecap:round;}
-#rptRoot .bm-face{fill:#5b6670;font:700 11px/1 inherit;letter-spacing:.12em;
+#rptRoot .bm-face{fill:#5b6670;font-weight:700;font-size:11px;line-height:1;font-family:inherit;letter-spacing:.12em;
   paint-order:stroke fill;stroke:#fff;stroke-width:3px;stroke-linejoin:round;}
-#rptRoot .bm-way{fill:#8b939b;font:700 10px/1 inherit;letter-spacing:.1em;}
+#rptRoot .bm-way{fill:#8b939b;font-weight:700;font-size:10px;line-height:1;font-family:inherit;letter-spacing:.1em;}
 #rptRoot .bm-hit{fill:none;}
 /* Printed, often in grey, so state is carried by the fill AND the outline
    weight — a station at the limit has to read as different on a page with no
@@ -275,7 +275,7 @@
    and for the grey office printer at the same time. The tray map has done it
    this way since it shipped; this is the same treatment, not a new idea. */
 #rptRoot .um-num .um-puck{fill:#fff;stroke:#16242c;stroke-width:1.6;}
-#rptRoot .um-num .um-n{font:700 12px/1 inherit;fill:#16242c;}
+#rptRoot .um-num .um-n{font-weight:700;font-size:12px;line-height:1;font-family:inherit;fill:#16242c;}
 #rptRoot .um-num.done .um-puck{fill:#0a7134;stroke:#075025;stroke-width:1.2;}
 #rptRoot .um-num.watch .um-puck{fill:#ec835a;stroke:#8a3d16;stroke-width:2.4;}
 #rptRoot .um-num.act .um-puck{fill:#d03b3b;stroke:#5e1010;stroke-width:3.4;}
@@ -285,7 +285,7 @@
 #rptRoot .um-num .um-hit{display:none;}
 #rptRoot .umside{font-size:9px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;
   color:#5b6670;text-align:center;padding:1px 0 3px;}
-#rptRoot .um-side{font:700 17px/1 inherit;fill:#8b939b;letter-spacing:.04em;}
+#rptRoot .um-side{font-weight:700;font-size:17px;line-height:1;font-family:inherit;fill:#8b939b;letter-spacing:.04em;}
 #rptRoot .ucmap .mf-body{fill:#e6eaee;stroke:#5b6670;stroke-width:1.3;stroke-linejoin:round;}
 #rptRoot .ucmap .mf-part{fill:#f2f5f7;stroke:#5b6670;stroke-width:1.2;stroke-linejoin:round;}
 #rptRoot .ucmap .mf-rail{fill:none;stroke:#5b6670;stroke-width:1.3;}
@@ -295,7 +295,7 @@
 #rptRoot .ucmap .mf-ground{fill:none;stroke:#a9b2ba;stroke-width:1.1;}
 #rptRoot .ucmap .mf-lead{fill:none;stroke:#a9b2ba;stroke-width:.9;stroke-dasharray:3 3;opacity:.7;}
 #rptRoot .um-spot .um-puck{fill:#fff;stroke:#5b6670;stroke-width:2.4;}
-#rptRoot .um-spot .um-n{font:700 16px/1 inherit;fill:#5b6670;}
+#rptRoot .um-spot .um-n{font-weight:700;font-size:16px;line-height:1;font-family:inherit;fill:#5b6670;}
 #rptRoot .um-spot .um-n.um-chain{font-size:14px;letter-spacing:.02em;}
 #rptRoot .um-spot.done .um-puck{fill:#0a7134;stroke:#0a7134;}
 #rptRoot .um-spot.watch .um-puck{fill:#ec835a;stroke:#ec835a;}

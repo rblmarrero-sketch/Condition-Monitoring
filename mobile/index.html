@@ -197,7 +197,7 @@
   #cardInspection.folded{padding-bottom:8px;}
   .foldrow{display:flex;align-items:center;gap:8px;width:100%;min-height:44px;
     margin:0;padding:2px 0;background:none;border:0;text-align:left;cursor:pointer;
-    color:var(--ink-2);font:600 12.5px/1 inherit;font-family:inherit;}
+    color:var(--ink-2);font-weight:600;font-size:12.5px;line-height:1;font-family:inherit;}
   .foldrow:active{opacity:.7;}
   /* Only the card that holds the round is tinted, and only its head. Tinting
      the whole screen would put a wash behind every status pill on it. */
@@ -628,7 +628,7 @@
   #ucFields.dock .sh-nav{order:9;display:flex;gap:8px;margin-top:8px;}
   #ucFields.dock .sh-nav button{flex:1;min-width:0;min-height:44px;border-radius:11px;
     background:var(--surface-2);border:1px solid var(--border);color:var(--ink);
-    font:650 14px/1 inherit;cursor:pointer;}
+    font-weight:650;font-size:14px;line-height:1;font-family:inherit;cursor:pointer;}
   #ucFields.dock .sh-nav button.pri{background:var(--accent);border-color:var(--accent);
     color:var(--accent-ink);}
   #ucFields.dock #ucBaseTog{order:10;}
@@ -653,7 +653,7 @@
   #ucFields.dock .ucna-h,#ucFields.dock .guide-t,#getFields .guide-t{
     display:flex;align-items:center;gap:8px;
     width:100%;min-height:44px;margin:0;padding:4px 2px;background:none;border:0;
-    border-top:1px solid var(--line);color:var(--ink-2);font:600 12.5px/1 inherit;
+    border-top:1px solid var(--line);color:var(--ink-2);font-weight:600;font-size:12.5px;line-height:1;font-family:inherit;
     text-align:left;cursor:pointer;}
   #ucFields.dock .ucna,#ucFields.dock .guide,#getFields .guide{
     border:0;background:none;padding:0;margin:0;}
@@ -676,7 +676,7 @@
   /* Whether the row is on screen is the renderer's call, not the cascade's: it
      is there when the point has a drawing behind it and gone when it has not.
      A default of display:none here is what hid the GET round's copy outright. */
-  .ucfigtog{width:100%;font:600 12.5px/1 inherit;color:var(--muted);
+  .ucfigtog{width:100%;font-weight:600;font-size:12.5px;line-height:1;font-family:inherit;color:var(--muted);
     background:none;border:0;border-bottom:1px dashed var(--line);padding:9px 0 10px;
     margin:0 0 10px;cursor:pointer;text-align:left;}
   .ucfig{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;
@@ -703,7 +703,7 @@
   /* 44 px, like every other row you have to hit with a glove on. This one was
      27 — the text's own line box and nothing more. */
   .guide-t{display:flex;align-items:center;gap:6px;width:100%;min-height:44px;background:none;border:0;
-    padding:6px 0;font:600 12.5px/1.3 inherit;color:var(--accent);cursor:pointer;text-align:left;}
+    padding:6px 0;font-weight:600;font-size:12.5px;line-height:1.3;font-family:inherit;color:var(--accent);cursor:pointer;text-align:left;}
   .guide-b{display:grid;gap:8px;padding:10px 12px;margin-top:2px;border-radius:10px;
     background:var(--surface-2);border:1px solid var(--line);}
   .guide-b div{font-size:12.5px;line-height:1.55;color:var(--ink-2);}
@@ -757,7 +757,7 @@
   .ucbase .bset{display:flex;flex-wrap:wrap;gap:8px;}
   .ucbase .bset button{flex:1 1 130px;min-height:44px;border-radius:10px;cursor:pointer;
     border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);
-    font:650 13px/1.25 inherit;padding:6px 10px;}
+    font-weight:650;font-size:13px;line-height:1.25;font-family:inherit;padding:6px 10px;}
   .ucbase .bset button.off{background:var(--surface);color:var(--ink-2);border-color:var(--line);}
   .ucbase .bset button:disabled{opacity:.45;cursor:default;}
   .ucbase label.fld{margin:9px 0 0;}
@@ -850,13 +850,13 @@
   .ucna{border-top:1px solid var(--line);padding-top:9px;margin-bottom:2px;}
   .ucna-h{font-size:12.5px;color:var(--muted);margin-bottom:6px;}
   .chips{display:flex;flex-wrap:wrap;gap:7px;}
-  .chips button{font:600 12.5px/1 inherit;color:var(--ink);background:var(--surface-2);
+  .chips button{font-weight:600;font-size:12.5px;line-height:1;font-family:inherit;color:var(--ink);background:var(--surface-2);
     border:1px solid var(--line);border-radius:999px;padding:9px 13px;cursor:pointer;}
   .chips button.on{background:color-mix(in srgb,var(--warning) 16%,var(--surface));border-color:var(--warn-ink);color:var(--warn-ink);}
   .stale{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between;
     background:var(--accent-soft);border:1px solid var(--accent);border-radius:12px;
     padding:12px 14px;margin:0 0 12px;font-size:13.5px;color:var(--ink);line-height:1.45;}
-  .stale button{font:700 13px/1 inherit;color:var(--accent-ink);background:var(--accent);
+  .stale button{font-weight:700;font-size:13px;line-height:1;font-family:inherit;color:var(--accent-ink);background:var(--accent);
     border:0;display:inline-flex;align-items:center;border-radius:9px;min-height:44px;padding:0 16px;cursor:pointer;white-space:nowrap;}
   .verlink{color:var(--accent);font-weight:700;text-decoration:none;
     display:inline-flex;align-items:center;min-height:44px;padding:0 10px;margin:-10px 0;}
@@ -877,7 +877,7 @@
     background:linear-gradient(90deg,transparent,var(--surface-2));}
   .ucswipe{font-size:11.5px;color:var(--muted);text-align:center;margin:-4px 0 10px;}
   .ucmap{display:block;width:100%;height:auto;}
-  .um-side{font:700 17px/1 inherit;fill:var(--muted);letter-spacing:.04em;}
+  .um-side{font-weight:700;font-size:17px;line-height:1;font-family:inherit;fill:var(--muted);letter-spacing:.04em;}
   /* A photograph of the model's own frame, dropped back far enough that the
      numbers on top of it stay numbers. */
   .ucmap .um-photo{opacity:1;}
@@ -910,13 +910,13 @@
      the same photograph twice. */
   .ucsides{flex:0 0 100%;display:flex;gap:8px;margin:0 0 9px;}
   .ucsides button{flex:1 1 0;min-height:44px;border:1px solid var(--line);
-    background:var(--surface);color:var(--ink-2);border-radius:10px;font:700 13.5px/1 inherit;
+    background:var(--surface);color:var(--ink-2);border-radius:10px;font-weight:700;font-size:13.5px;line-height:1;font-family:inherit;
     letter-spacing:.04em;text-transform:uppercase;cursor:pointer;}
   .ucsides button.on{background:var(--accent);border-color:var(--accent);color:#fff;}
   .ucgroups{flex:0 0 100%;display:flex;flex-wrap:wrap;gap:7px;margin:10px 0 0;}
   .ucgroups button{display:inline-flex;align-items:center;gap:7px;min-height:44px;
     padding:6px 12px 6px 6px;border:1px solid var(--line);background:var(--surface);
-    color:var(--ink);border-radius:999px;font:600 12.5px/1.25 inherit;text-align:left;cursor:pointer;}
+    color:var(--ink);border-radius:999px;font-weight:600;font-size:12.5px;line-height:1.25;font-family:inherit;text-align:left;cursor:pointer;}
   .ucgroups button i{flex:0 0 auto;width:22px;height:22px;border-radius:999px;
     display:inline-flex;align-items:center;justify-content:center;font-style:normal;
     font-weight:800;font-size:11.5px;background:var(--surface-2);border:1px solid var(--line);}
@@ -947,9 +947,9 @@
   .bm-fold{fill:none;stroke:var(--bm-fold);stroke-width:1.6;stroke-dasharray:7 5;opacity:.85;}
   .bm-div{fill:none;stroke:var(--bm-edge);stroke-width:1;opacity:.7;}
   .bm-lip{fill:none;stroke:var(--warn-ink);stroke-width:5;stroke-linecap:round;opacity:.75;}
-  .bm-face{fill:var(--ink-2);font:700 11px/1 inherit;letter-spacing:.09em;
+  .bm-face{fill:var(--ink-2);font-weight:700;font-size:11px;line-height:1;font-family:inherit;letter-spacing:.09em;
     paint-order:stroke fill;stroke:var(--surface);stroke-width:3.5px;stroke-linejoin:round;opacity:.9;}
-  .bm-way{fill:var(--muted);font:700 10.5px/1 inherit;letter-spacing:.1em;opacity:.75;}
+  .bm-way{fill:var(--muted);font-weight:700;font-size:10.5px;line-height:1;font-family:inherit;letter-spacing:.1em;opacity:.75;}
   /* The surface is the control, not the dot — 63 stations across a phone puts
      them about seven pixels apart, and nothing that small is a button. */
   .bm-hit{fill:transparent;cursor:pointer;}
@@ -963,7 +963,7 @@
   /* A chip, not bare text: over a field of dots, unbacked type is unreadable at
      exactly the moment it is needed. */
   .bm-tag rect{fill:var(--accent);}
-  .bm-tag text{fill:var(--accent-ink);font:800 14px/1 inherit;}
+  .bm-tag text{fill:var(--accent-ink);font-weight:800;font-size:14px;line-height:1;font-family:inherit;}
   /* Its own shape until the sheet wants the room, then it gives way and the
      drawing scales down inside it — whole, never covered, never half scrolled.
      This is what the old 300x640 portrait drawing could not do at any sheet
@@ -1049,7 +1049,7 @@
   .tbnote.open button span{white-space:normal;overflow:visible;}
   .ucmembers{flex:0 0 100%;display:flex;flex-wrap:wrap;gap:7px;margin:9px 0 0;}
   .ucmembers button{min-width:56px;min-height:44px;padding:6px 14px;border:1px solid var(--line);
-    background:var(--surface);color:var(--ink);border-radius:12px;font:700 13px/1 inherit;cursor:pointer;}
+    background:var(--surface);color:var(--ink);border-radius:12px;font-weight:700;font-size:13px;line-height:1;font-family:inherit;cursor:pointer;}
   .ucmembers button.on{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);}
   .ucmembers button.done{border-color:var(--good);}
   .ucmembers button.watch{border-color:var(--warn-ink);}
@@ -1057,7 +1057,7 @@
   .ucmembers button.na{border-style:dashed;}
   /* the numbers on the picture */
   .ucmap .um-num .um-puck{fill:var(--surface);stroke:var(--ink-2);stroke-width:1.6;}
-  .ucmap .um-num .um-n{font:800 13px/1 inherit;fill:var(--ink);}
+  .ucmap .um-num .um-n{font-weight:800;font-size:13px;line-height:1;font-family:inherit;fill:var(--ink);}
   /* State in the FILL and in the RING. Serviceable green against watch orange
      measures dE 5.6 under protanopia, and green against red dE 4.1 under
      deuteranopia — the same colour to about one man in twelve. The number on
@@ -1176,7 +1176,7 @@
      that matters here. */
   .um-spot{cursor:pointer;}
   .um-spot .um-puck{fill:var(--surface);stroke:var(--ink-2);stroke-width:2.4;}
-  .um-spot .um-n{font:700 16px/1 inherit;fill:var(--ink-2);pointer-events:none;}
+  .um-spot .um-n{font-weight:700;font-size:16px;line-height:1;font-family:inherit;fill:var(--ink-2);pointer-events:none;}
   .um-spot .um-n.um-chain{font-size:14px;letter-spacing:.02em;}
   .um-spot.done .um-puck{fill:var(--good);stroke:var(--good);}
   .um-spot.watch .um-puck{fill:var(--warning);stroke:var(--warning);}
@@ -1188,7 +1188,7 @@
   .um-spot:focus-visible{outline:none;}
   .um-spot:focus-visible .um-puck{stroke:var(--accent);stroke-width:4.5;}
   .ucviews{display:flex;gap:7px;margin:0 0 9px;}
-  .ucviews button{flex:1;min-width:0;font:600 13px/1 inherit;color:var(--muted);background:var(--surface-2);
+  .ucviews button{flex:1;min-width:0;font-weight:600;font-size:13px;line-height:1;font-family:inherit;color:var(--muted);background:var(--surface-2);
     border:1px solid var(--line);border-radius:10px;padding:10px;cursor:pointer;}
   .ucviews button.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);}
   .uctally{display:flex;flex-wrap:wrap;gap:6px 14px;margin:0 0 10px;
