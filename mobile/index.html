@@ -2450,6 +2450,11 @@ const I18N = {
        believe nothing has left the phone when the finding is already on a
        screen in the office. */
     up_rec:"Findings sent — photos still going",
+  /* Not "sent". The phone went back and asked, and the server listed every
+     file — the only state in this app that is about the folder rather than
+     about the conversation that filled it. */
+  up_conf:"Confirmed on the server — {n} file(s) listed",
+  up_short:"Sent, but the server is missing {n} of {of} files",
     up_sending:"Sending now",
     up_err:"Needs attention",
     up_never:"Saved on this phone only", up_at:"sent {t}",
@@ -2859,6 +2864,8 @@ const I18N = {
     up_yes:"Отправлено — все файлы приняты", up_wait:"Ожидает отправки", up_part:"Отправка {n}/{of}",
     up_missing:"ждёт {d}",
     up_rec:"Данные отправлены — фото ещё идут",
+  up_conf:"Подтверждено сервером — файлов: {n}",
+  up_short:"Отправлено, но на сервере нет {n} из {of} файлов",
     up_sending:"Идёт отправка",
     up_err:"Требует внимания",
     up_never:"Только на этом телефоне", up_at:"отправлено {t}",
@@ -7587,8 +7594,24 @@ async function renderPending(){
      to disagree. */
   const upState = (rec, nAtt) => {
     const dests = (typeof activeDests === "function") ? activeDests() : [];
-    if (rec.up) return { k:"ok", txt:t("up_yes") + (rec.upAt
-      ? " · " + t("up_at", { t:String(rec.upAt).slice(0,16).replace("T"," ") }) : "") };
+    if (rec.up) {
+      /* THE ONE STATE THAT IS ABOUT THE FOLDER RATHER THAN THE CONVERSATION.
+         `up` means every file was accepted; `conf` means the phone went back
+         afterwards and the server listed them. Only the second is worth the
+         word "confirmed", and only the second can name a file that is not
+         there — which is a different problem from a failed upload, and needs
+         different work, so it gets its own sentence rather than being folded
+         into an error. */
+      const c=rec.conf;
+      if (c && c.of && c.n === c.of)
+        return { k:"ok", txt:t("up_conf", { n:c.of }) + " · "
+          + t("up_at", { t:String(c.at||"").slice(0,16).replace("T"," ") }) };
+      if (c && c.of && c.n < c.of)
+        return { k:"part", txt:t("up_short", { n:c.of-c.n, of:c.of })
+          + (c.miss && c.miss.length ? " · " + c.miss[0] : "") };
+      return { k:"ok", txt:t("up_yes") + (rec.upAt
+        ? " · " + t("up_at", { t:String(rec.upAt).slice(0,16).replace("T"," ") }) : "") };
+    }
     /* WHAT HAS LEFT THE PHONE IS ASKED BEFORE WHETHER SENDING IS SWITCHED ON.
 
        `up:1` was already above this line for exactly this reason, and the two
@@ -8916,6 +8939,68 @@ async function putBatch(UP, files, rec, sent){
      refused, since that is the case that says something is actually wrong. */
   if(bad.length && bad.length===files.length) throw new Error(bad[0].error||"batch refused");
 }
+/* ---- READ-AFTER-WRITE: ASK THE SERVER WHAT IT ACTUALLY HAS ---------------
+
+   `up:1` has always meant "the endpoint returned 2xx for every file I sent".
+   That is a statement about a conversation, not about a folder — and the two
+   come apart in exactly the ways that matter: a write accepted and then lost, a
+   file stored at zero bytes, a folder the endpoint created for one destination
+   and not the other. The phone had no way to tell any of that from success,
+   which is why the queue's best state is worded as acceptance rather than as
+   arrival.
+
+   This asks afterwards. `?action=list` is answered by both backends the site
+   runs, returns names and sizes, and takes the secret the phone already sends
+   with its ping — so no deployment has to change for a round to be confirmed.
+
+   ONE request per sync run, not per record: list each folder that was written
+   to once, then check every finished record against what came back. A record
+   whose files are all present, none of them empty, is confirmed and says so.
+   One that comes up short is NOT downgraded to a failure — it is named, with
+   the file that is missing, because "sent, and the server does not have all of
+   it" is a different sentence from "did not send" and needs different work. */
+function listCapable(d){ return d && (d.id==="gas" || d.id==="mirror") && d.url; }
+async function serverNames(dest, folder){
+  const u=new URL(dest.url);
+  u.searchParams.set("action","list");
+  if(folder) u.searchParams.set("folder", folder);
+  if(dest.sec) u.searchParams.set("secret", dest.sec);
+  const r=await fetchT(u.toString(), {method:"GET"}, 25000);
+  if(!r.ok) throw new Error(await httpErr(r));
+  const j=JSON.parse(await r.text());
+  if(!j || j.ok===false) throw new Error((j&&j.error)||"list refused");
+  const m=new Map();
+  (j.files||[]).forEach(f=>{ if(f&&f.name) m.set(String(f.name), Number(f.size||0)); });
+  return m;
+}
+/* `done` is [{rec, names}] for the records that finished in this run. Returns
+   nothing; it writes the verdict onto each record and leaves the rendering to
+   the queue, which is where every other piece of this state already lives. */
+async function confirmRun(done, dests){
+  const able=(dests||[]).filter(listCapable);
+  if(!able.length || !done.length) return;
+  const dest=able[0];
+  /* Folders, not records: two dozen rounds on one day share one folder, and
+     listing it once is one request instead of two dozen. */
+  const byFolder=new Map();
+  done.forEach(d=>{ const f=expandFolder(dest.folder||"", d.rec);
+    (byFolder.get(f) || byFolder.set(f,[]).get(f)).push(d); });
+  for(const [folder, group] of byFolder){
+    let have;
+    try{ have=await serverNames(dest, folder); }
+    catch(e){ continue; }        // unanswered is not "missing" — say nothing
+    for(const {rec, names} of group){
+      const missing=names.filter(n=>!have.has(n));
+      const empty=names.filter(n=>have.has(n) && have.get(n)===0);
+      const fresh=await dbGet(rec.id);
+      if(!fresh || (fresh.rev||0)!==(rec.rev||0)) continue;   // edited under us
+      fresh.conf={ at:new Date().toISOString(), of:names.length,
+                   n:names.length-missing.length-empty.length,
+                   miss:missing.concat(empty).slice(0,8), dest:dest.id };
+      await dbPut(fresh);
+    }
+  }
+}
 async function putAll(dest, files, rec, sent){
   if(!files.length) return;
   sent = sent || {};
@@ -9094,6 +9179,7 @@ async function syncNow(manual){
   try{
     const dests=activeDests();
     const all=(await dbAll()).filter(r=>!r.up);
+    const justDone=[];
     let consecutive=0;
     for(const rec of all){
       /* Only when somebody is looking at the queue. renderPending() rebuilds
@@ -9158,6 +9244,11 @@ async function syncNow(manual){
         if(fresh.up) { fresh.upAt=new Date().toISOString(); delete fresh.sent; }
         else fresh.sent=sent;
         await dbPut(fresh);
+        /* Finished this run, so it is a candidate for the read-back below.
+           The names are taken from the payload actually sent rather than
+           rebuilt afterwards, because rebuilding is how the two lists come to
+           disagree about what was supposed to be there. */
+        if(fresh.up && payload) justDone.push({rec:fresh, names:payload.map(f=>f.name)});
       }
       if(errs.length) lastErr=errs.join(" · ");
       if(todo.length) netSeen(progressed);          // evidence, not navigator.onLine
@@ -9174,6 +9265,10 @@ async function syncNow(manual){
        everything else rather than sitting on one phone where nobody but the
        inspector who wrote them can read them. */
     try{ await syncDefer(dests); }catch(e){ /* never fails a round's upload */ }
+    /* And now ASK the server what it has. One listing per folder written to,
+       after the writing is finished — never in the way of it, and never able
+       to fail an upload that already succeeded. */
+    try{ await confirmRun(justDone, dests); }catch(e){ /* silence is not a verdict */ }
   } finally {
     syncing=false; syncingId=null; renderSync(); renderPending(); renderNet();
     // Whatever this phone just pushed, someone else has pushed something too.
