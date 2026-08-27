@@ -263,11 +263,11 @@
   .sevseg button,.sevseg>span{font-size:14px;line-height:1.2;white-space:normal;overflow-wrap:anywhere;}
   /* Derived, not chosen: it wears the segment's shape so the reading is
      familiar, and none of its affordances so nobody reaches for it. */
-  .sevseg.ro>span{display:flex;align-items:center;justify-content:center;
+  .sevseg[aria-readonly="true"]>span{display:flex;align-items:center;justify-content:center;
     text-align:center;padding:12px 10px;border-radius:10px;cursor:default;
     border:1px solid var(--line);background:var(--surface-2);color:var(--muted);
     -webkit-user-select:none;user-select:none;}
-  .sevseg.ro>span.on{font-weight:650;}
+  .sevseg[aria-readonly="true"]>span.on{font-weight:650;}
   .fld>em.derived{display:block;margin-top:6px;font-style:normal;
     font-size:12px;color:var(--muted);}
   .seg button.on{background:var(--accent);color:var(--accent-ink);border-color:transparent;}
@@ -1562,7 +1562,7 @@
          grade; the office is where a severity may deliberately differ, with a
          reason attached. -->
     <div class="fld"><span data-i18n="lbl_sev">Severity (ISO 14224)</span>
-      <div class="seg sevseg ro" id="sevSeg" aria-readonly="true"
+      <div class="seg sevseg" id="sevSeg" aria-readonly="true"
            data-i18n-title="sev_derived_a" title="ISO severity, derived from the condition code">
         <span class="s-NOF" data-s="NOF" data-i18n="sev_NOF">No failure</span>
         <span class="s-INC" data-s="INC" data-i18n="sev_INC">Incipient</span>

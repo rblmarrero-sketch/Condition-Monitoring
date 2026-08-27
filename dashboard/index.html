@@ -2639,7 +2639,7 @@ const I18N={
   as_m_action:"recommended action", as_m_prio:"priority", as_m_owner:"responsible",
   as_m_due:"due date", as_m_disp:"authorised reason and approver",
   a_k_triage:"Needs triage", a_k_triage_s:"exceptions not yet planned",
-  a_f_triage:"Triage",
+  a_f_triage:"Triage", a_f_crit:"Critical", a_f_week:"Due this week", a_f_noown:"No owner",
   k_act_tri:"{n} not yet planned",
   u_disposed:"Dispositioned",
   u_alldisposed:"Every exception on this machine has an audited disposition ({n}).",
@@ -3134,7 +3134,7 @@ const I18N={
   as_m_action:"рекомендуемое действие", as_m_prio:"приоритет", as_m_owner:"ответственный",
   as_m_due:"срок", as_m_disp:"обоснование и утверждающий",
   a_k_triage:"Требует разбора", a_k_triage_s:"замечания без плана",
-  a_f_triage:"Разбор",
+  a_f_triage:"Разбор", a_f_crit:"Критичные", a_f_week:"Срок на неделе", a_f_noown:"Без ответственного",
   k_act_tri:"{n} без плана",
   u_disposed:"Решение принято",
   u_alldisposed:"По каждому замечанию этой машины есть зафиксированное решение ({n}).",
@@ -4561,6 +4561,7 @@ function renderActions(){
       card("open", t("a_k_open"), required, t("a_k_open_s",{n:rows.length}), "info")
     + card("over", t("a_k_overdue"), overdue, t("a_k_overdue_s"), "bad"+(overdue?"":" zero"))
     + card("triage", t("a_k_triage"), triage, t("a_k_triage_s"), "warn"+(triage?"":" zero"))
+    + card("noown", t("a_k_unowned"), rows.length-owned, t("a_k_unowned_s"), "warn")
     + `<div class="kpi"><span class="k">${esc(t("a_k_oldest"))}</span>
         <span class="v">${oldest?esc(oldest+" d"):"—"}</span>
         <span class="s">${esc(t("a_k_oldest_s"))}</span></div>`
@@ -4582,8 +4583,17 @@ function renderActions(){
           p:Math.round(done/rows.length*100)}))}</span></div>` : "";
 
   /* the segmented filter, with counts so the choice is informed */
-  const counts={ open:required, triage, over:overdue, mine:owned, all:rows.length };
-  $("aSeg").innerHTML=[["open","a_f_open"],["triage","a_f_triage"],["over","a_f_over"],["mine","a_f_owned"],["all","a_f_all"]]
+  const week=rows.filter(({i})=>{
+    if(!i.due || !stOpen(i.status)) return false;
+    const d=Math.round((Date.parse(i.due+"T00:00:00Z")-Date.parse(todayISO()+"T00:00:00Z"))/864e5);
+    return d>=0 && d<=7;
+  }).length;
+  const crit=rows.filter(({r,i})=>sevOf(r,i)==="CRI" && actionRequired(r,i)).length;
+  const counts={ open:required, triage, crit, over:overdue, week,
+                 noown:rows.length-owned, mine:owned, all:rows.length };
+  $("aSeg").innerHTML=[["open","a_f_open"],["triage","a_f_triage"],["crit","a_f_crit"],
+                       ["over","a_f_over"],["week","a_f_week"],["noown","a_f_noown"],
+                       ["mine","a_f_owned"],["all","a_f_all"]]
     .map(([k,lab])=>`<button type="button" data-af="${k}"${filt===k?' class="on"':''}>${
       esc(t(lab))}<span class="n">${counts[k]}</span></button>`).join("");
   $("aSeg").querySelectorAll("[data-af]").forEach(b=>b.onclick=()=>setAFilt(b.dataset.af));
@@ -4599,6 +4609,11 @@ function renderActions(){
               : filt==="mine" ? rows.filter(({i})=>i.owner)
               : filt==="triage" ? rows.filter(({r,i})=>actionState(r,i).k==="triage")
               : filt==="noown" ? rows.filter(({i})=>!i.owner)
+              : filt==="crit" ? rows.filter(({r,i})=>sevOf(r,i)==="CRI" && actionRequired(r,i))
+              : filt==="week" ? rows.filter(({i})=>{
+                  if(!i.due || !stOpen(i.status)) return false;
+                  const d=Math.round((Date.parse(i.due+"T00:00:00Z")-Date.parse(todayISO()+"T00:00:00Z"))/864e5);
+                  return d>=0 && d<=7; })
               : filt==="done" ? rows.filter(({r,i})=>["closed","noaction"].includes(actionState(r,i).k))
               /* "Open" means outstanding, which includes what is not yet
                  properly described. Triage work is not done work. */
@@ -6241,7 +6256,11 @@ function collectEdit(){
      the code maps to, what is actually being used, and — when they differ — who
      decided that and why. Reports and KPIs read the effective value; the audit
      view can always show all three. */
-  const who=(()=>{ try{ return localStorage.getItem("cm_dash_who")||""; }catch(e){ return ""; } })();
+  /* The engineer is the one this panel already asked for by name and refuses to
+     save without — not a remembered browser preference, which may belong to
+     whoever last used the machine. */
+  const who=(($("edBy")&&$("edBy").value.trim())
+    || (()=>{ try{ return localStorage.getItem("cm_dash_who")||""; }catch(e){ return ""; } })());
   $("edItems").querySelectorAll('[data-f="grade"]').forEach(g=>{
     const k=g.dataset.k;
     const sv=$("edItems").querySelector(`[data-f="sev"][data-k="${cssq(k)}"]`);

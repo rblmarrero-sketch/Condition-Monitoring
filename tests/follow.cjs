@@ -88,8 +88,15 @@ const rowsOf = () => [...document.querySelectorAll('#actionTbl .wlu')].flatMap(u
   let k = await p.evaluate(kpis);
   note('tracker', k.join('  '));
   ok('it counts what is still open', /STILL OPEN=4/.test(k.join(' ')), k[0]);
+  /* The card strip gained a Needs triage headline ahead of the unowned count:
+     an exception nobody can plan is worse news than an exception nobody owns,
+     and owner is only one of the four things it can be missing. Both numbers
+     are still there — this reads whichever card carries the unowned figure
+     rather than the slot it happens to sit in. */
   ok('and says how many have nobody against them',
-     /NOBODY OWNS IT=4/.test(k.join(' ')), k[2]);
+     /NOBODY OWNS IT=4/.test(k.join(' ')), k.join(' | '));
+  ok('and how many cannot be planned at all yet',
+     /NEEDS TRIAGE=4/i.test(k.join(' ')), k.join(' | '));
   ok('nothing is overdue before anything has a date',
      /OVERDUE=0/.test(k.join(' ')), k[1]);
   ok('the oldest open finding is aged from the day it was found',

@@ -54,6 +54,16 @@ const openHist = async (p,unit) => {
   ok('it insists on a name first',/name/i.test(await edMsg(p)), await edMsg(p));
   await p.fill('#edBy','R. Marrero');
   await p.selectOption('[data-f="sev"][data-k="4C"]','CRI');
+  /* This is the legitimate override, not a mistake: the grade stays C because
+     that is what the inspector saw at the machine and it is evidence, while the
+     engineer raises the effective severity after re-reading the plug under
+     magnification. Exactly that combination now needs a reason — a saved
+     C-with-Critical that nobody explained is indistinguishable from a mis-click
+     for the rest of the record's life. Prove it is refused without one first. */
+  await p.click('#edSave'); await edSettled(p);
+  ok('a severity that contradicts its grade is refused unexplained',
+     /reason/i.test(await edMsg(p)), await edMsg(p));
+  await p.fill('[data-f="sevReason"][data-k="4C"]','Re-read under magnification: heavy ferrous, not moderate');
   await p.selectOption('[data-f="action"][data-k="4C"]','RA-06');   // matrix code for "repair immediately"
   await p.fill('[data-f="wo"][data-k="4C"]','N-771');
   await p.fill('#edNote','plug re-read under magnification');
@@ -67,6 +77,14 @@ const openHist = async (p,unit) => {
   ok('the WO is set',item.wo==='N-771',item.wo);
   ok('what was not touched is untouched',item.defect==='Ferrous debris — heavy'&&item.grade==='C',
      `${item.defect} / grade ${item.grade}`);
+  /* And the contradiction is on the record as a decision, with the mapped value
+     kept beside the effective one so an audit can always see both. */
+  ok('the override is flagged',item.sevOverride===1,String(item.sevOverride));
+  ok('the mapped severity is kept beside the effective one',item.mapSev==='DEG',
+     `${item.mapSev} mapped / ${item.sev} in use`);
+  ok('with the reason, the engineer and the time',
+     /magnification/.test(item.sevReason||'')&&!!item.sevBy&&!!item.sevAt,
+     `${item.sevBy} · ${(item.sevReason||'').slice(0,40)}`);
 
   console.log('\nit is stored beside the inspection, not inside it');
   let f=await files();
