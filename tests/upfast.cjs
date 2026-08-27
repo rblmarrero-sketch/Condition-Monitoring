@@ -197,7 +197,18 @@ const dims = `(async (blob) => {
      answer. What matters is that neither of them asks for a press. */
   const bar = ((await p.textContent('#syncBar')) || '').replace(/\s+/g, ' ').trim();
   const pill = ((await p.textContent('#netStatus')) || '').replace(/\s+/g, ' ').trim();
-  ok('the round went up on its own', /synced|отправлено/i.test(pill), pill);
+  /* ASK THE STATE, NOT THE WORDING. This matched the literal word "Synced",
+     which the pill no longer says — and stopped saying on purpose: the phone
+     has never spoken to the dashboard, so it claims only what it knows, that
+     every file was accepted. A suite pinned to one word fails the day the word
+     is corrected, which teaches everybody to change the suite rather than to
+     read it. The claim being made here is that the round went up with nobody
+     pressing anything, and that is the settled state, whatever it is called. */
+  const pillOn = await p.evaluate(() =>
+    document.getElementById('netStatus').className.split(/\s+/).indexOf('on') >= 0);
+  ok('the round went up on its own', pillOn, pill);
+  ok('  and the pill does not claim a sync it cannot see',
+     !/^synced$|^синхронизировано$/i.test(pill), pill);
   ok('  and nothing on screen asks anybody to press anything',
      !/press|tap|нажм/i.test(bar + ' ' + pill), (bar || '(bar silent)') + ' | ' + pill);
   ok('  the bar stays out of the way while there is nothing to report',
