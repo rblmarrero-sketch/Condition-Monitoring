@@ -102,6 +102,10 @@
     margin-left:var(--sbw);background:var(--surface);
     border-bottom:1px solid var(--border);position:sticky;top:0;z-index:21;}
   header.app .btn{padding:4px 10px;font-size:12px;}
+  .ver{font:600 var(--t-micro)/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+    color:var(--muted);letter-spacing:.02em;padding:3px 7px;border-radius:5px;
+    background:var(--surface-2);border:1px solid var(--border);cursor:help;
+    white-space:nowrap;}
   /* The toggle lives with the thing it moves. */
   .railtog{position:absolute;right:8px;top:12px;width:24px;height:24px;padding:0;
     border:1px solid var(--rail-line);background:none;color:var(--rail-muted);
@@ -1531,6 +1535,11 @@
   <button class="btn primary" id="dataBtn" data-i18n="datasources">Data sources</button>
   <div class="lang"><button data-lang="en">EN</button><button data-lang="ru">RU</button></div>
   <button class="btn" id="themeBtn" data-i18n-title="theme" title="Light / dark">◐</button>
+  <!-- "Am I looking at the current version?" is a question a browser cache can
+       make unanswerable, and arguing about it is worse than printing it. This
+       is the build the page was actually served as. -->
+  <span class="ver" id="dashVer" data-i18n-title="ver_tip"
+        title="The build this page was served as. If it is behind, reload with Ctrl+Shift+R."></span>
 </header>
 
 <!-- A round two phones both sent, waiting for somebody to say which one counts.
@@ -2376,6 +2385,7 @@ const I18N={
   lp_insight:"Largest gap: {n} still to reach on “{m}”. Start with critical equipment and the high-volume lubricant systems.",
   f_count:"{n} of {of} inspections",
   a_queue_tip:"Critical first, then overdue, then longest open",
+  ver_tip:"The build this page was served as. If it is behind what was shipped, reload with Ctrl+Shift+R.",
   lm_all:"All classes", lm_machine:"Machine", lm_notset:"Not audited", lm_nocomp:"No such compartment",
   lm_alias:"recorded by make; identified as {m}", lm_csv:"⬇ Export CSV",
   lg_title:"Not on the sheet",
@@ -2831,6 +2841,7 @@ const I18N={
   lp_insight:"Наибольший разрыв: {n} по показателю «{m}». Начните с критичной техники и систем с наибольшим расходом.",
   f_count:"{n} из {of} осмотров",
   a_queue_tip:"Сначала критичные, затем просроченные, затем самые давние",
+  ver_tip:"Сборка, в которой загружена эта страница. Если она устарела — обновите через Ctrl+Shift+R.",
   lm_all:"Все классы", lm_machine:"Машина", lm_notset:"Не проверено", lm_nocomp:"Нет такого узла",
   lm_alias:"записано по марке; определено как {m}", lm_csv:"⬇ Экспорт CSV",
   lg_title:"Не попало на лист",
@@ -7784,6 +7795,16 @@ document.querySelector(".lang").addEventListener("click",e=>{
   try{ localStorage.setItem("cm_dash_lang",lang); }catch(err){}
   applyLang();
 });
+/* The build, on the page, where a cache question can be settled by looking.
+   Read off the ?v= the page's own scripts were requested with, so it can never
+   drift from what was actually served. */
+(function(){
+  const el=$("dashVer"); if(!el) return;
+  const tag=[...document.scripts].map(x=>(x.src||"").match(/[?&]v=([^&]+)/))
+    .filter(Boolean).map(m=>m[1])[0] || "?";
+  el.textContent="v"+tag;
+})();
+
 rebuild(); refreshControls(); renderAll(); refreshSources();
 applyLang();                          // paints the static markup and re-renders in the saved language
 /* First run shows where data comes from — but only when there is a question to
