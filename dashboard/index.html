@@ -991,6 +991,9 @@
   .ovr.hidden{display:none;}
   .ovrwarn{margin-top:4px;font-weight:600;font-size:var(--t-micro);line-height:1.4;
     font-family:inherit;color:var(--warn-ink);}
+  .synone{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;}
+  .synone li{font-weight:400;font-size:var(--t-small);line-height:1.45;font-family:inherit;
+    color:var(--muted);}
   .pxopen{position:absolute;right:56px;top:12px;z-index:2;}
   .pxpanel{position:absolute;left:0;right:0;bottom:0;z-index:3;
     background:color-mix(in srgb,var(--surface) 94%,transparent);
@@ -1965,6 +1968,7 @@
   <button data-tab="due"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span data-i18n="tab_due">Due &amp; missed</span><span class="nb" id="nbDue"></span></button>
   <button data-tab="equipment"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3L4.5 8.9"/><path d="M4.5 4.5v4.4h4.4"/></svg><span data-i18n="tab_equipment">Equipment history</span></button>
   <button data-tab="lube"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5s5.8 6.3 5.8 10.2a5.8 5.8 0 0 1-11.6 0C6.2 9.8 12 3.5 12 3.5Z"/></svg><span data-i18n="tab_lube">Lubrication</span></button>
+  <button data-tab="sync"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12a7.5 7.5 0 0 1 12.8-5.3L20 9.5"/><path d="M20 4.5v5h-5"/><path d="M19.5 12a7.5 7.5 0 0 1-12.8 5.3L4 14.5"/><path d="M4 19.5v-5h5"/></svg><span data-i18n="tab_sync">Sync operations</span><span class="nb warn" id="nbSync"></span></button>
   <button data-tab="reports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3.5h6.5L18 8v12.5H7Z"/><path d="M13.5 3.5V8H18"/></svg><span data-i18n="tab_reports">Reports</span></button>
 </nav>
 
@@ -2321,6 +2325,40 @@
       </div>
       <div class="posterbox"><div class="poster" id="lpoSheet"></div></div>
     </div>
+    </div>
+  </section>
+
+  <!-- What the field sent, what arrived, and what has not. An operations view,
+       not a reassurance: every number here is something this client can
+       actually verify, and the things it cannot verify say so by name instead
+       of printing a zero. A dashboard that reports 0 failures because it has no
+       way to detect one is worse than a dashboard with no panel at all. -->
+  <section id="tab-sync" class="hidden">
+    <div class="kpis" id="syncKpis"></div>
+    <div class="grid12">
+      <div class="section g7">
+        <div class="secthd"><h2 data-i18n="sy_gaps">Records waiting on evidence</h2>
+          <span class="spacer"></span><span class="hint" id="syGapHint"></span></div>
+        <div class="tblwrap scrollbox" style="--sb:300px"><table class="grid" id="syGapTbl"></table></div>
+        <div class="shown" id="syGapShown"></div>
+        <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
+          <div class="sub" data-i18n="sy_gaps_sub">Every photograph and video a record says it has, checked against the file names the server actually holds. A record is waiting when one of its own attachments has not arrived.</div></details>
+      </div>
+      <div class="section g5">
+        <div class="secthd"><h2 data-i18n="sy_health">Backend</h2></div>
+        <dl class="kv" id="syHealth"></dl>
+        <div class="secthd" style="margin-top:var(--s4)"><h2 data-i18n="sy_unknown">Not measurable from here</h2></div>
+        <ul class="synone" id="syUnknown"></ul>
+        <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
+          <div class="sub" data-i18n="sy_unknown_sub">These need a backend that issues a durable receipt per record and a hash per attachment. This one stores files in folders, so the dashboard cannot prove delivery latency, detect a corrupted upload or count a suppressed duplicate. They are listed rather than reported as zero.</div></details>
+      </div>
+    </div>
+    <div class="section">
+      <div class="secthd"><h2 data-i18n="sy_quar">Records that cannot be trusted as they stand</h2>
+        <span class="spacer"></span><span class="hint" id="syQuarHint"></span></div>
+      <div class="tblwrap scrollbox" style="--sb:260px"><table class="grid" id="syQuarTbl"></table></div>
+      <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
+        <div class="sub" data-i18n="sy_quar_sub">A record missing the identity it needs to be filed — unit, date or round — or carrying a point with no key. Nothing is deleted; they are held here so they are visible rather than silently dropped from every count.</div></details>
     </div>
   </section>
 
@@ -2698,6 +2736,33 @@ const I18N={
   ed_ovr:"Override reason", ed_ovr_ph:"Why this severity, not the mapped one",
   ed_ovr_warn:"{g} maps to {m}. Saving {e} is a deliberate override.",
   ed_ovr_need:"A severity that differs from its grade needs a reason ({k}).",
+  tab_sync:"Sync operations",
+  sy_gaps:"Records waiting on evidence", sy_health:"Backend",
+  sy_unknown:"Not measurable from here",
+  sy_k_recs:"Records held", sy_k_recs_s:"{n} cannot be filed",
+  sy_k_media:"Evidence arrived", sy_k_media_s:"{n} of {of} attachments",
+  sy_k_wait:"Waiting on media", sy_k_wait_s:"records missing an attachment",
+  sy_k_crit:"Critical waiting", sy_k_crit_s:"a Critical with no evidence yet",
+  sy_k_conf:"Conflicts", sy_k_conf_s:"two phones, one round",
+  sy_h_files:"Files on the server", sy_h_last:"Last asked",
+  sy_h_att:"Attachments accounted for", sy_h_held:"Held back",
+  sy_notlinked:"no backend attached — nothing to compare against",
+  sy_nolink:"No backend attached", sy_nolink_s:"Attach a data source and this will compare every attachment these records name against the files the server actually holds. Until then it has nothing to check, and reporting 0% would describe this browser rather than the field.",
+  sy_never:"never", sy_justnow:"just now", sy_min:"{n} min ago",
+  sy_hr:"{n} h ago", sy_day:"{n} days ago",
+  sy_c_missing:"Missing", sy_c_which:"Points", sy_c_why:"Why",
+  sy_blank:"(blank)", sy_w_equip:"no unit", sy_w_date:"no date",
+  sy_w_type:"no round", sy_w_point:"a point with no key",
+  sy_gap_hint:"{n} of {of} attachments have not arrived",
+  sy_gap_none:"Every attachment is accounted for",
+  sy_gap_none_s:"Each photograph and video these records name is on the server.",
+  sy_quar:"Records that cannot be trusted as they stand",
+  sy_quar_hint:"{n} held back", sy_quar_none:"Nothing held back",
+  sy_quar_none_s:"Every record carries the unit, date and round it needs to be filed.",
+  sy_u_latency:"Dashboard-confirmation latency — needs a durable per-record receipt from the backend.",
+  sy_u_hash:"Corrupted or truncated uploads — needs a hash per attachment, stored server-side.",
+  sy_u_dupe:"Duplicate retries suppressed — counted by the server that suppressed them.",
+  sy_u_receipt:"Proof a record is queryable through the production path — needs read-after-write verification.",
   px_edit:"Edit photo", px_rotl:"Rotate left", px_rotr:"Rotate right",
   px_straighten:"Straighten", px_crop:"Crop", px_r_none:"Full frame",
   px_r_free:"Freeform", px_r_1:"1:1", px_r_43:"4:3", px_r_169:"16:9",
@@ -3200,6 +3265,33 @@ const I18N={
   ed_ovr:"Обоснование отклонения", ed_ovr_ph:"Почему эта категория, а не сопоставленная",
   ed_ovr_warn:"{g} соответствует «{m}». Сохранение «{e}» — осознанное отклонение.",
   ed_ovr_need:"Для категории, отличной от кода состояния, нужно обоснование ({k}).",
+  tab_sync:"Синхронизация",
+  sy_gaps:"Записи, ожидающие материалов", sy_health:"Хранилище",
+  sy_unknown:"Отсюда не измеряется",
+  sy_k_recs:"Записей в системе", sy_k_recs_s:"{n} невозможно разложить",
+  sy_k_media:"Материалы получены", sy_k_media_s:"{n} из {of} вложений",
+  sy_k_wait:"Ждут материалов", sy_k_wait_s:"записей без вложения",
+  sy_k_crit:"Критичные в ожидании", sy_k_crit_s:"критичное без подтверждения",
+  sy_k_conf:"Конфликты", sy_k_conf_s:"два телефона, один обход",
+  sy_h_files:"Файлов на сервере", sy_h_last:"Последний запрос",
+  sy_h_att:"Вложений учтено", sy_h_held:"Отложено",
+  sy_notlinked:"хранилище не подключено — не с чем сравнивать",
+  sy_nolink:"Хранилище не подключено", sy_nolink_s:"Подключите источник данных, и здесь появится сверка всех вложений с файлами на сервере. Пока сверять не с чем, а «0%» описывал бы этот браузер, а не работу в поле.",
+  sy_never:"никогда", sy_justnow:"только что", sy_min:"{n} мин назад",
+  sy_hr:"{n} ч назад", sy_day:"{n} дн. назад",
+  sy_c_missing:"Не хватает", sy_c_which:"Точки", sy_c_why:"Причина",
+  sy_blank:"(пусто)", sy_w_equip:"нет машины", sy_w_date:"нет даты",
+  sy_w_type:"нет обхода", sy_w_point:"точка без ключа",
+  sy_gap_hint:"{n} из {of} вложений не поступило",
+  sy_gap_none:"Все вложения на месте",
+  sy_gap_none_s:"Каждое фото и видео, указанное в этих записях, есть на сервере.",
+  sy_quar:"Записи, которым нельзя доверять в текущем виде",
+  sy_quar_hint:"отложено: {n}", sy_quar_none:"Отложенных нет",
+  sy_quar_none_s:"В каждой записи есть машина, дата и обход, необходимые для раскладки.",
+  sy_u_latency:"Задержка подтверждения на дашборде — нужна долговременная квитанция на запись.",
+  sy_u_hash:"Повреждённые или обрезанные загрузки — нужен хеш на каждое вложение на сервере.",
+  sy_u_dupe:"Подавленные повторы — их считает сервер, который их подавил.",
+  sy_u_receipt:"Доказательство доступности записи через рабочий путь — нужна проверка чтением после записи.",
   px_edit:"Правка фото", px_rotl:"Повернуть влево", px_rotr:"Повернуть вправо",
   px_straighten:"Выравнивание", px_crop:"Кадрирование", px_r_none:"Весь кадр",
   px_r_free:"Произвольно", px_r_1:"1:1", px_r_43:"4:3", px_r_169:"16:9",
@@ -6594,6 +6686,9 @@ $("dataOv").onclick=e=>{ if(e.target.id==="dataOv") $("dataOv").classList.add("h
 
 /* One line that always answers "what am I looking at, and from where?" */
 function refreshSources(){
+  /* Whatever changed about where data comes from, the synchronisation panel is
+     about to be describing something different. */
+  try{ if($("syncKpis")) renderSync(); }catch(e){}
   const units=new Set(RECS.map(r=>r.equip)).size;
   const nVoid=RECS.filter(r=>r._void).length;
   const nPhotos=folderPhotos?Object.keys(folderPhotos).length:0;
@@ -7244,6 +7339,11 @@ $("themeBtn").onclick=()=>{ const c=document.documentElement.getAttribute("data-
    see that nothing can reach the function. */
 function showTab(t){
   const tabs=[...$("tabs").querySelectorAll("button[data-tab]")].map(b=>b.dataset.tab);
+  /* The sync panel is the only one whose answer depends on the backend having
+     finished attaching. drive.js swaps in the shipped default asynchronously
+     on boot, so a panel painted once at start-up reported "no backend
+     attached" for the rest of the session on a dashboard that had one. */
+  if(t==="sync") setTimeout(()=>{ try{ renderSync(); }catch(e){} },0);
   tabs.forEach(x=>{ const s=$("tab-"+x); if(s) s.classList.toggle("hidden", x!==t); });
   $("tabs").querySelectorAll("button").forEach(b=>b.classList.toggle("active",b.dataset.tab===t));
   /* The bar at the top narrows the RECORDS being analysed — a type, a class, a
@@ -8920,6 +9020,161 @@ function renderConflictBar(){
    promise a phone app makes: you do not have to open every room to find out
    which one needs you. Overdue rounds in red, open actions in amber; empty
    means empty, and an empty badge does not render at all. */
+/* ── SYNCHRONISATION OPERATIONS ─────────────────────────────────────────────
+
+   Two honest categories and no third.
+
+   MEASURED — things this client can check for itself: which attachments a
+   record claims, which of those names the server actually holds, which records
+   arrived without the identity they need to be filed, and how long ago the
+   backend was last asked.
+
+   NOT MEASURABLE — delivery latency, corrupted uploads, suppressed duplicates.
+   Each of those needs a backend that issues a durable receipt per record and a
+   hash per attachment. This one stores files in folders. So they are named and
+   explained rather than reported as zero, because a panel showing "0 hash
+   failures" when it cannot detect one is worse than no panel at all: it is a
+   reassurance nobody earned. */
+function syncScan(){
+  const held=(()=>{ try{ return new Set(window.CMDrive&&CMDrive.names?CMDrive.names():[]); }
+                    catch(e){ return new Set(); } })();
+  const local=(()=>{ try{ return folderPhotos||{}; }catch(e){ return {}; } })();
+  const have=n=>held.has(n)||!!local[n];
+  const gaps=[], quar=[];
+  let expected=0, present=0;
+  RECS.forEach(r=>{
+    /* Filed by unit, date and round. A record without all three cannot be put
+       anywhere, so it is held rather than counted as if it were fine. */
+    const why=[];
+    if(!r.equip) why.push("equip");
+    if(!r.date)  why.push("date");
+    if(!r.type)  why.push("type");
+    if((r.items||[]).some(i=>!i||!i.key)) why.push("point");
+    if(why.length){ quar.push({r,why}); return; }
+    if(r._void) return;
+    const miss=[];
+    (r.items||[]).forEach(i=>{
+      mediaOf(i,r).forEach(m=>{
+        if(!m.name) return;
+        expected++;
+        if(have(m.name)) present++; else miss.push({ik:i.key, name:m.name});
+      });
+    });
+    if(miss.length) gaps.push({r, miss});
+  });
+  /* Worst first: a Critical still missing its evidence is the one that matters,
+     because the photograph is what the order is raised on. */
+  const critOf=r=>(r.items||[]).some(i=>sevOf(r,i)==="CRI");
+  gaps.sort((a,b)=>(critOf(b.r)?1:0)-(critOf(a.r)?1:0)
+                 || b.miss.length-a.miss.length
+                 || String(b.r.date||"").localeCompare(String(a.r.date||"")));
+  const cursorAt=(()=>{ try{ return (window.CMDrive&&CMDrive.cursorAt)?CMDrive.cursorAt():0; }
+                        catch(e){ return 0; } })();
+  /* Without a backend attached, "0% of evidence arrived" is not a fact about
+     the field — it is a fact about this browser never having asked. Reporting
+     it as a delivery failure would be the same lie as reporting zero hash
+     failures on a store that cannot compute a hash. */
+  const linked=(()=>{ try{ return !!(window.CMDrive&&CMDrive.configured&&CMDrive.configured()); }
+                      catch(e){ return false; } })();
+  return { gaps, quar, expected, present, held:held.size, cursorAt, linked,
+           critWaiting:gaps.filter(g=>critOf(g.r)).length,
+           conflicts:(()=>{ try{ return CMDash.conflictCount(); }catch(e){ return 0; } })() };
+}
+/* Things a folder-backed store genuinely cannot answer. Named, with the reason,
+   so the gap is a decision on somebody's list rather than a blank. */
+const SYNC_UNKNOWN=["sy_u_latency","sy_u_hash","sy_u_dupe","sy_u_receipt"];
+function renderSync(){
+  if(!$("syncKpis")) return;
+  const s=syncScan();
+  const card=(id,lab,val,sub,cls)=>
+    `<div class="kpi ${cls||""}" id="${esc(id)}"><span class="k">${esc(lab)}</span>
+       <span class="v">${esc(String(val))}</span><span class="s">${esc(sub)}</span></div>`;
+  const pct = (s.linked && s.expected) ? Math.round(s.present/s.expected*100) : null;
+  const na = (v,sub) => s.linked ? [v,sub] : ["—", t("sy_notlinked")];
+  const [vMedia,sMedia]=na(pct==null?"—":pct+"%", t("sy_k_media_s",{n:s.present, of:s.expected}));
+  const [vWait,sWait]=na(s.gaps.length, t("sy_k_wait_s"));
+  const [vCrit,sCrit]=na(s.critWaiting, t("sy_k_crit_s"));
+  $("syncKpis").innerHTML=
+      card("syRecs", t("sy_k_recs"), RECS.length, t("sy_k_recs_s",{n:s.quar.length}), "info")
+    + card("syMedia", t("sy_k_media"), vMedia, sMedia,
+           !s.linked?"":pct>=100?"good":pct>=90?"warn":"bad")
+    + card("syWait", t("sy_k_wait"), vWait, sWait, (s.linked&&s.gaps.length)?"warn":"good")
+    + card("syCrit", t("sy_k_crit"), vCrit, sCrit, (s.linked&&s.critWaiting)?"bad":"good")
+    + card("syConf", t("sy_k_conf"), s.conflicts, t("sy_k_conf_s"), s.conflicts?"warn":"good");
+
+  const num=n=>Number(n||0).toLocaleString(lang==="ru"?"ru-RU":"en-GB");
+  const ago=ms=>{
+    if(!ms) return t("sy_never");
+    const m=Math.round((Date.now()-ms)/60000);
+    if(m<1) return t("sy_justnow");
+    if(m<60) return t("sy_min",{n:m});
+    const h=Math.round(m/60);
+    return h<48 ? t("sy_hr",{n:h}) : t("sy_day",{n:Math.round(h/24)});
+  };
+  $("syHealth").innerHTML=
+      `<dt>${esc(t("sy_h_files"))}</dt><dd>${esc(num(s.held))}</dd>`
+    + `<dt>${esc(t("sy_h_last"))}</dt><dd>${esc(ago(s.cursorAt))}</dd>`
+    + `<dt>${esc(t("sy_h_att"))}</dt><dd>${esc(num(s.present))} / ${esc(num(s.expected))}</dd>`
+    + `<dt>${esc(t("sy_h_held"))}</dt><dd>${esc(num(s.quar.length))}</dd>`;
+  $("syUnknown").innerHTML=SYNC_UNKNOWN.map(k=>`<li>${esc(t(k))}</li>`).join("");
+  /* The badge is this panel's own number, so this panel sets it. Leaving it to
+     renderNavCounts() made it correct only when the two happened to be called
+     in the right order. */
+  const nbs=$("nbSync");
+  if(nbs){ const n=(s.linked?s.critWaiting:0)||s.conflicts;
+           nbs.textContent = n>0 ? (n>99?"99+":String(n)) : ""; }
+
+  const CAP=60;
+  if(!s.linked){
+    /* Say which question is unanswered and why, rather than answering a
+       different one. */
+    $("syGapTbl").innerHTML=`<tbody><tr><td class="empty"><b>${esc(t("sy_nolink"))}</b><span>${
+      esc(t("sy_nolink_s"))}</span></td></tr></tbody>`;
+    $("syGapShown").innerHTML=""; $("syGapHint").textContent="";
+  }else if(!s.gaps.length){
+    $("syGapTbl").innerHTML=`<tbody><tr><td class="empty"><b>${esc(t("sy_gap_none"))}</b><span>${
+      esc(t("sy_gap_none_s"))}</span></td></tr></tbody>`;
+    $("syGapShown").innerHTML="";
+  }else{
+    $("syGapTbl").innerHTML=`<thead><tr><th>${esc(t("th_unit"))}</th><th>${esc(t("th_date"))}</th>
+      <th>${esc(t("th_type"))}</th><th class="r">${esc(t("sy_c_missing"))}</th>
+      <th>${esc(t("sy_c_which"))}</th></tr></thead><tbody>`
+      + s.gaps.slice(0,CAP).map(({r,miss})=>{
+          const crit=(r.items||[]).some(i=>sevOf(r,i)==="CRI");
+          return `<tr class="hrow" tabindex="0" data-sygo="${esc(recKey(r))}">
+            <td><b>${esc(r.equip)}</b>${crit?` <span class="pill c">${esc(SEV.CRI.l)}</span>`:""}</td>
+            <td class="mono">${esc(r.date||"")}</td>
+            <td><span class="tag">${esc(TYPE_LABEL[r.type]||r.type)}</span></td>
+            <td class="num mono bad">${miss.length}</td>
+            <td class="muted"><span class="trunc" title="${esc(miss.map(m=>m.name).join("\n"))}">${
+              esc(miss.map(m=>m.ik).join(", "))}</span></td></tr>`;
+        }).join("")+`</tbody>`;
+    $("syGapShown").innerHTML=`<span>${esc(t("shown_n",{n:Math.min(CAP,s.gaps.length), of:s.gaps.length}))}</span>`;
+    $("syGapTbl").querySelectorAll("[data-sygo]").forEach(tr=>{
+      const go=()=>{ const rec=RECS.find(x=>recKey(x)===tr.dataset.sygo);
+                     if(!rec) return; showTab("equipment"); $("equipSel").value=rec.equip; renderHistory(); };
+      tr.onclick=go;
+      tr.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } };
+    });
+  }
+  if(s.linked) $("syGapHint").textContent = s.expected
+    ? t("sy_gap_hint",{n:s.expected-s.present, of:s.expected}) : "";
+
+  if(!s.quar.length){
+    $("syQuarTbl").innerHTML=`<tbody><tr><td class="empty"><b>${esc(t("sy_quar_none"))}</b><span>${
+      esc(t("sy_quar_none_s"))}</span></td></tr></tbody>`;
+  }else{
+    $("syQuarTbl").innerHTML=`<thead><tr><th>${esc(t("th_unit"))}</th><th>${esc(t("th_date"))}</th>
+      <th>${esc(t("th_type"))}</th><th>${esc(t("sy_c_why"))}</th></tr></thead><tbody>`
+      + s.quar.slice(0,CAP).map(({r,why})=>`<tr>
+          <td><b>${esc(r.equip||t("sy_blank"))}</b></td>
+          <td class="mono">${esc(r.date||t("sy_blank"))}</td>
+          <td>${esc(TYPE_LABEL[r.type]||r.type||t("sy_blank"))}</td>
+          <td>${why.map(w=>`<span class="tri">${esc(t("sy_w_"+w))}</span>`).join(" ")}</td></tr>`).join("")
+      +`</tbody>`;
+  }
+  $("syQuarHint").textContent = s.quar.length ? t("sy_quar_hint",{n:s.quar.length}) : "";
+}
 function renderNavCounts(){
   const nb=(id,n)=>{ const el=$(id); if(el) el.textContent=n>0?(n>99?"99+":String(n)):""; };
   try{ nb("nbDue", dueTabRows().filter(r=>r.st==="over").length); }catch(e){}
@@ -8927,6 +9182,9 @@ function renderNavCounts(){
     const f=findings(filtered());
     nb("nbAct", f.filter(x=>actionRequired(x.r,x.i)).length);
   }catch(e){}
+  /* Critical evidence that has not arrived is the one sync number worth a
+     badge: it is the photograph an order gets raised on. */
+  try{ const s=syncScan(); nb("nbSync", (s.linked?s.critWaiting:0) || s.conflicts); }catch(e){}
 }
 function renderAll(){
   /* What survived the filters, beside the controls that did the filtering. */
@@ -8941,7 +9199,7 @@ function renderAll(){
         const n=filtered().length, of=RECS.filter(r=>showV||!r._void).length;
       el.textContent = n===of ? "" : t("f_count",{n:fmtN(n), of:fmtN(of)}); }
   }catch(e){}
-  renderChips(); renderConflictBar(); renderKpis(); renderCoverage(); renderTrend(); renderFleet(); renderFailure(); renderWearTab(); renderActions(); renderHistory(); renderLubeTab(); renderDueTab(); renderNavCounts(); }
+  renderChips(); renderConflictBar(); renderKpis(); renderCoverage(); renderTrend(); renderFleet(); renderFailure(); renderWearTab(); renderActions(); renderHistory(); renderLubeTab(); renderDueTab(); renderSync(); renderNavCounts(); }
 ["fType","fClass","fRange"].forEach(id=>$(id).onchange=renderAll);
 $("fReset").onclick=clearFilters;
 $("dispCancel").onclick=dispClose;

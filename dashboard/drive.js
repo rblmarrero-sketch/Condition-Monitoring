@@ -647,5 +647,12 @@
       if (changed) { localStorage.removeItem(LS_CUR); index = {}; fetched = {}; legacy = false; }
     },
     indexed() { return Object.keys(index).length; },
+    /* What the synchronisation view is allowed to say. Everything here is
+       something this client actually knows: the names the server holds, and
+       when it was last asked. Anything it does not know — a durable receipt, a
+       delivery hash, a suppressed duplicate count — is not invented here, and
+       the view says so rather than printing a zero. */
+    names() { return Object.keys(index); },
+    cursorAt() { return cursor(); },
   };
 })();
