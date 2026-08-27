@@ -991,6 +991,13 @@
   .ovr.hidden{display:none;}
   .ovrwarn{margin-top:4px;font-weight:600;font-size:var(--t-micro);line-height:1.4;
     font-family:inherit;color:var(--warn-ink);}
+  .rst{display:inline-flex;align-items:center;gap:4px;padding:1px 7px;border-radius:999px;
+    font-weight:600;font-size:var(--t-micro);line-height:1.6;font-family:inherit;
+    white-space:nowrap;}
+  .rst.final{color:var(--good-ink);background:color-mix(in srgb,var(--good) 16%,transparent);}
+  .rst.provisional{color:var(--warn-ink);background:color-mix(in srgb,var(--warning) 18%,transparent);}
+  .rst.field{color:var(--ink-2);background:var(--surface-2);}
+  .rst.super{color:var(--crit-ink);background:color-mix(in srgb,var(--critical) 14%,transparent);}
   .synone{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;}
   .synone li{font-weight:400;font-size:var(--t-small);line-height:1.45;font-family:inherit;
     color:var(--muted);}
@@ -2736,6 +2743,11 @@ const I18N={
   ed_ovr:"Override reason", ed_ovr_ph:"Why this severity, not the mapped one",
   ed_ovr_warn:"{g} maps to {m}. Saving {e} is a deliberate override.",
   ed_ovr_need:"A severity that differs from its grade needs a reason ({k}).",
+  u_report:"Report",
+  rs_final:"Controlled final", rs_provisional:"Provisional", rs_field:"Field",
+  rs_none:"none issued", rs_issued:"issued {d}", rs_super:"superseded",
+  r_done_final:"Controlled final — {n} pages",
+  r_done_prov:"Provisional — {n} pages, {m} attachments still to arrive",
   tab_sync:"Sync operations",
   sy_gaps:"Records waiting on evidence", sy_health:"Backend",
   sy_unknown:"Not measurable from here",
@@ -3265,6 +3277,11 @@ const I18N={
   ed_ovr:"Обоснование отклонения", ed_ovr_ph:"Почему эта категория, а не сопоставленная",
   ed_ovr_warn:"{g} соответствует «{m}». Сохранение «{e}» — осознанное отклонение.",
   ed_ovr_need:"Для категории, отличной от кода состояния, нужно обоснование ({k}).",
+  u_report:"Отчёт",
+  rs_final:"Итоговый", rs_provisional:"Предварительный", rs_field:"Полевой",
+  rs_none:"не выпускался", rs_issued:"выпущен {d}", rs_super:"устарел",
+  r_done_final:"Итоговый — страниц: {n}",
+  r_done_prov:"Предварительный — страниц: {n}, ещё не поступило вложений: {m}",
   tab_sync:"Синхронизация",
   sy_gaps:"Записи, ожидающие материалов", sy_health:"Хранилище",
   sy_unknown:"Отсюда не измеряется",
@@ -5201,7 +5218,19 @@ window.CMDash={
     // Last write wins, and a stale one arriving late must not undo a newer edit.
     (list||[]).forEach(e=>{ if(!e||!e.key) return;
       const cur=edits[e.key];
-      if(!cur || String(e.at||"")>=String(cur.at||"")) edits[e.key]=e; });
+      if(!cur || String(e.at||"")>=String(cur.at||"")){
+        /* A writer that does not mention the photo recipes or the report log is
+           saying nothing about them — not deleting them. Setting an owner on a
+           finding used to replace the whole document, so it silently discarded
+           every crop and every issued report on that record. Merging here means
+           no future writer has to remember; a writer that DOES mention a block
+           still wins outright, which is what makes "reset to original" able to
+           remove a recipe. */
+        const keep=cur||{};
+        if(!("media" in e) && keep.media) e.media=keep.media;
+        if(!("reports" in e) && keep.reports) e.reports=keep.reports;
+        edits[e.key]=e;
+      } });
     saveEdits(); rebuild(); refreshControls(); renderAll(); refreshSources();
   },
   editCount(){ return Object.keys(edits).length; },
@@ -6988,6 +7017,20 @@ function openUnit(unit){
         ? `<b>${open.length}</b>${nTri?` <span class="tri">${esc(t("as_triage"))} ${nTri}</span>`:""}`
         : `<span class="muted">0</span>`)
     + (disp.length ? row(t("u_disposed"), `<span class="muted">${disp.length}</span>`) : "")
+    + row(t("u_report"), (()=>{
+        const latest=recs[0]; if(!latest) return "";
+        const st=reportStatus(latest);
+        const sup=reportsSuperseded(latest);
+        const cur=reportCurrent(latest);
+        const badge=`<span class="rst ${esc(st.status)}">${esc(t("rs_"+st.status))}</span>`;
+        if(!reportLog(recKey(latest)).length)
+          return badge+` <span class="muted">${esc(t("rs_none"))}</span>`;
+        if(cur) return badge+` <span class="muted">${esc(t("rs_issued",{d:String(cur.at).slice(0,10)}))}</span>`;
+        /* Something material changed after the last issue. Say so where the
+           reader is, not on a tab they would have to think to open. */
+        return badge+` <span class="rst super">${esc(t("rs_super"))}</span>`
+             + ` <span class="muted">${esc(t("rs_issued",{d:String(sup[sup.length-1].at).slice(0,10)}))}</span>`;
+      })())
   + `</dl>`
   + (open.length
       ? `<h3 class="drwh">${esc(t("u_open"))}</h3><div class="ulist">`
@@ -7394,6 +7437,98 @@ $("rScope").onchange=refreshReportTargets;
 
    Progress goes on whatever asked for it: the tab has a message line, a button
    on a card has only itself, so the button becomes the message line. */
+/* ── REPORT LIFECYCLE ───────────────────────────────────────────────────────
+
+   A report is a statement about a machine on a date, issued to somebody. Three
+   things follow from that and none of them were true before:
+
+   It has a STATUS. A report printed while two of its photographs are still
+   uploading is not the same document as one printed when they had all arrived,
+   and calling both "the report" is how a purchasing decision ends up resting on
+   evidence nobody had seen. Provisional says so on its face; Controlled final
+   is only earned when every attachment the record names is present.
+
+   It has a REVISION, and the revision is of the CONTENT, not of the clock. Two
+   reports of a record nobody has touched are the same report. One printed
+   before an engineer re-graded a plug and one printed after are not, and the
+   earlier one is superseded the moment that grade moves — not when somebody
+   remembers to reprint.
+
+   And it is never silently replaced. The earlier issue keeps its revision and
+   its timestamp; the panel offers the current one alongside rather than
+   pretending the old one was always this. */
+
+/* A fingerprint of everything a report would actually print. Deliberately not
+   a timestamp: reprinting an untouched record must not invent a new revision,
+   or "superseded" stops meaning anything within a week. */
+function recRevision(rec){
+  if(!rec) return "";
+  const parts=[rec.equip,rec.date,rec.type,rec.by,rec.sup,rec.smu,rec._void?1:0,rec._reason||""];
+  (rec.items||[]).forEach(i=>{
+    parts.push(i.key,i.grade||"",i.sev||"",i.mapSev||"",i.sevOverride||0,i.sevReason||"",
+      i.defect||"",i.defectCode||"",i.cause||"",i.action||"",i.actionLabel||"",
+      i.prio||"",i.owner||"",i.due||"",i.status||"",i.comment||"",i.wo||"",
+      i.mm==null?"":i.mm, i.reason||"", (i.hidden||[]).join(","));
+  });
+  /* Photo recipes count: a crop or a caption changes the document. */
+  const med=(()=>{ try{ return CMDash.mediaEdits(recKey(rec)); }catch(e){ return {}; } })();
+  Object.keys(med).sort().forEach(k=>{ const m=med[k];
+    parts.push(k,m.rot||0,m.straighten||0,JSON.stringify(m.crop||null),m.caption||"",m.preferred||0); });
+  const str=parts.join("\u0001");
+  let h=5381; for(let i=0;i<str.length;i++) h=((h*33)^str.charCodeAt(i))>>>0;
+  return h.toString(16);
+}
+/* Which attachments this record names, and how many the server actually has.
+   The same question the sync panel asks, asked of one record. */
+function reportMedia(rec){
+  const held=(()=>{ try{ return new Set(window.CMDrive&&CMDrive.names?CMDrive.names():[]); }
+                    catch(e){ return new Set(); } })();
+  const local=(()=>{ try{ return folderPhotos||{}; }catch(e){ return {}; } })();
+  let need=0, have=0;
+  (rec.items||[]).forEach(i=>mediaOf(i,rec).forEach(m=>{
+    if(!m.name) return; need++;
+    if(held.has(m.name)||local[m.name]) have++;
+  }));
+  return {need, have, complete: need===have};
+}
+/* field       — issued on the phone from local data, before anything synced
+   provisional — issued here while evidence is still arriving
+   final       — every attachment present, and this is the current content */
+function reportStatus(rec){
+  const m=reportMedia(rec);
+  return { status: m.complete ? "final" : "provisional", ...m, rev: recRevision(rec) };
+}
+const REPORTS_KEY="reports";
+function reportLog(rk){
+  const e=edits[rk];
+  const l=(e && e[REPORTS_KEY]) || [];
+  return Array.isArray(l) ? l : [];
+}
+/* Which issued reports no longer describe the record as it now stands. */
+function reportsSuperseded(rec){
+  const now=recRevision(rec);
+  return reportLog(recKey(rec)).filter(r=>r.rev && r.rev!==now);
+}
+function reportCurrent(rec){
+  const now=recRevision(rec);
+  return reportLog(recKey(rec)).find(r=>r.rev===now) || null;
+}
+/* Record that a report was issued. Written to the same sidecar as every other
+   office-side fact, so the audit trail travels with the record rather than
+   living in one browser. */
+function logReport(rk, pages, status, rev){
+  const rec=RECS.find(r=>recKey(r)===rk); if(!rec) return;
+  let by=""; try{ by=localStorage.getItem("cm_dash_who")||""; }catch(e){}
+  const keep=edits[rk]||{};
+  const log=reportLog(rk).slice(-19);          // keep the last twenty issues
+  log.push({ rev: rev||recRevision(rec), at:new Date().toISOString(),
+             by, status, pages: pages||0 });
+  const doc={ key:rk, by:by||keep.by||"", at:new Date().toISOString(),
+              void:!!keep.void, reason:keep.reason||"", note:keep.note||"",
+              items:keep.items||{}, media:keep.media||{}, [REPORTS_KEY]:log };
+  window.CMDash.setEdits([doc]);
+  if(window.CMDrive && CMDrive.saveEdit) window.CMDrive.saveEdit(doc).catch(()=>{});
+}
 async function runReport(scope, target, btn, opts){
   opts = opts || {};
   const msg  = opts.msg || null;
@@ -7410,6 +7545,18 @@ async function runReport(scope, target, btn, opts){
     }
     const n = await window.CMReport.generate(scope, target, {photos, scale},
       (i,total)=>say(t("r_rendering",{i,n:total})));
+    /* A single-record report is a document that was issued to somebody, so it
+       goes on the record with its status and the content revision it describes.
+       A fleet or scope report is not about one record and is not logged against
+       one. */
+    if(scope==="one"){
+      const rec=RECS.find(r=>recKey(r)===target);
+      if(rec){ const st=reportStatus(rec);
+               logReport(target, n, st.status, st.rev);
+               say(t(st.status==="final"?"r_done_final":"r_done_prov",{n, m:st.need-st.have}));
+               if(btn && !msg) setTimeout(()=>{ btn.textContent = label; }, 2600);
+               return n; }
+    }
     say(t("r_done",{n}));
     /* The button says "Report" again after a moment. Leaving "Done — 3 pages"
        on it turns a control into a status light nobody can press. */
