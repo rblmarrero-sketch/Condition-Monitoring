@@ -3902,7 +3902,14 @@ function applyLang(){
   // it in the old language. Repaint the part that is generated rather than
   // reopening the panel, which would throw away selections not yet saved.
   if(edKey && !$("editOv").classList.contains("hidden")){
-    const r=RECS.find(x=>recKey(x)===edKey); if(r) renderConflict(r);
+    /* ekOf, not recKey. `edKey` is the FILING address — the one a re-filed
+       round keeps — and recKey answers with the address the round now reads
+       under, which for a moved record is a different string. The find would
+       simply return nothing and the conflict card would not be repainted: no
+       error, no symptom, just a panel that stopped speaking Russian. This one
+       call site sits above the definition of ekOf and was missed when every
+       other one was converted. */
+    const r=RECS.find(x=>ekOf(x)===edKey); if(r) renderConflict(r);
   }
 }
 
