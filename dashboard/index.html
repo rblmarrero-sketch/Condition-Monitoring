@@ -464,7 +464,10 @@
      sideways while four months left 300px of the panel empty. The columns are
      the flexible thing here; the panel is the fixed thing. */
   .trend{display:flex;align-items:flex-end;gap:6px;padding:6px 0 0;}
-  .tmon{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px;}
+  .tmon{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px;
+    background:none;border:1px solid transparent;border-radius:6px;padding:2px 1px;cursor:pointer;}
+  .tmon:hover,.tmon:focus-visible{border-color:var(--accent);outline:none;}
+  .tmon.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,transparent);}
   .tstack{width:100%;height:120px;display:flex;flex-direction:column;justify-content:flex-end;
     background:var(--surface-2);border-radius:4px;overflow:hidden;}
   .tstack i{display:block;width:100%;}
@@ -596,6 +599,30 @@
   .drwshots img,.drwshots video{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:6px;
     background:var(--surface-2);cursor:zoom-in;display:block;}
   @media (prefers-reduced-motion:reduce){ .drw{transition:none;} }
+  /* The machine drawer. Everything a reader wanted the tab-jump for, in the
+     place they were already standing. */
+  .uhead{display:flex;align-items:center;gap:var(--s2);margin-bottom:var(--s3);flex-wrap:wrap;}
+  .umod{font:500 var(--t-small)/1.3 var(--ui);color:var(--muted);}
+  dl.kv{display:grid;grid-template-columns:auto 1fr;gap:5px var(--s3);margin:0 0 var(--s4);}
+  dl.kv dt{font:600 var(--t-micro)/1.5 var(--ui);color:var(--muted);
+    text-transform:uppercase;letter-spacing:.04em;}
+  dl.kv dd{margin:0;font:500 var(--t-small)/1.5 var(--ui);color:var(--ink);}
+  .drwh{font:700 var(--t-small)/1.3 var(--ui);color:var(--ink);margin:var(--s4) 0 var(--s2);
+    text-transform:uppercase;letter-spacing:.04em;}
+  .ulist{display:flex;flex-direction:column;gap:4px;}
+  .urow{display:flex;align-items:center;gap:var(--s2);width:100%;text-align:left;
+    padding:6px 8px 6px 0;border:1px solid var(--border);border-radius:7px;
+    background:var(--surface);cursor:pointer;overflow:hidden;}
+  .urow:hover,.urow:focus-visible{border-color:var(--accent);outline:none;}
+  .urow .sev{flex:0 0 3px;align-self:stretch;background:var(--sc);border-radius:2px;}
+  .urow .ut{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px;}
+  .urow .ut b{font:600 var(--t-small)/1.3 var(--ui);color:var(--ink);
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .urow .ut i{font:400 var(--t-micro)/1.3 var(--ui);color:var(--muted);font-style:normal;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .urow .um{flex:0 0 auto;font:600 var(--t-micro)/1 var(--ui);color:var(--muted);
+    display:flex;align-items:center;gap:4px;}
+  .drwact{display:flex;gap:var(--s2);margin-top:var(--s5);}
   .pos{border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--surface);}
   .pos .photo{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:var(--surface-2);cursor:zoom-in;}
   .pos .nophoto{width:100%;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;color:var(--muted);background:var(--surface-2);font-size:12px;}
@@ -2527,10 +2554,16 @@ const I18N={
   f_voidtip:"Voided inspections are withdrawn from every count, but nothing is deleted",
   clearall:"Clear all", remove:"Remove",
   c_type:"Type", c_class:"Class", c_period:"Period", c_search:"Search",
+  c_owner:"Responsible", c_month:"Month",
+  xf_own:"Show only findings assigned to {o}",
+  tr_click:"press to show only this month",
   c_unit:"Unit", c_sev:"Severity", c_defect:"Defect", c_cause:"Cause",
 
   k_insp:"Inspections", k_find:"Findings", k_att:"Needs attention",
   k_comp:"On-time compliance", k_comp_s:"{n} of {of} rounds walked before they were overdue",
+  u_rounds:"Inspections", u_open:"Open work", u_recent:"Recent rounds",
+  u_noopen:"Nothing open on this machine.", u_nofind:"nothing raised",
+  u_more:"and {n} more", u_hist:"Full history", u_acts:"In the register",
   a_sel_all:"Select everything shown", a_sel_one:"Select this finding on {u}",
   a_sel_n:"{n} selected", a_bulk_apply:"Apply to selected", a_bulk_clear:"Clear",
   a_bulk_keep:"Leave unchanged", a_bulk_nothing:"Nothing to apply \u2014 set an owner, a date or a status first.",
@@ -2997,10 +3030,16 @@ const I18N={
   f_voidtip:"Отозванные осмотры исключены из всех подсчётов, но ничего не удалено",
   clearall:"Очистить всё", remove:"Убрать",
   c_type:"Тип", c_class:"Класс", c_period:"Период", c_search:"Поиск",
+  c_owner:"Ответственный", c_month:"Месяц",
+  xf_own:"Показать только находки под ответственностью {o}",
+  tr_click:"нажмите, чтобы показать только этот месяц",
   c_unit:"Ед.", c_sev:"Степень", c_defect:"Дефект", c_cause:"Причина",
 
   k_insp:"Осмотров", k_find:"Находок", k_att:"Требует внимания",
   k_comp:"Выполнено в срок", k_comp_s:"{n} из {of} обходов пройдены до просрочки",
+  u_rounds:"Осмотров", u_open:"Открытые работы", u_recent:"Последние обходы",
+  u_noopen:"По этой машине ничего не открыто.", u_nofind:"замечаний нет",
+  u_more:"и ещё {n}", u_hist:"Вся история", u_acts:"В реестре",
   a_sel_all:"Выбрать всё показанное", a_sel_one:"Выбрать находку по {u}",
   a_sel_n:"Выбрано: {n}", a_bulk_apply:"Применить к выбранным", a_bulk_clear:"Снять",
   a_bulk_keep:"Не менять", a_bulk_nothing:"Нечего применять \u2014 укажите ответственного, срок или статус.",
@@ -3659,9 +3698,13 @@ function saveDefer(){
 /* ---------- filters ---------- */
 /* Extra filters set by clicking a chart, a KPI or a table — they live here rather
    than in the controls so a drill-down is one click and one click to undo. */
-let drill={ sev:"", defect:"", cause:"", unit:"" };
+/* Two more axes a reliability meeting actually argues along: whose work it is,
+   and which month it came from. Both were readable on the page and neither was
+   filterable, so answering "what did March raise that is still Petrov's" meant
+   exporting it to a spreadsheet. */
+let drill={ sev:"", defect:"", cause:"", unit:"", owner:"", month:"" };
 function setDrill(k,v){ drill[k] = (drill[k]===v ? "" : v); renderAll(); }
-function clearDrill(){ drill={sev:"",defect:"",cause:"",unit:""}; renderAll(); }
+function clearDrill(){ drill={sev:"",defect:"",cause:"",unit:"",owner:"",month:""}; renderAll(); }
 function matchesText(r,q){
   if(!q) return true;
   const hay=[r.equip,r.by,r.type,r.date].concat(
@@ -3683,6 +3726,10 @@ function filtered(inclVoid){
     if(c&&r.cls!==c) return false;
     if(cutoff&&(r.date||"")<cutoff) return false;
     if(drill.unit&&r.equip!==drill.unit) return false;
+    if(drill.month&&String(r.date||"").slice(0,7)!==drill.month) return false;
+    /* Owner is per finding, so a record survives if any of its findings is
+       theirs — and the register, which lists findings, narrows the rest. */
+    if(drill.owner&&!(r.items||[]).some(i=>(i.owner||"")===drill.owner)) return false;
     if(!matchesText(r,q)) return false;
     if(drill.sev||drill.defect||drill.cause){
       const hit=(r.items||[]).some(i=>
@@ -3702,6 +3749,8 @@ function renderChips(){
   if(+$("fRange").value) add(t("c_period"), $("fRange").selectedOptions[0].textContent, ()=>{ $("fRange").value="0"; renderAll(); });
   if(($("fQ").value||"").trim()) add(t("c_search"), $("fQ").value.trim(), ()=>{ $("fQ").value=""; renderAll(); });
   if(drill.unit)   add(t("c_unit"), drill.unit, ()=>setDrill("unit",drill.unit));
+  if(drill.owner)  add(t("c_owner"), drill.owner, ()=>setDrill("owner",drill.owner));
+  if(drill.month)  add(t("c_month"), drill.month, ()=>setDrill("month",drill.month));
   if(drill.sev)    add(t("c_sev"), SEV[drill.sev]?SEV[drill.sev].l:drill.sev, ()=>setDrill("sev",drill.sev));
   if(drill.defect) add(t("c_defect"), drill.defect, ()=>setDrill("defect",drill.defect));
   if(drill.cause)  add(t("c_cause"), drill.cause, ()=>setDrill("cause",drill.cause));
@@ -3975,7 +4024,7 @@ function renderFleet(){
           ? `<button class="xf num${nOver?" bad":""}" data-xact="${esc(r.equip)}" title="${esc(nOver?t("xf_open_over",{n:nOver}):t("xf_open"))}">${open.length}${nOver?`<i>\u25cf</i>`:""}</button>`
           : '<span class="muted">0</span>'}</td>
       <td>${own.length
-          ? `<span class="who" title="${esc(own.join(", "))}"><i>${esc(ini(own[0]))}</i><span>${esc(own[0])}${own.length>1?` +${own.length-1}`:""}</span></span>`
+          ? `<button class="xf who" data-xown="${esc(own[0])}" title="${esc(t("xf_own",{o:own.join(", ")}))}"><i>${esc(ini(own[0]))}</i><span>${esc(own[0])}${own.length>1?` +${own.length-1}`:""}</span></button>`
           : `<span class="muted">${esc(t("th_noowner"))}</span>`}</td>
       <td>${d ? dueCell(d) : '<span class="muted">\u2014</span>'}</td>
       <td>${top?esc(top):'<span class="muted">\u2014</span>'}</td>
@@ -3994,9 +4043,16 @@ function renderFleet(){
      a class would open a machine's history instead of filtering by class. */
   $("fleetTbl").querySelectorAll("[data-xcls]").forEach(b=>b.onclick=e=>{
     e.stopPropagation(); $("fClass").value=b.dataset.xcls; renderAll(); });
+  $("fleetTbl").querySelectorAll("[data-xown]").forEach(b=>b.onclick=e=>{
+    e.stopPropagation(); setDrill("owner", b.dataset.xown); });
   $("fleetTbl").querySelectorAll("[data-xact]").forEach(b=>b.onclick=e=>{
     e.stopPropagation(); setDrillTo("unit", b.dataset.xact); showTab("actions"); });
-  $("fleetTbl").querySelectorAll("tr[data-u]").forEach(tr=>tr.onclick=()=>{ showTab("equipment"); $("equipSel").value=tr.dataset.u; renderHistory(); });
+  $("fleetTbl").querySelectorAll("tr[data-u]").forEach(tr=>{
+    tr.tabIndex=0;
+    const go=()=>openUnit(tr.dataset.u);
+    tr.onclick=go;
+    tr.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } };
+  });
 }
 /* Days to the next round, said the way a planner reads it, coloured only when
    it needs a decision. */
@@ -5320,7 +5376,14 @@ let covOpen=false;
    count of findings and the count of rounds are different things and drawing
    them on one axis invites the reader to compare heights that do not compare. */
 function trendMonths(){
+  /* Every filter EXCEPT the month one. A chart you filter from has to stay
+     whole: narrowing to March made the chart one column, which is both useless
+     as a trend and impossible to press again to get back out of. The chosen
+     month is marked, not made into the only month there is. */
+  const held=drill.month;
+  drill.month="";
   const recs=filtered();
+  drill.month=held;
   const m=new Map();
   recs.forEach(r=>{
     const k=String(r.date||"").slice(0,7); if(!/^\d{4}-\d{2}$/.test(k)) return;
@@ -5343,7 +5406,8 @@ function renderTrend(){
        track — an empty box, indistinguishable from a month with none. Anything
        that happened gets a sliver you can see; nothing stays nothing. */
     const h=v=>v<=0?"0":`${Math.max(4,(v/worst*100)).toFixed(1)}%`;
-    return `<div class="tmon" title="${esc(x.k+" · "+t("tr_tip",{f:tot,r:x.rounds,u:x.units.size}))}">
+    return `<button type="button" class="tmon${drill.month===x.k?" on":""}" data-tm="${esc(x.k)}"
+      title="${esc(x.k+" · "+t("tr_tip",{f:tot,r:x.rounds,u:x.units.size})+" · "+t("tr_click"))}">
       <div class="tstack">
         <i class="s-cri" style="height:${h(x.CRI)}"></i>
         <i class="s-deg" style="height:${h(x.DEG)}"></i>
@@ -5351,7 +5415,7 @@ function renderTrend(){
       </div>
       <b>${tot||""}</b>
       <span>${esc(x.k.slice(2))}</span>
-      <u>${x.rounds}</u></div>`;
+      <u>${x.rounds}</u></button>`;
   }).join("");
   /* The key rides on the title line. A legend of its own cost a row of the
      panel and pushed the columns into a shorter box — a chart that spends its
@@ -5362,6 +5426,7 @@ function renderTrend(){
     + `<span><i style="--c:var(--warning)"></i>${esc(SEV.INC?SEV.INC.l:"Incipient")}</span>`
     + `<span>${esc(t("tr_rounds"))}</span>`;
   $("trendChart").innerHTML=`<div class="trend">${bars}</div>`;
+  $("trendChart").querySelectorAll("[data-tm]").forEach(b=>b.onclick=()=>setDrill("month",b.dataset.tm));
   /* One sentence of direction, because a chart nobody reads out loud is a
      chart nobody acts on. Compares the last month with the average of the
      three before it, and says plainly when there is not enough to say. */
@@ -6302,6 +6367,7 @@ function openPos(rk, ik){
   const i=(rec.items||[]).find(x=>x.key===ik); if(!i) return;
   drwFrom=document.activeElement;
   drwKey={rk,ik};
+  $("drwEdit").hidden=false;
   const med=mediaOf(i,rec), sev=sevOf(rec,i);
   const cap=`${rec.equip} · ${i.key} · ${rec.date}`;
   $("drwTitle").textContent=`${rec.equip} · ${i.key} · ${rec.date}`;
@@ -6353,6 +6419,76 @@ function openPos(rk, ik){
 }
 $("drwClose").onclick=drwClose;
 $("drwScrim").onclick=drwClose;
+/* ---------- the machine, without leaving the page ----------
+
+   Pressing a unit on the overview threw the reader onto another tab, which is
+   a navigation, not a look: they lost the filters, the sort and their place in
+   a 1,128-row table to answer a question that takes four lines to answer. The
+   drawer answers it where they are, and the tab is still one press away for
+   when they actually want it. */
+function openUnit(unit){
+  const recs=RECS.filter(r=>r.equip===unit && (!r._void || ($("fVoid")&&$("fVoid").checked)))
+    .sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));
+  if(!recs.length) return;
+  drwFrom=document.activeElement;
+  drwKey={rk:recKey(recs[0]), unit};
+  const a=ASSET_BY[unit]||{};
+  $("drwTitle").textContent=unit;
+  $("drwEdit").hidden=true;                     // there is no one record to edit here
+  const open=[];
+  recs.forEach(r=>(r.items||[]).forEach(i=>{ if(fOpen(i)) open.push({r,i}); }));
+  open.sort((x,y)=>sevRank(sevOf(y.r,y.i))-sevRank(sevOf(x.r,x.i)));
+  const dm=nextDueBy(), d=dm[String(unit).toUpperCase()];
+  const worst=recs.length?worstOf(recs[0]):"";
+  const row=(k,v)=>v==null||v===""?"":`<dt>${esc(k)}</dt><dd>${v}</dd>`;
+  $("drwBody").innerHTML=
+    `<div class="uhead">${worst?`<span class="pill ${SEV[worst].c}">${esc(SEV[worst].l)}</span>`:""}
+       <span class="umod">${esc([a.m,a.cat||a.cls].filter(Boolean).join(" \u00b7 "))}</span></div>`
+  + `<dl class="kv">`
+    + row(t("th_class"), a.cls?`<button class="xf" data-ucls="${esc(a.cls)}">${esc(a.cls)}</button>`:"")
+    + row(t("th_nextdue"), d?dueCell(d)+` <span class="muted">${esc(TYPE_LABEL[d.ty]||d.ty)}</span>`:`<span class="muted">\u2014</span>`)
+    + row(t("u_rounds"), String(recs.length))
+    + row(t("th_open"), open.length?`<b>${open.length}</b>`:`<span class="muted">0</span>`)
+  + `</dl>`
+  + (open.length
+      ? `<h3 class="drwh">${esc(t("u_open"))}</h3><div class="ulist">`
+        + open.slice(0,12).map(({r,i})=>{
+            const sv=sevOf(r,i), od=fOverdue(i);
+            return `<button type="button" class="urow" data-fu="${esc(recKey(r))}" data-fi="${esc(i.key)}"
+              style="--sc:${sv?`var(--${SEV[sv].c==="c"?"critical":SEV[sv].c==="s"?"serious":SEV[sv].c==="w"?"warning":"good"})`:"var(--none)"}">
+              <span class="sev"></span>
+              <span class="ut"><b>${esc(i.label||i.key)}</b>
+                <i>${esc([i.defect,i.actionLabel].filter(Boolean).join(" \u2192 "))||esc(r.date||"")}</i></span>
+              <span class="um">${i.owner?esc(ini(i.owner)):`<span class="muted">\u2014</span>`}${
+                od?` <span class="pill c">${esc(t("a_late"))}</span>`:""}</span></button>`;
+          }).join("")
+        + (open.length>12?`<div class="sub">${esc(t("u_more",{n:open.length-12}))}</div>`:"")
+        + `</div>`
+      : `<div class="sub">${esc(t("u_noopen"))}</div>`)
+  + `<h3 class="drwh">${esc(t("u_recent"))}</h3><div class="ulist">`
+    + recs.slice(0,6).map(r=>{
+        const w=worstOf(r);
+        return `<button type="button" class="urow" data-rk="${esc(recKey(r))}"
+          style="--sc:${w?`var(--${SEV[w].c==="c"?"critical":SEV[w].c==="s"?"serious":SEV[w].c==="w"?"warning":"good"})`:"var(--none)"}">
+          <span class="sev"></span>
+          <span class="ut"><b>${esc(TYPE_LABEL[r.type]||r.type)} \u00b7 ${esc(r.date||"")}</b>
+            <i>${esc(topFinding(r)||t("u_nofind"))}</i></span>
+          <span class="um">${esc(r.by||"")}</span></button>`;
+      }).join("")
+  + `</div>`
+  + `<div class="drwact"><button class="btn primary" id="uHist">${esc(t("u_hist"))}</button>
+       <button class="btn" id="uActs">${esc(t("u_acts"))}</button></div>`;
+  $("drwBody").querySelectorAll("[data-fu]").forEach(b=>b.onclick=()=>{
+    drwClose(); showTab("actions"); openFollow(b.dataset.fu, b.dataset.fi); });
+  $("drwBody").querySelectorAll("[data-rk]").forEach(b=>b.onclick=()=>{
+    drwClose(); showTab("equipment"); $("equipSel").value=unit; renderHistory(); });
+  const uc=$("drwBody").querySelector("[data-ucls]");
+  if(uc) uc.onclick=()=>{ drwClose(); $("fClass").value=uc.dataset.ucls; renderAll(); };
+  $("uHist").onclick=()=>{ drwClose(); showTab("equipment"); $("equipSel").value=unit; renderHistory(); };
+  $("uActs").onclick=()=>{ drwClose(); setDrillTo("unit",unit); showTab("actions"); };
+  $("drw").classList.remove("hidden"); $("drwScrim").classList.remove("hidden");
+  $("drwClose").focus();
+}
 $("drwRpt").onclick=()=>{ if(drwKey) runReport("one",drwKey.rk,$("drwRpt")); };
 $("drwEdit").onclick=()=>{ if(drwKey){ const k=drwKey.rk; drwClose(); openEdit(k); } };
 
