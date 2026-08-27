@@ -307,14 +307,38 @@
      above it: same information, same accessible name, 38px instead of 84.
      Sticky under the header, because a filter you have scrolled past is a
      filter you have forgotten you set. */
-  .controls{display:flex;flex-wrap:wrap;gap:var(--s2) var(--s3);align-items:center;
+  .controls{display:flex;flex-wrap:wrap;gap:var(--s2);align-items:center;
     padding:var(--s2) var(--mainpad);margin:0 calc(-1 * var(--mainpad)) var(--s3);
     background:var(--surface);border-bottom:1px solid var(--border);
     position:sticky;top:40px;z-index:19;}
   .controls .field{flex-direction:row;align-items:center;gap:var(--s2);}
   .controls .field label{white-space:nowrap;}
+  /* A select is as wide as its longest option unless it is told otherwise, and
+     three of them at 250px each left the search field nowhere to go and pushed
+     "Show voided" onto a second row. The full option text is still in the list
+     when it opens; the closed control only has to be readable. */
   .controls select,.controls input{padding:5px 8px;font-size:12.5px;}
-  .controls input[type=search]{min-width:180px;flex:1 1 180px;max-width:320px;}
+  /* The base select rule carries min-width:190px, and a min beats a max — so
+     capping the width did nothing until the floor came off. Three selects at
+     190 left the search field nowhere to go and pushed "Show voided" onto a
+     second row. The full option text is still in the list when it opens; the
+     closed control only has to be readable. */
+  .controls .field select{min-width:0;max-width:154px;text-overflow:ellipsis;}
+  /* The field was 194px holding a 35-character placeholder, so the hint was
+     clipped before it was read and a typed query scrolled inside its own box.
+     It takes the row's slack now, up to a limit — a search field the width of
+     the page is its own kind of wrong. The icon is a background image so the
+     text never has to share the line with an element. */
+  .controls input[type=search]{flex:1 1 220px;min-width:200px;max-width:440px;
+    padding-left:28px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235a6b76' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='6.5'/%3E%3Cpath d='m16 16 4.5 4.5'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:7px 50%;background-size:14px 14px;}
+  .controls input[type=search]:focus{background-image:none;padding-left:11px;}
+  /* How much survived the filters. A toolbar that can hide 900 rows has to say
+     how many are left, next to the controls that did it. */
+  .fcount{font-size:var(--t-small);color:var(--muted);white-space:nowrap;
+    font-variant-numeric:tabular-nums;}
+  .fcount b{color:var(--ink);}
   /* Present to a screen reader, absent from the layout. The toolbar labels are
      shortened to fit one line; where even a short one costs more than it
      explains, the full name lives here instead of nowhere. */
@@ -1751,8 +1775,12 @@
     <div class="field"><label for="fRange" data-i18n="f_period">Period</label><select id="fRange">
       <option value="0" data-i18n="f_alltime">All time</option><option value="30" data-i18n="f_30">Last 30 days</option>
       <option value="90" data-i18n="f_90">Last 90 days</option><option value="365" data-i18n="f_365">Last 12 months</option></select></div>
-    <div class="field"><label class="vh" for="fQ" data-i18n="f_search">Search</label>
-      <input id="fQ" type="search" data-i18n-ph="f_qph" placeholder="unit, defect, cause, comment…  ( / )"></div>
+    <!-- Not wrapped in a .field: the wrapper was the flex child, so the grow
+         factor on the input did nothing and a 26-character query still scrolled
+         inside a 200px box. The label is visually hidden either way. -->
+    <label class="vh" for="fQ" data-i18n="f_search">Search</label>
+    <input id="fQ" type="search" data-i18n-ph="f_qph" placeholder="Unit, defect, action, inspector…">
+    <span class="fcount" id="fCount"></span>
     <label class="voidtog" data-i18n-title="f_voidtip" title="Voided inspections are withdrawn from every count, but nothing is deleted">
       <input type="checkbox" id="fVoid"><span data-i18n="f_void">Show voided</span></label>
   </div>
@@ -2339,6 +2367,7 @@ const I18N={
   lp_hd_ref:"referenced units",
   lp_hd_reg:"registered units",
   lp_insight:"Largest gap: {n} still to reach on “{m}”. Start with critical equipment and the high-volume lubricant systems.",
+  f_count:"{n} of {of} inspections",
   lm_all:"All classes", lm_machine:"Machine", lm_notset:"Not audited", lm_nocomp:"No such compartment",
   lm_alias:"recorded by make; identified as {m}", lm_csv:"⬇ Export CSV",
   lg_title:"Not on the sheet",
@@ -2413,7 +2442,7 @@ const I18N={
   f_type:"Inspection type", f_class:"Equipment class", f_period:"Period", f_search:"Search",
   f_alltime:"All time", f_30:"Last 30 days", f_90:"Last 90 days", f_365:"Last 12 months",
   f_alltypes:"All types", f_allclasses:"All classes",
-  f_qph:"unit, defect, cause, comment…  ( / )",
+  f_qph:"Unit, defect, action, inspector…",
   f_void:"Show voided",
   f_voidtip:"Voided inspections are withdrawn from every count, but nothing is deleted",
   clearall:"Clear all", remove:"Remove",
@@ -2792,6 +2821,7 @@ const I18N={
   lp_hd_ref:"машин со справочником",
   lp_hd_reg:"машин в реестре",
   lp_insight:"Наибольший разрыв: {n} по показателю «{m}». Начните с критичной техники и систем с наибольшим расходом.",
+  f_count:"{n} из {of} осмотров",
   lm_all:"Все классы", lm_machine:"Машина", lm_notset:"Не проверено", lm_nocomp:"Нет такого узла",
   lm_alias:"записано по марке; определено как {m}", lm_csv:"⬇ Экспорт CSV",
   lg_title:"Не попало на лист",
@@ -2866,7 +2896,7 @@ const I18N={
   f_type:"Тип осмотра", f_class:"Класс техники", f_period:"Период", f_search:"Поиск",
   f_alltime:"За всё время", f_30:"Последние 30 дней", f_90:"Последние 90 дней", f_365:"Последние 12 мес.",
   f_alltypes:"Все типы", f_allclasses:"Все классы",
-  f_qph:"ед., дефект, причина, комментарий…  ( / )",
+  f_qph:"Ед., дефект, действие, инспектор…",
   f_void:"Показать отозванные",
   f_voidtip:"Отозванные осмотры исключены из всех подсчётов, но ничего не удалено",
   clearall:"Очистить всё", remove:"Убрать",
@@ -7660,7 +7690,20 @@ function renderNavCounts(){
     nb("nbAct", f.filter(x=>x.i.action&&!["MON"].includes(x.i.action)).length);
   }catch(e){}
 }
-function renderAll(){ renderChips(); renderConflictBar(); renderKpis(); renderCoverage(); renderTrend(); renderFleet(); renderFailure(); renderWearTab(); renderActions(); renderHistory(); renderLubeTab(); renderDueTab(); renderNavCounts(); }
+function renderAll(){
+  /* What survived the filters, beside the controls that did the filtering. */
+  try{ const el=$("fCount");
+      /* The denominator is what the page holds BEFORE the toolbar touched it.
+         filtered(true) only relaxes the void filter — it still applies the
+         search and the type and the class, so both sides moved together and
+         the count never appeared. Voided rounds count only when the reader has
+         asked to see them, because otherwise "12 of 60" counts rows the page
+         would not show at all. */
+      if(el){ const showV=$("fVoid")&&$("fVoid").checked;
+        const n=filtered().length, of=RECS.filter(r=>showV||!r._void).length;
+      el.textContent = n===of ? "" : t("f_count",{n:fmtN(n), of:fmtN(of)}); }
+  }catch(e){}
+  renderChips(); renderConflictBar(); renderKpis(); renderCoverage(); renderTrend(); renderFleet(); renderFailure(); renderWearTab(); renderActions(); renderHistory(); renderLubeTab(); renderDueTab(); renderNavCounts(); }
 ["fType","fClass","fRange"].forEach(id=>$(id).onchange=renderAll);
 let qTimer=null;
 $("fQ").oninput=()=>{ clearTimeout(qTimer); qTimer=setTimeout(renderAll,180); };   // debounce, the fleet table is big
