@@ -2924,6 +2924,8 @@ const I18N={
   px_compare:"Show original", px_compare_off:"Show edit",
   px_reset:"Reset to original", px_cancel:"Cancel", px_save:"Save edit",
   px_edited:"edited", px_pending:"The original is still uploading. The edit will wait for it.",
+  px_nochange:"No change to save. Use Reset to remove the edit.",
+  px_nothing:"Nothing to save yet — crop, rotate, zoom or add a caption first.",
   as_open:"Open", as_triage:"Needs triage", as_closed:"Closed",
   as_noaction:"No action required", as_none:"\u2014",
   as_triage_t:"Cannot be planned yet \u2014 missing: {f}",
@@ -3471,6 +3473,8 @@ const I18N={
   px_compare:"Показать оригинал", px_compare_off:"Показать правку",
   px_reset:"Вернуть оригинал", px_cancel:"Отмена", px_save:"Сохранить правку",
   px_edited:"с правкой", px_pending:"Оригинал ещё загружается. Правка дождётся его.",
+  px_nochange:"Изменений нет. Чтобы убрать правку, нажмите «Вернуть оригинал».",
+  px_nothing:"Пока нечего сохранять — кадрируйте, поверните, приблизьте или добавьте подпись.",
   as_open:"Открыто", as_triage:"Требует разбора", as_closed:"Закрыто",
   as_noaction:"Действий не требуется", as_none:"\u2014",
   as_triage_t:"Пока нельзя запланировать \u2014 не хватает: {f}",
@@ -7440,6 +7444,12 @@ function openLB(set,ix,cap,ctx){ lbSet=set||[]; lbIx=Math.max(0,Math.min(ix|0,lb
 const PX_STRAIGHTEN_MAX=8;                 // degrees, either way
 let lbCtx=null;                            // {rk, ik, name} for the current frame
 let pxRecipe=null, pxDraft=null, pxCompare=false;
+/* Reset asks for the edit to be REMOVED, which is a different instruction from
+   "there is nothing here". Both leave an empty draft, so the difference has to
+   be carried deliberately or Save cannot tell them apart — and when it could
+   not, it guessed "remove", which is how pressing Save after a zoom destroyed
+   the edit somebody had just made. */
+let pxWipe=false;
 
 function pxKey(name){ return String(name||""); }
 /* Every recipe stored against this record, from the sidecar. */
@@ -7529,7 +7539,7 @@ function pxSync(){
   if(!editable){ pxRecipe=null; pxDraft=null; return; }
   pxRecipe=pxGet(lbCtx.rk, lbCtx.name) || null;
   pxDraft=pxNorm(pxRecipe);
-  pxCompare=false;
+  pxCompare=false; pxWipe=false;
   pxPaint();
   /* A frame that already carries an edit says so, so nobody mistakes a
      derivative for the photograph that was taken. */
@@ -7717,7 +7727,7 @@ $("pxZoom").oninput=()=>{
 };
 $("pxOpen").onclick=e=>{ e.stopPropagation(); pxOpenPanel(); };
 $("pxPanel").onclick=e=>e.stopPropagation();
-$("pxCancel").onclick=()=>{ pxDraft=pxNorm(pxRecipe); pxCompare=false;
+$("pxCancel").onclick=()=>{ pxDraft=pxNorm(pxRecipe); pxCompare=false; pxWipe=false;
   pxPaint(); pxCropSync(); pxClosePanel(); };
 $("pxRotL").onclick=()=>{ pxDraft.rot=(((pxDraft.rot-90)%360)+360)%360; pxPaint(); pxCropSync(); };
 $("pxRotR").onclick=()=>{ pxDraft.rot=(((pxDraft.rot+90)%360)+360)%360; pxPaint(); pxCropSync(); };
@@ -7767,22 +7777,61 @@ $("pxCompare").onclick=()=>{
   pxPaint(); pxCropSync();
 };
 $("pxReset").onclick=()=>{
+  /* Only meaningful if there is something stored to remove. Pressing it on an
+     unedited photograph is a no-op, not a pending deletion. */
+  pxWipe=pxTouched(pxRecipe);
   pxDraft=pxNorm(null); pxCompare=false;
   $("pxStr").value="0"; $("pxStrV").textContent="0°"; $("pxRatio").value="";
   $("pxCap").value=""; $("pxPref").checked=false;
   pxZoomReset(); pxPaint(); pxCropSync();
 };
+/* ZOOMING IN IS FRAMING. The picture on screen when somebody presses Save is
+   the picture they mean, so a zoomed view commits as the crop it visibly is.
+
+   With transform:scale(z) translate(t) about the centre, the visible slice is
+   1/z of each axis, centred half a pan off middle. Working that back into the
+   fractions the recipe already stores means the same coordinates come out, and
+   there is no second idea of "what is cropped" to fall out of step with the
+   first. */
+function pxZoomAsCrop(){
+  if(pxZ<=1.001) return null;
+  const img=$("lbimg"); if(!img) return null;
+  const W=img.clientWidth||1, H=img.clientHeight||1;
+  const w=1/pxZ, h=1/pxZ;
+  const cl=v=>Math.max(0,Math.min(1,v));
+  let x=cl(0.5 - pxPanX/W - w/2);
+  let y=cl(0.5 - pxPanY/H - h/2);
+  if(x+w>1) x=1-w;
+  if(y+h>1) y=1-h;
+  return {x, y, w, h, ratio:"free"};
+}
 $("pxSave").onclick=()=>{
   if(!lbCtx) return;
   if(pxPending()){ $("pxMsg").textContent=t("px_pending"); return; }
   const by=mediaWho();
   if(!by){ $("pxMsg").textContent=t("ed_needname"); return; }
+  /* A zoomed view with no explicit crop box is still a decision about framing,
+     and it was being thrown away: zoom is not part of the recipe, so
+     pxTouched() read false and Save took the "nothing here" branch. */
+  const zc=pxWipe ? null : pxZoomAsCrop();
+  if(zc && !pxDraft.crop) pxDraft.crop=zc;
   const rk=lbCtx.rk, name=pxKey(lbCtx.name);
   const prior=pxAll(rk);
   const media={}; Object.keys(prior).forEach(k=>media[k]=Object.assign({},prior[k]));
   if(!pxTouched(pxDraft)){
-    /* Reset to original: remove the recipe rather than store an empty one, so
-       "no edit" and "an edit that happens to do nothing" cannot diverge. */
+    /* NOTHING TO SAVE IS NOT AN INSTRUCTION TO DELETE.
+
+       This used to remove the recipe whenever the draft came out empty, so
+       pressing Save after a zoom — which is not part of the recipe — silently
+       destroyed the edit that was already there. Save behaving as Reset is the
+       worst possible pairing of a word and an action.
+
+       Reset still removes, because Reset asked to; it says so through pxWipe
+       rather than through the shape of the draft, which the two share. */
+    if(!pxWipe){
+      $("pxMsg").textContent = prior[name] ? t("px_nochange") : t("px_nothing");
+      return;
+    }
     delete media[name];
   }else{
     /* The fingerprint identifies which rendition a report used. Computed from
@@ -7804,7 +7853,7 @@ $("pxSave").onclick=()=>{
   window.CMDrive.saveEdit({ key:rk, by, void:!!keep.void, reason:keep.reason||"",
                             note:keep.note||"", items:keep.items||{}, media })
     .then(()=>{ $("pxMsg").textContent=t("ed_saved");
-                pxRecipe=pxGet(rk,name); pxDraft=pxNorm(pxRecipe);
+                pxRecipe=pxGet(rk,name); pxDraft=pxNorm(pxRecipe); pxWipe=false;
                 setTimeout(pxClosePanel,600); })
     .catch(err=>{
       if(before) edits[rk]=before; else delete edits[rk];

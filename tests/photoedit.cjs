@@ -143,6 +143,59 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
   await p.evaluate(() => { $("pxReset").click(); });
   await p.waitForTimeout(200);
 
+  console.log("\n── zooming in is framing, and Save keeps it");
+  /* Pressing Save after a zoom used to DESTROY the edit that was already there.
+     Zoom is not part of the recipe, so the draft came out empty, and Save read
+     an empty draft as "remove this" — Save behaving as Reset, which is the
+     worst possible pairing of a word and an action. The picture on screen when
+     somebody presses Save is the picture they mean. */
+  const asCrop = await p.evaluate(async () => {
+    window.__w = [];
+    $("pxReset").click();
+    await new Promise(r => setTimeout(r, 150));
+    $("pxZoom").value = "250"; $("pxZoom").dispatchEvent(new Event("input", { bubbles: true }));
+    await new Promise(r => setTimeout(r, 150));
+    $("pxSave").click();
+    await new Promise(r => setTimeout(r, 1100));
+    const d = window.__w[0] || {}; const k = Object.keys(d.media || {})[0];
+    return { crop: k ? d.media[k].crop : null,
+             stored: Object.keys(CMDash.mediaEdits(lbCtx.rk)).length };
+  });
+  ok(!!asCrop.crop, "a zoomed view saves", JSON.stringify(asCrop.crop));
+  /* 250% shows 1/2.5 of each axis, centred — the same fractions the recipe
+     already stores, so there is no second idea of "what is cropped". */
+  ok(Math.abs(asCrop.crop.w - 0.4) < 0.01 && Math.abs(asCrop.crop.h - 0.4) < 0.01,
+     "as exactly the slice that was visible", `w ${asCrop.crop.w.toFixed(3)} (1/2.5 = 0.4)`);
+  ok(asCrop.stored === 1, "and it is on the record", asCrop.stored + "");
+
+  console.log("\n── Save never deletes; Reset does, because Reset asked to");
+  const keep = await p.evaluate(async () => {
+    window.__w = [];
+    $("pxSave").click();
+    await new Promise(r => setTimeout(r, 900));
+    return { stored: Object.keys(CMDash.mediaEdits(lbCtx.rk)).length };
+  });
+  ok(keep.stored === 1, "saving an unchanged edit keeps it", keep.stored + "");
+  const wiped = await p.evaluate(async () => {
+    window.__w = [];
+    $("pxReset").click();
+    await new Promise(r => setTimeout(r, 200));
+    $("pxSave").click();
+    await new Promise(r => setTimeout(r, 1100));
+    return { stored: Object.keys(CMDash.mediaEdits(lbCtx.rk)).length };
+  });
+  ok(wiped.stored === 0, "Reset then Save removes it", wiped.stored + "");
+  const nothing = await p.evaluate(async () => {
+    window.__w = [];
+    $("pxSave").click();
+    await new Promise(r => setTimeout(r, 600));
+    return { writes: window.__w.length, msg: $("pxMsg").textContent };
+  });
+  ok(nothing.writes === 0, "and Save on an unedited photo writes nothing",
+     nothing.writes + " write(s)");
+  ok(/nothing to save/i.test(nothing.msg), "saying so rather than doing nothing quietly",
+     nothing.msg.slice(0, 50));
+
   console.log("\n── straighten is capped: presentation, not re-framing");
   const capped = await p.evaluate(() => {
     const r = $("pxStr");
