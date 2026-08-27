@@ -1291,8 +1291,13 @@
     background:var(--surface-3);color:var(--ink-2);font:700 var(--t-micro)/1 inherit;font-style:normal;
     letter-spacing:.02em;}
   .who span{font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .who.none i{background:none;border:1px dashed var(--border);color:var(--muted);}
-  .who.none span{color:var(--muted);}
+  /* Nobody owns this. Grey and dashed made it the quietest thing in the row —
+     it should be among the loudest, because an action with no name against it
+     is the one that does not happen. Amber, not red: it is a gap in the plan,
+     not a machine about to fail. */
+  .who.none i{background:none;border:1px dashed var(--warn-ink);color:var(--warn-ink);}
+  .who.none span{color:var(--warn-ink);font-weight:650;}
+  tr.hrow:hover .who.none i{background:color-mix(in srgb,var(--warning) 16%,transparent);}
   .due{display:inline-flex;align-items:baseline;gap:6px;font-variant-numeric:tabular-nums;}
   .due b{font:600 12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;}
   .due i{font-style:normal;font-size:var(--t-micro);color:var(--muted);}
@@ -2368,6 +2373,7 @@ const I18N={
   lp_hd_reg:"registered units",
   lp_insight:"Largest gap: {n} still to reach on “{m}”. Start with critical equipment and the high-volume lubricant systems.",
   f_count:"{n} of {of} inspections",
+  a_queue_tip:"Critical first, then overdue, then longest open",
   lm_all:"All classes", lm_machine:"Machine", lm_notset:"Not audited", lm_nocomp:"No such compartment",
   lm_alias:"recorded by make; identified as {m}", lm_csv:"⬇ Export CSV",
   lg_title:"Not on the sheet",
@@ -2822,6 +2828,7 @@ const I18N={
   lp_hd_reg:"машин в реестре",
   lp_insight:"Наибольший разрыв: {n} по показателю «{m}». Начните с критичной техники и систем с наибольшим расходом.",
   f_count:"{n} из {of} осмотров",
+  a_queue_tip:"Сначала критичные, затем просроченные, затем самые давние",
   lm_all:"Все классы", lm_machine:"Машина", lm_notset:"Не проверено", lm_nocomp:"Нет такого узла",
   lm_alias:"записано по марке; определено как {m}", lm_csv:"⬇ Экспорт CSV",
   lg_title:"Не попало на лист",
@@ -3989,7 +3996,13 @@ function fAgeDays(r,i){
 const AVK="cm_dash_actview";
 let actView=(function(){ try{ return localStorage.getItem(AVK)==="unit"?"unit":"table"; }
                          catch(e){ return "table"; } })();
-let actSort={k:"sev", dir:-1};
+/* What a planner opens the register to see, in the order they need it:
+   critical first, then whatever is late, then whatever has been waiting
+   longest. One column cannot say that — sorting by severity alone puts a
+   critical finding raised this morning above a critical one that has been open
+   for ninety days — so the default is a composite, and pressing any header
+   leaves it for that column. */
+let actSort={k:"queue", dir:-1};
 
 function renderActions(){
   const rows=actionRows();
@@ -4070,20 +4083,27 @@ function renderActions(){
      actually plans against: what is latest, what is oldest, what has nobody's
      name on it. Both shapes, and the sortable one opens. */
   if(actView==="table"){
-    const val=(x,k)=>({ sev:sevRank(sevOf(x.r,x.i)), unit:x.r.equip, comp:x.i.label||x.i.key,
+    const val=(x,k)=>({ queue:0, sev:sevRank(sevOf(x.r,x.i)), unit:x.r.equip, comp:x.i.label||x.i.key,
       date:x.r.date||"", act:(x.i.defect||"")+" "+(x.i.actionLabel||""), owner:x.i.owner||"",
       due:x.i.due||"9999-99-99", age:(fAgeDays(x.r,x.i)||0), st:stName(x.i.status) }[k]);
     const list=shown.slice().sort((a,b)=>{
+      if(actSort.k==="queue"){
+        const c = sevRank(sevOf(a.r,a.i)) - sevRank(sevOf(b.r,b.i))
+               || (fOverdue(a.i)?1:0) - (fOverdue(b.i)?1:0)
+               || (fAgeDays(a.r,a.i)||0) - (fAgeDays(b.r,b.i)||0);
+        return (c || b.r.equip.localeCompare(a.r.equip)) * actSort.dir;
+      }
       const p1=val(a,actSort.k), p2=val(b,actSort.k);
       const c=typeof p1==="number"?p1-p2:String(p1).localeCompare(String(p2));
       return (c || a.r.equip.localeCompare(b.r.equip))*actSort.dir;
     });
-    const cols=[["sev",t("th_sev")],["unit",t("th_unit")],["comp",t("a_th_comp")],
+    const cols=[[actSort.k==="queue"?"queue":"sev",t("th_sev")],["unit",t("th_unit")],["comp",t("a_th_comp")],
                 ["date",t("th_date")],["act",t("a_th_find")],["owner",t("a_th_owner")],
                 ["due",t("a_th_due")],["age",t("a_th_age")],["st",t("a_th_status")]];
     $("actionTbl").innerHTML=`<div class="tblwrap scrollbox" style="--sb:520px"><table class="grid">
       <thead><tr>${cols.map(([k,l])=>
-        `<th class="sortable${actSort.k===k?" on":""}" data-asort="${k}">${esc(l)}<span class="arrow">${
+        `<th class="sortable${actSort.k===k?" on":""}" data-asort="${k}"${
+          k==="queue"?` title="${esc(t("a_queue_tip"))}"`:""}>${esc(l)}<span class="arrow">${
           actSort.k===k?(actSort.dir>0?"▲":"▼"):"↕"}</span></th>`).join("")}</tr></thead><tbody>`
       + list.map(({r,i})=>{
           const sv=sevOf(r,i), od=fOverdue(i), dd=i.due?daysTo0(i.due):null, age=fAgeDays(r,i);
@@ -4128,7 +4148,7 @@ function renderActions(){
       /* A new column starts on the reading people expect: worst, latest,
          oldest, most overdue — never alphabetical-ascending by accident. */
       if(actSort.k===k) actSort.dir=-actSort.dir;
-      else { actSort.k=k; actSort.dir=(k==="sev"||k==="age")?-1:1; }
+      else { actSort.k=k; actSort.dir=(k==="sev"||k==="age"||k==="queue")?-1:1; }
       renderActions();
     });
     return;
