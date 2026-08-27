@@ -164,6 +164,103 @@ function proseUnderTitles() {
   const prose = proseUnderTitles();
   ok(prose.length === 0, "no title is followed by a paragraph", prose.join(" | "));
 
+  console.log("\n── nothing meaningful is too small to read");
+  /* 11px is the floor. The scale ran to 9.5 for KPI labels and filter labels,
+     and table.grid th dressed every column heading at 8.5 — all of them words
+     a person is meant to read. Decoration is exempt because it carries nothing:
+     an arrow glyph, a swatch, an icon. */
+  const tiny = [];
+  for (const tab of TABS) {
+    await p.evaluate(k => showTab(k), tab);
+    await p.waitForTimeout(220);
+    const found = await p.evaluate(() => {
+      const out = [];
+      document.querySelectorAll("main *, header.app *, nav.tabs *").forEach(e => {
+        const txt = [...e.childNodes].filter(n => n.nodeType === 3)
+          .map(n => n.textContent.trim()).join("").trim();
+        if (txt.length < 2) return;                       // a glyph is not a word
+        if (e.offsetParent === null) return;              // not on screen
+        const px = parseFloat(getComputedStyle(e).fontSize);
+        if (px < 11) out.push(`${e.tagName}.${(typeof e.className === "string" ? e.className : "")
+          .split(" ")[0]} ${px}px "${txt.slice(0, 18)}"`);
+      });
+      return [...new Set(out)];
+    });
+    found.forEach(f => tiny.push(tab + ": " + f));
+  }
+  ok(tiny.length === 0, "no readable text is under 11px", tiny.slice(0, 4).join(" | "));
+
+  console.log("\n── the filter toolbar is one row, and the search fits");
+  for (const w of [1280, 1366, 1920]) {
+    await p.setViewportSize({ width: w, height: 800 });
+    await p.waitForTimeout(250);
+    const bar = await p.evaluate(() => {
+      const q = document.getElementById("fQ");
+      return { h: Math.round(document.querySelector(".controls").getBoundingClientRect().height),
+               w: Math.round(q.getBoundingClientRect().width),
+               clipped: q.scrollWidth > q.clientWidth + 1 };
+    });
+    ok(bar.h <= 70, `${w}px: the toolbar is one row`, bar.h + "px");
+    ok(!bar.clipped && bar.w >= 260, `${w}px: the search field is not clipped`, bar.w + "px");
+  }
+  /* A query that is longer than the box must scroll the RESULTS, not the box. */
+  await p.fill("#fQ", "TK146 ferrous debris heavy monitor");
+  await p.waitForTimeout(700);
+  const typed = await p.evaluate(() => {
+    const q = document.getElementById("fQ");
+    return { clipped: q.scrollWidth > q.clientWidth + 1,
+             count: document.getElementById("fCount").textContent.trim(),
+             clear: !!document.getElementById("chipClear") };
+  });
+  ok(!typed.clipped, "a long query is not clipped either");
+  ok(/\d/.test(typed.count), "and the toolbar says how much survived", typed.count);
+  ok(typed.clear, "with one control that clears everything");
+  await p.evaluate(() => { const q = document.getElementById("fQ");
+    q.value = ""; q.dispatchEvent(new Event("input")); });
+  await p.waitForTimeout(500);
+
+  console.log("\n── programme coverage is a scorecard, not a report");
+  await p.evaluate(() => { showTab("lube"); lubeGo("cover"); });
+  await p.waitForTimeout(600);
+  const sc = await p.evaluate(() => {
+    const sec = document.querySelector('#tab-lube .lsub[data-lsub="cover"] .section');
+    const rows = [...document.querySelectorAll("#lubeProg tbody tr")];
+    return { panel: Math.round(sec.getBoundingClientRect().height),
+             rows: rows.length,
+             rowH: rows.length ? Math.round(rows[0].getBoundingClientRect().height) : 0,
+             cols: document.querySelectorAll("#lubeProg thead th").length,
+             note: document.getElementById("lubeProgNote").textContent.trim(),
+             facts: document.getElementById("lubeProgHd").textContent.replace(/\s+/g, " ").trim() };
+  });
+  ok(sc.rows === 7 && sc.cols === 5, "seven metrics, five columns",
+     `${sc.rows} rows / ${sc.cols} cols`);
+  ok(sc.rowH >= 30 && sc.rowH <= 44, "rows in the compact band", sc.rowH + "px");
+  ok(sc.panel <= 400, "and the panel fits a screen", sc.panel + "px");
+  ok(/\d/.test(sc.facts), "the denominators are on the title line", sc.facts.slice(0, 44));
+  ok(sc.note.length > 20, "and one line says where the biggest gap is", sc.note.slice(0, 60));
+
+  console.log("\n── the register opens as a work queue");
+  await p.evaluate(() => { showTab("actions"); actView = "table"; renderActions(); });
+  await p.waitForTimeout(600);
+  const reg = await p.evaluate(() => {
+    const rows = [...document.querySelectorAll("#actionTbl tbody tr")];
+    const none = rows.find(r => r.querySelector(".who.none"));
+    return { sort: actSort.k, n: rows.length,
+             firstSev: rows.length ? rows[0].children[0].textContent.trim() : "",
+             ownerInk: none ? getComputedStyle(none.querySelector(".who.none span")).color : "",
+             ownerText: none ? none.querySelector(".who.none span").textContent.trim() : "" };
+  });
+  ok(reg.sort === "queue", "sorted as a queue, not by one column", reg.sort);
+  if (reg.n) ok(/crit/i.test(reg.firstSev), "critical work is at the top", reg.firstSev);
+  /* An unowned action must not be the quietest thing in its row, and the word
+     has to carry it as well as the colour. */
+  if (reg.ownerInk) {
+    const grey = /rgb\((\d+), *(\d+), *(\d+)\)/.exec(reg.ownerInk);
+    const isGrey = grey && Math.abs(+grey[1] - +grey[3]) < 18;
+    ok(!isGrey, "an unowned action is not grey", reg.ownerInk);
+    ok(reg.ownerText.length > 2, "and says so in words", reg.ownerText);
+  }
+
   await b.close();
   console.log(fail ? `\n${fail} FAILED` : "\nall passed");
   process.exit(fail ? 1 : 0);

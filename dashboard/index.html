@@ -123,7 +123,7 @@
     font:800 13px/1 ui-monospace,SFMono-Regular,Menlo,monospace;}
   nav.tabs .brand .t1{font-weight:750;font-size:13.5px;letter-spacing:-.01em;
     color:var(--rail-ink);line-height:1.2;}
-  nav.tabs .brand .t2{color:var(--rail-muted);font-size:10.5px;margin-top:2px;}
+  nav.tabs .brand .t2{color:var(--rail-muted);font-size:var(--t-micro);margin-top:2px;}
   nav.tabs button{position:relative;display:flex;align-items:center;gap:10px;width:100%;
     border:0;background:none;color:var(--rail-muted);padding:6px 9px;
     border-radius:7px;cursor:pointer;font-size:12.5px;font-weight:600;
@@ -135,8 +135,10 @@
   nav.tabs button.active{background:var(--rail-on);color:var(--rail-ink);
     box-shadow:inset 3px 0 0 var(--accent);}
   /* what is waiting, on the door to it — set by renderNavCounts() */
-  nav.tabs .nb{flex:none;min-width:20px;padding:2px 6px;border-radius:99px;text-align:center;
-    font:700 10.5px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;
+  /* A count on the door to the thing it counts. It is a number a person
+     reads, so it lives at the floor like every other number. */
+  nav.tabs .nb{flex:none;min-width:20px;padding:1px 6px;border-radius:99px;text-align:center;
+    font:700 var(--t-micro)/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;
     background:var(--critical);color:#fff;}
   nav.tabs .nb.warn{background:var(--warning);color:#3a2a00;}
   nav.tabs .nb:empty{display:none;}
