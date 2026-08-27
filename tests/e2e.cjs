@@ -90,15 +90,26 @@ const SEED = `(async () => {
     num.mix.DEG+' degraded');
 
   console.log('\n  the fleet table says which machine to look at');
-  const fleet = await dash.evaluate(()=>[...document.querySelectorAll('#fleetTbl tbody tr')].map(tr=>
-    [...tr.children].map(td=>td.textContent.trim())));
-  const dz2 = fleet.find(r=>r[0]==='DZ002'), dz1 = fleet.find(r=>r[0]==='DZ001');
+  /* Read each cell by the column it IS, off the header's own data-sort keys —
+     never by position. This asked for [3], [4] and [5] and was right until the
+     fleet table gained a Class column, at which point it was comparing a date
+     against /Critical/ and a severity against a number. Which column sits where
+     is a layout decision; what the column means is the contract. */
+  const fleet = await dash.evaluate(()=>{
+    const keys=[...document.querySelectorAll('#fleetTbl thead th')].map(th=>th.getAttribute('data-sort'));
+    return [...document.querySelectorAll('#fleetTbl tbody tr')].map(tr=>{
+      const o={};
+      [...tr.children].forEach((td,ix)=>{ if(keys[ix]) o[keys[ix]]=td.textContent.trim(); });
+      return o;
+    });
+  });
+  const dz2 = fleet.find(r=>r.equip==='DZ002'), dz1 = fleet.find(r=>r.equip==='DZ001');
   ok('the worn dozer is listed', !!dz2, JSON.stringify(dz2));
-  ok('and is marked Critical', dz2 && /Critical/i.test(dz2[3]), dz2&&dz2[3]);
-  ok('the healthy one is not', dz1 && !/Critical/i.test(dz1[3]), dz1&&dz1[3]);
+  ok('and is marked Critical', dz2 && /Critical/i.test(dz2.sev), dz2&&dz2.sev);
+  ok('the healthy one is not', dz1 && !/Critical/i.test(dz1.sev), dz1&&dz1.sev);
   ok('its top finding names the wear, not a dash',
-    dz2 && /condemn|worst/i.test(dz2[5]), dz2&&dz2[5]);
-  ok('the finding count is not zero', dz2 && Number(dz2[4])>0, dz2&&dz2[4]);
+    dz2 && /condemn|worst/i.test(dz2.defect), dz2&&dz2.defect);
+  ok('the finding count is not zero', dz2 && Number(dz2.find)>0, dz2&&dz2.find);
 
   console.log('\n  and the history shows every measurement');
   await dash.evaluate(()=>{ showTab('equipment');
