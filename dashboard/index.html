@@ -698,7 +698,9 @@
      arm's length. At full size ON SCREEN it dwarfed the page around it, so the
      preview is shown at 62% and the print path puts it back: what the fitter
      reads does not shrink, only the thumbnail of it. */
-  .posterbox .poster{zoom:.62;}
+  /* Only when somebody asks for the overview. Nothing operational is shrunk by
+     default. */
+  .posterbox.fit .poster{zoom:.62;}
   body.printing-poster .posterbox .poster{zoom:1;}
   @media print{ .posterbox .poster{zoom:1;} }
   .poster{background:#fff;color:#11171a;min-width:820px;padding:22px 26px;border-radius:6px;
@@ -724,6 +726,15 @@
     text-transform:none;letter-spacing:0;font-size:10px;}
   .poster td{padding:9px 8px 9px 0;border-bottom:1px solid #d6dde1;vertical-align:top;}
   .poster td i{display:block;font-style:normal;font-size:11px;color:#5b686f;font-weight:600;}
+  /* On screen at actual size the sheet holds the 11px floor the rest of the
+     dashboard holds. Paper keeps the tighter setting: an A3 poster at 10px is
+     read at arm's length, a monitor is not. */
+  @media screen{
+    .posterbox:not(.fit) .poster th{font-size:11.5px;}
+    .posterbox:not(.fit) .poster th i{font-size:11px;}
+    .posterbox:not(.fit) .poster td.big i{font-size:11px;}
+    .posterbox:not(.fit) .poster .ck{font-size:11.5px;}
+  }
   .poster td.pc b{font-size:15px;}
   .poster td.pp b{font-size:15px;color:#8a4526;}
   .poster td.big{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;
@@ -1024,6 +1035,7 @@
   }
   .dqtog.on{border-color:var(--accent);color:var(--accent);
     background:color-mix(in srgb,var(--accent) 10%,var(--surface-2));}
+  .seg.lpozoom{flex:0 0 auto;}
   .ddact{white-space:nowrap;display:flex;gap:5px;justify-content:flex-end;}
   .ddact .minibtn{text-decoration:none;}
   .tgap{display:inline-flex;align-items:baseline;gap:5px;}
@@ -2415,6 +2427,16 @@
         <label class="fld hidden" id="lpoModelWrap"><span data-i18n="lr_model">Model</span>
           <select id="lpoModel"></select></label>
         <span style="flex:1"></span>
+        <!-- The poster is sized for a wall, so the preview used to be shown at
+             62% to fit the page — which put its column headings and its Russian
+             sub-labels at roughly six and a half pixels on screen. This sheet is
+             not only printed; a planner reads it here to decide what to order.
+             Actual size is the default and the whole sheet scrolls; Fit is still
+             one press away for anyone who wants to see the layout at a glance. -->
+        <div class="seg lpozoom" id="lpoZoom" role="group" data-i18n-title="lpo_zoom" title="Preview size">
+          <button type="button" data-z="full" data-i18n="lpo_full">Actual size</button>
+          <button type="button" data-z="fit" data-i18n="lpo_fit">Fit</button>
+        </div>
         <button class="btn primary" id="lpoPrint" data-i18n="lpo_print">🖨 Print</button>
       </div>
       <div class="posterbox"><div class="poster" id="lpoSheet"></div></div>
@@ -3046,6 +3068,7 @@ const I18N={
   ed_title:"Edit inspection",
   ed_lede:"Corrections are saved beside the inspection, never over it — the phone that captured it still holds the original, and the photos and readings are never altered. Your change shows here and in the reports, with your name on it.",
   ed_by:"Your name", ed_byph:"who is making this change",
+  lpo_zoom:"Preview size", lpo_full:"Actual size", lpo_fit:"Fit",
   ed_danger:"Withdraw or destroy this inspection",
   ed_danger_sub:"Not corrections. Open only if that is what you mean to do.",
   ed_note:"Note on this inspection (optional)", ed_noteph:"e.g. plug re-read under magnification",
@@ -3599,6 +3622,7 @@ const I18N={
   ed_title:"Правка осмотра",
   ed_lede:"Правки сохраняются рядом с осмотром, а не поверх него — телефон, который его снял, хранит оригинал, а фото и замеры не изменяются. Ваше изменение видно здесь и в отчётах, с вашим именем.",
   ed_by:"Ваше имя", ed_byph:"кто вносит изменение",
+  lpo_zoom:"Размер предпросмотра", lpo_full:"Реальный размер", lpo_fit:"Вписать",
   ed_danger:"Отозвать или уничтожить осмотр",
   ed_danger_sub:"Это не исправления. Открывайте, только если действительно это имеете в виду.",
   ed_note:"Примечание к осмотру (необязательно)", ed_noteph:"напр. пробка пересмотрена под увеличением",
@@ -8937,8 +8961,23 @@ function lpoCellText(c){
            grade: std ? std.g : null,
            cap: c.cap, iv: c.iv, spec: c.oem };
 }
+/* Fit or actual size. Remembered, because somebody who wants the whole sheet
+   on screen wants it tomorrow too. */
+const LPOZ="cm_dash_lpozoom";
+let lpoZoom=(function(){ try{ return localStorage.getItem(LPOZ)==="fit"?"fit":"full"; }
+                         catch(e){ return "full"; } })();
+function lpoZoomSync(){
+  const wrap=document.querySelector(".posterbox");
+  if(wrap) wrap.classList.toggle("fit", lpoZoom==="fit");
+  document.querySelectorAll("#lpoZoom button[data-z]").forEach(b=>{
+    const on=b.dataset.z===lpoZoom;
+    b.classList.toggle("on", on);
+    b.setAttribute("aria-pressed", on?"true":"false");
+  });
+}
 function renderLubePoster(){
   const box = $("lpoSheet"); if(!box || !window.LUBE) return;
+  lpoZoomSync();
   const every = lpoRows();
   if(!every.length){ box.innerHTML = ""; return; }
   const classes = [];
@@ -9639,6 +9678,11 @@ $("fDqTog").onclick=()=>{
   if(!open) $("fDq").focus();
 };
 $("fReset").onclick=clearFilters;
+document.querySelectorAll("#lpoZoom button[data-z]").forEach(b=>b.onclick=()=>{
+  lpoZoom=b.dataset.z;
+  try{ localStorage.setItem(LPOZ,lpoZoom); }catch(e){}
+  lpoZoomSync();
+});
 $("dfCancel").onclick=dfClose;
 $("dfScrim").onclick=dfClose;
 $("dfSave").onclick=()=>dfSave(false);
