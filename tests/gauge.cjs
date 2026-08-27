@@ -163,11 +163,16 @@ const READ = frac => {
 
   console.log('\nseverity is drawn as the ramp it is');
   const keys = ['NOF', 'INC', 'DEG', 'CRI'];
+  /* The severity strip is derived and no longer pressable — a technician
+     choosing a severity independently of the grade is exactly the split answer
+     the record cannot resolve. Drive it the way the app does, through A/B/C/X,
+     and read the spans it paints. */
+  const SEVG = { NOF: 'A', INC: 'B', DEG: 'C', CRI: 'X' };
   const ramp = {};
   for (const s of keys) {
     ramp[s] = { rail: await p.evaluate(x =>
-      getComputedStyle(document.querySelector('#sevSeg button.s-' + x), '::before').backgroundColor, s) };
-    await p.evaluate(x => document.querySelector('#sevSeg button.s-' + x).click(), s);
+      getComputedStyle(document.querySelector('#sevSeg .s-' + x), '::before').backgroundColor, s) };
+    await p.evaluate(g => document.querySelector('#gradeSeg .g-' + g).click(), SEVG[s]);
     /* The buttons transition their background over 100ms, so reading the
        computed colour in the same tick as the click returns the colour it is
        LEAVING. Three of the four came back grey that way and the fourth came
@@ -175,10 +180,10 @@ const READ = frac => {
        mistaken for a bug. Let it land. */
     await p.waitForTimeout(250);
     ramp[s].on = await p.evaluate(x =>
-      getComputedStyle(document.querySelector('#sevSeg button.s-' + x)).backgroundColor, s);
+      getComputedStyle(document.querySelector('#sevSeg .s-' + x)).backgroundColor, s);
   }
   /* Put it back, so nothing downstream inherits a Critical. */
-  await p.evaluate(() => { const b = document.querySelector('#sevSeg button.s-NOF');
+  await p.evaluate(() => { const b = document.querySelector('#gradeSeg .g-A');
     b.click(); b.click(); });
   ok('each step carries its own colour when selected',
      new Set(keys.map(k => ramp[k].on)).size === 4, keys.map(k => k + '=' + ramp[k].on).join(' '));

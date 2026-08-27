@@ -260,7 +260,16 @@
      commonest phone in the fleet, in the language most of the fleet reads. Two
      across gives every label its full width, and a tablet still gets four. */
   .sevseg{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:6px;}
-  .sevseg button{font-size:14px;line-height:1.2;white-space:normal;overflow-wrap:anywhere;}
+  .sevseg button,.sevseg>span{font-size:14px;line-height:1.2;white-space:normal;overflow-wrap:anywhere;}
+  /* Derived, not chosen: it wears the segment's shape so the reading is
+     familiar, and none of its affordances so nobody reaches for it. */
+  .sevseg.ro>span{display:flex;align-items:center;justify-content:center;
+    text-align:center;padding:12px 10px;border-radius:10px;cursor:default;
+    border:1px solid var(--line);background:var(--surface-2);color:var(--muted);
+    -webkit-user-select:none;user-select:none;}
+  .sevseg.ro>span.on{font-weight:650;}
+  .fld>em.derived{display:block;margin-top:6px;font-style:normal;
+    font-size:12px;color:var(--muted);}
   .seg button.on{background:var(--accent);color:var(--accent-ink);border-color:transparent;}
   .seg button:active{background:var(--surface-3);}
   .seg button.on:active{opacity:.85;background:var(--accent);}
@@ -300,18 +309,22 @@
      wears a rail of its own colour, which puts the ramp on screen before
      anything is tapped. The rail is absolutely positioned, so it costs no
      layout on a label as long as "Зарождающийся". */
-  .sevseg button, .gradeseg button{position:relative;overflow:hidden;}
-  .sevseg button::before, .gradeseg button::before{content:"";position:absolute;
+  .sevseg button, .sevseg>span, .gradeseg button{position:relative;overflow:hidden;}
+  .sevseg button::before, .sevseg>span::before, .gradeseg button::before{content:"";position:absolute;
     left:0;top:0;bottom:0;width:4px;background:var(--rail,transparent);transition:opacity .12s;}
-  .sevseg button.on::before, .gradeseg button.on::before{opacity:0;}
-  .sevseg button.s-NOF, .gradeseg button.g-A{--rail:var(--good);}
-  .sevseg button.s-INC, .gradeseg button.g-B{--rail:var(--warning);}
-  .sevseg button.s-DEG, .gradeseg button.g-C{--rail:var(--serious);}
-  .sevseg button.s-CRI, .gradeseg button.g-X{--rail:var(--critical);}
-  .sevseg button.s-NOF.on{background:var(--good);color:#fff;border-color:transparent;}
-  .sevseg button.s-INC.on{background:var(--warning);color:#111;border-color:transparent;}
-  .sevseg button.s-DEG.on{background:var(--serious);color:#fff;border-color:transparent;}
-  .sevseg button.s-CRI.on{background:var(--critical);color:#fff;border-color:transparent;}
+  .sevseg button.on::before, .sevseg>span.on::before, .gradeseg button.on::before{opacity:0;}
+  /* The ramp belongs to the STEP, not to the fact that the step was once a
+     button. Severity became a derived read-only strip and these four rules
+     still named `button`, so the whole scale went flat grey — the one thing on
+     the screen whose colour carries meaning. */
+  .sevseg .s-NOF, .gradeseg button.g-A{--rail:var(--good);}
+  .sevseg .s-INC, .gradeseg button.g-B{--rail:var(--warning);}
+  .sevseg .s-DEG, .gradeseg button.g-C{--rail:var(--serious);}
+  .sevseg .s-CRI, .gradeseg button.g-X{--rail:var(--critical);}
+  .sevseg .s-NOF.on{background:var(--good);color:#fff;border-color:transparent;}
+  .sevseg .s-INC.on{background:var(--warning);color:#111;border-color:transparent;}
+  .sevseg .s-DEG.on{background:var(--serious);color:#fff;border-color:transparent;}
+  .sevseg .s-CRI.on{background:var(--critical);color:#fff;border-color:transparent;}
   .btn{display:block;width:100%;min-height:44px;padding:10px 14px;border-radius:12px;border:none;font-size:15.5px;font-weight:700;cursor:pointer;
     font-family:inherit;transition:opacity .1s;}
   .btn:active{opacity:.86;}
@@ -1540,14 +1553,24 @@
         </div>
       </div>
     </div>
-    <label class="fld"><span data-i18n="lbl_sev">Severity (ISO 14224)</span>
-      <div class="seg sevseg" id="sevSeg">
-        <button class="s-NOF" data-s="NOF" data-i18n="sev_NOF">No failure</button>
-        <button class="s-INC" data-s="INC" data-i18n="sev_INC">Incipient</button>
-        <button class="s-DEG" data-s="DEG" data-i18n="sev_DEG">Degraded</button>
-        <button class="s-CRI" data-s="CRI" data-i18n="sev_CRI">Critical</button>
+    <!-- A/B/C/X is the technician's answer. ISO severity is what that answer
+         MEANS, and it is derived from it — not a second opinion offered beside
+         it. This was a pressable segmented control, so a fitter could mark a
+         plug X and then press Incipient, and the record went out carrying both.
+         Nothing downstream can resolve that: the report reads one, the KPI
+         reads the other, and neither is wrong. The technician chooses the
+         grade; the office is where a severity may deliberately differ, with a
+         reason attached. -->
+    <div class="fld"><span data-i18n="lbl_sev">Severity (ISO 14224)</span>
+      <div class="seg sevseg ro" id="sevSeg" aria-readonly="true"
+           data-i18n-title="sev_derived_a" title="ISO severity, derived from the condition code">
+        <span class="s-NOF" data-s="NOF" data-i18n="sev_NOF">No failure</span>
+        <span class="s-INC" data-s="INC" data-i18n="sev_INC">Incipient</span>
+        <span class="s-DEG" data-s="DEG" data-i18n="sev_DEG">Degraded</span>
+        <span class="s-CRI" data-s="CRI" data-i18n="sev_CRI">Critical</span>
       </div>
-    </label>
+      <em class="derived" data-i18n="sev_derived">Set automatically by the condition code</em>
+    </div>
     <!-- On a measurement round the answer is a number and the coded fields are
          the exception: nearly every one of forty-four points is "no failure",
          and 430 px of ISO 14224 pickers sat under every one of them. Behind one
@@ -2077,6 +2100,8 @@ const I18N = {
     set_needurl:"Choose a mode and paste the URL first.",
     set_help:"Power Automate: create a flow with the trigger \u201cWhen an HTTP request is received\u201d, add \u201cCreate file\u201d (SharePoint) with name = triggerBody()?['name'] and content = base64ToBinary(triggerBody()?['file']), then copy the generated URL here.",
     lbl_inspector:"Inspected by", ph_inspector:"name / badge no.", lbl_sev:"Severity (ISO 14224)",
+    sev_derived:"Set automatically by the condition code",
+    sev_derived_a:"ISO severity, derived from the condition code",
     sev_NOF:"No failure", sev_INC:"Incipient", sev_DEG:"Degraded", sev_CRI:"Critical",
     lbl_action:"Recommended action", lbl_wo:"1C notification / WO no. (optional)", opt_action_none:"— not set —",
     m_need_inspector:["Add the inspector","Enter who carried out the inspection first."],
@@ -2485,6 +2510,8 @@ const I18N = {
     set_needurl:"Сначала выберите режим и укажите URL.",
     set_help:"Power Automate: создайте поток с триггером \u201cWhen an HTTP request is received\u201d, добавьте \u201cCreate file\u201d (SharePoint): name = triggerBody()?['name'], content = base64ToBinary(triggerBody()?['file']), затем скопируйте URL сюда.",
     lbl_inspector:"Осмотр выполнил", ph_inspector:"ФИО / табельный №", lbl_sev:"Категория (ISO 14224)",
+    sev_derived:"Определяется автоматически по коду состояния",
+    sev_derived_a:"Категория ISO, определена по коду состояния",
     sev_NOF:"Без отказа", sev_INC:"Зарождающийся", sev_DEG:"Частичный", sev_CRI:"Критический",
     lbl_action:"Рекомендуемое действие", lbl_wo:"Уведомление / № заказа 1С (необяз.)", opt_action_none:"— не задано —",
     m_need_inspector:["Укажите исполнителя","Сначала укажите, кто выполнил осмотр."],
@@ -2984,6 +3011,9 @@ function classForCat(cat){ return CAT2CLS[cat] || "GEN"; }
 // Inspection grade scale is A / B / C / X, X being the worst (confirmed with the
 // reliability team). Grade only suggests the ISO severity — the inspector can override.
 const GRADE_SEV={A:"NOF",B:"INC",C:"DEG",X:"CRI"};
+/* The same mapping read the other way, so a limit table that concludes a
+   severity can propose the condition code the technician actually answers in. */
+const SEV_GRADE={NOF:"A",INC:"B",DEG:"C",CRI:"X"};
 
 /* ===================== state ===================== */
 let eqClass = localStorage.getItem("equip_class") || "ALL";
@@ -4113,7 +4143,13 @@ function renderMedia(){ const p=draft.positions[curItem]||{}; const ph=p.photos|
 /* ===================== grade + fields ===================== */
 $("gradeSeg").addEventListener("click",(e)=>{ const b=e.target.closest("button[data-g]"); if(!b) return;
   const p=curP(); p.grade=(p.grade===b.dataset.g)?null:b.dataset.g;
-  if(p.grade && !p.sev){ const sug=GRADE_SEV[p.grade]; if(sug) p.sev=sug; }   // suggest ISO severity
+  /* The mapping, every time — not only when severity happens to be blank. It
+     was "suggest", which meant a grade corrected from X to A left CRI behind. */
+  if(p.grade) p.sev=GRADE_SEV[p.grade]||"";
+  else delete p.sev;
+  delete p.sevMan;
+  /* A technician's own answer, so the limit table stops proposing over it. */
+  p.gradeMan=1; delete p.gradeAuto;
   renderGrade(); renderSev(); renderChips(); });
 /* A/B/C/X is a walk-around's answer. A measured station's answer is a number,
    and offering a grade beside it invites two answers to one question — which
@@ -4131,7 +4167,8 @@ function renderGrade(){
   const fld=$("gradeFld");
   if(fld) fld.classList.toggle("hidden", !gradeApplies());
   const g=posRO().grade; $("gradeSeg").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.g===g)); }
-function renderSev(){ const v=posRO().sev; $("sevSeg").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.s===v));
+function renderSev(){ const p=posRO(); const v=p.sev||GRADE_SEV[p.grade]||"";
+  $("sevSeg").querySelectorAll("[data-s]").forEach(x=>x.classList.toggle("on",x.dataset.s===v));
   renderISOFold(); }   // anything but "no failure" needs the coded fields open
 /* Evidence is a toggle, not a required field: tapping the chosen one again
    clears it, because a fitter who taps by accident must be able to undo it
@@ -4144,9 +4181,7 @@ $("lubeProd").addEventListener("change",()=>{ saveCur(); renderLube(); renderChi
 $("lubeOther").addEventListener("input",()=>{ saveCur(); renderLube(); renderChips(); });
 $("lubeSamp").addEventListener("change",()=>{ saveCur(); renderChips(); });
 
-$("sevSeg").addEventListener("click",(e)=>{ const b=e.target.closest("button[data-s]"); if(!b) return;
-  const p=curP(); p.sev=(p.sev===b.dataset.s)?null:b.dataset.s; p.sevMan=1;   // manual choice wins over the temperature rule
-  renderSev(); renderChips(); });
+/* No handler. Severity is derived; there is nothing here to press. */
 
 /* --- temperature: limit hint + auto-suggested ISO severity --------------- */
 // Match the limit table against the code + BOTH language labels, so the limits never
@@ -5472,7 +5507,16 @@ function renderTempHint(){ if(!TYPE_META[type].temp) return;
   $("tempLim").innerHTML=h; }
 function syncTempSev(){ if(!TYPE_META[type].temp || !curItem) return;
   const p=draft.positions[curItem];
-  if(p && !p.sevMan){ const sv=tempSeverity(p.tempV,tempLimit(tempCtx())); if(sv && p.sev!==sv){ p.sev=sv; renderSev(); } }
+  /* A measured round's limits propose a CONDITION, which the technician
+     confirms or corrects; the severity follows from that. Writing severity
+     straight from the limit table produced the same split answer the segmented
+     control did — a reading past its limit setting CRI under a grade of A. */
+  if(p){
+    const sv=tempSeverity(p.tempV,tempLimit(tempCtx()));
+    const g=sv?SEV_GRADE[sv]:"";
+    if(g && !p.gradeMan && p.grade!==g){ p.grade=g; p.gradeAuto=1; p.sev=GRADE_SEV[g]||""; 
+      renderGrade(); renderSev(); }
+  }
   renderTempHint(); }
 function updateActionBtn(){ const a=(draft.positions[curItem]||{}).action;
   $("actionBtn").textContent = a ? actionLabel(a) : t("opt_action_none"); }

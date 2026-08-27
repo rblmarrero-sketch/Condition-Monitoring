@@ -96,7 +96,10 @@ const save = async p => { await p.click('#saveBtn'); await p.waitForTimeout(500)
   const k3 = await p.evaluate(() => items()[0].k);
   await pick(p, k3);
   await setGrade(p, 'B');                            // B alone would save
-  await p.evaluate(() => { draft.positions[curItem].sev = 'CRI'; draft.positions[curItem].sevMan = 1; });
+  /* Severity is derived now, so the way a Critical arrives is the grade. The
+     old shape of this test wrote sev='CRI' beside grade='B' directly, which is
+     the contradiction the derivation exists to make unrepresentable. */
+  await setGrade(p, 'X');
   await save(p);
   ok('a hand-raised Critical is refused too', (await queued(p)) === 0, `${await queued(p)} queued`);
   ok('with the same explanation', /Critical/i.test(await dlgTxt(p)), await dlgTxt(p));

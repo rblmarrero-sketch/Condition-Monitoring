@@ -111,7 +111,7 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
       for (let n = 0; n < DATES.length; n++) {
         const positions = {};
         spec.keys.forEach((k, i) => {
-          const p = { grade: '', sev: '', sevMan: 0, action: '', wo: '', particle: '',
+          const p = { grade: '', sev: '', action: '', wo: '', particle: '',
             comp: '', oil: '', defect: '', cause: '', comment: '', tempV: '', tempA: '',
             tempM: '', detect: 'DM-02', prio: '', prod: '', other: '', evid: '', samp: 0,
             mm: null, stood: 0, reason: '', base: null, photos: [], video: null };

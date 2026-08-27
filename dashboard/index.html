@@ -987,6 +987,10 @@
   /* Needs triage. It is not an error and not a success: it is work that has
      not been described well enough to plan, and it has to read as its own
      state rather than as a quieter kind of open. */
+  .ovr{grid-column:1/-1;}
+  .ovr.hidden{display:none;}
+  .ovrwarn{margin-top:4px;font-weight:600;font-size:var(--t-micro);line-height:1.4;
+    font-family:inherit;color:var(--warn-ink);}
   .tri{display:inline-flex;align-items:center;gap:5px;margin-left:6px;
     padding:1px 7px;border-radius:999px;white-space:nowrap;
     font-weight:600;font-size:var(--t-micro);line-height:1.6;font-family:inherit;
@@ -2626,6 +2630,9 @@ const I18N={
   cv_on:"Show only this round",
   cv_off:"Showing only this round — press to show them all",
   cv_never_go:"Machines this round has never reached — open the due list",
+  ed_ovr:"Override reason", ed_ovr_ph:"Why this severity, not the mapped one",
+  ed_ovr_warn:"{g} maps to {m}. Saving {e} is a deliberate override.",
+  ed_ovr_need:"A severity that differs from its grade needs a reason ({k}).",
   as_open:"Open", as_triage:"Needs triage", as_closed:"Closed",
   as_noaction:"No action required", as_none:"\u2014",
   as_triage_t:"Cannot be planned yet \u2014 missing: {f}",
@@ -3118,6 +3125,9 @@ const I18N={
   cv_on:"Показать только этот обход",
   cv_off:"Показан только этот обход — нажмите, чтобы показать все",
   cv_never_go:"Машины, до которых обход ни разу не дошёл — открыть список сроков",
+  ed_ovr:"Обоснование отклонения", ed_ovr_ph:"Почему эта категория, а не сопоставленная",
+  ed_ovr_warn:"{g} соответствует «{m}». Сохранение «{e}» — осознанное отклонение.",
+  ed_ovr_need:"Для категории, отличной от кода состояния, нужно обоснование ({k}).",
   as_open:"Открыто", as_triage:"Требует разбора", as_closed:"Закрыто",
   as_noaction:"Действий не требуется", as_none:"\u2014",
   as_triage_t:"Пока нельзя запланировать \u2014 не хватает: {f}",
@@ -6062,6 +6072,18 @@ function openEdit(key,keepMsg){
             <option value="">${esc(t("ed_none"))}</option>
             ${["NOF","INC","DEG","CRI"].map(s=>`<option value="${s}"${s===sev?" selected":""}>${esc(SEV[s].l)}</option>`).join("")}
           </select></div>
+          <!-- Grade supplies the mapped default. A severity that deliberately
+               differs is allowed — an engineer knows things the code does not —
+               but it is an override, and an override without a reason is a
+               contradiction the record cannot explain later. X · Critical
+               sitting beside Incipient has to be somebody's decision or it is a
+               mistake nobody can tell from a decision. -->
+          <div class="field ovr hidden" data-ovr="${esc(i.key)}">
+            <label>${esc(t("ed_ovr"))}</label>
+            <input data-f="sevReason" data-k="${esc(i.key)}" type="text"
+              value="${esc(i.sevReason||"")}" placeholder="${esc(t("ed_ovr_ph"))}">
+            <div class="ovrwarn" data-ovrw="${esc(i.key)}"></div>
+          </div>
           <div class="field"><label>${esc(t("ed_rec"))}</label><select data-f="action" data-k="${esc(i.key)}">
             ${actionOpts().map(([v,l])=>`<option value="${esc(v)}"${v&&v===i.action?" selected":""}>${esc(l)}</option>`).join("")}
           </select></div>
@@ -6105,6 +6127,31 @@ function openEdit(key,keepMsg){
   // rewrote every field, and rewriting the defect from its code silently
   // replaced the inspector's wording with the taxonomy's.
   $("edItems").querySelectorAll("[data-f]").forEach(el=>{ el.dataset.init=el.value; });
+  /* Grade sets the mapped default; the engineer may then move severity away
+     from it deliberately, and the moment they do the reason field appears. */
+  const syncOvr=k=>{
+    const g=$("edItems").querySelector(`[data-f="grade"][data-k="${cssq(k)}"]`);
+    const sv=$("edItems").querySelector(`[data-f="sev"][data-k="${cssq(k)}"]`);
+    const box=$("edItems").querySelector(`[data-ovr="${cssq(k)}"]`);
+    const warn=$("edItems").querySelector(`[data-ovrw="${cssq(k)}"]`);
+    if(!g||!sv||!box) return;
+    const mapped=GRADE_SEV[g.value]||"";
+    const diverged=!!(g.value && sv.value && sv.value!==mapped);
+    box.classList.toggle("hidden", !diverged);
+    if(diverged && warn) warn.textContent=t("ed_ovr_warn",
+      {g:g.value, m:(SEV[mapped]||{}).l||mapped, e:(SEV[sv.value]||{}).l||sv.value});
+  };
+  $("edItems").querySelectorAll('[data-f="grade"]').forEach(g=>{
+    g.addEventListener("change",()=>{
+      const k=g.dataset.k;
+      const sv=$("edItems").querySelector(`[data-f="sev"][data-k="${cssq(k)}"]`);
+      if(sv && g.value) sv.value=GRADE_SEV[g.value]||"";   // the mapped default
+      syncOvr(k);
+    });
+  });
+  $("edItems").querySelectorAll('[data-f="sev"]').forEach(sv=>
+    sv.addEventListener("change",()=>syncOvr(sv.dataset.k)));
+  $("edItems").querySelectorAll('[data-f="grade"]').forEach(g=>syncOvr(g.dataset.k));
   $("editOv").classList.remove("hidden");
 }
 /* The choice between two phones' versions of the same round. Both are listed
@@ -6190,7 +6237,42 @@ function collectEdit(){
       if(d){ items[k].defect=d.en; items[k].iso=d.iso14224||""; items[k].isoMode=d.iso14224||""; } }
     if(f==="causeCode"){ const c=CAUSE_BY[upCause(v)]; if(c) items[k].cause=c.en; }
   });
+  /* Whatever moved, the grade/severity relationship is recorded in full: what
+     the code maps to, what is actually being used, and — when they differ — who
+     decided that and why. Reports and KPIs read the effective value; the audit
+     view can always show all three. */
+  const who=(()=>{ try{ return localStorage.getItem("cm_dash_who")||""; }catch(e){ return ""; } })();
+  $("edItems").querySelectorAll('[data-f="grade"]').forEach(g=>{
+    const k=g.dataset.k;
+    const sv=$("edItems").querySelector(`[data-f="sev"][data-k="${cssq(k)}"]`);
+    if(!sv) return;
+    const mapped=GRADE_SEV[g.value]||"";
+    const eff=sv.value||mapped;
+    const diverged=!!(g.value && sv.value && sv.value!==mapped);
+    const rs=$("edItems").querySelector(`[data-f="sevReason"][data-k="${cssq(k)}"]`);
+    const touched = items[k] && ("grade" in items[k] || "sev" in items[k] ||
+                                 "sevReason" in items[k]);
+    if(!touched) return;
+    const it=(items[k]||(items[k]={}));
+    it.mapSev=mapped;
+    it.sev=eff;
+    if(diverged){
+      it.sevOverride=1;
+      it.sevReason=(rs&&rs.value.trim())||"";
+      it.sevBy=who;
+      it.sevAt=new Date().toISOString();
+    }else{
+      it.sevOverride=0; it.sevReason=""; it.sevBy=""; it.sevAt="";
+    }
+  });
   return items;
+}
+/* CSS.escape is not everywhere; a point key can carry a dot. */
+function cssq(v){ return String(v).replace(/["\\]/g,"\\$&"); }
+/* Which items are being saved with a severity that contradicts their grade and
+   no reason for it. Returns the point keys, so the message can name them. */
+function overrideGaps(items){
+  return Object.keys(items||{}).filter(k=>items[k].sevOverride===1 && !items[k].sevReason);
 }
 /* Each save writes one complete marker, but the panel only reports what moved
    this time — so a later void or a one-field tweak would drop every earlier
@@ -6242,7 +6324,13 @@ function edPost(extra){
 }
 $("edSave").onclick=()=>{
   const rec=RECS.find(r=>recKey(r)===edKey);
-  if(edPost({ items:mergedItems(), fields:mergedFields(), note:$("edNote").value.trim(),
+  const items=mergedItems();
+  /* An engineer may overrule the mapping. They may not do it silently: a saved
+     X · Critical showing Incipient with no reason is indistinguishable from a
+     mis-click, for ever. */
+  const gaps=overrideGaps(items);
+  if(gaps.length){ $("edMsg").textContent=t("ed_ovr_need",{k:gaps.slice(0,3).join(", ")}); return; }
+  if(edPost({ items, fields:mergedFields(), note:$("edNote").value.trim(),
               void:!!(rec&&rec._void), reason:(rec&&rec._reason)||"" })) openEdit(edKey,true);
 };
 $("edVoid").onclick=()=>{
