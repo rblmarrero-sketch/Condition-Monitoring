@@ -154,6 +154,59 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
   ok(!unknown.tiles.some(k => /latency|hash|duplicate/i.test(k)),
      "and none of them is reported as a figure", unknown.tiles.join(", "));
 
+  console.log("\n── where the number comes from");
+  /* Three screens quoted three different counts of the same inspections and
+     none of them showed its working, so all three stopped being believed. The
+     ledger has to BALANCE — a reconciliation that does not add up is worse
+     than no reconciliation, because it looks like an answer. */
+  const led = await p.evaluate(() => {
+    const rows = reconcile();
+    const by = {};
+    rows.forEach(r => { by[r.label] = r.n; });
+    return { rows: rows.map(r => ({ n: r.n, step: !!r.step, total: !!r.total })), by,
+             labels: rows.map(r => r.label), recs: RECS.length };
+  });
+  ok(led.rows.length === 8, "every step of the arithmetic is on the page", led.rows.length);
+  ok(led.labels.every(l => l && !/^sy_r_/.test(l)),
+     "each one is named, not left as a key", led.labels.join(" · "));
+  const sources = led.rows.slice(0, 3).reduce((s, r) => s + r.n, 0);
+  const subs = led.rows.slice(3, 5).reduce((s, r) => s + r.n, 0);
+  const total = led.rows[5].n;
+  ok(sources - subs === total,
+     "the sources minus the merges equal what the dashboard holds",
+     `${sources} − ${subs} = ${sources - subs}, shown ${total}`);
+  ok(total === led.recs, "and that is the same number every other screen counts",
+     `${total} vs ${led.recs}`);
+  ok(led.rows[5].n - led.rows[6].n === led.rows[7].n,
+     "withdrawn rounds come off the figure that counts as work",
+     `${led.rows[5].n} − ${led.rows[6].n} = ${led.rows[7].n}`);
+
+  /* And it still balances once there is something to subtract. Two phones
+     sending one round is ONE round and a conflict — counting both would report
+     the fleet as having walked a machine twice. */
+  const withRivals = await p.evaluate(() => {
+    const seed = driveRecs.slice();
+    const one = RECS[0];
+    /* the same address twice, which is exactly what a two-phone clash looks
+       like on the way in */
+    driveRecs = [{ equip: one.equip, date: one.date, type: one.type, by: "A", items: [] },
+                 { equip: one.equip, date: one.date, type: one.type, by: "B", items: [] }];
+    rebuild();
+    const rows = reconcile();
+    const out = { rows: rows.map(r => r.n), recs: RECS.length };
+    driveRecs = seed; rebuild();
+    return out;
+  });
+  const s2 = withRivals.rows.slice(0, 3).reduce((a, b) => a + b, 0);
+  const d2 = withRivals.rows.slice(3, 5).reduce((a, b) => a + b, 0);
+  ok(withRivals.rows[4] >= 1, "a round two phones sent is counted as one and a rival",
+     "rivals " + withRivals.rows[4]);
+  ok(s2 - d2 === withRivals.rows[5],
+     "and the ledger still balances with something to subtract",
+     `${s2} − ${d2} = ${s2 - d2}, shown ${withRivals.rows[5]}`);
+  ok(withRivals.rows[5] === withRivals.recs, "matching the record set",
+     `${withRivals.rows[5]} vs ${withRivals.recs}`);
+
   console.log("\n── it fits");
   for (const w of [1280, 1440, 1920]) {
     await p.setViewportSize({ width: w, height: 900 });

@@ -2518,6 +2518,18 @@
       <div class="section g5">
         <div class="secthd"><h2 data-i18n="sy_health">Backend</h2></div>
         <dl class="kv" id="syHealth"></dl>
+        <!-- WHY THE THREE SCREENS DISAGREE.
+
+             The phone said 44, the folder had 60, the dashboard drew 45, and
+             nothing on any of them explained the gap — so all three numbers
+             stopped being believed, which is worse than any one of them being
+             wrong. Each step of the arithmetic is named here with the reason
+             it subtracts, so a difference is something to act on rather than
+             something to argue about. -->
+        <div class="secthd" style="margin-top:var(--s4)"><h2 data-i18n="sy_recon">Where the number comes from</h2></div>
+        <dl class="kv" id="syRecon"></dl>
+        <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
+          <div class="sub" data-i18n="sy_recon_sub">Read down. Each line is a source or a rule, and the last one is the figure every other screen counts. A round in the folder that is also in the bundled history is one round, not two — that is the merge. A round two phones both sent is one round with a conflict to settle, not two rounds.</div></details>
         <div class="secthd" style="margin-top:var(--s4)"><h2 data-i18n="sy_unknown">Not measurable from here</h2></div>
         <ul class="synone" id="syUnknown"></ul>
         <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
@@ -2927,6 +2939,13 @@ const I18N={
   tab_sync:"Sync operations",
   sy_gaps:"Records waiting on evidence", sy_health:"Backend",
   sy_unknown:"Not measurable from here",
+  sy_recon:"Where the number comes from",
+  sy_recon_sub:"Read down. Each line is a source or a rule, and the last one is the figure every other screen counts. A round in the folder that is also in the bundled history is one round, not two — that is the merge. A round two phones both sent is one round with a conflict to settle, not two rounds.",
+  sy_r_bundled:"In the bundled history", sy_r_drive:"In the folder",
+  sy_r_import:"Imported by hand",
+  sy_r_dupe:"Same round from more than one source", sy_r_rival:"Two phones, one round",
+  sy_r_total:"Inspections in the system", sy_r_void:"Withdrawn, kept for the trail",
+  sy_r_live:"Inspections that count as work",
   sy_k_recs:"Records held", sy_k_recs_s:"{n} cannot be filed",
   sy_k_media:"Evidence arrived", sy_k_media_s:"{n} of {of} attachments",
   sy_k_wait:"Waiting on media", sy_k_wait_s:"records missing an attachment",
@@ -3491,6 +3510,13 @@ const I18N={
   tab_sync:"Синхронизация",
   sy_gaps:"Записи, ожидающие материалов", sy_health:"Хранилище",
   sy_unknown:"Отсюда не измеряется",
+  sy_recon:"Откуда берётся эта цифра",
+  sy_recon_sub:"Читайте сверху вниз. Каждая строка — источник или правило, последняя — та цифра, которую считают все остальные экраны. Обход, который есть и в папке, и в истории, — это один обход, а не два. Обход, присланный двумя телефонами, — это один обход и конфликт, который надо решить.",
+  sy_r_bundled:"В приложенной истории", sy_r_drive:"В папке",
+  sy_r_import:"Загружено вручную",
+  sy_r_dupe:"Один обход из нескольких источников", sy_r_rival:"Два телефона, один обход",
+  sy_r_total:"Обходов в системе", sy_r_void:"Аннулировано, оставлено для истории",
+  sy_r_live:"Обходов, считающихся работой",
   sy_k_recs:"Записей в системе", sy_k_recs_s:"{n} невозможно разложить",
   sy_k_media:"Материалы получены", sy_k_media_s:"{n} из {of} вложений",
   sy_k_wait:"Ждут материалов", sy_k_wait_s:"записей без вложения",
@@ -10021,6 +10047,45 @@ function syncScan(){
            critWaiting:gaps.filter(g=>critOf(g.r)).length,
            conflicts:(()=>{ try{ return CMDash.conflictCount(); }catch(e){ return 0; } })() };
 }
+/* WHERE THE NUMBER COMES FROM.
+
+   Three screens quoted three different counts of the same inspections and none
+   of them showed its working, so all three stopped being believed — which is a
+   worse outcome than any single one of them being wrong. The arithmetic is not
+   complicated; it was simply invisible:
+
+     the bundled history + what the folder holds + anything imported by hand
+     − the rounds that appear in more than one of those, which are one round
+     − the rounds two phones both sent, which are one round and a conflict
+     = what every other screen on this dashboard counts
+     − the ones withdrawn, which stay for the audit trail and are not work
+
+   Each line is measured at the moment it is drawn. */
+function reconcile(){
+  const bundled=fromBundled(), drv=driveRecs, imp=imported;
+  const raw=bundled.length+drv.length+imp.length;
+  /* How many distinct addresses those three between them name. */
+  const addrs=new Set();
+  bundled.forEach(r=>addrs.add(recKey(r)));
+  drv.forEach(r=>addrs.add(recKey(r)));
+  imp.forEach(r=>addrs.add(recKey(r)));
+  /* Two phones on one round is one round here and a conflict to settle — the
+     script keeps both copies on purpose, and counting both as inspections
+     would report the fleet as having walked a machine twice. */
+  const rivals=Math.max(0, drv.length - new Set(drv.map(r=>recKey(r))).size);
+  const dupes=Math.max(0, raw - addrs.size - rivals);
+  const voided=RECS.filter(r=>r._void).length;
+  return [
+    { label:t("sy_r_bundled"), n:bundled.length },
+    { label:t("sy_r_drive"),   n:drv.length },
+    { label:t("sy_r_import"),  n:imp.length },
+    { label:t("sy_r_dupe"),    n:dupes,  step:1 },
+    { label:t("sy_r_rival"),   n:rivals, step:1 },
+    { label:t("sy_r_total"),   n:RECS.length, total:1 },
+    { label:t("sy_r_void"),    n:voided, step:1 },
+    { label:t("sy_r_live"),    n:RECS.length-voided, total:1 },
+  ];
+}
 /* Things a folder-backed store genuinely cannot answer. Named, with the reason,
    so the gap is a decision on somebody's list rather than a blank. */
 const SYNC_UNKNOWN=["sy_u_latency","sy_u_hash","sy_u_dupe","sy_u_receipt"];
@@ -10057,6 +10122,14 @@ function renderSync(){
     + `<dt>${esc(t("sy_h_last"))}</dt><dd>${esc(ago(s.cursorAt))}</dd>`
     + `<dt>${esc(t("sy_h_att"))}</dt><dd>${esc(num(s.present))} / ${esc(num(s.expected))}</dd>`
     + `<dt>${esc(t("sy_h_held"))}</dt><dd>${esc(num(s.quar.length))}</dd>`;
+  /* THE LEDGER FROM THE SOURCES TO THE NUMBER ON THE SCREEN.
+     Every line is measured here and now, never carried from another render —
+     two screens quoting one figure from two moments is how they came to
+     disagree in the first place. */
+  const rc=reconcile();
+  $("syRecon").innerHTML=rc.map(r=>
+      `<dt${r.step?' class="muted"':""}>${esc(r.label)}</dt>`
+    + `<dd class="mono${r.total?" strong":""}">${r.step&&r.n>0?"−":""}${esc(num(r.n))}</dd>`).join("");
   $("syUnknown").innerHTML=SYNC_UNKNOWN.map(k=>`<li>${esc(t(k))}</li>`).join("");
   /* The badge is this panel's own number, so this panel sets it. Leaving it to
      renderNavCounts() made it correct only when the two happened to be called
