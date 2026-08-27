@@ -26,10 +26,27 @@ const rows = p => p.evaluate(() => [...document.querySelectorAll('.dueitem')]
   .map(x => x.textContent.replace(/\s+/g, ' ').trim()));
 
 /* Five rounds on five machines, deliberately different types and different
-   ages, so "one list, worst first" is a claim with something to be wrong. */
+   ages, so "one list, worst first" is a claim with something to be wrong.
+
+   RELATIVE, NOT FIXED. These were five calendar dates, which meant the ages
+   they stood for drifted every day the suite was not run and the intervals
+   they were chosen against were the flat ones this project used to have. Each
+   one is now stated as "this many days past its own interval", against the
+   figures the fleet actually gave, at 20 h/day:
+
+     MP    250 h  = 12.5 d   every machine
+     FC    500 h  =   25 d
+     INSP  500 h  =   25 d
+     UC   1000 h  =   50 d   dozers   ·  4000 h = 200 d  excavators
+     TB   4000 h  =  200 d   articulated  ·  1000 h = 50 d  the rest
+
+   TK101 is an articulated truck, so its tray round comes round at 4,000 hours
+   and not the 1,000 the suite used to assume — 250 days puts it 50 days past,
+   which keeps it the worst on the list for the reason it was chosen. */
+const ago = n => new Date(Date.now() - n * 86400000).toISOString().slice(0, 10);
 const SEED = `(() => {
-  histSave({ 'MP|TK146':'2026-08-01', 'UC|DZ001':'2026-06-20', 'FC|EX005':'2026-08-18',
-             'INSP|TK150':'2026-07-01', 'TB|TK101':'2026-05-01' });
+  histSave({ 'MP|TK146':'${ago(26)}', 'UC|DZ001':'${ago(68)}', 'FC|EX005':'${ago(9)}',
+             'INSP|TK150':'${ago(57)}', 'TB|TK101':'${ago(250)}' });
   deferSave({}); smuSave({});
   dueType = '';
   dueScope = 'over';
