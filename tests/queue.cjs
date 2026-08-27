@@ -152,9 +152,49 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
   ok(trend.rowsAfter < trend.rowsBefore, "while the rest of the page narrows",
      trend.rowsBefore + " → " + trend.rowsAfter + " machines");
 
-  console.log("\n── the machine opens where the reader is standing");
-  await p.evaluate(() => { clearDrill(); });
+  console.log("\n── a coverage row is the round it names");
+  await p.evaluate(() => { clearDrill(); $("fType").value = ""; renderAll(); });
   await p.waitForTimeout(400);
+  const cvA = await p.evaluate(() => {
+    const tr = document.querySelector("#covTbl tr[data-cvty]");
+    if (!tr) return { skip: true };
+    const ty = tr.dataset.cvty; tr.click();
+    return { ty, fType: $("fType").value,
+             on: document.querySelectorAll("#covTbl tr.covr.on").length,
+             chips: [...document.querySelectorAll("#chips .chip")].map(x => x.textContent.trim()) };
+  });
+  if (!cvA.skip) {
+    ok(cvA.fType === cvA.ty, "pressing a round filters the page by it", cvA.fType);
+    ok(cvA.on === 1, "and the row it came from says so", cvA.on + " marked");
+    ok(cvA.chips.some(c => /×/.test(c)), "with a way back out on the chip bar", cvA.chips.join(" / "));
+    /* It has to be reversible from the same press. The type filter collapses
+       this table to one row, so if the row did not toggle there would be
+       nothing left on screen that could clear it. */
+    const cvB = await p.evaluate(() => {
+      document.querySelector("#covTbl tr[data-cvty]").click();
+      return $("fType").value; });
+    ok(cvB === "", "and pressing it again clears it", cvB === "" ? "cleared" : cvB);
+  }
+  /* "Never done" counts machines with no record at all. There is nothing to
+     filter TO, so it is a due-list question and has to go there. */
+  const never = await p.evaluate(() => {
+    const btn = document.querySelector("#covTbl [data-cvnever]");
+    if (!btn) return { skip: true };
+    const ty = btn.dataset.cvnever; btn.click();
+    return { ty, tab: (document.querySelector("section:not(.hidden)") || {}).id,
+             ddType: ($("ddType") || {}).value, scope: ($("ddScope") || {}).value };
+  });
+  if (!never.skip) {
+    ok(never.tab === "tab-due", "the never-done count opens the due list", never.tab);
+    ok(never.ddType === never.ty, "already narrowed to that round", never.ddType);
+  }
+
+  console.log("\n── the machine opens where the reader is standing");
+  /* The never-done check above lands on the due list, so come back and clear
+     what the coverage row set — otherwise the fleet table is off screen and
+     the click below waits thirty seconds for a row that is not there. */
+  await p.evaluate(() => { showTab("overview"); $("fType").value = ""; clearDrill(); });
+  await p.waitForTimeout(500);
   await p.click("#fleetTbl tbody tr"); await p.waitForTimeout(400);
   const drw = await p.evaluate(() => ({
     open: !document.getElementById("drw").classList.contains("hidden"),

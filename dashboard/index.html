@@ -984,6 +984,10 @@
   .duec{font:500 var(--t-small)/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;
     color:var(--ink-2);white-space:nowrap;}
   .duec.soon{color:var(--warn-ink);font-weight:600;}
+  .covr{cursor:pointer;}
+  .covr:hover>td{background:color-mix(in srgb,var(--accent) 6%,transparent);}
+  .covr:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;}
+  .covr.on>td{background:color-mix(in srgb,var(--accent) 11%,transparent);}
   .duec.over{color:var(--crit-ink);font-weight:700;}
   /* The reset is always on the bar, so "how do I get back to everything" is
      never a question. Dimmed with nothing to clear rather than hidden —
@@ -2580,6 +2584,9 @@ const I18N={
   f_voidtip:"Voided inspections are withdrawn from every count, but nothing is deleted",
   clearall:"Clear all", remove:"Remove",
   c_type:"Type", c_class:"Class", c_period:"Period", c_search:"Search",
+  cv_on:"Show only this round",
+  cv_off:"Showing only this round — press to show them all",
+  cv_never_go:"Machines this round has never reached — open the due list",
   c_owner:"Responsible", c_month:"Month",
   xf_own:"Show only findings assigned to {o}",
   tr_click:"press to show only this month",
@@ -3056,6 +3063,9 @@ const I18N={
   f_voidtip:"Отозванные осмотры исключены из всех подсчётов, но ничего не удалено",
   clearall:"Очистить всё", remove:"Убрать",
   c_type:"Тип", c_class:"Класс", c_period:"Период", c_search:"Поиск",
+  cv_on:"Показать только этот обход",
+  cv_off:"Показан только этот обход — нажмите, чтобы показать все",
+  cv_never_go:"Машины, до которых обход ни разу не дошёл — открыть список сроков",
   c_owner:"Ответственный", c_month:"Месяц",
   xf_own:"Показать только находки под ответственностью {o}",
   tr_click:"нажмите, чтобы показать только этот месяц",
@@ -5379,13 +5389,24 @@ function renderCoverage(){
            is good news and should not shout; "never done: 1,112" is the largest
            gap in the programme and should. */
         const n=(v,warn)=>`<td class="num mono${v&&warn?" bad":!v?" muted":""}">${v}</td>`;
-        return `<tr><td><b>${esc(TYPE_LABEL[r.ty]||r.ty)}</b>
+        /* Every row here names a round, and the round is a filter the toolbar
+           already has. Reading "MP: 2% covered, 1,112 never done" and then
+           going to a dropdown to see WHICH 1,112 is two actions for one
+           thought. Pressing the round toggles it, so the same press gets back
+           out of it. */
+        const on = $("fType").value===r.ty;
+        return `<tr class="covr${on?" on":""}" data-cvty="${esc(r.ty)}" tabindex="0"
+            title="${esc(on?t("cv_off"):t("cv_on"))}"><td><b>${esc(TYPE_LABEL[r.ty]||r.ty)}</b>
             <div class="muted" style="font-size:11px">${esc(t("cv_every",{d:r.iv}))}${
               r.scoped?" · "+esc(t("cv_scoped")):""}</div></td>
           <td class="covcell">
             <div class="covrow"><span class="covpc${bad?" bad":""}">${r.pc}%</span>${covBar(r.pc)}</div>
             <div class="muted mono" style="font-size:11px">${r.seen} / ${r.total}</div></td>
-          ${n(r.inspections,0)}${n(r.never,1)}${n(r.overdue,1)}${n(r.people,0)}</tr>`;
+          ${n(r.inspections,0)}
+          <td class="num mono${r.never?" bad":" muted"}">${r.never
+            ? `<button class="xf num bad" data-cvnever="${esc(r.ty)}"
+                 title="${esc(t("cv_never_go"))}">${r.never}</button>` : 0}</td>
+          ${n(r.overdue,1)}${n(r.people,0)}</tr>`;
       }).join("")+`</tbody>`;
   $("covFleet").textContent=t("cv_fleet",{n:fmtN(fleet)});
   $("covMore").innerHTML = rows.length>CAP
@@ -5394,6 +5415,21 @@ function renderCoverage(){
     : "";
   const tg=$("covToggle");
   if(tg) tg.onclick=()=>{ covOpen=!covOpen; renderCoverage(); };
+  $("covTbl").querySelectorAll("tr[data-cvty]").forEach(tr=>{
+    const go=e=>{ if(e && e.target.closest("[data-cvnever]")) return;
+      const ty=tr.dataset.cvty;
+      $("fType").value = $("fType").value===ty ? "" : ty;
+      renderAll(); };
+    tr.onclick=go;
+    tr.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(null); } };
+  });
+  /* Never-done is a due-list question, not a findings question: the machines it
+     counts have no record to filter TO. */
+  $("covTbl").querySelectorAll("[data-cvnever]").forEach(b=>b.onclick=e=>{
+    e.stopPropagation();
+    if($("ddType")) $("ddType").value=b.dataset.cvnever;
+    showTab("due"); dueGo("all");
+  });
   $("covNote").textContent=t("cv_note",{n:fleet, p:days?t("cv_p_days",{d:days}):t("cv_p_all")});
 }
 let covOpen=false;
