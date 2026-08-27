@@ -460,8 +460,11 @@
     border-radius:8px;font-size:13px;color:var(--ink-2);}
   .field.why label{font-variant-numeric:tabular-nums;}
   /* coverage and direction */
-  .trend{display:flex;align-items:flex-end;gap:8px;overflow-x:auto;padding:6px 0 0;}
-  .tmon{flex:0 0 46px;display:flex;flex-direction:column;align-items:center;gap:3px;}
+  /* Fixed-width columns in a half-width panel meant twelve months scrolled
+     sideways while four months left 300px of the panel empty. The columns are
+     the flexible thing here; the panel is the fixed thing. */
+  .trend{display:flex;align-items:flex-end;gap:6px;padding:6px 0 0;}
+  .tmon{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px;}
   .tstack{width:100%;height:120px;display:flex;flex-direction:column;justify-content:flex-end;
     background:var(--surface-2);border-radius:4px;overflow:hidden;}
   .tstack i{display:block;width:100%;}
@@ -919,8 +922,30 @@
   .empty b{display:block;color:var(--ink-2);font-size:13px;font-weight:640;margin-bottom:4px;}
   .empty span{display:block;font-size:12.5px;line-height:1.5;max-width:52ch;margin:0 auto;}
   /* active filters, as removable chips */
-  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:-6px 0 18px;}
+  .chips{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:-6px 0 18px;}
   .chips:empty{display:none;}
+  /* A cell that is also a filter. It has to read as pressable without turning
+     the table into a wall of buttons, so it borrows the row's ink and only
+     shows its edge on hover. */
+  .xf{font:inherit;color:inherit;background:none;border:1px solid transparent;
+    border-radius:5px;padding:1px 5px;margin:-1px -5px;cursor:pointer;text-align:left;}
+  .xf:hover,.xf:focus-visible{border-color:var(--accent);color:var(--accent);
+    background:color-mix(in srgb,var(--accent) 8%,transparent);outline:none;}
+  .xf.num{font:600 var(--t-small)/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;
+    display:inline-flex;align-items:center;gap:4px;}
+  .xf.num.bad{color:var(--crit-ink);}
+  .xf.num i{width:5px;height:5px;border-radius:50%;background:var(--critical);}
+  /* Days to the next round. Neutral unless it needs a decision this week. */
+  .duec{font:500 var(--t-small)/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;
+    color:var(--ink-2);white-space:nowrap;}
+  .duec.soon{color:var(--warn-ink);font-weight:600;}
+  .duec.over{color:var(--crit-ink);font-weight:700;}
+  /* The reset is always on the bar, so "how do I get back to everything" is
+     never a question. Dimmed with nothing to clear rather than hidden —
+     a control that appears and disappears is a control people stop looking for. */
+  .resetb{margin-left:auto;flex:0 0 auto;}
+  .resetb[disabled]{opacity:.4;cursor:default;}
+  @media (max-width:1500px){ .hide-m{display:none !important;} }
   .chip{display:inline-flex;align-items:center;gap:7px;background:color-mix(in srgb,var(--accent) 14%,var(--surface));
     border:1px solid color-mix(in srgb,var(--accent) 40%,var(--border));color:var(--ink);
     border-radius:999px;padding:4px 6px 4px 11px;font-size:12.5px;}
@@ -1799,6 +1824,10 @@
     <span class="fcount" id="fCount"></span>
     <label class="voidtog" data-i18n-title="f_voidtip" title="Voided inspections are withdrawn from every count, but nothing is deleted">
       <input type="checkbox" id="fVoid"><span data-i18n="f_void">Show voided</span></label>
+    <!-- Always here, so "how do I get back to the whole fleet" is answered by
+         looking rather than by remembering. -->
+    <button class="btn resetb" id="fReset" data-i18n="f_reset"
+      data-i18n-title="f_reset_t" title="Clear every filter and drill-down">Reset</button>
   </div>
   <div class="chips" id="chips"></div>
 
@@ -2469,6 +2498,10 @@ const I18N={
 
   k_insp:"Inspections", k_find:"Findings", k_att:"Needs attention",
   k_comp:"On-time compliance", k_comp_s:"{n} of {of} rounds walked before they were overdue",
+  f_reset:"Reset", f_reset_n:"Reset ({n})",
+  f_reset_t:"Clear every filter and drill-down and go back to the whole fleet",
+  k_week:"Due this week", k_week_clear:"Nothing past due", k_week_over:"{n} already overdue",
+  k_week_t:"Rounds coming due in the next seven days, on the current Type and Class filters. Opens the due list.",
   k_comp_none:"no rounds scheduled yet", k_comp_t:"Open the due list",
   k_att_t:"Show only these findings", k_act_t:"Open the action register",
   k_same:"no change", k_vsprev:"vs the period before",
@@ -2576,6 +2609,9 @@ const I18N={
   a_assign:"Assign", a_in_d:"in {d}d",
   a_none:"Nothing here", a_none_s:"No finding matches this filter — try Everything.",
   th_owner:"Responsible", th_due:"Due", th_status:"Status",
+  th_class:"Class", th_open:"Open", th_nextdue:"Next due", th_noowner:"unassigned",
+  xf_cls:"Show only this class", xf_open:"Open the register for this machine",
+  xf_open_over:"{n} past its date \u2014 open the register for this machine",
   a_show:"Show", a_f_open:"Still open", a_f_over:"Overdue", a_f_owned:"Has an owner", a_f_all:"Everything",
   a_k_open:"STILL OPEN", a_k_open_s:"of {n} finding(s)",
   a_k_overdue:"OVERDUE", a_k_overdue_s:"past the date, still open",
@@ -2925,6 +2961,10 @@ const I18N={
 
   k_insp:"Осмотров", k_find:"Находок", k_att:"Требует внимания",
   k_comp:"Выполнено в срок", k_comp_s:"{n} из {of} обходов пройдены до просрочки",
+  f_reset:"Сброс", f_reset_n:"Сброс ({n})",
+  f_reset_t:"Снять все фильтры и уточнения и вернуться ко всему парку",
+  k_week:"Срок на этой неделе", k_week_clear:"Просрочек нет", k_week_over:"{n} уже просрочено",
+  k_week_t:"Обходы, срок которых наступает в ближайшие семь дней, с учётом фильтров «Тип» и «Класс». Открывает список сроков.",
   k_comp_none:"обходы ещё не запланированы", k_comp_t:"Открыть список сроков",
   k_att_t:"Показать только эти находки", k_act_t:"Открыть реестр действий",
   k_same:"без изменений", k_vsprev:"к предыдущему периоду",
@@ -3038,6 +3078,9 @@ const I18N={
   a_assign:"Назначить", a_in_d:"через {d} сут",
   a_none:"Здесь пусто", a_none_s:"Под этот фильтр ничего не подходит — попробуйте «Все».",
   th_owner:"Ответственный", th_due:"Срок", th_status:"Статус",
+  th_class:"Класс", th_open:"В работе", th_nextdue:"След. срок", th_noowner:"не назначен",
+  xf_cls:"Показать только этот класс", xf_open:"Открыть реестр по этой машине",
+  xf_open_over:"{n} просрочено \u2014 открыть реестр по этой машине",
   a_show:"Показать", a_f_open:"Открытые", a_f_over:"Просроченные",
   a_f_owned:"С ответственным", a_f_all:"Все",
   a_k_open:"ОТКРЫТО", a_k_open_s:"из {n}",
@@ -3616,14 +3659,22 @@ function renderChips(){
   if(drill.defect) add(t("c_defect"), drill.defect, ()=>setDrill("defect",drill.defect));
   if(drill.cause)  add(t("c_cause"), drill.cause, ()=>setDrill("cause",drill.cause));
   const box=$("chips");
+  const rb=$("fReset");
+  if(rb){
+    rb.disabled=!c.length;
+    rb.textContent = c.length ? t("f_reset_n",{n:c.length}) : t("f_reset");
+  }
   if(!c.length){ box.innerHTML=""; return; }
   box.innerHTML=c.map((x,i)=>`<span class="chip"><span class="muted">${esc(x.label)}</span> <b>${esc(x.val)}</b><button data-x="${i}" title="${esc(t("remove"))}" aria-label="${esc(t("remove"))}">×</button></span>`).join("")
     +`<button class="chip clearall" id="chipClear">${esc(t("clearall"))}</button>`;
   box.querySelectorAll("[data-x]").forEach(b=>b.onclick=()=>c[+b.dataset.x].onX());
-  const ca=$("chipClear"); if(ca) ca.onclick=()=>{
-    $("fType").value=""; $("fClass").value=""; $("fRange").value="0"; $("fQ").value="";
-    clearDrill();                      // ends with renderAll(), so the cleared controls take effect
-  };
+  const ca=$("chipClear"); if(ca) ca.onclick=clearFilters;
+}
+/* One function, two doors: the chip bar's clear-all and the Reset on the
+   toolbar. Two clear controls that clear different amounts is worse than one. */
+function clearFilters(){
+  $("fType").value=""; $("fClass").value=""; $("fRange").value="0"; $("fQ").value="";
+  clearDrill();                        // ends with renderAll(), so the cleared controls take effect
 }
 function findings(recs){            // one row per item that has any content
   const out=[];
@@ -3706,6 +3757,7 @@ function renderKpis(){
      manager is held to, and the dashboard had it nowhere. Computed from the
      same due engine the phone and the Due tab use, so all three agree. */
   const comp=complianceNow();
+  const ds=dueSoon(7);
 
   const prev=prevWindow();
   let pAtt=null, pFind=null;
@@ -3736,6 +3788,11 @@ function renderKpis(){
                 : esc(t("k_comp_s",{n:comp.onTime, of:comp.due})),
              cls: comp.pct==null ? "" : comp.pct>=90 ? "good" : comp.pct>=75 ? "warn" : "bad",
              go:"due", title:t("k_comp_t") })
+    + tile({ id:"kpiWeek", k:t("k_week"), v:ds.week,
+             s: ds.over ? `<span class="dlt up">${esc(t("k_week_over",{n:ds.over}))}</span>`
+                        : esc(t("k_week_clear")),
+             cls: ds.over ? "bad" : ds.week ? "warn" : "good",
+             go:"week", title:t("k_week_t") })
     + tile({ id:"kpiAtt", k:t("k_att"), v:attention, s:(deltaLine(attention,pAtt,true)||esc(t("k_attsub"))),
              cls:attention?"bad":"good", go:"attention", title:t("k_att_t") })
     + tile({ id:"kpiAct", k:t("k_act"), v:openActions, s:esc(t("k_actsub")), cls:openActions?"warn":"good",
@@ -3756,6 +3813,7 @@ function renderKpis(){
   $("kpis").querySelectorAll("[data-kgo]").forEach(b=>b.onclick=()=>{
     const g=b.dataset.kgo;
     if(g==="due"){ showTab("due"); return; }
+    if(g==="week"){ showTab("due"); dueGo(ds.over?"over":"soon"); return; }
     if(g==="actions"){ showTab("actions"); return; }
     if(g==="attention"){ setDrill("sev", drill.sev==="CRI"?"DEG":"CRI"); }
   });
@@ -3766,6 +3824,27 @@ function renderKpis(){
 /* Rounds walked on time, against rounds that came due — over the whole
    register, not over the rounds that happen to have a record, because
    measuring compliance against the work that got done always reads 100%. */
+/* What has to be walked in the next seven days, and what is already past its
+   interval. Compliance is the score for last month; this is the work list for
+   this one, and a planning dashboard that cannot answer "what is due this
+   week" is answering a question nobody asked first. */
+function dueSoon(days){
+  const win = days==null ? 7 : days;
+  try{
+    const rows=dueTabRows();
+    const cls=$("fClass").value, ty=$("fType").value;
+    const mine=rows.filter(r=>{
+      if(ty && r.ty!==ty) return false;
+      if(cls){ const a=(window.ASSETS||[]).find(x=>String(x.n).toUpperCase()===r.unit);
+               if(!a || a.cls!==cls) return false; }
+      return true;
+    });
+    const over=mine.filter(r=>r.st==="over").length;
+    const week=mine.filter(r=>r.st!=="over" && r.n && r.n.dueInDays!=null
+                              && r.n.dueInDays<=win).length;
+    return {week, over, total:mine.length};
+  }catch(e){ return {week:0, over:0, total:0}; }
+}
 function complianceNow(){
   try{
     const rows=dueTabRows();
@@ -3778,11 +3857,43 @@ function complianceNow(){
 
 /* ---------- fleet table ---------- */
 let fleetSort={k:"sev",dir:-1};
+/* One row per machine, and everything a planner needs to decide whether to walk
+   to it: what it is, what was found, who owns the work and when the next round
+   falls. It used to carry the finding and nothing about the response — worst
+   severity and a defect name, with the owner, the open work and the next due
+   date each living on a different tab. Reading one machine meant three tabs. */
+function nextDueBy(){
+  /* unit → the soonest round of any type, so the column answers "when do I next
+     have to be at this machine", not "when is one particular round due". */
+  if(nextDueBy._c && nextDueBy._c.at > Date.now()-4000) return nextDueBy._c.v;
+  const m={};
+  try{
+    dueTabRows().forEach(r=>{
+      const cur=m[r.unit];
+      if(!cur || r.n.dueInDays < cur.n.dueInDays) m[r.unit]=r;
+    });
+  }catch(e){}
+  nextDueBy._c={at:Date.now(), v:m};
+  return m;
+}
 function renderFleet(){
-  const recs=filtered(); const byU={};
+  const recs=filtered(); const byU={}, itemsU={};
   recs.forEach(r=>{ const k=r.equip; if(!byU[k]||(r.date||"")>(byU[k].date||"")) byU[k]=r; });
-  const val=(r,k)=>({ equip:r.equip, type:r.type, date:r.date||"",
+  /* Open work is counted across every round on the machine in the current
+     filter, not just the latest one: a critical finding raised in March is
+     still open in May, and reading it off May's round alone reports zero. */
+  findings(recs).forEach(({r,i})=>{
+    if(!fOpen(i)) return;
+    (itemsU[r.equip]=itemsU[r.equip]||[]).push(i);
+  });
+  const due=nextDueBy();
+  const clsOf=r=>r.cls||"";
+  const ownersOf=u=>[...new Set((itemsU[u]||[]).map(i=>i.owner).filter(Boolean))];
+  const val=(r,k)=>({ equip:r.equip, cls:clsOf(r), type:r.type, date:r.date||"",
     sev:sevRank(worstOf(r)), find:notable(r).length,
+    open:(itemsU[r.equip]||[]).length,
+    owner:(ownersOf(r.equip)[0]||"\uffff"),
+    due:(due[String(r.equip).toUpperCase()] ? due[String(r.equip).toUpperCase()].n.dueInDays : 99999),
     defect:topFinding(r), by:r.by||"" }[k]);
   const rows=Object.values(byU).sort((a,b)=>{
     const x=val(a,fleetSort.k), y=val(b,fleetSort.k);
@@ -3790,18 +3901,38 @@ function renderFleet(){
     return (c||a.equip.localeCompare(b.equip))*fleetSort.dir;
   });
   if(!rows.length){ $("fleetTbl").innerHTML=`<tr><td class="empty">${esc(t("e_nofilter"))}</td></tr>`; return; }
-  const cols=[["equip",t("th_unit")],["type",t("th_type")],["date",t("th_date")],["sev",t("th_worst")],
-              ["find",t("th_find")],["defect",t("th_topdef")],["by",t("th_by")]];
-  let h=`<thead><tr>`+cols.map(([k,l])=>
-    `<th class="sortable${fleetSort.k===k?" on":""}" data-sort="${k}">${l}<span class="arrow">${fleetSort.k===k?(fleetSort.dir>0?"▲":"▼"):"↕"}</span></th>`).join("")+`</tr></thead><tbody>`;
+  const cols=[["equip",t("th_unit"),""],["cls",t("th_class"),""],["type",t("th_type"),""],
+              ["date",t("th_date"),""],["sev",t("th_worst"),""],
+              ["find",t("th_find"),"r"],["open",t("th_open"),"r"],
+              ["owner",t("th_owner"),""],["due",t("th_nextdue"),""],
+              ["defect",t("th_topdef"),""],["by",t("th_by"),"hide-m"]];
+  let h=`<thead><tr>`+cols.map(([k,l,cl])=>
+    `<th class="sortable ${cl}${fleetSort.k===k?" on":""}" data-sort="${k}">${l}<span class="arrow">${fleetSort.k===k?(fleetSort.dir>0?"\u25b2":"\u25bc"):"\u2195"}</span></th>`).join("")+`</tr></thead><tbody>`;
   rows.forEach(r=>{
     const w=worstOf(r); const fs=notable(r); const top=topFinding(r);
+    const open=(itemsU[r.equip]||[]);
+    const nOver=open.filter(fOverdue).length;
+    const own=ownersOf(r.equip);
+    const d=due[String(r.equip).toUpperCase()];
+    /* Every cell that names a thing you can filter by IS the filter for it.
+       A class you can read but not click is a class you then go and find in a
+       dropdown, which is the same information costing two more actions. */
     h+=`<tr data-u="${esc(r.equip)}" style="cursor:pointer">
-      <td><b>${esc(r.equip)}</b></td><td><span class="tag">${esc(TYPE_LABEL[r.type]||r.type)}</span></td>
+      <td><b>${esc(r.equip)}</b></td>
+      <td>${clsOf(r)?`<button class="xf" data-xcls="${esc(clsOf(r))}" title="${esc(t("xf_cls"))}">${esc(clsOf(r))}</button>`:'<span class="muted">\u2014</span>'}</td>
+      <td><span class="tag">${esc(TYPE_LABEL[r.type]||r.type)}</span></td>
       <td class="mono">${esc(r.date||"")}</td>
-      <td>${w?`<span class="pill ${SEV[w].c}">${SEV[w].l}</span>`:'<span class="muted">—</span>'}</td>
-      <td class="mono">${fs.length}</td><td>${top?esc(top):'<span class="muted">—</span>'}</td>
-      <td class="muted">${esc(r.by||"")}</td></tr>`;
+      <td>${w?`<span class="pill ${SEV[w].c}">${SEV[w].l}</span>`:'<span class="muted">\u2014</span>'}</td>
+      <td class="mono r">${fs.length}</td>
+      <td class="mono r">${open.length
+          ? `<button class="xf num${nOver?" bad":""}" data-xact="${esc(r.equip)}" title="${esc(nOver?t("xf_open_over",{n:nOver}):t("xf_open"))}">${open.length}${nOver?`<i>\u25cf</i>`:""}</button>`
+          : '<span class="muted">0</span>'}</td>
+      <td>${own.length
+          ? `<span class="who" title="${esc(own.join(", "))}"><i>${esc(ini(own[0]))}</i><span>${esc(own[0])}${own.length>1?` +${own.length-1}`:""}</span></span>`
+          : `<span class="muted">${esc(t("th_noowner"))}</span>`}</td>
+      <td>${d ? dueCell(d) : '<span class="muted">\u2014</span>'}</td>
+      <td>${top?esc(top):'<span class="muted">\u2014</span>'}</td>
+      <td class="muted hide-m">${esc(r.by||"")}</td></tr>`;
   });
   $("fleetTbl").innerHTML=h+"</tbody>";
   if($("fleetShown")) $("fleetShown").innerHTML=
@@ -3809,9 +3940,25 @@ function renderFleet(){
   $("fleetTbl").querySelectorAll("th[data-sort]").forEach(th=>th.onclick=()=>{
     const k=th.dataset.sort;
     // a new column starts on the reading people expect: worst/newest first
-    if(fleetSort.k===k) fleetSort.dir*=-1; else fleetSort={k,dir:(k==="sev"||k==="find"||k==="date")?-1:1};
+    if(fleetSort.k===k) fleetSort.dir*=-1;
+    else fleetSort={k,dir:(k==="sev"||k==="find"||k==="date"||k==="open")?-1:1};
     renderFleet(); });
+  /* The cross-filters have to claim the click before the row does, or pressing
+     a class would open a machine's history instead of filtering by class. */
+  $("fleetTbl").querySelectorAll("[data-xcls]").forEach(b=>b.onclick=e=>{
+    e.stopPropagation(); $("fClass").value=b.dataset.xcls; renderAll(); });
+  $("fleetTbl").querySelectorAll("[data-xact]").forEach(b=>b.onclick=e=>{
+    e.stopPropagation(); setDrillTo("unit", b.dataset.xact); showTab("actions"); });
   $("fleetTbl").querySelectorAll("tr[data-u]").forEach(tr=>tr.onclick=()=>{ showTab("equipment"); $("equipSel").value=tr.dataset.u; renderHistory(); });
+}
+/* Days to the next round, said the way a planner reads it, coloured only when
+   it needs a decision. */
+function dueCell(r){
+  const n=r.n, d=n.dueInDays;
+  const lab=TYPE_LABEL[r.ty]||r.ty;
+  if(n.over) return `<span class="duec over" title="${esc(lab)}">${esc(t("due_over",{n:Math.abs(d)}))}</span>`;
+  if(d<=7)   return `<span class="duec soon" title="${esc(lab)}">${esc(t("due_in",{n:d}))}</span>`;
+  return `<span class="duec" title="${esc(lab)}">${esc(t("due_in",{n:d}))}</span>`;
 }
 
 /* ---------- Pareto ---------- */
@@ -4000,6 +4147,20 @@ const todayISO=()=>new Date().toISOString().slice(0,10);
 /* Overdue is only meaningful while something is still open — a job finished
    late is finished, and colouring it red for ever teaches people to ignore red. */
 function fOverdue(i){ return !!(i.due && stOpen(i.status) && i.due < todayISO()); }
+/* A finding that still needs somebody to do something. "Monitor" is a decision
+   that has already been taken, so it is not open work. */
+function fOpen(i){
+  if(!i) return false;
+  if(!stOpen(i.status)) return false;
+  const sv=String(i.sev||i.grade||"");
+  return !!(i.action && i.action!=="MON") || sv==="CRI" || sv==="DEG";
+}
+const ini=n=>String(n||"").split(/[\s.]+/).filter(Boolean)
+  .slice(0,2).map(x=>x[0]).join("").toUpperCase()||"?";
+/* setDrill toggles, which is right for a chart bar you press twice. Arriving
+   from somewhere else has to SET it — pressing "3 open" on a machine that is
+   already the drilled unit must not clear the filter on the way in. */
+function setDrillTo(k,v){ if(drill[k]===v){ renderAll(); return; } drill[k]=v; renderAll(); }
 function fAgeDays(r,i){
   const from=Date.parse((r.date||"")+"T00:00:00Z");
   return isFinite(from) ? Math.floor((Date.now()-from)/864e5) : null;
@@ -7510,6 +7671,12 @@ function dueTabRows(){
                 || a.ty.localeCompare(b.ty));
   return out;
 }
+/* The Due tab, opened already narrowed to the thing that was pressed. */
+function dueGo(scope){
+  const sc = scope==="soon" ? "due" : scope;
+  if($("ddScope")) $("ddScope").value=sc;
+  renderDueTab();
+}
 function renderDueTab(){
   const box=$("ddList"); if(!box) return;
   const sel=$("ddType");
@@ -7738,6 +7905,7 @@ function renderAll(){
   }catch(e){}
   renderChips(); renderConflictBar(); renderKpis(); renderCoverage(); renderTrend(); renderFleet(); renderFailure(); renderWearTab(); renderActions(); renderHistory(); renderLubeTab(); renderDueTab(); renderNavCounts(); }
 ["fType","fClass","fRange"].forEach(id=>$(id).onchange=renderAll);
+$("fReset").onclick=clearFilters;
 let qTimer=null;
 $("fQ").oninput=()=>{ clearTimeout(qTimer); qTimer=setTimeout(renderAll,180); };   // debounce, the fleet table is big
 document.addEventListener("keydown",e=>{
