@@ -984,6 +984,29 @@
   .duec{font:500 var(--t-small)/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;
     color:var(--ink-2);white-space:nowrap;}
   .duec.soon{color:var(--warn-ink);font-weight:600;}
+  /* Needs triage. It is not an error and not a success: it is work that has
+     not been described well enough to plan, and it has to read as its own
+     state rather than as a quieter kind of open. */
+  .tri{display:inline-flex;align-items:center;gap:5px;margin-left:6px;
+    padding:1px 7px;border-radius:999px;white-space:nowrap;
+    font-weight:600;font-size:var(--t-micro);line-height:1.6;font-family:inherit;
+    color:var(--warn-ink);background:color-mix(in srgb,var(--warning) 18%,transparent);
+    border:1px solid color-mix(in srgb,var(--warning) 45%,transparent);}
+  .tri i{font-style:normal;font-weight:400;opacity:.85;
+    overflow:hidden;text-overflow:ellipsis;max-width:15ch;}
+  .dispbox{position:fixed;z-index:70;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:min(420px,calc(100vw - 32px));background:var(--surface);
+    border:1px solid var(--border);border-radius:12px;box-shadow:var(--e3,0 18px 48px rgba(0,0,0,.28));
+    padding:var(--s4);display:flex;flex-direction:column;gap:var(--s3);}
+  .dispbox.hidden{display:none;}
+  .dispbox h3{margin:0;font-weight:700;font-size:15px;line-height:1.3;font-family:inherit;}
+  .dispbox textarea,.dispbox input{width:100%;font-weight:500;font-size:var(--t-small);
+    line-height:1.4;font-family:inherit;padding:7px 9px;border:1px solid var(--border);
+    border-radius:7px;background:var(--surface);color:var(--ink);resize:vertical;}
+  .dispbox .sf{display:flex;flex-direction:column;gap:4px;}
+  .dispbox .sf>span{font-weight:600;font-size:var(--t-micro);line-height:1;font-family:inherit;
+    color:var(--muted);text-transform:uppercase;letter-spacing:.04em;}
+  .dispact{display:flex;gap:var(--s2);justify-content:flex-end;}
   .covr{cursor:pointer;}
   .covr:hover>td{background:color-mix(in srgb,var(--accent) 6%,transparent);}
   .covr:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;}
@@ -1672,6 +1695,22 @@
 
 <!-- One place that answers "where does the dashboard get its data?" -->
 <!-- One position, in full, without leaving the list that named it. -->
+<!-- "No action required" is a decision somebody takes, so it is the one status
+     that cannot be set by picking it from a list and walking away. -->
+<div id="dispScrim" class="drwscrim hidden"></div>
+<div id="dispBox" class="dispbox hidden" role="dialog" aria-modal="true" aria-labelledby="dispTitle">
+  <h3 id="dispTitle" data-i18n="disp_title">No action required</h3>
+  <p class="sub" id="dispWhat"></p>
+  <label class="sf"><span data-i18n="disp_reason">Reason</span>
+    <textarea id="dispReason" rows="3"></textarea></label>
+  <label class="sf"><span data-i18n="disp_by">Approved by</span>
+    <input id="dispBy" type="text"></label>
+  <div class="dispact">
+    <button class="btn" id="dispCancel" data-i18n="disp_cancel">Cancel</button>
+    <button class="btn primary" id="dispSave" data-i18n="disp_save">Save disposition</button>
+  </div>
+  <div class="sub" id="dispMsg"></div>
+</div>
 <div id="drwScrim" class="drwscrim hidden"></div>
 <aside id="drw" class="drw hidden" role="dialog" aria-modal="true" aria-labelledby="drwTitle">
   <div class="drwhd"><b id="drwTitle"></b>
@@ -2587,6 +2626,19 @@ const I18N={
   cv_on:"Show only this round",
   cv_off:"Showing only this round — press to show them all",
   cv_never_go:"Machines this round has never reached — open the due list",
+  as_open:"Open", as_triage:"Needs triage", as_closed:"Closed",
+  as_noaction:"No action required", as_none:"\u2014",
+  as_triage_t:"Cannot be planned yet \u2014 missing: {f}",
+  as_m_action:"recommended action", as_m_prio:"priority", as_m_owner:"responsible",
+  as_m_due:"due date", as_m_disp:"authorised reason and approver",
+  a_k_triage:"Needs triage", a_k_triage_s:"exceptions not yet planned",
+  a_f_triage:"Triage",
+  k_act_tri:"{n} not yet planned",
+  u_disposed:"Dispositioned",
+  u_alldisposed:"Every exception on this machine has an audited disposition ({n}).",
+  disp_title:"No action required", disp_need:"Record who decided this and why",
+  disp_reason:"Reason", disp_by:"Approved by", disp_save:"Save disposition",
+  disp_cancel:"Cancel", disp_err:"A reason and an approver are both required.",
   c_owner:"Responsible", c_month:"Month",
   xf_own:"Show only findings assigned to {o}",
   tr_click:"press to show only this month",
@@ -3066,6 +3118,19 @@ const I18N={
   cv_on:"Показать только этот обход",
   cv_off:"Показан только этот обход — нажмите, чтобы показать все",
   cv_never_go:"Машины, до которых обход ни разу не дошёл — открыть список сроков",
+  as_open:"Открыто", as_triage:"Требует разбора", as_closed:"Закрыто",
+  as_noaction:"Действий не требуется", as_none:"\u2014",
+  as_triage_t:"Пока нельзя запланировать \u2014 не хватает: {f}",
+  as_m_action:"рекомендуемое действие", as_m_prio:"приоритет", as_m_owner:"ответственный",
+  as_m_due:"срок", as_m_disp:"обоснование и утверждающий",
+  a_k_triage:"Требует разбора", a_k_triage_s:"замечания без плана",
+  a_f_triage:"Разбор",
+  k_act_tri:"{n} без плана",
+  u_disposed:"Решение принято",
+  u_alldisposed:"По каждому замечанию этой машины есть зафиксированное решение ({n}).",
+  disp_title:"Действий не требуется", disp_need:"Укажите, кто принял решение и почему",
+  disp_reason:"Обоснование", disp_by:"Утвердил", disp_save:"Сохранить решение",
+  disp_cancel:"Отмена", disp_err:"Нужны и обоснование, и утверждающий.",
   c_owner:"Ответственный", c_month:"Месяц",
   xf_own:"Показать только находки под ответственностью {o}",
   tr_click:"нажмите, чтобы показать только этот месяц",
@@ -3883,7 +3948,10 @@ function renderKpis(){
   const cnt={NOF:0,INC:0,DEG:0,CRI:0};
   f.forEach(x=>{ const s=sevOf(x.r,x.i); if(cnt[s]!=null)cnt[s]++; });
   const attention=cnt.DEG+cnt.CRI;
-  const openActions=f.filter(x=>x.i.action&&!["MON"].includes(x.i.action)).length;
+  /* One predicate. This used to be `action && action!=="MON"` with no look at
+     status, so finished work still counted as work to plan. */
+  const openActions=f.filter(x=>actionRequired(x.r,x.i)).length;
+  const nTriage=f.filter(x=>actionState(x.r,x.i).k==="triage").length;
 
   /* Was the round walked when it was due — the one number a reliability
      manager is held to, and the dashboard had it nowhere. Computed from the
@@ -3927,7 +3995,9 @@ function renderKpis(){
              go:"week", title:t("k_week_t") })
     + tile({ id:"kpiAtt", k:t("k_att"), v:attention, s:(deltaLine(attention,pAtt,true)||esc(t("k_attsub"))),
              cls:attention?"bad":"good", go:"attention", title:t("k_att_t") })
-    + tile({ id:"kpiAct", k:t("k_act"), v:openActions, s:esc(t("k_actsub")), cls:openActions?"warn":"good",
+    + tile({ id:"kpiAct", k:t("k_act"), v:openActions,
+             s: nTriage ? esc(t("k_act_tri",{n:nTriage})) : esc(t("k_actsub")),
+             cls:openActions?"warn":"good",
              go:"actions", title:t("k_act_t") })
     + tile({ id:"kpiInsp", k:t("k_insp"), v:recs.length,
              s:esc(t("k_units",{n:units}))+(nVoidHid
@@ -4015,7 +4085,7 @@ function renderFleet(){
      filter, not just the latest one: a critical finding raised in March is
      still open in May, and reading it off May's round alone reports zero. */
   findings(recs).forEach(({r,i})=>{
-    if(!fOpen(i)) return;
+    if(!actionRequired(r,i)) return;
     (itemsU[r.equip]=itemsU[r.equip]||[]).push(i);
   });
   const due=nextDueBy();
@@ -4254,8 +4324,11 @@ function renderPF(){
 
 /* ---------- action register ---------- */
 function actionRows(){
+  /* Everything actionState() does not call "none": open, triage, closed and
+     authorised no-action alike, so the register can show what happened to a
+     finding as well as what is left. The filters below narrow it. */
   return findings(filtered())
-    .filter(x=>x.i.action||sevRank(sevOf(x.r,x.i))>=2)
+    .filter(x=>actionState(x.r,x.i).k!=="none")
     .sort((a,b)=>sevRank(sevOf(b.r,b.i))-sevRank(sevOf(a.r,a.i))
       ||(b.r.date||"").localeCompare(a.r.date||""));
 }
@@ -4286,13 +4359,62 @@ const todayISO=()=>new Date().toISOString().slice(0,10);
 /* Overdue is only meaningful while something is still open — a job finished
    late is finished, and colouring it red for ever teaches people to ignore red. */
 function fOverdue(i){ return !!(i.due && stOpen(i.status) && i.due < todayISO()); }
-/* A finding that still needs somebody to do something. "Monitor" is a decision
-   that has already been taken, so it is not open work. */
-function fOpen(i){
-  if(!i) return false;
-  if(!stOpen(i.status)) return false;
-  const sv=String(i.sev||i.grade||"");
-  return !!(i.action && i.action!=="MON") || sv==="CRI" || sv==="DEG";
+/* ── ONE DEFINITION OF "AN ACTION" ──────────────────────────────────────────
+
+   There were four, and they disagreed by a factor of six. The navigation badge
+   and the Overview tile counted `action && action!=="MON"` and never looked at
+   status, so a job somebody had finished still counted as work to plan. The
+   register counted `action OR severity>=Degraded`, a union of two different
+   things. The equipment drawer counted a third way. On the deployed build that
+   read as 21 actions to plan beside 138 open findings, and both were labelled
+   actions.
+
+   A FINDING IS NOT AN ACTION. A finding is what the inspector saw. An action is
+   what somebody committed to do about it, to whom, by when. C and X exceptions
+   MUST end in one of two places — a real action or an authorised decision that
+   none is needed — and anything short of that is not "nothing", it is
+   NEEDS TRIAGE, which is a state with a name and a queue.
+
+   Every badge, tile, column, drawer, filter, register row and export goes
+   through actionState(). One predicate, or the numbers drift again. */
+
+/* What an exception has to carry before it can leave triage. */
+const TRIAGE_REQ={ CRI:["action","prio","owner","due"], DEG:["action","prio","owner","due"],
+                   other:["action","owner","due"] };
+function actionState(r,i){
+  if(!i) return {k:"none", miss:[]};
+  const sv=sevOf(r,i);
+  const exception = sv==="CRI"||sv==="DEG";     // C · Degraded and X · Critical
+  const hasAction = !!(i.action && i.action!=="MON");
+  /* Not an exception and nobody proposed anything: a record, not a job. */
+  if(!exception && !hasAction) return {k:"none", miss:[], sev:sv};
+  const st=String(i.status||"");
+  /* "No action needed" is a decision, and a decision has an author. Inferring
+     it from blank fields is how a critical finding disappears. */
+  if(st==="NOACT"){
+    const ok = !!(i.dispBy && i.dispReason);
+    return ok ? {k:"noaction", miss:[], sev:sv} : {k:"triage", miss:["disp"], sev:sv};
+  }
+  if(st==="DONE"||st==="VERIFIED") return {k:"closed", miss:[], sev:sv};
+  const need = exception ? TRIAGE_REQ[sv] : TRIAGE_REQ.other;
+  const has = { action:hasAction, prio:!!i.prio, owner:!!i.owner, due:!!i.due };
+  const miss = need.filter(f=>!has[f]);
+  return miss.length ? {k:"triage", miss, sev:sv} : {k:"open", miss:[], sev:sv};
+}
+/* THE canonical predicate. Open work plus work that is not yet properly
+   described — both are outstanding, and hiding the second is how 138 findings
+   became 21 actions. */
+function actionRequired(r,i){ const s=actionState(r,i); return s.k==="open"||s.k==="triage"; }
+/* Kept as the name the rest of the file already uses, now delegating so there
+   is exactly one rule. Callers that only hold an item (no record) still work:
+   sevOf falls back to the item's own grade. */
+function fOpen(i,r){ return actionRequired(r||{items:[i]}, i); }
+const ACT_STATE_LABEL={ open:"as_open", triage:"as_triage", closed:"as_closed",
+                        noaction:"as_noaction", none:"as_none" };
+const ACT_MISS_LABEL={ action:"as_m_action", prio:"as_m_prio", owner:"as_m_owner",
+                       due:"as_m_due", disp:"as_m_disp" };
+function actionMissText(miss){
+  return (miss||[]).map(m=>t(ACT_MISS_LABEL[m]||m)).join(", ");
 }
 const ini=n=>String(n||"").split(/[\s.]+/).filter(Boolean)
   .slice(0,2).map(x=>x[0]).join("").toUpperCase()||"?";
@@ -4333,6 +4455,32 @@ const selOf=cb=>{ const tr=cb.closest("tr"); return {rk:tr.dataset.fu, ik:tr.dat
 /* The week's planning, as one gesture. Tick six findings, give them a name and
    a Friday, and the register writes six sidecar patches through the same path a
    single edit uses. */
+/* targets: one {rk,ik} or an array of them. extra: other fields to set in the
+   same patch, so a bulk apply that also sets an owner still does. */
+let dispCtx=null;
+function askDisposition(targets, done, extra){
+  const list=Array.isArray(targets)?targets:[targets];
+  if(!list.length) return;
+  dispCtx={list, done, extra:extra||{}};
+  const one = list.length===1
+    ? (()=>{ const r=RECS.find(x=>recKey(x)===list[0].rk);
+             const i=r&&(r.items||[]).find(x=>x.key===list[0].ik);
+             return r? `${r.equip} · ${i?(i.label||i.key):list[0].ik}` : ""; })()
+    : t("a_sel_n",{n:list.length});
+  $("dispWhat").textContent = [one, t("disp_need")].filter(Boolean).join(" — ");
+  $("dispReason").value=""; $("dispMsg").textContent="";
+  let who=""; try{ who=localStorage.getItem("cm_dash_who")||""; }catch(e){}
+  $("dispBy").value=who;
+  $("dispBox").classList.remove("hidden"); $("dispScrim").classList.remove("hidden");
+  $("dispReason").focus();
+}
+function dispClose(){
+  $("dispBox").classList.add("hidden"); $("dispScrim").classList.add("hidden");
+  const c=dispCtx; dispCtx=null;
+  /* The select still shows NOACT from the click that opened this. Repaint so
+     it goes back to what is actually stored. */
+  if(c && c.done) c.done();
+}
 function renderSelBar(){
   const bar=$("selBar"); if(!bar) return;
   const n=aSel.size;
@@ -4361,6 +4509,13 @@ function renderSelBar(){
     const st=$("bkStatus").value;      if(st) patch.status=st;
     if(!Object.keys(patch).length){ $("bkMsg").textContent=t("a_bulk_nothing"); return; }
     const targets=[...aSel.values()];
+    /* Bulk cannot be a way around the provenance requirement. Ninety findings
+       closed as "no action required" with no reason is exactly the hole this
+       exists to shut. */
+    if(st==="NOACT"){
+      askDisposition(targets, ()=>{ aSel.clear(); renderActions(); }, patch);
+      return;
+    }
     $("bkApply").disabled=true;
     patchItems(targets, patch, $("bkMsg"))
       .then(()=>{ aSel.clear(); renderActions(); })
@@ -4370,9 +4525,13 @@ function renderSelBar(){
 function renderActions(){
   const rows=actionRows();
   /* The tracker answers the meeting's question before the table does. */
-  let overdue=0, oldest=0, owned=0;
+  let overdue=0, oldest=0, owned=0, triage=0, required=0, disposed=0;
   const byState={open:0,PLAN:0,WIP:0,DONE:0};
   rows.forEach(({r,i})=>{
+    const as=actionState(r,i);
+    if(as.k==="triage") triage++;
+    if(as.k==="open"||as.k==="triage") required++;
+    if(as.k==="noaction") disposed++;
     const st=String(i.status||"");
     byState[st==="VERIFIED"?"DONE":(st==="NOACT"?"DONE":(st||"open"))] ??= 0;
     byState[st==="VERIFIED"||st==="NOACT"?"DONE":(st||"open")]++;
@@ -4389,13 +4548,13 @@ function renderActions(){
        <span class="k">${esc(lab)}</span><span class="v">${esc(String(val))}</span>
        <span class="s">${esc(sub)}</span></button>`;
   $("actKpis").innerHTML=
-      card("open", t("a_k_open"), open, t("a_k_open_s",{n:rows.length}), "info")
+      card("open", t("a_k_open"), required, t("a_k_open_s",{n:rows.length}), "info")
     + card("over", t("a_k_overdue"), overdue, t("a_k_overdue_s"), "bad"+(overdue?"":" zero"))
-    + card("noown", t("a_k_unowned"), rows.length-owned, t("a_k_unowned_s"), "warn")
+    + card("triage", t("a_k_triage"), triage, t("a_k_triage_s"), "warn"+(triage?"":" zero"))
     + `<div class="kpi"><span class="k">${esc(t("a_k_oldest"))}</span>
         <span class="v">${oldest?esc(oldest+" d"):"—"}</span>
         <span class="s">${esc(t("a_k_oldest_s"))}</span></div>`
-    + card("done", t("a_k_done"), done, t("a_k_done_s"), "good");
+    + card("done", t("a_k_done"), done+disposed, t("a_k_done_s"), "good");
   $("actKpis").querySelectorAll("[data-af]").forEach(b=>b.onclick=()=>{
     /* Pressing the card you are already in takes the filter off, which is the
        behaviour anybody expects from a thing that looks pressed. */
@@ -4413,8 +4572,8 @@ function renderActions(){
           p:Math.round(done/rows.length*100)}))}</span></div>` : "";
 
   /* the segmented filter, with counts so the choice is informed */
-  const counts={ open, over:overdue, mine:owned, all:rows.length };
-  $("aSeg").innerHTML=[["open","a_f_open"],["over","a_f_over"],["mine","a_f_owned"],["all","a_f_all"]]
+  const counts={ open:required, triage, over:overdue, mine:owned, all:rows.length };
+  $("aSeg").innerHTML=[["open","a_f_open"],["triage","a_f_triage"],["over","a_f_over"],["mine","a_f_owned"],["all","a_f_all"]]
     .map(([k,lab])=>`<button type="button" data-af="${k}"${filt===k?' class="on"':''}>${
       esc(t(lab))}<span class="n">${counts[k]}</span></button>`).join("");
   $("aSeg").querySelectorAll("[data-af]").forEach(b=>b.onclick=()=>setAFilt(b.dataset.af));
@@ -4428,8 +4587,12 @@ function renderActions(){
   const shown = filt==="all" ? rows
               : filt==="over" ? rows.filter(({i})=>fOverdue(i))
               : filt==="mine" ? rows.filter(({i})=>i.owner)
-              : filt==="done" ? rows.filter(({i})=>!stOpen(i.status))
-              : rows.filter(({i})=>stOpen(i.status));
+              : filt==="triage" ? rows.filter(({r,i})=>actionState(r,i).k==="triage")
+              : filt==="noown" ? rows.filter(({i})=>!i.owner)
+              : filt==="done" ? rows.filter(({r,i})=>["closed","noaction"].includes(actionState(r,i).k))
+              /* "Open" means outstanding, which includes what is not yet
+                 properly described. Triage work is not done work. */
+              : rows.filter(({r,i})=>actionRequired(r,i));
   if(!shown.length){
     $("actionTbl").innerHTML=`<div class="empty"><b>${esc(t("a_none"))}</b><span>${esc(t("a_none_s"))}</span></div>`;
     return; }
@@ -4477,6 +4640,7 @@ function renderActions(){
           actSort.k===k?(actSort.dir>0?"▲":"▼"):"↕"}</span></th>`).join("")}</tr></thead><tbody>`
       + list.map(({r,i})=>{
           const sv=sevOf(r,i), od=fOverdue(i), dd=i.due?daysTo0(i.due):null, age=fAgeDays(r,i);
+          const ast=actionState(r,i);
           const sc=sv?`var(--${SEV[sv].c==="c"?"critical":SEV[sv].c==="s"?"serious":SEV[sv].c==="w"?"warning":"good"})`:"";
           const sid=selId(recKey(r),i.key);
           return `<tr class="hrow${aSel.has(sid)?" picked":""}" tabindex="0" data-fu="${esc(recKey(r))}" data-fi="${esc(i.key)}">
@@ -4514,7 +4678,10 @@ function renderActions(){
             <td class="ed"><select class="iedit ist s-${esc(String(i.status||"open"))}" data-f="status"
                 title="${esc(t("a_ed_st"))}">${FSTATUS.map(x=>
                   `<option value="${esc(x.k)}"${String(i.status||"")===x.k?" selected":""}>${esc(x[lang]||x.en)}</option>`).join("")}</select>${
-              i.prio?` <span class="prio ${prioClass(i.prio)}" title="${esc(prioName(i.prio))}">${esc(i.prio)}</span>`:""}</td>
+              i.prio?` <span class="prio ${prioClass(i.prio)}" title="${esc(prioName(i.prio))}">${esc(i.prio)}</span>`:""}${
+              ast.k==="triage"
+                ? `<span class="tri" title="${esc(t("as_triage_t",{f:actionMissText(ast.miss)}))}">${
+                     esc(t("as_triage"))}<i>${esc(actionMissText(ast.miss))}</i></span>` : ""}</td>
           </tr>`;
         }).join("")+`</tbody></table></div>`
       + `<datalist id="ownerNames">${owners.map(o=>`<option value="${esc(o)}"></option>`).join("")}</datalist>`;
@@ -4532,6 +4699,14 @@ function renderActions(){
     $("actionTbl").querySelectorAll(".iedit").forEach(el=>{
       el.onchange=()=>{
         const tr=el.closest("tr");
+        /* Every other status is a workflow step. This one is a judgement that
+           closes a C or X exception, so it cannot be set by picking it from a
+           list — it needs a reason and a name, and without them the finding
+           stays in triage rather than quietly leaving the register. */
+        if(el.dataset.f==="status" && el.value==="NOACT"){
+          askDisposition({rk:tr.dataset.fu, ik:tr.dataset.fi}, ()=>renderActions());
+          return;
+        }
         const patch={}; patch[el.dataset.f]= el.dataset.f==="owner" ? el.value.trim() : el.value;
         el.classList.add("saving");
         patchItems([{rk:tr.dataset.fu, ik:tr.dataset.fi}], patch, $("actShown"))
@@ -6497,9 +6672,20 @@ function openUnit(unit){
   const a=ASSET_BY[unit]||{};
   $("drwTitle").textContent=unit;
   $("drwEdit").hidden=true;                     // there is no one record to edit here
-  const open=[];
-  recs.forEach(r=>(r.items||[]).forEach(i=>{ if(fOpen(i)) open.push({r,i}); }));
+  /* Every exception on the machine and what became of it. The audited build
+     showed "Critical · 7 findings" beside "Nothing open on this machine", which
+     is the sentence that makes a dashboard unusable: a critical exception with
+     no action is not nothing, it is untriaged. Both are counted here and the
+     panel is forbidden from saying "nothing" while any exception is
+     undispositioned. */
+  const open=[], disp=[];
+  recs.forEach(r=>(r.items||[]).forEach(i=>{
+    const as=actionState(r,i);
+    if(as.k==="open"||as.k==="triage") open.push({r,i,as});
+    else if(as.k==="closed"||as.k==="noaction") disp.push({r,i,as});
+  }));
   open.sort((x,y)=>sevRank(sevOf(y.r,y.i))-sevRank(sevOf(x.r,x.i)));
+  const nTri=open.filter(x=>x.as.k==="triage").length;
   const dm=nextDueBy(), d=dm[String(unit).toUpperCase()];
   const worst=recs.length?worstOf(recs[0]):"";
   const row=(k,v)=>v==null||v===""?"":`<dt>${esc(k)}</dt><dd>${v}</dd>`;
@@ -6510,23 +6696,28 @@ function openUnit(unit){
     + row(t("th_class"), a.cls?`<button class="xf" data-ucls="${esc(a.cls)}">${esc(a.cls)}</button>`:"")
     + row(t("th_nextdue"), d?dueCell(d)+` <span class="muted">${esc(TYPE_LABEL[d.ty]||d.ty)}</span>`:`<span class="muted">\u2014</span>`)
     + row(t("u_rounds"), String(recs.length))
-    + row(t("th_open"), open.length?`<b>${open.length}</b>`:`<span class="muted">0</span>`)
+    + row(t("th_open"), open.length
+        ? `<b>${open.length}</b>${nTri?` <span class="tri">${esc(t("as_triage"))} ${nTri}</span>`:""}`
+        : `<span class="muted">0</span>`)
+    + (disp.length ? row(t("u_disposed"), `<span class="muted">${disp.length}</span>`) : "")
   + `</dl>`
   + (open.length
       ? `<h3 class="drwh">${esc(t("u_open"))}</h3><div class="ulist">`
-        + open.slice(0,12).map(({r,i})=>{
+        + open.slice(0,12).map(({r,i,as})=>{
             const sv=sevOf(r,i), od=fOverdue(i);
             return `<button type="button" class="urow" data-fu="${esc(recKey(r))}" data-fi="${esc(i.key)}"
               style="--sc:${sv?`var(--${SEV[sv].c==="c"?"critical":SEV[sv].c==="s"?"serious":SEV[sv].c==="w"?"warning":"good"})`:"var(--none)"}">
               <span class="sev"></span>
               <span class="ut"><b>${esc(i.label||i.key)}</b>
                 <i>${esc([i.defect,i.actionLabel].filter(Boolean).join(" \u2192 "))||esc(r.date||"")}</i></span>
-              <span class="um">${i.owner?esc(ini(i.owner)):`<span class="muted">\u2014</span>`}${
+              <span class="um">${as.k==="triage"
+                  ? `<span class="tri" title="${esc(t("as_triage_t",{f:actionMissText(as.miss)}))}">${esc(t("as_triage"))}</span>`
+                  : (i.owner?esc(ini(i.owner)):`<span class="muted">\u2014</span>`)}${
                 od?` <span class="pill c">${esc(t("a_late"))}</span>`:""}</span></button>`;
           }).join("")
         + (open.length>12?`<div class="sub">${esc(t("u_more",{n:open.length-12}))}</div>`:"")
         + `</div>`
-      : `<div class="sub">${esc(t("u_noopen"))}</div>`)
+      : `<div class="sub">${esc(disp.length ? t("u_alldisposed",{n:disp.length}) : t("u_noopen"))}</div>`)
   + `<h3 class="drwh">${esc(t("u_recent"))}</h3><div class="ulist">`
     + recs.slice(0,6).map(r=>{
         const w=worstOf(r);
@@ -8293,7 +8484,7 @@ function renderNavCounts(){
   try{ nb("nbDue", dueTabRows().filter(r=>r.st==="over").length); }catch(e){}
   try{
     const f=findings(filtered());
-    nb("nbAct", f.filter(x=>x.i.action&&!["MON"].includes(x.i.action)).length);
+    nb("nbAct", f.filter(x=>actionRequired(x.r,x.i)).length);
   }catch(e){}
 }
 function renderAll(){
@@ -8312,6 +8503,22 @@ function renderAll(){
   renderChips(); renderConflictBar(); renderKpis(); renderCoverage(); renderTrend(); renderFleet(); renderFailure(); renderWearTab(); renderActions(); renderHistory(); renderLubeTab(); renderDueTab(); renderNavCounts(); }
 ["fType","fClass","fRange"].forEach(id=>$(id).onchange=renderAll);
 $("fReset").onclick=clearFilters;
+$("dispCancel").onclick=dispClose;
+$("dispScrim").onclick=dispClose;
+$("dispSave").onclick=()=>{
+  if(!dispCtx) return;
+  const reason=$("dispReason").value.trim(), by=$("dispBy").value.trim();
+  if(!reason || !by){ $("dispMsg").textContent=t("disp_err"); return; }
+  try{ localStorage.setItem("cm_dash_who",by); }catch(e){}
+  const patch=Object.assign({}, dispCtx.extra, {
+    status:"NOACT", dispReason:reason, dispBy:by, dispAt:new Date().toISOString() });
+  const ctx=dispCtx;
+  $("dispSave").disabled=true;
+  patchItems(ctx.list, patch, $("dispMsg"))
+    .then(()=>{ $("dispSave").disabled=false; dispClose(); })
+    .catch(()=>{ $("dispSave").disabled=false; });
+};
+document.addEventListener("keydown",e=>{ if(e.key==="Escape" && dispCtx) dispClose(); });
 let qTimer=null;
 $("fQ").oninput=()=>{ clearTimeout(qTimer); qTimer=setTimeout(renderAll,180); };   // debounce, the fleet table is big
 document.addEventListener("keydown",e=>{
