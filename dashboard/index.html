@@ -943,6 +943,36 @@
   /* The reset is always on the bar, so "how do I get back to everything" is
      never a question. Dimmed with nothing to clear rather than hidden —
      a control that appears and disappears is a control people stop looking for. */
+  /* The work queue. A register you can only read is a list; one you can act on
+     without leaving it is a plan. */
+  .selbar{display:flex;flex-wrap:wrap;align-items:end;gap:10px;margin:0 0 12px;
+    padding:9px 12px;border:1px solid var(--accent);border-radius:8px;
+    background:color-mix(in srgb,var(--accent) 8%,var(--surface));}
+  .selbar[hidden]{display:none;}
+  .selbar .cnt{font:700 var(--t-small)/1.6 var(--ui);color:var(--accent);white-space:nowrap;}
+  .selbar .sf{display:flex;flex-direction:column;gap:3px;}
+  .selbar .sf>span{font:600 var(--t-micro)/1 var(--ui);color:var(--muted);
+    text-transform:uppercase;letter-spacing:.04em;}
+  .selbar input,.selbar select{font:500 var(--t-small)/1 var(--ui);padding:5px 7px;
+    border:1px solid var(--border);border-radius:6px;background:var(--surface);
+    color:var(--ink);min-width:132px;}
+  .selbar .msg{font:500 var(--t-small)/1.6 var(--ui);color:var(--muted);}
+  .selcol{width:28px;padding-left:8px !important;padding-right:0 !important;}
+  .selcol input{width:14px;height:14px;accent-color:var(--accent);cursor:pointer;margin:0;}
+  tr.picked>td{background:color-mix(in srgb,var(--accent) 9%,transparent);}
+  /* Editable in place. It has to look like a field on hover and like text at
+     rest, or nine columns of boxes turn the register into a form. */
+  td.ed{padding-top:2px !important;padding-bottom:2px !important;}
+  .iedit{font:500 var(--t-small)/1.3 var(--ui);color:var(--ink);width:100%;min-width:0;
+    padding:3px 5px;border:1px solid transparent;border-radius:5px;background:none;}
+  .iedit:hover{border-color:var(--border);background:var(--surface);}
+  .iedit:focus{border-color:var(--accent);background:var(--surface);outline:none;}
+  .iedit.saving{border-color:var(--accent);opacity:.6;}
+  .iown::placeholder{color:var(--muted);font-style:italic;}
+  .idue{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;}
+  .idue.late{color:var(--crit-ink);font-weight:600;}
+  .idue.soon{color:var(--warn-ink);font-weight:600;}
+  .ist{-webkit-appearance:none;appearance:none;font-weight:600;cursor:pointer;}
   .resetb{margin-left:auto;flex:0 0 auto;}
   .resetb[disabled]{opacity:.4;cursor:default;}
   @media (max-width:1500px){ .hide-m{display:none !important;} }
@@ -1971,6 +2001,9 @@
         <span style="flex:1"></span>
         <button class="btn" id="csvBtn" data-i18n="csv">⬇ Export CSV</button>
       </div>
+      <!-- Appears only with something ticked. A bar that is always there,
+           always empty, is a bar people stop reading. -->
+      <div class="selbar" id="selBar" hidden></div>
       <div class="scrollbox" style="--sb:640px;border-top:0"><div class="wl" id="actionTbl"></div></div>
       <div class="shown" id="actShown"></div>
     </div>
@@ -2498,6 +2531,13 @@ const I18N={
 
   k_insp:"Inspections", k_find:"Findings", k_att:"Needs attention",
   k_comp:"On-time compliance", k_comp_s:"{n} of {of} rounds walked before they were overdue",
+  a_sel_all:"Select everything shown", a_sel_one:"Select this finding on {u}",
+  a_sel_n:"{n} selected", a_bulk_apply:"Apply to selected", a_bulk_clear:"Clear",
+  a_bulk_keep:"Leave unchanged", a_bulk_nothing:"Nothing to apply \u2014 set an owner, a date or a status first.",
+  a_bulk_done:"Saved on {n}.",
+  a_ed_owner:"Type or pick a name. Saves when you leave the field.",
+  a_ed_due:"Set the date this is due. Saves on change.",
+  a_ed_st:"Move it along. Saves on change.",
   f_reset:"Reset", f_reset_n:"Reset ({n})",
   f_reset_t:"Clear every filter and drill-down and go back to the whole fleet",
   k_week:"Due this week", k_week_clear:"Nothing past due", k_week_over:"{n} already overdue",
@@ -2961,6 +3001,13 @@ const I18N={
 
   k_insp:"Осмотров", k_find:"Находок", k_att:"Требует внимания",
   k_comp:"Выполнено в срок", k_comp_s:"{n} из {of} обходов пройдены до просрочки",
+  a_sel_all:"Выбрать всё показанное", a_sel_one:"Выбрать находку по {u}",
+  a_sel_n:"Выбрано: {n}", a_bulk_apply:"Применить к выбранным", a_bulk_clear:"Снять",
+  a_bulk_keep:"Не менять", a_bulk_nothing:"Нечего применять \u2014 укажите ответственного, срок или статус.",
+  a_bulk_done:"Сохранено: {n}.",
+  a_ed_owner:"Введите или выберите имя. Сохраняется при уходе из поля.",
+  a_ed_due:"Укажите срок. Сохраняется сразу.",
+  a_ed_st:"Изменить статус. Сохраняется сразу.",
   f_reset:"Сброс", f_reset_n:"Сброс ({n})",
   f_reset_t:"Снять все фильтры и уточнения и вернуться ко всему парку",
   k_week:"Срок на этой неделе", k_week_clear:"Просрочек нет", k_week_over:"{n} уже просрочено",
@@ -4177,7 +4224,57 @@ let actView=(function(){ try{ return localStorage.getItem(AVK)==="unit"?"unit":"
    for ninety days — so the default is a composite, and pressing any header
    leaves it for that column. */
 let actSort={k:"queue", dir:-1};
+/* What is ticked. Kept across a repaint so a save that redraws the table does
+   not silently drop a selection somebody spent a minute building.
 
+   The composite key never goes into the markup. It was carried in a data-sid
+   attribute joined by a NUL, and HTML attribute parsing turns a literal NUL
+   into U+FFFD — so the separator did not survive the DOM, the split found
+   nothing, and every bulk edit was addressed to a record key one character
+   short of a real one. Nothing threw; it simply patched nothing. The row
+   already carries data-fu and data-fi, so the checkbox reads the pair off its
+   own row and the composite exists only in JavaScript, where a NUL is a NUL. */
+const aSel=new Map();                    // selId -> {rk, ik}
+const selId=(rk,ik)=>rk+"\u0000"+ik;
+const selOf=cb=>{ const tr=cb.closest("tr"); return {rk:tr.dataset.fu, ik:tr.dataset.fi}; };
+
+/* The week's planning, as one gesture. Tick six findings, give them a name and
+   a Friday, and the register writes six sidecar patches through the same path a
+   single edit uses. */
+function renderSelBar(){
+  const bar=$("selBar"); if(!bar) return;
+  const n=aSel.size;
+  if(!n){ bar.hidden=true; bar.innerHTML=""; return; }
+  bar.hidden=false;
+  const owners=ownerList();
+  bar.innerHTML=`
+    <span class="cnt">${esc(t("a_sel_n",{n}))}</span>
+    <label class="sf"><span>${esc(t("a_th_owner"))}</span>
+      <input id="bkOwner" list="bulkOwners" placeholder="${esc(t("a_assign"))}"></label>
+    <datalist id="bulkOwners">${owners.map(o=>`<option value="${esc(o)}"></option>`).join("")}</datalist>
+    <label class="sf"><span>${esc(t("a_th_due"))}</span><input id="bkDue" type="date"></label>
+    <label class="sf"><span>${esc(t("a_th_status"))}</span>
+      <select id="bkStatus"><option value="">${esc(t("a_bulk_keep"))}</option>${
+        FSTATUS.map(x=>`<option value="${esc(x.k)}">${esc(x[lang]||x.en)}</option>`).join("")}</select></label>
+    <button class="btn primary" id="bkApply">${esc(t("a_bulk_apply"))}</button>
+    <button class="btn" id="bkClear">${esc(t("a_bulk_clear"))}</button>
+    <span class="msg" id="bkMsg"></span>`;
+  $("bkClear").onclick=()=>{ aSel.clear(); renderActions(); };
+  $("bkApply").onclick=()=>{
+    const patch={};
+    const o=$("bkOwner").value.trim(); if(o) patch.owner=o;
+    const d=$("bkDue").value;          if(d) patch.due=d;
+    /* An empty status means "leave it alone", not "set it to Open" — the first
+       option in the list is a real state and picking nothing must not apply it. */
+    const st=$("bkStatus").value;      if(st) patch.status=st;
+    if(!Object.keys(patch).length){ $("bkMsg").textContent=t("a_bulk_nothing"); return; }
+    const targets=[...aSel.values()];
+    $("bkApply").disabled=true;
+    patchItems(targets, patch, $("bkMsg"))
+      .then(()=>{ aSel.clear(); renderActions(); })
+      .catch(()=>{ const b=$("bkApply"); if(b) b.disabled=false; });
+  };
+}
 function renderActions(){
   const rows=actionRows();
   /* The tracker answers the meeting's question before the table does. */
@@ -4274,15 +4371,25 @@ function renderActions(){
     const cols=[[actSort.k==="queue"?"queue":"sev",t("th_sev")],["unit",t("th_unit")],["comp",t("a_th_comp")],
                 ["date",t("th_date")],["act",t("a_th_find")],["owner",t("a_th_owner")],
                 ["due",t("a_th_due")],["age",t("a_th_age")],["st",t("a_th_status")]];
-    $("actionTbl").innerHTML=`<div class="tblwrap scrollbox" style="--sb:520px"><table class="grid">
-      <thead><tr>${cols.map(([k,l])=>
+    /* Everything on screen, ticked or cleared in one press. It is scoped to what
+       is SHOWN, not to the whole register — a select-all that silently reaches
+       past the filter is how somebody reassigns four hundred findings meaning to
+       reassign nine. */
+    const allOn = !!list.length && list.every(({r,i})=>aSel.has(selId(recKey(r),i.key)));
+    const owners=ownerList();
+    $("actionTbl").innerHTML=`<div class="tblwrap scrollbox" style="--sb:520px"><table class="grid seltbl">
+      <thead><tr><th class="selcol"><input type="checkbox" id="aAll"${allOn?" checked":""}
+          title="${esc(t("a_sel_all"))}" aria-label="${esc(t("a_sel_all"))}"></th>${cols.map(([k,l])=>
         `<th class="sortable${actSort.k===k?" on":""}" data-asort="${k}"${
           k==="queue"?` title="${esc(t("a_queue_tip"))}"`:""}>${esc(l)}<span class="arrow">${
           actSort.k===k?(actSort.dir>0?"▲":"▼"):"↕"}</span></th>`).join("")}</tr></thead><tbody>`
       + list.map(({r,i})=>{
           const sv=sevOf(r,i), od=fOverdue(i), dd=i.due?daysTo0(i.due):null, age=fAgeDays(r,i);
           const sc=sv?`var(--${SEV[sv].c==="c"?"critical":SEV[sv].c==="s"?"serious":SEV[sv].c==="w"?"warning":"good"})`:"";
-          return `<tr class="hrow" tabindex="0" data-fu="${esc(recKey(r))}" data-fi="${esc(i.key)}">
+          const sid=selId(recKey(r),i.key);
+          return `<tr class="hrow${aSel.has(sid)?" picked":""}" tabindex="0" data-fu="${esc(recKey(r))}" data-fi="${esc(i.key)}">
+            <td class="selcol"><input type="checkbox" class="asel"${
+              aSel.has(sid)?" checked":""} aria-label="${esc(t("a_sel_one",{u:r.equip}))}"></td>
             <td>${sv?`<span class="sevcell" style="--sc:${sc}"><i></i>${esc(SEV[sv].l)}</span>`
                     :'<span class="muted">—</span>'}</td>
             <td><b>${esc(r.equip)}</b></td>
@@ -4303,20 +4410,61 @@ function renderActions(){
             <td title="${esc((i.defect||"")+(i.actionLabel?" \u2192 "+i.actionLabel:""))}">
               <span class="trunc">${i.defect?esc(i.defect):'<span class="muted">\u2014</span>'}${
                 i.actionLabel?` <span class="muted">\u2192 ${esc(i.actionLabel)}</span>`:""}</span></td>
-            <td>${i.owner?`<span class="who"><i>${esc(initials0(i.owner))}</i><span>${esc(i.owner)}</span></span>`
-                        :`<span class="who none"><i>+</i><span>${esc(t("a_assign"))}</span></span>`}</td>
-            <td class="mono">${i.due?`<span class="due ${od?"late":(dd!=null&&dd<=7?"soon":"")}"><b>${
-              esc(i.due.slice(5))}</b></span>`:'<span class="muted">—</span>'}</td>
+            <!-- Editable where it is read. Assigning an owner used to mean
+                 opening a drawer, typing, saving and closing; on eighty-two
+                 findings that is the reason nobody assigned any. -->
+            <td class="ed"><input class="iedit iown" list="ownerNames" data-f="owner"
+                value="${esc(i.owner||"")}" placeholder="${esc(t("a_assign"))}"
+                title="${esc(t("a_ed_owner"))}"></td>
+            <td class="ed"><input class="iedit idue ${od?"late":(dd!=null&&dd<=7?"soon":"")}" type="date"
+                data-f="due" value="${esc(i.due||"")}" title="${esc(t("a_ed_due"))}"></td>
             <td class="num mono">${age==null?"":age}</td>
-            <td><span class="st s-${esc(String(i.status||"open"))}">${esc(stName(i.status))}</span>${
+            <td class="ed"><select class="iedit ist s-${esc(String(i.status||"open"))}" data-f="status"
+                title="${esc(t("a_ed_st"))}">${FSTATUS.map(x=>
+                  `<option value="${esc(x.k)}"${String(i.status||"")===x.k?" selected":""}>${esc(x[lang]||x.en)}</option>`).join("")}</select>${
               i.prio?` <span class="prio ${prioClass(i.prio)}" title="${esc(prioName(i.prio))}">${esc(i.prio)}</span>`:""}</td>
           </tr>`;
-        }).join("")+`</tbody></table></div>`;
+        }).join("")+`</tbody></table></div>`
+      + `<datalist id="ownerNames">${owners.map(o=>`<option value="${esc(o)}"></option>`).join("")}</datalist>`;
+    /* A row opens the drawer. A control inside a row does its own job and must
+       not also open the drawer under the reader's hands. */
     $("actionTbl").querySelectorAll("tr.hrow").forEach(tr=>{
-      const go=()=>openFollow(tr.dataset.fu, tr.dataset.fi);
+      const go=e=>{ if(e && e.target.closest(".iedit,.selcol")) return;
+                    openFollow(tr.dataset.fu, tr.dataset.fi); };
       tr.onclick=go;
-      tr.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } };
+      tr.onkeydown=e=>{ if((e.key==="Enter"||e.key===" ") && !e.target.closest(".iedit,.selcol")){
+        e.preventDefault(); go(null); } };
     });
+    /* Inline edit: commit on change, which for a date and a select is the press
+       and for a name is leaving the field. */
+    $("actionTbl").querySelectorAll(".iedit").forEach(el=>{
+      el.onchange=()=>{
+        const tr=el.closest("tr");
+        const patch={}; patch[el.dataset.f]= el.dataset.f==="owner" ? el.value.trim() : el.value;
+        el.classList.add("saving");
+        patchItems([{rk:tr.dataset.fu, ik:tr.dataset.fi}], patch, $("actShown"))
+          .catch(()=>{}).then(()=>renderActions());
+      };
+    });
+    const pick=(cb,on)=>{
+      const p=selOf(cb), id=selId(p.rk,p.ik);
+      if(on) aSel.set(id,p); else aSel.delete(id);
+      cb.checked=on;
+      cb.closest("tr").classList.toggle("picked", on);
+    };
+    $("actionTbl").querySelectorAll(".asel").forEach(cb=>{
+      cb.onclick=e=>e.stopPropagation();
+      cb.onchange=()=>{ pick(cb, cb.checked);
+                        const all=$("aAll");
+                        if(all) all.checked=[...$("actionTbl").querySelectorAll(".asel")].every(x=>x.checked);
+                        renderSelBar(); };
+    });
+    const aAll=$("aAll");
+    if(aAll) aAll.onchange=()=>{
+      $("actionTbl").querySelectorAll(".asel").forEach(cb=>pick(cb, aAll.checked));
+      renderSelBar();
+    };
+    renderSelBar();
     $("actionTbl").querySelectorAll("th[data-asort]").forEach(th=>th.onclick=()=>{
       const k=th.dataset.asort;
       /* A new column starts on the reading people expect: worst, latest,
@@ -5276,6 +5424,66 @@ function openFollow(rk, ik){
   $("follOv").classList.remove("hidden");
 }
 function closeFollow(){ $("follOv").classList.add("hidden"); follKey=null; }
+/* ---------- one patch, one finding or ninety ----------
+
+   The drawer could set an owner and a date; the register could not. So planning
+   a week's work meant opening, typing, saving and closing eighty-two times, and
+   the thing that actually happens in a planning meeting — "these six are Petrov's,
+   all due Friday" — had no expression in the tool at all.
+
+   The sidecar write is identical whether it covers one item or ninety: layer the
+   patch over whatever that record already says, keep every other item on the
+   record intact, and post it. Bulk is not a different mechanism, it is the same
+   mechanism called with a longer list, which is why they cannot drift apart. */
+function planWho(){
+  let by=""; try{ by=localStorage.getItem("cm_dash_who")||""; }catch(e){}
+  if(by) return by;
+  by=(prompt(t("ph_who"))||"").trim();
+  if(by){ try{ localStorage.setItem("cm_dash_who",by); }catch(e){} }
+  return by;
+}
+/* Every distinct owner already used, so assigning is picking a name that exists
+   rather than re-typing one and inventing a second spelling of it. */
+function ownerList(){
+  const set=new Set();
+  RECS.forEach(r=>(r.items||[]).forEach(i=>{ if(i.owner) set.add(i.owner); }));
+  return [...set].sort((a,b)=>a.localeCompare(b));
+}
+/* targets: [{rk, ik}]. patch: the fields to set on each. */
+function patchItems(targets, patch, msgEl){
+  if(!targets.length) return Promise.resolve();
+  const by=planWho();
+  if(!by){ if(msgEl) msgEl.textContent=t("ed_needname"); return Promise.reject(new Error("no name")); }
+  if(!drvOn()){ if(msgEl) msgEl.textContent=t("ed_needdrive"); return Promise.reject(new Error("offline")); }
+  /* Grouped by record, because the sidecar is per record: eighty-two findings
+     on nine machines is nine writes, not eighty-two. */
+  const byRec=new Map();
+  targets.forEach(({rk,ik})=>{ (byRec.get(rk) || byRec.set(rk,[]).get(rk)).push(ik); });
+  const at=new Date().toISOString();
+  const docs=[], before=new Map(), posts=[];
+  byRec.forEach((iks, rk)=>{
+    const keep=edits[rk]||{};
+    before.set(rk, edits[rk] ? JSON.parse(JSON.stringify(edits[rk])) : null);
+    const prior=keep.items||{};
+    const items={}; Object.keys(prior).forEach(k=>items[k]=Object.assign({},prior[k]));
+    iks.forEach(ik=>{ items[ik]=Object.assign({}, items[ik]||{}, patch, {planBy:by, planAt:at}); });
+    docs.push({ key:rk, by, at, void:!!keep.void, reason:keep.reason||"", note:keep.note||"", items });
+    posts.push({ key:rk, by, void:!!keep.void, reason:keep.reason||"", note:keep.note||"", items });
+  });
+  /* Optimistic: the table repaints now, and every record rolls back together if
+     the network says no. A half-applied bulk edit is worse than a failed one. */
+  window.CMDash.setEdits(docs);
+  saveEdits(); rebuild(); refreshControls(); renderAll();
+  if(msgEl) msgEl.textContent=t("ed_sending");
+  return Promise.all(posts.map(d=>window.CMDrive.saveEdit(d)))
+    .then(()=>{ if(msgEl) msgEl.textContent=t("a_bulk_done",{n:targets.length}); })
+    .catch(err=>{
+      before.forEach((prev,rk)=>{ if(prev) edits[rk]=prev; else delete edits[rk]; });
+      saveEdits(); rebuild(); refreshControls(); renderAll();
+      if(msgEl) msgEl.textContent=t("ed_undone",{e:(err&&err.message)||err});
+      throw err;
+    });
+}
 function saveFollow(){
   if(!follKey) return;
   const by=$("follBy").value.trim();
