@@ -653,6 +653,17 @@
        delivery hash, a suppressed duplicate count — is not invented here, and
        the view says so rather than printing a zero. */
     names() { return Object.keys(index); },
+    /* A small JSON document, written where the phones write theirs. A deferral
+       is not a record correction — it is keyed by unit and round, not by
+       record — so it goes to its own folder as its own file, exactly as
+       syncDefer() on the phone does. Same shape, same place, same reader. */
+    async putDoc(name, obj) {
+      const data = btoa(unescape(encodeURIComponent(JSON.stringify(obj, null, 2))));
+      const j = await post({ op: "batch", files: [{ name, mime: "application/json", data }] });
+      if (j && j.failed && j.failed.length) throw new Error(j.failed[0].error || "Refused");
+      index[name] = { id: (j && j.saved && j.saved[0] && j.saved[0].id) || "", size: data.length };
+      return j;
+    },
     cursorAt() { return cursor(); },
   };
 })();

@@ -6212,6 +6212,26 @@ function deferAll(){ return deferCache || (deferCache=(()=>{
   try{ return JSON.parse(localStorage.getItem(DEFER_KEY)||"{}"); }catch(e){ return {}; }
 })()); }
 function deferSave(m){ deferCache=m; try{ localStorage.setItem(DEFER_KEY,JSON.stringify(m)); }catch(e){} }
+/* Deferrals that arrived from the shared folder — the office's, or another
+   phone's. One per unit and round: a round put off twice is one deferral in two
+   states, and the later statement is the one that stands. Already marked `up`
+   because it came FROM the server; re-uploading it would be this phone
+   claiming somebody else's decision. */
+function teamDefer(list){
+  if(!Array.isArray(list) || !list.length) return 0;
+  const m=deferAll(); let n=0;
+  list.forEach(d=>{
+    if(!d || !d.u || !d.t) return;
+    const k=d.t+"|"+String(d.u).toUpperCase();
+    const cur=m[k];
+    if(cur && String(cur.at||"") > String(d.at||"")) return;   // ours is newer
+    if(d.cleared){ if(cur){ delete m[k]; n++; } return; }
+    m[k]={ until:d.until||null, why:d.why||"", by:d.by||"", at:d.at||"", up:1 };
+    n++;
+  });
+  if(n) deferSave(m);
+  return n;
+}
 function deferOf(ty,unit){ return deferAll()[ty+"|"+(unit||"").toUpperCase()]||null; }
 function deferPut(ty,unit,d){
   const m=deferAll(); const k=ty+"|"+(unit||"").toUpperCase();
@@ -6899,6 +6919,13 @@ async function teamPull(manual,full){
        is, because the effect on a phone is the same: the round no longer
        counts, and the unit is due again. */
     const wiped=teamGone(j.deleted||[]);
+    /* A round the OFFICE put off. The phone has always written its own
+       deferrals to _meta/deferrals and the backend has always returned them in
+       this reply — but nothing here ever read them, so a planner deferring a
+       round from the dashboard changed nothing in the field and the technician
+       walked to a machine somebody had already decided to skip. Same
+       last-write-wins rule the office applies, keyed the same way. */
+    teamDefer(j.deferrals||[]);
     /* Complete only when this reply listed the whole folder: the cursor started
        at zero, nothing was cut short, and it came the long way — the index path
        reports records, not markers. */

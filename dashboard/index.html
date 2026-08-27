@@ -998,6 +998,8 @@
     background:none;border:0;padding:0;}
   button.prow:focus-visible,.tmon:focus-visible,.covr:focus-visible{
     outline:2px solid var(--accent);outline-offset:2px;}
+  .ddact{white-space:nowrap;display:flex;gap:5px;justify-content:flex-end;}
+  .ddact .minibtn{text-decoration:none;}
   .tgap{display:inline-flex;align-items:baseline;gap:5px;}
   .tgap i{font-style:normal;font-weight:600;font-size:var(--t-micro);
     color:var(--warn-ink);background:color-mix(in srgb,var(--warning) 16%,transparent);
@@ -1751,6 +1753,21 @@
 <!-- One position, in full, without leaving the list that named it. -->
 <!-- "No action required" is a decision somebody takes, so it is the one status
      that cannot be set by picking it from a list and walking away. -->
+<div id="dfScrim" class="drwscrim hidden"></div>
+<div id="dfBox" class="dispbox hidden" role="dialog" aria-modal="true" aria-labelledby="dfTitle">
+  <h3 id="dfTitle" data-i18n="dd_defer_title">Put this round off</h3>
+  <p class="sub" id="dfWhat"></p>
+  <label class="sf"><span data-i18n="dd_why">Reason</span><textarea id="dfWhy" rows="3"></textarea></label>
+  <label class="sf"><span data-i18n="dd_until">Review on</span><input id="dfUntil" type="date"></label>
+  <label class="sf"><span data-i18n="dd_by">Deferred by</span><input id="dfBy" type="text"></label>
+  <div class="dispact">
+    <button class="btn" id="dfClear" hidden data-i18n="dd_undefer">Cancel the deferral</button>
+    <span style="flex:1"></span>
+    <button class="btn" id="dfCancel" data-i18n="disp_cancel">Cancel</button>
+    <button class="btn primary" id="dfSave" data-i18n="dd_defer_save">Save</button>
+  </div>
+  <div class="sub" id="dfMsg"></div>
+</div>
 <div id="dispScrim" class="drwscrim hidden"></div>
 <div id="dispBox" class="dispbox hidden" role="dialog" aria-modal="true" aria-labelledby="dispTitle">
   <h3 id="dispTitle" data-i18n="disp_title">No action required</h3>
@@ -3087,6 +3104,11 @@ const I18N={
   dd_none:"Nothing in this view.",
   dd_c_unit:"Unit", dd_c_round:"Round", dd_c_last:"Last done",
   dd_c_due:"Due", dd_c_rate:"h/day", dd_c_why:"Why it was not walked",
+  dd_start:"Start", dd_start_t:"Open this machine and this round on the phone app",
+  dd_defer:"Defer", dd_defer_edit:"Deferral", dd_defer_t:"Put this round off, with a reason",
+  dd_defer_title:"Put this round off", dd_why:"Reason", dd_until:"Review on",
+  dd_by:"Deferred by", dd_defer_save:"Save", dd_undefer:"Cancel the deferral",
+  dd_need:"A reason and a name are both required.",
   dd_put_to:"put off to {d}", dd_not_doing:"not being done",
   shown_n:"Showing {n} of {of}",
   dd_foot:"h/day is the machine's own measured rate; * marks the fleet assumption of {r} h/day, used until two hour-meter readings have measured that machine. \u201cDue\u201d counts hours, and the days beside it are those hours at that rate.",
@@ -3625,6 +3647,11 @@ const I18N={
   dd_none:"В этом представлении пусто.",
   dd_c_unit:"Единица", dd_c_round:"Обход", dd_c_last:"Последний раз",
   dd_c_due:"Срок", dd_c_rate:"ч/сут", dd_c_why:"Почему не сделан",
+  dd_start:"Начать", dd_start_t:"Открыть эту машину и этот обход в приложении",
+  dd_defer:"Отложить", dd_defer_edit:"Отсрочка", dd_defer_t:"Отложить обход с указанием причины",
+  dd_defer_title:"Отложить обход", dd_why:"Причина", dd_until:"Пересмотреть",
+  dd_by:"Отложил", dd_defer_save:"Сохранить", dd_undefer:"Снять отсрочку",
+  dd_need:"Нужны и причина, и имя.",
   dd_put_to:"отложено до {d}", dd_not_doing:"не выполняется",
   shown_n:"Показано {n} из {of}",
   dd_foot:"ч/сут — собственная измеренная наработка машины; * означает допущение по парку в {r} ч/сут, которое действует, пока машину не измерили два показания счётчика. «Срок» считается в часах, дни рядом — это те же часы при этой наработке.",
@@ -9070,7 +9097,7 @@ function renderDueTab(){
   box.innerHTML=`<div class="tblwrap scrollbox" style="--sb:560px"><table class="grid"><thead><tr>
     <th>${esc(t("dd_c_unit"))}</th><th>${esc(t("dd_c_round"))}</th><th>${esc(t("dd_c_last"))}</th>
     <th class="r">${esc(t("dd_c_due"))}</th><th class="r">${esc(t("dd_c_rate"))}</th>
-    <th>${esc(t("dd_c_why"))}</th></tr></thead><tbody>`
+    <th>${esc(t("dd_c_why"))}</th><th></th></tr></thead><tbody>`
     + kept.map(r=>{
       const n=r.n;
       const when = n.over ? `<b style="color:var(--critical)">${esc(t("due_over",{n:num(n.dueInDays)}))}</b>`
@@ -9085,18 +9112,90 @@ function renderDueTab(){
         <td>${esc(r.last.d)} <span class="muted">· ${esc(t("due_days",{n:num(n.daysSince)}))}</span></td>
         <td class="r">${when}<span class="muted"> · ${esc(t("due_h",{n:num(n.dueInHours)}))}</span></td>
         <td class="r">${n.rate}${n.measured?"":"*"}</td>
-        <td>${why}</td></tr>`; }).join("")
+        <td>${why}</td>
+        <td class="ddact">
+          <!-- The two things somebody does with a due row. Start hands the
+               phone the same unit and round this row is about, so the
+               inspection that follows is this one rather than a second record
+               about the same machine. -->
+          <a class="minibtn" href="${esc(unitLink(r.unit,r.ty))}" target="_blank" rel="noopener"
+             title="${esc(t("dd_start_t"))}">${esc(t("dd_start"))}</a>
+          <button type="button" class="minibtn" data-defer="${esc(r.ty+"|"+r.unit)}"
+             title="${esc(t("dd_defer_t"))}">${esc(r.d?t("dd_defer_edit"):t("dd_defer"))}</button>
+        </td></tr>`; }).join("")
     + `</tbody></table></div>`
     /* What is on screen out of what exists. The list was capped at 500 rows in
        silence, which on a fleet this size reads as "that is all of them". */
     + `<div class="shown"><span>${esc(t("shown_n",{n:kept.length, of:show.length}))}</span>
         <span class="spacer"></span>
         <span>${esc(t("dd_foot",{r:DUE.HOURS_PER_DAY}))}</span></div>`;
+  box.querySelectorAll("[data-defer]").forEach(b=>b.onclick=()=>askDefer(b.dataset.defer));
 }
 /* The sheet somebody takes to the planning meeting has to be the list they were
    looking at when they pressed the button. An export that quietly widens back
    to the whole fleet is how a filtered screen becomes an unfiltered spreadsheet
    with nobody noticing. */
+/* The phone's own deep link: one place implements "go to this machine", and
+   this hands it the round as well so the technician does not re-pick it. */
+function unitLink(unit,ty){
+  return "../mobile/index.html?unit="+encodeURIComponent(unit)
+       + (ty?"&type="+encodeURIComponent(ty):"");
+}
+/* ── DEFERRING A ROUND FROM THE OFFICE ──────────────────────────────────────
+
+   A deferral is not a correction to a record — it is keyed by unit and round,
+   and it says "not this time, and here is why". The phones already write one as
+   a small JSON document in a fixed folder; the dashboard writes the identical
+   shape to the identical place, so the phones read an office deferral through
+   the path they already use and nothing new has to understand it.
+
+   It is answered by a round of that type actually being walked, so nothing has
+   to be deleted for it to stop being true. */
+let dfCtx=null;
+function askDefer(key){
+  const [ty,unit]=key.split("|");
+  dfCtx={ty,unit};
+  const cur=deferrals[key]||null;
+  $("dfWhat").textContent=`${unit} \u00b7 ${TYPE_LABEL[ty]||ty}`;
+  $("dfWhy").value=(cur&&cur.why)||"";
+  $("dfUntil").value=(cur&&cur.until)||"";
+  let who=""; try{ who=localStorage.getItem("cm_dash_who")||""; }catch(e){}
+  $("dfBy").value=(cur&&cur.by)||who;
+  $("dfMsg").textContent="";
+  $("dfClear").hidden=!cur;
+  $("dfBox").classList.remove("hidden"); $("dfScrim").classList.remove("hidden");
+  $("dfWhy").focus();
+}
+function dfClose(){ $("dfBox").classList.add("hidden"); $("dfScrim").classList.add("hidden"); dfCtx=null; }
+function dfSave(clear){
+  if(!dfCtx) return;
+  const why=$("dfWhy").value.trim(), by=$("dfBy").value.trim(), until=$("dfUntil").value||null;
+  if(!clear && (!why || !by)){ $("dfMsg").textContent=t("dd_need"); return; }
+  try{ localStorage.setItem("cm_dash_who",by); }catch(e){}
+  const {ty,unit}=dfCtx;
+  const k=ty+"|"+String(unit).toUpperCase();
+  const at=new Date().toISOString();
+  /* Clearing writes the act rather than deleting the file: the row coming back
+     with no record that anybody ever put it off is how an audit trail loses
+     the only part somebody would later ask about. */
+  const doc={ type:"cm-round-deferred", version:1, u:unit, t:ty,
+              until: clear?null:until, why: clear?"":why, by, at,
+              cleared: clear?1:0, dev:"DASH" };
+  const before=deferrals[k]?JSON.parse(JSON.stringify(deferrals[k])):null;
+  if(clear) delete deferrals[k];
+  else deferrals[k]={u:unit,t:ty,until,why,by,at};
+  saveDefer(); renderAll();
+  $("dfMsg").textContent=t("ed_sending");
+  const name=`_meta/deferrals/${unit}_${ty}.defer.json`;
+  const put=(window.CMDrive&&CMDrive.putDoc) ? CMDrive.putDoc(name,doc)
+           : Promise.reject(new Error("no data source"));
+  put.then(()=>{ $("dfMsg").textContent=t("ed_saved"); setTimeout(dfClose,600); })
+     .catch(err=>{
+       if(before) deferrals[k]=before; else delete deferrals[k];
+       saveDefer(); renderAll();
+       $("dfMsg").textContent=t("ed_undone",{e:(err&&err.message)||err});
+     });
+}
 function dueCsv(){
   const rows=[["unit","round","last_done","days_since","due_in_days","due_in_hours",
                "rate_h_per_day","rate_measured","state","reason","reason_by","put_off_to"]];
@@ -9410,6 +9509,11 @@ function renderAll(){
   renderChips(); renderConflictBar(); renderKpis(); renderCoverage(); renderTrend(); renderFleet(); renderFailure(); renderWearTab(); renderActions(); renderHistory(); renderLubeTab(); renderDueTab(); renderSync(); renderNavCounts(); }
 ["fType","fClass","fRange"].forEach(id=>$(id).onchange=renderAll);
 $("fReset").onclick=clearFilters;
+$("dfCancel").onclick=dfClose;
+$("dfScrim").onclick=dfClose;
+$("dfSave").onclick=()=>dfSave(false);
+$("dfClear").onclick=()=>dfSave(true);
+document.addEventListener("keydown",e=>{ if(e.key==="Escape" && dfCtx) dfClose(); });
 $("dispCancel").onclick=dispClose;
 $("dispScrim").onclick=dispClose;
 $("dispSave").onclick=()=>{
