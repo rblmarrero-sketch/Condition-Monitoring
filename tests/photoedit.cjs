@@ -195,6 +195,13 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
      nothing.writes + " write(s)");
   ok(/nothing to save/i.test(nothing.msg), "saying so rather than doing nothing quietly",
      nothing.msg.slice(0, 50));
+  /* A successful save closes the panel after a moment, so reopen it before the
+     checks below reach for its controls. */
+  await p.evaluate(async () => {
+    if ($("pxPanel").classList.contains("hidden")) $("pxOpen").click();
+    await new Promise(r => setTimeout(r, 200));
+  });
+  await p.waitForTimeout(300);
 
   console.log("\n── straighten is capped: presentation, not re-framing");
   const capped = await p.evaluate(() => {
