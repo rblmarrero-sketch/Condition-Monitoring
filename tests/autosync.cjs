@@ -107,7 +107,14 @@ const pend = p => p.evaluate(async () => (await dbAll()).filter(r => !r.up).leng
      what reports the all-clear. */
   const bar2 = (await p.textContent('#syncBar') || '').replace(/\s+/g, ' ').trim();
   const pill2 = (await p.textContent('#netStatus') || '').replace(/\s+/g, ' ').trim();
-  ok('the all-clear is reported', /synced/i.test(pill2), pill2);
+  /* The word, not the state, was what this matched — and the word changed on
+     purpose: the pill claims only that every file was accepted, because this
+     phone has never spoken to the dashboard and cannot say more. Ask the app
+     what it calls the all-clear rather than keeping a copy of it here. */
+  const clear = await p.evaluate(() => I18N.en.net_synced);
+  const pillOn = await p.evaluate(() =>
+    document.getElementById('netStatus').className.split(/\s+/).indexOf('on') >= 0);
+  ok('the all-clear is reported', pillOn && pill2 === clear, pill2);
   ok('  by the pill, not by a bar repeating it', bar2 === '', bar2 || '(silent)');
 
   console.log('\n  the backoff lengthens while it keeps failing, and resets on progress');
