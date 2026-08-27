@@ -201,7 +201,7 @@
     border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;}
   .subtabs::-webkit-scrollbar{display:none;}
   .subtabs button{flex:none;border:0;background:none;color:var(--muted);cursor:pointer;
-    font:600 12.5px inherit;font-family:inherit;padding:6px 12px;border-radius:7px 7px 0 0;
+    font-weight:600;font-size:12.5px;font-family:inherit;padding:6px 12px;border-radius:7px 7px 0 0;
     border-bottom:2px solid transparent;margin-bottom:-3px;white-space:nowrap;}
   .subtabs button:hover{color:var(--ink-2);background:var(--surface-2);}
   .subtabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent);}
@@ -448,7 +448,7 @@
   .pfband{fill:var(--serious);opacity:.09;}
   /* adding and removing a position's media */
   .medit{padding:4px 8px 0;}
-  .medit .mtog{background:none;border:0;padding:2px 0;color:var(--accent);font:600 11px inherit;
+  .medit .mtog{background:none;border:0;padding:2px 0;color:var(--accent);font-weight:600;font-size:11px;font-family:inherit;
     font-family:inherit;cursor:pointer;}
   .medit .mpanel{padding:6px 0 2px;}
   .medit .mlist{display:flex;flex-wrap:wrap;gap:6px;align-items:center;}
@@ -528,7 +528,12 @@
      and the whole toolbar read as furniture that had been bumped. One
      pattern; a wrapped row still ranges left. */
   .fld{display:flex;flex-direction:column;align-items:flex-start;gap:5px;color:var(--ink-2);}
-  .fld>span{font:700 9.5px/1.2 inherit;letter-spacing:.11em;text-transform:uppercase;
+  /* 9.5px, and it never applied: the rule was written as a font shorthand with
+     `inherit` in the family slot, which is invalid as a whole and was dropped,
+     so these labels had been inheriting body size all along. Making the rule
+     valid made it true, and 9.5px is below the floor — so it goes to the floor
+     token rather than back to being a rule that does nothing. */
+  .fld>span{font-weight:700;font-size:var(--t-micro);line-height:1.2;font-family:inherit;letter-spacing:.11em;text-transform:uppercase;
     color:var(--muted);}
   .fld select,.fld input[type=search]{min-width:0;padding:7px 10px;font-size:13px;}
   .fld select{min-width:150px;} .fld input[type=search]{width:150px;}
@@ -582,7 +587,7 @@
      is a picture job. Both, and the table is what opens. */
   .hview{display:flex;gap:2px;background:var(--surface-2);border:1px solid var(--border);
     border-radius:8px;padding:2px;}
-  .hview button{border:0;background:none;color:var(--muted);font:600 12px inherit;font-family:inherit;
+  .hview button{border:0;background:none;color:var(--muted);font-weight:600;font-size:12px;font-family:inherit;
     padding:4px 10px;border-radius:6px;cursor:pointer;display:flex;align-items:center;gap:5px;}
   .hview button.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.10);}
   .hview svg{width:14px;height:14px;}
@@ -615,12 +620,12 @@
   /* The machine drawer. Everything a reader wanted the tab-jump for, in the
      place they were already standing. */
   .uhead{display:flex;align-items:center;gap:var(--s2);margin-bottom:var(--s3);flex-wrap:wrap;}
-  .umod{font:500 var(--t-small)/1.3 var(--ui);color:var(--muted);}
+  .umod{font-weight:500;font-size:var(--t-small);line-height:1.3;font-family:inherit;color:var(--muted);}
   dl.kv{display:grid;grid-template-columns:auto 1fr;gap:5px var(--s3);margin:0 0 var(--s4);}
-  dl.kv dt{font:600 var(--t-micro)/1.5 var(--ui);color:var(--muted);
+  dl.kv dt{font-weight:600;font-size:var(--t-micro);line-height:1.5;font-family:inherit;color:var(--muted);
     text-transform:uppercase;letter-spacing:.04em;}
-  dl.kv dd{margin:0;font:500 var(--t-small)/1.5 var(--ui);color:var(--ink);}
-  .drwh{font:700 var(--t-small)/1.3 var(--ui);color:var(--ink);margin:var(--s4) 0 var(--s2);
+  dl.kv dd{margin:0;font-weight:500;font-size:var(--t-small);line-height:1.5;font-family:inherit;color:var(--ink);}
+  .drwh{font-weight:700;font-size:var(--t-small);line-height:1.3;font-family:inherit;color:var(--ink);margin:var(--s4) 0 var(--s2);
     text-transform:uppercase;letter-spacing:.04em;}
   .ulist{display:flex;flex-direction:column;gap:4px;}
   .urow{display:flex;align-items:center;gap:var(--s2);width:100%;text-align:left;
@@ -629,11 +634,11 @@
   .urow:hover,.urow:focus-visible{border-color:var(--accent);outline:none;}
   .urow .sev{flex:0 0 3px;align-self:stretch;background:var(--sc);border-radius:2px;}
   .urow .ut{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px;}
-  .urow .ut b{font:600 var(--t-small)/1.3 var(--ui);color:var(--ink);
+  .urow .ut b{font-weight:600;font-size:var(--t-small);line-height:1.3;font-family:inherit;color:var(--ink);
     overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .urow .ut i{font:400 var(--t-micro)/1.3 var(--ui);color:var(--muted);font-style:normal;
+  .urow .ut i{font-weight:400;font-size:var(--t-micro);line-height:1.3;font-family:inherit;color:var(--muted);font-style:normal;
     overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .urow .um{flex:0 0 auto;font:600 var(--t-micro)/1 var(--ui);color:var(--muted);
+  .urow .um{flex:0 0 auto;font-weight:600;font-size:var(--t-micro);line-height:1;font-family:inherit;color:var(--muted);
     display:flex;align-items:center;gap:4px;}
   .drwact{display:flex;gap:var(--s2);margin-top:var(--s5);}
   .pos{border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--surface);}
@@ -989,21 +994,21 @@
     padding:9px 12px;border:1px solid var(--accent);border-radius:8px;
     background:color-mix(in srgb,var(--accent) 8%,var(--surface));}
   .selbar[hidden]{display:none;}
-  .selbar .cnt{font:700 var(--t-small)/1.6 var(--ui);color:var(--accent);white-space:nowrap;}
+  .selbar .cnt{font-weight:700;font-size:var(--t-small);line-height:1.6;font-family:inherit;color:var(--accent);white-space:nowrap;}
   .selbar .sf{display:flex;flex-direction:column;gap:3px;}
-  .selbar .sf>span{font:600 var(--t-micro)/1 var(--ui);color:var(--muted);
+  .selbar .sf>span{font-weight:600;font-size:var(--t-micro);line-height:1;font-family:inherit;color:var(--muted);
     text-transform:uppercase;letter-spacing:.04em;}
-  .selbar input,.selbar select{font:500 var(--t-small)/1 var(--ui);padding:5px 7px;
+  .selbar input,.selbar select{font-weight:500;font-size:var(--t-small);line-height:1;font-family:inherit;padding:5px 7px;
     border:1px solid var(--border);border-radius:6px;background:var(--surface);
     color:var(--ink);min-width:132px;}
-  .selbar .msg{font:500 var(--t-small)/1.6 var(--ui);color:var(--muted);}
+  .selbar .msg{font-weight:500;font-size:var(--t-small);line-height:1.6;font-family:inherit;color:var(--muted);}
   .selcol{width:28px;padding-left:8px !important;padding-right:0 !important;}
   .selcol input{width:14px;height:14px;accent-color:var(--accent);cursor:pointer;margin:0;}
   tr.picked>td{background:color-mix(in srgb,var(--accent) 9%,transparent);}
   /* Editable in place. It has to look like a field on hover and like text at
      rest, or nine columns of boxes turn the register into a form. */
   td.ed{padding-top:2px !important;padding-bottom:2px !important;}
-  .iedit{font:500 var(--t-small)/1.3 var(--ui);color:var(--ink);width:100%;min-width:0;
+  .iedit{font-weight:500;font-size:var(--t-small);line-height:1.3;font-family:inherit;color:var(--ink);width:100%;min-width:0;
     padding:3px 5px;border:1px solid transparent;border-radius:5px;background:none;}
   .iedit:hover{border-color:var(--border);background:var(--surface);}
   .iedit:focus{border-color:var(--accent);background:var(--surface);outline:none;}
@@ -1270,7 +1275,7 @@
   button.kpi:hover::before{height:5px;}
   .kpi.on{background:var(--surface-2);
     box-shadow:0 0 0 1px var(--kc,var(--accent)) inset;}
-  .kpi .k,.tile .k{font:700 var(--t-micro)/1.2 inherit;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);}
+  .kpi .k,.tile .k{font-weight:700;font-size:var(--t-micro);line-height:1.2;font-family:inherit;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);}
   /* 34px and 42px were the sizes of a marketing page. A number a reliability
      engineer reads fifty times a day needs to be unmistakable, not enormous —
      and the four lines under it are what make it mean anything. */
@@ -1339,7 +1344,7 @@
   .wlu.shut .wlh{border-bottom-color:transparent;}
   .wlu.shut .wlr{display:none;}
   .wlall{display:flex;justify-content:flex-end;margin:-4px 0 2px;}
-  .wlall button{border:0;background:none;color:var(--accent);font:600 12px inherit;
+  .wlall button{border:0;background:none;color:var(--accent);font-weight:600;font-size:12px;font-family:inherit;
     font-family:inherit;cursor:pointer;padding:4px 2px;}
   .wlall button:hover{text-decoration:underline;}
 
@@ -1357,7 +1362,7 @@
      four answers and costs two clicks to change. All four, always visible. */
   .seg{display:inline-flex;gap:2px;padding:3px;background:var(--surface-2);
     border:1px solid var(--border);border-radius:10px;}
-  .seg button{border:0;background:none;color:var(--ink-2);font:600 12.5px/1 inherit;
+  .seg button{border:0;background:none;color:var(--ink-2);font-weight:600;font-size:12.5px;line-height:1;font-family:inherit;
     font-family:inherit;padding:7px 12px;border-radius:7px;cursor:pointer;white-space:nowrap;
     transition:background .15s, color .15s;}
   .seg button:hover{color:var(--ink);}
@@ -1375,7 +1380,7 @@
     box-shadow:var(--e1);overflow:hidden;}
   .wlh{display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--surface-2);
     border-bottom:1px solid var(--border);}
-  .wlh .u{font:700 14px/1 inherit;letter-spacing:-.01em;}
+  .wlh .u{font-weight:700;font-size:14px;line-height:1;font-family:inherit;letter-spacing:-.01em;}
   .wlh .m{font-size:11.5px;color:var(--muted);}
   .wlh .sp{flex:1;}
   .wlh .cnt{font:700 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);
@@ -1397,7 +1402,7 @@
   /* Who owns it, as a face-sized thing rather than a column of names. */
   .who{display:inline-flex;align-items:center;gap:7px;min-width:0;}
   .who i{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;
-    background:var(--surface-3);color:var(--ink-2);font:700 var(--t-micro)/1 inherit;font-style:normal;
+    background:var(--surface-3);color:var(--ink-2);font-weight:700;font-size:var(--t-micro);line-height:1;font-family:inherit;font-style:normal;
     letter-spacing:.02em;}
   .who span{font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   /* Nobody owns this. Grey and dashed made it the quietest thing in the row —
@@ -1412,12 +1417,12 @@
   .due i{font-style:normal;font-size:var(--t-micro);color:var(--muted);}
   .due.late b{color:var(--critical);} .due.late i{color:var(--critical);font-weight:700;}
   .due.soon b{color:var(--serious);}
-  .st{display:inline-flex;align-items:center;gap:6px;font:600 11.5px/1 inherit;color:var(--ink-2);}
+  .st{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:11.5px;line-height:1;font-family:inherit;color:var(--ink-2);}
   .st::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--stc,var(--none));flex:none;}
   .st.s-open{--stc:var(--muted);} .st.s-PLAN{--stc:var(--accent);}
   .st.s-WIP{--stc:var(--warning);} .st.s-DONE{--stc:var(--good);}
   .st.s-VERIFIED{--stc:var(--good);} .st.s-NOACT{--stc:var(--muted);}
-  .rcam{display:inline-block;font:700 9px/1 inherit;letter-spacing:.09em;color:var(--accent);
+  .rcam{display:inline-block;font-weight:700;font-size:9px;line-height:1;font-family:inherit;letter-spacing:.09em;color:var(--accent);
     border:1px solid currentColor;border-radius:4px;padding:2px 4px;vertical-align:1px;margin-left:6px;}
 
   /* progress, by state rather than one green nub */
@@ -1474,11 +1479,11 @@
     outline:none;background:var(--surface);border-color:var(--accent);
     box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent);}
   .sheet .field{gap:6px;margin-bottom:14px;}
-  .sheet .field label{font:700 var(--t-micro)/1.2 inherit;letter-spacing:.08em;color:var(--muted);}
+  .sheet .field label{font-weight:700;font-size:var(--t-micro);line-height:1.2;font-family:inherit;letter-spacing:.08em;color:var(--muted);}
   .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:0 14px;}
   .sbsec{margin-top:6px;padding-top:16px;border-top:1px solid var(--border);}
   .sbsec:first-of-type{border-top:0;padding-top:4px;}
-  .sbsec > h3{margin:0 0 3px;font:700 10px/1.2 inherit;letter-spacing:.12em;
+  .sbsec > h3{margin:0 0 3px;font-weight:700;font-size:10px;line-height:1.2;font-family:inherit;letter-spacing:.12em;
     text-transform:uppercase;color:var(--accent);}
   .sbsec > .hint{font-size:12px;color:var(--muted);margin:0 0 13px;line-height:1.5;}
   .readback{padding:9px 11px;background:var(--surface-2);border:1px solid var(--border);
@@ -1538,7 +1543,7 @@
   .controls{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
     box-shadow:var(--e1);padding:12px 16px;gap:16px;align-items:end;margin-bottom:16px;}
   .controls .field{gap:5px;}
-  .controls .field label{font:700 var(--t-micro)/1.2 inherit;letter-spacing:.08em;color:var(--muted);}
+  .controls .field label{font-weight:700;font-size:var(--t-micro);line-height:1.2;font-family:inherit;letter-spacing:.08em;color:var(--muted);}
   .controls select,.controls input[type=search],.controls input[type=text]{
     background:var(--surface-2);border:1px solid var(--border);border-radius:9px;
     padding:8px 11px;font:inherit;font-size:13px;color:var(--ink);min-height:36px;
@@ -1553,7 +1558,7 @@
      header that stays put on a long list, and rows that answer the pointer. */
   table.grid{font-size:12.5px;}
   table.grid th{position:sticky;top:0;z-index:1;background:var(--surface);
-    font:700 var(--t-micro)/1.3 inherit;letter-spacing:.08em;text-transform:uppercase;
+    font-weight:700;font-size:var(--t-micro);line-height:1.3;font-family:inherit;letter-spacing:.08em;text-transform:uppercase;
     color:var(--muted);padding:11px 10px;border-bottom:1px solid var(--border);}
   table.grid td{padding:11px 10px;border-bottom:1px solid var(--border);
     font-variant-numeric:tabular-nums;}
@@ -1568,7 +1573,7 @@
   /* ── pills ─────────────────────────────────────────────────────────────
      Severity is the one thing on this page that must never be misread, so it
      keeps a filled chip and gains a little air. */
-  .pill{padding:3px 8px;border-radius:5px;font:700 var(--t-micro)/1.3 inherit;letter-spacing:.06em;
+  .pill{padding:3px 8px;border-radius:5px;font-weight:700;font-size:var(--t-micro);line-height:1.3;font-family:inherit;letter-spacing:.06em;
     text-transform:uppercase;}
 
   /* ── the wear bar, as an instrument ────────────────────────────────────
