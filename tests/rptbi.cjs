@@ -120,6 +120,61 @@ const LAY = (secs) => {
     ok(`  the pairing is applied broadly, not in one place`, bi[L].alt > 40, bi[L].alt + ' pairs');
   });
 
+  /* ---- EVERY ROUND, NOT JUST THE ONE THAT WAS AUDITED --------------------
+     The check above builds DZ002, which carries an undercarriage round AND a
+     magnetic-plug round, and counts the pairs in the two of them together. So
+     a report that paired every label on the undercarriage page and none on the
+     others would pass it with room to spare — which is exactly the shape of
+     the complaint it was supposed to answer.
+
+     One unit per round type, so no section can cover for another. */
+  const perType = await p.evaluate(({ BUILD }) => {
+    const build = eval('(' + BUILD + ')');
+    const it = (k, x) => Object.assign({ key: k, label: k }, x || {});
+    const recs = [
+      { equip: 'ZM001', date: '2026-08-11', type: 'MP', cls: 'HT', by: 'R', smu: '100',
+        items: [it('1A', { grade: 'C', defect: 'Ferrous debris', defectCode: 'DT14-03',
+                           cause: 'Gear wear', actionLabel: 'Schedule repair', prio: 'P2' })] },
+      { equip: 'ZM002', date: '2026-08-11', type: 'FC', cls: 'HT', by: 'R', smu: '100',
+        items: [it('ENG', { grade: 'B', comment: 'light fuzz' })] },
+      { equip: 'ZM003', date: '2026-08-11', type: 'TB', cls: 'AT', by: 'R', smu: '100',
+        items: [it('FLOOR', { grade: 'C', defect: 'Cracking', comment: 'weld line' })] },
+      { equip: 'ZM004', date: '2026-08-11', type: 'INSP', cls: 'HT', by: 'R', smu: '100',
+        items: [it('GEN', { grade: 'B' })] },
+      { equip: 'ZM005', date: '2026-08-11', type: 'LUBE', cls: 'HT', by: 'R', smu: '100',
+        items: [it('HYD', { grade: 'A', lubeProduct: 'Mobil DTE 10' })] },
+      { equip: 'ZM006', date: '2026-08-11', type: 'UC', cls: 'DOZ', by: 'R', smu: '100',
+        items: [it('ROLLER.L1', { mm: 220 })] },
+    ];
+    CMDash.importRecords(recs);
+    const res = {};
+    ['en', 'ru'].forEach(L => {
+      lang = L; applyLang();
+      recs.forEach(r => {
+        const html = build('unit', r.equip).map(s => s.html).join('');
+        (res[r.type] = res[r.type] || {})[L] = {
+          pairs: (html.match(/class="alt[l2i]?"/g) || []).length,
+          cyr: /[\u0400-\u04FF]/.test(html), lat: /[A-Za-z]{4}/.test(html),
+        };
+      });
+    });
+    lang = 'en'; applyLang();
+    return res;
+  }, { BUILD: BUILD.toString() });
+  console.log('\nevery round type, on its own');
+  ['MP', 'FC', 'TB', 'INSP', 'LUBE', 'UC'].forEach(ty => {
+    const r = perType[ty] || {};
+    const e = r.en || {}, u = r.ru || {};
+    note(ty, 'en ' + e.pairs + ' pairs · ru ' + u.pairs + ' pairs');
+    /* A floor, not a count. The number is proportional to how many labels the
+       section has, and pinning it exactly would fail the day somebody adds a
+       row. Zero is the failure being guarded against. */
+    ok('  a ' + ty + ' report pairs its labels in English mode', e.pairs > 5, String(e.pairs));
+    ok('  and in Russian mode', u.pairs > 5, String(u.pairs));
+    ok('  an English ' + ty + ' report carries Russian too', !!e.cyr);
+    ok('  and a Russian one carries English', !!u.lat);
+  });
+
   /* Every dictionary key the report can reach exists in both halves. A missing
      Russian key silently falls through to the English one and reads finished. */
   const gaps = await p.evaluate(() =>
