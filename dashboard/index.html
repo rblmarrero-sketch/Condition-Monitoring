@@ -1185,6 +1185,13 @@
   table.grid th .arrow{opacity:.4;font-size:11px;margin-left:3px;} table.grid th.on .arrow{opacity:1;}
   .note{font-size:12px;color:var(--ink-2);background:color-mix(in srgb,var(--warning) 14%,var(--surface));border:1px solid color-mix(in srgb,var(--warning) 45%,var(--border));border-radius:8px;padding:8px 11px;margin-top:12px;}
   /* data-source sheet */
+  /* The disagreement between two phones' versions of one round, under the
+     version it belongs to. Indented and ruled off the choice above it, so the
+     eye reads "this version — and here is what taking it would change". */
+  .cfdiff{margin:7px 0 0 14px;padding-left:11px;border-left:2px solid var(--border);}
+  .cfdiff table.grid td{padding:3px 8px;font-size:12px;vertical-align:top;}
+  .cfdiff table.grid td:first-child{width:1%;white-space:nowrap;color:var(--ink-2);}
+  .cfd{display:inline-block;margin-right:12px;white-space:nowrap;}
   .cfbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;
     margin:14px 18px 0 calc(var(--sbw) + 18px);padding:10px 14px;border:1px solid var(--warning);
     border-left-width:4px;border-radius:8px;
@@ -3208,6 +3215,14 @@ const I18N={
   cf_dev:"Device {d}", cf_by:"By {by} · {n} position(s)",
   cf_absent:"Not in this browser yet — refresh from Drive to see it",
   cf_inuse:"in use", cf_use:"Use this one",
+  cf_standing:"standing now",
+  cf_identical:"Every finding matches — either version says the same thing.",
+  cf_diff_n:"{n} difference(s) · {s} finding(s) identical",
+  cf_only:"only on device {d}",
+  cf_blank:"not recorded",
+  cf_f_grade:"Grade", cf_f_sev:"Severity", cf_f_defect:"Defect",
+  cf_f_cause:"Cause", cf_f_action:"Action", cf_f_prio:"Priority",
+  cf_f_mm:"Measurement", cf_f_comment:"Comment",
   cf_saving:"Recording the choice…", cf_saved:"Reports now use device {d} ✔",
 
 
@@ -3786,6 +3801,14 @@ const I18N={
   cf_dev:"Устройство {d}", cf_by:"Автор {by} · позиций: {n}",
   cf_absent:"Ещё не загружено в этот браузер — обновите из Drive",
   cf_inuse:"используется", cf_use:"Взять эту",
+  cf_standing:"сейчас принята",
+  cf_identical:"Все находки совпадают — обе версии говорят одно и то же.",
+  cf_diff_n:"Расхождений: {n} · совпадает находок: {s}",
+  cf_only:"только на устройстве {d}",
+  cf_blank:"не записано",
+  cf_f_grade:"Оценка", cf_f_sev:"Критичность", cf_f_defect:"Дефект",
+  cf_f_cause:"Причина", cf_f_action:"Действие", cf_f_prio:"Приоритет",
+  cf_f_mm:"Замер", cf_f_comment:"Комментарий",
   cf_saving:"Сохраняем выбор…", cf_saved:"Отчёты теперь используют устройство {d} ✔",
 
 
@@ -4257,8 +4280,22 @@ function groupRivals(list){
     if(c&&c.resolved&&c.keep) win=rivals.find(r=>String(r.dev||"")===c.keep)||win;
     if(rivals.length<2&&!c){ out.set(k,win); return; }
     const m=Object.assign({},win);
+    /* THE LOSING VERSION'S FINDINGS COME WITH IT.
+
+       This kept a summary — device, inspector, a count — and threw the items
+       away, so the panel that asks "which of these two stands?" could not show
+       what the two actually disagree about. It was not withholding the
+       comparison; it had never been given the data, and an office picking one
+       version blind is picking blind on exactly the records where the wrong
+       pick loses a finding.
+
+       Costs nothing to keep: driveRecs already holds both copies in full and
+       is what gets persisted, so this is a reference, not a second copy. */
     m._rivals=rivals.filter(r=>r!==win)
-      .map(r=>({dev:String(r.dev||""),by:r.by||"",n:(r.items||[]).length,date:r.date}));
+      .map(r=>({dev:String(r.dev||""),by:r.by||"",n:(r.items||[]).length,date:r.date,
+                smu:r.smu, sup:r.sup, items:r.items||[]}));
+    m._mine={dev:String(win.dev||""),by:win.by||"",n:(win.items||[]).length,
+             date:win.date, smu:win.smu, sup:win.sup, items:win.items||[]};
     m._devs=(c&&(c.devices||[]).map(d=>d.dev))||rivals.map(r=>String(r.dev||""));
     m._keep=(c&&c.keep)||"";
     m._resolvedBy=(c&&c.by)||"";
@@ -6858,6 +6895,77 @@ function openEdit(key,keepMsg){
    with enough to tell them apart — who took it and how many positions they
    filled — and the current answer is marked, because "already decided" is as
    useful to see as the options. */
+/* WHAT THE TWO PHONES ACTUALLY DISAGREE ABOUT.
+
+   "Version A, 12 findings · Version B, 11 findings" is not a basis for a
+   decision — it says one of them has a finding the other has not and refuses
+   to say which, on the one screen where choosing wrong loses an inspection.
+
+   Compared by what a finding IS, never by position: two phones walking one
+   machine record the points in whatever order they reached them, so index 3 on
+   one is not index 3 on the other. Only fields somebody would act on are
+   compared; a timestamp differing is not a disagreement. */
+const CF_FIELDS=[
+  {f:"grade",      k:"cf_f_grade"},
+  {f:"sev",        k:"cf_f_sev"},
+  {f:"defectCode", k:"cf_f_defect"},
+  {f:"causeCode",  k:"cf_f_cause"},
+  {f:"action",     k:"cf_f_action"},
+  {f:"prio",       k:"cf_f_prio"},
+  {f:"mm",         k:"cf_f_mm"},
+  {f:"comment",    k:"cf_f_comment"},
+];
+function cfDiff(mine, other){
+  const A=new Map(), B=new Map();
+  (mine||[]).forEach(i=>{ if(i&&i.key!=null) A.set(String(i.key), i); });
+  (other||[]).forEach(i=>{ if(i&&i.key!=null) B.set(String(i.key), i); });
+  const onlyMine=[], onlyOther=[], differ=[];
+  A.forEach((a,k)=>{
+    const b=B.get(k);
+    if(!b){ onlyMine.push({key:k, it:a}); return; }
+    const fields=CF_FIELDS.filter(({f})=>{
+      const x=a[f], y=b[f];
+      /* Blank, null and undefined all mean "not recorded" — treating them as
+         three different answers would report a disagreement on every point
+         neither phone filled in. */
+      const n=v=>(v==null||v==="")?"":String(v);
+      return n(x)!==n(y);
+    }).map(({f,k:lk})=>({f, k:lk, a:a[f], b:b[f]}));
+    if(fields.length) differ.push({key:k, fields});
+  });
+  B.forEach((b,k)=>{ if(!A.has(k)) onlyOther.push({key:k, it:b}); });
+  return { onlyMine, onlyOther, differ,
+           same: A.size - onlyMine.length - differ.length,
+           any: onlyMine.length + onlyOther.length + differ.length };
+}
+/* One line per disagreement, in the language the office is reading. Values are
+   rendered through the same label functions the rest of the dashboard uses, so
+   a severity reads "Critical" here and "Critical" everywhere else rather than
+   CRI on this one panel. */
+function cfValue(f, v){
+  if(v==null||v==="") return t("cf_blank");
+  if(f==="sev") return (SEV[v]&&SEV[v].l)||String(v);
+  if(f==="action") return actionName(v,lang);
+  if(f==="prio") return prioName(v,lang);
+  return String(v);
+}
+function cfDiffHTML(d, devA, devB){
+  if(!d.any) return `<div class="muted" style="font-size:12px">${esc(t("cf_identical"))}</div>`;
+  const rows=[];
+  d.differ.forEach(x=>{
+    rows.push(`<tr><td class="mono">${esc(x.key)}</td><td>`
+      + x.fields.map(f=>`<span class="cfd">${esc(t(f.k))}: <b>${esc(cfValue(f.f,f.a))}</b>`
+          + ` <span class="muted">\u2260</span> <b>${esc(cfValue(f.f,f.b))}</b></span>`).join(" ")
+      + `</td></tr>`);
+  });
+  d.onlyMine.forEach(x=>rows.push(
+    `<tr><td class="mono">${esc(x.key)}</td><td><span class="pill w">${esc(t("cf_only",{d:devA}))}</span></td></tr>`));
+  d.onlyOther.forEach(x=>rows.push(
+    `<tr><td class="mono">${esc(x.key)}</td><td><span class="pill w">${esc(t("cf_only",{d:devB}))}</span></td></tr>`));
+  return `<div class="cfdiff"><div class="muted" style="font-size:12px;margin-bottom:5px">${
+      esc(t("cf_diff_n",{n:d.any, s:d.same}))}</div>`
+    + `<div class="tblwrap"><table class="grid"><tbody>${rows.join("")}</tbody></table></div></div>`;
+}
 function renderConflict(rec){
   const card=$("edCfCard"), box=$("edCfList");
   if(!card||!box) return;
@@ -6869,16 +6977,30 @@ function renderConflict(rec){
     .filter(v=>v.dev).filter((v,i,a)=>a.findIndex(x=>x.dev===v.dev)===i);
   // A device named in the marker whose file has not reached this browser yet.
   devs.forEach(d=>{ if(d&&!all.some(v=>v.dev===d)) all.push({dev:d,by:"",n:null,absent:1}); });
+  /* The version currently standing, with its findings — what every other
+     version is compared against. */
+  const winDev=String((rec._mine&&rec._mine.dev)||rec.dev||"");
+  const winItems=(rec._mine&&rec._mine.items)||rec.items||[];
   box.innerHTML=all.map(v=>{
     const on=rec._keep&&rec._keep===v.dev;
-    return `<div class="row" style="align-items:center;gap:10px;margin-bottom:8px">
+    /* AND WHAT CHOOSING IT WOULD CHANGE. A row that says only "12 findings"
+       asks somebody to pick between two inspections of the same machine
+       without telling them where the two disagree — on the one screen where
+       the wrong pick loses a finding for good. */
+    const isWin = v.dev===winDev;
+    const diff = (!v.absent && !isWin && v.items)
+      ? cfDiffHTML(cfDiff(winItems, v.items), winDev||"—", v.dev) : "";
+    return `<div style="margin-bottom:12px">
+      <div class="row" style="align-items:center;gap:10px">
       <div style="flex:1">
-        <b>${esc(t("cf_dev",{d:v.dev}))}</b>${on?` <span class="editflag">${esc(t("cf_inuse"))}</span>`:""}
+        <b>${esc(t("cf_dev",{d:v.dev}))}</b>${on?` <span class="editflag">${esc(t("cf_inuse"))}</span>`:""}${
+          isWin?` <span class="pill g">${esc(t("cf_standing"))}</span>`:""}
         <div class="muted" style="font-size:12px">${esc(v.absent
           ? t("cf_absent")
           : t("cf_by",{by:v.by||"—", n:v.n==null?"?":v.n}))}</div>
       </div>
       <button class="btn${on?"":" primary"}" data-keep="${esc(v.dev)}"${on||v.absent?" disabled":""}>${esc(t("cf_use"))}</button>
+      </div>${diff}
     </div>`;
   }).join("");
   box.querySelectorAll("[data-keep]").forEach(b=>b.onclick=()=>keepVersion(b.dataset.keep));
