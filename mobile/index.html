@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=188">
+<link rel="manifest" href="manifest.webmanifest?v=189">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=188">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=188">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=188">
+<link rel="apple-touch-icon" href="icon-192.png?v=189">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=189">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=189">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1970,31 +1970,31 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=188"></script>
-<script src="upload-defaults.js?v=188"></script>
-<script src="hme.js?v=188"></script>
-<script src="mp-fc.js?v=188"></script>
-<script src="hme-cascade.js?v=188"></script>
-<script src="assets.js?v=188"></script>
-<script src="temp-limits.js?v=188"></script>
-<script src="normalize.js?v=188"></script>
-<script src="due.js?v=188"></script>
-<script src="wear.js?v=188"></script>
-<script src="wear-figs.js?v=188"></script>
-<script src="wear-map.js?v=188"></script>
-<script src="machine-photos.js?v=188"></script>
-<script src="machine-fig.js?v=188"></script>
-<script src="get.js?v=188"></script>
-<script src="points.js?v=188"></script>
-<script src="uc-points.js?v=188"></script>
-<script src="inspect-guide.js?v=188"></script>
-<script src="get-figs.js?v=188"></script>
-<script src="body-points.js?v=188"></script>
-<script src="body-map.js?v=188"></script>
-<script src="lube.js?v=188"></script>
-<script src="lube-overrides.js?v=188"></script>
-<script src="lube2027.js?v=188"></script>
-<script src="report-core.js?v=188"></script>
+<script src="native.js?v=189"></script>
+<script src="upload-defaults.js?v=189"></script>
+<script src="hme.js?v=189"></script>
+<script src="mp-fc.js?v=189"></script>
+<script src="hme-cascade.js?v=189"></script>
+<script src="assets.js?v=189"></script>
+<script src="temp-limits.js?v=189"></script>
+<script src="normalize.js?v=189"></script>
+<script src="due.js?v=189"></script>
+<script src="wear.js?v=189"></script>
+<script src="wear-figs.js?v=189"></script>
+<script src="wear-map.js?v=189"></script>
+<script src="machine-photos.js?v=189"></script>
+<script src="machine-fig.js?v=189"></script>
+<script src="get.js?v=189"></script>
+<script src="points.js?v=189"></script>
+<script src="uc-points.js?v=189"></script>
+<script src="inspect-guide.js?v=189"></script>
+<script src="get-figs.js?v=189"></script>
+<script src="body-points.js?v=189"></script>
+<script src="body-map.js?v=189"></script>
+<script src="lube.js?v=189"></script>
+<script src="lube-overrides.js?v=189"></script>
+<script src="lube2027.js?v=189"></script>
+<script src="report-core.js?v=189"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2368,6 +2368,7 @@ const I18N = {
     due_never_p:"Never done",
     due_more:"+{n} more — narrow by round to see them",
     due_stray:"⚠ {n} of these dates are not in the system — loaded from a file, or left from an older sync",
+    due_stray1:"⚠ 1 of these dates is not in the system — loaded from a file, or left from an older sync",
     due_bad:"⚠ the system cannot read {n} of its own files — those inspections reach nobody; report it",
     due_unk:"⚠ {n} round(s) cannot be scheduled — an unknown round type, or a date this app cannot read",
     due_find:"Find a machine — CR006, DZ003…",
@@ -2837,6 +2838,7 @@ const I18N = {
     due_never_p:"Ни разу",
     due_more:"ещё {n} — выберите тип осмотра, чтобы увидеть",
     due_stray:"⚠ {n} из этих дат нет в системе — загружены из файла или остались от прежней синхронизации",
+    due_stray1:"⚠ 1 из этих дат нет в системе — загружена из файла или осталась от прежней синхронизации",
     due_bad:"⚠ система не может прочитать {n} из своих файлов — эти осмотры не доходят ни до кого; сообщите об этом",
     due_unk:"⚠ {n} обход(ов) невозможно запланировать — неизвестный тип обхода или нечитаемая дата",
     due_find:"Найти машину — CR006, DZ003…",
@@ -6724,9 +6726,48 @@ function histStrays(){
   if(!src.f) return 0;                    // no stamping read yet — say nothing
   return src.i + src.u;
 }
+/* A STAMP THAT WAS WRONG WHEN IT WAS WRITTEN, AND THAT NOTHING EVER CORRECTED.
+
+   Builds 183 to 187 marked a date "from the system" whenever the folder
+   mentioned the same round on the same machine — including when the date this
+   phone held was NEWER than the folder's, which is exactly the case where the
+   folder has never seen it. 188 stopped that happening again. It could not undo
+   what five builds had already written, because histPut only ever ADDS the
+   stamp: no later sync has any reason to revisit an entry that already claims
+   to be the system's.
+
+   So every handset that ran those builds still carries strays wearing the
+   fleet's colours. histStrays() does not count them, "Keep only what the system
+   has" will not remove them, and the due list goes on sending somebody to a
+   machine on the strength of a date nobody else in the fleet holds. Two copies
+   of this app, both on 188, both truthfully reporting "this phone already has
+   every round in the folder", still showed 0 missed and 5 missed.
+
+   A read that covered the WHOLE folder is the one thing that can settle it. It
+   knows every round the folder holds and the date of each, so anything wearing
+   the stamp that the folder did not just deliver is not the system's, whatever
+   it says. The claim comes off; the DATE is never touched here. The entry
+   becomes what it always was — this device's alone, countable, and removable.
+
+   Only ever from a complete read. Trueing up against a prefix would strip the
+   stamp off every real date beyond it and offer the fleet's own history for
+   deletion, which is a far worse failure than the one it repairs. */
+function histTrueUp(folder){
+  if(!folder || !folder.size) return 0;
+  const h=histAll(); let n=0;
+  for(const k of Object.keys(h)){
+    const e=histEntry(h[k]); if(!e || e.s!=="f") continue;
+    const had=folder.get(k);
+    /* Not delivered at all, or delivered — but not this date. */
+    if(had && !(String(e.d)>String(had))) continue;
+    delete e.s; h[k]=e; n++;
+  }
+  if(n) histSave(h);
+  return n;
+}
 function dueStray(){
   const n=histStrays();
-  return n ? t("due_stray",{n}) : "";
+  return n ? t(n===1?"due_stray1":"due_stray",{n}) : "";
 }
 function dueNoProgramme(){
   const n=unclassedCount();
@@ -7729,6 +7770,12 @@ let teamPending=0;
 let teamLastCursor=0;
 /* Sidecars the last reply could not parse, so they sent no rounds at all. */
 let teamFailed=0;
+/* What the folder holds, keyed the way the due index is: round|unit -> the
+   newest date the folder has for it. From the last reply, and — while a full
+   walk is running — accumulated across its pages, because no single page of a
+   folder bigger than one call can speak for the folder. */
+let teamLastFolder=new Map();
+let teamFolderAcc=null;
 const TEAM_MIN_GAP=60000;    // automatic pulls only; the button always goes
 const TEAM_TIMEOUT=20000;    // pit signal can leave a fetch hanging for ever
 /* A full re-read is a different kind of request: the script walks every file in
@@ -7902,19 +7949,34 @@ async function teamPull(manual,full,from){
 
        Only ever written by a COMPLETE read. A truncated one knows a prefix and
        would report it as the whole. */
-    if(teamLastComplete){
-      try{
-        const rows = viaIndex ? (j.rows||[]) : (j.records||[]);
-        const pairs = new Set(), units = new Set();
-        for(const r of rows){
-          const u = (r.u || r.equip || "").toUpperCase();
-          const ty = r.t || r.type || "";
-          if(!u || !ty) continue;
-          pairs.add(ty+"|"+u); units.add(u);
-        }
-        lsSet("cm_fleet_n", JSON.stringify({p:pairs.size, u:units.size, at:Date.now()}));
-      }catch(e){}
-    }
+    /* Built from EVERY reply, not only a complete one. The count below is still
+       only written by a complete read — but a full walk covers the folder a
+       page at a time, and the pages together ARE the folder, so the pages have
+       to be collected as they arrive or the walk ends knowing nothing. */
+    try{
+      const rows = viaIndex ? (j.rows||[]) : (j.records||[]);
+      const seen = new Map(), units = new Set();
+      for(const r of rows){
+        const u = (r.u || r.equip || "").toUpperCase();
+        const tyRaw = r.t || r.type || "";
+        if(!u || !tyRaw) continue;             // never invent a pairing
+        const k = teamType(tyRaw)+"|"+u, d = teamDate(r.d || r.date || "");
+        if(!d) continue;
+        const cur = seen.get(k);
+        if(!cur || String(d) > String(cur)) seen.set(k, d);
+        units.add(u);
+      }
+      teamLastFolder = seen;
+      if(teamFolderAcc) for(const [k,d] of seen){
+        const cur = teamFolderAcc.get(k);
+        if(!cur || String(d) > String(cur)) teamFolderAcc.set(k, d);
+      }
+      if(teamLastComplete){
+        lsSet("cm_fleet_n", JSON.stringify({p:seen.size, u:units.size, at:Date.now()}));
+        /* One call held the whole folder, so it is entitled to speak. */
+        histTrueUp(seen);
+      }
+    }catch(e){}
     const nextCur = viaIndex ? (j.truncated ? j.cursor : j.at) : j.cursor;
     /* A CURSOR MAY NEVER GO BACKWARDS.
 
@@ -8320,22 +8382,29 @@ async function histDrain(onStep){
      page can claim to. Start the tally at nothing and let the pages add to it,
      or the figure is either stale or counted twice. */
   badSet(0);
+  /* Collect what every page delivers. A walk that reaches the end has seen the
+     whole folder even though no one call did, and that is what entitles it to
+     correct a stamp — see histTrueUp. Cleared on every exit, so a walk that
+     stopped short can never be mistaken for one that finished. */
+  teamFolderAcc=new Map();
+  const done=v=>{ const acc=teamFolderAcc; teamFolderAcc=null;
+                  if(v && acc) histTrueUp(acc); return v; };
   let ok=await teamPull(true,true);                // from the beginning
-  if(!ok) return false;
+  if(!ok) return done(false);
   if(onStep) onStep();
-  if(teamLastComplete) return true;                // one call held the lot
+  if(teamLastComplete) return done(true);          // one call held the lot
   let pos=teamLastCursor;
   for(let i=1;i<HEAL_MAX_CALLS;i++){
-    if(!teamPending) return true;                  // the folder says it is done
+    if(!teamPending) return done(true);            // the folder says it is done
     ok=await teamPull(true,false,pos);
-    if(!ok) return false;
+    if(!ok) return done(false);
     if(onStep) onStep();
     /* A position that will not move is a scan that cannot finish, and going
        round again would only ask the same question. */
-    if(teamLastCursor<=pos) return !teamPending;
+    if(teamLastCursor<=pos) return done(!teamPending);
     pos=teamLastCursor;
   }
-  return !teamPending;                             // more folder than a session
+  return done(!teamPending);                       // more folder than a session
 }
 /* A drain that reached the end IS a complete read of the folder, however many
    calls it took — so it is entitled to record what the folder holds. Written
@@ -9607,7 +9676,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="188";
+const BUILD="189";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
