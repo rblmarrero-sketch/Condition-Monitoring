@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=185">
+<link rel="manifest" href="manifest.webmanifest?v=186">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=185">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=185">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=185">
+<link rel="apple-touch-icon" href="icon-192.png?v=186">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=186">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=186">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1259,7 +1259,7 @@
   .dueitem.put{border-left-color:var(--ink-2);} .dueitem.off{border-left-color:var(--muted);}
   .findbox{width:100%;box-sizing:border-box;margin:0 0 8px;padding:9px 11px;
     border:1px solid var(--border);border-radius:9px;background:var(--surface-2);
-    color:var(--ink);font-size:var(--t-body);font-family:inherit;}
+    color:var(--ink);font-size:16px;font-family:inherit;}
   .findbox:focus{outline:none;border-color:var(--accent);}
   /* Never done is not overdue and not due soon — it is a machine with no
      record at all, and it must not borrow either colour. Dashed, because the
@@ -1966,31 +1966,31 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=185"></script>
-<script src="upload-defaults.js?v=185"></script>
-<script src="hme.js?v=185"></script>
-<script src="mp-fc.js?v=185"></script>
-<script src="hme-cascade.js?v=185"></script>
-<script src="assets.js?v=185"></script>
-<script src="temp-limits.js?v=185"></script>
-<script src="normalize.js?v=185"></script>
-<script src="due.js?v=185"></script>
-<script src="wear.js?v=185"></script>
-<script src="wear-figs.js?v=185"></script>
-<script src="wear-map.js?v=185"></script>
-<script src="machine-photos.js?v=185"></script>
-<script src="machine-fig.js?v=185"></script>
-<script src="get.js?v=185"></script>
-<script src="points.js?v=185"></script>
-<script src="uc-points.js?v=185"></script>
-<script src="inspect-guide.js?v=185"></script>
-<script src="get-figs.js?v=185"></script>
-<script src="body-points.js?v=185"></script>
-<script src="body-map.js?v=185"></script>
-<script src="lube.js?v=185"></script>
-<script src="lube-overrides.js?v=185"></script>
-<script src="lube2027.js?v=185"></script>
-<script src="report-core.js?v=185"></script>
+<script src="native.js?v=186"></script>
+<script src="upload-defaults.js?v=186"></script>
+<script src="hme.js?v=186"></script>
+<script src="mp-fc.js?v=186"></script>
+<script src="hme-cascade.js?v=186"></script>
+<script src="assets.js?v=186"></script>
+<script src="temp-limits.js?v=186"></script>
+<script src="normalize.js?v=186"></script>
+<script src="due.js?v=186"></script>
+<script src="wear.js?v=186"></script>
+<script src="wear-figs.js?v=186"></script>
+<script src="wear-map.js?v=186"></script>
+<script src="machine-photos.js?v=186"></script>
+<script src="machine-fig.js?v=186"></script>
+<script src="get.js?v=186"></script>
+<script src="points.js?v=186"></script>
+<script src="uc-points.js?v=186"></script>
+<script src="inspect-guide.js?v=186"></script>
+<script src="get-figs.js?v=186"></script>
+<script src="body-points.js?v=186"></script>
+<script src="body-map.js?v=186"></script>
+<script src="lube.js?v=186"></script>
+<script src="lube-overrides.js?v=186"></script>
+<script src="lube2027.js?v=186"></script>
+<script src="report-core.js?v=186"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->

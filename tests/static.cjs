@@ -55,7 +55,13 @@ const noisy=[];
 for(const [name,src] of [['app',app],['dashboard',dash],['sw',sw]]){
   src.split('\n').forEach((l,i)=>{
     if(/^\s*(\/\/|\*|\/\*)/.test(l)) return;
-    if(/\bdebugger\b/.test(l)) noisy.push(name+':'+(i+1)+' debugger');
+    /* The STATEMENT, which always ends the line or the block.
+       A line is skipped only when it STARTS with a comment marker, so the
+       closing line of a block comment that happens to begin with the word
+       itself was scanned as code, and the suite spent every run since crying
+       wolf over a sentence. A guard that cries wolf is the noise a real
+       failure hides in. */
+    if(/\bdebugger\s*(;|\}|$)/.test(l)) noisy.push(name+':'+(i+1)+' debugger');
     if(/console\.log\(/.test(l)) noisy.push(name+':'+(i+1)+' console.log');
   });
 }
