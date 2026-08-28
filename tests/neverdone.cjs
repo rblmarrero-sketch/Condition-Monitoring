@@ -97,9 +97,29 @@ const pick = p => p.evaluate(() => {
     ok('machines with no stated class are proposed for nothing',
        !rows.some(r => /\|(GEN|ALL|)$/.test(r)), 'unclassed rows: '
          + rows.filter(r => /\|(GEN|ALL|)$/.test(r)).length);
+    /* Counted, and the count is the app's own — not a number this suite keeps
+       a copy of. It used to assert the unclassed total, which stopped being
+       the whole story: a machine whose class IS known but whose class has no
+       rounds on record was in neither the count nor any row, and so was
+       silently absent from a screen that accounts for the whole fleet. */
     ok('but they are counted and named, not silently dropped',
        (await a.p.evaluate(() => (document.getElementById('dueBasis') || {}).textContent || ''))
-         .includes(await say(a.p, 'due_noprog', { n: f.count.GEN })), 'GEN=' + f.count.GEN);
+         .includes(await say(a.p, 'due_noprog', { n: await a.p.evaluate(() => unclassedCount()) })),
+       'no programme: ' + await a.p.evaluate(() => unclassedCount()));
+    /* THE INVARIANT THAT MAKES THAT COUNT MEAN SOMETHING. Every machine in the
+       register is on a row of work or in that number — exactly once, never
+       neither. Two copies of this app disagreeing about the fleet is what this
+       whole line of work is about, and a machine that is on no list and in no
+       count is how a copy comes to be quietly missing one. */
+    const acct = await a.p.evaluate(() => {
+      const onList = new Set(neverRows('').concat(dueRows()).map(r => r.unit));
+      const total = (window.ASSETS || []).filter(x => x && x.n).length;
+      return { onList: onList.size, noProg: unclassedCount(), total };
+    });
+    ok('and every machine in the register is accounted for, exactly once',
+       acct.onList + acct.noProg === acct.total,
+       acct.onList + ' on the list + ' + acct.noProg + ' with no programme = '
+         + (acct.onList + acct.noProg) + ' of ' + acct.total);
     await a.ctx.close();
   }
 

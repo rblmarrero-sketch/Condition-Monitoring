@@ -119,29 +119,33 @@ const entry = (p, k) => p.evaluate(k => histAll()[k] || null, k);
     await reset('n=4');
     const a = await phone(b, { hist: LAUNDERED });
     await drain(a.p);
-    const had = await a.p.evaluate(() => dueRows().some(r => r.unit === 'CR006'));
-    ok('CR006 is on the due list before the cleanup, on a date nobody else has', had);
+    /* The stray never reaches the due list at all now: the schedule is built
+       only on dates the fleet can verify, so a full read is enough on its own
+       and nobody has to find the button. Pressing it is then about tidying the
+       phone, not about correcting the plan. */
+    ok('the unverifiable date is not on the due list to begin with',
+       !(await a.p.evaluate(() => dueRows().some(r => r.unit === 'CR006'))));
     await a.p.click('#dueOnly');
     await a.p.waitForTimeout(500);
-    ok('the unverifiable date is off the due list',
+    ok('and it is not there after the cleanup either',
        !(await a.p.evaluate(() => dueRows().some(r => r.unit === 'CR006'))));
-    /* AND THE MACHINE ITSELF IS STILL THERE.
+    /* AND THE MACHINE ITSELF IS NEVER SILENTLY ABSENT.
 
-       Dropping the date is right — nobody can confirm that inspection. The
-       crusher still has to be walked, and it vanished: not overdue, not never
-       done, absent. roundsOnClass derives which rounds a kind of machine is on
-       from the history index, so deleting the only INSP record on a crusher
-       also deleted the knowledge that crushers get INSP rounds, and neverRows
-       then proposed nothing for it. The button meant to make two phones agree
-       would have quietly removed a machine from the round list of both — a
-       real machine rendered as nothing, produced by the fix for a real date
-       rendered as nothing. */
-    ok('but the machine is still on the work list, as never done',
-       await a.p.evaluate(() => neverRows().some(r => r.unit === 'CR006' && r.ty === 'INSP')),
-       JSON.stringify(await a.p.evaluate(() => neverRows()
-         .filter(r => r.unit === 'CR006').map(r => r.ty + '|' + r.unit))));
-    ok('and it is counted as never done, not as inspected',
-       await a.p.evaluate(() => !histEntry(histAll()['INSP|CR006'])));
+       This is where a machine gets lost. Nothing verifiable says crushers are
+       on an INSP round — the only record of one was the stray — so no round is
+       proposed for CR006, which is right: this screen does not invent a
+       programme out of residue. What it must not do is drop the machine on the
+       floor. It is in the no-programme count, and that count is on screen. */
+    ok('the machine is accounted for, not dropped',
+       await a.p.evaluate(() => {
+         const onList = neverRows().concat(dueRows()).some(r => r.unit === 'CR006');
+         const asset = (window.ASSET_BY||{})['CR006'];
+         const k = asset ? PTS.classOf(asset.cls || asset.cat || '') : '';
+         const noProg = !k || k === 'GEN' || k === 'ALL' || !(roundsOnClass()[k]||{}).size;
+         return onList || noProg;
+       }));
+    ok('and it is not counted as inspected',
+       await a.p.evaluate(() => !histFirm(histEntry(histAll()['INSP|CR006']), histGated())));
     /* TK101's December date goes, and the folder's July date for that same
        round is what is left — not nothing. A machine the folder says was
        walked must not come back as never inspected. */

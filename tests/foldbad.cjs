@@ -192,7 +192,7 @@ async function drain(p) { await p.click('#dueFull'); await p.waitForTimeout(3000
     const s = await a.p.evaluate(() => histSources());
     ok('it is not laundered into a fleet fact', s.u === 1, JSON.stringify(s));
     ok('the phone still knows the folder answered', s.f > 0, s.f + ' from the system');
-    ok('the note counts it', (await note(a.p)).includes(await say(a.p, 'due_stray', { n: 1 })),
+    ok('the note counts it', (await note(a.p)).includes(await say(a.p, 'due_stray1', { n: 1 })),
        (await note(a.p)).slice(-140));
     await a.p.click('#dueOnly');
     await a.p.waitForTimeout(500);

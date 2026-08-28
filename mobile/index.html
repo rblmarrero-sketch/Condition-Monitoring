@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=190">
+<link rel="manifest" href="manifest.webmanifest?v=191">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=190">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=190">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=190">
+<link rel="apple-touch-icon" href="icon-192.png?v=191">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=191">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=191">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1970,31 +1970,31 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=190"></script>
-<script src="upload-defaults.js?v=190"></script>
-<script src="hme.js?v=190"></script>
-<script src="mp-fc.js?v=190"></script>
-<script src="hme-cascade.js?v=190"></script>
-<script src="assets.js?v=190"></script>
-<script src="temp-limits.js?v=190"></script>
-<script src="normalize.js?v=190"></script>
-<script src="due.js?v=190"></script>
-<script src="wear.js?v=190"></script>
-<script src="wear-figs.js?v=190"></script>
-<script src="wear-map.js?v=190"></script>
-<script src="machine-photos.js?v=190"></script>
-<script src="machine-fig.js?v=190"></script>
-<script src="get.js?v=190"></script>
-<script src="points.js?v=190"></script>
-<script src="uc-points.js?v=190"></script>
-<script src="inspect-guide.js?v=190"></script>
-<script src="get-figs.js?v=190"></script>
-<script src="body-points.js?v=190"></script>
-<script src="body-map.js?v=190"></script>
-<script src="lube.js?v=190"></script>
-<script src="lube-overrides.js?v=190"></script>
-<script src="lube2027.js?v=190"></script>
-<script src="report-core.js?v=190"></script>
+<script src="native.js?v=191"></script>
+<script src="upload-defaults.js?v=191"></script>
+<script src="hme.js?v=191"></script>
+<script src="mp-fc.js?v=191"></script>
+<script src="hme-cascade.js?v=191"></script>
+<script src="assets.js?v=191"></script>
+<script src="temp-limits.js?v=191"></script>
+<script src="normalize.js?v=191"></script>
+<script src="due.js?v=191"></script>
+<script src="wear.js?v=191"></script>
+<script src="wear-figs.js?v=191"></script>
+<script src="wear-map.js?v=191"></script>
+<script src="machine-photos.js?v=191"></script>
+<script src="machine-fig.js?v=191"></script>
+<script src="get.js?v=191"></script>
+<script src="points.js?v=191"></script>
+<script src="uc-points.js?v=191"></script>
+<script src="inspect-guide.js?v=191"></script>
+<script src="get-figs.js?v=191"></script>
+<script src="body-points.js?v=191"></script>
+<script src="body-map.js?v=191"></script>
+<script src="lube.js?v=191"></script>
+<script src="lube-overrides.js?v=191"></script>
+<script src="lube2027.js?v=191"></script>
+<script src="report-core.js?v=191"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2367,8 +2367,8 @@ const I18N = {
     due_cover:"covering {n} of {m} machines",
     due_never_p:"Never done",
     due_more:"+{n} more — narrow by round to see them",
-    due_stray:"⚠ {n} of these dates are not in the system — loaded from a file, or left from an older sync",
-    due_stray1:"⚠ 1 of these dates is not in the system — loaded from a file, or left from an older sync",
+    due_stray:"⚠ {n} dates here are not in the system — loaded from a file, or left from an older sync — so nothing is scheduled on them and those machines count as never done",
+    due_stray1:"⚠ 1 date here is not in the system — loaded from a file, or left from an older sync — so nothing is scheduled on it and that machine counts as never done",
     due_bad:"⚠ the system cannot read {n} of its own files — those inspections reach nobody; report it",
     due_unk:"⚠ {n} round(s) cannot be scheduled — an unknown round type, or a date this app cannot read",
     due_find:"Find a machine — CR006, DZ003…",
@@ -2837,8 +2837,8 @@ const I18N = {
     due_cover:"охвачено машин: {n} из {m}",
     due_never_p:"Ни разу",
     due_more:"ещё {n} — выберите тип осмотра, чтобы увидеть",
-    due_stray:"⚠ {n} из этих дат нет в системе — загружены из файла или остались от прежней синхронизации",
-    due_stray1:"⚠ 1 из этих дат нет в системе — загружена из файла или осталась от прежней синхронизации",
+    due_stray:"⚠ {n} дат здесь нет в системе — загружены из файла или остались от прежней синхронизации — поэтому по ним ничего не планируется, а машины считаются необслуженными",
+    due_stray1:"⚠ 1 даты здесь нет в системе — загружена из файла или осталась от прежней синхронизации — поэтому по ней ничего не планируется, а машина считается необслуженной",
     due_bad:"⚠ система не может прочитать {n} из своих файлов — эти осмотры не доходят ни до кого; сообщите об этом",
     due_unk:"⚠ {n} обход(ов) невозможно запланировать — неизвестный тип обхода или нечитаемая дата",
     due_find:"Найти машину — CR006, DZ003…",
@@ -6721,6 +6721,48 @@ function dueUnknown(){ const n=histUnschedulable(); return n ? t("due_unk",{n}) 
    left over from a backend or a sync that no longer exists. A round captured
    HERE is not in this count — it is on its way, and it is this phone's own
    work. */
+/* THE ROOT CAUSE OF TWO COPIES OF ONE APP DISAGREEING, AND ITS ELIMINATION.
+
+   cm_hist is a local accumulation. Four different things write to it — a
+   folder sync, a round captured here, a loaded history file, a backend that
+   has since been retired — nothing has ever pruned it, and iOS gives an
+   installed app and the same page in Safari SEPARATE storage. So one handset
+   carries two independent databases that never meet, they drift apart for
+   good, and each is telling the truth when it says "this phone already has
+   every round in the folder": both do. They disagree about the FLEET because
+   each also holds things the folder never had.
+
+   The defect is not the stray dates. It is that the schedule was built on
+   whatever a copy happened to be holding, instead of on what the fleet can
+   actually verify. Two inspectors then plan different work off one system, and
+   neither screen gives any sign of it.
+
+   So a date may drive the schedule only if it is one of two things:
+
+     f   the folder delivered it — everyone can see it
+     o   this device captured it and is carrying it — real, and on its way
+
+   Anything else, ONCE A COMPLETE FOLDER READ HAS PROVED THE FOLDER DOES NOT
+   HAVE IT, is a date nobody else in the fleet holds. It is not deleted — this
+   app does not destroy what somebody typed — it simply stops being treated as
+   a fleet fact, and the machine goes back to counting as never done, which is
+   the honest thing to say about a round nobody can produce a record of.
+
+   That makes every copy's schedule a function of the folder plus its own
+   unsent work, so two copies cannot disagree, and nobody has to notice a
+   sentence and press a button for it to be true. */
+function histGated(){
+  try{
+    const h=histAll();
+    for(const k of Object.keys(h)){ const e=histEntry(h[k]); if(e && e.s==="f") return true; }
+  }catch(e){}
+  return false;                      // the folder has never spoken: judge nothing
+}
+function histFirm(e,gated){
+  if(!e || !e.d) return false;
+  if(!gated) return true;
+  return e.s==="f" || e.s==="o";
+}
 function histStrays(){
   const src=histSources();
   if(!src.f) return 0;                    // no stamping read yet — say nothing
@@ -6775,9 +6817,12 @@ function dueNoProgramme(){
 }
 function dueCoverage(){
   try{
-    const seen=new Set();
-    for(const k of Object.keys(histAll())){
-      const u=k.split("|")[1]; if(u) seen.add(u);
+    const seen=new Set(), h=histAll(), gated=histGated();
+    for(const k of Object.keys(h)){
+      const u=k.split("|")[1];
+      /* "Covering 47 of 1128" counted units whose only date came from a file
+         nobody else has. Coverage is a claim about the FLEET's history. */
+      if(u && histFirm(histEntry(h[k]),gated)) seen.add(u);
     }
     const total=(typeof ASSETS!=="undefined" && ASSETS.length) || 0;
     if(!total || seen.size>=total) return "";
@@ -6866,11 +6911,17 @@ function daysBetween(iso){ const d=new Date(iso+"T00:00:00"); if(isNaN(d)) retur
    with a count at the top: overdue, due soon, and put off with a reason. */
 function dueRows(only){
   const h=histAll(), out=[];
+  /* Computed once: histGated walks the whole index, and asking it per row
+     would make this quadratic on a phone holding a season's work. */
+  const gated=histGated();
   for(const k of Object.keys(h)){
     const [ty,unit]=k.split("|");
     if(only && ty!==only) continue;
     if(!DUE.EVERY[ty] && !TYPE_META[ty]) continue;
-    const last=histEntry(h[k]); if(!last) continue;
+    const last=histEntry(h[k]);
+    /* A date the fleet cannot verify does not put a machine on this list. It
+       is still on screen — as never done, which is what it is. */
+    if(!histFirm(last,gated)) continue;
     /* The machine's own hours per day where two readings have measured it,
        the fleet's assumption where they have not. */
     /* THE INTERVAL IS A PROPERTY OF THE ROUND AND THE MACHINE.
@@ -6959,10 +7010,6 @@ function dueRows(only){
    worklist and a spreadsheet of every combination. And it grows on its own:
    the first time somebody walks a new round on a new class, the rest of that
    class appears behind it. */
-/* Which rounds each class of machine is on, as this phone has come to know it.
-   Kept beside the history rather than inside it, because a date can be dropped
-   and the pairing it proved must not go with it. */
-const CLASS_ROUNDS="cm_class_rounds";
 function roundsOnClass(){
   const map={};                                     // class -> Set of round types
   const add=(k,ty)=>{ if(!k||!ty) return; (map[k]||(map[k]=new Set())).add(ty); };
@@ -6974,50 +7021,41 @@ function roundsOnClass(){
       if(by) for(const k of Object.keys(by)) add(k,ty);
     }
   }catch(e){}
-  /* Done: this fleet has walked that round on that kind of machine. */
+  /* Done: this fleet has walked that round on that kind of machine.
+
+     VERIFIABLE rounds only, by the same rule the schedule uses. A pairing
+     taken from a stray is evidence of exactly the same dubious provenance as
+     the date it came with — and it is worse used, because one unverifiable
+     record proposes work for every machine of that class. That is how one
+     handset came to show 335 machines never inspected where the other showed
+     306: twenty-nine machines proposed for rounds on the strength of residue
+     that syncs nowhere.
+
+     A class the fleet's own records say nothing about gets no programme
+     invented for it. It is counted instead — see unclassedCount — so no
+     machine is ever silently absent from this screen. */
   try{
-    for(const key of Object.keys(histAll())){
+    const h=histAll(), gated=histGated();
+    for(const key of Object.keys(h)){
       const [ty,unit]=key.split("|");
+      if(!histFirm(histEntry(h[key]),gated)) continue;
       const a=ASSET_BY[unit]; if(!a) continue;
       add(PTS.classOf(a.cls||a.cat||""), ty);
     }
   }catch(e){}
-  /* SEEN: AND A CLEANUP MUST NOT UNLEARN IT.
-
-     "Done" above is derived from the history index, so removing a date removes
-     the knowledge that this kind of machine gets that round at all — and then
-     neverRows proposes nothing for the machine, and it leaves the work list
-     altogether. Not overdue, not never done: absent.
-
-     That was measured. A crusher whose only record was a stray date vanished
-     the moment somebody pressed "Keep only what the system has" — the button
-     meant to make two phones agree would have quietly removed a machine from
-     the round list of both. A real machine rendered as nothing, produced by
-     the fix for a real date rendered as nothing.
-
-     Dropping an unverifiable DATE is right; the machine still has to be walked,
-     and "never done" is the honest thing to say about it. So the pairing is
-     remembered separately from the date. Nothing is invented here — only what
-     was already derived from a stated interval or a round actually recorded is
-     ever written, and the row it produces claims no inspection, only that this
-     round belongs to this kind of machine. */
-  try{
-    const kept=JSON.parse(localStorage.getItem(CLASS_ROUNDS)||"{}")||{};
-    let grew=false;
-    for(const k of Object.keys(map)){
-      const now=new Set(kept[k]||[]), before=now.size;
-      for(const ty of map[k]) now.add(ty);
-      if(now.size!==before){ kept[k]=[...now]; grew=true; }
-    }
-    for(const k of Object.keys(kept)) for(const ty of kept[k]) add(k,ty);
-    if(grew) lsSet(CLASS_ROUNDS, JSON.stringify(kept));
-  }catch(e){}
+  /* A remembered-pairings cache lived here for one build, so that dropping a
+     stray date could not take a machine off the work list. Trusting only
+     verifiable rounds above answers that better: a pairing that was only ever
+     evidenced by a stray now proposes nothing for anybody, rather than
+     proposing work for a whole class — and a pairing the folder HAS shown
+     survives on its own, with no local memory to keep. The cache would only
+     reintroduce the divergence, since each copy remembers a different set. */
   return map;
 }
 function neverRows(only){
   const out=[];
   if(typeof ASSETS==="undefined" || !window.PTS) return out;
-  const h=histAll(), on=roundsOnClass();
+  const h=histAll(), on=roundsOnClass(), gated=histGated();
   for(const a of ASSETS){
     if(!a || !a.n) continue;
     const k=PTS.classOf(a.cls||a.cat||"");
@@ -7029,7 +7067,11 @@ function neverRows(only){
     for(const ty of rounds){
       if(only && ty!==only) continue;
       if(!TYPE_META[ty]) continue;
-      if(histEntry(h[ty+"|"+a.n])) continue;               // it has been done
+      /* Read by the same rule the due list uses, or a machine whose only date
+         is one the fleet cannot verify falls out of BOTH lists and leaves the
+         work list altogether — which is the failure this whole change exists
+         to stop, reproduced one function further along. */
+      if(histFirm(histEntry(h[ty+"|"+a.n]),gated)) continue;   // it has been done
       out.push({ty, unit:a.n, cat:a.cat||"", cls:k, never:true, st:"never"});
     }
   }
@@ -7038,14 +7080,22 @@ function neverRows(only){
   return out;
 }
 /* Machines the register knows and no programme covers. Counted, never listed
-   as work — nobody can walk a round that has not been defined. */
+   as work — nobody can walk a round that has not been defined.
+
+   This counted only machines with no CLASS. A machine whose class is known but
+   whose class has no rounds on record was in neither the count nor any list:
+   silently absent from a screen that is supposed to account for the whole
+   fleet. Every machine now appears in exactly one place — a row of work, or
+   this number. */
 function unclassedCount(){
   if(typeof ASSETS==="undefined" || !window.PTS) return 0;
-  let n=0;
+  const on=roundsOnClass(); let n=0;
   for(const a of ASSETS){
     if(!a || !a.n) continue;
     const k=PTS.classOf(a.cls||a.cat||"");
-    if(!k || k==="GEN" || k==="ALL") n++;
+    if(!k || k==="GEN" || k==="ALL"){ n++; continue; }
+    const rounds=on[k];
+    if(!rounds || !rounds.size) n++;
   }
   return n;
 }
@@ -9710,7 +9760,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="190";
+const BUILD="191";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
