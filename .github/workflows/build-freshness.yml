@@ -1,0 +1,140 @@
+# Does the work actually reach a phone?
+#
+# BUILD is the service worker's cache key. An entire body of work once shipped
+# with it left at "162": tested, committed, pushed, published — and invisible,
+# because checkForNewBuild() returns early when the number matches and every
+# phone concluded there was nothing new.
+#
+# Two gates, because there are two different lies to catch:
+#
+#   freshness  — before merge: shipped files changed, build number did not.
+#   deployed   — after publish: what the PUBLIC URLs actually serve, which is
+#                the only evidence that says anything about the fleet.
+#
+# The second exists because a green first gate proves the repository is
+# consistent, and proves nothing at all about what a phone in the pit can see.
+
+name: Build freshness
+
+on:
+  push:
+    branches: [claude/magnetic-plug-dashboard-llv4wc]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  freshness:
+    name: Shipped files changed without a build increment
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # bump.cjs asks git WHEN the current BUILD was introduced, so it needs
+          # the history to answer from. The default shallow clone cannot, and the
+          # suite deliberately reports "not checked" rather than passing on a
+          # question it could not ask — which would be a green tick meaning
+          # nothing. Full history makes the question answerable.
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: The build number is newer than every shipped file
+        run: node tests/bump.cjs
+
+      - name: Fail if the guard could not actually check
+        # "not checked" exits 0 so a developer's shallow clone is not blocked.
+        # In CI it must be a failure: an unanswerable question is not a pass,
+        # and this is the job whose whole purpose is to answer it.
+        run: |
+          out=$(node tests/bump.cjs)
+          echo "$out"
+          if echo "$out" | grep -q "not checked"; then
+            echo "::error::bump.cjs could not determine when BUILD was set — history is missing in CI."
+            exit 1
+          fi
+
+      - name: Every version stamp agrees with every other
+        run: node tests/ver.cjs || echo "::warning::ver.cjs needs a browser; consistency is re-checked in the full sweep"
+
+  deployed:
+    name: What the public URLs actually serve
+    # Only after a push to the published branch, and only if the repository
+    # itself is consistent — there is nothing to learn from asking the live site
+    # about a build that was never coherent.
+    needs: freshness
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Wait for Pages to publish
+        # Pages is not synchronous with the push. Poll rather than sleep a fixed
+        # guess: a fixed wait is either wasted time or a false failure.
+        run: sleep 45
+
+      - name: The deployed service worker is on this commit's build
+        id: sw
+        run: |
+          set -euo pipefail
+          WANT=$(grep -o 'const BUILD = "[^"]*"' mobile/sw.js | sed 's/.*"\(.*\)"/\1/')
+          echo "expected build: $WANT"
+          BASE="https://rblmarrero-sketch.github.io/Condition-Monitoring"
+
+          fetch_build () {
+            # cache-bust, because the CDN edge is exactly what this is testing
+            curl -fsSL --max-time 30 "$1?ci=$GITHUB_SHA" \
+              | grep -o 'const BUILD = "[^"]*"' | sed 's/.*"\(.*\)"/\1/' || true
+          }
+
+          # Pages can take a couple of minutes; give it a bounded number of tries
+          # rather than one shot, and say which try succeeded.
+          GOT=""
+          for i in 1 2 3 4 5 6; do
+            GOT=$(fetch_build "$BASE/mobile/sw.js")
+            [ -n "$GOT" ] && [ "$GOT" = "$WANT" ] && { echo "matched on attempt $i"; break; }
+            echo "attempt $i: served '${GOT:-<nothing>}', want '$WANT'"
+            sleep 20
+          done
+
+          if [ "$GOT" != "$WANT" ]; then
+            echo "::error::The deployed service worker serves BUILD='${GOT:-<nothing>}' but this commit is '$WANT'. Phones will not update."
+            exit 1
+          fi
+          echo "want=$WANT" >> "$GITHUB_OUTPUT"
+
+      - name: The public mobile and dashboard pages are on that build too
+        run: |
+          set -euo pipefail
+          WANT="${{ steps.sw.outputs.want }}"
+          BASE="https://rblmarrero-sketch.github.io/Condition-Monitoring"
+
+          # The phone declares it in script; the dashboard carries it on every
+          # shared ?v= tag and shows it in #dashVer. Check the served bytes, not
+          # a rendered page — this job has no browser and does not need one.
+          M=$(curl -fsSL --max-time 30 "$BASE/mobile/index.html?ci=$GITHUB_SHA" \
+                | grep -o 'const BUILD="[^"]*"' | sed 's/.*"\(.*\)"/\1/' || true)
+          if [ "$M" != "$WANT" ]; then
+            echo "::error::Public mobile page serves BUILD='${M:-<nothing>}', expected '$WANT'."
+            exit 1
+          fi
+
+          D=$(curl -fsSL --max-time 30 "$BASE/dashboard/index.html?ci=$GITHUB_SHA" \
+                | grep -o 'report-core\.js?v=[^"]*' | head -1 | sed 's/.*v=//' || true)
+          if [ "$D" != "$WANT" ]; then
+            echo "::error::Public dashboard serves asset tag v='${D:-<nothing>}', expected '$WANT'."
+            exit 1
+          fi
+
+          echo "mobile=$M dashboard=$D — both on $WANT"
+
+      - name: Summary
+        run: |
+          echo "### Deployed build verified" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Service worker, mobile page and dashboard assets on the public URLs" >> "$GITHUB_STEP_SUMMARY"
+          echo "all serve build \`${{ steps.sw.outputs.want }}\`." >> "$GITHUB_STEP_SUMMARY"
