@@ -2641,26 +2641,26 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=163"></script>
-<script src="../mobile/hme.js?v=163"></script>
-<script src="../mobile/mp-fc.js?v=163"></script>
-<script src="../mobile/hme-cascade.js?v=163"></script>
-<script src="../mobile/temp-limits.js?v=163"></script>
+<script src="../data/magnetic_plug.js?v=164"></script>
+<script src="../mobile/hme.js?v=164"></script>
+<script src="../mobile/mp-fc.js?v=164"></script>
+<script src="../mobile/hme-cascade.js?v=164"></script>
+<script src="../mobile/temp-limits.js?v=164"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=163"></script>
-<script src="../mobile/due.js?v=163"></script>
-<script src="../mobile/wear.js?v=163"></script>
-<script src="../mobile/wear-map.js?v=163"></script>
-<script src="../mobile/lube.js?v=163"></script>
-<script src="../mobile/lube-overrides.js?v=163"></script>
-<script src="../mobile/lube2027.js?v=163"></script>
-<script src="../mobile/lube-tds.js?v=163"></script>
+<script src="../mobile/assets.js?v=164"></script>
+<script src="../mobile/due.js?v=164"></script>
+<script src="../mobile/wear.js?v=164"></script>
+<script src="../mobile/wear-map.js?v=164"></script>
+<script src="../mobile/lube.js?v=164"></script>
+<script src="../mobile/lube-overrides.js?v=164"></script>
+<script src="../mobile/lube2027.js?v=164"></script>
+<script src="../mobile/lube-tds.js?v=164"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=163"></script>
-<script src="../mobile/machine-photos.js?v=163"></script>
+<script src="../mobile/upload-defaults.js?v=164"></script>
+<script src="../mobile/machine-photos.js?v=164"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -2669,17 +2669,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=163"></script>
-<script src="../mobile/get.js?v=163"></script>
-<script src="../mobile/points.js?v=163"></script>
-<script src="../mobile/uc-points.js?v=163"></script>
-<script src="../mobile/inspect-guide.js?v=163"></script>
-<script src="../mobile/get-figs.js?v=163"></script>
-<script src="../mobile/body-points.js?v=163"></script>
-<script src="../mobile/body-map.js?v=163"></script>
-<script src="../mobile/jspdf.umd.min.js?v=163"></script>
-<script src="../mobile/html2canvas.min.js?v=163"></script>
-<script src="../mobile/report-core.js?v=163"></script>
+<script src="../mobile/machine-fig.js?v=164"></script>
+<script src="../mobile/get.js?v=164"></script>
+<script src="../mobile/points.js?v=164"></script>
+<script src="../mobile/uc-points.js?v=164"></script>
+<script src="../mobile/inspect-guide.js?v=164"></script>
+<script src="../mobile/get-figs.js?v=164"></script>
+<script src="../mobile/body-points.js?v=164"></script>
+<script src="../mobile/body-map.js?v=164"></script>
+<script src="../mobile/jspdf.umd.min.js?v=164"></script>
+<script src="../mobile/html2canvas.min.js?v=164"></script>
+<script src="../mobile/report-core.js?v=164"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -2945,7 +2945,12 @@ const I18N={
   r_done_prov:"Provisional — {n} pages, {m} attachments still to arrive",
   tab_sync:"Sync operations",
   sy_gaps:"Records waiting on evidence", sy_health:"Backend",
-  sy_unknown:"Not measurable from here",
+  /* WRITTEN FOR THE PEOPLE WHO READ IT. A reliability engineer, a planner and
+     a fitter share this screen, and none of them says "queryable" or "latency".
+     The old wording described the MECHANISM that was missing; these describe
+     the QUESTION that cannot be answered, which is what somebody standing here
+     actually wants to know. */
+  sy_unknown:"What this dashboard cannot check",
   sy_recon:"Where the number comes from",
   sy_recon_sub:"Read down. Each line is a source or a rule, and the last one is the figure every other screen counts. A round in the folder that is also in the bundled history is one round, not two — that is the merge. A round two phones both sent is one round with a conflict to settle, not two rounds.",
   sy_r_bundled:"In the bundled history", sy_r_drive:"In the folder",
@@ -2966,17 +2971,23 @@ const I18N={
   sy_hr:"{n} h ago", sy_day:"{n} days ago",
   sy_c_missing:"Missing", sy_c_which:"Points", sy_c_why:"Why",
   sy_blank:"(blank)", sy_w_equip:"no unit", sy_w_date:"no date",
-  sy_w_type:"no round", sy_w_point:"a point with no key",
+  sy_w_type:"no round", sy_w_point:"inspection point not identified",
   sy_gap_hint:"{n} of {of} attachments have not arrived",
   sy_gap_none:"Every attachment is accounted for",
   sy_gap_none_s:"Each photograph and video these records name is on the server.",
-  sy_quar:"Records that cannot be trusted as they stand",
-  sy_quar_hint:"{n} held back", sy_quar_none:"Nothing held back",
-  sy_quar_none_s:"Every record carries the unit, date and round it needs to be filed.",
-  sy_u_latency:"Dashboard-confirmation latency — needs a durable per-record receipt from the backend.",
-  sy_u_hash:"Corrupted or truncated uploads — needs a hash per attachment, stored server-side.",
-  sy_u_dupe:"Duplicate retries suppressed — counted by the server that suppressed them.",
-  sy_u_receipt:"Proof a record is queryable through the production path — needs read-after-write verification.",
+  sy_quar:"Inspections missing key information",
+  /* What to DO, per fault, in the words of somebody who would do it. */
+  sy_fix_equip:"No unit number — the phone that captured it must re-send it.",
+  sy_fix_date:"No date — the phone that captured it must re-send it.",
+  sy_fix_type:"No round type — the phone that captured it must re-send it.",
+  sy_fix_point:"A finding here is not linked to a component, so nobody can tell which one it is about. Name the point on the finding, or withdraw the inspection and re-walk the machine.",
+  sy_fix_open:"Open it to correct.",
+  sy_quar_hint:"{n} on hold", sy_quar_none:"None on hold",
+  sy_quar_none_s:"Every inspection names its unit, its date, its round and the point each finding was made at.",
+  sy_u_latency:"How long an inspection takes to reach this screen — the server does not issue a receipt when it stores one.",
+  sy_u_hash:"Whether a photo arrived damaged or half-sent — the server does not fingerprint files, so a corrupt one looks the same as a good one.",
+  sy_u_dupe:"How often the same photo was sent twice — only the server that discarded the copy can count it.",
+  sy_u_receipt:"Proof the server can read an inspection back after storing it — checked on the phone now, not yet proven from this end.",
   px_edit:"Edit photo", px_rotl:"Rotate left", px_rotr:"Rotate right",
   px_straighten:"Straighten", px_zoom:"Zoom", px_crop:"Crop", px_r_none:"Full frame",
   px_r_free:"Freeform", px_r_1:"1:1", px_r_43:"4:3", px_r_169:"16:9",
@@ -2986,12 +2997,16 @@ const I18N={
   px_edited:"edited", px_pending:"The original is still uploading. The edit will wait for it.",
   px_nochange:"No change to save. Use Reset to remove the edit.",
   px_nothing:"Nothing to save yet — crop, rotate, zoom or add a caption first.",
-  as_open:"Open", as_triage:"Needs triage", as_closed:"Closed",
+  /* "Triage" is a hospital word. What this state actually means is that a
+     finding serious enough to act on has nobody's name, no date and no job on
+     it — so the sentence a planner needs is "needs a plan", and the tooltip
+     below already names the missing fields. */
+  as_open:"Open", as_triage:"Needs a plan", as_closed:"Closed",
   as_noaction:"No action required", as_none:"\u2014",
-  as_triage_t:"Cannot be planned yet \u2014 missing: {f}",
+  as_triage_t:"Nobody can act on this yet \u2014 still missing: {f}",
   as_m_action:"recommended action", as_m_prio:"priority", as_m_owner:"responsible",
   as_m_due:"due date", as_m_disp:"authorised reason and approver",
-  a_k_triage:"Needs triage", a_k_triage_s:"exceptions not yet planned",
+  a_k_triage:"Needs a plan", a_k_triage_s:"findings with no job, owner or date",
   a_f_triage:"Triage", a_f_crit:"Critical", a_f_week:"Due this week", a_f_noown:"No owner",
   k_act_tri:"{n} not yet planned",
   u_disposed:"Dispositioned",
@@ -3524,7 +3539,7 @@ const I18N={
   r_done_prov:"Предварительный — страниц: {n}, ещё не поступило вложений: {m}",
   tab_sync:"Синхронизация",
   sy_gaps:"Записи, ожидающие материалов", sy_health:"Хранилище",
-  sy_unknown:"Отсюда не измеряется",
+  sy_unknown:"Что эта панель проверить не может",
   sy_recon:"Откуда берётся эта цифра",
   sy_recon_sub:"Читайте сверху вниз. Каждая строка — источник или правило, последняя — та цифра, которую считают все остальные экраны. Обход, который есть и в папке, и в истории, — это один обход, а не два. Обход, присланный двумя телефонами, — это один обход и конфликт, который надо решить.",
   sy_r_bundled:"В приложенной истории", sy_r_drive:"В папке",
@@ -3545,17 +3560,22 @@ const I18N={
   sy_hr:"{n} ч назад", sy_day:"{n} дн. назад",
   sy_c_missing:"Не хватает", sy_c_which:"Точки", sy_c_why:"Причина",
   sy_blank:"(пусто)", sy_w_equip:"нет машины", sy_w_date:"нет даты",
-  sy_w_type:"нет обхода", sy_w_point:"точка без ключа",
+  sy_w_type:"нет обхода", sy_w_point:"точка осмотра не определена",
   sy_gap_hint:"{n} из {of} вложений не поступило",
   sy_gap_none:"Все вложения на месте",
   sy_gap_none_s:"Каждое фото и видео, указанное в этих записях, есть на сервере.",
-  sy_quar:"Записи, которым нельзя доверять в текущем виде",
-  sy_quar_hint:"отложено: {n}", sy_quar_none:"Отложенных нет",
-  sy_quar_none_s:"В каждой записи есть машина, дата и обход, необходимые для раскладки.",
-  sy_u_latency:"Задержка подтверждения на дашборде — нужна долговременная квитанция на запись.",
-  sy_u_hash:"Повреждённые или обрезанные загрузки — нужен хеш на каждое вложение на сервере.",
-  sy_u_dupe:"Подавленные повторы — их считает сервер, который их подавил.",
-  sy_u_receipt:"Доказательство доступности записи через рабочий путь — нужна проверка чтением после записи.",
+  sy_quar:"Осмотры с неполными данными",
+  sy_fix_equip:"Нет номера машины — телефон, который делал осмотр, должен отправить его заново.",
+  sy_fix_date:"Нет даты — телефон, который делал осмотр, должен отправить его заново.",
+  sy_fix_type:"Нет типа обхода — телефон, который делал осмотр, должен отправить его заново.",
+  sy_fix_point:"Находка не привязана к узлу, и понять, о чём она, невозможно. Укажите точку в находке или аннулируйте осмотр и пройдите машину заново.",
+  sy_fix_open:"Откройте для правки.",
+  sy_quar_hint:"на удержании: {n}", sy_quar_none:"На удержании ничего нет",
+  sy_quar_none_s:"В каждом осмотре указаны машина, дата, обход и точка, где сделана находка.",
+  sy_u_latency:"Сколько идёт осмотр до этого экрана — сервер не выдаёт квитанцию при сохранении.",
+  sy_u_hash:"Пришло ли фото повреждённым или недогруженным — сервер не считает контрольную сумму, и битый файл выглядит как целый.",
+  sy_u_dupe:"Сколько раз одно фото отправлено дважды — посчитать может только сервер, отбросивший копию.",
+  sy_u_receipt:"Доказательство, что сервер может прочитать осмотр обратно — телефон это проверяет, с этой стороны пока нет.",
   px_edit:"Правка фото", px_rotl:"Повернуть влево", px_rotr:"Повернуть вправо",
   px_straighten:"Выравнивание", px_zoom:"Масштаб", px_crop:"Кадрирование", px_r_none:"Весь кадр",
   px_r_free:"Произвольно", px_r_1:"1:1", px_r_43:"4:3", px_r_169:"16:9",
@@ -3565,12 +3585,12 @@ const I18N={
   px_edited:"с правкой", px_pending:"Оригинал ещё загружается. Правка дождётся его.",
   px_nochange:"Изменений нет. Чтобы убрать правку, нажмите «Вернуть оригинал».",
   px_nothing:"Пока нечего сохранять — кадрируйте, поверните, приблизьте или добавьте подпись.",
-  as_open:"Открыто", as_triage:"Требует разбора", as_closed:"Закрыто",
+  as_open:"Открыто", as_triage:"Нужен план", as_closed:"Закрыто",
   as_noaction:"Действий не требуется", as_none:"\u2014",
-  as_triage_t:"Пока нельзя запланировать \u2014 не хватает: {f}",
+  as_triage_t:"Пока действовать некому \u2014 не хватает: {f}",
   as_m_action:"рекомендуемое действие", as_m_prio:"приоритет", as_m_owner:"ответственный",
   as_m_due:"срок", as_m_disp:"обоснование и утверждающий",
-  a_k_triage:"Требует разбора", a_k_triage_s:"замечания без плана",
+  a_k_triage:"Нужен план", a_k_triage_s:"находки без работы, ответственного и срока",
   a_f_triage:"Разбор", a_f_crit:"Критичные", a_f_week:"Срок на неделе", a_f_noown:"Без ответственного",
   k_act_tri:"{n} без плана",
   u_disposed:"Решение принято",
@@ -10309,14 +10329,32 @@ function renderSync(){
   }else{
     $("syQuarTbl").innerHTML=`<thead><tr><th>${esc(t("th_unit"))}</th><th>${esc(t("th_date"))}</th>
       <th>${esc(t("th_type"))}</th><th>${esc(t("sy_c_why"))}</th></tr></thead><tbody>`
-      + s.quar.slice(0,CAP).map(({r,why})=>`<tr>
+      /* A ROW THAT SAYS WHAT IS WRONG AND NOTHING ABOUT WHAT TO DO IS HALF A
+         MESSAGE. This table named a defect and then left the reader with no
+         next step and nothing to click — on the one screen whose whole job is
+         to say "these inspections are not counted anywhere, deal with them". */
+      + s.quar.slice(0,CAP).map(({r,why})=>{
+          const canOpen = !!(r.equip && r.date && r.type);
+          return `<tr${canOpen?` class="hrow" tabindex="0" data-quargo="${esc(ekOf(r))}"`:""}>
           <td><b>${esc(r.equip||t("sy_blank"))}</b></td>
           <td class="mono">${esc(r.date||t("sy_blank"))}</td>
           <td>${esc(TYPE_LABEL[r.type]||r.type||t("sy_blank"))}</td>
-          <td>${why.map(w=>`<span class="tri">${esc(t("sy_w_"+w))}</span>`).join(" ")}</td></tr>`).join("")
+          <td>${why.map(w=>`<span class="tri">${esc(t("sy_w_"+w))}</span>`).join(" ")}
+              <div class="muted" style="font-size:11.5px;margin-top:3px">${
+                esc(why.map(w=>t("sy_fix_"+w)).join(" "))}${
+                canOpen?" "+esc(t("sy_fix_open")):""}</div></td></tr>`;
+        }).join("")
       +`</tbody>`;
   }
   $("syQuarHint").textContent = s.quar.length ? t("sy_quar_hint",{n:s.quar.length}) : "";
+  /* Straight into the correction panel for that inspection. A record whose
+     unit, date or round is missing has no address to open, so it is not made
+     to look clickable — it needs the phone that captured it. */
+  $("syQuarTbl").querySelectorAll("[data-quargo]").forEach(tr=>{
+    const go=()=>openEdit(tr.dataset.quargo);
+    tr.onclick=go;
+    tr.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } };
+  });
 }
 function renderNavCounts(){
   const nb=(id,n)=>{ const el=$(id); if(el) el.textContent=n>0?(n>99?"99+":String(n)):""; };
@@ -10468,8 +10506,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=163"></script>
-<script src="sync-adapter.js?v=163"></script>
-<script src="report.js?v=163"></script>
+<script src="drive.js?v=164"></script>
+<script src="sync-adapter.js?v=164"></script>
+<script src="report.js?v=164"></script>
 </body>
 </html>

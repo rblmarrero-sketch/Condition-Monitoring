@@ -146,10 +146,20 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
     items: [...document.querySelectorAll("#syUnknown li")].map(li => li.textContent),
     tiles: [...document.querySelectorAll("#syncKpis .kpi .k")].map(k => k.textContent) }));
   ok(unknown.items.length >= 4, "the gaps are listed", unknown.items.length + " listed");
-  ["latency", "hash|corrupt", "duplicate", "receipt|read-after-write"].forEach(pat =>
-    ok(unknown.items.some(x => new RegExp(pat, "i").test(x)),
-       `${pat.split("|")[0]} is named as unmeasurable`,
-       (unknown.items.find(x => new RegExp(pat, "i").test(x)) || "").slice(0, 56)));
+  /* ASK THE APP WHICH GAPS IT DECLARES, not for the words it used to use.
+     These matched "latency", "hash", "duplicate" — the vocabulary of the
+     mechanism, which is exactly the vocabulary that was removed because the
+     engineer, the planner and the fitter who share this screen do not speak it.
+     A suite that pins the jargon makes the jargon expensive to fix. What has to
+     be true is that every gap the app knows about is ON the page, whatever it
+     has learned to call it. */
+  const declared = await p.evaluate(() => SYNC_UNKNOWN.map(k => I18N.en[k]));
+  ok(declared.length >= 4 && declared.every(Boolean),
+     "the app declares its gaps and has a sentence for each", declared.length + " declared");
+  declared.forEach(text =>
+    ok(unknown.items.some(x => x.trim() === text.trim()),
+       "on the page: " + text.slice(0, 44) + "…",
+       (unknown.items.find(x => x.trim() === text.trim()) || "MISSING").slice(0, 50)));
   /* The point of the list: none of these appears as a tile with a number. */
   ok(!unknown.tiles.some(k => /latency|hash|duplicate/i.test(k)),
      "and none of them is reported as a figure", unknown.tiles.join(", "));

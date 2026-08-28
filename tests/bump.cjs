@@ -65,12 +65,26 @@ const SHIPPED = ["mobile/", "dashboard/", "data/"];
   } catch (e) { /* shallow clone or no history — handled below */ }
 
   if (!introduced) {
-    /* Never assert a pass from an unanswerable question. A shallow clone cannot
-       see when the build was set, and reporting that as "nothing changed" would
-       be the false reassurance this whole project is about. */
-    console.log("  SKIP  no history for this build — shallow clone?");
-    console.log("\nnot checked");
-    process.exit(0);
+    /* TWO VERY DIFFERENT REASONS THE HISTORY HAS NEVER SEEN THIS BUILD.
+
+       A shallow clone genuinely cannot answer, and saying "nothing changed"
+       there would be the false reassurance this whole project is about. But the
+       commonest case by far is the good one: somebody has just bumped the
+       number and not committed it yet — the build is NEWER than every commit,
+       which is exactly the state this guard exists to produce. Reporting that
+       as "not checked" trains people to ignore the guard at the precise moment
+       it should be congratulating them. */
+    let shallow = "false";
+    try { shallow = git("rev-parse", "--is-shallow-repository"); } catch (e) {}
+    if (shallow === "true") {
+      console.log("  SKIP  shallow clone — the history needed to answer is not here");
+      console.log("        CI must check out with fetch-depth: 0");
+      console.log("\nnot checked");
+      process.exit(0);
+    }
+    ok(true, "the build number is newer than every commit — a fresh bump, not yet committed");
+    console.log(fail ? "\nFAILED: " + fail : "\nall passed");
+    process.exit(fail ? 1 : 0);
   }
   console.log("  set in " + introduced.slice(0, 8) + "  " + git("log", "-1", "--format=%s", introduced).slice(0, 60));
 

@@ -95,8 +95,15 @@ const rowsOf = () => [...document.querySelectorAll('#actionTbl .wlu')].flatMap(u
      rather than the slot it happens to sit in. */
   ok('and says how many have nobody against them',
      /NOBODY OWNS IT=4/.test(k.join(' ')), k.join(' | '));
+  /* The label, from the app. This matched the literal "NEEDS TRIAGE" — a
+     hospital word on a screen shared by a reliability engineer, a planner and a
+     fitter, none of whom use it. What must be true is that the count of
+     findings nobody can act on yet is on the strip, under whatever name the app
+     has settled on. */
+  const planLbl = (await p.evaluate(() => I18N.en.a_k_triage)).toUpperCase();
   ok('and how many cannot be planned at all yet',
-     /NEEDS TRIAGE=4/i.test(k.join(' ')), k.join(' | '));
+     new RegExp(planLbl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '=4', 'i').test(k.join(' ')),
+     k.join(' | '));
   ok('nothing is overdue before anything has a date',
      /OVERDUE=0/.test(k.join(' ')), k[1]);
   ok('the oldest open finding is aged from the day it was found',
