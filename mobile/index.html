@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=189">
+<link rel="manifest" href="manifest.webmanifest?v=190">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=189">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=189">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=189">
+<link rel="apple-touch-icon" href="icon-192.png?v=190">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=190">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=190">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1970,31 +1970,31 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=189"></script>
-<script src="upload-defaults.js?v=189"></script>
-<script src="hme.js?v=189"></script>
-<script src="mp-fc.js?v=189"></script>
-<script src="hme-cascade.js?v=189"></script>
-<script src="assets.js?v=189"></script>
-<script src="temp-limits.js?v=189"></script>
-<script src="normalize.js?v=189"></script>
-<script src="due.js?v=189"></script>
-<script src="wear.js?v=189"></script>
-<script src="wear-figs.js?v=189"></script>
-<script src="wear-map.js?v=189"></script>
-<script src="machine-photos.js?v=189"></script>
-<script src="machine-fig.js?v=189"></script>
-<script src="get.js?v=189"></script>
-<script src="points.js?v=189"></script>
-<script src="uc-points.js?v=189"></script>
-<script src="inspect-guide.js?v=189"></script>
-<script src="get-figs.js?v=189"></script>
-<script src="body-points.js?v=189"></script>
-<script src="body-map.js?v=189"></script>
-<script src="lube.js?v=189"></script>
-<script src="lube-overrides.js?v=189"></script>
-<script src="lube2027.js?v=189"></script>
-<script src="report-core.js?v=189"></script>
+<script src="native.js?v=190"></script>
+<script src="upload-defaults.js?v=190"></script>
+<script src="hme.js?v=190"></script>
+<script src="mp-fc.js?v=190"></script>
+<script src="hme-cascade.js?v=190"></script>
+<script src="assets.js?v=190"></script>
+<script src="temp-limits.js?v=190"></script>
+<script src="normalize.js?v=190"></script>
+<script src="due.js?v=190"></script>
+<script src="wear.js?v=190"></script>
+<script src="wear-figs.js?v=190"></script>
+<script src="wear-map.js?v=190"></script>
+<script src="machine-photos.js?v=190"></script>
+<script src="machine-fig.js?v=190"></script>
+<script src="get.js?v=190"></script>
+<script src="points.js?v=190"></script>
+<script src="uc-points.js?v=190"></script>
+<script src="inspect-guide.js?v=190"></script>
+<script src="get-figs.js?v=190"></script>
+<script src="body-points.js?v=190"></script>
+<script src="body-map.js?v=190"></script>
+<script src="lube.js?v=190"></script>
+<script src="lube-overrides.js?v=190"></script>
+<script src="lube2027.js?v=190"></script>
+<script src="report-core.js?v=190"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -6959,6 +6959,10 @@ function dueRows(only){
    worklist and a spreadsheet of every combination. And it grows on its own:
    the first time somebody walks a new round on a new class, the rest of that
    class appears behind it. */
+/* Which rounds each class of machine is on, as this phone has come to know it.
+   Kept beside the history rather than inside it, because a date can be dropped
+   and the pairing it proved must not go with it. */
+const CLASS_ROUNDS="cm_class_rounds";
 function roundsOnClass(){
   const map={};                                     // class -> Set of round types
   const add=(k,ty)=>{ if(!k||!ty) return; (map[k]||(map[k]=new Set())).add(ty); };
@@ -6977,6 +6981,36 @@ function roundsOnClass(){
       const a=ASSET_BY[unit]; if(!a) continue;
       add(PTS.classOf(a.cls||a.cat||""), ty);
     }
+  }catch(e){}
+  /* SEEN: AND A CLEANUP MUST NOT UNLEARN IT.
+
+     "Done" above is derived from the history index, so removing a date removes
+     the knowledge that this kind of machine gets that round at all — and then
+     neverRows proposes nothing for the machine, and it leaves the work list
+     altogether. Not overdue, not never done: absent.
+
+     That was measured. A crusher whose only record was a stray date vanished
+     the moment somebody pressed "Keep only what the system has" — the button
+     meant to make two phones agree would have quietly removed a machine from
+     the round list of both. A real machine rendered as nothing, produced by
+     the fix for a real date rendered as nothing.
+
+     Dropping an unverifiable DATE is right; the machine still has to be walked,
+     and "never done" is the honest thing to say about it. So the pairing is
+     remembered separately from the date. Nothing is invented here — only what
+     was already derived from a stated interval or a round actually recorded is
+     ever written, and the row it produces claims no inspection, only that this
+     round belongs to this kind of machine. */
+  try{
+    const kept=JSON.parse(localStorage.getItem(CLASS_ROUNDS)||"{}")||{};
+    let grew=false;
+    for(const k of Object.keys(map)){
+      const now=new Set(kept[k]||[]), before=now.size;
+      for(const ty of map[k]) now.add(ty);
+      if(now.size!==before){ kept[k]=[...now]; grew=true; }
+    }
+    for(const k of Object.keys(kept)) for(const ty of kept[k]) add(k,ty);
+    if(grew) lsSet(CLASS_ROUNDS, JSON.stringify(kept));
   }catch(e){}
   return map;
 }
@@ -9676,7 +9710,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="189";
+const BUILD="190";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

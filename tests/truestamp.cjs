@@ -123,8 +123,25 @@ const entry = (p, k) => p.evaluate(k => histAll()[k] || null, k);
     ok('CR006 is on the due list before the cleanup, on a date nobody else has', had);
     await a.p.click('#dueOnly');
     await a.p.waitForTimeout(500);
-    ok('the machine the folder never heard of is gone',
+    ok('the unverifiable date is off the due list',
        !(await a.p.evaluate(() => dueRows().some(r => r.unit === 'CR006'))));
+    /* AND THE MACHINE ITSELF IS STILL THERE.
+
+       Dropping the date is right — nobody can confirm that inspection. The
+       crusher still has to be walked, and it vanished: not overdue, not never
+       done, absent. roundsOnClass derives which rounds a kind of machine is on
+       from the history index, so deleting the only INSP record on a crusher
+       also deleted the knowledge that crushers get INSP rounds, and neverRows
+       then proposed nothing for it. The button meant to make two phones agree
+       would have quietly removed a machine from the round list of both — a
+       real machine rendered as nothing, produced by the fix for a real date
+       rendered as nothing. */
+    ok('but the machine is still on the work list, as never done',
+       await a.p.evaluate(() => neverRows().some(r => r.unit === 'CR006' && r.ty === 'INSP')),
+       JSON.stringify(await a.p.evaluate(() => neverRows()
+         .filter(r => r.unit === 'CR006').map(r => r.ty + '|' + r.unit))));
+    ok('and it is counted as never done, not as inspected',
+       await a.p.evaluate(() => !histEntry(histAll()['INSP|CR006'])));
     /* TK101's December date goes, and the folder's July date for that same
        round is what is left — not nothing. A machine the folder says was
        walked must not come back as never inspected. */
