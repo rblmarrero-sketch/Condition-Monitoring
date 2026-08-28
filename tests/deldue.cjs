@@ -100,8 +100,20 @@ const post = body => fetch(B + '/exec', { method: 'POST',
     await new Promise(r => setTimeout(r, 200));
     return document.getElementById('dueList').textContent.replace(/\s+/g, ' ').trim();
   });
-  ok('the deleted round is no longer holding a date for TK146',
-    !/TK146/.test(due) || /TK146/.test(due) === false, due.slice(0, 120));
+  /* This section is headed "so the machine comes back onto the due list", and
+     it used to assert the opposite — that TK146 VANISHED. That was the only
+     way to express it at the time: a machine with no last-done date produced
+     no row at all, so the best available proof that the date was gone was the
+     machine being gone with it.
+
+     A machine that has never been inspected is now a row of its own, so the
+     heading can finally be checked as written. Deleting a round does not
+     remove a haul truck from the fleet; it puts it back on the list with
+     nothing on record, which is where somebody can act on it. */
+  ok('TK146 is back on the list rather than vanishing from it',
+    /TK146/.test(due), due.slice(0, 140));
+  const never = await p.evaluate(() => neverRows('MP').some(r => r.unit === 'TK146'));
+  ok('  as a machine with no plug round on record', never);
 
   await b.close();
   console.log(fails.length ? '\n' + fails.length + ' FAILED' : '\nall good');

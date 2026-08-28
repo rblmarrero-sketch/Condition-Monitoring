@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=181">
+<link rel="manifest" href="manifest.webmanifest?v=182">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=181">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=181">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=181">
+<link rel="apple-touch-icon" href="icon-192.png?v=182">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=182">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=182">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1257,6 +1257,10 @@
      they take the quiet border rather than the red one — the reason underneath
      is the part worth reading. */
   .dueitem.put{border-left-color:var(--ink-2);} .dueitem.off{border-left-color:var(--muted);}
+  /* Never done is not overdue and not due soon — it is a machine with no
+     record at all, and it must not borrow either colour. Dashed, because the
+     bar is standing in for a history that is not there. */
+  .dueitem.never{border-left-style:dashed;border-left-color:var(--accent);}
   #dueList .dueput{flex:1 1 100%;font-size:11.5px;color:var(--ink-2);text-align:left;margin-top:4px;
     white-space:normal;line-height:1.35;}
   .chipbtn{padding:8px 12px;font-size:13px;min-width:0;}
@@ -1941,31 +1945,31 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=181"></script>
-<script src="upload-defaults.js?v=181"></script>
-<script src="hme.js?v=181"></script>
-<script src="mp-fc.js?v=181"></script>
-<script src="hme-cascade.js?v=181"></script>
-<script src="assets.js?v=181"></script>
-<script src="temp-limits.js?v=181"></script>
-<script src="normalize.js?v=181"></script>
-<script src="due.js?v=181"></script>
-<script src="wear.js?v=181"></script>
-<script src="wear-figs.js?v=181"></script>
-<script src="wear-map.js?v=181"></script>
-<script src="machine-photos.js?v=181"></script>
-<script src="machine-fig.js?v=181"></script>
-<script src="get.js?v=181"></script>
-<script src="points.js?v=181"></script>
-<script src="uc-points.js?v=181"></script>
-<script src="inspect-guide.js?v=181"></script>
-<script src="get-figs.js?v=181"></script>
-<script src="body-points.js?v=181"></script>
-<script src="body-map.js?v=181"></script>
-<script src="lube.js?v=181"></script>
-<script src="lube-overrides.js?v=181"></script>
-<script src="lube2027.js?v=181"></script>
-<script src="report-core.js?v=181"></script>
+<script src="native.js?v=182"></script>
+<script src="upload-defaults.js?v=182"></script>
+<script src="hme.js?v=182"></script>
+<script src="mp-fc.js?v=182"></script>
+<script src="hme-cascade.js?v=182"></script>
+<script src="assets.js?v=182"></script>
+<script src="temp-limits.js?v=182"></script>
+<script src="normalize.js?v=182"></script>
+<script src="due.js?v=182"></script>
+<script src="wear.js?v=182"></script>
+<script src="wear-figs.js?v=182"></script>
+<script src="wear-map.js?v=182"></script>
+<script src="machine-photos.js?v=182"></script>
+<script src="machine-fig.js?v=182"></script>
+<script src="get.js?v=182"></script>
+<script src="points.js?v=182"></script>
+<script src="uc-points.js?v=182"></script>
+<script src="inspect-guide.js?v=182"></script>
+<script src="get-figs.js?v=182"></script>
+<script src="body-points.js?v=182"></script>
+<script src="body-map.js?v=182"></script>
+<script src="lube.js?v=182"></script>
+<script src="lube-overrides.js?v=182"></script>
+<script src="lube2027.js?v=182"></script>
+<script src="report-core.js?v=182"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2336,6 +2340,10 @@ const I18N = {
     hist_never:"⚠ this phone has never loaded the fleet's history",
     hist_short:"⚠ this phone ran out of room — its history is incomplete",
     due_cover:"covering {n} of {m} machines",
+    due_never_p:"Never done",
+    due_more:"+{n} more — narrow by round to see them",
+    due_never_row:"no inspection of this round on record",
+    due_noprog:"{n} machines have no round programme, so none is proposed for them",
     due_behind:"⚠ the folder holds {f} rounds and this phone has {m} — {n} missing",
     hist_fail:"⚠ could not reach the system — this list may be out of date",
     due_no_hist:"This phone has not loaded the fleet's history yet, so it cannot say what is due. Open System and press Refresh, or load a history file.",
@@ -2791,6 +2799,10 @@ const I18N = {
     hist_never:"⚠ этот телефон ещё ни разу не загружал историю парка",
     hist_short:"⚠ на телефоне не хватило места — история неполная",
     due_cover:"охвачено машин: {n} из {m}",
+    due_never_p:"Ни разу",
+    due_more:"ещё {n} — выберите тип осмотра, чтобы увидеть",
+    due_never_row:"осмотров этого типа в системе нет",
+    due_noprog:"Для {n} машин программа осмотров не задана — они не предлагаются",
     due_behind:"⚠ в папке осмотров: {f}, на телефоне: {m} — не хватает {n}",
     hist_fail:"⚠ не удалось связаться с системой — список может быть устаревшим",
     due_no_hist:"Этот телефон ещё не загрузил историю парка и не может сказать, что просрочено. Откройте «Система» и нажмите «Обновить» или загрузите файл истории.",
@@ -6544,6 +6556,10 @@ function dueVsFolder(){
   if(mine>=f.p) return "";
   return t("due_behind",{n:f.p-mine, f:f.p, m:mine});
 }
+function dueNoProgramme(){
+  const n=unclassedCount();
+  return n ? t("due_noprog",{n}) : "";
+}
 function dueCoverage(){
   try{
     const seen=new Set();
@@ -6683,6 +6699,109 @@ function dueRows(only){
   return out;
 }
 
+/* MACHINES THAT HAVE NEVER BEEN INSPECTED AT ALL.
+
+   dueRows() walks the last-done index, so it can only ever speak about a
+   machine somebody has already inspected. A machine with no round on record
+   produces no row — not "missed", not "never done", nothing. It is simply
+   absent, for ever.
+
+   That reads as "nothing is due" while the truth is "I have never heard of
+   this machine". On a register of 1,128 and a folder holding 44, it is the
+   difference between a screen that lists what it knows and a screen that lists
+   what the fleet needs — and the machine nobody has ever walked to is the one
+   most worth walking to.
+
+   THE LINE THIS DRAWS, and it matters more than the feature. A round is only
+   proposed for a machine whose CLASS states that round. The reference lists
+   MP, FC and INSP per class, and 940 of the 1,128 machines here carry no class
+   at all — light vehicles, buses, plant nobody has assigned a programme to.
+   Proposing a final-drive plug round for a crew bus because a catch-all class
+   happens to list one is guessing, and a worklist of nine hundred guesses
+   buries the hundred and eighty that are real. Those machines are counted and
+   named on the line below the list instead, because "no programme defined" is
+   a real finding and a different one. */
+/* WHICH ROUNDS A MACHINE IS ACTUALLY ON.
+
+   There is no table that answers this. The capture screen offers every round
+   for every machine, and the points reference lists MP, FC, INSP and TEMP for
+   every class alike — including the catch-all one — while saying nothing about
+   the undercarriage or the dump body, which are the two rounds the fleet has
+   been most explicit about. Reading it as a programme would propose a thermal
+   survey for all 188 machines and an undercarriage round for none of them.
+
+   So the pairing is taken from what the fleet has STATED and what it has
+   DONE, and from nothing else:
+
+     stated  due.js carries a per-class interval where somebody named one —
+             UC at 1,000 h for dozers and 4,000 for excavators, TB at 4,000 for
+             articulated trucks. A figure stated for a class IS the statement
+             that the class is on that round.
+     done    a round walked on any machine of a class is that class
+             demonstrating the pairing. If a haul truck has had a plug round,
+             every haul truck is on the plug round.
+
+   Nothing else proposes anything. A round type nobody has ever walked on a
+   crusher is not proposed for crushers, which is the difference between a
+   worklist and a spreadsheet of every combination. And it grows on its own:
+   the first time somebody walks a new round on a new class, the rest of that
+   class appears behind it. */
+function roundsOnClass(){
+  const map={};                                     // class -> Set of round types
+  const add=(k,ty)=>{ if(!k||!ty) return; (map[k]||(map[k]=new Set())).add(ty); };
+  /* Stated: an interval named for a class. */
+  try{
+    const E=(window.DUE&&DUE.EVERY)||{};
+    for(const ty of Object.keys(E)){
+      const by=E[ty] && E[ty].byClass;
+      if(by) for(const k of Object.keys(by)) add(k,ty);
+    }
+  }catch(e){}
+  /* Done: this fleet has walked that round on that kind of machine. */
+  try{
+    for(const key of Object.keys(histAll())){
+      const [ty,unit]=key.split("|");
+      const a=ASSET_BY[unit]; if(!a) continue;
+      add(PTS.classOf(a.cls||a.cat||""), ty);
+    }
+  }catch(e){}
+  return map;
+}
+function neverRows(only){
+  const out=[];
+  if(typeof ASSETS==="undefined" || !window.PTS) return out;
+  const h=histAll(), on=roundsOnClass();
+  for(const a of ASSETS){
+    if(!a || !a.n) continue;
+    const k=PTS.classOf(a.cls||a.cat||"");
+    /* No stated class is not the same as no rounds done. It means nobody has
+       said which rounds this machine is on, and this screen will not invent
+       one. */
+    if(!k || k==="GEN" || k==="ALL") continue;
+    const rounds=on[k]; if(!rounds) continue;
+    for(const ty of rounds){
+      if(only && ty!==only) continue;
+      if(!TYPE_META[ty]) continue;
+      if(histEntry(h[ty+"|"+a.n])) continue;               // it has been done
+      out.push({ty, unit:a.n, cat:a.cat||"", cls:k, never:true, st:"never"});
+    }
+  }
+  out.sort((x,y)=>x.unit.localeCompare(y.unit,undefined,{numeric:true})
+                || x.ty.localeCompare(y.ty));
+  return out;
+}
+/* Machines the register knows and no programme covers. Counted, never listed
+   as work — nobody can walk a round that has not been defined. */
+function unclassedCount(){
+  if(typeof ASSETS==="undefined" || !window.PTS) return 0;
+  let n=0;
+  for(const a of ASSETS){
+    if(!a || !a.n) continue;
+    const k=PTS.classOf(a.cls||a.cat||"");
+    if(!k || k==="GEN" || k==="ALL") n++;
+  }
+  return n;
+}
 /* Which slice of the due list is on screen. Held here rather than read off a
    control, because the controls are now rebuilt on every render — a pill for a
    state nobody is in is a control that leads to an empty list. */
@@ -6698,6 +6817,7 @@ function dueRows(only){
 let dueScope=(localStorage.getItem("due_scope")||"over").replace(/^due$/,"over");
 let dueType="";
 const DUE_SCOPES=[["over","due_missed","over"],["soon","due_soon","soon"],
+                  ["never","due_never_p","never"],
                   ["put","due_putoff","put"],["all","due_all","" ]];
 function renderDue(){
   renderTabs();
@@ -6705,15 +6825,22 @@ function renderDue(){
   /* Counted BEFORE the round filter, so the scope pills say how much there is
      on the machine and not how much survives the other filter. Two filters
      whose counts each move when the other is touched cannot be read. */
-  const every=dueRows("");
-  const rows=dueRows(dueType);
+  /* Never-done rows come from the REGISTER, not from the last-done index, so
+     they are a separate population and are concatenated rather than filtered
+     out of the other one. "All" means every machine this screen can say
+     anything about, which now includes the ones nobody has walked to. */
+  const everyDue=dueRows(""), everyNever=neverRows("");
+  const every=everyDue.concat(everyNever);
+  const rows=dueRows(dueType).concat(neverRows(dueType));
   const scope=dueScope;
   const nOver=rows.filter(r=>r.st==="over").length;
   const nSoon=rows.filter(r=>r.st==="soon").length;
   const nPut =rows.filter(r=>r.st==="put"||r.st==="off").length;
+  const nNever=rows.filter(r=>r.st==="never").length;
   const inScope=(list,sc)=> sc==="all" ? list
     : sc==="over" ? list.filter(r=>r.st==="over")
     : sc==="soon" ? list.filter(r=>r.st==="soon")
+    : sc==="never"? list.filter(r=>r.st==="never")
     : sc==="put"  ? list.filter(r=>r.st==="put"||r.st==="off")
     : list.filter(r=>r.st==="over"||r.st==="soon");
   const show = inScope(rows, scope);
@@ -6724,9 +6851,9 @@ function renderDue(){
      somebody has actually put something off. */
   const sbox=$("dueScopeF");
   if(sbox){
-    const cnt={over:nOver, soon:nSoon, put:nPut, all:rows.length};
+    const cnt={over:nOver, soon:nSoon, never:nNever, put:nPut, all:rows.length};
     sbox.innerHTML=DUE_SCOPES
-      .filter(([k])=> k!=="put" || nPut>0)
+      .filter(([k])=> (k!=="put" || nPut>0) && (k!=="never" || nNever>0))
       .map(([k,lab,cls])=>`<button type="button" data-sc="${esc(k)}" class="${
         (scope===k?"on ":"")+(cls||"")}">${esc(t(lab))}<span class="n">${cnt[k]}</span></button>`)
       .join("");
@@ -6768,7 +6895,10 @@ function renderDue(){
      eye. It goes above the rows, in the same three words every time. */
   const note=$("dueBasis");
   if(note){
-    const measured=rows.filter(r=>r.n.measured).length;
+    /* A never-done row has no schedule behind it, so it has nothing to have
+       been measured or assumed FROM. Counting it either way would put a
+       machine with no readings into a figure about readings. */
+    const measured=rows.filter(r=>r.n && r.n.measured).length;
     /* The counts moved onto the pills, which is where the tap is. What is left
        here is what a count cannot say: the interval this round is walked on,
        the rate the days were computed at, and how many machines were measured
@@ -6787,6 +6917,10 @@ function renderDue(){
          heard of is overdue" while reading as "nothing is overdue". The
          difference is the whole question, and the count is one line. */
       dueCoverage(),
+      /* Nine hundred and forty machines carry no class, so no round is
+         proposed for them. Saying nothing about that would make this screen
+         quietly about a fifth of the fleet while reading as all of it. */
+      dueNoProgramme(),
       /* Not "how much of the register", which is a fact about the site — how
          much of the FOLDER, which is a fact about this phone. */
       dueVsFolder(),
@@ -6808,6 +6942,15 @@ function renderDue(){
     return;
   }
   box.innerHTML=show.slice(0,200).map(r=>{
+    /* A machine with no round on record has no interval to be past and no
+       date to be counted from. Printing "0 d ago" over one would be inventing
+       an inspection; it says what is true instead, and the row still opens
+       the round so the answer is one tap away. */
+    if(r.never) return `<div class="duerow">
+      <button class="dueitem never" data-u="${esc(r.unit)}" data-t="${esc(r.ty)}">
+        <span class="u"><span class="tag t-${esc(r.ty)}">${esc(r.ty)}</span> ${esc(r.unit)}${
+          r.cat?` · <span style="color:var(--muted);font-weight:400">${esc(r.cat)}</span>`:""}</span>
+        <span class="d">${esc(t("due_never_row"))}</span></button></div>`;
     const a=ASSET_BY[r.unit], n=r.n;
     const cal = DUE.hours(r.ty)==null && !n.why;
     const days = n.over ? t("due_over").replace("{n}",num(n.dueInDays))
@@ -6827,6 +6970,18 @@ function renderDue(){
         ${put}</button>
       <button class="dueforget" data-f="${esc(r.unit)}" data-ft="${esc(r.ty)}"
         aria-label="${esc(t("due_not"))}" title="${esc(t("due_not"))}">⋯</button></div>`; }).join("");
+  /* A LIST THAT STOPS AT TWO HUNDRED HAS TO SAY SO.
+
+     The cap has always been here and has always been silent, which was
+     survivable while the list was a dozen overdue rounds and is not now that
+     it can carry every machine nobody has walked to. A pill reading 149 over a
+     list of 200 rows is fine; a pill reading 600 over the same list, with
+     nothing saying the rest exist, is the same failure this screen keeps
+     having. */
+  if(show.length>200){
+    box.insertAdjacentHTML("beforeend",
+      `<div class="quiet" style="padding:8px 2px 0">${esc(t("due_more",{n:show.length-200}))}</div>`);
+  }
   box.querySelectorAll("[data-u]").forEach(b=>b.onclick=()=>{
     /* Open the machine ON the round that is due, not on whatever the capture
        screen was last set to — the list is now all rounds, so the row has to
@@ -9120,7 +9275,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="181";
+const BUILD="182";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
