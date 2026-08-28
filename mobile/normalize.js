@@ -56,7 +56,7 @@
     'reading', 'baseline', 'limit', 'hours', 'f',
     /* what was found and why */
     'defect', 'defectCode', 'defectIso', 'finding', 'iso', 'isoMode',
-    'cause', 'causeCode', 'causeIso', 'particle', 'detection',
+    'cause', 'causeCode', 'causeIso', 'particle',
     /* what to do about it */
     'action', 'actionIso', 'actionLabel', 'recommendation', 'rec',
     'prio', 'prioLabel', 'priority', 'wo', 'workOrder',
@@ -118,6 +118,30 @@
      technician. `unknown()` is what the diagnostics line reads: a field nobody
      has classified is a bug in this file, and the person who can fix it is not
      the one standing at the truck. */
+  /* FIELDS THE APP FILLS IN BY ITSELF.
+
+     This is the category that broke the first two attempts, and it is worth
+     naming precisely: a value the SOFTWARE supplies is not evidence that a
+     HUMAN recorded anything.
+
+     recToExport writes `detection` and `detectionLabel` on every exported item,
+     unconditionally —
+
+         detection:      (p.detect || DETECT_DEFAULT)      // "DM-02"
+         detectionLabel: detectLabel(p.detect || DETECT_DEFAULT, "en")
+
+     — so a blank row leaves the phone carrying a detection method and its
+     label. Both are non-blank, `detection` was on the operational list, and
+     every blank row therefore came back as a real finding with a missing
+     component. TK115 and DZ007 stayed on hold through builds 165 and 166, and
+     Admin Diagnostics stayed empty because nothing was ever removed.
+
+     Detection describes HOW a finding was found. Without a finding it describes
+     nothing. On a real point it is preserved exactly as before — this list
+     changes only whether a field can make an otherwise-empty point count as
+     populated, never whether it is kept. */
+  var DEFAULTED = ['detect', 'detection', 'detectionLabel'];
+
   var METADATA = [
     'id', 'uid', 'uuid', 'tmpId', 'tempId', 'localId', 'seq', 'idx', 'index',
     'order', 'n', 'row', 'created', 'createdAt', 'updated', 'updatedAt', 'ts',
@@ -129,7 +153,7 @@
   function isMeta(k) {
     if (k === 'key' || k === 'label' || k === 'name') return true;
     if (k.charAt(0) === '_') return true;
-    return METADATA.indexOf(k) >= 0;
+    return METADATA.indexOf(k) >= 0 || DEFAULTED.indexOf(k) >= 0;
   }
   /* Fields on this point that are neither identity, nor operational, nor known
      housekeeping — for developer diagnostics only. */
@@ -197,6 +221,7 @@
   G.CMNorm = {
     OPERATIONAL: OPERATIONAL,
     METADATA: METADATA,
+    DEFAULTED: DEFAULTED,
     unknown: unknown,
     blank: blank,
     named: named,

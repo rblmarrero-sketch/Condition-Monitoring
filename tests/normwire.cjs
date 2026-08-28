@@ -33,8 +33,15 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
                           else console.log("  PASS  " + w + (d !== undefined ? "   " + d : "")); return c; };
 
 /* The production shape: real points plus one blank row carrying housekeeping. */
-const BLANK = { key: "", label: "", grade: "", sev: "", mm: "", unit: "", defect: "",
-  cause: "", recommendation: "", prio: "", wo: "", comment: "", photos: 0,
+/* Exactly what recToExport emits for an untouched position, INCLUDING the two
+   fields the phone writes from a default on every item. Those two are what kept
+   TK115 and DZ007 on hold through v165 and v166 while a hand-written fixture
+   passed locally. */
+const BLANK = { key: "", label: "", grade: "", sev: "", sevIso: "", mm: "", unit: "",
+  defect: "", defectCode: "", cause: "", causeCode: "", recommendation: "",
+  prio: "", wo: "", comment: "", particle: "", comp: "", oil: "",
+  tempC: "", ambC: "", tempMethod: "", photos: 0, video: 0,
+  detection: "DM-02", detectionLabel: "Visual inspection",
   id: "tmp_8812", seq: 3, createdAt: "2026-08-05T04:11:02.881Z", src: "phone",
   syncState: "sent" };
 const TK115 = { equip: "TK115", date: "2026-08-05", type: "TB", cls: "AT", by: "R. Marrero",

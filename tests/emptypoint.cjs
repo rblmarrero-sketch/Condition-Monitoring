@@ -39,9 +39,12 @@ const TK115 = {
     { key: "FLOOR.1", label: "Floor plate 1", grade: "C", mm: 18,
       defect: "Cracking", defectCode: "DT8-02", comment: "weld line lifting" },
     { key: "SIDE.L", label: "Left side sheet", grade: "B" },
-    /* the object that caused all of this */
+    /* the object that caused all of this, WITH the fields the phone really
+       adds — detection and its label, written unconditionally by recToExport */
     { key: "", label: "", grade: "", sev: "", mm: "", unit: "", defect: "",
-      cause: "", recommendation: "", prio: "", wo: "", comment: "", photos: 0 },
+      cause: "", recommendation: "", prio: "", wo: "", comment: "", photos: 0,
+      detection: "DM-02", detectionLabel: "Visual inspection",
+      id: "tmp_8812", seq: 3, createdAt: "2026-08-05T04:11:02.881Z" },
   ],
 };
 const DZ007 = {
@@ -49,7 +52,8 @@ const DZ007 = {
   items: [
     { key: "ROLLER.L1", label: "Roller L1", mm: 213 },
     { key: "IDLER.L-OUT", label: "Idler L outer", mm: 29 },
-    { key: "", label: "", mm: null, grade: null, comment: null, photos: 0, video: 0 },
+    { key: "", label: "", mm: null, grade: null, comment: null, photos: 0, video: 0,
+      detection: "DM-02", detectionLabel: "Visual inspection", seq: 4 },
   ],
 };
 
@@ -96,6 +100,52 @@ carriers.forEach(([what, item]) => {
   ok(r.rec.items[0] && r.rec.items[0]._needsPoint === 1,
      `  and it is marked for identification, not guessed at`);
 });
+
+console.log("\n  THE SHAPE recToExport ACTUALLY EMITS");
+/* NOT HAND-WRITTEN. Two builds shipped a fix that passed a fixture I invented
+   and failed in production, because the fixture never contained the field the
+   phone actually adds. This object is every key recToExport writes for an
+   untouched position, at the values it writes them — read off mobile/index.html,
+   not imagined.
+
+   The two that mattered:
+
+       detection:      (p.detect || DETECT_DEFAULT)      // "DM-02"
+       detectionLabel: detectLabel(p.detect || DETECT_DEFAULT, "en")
+
+   Written unconditionally, on every item. A value the SOFTWARE supplies is not
+   evidence that a HUMAN recorded anything, and treating it as such kept TK115
+   and DZ007 on hold through v165 and v166 while Admin Diagnostics sat empty
+   because nothing was ever removed. */
+const EXPORTED_BLANK = {
+  key: "", label: "", grade: "", sev: "", sevIso: "", action: "", actionIso: "",
+  actionLabel: "", wo: "", prio: "", prioLabel: "", defectCode: "", defectIso: "",
+  defect: "", iso: "", isoMode: "", lubeProduct: "", lubeUnlisted: 0,
+  lubeEvidence: "", lubeSampled: 0, causeCode: "", causeIso: "", cause: "",
+  particle: "", detection: "DM-02", detectionLabel: "Visual inspection",
+  comp: "", oil: "", comment: "", tempC: "", ambC: "", tempMethod: "",
+  photos: 0, video: 0,
+};
+ok(N.classify(EXPORTED_BLANK) === "empty",
+   "an untouched position, exactly as the phone exports it, is empty",
+   N.classify(EXPORTED_BLANK));
+ok(N.unknown(EXPORTED_BLANK).length === 0,
+   "and every one of its fields is classified", JSON.stringify(N.unknown(EXPORTED_BLANK)));
+/* The other half: a defaulted field must not stop a REAL point from being real,
+   and must survive on it untouched. */
+const realWithDetection = { key: "FLOOR.1", label: "Floor plate 1", grade: "C",
+  detection: "DM-02", detectionLabel: "Visual inspection" };
+ok(N.classify(realWithDetection) === "ok", "a real point is unaffected");
+const keptDet = N.record({ items: [realWithDetection] }).rec.items[0];
+ok(keptDet.detection === "DM-02" && keptDet.detectionLabel === "Visual inspection",
+   "and keeps its detection method, field for field");
+/* A keyless point whose ONLY content is the default is still a blank row —
+   this is the exact production case. */
+ok(N.classify({ key: "", detection: "DM-02", detectionLabel: "Visual inspection" }) === "empty",
+   "a keyless row carrying only the default detection is a blank row");
+/* But add one real thing and it becomes a finding that needs identifying. */
+ok(N.classify({ key: "", detection: "DM-02", grade: "X" }) === "orphan",
+   "add a grade to it and it becomes a finding for a human");
 
 console.log("\n  HOUSEKEEPING IS NOT CONTENT");
 /* The bug that made the first version of this file useless in production. The
@@ -191,6 +241,30 @@ console.log("\n  it never throws on the shapes a folder actually contains");
   try { N.record(r); } catch (e) { threw = e.message; }
   ok(!threw, "survives malformed input #" + (n + 1), threw || "ok");
 });
+
+console.log("\n  THE GUARD THAT WOULD HAVE CAUGHT THIS");
+/* Two builds shipped because a field the exporter fills in by itself was on the
+   operational list, and nothing compared the two. This reads the exporter and
+   fails if it writes a field unconditionally from a default that normalize.js
+   has not classified as defaulted — so the next `x: (p.y || SOME_DEFAULT)`
+   added to an export cannot quietly turn every blank row into a finding. */
+const fs = require("fs");
+const mob = fs.readFileSync(path.join(__dirname, "..", "mobile", "index.html"), "utf8");
+/* field: (p.thing || SOME_CONSTANT)  — the shape that always emits something */
+const defaulted = [...mob.matchAll(/(\w+)\s*:\s*\(?\s*p\.\w+\s*\|\|\s*([A-Z_][A-Z0-9_]*)\s*\)?/g)]
+  .map(m => m[1]);
+/* and the label form: field: someLabel(p.thing || SOME_CONSTANT, ...) */
+const labelled = [...mob.matchAll(/(\w+)\s*:\s*\w+\(\s*p\.\w+\s*\|\|\s*[A-Z_][A-Z0-9_]*/g)]
+  .map(m => m[1]);
+const emitted = [...new Set(defaulted.concat(labelled))];
+console.log("        exporter writes from a default: " + (emitted.join(", ") || "none"));
+const unclassified = emitted.filter(f =>
+  N.OPERATIONAL.indexOf(f) >= 0 && N.DEFAULTED.indexOf(f) < 0);
+ok(unclassified.length === 0,
+   "no field written from a default is treated as evidence of a finding",
+   unclassified.length ? unclassified.join(", ") + " — add to DEFAULTED" : "none");
+ok(emitted.includes("detection") || emitted.includes("detect"),
+   "the guard can see the field that caused this", emitted.join(", "));
 
 console.log(fail ? "\nFAILED: " + fail : "\nall passed");
 process.exit(fail ? 1 : 0);
