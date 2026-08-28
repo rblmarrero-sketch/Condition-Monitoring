@@ -178,6 +178,81 @@ const histKeys = p => p.evaluate(() => Object.keys(JSON.parse(localStorage.getIt
     await a.ctx.close();
   }
 
+  console.log('\nan index and a cache that agree with each other and are both short');
+  {
+    /* THE STATE THE FIELD IS ACTUALLY IN, and the one the 177 invariant cannot
+       see. The old storage bug damaged BOTH structures in the same breath —
+       teamSave halved the cache, histSave lost the index — and then the cursor
+       advanced past everything they had just dropped. What is left agrees
+       perfectly with itself and is short of the folder. Nothing on the phone
+       can detect that, because the only thing that knows what the folder holds
+       is the folder.
+
+       So: two rounds held, a cursor far ahead so an ordinary pull returns
+       nothing, and forty rounds sitting in the folder. */
+    const held = [{ t: 'MP', u: 'TK101', d: '2026-07-02', by: 'R. Marrero', g: 'A', s: '5120' }];
+    const heldHist = { 'MP|TK101': { d: '2026-07-02', h: 5120 } };
+    const ctx = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true });
+    const pg = await ctx.newPage();
+    pg.on('pageerror', e => fails.push('PAGEERROR ' + e.message));
+    const asked = [];
+    pg.on('request', r => { const u = r.url(); if (u.indexOf('/exec') > 0) asked.push(u); });
+    await pg.addInitScript(s => {
+      localStorage.setItem('up_dests', JSON.stringify(
+        [{ id: 'gas', on: true, url: s.url, sec: '', folder: '' }]));
+      localStorage.setItem('cm_team', JSON.stringify(s.team));
+      localStorage.setItem('cm_hist', JSON.stringify(s.hist));
+      localStorage.setItem('cm_team_cursor', String(9e12));   // "I have everything"
+      /* Every phone in the field did the round-body heal months ago, so that
+         one returns immediately and cannot be what repairs this. Without this
+         line the fixture is healed by the OLD mechanism and proves nothing —
+         which is exactly what it did on the first run. */
+      localStorage.setItem('cm_team_full_v1', '1');
+    }, { url: BASE + '/exec', team: held, hist: heldHist });
+    await pg.goto(BASE + '/mobile/index.html', { waitUntil: 'load' });
+    await pg.waitForTimeout(2600);
+
+    const before = Object.keys(heldHist).length;
+    const after = (await pg.evaluate(() => Object.keys(JSON.parse(
+      localStorage.getItem('cm_hist') || '{}')))).length;
+    ok('nothing on the phone looked inconsistent to begin with',
+       await pg.evaluate(() => typeof histGapVsTeam === 'function' && histGapVsTeam() === 0));
+    /* THE ONE THAT NAMES THIS ROUND OF THE BUG. */
+    ok('it asks the folder anyway, once, on the upgrade',
+       asked.some(u => /after=0/.test(u)),
+       asked.map(u => (u.match(/after=\d+/) || ['—'])[0]).join(' ') || '(no request)');
+    ok('and the missing rounds arrive', after > before, before + ' → ' + after);
+    ok('the repair is recorded so it happens once, not every launch',
+       await pg.evaluate(() => !!localStorage.getItem('cm_hist_full_v1')));
+    await ctx.close();
+  }
+  {
+    /* A phone that has already been repaired must not re-read the whole folder
+       on every launch. A season of work is megabytes over a satellite link. */
+    const ctx = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true });
+    const pg = await ctx.newPage();
+    pg.on('pageerror', e => fails.push('PAGEERROR ' + e.message));
+    const asked = [];
+    pg.on('request', r => { const u = r.url(); if (u.indexOf('/exec') > 0) asked.push(u); });
+    await pg.addInitScript(s => {
+      localStorage.setItem('up_dests', JSON.stringify(
+        [{ id: 'gas', on: true, url: s.url, sec: '', folder: '' }]));
+      localStorage.setItem('cm_team', JSON.stringify(s.team));
+      localStorage.setItem('cm_hist', JSON.stringify(s.hist));
+      localStorage.setItem('cm_team_cursor', String(9e12));
+      localStorage.setItem('cm_hist_full_v1', '1');          // already done
+      localStorage.setItem('cm_team_full_v1', '1');
+    }, { url: BASE + '/exec',
+         team: [{ t: 'MP', u: 'TK101', d: '2026-07-02', by: 'R. Marrero', g: 'A' }],
+         hist: { 'MP|TK101': { d: '2026-07-02' } } });
+    await pg.goto(BASE + '/mobile/index.html', { waitUntil: 'load' });
+    await pg.waitForTimeout(2200);
+    ok('a phone already repaired does not re-read the folder again',
+       !asked.some(u => /after=0/.test(u)),
+       asked.map(u => (u.match(/after=\d+/) || ['—'])[0]).join(' ') || '(none)');
+    await ctx.close();
+  }
+
   console.log('\nthe number says how much of the fleet it is about');
   {
     const a = await phone(b, { offline: true, team: TEAM, hist: HIST, cursor: Date.now() });

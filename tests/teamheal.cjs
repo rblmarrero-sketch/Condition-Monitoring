@@ -58,6 +58,11 @@ const UPGRADED = o => {
      arrives after all. */
   const h = {}; rows.forEach(r => { h[r.t + '|' + r.u] = { d: r.d }; });
   localStorage.setItem('cm_hist', JSON.stringify(h));
+  /* And the one-time due-list repair, marked done. This file is about the
+     ROUND-BODY heal; the history heal is a separate mechanism that also forces
+     a full re-read, and leaving it armed would mask the thing under test by
+     fetching the round this fixture exists to NOT hold. */
+  localStorage.setItem('cm_hist_full_v1', '1');
   /* Far in the future: "I already have everything", so a normal pull is empty. */
   localStorage.setItem('cm_team_cursor', String(Date.now() + 864e5));
   /* healed: this phone has already done its one-time re-read. The row is
