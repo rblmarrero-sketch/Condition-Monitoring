@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=183">
+<link rel="manifest" href="manifest.webmanifest?v=184">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=183">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=183">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=183">
+<link rel="apple-touch-icon" href="icon-192.png?v=184">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=184">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=184">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1948,31 +1948,31 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=183"></script>
-<script src="upload-defaults.js?v=183"></script>
-<script src="hme.js?v=183"></script>
-<script src="mp-fc.js?v=183"></script>
-<script src="hme-cascade.js?v=183"></script>
-<script src="assets.js?v=183"></script>
-<script src="temp-limits.js?v=183"></script>
-<script src="normalize.js?v=183"></script>
-<script src="due.js?v=183"></script>
-<script src="wear.js?v=183"></script>
-<script src="wear-figs.js?v=183"></script>
-<script src="wear-map.js?v=183"></script>
-<script src="machine-photos.js?v=183"></script>
-<script src="machine-fig.js?v=183"></script>
-<script src="get.js?v=183"></script>
-<script src="points.js?v=183"></script>
-<script src="uc-points.js?v=183"></script>
-<script src="inspect-guide.js?v=183"></script>
-<script src="get-figs.js?v=183"></script>
-<script src="body-points.js?v=183"></script>
-<script src="body-map.js?v=183"></script>
-<script src="lube.js?v=183"></script>
-<script src="lube-overrides.js?v=183"></script>
-<script src="lube2027.js?v=183"></script>
-<script src="report-core.js?v=183"></script>
+<script src="native.js?v=184"></script>
+<script src="upload-defaults.js?v=184"></script>
+<script src="hme.js?v=184"></script>
+<script src="mp-fc.js?v=184"></script>
+<script src="hme-cascade.js?v=184"></script>
+<script src="assets.js?v=184"></script>
+<script src="temp-limits.js?v=184"></script>
+<script src="normalize.js?v=184"></script>
+<script src="due.js?v=184"></script>
+<script src="wear.js?v=184"></script>
+<script src="wear-figs.js?v=184"></script>
+<script src="wear-map.js?v=184"></script>
+<script src="machine-photos.js?v=184"></script>
+<script src="machine-fig.js?v=184"></script>
+<script src="get.js?v=184"></script>
+<script src="points.js?v=184"></script>
+<script src="uc-points.js?v=184"></script>
+<script src="inspect-guide.js?v=184"></script>
+<script src="get-figs.js?v=184"></script>
+<script src="body-points.js?v=184"></script>
+<script src="body-map.js?v=184"></script>
+<script src="lube.js?v=184"></script>
+<script src="lube-overrides.js?v=184"></script>
+<script src="lube2027.js?v=184"></script>
+<script src="report-core.js?v=184"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -6998,6 +6998,17 @@ function renderDue(){
     note.classList.toggle("warn", histStale());
   }
 
+  /* BEFORE THE EMPTY-LIST RETURN, not after it.
+
+     This sat below the rows, so it never ran on a phone whose list was empty —
+     which is precisely the phone carrying stray dates it needs to drop. The
+     one handset in the fleet that showed "Missed 0" over a schedule the folder
+     had never seen was the one handset that could not be offered the cleanup.
+     A control that hides itself from the only case it exists for is not a
+     control. */
+  const strayBtn=$("dueOnly");
+  if(strayBtn) strayBtn.classList.toggle("hidden", histStrays()===0);
+
   if(!show.length){
     /* "Nothing due" and "this phone has never heard from the fleet" are
        different sentences, and only one of them is reassuring. */
@@ -7046,8 +7057,6 @@ function renderDue(){
      list of 200 rows is fine; a pill reading 600 over the same list, with
      nothing saying the rest exist, is the same failure this screen keeps
      having. */
-  const strayBtn=$("dueOnly");
-  if(strayBtn) strayBtn.classList.toggle("hidden", histStrays()===0);
   if(show.length>200){
     box.insertAdjacentHTML("beforeend",
       `<div class="quiet" style="padding:8px 2px 0">${esc(t("due_more",{n:show.length-200}))}</div>`);
@@ -9368,7 +9377,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="183";
+const BUILD="184";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

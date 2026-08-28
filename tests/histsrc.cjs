@@ -171,6 +171,33 @@ const btn = p => p.evaluate(() => !document.getElementById('dueOnly').classList.
     await a.ctx.close();
   }
 
+  console.log('\nthe cleanup is reachable on the phone that needs it most');
+  {
+    /* IT WAS NOT. The toggle sat below the rows, after the early return that
+       fires when the list is empty — so the one handset in the fleet showing
+       "Missed 0" over a schedule the folder had never seen was the one handset
+       that could not be offered the cleanup. A control that hides itself from
+       the only case it exists for is not a control.
+
+       Nothing overdue, so the list is empty: one date from the system and one
+       stray, both dated today. */
+    const today = new Date().toISOString().slice(0, 10);
+    const a = await phone(b, { offline: true,
+      hist: { 'MP|TK001': { d: today, s: 'f' }, 'MP|BS001': { d: today } } });
+    await a.p.evaluate(() => { dueScope = 'over'; renderDue(); });
+    await a.p.waitForTimeout(300);
+    ok('the list really is empty',
+       await a.p.evaluate(() => !!document.querySelector('#dueList .empty')));
+    ok('and the stray is still counted', await a.p.evaluate(() => histStrays()) === 1);
+    ok('the cleanup is offered anyway', await btn(a.p));
+    await a.p.click('#dueOnly');
+    await a.p.waitForTimeout(300);
+    ok('and it works from there', await a.p.evaluate(() => histStrays()) === 0);
+    ok('leaving the system\'s date alone',
+       (await src(a.p)).f === 1, JSON.stringify(await src(a.p)));
+    await a.ctx.close();
+  }
+
   await b.close();
   console.log('\n' + (fails.length ? 'FAILED ' + fails.length + '\n  ' + fails.join('\n  ') : 'all passed'));
   process.exit(fails.length ? 1 : 0);
