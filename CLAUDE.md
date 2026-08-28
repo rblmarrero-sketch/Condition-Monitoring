@@ -54,6 +54,43 @@ sudo systemctl status cm --no-pager
 
 ---
 
+## BUMP `BUILD` OR THE WORK DOES NOT REACH ANYBODY
+
+`BUILD` lives in `mobile/index.html` and `mobile/sw.js`, and is repeated as the
+`?v=` tag on every shared script in `mobile/index.html` and `dashboard/index.html`
+— about 59 places. **Every change that touches those files has to bump it.**
+
+This is not a version label. It is the cache key:
+
+- `CACHE = "plug-capture-v" + BUILD` — leave BUILD alone and the service worker
+  goes on serving the previous files to every installed phone, for ever.
+- `checkForNewBuild()` fetches `sw.js`, reads its `const BUILD`, and **returns
+  early when it equals its own**. An un-bumped build does not merely fail to
+  arrive; the phone actively concludes there is nothing new.
+- The dashboard's `?v=` tags do the same for the browser cache, and `#dashVer`
+  reads its badge off those tags — so the page reports the stale number too.
+
+It has already happened once: an entire body of work — the class-aware intervals,
+the photo editor fixes, the send-state vocabulary, re-file, the conflict
+comparison, the read-after-write confirmation — was written, tested, committed
+and pushed while BUILD stayed at 162. Pages published all of it and not one phone
+saw any of it. The pure form of this project's signature defect: a real change
+rendered as nothing.
+
+To bump:
+
+```
+sed -i 's/v=<old>/v=<new>/g; s/const BUILD = "<old>"/const BUILD = "<new>"/; s/const BUILD="<old>"/const BUILD="<new>"/' \
+  mobile/sw.js mobile/index.html dashboard/index.html
+node tests/ver.cjs
+```
+
+`tests/ver.cjs` checks the stamps agree **with each other**. It cannot know
+whether a change should have bumped them, and it passed every run while the
+fleet sat on a stale build — so it is not the guard here. This paragraph is.
+
+---
+
 ## Secrets
 
 `ADMIN_SECRET` lives in `/opt/cm/cm.env` on the VM and **nowhere else**. It must
