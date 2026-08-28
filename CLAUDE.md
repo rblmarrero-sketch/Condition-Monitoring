@@ -174,6 +174,23 @@ Habits that follow from that, all of them learned the hard way:
   this separately.
 - **One source of truth per fact.** Two tables for one interval, two copies of
   one label — that is how surfaces come to disagree.
+- **Normalise on the way IN, and read every marker key by the same rules.**
+  The folder is written by more than one thing. The unit was upper-cased on
+  ingest and the round type was not, so a sidecar written `insp` keyed as a
+  round that does not exist and `dueRows` dropped it in silence — the machine
+  simply left the due screen. Dates are the same: `DUE.next` parses ISO and
+  returns null on anything else, and `31.07.2026` is how this folder's own
+  filenames are written. `teamType()` and `teamDate()` are the two rules, and
+  **every place that parses a `unit|date|type` key off the wire — a void, a
+  delete, a deferral — must apply them too**, or the marker stops matching the
+  round it is about. Ambiguity is never guessed at: `07/02/2026` is left as it
+  arrived and counted, because a wrong date is worse than an unreadable one.
+- **A number the backend sends about itself has to be read.** `action=records`
+  has always returned `failed: n` — sidecars it opened and could not parse. It
+  skips them, moves its cursor past them, and nothing in the app looked. Those
+  inspections exist in the folder, so a migration counts them as "already
+  there" and a backup preserves them, and they reach no client, ever, with no
+  gap visible anywhere. `badGet()` holds the figure and the Due screen says it.
 - **Tests must ask the app, not keep their own copy.** Four suites failed on
   working code because each held a duplicate of something the app owns. Take
   labels from `I18N`, intervals from `due.js`, limits from the running page.

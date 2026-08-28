@@ -39,11 +39,15 @@ function exec(q, legacy) {
     const side = FILES.filter(f => /\.json$/i.test(f.name) && f.updated > after)
                       .sort((a, b) => a.updated - b.updated);
     const take = side.slice(0, max);
-    const out = { ok: true, records: [], read: take.length, failed: 0,
+    /* A sidecar the backend opens and cannot parse. It is counted in `failed`,
+       it sends no records, and the cursor still moves past it — which is what
+       makes those inspections permanently invisible unless somebody says so. */
+    const good = take.filter(f => !f.bad);
+    const out = { ok: true, records: [], read: good.length, failed: take.length - good.length,
       pending: Math.max(0, side.length - take.length), truncated: side.length > take.length,
       cursor: take.length ? take[take.length - 1].updated : after,
       files: FILES.length, photos: FILES.filter(f => MEDIA.test(f.name)).length };
-    take.forEach(f => f.json.records.forEach(r => out.records.push(Object.assign({ _file: f.name }, r))));
+    good.forEach(f => f.json.records.forEach(r => out.records.push(Object.assign({ _file: f.name }, r))));
     if (q.get('index') !== '0') {
       out.index = FILES.filter(f => MEDIA.test(f.name)).map(f => ({ name: f.name, id: f.id, size: f.size }));
     }
@@ -108,6 +112,25 @@ http.createServer((req, res) => {
   if (u.pathname === '/__reset') {
     Object.keys(stats).forEach(k => stats[k] = 0);
     if (u.searchParams.get('n')) seed(Number(u.searchParams.get('n')));
+    if (u.searchParams.get('bad')) {                      // sidecars the backend cannot parse
+      const n = Number(u.searchParams.get('bad')) || 1;
+      for (let i = 1; i <= n; i++) {
+        const id = 800 + i;
+        FILES.push({ name: `TK${id}_31.07.2026_MP.json`, id: 'b' + id,
+                     updated: 8000000 + id, size: 400, bad: true, json: null });
+      }
+    }
+    /* One round exactly as it sits in the folder: unit,date,type. The type is
+       written through untouched, so a test can send the case the folder really
+       carries rather than the case this repo happens to prefer. */
+    const rec = u.searchParams.get('rec');
+    if (rec) {
+      const [unit, date, ty] = rec.split(',');
+      const i = FILES.length;
+      FILES.push({ name: `${unit}_${date.split('-').reverse().join('.')}_${ty}.json`,
+                   id: 'r' + i, updated: 7000000 + i, size: 400,
+                   json: sidecar(unit, date, ty, 'C') });
+    }
     if (u.searchParams.get('add')) {                      // a phone uploads one more
       const i = 900 + Number(u.searchParams.get('add'));
       FILES.push({ name: `TK${i}_31.07.2026_MP.json`, id: 'j' + i, updated: 9000000 + i, size: 400,

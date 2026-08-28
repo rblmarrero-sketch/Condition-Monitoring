@@ -2364,6 +2364,8 @@ const I18N = {
     due_never_p:"Never done",
     due_more:"+{n} more — narrow by round to see them",
     due_stray:"⚠ {n} of these dates are not in the system — loaded from a file, or left from an older sync",
+    due_bad:"⚠ the system cannot read {n} of its own files — those inspections reach nobody; report it",
+    due_unk:"⚠ {n} round(s) cannot be scheduled — an unknown round type, or a date this app cannot read",
     due_find:"Find a machine — CR006, DZ003…",
     due_found:"{n} row(s) for “{q}” — every round, whatever its state",
     due_none_found:"Nothing scheduled for “{q}”. It is in the register — no round has ever been walked on this kind of machine, so none is proposed.",
@@ -2831,6 +2833,8 @@ const I18N = {
     due_never_p:"Ни разу",
     due_more:"ещё {n} — выберите тип осмотра, чтобы увидеть",
     due_stray:"⚠ {n} из этих дат нет в системе — загружены из файла или остались от прежней синхронизации",
+    due_bad:"⚠ система не может прочитать {n} из своих файлов — эти осмотры не доходят ни до кого; сообщите об этом",
+    due_unk:"⚠ {n} обход(ов) невозможно запланировать — неизвестный тип обхода или нечитаемая дата",
     due_find:"Найти машину — CR006, DZ003…",
     due_found:"Строк по «{q}»: {n} — все осмотры, в любом состоянии",
     due_none_found:"По «{q}» ничего не запланировано. Машина есть в реестре — осмотры такого типа техники ещё не проводились, поэтому не предлагаются.",
@@ -6338,9 +6342,26 @@ function histPut(h,k,e,src){
   if(!e || !e.d) return false;
   const cur=histEntry(h[k]);
   if(cur && cur.d>e.d){
-    /* Older date, so nothing to learn about WHEN — but the folder having sent
-       it at all is worth recording about WHERE. */
-    if(src==="f" && cur.s!=="f"){ cur.s="f"; h[k]=cur; }
+    /* THE DATE THIS DEVICE HOLDS IS NEWER THAN THE FOLDER'S, WHICH MEANS THE
+       FOLDER HAS NEVER SEEN IT.
+
+       183 stamped it "from the system" here, on the reasoning that the folder
+       had mentioned the pairing at all. It had not mentioned this DATE, and the
+       stamp is about the date. The effect was to launder a stray into a fleet
+       fact while keeping the stray's date: "Keep only what the system has"
+       would then refuse to remove it, and the due list went on planning against
+       a date nobody else in the fleet has. Exactly the failure the stamps were
+       added to expose, produced by the stamps.
+
+       Nothing is learned here about WHEN, and the date only earns the folder's
+       stamp by matching what the folder sent — the `same` path below.
+
+       What IS worth keeping is the folder's own date for this round, because
+       the moment somebody drops the stray there would otherwise be nothing
+       left: a machine the folder says was walked in July would come back as
+       never inspected, and a false alarm is the same failure as a false
+       reassurance. Held beside the entry, not as the entry. */
+    if(src==="f" && cur.fd!==e.d){ cur.fd=e.d; h[k]=cur; }
     return false;
   }
   const same=!!(cur && cur.d===e.d);
@@ -6412,7 +6433,9 @@ function teamDefer(list){
   const m=deferAll(); let n=0;
   list.forEach(d=>{
     if(!d || !d.u || !d.t) return;
-    const k=d.t+"|"+String(d.u).toUpperCase();
+    /* Read by the same rules the rows are, or the office defers "insp" and the
+       phone is holding "INSP" and nothing happens. */
+    const k=teamType(d.t)+"|"+String(d.u).toUpperCase();
     const cur=m[k];
     if(cur && String(cur.at||"") > String(d.at||"")) return;   // ours is newer
     if(d.cleared){ if(cur){ delete m[k]; n++; } return; }
@@ -6634,6 +6657,60 @@ function histSources(){
   }catch(e){}
   return out;
 }
+/* FILES IN THE FOLDER THE SYSTEM CANNOT READ.
+
+   A records reply carries `failed: n` — sidecars the backend opened and could
+   not parse. It skips them, it advances the cursor past them, and it says so.
+   Nothing in this app has ever read that field.
+
+   The consequence is the quietest failure in the project. The inspection was
+   walked, it was uploaded, it is in the folder — so a migration counts it as
+   "already there" and a backup preserves it — and it reaches no client, ever,
+   with no screen anywhere showing a gap. Somebody has to be told, or that
+   round is simply gone while every number on every phone looks healthy. */
+const BAD_KEY="cm_fold_bad";
+function badGet(){
+  try{ const o=JSON.parse(localStorage.getItem(BAD_KEY)||"{}")||{}; return Math.max(0,Number(o.n||0)||0); }
+  catch(e){ return 0; }
+}
+function badSet(n){ lsSet(BAD_KEY,JSON.stringify({n:Math.max(0,Number(n)||0), at:Date.now()})); }
+/* A read that covered the WHOLE folder knows the folder's figure and replaces
+   what was stored. A read of a slice only ever knows about its own slice, so
+   it can add and must not clear — which is why a paged full re-read zeroes the
+   tally before its first call and lets the pages accumulate. */
+function badNote(n,whole){
+  const v=Math.max(0,Number(n)||0);
+  if(whole) badSet(v);
+  else if(v) badSet(badGet()+v);
+}
+function dueBad(){ const n=badGet(); return n ? t("due_bad",{n}) : ""; }
+
+/* A ROUND THIS SCREEN CANNOT SCHEDULE, FOR EITHER OF THE TWO REASONS.
+
+   dueRows drops a round whose type is not in the programme, and drops one
+   whose date DUE.next cannot parse. Both are right — there is no interval to
+   measure the first against and no day to count the second from. Both were
+   done in silence, which is not: the round was walked, it is in the folder,
+   and the machine falls off this screen looking exactly like a machine with
+   nothing due.
+
+   Counted together because the consequence is one thing, and the consequence
+   is what the person reading this screen needs to know. */
+function histUnschedulable(){
+  let n=0;
+  try{
+    const h=histAll(), today=todayISO();
+    for(const k of Object.keys(h)){
+      const ty=k.split("|")[0]; if(!ty) continue;
+      if(!DUE.EVERY[ty] && !TYPE_META[ty]){ n++; continue; }
+      const e=histEntry(h[k]);
+      if(!e || DUE.dayDiff(e.d, today)==null) n++;
+    }
+  }catch(e){}
+  return n;
+}
+function dueUnknown(){ const n=histUnschedulable(); return n ? t("due_unk",{n}) : ""; }
+
 /* Dates this device holds that the folder does not: loaded from a file, or
    left over from a backend or a sync that no longer exists. A round captured
    HERE is not in this count — it is on its way, and it is this phone's own
@@ -7042,9 +7119,16 @@ function renderDue(){
          proposed for them. Saying nothing about that would make this screen
          quietly about a fifth of the fleet while reading as all of it. */
       dueNoProgramme(),
+      /* A round that was walked and cannot be scheduled, because nothing here
+         knows what it is. Silently dropping it takes the machine off the
+         screen and looks exactly like a machine with nothing due. */
+      dueUnknown(),
       /* The line that explains three copies of one app carrying three
          different schedules. */
       dueStray(),
+      /* Not about this phone at all: rounds the SYSTEM cannot read, which
+         reach no phone in the fleet and show up in no gap anywhere. */
+      dueBad(),
       /* Not "how much of the register", which is a fact about the site — how
          much of the FOLDER, which is a fact about this phone. */
       dueVsFolder(),
@@ -7386,6 +7470,32 @@ const teamKey=r=>`${r.t}|${r.u}|${r.d}`;
 const GRADE_RANK={A:0,B:1,C:2,X:3};
 // GRADE_HEX is declared further down this script; this list renders before it.
 const GRADE_TINT={A:"#0ca30c",B:"#fab219",C:"#ec835a",X:"#d03b3b"};
+/* The round type as this app keys it. Trimmed and upper-cased, because the
+   folder is written by more than one thing and case is not a round type. */
+function teamType(v){ const s=String(v==null?"":v).trim().toUpperCase(); return s||"MP"; }
+/* THE DATE, IN THE ONE SHAPE EVERYTHING HERE ASSUMES.
+
+   DUE.next parses ISO and returns null on anything else, and dueRows drops a
+   null without a word — so a round written 31.07.2026, which is how this
+   folder's own filenames are written, takes the machine off the due screen and
+   looks exactly like a machine with nothing due. cm_hist also compares dates as
+   strings, where "31.07.2026" sorts above every ISO date there will ever be,
+   so one such round would also outrank every real one on that machine.
+
+   Two shapes are converted because they are unambiguous: a four-digit year
+   first is year-month-day whatever the separator, and dotted day.month.year is
+   what the folder itself writes. DD/MM versus MM/DD is NOT guessed at — a
+   wrong date is worse than an unreadable one, and an unreadable one is now
+   counted and said out loud rather than dropped. */
+function teamDate(v){
+  const s=String(v==null?"":v).trim();
+  const p2=n=>String(n).padStart(2,"0");
+  let m=/^(\d{4})[-\/.](\d{1,2})[-\/.](\d{1,2})$/.exec(s);
+  if(m) return m[1]+"-"+p2(m[2])+"-"+p2(m[3]);
+  m=/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/.exec(s);
+  if(m) return m[3]+"-"+p2(m[2])+"-"+p2(m[1]);
+  return s;
+}
 function teamRow(r){
   let worst="";
   (r.items||[]).forEach(i=>{ const g=i.grade||"";
@@ -7404,7 +7514,15 @@ function teamRow(r){
      This must stay identical to indexRow_() in the Apps Script — the suite
      compares the two on the same records so they cannot drift apart. */
   const smu=(r.smu==null||r.smu==="")?null:Number(r.smu);
-  return { u:(r.equip||"").toUpperCase(), d:r.date||"", t:r.type||"MP",
+  /* THE UNIT WAS UPPERCASED AND THE TYPE WAS NOT.
+
+     Every index in this app is keyed type+"|"+unit, so a sidecar written
+     "insp" and one written "INSP" are two different rounds — and only one of
+     them is in the programme. The other is skipped by dueRows without a word,
+     which takes the machine off the due screen entirely. One toUpperCase is
+     the whole difference between a round that schedules and a round that
+     disappears. */
+  return { u:(r.equip||"").toUpperCase(), d:teamDate(r.date), t:teamType(r.type),
            by:r.by||"", g:worst, ...(smu!=null&&isFinite(smu)?{s:smu}:{}),
            ...(base.length?{b:base}:{}) };
 }
@@ -7418,7 +7536,8 @@ function teamVoid(eds){
   const h=histAll(); let n=0;
   for(const e of eds){
     const p=String(e.key||"").split("|"); if(p.length!==3) continue;
-    const k=`${p[2]}|${p[0].toUpperCase()}|${p[1]}`;
+    p[0]=p[0].toUpperCase(); p[1]=teamDate(p[1]); p[2]=teamType(p[2]);
+    const k=`${p[2]}|${p[0]}|${p[1]}`;
     if(e.void){
       if(have.delete(k)) n++;
       // The last-done date has to be recomputed from what is left, or a voided
@@ -7454,7 +7573,7 @@ function teamGone(dels){
   const h=histAll(); let n=0, touched=false;
   for(const d of dels){
     const p=String((d&&d.key)||"").split("|"); if(p.length!==3) continue;
-    const u=p[0].toUpperCase(), date=p[1], ty=p[2];
+    const u=p[0].toUpperCase(), date=teamDate(p[1]), ty=teamType(p[2]);
     /* Every device's copy of the round: a delete takes the round, not one
        phone's upload of it. */
     for(const [k,row] of [...have]) if(row.u===u && row.d===date && row.t===ty){ have.delete(k); n++; }
@@ -7517,6 +7636,8 @@ function teamMergeRows(rows,replace){
   const h=histAll(); let added=0, hist=0;
   for(const row of rows){
     if(!row || !row.u || !row.d) continue;
+    /* Built at the other end, by code this repo does not ship. Same rules. */
+    row.t=teamType(row.t); row.d=teamDate(row.d);
     const k=teamKey(row);
     if(!have.has(k)) added++;
     have.set(k,row);                                  // a re-upload replaces
@@ -7602,6 +7723,8 @@ let teamPending=0;
    must not be moved back to it, because the stored cursor is a promise about
    what this phone holds and a prefix is not that promise. */
 let teamLastCursor=0;
+/* Sidecars the last reply could not parse, so they sent no rounds at all. */
+let teamFailed=0;
 const TEAM_MIN_GAP=60000;    // automatic pulls only; the button always goes
 const TEAM_TIMEOUT=20000;    // pit signal can leave a fetch hanging for ever
 /* A full re-read is a different kind of request: the script walks every file in
@@ -7743,6 +7866,10 @@ async function teamPull(manual,full,from){
     teamLastComplete = !!(after===0 && !j.truncated);
     teamPending = Number(j.pending||0)||0;
     teamLastCursor = Number(j.cursor||0)||0;
+    /* What the folder holds and could not send. Not a network problem and not
+       this phone's problem, and the only end that can see it is this one. */
+    teamFailed = Number(j.failed||0)||0;
+    badNote(teamFailed, teamLastComplete);
     /* WHAT THE FOLDER HOLDS, AS OPPOSED TO WHAT THIS PHONE HOLDS.
 
        Four builds have been spent asking why two copies of this app disagree,
@@ -7798,7 +7925,9 @@ async function teamPull(manual,full,from){
       +(wiped?" "+t("team_deleted").replace("{n}",wiped):"")
       +(clash?" "+t("team_clash").replace("{n}",clash):"")
       // A truncated reply means the folder holds more than one call returns.
-      +(saved&&j.truncated?" "+t("team_more"):"");
+      +(saved&&j.truncated?" "+t("team_more"):"")
+      // Files the system opened and could not read. Those rounds reach nobody.
+      +(teamFailed?" "+t("due_bad",{n:teamFailed}):"");
     renderTeam(); renderDue(); renderLastDone(); renderTrend();
     /* Only now. openTeamRow() asks for a round the moment this resolves, and
        IndexedDB is slower than the paint — returning before the write lands
@@ -8170,6 +8299,10 @@ async function teamHealOnce(){
    than a job that is not finished. */
 const HEAL_MAX_CALLS=12;
 async function histDrain(onStep){
+  /* This walk is about to see the whole folder a page at a time, and no single
+     page can claim to. Start the tally at nothing and let the pages add to it,
+     or the figure is either stale or counted twice. */
+  badSet(0);
   let ok=await teamPull(true,true);                // from the beginning
   if(!ok) return false;
   if(onStep) onStep();
@@ -8408,7 +8541,13 @@ $("dueOnly").onclick=()=>{
     if(e.s!=="f" && e.s!=="o") drop.push(k);
   }
   if(!drop.length){ msg.textContent=t("due_only_none"); return; }
-  drop.forEach(k=>{ delete h[k]; });
+  /* Drop the stray DATE, not the round. Where the folder sent a date for this
+     pairing and the stray was simply newer, the folder's date is what is left
+     — which is exactly what "keep only what the system has" means. */
+  drop.forEach(k=>{
+    const e=histEntry(h[k]);
+    if(e && e.fd) h[k]={d:e.fd, s:"f"}; else delete h[k];
+  });
   histSave(h);
   msg.textContent=t("due_only_go",{n:drop.length, m:dueMachines()});
   renderDue();
@@ -9451,7 +9590,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="185";
+const BUILD="186";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
