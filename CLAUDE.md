@@ -87,7 +87,23 @@ node tests/ver.cjs
 
 `tests/ver.cjs` checks the stamps agree **with each other**. It cannot know
 whether a change should have bumped them, and it passed every run while the
-fleet sat on a stale build — so it is not the guard here. This paragraph is.
+fleet sat on a stale build — agreement is not freshness.
+
+**`tests/bump.cjs` is the guard.** It asks git instead of the page: since the
+commit that introduced the current BUILD, has any file under `mobile/`,
+`dashboard/` or `data/` changed — committed or still in the working tree? If so
+the number is stale and the work is invisible, and it prints the exact sed line
+to fix it. It runs in under a second, needs no browser, and is first in
+`tests/runall.sh`.
+
+**Run it before every push:**
+
+```
+node tests/bump.cjs
+```
+
+The full sweep takes about ninety minutes; this takes one, and it is the check
+that decides whether any of the work reaches a human being.
 
 ---
 
