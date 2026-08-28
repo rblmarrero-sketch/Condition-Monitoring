@@ -45,10 +45,19 @@ const openSystem = async p => {
 const UPGRADED = o => {
   localStorage.setItem('up_dests', JSON.stringify(
     [{ id: 'gas', name: 'Drive', url: o.url, sec: '' }]));
-  localStorage.setItem('cm_team', JSON.stringify([
+  const rows = [
     { u: 'TK146', d: '2026-03-09', t: 'MP', by: 'B. Ivanov', g: 'C' },
     { u: 'TK147', d: '2026-03-10', t: 'MP', by: 'B. Ivanov', g: 'A' },
-  ]));
+  ];
+  localStorage.setItem('cm_team', JSON.stringify(rows));
+  /* And the last-done index that goes with them. Every round in the cache is
+     represented in the index — that is the invariant the app now checks, and a
+     phone missing it is a phone with a damaged index, which is a different
+     story from the one this file tells. Without this the boot repair fires,
+     forces a full re-read, and the round this fixture exists to NOT hold
+     arrives after all. */
+  const h = {}; rows.forEach(r => { h[r.t + '|' + r.u] = { d: r.d }; });
+  localStorage.setItem('cm_hist', JSON.stringify(h));
   /* Far in the future: "I already have everything", so a normal pull is empty. */
   localStorage.setItem('cm_team_cursor', String(Date.now() + 864e5));
   /* healed: this phone has already done its one-time re-read. The row is

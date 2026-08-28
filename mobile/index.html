@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=176">
+<link rel="manifest" href="manifest.webmanifest?v=177">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=176">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=176">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=176">
+<link rel="apple-touch-icon" href="icon-192.png?v=177">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=177">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=177">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1932,31 +1932,31 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=176"></script>
-<script src="upload-defaults.js?v=176"></script>
-<script src="hme.js?v=176"></script>
-<script src="mp-fc.js?v=176"></script>
-<script src="hme-cascade.js?v=176"></script>
-<script src="assets.js?v=176"></script>
-<script src="temp-limits.js?v=176"></script>
-<script src="normalize.js?v=176"></script>
-<script src="due.js?v=176"></script>
-<script src="wear.js?v=176"></script>
-<script src="wear-figs.js?v=176"></script>
-<script src="wear-map.js?v=176"></script>
-<script src="machine-photos.js?v=176"></script>
-<script src="machine-fig.js?v=176"></script>
-<script src="get.js?v=176"></script>
-<script src="points.js?v=176"></script>
-<script src="uc-points.js?v=176"></script>
-<script src="inspect-guide.js?v=176"></script>
-<script src="get-figs.js?v=176"></script>
-<script src="body-points.js?v=176"></script>
-<script src="body-map.js?v=176"></script>
-<script src="lube.js?v=176"></script>
-<script src="lube-overrides.js?v=176"></script>
-<script src="lube2027.js?v=176"></script>
-<script src="report-core.js?v=176"></script>
+<script src="native.js?v=177"></script>
+<script src="upload-defaults.js?v=177"></script>
+<script src="hme.js?v=177"></script>
+<script src="mp-fc.js?v=177"></script>
+<script src="hme-cascade.js?v=177"></script>
+<script src="assets.js?v=177"></script>
+<script src="temp-limits.js?v=177"></script>
+<script src="normalize.js?v=177"></script>
+<script src="due.js?v=177"></script>
+<script src="wear.js?v=177"></script>
+<script src="wear-figs.js?v=177"></script>
+<script src="wear-map.js?v=177"></script>
+<script src="machine-photos.js?v=177"></script>
+<script src="machine-fig.js?v=177"></script>
+<script src="get.js?v=177"></script>
+<script src="points.js?v=177"></script>
+<script src="uc-points.js?v=177"></script>
+<script src="inspect-guide.js?v=177"></script>
+<script src="get-figs.js?v=177"></script>
+<script src="body-points.js?v=177"></script>
+<script src="body-map.js?v=177"></script>
+<script src="lube.js?v=177"></script>
+<script src="lube-overrides.js?v=177"></script>
+<script src="lube2027.js?v=177"></script>
+<script src="report-core.js?v=177"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2326,6 +2326,7 @@ const I18N = {
     hist_min:"{n} min ago", hist_hr:"{n} h ago", hist_day:"{n} d ago",
     hist_never:"⚠ this phone has never loaded the fleet's history",
     hist_short:"⚠ this phone ran out of room — its history is incomplete",
+    due_cover:"covering {n} of {m} machines",
     hist_fail:"⚠ could not reach the system — this list may be out of date",
     due_no_hist:"This phone has not loaded the fleet's history yet, so it cannot say what is due. Open System and press Refresh, or load a history file.",
     due_short:"This phone ran out of storage, so part of the fleet's history was lost and this list is incomplete. Free some space on the phone, then press Check for new in System — the missing rounds will be read again.",
@@ -2772,6 +2773,7 @@ const I18N = {
     hist_min:"{n} мин назад", hist_hr:"{n} ч назад", hist_day:"{n} д назад",
     hist_never:"⚠ этот телефон ещё ни разу не загружал историю парка",
     hist_short:"⚠ на телефоне не хватило места — история неполная",
+    due_cover:"охвачено машин: {n} из {m}",
     hist_fail:"⚠ не удалось связаться с системой — список может быть устаревшим",
     due_no_hist:"Этот телефон ещё не загрузил историю парка и не может сказать, что просрочено. Откройте «Система» и нажмите «Обновить» или загрузите файл истории.",
     due_stale:"По данным этого телефона ничего не просрочено, но история парка обновлялась {t}. Обновите, прежде чем полагаться на список.",
@@ -6406,6 +6408,61 @@ function histShort(on){
   catch(e){}
 }
 function histIsShort(){ try{ return !!localStorage.getItem(HIST_SHORT); }catch(e){ return false; } }
+/* THE INVARIANT NOBODY WAS CHECKING.
+
+   The due list is computed from cm_hist and from nothing else — dueRows walks
+   its keys, and a unit/type pair that is not in it produces no row at all.
+   Not "missed", not "unknown": absent. So a damaged index does not show up as
+   an error or a gap. It shows up as "Missed 0", which is the one answer a
+   reliability engineer will act on without checking.
+
+   The self-heal that existed guarded the WRONG STRUCTURE. It reset the cursor
+   when cm_team was empty — the browsable cache — while the thing the due list
+   runs on is cm_hist. The two can drift apart, and when they do only one of
+   them is looked at. A phone that lost its index months ago and kept its
+   cursor had no repair path at all: the cursor promises the server "I already
+   hold everything up to here", so nothing is ever sent again.
+
+   cm_hist keeps a date after its row ages out of the bounded cache, so the
+   index is a superset of the cache and the invariant is one-directional:
+   EVERY ROUND IN THE CACHE MUST BE REPRESENTED IN THE INDEX. A violation is
+   proof the index is damaged, and it costs one pass over at most two thousand
+   short rows to check. */
+function histGapVsTeam(){
+  try{
+    const h=histAll(); let n=0;
+    for(const r of teamAll()){
+      if(!r || !r.t || !r.u || !r.d) continue;
+      if(!histEntry(h[r.t+"|"+r.u])) n++;
+    }
+    return n;
+  }catch(e){ return 0; }
+}
+/* Free, local, and immediate: the dates are already on the phone, in the rows
+   it kept. A phone with no signal gets its due list back from its own cache
+   rather than waiting for a folder it cannot reach. */
+function histRebuildFromTeam(){
+  try{
+    const h=histAll(); let n=0;
+    for(const r of teamAll()){
+      if(!r || !r.t || !r.u || !r.d) continue;
+      if(histPut(h, r.t+"|"+r.u, {d:r.d, h:r.s})) n++;
+    }
+    if(n) histSave(h);
+    return n;
+  }catch(e){ return 0; }
+}
+/* Run wherever the index is about to be trusted. Rebuilding recovers what the
+   cache still holds; the flag says the rest is still missing, because the
+   cache is bounded and the rounds that aged out of it are exactly the oldest —
+   which are exactly the ones most likely to be overdue. */
+function histRepair(){
+  const gap=histGapVsTeam();
+  if(!gap) return 0;
+  histRebuildFromTeam();
+  histShort(true);
+  return gap;
+}
 /* WHEN THIS PHONE LAST LEARNED WHAT THE FLEET HAS DONE.
 
    An installed home-screen app and the same page in the browser are separate
@@ -6441,6 +6498,19 @@ function agoWords(at){
   if(m<60) return t("hist_min",{n:m});
   const h=Math.round(m/60);
   return h<48 ? t("hist_hr",{n:h}) : t("hist_day",{n:Math.round(h/24)});
+}
+/* Distinct machines this phone can say anything about, against the register.
+   Silent when it holds the lot — a count that never changes is furniture. */
+function dueCoverage(){
+  try{
+    const seen=new Set();
+    for(const k of Object.keys(histAll())){
+      const u=k.split("|")[1]; if(u) seen.add(u);
+    }
+    const total=(typeof ASSETS!=="undefined" && ASSETS.length) || 0;
+    if(!total || seen.size>=total) return "";
+    return t("due_cover",{n:seen.size, m:total});
+  }catch(e){ return ""; }
 }
 /* The sentence that decides whether "Missed 0" means anything. */
 function histAge(){
@@ -6666,6 +6736,14 @@ function renderDue(){
              .replace("{d}",DUE.spec(dueType).d||"") : "",
       t("due_at_rate").replace("{r}",DUE.HOURS_PER_DAY),
       measured ? t("due_basis_own").replace("{n}",measured) : "",
+      /* HOW MUCH OF THE FLEET THIS NUMBER IS ABOUT.
+
+         dueRows can only speak about units it has a last-done date for. This
+         site has 1,128 machines and a phone typically holds a few dozen
+         rounds, so "Missed 0" has always meant "none of the machines I have
+         heard of is overdue" while reading as "nothing is overdue". The
+         difference is the whole question, and the count is one line. */
+      dueCoverage(),
       /* The line that decides whether "Missed 0" can be believed. */
       histAge(),
     ].filter(Boolean).join(" · ");
@@ -7205,6 +7283,9 @@ async function teamPull(manual,full){
        "what is new since X" returns nothing for ever. Both are self-healed by
        starting over. The short case is the one that cost six overdue machines:
        nothing was cleared, so nothing looked wrong. */
+    /* histRepair first, so a cursor is never trusted over an index that cannot
+       account for the rounds this phone is already holding. */
+    if(after) histRepair();
     if(full || (after && !teamAll().length) || (after && histIsShort())) after=0;
 
     const ask=async p2=>{
@@ -8822,7 +8903,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="176";
+const BUILD="177";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -10763,6 +10844,11 @@ function openUnit(unit, type){
    produced no message, no mark and no clue, while the Due screen went on
    reporting whatever it happened to hold. Recorded now, and the Due screen says
    so. */
+/* Before the first pull and whether or not it lands. A phone in the pit with
+   a damaged index can still rebuild it out of the rounds it is already
+   holding, and a due list that is repairable offline should not wait for a
+   folder it cannot reach. */
+try{ if(histRepair()) renderDue&&renderDue(); }catch(e){}
 teamPull(false).then(teamHealOnce).catch(e=>{ histNote((e&&e.message)||e); renderDue&&renderDue(); });
 window.addEventListener("online",()=>teamPull(false).then(teamHealOnce)
   .catch(e=>{ histNote((e&&e.message)||e); renderDue&&renderDue(); }));
