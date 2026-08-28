@@ -456,6 +456,11 @@
     border-radius:5px;overflow:hidden;background:var(--surface-2);}
   .medit .mitem img,.medit .mitem video{width:100%;height:100%;object-fit:cover;display:block;}
   .medit .mitem.off{opacity:.35;filter:grayscale(1);}
+  /* On the record, out of the report. Not the same as off, and it must not
+     look the same as off. */
+  .medit .mitem.nrpt{border-color:var(--warn-ink);}
+  .medit .mitem.nrpt::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;
+    background:var(--warn-ink);}
   .medit .mx{position:absolute;top:1px;right:1px;width:17px;height:17px;line-height:15px;
     padding:0;border:0;border-radius:50%;background:rgba(0,0,0,.62);color:#fff;font-size:12px;
     cursor:pointer;}
@@ -464,6 +469,12 @@
     cursor:pointer;}
   .medit .madd:hover{border-color:var(--accent);color:var(--accent);}
   .medit .mmsg{font-size:11px;color:var(--muted);min-height:14px;margin-top:4px;}
+  .medit .mwhy{display:flex;gap:6px;align-items:center;margin-top:6px;}
+  .medit .mwhy.hidden{display:none;}
+  .medit .mwhy input{flex:1;min-width:0;font-size:11.5px;font-family:inherit;padding:4px 6px;
+    border:1px solid var(--border);border-radius:5px;background:var(--surface);color:var(--ink);}
+  .medit .mwhy .mgo{color:var(--crit-ink);
+    border-color:color-mix(in srgb,var(--critical) 45%,var(--border));}
   /* the follow-up panel and the tracker */
   .kpi.bad .v{color:var(--critical);}
   table.grid tr.over td{background:color-mix(in srgb,var(--critical) 7%,transparent);}
@@ -1108,6 +1119,10 @@
   .pxstr b{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
     font-size:var(--t-micro);color:var(--ink-2);min-width:34px;text-align:right;}
   .pxpref{text-transform:none;letter-spacing:0;color:var(--ink-2);}
+  .pxpanel .btn.danger{color:var(--crit-ink);
+    border-color:color-mix(in srgb,var(--critical) 45%,var(--border));}
+  .pxpanel .btn.danger.armed{background:var(--critical);color:#fff;border-color:var(--critical);}
+  .pxwhy input{flex:1;min-width:0;}
   .pxpref input{accent-color:var(--accent);width:15px;height:15px;}
   .pxmsg{font-weight:500;font-size:var(--t-small);line-height:1.4;font-family:inherit;
     color:var(--muted);}
@@ -2715,6 +2730,32 @@
       <label class="pxpref"><input type="checkbox" id="pxPref">
         <span data-i18n="px_prefer">Use in the report</span></label>
     </div>
+    <!-- TWO DIFFERENT DECISIONS THAT WERE ONE AMBIGUOUS BUTTON.
+
+         The history strip offered "Remove from the record", which took the
+         photograph off every screen AND out of every report, kept no reason,
+         and asked nobody to confirm. One control, two meanings, no audit.
+
+         Excluding is a statement about the PDF: the photograph stays on the
+         record, stays on this screen, and does not print. A blurred duplicate
+         should not reach a signed report; that is not the same as saying it
+         was never part of the inspection.
+
+         Taking it off the record is the heavier one, so it asks twice and
+         will not proceed without a reason somebody has typed. The file itself
+         is never written to - the same rule the editor above runs on. -->
+    <div class="pxrow">
+      <label class="pxstr"><span data-i18n="px_in_rpt">In the report</span>
+        <select id="pxUse">
+          <option value="1" data-i18n="px_use_in">Include</option>
+          <option value="0" data-i18n="px_use_out">Exclude</option>
+        </select></label>
+      <label class="pxcap pxwhy hidden" id="pxWhyWrap"><span data-i18n="px_why">Reason</span>
+        <input id="pxWhy" type="text" data-i18n-ph="px_why_ph"
+               placeholder="blurred · duplicate · nothing in frame"></label>
+      <span class="pxsp"></span>
+      <button class="btn danger" id="pxOff" data-i18n="px_off">Remove from the record</button>
+    </div>
     <div class="pxrow">
       <button class="btn" id="pxCompare" aria-pressed="false" data-i18n="px_compare">Show original</button>
       <button class="btn" id="pxReset" data-i18n="px_reset">Reset to original</button>
@@ -2732,27 +2773,27 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=174"></script>
-<script src="../mobile/hme.js?v=174"></script>
-<script src="../mobile/mp-fc.js?v=174"></script>
-<script src="../mobile/hme-cascade.js?v=174"></script>
-<script src="../mobile/temp-limits.js?v=174"></script>
+<script src="../data/magnetic_plug.js?v=175"></script>
+<script src="../mobile/hme.js?v=175"></script>
+<script src="../mobile/mp-fc.js?v=175"></script>
+<script src="../mobile/hme-cascade.js?v=175"></script>
+<script src="../mobile/temp-limits.js?v=175"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=174"></script>
-<script src="../mobile/normalize.js?v=174"></script>
-<script src="../mobile/due.js?v=174"></script>
-<script src="../mobile/wear.js?v=174"></script>
-<script src="../mobile/wear-map.js?v=174"></script>
-<script src="../mobile/lube.js?v=174"></script>
-<script src="../mobile/lube-overrides.js?v=174"></script>
-<script src="../mobile/lube2027.js?v=174"></script>
-<script src="../mobile/lube-tds.js?v=174"></script>
+<script src="../mobile/assets.js?v=175"></script>
+<script src="../mobile/normalize.js?v=175"></script>
+<script src="../mobile/due.js?v=175"></script>
+<script src="../mobile/wear.js?v=175"></script>
+<script src="../mobile/wear-map.js?v=175"></script>
+<script src="../mobile/lube.js?v=175"></script>
+<script src="../mobile/lube-overrides.js?v=175"></script>
+<script src="../mobile/lube2027.js?v=175"></script>
+<script src="../mobile/lube-tds.js?v=175"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=174"></script>
-<script src="../mobile/machine-photos.js?v=174"></script>
+<script src="../mobile/upload-defaults.js?v=175"></script>
+<script src="../mobile/machine-photos.js?v=175"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -2761,17 +2802,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=174"></script>
-<script src="../mobile/get.js?v=174"></script>
-<script src="../mobile/points.js?v=174"></script>
-<script src="../mobile/uc-points.js?v=174"></script>
-<script src="../mobile/inspect-guide.js?v=174"></script>
-<script src="../mobile/get-figs.js?v=174"></script>
-<script src="../mobile/body-points.js?v=174"></script>
-<script src="../mobile/body-map.js?v=174"></script>
-<script src="../mobile/jspdf.umd.min.js?v=174"></script>
-<script src="../mobile/html2canvas.min.js?v=174"></script>
-<script src="../mobile/report-core.js?v=174"></script>
+<script src="../mobile/machine-fig.js?v=175"></script>
+<script src="../mobile/get.js?v=175"></script>
+<script src="../mobile/points.js?v=175"></script>
+<script src="../mobile/uc-points.js?v=175"></script>
+<script src="../mobile/inspect-guide.js?v=175"></script>
+<script src="../mobile/get-figs.js?v=175"></script>
+<script src="../mobile/body-points.js?v=175"></script>
+<script src="../mobile/body-map.js?v=175"></script>
+<script src="../mobile/jspdf.umd.min.js?v=175"></script>
+<script src="../mobile/html2canvas.min.js?v=175"></script>
+<script src="../mobile/report-core.js?v=175"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -3139,6 +3180,15 @@ const I18N={
   px_caption:"Caption", px_prefer:"Use in the report",
   px_compare:"Show original", px_compare_off:"Show edit",
   px_reset:"Reset to original", px_cancel:"Cancel", px_save:"Save edit",
+  px_in_rpt:"In the report", px_use_in:"Include", px_use_out:"Exclude",
+  px_why:"Reason", px_why_ph:"blurred \u00b7 duplicate \u00b7 nothing in frame",
+  px_why_need:"Say why it is being left out \u2014 the report is what somebody else reads.",
+  px_off:"Remove from the record", px_off_go:"Confirm \u2014 take it off the record",
+  px_off_ph:"why it is being taken off",
+  px_off_hint:"It comes off every screen and every report. The file itself is kept, so it can be put back \u2014 the reason and your name are stored with it.",
+  px_off_need:"Say why, then press again. This is field evidence.",
+  px_off_done:"\u2705 Taken off the record.",
+  px_excluded:"not in the report",
   px_edited:"edited", px_pending:"The original is still uploading. The edit will wait for it.",
   px_nochange:"No change to save. Use Reset to remove the edit.",
   px_nothing:"Nothing to save yet — crop, rotate, zoom or add a caption first.",
@@ -3768,6 +3818,15 @@ const I18N={
   px_caption:"Подпись", px_prefer:"Использовать в отчёте",
   px_compare:"Показать оригинал", px_compare_off:"Показать правку",
   px_reset:"Вернуть оригинал", px_cancel:"Отмена", px_save:"Сохранить правку",
+  px_in_rpt:"В отчёте", px_use_in:"Включить", px_use_out:"Исключить",
+  px_why:"Причина", px_why_ph:"смазано \u00b7 дубликат \u00b7 не тот кадр",
+  px_why_need:"Укажите, почему кадр не идёт в отчёт — отчёт читают другие люди.",
+  px_off:"Убрать из записи", px_off_go:"Подтвердить — убрать из записи",
+  px_off_ph:"почему убирается",
+  px_off_hint:"Кадр исчезнет со всех экранов и из всех отчётов. Сам файл сохраняется, его можно вернуть — причина и ваше имя записываются.",
+  px_off_need:"Укажите причину и нажмите ещё раз. Это материал осмотра.",
+  px_off_done:"\u2705 Убрано из записи.",
+  px_excluded:"не в отчёте",
   px_edited:"с правкой", px_pending:"Оригинал ещё загружается. Правка дождётся его.",
   px_nochange:"Изменений нет. Чтобы убрать правку, нажмите «Вернуть оригинал».",
   px_nothing:"Пока нечего сохранять — кадрируйте, поверните, приблизьте или добавьте подпись.",
@@ -5763,11 +5822,104 @@ function hiddenSet(it){
   const h=it&&it.hidden;
   return new Set(Array.isArray(h)?h:(typeof h==="string"&&h?h.split("|"):[]));
 }
+/* WHERE A PHOTOGRAPH BELONGS ONCE SOMEBODY HAS SAID SO.
+
+   The correction panel has been storing these decisions since the orphan
+   screen shipped, and nothing downstream read them. A photograph filed against
+   inspection point 4C went on being listed under the keyless row it arrived
+   on, and the report - which asks each item for its own pictures - printed it
+   nowhere at all. The decision was recorded, audited, synced, and had no
+   effect on anything anybody looks at.
+
+   So the re-file happens HERE, in the one function every screen and the report
+   both go through, rather than in the report alone. Two places deciding where
+   a photograph lives is two places that come to disagree, and the history
+   screen and the PDF disagreeing about which component a picture shows is
+   worse than either being wrong on its own.
+
+   Four decisions, all keyed by file name:
+
+     point    it belongs to that inspection point - listed and printed there
+     general  it belongs to the machine, not to any one component
+     exclude  it stays on the record and does not print
+     off      it is off the record entirely (it.hidden, which predates this)
+
+   `exclude` and `off` are different answers to different questions, and the
+   panel used to offer only the second while labelling it ambiguously. A
+   blurred duplicate should not reach a signed PDF; that is not the same as
+   saying it was never part of the inspection. */
+let assignEpoch=0;                                  // bumped when a decision changes
+const assignPlans=new Map();
+function assignPlan(rec){
+  const rk=ekOf(rec);
+  const hit=assignPlans.get(rk);
+  if(hit && hit.epoch===assignEpoch) return hit;
+  const a=assignsFor(rk);
+  const plan={ epoch:assignEpoch, moved:new Set(), excluded:new Map(),
+               toPoint:new Map(), general:[] };
+  if(Object.keys(a).length){
+    (rec.items||[]).forEach(i=>{
+      /* mediaAll, never mediaOf - this is what mediaOf is being built out of. */
+      mediaAll(i,rec).forEach(m=>{
+        const d=a[m.name]; if(!d) return;
+        if(d.exclude) plan.excluded.set(m.name, d);
+        if(d.general){ plan.moved.add(m.name); plan.general.push(Object.assign({},m,{from:i.key})); }
+        else if(d.point && d.point!==i.key){
+          plan.moved.add(m.name);
+          const l=plan.toPoint.get(d.point)||[]; l.push(m); plan.toPoint.set(d.point,l);
+        }
+      });
+    });
+  }
+  assignPlans.set(rk,plan);
+  return plan;
+}
 function mediaOf(it,rec,withHidden){
   const hid=hiddenSet(it);
-  const all=mediaAll(it,rec);
-  all.forEach(m=>{ m.hidden=hid.has(m.name); });
+  const plan=assignPlan(rec);
+  /* Off this item because somebody filed it somewhere else. */
+  const mine=mediaAll(it,rec).filter(m=>!plan.moved.has(m.name));
+  /* On to this item for the same reason, and not twice. */
+  const here=new Set(mine.map(m=>m.name));
+  const come=(it&&it.key&&plan.toPoint.get(it.key)||[]).filter(m=>!here.has(m.name));
+  const all=mine.concat(come);
+  all.forEach(m=>{
+    m.hidden=hid.has(m.name);
+    /* Kept on the record and out of the report. The history screen still shows
+       it - excluding is a statement about the PDF, not about the evidence -
+       so this is a flag rather than a removal, and only the report reads it. */
+    const ex=plan.excluded.get(m.name);
+    m.excluded=!!ex;
+    m.excludeWhy=(ex&&ex.why)||"";
+  });
   return withHidden ? all : all.filter(m=>!m.hidden);
+}
+/* Photographs that belong to the inspection rather than to any one component.
+   They have no item to be listed under, so without this they would simply
+   vanish from every screen the moment somebody classified them - the exact
+   failure the classification exists to prevent. */
+function generalMedia(rec){
+  const plan=assignPlan(rec);
+  const hid=new Set();
+  (rec.items||[]).forEach(i=>hiddenSet(i).forEach(n=>hid.add(n)));
+  return plan.general.filter(m=>!hid.has(m.name)).map(m=>{
+    const ex=plan.excluded.get(m.name);
+    return Object.assign({},m,{excluded:!!ex, excludeWhy:(ex&&ex.why)||""});
+  });
+}
+/* HOW MANY PHOTOGRAPHS THIS INSPECTION SAYS IT HAS AND THIS DASHBOARD HAS NOT.
+
+   Expected is a claim the phone made; received is a file somebody can open.
+   They were one number once, and a report that silently prints four pictures
+   where six were taken tells a reader nothing is missing. */
+function evidenceGap(rec){
+  let expected=0, received=0;
+  (rec.items||[]).forEach(i=>{
+    const n=window.CMNorm ? CMNorm.explain(i).photos : 0;
+    expected+=n;
+    received+=mediaAll(i,rec).filter(m=>m.kind!=="video").length;
+  });
+  return { expected, received, missing:Math.max(0, expected-received) };
 }
 function mediaAll(it,rec){
   const out=[], seen=new Set();
@@ -5807,7 +5959,7 @@ function photoSrc(it,rec){ const m=mediaOf(it,rec); return m.length?m[0].src:nul
 /* Bridge for drive.js — RECS, imported and folderPhotos are `let`s in this script,
    so they are not reachable as window properties from another file. */
 window.CMDash={
-  photoBase, photoNames, videoNames, mediaOf,
+  photoBase, photoNames, videoNames, mediaOf, generalMedia, evidenceGap,
   addPhoto(name,url){ (folderPhotos ||= {})[name]=url; },
   importRecords(recs){
     recs.forEach(r=>{ const k=`${r.equip}|${r.date}|${r.type}`;
@@ -5862,6 +6014,7 @@ window.CMDash={
         if(!("move" in e) && keep.move) e.move=keep.move;
         edits[e.key]=e;
       } });
+    assignEpoch++;                 // a decision may have changed under the cache
     saveEdits(); rebuild(); refreshControls(); renderAll(); refreshSources();
   },
   editCount(){ return Object.keys(edits).length; },
@@ -6290,7 +6443,8 @@ function renderHistory(){
             <button class="mtog" type="button" title="${esc(t("ph_edit"))}" aria-label="${esc(t("ph_edit"))}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true" style="width:12px;height:12px;vertical-align:-2px"><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="m4.5 17 4.8-4.3 3.4 3 2.6-2.2 4.2 3.5"/></svg> ${shown.length}</button>
             <div class="mpanel hidden">
               <div class="mlist">${shown.map(m=>`
-                <span class="mitem${m.hidden?" off":""}">
+                <span class="mitem${m.hidden?" off":""}${m.excluded?" nrpt":""}"
+                      title="${esc(m.excluded?t("px_excluded")+(m.excludeWhy?" \u2014 "+m.excludeWhy:""):m.name)}">
                   ${m.kind==="video"?`<video preload="metadata" src="${esc(m.src)}"></video>`
                                     :`<img loading="lazy" src="${esc(m.src)}" alt="">`}
                   <button type="button" class="mx" data-name="${esc(m.name)}" data-on="${m.hidden?"0":"1"}"
@@ -6298,6 +6452,12 @@ function renderHistory(){
                 </span>`).join("")||`<span class="muted" style="font-size:11.5px">${esc(t("ph_none"))}</span>`}
                 <label class="madd" title="${esc(t("ph_add"))}">+
                   <input type="file" accept="image/*,video/*" multiple hidden></label>
+              </div>
+              <div class="mwhy hidden">
+                <input type="text" class="mwhyi" placeholder="${esc(t("px_off_ph"))}"
+                       aria-label="${esc(t("px_why"))}">
+                <button type="button" class="btn mgo">${esc(t("px_off_go"))}</button>
+                <button type="button" class="btn mno">${esc(t("px_cancel"))}</button>
               </div>
               <div class="mmsg"></div>
             </div>
@@ -6820,7 +6980,7 @@ function mediaWho(){
 }
 /* Layer over whatever the sidecar already says for this record, exactly as the
    correction panel does — a media change must not drop an earlier severity fix. */
-function mediaEditPost(rk, ik, hidden, msgEl){
+function mediaEditPost(rk, ik, hidden, msgEl, name, why){
   const by=mediaWho();
   if(!by){ if(msgEl) msgEl.textContent=t("ed_needname"); return; }
   const prior=(edits[rk]&&edits[rk].items)||{};
@@ -6829,11 +6989,23 @@ function mediaEditPost(rk, ik, hidden, msgEl){
   const at=new Date().toISOString();
   const before=edits[rk] ? JSON.parse(JSON.stringify(edits[rk])) : null;
   const keep=edits[rk]||{};
-  window.CMDash.setEdits([{ key:rk, by, at, void:!!keep.void, reason:keep.reason||"",
-                            note:keep.note||"", items }]);
+  /* `hidden` stays the one authority on whether a photograph is on the record.
+     The reason rides beside it rather than instead of it, so nothing that
+     already reads `hidden` has to learn a second place to look. */
+  const asg=Object.assign({}, keep[ASSIGN_KEY]||{});
+  if(name){
+    const had=asg[name]||{};
+    asg[name] = why ? Object.assign({}, had, {off:1, offWhy:why, by, at})
+                    : (()=>{ const n2=Object.assign({},had); delete n2.off; delete n2.offWhy;
+                             n2.by=by; n2.at=at; return n2; })();
+  }
+  const doc={ key:rk, by, at, void:!!keep.void, reason:keep.reason||"",
+              note:keep.note||"", items, fields:keep.fields||{}, [ASSIGN_KEY]:asg };
+  window.CMDash.setEdits([doc]);
   if(msgEl) msgEl.textContent=t("ed_sending");
   window.CMDrive.saveEdit({ key:rk, by, void:!!keep.void, reason:keep.reason||"",
-                            note:keep.note||"", items })
+                            note:keep.note||"", items, fields:keep.fields||{},
+                            [ASSIGN_KEY]:asg })
     .then(()=>{ if(msgEl) msgEl.textContent=t("ed_saved"); })
     .catch(err=>{
       if(before) edits[rk]=before; else delete edits[rk];
@@ -6862,12 +7034,44 @@ function wireMediaEdit(){
     const rk=box.dataset.rk, ik=box.dataset.ik;
     const panel=box.querySelector(".mpanel"), msg=box.querySelector(".mmsg");
     box.querySelector(".mtog").onclick=()=>panel.classList.toggle("hidden");
+    /* TAKING FIELD EVIDENCE OFF THE RECORD ASKS TWICE AND ASKS WHY.
+
+       This was one click. It removed the photograph from every screen and
+       every report, kept no reason, and asked nobody to confirm — on a
+       dashboard whose entire subject is evidence somebody stood in front of a
+       machine at −40 to collect.
+
+       Putting it BACK stays one click. Restoring a photograph costs nothing
+       and needs no defence, and a confirmation on the harmless direction is
+       how people learn to click through the one that matters. */
+    const whyBox=box.querySelector(".mwhy"), whyIn=box.querySelector(".mwhyi");
+    let armed=null;
+    const disarm=()=>{ armed=null; whyBox.classList.add("hidden"); whyIn.value=""; };
+    const commit=()=>{
+      if(!armed) return;
+      const why=whyIn.value.trim();
+      if(!why){ msg.textContent=t("px_off_need"); whyIn.focus(); return; }
+      const rec=RECS.find(r=>ekOf(r)===rk); if(!rec) return;
+      const it=(rec.items||[]).find(x=>x.key===ik); if(!it) return;
+      const cur=hiddenSet(it); cur.add(armed);
+      const nm=armed; disarm();
+      mediaEditPost(rk, ik, [...cur], msg, nm, why);
+      saveEdits(); rebuild(); refreshControls(); renderHistory();
+    };
+    box.querySelector(".mgo").onclick=commit;
+    box.querySelector(".mno").onclick=()=>{ disarm(); msg.textContent=""; };
+    whyIn.onkeydown=e=>{ if(e.key==="Enter"){ e.preventDefault(); commit(); } };
     box.querySelectorAll(".mx").forEach(b=>b.onclick=()=>{
       const rec=RECS.find(r=>ekOf(r)===rk); if(!rec) return;
       const it=(rec.items||[]).find(x=>x.key===ik); if(!it) return;
-      const cur=hiddenSet(it);
-      if(b.dataset.on==="1") cur.add(b.dataset.name); else cur.delete(b.dataset.name);
-      mediaEditPost(rk, ik, [...cur], msg);
+      const nm=b.dataset.name;
+      if(b.dataset.on==="1"){
+        armed=nm; whyBox.classList.remove("hidden");
+        msg.textContent=t("px_off_hint"); whyIn.focus();
+        return;
+      }
+      const cur=hiddenSet(it); cur.delete(nm);
+      mediaEditPost(rk, ik, [...cur], msg, nm, "");
       saveEdits(); rebuild(); refreshControls(); renderHistory();
     });
     const inp=box.querySelector(".madd input");
@@ -7209,7 +7413,19 @@ function orphanPhotos(rec){
   const rk=ekOf(rec), a=assignsFor(rk), out=[];
   (rec.items||[]).forEach(i=>{
     if(!i || !i._needsPoint) return;
-    const med=mediaOf(i,rec);
+    /* mediaAll, deliberately, not mediaOf. mediaOf now MOVES a photograph off
+       the keyless row the moment somebody files it against a point - which is
+       the whole point of filing it, and which would take it straight out of
+       this panel. The engineer would press Assign, watch four photographs
+       disappear, and have no way to see what they had done or to correct a
+       wrong choice: a real action rendered as nothing, from the other side.
+
+       This panel is the one place that must go on seeing a photograph AFTER
+       it has been filed, because this panel is where the filing happened. A
+       photograph taken off the record entirely is different - that is not a
+       decision waiting to be made - so `hidden` still applies. */
+    const hid=hiddenSet(i);
+    const med=mediaAll(i,rec).filter(m=>!hid.has(m.name));
     if(med.length){ med.forEach(m=>out.push({name:m.name, src:m.src, it:i, a:a[m.name]||null})); return; }
     /* The count says photographs exist but the files have not reached this
        dashboard. Show them as rows without a thumbnail rather than pretending
@@ -8408,6 +8624,7 @@ function pxOpenPanel(){
   $("pxStrV").textContent=(pxDraft.straighten||0)+"°";
   $("pxCap").value=pxDraft.caption||"";
   $("pxPref").checked=!!pxDraft.preferred;
+  pxDispLoad();
   $("pxRatio").value=pxDraft.crop?(pxDraft.crop.ratio||"free"):"";
   const busy=pxPending();
   ["pxRotL","pxRotR","pxStr","pxRatio","pxCap","pxPref","pxSave"].forEach(id=>{
@@ -8431,6 +8648,80 @@ function pxOpenPanel(){
    zoom, takes the draft back to the stored recipe, and repaints from that —
    which is the only rendition that is true after the panel closes, whichever
    button closed it. */
+/* THE PHOTOGRAPH'S STANDING, AS OPPOSED TO ITS APPEARANCE.
+
+   Everything else in this panel is a recipe: a crop, a rotation, a caption -
+   how the picture is PRESENTED. These two say what it is FOR, and they are
+   stored where every other per-photograph decision already lives, keyed by
+   file name on the correction sidecar, so the report and the orphan panel read
+   one answer rather than two. */
+function pxDisp(){
+  if(!lbCtx) return {};
+  const a=assignsFor(lbCtx.rk)[pxKey(lbCtx.name)];
+  return a||{};
+}
+function pxDispLoad(){
+  const d=pxDisp();
+  $("pxUse").value=d.exclude?"0":"1";
+  $("pxWhy").value=d.why||"";
+  pxWhyShow();
+  pxOffArm(false);
+}
+function pxWhyShow(){
+  $("pxWhyWrap").classList.toggle("hidden", $("pxUse").value!=="0");
+}
+$("pxUse").onchange=()=>{ pxWhyShow(); if($("pxUse").value==="0") $("pxWhy").focus(); };
+/* Pressed once it arms and says what it will do; pressed again it does it.
+   No reason, no second press - a control that destroys nothing is still a
+   control that removes field evidence from every screen somebody plans from. */
+let pxOffReady=false;
+function pxOffArm(on){
+  pxOffReady=!!on;
+  const b=$("pxOff");
+  b.classList.toggle("armed", pxOffReady);
+  b.textContent = pxOffReady ? t("px_off_go") : t("px_off");
+  if(pxOffReady){ $("pxWhyWrap").classList.remove("hidden");
+                  $("pxWhy").placeholder=t("px_off_ph"); }
+  else $("pxWhy").placeholder=t("px_why_ph");
+}
+$("pxOff").onclick=()=>{
+  if(!lbCtx) return;
+  const msg=$("pxMsg");
+  if(!pxOffReady){ pxOffArm(true); msg.textContent=t("px_off_hint"); $("pxWhy").focus(); return; }
+  const why=$("pxWhy").value.trim();
+  if(!why){ msg.textContent=t("px_off_need"); $("pxWhy").focus(); return; }
+  const by=mediaWho(); if(!by){ msg.textContent=t("ed_needname"); return; }
+  if(!drvOn()){ msg.textContent=t("ed_needdrive"); return; }
+  const rk=lbCtx.rk, ik=lbCtx.ik, name=pxKey(lbCtx.name);
+  const rec=RECS.find(r=>ekOf(r)===rk);
+  const it=rec&&(rec.items||[]).find(x=>x.key===ik);
+  const cur=hiddenSet(it||{}); cur.add(name);
+  const keep=edits[rk]||{};
+  const prior=(keep.items)||{};
+  const items={}; Object.keys(prior).forEach(k=>items[k]=Object.assign({},prior[k]));
+  items[ik]=Object.assign({}, items[ik]||{}, { hidden:[...cur] });
+  /* The reason rides beside the decision, never instead of it: `hidden` stays
+     the one authority on whether a photograph is on the record, because every
+     screen and both backends already read it. */
+  const now=Object.assign({}, keep[ASSIGN_KEY]||{});
+  const at=new Date().toISOString();
+  now[name]=Object.assign({}, now[name]||{}, { off:1, offWhy:why, by, at });
+  const doc={ key:rk, by, at, void:!!keep.void, reason:keep.reason||"",
+              note:keep.note||"", items, fields:keep.fields||{},
+              media:keep.media||{}, [ASSIGN_KEY]:now };
+  const before=edits[rk]?JSON.parse(JSON.stringify(edits[rk])):null;
+  window.CMDash.setEdits([doc]);
+  msg.textContent=t("ed_sending");
+  window.CMDrive.saveEdit(doc)
+    .then(()=>{ msg.textContent=t("px_off_done");
+                setTimeout(()=>{ pxClosePanel(); lbClose(); renderHistory(); }, 700); })
+    .catch(err=>{
+      if(before) edits[rk]=before; else delete edits[rk];
+      assignEpoch++; saveEdits(); rebuild(); refreshControls(); renderAll();
+      msg.textContent=t("ed_undone",{e:(err&&err.message)||err});
+      pxOffArm(false);
+    });
+};
 function pxClosePanel(){
   $("pxPanel").classList.add("hidden");
   $("lb").classList.remove("editing"); $("lb").classList.remove("cropping");
@@ -8715,13 +9006,25 @@ $("pxSave").onclick=()=>{
   const keep=edits[rk]||{};
   const before=edits[rk] ? JSON.parse(JSON.stringify(edits[rk])) : null;
   const at=new Date().toISOString();
+  /* One press, both kinds of decision. Splitting them would mean an engineer
+     who crops a frame and excludes it in the same breath has to press Save and
+     then something else, and the something else is what gets forgotten. */
+  const out=$("pxUse").value==="0", why=$("pxWhy").value.trim();
+  if(out && !why){ $("pxMsg").textContent=t("px_why_need"); $("pxWhy").focus(); return; }
+  const asg=Object.assign({}, keep[ASSIGN_KEY]||{});
+  const had=asg[name]||{};
+  if(out) asg[name]=Object.assign({}, had, {exclude:1, why, by, at});
+  else if(had.exclude){ const n2=Object.assign({}, had); delete n2.exclude; delete n2.why;
+                        n2.by=by; n2.at=at; asg[name]=n2; }
   const doc={ key:rk, by, at, void:!!keep.void, reason:keep.reason||"",
-              note:keep.note||"", items:keep.items||{}, media };
+              note:keep.note||"", items:keep.items||{}, media,
+              fields:keep.fields||{}, [ASSIGN_KEY]:asg };
   window.CMDash.setEdits([doc]);
   saveEdits(); rebuild(); refreshControls(); renderAll();
   $("pxMsg").textContent=t("ed_sending");
   window.CMDrive.saveEdit({ key:rk, by, void:!!keep.void, reason:keep.reason||"",
-                            note:keep.note||"", items:keep.items||{}, media })
+                            note:keep.note||"", items:keep.items||{}, media,
+                            fields:keep.fields||{}, [ASSIGN_KEY]:asg })
     .then(()=>{ $("pxMsg").textContent=t("ed_saved");
                 pxRecipe=pxGet(rk,name); pxDraft=pxNorm(pxRecipe); pxWipe=false;
                 /* Repaint here as well as on close: the panel stays up for
@@ -11205,8 +11508,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=174"></script>
-<script src="sync-adapter.js?v=174"></script>
-<script src="report.js?v=174"></script>
+<script src="drive.js?v=175"></script>
+<script src="sync-adapter.js?v=175"></script>
+<script src="report.js?v=175"></script>
 </body>
 </html>

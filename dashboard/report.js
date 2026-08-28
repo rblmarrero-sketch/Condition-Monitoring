@@ -69,8 +69,16 @@
       /* Stills only: a PDF cannot play a clip, and a black frame with no way
          to press anything is worse than leaving it out. The history screen is
          where a video is watched. */
-      const out = med.filter(m => m.kind !== "video").map(m => m.src);
-      if (out.length) return out;
+      /* Excluded is a decision about the PDF and only about the PDF: the
+         photograph stays on the record and stays on the history screen. This
+         is the only reader of that flag, which is why it is a flag rather
+         than a removal. */
+      /* mediaAll already covers it.photo, so mediaOf is the WHOLE answer for
+         this item - including the ones it removed because somebody filed them
+         against another point, kept them as general evidence, or took them off
+         the record. Falling through to it.photo below undid every one of those
+         decisions: a photograph re-filed to 4D went on printing under 4C. */
+      return med.filter(m => m.kind !== "video" && !m.excluded).map(m => m.src);
     }
     // a record that carries its own URL (Drive, or an import that inlined it)
     if (it.photo) {
@@ -253,6 +261,19 @@
       ...(() => { const m = reportMap(rec, (opts && opts.art && opts.art[rec.equip + "|" + rec.type]) || "");
                   return { mapHTML: m.html, mapKey: m.key }; })(),
       zones: rec.type === "TB" ? bodyZones(rec) : null,
+      /* EVIDENCE THAT BELONGS TO THE MACHINE, NOT TO A COMPONENT.
+
+         A photograph of the plate, the whole machine, the ground under it -
+         filed as general evidence in the correction panel because it answers
+         no single inspection point. It has no item to be printed under, so
+         until now classifying one removed it from the report entirely. */
+      general: wantPhotos && window.CMDash && CMDash.generalMedia
+        ? CMDash.generalMedia(rec).filter(m => m.kind !== "video" && !m.excluded).map(m => m.src)
+        : [],
+      /* What this inspection says it photographed, against what actually
+         reached this dashboard. A report that prints four pictures where six
+         were taken, and says nothing, reads as complete. */
+      gap: (window.CMDash && CMDash.evidenceGap ? CMDash.evidenceGap(rec) : null),
       wear: typeof isWearType === "function" && isWearType(rec.type),
       temp: rec.type === "TEMP",
       items: (rec.items || []).map(it => {

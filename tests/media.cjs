@@ -100,9 +100,23 @@ const state = () => ({
   ok('and steps through', /5 \/ 11/.test(await p.evaluate(() => $('lbcap').textContent)));
   await p.keyboard.press('Escape'); await p.waitForTimeout(200);
 
-  console.log('\nthe office takes one down');
+  console.log('\nthe office takes one down — and has to say why');
   await p.click('#history .medit .mtog'); await p.waitForTimeout(200);
-  await p.click('#history .medit .mitem:nth-child(2) .mx'); await p.waitForTimeout(700);
+  await p.click('#history .medit .mitem:nth-child(2) .mx'); await p.waitForTimeout(400);
+  /* One click used to remove field evidence outright: no reason, no
+     confirmation, nothing in the audit trail beyond a file name. It now arms
+     and asks, and the photograph is still on the card while it does. */
+  s = await p.evaluate(state);
+  ok('the first press removes nothing', s.strip === 11, s.strip + ' still shown');
+  ok('it asks for a reason instead',
+     await p.evaluate(() => !$('history').querySelector('.medit .mwhy').classList.contains('hidden')));
+  await p.click('#history .medit .mgo'); await p.waitForTimeout(500);
+  s = await p.evaluate(state);
+  ok('and will not proceed on an empty one', s.strip === 11, s.strip + ' still shown');
+  ok('saying so rather than doing nothing quietly',
+     /\S/.test(await p.evaluate(() => $('history').querySelector('.medit .mmsg').textContent)));
+  await p.fill('#history .medit .mwhyi', 'thumb over the lens');
+  await p.click('#history .medit .mgo'); await p.waitForTimeout(700);
   s = await p.evaluate(state);
   ok('it stops being shown', s.strip === 10, s.strip + ' left');
   ok('the count follows', s.badge === '10', s.badge);
@@ -119,8 +133,17 @@ const state = () => ({
      !!(w[0] && w[0].items['4C'] && w[0].items['4C'].hidden || []).length &&
      w[0].items['4C'].hidden[0] === BASE + '_2.jpg',
      JSON.stringify(w[0] && w[0].items));
+  /* The reason is the point of asking for one. It has to reach the sidecar,
+     keyed by the file it is about, with the name and the moment beside it —
+     otherwise this is a confirmation dialogue and not an audit trail. */
+  const aud = await p.evaluate(() => (window.__writes.filter(x => x[0] === 'edit').pop() || [])[1]);
+  const rec2 = aud && aud.assign && aud.assign[BASE + '_2.jpg'];
+  ok('the reason is stored against that photograph',
+     !!rec2 && rec2.off === 1 && rec2.offWhy === 'thumb over the lens',
+     JSON.stringify(rec2));
+  ok('with who and when', !!(rec2 && rec2.by && rec2.at), JSON.stringify(rec2 && [rec2.by, rec2.at]));
 
-  console.log('\nand can put it back');
+  console.log('\nand can put it back — in one press, because that costs nothing');
   await p.click('#history .medit .mtog'); await p.waitForTimeout(200);
   await p.click('#history .medit .mitem.off .mx'); await p.waitForTimeout(700);
   s = await p.evaluate(state);

@@ -387,6 +387,20 @@
 #rptRoot .shots img{width:150px;height:112px;object-fit:cover;border-radius:3px;
   border:1px solid #dfe4e9;display:block;}
 #rptRoot .shots figcaption{font-size:8.5px;color:#5b6670;margin-top:3px;line-height:1.3;}
+/* General evidence: the same size and rhythm as the point galleries, so a
+   reader does not read "different size" as "different importance". */
+#rptRoot .genrow{display:flex;flex-wrap:wrap;gap:8px;}
+#rptRoot .genrow figure{width:176px;margin:0;}
+#rptRoot .genrow img{width:176px;height:132px;object-fit:cover;border-radius:3px;
+  border:1px solid #dfe4e9;display:block;}
+#rptRoot .genwhy{font-size:8.5px;color:#5b6670;margin-top:5px;line-height:1.35;}
+/* Said plainly and without alarm. A missing file is a synchronisation problem,
+   and a reader who cannot tell that from a bad measurement will distrust the
+   measurements too. */
+#rptRoot .evgap{font-size:9px;line-height:1.45;color:#5b6670;padding:6px 9px;
+  border:1px solid #dfe4e9;border-left:3px solid #b9c2c9;border-radius:3px;
+  background:#f6f8f9;}
+#rptRoot .evgap b{color:#3d474f;}
 
 #rptRoot .sign{display:flex;gap:34px;align-items:flex-end;}
 #rptRoot .sign > div{min-width:210px;}
@@ -596,6 +610,11 @@
       uc_cause:"normal service wear unless noted",
       map_t:"Where the wear is", map_na:"Not measured",
       meas_t:"Undercarriage measurements", photos:"Photographs",
+      /* Filed against the machine rather than against a component. */
+      gen_t:"General evidence",
+      gen_sub:"Photographs of the machine or its surroundings, recorded during this round and not tied to a single inspection point.",
+      ev_gap_t:"Evidence incomplete.",
+      ev_gap:"{n} of {e} photograph(s) taken on this round have not reached the office, so they are not printed here. The readings, condition and actions above are unaffected and still stand.",
       by_who:"Inspected by", sup:"Verified by", nosign:"not signed off",
       gps:"Location", none_att:"None flagged.",
       legend:"How to read this report",
@@ -680,6 +699,10 @@
       uc_cause:"обычный эксплуатационный износ, если не указано иное",
       map_t:"Где износ", map_na:"Не измерено",
       meas_t:"Замеры ходовой части", photos:"Фотографии",
+      gen_t:"Общий фотоматериал",
+      gen_sub:"Фотографии машины или места работ, сделанные во время осмотра и не привязанные к отдельной точке.",
+      ev_gap_t:"Фотоматериал неполный.",
+      ev_gap:"Из {e} сделанных на этом осмотре фотографий {n} не дошли до офиса и здесь не приводятся. На замеры, оценку состояния и назначенные действия выше это не влияет.",
       by_who:"Осмотр выполнил", sup:"Проверил", nosign:"не подписано",
       gps:"Координаты", none_att:"Не отмечено.",
       legend:"Как читать этот отчёт",
@@ -1413,6 +1436,45 @@
      the positions across, the photograph at the top of each, what was found
      underneath. No cover, no work list, no legend: the reader already knows
      which machine and why they opened it. */
+  /* TWO FACTS ABOUT A ROUND'S PHOTOGRAPHS THAT NO INSPECTION POINT CAN CARRY.
+
+     General evidence is a photograph filed against the MACHINE - the plate,
+     the whole unit, the ground under it - because it answers no single point.
+     A report built entirely out of points had nowhere to put one, so
+     classifying it in the office took it out of the document altogether: a
+     decision that was meant to file a photograph deleted it from the reader's
+     view instead.
+
+     The gap is the other half. Expected is a claim the phone made about how
+     many photographs were taken; received is a file somebody can open. A
+     report that prints four where six were taken, and says nothing, reads as
+     complete - so it says so, and says plainly that the readings and findings
+     are unaffected, because a missing file is a synchronisation problem and a
+     reader who cannot tell those apart will distrust the measurements too.
+
+     One function, called at every exit from a sheet. Every round type ends its
+     own way - lube returns early, a graded round returns early, a wear round
+     runs to the bottom - and a block written into only one of those branches
+     reaches only one kind of round, which is exactly what happened first. */
+  function evidenceSections(T, rec) {
+    var out = [];
+    if ((rec.general || []).length) {
+      out.push({ nb: false, html: '<div class="sec">'
+        + '<div class="subhd">' + T.I("gen_t") + '</div>'
+        + '<div class="genrow">'
+        + rec.general.map(function (u) {
+            return '<figure><img src="' + esc(u) + '" alt=""></figure>'; }).join("")
+        + '</div>'
+        + '<div class="genwhy">' + T.I("gen_sub") + '</div></div>' });
+    }
+    if (rec.gap && rec.gap.missing > 0) {
+      out.push({ nb: false, html: '<div class="sec"><div class="evgap">'
+        + '<b>' + T.I("ev_gap_t") + '</b> '
+        + esc(T.I("ev_gap", { n: rec.gap.missing, e: rec.gap.expected, r: rec.gap.received }))
+        + '</div></div>' });
+    }
+    return out;
+  }
   function unitSheets(ctx, T, recs) {
     var secs = [];
     /* One full sheet per inspection TYPE, not per round.
@@ -1539,6 +1601,7 @@
       if (!isWear && isLube) {
         secs.push({ nb: n > 0, html: '<div class="sec">' + head + body + '</div>' });
         lubeSections(ctx, T, rec, sign).forEach(function (x) { secs.push(x); });
+        evidenceSections(T, rec).forEach(function (x) { secs.push(x); });
         return;
       }
       /* A round with nothing to measure is one page: masthead, board, names.
@@ -1560,6 +1623,7 @@
         secs.push({ nb: n > 0, html: '<div class="sec">' + head + body
           + (oneMap ? "" : sign) + '</div>' });
         if (oneMap) secs.push({ nb: false, html: '<div class="sec">' + oneMap + sign + '</div>' });
+        evidenceSections(T, rec).forEach(function (x) { secs.push(x); });
         return;
       }
 
@@ -1601,6 +1665,7 @@
           + '<div class="board gal b' + (ph.length >= 2 ? 2 : 1) + '">'
           + ph.map(function (it) { return cell(ctx, T, it, null, true); }).join("") + '</div></div>' });
       }
+      evidenceSections(T, rec).forEach(function (x) { secs.push(x); });
     });
 
     if (older.length) {
@@ -2259,6 +2324,21 @@
         shots.forEach(function(s){ ph+='<figure><img src="'+s.u+'"><figcaption>'
           + esc(s.it.name||s.it.key)+'</figcaption></figure>'; });
         extra.push({nb:false, html:ph+'</div></div></div>'});
+      }
+      /* The fleet path prints one block per round too, so the same two facts
+         belong here. A general photograph that appears in the unit report and
+         vanishes from the fleet one is two documents disagreeing about the
+         same inspection. */
+      if((rec.general||[]).length){
+        var gp=cont+'<div class="subhd" style="margin-top:11px;">'+T.I("gen_t")+'</div><div class="shots">';
+        rec.general.forEach(function(u){ gp+='<figure><img src="'+esc(u)+'"></figure>'; });
+        extra.push({nb:false, html:gp+'</div></div></div>'});
+      }
+      if(rec.gap && rec.gap.missing>0){
+        extra.push({nb:false, html:cont+'<div class="evgap" style="margin-top:11px;"><b>'
+          +T.I("ev_gap_t")+'</b> '
+          +esc(T.I("ev_gap",{n:rec.gap.missing, e:rec.gap.expected, r:rec.gap.received}))
+          +'</div></div></div>'});
       }
 
       var sign = '<div class="hair" style="margin:15px 0 11px;"></div><div class="sign">'
