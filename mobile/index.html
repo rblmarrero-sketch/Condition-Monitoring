@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=184">
+<link rel="manifest" href="manifest.webmanifest?v=185">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=184">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=184">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=184">
+<link rel="apple-touch-icon" href="icon-192.png?v=185">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=185">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=185">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1257,6 +1257,10 @@
      they take the quiet border rather than the red one — the reason underneath
      is the part worth reading. */
   .dueitem.put{border-left-color:var(--ink-2);} .dueitem.off{border-left-color:var(--muted);}
+  .findbox{width:100%;box-sizing:border-box;margin:0 0 8px;padding:9px 11px;
+    border:1px solid var(--border);border-radius:9px;background:var(--surface-2);
+    color:var(--ink);font-size:var(--t-body);font-family:inherit;}
+  .findbox:focus{outline:none;border-color:var(--accent);}
   /* Never done is not overdue and not due soon — it is a machine with no
      record at all, and it must not borrow either colour. Dashed, because the
      bar is standing in for a history that is not there. */
@@ -1734,6 +1738,20 @@
          control that filters to it, so "how bad is it" and "show me" are the
          same glance and the same tap. A state nobody is in gets no pill: a
          control that leads to an empty list is a control that lies. -->
+    <!-- ONE MACHINE, ASKED DIRECTLY.
+
+         "Never done" can be three hundred rows, and there has never been a way
+         to ask this screen about a single machine — which is the question
+         somebody actually has. "Is CR006 outstanding?" took scrolling three
+         hundred rows across four scopes, so in practice it was unanswerable
+         and the answer got guessed at instead.
+
+         A search bypasses the scope pills on purpose. Filtering a search by
+         the state you happened to be looking at is how a machine that IS on
+         the list comes back as "not found". -->
+    <input id="dueFind" class="findbox" type="search" inputmode="search"
+           data-i18n-ph="due_find" placeholder="Find a machine — CR006, DZ003…">
+    <div class="quiet hidden" id="dueFindMsg" style="margin:-2px 0 8px"></div>
     <div class="tfilter dfilter" id="dueScopeF"></div>
     <div class="tfilter dfilter tfrounds" id="dueTypeF"></div>
     <div class="quiet" id="dueBasis" style="margin:-4px 0 10px"></div>
@@ -1948,31 +1966,31 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=184"></script>
-<script src="upload-defaults.js?v=184"></script>
-<script src="hme.js?v=184"></script>
-<script src="mp-fc.js?v=184"></script>
-<script src="hme-cascade.js?v=184"></script>
-<script src="assets.js?v=184"></script>
-<script src="temp-limits.js?v=184"></script>
-<script src="normalize.js?v=184"></script>
-<script src="due.js?v=184"></script>
-<script src="wear.js?v=184"></script>
-<script src="wear-figs.js?v=184"></script>
-<script src="wear-map.js?v=184"></script>
-<script src="machine-photos.js?v=184"></script>
-<script src="machine-fig.js?v=184"></script>
-<script src="get.js?v=184"></script>
-<script src="points.js?v=184"></script>
-<script src="uc-points.js?v=184"></script>
-<script src="inspect-guide.js?v=184"></script>
-<script src="get-figs.js?v=184"></script>
-<script src="body-points.js?v=184"></script>
-<script src="body-map.js?v=184"></script>
-<script src="lube.js?v=184"></script>
-<script src="lube-overrides.js?v=184"></script>
-<script src="lube2027.js?v=184"></script>
-<script src="report-core.js?v=184"></script>
+<script src="native.js?v=185"></script>
+<script src="upload-defaults.js?v=185"></script>
+<script src="hme.js?v=185"></script>
+<script src="mp-fc.js?v=185"></script>
+<script src="hme-cascade.js?v=185"></script>
+<script src="assets.js?v=185"></script>
+<script src="temp-limits.js?v=185"></script>
+<script src="normalize.js?v=185"></script>
+<script src="due.js?v=185"></script>
+<script src="wear.js?v=185"></script>
+<script src="wear-figs.js?v=185"></script>
+<script src="wear-map.js?v=185"></script>
+<script src="machine-photos.js?v=185"></script>
+<script src="machine-fig.js?v=185"></script>
+<script src="get.js?v=185"></script>
+<script src="points.js?v=185"></script>
+<script src="uc-points.js?v=185"></script>
+<script src="inspect-guide.js?v=185"></script>
+<script src="get-figs.js?v=185"></script>
+<script src="body-points.js?v=185"></script>
+<script src="body-map.js?v=185"></script>
+<script src="lube.js?v=185"></script>
+<script src="lube-overrides.js?v=185"></script>
+<script src="lube2027.js?v=185"></script>
+<script src="report-core.js?v=185"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2346,6 +2364,10 @@ const I18N = {
     due_never_p:"Never done",
     due_more:"+{n} more — narrow by round to see them",
     due_stray:"⚠ {n} of these dates are not in the system — loaded from a file, or left from an older sync",
+    due_find:"Find a machine — CR006, DZ003…",
+    due_found:"{n} row(s) for “{q}” — every round, whatever its state",
+    due_none_found:"Nothing scheduled for “{q}”. It is in the register — no round has ever been walked on this kind of machine, so none is proposed.",
+    due_reg_row:"in the register · no round proposed · tap to start one",
     btn_due_only:"Keep only what the system has",
     due_only_go:"Dropped {n}. Now {m} machines, all from the system.",
     due_only_none:"Nothing to drop — every date here came from the system or from this phone.",
@@ -2809,6 +2831,10 @@ const I18N = {
     due_never_p:"Ни разу",
     due_more:"ещё {n} — выберите тип осмотра, чтобы увидеть",
     due_stray:"⚠ {n} из этих дат нет в системе — загружены из файла или остались от прежней синхронизации",
+    due_find:"Найти машину — CR006, DZ003…",
+    due_found:"Строк по «{q}»: {n} — все осмотры, в любом состоянии",
+    due_none_found:"По «{q}» ничего не запланировано. Машина есть в реестре — осмотры такого типа техники ещё не проводились, поэтому не предлагаются.",
+    due_reg_row:"есть в реестре · осмотр не предлагается · нажмите, чтобы начать",
     btn_due_only:"Оставить только то, что есть в системе",
     due_only_go:"Удалено: {n}. Осталось машин: {m}, все из системы.",
     due_only_none:"Удалять нечего — все даты пришли из системы или с этого телефона.",
@@ -6881,6 +6907,9 @@ function unclassedCount(){
    nearest pill rather than leaving somebody on a scope with no pill lit. */
 let dueScope=(localStorage.getItem("due_scope")||"over").replace(/^due$/,"over");
 let dueType="";
+/* Not remembered between sessions. A filter that survives a restart is a
+   filter somebody will be looking through without knowing it. */
+let dueFind="";
 const DUE_SCOPES=[["over","due_missed","over"],["soon","due_soon","soon"],
                   ["never","due_never_p","never"],
                   ["put","due_putoff","put"],["all","due_all","" ]];
@@ -6908,7 +6937,34 @@ function renderDue(){
     : sc==="never"? list.filter(r=>r.st==="never")
     : sc==="put"  ? list.filter(r=>r.st==="put"||r.st==="off")
     : list.filter(r=>r.st==="over"||r.st==="soon");
-  const show = inScope(rows, scope);
+  /* A SEARCH ANSWERS ABOUT THE MACHINE, NOT ABOUT THE SCOPE.
+
+     Deliberately not filtered by the pills: somebody typing CR006 wants to
+     know what this app has for CR006, and returning "nothing" because they
+     happened to be on Missed is the same wrong answer this screen has been
+     giving all week, one control along. It searches every round and every
+     state, and the row's own colour says which state each one is in. */
+  const q=(dueFind||"").trim().toUpperCase();
+  const hit=r=>r.unit.toUpperCase().indexOf(q)>=0
+             || String((ASSET_BY[r.unit]||{}).cat||"").toUpperCase().indexOf(q)>=0;
+  let show = q ? every.filter(hit) : inScope(rows, scope);
+  /* A MACHINE IN THE REGISTER THAT NO ROUND REACHES.
+
+     The rule that decides which rounds a class is on is deliberately narrow —
+     stated per-class intervals, and rounds this fleet has actually walked on
+     that kind of machine. A jaw crusher nobody has ever walked an inspection
+     round on is therefore proposed for nothing, and searching for it came back
+     empty: a real machine, in the register, rendered as nothing.
+
+     Being unable to schedule it is not a reason to be unable to FIND it. The
+     search answers with the machine and a way onto it, and says plainly that
+     this is the register talking and not a schedule. */
+  if(q && !show.length && typeof ASSETS!=="undefined"){
+    show=ASSETS.filter(a=>a && a.n &&
+        (a.n.toUpperCase().indexOf(q)>=0 || String(a.cat||"").toUpperCase().indexOf(q)>=0))
+      .slice(0,20)
+      .map(a=>({unit:a.n, cat:a.cat||"", ty:"", reg:true, st:"never"}));
+  }
 
   /* ---- the scope pills ------------------------------------------------
      Missed and Due soon are always offered: zero of either is news worth
@@ -7006,6 +7062,15 @@ function renderDue(){
      had never seen was the one handset that could not be offered the cleanup.
      A control that hides itself from the only case it exists for is not a
      control. */
+  /* What the search found, said plainly — including when it found nothing,
+     which for a machine in the register means no round is proposed for it. */
+  const fnote=$("dueFindMsg");
+  if(fnote){
+    fnote.textContent = !q ? ""
+      : show.length ? t("due_found",{n:show.length, q:dueFind.trim()})
+      : t("due_none_found",{q:dueFind.trim()});
+    fnote.classList.toggle("hidden", !q);
+  }
   const strayBtn=$("dueOnly");
   if(strayBtn) strayBtn.classList.toggle("hidden", histStrays()===0);
 
@@ -7025,6 +7090,13 @@ function renderDue(){
        date to be counted from. Printing "0 d ago" over one would be inventing
        an inspection; it says what is true instead, and the row still opens
        the round so the answer is one tap away. */
+    /* No round to open, so no round tag and no round on the tap — the
+       capture screen asks which one, because this app does not know. */
+    if(r.reg) return `<div class="duerow">
+      <button class="dueitem never" data-u="${esc(r.unit)}">
+        <span class="u">${esc(r.unit)}${
+          r.cat?` · <span style="color:var(--muted);font-weight:400">${esc(r.cat)}</span>`:""}</span>
+        <span class="d">${esc(t("due_reg_row"))}</span></button></div>`;
     if(r.never) return `<div class="duerow">
       <button class="dueitem never" data-u="${esc(r.unit)}" data-t="${esc(r.ty)}">
         <span class="u"><span class="tag t-${esc(r.ty)}">${esc(r.ty)}</span> ${esc(r.unit)}${
@@ -8341,6 +8413,8 @@ $("dueOnly").onclick=()=>{
   msg.textContent=t("due_only_go",{n:drop.length, m:dueMachines()});
   renderDue();
 };
+/* Live, because a search you have to submit is a search people give up on. */
+$("dueFind").oninput=()=>{ dueFind=$("dueFind").value; renderDue(); };
 $("dueImport").onclick=()=>$("dueFile").click();
 $("dueFile").onchange=async (e)=>{ const f=e.target.files[0]; e.target.value=""; if(!f) return;
   let j; try{ j=JSON.parse(await f.text()); }catch(err){ dlg(t("m_merge_bad")); return; }
@@ -9377,7 +9451,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="184";
+const BUILD="185";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

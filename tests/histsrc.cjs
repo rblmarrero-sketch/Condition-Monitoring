@@ -198,6 +198,62 @@ const btn = p => p.evaluate(() => !document.getElementById('dueOnly').classList.
     await a.ctx.close();
   }
 
+  console.log('\nasking about one machine, which was not possible at all');
+  {
+    /* "Never done" can be three hundred rows across four scopes, and there was
+       no way to ask this screen about a single machine — which is the question
+       somebody actually has. In practice it was unanswerable, so it got
+       guessed at instead, which is most of what this week was. */
+    const a = await phone(b, {});
+    await a.p.click('#dueFull');
+    await a.p.waitForTimeout(2800);
+    await a.p.evaluate(() => { dueScope = 'over'; renderDue(); });
+    await a.p.waitForTimeout(300);
+    const find = async q => { await a.p.fill('#dueFind', q); await a.p.waitForTimeout(300);
+      return a.p.evaluate(() => ({
+        msg: document.getElementById('dueFindMsg').textContent,
+        rows: [...document.querySelectorAll('#dueList .dueitem')]
+                .map(r => ({ u: r.dataset.u, t: r.dataset.t,
+                             txt: r.textContent.replace(/\s+/g, ' ').trim() })) })); };
+    const known = await a.p.evaluate(() => (neverRows('')[0] || {}).unit || '');
+    const r1 = await find(known);
+    /* Searched while the scope is Missed and the machine is not missed.
+       Filtering a search by the state somebody happened to be looking at is
+       how a machine that IS on the list comes back as "not found". */
+    ok('a machine is found regardless of which pill is lit',
+       r1.rows.some(x => x.u === known), known + ' → ' + r1.rows.length + ' row(s)');
+    ok('and the search says what it found', r1.msg.includes(String(r1.rows.length)), r1.msg);
+    /* The narrow rule that decides which rounds a class is on means a machine
+       nobody has ever walked that round on is proposed for nothing. Being
+       unable to schedule it is not a reason to be unable to FIND it. */
+    const orphan = await a.p.evaluate(() => {
+      const scheduled = new Set(neverRows('').map(r => r.unit)
+        .concat(dueRows('').map(r => r.unit)));
+      const a2 = (window.ASSETS || []).find(x => x && x.n && !scheduled.has(x.n)
+        && PTS.classOf(x.cls || x.cat || '') && PTS.classOf(x.cls || x.cat || '') !== 'GEN');
+      return a2 ? a2.n : '';
+    });
+    if (orphan) {
+      const r2 = await find(orphan);
+      ok('a machine no round reaches is still found', r2.rows.some(x => x.u === orphan),
+         orphan + ' → ' + (r2.rows[0] || {}).txt);
+      ok('and offers a way onto it rather than a dead end',
+         (r2.rows[0] || {}).txt.includes(await say(a.p, 'due_reg_row')), (r2.rows[0] || {}).txt);
+      ok('with no round on the tap, because the app does not know which',
+         !(r2.rows[0] || {}).t, String((r2.rows[0] || {}).t));
+    } else {
+      ok('every classed machine is reached by some round in this fixture', true, '(none orphaned)');
+    }
+    const r3 = await find('ZZZZZZ');
+    ok('and a code that matches nothing says so', r3.rows.length === 0
+       && r3.msg.length > 0, r3.msg.slice(0, 60));
+    await a.p.fill('#dueFind', '');
+    await a.p.waitForTimeout(300);
+    ok('clearing it puts the scope back', await a.p.evaluate(() =>
+       document.getElementById('dueFindMsg').classList.contains('hidden')));
+    await a.ctx.close();
+  }
+
   await b.close();
   console.log('\n' + (fails.length ? 'FAILED ' + fails.length + '\n  ' + fails.join('\n  ') : 'all passed'));
   process.exit(fails.length ? 1 : 0);
