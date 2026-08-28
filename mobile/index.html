@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=175">
+<link rel="manifest" href="manifest.webmanifest?v=176">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=175">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=175">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=175">
+<link rel="apple-touch-icon" href="icon-192.png?v=176">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=176">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=176">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1932,31 +1932,31 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=175"></script>
-<script src="upload-defaults.js?v=175"></script>
-<script src="hme.js?v=175"></script>
-<script src="mp-fc.js?v=175"></script>
-<script src="hme-cascade.js?v=175"></script>
-<script src="assets.js?v=175"></script>
-<script src="temp-limits.js?v=175"></script>
-<script src="normalize.js?v=175"></script>
-<script src="due.js?v=175"></script>
-<script src="wear.js?v=175"></script>
-<script src="wear-figs.js?v=175"></script>
-<script src="wear-map.js?v=175"></script>
-<script src="machine-photos.js?v=175"></script>
-<script src="machine-fig.js?v=175"></script>
-<script src="get.js?v=175"></script>
-<script src="points.js?v=175"></script>
-<script src="uc-points.js?v=175"></script>
-<script src="inspect-guide.js?v=175"></script>
-<script src="get-figs.js?v=175"></script>
-<script src="body-points.js?v=175"></script>
-<script src="body-map.js?v=175"></script>
-<script src="lube.js?v=175"></script>
-<script src="lube-overrides.js?v=175"></script>
-<script src="lube2027.js?v=175"></script>
-<script src="report-core.js?v=175"></script>
+<script src="native.js?v=176"></script>
+<script src="upload-defaults.js?v=176"></script>
+<script src="hme.js?v=176"></script>
+<script src="mp-fc.js?v=176"></script>
+<script src="hme-cascade.js?v=176"></script>
+<script src="assets.js?v=176"></script>
+<script src="temp-limits.js?v=176"></script>
+<script src="normalize.js?v=176"></script>
+<script src="due.js?v=176"></script>
+<script src="wear.js?v=176"></script>
+<script src="wear-figs.js?v=176"></script>
+<script src="wear-map.js?v=176"></script>
+<script src="machine-photos.js?v=176"></script>
+<script src="machine-fig.js?v=176"></script>
+<script src="get.js?v=176"></script>
+<script src="points.js?v=176"></script>
+<script src="uc-points.js?v=176"></script>
+<script src="inspect-guide.js?v=176"></script>
+<script src="get-figs.js?v=176"></script>
+<script src="body-points.js?v=176"></script>
+<script src="body-map.js?v=176"></script>
+<script src="lube.js?v=176"></script>
+<script src="lube-overrides.js?v=176"></script>
+<script src="lube2027.js?v=176"></script>
+<script src="report-core.js?v=176"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2325,8 +2325,10 @@ const I18N = {
     hist_at:"fleet history updated {t}", hist_now:"just now",
     hist_min:"{n} min ago", hist_hr:"{n} h ago", hist_day:"{n} d ago",
     hist_never:"⚠ this phone has never loaded the fleet's history",
+    hist_short:"⚠ this phone ran out of room — its history is incomplete",
     hist_fail:"⚠ could not reach the system — this list may be out of date",
     due_no_hist:"This phone has not loaded the fleet's history yet, so it cannot say what is due. Open System and press Refresh, or load a history file.",
+    due_short:"This phone ran out of storage, so part of the fleet's history was lost and this list is incomplete. Free some space on the phone, then press Check for new in System — the missing rounds will be read again.",
     due_stale:"Nothing due from what this phone knows — but its fleet history was last updated {t}. Refresh before relying on it.",
     due_not:"Not doing this one",
     due_not_t:"{u} — not doing this round?",
@@ -2769,9 +2771,11 @@ const I18N = {
     hist_at:"история парка обновлена {t}", hist_now:"только что",
     hist_min:"{n} мин назад", hist_hr:"{n} ч назад", hist_day:"{n} д назад",
     hist_never:"⚠ этот телефон ещё ни разу не загружал историю парка",
+    hist_short:"⚠ на телефоне не хватило места — история неполная",
     hist_fail:"⚠ не удалось связаться с системой — список может быть устаревшим",
     due_no_hist:"Этот телефон ещё не загрузил историю парка и не может сказать, что просрочено. Откройте «Система» и нажмите «Обновить» или загрузите файл истории.",
     due_stale:"По данным этого телефона ничего не просрочено, но история парка обновлялась {t}. Обновите, прежде чем полагаться на список.",
+    due_short:"На телефоне закончилось место, часть истории парка потеряна, и этот список неполный. Освободите место, затем нажмите «Проверить новые» в «Системе» — недостающие осмотры будут прочитаны заново.",
     due_not:"Не выполняем",
     due_not_t:"{u} — не выполняем этот осмотр?",
     due_not_m:"{ty}. Отложите на срок или укажите, что осмотр не будет выполнен. В обоих случаях причина сохраняется — офис увидит, что пропущено и почему.",
@@ -3082,17 +3086,37 @@ const GRADE_SEV={A:"NOF",B:"INC",C:"DEG",X:"CRI"};
    severity can propose the condition code the technician actually answers in. */
 const SEV_GRADE={NOF:"A",INC:"B",DEG:"C",CRI:"X"};
 
+/* WRITING TO localStorage CAN THROW, AND ONE OF THESE RAN AT TOP LEVEL.
+
+   Safari raises QuotaExceededError from setItem when the jar is full. The
+   `cm_seen` upgrade write below is a bare statement in the body of this
+   script, so on a phone that is out of room it threw during evaluation and
+   EVERY LINE BELOW IT NEVER RAN — no state, no functions, no handlers. The
+   page painted its static markup and did nothing at all, with one error in a
+   console nobody in a pit can open.
+
+   An installed home-screen app has its own storage jar and fills first: it
+   carries the offline shell, the photo queue and the drafts. So this is the
+   copy that dies, on the handsets that have been in service longest, and it
+   looks like "the app is broken on my phone and fine in the browser".
+
+   Every write that is not deliberately checking for a failure goes through
+   these. teamSave and histSave still call setItem directly, because for those
+   two the throw IS the answer. */
+function lsSet(k,v){ try{ localStorage.setItem(k,String(v)); return true; }catch(e){ return false; } }
+function lsDel(k){ try{ localStorage.removeItem(k); }catch(e){} }
+
 /* ===================== state ===================== */
 let eqClass = localStorage.getItem("equip_class") || "ALL";
 // One-time on upgrade: default returning users to "All equipment" so the unit search covers the whole fleet.
-if(localStorage.getItem("cm_seen")!=="allfleet"){ eqClass="ALL"; localStorage.setItem("cm_seen","allfleet"); localStorage.setItem("equip_class","ALL"); }
+if(localStorage.getItem("cm_seen")!=="allfleet"){ eqClass="ALL"; lsSet("cm_seen","allfleet"); lsSet("equip_class","ALL"); }
 if(!CLASSES[eqClass]) eqClass="ALL";
 let type = localStorage.getItem("insp_type") || "MP";
 if(!TYPE_META[type]) type="MP";
 let editing=null;
 // Stable id for this phone — used to keep record ids unique and to attribute merged rounds.
 const DEVICE = (()=>{ let d=localStorage.getItem("cm_dev");
-  if(!d){ d="D"+Math.random().toString(36).slice(2,7).toUpperCase(); localStorage.setItem("cm_dev",d); } return d; })();
+  if(!d){ d="D"+Math.random().toString(36).slice(2,7).toUpperCase(); lsSet("cm_dev",d); } return d; })();
 const dlg=(pair)=>{ $("dlgTitle").textContent=pair[0]; $("dlgMsg").textContent=pair[1];
   $("dlgCancel").classList.add("hidden"); $("dlgOk").className="btn primary";
   $("dlgOk").textContent=t("dlg_ok"); $("dlg").showModal(); };
@@ -3714,15 +3738,15 @@ async function dbDel(id){ const d=await idb(); return new Promise((res,rej)=>{ c
 /* ===================== class + type + component chips ===================== */
 function fillClassSel(){ $("classBtn").textContent = eqCat==="ALL"
   ? `${t("opt_all_equip")} (${ASSETS.length})` : `${eqCat} (${CAT_COUNT[eqCat]||0})`; }
-function selectCat(c){ eqCat=c; localStorage.setItem("equip_cat",eqCat);
-  eqClass = eqCat==="ALL" ? "GEN" : classForCat(eqCat); localStorage.setItem("equip_class",eqClass);
+function selectCat(c){ eqCat=c; lsSet("equip_cat",eqCat);
+  eqClass = eqCat==="ALL" ? "GEN" : classForCat(eqCat); lsSet("equip_class",eqClass);
   curEquip=""; updateEquipBtn(); draft={positions:{}}; editing=null; curItem=""; applyForm(); setEditing(null); }
 $("classBtn").onclick=()=>openPicker("cat");
 /* The code in front of the name. An <option> cannot be tinted reliably on
    either platform, and the code is the identity anyway — the colour is only
    ever the reinforcement. */
 function fillTypeSel(){ $("typeSel").innerHTML=TYPE_ORDER.map(k=>`<option value="${k}">${k} · ${t("type_"+k)}</option>`).join(""); $("typeSel").value=type; }
-$("typeSel").onchange=(e)=>{ type=e.target.value; localStorage.setItem("insp_type",type);
+$("typeSel").onchange=(e)=>{ type=e.target.value; lsSet("insp_type",type);
   draft={positions:{}}; editing=null; curItem=""; applyForm(); setEditing(null); };
 function renderChips(){ const tr=currentTree();
   if(wearType() && curEquip && ucStatus(curEquip).ok && ucView==="map"){ renderUCMap(); return; }
@@ -4843,7 +4867,7 @@ function renderGuide(boxId, code, scope){
       '<div><b>'+esc(t("g_check"))+'</b>'+esc(g.check)+'</div>'+
     '</div>':"");
   box.querySelector(".guide-t").onclick=()=>{
-    guideOpen=!guideOpen; localStorage.setItem("guide_open",guideOpen?"1":"0");
+    guideOpen=!guideOpen; lsSet("guide_open",guideOpen?"1":"0");
     /* Repaint both, not just the one that was tapped: the two rounds share the
        setting, and a stale arrow on the other screen is a lie about state. */
     renderGuide("ucGuide", ucSplit(curItem||"")[0], "");
@@ -4924,7 +4948,7 @@ function renderUCExtra(on){
   tog.textContent=(show?"\u25BE ":"\u25B8 ")+t(show?"tb_note_hide":"tb_note")
     + (hasC && !show ? " \u00B7 " + t("tb_x_comment") : "");
   tog.onclick=()=>{ ucExtraOpen=!ucExtraOpen;
-    localStorage.setItem("uc_extra_open",ucExtraOpen?"1":"0"); renderUCExtra(true); };
+    lsSet("uc_extra_open",ucExtraOpen?"1":"0"); renderUCExtra(true); };
   UC_FOLD.forEach(id=>{ const el=$(id); if(el) el.style.display = show ? "" : "none"; });
 }
 /* Closed by default and remembered, like the method above it. Six chips open on
@@ -4935,7 +4959,7 @@ function renderUCReasons(){
   const box=$("ucReasons"); if(!box) return;
   const tog=$("ucNaTog");
   if(tog){ tog.textContent=(ucNaOpen?"\u25BE ":"\u25B8 ")+t("uc_cannot");
-    tog.onclick=()=>{ ucNaOpen=!ucNaOpen; localStorage.setItem("uc_na_open",ucNaOpen?"1":"0");
+    tog.onclick=()=>{ ucNaOpen=!ucNaOpen; lsSet("uc_na_open",ucNaOpen?"1":"0");
       renderUCReasons(); }; }
   /* A reason already given is never hidden — the state has to be visible or
      somebody re-measures a point that was answered. */
@@ -4998,7 +5022,7 @@ addEventListener("resize", ()=>markScrollRows());
 function wireUCViews(){
   markScrollRows($("posnav"));
   $("posnav").querySelectorAll(".ucviews button").forEach(b=>b.onclick=()=>{
-    ucView=b.dataset.v; localStorage.setItem("uc_view",ucView);
+    ucView=b.dataset.v; lsSet("uc_view",ucView);
     cascL7=null; cascL8=null; renderChips(); });
 }
 /* An untouched round is all white pucks, which reads as "broken" rather than
@@ -5421,7 +5445,7 @@ function renderUCFig(){
   if(tog){ tog.classList.toggle("hidden", !svg);
     tog.textContent = (ucFigOpen?"▾ ":"▸ ")+t(ucFigOpen?"uc_fig_hide":"uc_fig_show");
     tog.onclick = !svg ? null : ()=>{ ucFigOpen=!ucFigOpen;
-      localStorage.setItem("uc_fig",ucFigOpen?"1":"0");
+      lsSet("uc_fig",ucFigOpen?"1":"0");
       renderUCFig(); if(TYPE_META[type].get) renderGETFig(); }; }
   box.style.display = (svg && ucFigOpen)?"":"none";
   if(!svg || !ucFigOpen){ box.innerHTML=""; return; }
@@ -5445,7 +5469,7 @@ function renderGETFig(){
   tog.classList.toggle("hidden", !svg);
   if(!svg){ box.style.display="none"; box.innerHTML=""; return; }
   tog.textContent=(ucFigOpen?"▾ ":"▸ ")+t(ucFigOpen?"uc_fig_hide":"uc_fig_show");
-  tog.onclick=()=>{ ucFigOpen=!ucFigOpen; localStorage.setItem("uc_fig",ucFigOpen?"1":"0");
+  tog.onclick=()=>{ ucFigOpen=!ucFigOpen; lsSet("uc_fig",ucFigOpen?"1":"0");
     renderGETFig(); if(TYPE_META[type].wear) renderUCFig(); };
   box.style.display = ucFigOpen ? "" : "none";
   box.innerHTML = ucFigOpen ? svg : "";
@@ -5827,14 +5851,14 @@ function recentUnits(){
 function noteRecent(n){
   if(!n) return;
   try{ const r=recentUnits().filter(x=>x!==n); r.unshift(n);
-    localStorage.setItem("recent_units", JSON.stringify(r.slice(0,RECENT_MAX))); }catch(e){}
+    lsSet("recent_units", JSON.stringify(r.slice(0,RECENT_MAX))); }catch(e){}
 }
 function selectEquip(n){ n=(n||"").trim().toUpperCase().replace(/\s+/g,""); curEquip=n;
   noteRecent(n);
   if(!gps) getGps(true);   // start the fix now so Save never has to wait
   const a=ASSET_BY[n];
-  if(a){ eqCat=a.cat||"— UNCATEGORISED —"; localStorage.setItem("equip_cat",eqCat); }
-  const cls=assetClassOf(n); if(cls){ eqClass=cls; localStorage.setItem("equip_class",eqClass); }
+  if(a){ eqCat=a.cat||"— UNCATEGORISED —"; lsSet("equip_cat",eqCat); }
+  const cls=assetClassOf(n); if(cls){ eqClass=cls; lsSet("equip_class",eqClass); }
   draft={positions:{}}; editing=null; curItem=""; hdrOpen=false;
   applyForm(); setEditing(null); updateEquipBtn();
   renderLastDone(); renderTrend(); }
@@ -6035,7 +6059,7 @@ function clearSign(){ signDirty=false; const c=signPad.getContext("2d");
   c.fillStyle="#fff"; c.fillRect(0,0,signPad.width,signPad.height); renderSignFold(); }
 $("signClear").onclick=clearSign;
 $("supName").value=localStorage.getItem("supervisor")||"";
-$("supName").addEventListener("input",()=>localStorage.setItem("supervisor",$("supName").value.trim()));
+$("supName").addEventListener("input",()=>lsSet("supervisor",$("supName").value.trim()));
 function signBlob(){ return signDirty ? new Promise(r=>signPad.toBlob(r,"image/png")) : Promise.resolve(null); }
 function loadSign(blob){ clearSign(); if(!blob) return;
   signOpen=true; renderSignFold();
@@ -6054,7 +6078,7 @@ $("supName").addEventListener("input",renderSignFold);
 function todayISO(){ const d=new Date(),p=(n)=>String(n).padStart(2,"0"); return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`; }
 $("date").value=todayISO();
 $("inspector").value=localStorage.getItem("inspector")||"";
-$("inspector").addEventListener("input",()=>localStorage.setItem("inspector",$("inspector").value.trim()));
+$("inspector").addEventListener("input",()=>lsSet("inspector",$("inspector").value.trim()));
 $("hdrSum").onclick=openHdr;
 /* Folding is a thing that happens when you have finished with the card, not
    while you are still in it. Re-rendering on every keystroke meant typing the
@@ -6089,8 +6113,8 @@ function resetForm(){ draft={positions:{}}; curEquip=""; curItem=""; draftSig=""
   updateEquipBtn(); $("smu").value=""; $("date").value=todayISO();
   gps=null; renderGps(); clearSign();
   applyForm(); setEditing(null); }
-function editRecord(rec){ if(rec.cls && CLASSES[rec.cls]){ eqClass=rec.cls; localStorage.setItem("equip_class",eqClass); }
-  if(rec.type && TYPE_META[rec.type]){ type=rec.type; localStorage.setItem("insp_type",type); }
+function editRecord(rec){ if(rec.cls && CLASSES[rec.cls]){ eqClass=rec.cls; lsSet("equip_class",eqClass); }
+  if(rec.type && TYPE_META[rec.type]){ type=rec.type; lsSet("insp_type",type); }
   draft={positions:{}};
   for(const [k,pp] of Object.entries(rec.positions)) draft.positions[k]={grade:pp.grade,sev:pp.sev,sevMan:pp.sevMan||0,action:pp.action,wo:pp.wo,particle:pp.particle,comp:pp.comp,oil:pp.oil,comment:pp.comment,defect:pp.defect,cause:pp.cause,tempV:pp.tempV||"",tempA:pp.tempA||"",tempM:pp.tempM||"",
     prio:pp.prio||"",
@@ -6242,7 +6266,7 @@ let smuCache=null;
 function smuAll(){ return smuCache || (smuCache=(()=>{
   try{ return JSON.parse(localStorage.getItem(SMU_KEY)||"{}"); }catch(e){ return {}; }
 })()); }
-function smuSave(m){ smuCache=m; try{ localStorage.setItem(SMU_KEY,JSON.stringify(m)); }catch(e){} }
+function smuSave(m){ smuCache=m; try{ lsSet(SMU_KEY,JSON.stringify(m)); }catch(e){} }
 function smuNote(unit,date,smu){
   const u=(unit||"").toUpperCase(), n=Number(smu);
   if(!u||!date||smu==null||smu===""||!isFinite(n)) return;
@@ -6278,7 +6302,7 @@ let deferCache=null;
 function deferAll(){ return deferCache || (deferCache=(()=>{
   try{ return JSON.parse(localStorage.getItem(DEFER_KEY)||"{}"); }catch(e){ return {}; }
 })()); }
-function deferSave(m){ deferCache=m; try{ localStorage.setItem(DEFER_KEY,JSON.stringify(m)); }catch(e){} }
+function deferSave(m){ deferCache=m; try{ lsSet(DEFER_KEY,JSON.stringify(m)); }catch(e){} }
 /* Deferrals that arrived from the shared folder — the office's, or another
    phone's. One per unit and round: a round put off twice is one deferral in two
    states, and the later statement is the one that stands. Already marked `up`
@@ -6319,7 +6343,69 @@ function histAll(){ return histCache || (histCache=(()=>{
    throw here left the record stored but the form un-reset and sync never
    started — the inspection looked lost. Storage is best-effort; the record in
    IndexedDB is the thing that matters. */
-function histSave(h){ histCache=h; try{ localStorage.setItem("cm_hist",JSON.stringify(h)); }catch(e){} }
+/* THE LAST-DONE INDEX MUST NEVER BE THE THING THAT GETS DROPPED.
+
+   This swallowed a quota failure whole. histCache — memory — took the new
+   value, localStorage kept the old one, and the very next line stamped "fleet
+   history updated just now" over an index that had not been written. On the
+   next launch memory is gone and the short stored index is the only truth, so
+   the phone computes its due list from a history it does not have and reports
+   "Missed 0" with complete confidence.
+
+   That is how an installed app and the same page in the browser came to
+   disagree by six overdue machines while both said they had just updated. Not
+   the storage split — the split only decides WHICH jar fills first, and the
+   installed copy fills first because it also carries the offline shell, the
+   photo queue and the drafts.
+
+   The priority was inverted too. cm_hist is a few hundred bytes per unit and
+   is the thing that decides whether somebody walks to a machine at −40.
+   cm_team is a bounded cache of two thousand rows behind a browsable list. The
+   small critical one was losing to the big convenient one, so room is taken
+   from the cache to make it fit. Returns whether it actually stuck, because a
+   caller that cannot tell is a caller that will claim it did. */
+function histSave(h){
+  histCache=h;
+  const body=JSON.stringify(h);
+  try{ localStorage.setItem("cm_hist",body); return true; }catch(e){}
+  /* Out of room. Give up the browsable cache — it can be re-read from the
+     folder at any time; a last-done date that nothing else holds cannot.
+
+     The key is written out literally and the in-memory cache is dropped
+     through its own guarded step, because this runs on a path that can be
+     reached while the script is still evaluating: naming TEAM_KEY or assigning
+     teamCache here threw a temporal-dead-zone ReferenceError that aborted the
+     rest of the file, and a phone that is merely FULL came up with half its
+     functions undefined. Storage code cannot depend on load order. */
+  for(const frac of [0.5, 0.2, 0]){
+    try{
+      let cur=[];
+      try{ cur=JSON.parse(localStorage.getItem("cm_team")||"[]")||[]; }catch(e1){ cur=[]; }
+      const keep=frac ? cur.slice(0,Math.max(50,Math.floor(cur.length*frac))) : [];
+      if(keep.length) localStorage.setItem("cm_team",JSON.stringify(keep));
+      else localStorage.removeItem("cm_team");
+      try{ teamCache=keep; }catch(e2){ /* not declared yet — it will read storage */ }
+      localStorage.setItem("cm_hist",body);
+      /* The cache is now short of what the cursor claims, so the cursor is a
+         lie. Say so and let the next pull re-read the folder in full. */
+      histShort(true);
+      return true;
+    }catch(e3){ /* still not enough — take more */ }
+  }
+  histShort(true);
+  return false;
+}
+/* "What this phone holds is less than its cursor says it holds."
+
+   The cursor means "I already have everything up to here", so a phone that
+   dropped rows and kept its cursor will never be sent them again. One flag,
+   cleared only by a complete read that actually stored. */
+const HIST_SHORT="cm_hist_short";
+function histShort(on){
+  try{ if(on) lsSet(HIST_SHORT,"1"); else lsDel(HIST_SHORT); }
+  catch(e){}
+}
+function histIsShort(){ try{ return !!localStorage.getItem(HIST_SHORT); }catch(e){ return false; } }
 /* WHEN THIS PHONE LAST LEARNED WHAT THE FLEET HAS DONE.
 
    An installed home-screen app and the same page in the browser are separate
@@ -6333,10 +6419,10 @@ function histSave(h){ histCache=h; try{ localStorage.setItem("cm_hist",JSON.stri
    that should not be trusted to say nothing is due. */
 const HIST_AT="cm_hist_at", HIST_ERR="cm_hist_err";
 function histStamp(n){
-  try{ localStorage.setItem(HIST_AT, JSON.stringify({at:Date.now(), n:n||0}));
-       localStorage.removeItem(HIST_ERR); }catch(e){}
+  try{ lsSet(HIST_AT, JSON.stringify({at:Date.now(), n:n||0}));
+       lsDel(HIST_ERR); }catch(e){}
 }
-function histNote(err){ try{ localStorage.setItem(HIST_ERR, String(err||"1")); }catch(e){} }
+function histNote(err){ try{ lsSet(HIST_ERR, String(err||"1")); }catch(e){} }
 function histWhen(){
   try{ const j=JSON.parse(localStorage.getItem(HIST_AT)||"null"); return j&&j.at?j:null; }
   catch(e){ return null; }
@@ -6347,7 +6433,7 @@ function histFailed(){ try{ return !!localStorage.getItem(HIST_ERR); }catch(e){ 
 const HIST_STALE_MS=12*3600*1000;
 function histStale(){
   const w=histWhen();
-  return !w || histFailed() || (Date.now()-w.at)>HIST_STALE_MS;
+  return !w || histFailed() || histIsShort() || (Date.now()-w.at)>HIST_STALE_MS;
 }
 function agoWords(at){
   const m=Math.round((Date.now()-at)/60000);
@@ -6359,6 +6445,11 @@ function agoWords(at){
 /* The sentence that decides whether "Missed 0" means anything. */
 function histAge(){
   const w=histWhen();
+  /* Out of room comes first, because it is the one the reader can act on and
+     the one that survives a perfectly successful sync. A phone that is full
+     goes on reaching the system and goes on being wrong, so reporting it as a
+     network failure would send somebody to look at the signal. */
+  if(histIsShort()) return t("hist_short");
   if(histFailed()) return t("hist_fail");
   if(!w) return t("hist_never");
   return t("hist_at",{t:agoWords(w.at)});
@@ -6528,7 +6619,7 @@ function renderDue(){
       .join("");
     sbox.querySelectorAll("[data-sc]").forEach(b=>b.onclick=()=>{
       dueScope=b.dataset.sc;
-      try{ localStorage.setItem("due_scope",dueScope); }catch(e){}
+      try{ lsSet("due_scope",dueScope); }catch(e){}
       renderDue();
     });
   }
@@ -6586,7 +6677,10 @@ function renderDue(){
        different sentences, and only one of them is reassuring. */
     const w=histWhen();
     box.innerHTML=`<div class="empty">${
-      !w ? t("due_no_hist") : histStale() ? t("due_stale",{t:agoWords(w.at)}) : t("due_empty")}</div>`;
+      histIsShort() ? t("due_short")
+      : !w ? t("due_no_hist")
+      : histStale() ? t("due_stale",{t:agoWords(w.at)})
+      : t("due_empty")}</div>`;
     return;
   }
   box.innerHTML=show.slice(0,200).map(r=>{
@@ -6711,7 +6805,7 @@ function cfMerge(list, complete){
     for(const k of Object.keys(have)) if(!seen[k]){ delete have[k]; touched=true; }
   }
   if(touched){
-    try{ localStorage.setItem(TEAM_CF,JSON.stringify(have)); }catch(e){ /* not worth failing a sync over */ }
+    try{ lsSet(TEAM_CF,JSON.stringify(have)); }catch(e){ /* not worth failing a sync over */ }
     cfCache=have;
   }
   return cfOpen().length;
@@ -6813,7 +6907,7 @@ async function cfRecheck(signal){
     }
   }
   if(closed){
-    try{ localStorage.setItem(TEAM_CF,JSON.stringify(have)); }catch(e){}
+    try{ lsSet(TEAM_CF,JSON.stringify(have)); }catch(e){}
     cfCache=have;
   }
   return closed;
@@ -6827,19 +6921,32 @@ function teamAll(){ return teamCache || (teamCache=teamAllUncached()); }
 /* Returns false when the write did not stick. The caller MUST NOT advance the
    cursor in that case: the records were dropped, and an advanced cursor means
    "already have them", so they would never be asked for again. */
+/* RETURNS FALSE WHEN THE WRITE DID NOT HOLD EVERYTHING IT WAS GIVEN.
+
+   It used to return TRUE after silently halving the list, and the caller reads
+   that return to decide whether to advance the cursor. So a phone short of room
+   dropped half its rounds, reported success, moved the cursor past them, and
+   never asked for them again — permanently, because "I have everything up to
+   here" is a claim the server takes at face value.
+
+   Halving is still right for what is ON SCREEN: a phone with a big photo queue
+   should show the recent rounds rather than nothing. It is not right for the
+   cursor, and those two decisions were the same boolean. They are separate
+   now: the rows that fit are kept, and the caller is told plainly that this was
+   not a complete store. */
 function teamSave(a){
   a.sort((x,y)=>(y.d||"").localeCompare(x.d||""));
   const keep=a.slice(0,TEAM_MAX);
   try{ localStorage.setItem(TEAM_KEY,JSON.stringify(keep)); teamCache=keep; return true; }
   catch(e){
-    // Out of room. Halve it and try once more before giving up — a phone with a
-    // big photo queue should still get the recent rounds rather than nothing.
     try{
       const half=keep.slice(0,Math.max(100,Math.floor(keep.length/2)));
-      localStorage.setItem(TEAM_KEY,JSON.stringify(half)); teamCache=half; return true;
+      localStorage.setItem(TEAM_KEY,JSON.stringify(half)); teamCache=half;
+      histShort(true);
+      return false;                       // shown, but NOT all of it stored
     }catch(e2){
       localStorage.removeItem(TEAM_KEY); localStorage.removeItem(TEAM_CUR);
-      teamCache=[]; return false;
+      teamCache=[]; histShort(true); return false;
     }
   }
 }
@@ -6986,7 +7093,15 @@ function teamMergeRows(rows,replace){
     if(histPut(h,row.t+"|"+row.u,{d:row.d, h:row.s})) hist++;
     smuNote(row.u,row.d,row.s);
   }
-  const saved=teamSave([...have.values()]); histSave(h); histStamp(Object.keys(h).length);
+  /* Stamped only if the index actually reached storage. "Updated just now"
+     over a history that was never written is the reassuring direction of this
+     project's oldest failure, and the one nobody goes back to check. */
+  const saved=teamSave([...have.values()]);
+  if(histSave(h)) histStamp(Object.keys(h).length);
+  /* Not histNote(): that means "could not reach the system", and the system
+     was reached. histSave has already raised the short flag, which is the
+     accurate complaint and has a sentence of its own. Reporting a full phone
+     as a network failure would send somebody to look at the signal. */
   loadBaselines();
   /* Deliberately no stash: a row is not a round. The round itself is one
      request away by the id the row carries, made when somebody actually opens
@@ -7008,7 +7123,15 @@ function teamMerge(recs,replace){
     if(histPut(h,row.t+"|"+row.u,{d:row.d, h:row.s})) hist++;
     smuNote(row.u,row.d,row.s);
   }
-  const saved=teamSave([...have.values()]); histSave(h); histStamp(Object.keys(h).length);
+  /* Stamped only if the index actually reached storage. "Updated just now"
+     over a history that was never written is the reassuring direction of this
+     project's oldest failure, and the one nobody goes back to check. */
+  const saved=teamSave([...have.values()]);
+  if(histSave(h)) histStamp(Object.keys(h).length);
+  /* Not histNote(): that means "could not reach the system", and the system
+     was reached. histSave has already raised the short flag, which is the
+     accurate complaint and has a sentence of its own. Reporting a full phone
+     as a network failure would send somebody to look at the signal. */
   /* Keep the rounds themselves, not just the line about them. Not awaited here:
      the list must paint whether or not the write lands, and a phone that is out
      of room should still get the summary it has always had. The promise is
@@ -7034,7 +7157,7 @@ function idxCaps(){ if(idxCache) return idxCache;
 function idxCap(url){ const v=idxCaps()[url]; return v===undefined?undefined:v; }
 function setIdxCap(url,v){ const c=idxCaps();
   if(v===null) delete c[url]; else c[url]=v;
-  try{ localStorage.setItem("up_index",JSON.stringify(c)); }catch(e){} }
+  try{ lsSet("up_index",JSON.stringify(c)); }catch(e){} }
 let teamBusy=false, teamAt=0, teamAbort=null, teamRun=0;
 const TEAM_MIN_GAP=60000;    // automatic pulls only; the button always goes
 const TEAM_TIMEOUT=20000;    // pit signal can leave a fetch hanging for ever
@@ -7076,7 +7199,13 @@ async function teamPull(manual,full){
     // Note the cursor is only *cleared* here, never on a path that could fail —
     // it is rewritten below from the reply, and only if the save stuck.
     let after=Number(localStorage.getItem(TEAM_CUR)||0)||0;
-    if(full || (after && !teamAll().length)) after=0;
+    /* The cursor means "I already hold everything up to here". If the cache is
+       gone — cleared, evicted, a fresh install — or SHORT of what the cursor
+       claims, because a write ran out of room, that promise is false and asking
+       "what is new since X" returns nothing for ever. Both are self-healed by
+       starting over. The short case is the one that cost six overdue machines:
+       nothing was cleared, so nothing looked wrong. */
+    if(full || (after && !teamAll().length) || (after && histIsShort())) after=0;
 
     const ask=async p2=>{
       const q=new URLSearchParams(p2);
@@ -7161,7 +7290,11 @@ async function teamPull(manual,full){
     /* The index reports where the folder is, not where this reply stopped —
        unless it did stop, in which case the next call resumes from there. */
     const nextCur = viaIndex ? (j.truncated ? j.cursor : j.at) : j.cursor;
-    if(saved && nextCur) localStorage.setItem(TEAM_CUR,String(nextCur));
+    if(saved && nextCur) lsSet(TEAM_CUR,String(nextCur));
+    /* A complete read that stored everything is the one thing that can retire
+       the repair flag — and only then, or the next pull goes straight back to
+       asking "what is new since a cursor I cannot back up". */
+    if(saved && after===0 && !j.truncated) histShort(false);
     const total=teamAll().length;
     msg.textContent=(!saved ? t("team_full")
       : (added?t("team_new").replace("{n}",added):t("team_upto")).replace("{t}",total))
@@ -7493,7 +7626,7 @@ const TEAM_HEAL="cm_team_full_v1";
 async function teamHealOnce(){
   if(teamHealed || localStorage.getItem(TEAM_HEAL)) return;
   if(!teamAll().length) return;                          // nothing listed, nothing to heal
-  if((await dbTeam()).length) { localStorage.setItem(TEAM_HEAL,"1"); return; }
+  if((await dbTeam()).length) { lsSet(TEAM_HEAL,"1"); return; }
   const g=loadDests().find(d=>d.id==="gas" && d.url);
   if(!g || !navigator.onLine) return;                    // try again next launch
   teamHealed=true;
@@ -7502,7 +7635,7 @@ async function teamHealOnce(){
   // just run, and the automatic-pull gap would otherwise swallow this one and
   // leave the phone flagged as healed without ever having asked.
   try{
-    if(await teamPull(true,true)) localStorage.setItem(TEAM_HEAL,"1");
+    if(await teamPull(true,true)) lsSet(TEAM_HEAL,"1");
     else teamHealed=false;                               // never reached Drive — try next launch
   }
   catch(e){ teamHealed=false; }
@@ -8637,7 +8770,7 @@ function applyLang(){ document.documentElement.lang=lang;
   if(TYPE_META[type].wear) renderUC();
   if(TYPE_META[type].get) renderGET();
   document.querySelectorAll(".lang button").forEach(b=>b.classList.toggle("on", b.dataset.lang===lang)); }
-document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target.closest("button[data-lang]"); if(!b) return; lang=b.dataset.lang; localStorage.setItem("lang",lang); applyLang(); });
+document.querySelector(".lang").addEventListener("click",(e)=>{ const b=e.target.closest("button[data-lang]"); if(!b) return; lang=b.dataset.lang; lsSet("lang",lang); applyLang(); });
 
 
 /* ===================== auto-upload (generic sync queue) =====================
@@ -8689,7 +8822,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="175";
+const BUILD="176";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -8778,7 +8911,7 @@ function loadDests(){
      keeps it. */
   if(!localStorage.getItem("up_folder_v2")){
     d.forEach(x=>{ if(x && x.folder==="{YYYY-MM}") x.folder="{TYPE}/{YYYY-MM}"; });
-    try{ localStorage.setItem("up_folder_v2","1"); }catch(e){}
+    try{ lsSet("up_folder_v2","1"); }catch(e){}
   }
   /* And once more, to type / unit / date. A month folder is a pile of every
      machine's rounds mixed together; a unit folder is a machine's own history,
@@ -8787,7 +8920,7 @@ function loadDests(){
      string is replaced, so a folder someone typed is never touched. */
   if(!localStorage.getItem("up_folder_v3")){
     d.forEach(x=>{ if(x && x.folder==="{TYPE}/{YYYY-MM}") x.folder=FOLDER_DEFAULT; });
-    try{ localStorage.setItem("up_folder_v3","1"); }catch(e){}
+    try{ lsSet("up_folder_v3","1"); }catch(e){}
   }
   /* ONE DESTINATION DECIDES, and it is the one everything reads from.
      ------------------------------------------------------------------
@@ -8814,7 +8947,7 @@ function loadDests(){
      afterwards keeps it. This is a correction, not a policy. */
   if(!localStorage.getItem("up_gas_only_v1")){
     d.forEach(x=>{ if(x && x.id!=="gas") x.on=false; });
-    try{ localStorage.setItem("up_gas_only_v1","1"); }catch(e){}
+    try{ lsSet("up_gas_only_v1","1"); }catch(e){}
   }
 
   /* CHANGING BACKEND ON A FLEET THAT IS ALREADY IN THE FIELD
@@ -8882,7 +9015,7 @@ function loadDests(){
       /* Remembered only once it has actually moved. Recording it regardless
          would mean a phone that was briefly on some other endpoint during the
          changeover never moves at all — and nothing would ever say so. */
-      try{ localStorage.setItem("up_swap_"+SWAP.id,"1"); }catch(e){}
+      try{ lsSet("up_swap_"+SWAP.id,"1"); }catch(e){}
     }
   }
 
@@ -8908,7 +9041,7 @@ function loadDests(){
       /* The URL stays. Switching a destination off is reversible in one tick;
          clearing the URL as well makes turning it back on a hunt for a string
          nobody wrote down. */
-      try{ localStorage.setItem("up_retire_"+RET.id,"1"); }catch(e){}
+      try{ lsSet("up_retire_"+RET.id,"1"); }catch(e){}
     }
   }
   // This used to write unconditionally, and loadDests() is reached from the UP.on
@@ -8916,13 +9049,13 @@ function loadDests(){
   // localStorage write, and on a phone with no room left it threw from inside a
   // render. Persist only a genuine change, and never let storage break the app.
   const json=JSON.stringify(d);
-  if(json!==destsRaw){ destsRaw=json; try{ localStorage.setItem("up_dests",json); }catch(e){} }
+  if(json!==destsRaw){ destsRaw=json; try{ lsSet("up_dests",json); }catch(e){} }
   destsCache=DEST_IDS.map(id=>Object.assign({id,on:false,url:"",sec:"",folder:""}, d.find(x=>x.id===id)||{}));
   return destsCache;
 }
 function saveDests(d){
   destsCache=null; destsRaw=null;
-  try{ localStorage.setItem("up_dests",JSON.stringify(d)); }catch(e){ dlg(t("m_storage_full")); }
+  try{ lsSet("up_dests",JSON.stringify(d)); }catch(e){ dlg(t("m_storage_full")); }
 }
 function activeDests(){ return loadDests().filter(d=>d.on && d.url); }
 const UP={ get on(){ return activeDests().length>0; } };
@@ -9075,7 +9208,7 @@ function batchCaps(){ if(batchCap) return batchCap;
   try{ batchCap=JSON.parse(localStorage.getItem("up_batch")||"{}"); }catch(e){ batchCap={}; }
   return batchCap; }
 function setBatchCap(url,v){ const c=batchCaps(); c[url]=v;
-  try{ localStorage.setItem("up_batch",JSON.stringify(c)); }catch(e){} }
+  try{ lsSet("up_batch",JSON.stringify(c)); }catch(e){} }
 async function canBatch(UP){
   // The batch op belongs to this protocol, which is gas's and the mirror's.
   if(UP.id!=="gas" && UP.id!=="mirror") return false;
@@ -9867,7 +10000,7 @@ function swHealth(){
   catch(e){ clearTimeout(done); el.textContent=t("sw_noanswer"); el.className="hint warn"; }
 }
 function persistSettings(){ saveDests(formToDests());
-  try{ localStorage.setItem("up_px",$("upPx").value); }catch(e){} }
+  try{ lsSet("up_px",$("upPx").value); }catch(e){} }
 $("setBtn").onclick=openSettings;
 $("setClose").onclick=()=>$("setOv").classList.add("hidden");
 $("saveSet").onclick=()=>{ persistSettings(); $("setOv").classList.add("hidden"); renderSync(); syncThenArm(); };
@@ -10117,7 +10250,7 @@ function applyCfg(b64){
     const j=JSON.parse(decodeURIComponent(escape(atob(String(b64).replace(/-/g,"+").replace(/_/g,"/")))));
     if(!j || j.v!==1 || !Array.isArray(j.dests)) return false;
     saveDests(DEST_IDS.map(id=>Object.assign({id,on:false,url:"",sec:"",folder:""}, j.dests.find(x=>x.id===id)||{})));
-    if(j.px!=null) try{ localStorage.setItem("up_px",String(j.px)); }catch(e){}
+    if(j.px!=null) try{ lsSet("up_px",String(j.px)); }catch(e){}
     return true;
   }catch(e){ return false; }
 }
@@ -10259,7 +10392,7 @@ function applyTheme(){
 }
 $("themeSeg").addEventListener("click",e=>{
   const b=e.target.closest("button[data-theme]"); if(!b) return;
-  try{ localStorage.setItem("theme",b.dataset.theme); }catch(_){ }
+  try{ lsSet("theme",b.dataset.theme); }catch(_){ }
   applyTheme();
 });
 // "Auto" has to keep following the phone after the app is open.
@@ -10546,7 +10679,7 @@ async function offerDraft(){
     if(carry===false){ try{ await dbDel(DRAFT_ID); }catch(e){} }
     return;
   }
-  if(TYPE_META[ty]){ type=ty; localStorage.setItem("insp_type",type); }
+  if(TYPE_META[ty]){ type=ty; lsSet("insp_type",type); }
   if(d.date) $("date").value=d.date;
   if(d.smu) $("smu").value=d.smu;
   if(d.by) $("inspector").value=d.by;
