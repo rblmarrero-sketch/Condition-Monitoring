@@ -322,6 +322,74 @@ const histKeys = p => p.evaluate(() => Object.keys(JSON.parse(localStorage.getIt
     await a.ctx.close();
   }
 
+  console.log('\nthe phone can say how far behind the folder it is, on its own');
+  {
+    /* FOUR BUILDS WERE SPENT COMPARING TWO PHONES.
+
+       Neither of them could say anything about the FOLDER, so there was no
+       third number to settle it against - and "covering 44 of 1128 machines"
+       is a statement about the equipment register, not about how much of the
+       fleet's work this phone actually received. A read that covered the whole
+       folder knows exactly that, once, for free: it is holding every round in
+       it. Counted the same way the due index is keyed, so the two numbers are
+       about the same thing and can be subtracted. */
+    const ctx = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true });
+    const pg = await ctx.newPage();
+    pg.on('pageerror', e => fails.push('PAGEERROR ' + e.message));
+    await pg.addInitScript(u => {
+      localStorage.setItem('up_dests', JSON.stringify(
+        [{ id: 'gas', on: true, url: u, sec: '', folder: '' }]));
+      localStorage.setItem('cm_team_full_v1', '1');
+      localStorage.setItem('cm_hist_full_v1', '1');
+    }, BASE + '/exec');
+    await pg.goto(BASE + '/mobile/index.html', { waitUntil: 'load' });
+    await pg.waitForTimeout(1800);
+    await pg.evaluate(() => showPane('paneDue'));
+    await pg.waitForTimeout(400);
+    await pg.click('#dueFull');
+    await pg.waitForTimeout(2600);
+    const folder = await pg.evaluate(() => JSON.parse(localStorage.getItem('cm_fleet_n') || 'null'));
+    ok('a complete read records what the folder holds', !!folder && folder.p > 0,
+       JSON.stringify(folder));
+    /* Silent while they agree: a number that never changes is furniture. */
+    ok('and says nothing while the phone has all of it',
+       !(await pg.evaluate(() => (document.getElementById('dueBasis') || {}).textContent || ''))
+         .includes('missing'));
+    /* A read that did not cover the folder knows a prefix, and must never
+       report it as the whole - or the phone would announce it is behind a
+       folder it never finished reading. Checked here, while the phone is
+       still whole: once the index is damaged below, the repair correctly
+       turns the next pull into a full read and there is no incremental one
+       left to observe. */
+    const kept = await pg.evaluate(async () => {
+      localStorage.removeItem('cm_fleet_n');
+      await teamPull(true, false);                 // incremental, not full
+      return { wrote: localStorage.getItem('cm_fleet_n'), complete: teamLastComplete };
+    });
+    ok('an incremental read writes no folder count', !kept.wrote,
+       String(kept.wrote) + ' · complete=' + kept.complete);
+    await pg.evaluate(f => localStorage.setItem('cm_fleet_n', JSON.stringify(f)), folder);
+
+    const gone = await pg.evaluate(() => {
+      const h = JSON.parse(localStorage.getItem('cm_hist'));
+      const drop = Object.keys(h).slice(0, 5);
+      drop.forEach(k => delete h[k]);
+      localStorage.setItem('cm_hist', JSON.stringify(h));
+      histCache = null; renderDue();
+      return drop.length;
+    });
+    await pg.waitForTimeout(300);
+    const n = await pg.evaluate(() => Object.keys(histAll()).length);
+    const line = await pg.evaluate(() => (document.getElementById('dueBasis') || {}).textContent || '');
+    /* THE LINE THAT ENDS THE ARGUMENT — a statement this phone can make on its
+       own, with no second phone to compare against. */
+    ok('and names the shortfall the moment they part company',
+       line.includes(await say(pg, 'due_behind', { n: gone, f: folder.p, m: n })), line.slice(-90));
+    ok('with the note marked as a warning',
+       await pg.evaluate(() => document.getElementById('dueBasis').classList.contains('warn')));
+    await ctx.close();
+  }
+
   await b.close();
   console.log('\n' + (fails.length ? 'FAILED ' + fails.length + '\n  ' + fails.join('\n  ') : 'all passed'));
   process.exit(fails.length ? 1 : 0);

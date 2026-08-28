@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=179">
+<link rel="manifest" href="manifest.webmanifest?v=180">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=179">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=179">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=179">
+<link rel="apple-touch-icon" href="icon-192.png?v=180">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=180">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=180">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1941,31 +1941,31 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=179"></script>
-<script src="upload-defaults.js?v=179"></script>
-<script src="hme.js?v=179"></script>
-<script src="mp-fc.js?v=179"></script>
-<script src="hme-cascade.js?v=179"></script>
-<script src="assets.js?v=179"></script>
-<script src="temp-limits.js?v=179"></script>
-<script src="normalize.js?v=179"></script>
-<script src="due.js?v=179"></script>
-<script src="wear.js?v=179"></script>
-<script src="wear-figs.js?v=179"></script>
-<script src="wear-map.js?v=179"></script>
-<script src="machine-photos.js?v=179"></script>
-<script src="machine-fig.js?v=179"></script>
-<script src="get.js?v=179"></script>
-<script src="points.js?v=179"></script>
-<script src="uc-points.js?v=179"></script>
-<script src="inspect-guide.js?v=179"></script>
-<script src="get-figs.js?v=179"></script>
-<script src="body-points.js?v=179"></script>
-<script src="body-map.js?v=179"></script>
-<script src="lube.js?v=179"></script>
-<script src="lube-overrides.js?v=179"></script>
-<script src="lube2027.js?v=179"></script>
-<script src="report-core.js?v=179"></script>
+<script src="native.js?v=180"></script>
+<script src="upload-defaults.js?v=180"></script>
+<script src="hme.js?v=180"></script>
+<script src="mp-fc.js?v=180"></script>
+<script src="hme-cascade.js?v=180"></script>
+<script src="assets.js?v=180"></script>
+<script src="temp-limits.js?v=180"></script>
+<script src="normalize.js?v=180"></script>
+<script src="due.js?v=180"></script>
+<script src="wear.js?v=180"></script>
+<script src="wear-figs.js?v=180"></script>
+<script src="wear-map.js?v=180"></script>
+<script src="machine-photos.js?v=180"></script>
+<script src="machine-fig.js?v=180"></script>
+<script src="get.js?v=180"></script>
+<script src="points.js?v=180"></script>
+<script src="uc-points.js?v=180"></script>
+<script src="inspect-guide.js?v=180"></script>
+<script src="get-figs.js?v=180"></script>
+<script src="body-points.js?v=180"></script>
+<script src="body-map.js?v=180"></script>
+<script src="lube.js?v=180"></script>
+<script src="lube-overrides.js?v=180"></script>
+<script src="lube2027.js?v=180"></script>
+<script src="report-core.js?v=180"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2336,6 +2336,7 @@ const I18N = {
     hist_never:"⚠ this phone has never loaded the fleet's history",
     hist_short:"⚠ this phone ran out of room — its history is incomplete",
     due_cover:"covering {n} of {m} machines",
+    due_behind:"⚠ the folder holds {f} rounds and this phone has {m} — {n} missing",
     hist_fail:"⚠ could not reach the system — this list may be out of date",
     due_no_hist:"This phone has not loaded the fleet's history yet, so it cannot say what is due. Open System and press Refresh, or load a history file.",
     due_short:"This phone ran out of storage, so part of the fleet's history was lost and this list is incomplete. Free some space on the phone, then press Check for new in System — the missing rounds will be read again.",
@@ -2790,6 +2791,7 @@ const I18N = {
     hist_never:"⚠ этот телефон ещё ни разу не загружал историю парка",
     hist_short:"⚠ на телефоне не хватило места — история неполная",
     due_cover:"охвачено машин: {n} из {m}",
+    due_behind:"⚠ в папке осмотров: {f}, на телефоне: {m} — не хватает {n}",
     hist_fail:"⚠ не удалось связаться с системой — список может быть устаревшим",
     due_no_hist:"Этот телефон ещё не загрузил историю парка и не может сказать, что просрочено. Откройте «Система» и нажмите «Обновить» или загрузите файл истории.",
     due_stale:"По данным этого телефона ничего не просрочено, но история парка обновлялась {t}. Обновите, прежде чем полагаться на список.",
@@ -6513,7 +6515,8 @@ function histFailed(){ try{ return !!localStorage.getItem(HIST_ERR); }catch(e){ 
 const HIST_STALE_MS=12*3600*1000;
 function histStale(){
   const w=histWhen();
-  return !w || histFailed() || histIsShort() || (Date.now()-w.at)>HIST_STALE_MS;
+  return !w || histFailed() || histIsShort() || !!dueVsFolder()
+      || (Date.now()-w.at)>HIST_STALE_MS;
 }
 function agoWords(at){
   const m=Math.round((Date.now()-at)/60000);
@@ -6524,6 +6527,23 @@ function agoWords(at){
 }
 /* Distinct machines this phone can say anything about, against the register.
    Silent when it holds the lot — a count that never changes is furniture. */
+/* The folder's own count, from the last read that saw all of it. */
+function fleetKnown(){
+  try{ const j=JSON.parse(localStorage.getItem("cm_fleet_n")||"null");
+       return (j && j.p>0) ? j : null; }catch(e){ return null; }
+}
+/* THE LINE THAT ENDS THE ARGUMENT.
+
+   Silent while the phone holds everything the folder had, because a number
+   that never changes is furniture. It speaks the moment they part company,
+   which is the only moment anybody needs it — and it is a statement this phone
+   can make on its own, without a second phone to compare against. */
+function dueVsFolder(){
+  const f=fleetKnown(); if(!f) return "";
+  let mine=0; try{ mine=Object.keys(histAll()).length; }catch(e){ return ""; }
+  if(mine>=f.p) return "";
+  return t("due_behind",{n:f.p-mine, f:f.p, m:mine});
+}
 function dueCoverage(){
   try{
     const seen=new Set();
@@ -6767,6 +6787,9 @@ function renderDue(){
          heard of is overdue" while reading as "nothing is overdue". The
          difference is the whole question, and the count is one line. */
       dueCoverage(),
+      /* Not "how much of the register", which is a fact about the site — how
+         much of the FOLDER, which is a fact about this phone. */
+      dueVsFolder(),
       /* The line that decides whether "Missed 0" can be believed. */
       histAge(),
     ].filter(Boolean).join(" · ");
@@ -7399,6 +7422,34 @@ async function teamPull(manual,full){
     /* The index reports where the folder is, not where this reply stopped —
        unless it did stop, in which case the next call resumes from there. */
     teamLastComplete = !!(after===0 && !j.truncated);
+    /* WHAT THE FOLDER HOLDS, AS OPPOSED TO WHAT THIS PHONE HOLDS.
+
+       Four builds have been spent asking why two copies of this app disagree,
+       and every one of them compared the two PHONES. Neither of them could say
+       anything about the folder, so there was no third number to settle it
+       against — and "covering 44 of 1128 machines" is a statement about the
+       register, not about how much of the fleet's work this phone actually
+       received.
+
+       A read that covered the whole folder knows exactly that, once, for free:
+       it is holding every round in it. Counted the same way the due index is
+       keyed, so the two numbers are about the same thing and can be subtracted.
+
+       Only ever written by a COMPLETE read. A truncated one knows a prefix and
+       would report it as the whole. */
+    if(teamLastComplete){
+      try{
+        const rows = viaIndex ? (j.rows||[]) : (j.records||[]);
+        const pairs = new Set(), units = new Set();
+        for(const r of rows){
+          const u = (r.u || r.equip || "").toUpperCase();
+          const ty = r.t || r.type || "";
+          if(!u || !ty) continue;
+          pairs.add(ty+"|"+u); units.add(u);
+        }
+        lsSet("cm_fleet_n", JSON.stringify({p:pairs.size, u:units.size, at:Date.now()}));
+      }catch(e){}
+    }
     const nextCur = viaIndex ? (j.truncated ? j.cursor : j.at) : j.cursor;
     if(saved && nextCur) lsSet(TEAM_CUR,String(nextCur));
     /* A complete read that stored everything is the one thing that can retire
@@ -8999,7 +9050,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="179";
+const BUILD="180";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
