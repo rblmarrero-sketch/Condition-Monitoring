@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=178">
+<link rel="manifest" href="manifest.webmanifest?v=179">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=178">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=178">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=178">
+<link rel="apple-touch-icon" href="icon-192.png?v=179">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=179">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=179">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1734,7 +1734,16 @@
     <div class="tfilter dfilter tfrounds" id="dueTypeF"></div>
     <div class="quiet" id="dueBasis" style="margin:-4px 0 10px"></div>
     <div class="duelist" id="dueList"></div>
-    <button class="btn ghost" id="dueImport" style="margin-top:12px">📥 <span data-i18n="btn_due_import">Load history file</span></button>
+    <!-- THE ONE-TAP ANSWER TO "WHY IS THIS MACHINE NOT ON MY LIST".
+
+         A full re-read is the only call that returns rounds already behind the
+         cursor, and it lived in System behind a button called "Reload all" —
+         which nobody reading a due list would think to press, because nothing
+         on the screen connects the two. It belongs next to the count it
+         corrects, and it says what it changed. -->
+    <button class="btn ghost" id="dueFull" style="margin-top:12px">⟳ <span data-i18n="btn_due_full">Get the full fleet history</span></button>
+    <div class="quiet" id="dueFullMsg" style="margin:6px 0 0"></div>
+    <button class="btn ghost" id="dueImport" style="margin-top:8px">📥 <span data-i18n="btn_due_import">Load history file</span></button>
     <div class="hint" style="margin-top:8px" data-i18n="due_hint">Built from what this phone has recorded. Load an entries.json exported from the dashboard to seed the whole fleet's last-done dates.</div>
     <input id="dueFile" type="file" accept=".json,application/json" class="hidden">
   </div>
@@ -1932,31 +1941,31 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=178"></script>
-<script src="upload-defaults.js?v=178"></script>
-<script src="hme.js?v=178"></script>
-<script src="mp-fc.js?v=178"></script>
-<script src="hme-cascade.js?v=178"></script>
-<script src="assets.js?v=178"></script>
-<script src="temp-limits.js?v=178"></script>
-<script src="normalize.js?v=178"></script>
-<script src="due.js?v=178"></script>
-<script src="wear.js?v=178"></script>
-<script src="wear-figs.js?v=178"></script>
-<script src="wear-map.js?v=178"></script>
-<script src="machine-photos.js?v=178"></script>
-<script src="machine-fig.js?v=178"></script>
-<script src="get.js?v=178"></script>
-<script src="points.js?v=178"></script>
-<script src="uc-points.js?v=178"></script>
-<script src="inspect-guide.js?v=178"></script>
-<script src="get-figs.js?v=178"></script>
-<script src="body-points.js?v=178"></script>
-<script src="body-map.js?v=178"></script>
-<script src="lube.js?v=178"></script>
-<script src="lube-overrides.js?v=178"></script>
-<script src="lube2027.js?v=178"></script>
-<script src="report-core.js?v=178"></script>
+<script src="native.js?v=179"></script>
+<script src="upload-defaults.js?v=179"></script>
+<script src="hme.js?v=179"></script>
+<script src="mp-fc.js?v=179"></script>
+<script src="hme-cascade.js?v=179"></script>
+<script src="assets.js?v=179"></script>
+<script src="temp-limits.js?v=179"></script>
+<script src="normalize.js?v=179"></script>
+<script src="due.js?v=179"></script>
+<script src="wear.js?v=179"></script>
+<script src="wear-figs.js?v=179"></script>
+<script src="wear-map.js?v=179"></script>
+<script src="machine-photos.js?v=179"></script>
+<script src="machine-fig.js?v=179"></script>
+<script src="get.js?v=179"></script>
+<script src="points.js?v=179"></script>
+<script src="uc-points.js?v=179"></script>
+<script src="inspect-guide.js?v=179"></script>
+<script src="get-figs.js?v=179"></script>
+<script src="body-points.js?v=179"></script>
+<script src="body-map.js?v=179"></script>
+<script src="lube.js?v=179"></script>
+<script src="lube-overrides.js?v=179"></script>
+<script src="lube2027.js?v=179"></script>
+<script src="report-core.js?v=179"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2342,6 +2351,13 @@ const I18N = {
        label only has to say which. "Missed only" and "All units with history"
        were written to be read one at a time with the others hidden. */
     due_soon:"Due soon", due_putoff:"Put off",
+    btn_due_full:"Get the full fleet history",
+    due_full_go:"Reading the whole folder\u2026",
+    due_full_ok:"{n} machine(s) added \u2014 now covering {m}.",
+    due_full_same:"Nothing new. This phone already has every round in the folder.",
+    due_full_part:"Read part of the folder: {m} machines so far. Press again to continue.",
+    due_full_off:"No signal. Try again where there is one.",
+    due_full_fail:"Could not read the folder.",
     btn_due_import:"Load history file", due_days:"{n} d ago", due_over:"overdue {n} d", due_in:"in {n} d",
     due_never:"never done", due_empty:"Nothing is due right now.",
     due_hint:"Built from what this phone has recorded plus everything in the system above. Load an entries.json exported from the dashboard to seed the whole fleet's last-done dates.",
@@ -2786,6 +2802,13 @@ const I18N = {
     due_why_need:"Укажите причину — её будут читать позже.",
     due_overdue:"Просроченные и скоро", due_all:"Все",
     due_soon:"Скоро срок", due_putoff:"Отложено",
+    btn_due_full:"Загрузить историю всего парка",
+    due_full_go:"Читаю всю папку\u2026",
+    due_full_ok:"Добавлено машин: {n}. Теперь охвачено: {m}.",
+    due_full_same:"Нового нет. На телефоне уже есть все осмотры из папки.",
+    due_full_part:"Прочитана часть папки: машин {m}. Нажмите ещё раз, чтобы продолжить.",
+    due_full_off:"Нет связи. Попробуйте там, где она есть.",
+    due_full_fail:"Не удалось прочитать папку.",
     btn_due_import:"Загрузить историю", due_days:"{n} дн. назад", due_over:"просрочено {n} дн.", due_in:"через {n} дн.",
     due_never:"не проводился", due_empty:"Сейчас ничего не требуется.",
     due_hint:"Строится по данным этого телефона и по всему, что есть в системе выше. Загрузите entries.json из дашборда, чтобы подтянуть даты по всему парку.",
@@ -7237,6 +7260,11 @@ function setIdxCap(url,v){ const c=idxCaps();
   if(v===null) delete c[url]; else c[url]=v;
   try{ lsSet("up_index",JSON.stringify(c)); }catch(e){} }
 let teamBusy=false, teamAt=0, teamAbort=null, teamRun=0;
+/* Did the last reply that landed cover the WHOLE folder, or stop short of it?
+   The backend caps a records call at six hundred sidecars, so on a season's
+   work a "full" re-read returns a prefix and says so. Anything that means "I
+   have now seen everything" has to read this and not the bare success. */
+let teamLastComplete=false;
 const TEAM_MIN_GAP=60000;    // automatic pulls only; the button always goes
 const TEAM_TIMEOUT=20000;    // pit signal can leave a fetch hanging for ever
 /* A full re-read is a different kind of request: the script walks every file in
@@ -7370,6 +7398,7 @@ async function teamPull(manual,full){
     // cursor after a failed write loses those inspections permanently.
     /* The index reports where the folder is, not where this reply stopped —
        unless it did stop, in which case the next call resumes from there. */
+    teamLastComplete = !!(after===0 && !j.truncated);
     const nextCur = viaIndex ? (j.truncated ? j.cursor : j.at) : j.cursor;
     if(saved && nextCur) lsSet(TEAM_CUR,String(nextCur));
     /* A complete read that stored everything is the one thing that can retire
@@ -7753,7 +7782,11 @@ async function histHealOnce(){
   try{
     /* Manual, so the automatic-pull gap cannot swallow it and leave the phone
        marked as repaired without having asked. */
-    if(await teamPull(true,true)) lsSet(HIST_HEAL,"1");
+    /* A truncated read leaves the cursor further forward and the rest
+       arriving on later pulls, which is fine — but it is not grounds for
+       saying the repair is finished, and marking it finished is how a phone
+       ends up permanently holding part of the folder. */
+    if(await teamPull(true,true) && teamLastComplete) lsSet(HIST_HEAL,"1");
   }catch(e){ /* never reached the folder — try again next launch */ }
   finally{ histHealing=false; }
 }
@@ -7903,6 +7936,33 @@ $("teamRefresh").onclick=async ()=>{
    fetched set replaces the stored one only once it has actually arrived. */
 $("teamReload").onclick=()=>teamPull(true,true);
 
+/* Counted in MACHINES, which is the unit the line above it uses and the unit
+   somebody plans in. Saying "12 rounds added" over a list of machines invites
+   the reader to compare two different things. */
+function dueMachines(){
+  try{
+    const seen=new Set();
+    for(const k of Object.keys(histAll())){ const u=k.split("|")[1]; if(u) seen.add(u); }
+    return seen.size;
+  }catch(e){ return 0; }
+}
+$("dueFull").onclick=async ()=>{
+  const btn=$("dueFull"), msg=$("dueFullMsg");
+  if(!navigator.onLine){ msg.textContent=t("due_full_off"); return; }
+  const before=dueMachines();
+  btn.disabled=true; msg.textContent=t("due_full_go");
+  try{
+    const ok=await teamPull(true,true);
+    const after=dueMachines();
+    msg.textContent = !ok ? t("due_full_fail")
+      : !teamLastComplete ? t("due_full_part",{m:after})
+      : after>before ? t("due_full_ok",{n:after-before, m:after})
+      : t("due_full_same");
+    if(ok && teamLastComplete) lsSet(HIST_HEAL,"1");
+    renderDue();
+  }catch(e){ msg.textContent=t("due_full_fail"); }
+  finally{ btn.disabled=false; }
+};
 $("dueImport").onclick=()=>$("dueFile").click();
 $("dueFile").onchange=async (e)=>{ const f=e.target.files[0]; e.target.value=""; if(!f) return;
   let j; try{ j=JSON.parse(await f.text()); }catch(err){ dlg(t("m_merge_bad")); return; }
@@ -8939,7 +8999,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="178";
+const BUILD="179";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

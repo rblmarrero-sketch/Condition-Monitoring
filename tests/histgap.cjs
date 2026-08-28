@@ -253,6 +253,58 @@ const histKeys = p => p.evaluate(() => Object.keys(JSON.parse(localStorage.getIt
     await ctx.close();
   }
 
+  console.log('\nand a phone that is still wrong has one tap that fixes it');
+  {
+    /* Every automatic repair has already run and marked itself done. This is
+       the state a handset is in when it is STILL short - and until now the
+       only way out was a button called "Reload all", in System, which nobody
+       reading a due list would think to press because nothing on the screen
+       connects the two. It belongs next to the count it corrects. */
+    const ctx = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true });
+    const pg = await ctx.newPage();
+    pg.on('pageerror', e => fails.push('PAGEERROR ' + e.message));
+    await pg.addInitScript(s => {
+      localStorage.setItem('up_dests', JSON.stringify(
+        [{ id: 'gas', on: true, url: s.url, sec: '', folder: '' }]));
+      localStorage.setItem('cm_team', JSON.stringify(s.team));
+      localStorage.setItem('cm_hist', JSON.stringify(s.hist));
+      localStorage.setItem('cm_team_cursor', String(9e12));
+      localStorage.setItem('cm_team_full_v1', '1');
+      localStorage.setItem('cm_hist_full_v1', '1');
+    }, { url: BASE + '/exec',
+         team: [{ t: 'MP', u: 'TK101', d: '2026-07-02', by: 'R. Marrero', g: 'A' }],
+         hist: { 'MP|TK101': { d: '2026-07-02' } } });
+    await pg.goto(BASE + '/mobile/index.html', { waitUntil: 'load' });
+    await pg.waitForTimeout(1800);
+    await pg.evaluate(() => showPane('paneDue'));
+    await pg.waitForTimeout(400);
+    const before = await pg.evaluate(() => dueMachines());
+    ok('the phone starts short and nothing automatic will fix it', before === 1, before + ' machine(s)');
+    ok('the control is on the screen whose number is wrong',
+       await pg.evaluate(() => !!document.getElementById('dueFull')));
+    await pg.click('#dueFull');
+    await pg.waitForTimeout(2600);
+    const after = await pg.evaluate(() => dueMachines());
+    ok('one tap reads the whole folder', after > before, before + ' → ' + after);
+    /* It has to say what it changed, in machines - the unit the line above it
+       uses and the unit somebody plans in. */
+    const msg = await pg.evaluate(() => document.getElementById('dueFullMsg').textContent);
+    ok('and says what it changed, counted in machines',
+       msg === await say(pg, 'due_full_ok', { n: after - before, m: after }), msg);
+    ok('the list is redrawn from it',
+       (await pg.evaluate(() => (document.getElementById('dueBasis') || {}).textContent || ''))
+         .includes(await say(pg, 'due_cover', { n: after, m: 1128 })));
+    await pg.click('#dueFull');
+    await pg.waitForTimeout(2600);
+    /* Pressing it again on a phone that is already complete must say so
+       rather than reporting a change it did not make. */
+    ok('pressing it again reports no change',
+       await pg.evaluate(() => document.getElementById('dueFullMsg').textContent)
+         === await say(pg, 'due_full_same'),
+       await pg.evaluate(() => document.getElementById('dueFullMsg').textContent));
+    await ctx.close();
+  }
+
   console.log('\nthe number says how much of the fleet it is about');
   {
     const a = await phone(b, { offline: true, team: TEAM, hist: HIST, cursor: Date.now() });
