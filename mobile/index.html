@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=182">
+<link rel="manifest" href="manifest.webmanifest?v=183">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=182">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=182">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=182">
+<link rel="apple-touch-icon" href="icon-192.png?v=183">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=183">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=183">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1747,6 +1747,9 @@
          corrects, and it says what it changed. -->
     <button class="btn ghost" id="dueFull" style="margin-top:12px">⟳ <span data-i18n="btn_due_full">Get the full fleet history</span></button>
     <div class="quiet" id="dueFullMsg" style="margin:6px 0 0"></div>
+    <!-- Only offered where there is something to drop. A control for a state
+         nobody is in is a control that teaches people to ignore controls. -->
+    <button class="btn ghost hidden" id="dueOnly" style="margin-top:8px">🧹 <span data-i18n="btn_due_only">Keep only what the system has</span></button>
     <button class="btn ghost" id="dueImport" style="margin-top:8px">📥 <span data-i18n="btn_due_import">Load history file</span></button>
     <div class="hint" style="margin-top:8px" data-i18n="due_hint">Built from what this phone has recorded. Load an entries.json exported from the dashboard to seed the whole fleet's last-done dates.</div>
     <input id="dueFile" type="file" accept=".json,application/json" class="hidden">
@@ -1945,31 +1948,31 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=182"></script>
-<script src="upload-defaults.js?v=182"></script>
-<script src="hme.js?v=182"></script>
-<script src="mp-fc.js?v=182"></script>
-<script src="hme-cascade.js?v=182"></script>
-<script src="assets.js?v=182"></script>
-<script src="temp-limits.js?v=182"></script>
-<script src="normalize.js?v=182"></script>
-<script src="due.js?v=182"></script>
-<script src="wear.js?v=182"></script>
-<script src="wear-figs.js?v=182"></script>
-<script src="wear-map.js?v=182"></script>
-<script src="machine-photos.js?v=182"></script>
-<script src="machine-fig.js?v=182"></script>
-<script src="get.js?v=182"></script>
-<script src="points.js?v=182"></script>
-<script src="uc-points.js?v=182"></script>
-<script src="inspect-guide.js?v=182"></script>
-<script src="get-figs.js?v=182"></script>
-<script src="body-points.js?v=182"></script>
-<script src="body-map.js?v=182"></script>
-<script src="lube.js?v=182"></script>
-<script src="lube-overrides.js?v=182"></script>
-<script src="lube2027.js?v=182"></script>
-<script src="report-core.js?v=182"></script>
+<script src="native.js?v=183"></script>
+<script src="upload-defaults.js?v=183"></script>
+<script src="hme.js?v=183"></script>
+<script src="mp-fc.js?v=183"></script>
+<script src="hme-cascade.js?v=183"></script>
+<script src="assets.js?v=183"></script>
+<script src="temp-limits.js?v=183"></script>
+<script src="normalize.js?v=183"></script>
+<script src="due.js?v=183"></script>
+<script src="wear.js?v=183"></script>
+<script src="wear-figs.js?v=183"></script>
+<script src="wear-map.js?v=183"></script>
+<script src="machine-photos.js?v=183"></script>
+<script src="machine-fig.js?v=183"></script>
+<script src="get.js?v=183"></script>
+<script src="points.js?v=183"></script>
+<script src="uc-points.js?v=183"></script>
+<script src="inspect-guide.js?v=183"></script>
+<script src="get-figs.js?v=183"></script>
+<script src="body-points.js?v=183"></script>
+<script src="body-map.js?v=183"></script>
+<script src="lube.js?v=183"></script>
+<script src="lube-overrides.js?v=183"></script>
+<script src="lube2027.js?v=183"></script>
+<script src="report-core.js?v=183"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2342,6 +2345,10 @@ const I18N = {
     due_cover:"covering {n} of {m} machines",
     due_never_p:"Never done",
     due_more:"+{n} more — narrow by round to see them",
+    due_stray:"⚠ {n} of these dates are not in the system — loaded from a file, or left from an older sync",
+    btn_due_only:"Keep only what the system has",
+    due_only_go:"Dropped {n}. Now {m} machines, all from the system.",
+    due_only_none:"Nothing to drop — every date here came from the system or from this phone.",
     due_never_row:"no inspection of this round on record",
     due_noprog:"{n} machines have no round programme, so none is proposed for them",
     due_behind:"⚠ the folder holds {f} rounds and this phone has {m} — {n} missing",
@@ -2801,6 +2808,10 @@ const I18N = {
     due_cover:"охвачено машин: {n} из {m}",
     due_never_p:"Ни разу",
     due_more:"ещё {n} — выберите тип осмотра, чтобы увидеть",
+    due_stray:"⚠ {n} из этих дат нет в системе — загружены из файла или остались от прежней синхронизации",
+    btn_due_only:"Оставить только то, что есть в системе",
+    due_only_go:"Удалено: {n}. Осталось машин: {m}, все из системы.",
+    due_only_none:"Удалять нечего — все даты пришли из системы или с этого телефона.",
     due_never_row:"осмотров этого типа в системе нет",
     due_noprog:"Для {n} машин программа осмотров не задана — они не предлагаются",
     due_behind:"⚠ в папке осмотров: {f}, на телефоне: {m} — не хватает {n}",
@@ -6280,12 +6291,35 @@ function histDate(v){ const e=histEntry(v); return e?e.d:null; }
    meter arrive by different paths — this phone's own save knows both, a team
    row may know only the date. An older one is ignored outright: a round from
    last month arriving late does not un-inspect a machine. */
-function histPut(h,k,e){
+/* WHERE THIS DATE CAME FROM.
+
+   cm_hist accumulates and is never pruned. A date learned two backends ago is
+   still in it; a date loaded by hand from an exported file is in it on exactly
+   one device and syncs nowhere; a date from a round captured here is in it
+   before the folder has ever seen it. Nothing recorded which was which, so
+   three copies of this app carried three different histories, all of them
+   truthfully reporting "fleet history updated just now", and there was no way
+   from inside any of them to tell a fleet fact from a local one.
+
+     f  the system — a folder read delivered it
+     o  recorded on this device
+     i  loaded from a history file, and on this device alone
+
+   Stamped even when the date has not changed, so one folder read re-stamps
+   everything the folder holds. Whatever is left unstamped afterwards is
+   exactly what the folder does not have. */
+function histPut(h,k,e,src){
   if(!e || !e.d) return false;
   const cur=histEntry(h[k]);
-  if(cur && cur.d>e.d) return false;
+  if(cur && cur.d>e.d){
+    /* Older date, so nothing to learn about WHEN — but the folder having sent
+       it at all is worth recording about WHERE. */
+    if(src==="f" && cur.s!=="f"){ cur.s="f"; h[k]=cur; }
+    return false;
+  }
   const same=!!(cur && cur.d===e.d);
   const out={d:e.d};
+  if(src) out.s=src; else if(same && cur.s) out.s=cur.s;
   const hv=(e.h!=null&&e.h!=="")?Number(e.h):(same&&cur.h!=null?Number(cur.h):null);
   const fv=(e.f!=null&&e.f!=="")?Number(e.f):(same&&cur.f!=null?Number(cur.f):null);
   if(hv!=null&&isFinite(hv)) out.h=hv;
@@ -6483,7 +6517,7 @@ function histRebuildFromTeam(){
     const h=histAll(); let n=0;
     for(const r of teamAll()){
       if(!r || !r.t || !r.u || !r.d) continue;
-      if(histPut(h, r.t+"|"+r.u, {d:r.d, h:r.s})) n++;
+      if(histPut(h, r.t+"|"+r.u, {d:r.d, h:r.s}, "f")) n++;
     }
     if(n) histSave(h);
     return n;
@@ -6556,6 +6590,37 @@ function dueVsFolder(){
   if(mine>=f.p) return "";
   return t("due_behind",{n:f.p-mine, f:f.p, m:mine});
 }
+/* WHAT IS IN THIS PHONE'S SCHEDULE THAT THE SYSTEM HAS NEVER SEEN.
+
+   Self-gating: it says nothing until at least one entry carries the folder's
+   stamp, because until a stamping read has run EVERYTHING is unstamped and the
+   warning would be about the upgrade rather than about the data. */
+function histSources(){
+  const out={f:0,o:0,i:0,u:0,total:0};
+  try{
+    const h=histAll();
+    for(const k of Object.keys(h)){
+      const e=histEntry(h[k]); if(!e) continue;
+      out.total++;
+      const sr=e.s==="f"||e.s==="o"||e.s==="i" ? e.s : "u";
+      out[sr]++;
+    }
+  }catch(e){}
+  return out;
+}
+/* Dates this device holds that the folder does not: loaded from a file, or
+   left over from a backend or a sync that no longer exists. A round captured
+   HERE is not in this count — it is on its way, and it is this phone's own
+   work. */
+function histStrays(){
+  const src=histSources();
+  if(!src.f) return 0;                    // no stamping read yet — say nothing
+  return src.i + src.u;
+}
+function dueStray(){
+  const n=histStrays();
+  return n ? t("due_stray",{n}) : "";
+}
 function dueNoProgramme(){
   const n=unclassedCount();
   return n ? t("due_noprog",{n}) : "";
@@ -6584,7 +6649,7 @@ function histAge(){
   return t("hist_at",{t:agoWords(w.at)});
 }
 function noteDone(rec){ if(!rec.equip||!rec.date) return; const h=histAll();
-  histPut(h,(rec.type||"MP")+"|"+rec.equip,{d:rec.date, h:rec.smu});
+  histPut(h,(rec.type||"MP")+"|"+rec.equip,{d:rec.date, h:rec.smu},"o");
   histSave(h);
   smuNote(rec.equip, rec.date, rec.smu);
   /* "It could not be done" stops being true the moment it is done. */
@@ -6628,7 +6693,7 @@ async function noteWear(rec){
     }
     if(soonest==null) return;
     const h=histAll();
-    histPut(h,(rec.type||"MP")+"|"+rec.equip,{d:rec.date, h:rec.smu, f:Math.round(soonest)});
+    histPut(h,(rec.type||"MP")+"|"+rec.equip,{d:rec.date, h:rec.smu, f:Math.round(soonest)},"o");
     histSave(h);
     renderDue();
   }catch(e){ /* a forecast that cannot be made is not a failed save */ }
@@ -6921,6 +6986,9 @@ function renderDue(){
          proposed for them. Saying nothing about that would make this screen
          quietly about a fifth of the fleet while reading as all of it. */
       dueNoProgramme(),
+      /* The line that explains three copies of one app carrying three
+         different schedules. */
+      dueStray(),
       /* Not "how much of the register", which is a fact about the site — how
          much of the FOLDER, which is a fact about this phone. */
       dueVsFolder(),
@@ -6978,6 +7046,8 @@ function renderDue(){
      list of 200 rows is fine; a pill reading 600 over the same list, with
      nothing saying the rest exist, is the same failure this screen keeps
      having. */
+  const strayBtn=$("dueOnly");
+  if(strayBtn) strayBtn.classList.toggle("hidden", histStrays()===0);
   if(show.length>200){
     box.insertAdjacentHTML("beforeend",
       `<div class="quiet" style="padding:8px 2px 0">${esc(t("due_more",{n:show.length-200}))}</div>`);
@@ -7369,7 +7439,7 @@ function teamMergeRows(rows,replace){
     const k=teamKey(row);
     if(!have.has(k)) added++;
     have.set(k,row);                                  // a re-upload replaces
-    if(histPut(h,row.t+"|"+row.u,{d:row.d, h:row.s})) hist++;
+    if(histPut(h,row.t+"|"+row.u,{d:row.d, h:row.s},"f")) hist++;
     smuNote(row.u,row.d,row.s);
   }
   /* Stamped only if the index actually reached storage. "Updated just now"
@@ -7399,7 +7469,7 @@ function teamMerge(recs,replace){
     const k=teamKey(row);
     if(!have.has(k)) added++;
     have.set(k,row);                                  // a re-upload replaces
-    if(histPut(h,row.t+"|"+row.u,{d:row.d, h:row.s})) hist++;
+    if(histPut(h,row.t+"|"+row.u,{d:row.d, h:row.s},"f")) hist++;
     smuNote(row.u,row.d,row.s);
   }
   /* Stamped only if the index actually reached storage. "Updated just now"
@@ -8239,13 +8309,36 @@ $("dueFull").onclick=async ()=>{
   }catch(e){ msg.textContent=t("due_full_fail"); }
   finally{ btn.disabled=false; }
 };
+/* THE WAY BACK TO ONE ANSWER.
+
+   Three copies of this app carried three different schedules because each had
+   accumulated dates the others had not, and none could be told from a fleet
+   fact. This drops exactly the ones the system has never seen — a loaded file,
+   or a leftover from a backend that no longer exists — and keeps what the
+   folder holds and what this phone recorded itself.
+
+   Nothing is uploaded and nothing is destroyed anywhere else: this is one
+   device's copy of a schedule, and the rounds themselves are untouched. */
+$("dueOnly").onclick=()=>{
+  const msg=$("dueFullMsg");
+  const h=histAll(); const drop=[];
+  for(const k of Object.keys(h)){
+    const e=histEntry(h[k]); if(!e) continue;
+    if(e.s!=="f" && e.s!=="o") drop.push(k);
+  }
+  if(!drop.length){ msg.textContent=t("due_only_none"); return; }
+  drop.forEach(k=>{ delete h[k]; });
+  histSave(h);
+  msg.textContent=t("due_only_go",{n:drop.length, m:dueMachines()});
+  renderDue();
+};
 $("dueImport").onclick=()=>$("dueFile").click();
 $("dueFile").onchange=async (e)=>{ const f=e.target.files[0]; e.target.value=""; if(!f) return;
   let j; try{ j=JSON.parse(await f.text()); }catch(err){ dlg(t("m_merge_bad")); return; }
   const recs=(j&&(j.records||j.inspections))||[]; const h=histAll(); let n=0;
   for(const r of recs){ const u=(r.equip||r.equipment||"").toUpperCase(), d=r.date, ty=r.type||"MP";
     if(!u||!d) continue;
-    if(histPut(h,ty+"|"+u,{d:d, h:r.smu})) n++;
+    if(histPut(h,ty+"|"+u,{d:d, h:r.smu},"i")) n++;
     smuNote(u,d,r.smu); }
   /* A file loaded by hand IS this phone learning what the fleet knows — the
      path a machine with no signal to the office actually uses. Without the
@@ -9275,7 +9368,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="182";
+const BUILD="183";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
