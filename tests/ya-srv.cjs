@@ -121,6 +121,14 @@ http.createServer(async (req, res) => {
           u.searchParams.get('type') || 'application/octet-stream', '');
     res.writeHead(200, cors); return res.end('ok');
   }
+  /* Remove an object outright. The function itself never deletes a settled
+     conflict marker - it stamps it - but the backend that ran on the VM before
+     that fix DID, and a phone left holding the leftover key is the state the
+     pit reported. There is no way to reach it through the API, by design. */
+  if (u.pathname === '/__del') {
+    const gone = B.del(u.searchParams.get('key') || '');
+    res.writeHead(200, cors); return res.end(gone ? 'ok' : 'missing');
+  }
   if (u.pathname === '/__keys') {
     res.writeHead(200, Object.assign({ 'Content-Type': 'application/json' }, cors));
     return res.end(JSON.stringify({ keys: B.keys() }));

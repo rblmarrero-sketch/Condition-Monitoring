@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=173">
+<link rel="manifest" href="manifest.webmanifest?v=174">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=173">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=173">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=173">
+<link rel="apple-touch-icon" href="icon-192.png?v=174">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=174">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=174">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1932,31 +1932,31 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=173"></script>
-<script src="upload-defaults.js?v=173"></script>
-<script src="hme.js?v=173"></script>
-<script src="mp-fc.js?v=173"></script>
-<script src="hme-cascade.js?v=173"></script>
-<script src="assets.js?v=173"></script>
-<script src="temp-limits.js?v=173"></script>
-<script src="normalize.js?v=173"></script>
-<script src="due.js?v=173"></script>
-<script src="wear.js?v=173"></script>
-<script src="wear-figs.js?v=173"></script>
-<script src="wear-map.js?v=173"></script>
-<script src="machine-photos.js?v=173"></script>
-<script src="machine-fig.js?v=173"></script>
-<script src="get.js?v=173"></script>
-<script src="points.js?v=173"></script>
-<script src="uc-points.js?v=173"></script>
-<script src="inspect-guide.js?v=173"></script>
-<script src="get-figs.js?v=173"></script>
-<script src="body-points.js?v=173"></script>
-<script src="body-map.js?v=173"></script>
-<script src="lube.js?v=173"></script>
-<script src="lube-overrides.js?v=173"></script>
-<script src="lube2027.js?v=173"></script>
-<script src="report-core.js?v=173"></script>
+<script src="native.js?v=174"></script>
+<script src="upload-defaults.js?v=174"></script>
+<script src="hme.js?v=174"></script>
+<script src="mp-fc.js?v=174"></script>
+<script src="hme-cascade.js?v=174"></script>
+<script src="assets.js?v=174"></script>
+<script src="temp-limits.js?v=174"></script>
+<script src="normalize.js?v=174"></script>
+<script src="due.js?v=174"></script>
+<script src="wear.js?v=174"></script>
+<script src="wear-figs.js?v=174"></script>
+<script src="wear-map.js?v=174"></script>
+<script src="machine-photos.js?v=174"></script>
+<script src="machine-fig.js?v=174"></script>
+<script src="get.js?v=174"></script>
+<script src="points.js?v=174"></script>
+<script src="uc-points.js?v=174"></script>
+<script src="inspect-guide.js?v=174"></script>
+<script src="get-figs.js?v=174"></script>
+<script src="body-points.js?v=174"></script>
+<script src="body-map.js?v=174"></script>
+<script src="lube.js?v=174"></script>
+<script src="lube-overrides.js?v=174"></script>
+<script src="lube2027.js?v=174"></script>
+<script src="report-core.js?v=174"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -6734,6 +6734,90 @@ function cfOpen(){
   const live=new Set(teamAll().map(cfKey));
   return keys.filter(k=>live.has(k));
 }
+/* THE OFFICE ANSWERED AND THE PHONE NEVER HEARD.
+
+   "EX001 — we already chose one. It is still there." The decision was made in
+   the dashboard, the marker was settled, and the phone went on painting a 1 on
+   SYSTEM and a ⑂ on the row for as long as it lived.
+
+   Two ways that happens, and the phone cannot tell them apart from the
+   outside:
+
+     · the backend running on the VM is older than the fix that STAMPS a
+       settled marker — it DELETED it instead, so nothing ever arrived saying
+       the question had been answered; or
+     · the marker was settled correctly, but by a backend that has since been
+       replaced, and the deletion already happened.
+
+   Either way the phone is left holding a key nothing will ever contradict. The
+   only cure it had was cfMerge's reconcile-by-absence, which runs ONLY on a
+   full re-read of the whole folder — a request with a four-minute budget,
+   behind a button whose connection to a stale conflict badge is invisible to
+   the person reading the badge.
+
+   So: ask about the markers themselves, precisely. `list` and `files` are old
+   actions that every deployment of this backend has, which matters — this has
+   to work against whatever is on the VM today, not against a version somebody
+   still has to install.
+
+   Only ever CLOSES a clash. A partial answer must never invent one: opening is
+   the pull's job, where a marker arrives saying so. */
+const CF_MARK=/^(.+)_(\d{2})\.(\d{2})\.(\d{4})_([^_.]+)\.conflict\.json$/i;
+function cfKeyFromMarker(name){
+  const m=CF_MARK.exec(String(name||""));
+  return m ? `${m[1]}|${m[4]}-${m[3]}-${m[2]}|${m[5]}` : "";
+}
+function cfDecode(b64){
+  /* The marker carries an inspector's name. atob gives bytes, not characters. */
+  try{
+    const bin=atob(String(b64||"")), by=new Uint8Array(bin.length);
+    for(let i=0;i<bin.length;i++) by[i]=bin.charCodeAt(i);
+    return JSON.parse(new TextDecoder().decode(by));
+  }catch(e){ return null; }
+}
+async function cfRecheck(signal){
+  const open=cfOpen();
+  if(!open.length) return 0;
+  const g=loadDests().find(d=>d.id==="gas" && d.url);
+  if(!g || !navigator.onLine) return 0;
+  const ask=async pr=>{
+    const q=new URLSearchParams(pr);
+    if(g.sec) q.set("secret",g.sec);
+    const res=await fetch(g.url+(g.url.indexOf("?")<0?"?":"&")+q.toString(),
+                          {method:"GET", signal});
+    return JSON.parse(await res.text());
+  };
+  let list=null;
+  try{ list=await ask({action:"list", folder:"_meta", ext:".conflict.json"}); }
+  catch(e){ return 0; }
+  /* Silence is not a verdict. A listing that failed, or that says it did not
+     finish, is not a statement about what is absent from the folder. */
+  if(!list || list.ok===false || !Array.isArray(list.files) || list.truncated) return 0;
+
+  const id={};
+  for(const f of list.files){ const k=cfKeyFromMarker(f && f.name); if(k) id[k]=f.id; }
+  const have=cfAll(); let closed=0;
+  /* No marker in the folder at all: settled by a backend that deleted it
+     rather than stamping it. The same conclusion cfMerge draws from a complete
+     read, drawn from a complete listing. */
+  for(const k of open) if(!id[k] && have[k]){ delete have[k]; closed++; }
+  const still=open.filter(k=>id[k]);
+  if(still.length){
+    let docs=null;
+    try{ docs=await ask({action:"files", ids:still.map(k=>id[k]).join(",")}); }
+    catch(e){ docs=null; }
+    for(const f of ((docs&&docs.files)||[])){
+      if(!f || !f.ok || !f.data) continue;
+      const j=cfDecode(f.data);
+      if(j && j.key && j.resolved && have[j.key]){ delete have[j.key]; closed++; }
+    }
+  }
+  if(closed){
+    try{ localStorage.setItem(TEAM_CF,JSON.stringify(have)); }catch(e){}
+    cfCache=have;
+  }
+  return closed;
+}
 /* Parsing the whole cache on every call was costing a JSON.parse of up to a
    megabyte each time a unit was picked — renderLastDone, renderTeam and
    teamMerge all call this. Hold it in memory and invalidate on write. */
@@ -7551,7 +7635,14 @@ function renderTabs(){
     set($("tabS"), cfOpen().length, "warn");
   }catch(e){}
 }
-$("teamRefresh").onclick=()=>teamPull(true);
+$("teamRefresh").onclick=async ()=>{
+  await teamPull(true);
+  /* Pressing "Check for new" while a clash is showing is somebody asking about
+     that clash. An incremental pull is silent about a marker older than the
+     cursor, so the press would otherwise report "up to date" over a warning
+     the office answered weeks ago. Only when there is one to ask about. */
+  if(cfOpen().length && await cfRecheck()){ renderTeam(); renderTabs(); }
+};
 /* Two phones can hold different subsets: an installed app and a browser tab do
    not always share storage (iOS keeps them apart), and each keeps its own
    cursor. Nothing can reconcile that from the inside — so offer the one thing
@@ -8598,7 +8689,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="173";
+const BUILD="174";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
