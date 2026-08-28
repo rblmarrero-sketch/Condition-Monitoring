@@ -92,13 +92,55 @@
     return !blank(i && i.key) || !blank(i && i.label) || !blank(i && i.name);
   }
 
-  /* The evidence half: whether anything was recorded here. */
+  /* WHAT A HUMAN ACTUALLY RECORDED — THE SHORT LIST, AND ONLY THIS LIST.
+
+     Three builds shipped a fix that passed locally and failed in production,
+     because `carries()` asked a sixty-field question. Every extra field is
+     another way for a blank row to look populated: a unit, a limit, a baseline,
+     a reference source, a status, an ISO code — none of them is a finding, and
+     any one of them being non-blank kept a good inspection on hold.
+
+     So the test that can BLOCK an inspection is now exactly the list of things
+     an inspector records, and nothing else:
+
+         grade · severity · measurement · finding · defect · cause ·
+         recommendation · comment · photograph · attachment · work order
+
+     A field outside this list can still be preserved, reported and printed.
+     What it can no longer do is make an otherwise-empty row into a finding
+     somebody has to identify. The wide OPERATIONAL list stays for callers that
+     ask "is there anything here at all"; EVIDENCE is what decides whether a
+     human is interrupted. Narrow, because the cost of being wrong is a shift. */
+  var EVIDENCE = [
+    'grade', 'sev', 'severity', 'condition',
+    'mm', 'value', 'measurement', 'reading',
+    'finding', 'defect', 'defectCode', 'cause', 'causeCode',
+    'recommendation', 'rec', 'action', 'actionLabel',
+    'prio', 'priority', 'wo', 'workOrder',
+    'comment', 'note', 'notes',
+    'photo', 'photos', 'video', 'attachments', 'media',
+    /* A temperature IS a measurement, and the product found in a component IS
+       what the lubrication round records — both are things an inspector wrote
+       down, so both belong on the short list. Left off the first draft of it
+       because the list was cut to the audit's eleven headings and these two sit
+       under "measurement" and "finding" rather than having headings of their
+       own. `owner` is deliberately NOT here: an owner is assigned TO a finding
+       in the office, it is not something anybody observed at a machine. */
+    'tempC', 'tempV', 'ambC', 'tempA',
+    'lubeProduct', 'lubeEvidence', 'prod', 'evid'
+  ];
   function carries(i) {
     if (!i || typeof i !== 'object') return false;
-    for (var n = 0; n < OPERATIONAL.length; n++) {
-      if (!blank(i[OPERATIONAL[n]])) return true;
+    for (var n = 0; n < EVIDENCE.length; n++) {
+      if (!blank(i[EVIDENCE[n]])) return true;
     }
     return false;
+  }
+  /* Which of them, by name — so a diagnostic can say WHY a row was kept rather
+     than leaving somebody to work it out from the outside. */
+  function evidenceIn(i) {
+    if (!i || typeof i !== 'object') return [];
+    return EVIDENCE.filter(function (f) { return !blank(i[f]); });
   }
 
   /* FIELDS AN UNKNOWN NAME IS *NOT* ALLOWED TO BECOME.
@@ -174,6 +216,33 @@
     return carries(i) ? 'orphan' : 'empty';
   }
 
+  /* THE WHOLE VERDICT ON ONE POINT, IN THE TERMS THE AUDIT ASKED FOR.
+
+     Three rounds of "the fixture passes and production does not" ended here:
+     the app can see the object and I cannot, so the app says what it sees. */
+  function explain(i) {
+    var meta = [], unk = unknown(i), ev = evidenceIn(i);
+    if (i && typeof i === 'object') {
+      Object.keys(i).forEach(function (k) {
+        if (isMeta(k) && !blank(i[k]) && k !== 'key' && k !== 'label' && k !== 'name')
+          meta.push(k);
+      });
+    }
+    var c = classify(i);
+    return {
+      verdict: c,
+      identity: named(i) ? ['key', 'label', 'name'].filter(function (k) {
+        return !blank(i && i[k]); }) : [],
+      evidence: ev,
+      housekeeping: meta,
+      unknown: unk,
+      reason: c === 'ok' ? 'identified'
+            : c === 'orphan' ? 'no identity, but carries: ' + ev.join(', ')
+            : 'nothing identifying and nothing recorded',
+      removed: c === 'empty'
+    };
+  }
+
   /* Normalise ONE record. Returns the record (a copy when anything changed, the
      original when nothing did, so callers can cheaply tell) plus what happened,
      which is what Admin Diagnostics reports and what the suites assert on. */
@@ -220,9 +289,12 @@
 
   G.CMNorm = {
     OPERATIONAL: OPERATIONAL,
+    EVIDENCE: EVIDENCE,
+    evidenceIn: evidenceIn,
     METADATA: METADATA,
     DEFAULTED: DEFAULTED,
     unknown: unknown,
+    explain: explain,
     blank: blank,
     named: named,
     carries: carries,

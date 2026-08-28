@@ -88,7 +88,7 @@ const carriers = [
   ["a comment",      { key: "", comment: "fine fuzz" }],
   ["a photograph",   { key: "", photos: 2 }],
   ["a video",        { key: "", video: 1 }],
-  ["an owner",       { key: "", owner: "A. Sokolov" }],
+
   ["a lube product", { key: "", lubeProduct: "Mobil DTE 10" }],
   ["a temperature",  { key: "", tempC: 91 }],
 ]; 
@@ -204,6 +204,16 @@ ok(withUnknown.unknown.length === 1 && withUnknown.unknown[0].fields[0] === "som
    "and it reaches the diagnostics tally", JSON.stringify(withUnknown.unknown));
 ok(N.unknown({ key: "A", grade: "B", seq: 2, createdAt: "x" }).length === 0,
    "known operational and known housekeeping raise nothing");
+
+/* And the one that must NOT keep a row alive. An owner is assigned to a
+   finding in the office; it is not something anybody observed at a machine, so
+   a keyless row carrying only an owner is still a blank row. */
+const ownerOnly = N.record({ items: [{ key: "", label: "", owner: "A. Sokolov" }] });
+ok(ownerOnly.removed === 1,
+   "an owner alone does not make a blank row into a finding",
+   `removed ${ownerOnly.removed}, flagged ${ownerOnly.orphans}`);
+ok(N.record({ items: [{ key: "", grade: "C", owner: "A. Sokolov" }] }).orphans === 1,
+   "but an owner beside a grade rides along with it");
 
 console.log("\n  what counts as blank");
 const blanks = [

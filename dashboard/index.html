@@ -2643,27 +2643,27 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=167"></script>
-<script src="../mobile/hme.js?v=167"></script>
-<script src="../mobile/mp-fc.js?v=167"></script>
-<script src="../mobile/hme-cascade.js?v=167"></script>
-<script src="../mobile/temp-limits.js?v=167"></script>
+<script src="../data/magnetic_plug.js?v=168"></script>
+<script src="../mobile/hme.js?v=168"></script>
+<script src="../mobile/mp-fc.js?v=168"></script>
+<script src="../mobile/hme-cascade.js?v=168"></script>
+<script src="../mobile/temp-limits.js?v=168"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=167"></script>
-<script src="../mobile/normalize.js?v=167"></script>
-<script src="../mobile/due.js?v=167"></script>
-<script src="../mobile/wear.js?v=167"></script>
-<script src="../mobile/wear-map.js?v=167"></script>
-<script src="../mobile/lube.js?v=167"></script>
-<script src="../mobile/lube-overrides.js?v=167"></script>
-<script src="../mobile/lube2027.js?v=167"></script>
-<script src="../mobile/lube-tds.js?v=167"></script>
+<script src="../mobile/assets.js?v=168"></script>
+<script src="../mobile/normalize.js?v=168"></script>
+<script src="../mobile/due.js?v=168"></script>
+<script src="../mobile/wear.js?v=168"></script>
+<script src="../mobile/wear-map.js?v=168"></script>
+<script src="../mobile/lube.js?v=168"></script>
+<script src="../mobile/lube-overrides.js?v=168"></script>
+<script src="../mobile/lube2027.js?v=168"></script>
+<script src="../mobile/lube-tds.js?v=168"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=167"></script>
-<script src="../mobile/machine-photos.js?v=167"></script>
+<script src="../mobile/upload-defaults.js?v=168"></script>
+<script src="../mobile/machine-photos.js?v=168"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -2672,17 +2672,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=167"></script>
-<script src="../mobile/get.js?v=167"></script>
-<script src="../mobile/points.js?v=167"></script>
-<script src="../mobile/uc-points.js?v=167"></script>
-<script src="../mobile/inspect-guide.js?v=167"></script>
-<script src="../mobile/get-figs.js?v=167"></script>
-<script src="../mobile/body-points.js?v=167"></script>
-<script src="../mobile/body-map.js?v=167"></script>
-<script src="../mobile/jspdf.umd.min.js?v=167"></script>
-<script src="../mobile/html2canvas.min.js?v=167"></script>
-<script src="../mobile/report-core.js?v=167"></script>
+<script src="../mobile/machine-fig.js?v=168"></script>
+<script src="../mobile/get.js?v=168"></script>
+<script src="../mobile/points.js?v=168"></script>
+<script src="../mobile/uc-points.js?v=168"></script>
+<script src="../mobile/inspect-guide.js?v=168"></script>
+<script src="../mobile/get-figs.js?v=168"></script>
+<script src="../mobile/body-points.js?v=168"></script>
+<script src="../mobile/body-map.js?v=168"></script>
+<script src="../mobile/jspdf.umd.min.js?v=168"></script>
+<script src="../mobile/html2canvas.min.js?v=168"></script>
+<script src="../mobile/report-core.js?v=168"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -2981,12 +2981,18 @@ const I18N={
   sy_diag:"Admin diagnostics",
   sy_d_empty:"Removed {n} completely empty inspection row(s) during import, across {r} inspection(s). No recorded information was affected.",
   sy_d_none:"Nothing to report — no records needed repair on import.",
+  sy_d_unknown:"{n} inspection point(s) carry a field this build does not classify — {f}. Not treated as a finding; reported so it can be classified.",
+  sy_d_why:"{u} · {d} is on hold. Recorded here: {e}. Housekeeping only: {h}. Unclassified: {k}.",
   sy_quar:"Inspections missing key information",
   /* What to DO, per fault, in the words of somebody who would do it. */
   sy_fix_equip:"No unit number — the phone that captured it must re-send it.",
   sy_fix_date:"No date — the phone that captured it must re-send it.",
   sy_fix_type:"No round type — the phone that captured it must re-send it.",
-  sy_fix_point:"A finding here is not linked to a component, so nobody can tell which one it is about. Name the point on the finding, or withdraw the inspection and re-walk the machine.",
+  /* The re-walk is gone. It was written for a case that does not exist — an
+     empty row is removed now, so anything still here carries a real finding,
+     and the answer to a real finding is to identify its component, not to send
+     somebody back to the machine. */
+  sy_fix_point:"Inspection point needs identification. Select the correct component before approving this finding.",
   sy_fix_open:"Open it to correct.",
   sy_quar_hint:"{n} on hold", sy_quar_none:"None on hold",
   sy_quar_none_s:"Every inspection names its unit, its date, its round and the point each finding was made at.",
@@ -3573,11 +3579,13 @@ const I18N={
   sy_diag:"Диагностика (администратор)",
   sy_d_empty:"При импорте удалено полностью пустых строк осмотра: {n}, в {r} осмотр(ах). Записанные данные не затронуты.",
   sy_d_none:"Сообщать нечего — при импорте ничего исправлять не потребовалось.",
+  sy_d_unknown:"Точек осмотра с неклассифицированным полем: {n} — {f}. Находкой не считается; сообщается для классификации.",
+  sy_d_why:"{u} · {d} на удержании. Записано: {e}. Только служебное: {h}. Не классифицировано: {k}.",
   sy_quar:"Осмотры с неполными данными",
   sy_fix_equip:"Нет номера машины — телефон, который делал осмотр, должен отправить его заново.",
   sy_fix_date:"Нет даты — телефон, который делал осмотр, должен отправить его заново.",
   sy_fix_type:"Нет типа обхода — телефон, который делал осмотр, должен отправить его заново.",
-  sy_fix_point:"Находка не привязана к узлу, и понять, о чём она, невозможно. Укажите точку в находке или аннулируйте осмотр и пройдите машину заново.",
+  sy_fix_point:"Точка осмотра не определена. Укажите нужный узел, прежде чем утверждать эту находку.",
   sy_fix_open:"Откройте для правки.",
   sy_quar_hint:"на удержании: {n}", sy_quar_none:"На удержании ничего нет",
   sy_quar_none_s:"В каждом осмотре указаны машина, дата, обход и точка, где сделана находка.",
@@ -10317,6 +10325,30 @@ function renderSync(){
   if(dg){
     const bits=[];
     if(normStats.removed) bits.push(t("sy_d_empty",{n:normStats.removed, r:normStats.touched}));
+    if((normStats.unknown||[]).length){
+      const u=normStats.unknown.slice(0,4)
+        .map(x=>(x.rec||"?")+": "+x.fields.join(", ")).join(" · ");
+      bits.push(t("sy_d_unknown",{n:normStats.unknown.length, f:u}));
+    }
+    /* WHY EACH HELD RECORD IS HELD, NAMED.
+
+       Three builds shipped a fix that passed a local fixture and failed in
+       production, because the object here was not the object I was reasoning
+       about and nothing in the app would say so. It says so now: for every
+       inspection on hold, which fields the rule read as evidence, which it
+       read as housekeeping, and which it could not classify at all — in field
+       NAMES, never raw JSON, because this is a diagnostics list and not a
+       debugger. */
+    s.quar.forEach(({r})=>{
+      (r.items||[]).forEach(i=>{
+        if(!i || !i._needsPoint || !window.CMNorm) return;
+        const x=CMNorm.explain(i);
+        bits.push(t("sy_d_why",{ u:r.equip||"?", d:r.date||"?",
+          e:x.evidence.join(", ")||"—",
+          h:x.housekeeping.join(", ")||"—",
+          k:x.unknown.join(", ")||"—" }));
+      });
+    });
     dg.innerHTML = bits.length ? bits.map(b2=>`<li>${esc(b2)}</li>`).join("")
                                : `<li class="muted">${esc(t("sy_d_none"))}</li>`;
   }
@@ -10546,8 +10578,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=167"></script>
-<script src="sync-adapter.js?v=167"></script>
-<script src="report.js?v=167"></script>
+<script src="drive.js?v=168"></script>
+<script src="sync-adapter.js?v=168"></script>
+<script src="report.js?v=168"></script>
 </body>
 </html>

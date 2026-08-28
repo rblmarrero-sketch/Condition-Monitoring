@@ -145,6 +145,85 @@ const probe = async (p) => p.evaluate(() => {
        "cm_dash_drive did not restore");
   }
 
+  console.log("\n  the final-collection check, on the page's own functions");
+  /* Not a unit test of the rule. This drives syncScan() — the exact function
+     renderSync() calls — over the collection RECS, and asserts on the numbers
+     the deployed page would print. Three builds passed a lower-level test and
+     failed here, so this is the one that decides.
+
+     The blank rows carry every field that was on the old wide operational list
+     and is NOT a finding: a unit, a limit, a baseline, a reference source, an
+     ISO code, a status, a particle count, a detection method. Any one of them
+     kept a good inspection on hold. */
+  const WIDE = { unit: "mm", limit: 30, baseline: 40, refSrc: "tray:HM400",
+    status: "", iso: "", isoMode: "", particle: "", hours: 0, f: "",
+    detection: "DM-02", detectionLabel: "Visual inspection",
+    owner: "", due: "", stood: 0, reason: "", reasonLabel: "", reasonRu: "",
+    newMM: "", condemnMM: "", wearPct: "", band: "", zone: "", zoneLabel: "" };
+  const final = await p.evaluate(w => {
+    const blank = Object.assign({ key: "", label: "", grade: "", sev: "", mm: "",
+      defect: "", cause: "", recommendation: "", prio: "", wo: "", comment: "",
+      photos: 0, video: 0, id: "tmp_1", seq: 9, createdAt: "2026-08-05T04:11:02Z" }, w);
+    CMDash.importRecords([
+      { equip: "TK115", date: "2026-08-05", type: "TB", cls: "AT", by: "R. Marrero",
+        items: [{ key: "FLOOR.1", label: "Floor plate 1", grade: "C", mm: 18 },
+                { key: "SIDE.L", label: "Left side sheet", grade: "B" },
+                Object.assign({}, blank)] },
+      { equip: "DZ007", date: "2026-08-02", type: "UC", cls: "DOZ", by: "B. Ivanov",
+        items: [{ key: "ROLLER.L1", label: "Roller L1", mm: 213 },
+                { key: "IDLER.L-OUT", label: "Idler L outer", mm: 29 },
+                Object.assign({}, blank)] },
+    ]);
+    showTab("sync");
+    const scan = syncScan();
+    const hist = u => { const r = RECS.find(x => x.equip === u); return r ? r.items.length : -1; };
+    return {
+      hold: scan.quar.map(q => q.r.equip),
+      holdCount: scan.quar.length,
+      tk: hist("TK115"), dz: hist("DZ007"),
+      removed: normStats.removed,
+      diag: (document.getElementById("syDiag") || {}).textContent || "",
+      table: (document.getElementById("syQuarTbl") || {}).textContent || "",
+    };
+  }, WIDE);
+
+  ok(final.tk === 2, "TK115 remains in Equipment History with both real points", String(final.tk));
+  ok(final.dz === 2, "DZ007 remains in Equipment History with both real points", String(final.dz));
+  ok(!final.hold.includes("TK115"), "TK115 is absent from the hold list", final.hold.join(",") || "empty");
+  ok(!final.hold.includes("DZ007"), "DZ007 is absent from the hold list", final.hold.join(",") || "empty");
+  ok(final.removed >= 2, "two blank rows removed", String(final.removed));
+  ok(/Removed \d+ completely empty/.test(final.diag),
+     "Admin Diagnostics reports the cleanup", final.diag.slice(0, 80));
+  /* The sentence that sends somebody to a truck. It was written for a case
+     that no longer exists: an empty row is removed, so anything still on this
+     page carries a real finding, and the answer to a real finding is to name
+     its component — not to walk the machine again. Asserted across the whole
+     table, including the genuine orphan, because it is wrong advice there too. */
+  ok(!/re-walk|re-inspect|withdraw the inspection/i.test(final.table),
+     "no re-walk instruction anywhere on the page",
+     (final.table.match(/re-walk[^.]*/) || ["none"])[0]);
+  ok(/needs identification|select the correct component/i.test(
+       await p.evaluate(() => I18N.en.sy_fix_point)),
+     "and the guidance says what to do instead",
+     await p.evaluate(() => I18N.en.sy_fix_point));
+
+  console.log("\n  and a populated keyless point is still held and actionable");
+  const orphan = await p.evaluate(w => {
+    const carrying = Object.assign({ key: "", label: "", grade: "X",
+      comment: "cracked, could not tell which plate" }, w);
+    CMDash.importRecords([{ equip: "TK999", date: "2026-08-07", type: "TB", cls: "AT",
+      by: "R. Marrero", items: [{ key: "FLOOR.2", grade: "B" }, carrying] }]);
+    showTab("sync");
+    const scan = syncScan();
+    return { hold: scan.quar.map(q => q.r.equip),
+             items: (RECS.find(r => r.equip === "TK999") || {}).items.length,
+             clickable: document.querySelectorAll("#syQuarTbl [data-quargo]").length };
+  }, WIDE);
+  ok(orphan.hold.includes("TK999"), "a real finding with no point is still held",
+     orphan.hold.join(","));
+  ok(orphan.items === 2, "and its finding is preserved, not deleted", String(orphan.items));
+  ok(orphan.clickable >= 1, "with a row that opens the correction", String(orphan.clickable));
+
   console.log(fail ? "\nFAILED: " + fail : "\nall passed");
   await b.close();
   process.exit(fail ? 1 : 0);
