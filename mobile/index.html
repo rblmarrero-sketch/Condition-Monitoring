@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=187">
+<link rel="manifest" href="manifest.webmanifest?v=188">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=187">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=187">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=187">
+<link rel="apple-touch-icon" href="icon-192.png?v=188">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=188">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=188">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -328,6 +328,10 @@
   .btn{display:block;width:100%;min-height:44px;padding:10px 14px;border-radius:12px;border:none;font-size:15.5px;font-weight:700;cursor:pointer;
     font-family:inherit;transition:opacity .1s;}
   .btn:active{opacity:.86;}
+  /* A button that cannot be pressed has to look like one. There was no rule
+     here at all, so every disabled .btn in the app kept full ink and a pointer
+     cursor — indistinguishable from a live control that simply does nothing. */
+  .btn:disabled{opacity:.45;cursor:default;}
   .btn.primary{background:var(--accent);color:var(--accent-ink);}
   .btn.ghost{background:var(--surface-2);color:var(--ink);border:1px solid var(--border);}
   .btn.ghost:active{background:var(--surface-3);opacity:1;}
@@ -1966,31 +1970,31 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=187"></script>
-<script src="upload-defaults.js?v=187"></script>
-<script src="hme.js?v=187"></script>
-<script src="mp-fc.js?v=187"></script>
-<script src="hme-cascade.js?v=187"></script>
-<script src="assets.js?v=187"></script>
-<script src="temp-limits.js?v=187"></script>
-<script src="normalize.js?v=187"></script>
-<script src="due.js?v=187"></script>
-<script src="wear.js?v=187"></script>
-<script src="wear-figs.js?v=187"></script>
-<script src="wear-map.js?v=187"></script>
-<script src="machine-photos.js?v=187"></script>
-<script src="machine-fig.js?v=187"></script>
-<script src="get.js?v=187"></script>
-<script src="points.js?v=187"></script>
-<script src="uc-points.js?v=187"></script>
-<script src="inspect-guide.js?v=187"></script>
-<script src="get-figs.js?v=187"></script>
-<script src="body-points.js?v=187"></script>
-<script src="body-map.js?v=187"></script>
-<script src="lube.js?v=187"></script>
-<script src="lube-overrides.js?v=187"></script>
-<script src="lube2027.js?v=187"></script>
-<script src="report-core.js?v=187"></script>
+<script src="native.js?v=188"></script>
+<script src="upload-defaults.js?v=188"></script>
+<script src="hme.js?v=188"></script>
+<script src="mp-fc.js?v=188"></script>
+<script src="hme-cascade.js?v=188"></script>
+<script src="assets.js?v=188"></script>
+<script src="temp-limits.js?v=188"></script>
+<script src="normalize.js?v=188"></script>
+<script src="due.js?v=188"></script>
+<script src="wear.js?v=188"></script>
+<script src="wear-figs.js?v=188"></script>
+<script src="wear-map.js?v=188"></script>
+<script src="machine-photos.js?v=188"></script>
+<script src="machine-fig.js?v=188"></script>
+<script src="get.js?v=188"></script>
+<script src="points.js?v=188"></script>
+<script src="uc-points.js?v=188"></script>
+<script src="inspect-guide.js?v=188"></script>
+<script src="get-figs.js?v=188"></script>
+<script src="body-points.js?v=188"></script>
+<script src="body-map.js?v=188"></script>
+<script src="lube.js?v=188"></script>
+<script src="lube-overrides.js?v=188"></script>
+<script src="lube2027.js?v=188"></script>
+<script src="report-core.js?v=188"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -7760,7 +7764,20 @@ async function teamPull(manual,full,from){
   const mine=()=>teamRun===run;
   const ac=new AbortController(); teamAbort=ac;
   const timer=setTimeout(()=>{ try{ ac.abort(); }catch(_){ } }, full?TEAM_TIMEOUT_FULL:TEAM_TIMEOUT);
-  teamBusy=true; $("teamRefresh").disabled=true;
+  /* THE BUTTON IS NOT DISABLED WHILE A PULL OWNS IT, AND MUST NOT BE.
+
+     Six lines above, a manual press that arrives while one is in flight aborts
+     the hung request and starts a fresh one — written precisely because fetch()
+     has no timeout and a startup pull on weak signal can sit open indefinitely.
+     Disabling the button here made that repair unreachable: the press could
+     never be delivered, so the recovery it performs never ran.
+
+     What the inspector saw was worse than a dead button, because nothing said
+     it was dead. `.btn` had no disabled styling at all, so it kept full opacity
+     and a pointer cursor, and #teamMsg was empty on a startup pull — a control
+     that looks live, does nothing when pressed, and offers no reason. The
+     re-entry guard at the top of this function is the only guard needed. */
+  teamBusy=true;
   try{
     // The cursor means "I already hold everything up to here". If the cache is
     // gone — cleared, evicted, a fresh install of the same origin — that claim
@@ -7948,7 +7965,7 @@ async function teamPull(manual,full,from){
   }
   finally{
     clearTimeout(timer);
-    if(mine()){ teamBusy=false; teamAbort=null; $("teamRefresh").disabled=false; }
+    if(mine()){ teamBusy=false; teamAbort=null; }
   }
 }
 /* Which types this card is showing. "" is all of them, and it is the default
@@ -9590,7 +9607,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="187";
+const BUILD="188";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -11536,9 +11553,24 @@ function openUnit(unit, type){
    holding, and a due list that is repairable offline should not wait for a
    folder it cannot reach. */
 try{ if(histRepair()) renderDue&&renderDue(); }catch(e){}
-teamPull(false).then(histHealOnce).then(teamHealOnce)
+/* THE ONE-TIME REPAIRS ONLY RUN IF THE FOLDER ACTUALLY ANSWERED.
+
+   Both of them are a FULL folder re-read, which carries a 150-second timeout
+   because reading a season's work legitimately takes that long. The boolean
+   teamPull hands back was being thrown away, so on a phone in the pit the
+   sequence was: the ordinary pull fails, and a two-and-a-half-minute full read
+   is started anyway against a folder that has just proved unreachable.
+
+   It cannot succeed — and while it runs it owns #teamMsg, so the System screen
+   reads "Checking the system…" for 150 seconds after the network already gave
+   up, and a press of Check for new inside that window is superseded by it and
+   discarded. That is a screen claiming to be doing something it has no way of
+   finishing, which is the reassuring direction of this project's oldest
+   failure. A repair that needs the folder waits for a launch that has it. */
+const healIfReached = ok => ok ? histHealOnce().then(teamHealOnce) : null;
+teamPull(false).then(healIfReached)
   .catch(e=>{ histNote((e&&e.message)||e); renderDue&&renderDue(); });
-window.addEventListener("online",()=>teamPull(false).then(histHealOnce).then(teamHealOnce)
+window.addEventListener("online",()=>teamPull(false).then(healIfReached)
   .catch(e=>{ histNote((e&&e.message)||e); renderDue&&renderDue(); }));
 </script>
 </body>
