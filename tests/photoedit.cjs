@@ -309,6 +309,148 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
   ok(pend.disabled.length === 3, "the controls are held", pend.disabled.join(","));
   ok(pend.writes === 0, "and nothing is written", pend.writes + " write(s)");
 
+  /* ---------------------------------------------------------------------
+     WHAT IS ON SCREEN AFTER SAVE IS WHAT WAS SAVED.
+
+     Everything above this line checks what got WRITTEN, and all of it passed
+     while the editor was visibly broken: "it says saved and then goes back to
+     the original." Both statements were true. The sidecar was correct and the
+     picture was not, and a suite that only reads the write cannot tell the
+     difference — so from here down it reads the screen.
+
+     Zoom is the case that exposed it. Zoom is not part of the recipe: while
+     the panel is open it is a CSS transform on the original image, so no
+     canvas render ever ran. Save folded the zoom into a crop and stored it
+     properly, then closing the panel dropped the transform and left the img
+     element pointing at the untouched original file. --------------------- */
+  console.log("\n── the picture after Save is the picture that was saved");
+  await p.evaluate(() => { CMDrive.hasName = () => true; lbClose(); });
+  await p.waitForTimeout(200);
+  await p.evaluate(() => document.querySelector("#drwBody [data-i]").click());
+  await p.waitForTimeout(400);
+  await p.evaluate(() => { pxReset.click(); pxOpenPanel();
+    const z = $("pxZoom"); z.value = "200"; z.dispatchEvent(new Event("input")); });
+  await p.waitForTimeout(400);
+  const zoomed = await p.evaluate(() => ({
+    z: pxZ, drafted: pxTouched(pxDraft),
+    src: $("lbimg").src.slice(0, 5) }));
+  ok(Math.abs(zoomed.z - 2) < 0.01, "zooming to 200% is a view, not yet a recipe", "pxZ=" + zoomed.z);
+  ok(zoomed.drafted === false, "so the draft is still empty at this point");
+  await p.evaluate(() => $("pxSave").click());
+  await p.waitForTimeout(1400);
+  const kept = await p.evaluate(() => {
+    const img = $("lbimg");
+    return { src: img.src.slice(0, 11),
+             crop: pxRecipe && pxRecipe.crop ? { w: pxRecipe.crop.w, h: pxRecipe.crop.h } : null,
+             badge: !!$("lbcap").querySelector(".pxbadge"),
+             nat: img.naturalWidth + "x" + img.naturalHeight,
+             open: $("lb").classList.contains("open") };
+  });
+  ok(!!kept.crop && Math.abs(kept.crop.w - 0.5) < 0.01,
+     "Save folds the zoom into a crop and stores it", JSON.stringify(kept.crop));
+  /* THE ONE THAT NAMES THE BUG. */
+  ok(kept.src === "data:image/", "and the picture on screen is the derivative, not the original file",
+     kept.src);
+  ok(kept.badge, "the frame is marked as edited straight away, not on the next visit");
+
+  console.log("\n── Cancel puts back what is stored, not what was abandoned");
+  await p.evaluate(() => { pxOpenPanel();
+    const st = $("pxStr"); st.value = "6"; st.dispatchEvent(new Event("input")); st.dispatchEvent(new Event("change")); });
+  await p.waitForTimeout(500);
+  await p.evaluate(() => $("pxCancel").click());
+  await p.waitForTimeout(600);
+  const cancelled = await p.evaluate(() => ({
+    straighten: pxDraft.straighten, stored: pxRecipe ? pxRecipe.straighten : null,
+    src: $("lbimg").src.slice(0, 11) }));
+  ok(cancelled.straighten === cancelled.stored,
+     "the abandoned draft is gone", cancelled.straighten + " vs stored " + cancelled.stored);
+  ok(cancelled.src === "data:image/", "and the stored edit is still what is shown", cancelled.src);
+
+  /* ---------------------------------------------------------------------
+     THE PANEL MAY NOT COVER THE EVIDENCE.
+
+     The panel is absolutely positioned over the bottom of the lightbox, which
+     centres the photograph in the FULL viewport — so the centring never knew
+     the panel was there. The single mitigation was a hardcoded "100vh - 210px"
+     guess at the panel's height; the controls wrap to three rows at a laptop
+     width and more in Russian, and at 260px tall the panel hid the bottom
+     fifth of every photograph. The crop box could then be dragged into the
+     hidden part, so an engineer could crop away a measurement they could not
+     see. Checked in both languages, because that is where the guess broke. */
+  console.log("\n── the editing panel never covers the photograph");
+  /* Narrow enough that the controls wrap to three rows, which is the condition
+     the hardcoded 210px was wrong about, and the width a laptop actually is.
+     The language really is switched — through the control a person presses,
+     because a test that calls a function which does not exist passes without
+     checking anything, and Russian is where the labels are longest. */
+  /* The stored edit is removed first, and the viewport is made short. Both
+     matter: with a small derivative on screen the photograph never reaches the
+     panel however wrong the reservation is, and a check that cannot fail is
+     not a check — an earlier draft of this section passed against the broken
+     stylesheet for exactly that reason. */
+  await p.evaluate(() => { pxOpenPanel(); $("pxReset").click(); $("pxSave").click(); });
+  await p.waitForTimeout(1200);
+  await p.setViewportSize({ width: 1180, height: 560 });
+  for (const lang of ["en", "ru"]) {
+    /* Through the control a person presses — dispatched rather than clicked
+       only because the open lightbox is on top of it. */
+    await p.evaluate(l => document.querySelector(`.lang button[data-lang="${l}"]`).click(), lang);
+    await p.waitForTimeout(400);
+    await p.evaluate(() => pxOpenPanel());
+    await p.waitForTimeout(500);
+    const geo = await p.evaluate(() => {
+      const i = $("lbimg").getBoundingClientRect(), pn = $("pxPanel").getBoundingClientRect();
+      return { imgBottom: Math.round(i.bottom), panelTop: Math.round(pn.top),
+               panelH: Math.round(pn.height), imgH: Math.round(i.height),
+               rows: $("pxPanel").querySelectorAll(".pxrow").length,
+               natH: $("lbimg").naturalHeight,
+               constrained: Math.round(i.height) < $("lbimg").naturalHeight - 2,
+               varH: getComputedStyle($("lb")).getPropertyValue("--pxh").trim() };
+    });
+    ok(geo.imgBottom <= geo.panelTop + 1, "[" + lang + "] the picture ends above the panel",
+       "img ends " + geo.imgBottom + ", panel starts " + geo.panelTop);
+    ok(geo.imgH > 100, "[" + lang + "] and there is still a picture to look at", geo.imgH + "px tall");
+    /* If the frame is not being constrained by the viewport at all, the two
+       checks above are true for free. */
+    ok(geo.constrained, "[" + lang + "] and the frame is genuinely being constrained here",
+       geo.imgH + " shown of " + geo.natH + " natural");
+    /* The height is measured, never guessed: the fallback constant in the
+       stylesheet is what this replaced. */
+    ok(geo.varH === geo.panelH + "px", "[" + lang + "] the height used is the panel's real height",
+       geo.varH + " vs " + geo.panelH + "px, " + geo.rows + " rows");
+    await p.evaluate(() => $("pxCancel").click());
+    await p.waitForTimeout(300);
+  }
+  await p.evaluate(() => document.querySelector('.lang button[data-lang="en"]').click());
+  await p.waitForTimeout(300);
+  /* The constant was wrong in BOTH directions, which is the argument for
+     measuring rather than for a bigger constant: too small and it hid the
+     bottom of the photograph, too large and it threw away picture for nothing.
+     So what is checked is that the reservation FOLLOWS the panel — read at two
+     widths where the controls wrap differently. */
+  const at = async w => {
+    await p.setViewportSize({ width: w, height: 560 });
+    await p.waitForTimeout(400);
+    await p.evaluate(() => pxOpenPanel());
+    await p.waitForTimeout(400);
+    const g = await p.evaluate(() => {
+      const i = $("lbimg").getBoundingClientRect(), pn = $("pxPanel").getBoundingClientRect();
+      return { panelH: Math.round(pn.height), clears: i.bottom <= pn.top + 1,
+               varH: getComputedStyle($("lb")).getPropertyValue("--pxh").trim() };
+    });
+    await p.evaluate(() => $("pxCancel").click());
+    await p.waitForTimeout(250);
+    return g;
+  };
+  await p.setViewportSize({ width: 1400, height: 560 });
+  const wide = await at(1400), narrow = await at(620);
+  ok(wide.panelH !== narrow.panelH, "the panel is a different height at a different width",
+     wide.panelH + "px at 1400, " + narrow.panelH + "px at 620");
+  ok(wide.varH === wide.panelH + "px" && narrow.varH === narrow.panelH + "px",
+     "and the space reserved for it follows, at both", wide.varH + " / " + narrow.varH);
+  ok(wide.clears && narrow.clears, "so the photograph clears it at both");
+  await p.setViewportSize({ width: 1440, height: 900 });
+
   ok(errs.length === 0, "nothing threw throughout", errs.slice(0, 2).join(" | "));
   await b.close();
   console.log(fail ? `\n${fail} FAILED` : "\nall passed");

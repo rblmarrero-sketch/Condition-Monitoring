@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=172">
+<link rel="manifest" href="manifest.webmanifest?v=173">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=172">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=172">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=172">
+<link rel="apple-touch-icon" href="icon-192.png?v=173">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=173">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=173">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1932,31 +1932,31 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=172"></script>
-<script src="upload-defaults.js?v=172"></script>
-<script src="hme.js?v=172"></script>
-<script src="mp-fc.js?v=172"></script>
-<script src="hme-cascade.js?v=172"></script>
-<script src="assets.js?v=172"></script>
-<script src="temp-limits.js?v=172"></script>
-<script src="normalize.js?v=172"></script>
-<script src="due.js?v=172"></script>
-<script src="wear.js?v=172"></script>
-<script src="wear-figs.js?v=172"></script>
-<script src="wear-map.js?v=172"></script>
-<script src="machine-photos.js?v=172"></script>
-<script src="machine-fig.js?v=172"></script>
-<script src="get.js?v=172"></script>
-<script src="points.js?v=172"></script>
-<script src="uc-points.js?v=172"></script>
-<script src="inspect-guide.js?v=172"></script>
-<script src="get-figs.js?v=172"></script>
-<script src="body-points.js?v=172"></script>
-<script src="body-map.js?v=172"></script>
-<script src="lube.js?v=172"></script>
-<script src="lube-overrides.js?v=172"></script>
-<script src="lube2027.js?v=172"></script>
-<script src="report-core.js?v=172"></script>
+<script src="native.js?v=173"></script>
+<script src="upload-defaults.js?v=173"></script>
+<script src="hme.js?v=173"></script>
+<script src="mp-fc.js?v=173"></script>
+<script src="hme-cascade.js?v=173"></script>
+<script src="assets.js?v=173"></script>
+<script src="temp-limits.js?v=173"></script>
+<script src="normalize.js?v=173"></script>
+<script src="due.js?v=173"></script>
+<script src="wear.js?v=173"></script>
+<script src="wear-figs.js?v=173"></script>
+<script src="wear-map.js?v=173"></script>
+<script src="machine-photos.js?v=173"></script>
+<script src="machine-fig.js?v=173"></script>
+<script src="get.js?v=173"></script>
+<script src="points.js?v=173"></script>
+<script src="uc-points.js?v=173"></script>
+<script src="inspect-guide.js?v=173"></script>
+<script src="get-figs.js?v=173"></script>
+<script src="body-points.js?v=173"></script>
+<script src="body-map.js?v=173"></script>
+<script src="lube.js?v=173"></script>
+<script src="lube-overrides.js?v=173"></script>
+<script src="lube2027.js?v=173"></script>
+<script src="report-core.js?v=173"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2319,6 +2319,15 @@ const I18N = {
     lbl_due_round:"Round", due_all_rounds:"All rounds", due_missed:"Missed",
     due_n_over:"{n} missed", due_n_soon:"{n} due soon", due_n_put:"{n} put off",
     due_every:"every {h} h", due_at_rate:"{r} h/day assumed",
+    /* An installed app and the browser are separate stores on iOS — same URL,
+       same build, different history. So the list has to say when it last heard
+       from the fleet, or "nothing missed" is a guess wearing a number. */
+    hist_at:"fleet history updated {t}", hist_now:"just now",
+    hist_min:"{n} min ago", hist_hr:"{n} h ago", hist_day:"{n} d ago",
+    hist_never:"⚠ this phone has never loaded the fleet's history",
+    hist_fail:"⚠ could not reach the system — this list may be out of date",
+    due_no_hist:"This phone has not loaded the fleet's history yet, so it cannot say what is due. Open System and press Refresh, or load a history file.",
+    due_stale:"Nothing due from what this phone knows — but its fleet history was last updated {t}. Refresh before relying on it.",
     due_not:"Not doing this one",
     due_not_t:"{u} — not doing this round?",
     due_not_m:"{ty}. Put it off to a date, or say it is not being done at all. Either way the reason is kept, so the office can see what was missed and why.",
@@ -2331,7 +2340,7 @@ const I18N = {
        were written to be read one at a time with the others hidden. */
     due_soon:"Due soon", due_putoff:"Put off",
     btn_due_import:"Load history file", due_days:"{n} d ago", due_over:"overdue {n} d", due_in:"in {n} d",
-    due_never:"never done", due_empty:"Nothing due — or no history on this phone yet.",
+    due_never:"never done", due_empty:"Nothing is due right now.",
     due_hint:"Built from what this phone has recorded plus everything in the system above. Load an entries.json exported from the dashboard to seed the whole fleet's last-done dates.",
     m_due_loaded:["History loaded ✔","{n} unit/type dates added to the due list."],
     sec_team:"In the system", btn_team_refresh:"Check for new",
@@ -2757,6 +2766,12 @@ const I18N = {
     lbl_due_round:"Осмотр", due_all_rounds:"Все виды", due_missed:"Пропущено",
     due_n_over:"пропущено: {n}", due_n_soon:"скоро: {n}", due_n_put:"отложено: {n}",
     due_every:"каждые {h} ч", due_at_rate:"принято {r} ч/сутки",
+    hist_at:"история парка обновлена {t}", hist_now:"только что",
+    hist_min:"{n} мин назад", hist_hr:"{n} ч назад", hist_day:"{n} д назад",
+    hist_never:"⚠ этот телефон ещё ни разу не загружал историю парка",
+    hist_fail:"⚠ не удалось связаться с системой — список может быть устаревшим",
+    due_no_hist:"Этот телефон ещё не загрузил историю парка и не может сказать, что просрочено. Откройте «Система» и нажмите «Обновить» или загрузите файл истории.",
+    due_stale:"По данным этого телефона ничего не просрочено, но история парка обновлялась {t}. Обновите, прежде чем полагаться на список.",
     due_not:"Не выполняем",
     due_not_t:"{u} — не выполняем этот осмотр?",
     due_not_m:"{ty}. Отложите на срок или укажите, что осмотр не будет выполнен. В обоих случаях причина сохраняется — офис увидит, что пропущено и почему.",
@@ -2766,7 +2781,7 @@ const I18N = {
     due_overdue:"Просроченные и скоро", due_all:"Все",
     due_soon:"Скоро срок", due_putoff:"Отложено",
     btn_due_import:"Загрузить историю", due_days:"{n} дн. назад", due_over:"просрочено {n} дн.", due_in:"через {n} дн.",
-    due_never:"не проводился", due_empty:"Ничего не требуется — или на телефоне ещё нет истории.",
+    due_never:"не проводился", due_empty:"Сейчас ничего не требуется.",
     due_hint:"Строится по данным этого телефона и по всему, что есть в системе выше. Загрузите entries.json из дашборда, чтобы подтянуть даты по всему парку.",
     m_due_loaded:["История загружена ✔","Добавлено дат: {n}."],
     sec_team:"В системе", btn_team_refresh:"Проверить новые",
@@ -6305,6 +6320,49 @@ function histAll(){ return histCache || (histCache=(()=>{
    started — the inspection looked lost. Storage is best-effort; the record in
    IndexedDB is the thing that matters. */
 function histSave(h){ histCache=h; try{ localStorage.setItem("cm_hist",JSON.stringify(h)); }catch(e){} }
+/* WHEN THIS PHONE LAST LEARNED WHAT THE FLEET HAS DONE.
+
+   An installed home-screen app and the same page in the browser are separate
+   storage jars on iOS: same URL, same build, different history. So one can show
+   "Missed 0" while the other shows six overdue machines, and neither says which
+   of them is out of date. Worse, the startup pull discarded its errors — a
+   phone whose pull had been failing since it was installed reported nothing
+   missed, confidently, for ever.
+
+   A due list that cannot say when it last heard from the fleet is a due list
+   that should not be trusted to say nothing is due. */
+const HIST_AT="cm_hist_at", HIST_ERR="cm_hist_err";
+function histStamp(n){
+  try{ localStorage.setItem(HIST_AT, JSON.stringify({at:Date.now(), n:n||0}));
+       localStorage.removeItem(HIST_ERR); }catch(e){}
+}
+function histNote(err){ try{ localStorage.setItem(HIST_ERR, String(err||"1")); }catch(e){} }
+function histWhen(){
+  try{ const j=JSON.parse(localStorage.getItem(HIST_AT)||"null"); return j&&j.at?j:null; }
+  catch(e){ return null; }
+}
+function histFailed(){ try{ return !!localStorage.getItem(HIST_ERR); }catch(e){ return false; } }
+/* Older than a shift, never fetched, or failing — any of the three means the
+   list on screen is not what the fleet knows. */
+const HIST_STALE_MS=12*3600*1000;
+function histStale(){
+  const w=histWhen();
+  return !w || histFailed() || (Date.now()-w.at)>HIST_STALE_MS;
+}
+function agoWords(at){
+  const m=Math.round((Date.now()-at)/60000);
+  if(m<2) return t("hist_now");
+  if(m<60) return t("hist_min",{n:m});
+  const h=Math.round(m/60);
+  return h<48 ? t("hist_hr",{n:h}) : t("hist_day",{n:Math.round(h/24)});
+}
+/* The sentence that decides whether "Missed 0" means anything. */
+function histAge(){
+  const w=histWhen();
+  if(histFailed()) return t("hist_fail");
+  if(!w) return t("hist_never");
+  return t("hist_at",{t:agoWords(w.at)});
+}
 function noteDone(rec){ if(!rec.equip||!rec.date) return; const h=histAll();
   histPut(h,(rec.type||"MP")+"|"+rec.equip,{d:rec.date, h:rec.smu});
   histSave(h);
@@ -6517,10 +6575,20 @@ function renderDue(){
              .replace("{d}",DUE.spec(dueType).d||"") : "",
       t("due_at_rate").replace("{r}",DUE.HOURS_PER_DAY),
       measured ? t("due_basis_own").replace("{n}",measured) : "",
+      /* The line that decides whether "Missed 0" can be believed. */
+      histAge(),
     ].filter(Boolean).join(" · ");
+    note.classList.toggle("warn", histStale());
   }
 
-  if(!show.length){ box.innerHTML=`<div class="empty">${t("due_empty")}</div>`; return; }
+  if(!show.length){
+    /* "Nothing due" and "this phone has never heard from the fleet" are
+       different sentences, and only one of them is reassuring. */
+    const w=histWhen();
+    box.innerHTML=`<div class="empty">${
+      !w ? t("due_no_hist") : histStale() ? t("due_stale",{t:agoWords(w.at)}) : t("due_empty")}</div>`;
+    return;
+  }
   box.innerHTML=show.slice(0,200).map(r=>{
     const a=ASSET_BY[r.unit], n=r.n;
     const cal = DUE.hours(r.ty)==null && !n.why;
@@ -6745,7 +6813,7 @@ function teamVoid(eds){
       else delete h[hk];
     }
   }
-  if(n){ teamSave([...have.values()]); histSave(h); }
+  if(n){ teamSave([...have.values()]); histSave(h); histStamp(Object.keys(h).length); }
   return n;
 }
 /* A round deleted in the dashboard. The office did not withdraw it, it removed
@@ -6780,7 +6848,7 @@ function teamGone(dels){
       h[hk]={d:w.d, ...(w.s!=null?{h:Number(w.s)}:{})}; }
     else delete h[hk];
   }
-  if(touched){ teamSave([...have.values()]); histSave(h); }
+  if(touched){ teamSave([...have.values()]); histSave(h); histStamp(Object.keys(h).length); }
   return n;
 }
 
@@ -6834,7 +6902,7 @@ function teamMergeRows(rows,replace){
     if(histPut(h,row.t+"|"+row.u,{d:row.d, h:row.s})) hist++;
     smuNote(row.u,row.d,row.s);
   }
-  const saved=teamSave([...have.values()]); histSave(h);
+  const saved=teamSave([...have.values()]); histSave(h); histStamp(Object.keys(h).length);
   loadBaselines();
   /* Deliberately no stash: a row is not a round. The round itself is one
      request away by the id the row carries, made when somebody actually opens
@@ -6856,7 +6924,7 @@ function teamMerge(recs,replace){
     if(histPut(h,row.t+"|"+row.u,{d:row.d, h:row.s})) hist++;
     smuNote(row.u,row.d,row.s);
   }
-  const saved=teamSave([...have.values()]); histSave(h);
+  const saved=teamSave([...have.values()]); histSave(h); histStamp(Object.keys(h).length);
   /* Keep the rounds themselves, not just the line about them. Not awaited here:
      the list must paint whether or not the write lands, and a phone that is out
      of room should still get the summary it has always had. The promise is
@@ -6957,10 +7025,23 @@ async function teamPull(manual,full){
       if(!mine()) return false;
       j=r3.j; txt=r3.txt;
     }
-    if(!j){ if(manual) msg.textContent="⚠ "+txt.slice(0,90); return false; }
+    /* THE TWO WAYS THIS CAN LIE.
+
+       Both of these are a reach that got through to something and came back
+       useless, and both used to return quietly. The caller's .catch() never
+       fired — teamPull swallows its own errors — so a phone whose backend had
+       been answering "unknown action" since the day it was installed showed a
+       due list with no warning on it at all, and the freshness stamp from
+       whenever it last worked stayed on screen getting older in silence.
+
+       A pull that did not land must say so HERE, where the failure is, not at
+       a caller that is never told. */
+    if(!j){ if(manual) msg.textContent="⚠ "+txt.slice(0,90);
+            histNote(txt.slice(0,90)||"unreadable reply"); renderDue(); return false; }
     if(j.ok===false){
       // The usual reason: the script was edited but never released as a new version.
       if(manual) msg.textContent=/unknown action/i.test(j.error||"") ? t("team_old") : "⚠ "+j.error;
+      histNote(j.error||"refused"); renderDue();
       return false;
     }
     netSeen(true);                                  // Drive answered — that is "online"
@@ -7014,6 +7095,9 @@ async function teamPull(manual,full){
   }catch(e){
     if(!mine()) return false;                      // superseded by a newer press
     netSeen(false);
+    /* Timed out, unreachable, CORS, DNS — whichever it was, this phone did not
+       hear from the fleet, and the due list has to stop implying it did. */
+    histNote((e&&e.message)||e); renderDue();
     if(e && e.name==="AbortError"){ if(manual) msg.textContent=t("team_timeout"); }
     // fetch() reports every network and CORS failure as the opaque "Failed to
     // fetch", which tells an inspector in the pit nothing they can act on.
@@ -7486,7 +7570,12 @@ $("dueFile").onchange=async (e)=>{ const f=e.target.files[0]; e.target.value="";
     if(!u||!d) continue;
     if(histPut(h,ty+"|"+u,{d:d, h:r.smu})) n++;
     smuNote(u,d,r.smu); }
-  histSave(h); renderDue(); const m=t("m_due_loaded"); dlg([m[0], m[1].replace("{n}",n)]); };
+  /* A file loaded by hand IS this phone learning what the fleet knows — the
+     path a machine with no signal to the office actually uses. Without the
+     stamp it would carry the "never loaded" warning for ever, which would
+     teach inspectors to read past the one warning that matters. */
+  histSave(h); histStamp(Object.keys(h).length);
+  renderDue(); const m=t("m_due_loaded"); dlg([m[0], m[1].replace("{n}",n)]); };
 
 /* ===================== multi-device merge =====================
    Two inspectors on the same round. Each phone exports its records (media inlined as
@@ -8509,7 +8598,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="172";
+const BUILD="173";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -10443,8 +10532,16 @@ function openUnit(unit, type){
    and no records. Heal that once, on the first launch that has a signal, so
    the list is openable without anybody being told to press Reload all — and
    only after the ordinary pull has answered, so the two do not race. */
-teamPull(false).then(teamHealOnce).catch(()=>{});
-window.addEventListener("online",()=>teamPull(false).then(teamHealOnce).catch(()=>{}));
+/* A SWALLOWED ERROR HERE IS A PHONE THAT LIES ABOUT THE FLEET.
+
+   This was `.catch(()=>{})`. A pull that failed on every open — a bad secret, a
+   blocked endpoint, a home-screen app that has never once reached the backend —
+   produced no message, no mark and no clue, while the Due screen went on
+   reporting whatever it happened to hold. Recorded now, and the Due screen says
+   so. */
+teamPull(false).then(teamHealOnce).catch(e=>{ histNote((e&&e.message)||e); renderDue&&renderDue(); });
+window.addEventListener("online",()=>teamPull(false).then(teamHealOnce)
+  .catch(e=>{ histNote((e&&e.message)||e); renderDue&&renderDue(); }));
 </script>
 </body>
 </html>

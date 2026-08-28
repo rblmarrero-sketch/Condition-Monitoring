@@ -1074,6 +1074,20 @@
   .pxcrop i[data-h="se"]{right:-7px;bottom:-7px;cursor:nwse-resize;}
   .pxsp2{width:1px;height:22px;background:var(--border);}
   .pxopen{position:absolute;right:56px;top:12px;z-index:2;}
+  /* THE PANEL IS NOT ALLOWED TO COVER THE EVIDENCE.
+
+     It is positioned absolutely over the bottom of the lightbox, which is a
+     flex box centring the photograph in the FULL viewport — so the centring
+     never knew the panel was there. The one mitigation was a hardcoded
+     max-height of "100vh - 210px", a guess at how tall the panel would be.
+     The panel wraps: three rows of controls at a laptop width, more in Russian
+     where every label is longer. At 260px tall it hid the bottom fifth of
+     every photograph — and the crop box could be dragged down into the hidden
+     part, so an engineer could crop away a measurement they could not see.
+
+     --pxh is the panel's REAL height, measured from the panel itself and
+     rewritten whenever it changes size. Padding, not margin, so the flex
+     centring happens inside the space that is actually left. */
   .pxpanel{position:absolute;left:0;right:0;bottom:0;z-index:3;
     background:color-mix(in srgb,var(--surface) 94%,transparent);
     border-top:1px solid var(--border);padding:var(--s3) var(--s4);
@@ -1097,7 +1111,13 @@
   .pxpref input{accent-color:var(--accent);width:15px;height:15px;}
   .pxmsg{font-weight:500;font-size:var(--t-small);line-height:1.4;font-family:inherit;
     color:var(--muted);}
-  .lb.editing #lbimg{max-height:calc(100vh - 210px);}
+  /* 30px is .lb's own padding, top and bottom. --pxh falls back to the old
+     guess only if the measurement has not run yet — one frame, never zero. */
+  .lb.editing{padding-bottom:calc(30px + var(--pxh,210px));}
+  .lb.editing #lbimg{max-height:calc(100vh - 60px - var(--pxh,210px));}
+  /* The arrows and the caption belong to the picture, so they follow it up. */
+  .lb.editing .nav{top:calc(50% - var(--pxh,210px)/2);}
+  .lb.editing .cap{display:none;}
   .pxbadge{display:inline-flex;align-items:center;gap:4px;padding:1px 6px;
     border-radius:999px;font-weight:600;font-size:var(--t-micro);line-height:1.6;
     font-family:inherit;color:var(--accent);
@@ -2712,27 +2732,27 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=172"></script>
-<script src="../mobile/hme.js?v=172"></script>
-<script src="../mobile/mp-fc.js?v=172"></script>
-<script src="../mobile/hme-cascade.js?v=172"></script>
-<script src="../mobile/temp-limits.js?v=172"></script>
+<script src="../data/magnetic_plug.js?v=173"></script>
+<script src="../mobile/hme.js?v=173"></script>
+<script src="../mobile/mp-fc.js?v=173"></script>
+<script src="../mobile/hme-cascade.js?v=173"></script>
+<script src="../mobile/temp-limits.js?v=173"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=172"></script>
-<script src="../mobile/normalize.js?v=172"></script>
-<script src="../mobile/due.js?v=172"></script>
-<script src="../mobile/wear.js?v=172"></script>
-<script src="../mobile/wear-map.js?v=172"></script>
-<script src="../mobile/lube.js?v=172"></script>
-<script src="../mobile/lube-overrides.js?v=172"></script>
-<script src="../mobile/lube2027.js?v=172"></script>
-<script src="../mobile/lube-tds.js?v=172"></script>
+<script src="../mobile/assets.js?v=173"></script>
+<script src="../mobile/normalize.js?v=173"></script>
+<script src="../mobile/due.js?v=173"></script>
+<script src="../mobile/wear.js?v=173"></script>
+<script src="../mobile/wear-map.js?v=173"></script>
+<script src="../mobile/lube.js?v=173"></script>
+<script src="../mobile/lube-overrides.js?v=173"></script>
+<script src="../mobile/lube2027.js?v=173"></script>
+<script src="../mobile/lube-tds.js?v=173"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=172"></script>
-<script src="../mobile/machine-photos.js?v=172"></script>
+<script src="../mobile/upload-defaults.js?v=173"></script>
+<script src="../mobile/machine-photos.js?v=173"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -2741,17 +2761,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=172"></script>
-<script src="../mobile/get.js?v=172"></script>
-<script src="../mobile/points.js?v=172"></script>
-<script src="../mobile/uc-points.js?v=172"></script>
-<script src="../mobile/inspect-guide.js?v=172"></script>
-<script src="../mobile/get-figs.js?v=172"></script>
-<script src="../mobile/body-points.js?v=172"></script>
-<script src="../mobile/body-map.js?v=172"></script>
-<script src="../mobile/jspdf.umd.min.js?v=172"></script>
-<script src="../mobile/html2canvas.min.js?v=172"></script>
-<script src="../mobile/report-core.js?v=172"></script>
+<script src="../mobile/machine-fig.js?v=173"></script>
+<script src="../mobile/get.js?v=173"></script>
+<script src="../mobile/points.js?v=173"></script>
+<script src="../mobile/uc-points.js?v=173"></script>
+<script src="../mobile/inspect-guide.js?v=173"></script>
+<script src="../mobile/get-figs.js?v=173"></script>
+<script src="../mobile/body-points.js?v=173"></script>
+<script src="../mobile/body-map.js?v=173"></script>
+<script src="../mobile/jspdf.umd.min.js?v=173"></script>
+<script src="../mobile/html2canvas.min.js?v=173"></script>
+<script src="../mobile/report-core.js?v=173"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -8349,11 +8369,33 @@ function pxSync(){
   pxDraft=pxNorm(pxRecipe);
   pxCompare=false; pxWipe=false;
   pxPaint();
-  /* A frame that already carries an edit says so, so nobody mistakes a
-     derivative for the photograph that was taken. */
+  pxBadge();
+}
+/* A frame that already carries an edit says so, so nobody mistakes a
+   derivative for the photograph that was taken. Written once and called from
+   both the frame change and the save, because a badge that only appears on the
+   NEXT visit is a badge that says the save did not happen. */
+function pxBadge(){
+  const cap=$("lbcap"); if(!cap) return;
+  const b=cap.querySelector(".pxbadge"); if(b) b.remove();
   if(pxTouched(pxRecipe))
-    $("lbcap").innerHTML=esc($("lbcap").textContent)
+    cap.innerHTML=esc(cap.textContent.trim())
       +` <span class="pxbadge">${esc(t("px_edited"))}</span>`;
+}
+/* The panel measures itself. A number written twice — once as the panel's real
+   height and once as a constant in a stylesheet — is two numbers that drift,
+   and this pair drifted the moment the controls wrapped to a third row. */
+let pxRO=null;
+function pxFit(){
+  const pn=$("pxPanel"), lb=$("lb");
+  if(!pn || !lb) return;
+  const h=pn.classList.contains("hidden") ? 0 : pn.offsetHeight;
+  lb.style.setProperty("--pxh", h+"px");
+}
+function pxWatch(){
+  if(pxRO || typeof ResizeObserver!=="function") return;
+  pxRO=new ResizeObserver(()=>pxFit());
+  pxRO.observe($("pxPanel"));
 }
 function pxOpenPanel(){
   if($("pxOpen").hidden) return;
@@ -8361,6 +8403,7 @@ function pxOpenPanel(){
   if(pxPending()){ $("pxMsg").textContent=t("px_pending"); }
   $("pxPanel").classList.remove("hidden");
   $("lb").classList.add("editing");
+  pxFit(); pxWatch();
   $("pxStr").value=String(pxDraft.straighten||0);
   $("pxStrV").textContent=(pxDraft.straighten||0)+"°";
   $("pxCap").value=pxDraft.caption||"";
@@ -8371,12 +8414,31 @@ function pxOpenPanel(){
     const el=$(id); if(el) el.disabled=busy; });
   pxCropSync();
 }
+/* WHAT THE LIGHTBOX SHOWS, ONCE THE PANEL IS SHUT, IS WHAT IS STORED.
+
+   "It says saved and then goes back to the original" was true, and only for a
+   zoom. Zoom is not part of the recipe — while the panel is open it is a CSS
+   transform on the original image, and only a canvas render produces a
+   derivative. Save folds the zoom into a crop and writes it correctly (the
+   sidecar was always right), then closePanel dropped the transform and left
+   the element pointing at the untouched original file. The engineer saw the
+   picture they started with and reasonably concluded nothing had been kept.
+
+   The same gap ran the other way on Cancel: an abandoned draft stayed on
+   screen as though it had been accepted.
+
+   So the panel no longer leaves anything of its own behind. It resets the
+   zoom, takes the draft back to the stored recipe, and repaints from that —
+   which is the only rendition that is true after the panel closes, whichever
+   button closed it. */
 function pxClosePanel(){
   $("pxPanel").classList.add("hidden");
   $("lb").classList.remove("editing"); $("lb").classList.remove("cropping");
+  $("lb").style.removeProperty("--pxh");
   $("pxCrop").classList.add("hidden");
   $("pxMsg").textContent="";
   pxZoomReset();
+  if(lbCtx){ pxDraft=pxNorm(pxRecipe); pxCompare=false; pxWipe=false; pxPaint(); pxBadge(); }
 }
 /* Is the original still on its way up? Then there is nothing to edit yet. */
 function pxPending(){
@@ -8662,6 +8724,10 @@ $("pxSave").onclick=()=>{
                             note:keep.note||"", items:keep.items||{}, media })
     .then(()=>{ $("pxMsg").textContent=t("ed_saved");
                 pxRecipe=pxGet(rk,name); pxDraft=pxNorm(pxRecipe); pxWipe=false;
+                /* Repaint here as well as on close: the panel stays up for
+                   another six-tenths of a second, and for that whole time the
+                   picture under it should already be the saved one. */
+                pxZoomReset(); pxPaint(); pxBadge();
                 setTimeout(pxClosePanel,600); })
     .catch(err=>{
       if(before) edits[rk]=before; else delete edits[rk];
@@ -11139,8 +11205,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=172"></script>
-<script src="sync-adapter.js?v=172"></script>
-<script src="report.js?v=172"></script>
+<script src="drive.js?v=173"></script>
+<script src="sync-adapter.js?v=173"></script>
+<script src="report.js?v=173"></script>
 </body>
 </html>
