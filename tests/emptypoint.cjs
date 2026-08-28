@@ -306,8 +306,9 @@ console.log("\n  the diagnostic reports the VALUE, not just the field name");
    count of three and an array of two nulls are the same word and opposite
    problems. */
 const exReal = N.explain({ key: "", photos: [{ id: "att_1", name: "x.jpg" }] });
-ok(exReal.detail.some(d => /photos=array\[1\].*1 real/.test(d)),
-   "a real attachment is reported with its shape and count", exReal.detail.join(" · "));
+ok(exReal.detail.some(d => /photos=array\[1\].*1 expected/.test(d)),
+   "an attachment is reported with its shape and EXPECTED count — a count is a\n     claim that photographs were taken, never proof their files arrived",
+   exReal.detail.join(" · "));
 ok(exReal.photos === 1, "and the count is exposed for the UI", String(exReal.photos));
 const exSlots = N.explain({ key: "", photos: [null, ""] });
 ok(exSlots.verdict === "empty", "two empty slots are not evidence", exSlots.reason);

@@ -287,7 +287,11 @@
       if (MEDIA_FIELDS.indexOf(f) >= 0) {
         d += (Array.isArray(v) ? 'array[' + v.length + ']'
              : v === null ? 'null' : typeof v === 'object' ? 'object' : String(v));
-        d += ' \u2192 ' + photoCount(v) + ' real';
+        /* EXPECTED, NOT REAL. A count is a claim that photographs were taken;
+           it says nothing about whether their files ever arrived. Calling it
+           "real" put six photographs on a panel that could show none of them
+           and let an engineer file evidence nobody can see. */
+        d += ' \u2192 ' + photoCount(v) + ' expected';
       } else {
         d += typeof v === 'string' ? '"' + String(v).slice(0, 24) + '"' : String(v);
       }
@@ -296,6 +300,10 @@
     return {
       verdict: c,
       detail: detail,
+      /* How many photographs this point CLAIMS. Whether their files exist is a
+         question only the dashboard can answer, and it must ask separately. */
+      expected: photoCount(i && i.photos) + photoCount(i && i.photo) +
+                photoCount(i && i.attachments),
       photos: photoCount(i && i.photos) + photoCount(i && i.photo) +
               photoCount(i && i.attachments),
       identity: named(i) ? ['key', 'label', 'name'].filter(function (k) {

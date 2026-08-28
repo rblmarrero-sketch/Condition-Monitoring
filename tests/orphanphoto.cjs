@@ -60,11 +60,58 @@ const setup = async p => p.evaluate(recs => {
     CMDash.importRecords(recs);
     showTab("sync");
   }, RECS);
+  await p.waitForTimeout(300);
   await p.waitForTimeout(400);
+
+  console.log("\n  EXPECTED IS NOT RECEIVED");
+  /* The panel showed six checkboxes over six "file has not reached this
+     dashboard" messages and let an engineer assign all six anyway. A photograph
+     nobody can see cannot be filed against a component — looking at it is the
+     whole point — and an assignment made blind is worse than none, because it
+     looks finished. */
+  const missing = await p.evaluate(() => {
+    const row = [...document.querySelectorAll("#syQuarTbl [data-quargo]")]
+      .find(r => /TK115/.test(r.textContent));
+    row.click();
+    return { cards: document.querySelectorAll("#opGrid .opc").length,
+             boxes: [...document.querySelectorAll("#opGrid input")].map(x => x.disabled),
+             states: [...new Set([...document.querySelectorAll("#opGrid .st")]
+               .map(x => x.textContent))],
+             tally: $("opCount").textContent,
+             assign: $("opAssign").disabled, general: $("opGeneral").disabled,
+             retry: !$("opRetry").classList.contains("hidden") };
+  });
+  ok(missing.cards === 6, "six placeholders are shown, one per expected photograph",
+     String(missing.cards));
+  ok(missing.boxes.length === 6 && missing.boxes.every(Boolean),
+     "every checkbox is DISABLED, because none of the files is here",
+     missing.boxes.join(","));
+  ok(missing.states.length === 1 && /not received/i.test(missing.states[0]),
+     "and each says the file was not received", missing.states.join(" | "));
+  ok(missing.assign && missing.general,
+     "Assign and Keep-as-general are both disabled — no blind classification");
+  ok(missing.retry, "a way to re-check synchronisation is offered instead");
+  ok(/6 expected/.test(missing.tally) && /0 received/.test(missing.tally)
+     && /6 file\(s\) missing/.test(missing.tally),
+     "the four numbers are separate and honest", missing.tally);
+  /* And the row says which problem it is, so the right person picks it up. */
+  const rowWhy = await p.evaluate(() => {
+    $("opClose").click();
+    return [...document.querySelectorAll("#syQuarTbl [data-quargo]")]
+      .find(r => /TK115/.test(r.textContent)).textContent.replace(/\s+/g, " ");
+  });
+  ok(/evidence incomplete|file missing/i.test(rowWhy),
+     "the row calls it incomplete evidence, not a missing inspection point",
+     rowWhy.slice(40, 130));
+  ok(!/needs an inspection point/i.test(rowWhy),
+     "and does not send a reliability engineer to a sync problem");
 
   console.log("\n  the workload is counted in photographs, not records");
   const hint = await p.evaluate(() => $("syQuarHint").textContent);
-  ok(/10\b/.test(hint), "ten photographs need assignment", hint);
+  /* Never "10 need assignment" while ten files have not arrived — that is a
+     workload nobody can start. Missing is counted as missing. */
+  ok(/10\b/.test(hint) && /missing/i.test(hint),
+     "ten photo FILES are reported missing, not ten assignments waiting", hint);
   ok(!/held back/i.test(await p.evaluate(() => document.body.innerText)),
      "and the words 'held back' appear nowhere on the page");
 
@@ -83,6 +130,41 @@ const setup = async p => p.evaluate(recs => {
   ok(open.cards === 6, "six orphan photographs are shown", String(open.cards));
   ok(/TK115/.test(open.sub) && /2026-08-05/.test(open.sub),
      "with the unit, date and round named", open.sub);
+
+  console.log("\n  when the files arrive, the placeholders become photographs");
+  /* A REAL IMAGE, not a numeric placeholder. The audit was right that assignment
+     had never been proven against a file anybody could see — every earlier test
+     drove counts. This lands actual bytes through the same door drive.js uses,
+     which is what turns "expected" into "viewable". */
+  const PX = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/wAALCAABAAEBAREA/8QAFAABAAAAAAAAAAAAAAAAAAAACf/EABQQAQAAAAAAAAAAAAAAAAAAAAD/2gAIAQEAAD8AKp//2Q==";
+  const arrived = await p.evaluate(px => {
+    /* Six files, named the way the folder names this record's photographs. */
+    const rec = RECS.find(r => r.equip === "TK115");
+    const base = CMDash.photoBase(rec.items.find(i => i._needsPoint), rec);
+    for (let n = 1; n <= 6; n++) CMDash.addPhoto(base + "_" + n + ".jpg", px);
+    rebuild(); renderSync();
+    const row = [...document.querySelectorAll("#syQuarTbl [data-quargo]")]
+      .find(r => /TK115/.test(r.textContent));
+    if (row) row.click();
+    return { imgs: document.querySelectorAll("#opGrid img.th").length,
+             boxes: [...document.querySelectorAll("#opGrid input")].map(x => x.disabled),
+             tally: $("opCount").textContent };
+  }, PX);
+  if (arrived.imgs === 6) {
+    ok(true, "six thumbnails render once the files are here", String(arrived.imgs));
+    ok(arrived.boxes.every(x => !x), "and every checkbox is now enabled",
+       arrived.boxes.join(","));
+    ok(/6 received/.test(arrived.tally), "the tally moves from missing to received",
+       arrived.tally);
+  } else {
+    /* The folder names photographs from the point key, and this point has none —
+       so the dashboard cannot match a file to it by name. Say so plainly rather
+       than passing: it is the next thing to fix, and it is Phase 2's stable
+       attachment id. */
+    ok(false, "six thumbnails render once the files are here",
+       arrived.imgs + " rendered — a keyless point has no name to match files by; "
+       + "needs the stable attachment id from the mobile manifest");
+  }
 
   console.log("\n  the point list is this round's, and nothing is preselected");
   const pts = await p.evaluate(() => ({
@@ -144,16 +226,28 @@ const setup = async p => p.evaluate(recs => {
   const persisted = await p.evaluate(() => {
     const rec = RECS.find(r => r.equip === "TK115");
     if (!rec) return { gone: true };
+    const q = syncScan().quar.find(x => x.r.equip === "TK115");
+    const tl = photoTally(rec);
     return { left: unresolvedPhotos(rec).length,
-             held: syncScan().quar.some(q => q.r.equip === "TK115"),
-             photos: orphanPhotos(rec).length };
+             photos: orphanPhotos(rec).length,
+             heldForAssignment: tl.needs > 0,
+             why: q ? (tl.missing + " file(s) missing") : "" };
   });
   if (persisted.gone) {
     ok(false, "TK115 survived the reload", "record not present — imports are not persisted here");
   } else {
-    ok(persisted.left === 0, "the assignments are still there", String(persisted.left));
-    ok(!persisted.held, "and the record has not come back onto the list");
-    ok(persisted.photos === 6, "with every photograph intact", String(persisted.photos));
+    ok(persisted.left === 0, "no photograph is waiting on a human again",
+       String(persisted.left));
+    ok(persisted.photos === 6, "every photograph is still accounted for",
+       String(persisted.photos));
+    /* The record MAY still be listed after a reload, and correctly so: the
+       thumbnails were landed into this page's media index, which a reload
+       clears, so the six files are "missing" again. That is a sync problem, not
+       an unfinished correction — and the distinction is the whole point of this
+       build, so the test asserts WHICH reason rather than that there is none. */
+    ok(!persisted.heldForAssignment,
+       "and if it is listed, it is for missing files — not for an assignment "
+       + "somebody already made", persisted.why || "not listed");
   }
 
   console.log("\n  nothing was deleted, and the audit trail names who and when");

@@ -1196,6 +1196,10 @@
   .opc{border:1px solid var(--border);border-radius:8px;overflow:hidden;
        background:var(--card);position:relative;}
   .opc.sel{outline:2px solid var(--accent);outline-offset:-2px;}
+  /* A card nobody can judge does not look like one they can. */
+  .opc.off{opacity:.62;}
+  .opc.off .th,.opc.off .nofile{filter:grayscale(1);}
+  .opc .st.gone{background:var(--crit-bg,#f6e6e3);color:var(--critical);}
   .opc .th{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;
            background:var(--surface-3);cursor:pointer;}
   .opc .nofile{width:100%;aspect-ratio:4/3;display:flex;align-items:center;
@@ -2152,6 +2156,7 @@
       <div class="row" style="gap:10px;margin-bottom:6px">
         <button class="btn" id="opAll" data-i18n="op_all">Select all</button>
         <button class="btn" id="opNone" data-i18n="op_none">Select none</button>
+        <button class="btn hidden" id="opRetry" data-i18n="op_retry">Check synchronisation</button>
         <span class="spacer"></span><span class="hint" id="opCount"></span>
       </div>
       <div id="opGrid" class="opgrid"></div>
@@ -2703,27 +2708,27 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=170"></script>
-<script src="../mobile/hme.js?v=170"></script>
-<script src="../mobile/mp-fc.js?v=170"></script>
-<script src="../mobile/hme-cascade.js?v=170"></script>
-<script src="../mobile/temp-limits.js?v=170"></script>
+<script src="../data/magnetic_plug.js?v=171"></script>
+<script src="../mobile/hme.js?v=171"></script>
+<script src="../mobile/mp-fc.js?v=171"></script>
+<script src="../mobile/hme-cascade.js?v=171"></script>
+<script src="../mobile/temp-limits.js?v=171"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=170"></script>
-<script src="../mobile/normalize.js?v=170"></script>
-<script src="../mobile/due.js?v=170"></script>
-<script src="../mobile/wear.js?v=170"></script>
-<script src="../mobile/wear-map.js?v=170"></script>
-<script src="../mobile/lube.js?v=170"></script>
-<script src="../mobile/lube-overrides.js?v=170"></script>
-<script src="../mobile/lube2027.js?v=170"></script>
-<script src="../mobile/lube-tds.js?v=170"></script>
+<script src="../mobile/assets.js?v=171"></script>
+<script src="../mobile/normalize.js?v=171"></script>
+<script src="../mobile/due.js?v=171"></script>
+<script src="../mobile/wear.js?v=171"></script>
+<script src="../mobile/wear-map.js?v=171"></script>
+<script src="../mobile/lube.js?v=171"></script>
+<script src="../mobile/lube-overrides.js?v=171"></script>
+<script src="../mobile/lube2027.js?v=171"></script>
+<script src="../mobile/lube-tds.js?v=171"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=170"></script>
-<script src="../mobile/machine-photos.js?v=170"></script>
+<script src="../mobile/upload-defaults.js?v=171"></script>
+<script src="../mobile/machine-photos.js?v=171"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -2732,17 +2737,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=170"></script>
-<script src="../mobile/get.js?v=170"></script>
-<script src="../mobile/points.js?v=170"></script>
-<script src="../mobile/uc-points.js?v=170"></script>
-<script src="../mobile/inspect-guide.js?v=170"></script>
-<script src="../mobile/get-figs.js?v=170"></script>
-<script src="../mobile/body-points.js?v=170"></script>
-<script src="../mobile/body-map.js?v=170"></script>
-<script src="../mobile/jspdf.umd.min.js?v=170"></script>
-<script src="../mobile/html2canvas.min.js?v=170"></script>
-<script src="../mobile/report-core.js?v=170"></script>
+<script src="../mobile/machine-fig.js?v=171"></script>
+<script src="../mobile/get.js?v=171"></script>
+<script src="../mobile/points.js?v=171"></script>
+<script src="../mobile/uc-points.js?v=171"></script>
+<script src="../mobile/inspect-guide.js?v=171"></script>
+<script src="../mobile/get-figs.js?v=171"></script>
+<script src="../mobile/body-points.js?v=171"></script>
+<script src="../mobile/body-map.js?v=171"></script>
+<script src="../mobile/jspdf.umd.min.js?v=171"></script>
+<script src="../mobile/html2canvas.min.js?v=171"></script>
+<script src="../mobile/report-core.js?v=171"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -3073,6 +3078,14 @@ const I18N={
   op_saved:"✅ {n} photograph(s) assigned.",
   op_nofile:"Not downloaded yet — the file has not reached this dashboard.",
   op_open:"Assign photos",
+  op_missing:"Photo file not received",
+  op_retry:"Check synchronisation",
+  op_cant:"Those photographs have not arrived, so they cannot be assigned yet.",
+  op_tally:"{e} expected · {r} received · {m} file(s) missing · {n} selected",
+  /* Two different problems, two different owners. */
+  sy_w_photomiss:"Evidence incomplete — photo file missing",
+  sy_fix_photomiss:"This inspection expects photographs that have not reached the dashboard. The readings, condition and actions on it are unaffected and still count. Nothing can be assigned until the files arrive.",
+  sy_quar_miss:"{n} photo file(s) missing",
   op_resolved:"Every photograph on this inspection is now assigned.",
   sy_fix_photo:"This photo arrived without a component or inspection-point reference. Assign it to the correct point, or keep it as general inspection evidence.",
   /* The workload, not the record count. Two inspections on hold is a number
@@ -3685,6 +3698,13 @@ const I18N={
   op_saved:"✅ Назначено фотографий: {n}.",
   op_nofile:"Ещё не загружено — файл не дошёл до этой панели.",
   op_open:"Назначить фото",
+  op_missing:"Файл фото не получен",
+  op_retry:"Проверить синхронизацию",
+  op_cant:"Эти фотографии ещё не пришли, назначить их пока нельзя.",
+  op_tally:"ожидается {e} · получено {r} · нет файлов: {m} · выбрано {n}",
+  sy_w_photomiss:"Материалы неполные — нет файла фото",
+  sy_fix_photomiss:"Этот осмотр ожидает фотографии, которые не дошли до панели. Замеры, состояние и действия по нему не затронуты и учитываются. Назначить что-либо можно будет после прихода файлов.",
+  sy_quar_miss:"нет файлов фото: {n}",
   op_resolved:"Все фотографии этого осмотра назначены.",
   sy_fix_photo:"Это фото пришло без привязки к узлу или точке осмотра. Назначьте его нужной точке или оставьте как общий материал по осмотру.",
   sy_quar_hint:"фото требуют назначения: {n}", sy_quar_none:"Исправлять нечего",
@@ -7153,7 +7173,48 @@ function orphanPhotos(rec){
   });
   return out;
 }
-function unresolvedPhotos(rec){ return orphanPhotos(rec).filter(p=>!p.a); }
+/* THE STATE OF ONE PHOTOGRAPH.
+
+   The panel showed six checkboxes over six messages saying the file had not
+   arrived, and let an engineer assign all six anyway. A photograph nobody can
+   see cannot be filed against a component — the whole point of looking at it is
+   to know which component it shows — and an assignment made blind is worse than
+   no assignment, because it looks finished.
+
+   Expected is a claim that photographs were taken. Received is a file this
+   dashboard actually holds. They were the same number in the code and they are
+   not the same fact.
+
+   Two of these states can be acted on: VIEWABLE (a file is here and nobody has
+   filed it) and the already-filed states, which can be changed. MISSING cannot,
+   and its controls are disabled rather than merely discouraged. */
+const PH_MISSING="missing", PH_VIEWABLE="viewable",
+      PH_POINT="point", PH_GENERAL="general";
+function photoState(p){
+  if(!p.src) return PH_MISSING;                 // expected, never received
+  if(p.a && p.a.general) return PH_GENERAL;
+  if(p.a && p.a.point)   return PH_POINT;
+  return PH_VIEWABLE;                           // received, needs assignment
+}
+const photoActionable = p => photoState(p)!==PH_MISSING;
+/* The four numbers that were one number. */
+function photoTally(rec){
+  const all=orphanPhotos(rec);
+  const missing=all.filter(p=>photoState(p)===PH_MISSING).length;
+  const received=all.length-missing;
+  const needs=all.filter(p=>photoState(p)===PH_VIEWABLE).length;
+  return { expected:all.length, received, missing, needs };
+}
+/* A record is only WAITING ON A HUMAN when a received photograph has nowhere to
+   be. A missing file is waiting on the sync pipeline, which is a different
+   problem with a different owner, and it must not present as a correction
+   somebody can make. */
+function unresolvedPhotos(rec){
+  return orphanPhotos(rec).filter(p=>photoState(p)===PH_VIEWABLE);
+}
+function missingPhotos(rec){
+  return orphanPhotos(rec).filter(p=>photoState(p)===PH_MISSING);
+}
 /* THE POINTS THIS ROUND ACTUALLY HAS, ON THIS MACHINE.
 
    A tray zone must not be offered on a magnetic-plug round — filing a
@@ -7199,23 +7260,36 @@ function renderOrphan(){
   const rec=RECS.find(r=>ekOf(r)===opKey); if(!rec){ closeOrphan(); return; }
   const all=orphanPhotos(rec), left=all.filter(p=>!p.a).length;
   $("opLead").textContent = left ? t("op_lead",{n:left}) : t("op_resolved");
-  $("opGrid").innerHTML=all.map((p,n)=>{
-    const done=p.a;
-    const state=done
-      ? (done.general ? t("op_done_gen") : t("op_done_point",{p:done.point||""}))
-      : t("op_todo");
+  $("opGrid").innerHTML=all.map(p=>{
+    const st=photoState(p), can=photoActionable(p);
+    const label = st===PH_MISSING ? t("op_missing")
+                : st===PH_GENERAL ? t("op_done_gen")
+                : st===PH_POINT   ? t("op_done_point",{p:(p.a&&p.a.point)||""})
+                :                   t("op_todo");
+    const cls = st===PH_MISSING ? "gone" : (st===PH_VIEWABLE ? "todo" : "done");
     const thumb=p.src
       ? `<img class="th" src="${esc(p.src)}" alt="${esc(p.name)}" loading="lazy">`
       : `<div class="nofile">${esc(t("op_nofile"))}</div>`;
-    return `<div class="opc${opSel.has(p.name)?" sel":""}" data-op="${esc(p.name)}">
-      <input type="checkbox" ${opSel.has(p.name)?"checked":""} aria-label="${esc(p.name)}">
+    return `<div class="opc${opSel.has(p.name)?" sel":""}${can?"":" off"}" data-op="${esc(p.name)}">
+      <input type="checkbox" ${opSel.has(p.name)?"checked":""} ${can?"":"disabled"}
+             aria-label="${esc(p.name)}">
       ${thumb}
       <div class="meta"><b>${esc(p.name)}</b>
-        <span class="st ${done?"done":"todo"}">${esc(state)}</span></div></div>`;
+        <span class="st ${cls}">${esc(label)}</span></div></div>`;
   }).join("") || `<div class="empty">${esc(t("op_resolved"))}</div>`;
-  $("opCount").textContent=t("op_sel",{n:opSel.size, of:all.length});
+  /* Four numbers, because they are four different problems. */
+  const tal=photoTally(rec);
+  $("opCount").textContent=t("op_tally",{e:tal.expected, r:tal.received,
+    m:tal.missing, n:opSel.size});
+  /* Assignment is impossible while nothing viewable is chosen. Disabled, not
+     merely unhelpful: an engineer who can press it has been invited to guess. */
+  const canAct=opSel.size>0;
+  $("opAssign").disabled=!canAct;
+  $("opGeneral").disabled=!canAct;
+  $("opRetry").classList.toggle("hidden", !tal.missing);
   $("opGrid").querySelectorAll("[data-op]").forEach(c=>{
     const nm=c.dataset.op;
+    if(c.classList.contains("off")){ c.onclick=null; return; }
     c.onclick=e=>{
       if(e.target.tagName==="IMG" && e.detail===2) return;   // double-click = lightbox
       if(opSel.has(nm)) opSel.delete(nm); else opSel.add(nm);
@@ -7228,6 +7302,12 @@ function closeOrphan(){ $("opOv").classList.add("hidden"); opKey=null; opSel.cle
    sidecar every other correction uses. */
 function saveAssign(patch){
   const rec=RECS.find(r=>ekOf(r)===opKey); if(!rec) return;
+  /* The last gate. Whatever the controls allowed, a photograph whose file is
+     not here cannot be filed — checked against the record rather than against
+     the checkbox, so a stale selection or a future caller cannot get past it. */
+  const seen=new Set(orphanPhotos(rec).filter(photoActionable).map(p=>p.name));
+  Object.keys(patch).forEach(n=>{ if(!seen.has(n)) delete patch[n]; });
+  if(!Object.keys(patch).length){ $("opMsg").textContent=t("op_cant"); return; }
   const rk=opKey, msg=$("opMsg");
   const by=(()=>{ try{ return localStorage.getItem("cm_dash_who")||""; }catch(e){ return ""; } })();
   if(!by){ msg.textContent=t("ed_needname"); return; }
@@ -7255,8 +7335,23 @@ function saveAssign(patch){
 $("opClose").onclick=closeOrphan;
 $("opOv").onclick=e=>{ if(e.target===$("opOv")) closeOrphan(); };
 $("opAll").onclick=()=>{ const rec=RECS.find(r=>ekOf(r)===opKey); if(!rec) return;
-  orphanPhotos(rec).forEach(p=>opSel.add(p.name)); renderOrphan(); };
+  /* "All" means all the engineer can actually judge. Selecting a missing file
+     here would put it straight back into the blind-assignment problem. */
+  orphanPhotos(rec).filter(photoActionable).forEach(p=>opSel.add(p.name));
+  renderOrphan(); };
 $("opNone").onclick=()=>{ opSel.clear(); renderOrphan(); };
+/* The only useful action on a file that has not arrived: ask the folder again.
+   A missing photograph is a sync problem, and this is where somebody standing
+   in front of it would look for the button. */
+$("opRetry").onclick=()=>{
+  $("opMsg").textContent=t("ed_sending");
+  Promise.resolve(window.CMDrive&&CMDrive.load?CMDrive.load({refresh:true}):null)
+    .then(()=>{ renderOrphan(); renderSync();
+                const rec=RECS.find(r=>ekOf(r)===opKey);
+                const tl=rec?photoTally(rec):{missing:0};
+                $("opMsg").textContent = tl.missing ? t("op_missing") : ""; })
+    .catch(e=>{ $("opMsg").textContent=String((e&&e.message)||e); });
+};
 $("opAssign").onclick=()=>{
   if(!opSel.size){ $("opMsg").textContent=t("op_none_sel"); return; }
   const pt=$("opPoint").value;
@@ -10463,7 +10558,16 @@ function syncScan(){
       const x=CMNorm.explain(i);
       const photoOnly = x.photos>0 && x.evidence.every(f=>MED.indexOf(f)>=0);
       if(!photoOnly) return true;                     // a reading needs its point
-      return typeof unresolvedPhotos!=="function" || unresolvedPhotos(r).length>0;
+      if(typeof photoTally!=="function") return true;
+      /* Still listed while EITHER is true, because they are two problems and
+         both need somebody:
+           a received photograph with nowhere to be   -> a reliability engineer
+           a photograph whose file never arrived      -> the sync pipeline
+         Dropping the second because nobody can act on it in this panel would
+         hide six missing photographs completely. The row says which it is, so
+         the right person picks it up. */
+      const tl=photoTally(r);
+      return tl.needs>0 || tl.missing>0;
     });
     if(orph.length && stillOpen) why.push("point");
     if(why.length){ quar.push({r,why}); return; }
@@ -10693,7 +10797,14 @@ function renderSync(){
               return x.photos>0 && x.evidence.every(f=>
                 ["photos","photo","video","attachments","media"].indexOf(f)>=0);
             });
-            return onlyPhotos ? "photo" : w;
+            if(!onlyPhotos) return w;
+            /* Missing evidence and unassigned evidence are different problems
+               with different owners: one waits on the sync pipeline, the other
+               on a reliability engineer. Saying "needs an inspection point"
+               over a file that never arrived sends the wrong person to it. */
+            const anyViewable = typeof unresolvedPhotos==="function"
+              && unresolvedPhotos(rec).length>0;
+            return anyViewable ? "photo" : "photomiss";
           };
           return `<tr${canOpen?` class="hrow" tabindex="0" data-quargo="${esc(ekOf(r))}"`:""}>
           <td><b>${esc(r.equip||t("sy_blank"))}</b></td>
@@ -10706,29 +10817,52 @@ function renderSync(){
         }).join("")
       +`</tbody>`;
   }
-  /* Count the work, not the containers. */
-  const orphanPhotos = s.quar.reduce((n,{r})=>n + (r.items||[])
-    .filter(i=>i&&i._needsPoint)
-    .reduce((m,i)=>m + (window.CMNorm?CMNorm.explain(i).photos:0), 0), 0);
+  /* A local `const orphanPhotos` — a NUMBER — used to sit here, shadowing the
+     FUNCTION of the same name for everything defined below it in this scope.
+     The delegated row handler then read `orphanPhotos(rec).length` as a call on
+     an integer, took the else branch, and opened the full correction form
+     instead of the photo panel. The row still looked clickable and still did
+     something, which is why it took a browser to find rather than a reading.
+     Superseded by the tally below; the name is not reused. */
+  /* Never "10 photos need assignment" when ten files have not arrived — that
+     is a workload nobody can start. Missing files are counted as what they are. */
+  let needAssign=0, missing=0;
+  s.quar.forEach(({r})=>{
+    if(typeof photoTally!=="function") return;
+    const tl=photoTally(r); needAssign+=tl.needs; missing+=tl.missing;
+  });
   $("syQuarHint").textContent = !s.quar.length ? ""
-    : orphanPhotos ? t("sy_quar_hint",{n:orphanPhotos})
+    : needAssign ? t("sy_quar_hint",{n:needAssign})
+    : missing    ? t("sy_quar_miss",{n:missing})
     : t("sy_quar_rows",{n:s.quar.length});
   /* Straight into the correction panel for that inspection. A record whose
      unit, date or round is missing has no address to open, so it is not made
      to look clickable — it needs the phone that captured it. */
-  $("syQuarTbl").querySelectorAll("[data-quargo]").forEach(tr=>{
-    /* Straight to the photographs when that is the whole problem. Sending
-       somebody into the full correction form to hunt for ten unassigned
-       photographs is how ten photographs become a job nobody starts. */
-    const go=()=>{
-      const rec=RECS.find(r=>ekOf(r)===tr.dataset.quargo);
-      if(rec && typeof unresolvedPhotos==="function" && unresolvedPhotos(rec).length)
-        openOrphan(tr.dataset.quargo);
-      else openEdit(tr.dataset.quargo);
+  /* DELEGATED, NOT BOUND PER ROW. Handlers attached to rows are lost the next
+     time anything rewrites the table, and the correction row is rewritten by
+     every refresh, language switch and tab change — so the one control on this
+     screen quietly stopped working while the row still looked clickable. One
+     listener on the table, which outlives every re-render. */
+  if(!$("syQuarTbl").dataset.wired){
+    $("syQuarTbl").dataset.wired="1";
+    const go=el=>{
+      const rk=el && el.dataset.quargo; if(!rk) return;
+      const rec=RECS.find(r=>ekOf(r)===rk);
+      /* Open the photo panel whenever photographs are the problem — including
+         when none have arrived. Six greyed placeholders saying "Photo file not
+         received", with a way to re-check, is the honest answer; dropping
+         somebody into the full correction form to work out why is not. */
+      if(rec && typeof orphanPhotos==="function" && orphanPhotos(rec).length)
+        openOrphan(rk);
+      else openEdit(rk);
     };
-    tr.onclick=go;
-    tr.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } };
-  });
+    $("syQuarTbl").addEventListener("click", e=>{
+      const tr=e.target.closest("[data-quargo]"); if(tr) go(tr); });
+    $("syQuarTbl").addEventListener("keydown", e=>{
+      if(e.key!=="Enter" && e.key!==" ") return;
+      const tr=e.target.closest("[data-quargo]"); if(!tr) return;
+      e.preventDefault(); go(tr); });
+  }
 }
 function renderNavCounts(){
   const nb=(id,n)=>{ const el=$(id); if(el) el.textContent=n>0?(n>99?"99+":String(n)):""; };
@@ -10880,8 +11014,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=170"></script>
-<script src="sync-adapter.js?v=170"></script>
-<script src="report.js?v=170"></script>
+<script src="drive.js?v=171"></script>
+<script src="sync-adapter.js?v=171"></script>
+<script src="report.js?v=171"></script>
 </body>
 </html>
