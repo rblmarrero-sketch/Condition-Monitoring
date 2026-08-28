@@ -74,10 +74,59 @@
     'photo', 'photos', 'video', 'attachments', 'media'
   ];
 
+  /* HOW MANY PHOTOGRAPHS THIS POINT ACTUALLY CLAIMS.
+     ------------------------------------------------------------------------
+     `photos` is the field that kept TK115 and DZ007 on hold through v168, and
+     it is the one on the list that arrives in half a dozen shapes: a count from
+     the phone's export, an array of file names from an older sidecar, an array
+     of attachment objects, and — in between — arrays holding nulls and empty
+     strings where a photograph was removed but its slot was not.
+
+     A slot is not a photograph. Counting one is how a blank row becomes a
+     finding somebody must identify; NOT counting a real one is how field
+     evidence gets deleted. So this is deliberately exact, and it is the only
+     place that decides.
+
+     A positive answer means an inspector attached photographs to a position
+     that never got a key. That is a real correction for a human, and the
+     photographs must not be touched. */
+  function photoCount(v) {
+    if (v == null) return 0;
+    if (typeof v === 'number') return isFinite(v) && v > 0 ? v : 0;
+    if (typeof v === 'string') return v.trim() === '' ? 0 : 1;
+    if (Array.isArray(v)) {
+      var n = 0;
+      for (var i = 0; i < v.length; i++) {
+        var e = v[i];
+        if (e == null) continue;                       // a slot, not a photograph
+        if (typeof e === 'string') { if (e.trim() !== '') n++; continue; }
+        if (typeof e === 'object') {
+          var nm = e.name || e.file || e.filename || e.src || e.url || '';
+          var id = e.id || e.attachmentId || e.aid || '';
+          if (String(nm).trim() !== '' || String(id).trim() !== '') n++;
+          continue;
+        }
+        n++;
+      }
+      return n;
+    }
+    if (typeof v === 'object') {
+      if (!Object.keys(v).length) return 0;
+      var onm = v.name || v.file || v.filename || v.src || v.url || '';
+      var oid = v.id || v.attachmentId || v.aid || '';
+      return (String(onm).trim() !== '' || String(oid).trim() !== '') ? 1 : 0;
+    }
+    return 0;
+  }
+  var MEDIA_FIELDS = ['photos', 'photo', 'video', 'attachments', 'media'];
+
   /* "Carries nothing" has to cover every shape a blank arrives in. A count of
      zero photographs is not a photograph; an empty array is not evidence; a
      string of spaces is what a keyboard leaves behind. */
-  function blank(v) {
+  function blank(v, field) {
+    /* Media gets the exact count above, never the generic test: [null, ""] is
+       length 2 and holds nothing at all. */
+    if (field && MEDIA_FIELDS.indexOf(field) >= 0) return photoCount(v) === 0;
     if (v == null) return true;
     if (typeof v === 'string') return v.trim() === '';
     if (typeof v === 'number') return v === 0;      // photos:0 is no photographs
@@ -89,7 +138,8 @@
 
   /* The identity half: what the point IS. */
   function named(i) {
-    return !blank(i && i.key) || !blank(i && i.label) || !blank(i && i.name);
+    return !blank(i && i.key, 'key') || !blank(i && i.label, 'label') ||
+           !blank(i && i.name, 'name');
   }
 
   /* WHAT A HUMAN ACTUALLY RECORDED — THE SHORT LIST, AND ONLY THIS LIST.
@@ -132,7 +182,7 @@
   function carries(i) {
     if (!i || typeof i !== 'object') return false;
     for (var n = 0; n < EVIDENCE.length; n++) {
-      if (!blank(i[EVIDENCE[n]])) return true;
+      if (!blank(i[EVIDENCE[n]], EVIDENCE[n])) return true;
     }
     return false;
   }
@@ -140,7 +190,7 @@
      than leaving somebody to work it out from the outside. */
   function evidenceIn(i) {
     if (!i || typeof i !== 'object') return [];
-    return EVIDENCE.filter(function (f) { return !blank(i[f]); });
+    return EVIDENCE.filter(function (f) { return !blank(i[f], f); });
   }
 
   /* FIELDS AN UNKNOWN NAME IS *NOT* ALLOWED TO BECOME.
@@ -202,7 +252,7 @@
   function unknown(i) {
     if (!i || typeof i !== 'object') return [];
     return Object.keys(i).filter(function (k) {
-      return !isMeta(k) && OPERATIONAL.indexOf(k) < 0 && !blank(i[k]);
+      return !isMeta(k) && OPERATIONAL.indexOf(k) < 0 && !blank(i[k], k);
     });
   }
 
@@ -224,15 +274,32 @@
     var meta = [], unk = unknown(i), ev = evidenceIn(i);
     if (i && typeof i === 'object') {
       Object.keys(i).forEach(function (k) {
-        if (isMeta(k) && !blank(i[k]) && k !== 'key' && k !== 'label' && k !== 'name')
+        if (isMeta(k) && !blank(i[k], k) && k !== 'key' && k !== 'label' && k !== 'name')
           meta.push(k);
       });
     }
     var c = classify(i);
+    /* THE VALUE, NOT ONLY THE FIELD NAME. v168 reported "on hold because:
+       photos", which was not enough to act on — a count of three and an array
+       of two nulls are the same word and opposite problems. */
+    var detail = ev.map(function (f) {
+      var v = i[f], d = f + '=';
+      if (MEDIA_FIELDS.indexOf(f) >= 0) {
+        d += (Array.isArray(v) ? 'array[' + v.length + ']'
+             : v === null ? 'null' : typeof v === 'object' ? 'object' : String(v));
+        d += ' \u2192 ' + photoCount(v) + ' real';
+      } else {
+        d += typeof v === 'string' ? '"' + String(v).slice(0, 24) + '"' : String(v);
+      }
+      return d;
+    });
     return {
       verdict: c,
+      detail: detail,
+      photos: photoCount(i && i.photos) + photoCount(i && i.photo) +
+              photoCount(i && i.attachments),
       identity: named(i) ? ['key', 'label', 'name'].filter(function (k) {
-        return !blank(i && i[k]); }) : [],
+        return !blank(i && i[k], k); }) : [],
       evidence: ev,
       housekeeping: meta,
       unknown: unk,
@@ -291,6 +358,7 @@
     OPERATIONAL: OPERATIONAL,
     EVIDENCE: EVIDENCE,
     evidenceIn: evidenceIn,
+    photoCount: photoCount,
     METADATA: METADATA,
     DEFAULTED: DEFAULTED,
     unknown: unknown,

@@ -2643,27 +2643,27 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=168"></script>
-<script src="../mobile/hme.js?v=168"></script>
-<script src="../mobile/mp-fc.js?v=168"></script>
-<script src="../mobile/hme-cascade.js?v=168"></script>
-<script src="../mobile/temp-limits.js?v=168"></script>
+<script src="../data/magnetic_plug.js?v=169"></script>
+<script src="../mobile/hme.js?v=169"></script>
+<script src="../mobile/mp-fc.js?v=169"></script>
+<script src="../mobile/hme-cascade.js?v=169"></script>
+<script src="../mobile/temp-limits.js?v=169"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=168"></script>
-<script src="../mobile/normalize.js?v=168"></script>
-<script src="../mobile/due.js?v=168"></script>
-<script src="../mobile/wear.js?v=168"></script>
-<script src="../mobile/wear-map.js?v=168"></script>
-<script src="../mobile/lube.js?v=168"></script>
-<script src="../mobile/lube-overrides.js?v=168"></script>
-<script src="../mobile/lube2027.js?v=168"></script>
-<script src="../mobile/lube-tds.js?v=168"></script>
+<script src="../mobile/assets.js?v=169"></script>
+<script src="../mobile/normalize.js?v=169"></script>
+<script src="../mobile/due.js?v=169"></script>
+<script src="../mobile/wear.js?v=169"></script>
+<script src="../mobile/wear-map.js?v=169"></script>
+<script src="../mobile/lube.js?v=169"></script>
+<script src="../mobile/lube-overrides.js?v=169"></script>
+<script src="../mobile/lube2027.js?v=169"></script>
+<script src="../mobile/lube-tds.js?v=169"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=168"></script>
-<script src="../mobile/machine-photos.js?v=168"></script>
+<script src="../mobile/upload-defaults.js?v=169"></script>
+<script src="../mobile/machine-photos.js?v=169"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -2672,17 +2672,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=168"></script>
-<script src="../mobile/get.js?v=168"></script>
-<script src="../mobile/points.js?v=168"></script>
-<script src="../mobile/uc-points.js?v=168"></script>
-<script src="../mobile/inspect-guide.js?v=168"></script>
-<script src="../mobile/get-figs.js?v=168"></script>
-<script src="../mobile/body-points.js?v=168"></script>
-<script src="../mobile/body-map.js?v=168"></script>
-<script src="../mobile/jspdf.umd.min.js?v=168"></script>
-<script src="../mobile/html2canvas.min.js?v=168"></script>
-<script src="../mobile/report-core.js?v=168"></script>
+<script src="../mobile/machine-fig.js?v=169"></script>
+<script src="../mobile/get.js?v=169"></script>
+<script src="../mobile/points.js?v=169"></script>
+<script src="../mobile/uc-points.js?v=169"></script>
+<script src="../mobile/inspect-guide.js?v=169"></script>
+<script src="../mobile/get-figs.js?v=169"></script>
+<script src="../mobile/body-points.js?v=169"></script>
+<script src="../mobile/body-map.js?v=169"></script>
+<script src="../mobile/jspdf.umd.min.js?v=169"></script>
+<script src="../mobile/html2canvas.min.js?v=169"></script>
+<script src="../mobile/report-core.js?v=169"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -2983,7 +2983,7 @@ const I18N={
   sy_d_none:"Nothing to report — no records needed repair on import.",
   sy_d_unknown:"{n} inspection point(s) carry a field this build does not classify — {f}. Not treated as a finding; reported so it can be classified.",
   sy_d_why:"{u} · {d} is on hold. Recorded here: {e}. Housekeeping only: {h}. Unclassified: {k}.",
-  sy_quar:"Inspections missing key information",
+  sy_quar:"Data correction required",
   /* What to DO, per fault, in the words of somebody who would do it. */
   sy_fix_equip:"No unit number — the phone that captured it must re-send it.",
   sy_fix_date:"No date — the phone that captured it must re-send it.",
@@ -2994,7 +2994,14 @@ const I18N={
      somebody back to the machine. */
   sy_fix_point:"Inspection point needs identification. Select the correct component before approving this finding.",
   sy_fix_open:"Open it to correct.",
-  sy_quar_hint:"{n} on hold", sy_quar_none:"None on hold",
+  /* A photograph with no component is a DIFFERENT correction from a reading
+     with no component: the evidence is right there to look at, and the engineer
+     may reasonably decide it belongs to the inspection as a whole rather than
+     to any one point. Saying "inspection point not identified" over a
+     photograph asks the wrong question. */
+  sy_w_photo:"Photo needs an inspection point",
+  sy_fix_photo:"This photo arrived without a component or inspection-point reference. Assign it to the correct point, or keep it as general inspection evidence.",
+  sy_quar_hint:"{n} to correct", sy_quar_none:"Nothing to correct",
   sy_quar_none_s:"Every inspection names its unit, its date, its round and the point each finding was made at.",
   sy_u_latency:"How long an inspection takes to reach this screen — the server does not issue a receipt when it stores one.",
   sy_u_hash:"Whether a photo arrived damaged or half-sent — the server does not fingerprint files, so a corrupt one looks the same as a good one.",
@@ -3581,13 +3588,15 @@ const I18N={
   sy_d_none:"Сообщать нечего — при импорте ничего исправлять не потребовалось.",
   sy_d_unknown:"Точек осмотра с неклассифицированным полем: {n} — {f}. Находкой не считается; сообщается для классификации.",
   sy_d_why:"{u} · {d} на удержании. Записано: {e}. Только служебное: {h}. Не классифицировано: {k}.",
-  sy_quar:"Осмотры с неполными данными",
+  sy_quar:"Требуется исправление данных",
   sy_fix_equip:"Нет номера машины — телефон, который делал осмотр, должен отправить его заново.",
   sy_fix_date:"Нет даты — телефон, который делал осмотр, должен отправить его заново.",
   sy_fix_type:"Нет типа обхода — телефон, который делал осмотр, должен отправить его заново.",
   sy_fix_point:"Точка осмотра не определена. Укажите нужный узел, прежде чем утверждать эту находку.",
   sy_fix_open:"Откройте для правки.",
-  sy_quar_hint:"на удержании: {n}", sy_quar_none:"На удержании ничего нет",
+  sy_w_photo:"Фото без точки осмотра",
+  sy_fix_photo:"Это фото пришло без привязки к узлу или точке осмотра. Назначьте его нужной точке или оставьте как общий материал по осмотру.",
+  sy_quar_hint:"к исправлению: {n}", sy_quar_none:"Исправлять нечего",
   sy_quar_none_s:"В каждом осмотре указаны машина, дата, обход и точка, где сделана находка.",
   sy_u_latency:"Сколько идёт осмотр до этого экрана — сервер не выдаёт квитанцию при сохранении.",
   sy_u_hash:"Пришло ли фото повреждённым или недогруженным — сервер не считает контрольную сумму, и битый файл выглядит как целый.",
@@ -10344,7 +10353,7 @@ function renderSync(){
         if(!i || !i._needsPoint || !window.CMNorm) return;
         const x=CMNorm.explain(i);
         bits.push(t("sy_d_why",{ u:r.equip||"?", d:r.date||"?",
-          e:x.evidence.join(", ")||"—",
+          e:(x.detail && x.detail.length ? x.detail.join(", ") : "—"),
           h:x.housekeeping.join(", ")||"—",
           k:x.unknown.join(", ")||"—" }));
       });
@@ -10405,15 +10414,30 @@ function renderSync(){
          MESSAGE. This table named a defect and then left the reader with no
          next step and nothing to click — on the one screen whose whole job is
          to say "these inspections are not counted anywhere, deal with them". */
+      /* Which sentence this record needs. A keyless point whose only evidence
+         is a photograph is not a missing reading — the evidence is there to
+         look at, and it may belong to the inspection rather than to any single
+         point. Asking "which component is this reading about" over a photograph
+         is the wrong question. */
       + s.quar.slice(0,CAP).map(({r,why})=>{
           const canOpen = !!(r.equip && r.date && r.type);
+          const lbl=(w,rec)=>{
+            if(w!=="point" || !window.CMNorm) return w;
+            const orph=(rec.items||[]).filter(i=>i&&i._needsPoint);
+            const onlyPhotos = orph.length && orph.every(i=>{
+              const x=CMNorm.explain(i);
+              return x.photos>0 && x.evidence.every(f=>
+                ["photos","photo","video","attachments","media"].indexOf(f)>=0);
+            });
+            return onlyPhotos ? "photo" : w;
+          };
           return `<tr${canOpen?` class="hrow" tabindex="0" data-quargo="${esc(ekOf(r))}"`:""}>
           <td><b>${esc(r.equip||t("sy_blank"))}</b></td>
           <td class="mono">${esc(r.date||t("sy_blank"))}</td>
           <td>${esc(TYPE_LABEL[r.type]||r.type||t("sy_blank"))}</td>
-          <td>${why.map(w=>`<span class="tri">${esc(t("sy_w_"+w))}</span>`).join(" ")}
+          <td>${why.map(w=>`<span class="tri">${esc(t("sy_w_"+lbl(w,r)))}</span>`).join(" ")}
               <div class="muted" style="font-size:11.5px;margin-top:3px">${
-                esc(why.map(w=>t("sy_fix_"+w)).join(" "))}${
+                esc(why.map(w=>t("sy_fix_"+lbl(w,r))).join(" "))}${
                 canOpen?" "+esc(t("sy_fix_open")):""}</div></td></tr>`;
         }).join("")
       +`</tbody>`;
@@ -10578,8 +10602,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=168"></script>
-<script src="sync-adapter.js?v=168"></script>
-<script src="report.js?v=168"></script>
+<script src="drive.js?v=169"></script>
+<script src="sync-adapter.js?v=169"></script>
+<script src="report.js?v=169"></script>
 </body>
 </html>

@@ -252,6 +252,66 @@ console.log("\n  it never throws on the shapes a folder actually contains");
   ok(!threw, "survives malformed input #" + (n + 1), threw || "ok");
 });
 
+console.log("\n  PHOTOS: A SLOT IS NOT A PHOTOGRAPH");
+/* The field that kept TK115 and DZ007 on hold through v168, and the only one
+   on the list that arrives in half a dozen shapes. Counting a slot is how a
+   blank row becomes a finding somebody must identify; not counting a real one
+   is how field evidence gets deleted. Both directions, exactly. */
+const emptyPhotos = [
+  ["photos: 0", 0], ["photos: null", null], ["photos: undefined", undefined],
+  ["photos: ''", ""], ["photos: []", []],
+  ["photos: [null, '']", [null, ""]],
+  ["photos: [{}]", [{}]],
+  ["photos: [{ name: '' }]", [{ name: "" }]],
+  ["photos: {}", {}],
+  ["photos: { name: '' }", { name: "" }],
+];
+emptyPhotos.forEach(([what, v]) => {
+  const r = N.record({ items: [{ key: "", label: "", photos: v }] });
+  ok(r.removed === 1 && r.orphans === 0,
+     `removed: a blank row with ${what}`, `real=${N.photoCount(v)}`);
+});
+const realPhotos = [
+  ["a count of 3", 3],
+  ["two file names", ["a.jpg", "b.jpg"]],
+  ["an attachment with an id", [{ id: "att_1", name: "x.jpg" }]],
+  ["an attachment with only an id", [{ id: "att_2" }]],
+  ["a single file name", "plug_left.jpg"],
+  ["a mix of one real and two slots", [null, "real.jpg", ""]],
+];
+realPhotos.forEach(([what, v]) => {
+  const r = N.record({ items: [{ key: "", label: "", photos: v }] });
+  ok(r.removed === 0 && r.orphans === 1,
+     `kept and flagged: a keyless point with ${what}`, `real=${N.photoCount(v)}`);
+  /* THE PHOTOGRAPH ITSELF IS NEVER TOUCHED. */
+  ok(JSON.stringify(r.rec.items[0].photos) === JSON.stringify(v),
+     `  and the photographs are preserved exactly`);
+});
+
+console.log("\n  a photo count is never inherited from the inspection");
+/* A record carrying three photographs across its real points must not put
+   "photos: 3" on a blank one. Proven on the shape the phone exports: the count
+   is per position, and a position with none carries 0. */
+const parent = { equip: "TK500", date: "2026-08-05", type: "MP", photos: 3,
+  items: [{ key: "1A", grade: "C", photos: 2 }, { key: "2B", grade: "A", photos: 1 },
+          { key: "", label: "", photos: 0, detection: "DM-02" }] };
+const pr = N.record(parent);
+ok(pr.removed === 1, "the blank point is removed even though the inspection has photographs",
+   `removed ${pr.removed}`);
+ok(pr.rec.items.length === 2 && pr.rec.items[0].photos === 2 && pr.rec.items[1].photos === 1,
+   "and every real point keeps its own count", JSON.stringify(pr.rec.items.map(i => i.photos)));
+
+console.log("\n  the diagnostic reports the VALUE, not just the field name");
+/* v168 said "on hold because: photos" and that was not enough to act on — a
+   count of three and an array of two nulls are the same word and opposite
+   problems. */
+const exReal = N.explain({ key: "", photos: [{ id: "att_1", name: "x.jpg" }] });
+ok(exReal.detail.some(d => /photos=array\[1\].*1 real/.test(d)),
+   "a real attachment is reported with its shape and count", exReal.detail.join(" · "));
+ok(exReal.photos === 1, "and the count is exposed for the UI", String(exReal.photos));
+const exSlots = N.explain({ key: "", photos: [null, ""] });
+ok(exSlots.verdict === "empty", "two empty slots are not evidence", exSlots.reason);
+
 console.log("\n  THE GUARD THAT WOULD HAVE CAUGHT THIS");
 /* Two builds shipped because a field the exporter fills in by itself was on the
    operational list, and nothing compared the two. This reads the exporter and
