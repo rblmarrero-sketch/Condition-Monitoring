@@ -16,14 +16,14 @@ let FILES = [];
 function seed(n) {
   FILES = [];
   for (let i = 1; i <= n; i++) {
-    const u = 'TK' + (100 + i), d = `2026-07-${String((i % 28) + 1).padStart(2, '0')}`;
+    const u = 'TK' + String(100 + i), d = `2026-07-${String((i % 28) + 1).padStart(2, '0')}`;
     FILES.push({ name: `${u}_${d.split('-').reverse().join('.')}_MP.json`, id: 'j' + i,
       updated: 1000000 + i * 1000, size: 400, json: sidecar(u, d, 'MP', ['A', 'C', 'X'][i % 3]) });
     FILES.push({ name: `${u}_4C_${d.split('-').reverse().join('.')}_MP.jpg`, id: 'p' + i,
       updated: 1000000 + i * 1000, size: 90000 });
   }
 }
-seed(40);
+seed(Number(process.env.CM_SEED || 40));
 
 const stats = { records: 0, list: 0, file: 0, health: 0 };
 const MEDIA = /\.(jpe?g|png|webp|mp4|mov)$/i;

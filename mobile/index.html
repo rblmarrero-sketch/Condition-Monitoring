@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=180">
+<link rel="manifest" href="manifest.webmanifest?v=181">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=180">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=180">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=180">
+<link rel="apple-touch-icon" href="icon-192.png?v=181">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=181">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=181">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1941,31 +1941,31 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=180"></script>
-<script src="upload-defaults.js?v=180"></script>
-<script src="hme.js?v=180"></script>
-<script src="mp-fc.js?v=180"></script>
-<script src="hme-cascade.js?v=180"></script>
-<script src="assets.js?v=180"></script>
-<script src="temp-limits.js?v=180"></script>
-<script src="normalize.js?v=180"></script>
-<script src="due.js?v=180"></script>
-<script src="wear.js?v=180"></script>
-<script src="wear-figs.js?v=180"></script>
-<script src="wear-map.js?v=180"></script>
-<script src="machine-photos.js?v=180"></script>
-<script src="machine-fig.js?v=180"></script>
-<script src="get.js?v=180"></script>
-<script src="points.js?v=180"></script>
-<script src="uc-points.js?v=180"></script>
-<script src="inspect-guide.js?v=180"></script>
-<script src="get-figs.js?v=180"></script>
-<script src="body-points.js?v=180"></script>
-<script src="body-map.js?v=180"></script>
-<script src="lube.js?v=180"></script>
-<script src="lube-overrides.js?v=180"></script>
-<script src="lube2027.js?v=180"></script>
-<script src="report-core.js?v=180"></script>
+<script src="native.js?v=181"></script>
+<script src="upload-defaults.js?v=181"></script>
+<script src="hme.js?v=181"></script>
+<script src="mp-fc.js?v=181"></script>
+<script src="hme-cascade.js?v=181"></script>
+<script src="assets.js?v=181"></script>
+<script src="temp-limits.js?v=181"></script>
+<script src="normalize.js?v=181"></script>
+<script src="due.js?v=181"></script>
+<script src="wear.js?v=181"></script>
+<script src="wear-figs.js?v=181"></script>
+<script src="wear-map.js?v=181"></script>
+<script src="machine-photos.js?v=181"></script>
+<script src="machine-fig.js?v=181"></script>
+<script src="get.js?v=181"></script>
+<script src="points.js?v=181"></script>
+<script src="uc-points.js?v=181"></script>
+<script src="inspect-guide.js?v=181"></script>
+<script src="get-figs.js?v=181"></script>
+<script src="body-points.js?v=181"></script>
+<script src="body-map.js?v=181"></script>
+<script src="lube.js?v=181"></script>
+<script src="lube-overrides.js?v=181"></script>
+<script src="lube2027.js?v=181"></script>
+<script src="report-core.js?v=181"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -7288,6 +7288,14 @@ let teamBusy=false, teamAt=0, teamAbort=null, teamRun=0;
    work a "full" re-read returns a prefix and says so. Anything that means "I
    have now seen everything" has to read this and not the bare success. */
 let teamLastComplete=false;
+/* How many JSON files the last reply said it had NOT sent. Zero means the
+   folder is finished with this phone for now. */
+let teamPending=0;
+/* Where the last reply stopped. A truncated read has more folder behind it,
+   and this is the only thing that says where to pick it up — the STORED cursor
+   must not be moved back to it, because the stored cursor is a promise about
+   what this phone holds and a prefix is not that promise. */
+let teamLastCursor=0;
 const TEAM_MIN_GAP=60000;    // automatic pulls only; the button always goes
 const TEAM_TIMEOUT=20000;    // pit signal can leave a fetch hanging for ever
 /* A full re-read is a different kind of request: the script walks every file in
@@ -7296,7 +7304,11 @@ const TEAM_TIMEOUT=20000;    // pit signal can leave a fetch hanging for ever
    folder with a season's work in it, and reports weak signal for a link that is
    fine. The incremental pull keeps the short leash; it returns almost nothing. */
 const TEAM_TIMEOUT_FULL=150000;
-async function teamPull(manual,full){
+/* `from` reads the folder from a given point WITHOUT the stored cursor having
+   to move there. That separation is the whole of the fix: a scan that is
+   walking a folder in six-hundred-file steps needs a position, and the stored
+   cursor is not a position — it is a claim about what is already held. */
+async function teamPull(manual,full,from){
   const msg=$("teamMsg"); if(!msg) return false;
   if(teamBusy){
     // A hung request must never wedge the button. fetch() has no timeout of its
@@ -7338,6 +7350,7 @@ async function teamPull(manual,full){
        account for the rounds this phone is already holding. */
     if(after) histRepair();
     if(full || (after && !teamAll().length) || (after && histIsShort())) after=0;
+    if(from!=null) after=Number(from)||0;
 
     const ask=async p2=>{
       const q=new URLSearchParams(p2);
@@ -7422,6 +7435,8 @@ async function teamPull(manual,full){
     /* The index reports where the folder is, not where this reply stopped —
        unless it did stop, in which case the next call resumes from there. */
     teamLastComplete = !!(after===0 && !j.truncated);
+    teamPending = Number(j.pending||0)||0;
+    teamLastCursor = Number(j.cursor||0)||0;
     /* WHAT THE FOLDER HOLDS, AS OPPOSED TO WHAT THIS PHONE HOLDS.
 
        Four builds have been spent asking why two copies of this app disagree,
@@ -7451,7 +7466,21 @@ async function teamPull(manual,full){
       }catch(e){}
     }
     const nextCur = viaIndex ? (j.truncated ? j.cursor : j.at) : j.cursor;
-    if(saved && nextCur) lsSet(TEAM_CUR,String(nextCur));
+    /* A CURSOR MAY NEVER GO BACKWARDS.
+
+       A records call returns at most six hundred JSON files, oldest first. On a
+       folder past that size a FULL read - after=0 - is always truncated, and
+       its cursor is the six-hundredth oldest file. Writing that over a cursor
+       already at today threw away everything between, and the one-time repair
+       ran a full read on every launch until it succeeded, so the phone reset
+       itself to the same old window every time it opened and never reached the
+       recent rounds. That is a phone permanently missing the newest work,
+       which is exactly the work somebody is planning against. */
+    if(saved && nextCur){
+      const was=Number(localStorage.getItem(TEAM_CUR)||0)||0;
+      const now=Number(nextCur)||0;
+      if(now>was || !was) lsSet(TEAM_CUR,String(nextCur));
+    }
     /* A complete read that stored everything is the one thing that can retire
        the repair flag — and only then, or the next pull goes straight back to
        asking "what is new since a cursor I cannot back up". */
@@ -7822,6 +7851,48 @@ async function teamHealOnce(){
    here is to the DUE LIST — a different structure with a different failure and
    a different cost. Six machines past their interval reading as "Missed 0" is
    the reason this exists. */
+/* READ THE FOLDER UNTIL THERE IS NO MORE OF IT.
+
+   One call answers at most six hundred JSON files. A season of work is more
+   than that, so a single "full" read is a prefix and a repair built on one
+   call can never finish - it re-reads the same oldest window on every launch
+   and the newest rounds never arrive.
+
+   So: one full read to get behind the cursor, then ordinary incremental reads
+   until the folder says there is nothing pending, or until a read brings
+   nothing new. Bounded, because a loop that cannot end is worse on a phone
+   than a job that is not finished. */
+const HEAL_MAX_CALLS=12;
+async function histDrain(onStep){
+  let ok=await teamPull(true,true);                // from the beginning
+  if(!ok) return false;
+  if(onStep) onStep();
+  if(teamLastComplete) return true;                // one call held the lot
+  let pos=teamLastCursor;
+  for(let i=1;i<HEAL_MAX_CALLS;i++){
+    if(!teamPending) return true;                  // the folder says it is done
+    ok=await teamPull(true,false,pos);
+    if(!ok) return false;
+    if(onStep) onStep();
+    /* A position that will not move is a scan that cannot finish, and going
+       round again would only ask the same question. */
+    if(teamLastCursor<=pos) return !teamPending;
+    pos=teamLastCursor;
+  }
+  return !teamPending;                             // more folder than a session
+}
+/* A drain that reached the end IS a complete read of the folder, however many
+   calls it took — so it is entitled to record what the folder holds. Written
+   from what the phone now has, which at that instant is the same thing, and
+   which is what makes any later drift visible. */
+function histNoteFolder(){
+  try{
+    const pairs=Object.keys(histAll()).length;
+    const units=new Set();
+    for(const k of Object.keys(histAll())){ const u=k.split("|")[1]; if(u) units.add(u); }
+    if(pairs) lsSet("cm_fleet_n", JSON.stringify({p:pairs, u:units.size, at:Date.now()}));
+  }catch(e){}
+}
 const HIST_HEAL="cm_hist_full_v1";
 let histHealing=false;
 async function histHealOnce(){
@@ -7833,11 +7904,7 @@ async function histHealOnce(){
   try{
     /* Manual, so the automatic-pull gap cannot swallow it and leave the phone
        marked as repaired without having asked. */
-    /* A truncated read leaves the cursor further forward and the rest
-       arriving on later pulls, which is fine — but it is not grounds for
-       saying the repair is finished, and marking it finished is how a phone
-       ends up permanently holding part of the folder. */
-    if(await teamPull(true,true) && teamLastComplete) lsSet(HIST_HEAL,"1");
+    if(await histDrain()){ histNoteFolder(); lsSet(HIST_HEAL,"1"); }
   }catch(e){ /* never reached the folder — try again next launch */ }
   finally{ histHealing=false; }
 }
@@ -8003,13 +8070,16 @@ $("dueFull").onclick=async ()=>{
   const before=dueMachines();
   btn.disabled=true; msg.textContent=t("due_full_go");
   try{
-    const ok=await teamPull(true,true);
+    let calls=0;
+    const ok=await histDrain(()=>{ calls++; msg.textContent=t("due_full_go"); });
     const after=dueMachines();
-    msg.textContent = !ok ? t("due_full_fail")
-      : !teamLastComplete ? t("due_full_part",{m:after})
+    /* Complete means the folder ran out, however many calls that took. Short
+       means it did not, and then the honest thing is how far it got — not a
+       failure, and not a success either. */
+    msg.textContent = !ok ? t("due_full_part",{m:after})
       : after>before ? t("due_full_ok",{n:after-before, m:after})
       : t("due_full_same");
-    if(ok && teamLastComplete) lsSet(HIST_HEAL,"1");
+    if(ok){ histNoteFolder(); lsSet(HIST_HEAL,"1"); }
     renderDue();
   }catch(e){ msg.textContent=t("due_full_fail"); }
   finally{ btn.disabled=false; }
@@ -9050,7 +9120,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="180";
+const BUILD="181";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
