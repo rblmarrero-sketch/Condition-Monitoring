@@ -320,6 +320,9 @@ function saveEdit_(b) {
        save succeeded, the panel said so, and the crop or the issued report was
        gone the next time the folder was read. */
     media: (b.media && typeof b.media === 'object') ? b.media : null,
+    /* Orphan-photograph assignments, keyed by file name — see the note in the
+       Yandex function. */
+    assign: (b.assign && typeof b.assign === 'object') ? b.assign : null,
     reports: (b.reports && b.reports.length) ? b.reports.slice(-20) : null,
     items: (b.items && typeof b.items === 'object') ? b.items : {},
   };

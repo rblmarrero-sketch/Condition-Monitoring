@@ -386,6 +386,12 @@ async function saveEdit(b) {
                    whitelist is the right shape for this document; it was simply
                    missing two of the things the document actually carries. */
                 media: (b.media && typeof b.media === 'object') ? b.media : null,
+                /* Which inspection point each orphan photograph belongs to, or
+                   that it is general evidence for the whole round. Keyed by
+                   file name. Without this the engineer's decision lives in one
+                   browser and the record comes back onto the correction list
+                   the next time anybody reads the folder. */
+                assign: (b.assign && typeof b.assign === 'object') ? b.assign : null,
                 reports: Array.isArray(b.reports) ? b.reports.slice(-20) : null,
                 items: b.items || null };
   await putObj(META_DIR + '/' + name, Buffer.from(JSON.stringify(doc, null, 2)), 'application/json');

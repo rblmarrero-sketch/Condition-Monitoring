@@ -1188,6 +1188,28 @@
   /* The disagreement between two phones' versions of one round, under the
      version it belongs to. Indented and ruled off the choice above it, so the
      eye reads "this version — and here is what taking it would change". */
+  /* Four across at a desk, two on a tablet, one on a phone — fixed ratio, so a
+     wall panel and a plug photograph line up instead of stepping. */
+  .opgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;}
+  @media (max-width:900px){ .opgrid{grid-template-columns:repeat(2,minmax(0,1fr));} }
+  @media (max-width:560px){ .opgrid{grid-template-columns:1fr;} }
+  .opc{border:1px solid var(--border);border-radius:8px;overflow:hidden;
+       background:var(--card);position:relative;}
+  .opc.sel{outline:2px solid var(--accent);outline-offset:-2px;}
+  .opc .th{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;
+           background:var(--surface-3);cursor:pointer;}
+  .opc .nofile{width:100%;aspect-ratio:4/3;display:flex;align-items:center;
+           justify-content:center;background:var(--surface-3);color:var(--muted);
+           font-size:12px;text-align:center;padding:8px;}
+  .opc .meta{padding:7px 9px;font-size:11.5px;color:var(--ink-2);}
+  .opc .meta b{display:block;font:600 12px/1.3 var(--mono);color:var(--ink);
+           word-break:break-all;}
+  .opc .st{display:inline-block;margin-top:4px;padding:1px 6px;border-radius:3px;
+           font:600 10px/1.6 var(--sans);letter-spacing:.06em;text-transform:uppercase;}
+  .opc .st.done{background:var(--good-bg,#e2efe8);color:var(--good);}
+  .opc .st.todo{background:var(--warn-bg,#f2e9de);color:var(--warn-ink);}
+  .opc input[type=checkbox]{position:absolute;top:8px;left:8px;width:20px;height:20px;
+           accent-color:var(--accent);cursor:pointer;z-index:2;}
   .cfdiff{margin:7px 0 0 14px;padding-left:11px;border-left:2px solid var(--border);}
   .cfdiff table.grid td{padding:3px 8px;font-size:12px;vertical-align:top;}
   .cfdiff table.grid td:first-child{width:1%;white-space:nowrap;color:var(--ink-2);}
@@ -2100,6 +2122,44 @@
   </div>
 </div>
 
+<!-- ORPHAN PHOTOGRAPHS: A FOCUSED PANEL, NOT THE WHOLE INSPECTION FORM.
+
+     TK115 carries six photographs and DZ007 four, all attached to a position
+     that never got a key. They are real field evidence — nothing about them is
+     wrong except that nobody can say which component they show. Sending a
+     reliability engineer into the full correction form to hunt for that is how
+     ten photographs become a job nobody starts.
+
+     One screen, one job: look at the photograph, say where it belongs. -->
+<div class="ov hidden" id="opOv">
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="opTitle">
+    <div class="sheethd">
+      <div><b id="opTitle">—</b><div class="muted" id="opSub"></div></div>
+      <button class="x" id="opClose" aria-label="Close">✕</button>
+    </div>
+    <div class="sheetbody">
+      <div class="note" id="opLead"></div>
+      <!-- Assign several at once: six photographs of one wall is one decision,
+           not six. -->
+      <div class="row" style="align-items:flex-end;gap:10px;margin:12px 0 4px">
+        <div class="field" style="flex:1"><label for="opPoint" data-i18n="op_point">Inspection point</label>
+          <input id="opSearch" type="search" data-i18n-ph="op_find" placeholder="Search points…"
+                 style="margin-bottom:6px">
+          <select id="opPoint"></select></div>
+        <button class="btn primary" id="opAssign" data-i18n="op_assign">Assign selected</button>
+        <button class="btn" id="opGeneral" data-i18n="op_general">Keep as general evidence</button>
+      </div>
+      <div class="row" style="gap:10px;margin-bottom:6px">
+        <button class="btn" id="opAll" data-i18n="op_all">Select all</button>
+        <button class="btn" id="opNone" data-i18n="op_none">Select none</button>
+        <span class="spacer"></span><span class="hint" id="opCount"></span>
+      </div>
+      <div id="opGrid" class="opgrid"></div>
+      <div class="msg" id="opMsg"></div>
+    </div>
+  </div>
+</div>
+
 <nav class="tabs" id="tabs">
   <div class="brand"><div class="bmark">CM</div>
     <div><div class="t1">Condition Monitoring</div><div class="t2" id="sub" data-i18n="sub">Fleet dashboard</div></div>
@@ -2643,27 +2703,27 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=169"></script>
-<script src="../mobile/hme.js?v=169"></script>
-<script src="../mobile/mp-fc.js?v=169"></script>
-<script src="../mobile/hme-cascade.js?v=169"></script>
-<script src="../mobile/temp-limits.js?v=169"></script>
+<script src="../data/magnetic_plug.js?v=170"></script>
+<script src="../mobile/hme.js?v=170"></script>
+<script src="../mobile/mp-fc.js?v=170"></script>
+<script src="../mobile/hme-cascade.js?v=170"></script>
+<script src="../mobile/temp-limits.js?v=170"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=169"></script>
-<script src="../mobile/normalize.js?v=169"></script>
-<script src="../mobile/due.js?v=169"></script>
-<script src="../mobile/wear.js?v=169"></script>
-<script src="../mobile/wear-map.js?v=169"></script>
-<script src="../mobile/lube.js?v=169"></script>
-<script src="../mobile/lube-overrides.js?v=169"></script>
-<script src="../mobile/lube2027.js?v=169"></script>
-<script src="../mobile/lube-tds.js?v=169"></script>
+<script src="../mobile/assets.js?v=170"></script>
+<script src="../mobile/normalize.js?v=170"></script>
+<script src="../mobile/due.js?v=170"></script>
+<script src="../mobile/wear.js?v=170"></script>
+<script src="../mobile/wear-map.js?v=170"></script>
+<script src="../mobile/lube.js?v=170"></script>
+<script src="../mobile/lube-overrides.js?v=170"></script>
+<script src="../mobile/lube2027.js?v=170"></script>
+<script src="../mobile/lube-tds.js?v=170"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=169"></script>
-<script src="../mobile/machine-photos.js?v=169"></script>
+<script src="../mobile/upload-defaults.js?v=170"></script>
+<script src="../mobile/machine-photos.js?v=170"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -2672,17 +2732,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=169"></script>
-<script src="../mobile/get.js?v=169"></script>
-<script src="../mobile/points.js?v=169"></script>
-<script src="../mobile/uc-points.js?v=169"></script>
-<script src="../mobile/inspect-guide.js?v=169"></script>
-<script src="../mobile/get-figs.js?v=169"></script>
-<script src="../mobile/body-points.js?v=169"></script>
-<script src="../mobile/body-map.js?v=169"></script>
-<script src="../mobile/jspdf.umd.min.js?v=169"></script>
-<script src="../mobile/html2canvas.min.js?v=169"></script>
-<script src="../mobile/report-core.js?v=169"></script>
+<script src="../mobile/machine-fig.js?v=170"></script>
+<script src="../mobile/get.js?v=170"></script>
+<script src="../mobile/points.js?v=170"></script>
+<script src="../mobile/uc-points.js?v=170"></script>
+<script src="../mobile/inspect-guide.js?v=170"></script>
+<script src="../mobile/get-figs.js?v=170"></script>
+<script src="../mobile/body-points.js?v=170"></script>
+<script src="../mobile/body-map.js?v=170"></script>
+<script src="../mobile/jspdf.umd.min.js?v=170"></script>
+<script src="../mobile/html2canvas.min.js?v=170"></script>
+<script src="../mobile/report-core.js?v=170"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -2967,7 +3027,7 @@ const I18N={
   sy_k_crit:"Critical waiting", sy_k_crit_s:"a Critical with no evidence yet",
   sy_k_conf:"Conflicts", sy_k_conf_s:"two phones, one round",
   sy_h_files:"Files on the server", sy_h_last:"Last asked",
-  sy_h_att:"Attachments accounted for", sy_h_held:"Held back",
+  sy_h_att:"Attachments accounted for", sy_h_held:"Needing correction",
   sy_notlinked:"no backend attached — nothing to compare against",
   sy_nolink:"Nothing to compare against yet", sy_nolink_s:"The file list has not arrived from the server. Until it does there is nothing to check these attachments against, and reporting 0% would describe this browser rather than the field. It fills in when the data source refreshes.",
   sy_never:"never", sy_justnow:"just now", sy_min:"{n} min ago",
@@ -3000,8 +3060,25 @@ const I18N={
      to any one point. Saying "inspection point not identified" over a
      photograph asks the wrong question. */
   sy_w_photo:"Photo needs an inspection point",
+  op_title:"Assign photographs", op_sub:"{u} · {d} · {t}",
+  op_lead:"{n} photograph(s) here arrived without a component reference. Say which inspection point each one shows, or keep it as general evidence for the whole inspection. Nothing is deleted and nothing is guessed.",
+  op_point:"Inspection point", op_find:"Search points…",
+  op_assign:"Assign selected", op_general:"Keep as general evidence",
+  op_all:"Select all", op_none:"Select none",
+  op_sel:"{n} selected of {of}",
+  op_none_sel:"Choose at least one photograph first.",
+  op_no_point:"Choose an inspection point first.",
+  op_done_point:"assigned to {p}", op_done_gen:"general evidence",
+  op_todo:"needs a point",
+  op_saved:"✅ {n} photograph(s) assigned.",
+  op_nofile:"Not downloaded yet — the file has not reached this dashboard.",
+  op_open:"Assign photos",
+  op_resolved:"Every photograph on this inspection is now assigned.",
   sy_fix_photo:"This photo arrived without a component or inspection-point reference. Assign it to the correct point, or keep it as general inspection evidence.",
-  sy_quar_hint:"{n} to correct", sy_quar_none:"Nothing to correct",
+  /* The workload, not the record count. Two inspections on hold is a number
+     nobody can plan against; ten photographs to classify is an afternoon. */
+  sy_quar_hint:"{n} photo(s) need assignment", sy_quar_none:"Nothing to correct",
+  sy_quar_rows:"{n} inspection(s) need a correction",
   sy_quar_none_s:"Every inspection names its unit, its date, its round and the point each finding was made at.",
   sy_u_latency:"How long an inspection takes to reach this screen — the server does not issue a receipt when it stores one.",
   sy_u_hash:"Whether a photo arrived damaged or half-sent — the server does not fingerprint files, so a corrupt one looks the same as a good one.",
@@ -3572,7 +3649,7 @@ const I18N={
   sy_k_crit:"Критичные в ожидании", sy_k_crit_s:"критичное без подтверждения",
   sy_k_conf:"Конфликты", sy_k_conf_s:"два телефона, один обход",
   sy_h_files:"Файлов на сервере", sy_h_last:"Последний запрос",
-  sy_h_att:"Вложений учтено", sy_h_held:"Отложено",
+  sy_h_att:"Вложений учтено", sy_h_held:"Требуют исправления",
   sy_notlinked:"хранилище не подключено — не с чем сравнивать",
   sy_nolink:"Пока не с чем сравнивать", sy_nolink_s:"Список файлов ещё не получен с сервера. Пока его нет, сверять вложения не с чем, а «0%» описывал бы этот браузер, а не работу в поле. Данные появятся после обновления источника.",
   sy_never:"никогда", sy_justnow:"только что", sy_min:"{n} мин назад",
@@ -3595,8 +3672,23 @@ const I18N={
   sy_fix_point:"Точка осмотра не определена. Укажите нужный узел, прежде чем утверждать эту находку.",
   sy_fix_open:"Откройте для правки.",
   sy_w_photo:"Фото без точки осмотра",
+  op_title:"Назначение фотографий", op_sub:"{u} · {d} · {t}",
+  op_lead:"Фотографий без привязки к узлу: {n}. Укажите, какую точку осмотра показывает каждая, или оставьте как общий материал по осмотру. Ничего не удаляется и ничего не угадывается.",
+  op_point:"Точка осмотра", op_find:"Поиск точек…",
+  op_assign:"Назначить выбранные", op_general:"Оставить как общий материал",
+  op_all:"Выбрать все", op_none:"Снять выбор",
+  op_sel:"выбрано {n} из {of}",
+  op_none_sel:"Сначала выберите хотя бы одну фотографию.",
+  op_no_point:"Сначала выберите точку осмотра.",
+  op_done_point:"назначено: {p}", op_done_gen:"общий материал",
+  op_todo:"нужна точка",
+  op_saved:"✅ Назначено фотографий: {n}.",
+  op_nofile:"Ещё не загружено — файл не дошёл до этой панели.",
+  op_open:"Назначить фото",
+  op_resolved:"Все фотографии этого осмотра назначены.",
   sy_fix_photo:"Это фото пришло без привязки к узлу или точке осмотра. Назначьте его нужной точке или оставьте как общий материал по осмотру.",
-  sy_quar_hint:"к исправлению: {n}", sy_quar_none:"Исправлять нечего",
+  sy_quar_hint:"фото требуют назначения: {n}", sy_quar_none:"Исправлять нечего",
+  sy_quar_rows:"осмотров требуют исправления: {n}",
   sy_quar_none_s:"В каждом осмотре указаны машина, дата, обход и точка, где сделана находка.",
   sy_u_latency:"Сколько идёт осмотр до этого экрана — сервер не выдаёт квитанцию при сохранении.",
   sy_u_hash:"Пришло ли фото повреждённым или недогруженным — сервер не считает контрольную сумму, и битый файл выглядит как целый.",
@@ -5692,6 +5784,7 @@ window.CMDash={
            removes a block by sending an empty object; null is the shape of "not
            mentioned", and is treated as such. */
         const said=k=>(e[k]!==undefined && e[k]!==null);
+        if(!said("assign") && keep.assign) e.assign=keep.assign;
         if(!said("media") && keep.media) e.media=keep.media;
         if(!said("reports") && keep.reports) e.reports=keep.reports;
         /* A move is the same: null is how a re-file is undone, and the panel
@@ -7029,6 +7122,153 @@ function cfDiffHTML(d, devA, devB){
       esc(t("cf_diff_n",{n:d.any, s:d.same}))}</div>`
     + `<div class="tblwrap"><table class="grid"><tbody>${rows.join("")}</tbody></table></div></div>`;
 }
+/* ===== ORPHAN PHOTOGRAPHS: SAY WHERE THEY BELONG ==========================
+
+   Real field evidence attached to a position that never got a key. Nothing is
+   wrong with the photographs; the only missing fact is which component they
+   show, and only a human can supply it — so nothing here guesses, and nothing
+   here deletes.
+
+   The decision is stored on the correction sidecar under `assign`, keyed by
+   file name, so it travels the path every other correction already travels and
+   survives a refresh and a re-read of the folder. */
+let opKey=null, opItem=null, opSel=new Set();
+const ASSIGN_KEY="assign";
+function assignsFor(rk){ const e=edits[rk]; return (e&&e[ASSIGN_KEY])||{}; }
+/* Which photographs on this record still have nowhere to be. A record is only
+   held while at least one is unresolved. */
+function orphanPhotos(rec){
+  const rk=ekOf(rec), a=assignsFor(rk), out=[];
+  (rec.items||[]).forEach(i=>{
+    if(!i || !i._needsPoint) return;
+    const med=mediaOf(i,rec);
+    if(med.length){ med.forEach(m=>out.push({name:m.name, src:m.src, it:i, a:a[m.name]||null})); return; }
+    /* The count says photographs exist but the files have not reached this
+       dashboard. Show them as rows without a thumbnail rather than pretending
+       they are not there — a photograph nobody can see is still a photograph
+       somebody has to classify. */
+    const n=window.CMNorm?CMNorm.explain(i).photos:0;
+    for(let x=0;x<n;x++){ const nm=(i.key||"")+"#"+(x+1);
+      out.push({name:nm, src:null, it:i, a:a[nm]||null}); }
+  });
+  return out;
+}
+function unresolvedPhotos(rec){ return orphanPhotos(rec).filter(p=>!p.a); }
+/* THE POINTS THIS ROUND ACTUALLY HAS, ON THIS MACHINE.
+
+   A tray zone must not be offered on a magnetic-plug round — filing a
+   photograph against a component the machine does not have is a worse outcome
+   than leaving it unassigned, because it looks resolved.
+
+   Two sources, both real, neither guessed: the reference list for this class
+   and round type, and the points this very inspection already identified. The
+   second is the guarantee — whatever the reference does or does not cover, a
+   photograph taken during this round almost certainly belongs to a point the
+   inspector already walked, and those are always offered. */
+function orphanPointOptions(rec){
+  const out=new Map();
+  const add=(k,l)=>{ if(k && !out.has(k)) out.set(k, {k, l:l||k}); };
+  try{
+    const cls=(ASSET_BY[rec.equip]||{}).cls || rec.cls || "";
+    const C=(window.PTS && PTS.CLASSES) || null;
+    const list=C && ((C[PTS.classOf?PTS.classOf(cls):cls] || C.ALL || {})[rec.type] || []);
+    (list||[]).forEach(pt=>add(pt.k, (lang==="ru"&&pt.ru)||pt.en||pt.k));
+  }catch(e){ /* no reference for this round — the record's own points still are */ }
+  (rec.items||[]).forEach(i=>{ if(i && i.key) add(i.key, i.label||i.name||i.key); });
+  return [...out.values()].sort((a,b)=>a.k.localeCompare(b.k,undefined,{numeric:true}));
+}
+function openOrphan(rk){
+  const rec=RECS.find(r=>ekOf(r)===rk); if(!rec) return;
+  opKey=rk; opSel=new Set();
+  $("opTitle").textContent=t("op_title");
+  $("opSub").textContent=t("op_sub",{u:rec.equip, d:rec.date,
+    t:TYPE_LABEL[rec.type]||rec.type});
+  const pts=orphanPointOptions(rec);
+  const fill=q=>{
+    const n=(q||"").trim().toLowerCase();
+    const hit=pts.filter(p=>!n || (p.k+" "+p.l).toLowerCase().indexOf(n)>=0);
+    $("opPoint").innerHTML=`<option value="">${esc(t("ed_none"))}</option>`
+      +hit.map(p=>`<option value="${esc(p.k)}">${esc(p.k)} — ${esc(p.l)}</option>`).join("");
+  };
+  fill(""); $("opSearch").value="";
+  $("opSearch").oninput=()=>fill($("opSearch").value);
+  renderOrphan();
+  $("opOv").classList.remove("hidden");
+}
+function renderOrphan(){
+  const rec=RECS.find(r=>ekOf(r)===opKey); if(!rec){ closeOrphan(); return; }
+  const all=orphanPhotos(rec), left=all.filter(p=>!p.a).length;
+  $("opLead").textContent = left ? t("op_lead",{n:left}) : t("op_resolved");
+  $("opGrid").innerHTML=all.map((p,n)=>{
+    const done=p.a;
+    const state=done
+      ? (done.general ? t("op_done_gen") : t("op_done_point",{p:done.point||""}))
+      : t("op_todo");
+    const thumb=p.src
+      ? `<img class="th" src="${esc(p.src)}" alt="${esc(p.name)}" loading="lazy">`
+      : `<div class="nofile">${esc(t("op_nofile"))}</div>`;
+    return `<div class="opc${opSel.has(p.name)?" sel":""}" data-op="${esc(p.name)}">
+      <input type="checkbox" ${opSel.has(p.name)?"checked":""} aria-label="${esc(p.name)}">
+      ${thumb}
+      <div class="meta"><b>${esc(p.name)}</b>
+        <span class="st ${done?"done":"todo"}">${esc(state)}</span></div></div>`;
+  }).join("") || `<div class="empty">${esc(t("op_resolved"))}</div>`;
+  $("opCount").textContent=t("op_sel",{n:opSel.size, of:all.length});
+  $("opGrid").querySelectorAll("[data-op]").forEach(c=>{
+    const nm=c.dataset.op;
+    c.onclick=e=>{
+      if(e.target.tagName==="IMG" && e.detail===2) return;   // double-click = lightbox
+      if(opSel.has(nm)) opSel.delete(nm); else opSel.add(nm);
+      renderOrphan();
+    };
+  });
+}
+function closeOrphan(){ $("opOv").classList.add("hidden"); opKey=null; opSel.clear(); }
+/* One write, carrying every decision made in this panel, through the same
+   sidecar every other correction uses. */
+function saveAssign(patch){
+  const rec=RECS.find(r=>ekOf(r)===opKey); if(!rec) return;
+  const rk=opKey, msg=$("opMsg");
+  const by=(()=>{ try{ return localStorage.getItem("cm_dash_who")||""; }catch(e){ return ""; } })();
+  if(!by){ msg.textContent=t("ed_needname"); return; }
+  if(!drvOn()){ msg.textContent=t("ed_needdrive"); return; }
+  const keep=edits[rk]||{};
+  const now=Object.assign({}, keep[ASSIGN_KEY]||{});
+  const at=new Date().toISOString();
+  Object.keys(patch).forEach(n=>{ now[n]=Object.assign({by, at}, patch[n]); });
+  const doc={ key:rk, by, at, void:!!keep.void, reason:keep.reason||"",
+              note:keep.note||"", items:keep.items||{}, fields:keep.fields||{},
+              [ASSIGN_KEY]:now };
+  const before=edits[rk]?JSON.parse(JSON.stringify(edits[rk])):null;
+  window.CMDash.setEdits([doc]);
+  msg.textContent=t("ed_sending");
+  const n=Object.keys(patch).length;
+  (window.CMDrive&&CMDrive.saveEdit ? CMDrive.saveEdit(doc) : Promise.resolve())
+    .then(()=>{ msg.textContent=t("op_saved",{n}); opSel.clear(); renderOrphan(); renderSync(); })
+    .catch(err=>{
+      if(before) edits[rk]=before; else delete edits[rk];
+      saveEdits(); rebuild(); renderAll(); refreshSources();
+      msg.textContent=t("ed_undone",{e:(err&&err.message)||err});
+      renderOrphan();
+    });
+}
+$("opClose").onclick=closeOrphan;
+$("opOv").onclick=e=>{ if(e.target===$("opOv")) closeOrphan(); };
+$("opAll").onclick=()=>{ const rec=RECS.find(r=>ekOf(r)===opKey); if(!rec) return;
+  orphanPhotos(rec).forEach(p=>opSel.add(p.name)); renderOrphan(); };
+$("opNone").onclick=()=>{ opSel.clear(); renderOrphan(); };
+$("opAssign").onclick=()=>{
+  if(!opSel.size){ $("opMsg").textContent=t("op_none_sel"); return; }
+  const pt=$("opPoint").value;
+  if(!pt){ $("opMsg").textContent=t("op_no_point"); return; }
+  const patch={}; opSel.forEach(n=>{ patch[n]={point:pt}; });
+  saveAssign(patch);
+};
+$("opGeneral").onclick=()=>{
+  if(!opSel.size){ $("opMsg").textContent=t("op_none_sel"); return; }
+  const patch={}; opSel.forEach(n=>{ patch[n]={general:1}; });
+  saveAssign(patch);
+};
 function renderConflict(rec){
   const card=$("edCfCard"), box=$("edCfList");
   if(!card||!box) return;
@@ -10201,7 +10441,31 @@ function syncScan(){
     /* Only a point that carries real content and no identity. A completely
        empty row is removed in rebuild() and never reaches here; treating one as
        a data-integrity fault is what produced the TK115 and DZ007 warnings. */
-    if((r.items||[]).some(i=>i&&i._needsPoint)) why.push("point");
+    /* WHEN AN ORPHAN STOPS BEING AN EXCEPTION.
+
+       Two kinds, and they clear differently:
+
+         photographs only — resolved when every one has been given a point or
+           marked as general evidence. That is the panel's whole job, and the
+           record leaves this list without being voided or re-walked.
+
+         anything else — a grade, a millimetre, a defect. Those are a reading
+           with no component, which the photo panel cannot answer; they stay
+           until the point itself is identified.
+
+       Treating the second as resolved just because it has no photographs was a
+       bug I introduced with the first: it would have quietly dropped a real
+       finding off the correction list. */
+    const orph=(r.items||[]).filter(i=>i&&i._needsPoint);
+    const MED=["photos","photo","video","attachments","media"];
+    const stillOpen = orph.some(i=>{
+      if(!window.CMNorm) return true;
+      const x=CMNorm.explain(i);
+      const photoOnly = x.photos>0 && x.evidence.every(f=>MED.indexOf(f)>=0);
+      if(!photoOnly) return true;                     // a reading needs its point
+      return typeof unresolvedPhotos!=="function" || unresolvedPhotos(r).length>0;
+    });
+    if(orph.length && stillOpen) why.push("point");
     if(why.length){ quar.push({r,why}); return; }
     if(r._void) return;
     const miss=[];
@@ -10442,12 +10706,26 @@ function renderSync(){
         }).join("")
       +`</tbody>`;
   }
-  $("syQuarHint").textContent = s.quar.length ? t("sy_quar_hint",{n:s.quar.length}) : "";
+  /* Count the work, not the containers. */
+  const orphanPhotos = s.quar.reduce((n,{r})=>n + (r.items||[])
+    .filter(i=>i&&i._needsPoint)
+    .reduce((m,i)=>m + (window.CMNorm?CMNorm.explain(i).photos:0), 0), 0);
+  $("syQuarHint").textContent = !s.quar.length ? ""
+    : orphanPhotos ? t("sy_quar_hint",{n:orphanPhotos})
+    : t("sy_quar_rows",{n:s.quar.length});
   /* Straight into the correction panel for that inspection. A record whose
      unit, date or round is missing has no address to open, so it is not made
      to look clickable — it needs the phone that captured it. */
   $("syQuarTbl").querySelectorAll("[data-quargo]").forEach(tr=>{
-    const go=()=>openEdit(tr.dataset.quargo);
+    /* Straight to the photographs when that is the whole problem. Sending
+       somebody into the full correction form to hunt for ten unassigned
+       photographs is how ten photographs become a job nobody starts. */
+    const go=()=>{
+      const rec=RECS.find(r=>ekOf(r)===tr.dataset.quargo);
+      if(rec && typeof unresolvedPhotos==="function" && unresolvedPhotos(rec).length)
+        openOrphan(tr.dataset.quargo);
+      else openEdit(tr.dataset.quargo);
+    };
     tr.onclick=go;
     tr.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } };
   });
@@ -10602,8 +10880,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=169"></script>
-<script src="sync-adapter.js?v=169"></script>
-<script src="report.js?v=169"></script>
+<script src="drive.js?v=170"></script>
+<script src="sync-adapter.js?v=170"></script>
+<script src="report.js?v=170"></script>
 </body>
 </html>
