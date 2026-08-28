@@ -106,6 +106,58 @@ const setup = async p => p.evaluate(recs => {
   ok(!/needs an inspection point/i.test(rowWhy),
      "and does not send a reliability engineer to a sync problem");
 
+  console.log("\n  the panel says which problem it is looking at");
+  /* It said "6 photograph(s) here arrived without a component reference" over
+     six cards each saying the file had NOT arrived — the panel contradicting
+     itself twice on one screen. "Arrived" belongs to a file somebody can see. */
+  const words = await p.evaluate(() => ({
+    title: $("opTitle").textContent,
+    lead: $("opLead").textContent,
+    pointHidden: $("opPoint").closest(".field").classList.contains("hidden"),
+    assignHidden: $("opAssign").classList.contains("hidden"),
+    last: $("opLast").textContent }));
+  ok(/missing photo files/i.test(words.title),
+     "the title names the real problem", words.title);
+  ok(!/arrived without/i.test(words.lead),
+     "nothing claims these photographs arrived", words.lead.slice(0, 60));
+  ok(/have not reached the dashboard/i.test(words.lead)
+     && /remain available/i.test(words.lead),
+     "it says the files are missing AND the inspection is still usable",
+     words.lead.slice(0, 90));
+  ok(words.pointHidden && words.assignHidden,
+     "the assignment controls are out of the way, not merely disabled");
+  ok(/last checked/i.test(words.last), "and the last check is shown", words.last);
+
+  console.log("\n  four populations, not one number");
+  /* "Evidence arrived: 0 of 63" counted photographs bundled with the app as
+     missing field uploads. Their files live beside the app and were never in
+     the sync folder. */
+  const pop = await p.evaluate(() => {
+    const P = mediaPopulations();
+    const tile = [...document.querySelectorAll("#syncKpis .kpi")]
+      .map(k => k.textContent.replace(/\s+/g, " ").trim())
+      .find(x => /field photos/i.test(x)) || "";
+    return { P, tile, block: $("syPop").textContent.replace(/\s+/g, " ") };
+  });
+  ok(pop.P.historical > 0,
+     "the bundled photographs are counted as their own population",
+     String(pop.P.historical));
+  /* Ten: TK115's six and DZ007's four. Both fixtures are loaded by now, and
+     the point is that NONE of the bundled photographs joins them. */
+  ok(pop.P.mobExpected === 10 && pop.P.mobReceived === 0 && pop.P.mobMissing === 10,
+     "field photographs are counted separately from them",
+     `${pop.P.mobExpected} expected / ${pop.P.mobReceived} received / ${pop.P.mobMissing} missing`);
+  ok(pop.P.historical !== pop.P.mobExpected,
+     "the two populations are genuinely different numbers",
+     `${pop.P.historical} bundled vs ${pop.P.mobExpected} field`);
+  ok(!/evidence arrived/i.test(pop.tile), "the tile no longer says 'Evidence arrived'", pop.tile);
+  ok(/field photos received/i.test(pop.tile), "it says what it measures", pop.tile);
+  /* And it refuses a percentage it cannot honestly compute. */
+  ok(!/\b0 of 6[0-9]\b/.test(pop.tile),
+     "and never reports the bundled history as missing uploads", pop.tile);
+  ok(/expected/i.test(pop.block) && /bundled/i.test(pop.block),
+     "the four numbers are on the page", pop.block.slice(0, 90));
+
   console.log("\n  the workload is counted in photographs, not records");
   const hint = await p.evaluate(() => $("syQuarHint").textContent);
   /* Never "10 need assignment" while ten files have not arrived — that is a

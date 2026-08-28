@@ -2157,6 +2157,7 @@
         <button class="btn" id="opAll" data-i18n="op_all">Select all</button>
         <button class="btn" id="opNone" data-i18n="op_none">Select none</button>
         <button class="btn hidden" id="opRetry" data-i18n="op_retry">Check synchronisation</button>
+        <span class="hint" id="opLast"></span>
         <span class="spacer"></span><span class="hint" id="opCount"></span>
       </div>
       <div id="opGrid" class="opgrid"></div>
@@ -2602,6 +2603,9 @@
         <dl class="kv" id="syRecon"></dl>
         <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
           <div class="sub" data-i18n="sy_recon_sub">Read down. Each line is a source or a rule, and the last one is the figure every other screen counts. A round in the folder that is also in the bundled history is one round, not two — that is the merge. A round two phones both sent is one round with a conflict to settle, not two rounds.</div></details>
+        <div class="secthd" style="margin-top:var(--s4)"><h2 data-i18n="sy_h_pop">Where the photographs are</h2></div>
+        <dl class="kv" id="syPop"></dl>
+        <div class="sub" data-i18n="sy_p_note" style="font-size:11.5px;margin-top:4px">Photographs bundled with this app live beside it, never in the sync folder. They are not missing field uploads and are counted separately.</div>
         <div class="secthd" style="margin-top:var(--s4)"><h2 data-i18n="sy_diag">Admin diagnostics</h2></div>
         <ul class="synone" id="syDiag"></ul>
         <div class="secthd" style="margin-top:var(--s4)"><h2 data-i18n="sy_unknown">Not measurable from here</h2></div>
@@ -2708,27 +2712,27 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=171"></script>
-<script src="../mobile/hme.js?v=171"></script>
-<script src="../mobile/mp-fc.js?v=171"></script>
-<script src="../mobile/hme-cascade.js?v=171"></script>
-<script src="../mobile/temp-limits.js?v=171"></script>
+<script src="../data/magnetic_plug.js?v=172"></script>
+<script src="../mobile/hme.js?v=172"></script>
+<script src="../mobile/mp-fc.js?v=172"></script>
+<script src="../mobile/hme-cascade.js?v=172"></script>
+<script src="../mobile/temp-limits.js?v=172"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=171"></script>
-<script src="../mobile/normalize.js?v=171"></script>
-<script src="../mobile/due.js?v=171"></script>
-<script src="../mobile/wear.js?v=171"></script>
-<script src="../mobile/wear-map.js?v=171"></script>
-<script src="../mobile/lube.js?v=171"></script>
-<script src="../mobile/lube-overrides.js?v=171"></script>
-<script src="../mobile/lube2027.js?v=171"></script>
-<script src="../mobile/lube-tds.js?v=171"></script>
+<script src="../mobile/assets.js?v=172"></script>
+<script src="../mobile/normalize.js?v=172"></script>
+<script src="../mobile/due.js?v=172"></script>
+<script src="../mobile/wear.js?v=172"></script>
+<script src="../mobile/wear-map.js?v=172"></script>
+<script src="../mobile/lube.js?v=172"></script>
+<script src="../mobile/lube-overrides.js?v=172"></script>
+<script src="../mobile/lube2027.js?v=172"></script>
+<script src="../mobile/lube-tds.js?v=172"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=171"></script>
-<script src="../mobile/machine-photos.js?v=171"></script>
+<script src="../mobile/upload-defaults.js?v=172"></script>
+<script src="../mobile/machine-photos.js?v=172"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -2737,17 +2741,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=171"></script>
-<script src="../mobile/get.js?v=171"></script>
-<script src="../mobile/points.js?v=171"></script>
-<script src="../mobile/uc-points.js?v=171"></script>
-<script src="../mobile/inspect-guide.js?v=171"></script>
-<script src="../mobile/get-figs.js?v=171"></script>
-<script src="../mobile/body-points.js?v=171"></script>
-<script src="../mobile/body-map.js?v=171"></script>
-<script src="../mobile/jspdf.umd.min.js?v=171"></script>
-<script src="../mobile/html2canvas.min.js?v=171"></script>
-<script src="../mobile/report-core.js?v=171"></script>
+<script src="../mobile/machine-fig.js?v=172"></script>
+<script src="../mobile/get.js?v=172"></script>
+<script src="../mobile/points.js?v=172"></script>
+<script src="../mobile/uc-points.js?v=172"></script>
+<script src="../mobile/inspect-guide.js?v=172"></script>
+<script src="../mobile/get-figs.js?v=172"></script>
+<script src="../mobile/body-points.js?v=172"></script>
+<script src="../mobile/body-map.js?v=172"></script>
+<script src="../mobile/jspdf.umd.min.js?v=172"></script>
+<script src="../mobile/html2canvas.min.js?v=172"></script>
+<script src="../mobile/report-core.js?v=172"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -3027,7 +3031,13 @@ const I18N={
   sy_r_total:"Inspections in the system", sy_r_void:"Withdrawn, kept for the trail",
   sy_r_live:"Inspections that count as work",
   sy_k_recs:"Records held", sy_k_recs_s:"{n} cannot be filed",
-  sy_k_media:"Evidence arrived", sy_k_media_s:"{n} of {of} attachments",
+  sy_k_media:"Field photos received", sy_k_media_s:"{n} of {of} field photos",
+  sy_k_media_na:"Field-photo reconciliation unavailable",
+  sy_h_pop:"Where the photographs are",
+  sy_p_hist:"Bundled with this app", sy_p_exp:"Field photos expected",
+  sy_p_rec:"Field files received", sy_p_miss:"Field files missing",
+  sy_p_dash:"Added from a desk",
+  sy_p_note:"Photographs bundled with this app live beside it, never in the sync folder. They are not missing field uploads and are counted separately.",
   sy_k_wait:"Waiting on media", sy_k_wait_s:"records missing an attachment",
   sy_k_crit:"Critical waiting", sy_k_crit_s:"a Critical with no evidence yet",
   sy_k_conf:"Conflicts", sy_k_conf_s:"two phones, one round",
@@ -3079,6 +3089,12 @@ const I18N={
   op_nofile:"Not downloaded yet — the file has not reached this dashboard.",
   op_open:"Assign photos",
   op_missing:"Photo file not received",
+  op_title_miss:"Missing photo files",
+  op_lead_miss:"This inspection expects {n} photograph(s), but their files have not reached the dashboard. The readings, condition and actions on it remain available and still count. Check synchronisation before assigning anything.",
+  op_last:"Last checked: {t}", op_never:"not yet",
+  op_chk_none:"Checked just now — no new photo files found.",
+  op_chk_some:"{n} photo file(s) received. {m} still missing.",
+  op_chk_all:"All expected photo files received.",
   op_retry:"Check synchronisation",
   op_cant:"Those photographs have not arrived, so they cannot be assigned yet.",
   op_tally:"{e} expected · {r} received · {m} file(s) missing · {n} selected",
@@ -3657,7 +3673,13 @@ const I18N={
   sy_r_total:"Обходов в системе", sy_r_void:"Аннулировано, оставлено для истории",
   sy_r_live:"Обходов, считающихся работой",
   sy_k_recs:"Записей в системе", sy_k_recs_s:"{n} невозможно разложить",
-  sy_k_media:"Материалы получены", sy_k_media_s:"{n} из {of} вложений",
+  sy_k_media:"Фото с поля получены", sy_k_media_s:"{n} из {of} полевых фото",
+  sy_k_media_na:"Сверка полевых фото недоступна",
+  sy_h_pop:"Где находятся фотографии",
+  sy_p_hist:"В комплекте приложения", sy_p_exp:"Ожидается фото с поля",
+  sy_p_rec:"Получено файлов с поля", sy_p_miss:"Нет файлов с поля",
+  sy_p_dash:"Добавлено с рабочего места",
+  sy_p_note:"Фотографии из комплекта приложения лежат рядом с ним, а не в папке синхронизации. Это не потерянные загрузки, и они считаются отдельно.",
   sy_k_wait:"Ждут материалов", sy_k_wait_s:"записей без вложения",
   sy_k_crit:"Критичные в ожидании", sy_k_crit_s:"критичное без подтверждения",
   sy_k_conf:"Конфликты", sy_k_conf_s:"два телефона, один обход",
@@ -3699,6 +3721,12 @@ const I18N={
   op_nofile:"Ещё не загружено — файл не дошёл до этой панели.",
   op_open:"Назначить фото",
   op_missing:"Файл фото не получен",
+  op_title_miss:"Нет файлов фотографий",
+  op_lead_miss:"Этот осмотр ожидает фотографий: {n}, но их файлы не дошли до панели. Замеры, состояние и действия по нему доступны и учитываются. Проверьте синхронизацию, прежде чем что-то назначать.",
+  op_last:"Последняя проверка: {t}", op_never:"ещё не было",
+  op_chk_none:"Проверено только что — новых файлов фото нет.",
+  op_chk_some:"Получено файлов фото: {n}. Ещё нет: {m}.",
+  op_chk_all:"Все ожидаемые файлы фотографий получены.",
   op_retry:"Проверить синхронизацию",
   op_cant:"Эти фотографии ещё не пришли, назначить их пока нельзя.",
   op_tally:"ожидается {e} · получено {r} · нет файлов: {m} · выбрано {n}",
@@ -7259,7 +7287,30 @@ function openOrphan(rk){
 function renderOrphan(){
   const rec=RECS.find(r=>ekOf(r)===opKey); if(!rec){ closeOrphan(); return; }
   const all=orphanPhotos(rec), left=all.filter(p=>!p.a).length;
-  $("opLead").textContent = left ? t("op_lead",{n:left}) : t("op_resolved");
+  /* THE PANEL SAYS WHICH PROBLEM IT IS LOOKING AT.
+
+     It said "6 photograph(s) here arrived without a component reference" over
+     six cards that each said the file had not arrived — the panel contradicting
+     itself in two places on one screen. "Arrived" belongs to a file somebody
+     can see; an expected placeholder has not arrived by definition.
+
+     Nothing viewable means this is a synchronisation problem, and the
+     assignment controls are not merely disabled but out of the way: offering
+     them at all invites somebody to keep trying. */
+  const tal0=photoTally(rec);
+  const nothingHere = tal0.received===0 && tal0.missing>0;
+  $("opTitle").textContent = nothingHere ? t("op_title_miss") : t("op_title");
+  $("opLead").textContent = nothingHere ? t("op_lead_miss",{n:tal0.missing})
+    : left ? t("op_lead",{n:left}) : t("op_resolved");
+  /* The controls that only make sense over a photograph somebody can look at. */
+  ["opPoint","opSearch","opAssign","opGeneral","opAll","opNone"].forEach(id=>{
+    const el=$(id); if(!el) return;
+    const row=el.closest(".field")||el;
+    row.classList.toggle("hidden", nothingHere);
+    if(el!==row) el.classList.toggle("hidden", nothingHere);
+  });
+  $("opLast").textContent = nothingHere
+    ? t("op_last",{t: opLastCheck ? opLastCheck : t("op_never")}) : "";
   $("opGrid").innerHTML=all.map(p=>{
     const st=photoState(p), can=photoActionable(p);
     const label = st===PH_MISSING ? t("op_missing")
@@ -7343,14 +7394,26 @@ $("opNone").onclick=()=>{ opSel.clear(); renderOrphan(); };
 /* The only useful action on a file that has not arrived: ask the folder again.
    A missing photograph is a sync problem, and this is where somebody standing
    in front of it would look for the button. */
+let opLastCheck="";
 $("opRetry").onclick=()=>{
+  const rec0=RECS.find(r=>ekOf(r)===opKey);
+  const before=rec0?photoTally(rec0).received:0;
   $("opMsg").textContent=t("ed_sending");
   Promise.resolve(window.CMDrive&&CMDrive.load?CMDrive.load({refresh:true}):null)
-    .then(()=>{ renderOrphan(); renderSync();
-                const rec=RECS.find(r=>ekOf(r)===opKey);
-                const tl=rec?photoTally(rec):{missing:0};
-                $("opMsg").textContent = tl.missing ? t("op_missing") : ""; })
-    .catch(e=>{ $("opMsg").textContent=String((e&&e.message)||e); });
+    .then(()=>{
+      opLastCheck=new Date().toTimeString().slice(0,5);
+      renderOrphan(); renderSync();
+      const rec=RECS.find(r=>ekOf(r)===opKey);
+      const tl=rec?photoTally(rec):{received:0,missing:0};
+      const got=tl.received-before;
+      /* Plain language, and never a folder, a bucket or a stack trace. The
+         person reading this wants to know whether to wait or to escalate. */
+      $("opMsg").textContent = !tl.missing ? t("op_chk_all")
+        : got>0 ? t("op_chk_some",{n:got, m:tl.missing})
+        : t("op_chk_none");
+    })
+    .catch(()=>{ opLastCheck=new Date().toTimeString().slice(0,5);
+                 $("opMsg").textContent=t("op_chk_none"); });
 };
 $("opAssign").onclick=()=>{
   if(!opSel.size){ $("opMsg").textContent=t("op_none_sel"); return; }
@@ -10519,6 +10582,54 @@ function renderConflictBar(){
    explained rather than reported as zero, because a panel showing "0 hash
    failures" when it cannot detect one is worse than no panel at all: it is a
    reassurance nobody earned. */
+/* FOUR POPULATIONS, NOT ONE NUMBER.
+   ==========================================================================
+   "Evidence arrived: 0 of 63" mixed things that have nothing to do with each
+   other, and reported the result as a delivery failure in the field:
+
+     historical_repo   photographs bundled with this repository. Their files
+                       live beside the app, never in the sync folder, and
+                       counting them as missing uploads is how a healthy
+                       pipeline came to read as 6%.
+     mobile_expected   what a phone says it captured — a COUNT, which is a
+                       claim, not a file.
+     mobile_received   files this dashboard actually holds for those points.
+     dashboard_added   photographs an engineer attached from a desk.
+
+   Only the middle two belong in a field-upload figure, and the honest answer
+   when the phone's records carry no per-attachment identity is that the
+   question cannot be answered yet — not a percentage that looks like an
+   answer. Stable attachment ids come with the mobile manifest; until then this
+   says so out loud. */
+function mediaPopulations(){
+  const held=(()=>{ try{ return new Set(window.CMDrive&&CMDrive.names?CMDrive.names():[]); }
+                    catch(e){ return new Set(); } })();
+  const local=(()=>{ try{ return folderPhotos||{}; }catch(e){ return {}; } })();
+  const have=n=>held.has(n)||!!local[n];
+  const P={ historical:0, mobExpected:0, mobReceived:0, dashAdded:0, answered:held.size>0||Object.keys(local).length>0 };
+  RECS.forEach(r=>{
+    if(r._void) return;
+    const bundled = r.src==="bundled";
+    (r.items||[]).forEach(i=>{
+      if(!i) return;
+      /* A literal file name on the item is how the bundled history carries its
+         photographs — those files ship with the repository. */
+      const literal = (i.photo?1:0) + (Array.isArray(i.photos)?i.photos.filter(Boolean).length:0);
+      if(bundled || (literal && typeof i.photos!=="number")){ P.historical+=literal||1; return; }
+      const exp = window.CMNorm ? CMNorm.photoCount(i.photos) : 0;
+      if(!exp) return;
+      P.mobExpected += exp;
+      /* Received is what the folder can actually produce for this point. */
+      let got=0;
+      try{ got = mediaOf(i,r).filter(m=>m.name && have(m.name)).length; }catch(e){}
+      P.mobReceived += Math.min(got, exp);
+    });
+  });
+  try{ P.dashAdded = Object.values(edits).reduce((n,e)=>n+Object.keys((e&&e.media)||{}).length,0); }
+  catch(e){}
+  P.mobMissing = Math.max(0, P.mobExpected - P.mobReceived);
+  return P;
+}
 function syncScan(){
   const held=(()=>{ try{ return new Set(window.CMDrive&&CMDrive.names?CMDrive.names():[]); }
                     catch(e){ return new Set(); } })();
@@ -10658,9 +10769,17 @@ function renderSync(){
   const card=(id,lab,val,sub,cls)=>
     `<div class="kpi ${cls||""}" id="${esc(id)}"><span class="k">${esc(lab)}</span>
        <span class="v">${esc(String(val))}</span><span class="s">${esc(sub)}</span></div>`;
-  const pct = (s.linked && s.expected) ? Math.round(s.present/s.expected*100) : null;
+  const pop=mediaPopulations();
+  /* The tile answers about FIELD photographs only, and refuses to answer at all
+     while the phone's records carry no per-attachment identity — a percentage
+     computed from a count nobody can match to a file is a number that looks
+     like an answer. */
+  const canReconcile = pop.answered && pop.mobExpected>0;
+  const pct = canReconcile ? Math.round(pop.mobReceived/pop.mobExpected*100) : null;
   const na = (v,sub) => s.linked ? [v,sub] : ["—", t("sy_notlinked")];
-  const [vMedia,sMedia]=na(pct==null?"—":pct+"%", t("sy_k_media_s",{n:s.present, of:s.expected}));
+  const [vMedia,sMedia]= !pop.answered ? ["—", t("sy_notlinked")]
+    : !canReconcile ? ["—", t("sy_k_media_na")]
+    : [pct+"%", t("sy_k_media_s",{n:pop.mobReceived, of:pop.mobExpected})];
   const [vWait,sWait]=na(s.gaps.length, t("sy_k_wait_s"));
   const [vCrit,sCrit]=na(s.critWaiting, t("sy_k_crit_s"));
   $("syncKpis").innerHTML=
@@ -10680,6 +10799,12 @@ function renderSync(){
     const h=Math.round(m/60);
     return h<48 ? t("sy_hr",{n:h}) : t("sy_day",{n:Math.round(h/24)});
   };
+  $("syPop").innerHTML=
+      `<dt>${esc(t("sy_p_exp"))}</dt><dd>${esc(num(pop.mobExpected))}</dd>`
+    + `<dt>${esc(t("sy_p_rec"))}</dt><dd>${esc(num(pop.mobReceived))}</dd>`
+    + `<dt>${esc(t("sy_p_miss"))}</dt><dd>${esc(num(pop.mobMissing))}</dd>`
+    + `<dt>${esc(t("sy_p_hist"))}</dt><dd>${esc(num(pop.historical))}</dd>`
+    + `<dt>${esc(t("sy_p_dash"))}</dt><dd>${esc(num(pop.dashAdded))}</dd>`;
   $("syHealth").innerHTML=
       `<dt>${esc(t("sy_h_files"))}</dt><dd>${esc(num(s.held))}</dd>`
     + `<dt>${esc(t("sy_h_last"))}</dt><dd>${esc(ago(s.cursorAt))}</dd>`
@@ -11014,8 +11139,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=171"></script>
-<script src="sync-adapter.js?v=171"></script>
-<script src="report.js?v=171"></script>
+<script src="drive.js?v=172"></script>
+<script src="sync-adapter.js?v=172"></script>
+<script src="report.js?v=172"></script>
 </body>
 </html>

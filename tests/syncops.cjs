@@ -119,7 +119,18 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
              empty: (document.querySelector("#syGapTbl .empty") || {}).textContent || "",
              badge: $("nbSync").textContent };
   });
-  ok(full.tiles.some(x => /Evidence arrived=100%/.test(x)), "100% when it is 100%",
+  /* THIS ASSERTION USED TO ENCODE THE BUG. The fixture is bundled records,
+     whose photographs ship beside the app and were never in the sync folder —
+     so "Evidence arrived: 100%" was a field-delivery figure computed entirely
+     from things that are not field deliveries. The tile now answers about field
+     photographs only, and when there are none it says the reconciliation is
+     unavailable rather than inventing a percentage. */
+  const fieldTile = full.tiles.find(x => /Field photos received/.test(x)) || "";
+  ok(!!fieldTile, "the tile measures field photographs", fieldTile);
+  ok(!/Evidence arrived/.test(full.tiles.join(" ")),
+     "and no longer claims to measure 'evidence arrived'", full.tiles.join("  "));
+  ok(/=—$/.test(fieldTile) || /=100%/.test(fieldTile),
+     "with no field photographs in this fixture it declines to invent a figure",
      full.tiles.join("  "));
   ok(/accounted for/i.test(full.empty), "and the table says so plainly", full.empty.slice(0, 50));
 
