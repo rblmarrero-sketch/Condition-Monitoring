@@ -132,6 +132,45 @@ jobs:
 
           echo "mobile=$M dashboard=$D — both on $WANT"
 
+      - name: Both public apps load the same normalizer, at this build
+        run: |
+          set -euo pipefail
+          WANT="${{ steps.sw.outputs.want }}"
+          BASE="https://rblmarrero-sketch.github.io/Condition-Monitoring"
+
+          # An independent audit found the dashboard loading normalize.js while
+          # the mobile app did not — a shared rule is not shared until BOTH ends
+          # have it, and "the dashboard is fine" is exactly the half-answer that
+          # let it ship. Checked separately, per app, on the public bytes.
+          for app in mobile dashboard; do
+            SRC=$(curl -fsSL --max-time 30 "$BASE/$app/index.html?ci=$GITHUB_SHA" \
+                   | grep -o 'normalize\.js?v=[0-9]*' | head -1 | sed 's/.*v=//' || true)
+            if [ -z "$SRC" ]; then
+              echo "::error::Public $app page does not load normalize.js at all."
+              exit 1
+            fi
+            if [ "$SRC" != "$WANT" ]; then
+              echo "::error::Public $app loads normalize.js?v=$SRC, expected $WANT."
+              exit 1
+            fi
+            echo "$app: normalize.js?v=$SRC"
+          done
+
+          # And the file itself has to be reachable, not merely referenced.
+          curl -fsSL --max-time 30 "$BASE/mobile/normalize.js?ci=$GITHUB_SHA" \
+            | grep -q "CMNorm" \
+            || { echo "::error::normalize.js is referenced but does not serve CMNorm."; exit 1; }
+          echo "normalize.js serves CMNorm"
+
+      - name: The service worker precaches the normalizer
+        run: |
+          set -euo pipefail
+          BASE="https://rblmarrero-sketch.github.io/Condition-Monitoring"
+          curl -fsSL --max-time 30 "$BASE/mobile/sw.js?ci=$GITHUB_SHA" \
+            | grep -q "normalize.js" \
+            || { echo "::error::The service worker does not precache normalize.js — an offline phone would run without it."; exit 1; }
+          echo "sw.js precaches normalize.js"
+
       - name: Summary
         run: |
           echo "### Deployed build verified" >> "$GITHUB_STEP_SUMMARY"

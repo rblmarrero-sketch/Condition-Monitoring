@@ -87,9 +87,7 @@ const carriers = [
   ["an owner",       { key: "", owner: "A. Sokolov" }],
   ["a lube product", { key: "", lubeProduct: "Mobil DTE 10" }],
   ["a temperature",  { key: "", tempC: 91 }],
-  /* the one the OPERATIONAL list has never heard of */
-  ["a field nobody has added yet", { key: "", somethingNewIn2027: "measured" }],
-];
+]; 
 carriers.forEach(([what, item]) => {
   const r = N.record({ equip: "ZZ001", date: "2026-08-05", type: "MP", items: [item] });
   ok(r.removed === 0 && r.orphans === 1,
@@ -98,6 +96,64 @@ carriers.forEach(([what, item]) => {
   ok(r.rec.items[0] && r.rec.items[0]._needsPoint === 1,
      `  and it is marked for identification, not guessed at`);
 });
+
+console.log("\n  HOUSEKEEPING IS NOT CONTENT");
+/* The bug that made the first version of this file useless in production. The
+   blank row is not empty in the JSON sense — it arrives carrying a temporary
+   id, a sequence number, a created timestamp, an import source, a sync flag.
+   The first rule said "anything beyond the fields we know about counts as
+   content", so every one of those made the row look real, every blank row was
+   flagged for a human, and TK115 and DZ007 stayed on hold through a build that
+   was supposed to have fixed them. */
+const housekeeping = [
+  ["a temporary id",       { id: "tmp_8812" }],
+  ["a local id",           { localId: "L-41" }],
+  ["a sequence number",    { seq: 3 }],
+  ["an index",             { idx: 7 }],
+  ["a created timestamp",  { createdAt: "2026-08-05T04:11:02.881Z" }],
+  ["an updated timestamp", { updatedAt: "2026-08-05T04:12:00.000Z" }],
+  ["an import source",     { src: "phone" }],
+  ["a device",             { dev: "A9F2" }],
+  ["a sync state",         { syncState: "sent" }],
+  ["UI state",             { expanded: true, selected: true }],
+  ["a schema version",     { version: 2, schema: "v4" }],
+  ["an internal mark",     { _touchedByUi: 1 }],
+  ["empty containers",     { photos: [], media: {}, attachments: [] }],
+  ["all of it at once",    { id: "tmp_1", seq: 2, createdAt: "2026-08-05T04:11:02Z",
+                             src: "phone", syncState: "sent", expanded: false,
+                             photos: [], version: 2 }],
+];
+housekeeping.forEach(([what, extra]) => {
+  const item = Object.assign({ key: "", label: "", grade: "", mm: "", defect: "",
+                               comment: "", photos: 0 }, extra);
+  const r = N.record({ equip: "ZZ002", items: [item] });
+  ok(r.removed === 1 && r.orphans === 0,
+     `removed: a blank row carrying only ${what}`,
+     `removed ${r.removed}, flagged ${r.orphans}`);
+});
+/* And the exact production shape, whole. */
+const realBlank = { key: "", label: "", grade: "", sev: "", mm: "", unit: "",
+  defect: "", cause: "", recommendation: "", prio: "", wo: "", comment: "",
+  photos: 0, id: "tmp_8812", seq: 3, createdAt: "2026-08-05T04:11:02.881Z",
+  src: "phone", syncState: "sent" };
+ok(N.classify(realBlank) === "empty",
+   "the production blank row classifies as empty, housekeeping and all",
+   N.classify(realBlank));
+
+console.log("\n  a field nobody has classified is a developer's problem, not a technician's");
+/* The reasoning behind the old catch-all was sound — a round added next year
+   must not have its data eaten by a stale list — but charging it to the person
+   at the truck was not. It is reported instead. */
+const future = { key: "", label: "", somethingNewIn2027: "measured" };
+ok(N.classify(future) === "empty",
+   "an unknown field does not make a blank row into a finding", N.classify(future));
+ok(N.unknown(future).indexOf("somethingNewIn2027") >= 0,
+   "but it IS reported, so the omission gets fixed", JSON.stringify(N.unknown(future)));
+const withUnknown = N.list([{ equip: "ZZ003", items: [future] }]);
+ok(withUnknown.unknown.length === 1 && withUnknown.unknown[0].fields[0] === "somethingNewIn2027",
+   "and it reaches the diagnostics tally", JSON.stringify(withUnknown.unknown));
+ok(N.unknown({ key: "A", grade: "B", seq: 2, createdAt: "x" }).length === 0,
+   "known operational and known housekeeping raise nothing");
 
 console.log("\n  what counts as blank");
 const blanks = [

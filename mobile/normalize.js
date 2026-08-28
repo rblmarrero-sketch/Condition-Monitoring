@@ -98,18 +98,46 @@
     for (var n = 0; n < OPERATIONAL.length; n++) {
       if (!blank(i[OPERATIONAL[n]])) return true;
     }
-    /* Anything at all beyond the fields we know about still counts as content.
-       A round added next year writes a field this list has never heard of, and
-       silently deleting it because the list is out of date is exactly the
-       failure this file exists to prevent. */
-    var keys = Object.keys(i);
-    for (var j = 0; j < keys.length; j++) {
-      var k = keys[j];
-      if (k === 'key' || k === 'label' || k === 'name') continue;
-      if (k.charAt(0) === '_') continue;             // internal marks, not data
-      if (!blank(i[k])) return true;
-    }
     return false;
+  }
+
+  /* FIELDS AN UNKNOWN NAME IS *NOT* ALLOWED TO BECOME.
+
+     The first version of this file said "anything beyond the fields we know
+     about counts as content", reasoning that a round added next year must not
+     have its data silently eaten by a stale list. That reasoning is sound and
+     the rule was still wrong, because the blank row is not empty in the JSON
+     sense — it arrives carrying housekeeping. A sequence number, a created
+     timestamp, an import source, a sync flag: every one of them is non-blank,
+     so every blank row came back as "carries something", was flagged for a
+     human, and the whole inspection stayed on hold. The catch-all did not
+     protect future data; it re-created the exact defect it was written to fix.
+
+     So the operational list is now the only thing that makes a point real, and
+     an unknown field is reported to developers rather than charged to a
+     technician. `unknown()` is what the diagnostics line reads: a field nobody
+     has classified is a bug in this file, and the person who can fix it is not
+     the one standing at the truck. */
+  var METADATA = [
+    'id', 'uid', 'uuid', 'tmpId', 'tempId', 'localId', 'seq', 'idx', 'index',
+    'order', 'n', 'row', 'created', 'createdAt', 'updated', 'updatedAt', 'ts',
+    'at', 'modified', 'rev', 'version', 'v', 'schema', 'src', 'source',
+    'origin', 'imported', 'importedAt', 'dev', 'device', 'sync', 'synced',
+    'syncState', 'up', 'upAt', 'dirty', 'touched', 'open', 'expanded',
+    'selected', 'active', 'focus', 'ui', 'state', 'draft', 'valid', 'dirtyUi'
+  ];
+  function isMeta(k) {
+    if (k === 'key' || k === 'label' || k === 'name') return true;
+    if (k.charAt(0) === '_') return true;
+    return METADATA.indexOf(k) >= 0;
+  }
+  /* Fields on this point that are neither identity, nor operational, nor known
+     housekeeping — for developer diagnostics only. */
+  function unknown(i) {
+    if (!i || typeof i !== 'object') return [];
+    return Object.keys(i).filter(function (k) {
+      return !isMeta(k) && OPERATIONAL.indexOf(k) < 0 && !blank(i[k]);
+    });
   }
 
   /* THE THREE ANSWERS.
@@ -126,10 +154,14 @@
      original when nothing did, so callers can cheaply tell) plus what happened,
      which is what Admin Diagnostics reports and what the suites assert on. */
   function record(rec) {
-    if (!rec || !Array.isArray(rec.items)) return { rec: rec, removed: 0, orphans: 0 };
-    var keep = [], removed = 0, orphans = 0;
+    if (!rec || !Array.isArray(rec.items)) return { rec: rec, removed: 0, orphans: 0, unknown: [] };
+    var keep = [], removed = 0, orphans = 0, unk = [];
     for (var n = 0; n < rec.items.length; n++) {
       var i = rec.items[n], c = classify(i);
+      /* An audit copy of anything this file could not classify. Kept whatever
+         the verdict, because the point of it is to notice the gap. */
+      var u = unknown(i);
+      if (u.length) unk.push({ key: (i && i.key) || '', fields: u });
       if (c === 'empty') { removed++; continue; }
       if (c === 'orphan') {
         orphans++;
@@ -143,25 +175,29 @@
       }
       keep.push(i);
     }
-    if (!removed && !orphans) return { rec: rec, removed: 0, orphans: 0 };
+    if (!removed && !orphans) return { rec: rec, removed: 0, orphans: 0, unknown: unk };
     var out = Object.assign({}, rec, { items: keep });
-    return { rec: out, removed: removed, orphans: orphans };
+    return { rec: out, removed: removed, orphans: orphans, unknown: unk };
   }
 
   /* A whole list, with one tally for the diagnostics line. */
   function list(recs) {
-    var out = [], removed = 0, orphans = 0, touched = 0;
+    var out = [], removed = 0, orphans = 0, touched = 0, unk = [];
     (recs || []).forEach(function (r) {
       var res = record(r);
       if (res.removed || res.orphans) touched++;
       removed += res.removed; orphans += res.orphans;
+      (res.unknown || []).forEach(function (u) {
+        unk.push({ rec: (r && r.equip) || '', key: u.key, fields: u.fields }); });
       out.push(res.rec);
     });
-    return { recs: out, removed: removed, orphans: orphans, touched: touched };
+    return { recs: out, removed: removed, orphans: orphans, touched: touched, unknown: unk };
   }
 
   G.CMNorm = {
     OPERATIONAL: OPERATIONAL,
+    METADATA: METADATA,
+    unknown: unknown,
     blank: blank,
     named: named,
     carries: carries,
