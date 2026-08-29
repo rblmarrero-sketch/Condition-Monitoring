@@ -107,7 +107,13 @@ const STATED = [
   const rows = await p.evaluate(() => {
     const pick = c => (window.ASSETS || []).find(a => a.cls === c);
     const add = [];
-    [["UC", "DOZ"], ["UC", "EXC"], ["TB", "AT"], ["TB", "HT"]].forEach(([ty, cls], i) => {
+    /* MP is in this list now. It used to be missing because the plug round
+       already had rows on screen — from data/magnetic_plug.js, the bundled
+       history the dashboard merged in as a second source. That source is gone
+       (its sixteen rounds live in the folder now, where the phones can see
+       them too), so this suite supplies its own fixture for every round it
+       asks about, which is what it should always have done. */
+    [["UC", "DOZ"], ["UC", "EXC"], ["TB", "AT"], ["TB", "HT"], ["MP", "HT"]].forEach(([ty, cls], i) => {
       const a = pick(cls); if (!a) return;
       add.push({ equip: a.n, date: "2026-08-2" + i, type: ty, cls: a.cls, by: "I. P",
                  items: [{ key: "P1", label: "x", grade: "A" }] });

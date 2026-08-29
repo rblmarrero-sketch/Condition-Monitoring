@@ -41,6 +41,16 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
     window.__docs = [];
     CMDrive.putDoc = (n, o) => { window.__docs.push({ n, o }); return Promise.resolve({ ok: true }); };
     try { localStorage.setItem("cm_dash_who", "R. Marrero"); } catch (e) {}
+    /* This suite used to get its due rows from data/magnetic_plug.js — the
+       bundled history the dashboard merged in as a second source of records.
+       That source is gone: its sixteen rounds are in the folder now, where the
+       phones can read them too. So the fixture is supplied here, which is
+       where a test's fixture belongs. */
+    const ht = (window.ASSETS || []).filter(a => a.cls === "HT").slice(0, 3);
+    CMDash.importRecords(ht.map((a, i) => ({
+      equip: a.n, date: "2026-07-2" + (i + 1), type: "MP", cls: "HT", by: "I. P", smu: 6000 + i,
+      items: [{ key: "4C", label: "Left Rear Final Drive", grade: "B" }],
+    })));
     showTab("due"); if ($("ddScope")) $("ddScope").value = "all"; renderDueTab();
   });
   await p.waitForTimeout(500);

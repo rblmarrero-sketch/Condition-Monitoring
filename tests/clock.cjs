@@ -105,6 +105,32 @@ console.log('\n1. THE SITE DAY, READ FROM SEVEN TIMEZONES');
 });
 
 /* ---------------------------------------------------------------------------
+   1b. THE PHONE WITH NO TIMEZONE DATABASE.
+
+   D.parts() reaches Intl first and falls back to a fixed +12 offset. That
+   fallback is what runs on an old Android WebView that has been in a drawer
+   all winter, and it is the branch nobody would ever notice was wrong — so it
+   is run here with Intl taken away entirely, in every zone, against the same
+   instants. Chukotka has had no daylight saving since 2011, so +12 is not an
+   approximation for this site; it is the answer. */
+console.log('\n1b. THE SAME ANSWER WITH NO TIMEZONE DATABASE AT ALL');
+(ONE_TZ ? [ONE_TZ] : ZONES).forEach(tz => {
+  const src = `
+    const fs=require('fs');
+    delete globalThis.Intl;                       // an engine that has none
+    const G={}; new Function('self', fs.readFileSync(${JSON.stringify(DUE_JS)},'utf8'))(G);
+    const D=G.DUE, out=[];
+    ${JSON.stringify(INSTANTS)}.forEach(function(r){ out.push([r[0], D.today(new Date(r[0])), r[1], r[2]]); });
+    process.stdout.write(JSON.stringify(out));
+  `;
+  const rows = JSON.parse(execFileSync(process.execPath, ['-e', src],
+    { env: Object.assign({}, process.env, { TZ: tz }) }).toString());
+  const bad = rows.filter(r => r[1] !== r[2]);
+  ok(bad.length === 0, `${tz.padEnd(20)} no Intl: all ${rows.length} instants still give the site's day`,
+     bad.length ? bad.map(r => `${r[0]} -> ${r[1]} want ${r[2]} (${r[3]})`).join('; ') : '');
+});
+
+/* ---------------------------------------------------------------------------
    2. The arithmetic itself. */
 const D = load();
 

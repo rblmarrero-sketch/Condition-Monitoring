@@ -27,9 +27,23 @@ const URL = 'http://127.0.0.1:8099/dashboard/index.html';
 const fails = [];
 const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !== undefined ? '   ' + d : '')); if (!c) fails.push(n); };
 
-/* Dates relative to today, so the suite does not go red in November. */
-const ago = n => new Date(Date.now() - n * 86400000).toISOString().slice(0, 10);
-const on  = n => new Date(Date.now() + n * 86400000).toISOString().slice(0, 10);
+/* Dates relative to today, so the suite does not go red in November — and
+   relative to the SITE's today, which is the only calendar the application
+   uses. Built from Date.now() in UTC, every fixture date was a day older than
+   this suite intended for twelve hours out of every twenty-four, and a machine
+   placed deliberately at "due soon" was reported overdue. The suite has to ask
+   due.js what day it is for the same reason the two applications do.
+
+   And the day is FROZEN, in the fixture and in the page alike, so a sweep that
+   runs across site midnight cannot have the records built on one day and read
+   on the next. */
+const fs = require('fs'), path = require('path');
+const DUE = (() => { const G = {};
+  new Function('self', fs.readFileSync(path.join(__dirname, '..', 'mobile', 'due.js'), 'utf8'))(G);
+  return G.DUE; })();
+const TODAY = DUE.today();
+const ago = n => DUE.shift(TODAY, -n);
+const on  = n => DUE.shift(TODAY,  n);
 
 /* At 20 h/day the intervals land at: MP 250 h = 12.5 d, UC/GET/INSP 500 h =
    25 d, TB 1000 h = 50 d. Every unit below is placed against one of those
@@ -90,6 +104,7 @@ const rows = p => p.$$eval('#ddList tbody tr', a => a.map(tr => ({
      every count in this suite a count of the sample data. Clear it, so the
      numbers asserted here are the numbers this suite put there. */
   await p.evaluate(() => { localStorage.clear(); window.CM_DATA = null; });
+  await p.evaluate(d => { DUE.setToday(d); }, TODAY);   // the same day the fixture was built on
   await p.evaluate(r => { CMDash.importRecords(r); }, RECS);
   await p.evaluate(d => { CMDash.setDeferrals(d, { replace: true }); }, DEFS);
   await p.evaluate(() => document.getElementById('dataOv').classList.add('hidden'));
