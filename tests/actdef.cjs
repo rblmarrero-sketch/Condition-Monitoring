@@ -71,12 +71,31 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
       kpi: Number(document.querySelector("#kpiAct .v").textContent || 0),
       segOpen: Number(document.querySelector('#aSeg [data-af="open"] .n').textContent || 0),
       rows: document.querySelectorAll("#actionTbl tbody tr").length,
+      /* THE PAGER'S OWN TOTAL, which is what the register now claims to hold.
+         Comparing the RENDERED rows to the predicate stopped being the right
+         question the moment the table started paging: fifty rows on screen out
+         of sixty-four is not a surface disagreeing, it is a window. What must
+         never differ is the number the page says is behind it. */
+      pagerTotal: (() => {
+        const el = document.querySelector("#actionTbl .pager .muted");
+        if (!el) return null;                       // short enough not to page
+        const m = /of\s*([\d.,\u00a0\u202f]+)/.exec(el.textContent || "");
+        return m ? Number(m[1].replace(/[^\d]/g, "")) : null;
+      })(),
       registerAll: actionRows().length,
     };
   });
-  ["nav", "kpi", "segOpen", "rows"].forEach(k =>
+  ["nav", "kpi", "segOpen"].forEach(k =>
     ok(counts[k] === counts.predicate, `${k} agrees with the predicate`,
        counts[k] + " vs " + counts.predicate));
+  ok(counts.pagerTotal === null ? counts.rows === counts.predicate
+                                : counts.pagerTotal === counts.predicate,
+     "the register says it holds exactly the outstanding findings",
+     (counts.pagerTotal === null ? counts.rows + " rows" : counts.pagerTotal + " stated")
+     + " vs " + counts.predicate);
+  ok(counts.rows <= counts.predicate && counts.rows > 0,
+     "and shows a page of them, never more than there are",
+     counts.rows + " on screen");
   ok(counts.registerAll >= counts.predicate,
      "and the register holds at least the outstanding ones",
      counts.registerAll + " rows, " + counts.predicate + " outstanding");

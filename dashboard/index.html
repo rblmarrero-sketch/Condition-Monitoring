@@ -366,7 +366,11 @@
   @media (max-width:820px){ .controls{position:static;margin:0 0 var(--s3);padding:var(--s2) 0;} }
   .field{display:flex;flex-direction:column;gap:5px;}
   .field label{font-size:var(--t-micro);text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:700;}
-  select,input[type=search]{background:var(--surface);color:var(--ink);border:1px solid var(--border);border-radius:8px;padding:9px 11px;font-size:14px;min-width:190px;font-family:inherit;}
+  /* min-width:190px keeps a control from collapsing to nothing on a desk, and
+     on a 390px phone it is wider than the space there is — so the page scrolls
+     sideways to fit a dropdown. min() gives it 190px where 190px exists and the
+     column where it does not. */
+  select,input[type=search]{background:var(--surface);color:var(--ink);border:1px solid var(--border);border-radius:8px;padding:9px 11px;font-size:14px;min-width:min(190px,100%);max-width:100%;box-sizing:border-box;font-family:inherit;}
   /* The tile block that used to live here \u2014 .kpis, .tile and its three text
      rules \u2014 is gone. It was overridden in full by the stat-card system further
      down, and a dead rule that still parses is how a page ends up with three
@@ -1301,6 +1305,17 @@
     background:var(--surface-2);}
   details.disc > summary{cursor:pointer;font-weight:600;font-size:13px;}
   details.disc[open] > summary{margin-bottom:6px;}
+  /* A flex child's default min-width is its CONTENT, so adding a filter box
+     beside the machine picker stopped the field being able to shrink and pushed
+     the page sideways on a phone. min-width:0 is what lets a flex item be
+     narrower than what is inside it. */
+  #tab-equipment .field{min-width:0;}
+  .eqpick{display:flex;flex-direction:column;gap:4px;min-width:0;flex:1;}
+  .eqpick > input,.eqpick > select{min-width:0;max-width:100%;box-sizing:border-box;}
+  .eqpick > .hint{font-size:11px;color:var(--muted);}
+  .pager{display:flex;align-items:center;gap:10px;padding:8px 10px;
+    border-top:1px solid var(--border);background:var(--surface-2);font-size:12px;}
+  .pager .spacer{flex:1;}
   ul.plainlist{list-style:none;margin:6px 0 0;padding:0;max-height:220px;overflow:auto;}
   ul.plainlist li{padding:4px 0;border-bottom:1px solid var(--border);font-size:12px;
     display:flex;align-items:center;gap:8px;}
@@ -2279,7 +2294,7 @@
         <option value="cond" data-i18n="dq_cond">Condition missing</option>
         <option value="defect" data-i18n="dq_defect">Defect missing</option>
         <option value="action" data-i18n="dq_action">Action missing</option>
-        <option value="owner" data-i18n="dq_owner">Owner missing</option>
+        <option value="owner" data-i18n="dq_owner">Nobody responsible</option>
         <option value="due" data-i18n="dq_due">Due date missing</option>
       </select></div>
     <span class="fcount" id="fCount"></span>
@@ -2442,7 +2457,19 @@
 
   <section id="tab-equipment" class="hidden">
     <div class="controls">
-      <div class="field"><label for="equipSel" data-i18n="tab_equipment">Equipment</label><select id="equipSel"></select></div>
+      <!-- A picker with a thousand machines in it is a picker nobody scrolls.
+           The box above filters what the list offers; the list itself stays a
+           plain <select>, because that is the control every browser and every
+           screen reader on site already handles. -->
+      <!-- The filter and the picker are ONE control and stack together: this
+           field sits in .controls, which lays its children out in a row, so
+           four siblings here put a dropdown off the side of a phone. -->
+      <div class="field"><label for="equipSel" data-i18n="tab_equipment">Equipment</label>
+        <span class="eqpick">
+          <input id="equipQ" type="search" data-i18n-ph="eq_findph" placeholder="Filter machines…">
+          <select id="equipSel"></select>
+          <span class="hint" id="equipShown"></span>
+        </span></div>
     </div>
     <div class="section">
       <!-- The report belongs where the inspection is. Reaching it used to mean
@@ -2684,7 +2711,7 @@
         <span class="spacer"></span><span class="hint" id="syQuarHint"></span></div>
       <div class="tblwrap scrollbox" style="--sb:260px"><table class="grid" id="syQuarTbl"></table></div>
       <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
-        <div class="sub" data-i18n="sy_quar_sub">A record missing the identity it needs to be filed — unit, date or round — or carrying a point with no key. Nothing is deleted; they are held here so they are visible rather than silently dropped from every count.</div></details>
+        <div class="sub" data-i18n="sy_quar_sub">A record missing the identity it needs to be filed — unit, date or round — or carrying an inspection point nobody has identified. Nothing is deleted; the inspection is on hold here so it is visible rather than silently dropped from every count.</div></details>
     </div>
   </section>
 
@@ -2810,27 +2837,27 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=207"></script>
-<script src="../mobile/hme.js?v=207"></script>
-<script src="../mobile/mp-fc.js?v=207"></script>
-<script src="../mobile/hme-cascade.js?v=207"></script>
-<script src="../mobile/temp-limits.js?v=207"></script>
+<script src="../data/magnetic_plug.js?v=208"></script>
+<script src="../mobile/hme.js?v=208"></script>
+<script src="../mobile/mp-fc.js?v=208"></script>
+<script src="../mobile/hme-cascade.js?v=208"></script>
+<script src="../mobile/temp-limits.js?v=208"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=207"></script>
-<script src="../mobile/normalize.js?v=207"></script>
-<script src="../mobile/due.js?v=207"></script>
-<script src="../mobile/wear.js?v=207"></script>
-<script src="../mobile/wear-map.js?v=207"></script>
-<script src="../mobile/lube.js?v=207"></script>
-<script src="../mobile/lube-overrides.js?v=207"></script>
-<script src="../mobile/lube2027.js?v=207"></script>
-<script src="../mobile/lube-tds.js?v=207"></script>
+<script src="../mobile/assets.js?v=208"></script>
+<script src="../mobile/normalize.js?v=208"></script>
+<script src="../mobile/due.js?v=208"></script>
+<script src="../mobile/wear.js?v=208"></script>
+<script src="../mobile/wear-map.js?v=208"></script>
+<script src="../mobile/lube.js?v=208"></script>
+<script src="../mobile/lube-overrides.js?v=208"></script>
+<script src="../mobile/lube2027.js?v=208"></script>
+<script src="../mobile/lube-tds.js?v=208"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=207"></script>
-<script src="../mobile/machine-photos.js?v=207"></script>
+<script src="../mobile/upload-defaults.js?v=208"></script>
+<script src="../mobile/machine-photos.js?v=208"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -2839,17 +2866,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=207"></script>
-<script src="../mobile/get.js?v=207"></script>
-<script src="../mobile/points.js?v=207"></script>
-<script src="../mobile/uc-points.js?v=207"></script>
-<script src="../mobile/inspect-guide.js?v=207"></script>
-<script src="../mobile/get-figs.js?v=207"></script>
-<script src="../mobile/body-points.js?v=207"></script>
-<script src="../mobile/body-map.js?v=207"></script>
-<script src="../mobile/jspdf.umd.min.js?v=207"></script>
-<script src="../mobile/html2canvas.min.js?v=207"></script>
-<script src="../mobile/report-core.js?v=207"></script>
+<script src="../mobile/machine-fig.js?v=208"></script>
+<script src="../mobile/get.js?v=208"></script>
+<script src="../mobile/points.js?v=208"></script>
+<script src="../mobile/uc-points.js?v=208"></script>
+<script src="../mobile/inspect-guide.js?v=208"></script>
+<script src="../mobile/get-figs.js?v=208"></script>
+<script src="../mobile/body-points.js?v=208"></script>
+<script src="../mobile/body-map.js?v=208"></script>
+<script src="../mobile/jspdf.umd.min.js?v=208"></script>
+<script src="../mobile/html2canvas.min.js?v=208"></script>
+<script src="../mobile/report-core.js?v=208"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -3000,7 +3027,7 @@ const I18N={
   lt_exc:"Exceptions",
   lt_shop:"Shop materials",
   a_th_comp:"Component",
-  a_th_owner:"Owner",
+  a_th_owner:"Responsible",
   a_th_due:"Due",
   a_th_age:"Age",
   a_th_status:"Status",
@@ -3130,7 +3157,7 @@ const I18N={
   sy_r_less:"less", sy_r_dupe:"Same round from more than one source", sy_r_rival:"Two phones, one round",
   sy_r_total:"Inspections in the system", sy_r_void:"Withdrawn, kept for the trail",
   sy_r_live:"Inspections that count as work",
-  sy_k_recs:"Records held", sy_k_recs_s:"{n} cannot be filed",
+  sy_k_recs:"Inspections loaded", sy_k_recs_s:"{n} on hold, cannot be filed",
   sy_k_media:"Field photos received", sy_k_media_s:"{n} of {of} field photos",
   sy_k_media_na:"Field-photo reconciliation unavailable",
   sy_h_pop:"Where the photographs are",
@@ -3142,7 +3169,7 @@ const I18N={
   sy_k_crit:"Critical waiting", sy_k_crit_s:"a Critical with no evidence yet",
   sy_k_conf:"Conflicts", sy_k_conf_s:"two phones, one round",
   sy_h_files:"Files on the server", sy_h_last:"Last asked",
-  sy_h_att:"Attachments accounted for", sy_h_held:"Needing correction",
+  sy_h_att:"Attachments accounted for", sy_h_held:"Inspections on hold",
   sy_notlinked:"no backend attached — nothing to compare against",
   sy_nolink:"Nothing to compare against yet", sy_nolink_s:"The file list has not arrived from the server. Until it does there is nothing to check these attachments against, and reporting 0% would describe this browser rather than the field. It fills in when the data source refreshes.",
   sy_never:"never", sy_justnow:"just now", sy_min:"{n} min ago",
@@ -3159,6 +3186,15 @@ const I18N={
   sy_d_unknown:"{n} field name(s) this build does not classify — {f}. Not treated as findings; reported so they can be classified.",
   sy_d_why:"{u} · {d} is on hold. Recorded here: {e}. Housekeeping only: {h}. Unclassified: {k}.",
   sy_quar:"Data correction required",
+  eq_findph:"Filter machines\u2026",
+  pg_prev:"Previous", pg_next:"Next",
+  pg_of:"{a}–{b} of {n}",
+  pg_show_all:"Show all {n}",
+  pg_all:"Showing all {n}",
+  pg_back:"Back to {n} at a time",
+  sy_gaps_sub:"Every photograph and video a record says it has, checked against the file names the server actually holds. A record is waiting when one of its own attachments has not arrived.",
+  sy_unknown_sub:"These need a backend that issues a durable receipt per record and a hash per attachment. This one stores files in folders, so the dashboard cannot prove delivery latency, detect a corrupted upload or count a suppressed duplicate. They are listed rather than reported as zero.",
+  sy_quar_sub:"A record missing the identity it needs to be filed — unit, date or round — or carrying an inspection point nobody has identified. Nothing is deleted; the inspection is on hold here so it is visible rather than silently dropped from every count.",
   /* What to DO, per fault, in the words of somebody who would do it. */
   sy_fix_equip:"No unit number — the phone that captured it must re-send it.",
   sy_fix_date:"No date — the phone that captured it must re-send it.",
@@ -3269,7 +3305,7 @@ const I18N={
   as_m_action:"recommended action", as_m_prio:"priority", as_m_owner:"responsible",
   as_m_due:"due date", as_m_disp:"authorised reason and approver",
   a_k_triage:"Needs a plan", a_k_triage_s:"findings with no job, owner or date",
-  a_f_triage:"Triage", a_f_crit:"Critical", a_f_week:"Due this week", a_f_noown:"No owner",
+  a_f_triage:"Needs a plan", a_f_crit:"Critical", a_f_week:"Due this week", a_f_noown:"Nobody responsible",
   k_act_tri:"{n} not yet planned",
   u_disposed:"Dispositioned",
   u_alldisposed:"Every exception on this machine has an audited disposition ({n}).",
@@ -3295,7 +3331,7 @@ const I18N={
   a_ed_st:"Move it along. Saves on change.",
   f_dq:"Data quality — what is missing from what was found", f_dq_s:"Quality",
   dq_all:"Everything", dq_any:"Anything missing", dq_cond:"Condition missing",
-  dq_defect:"Defect missing", dq_action:"Action missing", dq_owner:"Owner missing",
+  dq_defect:"Defect missing", dq_action:"Action missing", dq_owner:"Nobody responsible",
   dq_due:"Due date missing", c_dq:"Quality",
   f_reset:"Reset", f_reset_n:"Reset ({n})",
   f_reset_t:"Clear every filter and drill-down and go back to the whole fleet",
@@ -3840,6 +3876,15 @@ const I18N={
   sy_d_unknown:"Неклассифицированных имён полей: {n} — {f}. Находками не считаются; сообщается для классификации.",
   sy_d_why:"{u} · {d} на удержании. Записано: {e}. Только служебное: {h}. Не классифицировано: {k}.",
   sy_quar:"Требуется исправление данных",
+  eq_findph:"Фильтр машин\u2026",
+  pg_prev:"Назад", pg_next:"Вперёд",
+  pg_of:"{a}–{b} из {n}",
+  pg_show_all:"Показать все {n}",
+  pg_all:"Показаны все {n}",
+  pg_back:"Снова по {n}",
+  sy_gaps_sub:"Каждая фотография и видео, о которых заявляет запись, сверены с именами файлов, которые действительно есть на сервере. Запись ждёт, если какое-то из её вложений не пришло.",
+  sy_unknown_sub:"Для этого нужен бэкенд, выдающий устойчивую квитанцию на запись и хеш на вложение. Этот хранит файлы в папках, поэтому панель не может доказать задержку доставки, обнаружить повреждённую загрузку или посчитать подавленный дубликат. Они перечислены, а не показаны нулями.",
+  sy_quar_sub:"Запись без данных, нужных для размещения, — машины, даты или обхода — либо с точкой осмотра, которую никто не определил. Ничего не удаляется; осмотр стоит здесь на паузе, чтобы его было видно, а не молча выброшен из всех подсчётов.",
   sy_fix_equip:"Нет номера машины — телефон, который делал осмотр, должен отправить его заново.",
   sy_fix_date:"Нет даты — телефон, который делал осмотр, должен отправить его заново.",
   sy_fix_type:"Нет типа обхода — телефон, который делал осмотр, должен отправить его заново.",
@@ -4548,6 +4593,12 @@ let RECS=[];
    travels in the sidecar. It is unique where the storage key is not: two
    phones inspecting one unit on one day produce one recKey and two recIds.
    Anything that has to be certain two rows are the same round asks this. */
+/* One number formatter. There were three, all local, and none of them
+   reachable from anywhere else — so the pager, written later, called a `num`
+   that did not exist where it stood. Two were the same function; the third
+   takes an ABSOLUTE value, which is a different thing and now says so. */
+const num=n=>Number(n||0).toLocaleString(lang==="ru"?"ru-RU":"en-GB");
+const numAbs=n=>Math.abs(Number(n)||0).toLocaleString(lang==="ru"?"ru-RU":"en-GB");
 const recKey=r=>`${r.equip}|${r.date}|${r.type}`;
 /* THE KEY A CORRECTION IS FILED UNDER, WHICH IS NOT ALWAYS THE KEY IT READS
    UNDER NOW.
@@ -5129,7 +5180,11 @@ function renderFleet(){
               ["defect",t("th_topdef"),""],["by",t("th_by"),"hide-m"]];
   let h=`<thead><tr>`+cols.map(([k,l,cl])=>
     `<th class="sortable ${cl}${fleetSort.k===k?" on":""}" data-sort="${k}">${l}<span class="arrow">${fleetSort.k===k?(fleetSort.dir>0?"\u25b2":"\u25bc"):"\u2195"}</span></th>`).join("")+`</tr></thead><tbody>`;
-  rows.forEach(r=>{
+  /* Fifty machines at a time. One row per machine and 1,128 machines on the
+     register: a table that long is a table nobody reads to the end, and the
+     sort controls above it are what people actually navigate with. */
+  const pgF=paged("fleet", rows, renderFleet);
+  pgF.rows.forEach(r=>{
     const w=worstOf(r); const fs=notable(r); const top=topFinding(r);
     const open=(itemsU[r.equip]||[]);
     const nOver=open.filter(fOverdue).length;
@@ -5156,8 +5211,11 @@ function renderFleet(){
       <td class="muted hide-m">${esc(r.by||"")}</td></tr>`;
   });
   $("fleetTbl").innerHTML=h+"</tbody>";
+  const fw=$("fleetTbl").parentNode;
+  if(fw){ const old2=fw.querySelector(":scope > .pager"); if(old2) old2.remove();
+          if(pgF.strip) fw.insertAdjacentHTML("beforeend", pgF.strip); }
   if($("fleetShown")) $("fleetShown").innerHTML=
-    `<span>${esc(t("shown_n",{n:rows.length, of:rows.length}))}</span>`;
+    `<span>${esc(t("shown_n",{n:pgF.rows.length, of:rows.length}))}</span>`;
   $("fleetTbl").querySelectorAll("th[data-sort]").forEach(th=>th.onclick=()=>{
     const k=th.dataset.sort;
     // a new column starts on the reading people expect: worst/newest first
@@ -5554,6 +5612,68 @@ function renderSelBar(){
       .catch(()=>{ const b=$("bkApply"); if(b) b.disabled=false; });
   };
 }
+/* ── ONE PAGINATOR ─────────────────────────────────────────────────────────
+
+   A worklist of a thousand rows is not a worklist. The action register drew
+   1,001 rows at a thousand inspections — every finding on site, in one scroll,
+   with the three that matter somewhere inside it. The browser coped; the person
+   did not.
+
+   Fifty rows, and the controls say plainly what is being withheld and offer all
+   of it in one press, because a reliability engineer exporting a register for a
+   shutdown meeting needs the whole thing and must not have to discover that
+   what they printed was page one.
+
+   ONE of these, shared, for the same reason there is one interval table: two
+   paginators would be two page sizes, two off-by-ones and two ways for a screen
+   to quietly stop showing a row. Page state is keyed by list, held in memory
+   only — a page number is not a preference, and coming back tomorrow on page
+   seven of a list that has changed underneath is worse than starting at the
+   top. */
+const PAGE_SIZE=50;
+const pageAt=new Map();
+function pageReset(key){ pageAt.delete(key); }
+/* Slice a list, and hand back the strip that says so. `render` is the caller's
+   own redraw, so pressing a page control repaints through exactly the path
+   that drew the list in the first place. */
+function paged(key, rows, render){
+  const n=rows.length;
+  const st=pageAt.get(key)||{ i:0, all:false };
+  if(st.all || n<=PAGE_SIZE){
+    return { rows, strip: n>PAGE_SIZE
+      ? `<div class="pager"><span class="muted">${esc(t("pg_all",{n:num(n)}))}</span>
+           <span class="spacer"></span>
+           <button type="button" class="btn sm" data-pg="${esc(key)}:page">${esc(t("pg_back",{n:PAGE_SIZE}))}</button></div>`
+      : "" };
+  }
+  const pages=Math.ceil(n/PAGE_SIZE);
+  const i=Math.max(0,Math.min(st.i,pages-1));
+  const from=i*PAGE_SIZE, to=Math.min(n,from+PAGE_SIZE);
+  const strip=`<div class="pager">
+    <button type="button" class="btn sm" data-pg="${esc(key)}:prev"${i?"":" disabled"}>${esc(t("pg_prev"))}</button>
+    <span class="muted">${esc(t("pg_of",{a:num(from+1), b:num(to), n:num(n)}))}</span>
+    <button type="button" class="btn sm" data-pg="${esc(key)}:next"${i<pages-1?"":" disabled"}>${esc(t("pg_next"))}</button>
+    <span class="spacer"></span>
+    <button type="button" class="btn sm" data-pg="${esc(key)}:all">${esc(t("pg_show_all",{n:num(n)}))}</button>
+  </div>`;
+  pageAt.set(key,{ i, all:false });
+  if(!pagedWired.has(key)) pagedWired.set(key, render);
+  return { rows: rows.slice(from,to), strip };
+}
+const pagedWired=new Map();
+/* One listener for every pager on the page, so a table redrawn from scratch
+   does not need its buttons re-bound and cannot be left with dead ones. */
+document.addEventListener("click", e=>{
+  const b=e.target.closest("[data-pg]"); if(!b) return;
+  const [key,what]=String(b.dataset.pg).split(":");
+  const st=pageAt.get(key)||{ i:0, all:false };
+  if(what==="next") st.i=(st.i||0)+1;
+  else if(what==="prev") st.i=Math.max(0,(st.i||0)-1);
+  else if(what==="all"){ st.all=true; }
+  else if(what==="page"){ st.all=false; st.i=0; }
+  pageAt.set(key,st);
+  const r=pagedWired.get(key); if(r) r();
+});
 function renderActions(){
   const rows=actionRows();
   /* The tracker answers the meeting's question before the table does. */
@@ -5677,7 +5797,14 @@ function renderActions(){
        is SHOWN, not to the whole register — a select-all that silently reaches
        past the filter is how somebody reassigns four hundred findings meaning to
        reassign nine. */
-    const allOn = !!list.length && list.every(({r,i})=>aSel.has(selId(ekOf(r),i.key)));
+    /* Fifty findings at a time. This is the flat register — the one an engineer
+       sorts by severity and works down — and at a thousand inspections it drew
+       every finding on site in one scroll. Select-all stays scoped to what is
+       SHOWN, which now means the page: a tick that silently reaches past the
+       page would reassign four hundred findings meaning to reassign fifty. */
+    const pgT=paged("actions-table", list, renderActions);
+    const page=pgT.rows;
+    const allOn = !!page.length && page.every(({r,i})=>aSel.has(selId(ekOf(r),i.key)));
     const owners=ownerList();
     $("actionTbl").innerHTML=`<div class="tblwrap scrollbox" style="--sb:520px"><table class="grid seltbl">
       <thead><tr><th class="selcol"><input type="checkbox" id="aAll"${allOn?" checked":""}
@@ -5685,7 +5812,7 @@ function renderActions(){
         `<th class="sortable${actSort.k===k?" on":""}" data-asort="${k}"${
           k==="queue"?` title="${esc(t("a_queue_tip"))}"`:""}>${esc(l)}<span class="arrow">${
           actSort.k===k?(actSort.dir>0?"▲":"▼"):"↕"}</span></th>`).join("")}</tr></thead><tbody>`
-      + list.map(({r,i})=>{
+      + page.map(({r,i})=>{
           const sv=sevOf(r,i), od=fOverdue(i), dd=i.due?daysTo0(i.due):null, age=fAgeDays(r,i);
           const ast=actionState(r,i);
           const sc=sv?`var(--${SEV[sv].c==="c"?"critical":SEV[sv].c==="s"?"serious":SEV[sv].c==="w"?"warning":"good"})`:"";
@@ -5730,7 +5857,7 @@ function renderActions(){
                 ? `<span class="tri" title="${esc(t("as_triage_t",{f:actionMissText(ast.miss)}))}">${
                      esc(t("as_triage"))}<i>${esc(actionMissText(ast.miss))}</i></span>` : ""}</td>
           </tr>`;
-        }).join("")+`</tbody></table></div>`
+        }).join("")+`</tbody></table></div>` + pgT.strip
       + `<datalist id="ownerNames">${owners.map(o=>`<option value="${esc(o)}"></option>`).join("")}</datalist>`;
     /* A row opens the drawer. A control inside a row does its own job and must
        not also open the drawer under the reader's hands. */
@@ -5803,9 +5930,13 @@ function renderActions(){
   const initials=n=>String(n||"").split(/[\s.]+/).filter(Boolean)
     .slice(0,2).map(w=>w[0]).join("").toUpperCase()||"?";
   const daysTo=d=>Math.round((Date.parse(d+"T00:00:00Z")-Date.parse(todayISO()+"T00:00:00Z"))/864e5);
+  /* Paged by MACHINE, never by finding: a unit whose six findings straddle a
+     page boundary is a unit somebody acts on twice, or half. */
+  const units=[...byUnit.entries()];
+  const pg=paged("actions", units, renderActions);
   if($("actShown")) $("actShown").innerHTML=
-    `<span>${esc(t("shown_n",{n:byUnit.size, of:byUnit.size}))} \u00b7 ${esc(String(rows.length))}</span>`;
-  $("actionTbl").innerHTML=[...byUnit.entries()].map(([unit,list])=>{
+    `<span>${esc(t("shown_n",{n:pg.rows.length, of:byUnit.size}))} \u00b7 ${esc(String(rows.length))}</span>`;
+  $("actionTbl").innerHTML=pg.rows.map(([unit,list])=>{
     const worst=list.map(({r,i})=>sevOf(r,i)).sort((a,b)=>sevRank(b)-sevRank(a))[0];
     const a=ASSET_BY[unit]||{};
     const late=list.filter(({i})=>fOverdue(i)).length;
@@ -5847,7 +5978,7 @@ function renderActions(){
           <span class="go">›</span>
         </button>`;
       }).join("") + `</div>`;
-  }).join("");
+  }).join("") + pg.strip;
   $("actionTbl").querySelectorAll("[data-fu]").forEach(b=>
     b.onclick=()=>openFollow(b.dataset.fu, b.dataset.fi));
   /* Opening a machine is remembered, so a save that repaints the list does not
@@ -6909,7 +7040,6 @@ function covBar(pc){
    ride on the title, because hours are what the machine wears in and the
    calendar is a rendering of them. */
 function cvEvery(r){
-  const num=n=>Number(n).toLocaleString(lang==="ru"?"ru-RU":"en-GB");
   const per=r.perCls||[];
   const hrs=[...new Set(per.map(x=>x.h).filter(h=>h!=null))];
   /* One figure for every machine it fits: say it once. */
@@ -9742,6 +9872,31 @@ async function runReport(scope, target, btn, opts){
 }
 $("rGo").onclick=()=>runReport($("rScope").value, $("rTarget").value, $("rGo"),
   { msg:$("rMsg"), photos:$("rPhotos").value==="1", scale:parseFloat($("rScale").value) });
+/* THE MACHINE PICKER, FILTERED.
+
+   One option per machine and 1,128 machines: nobody scrolls that, so people
+   navigated by going somewhere else and clicking a unit. The filter narrows the
+   options and says how many it is showing out of how many exist — a list that
+   silently gets shorter is how somebody concludes a machine is not on the
+   register.
+
+   The machine that is already SELECTED is never filtered away: the history on
+   screen belongs to it, and a picker that stops naming what it is showing is
+   the screen disagreeing with itself. */
+function fillEquip(){
+  const sel=$("equipSel"); if(!sel) return;
+  const all=window.__units||[];
+  const q=(($("equipQ")||{}).value||"").trim().toUpperCase();
+  const prev=sel.value;
+  const hit=q ? all.filter(u=>String(u).toUpperCase().indexOf(q)>=0) : all.slice();
+  if(prev && all.includes(prev) && !hit.includes(prev)) hit.unshift(prev);
+  sel.innerHTML=hit.map(u=>`<option value="${esc(u)}">${esc(u)}</option>`).join("");
+  if(hit.includes(prev)) sel.value=prev; else if(hit.length) sel.value=hit[0];
+  const shown=$("equipShown");
+  if(shown) shown.textContent = (q && hit.length!==all.length)
+    ? t("shown_n",{n:hit.length, of:all.length}) : "";
+}
+if($("equipQ")) $("equipQ").oninput=()=>{ fillEquip(); renderHistory(); };
 $("histRpt").onclick=()=>runReport("unit", $("equipSel").value, $("histRpt"));
 
 /* ---------- init ---------- */
@@ -9754,9 +9909,8 @@ function refreshControls(){
   const cls=[...new Set(RECS.map(r=>r.cls).filter(Boolean))].sort();
   $("fClass").innerHTML=`<option value="">${esc(t("f_allclasses"))}</option>`+cls.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join("");
   const units=[...new Set(RECS.map(r=>r.equip))].sort();
-  const prev=$("equipSel").value;
-  $("equipSel").innerHTML=units.map(u=>`<option value="${esc(u)}">${esc(u)}</option>`).join("");
-  if(units.includes(prev)) $("equipSel").value=prev;
+  window.__units=units;
+  fillEquip();
   $("sevLegend").innerHTML=Object.entries(SEV).map(([k,v])=>`<span><span class="sw" style="background:${SEVC[k]}"></span>${v.l}</span>`).join("");
   refreshReportTargets();
   $("sub").textContent=t("sub_count",{n:RECS.length,u:units.length})
@@ -11189,16 +11343,18 @@ function renderDueTab(){
              : scope==="due" ? all.filter(r=>r.st==="over"||r.st==="soon")
              : all.filter(r=>r.st==="over");
   if(!show.length){ box.innerHTML=`<div class="sub">${esc(t("dd_none"))}</div>`; return; }
-  const num=n=>Math.abs(n).toLocaleString(lang==="ru"?"ru-RU":"en-GB");
-  const CAP=500, kept=show.slice(0,CAP);
+  /* Fifty at a time, not five hundred: the cap was there to stop the browser
+     dying and never to help anybody read. */
+  const pg=paged("due", show, renderDueTab);
+  const kept=pg.rows;
   box.innerHTML=`<div class="tblwrap scrollbox" style="--sb:560px"><table class="grid"><thead><tr>
     <th>${esc(t("dd_c_unit"))}</th><th>${esc(t("dd_c_round"))}</th><th>${esc(t("dd_c_last"))}</th>
     <th class="r">${esc(t("dd_c_due"))}</th><th class="r">${esc(t("dd_c_rate"))}</th>
     <th>${esc(t("dd_c_why"))}</th><th></th></tr></thead><tbody>`
     + kept.map(r=>{
       const n=r.n;
-      const when = n.over ? `<b style="color:var(--critical)">${esc(t("due_over",{n:num(n.dueInDays)}))}</b>`
-                          : esc(t("due_in",{n:num(n.dueInDays)}));
+      const when = n.over ? `<b style="color:var(--critical)">${esc(t("due_over",{n:numAbs(n.dueInDays)}))}</b>`
+                          : esc(t("due_in",{n:numAbs(n.dueInDays)}));
       const why = r.d
         ? `${esc(r.d.until?t("dd_put_to",{d:r.d.until}):t("dd_not_doing"))} — ${esc(r.d.why||"")}${
             r.d.by?` <span class="muted">· ${esc(r.d.by)}</span>`:""}`
@@ -11206,8 +11362,8 @@ function renderDueTab(){
       return `<tr class="dd-${esc(r.st)}">
         <td><b>${esc(r.unit)}</b></td>
         <td>${esc(r.ty)} · <span class="muted">${esc(t("type_"+r.ty)||r.ty)}</span></td>
-        <td>${esc(r.last.d)} <span class="muted">· ${esc(t("due_days",{n:num(n.daysSince)}))}</span></td>
-        <td class="r">${when}<span class="muted"> · ${esc(t("due_h",{n:num(n.dueInHours)}))}</span></td>
+        <td>${esc(r.last.d)} <span class="muted">· ${esc(t("due_days",{n:numAbs(n.daysSince)}))}</span></td>
+        <td class="r">${when}<span class="muted"> · ${esc(t("due_h",{n:numAbs(n.dueInHours)}))}</span></td>
         <td class="r">${n.rate}${n.measured?"":"*"}</td>
         <td>${why}</td>
         <td class="ddact">
@@ -11223,6 +11379,7 @@ function renderDueTab(){
     + `</tbody></table></div>`
     /* What is on screen out of what exists. The list was capped at 500 rows in
        silence, which on a fleet this size reads as "that is all of them". */
+    + pg.strip
     + `<div class="shown"><span>${esc(t("shown_n",{n:kept.length, of:show.length}))}</span>
         <span class="spacer"></span>
         <span>${esc(t("dd_foot",{r:DUE.HOURS_PER_DAY}))}</span></div>`;
@@ -11710,7 +11867,6 @@ function renderSync(){
     + card("syCrit", t("sy_k_crit"), vCrit, sCrit, (s.linked&&s.critWaiting)?"bad":"good")
     + card("syConf", t("sy_k_conf"), s.conflicts, t("sy_k_conf_s"), s.conflicts?"warn":"good");
 
-  const num=n=>Number(n||0).toLocaleString(lang==="ru"?"ru-RU":"en-GB");
   const ago=ms=>{
     if(!ms) return t("sy_never");
     const m=Math.round((Date.now()-ms)/60000);
@@ -12094,8 +12250,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=207"></script>
-<script src="sync-adapter.js?v=207"></script>
-<script src="report.js?v=207"></script>
+<script src="drive.js?v=208"></script>
+<script src="sync-adapter.js?v=208"></script>
+<script src="report.js?v=208"></script>
 </body>
 </html>
