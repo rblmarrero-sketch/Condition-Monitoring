@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=199">
+<link rel="manifest" href="manifest.webmanifest?v=200">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=199">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=199">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=199">
+<link rel="apple-touch-icon" href="icon-192.png?v=200">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=200">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=200">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1970,31 +1970,31 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=199"></script>
-<script src="upload-defaults.js?v=199"></script>
-<script src="hme.js?v=199"></script>
-<script src="mp-fc.js?v=199"></script>
-<script src="hme-cascade.js?v=199"></script>
-<script src="assets.js?v=199"></script>
-<script src="temp-limits.js?v=199"></script>
-<script src="normalize.js?v=199"></script>
-<script src="due.js?v=199"></script>
-<script src="wear.js?v=199"></script>
-<script src="wear-figs.js?v=199"></script>
-<script src="wear-map.js?v=199"></script>
-<script src="machine-photos.js?v=199"></script>
-<script src="machine-fig.js?v=199"></script>
-<script src="get.js?v=199"></script>
-<script src="points.js?v=199"></script>
-<script src="uc-points.js?v=199"></script>
-<script src="inspect-guide.js?v=199"></script>
-<script src="get-figs.js?v=199"></script>
-<script src="body-points.js?v=199"></script>
-<script src="body-map.js?v=199"></script>
-<script src="lube.js?v=199"></script>
-<script src="lube-overrides.js?v=199"></script>
-<script src="lube2027.js?v=199"></script>
-<script src="report-core.js?v=199"></script>
+<script src="native.js?v=200"></script>
+<script src="upload-defaults.js?v=200"></script>
+<script src="hme.js?v=200"></script>
+<script src="mp-fc.js?v=200"></script>
+<script src="hme-cascade.js?v=200"></script>
+<script src="assets.js?v=200"></script>
+<script src="temp-limits.js?v=200"></script>
+<script src="normalize.js?v=200"></script>
+<script src="due.js?v=200"></script>
+<script src="wear.js?v=200"></script>
+<script src="wear-figs.js?v=200"></script>
+<script src="wear-map.js?v=200"></script>
+<script src="machine-photos.js?v=200"></script>
+<script src="machine-fig.js?v=200"></script>
+<script src="get.js?v=200"></script>
+<script src="points.js?v=200"></script>
+<script src="uc-points.js?v=200"></script>
+<script src="inspect-guide.js?v=200"></script>
+<script src="get-figs.js?v=200"></script>
+<script src="body-points.js?v=200"></script>
+<script src="body-map.js?v=200"></script>
+<script src="lube.js?v=200"></script>
+<script src="lube-overrides.js?v=200"></script>
+<script src="lube2027.js?v=200"></script>
+<script src="report-core.js?v=200"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -9847,7 +9847,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="199";
+const BUILD="200";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -10324,7 +10324,11 @@ async function putBatch(UP, files, rec, sent){
   if(j.ok===false) throw new Error(j.error||"Apps Script rejected the upload");
   /* Mark by the name we ASKED for. Drive may hold it under another when a
      second phone already owns that name. */
-  (j.saved||[]).forEach(x=>{ if(x&&(x.req||x.name)) sent[x.req||x.name]=1; });
+  (j.saved||[]).forEach(x=>{ if(x&&(x.req||x.name)) sent[x.req||x.name]=1;
+    /* A backend that issues receipts hands one back per file. One that does
+       not simply leaves this empty, and the evidence ladder stays where it
+       was — nothing here demands a receipt in order to work. */
+    if(x && x.receipt && RCPT) RCPT[x.req||x.name]=x.receipt; });
   const bad=(j.failed||[]);
   /* Some landed and some did not: the ones that did are marked, the rest come
      round again on the next attempt. Only raise it if the whole batch was
@@ -10503,6 +10507,7 @@ async function putOne(UP, name, blob, type, ctx){
     let j=null; try{ j=JSON.parse(await r.text()); }catch(e){}
     if(j && j.ok===false) throw new Error(j.error||"Apps Script rejected the upload");
     if(!j) throw new Error("Unexpected reply — check the deployment is set to “Anyone”.");
+    if(j.receipt && RCPT) RCPT[name]=j.receipt;
     return true;
   }
   if(UP.id==="pa"){
@@ -10669,6 +10674,37 @@ function attSettle(rec,payload,sent,dests,err){
     else { e.uploadState="pending"; if(err) e.lastError=String(err).slice(0,200); }
   }
 }
+/* WHAT THE SERVER SAID IT ACTUALLY STORED.
+
+   A receipt nobody reads is a promise nobody checked, which is what this whole
+   system already has too much of. The figures are kept per attachment and are
+   the SERVER's, never the phone's — the point of them is that they can
+   disagree, and evidenceLevel only calls an attachment verified when they do
+   not. Where a receipt says something different from what left this phone, the
+   difference is recorded rather than smoothed over. */
+function attReceipt(rec, byName){
+  if(!byName || !Object.keys(byName).length) return 0;
+  const by=attIndex(rec); let n=0;
+  for(const [name, r] of Object.entries(byName)){
+    if(!r) continue;
+    /* Matched on the id the server was given, falling back to the name for a
+       backend that does not echo one yet. */
+    const e=(r.attachmentId && by[r.attachmentId]) ||
+            Object.values(by).find(x=>x && x.originalFilename===name) || null;
+    if(!e) continue;
+    e.serverReceiptId=String(r.receiptId||"");
+    e.serverObjectId =String(r.objectId||"");
+    e.serverByteSize =(r.byteSize==null?null:Number(r.byteSize));
+    e.serverSha256   =String(r.sha256||"");
+    e.serverReceivedAt=String(r.at||"");
+    if(r.duplicate) e.duplicateSuppressed=1;
+    /* The server checked its own object and said the check failed. That is not
+       a delivery this phone may treat as done. */
+    if(r.verified===false) e.lastError=String(r.error||"the store could not verify what it kept");
+    n++;
+  }
+  return n;
+}
 /* HOW MANY UPLOADS THIS PHONE DID NOT MAKE.
 
    A resume sends only what has not landed, which is the whole point of keeping
@@ -10763,6 +10799,11 @@ async function renderStorage(){
    below, because a row left saying "sending" after the sync ended is the same
    class of lie as "Synced". */
 let syncing=false, lastErr="", syncingId=null;
+/* Receipts land in the two functions that talk to the endpoint and are read by
+   the one that writes the record. Module-scoped and cleared per record rather
+   than threaded through putAll's lanes, which would mean changing the shape of
+   every upload path to carry a value most backends do not send yet. */
+let RCPT=null;
 async function syncNow(manual){
   if(syncing) return; if(!UP.on){ renderSync(); return; }
   if(!navigator.onLine){ renderSync(); return; }
@@ -10804,6 +10845,7 @@ async function syncNow(manual){
       let progressed=false;
       /* What each destination has already taken, carried across attempts. */
       const sent=rec.sent||{};
+      RCPT={};
       for(const d of todo){
         const already=(sent[d.id] ||= {});
         const before=Object.keys(already).length;
@@ -10840,6 +10882,9 @@ async function syncNow(manual){
         /* The manifest is brought up to date in the same put that records
            upTo — no extra write, and the photographs are not rewritten. */
         if(payload) attSettle(fresh,payload,sent,dests,errs[0]||"");
+        /* Written after settle, so a receipt that contradicts the phone is the
+           last word rather than the first. */
+        if(RCPT) attReceipt(fresh,RCPT);
         if(fresh.up) { fresh.upAt=new Date().toISOString(); delete fresh.sent; }
         else fresh.sent=sent;
         await dbPut(fresh);

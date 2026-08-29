@@ -20,9 +20,15 @@ function mkBucket() {
   let clock = Date.now();
   const stamp = () => (clock = Math.max(Date.now(), clock + 1));
   return {
-    put(key, buf, type, dev) {
+    put(key, buf, type, dev, meta) {
       obj.set(key, { buf: Buffer.isBuffer(buf) ? buf : Buffer.from(String(buf)),
-                     type: type || 'application/octet-stream', dev: dev || '', at: stamp() });
+                     type: type || 'application/octet-stream', dev: dev || '',
+                     /* Object metadata, because the function now writes the
+                        stored hash there and reads it back with a HEAD to
+                        decide whether a re-send is a duplicate. A double that
+                        dropped it would make that check appear to work here
+                        and never work against the real bucket. */
+                     meta: meta || {}, at: stamp() });
     },
     get(key) { return obj.get(key) || null; },
     del(key) { return obj.delete(key); },
@@ -63,10 +69,11 @@ const src = fs.readFileSync(path.join(ROOT, 'docs/yandex/function.js'), 'utf8');
 const shim = `
   listAll = async prefix => BUCKET_.list(prefix || '');
   getObj = async key => { const o = BUCKET_.get(key); if (!o) throw new Error('S3 404: ' + key);
-    return { status: 200, body: o.buf, headers: { 'content-type': o.type, 'x-amz-meta-cm-dev': o.dev } }; };
+    return { status: 200, body: o.buf, headers: Object.assign(
+      { 'content-type': o.type, 'x-amz-meta-cm-dev': o.dev }, o.meta || {}) }; };
   headObj = async key => { const o = BUCKET_.get(key); return o ? { status: 200, body: Buffer.alloc(0),
-    headers: { 'content-type': o.type, 'x-amz-meta-cm-dev': o.dev } } : null; };
-  putObj = async (key, buf, type, dev) => { BUCKET_.put(key, buf, type, dev); return { status: 200 }; };
+    headers: Object.assign({ 'content-type': o.type, 'x-amz-meta-cm-dev': o.dev }, o.meta || {}) } : null; };
+  putObj = async (key, buf, type, dev, meta) => { BUCKET_.put(key, buf, type, dev, meta); return { status: 200 }; };
   delObj = async key => { BUCKET_.del(key); return { status: 204 }; };
 `;
 const body = src

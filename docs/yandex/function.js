@@ -161,9 +161,10 @@ async function listAll(prefix) {
 }
 const getObj  = key => s3('GET', key, null, '');
 const headObj = key => s3('HEAD', key, null, '').then(r => r, () => null);
-const putObj  = (key, buf, type, dev) => s3('PUT', key, null, buf, Object.assign(
+const putObj  = (key, buf, type, dev, meta) => s3('PUT', key, null, buf, Object.assign(
   { 'content-type': type || 'application/octet-stream',
-    'content-length': String(buf.length) }, dev ? { 'x-amz-meta-cm-dev': dev } : {}));
+    'content-length': String(buf.length) },
+  dev ? { 'x-amz-meta-cm-dev': dev } : {}, meta || {}));
 const delObj  = key => s3('DELETE', key, null, '');
 
 /* ---- the contract -------------------------------------------------------
@@ -512,8 +513,66 @@ async function saveOne(b) {
   }
   const key = (path ? path + '/' : '') + name;
   const buf = Buffer.from(String(b.file), 'base64');
-  await putObj(key, buf, b.contentType || 'application/octet-stream', dev);
+  const want = sha256(buf);
+
+  /* ALREADY HERE, BYTE FOR BYTE?
+
+     A phone that lost the link mid-record re-sends the tail, and a phone that
+     lost the reply re-sends a file that did in fact land. Storing it again
+     changes nothing, so the honest answer is a receipt for what is already
+     there and a flag saying so — which is also the only way either end can
+     count a suppressed duplicate rather than assume one. The comparison is on
+     the HASH, not the size: two different photographs of the same plug are
+     very often the same number of bytes. */
+  let duplicate = false;
+  const already = await headObj(key);
+  if (already && String(already.headers['x-amz-meta-cm-sha'] || '') === want) duplicate = true;
+
+  if (!duplicate) {
+    await putObj(key, buf, b.contentType || 'application/octet-stream', dev,
+                 { 'x-amz-meta-cm-sha': want });
+  }
+
+  /* VERIFY AFTER STORAGE, NOT BEFORE.
+
+     A receipt computed from the request body is a receipt for the request. It
+     says the bytes arrived at this function; it says nothing about whether
+     they reached the bucket, or reached it whole. So the object is read back
+     and the figures in the receipt are measured from what the STORE returned —
+     which is the only reading that can contradict the phone, and therefore the
+     only one worth sending it.
+
+     If the read-back fails or disagrees, that is reported rather than hidden:
+     a receipt is a promise, and a promise nobody checked is what this whole
+     system already has too much of. */
+  let storedSize = null, storedSha = '', verifyError = '';
+  try {
+    const back = await getObj(key);
+    const body = back && back.body ? Buffer.from(back.body) : null;
+    if (!body) verifyError = 'stored object could not be read back';
+    else { storedSize = body.length; storedSha = sha256(body); }
+  } catch (e) { verifyError = 'read-after-write failed: ' + String(e.message || e); }
+  if (!verifyError && storedSha !== want) {
+    verifyError = 'stored bytes do not match what was sent';
+  }
+
   const out = { ok: true, req: b.name, id: key, name, url: '', folder: path || '/' };
+  /* THE RECEIPT. Every field is something this end measured or was told by the
+     caller; nothing is inferred. receiptId is derived from the object and its
+     hash, so a retry of the same bytes returns the SAME receipt — an
+     idempotent operation should not mint a new proof each time it is asked. */
+  out.receipt = {
+    receiptId:    'r' + sha256(key + ':' + (storedSha || want)).slice(0, 24),
+    attachmentId: String(b.aid || ''),
+    inspectionId: String(b.inspectionId || ''),
+    objectId:     key,
+    byteSize:     storedSize,
+    sha256:       storedSha,
+    at:           new Date().toISOString(),
+    duplicate:    duplicate,
+    verified:     !verifyError
+  };
+  if (verifyError) out.receipt.error = verifyError;
   if (rival) {
     out.kept = true;
     if (isSidecar(fileName)) {
