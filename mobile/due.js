@@ -247,10 +247,137 @@
     };
   };
 
-  function isoToday() {
-    var d = new Date(), p = function (n) { return String(n).padStart(2, '0'); };
-    return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
-  }
+  /* =======================================================================
+     THE VERDICT ON ONE ROUND — over, soon, ok, put off, or cancelled.
+
+     D.next says WHEN. This says WHAT TO CALL IT, and it used to be written out
+     twice: once in the phone's dueRows() and once in the dashboard's
+     dueTabRows(), the same four lines copied. Two copies of one rule is how
+     surfaces come to disagree — it is the same defect as two interval tables,
+     one step further along — so the rule lives here and both ends ask.
+
+     in:  { type, cls, n (from D.next), last, defer, today }
+     out: { st, soonH, interval, deferLive, daysToRelease }
+
+     "Soon" is a fifth of the interval and never less than a shift. On a
+     250-hour plug round that is 50 hours — two and a half days at the fleet's
+     rate, which is a round you can still plan rather than one you are late for.
+
+     A DEFERRAL IS ANSWERED BY WALKING THE ROUND. Not by deleting anything: a
+     deferral written before the last round of that type is spent, and the
+     machine is back on the list on its own. Put off to a date it waits and
+     then returns; cancelled outright it leaves the working list but is still
+     counted and still findable, because a round nobody intends to do is
+     exactly the thing somebody must be able to find later. */
+  D.status = function (o) {
+    o = o || {};
+    var n = o.n, last = o.last || {}, d = o.defer || null;
+    if (!n) return { st: '', soonH: null, interval: null, deferLive: false, daysToRelease: null };
+    var today = o.today || D.today();
+    var interval = D.hours(o.type, null, o.cls);
+    if (interval == null) interval = Math.round(spec(o.type, o.cls).d * n.rate);
+    var soonH = Math.max(20, Math.round(interval * 0.2));
+
+    var live = !!(d && String(d.at || '') >= String(last.d || ''));
+    var st = n.over ? 'over' : (n.dueInHours <= soonH ? 'soon' : 'ok');
+    var left = null;
+    if (live && d.until) {
+      left = dayDiff(today, d.until);
+      if (left != null && left > 0) st = 'put';
+    } else if (live) st = 'off';
+    return { st: st, soonH: soonH, interval: interval, deferLive: live, daysToRelease: left };
+  };
+
+  /* =======================================================================
+     WHAT DAY IS IT — asked in ONE place, in ONE timezone.
+
+     This is where the phone and the office spent a dozen builds disagreeing,
+     and the disagreement was never in the schedule. There were three answers
+     to "what is today":
+
+       mobile/index.html  todayISO()   built from getFullYear/getMonth/getDate
+                                       — the BROWSER's local day
+       due.js             isoToday()   the same, for its own fallback
+       dashboard          todayISO()   new Date().toISOString().slice(0,10)
+                                       — the UTC day
+
+     Baimskaya is UTC+12. So for twelve hours out of every twenty-four the
+     phone standing at the machine and the laptop in the office were on
+     DIFFERENT CALENDAR DAYS, and every single row differed by one: 32 days
+     since instead of 31, 19 overdue instead of 18, and two rounds sitting on
+     the boundary reported overdue on one screen and due soon on the other.
+     Measured on the deployed builds: 54 rows compared, 54 rows different.
+
+     A machine does not become overdue because somebody opened a different
+     screen. An inspection date is a CALENDAR DATE — the day somebody stood at
+     the machine — not an instant, and the calendar it belongs to is the site's.
+
+     Asia/Anadyr is Chukotka: UTC+12, and no daylight saving since 2011. The
+     fixed offset below is therefore exact, and is only ever reached if the
+     engine has no timezone database at all — an old WebView on a phone that
+     has been in a drawer. It is a fallback that cannot be wrong for THIS
+     site, which is the only kind worth having. */
+  D.SITE_TZ = 'Asia/Anadyr';
+  D.SITE_OFFSET_MIN = 12 * 60;
+
+  /* The site clock, broken into parts. One implementation; today(), the report
+     stamp and anything else that needs the site's wall clock all come here. */
+  D.parts = function (at) {
+    var d = at == null ? new Date() : (at instanceof Date ? at : new Date(at));
+    try {
+      var f = new Intl.DateTimeFormat('en-US', {
+        timeZone: D.SITE_TZ, hour12: false,
+        year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit',
+      }).formatToParts(d);
+      var g = {};
+      for (var i = 0; i < f.length; i++) g[f[i].type] = f[i].value;
+      /* Hour 24 is midnight in some engines' hour12:false output. */
+      if (g.hour === '24') g.hour = '00';
+      if (g.year && g.month && g.day && g.hour && g.minute) {
+        return { y: g.year, m: g.month, d: g.day, hh: g.hour, mm: g.minute };
+      }
+    } catch (e) { /* no timezone database — fall through */ }
+    var t = new Date(d.getTime() + D.SITE_OFFSET_MIN * 60000);
+    var p = function (n) { return String(n).padStart(2, '0'); };
+    return { y: String(t.getUTCFullYear()), m: p(t.getUTCMonth() + 1), d: p(t.getUTCDate()),
+             hh: p(t.getUTCHours()), mm: p(t.getUTCMinutes()) };
+  };
+
+  /* A frozen day, for the regression suite that compares the two surfaces row
+     for row. Programmatic only — there is no URL or storage key for it, so a
+     phone in the field cannot end up holding a date somebody typed once. */
+  var FROZEN = null;
+  D.setToday = function (iso) {
+    FROZEN = (typeof iso === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(iso)) ? iso : null;
+    return D.today();
+  };
+  D.frozen = function () { return FROZEN; };
+
+  /** The site's calendar day, "YYYY-MM-DD". Pass an instant to ask about one. */
+  D.today = function (at) {
+    if (FROZEN && at == null) return FROZEN;
+    var p = D.parts(at);
+    return p.y + '-' + p.m + '-' + p.d;
+  };
+
+  /** Site wall-clock time, "HH:MM". */
+  D.timeNow = function (at) { var p = D.parts(at); return p.hh + ':' + p.mm; };
+
+  /* n days from a calendar date, ON THE CALENDAR. Not `Date.now() - n*864e5`
+     then formatted: an instant shifted by a multiple of 24 h and then rendered
+     in a zone is one day out whenever the shift crosses an offset change, and
+     the answer to "what date was 30 days ago" should not depend on what time
+     of day it is when you ask. */
+  D.shift = function (iso, days) {
+    var t = Date.parse(String(iso) + 'T00:00:00Z');
+    if (!isFinite(t)) return null;
+    return new Date(t + Math.round(days) * 86400000).toISOString().slice(0, 10);
+  };
+  /** n days before the site's today. */
+  D.daysAgo = function (days) { return D.shift(D.today(), -Math.abs(Math.round(days))); };
+
+  function isoToday() { return D.today(); }
   function dayDiff(from, to) {
     if (!from) return null;
     var a = Date.parse(from + 'T00:00:00Z'), b = Date.parse(to + 'T00:00:00Z');

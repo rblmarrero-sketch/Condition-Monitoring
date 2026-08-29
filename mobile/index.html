@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=200">
+<link rel="manifest" href="manifest.webmanifest?v=201">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=200">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=200">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=200">
+<link rel="apple-touch-icon" href="icon-192.png?v=201">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=201">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=201">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1970,31 +1970,31 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=200"></script>
-<script src="upload-defaults.js?v=200"></script>
-<script src="hme.js?v=200"></script>
-<script src="mp-fc.js?v=200"></script>
-<script src="hme-cascade.js?v=200"></script>
-<script src="assets.js?v=200"></script>
-<script src="temp-limits.js?v=200"></script>
-<script src="normalize.js?v=200"></script>
-<script src="due.js?v=200"></script>
-<script src="wear.js?v=200"></script>
-<script src="wear-figs.js?v=200"></script>
-<script src="wear-map.js?v=200"></script>
-<script src="machine-photos.js?v=200"></script>
-<script src="machine-fig.js?v=200"></script>
-<script src="get.js?v=200"></script>
-<script src="points.js?v=200"></script>
-<script src="uc-points.js?v=200"></script>
-<script src="inspect-guide.js?v=200"></script>
-<script src="get-figs.js?v=200"></script>
-<script src="body-points.js?v=200"></script>
-<script src="body-map.js?v=200"></script>
-<script src="lube.js?v=200"></script>
-<script src="lube-overrides.js?v=200"></script>
-<script src="lube2027.js?v=200"></script>
-<script src="report-core.js?v=200"></script>
+<script src="native.js?v=201"></script>
+<script src="upload-defaults.js?v=201"></script>
+<script src="hme.js?v=201"></script>
+<script src="mp-fc.js?v=201"></script>
+<script src="hme-cascade.js?v=201"></script>
+<script src="assets.js?v=201"></script>
+<script src="temp-limits.js?v=201"></script>
+<script src="normalize.js?v=201"></script>
+<script src="due.js?v=201"></script>
+<script src="wear.js?v=201"></script>
+<script src="wear-figs.js?v=201"></script>
+<script src="wear-map.js?v=201"></script>
+<script src="machine-photos.js?v=201"></script>
+<script src="machine-fig.js?v=201"></script>
+<script src="get.js?v=201"></script>
+<script src="points.js?v=201"></script>
+<script src="uc-points.js?v=201"></script>
+<script src="inspect-guide.js?v=201"></script>
+<script src="get-figs.js?v=201"></script>
+<script src="body-points.js?v=201"></script>
+<script src="body-map.js?v=201"></script>
+<script src="lube.js?v=201"></script>
+<script src="lube-overrides.js?v=201"></script>
+<script src="lube2027.js?v=201"></script>
+<script src="report-core.js?v=201"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -6169,7 +6169,12 @@ $("signTog").onclick=()=>{ signOpen=!(signOpen||signDirty||$("supName").value.tr
 $("supName").addEventListener("input",renderSignFold);
 
 /* ===================== date + edit ===================== */
-function todayISO(){ const d=new Date(),p=(n)=>String(n).padStart(2,"0"); return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`; }
+/* The site's day, from due.js, which is the only thing that knows what day it
+   is. This used to build the BROWSER's day — and the dashboard built the UTC
+   day — so at Baimskaya, UTC+12, the two surfaces spent half of every day on
+   different dates and disagreed about every row on the due list. No local
+   fallback here on purpose: a second answer is the whole defect. */
+function todayISO(){ return DUE.today(); }
 $("date").value=todayISO();
 $("inspector").value=localStorage.getItem("inspector")||"";
 $("inspector").addEventListener("input",()=>lsSet("inspector",$("inspector").value.trim()));
@@ -6948,28 +6953,13 @@ function dueRows(only){
     const cls=assetClassOf(unit);
     const n=DUE.next({type:ty, last:last, today:todayISO(), rate:unitRate(unit), cls:cls});
     if(!n) continue;
-    /* "Soon" is a fifth of the interval and at least a shift. On a 250-hour
-       plug round that is 50 hours — two and a half days at the fleet's rate,
-       which is a round you can still plan rather than one you are late for. */
-    const iv=DUE.hours(ty,null,cls)||Math.round(DUE.spec(ty,cls).d*n.rate);
-    const soonH=Math.max(20, Math.round(iv*0.2));
-    /* A deferral is answered by a round of that type actually being walked
-       after it, and nothing is deleted for that to be true. The office has
-       always read them this way; this end did not, so a machine put off in
-       July and inspected in August still showed as put off here while the
-       dashboard had it back on the list. One rule, both ends. */
+    /* The verdict — over / soon / ok / put / off — comes from due.js, the same
+       call the dashboard makes. These four lines used to be written out here
+       AND in dueTabRows(), and two copies of one rule is how two screens come
+       to disagree about the same machine. */
     const d0=deferOf(ty,unit);
-    const d=(d0 && String(d0.at||"") >= String(last.d||"")) ? d0 : null;
-    let st = n.over ? "over" : (n.dueInHours<=soonH ? "soon" : "ok");
-    /* A deferral does not hide a machine. Put off to a date, it waits until
-       that date and then comes back on its own; cancelled, it drops out of the
-       working list but is still counted and still there under "All", because a
-       round nobody is going to do is exactly the thing somebody should be able
-       to find later. */
-    if(d && d.until){ const left=DUE.dayDiff(todayISO(), d.until);
-      if(left!=null && left>0) st="put"; }
-    else if(d) st="off";
-    out.push({ty, unit, last, n, d, st});
+    const v=DUE.status({type:ty, cls:cls, n:n, last:last, defer:d0, today:todayISO()});
+    out.push({ty, unit, last, n, d:(v.deferLive?d0:null), st:v.st});
   }
   out.sort((a,b)=>a.n.dueInHours-b.n.dueInHours || a.unit.localeCompare(b.unit)
                 || a.ty.localeCompare(b.ty));
@@ -7409,9 +7399,7 @@ async function dueNotDoing(ty,unit){
   if(done.until==="off"){
     deferPut(ty,u,{until:null, why:done.why, by, at:todayISO()});
   }else{
-    const d=new Date(todayISO()+"T00:00:00Z");
-    d.setUTCDate(d.getUTCDate()+Number(done.until));
-    deferPut(ty,u,{until:d.toISOString().slice(0,10), why:done.why, by, at:todayISO()});
+    deferPut(ty,u,{until:DUE.shift(todayISO(),Number(done.until)), why:done.why, by, at:todayISO()});
   }
   renderDue();
 }
@@ -9847,7 +9835,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="200";
+const BUILD="201";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -10093,8 +10081,11 @@ const UP={ get on(){ return activeDests().length>0; } };
 function expandFolder(f,ctx){ if(!f) return "";
   ctx=ctx||{};
   const iso=String(ctx.date||"").match(/^(\d{4})-(\d{2})-(\d{2})/);
-  const d=new Date(), p=n=>String(n).padStart(2,"0");
-  const Y=iso?iso[1]:String(d.getFullYear()), M=iso?iso[2]:p(d.getMonth()+1), D=iso?iso[3]:p(d.getDate());
+  /* Falling back to today means falling back to the SITE's today: a folder
+     named for the browser's day would file a round under yesterday for half of
+     every shift. */
+  const nowP=DUE.parts();
+  const Y=iso?iso[1]:nowP.y, M=iso?iso[2]:nowP.m, D=iso?iso[3]:nowP.d;
   const clean=v=>String(v||"").replace(/[\\/:*?"<>|]/g,"-").trim();
   // longest first: {YYYY-MM-DD} contains {YYYY-MM}, which contains {YYYY}
   return f.replace(/\{YYYY-MM-DD\}/g,`${Y}-${M}-${D}`)

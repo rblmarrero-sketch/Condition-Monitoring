@@ -2103,10 +2103,17 @@
       });
       return sheets;
     }
-    // 8/1/2026 means one thing in Anadyr and another in Denver. Write it once.
-    var stampTxt = st.getFullYear()+"-"+p2(st.getMonth()+1)+"-"+p2(st.getDate())
-                 +" "+p2(st.getHours())+":"+p2(st.getMinutes());
-    var today = st.getFullYear()+"-"+p2(st.getMonth()+1)+"-"+p2(st.getDate());
+    /* 8/1/2026 means one thing in Anadyr and another in Denver. Write it once —
+       and write it in the SITE's clock, not the reader's. These were the
+       browser's own getters, so the same report printed from the office and
+       from the phone could carry two different dates on its face, and a report
+       printed from a laptop that had travelled carried a third. The site is
+       where the work happened; the site's day is the date on the paper. */
+    var sp = (typeof DUE !== "undefined" && DUE.parts) ? DUE.parts(st)
+           : { y:String(st.getFullYear()), m:p2(st.getMonth()+1), d:p2(st.getDate()),
+               hh:p2(st.getHours()), mm:p2(st.getMinutes()) };
+    var today = sp.y+"-"+sp.m+"-"+sp.d;
+    var stampTxt = today+" "+sp.hh+":"+sp.mm;
 
     /* ---------- 1. the answer ---------- */
     var graded = X.grade.A+X.grade.B+X.grade.C+X.grade.X;

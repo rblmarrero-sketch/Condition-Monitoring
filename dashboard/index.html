@@ -2636,8 +2636,9 @@
              something to argue about. -->
         <div class="secthd" style="margin-top:var(--s4)"><h2 data-i18n="sy_recon">Where the number comes from</h2></div>
         <dl class="kv" id="syRecon"></dl>
+        <div class="sub" id="syImport"></div>
         <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
-          <div class="sub" data-i18n="sy_recon_sub">Read down. Each line is a source or a rule, and the last one is the figure every other screen counts. A round in the folder that is also in the bundled history is one round, not two — that is the merge. A round two phones both sent is one round with a conflict to settle, not two rounds.</div></details>
+          <div class="sub" data-i18n="sy_recon_sub">Read down. Each line is a source or a rule, and the last one is the figure every other screen counts. The folder is the only source of rounds — the sixteen imported from the original spreadsheets were written into it on 29 August 2026 and are no longer counted separately. A round two phones both sent is one round with a conflict to settle, not two rounds.</div></details>
         <div class="secthd" style="margin-top:var(--s4)"><h2 data-i18n="sy_h_pop">Where the photographs are</h2></div>
         <dl class="kv" id="syPop"></dl>
         <div class="sub" data-i18n="sy_p_note" style="font-size:11.5px;margin-top:4px">Photographs bundled with this app live beside it, never in the sync folder. They are not missing field uploads and are counted separately.</div>
@@ -2773,27 +2774,27 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=200"></script>
-<script src="../mobile/hme.js?v=200"></script>
-<script src="../mobile/mp-fc.js?v=200"></script>
-<script src="../mobile/hme-cascade.js?v=200"></script>
-<script src="../mobile/temp-limits.js?v=200"></script>
+<script src="../data/magnetic_plug.js?v=201"></script>
+<script src="../mobile/hme.js?v=201"></script>
+<script src="../mobile/mp-fc.js?v=201"></script>
+<script src="../mobile/hme-cascade.js?v=201"></script>
+<script src="../mobile/temp-limits.js?v=201"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=200"></script>
-<script src="../mobile/normalize.js?v=200"></script>
-<script src="../mobile/due.js?v=200"></script>
-<script src="../mobile/wear.js?v=200"></script>
-<script src="../mobile/wear-map.js?v=200"></script>
-<script src="../mobile/lube.js?v=200"></script>
-<script src="../mobile/lube-overrides.js?v=200"></script>
-<script src="../mobile/lube2027.js?v=200"></script>
-<script src="../mobile/lube-tds.js?v=200"></script>
+<script src="../mobile/assets.js?v=201"></script>
+<script src="../mobile/normalize.js?v=201"></script>
+<script src="../mobile/due.js?v=201"></script>
+<script src="../mobile/wear.js?v=201"></script>
+<script src="../mobile/wear-map.js?v=201"></script>
+<script src="../mobile/lube.js?v=201"></script>
+<script src="../mobile/lube-overrides.js?v=201"></script>
+<script src="../mobile/lube2027.js?v=201"></script>
+<script src="../mobile/lube-tds.js?v=201"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=200"></script>
-<script src="../mobile/machine-photos.js?v=200"></script>
+<script src="../mobile/upload-defaults.js?v=201"></script>
+<script src="../mobile/machine-photos.js?v=201"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -2802,17 +2803,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=200"></script>
-<script src="../mobile/get.js?v=200"></script>
-<script src="../mobile/points.js?v=200"></script>
-<script src="../mobile/uc-points.js?v=200"></script>
-<script src="../mobile/inspect-guide.js?v=200"></script>
-<script src="../mobile/get-figs.js?v=200"></script>
-<script src="../mobile/body-points.js?v=200"></script>
-<script src="../mobile/body-map.js?v=200"></script>
-<script src="../mobile/jspdf.umd.min.js?v=200"></script>
-<script src="../mobile/html2canvas.min.js?v=200"></script>
-<script src="../mobile/report-core.js?v=200"></script>
+<script src="../mobile/machine-fig.js?v=201"></script>
+<script src="../mobile/get.js?v=201"></script>
+<script src="../mobile/points.js?v=201"></script>
+<script src="../mobile/uc-points.js?v=201"></script>
+<script src="../mobile/inspect-guide.js?v=201"></script>
+<script src="../mobile/get-figs.js?v=201"></script>
+<script src="../mobile/body-points.js?v=201"></script>
+<script src="../mobile/body-map.js?v=201"></script>
+<script src="../mobile/jspdf.umd.min.js?v=201"></script>
+<script src="../mobile/html2canvas.min.js?v=201"></script>
+<script src="../mobile/report-core.js?v=201"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -3085,9 +3086,11 @@ const I18N={
      actually wants to know. */
   sy_unknown:"What this dashboard cannot check",
   sy_recon:"Where the number comes from",
-  sy_recon_sub:"Read down. Each line is a source or a rule, and the last one is the figure every other screen counts. A round in the folder that is also in the bundled history is one round, not two — that is the merge. A round two phones both sent is one round with a conflict to settle, not two rounds.",
+  sy_recon_sub:"Read down. Each line is a source or a rule, and the last one is the figure every other screen counts. The folder is the only source of rounds — the sixteen imported from the original spreadsheets were written into it on 29 August 2026 and are no longer counted separately. A round two phones both sent is one round with a conflict to settle, not two rounds.",
   sy_r_bundled:"In the bundled history", sy_r_drive:"In the folder",
   sy_r_import:"Imported by hand",
+  sy_imp_ok:"One-time import: all {n} rounds are in the folder",
+  sy_imp_bad:"One-time import: {k} of {n} rounds are NOT in the folder — {list}",
   sy_r_less:"less", sy_r_dupe:"Same round from more than one source", sy_r_rival:"Two phones, one round",
   sy_r_total:"Inspections in the system", sy_r_void:"Withdrawn, kept for the trail",
   sy_r_live:"Inspections that count as work",
@@ -3736,9 +3739,11 @@ const I18N={
   sy_gaps:"Записи, ожидающие материалов", sy_health:"Хранилище",
   sy_unknown:"Что эта панель проверить не может",
   sy_recon:"Откуда берётся эта цифра",
-  sy_recon_sub:"Читайте сверху вниз. Каждая строка — источник или правило, последняя — та цифра, которую считают все остальные экраны. Обход, который есть и в папке, и в истории, — это один обход, а не два. Обход, присланный двумя телефонами, — это один обход и конфликт, который надо решить.",
+  sy_recon_sub:"Читайте сверху вниз. Каждая строка — источник или правило, последняя — та цифра, которую считают все остальные экраны. Источник обходов только один — папка: шестнадцать обходов из исходных таблиц записаны в неё 29 августа 2026 года и больше отдельно не считаются. Обход, присланный двумя телефонами, — это один обход и конфликт, который надо решить.",
   sy_r_bundled:"В приложенной истории", sy_r_drive:"В папке",
   sy_r_import:"Загружено вручную",
+  sy_imp_ok:"Разовый импорт: все {n} обходов есть в папке",
+  sy_imp_bad:"Разовый импорт: {k} из {n} обходов НЕТ в папке — {list}",
   sy_r_less:"минус", sy_r_dupe:"Один обход из нескольких источников", sy_r_rival:"Два телефона, один обход",
   sy_r_total:"Обходов в системе", sy_r_void:"Аннулировано, оставлено для истории",
   sy_r_live:"Обходов, считающихся работой",
@@ -4619,7 +4624,24 @@ let normStats={recs:[],removed:0,orphans:0,touched:0};
 function rebuild(){
   const key=r=>`${r.equip}|${r.date}|${r.type}`;
   const map=new Map();
-  fromBundled().forEach(r=>map.set(key(r),r));
+  /* THE BUNDLED HISTORY IS NOT A SOURCE ANY MORE.
+
+     data/magnetic_plug.js holds the sixteen plug rounds of 29 July that were
+     imported once from the original Excel sheets. This page read them; a phone
+     could not, because a phone knows the FOLDER and nothing else. That is the
+     whole of the dashboard-versus-phone disagreement this project chased for a
+     dozen builds, and it was never a bug in either surface — it was one source
+     of truth that only one of them could read.
+
+     On 29 August 2026 all sixteen rounds and their sixty-three photographs
+     were written into the folder, where both surfaces already look. Reading
+     the file back in here as well would make it a PARALLEL source again: the
+     same round from two places, agreeing today and free to disagree the moment
+     anybody corrects one of them.
+
+     So the file is still loaded — but only to AUDIT the import, in
+     bundledOwed() below. A source became a check, which is the direction that
+     is safe to travel. */
   // Drive beats the bundled history. Two Drive records CAN share a key now — the
   // script keeps both when two phones clash — and "last one in the array wins"
   // would throw one away here after taking the trouble to keep it in Drive.
@@ -4685,7 +4707,7 @@ function matchesText(r,q){
 function filtered(inclVoid){
   const ty=$("fType").value, c=$("fClass").value, days=+$("fRange").value;   // not "t" — that is t()
   const dq=($("fDq")&&$("fDq").value)||"";
-  const cutoff=days? new Date(Date.now()-days*864e5).toISOString().slice(0,10):null;
+  const cutoff=days? DUE.daysAgo(days):null;
   const q=($("fQ").value||"").trim().toLowerCase();
   const showVoid=inclVoid||($("fVoid")&&$("fVoid").checked);
   return RECS.filter(r=>{
@@ -4832,9 +4854,7 @@ function prevWindow(){
      rather than inventing a baseline. */
   const days=+$("fRange").value;
   if(!days) return null;
-  const now=Date.now();
-  const a=new Date(now-days*2*864e5).toISOString().slice(0,10);
-  const b=new Date(now-days*864e5).toISOString().slice(0,10);
+  const a=DUE.daysAgo(days*2), b=DUE.daysAgo(days);
   return RECS.filter(r=>!r._void && String(r.date||"")>=a && String(r.date||"")<b);
 }
 /* "12 more than the month before", in the reader's language, coloured by
@@ -5268,7 +5288,14 @@ const FSTATUS=[
 const FST_BY={}; FSTATUS.forEach(x=>FST_BY[x.k]=x);
 const stName=k=>{ const x=FST_BY[String(k||"")]; return x?(x[lang]||x.en):k; };
 const stOpen=k=>!["DONE","VERIFIED","NOACT"].includes(String(k||""));
-const todayISO=()=>new Date().toISOString().slice(0,10);
+/* THE SITE'S DAY, AND NOBODY ELSE'S.
+
+   This was `new Date().toISOString().slice(0,10)` — the UTC day — while the
+   phone built the browser's day. Baimskaya is UTC+12, so for twelve hours out
+   of every twenty-four the office and the field were on different dates and
+   every row on the due list differed by one. It is one function now, in
+   due.js, which both surfaces already load. */
+const todayISO=()=>DUE.today();
 /* Overdue is only meaningful while something is still open — a job finished
    late is finished, and colouring it red for ever teaches people to ignore red. */
 function fOverdue(i){ return !!(i.due && stOpen(i.status) && i.due < todayISO()); }
@@ -5777,7 +5804,7 @@ $("csvBtn").onclick=()=>{
   ].flat().map(q).join(","));
   const csv=[head.map(q).join(","),...body].join("\r\n");
   const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob(["﻿"+csv],{type:"text/csv"}));
-  a.download=`cm_action_register_${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(a.href);
+  a.download=`cm_action_register_${todayISO()}.csv`; a.click(); URL.revokeObjectURL(a.href);
 };
 
 /* ---------- equipment history ---------- */
@@ -6652,7 +6679,7 @@ function coverageRows(){
     pool.forEach(a=>{ const d=last.get(a.n);
       if(!d){ never++; return; }
       const k=a.cls||"";
-      if(!cutOf[k]) cutOf[k]=new Date(Date.now()-ivDaysFor(ty,a)*864e5).toISOString().slice(0,10);
+      if(!cutOf[k]) cutOf[k]=DUE.daysAgo(ivDaysFor(ty,a));
       if(d<cutOf[k]) overdue++; });
     /* Which of the classes this round actually fits carry a stated figure, so
        the row can name them instead of printing one number for both. */
@@ -7922,7 +7949,7 @@ function mvCheck(rec, to, why){
   if(to.equip===rec.equip && to.date===rec.date && to.type===rec.type) return t("ed_mv_same");
   if(!why) return t("ed_mv_nowhy");
   if(!(ASSET_BY||{})[to.equip]) return t("ed_mv_badunit",{u:to.equip});
-  if(to.date && to.date > new Date().toISOString().slice(0,10)) return t("ed_mv_baddate");
+  if(to.date && to.date > todayISO()) return t("ed_mv_baddate");
   const k=recKey(to);
   /* Against the record it would land beside, not against itself. */
   if(RECS.some(r=>ekOf(r)!==edKey && recKey(r)===k)) return t("ed_mv_clash",{k});
@@ -7968,9 +7995,12 @@ $("edUnvoid").onclick=()=>{
    uploaded it and this end simply has not pulled it yet. Only the script can
    answer for Drive, so only the script is allowed to. */
 function heldIn(key){
+  /* No `bundled` any more. The bundled history stopped being a record source
+     when its sixteen rounds were written into the folder, so a round can no
+     longer be held ONLY there — and a guard against deleting something that
+     cannot exist is a guard that reads like a safety net and is not one. */
   return { drive: driveRecs.some(x=>ekOf(x)===key),
-           imported: imported.some(x=>ekOf(x)===key),
-           bundled: fromBundled().some(x=>ekOf(x)===key) };
+           imported: imported.some(x=>ekOf(x)===key) };
 }
 /* Forget this dashboard's copy. The Drive files, if there are any, are not
    touched — Reload everything brings the round back if they exist. */
@@ -7997,16 +8027,12 @@ $("edDelete").onclick=async ()=>{
      local, and then the button can only mean "forget it here". */
   const where=heldIn(edKey);
   if(!drvOn()){
-    if(where.bundled && !where.imported && !where.drive){
-      msg.textContent=t("ed_del_bundled"); return; }
     dropLocal(edKey);
     msg.textContent=t("ed_del_local");
     $("edAdmin").value=""; $("edConfirm").value="";
     $("editOv").classList.add("hidden");
     return;
   }
-  if(where.bundled && !where.imported && !where.drive){
-    msg.textContent=t("ed_del_bundled"); return; }
   /* No client-side refusal on an empty box. Deletion is OFF at the script until
      somebody sets ADMIN_SECRET there and deploys a new version — refusing here
      sent people hunting for a password that does not exist, when the script's
@@ -9367,8 +9393,7 @@ function fmtH(h){ return h==null?"" : h>=100000 ? "—" :
    and is stated rather than hidden. */
 function whenDate(h){
   if(h==null||h>=100000) return "";
-  const d=new Date(Date.now()+ (h/12)*864e5);
-  return d.toISOString().slice(0,10);
+  return DUE.shift(todayISO(), h/12);
 }
 function renderWearTab(){
   const recs=filtered();
@@ -9464,7 +9489,7 @@ function wearCsv(){
   const blob=new Blob(["﻿"+[head.map(q).join(","),...body].join("\r\n")],
     {type:"text/csv;charset=utf-8"});
   const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
-  a.download=`wear-and-life_${new Date().toISOString().slice(0,10)}.csv`; a.click();
+  a.download=`wear-and-life_${todayISO()}.csv`; a.click();
   setTimeout(()=>URL.revokeObjectURL(a.href),4000);
 }
 /* ══ the lubrication programme ═══════════════════════════════════════════
@@ -10030,7 +10055,7 @@ function lubeRefSave(){
     if(f==="doc"||f==="page"||f==="who"){
       o[k].src = Object.assign({}, base.src||{}, o[k].src||{});
       o[k].src[f] = v;
-      o[k].src.when = new Date().toISOString().slice(0,10);
+      o[k].src.when = todayISO();
     } else {
       o[k][f] = v;
     }
@@ -10058,7 +10083,7 @@ function lubeRefExport(){
   const blob = new Blob([JSON.stringify(lubeOverrides(), null, 1)],
     {type:"application/json"});
   const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
-  a.download = `lube-overrides_${new Date().toISOString().slice(0,10)}.json`; a.click();
+  a.download = `lube-overrides_${todayISO()}.json`; a.click();
   setTimeout(()=>URL.revokeObjectURL(a.href), 4000);
 }
 
@@ -10417,7 +10442,7 @@ function lubeCsv(){
   const blob = new Blob(["\ufeff"+[head.map(q).join(","), ...body].join("\r\n")],
     {type:"text/csv;charset=utf-8"});
   const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
-  a.download = `lubrication-matrix_${new Date().toISOString().slice(0,10)}.csv`; a.click();
+  a.download = `lubrication-matrix_${todayISO()}.csv`; a.click();
   setTimeout(()=>URL.revokeObjectURL(a.href), 4000);
 }
 
@@ -10493,7 +10518,7 @@ function renderLubePoster(){
       <p>${esc(sub)}</p></div>
       <div class="pmeta"><b>${esc(t("lpo_site"))}</b>
         <span>${esc(t("lpo_design",{d:LUBE.site.design}))}</span>
-        <span>${esc(t("lpo_issued",{d:new Date().toISOString().slice(0,10)}))}</span>
+        <span>${esc(t("lpo_issued",{d:todayISO()}))}</span>
       </div></div>`;
   const foot = `<div class="pfoot">${esc(t("lpo_foot"))}</div>`;
 
@@ -10648,7 +10673,7 @@ function dueTabRows(){
     if(r.smu==null || r.smu==="") return;
     const u=String(r.equip).toUpperCase();
     (trail[u]=trail[u]||[]).push({d:r.date, h:r.smu}); });
-  const today=new Date().toISOString().slice(0,10);
+  const today=todayISO();
   Object.keys(last).forEach(k=>{
     const [ty,unit]=k.split("|");
     const rate=window.DUE ? DUE.rateFrom(trail[unit]||[]) : null;
@@ -10659,16 +10684,11 @@ function dueTabRows(){
     const cls=(ASSET_BY[unit]||{}).cls||null;
     const n=window.DUE ? DUE.next({type:ty, last:last[k], today, rate, cls}) : null;
     if(!n) return;
-    const iv=DUE.hours(ty,null,cls)||Math.round(DUE.spec(ty,cls).d*n.rate);
-    const soonH=Math.max(20, Math.round(iv*0.2));
+    /* over / soon / ok / put / off — from due.js, the same call the phone
+       makes. It was four lines copied into both files; one rule, one place. */
     const d=deferrals[k];
-    /* A deferral is answered by a round of that type walked after it. Nothing
-       is deleted for it to stop being true. */
-    const live = d && String(d.at||"") >= String(last[k].d||"");
-    let st = n.over ? "over" : (n.dueInHours<=soonH ? "soon" : "ok");
-    if(live && d.until){ const left=DUE.dayDiff(today, d.until);
-      if(left!=null && left>0) st="put"; }
-    else if(live) st="off";
+    const v=DUE.status({type:ty, cls:cls, n:n, last:last[k], defer:d, today:today});
+    const live=v.deferLive, st=v.st;
     /* `late` is the arithmetic and `st` is the judgement. A machine past its
        interval that somebody put off is still past its interval — it is just
        not a machine anybody missed. Keeping both means the tiles can say "2
@@ -11161,12 +11181,29 @@ function syncScan(){
      − the ones withdrawn, which stay for the audit trail and are not work
 
    Each line is measured at the moment it is drawn. */
+/* WHAT THE ONE-TIME IMPORT STILL OWES THE FOLDER.
+
+   The bundled history is no longer merged into the records — it would be a
+   second source for rounds the folder already holds. But dropping it silently
+   would mean that if a bundled round ever went missing from the folder, this
+   page would simply stop knowing about it, which is the defect this project
+   produces more than any other: a real value rendered as nothing.
+
+   So the file is read for exactly one purpose — to say how many of the sixteen
+   imported rounds this dashboard can actually see in the folder, and to name
+   the ones it cannot. Zero missing is the expected answer and is stated rather
+   than assumed. */
+function bundledOwed(){
+  const b=fromBundled();
+  const have=new Set(driveRecs.map(recKey).concat(imported.map(recKey)));
+  const missing=b.filter(r=>!have.has(recKey(r))).map(recKey);
+  return { total:b.length, inFolder:b.length-missing.length, missing };
+}
 function reconcile(){
-  const bundled=fromBundled(), drv=driveRecs, imp=imported;
-  const raw=bundled.length+drv.length+imp.length;
-  /* How many distinct addresses those three between them name. */
+  const drv=driveRecs, imp=imported;
+  const raw=drv.length+imp.length;
+  /* How many distinct addresses those two between them name. */
   const addrs=new Set();
-  bundled.forEach(r=>addrs.add(recKey(r)));
   drv.forEach(r=>addrs.add(recKey(r)));
   imp.forEach(r=>addrs.add(recKey(r)));
   /* Two phones on one round is one round here and a conflict to settle — the
@@ -11176,7 +11213,6 @@ function reconcile(){
   const dupes=Math.max(0, raw - addrs.size - rivals);
   const voided=RECS.filter(r=>r._void).length;
   return [
-    { label:t("sy_r_bundled"), n:bundled.length },
     { label:t("sy_r_drive"),   n:drv.length },
     { label:t("sy_r_import"),  n:imp.length },
     { label:t("sy_r_dupe"),    n:dupes,  step:1 },
@@ -11252,6 +11288,21 @@ function renderSync(){
          number on the screen should be a count somebody can believe. */
       `<dt${r.step?' class="muted"':""}>${r.step?esc(t("sy_r_less"))+" ":""}${esc(r.label)}</dt>`
     + `<dd class="mono${r.total?" strong":""}">${esc(num(r.n))}</dd>`).join("");
+  /* THE ONE-TIME IMPORT, AUDITED EVERY RENDER.
+
+     The bundled history stopped being a source when its rounds were written
+     into the folder. That is only safe while they are actually THERE, so this
+     says so — and names them if they are not, instead of the sixteen quietly
+     ceasing to exist the day somebody tidies the folder. */
+  {
+    const bo=bundledOwed(), el=$("syImport");
+    if(el){
+      el.textContent = bo.missing.length
+        ? t("sy_imp_bad",{k:bo.missing.length,n:bo.total,list:bo.missing.join(", ")})
+        : t("sy_imp_ok",{n:bo.total});
+      el.className = "sub" + (bo.missing.length ? " warn" : "");
+    }
+  }
   $("syUnknown").innerHTML=SYNC_UNKNOWN.map(k=>`<li>${esc(t(k))}</li>`).join("");
   /* ADMIN DIAGNOSTICS, not an operational warning. A blank row removed on
      import is housekeeping — it is recorded so the repair can be audited, and
@@ -11573,8 +11624,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=200"></script>
-<script src="sync-adapter.js?v=200"></script>
-<script src="report.js?v=200"></script>
+<script src="drive.js?v=201"></script>
+<script src="sync-adapter.js?v=201"></script>
+<script src="report.js?v=201"></script>
 </body>
 </html>
