@@ -89,8 +89,30 @@ const pick = p => p.evaluate(() => {
        a kind of machine is not proposed for it. */
     ok('a thermal survey nobody has walked is proposed for nothing',
        !rows.some(r => r.startsWith('TEMP')), rows.filter(r => r.startsWith('TEMP')).length + ' TEMP row(s)');
-    ok('and neither is a plug round, until somebody does one',
-       !rows.some(r => r.startsWith('MP')), rows.filter(r => r.startsWith('MP')).length + ' MP row(s)');
+    /* THE ROUND THIS SITE HAS ACTUALLY CONFIRMED A FIGURE FOR.
+
+       250 h on the plug round, and for a long time it proposed itself to
+       nobody: a class only reached a round through byClass, byClass exists to
+       state a figure that DIFFERS from the round's own, and 250 h is the same
+       number for every truck — so no class was ever written down as being on
+       it, and a haul truck got a plug round only because somebody happened to
+       have already walked one on a truck of its kind. onClass says who is on
+       the round without pretending to state a second figure. */
+    ok('every haul truck is on the plug round because the site says so',
+       tys['MP HT'] === f.count.HT, tys['MP HT'] + ' of ' + f.count.HT);
+    ok('and every articulated truck with them',
+       tys['MP AT'] === f.count.AT, tys['MP AT'] + ' of ' + f.count.AT);
+    /* AND NOWHERE ELSE. Membership is stated, not spread. */
+    ok('and no other kind of machine is given one it was never put on',
+       rows.filter(r => r.startsWith('MP')).every(r => /\|(HT|AT)$/.test(r)),
+       [...new Set(rows.filter(r => r.startsWith('MP')))].join(' '));
+    /* The figure itself must not have moved, and no class may quietly acquire
+       a carried-forward flag from a field that carries no number. */
+    ok('on the same 250 h, for the trucks and for everyone else',
+       await a.p.evaluate(() => [DUE.spec('MP','HT').h, DUE.spec('MP','AT').h,
+                                 DUE.spec('MP','DOZ').h, DUE.spec('MP').h].join()) === '250,250,250,250');
+    ok('and nobody is marked as walking it on a carried-forward number',
+       await a.p.evaluate(() => !['HT','AT','DOZ','EXC'].some(c => DUE.spec('MP',c).carriedClass)));
     /* 940 machines carry no class. Proposing a final-drive plug round for a
        crew bus because a catch-all class happens to list one is guessing, and
        nine hundred guesses bury the hundred and eighty that are real. */

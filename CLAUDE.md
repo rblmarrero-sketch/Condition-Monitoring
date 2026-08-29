@@ -136,12 +136,21 @@ rendered to a calendar at 20 h/day, and several are **per class**:
 
 | Round | Interval |
 |---|---|
-| MP | 250 h — confirmed for the Terex TR60 haul trucks |
+| MP | 250 h — confirmed for the Terex TR60 haul trucks · **on HT + AT** |
 | FC | 500 h engine filter, 1000 h the rest |
 | INSP | 500 h |
 | UC | **1000 h dozers · 4000 h excavators** |
 | TB | **4000 h articulated · 1000 h carried forward for the rest** |
 | TEMP, LUBE | 30 days, carried forward — no hour figure stated |
+
+**`onClass` says WHO IS ON the round; `byClass` says WHAT THE INTERVAL IS**
+where a class differs from the round's own figure. They were one field, and the
+overload hid this fleet's most confirmed round from its own programme: a class
+reached a round only through `byClass`, `byClass` exists to state a *different*
+number, and 250 h is the same for every truck — so no class was ever written
+down as being on the plug round, and a haul truck was proposed one only because
+somebody happened to have already walked one on a truck of its kind. `onClass`
+carries no number and so can never become a second interval table.
 
 An interval is a property of the round **and the machine**. Always pass `cls`
 to `DUE.next` / `DUE.hours` / `DUE.spec`. Omitting it schedules every excavator

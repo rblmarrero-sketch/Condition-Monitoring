@@ -63,7 +63,20 @@
       /* Confirmed for the Terex TR60 haul trucks — final drive magnetic plugs
          at 250 h. Everything else on site keeps that figure until somebody
          states one for it, and `byClass` is where a stated one goes. */
-      MP:   { h: 250 },
+      /* onClass says WHO IS ON THE ROUND. byClass says WHAT THE INTERVAL IS
+         where a class differs from the round's own figure. They were one
+         field, and that overload hid this fleet's most confirmed round from
+         its own programme: 250 h is the same number for every truck, so
+         nobody ever wrote a byClass entry for it, so no class was ever
+         declared to be on the plug round at all — and a truck was proposed
+         one only because somebody happened to have already walked one on a
+         truck of its kind. A round with a stated figure that proposes itself
+         to nobody is a policy rendered as nothing.
+
+         Haul trucks and articulated trucks, confirmed by the site. Carries no
+         number, so it cannot become a second interval table — the figure on
+         this line stays the only one. */
+      MP:   { h: 250, onClass: ["HT", "AT"] },
       FC:   { h: 500, parts: { ENG: 500, TRANS: 1000, HYD: 1000, FUEL: 1000, LUBE: 1000 } },
       /* Undercarriage is not one interval. A dozer's chain is in the ground
          every hour it works; an excavator's carries the machine and turns far
