@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=198">
+<link rel="manifest" href="manifest.webmanifest?v=199">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=198">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=198">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=198">
+<link rel="apple-touch-icon" href="icon-192.png?v=199">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=199">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=199">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1970,31 +1970,31 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=198"></script>
-<script src="upload-defaults.js?v=198"></script>
-<script src="hme.js?v=198"></script>
-<script src="mp-fc.js?v=198"></script>
-<script src="hme-cascade.js?v=198"></script>
-<script src="assets.js?v=198"></script>
-<script src="temp-limits.js?v=198"></script>
-<script src="normalize.js?v=198"></script>
-<script src="due.js?v=198"></script>
-<script src="wear.js?v=198"></script>
-<script src="wear-figs.js?v=198"></script>
-<script src="wear-map.js?v=198"></script>
-<script src="machine-photos.js?v=198"></script>
-<script src="machine-fig.js?v=198"></script>
-<script src="get.js?v=198"></script>
-<script src="points.js?v=198"></script>
-<script src="uc-points.js?v=198"></script>
-<script src="inspect-guide.js?v=198"></script>
-<script src="get-figs.js?v=198"></script>
-<script src="body-points.js?v=198"></script>
-<script src="body-map.js?v=198"></script>
-<script src="lube.js?v=198"></script>
-<script src="lube-overrides.js?v=198"></script>
-<script src="lube2027.js?v=198"></script>
-<script src="report-core.js?v=198"></script>
+<script src="native.js?v=199"></script>
+<script src="upload-defaults.js?v=199"></script>
+<script src="hme.js?v=199"></script>
+<script src="mp-fc.js?v=199"></script>
+<script src="hme-cascade.js?v=199"></script>
+<script src="assets.js?v=199"></script>
+<script src="temp-limits.js?v=199"></script>
+<script src="normalize.js?v=199"></script>
+<script src="due.js?v=199"></script>
+<script src="wear.js?v=199"></script>
+<script src="wear-figs.js?v=199"></script>
+<script src="wear-map.js?v=199"></script>
+<script src="machine-photos.js?v=199"></script>
+<script src="machine-fig.js?v=199"></script>
+<script src="get.js?v=199"></script>
+<script src="points.js?v=199"></script>
+<script src="uc-points.js?v=199"></script>
+<script src="inspect-guide.js?v=199"></script>
+<script src="get-figs.js?v=199"></script>
+<script src="body-points.js?v=199"></script>
+<script src="body-map.js?v=199"></script>
+<script src="lube.js?v=199"></script>
+<script src="lube-overrides.js?v=199"></script>
+<script src="lube2027.js?v=199"></script>
+<script src="report-core.js?v=199"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -9847,7 +9847,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="198";
+const BUILD="199";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -10298,8 +10298,13 @@ async function canBatch(UP){
 async function putBatch(UP, files, rec, sent){
   const folder=expandFolder(UP.folder||"", rec);
   const body={ op:"batch", folder, secret:UP.sec||"", dev:(rec&&rec.dev)||DEVICE,
+    /* aid rides along. The backend reads only the fields it knows and ignores
+       the rest, so this costs nothing today and is the key a server that
+       suppresses duplicates for itself will need — without it, the only thing
+       either end can match on is a file name. */
     files: await Promise.all(files.map(async f=>({ name:f.name,
       contentType:f.type||f.blob.type||"application/octet-stream",
+      ...(f.aid?{aid:f.aid}:{}),
       file: await blobToB64(f.blob) }))) };
   const r=await fetchT(UP.url,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
                                body:JSON.stringify(body)});
@@ -10627,6 +10632,60 @@ async function attSync(rec){
   }
   return changed;
 }
+/* Every attachment on a record, reachable by its id rather than by walking. */
+function attIndex(rec){
+  const by={};
+  for(const [k,p] of positionsOf(rec)){
+    const m=attMap(p); if(!m) continue;
+    for(const aid of Object.keys(m)) by[aid]=m[aid];
+  }
+  return by;
+}
+/* WHAT HAPPENED TO EACH ATTACHMENT, WRITTEN ON THE RECORD THAT IS BEING SAVED.
+
+   The attempt used to be counted on `rec` before the upload and the outcome on
+   `fresh` after it. `fresh` is a re-read from the store — deliberately, so an
+   edit made during the upload is not silently overwritten — so the attempt
+   count was being written to an object nobody saved, and every attachment came
+   out of a successful upload claiming zero attempts and no time. Measured:
+   {"st":"sent","n":0,"at":false}. One object, one write, both facts.
+
+   The attempt is counted whether or not it worked, because a file on its ninth
+   try is telling somebody something a file on its first is not; this runs on
+   the same path for a failure, which is why lastError belongs here too.
+
+   "Sent" means EVERY destination took it. A photograph that reached one of two
+   is not sent, it is half sent, and the difference is the whole reason this
+   project keeps two of them. */
+function attSettle(rec,payload,sent,dests,err){
+  const by=attIndex(rec);
+  const at=new Date().toISOString();
+  for(const f of payload||[]){
+    const e=f.aid && by[f.aid]; if(!e) continue;
+    e.uploadAttempts=(Number(e.uploadAttempts)||0)+1;
+    e.lastAttemptAt=at;
+    const all=(dests||[]).length>0 && dests.every(d=>(((sent||{})[d.id])||{})[f.name]);
+    if(all){ e.uploadState="sent"; e.lastError=""; }
+    else { e.uploadState="pending"; if(err) e.lastError=String(err).slice(0,200); }
+  }
+}
+/* HOW MANY UPLOADS THIS PHONE DID NOT MAKE.
+
+   A resume sends only what has not landed, which is the whole point of keeping
+   rec.sent — but it did so silently, so "retrying is idempotent" was a claim
+   with no number behind it. This is that number: every file the phone declined
+   to send a second time because it already had. It is a count of bytes not
+   crossing a satellite link, and it is the only evidence available on this end
+   that a retry costs one upload rather than two. */
+const DUP_KEY="cm_dup_skipped";
+function dupCount(){
+  try{ const o=JSON.parse(localStorage.getItem(DUP_KEY)||"{}")||{}; return Math.max(0,Number(o.n)||0); }
+  catch(e){ return 0; }
+}
+function dupNote(n){
+  if(!(n>0)) return;
+  lsSet(DUP_KEY, JSON.stringify({n:dupCount()+n, at:Date.now()}));
+}
 /* The whole manifest for a record, flattened — what goes up beside the round. */
 function attList(rec){
   const out=[];
@@ -10737,7 +10796,8 @@ async function syncNow(manual){
                     blob:new Blob([JSON.stringify(meta,null,2)],{type:"application/json"}),
                     type:"application/json"}];
           for(const f of await filesForRecord(rec))
-            payload.push({name:f.name, blob:await maybeShrink(f.blob,f.name), type:f.blob.type});
+            payload.push({name:f.name, blob:await maybeShrink(f.blob,f.name),
+                          type:f.blob.type, aid:f.aid||""});
         }catch(e){ lastErr="Could not read "+rec.equip+": "+(e.message||e); continue; }
       }
       const errs=[];
@@ -10750,6 +10810,10 @@ async function syncNow(manual){
         /* Only what is still missing. On a first attempt that is everything; on
            a resume it is the tail, and the tail is usually where the link died. */
         const left=payload.filter(f=>!already[f.name]);
+        /* The ones this phone is NOT sending again because it already has.
+           Counted rather than merely skipped: it is the only measure available
+           on this end of what a retry actually costs. */
+        dupNote(payload.length-left.length);
         try{ await putAll(d,left,rec,already); done[d.id]=1; progressed=true; }
         catch(e){ errs.push(destLabel(d.id)+": "+String(e.message||e)); }
         /* Files landing IS progress, even when the destination did not finish.
@@ -10773,6 +10837,9 @@ async function syncNow(manual){
            somebody edits it, the list is wrong and is thrown away. An edited
            round re-sends in full, which is right — the file behind a name may
            not be the file that name meant last time. */
+        /* The manifest is brought up to date in the same put that records
+           upTo — no extra write, and the photographs are not rewritten. */
+        if(payload) attSettle(fresh,payload,sent,dests,errs[0]||"");
         if(fresh.up) { fresh.upAt=new Date().toISOString(); delete fresh.sent; }
         else fresh.sent=sent;
         await dbPut(fresh);
