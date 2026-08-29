@@ -84,6 +84,22 @@ function bundled() {
   return d.inspections;
 }
 
+/* ---- the class comes off the fleet roster, never off this file ----------
+   An interval is a property of the round AND the machine, so a record whose
+   class is guessed here schedules the machine on somebody else's number. The
+   roster in mobile/assets.js is the one place that knows, and it is the same
+   file both surfaces read; a literal typed here would be a second answer to a
+   question that already has one. */
+function classes() {
+  const g = { window: {} };
+  const src = fs.readFileSync(path.join(ROOT, 'mobile', 'assets.js'), 'utf8');
+  new Function('window', src)(g.window);
+  const a = g.window.ASSETS;
+  if (!Array.isArray(a)) throw new Error('mobile/assets.js has no ASSETS');
+  return Object.fromEntries(a.map(x => [String(x.n), String(x.cls || '')]));
+}
+const CLS = classes();
+
 const ddmmyyyy = iso => { const m = String(iso).match(/(\d{4})-(\d{2})-(\d{2})/);
   return m ? `${m[3]}.${m[2]}.${m[1]}` : String(iso); };
 
@@ -120,7 +136,7 @@ function sidecarFor(insp) {
          tool produces the same id for the same round, so a second run cannot
          create a second record of one inspection. */
       id: `bundled__${equip}__${date}__MP`, rev: 1,
-      equip, date, type: 'MP', cls: 'HT',
+      equip, date, type: 'MP', cls: CLS[equip] || '',
       by: insp.by || BY, smu: insp.motorHours || '', sup: '', gps: null,
       /* Not a phone. The conflict machinery keys on dev to tell "this phone
          re-sending its own round" from "another phone overwriting one", and a
@@ -169,6 +185,19 @@ const post = async body => {
     console.error('\nRefusing to write rounds with no inspector on them.');
     console.error('Pass --by "Name". A round nobody signed is a round nobody can be asked about.');
     process.exit(1);
+  }
+
+  /* A machine the roster does not know cannot be scheduled at all: DUE.next is
+     handed a blank class and falls back to the round's own figure, which is
+     the exact mis-scheduling this project already shipped once. Said out loud
+     here rather than written silently. */
+  const noCls = plan.filter(p => !p.body.records[0].cls)
+                    .map(p => p.body.records[0].equip);
+  if (noCls.length) {
+    console.error(`\nNot on the fleet roster: ${noCls.join(', ')}`);
+    console.error('A record with no class is scheduled on the round\'s own interval,');
+    console.error('not the machine\'s. Add them to mobile/assets.js first.');
+    if (APPLY) process.exit(1);
   }
   const writeS = plan.filter(p => !held.has(p.name));
   const haveS  = plan.filter(p =>  held.has(p.name));
