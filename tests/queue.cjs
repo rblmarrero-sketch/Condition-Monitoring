@@ -18,6 +18,7 @@
    Run: node tests/queue.cjs [port]   (needs tests/ed-srv.cjs on 8093)
 */
 const { chromium } = require(require("./pw.cjs"));
+const BUNDLED = require("./bundled.cjs");
 const PORT = Number(process.argv[2] || 8093);
 const URL = `http://127.0.0.1:${PORT}/dashboard/index.html`;
 
@@ -32,6 +33,12 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
   p.on("pageerror", e => errs.push(e.message));
   await p.goto(URL, { waitUntil: "load" });
   await p.waitForTimeout(1800);
+  /* The sixteen bundled rounds, supplied explicitly. The dashboard no longer
+     merges data/magnetic_plug.js into its records — that file was a second
+     source for rounds the folder now holds — so this suite states the
+     fixture it has always depended on. */
+  await p.evaluate(BUNDLED + "()");
+  await p.waitForTimeout(500);
 
   /* Writes go to a stub, exactly as follow.cjs does it: what is under test is
      what the register ASKS for, not whether the network is up. */

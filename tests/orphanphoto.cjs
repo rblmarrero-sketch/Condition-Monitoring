@@ -18,6 +18,7 @@
    Run: node tests/orphanphoto.cjs [port]     (needs tests/ed-srv.cjs on 8093)
 */
 const { chromium } = require(require("./pw.cjs"));
+const BUNDLED = require("./bundled.cjs");
 const PORT = Number(process.argv[2] || 8093);
 const URL = `http://127.0.0.1:${PORT}/dashboard/index.html`;
 
@@ -52,6 +53,11 @@ const setup = async p => p.evaluate(recs => {
   p.on("pageerror", e => { fail++; console.log("  FAIL  PAGEERROR " + e.message); });
   await p.goto(URL, { waitUntil: "load" });
   await p.waitForFunction(() => typeof RECS !== "undefined", null, { timeout: 25000 });
+  /* The sixteen bundled rounds, supplied explicitly. The dashboard no longer
+     merges data/magnetic_plug.js into its records — that file was a second
+     source for rounds the folder now holds — so this suite states the
+     fixture it has always depended on. */
+  await p.evaluate(BUNDLED + "()");
   await p.evaluate(recs => {
     CMDrive.configured = () => true;
     window.__saved = [];

@@ -16,6 +16,7 @@
    Run: node tests/grade.cjs [port]   (needs tests/ed-srv.cjs on 8093)
 */
 const { chromium } = require(require("./pw.cjs"));
+const BUNDLED = require("./bundled.cjs");
 const PORT = Number(process.argv[2] || 8093);
 const B = `http://127.0.0.1:${PORT}`;
 const MAP = { A: "NOF", B: "INC", C: "DEG", X: "CRI" };
@@ -95,6 +96,9 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
   dash.on("pageerror", e => errs.push("DASH " + e.message));
   await dash.goto(B + "/dashboard/index.html", { waitUntil: "load" });
   await dash.waitForTimeout(1800);
+  /* The sixteen bundled rounds, supplied explicitly — see tests/bundled.cjs. */
+  await dash.evaluate(BUNDLED + "()");
+  await dash.waitForTimeout(500);
   await dash.evaluate(() => { try { localStorage.setItem("cm_dash_who", "R. Marrero"); } catch (e) {} });
 
   const SEVL = await dash.evaluate(m => {

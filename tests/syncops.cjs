@@ -19,6 +19,7 @@
    Run: node tests/syncops.cjs [port]   (needs tests/ed-srv.cjs on 8093)
 */
 const { chromium } = require(require("./pw.cjs"));
+const BUNDLED = require("./bundled.cjs");
 const PORT = Number(process.argv[2] || 8093);
 const URL = `http://127.0.0.1:${PORT}/dashboard/index.html`;
 
@@ -70,6 +71,11 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
      `badge="${cold.badge}"`);
 
   console.log("\n── attached, it checks every attachment a record claims");
+  /* A folder with more in it than this suite's own two records. These sixteen
+     used to arrive for free, merged in from data/magnetic_plug.js; that source
+     is retired, so the fixture is stated. See tests/bundled.cjs. */
+  await p.evaluate(BUNDLED + "()");
+  await p.waitForTimeout(400);
   const live = await p.evaluate(() => {
     /* A server that holds everything except one Critical's photograph.
 
@@ -91,13 +97,28 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
                 photo: "TK901_4C_29.07.2026_MP.jpg", photos: 1, video: 0 }] };
     if (!RECS.some(r => r.equip === "TK901")) RECS.push(FIELD_CRIT);
     const crit = RECS.find(r => r.equip === "TK901");
+    /* THE FOLDER'S NAMES, NOT THIS TAB'S.
+
+       This built its "what the server holds" list out of mediaOf(), which
+       reports only photographs already lazily downloaded into browser memory —
+       so on a page that had opened nothing it built an EMPTY folder and then
+       asserted the dashboard could see a backend. expectedNames() is the same
+       rule the phone names files by, which is what the folder actually
+       contains. */
+    const namesFor = (r) => { const out = [];
+      (r.items || []).forEach(i => { if (!i) return;
+        const n = window.CMNorm ? CMNorm.photoCount(i.photos) : 0;
+        if (n) expectedNames(i, r, n).forEach(x => out.push(x)); });
+      return out; };
     const all = [];
-    RECS.forEach(r => (r.items || []).forEach(i => mediaOf(i, r).forEach(m => m.name && all.push(m.name))));
-    const critNames = [];
-    (crit.items || []).forEach(i => mediaOf(i, crit).forEach(m => m.name && critNames.push(m.name)));
+    RECS.forEach(r => namesFor(r).forEach(n => all.push(n)));
+    const critNames = namesFor(crit);
     const held = new Set(all.filter(n => !critNames.includes(n)));
     CMDrive.configured = () => true;
     CMDrive.names = () => [...held];
+    /* The audit asks hasName() one predicted file at a time; stub both or the
+       suite is asking a different question from the screen. */
+    CMDrive.hasName = (n) => held.has(n);
     CMDrive.cursorAt = () => Date.now() - 5 * 60000;
     renderSync();
     return { total: all.length, withheld: critNames.length, unit: crit.equip,
@@ -129,8 +150,12 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
   console.log("\n── everything present reads as everything present");
   const full = await p.evaluate(() => {
     const all = [];
-    RECS.forEach(r => (r.items || []).forEach(i => mediaOf(i, r).forEach(m => m.name && all.push(m.name))));
-    CMDrive.names = () => all;
+    RECS.forEach(r => (r.items || []).forEach(i => { if (!i) return;
+      const n = window.CMNorm ? CMNorm.photoCount(i.photos) : 0;
+      if (n) expectedNames(i, r, n).forEach(x => all.push(x)); }));
+    const set = new Set(all);
+    CMDrive.names = () => [...set];
+    CMDrive.hasName = (n) => set.has(n);
     renderSync();
     return { tiles: [...document.querySelectorAll("#syncKpis .kpi")]
                .map(k => k.querySelector(".k").textContent + "=" + k.querySelector(".v").textContent),
@@ -205,12 +230,20 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
     return { rows: rows.map(r => ({ n: r.n, step: !!r.step, total: !!r.total })), by,
              labels: rows.map(r => r.label), recs: RECS.length };
   });
-  ok(led.rows.length === 8, "every step of the arithmetic is on the page", led.rows.length);
+  /* Asked of the ladder's own shape, not of fixed row numbers. The bundled
+     history used to be the first line; retiring it as a source shortened the
+     ladder by one and every hard-coded index here pointed at the wrong row —
+     a suite that knows the answer by position stops testing the arithmetic the
+     moment the arithmetic changes. */
+  ok(led.rows.length >= 5, "every step of the arithmetic is on the page", led.rows.length);
   ok(led.labels.every(l => l && !/^sy_r_/.test(l)),
      "each one is named, not left as a key", led.labels.join(" · "));
-  const sources = led.rows.slice(0, 3).reduce((s, r) => s + r.n, 0);
-  const subs = led.rows.slice(3, 5).reduce((s, r) => s + r.n, 0);
-  const total = led.rows[5].n;
+  const upto = led.rows.findIndex(r => r.total);
+  ok(upto > 0, "the ladder reaches a total", upto);
+  const head = led.rows.slice(0, upto);
+  const sources = head.filter(r => !r.step).reduce((s, r) => s + r.n, 0);
+  const subs = head.filter(r => r.step).reduce((s, r) => s + r.n, 0);
+  const total = led.rows[upto].n;
   ok(sources - subs === total,
      "the sources minus the merges equal what the dashboard holds",
      `${sources} − ${subs} = ${sources - subs}, shown ${total}`);

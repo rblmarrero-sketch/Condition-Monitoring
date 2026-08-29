@@ -29,6 +29,7 @@
    Run: node tests/cfdiff.cjs [port]    (needs tests/ed-srv.cjs on 8093)
 */
 const { chromium } = require(require("./pw.cjs"));
+const BUNDLED = require("./bundled.cjs");
 const PORT = Number(process.argv[2] || 8093);
 const URL = `http://127.0.0.1:${PORT}/dashboard/index.html`;
 
@@ -41,6 +42,12 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
   const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
   p.on("pageerror", e => { fail++; console.log("  FAIL  PAGEERROR " + e.message); });
   await p.goto(URL, { waitUntil: "load" });
+  await p.waitForFunction(() => !!window.CMDash, null, { timeout: 25000 });
+  /* The sixteen bundled rounds, supplied explicitly. The dashboard no longer
+     merges data/magnetic_plug.js into its records — that file was a second
+     source for rounds the folder now holds — so this suite states the
+     fixture it has always depended on. */
+  await p.evaluate(BUNDLED + "()");
   await p.waitForFunction(() => !!window.CMDash && typeof RECS !== "undefined" && RECS.length > 0,
     null, { timeout: 25000 });
   await p.waitForTimeout(400);

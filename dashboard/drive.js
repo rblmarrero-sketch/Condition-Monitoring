@@ -37,6 +37,56 @@
   let fetched = {};                     // file name -> objectURL (or null if it failed)
   let legacy = false;                   // deployed script predates ?action=records
 
+  /* ---- THE FOLDER'S OBJECT INDEX IS NOT OPTIONAL ------------------------
+
+     `index` is the complete list of file names the folder holds. Everything
+     the office says about evidence is measured against it: how many field
+     photographs arrived, which inspections are still waiting, whether a
+     Critical finding has the picture its work order rests on.
+
+     It was being loaded by accident. The fast path — loadViaIndex(), which is
+     the path every configured dashboard now takes — deliberately skipped it,
+     because a unit's pictures are only fetched when somebody opens that unit.
+     The slow path asked for it once per load, in memory, and a reload threw it
+     away. So on a freshly opened dashboard `index` was EMPTY, and the audit,
+     finding nothing, reported 314 field photographs expected, none received
+     and hundreds missing — while the same scan said no records were waiting
+     and every attachment was accounted for.
+
+     Both halves of that were wrong and both came from here. The index is now
+     kept on disk between sessions and refreshed on every load, so the audit
+     asks the folder rather than asking what this tab happens to have opened. */
+  const LS_MED = "cm_drive_media";
+  function saveIndex() {
+    try { localStorage.setItem(LS_MED, JSON.stringify(index)); }
+    catch (e) { try { localStorage.removeItem(LS_MED); } catch (_) {} }
+  }
+  function restoreIndex() {
+    try { const v = JSON.parse(localStorage.getItem(LS_MED) || "null");
+          if (v && typeof v === "object" && !Array.isArray(v)) index = v; } catch (e) {}
+  }
+  restoreIndex();
+
+  /* One request, whatever else the load did. `after` past every timestamp the
+     folder can hold means no sidecar is read and no cursor moves — the reply
+     is the file listing and nothing else. It costs one call and it is the only
+     thing standing between this dashboard and a confident wrong answer.
+
+     Never clears what it has on a failure: an index that could not be
+     refreshed is stale, and stale is a great deal better than absent. */
+  async function refreshMediaIndex() {
+    try {
+      const r = await api({ action: "records", after: 9e15, index: 1 });
+      const list = r.index || [];
+      if (!Array.isArray(r.index)) return Object.keys(index).length;
+      const next = {};
+      list.forEach(f => { if (f && f.name) next[f.name] = { id: f.id, size: f.size }; });
+      index = next;
+      saveIndex();
+      return list.length;
+    } catch (e) { return Object.keys(index).length; }
+  }
+
   /* ---- where a browser that has never been set up gets its settings ----
 
      Opening the dashboard on a new machine used to mean somebody pasting an
@@ -236,7 +286,10 @@
   async function load(onProgress, opts) {
     opts = opts || {};
     const say = (m) => onProgress && onProgress(m);
-    if (opts.full) { index = {}; fetched = {}; localStorage.removeItem(LS_CUR); }
+    /* `fetched` is bytes and may go; `index` is the folder's own listing and
+       is refreshed below rather than emptied, so no window exists in which the
+       audit is measuring against nothing. */
+    if (opts.full) { fetched = {}; localStorage.removeItem(LS_CUR); }
 
     if (idxCap() !== false && !legacy) {
       try {
@@ -246,7 +299,16 @@
           await buildIndex(onProgress);
           r = await loadViaIndex(onProgress, opts);
         }
-        if (r && !r.needsRebuild) { setIdxCap(true); return Object.assign({ files: 0, photos: 0 }, r); }
+        if (r && !r.needsRebuild) {
+          setIdxCap(true);
+          /* The index path answers "which rounds" and says nothing about
+             files. The evidence audit needs both, so ask for the object
+             listing here rather than letting the office measure the folder
+             against an empty set. */
+          say("Reading the file index…");
+          const photos = await refreshMediaIndex();
+          return Object.assign({ files: 0, photos }, r);
+        }
         setIdxCap(false);
       } catch (e) {
         // An /exec without the index says "Unknown action". Anything else is a
@@ -299,6 +361,9 @@
        said ABOUT a round, filed beside it rather than inside it. */
     if (defs.length || opts.full) window.CMDash.setDeferrals(defs, { replace: !!opts.full });
     try { localStorage.setItem(LS_CUR, String(at)); } catch (e) {}
+    /* A page-0 reply carries the whole listing, but an incremental load that
+       fetched nothing new carries none — and the audit needs it either way. */
+    if (!Object.keys(index).length) await refreshMediaIndex(); else saveIndex();
 
     const held = window.CMDash.driveCount();
     return { records: recs.length, edits: eds.length, conflicts: cons.length, held, files, photos, failed,
@@ -314,6 +379,7 @@
 
     index = {};
     all.files.forEach(f => { index[f.name] = { id: f.id, size: f.size }; });
+    saveIndex();
 
     const sidecars = all.files.filter(f => /\.json$/i.test(f.name));
     if (!sidecars.length) {
@@ -644,7 +710,8 @@
       localStorage.setItem(LS_URL, (url || "").trim());
       localStorage.setItem(LS_SEC, sec || "");
       // A different folder's cursor means nothing — start that one from scratch.
-      if (changed) { localStorage.removeItem(LS_CUR); index = {}; fetched = {}; legacy = false; }
+      if (changed) { localStorage.removeItem(LS_CUR); index = {}; fetched = {}; legacy = false;
+                     try { localStorage.removeItem(LS_MED); } catch (e) {} }
     },
     indexed() { return Object.keys(index).length; },
     /* What the synchronisation view is allowed to say. Everything here is

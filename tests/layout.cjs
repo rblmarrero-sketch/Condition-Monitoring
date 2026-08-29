@@ -15,6 +15,7 @@
    Run: node tests/layout.cjs [port]   (needs tests/ed-srv.cjs on 8093)
 */
 const { chromium } = require(require("./pw.cjs"));
+const BUNDLED = require("./bundled.cjs");
 const fs = require("fs"), path = require("path");
 const PORT = Number(process.argv[2] || 8093);
 const URL = `http://127.0.0.1:${PORT}/dashboard/index.html`;
@@ -63,6 +64,9 @@ function proseUnderTitles() {
   const p = await b.newPage({ viewport: { width: 1366, height: 768 } });
   await p.goto(URL, { waitUntil: "load" });
   await p.waitForTimeout(2200);
+  /* The sixteen bundled rounds, supplied explicitly — see tests/bundled.cjs. */
+  await p.evaluate(BUNDLED + "()");
+  await p.waitForTimeout(600);
 
   console.log("\n── no card is a horizontal slider");
   /* A table container may overflow — an engineering table with fifteen columns

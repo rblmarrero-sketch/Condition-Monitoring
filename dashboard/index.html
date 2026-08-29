@@ -2774,27 +2774,27 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=201"></script>
-<script src="../mobile/hme.js?v=201"></script>
-<script src="../mobile/mp-fc.js?v=201"></script>
-<script src="../mobile/hme-cascade.js?v=201"></script>
-<script src="../mobile/temp-limits.js?v=201"></script>
+<script src="../data/magnetic_plug.js?v=202"></script>
+<script src="../mobile/hme.js?v=202"></script>
+<script src="../mobile/mp-fc.js?v=202"></script>
+<script src="../mobile/hme-cascade.js?v=202"></script>
+<script src="../mobile/temp-limits.js?v=202"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=201"></script>
-<script src="../mobile/normalize.js?v=201"></script>
-<script src="../mobile/due.js?v=201"></script>
-<script src="../mobile/wear.js?v=201"></script>
-<script src="../mobile/wear-map.js?v=201"></script>
-<script src="../mobile/lube.js?v=201"></script>
-<script src="../mobile/lube-overrides.js?v=201"></script>
-<script src="../mobile/lube2027.js?v=201"></script>
-<script src="../mobile/lube-tds.js?v=201"></script>
+<script src="../mobile/assets.js?v=202"></script>
+<script src="../mobile/normalize.js?v=202"></script>
+<script src="../mobile/due.js?v=202"></script>
+<script src="../mobile/wear.js?v=202"></script>
+<script src="../mobile/wear-map.js?v=202"></script>
+<script src="../mobile/lube.js?v=202"></script>
+<script src="../mobile/lube-overrides.js?v=202"></script>
+<script src="../mobile/lube2027.js?v=202"></script>
+<script src="../mobile/lube-tds.js?v=202"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=201"></script>
-<script src="../mobile/machine-photos.js?v=201"></script>
+<script src="../mobile/upload-defaults.js?v=202"></script>
+<script src="../mobile/machine-photos.js?v=202"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -2803,17 +2803,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=201"></script>
-<script src="../mobile/get.js?v=201"></script>
-<script src="../mobile/points.js?v=201"></script>
-<script src="../mobile/uc-points.js?v=201"></script>
-<script src="../mobile/inspect-guide.js?v=201"></script>
-<script src="../mobile/get-figs.js?v=201"></script>
-<script src="../mobile/body-points.js?v=201"></script>
-<script src="../mobile/body-map.js?v=201"></script>
-<script src="../mobile/jspdf.umd.min.js?v=201"></script>
-<script src="../mobile/html2canvas.min.js?v=201"></script>
-<script src="../mobile/report-core.js?v=201"></script>
+<script src="../mobile/machine-fig.js?v=202"></script>
+<script src="../mobile/get.js?v=202"></script>
+<script src="../mobile/points.js?v=202"></script>
+<script src="../mobile/uc-points.js?v=202"></script>
+<script src="../mobile/inspect-guide.js?v=202"></script>
+<script src="../mobile/get-figs.js?v=202"></script>
+<script src="../mobile/body-points.js?v=202"></script>
+<script src="../mobile/body-map.js?v=202"></script>
+<script src="../mobile/jspdf.umd.min.js?v=202"></script>
+<script src="../mobile/html2canvas.min.js?v=202"></script>
+<script src="../mobile/report-core.js?v=202"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -6019,6 +6019,68 @@ function mediaAll(it,rec){
   if(Array.isArray(it.photos)) it.photos.forEach(ph=>
     add(ph, /^(data:|blob:|https?:|\/)/.test(ph)?ph:"../"+ph, "photo"));
   if(it.video) add(it.video, /^(data:|blob:|https?:|\/)/.test(it.video)?it.video:"../"+it.video, "video");
+  return out;
+}
+/* WHAT THE SERVER HOLDS FOR THIS POINT — asked of the INDEX, never of memory.
+
+   mediaOf() answers a different question from the one the audit needs, and for
+   months the audit asked it anyway. mediaAll() only emits an entry when
+   folderPhotos[name] is already populated, and folderPhotos is browser memory
+   filled by lazy-loading when somebody opens a unit's Equipment History. So
+   mediaOf() does not mean "the evidence this point has"; it means "the
+   evidence this browser has already downloaded".
+
+   Everything built on it inherited that. Straight after a sync the dashboard
+   reported 314 field photographs expected, four received, hundreds missing —
+   and, from the same scan, ZERO records waiting and "every attachment is
+   accounted for". Opening TK151's history pushed received up; reloading put it
+   back. A false alarm and a false reassurance, side by side, from one cause.
+
+   This asks the file index — the complete list of object names the backend
+   returns once per sync — and touches no URL, no blob and no open tab. Its
+   answer is therefore the same before and after opening a history, changing
+   tab, printing a report, switching language or reloading the page.
+
+   Identity here is still the FILE NAME, which is what the folder has. A stable
+   attachment id is the better key and is what the phone now stamps on
+   everything it sends; until every record in the folder carries one, a name is
+   what both ends can agree on, and guessing would be worse than saying so. */
+function serverMediaOf(it,rec){
+  let has=null;
+  try{ has=(window.CMDrive&&CMDrive.hasName)?CMDrive.hasName:null; }catch(e){ has=null; }
+  if(!has||!it||!rec) return [];
+  const out=[], seen=new Set();
+  for(const b of photoBases(it,rec)){
+    for(const s of PHOTO_SUF){
+      for(const n of photoNames(b,rec,[s])){
+        if(seen.has(n)||!has(n)) continue;
+        seen.add(n); out.push({name:n,kind:"photo"}); break;   // one file per suffix
+      }
+    }
+    for(const n of videoNames(b,rec)){
+      if(seen.has(n)||!has(n)) continue;
+      seen.add(n); out.push({name:n,kind:"video"}); break;
+    }
+  }
+  /* The same re-filing rules the display obeys, so a photograph moved to
+     another point is not counted twice or counted in the wrong place. */
+  const plan=assignPlan(rec), hid=hiddenSet(it);
+  const mine=out.filter(m=>!plan.moved.has(m.name));
+  const here=new Set(mine.map(m=>m.name));
+  const come=((it&&it.key&&plan.toPoint.get(it.key))||[]).filter(m=>!here.has(m.name));
+  return mine.concat(come).filter(m=>!hid.has(m.name));
+}
+/* The names this point's photographs WOULD have, in the order the phone writes
+   them. Used to say which files a shortfall is waiting for — a person hunting
+   a missing photograph needs something to search the folder for. */
+function expectedNames(it,rec,n){
+  const b=photoBases(it,rec)[0], out=[];
+  /* The phone's own rule: <base>.jpg when a point has exactly one photograph,
+     <base>_1.jpg … <base>_n.jpg when it has more. Naming a single photograph
+     "_1" would send somebody hunting the folder for a file that was never
+     going to be called that. */
+  if(n<=1){ if(n>0) out.push(`${b}.jpg`); return out; }
+  for(let i=1;i<=n;i++) out.push(`${b}_${i}.jpg`);
   return out;
 }
 /* Kept for the callers that only ask "is there anything to show". */
@@ -11045,8 +11107,9 @@ function bundledMedia(rec, m){
 function mediaPopulations(){
   const held=(()=>{ try{ return new Set(window.CMDrive&&CMDrive.names?CMDrive.names():[]); }
                     catch(e){ return new Set(); } })();
+  /* `answered` is the one thing memory may speak to: it says whether the
+     question has been PUT to the backend at all, not what the answer was. */
   const local=(()=>{ try{ return folderPhotos||{}; }catch(e){ return {}; } })();
-  const have=n=>held.has(n)||!!local[n];
   const P={ historical:0, mobExpected:0, mobReceived:0, dashAdded:0, answered:held.size>0||Object.keys(local).length>0 };
   RECS.forEach(r=>{
     if(r._void) return;
@@ -11060,9 +11123,14 @@ function mediaPopulations(){
       const exp = window.CMNorm ? CMNorm.photoCount(i.photos) : 0;
       if(!exp) return;
       P.mobExpected += exp;
-      /* Received is what the folder can actually produce for this point. */
+      /* RECEIVED IS WHAT THE SERVER HOLDS, not what this browser has opened.
+         This asked mediaOf(), which only lists photographs already lazily
+         downloaded into folderPhotos — so the figure started near zero, rose
+         when somebody opened a unit's history, and fell back on reload. A
+         number that answers "what have I clicked on" while claiming to answer
+         "what arrived from the field" is the worst kind this project makes. */
       let got=0;
-      try{ got = mediaOf(i,r).filter(m=>m.name && have(m.name)).length; }catch(e){}
+      try{ got = serverMediaOf(i,r).filter(m=>m.kind==="photo").length; }catch(e){}
       P.mobReceived += Math.min(got, exp);
     });
   });
@@ -11074,8 +11142,9 @@ function mediaPopulations(){
 function syncScan(){
   const held=(()=>{ try{ return new Set(window.CMDrive&&CMDrive.names?CMDrive.names():[]); }
                     catch(e){ return new Set(); } })();
+  /* Only for `linked` below — whether the backend has ever answered. No count
+     on this screen is allowed to depend on what happens to be in memory. */
   const local=(()=>{ try{ return folderPhotos||{}; }catch(e){ return {}; } })();
-  const have=n=>held.has(n)||!!local[n];
   const gaps=[], quar=[];
   let expected=0, present=0;
   RECS.forEach(r=>{
@@ -11126,16 +11195,22 @@ function syncScan(){
     if(r._void) return;
     const miss=[];
     (r.items||[]).forEach(i=>{
-      mediaOf(i,r).forEach(m=>{
-        if(!m.name) return;
-        /* Ships with the application, so it is not a delivery that can be
-           late. Counting it here put four photographs that were on the screen
-           at the time into the missing list, and into the denominator of every
-           percentage drawn from it. */
-        if(bundledMedia(r,m)) return;
-        expected++;
-        if(have(m.name)) present++; else miss.push({ik:i.key, name:m.name});
-      });
+      if(!i) return;
+      /* EXPECTED IS THE CLAIM. RECEIVED IS THE INDEX. They are two different
+         measurements of two different things, and this used to take both from
+         mediaOf() — which is neither. It reports what the browser has already
+         lazily downloaded, so a fresh page said every photograph on site was
+         missing AND, from the same pass, that nothing was waiting. */
+      if(bundledMedia(r,null)) return;      // ships with the app; never a late delivery
+      const claim = window.CMNorm ? CMNorm.photoCount(i.photos) : 0;
+      if(!claim) return;
+      const held = serverMediaOf(i,r).filter(m=>m.kind==="photo").length;
+      expected += claim;
+      present  += Math.min(held, claim);
+      /* A shortfall is named by the point and by the file names the phone
+         would have written, so somebody can search the folder for them. */
+      if(held < claim) expectedNames(i,r,claim).slice(held).forEach(n=>
+        miss.push({ik:i.key, name:n}));
     });
     if(miss.length) gaps.push({r, miss});
   });
@@ -11624,8 +11699,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=201"></script>
-<script src="sync-adapter.js?v=201"></script>
-<script src="report.js?v=201"></script>
+<script src="drive.js?v=202"></script>
+<script src="sync-adapter.js?v=202"></script>
+<script src="report.js?v=202"></script>
 </body>
 </html>

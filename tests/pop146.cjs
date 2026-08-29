@@ -23,6 +23,7 @@
 
    Run: node tests/pop146.cjs [port]    (needs tests/ed-srv.cjs on 8093) */
 const { chromium } = require(require("./pw.cjs"));
+const BUNDLED = require("./bundled.cjs");
 const PORT = Number(process.argv[2] || 8093);
 const URL = `http://127.0.0.1:${PORT}/dashboard/index.html`;
 let fail = 0;
@@ -46,6 +47,12 @@ const FIELD = {
   p.on("pageerror", e => errs.push(e.message));
   await p.goto(URL, { waitUntil: "load" });
   await p.waitForTimeout(1800);
+  /* The sixteen bundled rounds, supplied explicitly. The dashboard no longer
+     merges data/magnetic_plug.js into its records — that file was a second
+     source for rounds the folder now holds — so this suite states the
+     fixture it has always depended on. */
+  await p.evaluate(BUNDLED + "()");
+  await p.waitForTimeout(500);
 
   /* The server holds nothing of TK900's yet, and could never hold TK146's
      bundled paths. Controlled rather than assumed, so the run is the same on
@@ -54,6 +61,10 @@ const FIELD = {
     window.__held = h;
     CMDrive.configured = () => true;
     CMDrive.names = () => window.__held;
+    /* The audit asks hasName(), not names(): it checks the folder's index for
+       one predicted file at a time rather than pulling the whole list. Stub
+       both or the suite is testing a different question from the screen. */
+    CMDrive.hasName = (n) => window.__held.indexOf(n) >= 0;
     try { folderPhotos = {}; } catch (e) {}
     if (!RECS.some(r => r.equip === "TK900")) RECS.push(window.__field);
     return true;
