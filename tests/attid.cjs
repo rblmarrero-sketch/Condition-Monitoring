@@ -140,6 +140,51 @@ const build = p => p.evaluate(async () => {
      'with an id, a hash and a size on every one',
      JSON.stringify((pkg.atts[0] || {}).attachmentId));
 
+  console.log('\n── what the phone is entitled to say before somebody deletes it');
+  {
+    /* The delete confirmation used to warn on rec.up alone, which this file
+       documents as "the endpoint returned 2xx for every file I sent". A 2xx is
+       a fact about a conversation. confirmRun already asks the folder what it
+       really holds and writes rec.conf — and rec.conf was read in one place, a
+       status line. The phone held the stronger fact and reassured on the
+       weaker one, next to a bin. */
+    const lv = await p.evaluate(() => {
+      const base = () => ({ id: 'ev__TK904__2026-07-29__X__z', type: 'MP', equip: 'TK904',
+        date: '2026-07-29', cls: 'HT', by: 'R. Marrero', created: new Date().toISOString(),
+        positions: { '4C': { photos: [] } } });
+      const out = {};
+      let r = base();                                   out.nowhere = evidenceLevel(r);
+      r = base(); r.up = 1;                             out.accepted = evidenceLevel(r);
+      r = base(); r.up = 1; r.conf = { of: 2, n: 1 };   out.shortListing = evidenceLevel(r);
+      r = base(); r.up = 1; r.conf = { of: 2, n: 2 };   out.listed = evidenceLevel(r);
+      /* A receipt the server does not yet issue: proves the ladder reads the
+         manifest, so the phone gets stricter on its own the day it lands. */
+      r = base(); r.up = 1; r.conf = { of: 1, n: 1 };
+      r.positions['4C'].att = { a1: { attachmentId: 'a1', sha256: 'ff', byteSize: 10,
+                                      serverSha256: 'ff', serverByteSize: 10 } };
+      out.verified = evidenceLevel(r);
+      r.positions['4C'].att.a1.dashboardConfirmedAt = '2026-07-29T10:00:00Z';
+      out.office = evidenceLevel(r);
+      /* A receipt whose hash does NOT match must not count as verified. */
+      const bad = base(); bad.up = 1; bad.conf = { of: 1, n: 1 };
+      bad.positions['4C'].att = { a1: { attachmentId: 'a1', sha256: 'ff', byteSize: 10,
+                                        serverSha256: 'ee', serverByteSize: 10 } };
+      out.mismatch = evidenceLevel(bad);
+      return out;
+    });
+    ok(lv.nowhere === 0, 'nothing sent is nowhere else', String(lv.nowhere));
+    /* THE CHECK THAT NAMES THE BUG. */
+    ok(lv.accepted === 1, 'a 2xx is "accepted", not "the system has it"', String(lv.accepted));
+    ok(lv.shortListing === 1,
+       'and a listing that came back short does not promote it', String(lv.shortListing));
+    ok(lv.listed === 2, 'asking the folder and finding every file is stronger', String(lv.listed));
+    ok(lv.verified === 3, 'a receipt matching size and hash is stronger again', String(lv.verified));
+    ok(lv.office === 4, 'and the office resolving it by id is the top of the ladder', String(lv.office));
+    ok(lv.mismatch === 2,
+       'a receipt whose hash disagrees is NOT verified — it falls back to what was checked',
+       String(lv.mismatch));
+  }
+
   await ctx.close(); await b.close();
   console.log(fails.length ? '\n' + fails.length + ' FAILED\n' + fails.join('\n') : '\nall good');
   process.exit(fails.length ? 1 : 0);

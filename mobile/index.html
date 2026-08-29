@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=196">
+<link rel="manifest" href="manifest.webmanifest?v=197">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=196">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=196">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=196">
+<link rel="apple-touch-icon" href="icon-192.png?v=197">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=197">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=197">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1970,31 +1970,31 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=196"></script>
-<script src="upload-defaults.js?v=196"></script>
-<script src="hme.js?v=196"></script>
-<script src="mp-fc.js?v=196"></script>
-<script src="hme-cascade.js?v=196"></script>
-<script src="assets.js?v=196"></script>
-<script src="temp-limits.js?v=196"></script>
-<script src="normalize.js?v=196"></script>
-<script src="due.js?v=196"></script>
-<script src="wear.js?v=196"></script>
-<script src="wear-figs.js?v=196"></script>
-<script src="wear-map.js?v=196"></script>
-<script src="machine-photos.js?v=196"></script>
-<script src="machine-fig.js?v=196"></script>
-<script src="get.js?v=196"></script>
-<script src="points.js?v=196"></script>
-<script src="uc-points.js?v=196"></script>
-<script src="inspect-guide.js?v=196"></script>
-<script src="get-figs.js?v=196"></script>
-<script src="body-points.js?v=196"></script>
-<script src="body-map.js?v=196"></script>
-<script src="lube.js?v=196"></script>
-<script src="lube-overrides.js?v=196"></script>
-<script src="lube2027.js?v=196"></script>
-<script src="report-core.js?v=196"></script>
+<script src="native.js?v=197"></script>
+<script src="upload-defaults.js?v=197"></script>
+<script src="hme.js?v=197"></script>
+<script src="mp-fc.js?v=197"></script>
+<script src="hme-cascade.js?v=197"></script>
+<script src="assets.js?v=197"></script>
+<script src="temp-limits.js?v=197"></script>
+<script src="normalize.js?v=197"></script>
+<script src="due.js?v=197"></script>
+<script src="wear.js?v=197"></script>
+<script src="wear-figs.js?v=197"></script>
+<script src="wear-map.js?v=197"></script>
+<script src="machine-photos.js?v=197"></script>
+<script src="machine-fig.js?v=197"></script>
+<script src="get.js?v=197"></script>
+<script src="points.js?v=197"></script>
+<script src="uc-points.js?v=197"></script>
+<script src="inspect-guide.js?v=197"></script>
+<script src="get-figs.js?v=197"></script>
+<script src="body-points.js?v=197"></script>
+<script src="body-map.js?v=197"></script>
+<script src="lube.js?v=197"></script>
+<script src="lube-overrides.js?v=197"></script>
+<script src="lube2027.js?v=197"></script>
+<script src="report-core.js?v=197"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2534,6 +2534,8 @@ const I18N = {
     up_never:"Saved on this phone only", up_at:"sent {t}",
     del_t_unsent:"This has not been uploaded",
     del_m_unsent:"{x} is only on this phone. Deleting it destroys {d} for good — there is no copy anywhere else and it cannot be undone.",
+    del_t_maybe:"Sent, but not yet confirmed",
+    del_m_maybe:"{x} was accepted when it was sent, but this phone has not yet checked that the system really has it. Deleting now could destroy {d} with no copy anywhere. Wait until it says the system has it.",
     del_t_sent:"Delete from this phone?",
     del_m_sent:"{x} has already been uploaded. Removing it here frees space on the phone; the copy in the system is not touched.",
     m_saved:["Saved ✔","{x} saved on this phone. Capture the next one, then Share/Export when you have internet."],
@@ -2977,6 +2979,8 @@ const I18N = {
     up_never:"Только на этом телефоне", up_at:"отправлено {t}",
     del_t_unsent:"Это ещё не выгружено",
     del_m_unsent:"{x} есть только на этом телефоне. Удаление уничтожит {d} безвозвратно — копии нигде нет, отменить нельзя.",
+    del_t_maybe:"Отправлено, но ещё не подтверждено",
+    del_m_maybe:"{x} было принято при отправке, но телефон ещё не проверил, что это действительно есть в системе. Удаление сейчас может уничтожить {d} без единой копии. Дождитесь подтверждения.",
     del_t_sent:"Удалить с этого телефона?",
     del_m_sent:"{x} уже выгружено. Удаление здесь освободит место на телефоне; копия на Диске не затрагивается.",
     m_saved:["Сохранено ✔","{x} сохранён на телефоне. Снимайте следующий, затем «Поделиться»/«Экспорт» при интернете."],
@@ -8972,11 +8976,18 @@ async function renderPending(){
          nowhere — and telling somebody clearing space that they are about to
          destroy the only copy, when they are not, is how a warning stops being
          read. Partly-sent counts as sent for this question. */
-      const anywhere = rec.up || Object.keys(rec.upTo||{}).length > 0;
-      const gone=!anywhere;
-      const okd=await ask(t(gone?"del_t_unsent":"del_t_sent"),
-        (gone ? t("del_m_unsent",{x:what,d:detail}) : t("del_m_sent",{x:what})),
-        t("del_go"), gone);
+      /* Three answers, not two. "Sent" and "the system has it" were one
+         sentence, and only the second is grounds for saying the copy in the
+         system is not touched. */
+      const lvl=evidenceLevel(rec);
+      const gone = lvl===EV_NONE;
+      const unsure = lvl===EV_SENT;              // accepted, never verified
+      const okd=await ask(
+        t(gone ? "del_t_unsent" : unsure ? "del_t_maybe" : "del_t_sent"),
+        (gone ? t("del_m_unsent",{x:what,d:detail})
+              : unsure ? t("del_m_maybe",{x:what,d:detail})
+              : t("del_m_sent",{x:what})),
+        t("del_go"), gone || unsure);
       if(!okd) return;
       await dbDel(rec.id);
       if(editing&&editing.id===rec.id) setEditing(null);
@@ -9804,7 +9815,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="196";
+const BUILD="197";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -10454,6 +10465,48 @@ const isBlob=v=>v instanceof Blob;
    from another phone's merge bundle, so "shaped correctly" is not a given. */
 function positionsOf(rec){ return Object.entries((rec&&rec.positions)||{}).filter(([,p])=>p&&typeof p==="object"); }
 function photosOf(p){ const ph=p.photos||(p.photoBlob?[p.photoBlob]:[]); return Array.isArray(ph)?ph.filter(isBlob):[]; }
+/* HOW WELL THIS ROUND IS PROVEN TO EXIST ANYWHERE BUT HERE.
+
+   The delete confirmation decided how loudly to warn from `rec.up`, and this
+   file says plainly what that means: "the endpoint returned 2xx for every file
+   I sent". A 2xx is a fact about a conversation. It is not a fact about a
+   stored object, and it is not grounds for telling somebody clearing space
+   that "the copy in the system is not touched".
+
+   Meanwhile confirmRun already asks the folder what it actually holds and
+   writes the answer to rec.conf — and rec.conf was read in exactly one place,
+   a status line. The phone held the stronger fact and reassured on the weaker
+   one. A false reassurance is the same failure as a false alarm, and this is
+   the one that ends with evidence deleted.
+
+   So there is one ladder, and every rung is something somebody checked:
+
+     0  nowhere else      nothing has left this phone
+     1  accepted          the endpoint took it - a conversation, not a file
+     2  listed            the folder was asked and the file is there, non-empty
+     3  verified          a receipt whose byte size and SHA-256 match this
+                          phone's manifest, for every attachment
+     4  in the office     the dashboard has resolved every attachment by id
+
+   Three and four are not reachable yet: the backend issues no receipt and the
+   dashboard does not yet match on id. The manifest already carries the fields
+   they will fill - serverReceiptId, serverByteSize, serverSha256,
+   dashboardConfirmedAt - deliberately absent rather than guessed at. Because
+   this reads the manifest instead of hard-coding a policy, the day the server
+   starts answering, the phone gets stricter on its own. */
+const EV_NONE=0, EV_SENT=1, EV_LISTED=2, EV_VERIFIED=3, EV_OFFICE=4;
+function evidenceLevel(rec){
+  if(!rec) return EV_NONE;
+  const atts=(()=>{ try{ return attList(rec); }catch(e){ return []; } })();
+  const every=f=>atts.length>0 && atts.every(f);
+  if(every(e=>!!e.dashboardConfirmedAt)) return EV_OFFICE;
+  if(every(e=>e.serverSha256 && e.sha256 && e.serverSha256===e.sha256
+            && Number(e.serverByteSize)===Number(e.byteSize))) return EV_VERIFIED;
+  const c=rec.conf;
+  if(c && c.of && c.n===c.of) return EV_LISTED;
+  if(rec.up || Object.keys(rec.upTo||{}).length>0) return EV_SENT;
+  return EV_NONE;
+}
 /* THE MANIFEST. One entry per attachment, keyed by the attachment's own id —
    never by position, never by the name it will be uploaded under.
 
