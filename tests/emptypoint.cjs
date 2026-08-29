@@ -337,5 +337,48 @@ ok(unclassified.length === 0,
 ok(emitted.includes("detection") || emitted.includes("detect"),
    "the guard can see the field that caused this", emitted.join(", "));
 
+/* ─────────────────────────────────────────────────────────────────────────
+   THE 1,220 IDENTICAL WARNINGS.
+
+   Admin Diagnostics on the deployed build reported refSrc, zone and zoneLabel
+   as unclassified point fields — one warning per point, 1,220 of them. A
+   diagnostic that fires on every point is not a diagnostic; it is the noise a
+   real one has to be found in.
+
+   All three carry meaning and are kept. None of them is evidence that a
+   technician recorded anything: the app writes refSrc from a reference-table
+   lookup, and zone/zoneLabel from the point definition — so every point on a
+   tray-body round carries a zone whether or not anybody touched it. That is
+   the detection/detectionLabel mistake exactly, and it is what put TK115 and
+   DZ007 on hold. */
+console.log("\n── refSrc, zone and zoneLabel");
+{
+  const appSupplied = { refSrc: "tray:HM400", zone: "Z3", zoneLabel: "Left wall" };
+  const blankRow = Object.assign({ key: "", label: "" }, appSupplied);
+  ok(N.unknown(blankRow).length === 0,
+     "none of the three is reported as unclassified any more",
+     N.unknown(blankRow).join(", ") || "none");
+  /* THE DIRECTION THAT MATTERS MOST. A tray row nobody filled in still leaves
+     the phone carrying a zone and its label. */
+  ok(N.classify(blankRow) === "empty",
+     "a tray row carrying only what the app filled in is empty, not a finding",
+     N.classify(blankRow));
+  ok(!N.carries(blankRow),
+     "so it can never put an inspection on hold for a missing component");
+  /* And the other direction, which is how field evidence gets lost. */
+  const realRow = Object.assign({ key: "Z3-1", label: "Left wall", mm: 12 }, appSupplied);
+  ok(N.classify(realRow) === "ok", "a measured row is still a real point", N.classify(realRow));
+  ok(["refSrc", "zone", "zoneLabel"].every(f => realRow[f] === appSupplied[f]),
+     "with all three preserved on it exactly as captured",
+     JSON.stringify({ refSrc: realRow.refSrc, zone: realRow.zone, zoneLabel: realRow.zoneLabel }));
+  ok(N.unknown(realRow).length === 0, "and nothing on it unclassified",
+     N.unknown(realRow).join(", ") || "none");
+  /* A field on both lists would be a contradiction: kept out of the evidence
+     test and counted as evidence at the same time. */
+  ok(!N.DEFAULTED.some(f => N.OPERATIONAL.indexOf(f) >= 0),
+     "no field is both app-supplied and operational",
+     N.DEFAULTED.filter(f => N.OPERATIONAL.indexOf(f) >= 0).join(", ") || "none");
+}
+
 console.log(fail ? "\nFAILED: " + fail : "\nall passed");
 process.exit(fail ? 1 : 0);

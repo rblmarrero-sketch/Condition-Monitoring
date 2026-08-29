@@ -232,7 +232,32 @@
      nothing. On a real point it is preserved exactly as before — this list
      changes only whether a field can make an otherwise-empty point count as
      populated, never whether it is kept. */
-  var DEFAULTED = ['detect', 'detection', 'detectionLabel'];
+  /* refSrc, zone and zoneLabel are the same category, and they were reported
+     as unclassified 1,220 times on the deployed dashboard — one identical
+     warning per point, which is noise a real diagnostic would have to hide in.
+
+     All three carry operational MEANING and are kept: refSrc is the provenance
+     of the limit a wear judgement was made against ("tray:<model>", with a "?"
+     when the model was not certain, or "x:<id>" for an explicit reference), and
+     zone/zoneLabel say which zone of a tray body a measurement belongs to. An
+     auditor asking "measured against what, and where?" needs both.
+
+     What they are not is evidence that anybody recorded anything. The app
+     writes them itself:
+
+         refSrc:    st.ok ? ("tray:" + st.model + …) : ""     — a table lookup
+         zone:      pt ? pt.z : ""                            — the point definition
+         zoneLabel: pt ? BODY.zoneLabel(st.model, pt.z, …)    — its label
+
+     Every point on a tray-body round has a zone whether or not a technician
+     touched it, so a row nobody filled in leaves the phone carrying two
+     non-blank fields. Put on the operational list they would make every blank
+     tray row a finding with no component — which is precisely what `detection`
+     did to TK115 and DZ007 through builds 165 and 166. Listed here they are
+     preserved on a real point exactly as before and can never make an empty
+     one count as populated. */
+  var DEFAULTED = ['detect', 'detection', 'detectionLabel',
+                   'refSrc', 'zone', 'zoneLabel'];
 
   var METADATA = [
     'id', 'uid', 'uuid', 'tmpId', 'tempId', 'localId', 'seq', 'idx', 'index',
