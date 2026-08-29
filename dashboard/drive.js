@@ -411,6 +411,15 @@
     const names = [];
     for (const rec of recs) {
       for (const it of (rec.items || [])) {
+        /* The manifest names this point's files outright. Without it the list
+           below is built from the point KEY, so a photograph on a keyless
+           point was never even requested — it could not be displayed, so it
+           could not be classified, so it stayed on the correction list. */
+        for (const e of (Array.isArray(it && it.att) ? it.att : [])) {
+          const key = String((e && e.serverObjectId) || "");
+          const nm = key ? key.split("/").pop() : String((e && e.storedName) || "");
+          if (nm && index[nm] && !(nm in fetched)) names.push(nm);
+        }
         const base = window.CMDash.photoBase(it, rec);
         // The same candidate list the history uses, so a record whose photos were
         // kept under "~DEVICE" after a two-phone clash still gets them fetched.

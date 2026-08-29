@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=208">
+<link rel="manifest" href="manifest.webmanifest?v=209">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=208">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=208">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=208">
+<link rel="apple-touch-icon" href="icon-192.png?v=209">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=209">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=209">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1970,31 +1970,31 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=208"></script>
-<script src="upload-defaults.js?v=208"></script>
-<script src="hme.js?v=208"></script>
-<script src="mp-fc.js?v=208"></script>
-<script src="hme-cascade.js?v=208"></script>
-<script src="assets.js?v=208"></script>
-<script src="temp-limits.js?v=208"></script>
-<script src="normalize.js?v=208"></script>
-<script src="due.js?v=208"></script>
-<script src="wear.js?v=208"></script>
-<script src="wear-figs.js?v=208"></script>
-<script src="wear-map.js?v=208"></script>
-<script src="machine-photos.js?v=208"></script>
-<script src="machine-fig.js?v=208"></script>
-<script src="get.js?v=208"></script>
-<script src="points.js?v=208"></script>
-<script src="uc-points.js?v=208"></script>
-<script src="inspect-guide.js?v=208"></script>
-<script src="get-figs.js?v=208"></script>
-<script src="body-points.js?v=208"></script>
-<script src="body-map.js?v=208"></script>
-<script src="lube.js?v=208"></script>
-<script src="lube-overrides.js?v=208"></script>
-<script src="lube2027.js?v=208"></script>
-<script src="report-core.js?v=208"></script>
+<script src="native.js?v=209"></script>
+<script src="upload-defaults.js?v=209"></script>
+<script src="hme.js?v=209"></script>
+<script src="mp-fc.js?v=209"></script>
+<script src="hme-cascade.js?v=209"></script>
+<script src="assets.js?v=209"></script>
+<script src="temp-limits.js?v=209"></script>
+<script src="normalize.js?v=209"></script>
+<script src="due.js?v=209"></script>
+<script src="wear.js?v=209"></script>
+<script src="wear-figs.js?v=209"></script>
+<script src="wear-map.js?v=209"></script>
+<script src="machine-photos.js?v=209"></script>
+<script src="machine-fig.js?v=209"></script>
+<script src="get.js?v=209"></script>
+<script src="points.js?v=209"></script>
+<script src="uc-points.js?v=209"></script>
+<script src="inspect-guide.js?v=209"></script>
+<script src="get-figs.js?v=209"></script>
+<script src="body-points.js?v=209"></script>
+<script src="body-map.js?v=209"></script>
+<script src="lube.js?v=209"></script>
+<script src="lube-overrides.js?v=209"></script>
+<script src="lube2027.js?v=209"></script>
+<script src="report-core.js?v=209"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -9897,7 +9897,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="208";
+const BUILD="209";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -10797,10 +10797,22 @@ async function filesForRecord(rec){
          it, and the rename overwrote a different component on the server. */
       const aid=attIdOf(ph[i]);
       const seq=aid ? attSeq(p,aid) : (i+1);
-      out.push({name: (ph.length>1||seq>1) ? base.replace("."+ext,"_"+seq+"."+ext) : base,
-                blob:ph[i], aid}); }
+      const nm=(ph.length>1||seq>1) ? base.replace("."+ext,"_"+seq+"."+ext) : base;
+      /* THE NAME IT IS ACTUALLY SENT UNDER, written onto the manifest.
+
+         Everything else about a photograph was recorded and this was not, so
+         the office had nothing to match a file by except a name it worked out
+         for itself — from the point key, which is exactly what a keyless point
+         does not have. Recorded here, at the one place that decides it. */
+      const e=aid && attMap(p) && attMap(p)[aid];
+      if(e) e.storedName=nm;
+      out.push({name:nm, blob:ph[i], aid}); }
     if(isBlob(p.video)){ const vext=(p.video.type||"").includes("quicktime")?"mov":"mp4";
-      out.push({name:fileName(rec.equip,k,rec.date,vext,suffix,isComp), blob:p.video}); }
+      const vnm=fileName(rec.equip,k,rec.date,vext,suffix,isComp);
+      const vaid=attIdOf(p.video);
+      const ve=vaid && attMap(p) && attMap(p)[vaid];
+      if(ve) ve.storedName=vnm;
+      out.push({name:vnm, blob:p.video, aid:vaid}); }
   }
   if(isBlob(rec.sign)) out.push({name:`${rec.equip}_${ddmmyyyy(rec.date)}_${suffix}_SIGN.png`, blob:rec.sign});
   return out;
@@ -11033,7 +11045,40 @@ function recToExport(rec){
         detection:det, detectionLabel:detectLabel(det,"en"),
         comp:p.comp||"", oil:p.oil||"", comment:p.comment||"", tempC:p.tempV||"", ambC:p.tempA||"", tempMethod:p.tempM||"",
         ...(wearOut(rec,k,p)||{}),
-        photos:((p.photos||[]).length), video:p.video?1:0 }; }) };
+        photos:((p.photos||[]).length), video:p.video?1:0,
+        /* THE ATTACHMENT MANIFEST, TRAVELLING WITH THE ROUND.
+
+           The phone has recorded all of this per photograph since build 196 —
+           a stable id, the point it belongs to, its mime type, its byte size,
+           its SHA-256, when it was captured and by whom, how many times it has
+           been sent, and what the server said it stored. None of it left the
+           phone. So the office, holding a sidecar and a folder of files, had
+           nothing to match one to the other by except a name it worked out for
+           itself from the point key — which is why a photograph on a point
+           with no key could not be matched at all, and why TK115's six and
+           DZ007's four have sat unresolvable for a month.
+
+           `photos` above stays exactly as it is: it is the CLAIM, the number a
+           phone says it took, and the audit measures the folder against it.
+           This is the other half — what each of those photographs IS. */
+        att:(function(){
+          const m=attMap(p); if(!m) return [];
+          return Object.keys(m).map(function(aid){
+            const e=m[aid]||{};
+            return { schemaVersion:e.schemaVersion||1, attachmentId:aid, seq:e.seq||0,
+                     inspectionId:e.inspectionId||"", pointId:e.pointId||"",
+                     generalEvidence:e.generalEvidence?1:0,
+                     mediaType:e.mediaType||"", mimeType:e.mimeType||"",
+                     storedName:e.storedName||"", originalFilename:e.originalFilename||"",
+                     byteSize:Number(e.byteSize)||0, sha256:e.sha256||"",
+                     capturedBy:e.capturedBy||"", capturedAt:e.capturedAt||"",
+                     uploadState:e.uploadState||"", uploadAttempts:Number(e.uploadAttempts)||0,
+                     serverReceiptId:e.serverReceiptId||"", serverObjectId:e.serverObjectId||"",
+                     serverByteSize:(e.serverByteSize==null?null:Number(e.serverByteSize)),
+                     serverSha256:e.serverSha256||"", serverReceivedAt:e.serverReceivedAt||"",
+                     duplicateSuppressed:e.duplicateSuppressed?1:0 };
+          }).sort(function(a,b){ return (a.seq||0)-(b.seq||0); });
+        })() }; }) };
 }
 async function renderSync(){
   const bar=$("syncBar"); if(!bar) return;

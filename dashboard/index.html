@@ -2837,27 +2837,27 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=208"></script>
-<script src="../mobile/hme.js?v=208"></script>
-<script src="../mobile/mp-fc.js?v=208"></script>
-<script src="../mobile/hme-cascade.js?v=208"></script>
-<script src="../mobile/temp-limits.js?v=208"></script>
+<script src="../data/magnetic_plug.js?v=209"></script>
+<script src="../mobile/hme.js?v=209"></script>
+<script src="../mobile/mp-fc.js?v=209"></script>
+<script src="../mobile/hme-cascade.js?v=209"></script>
+<script src="../mobile/temp-limits.js?v=209"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=208"></script>
-<script src="../mobile/normalize.js?v=208"></script>
-<script src="../mobile/due.js?v=208"></script>
-<script src="../mobile/wear.js?v=208"></script>
-<script src="../mobile/wear-map.js?v=208"></script>
-<script src="../mobile/lube.js?v=208"></script>
-<script src="../mobile/lube-overrides.js?v=208"></script>
-<script src="../mobile/lube2027.js?v=208"></script>
-<script src="../mobile/lube-tds.js?v=208"></script>
+<script src="../mobile/assets.js?v=209"></script>
+<script src="../mobile/normalize.js?v=209"></script>
+<script src="../mobile/due.js?v=209"></script>
+<script src="../mobile/wear.js?v=209"></script>
+<script src="../mobile/wear-map.js?v=209"></script>
+<script src="../mobile/lube.js?v=209"></script>
+<script src="../mobile/lube-overrides.js?v=209"></script>
+<script src="../mobile/lube2027.js?v=209"></script>
+<script src="../mobile/lube-tds.js?v=209"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=208"></script>
-<script src="../mobile/machine-photos.js?v=208"></script>
+<script src="../mobile/upload-defaults.js?v=209"></script>
+<script src="../mobile/machine-photos.js?v=209"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -2866,17 +2866,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=208"></script>
-<script src="../mobile/get.js?v=208"></script>
-<script src="../mobile/points.js?v=208"></script>
-<script src="../mobile/uc-points.js?v=208"></script>
-<script src="../mobile/inspect-guide.js?v=208"></script>
-<script src="../mobile/get-figs.js?v=208"></script>
-<script src="../mobile/body-points.js?v=208"></script>
-<script src="../mobile/body-map.js?v=208"></script>
-<script src="../mobile/jspdf.umd.min.js?v=208"></script>
-<script src="../mobile/html2canvas.min.js?v=208"></script>
-<script src="../mobile/report-core.js?v=208"></script>
+<script src="../mobile/machine-fig.js?v=209"></script>
+<script src="../mobile/get.js?v=209"></script>
+<script src="../mobile/points.js?v=209"></script>
+<script src="../mobile/uc-points.js?v=209"></script>
+<script src="../mobile/inspect-guide.js?v=209"></script>
+<script src="../mobile/get-figs.js?v=209"></script>
+<script src="../mobile/body-points.js?v=209"></script>
+<script src="../mobile/body-map.js?v=209"></script>
+<script src="../mobile/jspdf.umd.min.js?v=209"></script>
+<script src="../mobile/html2canvas.min.js?v=209"></script>
+<script src="../mobile/report-core.js?v=209"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -6093,6 +6093,11 @@ const VIDEO_EXT=["mp4","mov","MP4","MOV","webm"];
 const MEDIA_MAX=20;
 const PHOTO_SUF=[""].concat(Array.from({length:MEDIA_MAX},(_,i)=>"_"+(i+1)));
 function photoNames(base,rec,sufs){
+  /* No base, no names. photoBases() returns nothing for a keyless point, and
+     without this guard `${undefined}_1.jpg` came out the other side — the same
+     invented name, one layer down, checked against the index and quietly never
+     matching. */
+  if(!base) return [];
   const dev=String((rec&&rec.dev)||""), out=[];
   for(const s of (sufs||PHOTO_SUF))
     for(const e of PHOTO_EXT){
@@ -6102,6 +6107,7 @@ function photoNames(base,rec,sufs){
   return out;
 }
 function videoNames(base,rec){
+  if(!base) return [];
   const dev=String((rec&&rec.dev)||""), out=[];
   for(const e of VIDEO_EXT){
     if(dev) out.push(`${base}~${dev}.${e}`);
@@ -6259,6 +6265,16 @@ function mediaAll(it,rec){
      nothing an inspector captured quietly disappears. */
   const add=(name,src,kind)=>{ if(!name||seen.has(name)) return;
     seen.add(name); out.push({src,kind,name}); };
+  /* The manifest, for display too. Without this a photograph whose bytes are
+     in hand still would not appear on a keyless point, because every candidate
+     name below is built from the key. */
+  if(folderPhotos){
+    for(const e of attOf(it)){
+      const n=attName(e); if(!n) continue;
+      const u=folderPhotos[n];
+      if(u) add(n,u,(e.mediaType==="video"?"video":"photo"));
+    }
+  }
   if(folderPhotos){
     const bases=photoBases(it,rec), base=bases[0];
     /* When two phones inspected the same unit on the same day the script kept
@@ -6282,6 +6298,29 @@ function mediaAll(it,rec){
     add(ph, /^(data:|blob:|https?:|\/)/.test(ph)?ph:"../"+ph, "photo"));
   if(it.video) add(it.video, /^(data:|blob:|https?:|\/)/.test(it.video)?it.video:"../"+it.video, "video");
   return out;
+}
+/* THE ATTACHMENT MANIFEST, WHERE THERE IS ONE.
+
+   Since build 209 a round carries, per point, what each of its photographs IS:
+   a stable id, the name it was stored under, its byte size, its SHA-256, when
+   it was captured, and what the server said when it took it. That is the end
+   of predicting file names — the round SAYS which files are its own.
+
+   It is not the end of predicting them everywhere, and pretending otherwise
+   would break three hundred photographs already in the folder. Every round
+   walked before this build carries no manifest at all, so the prediction stays
+   as the fallback and this takes precedence where it exists. Both are named in
+   what they return, so a screen can say which of the two it is standing on. */
+function attOf(it){
+  const a = it && it.att;
+  return Array.isArray(a) ? a.filter(x=>x && (x.storedName||x.serverObjectId||x.attachmentId)) : [];
+}
+/* The name a manifest entry's file is under in the folder. serverObjectId is
+   what the store itself echoed back and outranks anything the phone chose. */
+function attName(e){
+  const key=String((e&&e.serverObjectId)||"");
+  if(key) return key.split("/").pop();
+  return String((e&&e.storedName)||"");
 }
 /* WHAT THE SERVER HOLDS FOR THIS POINT — asked of the INDEX, never of memory.
 
@@ -6312,6 +6351,16 @@ function serverMediaOf(it,rec){
   try{ has=(window.CMDrive&&CMDrive.hasName)?CMDrive.hasName:null; }catch(e){ has=null; }
   if(!has||!it||!rec) return [];
   const out=[], seen=new Set();
+  /* THE MANIFEST FIRST. A round that names its own files needs no guessing,
+     and a point with no key — which can never be guessed for — is answered
+     here or not at all. */
+  for(const e of attOf(it)){
+    const n=attName(e); if(!n||seen.has(n)||!has(n)) continue;
+    seen.add(n);
+    out.push({ name:n, kind:(e.mediaType==="video"?"video":"photo"),
+               aid:e.attachmentId||"", sha256:e.sha256||"", byteSize:Number(e.byteSize)||0,
+               byManifest:1 });
+  }
   for(const b of photoBases(it,rec)){
     for(const s of PHOTO_SUF){
       for(const n of photoNames(b,rec,[s])){
@@ -6336,6 +6385,11 @@ function serverMediaOf(it,rec){
    them. Used to say which files a shortfall is waiting for — a person hunting
    a missing photograph needs something to search the folder for. */
 function expectedNames(it,rec,n){
+  /* A manifest names the files this point is waiting for, whatever its key —
+     which is the difference between "9 photographs missing" and "these nine
+     photographs, by name, are missing". */
+  const man=attOf(it).map(attName).filter(Boolean);
+  if(man.length) return man.slice(0,n);
   const b=photoBases(it,rec)[0], out=[];
   if(!b) return out;                 // no key, so no name anybody could search for
   /* The phone's own rule: <base>.jpg when a point has exactly one photograph,
@@ -7808,14 +7862,37 @@ function orphanPhotos(rec){
        decision waiting to be made - so `hidden` still applies. */
     const hid=hiddenSet(i);
     const med=mediaAll(i,rec).filter(m=>!hid.has(m.name));
-    if(med.length){ med.forEach(m=>out.push({name:m.name, src:m.src, it:i, a:a[m.name]||null})); return; }
+    med.forEach(m=>out.push({name:m.name, src:m.src, it:i, a:a[m.name]||null}));
+    /* ALL OF THEM, NOT THE ONES THAT HAPPENED TO ARRIVE.
+
+       This used to return the moment ANY file matched, so a point claiming six
+       photographs with two in hand showed two — and the four nobody could see
+       were not on the panel to be chased, counted or even known about. The
+       all-or-nothing branch only ever looked right because, before the
+       manifest, a keyless point matched either everything or nothing. */
     /* The count says photographs exist but the files have not reached this
        dashboard. Show them as rows without a thumbnail rather than pretending
        they are not there — a photograph nobody can see is still a photograph
        somebody has to classify. */
+    /* NAMED, where the round names them. "#2" tells somebody chasing a missing
+       file nothing at all; the manifest says what it is called, and a name is
+       the one thing that makes it findable. Only where there IS a manifest — a
+       round from before build 209 still gets the placeholder, because there is
+       genuinely nothing to call it. */
     const n=window.CMNorm?CMNorm.explain(i).photos:0;
-    for(let x=0;x<n;x++){ const nm=(i.key||"")+"#"+(x+1);
-      out.push({name:nm, src:null, it:i, a:a[nm]||null}); }
+    const have=new Set(med.map(m=>m.name));
+    const named=attOf(i).map(attName).filter(Boolean);
+    let ph=0;
+    for(let x=0;x<n;x++){
+      const nm=named[x];
+      if(nm){ if(have.has(nm)) continue;                 // already listed, with its picture
+              out.push({name:nm, src:null, it:i, a:a[nm]||null}); continue; }
+      /* No manifest: nothing to call it but a placeholder, and only for the
+         shortfall the claim says is still outstanding. */
+      if(med.length + ph >= n) break;
+      const pn=(i.key||"")+"#"+(++ph + med.length);
+      out.push({name:pn, src:null, it:i, a:a[pn]||null, unnamed:1});
+    }
   });
   return out;
 }
@@ -12250,8 +12327,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=208"></script>
-<script src="sync-adapter.js?v=208"></script>
-<script src="report.js?v=208"></script>
+<script src="drive.js?v=209"></script>
+<script src="sync-adapter.js?v=209"></script>
+<script src="report.js?v=209"></script>
 </body>
 </html>
