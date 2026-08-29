@@ -2773,27 +2773,27 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=192"></script>
-<script src="../mobile/hme.js?v=192"></script>
-<script src="../mobile/mp-fc.js?v=192"></script>
-<script src="../mobile/hme-cascade.js?v=192"></script>
-<script src="../mobile/temp-limits.js?v=192"></script>
+<script src="../data/magnetic_plug.js?v=193"></script>
+<script src="../mobile/hme.js?v=193"></script>
+<script src="../mobile/mp-fc.js?v=193"></script>
+<script src="../mobile/hme-cascade.js?v=193"></script>
+<script src="../mobile/temp-limits.js?v=193"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=192"></script>
-<script src="../mobile/normalize.js?v=192"></script>
-<script src="../mobile/due.js?v=192"></script>
-<script src="../mobile/wear.js?v=192"></script>
-<script src="../mobile/wear-map.js?v=192"></script>
-<script src="../mobile/lube.js?v=192"></script>
-<script src="../mobile/lube-overrides.js?v=192"></script>
-<script src="../mobile/lube2027.js?v=192"></script>
-<script src="../mobile/lube-tds.js?v=192"></script>
+<script src="../mobile/assets.js?v=193"></script>
+<script src="../mobile/normalize.js?v=193"></script>
+<script src="../mobile/due.js?v=193"></script>
+<script src="../mobile/wear.js?v=193"></script>
+<script src="../mobile/wear-map.js?v=193"></script>
+<script src="../mobile/lube.js?v=193"></script>
+<script src="../mobile/lube-overrides.js?v=193"></script>
+<script src="../mobile/lube2027.js?v=193"></script>
+<script src="../mobile/lube-tds.js?v=193"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=192"></script>
-<script src="../mobile/machine-photos.js?v=192"></script>
+<script src="../mobile/upload-defaults.js?v=193"></script>
+<script src="../mobile/machine-photos.js?v=193"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -2802,17 +2802,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=192"></script>
-<script src="../mobile/get.js?v=192"></script>
-<script src="../mobile/points.js?v=192"></script>
-<script src="../mobile/uc-points.js?v=192"></script>
-<script src="../mobile/inspect-guide.js?v=192"></script>
-<script src="../mobile/get-figs.js?v=192"></script>
-<script src="../mobile/body-points.js?v=192"></script>
-<script src="../mobile/body-map.js?v=192"></script>
-<script src="../mobile/jspdf.umd.min.js?v=192"></script>
-<script src="../mobile/html2canvas.min.js?v=192"></script>
-<script src="../mobile/report-core.js?v=192"></script>
+<script src="../mobile/machine-fig.js?v=193"></script>
+<script src="../mobile/get.js?v=193"></script>
+<script src="../mobile/points.js?v=193"></script>
+<script src="../mobile/uc-points.js?v=193"></script>
+<script src="../mobile/inspect-guide.js?v=193"></script>
+<script src="../mobile/get-figs.js?v=193"></script>
+<script src="../mobile/body-points.js?v=193"></script>
+<script src="../mobile/body-map.js?v=193"></script>
+<script src="../mobile/jspdf.umd.min.js?v=193"></script>
+<script src="../mobile/html2canvas.min.js?v=193"></script>
+<script src="../mobile/report-core.js?v=193"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -3088,7 +3088,7 @@ const I18N={
   sy_recon_sub:"Read down. Each line is a source or a rule, and the last one is the figure every other screen counts. A round in the folder that is also in the bundled history is one round, not two — that is the merge. A round two phones both sent is one round with a conflict to settle, not two rounds.",
   sy_r_bundled:"In the bundled history", sy_r_drive:"In the folder",
   sy_r_import:"Imported by hand",
-  sy_r_dupe:"Same round from more than one source", sy_r_rival:"Two phones, one round",
+  sy_r_less:"less", sy_r_dupe:"Same round from more than one source", sy_r_rival:"Two phones, one round",
   sy_r_total:"Inspections in the system", sy_r_void:"Withdrawn, kept for the trail",
   sy_r_live:"Inspections that count as work",
   sy_k_recs:"Records held", sy_k_recs_s:"{n} cannot be filed",
@@ -3739,7 +3739,7 @@ const I18N={
   sy_recon_sub:"Читайте сверху вниз. Каждая строка — источник или правило, последняя — та цифра, которую считают все остальные экраны. Обход, который есть и в папке, и в истории, — это один обход, а не два. Обход, присланный двумя телефонами, — это один обход и конфликт, который надо решить.",
   sy_r_bundled:"В приложенной истории", sy_r_drive:"В папке",
   sy_r_import:"Загружено вручную",
-  sy_r_dupe:"Один обход из нескольких источников", sy_r_rival:"Два телефона, один обход",
+  sy_r_less:"минус", sy_r_dupe:"Один обход из нескольких источников", sy_r_rival:"Два телефона, один обход",
   sy_r_total:"Обходов в системе", sy_r_void:"Аннулировано, оставлено для истории",
   sy_r_live:"Обходов, считающихся работой",
   sy_k_recs:"Записей в системе", sy_k_recs_s:"{n} невозможно разложить",
@@ -10970,6 +10970,31 @@ function renderConflictBar(){
    question cannot be answered yet — not a percentage that looks like an
    answer. Stable attachment ids come with the mobile manifest; until then this
    says so out loud. */
+/* WHICH POPULATION AN ATTACHMENT BELONGS TO, DECIDED IN ONE PLACE.
+
+   An attachment is in exactly one of these, and the question "is this a field
+   upload?" must have exactly one answer on this screen. It had two.
+
+   mediaPopulations() knew about bundled evidence and excluded it. syncScan()
+   did not: it walked every record's media and asked whether the SERVER holds
+   each name. A bundled photograph's name is a path that ships with the
+   application — assets/photos/TK146_4C_2026-07-29.jpg — and no server will
+   ever hold one, so the answer could only ever be "missing".
+
+   The result was TK146 rendering four photographs in Equipment History while
+   Sync Operations, on the same screen, from the same records, called the same
+   four missing field uploads on a round nobody ever sent from a phone. Every
+   percentage built on that denominator was measuring the repository.
+
+   This is the project's oldest failure running backwards: not a real value
+   rendered as nothing, but nothing rendered as a real problem. A false alarm
+   and a false reassurance are the same defect, and this one sent somebody
+   looking for four files that were never late. */
+function bundledMedia(rec, m){
+  if(rec && rec.src === "bundled") return true;
+  const n = m && m.name;
+  return !!(n && /^assets\/photos\//i.test(String(n)));
+}
 function mediaPopulations(){
   const held=(()=>{ try{ return new Set(window.CMDrive&&CMDrive.names?CMDrive.names():[]); }
                     catch(e){ return new Set(); } })();
@@ -10978,7 +11003,7 @@ function mediaPopulations(){
   const P={ historical:0, mobExpected:0, mobReceived:0, dashAdded:0, answered:held.size>0||Object.keys(local).length>0 };
   RECS.forEach(r=>{
     if(r._void) return;
-    const bundled = r.src==="bundled";
+    const bundled = bundledMedia(r, null);        // the one rule, asked here too
     (r.items||[]).forEach(i=>{
       if(!i) return;
       /* A literal file name on the item is how the bundled history carries its
@@ -11056,6 +11081,11 @@ function syncScan(){
     (r.items||[]).forEach(i=>{
       mediaOf(i,r).forEach(m=>{
         if(!m.name) return;
+        /* Ships with the application, so it is not a delivery that can be
+           late. Counting it here put four photographs that were on the screen
+           at the time into the missing list, and into the denominator of every
+           percentage drawn from it. */
+        if(bundledMedia(r,m)) return;
         expected++;
         if(have(m.name)) present++; else miss.push({ik:i.key, name:m.name});
       });
@@ -11185,8 +11215,16 @@ function renderSync(){
      disagree in the first place. */
   const rc=reconcile();
   $("syRecon").innerHTML=rc.map(r=>
-      `<dt${r.step?' class="muted"':""}>${esc(r.label)}</dt>`
-    + `<dd class="mono${r.total?" strong":""}">${r.step&&r.n>0?"−":""}${esc(num(r.n))}</dd>`).join("");
+      /* A SUBTRACTION STEP MUST NOT READ AS AN IMPOSSIBLE COUNT.
+
+         This rendered a leading minus on any step row, so "Two phones, one
+         round" with one conflict to settle printed as "−1" — audited, quite
+         reasonably, as a negative count and a release blocker. The arithmetic
+         was right (rivals is floored at zero and was 1); the notation was not.
+         A ladder that subtracts should say it subtracts in words, and every
+         number on the screen should be a count somebody can believe. */
+      `<dt${r.step?' class="muted"':""}>${r.step?esc(t("sy_r_less"))+" ":""}${esc(r.label)}</dt>`
+    + `<dd class="mono${r.total?" strong":""}">${esc(num(r.n))}</dd>`).join("");
   $("syUnknown").innerHTML=SYNC_UNKNOWN.map(k=>`<li>${esc(t(k))}</li>`).join("");
   /* ADMIN DIAGNOSTICS, not an operational warning. A blank row removed on
      import is housekeeping — it is recorded so the repair can be audited, and
@@ -11508,8 +11546,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=192"></script>
-<script src="sync-adapter.js?v=192"></script>
-<script src="report.js?v=192"></script>
+<script src="drive.js?v=193"></script>
+<script src="sync-adapter.js?v=193"></script>
+<script src="report.js?v=193"></script>
 </body>
 </html>

@@ -71,10 +71,28 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
 
   console.log("\n── attached, it checks every attachment a record claims");
   const live = await p.evaluate(() => {
-    /* A server that holds everything except one Critical's photograph. */
+    /* A server that holds everything except one Critical's photograph.
+
+       THE RECORD HAS TO BE ONE A PHONE SENT. This fixture used to pick the
+       first Critical in RECS, and on a bare dashboard every record is bundled
+       history — TK151, whose photographs are assets/photos/... paths that ship
+       with the application and that no server will ever hold. Withholding them
+       "from the server" withheld nothing, and the suite passed by asserting
+       that a bundled photograph is a field upload that never arrived: exactly
+       the defect that had TK146 showing four photographs on screen and listed
+       as four missing at the same time. A test that agrees with the bug is how
+       the bug reached the field. */
+    const FIELD_CRIT = {
+      equip: "TK901", date: "2026-07-29", type: "MP", cls: "HT",
+      by: "R. Marrero", smu: 6100, src: "drive",
+      items: [{ key: "4C", label: "4C LEFT REAR FINAL DRIVE", grade: "X",
+                defect: "Ferrous debris — heavy", defectCode: "DT14-03",
+                action: "STOP", actionLabel: "Stop the machine", wo: "N-104",
+                photo: "TK901_4C_29.07.2026_MP.jpg", photos: 1, video: 0 }] };
+    if (!RECS.some(r => r.equip === "TK901")) RECS.push(FIELD_CRIT);
+    const crit = RECS.find(r => r.equip === "TK901");
     const all = [];
     RECS.forEach(r => (r.items || []).forEach(i => mediaOf(i, r).forEach(m => m.name && all.push(m.name))));
-    const crit = RECS.find(r => (r.items || []).some(i => sevOf(r, i) === "CRI"));
     const critNames = [];
     (crit.items || []).forEach(i => mediaOf(i, crit).forEach(m => m.name && critNames.push(m.name)));
     const held = new Set(all.filter(n => !critNames.includes(n)));
