@@ -36,6 +36,10 @@
    Options
      --to <URL>        the backend /exec, e.g. https://baimskaya-cm.duckdns.org/
      --to-secret X     its shared secret, if it has one
+     --by "Name"       who walked these rounds. The Excel import carries no
+                       inspector, and a round with nobody's name on it is a
+                       round nobody can be asked about — so this is passed in
+                       rather than left blank or invented.
      --apply           actually write (default is a dry run)
      --photos          include the 65 bundled photographs as well
      --batch 4         files per upload request when applying
@@ -56,6 +60,7 @@ const has = n => process.argv.indexOf('--' + n) > 0;
 const TO     = String(arg('to', '')).trim().replace(/\s+/g, '');
 const SECRET = String(arg('to-secret', '')).trim();
 const APPLY  = has('apply');
+const BY     = String(arg('by', '')).trim();
 const PHOTOS = has('photos');
 const BATCH  = Math.max(1, Number(arg('batch', 4)) || 4);
 const ROOT   = path.join(__dirname, '..', '..');
@@ -116,7 +121,7 @@ function sidecarFor(insp) {
          create a second record of one inspection. */
       id: `bundled__${equip}__${date}__MP`, rev: 1,
       equip, date, type: 'MP', cls: 'HT',
-      by: insp.by || '', smu: insp.motorHours || '', sup: '', gps: null,
+      by: insp.by || BY, smu: insp.motorHours || '', sup: '', gps: null,
       /* Not a phone. The conflict machinery keys on dev to tell "this phone
          re-sending its own round" from "another phone overwriting one", and a
          migration must be neither. */
@@ -141,6 +146,7 @@ const post = async body => {
   const plan = bundled().map(sidecarFor);
   console.log(`\nbundled history   ${plan.length} inspection(s), all MP`);
   console.log(`destination       ${TO}`);
+  console.log(`inspector         ${BY || '(blank — pass --by "Name")'}`);
   console.log(`mode              ${APPLY ? 'APPLY — this will write' : 'DRY RUN — nothing will be written'}`);
 
   /* What is already there. Asked once, by listing, so the report is about the
@@ -159,6 +165,11 @@ const post = async body => {
     process.exit(1);
   }
 
+  if (!BY && APPLY) {
+    console.error('\nRefusing to write rounds with no inspector on them.');
+    console.error('Pass --by "Name". A round nobody signed is a round nobody can be asked about.');
+    process.exit(1);
+  }
   const writeS = plan.filter(p => !held.has(p.name));
   const haveS  = plan.filter(p =>  held.has(p.name));
   const allPh  = plan.flatMap(p => p.photos);
