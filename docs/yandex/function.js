@@ -441,6 +441,54 @@ async function deleteRecord(b) {
   return { ok: true, deleted: gone };
 }
 
+/* ONE PHOTOGRAPH, DELETED ON PURPOSE, WITH A REASON ON IT.
+
+   The office can already delete a whole round. It could not delete a single
+   file, and there are files that need it: a frame of somebody's boot, a
+   duplicate shot twice, a photograph of the wrong machine. Until now the only
+   answers were to leave it in the folder for ever or to delete the entire
+   inspection around it.
+
+   Same gate as deleteRecord — ADMIN_SECRET, which lives in cm.env on the VM and
+   nowhere else — because this destroys bytes and nothing brings them back.
+
+   A REASON IS NOT OPTIONAL. A photograph that vanishes with no record of who
+   removed it or why is indistinguishable from one the sync lost, and this
+   project has spent months telling those two apart. The marker is written
+   BEFORE the object is deleted, so a failure halfway leaves a note explaining
+   an absence rather than an absence explaining nothing.
+
+   Refuses anything that is not a media file: a sidecar deleted this way would
+   take a round off every screen with no record of the round ever existing. */
+async function deleteFile(b) {
+  if (!ADMIN) return { ok: false, error: 'Deletion is switched off. Set ADMIN_SECRET in the function to enable it.' };
+  if (b.admin !== ADMIN) return { ok: false, error: 'Wrong admin password' };
+  const name = String(b.name || '').trim();
+  if (!name) return { ok: false, error: 'Missing file name' };
+  if (!MEDIA_RE.test(name)) return { ok: false, error: 'Only photographs and video can be deleted one at a time' };
+  const why = String(b.why || '').trim();
+  if (!why) return { ok: false, error: 'A reason is required' };
+  const by = String(b.by || '').trim();
+  if (!by) return { ok: false, error: 'A name is required' };
+
+  const all = await listAll('');
+  const hit = all.filter(f => f.name === name);
+  if (!hit.length) return { ok: false, error: 'No file called ' + name };
+
+  const at = new Date().toISOString();
+  const stem = name.replace(/\.[^.]+$/, '');
+  await putObj(META_DIR + '/deletions/' + at.replace(/[:.]/g, '-') + '_' + stem + '.file.json',
+    Buffer.from(JSON.stringify({ type: 'cm-file-deleted', name: name,
+      key: String(b.key || ''), by: by, why: why, at: at,
+      paths: hit.map(f => f.path), bytes: hit.reduce((n, f) => n + (Number(f.size) || 0), 0) },
+      null, 2)), 'application/json');
+
+  let gone = 0;
+  for (const f of hit) { try { await delObj(f.key); gone++; } catch (e) {} }
+  await touchIndex();
+  return { ok: true, deleted: gone, name: name, at: at };
+}
+
 /* The office's decision. Both versions stay in the bucket — this only records
    which one the reports should use, so it is as reversible as a void.
 
@@ -625,6 +673,7 @@ exports.handler = async function (event) {
       canDelete: !!ADMIN, index: false, media: MEDIA_MAX, at: await indexAt() });
     if (b.op === 'edit')    return json(await saveEdit(b));
     if (b.op === 'delete')  return json(await deleteRecord(b));
+    if (b.op === 'delfile') return json(await deleteFile(b));
     if (b.op === 'resolve') return json(await resolveConflict(b));
     if (b.op === 'batch') {
       const list = b.files || [];
@@ -653,5 +702,5 @@ exports.handler = async function (event) {
 /* Exported for tests/ya-srv.cjs, which runs this file against an in-memory
    bucket so the suite that proves the Apps Script proves this too. */
 exports._internals = { listAll, saveOne, readRecords, listFiles, readFile, readFiles,
-                       saveEdit, deleteRecord, resolveConflict, diagnose, keyFile, keyFromSidecar,
+                       saveEdit, deleteRecord, deleteFile, resolveConflict, diagnose, keyFile, keyFromSidecar,
                        markConflict, isSidecar };

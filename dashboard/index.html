@@ -1295,6 +1295,18 @@
   .srcbody .msg{font-size:12px;color:var(--muted);min-height:16px;white-space:pre-wrap;}
   .btn.danger{color:var(--critical);}
   /* header status chip */
+  /* A disclosure that is a tool, not a footnote: closed by default because
+     hunting a stray file is the exception, open with one press when it is not. */
+  details.disc{border:1px solid var(--border);border-radius:8px;padding:8px 10px;margin-top:10px;
+    background:var(--surface-2);}
+  details.disc > summary{cursor:pointer;font-weight:600;font-size:13px;}
+  details.disc[open] > summary{margin-bottom:6px;}
+  ul.plainlist{list-style:none;margin:6px 0 0;padding:0;max-height:220px;overflow:auto;}
+  ul.plainlist li{padding:4px 0;border-bottom:1px solid var(--border);font-size:12px;
+    display:flex;align-items:center;gap:8px;}
+  ul.plainlist li img.th{width:44px;height:44px;object-fit:cover;border-radius:4px;flex:none;}
+  .btn.sm{padding:2px 8px;font-size:11px;min-height:0;}
+  ul.plainlist li:last-child{border-bottom:0;}
   .src{display:flex;align-items:center;gap:8px;border:1px solid var(--border);background:var(--surface-2);
     color:var(--ink-2);border-radius:999px;padding:6px 13px;font-size:12.5px;cursor:pointer;font-family:inherit;}
   .src .dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex:none;}
@@ -2196,7 +2208,24 @@
         <span class="spacer"></span><span class="hint" id="opCount"></span>
       </div>
       <div id="opGrid" class="opgrid"></div>
+      <!-- WHAT HAPPENS NEXT, AND WHOSE JOB IT IS. A panel that shows a problem
+           and not its owner is a panel everybody assumes somebody else read. -->
+      <div class="note" id="opNext"></div>
       <div class="msg" id="opMsg"></div>
+
+      <!-- HUNTING A STRAY. A photograph that never reached its inspection may
+           still be in the folder under another name — a different component
+           prefix, another device's copy, a date typed one day out. This looks
+           through the folder's own file index, which is the only list that
+           knows what is actually there. -->
+      <details class="disc" id="opFindBox"><summary data-i18n="op_find_t">Look for a file in the folder</summary>
+        <div class="row" style="align-items:flex-end;gap:10px;margin:8px 0 4px">
+          <div class="field" style="flex:1"><label for="opFindQ" data-i18n="op_find_l">Unit, date, device or part of a file name</label>
+            <input id="opFindQ" type="search" data-i18n-ph="op_find_ph" placeholder="TK115  ·  05.08.2026  ·  DM12QM"></div>
+          <button class="btn" id="opFindGo" data-i18n="op_find_go">Search the folder</button>
+        </div>
+        <div class="sub" id="opFindOut"></div>
+      </details>
     </div>
   </div>
 </div>
@@ -2756,6 +2785,11 @@
                placeholder="blurred · duplicate · nothing in frame"></label>
       <span class="pxsp"></span>
       <button class="btn danger" id="pxOff" data-i18n="px_off">Remove from the record</button>
+      <!-- And the one that is not reversible. Removing from the record is a
+           decision the office can change its mind about; this destroys the
+           file, so it asks for the reason above, the unit typed out, and the
+           admin password that lives on the server and nowhere else. -->
+      <button class="btn danger" id="pxDelete" data-i18n="px_del">Delete the file…</button>
     </div>
     <div class="pxrow">
       <button class="btn" id="pxCompare" aria-pressed="false" data-i18n="px_compare">Show original</button>
@@ -2774,27 +2808,27 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=205"></script>
-<script src="../mobile/hme.js?v=205"></script>
-<script src="../mobile/mp-fc.js?v=205"></script>
-<script src="../mobile/hme-cascade.js?v=205"></script>
-<script src="../mobile/temp-limits.js?v=205"></script>
+<script src="../data/magnetic_plug.js?v=206"></script>
+<script src="../mobile/hme.js?v=206"></script>
+<script src="../mobile/mp-fc.js?v=206"></script>
+<script src="../mobile/hme-cascade.js?v=206"></script>
+<script src="../mobile/temp-limits.js?v=206"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=205"></script>
-<script src="../mobile/normalize.js?v=205"></script>
-<script src="../mobile/due.js?v=205"></script>
-<script src="../mobile/wear.js?v=205"></script>
-<script src="../mobile/wear-map.js?v=205"></script>
-<script src="../mobile/lube.js?v=205"></script>
-<script src="../mobile/lube-overrides.js?v=205"></script>
-<script src="../mobile/lube2027.js?v=205"></script>
-<script src="../mobile/lube-tds.js?v=205"></script>
+<script src="../mobile/assets.js?v=206"></script>
+<script src="../mobile/normalize.js?v=206"></script>
+<script src="../mobile/due.js?v=206"></script>
+<script src="../mobile/wear.js?v=206"></script>
+<script src="../mobile/wear-map.js?v=206"></script>
+<script src="../mobile/lube.js?v=206"></script>
+<script src="../mobile/lube-overrides.js?v=206"></script>
+<script src="../mobile/lube2027.js?v=206"></script>
+<script src="../mobile/lube-tds.js?v=206"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=205"></script>
-<script src="../mobile/machine-photos.js?v=205"></script>
+<script src="../mobile/upload-defaults.js?v=206"></script>
+<script src="../mobile/machine-photos.js?v=206"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -2803,17 +2837,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=205"></script>
-<script src="../mobile/get.js?v=205"></script>
-<script src="../mobile/points.js?v=205"></script>
-<script src="../mobile/uc-points.js?v=205"></script>
-<script src="../mobile/inspect-guide.js?v=205"></script>
-<script src="../mobile/get-figs.js?v=205"></script>
-<script src="../mobile/body-points.js?v=205"></script>
-<script src="../mobile/body-map.js?v=205"></script>
-<script src="../mobile/jspdf.umd.min.js?v=205"></script>
-<script src="../mobile/html2canvas.min.js?v=205"></script>
-<script src="../mobile/report-core.js?v=205"></script>
+<script src="../mobile/machine-fig.js?v=206"></script>
+<script src="../mobile/get.js?v=206"></script>
+<script src="../mobile/points.js?v=206"></script>
+<script src="../mobile/uc-points.js?v=206"></script>
+<script src="../mobile/inspect-guide.js?v=206"></script>
+<script src="../mobile/get-figs.js?v=206"></script>
+<script src="../mobile/body-points.js?v=206"></script>
+<script src="../mobile/body-map.js?v=206"></script>
+<script src="../mobile/jspdf.umd.min.js?v=206"></script>
+<script src="../mobile/html2canvas.min.js?v=206"></script>
+<script src="../mobile/report-core.js?v=206"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -3162,6 +3196,28 @@ const I18N={
   op_retry:"Check synchronisation",
   op_cant:"Those photographs have not arrived, so they cannot be assigned yet.",
   op_tally:"{e} expected · {r} received · {m} file(s) missing · {n} selected",
+  op_why:"Reason", op_why_ph:"Why this photograph should not be in the report",
+  op_exclude:"Exclude from report", op_delete:"Delete file…",
+  op_excluded:"excluded from the report",
+  op_need_why:"Say why first. A photograph removed with no reason cannot be told from one the sync lost.",
+  op_excl_ok:"✅ {n} photograph(s) will not appear in the report. They stay on the record.",
+  op_del_confirm:"This permanently deletes {n} file(s) from the folder. Nothing brings them back. Type {x} to confirm, and give the admin password.",
+  op_del_ok:"✅ {n} file(s) deleted from the folder, with the reason recorded.",
+  op_del_off:"Deleting a file needs the admin password set on the server. Excluding it from the report needs nothing and keeps the evidence.",
+  op_next_assign:"Next: a reliability engineer says which point each photograph shows, or keeps it as general evidence.",
+  op_next_sync:"Next: nobody can classify a photograph they cannot see. This is a synchronisation job — check the phone that captured it is still holding the round, and press Check synchronisation.",
+  op_next_none:"Nothing outstanding on this inspection.",
+  op_find_t:"Look for a file in the folder",
+  op_find_l:"Unit, date, device or part of a file name",
+  op_find_ph:"TK115  ·  05.08.2026  ·  DM12QM",
+  op_find_go:"Search the folder",
+  op_find_none:"Nothing in the folder matches that.",
+  op_find_n:"{n} file(s) in the folder match. These are file names, not assignments — a file listed here still belongs wherever its name says.",
+  op_find_ask:"Type something to look for.",
+  op_find_noidx:"The file list has not arrived from the server yet, so there is nothing to search.",
+  op_look:"Look at it", op_looking:"Opening…", op_look_no:"Could not open it",
+  op_take:"Use this one", op_general_short:"general evidence",
+  op_took:"✅ {n} filed against {p}. The file is left where it is in the folder.",
   /* Two different problems, two different owners. */
   sy_w_photomiss:"Evidence incomplete — photo file missing",
   sy_fix_photomiss:"This inspection expects photographs that have not reached the dashboard. The readings, condition and actions on it are unaffected and still count. Nothing can be assigned until the files arrive.",
@@ -3192,6 +3248,11 @@ const I18N={
   px_off_need:"Say why, then press again. This is field evidence.",
   px_off_done:"\u2705 Taken off the record.",
   px_excluded:"not in the report",
+  px_del:"Delete the file…",
+  px_del_need:"Say why first. A photograph that leaves the folder with no reason cannot be told from one the sync lost.",
+  px_del_confirm:"This permanently deletes {n} from the folder. Nothing brings it back — “Remove from the record” hides it and keeps it. Type {x} to confirm, and give the admin password.",
+  px_del_ok:"✅ {n} deleted from the folder, with the reason recorded.",
+  px_del_no:"The server would not delete it.",
   px_edited:"edited", px_pending:"The original is still uploading. The edit will wait for it.",
   px_nochange:"No change to save. Use Reset to remove the edit.",
   px_nothing:"Nothing to save yet — crop, rotate, zoom or add a caption first.",
@@ -3805,6 +3866,28 @@ const I18N={
   op_retry:"Проверить синхронизацию",
   op_cant:"Эти фотографии ещё не пришли, назначить их пока нельзя.",
   op_tally:"ожидается {e} · получено {r} · нет файлов: {m} · выбрано {n}",
+  op_why:"Причина", op_why_ph:"Почему этой фотографии не должно быть в отчёте",
+  op_exclude:"Исключить из отчёта", op_delete:"Удалить файл…",
+  op_excluded:"исключено из отчёта",
+  op_need_why:"Сначала укажите причину. Фотографию, удалённую без причины, не отличить от потерянной при синхронизации.",
+  op_excl_ok:"✅ Фотографий, которые не попадут в отчёт: {n}. В записи они остаются.",
+  op_del_confirm:"Это безвозвратно удалит файлов: {n}. Восстановить их нельзя. Введите {x} для подтверждения и пароль администратора.",
+  op_del_ok:"✅ Удалено файлов: {n}. Причина записана.",
+  op_del_off:"Для удаления файла нужен пароль администратора на сервере. Исключение из отчёта не требует ничего и сохраняет материал.",
+  op_next_assign:"Далее: инженер по надёжности указывает точку осмотра для каждой фотографии или оставляет её как общий материал.",
+  op_next_sync:"Далее: классифицировать фотографию, которую не видно, невозможно. Это задача синхронизации — проверьте, что телефон с этим обходом ещё хранит его, и нажмите «Проверить синхронизацию».",
+  op_next_none:"По этому осмотру ничего не требуется.",
+  op_find_t:"Найти файл в папке",
+  op_find_l:"Единица, дата, устройство или часть имени файла",
+  op_find_ph:"TK115  ·  05.08.2026  ·  DM12QM",
+  op_find_go:"Искать в папке",
+  op_find_none:"В папке нет совпадений.",
+  op_find_n:"Совпадений в папке: {n}. Это имена файлов, а не назначения — файл остаётся там, куда указывает его имя.",
+  op_find_ask:"Введите, что искать.",
+  op_find_noidx:"Список файлов ещё не получен с сервера, искать пока не в чем.",
+  op_look:"Посмотреть", op_looking:"Открываем…", op_look_no:"Не удалось открыть",
+  op_take:"Взять этот", op_general_short:"общий материал",
+  op_took:"✅ {n} отнесено к: {p}. Файл остаётся в папке на своём месте.",
   sy_w_photomiss:"Материалы неполные — нет файла фото",
   sy_fix_photomiss:"Этот осмотр ожидает фотографии, которые не дошли до панели. Замеры, состояние и действия по нему не затронуты и учитываются. Назначить что-либо можно будет после прихода файлов.",
   sy_quar_miss:"нет файлов фото: {n}",
@@ -3832,6 +3915,11 @@ const I18N={
   px_off_need:"Укажите причину и нажмите ещё раз. Это материал осмотра.",
   px_off_done:"\u2705 Убрано из записи.",
   px_excluded:"не в отчёте",
+  px_del:"Удалить файл…",
+  px_del_need:"Сначала укажите причину. Фотографию, исчезнувшую из папки без причины, не отличить от потерянной при синхронизации.",
+  px_del_confirm:"Это безвозвратно удалит {n} из папки. Восстановить нельзя — «Убрать из записи» скрывает и сохраняет. Введите {x} для подтверждения и пароль администратора.",
+  px_del_ok:"✅ {n} удалён из папки, причина записана.",
+  px_del_no:"Сервер отказался удалять файл.",
   px_edited:"с правкой", px_pending:"Оригинал ещё загружается. Правка дождётся его.",
   px_nochange:"Изменений нет. Чтобы убрать правку, нажмите «Вернуть оригинал».",
   px_nothing:"Пока нечего сохранять — кадрируйте, поверните, приблизьте или добавьте подпись.",
@@ -5830,6 +5918,18 @@ function photoBase(it,rec){ return photoBases(it,rec)[0]; }
    both forms costs lookups and finds the picture whichever rule wrote it —
    including files written by builds whose rule was different again. */
 function photoBases(it,rec){
+  /* A POINT WITH NO KEY HAS NO PREDICTABLE FILE NAME.
+
+     This built one anyway: String(undefined) is "undefined", so a keyless row
+     produced "TK115.undefined_05.08.2026_TB" and everything downstream treated
+     that as the name to look for. It is not a name any phone has ever written.
+     It made the folder search suggest a file that cannot exist, and it would
+     have put an invented name in front of somebody hunting a real one.
+
+     Nothing, honestly, is the right answer: the photographs of a keyless point
+     are exactly the ones that cannot be found by name, which is why the panel
+     shows them as placeholders and why the folder search exists at all. */
+  if(!it || it.key==null || String(it.key)==="") return [];
   const d=(rec.date||"").split("-").reverse().join("."), k=String(it.key);
   const tail=`_${d}_${rec.type}`;
   const dot=`${rec.equip}.${k}${tail}`, us=`${rec.equip}_${k.replace(/\./g,"-")}${tail}`;
@@ -5925,9 +6025,11 @@ function assignPlan(rec){
   const plan={ epoch:assignEpoch, moved:new Set(), excluded:new Map(),
                toPoint:new Map(), general:[] };
   if(Object.keys(a).length){
+    const seen=new Set();
     (rec.items||[]).forEach(i=>{
       /* mediaAll, never mediaOf - this is what mediaOf is being built out of. */
       mediaAll(i,rec).forEach(m=>{
+        seen.add(m.name);
         const d=a[m.name]; if(!d) return;
         if(d.exclude) plan.excluded.set(m.name, d);
         if(d.general){ plan.moved.add(m.name); plan.general.push(Object.assign({},m,{from:i.key})); }
@@ -5936,6 +6038,31 @@ function assignPlan(rec){
           const l=plan.toPoint.get(d.point)||[]; l.push(m); plan.toPoint.set(d.point,l);
         }
       });
+    });
+    /* A PHOTOGRAPH FOUND IN THE FOLDER AND FILED BY HAND.
+
+       Everything above walks the names this record could PREDICT. A photograph
+       on a keyless point has no predictable name — that is why somebody had to
+       go and find it — so the assignment naming it would have been read by
+       nothing at all: written, saved, and invisible on every screen. A real
+       action that does nothing, which is this project's signature defect, and
+       I built one here before this block existed.
+
+       So an assignment carrying `found` is honoured on its own terms. Its src
+       comes from whatever this browser has actually fetched, and it is only
+       admitted when the folder really holds it — a name typed into a correction
+       cannot conjure evidence. */
+    Object.keys(a).forEach(n=>{
+      const d=a[n];
+      if(!d || !d.found || seen.has(n)) return;
+      let onServer=false;
+      try{ onServer=!!(window.CMDrive&&CMDrive.hasName&&CMDrive.hasName(n)); }catch(e){}
+      if(!onServer) return;
+      const src=(()=>{ try{ return (folderPhotos||{})[n]||""; }catch(e){ return ""; } })();
+      const m={ name:n, src:src, kind:/\.(mp4|mov|webm)$/i.test(n)?"video":"photo", found:1 };
+      if(d.exclude) plan.excluded.set(n, d);
+      if(d.general) plan.general.push(Object.assign({},m,{from:null}));
+      else if(d.point){ const l=plan.toPoint.get(d.point)||[]; l.push(m); plan.toPoint.set(d.point,l); }
     });
   }
   assignPlans.set(rk,plan);
@@ -6075,6 +6202,7 @@ function serverMediaOf(it,rec){
    a missing photograph needs something to search the folder for. */
 function expectedNames(it,rec,n){
   const b=photoBases(it,rec)[0], out=[];
+  if(!b) return out;                 // no key, so no name anybody could search for
   /* The phone's own rule: <base>.jpg when a point has exactly one photograph,
      <base>_1.jpg … <base>_n.jpg when it has more. Naming a single photograph
      "_1" would send somebody hunting the folder for a file that was never
@@ -7669,11 +7797,17 @@ function renderOrphan(){
     ? t("op_last",{t: opLastCheck ? opLastCheck : t("op_never")}) : "";
   $("opGrid").innerHTML=all.map(p=>{
     const st=photoState(p), can=photoActionable(p);
+    /* An excluded photograph is not "needs a point" — the decision about it has
+       been made and printed nowhere. Saying "needs a point" over it would put
+       a settled question back on somebody's list. */
     const label = st===PH_MISSING ? t("op_missing")
+                : (p.a&&p.a.exclude) ? t("op_excluded")
                 : st===PH_GENERAL ? t("op_done_gen")
                 : st===PH_POINT   ? t("op_done_point",{p:(p.a&&p.a.point)||""})
                 :                   t("op_todo");
-    const cls = st===PH_MISSING ? "gone" : (st===PH_VIEWABLE ? "todo" : "done");
+    const cls = st===PH_MISSING ? "gone"
+              : (p.a&&p.a.exclude) ? "done"
+              : (st===PH_VIEWABLE ? "todo" : "done");
     const thumb=p.src
       ? `<img class="th" src="${esc(p.src)}" alt="${esc(p.name)}" loading="lazy">`
       : `<div class="nofile">${esc(t("op_nofile"))}</div>`;
@@ -7694,6 +7828,9 @@ function renderOrphan(){
   $("opAssign").disabled=!canAct;
   $("opGeneral").disabled=!canAct;
   $("opRetry").classList.toggle("hidden", !tal.missing);
+  /* WHAT HAPPENS NEXT, AND WHOSE JOB IT IS. */
+  $("opNext").textContent = nothingHere ? t("op_next_sync")
+    : left ? t("op_next_assign") : t("op_next_none");
   $("opGrid").querySelectorAll("[data-op]").forEach(c=>{
     const nm=c.dataset.op;
     if(c.classList.contains("off")){ c.onclick=null; return; }
@@ -7707,13 +7844,24 @@ function renderOrphan(){
 function closeOrphan(){ $("opOv").classList.add("hidden"); opKey=null; opSel.clear(); }
 /* One write, carrying every decision made in this panel, through the same
    sidecar every other correction uses. */
-function saveAssign(patch){
+function saveAssign(patch, onDone, opts){
   const rec=RECS.find(r=>ekOf(r)===opKey); if(!rec) return;
   /* The last gate. Whatever the controls allowed, a photograph whose file is
      not here cannot be filed — checked against the record rather than against
-     the checkbox, so a stale selection or a future caller cannot get past it. */
+     the checkbox, so a stale selection or a future caller cannot get past it.
+
+     A file found in the FOLDER is the one thing that is legitimately not on
+     this record yet: that is the whole point of finding it. It still had to be
+     displayed before the button unlocked, so the rule the gate exists for — no
+     classifying a picture nobody has seen — is satisfied by the time it gets
+     here, and it is checked again against what this browser actually holds. */
   const seen=new Set(orphanPhotos(rec).filter(photoActionable).map(p=>p.name));
-  Object.keys(patch).forEach(n=>{ if(!seen.has(n)) delete patch[n]; });
+  const held=(()=>{ try{ return folderPhotos||{}; }catch(e){ return {}; } })();
+  Object.keys(patch).forEach(n=>{
+    if(seen.has(n)) return;
+    if(opts&&opts.allowFound&&held[n]) return;
+    delete patch[n];
+  });
   if(!Object.keys(patch).length){ $("opMsg").textContent=t("op_cant"); return; }
   const rk=opKey, msg=$("opMsg");
   const by=(()=>{ try{ return localStorage.getItem("cm_dash_who")||""; }catch(e){ return ""; } })();
@@ -7731,7 +7879,9 @@ function saveAssign(patch){
   msg.textContent=t("ed_sending");
   const n=Object.keys(patch).length;
   (window.CMDrive&&CMDrive.saveEdit ? CMDrive.saveEdit(doc) : Promise.resolve())
-    .then(()=>{ msg.textContent=t("op_saved",{n}); opSel.clear(); renderOrphan(); renderSync(); })
+    .then(()=>{ msg.textContent=t("op_saved",{n}); opSel.clear();
+                renderOrphan(); renderSync();
+                if(onDone) onDone(); })
     .catch(err=>{
       if(before) edits[rk]=before; else delete edits[rk];
       saveEdits(); rebuild(); renderAll(); refreshSources();
@@ -7783,6 +7933,78 @@ $("opGeneral").onclick=()=>{
   const patch={}; opSel.forEach(n=>{ patch[n]={general:1}; });
   saveAssign(patch);
 };
+/* Excluding a photograph from the report, and deleting its file, are both
+   done from the photograph itself — the lightbox, where somebody is looking at
+   it — and not from here. This panel answers one question: where does this
+   picture belong. A second set of buttons for decisions that already have a
+   home is how two screens come to disagree about whether a picture is in the
+   report. */
+/* HUNTING A STRAY IN THE FOLDER.
+
+   A photograph that never reached its inspection is often still there under a
+   name nobody predicted — another component prefix, a second device's copy, a
+   date a day out. This searches the folder's own file index, which is the only
+   list that knows what the folder actually holds, and it is deliberately a
+   SEARCH and not an action: it says where a file is, and filing it anywhere is
+   still a decision somebody makes on purpose. */
+$("opFindGo").onclick=()=>{
+  const out=$("opFindOut"), q=($("opFindQ").value||"").trim();
+  if(!q){ out.textContent=t("op_find_ask"); return; }
+  let names=[];
+  try{ names=(window.CMDrive&&CMDrive.names)?CMDrive.names():[]; }catch(e){ names=[]; }
+  if(!names.length){ out.textContent=t("op_find_noidx"); return; }
+  /* Every word has to appear, in any order — "TK115 05.08" finds the file
+     without anybody having to know which comes first in the name. */
+  const words=q.toLowerCase().split(/\s+/).filter(Boolean);
+  const hit=names.filter(n=>{ const l=n.toLowerCase(); return words.every(w=>l.indexOf(w)>=0); });
+  if(!hit.length){ out.textContent=t("op_find_none"); return; }
+  const show=hit.slice(0,40);
+  out.innerHTML=`<div>${esc(t("op_find_n",{n:hit.length}))}</div>`
+    + `<ul class="plainlist">${show.map(n=>
+        `<li><span class="mono">${esc(n)}</span>
+           <span class="spacer"></span>
+           <button class="btn sm" data-look="${esc(n)}">${esc(t("op_look"))}</button>
+           <button class="btn sm" data-take="${esc(n)}" disabled>${esc(t("op_take"))}</button>
+         </li>`).join("")}</ul>`
+    + (hit.length>40 ? `<div class="muted">${esc(t("shown_n",{n:40, of:hit.length}))}</div>` : "");
+
+  /* LOOK BEFORE FILING. A picture nobody has seen cannot be classified — that
+     rule does not stop applying because the file was found somewhere else. So
+     "Use this" stays disabled until the bytes are actually on screen. */
+  out.querySelectorAll("[data-look]").forEach(btn=>{
+    btn.onclick=async ()=>{
+      const nm=btn.dataset.look;
+      btn.disabled=true; btn.textContent=t("op_looking");
+      let url=null;
+      try{ url=await (window.CMDrive&&CMDrive.fetchByName?CMDrive.fetchByName(nm):null); }catch(e){}
+      if(!url){ btn.textContent=t("op_look_no"); return; }
+      const li=btn.closest("li");
+      const img=document.createElement("img");
+      img.className="th"; img.src=url; img.alt=nm; img.loading="lazy";
+      li.insertBefore(img, li.firstChild);
+      btn.remove();
+      const take=li.querySelector("[data-take]");
+      if(take) take.disabled=false;
+    };
+  });
+  /* AND THEN IT IS A DECISION, MADE ON PURPOSE, RECORDED LIKE EVERY OTHER.
+
+     Filing a found file uses the same correction sidecar as everything else in
+     this panel, so a photograph attached from the folder carries who attached
+     it and when, exactly as one assigned from the grid does. It does not move
+     the file and it does not rename it: the folder is left as it is and the
+     record says where the picture belongs. */
+  out.querySelectorAll("[data-take]").forEach(btn=>{
+    btn.onclick=()=>{
+      const nm=btn.dataset.take, pt=$("opPoint").value;
+      const patch={};
+      patch[nm]= pt ? {point:pt, found:1} : {general:1, found:1};
+      saveAssign(patch, ()=>{ $("opMsg").textContent=t("op_took",{n:nm,
+        p: pt || t("op_general_short")}); }, {allowFound:true});
+    };
+  });
+};
+$("opFindQ").onkeydown=e=>{ if(e.key==="Enter"){ e.preventDefault(); $("opFindGo").click(); } };
 function renderConflict(rec){
   const card=$("edCfCard"), box=$("edCfList");
   if(!card||!box) return;
@@ -8799,6 +9021,50 @@ function pxOffArm(on){
                   $("pxWhy").placeholder=t("px_off_ph"); }
   else $("pxWhy").placeholder=t("px_why_ph");
 }
+/* DELETING THE FILE. The only irreversible thing in this editor.
+
+   "Remove from the record" is a decision the office can change its mind about:
+   the photograph stops appearing and the marker says who took it off and why.
+   This destroys the bytes. So it asks for everything the record-level delete
+   asks for — the reason already on screen, the unit typed out, and the admin
+   password, which lives in cm.env on the server and nowhere else — and the
+   server refuses without a reason and a name of its own accord, so a picture
+   can never leave the folder with nothing to say who removed it.
+
+   The reason is written into the folder BEFORE the object goes, so a delete
+   that fails halfway leaves a note explaining an absence rather than an
+   absence explaining nothing. */
+$("pxDelete").onclick=async ()=>{
+  if(!lbCtx) return;
+  const msg=$("pxMsg");
+  const rk=lbCtx.rk, name=pxKey(lbCtx.name);
+  const rec=RECS.find(r=>ekOf(r)===rk);
+  if(!rec) return;
+  $("pxWhyWrap").classList.remove("hidden");
+  const why=$("pxWhy").value.trim();
+  if(!why){ msg.textContent=t("px_del_need"); $("pxWhy").focus(); return; }
+  const by=mediaWho(); if(!by){ msg.textContent=t("ed_needname"); return; }
+  if(!drvOn()){ msg.textContent=t("ed_needdrive"); return; }
+  const typed=prompt(t("px_del_confirm",{n:name, x:rec.equip}));
+  if(typed===null) return;
+  if(String(typed).trim().toUpperCase()!==String(rec.equip).toUpperCase()){
+    msg.textContent=t("ed_needconfirm",{x:rec.equip}); return; }
+  const admin=prompt(t("ed_admin"));
+  if(admin===null) return;
+  msg.textContent=t("ed_sending");
+  try{
+    const r=await (window.CMDrive&&CMDrive.deleteFile
+      ? CMDrive.deleteFile({name, key:rk, by, why, admin})
+      : Promise.resolve({ok:false, error:"no backend"}));
+    if(!r||!r.ok){ msg.textContent=(r&&r.error)||t("px_del_no"); return; }
+    /* Ask the folder what it holds now rather than assuming: this is the one
+       action on the page that changed it. */
+    try{ await (window.CMDrive&&CMDrive.load?CMDrive.load({refresh:true}):null); }catch(e){}
+    msg.textContent=t("px_del_ok",{n:name});
+    renderAll(); renderSync();
+    if(typeof closeLB==="function") closeLB();
+  }catch(e){ msg.textContent=(e&&e.message)||String(e); }
+};
 $("pxOff").onclick=()=>{
   if(!lbCtx) return;
   const msg=$("pxMsg");
@@ -11208,9 +11474,13 @@ function syncScan(){
       expected += claim;
       present  += Math.min(held, claim);
       /* A shortfall is named by the point and by the file names the phone
-         would have written, so somebody can search the folder for them. */
-      if(held < claim) expectedNames(i,r,claim).slice(held).forEach(n=>
-        miss.push({ik:i.key, name:n}));
+         would have written, so somebody can search the folder for them — and
+         where the point has no key there IS no such name, so the row is
+         counted with an empty one rather than an invented one. */
+      if(held < claim){
+        const want=expectedNames(i,r,claim).slice(held);
+        for(let x=0;x<claim-held;x++) miss.push({ik:i.key||"", name:want[x]||""});
+      }
     });
     if(miss.length) gaps.push({r, miss});
   });
@@ -11711,8 +11981,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=205"></script>
-<script src="sync-adapter.js?v=205"></script>
-<script src="report.js?v=205"></script>
+<script src="drive.js?v=206"></script>
+<script src="sync-adapter.js?v=206"></script>
+<script src="report.js?v=206"></script>
 </body>
 </html>

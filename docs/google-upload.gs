@@ -106,6 +106,7 @@ function doPost(e) {
 
     if (b.op === 'edit')    return json(saveEdit_(b));
     if (b.op === 'delete')  return json(deleteRecord_(b));
+    if (b.op === 'delfile') return json(deleteFile_(b));
     if (b.op === 'resolve') return json(resolveConflict_(b));
 
     /* Several files in one request.
@@ -500,6 +501,50 @@ function deleteRecord_(b) {
   indexDrop_(b.key);          // or the list keeps offering a round that is gone
   indexTouch_();              // even if it was never indexed, this IS a change
   return { ok: true, deleted: gone.length, files: gone, trashed: true };
+}
+/* ONE PHOTOGRAPH, DELETED ON PURPOSE, WITH A REASON ON IT.
+
+   Field for field the same operation as docs/yandex/function.js deleteFile().
+   This backend is retired and is not deployed; it is kept in step because two
+   backends for one document have to agree about what the document IS, and a
+   backend that is ever switched back on must not silently disagree.
+
+   Same gate as deleteRecord_ — ADMIN_SECRET — because this destroys a file.
+   The marker is written BEFORE the file goes, so a failure halfway leaves a
+   note explaining an absence rather than an absence explaining nothing, and a
+   reason and a name are both required: a photograph that vanishes with neither
+   is indistinguishable from one the sync lost. Media only; a sidecar removed
+   this way would take a round off every screen with nothing to say it existed. */
+function deleteFile_(b) {
+  if (!ADMIN_SECRET) return { ok: false, error:
+    'Deletion is switched off. Set ADMIN_SECRET in the Apps Script and deploy a new version.' };
+  if (String(b.admin || '') !== ADMIN_SECRET) return { ok: false, error: 'Wrong admin password' };
+  var name = String(b.name || '').trim();
+  if (!name) return { ok: false, error: 'Missing file name' };
+  if (!/\.(jpe?g|png|webp|mp4|mov|webm)$/i.test(name))
+    return { ok: false, error: 'Only photographs and video can be deleted one at a time' };
+  var why = String(b.why || '').trim();
+  if (!why) return { ok: false, error: 'A reason is required' };
+  var by = String(b.by || '').trim();
+  if (!by) return { ok: false, error: 'A name is required' };
+
+  var hit = [];
+  (function take(it) { while (it.hasNext()) { var f = it.next();
+    if (f.getName() === name) hit.push(f); } })(rootFolder_().getFiles());
+  if (!hit.length) return { ok: false, error: 'No file called ' + name };
+
+  var at = new Date().toISOString(), stampSafe = at.replace(/[:.]/g, '-');
+  var stem = name.replace(/\.[^.]+$/, '');
+  folderPath_(rootFolder_(), META_DIR + '/deletions').createFile(
+    Utilities.newBlob(JSON.stringify({ type: 'cm-file-deleted', name: name,
+      key: String(b.key || ''), by: by.slice(0, 80), why: why.slice(0, 400), at: at,
+      bytes: hit.reduce(function (n, f) { return n + f.getSize(); }, 0) }, null, 2),
+      'application/json', stampSafe + '_' + stem + '.file.json'));
+
+  var gone = 0;
+  for (var i = 0; i < hit.length; i++) { try { hit[i].setTrashed(true); gone++; } catch (e) {} }
+  indexTouch_();
+  return { ok: true, deleted: gone, name: name, at: at };
 }
 function esc_(s) { return String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
 

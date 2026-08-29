@@ -481,18 +481,47 @@
   let mediaIndexAt = 0;
   const MEDIA_INDEX_TTL = 5 * 60 * 1000;
   async function ensureMediaIndex() {
-    /* The records path brings its own index down with the first page, and has
-       always done. Only the index path arrives without one — so this must not
-       re-fetch what a load already provided, or every dashboard pays a folder
-       listing it does not need. */
+    /* ONE INDEX, ONE WAY OF GETTING IT.
+
+       This used to fetch its own listing with action=list and merge the result,
+       while refreshMediaIndex() above replaced the index from action=records.
+       Two functions maintaining one fact, and they did not even agree on the
+       rule: merging cannot notice a file that has been DELETED, so a folder
+       tidied from another desk would go on being counted here for as long as
+       the tab stayed open — which is the exact shape of the audit bug this
+       index was fixed to stop.
+
+       Every load now refreshes the index eagerly, so this is only the
+       belt-and-braces case: a page that somehow reached "open a unit" without
+       one. Same call, same replacement, same saved copy. */
     const have = Object.keys(index).length;
-    if (have && !mediaIndexAt) return;                       // came with the records
+    if (have && !mediaIndexAt) return;                       // came with the load
     if (have && Date.now() - mediaIndexAt < MEDIA_INDEX_TTL) return;
-    try {
-      const all = await api({ action: "list" });
-      (all.files || []).forEach(f => { index[f.name] = { id: f.id, size: f.size }; });
-      mediaIndexAt = Date.now();
-    } catch (e) { /* no index means no pictures, not a broken page */ }
+    await refreshMediaIndex();
+    mediaIndexAt = Date.now();
+  }
+
+  /* ONE FILE, BY NAME, SO SOMEBODY CAN LOOK AT IT BEFORE DECIDING.
+
+     A photograph that never matched an inspection is still in the folder under
+     a name nobody predicted. Filing it anywhere is a decision, and a decision
+     about a picture nobody has seen is a guess — so the panel that offers to
+     file it has to be able to show it first. */
+  async function fetchByName(name) {
+    await ensureMediaIndex();
+    const e = index[name];
+    if (!e) return null;
+    if (fetched[name]) return fetched[name];
+    const cached = await cacheGet(e.id);
+    if (cached) { fetched[name] = cached; window.CMDash.addPhoto(name, cached); return cached; }
+    const r = await api({ action: "file", id: e.id });
+    if (!r || !r.data) { fetched[name] = null; return null; }
+    const blob = b64ToBlob(r.data, r.mime);
+    const url = URL.createObjectURL(blob);
+    await cachePut(e.id, blob);
+    fetched[name] = url;
+    window.CMDash.addPhoto(name, url);
+    return url;
   }
 
   async function ensurePhotos(recs, onProgress) {
@@ -612,6 +641,12 @@
   const remove = (key, admin, by, reason) =>
     post({ op: "delete", key, admin, by, reason });
 
+  /* ONE PHOTOGRAPH, on purpose, with a reason on it. Same gate as remove(),
+     because this destroys a file and nothing brings it back — and the server
+     refuses without both a reason and a name, so a picture can never disappear
+     from the folder with nothing to say who took it out or why. */
+  const deleteFile = (p2) => post(Object.assign({ op: "delfile" }, p2));
+
   /* Put one picture into Drive under a name the dashboard will find again.
      The same `batch` op the phones use, so nothing new has to be deployed to
      the Apps Script for a photograph added from a desk. */
@@ -697,7 +732,7 @@
   }
 
   window.CMDrive = {
-    load, ensurePhotos, configured, ping, saveEdit, remove, resolve, putMedia,
+    load, ensurePhotos, fetchByName, configured, ping, saveEdit, remove, deleteFile, resolve, putMedia,
     /* "Is this name already taken on Drive?" — asked before choosing the next
        _N for an added photograph, so one added from another desk yesterday is
        not overwritten by one added from this desk today. */

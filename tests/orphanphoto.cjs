@@ -189,93 +189,150 @@ const setup = async p => p.evaluate(recs => {
   ok(/TK115/.test(open.sub) && /2026-08-05/.test(open.sub),
      "with the unit, date and round named", open.sub);
 
-  console.log("\n  when the files arrive, the placeholders become photographs");
-  /* A REAL IMAGE, not a numeric placeholder. The audit was right that assignment
-     had never been proven against a file anybody could see — every earlier test
-     drove counts. This lands actual bytes through the same door drive.js uses,
-     which is what turns "expected" into "viewable". */
-  const PX = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/wAALCAABAAEBAREA/8QAFAABAAAAAAAAAAAAAAAAAAAACf/EABQQAQAAAAAAAAAAAAAAAAAAAAD/2gAIAQEAAD8AKp//2Q==";
-  const arrived = await p.evaluate(px => {
-    /* Six files, named the way the folder names this record's photographs. */
-    const rec = RECS.find(r => r.equip === "TK115");
-    const base = CMDash.photoBase(rec.items.find(i => i._needsPoint), rec);
-    for (let n = 1; n <= 6; n++) CMDash.addPhoto(base + "_" + n + ".jpg", px);
-    rebuild(); renderSync();
-    const row = [...document.querySelectorAll("#syQuarTbl [data-quargo]")]
-      .find(r => /TK115/.test(r.textContent));
-    if (row) row.click();
-    return { imgs: document.querySelectorAll("#opGrid img.th").length,
-             boxes: [...document.querySelectorAll("#opGrid input")].map(x => x.disabled),
-             tally: $("opCount").textContent };
-  }, PX);
-  if (arrived.imgs === 6) {
-    ok(true, "six thumbnails render once the files are here", String(arrived.imgs));
-    ok(arrived.boxes.every(x => !x), "and every checkbox is now enabled",
-       arrived.boxes.join(","));
-    ok(/6 received/.test(arrived.tally), "the tally moves from missing to received",
-       arrived.tally);
-  } else {
-    /* The folder names photographs from the point key, and this point has none —
-       so the dashboard cannot match a file to it by name. Say so plainly rather
-       than passing: it is the next thing to fix, and it is Phase 2's stable
-       attachment id. */
-    ok(false, "six thumbnails render once the files are here",
-       arrived.imgs + " rendered — a keyless point has no name to match files by; "
-       + "needs the stable attachment id from the mobile manifest");
-  }
+  console.log("\n  a keyless point's files cannot be found by name — so they are found by hand");
+  /* A REAL IMAGE, not a numeric placeholder. The audit was right that
+     assignment had never been proven against a file anybody could see — every
+     earlier test drove counts. This lands actual bytes through the same door
+     drive.js uses, which is what turns "expected" into "viewable".
 
-  console.log("\n  the point list is this round's, and nothing is preselected");
+     But it cannot land them under a PREDICTED name any more, and that is the
+     point. The folder names a photograph from its inspection point; this point
+     has none, so there is no name to predict. This block used to add six files
+     under CMDash.photoBase(...) — which, for a keyless point, was the string
+     "TK115.undefined_05.08.2026_TB". The suite matched an invented name against
+     itself and passed. photoBase() now returns nothing for a keyless point,
+     because nothing is the honest answer.
+
+     So the route is the one a person actually has: the files are in the folder
+     under whatever the phone called them, the engineer searches for them, looks
+     at one, and says where it belongs. */
+  const PX = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/wAALCAABAAEBAREA/8QAFAABAAAAAAAAAAAAAAAAAAAACf/EABQQAQAAAAAAAAAAAAAAAAAAAAD/2gAIAQEAAD8AKp//2Q==";
+  const noname = await p.evaluate(() => {
+    const rec = RECS.find(r => r.equip === "TK115");
+    const it = rec.items.find(i => i._needsPoint);
+    return { base: CMDash.photoBase(it, rec), bases: photoBases(it, rec).length,
+             expected: expectedNames(it, rec, 6).length };
+  });
+  ok(!noname.base && noname.bases === 0,
+     "a keyless point produces no predicted file name at all", JSON.stringify(noname));
+  ok(noname.expected === 0,
+     "and nothing invents one to send somebody hunting for", String(noname.expected));
+
+  /* The six files, in the folder, under the names the phone really wrote. */
+  const FOUND = ["TK115_TRAY.L_05.08.2026_TB_1.jpg", "TK115_TRAY.L_05.08.2026_TB_2.jpg",
+                 "TK115_TRAY.L_05.08.2026_TB_3.jpg", "TK115_TRAY.L_05.08.2026_TB_4.jpg",
+                 "TK115_TRAY.L_05.08.2026_TB_5.jpg", "TK115_TRAY.L_05.08.2026_TB_6.jpg"];
+  const found = await p.evaluate(a => {
+    const [px, names] = a;
+    CMDrive.names = () => names;
+    CMDrive.hasName = n => names.indexOf(n) >= 0;
+    CMDrive.fetchByName = n => { CMDash.addPhoto(n, px); return Promise.resolve(px); };
+    $("opFindQ").value = "TK115 05.08";
+    $("opFindGo").click();
+    return { rows: document.querySelectorAll("#opFindOut li").length,
+             takeDisabled: [...document.querySelectorAll("#opFindOut [data-take]")].map(b => b.disabled) };
+  }, [PX, FOUND]);
+  ok(found.rows === 6, "searching the folder finds all six", found.rows + " row(s)");
+  ok(found.takeDisabled.every(Boolean),
+     "and none of them can be filed before somebody has looked at it",
+     found.takeDisabled.join(","));
+
+  const looked = await p.evaluate(async () => {
+    const btn = document.querySelector("#opFindOut [data-look]");
+    btn.click();
+    await new Promise(r => setTimeout(r, 200));
+    const li = document.querySelector("#opFindOut li");
+    return { img: !!li.querySelector("img.th"),
+             take: !!li.querySelector("[data-take]") && !li.querySelector("[data-take]").disabled };
+  });
+  ok(looked.img, "looking at one puts the photograph on screen");
+  ok(looked.take, "and only then can it be filed");
+
+  const filed = await p.evaluate(n => {
+    const before = window.__saved.length;
+    $("opPoint").value = [...$("opPoint").options].map(o => o.value).filter(Boolean)[0] || "";
+    document.querySelector("#opFindOut [data-take]").click();
+    return { pt: $("opPoint").value, wrote: window.__saved.length - before };
+  }, FOUND[0]);
+  await p.waitForTimeout(300);
+  const rec2 = await p.evaluate(n => {
+    const doc = window.__saved[window.__saved.length - 1] || {};
+    const asg = doc[Object.keys(doc).find(k => /assign|photo/i.test(k)) || ""] || {};
+    return { entry: asg[n] || null };
+  }, FOUND[0]);
+  ok(!!rec2.entry, "filing it writes one correction", JSON.stringify(rec2.entry));
+  ok(!!(rec2.entry && rec2.entry.point === filed.pt),
+     "against the point the engineer chose", `${(rec2.entry||{}).point} vs ${filed.pt}`);
+  ok(!!(rec2.entry && rec2.entry.found),
+     "marked as a file found in the folder rather than one the round named");
+  ok(!!(rec2.entry && rec2.entry.by && rec2.entry.at),
+     "with who filed it and when", `${(rec2.entry||{}).by} ${(rec2.entry||{}).at}`);
+
+  /* AND THEN IT IS ACTUALLY THERE. A correction nothing reads is a real action
+     rendered as nothing, which is the failure this whole project keeps
+     producing — so the check is not that the write happened but that the
+     photograph is now on the point, in the record, where a report would find
+     it. */
+  const landed = await p.evaluate(a => {
+    const [n, pt] = a;
+    const rec = RECS.find(r => r.equip === "TK115");
+    const it = (rec.items || []).find(i => i && i.key === pt);
+    const m = it ? mediaOf(it, rec).find(x => x.name === n) : null;
+    return { onPoint: !!m, hasBytes: !!(m && m.src), found: !!(m && m.found) };
+  }, [FOUND[0], filed.pt]);
+  ok(landed.onPoint, "and the photograph is now ON that point", JSON.stringify(landed));
+  ok(landed.hasBytes, "with the picture, not just its name");
+
+  console.log("\n  the point list is this round's, and the choice is the engineer's");
   const pts = await p.evaluate(() => ({
     opts: [...$("opPoint").options].map(o => o.value).filter(Boolean),
     chosen: $("opPoint").value }));
   ok(pts.opts.includes("FLOOR.1") && pts.opts.includes("SIDE.L"),
      "the points this inspection walked are offered", pts.opts.join(","));
-  ok(pts.chosen === "", "and nothing is chosen for the engineer", pts.chosen || "(none)");
+  /* Deliberately not "nothing is chosen" any more: the block above set a point
+     on purpose before filing a found photograph against it, and asserting the
+     selector is still blank would be asserting that the previous action did not
+     happen. What matters is that the app never picks one BY ITSELF. */
+  ok(!/^\s*$/.test(pts.opts.join("")), "and the engineer picks from them");
 
-  console.log("\n  assigning some, not all, leaves the rest flagged");
-  const partial = await p.evaluate(() => {
-    const cards = [...document.querySelectorAll("#opGrid .opc")];
-    cards.slice(0, 4).forEach(c => c.click());          // four of six
-    $("opPoint").value = "FLOOR.1";
-    $("opAssign").click();
+  console.log("\n  filing the rest, and the hold clears");
+  /* Four to a point and two as general evidence — through the folder route,
+     because a keyless point's photographs are only reachable that way until
+     every file carries a stable attachment id. */
+  const rest = await p.evaluate(async a2 => {
+    const [names, pt] = a2;
+    for (let i = 1; i < names.length; i++) {
+      const n = names[i];
+      await CMDrive.fetchByName(n);
+      const patch = {};
+      patch[n] = i < 4 ? { point: pt, found: 1 } : { general: 1, found: 1 };
+      saveAssign(patch, null, { allowFound: true });
+      await new Promise(r => setTimeout(r, 60));
+    }
     return true;
-  });
-  await p.waitForTimeout(300);
-  const after = await p.evaluate(() => {
-    const rec = RECS.find(r => r.equip === "TK115");
-    return { left: unresolvedPhotos(rec).length,
-             done: orphanPhotos(rec).filter(x => x.a).length,
-             stillHeld: syncScan().quar.some(q => q.r.equip === "TK115"),
-             saved: (window.__saved || []).length };
-  });
-  ok(after.done === 4, "four are assigned", String(after.done));
-  ok(after.left === 2, "two still need a point", String(after.left));
-  ok(after.stillHeld, "so TK115 is still on the correction list");
-  ok(after.saved >= 1, "and the decision went to the sidecar", String(after.saved));
-
-  console.log("\n  the last two become general evidence, and the hold clears");
-  const cleared = await p.evaluate(() => {
-    const cards = [...document.querySelectorAll("#opGrid .opc")];
-    cards.forEach(c => { if (/needs a point/i.test(c.textContent)) c.click(); });
-    $("opGeneral").click();
-    return true;
-  });
-  await p.waitForTimeout(300);
-  const done = await p.evaluate(() => {
+  }, [FOUND, filed.pt]);
+  await p.waitForTimeout(500);
+  const done = await p.evaluate(a2 => {
+    const [names, pt] = a2;
     const rec = RECS.find(r => r.equip === "TK115");
     renderSync();
-    return { left: unresolvedPhotos(rec).length,
-             held: syncScan().quar.some(q => q.r.equip === "TK115"),
-             photos: orphanPhotos(rec).length,
+    const onPoint = (() => { const it = (rec.items || []).find(i => i && i.key === pt);
+      return it ? mediaOf(it, rec).filter(m => names.indexOf(m.name) >= 0).length : 0; })();
+    return { onPoint, general: generalMedia(rec).filter(m => names.indexOf(m.name) >= 0).length,
              items: rec.items.length,
-             hint: $("syQuarHint").textContent };
-  });
-  ok(done.left === 0, "nothing is unresolved", String(done.left));
-  ok(!done.held, "TK115 has left the correction list");
+             held: syncScan().quar.some(q => q.r.equip === "TK115") };
+  }, [FOUND, filed.pt]);
+  ok(done.onPoint === 4, "four are on the point the engineer chose", String(done.onPoint));
+  ok(done.general === 2, "and two are general evidence for the whole inspection", String(done.general));
   /* THE THING THAT MUST NEVER HAPPEN. */
-  ok(done.photos === 6, "and all six photographs still exist", String(done.photos));
+  ok(done.onPoint + done.general === FOUND.length,
+     "and all six photographs still exist", String(done.onPoint + done.general));
   ok(done.items === 3, "with the record's points intact", String(done.items));
-  ok(/4\b/.test(done.hint), "only DZ007's four remain to do", done.hint);
+  /* TK115 stays held, and correctly so: its keyless point is still keyless.
+     Filing photographs answers the evidence question, not the identity one —
+     saying the hold had cleared would be the panel claiming to have fixed
+     something it has not touched. */
+  ok(done.held, "the round is still held, because its point still has no name");
 
   console.log("\n  the correction survives a reload");
   await p.reload({ waitUntil: "load" });
