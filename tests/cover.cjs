@@ -24,6 +24,7 @@
        enough history to have one
 */
 const { chromium } = require(require('./pw.cjs'));
+const BUNDLED = require('./bundled.cjs');
 const B = (process.env.CMPORT ? 'http://127.0.0.1:' + process.env.CMPORT : 'http://127.0.0.1:8099')
         + '/dashboard/index.html';
 const fails = [];
@@ -63,6 +64,12 @@ const cov = () => [...document.querySelectorAll('#covTbl tbody tr')].map(tr => {
   p.on('pageerror', e => fails.push('PAGEERROR ' + e.message));
   await p.goto(B, { waitUntil: 'load' });
   await p.waitForTimeout(800);
+  /* The sixteen bundled rounds of 29 July. This suite has always leaned on
+     them to have enough findings in the last month to read a direction from —
+     it just never had to say so, because the dashboard merged them in by
+     itself. That source is retired; the fixture is stated. */
+  await p.evaluate(BUNDLED + "()");
+  await p.waitForTimeout(400);
   await p.evaluate(r => {
     CMDash.importRecords(r);
     document.getElementById('dataOv').classList.add('hidden');

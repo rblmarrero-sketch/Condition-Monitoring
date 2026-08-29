@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=204">
+<link rel="manifest" href="manifest.webmanifest?v=205">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=204">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=204">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=204">
+<link rel="apple-touch-icon" href="icon-192.png?v=205">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=205">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=205">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1970,35 +1970,65 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=204"></script>
-<script src="upload-defaults.js?v=204"></script>
-<script src="hme.js?v=204"></script>
-<script src="mp-fc.js?v=204"></script>
-<script src="hme-cascade.js?v=204"></script>
-<script src="assets.js?v=204"></script>
-<script src="temp-limits.js?v=204"></script>
-<script src="normalize.js?v=204"></script>
-<script src="due.js?v=204"></script>
-<script src="wear.js?v=204"></script>
-<script src="wear-figs.js?v=204"></script>
-<script src="wear-map.js?v=204"></script>
-<script src="machine-photos.js?v=204"></script>
-<script src="machine-fig.js?v=204"></script>
-<script src="get.js?v=204"></script>
-<script src="points.js?v=204"></script>
-<script src="uc-points.js?v=204"></script>
-<script src="inspect-guide.js?v=204"></script>
-<script src="get-figs.js?v=204"></script>
-<script src="body-points.js?v=204"></script>
-<script src="body-map.js?v=204"></script>
-<script src="lube.js?v=204"></script>
-<script src="lube-overrides.js?v=204"></script>
-<script src="lube2027.js?v=204"></script>
-<script src="report-core.js?v=204"></script>
+<script src="native.js?v=205"></script>
+<script src="upload-defaults.js?v=205"></script>
+<script src="hme.js?v=205"></script>
+<script src="mp-fc.js?v=205"></script>
+<script src="hme-cascade.js?v=205"></script>
+<script src="assets.js?v=205"></script>
+<script src="temp-limits.js?v=205"></script>
+<script src="normalize.js?v=205"></script>
+<script src="due.js?v=205"></script>
+<script src="wear.js?v=205"></script>
+<script src="wear-figs.js?v=205"></script>
+<script src="wear-map.js?v=205"></script>
+<script src="machine-photos.js?v=205"></script>
+<script src="machine-fig.js?v=205"></script>
+<script src="get.js?v=205"></script>
+<script src="points.js?v=205"></script>
+<script src="uc-points.js?v=205"></script>
+<script src="inspect-guide.js?v=205"></script>
+<script src="get-figs.js?v=205"></script>
+<script src="body-points.js?v=205"></script>
+<script src="body-map.js?v=205"></script>
+<script src="lube.js?v=205"></script>
+<script src="lube-overrides.js?v=205"></script>
+<script src="lube2027.js?v=205"></script>
+<script src="report-core.js?v=205"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
 <script>
+/* A DOWNLOAD THAT STOPPED BETWEEN TWO FILES.
+
+   index.html can be in the cache while one of the scripts above is not — the
+   connection dropped between them. Everything below then runs against a module
+   that is not there, throws on the first line that needs it, and the inspector
+   gets a white screen: no way to tell whether the round they captured this
+   morning survived, and nothing to press.
+
+   due.js is the one this cannot do without: it is the schedule, and it is also
+   the clock, so nothing here can even say what day it is without it. Caught
+   here, before a line of the app runs, and handed to the service worker's own
+   page — which says the download is unfinished, says plainly that nothing
+   captured has been lost, and offers Try again. That page is written once, in
+   sw.js, and the worker finishes the download in the background while it is on
+   screen.
+
+   Without a worker there is nothing to explain anything, so the reload is the
+   only move left and is taken once. */
+var CM_NO_DUE = (typeof DUE === "undefined" || !DUE || typeof DUE.today !== "function");
+if (CM_NO_DUE && navigator.serviceWorker && navigator.serviceWorker.controller) {
+  /* A phone with a worker gets the worker's own page, which says the download
+     is unfinished, says plainly that nothing captured has been lost, and heals
+     itself in the background. Written once, in sw.js. */
+  location.replace("./__incomplete");
+}
+/* And where there is no worker to explain anything — a plain browser, or a
+   copy that never installed — the app STILL RUNS. It ran without any of its
+   modules before this guard existed, and an inspector being able to open the
+   app and see their saved rounds matters more than the schedule does. What it
+   must not do is invent a date: see todayISO(). */
 /* ============================================================================
    EQUIPMENT CLASSES & INSPECTION TYPES  —  EDIT here for your fleet.
    • TYPE_META: the 3 inspection kinds (Magnetic Plug / Filter Cut / Inspection).
@@ -6172,9 +6202,16 @@ $("supName").addEventListener("input",renderSignFold);
 /* The site's day, from due.js, which is the only thing that knows what day it
    is. This used to build the BROWSER's day — and the dashboard built the UTC
    day — so at Baimskaya, UTC+12, the two surfaces spent half of every day on
-   different dates and disagreed about every row on the due list. No local
-   fallback here on purpose: a second answer is the whole defect. */
-function todayISO(){ return DUE.today(); }
+   different dates and disagreed about every row on the due list.
+
+   NO LOCAL FALLBACK, and blank rather than wrong. If due.js is missing this
+   returns "" — the date box opens empty and somebody has to type the date.
+   Computing one here from the browser's clock is the defect this whole change
+   removed, and it would be worse than an empty box precisely because nobody
+   would notice it. */
+function todayISO(){
+  return (typeof DUE !== "undefined" && DUE && DUE.today) ? DUE.today() : "";
+}
 $("date").value=todayISO();
 $("inspector").value=localStorage.getItem("inspector")||"";
 $("inspector").addEventListener("input",()=>lsSet("inspector",$("inspector").value.trim()));
@@ -9860,7 +9897,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="204";
+const BUILD="205";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

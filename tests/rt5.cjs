@@ -3,7 +3,7 @@
    millimetres never left the draft — and nothing caught it because no suite had
    ever read a saved position back. This one does, for all five. */
 const { chromium } = require(require('./pw.cjs'));
-const B = 'http://127.0.0.1:8093';
+const B = process.env.CMB || 'http://127.0.0.1:8093';
 const fails = [];
 const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !== undefined ? '   ' + d : '')); if (!c) fails.push(n); };
 
@@ -210,6 +210,13 @@ const PLAN = [
      Only escaping is under test here; autosync.cjs exercises the timers. */
   const inj = await p.evaluate(async () => {
     if (typeof retryTimer !== 'undefined' && retryTimer) { clearTimeout(retryTimer); retryTimer = null; }
+    /* `syncing` outranks `lastErr` in the bar, and rightly so — a send in
+       flight is what an inspector most needs to see. It also meant this
+       assertion read "Sending automatically…" whenever a periodic send happened
+       to be running, which is a race the suite cannot win by sleeping. Only
+       escaping is under test here, so the in-flight state is stood down first;
+       autosync.cjs is what exercises the timers. */
+    if (typeof syncing !== 'undefined') syncing = false;
     lastErr = '<img src=x onerror="window.__x=1">';
     await renderSync();
     const bar = document.getElementById('syncBar');

@@ -36,7 +36,7 @@
        explains itself and offers a retry — because an honest offline page is
        recoverable and a browser error page is not. */
 
-const BUILD = "204";
+const BUILD = "205";
 const CACHE = "plug-capture-v" + BUILD;
 
 /* Without these the app is not an app: no page, no equipment register, no
@@ -239,6 +239,22 @@ self.addEventListener("fetch", (e) => {
   if (url.origin !== self.location.origin) return;      // uploads go straight out
 
   const isDoc = req.mode === "navigate" || req.destination === "document";
+
+  /* THE PAGE ASKING FOR THE PAGE THAT EXPLAINS ITSELF.
+
+     index.html can be in the cache while a script it needs is not — a download
+     interrupted between the two. The app then opens and dies on a missing
+     module, which on a phone is a white screen and no way to tell whether the
+     work on it survived.
+
+     The page detects that and navigates here. The message is written once, in
+     offlinePage(), because two copies of one sentence is how two screens come
+     to say different things, and healSoon() finishes the download in the
+     background so the next attempt is the real app. */
+  if (isDoc && /\/__incomplete$/.test(url.pathname)) {
+    healSoon();
+    return e.respondWith(offlinePage());
+  }
 
   /* ---- a page navigation: cache first, always ------------------------------
      Network-first here was the original mistake. It put a 3.5-second timeout on

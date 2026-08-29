@@ -2774,27 +2774,27 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=204"></script>
-<script src="../mobile/hme.js?v=204"></script>
-<script src="../mobile/mp-fc.js?v=204"></script>
-<script src="../mobile/hme-cascade.js?v=204"></script>
-<script src="../mobile/temp-limits.js?v=204"></script>
+<script src="../data/magnetic_plug.js?v=205"></script>
+<script src="../mobile/hme.js?v=205"></script>
+<script src="../mobile/mp-fc.js?v=205"></script>
+<script src="../mobile/hme-cascade.js?v=205"></script>
+<script src="../mobile/temp-limits.js?v=205"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=204"></script>
-<script src="../mobile/normalize.js?v=204"></script>
-<script src="../mobile/due.js?v=204"></script>
-<script src="../mobile/wear.js?v=204"></script>
-<script src="../mobile/wear-map.js?v=204"></script>
-<script src="../mobile/lube.js?v=204"></script>
-<script src="../mobile/lube-overrides.js?v=204"></script>
-<script src="../mobile/lube2027.js?v=204"></script>
-<script src="../mobile/lube-tds.js?v=204"></script>
+<script src="../mobile/assets.js?v=205"></script>
+<script src="../mobile/normalize.js?v=205"></script>
+<script src="../mobile/due.js?v=205"></script>
+<script src="../mobile/wear.js?v=205"></script>
+<script src="../mobile/wear-map.js?v=205"></script>
+<script src="../mobile/lube.js?v=205"></script>
+<script src="../mobile/lube-overrides.js?v=205"></script>
+<script src="../mobile/lube2027.js?v=205"></script>
+<script src="../mobile/lube-tds.js?v=205"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=204"></script>
-<script src="../mobile/machine-photos.js?v=204"></script>
+<script src="../mobile/upload-defaults.js?v=205"></script>
+<script src="../mobile/machine-photos.js?v=205"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -2803,17 +2803,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=204"></script>
-<script src="../mobile/get.js?v=204"></script>
-<script src="../mobile/points.js?v=204"></script>
-<script src="../mobile/uc-points.js?v=204"></script>
-<script src="../mobile/inspect-guide.js?v=204"></script>
-<script src="../mobile/get-figs.js?v=204"></script>
-<script src="../mobile/body-points.js?v=204"></script>
-<script src="../mobile/body-map.js?v=204"></script>
-<script src="../mobile/jspdf.umd.min.js?v=204"></script>
-<script src="../mobile/html2canvas.min.js?v=204"></script>
-<script src="../mobile/report-core.js?v=204"></script>
+<script src="../mobile/machine-fig.js?v=205"></script>
+<script src="../mobile/get.js?v=205"></script>
+<script src="../mobile/points.js?v=205"></script>
+<script src="../mobile/uc-points.js?v=205"></script>
+<script src="../mobile/inspect-guide.js?v=205"></script>
+<script src="../mobile/get-figs.js?v=205"></script>
+<script src="../mobile/body-points.js?v=205"></script>
+<script src="../mobile/body-map.js?v=205"></script>
+<script src="../mobile/jspdf.umd.min.js?v=205"></script>
+<script src="../mobile/html2canvas.min.js?v=205"></script>
+<script src="../mobile/report-core.js?v=205"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -11711,8 +11711,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=204"></script>
-<script src="sync-adapter.js?v=204"></script>
-<script src="report.js?v=204"></script>
+<script src="drive.js?v=205"></script>
+<script src="sync-adapter.js?v=205"></script>
+<script src="report.js?v=205"></script>
 </body>
 </html>

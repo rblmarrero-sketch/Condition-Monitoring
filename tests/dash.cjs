@@ -31,12 +31,26 @@ const recs = () => {
   p.on('pageerror', e => fails.push('PAGEERROR ' + e.message));
   p.on('console', m => { if (m.type() === 'error' && !/ERR_/.test(m.text())) fails.push('CONSOLE ' + m.text()); });
 
+  /* A DASHBOARD WITH NOTHING, AND NOTHING TO GET IT FROM.
+
+     This used to pass on the sixteen bundled records — allRecs() was never
+     zero, so the assertion's other half was doing the work and the behaviour
+     it names was never exercised. With that source retired the case is real,
+     and it has to be set up honestly: the page reads upload-defaults.js and
+     configures itself from it, so "no backend" means saying so, not relying on
+     a fetch failing. An empty stored URL beats the built-in one. */
+  await p.addInitScript(() => {
+    localStorage.setItem('cm_drive_url', '');
+    localStorage.setItem('cm_drive_sec', '');
+    localStorage.setItem('cm_swap_off', '1');
+  });
   await p.goto('http://127.0.0.1:8099/dashboard/index.html', { waitUntil: 'load' });
+  await p.waitForTimeout(900);
 
   console.log('first run');
   ok('data sheet opens itself when there is nothing loaded',
-     await p.evaluate(() => !document.getElementById('dataOv').classList.contains('hidden')) ||
-     await p.evaluate(() => CMDash.allRecs().length > 0), 'or bundled data exists');
+     await p.evaluate(() => !document.getElementById('dataOv').classList.contains('hidden')),
+     await p.evaluate(() => 'records=' + CMDash.allRecs().length + ' backend=' + drvOn()));
   const cards = await p.$$eval('#dataOv .srccard .srchead > div > b', a => a.map(x => x.textContent));
   ok('three sources, each explained', cards.length === 3, cards.join(' | '));
 
