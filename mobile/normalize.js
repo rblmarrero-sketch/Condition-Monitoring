@@ -70,6 +70,12 @@
     'tempC', 'ambC', 'tempMethod', 'tempV', 'tempA', 'tempM',
     /* components and fluid */
     'comp', 'oil',
+    /* A WEAR SURVEY IS A THING A HUMAN DID.
+
+       `stood` is the technician saying the machine was stood the right way for
+       the measurement to mean anything — their input, not the app's, so a
+       point carrying it is a point somebody worked on. */
+    'stood',
     /* evidence */
     'photo', 'photos', 'video', 'attachments', 'media'
   ];
@@ -256,8 +262,33 @@
      did to TK115 and DZ007 through builds 165 and 166. Listed here they are
      preserved on a real point exactly as before and can never make an empty
      one count as populated. */
+  /* The wear fields are the same category and were reported as unclassified
+     on 466 points of the live folder — newMM, condemnMM, band and wearPct,
+     one warning per point, which is a number big enough to look like a fault
+     and is nothing of the kind.
+
+     Not one of them is something a person typed. They are written beside the
+     millimetre a technician DID record, out of the reference table:
+
+         newMM:     L ? L.n : ""                  — the new-part dimension
+         condemnMM: L ? L.c : ""                  — the condemn limit
+         wearPct:   BODY.wear(model, key, mm)     — the two, and the reading
+         band:      BODY.band(model, key, mm)     — which is the same again
+
+     They are operational in every sense that matters and they are KEPT: an
+     auditor asking "worn how far, against what limit?" needs all four, and
+     this list has never governed whether a field is preserved. What it governs
+     is whether a field can make an otherwise-empty point count as populated —
+     and a row nobody filled in must not become a finding because a lookup
+     table had an opinion about it. That is exactly what `detection` did to
+     TK115 and DZ007.
+
+     mapSev is the dashboard's own derived severity, written from the grade
+     since 194. Same category, for the same reason. */
   var DEFAULTED = ['detect', 'detection', 'detectionLabel',
-                   'refSrc', 'zone', 'zoneLabel'];
+                   'refSrc', 'zone', 'zoneLabel',
+                   'newMM', 'condemnMM', 'wearPct', 'band',
+                   'mapSev'];
 
   var METADATA = [
     'id', 'uid', 'uuid', 'tmpId', 'tempId', 'localId', 'seq', 'idx', 'index',
