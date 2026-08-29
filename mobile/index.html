@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=197">
+<link rel="manifest" href="manifest.webmanifest?v=198">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=197">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=197">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=197">
+<link rel="apple-touch-icon" href="icon-192.png?v=198">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=198">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=198">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1970,31 +1970,31 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=197"></script>
-<script src="upload-defaults.js?v=197"></script>
-<script src="hme.js?v=197"></script>
-<script src="mp-fc.js?v=197"></script>
-<script src="hme-cascade.js?v=197"></script>
-<script src="assets.js?v=197"></script>
-<script src="temp-limits.js?v=197"></script>
-<script src="normalize.js?v=197"></script>
-<script src="due.js?v=197"></script>
-<script src="wear.js?v=197"></script>
-<script src="wear-figs.js?v=197"></script>
-<script src="wear-map.js?v=197"></script>
-<script src="machine-photos.js?v=197"></script>
-<script src="machine-fig.js?v=197"></script>
-<script src="get.js?v=197"></script>
-<script src="points.js?v=197"></script>
-<script src="uc-points.js?v=197"></script>
-<script src="inspect-guide.js?v=197"></script>
-<script src="get-figs.js?v=197"></script>
-<script src="body-points.js?v=197"></script>
-<script src="body-map.js?v=197"></script>
-<script src="lube.js?v=197"></script>
-<script src="lube-overrides.js?v=197"></script>
-<script src="lube2027.js?v=197"></script>
-<script src="report-core.js?v=197"></script>
+<script src="native.js?v=198"></script>
+<script src="upload-defaults.js?v=198"></script>
+<script src="hme.js?v=198"></script>
+<script src="mp-fc.js?v=198"></script>
+<script src="hme-cascade.js?v=198"></script>
+<script src="assets.js?v=198"></script>
+<script src="temp-limits.js?v=198"></script>
+<script src="normalize.js?v=198"></script>
+<script src="due.js?v=198"></script>
+<script src="wear.js?v=198"></script>
+<script src="wear-figs.js?v=198"></script>
+<script src="wear-map.js?v=198"></script>
+<script src="machine-photos.js?v=198"></script>
+<script src="machine-fig.js?v=198"></script>
+<script src="get.js?v=198"></script>
+<script src="points.js?v=198"></script>
+<script src="uc-points.js?v=198"></script>
+<script src="inspect-guide.js?v=198"></script>
+<script src="get-figs.js?v=198"></script>
+<script src="body-points.js?v=198"></script>
+<script src="body-map.js?v=198"></script>
+<script src="lube.js?v=198"></script>
+<script src="lube-overrides.js?v=198"></script>
+<script src="lube2027.js?v=198"></script>
+<script src="report-core.js?v=198"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2534,6 +2534,8 @@ const I18N = {
     up_never:"Saved on this phone only", up_at:"sent {t}",
     del_t_unsent:"This has not been uploaded",
     del_m_unsent:"{x} is only on this phone. Deleting it destroys {d} for good — there is no copy anywhere else and it cannot be undone.",
+    del_t_unver:"Delete from this phone?",
+    del_m_unver:"{x} has already been uploaded, and the endpoint accepted every file. This phone has no way of checking the system's copy from here, so that acceptance is all it can go on. Removing it frees space on the phone.",
     del_t_maybe:"Sent, but not yet confirmed",
     del_m_maybe:"{x} was accepted when it was sent, but this phone has not yet checked that the system really has it. Deleting now could destroy {d} with no copy anywhere. Wait until it says the system has it.",
     del_t_sent:"Delete from this phone?",
@@ -2979,6 +2981,8 @@ const I18N = {
     up_never:"Только на этом телефоне", up_at:"отправлено {t}",
     del_t_unsent:"Это ещё не выгружено",
     del_m_unsent:"{x} есть только на этом телефоне. Удаление уничтожит {d} безвозвратно — копии нигде нет, отменить нельзя.",
+    del_t_unver:"Удалить с этого телефона?",
+    del_m_unver:"{x} уже выгружено, и приёмник принял все файлы. Этот телефон не может отсюда проверить копию в системе, поэтому опирается только на это подтверждение приёма. Удаление освободит место на телефоне.",
     del_t_maybe:"Отправлено, но ещё не подтверждено",
     del_m_maybe:"{x} было принято при отправке, но телефон ещё не проверил, что это действительно есть в системе. Удаление сейчас может уничтожить {d} без единой копии. Дождитесь подтверждения.",
     del_t_sent:"Удалить с этого телефона?",
@@ -8979,15 +8983,43 @@ async function renderPending(){
       /* Three answers, not two. "Sent" and "the system has it" were one
          sentence, and only the second is grounds for saying the copy in the
          system is not touched. */
+      /* FOUR ANSWERS, BECAUSE THE RIGHT ACTION DIFFERS IN EACH.
+
+         The technician is asking one thing: if I delete this, could I lose it?
+
+           never sent          yes, certainly              — loud, and Cancel
+           accepted, checkable possibly, and waiting fixes it — wait
+           accepted, no way to
+             check from here   possibly, and waiting will NEVER fix it
+           the system has it   no
+
+         The third is the one that matters and the one a stricter rule gets
+         wrong. confirmRun can only ask a destination that can be LISTED; where
+         none can, rec.conf is never written and the round would say "not yet
+         confirmed" for the rest of its life. A warning that never clears is a
+         warning people learn to click through, and then it is not there on the
+         day it is true. This file's own rule: a server that does not answer
+         produces no finding. So where nothing can answer, the phone says what
+         it does know — it was accepted — and says plainly that it could not
+         check, rather than implying a confirmation is on its way. */
       const lvl=evidenceLevel(rec);
-      const gone = lvl===EV_NONE;
-      const unsure = lvl===EV_SENT;              // accepted, never verified
+      /* Not "could this be checked in principle" — every phone is configured
+         for a destination that could be. "Has this phone ever actually done
+         it", which is the only thing that makes a missing confirmation mean
+         something. */
+      const canCheck=confEverWorked()
+                  && (()=>{ try{ return loadDests().some(d=>d.on && listCapable(d)); }
+                            catch(e){ return false; } })();
+      const gone   = lvl===EV_NONE;
+      const waiting= lvl===EV_SENT && canCheck;   // accepted; confirmation is coming
+      const unver  = lvl===EV_SENT && !canCheck;  // accepted; nothing here can check
       const okd=await ask(
-        t(gone ? "del_t_unsent" : unsure ? "del_t_maybe" : "del_t_sent"),
-        (gone ? t("del_m_unsent",{x:what,d:detail})
-              : unsure ? t("del_m_maybe",{x:what,d:detail})
-              : t("del_m_sent",{x:what})),
-        t("del_go"), gone || unsure);
+        t(gone ? "del_t_unsent" : waiting ? "del_t_maybe" : unver ? "del_t_unver" : "del_t_sent"),
+        (gone    ? t("del_m_unsent",{x:what,d:detail})
+         : waiting ? t("del_m_maybe",{x:what,d:detail})
+         : unver ? t("del_m_unver",{x:what})
+         : t("del_m_sent",{x:what})),
+        t("del_go"), gone || waiting);
       if(!okd) return;
       await dbDel(rec.id);
       if(editing&&editing.id===rec.id) setEditing(null);
@@ -9815,7 +9847,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="197";
+const BUILD="198";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -10315,6 +10347,26 @@ async function putBatch(UP, files, rec, sent){
    the file that is missing, because "sent, and the server does not have all of
    it" is a different sentence from "did not send" and needs different work. */
 function listCapable(d){ return d && (d.id==="gas" || d.id==="mirror") && d.url; }
+/* HAS A CONFIRMATION EVER SUCCEEDED ON THIS PHONE?
+
+   Being configured with a destination that COULD be listed is not the same as
+   having listed one. Every phone ships with the fleet's destination already
+   armed, so "could" is true everywhere and always — and every round already on
+   every handset carries up:1 with no conf, because confirmRun only ever
+   covered the records of the run it was part of.
+
+   Judging those rounds by the absence of a confirmation would put "sent, but
+   not yet confirmed" on the entire fleet's back catalogue the morning this
+   build lands: a false alarm about an upgrade rather than about the data, on
+   rounds that are safely stored. That is exactly what the provenance stamps
+   got wrong in 183 and had to be self-gated out of.
+
+   So the same rule. The absence of a confirmation is only evidence once this
+   phone has produced one. */
+const CONF_WORKS="cm_conf_works";
+function confEverWorked(){
+  try{ return localStorage.getItem(CONF_WORKS)==="1"; }catch(e){ return false; }
+}
 async function serverNames(dest, folder){
   const u=new URL(dest.url);
   u.searchParams.set("action","list");
@@ -10353,6 +10405,10 @@ async function confirmRun(done, dests){
                    n:names.length-missing.length-empty.length,
                    miss:missing.concat(empty).slice(0,8), dest:dest.id };
       await dbPut(fresh);
+      /* This phone has now demonstrated that it CAN ask the store what it
+         holds. Until it has, the absence of a confirmation says nothing about
+         a round — see the delete dialog. */
+      lsSet(CONF_WORKS,"1");
     }
   }
 }

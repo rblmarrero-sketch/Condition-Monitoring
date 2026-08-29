@@ -185,6 +185,51 @@ const build = p => p.evaluate(async () => {
        String(lv.mismatch));
   }
 
+  console.log('\n── and it says nothing until it has earned the right to');
+  {
+    /* THE CHECK THAT PROTECTS THE FLEET.
+
+       Every round already on every handset carries up:1 and no conf, because
+       confirmRun only ever covered the records of the run it belonged to. A
+       rule that read "no confirmation" as "unconfirmed" would put a warning on
+       the entire back catalogue the morning this build lands — a false alarm
+       about an upgrade, on rounds that are safely stored, next to a bin.
+
+       Every phone also ships with the fleet's destination already armed, so
+       "this could be checked in principle" is true everywhere and is not the
+       question. The question is whether THIS phone has ever actually done it. */
+    const gate = await p.evaluate(() => {
+      try { localStorage.removeItem('cm_conf_works'); } catch (e) {}
+      const before = confEverWorked();
+      try { localStorage.setItem('cm_conf_works', '1'); } catch (e) {}
+      const after = confEverWorked();
+      try { localStorage.removeItem('cm_conf_works'); } catch (e) {}
+      return { before, after };
+    });
+    ok(gate.before === false,
+       'a phone that has never confirmed anything makes no claim about it',
+       String(gate.before));
+    ok(gate.after === true,
+       'and only once one has actually succeeded here does it start to',
+       String(gate.after));
+    /* The ladder itself must not move: level is about the RECORD, the gate is
+       about what the phone is entitled to say. Conflating them would make the
+       same round read differently on two phones, which is the whole disease. */
+    const lvl = await p.evaluate(() => {
+      const r = { id: 'g__TK905__2026-07-29__X__z', type: 'MP', equip: 'TK905',
+                  date: '2026-07-29', up: 1, positions: { '4C': { photos: [] } } };
+      try { localStorage.removeItem('cm_conf_works'); } catch (e) {}
+      const a = evidenceLevel(r);
+      try { localStorage.setItem('cm_conf_works', '1'); } catch (e) {}
+      const b2 = evidenceLevel(r);
+      try { localStorage.removeItem('cm_conf_works'); } catch (e) {}
+      return { a, b2 };
+    });
+    ok(lvl.a === 1 && lvl.b2 === 1,
+       'and the record\'s own level does not depend on the gate',
+       `${lvl.a} then ${lvl.b2}`);
+  }
+
   await ctx.close(); await b.close();
   console.log(fails.length ? '\n' + fails.length + ' FAILED\n' + fails.join('\n') : '\nall good');
   process.exit(fails.length ? 1 : 0);
