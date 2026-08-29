@@ -80,10 +80,25 @@ const dims = `(async (blob) => {
   ok('and it is a fraction of the size', shrunk.small.size < shrunk.big.size / 3,
      Math.round(shrunk.big.size / 1024) + ' KB → ' + Math.round(shrunk.small.size / 1024) + ' KB');
 
+  /* WHAT "UNTOUCHED" HAS TO MEAN NOW.
+
+     This asserted out === s: the very same object came back. That was a
+     convenient stand-in for the real requirement, which is that the BYTES are
+     not re-encoded — a photograph small enough to send must not be put through
+     the JPEG encoder again and lose quality for nothing.
+
+     Every photograph is now wrapped as a File carrying the id minted when it
+     was taken, so the object is a different object. Blob construction from a
+     blob does not re-encode and does not copy the pixels; it wraps the same
+     immutable bytes. So this asks the question it always meant to ask, by
+     hashing both, which is a stricter test than reference equality was. */
   const already = await p.evaluate(async (mk) => {
     const s = await eval(mk)(700, 520);
     const out = await intake(s);
-    return { same: out === s, size: s.size };
+    const h = async x => { const d = await crypto.subtle.digest('SHA-256', await x.arrayBuffer());
+      return [...new Uint8Array(d)].map(v => v.toString(16).padStart(2, '0')).join(''); };
+    return { same: (await h(s)) === (await h(out)) && out.size === s.size && out.type === s.type,
+             size: s.size, id: attIdOf(out) };
   }, MAKE_BIG);
   ok('one that is already small is handed back untouched, not re-encoded',
      already.same, Math.round(already.size / 1024) + ' KB');
@@ -94,12 +109,20 @@ const dims = `(async (blob) => {
     localStorage.setItem('up_px', '0');
     const big = await eval(mk)(3200, 2400);
     const out = await intake(big);
-    const r = { same: out === big, px: photoPx(), shown: (openSettings(), document.getElementById('upPx').value) };
+    const h = async x => { const d = await crypto.subtle.digest('SHA-256', await x.arrayBuffer());
+      return [...new Uint8Array(d)].map(v => v.toString(16).padStart(2, '0')).join(''); };
+    const r = { same: (await h(big)) === (await h(out)) && out.size === big.size,
+                id: attIdOf(out),
+                px: photoPx(), shown: (openSettings(), document.getElementById('upPx').value) };
     document.getElementById('setOv').classList.add('hidden');
     localStorage.removeItem('up_px');
     return r;
   }, MAKE_BIG);
   ok('Original still means original — nothing is re-encoded', orig.same && orig.px === 0);
+  /* And identity is carried even at Original, where nothing else happens to
+     the photograph — otherwise the one setting that touches the fewest bytes
+     would be the one that sends them anonymously. */
+  ok('and it still leaves with an id of its own', !!orig.id, orig.id || '(none)');
   ok('and ⚙ shows it selected', orig.shown === '0', orig.shown);
 
   const slow = await p.evaluate(() => {

@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=195">
+<link rel="manifest" href="manifest.webmanifest?v=196">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=195">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=195">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=195">
+<link rel="apple-touch-icon" href="icon-192.png?v=196">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=196">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=196">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1970,31 +1970,31 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=195"></script>
-<script src="upload-defaults.js?v=195"></script>
-<script src="hme.js?v=195"></script>
-<script src="mp-fc.js?v=195"></script>
-<script src="hme-cascade.js?v=195"></script>
-<script src="assets.js?v=195"></script>
-<script src="temp-limits.js?v=195"></script>
-<script src="normalize.js?v=195"></script>
-<script src="due.js?v=195"></script>
-<script src="wear.js?v=195"></script>
-<script src="wear-figs.js?v=195"></script>
-<script src="wear-map.js?v=195"></script>
-<script src="machine-photos.js?v=195"></script>
-<script src="machine-fig.js?v=195"></script>
-<script src="get.js?v=195"></script>
-<script src="points.js?v=195"></script>
-<script src="uc-points.js?v=195"></script>
-<script src="inspect-guide.js?v=195"></script>
-<script src="get-figs.js?v=195"></script>
-<script src="body-points.js?v=195"></script>
-<script src="body-map.js?v=195"></script>
-<script src="lube.js?v=195"></script>
-<script src="lube-overrides.js?v=195"></script>
-<script src="lube2027.js?v=195"></script>
-<script src="report-core.js?v=195"></script>
+<script src="native.js?v=196"></script>
+<script src="upload-defaults.js?v=196"></script>
+<script src="hme.js?v=196"></script>
+<script src="mp-fc.js?v=196"></script>
+<script src="hme-cascade.js?v=196"></script>
+<script src="assets.js?v=196"></script>
+<script src="temp-limits.js?v=196"></script>
+<script src="normalize.js?v=196"></script>
+<script src="due.js?v=196"></script>
+<script src="wear.js?v=196"></script>
+<script src="wear-figs.js?v=196"></script>
+<script src="wear-map.js?v=196"></script>
+<script src="machine-photos.js?v=196"></script>
+<script src="machine-fig.js?v=196"></script>
+<script src="get.js?v=196"></script>
+<script src="points.js?v=196"></script>
+<script src="uc-points.js?v=196"></script>
+<script src="inspect-guide.js?v=196"></script>
+<script src="get-figs.js?v=196"></script>
+<script src="body-points.js?v=196"></script>
+<script src="body-map.js?v=196"></script>
+<script src="lube.js?v=196"></script>
+<script src="lube-overrides.js?v=196"></script>
+<script src="lube2027.js?v=196"></script>
+<script src="report-core.js?v=196"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -6276,6 +6276,11 @@ $("saveBtn").onclick=async ()=>{
       base:(p.base?{n:Number(p.base.n), c:(p.base.c==null?null:Number(p.base.c)),
                     all:p.base.all?1:0}:null),
       photos:(p.photos||[]).slice(), video:p.video||null };
+  /* The manifest is written BEFORE the record is stored, so an attachment has
+     an identity from the moment the round exists — not the first time somebody
+     manages to upload it. A phone that never reaches a signal still holds a
+     complete, hashed account of what it captured. */
+  try{ await attSync(rec); }catch(e){}
   await dbPut(rec); noteDone(rec); noteWear(rec); await loadBaselines();
   clearTimeout(draftT); draftT=null; draftSig="";
   try{ await dbDel(DRAFT_ID); }catch(e){}
@@ -8758,8 +8763,11 @@ async function recToBundle(rec){
   if(rec.sign) out.sign={t:rec.sign.type||"image/png", b:await b64of(rec.sign)};
   for(const [k,p] of Object.entries(rec.positions)){
     const q=Object.assign({},p); delete q.photos; delete q.video; delete q.photoBlob;
-    q.photos=[]; for(const b of (p.photos||[])) q.photos.push({t:b.type||"image/jpeg", b:await b64of(b)});
-    if(p.video) q.video={t:p.video.type||"video/mp4", b:await b64of(p.video)};
+    /* The id travels with the bytes. An export that dropped it would hand back
+       photographs with no identity on re-import, and every one of them would be
+       minted a new id — which is how one photograph becomes two. */
+    q.photos=[]; for(const b of (p.photos||[])) q.photos.push({t:b.type||"image/jpeg", n:b.name||"", b:await b64of(b)});
+    if(p.video) q.video={t:p.video.type||"video/mp4", n:p.video.name||"", b:await b64of(p.video)};
     out.positions[k]=q;
   }
   return out;
@@ -8772,8 +8780,16 @@ function recFromBundle(r){
   if(r.sign&&r.sign.b) rec.sign=blobFromB64(r.sign.b,r.sign.t);
   for(const [k,p] of Object.entries(r.positions||{})){
     const q=Object.assign({},p);
-    q.photos=(p.photos||[]).map(x=>blobFromB64(x.b,x.t));
-    q.video = p.video&&p.video.b ? blobFromB64(p.video.b,p.video.t) : null;
+    /* Re-imported under the SAME name, so the same photograph keeps the same
+       id across export and re-import. */
+    q.photos=(p.photos||[]).map(x=>{
+      const b=blobFromB64(x.b,x.t);
+      if(!x.n) return b;
+      try{ return new File([b], x.n, {type:x.t||"image/jpeg"}); }catch(e){ return b; }
+    });
+    q.video = p.video&&p.video.b ? (()=>{ const b=blobFromB64(p.video.b,p.video.t);
+      if(!p.video.n) return b;
+      try{ return new File([b], p.video.n, {type:p.video.t||"video/mp4"}); }catch(e){ return b; } })() : null;
     rec.positions[k]=q;
   }
   return rec;
@@ -8981,13 +8997,22 @@ function fileName(equip,item,date,ext,suffix,isComp){
 function extOf(blob){ const t=(blob.type||"").toLowerCase(); if(t.includes("png"))return"png"; if(t.includes("webp"))return"webp"; return "jpg"; }
 async function buildPackage(){
   const all=await dbAll(); const files=[]; const grades={}, notes={};
+  /* Bring every record's manifest up to date first. A round captured by an
+     older build has photographs with no id; giving them one here means they go
+     up identified rather than anonymous, and the ordinal in their file name
+     stops depending on where they happen to sit in an array. */
+  for(const rec of all){ try{ if(await attSync(rec)) await dbPut(rec); }catch(e){} }
   for(const rec of all){ const suffix=(TYPE_META[rec.type]&&TYPE_META[rec.type].suffix)||rec.type||"MP";
     if(rec.smu) (notes[`${rec.equip}|${rec.date}`] ||= {}).smu=rec.smu;
     const isComp = usesRegister(rec.type) && rec.equip && !!componentsForUnit(rec.equip);
     for(const [k,p] of positionsOf(rec)){
       const ph=photosOf(p);
       for(let i=0;i<ph.length;i++){ const ext=extOf(ph[i]); const base=fileName(rec.equip,k,rec.date,ext,suffix,isComp);
-        const name = ph.length>1 ? base.replace("."+ext, "_"+(i+1)+"."+ext) : base;
+        /* Same rule as filesForRecord: the ordinal belongs to the attachment,
+           not to where it happens to sit in the array today. */
+        const aid=attIdOf(ph[i]);
+        const seq=aid ? attSeq(p,aid) : (i+1);
+        const name = (ph.length>1||seq>1) ? base.replace("."+ext, "_"+seq+"."+ext) : base;
         files.push({name, data:new Uint8Array(await ph[i].arrayBuffer())}); }
       if(isBlob(p.video)){ const vext=(p.video.type||"").includes("quicktime")?"mov":"mp4";
         files.push({name:fileName(rec.equip,k,rec.date,vext,suffix,isComp), data:new Uint8Array(await p.video.arrayBuffer())}); }
@@ -9037,6 +9062,19 @@ async function buildPackage(){
        lets a retried upload be recognised instead of duplicated, and what
        any real backend — or 1C — needs to import idempotently. */
     id:rec.id||"", rev:rec.rev||1,
+    /* THE ATTACHMENT MANIFEST — WHAT WAS CAPTURED, NOT HOW MANY.
+
+       The line further down still writes `photos: <count>`, and a count is a
+       claim, not a file: it says photographs were taken and nothing whatever
+       about whether any of them arrived. That is precisely the shape of the
+       legacy records this system cannot reconcile today.
+
+       So the manifest goes beside it. One entry per attachment, each carrying
+       the id minted when the shutter closed, its point, its byte size and its
+       SHA-256 — so a receiving end can ask "do I have THIS photograph?" rather
+       than "do I have four of something?". The count stays for the builds and
+       tools that read it. */
+    attachments:(()=>{ try{ return attList(rec); }catch(e){ return []; } })(),
     equip:rec.equip, date:rec.date, type:rec.type||"MP", cls:rec.cls||"", by:rec.by||"", smu:rec.smu||"",
     sup:rec.sup||"", gps:rec.gps||null, dev:rec.dev||"", signed:rec.sign?1:0,
     items:Object.entries(rec.positions).map(([k,p])=>{
@@ -9766,7 +9804,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="195";
+const BUILD="196";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -10070,10 +10108,58 @@ function pxSetting(){ const v=localStorage.getItem("up_px");
    the inspector is still standing at the machine and the phone has nothing else
    to do — so the cost is invisible and sync becomes pure network. A photograph
    is never lost to this: any failure keeps the original. */
+/* A PHOTOGRAPH'S OWN NAME, MINTED ONCE, WHEN IT IS TAKEN.
+
+   Until now a photograph was identified by where it sat in an array. The
+   upload name was built as <UNIT>_<POINT>_<DATE>_<TYPE>_<i+1>.jpg, with i the
+   position in p.photos — so identity was an index, and an index moves.
+
+   Measured on this build: three photographs upload as _1, _2, _3; delete the
+   middle one and the remaining two upload as _1 and _2. The photograph that
+   was _3 is now _2, so it OVERWRITES a different plug position on the server,
+   and the orphaned _3 from the earlier upload stays there for ever. Two
+   photographs of two different components, one of them silently replaced, and
+   not one count on any screen changes.
+
+   So every photograph gets an id of its own the moment it is taken, and keeps
+   it through storage, reload, retry, export and re-import. The id rides on the
+   File NAME: File extends Blob, survives IndexedDB's structured clone with its
+   name intact (measured), and isBlob() still answers true — so every existing
+   path that reads .type, .size or .arrayBuffer() is untouched.
+
+   The ordinal in the upload name now comes from the manifest and is allocated
+   once, so deleting a photograph leaves a gap rather than renaming its
+   neighbours. A gap is honest; a rename is a lost inspection. */
+const ATT_RE=/^(a[0-9a-z]{8,})\./i;
+function attNew(){
+  return "a"+Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+}
+function attIdOf(b){ const m=ATT_RE.exec((b&&b.name)||""); return m?m[1]:""; }
+/* Wrap a blob as a File carrying its id. Never re-mints one that is already
+   there — a retry must not create a second identity for one photograph. */
+function attWrap(blob,aid){
+  if(!blob) return blob;
+  const have=attIdOf(blob);
+  if(have) return blob;
+  const id=aid||attNew();
+  try{ return new File([blob], id+"."+extOf(blob), {type:blob.type||"image/jpeg"}); }
+  catch(e){ return blob; }               // no File constructor: behave as before
+}
+async function sha256Of(blob){
+  try{
+    if(!(self.crypto&&crypto.subtle&&blob&&blob.arrayBuffer)) return "";
+    const h=await crypto.subtle.digest("SHA-256", await blob.arrayBuffer());
+    return [...new Uint8Array(h)].map(x=>x.toString(16).padStart(2,"0")).join("");
+  }catch(e){ return ""; }
+}
 async function intake(blob){
   const px=photoPx();
-  if(!px || !blob || !isPhotoType(blob.type) || blob.size<=SHRINK_SKIP_BYTES) return blob;
-  try{ return await shrinkImage(blob,px); }catch(e){ return blob; }
+  let out=blob;
+  if(px && blob && isPhotoType(blob.type) && blob.size>SHRINK_SKIP_BYTES){
+    try{ out=await shrinkImage(blob,px); }catch(e){ out=blob; }
+  }
+  /* Named AFTER any shrink, so the id belongs to the bytes that are kept. */
+  return attWrap(out);
 }
 /* Shrink camera photos before upload — the single biggest lever on upload time.
    Skipped for the signature PNG and for anything already smaller than the limit. */
@@ -10368,6 +10454,79 @@ const isBlob=v=>v instanceof Blob;
    from another phone's merge bundle, so "shaped correctly" is not a given. */
 function positionsOf(rec){ return Object.entries((rec&&rec.positions)||{}).filter(([,p])=>p&&typeof p==="object"); }
 function photosOf(p){ const ph=p.photos||(p.photoBlob?[p.photoBlob]:[]); return Array.isArray(ph)?ph.filter(isBlob):[]; }
+/* THE MANIFEST. One entry per attachment, keyed by the attachment's own id —
+   never by position, never by the name it will be uploaded under.
+
+   It lives on the position, so it travels with the record through IndexedDB,
+   the upload bundle, export and re-import, and a phone that is wiped and
+   restored. `seq` is allocated once and never reused, which is what stops a
+   deletion renaming the photographs that came after it. */
+function attMap(p){ return (p && p.att && typeof p.att==="object") ? p.att : null; }
+function attSeq(p,aid){
+  const m=(p.att ||= {});
+  if(m[aid] && m[aid].seq) return m[aid].seq;
+  let top=0; for(const k of Object.keys(m)){ const v=Number(m[k]&&m[k].seq)||0; if(v>top) top=v; }
+  (m[aid] ||= {}).seq = top+1;
+  return m[aid].seq;
+}
+/* Everything the phone can say about an attachment for itself. What only the
+   server can answer — receipt, stored size, stored hash, read-after-write —
+   is deliberately absent rather than guessed at. */
+async function attNote(rec,k,p,blob){
+  const aid=attIdOf(blob); if(!aid) return null;
+  const m=(p.att ||= {});
+  const e=(m[aid] ||= {});
+  e.schemaVersion = 1;
+  e.attachmentId  = aid;
+  e.inspectionId  = rec.id||"";
+  e.equipmentId   = rec.equip||"";
+  e.inspectionType= rec.type||"";
+  e.inspectionDate= rec.date||"";
+  if(k==="__general") e.generalEvidence=1; else e.pointId=k;
+  e.mediaType     = isPhotoType(blob.type)?"photo":"video";
+  e.mimeType      = blob.type||"";
+  e.originalFilename = blob.name||"";
+  e.byteSize      = blob.size||0;
+  e.capturedBy    = e.capturedBy || rec.by || "";
+  e.capturedAt    = e.capturedAt || rec.created || new Date().toISOString();
+  e.localState    = "stored";
+  e.uploadState   = e.uploadState || "pending";
+  e.uploadAttempts= Number(e.uploadAttempts)||0;
+  if(!e.sha256) e.sha256 = await sha256Of(blob);
+  attSeq(p,aid);
+  return e;
+}
+/* Bring a record's manifest up to date with the blobs actually on it. Run
+   before anything is named or sent, so a photograph captured by an older build
+   — which has no id — is given one here rather than being sent anonymously. */
+async function attSync(rec){
+  let changed=false;
+  for(const [k,p] of positionsOf(rec)){
+    const ph=photosOf(p);
+    for(let i=0;i<ph.length;i++){
+      let b=ph[i];
+      if(!attIdOf(b)){ const w=attWrap(b); if(w!==b){ ph[i]=w; if(Array.isArray(p.photos)) p.photos[i]=w; b=w; changed=true; } }
+      const e=attMap(p)&&attMap(p)[attIdOf(b)];
+      if(!e || !e.sha256 || e.byteSize!==b.size){ await attNote(rec,k,p,b); changed=true; }
+    }
+    if(isBlob(p.video)){
+      let v=p.video;
+      if(!attIdOf(v)){ const w=attWrap(v); if(w!==v){ p.video=w; v=w; changed=true; } }
+      const e=attMap(p)&&attMap(p)[attIdOf(v)];
+      if(!e || !e.sha256){ await attNote(rec,k,p,v); changed=true; }
+    }
+  }
+  return changed;
+}
+/* The whole manifest for a record, flattened — what goes up beside the round. */
+function attList(rec){
+  const out=[];
+  for(const [k,p] of positionsOf(rec)){
+    const m=attMap(p); if(!m) continue;
+    for(const aid of Object.keys(m)) out.push(Object.assign({},m[aid]));
+  }
+  return out;
+}
 /* files belonging to one record, using the agreed naming standard */
 async function filesForRecord(rec){
   const suffix=(TYPE_META[rec.type]&&TYPE_META[rec.type].suffix)||rec.type||"MP";
@@ -10376,7 +10535,13 @@ async function filesForRecord(rec){
   for(const [k,p] of positionsOf(rec)){
     const ph=photosOf(p);
     for(let i=0;i<ph.length;i++){ const ext=extOf(ph[i]); const base=fileName(rec.equip,k,rec.date,ext,suffix,isComp);
-      out.push({name: ph.length>1? base.replace("."+ext,"_"+(i+1)+"."+ext) : base, blob:ph[i]}); }
+      /* The attachment's own ordinal, allocated once when it was taken. Using
+         i+1 here meant deleting one photograph renamed every photograph after
+         it, and the rename overwrote a different component on the server. */
+      const aid=attIdOf(ph[i]);
+      const seq=aid ? attSeq(p,aid) : (i+1);
+      out.push({name: (ph.length>1||seq>1) ? base.replace("."+ext,"_"+seq+"."+ext) : base,
+                blob:ph[i], aid}); }
     if(isBlob(p.video)){ const vext=(p.video.type||"").includes("quicktime")?"mov":"mp4";
       out.push({name:fileName(rec.equip,k,rec.date,vext,suffix,isComp), blob:p.video}); }
   }
