@@ -97,87 +97,108 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
   await dash.waitForTimeout(1800);
   await dash.evaluate(() => { try { localStorage.setItem("cm_dash_who", "R. Marrero"); } catch (e) {} });
 
-  console.log("\n── the engineer gets both, and the grade supplies the default");
+  const SEVL = await dash.evaluate(m => {
+    const o = {}; Object.keys(m).forEach(g => { o[m[g]] = (SEV[m[g]] || {}).l || m[g]; }); return o;
+  }, MAP);
+  console.log("\n── the engineer edits the finding; the severity follows it");
+  /* THE POLICY CHANGED, DELIBERATELY, AND THIS BLOCK CHANGED WITH IT.
+
+     Severity used to be a second control the engineer could move away from the
+     grade, with a written reason and full provenance. The reasoning was good —
+     an engineer knows things the code does not — but the cost was that a
+     record could carry a grade and a severity that contradict each other for
+     the rest of its life, and every table, filter, chart, report and action
+     downstream had to guess which one was meant.
+
+     One mapping now, everywhere: A No failure, B Incipient, C Degraded,
+     X Critical. The engineer still owns the finding; the finding is the GRADE. */
   const open = await dash.evaluate(() => {
     const rec = RECS.find(r => (r.items || []).some(i => i.grade));
     openEdit(recKey(rec));
     const g = document.querySelector('#edItems [data-f="grade"]');
     const k = g.dataset.k;
-    const sv = document.querySelector(`#edItems [data-f="sev"][data-k="${k}"]`);
-    const box = document.querySelector(`#edItems [data-ovr="${k}"]`);
-    return { k, hasGrade: !!g, hasSev: !!sv, hasBox: !!box,
-             boxHidden: box.classList.contains("hidden") };
+    return { k, hasGrade: !!g,
+             hasSevControl: !!document.querySelector(`#edItems [data-f="sev"][data-k="${k}"]`),
+             hasSevShown:   !!document.querySelector(`#edItems [data-sevout="${k}"]`),
+             hasReason:     !!document.querySelector(`#edItems [data-f="sevReason"][data-k="${k}"]`) };
   });
-  ok(open.hasGrade && open.hasSev, "both controls are present and editable");
-  ok(open.boxHidden, "and the override slot is out of the way while they agree");
+  ok(open.hasGrade, "the grade is editable");
+  ok(!open.hasSevControl, "there is no severity control to disagree with it");
+  ok(open.hasSevShown, "but the severity is shown, so nothing is hidden from the engineer");
+  ok(!open.hasReason, "and there is no override left to justify");
 
   const mapped = await dash.evaluate(() => {
     const out = {};
+    const gs0 = document.querySelector('#edItems [data-f="grade"]');
+    /* collectEdit deliberately saves only what MOVED, so the grade the record
+       already carried is not in the payload — that is correct, and it is why
+       this reads the on-screen value for every grade and the saved value only
+       where the engineer actually changed something. */
+    out.__init = gs0.dataset.init || gs0.value;
     for (const g of ["A", "B", "C", "X"]) {
       const gs = document.querySelector('#edItems [data-f="grade"]');
       const k = gs.dataset.k;
-      const sv = document.querySelector(`#edItems [data-f="sev"][data-k="${k}"]`);
       gs.value = g; gs.dispatchEvent(new Event("change", { bubbles: true }));
-      out[g] = { sev: sv.value,
-                 hidden: document.querySelector(`#edItems [data-ovr="${k}"]`).classList.contains("hidden") };
+      out[g] = { shown: document.querySelector(`#edItems [data-sevout="${k}"]`).textContent.trim(),
+                 saved: (collectEdit()[k] || null) };
     }
     return out;
   });
-  ["A", "B", "C", "X"].forEach(g =>
-    ok(mapped[g].sev === MAP[g] && mapped[g].hidden,
-       `choosing ${g} sets ${MAP[g]} and asks for nothing`, mapped[g].sev));
-
-  console.log("\n── a deliberate difference is allowed, and is an override");
-  const div = await dash.evaluate(() => {
-    const g = document.querySelector('#edItems [data-f="grade"]');
-    const k = g.dataset.k;
-    const sv = document.querySelector(`#edItems [data-f="sev"][data-k="${k}"]`);
-    g.value = "X"; g.dispatchEvent(new Event("change", { bubbles: true }));
-    sv.value = "INC"; sv.dispatchEvent(new Event("change", { bubbles: true }));
-    return { hidden: document.querySelector(`#edItems [data-ovr="${k}"]`).classList.contains("hidden"),
-             warn: document.querySelector(`#edItems [data-ovrw="${k}"]`).textContent };
+  ["A", "B", "C", "X"].forEach(g => {
+    ok(mapped[g].shown === SEVL[MAP[g]],
+       `choosing ${g} shows ${MAP[g]} on screen`, mapped[g].shown);
+    if (g === mapped.__init) {
+      ok(mapped[g].saved === null,
+         `  and ${g}, the grade it already had, is not written as a change`,
+         JSON.stringify(mapped[g].saved));
+      return;
+    }
+    ok(mapped[g].saved && mapped[g].saved.sev === MAP[g],
+       `  and saves ${MAP[g]}`, (mapped[g].saved || {}).sev);
+    ok(mapped[g].saved && mapped[g].saved.mapSev === MAP[g] && mapped[g].saved.sevOverride === 0,
+       `  with no override for ${g}`,
+       `map=${(mapped[g].saved||{}).mapSev} ovr=${(mapped[g].saved||{}).sevOverride}`);
   });
-  ok(!div.hidden, "the reason field appears the moment they diverge");
-  ok(/X/.test(div.warn) && /override/i.test(div.warn),
-     "with a warning naming both values", div.warn);
 
-  const refused = await dash.evaluate(() => {
-    document.getElementById("edSave").click();
-    return $("edMsg").textContent;
-  });
-  ok(/reason/i.test(refused), "saving without a reason is refused", refused.slice(0, 60));
-
-  console.log("\n── and it is stored with its full provenance");
+  console.log("\n── a change of finding carries who and when");
   const prov = await dash.evaluate(() => {
     const g = document.querySelector('#edItems [data-f="grade"]');
     const k = g.dataset.k;
-    const rs = document.querySelector(`#edItems [data-f="sevReason"][data-k="${k}"]`);
-    rs.value = "Bearing replaced under warranty before the next round.";
-    rs.dispatchEvent(new Event("change", { bubbles: true }));
+    g.value = "X"; g.dispatchEvent(new Event("change", { bubbles: true }));
     return collectEdit()[k];
   });
-  ok(prov.grade === "X", "the grade is kept as captured", prov.grade);
-  ok(prov.mapSev === "CRI", "beside the severity the code maps to", prov.mapSev);
-  ok(prov.sev === "INC", "and the effective severity actually in use", prov.sev);
-  ok(prov.sevOverride === 1, "flagged as an override", String(prov.sevOverride));
-  ok(!!prov.sevReason && !!prov.sevBy && !!prov.sevAt,
-     "carrying reason, engineer and timestamp",
-     `reason=${!!prov.sevReason} by=${prov.sevBy} at=${!!prov.sevAt}`);
+  ok(prov.grade === "X", "the grade the engineer chose is what is saved", prov.grade);
+  ok(prov.sev === "CRI" && prov.mapSev === "CRI",
+     "with the one severity that follows from it", `${prov.mapSev}/${prov.sev}`);
+  ok(!!prov.gradeBy && !!prov.gradeAt,
+     "and the engineer and the time it was changed",
+     `${prov.gradeBy} · ${!!prov.gradeAt}`);
+  ok(prov.sevOverride === 0 && !prov.sevReason,
+     "no override is created, and none can be", `ovr=${prov.sevOverride}`);
 
-  console.log("\n── putting it back clears the override rather than leaving a ghost");
-  const back = await dash.evaluate(() => {
-    const g = document.querySelector('#edItems [data-f="grade"]');
-    const k = g.dataset.k;
-    const sv = document.querySelector(`#edItems [data-f="sev"][data-k="${k}"]`);
-    sv.value = "CRI"; sv.dispatchEvent(new Event("change", { bubbles: true }));
-    const it = collectEdit()[k];
-    return { hidden: document.querySelector(`#edItems [data-ovr="${k}"]`).classList.contains("hidden"),
-             ovr: it.sevOverride, reason: it.sevReason, gaps: overrideGaps(collectEdit()).length };
+  console.log("\n── a legacy record whose grade and severity contradict each other");
+  const legacy = await dash.evaluate(() => {
+    /* Exactly what an old import can carry: graded C at the machine, stored
+       Critical by a build that let the two diverge. */
+    const rec = { equip: "TK902", date: "2026-07-29", type: "MP", cls: "HT", src: "drive",
+      items: [{ key: "4C", label: "4C", grade: "C", sev: "CRI" },
+              { key: "4D", label: "4D", grade: "",  sev: "INC" }] };
+    if (!RECS.some(r => r.equip === "TK902")) RECS.push(rec);
+    const r = RECS.find(x => x.equip === "TK902");
+    const c = sevConflicts().filter(x => x.r.equip === "TK902");
+    return { used: sevOf(r, r.items[0]), stored: r.items[0].sev,
+             nograde: sevOf(r, r.items[1]),
+             whys: c.map(x => x.why + ":" + x.was + "->" + x.now) };
   });
-  ok(back.hidden, "the reason field goes away again");
-  ok(back.ovr === 0 && !back.reason, "and the override provenance is cleared, not kept",
-     `override=${back.ovr} reason="${back.reason}"`);
-  ok(back.gaps === 0, "so the save is no longer blocked", back.gaps + " gaps");
+  ok(legacy.used === "DEG",
+     "the grade decides, so the contradiction cannot survive into a count", legacy.used);
+  ok(legacy.stored === "CRI", "the imported value is not destroyed on the record", legacy.stored);
+  ok(legacy.whys.some(w => /^conflict:CRI->DEG$/.test(w)),
+     "and it is reported as a conflict, not normalised in silence", legacy.whys.join(" | "));
+  ok(legacy.nograde === "INC",
+     "a severity with no grade to derive from is kept rather than thrown away", legacy.nograde);
+  ok(legacy.whys.some(w => /^nograde:INC/.test(w)),
+     "and named too, because nothing explains it", legacy.whys.join(" | "));
 
   ok(errs.length === 0, "nothing threw throughout", errs.slice(0, 2).join(" | "));
   await b.close();

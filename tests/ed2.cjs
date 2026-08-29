@@ -53,17 +53,23 @@ const openHist = async (p,unit) => {
   await p.click('#edSave'); await edSettled(p);
   ok('it insists on a name first',/name/i.test(await edMsg(p)), await edMsg(p));
   await p.fill('#edBy','R. Marrero');
-  await p.selectOption('[data-f="sev"][data-k="4C"]','CRI');
-  /* This is the legitimate override, not a mistake: the grade stays C because
-     that is what the inspector saw at the machine and it is evidence, while the
-     engineer raises the effective severity after re-reading the plug under
-     magnification. Exactly that combination now needs a reason — a saved
-     C-with-Critical that nobody explained is indistinguishable from a mis-click
-     for the rest of the record's life. Prove it is refused without one first. */
-  await p.click('#edSave'); await edSettled(p);
-  ok('a severity that contradicts its grade is refused unexplained',
-     /reason/i.test(await edMsg(p)), await edMsg(p));
-  await p.fill('[data-f="sevReason"][data-k="4C"]','Re-read under magnification: heavy ferrous, not moderate');
+  /* THE ENGINEER CHANGES THE FINDING, AND THE SEVERITY FOLLOWS IT.
+
+     This used to raise severity to Critical while leaving the grade at C — a
+     deliberate override with a written reason. Severity is now derived from
+     grade by one mapping everywhere, so the two can no longer be saved in
+     contradiction: the engineer who re-reads the plug under magnification and
+     concludes it is worse than it was graded changes the GRADE, which is the
+     finding, and Critical follows. There is no severity control to disagree
+     with it and nothing left to justify. */
+  ok('severity is shown, not chosen',
+     (await p.$('[data-f="sev"][data-k="4C"]'))===null,
+     'no severity control on the correction form');
+  await p.selectOption('[data-f="grade"][data-k="4C"]','X');
+  await p.waitForTimeout(150);
+  ok('and it follows the grade on screen at once',
+     /critical/i.test(await p.textContent('[data-sevout="4C"]')),
+     await p.textContent('[data-sevout="4C"]'));
   await p.selectOption('[data-f="action"][data-k="4C"]','RA-06');   // matrix code for "repair immediately"
   await p.fill('[data-f="wo"][data-k="4C"]','N-771');
   await p.fill('#edNote','plug re-read under magnification');
@@ -75,16 +81,17 @@ const openHist = async (p,unit) => {
   ok('the recommendation changed',item.action==='RA-06'&&/Repair immediately/.test(item.actionLabel||''),
      `${item.action} / ${item.actionLabel}`);
   ok('the WO is set',item.wo==='N-771',item.wo);
-  ok('what was not touched is untouched',item.defect==='Ferrous debris — heavy'&&item.grade==='C',
-     `${item.defect} / grade ${item.grade}`);
-  /* And the contradiction is on the record as a decision, with the mapped value
-     kept beside the effective one so an audit can always see both. */
-  ok('the override is flagged',item.sevOverride===1,String(item.sevOverride));
-  ok('the mapped severity is kept beside the effective one',item.mapSev==='DEG',
-     `${item.mapSev} mapped / ${item.sev} in use`);
-  ok('with the reason, the engineer and the time',
-     /magnification/.test(item.sevReason||'')&&!!item.sevBy&&!!item.sevAt,
-     `${item.sevBy} · ${(item.sevReason||'').slice(0,40)}`);
+  ok('the grade the engineer set is on the record',item.grade==='X',item.grade);
+  ok('what was not touched is untouched',item.defect==='Ferrous debris — heavy',item.defect);
+  /* The mapped value is written beside the effective one and they agree,
+     because there is now only one of them. */
+  ok('the mapped severity and the one in use are the same',
+     item.mapSev==='CRI'&&item.sev==='CRI',`${item.mapSev} mapped / ${item.sev} in use`);
+  ok('nothing is recorded as an override any more',
+     item.sevOverride===0&&!item.sevReason,
+     `override=${item.sevOverride} reason="${item.sevReason||''}"`);
+  ok('and the change of finding carries who and when',
+     !!item.gradeBy&&!!item.gradeAt,`${item.gradeBy} · ${item.gradeAt}`);
 
   console.log('\nit is stored beside the inspection, not inside it');
   let f=await files();

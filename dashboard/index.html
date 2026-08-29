@@ -2773,27 +2773,27 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=193"></script>
-<script src="../mobile/hme.js?v=193"></script>
-<script src="../mobile/mp-fc.js?v=193"></script>
-<script src="../mobile/hme-cascade.js?v=193"></script>
-<script src="../mobile/temp-limits.js?v=193"></script>
+<script src="../data/magnetic_plug.js?v=194"></script>
+<script src="../mobile/hme.js?v=194"></script>
+<script src="../mobile/mp-fc.js?v=194"></script>
+<script src="../mobile/hme-cascade.js?v=194"></script>
+<script src="../mobile/temp-limits.js?v=194"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=193"></script>
-<script src="../mobile/normalize.js?v=193"></script>
-<script src="../mobile/due.js?v=193"></script>
-<script src="../mobile/wear.js?v=193"></script>
-<script src="../mobile/wear-map.js?v=193"></script>
-<script src="../mobile/lube.js?v=193"></script>
-<script src="../mobile/lube-overrides.js?v=193"></script>
-<script src="../mobile/lube2027.js?v=193"></script>
-<script src="../mobile/lube-tds.js?v=193"></script>
+<script src="../mobile/assets.js?v=194"></script>
+<script src="../mobile/normalize.js?v=194"></script>
+<script src="../mobile/due.js?v=194"></script>
+<script src="../mobile/wear.js?v=194"></script>
+<script src="../mobile/wear-map.js?v=194"></script>
+<script src="../mobile/lube.js?v=194"></script>
+<script src="../mobile/lube-overrides.js?v=194"></script>
+<script src="../mobile/lube2027.js?v=194"></script>
+<script src="../mobile/lube-tds.js?v=194"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=193"></script>
-<script src="../mobile/machine-photos.js?v=193"></script>
+<script src="../mobile/upload-defaults.js?v=194"></script>
+<script src="../mobile/machine-photos.js?v=194"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -2802,17 +2802,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=193"></script>
-<script src="../mobile/get.js?v=193"></script>
-<script src="../mobile/points.js?v=193"></script>
-<script src="../mobile/uc-points.js?v=193"></script>
-<script src="../mobile/inspect-guide.js?v=193"></script>
-<script src="../mobile/get-figs.js?v=193"></script>
-<script src="../mobile/body-points.js?v=193"></script>
-<script src="../mobile/body-map.js?v=193"></script>
-<script src="../mobile/jspdf.umd.min.js?v=193"></script>
-<script src="../mobile/html2canvas.min.js?v=193"></script>
-<script src="../mobile/report-core.js?v=193"></script>
+<script src="../mobile/machine-fig.js?v=194"></script>
+<script src="../mobile/get.js?v=194"></script>
+<script src="../mobile/points.js?v=194"></script>
+<script src="../mobile/uc-points.js?v=194"></script>
+<script src="../mobile/inspect-guide.js?v=194"></script>
+<script src="../mobile/get-figs.js?v=194"></script>
+<script src="../mobile/body-points.js?v=194"></script>
+<script src="../mobile/body-map.js?v=194"></script>
+<script src="../mobile/jspdf.umd.min.js?v=194"></script>
+<script src="../mobile/html2canvas.min.js?v=194"></script>
+<script src="../mobile/report-core.js?v=194"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4335,10 +4335,50 @@ function reasonPair(ty, code){
    like any other finding, so worn points count in the mix, rank in the action
    register and colour a machine in the fleet table without a special case at
    every call site. */
+/* SEVERITY IS DERIVED FROM GRADE. ONE MAPPING, EVERYWHERE.
+
+     A = No failure   B = Incipient   C = Degraded   X = Critical
+
+   This read `it.sev || GRADE_SEV[it.grade]`, so a stored severity outranked
+   the grade beside it and the two could disagree for good: the table said
+   Degraded, the pill said Critical, the filter counted one and the report
+   printed the other. A record whose grade and severity contradict each other
+   cannot be acted on, because nobody downstream can tell which one the
+   inspector meant.
+
+   The wear band is NOT an exception to this. An undercarriage round is
+   measured in millimetres, and the band is that measurement — a derivation
+   from evidence, not somebody typing a severity over one. It keeps precedence
+   because it IS the finding for that round.
+
+   A stored severity is still read where there is no grade to derive from,
+   because discarding it there would throw a finding away rather than
+   reconcile it; sevConflicts() names both cases. */
 function sevOf(rec,it){
   const w=wearOf(rec,it);
   if(w && w.band) return UC_SEV[w.band]||"";
-  return it.sev||GRADE_SEV[it.grade]||"";
+  if(it && it.grade) return GRADE_SEV[it.grade]||"";
+  return (it&&it.sev)||"";
+}
+/* Every place a stored severity disagrees with the grade it sits beside, or
+   stands with no grade at all. Named and counted rather than silently
+   normalised, because a contradiction somebody imported is a fact about the
+   import and somebody has to see it. */
+function sevConflicts(){
+  const out=[];
+  try{
+    RECS.forEach(r=>{
+      if(r._void) return;
+      (r.items||[]).forEach(i=>{
+        if(!i || !i.sev) return;
+        const w=wearOf(r,i); if(w && w.band) return;      // measured, not graded
+        if(!i.grade){ out.push({r,i,why:"nograde",was:i.sev,now:""}); return; }
+        const map=GRADE_SEV[i.grade]||"";
+        if(map && i.sev!==map) out.push({r,i,why:"conflict",was:i.sev,now:map});
+      });
+    });
+  }catch(e){}
+  return out;
 }
 // Inspection and Temperature name their files with the real component code (TK151.DRS.ENG_…)
 /* The phone's list, which is longer than this one used to be: INSP and TEMP
@@ -7233,21 +7273,21 @@ function openEdit(key,keepMsg){
             <option value="">${esc(t("ed_none"))}</option>
             ${["A","B","C","X"].map(g=>`<option value="${g}"${g===(i.grade||"")?" selected":""}>${esc(g)}${GRADE_SEV[g]&&SEV[GRADE_SEV[g]]?" — "+esc(SEV[GRADE_SEV[g]].l):""}</option>`).join("")}
           </select></div>
-          <div class="field"><label>${esc(t("ed_sev"))}</label><select data-f="sev" data-k="${esc(i.key)}">
-            <option value="">${esc(t("ed_none"))}</option>
-            ${["NOF","INC","DEG","CRI"].map(s=>`<option value="${s}"${s===sev?" selected":""}>${esc(SEV[s].l)}</option>`).join("")}
-          </select></div>
-          <!-- Grade supplies the mapped default. A severity that deliberately
-               differs is allowed — an engineer knows things the code does not —
-               but it is an override, and an override without a reason is a
-               contradiction the record cannot explain later. X · Critical
-               sitting beside Incipient has to be somebody's decision or it is a
-               mistake nobody can tell from a decision. -->
+          <!-- Severity is shown, not chosen. It follows the grade above by the
+               one mapping this system has, so the two can never disagree on a
+               record somebody has to act on. Removing the control removes the
+               ability to set them in contradiction; it does not remove the
+               engineer's control over the finding, which is the grade. -->
+          <div class="field"><label>${esc(t("ed_sev"))}</label>
+            <div class="sevout" data-sevout="${esc(i.key)}">${
+              esc((SEV[GRADE_SEV[i.grade||""]]||{}).l||t("ed_none"))}</div></div>
+          <!-- The override reason field lived here. It existed because severity
+               could be moved away from its grade deliberately, and an override
+               without a reason is a contradiction the record cannot explain
+               later. Severity is now derived, so there is no override to
+               justify. Any sevReason already on a record is left on the record
+               and in the audit trail; it is simply no longer editable. -->
           <div class="field ovr hidden" data-ovr="${esc(i.key)}">
-            <label>${esc(t("ed_ovr"))}</label>
-            <input data-f="sevReason" data-k="${esc(i.key)}" type="text"
-              value="${esc(i.sevReason||"")}" placeholder="${esc(t("ed_ovr_ph"))}">
-            <div class="ovrwarn" data-ovrw="${esc(i.key)}"></div>
           </div>
           <div class="field"><label>${esc(t("ed_rec"))}</label><select data-f="action" data-k="${esc(i.key)}">
             ${actionOpts().map(([v,l])=>`<option value="${esc(v)}"${v&&v===i.action?" selected":""}>${esc(l)}</option>`).join("")}
@@ -7294,28 +7334,19 @@ function openEdit(key,keepMsg){
   $("edItems").querySelectorAll("[data-f]").forEach(el=>{ el.dataset.init=el.value; });
   /* Grade sets the mapped default; the engineer may then move severity away
      from it deliberately, and the moment they do the reason field appears. */
+  /* Severity follows the grade on the screen the moment it is changed, so the
+     engineer sees the consequence of the choice they are making rather than
+     being told about it after saving. */
   const syncOvr=k=>{
     const g=$("edItems").querySelector(`[data-f="grade"][data-k="${cssq(k)}"]`);
-    const sv=$("edItems").querySelector(`[data-f="sev"][data-k="${cssq(k)}"]`);
-    const box=$("edItems").querySelector(`[data-ovr="${cssq(k)}"]`);
-    const warn=$("edItems").querySelector(`[data-ovrw="${cssq(k)}"]`);
-    if(!g||!sv||!box) return;
+    const out=$("edItems").querySelector(`[data-sevout="${cssq(k)}"]`);
+    if(!g||!out) return;
     const mapped=GRADE_SEV[g.value]||"";
-    const diverged=!!(g.value && sv.value && sv.value!==mapped);
-    box.classList.toggle("hidden", !diverged);
-    if(diverged && warn) warn.textContent=t("ed_ovr_warn",
-      {g:g.value, m:(SEV[mapped]||{}).l||mapped, e:(SEV[sv.value]||{}).l||sv.value});
+    out.textContent=(SEV[mapped]||{}).l||t("ed_none");
   };
   $("edItems").querySelectorAll('[data-f="grade"]').forEach(g=>{
-    g.addEventListener("change",()=>{
-      const k=g.dataset.k;
-      const sv=$("edItems").querySelector(`[data-f="sev"][data-k="${cssq(k)}"]`);
-      if(sv && g.value) sv.value=GRADE_SEV[g.value]||"";   // the mapped default
-      syncOvr(k);
-    });
+    g.addEventListener("change",()=>syncOvr(g.dataset.k));
   });
-  $("edItems").querySelectorAll('[data-f="sev"]').forEach(sv=>
-    sv.addEventListener("change",()=>syncOvr(sv.dataset.k)));
   $("edItems").querySelectorAll('[data-f="grade"]').forEach(g=>syncOvr(g.dataset.k));
   $("editOv").classList.remove("hidden");
 }
@@ -7765,28 +7796,24 @@ function collectEdit(){
      whoever last used the machine. */
   const who=(($("edBy")&&$("edBy").value.trim())
     || (()=>{ try{ return localStorage.getItem("cm_dash_who")||""; }catch(e){ return ""; } })());
+  /* Severity is written from the grade, never from a control. There is no
+     control: an engineer changes the FINDING and the severity follows it, so a
+     saved record cannot carry the two in contradiction.
+
+     The override fields are still written — as zeroed — because a record that
+     used to carry one has to show that it no longer does. What was there
+     before stays in the audit trail; this only stops new ones being made. */
   $("edItems").querySelectorAll('[data-f="grade"]').forEach(g=>{
     const k=g.dataset.k;
-    const sv=$("edItems").querySelector(`[data-f="sev"][data-k="${cssq(k)}"]`);
-    if(!sv) return;
-    const mapped=GRADE_SEV[g.value]||"";
-    const eff=sv.value||mapped;
-    const diverged=!!(g.value && sv.value && sv.value!==mapped);
-    const rs=$("edItems").querySelector(`[data-f="sevReason"][data-k="${cssq(k)}"]`);
-    const touched = items[k] && ("grade" in items[k] || "sev" in items[k] ||
-                                 "sevReason" in items[k]);
+    const touched = items[k] && ("grade" in items[k]);
     if(!touched) return;
+    const mapped=GRADE_SEV[g.value]||"";
     const it=(items[k]||(items[k]={}));
     it.mapSev=mapped;
-    it.sev=eff;
-    if(diverged){
-      it.sevOverride=1;
-      it.sevReason=(rs&&rs.value.trim())||"";
-      it.sevBy=who;
-      it.sevAt=new Date().toISOString();
-    }else{
-      it.sevOverride=0; it.sevReason=""; it.sevBy=""; it.sevAt="";
-    }
+    it.sev=mapped;
+    it.sevOverride=0; it.sevReason=""; it.sevBy=""; it.sevAt="";
+    /* Who changed the finding, and when — the grade is the thing that moved. */
+    it.gradeBy=who; it.gradeAt=new Date().toISOString();
   });
   return items;
 }
@@ -11546,8 +11573,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=193"></script>
-<script src="sync-adapter.js?v=193"></script>
-<script src="report.js?v=193"></script>
+<script src="drive.js?v=194"></script>
+<script src="sync-adapter.js?v=194"></script>
+<script src="report.js?v=194"></script>
 </body>
 </html>
