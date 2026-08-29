@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=202">
+<link rel="manifest" href="manifest.webmanifest?v=203">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=202">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=202">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=202">
+<link rel="apple-touch-icon" href="icon-192.png?v=203">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=203">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=203">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1970,31 +1970,31 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=202"></script>
-<script src="upload-defaults.js?v=202"></script>
-<script src="hme.js?v=202"></script>
-<script src="mp-fc.js?v=202"></script>
-<script src="hme-cascade.js?v=202"></script>
-<script src="assets.js?v=202"></script>
-<script src="temp-limits.js?v=202"></script>
-<script src="normalize.js?v=202"></script>
-<script src="due.js?v=202"></script>
-<script src="wear.js?v=202"></script>
-<script src="wear-figs.js?v=202"></script>
-<script src="wear-map.js?v=202"></script>
-<script src="machine-photos.js?v=202"></script>
-<script src="machine-fig.js?v=202"></script>
-<script src="get.js?v=202"></script>
-<script src="points.js?v=202"></script>
-<script src="uc-points.js?v=202"></script>
-<script src="inspect-guide.js?v=202"></script>
-<script src="get-figs.js?v=202"></script>
-<script src="body-points.js?v=202"></script>
-<script src="body-map.js?v=202"></script>
-<script src="lube.js?v=202"></script>
-<script src="lube-overrides.js?v=202"></script>
-<script src="lube2027.js?v=202"></script>
-<script src="report-core.js?v=202"></script>
+<script src="native.js?v=203"></script>
+<script src="upload-defaults.js?v=203"></script>
+<script src="hme.js?v=203"></script>
+<script src="mp-fc.js?v=203"></script>
+<script src="hme-cascade.js?v=203"></script>
+<script src="assets.js?v=203"></script>
+<script src="temp-limits.js?v=203"></script>
+<script src="normalize.js?v=203"></script>
+<script src="due.js?v=203"></script>
+<script src="wear.js?v=203"></script>
+<script src="wear-figs.js?v=203"></script>
+<script src="wear-map.js?v=203"></script>
+<script src="machine-photos.js?v=203"></script>
+<script src="machine-fig.js?v=203"></script>
+<script src="get.js?v=203"></script>
+<script src="points.js?v=203"></script>
+<script src="uc-points.js?v=203"></script>
+<script src="inspect-guide.js?v=203"></script>
+<script src="get-figs.js?v=203"></script>
+<script src="body-points.js?v=203"></script>
+<script src="body-map.js?v=203"></script>
+<script src="lube.js?v=203"></script>
+<script src="lube-overrides.js?v=203"></script>
+<script src="lube2027.js?v=203"></script>
+<script src="report-core.js?v=203"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -7714,15 +7714,40 @@ function teamGone(dels){
        phone's upload of it. */
     for(const [k,row] of [...have]) if(row.u===u && row.d===date && row.t===ty){ have.delete(k); n++; }
     touched=true;
-    /* And the last-done date, recomputed from what is actually left rather
-       than patched — the entry being replaced belongs to the round that has
-       just been removed, and its hour meter and its forecast go with it. */
+    /* And the last-done date — but ONLY when the round being removed is the
+       one the due list is actually running on.
+
+       This recomputed the entry unconditionally, and did it two ways wrong.
+
+       It rewrote `{d, h}` and dropped the SOURCE STAMP, so a date the folder
+       had delivered came back unstamped. histFirm() then refuses to schedule
+       on an unverifiable date — correctly — and the machine left the due
+       screen without a word. Measured on the live folder: the office had
+       DZ004's undercarriage round of 9 August and the phone did not, because
+       the office had once deleted a DIFFERENT DZ004 undercarriage round dated
+       2 August. One deletion, seven days apart, and a dozer quietly stopped
+       being scheduled.
+
+       And it recomputed from the team rows, which are a bounded cache of what
+       the folder sent — so a round captured on this phone and not yet echoed
+       back would have been thrown away too.
+
+       A deletion is about one round. If the last-done date is some other
+       round's, nothing here has changed and nothing should be written. */
     const hk=ty+"|"+u;
-    const rest=[...have.values()].filter(x=>x.t===ty && x.u===u)
-                .sort((a,b)=>String(a.d).localeCompare(String(b.d)));
-    if(rest.length){ const w=rest[rest.length-1];
-      h[hk]={d:w.d, ...(w.s!=null?{h:Number(w.s)}:{})}; }
-    else delete h[hk];
+    const cur=histEntry(h[hk]);
+    if(cur && cur.d===date){
+      const rest=[...have.values()].filter(x=>x.t===ty && x.u===u)
+                  .sort((a,b)=>String(a.d).localeCompare(String(b.d)));
+      if(rest.length){ const w=rest[rest.length-1];
+        /* A team row is something the folder sent, so the date it leaves
+           behind carries the folder's stamp — the same one teamMerge writes. */
+        const e={d:w.d, s:"f"};
+        const hv=(w.s!=null&&w.s!=="")?Number(w.s):null;
+        if(hv!=null && isFinite(hv)) e.h=hv;
+        h[hk]=e; }
+      else delete h[hk];
+    }
   }
   if(touched){ teamSave([...have.values()]); histSave(h); histStamp(Object.keys(h).length); }
   return n;
@@ -9835,7 +9860,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="202";
+const BUILD="203";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
