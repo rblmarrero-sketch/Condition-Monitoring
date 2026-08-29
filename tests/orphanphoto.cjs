@@ -207,16 +207,31 @@ const setup = async p => p.evaluate(recs => {
      under whatever the phone called them, the engineer searches for them, looks
      at one, and says where it belongs. */
   const PX = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/wAALCAABAAEBAREA/8QAFAABAAAAAAAAAAAAAAAAAAAACf/EABQQAQAAAAAAAAAAAAAAAAAAAAD/2gAIAQEAAD8AKp//2Q==";
+  /* AN EMPTY KEY IS NOT A MISSING ONE, and the folder settles it.
+
+     photoBase() built the name with String(it.key), which on an undefined key
+     is the literal text "undefined" — "TK115.undefined_05.08.2026_TB". This
+     block first asserted the opposite fix: that a keyless point has no
+     predictable name at all. It was wrong, and the live folder said so —
+
+         TB/TK115/2026-08-05/TK115._05.08.2026_TB_1.jpg
+
+     unit, dot, nothing, date, round. The phone builds the same name with an
+     empty segment, so these six were predictable the whole time. Ten
+     photographs were called unmatchable for a month because one undefined was
+     rendered as four letters instead of none. */
   const noname = await p.evaluate(() => {
     const rec = RECS.find(r => r.equip === "TK115");
     const it = rec.items.find(i => i._needsPoint);
     return { base: CMDash.photoBase(it, rec), bases: photoBases(it, rec).length,
-             expected: expectedNames(it, rec, 6).length };
+             expected: expectedNames(it, rec, 6) };
   });
-  ok(!noname.base && noname.bases === 0,
-     "a keyless point produces no predicted file name at all", JSON.stringify(noname));
-  ok(noname.expected === 0,
-     "and nothing invents one to send somebody hunting for", String(noname.expected));
+  ok(/^TK115\._/.test(noname.base || ""),
+     "a keyless point's name is the unit, a dot, and nothing", noname.base);
+  ok(!/undefined/.test(noname.base || ""), "never the word undefined", noname.base);
+  ok(noname.expected.length === 6 && noname.expected.every(n => /^TK115\._/.test(n)),
+     "and the files it is waiting for are named, all six",
+     noname.expected.slice(0, 2).join(" "));
 
   /* The six files, in the folder, under the names the phone really wrote. */
   const FOUND = ["TK115_TRAY.L_05.08.2026_TB_1.jpg", "TK115_TRAY.L_05.08.2026_TB_2.jpg",
