@@ -18,6 +18,7 @@
    Run: node tests/photoedit.cjs [port]   (needs tests/ed-srv.cjs on 8093)
 */
 const { chromium } = require(require("./pw.cjs"));
+const BUNDLED = require("./bundled.cjs");
 const PORT = Number(process.argv[2] || 8093);
 const URL = `http://127.0.0.1:${PORT}/dashboard/index.html`;
 
@@ -32,6 +33,11 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
   p.on("pageerror", e => errs.push(e.message));
   await p.goto(URL, { waitUntil: "load" });
   await p.waitForTimeout(1800);
+  /* The sixteen bundled rounds — the records with photographs this suite has
+     always used. The dashboard no longer merges data/magnetic_plug.js as a
+     second source, so the fixture is stated here. See tests/bundled.cjs. */
+  await p.evaluate(BUNDLED + "()");
+  await p.waitForTimeout(600);
   await p.evaluate(() => {
     window.__w = [];
     CMDrive.saveEdit = d => { window.__w.push(JSON.parse(JSON.stringify(d))); return Promise.resolve({ ok: true }); };
