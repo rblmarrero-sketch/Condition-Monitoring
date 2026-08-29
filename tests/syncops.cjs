@@ -249,9 +249,14 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
      `${sources} − ${subs} = ${sources - subs}, shown ${total}`);
   ok(total === led.recs, "and that is the same number every other screen counts",
      `${total} vs ${led.recs}`);
-  ok(led.rows[5].n - led.rows[6].n === led.rows[7].n,
+  /* The tail of the ladder, by shape as well: the second total is the first
+     total less the withdrawn rounds. Positions again, not row numbers. */
+  const tail = led.rows.slice(upto + 1);
+  const voided = tail.filter(r => r.step).reduce((s, r) => s + r.n, 0);
+  const work = (tail.find(r => r.total) || {}).n;
+  ok(total - voided === work,
      "withdrawn rounds come off the figure that counts as work",
-     `${led.rows[5].n} − ${led.rows[6].n} = ${led.rows[7].n}`);
+     `${total} − ${voided} = ${work}`);
 
   /* And it still balances once there is something to subtract. Two phones
      sending one round is ONE round and a conflict — counting both would report
@@ -265,19 +270,25 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
                  { equip: one.equip, date: one.date, type: one.type, by: "B", items: [] }];
     rebuild();
     const rows = reconcile();
-    const out = { rows: rows.map(r => r.n), recs: RECS.length };
+    const out = { rows: rows.map(r => ({ n: r.n, step: !!r.step, total: !!r.total })),
+                  recs: RECS.length };
     driveRecs = seed; rebuild();
     return out;
   });
-  const s2 = withRivals.rows.slice(0, 3).reduce((a, b) => a + b, 0);
-  const d2 = withRivals.rows.slice(3, 5).reduce((a, b) => a + b, 0);
-  ok(withRivals.rows[4] >= 1, "a round two phones sent is counted as one and a rival",
-     "rivals " + withRivals.rows[4]);
-  ok(s2 - d2 === withRivals.rows[5],
+  /* Read by shape, like the ladder above: source lines, then the steps that
+     subtract, then the first total. */
+  const at2 = withRivals.rows.findIndex(r => r.total);
+  const head2 = withRivals.rows.slice(0, at2);
+  const s2 = head2.filter(r => !r.step).reduce((a, r) => a + r.n, 0);
+  const d2 = head2.filter(r => r.step).reduce((a, r) => a + r.n, 0);
+  const rivals = head2.filter(r => r.step).slice(-1)[0];
+  ok(rivals && rivals.n >= 1, "a round two phones sent is counted as one and a rival",
+     "rivals " + (rivals && rivals.n));
+  ok(s2 - d2 === withRivals.rows[at2].n,
      "and the ledger still balances with something to subtract",
-     `${s2} − ${d2} = ${s2 - d2}, shown ${withRivals.rows[5]}`);
-  ok(withRivals.rows[5] === withRivals.recs, "matching the record set",
-     `${withRivals.rows[5]} vs ${withRivals.recs}`);
+     `${s2} − ${d2} = ${s2 - d2}, shown ${withRivals.rows[at2].n}`);
+  ok(withRivals.rows[at2].n === withRivals.recs, "matching the record set",
+     `${withRivals.rows[at2].n} vs ${withRivals.recs}`);
 
   console.log("\n── it fits");
   for (const w of [1280, 1440, 1920]) {
