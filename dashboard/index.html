@@ -2792,6 +2792,8 @@
       <button class="btn danger" id="pxDelete" data-i18n="px_del">Delete the file…</button>
     </div>
     <div class="pxrow">
+      <button class="btn" id="pxUndo" data-i18n="px_undo" title="Ctrl+Z" disabled>Undo</button>
+      <button class="btn" id="pxRedo" data-i18n="px_redo" title="Ctrl+Shift+Z" disabled>Redo</button>
       <button class="btn" id="pxCompare" aria-pressed="false" data-i18n="px_compare">Show original</button>
       <button class="btn" id="pxReset" data-i18n="px_reset">Reset to original</button>
       <span class="pxsp"></span>
@@ -2808,27 +2810,27 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=206"></script>
-<script src="../mobile/hme.js?v=206"></script>
-<script src="../mobile/mp-fc.js?v=206"></script>
-<script src="../mobile/hme-cascade.js?v=206"></script>
-<script src="../mobile/temp-limits.js?v=206"></script>
+<script src="../data/magnetic_plug.js?v=207"></script>
+<script src="../mobile/hme.js?v=207"></script>
+<script src="../mobile/mp-fc.js?v=207"></script>
+<script src="../mobile/hme-cascade.js?v=207"></script>
+<script src="../mobile/temp-limits.js?v=207"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=206"></script>
-<script src="../mobile/normalize.js?v=206"></script>
-<script src="../mobile/due.js?v=206"></script>
-<script src="../mobile/wear.js?v=206"></script>
-<script src="../mobile/wear-map.js?v=206"></script>
-<script src="../mobile/lube.js?v=206"></script>
-<script src="../mobile/lube-overrides.js?v=206"></script>
-<script src="../mobile/lube2027.js?v=206"></script>
-<script src="../mobile/lube-tds.js?v=206"></script>
+<script src="../mobile/assets.js?v=207"></script>
+<script src="../mobile/normalize.js?v=207"></script>
+<script src="../mobile/due.js?v=207"></script>
+<script src="../mobile/wear.js?v=207"></script>
+<script src="../mobile/wear-map.js?v=207"></script>
+<script src="../mobile/lube.js?v=207"></script>
+<script src="../mobile/lube-overrides.js?v=207"></script>
+<script src="../mobile/lube2027.js?v=207"></script>
+<script src="../mobile/lube-tds.js?v=207"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=206"></script>
-<script src="../mobile/machine-photos.js?v=206"></script>
+<script src="../mobile/upload-defaults.js?v=207"></script>
+<script src="../mobile/machine-photos.js?v=207"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -2837,17 +2839,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=206"></script>
-<script src="../mobile/get.js?v=206"></script>
-<script src="../mobile/points.js?v=206"></script>
-<script src="../mobile/uc-points.js?v=206"></script>
-<script src="../mobile/inspect-guide.js?v=206"></script>
-<script src="../mobile/get-figs.js?v=206"></script>
-<script src="../mobile/body-points.js?v=206"></script>
-<script src="../mobile/body-map.js?v=206"></script>
-<script src="../mobile/jspdf.umd.min.js?v=206"></script>
-<script src="../mobile/html2canvas.min.js?v=206"></script>
-<script src="../mobile/report-core.js?v=206"></script>
+<script src="../mobile/machine-fig.js?v=207"></script>
+<script src="../mobile/get.js?v=207"></script>
+<script src="../mobile/points.js?v=207"></script>
+<script src="../mobile/uc-points.js?v=207"></script>
+<script src="../mobile/inspect-guide.js?v=207"></script>
+<script src="../mobile/get-figs.js?v=207"></script>
+<script src="../mobile/body-points.js?v=207"></script>
+<script src="../mobile/body-map.js?v=207"></script>
+<script src="../mobile/jspdf.umd.min.js?v=207"></script>
+<script src="../mobile/html2canvas.min.js?v=207"></script>
+<script src="../mobile/report-core.js?v=207"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -3235,6 +3237,7 @@ const I18N={
   sy_u_receipt:"Proof the server can read an inspection back after storing it — checked on the phone now, not yet proven from this end.",
   px_edit:"Edit photo", px_rotl:"Rotate left", px_rotr:"Rotate right",
   px_straighten:"Straighten", px_zoom:"Zoom", px_crop:"Crop", px_r_none:"Full frame",
+  px_undo:"Undo", px_redo:"Redo",
   px_r_free:"Freeform", px_r_1:"1:1", px_r_43:"4:3", px_r_169:"16:9",
   px_caption:"Caption", px_prefer:"Use in the report",
   px_compare:"Show original", px_compare_off:"Show edit",
@@ -3902,6 +3905,7 @@ const I18N={
   sy_u_receipt:"Доказательство, что сервер может прочитать осмотр обратно — телефон это проверяет, с этой стороны пока нет.",
   px_edit:"Правка фото", px_rotl:"Повернуть влево", px_rotr:"Повернуть вправо",
   px_straighten:"Выравнивание", px_zoom:"Масштаб", px_crop:"Кадрирование", px_r_none:"Весь кадр",
+  px_undo:"Отменить", px_redo:"Вернуть",
   px_r_free:"Произвольно", px_r_1:"1:1", px_r_43:"4:3", px_r_169:"16:9",
   px_caption:"Подпись", px_prefer:"Использовать в отчёте",
   px_compare:"Показать оригинал", px_compare_off:"Показать правку",
@@ -8825,6 +8829,42 @@ function openLB(set,ix,cap,ctx){ lbSet=set||[]; lbIx=Math.max(0,Math.min(ix|0,lb
 const PX_STRAIGHTEN_MAX=8;                 // degrees, either way
 let lbCtx=null;                            // {rk, ik, name} for the current frame
 let pxRecipe=null, pxDraft=null, pxCompare=false;
+/* ---- UNDO AND REDO -------------------------------------------------------
+
+   An editor without them is an editor people are afraid of. Somebody drags a
+   crop across a cracked weld, decides it was better before, and the only way
+   back is Reset — which throws away every other decision they made in the same
+   sitting. So they stop dragging, and the crop that would have made the defect
+   obvious in the report never happens.
+
+   The whole draft is snapshotted rather than the individual change: a recipe is
+   five small fields, an inspection is edited a handful of times, and a stack of
+   whole states cannot get out of step with the thing it is meant to restore —
+   which a stack of inverse operations can and does. Bounded, because a long
+   afternoon on one photograph should not grow without limit. */
+const PX_UNDO_MAX=40;
+let pxUndo=[], pxRedo=[];
+const pxSnap=()=>JSON.parse(JSON.stringify(pxNorm(pxDraft)));
+function pxMark(){
+  if(!pxDraft) return;
+  pxUndo.push(pxSnap());
+  if(pxUndo.length>PX_UNDO_MAX) pxUndo.shift();
+  pxRedo.length=0;                       // a new decision ends the redo branch
+  pxUndoBtns();
+}
+function pxUndoBtns(){
+  const u=$("pxUndo"), r=$("pxRedo");
+  if(u) u.disabled=!pxUndo.length;
+  if(r) r.disabled=!pxRedo.length;
+}
+function pxUndoClear(){ pxUndo=[]; pxRedo=[]; pxUndoBtns(); }
+function pxStep(from,to){
+  if(!from.length||!pxDraft) return;
+  to.push(pxSnap());
+  pxDraft=pxNorm(from.pop());
+  pxCompare=false; pxWipe=false;
+  pxSyncControls(); pxPaint(); pxCropSync(); pxBadge(); pxUndoBtns();
+}
 /* Reset asks for the edit to be REMOVED, which is a different instruction from
    "there is nothing here". Both leave an empty draft, so the difference has to
    be carried deliberately or Save cannot tell them apart — and when it could
@@ -8842,7 +8882,18 @@ function pxGet(rk,name){
   return r ? JSON.parse(JSON.stringify(r)) : null;
 }
 const PX_BLANK={rot:0, straighten:0, crop:null, caption:"", preferred:0};
-function pxNorm(r){ return Object.assign({},PX_BLANK,r||{}); }
+/* How many earlier renditions of one photograph are kept beside the current
+   one. Twenty is more edits than any frame in this folder has had, and it
+   bounds a sidecar that is otherwise unbounded on somebody's afternoon. */
+const PX_HIST_MAX=20;
+/* Only the five fields that describe the picture. `hist`, `v`, `by`, `at` and
+   `fp` are ABOUT the recipe rather than part of it, and letting them through
+   here would make two identical renditions compare as different. */
+function pxNorm(r){
+  const o=Object.assign({},PX_BLANK);
+  if(r) Object.keys(PX_BLANK).forEach(k=>{ if(r[k]!==undefined) o[k]=r[k]; });
+  return o;
+}
 /* Is this recipe actually asking for anything? An "edit" that changes nothing
    must not create a derivative or an audit entry. */
 function pxTouched(r){
@@ -8921,6 +8972,9 @@ function pxSync(){
   pxRecipe=pxGet(lbCtx.rk, lbCtx.name) || null;
   pxDraft=pxNorm(pxRecipe);
   pxCompare=false; pxWipe=false;
+  /* A different photograph is a different history. Carrying the stack across
+     would let Undo apply one frame's crop to another. */
+  pxUndoClear();
   pxPaint();
   pxBadge();
 }
@@ -8950,6 +9004,21 @@ function pxWatch(){
   pxRO=new ResizeObserver(()=>pxFit());
   pxRO.observe($("pxPanel"));
 }
+/* THE CONTROLS, PUT WHERE THE DRAFT SAYS.
+
+   Opening the panel used to seed them and nothing else ever moved them, which
+   was fine while the draft only changed by somebody touching a control. Undo
+   changes it from the other direction: the recipe goes back a step and the
+   slider has to follow, or the picture and the number under it disagree — and
+   the number is the one people read. */
+function pxSyncControls(){
+  if(!pxDraft) return;
+  const str=$("pxStr"); if(str) str.value=String(pxDraft.straighten||0);
+  const sv=$("pxStrV"); if(sv) sv.textContent=(pxDraft.straighten||0)+"°";
+  const cap=$("pxCap"); if(cap) cap.value=pxDraft.caption||"";
+  const pref=$("pxPref"); if(pref) pref.checked=!!pxDraft.preferred;
+  const rat=$("pxRatio"); if(rat) rat.value=pxDraft.crop?(pxDraft.crop.ratio||"free"):"";
+}
 function pxOpenPanel(){
   if($("pxOpen").hidden) return;
   pxZoomReset();
@@ -8957,12 +9026,8 @@ function pxOpenPanel(){
   $("pxPanel").classList.remove("hidden");
   $("lb").classList.add("editing");
   pxFit(); pxWatch();
-  $("pxStr").value=String(pxDraft.straighten||0);
-  $("pxStrV").textContent=(pxDraft.straighten||0)+"°";
-  $("pxCap").value=pxDraft.caption||"";
-  $("pxPref").checked=!!pxDraft.preferred;
+  pxSyncControls();
   pxDispLoad();
-  $("pxRatio").value=pxDraft.crop?(pxDraft.crop.ratio||"free"):"";
   const busy=pxPending();
   ["pxRotL","pxRotR","pxStr","pxRatio","pxCap","pxPref","pxSave"].forEach(id=>{
     const el=$(id); if(el) el.disabled=busy; });
@@ -9193,7 +9258,12 @@ function pxCropSync(){
     return { x:(e.clientX-img.left)/img.width, y:(e.clientY-img.top)/img.height };
   };
   const clamp=v=>Math.max(0,Math.min(1,v));
+  /* One undo step per DRAG, taken on the first move rather than on pointerdown:
+     a press that turns out to be a click has changed nothing and should not
+     leave a step behind for somebody to undo. */
+  let pxDragMarked=false;
   stage.addEventListener("pointerdown",e=>{
+    pxDragMarked=false;
     if($("pxPanel").classList.contains("hidden")) return;   // not editing
     const h=e.target.closest("[data-h]");
     const inBox=e.target.closest(".pxcrop");
@@ -9236,6 +9306,7 @@ function pxCropSync(){
       c.ratio="free";
       const sel=$("pxRatio"); if(sel && sel.value!=="free") sel.value="free";
     }
+    if(!pxDragMarked){ pxMark(); pxDragMarked=true; }
     pxDraft.crop=c;
     pxCropSync();
   });
@@ -9269,10 +9340,28 @@ $("pxZoom").oninput=()=>{
 };
 $("pxOpen").onclick=e=>{ e.stopPropagation(); pxOpenPanel(); };
 $("pxPanel").onclick=e=>e.stopPropagation();
+$("pxUndo").onclick=()=>pxStep(pxUndo,pxRedo);
+$("pxRedo").onclick=()=>pxStep(pxRedo,pxUndo);
+/* The shortcuts people already have in their fingers. Only while the editor is
+   open, so Ctrl+Z in a text box anywhere else on the page is left alone. */
+document.addEventListener("keydown",e=>{
+  if(!lbCtx || $("pxPanel").classList.contains("hidden")) return;
+  const z=(e.key==="z"||e.key==="Z"), y=(e.key==="y"||e.key==="Y");
+  if(!(e.ctrlKey||e.metaKey) || !(z||y)) return;
+  const tag=(e.target&&e.target.tagName)||"";
+  if(tag==="INPUT"||tag==="TEXTAREA"){ if(e.target.id!=="pxCap") return; }
+  e.preventDefault();
+  if(y || (z&&e.shiftKey)) pxStep(pxRedo,pxUndo); else pxStep(pxUndo,pxRedo);
+});
 $("pxCancel").onclick=()=>{ pxDraft=pxNorm(pxRecipe); pxCompare=false; pxWipe=false;
   pxPaint(); pxCropSync(); pxClosePanel(); };
-$("pxRotL").onclick=()=>{ pxDraft.rot=(((pxDraft.rot-90)%360)+360)%360; pxPaint(); pxCropSync(); };
-$("pxRotR").onclick=()=>{ pxDraft.rot=(((pxDraft.rot+90)%360)+360)%360; pxPaint(); pxCropSync(); };
+$("pxRotL").onclick=()=>{ pxMark(); pxDraft.rot=(((pxDraft.rot-90)%360)+360)%360; pxPaint(); pxCropSync(); };
+$("pxRotR").onclick=()=>{ pxMark(); pxDraft.rot=(((pxDraft.rot+90)%360)+360)%360; pxPaint(); pxCropSync(); };
+/* One undo step per GESTURE. A slider fires oninput on every pixel, and forty
+   snapshots of a single drag would fill the stack with one decision and push
+   out the four before it. The mark is taken when the drag starts. */
+$("pxStr").onpointerdown=()=>pxMark();
+$("pxStr").onkeydown=e=>{ if(/Arrow|Page|Home|End/.test(e.key)) pxMark(); };
 $("pxStr").oninput=()=>{
   /* Capped in the control and again here: presentation, not re-framing. */
   const v=Math.max(-PX_STRAIGHTEN_MAX,Math.min(PX_STRAIGHTEN_MAX,parseFloat($("pxStr").value)||0));
@@ -9292,6 +9381,7 @@ function pxFrame(cb){
 }
 $("pxRatio").onchange=()=>{
   const v=$("pxRatio").value;
+  pxMark();
   if(!v){ pxDraft.crop=null; pxPaint(); pxCropSync(); return; }
   if(v==="free"){ pxDraft.crop={x:0.08,y:0.08,w:0.84,h:0.84,ratio:"free"};
                   pxPaint(); pxCropSync(); return; }
@@ -9310,8 +9400,9 @@ $("pxRatio").onchange=()=>{
     pxPaint(); pxCropSync();
   });
 };
+$("pxCap").onfocus=()=>pxMark();          // one step for the whole caption
 $("pxCap").oninput=()=>{ pxDraft.caption=$("pxCap").value; };
-$("pxPref").onchange=()=>{ pxDraft.preferred=$("pxPref").checked?1:0; };
+$("pxPref").onchange=()=>{ pxMark(); pxDraft.preferred=$("pxPref").checked?1:0; };
 $("pxCompare").onclick=()=>{
   pxCompare=!pxCompare;
   $("pxCompare").setAttribute("aria-pressed", pxCompare?"true":"false");
@@ -9322,6 +9413,7 @@ $("pxReset").onclick=()=>{
   /* Only meaningful if there is something stored to remove. Pressing it on an
      unedited photograph is a no-op, not a pending deletion. */
   pxWipe=pxTouched(pxRecipe);
+  pxMark();                                   // Reset is itself undoable
   pxDraft=pxNorm(null); pxCompare=false;
   $("pxStr").value="0"; $("pxStrV").textContent="0°"; $("pxRatio").value="";
   $("pxCap").value=""; $("pxPref").checked=false;
@@ -9381,8 +9473,29 @@ $("pxSave").onclick=()=>{
     const probe=new Image(); probe.src=pxOrigSrc;
     let fp="";
     try{ const c=pxRender(probe,pxDraft,1600); if(c) fp=pxFingerprint(c); }catch(e){}
+    /* A VERSIONED SIDECAR, NOT A LATEST-ONLY ONE.
+
+       Every save used to overwrite the recipe, so a rendition that appeared in
+       a report last month could be silently replaced and nothing said it had
+       been — the report and the photograph it cited would disagree, with no
+       way to tell which of them had moved. The prior recipe is kept, with the
+       fingerprint of the rendition it produced and the name and time of who
+       made it, so any printed report can still be traced to the version it
+       actually used.
+
+       Bounded, and the ORIGINAL is never one of these: it is the file itself,
+       untouched, which every one of these recipes is measured against. */
+    const priorOne=prior[name];
+    const hist=(priorOne&&Array.isArray(priorOne.hist)?priorOne.hist.slice():[]);
+    if(priorOne && pxTouched(priorOne)){
+      const h=pxNorm(priorOne);
+      hist.push({ rot:h.rot, straighten:h.straighten, crop:h.crop,
+                  caption:h.caption, preferred:h.preferred,
+                  by:priorOne.by||"", at:priorOne.at||"", fp:priorOne.fp||"" });
+      while(hist.length>PX_HIST_MAX) hist.shift();
+    }
     media[name]=Object.assign({}, pxNorm(pxDraft), {
-      src:name, by, at:new Date().toISOString(), fp });
+      src:name, by, at:new Date().toISOString(), fp, v:hist.length+1, hist });
   }
   const keep=edits[rk]||{};
   const before=edits[rk] ? JSON.parse(JSON.stringify(edits[rk])) : null;
@@ -11981,8 +12094,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=206"></script>
-<script src="sync-adapter.js?v=206"></script>
-<script src="report.js?v=206"></script>
+<script src="drive.js?v=207"></script>
+<script src="sync-adapter.js?v=207"></script>
+<script src="report.js?v=207"></script>
 </body>
 </html>
