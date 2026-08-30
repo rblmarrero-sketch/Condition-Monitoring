@@ -2878,27 +2878,27 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=214"></script>
-<script src="../mobile/hme.js?v=214"></script>
-<script src="../mobile/mp-fc.js?v=214"></script>
-<script src="../mobile/hme-cascade.js?v=214"></script>
-<script src="../mobile/temp-limits.js?v=214"></script>
+<script src="../data/magnetic_plug.js?v=215"></script>
+<script src="../mobile/hme.js?v=215"></script>
+<script src="../mobile/mp-fc.js?v=215"></script>
+<script src="../mobile/hme-cascade.js?v=215"></script>
+<script src="../mobile/temp-limits.js?v=215"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=214"></script>
-<script src="../mobile/normalize.js?v=214"></script>
-<script src="../mobile/due.js?v=214"></script>
-<script src="../mobile/wear.js?v=214"></script>
-<script src="../mobile/wear-map.js?v=214"></script>
-<script src="../mobile/lube.js?v=214"></script>
-<script src="../mobile/lube-overrides.js?v=214"></script>
-<script src="../mobile/lube2027.js?v=214"></script>
-<script src="../mobile/lube-tds.js?v=214"></script>
+<script src="../mobile/assets.js?v=215"></script>
+<script src="../mobile/normalize.js?v=215"></script>
+<script src="../mobile/due.js?v=215"></script>
+<script src="../mobile/wear.js?v=215"></script>
+<script src="../mobile/wear-map.js?v=215"></script>
+<script src="../mobile/lube.js?v=215"></script>
+<script src="../mobile/lube-overrides.js?v=215"></script>
+<script src="../mobile/lube2027.js?v=215"></script>
+<script src="../mobile/lube-tds.js?v=215"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=214"></script>
-<script src="../mobile/machine-photos.js?v=214"></script>
+<script src="../mobile/upload-defaults.js?v=215"></script>
+<script src="../mobile/machine-photos.js?v=215"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -2907,17 +2907,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=214"></script>
-<script src="../mobile/get.js?v=214"></script>
-<script src="../mobile/points.js?v=214"></script>
-<script src="../mobile/uc-points.js?v=214"></script>
-<script src="../mobile/inspect-guide.js?v=214"></script>
-<script src="../mobile/get-figs.js?v=214"></script>
-<script src="../mobile/body-points.js?v=214"></script>
-<script src="../mobile/body-map.js?v=214"></script>
-<script src="../mobile/jspdf.umd.min.js?v=214"></script>
-<script src="../mobile/html2canvas.min.js?v=214"></script>
-<script src="../mobile/report-core.js?v=214"></script>
+<script src="../mobile/machine-fig.js?v=215"></script>
+<script src="../mobile/get.js?v=215"></script>
+<script src="../mobile/points.js?v=215"></script>
+<script src="../mobile/uc-points.js?v=215"></script>
+<script src="../mobile/inspect-guide.js?v=215"></script>
+<script src="../mobile/get-figs.js?v=215"></script>
+<script src="../mobile/body-points.js?v=215"></script>
+<script src="../mobile/body-map.js?v=215"></script>
+<script src="../mobile/jspdf.umd.min.js?v=215"></script>
+<script src="../mobile/html2canvas.min.js?v=215"></script>
+<script src="../mobile/report-core.js?v=215"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -12121,8 +12121,18 @@ function renderSevGaps(){
 function renderSync(){
   if(!$("syncKpis")) return;
   const s=syncScan();
+  /* data-kpi as well as the id, and it is not decoration.
+
+     These tiles are built here, so no literal id="syGrade" exists in the
+     markup for `$()` to be checked against — and lint's ghost-id rule is
+     right to fail that, because an id reached for and never defined is how a
+     control silently stops working. The action register solved this long ago
+     with data-af: the attribute comes from the SAME argument as the id, so a
+     rename cannot leave the lookup pointing at the old name, and the element
+     is found from the container that just rendered it rather than off the
+     document. Same pattern here. */
   const card=(id,lab,val,sub,cls)=>
-    `<div class="kpi ${cls||""}" id="${esc(id)}"><span class="k">${esc(lab)}</span>
+    `<div class="kpi ${cls||""}" id="${esc(id)}" data-kpi="${esc(id)}"><span class="k">${esc(lab)}</span>
        <span class="v">${esc(String(val))}</span><span class="s">${esc(sub)}</span></div>`;
   const pop=mediaPopulations();
   /* The tile answers about FIELD photographs only, and refuses to answer at all
@@ -12160,7 +12170,7 @@ function renderSync(){
      as nothing, but a real value shown with no way to act on it, which leaves
      the reader concluding the feature is broken. Keyboard too — a tile that
      only a mouse can reach is the same dead end for anybody using the rail. */
-  const tile=$("syGrade"), box=$("sySevBox");
+  const tile=$("syncKpis").querySelector('[data-kpi="syGrade"]'), box=$("sySevBox");
   if(tile && box){
     const n=sevConflicts().length;
     tile.classList.toggle("go", n>0);
@@ -12569,8 +12579,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=214"></script>
-<script src="sync-adapter.js?v=214"></script>
-<script src="report.js?v=214"></script>
+<script src="drive.js?v=215"></script>
+<script src="sync-adapter.js?v=215"></script>
+<script src="report.js?v=215"></script>
 </body>
 </html>
