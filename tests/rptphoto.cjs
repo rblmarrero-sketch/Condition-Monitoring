@@ -156,8 +156,19 @@ const note = (n, d) => console.log('  ....  ' + n + (d !== undefined ? '   ' + d
   note('time from tap to file', secs.toFixed(1) + ' s on a desktop CPU');
   /* A phone is slower than this machine. The bar is set where a wait stops
      being a wait and starts looking like a hang - if the desktop needs this
-     long, the handset needs several times it. */
-  ok('and it does not take longer than a person will wait', secs < 30, secs.toFixed(1) + ' s');
+     long, the handset needs several times it.
+
+     MEASURED AGAINST A BUSY MACHINE, NOT A QUIET ONE. In the full sweep this
+     browser is one of twenty and the same report takes 44 seconds that takes
+     18 alone, so the budget failed on every sweep and passed on every rerun —
+     which is a guard nobody reads by the third time. The load is measured and
+     the budget scales with it, so what is being tested is still the report and
+     not the neighbours. */
+  const load = require('os').loadavg()[0] / Math.max(1, require('os').cpus().length);
+  const budget = 30 * Math.max(1, Math.min(4, 1 + load));
+  note('machine load', load.toFixed(2) + ' per core, budget ' + budget.toFixed(0) + ' s');
+  ok('and it does not take longer than a person will wait', secs < budget,
+     secs.toFixed(1) + ' s of ' + budget.toFixed(0) + ' s');
 
   /* ---- the photographs are actually on it -------------------------------- */
   /* A fast report with no pictures in it is not a fast report, it is a
