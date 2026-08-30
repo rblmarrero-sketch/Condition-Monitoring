@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=215">
+<link rel="manifest" href="manifest.webmanifest?v=216">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=215">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=215">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=215">
+<link rel="apple-touch-icon" href="icon-192.png?v=216">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=216">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=216">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1970,31 +1970,31 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=215"></script>
-<script src="upload-defaults.js?v=215"></script>
-<script src="hme.js?v=215"></script>
-<script src="mp-fc.js?v=215"></script>
-<script src="hme-cascade.js?v=215"></script>
-<script src="assets.js?v=215"></script>
-<script src="temp-limits.js?v=215"></script>
-<script src="normalize.js?v=215"></script>
-<script src="due.js?v=215"></script>
-<script src="wear.js?v=215"></script>
-<script src="wear-figs.js?v=215"></script>
-<script src="wear-map.js?v=215"></script>
-<script src="machine-photos.js?v=215"></script>
-<script src="machine-fig.js?v=215"></script>
-<script src="get.js?v=215"></script>
-<script src="points.js?v=215"></script>
-<script src="uc-points.js?v=215"></script>
-<script src="inspect-guide.js?v=215"></script>
-<script src="get-figs.js?v=215"></script>
-<script src="body-points.js?v=215"></script>
-<script src="body-map.js?v=215"></script>
-<script src="lube.js?v=215"></script>
-<script src="lube-overrides.js?v=215"></script>
-<script src="lube2027.js?v=215"></script>
-<script src="report-core.js?v=215"></script>
+<script src="native.js?v=216"></script>
+<script src="upload-defaults.js?v=216"></script>
+<script src="hme.js?v=216"></script>
+<script src="mp-fc.js?v=216"></script>
+<script src="hme-cascade.js?v=216"></script>
+<script src="assets.js?v=216"></script>
+<script src="temp-limits.js?v=216"></script>
+<script src="normalize.js?v=216"></script>
+<script src="due.js?v=216"></script>
+<script src="wear.js?v=216"></script>
+<script src="wear-figs.js?v=216"></script>
+<script src="wear-map.js?v=216"></script>
+<script src="machine-photos.js?v=216"></script>
+<script src="machine-fig.js?v=216"></script>
+<script src="get.js?v=216"></script>
+<script src="points.js?v=216"></script>
+<script src="uc-points.js?v=216"></script>
+<script src="inspect-guide.js?v=216"></script>
+<script src="get-figs.js?v=216"></script>
+<script src="body-points.js?v=216"></script>
+<script src="body-map.js?v=216"></script>
+<script src="lube.js?v=216"></script>
+<script src="lube-overrides.js?v=216"></script>
+<script src="lube2027.js?v=216"></script>
+<script src="report-core.js?v=216"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -5788,10 +5788,27 @@ function draftSnapshot(){
            positions:draft.positions, at:new Date().toISOString() };
 }
 /* Cheap signature so an idle screen is not rewriting blobs every second. */
+/* WHAT MAKES THIS DRAFT DIFFERENT FROM THE ONE ALREADY STORED.
+
+   A blob cannot go through JSON.stringify, so photographs are reduced to
+   something comparable. They were reduced to a COUNT — and a count cannot tell
+   one photograph from another. Retake a blurred shot, delete a photo and add a
+   better one, swap the picture on a point: the array is the same length, the
+   signature is unchanged, draftFlush() returns early, and the autosave that
+   exists to survive a dropped phone quietly does not run. The old photograph
+   is what comes back.
+
+   Reduced to identity instead — name, size and modified time per blob, in
+   order. That distinguishes a swap, a reorder and a retake, and still ignores
+   the things that must not count as an edit. */
+function blobSig(b){
+  if(!b) return "-";
+  return (b.name||"") + ":" + (b.size||0) + ":" + (b.lastModified||0);
+}
 function draftSigOf(d){
   try{ return d.type+"|"+d.equip+"|"+d.date+"|"+d.smu+"|"+d.by+"|"+
-    JSON.stringify(d.positions, (k,v)=> (k==="photos") ? (v||[]).length
-      : (k==="video") ? (v?1:0) : v); }catch(e){ return String(Math.random()); }
+    JSON.stringify(d.positions, (k,v)=> (k==="photos") ? (v||[]).map(blobSig).join(",")
+      : (k==="video") ? blobSig(v) : v); }catch(e){ return String(Math.random()); }
 }
 async function draftFlush(){
   clearTimeout(draftT); draftT=null;
@@ -6260,6 +6277,25 @@ function editRecord(rec){ if(rec.cls && CLASSES[rec.cls]){ eqClass=rec.cls; lsSe
        not mention them, and the next Save wrote the blanks back over the
        record. */
     prod:pp.prod||"",other:pp.other||"",evid:pp.evid||"",samp:pp.samp?1:0,
+    /* THE MANIFEST, WHICH THIS LIST HAS TWICE ALREADY FAILED TO MENTION.
+
+       The two comments above are the same bug, found twice: a field the draft
+       is rebuilt without, blanked by the next Save. This is the third, and it
+       loses more than a typed value. `att` holds every attachment's hash,
+       capture time, upload attempts, any server receipt — and its `seq`, the
+       ordinal a file is NAMED from.
+
+       attSync() rebuilds what it can afterwards, which is what hid this: the
+       record looks fine, the photographs are all there. But seq is re-issued
+       1..n in current array order, so a round that had a photo deleted — the
+       case seq exists for — comes back with its files renamed, and the next
+       upload overwrites a different photograph in the folder under a name it
+       has now been given. Opening a round to fix a typo silently rewrites what
+       its evidence is called.
+
+       Copied, not referenced: the draft is edited in place, and a discarded
+       edit must not have already altered the stored record's manifest. */
+    att:(pp.att&&typeof pp.att==="object")?JSON.parse(JSON.stringify(pp.att)):null,
     photos:(pp.photos?pp.photos.slice():(pp.photoBlob?[pp.photoBlob]:[])),video:pp.video||null};
   curEquip=rec.equip||""; updateEquipBtn(); $("date").value=rec.date; $("smu").value=rec.smu||""; if(rec.by) $("inspector").value=rec.by;
   gps=rec.gps||null; renderGps(); $("supName").value=rec.sup||""; loadSign(rec.sign||null);
@@ -6325,6 +6361,11 @@ $("saveBtn").onclick=async ()=>{
          handling, the void — and needs nothing new at either end. */
       base:(p.base?{n:Number(p.base.n), c:(p.base.c==null?null:Number(p.base.c)),
                     all:p.base.all?1:0}:null),
+      /* The other half of the same omission — see editRecord. The draft now
+         carries the manifest in; this is what carries it back out. Without
+         both, a saved edit still arrives at attSync with no `att` and every
+         seq is re-issued. */
+      att:(p.att&&typeof p.att==="object")?p.att:null,
       photos:(p.photos||[]).slice(), video:p.video||null };
   /* The manifest is written BEFORE the record is stored, so an attachment has
      an identity from the moment the round exists — not the first time somebody
@@ -9072,6 +9113,10 @@ async function renderPending(){
         t("del_go"), gone || waiting);
       if(!okd) return;
       await dbDel(rec.id);
+      /* The round is gone; its upload progress is about nothing. Left behind
+         it would sit in the side store until the cap evicted it, and would be
+         handed to any future record that happened to be issued the same id. */
+      sentForget(rec.id);
       if(editing&&editing.id===rec.id) setEditing(null);
       renderPending();
     };
@@ -9897,7 +9942,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="215";
+const BUILD="216";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -10371,13 +10416,13 @@ async function putBatch(UP, files, rec, sent){
      round is lost over it. */
   if(j.ok===false && /missing file name|batch with no files/i.test(j.error||"")){
     setBatchCap(UP.url,false);
-    for(const f of files){ await putOne(UP,f.name,f.blob,f.type,rec); sent[f.name]=1; }
+    for(const f of files){ await putOne(UP,f.name,f.blob,f.type,rec); sentMark(sent,f.name); }
     return;
   }
   if(j.ok===false) throw new Error(j.error||"Apps Script rejected the upload");
   /* Mark by the name we ASKED for. Drive may hold it under another when a
      second phone already owns that name. */
-  (j.saved||[]).forEach(x=>{ if(x&&(x.req||x.name)) sent[x.req||x.name]=1;
+  (j.saved||[]).forEach(x=>{ if(x&&(x.req||x.name)) sentMark(sent,x.req||x.name);
     /* A backend that issues receipts hands one back per file. One that does
        not simply leaves this empty, and the evidence ladder stays where it
        was — nothing here demands a receipt in order to work. */
@@ -10474,6 +10519,67 @@ async function confirmRun(done, dests){
     }
   }
 }
+/* ── WHAT HAS ALREADY LANDED, KEPT WHERE A KILLED APP CANNOT LOSE IT ────────
+
+   `sent` is the list of files a destination already holds, and it is what stops
+   a resume re-sending eight photographs to send the ninth. It was written back
+   onto the record — but only after every destination for that record had been
+   tried, in the same put that records upTo.
+
+   So it survived the case it was written for, a failed request, and not the
+   case that actually happens on a truck: the inspector locks the phone, the
+   browser is killed, the van goes into the pit. Seven of eight photographs are
+   in the folder and the phone has no idea. Next sync it sends all eight again,
+   over the link that was already too slow to finish the first time.
+
+   It cannot simply be persisted onto the record more often: the record IS the
+   photographs, so every dbPut rewrites several megabytes of blob to record a
+   filename. This is a few hundred bytes and belongs beside the record, not in
+   it — the same reasoning that keeps corrections out of the inspection.
+
+   Keyed by revision. An edited round re-sends in full by design, and progress
+   recorded against the bytes it used to have must not be believed about the
+   bytes it has now. */
+const SENTLS="cm_sent_progress";
+let SENTCTX=null;                 // {id, rev, map} — the destination being sent to now
+function sentAll(){
+  try{ const v=JSON.parse(localStorage.getItem(SENTLS)||"{}");
+       return (v && typeof v==="object" && !Array.isArray(v)) ? v : {}; }
+  catch(e){ return {}; }
+}
+/* Only for the revision it was recorded against. */
+function sentLoad(rec){
+  const e=sentAll()[rec.id];
+  if(!e || (e.rev||0)!==(rec.rev||0) || !e.d || typeof e.d!=="object") return null;
+  return e.d;
+}
+function sentStore(rec, byDest){
+  const all=sentAll();
+  all[rec.id]={ rev:rec.rev||0, at:Date.now(), d:byDest };
+  /* A queue is bounded; this must be too, or a phone that never clears one
+     accumulates them for ever. Oldest first — the ones still uploading are
+     the ones touched most recently. */
+  const ids=Object.keys(all);
+  if(ids.length>60){
+    ids.sort((a,b)=>(all[a].at||0)-(all[b].at||0)).slice(0, ids.length-60)
+       .forEach(k=>{ delete all[k]; });
+  }
+  try{ localStorage.setItem(SENTLS, JSON.stringify(all)); }catch(e){}
+}
+function sentForget(recId){
+  const all=sentAll();
+  if(all[recId]){ delete all[recId];
+    try{ localStorage.setItem(SENTLS, JSON.stringify(all)); }catch(e){} }
+}
+/* Every place a file is marked as landed goes through here, so there is one
+   answer to "has this been recorded" rather than four. The identity check is
+   what makes it safe: it writes only for the map the current destination is
+   filling, never for a stale one left behind by an abandoned run. */
+function sentMark(map, name){
+  if(!map || !name) return;
+  map[name]=1;
+  if(SENTCTX && SENTCTX.map===map && SENTCTX.rec) sentStore(SENTCTX.rec, SENTCTX.byDest);
+}
 async function putAll(dest, files, rec, sent){
   if(!files.length) return;
   sent = sent || {};
@@ -10483,7 +10589,7 @@ async function putAll(dest, files, rec, sent){
   let rest=files;
   if(!Object.keys(sent).length){
     await putOne(dest,files[0].name,files[0].blob,files[0].type,rec);
-    sent[files[0].name]=1;
+    sentMark(sent,files[0].name);
     rest=files.slice(1);
   }
   if(!rest.length) return;
@@ -10503,7 +10609,7 @@ async function putAll(dest, files, rec, sent){
     if(cur.length) chunks.push(cur);
     jobs=chunks.map(c=>()=>putBatch(dest,c,rec,sent));
   } else {
-    jobs=rest.map(f=>async()=>{ await putOne(dest,f.name,f.blob,f.type,rec); sent[f.name]=1; });
+    jobs=rest.map(f=>async()=>{ await putOne(dest,f.name,f.blob,f.type,rec); sentMark(sent,f.name); });
   }
 
   let next=0, failed=null;
@@ -10686,6 +10792,32 @@ async function attSync(rec){
       if(!attIdOf(v)){ const w=attWrap(v); if(w!==v){ p.video=w; v=w; changed=true; } }
       const e=attMap(p)&&attMap(p)[attIdOf(v)];
       if(!e || !e.sha256){ await attNote(rec,k,p,v); changed=true; }
+    }
+    /* AND WHAT IS NO LONGER THERE STOPS BEING CLAIMED.
+
+       This only ever added. Removing a photograph in the editor splices the
+       blob out of p.photos and leaves p.att[aid] behind — so the manifest goes
+       on describing an attachment that does not exist, for ever.
+
+       It is not a tidiness problem. The manifest is the CLAIM: attList() feeds
+       the sidecar, and the office measures claims against the folder. An
+       orphan is a photograph the record insists it took and the folder will
+       never hold — a permanent missing-evidence line about a picture nobody
+       ever deleted by mistake. It also makes evidenceLevel() unreachable past
+       "sent", because that asks whether EVERY attachment has been confirmed
+       and an entry with no blob is never uploaded, never receipted, never
+       confirmed by anybody.
+
+       Keyed on what is actually on the position, so an attachment is claimed
+       exactly as long as its bytes are held. */
+    const m=attMap(p);
+    if(m){
+      const live=new Set();
+      photosOf(p).forEach(b=>{ const a=attIdOf(b); if(a) live.add(a); });
+      if(isBlob(p.video)){ const a=attIdOf(p.video); if(a) live.add(a); }
+      for(const aid of Object.keys(m)){
+        if(!live.has(aid)){ delete m[aid]; changed=true; }
+      }
     }
   }
   return changed;
@@ -10908,11 +11040,24 @@ async function syncNow(manual){
       }
       const errs=[];
       let progressed=false;
-      /* What each destination has already taken, carried across attempts. */
+      /* What each destination has already taken, carried across attempts —
+         and now across a kill. The record's own copy is the one written at the
+         end of the last completed run; the side store is whatever landed after
+         that, including files sent seconds before the app was closed. Merged,
+         because either may know something the other does not. */
       const sent=rec.sent||{};
+      {
+        const kept=sentLoad(rec);
+        if(kept) for(const id of Object.keys(kept)){
+          const m=(sent[id] ||= {});
+          for(const n of Object.keys(kept[id]||{})) m[n]=1;
+        }
+      }
       RCPT={};
       for(const d of todo){
         const already=(sent[d.id] ||= {});
+        /* Named for sentMark: it persists only the map it is handed here. */
+        SENTCTX={ rec:rec, rev:rev, map:already, byDest:sent };
         const before=Object.keys(already).length;
         /* Only what is still missing. On a first attempt that is everything; on
            a resume it is the tail, and the tail is usually where the link died. */
@@ -10929,6 +11074,10 @@ async function syncNow(manual){
            looks like a record that got nowhere and stops the whole queue. */
         if(Object.keys(already).length>before) progressed=true;
       }
+      /* Nothing is being sent now, so nothing may write progress under this
+         record's name. Cleared before the write-back rather than after, so a
+         failure below cannot leave it armed against a stale map. */
+      SENTCTX=null;
       // Re-read before writing. Putting back the copy we started with would
       // silently discard an edit made during the upload — and mark it synced, so
       // the edit would never be sent.
@@ -10953,6 +11102,11 @@ async function syncNow(manual){
         if(fresh.up) { fresh.upAt=new Date().toISOString(); delete fresh.sent; }
         else fresh.sent=sent;
         await dbPut(fresh);
+        /* The record now carries the same list, so the side store has nothing
+           left to say — and a round that is through has nothing to resume.
+           Dropped only once the put has actually happened: clearing it first
+           would throw away the only copy if the write failed. */
+        if(fresh.up) sentForget(rec.id); else sentStore(fresh, sent);
         /* Finished this run, so it is a candidate for the read-back below.
            The names are taken from the payload actually sent rather than
            rebuilt afterwards, because rebuilding is how the two lists come to
