@@ -163,6 +163,33 @@ const LIST = `(function(){
      !!lbl && (/Right Rear Final Drive/.test(lbl.text) || lbl.flagged),
      lbl && ('canonical=' + /Right Rear Final Drive/.test(lbl.text) + ' tgap=' + lbl.flagged));
 
+  console.log('\n2c. A REGISTER POINT IS NAMED FROM THE REGISTER');
+  /* points.js and the records use two different code systems. A walk-around
+     names its points "FDR"; an inspection record addresses the ISO 14224
+     component "DRS.FD", which is what its filenames and its items carry. Asking
+     only points.js missed every register point, fell back to the phone's frozen
+     label, and printed "no EN name" about a component hme.js has named in both
+     languages since the beginning. Checked through ucRefName, because this is
+     the whole dashboard's naming rule and not this panel's. */
+  const reg = await p.evaluate(() => {
+    const rec = { equip: 'TK149', type: 'INSP', cls: 'HT' };
+    const has = !!(window.COMP_BY || {})['DRS.FD'];
+    return { inTable: has || !!(HME.components || []).find(c => c.code === 'DRS.FD'),
+             en: ucRefName('DRS.FD', rec, 'en'),
+             ru: ucRefName('DRS.FD', rec, 'ru'),
+             // a code the register does not carry must still come back blank
+             junk: ucRefName('NOPE.XX', rec, 'en'),
+             // and a non-register round must not borrow a register name
+             uc: ucRefName('DRS.FD', { equip: 'DZ001', type: 'UC', cls: 'DOZ' }, 'en') };
+  });
+  ok('the reference table does carry this component', reg.inTable);
+  ok('  and an inspection point is named in English', reg.en === 'Final Drives', reg.en || '(blank)');
+  ok('  and in Russian', reg.ru === 'Конечные передачи', reg.ru || '(blank)');
+  ok('  a code the register does not carry still comes back blank',
+     reg.junk === '', JSON.stringify(reg.junk));
+  ok('  and a round that does not address components does not borrow one',
+     reg.uc !== 'Final Drives', JSON.stringify(reg.uc));
+
   console.log('\n3. THE COUNT IS THE SAME NUMBER EVERYWHERE IT APPEARS');
   ok('the tile counts what the list shows',
      A.card !== null && A.card.indexOf(String(A.rows.length)) >= 0,
