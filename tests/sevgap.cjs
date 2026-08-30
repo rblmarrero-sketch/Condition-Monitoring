@@ -52,9 +52,11 @@ const FIX = [
   // grade B means Incipient; the record also carries Degraded from the import.
   { equip: 'TK001', date: '2026-08-22', type: 'MP', cls: 'HT', by: 'S. Volkov', smu: '5120',
     items: [{ key: '4C', label: 'Left Rear Final Drive', grade: 'B', sev: 'DEG' }] },
-  // a severity with no grade at all behind it.
+  /* Captured on a Russian phone, read on the English board. The label is data
+     and arrives in whatever language the inspector's handset was set to, so
+     the panel must resolve it rather than print it. */
   { equip: 'TK002', date: '2026-08-22', type: 'MP', cls: 'HT', by: 'S. Volkov', smu: '5210',
-    items: [{ key: '4D', label: 'Right Rear Final Drive', grade: '', sev: 'DEG' }] },
+    items: [{ key: '4D', label: 'Правый задний бортовой редуктор', grade: '', sev: 'DEG' }] },
   // grade and severity agree — must not be listed.
   { equip: 'TK003', date: '2026-08-22', type: 'MP', cls: 'HT', by: 'S. Volkov', smu: '5300',
     items: [{ key: '4E', label: 'Left Front Wheel', grade: 'C', sev: 'DEG' }] },
@@ -138,6 +140,28 @@ const LIST = `(function(){
      ![...set].some(x => x.startsWith('TK004:')));
   ok('a MEASURED round is NOT flagged — the band is the finding',
      ![...set].some(x => x.startsWith('DZ001:')));
+
+  console.log('\n2b. A POINT IS NAMED IN THE LANGUAGE ON SCREEN');
+  /* The label is data, not UI: it arrives in whatever language the handset was
+     set to. Printing it raw put Cyrillic in the middle of the English board on
+     the live folder. ptLabelHTML() answers this once for the whole dashboard —
+     the panel must ask it rather than keep a second copy of the rule. */
+  const lbl = await p.evaluate(() => {
+    const li = [...document.querySelectorAll('#sySev li')]
+      .find(x => /TK002/.test(x.textContent));
+    return li ? { text: li.textContent.replace(/\s+/g, ' ').trim(),
+                  flagged: !!li.querySelector('.tgap') } : null;
+  });
+  ok('the Russian-captured row is on the list', !!lbl, lbl && lbl.text.slice(0, 80));
+  ok('  and the English board does not print its Cyrillic label raw',
+     !!lbl && !/Правый задний/.test(lbl.text), lbl && lbl.text.slice(0, 110));
+  /* Two acceptable outcomes and no third. The reference table knows 4D, so the
+     canonical English name is what should appear; where it does NOT know a
+     point, the code must be shown with the gap flagged rather than a name
+     guessed at. Asserting only the flag would fail on the better answer. */
+  ok('  it uses the reference name, or flags the gap — never guesses',
+     !!lbl && (/Right Rear Final Drive/.test(lbl.text) || lbl.flagged),
+     lbl && ('canonical=' + /Right Rear Final Drive/.test(lbl.text) + ' tgap=' + lbl.flagged));
 
   console.log('\n3. THE COUNT IS THE SAME NUMBER EVERYWHERE IT APPEARS');
   ok('the tile counts what the list shows',
