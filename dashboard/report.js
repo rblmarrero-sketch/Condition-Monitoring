@@ -274,6 +274,12 @@
          reached this dashboard. A report that prints four pictures where six
          were taken, and says nothing, reads as complete. */
       gap: (window.CMDash && CMDash.evidenceGap ? CMDash.evidenceGap(rec) : null),
+      /* Delivered by construction: every record this surface can print came
+         out of the folder, which IS the office having it. Stated rather than
+         assumed, because the engine asks both surfaces the same question and
+         a field left undefined would read as "not delivered" and mark every
+         office report preliminary. */
+      delivered: true,
       wear: typeof isWearType === "function" && isWearType(rec.type),
       temp: rec.type === "TEMP",
       items: (rec.items || []).map(it => {

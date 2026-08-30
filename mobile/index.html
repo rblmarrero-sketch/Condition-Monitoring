@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=217">
+<link rel="manifest" href="manifest.webmanifest?v=219">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=217">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=217">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=217">
+<link rel="apple-touch-icon" href="icon-192.png?v=219">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=219">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=219">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1970,31 +1970,31 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=217"></script>
-<script src="upload-defaults.js?v=217"></script>
-<script src="hme.js?v=217"></script>
-<script src="mp-fc.js?v=217"></script>
-<script src="hme-cascade.js?v=217"></script>
-<script src="assets.js?v=217"></script>
-<script src="temp-limits.js?v=217"></script>
-<script src="normalize.js?v=217"></script>
-<script src="due.js?v=217"></script>
-<script src="wear.js?v=217"></script>
-<script src="wear-figs.js?v=217"></script>
-<script src="wear-map.js?v=217"></script>
-<script src="machine-photos.js?v=217"></script>
-<script src="machine-fig.js?v=217"></script>
-<script src="get.js?v=217"></script>
-<script src="points.js?v=217"></script>
-<script src="uc-points.js?v=217"></script>
-<script src="inspect-guide.js?v=217"></script>
-<script src="get-figs.js?v=217"></script>
-<script src="body-points.js?v=217"></script>
-<script src="body-map.js?v=217"></script>
-<script src="lube.js?v=217"></script>
-<script src="lube-overrides.js?v=217"></script>
-<script src="lube2027.js?v=217"></script>
-<script src="report-core.js?v=217"></script>
+<script src="native.js?v=219"></script>
+<script src="upload-defaults.js?v=219"></script>
+<script src="hme.js?v=219"></script>
+<script src="mp-fc.js?v=219"></script>
+<script src="hme-cascade.js?v=219"></script>
+<script src="assets.js?v=219"></script>
+<script src="temp-limits.js?v=219"></script>
+<script src="normalize.js?v=219"></script>
+<script src="due.js?v=219"></script>
+<script src="wear.js?v=219"></script>
+<script src="wear-figs.js?v=219"></script>
+<script src="wear-map.js?v=219"></script>
+<script src="machine-photos.js?v=219"></script>
+<script src="machine-fig.js?v=219"></script>
+<script src="get.js?v=219"></script>
+<script src="points.js?v=219"></script>
+<script src="uc-points.js?v=219"></script>
+<script src="inspect-guide.js?v=219"></script>
+<script src="get-figs.js?v=219"></script>
+<script src="body-points.js?v=219"></script>
+<script src="body-map.js?v=219"></script>
+<script src="lube.js?v=219"></script>
+<script src="lube-overrides.js?v=219"></script>
+<script src="lube2027.js?v=219"></script>
+<script src="report-core.js?v=219"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -9539,6 +9539,25 @@ async function rptRecords(onlyId){
       mapHTML = m.html; mapKey = m.key; mapZones = m.zones || null;
     }
     out.push({ equip:rec.equip, clsLabel:a0.cat||(CLASSES[rec.cls]?(CLASSES[rec.cls][lang]||CLASSES[rec.cls].en):(rec.cls||"")),
+      /* WHAT THIS PHONE CAN HONESTLY SAY ABOUT THE ROUND'S STANDING.
+
+         delivered — the office has it. Not "I pressed send": rec.up means
+           every destination accepted every file, which is a fact about a
+           conversation. A round still in the queue, or half sent, has not
+           reached anybody.
+
+         gap — the phone HOLDS the photographs it took, so for its own rounds
+           there is nothing missing and this is zero. It is not zero for a
+           round pulled from another phone, which arrives as findings without
+           blobs; those print with the evidence line the office's copy uses,
+           because on this phone they genuinely are incomplete. */
+      delivered: !!rec.up,
+      gap: (function(){
+        var want=0, have=0;
+        for(const [,p2] of positionsOf(rec)){ const ph=photosOf(p2);
+          want+=ph.length; have+=ph.filter(isBlob).length; }
+        return { expected:want, received:have, missing:Math.max(0, want-have) };
+      })(),
       model:a0.m||"",
       type:rec.type, typeLabel:t("type_"+(rec.type||"MP")),
       typeAlt:inOtherLang(()=>t("type_"+(rec.type||"MP"))), date:rec.date||"",
@@ -9942,7 +9961,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="217";
+const BUILD="219";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

@@ -401,6 +401,15 @@
   border:1px solid #dfe4e9;border-left:3px solid #b9c2c9;border-radius:3px;
   background:#f6f8f9;}
 #rptRoot .evgap b{color:#3d474f;}
+/* THE DOCUMENT SAYING WHAT IT IS. Printed, so it must read on a photocopy
+   and in one colour: the word carries the meaning, the rule beside it is
+   emphasis and not the message. */
+#rptRoot .docst{display:flex;gap:10px;align-items:baseline;margin:0 0 14px;
+  padding:7px 0 8px;border-top:2px solid #3d474f;border-bottom:1px solid #dfe4e9;}
+#rptRoot .docst b{font-size:11px;letter-spacing:.13em;white-space:nowrap;color:#3d474f;}
+#rptRoot .docst span{font-size:9px;line-height:1.45;color:#5b6670;}
+#rptRoot .docst.pre{border-top-color:#a8791f;}
+#rptRoot .docst.pre b{color:#8c6317;}
 
 #rptRoot .sign{display:flex;gap:34px;align-items:flex-end;}
 #rptRoot .sign > div{min-width:210px;}
@@ -615,6 +624,12 @@
       gen_sub:"Photographs of the machine or its surroundings, recorded during this round and not tied to a single inspection point.",
       ev_gap_t:"Evidence incomplete.",
       ev_gap:"{n} of {e} photograph(s) taken on this round have not reached the office, so they are not printed here. The readings, condition and actions above are unaffected and still stand.",
+      st_final:"FINAL",
+      st_prelim:"PRELIMINARY",
+      st_final_s:"Every round in this report has reached the office with all of its photographs.",
+      st_gap:"{n} photograph(s) taken on {r} round(s) have not reached the office.",
+      st_undel:"{n} round(s) are still on the phone that captured them and have not reached the office.",
+      st_prelim_s:"Findings, readings and recommended actions stand as printed. What is outstanding is evidence, not judgement — but a round the office has not received may still be corrected there, so this is not the record of record.",
       by_who:"Inspected by", sup:"Verified by", nosign:"not signed off",
       gps:"Location", none_att:"None flagged.",
       legend:"How to read this report",
@@ -703,6 +718,12 @@
       gen_sub:"Фотографии машины или места работ, сделанные во время осмотра и не привязанные к отдельной точке.",
       ev_gap_t:"Фотоматериал неполный.",
       ev_gap:"Из {e} сделанных на этом осмотре фотографий {n} не дошли до офиса и здесь не приводятся. На замеры, оценку состояния и назначенные действия выше это не влияет.",
+      st_final:"ОКОНЧАТЕЛЬНЫЙ",
+      st_prelim:"ПРЕДВАРИТЕЛЬНЫЙ",
+      st_final_s:"Все обходы в этом отчёте получены офисом вместе со всеми фотографиями.",
+      st_gap:"Фотографий, не дошедших до офиса: {n} (обходов: {r}).",
+      st_undel:"Обходов, оставшихся на снявшем их телефоне и не дошедших до офиса: {n}.",
+      st_prelim_s:"Находки, замеры и назначенные действия действительны в напечатанном виде. Не хватает подтверждающего материала, а не выводов, — но обход, не полученный офисом, может быть там исправлен, поэтому этот документ не является учётным экземпляром.",
       by_who:"Осмотр выполнил", sup:"Проверил", nosign:"не подписано",
       gps:"Координаты", none_att:"Не отмечено.",
       legend:"Как читать этот отчёт",
@@ -1475,6 +1496,54 @@
     }
     return out;
   }
+  /* ── IS THIS DOCUMENT THE RECORD OF RECORD, OR A PRINTOUT AHEAD OF ONE? ──
+
+     A report carried a date and said nothing about its own completeness, so a
+     copy printed while photographs were still climbing out of the pit looked
+     exactly like one printed a week later with everything in. Both say
+     "Condition Monitoring Report" and a timestamp. Somebody signs the first
+     one and files it.
+
+     It is decided by FACTS ABOUT THE ROUNDS, not by which surface printed it.
+     "Preliminary because a phone made it" would be wrong twice over: a phone
+     holds every photograph it took, so its evidence is more complete than the
+     office's until the upload finishes — and a dashboard report can be missing
+     twenty photographs and would call itself final.
+
+     Two conditions, and each surface can verify both of the ones it is asked
+     about:
+
+       delivered   the office has this round at all. On the dashboard that is
+                   true by construction — the record came out of the folder.
+                   On the phone it is what the sync knows.
+       gap         the round's photographs are all accounted for.
+
+     Anything unproven is treated as outstanding. A phone that has never been
+     able to reach the server does not get to call its printout final on the
+     grounds that it has no evidence to the contrary. */
+  function docStatus(recs) {
+    var undelivered = 0, gapPhotos = 0, gapRounds = 0;
+    (recs || []).forEach(function (r) {
+      if (!r.delivered) undelivered++;
+      var g = r.gap;
+      if (g && g.missing > 0) { gapPhotos += g.missing; gapRounds++; }
+    });
+    return { final: undelivered === 0 && gapPhotos === 0,
+             undelivered: undelivered, gapPhotos: gapPhotos, gapRounds: gapRounds };
+  }
+  /* The banner, in the words the engine owns. Both surfaces print the same
+     sentence for the same state, which is the whole reason this is not
+     assembled at either call site. */
+  function statusHTML(T, st) {
+    var why = [];
+    if (st.undelivered) why.push(T.I("st_undel", { n: st.undelivered }));
+    if (st.gapPhotos) why.push(T.I("st_gap", { n: st.gapPhotos, r: st.gapRounds }));
+    return '<div class="docst ' + (st.final ? 'fin' : 'pre') + '">'
+      + '<b>' + T.I(st.final ? "st_final" : "st_prelim") + '</b>'
+      + '<span>' + (st.final ? T.I("st_final_s")
+                             : (why.join(" ") + " " + T.I("st_prelim_s"))) + '</span>'
+      + '</div>';
+  }
   function unitSheets(ctx, T, recs) {
     var secs = [];
     /* One full sheet per inspection TYPE, not per round.
@@ -2078,6 +2147,10 @@
       return copy;
     });
   }
+  /* The rule, reachable by the suite. It decides what a document calls
+     itself, so it is asked directly rather than inferred from rendered text —
+     a test that reads the banner proves the wording, not the judgement. */
+  CMR.__status = docStatus;
   CMR.sections = function (ctx) {
     var T = makeT(ctx.lang, ctx.bi !== false);
     var recs = sane(ctx.records).sort(function(a,b){
@@ -2092,6 +2165,19 @@
     if (mode === "unit") {
       var byNew = recs.slice().reverse();          // newest round first
       var sheets = unitSheets(ctx, T, byNew);
+      /* The same declaration the fleet cover carries. A single-machine report
+         has no cover page to put it on, and is the copy most likely to be
+         printed at the machine and signed — so it needs it more, not less.
+
+         Prepended INTO the first sheet, not pushed on as a section of its own.
+         A single-inspection report is meant to be one sheet and rptbi.cjs
+         holds it to at most three sections; an extra one took it to four. It
+         is a heading on the document, not a part of it, and the sheet is where
+         a heading belongs. */
+      if (sheets.length) {
+        sheets[0] = { nb: sheets[0].nb,
+                      html: statusHTML(T, docStatus(recs)) + sheets[0].html };
+      }
       /* A host section numbers itself by position — it cannot know what came
          before it, so it writes __N__ and the caller fills it in. The fleet
          path did; this one never did, and shipped a literal "__N__" as the
@@ -2159,6 +2245,8 @@
       + '<div class="rule" style="margin:13px 0 0"></div>'
       + '<div class="muted num" style="font-size:10.5px;padding:7px 0 20px;">'
         + T.I("generated")+' '+esc(stampTxt)+(typeLine?" · "+typeLine:"")+'</div>'
+      /* On the face, under the date, before anything a reader would act on. */
+      + statusHTML(T, docStatus(recs))
       + '<div class="lede" style="margin-bottom:18px;">'
         + (X.total ? T.S("head_some",{n:X.total,c:X.crit}) : T.S("head_none"))+'</div>'
       + '<div class="stats">'
