@@ -136,19 +136,60 @@ const ok = (c, n, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
      banner && banner.text.slice(-90));
 
   console.log('\n3. A SINGLE-MACHINE REPORT DECLARES ITSELF TOO');
-  /* The copy most likely to be printed at the machine and signed. It has no
-     cover page, which is how it came to have no declaration. */
+  /* The copy most likely to be printed at the machine and signed — and the one
+     with nowhere to put a declaration. That sheet is already a full A4 page:
+     a block, a field, and a few words on the type line were each tried and
+     each pushed the track drawing over the fold (1191, 1098, 1127 px against a
+     1089 budget), which pagecut.cjs and tray.cjs caught. So it rides in the
+     page footer, drawn as text after layout — no height, and on every page. */
   const unit = await p.evaluate(async () => {
     const recs = (await rptRecords()).filter(x => x.equip === 'TK941');
     const secs = CMR.sections(rptCtx('en', 'unit', recs));
     const d = document.createElement('div'); d.innerHTML = secs.map(s => s.html).join('');
-    const el = d.querySelector('.docst');
-    return { n: recs.length, has: !!el, first: !!(secs[0] && /docst/.test(secs[0].html)),
-             text: el ? el.textContent.replace(/\s+/g, ' ').trim().slice(0, 80) : '' };
+    return { n: recs.length, st: secs.status || null,
+             inFlow: !!d.querySelector('.docst') };
   });
   ok(unit.n === 1, 'one machine, one round', unit.n + '');
-  ok(unit.has, '  the single-machine report declares its status', unit.text);
-  ok(unit.first, '  at the head of the document, not buried in it');
+  ok(!!unit.st, '  the section list carries the document status',
+     unit.st ? JSON.stringify(unit.st) : '(none)');
+  ok(!!unit.st && unit.st.final === false,
+     '  and knows this one is not the record of record');
+  /* PLAIN TEXT, not the bilingual markup. The footer is drawn with doc.text(),
+     so a <span> carrying the other language would print as angle brackets
+     across the bottom of every page — which is what the first cut of this did,
+     and what asserting merely "there is a word" let through. */
+  ok(!!unit.st && !!unit.st.word, '  carrying the word to print', unit.st && unit.st.word);
+  ok(!!unit.st && !/[<>]/.test(unit.st.word || ''),
+     '  as text a PDF can draw, not as markup', unit.st && unit.st.word);
+  ok(!!unit.st && unit.st.word === 'PRELIMINARY',
+     '  in the language the document is in', unit.st && unit.st.word);
+
+  /* AND IT HAS TO SURVIVE INTO THE PDF, IN BOTH LANGUAGES.
+
+     The footer is real PDF text, not raster, and jsPDF's built-in fonts carry
+     no Cyrillic. A translated marker is therefore not merely wrong on a
+     Russian report — it is absent: rendering one and reading the drawn text
+     back out of its own content streams showed the word missing and no
+     Cyrillic anywhere in the file. The stamp gone from exactly the copy that
+     needs it, silently. Checked against what a printer would put on the page,
+     not against what the code meant to say. */
+  const drawn = await p.evaluate(async () => {
+    const recs = (await rptRecords()).filter(x => x.equip === 'TK941');
+    const out = {};
+    for (const lg of ['en', 'ru']) {
+      const secs = CMR.sections(rptCtx(lg, 'unit', recs));
+      const doc = await CMR.paginate({ sections: secs, jsPDF: window.jspdf.jsPDF,
+        html2canvas: window.html2canvas, docId: 'CM' });
+      const raw = atob(doc.output('datauristring').split(',')[1]);
+      out[lg] = { word: secs.status.word, inPdf: raw.indexOf(secs.status.word) >= 0 };
+    }
+    return out;
+  });
+  ok(drawn.en.inPdf, '  and the word is really drawn into the English PDF', drawn.en.word);
+  ok(drawn.ru.inPdf, '  and into the Russian one, which needs it to be ASCII',
+     drawn.ru.word + (drawn.ru.inPdf ? '' : ' — NOT IN THE FILE'));
+  ok(!unit.inFlow,
+     '  without spending any of the sheet, which has none to spare');
 
   console.log('\n4. BOTH LANGUAGES, AND NO KEY LEAKS ONTO THE PAPER');
   const ru = await p.evaluate(async () => {

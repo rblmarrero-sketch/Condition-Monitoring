@@ -410,6 +410,11 @@
 #rptRoot .docst span{font-size:9px;line-height:1.45;color:#5b6670;}
 #rptRoot .docst.pre{border-top-color:#a8791f;}
 #rptRoot .docst.pre b{color:#8c6317;}
+/* The one-field form, for a sheet with no room for the block. */
+#rptRoot .stw{letter-spacing:.08em;}
+#rptRoot .stw.pre{color:#8c6317;}
+#rptRoot .stw.fin{color:#3d474f;}
+#rptRoot .stsep{color:#b9c2c9;}
 
 #rptRoot .sign{display:flex;gap:34px;align-items:flex-end;}
 #rptRoot .sign > div{min-width:210px;}
@@ -630,6 +635,11 @@
       st_gap:"{n} photograph(s) taken on {r} round(s) have not reached the office.",
       st_undel:"{n} round(s) are still on the phone that captured them and have not reached the office.",
       st_prelim_s:"Findings, readings and recommended actions stand as printed. What is outstanding is evidence, not judgement — but a round the office has not received may still be corrected there, so this is not the record of record.",
+      st_undel_s:"not yet received by the office",
+      /* ASCII, in BOTH dictionaries, and deliberately not a translation — see
+         where it is drawn. */
+      st_mark:"PRELIMINARY",
+      f_status:"Standing",
       by_who:"Inspected by", sup:"Verified by", nosign:"not signed off",
       gps:"Location", none_att:"None flagged.",
       legend:"How to read this report",
@@ -724,6 +734,9 @@
       st_gap:"Фотографий, не дошедших до офиса: {n} (обходов: {r}).",
       st_undel:"Обходов, оставшихся на снявшем их телефоне и не дошедших до офиса: {n}.",
       st_prelim_s:"Находки, замеры и назначенные действия действительны в напечатанном виде. Не хватает подтверждающего материала, а не выводов, — но обход, не полученный офисом, может быть там исправлен, поэтому этот документ не является учётным экземпляром.",
+      st_undel_s:"ещё не получен офисом",
+      st_mark:"PRELIMINARY",
+      f_status:"Статус",
       by_who:"Осмотр выполнил", sup:"Проверил", nosign:"не подписано",
       gps:"Координаты", none_att:"Не отмечено.",
       legend:"Как читать этот отчёт",
@@ -1544,6 +1557,18 @@
                              : (why.join(" ") + " " + T.I("st_prelim_s"))) + '</span>'
       + '</div>';
   }
+  /* THE SAME VERDICT, IN ONE FIELD RATHER THAN A BLOCK.
+
+     A single-machine sheet is already a full page. The word is the part that
+     has to be on it — a reader looking at a signed sheet needs to know whether
+     it is the record of record — and the reasoning has somewhere else to live:
+     a missing photograph already prints its own line under the round. */
+  function statusField(T, st) {
+    if (!st) return "";
+    return '<b class="stw ' + (st.final ? 'fin' : 'pre') + '">'
+      + T.I(st.final ? "st_final" : "st_prelim") + '</b>'
+      + (st.final || !st.undelivered ? "" : ' <span class="quiet">' + T.I("st_undel_s") + '</span>');
+  }
   function unitSheets(ctx, T, recs) {
     var secs = [];
     /* One full sheet per inspection TYPE, not per round.
@@ -2165,19 +2190,12 @@
     if (mode === "unit") {
       var byNew = recs.slice().reverse();          // newest round first
       var sheets = unitSheets(ctx, T, byNew);
-      /* The same declaration the fleet cover carries. A single-machine report
-         has no cover page to put it on, and is the copy most likely to be
-         printed at the machine and signed — so it needs it more, not less.
-
-         Prepended INTO the first sheet, not pushed on as a section of its own.
-         A single-inspection report is meant to be one sheet and rptbi.cjs
-         holds it to at most three sections; an extra one took it to four. It
-         is a heading on the document, not a part of it, and the sheet is where
-         a heading belongs. */
-      if (sheets.length) {
-        sheets[0] = { nb: sheets[0].nb,
-                      html: statusHTML(T, docStatus(recs)) + sheets[0].html };
-      }
+      /* The declaration goes in the sheet's own field row — see unitSheets.
+         It was a block prepended here, and a block is the one thing that sheet
+         has no room for: it is already a full A4 page, so a hundred pixels of
+         banner pushed the track drawing over the fold and pagecut.cjs and
+         tray.cjs both said so (1191 px of 1089). A heading that slices the
+         drawing it sits above is worse than no heading. */
       /* A host section numbers itself by position — it cannot know what came
          before it, so it writes __N__ and the caller fills it in. The fleet
          path did; this one never did, and shipped a literal "__N__" as the
@@ -2187,6 +2205,40 @@
         un++;
         sheets.push({ nb: x.nb, html: String(x.html).split("__N__").join(p2(un)) });
       });
+      /* WHERE A DECLARATION GOES ON A PAGE THAT IS ALREADY FULL.
+
+         A single-machine sheet has no spare vertical space — not a block, not
+         a field, not a few words on the type line. Each of those was tried and
+         each pushed the track drawing over the fold, which pagecut.cjs and
+         tray.cjs caught (1191, then 1098, then 1127 against a 1089 budget).
+         A heading that slices the drawing beneath it is worse than none.
+
+         So it goes in the page footer, which the renderer draws as text after
+         layout, outside the flow, on every page — and therefore costs nothing
+         and cannot be lost by turning over. Carried as a property of the
+         section list rather than through a new argument, so neither call site
+         has to know about it and the two cannot pass different values. */
+      sheets.status = docStatus(recs);
+      /* THE FOOTER WORD IS ASCII IN BOTH LANGUAGES, AND THAT IS DELIBERATE.
+
+         Two constraints meet here. T.I() returns MARKUP — the word wrapped in
+         a span carrying the other language — which is right for a rasterised
+         section and would print as literal angle brackets across the bottom of
+         every page, because the footer is drawn with doc.text(). So: T().
+
+         And the footer is REAL PDF TEXT, not raster. jsPDF's built-in fonts
+         have no Cyrillic: rendering a Russian report and reading the drawn
+         text back out of its own content streams shows the word simply is not
+         in the file, and no Cyrillic anywhere in it. So a translated marker on
+         a Russian document is a blank — the stamp missing from exactly the
+         copy that most needs it, silently, which is this project's defect
+         again. An English word a Russian reader understands beats an absent
+         one, so st_mark is the same ASCII string in both dictionaries.
+
+         The reasoning is not lost to a Russian reader: the fleet cover's
+         banner is rasterised and carries all of it in Russian, and a round
+         short of photographs still prints its own ev_gap line. */
+      sheets.status.word = T("st_mark");
       return sheets;
     }
     /* 8/1/2026 means one thing in Anadyr and another in Denver. Write it once —
@@ -2477,6 +2529,11 @@
       + '<div class="muted" style="font-size:9.5px;">'+T.I("footer")+' · '+esc(today)+'</div>'
       + '</div>'});
 
+    /* The fleet document already prints the full banner on its cover; the
+       footer carries the word on every page after it, for the reader holding
+       page nine. */
+    secs.status = docStatus(recs);
+    secs.status.word = T("st_mark");
     return secs;
   };
 
@@ -2599,6 +2656,17 @@
         doc.setFontSize(7.5); doc.setTextColor(123,133,142);
         doc.text(opts.docId||"CM", M, PH-M+2);
         doc.text(pg+" / "+n, PW-M, PH-M+2, {align:"right"});
+        /* The document's standing, on every page, drawn after layout so it
+           costs no space at all — the single-machine sheet has none to give.
+           Only when it is NOT final: "PRELIMINARY" on every page of a document
+           that is not the record of record is the warning; stamping "FINAL"
+           across a finished one adds nothing a reader needs. */
+        var dst = opts.sections && opts.sections.status;
+        if (dst && !dst.final) {
+          doc.setTextColor(140, 99, 23);
+          doc.text(String(dst.word || "PRELIMINARY"), PW/2, PH-M+2, {align:"center"});
+          doc.setTextColor(123, 133, 142);
+        }
       }
       return doc;
     } finally { st.remove(); holder.remove(); }
