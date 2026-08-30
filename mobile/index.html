@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=216">
+<link rel="manifest" href="manifest.webmanifest?v=217">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=216">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=216">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=216">
+<link rel="apple-touch-icon" href="icon-192.png?v=217">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=217">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=217">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1970,31 +1970,31 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=216"></script>
-<script src="upload-defaults.js?v=216"></script>
-<script src="hme.js?v=216"></script>
-<script src="mp-fc.js?v=216"></script>
-<script src="hme-cascade.js?v=216"></script>
-<script src="assets.js?v=216"></script>
-<script src="temp-limits.js?v=216"></script>
-<script src="normalize.js?v=216"></script>
-<script src="due.js?v=216"></script>
-<script src="wear.js?v=216"></script>
-<script src="wear-figs.js?v=216"></script>
-<script src="wear-map.js?v=216"></script>
-<script src="machine-photos.js?v=216"></script>
-<script src="machine-fig.js?v=216"></script>
-<script src="get.js?v=216"></script>
-<script src="points.js?v=216"></script>
-<script src="uc-points.js?v=216"></script>
-<script src="inspect-guide.js?v=216"></script>
-<script src="get-figs.js?v=216"></script>
-<script src="body-points.js?v=216"></script>
-<script src="body-map.js?v=216"></script>
-<script src="lube.js?v=216"></script>
-<script src="lube-overrides.js?v=216"></script>
-<script src="lube2027.js?v=216"></script>
-<script src="report-core.js?v=216"></script>
+<script src="native.js?v=217"></script>
+<script src="upload-defaults.js?v=217"></script>
+<script src="hme.js?v=217"></script>
+<script src="mp-fc.js?v=217"></script>
+<script src="hme-cascade.js?v=217"></script>
+<script src="assets.js?v=217"></script>
+<script src="temp-limits.js?v=217"></script>
+<script src="normalize.js?v=217"></script>
+<script src="due.js?v=217"></script>
+<script src="wear.js?v=217"></script>
+<script src="wear-figs.js?v=217"></script>
+<script src="wear-map.js?v=217"></script>
+<script src="machine-photos.js?v=217"></script>
+<script src="machine-fig.js?v=217"></script>
+<script src="get.js?v=217"></script>
+<script src="points.js?v=217"></script>
+<script src="uc-points.js?v=217"></script>
+<script src="inspect-guide.js?v=217"></script>
+<script src="get-figs.js?v=217"></script>
+<script src="body-points.js?v=217"></script>
+<script src="body-map.js?v=217"></script>
+<script src="lube.js?v=217"></script>
+<script src="lube-overrides.js?v=217"></script>
+<script src="lube2027.js?v=217"></script>
+<script src="report-core.js?v=217"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -9942,7 +9942,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="216";
+const BUILD="217";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -10564,12 +10564,17 @@ function sentStore(rec, byDest){
     ids.sort((a,b)=>(all[a].at||0)-(all[b].at||0)).slice(0, ids.length-60)
        .forEach(k=>{ delete all[k]; });
   }
-  try{ localStorage.setItem(SENTLS, JSON.stringify(all)); }catch(e){}
+  /* lsSet, not a bare setItem. Mine were try/caught and would not have thrown
+     — but the rule is checked as text precisely because a guarded write and an
+     unguarded one look identical in review, and one bare call in the script
+     body stops the app loading on a full phone. A mechanism, not a resolution
+     to be careful. On a full phone this simply returns false and the resume
+     falls back to the record's own copy, which is the old behaviour. */
+  lsSet(SENTLS, JSON.stringify(all));
 }
 function sentForget(recId){
   const all=sentAll();
-  if(all[recId]){ delete all[recId];
-    try{ localStorage.setItem(SENTLS, JSON.stringify(all)); }catch(e){} }
+  if(all[recId]){ delete all[recId]; lsSet(SENTLS, JSON.stringify(all)); }
 }
 /* Every place a file is marked as landed goes through here, so there is one
    answer to "has this been recorded" rather than four. The identity check is
