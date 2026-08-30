@@ -209,6 +209,71 @@ const LIST = `(function(){
   ok('  and both writers of it agree, whichever ran last',
      both.a === both.b, `renderSync "${both.a}" vs renderNavCounts "${both.b}"`);
 
+  console.log('\n3b. THE TILE IS SOMETHING A HAND CAN ACT ON');
+  /* "Severity to settle · 6" shipped as a plain div. The first thing anybody
+     does with a count of six outstanding decisions is press it; pressing it did
+     nothing, with no cursor change to warn them. The list was on the page the
+     whole time, a thousand pixels further down and half a screen wide. */
+  const tile = await p.evaluate(() => {
+    const el = document.getElementById('syGrade');
+    if (!el) return null;
+    return { cursor: getComputedStyle(el).cursor, role: el.getAttribute('role'),
+             tab: el.getAttribute('tabindex'), title: el.getAttribute('title') || '' };
+  });
+  ok('the tile exists', !!tile);
+  ok('  and looks pressable', !!tile && tile.cursor === 'pointer', tile && tile.cursor);
+  ok('  and announces itself as a control', !!tile && tile.role === 'button', tile && tile.role);
+  ok('  reachable from the keyboard, not the mouse alone',
+     !!tile && tile.tab === '0', tile && tile.tab);
+  ok('  and says where it goes', !!tile && tile.title.length > 0, tile && tile.title);
+
+  const jumped = await p.evaluate(async () => {
+    scrollTo(0, 0); await new Promise(r => setTimeout(r, 200));
+    const before = scrollY;
+    document.getElementById('syGrade').click();
+    await new Promise(r => setTimeout(r, 900));
+    const box = document.getElementById('sySevBox');
+    const r2 = box.getBoundingClientRect();
+    return { before: before, after: scrollY, inView: r2.top >= -5 && r2.top < innerHeight,
+             flashed: box.classList.contains('flash') };
+  });
+  ok('pressing it brings the list into view', jumped.inView,
+     `scroll ${jumped.before}→${jumped.after}`);
+  ok('  and marks it, so arriving does not read as a mis-click', jumped.flashed);
+
+  const viaKey = await p.evaluate(async () => {
+    scrollTo(0, 0); await new Promise(r => setTimeout(r, 200));
+    const el = document.getElementById('syGrade');
+    el.focus();
+    el.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    await new Promise(r => setTimeout(r, 900));
+    const r2 = document.getElementById('sySevBox').getBoundingClientRect();
+    return r2.top >= -5 && r2.top < innerHeight;
+  });
+  ok('and Enter does the same thing as a click', viaKey);
+
+  console.log('\n3c. THE LIST IS WHERE A DECISION LIST BELONGS');
+  /* It first went into the right-hand column under the reconciliation ladder,
+     between "where the number comes from" and "admin diagnostics" — the column
+     that answers "is this dashboard telling the truth". This is a list of
+     decisions with somebody's name on them and belongs above that. */
+  const place = await p.evaluate(() => {
+    const y = id => { const e = document.getElementById(id);
+                      return e ? Math.round(e.getBoundingClientRect().top + scrollY) : null; };
+    const box = document.getElementById('sySevBox');
+    return { sev: y('sySevBox'), diag: y('syDiag'), recon: y('syRecon'),
+             kpis: y('syncKpis'), width: box ? Math.round(box.getBoundingClientRect().width) : 0,
+             page: document.documentElement.scrollWidth };
+  });
+  ok('the list sits above the admin diagnostics', place.sev < place.diag,
+     `list at ${place.sev}, diagnostics at ${place.diag}`);
+  ok('  and above the reconciliation ladder', place.sev < place.recon,
+     `list at ${place.sev}, ladder at ${place.recon}`);
+  ok('  directly under the tiles rather than a page down',
+     place.sev - place.kpis < 320, `${place.sev - place.kpis}px below the tiles`);
+  ok('  and full width, not a half-width column with blank beside it',
+     place.width > place.page * 0.7, `${place.width} of ${place.page}`);
+
   console.log('\n4. SETTING THE GRADE CLEARS A NO-GRADE ROW');
   await p.evaluate(k => openEdit(k), NGK);
   await p.waitForTimeout(500);

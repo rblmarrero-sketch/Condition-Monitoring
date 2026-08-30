@@ -1128,6 +1128,19 @@
   .agree{display:flex;align-items:center;gap:8px;margin-top:8px;cursor:pointer;
     font-weight:650;color:var(--ink);text-transform:none;letter-spacing:0;}
   .agree input{width:16px;height:16px;flex:0 0 auto;cursor:pointer;}
+  /* A tile with somewhere to go says so before it is pressed. */
+  .kpi.go{cursor:pointer;}
+  .kpi.go:hover{border-color:color-mix(in srgb,var(--kc,var(--border)) 55%,var(--border));
+    background:color-mix(in srgb,var(--kc,var(--surface)) 7%,var(--surface));}
+  .kpi.go:focus-visible{outline:2px solid var(--kc,var(--ink));outline-offset:2px;}
+  /* And the list says it is the thing that was asked for, once, on arrival —
+     landing at the top of a page with no confirmation reads as a mis-click. */
+  #sySevBox{scroll-margin-top:12px;}
+  #sySevBox:focus{outline:none;}
+  @keyframes cmflash{ from{ box-shadow:0 0 0 3px color-mix(in srgb,var(--warning) 60%,transparent); }
+                        to{ box-shadow:0 0 0 3px transparent; } }
+  .flash{animation:cmflash 1.2s ease-out 1;}
+  @media (prefers-reduced-motion:reduce){ .flash{animation:none;} }
   .pxpanel .btn.danger{color:var(--crit-ink);
     border-color:color-mix(in srgb,var(--critical) 45%,var(--border));}
   .pxpanel .btn.danger.armed{background:var(--critical);color:#fff;border-color:var(--critical);}
@@ -2675,6 +2688,29 @@
        way to detect one is worse than a dashboard with no panel at all. -->
   <section id="tab-sync" class="hidden">
     <div class="kpis" id="syncKpis"></div>
+    <!-- THE LIST sevConflicts() HAS ALWAYS COMPUTED AND NOBODY HAS EVER SEEN.
+
+         The function was written, commented "somebody has to see it", and never
+         called from anywhere — so six records carried a severity the board
+         could not justify, and the only way to find one was to guess which
+         record to open. This project's defect in the code meant to catch it: a
+         real value rendered as nothing.
+
+         Full width, directly under the tiles, and NOT down in the right-hand
+         column with the reconciliation ladder and the admin diagnostics, where
+         it first went. Those answer "is this dashboard telling the truth"; this
+         is a list of decisions with somebody's name on them, and it belongs
+         beside the other one — records waiting on evidence — not below the
+         housekeeping. In the narrow column it was six half-width rows starting
+         a thousand pixels down the page, with the left half of the screen
+         blank alongside them. A task nobody scrolls to is a task nobody does. -->
+    <div class="section" id="sySevBox" tabindex="-1" style="margin-bottom:var(--s4)">
+      <div class="secthd"><h2 data-i18n="sy_sev">Severities nobody can check</h2>
+        <span class="spacer"></span><span class="hint" id="sySevCt"></span></div>
+      <ul class="synone" id="sySev"></ul>
+      <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
+        <div class="sub" data-i18n="sy_sev_sub">A severity is not a field somebody types here — it is read off the grade (A→Normal, B→Incipient, C→Degraded, X→Critical), or off the millimetres on an undercarriage round. These are the places a record carries a severity that neither of those produces, so the board is showing a finding no one can re-derive. The fix is always the GRADE: set it and the severity follows. Rounds imported from the original spreadsheets are where nearly all of these come from.</div></details>
+    </div>
     <div class="grid12">
       <div class="section g7">
         <div class="secthd"><h2 data-i18n="sy_gaps">Records waiting on evidence</h2>
@@ -2703,19 +2739,6 @@
         <div class="secthd" style="margin-top:var(--s4)"><h2 data-i18n="sy_h_pop">Where the photographs are</h2></div>
         <dl class="kv" id="syPop"></dl>
         <div class="sub" data-i18n="sy_p_note" style="font-size:11.5px;margin-top:4px">Photographs bundled with this app live beside it, never in the sync folder. They are not missing field uploads and are counted separately.</div>
-        <!-- THE LIST sevConflicts() HAS ALWAYS COMPUTED AND NOBODY HAS EVER SEEN.
-
-             The function was written, commented "somebody has to see it", and
-             never called from anywhere — so six records carried a severity the
-             board could not justify, and the only way to find one was to guess
-             which record to open. The office was told to go to a panel that did
-             not exist. Exactly this project's defect, in the code meant to
-             catch it: a real value rendered as nothing. -->
-        <div class="secthd" style="margin-top:var(--s4)"><h2 data-i18n="sy_sev">Severities nobody can check</h2></div>
-        <div class="sub" id="sySevCt"></div>
-        <ul class="synone" id="sySev"></ul>
-        <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
-          <div class="sub" data-i18n="sy_sev_sub">A severity is not a field somebody types here — it is read off the grade (A→Normal, B→Incipient, C→Degraded, X→Critical), or off the millimetres on an undercarriage round. These are the places a record carries a severity that neither of those produces, so the board is showing a finding no one can re-derive. The fix is always the GRADE: set it and the severity follows. Rounds imported from the original spreadsheets are where nearly all of these come from.</div></details>
         <div class="secthd" style="margin-top:var(--s4)"><h2 data-i18n="sy_diag">Admin diagnostics</h2></div>
         <ul class="synone" id="syDiag"></ul>
         <div class="secthd" style="margin-top:var(--s4)"><h2 data-i18n="sy_unknown">Not measurable from here</h2></div>
@@ -2855,27 +2878,27 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=213"></script>
-<script src="../mobile/hme.js?v=213"></script>
-<script src="../mobile/mp-fc.js?v=213"></script>
-<script src="../mobile/hme-cascade.js?v=213"></script>
-<script src="../mobile/temp-limits.js?v=213"></script>
+<script src="../data/magnetic_plug.js?v=214"></script>
+<script src="../mobile/hme.js?v=214"></script>
+<script src="../mobile/mp-fc.js?v=214"></script>
+<script src="../mobile/hme-cascade.js?v=214"></script>
+<script src="../mobile/temp-limits.js?v=214"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=213"></script>
-<script src="../mobile/normalize.js?v=213"></script>
-<script src="../mobile/due.js?v=213"></script>
-<script src="../mobile/wear.js?v=213"></script>
-<script src="../mobile/wear-map.js?v=213"></script>
-<script src="../mobile/lube.js?v=213"></script>
-<script src="../mobile/lube-overrides.js?v=213"></script>
-<script src="../mobile/lube2027.js?v=213"></script>
-<script src="../mobile/lube-tds.js?v=213"></script>
+<script src="../mobile/assets.js?v=214"></script>
+<script src="../mobile/normalize.js?v=214"></script>
+<script src="../mobile/due.js?v=214"></script>
+<script src="../mobile/wear.js?v=214"></script>
+<script src="../mobile/wear-map.js?v=214"></script>
+<script src="../mobile/lube.js?v=214"></script>
+<script src="../mobile/lube-overrides.js?v=214"></script>
+<script src="../mobile/lube2027.js?v=214"></script>
+<script src="../mobile/lube-tds.js?v=214"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=213"></script>
-<script src="../mobile/machine-photos.js?v=213"></script>
+<script src="../mobile/upload-defaults.js?v=214"></script>
+<script src="../mobile/machine-photos.js?v=214"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -2884,17 +2907,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=213"></script>
-<script src="../mobile/get.js?v=213"></script>
-<script src="../mobile/points.js?v=213"></script>
-<script src="../mobile/uc-points.js?v=213"></script>
-<script src="../mobile/inspect-guide.js?v=213"></script>
-<script src="../mobile/get-figs.js?v=213"></script>
-<script src="../mobile/body-points.js?v=213"></script>
-<script src="../mobile/body-map.js?v=213"></script>
-<script src="../mobile/jspdf.umd.min.js?v=213"></script>
-<script src="../mobile/html2canvas.min.js?v=213"></script>
-<script src="../mobile/report-core.js?v=213"></script>
+<script src="../mobile/machine-fig.js?v=214"></script>
+<script src="../mobile/get.js?v=214"></script>
+<script src="../mobile/points.js?v=214"></script>
+<script src="../mobile/uc-points.js?v=214"></script>
+<script src="../mobile/inspect-guide.js?v=214"></script>
+<script src="../mobile/get-figs.js?v=214"></script>
+<script src="../mobile/body-points.js?v=214"></script>
+<script src="../mobile/body-map.js?v=214"></script>
+<script src="../mobile/jspdf.umd.min.js?v=214"></script>
+<script src="../mobile/html2canvas.min.js?v=214"></script>
+<script src="../mobile/report-core.js?v=214"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -3187,6 +3210,7 @@ const I18N={
   sy_k_crit:"Critical waiting", sy_k_crit_s:"a Critical with no evidence yet",
   sy_k_conf:"Conflicts", sy_k_conf_s:"two phones, one round",
   sy_k_grade:"Severity to settle", sy_k_grade_s:"a severity its grade cannot explain",
+  sy_k_grade_go:"Show the list",
   sy_sev:"Severities nobody can check",
   sy_sev_none:"Every severity on the board is derived from a grade or a measurement.",
   sy_sev_sub:"A severity is not a field somebody types here — it is read off the grade (A→Normal, B→Incipient, C→Degraded, X→Critical), or off the millimetres on an undercarriage round. These are the places a record carries a severity that neither of those produces, so the board is showing a finding no one can re-derive. The fix is always the GRADE: set it and the severity follows. Rounds imported from the original spreadsheets are where nearly all of these come from.",
@@ -3887,6 +3911,7 @@ const I18N={
   sy_k_crit:"Критичные в ожидании", sy_k_crit_s:"критичное без подтверждения",
   sy_k_conf:"Конфликты", sy_k_conf_s:"два телефона, один обход",
   sy_k_grade:"Разобрать оценку", sy_k_grade_s:"степень, не объяснимая оценкой",
+  sy_k_grade_go:"Показать список",
   sy_sev:"Степени, которые нечем проверить",
   sy_sev_none:"Каждая степень на экране выведена из оценки или из измерения.",
   sy_sev_sub:"Степень здесь не вводят вручную — она читается из оценки (A→Норма, B→Зарождающийся, C→Ухудшение, X→Критично) либо из миллиметров на обходе ходовой. Здесь перечислены записи со степенью, которую не даёт ни то, ни другое: на экране стоит находка, которую невозможно перепроверить. Исправляется всегда ОЦЕНКА: поставьте её, и степень появится сама. Почти все такие случаи пришли из первоначальных таблиц.",
@@ -12124,6 +12149,38 @@ function renderSync(){
     + (()=>{ const n=sevConflicts().length;
         return card("syGrade", t("sy_k_grade"), n, t("sy_k_grade_s"), n?"warn":"good"); })();
 
+  /* A NUMBER ON A TILE IS A PROMISE THAT THERE IS SOMEWHERE TO GO.
+
+     "Severity to settle · 6" was a plain div. The first thing anybody does with
+     a count of six outstanding decisions is press it, and pressing it did
+     nothing at all — no cursor change to warn them, no movement, no message.
+     The list was on the page the whole time, further down.
+
+     That is this project's defect wearing the other hat: not a real value shown
+     as nothing, but a real value shown with no way to act on it, which leaves
+     the reader concluding the feature is broken. Keyboard too — a tile that
+     only a mouse can reach is the same dead end for anybody using the rail. */
+  const tile=$("syGrade"), box=$("sySevBox");
+  if(tile && box){
+    const n=sevConflicts().length;
+    tile.classList.toggle("go", n>0);
+    if(n>0){
+      tile.setAttribute("role","button");
+      tile.setAttribute("tabindex","0");
+      tile.setAttribute("title", t("sy_k_grade_go"));
+      const jump=()=>{ box.scrollIntoView({behavior:"smooth", block:"start"});
+                       box.focus({preventScroll:true});
+                       box.classList.remove("flash");
+                       void box.offsetWidth;            // restart the animation
+                       box.classList.add("flash"); };
+      tile.onclick=jump;
+      tile.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); jump(); } };
+    }else{
+      tile.removeAttribute("role"); tile.removeAttribute("tabindex");
+      tile.removeAttribute("title"); tile.onclick=null; tile.onkeydown=null;
+    }
+  }
+
   const ago=ms=>{
     if(!ms) return t("sy_never");
     const m=Math.round((Date.now()-ms)/60000);
@@ -12512,8 +12569,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=213"></script>
-<script src="sync-adapter.js?v=213"></script>
-<script src="report.js?v=213"></script>
+<script src="drive.js?v=214"></script>
+<script src="sync-adapter.js?v=214"></script>
+<script src="report.js?v=214"></script>
 </body>
 </html>
