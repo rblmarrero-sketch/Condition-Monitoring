@@ -1123,6 +1123,11 @@
   .pxstr b{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
     font-size:var(--t-micro);color:var(--ink-2);min-width:34px;text-align:right;}
   .pxpref{text-transform:none;letter-spacing:0;color:var(--ink-2);}
+  /* The tick that retires a superseded severity. Its own line under the
+     sentence explaining it, with a target big enough for a gloved hand. */
+  .agree{display:flex;align-items:center;gap:8px;margin-top:8px;cursor:pointer;
+    font-weight:650;color:var(--ink);text-transform:none;letter-spacing:0;}
+  .agree input{width:16px;height:16px;flex:0 0 auto;cursor:pointer;}
   .pxpanel .btn.danger{color:var(--crit-ink);
     border-color:color-mix(in srgb,var(--critical) 45%,var(--border));}
   .pxpanel .btn.danger.armed{background:var(--critical);color:#fff;border-color:var(--critical);}
@@ -2698,6 +2703,19 @@
         <div class="secthd" style="margin-top:var(--s4)"><h2 data-i18n="sy_h_pop">Where the photographs are</h2></div>
         <dl class="kv" id="syPop"></dl>
         <div class="sub" data-i18n="sy_p_note" style="font-size:11.5px;margin-top:4px">Photographs bundled with this app live beside it, never in the sync folder. They are not missing field uploads and are counted separately.</div>
+        <!-- THE LIST sevConflicts() HAS ALWAYS COMPUTED AND NOBODY HAS EVER SEEN.
+
+             The function was written, commented "somebody has to see it", and
+             never called from anywhere — so six records carried a severity the
+             board could not justify, and the only way to find one was to guess
+             which record to open. The office was told to go to a panel that did
+             not exist. Exactly this project's defect, in the code meant to
+             catch it: a real value rendered as nothing. -->
+        <div class="secthd" style="margin-top:var(--s4)"><h2 data-i18n="sy_sev">Severities nobody can check</h2></div>
+        <div class="sub" id="sySevCt"></div>
+        <ul class="synone" id="sySev"></ul>
+        <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
+          <div class="sub" data-i18n="sy_sev_sub">A severity is not a field somebody types here — it is read off the grade (A→Normal, B→Incipient, C→Degraded, X→Critical), or off the millimetres on an undercarriage round. These are the places a record carries a severity that neither of those produces, so the board is showing a finding no one can re-derive. The fix is always the GRADE: set it and the severity follows. Rounds imported from the original spreadsheets are where nearly all of these come from.</div></details>
         <div class="secthd" style="margin-top:var(--s4)"><h2 data-i18n="sy_diag">Admin diagnostics</h2></div>
         <ul class="synone" id="syDiag"></ul>
         <div class="secthd" style="margin-top:var(--s4)"><h2 data-i18n="sy_unknown">Not measurable from here</h2></div>
@@ -2837,27 +2855,27 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=210"></script>
-<script src="../mobile/hme.js?v=210"></script>
-<script src="../mobile/mp-fc.js?v=210"></script>
-<script src="../mobile/hme-cascade.js?v=210"></script>
-<script src="../mobile/temp-limits.js?v=210"></script>
+<script src="../data/magnetic_plug.js?v=211"></script>
+<script src="../mobile/hme.js?v=211"></script>
+<script src="../mobile/mp-fc.js?v=211"></script>
+<script src="../mobile/hme-cascade.js?v=211"></script>
+<script src="../mobile/temp-limits.js?v=211"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=210"></script>
-<script src="../mobile/normalize.js?v=210"></script>
-<script src="../mobile/due.js?v=210"></script>
-<script src="../mobile/wear.js?v=210"></script>
-<script src="../mobile/wear-map.js?v=210"></script>
-<script src="../mobile/lube.js?v=210"></script>
-<script src="../mobile/lube-overrides.js?v=210"></script>
-<script src="../mobile/lube2027.js?v=210"></script>
-<script src="../mobile/lube-tds.js?v=210"></script>
+<script src="../mobile/assets.js?v=211"></script>
+<script src="../mobile/normalize.js?v=211"></script>
+<script src="../mobile/due.js?v=211"></script>
+<script src="../mobile/wear.js?v=211"></script>
+<script src="../mobile/wear-map.js?v=211"></script>
+<script src="../mobile/lube.js?v=211"></script>
+<script src="../mobile/lube-overrides.js?v=211"></script>
+<script src="../mobile/lube2027.js?v=211"></script>
+<script src="../mobile/lube-tds.js?v=211"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=210"></script>
-<script src="../mobile/machine-photos.js?v=210"></script>
+<script src="../mobile/upload-defaults.js?v=211"></script>
+<script src="../mobile/machine-photos.js?v=211"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -2866,17 +2884,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=210"></script>
-<script src="../mobile/get.js?v=210"></script>
-<script src="../mobile/points.js?v=210"></script>
-<script src="../mobile/uc-points.js?v=210"></script>
-<script src="../mobile/inspect-guide.js?v=210"></script>
-<script src="../mobile/get-figs.js?v=210"></script>
-<script src="../mobile/body-points.js?v=210"></script>
-<script src="../mobile/body-map.js?v=210"></script>
-<script src="../mobile/jspdf.umd.min.js?v=210"></script>
-<script src="../mobile/html2canvas.min.js?v=210"></script>
-<script src="../mobile/report-core.js?v=210"></script>
+<script src="../mobile/machine-fig.js?v=211"></script>
+<script src="../mobile/get.js?v=211"></script>
+<script src="../mobile/points.js?v=211"></script>
+<script src="../mobile/uc-points.js?v=211"></script>
+<script src="../mobile/inspect-guide.js?v=211"></script>
+<script src="../mobile/get-figs.js?v=211"></script>
+<script src="../mobile/body-points.js?v=211"></script>
+<script src="../mobile/body-map.js?v=211"></script>
+<script src="../mobile/jspdf.umd.min.js?v=211"></script>
+<script src="../mobile/html2canvas.min.js?v=211"></script>
+<script src="../mobile/report-core.js?v=211"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -3168,6 +3186,14 @@ const I18N={
   sy_k_wait:"Waiting on media", sy_k_wait_s:"records missing an attachment",
   sy_k_crit:"Critical waiting", sy_k_crit_s:"a Critical with no evidence yet",
   sy_k_conf:"Conflicts", sy_k_conf_s:"two phones, one round",
+  sy_k_grade:"Severity to settle", sy_k_grade_s:"a severity its grade cannot explain",
+  sy_sev:"Severities nobody can check",
+  sy_sev_none:"Every severity on the board is derived from a grade or a measurement.",
+  sy_sev_sub:"A severity is not a field somebody types here — it is read off the grade (A→Normal, B→Incipient, C→Degraded, X→Critical), or off the millimetres on an undercarriage round. These are the places a record carries a severity that neither of those produces, so the board is showing a finding no one can re-derive. The fix is always the GRADE: set it and the severity follows. Rounds imported from the original spreadsheets are where nearly all of these come from.",
+  sy_sev_go:"Set the grade",
+  sy_sev_ng:"Severity {s} with no grade behind it. Nothing on the record says how it was reached, and it is counted anyway — because dropping it would throw away a finding somebody made.",
+  sy_sev_cf:"Grade {g} means {now}, and the board shows {now}. The record also carries {was} from before grades were derived. If {was} was the real condition the grade is wrong, not the severity — change the grade to match.",
+  sy_sev_ct:"{n} to settle · {u} with no grade · {c} contradicting their grade",
   sy_h_files:"Files on the server", sy_h_last:"Last asked",
   sy_h_att:"Attachments accounted for", sy_h_held:"Inspections on hold",
   sy_notlinked:"no backend attached — nothing to compare against",
@@ -3500,6 +3526,8 @@ const I18N={
   ed_prio:"1C priority",
   ed_defect:"Defect", ed_cause:"Direct cause", ed_comment:"Comment",
   ed_none:"— none —", ed_nosev:"no severity",
+  ed_stale:"This point carries {was} from before severities were derived, while grade {g} means {now}. Every screen already shows {now} — the grade wins. If {was} was the real condition, then the grade is the wrong half: change it below.",
+  ed_stale_ok:"The grade is right — record {now} as the finding and retire the old severity",
   ed_find:"type to narrow…", ed_matches:"{n} of {t}", ed_nomatch:"nothing matches — clear the search",
   ed_nothing:"Nothing to correct", ed_nothing_sub:"This inspection has no positions recorded.",
   ed_needdrive:"❌ Set up Google Drive first — corrections are stored there.",
@@ -3858,6 +3886,14 @@ const I18N={
   sy_k_wait:"Ждут материалов", sy_k_wait_s:"записей без вложения",
   sy_k_crit:"Критичные в ожидании", sy_k_crit_s:"критичное без подтверждения",
   sy_k_conf:"Конфликты", sy_k_conf_s:"два телефона, один обход",
+  sy_k_grade:"Разобрать оценку", sy_k_grade_s:"степень, не объяснимая оценкой",
+  sy_sev:"Степени, которые нечем проверить",
+  sy_sev_none:"Каждая степень на экране выведена из оценки или из измерения.",
+  sy_sev_sub:"Степень здесь не вводят вручную — она читается из оценки (A→Норма, B→Зарождающийся, C→Ухудшение, X→Критично) либо из миллиметров на обходе ходовой. Здесь перечислены записи со степенью, которую не даёт ни то, ни другое: на экране стоит находка, которую невозможно перепроверить. Исправляется всегда ОЦЕНКА: поставьте её, и степень появится сама. Почти все такие случаи пришли из первоначальных таблиц.",
+  sy_sev_go:"Поставить оценку",
+  sy_sev_ng:"Степень {s} без оценки. В записи нет ничего, что объясняло бы, как её получили, и она всё равно учитывается — потому что отбросить её значило бы потерять сделанную кем-то находку.",
+  sy_sev_cf:"Оценка {g} означает {now}, и на экране стоит {now}. В записи осталась и {was} — с тех пор, когда степень ещё не выводили. Если верной была {was}, то ошибочна оценка, а не степень: измените оценку.",
+  sy_sev_ct:"К разбору: {n} · без оценки: {u} · расходятся с оценкой: {c}",
   sy_h_files:"Файлов на сервере", sy_h_last:"Последний запрос",
   sy_h_att:"Вложений учтено", sy_h_held:"Требуют исправления",
   sy_notlinked:"хранилище не подключено — не с чем сравнивать",
@@ -4180,6 +4216,8 @@ const I18N={
   ed_prio:"Приоритет 1С",
   ed_defect:"Дефект", ed_cause:"Непосредственная причина", ed_comment:"Комментарий",
   ed_none:"— нет —", ed_nosev:"степень не указана",
+  ed_stale:"В этой точке осталась {was} — с тех пор, когда степень ещё не выводили, — тогда как оценка {g} означает {now}. На всех экранах уже стоит {now}: побеждает оценка. Если верной была {was}, то ошибочна именно оценка — измените её ниже.",
+  ed_stale_ok:"Оценка верна — записать {now} как находку и снять устаревшую степень",
   ed_find:"начните вводить…", ed_matches:"{n} из {t}", ed_nomatch:"совпадений нет — очистите поиск",
   ed_nothing:"Нечего исправлять", ed_nothing_sub:"В этом осмотре нет записанных позиций.",
   ed_needdrive:"❌ Сначала настройте Google Диск — правки хранятся там.",
@@ -7665,11 +7703,32 @@ function openEdit(key,keepMsg){
 
   $("edItems").innerHTML=(rec.items||[]).map((i,n)=>{
     const sev=sevOf(rec,i);
+    /* THE ONE CASE WITH NOTHING TO CHANGE, AND SO NO WAY TO FINISH.
+
+       A point whose grade already outranks a stale stored severity shows the
+       right answer on every screen — so the engineer opens this panel, agrees
+       with it, and finds nothing to do: picking the grade it already has is not
+       a change, `dataset.init` correctly refuses to write it, and the record
+       goes on contradicting itself for ever. A list that cannot be emptied
+       becomes a list nobody reads, which is how a real one gets missed.
+
+       So agreement is made into an action somebody takes, rather than a field
+       silently rewritten by opening the panel. Ticking it retires the old
+       severity and signs the retirement; leaving it alone changes nothing. */
+    const stale = !!(i.grade && i.sev && !(wearOf(rec,i)||{}).band
+                     && i.sev!==(GRADE_SEV[i.grade]||""));
     return `<div class="srccard" style="margin-bottom:10px"><div class="srchead">
       <span class="ico">${i.grade?esc(i.grade):"·"}</span><div><b>${esc(i.key)}</b>
       <div class="muted">${esc(i.label||"")}${i.comment?` — “${esc(i.comment)}”`:""}</div></div>
       <span class="state">${sev?esc(SEV[sev]?SEV[sev].l:sev):esc(t("ed_nosev"))}</span></div>
       <div class="srcbody">
+        ${stale?`<div class="note" style="margin-top:0">
+          ${esc(t("ed_stale",{g:i.grade,
+                now:(SEV[GRADE_SEV[i.grade]]||{}).l||GRADE_SEV[i.grade],
+                was:(SEV[i.sev]||{}).l||i.sev}))}
+          <label class="agree"><input type="checkbox" data-cfok="${esc(i.key)}">
+            <span>${esc(t("ed_stale_ok",{now:(SEV[GRADE_SEV[i.grade]]||{}).l||GRADE_SEV[i.grade]}))}</span></label>
+        </div>`:""}
         <div class="row">
           <!-- Grade, which was shown and not editable.
 
@@ -8331,9 +8390,16 @@ function collectEdit(){
      The override fields are still written — as zeroed — because a record that
      used to carry one has to show that it no longer does. What was there
      before stays in the audit trail; this only stops new ones being made. */
+  /* Agreeing with a grade counts as moving it. The severity written is the one
+     the grade already implies, so this changes no screen — it retires a stored
+     value that disagreed and puts a name and a date on the retirement, which is
+     what makes the point disappear off "Severities nobody can check". */
+  const agreed=new Set();
+  $("edItems").querySelectorAll("[data-cfok]").forEach(c=>{
+    if(c.checked) agreed.add(c.dataset.cfok); });
   $("edItems").querySelectorAll('[data-f="grade"]').forEach(g=>{
     const k=g.dataset.k;
-    const touched = items[k] && ("grade" in items[k]);
+    const touched = (items[k] && ("grade" in items[k])) || agreed.has(k);
     if(!touched) return;
     const mapped=GRADE_SEV[g.value]||"";
     const it=(items[k]||(items[k]={}));
@@ -11923,6 +11989,72 @@ function reconcile(){
 /* Things a folder-backed store genuinely cannot answer. Named, with the reason,
    so the gap is a decision on somebody's list rather than a blank. */
 const SYNC_UNKNOWN=["sy_u_latency","sy_u_hash","sy_u_dupe","sy_u_receipt"];
+/* WHAT THE SYNC TAB'S BADGE COUNTS — the one definition, read by both writers.
+
+   Three things in this panel ask something of a person, and each of them has
+   at some point been the only one the badge knew about:
+
+     critWaiting   a Critical finding whose photograph never arrived — the
+                   picture an order gets raised on. Only meaningful once a
+                   backend is attached; before that it would be counting this
+                   browser.
+     conflicts     two phones sent the same round and one of them has to win.
+     sevConflicts  a severity on the board that nothing on the record explains.
+
+   Not a sum. These are three different jobs and adding them produces a number
+   that is none of them; the badge exists to say "there is something in here",
+   and the first one present says it. */
+function syncBadge(s){
+  const n=(s && s.linked ? s.critWaiting : 0) || (s ? s.conflicts : 0);
+  if(n) return n;
+  try{ return sevConflicts().length; }catch(e){ return 0; }
+}
+/* WHAT sevConflicts() FOUND, ON A SCREEN, WITH THE FIX ONE CLICK AWAY.
+
+   The two cases are not the same question and must not be listed as though
+   they were:
+
+   nograde — the board is showing a severity and there is nothing behind it.
+     sevOf() falls through to the stored value on purpose, because discarding a
+     finding an inspector made is worse than carrying one nobody can re-derive.
+     But it is still a number no one can check, and only a person knows the
+     grade it should have come from.
+
+   conflict — the grade already wins. The severity on every screen is the one
+     derived from the grade, so nothing on the board is wrong and there is
+     nothing to "pick". What the row asks is the opposite question: the record
+     contradicts itself, so go and check whether the GRADE is the wrong half.
+     Presenting this as a choice between two severities would invite somebody
+     to set them back into contradiction, which is the state sevOf() exists to
+     make impossible. */
+function renderSevGaps(){
+  const box=$("sySev"); if(!box) return;
+  const rows=sevConflicts();
+  const ct=$("sySevCt");
+  if(!rows.length){
+    box.innerHTML=`<li>${esc(t("sy_sev_none"))}</li>`;
+    if(ct){ ct.textContent=""; ct.className="sub"; }
+    return;
+  }
+  const nu=rows.filter(x=>x.why==="nograde").length;
+  if(ct){
+    ct.textContent=t("sy_sev_ct",{n:rows.length,u:nu,c:rows.length-nu});
+    ct.className="sub warn";
+  }
+  const sevL=s=>(SEV[s]&&SEV[s].l)||s||t("ed_none");
+  box.innerHTML=rows.map(x=>{
+    const k=ekOf(x.r);
+    const why = x.why==="nograde"
+      ? t("sy_sev_ng",{s:sevL(x.was)})
+      : t("sy_sev_cf",{g:x.i.grade,now:sevL(x.now),was:sevL(x.was)});
+    return `<li><b>${esc(x.r.equip)}</b> · ${esc(TYPE_LABEL[x.r.type]||x.r.type)}`
+      + ` · ${esc(x.r.date)} · <b>${esc(x.i.key)}</b>`
+      + (x.i.label?` <span class="muted">${esc(x.i.label)}</span>`:"")
+      + `<div class="muted">${esc(why)}</div>`
+      + `<button class="btn" data-sevgo="${esc(k)}">${esc(t("sy_sev_go"))}</button></li>`;
+  }).join("");
+  box.querySelectorAll("[data-sevgo]").forEach(b=>{ b.onclick=()=>openEdit(b.dataset.sevgo); });
+}
 function renderSync(){
   if(!$("syncKpis")) return;
   const s=syncScan();
@@ -11948,7 +12080,11 @@ function renderSync(){
            !s.linked?"":pct>=100?"good":pct>=90?"warn":"bad")
     + card("syWait", t("sy_k_wait"), vWait, sWait, (s.linked&&s.gaps.length)?"warn":"good")
     + card("syCrit", t("sy_k_crit"), vCrit, sCrit, (s.linked&&s.critWaiting)?"bad":"good")
-    + card("syConf", t("sy_k_conf"), s.conflicts, t("sy_k_conf_s"), s.conflicts?"warn":"good");
+    + card("syConf", t("sy_k_conf"), s.conflicts, t("sy_k_conf_s"), s.conflicts?"warn":"good")
+    /* Counted here and not carried from renderSevGaps: two places quoting one
+       figure from two moments is how the screens came to disagree. */
+    + (()=>{ const n=sevConflicts().length;
+        return card("syGrade", t("sy_k_grade"), n, t("sy_k_grade_s"), n?"warn":"good"); })();
 
   const ago=ms=>{
     if(!ms) return t("sy_never");
@@ -12000,6 +12136,7 @@ function renderSync(){
       el.className = "sub" + (bo.missing.length ? " warn" : "");
     }
   }
+  renderSevGaps();
   $("syUnknown").innerHTML=SYNC_UNKNOWN.map(k=>`<li>${esc(t(k))}</li>`).join("");
   /* ADMIN DIAGNOSTICS, not an operational warning. A blank row removed on
      import is housekeeping — it is recorded so the repair can be audited, and
@@ -12050,9 +12187,15 @@ function renderSync(){
   }
   /* The badge is this panel's own number, so this panel sets it. Leaving it to
      renderNavCounts() made it correct only when the two happened to be called
-     in the right order. */
+     in the right order.
+
+     Both still write it — each is reachable without the other — but the number
+     itself is computed in ONE place now. They had drifted apart the moment a
+     third thing worth a badge appeared: this one went on counting two of the
+     three, so whichever function ran last decided what the tab said. Two
+     writers is a layout detail; two DEFINITIONS is how the screens disagree. */
   const nbs=$("nbSync");
-  if(nbs){ const n=(s.linked?s.critWaiting:0)||s.conflicts;
+  if(nbs){ const n=syncBadge(s);
            nbs.textContent = n>0 ? (n>99?"99+":String(n)) : ""; }
 
   const CAP=60;
@@ -12190,9 +12333,7 @@ function renderNavCounts(){
     const f=findings(filtered());
     nb("nbAct", f.filter(x=>actionRequired(x.r,x.i)).length);
   }catch(e){}
-  /* Critical evidence that has not arrived is the one sync number worth a
-     badge: it is the photograph an order gets raised on. */
-  try{ const s=syncScan(); nb("nbSync", (s.linked?s.critWaiting:0) || s.conflicts); }catch(e){}
+  try{ nb("nbSync", syncBadge(syncScan())); }catch(e){}
 }
 function renderAll(){
   /* What survived the filters, beside the controls that did the filtering. */
@@ -12333,8 +12474,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=210"></script>
-<script src="sync-adapter.js?v=210"></script>
-<script src="report.js?v=210"></script>
+<script src="drive.js?v=211"></script>
+<script src="sync-adapter.js?v=211"></script>
+<script src="report.js?v=211"></script>
 </body>
 </html>
