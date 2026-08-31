@@ -61,7 +61,7 @@ function appsScript() {
   const sandbox = {
     DriveApp: { getFolderById: id => { if (id !== ROOTID) throw new Error('no folder'); return root; },
                 getFileById: () => null },
-    Utilities: { base64Decode: s => Buffer.from(s, 'base64'), base64Encode: b => Buffer.from(b).toString('base64'),
+    Utilities: { ...require('./gsdigest.cjs'), base64Decode: s => Buffer.from(s, 'base64'), base64Encode: b => Buffer.from(b).toString('base64'),
                  newBlob: (bytes, ct, name) => ({ bytes, ct, name }) },
     ContentService: { MimeType: { JSON: 'json' }, createTextOutput: s => ({ setMimeType: () => JSON.parse(s) }) },
     Logger: { log: () => {} },

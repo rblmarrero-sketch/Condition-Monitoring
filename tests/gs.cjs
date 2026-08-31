@@ -49,7 +49,7 @@ function load(drive, rootId) {
   const sandbox = {
     DriveApp: { getFolderById: id => { if (id !== rootId) throw new Error('no such folder'); return drive.root; },
                 getFileById: id => drive.byId[id] },
-    Utilities: { base64Encode: b => Buffer.from(b).toString('base64') },
+    Utilities: { ...require('./gsdigest.cjs'), base64Encode: b => Buffer.from(b).toString('base64') },
     ContentService: { MimeType: { JSON: 'json' },
       createTextOutput: s => ({ setMimeType: () => JSON.parse(s) }) },
     Logger: { log: () => {} },

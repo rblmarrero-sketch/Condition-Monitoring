@@ -64,7 +64,7 @@ function load(drive) {
   const sandbox = {
     DriveApp: { getFolderById: id => { if (id !== ROOTID) throw new Error('no folder'); return drive.root; },
                 getFileById: id => drive.byId[id] },
-    Utilities: {
+    Utilities: { ...require('./gsdigest.cjs'),
       base64Decode: s => Buffer.from(s, 'base64'),
       base64Encode: b => Buffer.from(b).toString('base64'),
       newBlob: (bytes, ct, name) => ({ body: Buffer.from(bytes).toString('utf8'), ct, name }),

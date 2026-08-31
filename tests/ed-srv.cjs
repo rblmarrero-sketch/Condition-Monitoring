@@ -82,14 +82,8 @@ function mkDrive(){
        back negative — and the script has to fold them back before hex. Handing
        it unsigned bytes here would let a wrong fold pass the suite and fail on
        Google, so the shim reproduces the signedness rather than the intent. */
-    Utilities:{base64Decode:s=>Buffer.from(s,'base64'),base64Encode:b=>Buffer.from(b).toString('base64'),
-               newBlob:(bytes,ct,name)=>({bytes,ct,name}),
-               DigestAlgorithm:{SHA_256:'SHA_256'},
-               computeDigest:(alg,bytes)=>{
-                 const h=require('crypto').createHash('sha256')
-                   .update(Buffer.isBuffer(bytes)?bytes:Buffer.from(bytes)).digest();
-                 return Array.from(h).map(v=>v>127?v-256:v);
-               }},
+    Utilities:{ ...require('./gsdigest.cjs'),base64Decode:s=>Buffer.from(s,'base64'),base64Encode:b=>Buffer.from(b).toString('base64'),
+               newBlob:(bytes,ct,name)=>({bytes,ct,name})},
     ContentService:{MimeType:{JSON:'json'},createTextOutput:s=>({setMimeType:()=>JSON.parse(s)})},
     Logger:{log:()=>{}},
     PropertiesService:{getScriptProperties:()=>({getProperty:k=>props[k]===undefined?null:props[k],

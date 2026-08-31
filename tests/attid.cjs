@@ -160,16 +160,39 @@ const build = p => p.evaluate(async () => {
       /* A receipt the server does not yet issue: proves the ladder reads the
          manifest, so the phone gets stricter on its own the day it lands. */
       r = base(); r.up = 1; r.conf = { of: 1, n: 1 };
+      /* Judged against what was SENT — wireSha256 — not against the hash of
+         the photograph this phone holds. maybeShrink() re-encodes before
+         sending, so the two differ for every real field photograph, and this
+         fixture used to carry only the stored one: it asserted the ladder's
+         intent while encoding the comparison that made it unreachable. */
       r.positions['4C'].att = { a1: { attachmentId: 'a1', sha256: 'ff', byteSize: 10,
-                                      serverSha256: 'ff', serverByteSize: 10 } };
+                                      wireSha256: 'aa', wireByteSize: 7,
+                                      serverSha256: 'aa', serverByteSize: 7 } };
       out.verified = evidenceLevel(r);
       r.positions['4C'].att.a1.dashboardConfirmedAt = '2026-07-29T10:00:00Z';
       out.office = evidenceLevel(r);
       /* A receipt whose hash does NOT match must not count as verified. */
       const bad = base(); bad.up = 1; bad.conf = { of: 1, n: 1 };
       bad.positions['4C'].att = { a1: { attachmentId: 'a1', sha256: 'ff', byteSize: 10,
-                                        serverSha256: 'ee', serverByteSize: 10 } };
+                                        wireSha256: 'aa', wireByteSize: 7,
+                                        serverSha256: 'ee', serverByteSize: 7 } };
       out.mismatch = evidenceLevel(bad);
+      /* THE CASE THAT WAS ACTUALLY HAPPENING. The store's receipt agrees with
+         the photograph on the phone and disagrees with what left it — which is
+         what a shrunk upload looks like if anyone compares the wrong pair. It
+         must not verify: the bytes in the folder are not the bytes that were
+         sent, and only the wire hash can say so. */
+      const held = base(); held.up = 1; held.conf = { of: 1, n: 1 };
+      held.positions['4C'].att = { a1: { attachmentId: 'a1', sha256: 'ff', byteSize: 10,
+                                         wireSha256: 'aa', wireByteSize: 7,
+                                         serverSha256: 'ff', serverByteSize: 10 } };
+      out.storedOnly = evidenceLevel(held);
+      /* And a round with no record of what it sent claims nothing, even when
+         the stored hash matches — silence is not a verdict. */
+      const older = base(); older.up = 1; older.conf = { of: 1, n: 1 };
+      older.positions['4C'].att = { a1: { attachmentId: 'a1', sha256: 'ff', byteSize: 10,
+                                          serverSha256: 'ff', serverByteSize: 10 } };
+      out.noWire = evidenceLevel(older);
       return out;
     });
     ok(lv.nowhere === 0, 'nothing sent is nowhere else', String(lv.nowhere));
@@ -179,6 +202,11 @@ const build = p => p.evaluate(async () => {
        'and a listing that came back short does not promote it', String(lv.shortListing));
     ok(lv.listed === 2, 'asking the folder and finding every file is stronger', String(lv.listed));
     ok(lv.verified === 3, 'a receipt matching size and hash is stronger again', String(lv.verified));
+    ok(lv.storedOnly === 2,
+       'a receipt that matches the held photograph but not the bytes sent is NOT verified',
+       String(lv.storedOnly));
+    ok(lv.noWire === 2,
+       'and a round with no record of what it sent claims nothing', String(lv.noWire));
     ok(lv.office === 4, 'and the office resolving it by id is the top of the ladder', String(lv.office));
     ok(lv.mismatch === 2,
        'a receipt whose hash disagrees is NOT verified — it falls back to what was checked',

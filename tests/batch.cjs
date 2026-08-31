@@ -43,7 +43,7 @@ function load(drive, src){
   const sb={
     DriveApp:{getFolderById:id=>{if(id!==ROOTID)throw new Error('no folder');return drive.root;},
               getFileById:id=>drive.byId[id]},
-    Utilities:{base64Decode:x=>Buffer.from(x,'base64'),base64Encode:b=>Buffer.from(b).toString('base64'),
+    Utilities:{ ...require('./gsdigest.cjs'),base64Decode:x=>Buffer.from(x,'base64'),base64Encode:b=>Buffer.from(b).toString('base64'),
                newBlob:(bytes,ct,name)=>({bytes,ct,name})},
     ContentService:{MimeType:{JSON:'json'},createTextOutput:s=>({setMimeType:()=>JSON.parse(s)})},
     Logger:{log:()=>{}},

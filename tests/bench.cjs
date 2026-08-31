@@ -55,7 +55,7 @@ function mkDrive() {
   const sb = {
     DriveApp: { getFolderById: id => { tick('getFolderById'); return root; },
                 getFileById: id => { tick('getFileById'); return byId[id]; } },
-    Utilities: { base64Decode: s => Buffer.from(s, 'base64'), base64Encode: b => Buffer.from(b).toString('base64'),
+    Utilities: { ...require('./gsdigest.cjs'), base64Decode: s => Buffer.from(s, 'base64'), base64Encode: b => Buffer.from(b).toString('base64'),
                  newBlob: (bytes, ct, name) => ({ bytes, ct, name }) },
     ContentService: { MimeType: { JSON: 'json' }, createTextOutput: s => ({ setMimeType: () => s }) },
     Logger: { log: () => {} },
