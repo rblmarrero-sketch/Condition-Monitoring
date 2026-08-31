@@ -206,6 +206,43 @@ function saveOne_(b, dirs) {
      ever. */
   var out = { ok: true, req: b.name, id: f.getId(), name: f.getName(), url: f.getUrl(), folder: dir.getName() };
 
+  /* THE RECEIPT — mirrored field for field from docs/yandex/function.js.
+
+     This backend is retired and is never deployed. It is kept in step for one
+     reason: two backends for one document have to agree about what a record
+     IS, so a backend that is ever switched back on cannot silently disagree
+     about the shape of a receipt the phone has learned to judge itself by.
+
+     VERIFY AFTER STORAGE, NOT BEFORE. A receipt computed from the request body
+     is a receipt for the request: it says the bytes arrived at this script, and
+     nothing about whether they reached the folder, or reached it whole. So the
+     file is read back and the figures are measured from what Drive returned —
+     the only reading that can contradict the phone, and therefore the only one
+     worth sending it. */
+  var storedSize = null, storedSha = '', verifyError = '';
+  try {
+    var back = f.getBlob().getBytes();
+    if (!back) verifyError = 'stored file could not be read back';
+    else { storedSize = back.length; storedSha = sha256Hex_(back); }
+  } catch (errV) { verifyError = 'read-after-write failed: ' + String(errV.message || errV); }
+  var wantSha = '';
+  try { wantSha = sha256Hex_(Utilities.base64Decode(b.file)); } catch (errW) {}
+  if (!verifyError && wantSha && storedSha !== wantSha) {
+    verifyError = 'stored bytes do not match what was sent';
+  }
+  out.receipt = {
+    receiptId:    'r' + sha256Hex_(strBytes_(f.getId() + ':' + (storedSha || wantSha))).slice(0, 24),
+    attachmentId: String(b.aid || ''),
+    inspectionId: String(b.inspectionId || ''),
+    objectId:     f.getId(),
+    byteSize:     storedSize,
+    sha256:       storedSha,
+    at:           new Date().toISOString(),
+    duplicate:    false,
+    verified:     !verifyError
+  };
+  if (verifyError) out.receipt.error = verifyError;
+
   /* The round is on Drive; now make it findable without anyone having to open
      it. This is the only place a record enters the folder, and the JSON is
      already decoded in `blob` — so the index is maintained for the cost of the
@@ -355,6 +392,28 @@ function saveEdit_(b) {
    clash still overwrites. Everything uploaded from here on is tagged.
    ──────────────────────────────────────────────────────────────────────────*/
 function cleanDev_(v) { return String(v || '').replace(/[^A-Za-z0-9_-]/g, '').slice(0, 12); }
+/* SHA-256 as lower-case hex.
+
+   Utilities.computeDigest returns SIGNED bytes — anything over 127 comes back
+   negative — so each has to be folded back into 0..255 before it is written as
+   hex. Getting that wrong produces a hash that is the right length, looks
+   entirely plausible, and matches nothing: the exact shape of defect this
+   receipt exists to catch. */
+function sha256Hex_(bytes) {
+  var d = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, bytes);
+  var out = '';
+  for (var i = 0; i < d.length; i++) {
+    var v = d[i] < 0 ? d[i] + 256 : d[i];
+    out += (v < 16 ? '0' : '') + v.toString(16);
+  }
+  return out;
+}
+/* A string as UTF-8 bytes, for hashing an identifier rather than a file. */
+function strBytes_(s) {
+  var out = [], i, c;
+  for (i = 0; i < s.length; i++) { c = s.charCodeAt(i); out.push(c < 128 ? c : 63); }
+  return out;
+}
 function isSidecar_(name) {
   return /\.json$/i.test(name) && !/\.(edit|deleted|conflict)\.json$/i.test(name);
 }

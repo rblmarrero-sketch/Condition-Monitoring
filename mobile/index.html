@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=220">
+<link rel="manifest" href="manifest.webmanifest?v=221">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=220">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=220">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=220">
+<link rel="apple-touch-icon" href="icon-192.png?v=221">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=221">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=221">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1970,31 +1970,31 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=220"></script>
-<script src="upload-defaults.js?v=220"></script>
-<script src="hme.js?v=220"></script>
-<script src="mp-fc.js?v=220"></script>
-<script src="hme-cascade.js?v=220"></script>
-<script src="assets.js?v=220"></script>
-<script src="temp-limits.js?v=220"></script>
-<script src="normalize.js?v=220"></script>
-<script src="due.js?v=220"></script>
-<script src="wear.js?v=220"></script>
-<script src="wear-figs.js?v=220"></script>
-<script src="wear-map.js?v=220"></script>
-<script src="machine-photos.js?v=220"></script>
-<script src="machine-fig.js?v=220"></script>
-<script src="get.js?v=220"></script>
-<script src="points.js?v=220"></script>
-<script src="uc-points.js?v=220"></script>
-<script src="inspect-guide.js?v=220"></script>
-<script src="get-figs.js?v=220"></script>
-<script src="body-points.js?v=220"></script>
-<script src="body-map.js?v=220"></script>
-<script src="lube.js?v=220"></script>
-<script src="lube-overrides.js?v=220"></script>
-<script src="lube2027.js?v=220"></script>
-<script src="report-core.js?v=220"></script>
+<script src="native.js?v=221"></script>
+<script src="upload-defaults.js?v=221"></script>
+<script src="hme.js?v=221"></script>
+<script src="mp-fc.js?v=221"></script>
+<script src="hme-cascade.js?v=221"></script>
+<script src="assets.js?v=221"></script>
+<script src="temp-limits.js?v=221"></script>
+<script src="normalize.js?v=221"></script>
+<script src="due.js?v=221"></script>
+<script src="wear.js?v=221"></script>
+<script src="wear-figs.js?v=221"></script>
+<script src="wear-map.js?v=221"></script>
+<script src="machine-photos.js?v=221"></script>
+<script src="machine-fig.js?v=221"></script>
+<script src="get.js?v=221"></script>
+<script src="points.js?v=221"></script>
+<script src="uc-points.js?v=221"></script>
+<script src="inspect-guide.js?v=221"></script>
+<script src="get-figs.js?v=221"></script>
+<script src="body-points.js?v=221"></script>
+<script src="body-map.js?v=221"></script>
+<script src="lube.js?v=221"></script>
+<script src="lube-overrides.js?v=221"></script>
+<script src="lube2027.js?v=221"></script>
+<script src="report-core.js?v=221"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2558,6 +2558,7 @@ const I18N = {
      file — the only state in this app that is about the folder rather than
      about the conversation that filled it. */
   up_conf:"Confirmed on the server — {n} file(s) listed",
+  up_verif:"Verified byte for byte — the store read back all {n} file(s)",
   up_short:"Sent, but the server is missing {n} of {of} files",
     up_sending:"Sending now",
     up_err:"Needs attention",
@@ -3005,6 +3006,7 @@ const I18N = {
     up_missing:"ждёт {d}",
     up_rec:"Данные отправлены — фото ещё идут",
   up_conf:"Подтверждено сервером — файлов: {n}",
+  up_verif:"Проверено побайтно — хранилище перечитало все файлы: {n}",
   up_short:"Отправлено, но на сервере нет {n} из {of} файлов",
     up_sending:"Идёт отправка",
     up_err:"Требует внимания",
@@ -8975,7 +8977,27 @@ async function renderPending(){
          there — which is a different problem from a failed upload, and needs
          different work, so it gets its own sentence rather than being folded
          into an error. */
+      /* THE STRONGEST THING THAT CAN HONESTLY BE SAID, WHEN IT CAN BE.
+
+         Three different facts, and they were collapsing into one word:
+
+           accepted  the endpoint took the request
+           listed    the folder was asked later and the name was in it
+           verified  the store read its own object back and reported a size
+                     and a hash that match the bytes this phone sent
+
+         Only the third rules out a truncated upload — and a photograph cut off
+         by a dying link lists perfectly well under its own name at a size
+         nobody compared. So it gets its own sentence, above the other two,
+         rather than being folded into "confirmed". */
       const c=rec.conf;
+      try{
+        if (evidenceLevel(rec) >= EV_VERIFIED) {
+          const n = attList(rec).length;
+          return { k:"ok", txt:t("up_verif", { n:n })
+            + (rec.upAt ? " · " + t("up_at", { t:String(rec.upAt).slice(0,16).replace("T"," ") }) : "") };
+        }
+      }catch(e){}
       if (c && c.of && c.n === c.of)
         return { k:"ok", txt:t("up_conf", { n:c.of }) + " · "
           + t("up_at", { t:String(c.at||"").slice(0,16).replace("T"," ") }) };
@@ -9961,7 +9983,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="220";
+const BUILD="221";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -10522,14 +10544,36 @@ async function confirmRun(done, dests){
     let have;
     try{ have=await serverNames(dest, folder); }
     catch(e){ continue; }        // unanswered is not "missing" — say nothing
-    for(const {rec, names} of group){
+    for(const {rec, names, sizes} of group){
       const missing=names.filter(n=>!have.has(n));
+      /* NOT MERELY "NOT ZERO".
+
+         A photograph cut off by a dying link is not empty — it is 40 KB of a
+         4 MB file, and it lists under its own name looking exactly like a
+         healthy one. Checking only for zero passed every truncation there has
+         ever been, and the round then said "Confirmed on the server".
+
+         So where this phone knows how many bytes it sent, the listed size is
+         compared against that. Where it does not — a round captured by an
+         older build, or a file whose wire size was never recorded — the old
+         test still applies and nothing is claimed beyond it. A size that
+         cannot be compared produces no finding, because a guard that cries
+         wolf is the noise a real failure hides in. */
+      const want=sizes||{};
+      const short=names.filter(n=>{
+        if(!have.has(n)) return false;
+        const w=Number(want[n]||0);
+        return w>0 && Number(have.get(n))!==w;
+      });
       const empty=names.filter(n=>have.has(n) && have.get(n)===0);
       const fresh=await dbGet(rec.id);
       if(!fresh || (fresh.rev||0)!==(rec.rev||0)) continue;   // edited under us
+      /* A file the store holds at the wrong length counts against the round
+         exactly as a missing one does — it is evidence that is not there. */
+      const bad=missing.concat(empty).concat(short);
       fresh.conf={ at:new Date().toISOString(), of:names.length,
-                   n:names.length-missing.length-empty.length,
-                   miss:missing.concat(empty).slice(0,8), dest:dest.id };
+                   n:names.length-bad.length,
+                   miss:bad.slice(0,8), dest:dest.id };
       await dbPut(fresh);
       /* This phone has now demonstrated that it CAN ask the store what it
          holds. Until it has, the absence of a confirmation says nothing about
@@ -10737,20 +10781,31 @@ function photosOf(p){ const ph=p.photos||(p.photoBlob?[p.photoBlob]:[]); return 
                           phone's manifest, for every attachment
      4  in the office     the dashboard has resolved every attachment by id
 
-   Three and four are not reachable yet: the backend issues no receipt and the
-   dashboard does not yet match on id. The manifest already carries the fields
-   they will fill - serverReceiptId, serverByteSize, serverSha256,
-   dashboardConfirmedAt - deliberately absent rather than guessed at. Because
-   this reads the manifest instead of hard-coding a policy, the day the server
-   starts answering, the phone gets stricter on its own. */
+   Rung three is reachable now. The backend does issue receipts — it stores the
+   object, READS IT BACK, and reports the size and hash it measured from what
+   the store returned, so the figure can contradict the phone rather than merely
+   echo it. What kept the rung unreachable was on this end and was arithmetic:
+   the comparison was against e.sha256, the hash of the photograph this phone
+   HOLDS, while maybeShrink() re-encodes it before sending. For every real
+   field photograph the server was hashing different bytes, so "verified" could
+   never once have been true. It is judged against the wire hash now — the
+   bytes that actually left — which is the only number a receipt is about.
+
+   Rung four still is not: the dashboard does not yet match on id, and
+   dashboardConfirmedAt is deliberately absent rather than guessed at. */
 const EV_NONE=0, EV_SENT=1, EV_LISTED=2, EV_VERIFIED=3, EV_OFFICE=4;
 function evidenceLevel(rec){
   if(!rec) return EV_NONE;
   const atts=(()=>{ try{ return attList(rec); }catch(e){ return []; } })();
   const every=f=>atts.length>0 && atts.every(f);
   if(every(e=>!!e.dashboardConfirmedAt)) return EV_OFFICE;
-  if(every(e=>e.serverSha256 && e.sha256 && e.serverSha256===e.sha256
-            && Number(e.serverByteSize)===Number(e.byteSize))) return EV_VERIFIED;
+  /* Against what was SENT, never against what is held — and never falling back
+     to the stored hash when the wire hash is missing. A fallback would make
+     "verified" mean two different things depending on whether a photograph was
+     small enough to escape shrinking, which is precisely the kind of quietly
+     conditional truth this ladder exists to prevent. No wire hash, no verdict. */
+  if(every(e=>e.serverSha256 && e.wireSha256 && e.serverSha256===e.wireSha256
+            && Number(e.serverByteSize)===Number(e.wireByteSize))) return EV_VERIFIED;
   const c=rec.conf;
   if(c && c.of && c.n===c.of) return EV_LISTED;
   if(rec.up || Object.keys(rec.upTo||{}).length>0) return EV_SENT;
@@ -10878,6 +10933,11 @@ function attSettle(rec,payload,sent,dests,err){
     const e=f.aid && by[f.aid]; if(!e) continue;
     e.uploadAttempts=(Number(e.uploadAttempts)||0)+1;
     e.lastAttemptAt=at;
+    /* What went on the wire for this attempt — see the payload build. Written
+       whether or not the attempt succeeded, because it describes the request,
+       not its outcome, and a receipt for a failed-looking attempt still has to
+       be judged against the right bytes. */
+    if(f.wireSha){ e.wireSha256=f.wireSha; e.wireByteSize=Number(f.wireSize)||0; }
     const all=(dests||[]).length>0 && dests.every(d=>(((sent||{})[d.id])||{})[f.name]);
     if(all){ e.uploadState="sent"; e.lastError=""; }
     else { e.uploadState="pending"; if(err) e.lastError=String(err).slice(0,200); }
@@ -11057,9 +11117,25 @@ async function syncNow(manual){
           payload=[{name:`${rec.equip}_${ddmmyyyy(rec.date)}_${rec.type}.json`,
                     blob:new Blob([JSON.stringify(meta,null,2)],{type:"application/json"}),
                     type:"application/json"}];
-          for(const f of await filesForRecord(rec))
-            payload.push({name:f.name, blob:await maybeShrink(f.blob,f.name),
-                          type:f.blob.type, aid:f.aid||""});
+          for(const f of await filesForRecord(rec)){
+            /* THE BYTES THAT ACTUALLY LEAVE, HASHED AS THEY LEAVE.
+
+               attNote() hashes the photograph this phone HOLDS. maybeShrink()
+               then re-encodes it at photoPx() before sending, so for every
+               real field photograph the server hashes different bytes — and
+               evidenceLevel's "verified" rung, which compares the receipt
+               against e.sha256, could never once have matched. The rung was
+               written, the backend does issue receipts, and the comparison was
+               against the wrong number, for ever, silently.
+
+               Two different facts, so two fields. e.sha256 stays what this
+               phone holds — that is what a local integrity check needs. The
+               wire hash is what the receipt can be judged against, and only
+               the wire hash. */
+            const wire=await maybeShrink(f.blob,f.name);
+            payload.push({name:f.name, blob:wire, type:f.blob.type, aid:f.aid||"",
+                          wireSha:await sha256Of(wire), wireSize:wire.size});
+          }
         }catch(e){ lastErr="Could not read "+rec.equip+": "+(e.message||e); continue; }
       }
       const errs=[];
@@ -11135,7 +11211,10 @@ async function syncNow(manual){
            The names are taken from the payload actually sent rather than
            rebuilt afterwards, because rebuilding is how the two lists come to
            disagree about what was supposed to be there. */
-        if(fresh.up && payload) justDone.push({rec:fresh, names:payload.map(f=>f.name)});
+        if(fresh.up && payload) justDone.push({rec:fresh, names:payload.map(f=>f.name),
+          /* What each file weighed on the wire, so the read-back can compare a
+             length rather than only look for a name. */
+          sizes:payload.reduce((m,f)=>{ if(f.wireSize) m[f.name]=f.wireSize; return m; },{})});
       }
       if(errs.length) lastErr=errs.join(" · ");
       if(todo.length) netSeen(progressed);          // evidence, not navigator.onLine
