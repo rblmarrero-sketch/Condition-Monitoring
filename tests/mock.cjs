@@ -131,6 +131,33 @@ http.createServer((req, res) => {
                    id: 'r' + i, updated: 7000000 + i, size: 400,
                    json: sidecar(unit, date, ty, 'C') });
     }
+    /* A ROUND SHAPED LIKE TK115: photographs on a point with NO KEY.
+
+       This is the case the correction panel exists for and the case its counts
+       got wrong, so a fixture has to be able to make it. The files are named
+       the way the folder really names them for a keyless point — unit, then a
+       bare dot, then the date and type — because the whole defect was a
+       resolver that could not find files under exactly that pattern.
+
+       ?keyless=TK115,2026-08-05,TB,6,have   files present, nothing missing
+       ?keyless=TK900,2026-08-05,TB,3,none   files absent, genuinely missing */
+    const kl = u.searchParams.get('keyless');
+    if (kl) {
+      const [unit, date, ty, nRaw, mode] = kl.split(',');
+      const n = Number(nRaw) || 1;
+      const dd = date.split('-').reverse().join('.');
+      const i = FILES.length;
+      const side = { type: 'cm-inspection-entries', version: 2, records: [{
+        equipment: unit, equip: unit, date: date, type: ty, cls: 'HT', by: 'R. Marrero',
+        smu: '5000', items: [{ key: '', label: '', grade: 'C', photos: n, video: 0 }] }] };
+      FILES.push({ name: `${unit}_${dd}_${ty}.json`, id: 'k' + i,
+                   updated: 7500000 + i, size: 400, json: side });
+      if (mode !== 'none') {
+        for (let x = 1; x <= n; x++)
+          FILES.push({ name: `${unit}._${dd}_${ty}_${x}.jpg`, id: 'kp' + i + '_' + x,
+                       updated: 7500000 + i, size: 90000 });
+      }
+    }
     if (u.searchParams.get('add')) {                      // a phone uploads one more
       const i = 900 + Number(u.searchParams.get('add'));
       FILES.push({ name: `TK${i}_31.07.2026_MP.json`, id: 'j' + i, updated: 9000000 + i, size: 400,

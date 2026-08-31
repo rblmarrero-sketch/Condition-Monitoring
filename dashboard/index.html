@@ -2878,27 +2878,27 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=222"></script>
-<script src="../mobile/hme.js?v=222"></script>
-<script src="../mobile/mp-fc.js?v=222"></script>
-<script src="../mobile/hme-cascade.js?v=222"></script>
-<script src="../mobile/temp-limits.js?v=222"></script>
+<script src="../data/magnetic_plug.js?v=224"></script>
+<script src="../mobile/hme.js?v=224"></script>
+<script src="../mobile/mp-fc.js?v=224"></script>
+<script src="../mobile/hme-cascade.js?v=224"></script>
+<script src="../mobile/temp-limits.js?v=224"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=222"></script>
-<script src="../mobile/normalize.js?v=222"></script>
-<script src="../mobile/due.js?v=222"></script>
-<script src="../mobile/wear.js?v=222"></script>
-<script src="../mobile/wear-map.js?v=222"></script>
-<script src="../mobile/lube.js?v=222"></script>
-<script src="../mobile/lube-overrides.js?v=222"></script>
-<script src="../mobile/lube2027.js?v=222"></script>
-<script src="../mobile/lube-tds.js?v=222"></script>
+<script src="../mobile/assets.js?v=224"></script>
+<script src="../mobile/normalize.js?v=224"></script>
+<script src="../mobile/due.js?v=224"></script>
+<script src="../mobile/wear.js?v=224"></script>
+<script src="../mobile/wear-map.js?v=224"></script>
+<script src="../mobile/lube.js?v=224"></script>
+<script src="../mobile/lube-overrides.js?v=224"></script>
+<script src="../mobile/lube2027.js?v=224"></script>
+<script src="../mobile/lube-tds.js?v=224"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=222"></script>
-<script src="../mobile/machine-photos.js?v=222"></script>
+<script src="../mobile/upload-defaults.js?v=224"></script>
+<script src="../mobile/machine-photos.js?v=224"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -2907,17 +2907,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=222"></script>
-<script src="../mobile/get.js?v=222"></script>
-<script src="../mobile/points.js?v=222"></script>
-<script src="../mobile/uc-points.js?v=222"></script>
-<script src="../mobile/inspect-guide.js?v=222"></script>
-<script src="../mobile/get-figs.js?v=222"></script>
-<script src="../mobile/body-points.js?v=222"></script>
-<script src="../mobile/body-map.js?v=222"></script>
-<script src="../mobile/jspdf.umd.min.js?v=222"></script>
-<script src="../mobile/html2canvas.min.js?v=222"></script>
-<script src="../mobile/report-core.js?v=222"></script>
+<script src="../mobile/machine-fig.js?v=224"></script>
+<script src="../mobile/get.js?v=224"></script>
+<script src="../mobile/points.js?v=224"></script>
+<script src="../mobile/uc-points.js?v=224"></script>
+<script src="../mobile/inspect-guide.js?v=224"></script>
+<script src="../mobile/get-figs.js?v=224"></script>
+<script src="../mobile/body-points.js?v=224"></script>
+<script src="../mobile/body-map.js?v=224"></script>
+<script src="../mobile/jspdf.umd.min.js?v=224"></script>
+<script src="../mobile/html2canvas.min.js?v=224"></script>
+<script src="../mobile/report-core.js?v=224"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -3272,7 +3272,10 @@ const I18N={
   op_done_point:"assigned to {p}", op_done_gen:"general evidence",
   op_todo:"needs a point",
   op_saved:"✅ {n} photograph(s) assigned.",
-  op_nofile:"Not downloaded yet — the file has not reached this dashboard.",
+  /* Three absences, three sentences. This one used to cover all of them. */
+  op_nofile:"Never arrived — the store does not hold this file.",
+  op_fetching:"On the server — fetching the picture…",
+  op_loading:"received · picture still loading",
   op_open:"Assign photos",
   op_missing:"Photo file not received",
   op_title_miss:"Missing photo files",
@@ -3963,7 +3966,9 @@ const I18N={
   op_done_point:"назначено: {p}", op_done_gen:"общий материал",
   op_todo:"нужна точка",
   op_saved:"✅ Назначено фотографий: {n}.",
-  op_nofile:"Ещё не загружено — файл не дошёл до этой панели.",
+  op_nofile:"Не поступил — в хранилище этого файла нет.",
+  op_fetching:"Есть на сервере — загружаем изображение…",
+  op_loading:"получено · изображение ещё загружается",
   op_open:"Назначить фото",
   op_missing:"Файл фото не получен",
   op_title_miss:"Нет файлов фотографий",
@@ -6316,12 +6321,29 @@ function generalMedia(rec){
    Expected is a claim the phone made; received is a file somebody can open.
    They were one number once, and a report that silently prints four pictures
    where six were taken tells a reader nothing is missing. */
+/* WHAT THE OFFICE HAS, WHICH IS NOT WHAT THIS TAB HAS DOWNLOADED.
+
+   The third place this same mistake was made, and the worst of the three,
+   because it is the one that goes on paper: this counted mediaAll(), the cache
+   filled lazily as thumbnails scroll into view. So a report generated on a
+   freshly loaded page declared "6 of 6 photographs taken on this round have not
+   reached the office" — printed, signed and filed — about photographs sitting
+   in the folder the whole time.
+
+   The claim on the footer is about the OFFICE, so it is measured against what
+   the store holds. serverMediaOf() is that measurement, and it is now the only
+   one: the sync tiles, the correction panel and this all ask it. */
 function evidenceGap(rec){
   let expected=0, received=0;
   (rec.items||[]).forEach(i=>{
     const n=window.CMNorm ? CMNorm.explain(i).photos : 0;
+    if(!n) return;
     expected+=n;
-    received+=mediaAll(i,rec).filter(m=>m.kind!=="video").length;
+    /* Capped at the claim: a folder holding a stray extra file must not make a
+       round read as more-than-complete and cancel out a genuine shortfall
+       somewhere else on the same document. */
+    const held=serverMediaOf(i,rec).filter(m=>m.kind!=="video").length;
+    received+=Math.min(held, n);
   });
   return { expected, received, missing:Math.max(0, expected-received) };
 }
@@ -7980,8 +8002,38 @@ function orphanPhotos(rec){
        photograph taken off the record entirely is different - that is not a
        decision waiting to be made - so `hidden` still applies. */
     const hid=hiddenSet(i);
+    /* WHAT THE FOLDER HOLDS, NOT WHAT THIS TAB HAS DOWNLOADED.
+
+       This enumerated from mediaAll(), which can only name a photograph once
+       its bytes are in folderPhotos — and folderPhotos is filled lazily, by
+       scrolling a thumbnail into view. So on a freshly loaded page it was
+       empty, every real file was invisible to this panel, and the loop below
+       filled the round out with placeholders: "#1 … #6", unnamed, no picture,
+       under the heading "Evidence incomplete — photo file missing".
+
+       The folder held all six the whole time. serverMediaOf() — the same
+       resolver the sync tab counts with — found every one of them by name on
+       the very same page render. Two reconciliations of one fact, and the one
+       the engineer was reading was the one that had never asked the server.
+
+       So the roll is taken from the folder, and a downloaded picture is
+       attached to it where there is one. A file the store holds and this tab
+       has not yet fetched is RECEIVED and awaiting a thumbnail; it is not
+       missing, and it must never be counted as a placeholder. */
     const med=mediaAll(i,rec).filter(m=>!hid.has(m.name));
-    med.forEach(m=>out.push({name:m.name, src:m.src, it:i, a:a[m.name]||null}));
+    const pic=new Map(med.map(m=>[m.name,m.src]));
+    const srv=(typeof serverMediaOf==="function" ? serverMediaOf(i,rec) : [])
+      .filter(m=>m && m.name && !hid.has(m.name));
+    const roll=[];
+    const seenN=new Set();
+    srv.forEach(m=>{ if(seenN.has(m.name)) return; seenN.add(m.name);
+      roll.push({name:m.name, src:pic.get(m.name)||null}); });
+    /* Anything this tab has bytes for that the index did not name — a file
+       downloaded before the index arrived — still belongs on the roll. */
+    med.forEach(m=>{ if(seenN.has(m.name)) return; seenN.add(m.name);
+      roll.push({name:m.name, src:m.src}); });
+    roll.forEach(m=>out.push({name:m.name, src:m.src, it:i, a:a[m.name]||null,
+                              onServer:1}));
     /* ALL OF THEM, NOT THE ONES THAT HAPPENED TO ARRIVE.
 
        This used to return the moment ANY file matched, so a point claiming six
@@ -7999,7 +8051,9 @@ function orphanPhotos(rec){
        round from before build 209 still gets the placeholder, because there is
        genuinely nothing to call it. */
     const n=window.CMNorm?CMNorm.explain(i).photos:0;
-    const have=new Set(med.map(m=>m.name));
+    /* The roll, not the downloads — otherwise a file the store holds would be
+       counted as still outstanding and get a placeholder beside itself. */
+    const have=new Set(roll.map(m=>m.name));
     const named=attOf(i).map(attName).filter(Boolean);
     let ph=0;
     for(let x=0;x<n;x++){
@@ -8008,8 +8062,8 @@ function orphanPhotos(rec){
               out.push({name:nm, src:null, it:i, a:a[nm]||null}); continue; }
       /* No manifest: nothing to call it but a placeholder, and only for the
          shortfall the claim says is still outstanding. */
-      if(med.length + ph >= n) break;
-      const pn=(i.key||"")+"#"+(++ph + med.length);
+      if(roll.length + ph >= n) break;
+      const pn=(i.key||"")+"#"+(++ph + roll.length);
       out.push({name:pn, src:null, it:i, a:a[pn]||null, unnamed:1});
     }
   });
@@ -8030,22 +8084,57 @@ function orphanPhotos(rec){
    Two of these states can be acted on: VIEWABLE (a file is here and nobody has
    filed it) and the already-filed states, which can be changed. MISSING cannot,
    and its controls are disabled rather than merely discouraged. */
-const PH_MISSING="missing", PH_VIEWABLE="viewable",
+/* FIVE STATES, BECAUSE THERE ARE FIVE THINGS THAT CAN BE TRUE.
+
+   There were four, and the first of them answered two different questions with
+   one word. "No src" meant PH_MISSING — "expected, never received" — but src
+   is a blob URL filled in lazily, when a thumbnail is scrolled into view. So a
+   photograph sitting in the folder, named, hashed and receipted, read as NEVER
+   RECEIVED until somebody happened to look at it.
+
+   That is what put "ten photo files missing · TK115 six expected, zero
+   received" on the same page as "314 of 314 received, every attachment
+   accounted for". Both were computed from the same records, seconds apart, and
+   the difference between them was entirely whether the answer came from the
+   folder or from this browser's scroll position.
+
+   PH_LOADING is the missing rung: the store holds it, this tab has not fetched
+   the picture yet. It counts as RECEIVED — because it is — and it is not
+   assignable, because you cannot classify a photograph you cannot see. */
+const PH_MISSING="missing", PH_LOADING="loading", PH_VIEWABLE="viewable",
       PH_POINT="point", PH_GENERAL="general";
 function photoState(p){
-  if(!p.src) return PH_MISSING;                 // expected, never received
+  /* A DECISION SOMEBODY MADE OUTRANKS WHETHER THE PICTURE HAPPENS TO BE ON
+     SCREEN. This asked about src first, so a photograph already filed against
+     a point reverted to "missing" on any page that had not downloaded it —
+     the assignment rendered as nothing, which is the same defect again. */
   if(p.a && p.a.general) return PH_GENERAL;
   if(p.a && p.a.point)   return PH_POINT;
-  return PH_VIEWABLE;                           // received, needs assignment
+  if(p.src)      return PH_VIEWABLE;             // received, and classifiable now
+  if(p.onServer) return PH_LOADING;              // received; picture not fetched yet
+  return PH_MISSING;                             // expected, never received
 }
-const photoActionable = p => photoState(p)!==PH_MISSING;
+/* RECEIVED is about the folder. ACTIONABLE is about this screen. They were one
+   test and they are not one question: a file the store holds is received even
+   while its thumbnail is still coming, and it cannot be assigned until it can
+   be seen — "enable selection only when each image can be displayed". */
+const photoReceived   = p => photoState(p)!==PH_MISSING;
+const photoActionable = p => { const st=photoState(p);
+  return st!==PH_MISSING && st!==PH_LOADING; };
 /* The four numbers that were one number. */
 function photoTally(rec){
   const all=orphanPhotos(rec);
   const missing=all.filter(p=>photoState(p)===PH_MISSING).length;
   const received=all.length-missing;
   const needs=all.filter(p=>photoState(p)===PH_VIEWABLE).length;
-  return { expected:all.length, received, missing, needs };
+  const loading=all.filter(p=>photoState(p)===PH_LOADING).length;
+  /* expected = received + missing, and received = assigned + general + awaiting
+     + still-loading. Stated as an identity rather than left to be inferred,
+     because the whole failure was two of these being added up differently in
+     two places. */
+  const assigned=all.filter(p=>{ const st=photoState(p);
+    return st===PH_POINT||st===PH_GENERAL; }).length;
+  return { expected:all.length, received, missing, needs, loading, assigned };
 }
 /* A record is only WAITING ON A HUMAN when a received photograph has nowhere to
    be. A missing file is waiting on the sync pipeline, which is a different
@@ -8098,6 +8187,9 @@ function openOrphan(rk){
   renderOrphan();
   $("opOv").classList.remove("hidden");
 }
+/* One fetch pass at a time — see renderOrphan. Without this the redraw at the
+   end of a pass starts another one, for ever. */
+let opFetching=0;
 function renderOrphan(){
   const rec=RECS.find(r=>ekOf(r)===opKey); if(!rec){ closeOrphan(); return; }
   const all=orphanPhotos(rec), left=all.filter(p=>!p.a).length;
@@ -8125,6 +8217,35 @@ function renderOrphan(){
   });
   $("opLast").textContent = nothingHere
     ? t("op_last",{t: opLastCheck ? opLastCheck : t("op_never")}) : "";
+  /* AND FETCH WHAT THE STORE HOLDS, SO A DECISION CAN ACTUALLY BE MADE.
+
+     A photograph that is received but not on screen cannot be classified —
+     that rule is right and it is why PH_LOADING is not assignable. But leaving
+     it there would be a panel that names ten photographs and offers nothing to
+     do about any of them. So the pictures this round is waiting on are pulled
+     in the background, once, and the grid redraws as they land.
+
+     Bounded, sequential, and only for files the index says exist: this runs on
+     a satellite link, and a burst of parallel fetches for a round with forty
+     photographs is how the office loses the whole panel to a stall. */
+  if(!opFetching){
+    const want=all.filter(x=>photoState(x)===PH_LOADING).map(x=>x.name).slice(0,24);
+    if(want.length){
+      opFetching=1;
+      (async()=>{
+        let got=0;
+        for(const nm of want){
+          if(opKey!==ekOf(rec)) break;             // the panel moved on
+          try{
+            const u=await (window.CMDrive&&CMDrive.fetchByName?CMDrive.fetchByName(nm):null);
+            if(u){ folderPhotos[nm]=u; got++; }
+          }catch(e){}
+        }
+        opFetching=0;
+        if(got && opKey===ekOf(rec)) renderOrphan();
+      })();
+    }
+  }
   $("opGrid").innerHTML=all.map(p=>{
     const st=photoState(p), can=photoActionable(p);
     /* An excluded photograph is not "needs a point" — the decision about it has
@@ -8134,13 +8255,19 @@ function renderOrphan(){
                 : (p.a&&p.a.exclude) ? t("op_excluded")
                 : st===PH_GENERAL ? t("op_done_gen")
                 : st===PH_POINT   ? t("op_done_point",{p:(p.a&&p.a.point)||""})
+                : st===PH_LOADING ? t("op_loading")
                 :                   t("op_todo");
     const cls = st===PH_MISSING ? "gone"
               : (p.a&&p.a.exclude) ? "done"
+              : st===PH_LOADING ? "wait"
               : (st===PH_VIEWABLE ? "todo" : "done");
+    /* THREE DIFFERENT ABSENCES OF A PICTURE, AND THEY ARE NOT THE SAME NEWS.
+       On the server and still coming says wait; never arrived says chase it. */
     const thumb=p.src
       ? `<img class="th" src="${esc(p.src)}" alt="${esc(p.name)}" loading="lazy">`
-      : `<div class="nofile">${esc(t("op_nofile"))}</div>`;
+      : st===PH_LOADING
+        ? `<div class="nofile wait">${esc(t("op_fetching"))}</div>`
+        : `<div class="nofile">${esc(t("op_nofile"))}</div>`;
     return `<div class="opc${opSel.has(p.name)?" sel":""}${can?"":" off"}" data-op="${esc(p.name)}">
       <input type="checkbox" ${opSel.has(p.name)?"checked":""} ${can?"":"disabled"}
              aria-label="${esc(p.name)}">
@@ -11927,10 +12054,33 @@ function syncScan(){
          hide six missing photographs completely. The row says which it is, so
          the right person picks it up. */
       const tl=photoTally(r);
-      return tl.needs>0 || tl.missing>0;
+      /* THREE REASONS TO STAY ON THE LIST, NOT TWO.
+
+         `needs` counts photographs that are on screen and unassigned. `loading`
+         counts photographs the folder holds whose thumbnail this tab has not
+         fetched yet — and they need a person exactly as much: the picture
+         arriving is a rendering detail, the decision is not.
+
+         Left out, the two records that started all of this dropped silently
+         off the correction panel the moment their files were correctly
+         resolved — ten photographs still unassigned and nowhere to say so.
+         Fixing the count would have removed the work. */
+      return tl.needs>0 || tl.loading>0 || tl.missing>0;
     });
     if(orph.length && stillOpen) why.push("point");
-    if(why.length){ quar.push({r,why}); return; }
+    /* HELD IS NOT THE SAME AS ACCOUNTED FOR.
+
+       A record on hold used to return here, so its evidence was never counted
+       at all — not as expected, not as received, not as missing. A round whose
+       photographs genuinely never arrived AND whose point has no key was
+       therefore invisible to the sync tab twice over: absent from "waiting on
+       media" and absent from the totals it is measured against.
+
+       The hold is about the POINT KEY. It says a person has to classify the
+       photographs; it says nothing about whether the files are there. So the
+       record is listed as held and its evidence is still counted, because
+       those are two facts and the panel needs both. */
+    if(why.length) quar.push({r,why});
     if(r._void) return;
     const miss=[];
     (r.items||[]).forEach(i=>{
@@ -12579,8 +12729,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=222"></script>
-<script src="sync-adapter.js?v=222"></script>
-<script src="report.js?v=222"></script>
+<script src="drive.js?v=224"></script>
+<script src="sync-adapter.js?v=224"></script>
+<script src="report.js?v=224"></script>
 </body>
 </html>

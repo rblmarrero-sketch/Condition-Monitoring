@@ -170,6 +170,54 @@ const lineOf = (p, unit) => p.evaluate(async u => {
      'a round with no record of what it sent is not called verified, even when the stored hash matches',
      'evidence level ' + old.level);
 
+  console.log('\n4b. THE SAME NAME WITH DIFFERENT BYTES IS NOT THE SAME FILE');
+  /* The case a name-based check can never catch, and the reason the receipt
+     carries a hash at all: something else wrote to that name — another phone,
+     a re-upload of a different photograph, a partial overwrite. The store's
+     object is the right LENGTH and the wrong PICTURE. Only the hash says so. */
+  const swapped = await p.evaluate(async () => {
+    const r = (await dbAll()).find(x => x.equip === 'TK960');
+    let first = null;
+    for (const [k, pos] of positionsOf(r)) {
+      const m = attMap(pos); if (!m) continue;
+      for (const aid of Object.keys(m)) {
+        const e = m[aid];
+        if (!first) first = e;
+        /* Put everything back to a verified state first, so the only thing
+           this case changes is the hash. */
+        e.wireSha256 = e.wireSha256 || 'aa'; e.wireByteSize = e.wireByteSize || 10;
+        e.serverSha256 = e.wireSha256; e.serverByteSize = e.wireByteSize;
+      }
+    }
+    await dbPut(r);
+    const before = evidenceLevel((await dbAll()).find(x => x.equip === 'TK960'));
+    /* Same size, different content. */
+    first.serverSha256 = 'cafebabe'.repeat(8);
+    await dbPut(r);
+    const after = evidenceLevel((await dbAll()).find(x => x.equip === 'TK960'));
+    return { before, after, size: first.serverByteSize, want: first.wireByteSize };
+  });
+  ok(swapped.before >= 3, 'the round verifies while the hashes agree',
+     'level ' + swapped.before);
+  ok(swapped.after < 3,
+     '  and stops the moment the store holds different bytes under the same name',
+     'level ' + swapped.after + ', size unchanged at ' + swapped.size);
+
+  console.log('\n4c. LOCAL EVIDENCE IS KEPT UNTIL VERIFICATION SUCCEEDS');
+  /* Nothing anywhere may drop a photograph off the phone because an upload
+     returned 200. Checked as a property of the record after a full successful
+     sync: the blobs are still there, and so is every manifest entry. */
+  const kept = await p.evaluate(async () => {
+    const r = (await dbAll()).find(x => x.equip === 'TK960');
+    let blobs = 0;
+    for (const [k, pos] of positionsOf(r)) blobs += photosOf(pos).length;
+    return { up: r.up, blobs: blobs, atts: attList(r).length };
+  });
+  ok(kept.up === 1, 'the round has been fully sent', 'up=' + kept.up);
+  ok(kept.blobs === 2, '  and both photographs are still on the phone',
+     kept.blobs + ' blob(s)');
+  ok(kept.atts === 2, '  with their manifest intact', kept.atts + ' entr(ies)');
+
   console.log('\n5. THE LISTING CHECK COMPARES A LENGTH, NOT MERELY A NAME');
   const sizes = await p.evaluate(async () => {
     const r = (await dbAll()).find(x => x.equip === 'TK960');
