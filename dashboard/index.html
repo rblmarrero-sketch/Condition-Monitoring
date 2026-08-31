@@ -2878,27 +2878,27 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=226"></script>
-<script src="../mobile/hme.js?v=226"></script>
-<script src="../mobile/mp-fc.js?v=226"></script>
-<script src="../mobile/hme-cascade.js?v=226"></script>
-<script src="../mobile/temp-limits.js?v=226"></script>
+<script src="../data/magnetic_plug.js?v=227"></script>
+<script src="../mobile/hme.js?v=227"></script>
+<script src="../mobile/mp-fc.js?v=227"></script>
+<script src="../mobile/hme-cascade.js?v=227"></script>
+<script src="../mobile/temp-limits.js?v=227"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=226"></script>
-<script src="../mobile/normalize.js?v=226"></script>
-<script src="../mobile/due.js?v=226"></script>
-<script src="../mobile/wear.js?v=226"></script>
-<script src="../mobile/wear-map.js?v=226"></script>
-<script src="../mobile/lube.js?v=226"></script>
-<script src="../mobile/lube-overrides.js?v=226"></script>
-<script src="../mobile/lube2027.js?v=226"></script>
-<script src="../mobile/lube-tds.js?v=226"></script>
+<script src="../mobile/assets.js?v=227"></script>
+<script src="../mobile/normalize.js?v=227"></script>
+<script src="../mobile/due.js?v=227"></script>
+<script src="../mobile/wear.js?v=227"></script>
+<script src="../mobile/wear-map.js?v=227"></script>
+<script src="../mobile/lube.js?v=227"></script>
+<script src="../mobile/lube-overrides.js?v=227"></script>
+<script src="../mobile/lube2027.js?v=227"></script>
+<script src="../mobile/lube-tds.js?v=227"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=226"></script>
-<script src="../mobile/machine-photos.js?v=226"></script>
+<script src="../mobile/upload-defaults.js?v=227"></script>
+<script src="../mobile/machine-photos.js?v=227"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -2907,17 +2907,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=226"></script>
-<script src="../mobile/get.js?v=226"></script>
-<script src="../mobile/points.js?v=226"></script>
-<script src="../mobile/uc-points.js?v=226"></script>
-<script src="../mobile/inspect-guide.js?v=226"></script>
-<script src="../mobile/get-figs.js?v=226"></script>
-<script src="../mobile/body-points.js?v=226"></script>
-<script src="../mobile/body-map.js?v=226"></script>
-<script src="../mobile/jspdf.umd.min.js?v=226"></script>
-<script src="../mobile/html2canvas.min.js?v=226"></script>
-<script src="../mobile/report-core.js?v=226"></script>
+<script src="../mobile/machine-fig.js?v=227"></script>
+<script src="../mobile/get.js?v=227"></script>
+<script src="../mobile/points.js?v=227"></script>
+<script src="../mobile/uc-points.js?v=227"></script>
+<script src="../mobile/inspect-guide.js?v=227"></script>
+<script src="../mobile/get-figs.js?v=227"></script>
+<script src="../mobile/body-points.js?v=227"></script>
+<script src="../mobile/body-map.js?v=227"></script>
+<script src="../mobile/jspdf.umd.min.js?v=227"></script>
+<script src="../mobile/html2canvas.min.js?v=227"></script>
+<script src="../mobile/report-core.js?v=227"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -3261,7 +3261,7 @@ const I18N={
      may reasonably decide it belongs to the inspection as a whole rather than
      to any one point. Saying "inspection point not identified" over a
      photograph asks the wrong question. */
-  sy_w_photo:"Photo needs an inspection point",
+  sy_w_photo:"Photographs need component assignment",
   op_title:"Assign photographs", op_sub:"{u} · {d} · {t}",
   op_lead:"{n} photograph(s) here arrived without a component reference. Say which inspection point each one shows, or keep it as general evidence for the whole inspection. Nothing is deleted and nothing is guessed.",
   op_point:"Inspection point", op_find:"Search points…",
@@ -3315,7 +3315,7 @@ const I18N={
   sy_fix_photomiss:"This inspection expects photographs that have not reached the dashboard. The readings, condition and actions on it are unaffected and still count. Nothing can be assigned until the files arrive.",
   sy_quar_miss:"{n} photo file(s) missing",
   op_resolved:"Every photograph on this inspection is now assigned.",
-  sy_fix_photo:"This photo arrived without a component or inspection-point reference. Assign it to the correct point, or keep it as general inspection evidence.",
+  sy_fix_photo:"All photographs were received, but they are not linked to an inspection point. Open this inspection to assign each photograph to a component or keep it as general evidence.",
   /* The workload, not the record count. Two inspections on hold is a number
      nobody can plan against; ten photographs to classify is an afternoon. */
   sy_quar_hint:"{n} photo(s) need assignment", sy_quar_none:"Nothing to correct",
@@ -3956,7 +3956,7 @@ const I18N={
   sy_fix_type:"Нет типа обхода — телефон, который делал осмотр, должен отправить его заново.",
   sy_fix_point:"Точка осмотра не определена. Укажите нужный узел, прежде чем утверждать эту находку.",
   sy_fix_open:"Откройте для правки.",
-  sy_w_photo:"Фото без точки осмотра",
+  sy_w_photo:"Фотографиям нужна привязка к узлу",
   op_title:"Назначение фотографий", op_sub:"{u} · {d} · {t}",
   op_lead:"Фотографий без привязки к узлу: {n}. Укажите, какую точку осмотра показывает каждая, или оставьте как общий материал по осмотру. Ничего не удаляется и ничего не угадывается.",
   op_point:"Точка осмотра", op_find:"Поиск точек…",
@@ -4008,7 +4008,7 @@ const I18N={
   sy_fix_photomiss:"Этот осмотр ожидает фотографии, которые не дошли до панели. Замеры, состояние и действия по нему не затронуты и учитываются. Назначить что-либо можно будет после прихода файлов.",
   sy_quar_miss:"нет файлов фото: {n}",
   op_resolved:"Все фотографии этого осмотра назначены.",
-  sy_fix_photo:"Это фото пришло без привязки к узлу или точке осмотра. Назначьте его нужной точке или оставьте как общий материал по осмотру.",
+  sy_fix_photo:"Все фотографии получены, но не привязаны к точке осмотра. Откройте этот осмотр и назначьте каждую фотографию узлу либо оставьте как общий материал.",
   sy_quar_hint:"фото требуют назначения: {n}", sy_quar_none:"Исправлять нечего",
   sy_quar_rows:"осмотров требуют исправления: {n}",
   sy_quar_none_s:"В каждом осмотре указаны машина, дата, обход и точка, где сделана находка.",
@@ -12556,10 +12556,23 @@ function renderSync(){
             /* Missing evidence and unassigned evidence are different problems
                with different owners: one waits on the sync pipeline, the other
                on a reliability engineer. Saying "needs an inspection point"
-               over a file that never arrived sends the wrong person to it. */
-            const anyViewable = typeof unresolvedPhotos==="function"
-              && unresolvedPhotos(rec).length>0;
-            return anyViewable ? "photo" : "photomiss";
+               over a file that never arrived sends the wrong person to it.
+
+               RECEIVED, not DISPLAYED. This asked unresolvedPhotos(), which
+               counts only photographs whose thumbnail this tab has already
+               fetched — so on a freshly loaded page TK115's six files, all
+               present in the folder, counted as none and the row read
+               "Evidence incomplete — photo file missing" directly beneath a
+               panel reporting 10 of 10 received. The last surviving copy of
+               the defect this whole pass was about, in the sentence a reader
+               is most likely to act on.
+
+               photoTally asks the store. A round with photographs in the
+               folder needs a person to classify them; only a round with
+               nothing there is waiting on synchronisation. */
+            const tl = typeof photoTally==="function" ? photoTally(rec) : null;
+            if(!tl) return w;
+            return tl.received>0 ? "photo" : "photomiss";
           };
           return `<tr${canOpen?` class="hrow" tabindex="0" data-quargo="${esc(ekOf(r))}"`:""}>
           <td><b>${esc(r.equip||t("sy_blank"))}</b></td>
@@ -12767,8 +12780,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=226"></script>
-<script src="sync-adapter.js?v=226"></script>
-<script src="report.js?v=226"></script>
+<script src="drive.js?v=227"></script>
+<script src="sync-adapter.js?v=227"></script>
+<script src="report.js?v=227"></script>
 </body>
 </html>

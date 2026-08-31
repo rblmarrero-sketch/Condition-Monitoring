@@ -224,6 +224,43 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
   ok('and a photograph already filed stays filed with no picture loaded',
      ld.filed === 'point', ld.filed);
 
+  console.log('\n6. THE ROW SAYS WHICH PROBLEM IT IS, IN WORDS');
+  /* The last surviving copy of the defect, and the one a reader acts on: the
+     correction table asked unresolvedPhotos() — photographs whose thumbnail
+     this tab had already fetched — so on a freshly loaded page TK115's six
+     files, all present in the folder, counted as none and the row read
+     "Evidence incomplete — photo file missing" directly under a panel
+     reporting 10 of 10 received. */
+  const rows = await p.evaluate(() => {
+    const el = document.querySelector('nav.tabs [data-tab="sync"]'); if (el) el.click();
+    renderSync();
+    const out = {};
+    document.querySelectorAll('#syQuarTbl tbody tr').forEach(tr => {
+      const u = (tr.querySelector('td b') || {}).textContent || '';
+      out[u.trim()] = tr.textContent.replace(/\s+/g, ' ').trim();
+    });
+    return out;
+  });
+  console.log('   TK115: ' + (rows.TK115 || '(no row)'));
+  console.log('   TK900: ' + (rows.TK900 || '(no row)'));
+
+  const BANNED = [/missing evidence/i, /file missing/i, /waiting for sync/i,
+                  /have not (arrived|reached)/i, /cannot be assigned/i,
+                  /evidence incomplete/i];
+  ok('the round whose files are all present has a row', !!rows.TK115, rows.TK115 || '');
+  ok('  it asks for component assignment',
+     /need[s]? component assignment/i.test(rows.TK115 || ''), rows.TK115 || '');
+  ok('  it says the photographs were received',
+     /All photographs were received/i.test(rows.TK115 || ''), rows.TK115 || '');
+  const hit = BANNED.filter(re => re.test(rows.TK115 || '')).map(String);
+  ok('  and says none of the things that are not true of it',
+     hit.length === 0, hit.join(' ') || 'none of the banned phrasings');
+
+  /* And the control: a round whose files really did not arrive must still be
+     allowed to say so, or fixing the wording would have hidden a real gap. */
+  ok('the round whose files never arrived still reports them missing',
+     /missing|incomplete|не дошли|неполные/i.test(rows.TK900 || ''), rows.TK900 || '');
+
   ok('no page errors', errs.length === 0, errs.join(' | '));
   await b.close();
   console.log(fails.length ? `\n${fails.length} FAILED:\n  ` + fails.join('\n  ') : '\nall passed');

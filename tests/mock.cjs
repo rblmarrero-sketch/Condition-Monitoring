@@ -149,7 +149,13 @@ http.createServer((req, res) => {
       const i = FILES.length;
       const side = { type: 'cm-inspection-entries', version: 2, records: [{
         equipment: unit, equip: unit, date: date, type: ty, cls: 'HT', by: 'R. Marrero',
-        smu: '5000', items: [{ key: '', label: '', grade: 'C', photos: n, video: 0 }] }] };
+        /* PHOTOGRAPHS ONLY, no grade — which is what TK115 and DZ007 actually
+           carry, checked against the live folder. It matters: a keyless point
+           with a GRADE is a reading nobody can approve until the component is
+           named, and a keyless point with only photographs is evidence looking
+           for a home. Two different problems, two different sentences, two
+           different people. A fixture carrying a grade tests the other one. */
+        smu: '5000', items: [{ key: '', label: '', photos: n, video: 0 }] }] };
       FILES.push({ name: `${unit}_${dd}_${ty}.json`, id: 'k' + i,
                    updated: 7500000 + i, size: 400, json: side });
       if (mode !== 'none') {
