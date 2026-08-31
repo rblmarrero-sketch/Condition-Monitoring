@@ -166,6 +166,28 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
   });
   ok('expected = received + missing, on every record', inv.length === 0, inv.slice(0, 3).join(' | '));
 
+  /* AND THE FLEET FIGURE IS THE SUM OF ITS PARTS.
+
+     The tile says how many photographs the fleet expects. The audit counts the
+     ones on records the pipeline owns. The excluded term counts the ones on
+     records a person owns. If those three do not add up, the difference is an
+     unexplained gap between two numbers on one screen — which is the exact
+     shape of the original defect, and the reason nobody believed the panel.
+
+     On the live folder this reads 304 + 10 = 314. */
+  const sums = await p.evaluate(() => {
+    const s = syncScan(), pop = mediaPopulations();
+    return { tile: pop.mobExpected, fleet: s.expected, excl: s.exExpected,
+             recv: pop.mobReceived, fleetP: s.present, exclP: s.exPresent };
+  });
+  console.log('   ' + JSON.stringify(sums));
+  ok('the tile total is the audit plus the excluded term',
+     sums.tile === sums.fleet + sums.excl,
+     sums.fleet + ' + ' + sums.excl + ' = ' + sums.tile);
+  ok('  and so is the received total',
+     sums.recv === sums.fleetP + sums.exclP,
+     sums.fleetP + ' + ' + sums.exclP + ' = ' + sums.recv);
+
   console.log('\n4. A PLACEHOLDER IS NEVER COUNTED AS A RECEIVED FILE');
   const ph = await p.evaluate(u => {
     const r = RECS.find(x => x.equip === u);
