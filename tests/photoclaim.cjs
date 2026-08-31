@@ -114,14 +114,37 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
     const s = syncScan();
     return { tally: photoTally(r),
              waiting: s.gaps.some(g => g.r.equip === u),
+             onHold: s.quar.some(q => (q.r || {}).equip === u),
+             exExpected: s.exExpected, exPresent: s.exPresent, exMissing: s.exMissing,
              miss: (s.gaps.find(g => g.r.equip === u) || {}).miss || [] };
   }, fx.gone);
   console.log('   ' + JSON.stringify(G.tally));
   ok('the round whose files never arrived is short', G.tally.missing === 3,
      G.tally.missing + ' missing');
+  ok('  and it is on hold, because its point has no key', G.onHold, 'held ' + G.onHold);
   ok('  received nothing', G.tally.received === 0, G.tally.received + ' received');
-  ok('  and the sync tab lists it as waiting', G.waiting, 'waiting ' + G.waiting);
-  ok('  naming the files it is waiting for', G.miss.length === 3, G.miss.length + ' named');
+  /* NOT in "waiting on media", and that is the point rather than an oversight.
+
+     A held round is waiting on a PERSON — somebody has to name the component —
+     not on the sync pipeline. Putting it in the pipeline's own queue sends the
+     wrong people after it. But dropping it from the arithmetic entirely, which
+     is what used to happen, made its missing files invisible on every screen.
+
+     So it is counted separately and NAMED, and the reconciliation closes as
+     expected = received + missing + excluded. */
+  ok('  it is not in the pipeline\'s queue, because it is waiting on a person',
+     !G.waiting, 'waiting ' + G.waiting);
+  /* Both held rounds land in this bucket — TK115's six, which are all in the
+     folder, and TK900's three, which are not. Asserted as the identity rather
+     than as a literal, because the number depends on how many held records the
+     fixture happens to make and the property does not. */
+  ok('  but its evidence is counted as excluded rather than dropped',
+     G.exExpected >= 3, G.exExpected + ' expected on held records');
+  ok('  the excluded bucket closes: present + missing = expected',
+     G.exPresent + G.exMissing === G.exExpected,
+     G.exPresent + ' + ' + G.exMissing + ' = ' + G.exExpected);
+  ok('  and the shortfall inside it is exactly the round whose files are gone',
+     G.exMissing === 3, G.exMissing + ' missing on held records');
 
   console.log('\n3. THE INVARIANT HOLDS FOR EVERY RECORD ON THE BOARD');
   /* expected = received + missing, and received breaks down with nothing left

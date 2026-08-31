@@ -2878,27 +2878,27 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=224"></script>
-<script src="../mobile/hme.js?v=224"></script>
-<script src="../mobile/mp-fc.js?v=224"></script>
-<script src="../mobile/hme-cascade.js?v=224"></script>
-<script src="../mobile/temp-limits.js?v=224"></script>
+<script src="../data/magnetic_plug.js?v=226"></script>
+<script src="../mobile/hme.js?v=226"></script>
+<script src="../mobile/mp-fc.js?v=226"></script>
+<script src="../mobile/hme-cascade.js?v=226"></script>
+<script src="../mobile/temp-limits.js?v=226"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=224"></script>
-<script src="../mobile/normalize.js?v=224"></script>
-<script src="../mobile/due.js?v=224"></script>
-<script src="../mobile/wear.js?v=224"></script>
-<script src="../mobile/wear-map.js?v=224"></script>
-<script src="../mobile/lube.js?v=224"></script>
-<script src="../mobile/lube-overrides.js?v=224"></script>
-<script src="../mobile/lube2027.js?v=224"></script>
-<script src="../mobile/lube-tds.js?v=224"></script>
+<script src="../mobile/assets.js?v=226"></script>
+<script src="../mobile/normalize.js?v=226"></script>
+<script src="../mobile/due.js?v=226"></script>
+<script src="../mobile/wear.js?v=226"></script>
+<script src="../mobile/wear-map.js?v=226"></script>
+<script src="../mobile/lube.js?v=226"></script>
+<script src="../mobile/lube-overrides.js?v=226"></script>
+<script src="../mobile/lube2027.js?v=226"></script>
+<script src="../mobile/lube-tds.js?v=226"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=224"></script>
-<script src="../mobile/machine-photos.js?v=224"></script>
+<script src="../mobile/upload-defaults.js?v=226"></script>
+<script src="../mobile/machine-photos.js?v=226"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -2907,17 +2907,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=224"></script>
-<script src="../mobile/get.js?v=224"></script>
-<script src="../mobile/points.js?v=224"></script>
-<script src="../mobile/uc-points.js?v=224"></script>
-<script src="../mobile/inspect-guide.js?v=224"></script>
-<script src="../mobile/get-figs.js?v=224"></script>
-<script src="../mobile/body-points.js?v=224"></script>
-<script src="../mobile/body-map.js?v=224"></script>
-<script src="../mobile/jspdf.umd.min.js?v=224"></script>
-<script src="../mobile/html2canvas.min.js?v=224"></script>
-<script src="../mobile/report-core.js?v=224"></script>
+<script src="../mobile/machine-fig.js?v=226"></script>
+<script src="../mobile/get.js?v=226"></script>
+<script src="../mobile/points.js?v=226"></script>
+<script src="../mobile/uc-points.js?v=226"></script>
+<script src="../mobile/inspect-guide.js?v=226"></script>
+<script src="../mobile/get-figs.js?v=226"></script>
+<script src="../mobile/body-points.js?v=226"></script>
+<script src="../mobile/body-map.js?v=226"></script>
+<script src="../mobile/jspdf.umd.min.js?v=226"></script>
+<script src="../mobile/html2canvas.min.js?v=226"></script>
+<script src="../mobile/report-core.js?v=226"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -3220,6 +3220,7 @@ const I18N={
   sy_sev_ct:"{n} to settle · {u} with no grade · {c} contradicting their grade",
   sy_h_files:"Files on the server", sy_h_last:"Last asked",
   sy_h_att:"Attachments accounted for", sy_h_held:"Inspections on hold",
+  sy_h_excl:"On held inspections", sy_h_excl_m:"{n} not in the folder",
   sy_notlinked:"no backend attached — nothing to compare against",
   sy_nolink:"Nothing to compare against yet", sy_nolink_s:"The file list has not arrived from the server. Until it does there is nothing to check these attachments against, and reporting 0% would describe this browser rather than the field. It fills in when the data source refreshes.",
   sy_never:"never", sy_justnow:"just now", sy_min:"{n} min ago",
@@ -3924,6 +3925,7 @@ const I18N={
   sy_sev_ct:"К разбору: {n} · без оценки: {u} · расходятся с оценкой: {c}",
   sy_h_files:"Файлов на сервере", sy_h_last:"Последний запрос",
   sy_h_att:"Вложений учтено", sy_h_held:"Требуют исправления",
+  sy_h_excl:"На отложенных осмотрах", sy_h_excl_m:"{n} нет в папке",
   sy_notlinked:"хранилище не подключено — не с чем сравнивать",
   sy_nolink:"Пока не с чем сравнивать", sy_nolink_s:"Список файлов ещё не получен с сервера. Пока его нет, сверять вложения не с чем, а «0%» описывал бы этот браузер, а не работу в поле. Данные появятся после обновления источника.",
   sy_never:"никогда", sy_justnow:"только что", sy_min:"{n} мин назад",
@@ -12013,6 +12015,9 @@ function syncScan(){
   const local=(()=>{ try{ return folderPhotos||{}; }catch(e){ return {}; } })();
   const gaps=[], quar=[];
   let expected=0, present=0;
+  /* The evidence on records held for a person — counted, named, and kept out
+     of the pipeline's own queue. See the hold branch below. */
+  let exExpected=0, exPresent=0;
   RECS.forEach(r=>{
     /* Filed by unit, date and round. A record without all three cannot be put
        anywhere, so it is held rather than counted as if it were fine. */
@@ -12068,19 +12073,37 @@ function syncScan(){
       return tl.needs>0 || tl.loading>0 || tl.missing>0;
     });
     if(orph.length && stillOpen) why.push("point");
-    /* HELD IS NOT THE SAME AS ACCOUNTED FOR.
+    /* HELD IS NOT THE SAME AS ACCOUNTED FOR — AND NOT THE SAME AS ORDINARY.
 
-       A record on hold used to return here, so its evidence was never counted
-       at all — not as expected, not as received, not as missing. A round whose
-       photographs genuinely never arrived AND whose point has no key was
-       therefore invisible to the sync tab twice over: absent from "waiting on
-       media" and absent from the totals it is measured against.
+       Three positions on this, two of them wrong.
 
-       The hold is about the POINT KEY. It says a person has to classify the
-       photographs; it says nothing about whether the files are there. So the
-       record is listed as held and its evidence is still counted, because
-       those are two facts and the panel needs both. */
-    if(why.length) quar.push({r,why});
+       It used to return here, so a held record's evidence was counted nowhere:
+       not expected, not received, not missing. A round whose photographs never
+       arrived AND whose point has no key was invisible twice over — absent
+       from "waiting on media" and absent from the totals it would be measured
+       against. Nothing on any screen said those files were outstanding.
+
+       Folding it into the ordinary totals instead is the opposite error: a
+       held round is not waiting on the sync pipeline, it is waiting on a
+       person, and putting it in "records waiting on evidence" sends the wrong
+       people after it.
+
+       So it is counted, and counted SEPARATELY. The reconciliation is
+       expected = received + missing + excluded, with excluded named on the
+       ladder rather than left as a silent difference between two numbers. The
+       work is visible, it is attributed to the right queue, and the arithmetic
+       closes. */
+    if(why.length){
+      quar.push({r,why});
+      (r.items||[]).forEach(i=>{
+        if(!i || bundledMedia(r,null)) return;
+        const claim = window.CMNorm ? CMNorm.photoCount(i.photos) : 0;
+        if(!claim) return;
+        exExpected += claim;
+        exPresent  += Math.min(serverMediaOf(i,r).filter(m=>m.kind==="photo").length, claim);
+      });
+      return;
+    }
     if(r._void) return;
     const miss=[];
     (r.items||[]).forEach(i=>{
@@ -12131,7 +12154,11 @@ function syncScan(){
   const linked=(()=>{ try{ return !!(window.CMDrive&&CMDrive.configured&&CMDrive.configured()); }
                       catch(e){ return false; } })()
                 && (held.size>0 || Object.keys(local).length>0);
-  return { gaps, quar, expected, present, held:held.size, cursorAt, linked,
+  return { gaps, quar, expected, present,
+           /* Named, so the ladder can say where the difference went instead of
+              leaving it as an unexplained gap between two figures. */
+           exExpected, exPresent, exMissing:Math.max(0, exExpected-exPresent),
+           held:held.size, cursorAt, linked,
            critWaiting:gaps.filter(g=>critOf(g.r)).length,
            conflicts:(()=>{ try{ return CMDash.conflictCount(); }catch(e){ return 0; } })() };
 }
@@ -12359,7 +12386,18 @@ function renderSync(){
       `<dt>${esc(t("sy_h_files"))}</dt><dd>${esc(num(s.held))}</dd>`
     + `<dt>${esc(t("sy_h_last"))}</dt><dd>${esc(ago(s.cursorAt))}</dd>`
     + `<dt>${esc(t("sy_h_att"))}</dt><dd>${esc(num(s.present))} / ${esc(num(s.expected))}</dd>`
-    + `<dt>${esc(t("sy_h_held"))}</dt><dd>${esc(num(s.quar.length))}</dd>`;
+    + `<dt>${esc(t("sy_h_held"))}</dt><dd>${esc(num(s.quar.length))}</dd>`
+    /* THE EXCLUDED TERM, WRITTEN DOWN.
+
+       Evidence on records held for a person is not in "attachments accounted
+       for" — those records are not waiting on the pipeline. Left unstated, the
+       difference between the two figures is an unexplained gap, and an
+       unexplained gap on this panel is how the numbers stopped being believed
+       the first time. */
+    + (s.exExpected
+        ? `<dt>${esc(t("sy_h_excl"))}</dt><dd>${esc(num(s.exPresent))} / ${esc(num(s.exExpected))}${
+            s.exMissing ? " · " + esc(t("sy_h_excl_m",{n:s.exMissing})) : ""}</dd>`
+        : "");
   /* THE LEDGER FROM THE SOURCES TO THE NUMBER ON THE SCREEN.
      Every line is measured here and now, never carried from another render —
      two screens quoting one figure from two moments is how they came to
@@ -12729,8 +12767,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=224"></script>
-<script src="sync-adapter.js?v=224"></script>
-<script src="report.js?v=224"></script>
+<script src="drive.js?v=226"></script>
+<script src="sync-adapter.js?v=226"></script>
+<script src="report.js?v=226"></script>
 </body>
 </html>

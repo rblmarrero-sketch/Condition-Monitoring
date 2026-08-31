@@ -9,6 +9,9 @@ const PORT=Number(process.argv[2]||8093);
 // which is the one configuration the tests most need to be able to reproduce.
 const ADMIN=process.argv[3]==='NONE'?'':(process.argv[3]||'letmein');
 
+/* Set by /__damage; cleared by /__damage?off=1. Module level so it survives a
+   mkDrive() reseed, because a test sets the damage and then uploads. */
+let DAMAGE=null;
 function mkDrive(){
   let seq=0, clock=Date.now();
   /* Drive stamps a file with wall-clock time, and the index compares those
@@ -48,7 +51,28 @@ function mkDrive(){
       getFoldersByName:n=>it(subs[n]?[subs[n]]:[]),
       getFilesByName:n=>it(files[n]?[files[n]]:[]),
       createFolder:n=>subs[n]=mkFolder(n,(full?full+'/':'')+n,dir),
-      createFile:b=>files[b.name]=mkFile(b.name,b.bytes,dir,(full?full+'/':'')+b.name)};
+      /* A STORE THAT DAMAGES WHAT IT IS GIVEN, ON PURPOSE.
+
+         Simulating corruption by editing the phone's manifest proves the
+         comparison and nothing else. This damages the bytes at the only place
+         that can: inside the store, after the request was accepted and before
+         the read-back. The script's own verify step then measures the object
+         it actually kept, reports a hash that does not match, and sets
+         verified:false — which is exactly what a dying satellite link produces
+         and is the one path that has never been exercised end to end.
+
+         Media only: mangling a sidecar would break the round rather than its
+         evidence, which is a different test. */
+      createFile:b=>{
+        let by=b.bytes;
+        if(DAMAGE && /\.(jpe?g|png|webp|mp4|mov)$/i.test(String(b.name))){
+          const buf=Buffer.isBuffer(by)?by:Buffer.from(String(by));
+          by = DAMAGE.mode==='truncate'
+            ? buf.slice(0, Math.max(1, Math.floor(buf.length*(DAMAGE.keep||0.25))))
+            : Buffer.concat([buf.slice(0, Math.max(0,buf.length-1)), Buffer.from([0])]);
+        }
+        return files[b.name]=mkFile(b.name,by,dir,(full?full+'/':'')+b.name);
+      }};
     byId[dir._id]=dir; return dir;
   }
   const root=mkFolder('Condition Monitoring','',null);
@@ -119,6 +143,15 @@ http.createServer((req,res)=>{
                  res.end(JSON.stringify(o));};
   if(u.pathname==='/__seed'){ seed(); res.writeHead(200,cors); return res.end('ok'); }
   if(u.pathname==='/__files') return send({files:D.listAll(),trashed:D.trashed});
+  /* ?mode=truncate&keep=0.25  store only the first quarter of every photograph
+     ?mode=flip                store the same LENGTH with the last byte changed
+     ?off=1                    store faithfully again */
+  if(u.pathname==='/__damage'){
+    DAMAGE = u.searchParams.get('off') ? null
+      : { mode:u.searchParams.get('mode')||'truncate',
+          keep:Number(u.searchParams.get('keep')||0.25) };
+    res.writeHead(200,cors); return res.end(JSON.stringify({ok:true,damage:DAMAGE}));
+  }
   if(u.pathname==='/exec'){
     if(req.method==='POST'){ let b=''; req.on('data',c=>b+=c);
       return req.on('end',()=>{ try{ send(D.api.doPost({postData:{contents:b}})); }

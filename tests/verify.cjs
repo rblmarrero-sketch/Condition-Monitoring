@@ -218,6 +218,78 @@ const lineOf = (p, unit) => p.evaluate(async u => {
      kept.blobs + ' blob(s)');
   ok(kept.atts === 2, '  with their manifest intact', kept.atts + ' entr(ies)');
 
+  console.log('\n4d. END TO END THROUGH A STORE THAT DAMAGES WHAT IT KEEPS');
+  /* Everything above simulates a bad receipt by editing the manifest, which
+     proves the comparison and nothing more. This damages the bytes where only
+     a store can: after the request was accepted, before the read-back. The
+     backend's own verify step then measures the object it actually kept and
+     reports a hash that does not match — the one path a dying satellite link
+     really takes, and the one that had never been exercised whole.
+
+     Two shapes, because they fail differently: a truncation changes the length,
+     and an overwrite of the same length changes only the content. A check that
+     compares sizes catches the first and is blind to the second. */
+  for (const [mode, q, label] of [
+        ['truncate', 'mode=truncate&keep=0.25', 'a quarter of the file'],
+        ['flip',     'mode=flip',               'the same length, one byte different']]) {
+    await fetch(B + '/__damage?' + q);
+    const unit = 'TK97' + (mode === 'flip' ? '1' : '0');
+    const n2 = await p.evaluate(async u => {
+      const shot = async k => await intake(new Blob(
+        [new Uint8Array(Array(9000).fill(k))], { type: 'image/jpeg' }));
+      const rec = { id: 'id__' + u + '__1', type: 'MP', equip: u, date: '2026-07-26', cls: 'HT',
+        by: 'R. Marrero', smu: 7100, created: new Date().toISOString(), up: 0, upTo: {}, rev: 1,
+        positions: { '4C': { grade: 'C', photos: [await shot(5)] } } };
+      await attSync(rec); await dbPut(rec);
+      return attList(rec).length;
+    }, unit);
+    await p.evaluate(() => syncNow(true));
+    await p.waitForTimeout(6000);
+    const st = await p.evaluate(async u => {
+      const r = (await dbAll()).find(x => x.equip === u);
+      const a = attList(r);
+      return { level: evidenceLevel(r), n: a.length,
+               wire: (a[0] || {}).wireSha256 || '', wireN: (a[0] || {}).wireByteSize || 0,
+               srv: (a[0] || {}).serverSha256 || '', srvN: (a[0] || {}).serverByteSize,
+               err: (a[0] || {}).lastError || '' };
+    }, unit);
+    console.log('   [' + mode + '] ' + JSON.stringify(st));
+    ok(n2 === 1, 'a round is uploaded into a damaged store — ' + label, unit);
+    ok(st.srv !== '' && st.srv !== st.wire,
+       '  the store reports a hash that is not what was sent',
+       st.srv.slice(0, 12) + ' vs ' + st.wire.slice(0, 12));
+    ok(st.level < 3, '  and the round never reaches verified', 'level ' + st.level);
+    if (mode === 'flip')
+      ok(Number(st.srvN) === Number(st.wireN),
+         '  even though the length matches exactly, so only the hash caught it',
+         st.srvN + ' = ' + st.wireN);
+    ok(!!st.err, '  and the failure is recorded on the attachment, not swallowed',
+       st.err.slice(0, 70) || '(nothing recorded)');
+  }
+  /* A store that keeps what it is given verifies, on the same code path — so
+     the two results above are about the bytes and not about the plumbing. */
+  await fetch(B + '/__damage?off=1');
+  const healthy = await p.evaluate(async () => {
+    const shot = async k => await intake(new Blob(
+      [new Uint8Array(Array(9000).fill(k))], { type: 'image/jpeg' }));
+    const rec = { id: 'id__TK972__1', type: 'MP', equip: 'TK972', date: '2026-07-26', cls: 'HT',
+      by: 'R. Marrero', smu: 7200, created: new Date().toISOString(), up: 0, upTo: {}, rev: 1,
+      positions: { '4C': { grade: 'C', photos: [await shot(6)] } } };
+    await attSync(rec); await dbPut(rec);
+    return 1;
+  });
+  await p.evaluate(() => syncNow(true));
+  await p.waitForTimeout(6000);
+  const hz = await p.evaluate(async () => {
+    const r = (await dbAll()).find(x => x.equip === 'TK972');
+    const a = attList(r);
+    return { level: evidenceLevel(r), match: (a[0] || {}).serverSha256 === (a[0] || {}).wireSha256 };
+  });
+  ok(healthy === 1 && hz.match === true,
+     'and an undamaged store returns the same hash it was sent', String(hz.match));
+  ok(hz.level >= 3, '  so a correct upload still verifies on the same path',
+     'level ' + hz.level);
+
   console.log('\n5. THE LISTING CHECK COMPARES A LENGTH, NOT MERELY A NAME');
   const sizes = await p.evaluate(async () => {
     const r = (await dbAll()).find(x => x.equip === 'TK960');

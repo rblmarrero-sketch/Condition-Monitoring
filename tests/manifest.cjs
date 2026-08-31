@@ -121,6 +121,7 @@ const ok = (c, n, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
       byManifest: serverMediaOf(keyed, r).every(m => m.byManifest),
       tally: photoTally(r),
       expected: s.expected, present: s.present, gaps: s.gaps.length,
+      exExpected: s.exExpected, exPresent: s.exPresent, exMissing: s.exMissing,
     };
   }, [REC, HELD]);
   ok(seen.keyed.includes('anything_at_all_1.jpg'),
@@ -141,6 +142,17 @@ const ok = (c, n, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
      the one that could not be matched at all before. */
   ok(seen.tally && seen.tally.expected === 1 && seen.tally.received === 1 && seen.tally.missing === 0,
      'and the keyless point\'s photograph is counted as received', JSON.stringify(seen.tally));
+  /* AND ITS EVIDENCE IS STILL ACCOUNTED FOR, SOMEWHERE.
+
+     Leaving a held record out of the pipeline's queue is right — it is waiting
+     on a person, not on sync. Leaving it out of the ARITHMETIC was not: a held
+     round whose photographs never arrived was invisible on every screen, in
+     neither the queue nor the totals. It is counted in its own term now, and
+     these two assertions belong together: drop either and the number goes back
+     to being an unexplained difference between two figures. */
+  ok(seen.exExpected >= 1 && seen.exPresent + seen.exMissing === seen.exExpected,
+     'and its evidence is counted in the excluded term, which closes',
+     seen.exPresent + ' + ' + seen.exMissing + ' = ' + seen.exExpected);
   ok(seen.gaps === 0 && seen.expected === 0,
      'while the fleet audit leaves a held record out, as it always has',
      `${seen.present} of ${seen.expected}, ${seen.gaps} waiting`);
