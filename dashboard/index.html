@@ -102,6 +102,30 @@
     margin-left:var(--sbw);background:var(--surface);
     border-bottom:1px solid var(--border);position:sticky;top:0;z-index:21;}
   header.app .btn{padding:4px 10px;font-size:12px;}
+  /* ── global search ─────────────────────────────────────────────────────*/
+  .gsearch{position:relative;display:flex;align-items:center;gap:8px;
+    flex:1 1 320px;max-width:520px;min-width:0;
+    background:var(--surface-2);border:1px solid var(--border);
+    border-radius:8px;padding:0 10px;height:34px;}
+  .gsearch:focus-within{border-color:var(--accent);
+    box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent);}
+  .gsearch svg{width:16px;height:16px;color:var(--muted);flex:0 0 auto;}
+  .gsearch input{flex:1;min-width:0;border:0;background:transparent;outline:none;
+    font:inherit;font-size:13.5px;color:var(--ink);height:100%;}
+  .gres{position:absolute;top:calc(100% + 6px);left:0;right:0;z-index:60;
+    background:var(--surface);border:1px solid var(--border);border-radius:10px;
+    box-shadow:var(--e2);max-height:min(70vh,520px);overflow:auto;padding:6px;}
+  .gres .gh{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--muted);padding:8px 10px 4px;}
+  .gres button{display:flex;align-items:baseline;gap:8px;width:100%;text-align:left;
+    border:0;background:transparent;padding:7px 10px;border-radius:6px;
+    font:inherit;font-size:13.5px;color:var(--ink);cursor:pointer;}
+  .gres button:hover,.gres button:focus-visible{background:var(--surface-2);outline:none;}
+  .gres button.on{background:color-mix(in srgb,var(--accent) 14%,transparent);}
+  .gres .gu{font-weight:700;font-variant-numeric:tabular-nums;flex:0 0 auto;}
+  .gres .gd{color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .gres .gnone{padding:12px 10px;color:var(--muted);font-size:13px;}
+  @media (max-width:900px){ .gsearch{flex-basis:180px;} }
   .ver{font:600 var(--t-micro)/1 ui-monospace,SFMono-Regular,Menlo,monospace;
     color:var(--muted);letter-spacing:.02em;padding:3px 7px;border-radius:5px;
     background:var(--surface-2);border:1px solid var(--border);cursor:help;
@@ -1915,6 +1939,24 @@
 </head>
 <body>
 <header class="app">
+  <!-- ONE PLACE TO LOOK SOMETHING UP.
+
+       Every screen had its own filter box and none of them answered the
+       question somebody actually arrives with: "what do we know about TK149",
+       or "who owns the cracked bushing", or "which round has work order 4471".
+       Finding that meant knowing which tab keeps it first, which is knowledge
+       about the software rather than about the machines.
+
+       Grouped, because the answer is not one kind of thing: a unit, the rounds
+       on it, the findings inside those rounds, and the work they raised. -->
+  <div class="gsearch" role="search">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+         stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
+    <input id="gq" type="search" autocomplete="off" role="combobox"
+           aria-expanded="false" aria-controls="gres" aria-autocomplete="list"
+           data-i18n-ph="g_ph" placeholder="Search unit, component, defect, action, person, WO…">
+    <div id="gres" class="gres hidden" role="listbox" aria-label="Search results"></div>
+  </div>
   <div class="spacer"></div>
   <input type="file" id="importFile" accept=".json,application/json" hidden multiple>
   <button class="src" id="srcChip" data-i18n-title="srctitle" title="Where the dashboard is reading from"><span class="dot"></span><span id="srcText">No data yet</span></button><span class="syncflash" id="syncFlash"></span>
@@ -2906,27 +2948,27 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=231"></script>
-<script src="../mobile/hme.js?v=231"></script>
-<script src="../mobile/mp-fc.js?v=231"></script>
-<script src="../mobile/hme-cascade.js?v=231"></script>
-<script src="../mobile/temp-limits.js?v=231"></script>
+<script src="../data/magnetic_plug.js?v=233"></script>
+<script src="../mobile/hme.js?v=233"></script>
+<script src="../mobile/mp-fc.js?v=233"></script>
+<script src="../mobile/hme-cascade.js?v=233"></script>
+<script src="../mobile/temp-limits.js?v=233"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=231"></script>
-<script src="../mobile/normalize.js?v=231"></script>
-<script src="../mobile/due.js?v=231"></script>
-<script src="../mobile/wear.js?v=231"></script>
-<script src="../mobile/wear-map.js?v=231"></script>
-<script src="../mobile/lube.js?v=231"></script>
-<script src="../mobile/lube-overrides.js?v=231"></script>
-<script src="../mobile/lube2027.js?v=231"></script>
-<script src="../mobile/lube-tds.js?v=231"></script>
+<script src="../mobile/assets.js?v=233"></script>
+<script src="../mobile/normalize.js?v=233"></script>
+<script src="../mobile/due.js?v=233"></script>
+<script src="../mobile/wear.js?v=233"></script>
+<script src="../mobile/wear-map.js?v=233"></script>
+<script src="../mobile/lube.js?v=233"></script>
+<script src="../mobile/lube-overrides.js?v=233"></script>
+<script src="../mobile/lube2027.js?v=233"></script>
+<script src="../mobile/lube-tds.js?v=233"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=231"></script>
-<script src="../mobile/machine-photos.js?v=231"></script>
+<script src="../mobile/upload-defaults.js?v=233"></script>
+<script src="../mobile/machine-photos.js?v=233"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -2935,17 +2977,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=231"></script>
-<script src="../mobile/get.js?v=231"></script>
-<script src="../mobile/points.js?v=231"></script>
-<script src="../mobile/uc-points.js?v=231"></script>
-<script src="../mobile/inspect-guide.js?v=231"></script>
-<script src="../mobile/get-figs.js?v=231"></script>
-<script src="../mobile/body-points.js?v=231"></script>
-<script src="../mobile/body-map.js?v=231"></script>
-<script src="../mobile/jspdf.umd.min.js?v=231"></script>
-<script src="../mobile/html2canvas.min.js?v=231"></script>
-<script src="../mobile/report-core.js?v=231"></script>
+<script src="../mobile/machine-fig.js?v=233"></script>
+<script src="../mobile/get.js?v=233"></script>
+<script src="../mobile/points.js?v=233"></script>
+<script src="../mobile/uc-points.js?v=233"></script>
+<script src="../mobile/inspect-guide.js?v=233"></script>
+<script src="../mobile/get-figs.js?v=233"></script>
+<script src="../mobile/body-points.js?v=233"></script>
+<script src="../mobile/body-map.js?v=233"></script>
+<script src="../mobile/jspdf.umd.min.js?v=233"></script>
+<script src="../mobile/html2canvas.min.js?v=233"></script>
+<script src="../mobile/report-core.js?v=233"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -3012,7 +3054,10 @@ const I18N={
   datasources:"Data sources", close:"Close", theme:"Light / dark",
   srctitle:"Where the dashboard is reading from",
 
-  tab_overview:"Overview", tab_failure:"Failure modes", tab_actions:"Action register",
+  g_ph:"Search unit, component, defect, action, person, WO\u2026",
+  g_equipment:"Equipment", g_inspections:"Inspections", g_findings:"Findings",
+  g_actions:"Maintenance actions", g_none:"Nothing matches that.",
+  tab_overview:"Overview", tab_failure:"Failure Analysis", tab_actions:"Maintenance Actions",
   p_vital:"{k} of {n} account for {p}% of everything coded here \u2014 that is the shortlist.",
   p_cum:"Running total", p_cut:"80% line", p_click:"Click to filter by this",
   pf_title:"P\u2013F interval \u2014 detection to functional failure",
@@ -3023,7 +3068,7 @@ const I18N={
   pf_note_no:"{u} \u00b7 {p}: not enough movement between readings to measure a P\u2013F interval yet.",
   pf_none:"No P\u2013F interval to draw yet",
   pf_none_s:"It needs a position measured at least twice, with a condemn figure. Undercarriage, GET and tray rounds produce these.",
-  tab_wear:"Wear & life",
+  tab_wear:"Wear \u0026 Remaining Life",
   w_title:"Wear and remaining life",
   w_sub:"Every measured position, soonest to run out first. Life is projected from this position's own history — two readings at least, and it says so plainly when it will not guess.",
   w_due_s:"Needs planning", w_act_s:"At condemn", w_all_s:"All measured",
@@ -3047,7 +3092,7 @@ const I18N={
   w_note:"Showing {s} of {n} measured position(s). A life needs two readings at least {h} hours or {d} days apart; until then the reason is given instead of a number.",
   w_empty:"No measured positions in this selection. Undercarriage, GET and tray rounds produce these \u2014 check the inspection-type filter.",
 
-  tab_equipment:"Equipment history", tab_reports:"Reports", tab_lube:"Lubrication",
+  tab_equipment:"Equipment History", tab_reports:"Reports", tab_lube:"Lubrication",
   cls_HT:"Rigid dump truck", cls_AT:"Articulated truck", cls_EXC:"Excavator",
   cls_DOZ:"Track dozer", cls_LDR:"Loader", cls_GRD:"Grader", cls_DRB:"Blast drill",
   cls_DRE:"Exploration drill", cls_HRB:"Rock breaker", cls_CRJ:"Jaw crusher",
@@ -3210,7 +3255,7 @@ const I18N={
   rs_none:"none issued", rs_issued:"issued {d}", rs_super:"superseded",
   r_done_final:"Controlled final — {n} pages",
   r_done_prov:"Provisional — {n} pages, {m} attachments still to arrive",
-  tab_sync:"Sync operations",
+  tab_sync:"Data \u0026 Sync",
   sy_gaps:"Attachment status", sy_health:"Server status",
   /* WRITTEN FOR THE PEOPLE WHO READ IT. A reliability engineer, a planner and
      a fitter share this screen, and none of them says "queryable" or "latency".
@@ -3693,7 +3738,7 @@ const I18N={
   /* Due & missed. The wording is deliberately about PEOPLE and MACHINES, not
      about records: an office reading "12 rows in state over" learns nothing,
      and an office reading "12 machines nobody has been to" acts. */
-  tab_due:"Due & missed",
+  tab_due:"Inspection Schedule",
   dd_title:"Every round, against the clock it is scheduled on",
   dd_sub:"Hours, not days — a machine parked for three weeks has not worn. Each row is one unit and one round, counted from the last one recorded anywhere in the system and at the machine's own operating rate where two hour-meter readings have measured it. A round somebody chose not to walk says so, with the reason they gave.",
   dd_round:"Round", dd_show:"Show", dd_find:"Unit", dd_findph:"unit number",
@@ -3724,7 +3769,10 @@ const I18N={
   datasources:"Источники данных", close:"Закрыть", theme:"Светлая / тёмная",
   srctitle:"Откуда панель читает данные",
 
-  tab_overview:"Обзор", tab_failure:"Виды отказов", tab_actions:"Реестр действий",
+  g_ph:"\u041f\u043e\u0438\u0441\u043a: \u0435\u0434\u0438\u043d\u0438\u0446\u0430, \u0443\u0437\u0435\u043b, \u0434\u0435\u0444\u0435\u043a\u0442, \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0435, \u0447\u0435\u043b\u043e\u0432\u0435\u043a, \u0417\u041d\u2026",
+  g_equipment:"\u0422\u0435\u0445\u043d\u0438\u043a\u0430", g_inspections:"\u041e\u0441\u043c\u043e\u0442\u0440\u044b", g_findings:"\u041d\u0430\u0445\u043e\u0434\u043a\u0438",
+  g_actions:"\u0420\u0430\u0431\u043e\u0442\u044b", g_none:"\u041d\u0438\u0447\u0435\u0433\u043e \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\u043e.",
+  tab_overview:"Обзор", tab_failure:"Анализ отказов", tab_actions:"Работы по обслуживанию",
   p_vital:"{k} \u0438\u0437 {n} \u0434\u0430\u044e\u0442 {p}% \u0432\u0441\u0435\u0433\u043e \u043a\u043e\u0434\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u043e\u0433\u043e \u2014 \u044d\u0442\u043e \u043a\u043e\u0440\u043e\u0442\u043a\u0438\u0439 \u0441\u043f\u0438\u0441\u043e\u043a.",
   p_cum:"\u041d\u0430\u043a\u043e\u043f\u043b\u0435\u043d\u043d\u044b\u0439 \u0438\u0442\u043e\u0433", p_cut:"\u041b\u0438\u043d\u0438\u044f 80%", p_click:"\u0424\u0438\u043b\u044c\u0442\u0440 \u043f\u043e \u044d\u0442\u043e\u043c\u0443",
   pf_title:"\u0418\u043d\u0442\u0435\u0440\u0432\u0430\u043b P\u2013F \u2014 \u043e\u0442 \u043e\u0431\u043d\u0430\u0440\u0443\u0436\u0435\u043d\u0438\u044f \u0434\u043e \u043e\u0442\u043a\u0430\u0437\u0430",
@@ -3735,7 +3783,7 @@ const I18N={
   pf_note_no:"{u} \u00b7 {p}: \u0434\u0432\u0438\u0436\u0435\u043d\u0438\u044f \u043c\u0435\u0436\u0434\u0443 \u0437\u0430\u043c\u0435\u0440\u0430\u043c\u0438 \u043f\u043e\u043a\u0430 \u043d\u0435\u0434\u043e\u0441\u0442\u0430\u0442\u043e\u0447\u043d\u043e.",
   pf_none:"\u0418\u043d\u0442\u0435\u0440\u0432\u0430\u043b P\u2013F \u043f\u043e\u043a\u0430 \u043d\u0435 \u043f\u043e\u0441\u0442\u0440\u043e\u0438\u0442\u044c",
   pf_none_s:"\u041d\u0443\u0436\u043d\u0430 \u0442\u043e\u0447\u043a\u0430 \u0441 \u0434\u0432\u0443\u043c\u044f \u0437\u0430\u043c\u0435\u0440\u0430\u043c\u0438 \u0438 \u043f\u0440\u0435\u0434\u0435\u043b\u043e\u043c.",
-  tab_wear:"\u0418\u0437\u043d\u043e\u0441 \u0438 \u0440\u0435\u0441\u0443\u0440\u0441",
+  tab_wear:"\u0418\u0437\u043d\u043e\u0441 \u0438 \u043e\u0441\u0442\u0430\u0442\u043e\u0447\u043d\u044b\u0439 \u0440\u0435\u0441\u0443\u0440\u0441",
   w_title:"\u0418\u0437\u043d\u043e\u0441 \u0438 \u043e\u0441\u0442\u0430\u0442\u043e\u0447\u043d\u044b\u0439 \u0440\u0435\u0441\u0443\u0440\u0441",
   w_sub:"\u0412\u0441\u0435 \u0437\u0430\u043c\u0435\u0440\u0435\u043d\u043d\u044b\u0435 \u0442\u043e\u0447\u043a\u0438; \u0441\u043d\u0430\u0447\u0430\u043b\u0430 \u0442\u0435, \u0447\u0442\u043e \u0432\u044b\u0439\u0434\u0443\u0442 \u0440\u0430\u043d\u044c\u0448\u0435. \u0420\u0435\u0441\u0443\u0440\u0441 \u0441\u0447\u0438\u0442\u0430\u0435\u0442\u0441\u044f \u043f\u043e \u0438\u0441\u0442\u043e\u0440\u0438\u0438 \u0441\u0430\u043c\u043e\u0439 \u0442\u043e\u0447\u043a\u0438 \u2014 \u043d\u0443\u0436\u043d\u043e \u043d\u0435 \u043c\u0435\u043d\u0435\u0435 \u0434\u0432\u0443\u0445 \u0437\u0430\u043c\u0435\u0440\u043e\u0432.",
   w_due_s:"\u0422\u0440\u0435\u0431\u0443\u0435\u0442 \u043f\u043b\u0430\u043d\u0430", w_act_s:"\u041d\u0430 \u043f\u0440\u0435\u0434\u0435\u043b\u0435", w_all_s:"\u0412\u0441\u0435 \u0437\u0430\u043c\u0435\u0440\u044b",
@@ -3922,7 +3970,7 @@ const I18N={
   rs_none:"не выпускался", rs_issued:"выпущен {d}", rs_super:"устарел",
   r_done_final:"Итоговый — страниц: {n}",
   r_done_prov:"Предварительный — страниц: {n}, ещё не поступило вложений: {m}",
-  tab_sync:"Синхронизация",
+  tab_sync:"Данные и синхронизация",
   sy_gaps:"Состояние вложений", sy_health:"Состояние сервера",
   sy_unknown:"Что эта панель проверить не может",
   sy_recon:"Сверка записей",
@@ -4385,7 +4433,7 @@ const I18N={
   ed_who:"Осмотр выполнил", ed_sup:"Проверил",
   ed_smu_rate:"У машины {n} показаний счётчика, по ним наработка {r} ч/сут — план строится по ней, а не по допущению для парка.",
   ed_smu_norate:"Показаний счётчика у машины: {n}. Если их два и с достаточным интервалом, план строится по фактической наработке, а не по 20 ч/сут для парка.",
-  tab_due:"Срок и пропуски",
+  tab_due:"График осмотров",
   dd_title:"Каждый обход — по тому счётчику, на котором он назначен",
   dd_sub:"Часы, а не дни: машина, простоявшая три недели, не износилась. Строка — это одна единица и один обход, отсчитанный от последнего, записанного где угодно в системе, и по собственной наработке машины, если её измерили два показания счётчика. Если обход решили не делать — здесь написано, почему.",
   dd_round:"Обход", dd_show:"Показать", dd_find:"Единица", dd_findph:"номер единицы",
@@ -10068,6 +10116,129 @@ function showTab(t){
 }
 $("tabs").onclick=e=>{ const b=e.target.closest("button[data-tab]"); if(b) showTab(b.dataset.tab); };
 
+/* ── GLOBAL SEARCH ─────────────────────────────────────────────────────────
+
+   What somebody actually arrives with is a machine number, a person's name, a
+   work order, or a word from a defect — not a tab. This answers all four from
+   one box and groups the answer by what KIND of thing it found, because
+   "TK149" is legitimately a unit, four inspections, a dozen findings and two
+   jobs, and which of those they wanted depends on why they typed it.
+
+   Bounded on purpose. It scans the loaded records rather than an index, so the
+   work is proportional to the fleet and has to be capped: a few results per
+   group, counted honestly, with the rest reachable by going to the page. At
+   fleet scale the scan is the cost, so it stops as soon as every group is
+   full. */
+const G_PER = 6;
+function gSearch(q){
+  const s=String(q||"").trim().toUpperCase();
+  if(s.length<2) return null;
+  const hit={units:[], insp:[], find:[], act:[]};
+  const full=g=>hit[g].length>=G_PER;
+  const has=(v)=>String(v==null?"":v).toUpperCase().indexOf(s)>=0;
+  const more={units:0, insp:0, find:0, act:0};
+
+  /* Units first: the commonest thing anybody types. */
+  const seen=new Set();
+  for(const r of RECS){
+    if(r._void || seen.has(r.equip)) continue;
+    if(!has(r.equip) && !has((ASSET_BY[r.equip]||{}).m) && !has((ASSET_BY[r.equip]||{}).cls)) continue;
+    seen.add(r.equip);
+    if(full("units")){ more.units++; continue; }
+    const a=ASSET_BY[r.equip]||{};
+    hit.units.push({ k:r.equip, l:[a.m, a.cat].filter(Boolean).join(" · ") });
+  }
+  for(const r of RECS){
+    if(r._void) continue;
+    /* The round itself — unit, date, type, who walked it, the hour meter. */
+    if(!full("insp") && (has(r.equip)||has(r.date)||has(r.type)||has(r.by)||has(r.smu))){
+      hit.insp.push({ k:ekOf(r),
+        l:r.equip+" · "+(TYPE_LABEL[r.type]||r.type)+" · "+r.date+(r.by?" · "+r.by:"") });
+    } else if(has(r.equip)||has(r.date)||has(r.type)||has(r.by)) more.insp++;
+    for(const i of (r.items||[])){
+      if(!i) continue;
+      const inFind = has(i.key)||has(i.label)||has(i.defect)||has(i.defectCode)
+                   ||has(i.cause)||has(i.comment);
+      const inAct  = has(i.action)||has(i.actionLabel)||has(i.wo)||has(i.owner)||has(i.prio);
+      if(inFind){
+        if(full("find")) more.find++;
+        else hit.find.push({ k:ekOf(r), p:i.key,
+          l:r.equip+" · "+(i.key||"—")+" · "+(i.defect||i.label||i.comment||"").slice(0,60) });
+      }
+      if(inAct && (i.action||i.wo)){
+        if(full("act")) more.act++;
+        else hit.act.push({ k:ekOf(r), p:i.key,
+          l:r.equip+" · "+(i.actionLabel||i.action||"")+(i.wo?" · WO "+i.wo:"")
+            +(i.owner?" · "+i.owner:"") });
+      }
+    }
+    if(full("units")&&full("insp")&&full("find")&&full("act")
+       && more.insp+more.find+more.act>200) break;   // enough to know there is more
+  }
+  return { hit, more, any:hit.units.length+hit.insp.length+hit.find.length+hit.act.length };
+}
+function gRender(res){
+  const box=$("gres"), inp=$("gq"); if(!box) return;
+  if(!res){ box.classList.add("hidden"); box.innerHTML=""; inp.setAttribute("aria-expanded","false"); return; }
+  const grp=(key,title,rows,extra)=> rows.length ? `<div class="gh">${esc(t(title))}${
+      extra?` · +${extra}`:""}</div>` + rows.map((r,n)=>
+      `<button type="button" role="option" data-g="${esc(key)}" data-k="${esc(r.k)}"${
+        r.p!=null?` data-p="${esc(r.p)}"`:""}>`
+      + `<span class="gu">${esc(r.k.split("|")[0]||r.k)}</span>`
+      + `<span class="gd">${esc(r.l||"")}</span></button>`).join("") : "";
+  const html = grp("unit","g_equipment",res.hit.units,res.more.units)
+             + grp("insp","g_inspections",res.hit.insp,res.more.insp)
+             + grp("find","g_findings",res.hit.find,res.more.find)
+             + grp("act","g_actions",res.hit.act,res.more.act);
+  box.innerHTML = html || `<div class="gnone">${esc(t("g_none"))}</div>`;
+  box.classList.remove("hidden");
+  inp.setAttribute("aria-expanded","true");
+}
+function gClose(){ const b=$("gres"); if(b){ b.classList.add("hidden"); b.innerHTML=""; }
+  const i=$("gq"); if(i) i.setAttribute("aria-expanded","false"); }
+/* Selecting a result goes where that KIND of thing lives — a unit to its
+   history, everything else to the record it belongs to. */
+function gGo(kind,key,pt){
+  gClose();
+  if(kind==="unit"){ showTab("equipment"); selectEquip(key); renderHistory(); return; }
+  const rec=RECS.find(r=>ekOf(r)===key);
+  if(!rec) return;
+  if(kind==="act"){ showTab("actions"); }
+  if(typeof openDrawer==="function"){ try{ openDrawer(key); return; }catch(e){} }
+  showTab("equipment"); selectEquip(rec.equip); renderHistory();
+}
+(function wireSearch(){
+  const inp=$("gq"), box=$("gres"); if(!inp||!box) return;
+  let tmr=null;
+  inp.addEventListener("input",()=>{
+    clearTimeout(tmr);
+    /* Debounced: at fleet size the scan is real work and running it on every
+       keystroke is how a search box freezes the page it is meant to speed up. */
+    tmr=setTimeout(()=>{ try{ gRender(gSearch(inp.value)); }catch(e){ gClose(); } }, 180);
+  });
+  inp.addEventListener("keydown",e=>{
+    const opts=[...box.querySelectorAll("button")];
+    if(e.key==="Escape"){ gClose(); inp.blur(); return; }
+    if(!opts.length) return;
+    const cur=opts.findIndex(o=>o.classList.contains("on"));
+    if(e.key==="ArrowDown"||e.key==="ArrowUp"){
+      e.preventDefault();
+      const nx=e.key==="ArrowDown" ? Math.min(opts.length-1,cur+1) : Math.max(0,cur-1);
+      opts.forEach(o=>o.classList.remove("on"));
+      opts[nx].classList.add("on"); opts[nx].scrollIntoView({block:"nearest"});
+    } else if(e.key==="Enter" && cur>=0){
+      e.preventDefault(); opts[cur].click();
+    }
+  });
+  box.addEventListener("click",e=>{
+    const b=e.target.closest("button[data-g]"); if(!b) return;
+    gGo(b.dataset.g, b.dataset.k, b.dataset.p);
+  });
+  document.addEventListener("click",e=>{
+    if(!e.target.closest(".gsearch")) gClose();
+  });
+})();
+
 /* ---------- reports ---------- */
 function refreshReportTargets(){
   const scope=$("rScope").value, sel=$("rTarget"); const prev=sel.value;
@@ -10453,12 +10624,28 @@ function renderWearTab(){
     $("wearTbl").innerHTML=`<tbody><tr><td class="muted" style="padding:18px">${esc(t("w_empty"))}</td></tr></tbody>`;
     $("wearNote").textContent=""; return;
   }
+  /* PAGINATED, like every other operational table on this dashboard.
+
+     This lived in a 620 px box with its own scrollbar. Taking the box away was
+     right — one scrollbar on the page — but on its own it was only half the
+     change: at fleet scale the measurements ran to 26,726 px of table, which
+     dashui.cjs caught immediately. A reader cannot scan twenty-six thousand
+     pixels and a browser should not be asked to lay them out.
+
+     The answer to a long table is fewer rows, not a shorter window onto the
+     same rows. The paginator is the one this dashboard already uses for the
+     action register, the due list and the fleet table, so the controls, the
+     "showing a to b of n" line and the show-all escape hatch are the ones a
+     reader has already learned somewhere else. Sorting and the counts above
+     still run over the WHOLE filtered set — the page is what is drawn, never
+     what is measured. */
+  const pg = paged("wear", rows, renderWearTab);
   const th=(k,cls)=>`<th${cls?` class="${cls}"`:""}>${esc(t(k))}</th>`;
   $("wearTbl").innerHTML=`<thead><tr>
       ${th("w_th_unit")}${th("w_th_point")}${th("w_th_meas","r")}${th("w_th_worn","r")}
       <th style="width:70px"></th>${th("w_th_left","r")}${th("w_th_rate","r")}${th("w_th_life","r")}
       ${th("w_th_when")}${th("w_th_seen","r")}</tr></thead><tbody>`
-    + rows.map(r=>{
+    + pg.rows.map(r=>{
       const life = r.hours!=null
         ? `<b class="${r.hours<W_SOON?"bad":""}">${esc(fmtH(r.hours))}</b> h`
         : `<span class="muted" title="${esc(t("w_why_"+(r.why||"few")+"_t"))}">${esc(t("w_why_"+(r.why||"few")))}</span>`;
@@ -10482,10 +10669,10 @@ function renderWearTab(){
       </tr>`;
     }).join("")+`</tbody>`;
   $("wearTbl").querySelectorAll("tr[data-unit]").forEach(tr=>tr.onclick=()=>{
-    $("equipSel").value=tr.dataset.unit; showTab("equipment"); renderHistory(); });
+    selectEquip(tr.dataset.unit); showTab("equipment"); renderHistory(); });
   $("wearNote").textContent = t("w_note",{s:rows.length, n:all.length, h:WEAR.MIN_HOURS, d:WEAR.MIN_DAYS});
   if($("wearShown")) $("wearShown").innerHTML=
-    `<span>${esc(t("shown_n",{n:rows.length, of:all.length}))}</span>`;
+    `<span>${esc(t("shown_n",{n:rows.length, of:all.length}))}</span>` + pg.strip;
 }
 function wearCsv(){
   const rows=wearRows(filtered());
@@ -12931,8 +13118,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=231"></script>
-<script src="sync-adapter.js?v=231"></script>
-<script src="report.js?v=231"></script>
+<script src="drive.js?v=233"></script>
+<script src="sync-adapter.js?v=233"></script>
+<script src="report.js?v=233"></script>
 </body>
 </html>

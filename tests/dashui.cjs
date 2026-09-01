@@ -104,14 +104,35 @@ const TABS = ['overview', 'failure', 'wear', 'actions', 'due', 'equipment', 'lub
   /* and pressing one actually changes the list under it */
   await p.evaluate(() => showTab('wear'));
   await p.waitForTimeout(300);
+  /* MEASURED ON THE SET, NOT ON THE PAGE.
+
+     This counted rendered rows. That worked while the table drew every
+     measurement it had — and stopped meaning anything the moment the table was
+     paginated, because a filter that cuts 300 rows to 120 still draws 50
+     either side of it. The test would then report "nothing happened" about a
+     filter that had worked perfectly.
+
+     The set size is what the tile changes and what the reader is told; the page
+     size is a rendering decision. So both are checked, separately: the total
+     moved, and the page stayed bounded while it did. */
   const moved = await p.evaluate(async () => {
-    const before = document.querySelectorAll('#wearTbl tbody tr').length;
+    const total = () => {
+      const m = String((document.getElementById('wearShown') || {}).textContent || '')
+        .match(/(\d[\d\s,\u00a0]*)\D+(\d[\d\s,\u00a0]*)/);
+      return m ? Number(m[1].replace(/\D/g, '')) : null;
+    };
+    const before = total(), beforeRows = document.querySelectorAll('#wearTbl tbody tr').length;
     const b2 = document.querySelector('[data-wgo="act"]'); if (!b2) return null;
     b2.click(); await new Promise(r => setTimeout(r, 250));
-    return { before, after: document.querySelectorAll('#wearTbl tbody tr').length };
+    return { before, after: total(),
+             beforeRows, afterRows: document.querySelectorAll('#wearTbl tbody tr').length };
   });
   ok('and pressing one filters the register beneath it',
-    moved && moved.after !== moved.before, JSON.stringify(moved));
+     !!moved && moved.before !== null && moved.after !== null && moved.after < moved.before,
+     JSON.stringify(moved));
+  ok('  while the page itself stays bounded',
+     !!moved && moved.afterRows <= 50 && moved.beforeRows <= 50,
+     moved ? moved.beforeRows + ' → ' + moved.afterRows + ' rows drawn' : '');
 
   console.log('\n  and nothing looks pressable that is not');
   await p.evaluate(() => showTab('failure'));

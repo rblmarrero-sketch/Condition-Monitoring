@@ -134,8 +134,18 @@ const PAGE = 50;
   console.log('\n4. A PICKER WITH A THOUSAND MACHINES IN IT CAN BE SEARCHED');
   await tab('equipment');
   {
+    /* THIS ASSERTED THE DEFECT.
+
+       It required the picker to hold more than a hundred options — "long
+       enough to need" a search box — which is a description of the control
+       being built at fleet size. That is the thing the search box exists to
+       make unnecessary, and rendering 1,128 <option> elements is what the
+       brief forbids. The property worth holding is the opposite one: the FLEET
+       is large, and the CONTROL is not. */
     const all = await p.evaluate(() => $('equipSel').options.length);
-    ok(all > 100, 'the machine picker is long enough to need it', all + ' option(s)');
+    const fleet = await p.evaluate(() => (window.__units || []).length);
+    ok(fleet > 100, 'the fleet is large enough for this to matter', fleet + ' machine(s)');
+    ok(all < fleet, 'and the picker does not render all of it', all + ' of ' + fleet);
     /* The prefix comes from the fleet this fixture actually built, not from a
        unit number typed here — the first run searched for "TK1" against a
        register whose first 260 machines are all BL, BS and CR, matched nothing,
@@ -156,7 +166,28 @@ const PAGE = 50;
     const back = await p.evaluate(() => {
       $('equipQ').value = ''; $('equipQ').dispatchEvent(new Event('input', { bubbles: true }));
       return $('equipSel').options.length; });
-    ok(back === all, 'clearing it brings the fleet back', back + ' option(s)');
+    ok(back === all, 'clearing it returns to the unfiltered window', back + ' option(s)');
+    /* And the machines beyond that window are still REACHABLE — a capped list
+       that cannot be searched past is worse than a long one. */
+    const far = await p.evaluate(() => {
+      const u = (window.__units || [])[(window.__units || []).length - 1];
+      $('equipQ').value = u;
+      $('equipQ').dispatchEvent(new Event('input', { bubbles: true }));
+      return { want: u, got: [...$('equipSel').options].map(o => o.value) };
+    });
+    ok(far.got.indexOf(far.want) >= 0,
+       'and the last machine in the fleet is still findable by typing it',
+       far.want + ' → ' + far.got.slice(0, 3).join(','));
+    /* Chosen from elsewhere — a drawer, a search result — it must land on THAT
+       machine even though it is outside the window. */
+    const jump = await p.evaluate(() => {
+      const u = (window.__units || [])[(window.__units || []).length - 1];
+      selectEquip(u);
+      return { want: u, got: $('equipSel').value };
+    });
+    ok(jump.got === jump.want,
+       'and selecting it from elsewhere lands on it, not on a neighbour',
+       jump.got + ' vs ' + jump.want);
   }
   {
     /* The machine on screen must never be filtered out from under the history
