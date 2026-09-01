@@ -301,8 +301,27 @@
      exists. The rows are all still there — this bounds the VIEW, never the
      data, because a list that silently stops at fifty is a worse lie than one
      that scrolls. */
-  .scrollbox{max-height:var(--sb,520px);overflow:auto;overscroll-behavior:contain;
-    border-top:1px solid var(--border);}
+  /* ONE SCROLLBAR ON THE PAGE, NOT ONE PER PANEL.
+
+     These were fixed-height boxes with their own scrollbars: a table penned
+     into 340 px holding 2,237 px of rows. Three things wrong with that on a
+     working screen — the reader cannot see how much there is, the browser's own
+     find-in-page scrolls a box they are not looking at, and printing gets the
+     visible slice. It also hides the real problem rather than solving it,
+     because the answer to a long table is fewer rows on the page, and these
+     tables are already paginated.
+
+     So the height comes off and the rows flow into the page. The sticky header
+     still works — with no scrolling ancestor, `position:sticky` sticks to the
+     viewport instead of to the box, which is the behaviour that was wanted all
+     along. `--sb` is left in the markup and simply ignored; on a narrow screen
+     the horizontal rule below still applies. */
+  .scrollbox{border-top:1px solid var(--border);}
+  @media (max-width:820px){
+    /* Small screens are the one place a bounded box earns its keep: the spec's
+       "controlled table-only overflow at smaller breakpoints". */
+    .scrollbox{max-height:var(--sb,520px);overflow:auto;overscroll-behavior:contain;}
+  }
   .scrollbox table{margin:0;}
   .scrollbox thead th{position:sticky;top:0;z-index:2;background:var(--surface-2);
     box-shadow:0 1px 0 var(--border);}
@@ -2771,7 +2790,12 @@
           <option value="round" data-i18n="r_round">Round — one date, all units</option>
           <option value="month" data-i18n="r_month">Fleet summary — one month</option>
         </select></div>
-        <div class="field"><label for="rTarget" id="rTargetLbl" data-i18n="r_target">Which</label><select id="rTarget"></select></div>
+        <div class="field"><label for="rTarget" id="rTargetLbl" data-i18n="r_target">Which</label>
+          <span class="eqpick">
+            <input id="rTargetQ" type="search" data-i18n-ph="eq_findph" placeholder="Filter…">
+            <select id="rTarget"></select>
+            <span class="hint" id="rTargetShown"></span>
+          </span></div>
         <div class="field"><label for="rPhotos" data-i18n="r_photos">Photos</label><select id="rPhotos">
           <option value="1" data-i18n="r_withphotos">Include photos</option>
           <option value="0" data-i18n="r_nophotos">No photos (smaller file)</option>
@@ -2882,27 +2906,27 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=230"></script>
-<script src="../mobile/hme.js?v=230"></script>
-<script src="../mobile/mp-fc.js?v=230"></script>
-<script src="../mobile/hme-cascade.js?v=230"></script>
-<script src="../mobile/temp-limits.js?v=230"></script>
+<script src="../data/magnetic_plug.js?v=231"></script>
+<script src="../mobile/hme.js?v=231"></script>
+<script src="../mobile/mp-fc.js?v=231"></script>
+<script src="../mobile/hme-cascade.js?v=231"></script>
+<script src="../mobile/temp-limits.js?v=231"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=230"></script>
-<script src="../mobile/normalize.js?v=230"></script>
-<script src="../mobile/due.js?v=230"></script>
-<script src="../mobile/wear.js?v=230"></script>
-<script src="../mobile/wear-map.js?v=230"></script>
-<script src="../mobile/lube.js?v=230"></script>
-<script src="../mobile/lube-overrides.js?v=230"></script>
-<script src="../mobile/lube2027.js?v=230"></script>
-<script src="../mobile/lube-tds.js?v=230"></script>
+<script src="../mobile/assets.js?v=231"></script>
+<script src="../mobile/normalize.js?v=231"></script>
+<script src="../mobile/due.js?v=231"></script>
+<script src="../mobile/wear.js?v=231"></script>
+<script src="../mobile/wear-map.js?v=231"></script>
+<script src="../mobile/lube.js?v=231"></script>
+<script src="../mobile/lube-overrides.js?v=231"></script>
+<script src="../mobile/lube2027.js?v=231"></script>
+<script src="../mobile/lube-tds.js?v=231"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=230"></script>
-<script src="../mobile/machine-photos.js?v=230"></script>
+<script src="../mobile/upload-defaults.js?v=231"></script>
+<script src="../mobile/machine-photos.js?v=231"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -2911,17 +2935,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=230"></script>
-<script src="../mobile/get.js?v=230"></script>
-<script src="../mobile/points.js?v=230"></script>
-<script src="../mobile/uc-points.js?v=230"></script>
-<script src="../mobile/inspect-guide.js?v=230"></script>
-<script src="../mobile/get-figs.js?v=230"></script>
-<script src="../mobile/body-points.js?v=230"></script>
-<script src="../mobile/body-map.js?v=230"></script>
-<script src="../mobile/jspdf.umd.min.js?v=230"></script>
-<script src="../mobile/html2canvas.min.js?v=230"></script>
-<script src="../mobile/report-core.js?v=230"></script>
+<script src="../mobile/machine-fig.js?v=231"></script>
+<script src="../mobile/get.js?v=231"></script>
+<script src="../mobile/points.js?v=231"></script>
+<script src="../mobile/uc-points.js?v=231"></script>
+<script src="../mobile/inspect-guide.js?v=231"></script>
+<script src="../mobile/get-figs.js?v=231"></script>
+<script src="../mobile/body-points.js?v=231"></script>
+<script src="../mobile/body-map.js?v=231"></script>
+<script src="../mobile/jspdf.umd.min.js?v=231"></script>
+<script src="../mobile/html2canvas.min.js?v=231"></script>
+<script src="../mobile/report-core.js?v=231"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -3187,14 +3211,14 @@ const I18N={
   r_done_final:"Controlled final — {n} pages",
   r_done_prov:"Provisional — {n} pages, {m} attachments still to arrive",
   tab_sync:"Sync operations",
-  sy_gaps:"Records waiting on evidence", sy_health:"Backend",
+  sy_gaps:"Attachment status", sy_health:"Server status",
   /* WRITTEN FOR THE PEOPLE WHO READ IT. A reliability engineer, a planner and
      a fitter share this screen, and none of them says "queryable" or "latency".
      The old wording described the MECHANISM that was missing; these describe
      the QUESTION that cannot be answered, which is what somebody standing here
      actually wants to know. */
   sy_unknown:"What this dashboard cannot check",
-  sy_recon:"Where the number comes from",
+  sy_recon:"Record reconciliation",
   sy_recon_sub:"Read down. Each line is a source or a rule, and the last one is the figure every other screen counts. The folder is the only source of rounds — the sixteen imported from the original spreadsheets were written into it on 29 August 2026 and are no longer counted separately. A round two phones both sent is one round with a conflict to settle, not two rounds.",
   sy_r_bundled:"In the bundled history", sy_r_drive:"In the folder",
   sy_r_import:"Imported by hand",
@@ -3214,17 +3238,17 @@ const I18N={
   sy_k_wait:"Waiting on media", sy_k_wait_s:"records missing an attachment",
   sy_k_crit:"Critical waiting", sy_k_crit_s:"a Critical with no evidence yet",
   sy_k_conf:"Conflicts", sy_k_conf_s:"two phones, one round",
-  sy_k_grade:"Severity to settle", sy_k_grade_s:"a severity its grade cannot explain",
+  sy_k_grade:"Grade review", sy_k_grade_s:"a severity its grade cannot explain",
   sy_k_grade_go:"Show the list",
-  sy_sev:"Severities nobody can check",
+  sy_sev:"Grade review required",
   sy_sev_none:"Every severity on the board is derived from a grade or a measurement.",
   sy_sev_sub:"A severity is not a field somebody types here — it is read off the grade (A→Normal, B→Incipient, C→Degraded, X→Critical), or off the millimetres on an undercarriage round. These are the places a record carries a severity that neither of those produces, so the board is showing a finding no one can re-derive. The fix is always the GRADE: set it and the severity follows. Rounds imported from the original spreadsheets are where nearly all of these come from.",
-  sy_sev_go:"Set the grade",
+  sy_sev_go:"Review grade",
   sy_sev_ng:"Severity {s} with no grade behind it. Nothing on the record says how it was reached, and it is counted anyway — because dropping it would throw away a finding somebody made.",
   sy_sev_cf:"Grade {g} means {now}, and the board shows {now}. The record also carries {was} from before grades were derived. If {was} was the real condition the grade is wrong, not the severity — change the grade to match.",
   sy_sev_ct:"{n} to settle · {u} with no grade · {c} contradicting their grade",
   sy_h_files:"Files on the server", sy_h_last:"Last asked",
-  sy_h_att:"Attachments accounted for", sy_h_held:"Inspections on hold",
+  sy_h_att:"Attachments accounted for", sy_h_held:"Inspections requiring correction",
   sy_h_excl:"On held inspections", sy_h_excl_m:"{n} not in the folder",
   sy_notlinked:"no backend attached — nothing to compare against",
   sy_nolink:"Nothing to compare against yet", sy_nolink_s:"The file list has not arrived from the server. Until it does there is nothing to check these attachments against, and reporting 0% would describe this browser rather than the field. It fills in when the data source refreshes.",
@@ -3358,13 +3382,13 @@ const I18N={
      finding serious enough to act on has nobody's name, no date and no job on
      it — so the sentence a planner needs is "needs a plan", and the tooltip
      below already names the missing fields. */
-  as_open:"Open", as_triage:"Needs a plan", as_closed:"Closed",
+  as_open:"Open", as_triage:"Planning required", as_closed:"Closed",
   as_noaction:"No action required", as_none:"\u2014",
   as_triage_t:"Nobody can act on this yet \u2014 still missing: {f}",
   as_m_action:"recommended action", as_m_prio:"priority", as_m_owner:"responsible",
   as_m_due:"due date", as_m_disp:"authorised reason and approver",
-  a_k_triage:"Needs a plan", a_k_triage_s:"findings with no job, owner or date",
-  a_f_triage:"Needs a plan", a_f_crit:"Critical", a_f_week:"Due this week", a_f_noown:"Nobody responsible",
+  a_k_triage:"Actions requiring planning", a_k_triage_s:"findings with no job, owner or date",
+  a_f_triage:"Planning required", a_f_crit:"Critical", a_f_week:"Due this week", a_f_noown:"Unassigned actions",
   k_act_tri:"{n} not yet planned",
   u_disposed:"Dispositioned",
   u_alldisposed:"Every exception on this machine has an audited disposition ({n}).",
@@ -3689,6 +3713,7 @@ const I18N={
   dd_by:"Deferred by", dd_defer_save:"Save", dd_undefer:"Cancel the deferral",
   dd_need:"A reason and a name are both required.",
   dd_put_to:"put off to {d}", dd_not_doing:"not being done",
+  eq_more:"Showing {n} of {of} — type to narrow",
   shown_n:"Showing {n} of {of}",
   dd_foot:"h/day is the machine's own measured rate; * marks the fleet assumption of {r} h/day, used until two hour-meter readings have measured that machine. \u201cDue\u201d counts hours, and the days beside it are those hours at that rate.",
   due_over:"overdue {n} d", due_in:"in {n} d", due_h:"{n} h", due_days:"{n} d ago",
@@ -3898,9 +3923,9 @@ const I18N={
   r_done_final:"Итоговый — страниц: {n}",
   r_done_prov:"Предварительный — страниц: {n}, ещё не поступило вложений: {m}",
   tab_sync:"Синхронизация",
-  sy_gaps:"Записи, ожидающие материалов", sy_health:"Хранилище",
+  sy_gaps:"Состояние вложений", sy_health:"Состояние сервера",
   sy_unknown:"Что эта панель проверить не может",
-  sy_recon:"Откуда берётся эта цифра",
+  sy_recon:"Сверка записей",
   sy_recon_sub:"Читайте сверху вниз. Каждая строка — источник или правило, последняя — та цифра, которую считают все остальные экраны. Источник обходов только один — папка: шестнадцать обходов из исходных таблиц записаны в неё 29 августа 2026 года и больше отдельно не считаются. Обход, присланный двумя телефонами, — это один обход и конфликт, который надо решить.",
   sy_r_bundled:"В приложенной истории", sy_r_drive:"В папке",
   sy_r_import:"Загружено вручную",
@@ -3920,17 +3945,17 @@ const I18N={
   sy_k_wait:"Ждут материалов", sy_k_wait_s:"записей без вложения",
   sy_k_crit:"Критичные в ожидании", sy_k_crit_s:"критичное без подтверждения",
   sy_k_conf:"Конфликты", sy_k_conf_s:"два телефона, один обход",
-  sy_k_grade:"Разобрать оценку", sy_k_grade_s:"степень, не объяснимая оценкой",
+  sy_k_grade:"Проверка оценки", sy_k_grade_s:"степень, не объяснимая оценкой",
   sy_k_grade_go:"Показать список",
-  sy_sev:"Степени, которые нечем проверить",
+  sy_sev:"Требуется проверка оценки",
   sy_sev_none:"Каждая степень на экране выведена из оценки или из измерения.",
   sy_sev_sub:"Степень здесь не вводят вручную — она читается из оценки (A→Норма, B→Зарождающийся, C→Ухудшение, X→Критично) либо из миллиметров на обходе ходовой. Здесь перечислены записи со степенью, которую не даёт ни то, ни другое: на экране стоит находка, которую невозможно перепроверить. Исправляется всегда ОЦЕНКА: поставьте её, и степень появится сама. Почти все такие случаи пришли из первоначальных таблиц.",
-  sy_sev_go:"Поставить оценку",
+  sy_sev_go:"Проверить оценку",
   sy_sev_ng:"Степень {s} без оценки. В записи нет ничего, что объясняло бы, как её получили, и она всё равно учитывается — потому что отбросить её значило бы потерять сделанную кем-то находку.",
   sy_sev_cf:"Оценка {g} означает {now}, и на экране стоит {now}. В записи осталась и {was} — с тех пор, когда степень ещё не выводили. Если верной была {was}, то ошибочна оценка, а не степень: измените оценку.",
   sy_sev_ct:"К разбору: {n} · без оценки: {u} · расходятся с оценкой: {c}",
   sy_h_files:"Файлов на сервере", sy_h_last:"Последний запрос",
-  sy_h_att:"Вложений учтено", sy_h_held:"Требуют исправления",
+  sy_h_att:"Вложений учтено", sy_h_held:"Осмотры, требующие исправления",
   sy_h_excl:"На отложенных осмотрах", sy_h_excl_m:"{n} нет в папке",
   sy_notlinked:"хранилище не подключено — не с чем сравнивать",
   sy_nolink:"Пока не с чем сравнивать", sy_nolink_s:"Список файлов ещё не получен с сервера. Пока его нет, сверять вложения не с чем, а «0%» описывал бы этот браузер, а не работу в поле. Данные появятся после обновления источника.",
@@ -4046,13 +4071,13 @@ const I18N={
   px_edited:"с правкой", px_pending:"Оригинал ещё загружается. Правка дождётся его.",
   px_nochange:"Изменений нет. Чтобы убрать правку, нажмите «Вернуть оригинал».",
   px_nothing:"Пока нечего сохранять — кадрируйте, поверните, приблизьте или добавьте подпись.",
-  as_open:"Открыто", as_triage:"Нужен план", as_closed:"Закрыто",
+  as_open:"Открыто", as_triage:"Требуется планирование", as_closed:"Закрыто",
   as_noaction:"Действий не требуется", as_none:"\u2014",
   as_triage_t:"Пока действовать некому \u2014 не хватает: {f}",
   as_m_action:"рекомендуемое действие", as_m_prio:"приоритет", as_m_owner:"ответственный",
   as_m_due:"срок", as_m_disp:"обоснование и утверждающий",
-  a_k_triage:"Нужен план", a_k_triage_s:"находки без работы, ответственного и срока",
-  a_f_triage:"Разбор", a_f_crit:"Критичные", a_f_week:"Срок на неделе", a_f_noown:"Без ответственного",
+  a_k_triage:"Действия, требующие планирования", a_k_triage_s:"находки без работы, ответственного и срока",
+  a_f_triage:"Требуется планирование", a_f_crit:"Критичные", a_f_week:"Срок на неделе", a_f_noown:"Без ответственного",
   k_act_tri:"{n} без плана",
   u_disposed:"Решение принято",
   u_alldisposed:"По каждому замечанию этой машины есть зафиксированное решение ({n}).",
@@ -4380,6 +4405,7 @@ const I18N={
   dd_by:"Отложил", dd_defer_save:"Сохранить", dd_undefer:"Снять отсрочку",
   dd_need:"Нужны и причина, и имя.",
   dd_put_to:"отложено до {d}", dd_not_doing:"не выполняется",
+  eq_more:"Показано {n} из {of} — уточните поиск",
   shown_n:"Показано {n} из {of}",
   dd_foot:"ч/сут — собственная измеренная наработка машины; * означает допущение по парку в {r} ч/сут, которое действует, пока машину не измерили два показания счётчика. «Срок» считается в часах, дни рядом — это те же часы при этой наработке.",
   due_over:"просрочено {n} дн.", due_in:"через {n} дн.", due_h:"{n} ч", due_days:"{n} дн. назад",
@@ -9245,10 +9271,10 @@ function openUnit(unit){
   $("drwBody").querySelectorAll("[data-fu]").forEach(b=>b.onclick=()=>{
     drwClose(); showTab("actions"); openFollow(b.dataset.fu, b.dataset.fi); });
   $("drwBody").querySelectorAll("[data-rk]").forEach(b=>b.onclick=()=>{
-    drwClose(); showTab("equipment"); $("equipSel").value=unit; renderHistory(); });
+    drwClose(); showTab("equipment"); selectEquip(unit); renderHistory(); });
   const uc=$("drwBody").querySelector("[data-ucls]");
   if(uc) uc.onclick=()=>{ drwClose(); $("fClass").value=uc.dataset.ucls; renderAll(); };
-  $("uHist").onclick=()=>{ drwClose(); showTab("equipment"); $("equipSel").value=unit; renderHistory(); };
+  $("uHist").onclick=()=>{ drwClose(); showTab("equipment"); selectEquip(unit); renderHistory(); };
   $("uActs").onclick=()=>{ drwClose(); setDrillTo("unit",unit); showTab("actions"); };
   $("drw").classList.remove("hidden"); $("drwScrim").classList.remove("hidden");
   $("drwClose").focus();
@@ -10061,9 +10087,26 @@ function refreshReportTargets(){
   else { $("rTargetLbl").textContent="Month";
     opts=[...new Set(RECS.map(r=>(r.date||"").slice(0,7)).filter(Boolean))].sort().reverse()
       .map(m=>[m,t("month_insp",{m,n:RECS.filter(r=>(r.date||"").slice(0,7)===m).length})]); }
-  sel.innerHTML=opts.map(([v,l])=>`<option value="${esc(v)}">${esc(l)}</option>`).join("")||`<option value="">${esc(t("r_nodata"))}</option>`;
-  if(opts.some(o=>o[0]===prev)) sel.value=prev;
+  /* SEARCHED AND BOUNDED, for the same reason as the equipment picker.
+
+     "Every unit" is a thousand options on this site's real fleet, and a report
+     is chosen from a list somebody has to read. The search narrows it; the cap
+     stops the control being built at fleet size when nothing has been typed.
+     The currently chosen target is always rendered, so a selection made
+     elsewhere is never silently dropped. */
+  const q=(($("rTargetQ")||{}).value||"").trim().toUpperCase();
+  if(q) opts=opts.filter(([v,l])=>(v+" "+l).toUpperCase().indexOf(q)>=0);
+  const all=opts.length;
+  let show=opts.slice(0, EQ_CAP);
+  if(prev && opts.some(o=>o[0]===prev) && !show.some(o=>o[0]===prev)){
+    const keep=opts.find(o=>o[0]===prev); if(keep) show.unshift(keep);
+  }
+  sel.innerHTML=show.map(([v,l])=>`<option value="${esc(v)}">${esc(l)}</option>`).join("")||`<option value="">${esc(t("r_nodata"))}</option>`;
+  if(show.some(o=>o[0]===prev)) sel.value=prev;
+  const shown=$("rTargetShown");
+  if(shown) shown.textContent = all>show.length ? t("eq_more",{n:show.length, of:all}) : "";
 }
+if($("rTargetQ")) $("rTargetQ").oninput=refreshReportTargets;
 $("rScope").onchange=refreshReportTargets;
 
 /* One way to build a report, called from three places.
@@ -10221,6 +10264,19 @@ $("rGo").onclick=()=>runReport($("rScope").value, $("rTarget").value, $("rGo"),
    The machine that is already SELECTED is never filtered away: the history on
    screen belongs to it, and a picker that stops naming what it is showing is
    the screen disagreeing with itself. */
+/* THE FLEET IS 1,128 MACHINES, AND A DROPDOWN IS NOT A WAY TO FIND ONE.
+
+   This built one <option> per unit. At sixty-five machines that is invisible;
+   measured against a fleet-sized folder it is a thousand nodes in a control
+   nobody can use — scrolling a native select past four hundred entries with a
+   glove on is not finding a machine, it is hunting for one.
+
+   The search box beside it already narrows the list. What was missing was the
+   bound: with the box empty it still rendered everything. So the list is capped
+   and says so, and typing is what reaches the rest. The cap is generous enough
+   that a small fleet never notices it and small enough that a large one costs
+   nothing. */
+const EQ_CAP=60;
 function fillEquip(){
   const sel=$("equipSel"); if(!sel) return;
   const all=window.__units||[];
@@ -10228,11 +10284,33 @@ function fillEquip(){
   const prev=sel.value;
   const hit=q ? all.filter(u=>String(u).toUpperCase().indexOf(q)>=0) : all.slice();
   if(prev && all.includes(prev) && !hit.includes(prev)) hit.unshift(prev);
-  sel.innerHTML=hit.map(u=>`<option value="${esc(u)}">${esc(u)}</option>`).join("");
-  if(hit.includes(prev)) sel.value=prev; else if(hit.length) sel.value=hit[0];
+  /* The selected machine is always rendered, whatever the cap or the filter —
+     a select whose value is not among its options reports an empty string, and
+     every reader of this control would then be looking at the wrong unit. */
+  const show=hit.slice(0, EQ_CAP);
+  if(prev && all.includes(prev) && !show.includes(prev)) show.unshift(prev);
+  sel.innerHTML=show.map(u=>`<option value="${esc(u)}">${esc(u)}</option>`).join("");
+  if(show.includes(prev)) sel.value=prev; else if(show.length) sel.value=show[0];
   const shown=$("equipShown");
-  if(shown) shown.textContent = (q && hit.length!==all.length)
-    ? t("shown_n",{n:hit.length, of:all.length}) : "";
+  if(shown) shown.textContent = hit.length>show.length
+    ? t("eq_more",{n:show.length, of:hit.length})
+    : (q && hit.length!==all.length ? t("shown_n",{n:hit.length, of:all.length}) : "");
+}
+/* Choosing a machine from somewhere else — a drawer, a KPI, a search result —
+   must work whether or not that machine is one of the sixty currently drawn.
+   Setting .value on a select that does not carry the option silently leaves it
+   on the previous unit, which would show one machine's history under another
+   machine's name. */
+function selectEquip(unit){
+  const sel=$("equipSel"); if(!sel || !unit) return false;
+  const q=$("equipQ"); if(q) q.value="";
+  fillEquip();
+  if(!Array.from(sel.options).some(o=>o.value===unit)){
+    const o=document.createElement("option");
+    o.value=unit; o.textContent=unit; sel.insertBefore(o, sel.firstChild);
+  }
+  sel.value=unit;
+  return sel.value===unit;
 }
 if($("equipQ")) $("equipQ").oninput=()=>{ fillEquip(); renderHistory(); };
 $("histRpt").onclick=()=>runReport("unit", $("equipSel").value, $("histRpt"));
@@ -12853,8 +12931,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=230"></script>
-<script src="sync-adapter.js?v=230"></script>
-<script src="report.js?v=230"></script>
+<script src="drive.js?v=231"></script>
+<script src="sync-adapter.js?v=231"></script>
+<script src="report.js?v=231"></script>
 </body>
 </html>

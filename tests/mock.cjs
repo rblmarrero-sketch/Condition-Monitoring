@@ -164,6 +164,52 @@ http.createServer((req, res) => {
                        updated: 7500000 + i, size: 90000 });
       }
     }
+    /* A FLEET-SIZED FOLDER, for asking whether the interface survives one.
+
+       The site runs 1,128 machines and the history grows every shift; a layout
+       that is comfortable at sixty-five inspections tells you nothing about the
+       one somebody opens in a year. This builds a folder of that order — units
+       across the real class prefixes, several rounds each, findings and
+       photographs per round — so "it stays responsive" can be a measurement.
+
+       ?scale=1000,1128   inspections, units */
+    const sc = u.searchParams.get('scale');
+    if (sc) {
+      const [nInsp, nUnit] = sc.split(',').map(Number);
+      const PRE = ['TK','EX','DZ','LD','GR','DR','CR','SC'];
+      const TY  = ['MP','FC','INSP','UC','TB','GET','LUBE','TEMP'];
+      const GR  = ['A','A','B','B','C','C','X'];
+      const units = [];
+      for (let i = 0; i < (nUnit || 1128); i++)
+        units.push(PRE[i % PRE.length] + String(100 + Math.floor(i / PRE.length)).padStart(3, '0'));
+      for (let i = 0; i < (nInsp || 1000); i++) {
+        const unit = units[i % units.length];
+        const ty = TY[i % TY.length];
+        const day = String((i % 28) + 1).padStart(2, '0');
+        const mon = String((i % 6) + 1).padStart(2, '0');
+        const date = '2026-' + mon + '-' + day;
+        const dd = day + '.' + mon + '.2026';
+        /* Ten findings a round, a photograph on every third — which is roughly
+           what the folder actually carries, and lands near the 10,000 findings
+           and 5,000 attachments the scale target asks for. */
+        const items = [];
+        for (let k = 0; k < 10; k++) {
+          const g = GR[(i + k) % GR.length];
+          items.push({ key: 'P' + k, label: 'Component ' + k, grade: g,
+                       photos: (k % 3 === 0) ? 1 : 0, video: 0,
+                       action: g === 'X' ? 'REPL' : (g === 'C' ? 'MON' : ''),
+                       comment: '' });
+        }
+        FILES.push({ name: unit + '_' + dd + '_' + ty + '.json', id: 's' + i,
+          updated: 6000000 + i, size: 900,
+          json: { type: 'cm-inspection-entries', version: 2, records: [{
+            equipment: unit, equip: unit, date: date, type: ty, cls: 'HT',
+            by: 'Inspector ' + (i % 12), smu: String(4000 + i), items: items }] } });
+        for (let k = 0; k < 10; k += 3)
+          FILES.push({ name: unit + '.P' + k + '_' + dd + '_' + ty + '_1.jpg',
+                       id: 'sp' + i + '_' + k, updated: 6000000 + i, size: 90000 });
+      }
+    }
     if (u.searchParams.get('add')) {                      // a phone uploads one more
       const i = 900 + Number(u.searchParams.get('add'));
       FILES.push({ name: `TK${i}_31.07.2026_MP.json`, id: 'j' + i, updated: 9000000 + i, size: 400,
