@@ -135,6 +135,31 @@ this path, because each was added to close a real gap:
 | the round is saved | `applyUpdateIfIdle()` — reloads the moment the app is idle, so the new build lands between rounds and never mid-capture |
 | nothing else worked | the banner, and `#forceUpdate`, which clears worker + caches + browser copies and refetches |
 
+**The same rule governs SYNCHRONISATION, in both directions.** Nobody should
+have to press anything to find out whether what is on screen is still true.
+
+The OUTBOUND half was always automatic: a save sends, reconnecting sends,
+picking the phone up sends, and `armRetry` backs off and retries. The INBOUND
+half was not — `teamPull` ran at boot, on an `online` event, and after this
+phone happened to finish an upload, and nothing else. That left the case an
+actual shift produces: a phone switched on at the crib room, in signal all day
+so `online` never fires again, with nothing of its own to send so no upload
+ever completes, and `armRetry` stops its own timer when the queue is empty.
+It showed the due list it downloaded at breakfast. Another inspector walks a
+machine at 09:00, this phone never hears, and somebody drives out to walk it
+twice.
+
+Inbound now runs on a five-minute timer and on `visibilitychange`, both guarded
+on `!document.hidden && navigator.onLine`. `TEAM_MIN_GAP` (60 s) throttles every
+automatic pull, which is what stops a timer, a visibility change and a finished
+upload arriving together from making three requests at one folder — the button
+is the only caller allowed to ignore it. `tests/autopull.cjs` asserts the idle
+case, the throttle and the offline silence by COUNTING REQUESTS at the mock,
+so "it pulls by itself" is a number rather than a promise.
+
+The dashboard's equivalent is `AUTO_MS` (3 min) plus a refresh on returning to
+the tab, and `startAuto()` only runs when a backend is attached.
+
 The two banners say different things and are not interchangeable: the one from
 `checkForNewBuild` fires when a build has been *found and started*, so its
 button must force a full refetch — a plain reload would serve the cached copy

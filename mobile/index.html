@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=228">
+<link rel="manifest" href="manifest.webmanifest?v=229">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=228">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=228">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=228">
+<link rel="apple-touch-icon" href="icon-192.png?v=229">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=229">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=229">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1970,31 +1970,31 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=228"></script>
-<script src="upload-defaults.js?v=228"></script>
-<script src="hme.js?v=228"></script>
-<script src="mp-fc.js?v=228"></script>
-<script src="hme-cascade.js?v=228"></script>
-<script src="assets.js?v=228"></script>
-<script src="temp-limits.js?v=228"></script>
-<script src="normalize.js?v=228"></script>
-<script src="due.js?v=228"></script>
-<script src="wear.js?v=228"></script>
-<script src="wear-figs.js?v=228"></script>
-<script src="wear-map.js?v=228"></script>
-<script src="machine-photos.js?v=228"></script>
-<script src="machine-fig.js?v=228"></script>
-<script src="get.js?v=228"></script>
-<script src="points.js?v=228"></script>
-<script src="uc-points.js?v=228"></script>
-<script src="inspect-guide.js?v=228"></script>
-<script src="get-figs.js?v=228"></script>
-<script src="body-points.js?v=228"></script>
-<script src="body-map.js?v=228"></script>
-<script src="lube.js?v=228"></script>
-<script src="lube-overrides.js?v=228"></script>
-<script src="lube2027.js?v=228"></script>
-<script src="report-core.js?v=228"></script>
+<script src="native.js?v=229"></script>
+<script src="upload-defaults.js?v=229"></script>
+<script src="hme.js?v=229"></script>
+<script src="mp-fc.js?v=229"></script>
+<script src="hme-cascade.js?v=229"></script>
+<script src="assets.js?v=229"></script>
+<script src="temp-limits.js?v=229"></script>
+<script src="normalize.js?v=229"></script>
+<script src="due.js?v=229"></script>
+<script src="wear.js?v=229"></script>
+<script src="wear-figs.js?v=229"></script>
+<script src="wear-map.js?v=229"></script>
+<script src="machine-photos.js?v=229"></script>
+<script src="machine-fig.js?v=229"></script>
+<script src="get.js?v=229"></script>
+<script src="points.js?v=229"></script>
+<script src="uc-points.js?v=229"></script>
+<script src="inspect-guide.js?v=229"></script>
+<script src="get-figs.js?v=229"></script>
+<script src="body-points.js?v=229"></script>
+<script src="body-map.js?v=229"></script>
+<script src="lube.js?v=229"></script>
+<script src="lube-overrides.js?v=229"></script>
+<script src="lube2027.js?v=229"></script>
+<script src="report-core.js?v=229"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -9983,7 +9983,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="228";
+const BUILD="229";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -12468,10 +12468,43 @@ try{ if(histRepair()) renderDue&&renderDue(); }catch(e){}
    finishing, which is the reassuring direction of this project's oldest
    failure. A repair that needs the folder waits for a launch that has it. */
 const healIfReached = ok => ok ? histHealOnce().then(teamHealOnce) : null;
-teamPull(false).then(healIfReached)
+const pullIn = () => teamPull(false).then(healIfReached)
   .catch(e=>{ histNote((e&&e.message)||e); renderDue&&renderDue(); });
-window.addEventListener("online",()=>teamPull(false).then(healIfReached)
-  .catch(e=>{ histNote((e&&e.message)||e); renderDue&&renderDue(); }));
+pullIn();
+window.addEventListener("online", pullIn);
+
+/* ── WHAT COMES IN HAS TO ARRIVE BY ITSELF TOO ─────────────────────────────
+
+   The OUTBOUND half was already automatic: armRetry backs off and retries, a
+   save triggers a send, reconnecting triggers a send, picking the phone up
+   triggers a send. The INBOUND half — the other inspectors' rounds, which are
+   what make the due list true — ran at boot, on an `online` event, and after
+   this phone happened to upload something. Nothing else.
+
+   So the case that actually happens on a shift was the one nobody covered: a
+   phone switched on at the crib room, in signal all day, with nothing of its
+   own to send. No `online` event ever fires, because the radio never dropped.
+   No upload ever finishes, because there is nothing queued. armRetry stops its
+   own timer the moment the queue is empty. That phone shows the due list it
+   downloaded at breakfast until somebody thinks to press Refresh — and the one
+   thing an inspector will not do is press a button to find out whether the
+   list they are already looking at is wrong.
+
+   A machine another inspector walked at 09:00 stays "due" on this phone all
+   day, and somebody drives out to walk it twice.
+
+   Same rule as the update check, for the same reason: nobody should have to
+   notice. teamPull is incremental — it sends a cursor and gets back only what
+   is new — and it already refuses automatic calls inside TEAM_MIN_GAP, so a
+   timer cannot turn into a request storm. */
+setInterval(()=>{ if(!document.hidden && navigator.onLine) pullIn(); }, 300000);
+/* Picking the phone up is the strongest signal that the world may have moved:
+   out of the pit, back in the yard, on camp wifi. The outbound side already
+   listens to this; the inbound side did not, so the walk back to the crib room
+   refreshed what was leaving and not what was arriving. */
+document.addEventListener("visibilitychange",()=>{
+  if(!document.hidden && navigator.onLine) pullIn();
+});
 </script>
 </body>
 </html>
