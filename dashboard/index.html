@@ -1627,6 +1627,70 @@
   .lcpart:hover{border-color:var(--accent);color:var(--ink);}
   .lcpart.off{cursor:default;opacity:.55;}
   .kpi .v .of{font-size:.55em;font-weight:600;color:var(--muted);letter-spacing:0;}
+  /* ── THE OVERVIEW HEADER, AND ITS ONE "DEFINITIONS" ─────────────────────
+     A page title, the count the page is over, and the explanations behind
+     one control instead of under every card. */
+  .pagehd{position:relative;display:flex;align-items:flex-end;gap:var(--s3);
+    margin:0 0 var(--s3);min-width:0;flex-wrap:wrap;}
+  .pagehd .pgt{display:flex;align-items:baseline;gap:var(--s3);flex-wrap:wrap;min-width:0;}
+  .pagehd h1{margin:0;font-size:17px;font-weight:800;line-height:1.2;letter-spacing:-.01em;color:var(--ink);}
+  .pgsub{font-size:var(--t-small);color:var(--muted);}
+  .pgsub .v{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:700;color:var(--ink);
+    font-variant-numeric:tabular-nums;}
+  .defs{position:relative;}
+  .defs>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px;
+    font:inherit;font-size:var(--t-small);font-weight:600;color:var(--ink-2);
+    border:1px solid var(--border);background:var(--surface);border-radius:var(--r);
+    padding:4px 10px;min-height:28px;}
+  .defs>summary::-webkit-details-marker{display:none;}
+  .defs>summary::before{content:"?";display:inline-grid;place-items:center;width:15px;height:15px;
+    border-radius:50%;border:1.5px solid currentColor;font-size:10px;font-weight:800;}
+  .defs>summary:hover{color:var(--ink);border-color:var(--axis);}
+  .defs>summary:focus-visible{outline:2px solid var(--accent);outline-offset:1px;}
+  .defs[open]>summary{color:var(--ink);border-color:var(--accent);}
+  .defsbody{position:absolute;right:0;top:calc(100% + 6px);z-index:30;width:min(560px,calc(100vw - 48px));
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);
+    box-shadow:var(--e2);padding:var(--s3) var(--s4);}
+  /* On a phone the popover becomes a panel in the flow: nine definitions in
+     a floating box taller than the screen is a box nobody can read. */
+  @media (max-width:640px){ .defsbody{position:static;width:auto;margin-top:6px;} }
+  .defsbody dl{margin:0;display:grid;grid-template-columns:max-content 1fr;gap:6px var(--s3);
+    font-size:var(--t-small);line-height:1.4;}
+  .defsbody dt{font-weight:700;color:var(--ink);}
+  .defsbody dd{margin:0;color:var(--ink-2);}
+  @media (max-width:640px){ .defsbody dl{grid-template-columns:1fr;} .defsbody dd{margin-bottom:4px;} }
+  /* Six headlines and the severity mix on ONE row on a laptop. 152px min put
+     the seventh on a second row at 1366 and doubled the strip's height. */
+  #kpis{grid-template-columns:repeat(auto-fit,minmax(132px,1fr));}
+  #kpis .kpi .s{-webkit-line-clamp:1;}
+  /* The compliance headline, on the panel that explains it. */
+  .compline{display:flex;align-items:baseline;gap:var(--s2);flex-wrap:wrap;margin:0 0 var(--s2);
+    font-size:var(--t-small);color:var(--muted);}
+  .compline .cpv{font:800 22px/1.05 ui-monospace,SFMono-Regular,Menlo,monospace;
+    letter-spacing:-.03em;font-variant-numeric:tabular-nums;color:var(--ink);
+    background:none;border:0;padding:0;cursor:pointer;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;}
+  .compline .cpv.good{color:var(--good-ink);} .compline .cpv.warn{color:var(--warn-ink);}
+  .compline .cpv.bad{color:var(--crit-ink);}
+  .compline .cpv:hover{text-decoration:underline;}
+  .compline .cpv:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px;}
+  /* A state that is a warning wears the warning colour as a badge; a gap that
+     is a fault ("unassigned" on open work) wears the fault colour as text. */
+  .triage{display:inline-block;padding:1px 7px;border-radius:5px;font-size:var(--t-micro);font-weight:700;
+    letter-spacing:.03em;background:var(--warning);color:#1f1a0a;white-space:nowrap;}
+  table.grid span.bad{color:var(--crit-ink);font-weight:640;}
+  #fleetTbl .pill{white-space:nowrap;}
+  #fleetTbl .fstat{font-size:var(--t-tiny);}
+  /* Ten columns on a 1366 screen, in Russian, whose column names run to
+     "ТРЕБУЕМОЕ ДЕЙСТВИЕ": a heading may take two lines; a table may not take
+     a sideways scroll. */
+  #fleetTbl th{white-space:normal;line-height:1.25;}
+  #fleetTbl td{padding-left:8px;padding-right:8px;}
+  /* The defect is the cell that carries the words; it must not be the one
+     squeezed to a third of its width so a round name wraps onto three lines. */
+  #fleetTbl td:nth-child(4){min-width:150px;}
+  #fleetTbl td .tag{white-space:nowrap;}
+  /* And in Russian the dates and badges give way before the table does. */
+  #fleetTbl .duec,#fleetTbl .triage{white-space:normal;}
     .covcell{min-width:180px;}
   .covrow{display:flex;align-items:center;gap:9px;}
   .covpc{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:700;
@@ -2391,53 +2455,70 @@
   <div class="chips" id="chips"></div>
 
   <section id="tab-overview">
+    <!-- THE PAGE THAT ANSWERS "WHAT NEEDS ME TODAY".
+
+         One header line, six headlines, two panels on one row, one table of
+         the ten machines that matter. Everything on it is a door: every
+         headline opens the page that holds the list behind it, already
+         filtered to what the headline counted, and the address bar follows so
+         Back returns here and the link can be sent.
+
+         The inspection count lives in the header rather than in a tile: it is
+         the denominator of the page, not a thing to act on. Its ids are a
+         contract — #kpiInsp and #kpiVoid are how the page explains a gap
+         between "loaded" and "counted" when a round has been voided. -->
+    <div class="pagehd">
+      <div class="pgt"><h1 data-i18n="ov_title">Overview</h1>
+        <span class="pgsub" id="kpiInsp"><b class="v"></b> <span class="s"></span></span></div>
+      <span class="spacer"></span>
+      <!-- ONE "DEFINITIONS" FOR THE PAGE. Every card used to carry its own
+           "How this is counted", which is the same sentence read past six
+           times. One control, one list, every number on the page explained
+           in the order the page shows them. -->
+      <details class="defs" id="ovDefs">
+        <summary data-i18n="ov_defs">Definitions</summary>
+        <div class="defsbody">
+          <dl>
+            <dt data-i18n="ov_k_crit">Critical equipment</dt><dd data-i18n="ov_d_crit">Machines whose most recent inspection carries a Critical (grade X) finding. Grade decides severity: A normal, B incipient, C degraded, X critical.</dd>
+            <dt data-i18n="ov_k_deg">Degraded equipment</dt><dd data-i18n="ov_d_deg">Machines whose most recent inspection carries a Degraded (grade C) finding and nothing worse.</dd>
+            <dt data-i18n="ov_k_over">Overdue inspections</dt><dd data-i18n="ov_d_over">Rounds past their interval, counted in machine hours at 20 h/day, on the Type and Class filters above.</dd>
+            <dt data-i18n="ov_k_act">Open maintenance actions</dt><dd data-i18n="ov_d_act">Findings that need work and are not closed — including those not yet planned.</dd>
+            <dt data-i18n="ov_k_noown">Unassigned actions</dt><dd data-i18n="ov_d_noown">Open maintenance actions with no responsible person.</dd>
+            <dt data-i18n="ov_k_review">Grade review required</dt><dd data-i18n="ov_d_review">Findings whose recorded severity does not match their grade. Review the grade; severity follows it.</dd>
+            <dt data-i18n="cv_title2">Inspection compliance</dt><dd data-i18n="cv_sub">Rounds walked before they were overdue, of every round that came due; and machines each round applies to, against machines it reached, in the period selected above.</dd>
+            <dt data-i18n="tr_title2">Condition trend</dt><dd data-i18n="tr_sub">Findings by month, worst on top. One month is a sample; three is a trend.</dd>
+            <dt data-i18n="s_fleet2">Equipment requiring attention</dt><dd data-i18n="s_fleet_sub">Worst finding on each machine's most recent inspection, highest priority first. Click a machine to open its history.</dd>
+          </dl>
+        </div>
+      </details>
+    </div>
     <div class="kpis" id="kpis"></div>
-    <!-- Counts with no denominator and no direction are the two things that
-         make a management page unreadable: 44 inspections is meaningless
-         without "of how many due", and 82 findings is meaningless without
-         "more or fewer than last month". Both, before the fleet table. -->
-    <!-- Coverage and direction answer one question between them — is the
-         programme being walked, and is it working — so on a screen wide enough
-         they are read together instead of one under the other. They were two
-         full-width slabs, which is why this tab ran to four and a half
-         thousand pixels on a 1600px monitor with 360px of it unused. -->
+    <!-- Compliance and direction answer one question between them — is the
+         programme being walked, and is it working — so they share a row. -->
     <div class="grid12">
-      <!-- Two panels that answer one question between them: is the programme
-           being walked, and is it working. Their titles were sentences —
-           "Coverage — was the round actually walked" — which is a caption, not
-           a name. The sentence is still true and still worth reading, so it is
-           behind "How this is counted" rather than deleted: methodology on
-           demand, the number always. -->
       <div class="section g7">
-        <div class="secthd"><h2 data-i18n="cv_title2">Inspection coverage</h2>
+        <div class="secthd"><h2 data-i18n="cv_title2">Inspection compliance</h2>
           <span class="spacer"></span><span class="hint" id="covFleet"></span></div>
+        <div class="compline" id="covComp"></div>
         <div class="tblwrap"><table class="grid" id="covTbl"></table></div>
         <div class="shown" id="covMore"></div>
-        <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
-          <div class="sub" data-i18n="cv_sub">Machines this round applies to, against machines it reached, in the period selected above. A finding you never went to look for is not an absence of findings.</div>
-          <div class="sub" id="covNote" style="margin-top:6px"></div></details>
+        <div class="sub" id="covNote" style="margin-top:6px"></div>
       </div>
       <div class="section g5">
         <div class="secthd"><h2 data-i18n="tr_title2">Condition trend</h2>
           <span class="spacer"></span><span class="lgnd" id="trendKey"></span></div>
         <div id="trendChart"></div>
         <div class="insight" id="trendNote"></div>
-        <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
-          <div class="sub" data-i18n="tr_sub">Findings by month, worst on top. One month is a sample; three is a trend.</div></details>
       </div>
     </div>
-    <!-- The operational table. It was 701px with a 560px viewport inside it,
-         which put its first row below the fold on a 768 screen — the one table
-         a reliability engineer opens the page to read. 340px starts it in view
-         and leaves the next section showing, which is what tells a reader
-         there IS a next section. -->
+    <!-- Ten machines, highest priority first, with what was found, what has to
+         be done about it, whose job it is and by when. The whole register is
+         one press away and never drawn here. -->
     <div class="section">
-      <div class="secthd"><h2 data-i18n="s_fleet2">Condition by equipment</h2>
+      <div class="secthd"><h2 data-i18n="s_fleet2">Equipment requiring attention</h2>
         <span class="spacer"></span><span class="legend" id="sevLegend"></span></div>
       <div class="tblwrap scrollbox" style="--sb:340px"><table class="grid" id="fleetTbl"></table></div>
       <div class="shown" id="fleetShown"></div>
-      <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
-        <div class="sub" data-i18n="s_fleet_sub">Worst severity found on each unit's most recent inspection. Click a unit to open its history.</div></details>
     </div>
   </section>
 
@@ -2948,27 +3029,27 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=235"></script>
-<script src="../mobile/hme.js?v=235"></script>
-<script src="../mobile/mp-fc.js?v=235"></script>
-<script src="../mobile/hme-cascade.js?v=235"></script>
-<script src="../mobile/temp-limits.js?v=235"></script>
+<script src="../data/magnetic_plug.js?v=236"></script>
+<script src="../mobile/hme.js?v=236"></script>
+<script src="../mobile/mp-fc.js?v=236"></script>
+<script src="../mobile/hme-cascade.js?v=236"></script>
+<script src="../mobile/temp-limits.js?v=236"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=235"></script>
-<script src="../mobile/normalize.js?v=235"></script>
-<script src="../mobile/due.js?v=235"></script>
-<script src="../mobile/wear.js?v=235"></script>
-<script src="../mobile/wear-map.js?v=235"></script>
-<script src="../mobile/lube.js?v=235"></script>
-<script src="../mobile/lube-overrides.js?v=235"></script>
-<script src="../mobile/lube2027.js?v=235"></script>
-<script src="../mobile/lube-tds.js?v=235"></script>
+<script src="../mobile/assets.js?v=236"></script>
+<script src="../mobile/normalize.js?v=236"></script>
+<script src="../mobile/due.js?v=236"></script>
+<script src="../mobile/wear.js?v=236"></script>
+<script src="../mobile/wear-map.js?v=236"></script>
+<script src="../mobile/lube.js?v=236"></script>
+<script src="../mobile/lube-overrides.js?v=236"></script>
+<script src="../mobile/lube2027.js?v=236"></script>
+<script src="../mobile/lube-tds.js?v=236"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=235"></script>
-<script src="../mobile/machine-photos.js?v=235"></script>
+<script src="../mobile/upload-defaults.js?v=236"></script>
+<script src="../mobile/machine-photos.js?v=236"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -2977,17 +3058,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=235"></script>
-<script src="../mobile/get.js?v=235"></script>
-<script src="../mobile/points.js?v=235"></script>
-<script src="../mobile/uc-points.js?v=235"></script>
-<script src="../mobile/inspect-guide.js?v=235"></script>
-<script src="../mobile/get-figs.js?v=235"></script>
-<script src="../mobile/body-points.js?v=235"></script>
-<script src="../mobile/body-map.js?v=235"></script>
-<script src="../mobile/jspdf.umd.min.js?v=235"></script>
-<script src="../mobile/html2canvas.min.js?v=235"></script>
-<script src="../mobile/report-core.js?v=235"></script>
+<script src="../mobile/machine-fig.js?v=236"></script>
+<script src="../mobile/get.js?v=236"></script>
+<script src="../mobile/points.js?v=236"></script>
+<script src="../mobile/uc-points.js?v=236"></script>
+<script src="../mobile/inspect-guide.js?v=236"></script>
+<script src="../mobile/get-figs.js?v=236"></script>
+<script src="../mobile/body-points.js?v=236"></script>
+<script src="../mobile/body-map.js?v=236"></script>
+<script src="../mobile/jspdf.umd.min.js?v=236"></script>
+<script src="../mobile/html2canvas.min.js?v=236"></script>
+<script src="../mobile/report-core.js?v=236"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -3126,13 +3207,13 @@ const I18N={
   hh_by:"By",
   hv_none:"Nothing recorded on this round",
   hv_open:"Open the full record",
-  cv_title2:"Inspection coverage",
+  cv_title2:"Inspection compliance",
   tr_title2:"Condition trend",
   how_counted:"How this is counted",
   cv_all:"Show all {n} rounds",
   cv_less:"Show fewer",
   cv_fleet:"of {n} machines",
-  s_fleet2:"Condition by equipment",
+  s_fleet2:"Equipment requiring attention",
   lt_cover:"Programme coverage",
   lt_std:"Standards",
   lt_rec:"Recommendations",
@@ -3501,7 +3582,7 @@ const I18N={
   uc_top_over:"{n} at or past condemn · worst {p}%", uc_top_worst:"worst {p}% worn",
 
   s_fleet:"Condition by equipment — latest inspection",
-  s_fleet_sub:"Worst severity found on each unit's most recent inspection. Click a unit to open its history.",
+  s_fleet_sub:"Worst finding on each machine's most recent inspection, highest priority first, with the work it is waiting on. Click a machine to open its history.",
   s_pareto:"Top failure modes (Pareto)",
   s_pareto_sub:"Coded defect types ranked by frequency — this is your defect-elimination shortlist.",
   s_cause:"Direct causes", s_cause_sub:"Why those defects occurred, as recorded at inspection.",
@@ -3550,7 +3631,7 @@ const I18N={
   ds_insp:"{n} inspection(s)", ds_indexed:"{n} files indexed", ds_inbrowser:"{n} record(s) in this browser",
   ds_photosn:"{n} photos", ds_voidn:"{n} voided",
   cv_title:"Coverage — was the round actually walked",
-  cv_sub:"Machines this round applies to, against machines it reached, in the period selected above. A finding you never went to look for is not an absence of findings.",
+  cv_sub:"Compliance is rounds walked before they were overdue, of every round that came due. Coverage is machines each round applies to, against machines it reached, in the period selected above. A finding you never went to look for is not an absence of findings.",
   cv_th_round:"Round", cv_th_seen:"Reached", cv_th_insp:"Insp.",
   cv_th_never:"Never", cv_th_over:"Overdue", cv_th_who:"By",
   cv_every:"every {d} days", cv_every_h:"every {h} h", cv_every_h_cls:"{h} h {c}", cv_carried:"(carried forward)", cv_scoped:"machines this round fits", cv_p_days:"the last {d} days", cv_p_all:"all time",
@@ -3761,6 +3842,22 @@ const I18N={
   eq_more:"Showing {n} of {of} — type to narrow",
   ov_top:"Showing the {n} highest-priority of {of} machines",
   ov_all:"View all equipment",
+  ov_title:"Overview", ov_defs:"Definitions", ov_of:"inspections on {n} machine(s)",
+  ov_k_crit:"Critical equipment", ov_s_crit:"stop or repair before next use", ov_t_crit:"Show the machines with a Critical finding",
+  ov_k_deg:"Degraded equipment", ov_s_deg:"plan the repair", ov_t_deg:"Show the machines with a Degraded finding",
+  ov_k_over:"Overdue inspections", ov_s_over:"{n} more due within 7 days", ov_s_over0:"none more due within 7 days",
+  ov_k_act:"Open maintenance actions",
+  ov_k_noown:"Unassigned actions", ov_s_noown:"no responsible person", ov_s_owned:"every action has an owner",
+  ov_t_noown:"Open the actions with no responsible person",
+  ov_k_review:"Grade review required", ov_s_none:"none in this view",
+  ov_d_crit:"Machines whose most recent inspection carries a Critical finding (grade X). Grade decides severity: A normal, B incipient, C degraded, X critical.",
+  ov_d_deg:"Machines whose most recent inspection carries a Degraded finding (grade C) and nothing worse.",
+  ov_d_over:"Rounds past their interval, counted in machine hours at 20 h/day, on the Type and Class filters above. Opens the Inspection Schedule.",
+  ov_d_act:"Findings that need work and are not closed, including those not yet planned. Opens Maintenance Actions.",
+  ov_d_noown:"Open maintenance actions with no responsible person. Opens Maintenance Actions, filtered to them.",
+  ov_d_review:"Findings whose recorded severity does not match their grade. Review the grade; severity follows it. Opens Data & Sync.",
+  th_grade:"Grade", th_reqact:"Required action", th_defcomp:"Component · top defect",
+  ov_noact:"no open work", ov_act_due:"action due {d}", ov_act_over:"action overdue {n} d",
   shown_n:"Showing {n} of {of}",
   dd_foot:"h/day is the machine's own measured rate; * marks the fleet assumption of {r} h/day, used until two hour-meter readings have measured that machine. \u201cDue\u201d counts hours, and the days beside it are those hours at that rate.",
   due_over:"overdue {n} d", due_in:"in {n} d", due_h:"{n} h", due_days:"{n} d ago",
@@ -3843,13 +3940,13 @@ const I18N={
   hh_by:"Кто",
   hv_none:"По этому обходу ничего не записано",
   hv_open:"Открыть полную запись",
-  cv_title2:"Охват осмотров",
+  cv_title2:"Соблюдение сроков осмотров",
   tr_title2:"Динамика состояния",
   how_counted:"Как это считается",
   cv_all:"Показать все обходы: {n}",
   cv_less:"Свернуть",
   cv_fleet:"из {n} машин",
-  s_fleet2:"Состояние по технике",
+  s_fleet2:"Техника, требующая внимания",
   lt_cover:"Охват программы",
   lt_std:"Нормативы",
   lt_rec:"Рекомендации",
@@ -4201,7 +4298,7 @@ const I18N={
   uc_top_over:"{n} на пределе · худшая {p}%", uc_top_worst:"худшая {p}% износа",
 
   s_fleet:"Состояние по технике — последний осмотр",
-  s_fleet_sub:"Худшая степень по последнему осмотру каждой единицы. Нажмите на единицу, чтобы открыть историю.",
+  s_fleet_sub:"Худшая находка по последнему осмотру каждой машины, самые приоритетные сверху, и работа, которую она ждёт. Нажмите на машину, чтобы открыть историю.",
   s_pareto:"Основные виды отказов (Парето)",
   s_pareto_sub:"Кодированные дефекты по частоте — это ваш список на устранение.",
   s_cause:"Непосредственные причины", s_cause_sub:"Почему возникли эти дефекты, по данным осмотра.",
@@ -4250,7 +4347,7 @@ const I18N={
   ds_insp:"осмотров: {n}", ds_indexed:"файлов в индексе: {n}", ds_inbrowser:"записей в этом браузере: {n}",
   ds_photosn:"фото: {n}", ds_voidn:"отозвано: {n}",
   cv_title:"Охват — обход действительно выполнен?",
-  cv_sub:"Машины, к которым применим обход, против машин, до которых он дошёл, за выбранный период. Отсутствие дефектов там, где никто не смотрел, — это не отсутствие дефектов.",
+  cv_sub:"Соблюдение сроков — обходы, пройденные до просрочки, из всех наступивших. Охват — машины, к которым применим обход, против машин, до которых он дошёл, за выбранный период. Отсутствие дефектов там, где никто не смотрел, — это не отсутствие дефектов.",
   cv_th_round:"Обход", cv_th_seen:"Охват", cv_th_insp:"Осм.",
   cv_th_never:"Ни разу", cv_th_over:"Просроч.", cv_th_who:"Кто",
   cv_every:"каждые {d} сут", cv_every_h:"каждые {h} ч", cv_every_h_cls:"{h} ч — {c}", cv_carried:"(перенесено)", cv_scoped:"машины, к которым применим обход", cv_p_days:"последние {d} сут", cv_p_all:"всё время",
@@ -4458,6 +4555,22 @@ const I18N={
   eq_more:"Показано {n} из {of} — уточните поиск",
   ov_top:"Показаны {n} самых приоритетных из {of} машин",
   ov_all:"Показать всё оборудование",
+  ov_title:"Обзор", ov_defs:"Определения", ov_of:"осмотров, машин: {n}",
+  ov_k_crit:"Критичная техника", ov_s_crit:"остановить или отремонтировать", ov_t_crit:"Показать машины с критической находкой",
+  ov_k_deg:"Ухудшенная техника", ov_s_deg:"запланировать ремонт", ov_t_deg:"Показать машины с находкой «Частичный»",
+  ov_k_over:"Просроченные осмотры", ov_s_over:"ещё {n} в ближайшие 7 дней", ov_s_over0:"больше ничего в ближайшие 7 дней",
+  ov_k_act:"Открытые действия",
+  ov_k_noown:"Без ответственного", ov_s_noown:"ответственный не назначен", ov_s_owned:"у каждого действия есть ответственный",
+  ov_t_noown:"Открыть действия без ответственного",
+  ov_k_review:"Проверка оценки", ov_s_none:"нет в этой выборке",
+  ov_d_crit:"Машины, у которых последний осмотр содержит критическую находку (оценка X). Оценка определяет степень: A — норма, B — зарождающийся, C — частичный, X — критический.",
+  ov_d_deg:"Машины, у которых последний осмотр содержит находку «Частичный» (оценка C) и ничего хуже.",
+  ov_d_over:"Обходы, вышедшие за интервал, в моточасах при 20 ч/сут, с учётом фильтров «Тип» и «Класс». Открывает график осмотров.",
+  ov_d_act:"Находки, требующие работ и не закрытые, включая ещё не запланированные. Открывает реестр действий.",
+  ov_d_noown:"Открытые действия без ответственного. Открывает реестр действий с этим фильтром.",
+  ov_d_review:"Находки, у которых записанная степень не совпадает с оценкой. Проверьте оценку — степень следует за ней. Открывает «Данные и синхронизация».",
+  th_grade:"Оценка", th_reqact:"Требуемое действие", th_defcomp:"Узел · основной дефект",
+  ov_noact:"нет открытых работ", ov_act_due:"срок {d}", ov_act_over:"просрочено {n} дн.",
   shown_n:"Показано {n} из {of}",
   dd_foot:"ч/сут — собственная измеренная наработка машины; * означает допущение по парку в {r} ч/сут, которое действует, пока машину не измерили два показания счётчика. «Срок» считается в часах, дни рядом — это те же часы при этой наработке.",
   due_over:"просрочено {n} дн.", due_in:"через {n} дн.", due_h:"{n} ч", due_days:"{n} дн. назад",
@@ -5210,27 +5323,53 @@ function renderKpis(){
       <span class="s">${o.s||""}</span>
     </${o.go?"button":"div"}>`;
 
+  /* EQUIPMENT, NOT FINDINGS. "Needs attention: 23" counted findings, and a
+     planner reads a headline as machines — one truck with nine degraded
+     bushings is one truck to send somebody to. So these two count machines
+     by the worst finding on their most recent inspection, exactly as the
+     table below ranks them, so the headline and the list can never disagree. */
+  const latest={};
+  recs.forEach(r=>{ const k=r.equip; if(!latest[k]||(r.date||"")>(latest[k].date||"")) latest[k]=r; });
+  let nCrit=0, nDeg=0;
+  Object.values(latest).forEach(r=>{ const w=worstOf(r); if(w==="CRI") nCrit++; else if(w==="DEG") nDeg++; });
+  const nNoown=f.filter(x=>actionRequired(x.r,x.i) && !x.i.owner).length;
+  let nReview=0; try{ nReview=sevConflicts().length; }catch(e){}
+
+  /* The denominator of the page, in the header: what is being counted, and
+     what was loaded but is not. */
+  const ki=$("kpiInsp");
+  if(ki){
+    ki.querySelector(".v").textContent=fmtN(recs.length);
+    ki.querySelector(".s").innerHTML=esc(t("ov_of",{n:units}))+(nVoidHid
+      ? ` · <button class="voidhint" id="kpiVoid" title="${esc(t("k_voidtip"))}">${esc(t("k_voidhid",{n:nVoidHid}))}</button>`
+      : "")+(pFind!=null?" · "+deltaLine(f.length,pFind,true):"");
+  }
+
   $("kpis").innerHTML=
-      tile({ id:"kpiComp", k:t("k_comp"), v:comp.pct==null?"—":comp.pct+"%",
-             s: comp.pct==null ? esc(t("k_comp_none"))
-                : esc(t("k_comp_s",{n:comp.onTime, of:comp.due})),
-             cls: comp.pct==null ? "" : comp.pct>=90 ? "good" : comp.pct>=75 ? "warn" : "bad",
-             go:"due", title:t("k_comp_t") })
-    + tile({ id:"kpiWeek", k:t("k_week"), v:ds.week,
-             s: ds.over ? `<span class="dlt up">${esc(t("k_week_over",{n:ds.over}))}</span>`
-                        : esc(t("k_week_clear")),
-             cls: ds.over ? "bad" : ds.week ? "warn" : "good",
-             go:"week", title:t("k_week_t") })
-    + tile({ id:"kpiAtt", k:t("k_att"), v:attention, s:(deltaLine(attention,pAtt,true)||esc(t("k_attsub"))),
-             cls:attention?"bad":"good", go:"attention", title:t("k_att_t") })
-    + tile({ id:"kpiAct", k:t("k_act"), v:openActions,
+      tile({ id:"kpiCrit", k:t("ov_k_crit"), v:nCrit,
+             s: esc(nCrit ? t("ov_s_crit") : t("ov_s_none")),
+             cls:"bad"+(nCrit?"":" zero")+(drill.sev==="CRI"?" on":""),
+             go:"crit", title:t("ov_t_crit") })
+    + tile({ id:"kpiDeg", k:t("ov_k_deg"), v:nDeg,
+             s: esc(nDeg ? t("ov_s_deg") : t("ov_s_none")),
+             cls:(nDeg?"warn":"good")+(drill.sev==="DEG"?" on":""),
+             go:"deg", title:t("ov_t_deg") })
+    + tile({ id:"kpiOver", k:t("ov_k_over"), v:ds.over,
+             s: esc(ds.week ? t("ov_s_over",{n:ds.week}) : ds.over ? t("ov_s_over0") : t("k_week_clear")),
+             cls:"bad"+(ds.over?"":" zero"),
+             go:"over", title:t("k_week_t") })
+    + tile({ id:"kpiAct", k:t("ov_k_act"), v:openActions,
              s: nTriage ? esc(t("k_act_tri",{n:nTriage})) : esc(t("k_actsub")),
              cls:openActions?"warn":"good",
              go:"actions", title:t("k_act_t") })
-    + tile({ id:"kpiInsp", k:t("k_insp"), v:recs.length,
-             s:esc(t("k_units",{n:units}))+(nVoidHid
-               ? ` · <button class="voidhint" id="kpiVoid" title="${esc(t("k_voidtip"))}">${esc(t("k_voidhid",{n:nVoidHid}))}</button>`
-               : "") + (pFind!=null?" · "+deltaLine(f.length,pFind,true):"") })
+    + tile({ id:"kpiNoown", k:t("ov_k_noown"), v:nNoown,
+             s: esc(nNoown ? t("ov_s_noown") : t("ov_s_owned")),
+             cls:"warn"+(nNoown?"":" zero"),
+             go:"noown", title:t("ov_t_noown") })
+    + tile({ id:"kpiReview", k:t("ov_k_review"), v:nReview,
+             s: esc(nReview ? t("sy_k_grade_s") : t("ov_s_none")),
+             cls:(nReview?"warn":"good"),
+             go:"review", title:t("sy_k_grade_go") })
     + `<div class="tile" id="kpiMix"><div class="k">${t("k_mix")}</div>
      <div class="bar" style="margin-top:8px">${bar}</div>
      <div class="legend">${["CRI","DEG","INC","NOF"].map(s=>
@@ -5240,16 +5379,43 @@ function renderKpis(){
         ><i style="background:${SEVC[s]}"></i>${esc(SEV[s].l)}<b>${cnt[s]}</b></button>`).join("")}</div>
    </div>`;
   $("kpis").querySelectorAll("[data-sev]").forEach(b=>b.onclick=()=>setDrill("sev",b.dataset.sev));
-  /* Each headline is a door into what it counts. */
-  $("kpis").querySelectorAll("[data-kgo]").forEach(b=>b.onclick=()=>{
-    const g=b.dataset.kgo;
-    if(g==="due"){ showTab("due"); return; }
-    if(g==="week"){ showTab("due"); dueGo(ds.over?"over":"soon"); return; }
-    if(g==="actions"){ showTab("actions"); return; }
-    if(g==="attention"){ setDrill("sev", drill.sev==="CRI"?"DEG":"CRI"); }
-  });
+  /* EACH HEADLINE IS A DOOR, AND THE DOOR OPENS ON THE RIGHT ROOM.
+
+     Pressing a number takes the reader to the page that holds the list behind
+     it, with that page already filtered to what the number counted — and
+     pushes an address, so Back returns to this page. A headline that only
+     changed a filter on the same page read as a dead button to everyone who
+     did not notice the table twenty rows below had changed. */
+  $("kpis").querySelectorAll("[data-kgo]").forEach(b=>b.onclick=()=>kpiGo(b.dataset.kgo));
   const kv=$("kpiVoid"); if(kv) kv.onclick=(e)=>{ e.stopPropagation();
     $("fVoid").checked=true; renderAll(); };
+  /* The KPI strip disagrees with nobody: keep the tally for whoever asks. */
+  renderKpis.last={ crit:nCrit, deg:nDeg, over:ds.over, act:openActions, noown:nNoown, review:nReview,
+                    units, recs:recs.length };
+}
+/* Where each Overview headline goes, and what it is filtered to when it gets
+   there. One table, so the routing can be read — and tested — as data. */
+function kpiGo(g){
+  if(g==="crit"||g==="deg"){
+    /* The list is this page's own table. Filter it, and bring it into view —
+       otherwise the press appears to do nothing on a tall screen. */
+    const sv = g==="crit" ? "CRI" : "DEG";
+    setDrill("sev", sv);
+    try{ urlWrite(true); }catch(e){}
+    const tb=$("fleetTbl"); if(tb && tb.scrollIntoView) tb.scrollIntoView({behavior:"smooth", block:"start"});
+    return;
+  }
+  if(g==="over"){ showTab("due", true); dueGo("over"); return; }
+  if(g==="due"){ showTab("due", true); return; }
+  if(g==="actions"){ showTab("actions", true); setAFilt("open"); return; }
+  if(g==="noown"){ showTab("actions", true); setAFilt("noown"); return; }
+  if(g==="review"){
+    showTab("sync", true);
+    const box=$("sySevBox");
+    if(box){ box.scrollIntoView({behavior:"smooth", block:"start"});
+             box.focus({preventScroll:true});
+             box.classList.remove("flash"); void box.offsetWidth; box.classList.add("flash"); }
+  }
 }
 
 /* Rounds walked on time, against rounds that came due — over the whole
@@ -5304,7 +5470,10 @@ function nextDueBy(){
       if(!cur || r.n.dueInDays < cur.n.dueInDays) m[r.unit]=r;
     });
   }catch(e){}
-  nextDueBy._c={at:Date.now(), v:m};
+  /* An empty answer is not cached: the first paint can run before the due
+     engine has its register, and remembering that "nothing" for four seconds
+     is how a column of real dates was drawn as a column of dashes. */
+  if(Object.keys(m).length) nextDueBy._c={at:Date.now(), v:m};
   return m;
 }
 function renderFleet(){
@@ -5315,28 +5484,60 @@ function renderFleet(){
      still open in May, and reading it off May's round alone reports zero. */
   findings(recs).forEach(({r,i})=>{
     if(!actionRequired(r,i)) return;
-    (itemsU[r.equip]=itemsU[r.equip]||[]).push(i);
+    (itemsU[r.equip]=itemsU[r.equip]||[]).push({r,i});
   });
   const due=nextDueBy();
   const clsOf=r=>r.cls||"";
-  const ownersOf=u=>[...new Set((itemsU[u]||[]).map(i=>i.owner).filter(Boolean))];
-  const val=(r,k)=>({ equip:r.equip, cls:clsOf(r), type:r.type, date:r.date||"",
-    sev:sevRank(worstOf(r)), find:notable(r).length,
-    open:(itemsU[r.equip]||[]).length,
-    owner:(ownersOf(r.equip)[0]||"\uffff"),
-    due:(due[String(r.equip).toUpperCase()] ? due[String(r.equip).toUpperCase()].n.dueInDays : 99999),
-    defect:topFinding(r), by:r.by||"" }[k]);
+  const ownersOf=u=>[...new Set((itemsU[u]||[]).map(x=>x.i.owner).filter(Boolean))];
+  /* THE JOB THE MACHINE IS WAITING ON. Of its open work, the worst finding
+     first and the most overdue among equals \u2014 the one a planner would name if
+     asked "what does TK149 need". Its action, its state and its date are the
+     three columns that turn a list of conditions into a list of work. */
+  /* COMPUTED ONCE PER MACHINE, NOT ONCE PER COMPARISON. The sort key used to
+     be read through a function that built every column's value for the row
+     \u2014 including a sort of the machine's own items \u2014 on each call, and a
+     sort makes n\u00b7log n calls. At a thousand machines that was four seconds
+     of a re-render the whole page had to wait for. */
+  const leadOf=u=>{
+    const xs=(itemsU[u]||[]).slice().sort((a,b)=>
+      (sevRank(sevOf(b.r,b.i))-sevRank(sevOf(a.r,a.i))) ||
+      ((fOverdue(b.i)?1:0)-(fOverdue(a.i)?1:0)) ||
+      String(a.i.due||"\uffff").localeCompare(String(b.i.due||"\uffff")));
+    return xs[0]||null;
+  };
+  const gradeOf=r=>{ let g="",n=-1; (r.items||[]).forEach(i=>{ const s=sevOf(r,i);
+    if(sevRank(s)>n){ n=sevRank(s); g=String(i.grade||"").toUpperCase(); } }); return g; };
+  const actDueOf=u=>{ const ds=(itemsU[u]||[]).map(x=>x.i.due).filter(Boolean).sort(); return ds[0]||""; };
+  const KEY={};
+  Object.values(byU).forEach(r=>{
+    const u=r.equip, lead=leadOf(u), dd=due[String(u).toUpperCase()];
+    const as=lead?actionState(lead.r,lead.i):null;
+    KEY[u]={ equip:u, cls:clsOf(r), type:r.type, date:r.date||"",
+      sev:sevRank(worstOf(r)), find:notable(r).length,
+      open:(itemsU[u]||[]).length,
+      owner:(ownersOf(u)[0]||"\uffff"),
+      due:(dd ? dd.n.dueInDays : 99999),
+      adue:(actDueOf(u)||"\uffff"),
+      act:(lead ? (lead.i.action ? actionName(lead.i.action) : "\ufffe") : "\uffff"),
+      status:(as ? (as.k==="triage" ? "triage" : "st_"+String(lead.i.status||"")) : "\uffff"),
+      defect:topFinding(r), by:r.by||"", lead, as };
+  });
+  const val=(r,k)=>KEY[r.equip][k];
   const rows=Object.values(byU).sort((a,b)=>{
     const x=val(a,fleetSort.k), y=val(b,fleetSort.k);
     const c = typeof x==="number" ? x-y : String(x).localeCompare(String(y));
     return (c||a.equip.localeCompare(b.equip))*fleetSort.dir;
   });
   if(!rows.length){ $("fleetTbl").innerHTML=`<tr><td class="empty">${esc(t("e_nofilter"))}</td></tr>`; return; }
-  const cols=[["equip",t("th_unit"),""],["cls",t("th_class"),""],["type",t("th_type"),""],
-              ["date",t("th_date"),""],["sev",t("th_worst"),""],
-              ["find",t("th_find"),"r"],["open",t("th_open"),"r"],
-              ["owner",t("th_owner"),""],["due",t("th_nextdue"),""],
-              ["defect",t("th_topdef"),""],["by",t("th_by"),"hide-m"]];
+  /* Unit \u00b7 Grade \u00b7 Class \u00b7 Component or top defect \u00b7 Findings \u00b7 Required
+     action (with its status beneath) \u00b7 Open \u00b7 Responsible \u00b7 Action due \u00b7 Next
+     round. The round type and date ride in the defect cell, and the status
+     rides under the action: each says something ABOUT the cell it sits in,
+     and as a column of its own it pushed the table off a 1366 screen. */
+  const cols=[["equip",t("th_unit"),""],["sev",t("th_grade"),""],["cls",t("th_class"),""],
+              ["defect",t("th_defcomp"),""],["find",t("th_find"),"r hide-m"],
+              ["act",t("th_reqact"),""],["open",t("th_open"),"r"],
+              ["owner",t("th_owner"),""],["adue",t("th_due"),""],["due",t("th_nextdue"),""]];
   let h=`<thead><tr>`+cols.map(([k,l,cl])=>
     `<th class="sortable ${cl}${fleetSort.k===k?" on":""}" data-sort="${k}">${l}<span class="arrow">${fleetSort.k===k?(fleetSort.dir>0?"\u25b2":"\u25bc"):"\u2195"}</span></th>`).join("")+`</tr></thead><tbody>`;
   /* TEN, ON OVERVIEW — AND THE WHOLE REGISTER ONE CLICK AWAY.
@@ -5365,28 +5566,38 @@ function renderFleet(){
   pgF.rows.forEach(r=>{
     const w=worstOf(r); const fs=notable(r); const top=topFinding(r);
     const open=(itemsU[r.equip]||[]);
-    const nOver=open.filter(fOverdue).length;
+    const nOver=open.filter(x=>fOverdue(x.i)).length;
     const own=ownersOf(r.equip);
     const d=due[String(r.equip).toUpperCase()];
+    const g=gradeOf(r), lead=KEY[r.equip].lead, as=KEY[r.equip].as;
+    const ad=actDueOf(r.equip);
+    const adOver = ad && ad<todayISO();
+    const adDays = ad ? Math.round((Date.parse(ad+"T00:00:00Z")-Date.parse(todayISO()+"T00:00:00Z"))/864e5) : null;
     /* Every cell that names a thing you can filter by IS the filter for it.
        A class you can read but not click is a class you then go and find in a
        dropdown, which is the same information costing two more actions. */
     h+=`<tr data-u="${esc(r.equip)}" style="cursor:pointer">
       <td><b>${esc(r.equip)}</b></td>
+      <td>${w?`<span class="pill ${SEV[w].c}" title="${esc(t("th_worst"))}">${g?esc(g)+" \u00b7 ":""}${SEV[w].l}</span>`:'<span class="muted">\u2014</span>'}</td>
       <td>${clsOf(r)?`<button class="xf" data-xcls="${esc(clsOf(r))}" title="${esc(t("xf_cls"))}">${esc(clsOf(r))}</button>`:'<span class="muted">\u2014</span>'}</td>
-      <td><span class="tag">${esc(TYPE_LABEL[r.type]||r.type)}</span></td>
-      <td class="mono">${esc(r.date||"")}</td>
-      <td>${w?`<span class="pill ${SEV[w].c}">${SEV[w].l}</span>`:'<span class="muted">\u2014</span>'}</td>
-      <td class="mono r">${fs.length}</td>
+      <td>${top?esc(top):'<span class="muted">\u2014</span>'}<div class="muted" style="font-size:11px;margin-top:2px"><span class="tag">${esc(TYPE_LABEL[r.type]||r.type)}</span><span class="mono">${esc(r.date||"")}</span>${r.by?` · ${esc(r.by)}`:""}</div></td>
+      <td class="mono r hide-m">${fs.length}</td>
+      <td>${lead
+          ? (lead.i.action ? esc(actionName(lead.i.action)) : `<span class="muted">—</span>`)
+            + `<div class="fstat" style="margin-top:3px">${as && as.k==="triage"
+                ? `<span class="triage">${esc(t("as_triage"))}</span>`
+                : `<span class="muted">${esc(stName(lead.i.status))}</span>`}</div>`
+          : `<span class="muted">${esc(t("ov_noact"))}</span>`}</td>
       <td class="mono r">${open.length
           ? `<button class="xf num${nOver?" bad":""}" data-xact="${esc(r.equip)}" title="${esc(nOver?t("xf_open_over",{n:nOver}):t("xf_open"))}">${open.length}${nOver?`<i>\u25cf</i>`:""}</button>`
           : '<span class="muted">0</span>'}</td>
       <td>${own.length
           ? `<button class="xf who" data-xown="${esc(own[0])}" title="${esc(t("xf_own",{o:own.join(", ")}))}"><i>${esc(ini(own[0]))}</i><span>${esc(own[0])}${own.length>1?` +${own.length-1}`:""}</span></button>`
-          : `<span class="muted">${esc(t("th_noowner"))}</span>`}</td>
-      <td>${d ? dueCell(d) : '<span class="muted">\u2014</span>'}</td>
-      <td>${top?esc(top):'<span class="muted">\u2014</span>'}</td>
-      <td class="muted hide-m">${esc(r.by||"")}</td></tr>`;
+          : (open.length ? `<span class="bad">${esc(t("th_noowner"))}</span>` : `<span class="muted">\u2014</span>`)}</td>
+      <td>${ad
+          ? `<span class="duec${adOver?" over":(adDays<=7?" soon":"")}" title="${esc(ad)}">${esc(adOver?t("ov_act_over",{n:Math.abs(adDays)}):t("ov_act_due",{d:ad}))}</span>`
+          : '<span class="muted">\u2014</span>'}</td>
+      <td>${d ? dueCell(d) : '<span class="muted">\u2014</span>'}</td></tr>`;
   });
   $("fleetTbl").innerHTML=h+"</tbody>";
   const fw=$("fleetTbl").parentNode;
@@ -6566,6 +6777,11 @@ function attName(e){
    everything it sends; until every record in the folder carries one, a name is
    what both ends can agree on, and guessing would be worse than saying so. */
 function serverMediaOf(it,rec){
+  /* Fresh objects every time, from one computation per pass: a caller that
+     decorates an entry must not be handing its decoration to the next one. */
+  return passMemo(it, ()=>serverMediaOf0(it,rec)).map(m=>Object.assign({},m));
+}
+function serverMediaOf0(it,rec){
   let has=null;
   try{ has=(window.CMDrive&&CMDrive.hasName)?CMDrive.hasName:null; }catch(e){ has=null; }
   if(!has||!it||!rec) return [];
@@ -7368,6 +7584,20 @@ function cvEvery(r){
 }
 function renderCoverage(){
   const { rows, days, fleet } = coverageRows();
+  /* THE COMPLIANCE FIGURE, ON THE PANEL THAT EXPLAINS IT. It led the KPI
+     strip as a tile; it is a score for the programme, not a thing to act on
+     this morning, and it belongs beside the coverage table it summarises.
+     The number is still a door to the schedule. */
+  try{
+    const comp=complianceNow(), cc=$("covComp");
+    if(cc){
+      const cls = comp.pct==null ? "" : comp.pct>=90 ? "good" : comp.pct>=75 ? "warn" : "bad";
+      cc.innerHTML=`<button type="button" class="cpv ${cls}" id="kpiComp" title="${esc(t("k_comp_t"))}">${
+          comp.pct==null?"—":comp.pct+"%"}</button><span>${esc(t("k_comp"))} · ${
+          comp.pct==null ? esc(t("k_comp_none")) : esc(t("k_comp_s",{n:comp.onTime, of:comp.due}))}</span>`;
+      const kb=$("kpiComp"); if(kb) kb.onclick=()=>kpiGo("due");
+    }
+  }catch(e){}
   if(!rows.length){
     $("covTbl").innerHTML=`<tbody><tr><td class="muted" style="padding:16px">${esc(t("cv_empty"))}</td></tr></tbody>`;
     $("covNote").textContent=""; return; }
@@ -12728,6 +12958,7 @@ function renderSevGaps(){
 function renderSync(){
   if(!$("syncKpis")) return;
   const s=syncScan();
+  if(RENDER_LIVE) renderSync.scan=s;
   /* data-kpi as well as the id, and it is not decoration.
 
      These tiles are built here, so no literal id="syGrade" exists in the
@@ -13069,7 +13300,7 @@ function renderNavCounts(){
     const f=findings(filtered());
     nb("nbAct", f.filter(x=>actionRequired(x.r,x.i)).length);
   }catch(e){}
-  try{ nb("nbSync", syncBadge(syncScan())); }catch(e){}
+  try{ nb("nbSync", syncBadge((RENDER_LIVE && renderSync.scan) || syncScan())); }catch(e){}
 }
 function renderAll(){
   /* What survived the filters, beside the controls that did the filtering. */
@@ -13084,7 +13315,31 @@ function renderAll(){
         const n=filtered().length, of=RECS.filter(r=>showV||!r._void).length;
       el.textContent = n===of ? "" : t("f_count",{n:fmtN(n), of:fmtN(of)}); }
   }catch(e){}
-  renderChips(); renderConflictBar(); renderKpis(); renderCoverage(); renderTrend(); renderFleet(); renderFailure(); renderWearTab(); renderActions(); renderHistory(); renderLubeTab(); renderDueTab(); renderSync(); renderNavCounts(); }
+  /* ONE FOLDER SCAN PER PASS. renderSync and renderNavCounts each ran
+     syncScan() — the same walk over every record and every file — so a
+     re-render at fleet size paid half a second twice. Inside one pass the
+     folder cannot change between the two, so the badge reads the panel's
+     scan; outside a pass each still scans for itself. */
+  RENDER_LIVE=true;
+  try{
+  renderChips(); renderConflictBar(); renderKpis(); renderCoverage(); renderTrend(); renderFleet(); renderFailure(); renderWearTab(); renderActions(); renderHistory(); renderLubeTab(); renderDueTab(); renderSync(); renderNavCounts();
+  }finally{ RENDER_LIVE=false; renderSync.scan=null; PASS_MEMO=null; } }
+var RENDER_LIVE=false;           // var: hoisted, so a render before this line reads false, not a TDZ error
+/* WORK THAT IS THE SAME FOR THE WHOLE PASS IS DONE ONCE IN THE PASS.
+   serverMediaOf() asks the folder index what it holds for a point, and three
+   audits — the sync scan, the population counts, the evidence gaps — ask it
+   about the same ten thousand points in the same renderAll. The index cannot
+   change between them, so inside a pass the answer is kept, keyed on the
+   point itself; outside a pass nothing is kept, and an assignment made in a
+   panel is seen by the very next call. */
+var PASS_MEMO=null;
+function passMemo(key, mk){
+  if(!RENDER_LIVE || !key || typeof key!=="object") return mk();
+  if(!PASS_MEMO) PASS_MEMO=new WeakMap();
+  let m=PASS_MEMO.get(key);
+  if(m===undefined){ m=mk(); PASS_MEMO.set(key,m); }
+  return m;
+}
 ["fType","fClass","fRange","fDq"].forEach(id=>{ const el=$(id); if(el) el.onchange=renderAll; });
 /* Open it, and keep it open while it is filtering: a control that hides itself
    while it is still narrowing the page is how somebody spends ten minutes
@@ -13108,6 +13363,12 @@ $("fDqTog").onclick=()=>{
   if(!open) $("fDq").focus();
 };
 $("fReset").onclick=clearFilters;
+/* The Definitions popover closes the way every popover is expected to: on
+   Escape, and on a press anywhere outside it. */
+(()=>{ const d=$("ovDefs"); if(!d) return;
+  document.addEventListener("click", e=>{ if(d.open && !d.contains(e.target)) d.open=false; });
+  document.addEventListener("keydown", e=>{ if(e.key==="Escape" && d.open){ d.open=false; d.querySelector("summary").focus(); } });
+})();
 document.querySelectorAll("#lpoZoom button[data-z]").forEach(b=>b.onclick=()=>{
   lpoZoom=b.dataset.z;
   try{ localStorage.setItem(LPOZ,lpoZoom); }catch(e){}
@@ -13289,8 +13550,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=235"></script>
-<script src="sync-adapter.js?v=235"></script>
-<script src="report.js?v=235"></script>
+<script src="drive.js?v=236"></script>
+<script src="sync-adapter.js?v=236"></script>
+<script src="report.js?v=236"></script>
 </body>
 </html>

@@ -155,8 +155,21 @@ const TABS = ['overview', 'failure', 'wear', 'actions', 'due', 'equipment', 'lub
     const t2 = [...document.querySelectorAll('#kpis > *')].map(x => (x.innerText || '').replace(/\s+/g, ' ').trim());
     return t2;
   });
-  ok('on-time compliance leads the page', /compliance/i.test(head[0] || ''), (head[0] || '').slice(0, 46));
-  ok('and it carries its denominator', /\d+\s*of\s*\d+/i.test(head[0] || ''), (head[0] || '').slice(0, 60));
+  /* The compliance figure moved off the headline strip and onto the panel
+     that explains it (the strip is for what needs doing today; compliance is
+     a score). What must hold is that it is ON the page, above the fold, with
+     its denominator — not which slot it occupies. */
+  const compl = await p.evaluate(() => {
+    const el = document.getElementById('covComp');
+    return { txt: (el ? el.innerText : '').replace(/\s+/g, ' ').trim(),
+             top: el ? Math.round(el.getBoundingClientRect().top) : -1, h: innerHeight };
+  }).catch(() => ({ txt: '', top: -1, h: 0 }));
+  ok('on-time compliance is on the page, above the fold',
+     /compliance/i.test(compl.txt) && compl.top >= 0 && compl.top < compl.h,
+     compl.txt.slice(0, 46) + ' @' + compl.top);
+  ok('and it carries its denominator', /\d+\s*of\s*\d+/i.test(compl.txt), compl.txt.slice(0, 60));
+  ok('and the headline strip is about today: it leads with the critical machines',
+     /critical/i.test(head[0] || ''), (head[0] || '').slice(0, 46));
 
   console.log('\n  the tray round is counted against a pool that exists');
   const cov = await p.evaluate(() => {
