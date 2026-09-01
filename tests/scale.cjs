@@ -28,6 +28,11 @@ const ok = (c, n, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
                           if (!c) fails.push(n); };
 
 const N = 1000;
+/* The LARGEST page any table uses. Tables choose their own size — the wear and
+   action rows carry twice what a plain row does, so those page at 25 — and a
+   test that hardcodes one number is a test that fails the day a table is made
+   easier to read. This is the ceiling, and the exact size is derived from the
+   pager's own words wherever it matters. */
 const PAGE = 50;
 
 (async () => {
@@ -102,7 +107,15 @@ const PAGE = 50;
     await p.evaluate(() => document.querySelector('#tab-actions [data-pg$=":next"]').click());
     await p.waitForTimeout(400);
     const after = await pagerText('actions');
-    ok(before !== after && /^51/.test(after), 'Next moves to the next page',
+    /* THE SECOND PAGE STARTS WHERE THE FIRST ONE ENDED — whatever the page
+       size is. This asserted /^51/, which was a restatement of PAGE_SIZE = 50
+       rather than a property of paging, and it failed the moment the register
+       moved to 25 rows to fit a 1366 laptop. The relationship is the thing
+       worth holding: no row skipped, none shown twice. */
+    const endOf = s2 => { const m = String(s2).replace(/[\s\u00a0,]/g, '').match(/^(\d+)\D+(\d+)/); return m ? +m[2] : null; };
+    const startOf = s2 => { const m = String(s2).replace(/[\s\u00a0,]/g, '').match(/^(\d+)/); return m ? +m[1] : null; };
+    ok(before !== after && startOf(after) === endOf(before) + 1,
+       'Next moves to the next page, continuing where the first ended',
        `${before} → ${after}`);
     await p.evaluate(() => document.querySelector('#tab-actions [data-pg$=":prev"]').click());
     await p.waitForTimeout(400);
