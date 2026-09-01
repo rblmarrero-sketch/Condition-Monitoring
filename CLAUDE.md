@@ -107,6 +107,46 @@ that decides whether any of the work reaches a human being.
 
 ---
 
+## THE UPDATE HAS TO REACH THE PHONE BY ITSELF
+
+Bumping `BUILD` is necessary and it is not sufficient. A build sitting on
+GitHub Pages that no handset has fetched is the same as no build at all — the
+signature defect one level up: real work rendered as nothing, this time by
+never arriving.
+
+**Standing rule for every change: assume nobody will ever tap "update".**
+An inspector at −40 with gloves on, mid-round, will not read a banner and will
+not go looking for a version number. If the update needs a decision from them,
+it does not happen. Every technician's phone must end up on the new build with
+no action taken by the technician, and the manual route exists only as the
+last resort for a phone that has somehow fallen behind.
+
+What the app already does — verify these still work after touching anything in
+this path, because each was added to close a real gap:
+
+| When | What happens |
+|---|---|
+| 1.5 s after boot | `checkForNewBuild()` |
+| every 5 minutes, always | `setInterval(checkForNewBuild, 300000)` — a phone is opened at the start of a shift and never closed, so "check on open" means "checked once, twelve hours ago" |
+| the app becomes visible | `visibilitychange` → check **and** apply |
+| the radio comes back | `online` → check |
+| a newer BUILD is seen | `reg.update()` starts the download **immediately**, without waiting for a tap |
+| the download completes | the worker takes over only once every essential file is cached — `sw.js` refuses to `skipWaiting()` on an incomplete precache |
+| the round is saved | `applyUpdateIfIdle()` — reloads the moment the app is idle, so the new build lands between rounds and never mid-capture |
+| nothing else worked | the banner, and `#forceUpdate`, which clears worker + caches + browser copies and refetches |
+
+The two banners say different things and are not interchangeable: the one from
+`checkForNewBuild` fires when a build has been *found and started*, so its
+button must force a full refetch — a plain reload would serve the cached copy
+and read as broken. The one from `controllerchange` fires when the new build is
+already downloaded and in charge, and only needs a reload.
+
+**Never make an update wait on a technician, and never apply one mid-round.**
+Losing a half-captured inspection to a reload is worse than a phone being an
+hour behind. `applyUpdateIfIdle` checks `__swBusy()` for exactly that reason.
+
+---
+
 ## Secrets
 
 `ADMIN_SECRET` lives in `/opt/cm/cm.env` on the VM and **nowhere else**. It must

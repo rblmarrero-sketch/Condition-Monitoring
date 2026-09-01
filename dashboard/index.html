@@ -106,6 +106,10 @@
     color:var(--muted);letter-spacing:.02em;padding:3px 7px;border-radius:5px;
     background:var(--surface-2);border:1px solid var(--border);cursor:help;
     white-space:nowrap;}
+  /* A version that is about to change says so — quietly, because the page
+     refreshes itself and this is a notice, not a task. */
+  .ver.stale{background:color-mix(in srgb,var(--warning) 22%,transparent);
+    border-color:color-mix(in srgb,var(--warning) 55%,var(--border));}
   /* The toggle lives with the thing it moves. */
   .railtog{position:absolute;right:7px;top:10px;width:28px;height:28px;padding:0;
     border:1px solid var(--rail-line);background:none;color:var(--rail-muted);
@@ -2878,27 +2882,27 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=227"></script>
-<script src="../mobile/hme.js?v=227"></script>
-<script src="../mobile/mp-fc.js?v=227"></script>
-<script src="../mobile/hme-cascade.js?v=227"></script>
-<script src="../mobile/temp-limits.js?v=227"></script>
+<script src="../data/magnetic_plug.js?v=228"></script>
+<script src="../mobile/hme.js?v=228"></script>
+<script src="../mobile/mp-fc.js?v=228"></script>
+<script src="../mobile/hme-cascade.js?v=228"></script>
+<script src="../mobile/temp-limits.js?v=228"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=227"></script>
-<script src="../mobile/normalize.js?v=227"></script>
-<script src="../mobile/due.js?v=227"></script>
-<script src="../mobile/wear.js?v=227"></script>
-<script src="../mobile/wear-map.js?v=227"></script>
-<script src="../mobile/lube.js?v=227"></script>
-<script src="../mobile/lube-overrides.js?v=227"></script>
-<script src="../mobile/lube2027.js?v=227"></script>
-<script src="../mobile/lube-tds.js?v=227"></script>
+<script src="../mobile/assets.js?v=228"></script>
+<script src="../mobile/normalize.js?v=228"></script>
+<script src="../mobile/due.js?v=228"></script>
+<script src="../mobile/wear.js?v=228"></script>
+<script src="../mobile/wear-map.js?v=228"></script>
+<script src="../mobile/lube.js?v=228"></script>
+<script src="../mobile/lube-overrides.js?v=228"></script>
+<script src="../mobile/lube2027.js?v=228"></script>
+<script src="../mobile/lube-tds.js?v=228"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=227"></script>
-<script src="../mobile/machine-photos.js?v=227"></script>
+<script src="../mobile/upload-defaults.js?v=228"></script>
+<script src="../mobile/machine-photos.js?v=228"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -2907,17 +2911,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=227"></script>
-<script src="../mobile/get.js?v=227"></script>
-<script src="../mobile/points.js?v=227"></script>
-<script src="../mobile/uc-points.js?v=227"></script>
-<script src="../mobile/inspect-guide.js?v=227"></script>
-<script src="../mobile/get-figs.js?v=227"></script>
-<script src="../mobile/body-points.js?v=227"></script>
-<script src="../mobile/body-map.js?v=227"></script>
-<script src="../mobile/jspdf.umd.min.js?v=227"></script>
-<script src="../mobile/html2canvas.min.js?v=227"></script>
-<script src="../mobile/report-core.js?v=227"></script>
+<script src="../mobile/machine-fig.js?v=228"></script>
+<script src="../mobile/get.js?v=228"></script>
+<script src="../mobile/points.js?v=228"></script>
+<script src="../mobile/uc-points.js?v=228"></script>
+<script src="../mobile/inspect-guide.js?v=228"></script>
+<script src="../mobile/get-figs.js?v=228"></script>
+<script src="../mobile/body-points.js?v=228"></script>
+<script src="../mobile/body-map.js?v=228"></script>
+<script src="../mobile/jspdf.umd.min.js?v=228"></script>
+<script src="../mobile/html2canvas.min.js?v=228"></script>
+<script src="../mobile/report-core.js?v=228"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -3089,6 +3093,7 @@ const I18N={
   lp_insight:"Largest gap: {n} still to reach on “{m}”. Start with critical equipment and the high-volume lubricant systems.",
   f_count:"{n} of {of} inspections",
   a_queue_tip:"Critical first, then overdue, then longest open",
+  ver_new:"Version {n} is ready — this page will refresh itself when you are not in the middle of something.",
   ver_tip:"The build this page was served as. If it is behind what was shipped, reload with Ctrl+Shift+R.",
   lm_all:"All classes", lm_machine:"Machine", lm_notset:"Not audited", lm_nocomp:"No such compartment",
   lm_alias:"recorded by make; identified as {m}", lm_csv:"⬇ Export CSV",
@@ -3799,6 +3804,7 @@ const I18N={
   lp_insight:"Наибольший разрыв: {n} по показателю «{m}». Начните с критичной техники и систем с наибольшим расходом.",
   f_count:"{n} из {of} осмотров",
   a_queue_tip:"Сначала критичные, затем просроченные, затем самые давние",
+  ver_new:"Версия {n} готова — страница обновится сама, когда вы не будете заняты.",
   ver_tip:"Сборка, в которой загружена эта страница. Если она устарела — обновите через Ctrl+Shift+R.",
   lm_all:"Все классы", lm_machine:"Машина", lm_notset:"Не проверено", lm_nocomp:"Нет такого узла",
   lm_alias:"записано по марке; определено как {m}", lm_csv:"⬇ Экспорт CSV",
@@ -12769,6 +12775,57 @@ document.querySelector(".lang").addEventListener("click",e=>{
   const tag=[...document.scripts].map(x=>(x.src||"").match(/[?&]v=([^&]+)/))
     .filter(Boolean).map(m=>m[1])[0] || "?";
   el.textContent="v"+tag;
+
+  /* AND THEN KEEP LOOKING, BECAUSE THIS PAGE IS LEFT OPEN FOR DAYS.
+
+     The phone checks every five minutes and applies the new build the moment
+     it is idle. The dashboard did neither: it stamped its version once at load
+     and never asked again, so an office browser opened on Monday was still
+     serving Monday's code on Friday — reading the field's data through a build
+     that predates the fixes the field is already running. A stale surface that
+     looks exactly like a fresh one, which is this project's defect wearing an
+     office coat.
+
+     Same rule as the phone, for the same reason: nobody should have to notice.
+     Find it silently, apply it only when the reader is not in the middle of
+     something, and never take a half-finished correction away from them. */
+  const BUILT=tag;
+  let dashWaiting=null;
+  const busy=()=>{
+    /* An overlay open is somebody mid-decision — a correction, a photo being
+       filed, the editor. Reloading under them would discard it. */
+    if([...document.querySelectorAll(".ov")].some(o=>!o.classList.contains("hidden"))) return true;
+    const px=$("pxPanel"); if(px && !px.classList.contains("hidden")) return true;
+    return false;
+  };
+  const applyIfIdle=()=>{
+    if(!dashWaiting || busy()) return;
+    /* replace(), not reload(): a reload can re-serve the cached document, and
+       the whole point is to stop running the old one. */
+    location.replace(location.pathname + "?b=" + dashWaiting + location.hash);
+  };
+  const look=async ()=>{
+    if(!navigator.onLine || dashWaiting) return;
+    try{
+      const r=await fetch("../mobile/sw.js?ts="+Date.now(),{cache:"no-store"});
+      if(!r || !r.ok) return;
+      const m=(await r.text()).match(/const BUILD\s*=\s*"([^"]+)"/);
+      if(!m || m[1]===BUILT) return;
+      dashWaiting=m[1];
+      /* Say so as well as acting: a reader who is mid-correction needs to know
+         why the page is about to change under them when they close the panel. */
+      el.textContent="v"+BUILT+" → v"+dashWaiting;
+      el.classList.add("stale");
+      el.title=t("ver_new",{n:dashWaiting});
+      applyIfIdle();
+    }catch(e){}                       // offline, blocked, slow — say nothing
+  };
+  setInterval(look, 300000);
+  setTimeout(look, 4000);
+  addEventListener("online", look);
+  document.addEventListener("visibilitychange", ()=>{ if(!document.hidden){ look(); applyIfIdle(); } });
+  /* Closing a panel is the moment a reader becomes free. */
+  document.addEventListener("click", ()=>setTimeout(applyIfIdle, 300), true);
 })();
 
 rebuild(); refreshControls(); renderAll(); refreshSources();
@@ -12780,8 +12837,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=227"></script>
-<script src="sync-adapter.js?v=227"></script>
-<script src="report.js?v=227"></script>
+<script src="drive.js?v=228"></script>
+<script src="sync-adapter.js?v=228"></script>
+<script src="report.js?v=228"></script>
 </body>
 </html>
