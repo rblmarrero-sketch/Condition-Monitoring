@@ -10,7 +10,14 @@ const ROOT = require('path').join(__dirname, '..');
 const fails = [];
 const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !== undefined ? '   ' + d : ''));
                           if (!c) fails.push(n); };
-let SERVED = '227';
+/* The build the app is actually on, read from the file rather than typed in.
+   Hardcoding it meant that the moment BUILD moved past the literal, the mock
+   was serving an OLDER version than the page was running — which is a
+   different test from the one this file is about, and it is how this suite
+   started reporting a navigation to ?b=227. */
+const REAL = (fs.readFileSync(path.join(ROOT, 'mobile', 'sw.js'), 'utf8')
+  .match(/const BUILD\s*=\s*"([^"]+)"/) || [])[1] || '0';
+let SERVED = REAL;
 const MIME = { '.html':'text/html', '.js':'text/javascript', '.json':'application/json' };
 const srv = http.createServer((req, res) => {
   const u = new URL(req.url, 'http://x');
@@ -42,17 +49,36 @@ const srv = http.createServer((req, res) => {
   const start = navs;
 
   console.log('\n1. AN IDLE DASHBOARD PICKS THE NEW BUILD UP BY ITSELF');
-  SERVED = '999';
+  SERVED = String(Number(REAL) + 1);
   await p.evaluate(() => { document.dispatchEvent(new Event('visibilitychange')); });
   await p.waitForTimeout(6000);
   const url = p.url();
   ok('it reloaded itself with nothing tapped', navs > start, (navs - start) + ' navigation(s)');
-  ok('  onto the new build', /b=999/.test(url), url.slice(-40));
+  ok('  onto the new build', url.indexOf('b=' + SERVED) >= 0, url.slice(-40));
+
+  console.log('\n1b. AN OLDER BUILD IS NOT AN UPDATE');
+  /* The check compared for INEQUALITY, so a build number lower than the
+     running one counted as new: the page navigated backwards onto it, re-read
+     its own version, saw the difference again and went round once more. Live
+     it never shows, because Pages serves exactly one version — which is
+     exactly why it would have waited there until the day something served a
+     stale copy, and then presented as the dashboard reloading in a loop. */
+  await p.goto('http://127.0.0.1:8131/dashboard/index.html', { waitUntil: 'load' });
+  await p.waitForTimeout(2500);
+  SERVED = String(Math.max(0, Number(REAL) - 5));
+  const bOld = navs, urlOld = p.url();
+  await p.evaluate(() => document.dispatchEvent(new Event('visibilitychange')));
+  await p.waitForTimeout(5000);
+  ok('a lower build number is ignored', navs === bOld && p.url() === urlOld,
+     'served ' + SERVED + ' while running ' + REAL + ', ' + (navs - bOld) + ' navigation(s)');
+  const q = await p.evaluate(() => (document.getElementById('dashVer') || {}).classList
+    ? document.getElementById('dashVer').classList.contains('stale') : null);
+  ok('  and nothing is announced', q === false, 'badge marked stale: ' + q);
 
   console.log('\n2. A READER MID-CORRECTION IS NOT INTERRUPTED');
   await p.goto('http://127.0.0.1:8131/dashboard/index.html', { waitUntil: 'load' });
   await p.waitForTimeout(2500);
-  SERVED = '1001';
+  SERVED = String(Number(REAL) + 2);
   const before = p.url();
   await p.evaluate(() => {
     const ov = document.getElementById('editOv');
@@ -76,7 +102,7 @@ const srv = http.createServer((req, res) => {
   });
   await p.waitForTimeout(3000);
   ok('closing it let the update through', navs > n2, (navs - n2) + ' navigation(s)');
-  ok('  onto the newer build', /b=1001/.test(p.url()), p.url().slice(-40));
+  ok('  onto the newer build', p.url().indexOf('b=' + SERVED) >= 0, p.url().slice(-40));
 
   ok('no page errors', errs.length === 0, errs.join(' | ') || 'none');
   await b.close(); srv.close();
