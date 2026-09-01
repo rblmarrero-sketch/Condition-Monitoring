@@ -2948,27 +2948,27 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=233"></script>
-<script src="../mobile/hme.js?v=233"></script>
-<script src="../mobile/mp-fc.js?v=233"></script>
-<script src="../mobile/hme-cascade.js?v=233"></script>
-<script src="../mobile/temp-limits.js?v=233"></script>
+<script src="../data/magnetic_plug.js?v=234"></script>
+<script src="../mobile/hme.js?v=234"></script>
+<script src="../mobile/mp-fc.js?v=234"></script>
+<script src="../mobile/hme-cascade.js?v=234"></script>
+<script src="../mobile/temp-limits.js?v=234"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=233"></script>
-<script src="../mobile/normalize.js?v=233"></script>
-<script src="../mobile/due.js?v=233"></script>
-<script src="../mobile/wear.js?v=233"></script>
-<script src="../mobile/wear-map.js?v=233"></script>
-<script src="../mobile/lube.js?v=233"></script>
-<script src="../mobile/lube-overrides.js?v=233"></script>
-<script src="../mobile/lube2027.js?v=233"></script>
-<script src="../mobile/lube-tds.js?v=233"></script>
+<script src="../mobile/assets.js?v=234"></script>
+<script src="../mobile/normalize.js?v=234"></script>
+<script src="../mobile/due.js?v=234"></script>
+<script src="../mobile/wear.js?v=234"></script>
+<script src="../mobile/wear-map.js?v=234"></script>
+<script src="../mobile/lube.js?v=234"></script>
+<script src="../mobile/lube-overrides.js?v=234"></script>
+<script src="../mobile/lube2027.js?v=234"></script>
+<script src="../mobile/lube-tds.js?v=234"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=233"></script>
-<script src="../mobile/machine-photos.js?v=233"></script>
+<script src="../mobile/upload-defaults.js?v=234"></script>
+<script src="../mobile/machine-photos.js?v=234"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -2977,17 +2977,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=233"></script>
-<script src="../mobile/get.js?v=233"></script>
-<script src="../mobile/points.js?v=233"></script>
-<script src="../mobile/uc-points.js?v=233"></script>
-<script src="../mobile/inspect-guide.js?v=233"></script>
-<script src="../mobile/get-figs.js?v=233"></script>
-<script src="../mobile/body-points.js?v=233"></script>
-<script src="../mobile/body-map.js?v=233"></script>
-<script src="../mobile/jspdf.umd.min.js?v=233"></script>
-<script src="../mobile/html2canvas.min.js?v=233"></script>
-<script src="../mobile/report-core.js?v=233"></script>
+<script src="../mobile/machine-fig.js?v=234"></script>
+<script src="../mobile/get.js?v=234"></script>
+<script src="../mobile/points.js?v=234"></script>
+<script src="../mobile/uc-points.js?v=234"></script>
+<script src="../mobile/inspect-guide.js?v=234"></script>
+<script src="../mobile/get-figs.js?v=234"></script>
+<script src="../mobile/body-points.js?v=234"></script>
+<script src="../mobile/body-map.js?v=234"></script>
+<script src="../mobile/jspdf.umd.min.js?v=234"></script>
+<script src="../mobile/html2canvas.min.js?v=234"></script>
+<script src="../mobile/report-core.js?v=234"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -3759,6 +3759,8 @@ const I18N={
   dd_need:"A reason and a name are both required.",
   dd_put_to:"put off to {d}", dd_not_doing:"not being done",
   eq_more:"Showing {n} of {of} — type to narrow",
+  ov_top:"Showing the {n} highest-priority of {of} machines",
+  ov_all:"View all equipment",
   shown_n:"Showing {n} of {of}",
   dd_foot:"h/day is the machine's own measured rate; * marks the fleet assumption of {r} h/day, used until two hour-meter readings have measured that machine. \u201cDue\u201d counts hours, and the days beside it are those hours at that rate.",
   due_over:"overdue {n} d", due_in:"in {n} d", due_h:"{n} h", due_days:"{n} d ago",
@@ -4454,6 +4456,8 @@ const I18N={
   dd_need:"Нужны и причина, и имя.",
   dd_put_to:"отложено до {d}", dd_not_doing:"не выполняется",
   eq_more:"Показано {n} из {of} — уточните поиск",
+  ov_top:"Показаны {n} самых приоритетных из {of} машин",
+  ov_all:"Показать всё оборудование",
   shown_n:"Показано {n} из {of}",
   dd_foot:"ч/сут — собственная измеренная наработка машины; * означает допущение по парку в {r} ч/сут, которое действует, пока машину не измерили два показания счётчика. «Срок» считается в часах, дни рядом — это те же часы при этой наработке.",
   due_over:"просрочено {n} дн.", due_in:"через {n} дн.", due_h:"{n} ч", due_days:"{n} дн. назад",
@@ -5075,6 +5079,11 @@ function renderChips(){
   if(drill.defect) add(t("c_defect"), drill.defect, ()=>setDrill("defect",drill.defect));
   if(drill.cause)  add(t("c_cause"), drill.cause, ()=>setDrill("cause",drill.cause));
   const box=$("chips");
+  /* THE ADDRESS FOLLOWS THE SCREEN, from the one place that already knows what
+     every filter is set to. Written without a history entry: changing a filter
+     refines the page you are on, it does not navigate — but it rides in the
+     entry, so Back returns to the previous page WITH the filters it had. */
+  if(typeof urlWrite==="function") urlWrite(false);
   dqSync();
   const rb=$("fReset");
   if(rb){
@@ -5330,10 +5339,29 @@ function renderFleet(){
               ["defect",t("th_topdef"),""],["by",t("th_by"),"hide-m"]];
   let h=`<thead><tr>`+cols.map(([k,l,cl])=>
     `<th class="sortable ${cl}${fleetSort.k===k?" on":""}" data-sort="${k}">${l}<span class="arrow">${fleetSort.k===k?(fleetSort.dir>0?"\u25b2":"\u25bc"):"\u2195"}</span></th>`).join("")+`</tr></thead><tbody>`;
-  /* Fifty machines at a time. One row per machine and 1,128 machines on the
-     register: a table that long is a table nobody reads to the end, and the
-     sort controls above it are what people actually navigate with. */
-  const pgF=paged("fleet", rows, renderFleet);
+  /* TEN, ON OVERVIEW — AND THE WHOLE REGISTER ONE CLICK AWAY.
+
+     Overview answers "what needs me today". A full equipment register does not
+     answer it: fifty machines is four screens of scrolling on a 1366 laptop
+     and the ten that matter are somewhere inside it. So the first screen shows
+     the ten highest-priority units and says how many more there are.
+
+     Priority here is the order the table is already sorted in, which by default
+     is worst-condition first — so "the ten highest-priority" is the top of the
+     list the reader would have scrolled to anyway, not a second ranking that
+     could disagree with the one below it.
+
+     `fleetAll` is the reader asking for the rest. It is a view of the same
+     rows, paginated, not a different query — the counts under the table are of
+     the WHOLE filtered set either way. */
+  const pgF = fleetAll
+    ? paged("fleet", rows, renderFleet)
+    : { rows: rows.slice(0, OVERVIEW_TOP),
+        strip: rows.length>OVERVIEW_TOP
+          ? `<div class="pager"><span class="muted">${esc(t("ov_top",{n:OVERVIEW_TOP, of:num(rows.length)}))}</span>
+               <span class="spacer"></span>
+               <button type="button" class="btn sm" id="fleetAllBtn">${esc(t("ov_all"))}</button></div>`
+          : "" };
   pgF.rows.forEach(r=>{
     const w=worstOf(r); const fs=notable(r); const top=topFinding(r);
     const open=(itemsU[r.equip]||[]);
@@ -5364,6 +5392,8 @@ function renderFleet(){
   const fw=$("fleetTbl").parentNode;
   if(fw){ const old2=fw.querySelector(":scope > .pager"); if(old2) old2.remove();
           if(pgF.strip) fw.insertAdjacentHTML("beforeend", pgF.strip); }
+  const fab=$("fleetAllBtn");
+  if(fab) fab.onclick=()=>{ fleetAll=true; renderFleet(); };
   if($("fleetShown")) $("fleetShown").innerHTML=
     `<span>${esc(t("shown_n",{n:pgF.rows.length, of:rows.length}))}</span>`;
   $("fleetTbl").querySelectorAll("th[data-sort]").forEach(th=>th.onclick=()=>{
@@ -5780,14 +5810,30 @@ function renderSelBar(){
    only — a page number is not a preference, and coming back tomorrow on page
    seven of a list that has changed underneath is worse than starting at the
    top. */
-const PAGE_SIZE=50;
+const PAGE_SIZE_DEFAULT=50;
+const PAGE_SIZE=PAGE_SIZE_DEFAULT;
+/* A MEASUREMENT TABLE IS DENSER THAN A LIST OF ROUNDS.
+
+   Fifty wear rows is five screens at 1366×768 — every row carries a unit, a
+   component, a reading, a bar, a rate, a life and a date, so it is roughly
+   twice the height of an action row. The page size is a reading-comfort
+   decision and not a global constant, and this table's is 25. */
+const PAGE_SIZE_WEAR=25;
+/* The action register is the same shape of row — unit, component, finding,
+   action, owner, due, status — and measured at 3.9 screens on a 1366 laptop
+   with fifty of them. Twenty-five brings it inside the ceiling. */
+const PAGE_SIZE_ACT=25;
+/* Overview shows the ten that need somebody, and a way to the rest. */
+const OVERVIEW_TOP=10;
+let fleetAll=false;
 const pageAt=new Map();
 function pageReset(key){ pageAt.delete(key); }
 /* Slice a list, and hand back the strip that says so. `render` is the caller's
    own redraw, so pressing a page control repaints through exactly the path
    that drew the list in the first place. */
-function paged(key, rows, render){
+function paged(key, rows, render, size){
   const n=rows.length;
+  const PAGE_SIZE=size||PAGE_SIZE_DEFAULT;
   const st=pageAt.get(key)||{ i:0, all:false };
   if(st.all || n<=PAGE_SIZE){
     return { rows, strip: n>PAGE_SIZE
@@ -5952,7 +5998,7 @@ function renderActions(){
        every finding on site in one scroll. Select-all stays scoped to what is
        SHOWN, which now means the page: a tick that silently reaches past the
        page would reassign four hundred findings meaning to reassign fifty. */
-    const pgT=paged("actions-table", list, renderActions);
+    const pgT=paged("actions-table", list, renderActions, PAGE_SIZE_ACT);
     const page=pgT.rows;
     const allOn = !!page.length && page.every(({r,i})=>aSel.has(selId(ekOf(r),i.key)));
     const owners=ownerList();
@@ -6083,7 +6129,7 @@ function renderActions(){
   /* Paged by MACHINE, never by finding: a unit whose six findings straddle a
      page boundary is a unit somebody acts on twice, or half. */
   const units=[...byUnit.entries()];
-  const pg=paged("actions", units, renderActions);
+  const pg=paged("actions", units, renderActions, PAGE_SIZE_ACT);
   if($("actShown")) $("actShown").innerHTML=
     `<span>${esc(t("shown_n",{n:pg.rows.length, of:byUnit.size}))} \u00b7 ${esc(String(rows.length))}</span>`;
   $("actionTbl").innerHTML=pg.rows.map(([unit,list])=>{
@@ -6584,6 +6630,13 @@ window.CMDash={
     recs.forEach(r=>{ const k=`${r.equip}|${r.date}|${r.type}`;
       imported=imported.filter(x=>`${x.equip}|${x.date}|${x.type}`!==k); imported.push(r); });
     saveImported(); rebuild(); refreshControls(); renderAll(); refreshSources();
+/* AND THE ADDRESS IS READ BACK ON ARRIVAL.
+
+   A reload, a bookmark, or a link somebody was sent lands on the page and the
+   filters it names — rather than on Overview with everything cleared, which is
+   what "send me the overdue list for TK149" used to mean in practice. Run
+   after the first render so the controls it sets exist and hold real options. */
+
   },
   /* Drive records are kept apart from imported ones so the sources panel can say
      honestly where each inspection came from. `replace` is the full-reload path;
@@ -10093,7 +10146,9 @@ $("themeBtn").onclick=()=>{ const c=document.documentElement.getAttribute("data-
    because the tests for that tab called renderWearTab() directly instead of
    pressing the button a person presses. A test that drives the function cannot
    see that nothing can reach the function. */
-function showTab(t){
+let CUR_TAB="overview";
+function showTab(t,push){
+  CUR_TAB=t;
   const tabs=[...$("tabs").querySelectorAll("button[data-tab]")].map(b=>b.dataset.tab);
   /* The sync panel is the only one whose answer depends on the backend having
      finished attaching. drive.js swaps in the shipped default asynchronously
@@ -10113,8 +10168,112 @@ function showTab(t){
   const bar = document.querySelector("main > .controls");
   if(bar) bar.classList.toggle("hidden", own);
   if($("chips")) $("chips").classList.toggle("hidden", own);
+  /* A new page is a new history entry; restoring one is not. */
+  if(typeof urlWrite==="function") urlWrite(!!push);
 }
-$("tabs").onclick=e=>{ const b=e.target.closest("button[data-tab]"); if(b) showTab(b.dataset.tab); };
+$("tabs").onclick=e=>{ const b=e.target.closest("button[data-tab]"); if(b) showTab(b.dataset.tab,true); };
+
+/* ── THE URL IS THE STATE, SO BACK AND RELOAD BOTH WORK ────────────────────
+
+   The dashboard had no address for anything. Every page was the same URL, so:
+   the browser's Back button left the site entirely from the fourth screen in,
+   a reload always dropped the reader on Overview with their filters gone, and
+   a filtered view could not be sent to anybody — "look at TK149's overdue
+   inspections" had to be a set of instructions rather than a link.
+
+   The tab is a HISTORY ENTRY, because moving between pages is what Back is
+   for. The filters are written into the same entry without adding one, because
+   typing into a search box should not have to be undone keystroke by
+   keystroke — but they travel WITH the entry, so going back to the previous
+   page restores the filters that were on it.
+
+   Kept short and readable, so the address bar stays something a person can
+   look at: #actions?type=MP&unit=TK149 */
+const URL_KEYS=[["type","fType"],["class","fClass"],["range","fRange"],
+                ["q","fQ"],["dq","fDq"]];
+let urlQuiet=0;                       // set while applying, so writing does not loop
+/* THE ADDRESS SOMEBODY ARRIVED ON, CAPTURED BEFORE ANYTHING CAN OVERWRITE IT.
+
+   The first render happens before the address is read — and rendering writes
+   the address, because the chip bar keeps it in step with the filters. So a
+   link to #wear?q=TK1 was replaced by #overview by the boot render, and the
+   read that followed found the dashboard's own default staring back at it. The
+   link worked perfectly and arrived nowhere.
+
+   Two things fix it and both are needed: keep the incoming value from before
+   the first render, and refuse to WRITE until it has been applied. */
+const BOOT_HASH=String(location.hash||"");
+let urlBooting=true;
+function urlWrite(push){
+  if(urlQuiet || urlBooting) return;
+  try{
+    const q=new URLSearchParams();
+    URL_KEYS.forEach(([k,id])=>{ const el=$(id); if(!el) return;
+      const v=String(el.value||"").trim();
+      if(v && v!=="0") q.set(k,v); });
+    if($("fVoid") && $("fVoid").checked) q.set("void","1");
+    ["unit","owner","month","sev","defect","cause"].forEach(k=>{
+      if(drill && drill[k]) q.set(k, drill[k]); });
+    const qs=q.toString();
+    const h="#"+(CUR_TAB||"overview")+(qs?"?"+qs:"");
+    if(location.hash===h) return;
+    if(push) history.pushState(null,"",h); else history.replaceState(null,"",h);
+  }catch(e){}
+}
+function urlRead(from){
+  try{
+    const raw=String(from!=null?from:(location.hash||"")).replace(/^#/,"");
+    if(!raw) return false;
+    const [tab,qs]=raw.split("?");
+    const q=new URLSearchParams(qs||"");
+    urlQuiet++;
+    URL_KEYS.forEach(([k,id])=>{ const el=$(id); if(!el) return;
+      const v=q.get(k);
+      /* A TEXT BOX HAS NO OPTIONS, AND ASKING FOR THEM THROWS.
+
+         This tested `[...el.options]` before looking at what the control IS.
+         On the search field that spreads `undefined` and raises a TypeError —
+         inside a try/catch that returned false and said nothing, so a link
+         carrying q= silently did nothing at all while every other part of it
+         worked. The failure only appeared when the address actually carried a
+         search term, which is the common case and the last one to be tried.
+
+         So: what kind of control is it, and only then what may it hold. A stale
+         link naming a type this folder no longer has still must not leave the
+         filter set to a value that hides everything. */
+      if(el.tagName==="INPUT"){ el.value=v||""; return; }
+      const opts=el.options ? [...el.options] : [];
+      if(v!=null && opts.some(o=>o.value===v)) el.value=v;
+      else el.value = (id==="fRange") ? "0" : "";
+    });
+    if($("fVoid")) $("fVoid").checked = q.get("void")==="1";
+    if(typeof drill==="object"){
+      ["unit","owner","month","sev","defect","cause"].forEach(k=>{ drill[k]=q.get(k)||null; });
+    }
+    urlQuiet--;
+    const tabs=[...$("tabs").querySelectorAll("button[data-tab]")].map(b=>b.dataset.tab);
+    if(tab && tabs.includes(tab)) showTab(tab);
+    rebuild(); refreshControls(); renderAll();
+    return true;
+  }catch(e){ urlQuiet=0; return false; }
+}
+/* Back and forward are the same operation: read the address and become it. */
+/* WRAPPED, because a listener is handed an EVENT.
+
+   `addEventListener("popstate", urlRead)` calls urlRead(PopStateEvent) — and
+   urlRead's first parameter is the address to read. It stringified the event
+   object, split "[object PopStateEvent]" on "?", looked for a tab called
+   "[object PopStateEvent]", found none and did nothing. Back and forward were
+   wired to a function that could never act, and silently. */
+addEventListener("popstate", ()=>urlRead());
+/* AND SO IS SOMEBODY CHANGING THE ADDRESS THEMSELVES.
+
+   popstate does not fire for a hash typed into the bar, or for a link to a
+   different view of the page already open — those raise hashchange instead.
+   Without this a shared link like #wear?q=TK1 opened the dashboard and then sat
+   on whatever page it was already showing, which is the failure mode the URL
+   work exists to remove: an address that names a view and does not produce it. */
+addEventListener("hashchange", ()=>urlRead());
 
 /* ── GLOBAL SEARCH ─────────────────────────────────────────────────────────
 
@@ -10639,7 +10798,7 @@ function renderWearTab(){
      reader has already learned somewhere else. Sorting and the counts above
      still run over the WHOLE filtered set — the page is what is drawn, never
      what is measured. */
-  const pg = paged("wear", rows, renderWearTab);
+  const pg = paged("wear", rows, renderWearTab, PAGE_SIZE_WEAR);
   const th=(k,cls)=>`<th${cls?` class="${cls}"`:""}>${esc(t(k))}</th>`;
   $("wearTbl").innerHTML=`<thead><tr>
       ${th("w_th_unit")}${th("w_th_point")}${th("w_th_meas","r")}${th("w_th_worn","r")}
@@ -13110,6 +13269,18 @@ document.querySelector(".lang").addEventListener("click",e=>{
 })();
 
 rebuild(); refreshControls(); renderAll(); refreshSources();
+
+/* AND THE ADDRESS IS READ BACK ON ARRIVAL — at the END of boot, deliberately.
+
+   The first version of this line went in beside an identical-looking call
+   inside a data-store method, because that string appears more than once and
+   the first match won. It then ran before `urlBooting` was even declared,
+   threw in the temporal dead zone, and took the boot sequence with it. The
+   address has to be applied after the page exists and once, here. */
+try{
+  urlBooting=false;
+  if(BOOT_HASH && BOOT_HASH.length>1) urlRead(BOOT_HASH); else urlWrite(false);
+}catch(e){ urlBooting=false; }
 applyLang();                          // paints the static markup and re-renders in the saved language
 /* First run shows where data comes from — but only when there is a question to
    answer. A browser that picked its settings up from the defaults file or from
@@ -13118,8 +13289,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=233"></script>
-<script src="sync-adapter.js?v=233"></script>
-<script src="report.js?v=233"></script>
+<script src="drive.js?v=234"></script>
+<script src="sync-adapter.js?v=234"></script>
+<script src="report.js?v=234"></script>
 </body>
 </html>
