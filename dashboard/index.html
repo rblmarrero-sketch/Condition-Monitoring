@@ -1691,6 +1691,28 @@
   .triage{display:inline-block;padding:1px 7px;border-radius:5px;font-size:var(--t-micro);font-weight:700;
     letter-spacing:.03em;background:var(--warning);color:#1f1a0a;white-space:nowrap;}
   table.grid span.bad{color:var(--crit-ink);font-weight:640;}
+  /* ── THE GUIDED REPORT FORM, AND THE COLLAPSED DIAGNOSTICS ──────────── */
+  .rstep{display:flex;gap:var(--s3);align-items:flex-start;padding:var(--s3) 0;border-bottom:1px solid var(--border);}
+  .rstep:first-child{padding-top:0;}
+  .rnum{flex:0 0 26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;
+    font-weight:800;font-size:13px;font-variant-numeric:tabular-nums;}
+  .rbody{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px;}
+  .rbody>label{font-size:var(--t-micro);text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:700;}
+  .rbody select{max-width:100%;}
+  .rbody .eqpick{max-width:420px;}
+  .rbody .eqpick>input[type=search]{flex:0 0 auto;height:auto;width:240px;max-width:100%;}
+  .rpreview{margin-top:var(--s3);padding:var(--s3) var(--s4);border-radius:var(--r);background:var(--surface-2);
+    border-left:3px solid var(--accent);font-size:var(--t-small);color:var(--ink-2);line-height:1.5;}
+  .rpreview:empty{display:none;}
+  .rpreview b{color:var(--ink);}
+  .rpreview .st{display:inline-block;padding:1px 7px;border-radius:5px;font-size:var(--t-micro);font-weight:700;letter-spacing:.04em;
+    background:var(--warning);color:#1f1a0a;margin-left:6px;}
+  .rpreview .st.final{background:var(--good);color:#fff;}
+  #rRecent li{display:flex;gap:var(--s2);align-items:center;flex-wrap:wrap;}
+  #rRecent li .when{color:var(--muted);font-size:var(--t-tiny);}
+  #rRecent li .sp{flex:1;}
+  details.admin>summary{font-size:var(--t-small);font-weight:700;color:var(--ink-2);}
+  details.admin{border-top:0;margin-top:var(--s2);}
   #fleetTbl .pill{white-space:nowrap;}
   #fleetTbl .fstat{font-size:var(--t-tiny);}
   /* Ten columns on a 1366 screen, in Russian, whose column names run to
@@ -2878,104 +2900,124 @@
        of printing a zero. A dashboard that reports 0 failures because it has no
        way to detect one is worse than a dashboard with no panel at all. -->
   <section id="tab-sync" class="hidden">
+    <!-- TWO KINDS OF READER, TWO HALVES OF THE PAGE.
+
+         A reliability engineer opens this page to find out what needs a
+         decision: a grade to review, photographs to assign, an inspection that
+         cannot be filed, a round waiting on its evidence. That is the page.
+         Everything that answers "is this dashboard telling the truth" — the
+         backend, the reconciliation ladder, the photograph populations, the
+         field-name diagnostics — is for whoever administers the folder, and it
+         is one collapsed control at the bottom rather than the right-hand
+         column the decisions used to be found beneath. -->
     <div class="kpis" id="syncKpis"></div>
-    <!-- THE LIST sevConflicts() HAS ALWAYS COMPUTED AND NOBODY HAS EVER SEEN.
-
-         The function was written, commented "somebody has to see it", and never
-         called from anywhere — so six records carried a severity the board
-         could not justify, and the only way to find one was to guess which
-         record to open. This project's defect in the code meant to catch it: a
-         real value rendered as nothing.
-
-         Full width, directly under the tiles, and NOT down in the right-hand
-         column with the reconciliation ladder and the admin diagnostics, where
-         it first went. Those answer "is this dashboard telling the truth"; this
-         is a list of decisions with somebody's name on them, and it belongs
-         beside the other one — records waiting on evidence — not below the
-         housekeeping. In the narrow column it was six half-width rows starting
-         a thousand pixels down the page, with the left half of the screen
-         blank alongside them. A task nobody scrolls to is a task nobody does. -->
     <div class="section" id="sySevBox" tabindex="-1" style="margin-bottom:var(--s4)">
-      <div class="secthd"><h2 data-i18n="sy_sev">Severities nobody can check</h2>
+      <div class="secthd"><h2 data-i18n="sy_sev">Grade review required</h2>
         <span class="spacer"></span><span class="hint" id="sySevCt"></span></div>
       <ul class="synone" id="sySev"></ul>
       <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
         <div class="sub" data-i18n="sy_sev_sub">A severity is not a field somebody types here — it is read off the grade (A→Normal, B→Incipient, C→Degraded, X→Critical), or off the millimetres on an undercarriage round. These are the places a record carries a severity that neither of those produces, so the board is showing a finding no one can re-derive. The fix is always the GRADE: set it and the severity follows. Rounds imported from the original spreadsheets are where nearly all of these come from.</div></details>
     </div>
-    <div class="grid12">
-      <div class="section g7">
-        <div class="secthd"><h2 data-i18n="sy_gaps">Records waiting on evidence</h2>
-          <span class="spacer"></span><span class="hint" id="syGapHint"></span></div>
-        <div class="tblwrap scrollbox" style="--sb:300px"><table class="grid" id="syGapTbl"></table></div>
-        <div class="shown" id="syGapShown"></div>
-        <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
-          <div class="sub" data-i18n="sy_gaps_sub">Every photograph and video a record says it has, checked against the file names the server actually holds. A record is waiting when one of its own attachments has not arrived.</div></details>
-      </div>
-      <div class="section g5">
-        <div class="secthd"><h2 data-i18n="sy_health">Backend</h2></div>
-        <dl class="kv" id="syHealth"></dl>
-        <!-- WHY THE THREE SCREENS DISAGREE.
-
-             The phone said 44, the folder had 60, the dashboard drew 45, and
-             nothing on any of them explained the gap — so all three numbers
-             stopped being believed, which is worse than any one of them being
-             wrong. Each step of the arithmetic is named here with the reason
-             it subtracts, so a difference is something to act on rather than
-             something to argue about. -->
-        <div class="secthd" style="margin-top:var(--s4)"><h2 data-i18n="sy_recon">Where the number comes from</h2></div>
-        <dl class="kv" id="syRecon"></dl>
-        <div class="sub" id="syImport"></div>
-        <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
-          <div class="sub" data-i18n="sy_recon_sub">Read down. Each line is a source or a rule, and the last one is the figure every other screen counts. The folder is the only source of rounds — the sixteen imported from the original spreadsheets were written into it on 29 August 2026 and are no longer counted separately. A round two phones both sent is one round with a conflict to settle, not two rounds.</div></details>
-        <div class="secthd" style="margin-top:var(--s4)"><h2 data-i18n="sy_h_pop">Where the photographs are</h2></div>
-        <dl class="kv" id="syPop"></dl>
-        <div class="sub" data-i18n="sy_p_note" style="font-size:11.5px;margin-top:4px">Photographs bundled with this app live beside it, never in the sync folder. They are not missing field uploads and are counted separately.</div>
-        <div class="secthd" style="margin-top:var(--s4)"><h2 data-i18n="sy_diag">Admin diagnostics</h2></div>
+    <div class="section" style="margin-bottom:var(--s4)">
+      <div class="secthd"><h2 data-i18n="sy_quar">Inspections requiring correction</h2>
+        <span class="spacer"></span><span class="hint" id="syQuarHint"></span></div>
+      <div class="tblwrap scrollbox" style="--sb:260px"><table class="grid" id="syQuarTbl"></table></div>
+      <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
+        <div class="sub" data-i18n="sy_quar_sub">A record missing the identity it needs to be filed — unit, date or round — or carrying an inspection point nobody has identified. Nothing is deleted; the inspection is on hold here so it is visible rather than silently dropped from every count.</div></details>
+    </div>
+    <div class="section" style="margin-bottom:var(--s4)">
+      <div class="secthd"><h2 data-i18n="sy_gaps">Records waiting on evidence</h2>
+        <span class="spacer"></span><span class="hint" id="syGapHint"></span></div>
+      <div class="tblwrap scrollbox" style="--sb:300px"><table class="grid" id="syGapTbl"></table></div>
+      <div class="shown" id="syGapShown"></div>
+      <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
+        <div class="sub" data-i18n="sy_gaps_sub">Every photograph and video a record says it has, checked against the file names the server actually holds. A record is waiting when one of its own attachments has not arrived.</div></details>
+    </div>
+    <details class="method admin" id="syAdmin">
+      <summary data-i18n="sy_diag">Admin diagnostics</summary>
+      <div class="section" style="margin-top:var(--s3)">
+        <div class="grid12">
+          <div class="g6">
+            <div class="secthd"><h2 data-i18n="sy_health">Backend</h2></div>
+            <dl class="kv" id="syHealth"></dl>
+            <div class="secthd" style="margin-top:var(--s4)"><h2 data-i18n="sy_h_pop">Where the photographs are</h2></div>
+            <dl class="kv" id="syPop"></dl>
+            <div class="sub" data-i18n="sy_p_note" style="font-size:11.5px;margin-top:4px">Photographs bundled with this app live beside it, never in the sync folder. They are not missing field uploads and are counted separately.</div>
+          </div>
+          <div class="g6">
+            <!-- WHY THE THREE SCREENS DISAGREE. The phone said 44, the folder
+                 had 60, the dashboard drew 45, and nothing explained the gap —
+                 so all three stopped being believed. Each step of the
+                 arithmetic is named with the reason it subtracts. -->
+            <div class="secthd"><h2 data-i18n="sy_recon">Where the number comes from</h2></div>
+            <dl class="kv" id="syRecon"></dl>
+            <div class="sub" id="syImport"></div>
+            <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
+              <div class="sub" data-i18n="sy_recon_sub">Read down. Each line is a source or a rule, and the last one is the figure every other screen counts. The folder is the only source of rounds — the sixteen imported from the original spreadsheets were written into it on 29 August 2026 and are no longer counted separately. A round two phones both sent is one round with a conflict to settle, not two rounds.</div></details>
+          </div>
+        </div>
+        <div class="secthd" style="margin-top:var(--s4)"><h2 data-i18n="sy_diag_h">Field diagnostics</h2></div>
         <ul class="synone" id="syDiag"></ul>
         <div class="secthd" style="margin-top:var(--s4)"><h2 data-i18n="sy_unknown">Not measurable from here</h2></div>
         <ul class="synone" id="syUnknown"></ul>
         <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
           <div class="sub" data-i18n="sy_unknown_sub">These need a backend that issues a durable receipt per record and a hash per attachment. This one stores files in folders, so the dashboard cannot prove delivery latency, detect a corrupted upload or count a suppressed duplicate. They are listed rather than reported as zero.</div></details>
       </div>
-    </div>
-    <div class="section">
-      <div class="secthd"><h2 data-i18n="sy_quar">Records that cannot be trusted as they stand</h2>
-        <span class="spacer"></span><span class="hint" id="syQuarHint"></span></div>
-      <div class="tblwrap scrollbox" style="--sb:260px"><table class="grid" id="syQuarTbl"></table></div>
-      <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
-        <div class="sub" data-i18n="sy_quar_sub">A record missing the identity it needs to be filed — unit, date or round — or carrying an inspection point nobody has identified. Nothing is deleted; the inspection is on hold here so it is visible rather than silently dropped from every count.</div></details>
-    </div>
+    </details>
   </section>
 
   <section id="tab-reports" class="hidden">
-    <div class="section">
-      <h2 data-i18n="r_title">PDF report</h2>
-      <div class="sub" data-i18n="r_sub">Bilingual EN / RU. Each inspection type prints its own layout.</div>
-      <div class="controls">
-        <div class="field"><label for="rScope" data-i18n="r_scope">Report</label><select id="rScope">
-          <option value="one" data-i18n="r_one">This inspection</option>
-          <option value="unit" data-i18n="r_unit" selected>Equipment — one machine + trend</option>
-          <option value="round" data-i18n="r_round">Round — one date, all units</option>
-          <option value="month" data-i18n="r_month">Fleet summary — one month</option>
-        </select></div>
-        <div class="field"><label for="rTarget" id="rTargetLbl" data-i18n="r_target">Which</label>
+    <!-- A GUIDED FORM. Four controls in a row asked the reader to know what
+         "scope" meant before choosing one. The three questions are asked in
+         order — what kind of report, of which machine or date, with what —
+         and the answer is previewed before anything is generated, so a
+         thirty-page PDF is never a surprise. What was generated is listed,
+         so the report handed to the planning meeting can be produced again. -->
+    <div class="pagehd">
+      <div class="pgt"><h1 data-i18n="r_title">Reports</h1>
+        <span class="pgsub" data-i18n="r_sub">Bilingual EN / RU PDF. Each inspection type prints its own layout.</span></div>
+    </div>
+    <div class="grid12">
+      <div class="section g7">
+        <div class="rstep"><div class="rnum">1</div><div class="rbody">
+          <label for="rScope" data-i18n="r_scope">What kind of report</label>
+          <select id="rScope">
+            <option value="one" data-i18n="r_one">One inspection</option>
+            <option value="unit" data-i18n="r_unit" selected>One machine — its history and trend</option>
+            <option value="round" data-i18n="r_round">One date — every machine walked that day</option>
+            <option value="month" data-i18n="r_month">Fleet summary — one month</option>
+          </select></div></div>
+        <div class="rstep"><div class="rnum">2</div><div class="rbody">
+          <label for="rTarget" id="rTargetLbl" data-i18n="r_target">Which</label>
           <span class="eqpick">
             <input id="rTargetQ" type="search" data-i18n-ph="eq_findph" placeholder="Filter…">
             <select id="rTarget"></select>
             <span class="hint" id="rTargetShown"></span>
-          </span></div>
-        <div class="field"><label for="rPhotos" data-i18n="r_photos">Photos</label><select id="rPhotos">
-          <option value="1" data-i18n="r_withphotos">Include photos</option>
-          <option value="0" data-i18n="r_nophotos">No photos (smaller file)</option>
-        </select></div>
-        <div class="field"><label for="rScale" data-i18n="r_scale">Quality</label><select id="rScale">
-          <option value="1.8">Standard</option>
-          <option value="2.4">High (larger file)</option>
-        </select></div>
-        <button class="btn primary" id="rGo" data-i18n="r_go">📄 Generate PDF</button>
+          </span></div></div>
+        <div class="rstep"><div class="rnum">3</div><div class="rbody">
+          <label data-i18n="r_opts">Options</label>
+          <div class="row" style="gap:12px;flex-wrap:wrap">
+            <div class="field"><label for="rPhotos" data-i18n="r_photos">Photos</label><select id="rPhotos">
+              <option value="1" data-i18n="r_withphotos">Include photos</option>
+              <option value="0" data-i18n="r_nophotos">No photos (smaller file)</option>
+            </select></div>
+            <div class="field"><label for="rScale" data-i18n="r_scale">Quality</label><select id="rScale">
+              <option value="1.8">Standard</option>
+              <option value="2.4">High (larger file)</option>
+            </select></div>
+          </div></div></div>
+        <div class="rpreview" id="rPreview"></div>
+        <div class="row" style="gap:12px;align-items:center;margin-top:var(--s3);flex-wrap:wrap">
+          <button class="btn primary" id="rGo" data-i18n="r_go">📄 Generate PDF</button>
+          <span id="rMsg" class="sub" style="margin:0"></span>
+        </div>
+        <div class="sub" style="margin-top:14px" data-i18n="r_hint">Photos and supervisor signatures come from whichever data source is loaded.</div>
       </div>
-      <div id="rMsg" class="sub" style="margin:0"></div>
-      <div class="sub" style="margin-top:14px" data-i18n="r_hint">Photos and supervisor signatures come from whichever data source is loaded.</div>
+      <div class="section g5">
+        <div class="secthd"><h2 data-i18n="r_recent">Recent reports</h2>
+          <span class="spacer"></span><span class="hint" id="rRecentHint"></span></div>
+        <ul class="synone" id="rRecent"></ul>
+      </div>
     </div>
   </section>
 </main>
@@ -3074,27 +3116,27 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=238"></script>
-<script src="../mobile/hme.js?v=238"></script>
-<script src="../mobile/mp-fc.js?v=238"></script>
-<script src="../mobile/hme-cascade.js?v=238"></script>
-<script src="../mobile/temp-limits.js?v=238"></script>
+<script src="../data/magnetic_plug.js?v=239"></script>
+<script src="../mobile/hme.js?v=239"></script>
+<script src="../mobile/mp-fc.js?v=239"></script>
+<script src="../mobile/hme-cascade.js?v=239"></script>
+<script src="../mobile/temp-limits.js?v=239"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=238"></script>
-<script src="../mobile/normalize.js?v=238"></script>
-<script src="../mobile/due.js?v=238"></script>
-<script src="../mobile/wear.js?v=238"></script>
-<script src="../mobile/wear-map.js?v=238"></script>
-<script src="../mobile/lube.js?v=238"></script>
-<script src="../mobile/lube-overrides.js?v=238"></script>
-<script src="../mobile/lube2027.js?v=238"></script>
-<script src="../mobile/lube-tds.js?v=238"></script>
+<script src="../mobile/assets.js?v=239"></script>
+<script src="../mobile/normalize.js?v=239"></script>
+<script src="../mobile/due.js?v=239"></script>
+<script src="../mobile/wear.js?v=239"></script>
+<script src="../mobile/wear-map.js?v=239"></script>
+<script src="../mobile/lube.js?v=239"></script>
+<script src="../mobile/lube-overrides.js?v=239"></script>
+<script src="../mobile/lube2027.js?v=239"></script>
+<script src="../mobile/lube-tds.js?v=239"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=238"></script>
-<script src="../mobile/machine-photos.js?v=238"></script>
+<script src="../mobile/upload-defaults.js?v=239"></script>
+<script src="../mobile/machine-photos.js?v=239"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3103,17 +3145,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=238"></script>
-<script src="../mobile/get.js?v=238"></script>
-<script src="../mobile/points.js?v=238"></script>
-<script src="../mobile/uc-points.js?v=238"></script>
-<script src="../mobile/inspect-guide.js?v=238"></script>
-<script src="../mobile/get-figs.js?v=238"></script>
-<script src="../mobile/body-points.js?v=238"></script>
-<script src="../mobile/body-map.js?v=238"></script>
-<script src="../mobile/jspdf.umd.min.js?v=238"></script>
-<script src="../mobile/html2canvas.min.js?v=238"></script>
-<script src="../mobile/report-core.js?v=238"></script>
+<script src="../mobile/machine-fig.js?v=239"></script>
+<script src="../mobile/get.js?v=239"></script>
+<script src="../mobile/points.js?v=239"></script>
+<script src="../mobile/uc-points.js?v=239"></script>
+<script src="../mobile/inspect-guide.js?v=239"></script>
+<script src="../mobile/get-figs.js?v=239"></script>
+<script src="../mobile/body-points.js?v=239"></script>
+<script src="../mobile/body-map.js?v=239"></script>
+<script src="../mobile/jspdf.umd.min.js?v=239"></script>
+<script src="../mobile/html2canvas.min.js?v=239"></script>
+<script src="../mobile/report-core.js?v=239"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -3424,8 +3466,8 @@ const I18N={
   sy_sev_none:"Every severity on the board is derived from a grade or a measurement.",
   sy_sev_sub:"A severity is not a field somebody types here — it is read off the grade (A→Normal, B→Incipient, C→Degraded, X→Critical), or off the millimetres on an undercarriage round. These are the places a record carries a severity that neither of those produces, so the board is showing a finding no one can re-derive. The fix is always the GRADE: set it and the severity follows. Rounds imported from the original spreadsheets are where nearly all of these come from.",
   sy_sev_go:"Review grade",
-  sy_sev_ng:"Severity {s} with no grade behind it. Nothing on the record says how it was reached, and it is counted anyway — because dropping it would throw away a finding somebody made.",
-  sy_sev_cf:"Grade {g} means {now}, and the board shows {now}. The record also carries {was} from before grades were derived. If {was} was the real condition the grade is wrong, not the severity — change the grade to match.",
+  sy_sev_ng:"Grade missing. Review the inspection and select A, B, C, or X. The recorded condition ({s}) still counts until then.",
+  sy_sev_cf:"Grade {g} and the previous condition ({was}) do not match. Review the grade; the condition will update automatically.",
   sy_sev_ct:"{n} to settle · {u} with no grade · {c} contradicting their grade",
   sy_h_files:"Files on the server", sy_h_last:"Last asked",
   sy_h_att:"Attachments accounted for", sy_h_held:"Inspections requiring correction",
@@ -3440,7 +3482,7 @@ const I18N={
   sy_gap_hint:"{n} of {of} attachments have not arrived",
   sy_gap_none:"Every attachment is accounted for",
   sy_gap_none_s:"Each photograph and video these records name is on the server.",
-  sy_diag:"Admin diagnostics",
+  sy_diag:"Admin diagnostics", sy_diag_h:"Field diagnostics",
   sy_d_empty:"Removed {n} completely empty inspection row(s) during import, across {r} inspection(s). No recorded information was affected.",
   sy_d_none:"Nothing to report — no records needed repair on import.",
   sy_d_unknown:"{n} field name(s) this build does not classify — {f}. Not treated as findings; reported so they can be classified.",
@@ -3470,7 +3512,7 @@ const I18N={
      may reasonably decide it belongs to the inspection as a whole rather than
      to any one point. Saying "inspection point not identified" over a
      photograph asks the wrong question. */
-  sy_w_photo:"Photographs need component assignment",
+  sy_w_photo:"Photos received; component assignment required",
   op_title:"Assign photographs", op_sub:"{u} · {d} · {t}",
   op_lead:"{n} photograph(s) here arrived without a component reference. Say which inspection point each one shows, or keep it as general evidence for the whole inspection. Nothing is deleted and nothing is guessed.",
   op_point:"Inspection point", op_find:"Search points…",
@@ -3820,8 +3862,17 @@ const I18N={
   g_top:"Positions raising the most work",
   g_generic:"Some limits shown are generic starting points, not the supplier's wear charts. The trend is real; the percentages move when the real figures are loaded.",
   g_nocost:"No cost per hour or per tonne is given. This system holds neither part prices nor payload, and a cost figure built on neither would be the most quoted number here and the least true.",
-  r_title:"PDF report",
-  r_sub:"Bilingual EN / RU. Each inspection type prints its own layout —",
+  r_title:"Reports",
+  r_sub:"Bilingual EN / RU PDF. Each inspection type prints its own layout.",
+  r_opts:"Options", r_recent:"Recent reports", r_recent_none:"Nothing generated yet in this browser.",
+  r_again:"Generate again", r_recent_hint:"{n} kept, newest first",
+  r_prev_none:"Choose what to report on and the summary appears here.",
+  r_prev_one:"<b>{u}</b> · {d} · {ty} — {p} photograph(s) on {k} point(s)",
+  r_prev_unit:"<b>{u}</b> — {n} inspection(s), {a} to {b}, {p} photograph(s)",
+  r_prev_round:"<b>{d}</b> — {n} inspection(s) on {m} machine(s), {p} photograph(s)",
+  r_prev_month:"<b>{m}</b> — {n} inspection(s) on {u} machine(s)",
+  r_prev_nophoto:"photos left out", r_st_prov_s:"Provisional", r_st_final:"Controlled final", r_st_prov:"Provisional — {m} attachment(s) still to arrive",
+  r_rec_pages:"{n} page(s)",
   r_scope:"Scope", r_unit:"Equipment — one machine + trend", r_round:"Round — one date, all units",
   r_month:"Fleet summary — one month", r_target:"Which",
   r_photos:"Photos", r_withphotos:"Include photos", r_nophotos:"No photos (smaller file)",
@@ -4161,8 +4212,8 @@ const I18N={
   sy_sev_none:"Каждая степень на экране выведена из оценки или из измерения.",
   sy_sev_sub:"Степень здесь не вводят вручную — она читается из оценки (A→Норма, B→Зарождающийся, C→Ухудшение, X→Критично) либо из миллиметров на обходе ходовой. Здесь перечислены записи со степенью, которую не даёт ни то, ни другое: на экране стоит находка, которую невозможно перепроверить. Исправляется всегда ОЦЕНКА: поставьте её, и степень появится сама. Почти все такие случаи пришли из первоначальных таблиц.",
   sy_sev_go:"Проверить оценку",
-  sy_sev_ng:"Степень {s} без оценки. В записи нет ничего, что объясняло бы, как её получили, и она всё равно учитывается — потому что отбросить её значило бы потерять сделанную кем-то находку.",
-  sy_sev_cf:"Оценка {g} означает {now}, и на экране стоит {now}. В записи осталась и {was} — с тех пор, когда степень ещё не выводили. Если верной была {was}, то ошибочна оценка, а не степень: измените оценку.",
+  sy_sev_ng:"Оценка не указана. Откройте осмотр и выберите A, B, C или X. Записанное состояние ({s}) пока учитывается.",
+  sy_sev_cf:"Оценка {g} и прежнее состояние ({was}) не совпадают. Проверьте оценку — состояние обновится автоматически.",
   sy_sev_ct:"К разбору: {n} · без оценки: {u} · расходятся с оценкой: {c}",
   sy_h_files:"Файлов на сервере", sy_h_last:"Последний запрос",
   sy_h_att:"Вложений учтено", sy_h_held:"Осмотры, требующие исправления",
@@ -4177,7 +4228,7 @@ const I18N={
   sy_gap_hint:"{n} из {of} вложений не поступило",
   sy_gap_none:"Все вложения на месте",
   sy_gap_none_s:"Каждое фото и видео, указанное в этих записях, есть на сервере.",
-  sy_diag:"Диагностика (администратор)",
+  sy_diag:"Диагностика (администратор)", sy_diag_h:"Диагностика полей",
   sy_d_empty:"При импорте удалено полностью пустых строк осмотра: {n}, в {r} осмотр(ах). Записанные данные не затронуты.",
   sy_d_none:"Сообщать нечего — при импорте ничего исправлять не потребовалось.",
   sy_d_unknown:"Неклассифицированных имён полей: {n} — {f}. Находками не считаются; сообщается для классификации.",
@@ -4197,7 +4248,7 @@ const I18N={
   sy_fix_type:"Нет типа обхода — телефон, который делал осмотр, должен отправить его заново.",
   sy_fix_point:"Точка осмотра не определена. Укажите нужный узел, прежде чем утверждать эту находку.",
   sy_fix_open:"Откройте для правки.",
-  sy_w_photo:"Фотографиям нужна привязка к узлу",
+  sy_w_photo:"Фото получены; требуется привязка к узлу",
   op_title:"Назначение фотографий", op_sub:"{u} · {d} · {t}",
   op_lead:"Фотографий без привязки к узлу: {n}. Укажите, какую точку осмотра показывает каждая, или оставьте как общий материал по осмотру. Ничего не удаляется и ничего не угадывается.",
   op_point:"Точка осмотра", op_find:"Поиск точек…",
@@ -4545,8 +4596,17 @@ const I18N={
   g_top:"Позиции, дающие больше всего работы",
   g_generic:"Часть пределов — типовые ориентиры, а не карты износа поставщика. Тенденция реальна; проценты изменятся, когда будут загружены настоящие цифры.",
   g_nocost:"Стоимость за час или за тонну не приводится. В системе нет ни цен на детали, ни объёмов, а цифра, построенная ни на чём, стала бы самым цитируемым и самым недостоверным числом в отчёте.",
-  r_title:"PDF-отчёт",
-  r_sub:"Двуязычный EN / RU. Каждый тип осмотра печатается по-своему —",
+  r_title:"Отчёты",
+  r_sub:"Двуязычный PDF EN / RU. Каждый тип осмотра печатается по-своему.",
+  r_opts:"Параметры", r_recent:"Недавние отчёты", r_recent_none:"В этом браузере ещё ничего не формировалось.",
+  r_again:"Сформировать снова", r_recent_hint:"сохранено: {n}, новые сверху",
+  r_prev_none:"Выберите, о чём отчёт, и здесь появится сводка.",
+  r_prev_one:"<b>{u}</b> · {d} · {ty} — фото: {p} на {k} точках",
+  r_prev_unit:"<b>{u}</b> — осмотров: {n}, с {a} по {b}, фото: {p}",
+  r_prev_round:"<b>{d}</b> — осмотров: {n} на {m} машинах, фото: {p}",
+  r_prev_month:"<b>{m}</b> — осмотров: {n} на {u} машинах",
+  r_prev_nophoto:"без фото", r_st_prov_s:"Предварительный", r_st_final:"Итоговый", r_st_prov:"Предварительный — ещё не поступило вложений: {m}",
+  r_rec_pages:"страниц: {n}",
   r_scope:"Объём", r_unit:"Техника — одна машина + тренд", r_round:"Обход — одна дата, все единицы",
   r_month:"Сводка по парку — месяц", r_target:"Что именно",
   r_photos:"Фото", r_withphotos:"С фото", r_nophotos:"Без фото (меньше файл)",
@@ -10821,9 +10881,80 @@ function refreshReportTargets(){
   if(show.some(o=>o[0]===prev)) sel.value=prev;
   const shown=$("rTargetShown");
   if(shown) shown.textContent = all>show.length ? t("eq_more",{n:show.length, of:all}) : "";
+  try{ renderReportPreview(); renderRecentReports(); }catch(e){}
 }
 if($("rTargetQ")) $("rTargetQ").oninput=refreshReportTargets;
 $("rScope").onchange=refreshReportTargets;
+/* WHAT THE PDF WILL CONTAIN, BEFORE IT IS MADE. A report is a document
+   somebody hands to a meeting; the size and the status of it are decided
+   before pressing the button, not discovered after. */
+function renderReportPreview(){
+  const el=$("rPreview"); if(!el) return;
+  const scope=($("rScope")||{}).value, target=($("rTarget")||{}).value;
+  const photos=($("rPhotos")||{}).value!=="0";
+  if(!target || !window.CMReport || !CMReport.recsForScope){ el.innerHTML=esc(t("r_prev_none")); return; }
+  let recs=[]; try{ recs=CMReport.recsForScope(scope,target)||[]; }catch(e){ recs=[]; }
+  const nPhotos=recs.reduce((a,r)=>a+(r.items||[]).reduce((b,i)=>b+mediaOf(i,r).length,0),0);
+  const units=new Set(recs.map(r=>r.equip)).size;
+  const dates=recs.map(r=>r.date||"").filter(Boolean).sort();
+  let html="";
+  if(scope==="one"){
+    const r=recs[0];
+    if(!r){ el.innerHTML=esc(t("r_prev_none")); return; }
+    const st=reportStatus(r);
+    html=t("r_prev_one",{u:esc(r.equip), d:esc(r.date||""), ty:esc(TYPE_LABEL[r.type]||r.type), p:nPhotos, k:(r.items||[]).length})
+       + (st.status==="final" ? `<span class="st final">${esc(t("r_st_final"))}</span>`
+                              : `<span class="st">${esc(t("r_st_prov",{m:st.need-st.have}))}</span>`);
+  }else if(scope==="unit"){
+    html=t("r_prev_unit",{u:esc(target), n:recs.length, a:esc(dates[0]||"—"), b:esc(dates[dates.length-1]||"—"), p:nPhotos});
+  }else if(scope==="round"){
+    html=t("r_prev_round",{d:esc(target), n:recs.length, m:units, p:nPhotos});
+  }else{
+    html=t("r_prev_month",{m:esc(target), n:recs.length, u:units});
+  }
+  if(!photos) html+=` <span class="muted">· ${esc(t("r_prev_nophoto"))}</span>`;
+  el.innerHTML=html;
+}
+/* WHAT WAS GENERATED, in this browser, newest first — so the report that
+   went to Tuesday's meeting can be produced again on Wednesday without
+   re-finding the machine. */
+const RRECENT="cm_dash_recent_reports";
+function recentReports(){ try{ const v=JSON.parse(localStorage.getItem(RRECENT)||"[]"); return Array.isArray(v)?v:[]; }catch(e){ return []; } }
+function rememberReport(scope, target, pages, status){
+  const list=recentReports().filter(x=>!(x.scope===scope && x.target===target));
+  list.unshift({ scope, target, pages, status:status||"", at:new Date().toISOString().slice(0,16).replace("T"," ") });
+  try{ localStorage.setItem(RRECENT, JSON.stringify(list.slice(0,12))); }catch(e){}
+  renderRecentReports();
+}
+function renderRecentReports(){
+  const ul=$("rRecent"); if(!ul) return;
+  const list=recentReports();
+  const hint=$("rRecentHint"); if(hint) hint.textContent = list.length ? t("r_recent_hint",{n:list.length}) : "";
+  if(!list.length){ ul.innerHTML=`<li class="muted">${esc(t("r_recent_none"))}</li>`; return; }
+  const scopeName={one:t("r_one"), unit:t("r_unit"), round:t("r_round"), month:t("r_month")};
+  ul.innerHTML=list.map((x,ix)=>`<li>
+      <span><b>${esc(x.target)}</b> <span class="muted">· ${esc(scopeName[x.scope]||x.scope)}</span>
+        ${x.pages?` <span class="muted">· ${esc(t("r_rec_pages",{n:x.pages}))}</span>`:""}${
+        x.status==="final"?` <span class="pill g">${esc(t("r_st_final"))}</span>`:x.status==="prov"?` <span class="tag">${esc(t("r_st_prov_s"))}</span>`:""}</span>
+      <span class="sp"></span><span class="when">${esc(x.at||"")}</span>
+      <button type="button" class="btn sm" data-ragain="${ix}">${esc(t("r_again"))}</button></li>`).join("");
+  ul.querySelectorAll("[data-ragain]").forEach(b=>b.onclick=()=>{
+    const x=list[Number(b.dataset.ragain)]; if(!x) return;
+    $("rScope").value=x.scope; refreshReportTargets();
+    if(!selectReportTarget(x.target)) return;
+    runReport(x.scope, x.target, $("rGo"), { msg:$("rMsg"), photos:$("rPhotos").value==="1", scale:parseFloat($("rScale").value) });
+  });
+}
+/* Choose a target that the bounded picker may not be showing. */
+function selectReportTarget(v){
+  const sel=$("rTarget"); if(!sel) return false;
+  if(![...sel.options].some(o=>o.value===v)){
+    const o=document.createElement("option"); o.value=v; o.textContent=v; sel.insertBefore(o, sel.firstChild);
+  }
+  sel.value=v; renderReportPreview(); return sel.value===v;
+}
+if($("rTarget")) $("rTarget").onchange=renderReportPreview;
+if($("rPhotos")) $("rPhotos").onchange=renderReportPreview;
 
 /* One way to build a report, called from three places.
 
@@ -10951,11 +11082,13 @@ async function runReport(scope, target, btn, opts){
       const rec=RECS.find(r=>ekOf(r)===target);
       if(rec){ const st=reportStatus(rec);
                logReport(target, n, st.status, st.rev);
+               rememberReport(scope, target, n, st.status==="final"?"final":"prov");
                say(t(st.status==="final"?"r_done_final":"r_done_prov",{n, m:st.need-st.have}));
                if(btn && !msg) setTimeout(()=>{ btn.textContent = label; }, 2600);
                return n; }
     }
     say(t("r_done",{n}));
+    rememberReport(scope, target, n, "");
     /* The button says "Report" again after a moment. Leaving "Done — 3 pages"
        on it turns a control into a status light nobody can press. */
     if(btn && !msg) setTimeout(()=>{ btn.textContent = label; }, 2600);
@@ -12164,15 +12297,24 @@ function renderLubeGaps(){
     suggested++;
     return `<span class="maybe" title="${esc(t("lg_maybe_t",{n:n.comps}))}">${esc(n.m)}</span>`;
   };
+  /* Fifteen at a time, side by side. 162 uncovered models is a work list for an
+     afternoon, not a wall; the counts in the sentence beneath are of the
+     whole list either way, and "Show all" is one press. */
+  const pgA=paged("lgNoRef", mrows, renderLubeGaps, 15), pgB=paged("lgNoMach", drows, renderLubeGaps, 15);
   noRef.innerHTML = hd("lg_class","lg_model","lg_units","lg_maybe") + (mrows.length
-    ? `<tbody>${mrows.map(r=>
+    ? `<tbody>${pgA.rows.map(r=>
         `<tr><td>${esc(t("cls_"+r.cls)||r.cls||"\u2014")}</td><td>${esc(r.m)}</td><td>${
           cell(r)}</td><td class="num">${esc(fmtN(r.n))}</td></tr>`).join("")}</tbody>`
     : `<tbody><tr><td colspan="4" class="muted">${esc(t("lg_none"))}</td></tr></tbody>`);
   noMach.innerHTML = hd("lg_class","lg_model","lg_comps") + (drows.length
-    ? `<tbody>${drows.map(r=>`<tr><td>${esc(r.cls==="?"?"\u2014":(t("cls_"+r.cls)||r.cls))}</td><td>${
+    ? `<tbody>${pgB.rows.map(r=>`<tr><td>${esc(r.cls==="?"?"\u2014":(t("cls_"+r.cls)||r.cls))}</td><td>${
         esc(r.m)}</td><td class="num">${esc(fmtN(r.comps))}</td></tr>`).join("")}</tbody>`
     : `<tbody><tr><td colspan="3" class="muted">${esc(t("lg_none2"))}</td></tr></tbody>`);
+  [[noRef,pgA],[noMach,pgB]].forEach(([tb,pg])=>{
+    const w=tb.parentNode; if(!w) return;
+    const old=w.querySelector(":scope > .pager"); if(old) old.remove();
+    if(pg.strip) w.insertAdjacentHTML("beforeend", pg.strip);
+  });
   $("lgNote").textContent = t("lg_note",{a:fmtN(missUnits), b:fmtN(mrows.length), c:fmtN(drows.length)})
     + (suggested ? " " + t("lg_note2",{n:fmtN(suggested)}) : "")
     + (settled ? " " + t("lg_note3",{n:fmtN(settled)}) : "");
@@ -13751,8 +13893,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=238"></script>
-<script src="sync-adapter.js?v=238"></script>
-<script src="report.js?v=238"></script>
+<script src="drive.js?v=239"></script>
+<script src="sync-adapter.js?v=239"></script>
+<script src="report.js?v=239"></script>
 </body>
 </html>

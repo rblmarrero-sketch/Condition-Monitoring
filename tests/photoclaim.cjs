@@ -249,7 +249,7 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
                   /evidence incomplete/i];
   ok('the round whose files are all present has a row', !!rows.TK115, rows.TK115 || '');
   ok('  it asks for component assignment',
-     /need[s]? component assignment/i.test(rows.TK115 || ''), rows.TK115 || '');
+     /(need[s]? component assignment|component assignment required)/i.test(rows.TK115 || ''), rows.TK115 || '');
   ok('  it says the photographs were received',
      /All photographs were received/i.test(rows.TK115 || ''), rows.TK115 || '');
   const hit = BANNED.filter(re => re.test(rows.TK115 || '')).map(String);

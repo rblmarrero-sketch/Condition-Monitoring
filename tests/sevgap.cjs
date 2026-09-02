@@ -258,6 +258,9 @@ const LIST = `(function(){
      that answers "is this dashboard telling the truth". This is a list of
      decisions with somebody's name on them and belongs above that. */
   const place = await p.evaluate(() => {
+    /* The diagnostics are collapsed by default now; open them so their
+       position on the page is a real one to compare against. */
+    const ad = document.getElementById('syAdmin'); if (ad) ad.open = true;
     const y = id => { const e = document.getElementById(id);
                       return e ? Math.round(e.getBoundingClientRect().top + scrollY) : null; };
     const box = document.getElementById('sySevBox');

@@ -109,6 +109,9 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
        broke silently the day a column gained a muted dash for "no suggestion" —
        the guard then counted 4 of 162 while every other assertion still passed.
        A structural test, not a cosmetic one. */
+    /* Both lists page at 25 now; this guard is about the WHOLE list, so
+       ask each pager for all of it before counting. */
+    ["lgNoRef", "lgNoMach"].forEach(k => { const b = document.querySelector('[data-pg="' + k + ':all"]'); if (b) b.click(); });
     const rows = id => [...document.querySelectorAll("#" + id + " tbody tr")]
       .filter(tr => !tr.querySelector("td[colspan]"));
     const noRef = rows("lgNoRef"), noMach = rows("lgNoMach");
@@ -148,6 +151,7 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
      to stay a QUESTION: the moment a resemblance reads as a decision, somebody
      puts a loader on a truck's compartments. */
   const sug = await p.evaluate(() => {
+    const ba = document.querySelector('[data-pg="lgNoRef:all"]'); if (ba) ba.click();
     const rows = [...document.querySelectorAll("#lgNoRef tbody tr")]
       .filter(tr => !tr.querySelector("td[colspan]"));
     const withOne = rows.filter(tr => tr.querySelector(".maybe"));
