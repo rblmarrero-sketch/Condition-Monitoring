@@ -2540,6 +2540,16 @@
          showed one at a time and the tab ran past a thousand pixels with 700
          of them unused on either side. What fails and why it failed are read
          together; so are how long you have and which mechanism it was. -->
+    <!-- Pressing a bar filters every page. A page that can be narrowed needs
+         a way back that is ON the page — the chip bar above the fold does the
+         same job, but it is above the fold, which on this page is exactly
+         where the reader is not looking. -->
+    <div class="pagehd">
+      <div class="pgt"><h1 data-i18n="tab_failure">Failure Analysis</h1>
+        <span class="pgsub" id="failLead"></span></div>
+      <span class="spacer"></span>
+      <button type="button" class="btn sm" id="failReset" hidden data-i18n="fa_reset">Reset filters</button>
+    </div>
     <div class="grid12">
     <div class="section g7">
       <h2 data-i18n="s_pareto">Top failure modes (Pareto)</h2>
@@ -2572,6 +2582,16 @@
       <div class="pareto" id="paretoIso"></div>
     </div>
     </div>
+    <!-- WHICH MACHINES. A Pareto names a defect; the question after it is
+         always "on which units", and the answer used to be three pages away
+         on the register. Here, under the charts, narrowed by whatever bar
+         has been pressed. -->
+    <div class="section">
+      <div class="secthd"><h2 data-i18n="fa_affected">Affected equipment</h2>
+        <span class="spacer"></span><span class="hint" id="failAffLead"></span></div>
+      <div class="tblwrap"><table class="grid" id="failAffTbl"></table></div>
+      <div class="shown" id="failAffShown"></div>
+    </div>
   </section>
 
   <!-- Every measured position on the fleet, worst first, with what it is doing
@@ -2582,7 +2602,8 @@
   <section id="tab-wear" class="hidden">
     <div class="kpis" id="wearKpis"></div>
     <div class="section">
-      <h2 data-i18n="w_title">Wear and remaining life</h2>
+      <div class="secthd"><h2 data-i18n="w_title">Wear and remaining life</h2>
+        <span class="spacer"></span><span class="hint" id="wearLead"></span></div>
       <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
         <div class="sub" data-i18n="w_sub">Every measured position, latest reading first. Life is projected from this position's own history — two readings at least, and the app says so when it will not guess.</div></details>
       <!-- The same segmented control the register uses. Two filters that do the
@@ -2594,6 +2615,8 @@
       </div>
       <select id="wBand" class="hidden">
         <option value="due"></option><option value="act"></option><option value="all"></option>
+        <option value="watch"></option><option value="soon"></option><option value="life"></option>
+        <option value="plan"></option><option value="second"></option>
       </select>
       <div class="tblwrap scrollbox" style="--sb:620px"><table class="grid" id="wearTbl"></table></div>
       <div class="shown" id="wearShown"></div>
@@ -3051,27 +3074,27 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=237"></script>
-<script src="../mobile/hme.js?v=237"></script>
-<script src="../mobile/mp-fc.js?v=237"></script>
-<script src="../mobile/hme-cascade.js?v=237"></script>
-<script src="../mobile/temp-limits.js?v=237"></script>
+<script src="../data/magnetic_plug.js?v=238"></script>
+<script src="../mobile/hme.js?v=238"></script>
+<script src="../mobile/mp-fc.js?v=238"></script>
+<script src="../mobile/hme-cascade.js?v=238"></script>
+<script src="../mobile/temp-limits.js?v=238"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=237"></script>
-<script src="../mobile/normalize.js?v=237"></script>
-<script src="../mobile/due.js?v=237"></script>
-<script src="../mobile/wear.js?v=237"></script>
-<script src="../mobile/wear-map.js?v=237"></script>
-<script src="../mobile/lube.js?v=237"></script>
-<script src="../mobile/lube-overrides.js?v=237"></script>
-<script src="../mobile/lube2027.js?v=237"></script>
-<script src="../mobile/lube-tds.js?v=237"></script>
+<script src="../mobile/assets.js?v=238"></script>
+<script src="../mobile/normalize.js?v=238"></script>
+<script src="../mobile/due.js?v=238"></script>
+<script src="../mobile/wear.js?v=238"></script>
+<script src="../mobile/wear-map.js?v=238"></script>
+<script src="../mobile/lube.js?v=238"></script>
+<script src="../mobile/lube-overrides.js?v=238"></script>
+<script src="../mobile/lube2027.js?v=238"></script>
+<script src="../mobile/lube-tds.js?v=238"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=237"></script>
-<script src="../mobile/machine-photos.js?v=237"></script>
+<script src="../mobile/upload-defaults.js?v=238"></script>
+<script src="../mobile/machine-photos.js?v=238"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3080,17 +3103,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=237"></script>
-<script src="../mobile/get.js?v=237"></script>
-<script src="../mobile/points.js?v=237"></script>
-<script src="../mobile/uc-points.js?v=237"></script>
-<script src="../mobile/inspect-guide.js?v=237"></script>
-<script src="../mobile/get-figs.js?v=237"></script>
-<script src="../mobile/body-points.js?v=237"></script>
-<script src="../mobile/body-map.js?v=237"></script>
-<script src="../mobile/jspdf.umd.min.js?v=237"></script>
-<script src="../mobile/html2canvas.min.js?v=237"></script>
-<script src="../mobile/report-core.js?v=237"></script>
+<script src="../mobile/machine-fig.js?v=238"></script>
+<script src="../mobile/get.js?v=238"></script>
+<script src="../mobile/points.js?v=238"></script>
+<script src="../mobile/uc-points.js?v=238"></script>
+<script src="../mobile/inspect-guide.js?v=238"></script>
+<script src="../mobile/get-figs.js?v=238"></script>
+<script src="../mobile/body-points.js?v=238"></script>
+<script src="../mobile/body-map.js?v=238"></script>
+<script src="../mobile/jspdf.umd.min.js?v=238"></script>
+<script src="../mobile/html2canvas.min.js?v=238"></script>
+<script src="../mobile/report-core.js?v=238"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -3183,6 +3206,15 @@ const I18N={
   w_k_watch:"OVER 80% WORN", w_k_watch_s:"watch list",
   w_k_soon:"UNDER {h} H LEFT", w_k_soon_s:"order the parts",
   w_k_life:"WITH A LIFE", w_k_life_s:"the rest need a second reading",
+  w_k_plan:"PLANNING REQUIRED", w_k_plan_s:"needs work, no action against it yet",
+  w_k_second:"SECOND READING", w_k_second_s:"no life until it is measured again",
+  w_lead:"{n} measured position(s) on {m} machine(s)", w_ref:"New → condemn",
+  drw_hist:"Open the history of {u}",
+  fa_reset:"Reset filters", fa_affected:"Affected equipment",
+  fa_lead:"{n} coded finding(s) on {m} machine(s)",
+  fa_aff_all:"every machine with a coded finding · {n}", fa_aff_filtered:"narrowed by the bar you pressed · {n} machine(s)",
+  fa_th_last:"Last found", fa_none:"No machine carries a finding in this selection.",
+  p_tip:"{l} · {n} finding(s) · {p}% cumulative",
   w_th_unit:"Unit", w_th_point:"Position", w_th_meas:"mm", w_th_worn:"Worn",
   w_th_left:"mm left", w_th_rate:"mm/1000h", w_th_life:"Life left", w_th_when:"Reaches condemn",
   w_th_seen:"Readings",
@@ -3916,6 +3948,15 @@ const I18N={
   w_k_watch:"\u0418\u0417\u041d\u041e\u0421 \u0421\u0412\u042b\u0428\u0415 80%", w_k_watch_s:"\u043f\u043e\u0434 \u043d\u0430\u0431\u043b\u044e\u0434\u0435\u043d\u0438\u0435\u043c",
   w_k_soon:"\u041c\u0415\u041d\u0415\u0415 {h} \u0427", w_k_soon_s:"\u0437\u0430\u043a\u0430\u0437\u0430\u0442\u044c \u0437\u0430\u043f\u0447\u0430\u0441\u0442\u0438",
   w_k_life:"\u0421 \u0420\u0410\u0421\u0427\u0401\u0422\u041d\u042b\u041c \u0420\u0415\u0421\u0423\u0420\u0421\u041e\u041c", w_k_life_s:"\u043e\u0441\u0442\u0430\u043b\u044c\u043d\u044b\u043c \u043d\u0443\u0436\u0435\u043d \u0432\u0442\u043e\u0440\u043e\u0439 \u0437\u0430\u043c\u0435\u0440",
+  w_k_plan:"\u0422\u0420\u0415\u0411\u0423\u0415\u0422 \u041f\u041b\u0410\u041d\u0418\u0420\u041e\u0412\u0410\u041d\u0418\u042f", w_k_plan_s:"\u043d\u0443\u0436\u043d\u044b \u0440\u0430\u0431\u043e\u0442\u044b, \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0435 \u043d\u0435 \u043d\u0430\u0437\u043d\u0430\u0447\u0435\u043d\u043e",
+  w_k_second:"\u0412\u0422\u041e\u0420\u041e\u0419 \u0417\u0410\u041c\u0415\u0420", w_k_second_s:"\u0440\u0435\u0441\u0443\u0440\u0441 \u043d\u0435 \u0440\u0430\u0441\u0441\u0447\u0438\u0442\u0430\u0442\u044c \u0431\u0435\u0437 \u043f\u043e\u0432\u0442\u043e\u0440\u043d\u043e\u0433\u043e \u0437\u0430\u043c\u0435\u0440\u0430",
+  w_lead:"\u0437\u0430\u043c\u0435\u0440\u0435\u043d\u043d\u044b\u0445 \u0442\u043e\u0447\u0435\u043a: {n} \u043d\u0430 {m} \u043c\u0430\u0448\u0438\u043d\u0430\u0445", w_ref:"\u041d\u043e\u0432\u043e\u0435 \u2192 \u043f\u0440\u0435\u0434\u0435\u043b",
+  drw_hist:"\u041e\u0442\u043a\u0440\u044b\u0442\u044c \u0438\u0441\u0442\u043e\u0440\u0438\u044e {u}",
+  fa_reset:"\u0421\u0431\u0440\u043e\u0441\u0438\u0442\u044c \u0444\u0438\u043b\u044c\u0442\u0440\u044b", fa_affected:"\u0417\u0430\u0442\u0440\u043e\u043d\u0443\u0442\u0430\u044f \u0442\u0435\u0445\u043d\u0438\u043a\u0430",
+  fa_lead:"\u043a\u043e\u0434\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u044b\u0445 \u043d\u0430\u0445\u043e\u0434\u043e\u043a: {n} \u043d\u0430 {m} \u043c\u0430\u0448\u0438\u043d\u0430\u0445",
+  fa_aff_all:"\u0432\u0441\u0435 \u043c\u0430\u0448\u0438\u043d\u044b \u0441 \u043a\u043e\u0434\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u043e\u0439 \u043d\u0430\u0445\u043e\u0434\u043a\u043e\u0439 \u00b7 {n}", fa_aff_filtered:"\u043f\u043e \u043d\u0430\u0436\u0430\u0442\u043e\u043c\u0443 \u0441\u0442\u043e\u043b\u0431\u0446\u0443 \u00b7 \u043c\u0430\u0448\u0438\u043d: {n}",
+  fa_th_last:"\u041f\u043e\u0441\u043b\u0435\u0434\u043d\u044f\u044f \u043d\u0430\u0445\u043e\u0434\u043a\u0430", fa_none:"\u0412 \u044d\u0442\u043e\u0439 \u0432\u044b\u0431\u043e\u0440\u043a\u0435 \u043d\u0438 \u043e\u0434\u043d\u0430 \u043c\u0430\u0448\u0438\u043d\u0430 \u043d\u0435 \u043d\u0435\u0441\u0451\u0442 \u043d\u0430\u0445\u043e\u0434\u043e\u043a.",
+  p_tip:"{l} \u00b7 \u043d\u0430\u0445\u043e\u0434\u043e\u043a: {n} \u00b7 {p}% \u043d\u0430\u043a\u043e\u043f\u0438\u0442\u0435\u043b\u044c\u043d\u043e",
   w_th_unit:"\u0415\u0434.", w_th_point:"\u0422\u043e\u0447\u043a\u0430", w_th_meas:"\u043c\u043c", w_th_worn:"\u0418\u0437\u043d\u043e\u0441",
   w_th_left:"\u043c\u043c \u0434\u043e \u043f\u0440\u0435\u0434\u0435\u043b\u0430", w_th_rate:"\u043c\u043c/1000\u0447", w_th_life:"\u041e\u0441\u0442\u0430\u0442\u043e\u043a", w_th_when:"\u0414\u043e\u0441\u0442\u0438\u0433\u043d\u0435\u0442 \u043f\u0440\u0435\u0434\u0435\u043b\u0430",
   w_th_seen:"\u0417\u0430\u043c\u0435\u0440\u043e\u0432",
@@ -5696,8 +5737,8 @@ function pareto(el,pairs,colorFn,drillKey,why,total){
      cannot reach and a screen reader announces as text. */
   el.innerHTML = head + rows.map((r,ix)=>`
     <${drillKey?"button type=\"button\"":"div"} class="prow${drillKey&&drill[drillKey]===r.label?" sel":""}${r.vital?" vital":""}" ${
-      drillKey?`data-drill="${esc(r.label)}" title="${esc(t("p_click"))}" aria-pressed="${
-        drill[drillKey]===r.label?"true":"false"}"`:""}>
+      drillKey?`data-drill="${esc(r.label)}" title="${esc(t("p_tip",{l:r.label, n:r.n, p:Math.round(r.cum)}))} · ${esc(t("p_click"))}" aria-pressed="${
+        drill[drillKey]===r.label?"true":"false"}"`:`title="${esc(t("p_tip",{l:r.label, n:r.n, p:Math.round(r.cum)}))}"`}>
       <div class="lbl" title="${esc(r.label)}">${esc(r.label)}${r.sub?` <small>${esc(r.sub)}</small>`:""}</div>
       <div class="ptrack"><div class="pfill" style="width:${Math.max(2,r.n/max*100)}%;background:${colorFn?colorFn(r.label):"var(--accent)"}"></div></div>
       <div class="n">${r.n}</div>
@@ -5727,6 +5768,61 @@ function renderFailure(){
   pareto($("paretoIso"),    i.rows, ()=>"var(--accent)", null,
     f.length ? src+t("e_iso_tail") : src, i.total);
   renderPF();
+  renderFailAffected(f);
+}
+/* Which machines carry the findings the charts are counting — the same
+   findings, so a pressed bar narrows this table exactly as it narrows the
+   charts. One row per machine: worst finding, how many, the last time, and
+   what is open against it. */
+function renderFailAffected(f){
+  const tb=$("failAffTbl"); if(!tb) return;
+  const active=["defect","cause","sev","month","unit","owner"].filter(k=>drill[k]);
+  /* filtered() keeps a RECORD when any of its points carries the pressed
+     defect; the other points on that round come with it. The machines are
+     right either way, but "3 findings, worst Critical" must be about the
+     defect that was pressed, not about whatever else that round found. */
+  if(drill.defect || drill.cause || drill.sev)
+    f=f.filter(x=>(!drill.defect || x.i.defect===drill.defect)
+               && (!drill.cause  || x.i.cause===drill.cause)
+               && (!drill.sev    || sevOf(x.r,x.i)===drill.sev));
+  const rb=$("failReset");
+  if(rb){ rb.hidden=!active.length; rb.onclick=()=>{ clearDrill(); }; }
+  const lead=$("failLead");
+  if(lead) lead.textContent = f.length ? t("fa_lead",{n:fmtN(f.length), m:fmtN(new Set(f.map(x=>x.r.equip)).size)}) : "";
+  const byU=new Map();
+  f.forEach(x=>{
+    const u=x.r.equip, e=byU.get(u)||{unit:u, cls:x.r.cls||"", n:0, worst:"", last:"", open:0, top:""};
+    e.n++;
+    /* The worst finding names the row. A measured position has no defect
+       text — its finding is a number against a limit — so it is named by the
+       component, never left as a dash beside "Critical". */
+    const sv=sevOf(x.r,x.i); if(sevRank(sv)>sevRank(e.worst)){ e.worst=sv; e.top=x.i.defect||x.i.label||x.i.key||e.top; }
+    if((x.r.date||"")>e.last) e.last=x.r.date||"";
+    if(actionRequired(x.r,x.i)) e.open++;
+    byU.set(u,e);
+  });
+  const rows=[...byU.values()].sort((a,b)=>(sevRank(b.worst)-sevRank(a.worst)) || (b.n-a.n) || a.unit.localeCompare(b.unit));
+  const al=$("failAffLead");
+  if(al) al.textContent = active.length ? t("fa_aff_filtered",{n:rows.length}) : t("fa_aff_all",{n:rows.length});
+  if(!rows.length){ tb.innerHTML=`<tbody><tr><td class="muted" style="padding:14px">${esc(t("fa_none"))}</td></tr></tbody>`;
+    if($("failAffShown")) $("failAffShown").innerHTML=""; return; }
+  const pg=paged("failaff", rows, ()=>renderFailAffected(findings(filtered())), PAGE_SIZE_ACT);
+  tb.innerHTML=`<thead><tr><th>${esc(t("th_unit"))}</th><th>${esc(t("th_class"))}</th><th>${esc(t("th_worst"))}</th>
+      <th>${esc(t("th_topdef"))}</th><th class="r">${esc(t("th_find"))}</th><th class="r">${esc(t("th_open"))}</th><th>${esc(t("fa_th_last"))}</th></tr></thead><tbody>`
+    + pg.rows.map(e=>`<tr data-u="${esc(e.unit)}" tabindex="0" style="cursor:pointer">
+        <td><b>${esc(e.unit)}</b></td>
+        <td>${e.cls?esc(e.cls):'<span class="muted">—</span>'}</td>
+        <td>${e.worst?`<span class="pill ${SEV[e.worst].c}">${esc(SEV[e.worst].l)}</span>`:'<span class="muted">—</span>'}</td>
+        <td><span class="trunc">${e.top?esc(e.top):'<span class="muted">—</span>'}</span></td>
+        <td class="r mono">${e.n}</td>
+        <td class="r mono">${e.open?`<b>${e.open}</b>`:'<span class="muted">0</span>'}</td>
+        <td class="mono">${esc(e.last)}</td></tr>`).join("")+`</tbody>`;
+  tb.querySelectorAll("tr[data-u]").forEach(tr=>{
+    const go=()=>openUnit(tr.dataset.u);
+    tr.onclick=go;
+    tr.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } };
+  });
+  if($("failAffShown")) $("failAffShown").innerHTML=`<span>${esc(t("shown_n",{n:pg.rows.length, of:rows.length}))}</span>`+pg.strip;
 }
 
 /* ---------- the P-F interval ----------
@@ -9471,6 +9567,30 @@ function drwClose(){
   drwFrom=null;
 }
 let drwFrom=null;
+/* THE READING, THE REFERENCE AND THE FORECAST, in the drawer a wear row
+   opens. The table shows one line per position; this is where the rest of
+   it lives — the same figures wearRows() computes for the table, so the
+   drawer cannot say something the row did not. */
+function wearDL(rec,i){
+  const w=wearOf(rec,i);
+  if(!w || w.mm==null) return "";
+  const row=(k,v)=>v==null||v===""?"":`<dt>${esc(k)}</dt><dd>${v}</dd>`;
+  let r=null;
+  try{ r=wearRows(RECS.filter(x=>x.equip===rec.equip)).find(x=>x.itemKey===i.key && x.type===rec.type)||null; }catch(e){}
+  const left=(w.condemnMM!=null&&w.mm!=null)?Math.abs(Number(w.mm)-Number(w.condemnMM)).toFixed(1):"";
+  return `<h4 class="drwh">${esc(t("w_title"))}</h4><dl>${
+      row(t("w_th_meas"), `<b>${esc(w.mm)}</b> mm`) +
+      row(t("w_ref"), w.newMM!=null ? `${esc(w.newMM)} → ${esc(w.condemnMM)} mm` : esc(t("uc_noref"))) +
+      row(t("w_th_worn"), w.wearPct!=null ? `${esc(w.wearPct)}% ${wearBar(w.wearPct)}` : "") +
+      row(t("w_th_left"), left ? `${esc(left)} mm` : "") +
+      (r ? row(t("w_th_rate"), r.rate!=null ? esc(r.rate.toFixed(2)) : "")
+         + row(t("w_th_life"), r.hours!=null ? `<b>${esc(fmtH(r.hours))}</b> h`
+                                : `<span class="muted">${esc(t("w_why_"+(r.why||"few")))} — ${esc(t("w_why_"+(r.why||"few")+"_t"))}</span>`)
+         + row(t("w_th_when"), r.hours!=null ? `${esc(whenDate(r.hours))} <span class="muted">· ${esc(t(r.basis==="smu"?"w_basis_smu":"w_basis_days"))}</span>` : "")
+         + row(t("w_th_seen"), `${r.n} · ${esc(r.at)}`)
+         : "")
+    }</dl>`;
+}
 function openPos(rk, ik){
   const rec=RECS.find(r=>ekOf(r)===rk); if(!rec) return;
   const i=(rec.items||[]).find(x=>x.key===ik); if(!i) return;
@@ -9517,9 +9637,13 @@ function openPos(rk, ik){
                i.baseAll?" · "+esc(t("th_base_all")):""}` : "") +
        row(t("hh_by"), esc(rec.by||"")) +
        row("✍", esc(rec.sup||""))
-     }</dl>${lubeDL(rec,i)}${
+     }</dl>${wearDL(rec,i)}${lubeDL(rec,i)}${
        i.comment?`<div class="cm">“${esc(i.comment)}”</div>`:""}${
-       rec._note?`<div class="sub" style="margin-top:8px">📝 ${esc(rec._note)}</div>`:""}`;
+       rec._note?`<div class="sub" style="margin-top:8px">📝 ${esc(rec._note)}</div>`:""}
+     <div class="row" style="margin-top:12px;gap:8px">
+       <button type="button" class="btn" id="drwHist">${esc(t("drw_hist",{u:rec.equip}))}</button></div>`;
+  const dh=$("drwHist");
+  if(dh) dh.onclick=()=>{ drwClose(); selectEquip(rec.equip); showTab("equipment", true); renderHistory(); };
   $("drwBody").querySelectorAll("[data-i]").forEach(el=>{
     /* The editor needs to know which record and which FILE it is looking at,
        or a recipe would be stored against a picture rather than against the
@@ -11016,31 +11140,44 @@ function renderWearTab(){
      five numbers and three views: "over 80% worn" and "under 1,000 h left"
      counted a set the reader could not then look at, which is a number you
      have to go and reproduce by hand. */
+  /* "Planning required" is a wear position that needs work — at condemn, past
+     80%, or under 1,000 h — and has no maintenance action against it yet: the
+     same actionState() rule the register uses, so the two can never disagree
+     about what is planned. "Second reading" is a position the app will not
+     forecast for, and the reason is one more measurement. */
+  const needsPlan=r=>wearDue(r) && actionRequired(r.rec, r.it);
   const rows = mode==="all"   ? all
              : mode==="act"   ? all.filter(r=>r.band==="act")
              : mode==="watch" ? all.filter(r=>r.pct!=null&&r.pct>=80)
              : mode==="soon"  ? all.filter(r=>r.hours!=null&&r.hours<W_SOON)
              : mode==="life"  ? all.filter(r=>r.hours!=null)
+             : mode==="plan"  ? all.filter(needsPlan)
+             : mode==="second"? all.filter(r=>r.hours==null)
              : all.filter(wearDue);
   const act=all.filter(r=>r.band==="act").length;
-  const watch=all.filter(r=>r.band==="watch").length;
+  const watch=all.filter(r=>r.pct!=null&&r.pct>=80).length;
   const soon=all.filter(r=>r.hours!=null&&r.hours<W_SOON).length;
-  const haveLife=all.filter(r=>r.hours!=null).length;
+  const plan=all.filter(needsPlan).length;
+  const second=all.filter(r=>r.hours==null).length;
   /* Every tile is the way into the set it counts. All five were inert. */
   const kp=(go,lab,val,sub,cls)=>`<button type="button" data-wgo="${esc(go)}"
       class="kpi${cls?" "+cls:""}${mode===go?" on":""}" title="${esc(t("w_k_go"))}">
     <span class="k">${esc(lab)}</span>
     <span class="v">${esc(String(val))}</span><span class="s">${esc(sub)}</span></button>`;
   $("wearKpis").innerHTML =
-      kp("all",  t("w_k_meas"), all.length, t("w_k_meas_s",{n:new Set(all.map(r=>r.equip)).size}))
-    + kp("act",  t("w_k_act"), act, t("w_k_act_s"), act?"bad":"good")
+      kp("act",  t("w_k_act"), act, t("w_k_act_s"), act?"bad":"good")
     + kp("watch",t("w_k_watch"), watch, t("w_k_watch_s"), watch?"warn":"good")
     + kp("soon", t("w_k_soon",{h:W_SOON.toLocaleString(lang==="ru"?"ru-RU":"en-GB")}), soon,
          t("w_k_soon_s"), soon?"warn":"good")
-    + kp("life", t("w_k_life"), haveLife+" / "+all.length, t("w_k_life_s"), "info");
+    + kp("plan", t("w_k_plan"), plan, t("w_k_plan_s"), plan?"warn":"good")
+    + kp("second", t("w_k_second"), second, t("w_k_second_s"), second?"info":"good");
   $("wearKpis").querySelectorAll("[data-wgo]").forEach(b=>b.onclick=()=>{
     if($("wBand")) $("wBand").value=b.dataset.wgo;
     renderWearTab(); });
+  /* The denominator, in the header rather than on a tile: what is measured
+     is context; what needs somebody is a headline. */
+  const wl=$("wearLead");
+  if(wl) wl.textContent=t("w_lead",{n:fmtN(all.length), m:fmtN(new Set(all.map(r=>r.equip)).size)});
   if(!all.length){
     $("wearTbl").innerHTML=`<tbody><tr><td class="muted" style="padding:18px">${esc(t("w_empty"))}</td></tr></tbody>`;
     $("wearNote").textContent=""; return;
@@ -11070,15 +11207,19 @@ function renderWearTab(){
       const life = r.hours!=null
         ? `<b class="${r.hours<W_SOON?"bad":""}">${esc(fmtH(r.hours))}</b> h`
         : `<span class="muted" title="${esc(t("w_why_"+(r.why||"few")+"_t"))}">${esc(t("w_why_"+(r.why||"few")))}</span>`;
+      /* ONE LINE PER ROW. The reference span, the forecast basis and the date
+         of the last reading rode as second lines under three cells, which made
+         every row 48px and the page five screens. They are on the title of the
+         cell they qualify, and all of them are in the drawer the row opens. */
       const when = r.hours!=null
-        ? `${esc(whenDate(r.hours))}<div class="muted" style="font-size:10.5px">${esc(t(r.basis==="smu"?"w_basis_smu":"w_basis_days"))}</div>`
+        ? `<span title="${esc(t(r.basis==="smu"?"w_basis_smu":"w_basis_days"))}">${esc(whenDate(r.hours))}</span>`
         : "";
       const left = (r.w.condemnMM!=null&&r.w.mm!=null)
         ? Math.abs(Number(r.w.mm)-Number(r.w.condemnMM)).toFixed(1) : "";
-      return `<tr data-unit="${esc(r.equip)}">
+      const ref = r.w.newMM!=null?esc(r.w.newMM)+" → "+esc(r.w.condemnMM)+" mm":esc(t("uc_noref"));
+      return `<tr data-unit="${esc(r.equip)}" data-rk="${esc(ekOf(r.rec))}" data-ik="${esc(r.itemKey)}" tabindex="0">
         <td><b>${esc(r.equip)}</b> <span class="tag">${esc(TYPE_LABEL[r.type]||r.type)}</span></td>
-        <td>${esc(r.name)}<div class="muted" style="font-size:10.5px">${
-            r.w.newMM!=null?esc(r.w.newMM)+" → "+esc(r.w.condemnMM)+" mm":esc(t("uc_noref"))}</div></td>
+        <td title="${ref}"><span class="trunc">${esc(r.name)}</span></td>
         <td class="r mono"><b>${esc(r.w.mm)}</b></td>
         <td class="r mono">${r.pct!=null?esc(r.pct)+"%":""}</td>
         <td>${r.pct!=null?wearBar(r.pct):""}</td>
@@ -11086,11 +11227,17 @@ function renderWearTab(){
         <td class="r mono">${r.rate!=null?esc(r.rate.toFixed(2)):""}</td>
         <td class="r mono">${life}</td>
         <td>${when}</td>
-        <td class="r mono">${r.n}<div class="muted" style="font-size:10.5px">${esc(r.at)}</div></td>
+        <td class="r mono" title="${esc(r.at)}">${r.n}</td>
       </tr>`;
     }).join("")+`</tbody>`;
-  $("wearTbl").querySelectorAll("tr[data-unit]").forEach(tr=>tr.onclick=()=>{
-    selectEquip(tr.dataset.unit); showTab("equipment"); renderHistory(); });
+  /* A row opens the position's own drawer — the reading, the reference, the
+     forecast and the photographs — without leaving the page. The machine's
+     full history is one button inside it. */
+  $("wearTbl").querySelectorAll("tr[data-rk]").forEach(tr=>{
+    const go=()=>openPos(tr.dataset.rk, tr.dataset.ik);
+    tr.onclick=go;
+    tr.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } };
+  });
   $("wearNote").textContent = t("w_note",{s:rows.length, n:all.length, h:WEAR.MIN_HOURS, d:WEAR.MIN_DAYS});
   if($("wearShown")) $("wearShown").innerHTML=
     `<span>${esc(t("shown_n",{n:rows.length, of:all.length}))}</span>` + pg.strip;
@@ -13604,8 +13751,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=237"></script>
-<script src="sync-adapter.js?v=237"></script>
-<script src="report.js?v=237"></script>
+<script src="drive.js?v=238"></script>
+<script src="sync-adapter.js?v=238"></script>
+<script src="report.js?v=238"></script>
 </body>
 </html>

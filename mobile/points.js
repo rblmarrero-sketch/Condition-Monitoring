@@ -70,7 +70,13 @@
     HT:{ en:"Haul Truck", ru:"Карьерный самосвал", asset:"TRUCK, DUMP",
       MP:[mk("4C","Left Rear Final Drive","Левый задний бортовой редуктор"),mk("4D","Right Rear Final Drive","Правый задний бортовой редуктор"),
           mk("4E","Left Rear Final Drive","Левый задний бортовой редуктор"),mk("4F","Right Rear Final Drive","Правый задний бортовой редуктор")],
-      FC:[mk("ENG","Engine Oil Filter","Фильтр моторного масла"),mk("HYD","Hydraulic Filter","Гидравлический фильтр"),
+      /* The transmission filter was missing from the haul truck's cut list —
+         the one class where every other fluid compartment was named. The
+         TR60's transmission has a filter, and due.js has always scheduled it
+         (TRANS at 1,000 h); the point simply was not on the sheet, so no
+         inspector could record it. */
+      FC:[mk("ENG","Engine Oil Filter","Фильтр моторного масла"),mk("TRANS","Transmission Filter","Фильтр трансмиссии"),
+          mk("HYD","Hydraulic Filter","Гидравлический фильтр"),
           mk("FDR","Final Drive Filter","Фильтр бортового редуктора"),mk("FUEL","Fuel Filter","Топливный фильтр")],
       INSP:["ENG","COOL","AIR","FUEL","ETRAC","WHEELM","FDR","HYD","HOIST","STEER","BRK","SUSP","FRAME","TYRE","ELEC","CAB","LUBE","FIRE"] },
     AT:{ en:"Articulated Truck", ru:"Сочленённый самосвал", asset:"TRUCK, ARTICULATED",
