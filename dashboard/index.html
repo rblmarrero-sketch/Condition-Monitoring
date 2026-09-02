@@ -1376,7 +1376,20 @@
      narrower than what is inside it. */
   #tab-equipment .field{min-width:0;}
   .eqpick{display:flex;flex-direction:column;gap:4px;min-width:0;flex:1;}
-  .eqpick > input,.eqpick > select{min-width:0;max-width:100%;box-sizing:border-box;}
+  /* flex:0 0 auto, explicitly: the toolbar's search rule grows its input to
+     fill the row, and inside this column that grew the filter box into a
+     220px-tall block with the picker underneath it. */
+  .eqpick > input,.eqpick > select{min-width:0;max-width:100%;box-sizing:border-box;flex:0 0 auto;height:auto;}
+  /* Outranks ".controls input[type=search]{flex:1 1 220px}", whose 220px
+     basis is a WIDTH on the toolbar row and became a HEIGHT in this column. */
+  .controls .eqpick > input[type=search]{flex:0 0 auto;height:auto;width:240px;max-width:100%;min-width:0;}
+  /* On a phone the label sits above the picker and the picker takes the
+     width; side by side they were 26px wider than the screen. */
+  @media (max-width:640px){
+    #tab-equipment .controls .field{flex-direction:column;align-items:stretch;}
+    #tab-equipment .eqpick{width:100%;}
+    .controls .eqpick > input[type=search],.controls .eqpick > select{width:100%;max-width:100%;}
+  }
   .eqpick > .hint{font-size:11px;color:var(--muted);}
   .pager{display:flex;align-items:center;gap:10px;padding:8px 10px;
     border-top:1px solid var(--border);background:var(--surface-2);font-size:12px;}
@@ -2669,14 +2682,23 @@
       <h2 data-i18n="dd_title">Every round, against the clock it is scheduled on</h2>
       <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
         <div class="sub" data-i18n="dd_sub">Hours, not days — a machine parked for three weeks has not worn. Each row is one unit and one round, counted from the last one recorded anywhere in the system and at the machine's own operating rate where two hour-meter readings have measured it. A round somebody chose not to walk says so, with the reason they gave.</div></details>
+      <!-- FOUR VIEWS, NAMED, ALL ON SCREEN. Overdue, Due soon, Deferred, All —
+           the four answers a planner wants, as tabs with their counts, so the
+           choice is informed and costs one press. The <select> underneath is
+           the state those tabs set and the address reads; it is kept
+           reachable (visually hidden, not display:none) because a control the
+           page's own scripts and tests drive must not vanish from the DOM. -->
       <div class="ddbar">
-        <label class="fld"><span data-i18n="dd_round">Round</span><select id="ddType"></select></label>
-        <label class="fld"><span data-i18n="dd_show">Show</span><select id="ddScope">
-          <option value="over" data-i18n="dd_missed">Missed</option>
-          <option value="due" data-i18n="dd_due">Missed &amp; due soon</option>
-          <option value="put" data-i18n="dd_put">Put off, with a reason</option>
-          <option value="all" data-i18n="dd_all">Everything with history</option>
+        <div class="seg" id="ddSeg" role="tablist" aria-label="Inspection schedule views"></div>
+        <label class="fld vh"><span data-i18n="dd_show">Show</span><select id="ddScope">
+          <option value="over" data-i18n="dd_missed">Overdue</option>
+          <option value="soon" data-i18n="dd_soon">Due soon</option>
+          <option value="due" data-i18n="dd_due">Overdue &amp; due soon</option>
+          <option value="put" data-i18n="dd_put">Deferred</option>
+          <option value="all" data-i18n="dd_all">All</option>
         </select></label>
+        <span class="spacer"></span>
+        <label class="fld"><span data-i18n="dd_round">Round</span><select id="ddType"></select></label>
         <label class="fld"><span data-i18n="dd_find">Unit</span>
           <input id="ddQ" type="search" data-i18n-ph="dd_findph" placeholder="unit number"></label>
         <button class="btn ghost" id="ddCsv" data-i18n="dd_csv">Export CSV</button>
@@ -3029,27 +3051,27 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=236"></script>
-<script src="../mobile/hme.js?v=236"></script>
-<script src="../mobile/mp-fc.js?v=236"></script>
-<script src="../mobile/hme-cascade.js?v=236"></script>
-<script src="../mobile/temp-limits.js?v=236"></script>
+<script src="../data/magnetic_plug.js?v=237"></script>
+<script src="../mobile/hme.js?v=237"></script>
+<script src="../mobile/mp-fc.js?v=237"></script>
+<script src="../mobile/hme-cascade.js?v=237"></script>
+<script src="../mobile/temp-limits.js?v=237"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=236"></script>
-<script src="../mobile/normalize.js?v=236"></script>
-<script src="../mobile/due.js?v=236"></script>
-<script src="../mobile/wear.js?v=236"></script>
-<script src="../mobile/wear-map.js?v=236"></script>
-<script src="../mobile/lube.js?v=236"></script>
-<script src="../mobile/lube-overrides.js?v=236"></script>
-<script src="../mobile/lube2027.js?v=236"></script>
-<script src="../mobile/lube-tds.js?v=236"></script>
+<script src="../mobile/assets.js?v=237"></script>
+<script src="../mobile/normalize.js?v=237"></script>
+<script src="../mobile/due.js?v=237"></script>
+<script src="../mobile/wear.js?v=237"></script>
+<script src="../mobile/wear-map.js?v=237"></script>
+<script src="../mobile/lube.js?v=237"></script>
+<script src="../mobile/lube-overrides.js?v=237"></script>
+<script src="../mobile/lube2027.js?v=237"></script>
+<script src="../mobile/lube-tds.js?v=237"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=236"></script>
-<script src="../mobile/machine-photos.js?v=236"></script>
+<script src="../mobile/upload-defaults.js?v=237"></script>
+<script src="../mobile/machine-photos.js?v=237"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3058,17 +3080,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=236"></script>
-<script src="../mobile/get.js?v=236"></script>
-<script src="../mobile/points.js?v=236"></script>
-<script src="../mobile/uc-points.js?v=236"></script>
-<script src="../mobile/inspect-guide.js?v=236"></script>
-<script src="../mobile/get-figs.js?v=236"></script>
-<script src="../mobile/body-points.js?v=236"></script>
-<script src="../mobile/body-map.js?v=236"></script>
-<script src="../mobile/jspdf.umd.min.js?v=236"></script>
-<script src="../mobile/html2canvas.min.js?v=236"></script>
-<script src="../mobile/report-core.js?v=236"></script>
+<script src="../mobile/machine-fig.js?v=237"></script>
+<script src="../mobile/get.js?v=237"></script>
+<script src="../mobile/points.js?v=237"></script>
+<script src="../mobile/uc-points.js?v=237"></script>
+<script src="../mobile/inspect-guide.js?v=237"></script>
+<script src="../mobile/get-figs.js?v=237"></script>
+<script src="../mobile/body-points.js?v=237"></script>
+<script src="../mobile/body-map.js?v=237"></script>
+<script src="../mobile/jspdf.umd.min.js?v=237"></script>
+<script src="../mobile/html2canvas.min.js?v=237"></script>
+<script src="../mobile/report-core.js?v=237"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -3588,11 +3610,11 @@ const I18N={
   s_cause:"Direct causes", s_cause_sub:"Why those defects occurred, as recorded at inspection.",
   s_iso:"ISO 14224 failure mechanism",
   s_iso_sub:"Table B.2 mechanism classes — comparable across sites and benchmarks.",
-  s_act:"Action register",
+  s_act:"Maintenance Actions",
   s_act_sub:"Every finding that needs work, worst first. Export to CSV to hand to planning.",
   csv:"⬇ Export CSV",
 
-  th_unit:"Unit", th_type:"Type", th_date:"Date", th_worst:"Worst severity",
+  th_unit:"Unit", th_type:"Type", th_date:"Date", th_worst:"Worst severity", th_point:"Component",
   th_find:"Findings", th_topdef:"Top defect", th_by:"Inspector",
   th_sev:"Sev", th_comp:"Component", th_defect:"Defect", th_cause:"Direct cause",
   th_action:"Action", th_prio:"Priority", th_wo:"WO", th_byshort:"By",
@@ -3820,21 +3842,21 @@ const I18N={
      about records: an office reading "12 rows in state over" learns nothing,
      and an office reading "12 machines nobody has been to" acts. */
   tab_due:"Inspection Schedule",
-  dd_title:"Every round, against the clock it is scheduled on",
+  dd_title:"Inspection Schedule", dd_soon:"Due soon",
   dd_sub:"Hours, not days — a machine parked for three weeks has not worn. Each row is one unit and one round, counted from the last one recorded anywhere in the system and at the machine's own operating rate where two hour-meter readings have measured it. A round somebody chose not to walk says so, with the reason they gave.",
   dd_round:"Round", dd_show:"Show", dd_find:"Unit", dd_findph:"unit number",
-  dd_missed:"Missed", dd_due:"Missed & due soon",
-  dd_put:"Put off, with a reason", dd_all:"Everything with history",
+  dd_missed:"Overdue", dd_due:"Overdue & due soon",
+  dd_put:"Deferred", dd_all:"All",
   dd_all_rounds:"All rounds", dd_csv:"Export CSV",
-  dd_k_missed:"Past due", dd_k_missed_s:"of {n} unit-rounds with history",
+  dd_k_missed:"Overdue", dd_k_missed_s:"of {n} unit-rounds with history",
   dd_k_soon:"Due soon", dd_k_soon_s:"inside the last fifth of the interval",
-  dd_k_put:"Put off", dd_k_put_s:"deferred by an inspector, reason recorded",
+  dd_k_put:"Deferred", dd_k_put_s:"put off by an inspector, reason recorded",
   dd_k_why:"Explained", dd_k_why_s:"of {n} past due carry a reason",
   dd_none:"Nothing in this view.",
   dd_c_unit:"Unit", dd_c_round:"Round", dd_c_last:"Last done",
   dd_c_due:"Due", dd_c_rate:"h/day", dd_c_why:"Why it was not walked",
-  dd_start:"Start", dd_start_t:"Open this machine and this round on the phone app",
-  dd_defer:"Defer", dd_defer_edit:"Deferral", dd_defer_t:"Put this round off, with a reason",
+  dd_start:"Start inspection", dd_start_t:"Open this machine and this round on the phone app",
+  dd_defer:"Defer inspection", dd_defer_edit:"Edit deferral", dd_defer_t:"Put this round off, with a reason",
   dd_defer_title:"Put this round off", dd_why:"Reason", dd_until:"Review on",
   dd_by:"Deferred by", dd_defer_save:"Save", dd_undefer:"Cancel the deferral",
   dd_need:"A reason and a name are both required.",
@@ -4304,11 +4326,11 @@ const I18N={
   s_cause:"Непосредственные причины", s_cause_sub:"Почему возникли эти дефекты, по данным осмотра.",
   s_iso:"Механизм отказа ISO 14224",
   s_iso_sub:"Классы по таблице B.2 — сопоставимы между площадками.",
-  s_act:"Реестр действий",
+  s_act:"Работы по обслуживанию",
   s_act_sub:"Все находки, требующие работ, худшие сверху. Выгрузите CSV для планирования.",
   csv:"⬇ Выгрузить CSV",
 
-  th_unit:"Ед.", th_type:"Тип", th_date:"Дата", th_worst:"Худшая степень",
+  th_unit:"Ед.", th_type:"Тип", th_date:"Дата", th_worst:"Худшая степень", th_point:"Узел",
   th_find:"Находок", th_topdef:"Основной дефект", th_by:"Инспектор",
   th_sev:"Степ.", th_comp:"Узел", th_defect:"Дефект", th_cause:"Причина",
   th_action:"Действие", th_prio:"Приоритет", th_wo:"Заявка", th_byshort:"Кто",
@@ -4533,11 +4555,11 @@ const I18N={
   ed_smu_rate:"У машины {n} показаний счётчика, по ним наработка {r} ч/сут — план строится по ней, а не по допущению для парка.",
   ed_smu_norate:"Показаний счётчика у машины: {n}. Если их два и с достаточным интервалом, план строится по фактической наработке, а не по 20 ч/сут для парка.",
   tab_due:"График осмотров",
-  dd_title:"Каждый обход — по тому счётчику, на котором он назначен",
+  dd_title:"График осмотров", dd_soon:"Скоро срок",
   dd_sub:"Часы, а не дни: машина, простоявшая три недели, не износилась. Строка — это одна единица и один обход, отсчитанный от последнего, записанного где угодно в системе, и по собственной наработке машины, если её измерили два показания счётчика. Если обход решили не делать — здесь написано, почему.",
   dd_round:"Обход", dd_show:"Показать", dd_find:"Единица", dd_findph:"номер единицы",
-  dd_missed:"Пропущено", dd_due:"Пропущено и скоро",
-  dd_put:"Отложено с причиной", dd_all:"Всё, где есть история",
+  dd_missed:"Просрочено", dd_due:"Просрочено и скоро",
+  dd_put:"Отложено", dd_all:"Все",
   dd_all_rounds:"Все обходы", dd_csv:"Выгрузить CSV",
   dd_k_missed:"Просрочено", dd_k_missed_s:"из {n} пар «единица — обход» с историей",
   dd_k_soon:"Скоро срок", dd_k_soon_s:"в последней пятой части интервала",
@@ -4546,8 +4568,8 @@ const I18N={
   dd_none:"В этом представлении пусто.",
   dd_c_unit:"Единица", dd_c_round:"Обход", dd_c_last:"Последний раз",
   dd_c_due:"Срок", dd_c_rate:"ч/сут", dd_c_why:"Почему не сделан",
-  dd_start:"Начать", dd_start_t:"Открыть эту машину и этот обход в приложении",
-  dd_defer:"Отложить", dd_defer_edit:"Отсрочка", dd_defer_t:"Отложить обход с указанием причины",
+  dd_start:"Начать осмотр", dd_start_t:"Открыть эту машину и этот обход в приложении",
+  dd_defer:"Отложить осмотр", dd_defer_edit:"Изменить отсрочку", dd_defer_t:"Отложить обход с указанием причины",
   dd_defer_title:"Отложить обход", dd_why:"Причина", dd_until:"Пересмотреть",
   dd_by:"Отложил", dd_defer_save:"Сохранить", dd_undefer:"Снять отсрочку",
   dd_need:"Нужны и причина, и имя.",
@@ -6409,7 +6431,7 @@ function renderActions(){
 let aFilterState="open";
 const aOpenUnits=new Set();
 const aFilt=()=>aFilterState;
-function setAFilt(v){ aFilterState=v; renderActions(); }
+function setAFilt(v){ aFilterState=v; renderActions(); try{ urlWrite(false); }catch(e){} }
 $("csvBtn").onclick=()=>{
   const rows=actionRows(); const q=s=>`"${String(s==null?"":s).replace(/"/g,'""')}"`;
   const head=["RecordId","Rev","Severity","Unit","Type","Component","ComponentName","DefectCode","Defect","ISOMechanism","ISOMode","CauseCode","Cause","Action","Priority","PriorityLabel","WO","Grade","TempC","AmbientC","Method","Date","Inspector","VerifiedBy","GPS","Comment",
@@ -10444,6 +10466,10 @@ function urlWrite(push){
     if($("fVoid") && $("fVoid").checked) q.set("void","1");
     ["unit","owner","month","sev","defect","cause"].forEach(k=>{
       if(drill && drill[k]) q.set(k, drill[k]); });
+    /* Which list a page is showing is part of its address: "the unassigned
+       actions" and "the overdue rounds" are things people send each other. */
+    if(CUR_TAB==="actions" && typeof aFilterState==="string" && aFilterState!=="open") q.set("af", aFilterState);
+    if(CUR_TAB==="due" && $("ddScope") && $("ddScope").value && $("ddScope").value!=="over") q.set("dd", $("ddScope").value);
     const qs=q.toString();
     const h="#"+(CUR_TAB||"overview")+(qs?"?"+qs:"");
     if(location.hash===h) return;
@@ -10480,6 +10506,12 @@ function urlRead(from){
     if(typeof drill==="object"){
       ["unit","owner","month","sev","defect","cause"].forEach(k=>{ drill[k]=q.get(k)||null; });
     }
+    /* A list name the address does not carry, or names wrongly, is the
+       default — never a value that would hide everything. */
+    const AF=["open","triage","crit","over","week","noown","mine","all","done"];
+    const af=q.get("af"); if(typeof aFilterState==="string") aFilterState = AF.includes(af) ? af : "open";
+    const dd=q.get("dd"), ds=$("ddScope");
+    if(ds) ds.value = (dd && [...ds.options].some(o=>o.value===dd)) ? dd : "over";
     urlQuiet--;
     const tabs=[...$("tabs").querySelectorAll("button[data-tab]")].map(b=>b.dataset.tab);
     if(tab && tabs.includes(tab)) showTab(tab);
@@ -12289,9 +12321,8 @@ function dueTabRows(){
 }
 /* The Due tab, opened already narrowed to the thing that was pressed. */
 function dueGo(scope){
-  const sc = scope==="soon" ? "due" : scope;
-  if($("ddScope")) $("ddScope").value=sc;
-  renderDueTab();
+  if($("ddScope")) $("ddScope").value=scope;
+  renderDueTab(); urlWrite(false);
 }
 function renderDueTab(){
   const box=$("ddList"); if(!box) return;
@@ -12319,7 +12350,7 @@ function renderDueTab(){
        <span class="s">${esc(sub)}</span></button>`;
   $("dueKpis").innerHTML=
       card("over", t("dd_k_missed"), nOver, t("dd_k_missed_s",{n:all.length}), "bad"+(nOver?"":" zero"))
-    + card("due",  t("dd_k_soon"),   nSoon, t("dd_k_soon_s"),  "warn"+(nSoon?"":" zero"))
+    + card("soon", t("dd_k_soon"),   nSoon, t("dd_k_soon_s"),  "warn"+(nSoon?"":" zero"))
     + card("put",  t("dd_k_put"),    nPut+nOff, t("dd_k_put_s"), "info"+(nPut+nOff?"":" zero"))
     /* Not a filter: it counts the same rows the first tile does, and two tiles
        that lead to one list is a tile nobody presses twice. */
@@ -12328,11 +12359,33 @@ function renderDueTab(){
         <span class="s">${esc(t("dd_k_why_s",{n:nLate}))}</span></div>`;
   $("dueKpis").querySelectorAll("[data-dd]").forEach(b=>b.onclick=()=>{
     if($("ddScope")) $("ddScope").value=b.dataset.dd;
-    renderDueTab();
+    renderDueTab(); urlWrite(false);
   });
+  /* The four views as tabs, each carrying its count. "due" (overdue and due
+     soon together) stays a valid scope for an address that names it, but it
+     is not a tab: two tabs that overlap are a tab nobody can explain. */
+  const seg=$("ddSeg");
+  if(seg){
+    const views=[["over","dd_missed",nOver],["soon","dd_soon",nSoon],["put","dd_put",nPut+nOff],["all","dd_all",all.length]];
+    seg.innerHTML=views.map(([k,lab,n])=>
+      `<button type="button" role="tab" data-dd="${k}" aria-selected="${scope===k?"true":"false"}"${
+        scope===k?' class="on"':''}>${esc(t(lab))}<span class="n">${n}</span></button>`).join("");
+    seg.querySelectorAll("[data-dd]").forEach(b=>{
+      b.onclick=()=>{ if($("ddScope")) $("ddScope").value=b.dataset.dd; renderDueTab(); urlWrite(false); };
+      b.onkeydown=e=>{
+        const d=e.key==="ArrowRight"?1:e.key==="ArrowLeft"?-1:0; if(!d) return;
+        e.preventDefault();
+        const ix=views.findIndex(v=>v[0]===scope);
+        const nx=views[(ix+d+views.length)%views.length][0];
+        if($("ddScope")) $("ddScope").value=nx; renderDueTab(); urlWrite(false);
+        const nb=$("ddSeg").querySelector('button[aria-selected="true"]'); if(nb) nb.focus();
+      };
+    });
+  }
   const show = scope==="all" ? all
              : scope==="put" ? all.filter(r=>r.st==="put"||r.st==="off")
              : scope==="due" ? all.filter(r=>r.st==="over"||r.st==="soon")
+             : scope==="soon" ? all.filter(r=>r.st==="soon")
              : all.filter(r=>r.st==="over");
   if(!show.length){ box.innerHTML=`<div class="sub">${esc(t("dd_none"))}</div>`; return; }
   /* Fifty at a time, not five hundred: the cap was there to stop the browser
@@ -12453,6 +12506,7 @@ function dueCsv(){
     .filter(r=> scope==="all" ? true
               : scope==="put" ? (r.st==="put"||r.st==="off")
               : scope==="due" ? (r.st==="over"||r.st==="soon")
+              : scope==="soon" ? r.st==="soon"
               : r.st==="over")
     .forEach(r=>rows.push([r.unit, r.ty, r.last.d, r.n.daysSince, r.n.dueInDays,
     r.n.dueInHours, r.n.rate, r.n.measured?1:0, r.st,
@@ -13402,7 +13456,7 @@ document.addEventListener("keydown",e=>{
   if(e.key==="Escape"&&document.activeElement===$("fQ")){ $("fQ").value=""; renderAll(); $("fQ").blur(); }
 });
 $("equipSel").onchange=renderHistory;
-$("ddType").onchange=renderDueTab; $("ddScope").onchange=renderDueTab;
+$("ddType").onchange=renderDueTab; $("ddScope").onchange=()=>{ renderDueTab(); urlWrite(false); };
 $("ddQ").oninput=renderDueTab;
 $("ddCsv").onclick=dueCsv;
 $("wBand").onchange=renderWearTab;
@@ -13550,8 +13604,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=236"></script>
-<script src="sync-adapter.js?v=236"></script>
-<script src="report.js?v=236"></script>
+<script src="drive.js?v=237"></script>
+<script src="sync-adapter.js?v=237"></script>
+<script src="report.js?v=237"></script>
 </body>
 </html>

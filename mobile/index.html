@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=236">
+<link rel="manifest" href="manifest.webmanifest?v=237">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=236">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=236">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=236">
+<link rel="apple-touch-icon" href="icon-192.png?v=237">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=237">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=237">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1970,31 +1970,31 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=236"></script>
-<script src="upload-defaults.js?v=236"></script>
-<script src="hme.js?v=236"></script>
-<script src="mp-fc.js?v=236"></script>
-<script src="hme-cascade.js?v=236"></script>
-<script src="assets.js?v=236"></script>
-<script src="temp-limits.js?v=236"></script>
-<script src="normalize.js?v=236"></script>
-<script src="due.js?v=236"></script>
-<script src="wear.js?v=236"></script>
-<script src="wear-figs.js?v=236"></script>
-<script src="wear-map.js?v=236"></script>
-<script src="machine-photos.js?v=236"></script>
-<script src="machine-fig.js?v=236"></script>
-<script src="get.js?v=236"></script>
-<script src="points.js?v=236"></script>
-<script src="uc-points.js?v=236"></script>
-<script src="inspect-guide.js?v=236"></script>
-<script src="get-figs.js?v=236"></script>
-<script src="body-points.js?v=236"></script>
-<script src="body-map.js?v=236"></script>
-<script src="lube.js?v=236"></script>
-<script src="lube-overrides.js?v=236"></script>
-<script src="lube2027.js?v=236"></script>
-<script src="report-core.js?v=236"></script>
+<script src="native.js?v=237"></script>
+<script src="upload-defaults.js?v=237"></script>
+<script src="hme.js?v=237"></script>
+<script src="mp-fc.js?v=237"></script>
+<script src="hme-cascade.js?v=237"></script>
+<script src="assets.js?v=237"></script>
+<script src="temp-limits.js?v=237"></script>
+<script src="normalize.js?v=237"></script>
+<script src="due.js?v=237"></script>
+<script src="wear.js?v=237"></script>
+<script src="wear-figs.js?v=237"></script>
+<script src="wear-map.js?v=237"></script>
+<script src="machine-photos.js?v=237"></script>
+<script src="machine-fig.js?v=237"></script>
+<script src="get.js?v=237"></script>
+<script src="points.js?v=237"></script>
+<script src="uc-points.js?v=237"></script>
+<script src="inspect-guide.js?v=237"></script>
+<script src="get-figs.js?v=237"></script>
+<script src="body-points.js?v=237"></script>
+<script src="body-map.js?v=237"></script>
+<script src="lube.js?v=237"></script>
+<script src="lube-overrides.js?v=237"></script>
+<script src="lube2027.js?v=237"></script>
+<script src="report-core.js?v=237"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -9983,7 +9983,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="236";
+const BUILD="237";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
