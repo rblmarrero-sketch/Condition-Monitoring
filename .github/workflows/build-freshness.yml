@@ -46,6 +46,10 @@ jobs:
       - name: The build number is newer than every shipped file
         run: node tests/bump.cjs
 
+      - name: No shipped file carries a git conflict marker
+        # Build 244 published one as text at the foot of the phone's page.
+        run: node tests/markers.cjs
+
       - name: Fail if the guard could not actually check
         # "not checked" exits 0 so a developer's shallow clone is not blocked.
         # In CI it must be a failure: an unanswerable question is not a pass,
