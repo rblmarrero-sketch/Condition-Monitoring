@@ -66,14 +66,14 @@ const SEED = p => p.evaluate(async () => {
     const rec = { id: 'up__' + unit + '__2026-07-29__X__z', type: 'MP', equip: unit,
       date: '2026-07-29', cls: 'HT', by: 'R. Marrero', smu: 6100,
       created: new Date().toISOString(), up: 0, upTo: {}, rev: 1,
-      positions: { '4C': { grade: 'C', comment: 'ferrous, heavy', photos: [await shot(n), await shot(n + 1)] } } };
+      positions: { '4C': { grade: 3, comment: 'ferrous, heavy', photos: [await shot(n), await shot(n + 1)] } } };
     await attSync(rec); await dbPut(rec); return rec.id;
   };
   const ids = [await mk('TK910', 1), await mk('TK911', 3)];
   /* The round in progress: not an inspection yet, and the thing a technician
      would be angriest to lose, because it is the one in their hands. */
   await dbPut({ id: DRAFT_ID, type: 'MP', equip: 'TK912', date: '2026-07-29',
-                by: 'R. Marrero', positions: { '4C': { grade: 'X', comment: 'half typed' } } });
+                by: 'R. Marrero', positions: { '4C': { grade: 5, comment: 'half typed' } } });
   return ids;
 });
 

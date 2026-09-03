@@ -32,7 +32,7 @@ const cyr=s=>/[А-Яа-яЁё]/.test(s);
      legend — "Начальный / Ухудшено / Критично" here against "Зарождающийся /
      Частичный / Критический" in the field. The field's wording won, because it
      is the one inspectors have been trained on and it is the ISO term. */
-  ok('severity labels translate', /Критический|Частичный/.test(await p.textContent('#kpis')));
+  ok('grade labels translate', /Критическое|Ухудшенное/.test(await p.textContent('#kpis')));
   ok('the fleet table headers translate', cyr(await p.textContent('#fleetTbl thead')),
      (await p.textContent('#fleetTbl thead')).replace(/\s+/g,' ').trim());
   ok('inspection type names translate', /Магнитная пробка/.test(await p.textContent('#fleetTbl')));
@@ -72,7 +72,7 @@ const cyr=s=>/[А-Яа-яЁё]/.test(s);
     ok('the edit panel translates', cyr(await p.textContent('#editOv')),
        (await p.textContent('#editOv')).replace(/\s+/g,' ').trim().slice(0,70));
     ok('and its severity/action pickers do too',
-       /Критический/.test(await p.textContent('#edItems')) && /Наблюдать/.test(await p.textContent('#edItems')));
+       /Критическое/.test(await p.textContent('#edItems')) && /Наблюдать/.test(await p.textContent('#edItems')));
     await p.screenshot({path:OUT+'/edit-ru.png'});
     await p.click('#edClose');
   } else fails.push('no edit button to test');

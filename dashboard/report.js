@@ -551,7 +551,10 @@
     opts = opts || {};
     const scope = opts.scope || "";
     const target = opts.target == null ? "" : opts.target;
-    const sev = s => (typeof SEV !== "undefined" && SEV[s] ? SEV[s].l : s);
+    /* An ISO class chip prints only on a point with no grade (see report-core
+       sevIf); it wears the name of the grade that class reads as. */
+    const sev = s => { const n = (typeof GRADE !== "undefined") ? GRADE.fromIso(s) : null;
+      return n ? GRADE.name(n, typeof lang !== "undefined" ? lang : "en") : s; };
     return {
       lang: typeof lang !== "undefined" ? lang : "en",
       /* A single inspection is a unit report with one round in it — the same

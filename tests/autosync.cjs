@@ -11,6 +11,7 @@
    What has to be true now: a round captured with the link down leaves by
    itself, with nobody pressing anything. */
 const { chromium } = require(require('./pw.cjs'));
+const { PLANT } = require('./overview.cjs');   // the machine photographs every round now carries
 const B = 'http://127.0.0.1:8099';
 const fails = [];
 const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !== undefined ? '   ' + d : '')); if (!c) fails.push(n); };
@@ -71,6 +72,7 @@ const pend = p => p.evaluate(async () => (await dbAll()).filter(r => !r.up).leng
     pp.cause = 'CA-WEAR'; pp.action = 'RA-04'; pp.prio = 'P2';
     saveCur();
   });
+  await p.evaluate(PLANT);
   await p.click('#saveBtn'); await p.waitForTimeout(900); await dismiss(p);
 
   ok('the round is stored and queued', (await pend(p)) === 1, String(await pend(p)));

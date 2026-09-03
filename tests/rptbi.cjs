@@ -381,7 +381,7 @@ const LAY = (secs) => {
   const sev = await p.evaluate(({ BUILD }) => {
     const build = eval('(' + BUILD + ')');
     const html = build('round', '2026-08-11').map(s => s.html).join('');
-    return { crit: html.indexOf(SEV.CRI.l) >= 0, chipAlt: /class="alt2"/.test(html) };
+    return { crit: html.indexOf(SEV[5].l) >= 0, chipAlt: /class="alt2"/.test(html) };
   }, { BUILD: BUILD.toString() });
   ok('severity chips carry the dashboard\'s own wording', sev.crit);
   ok('  in both languages', sev.chipAlt);
@@ -396,7 +396,7 @@ const LAY = (secs) => {
   const sevRu = await p.evaluate(() => {
     const was = lang; lang = 'ru';
     const out = ['NOF', 'INC', 'DEG', 'CRI'].map(s => ({
-      s, chip: SEV[s].l, legend: CMR.dict.ru['s_' + s].split(' — ')[0] }));
+      s, chip: GRADE.name(GRADE.fromIso(s), 'ru'), legend: CMR.dict.ru['s_' + s].split(' — ')[0] }));
     lang = was; return out;
   });
   sevRu.forEach(x => ok('  ' + x.s + ': the chip and the legend agree in Russian',

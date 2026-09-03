@@ -662,7 +662,7 @@
       g_3:"Degraded — defect found, plan repair",
       g_4:"Severe — serious defect, repair soon",
       g_5:"Critical — unsafe or failure likely, stop and inspect immediately",
-      s_NOF:"No failure — the item is doing its job",
+      s_NOF:"Normal — no failure, the item is doing its job",
       s_INC:"Incipient — a fault is starting, function is not affected yet",
       s_DEG:"Degraded — still working, but not to specification",
       s_CRI:"Critical — the item cannot do its job",
@@ -773,10 +773,10 @@
       g_3:"Ухудшенное — обнаружен дефект, запланировать ремонт",
       g_4:"Серьёзное — серьёзный дефект, ремонт в ближайшее время",
       g_5:"Критическое — опасно или вероятен отказ, остановить и осмотреть немедленно",
-      s_NOF:"Без отказа — узел выполняет свою функцию",
-      s_INC:"Зарождающийся — дефект начался, функция пока не затронута",
-      s_DEG:"Частичный — работает, но не по требованиям",
-      s_CRI:"Критический — узел не выполняет функцию",
+      s_NOF:"Норма — без отказа, узел выполняет свою функцию",
+      s_INC:"Начальный — дефект начался, функция пока не затронута",
+      s_DEG:"Ухудшенное — работает, но не по требованиям",
+      s_CRI:"Критическое — узел не выполняет функцию",
       noref:"нет эталона для этой модели",
       noref_s:"нет эталона",
       noref_all:"Для этой модели ещё не заданы предельные величины, поэтому процент износа не рассчитывается. Ниже — сами замеры.",
@@ -1079,9 +1079,14 @@
   /* The number and the name, always together — "4 – Severe" — in the
      reader's language. A record from before the change carries a letter and
      is read through gnum(). */
+  /* The grade name is a technical term and gets both languages like every
+     other one on the sheet — the other language on a second line inside the
+     chip, so a chip that says one thing stays one chip. */
   function gradeChip(g){ var n=gnum(g); if(!n) return "";
-    var c=GRADE_HEX[n]||"#8a939b";
-    return '<span class="g" style="background:'+c+';color:'+ink(c)+'">'+n+' – '+esc(gname(n))+'</span>'; }
+    var c=GRADE_HEX[n]||"#8a939b", a=gname(n);
+    var b=GR ? GR.name(n, curLang==="ru"?"en":"ru") : "";
+    return '<span class="g" style="background:'+c+';color:'+ink(c)+'">'+n+' – '+esc(a)
+      + (b && b!==a ? '<span class="alt2">'+esc(b)+'</span>' : "") + '</span>'; }
   /* The ISO class chip is shown only where there is no grade to show: a
      graded point's class is derived from the grade and would only repeat it
      in other words. */

@@ -55,7 +55,7 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
   note('tiles', strip.ids.join(' · '));
   ['kpiCrit', 'kpiDeg', 'kpiOver', 'kpiAct', 'kpiNoown', 'kpiReview'].forEach(id =>
     ok('the strip has ' + id, strip.ids.includes(id)));
-  ok('all six are buttons', strip.buttons === 6, String(strip.buttons));
+  ok('all seven are buttons', strip.buttons === 7, String(strip.buttons));
   ok('the strip is one row at 1366', strip.rows === 1, strip.rows + ' row(s)');
   ok('and fits 120px', strip.h <= 120, strip.h + 'px');
   ok('no card on the page carries its own "How this is counted"', strip.defs === 0, String(strip.defs));

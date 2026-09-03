@@ -13,6 +13,7 @@
 
    Run: node tests/teamphoto.cjs [port]   (needs tests/ed-srv.cjs on that port) */
 const { chromium } = require(require('./pw.cjs'));
+const { PLANT } = require('./overview.cjs');   // the overview photograph every round now carries
 const fs = require('fs');
 const { spawn } = require('child_process');
 /* Its own /exec on its own port, started and stopped here.
@@ -80,12 +81,13 @@ async function phone(b, withDrive) {
     renderMedia(); renderChips();
     return { unit:'TK151', keys:[ks[0], ks[1]] };
   });
+  await A.p.evaluate(PLANT);
   await A.p.click('#saveBtn');
   await A.p.waitForTimeout(7000);
   const onDrive = await (await fetch(`${EXEC}?action=list&ext=.jpg`)).json();
   /* The folder is not empty to begin with — the fixture has other machines in
      it, which is the point: the round has to find ITS pictures among them. */
-  const mineOnDrive = (onDrive.files || []).filter(f => /^TK151_/.test(f.name));
+  const mineOnDrive = (onDrive.files || []).filter(f => /^TK151_/.test(f.name) && !/_OVERVIEW_/.test(f.name));   // the point's four, not the machine overview
   note('in the folder', mineOnDrive.map(f => f.name).join('  '));
   ok('the four photographs are in the shared folder, among everyone else\'s',
      mineOnDrive.length === 4, mineOnDrive.length + ' of ' + (onDrive.files || []).length + ' files');
@@ -213,10 +215,11 @@ async function phone(b, withDrive) {
     const pos = curP(); pos.mm = 30; pos.photos = [await shot(), await shot()];
     renderMedia(); renderChips();
   });
+  await A2.p.evaluate(PLANT);
   await A2.p.click('#saveBtn');
   await A2.p.waitForTimeout(7000);
   const filed = await (await fetch(`${EXEC}?action=list&ext=.jpg`)).json();
-  const flat = (filed.files || []).filter(f => /^DZ002_/.test(f.name));
+  const flat = (filed.files || []).filter(f => /^DZ002_/.test(f.name) && !/_(OVERVIEW|LEFT|RIGHT|BODY|GET|PLATE|EXTRA)_/.test(f.name));
   note('filed as', flat.map(f => f.name).join('  ') || '(nothing)');
   ok('the sending phone filed them under the flat name', flat.length === 2,
      flat.length + ' files');

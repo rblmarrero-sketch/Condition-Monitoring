@@ -282,7 +282,7 @@ const LIST = `(function(){
   await p.waitForTimeout(500);
   const nsel = 'select[data-f="grade"][data-k="4D"]';
   ok('the row\'s button lands on a panel with the grade control', !!(await p.$(nsel)));
-  await p.selectOption(nsel, 'C');            // C maps to DEG, the stored value
+  await p.selectOption(nsel, '3');            // 3 · Degraded — the stored value's class
   await p.fill('#edBy', 'R. Marrero').catch(() => {});
   await p.click('#edSave');
   await p.waitForTimeout(1200);

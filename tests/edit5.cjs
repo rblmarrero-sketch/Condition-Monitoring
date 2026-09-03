@@ -3,6 +3,7 @@
    undercarriage round came back blank, which meant re-walking thirty-six points
    to fix one digit. Driven for all five types, five rounds each. */
 const { chromium } = require(require('./pw.cjs'));
+const { PLANT } = require('./overview.cjs');   // the machine photographs every round now carries
 const B = 'http://127.0.0.1:8093';
 const fails = [];
 const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !== undefined ? '   ' + d : '')); if (!c) fails.push(n); };
@@ -81,7 +82,7 @@ const PLAN = [
             const v = ref && !ref.x ? Math.round((ref.n + (ref.c - ref.n) * (0.25 + 0.15 * i)) * 10) / 10 : 40 + i;
             set('ucMM', String(v));
           } else {
-            document.querySelector('#gradeSeg [data-g="C"]').click();
+            document.querySelector('#gradeSeg [data-g="3"]').click();
             const pp = draft.positions[curItem];
             pp.defect = 'DT14-03'; pp.cause = 'CA-WEAR'; pp.action = 'MON'; pp.detect = 'US';
             if (ty === 'TEMP') { set('tempV', String(80 + i + n)); set('tempA', String(20 + i)); }
@@ -94,6 +95,7 @@ const PLAN = [
       if (wrote.err) { ok(tag + ': has positions', false, wrote.err); continue; }
 
       if (ty === 'UC') await closeSheet(p);
+      await p.evaluate(PLANT);
       await p.click('#saveBtn'); await p.waitForTimeout(500); await dismiss(p);
 
       const saved = await p.evaluate(async ({ u, ty }) => {
@@ -158,6 +160,7 @@ const PLAN = [
         saveCur();
       }, { ty, keys: wrote.keys });
       if (ty === 'UC') await closeSheet(p);
+      await p.evaluate(PLANT);
       await p.click('#saveBtn'); await p.waitForTimeout(500); await dismiss(p);
 
       const after = await p.evaluate(async ({ u, ty, id, k }) => {
@@ -167,7 +170,7 @@ const PLAN = [
         return { count: same.length, found: !!rec, rev: rec && rec.rev,
           mm: rec && rec.positions[k] && rec.positions[k].mm,
           comment: rec && rec.positions[k] && rec.positions[k].comment,
-          keys: rec ? Object.keys(rec.positions).length : 0 };
+          keys: rec ? Object.keys(rec.positions).filter(k => k !== '__general').length : 0 };
       }, { u, ty, id: saved.id, k: wrote.keys[0] });
 
       ok(tag + ': the correction replaced the round, it did not add one',

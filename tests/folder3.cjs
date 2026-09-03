@@ -5,6 +5,7 @@
    folder someone typed themselves, and breaking the older placeholders whose
    names are prefixes of the new one. */
 const { chromium } = require(require('./pw.cjs'));
+const { PLANT } = require('./overview.cjs');   // the machine photographs every round now carries
 const B = 'http://127.0.0.1:8085';
 const fails = [];
 const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !== undefined ? '   ' + d : '')); if (!c) fails.push(n); };
@@ -120,6 +121,7 @@ const NEW = '{TYPE}/{UNIT}/{YYYY-MM-DD}';
     saveCur();
   });
   const today = await p.evaluate(() => document.getElementById('date').value);
+  await p.evaluate(PLANT);
   await p.click('#saveBtn'); await p.waitForTimeout(600); await dismiss(p);
   await p.evaluate(async () => {
     for (let i = 0; i < 60; i++) {
@@ -129,6 +131,7 @@ const NEW = '{TYPE}/{UNIT}/{YYYY-MM-DD}';
   });
   const seen = await p.evaluate(async (u) => (await (await fetch(u + '/__log')).json()), B);
   ok('the round arrived', seen.log.length >= 1, seen.log.length + ' files');
+  console.log('   · what arrived   ' + seen.log.map(f => f.name + ' @ ' + (f.folder || '(no folder)')).join('  '));
   const paths = [...new Set(seen.log.map(f => f.folder))];
   ok('every file of the round went to one folder', paths.length === 1, paths.join(' | '));
   ok('and that folder is type / unit / day', paths[0] === 'MP/DZ004/' + today, paths[0]);

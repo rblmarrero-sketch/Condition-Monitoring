@@ -2,6 +2,7 @@
    Everything below drives the real form, not the draft object, so what is tested
    is what an inspector actually does. */
 const { chromium } = require(require('./pw.cjs'));
+const { PHOTOS } = require('./overview.cjs');   // the machine photographs every round now carries — and nothing of the plan, which is what this suite tests
 const B = 'http://127.0.0.1:8093';
 const fails = [];
 const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d ? '   ' + d : '')); if (!c) fails.push(n); };
@@ -38,7 +39,7 @@ async function start(p, unit) {
 const pick = (p, k) => p.evaluate(k => { saveCur(); curItem = k; loadPos(); renderChips(); }, k);
 const setGrade = (p, g) => p.evaluate(g =>
   document.querySelector(`#gradeSeg [data-g="${g}"]`).click(), g);
-const save = async p => { await p.click('#saveBtn'); await p.waitForTimeout(500); };
+const save = async p => { await p.evaluate(PHOTOS); await p.click('#saveBtn'); await p.waitForTimeout(500); };
 
 (async () => {
   const b = await chromium.launch();
@@ -48,7 +49,7 @@ const save = async p => { await p.click('#saveBtn'); await p.waitForTimeout(500)
   await start(p, 'TKF401');
   const first = await p.evaluate(() => items()[0].k);
   await pick(p, first);
-  await setGrade(p, 'X');                       // X = Critical
+  await setGrade(p, 5);                         // 5 = Critical
   await save(p);
   ok('the save is refused', (await queued(p)) === 0, `${await queued(p)} queued`);
   let d = await dlgTxt(p);
@@ -66,18 +67,31 @@ const save = async p => { await p.click('#saveBtn'); await p.waitForTimeout(500)
   ok('and only the action is asked for', /recommended action/.test(d) && !/a defect/.test(d), d);
   await close(p);
 
-  console.log('\n  with both, it saves');
+  console.log('\n  with both, a 5 still wants the rest of its plan');
   await p.evaluate(() => { draft.positions[curItem].action = 'REP'; });
+  await save(p);
+  ok('still refused', (await queued(p)) === 0);
+  d = await dlgTxt(p);
+  ok('it asks for the target date, the comment, the close-up and the notification',
+     /target date/.test(d) && /comment/.test(d) && /close-up/.test(d) && /notification/.test(d), d);
+  ok('and no longer for the defect or the action', !/a defect/.test(d) && !/recommended action/.test(d), d);
+  await close(p);
+
+  console.log('\n  with the whole plan, it saves');
+  await p.evaluate(() => { const q = draft.positions[curItem];
+    q.target = '2026-09-20'; q.comment = 'chips in the plug'; q.notified = 1; document.getElementById('comment').value = q.comment;
+    const bytes = new Uint8Array([0xff,0xd8,0xff,0xdb,1,2,3,4,5,6,7,8,9,0xff,0xd9]);
+    addPos(q, attWrap(new File([bytes], 'd.jpg', { type: 'image/jpeg' })), 'DEFECT'); });
   await save(p);
   ok('saved', (await queued(p)) === 1, `${await queued(p)} queued`);
   ok('the confirmation is the normal one', /Saved/.test(await dlgTxt(p)), await dlgTxt(p));
   await close(p);
   await ctx.close();
 
-  console.log('\nnothing below Critical is blocked');
+  console.log('\nnothing below 3 is blocked');
   ({ ctx, p } = await app(b));
   await start(p, 'TKF402');
-  for (const g of ['A', 'B', 'C']) {
+  for (const g of [1, 2]) {
     await p.evaluate(() => resetForm());
     await start(p, 'TKF402' + g);
     const k = await p.evaluate(() => items()[0].k);
@@ -87,7 +101,22 @@ const save = async p => { await p.click('#saveBtn'); await p.waitForTimeout(500)
     ok(`grade ${g} saves with no defect or action`, /Saved/.test(await dlgTxt(p)), await dlgTxt(p));
     await close(p);
   }
-  ok('all three are in the queue', (await queued(p)) === 3, `${await queued(p)} queued`);
+  ok('both are in the queue', (await queued(p)) === 2, `${await queued(p)} queued`);
+
+  console.log('\na 3 is a defect to plan: an action and a target date');
+  await p.evaluate(() => resetForm());
+  await start(p, 'TKF4023');
+  await pick(p, await p.evaluate(() => items()[0].k));
+  await setGrade(p, 3);
+  await save(p);
+  ok('refused without them', (await queued(p)) === 2);
+  d = await dlgTxt(p);
+  ok('naming the action and the target date', /recommended action/.test(d) && /target date/.test(d), d);
+  await close(p);
+  await p.evaluate(() => { draft.positions[curItem].action = 'MON'; draft.positions[curItem].target = '2026-09-20'; });
+  await save(p);
+  ok('and saves with them', (await queued(p)) === 3, `${await queued(p)} queued`);
+  await close(p);
   await ctx.close();
 
   console.log('\nseverity raised by hand is held to the same rule');
@@ -95,11 +124,11 @@ const save = async p => { await p.click('#saveBtn'); await p.waitForTimeout(500)
   await start(p, 'TKF403');
   const k3 = await p.evaluate(() => items()[0].k);
   await pick(p, k3);
-  await setGrade(p, 'B');                            // B alone would save
+  await setGrade(p, 2);                              // 2 alone would save
   /* Severity is derived now, so the way a Critical arrives is the grade. The
      old shape of this test wrote sev='CRI' beside grade='B' directly, which is
      the contradiction the derivation exists to make unrepresentable. */
-  await setGrade(p, 'X');
+  await setGrade(p, 5);
   await save(p);
   ok('a hand-raised Critical is refused too', (await queued(p)) === 0, `${await queued(p)} queued`);
   ok('with the same explanation', /Critical/i.test(await dlgTxt(p)), await dlgTxt(p));
@@ -110,9 +139,9 @@ const save = async p => { await p.click('#saveBtn'); await p.waitForTimeout(500)
   ({ ctx, p } = await app(b));
   await start(p, 'TKF404');
   const all = await p.evaluate(() => items().map(i => i.k));
-  await pick(p, all[0]); await setGrade(p, 'A');
-  await pick(p, all[2]); await setGrade(p, 'X');
-  await pick(p, all[1]); await setGrade(p, 'B');     // sitting somewhere else when Save is pressed
+  await pick(p, all[0]); await setGrade(p, 1);
+  await pick(p, all[2]); await setGrade(p, 5);
+  await pick(p, all[1]); await setGrade(p, 2);       // sitting somewhere else when Save is pressed
   ok('standing on a different position', (await curPos(p)) === all[1], await curPos(p));
   await save(p);
   ok('the save is refused', (await queued(p)) === 0);
@@ -130,10 +159,10 @@ const save = async p => { await p.click('#saveBtn'); await p.waitForTimeout(500)
   ({ ctx, p } = await app(b, 'ru'));
   await start(p, 'TKF405');
   await pick(p, await p.evaluate(() => items()[0].k));
-  await setGrade(p, 'X');
+  await setGrade(p, 5);
   await save(p);
   d = await dlgTxt(p);
-  ok('the refusal is translated', /Критично/.test(d), d.slice(0, 80));
+  ok('the refusal is translated', /Критическое/.test(d), d.slice(0, 80));
   ok('and so are the missing fields', /дефект/.test(d) && /действие/.test(d), d);
   ok('no English left', !/a defect|recommended action/.test(d), d);
   await close(p);

@@ -13,6 +13,7 @@
    matcher are all named after it, and a person reads it in the Drive folder.
    The id rides alongside as the thing that answers "is this the same round?" */
 const { chromium } = require(require('./pw.cjs'));
+const { PLANT } = require('./overview.cjs');   // the machine photographs every round now carries
 const B = 'http://127.0.0.1:8093';
 const fails = [];
 const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !== undefined ? '   ' + d : '')); if (!c) fails.push(n); };
@@ -45,6 +46,7 @@ const dismiss = async p => { for (let i = 0; i < 3; i++) {
     const pp = curP(); pp.grade = 'C'; pp.sev = 'DEG'; pp.defect = 'DT14-03';
     pp.cause = 'CA-WEAR'; pp.action = 'RA-04'; pp.prio = 'P2'; saveCur();
   });
+  await p.evaluate(PLANT);
   await p.click('#saveBtn'); await p.waitForTimeout(700); await dismiss(p);
 
   const first = await p.evaluate(async () => {
@@ -76,6 +78,7 @@ const dismiss = async p => { for (let i = 0; i < 3; i++) {
     const e = document.getElementById('comment'); e.value = 'corrected'; e.dispatchEvent(new Event('input', { bubbles: true }));
     saveCur();
   });
+  await p.evaluate(PLANT);
   await p.click('#saveBtn'); await p.waitForTimeout(700); await dismiss(p);
   const after = await p.evaluate(async id => {
     const r = await dbGet(id);

@@ -84,10 +84,13 @@ const SEED = `(async () => {
   console.log('  ' + JSON.stringify(num));
   ok('worn points count as findings, not as nothing',
     num.total >= uc.DZ001.meas + uc.DZ002.meas, String(num.total));
+  /* The mix is keyed by grade now. A measured point grades from its
+     remaining life: past the limit, or under 20% left (over 80% worn), is
+     5 – Critical; 20–39% left is 4 – Severe. */
   ok('a point past condemn is a Critical finding here too',
-    num.mix.CRI >= uc.DZ002.act, num.mix.CRI+' critical, '+uc.DZ002.act+' past condemn on DZ002');
-  ok('a point above 80% is Degraded', num.mix.DEG >= uc.DZ001.watch+uc.DZ002.watch,
-    num.mix.DEG+' degraded');
+    num.mix[5] >= uc.DZ002.act, num.mix[5]+' critical, '+uc.DZ002.act+' past condemn on DZ002');
+  ok('a point over 80% worn (under 20% remaining) is Critical too', num.mix[5] >= uc.DZ002.act+uc.DZ001.watch+uc.DZ002.watch,
+    num.mix[5]+' critical vs '+(uc.DZ002.act+uc.DZ001.watch+uc.DZ002.watch)+' at or past 80%');
 
   console.log('\n  the fleet table says which machine to look at');
   /* Read each cell by the column it IS, off the header's own data-sort keys —

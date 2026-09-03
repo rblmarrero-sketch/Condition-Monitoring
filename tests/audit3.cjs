@@ -9,6 +9,7 @@
    measured rather than asserted — every number below is printed, not just
    compared, because "it passed" is not the same as knowing what it cost. */
 const { chromium } = require(require('./pw.cjs'));
+const { PLANT } = require('./overview.cjs');   // the machine photographs every round now carries
 const http = require('http'), fs = require('fs'), path = require('path'), zlib = require('zlib');
 const ROOT = require('path').join(__dirname, '..');
 const PORT = 8081, LAT = 60;
@@ -134,6 +135,7 @@ const swHealth = p => p.evaluate(() => new Promise(res => {
      built.kept < built.raw / 4, (built.raw / built.kept).toFixed(1) + '× smaller');
 
   const t0 = Date.now();
+  await p.evaluate(PLANT);
   await p.click('#saveBtn'); await p.waitForTimeout(600); await dismiss(p);
   await p.evaluate(async () => { for (let i = 0; i < 80; i++) {
     if (!(await dbAll()).filter(r => !r.up).length) return; await new Promise(r => setTimeout(r, 300)); } });
@@ -230,6 +232,7 @@ const swHealth = p => p.evaluate(() => new Promise(res => {
   // the measurement sheet is over the Save button, as it should be
   await cold.click('#ucClose');
   await cold.waitForTimeout(400);
+  await cold.evaluate(PLANT);
   await cold.click('#saveBtn'); await cold.waitForTimeout(700); await dismiss(cold);
   const queued = await cold.evaluate(async () => (await dbAll()).filter(r => !r.up).length);
   ok('it is saved and queued, not refused', queued >= 1, queued + ' waiting');

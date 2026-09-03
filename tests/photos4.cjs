@@ -7,6 +7,7 @@
    makes a suite with a shelf life — it passes until somebody raises the limit
    and then reports the app as broken for doing exactly what it was asked. */
 const { chromium } = require(require('./pw.cjs'));
+const { PLANT } = require('./overview.cjs');   // the machine photographs every round now carries
 const B = 'http://127.0.0.1:8093';
 const fails = [];
 const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !== undefined ? '   ' + d : '')); if (!c) fails.push(n); };
@@ -84,6 +85,7 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
   console.log('\n  four survive the save and the reopen');
   await p.fill('#inspector', 'R. Marrero');
   await p.fill('#smu', '12345');
+  await p.evaluate(PLANT);
   await p.click('#saveBtn'); await p.waitForTimeout(700);
   for (let i = 0; i < 3; i++) { if (await p.evaluate(() => document.getElementById('dlg').open)) { await p.click('#dlgOk'); await p.waitForTimeout(250); } }
 
@@ -117,7 +119,7 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
     ok('and every name is different', new Set(first).size === first.length);
     ok('they are numbered in order', ['_1', '_2', '_3', '_4'].every(s => first.some(n => n.includes(s + '.'))),
       first.join(' '));
-    ok('an image file per photograph, none lost', names.length === CAP*3, String(names.length));
+    ok('an image file per photograph, none lost (plus the machine overview)', names.length === CAP*3 + 1, String(names.length));
   } else ok('the export names the photographs', false, 'recFiles() not reachable');
 
   console.log('\n  the count the dashboard reads');

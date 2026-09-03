@@ -188,6 +188,11 @@ const J = o => JSON.stringify(o).slice(0, 420);
 
   /* ---- 3. the dashboard -------------------------------------------------- */
   console.log('\n3. THE DASHBOARD');
+  /* The mock is shared with every dashboard suite in the sweep and keeps
+     whatever the last one seeded. Start from its full folder, as a fresh
+     server does, so the count below is about this build and not about which
+     suite ran before. */
+  await fetch(BASE + '/__reset?n=40');
   const q = await b.newPage({ viewport: { width: 1366, height: 768 } });
   const qerrs = []; q.on('pageerror', e => qerrs.push(e.message));
   await q.addInitScript(base => { localStorage.setItem('cm_drive_url', base + '/exec'); localStorage.setItem('cm_drive_sec', '');

@@ -3,6 +3,7 @@
    the air at once. The server on 8085 holds every request for a fixed 120 ms
    — the pit's round-trip, near enough — and reports what it saw. */
 const { chromium } = require(require('./pw.cjs'));
+const { PLANT } = require('./overview.cjs');   // the machine photographs every round now carries
 const B = 'http://127.0.0.1:8085';
 const fails = [];
 const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !== undefined ? '   ' + d : '')); if (!c) fails.push(n); };
@@ -184,6 +185,7 @@ const dims = `(async (blob) => {
 
   /* ---------------------------------------------------------------- 4 */
   console.log('\nwhat leaves the phone, and in what order');
+  await p.evaluate(PLANT);
   await p.click('#saveBtn'); await p.waitForTimeout(600); await dismiss(p);
   await p.evaluate(async () => {
     for (let i = 0; i < 60; i++) {
@@ -203,7 +205,7 @@ const dims = `(async (blob) => {
      seen.maxInFlight >= 2, 'up to ' + seen.maxInFlight + ' in flight');
   ok('but never more than three', seen.maxInFlight <= 3, String(seen.maxInFlight));
 
-  const jpg = seen.log.filter(f => /\.jpg$/.test(f.name));
+  const jpg = seen.log.filter(f => /\.jpg$/.test(f.name) && !/_OVERVIEW_/.test(f.name));
   const wire = jpg.reduce((a, f) => a + f.bytes, 0);
   ok('all five photographs went out', jpg.length === 5, String(jpg.length));
   ok('carrying a fraction of what the camera produced',

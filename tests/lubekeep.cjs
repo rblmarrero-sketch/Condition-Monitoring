@@ -47,6 +47,9 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
     curItem = k;
     /* saveCur() rebuilds the position from the DOM of a screen this test never
        opened; the draft above IS the inspector's answer. */
+    /* The machine overview every round now carries — see tests/overview.cjs. */
+    { const bytes=new Uint8Array([0xff,0xd8,0xff,0xdb,1,2,3,4,5,6,7,8,9,0xff,0xd9]); const g=(draft.positions[GEN_KEY] ||= {});
+      for(const s of machineSlots(type)) if(s.req && !genPhotos(draft,s.cat).length) addPos(g, attWrap(new File([bytes], s.cat+'.jpg',{type:'image/jpeg'})), s.cat); }
     const real = window.saveCur; window.saveCur = () => {};
     document.getElementById('saveBtn').click();
     await new Promise(r2 => setTimeout(r2, 900));

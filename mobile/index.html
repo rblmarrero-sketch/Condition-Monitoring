@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=242">
+<link rel="manifest" href="manifest.webmanifest?v=243">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=242">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=242">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=242">
+<link rel="apple-touch-icon" href="icon-192.png?v=243">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=243">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=243">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -51,6 +51,9 @@
        orange moved towards orange and the red towards red when Severe took the
        step between them — three reds in a row would have read as one. */
     --good:#0a7134; --warning:#c07c07; --serious:#c46a12; --severe:#c8431f; --critical:#b3242c; --none:#8b969b; --warn-ink:#8a5a00; --crit-ink:#c02f2f;
+    /* The ink that clears 4.5:1 on each grade's fill, per theme: white on the
+       dark green and the two reds, near-black on the amber and the orange. */
+    --g1-ink:#fff; --g2-ink:#111; --g3-ink:#111; --g4-ink:#fff; --g5-ink:#fff;
     /* The tray's surfaces: one low-chroma family stepped by HEIGHT OFF THE
        FLOOR, so the tint says "this panel is folded up" and leaves green, amber
        and red to mean what they already mean. */
@@ -62,6 +65,9 @@
     --line:#232a30; --shadow:none;
     --accent:#ce8256; --accent-ink:#2a1409; --accent-soft:#2a1a12;
     --good:#3aad5c; --warning:#e0a52a; --serious:#e3953c; --severe:#e46a3e; --critical:#e0524a; --none:#69757b; --warn-ink:#e0a52a;
+    /* Every grade fill is lighter in the dark theme, and none of them carries
+       white at 4.5:1 — so the number and the name take near-black ink. */
+    --g1-ink:#111; --g2-ink:#111; --g3-ink:#111; --g4-ink:#111; --g5-ink:#111;
     /* Critical as INK, which needs more light than critical as a fill.
        #e05a52 on --surface-2 is 4.24:1 in the dark — and the pill it is
        carrying says "Upload failing", so the one state that has to be read
@@ -76,6 +82,9 @@
     --line:#232a30; --shadow:none;
     --accent:#ce8256; --accent-ink:#2a1409; --accent-soft:#2a1a12;
     --good:#3aad5c; --warning:#e0a52a; --serious:#e3953c; --severe:#e46a3e; --critical:#e0524a; --none:#69757b; --warn-ink:#e0a52a;
+    /* Every grade fill is lighter in the dark theme, and none of them carries
+       white at 4.5:1 — so the number and the name take near-black ink. */
+    --g1-ink:#111; --g2-ink:#111; --g3-ink:#111; --g4-ink:#111; --g5-ink:#111;
     /* Critical as INK, which needs more light than critical as a fill.
        #e05a52 on --surface-2 is 4.24:1 in the dark — and the pill it is
        carrying says "Upload failing", so the one state that has to be read
@@ -324,8 +333,9 @@
   .gcard.on .gt b,.gcard.on .gm{color:var(--gink,#fff);}
   .gcard.on .gn{background:rgba(255,255,255,.28);color:var(--gink,#fff);}
   .gcard:active{opacity:.85;}
-  .g1{--gc:var(--good);} .g2{--gc:var(--warning);--gink:#111;} .g3{--gc:var(--serious);}
-  .g4{--gc:var(--severe);} .g5{--gc:var(--critical);}
+  .g-1{--gc:var(--good);--gink:var(--g1-ink);} .g-2{--gc:var(--warning);--gink:var(--g2-ink);} .g-3{--gc:var(--serious);--gink:var(--g3-ink);}
+  .g-4{--gc:var(--severe);--gink:var(--g4-ink);} .g-5{--gc:var(--critical);--gink:var(--g5-ink);}
+  .gcard:focus-visible,.mprow .mpb:focus,.mprow .mdel2:focus,.mtile .mcat:focus{outline:2px solid var(--accent);outline-offset:2px;}
   /* The proposal and the plan, under the cards. */
   .govr{margin-top:8px;padding:10px 12px;border-radius:10px;border:1px solid var(--critical);
     background:color-mix(in srgb,var(--critical) 10%,var(--surface));}
@@ -353,10 +363,10 @@
   .mprow .mpt .req{color:var(--crit-ink);font-weight:650;}
   .mprow .mpt .has{color:var(--good);font-weight:650;}
   .mprow img{width:52px;height:52px;object-fit:cover;border-radius:8px;background:var(--surface-3);flex:0 0 52px;}
-  .mprow .mpb{flex:0 0 auto;min-height:40px;padding:8px 12px;border-radius:10px;border:1px solid var(--border);
+  .mprow .mpb{flex:0 0 auto;min-height:44px;padding:8px 12px;border-radius:10px;border:1px solid var(--border);
     background:var(--surface-2);color:var(--ink);font-weight:700;font-size:13.5px;cursor:pointer;font-family:inherit;}
   .mprow .mpb.pri{background:var(--accent);color:var(--accent-ink);border-color:transparent;}
-  .mprow .mdel2{flex:0 0 auto;width:36px;height:36px;border-radius:50%;border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);cursor:pointer;}
+  .mprow .mdel2{flex:0 0 auto;width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);cursor:pointer;}
   .mpguide{padding:8px 12px 10px;font-size:12px;color:var(--muted);border-top:1px solid var(--line);line-height:1.3;}
   /* A photograph's category, on its tile. */
   .mtile .mcat{position:absolute;left:4px;bottom:4px;max-width:calc(100% - 8px);padding:2px 6px;border-radius:6px;
@@ -1280,6 +1290,10 @@
      says less per row and reads better as it already was. */
   #dueList .dueitem{flex-wrap:wrap;}
   #dueList .dueitem .u{flex:1 1 100%;max-width:100%;min-width:0;text-overflow:ellipsis;}
+  /* The team list's grade — "2 – Incipient", the number and the name, never
+     the number alone — rides on the detail line beside the date, because the
+     machine number's half of the row is what the row is for and the label
+     no longer fits beside it on a 320px phone. */
   #dueList .dueitem .d{flex:1 1 100%;margin-top:2px;}
   /* A unit brought forward by wear rather than by the interval. It has to read
      as a reason and not as decoration: the fitter is being asked to walk a
@@ -1470,7 +1484,7 @@
          inspection carries a whole-machine overview; an undercarriage round
          adds both sides, a tray round the whole tray, a GET round the whole
          assembly. Drawn by renderMachinePhotos() from machineSlots(type). -->
-    <details class="mphotos" id="mphotos">
+    <details class="mphotos" id="mphotos" open>
       <summary><span data-i18n="ph_title">Machine photographs</span><span class="mpc" id="mpCount"></span></summary>
       <div id="mpRows"></div>
       <div class="mpguide" data-i18n="ph_guide">Fill the frame, hold the phone still, keep the subject in focus and evenly lit. Wipe the lens.</div>
@@ -2012,7 +2026,7 @@
 <!-- What a point's photograph is of. Opened from the chip on its tile. -->
 <dialog id="catDlg"><div class="dlg-in"><h3 data-i18n="ph_cat">What is this photograph of?</h3>
   <div class="srcopts" id="catList"></div>
-  <div class="srcopts"><button type="button" class="btn quiet" onclick="document.getElementById('catDlg').close()" data-i18n="src_cancel">Cancel</button></div>
+  <div class="srcopts"><button type="button" class="btn quiet" id="catCancel" data-i18n="src_cancel">Cancel</button></div>
 </div></dialog>
 <dialog id="srcDlg"><div class="dlg-in"><h3 id="srcTitle"></h3>
   <div class="srcopts">
@@ -2045,58 +2059,58 @@
 </div>
 
 <<<<<<< HEAD
-<script src="native.js?v=242"></script>
-<script src="upload-defaults.js?v=242"></script>
-<script src="hme.js?v=242"></script>
-<script src="mp-fc.js?v=242"></script>
-<script src="hme-cascade.js?v=242"></script>
-<script src="assets.js?v=242"></script>
-<script src="temp-limits.js?v=242"></script>
-<script src="normalize.js?v=242"></script>
-<script src="due.js?v=242"></script>
-<script src="wear.js?v=242"></script>
-<script src="wear-figs.js?v=242"></script>
-<script src="wear-map.js?v=242"></script>
-<script src="machine-photos.js?v=242"></script>
-<script src="machine-fig.js?v=242"></script>
-<script src="get.js?v=242"></script>
-<script src="points.js?v=242"></script>
-<script src="uc-points.js?v=242"></script>
-<script src="inspect-guide.js?v=242"></script>
-<script src="get-figs.js?v=242"></script>
-<script src="body-points.js?v=242"></script>
-<script src="body-map.js?v=242"></script>
-<script src="lube.js?v=242"></script>
-<script src="lube-overrides.js?v=242"></script>
-<script src="lube2027.js?v=242"></script>
-<script src="report-core.js?v=242"></script>
+<script src="native.js?v=243"></script>
+<script src="upload-defaults.js?v=243"></script>
+<script src="hme.js?v=243"></script>
+<script src="mp-fc.js?v=243"></script>
+<script src="hme-cascade.js?v=243"></script>
+<script src="assets.js?v=243"></script>
+<script src="temp-limits.js?v=243"></script>
+<script src="normalize.js?v=243"></script>
+<script src="due.js?v=243"></script>
+<script src="wear.js?v=243"></script>
+<script src="wear-figs.js?v=243"></script>
+<script src="wear-map.js?v=243"></script>
+<script src="machine-photos.js?v=243"></script>
+<script src="machine-fig.js?v=243"></script>
+<script src="get.js?v=243"></script>
+<script src="points.js?v=243"></script>
+<script src="uc-points.js?v=243"></script>
+<script src="inspect-guide.js?v=243"></script>
+<script src="get-figs.js?v=243"></script>
+<script src="body-points.js?v=243"></script>
+<script src="body-map.js?v=243"></script>
+<script src="lube.js?v=243"></script>
+<script src="lube-overrides.js?v=243"></script>
+<script src="lube2027.js?v=243"></script>
+<script src="report-core.js?v=243"></script>
 =======
-<script src="native.js?v=241"></script>
-<script src="upload-defaults.js?v=241"></script>
-<script src="hme.js?v=241"></script>
-<script src="mp-fc.js?v=241"></script>
-<script src="hme-cascade.js?v=241"></script>
-<script src="assets.js?v=241"></script>
-<script src="temp-limits.js?v=241"></script>
-<script src="normalize.js?v=241"></script>
-<script src="grade.js?v=241"></script>
-<script src="due.js?v=241"></script>
-<script src="wear.js?v=241"></script>
-<script src="wear-figs.js?v=241"></script>
-<script src="wear-map.js?v=241"></script>
-<script src="machine-photos.js?v=241"></script>
-<script src="machine-fig.js?v=241"></script>
-<script src="get.js?v=241"></script>
-<script src="points.js?v=241"></script>
-<script src="uc-points.js?v=241"></script>
-<script src="inspect-guide.js?v=241"></script>
-<script src="get-figs.js?v=241"></script>
-<script src="body-points.js?v=241"></script>
-<script src="body-map.js?v=241"></script>
-<script src="lube.js?v=241"></script>
-<script src="lube-overrides.js?v=241"></script>
-<script src="lube2027.js?v=241"></script>
-<script src="report-core.js?v=241"></script>
+<script src="native.js?v=243"></script>
+<script src="upload-defaults.js?v=243"></script>
+<script src="hme.js?v=243"></script>
+<script src="mp-fc.js?v=243"></script>
+<script src="hme-cascade.js?v=243"></script>
+<script src="assets.js?v=243"></script>
+<script src="temp-limits.js?v=243"></script>
+<script src="normalize.js?v=243"></script>
+<script src="grade.js?v=243"></script>
+<script src="due.js?v=243"></script>
+<script src="wear.js?v=243"></script>
+<script src="wear-figs.js?v=243"></script>
+<script src="wear-map.js?v=243"></script>
+<script src="machine-photos.js?v=243"></script>
+<script src="machine-fig.js?v=243"></script>
+<script src="get.js?v=243"></script>
+<script src="points.js?v=243"></script>
+<script src="uc-points.js?v=243"></script>
+<script src="inspect-guide.js?v=243"></script>
+<script src="get-figs.js?v=243"></script>
+<script src="body-points.js?v=243"></script>
+<script src="body-map.js?v=243"></script>
+<script src="lube.js?v=243"></script>
+<script src="lube-overrides.js?v=243"></script>
+<script src="lube2027.js?v=243"></script>
+<script src="report-core.js?v=243"></script>
 >>>>>>> 69ea133 (Grades 1–5 — work in progress on the grading branch)
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
@@ -4541,7 +4555,7 @@ function addPos(p,blob,cat){ (p.photos ||= []); if(p.photos.length>=MAX_PHOTOS) 
   p.photos.push(blob); setAttCat(p,blob,cat||"COMPONENT"); return true; }
 function rememberResp(name){
   try{ let s=JSON.parse(localStorage.getItem("cm_resp_seen")||"[]"); s=[name].concat(s.filter(x=>x!==name)).slice(0,20);
-    localStorage.setItem("cm_resp_seen",JSON.stringify(s)); }catch(e){}
+    lsSet("cm_resp_seen",JSON.stringify(s)); }catch(e){}
 }
 async function takeMachinePhoto(cat){
   const s=await chooseSource("photo"); if(!s) return;
@@ -4592,6 +4606,7 @@ function renderMachinePhotos(){
 }
 function openMachinePhotos(){ const d=$("mphotos"); if(d){ d.open=true; d.scrollIntoView({behavior:"smooth",block:"start"}); } }
 /* Relabel one of a point's photographs. */
+$("catCancel").onclick=()=>$("catDlg").close();
 function pickPhotoCat(i){
   const p=curP(); const b=(p.photos||[])[i]; if(!b) return;
   const cur=attCat(p,b)||"COMPONENT";
@@ -4644,7 +4659,7 @@ function renderGradeCards(){
   const box=$("gradeSeg"); if(!box) return;
   const p=posRO(); const g=GRADE.num(p.grade);
   const ty=gradeFamilyType();
-  box.innerHTML=GRADE.LEVELS.map(n=>`<button type="button" class="gcard ${GRADE.cls(n)}${g===n?" on":""}" data-g="${n}" role="radio" aria-checked="${g===n?"true":"false"}">
+  box.innerHTML=GRADE.LEVELS.map(n=>`<button type="button" class="gcard ${"g-"+n}${g===n?" on":""}" data-g="${n}" role="radio" aria-checked="${g===n?"true":"false"}">
       <span class="gn">${n}</span>
       <span class="gt"><b>${esc(GRADE.label(n,lang))}</b><span class="gm">${esc(GRADE.meaning(n,ty,lang))}</span></span>
     </button>`).join("");
@@ -5558,7 +5573,10 @@ function ucKeepFrameInView(){
        and the way on come first, because you can scroll back to a picture and
        you cannot work without the buttons. */
     const map=$("posnav").querySelector(".tbwrap,.ucmapwrap");
-    if(map){ const keep=map.getBoundingClientRect().bottom-16; if(keep<need) need=Math.max(0,keep); }
+    /* Only on a screen tall enough to hold a strip of the map AND the dock's
+       essentials. A phone held sideways (412 px) cannot: there the number and
+       the way on come first, and the map scrolls back with a thumb. */
+    if(map && window.innerHeight>=560){ const keep=map.getBoundingClientRect().bottom-16; if(keep<need) need=Math.max(0,keep); }
     if(need>0) window.scrollBy({top:need});
     return;
   }
@@ -8680,8 +8698,8 @@ function renderTeam(){
        the same thing is one more thing to learn. */
     const tag=teamShow?"":`<span class="tag" data-r="${esc(r.t)}">${esc(r.t)}</span>`;
     return `<button class="dueitem ${cls}" data-u="${esc(r.u)}" data-k="${esc(r.u+"|"+r.d+"|"+r.t)}">
-      <span class="u">${tag}${esc(r.u)}${gn?` · <span style="color:${GRADE.css(gn)};font-weight:700">${esc(GRADE.label(gn,lang))}</span>`:""}${clash?` · <span style="color:var(--warn-ink);font-weight:700">⑂</span>`:""}</span>
-      <span class="d">${esc(r.d)}${age!=null?` · ${t("due_days").replace("{n}",age)}`:""}${r.by?` · ${esc(r.by)}`:""}${clash?` · ${esc(t("team_clash_one"))}`:""}</span></button>`;
+      <span class="u">${tag}${esc(r.u)}${clash?` · <span style="color:var(--warn-ink);font-weight:700">⑂</span>`:""}</span>
+      <span class="d">${gn?`<span style="color:${GRADE.css(gn)};font-weight:700">${esc(GRADE.label(gn,lang))}</span> · `:""}${esc(r.d)}${age!=null?` · ${t("due_days").replace("{n}",age)}`:""}${r.by?` · ${esc(r.by)}`:""}${clash?` · ${esc(t("team_clash_one"))}`:""}</span></button>`;
   }).join("");
   /* Tapping a row used to start a NEW round on that machine, which is the one
      thing an inspector looking at "TK152, 4 days ago, Хасенов" does not want.
@@ -9143,9 +9161,9 @@ async function migrateLocalGrades(){
   try{
     const all=teamAllUncached(); let ch=false;
     all.forEach(r=>{ if(r && GRADE.isLegacy(r.g)){ r.g=GRADE.num(r.g); ch=true; rows++; } });
-    if(ch){ localStorage.setItem(TEAM_KEY, JSON.stringify(all)); teamCache=null; }
+    if(ch){ lsSet(TEAM_KEY, JSON.stringify(all)); teamCache=null; }
   }catch(e){}
-  try{ localStorage.setItem("cm_grade5_v1", JSON.stringify({at:new Date().toISOString(), recs, items, rows})); }catch(e){}
+  lsSet("cm_grade5_v1", JSON.stringify({at:new Date().toISOString(), recs, items, rows}));
   return {recs, items, rows};
 }
 document.addEventListener("DOMContentLoaded",()=>{
@@ -10222,7 +10240,7 @@ $("roundRpt").onclick=async ()=>{
     const doc=await CMR.paginate({
       sections:CMR.sections({ lang, mode:"unit", title:t("rep_title"),
         titleAlt:inOtherLang(()=>t("rep_title")), stamp:new Date(),
-        sevLabel:s=>t("sev_"+s), sevLabelAlt:s=>inOtherLang(()=>t("sev_"+s)),
+        sevLabel:s=>GRADE.name(GRADE.fromIso(s),lang)||t("sev_"+s), sevLabelAlt:s=>inOtherLang(()=>GRADE.name(GRADE.fromIso(s),lang)||t("sev_"+s)),
         /* The report asks for the forecast rather than working one out, so the
            sheet and the screen can never quote different hours for the same
            part. One implementation, in wear.js. */
@@ -10248,7 +10266,7 @@ function rptSay(i,n){
 async function buildReportSections(onlyId){
   return CMR.sections({ lang, mode:onlyId?"unit":undefined, title:t("rep_title"),
     titleAlt:inOtherLang(()=>t("rep_title")), stamp:new Date(),
-    sevLabel:s=>t("sev_"+s), sevLabelAlt:s=>inOtherLang(()=>t("sev_"+s)),
+    sevLabel:s=>GRADE.name(GRADE.fromIso(s),lang)||t("sev_"+s), sevLabelAlt:s=>inOtherLang(()=>GRADE.name(GRADE.fromIso(s),lang)||t("sev_"+s)),
     /* Both call sites, or the fleet report and the single-machine sheet quote
        different hours for the same part - the drift this module exists to stop. */
     forecast:(ref,series)=>(window.WEAR?WEAR.forecast(ref,series):null),
@@ -10432,7 +10450,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="242";
+const BUILD="243";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

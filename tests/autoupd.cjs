@@ -17,6 +17,7 @@
  *     remember to press something.
  */
 const { chromium } = require(require('./pw.cjs'));
+const { PLANT } = require('./overview.cjs');   // the machine photographs every round now carries
 const http = require('http'), fs = require('fs'), path = require('path');
 
 const ROOT = require('path').join(__dirname, '..');
@@ -157,6 +158,7 @@ async function evalSettled(p, fn){
 
     console.log('\n  and it lands by itself the moment they are free — no tap');
     await evalSettled(p, () => { document.getElementById('comment').blur(); });
+    await p.evaluate(PLANT);
     await p.click('#saveBtn');
     await p.waitForTimeout(900);
     /* Saving is what releases the held update, so from here on the page can

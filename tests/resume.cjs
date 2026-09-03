@@ -3,6 +3,7 @@
    memory of what already landed spends every attempt re-sending the start of
    the round and never reaches the end of it. */
 const { chromium } = require(require('./pw.cjs'));
+const { PLANT } = require('./overview.cjs');   // the machine photographs every round now carries
 const http=require('http'),fs=require('fs'),path=require('path');
 const ROOT=require('path').join(__dirname, '..');
 const fails=[];const ok=(n,c,d)=>{console.log((c?'  PASS  ':'  FAIL  ')+n+(d!==undefined?'   '+d:''));if(!c)fails.push(n);};
@@ -16,6 +17,9 @@ const srv=http.createServer((req,res)=>{
    let b='';req.on('data',c=>b+=c);
    return req.on('end',()=>{
      let j=null;try{j=JSON.parse(b);}catch(e){}
+     /* The phone asks once per endpoint whether batches are taken. A ping is
+        not a file: answer it the way a backend without a batch branch would. */
+     if(j&&j.op==='ping'){ res.writeHead(200,Object.assign({'Content-Type':'application/json'},cors)); return res.end('{"ok":true,"batch":false}'); }
      if(dieAfter!==null && dieAfter<=0){ req.socket.destroy(); return; }
      if(dieAfter!==null) dieAfter--;
      if(j&&j.file){ b64+=j.file.length; raw+=Buffer.from(j.file,'base64').length; }
@@ -65,9 +69,10 @@ srv.listen(8091,async()=>{
     sync on save is itself the first doomed attempt — which is the real
     sequence in the pit, not a tidy one that starts from nothing. */
  dieAfter=2;
+ await p.evaluate(PLANT);
  await p.click('#saveBtn');
  await p.waitForTimeout(500);
- const TOTAL=N+1;                                   // the photographs plus the sidecar
+ const TOTAL=N+2;                                   // the photographs, the sidecar and the machine overview
 
  console.log('a link that keeps dying');
  // dies after two files, every single attempt — the pit at its worst
@@ -90,6 +95,7 @@ srv.listen(8091,async()=>{
  // the record is only marked done when every file is really there
  const st=await p.evaluate(async()=>{const r=(await dbAll())[0];
    return {up:r.up, sent:r.sent?Object.keys(r.sent.gas||{}).length:null};});
+ note('what the link saw', got.join('  '));
  ok('and only then is the round marked sent', st.up===1, 'up='+st.up);
  ok('the resume list is dropped once it is no use', st.sent===null, 'sent='+st.sent);
 

@@ -2,6 +2,7 @@
    that batches and a phone that cannot, a link that dies, and a script nobody
    has redeployed. Every combination has to end with the round on the far side. */
 const { chromium } = require(require('./pw.cjs'));
+const { PLANT } = require('./overview.cjs');   // the machine photographs every round now carries
 const http=require('http'),fs=require('fs'),path=require('path');
 const ROOT=require('path').join(__dirname, '..');
 const fails=[];const ok=(n,c,d)=>{console.log((c?'  PASS  ':'  FAIL  ')+n+(d!==undefined?'   '+d:''));if(!c)fails.push(n);};
@@ -95,6 +96,7 @@ srv.listen(8078,async()=>{
      }
      pos.grade='B'; renderMedia(); renderChips();
    }, opts.photos||5);
+   await p.evaluate(PLANT);
    await p.click('#saveBtn');
    await p.waitForTimeout(opts.wait||9000);
    if(opts.recover){
@@ -107,7 +109,7 @@ srv.listen(8078,async()=>{
    return {st,pend};
  }
 
- const N=5, FILES=N+1;                       // the photographs plus the sidecar
+ const N=5, FILES=N+2;                       // the photographs, the sidecar and the machine overview
  console.log('three destinations at once, from one phone');
  let {st,pend}=await round({photos:N});
  ok('Google Drive has the whole round', st.got.gas.length===FILES, st.got.gas.length+' of '+FILES);

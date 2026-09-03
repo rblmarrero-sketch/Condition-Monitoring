@@ -16,6 +16,7 @@
       table produces a confident, completely wrong percentage.
 */
 const { chromium } = require(require('./pw.cjs'));
+const { PLANT } = require('./overview.cjs');   // the machine photographs every round now carries
 const B = 'http://127.0.0.1:8093';
 const fails = [];
 const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !== undefined ? '   ' + d : '')); if (!c) fails.push(n); };
@@ -462,6 +463,7 @@ const put = (p, k, v) => p.evaluate(a => { pickComponent(a[0]);
   await p.fill('#inspector', 'R. Marrero');
   await p.evaluate(() => { saveCur(); ucCloseSheet(); });
   await p.waitForTimeout(200);
+  await p.evaluate(PLANT);
   await p.click('#saveBtn');
   await p.waitForTimeout(1200);
   const saved = await p.evaluate(async () => {

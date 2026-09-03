@@ -4,6 +4,7 @@
    the picker on the phone through the file, the register, the CSV and the
    printed page. */
 const { chromium } = require(require('./pw.cjs'));
+const { PLANT } = require('./overview.cjs');   // the machine photographs every round now carries
 const fs = require('fs');
 const B = 'http://127.0.0.1:8093';
 const fails = [];
@@ -98,6 +99,7 @@ const dismiss = async p => { for (let i = 0; i < 3; i++) {
   }, key);
   await p.fill('#inspector', 'R. Marrero');
   await p.fill('#smu', '12345');
+  await p.evaluate(PLANT);
   await p.click('#saveBtn'); await p.waitForTimeout(600); await dismiss(p);
 
   const stored = await p.evaluate(async k => {

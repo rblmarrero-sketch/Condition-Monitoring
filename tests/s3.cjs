@@ -1,6 +1,7 @@
 /* Stage 3 — one job per screen, tablet and landscape layouts, and the trend at
    the point of capture. */
 const { chromium } = require(require('./pw.cjs'));
+const { PLANT } = require('./overview.cjs');   // the machine photographs every round now carries
 const B = 'http://127.0.0.1:8094';
 const fails = [];
 const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d ? '   ' + d : '')); if (!c) fails.push(n); };
@@ -114,7 +115,7 @@ const pane = p => p.evaluate(() => [...document.querySelectorAll('main > .pane')
     return e.classList.contains('hidden') ? '' : e.textContent; }, id);
   ok('nothing waiting, no queue badge', (await badge(p, 'tabQ')) === '', await badge(p, 'tabQ'));
   await p.evaluate(() => { document.querySelector('#gradeSeg [data-g="3"]'); });
-  await p.evaluate(() => { draft.positions[curItem].defect = 'DT14-03'; draft.positions[curItem].action = 'MON'; });
+  await p.evaluate(() => { draft.positions[curItem].defect = 'DT14-03'; draft.positions[curItem].action = 'MON'; draft.positions[curItem].target = '2026-09-20'; });
   /* Offline for the save, deliberately.
 
      The badge counts rounds that have NOT gone. This suite talks to a real
@@ -125,6 +126,7 @@ const pane = p => p.evaluate(() => [...document.querySelectorAll('main > .pane')
      which is the state an inspector is actually in: in the pit, with no signal.
      So take the signal away first. */
   await ctx.setOffline(true);
+  await p.evaluate(PLANT);
   await p.click('#saveBtn'); await p.waitForTimeout(600);
   if (await p.evaluate(() => document.getElementById('dlg').open)) { await p.click('#dlgOk'); await p.waitForTimeout(200); }
   await p.waitForTimeout(400);
@@ -225,6 +227,7 @@ const pane = p => p.evaluate(() => [...document.querySelectorAll('main > .pane')
   await p.evaluate(() => { const k = items()[0].k; saveCur(); curItem = k; loadPos(); renderChips(); });
   await p.evaluate(() => document.querySelector('#gradeSeg [data-g="5"]').click());
   await p.evaluate(() => { draft.positions[curItem].defect = 'DT14-03'; draft.positions[curItem].action = 'REP'; });
+  await p.evaluate(PLANT);
   await p.click('#saveBtn'); await p.waitForTimeout(700);
   if (await p.evaluate(() => document.getElementById('dlg').open)) { await p.click('#dlgOk'); await p.waitForTimeout(200); }
   await p.evaluate(() => selectEquip('TK150')); await p.waitForTimeout(500);

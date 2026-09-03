@@ -1,6 +1,7 @@
 /* The phone's half. It has to batch where the endpoint takes them, work out for
    itself where it does not, and never need anybody to be told which. */
 const { chromium } = require(require('./pw.cjs'));
+const { PLANT } = require('./overview.cjs');   // the machine photographs every round now carries
 const http=require('http'),fs=require('fs'),path=require('path');
 const ROOT=require('path').join(__dirname, '..');
 const fails=[];const ok=(n,c,d)=>{console.log((c?'  PASS  ':'  FAIL  ')+n+(d!==undefined?'   '+d:''));if(!c)fails.push(n);};
@@ -68,6 +69,7 @@ srv.listen(8083,async()=>{
      }
      pos.grade='B'; renderMedia(); renderChips();
    });
+   await p.evaluate(PLANT);
    await p.click('#saveBtn');
    await p.waitForTimeout(6000);
    const st=await (await fetch(B+'/__stat')).json();
@@ -80,7 +82,7 @@ srv.listen(8083,async()=>{
  let {st,cap}=await round(false);
  const batches=st.reqs.filter(r=>/^batch:/.test(r));
  const singles=st.reqs.filter(r=>r==='one');
- ok('all eleven files arrive', st.files.length===11, st.files.length+' files');
+ ok('all twelve files arrive (eleven plus the machine overview)', st.files.length===12, st.files.length+' files');
  ok('but nowhere near eleven requests', batches.length+singles.length<=5,
     st.reqs.join(' '));
  note('what went over the wire', st.reqs.join('  '));
@@ -90,13 +92,13 @@ srv.listen(8083,async()=>{
 
  console.log('\nthe same phone against a deployment nobody has redeployed');
  ({st,cap}=await round(true));
- ok('every file still arrives', st.files.length===11, st.files.length+' files');
+ ok('every file still arrives', st.files.length===12, st.files.length+' files');
  ok('it works out for itself that batches are not on offer',
     st.reqs.filter(r=>r==='batch-refused').length<=1,
     st.reqs.filter(r=>r==='batch-refused').length+' refused batches');
  ok('and does not keep trying', /false/.test(cap||''), cap);
  note('what went over the wire', st.reqs.join('  '));
- ok('nothing was lost to the fallback', new Set(st.files).size===11, new Set(st.files).size+' distinct');
+ ok('nothing was lost to the fallback', new Set(st.files).size===12, new Set(st.files).size+' distinct');
 
  await b.close();
  console.log(fails.length?`\n${fails.length} FAILED: `+fails.join(' | '):'\nall passed');

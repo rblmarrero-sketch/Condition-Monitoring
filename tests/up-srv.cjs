@@ -24,6 +24,9 @@ http.createServer((req, res) => {
     let b = ''; req.on('data', c => b += c);
     return req.on('end', () => {
       let j = null; try { j = JSON.parse(b); } catch (e) {}
+      /* A capability ping is not a file: answered as a backend with no batch
+         branch would, and kept out of the log the suites measure. */
+      if (j && j.op === 'ping') return send({ ok: true, batch: false });
       const started = log.length;
       inFlight++; maxInFlight = Math.max(maxInFlight, inFlight);
       log.push({ name: (j && j.name) || '?', folder: (j && j.folder) || '',

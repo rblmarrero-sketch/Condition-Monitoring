@@ -401,8 +401,10 @@
      the search box at 220px — narrower than the placeholder it holds. Search is
      the control that has to carry a sentence, so it keeps its width and the
      fixed-width neighbours give theirs up. */
+  /* Four selects now — the grade joined type, class and period — so each
+     gives up a little more, and the search field keeps its sentence. */
   @media (max-width:1500px){
-    .controls .field select{max-width:112px;}
+    .controls .field select{max-width:88px;}
     .resetb{padding:0 10px;}
   }
   /* The field was 194px holding a 35-character placeholder, so the hint was
@@ -1112,7 +1114,15 @@
      field back the width of its own placeholder. */
   @media (max-width:1330px){
     .controls{gap:8px;}
-    .controls .field select{max-width:104px;}
+    .controls .field select{max-width:92px;}
+    .controls input[type=search]{min-width:180px;}
+  }
+  /* Four selects and their four words no longer share a laptop's toolbar
+     with the search sentence. Below 1400 the words go to screen readers only
+     — each select still carries its title, and the closed control shows its
+     own value ("All grades", "All types") — and the search keeps its width. */
+  @media (max-width:1400px){
+    .controls .field label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
   }
   .dqtog.on{border-color:var(--accent);color:var(--accent);
     background:color-mix(in srgb,var(--accent) 10%,var(--surface-2));}
@@ -1691,6 +1701,15 @@
      the seventh on a second row at 1366 and doubled the strip's height. */
   #kpis{grid-template-columns:repeat(auto-fit,minmax(132px,1fr));}
   #kpis .kpi .s{-webkit-line-clamp:1;}
+  /* Five grades in the mix, not four: two columns made three rows and the
+     strip grew past its 120px budget. On a laptop the mix tile takes three
+     columns of the strip and lays its five steps out three across — two
+     rows again, and seven headlines still on one row at 1366. */
+  @media (min-width:1100px){
+    #kpis{grid-template-columns:repeat(7,minmax(112px,1fr)) minmax(200px,1.6fr);}
+  }
+  #kpiMix .legend{gap:0 8px;line-height:1.25;}
+  #kpiMix .legend button{padding:1px 4px;}
   /* The compliance headline, on the panel that explains it. */
   .compline{display:flex;align-items:baseline;gap:var(--s2);flex-wrap:wrap;margin:0 0 var(--s2);
     font-size:var(--t-small);color:var(--muted);}
@@ -3164,28 +3183,28 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=242"></script>
-<script src="../mobile/hme.js?v=242"></script>
-<script src="../mobile/mp-fc.js?v=242"></script>
-<script src="../mobile/hme-cascade.js?v=242"></script>
-<script src="../mobile/temp-limits.js?v=242"></script>
+<script src="../data/magnetic_plug.js?v=243"></script>
+<script src="../mobile/hme.js?v=243"></script>
+<script src="../mobile/mp-fc.js?v=243"></script>
+<script src="../mobile/hme-cascade.js?v=243"></script>
+<script src="../mobile/temp-limits.js?v=243"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=242"></script>
-<script src="../mobile/normalize.js?v=242"></script>
-<script src="../mobile/grade.js?v=242"></script>
-<script src="../mobile/due.js?v=242"></script>
-<script src="../mobile/wear.js?v=242"></script>
-<script src="../mobile/wear-map.js?v=242"></script>
-<script src="../mobile/lube.js?v=242"></script>
-<script src="../mobile/lube-overrides.js?v=242"></script>
-<script src="../mobile/lube2027.js?v=242"></script>
-<script src="../mobile/lube-tds.js?v=242"></script>
+<script src="../mobile/assets.js?v=243"></script>
+<script src="../mobile/normalize.js?v=243"></script>
+<script src="../mobile/grade.js?v=243"></script>
+<script src="../mobile/due.js?v=243"></script>
+<script src="../mobile/wear.js?v=243"></script>
+<script src="../mobile/wear-map.js?v=243"></script>
+<script src="../mobile/lube.js?v=243"></script>
+<script src="../mobile/lube-overrides.js?v=243"></script>
+<script src="../mobile/lube2027.js?v=243"></script>
+<script src="../mobile/lube-tds.js?v=243"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=242"></script>
-<script src="../mobile/machine-photos.js?v=242"></script>
+<script src="../mobile/upload-defaults.js?v=243"></script>
+<script src="../mobile/machine-photos.js?v=243"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3194,17 +3213,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=242"></script>
-<script src="../mobile/get.js?v=242"></script>
-<script src="../mobile/points.js?v=242"></script>
-<script src="../mobile/uc-points.js?v=242"></script>
-<script src="../mobile/inspect-guide.js?v=242"></script>
-<script src="../mobile/get-figs.js?v=242"></script>
-<script src="../mobile/body-points.js?v=242"></script>
-<script src="../mobile/body-map.js?v=242"></script>
-<script src="../mobile/jspdf.umd.min.js?v=242"></script>
-<script src="../mobile/html2canvas.min.js?v=242"></script>
-<script src="../mobile/report-core.js?v=242"></script>
+<script src="../mobile/machine-fig.js?v=243"></script>
+<script src="../mobile/get.js?v=243"></script>
+<script src="../mobile/points.js?v=243"></script>
+<script src="../mobile/uc-points.js?v=243"></script>
+<script src="../mobile/inspect-guide.js?v=243"></script>
+<script src="../mobile/get-figs.js?v=243"></script>
+<script src="../mobile/body-points.js?v=243"></script>
+<script src="../mobile/body-map.js?v=243"></script>
+<script src="../mobile/jspdf.umd.min.js?v=243"></script>
+<script src="../mobile/html2canvas.min.js?v=243"></script>
+<script src="../mobile/report-core.js?v=243"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -14085,8 +14104,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=242"></script>
-<script src="sync-adapter.js?v=242"></script>
-<script src="report.js?v=242"></script>
+<script src="drive.js?v=243"></script>
+<script src="sync-adapter.js?v=243"></script>
+<script src="report.js?v=243"></script>
 </body>
 </html>

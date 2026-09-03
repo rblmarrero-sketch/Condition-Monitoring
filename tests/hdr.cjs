@@ -1,4 +1,5 @@
 const { chromium } = require(require('./pw.cjs'));
+const { PLANT } = require('./overview.cjs');   // the machine photographs every round now carries
 const fails=[]; const ok=(n,c,d)=>{console.log((c?'  PASS  ':'  FAIL  ')+n+(d!==undefined?'   '+d:''));if(!c)fails.push(n);};
 const vis=(p,s)=>p.evaluate(x=>{const e=document.querySelector(x);
   return !!e&&!e.classList.contains('hidden')&&getComputedStyle(e).display!=='none'&&e.getClientRects().length>0;},s);
@@ -52,6 +53,7 @@ ok('with no name it stays open, however focus moves', await vis(p,'#hdrBody'));
 await p.evaluate(()=>{ window.__dlg=[]; });
 p.on('dialog',d=>d.dismiss().catch(()=>{}));
 await p.evaluate(()=>{curItem='GROUSER.L';loadPos();draft.positions['GROUSER.L']={mm:60};});
+await p.evaluate(PLANT);
 await p.click('#saveBtn'); await p.waitForTimeout(600);
 ok('a save blocked on the inspector opens the header that holds it', await vis(p,'#hdrBody'));
 /* dlg() is <dialog>.showModal(), so the page behind it is inert — the field is

@@ -110,9 +110,9 @@ const recs = () => {
   console.log('\nseverity legend');
   await p.click('nav.tabs button[data-tab="overview"]'); await p.waitForTimeout(300);
   const legend = await p.$$eval('#kpis .legend button', a => a.map(x => x.textContent.replace(/\s+/g,' ').trim()));
-  ok('severity mix is a 4-row legend', legend.length === 4, legend.join(' | '));
+  ok('the grade mix is a 5-row legend', legend.length === 5, legend.join(' | '));
   await p.click('#kpis .legend button:not([disabled])'); await p.waitForTimeout(300);
-  ok('clicking a severity band filters', /Severity/.test(await p.textContent('#chips')));
+  ok('clicking a grade band filters', /Grade/.test(await p.textContent('#chips')));
   await p.click('#chipClear'); await p.waitForTimeout(300);
 
   console.log('\nscreens');

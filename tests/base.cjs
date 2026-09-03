@@ -136,6 +136,7 @@ const openBase = async (p) => { await p.evaluate(() => {
 
   console.log('\n  it survives being saved');
   await p.evaluate(async () => {
+    { const bytes=new Uint8Array([0xff,0xd8,0xff,0xdb,1,2,3,4,5,6,7,8,9,0xff,0xd9]); const g=(draft.positions[GEN_KEY] ||= {}); for(const s of machineSlots(type)) if(s.req && !genPhotos(draft,s.cat).length) addPos(g, attWrap(new File([bytes], s.cat+'.jpg',{type:'image/jpeg'})), s.cat); }
     document.getElementById('saveBtn').click();
     await new Promise(r => setTimeout(r, 900));
     const d = document.getElementById('dlg'); if (d && d.open) document.getElementById('dlgOk').click();

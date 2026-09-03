@@ -56,7 +56,7 @@ const outline = (p, sel) => p.evaluate(s => {
     /BS\.TV/.test(await p.textContent('#posLabel')), await p.textContent('#posLabel'));
 
   console.log('\ncapturing something on it');
-  await p.evaluate(() => document.querySelector('#gradeSeg [data-g="C"]').click());
+  await p.evaluate(() => document.querySelector('#gradeSeg [data-g="3"]').click());
   await p.waitForTimeout(250);
   ok('the card shows it is captured', await has(p, '[data-l8="BS.TV"]'), await cls(p, '[data-l8="BS.TV"]'));
   ok('the green dot is actually painted', (await dot(p, '[data-l8="BS.TV"]')) === 'block',
@@ -108,7 +108,7 @@ const outline = (p, sel) => p.evaluate(s => {
   await p.waitForTimeout(200);
   ok('the current plug position is marked', await on(p, `[data-pos="${first}"]`),
     await cls(p, `[data-pos="${first}"]`));
-  await p.evaluate(() => document.querySelector('#gradeSeg [data-g="B"]').click());
+  await p.evaluate(() => document.querySelector('#gradeSeg [data-g="2"]').click());
   await p.waitForTimeout(250);
   ok('and shows captured once graded', (await dot(p, `[data-pos="${first}"]`)) === 'block');
   const second = await p.evaluate(() => items()[1].k);

@@ -129,8 +129,8 @@ const SEED = `(async () => {
   ok('nothing rendered as undefined or NaN', !/undefined|NaN/.test(text),
     (text.match(/.{24}(undefined|NaN).{24}/) || [''])[0]);
   ok('the legend explains every grade and every severity',
-    ['Normal', 'Monitor', 'Attention', 'Critical'].every(w => sec[sec.length - 1].includes(w)) &&
-    /No failure/.test(sec[sec.length - 1]));
+    ['Normal', 'Incipient', 'Degraded', 'Severe', 'Critical'].every(w => sec[sec.length - 1].includes(w)) &&
+    /no failure/i.test(sec[sec.length - 1]));
 
   console.log('\n  and it does the same in Russian');
   const ru = await p.evaluate(async () => {

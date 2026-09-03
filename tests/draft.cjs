@@ -25,6 +25,7 @@
    round rather than with each other.
 */
 const { chromium } = require(require('./pw.cjs'));
+const { PLANT } = require('./overview.cjs');   // the machine photographs every round now carries
 const B = 'http://127.0.0.1:8093';
 const fails = [];
 const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !== undefined ? '   ' + d : '')); if (!c) fails.push(n); };
@@ -145,6 +146,7 @@ async function takeReadings(p, n) {
   ok('with the numbers unchanged', String(back.first) === '40', String(back.first));
 
   console.log('\nand finishing clears it');
+  await p.evaluate(PLANT);
   await p.evaluate(() => document.getElementById('saveBtn').click());
   await p.waitForTimeout(900);
   await p.evaluate(() => { const d = document.getElementById('dlg'); if (d.open) document.getElementById('dlgOk').click(); });

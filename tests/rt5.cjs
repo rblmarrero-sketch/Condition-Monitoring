@@ -3,6 +3,7 @@
    millimetres never left the draft — and nothing caught it because no suite had
    ever read a saved position back. This one does, for all five. */
 const { chromium } = require(require('./pw.cjs'));
+const { PLANT } = require('./overview.cjs');   // the machine photographs every round now carries
 const B = process.env.CMB || 'http://127.0.0.1:8093';
 const fails = [];
 const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !== undefined ? '   ' + d : '')); if (!c) fails.push(n); };
@@ -86,7 +87,7 @@ const PLAN = [
             document.getElementById('ucMM').dispatchEvent(new Event('input', { bubbles: true }));
             out.mm[k] = Number(document.getElementById('ucMM').value);
           } else {
-            document.querySelector('#gradeSeg [data-g="B"]').click();
+            document.querySelector('#gradeSeg [data-g="2"]').click();
             const cf = document.getElementById('comment');
             cf.value = 'round ' + n + ' pos ' + i;
             cf.dispatchEvent(new Event('input', { bubbles: true }));
@@ -104,6 +105,7 @@ const PLAN = [
 
       // the sheet is modal over the page — the round ends before it is saved
       if (ty === 'UC') { await p.evaluate(() => { if (ucSheetOn()) ucCloseSheet(); }); await p.waitForTimeout(250); }
+      await p.evaluate(PLANT);
       await p.click('#saveBtn'); await p.waitForTimeout(500);
       await dismiss(p);
       expected++;
@@ -114,7 +116,7 @@ const PLAN = [
           .sort((a, b) => String(b.created).localeCompare(String(a.created)))[0];
         if (!rec) return { err: 'no record stored' };
         return {
-          n: Object.keys(rec.positions).length,
+          n: Object.keys(rec.positions).filter(k => k !== '__general').length,   // the machine's photographs are not a position
           pos: keys.map(k => rec.positions[k] || null),
           out: keys.map(k => rec.positions[k] ? wearOut(rec, k, rec.positions[k]) : null),
         };
@@ -148,7 +150,7 @@ const PLAN = [
   const exp = await p.evaluate(async () => {
     const all = await dbAll();
     const uc = all.filter(r => r.type === 'UC').map(recToExport);
-    const items = uc.flatMap(r => r.items);
+    const items = uc.flatMap(r => r.items).filter(i => !i.general);
     return { rounds: uc.length, items: items.length,
       withMM: items.filter(i => i.mm !== '' && i.mm != null).length,
       withPct: items.filter(i => i.wearPct !== '' && i.wearPct != null).length,

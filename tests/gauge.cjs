@@ -161,38 +161,31 @@ const READ = frac => {
      imp.cls.indexOf('wg') < 0, imp.cls);
   ok('and it is questioned instead', imp.warn);
 
-  console.log('\nseverity is drawn as the ramp it is');
-  const keys = ['NOF', 'INC', 'DEG', 'CRI'];
-  /* The severity strip is derived and no longer pressable — a technician
-     choosing a severity independently of the grade is exactly the split answer
-     the record cannot resolve. Drive it the way the app does, through A/B/C/X,
-     and read the spans it paints. */
-  const SEVG = { NOF: 'A', INC: 'B', DEG: 'C', CRI: 'X' };
+  console.log('\nthe grade is drawn as the ramp it is');
+  /* Five cards, 1 to 5. Each wears a rail of its own colour before it is
+     tapped and fills with it when chosen, so the order reads at a glance and
+     the chosen one is unmistakable. */
+  const keys = [1, 2, 3, 4, 5];
   const ramp = {};
-  for (const s of keys) {
-    ramp[s] = { rail: await p.evaluate(x =>
-      getComputedStyle(document.querySelector('#sevSeg .s-' + x), '::before').backgroundColor, s) };
-    await p.evaluate(g => document.querySelector('#gradeSeg .g-' + g).click(), SEVG[s]);
-    /* The buttons transition their background over 100ms, so reading the
-       computed colour in the same tick as the click returns the colour it is
-       LEAVING. Three of the four came back grey that way and the fourth came
-       back correct, which is exactly what a race looks like when it is
-       mistaken for a bug. Let it land. */
+  for (const g of keys) {
+    ramp[g] = { rail: await p.evaluate(x =>
+      getComputedStyle(document.querySelector('#gradeSeg .gcard[data-g="' + x + '"]'), '::before').backgroundColor, g) };
+    await p.evaluate(x => document.querySelector('#gradeSeg .gcard[data-g="' + x + '"]').click(), g);
+    /* The cards transition their background over 100ms; let it land. */
     await p.waitForTimeout(250);
-    ramp[s].on = await p.evaluate(x =>
-      getComputedStyle(document.querySelector('#sevSeg .s-' + x)).backgroundColor, s);
+    ramp[g].on = await p.evaluate(x =>
+      getComputedStyle(document.querySelector('#gradeSeg .gcard[data-g="' + x + '"]')).backgroundColor, g);
   }
   /* Put it back, so nothing downstream inherits a Critical. */
-  await p.evaluate(() => { const b = document.querySelector('#gradeSeg .g-A');
-    b.click(); b.click(); });
-  ok('each step carries its own colour when selected',
-     new Set(keys.map(k => ramp[k].on)).size === 4, keys.map(k => k + '=' + ramp[k].on).join(' '));
+  await p.evaluate(() => { const b = document.querySelector('#gradeSeg .gcard[data-g="5"]'); if (b.classList.contains('on')) b.click(); });
+  ok('each grade carries its own colour when selected',
+     new Set(keys.map(k => ramp[k].on)).size === 5, keys.map(k => k + '=' + ramp[k].on).join(' '));
   ok('and shows it before it is tapped, so the order reads at a glance',
-     new Set(keys.map(k => ramp[k].rail)).size === 4,
+     new Set(keys.map(k => ramp[k].rail)).size === 5,
      keys.map(k => k + '=' + ramp[k].rail).join(' '));
   const transparent = c => /rgba\(0, 0, 0, 0\)|transparent/.test(c);
   ok('no step is left grey', !keys.some(k => transparent(ramp[k].on)),
-     keys.filter(k => transparent(ramp[k].on)).join(',') || 'all four filled');
+     keys.filter(k => transparent(ramp[k].on)).join(',') || 'all five filled');
 
   console.log('\nand the round it belongs to is visible the whole way down');
   const rail = await p.evaluate(() => {
