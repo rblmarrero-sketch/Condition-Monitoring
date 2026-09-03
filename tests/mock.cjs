@@ -8,6 +8,10 @@ const PORT = Number(process.argv[2] || 8098);
 const sidecar = (unit, date, type, grade) => ({
   type: 'cm-inspection-entries', version: 2,
   records: [{ equip: unit, date, type, cls: 'HT', by: 'R. Marrero', smu: '5120',
+    /* The live folder's rounds carry a position, and the inspection head
+       draws a map link for it. The fixture had none, so the link's size on a
+       phone was never measured here and was found on the deployed page. */
+    gps: { lat: 66.6009, lon: 164.4749, acc: 8 },
     items: [{ key: '4C', label: 'Left Rear Final Drive', grade,
               defect: 'Ferrous debris — heavy', defectCode: 'DT14-03', cause: 'Gear wear',
               action: 'SCH', actionLabel: 'Schedule repair', wo: 'N-104' }] }] });
