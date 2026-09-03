@@ -91,10 +91,15 @@ jobs:
               | grep -o 'const BUILD = "[^"]*"' | sed 's/.*"\(.*\)"/\1/' || true
           }
 
-          # Pages can take a couple of minutes; give it a bounded number of tries
-          # rather than one shot, and say which try succeeded.
+          # Pages is not quick and not consistent: builds 242 and 243 both took
+          # about seven minutes from push to public, and a window of three gave
+          # this job a red tick both times for a build that was, in fact,
+          # published. A guard that cries wolf is the noise a real failure hides
+          # in, so the window is fifteen minutes — bounded, and long enough
+          # that a failure here means the build did not publish, not that the
+          # job stopped looking. It says which try succeeded.
           GOT=""
-          for i in 1 2 3 4 5 6; do
+          for i in $(seq 1 45); do
             GOT=$(fetch_build "$BASE/mobile/sw.js")
             [ -n "$GOT" ] && [ "$GOT" = "$WANT" ] && { echo "matched on attempt $i"; break; }
             echo "attempt $i: served '${GOT:-<nothing>}', want '$WANT'"
