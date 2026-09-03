@@ -1203,6 +1203,23 @@
   .agree{display:flex;align-items:center;gap:8px;margin-top:8px;cursor:pointer;
     font-weight:650;color:var(--ink);text-transform:none;letter-spacing:0;}
   .agree input{width:16px;height:16px;flex:0 0 auto;cursor:pointer;}
+  /* The panel gives every input the full width of its row (".srcbody input"
+     below), and that rule came later in this sheet than the one above, so
+     the tick box was 540px wide, invisibly, and the words beside it were
+     pushed out of the notice into a sliver at its edge — the tall yellow box
+     with one word per line that the office reported. Scoped and specific. */
+  .srcbody .agree input{width:16px;height:16px;flex:0 0 auto;}
+  .agree span{flex:1 1 auto;min-width:0;}
+  .note p{margin:0 0 4px;}
+  /* WHAT THE INSPECTOR RECORDED, BESIDE THE GRADE BEING REVIEWED. A reviewer
+     asked to confirm or change a grade needs the photographs and the reading
+     in front of them, not in another panel. */
+  .edfacts{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:12px 16px;padding:12px 16px 0;}
+  .edfacts.nopic{grid-template-columns:1fr;}
+  .edshots{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;align-content:start;}
+  .edshots img,.edshots video{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:6px;cursor:zoom-in;display:block;}
+  .edfacts dl.kv{margin:0;}
+  .edfacts .cm{font-style:italic;color:var(--ink-2);font-size:var(--t-small);margin-top:6px;}
   /* A tile with somewhere to go says so before it is pressed. */
   .kpi.go{cursor:pointer;}
   .kpi.go:hover{border-color:color-mix(in srgb,var(--kc,var(--border)) 55%,var(--border));
@@ -3192,28 +3209,28 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=250"></script>
-<script src="../mobile/hme.js?v=250"></script>
-<script src="../mobile/mp-fc.js?v=250"></script>
-<script src="../mobile/hme-cascade.js?v=250"></script>
-<script src="../mobile/temp-limits.js?v=250"></script>
+<script src="../data/magnetic_plug.js?v=251"></script>
+<script src="../mobile/hme.js?v=251"></script>
+<script src="../mobile/mp-fc.js?v=251"></script>
+<script src="../mobile/hme-cascade.js?v=251"></script>
+<script src="../mobile/temp-limits.js?v=251"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=250"></script>
-<script src="../mobile/normalize.js?v=250"></script>
-<script src="../mobile/grade.js?v=250"></script>
-<script src="../mobile/due.js?v=250"></script>
-<script src="../mobile/wear.js?v=250"></script>
-<script src="../mobile/wear-map.js?v=250"></script>
-<script src="../mobile/lube.js?v=250"></script>
-<script src="../mobile/lube-overrides.js?v=250"></script>
-<script src="../mobile/lube2027.js?v=250"></script>
-<script src="../mobile/lube-tds.js?v=250"></script>
+<script src="../mobile/assets.js?v=251"></script>
+<script src="../mobile/normalize.js?v=251"></script>
+<script src="../mobile/grade.js?v=251"></script>
+<script src="../mobile/due.js?v=251"></script>
+<script src="../mobile/wear.js?v=251"></script>
+<script src="../mobile/wear-map.js?v=251"></script>
+<script src="../mobile/lube.js?v=251"></script>
+<script src="../mobile/lube-overrides.js?v=251"></script>
+<script src="../mobile/lube2027.js?v=251"></script>
+<script src="../mobile/lube-tds.js?v=251"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=250"></script>
-<script src="../mobile/machine-photos.js?v=250"></script>
+<script src="../mobile/upload-defaults.js?v=251"></script>
+<script src="../mobile/machine-photos.js?v=251"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3222,17 +3239,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=250"></script>
-<script src="../mobile/get.js?v=250"></script>
-<script src="../mobile/points.js?v=250"></script>
-<script src="../mobile/uc-points.js?v=250"></script>
-<script src="../mobile/inspect-guide.js?v=250"></script>
-<script src="../mobile/get-figs.js?v=250"></script>
-<script src="../mobile/body-points.js?v=250"></script>
-<script src="../mobile/body-map.js?v=250"></script>
-<script src="../mobile/jspdf.umd.min.js?v=250"></script>
-<script src="../mobile/html2canvas.min.js?v=250"></script>
-<script src="../mobile/report-core.js?v=250"></script>
+<script src="../mobile/machine-fig.js?v=251"></script>
+<script src="../mobile/get.js?v=251"></script>
+<script src="../mobile/points.js?v=251"></script>
+<script src="../mobile/uc-points.js?v=251"></script>
+<script src="../mobile/inspect-guide.js?v=251"></script>
+<script src="../mobile/get-figs.js?v=251"></script>
+<script src="../mobile/body-points.js?v=251"></script>
+<script src="../mobile/body-map.js?v=251"></script>
+<script src="../mobile/jspdf.umd.min.js?v=251"></script>
+<script src="../mobile/html2canvas.min.js?v=251"></script>
+<script src="../mobile/report-core.js?v=251"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -3766,7 +3783,7 @@ const I18N={
   csv:"⬇ Export CSV",
 
   th_unit:"Unit", th_type:"Type", th_date:"Date", th_worst:"Worst severity", th_point:"Component",
-  th_find:"Findings", th_topdef:"Top defect", th_by:"Inspector",
+  th_find:"Findings", th_topdef:"Top defect", th_by:"Inspector", th_inspected:"Inspected", th_temp:"Temperature",
   th_sev:"Grade", th_comp:"Component", th_defect:"Defect", th_cause:"Direct cause",
   th_action:"Action", th_prio:"Priority", th_wo:"WO", th_byshort:"By",
   th_detect:"Found by", th_stood:"Re-measured", th_stood_v:"challenged, inspector stood by it",
@@ -3882,8 +3899,8 @@ const I18N={
   ed_prio:"1C priority",
   ed_defect:"Defect", ed_cause:"Direct cause", ed_comment:"Comment",
   ed_none:"— none —", ed_nosev:"no severity",
-  ed_stale:"This point carries {was} from before severities were derived, while grade {g} means {now}. Every screen already shows {now} — the grade wins. If {was} was the real condition, then the grade is the wrong half: change it below.",
-  ed_stale_ok:"The grade is right — record {now} as the finding and retire the old severity",
+  ed_stale:"The condition recorded on this point, {was}, dates from before the grade set it, and does not match grade {g}. Every screen already shows the grade. If {was} is the real condition, change the grade below.",
+  ed_stale_ok:"The grade is right — retire the old condition",
   ed_find:"type to narrow…", ed_matches:"{n} of {t}", ed_nomatch:"nothing matches — clear the search",
   ed_nothing:"Nothing to correct", ed_nothing_sub:"This inspection has no positions recorded.",
   ed_needdrive:"❌ Set up Google Drive first — corrections are stored there.",
@@ -4507,7 +4524,7 @@ const I18N={
   csv:"⬇ Выгрузить CSV",
 
   th_unit:"Ед.", th_type:"Тип", th_date:"Дата", th_worst:"Худшая степень", th_point:"Узел",
-  th_find:"Находок", th_topdef:"Основной дефект", th_by:"Инспектор",
+  th_find:"Находок", th_topdef:"Основной дефект", th_by:"Инспектор", th_inspected:"Осмотрено", th_temp:"Температура",
   th_sev:"Оценка", th_comp:"Узел", th_defect:"Дефект", th_cause:"Причина",
   th_action:"Действие", th_prio:"Приоритет", th_wo:"Заявка", th_byshort:"Кто",
   th_detect:"Как обнаружено", th_stood:"Перезамер", th_stood_v:"оспорено, замер подтверждён",
@@ -4624,8 +4641,8 @@ const I18N={
   ed_prio:"Приоритет 1С",
   ed_defect:"Дефект", ed_cause:"Непосредственная причина", ed_comment:"Комментарий",
   ed_none:"— нет —", ed_nosev:"степень не указана",
-  ed_stale:"В этой точке осталась {was} — с тех пор, когда степень ещё не выводили, — тогда как оценка {g} означает {now}. На всех экранах уже стоит {now}: побеждает оценка. Если верной была {was}, то ошибочна именно оценка — измените её ниже.",
-  ed_stale_ok:"Оценка верна — записать {now} как находку и снять устаревшую степень",
+  ed_stale:"Записанное состояние точки — {was} — осталось с тех пор, когда его ещё не задавала оценка, и не совпадает с оценкой {g}. На всех экранах уже стоит оценка. Если верным было {was}, измените оценку ниже.",
+  ed_stale_ok:"Оценка верна — снять устаревшее состояние",
   ed_find:"начните вводить…", ed_matches:"{n} из {t}", ed_nomatch:"совпадений нет — очистите поиск",
   ed_nothing:"Нечего исправлять", ed_nothing_sub:"В этом осмотре нет записанных позиций.",
   ed_needdrive:"❌ Сначала настройте Google Диск — правки хранятся там.",
@@ -5804,7 +5821,7 @@ function renderFleet(){
      rides under the action: each says something ABOUT the cell it sits in,
      and as a column of its own it pushed the table off a 1366 screen. */
   const cols=[["equip",t("th_unit"),""],["sev",t("th_grade"),""],["cls",t("th_class"),""],
-              ["defect",t("th_defcomp"),""],["find",t("th_find"),"r hide-m"],
+              ["defect",t("th_defcomp"),""],["date",t("th_inspected"),"hide-m"],["find",t("th_find"),"r hide-m"],
               ["act",t("th_reqact"),""],["open",t("th_open"),"r"],
               ["owner",t("th_owner"),""],["adue",t("th_due"),""],["due",t("th_nextdue"),""]];
   let h=`<thead><tr>`+cols.map(([k,l,cl])=>
@@ -5850,6 +5867,7 @@ function renderFleet(){
       <td>${w?`<span class="pill ${SEV[w].c}" title="${esc(t("th_worst"))}">${SEV[w].l}</span>`:'<span class="muted">\u2014</span>'}</td>
       <td>${clsOf(r)?`<button class="xf" data-xcls="${esc(clsOf(r))}" title="${esc(t("xf_cls"))}">${esc(clsOf(r))}</button>`:'<span class="muted">\u2014</span>'}</td>
       <td>${top?esc(top):'<span class="muted">\u2014</span>'}<div class="muted" style="font-size:11px;margin-top:2px"><span class="tag">${esc(TYPE_LABEL[r.type]||r.type)}</span><span class="mono">${esc(r.date||"")}</span>${r.by?` · ${esc(r.by)}`:""}</div></td>
+      <td class="hide-m"><span class="mono">${esc(r.date||"")}</span><div class="muted" style="font-size:11px;margin-top:2px">${esc(r.by||"")}</div></td>
       <td class="mono r hide-m">${fs.length}</td>
       <td>${lead
           ? (lead.i.action ? esc(actionName(lead.i.action)) : `<span class="muted">—</span>`)
@@ -8504,6 +8522,29 @@ function fillPicker(f,key,q){
 /* keepMsg: re-opened after a save, to show the change applied. Without it the
    re-render wiped the "Saved" line the user had just earned, so a successful
    correction looked like nothing had happened. */
+/* What the inspector recorded on this point — the photographs and the reading
+   — so a grade can be confirmed or changed with the evidence in view rather
+   than from the position's code alone. Nothing here is editable; it is what
+   the controls beneath are judged against. */
+function edFacts(rec,i){
+  const med=(()=>{ try{ return mediaOf(i,rec); }catch(e){ return []; } })();
+  const row=(k,v)=>v==null||v===""?"":`<dt>${esc(k)}</dt><dd>${v}</dd>`;
+  const w=(()=>{ try{ return wearOf(rec,i); }catch(e){ return null; } })();
+  const shots=med.length?`<div class="edshots">${med.map((m,ix)=>m.kind==="video"
+      ?`<video preload="metadata" src="${esc(m.src)}" data-shot="${ix}"></video>`
+      :`<img loading="lazy" src="${esc(m.src)}" alt="${esc(i.key)}" data-shot="${ix}">`).join("")}</div>`:"";
+  const facts=`<dl class="kv">${
+      row(t("th_defect"), i.defect?esc(i.defect)+(i.defectCode?` <span class="muted">${esc(i.defectCode)}</span>`:""):"")+
+      row(t("th_cause"), esc(i.cause||""))+
+      row(t("w_th_meas"), (w&&w.mm!=null)?`<b>${esc(w.mm)}</b> mm${w.wearPct!=null?` · ${esc(w.wearPct)}%`:""}`:"")+
+      row(t("th_temp"), (i.tempV!=null&&i.tempV!=="")?esc(i.tempV)+" °C":"")+
+      row(t("th_detect"), esc(i.detectionLabel||i.detection||""))+
+      row(t("hh_action"), esc(i.actionLabel||(i.action?actionName(i.action):"")))+
+      row(t("th_prio"), i.prio?esc(prioName(i.prio)):"")+
+      row(t("d_resp"), esc(i.resp||""))+row(t("d_target"), esc(i.target||""))+
+      row(t("hh_by"), esc(rec.by||""))}</dl>`;
+  return `<div class="edfacts${shots?"":" nopic"}" data-rk="${esc(ekOf(rec))}" data-ik="${esc(i.key)}">${shots}<div>${facts}</div></div>`;
+}
 function openEdit(key,keepMsg){
   const rec=RECS.find(r=>ekOf(r)===key); if(!rec) return;
   edKey=key;
@@ -8582,11 +8623,12 @@ function openEdit(key,keepMsg){
       <span class="ico" style="${gN?`background:${SEVC[gN]};color:${GRADE.ink(gN)}`:""}">${gN?gN:"·"}</span><div><b>${esc(i.key)}</b>
       <div class="muted">${esc(i.label||"")}${i.comment?` — “${esc(i.comment)}”`:""}</div></div>
       <span class="state">${sev?esc(SEV[sev]?SEV[sev].l:sev):esc(t("ed_nosev"))}</span></div>
+      ${edFacts(rec,i)}
       <div class="srcbody">
         ${stale?`<div class="note" style="margin-top:0">
-          ${esc(t("ed_stale",{g:GRADE.label(gN,lang),
+          <p>${esc(t("ed_stale",{g:GRADE.label(gN,lang),
                 now:GRADE.label(gN,lang),
-                was:(SEV[sevKey(i.sev)]||{}).l||i.sev}))}
+                was:(SEV[sevKey(i.sev)]||{}).l||i.sev}))}</p>
           <label class="agree"><input type="checkbox" data-cfok="${esc(i.key)}">
             <span>${esc(t("ed_stale_ok",{now:GRADE.label(gN,lang)}))}</span></label>
         </div>`:""}
@@ -8679,6 +8721,15 @@ function openEdit(key,keepMsg){
     g.addEventListener("change",()=>syncOvr(g.dataset.k));
   });
   $("edItems").querySelectorAll('[data-f="grade"]').forEach(g=>syncOvr(g.dataset.k));
+  /* A photograph in the review opens in the lightbox with its record and
+     file named, so the editor there stores against the evidence it belongs to. */
+  $("edItems").querySelectorAll(".edfacts [data-shot]").forEach(el=>el.onclick=()=>{
+    const box=el.closest(".edfacts"); const rk=box.dataset.rk, ik=box.dataset.ik;
+    const rec2=RECS.find(r=>ekOf(r)===rk); const it2=rec2&&(rec2.items||[]).find(x=>x.key===ik); if(!it2) return;
+    const med=mediaOf(it2,rec2); const ix=Number(el.dataset.shot)||0;
+    openLB(med.map(m=>[m.orig||m.src,m.kind]), ix, `${rec2.equip} · ${ik} · ${rec2.date}`,
+      { rk, ik, names:med.map(m=>m.name||""), name:(med[ix]||{}).name||"" });
+  });
   if($("editOv").classList.contains("hidden")) ovPush("editOv");
   $("editOv").classList.remove("hidden");
 }
@@ -14231,8 +14282,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=250"></script>
-<script src="sync-adapter.js?v=250"></script>
-<script src="report.js?v=250"></script>
+<script src="drive.js?v=251"></script>
+<script src="sync-adapter.js?v=251"></script>
+<script src="report.js?v=251"></script>
 </body>
 </html>
