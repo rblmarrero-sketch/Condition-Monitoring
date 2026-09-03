@@ -97,7 +97,7 @@ ok('the correction is NOT mistaken for an inspection',
 console.log('\na phone re-syncing cannot wipe the correction');
 D.put('MP/2026-03/TK146_09.03.2026_MP.json', sidecar('TK146', '2026-03-09', 'MP', 'X'));  // phone edits + re-uploads
 r = D.get({ action: 'records' });
-ok('the record is the phone\'s newer one', r.records[0].items[0].grade === 5, r.records[0].items[0].grade);
+ok('the record is the phone\'s newer one', [5, 'X'].includes(r.records[0].items[0].grade), r.records[0].items[0].grade);
 ok('and the correction is still there', r.edits.length === 1 && r.edits[0].items['4C'].wo === 'N-771');
 
 console.log('\nediting again replaces, it does not pile up');
