@@ -147,16 +147,25 @@ const dims = `(async (blob) => {
   await p.fill('#inspector', 'R. Marrero');
   await p.fill('#smu', '6100');
 
-  const viaInput = await p.evaluate(async (mk) => {
+  /* The real path, not a copy of it: the camera control has no standing
+     handler any more (one filed the machine overview on the component), so
+     open it the way the button does and answer the browser's file chooser the
+     way the camera does. */
+  const bigB64 = await p.evaluate(async (mk) => {
     const big = await eval(mk)(3200, 2400);
-    const f = new File([big], 'IMG_0001.jpg', { type: 'image/jpeg' });
-    const dt = new DataTransfer(); dt.items.add(f);
-    const el = document.getElementById('camera');
-    el.files = dt.files;
-    await el.onchange({ target: el });            // the real handler, not a copy
-    const kept = (curP().photos || [])[0];
-    return { orig: big.size, kept: kept ? kept.size : 0, n: (curP().photos || []).length };
+    return new Promise(res => { const r = new FileReader(); r.onload = () => res(String(r.result).split(',')[1]); r.readAsDataURL(big); });
   }, MAKE_BIG);
+  const bigBuf = Buffer.from(bigB64, 'base64');
+  const [chooser] = await Promise.all([
+    p.waitForEvent('filechooser', { timeout: 10000 }),
+    p.evaluate(() => { window.__shot = takePhoto(); }),
+  ]);
+  await chooser.setFiles({ name: 'IMG_0001.jpg', mimeType: 'image/jpeg', buffer: bigBuf });
+  const viaInput = await p.evaluate(async (orig) => {
+    await window.__shot;
+    const kept = (curP().photos || [])[0];
+    return { orig, kept: kept ? kept.size : 0, n: (curP().photos || []).length };
+  }, bigBuf.length);
   ok('a photograph taken through the camera input is shrunk on the way in',
      viaInput.n === 1 && viaInput.kept > 0 && viaInput.kept < viaInput.orig / 3,
      Math.round(viaInput.orig / 1024) + ' KB → ' + Math.round(viaInput.kept / 1024) + ' KB');

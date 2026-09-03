@@ -231,12 +231,14 @@ const shot = async (p, name) => {
 
     /* And the wrapper is actually on the handlers that need it. */
     const wired = await p.evaluate(() => {
-      const ids = ['takeBtn', 'videoBtn', 'exportBtn', 'shareBtn', 'qrPhoto', 'camera', 'provShow'];
+      /* Not #camera: it has no standing handler by design — the caller that
+         opens it takes the file back, so nothing can file a shot elsewhere. */
+      const ids = ['takeBtn', 'videoBtn', 'exportBtn', 'shareBtn', 'qrPhoto', 'provShow'];
       return ids.filter(i => { const el = document.getElementById(i);
         const h = el && (el.onclick || el.onchange);
         return !h || !/try\s*\{/.test(String(h)); });
     });
-    ok('  and every handler that can fail goes through it', wired.length === 0, wired.join(',') || 'all seven');
+    ok('  and every handler that can fail goes through it', wired.length === 0, wired.join(',') || 'all six');
     await ctx.close();
   }
 

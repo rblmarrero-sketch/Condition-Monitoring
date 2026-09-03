@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=246">
+<link rel="manifest" href="manifest.webmanifest?v=247">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=246">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=246">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=246">
+<link rel="apple-touch-icon" href="icon-192.png?v=247">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=247">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=247">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1503,6 +1503,13 @@
          multiple so a point that was photographed four times is four taps
          shorter. -->
     <input id="gallery" type="file" accept="image/*,video/*" multiple class="hidden">
+    <!-- The machine photographs — overview, sides, tray, GET assembly — have
+         controls of their own with NO standing handler. Build 243 to 246 used
+         #camera and #gallery for them, whose standing handlers file every
+         photograph on the current component: the overview landed on 4C as a
+         "Component" shot, the checklist stayed at 0 of 1, and Save refused. -->
+    <input id="mcamera" type="file" accept="image/*" capture="environment" class="hidden">
+    <input id="mgallery" type="file" accept="image/*" class="hidden">
     <!-- Two buttons of equal weight said the two were an equal choice. Nearly
          every record carries photographs and almost none carries a video, so
          the photo button takes the row and the video sits beside it at the
@@ -2058,32 +2065,32 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=246"></script>
-<script src="upload-defaults.js?v=246"></script>
-<script src="hme.js?v=246"></script>
-<script src="mp-fc.js?v=246"></script>
-<script src="hme-cascade.js?v=246"></script>
-<script src="assets.js?v=246"></script>
-<script src="temp-limits.js?v=246"></script>
-<script src="normalize.js?v=246"></script>
-<script src="grade.js?v=246"></script>
-<script src="due.js?v=246"></script>
-<script src="wear.js?v=246"></script>
-<script src="wear-figs.js?v=246"></script>
-<script src="wear-map.js?v=246"></script>
-<script src="machine-photos.js?v=246"></script>
-<script src="machine-fig.js?v=246"></script>
-<script src="get.js?v=246"></script>
-<script src="points.js?v=246"></script>
-<script src="uc-points.js?v=246"></script>
-<script src="inspect-guide.js?v=246"></script>
-<script src="get-figs.js?v=246"></script>
-<script src="body-points.js?v=246"></script>
-<script src="body-map.js?v=246"></script>
-<script src="lube.js?v=246"></script>
-<script src="lube-overrides.js?v=246"></script>
-<script src="lube2027.js?v=246"></script>
-<script src="report-core.js?v=246"></script>
+<script src="native.js?v=247"></script>
+<script src="upload-defaults.js?v=247"></script>
+<script src="hme.js?v=247"></script>
+<script src="mp-fc.js?v=247"></script>
+<script src="hme-cascade.js?v=247"></script>
+<script src="assets.js?v=247"></script>
+<script src="temp-limits.js?v=247"></script>
+<script src="normalize.js?v=247"></script>
+<script src="grade.js?v=247"></script>
+<script src="due.js?v=247"></script>
+<script src="wear.js?v=247"></script>
+<script src="wear-figs.js?v=247"></script>
+<script src="wear-map.js?v=247"></script>
+<script src="machine-photos.js?v=247"></script>
+<script src="machine-fig.js?v=247"></script>
+<script src="get.js?v=247"></script>
+<script src="points.js?v=247"></script>
+<script src="uc-points.js?v=247"></script>
+<script src="inspect-guide.js?v=247"></script>
+<script src="get-figs.js?v=247"></script>
+<script src="body-points.js?v=247"></script>
+<script src="body-map.js?v=247"></script>
+<script src="lube.js?v=247"></script>
+<script src="lube-overrides.js?v=247"></script>
+<script src="lube2027.js?v=247"></script>
+<script src="report-core.js?v=247"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -4348,10 +4355,7 @@ async function takePhoto(){
   if((posRO().photos||[]).length>=MAX_PHOTOS) return;
   const btn=$("takeBtn"); btn.disabled=true;
   try{
-    const f = await (window.CMNative ? CMNative.photo() : new Promise(res=>{
-      const el=$("camera"); const on=()=>{ el.removeEventListener("change",on);
-        const x=el.files&&el.files[0]; el.value=""; res(x||null); };
-      el.addEventListener("change",on); el.click(); }));
+    const f = await (window.CMNative ? CMNative.photo() : oneFileFrom("camera"));
     if(!f) return;                                  // cancelled — not an error
     const p=curP(); (p.photos ||= []);
     // Shrunk here, once, with the button still disabled — not at sync time, when
@@ -4414,11 +4418,13 @@ $("videoBtn").onclick=guard(async ()=>{
   const s=await chooseSource("video"); if(!s) return;
   if(s==="live") $("video").click(); else await openGallery("video");
 });
-/* Still wired: the shell falls back to it if the Camera plugin is missing, and
-   it is the whole implementation on the web. */
-$("camera").onchange=guard(async (e)=>{ const f=e.target.files[0]; e.target.value=""; if(!f) return;
-  const s=await intake(f);
-  const p=curP(); addPos(p, s, "COMPONENT"); renderMedia(); renderChips(); renderGrade(); });
+/* NO STANDING HANDLER ON ANY CAMERA CONTROL. #camera used to have one that
+   filed every photograph on the current component. Anything that opened the
+   control for one shot — the machine overview, the sides, the tray — raced it
+   for the file, lost, and the overview landed on component 4C as a "Component"
+   shot while the checklist stayed at 0 of 1 and Save refused the round. Each
+   control is opened by the caller that wants the file, and the file goes back
+   to that caller only: CMNative.photo() / oneFileFrom(). */
 /* One place that decides whether a clip is short enough, because a clip picked
    out of the gallery has to clear the same bar as one taken here — and the way
    that goes wrong is a second copy of the rule that forgets to. Resolves true
@@ -4535,24 +4541,37 @@ function rememberResp(name){
   try{ let s=JSON.parse(localStorage.getItem("cm_resp_seen")||"[]"); s=[name].concat(s.filter(x=>x!==name)).slice(0,20);
     lsSet("cm_resp_seen",JSON.stringify(s)); }catch(e){}
 }
+/* One file from a control that has no standing handler. #camera and #gallery
+   each have one, registered at load, and a handler registered first runs
+   first: it took the file, filed it on the current component and cleared the
+   control before a listener added for one shot could read it. The machine
+   photographs therefore never reached the machine. They use #mcamera and
+   #mgallery, which nothing else listens to, and the file goes to exactly the
+   caller that asked. */
+function oneFileFrom(id){
+  return new Promise(res=>{
+    const el=$(id); if(!el) return res(null);
+    let done=false;
+    const fin=x=>{ if(done) return; done=true; el.removeEventListener("change",on); el.removeEventListener("cancel",off); res(x); };
+    const on=()=>{ const x=el.files&&el.files[0]; el.value=""; fin(x||null); };
+    const off=()=>fin(null);
+    el.addEventListener("change",on); el.addEventListener("cancel",off);
+    el.click();
+  });
+}
 async function takeMachinePhoto(cat){
   const s=await chooseSource("photo"); if(!s) return;
-  const p=(draft.positions[GEN_KEY] ||= {});
+  let f=null;
   if(s==="live"){
-    const f = await (window.CMNative ? CMNative.photo() : new Promise(res=>{
-      const el=$("camera"); const on=()=>{ el.removeEventListener("change",on);
-        const x=el.files&&el.files[0]; el.value=""; res(x||null); };
-      el.addEventListener("change",on); el.click(); }));
-    if(!f) return;
-    addPos(p, await intake(f), cat);
+    f = await (window.CMNative ? CMNative.photo({input:"mcamera"}) : oneFileFrom("mcamera"));
   } else {
     let got=null;
     if(window.CMNative && CMNative.pick){ try{ got=await CMNative.pick({limit:1}); }catch(_){ got=null; } }
-    if(!got){ got=await new Promise(res=>{ const g=$("gallery"); g.accept="image/*"; g.multiple=false;
-      const on=()=>{ g.removeEventListener("change",on); const x=[...(g.files||[])]; g.value=""; res(x); };
-      g.addEventListener("change",on); g.click(); }); }
-    if(got && got[0]) addPos(p, await intake(got[0]), cat);
+    f = got ? (got[0]||null) : await oneFileFrom("mgallery");
   }
+  if(!f) return;                                    // cancelled — not an error
+  const p=(draft.positions[GEN_KEY] ||= {});
+  addPos(p, await intake(f), cat);
   renderMachinePhotos(); draftFlush();
 }
 function dropMachinePhoto(cat,i){
@@ -10428,7 +10447,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="246";
+const BUILD="247";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

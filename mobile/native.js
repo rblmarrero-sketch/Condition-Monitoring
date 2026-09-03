@@ -45,25 +45,32 @@
      Both paths hand back a Blob, because that is what the record stores, what
      filesForRecord() names, and what the uploader sends. A native path that
      returned a file URI would push the difference into every one of them. */
-  function webPhoto() {
+  /* opts.input names the control: "camera" for a component's photograph,
+     "mcamera" for the machine's own — overview, sides, tray, assembly. Two
+     controls, because a control with a standing handler files the shot on
+     whoever registered first; these have none, and the file comes back to
+     exactly the caller that opened it. */
+  function webPhoto(opts) {
     return new Promise(function (resolve) {
-      var el = document.getElementById("camera");
+      var el = document.getElementById((opts && opts.input) || "camera");
       if (!el) return resolve(null);
       var done = false;
-      var onChange = function () {
-        el.removeEventListener("change", onChange);
+      var fin = function (f) {
         if (done) return; done = true;
-        var f = el.files && el.files[0]; el.value = "";
+        el.removeEventListener("change", onChange); el.removeEventListener("cancel", onCancel);
         resolve(f || null);
       };
+      var onChange = function () { var f = el.files && el.files[0]; el.value = ""; fin(f); };
+      var onCancel = function () { fin(null); };
       el.addEventListener("change", onChange);
+      el.addEventListener("cancel", onCancel);
       el.click();
     });
   }
 
   async function nativePhoto(opts) {
     var Camera = plug("Camera");
-    if (!Camera) return webPhoto();
+    if (!Camera) return webPhoto(opts);
     try {
       var shot = await Camera.getPhoto({
         quality: (opts && opts.quality) || 82,
@@ -287,7 +294,7 @@
   global.CMNative = {
     get native() { return NATIVE; },
     where: where,
-    photo: function (opts) { return NATIVE ? nativePhoto(opts) : webPhoto(); },
+    photo: function (opts) { return NATIVE ? nativePhoto(opts) : webPhoto(opts); },
     pick: nativePick,
     files: Files,
     net: Net,
