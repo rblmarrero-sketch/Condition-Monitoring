@@ -1145,6 +1145,9 @@
     color:var(--muted);}
   .pxstage{position:relative;display:inline-block;max-width:100%;overflow:hidden;
     touch-action:none;}
+  .pxframe{position:relative;display:inline-block;line-height:0;max-width:100%;
+    transform-origin:center center;}
+  .pxframe #lbimg{display:block;}
   .lb.editing .pxstage{cursor:grab;}
   .lb.editing .pxstage.grabbing{cursor:grabbing;}
   .lb.cropping .pxstage{cursor:crosshair;}
@@ -3091,12 +3094,18 @@
 
 <div class="lb" id="lb"><button class="x" id="lbx">&times;</button>
   <button class="nav prev" id="lbPrev" aria-label="Previous">&#8249;</button>
-  <div class="pxstage" id="pxStage"><img id="lbimg" alt="">
-    <!-- The crop box lives on the picture, in fractions of it, which is exactly
-         how the recipe stores it — so what is dragged IS what is saved, with no
-         second coordinate system to disagree with the first. -->
-    <div class="pxcrop hidden" id="pxCrop">
-      <i data-h="nw"></i><i data-h="ne"></i><i data-h="sw"></i><i data-h="se"></i>
+  <div class="pxstage" id="pxStage">
+    <!-- ONE FRAME FOR THE PICTURE AND THE BOX. The crop box lives on the
+         picture, in fractions of it, which is exactly how the recipe stores
+         it — so what is dragged IS what is saved. It sits INSIDE the element
+         that zooms and pans, so at 300% the box is still on the pixels it
+         names; as a sibling it stayed where it was while the picture moved
+         out from under it, and a drag under zoom stored a frame nobody had
+         drawn. -->
+    <div class="pxframe" id="pxFrame"><img id="lbimg" alt="">
+      <div class="pxcrop hidden" id="pxCrop">
+        <i data-h="nw"></i><i data-h="ne"></i><i data-h="sw"></i><i data-h="se"></i>
+      </div>
     </div>
   </div>
   <video id="lbvid" controls playsinline></video>
@@ -3183,28 +3192,28 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=248"></script>
-<script src="../mobile/hme.js?v=248"></script>
-<script src="../mobile/mp-fc.js?v=248"></script>
-<script src="../mobile/hme-cascade.js?v=248"></script>
-<script src="../mobile/temp-limits.js?v=248"></script>
+<script src="../data/magnetic_plug.js?v=249"></script>
+<script src="../mobile/hme.js?v=249"></script>
+<script src="../mobile/mp-fc.js?v=249"></script>
+<script src="../mobile/hme-cascade.js?v=249"></script>
+<script src="../mobile/temp-limits.js?v=249"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=248"></script>
-<script src="../mobile/normalize.js?v=248"></script>
-<script src="../mobile/grade.js?v=248"></script>
-<script src="../mobile/due.js?v=248"></script>
-<script src="../mobile/wear.js?v=248"></script>
-<script src="../mobile/wear-map.js?v=248"></script>
-<script src="../mobile/lube.js?v=248"></script>
-<script src="../mobile/lube-overrides.js?v=248"></script>
-<script src="../mobile/lube2027.js?v=248"></script>
-<script src="../mobile/lube-tds.js?v=248"></script>
+<script src="../mobile/assets.js?v=249"></script>
+<script src="../mobile/normalize.js?v=249"></script>
+<script src="../mobile/grade.js?v=249"></script>
+<script src="../mobile/due.js?v=249"></script>
+<script src="../mobile/wear.js?v=249"></script>
+<script src="../mobile/wear-map.js?v=249"></script>
+<script src="../mobile/lube.js?v=249"></script>
+<script src="../mobile/lube-overrides.js?v=249"></script>
+<script src="../mobile/lube2027.js?v=249"></script>
+<script src="../mobile/lube-tds.js?v=249"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=248"></script>
-<script src="../mobile/machine-photos.js?v=248"></script>
+<script src="../mobile/upload-defaults.js?v=249"></script>
+<script src="../mobile/machine-photos.js?v=249"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3213,17 +3222,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=248"></script>
-<script src="../mobile/get.js?v=248"></script>
-<script src="../mobile/points.js?v=248"></script>
-<script src="../mobile/uc-points.js?v=248"></script>
-<script src="../mobile/inspect-guide.js?v=248"></script>
-<script src="../mobile/get-figs.js?v=248"></script>
-<script src="../mobile/body-points.js?v=248"></script>
-<script src="../mobile/body-map.js?v=248"></script>
-<script src="../mobile/jspdf.umd.min.js?v=248"></script>
-<script src="../mobile/html2canvas.min.js?v=248"></script>
-<script src="../mobile/report-core.js?v=248"></script>
+<script src="../mobile/machine-fig.js?v=249"></script>
+<script src="../mobile/get.js?v=249"></script>
+<script src="../mobile/points.js?v=249"></script>
+<script src="../mobile/uc-points.js?v=249"></script>
+<script src="../mobile/inspect-guide.js?v=249"></script>
+<script src="../mobile/get-figs.js?v=249"></script>
+<script src="../mobile/body-points.js?v=249"></script>
+<script src="../mobile/body-map.js?v=249"></script>
+<script src="../mobile/jspdf.umd.min.js?v=249"></script>
+<script src="../mobile/html2canvas.min.js?v=249"></script>
+<script src="../mobile/report-core.js?v=249"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -10143,18 +10152,33 @@ function pxRender(img, recipe, maxW){
    which reads the file as text and cannot tell a comment from markup — and it
    is right to be blunt about that: a missing alt is worth more than my
    phrasing.) */
+/* THE BOX IS DRAWN OVER THE FRAME IT MEASURES. While the panel is open and
+   the draft carries a crop, the picture is painted WITHOUT the crop — rotated
+   and straightened, whole — and the box sits on it in the fractions the
+   recipe stores. Until build 249 the crop was painted in as well, and the box
+   was then laid in fractions over an already-cropped picture: it never showed
+   the frame it stood for, jumped after every drag as the picture re-cropped
+   beneath it, and Save stored a frame nobody had seen. Once the panel closes
+   the crop is painted, because that is what is stored. */
+function pxFraming(){
+  return !!(pxDraft && pxDraft.crop) && !$("pxPanel").classList.contains("hidden");
+}
 function pxPaint(){
   const img=$("lbimg");
   if(!lbCtx || !pxDraft || pxCompare){ if(pxOrigSrc) img.src=pxOrigSrc; return; }
-  if(!pxTouched(pxDraft)){ if(pxOrigSrc) img.src=pxOrigSrc; return; }
+  const recipe = pxFraming() ? Object.assign({}, pxDraft, {crop:null}) : pxDraft;
+  if(!pxTouched(recipe)){ if(pxOrigSrc) img.src=pxOrigSrc; return; }
+  const want=++pxPaintSeq;
   const probe=new Image();
   probe.onload=()=>{
-    const c=pxRender(probe,pxDraft,2000);
+    if(want!==pxPaintSeq) return;                 // a later paint has superseded this one
+    const c=pxRender(probe,recipe,2000);
     if(c) try{ img.src=c.toDataURL("image/jpeg",0.92); }catch(e){}
   };
   probe.onerror=()=>{};
   probe.src=pxOrigSrc;
 }
+let pxPaintSeq=0;
 let pxOrigSrc="";
 /* The panel offers itself only where there is something to edit and an original
    safely in place. A photo still uploading has no original to be
@@ -10228,7 +10252,7 @@ function pxOpenPanel(){
   const busy=pxPending();
   ["pxRotL","pxRotR","pxStr","pxRatio","pxCap","pxPref","pxSave"].forEach(id=>{
     const el=$(id); if(el) el.disabled=busy; });
-  pxCropSync();
+  pxPaint(); pxCropSync();
 }
 /* WHAT THE LIGHTBOX SHOWS, ONCE THE PANEL IS SHUT, IS WHAT IS STORED.
 
@@ -10421,10 +10445,10 @@ $("lb").onclick=e=>{ if(e.target.id==="lb"||e.target.id==="lbx") lbClose(); };
    photograph, and the saved rendition is identical whether they did or not. */
 let pxZ=1, pxPanX=0, pxPanY=0;
 function pxApplyZoom(){
-  const img=$("lbimg");
-  if(!img) return;
-  img.style.transformOrigin="center center";
-  img.style.transform=`scale(${pxZ}) translate(${pxPanX}px, ${pxPanY}px)`;
+  const fr=$("pxFrame")||$("lbimg");
+  if(!fr) return;
+  fr.style.transformOrigin="center center";
+  fr.style.transform=`scale(${pxZ}) translate(${pxPanX}px, ${pxPanY}px)`;
   const v=$("pxZoomV"); if(v) v.textContent=Math.round(pxZ*100)+"%";
   const r=$("pxZoom"); if(r && Math.abs(+r.value-pxZ*100)>1) r.value=String(Math.round(pxZ*100));
 }
@@ -10513,9 +10537,9 @@ function pxCropSync(){
     mode=null; handle=null; start=null;
     stage.classList.remove("grabbing");
     try{ stage.releasePointerCapture(e.pointerId); }catch(err){}
-    /* Repaint the preview from the recipe only once the gesture is finished —
-       re-rendering a canvas on every pointermove is how a drag turns to glue. */
-    if(wasCrop) pxPaint();
+    /* The frame under the box does not change with the box, so there is
+       nothing to repaint; the crop is painted when the panel closes. */
+    if(wasCrop) pxCropSync();
   };
   stage.addEventListener("pointerup",end);
   stage.addEventListener("pointercancel",end);
@@ -14112,8 +14136,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=248"></script>
-<script src="sync-adapter.js?v=248"></script>
-<script src="report.js?v=248"></script>
+<script src="drive.js?v=249"></script>
+<script src="sync-adapter.js?v=249"></script>
+<script src="report.js?v=249"></script>
 </body>
 </html>

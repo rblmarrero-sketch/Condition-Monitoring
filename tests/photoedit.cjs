@@ -108,7 +108,7 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
   const zoom = await p.evaluate(() => {
     const before = JSON.stringify(pxDraft);
     $("pxZoom").value = "250"; $("pxZoom").dispatchEvent(new Event("input", { bubbles: true }));
-    return { z: pxZ, transform: $("lbimg").style.transform,
+    return { z: pxZ, transform: $("pxFrame").style.transform,
              label: $("pxZoomV").textContent, recipeUnchanged: JSON.stringify(pxDraft) === before };
   });
   ok(Math.abs(zoom.z - 2.5) < 0.01, "the slider zooms", zoom.label);
