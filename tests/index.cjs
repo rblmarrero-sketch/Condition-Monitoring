@@ -172,7 +172,7 @@ const PHONE = o => {
       hit: teamAll().find(r => r.u === 'DZ044') || null }));
     note('second phone', JSON.stringify(after));
     ok('and the next check on this phone has it', after.n === before + 1, before + ' -> ' + after.n);
-    ok('  named, dated, and graded', after.hit && after.hit.by === 'Хасенов' && after.hit.g === 'X',
+    ok('  named, dated, and graded', after.hit && after.hit.by === 'Хасенов' && after.hit.g === 5,
        JSON.stringify(after.hit));
     ok('  with the id that opens it', !!(after.hit && after.hit.f), JSON.stringify(after.hit));
 

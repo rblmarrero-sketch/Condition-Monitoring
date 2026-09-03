@@ -102,7 +102,7 @@ const pane = p => p.evaluate(() => [...document.querySelectorAll('main > .pane')
   ok('the unit is still selected', (await p.evaluate(() => curEquip)) === 'TK146');
   ok('the inspector is still there', (await p.inputValue('#inspector')) === 'R. Marrero');
   ok('so are the machine hours', (await p.inputValue('#smu')) === '18422');
-  ok('the grade held', await p.evaluate(k => draft.positions[k] && draft.positions[k].grade === 'C', k));
+  ok('the grade held', await p.evaluate(k => draft.positions[k] && draft.positions[k].grade === 3, k));
   ok('and the comment held',
     await p.evaluate(k => (draft.positions[k] || {}).comment === 'fine swarf, ~2 mm chips', k));
   ok('the signature pad has real height after the switch',

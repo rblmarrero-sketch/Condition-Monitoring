@@ -42,7 +42,7 @@ process.on('exit', bye); process.on('SIGINT', () => { bye(); process.exit(1); })
   await p.evaluate(() => CMDrive.load(null, { full: true }));
   await p.waitForTimeout(900);
 
-  /* The seed's TK146 magnetic-plug round is graded C on position 4C. */
+  /* The seed's TK146 magnetic-plug round is graded 3 (C, on the old scale) on position 4C. */
   console.log('\na magnetic plug round, graded C at the machine');
   await p.evaluate(() => openEdit('TK146|2026-03-09|MP'));
   await p.waitForTimeout(500);
@@ -51,14 +51,14 @@ process.on('exit', bye); process.on('SIGINT', () => { bye(); process.exit(1); })
   const sel = 'select[data-f="grade"][data-k="4C"]';
   ok('  and the condition is a field, not a read-only badge', !!(await p.$(sel)));
   ok('  showing what the inspector recorded',
-     (await p.$eval(sel, e => e.value).catch(() => null)) === 'C',
+     (await p.$eval(sel, e => e.value).catch(() => null)) === '3',
      await p.$eval(sel, e => e.value).catch(() => '(missing)'));
   ok('  offering every grade the app can capture',
      (await p.$$eval(sel + ' option', o => o.map(x => x.value).filter(Boolean).join(''))
-        .catch(() => '')) === 'ABCX');
+        .catch(() => '')) === '12345');
 
-  console.log('\nthe office corrects it to A');
-  await p.selectOption(sel, 'A');
+  console.log('\nthe office corrects it to 1');
+  await p.selectOption(sel, '1');
   await p.fill('#edBy', 'R. Marrero').catch(() => {});
   await p.fill('#edReason', 'Re-read under light — no ferrous debris').catch(() => {});
   await p.click('#edSave');
@@ -69,7 +69,7 @@ process.on('exit', bye); process.on('SIGINT', () => { bye(); process.exit(1); })
   const stored = await fetch(EXEC + '?action=records').then(r => r.json())
     .then(j => (j.edits || []).find(e => e.key === 'TK146|2026-03-09|MP'));
   ok('the correction is stored beside the record', !!stored, stored ? 'saved' : '(nothing at the endpoint)');
-  ok('  carrying the new grade', !!stored && ((stored.items || {})['4C'] || {}).grade === 'A',
+  ok('  carrying the new grade', !!stored && ((stored.items || {})['4C'] || {}).grade === 1,
      JSON.stringify(stored && stored.items));
 
   /* And is applied where a reader looks. A correction that saves and does not
@@ -98,8 +98,8 @@ process.on('exit', bye); process.on('SIGINT', () => { bye(); process.exit(1); })
   await p.waitForTimeout(1200);
   await p.evaluate(() => openEdit('TK146|2026-03-09|MP'));
   await p.waitForTimeout(500);
-  ok('and it is still A when the panel is opened again',
-     (await p.$eval(sel, e => e.value).catch(() => null)) === 'A',
+  ok('and it is still 1 when the panel is opened again',
+     (await p.$eval(sel, e => e.value).catch(() => null)) === '1',
      await p.$eval(sel, e => e.value).catch(() => '(missing)'));
   ok('the dashboard raised nothing throughout', !errs.length, errs.slice(0, 2).join(' | ') || 'clean');
 

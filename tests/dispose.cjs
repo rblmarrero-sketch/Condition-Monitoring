@@ -268,7 +268,7 @@ const REC = {
                voided: !!rec._void };
     });
     ok('the millimetre survives every decision about the photographs', kept.mm === 12, String(kept.mm));
-    ok('so does the grade', kept.grade === 'C', String(kept.grade));
+    ok('so does the grade', kept.grade === 3, String(kept.grade));
     ok('and the inspector\'s words', /thinning/.test(kept.comment || ''), kept.comment);
     ok('and the round is not withdrawn for any of it', kept.voided === false);
   }

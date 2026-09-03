@@ -290,7 +290,7 @@ const LIST = `(function(){
     .then(j => (j.edits || []).find(e => e.key === NGK));
   ok('the decision reaches the endpoint, not just this tab', !!stored);
   ok('  carrying the grade the engineer chose',
-     !!stored && ((stored.items || {})['4D'] || {}).grade === 'C',
+     !!stored && ((stored.items || {})['4D'] || {}).grade === 3,
      JSON.stringify(stored && stored.items && stored.items['4D']));
   ok('  and the severity written from it, so the record cannot contradict itself',
      !!stored && ((stored.items || {})['4D'] || {}).sev === 'DEG',

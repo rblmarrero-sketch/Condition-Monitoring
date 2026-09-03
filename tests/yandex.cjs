@@ -225,7 +225,7 @@ function shape(v, depth) {
   const rec = (back.records || []).find(r => r.equip === 'TK149');
   ok('the round comes back through ?action=records', !!rec, rec ? rec.date : '(missing)');
   ok('  with its findings intact',
-     !!rec && (rec.items || []).some(i => i.grade === 'C' && /DT14-03/.test(i.defectCode || i.defect || '')),
+     !!rec && (rec.items || []).some(i => (i.grade === 3 || i.grade === 'C') && /DT14-03/.test(i.defectCode || i.defect || '')),
      rec ? JSON.stringify((rec.items || [])[0] || {}).slice(0, 80) : '');
   const idx = (back.index || []).filter(f => f.name.indexOf('TK149') === 0);
   ok('  and the photographs are in the media index, so a report can fetch them',

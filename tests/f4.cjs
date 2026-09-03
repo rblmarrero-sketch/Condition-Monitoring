@@ -121,8 +121,8 @@ const save = async p => { await p.click('#saveBtn'); await p.waitForTimeout(500)
   ok('the grade buttons show that position', await p.evaluate(() =>
     !!document.querySelector('#gradeSeg [data-g="5"].on')));
   ok('the earlier positions were not lost', await p.evaluate(([a, c]) =>
-    draft.positions[a] && draft.positions[a].grade === 'A' &&
-    draft.positions[c] && draft.positions[c].grade === 'B', [all[0], all[1]]));
+    draft.positions[a] && draft.positions[a].grade === 1 &&
+    draft.positions[c] && draft.positions[c].grade === 2, [all[0], all[1]]));
   await close(p);
   await ctx.close();
 

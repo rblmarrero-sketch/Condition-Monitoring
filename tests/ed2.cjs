@@ -62,14 +62,13 @@ const openHist = async (p,unit) => {
      concludes it is worse than it was graded changes the GRADE, which is the
      finding, and Critical follows. There is no severity control to disagree
      with it and nothing left to justify. */
-  ok('severity is shown, not chosen',
-     (await p.$('[data-f="sev"][data-k="4C"]'))===null,
-     'no severity control on the correction form');
-  await p.selectOption('[data-f="grade"][data-k="4C"]','X');
+  ok('severity is neither chosen nor shown — the grade is the assessment',
+     (await p.$('[data-f="sev"][data-k="4C"]'))===null && (await p.$('[data-sevout="4C"]'))===null,
+     'no severity control or read-out on the correction form');
+  await p.selectOption('[data-f="grade"][data-k="4C"]','5');
   await p.waitForTimeout(150);
-  ok('and it follows the grade on screen at once',
-     /critical/i.test(await p.textContent('[data-sevout="4C"]')),
-     await p.textContent('[data-sevout="4C"]'));
+  ok('raising the grade asks for no reason',
+     await p.$eval('[data-gwhy="4C"]', e => e.classList.contains('hidden')));
   await p.selectOption('[data-f="action"][data-k="4C"]','RA-06');   // matrix code for "repair immediately"
   await p.fill('[data-f="wo"][data-k="4C"]','N-771');
   await p.fill('#edNote','plug re-read under magnification');
@@ -81,7 +80,7 @@ const openHist = async (p,unit) => {
   ok('the recommendation changed',item.action==='RA-06'&&/Repair immediately/.test(item.actionLabel||''),
      `${item.action} / ${item.actionLabel}`);
   ok('the WO is set',item.wo==='N-771',item.wo);
-  ok('the grade the engineer set is on the record',item.grade==='X',item.grade);
+  ok('the grade the engineer set is on the record, as a number',item.grade===5,item.grade);
   ok('what was not touched is untouched',item.defect==='Ferrous debris — heavy',item.defect);
   /* The mapped value is written beside the effective one and they agree,
      because there is now only one of them. */
@@ -117,7 +116,7 @@ const openHist = async (p,unit) => {
   await p.waitForFunction(()=>/^(✅|❌)/.test(document.getElementById('drvMsg').textContent.trim()),null,{timeout:20000});
   await p.click('#dataClose'); await p.waitForTimeout(300);
   const after=await item0(p);
-  ok('the phone\'s new grade came through',after.grade==='X',after.grade);
+  ok('the phone\'s new grade came through — a letter off an old phone, read as 5',after.grade===5,after.grade);
   ok('and the correction still applies',after.sev==='CRI'&&after.wo==='N-771',
      `${after.sev} / ${after.wo}`);
 

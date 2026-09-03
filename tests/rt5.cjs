@@ -131,7 +131,7 @@ const PLAN = [
         ok(ty + ' ' + u + ': wear % and band resolve on read-back', derived,
           JSON.stringify(back.out.map(w => w && [w.wearPct, w.band, w.refSrc])));
       } else {
-        ok(ty + ' ' + u + ': the grade survived the save', back.pos.every(q => q && q.grade === 'B'));
+        ok(ty + ' ' + u + ': the grade survived the save', back.pos.every(q => q && q.grade === 2));
         ok(ty + ' ' + u + ': the comment survived the save',
           back.pos.every((q, i) => q && q.comment === 'round ' + n + ' pos ' + i));
         if (ty === 'TEMP') ok(ty + ' ' + u + ': the temperature survived the save',
