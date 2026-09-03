@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=245">
+<link rel="manifest" href="manifest.webmanifest?v=246">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=245">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=245">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=245">
+<link rel="apple-touch-icon" href="icon-192.png?v=246">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=246">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=246">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2058,32 +2058,32 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=245"></script>
-<script src="upload-defaults.js?v=245"></script>
-<script src="hme.js?v=245"></script>
-<script src="mp-fc.js?v=245"></script>
-<script src="hme-cascade.js?v=245"></script>
-<script src="assets.js?v=245"></script>
-<script src="temp-limits.js?v=245"></script>
-<script src="normalize.js?v=245"></script>
-<script src="grade.js?v=245"></script>
-<script src="due.js?v=245"></script>
-<script src="wear.js?v=245"></script>
-<script src="wear-figs.js?v=245"></script>
-<script src="wear-map.js?v=245"></script>
-<script src="machine-photos.js?v=245"></script>
-<script src="machine-fig.js?v=245"></script>
-<script src="get.js?v=245"></script>
-<script src="points.js?v=245"></script>
-<script src="uc-points.js?v=245"></script>
-<script src="inspect-guide.js?v=245"></script>
-<script src="get-figs.js?v=245"></script>
-<script src="body-points.js?v=245"></script>
-<script src="body-map.js?v=245"></script>
-<script src="lube.js?v=245"></script>
-<script src="lube-overrides.js?v=245"></script>
-<script src="lube2027.js?v=245"></script>
-<script src="report-core.js?v=245"></script>
+<script src="native.js?v=246"></script>
+<script src="upload-defaults.js?v=246"></script>
+<script src="hme.js?v=246"></script>
+<script src="mp-fc.js?v=246"></script>
+<script src="hme-cascade.js?v=246"></script>
+<script src="assets.js?v=246"></script>
+<script src="temp-limits.js?v=246"></script>
+<script src="normalize.js?v=246"></script>
+<script src="grade.js?v=246"></script>
+<script src="due.js?v=246"></script>
+<script src="wear.js?v=246"></script>
+<script src="wear-figs.js?v=246"></script>
+<script src="wear-map.js?v=246"></script>
+<script src="machine-photos.js?v=246"></script>
+<script src="machine-fig.js?v=246"></script>
+<script src="get.js?v=246"></script>
+<script src="points.js?v=246"></script>
+<script src="uc-points.js?v=246"></script>
+<script src="inspect-guide.js?v=246"></script>
+<script src="get-figs.js?v=246"></script>
+<script src="body-points.js?v=246"></script>
+<script src="body-map.js?v=246"></script>
+<script src="lube.js?v=246"></script>
+<script src="lube-overrides.js?v=246"></script>
+<script src="lube2027.js?v=246"></script>
+<script src="report-core.js?v=246"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2412,6 +2412,9 @@ const I18N = {
     uc_no_unknown:"This unit is not in the register, so there is no model to measure against.",
     upd_avail:"Build v{n} is downloading itself — this phone is on v{cur}. Nothing to do.",
     upd_go:"Update now",
+    upd_nosig:"No signal — the app you have is kept. Try again in coverage.",
+    upd_current:"On the latest build.",
+    upd_fail:"The download could not finish — nothing changed. Try again in coverage.",
     unit_guess:"{u} is not in the asset register. Showing the standard {c} component list — check it fits the machine, and ask for the register to be updated.",
     uc_fig_hide:"Hide the diagram", uc_fig_show:"Show the diagram",
     g_show:"How to check this", g_hide:"Hide how to check this",
@@ -2918,6 +2921,9 @@ const I18N = {
     uc_no_unknown:"Этой единицы нет в реестре, поэтому не с чем сравнивать.",
     upd_avail:"Сборка v{n} загружается сама — на телефоне v{cur}. Делать ничего не нужно.",
     upd_go:"Обновить",
+    upd_nosig:"Нет сигнала — текущая версия сохранена. Повторите при связи.",
+    upd_current:"Установлена последняя сборка.",
+    upd_fail:"Загрузка не завершилась — ничего не изменилось. Повторите при связи.",
     unit_guess:"{u} нет в реестре оборудования. Показан стандартный перечень узлов «{c}» — проверьте соответствие машине и запросите обновление реестра.",
     uc_fig_hide:"Скрыть схему", uc_fig_show:"Показать схему",
     g_show:"Как проверять", g_hide:"Скрыть как проверять",
@@ -10422,7 +10428,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="245";
+const BUILD="246";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -12625,25 +12631,15 @@ if("serviceWorker" in navigator && window.isSecureContext){ let reloaded=false;
   /* update() rejects when there is no signal. That is the ordinary state of a
      phone in the pit, not a fault, so swallow it here — an uncaught rejection
      would otherwise surface as a page error on every offline open. */
-  navigator.serviceWorker.register("sw.js")
+  /* updateViaCache:"none" — Pages serves sw.js with a ten-minute max-age, and a
+     registration that honours it can answer reg.update() from the HTTP cache with
+     the build it already has. The page has just read the new number past every
+     cache; the worker must fetch the same way. */
+  navigator.serviceWorker.register("sw.js",{updateViaCache:"none"})
     .then(reg=>{ if(reg&&reg.update) return reg.update(); })
     .catch(()=>{}); }
 
 /* ===================== force-update (clears cache + service worker) ===================== */
-/* Every asset the app loads. Listed here so "Update" can re-fetch each one:
-   clearing the service worker and Cache Storage is NOT enough, because the
-   browser's own HTTP cache still holds them and a reload does not bust the
-   <script src> URLs — only the page's own URL. cache:"reload" fetches past the
-   HTTP cache AND replaces what is stored there, so the reload that follows
-   picks up the new files. */
-const SHELL_ASSETS=["index.html","manifest.webmanifest","native.js","jsQR.js","qrcode.js","upload-defaults.js",
-  "hme.js","hme-cascade.js","mp-fc.js","assets.js","temp-limits.js",
-  "due.js","wear.js","wear-figs.js","wear-map.js","machine-photos.js","machine-fig.js","get.js","points.js","uc-points.js","report-core.js",
-  /* The lubrication reference was never on this list, so a rebuilt lube.js
-     could be served from the HTTP cache after an update - the app would say it
-     was current and hand a fitter last month's capacities. */
-  "lube.js","lube2027.js","lube-tds.js","body-points.js","body-map.js",
-  "jspdf.umd.min.js","html2canvas.min.js","inspect-guide.js","get-figs.js","sw.js"];
 /* "Am I on the latest build?" used to be unanswerable from inside the app: the
    service worker serves the copy it has, and a stale page looks exactly like a
    current one. So ask. sw.js carries the build number, it is tiny, and fetching
@@ -12736,16 +12732,116 @@ setTimeout(checkForNewBuild, 1500);
    this afternoon. */
 setInterval(checkForNewBuild, 300000);
 
-const fu=$("forceUpdate"); if(fu) fu.onclick=async (e)=>{ e.preventDefault();
-  const old=fu.textContent; fu.textContent="⟳ …";
-  try{ if("serviceWorker" in navigator){ const rs=await navigator.serviceWorker.getRegistrations(); await Promise.all(rs.map(r=>r.unregister())); } }catch(_){}
-  try{ if(window.caches){ const ks=await caches.keys(); await Promise.all(ks.map(k=>caches.delete(k))); } }catch(_){}
-  await Promise.all(SHELL_ASSETS.map(u=>
-    fetch(u+"?v="+BUILD,{cache:"reload"}).catch(()=>
-      fetch(u,{cache:"reload"}).catch(()=>{}))));   // versioned and bare, both get refreshed
-  fu.textContent=old;
-  location.replace(location.pathname+"?fresh="+Date.now()); };
-// …and drop that marker again so it does not linger in the address bar
+/* UPDATE MUST NEVER DESTROY THE COPY THAT WORKS.
+
+   This button used to unregister the service worker, delete every cache, swallow
+   any refetch that failed, and navigate. On a phone with a flaky link that left
+   NOTHING — no worker, no cache — and the navigation came back as Safari's own
+   "the network connection was lost", with no way back until a full online load
+   succeeded. It was reported from the field on build 244, minutes after an
+   inspector was told to tap it. sw.js is written so a build cannot take over
+   until it is complete and the old cache is not deleted until then; this
+   handler defeated all of that from outside.
+
+   Now it does only what the automatic path does, on request: ask the worker to
+   fetch the new build into its own cache, wait for the worker to prove it
+   complete and take over, and reload. If the download cannot finish, nothing
+   has changed and the app says so. No path here unregisters a worker or
+   deletes a cache — tests/updatesafe.cjs reads this file to make sure. */
+const fu=$("forceUpdate");
+async function updateNow(){
+  const say=s=>{ if(fu) fu.textContent=s; };
+  const old=fu?fu.textContent:"", restore=(ms)=>setTimeout(()=>say(old), ms||3500);
+  if(!navigator.onLine){ say(t("upd_nosig")); restore(); return false; }
+  say("⟳ …");
+  if(!("serviceWorker" in navigator) || !window.isSecureContext){ location.reload(); return true; }
+  /* What build is on the server? Fetched past every cache, like checkForNewBuild. */
+  let want=null;
+  try{
+    const res=await withTimeoutMs(fetch("sw.js?ts="+Date.now(),{cache:"no-store"}), 8000);
+    const m=res&&res.ok ? (await res.text()).match(/const BUILD\s*=\s*"([^"]+)"/) : null;
+    want=m?m[1]:null;
+  }catch(_){}
+  if(!want){ say(t("upd_nosig")); restore(); return false; }
+  let reg=null;
+  try{ reg=await navigator.serviceWorker.getRegistration(); }catch(_){}
+  if(!reg){ try{ reg=await navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}); }catch(_){} }
+  if(want===BUILD){
+    /* Nothing newer. The only useful thing left is to finish a cache that is
+       short of a file, which the worker does in place; then a plain reload
+       serves whatever it now holds. */
+    const ctl=navigator.serviceWorker.controller;
+    if(ctl){ try{ ctl.postMessage({type:"sw-heal"}); }catch(_){} }
+    const okNow=await swHealthOk(20000);
+    if(okNow){ say(t("upd_current")); restore(); return true; }
+    say(t("upd_nosig")); restore(); return false;
+  }
+  /* Newer. Start the worker fetching it — into a NEW cache, nothing running is
+     touched — and wait for it to be proven complete and take over. sw.js only
+     calls skipWaiting once every essential file is in; a worker that could not
+     finish stays waiting and the phone keeps the build that works. */
+  const took=await newWorkerTakesOver(reg, 120000);
+  if(!took){ say(t("upd_fail")); restore(6000); return false; }
+  /* The controllerchange handler above has already reloaded if nobody was
+     working, or armed applyUpdateIfIdle and said so if they were. Either way
+     the new build is on the phone; nothing more to do here. */
+  say(t("upd_current")); restore();
+  applyUpdateIfIdle();
+  return true;
+}
+/* Resolves true the moment a new worker is in charge, false on timeout. Asks
+   the registration to update first; a worker already waiting is asked to
+   finish its cache. */
+function newWorkerTakesOver(reg, ms){
+  return new Promise(resolve=>{
+    let done=false; const fin=v=>{ if(!done){ done=true; clearTimeout(timer); resolve(v); } };
+    const timer=setTimeout(()=>fin(false), ms);
+    /* A worker that reached "installed" without taking over is one whose
+       cache came up short — sw.js only skips waiting when every essential file
+       is in. Ask it rather than sitting out the timeout: an honest "could not
+       finish" in seconds beats a spinner for two minutes. */
+    const judge=w=>workerHealth(w).then(h=>{ if(h && !h.ok) fin(false); });
+    const watch=w=>{ if(!w) return;
+      if(w.state==="activated") return fin(true);
+      if(w.state==="installed") judge(w);
+      w.addEventListener("statechange",()=>{ if(w.state==="activated") fin(true);
+        if(w.state==="redundant") fin(false); if(w.state==="installed") judge(w); }); };
+    navigator.serviceWorker.addEventListener("controllerchange",()=>fin(true),{once:true});
+    if(!reg){ fin(false); return; }
+    reg.addEventListener("updatefound",()=>watch(reg.installing));
+    if(reg.waiting){ try{ reg.waiting.postMessage({type:"sw-heal"}); }catch(_){} watch(reg.waiting); }
+    watch(reg.installing);
+    Promise.resolve().then(()=>reg.update()).catch(()=>{});
+  });
+}
+/* One worker's own account of its cache — the one asked, not necessarily the
+   one in charge. Null when it does not answer. */
+function workerHealth(w){
+  return new Promise(res=>{
+    if(!w) return res(null);
+    const ch=new MessageChannel(); const tm=setTimeout(()=>res(null),4000);
+    ch.port1.onmessage=e=>{ clearTimeout(tm); res(e.data||null); };
+    try{ w.postMessage({type:"sw-health"},[ch.port2]); }catch(_){ clearTimeout(tm); res(null); }
+  });
+}
+/* The worker in charge, polled until it says every essential file is in or
+   the time is up. */
+async function swHealthOk(ms){
+  const until=Date.now()+ms;
+  while(Date.now()<until){
+    const h=await new Promise(res=>{
+      const ctl=navigator.serviceWorker.controller; if(!ctl) return res(null);
+      const ch=new MessageChannel(); const tm=setTimeout(()=>res(null),3000);
+      ch.port1.onmessage=e=>{ clearTimeout(tm); res(e.data||null); };
+      try{ ctl.postMessage({type:"sw-health"},[ch.port2]); }catch(_){ clearTimeout(tm); res(null); }
+    });
+    if(h && h.ok) return true;
+    await new Promise(r=>setTimeout(r,1500));
+  }
+  return false;
+}
+if(fu) fu.onclick=(e)=>{ e.preventDefault(); updateNow(); };
+// an old address with the marker the previous handler left behind
 if(/[?&]fresh=/.test(location.search)) history.replaceState(null,"",location.pathname);
 
 /* An empty equipment or defect list means a data file did not load — almost

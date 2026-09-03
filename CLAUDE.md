@@ -133,7 +133,19 @@ this path, because each was added to close a real gap:
 | a newer BUILD is seen | `reg.update()` starts the download **immediately**, without waiting for a tap |
 | the download completes | the worker takes over only once every essential file is cached — `sw.js` refuses to `skipWaiting()` on an incomplete precache |
 | the round is saved | `applyUpdateIfIdle()` — reloads the moment the app is idle, so the new build lands between rounds and never mid-capture |
-| nothing else worked | the banner, and `#forceUpdate`, which clears worker + caches + browser copies and refetches |
+| nothing else worked | the banner, and `#forceUpdate` → `updateNow()`: asks the worker to fetch the build, waits for it to be proven complete, reloads. If it cannot finish, nothing changes and the label says so |
+
+**THE PAGE MUST NEVER UNREGISTER THE WORKER OR DELETE A CACHE.** Until build
+246 the Update button did exactly that — unregister every worker, delete every
+cache, swallow any refetch that failed, navigate. On a flaky link that left the
+phone with nothing, and the navigation came back as Safari's own "the network
+connection was lost": no app, no way back until a full online load succeeded.
+Reported from the field minutes after an inspector was told to tap it. `sw.js`
+is arranged so a build cannot take over until it is complete and the old cache
+survives until then; one handler in the page defeated all of it from outside.
+`tests/updatesafe.cjs` reads `mobile/index.html` and fails on `.unregister()`
+or `caches.delete(`, and proves that Update tapped offline, or while the
+download cannot finish, leaves a phone that still opens offline.
 
 **The same rule governs SYNCHRONISATION, in both directions.** Nobody should
 have to press anything to find out whether what is on screen is still true.
