@@ -6680,9 +6680,16 @@ $("saveBtn").onclick=async ()=>{
      blank. A record from before grades that still carries CRI by hand is
      held to the old standard: defect and action. */
   const who=$("inspector").value.trim();
+  /* A round captured before these rules (phv < 2) is not held to them on an
+     edit — the inspector correcting a comment at the crib room cannot conjure
+     a target date or a close-up for a round walked last month. It keeps the
+     rule it was captured under: a Critical names its defect and its action. */
+  const strict = !editing || (editing.phv||1)>=2;
   for(const [k,p] of Object.entries(draft.positions)){
     if(k===GEN_KEY) continue;
-    const g=GRADE.num(p.grade); const req=g?GRADE.requires(g):(effSev(p)==="CRI"?{defect:1,action:1}:{});
+    const g=GRADE.num(p.grade);
+    const req = g ? (strict ? GRADE.requires(g) : (g===5?{defect:1,action:1}:{}))
+                  : (effSev(p)==="CRI"?{defect:1,action:1}:{});
     const miss=[];
     if(req.defect && !p.defect) miss.push(t("req_defect"));
     if(req.action && !p.action) miss.push(t("req_action"));

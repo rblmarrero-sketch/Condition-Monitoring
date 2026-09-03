@@ -4,7 +4,7 @@
    requiring correction, records waiting on evidence — and everything that
    answers "is this dashboard telling the truth" is one collapsed Admin
    diagnostics control. The three sentences a reader acts on are the agreed
-   ones: "Grade missing. Review the inspection and select A, B, C, or X.",
+   ones: "Grade missing. Review the inspection and select a grade from 1 to 5.",
    "Grade … and the previous condition … do not match. Review the grade; the
    condition will update automatically.", "Photos received; component
    assignment required."
@@ -71,10 +71,10 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
   ok('the page is under two screens with it collapsed', S.tall <= 2, S.tall + ' screens');
   ok('the review list has the two findings and the tile agrees', S.sev.length === 2 && S.tile === S.review && S.review === 2,
      S.sev.length + ' rows, tile ' + S.tile);
-  ok('a finding with no grade says: Grade missing. Review the inspection and select A, B, C, or X.',
-     S.sev.some(x => /Grade missing\. Review the inspection and select A, B, C, or X\./.test(x)), S.sev.join(' | ').slice(0, 200));
+  ok('a finding with no grade says: Grade missing. Review the inspection and select a grade from 1 to 5.',
+     S.sev.some(x => /Grade missing\. Review the inspection and select a grade from 1 to 5\./.test(x)), S.sev.join(' | ').slice(0, 200));
   ok('a grade that contradicts the stored condition says so, and that the condition follows the grade',
-     S.sev.some(x => /Grade [ABCX] and the previous condition \(.+\) do not match\. Review the grade; the condition will update automatically\./.test(x)),
+     S.sev.some(x => /Grade [1-5] – [^ ]+ and the previous condition \(.+\) do not match\. Review the grade; the condition will update automatically\./.test(x)),
      S.sev.join(' | ').slice(0, 200));
   ok('TK115 reads: Photos received; component assignment required',
      S.quar.some(x => /TK115/.test(x) && /Photos received; component assignment required/.test(x)), S.quar.join(' | ').slice(0, 200));
