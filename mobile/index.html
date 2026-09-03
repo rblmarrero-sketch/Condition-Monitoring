@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=247">
+<link rel="manifest" href="manifest.webmanifest?v=248">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=247">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=247">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=247">
+<link rel="apple-touch-icon" href="icon-192.png?v=248">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=248">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=248">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2065,32 +2065,32 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=247"></script>
-<script src="upload-defaults.js?v=247"></script>
-<script src="hme.js?v=247"></script>
-<script src="mp-fc.js?v=247"></script>
-<script src="hme-cascade.js?v=247"></script>
-<script src="assets.js?v=247"></script>
-<script src="temp-limits.js?v=247"></script>
-<script src="normalize.js?v=247"></script>
-<script src="grade.js?v=247"></script>
-<script src="due.js?v=247"></script>
-<script src="wear.js?v=247"></script>
-<script src="wear-figs.js?v=247"></script>
-<script src="wear-map.js?v=247"></script>
-<script src="machine-photos.js?v=247"></script>
-<script src="machine-fig.js?v=247"></script>
-<script src="get.js?v=247"></script>
-<script src="points.js?v=247"></script>
-<script src="uc-points.js?v=247"></script>
-<script src="inspect-guide.js?v=247"></script>
-<script src="get-figs.js?v=247"></script>
-<script src="body-points.js?v=247"></script>
-<script src="body-map.js?v=247"></script>
-<script src="lube.js?v=247"></script>
-<script src="lube-overrides.js?v=247"></script>
-<script src="lube2027.js?v=247"></script>
-<script src="report-core.js?v=247"></script>
+<script src="native.js?v=248"></script>
+<script src="upload-defaults.js?v=248"></script>
+<script src="hme.js?v=248"></script>
+<script src="mp-fc.js?v=248"></script>
+<script src="hme-cascade.js?v=248"></script>
+<script src="assets.js?v=248"></script>
+<script src="temp-limits.js?v=248"></script>
+<script src="normalize.js?v=248"></script>
+<script src="grade.js?v=248"></script>
+<script src="due.js?v=248"></script>
+<script src="wear.js?v=248"></script>
+<script src="wear-figs.js?v=248"></script>
+<script src="wear-map.js?v=248"></script>
+<script src="machine-photos.js?v=248"></script>
+<script src="machine-fig.js?v=248"></script>
+<script src="get.js?v=248"></script>
+<script src="points.js?v=248"></script>
+<script src="uc-points.js?v=248"></script>
+<script src="inspect-guide.js?v=248"></script>
+<script src="get-figs.js?v=248"></script>
+<script src="body-points.js?v=248"></script>
+<script src="body-map.js?v=248"></script>
+<script src="lube.js?v=248"></script>
+<script src="lube-overrides.js?v=248"></script>
+<script src="lube2027.js?v=248"></script>
+<script src="report-core.js?v=248"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2503,7 +2503,7 @@ const I18N = {
     lbl_gps:"Location (GPS)", gps_none:"Tap to stamp the location", gps_getting:"Getting location…",
     m_gps_na:["Location not available","This browser can't provide GPS. The record still saves without it."],
     m_gps_fail:["Location failed","Allow location access for this site, or continue — the record still saves."],
-    sec_sign:"Supervisor sign-off", sign_add:"Add a supervisor signature", sign_hide:"Hide the signature box", lbl_sup:"Verified by (supervisor)", ph_sup:"name / badge no.",
+    sec_sign:"Supervisor sign-off", sign_add:"Add a supervisor signature", sign_hide:"Hide the signature box", sign_show:"Show the signature box", sign_signed:"signed", lbl_sup:"Verified by (supervisor)", ph_sup:"name / badge no.",
     sign_hint:"Sign in the box (optional) — it is stored with the record and printed on the report.",
     btn_sign_clear:"Clear signature", rep_sup:"Verified by", rep_gps:"Location",
     sec_due:"Inspection due", lbl_due_int:"Interval (hours)", lbl_due_scope:"Show",
@@ -3012,7 +3012,7 @@ const I18N = {
     lbl_gps:"Координаты (GPS)", gps_none:"Нажмите, чтобы записать координаты", gps_getting:"Определение координат…",
     m_gps_na:["Геолокация недоступна","Браузер не может дать GPS. Запись всё равно сохранится."],
     m_gps_fail:["Не удалось определить координаты","Разрешите доступ к геолокации для этого сайта или продолжайте — запись сохранится."],
-    sec_sign:"Подпись руководителя", sign_add:"Добавить подпись руководителя", sign_hide:"Скрыть поле подписи", lbl_sup:"Проверил (руководитель)", ph_sup:"ФИО / табельный №",
+    sec_sign:"Подпись руководителя", sign_add:"Добавить подпись руководителя", sign_hide:"Скрыть поле подписи", sign_show:"Показать поле подписи", sign_signed:"подписано", lbl_sup:"Проверил (руководитель)", ph_sup:"ФИО / табельный №",
     sign_hint:"Распишитесь в поле (необязательно) — подпись сохраняется с записью и печатается в отчёте.",
     btn_sign_clear:"Очистить подпись", rep_sup:"Проверил", rep_gps:"Координаты",
     sec_due:"Плановые осмотры", lbl_due_int:"Интервал (часов)", lbl_due_scope:"Показать",
@@ -6536,12 +6536,28 @@ $("gpsBtn").onclick=()=>getGps(false);
 /* ===================== supervisor signature pad ===================== */
 const signPad=$("signPad"); let signDirty=false, signing=false;
 /* Open only when it is wanted. The canvas measures itself, and a canvas with no
-   box has no width — so it is sized the moment it appears, not before. */
+   box has no width — so it is sized the moment it appears, not before.
+
+   OPEN IS THE INSPECTOR'S CHOICE, AND ONLY THEIRS. Until build 248 the fold
+   forced itself open whenever the supervisor's name was filled in or a
+   signature had been drawn, and the button then did nothing. The name is put
+   back from storage on every load, and an update is a load — so on any phone
+   that had ever typed a supervisor, every update came back with a box that
+   could not be hidden, and on phones that had not, it could. "Sometimes it
+   can be hidden, sometimes it cannot" was exactly that. What the fold holds
+   is now said on the row instead, so hiding it hides nothing. */
 let signOpen=false;
+function signSummary(){
+  const name=$("supName").value.trim();
+  const bits=[]; if(name) bits.push(name); if(signDirty) bits.push(t("sign_signed"));
+  return bits.join(" · ");
+}
 function renderSignFold(){
   const tog=$("signTog"), body=$("signBody"); if(!tog||!body) return;
-  const on = signOpen || signDirty || !!$("supName").value.trim();
-  tog.textContent = (on?"▾ ":"▸ ")+t(on?"sign_hide":"sign_add");
+  const on = signOpen;
+  const has = signSummary();
+  tog.textContent = on ? "▾ "+t("sign_hide")
+                       : "▸ "+(has ? t("sign_show")+" — "+has : t("sign_add"));
   body.classList.toggle("hidden", !on);
   if(on) sizeSignPad();
 }
@@ -6575,7 +6591,7 @@ function loadSign(blob){ clearSign(); if(!blob) return;
   i.onerror=done;                       // a signature that will not decode still frees its bytes
   i.src=url; }
 addEventListener("resize",sizeSignPad);
-$("signTog").onclick=()=>{ signOpen=!(signOpen||signDirty||$("supName").value.trim()); renderSignFold(); };
+$("signTog").onclick=()=>{ signOpen=!signOpen; renderSignFold(); };
 $("supName").addEventListener("input",renderSignFold);
 
 /* ===================== date + edit ===================== */
@@ -10447,7 +10463,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="247";
+const BUILD="248";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
