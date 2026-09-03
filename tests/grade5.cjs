@@ -200,6 +200,20 @@ const J = o => JSON.stringify(o).slice(0, 420);
   await q.goto(BASE + '/dashboard/index.html#overview?sev=CRI', { waitUntil: 'load' });
   await q.waitForFunction(() => typeof RECS !== 'undefined' && RECS.length > 10, null, { timeout: 60000 });
   await q.waitForTimeout(2500);
+  /* A marker the office wrote before this build carries its grade as a
+     letter, and applyEdits() overlays the marker AFTER rebuild() has turned
+     the sidecar's grade into a number. Seven findings on three live rounds
+     read "C" and "X" on the deployed page that way: right on screen, wrong
+     in anything that compares the grade to a number. */
+  const ov = await q.evaluate(() => {
+    const rec = { equip: 'TK900', date: '2026-08-20', type: 'MP', items: [{ key: '4C', grade: 3 }, { key: '4D', grade: 2 }] };
+    const ek = ekOf(rec);
+    const was = edits[ek];
+    edits[ek] = { key: ek, at: '2026-08-21T08:00:00Z', by: 'office', items: { '4C': { grade: 'X', sev: 'CRI' }, '4D': { grade: '' } } };
+    let out; try { out = applyEdits(rec); } finally { if (was) edits[ek] = was; else delete edits[ek]; }
+    return { g: out.items.map(i => i.grade), edited: out.items.map(i => !!i._edited) };
+  });
+  ok('an office marker written with a letter reads as a number once overlaid', ov.g[0] === 5 && ov.g[1] === '' && ov.edited[0], J(ov));
   const d1 = await q.evaluate(() => {
     const letters = RECS.reduce((n, r) => n + r.items.filter(i => typeof i.grade === 'string' && i.grade !== '').length, 0);
     const numbers = RECS.reduce((n, r) => n + r.items.filter(i => typeof i.grade === 'number').length, 0);
