@@ -3192,28 +3192,28 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=249"></script>
-<script src="../mobile/hme.js?v=249"></script>
-<script src="../mobile/mp-fc.js?v=249"></script>
-<script src="../mobile/hme-cascade.js?v=249"></script>
-<script src="../mobile/temp-limits.js?v=249"></script>
+<script src="../data/magnetic_plug.js?v=250"></script>
+<script src="../mobile/hme.js?v=250"></script>
+<script src="../mobile/mp-fc.js?v=250"></script>
+<script src="../mobile/hme-cascade.js?v=250"></script>
+<script src="../mobile/temp-limits.js?v=250"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=249"></script>
-<script src="../mobile/normalize.js?v=249"></script>
-<script src="../mobile/grade.js?v=249"></script>
-<script src="../mobile/due.js?v=249"></script>
-<script src="../mobile/wear.js?v=249"></script>
-<script src="../mobile/wear-map.js?v=249"></script>
-<script src="../mobile/lube.js?v=249"></script>
-<script src="../mobile/lube-overrides.js?v=249"></script>
-<script src="../mobile/lube2027.js?v=249"></script>
-<script src="../mobile/lube-tds.js?v=249"></script>
+<script src="../mobile/assets.js?v=250"></script>
+<script src="../mobile/normalize.js?v=250"></script>
+<script src="../mobile/grade.js?v=250"></script>
+<script src="../mobile/due.js?v=250"></script>
+<script src="../mobile/wear.js?v=250"></script>
+<script src="../mobile/wear-map.js?v=250"></script>
+<script src="../mobile/lube.js?v=250"></script>
+<script src="../mobile/lube-overrides.js?v=250"></script>
+<script src="../mobile/lube2027.js?v=250"></script>
+<script src="../mobile/lube-tds.js?v=250"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=249"></script>
-<script src="../mobile/machine-photos.js?v=249"></script>
+<script src="../mobile/upload-defaults.js?v=250"></script>
+<script src="../mobile/machine-photos.js?v=250"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3222,17 +3222,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=249"></script>
-<script src="../mobile/get.js?v=249"></script>
-<script src="../mobile/points.js?v=249"></script>
-<script src="../mobile/uc-points.js?v=249"></script>
-<script src="../mobile/inspect-guide.js?v=249"></script>
-<script src="../mobile/get-figs.js?v=249"></script>
-<script src="../mobile/body-points.js?v=249"></script>
-<script src="../mobile/body-map.js?v=249"></script>
-<script src="../mobile/jspdf.umd.min.js?v=249"></script>
-<script src="../mobile/html2canvas.min.js?v=249"></script>
-<script src="../mobile/report-core.js?v=249"></script>
+<script src="../mobile/machine-fig.js?v=250"></script>
+<script src="../mobile/get.js?v=250"></script>
+<script src="../mobile/points.js?v=250"></script>
+<script src="../mobile/uc-points.js?v=250"></script>
+<script src="../mobile/inspect-guide.js?v=250"></script>
+<script src="../mobile/get-figs.js?v=250"></script>
+<script src="../mobile/body-points.js?v=250"></script>
+<script src="../mobile/body-map.js?v=250"></script>
+<script src="../mobile/jspdf.umd.min.js?v=250"></script>
+<script src="../mobile/html2canvas.min.js?v=250"></script>
+<script src="../mobile/report-core.js?v=250"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -6950,6 +6950,97 @@ function assignPlan(rec){
   assignPlans.set(rk,plan);
   return plan;
 }
+/* ── THE EDIT, EVERYWHERE THE PHOTOGRAPH IS SHOWN ──────────────────────────
+
+   A recipe — crop, rotation, straighten — used to be applied in one place:
+   the lightbox. The history cards, the drawer and the report all asked
+   mediaOf() for a URL and were handed the original file, so an engineer who
+   cropped a plug saw the crop in the lightbox and the uncropped picture in
+   the signed PDF. Reported from the office on build 249.
+
+   What is PRESENTED is now decided once, here. mediaOf() and generalMedia()
+   hand out the rendered derivative wherever a visual recipe exists, and keep
+   the original beside it as `orig` — which is what the editor works on and
+   what "Show original" shows. Until a rendition has been drawn the original
+   stands in, and every picture on screen that shows it swaps to the rendition
+   the moment it lands; a report waits for all of them (pxDeriveAll). The file
+   the inspector took is still never written to. */
+const PXD=new Map();                              // name -> {sig, url}
+const pxDeriving=new Map();                       // name|sig -> promise
+function pxVisual(r){ const n=pxNorm(r); return !!(n.rot||n.straighten||n.crop); }
+function pxSig(rk,name,orig){
+  const r=pxAll(rk)[pxKey(name)];
+  return (r && pxVisual(r)) ? JSON.stringify(pxNorm(r))+"|"+orig : "";
+}
+function pxShown(rk,name,orig){
+  if(!orig) return orig;
+  const sig=pxSig(rk,name,orig);
+  const d=PXD.get(name);
+  if(!sig){
+    /* The recipe is gone: whatever still shows the old rendition goes back. */
+    if(d){ PXD.delete(name); pxSwap(d.url,orig); try{ if(/^blob:/.test(d.url)) URL.revokeObjectURL(d.url); }catch(_){} }
+    return orig;
+  }
+  if(d && d.sig===sig) return d.url;
+  pxDerive(rk,name,orig,sig);
+  return orig;                                    // the original until the render lands
+}
+function pxDerive(rk,name,orig,sig){
+  const key=name+"|"+sig;
+  if(pxDeriving.has(key)) return pxDeriving.get(key);
+  const pr=new Promise(res=>{
+    const img=new Image();
+    img.onload=()=>{
+      try{
+        const c=pxRender(img,pxAll(rk)[pxKey(name)],1600);
+        if(!c) return res(null);
+        c.toBlob(bl=>{
+          if(!bl) return res(null);
+          const url=URL.createObjectURL(bl);
+          const old=PXD.get(name);
+          PXD.set(name,{sig,url});
+          pxSwap(orig,url); if(old && old.url!==url) pxSwap(old.url,url);
+          if(old && /^blob:/.test(old.url||"")) try{ URL.revokeObjectURL(old.url); }catch(_){}
+          res(url);
+        },"image/jpeg",0.9);
+      }catch(e){ res(null); }
+    };
+    img.onerror=()=>res(null);
+    img.src=orig;
+  }).finally(()=>pxDeriving.delete(key));
+  pxDeriving.set(key,pr);
+  return pr;
+}
+/* Every picture on screen that shows `from` now shows `to` — in place, no
+   re-render, no lost scroll. The lightbox paints its own and is left alone. */
+function pxSwap(from,to){
+  if(!from||!to||from===to) return;
+  document.querySelectorAll("img").forEach(im=>{
+    if(im.id==="lbimg") return;
+    if(im.getAttribute("src")===from) im.src=to;
+  });
+}
+/* Every rendition these records need, drawn — a report must not print an
+   original because its crop was still being rendered. */
+async function pxDeriveAll(recs){
+  const jobs=[];
+  (recs||[]).forEach(rec=>{
+    const rk=ekOf(rec); const list=[];
+    (rec.items||[]).forEach(i=>mediaOf(i,rec).forEach(m=>list.push(m)));
+    try{ generalMedia(rec).forEach(m=>list.push(m)); }catch(e){}
+    list.forEach(m=>{
+      if(m.kind==="video"||!m.orig) return;
+      const sig=pxSig(rk,m.name,m.orig); if(!sig) return;
+      const d=PXD.get(m.name); if(d&&d.sig===sig) return;
+      jobs.push(pxDerive(rk,m.name,m.orig,sig));
+    });
+  });
+  await Promise.all(jobs);
+}
+function pxPresent(rk,list){
+  list.forEach(m=>{ m.orig=m.orig||m.src; if(m.kind!=="video") m.src=pxShown(rk,m.name,m.orig); });
+  return list;
+}
 function mediaOf(it,rec,withHidden){
   const hid=hiddenSet(it);
   const plan=assignPlan(rec);
@@ -6968,7 +7059,7 @@ function mediaOf(it,rec,withHidden){
     m.excluded=!!ex;
     m.excludeWhy=(ex&&ex.why)||"";
   });
-  return withHidden ? all : all.filter(m=>!m.hidden);
+  return pxPresent(ekOf(rec), withHidden ? all : all.filter(m=>!m.hidden));
 }
 /* Photographs that belong to the inspection rather than to any one component.
    They have no item to be listed under, so without this they would simply
@@ -6978,10 +7069,10 @@ function generalMedia(rec){
   const plan=assignPlan(rec);
   const hid=new Set();
   (rec.items||[]).forEach(i=>hiddenSet(i).forEach(n=>hid.add(n)));
-  return plan.general.filter(m=>!hid.has(m.name)).map(m=>{
+  return pxPresent(ekOf(rec), plan.general.filter(m=>!hid.has(m.name)).map(m=>{
     const ex=plan.excluded.get(m.name);
     return Object.assign({},m,{excluded:!!ex, excludeWhy:(ex&&ex.why)||""});
-  });
+  }));
 }
 /* HOW MANY PHOTOGRAPHS THIS INSPECTION SAYS IT HAS AND THIS DASHBOARD HAS NOT.
 
@@ -7713,7 +7804,7 @@ function renderHistory(){
            with no context and the Edit button stayed hidden — the editor was
            reachable only from the position drawer, which is not where anybody
            looks at photographs. */
-        return `<div class="pos" data-med='${esc(JSON.stringify(med.map(m=>[m.src,m.kind])))}' data-cap="${cap}"
+        return `<div class="pos" data-med='${esc(JSON.stringify(med.map(m=>[m.orig||m.src,m.kind])))}' data-cap="${cap}"
           data-rk="${esc(ekOf(rec))}" data-ik="${esc(i.key)}"
           data-names='${esc(JSON.stringify(med.map(m=>m.name||"")))}'>
           ${gal}
@@ -9881,7 +9972,7 @@ function openPos(rk, ik){
     /* The editor needs to know which record and which FILE it is looking at,
        or a recipe would be stored against a picture rather than against the
        evidence it belongs to. */
-    el.onclick=()=>openLB(med.map(m=>[m.src,m.kind]), Number(el.dataset.i)||0, cap,
+    el.onclick=()=>openLB(med.map(m=>[m.orig||m.src,m.kind]), Number(el.dataset.i)||0, cap,
       { rk, ik, names:med.map(m=>m.name||m.file||""), name:(med[Number(el.dataset.i)||0]||{}).name||"" });
   });
   if($("drw").classList.contains("hidden")) ovPush("drw");
@@ -11302,9 +11393,13 @@ async function runReport(scope, target, btn, opts){
   if(btn) btn.disabled = true;
   say(t("r_building"));
   try{
-    if(photos && drvOn()){
+    if(photos){
       const recs = window.CMReport.recsForScope(scope, target);
-      await window.CMDrive.ensurePhotos(recs, (d,n)=>say(t("r_fetching",{d,n})));
+      if(drvOn()) await window.CMDrive.ensurePhotos(recs, (d,n)=>say(t("r_fetching",{d,n})));
+      /* The crops and rotations the office made, drawn before a page is laid
+         out: a report that prints the original because the rendition was
+         still rendering is the report that disagrees with the screen. */
+      await pxDeriveAll(recs);
     }
     const n = await window.CMReport.generate(scope, target, {photos, scale},
       (i,total)=>say(t("r_rendering",{i,n:total})));
@@ -14136,8 +14231,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=249"></script>
-<script src="sync-adapter.js?v=249"></script>
-<script src="report.js?v=249"></script>
+<script src="drive.js?v=250"></script>
+<script src="sync-adapter.js?v=250"></script>
+<script src="report.js?v=250"></script>
 </body>
 </html>
