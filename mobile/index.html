@@ -4655,7 +4655,9 @@ function renderGradeCards(){
    it: its three visual checks (adjuster and recoil, frame and guards, chain
    sag) have nothing to caliper, so they are graded and keep the control. */
 function gradeApplies(){
-  if(lubeType()) return false;
+  /* A lubrication compartment is graded on the same 1–5 scale, with the oil
+     meanings under each card (grade.js, family "lube"). */
+  if(lubeType()) return true;
   if(!wearType()) return true;
   if(bodyType()) return false;                       // every tray station is measured
   const [pt]=ucSplit(curItem||"");

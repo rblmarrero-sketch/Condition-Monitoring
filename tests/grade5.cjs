@@ -218,6 +218,19 @@ const J = o => JSON.stringify(o).slice(0, 420);
   });
   ok('the Degraded headline drills to grade 3 and the address says so', d2.deg.rows > 0 && /sev=3/.test(d2.deg.hash) && d2.deg.pills.every(x => /^3 – /.test(x)), J(d2.deg));
   ok('global search finds a grade by number and by name', d2.find5 > 0 && d2.findCrit > 0 && d2.findSevere === 0, J({ f5: d2.find5, fc: d2.findCrit, fs: d2.findSevere }));
+  const df = await q.evaluate(async () => {
+    const sel = document.getElementById('fGrade');
+    const opts = [...sel.options].map(o => o.textContent);
+    sel.value = '4'; sel.dispatchEvent(new Event('change')); await new Promise(r => setTimeout(r, 250));
+    const four = { drill: drill.sev, chip: [...document.querySelectorAll('#chips .chip b')].map(x => x.textContent), rows: document.querySelectorAll('#fleetTbl tbody tr').length };
+    kpiGo('crit'); await new Promise(r => setTimeout(r, 250));
+    const boxAfterTile = sel.value;
+    clearFilters(); await new Promise(r => setTimeout(r, 250));
+    return { opts, four, boxAfterTile, cleared: sel.value, drillCleared: drill.sev };
+  });
+  ok('the grade filter offers All grades and 1 – Normal … 5 – Critical, and is the same drill the headlines set',
+     df.opts.length === 6 && /All grades/.test(df.opts[0]) && df.opts[4] === '4 – Severe' && df.four.drill === 4 && df.four.chip.some(c => /4 – Severe/.test(c))
+     && df.boxAfterTile === '5' && df.cleared === '' && !df.drillCleared, J(df));
   const d3 = await q.evaluate(async () => {
     const blobs = []; const oc = URL.createObjectURL; URL.createObjectURL = bl => { blobs.push(bl); return oc(bl); };
     const clk = HTMLAnchorElement.prototype.click; HTMLAnchorElement.prototype.click = function () {};
