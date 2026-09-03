@@ -451,6 +451,33 @@ Nothing in the bucket is touched by this, and `cm.env` — the file with the key
 and the admin password in it — is not one of the files being replaced. Restarting
 takes about a second, during which a phone that happens to be syncing retries.
 
+### The grade migration (once, after the 1–5 build is deployed here)
+
+The grade scale changed from A/B/C/X to 1–5. Every phone and the dashboard read
+the old letters and write only numbers, so nothing breaks while the folder still
+holds letters — but the folder should say the same thing as the app. The tool
+that does that is `docs/yandex/migrate-grades.js`, run from your own computer
+(it needs `node`, and it reaches the server the same way the dashboard does).
+It only works once the `function.js` on this machine offers `op:rewrite`, which
+is the deploy above.
+
+```
+set CM_URL=https://baimskaya-cm.duckdns.org
+set ADMIN_SECRET=<the admin password from /opt/cm/cm.env — type it, never store it>
+node docs\yandex\migrate-grades.js --scan
+node docs\yandex\migrate-grades.js --apply --backup .\grade-backup
+node docs\yandex\migrate-grades.js --verify .\grade-backup
+```
+
+`--scan` writes nothing and says how many documents carry letters. `--apply`
+keeps every original in `grade-backup\` on your computer and under
+`_meta/backup/` in the bucket before it rewrites one, refuses a document that
+changed under it, and ends with `RECONCILED` only when the same documents,
+records, items, photographs and grades come back. `--verify` proves it again.
+Running `--apply` twice changes nothing the second time. Photographs are never
+touched. If anything says `NOT RECONCILED`, stop and send the output to whoever
+made the change — the originals are all still there.
+
 ---
 
 ## What this costs you that a function did not

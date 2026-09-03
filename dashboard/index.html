@@ -38,7 +38,8 @@
        state, the priority column). Same green as the phone now, measured the
        same way: 6.13:1 on white, 4.98:1 on its own 14% chip tint. One product
        showing one grade in two different greens was its own small bug. */
-    --good:#0a7134; --warning:#fab219; --serious:#ec835a; --critical:#d03b3b; --none:#898781;
+    /* Five steps for five grades: green, amber, orange, red-orange, red. */
+    --good:#0a7134; --warning:#fab219; --serious:#ec835a; --severe:#d9511f; --critical:#c8232c; --none:#898781;
     /* ── STATUS AS FILL, AND STATUS AS INK ────────────────────────────────
        They are not the same colour and cannot be. A fill sits in a bar or a
        chip where a saturated hue is exactly right; the same hue as TEXT on the
@@ -560,7 +561,7 @@
   .tstack{width:100%;height:120px;display:flex;flex-direction:column;justify-content:flex-end;
     background:var(--surface-2);border-radius:4px;overflow:hidden;}
   .tstack i{display:block;width:100%;}
-  .tstack i.s-cri{background:var(--critical);} .tstack i.s-deg{background:var(--serious);}
+  .tstack i.s-cri{background:var(--critical);} .tstack i.s-sev{background:var(--severe);} .tstack i.s-deg{background:var(--serious);}
   .tstack i.s-inc{background:var(--warning);}
   .tmon b{font:700 12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ink-2);min-height:12px;}
   .tmon span{font-size:var(--t-micro);color:var(--muted);font-variant-numeric:tabular-nums;}
@@ -569,7 +570,7 @@
   .tlegend{display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px;color:var(--ink-2);margin-bottom:4px;}
   .tlegend span{display:flex;align-items:center;gap:5px;}
   .tlegend i{width:10px;height:10px;border-radius:2px;display:inline-block;}
-  .tlegend i.s-cri{background:var(--critical);} .tlegend i.s-deg{background:var(--serious);}
+  .tlegend i.s-cri{background:var(--critical);} .tlegend i.s-sev{background:var(--severe);} .tlegend i.s-deg{background:var(--serious);}
   .tlegend i.s-inc{background:var(--warning);}
   /* table */
   table.grid{width:100%;border-collapse:collapse;font-size:12.5px;}
@@ -636,7 +637,7 @@
   .syncflash.on{opacity:1;}
   .pill{display:inline-block;padding:1px 8px;border-radius:999px;font-size:11px;font-weight:650;color:#fff;}
   .pill.g{background:var(--good);} .pill.w{background:var(--warning);color:#111;}
-  .pill.s{background:var(--serious);} .pill.c{background:var(--critical);} .pill.n{background:var(--none);}
+  .pill.s{background:var(--serious);} .pill.e{background:var(--severe);} .pill.c{background:var(--critical);} .pill.n{background:var(--none);}
   .tag{display:inline-block;font-size:var(--t-micro);font-weight:700;padding:1px 6px;border-radius:6px;background:var(--surface-3);color:var(--ink-2);margin-right:5px;}
   .muted{color:var(--muted);} .mono{font-variant-numeric:tabular-nums;}
   /* history */
@@ -2556,8 +2557,9 @@
         <summary data-i18n="ov_defs">Definitions</summary>
         <div class="defsbody">
           <dl>
-            <dt data-i18n="ov_k_crit">Critical equipment</dt><dd data-i18n="ov_d_crit">Machines whose most recent inspection carries a Critical (grade X) finding. Grade decides severity: A normal, B incipient, C degraded, X critical.</dd>
-            <dt data-i18n="ov_k_deg">Degraded equipment</dt><dd data-i18n="ov_d_deg">Machines whose most recent inspection carries a Degraded (grade C) finding and nothing worse.</dd>
+            <dt data-i18n="ov_k_crit">Critical equipment</dt><dd data-i18n="ov_d_crit">Machines whose most recent inspection carries a grade 5 – Critical finding. The grade is the assessment: 1 normal, 2 incipient, 3 degraded, 4 severe, 5 critical.</dd>
+            <dt data-i18n="ov_k_sev">Severe equipment</dt><dd data-i18n="ov_d_sev">Machines whose most recent inspection carries a grade 4 – Severe finding and nothing worse: a serious defect, repair soon.</dd>
+            <dt data-i18n="ov_k_deg">Degraded equipment</dt><dd data-i18n="ov_d_deg">Machines whose most recent inspection carries a grade 3 – Degraded finding and nothing worse: a defect found, plan the repair.</dd>
             <dt data-i18n="ov_k_over">Overdue inspections</dt><dd data-i18n="ov_d_over">Rounds past their interval, counted in machine hours at 20 h/day, on the Type and Class filters above.</dd>
             <dt data-i18n="ov_k_act">Open maintenance actions</dt><dd data-i18n="ov_d_act">Findings that need work and are not closed — including those not yet planned.</dd>
             <dt data-i18n="ov_k_noown">Unassigned actions</dt><dd data-i18n="ov_d_noown">Open maintenance actions with no responsible person.</dd>
@@ -3168,6 +3170,7 @@
      figures are a fallback for a machine this build does not know. -->
 <script src="../mobile/assets.js?v=242"></script>
 <script src="../mobile/normalize.js?v=242"></script>
+<script src="../mobile/grade.js?v=242"></script>
 <script src="../mobile/due.js?v=242"></script>
 <script src="../mobile/wear.js?v=242"></script>
 <script src="../mobile/wear-map.js?v=242"></script>
@@ -3508,7 +3511,7 @@ const I18N={
   sy_sev_none:"Every severity on the board is derived from a grade or a measurement.",
   sy_sev_sub:"A severity is not a field somebody types here — it is read off the grade (A→Normal, B→Incipient, C→Degraded, X→Critical), or off the millimetres on an undercarriage round. These are the places a record carries a severity that neither of those produces, so the board is showing a finding no one can re-derive. The fix is always the GRADE: set it and the severity follows. Rounds imported from the original spreadsheets are where nearly all of these come from.",
   sy_sev_go:"Review grade",
-  sy_sev_ng:"Grade missing. Review the inspection and select A, B, C, or X. The recorded condition ({s}) still counts until then.",
+  sy_sev_ng:"Grade missing. Review the inspection and select a grade from 1 to 5. The recorded condition ({s}) still counts until then.",
   sy_sev_cf:"Grade {g} and the previous condition ({was}) do not match. Review the grade; the condition will update automatically.",
   sy_sev_ct:"{n} to settle · {u} with no grade · {c} contradicting their grade",
   sy_h_files:"Files on the server", sy_h_last:"Last asked",
@@ -3662,7 +3665,7 @@ const I18N={
   c_owner:"Responsible", c_month:"Month",
   xf_own:"Show only findings assigned to {o}",
   tr_click:"press to show only this month",
-  c_unit:"Unit", c_sev:"Severity", c_defect:"Defect", c_cause:"Cause",
+  c_unit:"Unit", c_sev:"Grade", c_defect:"Defect", c_cause:"Cause",
 
   k_insp:"Inspections", k_find:"Findings", k_att:"Needs attention",
   k_comp:"Compliance", k_comp_s:"{n} of {of} rounds walked before they were overdue",
@@ -3691,7 +3694,7 @@ const I18N={
   lc_go:"Open this list",
   lc_settle:"Waiting to be settled",
   lc_settle_s:"one compartment, two of the site\u2019s documents disagreeing \u2014 each one an afternoon\u2019s work",
-  k_act:"Actions to plan", k_mix:"Severity mix",
+  k_act:"Actions to plan", k_mix:"Grade mix",
   k_units:"{n} unit(s)", k_finds:"items with a record", k_attsub:"degraded + critical",
   k_actsub:"excluding “monitor”", k_none_here:"None in this view", k_only:"Show only {x}",
   k_voidhid:"{n} voided, not counted", k_voidtip:"These rounds were withdrawn, not deleted. Click to show them.",
@@ -3732,7 +3735,7 @@ const I18N={
 
   th_unit:"Unit", th_type:"Type", th_date:"Date", th_worst:"Worst severity", th_point:"Component",
   th_find:"Findings", th_topdef:"Top defect", th_by:"Inspector",
-  th_sev:"Sev", th_comp:"Component", th_defect:"Defect", th_cause:"Direct cause",
+  th_sev:"Grade", th_comp:"Component", th_defect:"Defect", th_cause:"Direct cause",
   th_action:"Action", th_prio:"Priority", th_wo:"WO", th_byshort:"By",
   th_detect:"Found by", th_stood:"Re-measured", th_stood_v:"challenged, inspector stood by it",
   th_base:"Baseline", th_base_all:"whole group",
@@ -3992,13 +3995,20 @@ const I18N={
   ov_title:"Overview", ov_defs:"Definitions", ov_of:"inspections on {n} machine(s)",
   ov_k_crit:"Critical equipment", ov_s_crit:"stop or repair before next use", ov_t_crit:"Show the machines with a Critical finding",
   ov_k_deg:"Degraded equipment", ov_s_deg:"plan the repair", ov_t_deg:"Show the machines with a Degraded finding",
+  ov_k_sev:"Severe equipment", ov_s_sev:"repair soon", ov_t_sev:"Show the machines with a Severe finding",
+  d_resp:"Responsible (from the machine)", d_target:"Target date", d_opstat:"Operating status",
+  d_gwhy:"Graded below the proposed 5", d_gaudit:"Grade history", d_gsug:"proposed",
+  d_notified:"Supervisor notified", op_RUN:"Running", op_RES:"Running with restriction", op_STOP:"Stopped",
+  d_machine:"Machine photographs",
+  ov_d_sev:"Machines whose most recent inspection carries a grade 4 – Severe finding and nothing worse: a serious defect, repair soon.",
+  ed_gwhy:"Why is the grade being lowered?", ed_gwhy_ph:"A reason is required to lower a grade",
   ov_k_over:"Overdue inspections", ov_s_over:"{n} more due within 7 days", ov_s_over0:"none more due within 7 days",
   ov_k_act:"Open maintenance actions",
   ov_k_noown:"Unassigned actions", ov_s_noown:"no responsible person", ov_s_owned:"every action has an owner",
   ov_t_noown:"Open the actions with no responsible person",
   ov_k_review:"Grade review required", ov_s_none:"none in this view",
-  ov_d_crit:"Machines whose most recent inspection carries a Critical finding (grade X). Grade decides severity: A normal, B incipient, C degraded, X critical.",
-  ov_d_deg:"Machines whose most recent inspection carries a Degraded finding (grade C) and nothing worse.",
+  ov_d_crit:"Machines whose most recent inspection carries a grade 5 – Critical finding. The grade is the assessment: 1 normal, 2 incipient, 3 degraded, 4 severe, 5 critical.",
+  ov_d_deg:"Machines whose most recent inspection carries a grade 3 – Degraded finding and nothing worse: a defect found, plan the repair.",
   ov_d_over:"Rounds past their interval, counted in machine hours at 20 h/day, on the Type and Class filters above. Opens the Inspection Schedule.",
   ov_d_act:"Findings that need work and are not closed, including those not yet planned. Opens Maintenance Actions.",
   ov_d_noown:"Open maintenance actions with no responsible person. Opens Maintenance Actions, filtered to them.",
@@ -4254,7 +4264,7 @@ const I18N={
   sy_sev_none:"Каждая степень на экране выведена из оценки или из измерения.",
   sy_sev_sub:"Степень здесь не вводят вручную — она читается из оценки (A→Норма, B→Зарождающийся, C→Ухудшение, X→Критично) либо из миллиметров на обходе ходовой. Здесь перечислены записи со степенью, которую не даёт ни то, ни другое: на экране стоит находка, которую невозможно перепроверить. Исправляется всегда ОЦЕНКА: поставьте её, и степень появится сама. Почти все такие случаи пришли из первоначальных таблиц.",
   sy_sev_go:"Проверить оценку",
-  sy_sev_ng:"Оценка не указана. Откройте осмотр и выберите A, B, C или X. Записанное состояние ({s}) пока учитывается.",
+  sy_sev_ng:"Оценка не указана. Откройте осмотр и выберите оценку от 1 до 5. Записанное состояние ({s}) пока учитывается.",
   sy_sev_cf:"Оценка {g} и прежнее состояние ({was}) не совпадают. Проверьте оценку — состояние обновится автоматически.",
   sy_sev_ct:"К разбору: {n} · без оценки: {u} · расходятся с оценкой: {c}",
   sy_h_files:"Файлов на сервере", sy_h_last:"Последний запрос",
@@ -4390,7 +4400,7 @@ const I18N={
   c_owner:"Ответственный", c_month:"Месяц",
   xf_own:"Показать только находки под ответственностью {o}",
   tr_click:"нажмите, чтобы показать только этот месяц",
-  c_unit:"Ед.", c_sev:"Степень", c_defect:"Дефект", c_cause:"Причина",
+  c_unit:"Ед.", c_sev:"Оценка", c_defect:"Дефект", c_cause:"Причина",
 
   k_insp:"Осмотров", k_find:"Находок", k_att:"Требует внимания",
   k_comp:"В срок", k_comp_s:"{n} из {of} обходов пройдены до просрочки",
@@ -4419,7 +4429,7 @@ const I18N={
   lc_go:"Открыть список",
   lc_settle:"Ждут решения",
   lc_settle_s:"один узел, два документа площадки расходятся \u2014 каждый случай на полдня работы",
-  k_act:"Действий к планированию", k_mix:"Распределение",
+  k_act:"Действий к планированию", k_mix:"Распределение оценок",
   k_units:"ед.: {n}", k_finds:"позиций с записью", k_attsub:"ухудшено + критично",
   k_actsub:"без «наблюдать»", k_none_here:"Нет в этой выборке", k_only:"Только {x}",
   k_voidhid:"отозвано: {n}, не учтено", k_voidtip:"Эти осмотры отозваны, а не удалены. Нажмите, чтобы показать.",
@@ -4466,7 +4476,7 @@ const I18N={
 
   th_unit:"Ед.", th_type:"Тип", th_date:"Дата", th_worst:"Худшая степень", th_point:"Узел",
   th_find:"Находок", th_topdef:"Основной дефект", th_by:"Инспектор",
-  th_sev:"Степ.", th_comp:"Узел", th_defect:"Дефект", th_cause:"Причина",
+  th_sev:"Оценка", th_comp:"Узел", th_defect:"Дефект", th_cause:"Причина",
   th_action:"Действие", th_prio:"Приоритет", th_wo:"Заявка", th_byshort:"Кто",
   th_detect:"Как обнаружено", th_stood:"Перезамер", th_stood_v:"оспорено, замер подтверждён",
   th_base:"Базовый замер", th_base_all:"вся группа",
@@ -4722,14 +4732,21 @@ const I18N={
   ov_all:"Показать всё оборудование",
   ov_title:"Обзор", ov_defs:"Определения", ov_of:"осмотров, машин: {n}",
   ov_k_crit:"Критичная техника", ov_s_crit:"остановить или отремонтировать", ov_t_crit:"Показать машины с критической находкой",
-  ov_k_deg:"Ухудшенная техника", ov_s_deg:"запланировать ремонт", ov_t_deg:"Показать машины с находкой «Частичный»",
+  ov_k_deg:"Ухудшенная техника", ov_s_deg:"запланировать ремонт", ov_t_deg:"Показать машины с оценкой 3 – Ухудшенное",
+  ov_k_sev:"Техника с серьёзным дефектом", ov_s_sev:"ремонт в ближайшее время", ov_t_sev:"Показать машины с оценкой 4 – Серьёзное",
+  d_resp:"Ответственный (с машины)", d_target:"Срок", d_opstat:"Состояние техники",
+  d_gwhy:"Оценка ниже предложенной 5", d_gaudit:"История оценки", d_gsug:"предложено",
+  d_notified:"Руководитель уведомлён", op_RUN:"В работе", op_RES:"В работе с ограничением", op_STOP:"Остановлена",
+  d_machine:"Фотографии машины",
+  ov_d_sev:"Машины, у которых последний осмотр содержит находку с оценкой 4 – Серьёзное и ничего хуже: серьёзный дефект, ремонт в ближайшее время.",
+  ed_gwhy:"Почему оценка понижается?", ed_gwhy_ph:"Для понижения оценки нужна причина",
   ov_k_over:"Просроченные осмотры", ov_s_over:"ещё {n} в ближайшие 7 дней", ov_s_over0:"больше ничего в ближайшие 7 дней",
   ov_k_act:"Открытые действия",
   ov_k_noown:"Без ответственного", ov_s_noown:"ответственный не назначен", ov_s_owned:"у каждого действия есть ответственный",
   ov_t_noown:"Открыть действия без ответственного",
   ov_k_review:"Проверка оценки", ov_s_none:"нет в этой выборке",
-  ov_d_crit:"Машины, у которых последний осмотр содержит критическую находку (оценка X). Оценка определяет степень: A — норма, B — зарождающийся, C — частичный, X — критический.",
-  ov_d_deg:"Машины, у которых последний осмотр содержит находку «Частичный» (оценка C) и ничего хуже.",
+  ov_d_crit:"Машины, у которых последний осмотр содержит находку с оценкой 5 – Критическое. Оценка и есть заключение: 1 — норма, 2 — начальный, 3 — ухудшенное, 4 — серьёзное, 5 — критическое.",
+  ov_d_deg:"Машины, у которых последний осмотр содержит находку с оценкой 3 – Ухудшенное и ничего хуже: обнаружен дефект, запланировать ремонт.",
   ov_d_over:"Обходы, вышедшие за интервал, в моточасах при 20 ч/сут, с учётом фильтров «Тип» и «Класс». Открывает график осмотров.",
   ov_d_act:"Находки, требующие работ и не закрытые, включая ещё не запланированные. Открывает реестр действий.",
   ov_d_noown:"Открытые действия без ответственного. Открывает реестр действий с этим фильтром.",
@@ -4776,14 +4793,28 @@ function applyLang(){
   }
 }
 
-/* Labels are looked up live so a language switch repaints them. */
-const SEV_C={NOF:"g",INC:"w",DEG:"s",CRI:"c"}, SEV_R={NOF:0,INC:1,DEG:2,CRI:3};
-const SEV=new Proxy({},{ get:(_,k)=> SEV_C[k]?{get l(){return t("sev_"+k);},c:SEV_C[k],r:SEV_R[k]}:undefined,
-                         has:(_,k)=>!!SEV_C[k] });
-const SEVC={NOF:"var(--good)",INC:"var(--warning)",DEG:"var(--serious)",CRI:"var(--critical)"};
-// Inspection grade scale: A / B / C / X, X being the worst (confirmed with the
-// reliability team). A record's own ISO severity always wins over the grade.
-const GRADE_SEV={A:"NOF",B:"INC",C:"DEG",X:"CRI"};
+/* THE SEVERITY OF A FINDING IS ITS GRADE. 1 Normal · 2 Incipient · 3 Degraded ·
+   4 Severe · 5 Critical, from grade.js — the one table the phone, this page
+   and the printed sheet all read. There is no second vocabulary: the four
+   ISO 14224 classes the old severity codes named are now only what a grade
+   EXPORTS as (GRADE.iso), for 1C.
+
+   `SEV` keeps its name and shape — SEV[n].l is the label, .c the pill class,
+   .r the rank — because a hundred call sites read it, and every one of them
+   now indexes it by a grade number. Labels are looked up live so a language
+   switch repaints them. */
+const SEV_C={1:"g",2:"w",3:"s",4:"e",5:"c"};
+const SEV={};
+GRADE.LEVELS.forEach(n=>{ SEV[n]={ get l(){ return GRADE.label(n,lang); }, get name(){ return GRADE.name(n,lang); }, c:SEV_C[n], r:n }; });
+const SEVC={1:"var(--good)",2:"var(--warning)",3:"var(--serious)",4:"var(--severe)",5:"var(--critical)"};
+/* A grade, whatever shape it arrived in — 3, "3", "C", "c" — as the number.
+   Every read of a record's grade goes through this. */
+const gradeNum = g => GRADE.num(g);
+/* The old severity codes, for a URL or a stored filter written before grades
+   became the scale. */
+const LEGACY_SEV={NOF:1,INC:2,DEG:3,CRI:5};
+const sevKey = v => { if(v==null||v==="") return ""; const n=GRADE.num(v); if(n) return n;
+  return LEGACY_SEV[String(v).toUpperCase()]||""; };
 /* 1C's stoppage priority, the same four the planners pick from when a work
    request is raised. The phone writes the code onto the finding; here it is only
    read back and shown, so the register and 1C use one vocabulary. */
@@ -4821,7 +4852,10 @@ function bodyModelOf(unit){
    corrected since the export shows corrected here too. Both ends run the
    identical WEAR.wear() — there is no second opinion to reconcile. */
 const UC_BAND = pct => pct>=100 ? "act" : pct>=80 ? "watch" : "ok";
-const UC_SEV  = {act:"CRI", watch:"DEG", ok:"NOF"};
+/* A measured point's grade comes from its remaining life — GRADE.fromWorn —
+   on the same bands the phone's cards state for undercarriage and GET:
+   1 at 80–100% remaining … 5 below 20% or past the limit. */
+const UC_GRADE = pct => GRADE.fromWorn(pct) || "";
 function wearOf(rec,it){
   if(!isWearType(rec.type)) return null;
   /* A GET round with no reading and no reason given: there is nothing to
@@ -4929,27 +4963,36 @@ function reasonPair(ty, code){
    A stored severity is still read where there is no grade to derive from,
    because discarding it there would throw a finding away rather than
    reconcile it; sevConflicts() names both cases. */
+/* THE GRADE OF A FINDING, 1..5, or "" when nothing was graded.
+   A measured point grades from its millimetres; a graded point from its
+   grade; a point from before grades decided everything, which carries only a
+   stored ISO class, from that class — because discarding a finding an
+   inspector made is worse than carrying one nobody can re-derive.
+   sevConflicts() names those. */
 function sevOf(rec,it){
   const w=wearOf(rec,it);
-  if(w && w.band) return UC_SEV[w.band]||"";
-  if(it && it.grade) return GRADE_SEV[it.grade]||"";
-  return (it&&it.sev)||"";
+  if(w && w.wearPct!=null && w.wearPct!=="" && w.mm!=null) return UC_GRADE(w.wearPct);
+  if(it && it.general) return "";
+  const g=gradeNum(it && it.grade);
+  if(g) return g;
+  return sevKey(it && it.sev);
 }
-/* Every place a stored severity disagrees with the grade it sits beside, or
-   stands with no grade at all. Named and counted rather than silently
-   normalised, because a contradiction somebody imported is a fact about the
-   import and somebody has to see it. */
+/* Every point that stands on a stored ISO class with no grade behind it, or
+   whose stored class contradicts the grade beside it. Named and counted rather
+   than silently normalised, because a contradiction somebody imported is a
+   fact about the import and somebody has to see it. */
 function sevConflicts(){
   const out=[];
   try{
     RECS.forEach(r=>{
       if(r._void) return;
       (r.items||[]).forEach(i=>{
-        if(!i || !i.sev) return;
+        if(!i || i.general || !i.sev) return;
         const w=wearOf(r,i); if(w && w.band) return;      // measured, not graded
-        if(!i.grade){ out.push({r,i,why:"nograde",was:i.sev,now:""}); return; }
-        const map=GRADE_SEV[i.grade]||"";
-        if(map && i.sev!==map) out.push({r,i,why:"conflict",was:i.sev,now:map});
+        const g=gradeNum(i.grade);
+        if(!g){ out.push({r,i,why:"nograde",was:sevKey(i.sev),now:""}); return; }
+        const map=GRADE.iso(g)||"";
+        if(map && String(i.sev).toUpperCase()!==map) out.push({r,i,why:"conflict",was:sevKey(i.sev),now:g});
       });
     });
   }catch(e){}
@@ -4978,7 +5021,7 @@ const canWrite = () => localStorage.getItem(CANWRITE) || "?";
 function fromBundled(){
   const d=window.CM_DATA; if(!d||!d.inspections) return [];
   return d.inspections.map(r=>({equip:r.equipment,date:r.date,type:"MP",cls:"HT",by:"",smu:r.motorHours||"",
-    items:(r.positions||[]).map(p=>({key:p.key,label:p.label||"",grade:p.grade||"",sev:GRADE_SEV[p.grade]||"",
+    items:(r.positions||[]).map(p=>({key:p.key,label:p.label||"",grade:gradeNum(p.grade)||"",sev:GRADE.iso(p.grade)||"",
       action:"",actionLabel:"",wo:"",defectCode:"",defect:"",iso:"",isoMode:"",causeCode:"",cause:"",
       particle:p.particleCount||"",comp:p.componentHours||"",oil:p.oilHours||"",comment:p.comment||"",
       lubeProduct:p.lubeProduct||"",lubeUnlisted:p.lubeUnlisted||0,
@@ -5235,6 +5278,17 @@ function rebuild(){
      is its own kind of defect. */
   const norm=(window.CMNorm ? CMNorm.list([...map.values()]) : {recs:[...map.values()],removed:0,orphans:0,touched:0});
   normStats=norm;
+  /* NORMALISED ON THE WAY IN, ONCE.
+     The grade: a number 1..5 whatever the sidecar wrote (a phone on the old
+     build writes a letter). The machine's photographs: the phone carries
+     them on a pseudo-position keyed "__general"; here that item is marked
+     general, so nothing counts it as a point, and keyed MACHINE so a key
+     printed on a screen reads as what it is. */
+  norm.recs.forEach(r=>(r.items||[]).forEach(i=>{
+    if(!i) return;
+    if(i.grade!=null && i.grade!=="" && gradeNum(i.grade)!==i.grade) i.grade=gradeNum(i.grade)||"";
+    if(i.general || i.key==="__general"){ i.general=1; if(i.key==="__general") i.key="MACHINE"; }
+  }));
   RECS=norm.recs.map(applyEdits)                   // corrections last, over whatever won
     .sort((a,b)=>(b.date||"").localeCompare(a.date||"")||a.equip.localeCompare(b.equip));
 }
@@ -5305,7 +5359,7 @@ function filtered(inclVoid){
     if(!matchesText(r,q)) return false;
     if(drill.sev||drill.defect||drill.cause){
       const hit=(r.items||[]).some(i=>
-        (!drill.sev    || sevOf(r,i)===drill.sev) &&
+        (!drill.sev    || String(sevOf(r,i))===String(drill.sev)) &&
         (!drill.defect || i.defect===drill.defect) &&
         (!drill.cause  || i.cause===drill.cause));
       if(!hit) return false;
@@ -5333,7 +5387,7 @@ function dqMissing(rec,i){
   if(!sv && !i.grade) out.push("cond");
   /* An exception with no defect code is the gap that matters; a normal point
      needs no defect and a measurement IS the finding. */
-  if((sv==="CRI"||sv==="DEG"||sv==="INC") && !i.defect && !i.defectCode && !measured) out.push("defect");
+  if(sv>=3 && !i.defect && !i.defectCode && !measured) out.push("defect");
   if(actionRequired(rec,i)){
     const st=actionState(rec,i);
     if(st.miss.includes("action")) out.push("action");
@@ -5387,6 +5441,7 @@ function findings(recs){            // one row per item that has any content
   recs.forEach(r=>r.items.forEach(i=>{
     // A millimetre is content. Counting only graded items left an undercarriage
     // round showing zero findings on a machine measured past its condemn limit.
+    if(i.general) return;
     const w=wearOf(r,i);
     if(i.grade||i.sev||i.defectCode||i.comment||i.action||(w&&(w.mm!=null||w.reason)))
       out.push({r,i});
@@ -5398,8 +5453,8 @@ const sevRank=s=>SEV[s]?SEV[s].r:-1;
    raises no defect codes — its finding is a number against a limit — so both
    have to ask the wear band as well as the grade. */
 function notable(rec){
-  return (rec.items||[]).filter(i=>{ const w=wearOf(rec,i);
-    return i.grade||i.defectCode||(w&&(w.band==="act"||w.band==="watch")); });
+  return (rec.items||[]).filter(i=>{ if(i.general) return false; const w=wearOf(rec,i);
+    return GRADE.isFinding(sevOf(rec,i))||i.defectCode||(w&&(w.band==="act"||w.band==="watch")); });
 }
 function topFinding(rec){
   const d=(rec.items||[]).map(i=>i.defect).filter(Boolean)[0];
@@ -5452,9 +5507,9 @@ function renderKpis(){
   const recs=filtered(), f=findings(recs);
   const units=new Set(recs.map(r=>r.equip)).size;
   const nVoidHid=($("fVoid")&&$("fVoid").checked)?0:filtered(true).length-recs.length;
-  const cnt={NOF:0,INC:0,DEG:0,CRI:0};
+  const cnt={1:0,2:0,3:0,4:0,5:0};
   f.forEach(x=>{ const s=sevOf(x.r,x.i); if(cnt[s]!=null)cnt[s]++; });
-  const attention=cnt.DEG+cnt.CRI;
+  const attention=cnt[3]+cnt[4]+cnt[5];
   /* One predicate. This used to be `action && action!=="MON"` with no look at
      status, so finished work still counted as work to plan. */
   const openActions=f.filter(x=>actionRequired(x.r,x.i)).length;
@@ -5471,10 +5526,10 @@ function renderKpis(){
   if(prev){
     const pf=findings(prev);
     pFind=pf.length;
-    pAtt=pf.filter(x=>{ const sv=sevOf(x.r,x.i); return sv==="DEG"||sv==="CRI"; }).length;
+    pAtt=pf.filter(x=>sevOf(x.r,x.i)>=3).length;
   }
 
-  const bar=["CRI","DEG","INC","NOF"].map(s=>cnt[s]
+  const bar=[5,4,3,2,1].map(s=>cnt[s]
     ? `<span style="flex:${cnt[s]};background:${SEVC[s]}" title="${esc(SEV[s].l)}: ${cnt[s]}"></span>` : "").join("");
 
   /* A stable hook on each headline. Two suites used to reach these by their
@@ -5496,8 +5551,8 @@ function renderKpis(){
      table below ranks them, so the headline and the list can never disagree. */
   const latest={};
   recs.forEach(r=>{ const k=r.equip; if(!latest[k]||(r.date||"")>(latest[k].date||"")) latest[k]=r; });
-  let nCrit=0, nDeg=0;
-  Object.values(latest).forEach(r=>{ const w=worstOf(r); if(w==="CRI") nCrit++; else if(w==="DEG") nDeg++; });
+  let nCrit=0, nSev=0, nDeg=0;
+  Object.values(latest).forEach(r=>{ const w=worstOf(r); if(w===5) nCrit++; else if(w===4) nSev++; else if(w===3) nDeg++; });
   const nNoown=f.filter(x=>actionRequired(x.r,x.i) && !x.i.owner).length;
   let nReview=0; try{ nReview=sevConflicts().length; }catch(e){}
 
@@ -5514,11 +5569,15 @@ function renderKpis(){
   $("kpis").innerHTML=
       tile({ id:"kpiCrit", k:t("ov_k_crit"), v:nCrit,
              s: esc(nCrit ? t("ov_s_crit") : t("ov_s_none")),
-             cls:"bad"+(nCrit?"":" zero")+(drill.sev==="CRI"?" on":""),
+             cls:"bad"+(nCrit?"":" zero")+(String(drill.sev)==="5"?" on":""),
              go:"crit", title:t("ov_t_crit") })
+    + tile({ id:"kpiSev", k:t("ov_k_sev"), v:nSev,
+             s: esc(nSev ? t("ov_s_sev") : t("ov_s_none")),
+             cls:"bad"+(nSev?"":" zero")+(String(drill.sev)==="4"?" on":""),
+             go:"sev", title:t("ov_t_sev") })
     + tile({ id:"kpiDeg", k:t("ov_k_deg"), v:nDeg,
              s: esc(nDeg ? t("ov_s_deg") : t("ov_s_none")),
-             cls:(nDeg?"warn":"good")+(drill.sev==="DEG"?" on":""),
+             cls:(nDeg?"warn":"good")+(String(drill.sev)==="3"?" on":""),
              go:"deg", title:t("ov_t_deg") })
     + tile({ id:"kpiOver", k:t("ov_k_over"), v:ds.over,
              s: esc(ds.week ? t("ov_s_over",{n:ds.week}) : ds.over ? t("ov_s_over0") : t("k_week_clear")),
@@ -5538,13 +5597,13 @@ function renderKpis(){
              go:"review", title:t("sy_k_grade_go") })
     + `<div class="tile" id="kpiMix"><div class="k">${t("k_mix")}</div>
      <div class="bar" style="margin-top:8px">${bar}</div>
-     <div class="legend">${["CRI","DEG","INC","NOF"].map(s=>
-       `<button type="button" data-sev="${s}" class="${drill.sev===s?"on":""}"${cnt[s]?"":" disabled"}
-          aria-pressed="${drill.sev===s?"true":"false"}"
+     <div class="legend">${[5,4,3,2,1].map(s=>
+       `<button type="button" data-sev="${s}" class="${String(drill.sev)===String(s)?"on":""}"${cnt[s]?"":" disabled"}
+          aria-pressed="${String(drill.sev)===String(s)?"true":"false"}"
           title="${cnt[s]?esc(t("k_only",{x:SEV[s].l})):esc(t("k_none_here"))}"
         ><i style="background:${SEVC[s]}"></i>${esc(SEV[s].l)}<b>${cnt[s]}</b></button>`).join("")}</div>
    </div>`;
-  $("kpis").querySelectorAll("[data-sev]").forEach(b=>b.onclick=()=>setDrill("sev",b.dataset.sev));
+  $("kpis").querySelectorAll("[data-sev]").forEach(b=>b.onclick=()=>setDrill("sev",Number(b.dataset.sev)));
   /* EACH HEADLINE IS A DOOR, AND THE DOOR OPENS ON THE RIGHT ROOM.
 
      Pressing a number takes the reader to the page that holds the list behind
@@ -5556,16 +5615,16 @@ function renderKpis(){
   const kv=$("kpiVoid"); if(kv) kv.onclick=(e)=>{ e.stopPropagation();
     $("fVoid").checked=true; renderAll(); };
   /* The KPI strip disagrees with nobody: keep the tally for whoever asks. */
-  renderKpis.last={ crit:nCrit, deg:nDeg, over:ds.over, act:openActions, noown:nNoown, review:nReview,
+  renderKpis.last={ crit:nCrit, sev:nSev, deg:nDeg, over:ds.over, act:openActions, noown:nNoown, review:nReview,
                     units, recs:recs.length };
 }
 /* Where each Overview headline goes, and what it is filtered to when it gets
    there. One table, so the routing can be read — and tested — as data. */
 function kpiGo(g){
-  if(g==="crit"||g==="deg"){
+  if(g==="crit"||g==="sev"||g==="deg"){
     /* The list is this page's own table. Filter it, and bring it into view —
        otherwise the press appears to do nothing on a tall screen. */
-    const sv = g==="crit" ? "CRI" : "DEG";
+    const sv = g==="crit" ? 5 : g==="sev" ? 4 : 3;
     setDrill("sev", sv);
     try{ urlWrite(true); }catch(e){}
     const tb=$("fleetTbl"); if(tb && tb.scrollIntoView) tb.scrollIntoView({behavior:"smooth", block:"start"});
@@ -5654,7 +5713,9 @@ function renderFleet(){
   });
   const due=nextDueBy();
   const clsOf=r=>r.cls||"";
-  const ownersOf=u=>[...new Set((itemsU[u]||[]).map(x=>x.i.owner).filter(Boolean))];
+  /* The office's owner first; the person the inspector named at the machine
+     where the office has not yet assigned one. */
+  const ownersOf=u=>[...new Set((itemsU[u]||[]).map(x=>x.i.owner||x.i.resp).filter(Boolean))];
   /* THE JOB THE MACHINE IS WAITING ON. Of its open work, the worst finding
      first and the most overdue among equals \u2014 the one a planner would name if
      asked "what does TK149 need". Its action, its state and its date are the
@@ -5744,7 +5805,7 @@ function renderFleet(){
        dropdown, which is the same information costing two more actions. */
     h+=`<tr data-u="${esc(r.equip)}" style="cursor:pointer">
       <td><b>${esc(r.equip)}</b></td>
-      <td>${w?`<span class="pill ${SEV[w].c}" title="${esc(t("th_worst"))}">${g?esc(g)+" \u00b7 ":""}${SEV[w].l}</span>`:'<span class="muted">\u2014</span>'}</td>
+      <td>${w?`<span class="pill ${SEV[w].c}" title="${esc(t("th_worst"))}">${SEV[w].l}</span>`:'<span class="muted">\u2014</span>'}</td>
       <td>${clsOf(r)?`<button class="xf" data-xcls="${esc(clsOf(r))}" title="${esc(t("xf_cls"))}">${esc(clsOf(r))}</button>`:'<span class="muted">\u2014</span>'}</td>
       <td>${top?esc(top):'<span class="muted">\u2014</span>'}<div class="muted" style="font-size:11px;margin-top:2px"><span class="tag">${esc(TYPE_LABEL[r.type]||r.type)}</span><span class="mono">${esc(r.date||"")}</span>${r.by?` · ${esc(r.by)}`:""}</div></td>
       <td class="mono r hide-m">${fs.length}</td>
@@ -6081,12 +6142,12 @@ function fOverdue(i){ return !!(i.due && stOpen(i.status) && i.due < todayISO())
    through actionState(). One predicate, or the numbers drift again. */
 
 /* What an exception has to carry before it can leave triage. */
-const TRIAGE_REQ={ CRI:["action","prio","owner","due"], DEG:["action","prio","owner","due"],
-                   other:["action","owner","due"] };
+const TRIAGE_REQ={ 5:["action","prio","owner","due"], 4:["action","prio","owner","due"],
+                   3:["action","prio","owner","due"], other:["action","owner","due"] };
 function actionState(r,i){
   if(!i) return {k:"none", miss:[]};
   const sv=sevOf(r,i);
-  const exception = sv==="CRI"||sv==="DEG";     // C · Degraded and X · Critical
+  const exception = sv>=3;                      // 3 Degraded, 4 Severe, 5 Critical
   const hasAction = !!(i.action && i.action!=="MON");
   /* Not an exception and nobody proposed anything: a record, not a job. */
   if(!exception && !hasAction) return {k:"none", miss:[], sev:sv};
@@ -6099,7 +6160,9 @@ function actionState(r,i){
   }
   if(st==="DONE"||st==="VERIFIED") return {k:"closed", miss:[], sev:sv};
   const need = exception ? TRIAGE_REQ[sv] : TRIAGE_REQ.other;
-  const has = { action:hasAction, prio:!!i.prio, owner:!!i.owner, due:!!i.due };
+  /* The phone's plan counts: a responsible person named at the machine is an
+     owner, and a target date set there is a due date. */
+  const has = { action:hasAction, prio:!!i.prio, owner:!!(i.owner||i.resp), due:!!(i.due||i.target) };
   const miss = need.filter(f=>!has[f]);
   return miss.length ? {k:"triage", miss, sev:sv} : {k:"open", miss:[], sev:sv};
 }
@@ -6360,7 +6423,7 @@ function renderActions(){
     const d=Math.round((Date.parse(i.due+"T00:00:00Z")-Date.parse(todayISO()+"T00:00:00Z"))/864e5);
     return d>=0 && d<=7;
   }).length;
-  const crit=rows.filter(({r,i})=>sevOf(r,i)==="CRI" && actionRequired(r,i)).length;
+  const crit=rows.filter(({r,i})=>sevOf(r,i)===5 && actionRequired(r,i)).length;
   const counts={ open:required, triage, crit, over:overdue, week,
                  noown:rows.length-owned, mine:owned, all:rows.length };
   $("aSeg").innerHTML=[["open","a_f_open"],["triage","a_f_triage"],["crit","a_f_crit"],
@@ -6381,7 +6444,7 @@ function renderActions(){
               : filt==="mine" ? rows.filter(({i})=>i.owner)
               : filt==="triage" ? rows.filter(({r,i})=>actionState(r,i).k==="triage")
               : filt==="noown" ? rows.filter(({i})=>!i.owner)
-              : filt==="crit" ? rows.filter(({r,i})=>sevOf(r,i)==="CRI" && actionRequired(r,i))
+              : filt==="crit" ? rows.filter(({r,i})=>sevOf(r,i)===5 && actionRequired(r,i))
               : filt==="week" ? rows.filter(({i})=>{
                   if(!i.due || !stOpen(i.status)) return false;
                   const d=Math.round((Date.parse(i.due+"T00:00:00Z")-Date.parse(todayISO()+"T00:00:00Z"))/864e5);
@@ -6635,7 +6698,7 @@ const aFilt=()=>aFilterState;
 function setAFilt(v){ aFilterState=v; renderActions(); try{ urlWrite(false); }catch(e){} }
 $("csvBtn").onclick=()=>{
   const rows=actionRows(); const q=s=>`"${String(s==null?"":s).replace(/"/g,'""')}"`;
-  const head=["RecordId","Rev","Severity","Unit","Type","Component","ComponentName","DefectCode","Defect","ISOMechanism","ISOMode","CauseCode","Cause","Action","Priority","PriorityLabel","WO","Grade","TempC","AmbientC","Method","Date","Inspector","VerifiedBy","GPS","Comment",
+  const head=["RecordId","Rev","Grade","GradeName","Unit","Type","Component","ComponentName","DefectCode","Defect","ISOMechanism","ISOMode","CauseCode","Cause","Action","Priority","PriorityLabel","WO","ISOSeverity","Responsible","TargetDate","OperatingStatus","GradeReason","TempC","AmbientC","Method","Date","Inspector","VerifiedBy","GPS","Comment",
     /* Captured on the phone and, until now, dropped on the way out. The CSV
        is what planning and reliability actually load into a spreadsheet, so a
        field missing here is a field that does not exist to them. */
@@ -6644,7 +6707,7 @@ $("csvBtn").onclick=()=>{
        carry who owns it and when it is due, or the plan lives only here. */
     "Owner","Due","Status","Overdue","PlanNote","RootCause","Why1","Why2","Why3","Why4","Why5",
     "Corrective","Preventive","PlanBy","PlanAt"];
-  const body=rows.map(({r,i})=>[recId(r)||"",recRev(r)||"",SEV[sevOf(r,i)]?.l||"",r.equip,r.type,i.key,i.label,i.defectCode,i.defect,i.iso,i.isoMode,i.causeCode,i.cause,i.actionLabel,i.prio||"",i.prio?prioName(i.prio,"en"):"",i.wo,i.grade,i.tempC,i.ambC,i.tempMethod,r.date,r.by,r.sup||"",r.gps?`${r.gps.lat},${r.gps.lon}`:"",i.comment,
+  const body=rows.map(({r,i})=>[recId(r)||"",recRev(r)||"",sevOf(r,i)||"",GRADE.name(sevOf(r,i),"en"),r.equip,r.type,i.key,i.label,i.defectCode,i.defect,i.iso,i.isoMode,i.causeCode,i.cause,i.actionLabel,i.prio||"",i.prio?prioName(i.prio,"en"):"",i.wo,GRADE.iso(sevOf(r,i))||"",i.resp||"",i.target||"",i.opstat||"",i.gradeWhy||"",i.tempC,i.ambC,i.tempMethod,r.date,r.by,r.sup||"",r.gps?`${r.gps.lat},${r.gps.lon}`:"",i.comment,
     i.detectionLabel||i.detection||"", i.stood?"yes":"", r.smu||"",
     (w=>w?[w.mm==null?"":w.mm, w.newMM==null?"":w.newMM, w.condemnMM==null?"":w.condemnMM,
            w.wearPct==null?"":w.wearPct]:["","","",""])(wearOf(r,i)),
@@ -7482,13 +7545,13 @@ function renderHistList(recs){
     n+=items.length;
     const rows=items.map(i=>{
       const sev=sevOf(rec,i), med=mediaOf(i,rec);
-      const sc=sev?`var(--${SEV[sev].c==="c"?"critical":SEV[sev].c==="s"?"serious":SEV[sev].c==="w"?"warning":"good"})`:"";
+      const sc=sev?SEVC[sev]:"";
       /* Colour AND the word. A dot alone tells a colour-blind reader nothing,
          and this is the column the page is about. */
       const sevCell=sev?`<span class="sevcell" style="--sc:${sc}"><i></i>${esc(SEV[sev].l)}</span>`
                        :`<span class="muted">—</span>`;
       return `<tr class="hrow" tabindex="0" data-rk="${esc(ekOf(rec))}" data-ik="${esc(i.key)}">
-        <td><b>${esc(i.key)}</b>${i.grade?` <span class="pill ${SEV[GRADE_SEV[i.grade]]?.c||'n'}">${esc(i.grade)}</span>`:""}</td>
+        <td><b>${esc(i.key)}</b></td>
         <td title="${esc(i.label||"")}"><span class="trunc">${esc(i.label||"—")}</span></td>
         <td>${sevCell}</td>
         <td title="${esc(i.defect||"")}"><span class="trunc">${esc(i.defect||"—")}${
@@ -7613,7 +7676,7 @@ function renderHistory(){
           data-names='${esc(JSON.stringify(med.map(m=>m.name||"")))}'>
           ${gal}
           ${edit}
-          <div class="body"><div class="pk">${esc(i.key)}${i.grade?` <span class="pill ${SEV[GRADE_SEV[i.grade]]?.c||'n'}">${esc(i.grade)}</span>`:""}
+          <div class="body"><div class="pk">${esc(i.key)}
             ${s?`<span class="pill ${SEV[s].c}">${SEV[s].l}</span>`:""}</div>
             <div class="pl">${esc(i.label||"")}</div>
             ${i.defect?`<div style="font-size:12px"><b>${esc(i.defect)}</b> <span class="muted">${esc(i.defectCode)}</span></div>`:""}
@@ -7906,7 +7969,7 @@ function trendMonths(){
   const m=new Map();
   recs.forEach(r=>{
     const k=String(r.date||"").slice(0,7); if(!/^\d{4}-\d{2}$/.test(k)) return;
-    const e=m.get(k)||{k, rounds:0, units:new Set(), CRI:0, DEG:0, INC:0, NOF:0};
+    const e=m.get(k)||{k, rounds:0, units:new Set(), 5:0, 4:0, 3:0, 2:0, 1:0};
     e.rounds++; e.units.add(r.equip);
     (r.items||[]).forEach(i=>{ const s=sevOf(r,i); if(s && e[s]!=null) e[s]++; });
     m.set(k,e);
@@ -7918,9 +7981,10 @@ function renderTrend(){
   if(ms.length<2){
     $("trendChart").innerHTML=`<div class="empty"><b>${esc(t("tr_none"))}</b><span>${esc(t("tr_none_s"))}</span></div>`;
     $("trendKey").innerHTML=""; $("trendNote").textContent=""; return; }
-  const worst=Math.max(1,...ms.map(x=>x.CRI+x.DEG+x.INC));
+  const f=x=>x[5]+x[4]+x[3]+x[2];
+  const worst=Math.max(1,...ms.map(f));
   const bars=ms.map(x=>{
-    const tot=x.CRI+x.DEG+x.INC;
+    const tot=f(x);
     /* A month with one finding beside a month with sixty-seven is 1.5% of the
        track — an empty box, indistinguishable from a month with none. Anything
        that happened gets a sliver you can see; nothing stays nothing. */
@@ -7929,9 +7993,10 @@ function renderTrend(){
       aria-pressed="${drill.month===x.k?"true":"false"}"
       title="${esc(x.k+" · "+t("tr_tip",{f:tot,r:x.rounds,u:x.units.size})+" · "+t("tr_click"))}">
       <div class="tstack">
-        <i class="s-cri" style="height:${h(x.CRI)}"></i>
-        <i class="s-deg" style="height:${h(x.DEG)}"></i>
-        <i class="s-inc" style="height:${h(x.INC)}"></i>
+        <i class="s-cri" style="height:${h(x[5])}"></i>
+        <i class="s-sev" style="height:${h(x[4])}"></i>
+        <i class="s-deg" style="height:${h(x[3])}"></i>
+        <i class="s-inc" style="height:${h(x[2])}"></i>
       </div>
       <b>${tot||""}</b>
       <span>${esc(x.k.slice(2))}</span>
@@ -7941,9 +8006,7 @@ function renderTrend(){
      panel and pushed the columns into a shorter box — a chart that spends its
      height explaining its colours is a chart with less chart in it. */
   $("trendKey").innerHTML=
-      `<span><i style="--c:var(--critical)"></i>${esc(SEV.CRI?SEV.CRI.l:"Critical")}</span>`
-    + `<span><i style="--c:var(--serious)"></i>${esc(SEV.DEG?SEV.DEG.l:"Degraded")}</span>`
-    + `<span><i style="--c:var(--warning)"></i>${esc(SEV.INC?SEV.INC.l:"Incipient")}</span>`
+      [5,4,3,2].map(n=>`<span><i style="--c:${SEVC[n]}"></i>${esc(SEV[n].l)}</span>`).join("")
     + `<span>${esc(t("tr_rounds"))}</span>`;
   $("trendChart").innerHTML=`<div class="trend">${bars}</div>`;
   $("trendChart").querySelectorAll("[data-tm]").forEach(b=>b.onclick=()=>setDrill("month",b.dataset.tm));
@@ -7951,7 +8014,6 @@ function renderTrend(){
      chart nobody acts on. Compares the last month with the average of the
      three before it, and says plainly when there is not enough to say. */
   const last=ms[ms.length-1], prior=ms.slice(-4,-1);
-  const f=x=>x.CRI+x.DEG+x.INC;
   if(!prior.length){ $("trendNote").textContent=t("tr_short"); return; }
   const avg=prior.reduce((a,x)=>a+f(x),0)/prior.length;
   const now=f(last);
@@ -8380,19 +8442,20 @@ function openEdit(key,keepMsg){
        So agreement is made into an action somebody takes, rather than a field
        silently rewritten by opening the panel. Ticking it retires the old
        severity and signs the retirement; leaving it alone changes nothing. */
-    const stale = !!(i.grade && i.sev && !(wearOf(rec,i)||{}).band
-                     && i.sev!==(GRADE_SEV[i.grade]||""));
+    const gN=gradeNum(i.grade);
+    const stale = !!(gN && i.sev && !(wearOf(rec,i)||{}).band
+                     && String(i.sev).toUpperCase()!==(GRADE.iso(gN)||""));
     return `<div class="srccard" style="margin-bottom:10px"><div class="srchead">
-      <span class="ico">${i.grade?esc(i.grade):"·"}</span><div><b>${esc(i.key)}</b>
+      <span class="ico" style="${gN?`background:${SEVC[gN]};color:${GRADE.ink(gN)}`:""}">${gN?gN:"·"}</span><div><b>${esc(i.key)}</b>
       <div class="muted">${esc(i.label||"")}${i.comment?` — “${esc(i.comment)}”`:""}</div></div>
       <span class="state">${sev?esc(SEV[sev]?SEV[sev].l:sev):esc(t("ed_nosev"))}</span></div>
       <div class="srcbody">
         ${stale?`<div class="note" style="margin-top:0">
-          ${esc(t("ed_stale",{g:i.grade,
-                now:(SEV[GRADE_SEV[i.grade]]||{}).l||GRADE_SEV[i.grade],
-                was:(SEV[i.sev]||{}).l||i.sev}))}
+          ${esc(t("ed_stale",{g:GRADE.label(gN,lang),
+                now:GRADE.label(gN,lang),
+                was:(SEV[sevKey(i.sev)]||{}).l||i.sev}))}
           <label class="agree"><input type="checkbox" data-cfok="${esc(i.key)}">
-            <span>${esc(t("ed_stale_ok",{now:(SEV[GRADE_SEV[i.grade]]||{}).l||GRADE_SEV[i.grade]}))}</span></label>
+            <span>${esc(t("ed_stale_ok",{now:GRADE.label(gN,lang)}))}</span></label>
         </div>`:""}
         <div class="row">
           <!-- Grade, which was shown and not editable.
@@ -8404,18 +8467,16 @@ function openEdit(key,keepMsg){
                was recommended for lets the office fix everything except the
                thing an inspector is most likely to have got wrong in the dark
                at -40. The only route was to void the round and re-capture it. -->
-          <div class="field"><label>${esc(t("ed_grade"))}</label><select data-f="grade" data-k="${esc(i.key)}">
+          <div class="field"><label>${esc(t("ed_grade"))}</label><select data-f="grade" data-k="${esc(i.key)}" data-init="${gN||""}">
             <option value="">${esc(t("ed_none"))}</option>
-            ${["A","B","C","X"].map(g=>`<option value="${g}"${g===(i.grade||"")?" selected":""}>${esc(g)}${GRADE_SEV[g]&&SEV[GRADE_SEV[g]]?" — "+esc(SEV[GRADE_SEV[g]].l):""}</option>`).join("")}
+            ${GRADE.LEVELS.map(g=>`<option value="${g}"${g===gN?" selected":""}>${esc(GRADE.label(g,lang))} — ${esc(GRADE.meaning(g,rec.type,lang))}</option>`).join("")}
           </select></div>
-          <!-- Severity is shown, not chosen. It follows the grade above by the
-               one mapping this system has, so the two can never disagree on a
-               record somebody has to act on. Removing the control removes the
-               ability to set them in contradiction; it does not remove the
-               engineer's control over the finding, which is the grade. -->
-          <div class="field"><label>${esc(t("ed_sev"))}</label>
-            <div class="sevout" data-sevout="${esc(i.key)}">${
-              esc((SEV[GRADE_SEV[i.grade||""]]||{}).l||t("ed_none"))}</div></div>
+          <!-- There is no severity control and no severity read-out: the
+               grade IS the assessment. What a lowered grade needs is a reason,
+               and that box opens only when the grade chosen is below the one
+               the phone recorded. -->
+          <div class="field hidden" data-gwhy="${esc(i.key)}"><label>${esc(t("ed_gwhy"))}</label>
+            <input type="text" value="${esc(i.gradeWhy||"")}" placeholder="${esc(t("ed_gwhy_ph"))}"></div>
           <!-- The override reason field lived here. It existed because severity
                could be moved away from its grade deliberately, and an override
                without a reason is a contradiction the record cannot explain
@@ -8472,12 +8533,14 @@ function openEdit(key,keepMsg){
   /* Severity follows the grade on the screen the moment it is changed, so the
      engineer sees the consequence of the choice they are making rather than
      being told about it after saving. */
+  /* Lowering a grade is a judgement the record has to explain: the reason box
+     opens whenever the chosen grade is below the one the phone recorded. */
   const syncOvr=k=>{
     const g=$("edItems").querySelector(`[data-f="grade"][data-k="${cssq(k)}"]`);
-    const out=$("edItems").querySelector(`[data-sevout="${cssq(k)}"]`);
-    if(!g||!out) return;
-    const mapped=GRADE_SEV[g.value]||"";
-    out.textContent=(SEV[mapped]||{}).l||t("ed_none");
+    const why=$("edItems").querySelector(`[data-gwhy="${cssq(k)}"]`);
+    if(!g||!why) return;
+    const was=gradeNum(g.dataset.init)||0, now=gradeNum(g.value)||0;
+    why.classList.toggle("hidden", !(was && now && now<was));
   };
   $("edItems").querySelectorAll('[data-f="grade"]').forEach(g=>{
     g.addEventListener("change",()=>syncOvr(g.dataset.k));
@@ -8539,7 +8602,8 @@ function cfDiff(mine, other){
    CRI on this one panel. */
 function cfValue(f, v){
   if(v==null||v==="") return t("cf_blank");
-  if(f==="sev") return (SEV[v]&&SEV[v].l)||String(v);
+  if(f==="grade") return GRADE.label(v,lang)||String(v);
+  if(f==="sev") return (SEV[sevKey(v)]&&SEV[sevKey(v)].l)||String(v);
   if(f==="action") return actionName(v,lang);
   if(f==="prio") return prioName(v,lang);
   return String(v);
@@ -9142,6 +9206,7 @@ function collectEdit(){
     (items[k]||(items[k]={}))[f]=v;
     if(!v) return;                       // cleared: nothing to derive from it
     if(f==="action"){ if(v) items[k].actionLabel=actionName(v,"en"); }
+    if(f==="grade"){ items[k].grade=gradeNum(v)||""; }
     if(f==="prio"){ if(v) items[k].prioLabel=prioName(v,"en"); }
     if(f==="defectCode"){ const d=DEF[upDefect(v)];
       if(d){ items[k].defect=d.en; items[k].iso=d.iso14224||""; items[k].isoMode=d.iso14224||""; } }
@@ -9174,13 +9239,22 @@ function collectEdit(){
     const k=g.dataset.k;
     const touched = (items[k] && ("grade" in items[k])) || agreed.has(k);
     if(!touched) return;
-    const mapped=GRADE_SEV[g.value]||"";
+    const gn=gradeNum(g.value);
+    const mapped=GRADE.iso(gn)||"";
     const it=(items[k]||(items[k]={}));
     it.mapSev=mapped;
     it.sev=mapped;
     it.sevOverride=0; it.sevReason=""; it.sevBy=""; it.sevAt="";
-    /* Who changed the finding, and when — the grade is the thing that moved. */
+    /* Who changed the finding, and when — the grade is the thing that moved —
+       and why, when it was lowered. The trail is appended to, never replaced,
+       so every change stays on the record. */
     it.gradeBy=who; it.gradeAt=new Date().toISOString();
+    const whyEl=$("edItems").querySelector(`[data-gwhy="${cssq(k)}"] input`);
+    const was=gradeNum(g.dataset.init)||null;
+    const why=whyEl?whyEl.value.trim():"";
+    if(gn && was && gn<was) it.gradeWhy=why;
+    const prior=(edits[edKey]&&edits[edKey].items&&edits[edKey].items[k]&&edits[edKey].items[k].gradeAudit)||[];
+    it.gradeAudit=prior.concat([{at:it.gradeAt, by:who, from:was, to:gn||null, sug:null, why:why, office:1}]);
   });
   return items;
 }
@@ -9717,7 +9791,6 @@ function openPos(rk, ik){
     ).join("")}</div>`:"";
   $("drwBody").innerHTML = shots +
     `<div class="pk" style="margin-bottom:6px">${esc(i.key)}${
-      i.grade?` <span class="pill ${SEV[GRADE_SEV[i.grade]]?.c||'n'}">${esc(i.grade)}</span>`:""}${
       sev?` <span class="pill ${SEV[sev].c}">${esc(SEV[sev].l)}</span>`:""}${
       rec._void?` <span class="voidflag">${esc(t("ed_voided"))}</span>`:""}</div>
      <div class="pl">${esc(i.label||"")}</div>
@@ -9734,6 +9807,15 @@ function openPos(rk, ik){
        row(t("hh_action"), esc(i.actionLabel||"")) +
        row("Priority", i.prio?esc(prioName(i.prio)):"") +
        row("WO", esc(i.wo||"")) +
+       /* The plan the grade asked for at the machine, and the judgement
+          around the grade — proposed 5, set lower, why, and by whom. */
+       row(t("d_resp"), esc(i.resp||"")) +
+       row(t("d_target"), esc(i.target||"")) +
+       row(t("d_opstat"), i.opstat?esc(t("op_"+i.opstat)):"") +
+       row(t("d_notified"), i.notified?"✓":"") +
+       row(t("d_gwhy"), i.gradeWhy?`<b>${esc(i.gradeWhy)}</b>`:"") +
+       row(t("d_gaudit"), Array.isArray(i.gradeAudit)&&i.gradeAudit.length
+         ? `<ul class="gaudit">${i.gradeAudit.map(a=>`<li><span class="mono">${esc(String(a.at||"").slice(0,16).replace("T"," "))}</span> ${esc(a.by||"")}: ${a.from?esc(GRADE.label(a.from,lang)):"—"} → ${a.to?esc(GRADE.label(a.to,lang)):"—"}${a.sug?` <span class="muted">(${esc(t("d_gsug"))} ${a.sug})</span>`:""}${a.why?` — ${esc(a.why)}`:""}</li>`).join("")}</ul>` : "") +
        row(t("th_detect"), esc(i.detectionLabel||i.detection||"")) +
        /* The app challenged this reading and the inspector measured again and
           stood by it — exactly the number a reliability engineer wants flagged,
@@ -10741,6 +10823,9 @@ function urlRead(from){
     if($("fVoid")) $("fVoid").checked = q.get("void")==="1";
     if(typeof drill==="object"){
       ["unit","owner","month","sev","defect","cause"].forEach(k=>{ drill[k]=q.get(k)||null; });
+      /* A grade filter in an address: a number, or a code from before grades
+         were the scale ("CRI" reads as 5). Anything else is no filter. */
+      if(drill.sev!=null) drill.sev=sevKey(drill.sev)||null;
     }
     /* A list name the address does not carry, or names wrongly, is the
        default — never a value that would hide everything. */
@@ -10853,7 +10938,9 @@ function gSearch(q){
     for(const i of (r.items||[])){
       if(!i) continue;
       const inFind = has(i.key)||has(i.label)||has(i.defect)||has(i.defectCode)
-                   ||has(i.cause)||has(i.comment);
+                   ||has(i.cause)||has(i.comment)
+                   /* "grade 4", "severe", "4 – Severe": the grade by number and by name. */
+                   ||(sevOf(r,i) && (has("GRADE "+sevOf(r,i))||has(GRADE.label(sevOf(r,i),lang))||has(GRADE.name(sevOf(r,i),"en"))));
       const inAct  = has(i.action)||has(i.actionLabel)||has(i.wo)||has(i.owner)||has(i.prio);
       if(inFind){
         if(full("find")) more.find++;
@@ -13226,7 +13313,7 @@ function syncScan(){
   });
   /* Worst first: a Critical still missing its evidence is the one that matters,
      because the photograph is what the order is raised on. */
-  const critOf=r=>(r.items||[]).some(i=>sevOf(r,i)==="CRI");
+  const critOf=r=>(r.items||[]).some(i=>sevOf(r,i)===5);
   gaps.sort((a,b)=>(critOf(b.r)?1:0)-(critOf(a.r)?1:0)
                  || b.miss.length-a.miss.length
                  || String(b.r.date||"").localeCompare(String(a.r.date||"")));
@@ -13371,7 +13458,7 @@ function renderSevGaps(){
     const k=ekOf(x.r);
     const why = x.why==="nograde"
       ? t("sy_sev_ng",{s:sevL(x.was)})
-      : t("sy_sev_cf",{g:x.i.grade,now:sevL(x.now),was:sevL(x.was)});
+      : t("sy_sev_cf",{g:GRADE.label(x.i.grade,lang),now:sevL(x.now),was:sevL(x.was)});
     /* THE POINT'S NAME COMES FROM ptLabelHTML, NOT FROM THE RECORD.
 
        This printed `i.label` raw, so a round captured on a Russian phone put
@@ -13602,9 +13689,9 @@ function renderSync(){
       <th>${esc(t("th_type"))}</th><th class="r">${esc(t("sy_c_missing"))}</th>
       <th>${esc(t("sy_c_which"))}</th></tr></thead><tbody>`
       + s.gaps.slice(0,CAP).map(({r,miss})=>{
-          const crit=(r.items||[]).some(i=>sevOf(r,i)==="CRI");
+          const crit=(r.items||[]).some(i=>sevOf(r,i)===5);
           return `<tr class="hrow" tabindex="0" data-sygo="${esc(ekOf(r))}">
-            <td><b>${esc(r.equip)}</b>${crit?` <span class="pill c">${esc(SEV.CRI.l)}</span>`:""}</td>
+            <td><b>${esc(r.equip)}</b>${crit?` <span class="pill c">${esc(SEV[5].l)}</span>`:""}</td>
             <td class="mono">${esc(r.date||"")}</td>
             <td><span class="tag">${esc(TYPE_LABEL[r.type]||r.type)}</span></td>
             <td class="num mono bad">${miss.length}</td>

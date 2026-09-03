@@ -45,7 +45,7 @@ const dismiss = async p => { for (let i = 0; i < 3; i++) {
   ok('nothing to raise, nothing to prioritise', hiddenAtFirst);
 
   // grade it, choose an action through the picker exactly as a thumb would
-  await p.evaluate(() => document.querySelector('#gradeSeg [data-g="X"]').click());
+  await p.evaluate(() => document.querySelector('#gradeSeg [data-g="5"]').click());
   await p.waitForTimeout(250);
   await p.click('#actionBtn');
   await p.waitForTimeout(350);

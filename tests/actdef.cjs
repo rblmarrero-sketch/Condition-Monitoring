@@ -102,7 +102,7 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
 
   console.log("\n── the same predicate survives a filter");
   const filtered2 = await p.evaluate(() => {
-    setDrill("sev", "CRI");
+    setDrill("sev", 5);
     renderActions();
     const f = findings(filtered());
     return { predicate: f.filter(x => actionRequired(x.r, x.i)).length,
@@ -119,7 +119,7 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
   console.log("\n── an exception missing its plan is triage, not open, and not nothing");
   const tri = await p.evaluate(() => {
     const f = findings(filtered());
-    const x = f.find(y => ["CRI", "DEG"].includes(sevOf(y.r, y.i)));
+    const x = f.find(y => (sevOf(y.r, y.i) >= 3));
     if (!x) return { skip: true };
     const s = actionState(x.r, x.i);
     return { skip: false, k: s.k, miss: s.miss, required: actionRequired(x.r, x.i) };
@@ -133,7 +133,7 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
   console.log("\n── it leaves triage only when it can actually be planned");
   const promote = await p.evaluate(async () => {
     const f = findings(filtered());
-    const x = f.find(y => ["CRI", "DEG"].includes(sevOf(y.r, y.i)));
+    const x = f.find(y => (sevOf(y.r, y.i) >= 3));
     const tgt = { rk: recKey(x.r), ik: x.i.key };
     const step = async patch => {
       await patchItems([tgt], patch, null);
@@ -156,7 +156,7 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
   console.log("\n── \"no action required\" is a decision, and a decision has an author");
   const noact = await p.evaluate(async () => {
     const f = findings(filtered());
-    const x = f.find(y => ["CRI", "DEG"].includes(sevOf(y.r, y.i)) && !y.i.dispBy);
+    const x = f.find(y => (sevOf(y.r, y.i) >= 3) && !y.i.dispBy);
     const tgt = { rk: recKey(x.r), ik: x.i.key };
     const read = () => { const r2 = RECS.find(z => recKey(z) === tgt.rk);
       const i2 = (r2.items || []).find(z => z.key === tgt.ik); return actionState(r2, i2); };
@@ -214,13 +214,13 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
     /* Find a machine that has a C/X exception, open its drawer, and read what
        the panel is willing to claim. */
     const unit = (RECS.find(r => (r.items || []).some(i =>
-      ["CRI", "DEG"].includes(sevOf(r, i)))) || {}).equip;
+      (sevOf(r, i) >= 3))) || {}).equip;
     if (!unit) return { skip: true };
     showTab("overview"); openUnit(unit);
     const body = document.getElementById("drwBody").textContent;
     const exc = RECS.filter(r => r.equip === unit)
       .flatMap(r => (r.items || []).map(i => ({ r, i })))
-      .filter(({ r, i }) => ["CRI", "DEG"].includes(sevOf(r, i)));
+      .filter(({ r, i }) => (sevOf(r, i) >= 3));
     const undisposed = exc.filter(({ r, i }) => actionRequired(r, i)).length;
     return { skip: false, unit, exceptions: exc.length, undisposed,
              saysNothing: /Nothing open on this machine/i.test(body),

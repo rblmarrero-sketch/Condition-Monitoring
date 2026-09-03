@@ -216,8 +216,11 @@ async function readRecords(p) {
      equip|date|type|dev, edits and deferrals are last-write-wins, and teamGone
      on a key already applied does nothing. A round arriving twice is invisible.
      A round arriving never is what we had. */
+  /* _meta/backup holds the pre-rewrite copy of a sidecar under its own name
+     (see rewriteObject); read back as an inspection it would double the round. */
   const cars = all.filter(f => /\.json$/i.test(f.name) && f.updated >= after
-                            && f.path.indexOf(INDEX_DIR + '/') !== 0)
+                            && f.path.indexOf(INDEX_DIR + '/') !== 0
+                            && f.path.indexOf(META_DIR + '/backup/') !== 0)
                   .sort((a, b) => a.updated - b.updated);
   const records = [], edits = [], conflicts = [], deleted = [], deferrals = [];
   let read = 0, bad = 0, truncated = false, cursor = after;
@@ -489,6 +492,58 @@ async function deleteFile(b) {
   return { ok: true, deleted: gone, name: name, at: at };
 }
 
+/* REWRITE ONE SIDECAR OR MARKER IN PLACE, WITH THE ORIGINAL KEPT.
+
+   The grade migration (docs/yandex/migrate-grades.js) needs to change the
+   bytes of a JSON document the folder already holds — a letter grade to its
+   number — without changing anything else about it: not its name, not the
+   device that owns it, not its place in the index. saveOne cannot do that: a
+   different `dev` makes it a rival and forks the round.
+
+   So this is its own operation, and it is deliberately narrow:
+     - admin-gated, like every operation that changes what the folder says;
+     - JSON only — a photograph is never rewritten;
+     - the ORIGINAL BYTES are copied to _meta/backup/<stamp>/<key> BEFORE the
+       object is overwritten, so every rewrite is reversible by copying back;
+     - the owner (x-amz-meta-cm-dev) and the stored hash are carried over, so
+       the next upload from that phone is still recognised as its own;
+     - a rewrite that would store the same bytes is a no-op, and says so, so
+       the tool can be run twice and change nothing the second time. */
+async function rewriteObject(b) {
+  if (!ADMIN) return { ok: false, error: 'Rewrite is switched off. Set ADMIN_SECRET in the function to enable it.' };
+  if (b.admin !== ADMIN) return { ok: false, error: 'Wrong admin password' };
+  const key = String(b.id || b.key || '').replace(/^\/+/, '');
+  if (!key) return { ok: false, error: 'Missing object key' };
+  if (!/\.json$/i.test(key)) return { ok: false, error: 'Only JSON documents can be rewritten' };
+  if (!b.file) return { ok: false, error: 'Missing file content' };
+  const why = String(b.why || '').trim();
+  if (!why) return { ok: false, error: 'A reason is required' };
+  const buf = Buffer.from(String(b.file), 'base64');
+  try { JSON.parse(buf.toString('utf8')); } catch (e) { return { ok: false, error: 'New content is not JSON' }; }
+  const want = sha256(buf);
+  let cur = null;
+  try { cur = await getObj(key); } catch (e) { cur = null; }
+  if (!cur || !cur.body) return { ok: false, error: 'No object called ' + key };
+  const head = await headObj(key);
+  const dev = String((head && head.headers && head.headers['x-amz-meta-cm-dev']) || '');
+  const was = Buffer.from(cur.body);
+  const wasSha = sha256(was);
+  if (wasSha === want) return { ok: true, key, unchanged: true, sha256: want };
+  /* Guard against rewriting on top of a document that changed since the tool
+     read it: the caller says what it read, and a mismatch is refused. */
+  if (b.ifSha && String(b.ifSha) !== wasSha) return { ok: false, error: 'Object changed since it was read', sha256: wasSha };
+  const at = new Date().toISOString();
+  const stamp = at.replace(/[:.]/g, '-');
+  const backupKey = META_DIR + '/backup/' + stamp + '/' + key;
+  await putObj(backupKey, was, 'application/json', dev, { 'x-amz-meta-cm-sha': wasSha, 'x-amz-meta-cm-why': why.slice(0, 200) });
+  await putObj(key, buf, 'application/json', dev, { 'x-amz-meta-cm-sha': want });
+  let storedSha = '';
+  try { const back = await getObj(key); storedSha = sha256(Buffer.from(back.body)); } catch (e) {}
+  if (storedSha !== want) return { ok: false, error: 'stored bytes do not match what was sent', key, backup: backupKey };
+  if (isSidecar(key.split('/').pop())) await touchIndex();
+  return { ok: true, key, backup: backupKey, was: wasSha, sha256: storedSha, at, by: String(b.by || '').slice(0, 80) };
+}
+
 /* The office's decision. Both versions stay in the bucket — this only records
    which one the reports should use, so it is as reversible as a void.
 
@@ -675,6 +730,7 @@ exports.handler = async function (event) {
     if (b.op === 'delete')  return json(await deleteRecord(b));
     if (b.op === 'delfile') return json(await deleteFile(b));
     if (b.op === 'resolve') return json(await resolveConflict(b));
+    if (b.op === 'rewrite') return json(await rewriteObject(b));
     if (b.op === 'batch') {
       const list = b.files || [];
       if (!list.length) return json({ ok: false, error: 'Batch with no files' });

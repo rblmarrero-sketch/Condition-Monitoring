@@ -56,9 +56,14 @@ minutes per round the first time.
 4. **Select a machine.**
 5. **Enter readings** for at least three points. On a measurement round (UC, TB,
    GET) put real millimetres in. On LUBE choose a product.
-6. **Set a grade** — A, B, C or X — wherever the round asks for one. Include at
-   least one **X (Critical)** somewhere across the eight rounds, so the Critical
-   path is exercised.
+6. **Set a grade** — 1 to 5, from the five cards, each showing the number, the
+   name and what it means on this round — wherever the round asks for one.
+   Include at least one **5 – Critical** somewhere across the eight rounds, so
+   the Critical path is exercised (it asks for the defect, the action, a
+   comment, a close-up and the notification tick), and one **3 – Degraded**,
+   which asks for the action and a target date. Take the **Equipment overview**
+   photograph on every round — Save refuses without it — and both sides on the
+   undercarriage round.
 7. **Take an original photograph** on a point. Note roughly what it shows.
 8. **Take a retake** — a *different* picture, replacing or added to the same
    point. This is the step that matters most: make the two pictures visibly

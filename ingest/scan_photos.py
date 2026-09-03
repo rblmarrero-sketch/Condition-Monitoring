@@ -56,8 +56,13 @@ def parse_pos(s):
 
 
 def parse_grade(name):
+    """The grade as the app stores it: an integer 1..5 (mobile/grade.js).
+    File names carry the old letter suffix; A->1, B->2, C->3, D->4, X->5."""
     m = GRADE_RE.search(name or "")
-    return m.group(1).upper() if m else None
+    if not m:
+        return None
+    letter = m.group(1).upper()
+    return {"A": 1, "B": 2, "C": 3, "D": 4, "X": 5}.get(letter, int(letter) if letter in "12345" else None)
 
 
 def parse_equip(s):

@@ -104,22 +104,24 @@ const SNAP = `(function(){
   /* The rule the redesign must not loosen: severity is derived. There is no
      control for it, and the mapping is the app's, not this suite's copy. */
   const g = await p.evaluate(() => {
+    /* The grade IS the severity now: 1..5 from grade.js, and the ISO class is
+       what it exports as. A letter off an old record reads as its number. */
     const map = {};
-    ['A','B','C','X'].forEach(k => { map[k] = GRADE_SEV[k]; });
-    /* A wear band outranks both — a measured round's finding is the millimetres. */
+    ['A','B','C','X'].forEach(k => { map[k] = GRADE.num(k); });
     const rec = { type:'MP', equip:'TK001' };
     const byGrade = sevOf(rec, { key:'4C', grade:'B', sev:'DEG' });
-    return { map: map,
+    return { map: map, iso: [1,2,3,4,5].map(n => GRADE.iso(n)),
              gradeWins: byGrade,
              hasSevControl: !!document.querySelector('[data-f="sev"]'),
              hasGradeControl: true };
   });
   console.log('   ' + JSON.stringify(g));
-  ok('A is Normal', g.map.A === 'NOF', g.map.A);
-  ok('B is Early warning (Incipient)', g.map.B === 'INC', g.map.B);
-  ok('C is Degraded', g.map.C === 'DEG', g.map.C);
-  ok('X is Critical', g.map.X === 'CRI', g.map.X);
-  ok('a stored severity never outranks its grade', g.gradeWins === 'INC', g.gradeWins);
+  ok('A reads as 1 · Normal', g.map.A === 1, g.map.A);
+  ok('B reads as 2 · Incipient', g.map.B === 2, g.map.B);
+  ok('C reads as 3 · Degraded', g.map.C === 3, g.map.C);
+  ok('X reads as 5 · Critical', g.map.X === 5, g.map.X);
+  ok('the ISO class comes off the number', g.iso.join() === 'NOF,INC,DEG,DEG,CRI', g.iso.join());
+  ok('a stored severity never outranks its grade', g.gradeWins === 2, g.gradeWins);
   ok('and there is no control that edits severity directly', !g.hasSevControl,
      'severity input present: ' + g.hasSevControl);
 

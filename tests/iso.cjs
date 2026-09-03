@@ -49,14 +49,14 @@ await p.click('#isoTog'); await p.waitForTimeout(300);
 ok('and folds again', !(await vis(p,'#isoBody')));
 
 console.log('\nbut never while there is something to code');
-await p.evaluate(()=>{document.querySelector('#gradeSeg .g-X').click();});
+await p.evaluate(()=>{document.querySelector('#gradeSeg [data-g="5"]').click();});
 await p.waitForTimeout(400);
 ok('marking it Critical opens them by itself', await vis(p,'#isoBody'));
 ok('and the row cannot be used to hide them again while it is Critical',
    await p.evaluate(async()=>{ document.getElementById('isoTog').click();
      await new Promise(r=>setTimeout(r,150));
      return !document.getElementById('isoBody').classList.contains('hidden'); }));
-await p.evaluate(()=>{document.querySelector('#gradeSeg .g-A').click();});
+await p.evaluate(()=>{document.querySelector('#gradeSeg [data-g="1"]').click();});
 await p.waitForTimeout(400);
 ok('back to no failure and they fold away again', !(await vis(p,'#isoBody')));
 /* The one that matters: a defect recorded, then the point revisited. */

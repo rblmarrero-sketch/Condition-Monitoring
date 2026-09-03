@@ -60,15 +60,18 @@ To add an inspection later, just add another **date folder** with photos and
 click *Open photo folder* again. There's a ready-made example in `Photos/` you
 can point at right now.
 
-**Grades are optional.** Either click a photo and pick `A/B/C/X` in the app
-(remembered in your browser), or put the grade in the file name
-(`4C_C.jpg` or `TK146_4C_2026-10-15_C.jpg`).
+**Grades are 1 to 5.** One scale on every round — 1 Normal · 2 Incipient ·
+3 Degraded · 4 Severe · 5 Critical — from `mobile/grade.js`, with what each
+number means stated per round type (a plug's 3 is fine metal filings; a
+lubrication point's 3 is dirty oil or a small leak). The old `A/B/C/X` letters
+are read wherever they still exist (A→1, B→2, C→3, X→5) and never written
+again. A grade in a file name (`4C_C.jpg`) is read the same way.
 
 ### Recording readings, grades & comments (no Excel)
 
 Each photo card has type-in fields, filled in straight on the dashboard:
 
-- **Grade** (`A/B/C/X`, X worst) — click to set the plug's condition.
+- **Grade** (`1`–`5`, 5 worst) — the condition found, with the meaning for that round under each number.
 - **Particle count**, **Component hrs**, **Oil hrs**, **Comment** — per plug position.
 - **SMU / machine hrs** — once per inspection (the machine's hour meter).
 
@@ -478,7 +481,7 @@ it while the app is open; the other two override it and stick. Both palettes are
 designed rather than one inverted from the other — the neutrals carry a slight
 cool-steel bias, and every text tone clears WCAG AA against the surface it actually
 sits on, checked in the test suite rather than by eye. The severity colours are the
-same in both: a grade C must not look like a different grade because of the time of day.
+same in both: a grade 3 must not look like a different grade because of the time of day.
 
 The pill in the header used to read `navigator.onLine` and say **online**. That
 property means the phone has a network interface attached, not that anything can be
@@ -506,10 +509,22 @@ condition-monitoring finding from a breakdown, and without it a reliability prog
 cannot show it is working — `DM-08 Oil / fluid analysis` and `DM-09 Vibration analysis`
 are what the CM programme reports under.
 
-### A Critical finding has to say what is wrong
+### A graded finding has to say what comes next
 
-Saving will not finish while any position marked **Critical** — grade X, or a severity
-raised to Critical by hand — has no defect or no recommended action. The app jumps to that
+What a grade asks for is one table, `GRADE.requires` in `mobile/grade.js`, read by the
+phone's Save and by the office. A **3** needs a recommended action and a target date; a
+**4** adds a comment and a close-up photograph of the defect; a **5** adds the defect
+code and the supervisor's notification. For 3, 4 and 5 the form also takes who is
+responsible, the machine's operating status and a work order (or says one is required).
+A failure mode the matrix rates critical, a reading past its condemn limit or a
+temperature past its alarm **proposes 5**; the inspector may confirm or raise it, and may
+set it lower only with a reason, which stays on the record with who and when.
+
+Every inspection also needs a whole-machine **overview photograph**, an undercarriage
+round both **sides**, a tray round the **whole tray**, a GET round the **whole assembly**;
+a point's photographs can be relabelled as the defect close-up, a measurement, the plate
+or an extra. Saving will not finish while any position marked **Critical** — grade 5 —
+has no defect or no recommended action. The app jumps to that
 position and names what is missing, rather than reporting an error at the bottom of a long
 form. Planning cannot act on a critical finding that does not say what is wrong or what to
 do, and it is why the Pareto charts used to have blanks at the top.

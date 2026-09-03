@@ -47,7 +47,10 @@
        all three: 4.10:1, 3.99:1 and 4.45:1. In a lit cab at −40 that is the
        difference between reading "All sent" and assuming it. #0a7134 measures
        5.65 / 4.98 / 6.13, and the eye cannot tell the two greens apart. */
-    --good:#0a7134; --warning:#c07c07; --serious:#c95a2c; --critical:#c02f2f; --none:#8b969b; --warn-ink:#8a5a00; --crit-ink:#c02f2f;
+    /* Five steps for five grades: green, amber, orange, red-orange, red. The
+       orange moved towards orange and the red towards red when Severe took the
+       step between them — three reds in a row would have read as one. */
+    --good:#0a7134; --warning:#c07c07; --serious:#c46a12; --severe:#c8431f; --critical:#b3242c; --none:#8b969b; --warn-ink:#8a5a00; --crit-ink:#c02f2f;
     /* The tray's surfaces: one low-chroma family stepped by HEIGHT OFF THE
        FLOOR, so the tint says "this panel is folded up" and leaves green, amber
        and red to mean what they already mean. */
@@ -58,7 +61,7 @@
     --ink:#eef2f4; --ink-2:#b3bec4; --muted:#828e95; --border:#2c353b;
     --line:#232a30; --shadow:none;
     --accent:#ce8256; --accent-ink:#2a1409; --accent-soft:#2a1a12;
-    --good:#3aad5c; --warning:#e0a52a; --serious:#e2825a; --critical:#e05a52; --none:#69757b; --warn-ink:#e0a52a;
+    --good:#3aad5c; --warning:#e0a52a; --serious:#e3953c; --severe:#e46a3e; --critical:#e0524a; --none:#69757b; --warn-ink:#e0a52a;
     /* Critical as INK, which needs more light than critical as a fill.
        #e05a52 on --surface-2 is 4.24:1 in the dark — and the pill it is
        carrying says "Upload failing", so the one state that has to be read
@@ -72,7 +75,7 @@
     --ink:#eef2f4; --ink-2:#b3bec4; --muted:#828e95; --border:#2c353b;
     --line:#232a30; --shadow:none;
     --accent:#ce8256; --accent-ink:#2a1409; --accent-soft:#2a1a12;
-    --good:#3aad5c; --warning:#e0a52a; --serious:#e2825a; --critical:#e05a52; --none:#69757b; --warn-ink:#e0a52a;
+    --good:#3aad5c; --warning:#e0a52a; --serious:#e3953c; --severe:#e46a3e; --critical:#e0524a; --none:#69757b; --warn-ink:#e0a52a;
     /* Critical as INK, which needs more light than critical as a fill.
        #e05a52 on --surface-2 is 4.24:1 in the dark — and the pill it is
        carrying says "Upload failing", so the one state that has to be read
@@ -299,32 +302,65 @@
   .needunit .nu-t{color:var(--ink-2);font-size:14px;margin-bottom:12px;}
   .posnav button .dot{position:absolute;top:5px;right:6px;width:8px;height:8px;border-radius:50%;background:var(--good);display:none;}
   .posnav button.has .dot{display:block;}
-  .gradeseg button.g-A.on{background:var(--good);} .gradeseg button.g-B.on{background:var(--warning);color:#111;}
-  .gradeseg button.g-C.on{background:var(--serious);} .gradeseg button.g-X.on{background:var(--critical);}
-  /* Severity is a ramp — no failure, incipient, degraded, critical — and it was
-     drawn as four identical grey rectangles, so the escalation was carried by
-     reading four labels in Russian or English and knowing the order. The four
-     colours it needs are already reserved for exactly these four meanings, so
-     this spends no new colour: the selected one fills, and an unselected one
-     wears a rail of its own colour, which puts the ramp on screen before
-     anything is tapped. The rail is absolutely positioned, so it costs no
-     layout on a label as long as "Зарождающийся". */
-  .sevseg button, .sevseg>span, .gradeseg button{position:relative;overflow:hidden;}
-  .sevseg button::before, .sevseg>span::before, .gradeseg button::before{content:"";position:absolute;
-    left:0;top:0;bottom:0;width:4px;background:var(--rail,transparent);transition:opacity .12s;}
-  .sevseg button.on::before, .sevseg>span.on::before, .gradeseg button.on::before{opacity:0;}
-  /* The ramp belongs to the STEP, not to the fact that the step was once a
-     button. Severity became a derived read-only strip and these four rules
-     still named `button`, so the whole scale went flat grey — the one thing on
-     the screen whose colour carries meaning. */
-  .sevseg .s-NOF, .gradeseg button.g-A{--rail:var(--good);}
-  .sevseg .s-INC, .gradeseg button.g-B{--rail:var(--warning);}
-  .sevseg .s-DEG, .gradeseg button.g-C{--rail:var(--serious);}
-  .sevseg .s-CRI, .gradeseg button.g-X{--rail:var(--critical);}
-  .sevseg .s-NOF.on{background:var(--good);color:#fff;border-color:transparent;}
-  .sevseg .s-INC.on{background:var(--warning);color:#111;border-color:transparent;}
-  .sevseg .s-DEG.on{background:var(--serious);color:#fff;border-color:transparent;}
-  .sevseg .s-CRI.on{background:var(--critical);color:#fff;border-color:transparent;}
+  /* THE FIVE GRADE CARDS. A ramp — normal, incipient, degraded, severe,
+     critical — drawn as five rows, each wearing a rail of its own colour so
+     the escalation is on screen before anything is tapped, and filling with
+     that colour when chosen. The number is always beside the name, and the
+     meaning under it changes with the round. Rows, not a segment: a meaning
+     is a sentence, and five sentences do not fit five buttons across a phone. */
+  .gcards{display:flex;flex-direction:column;gap:6px;}
+  .gcard{display:flex;align-items:center;gap:10px;width:100%;min-height:52px;padding:8px 10px 8px 12px;
+    border-radius:11px;border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);
+    text-align:left;cursor:pointer;position:relative;overflow:hidden;font-family:inherit;
+    transition:background .1s,color .1s;}
+  .gcard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--gc);}
+  .gcard .gn{flex:0 0 30px;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;
+    justify-content:center;font-size:15px;font-weight:800;background:var(--gc);color:var(--gink,#fff);}
+  .gcard .gt{display:flex;flex-direction:column;gap:2px;min-width:0;}
+  .gcard .gt b{font-size:14.5px;color:var(--ink);line-height:1.2;}
+  .gcard .gm{font-size:12.5px;line-height:1.25;color:var(--ink-2);overflow-wrap:anywhere;}
+  .gcard.on{background:var(--gc);border-color:transparent;color:var(--gink,#fff);}
+  .gcard.on::before{opacity:0;}
+  .gcard.on .gt b,.gcard.on .gm{color:var(--gink,#fff);}
+  .gcard.on .gn{background:rgba(255,255,255,.28);color:var(--gink,#fff);}
+  .gcard:active{opacity:.85;}
+  .g1{--gc:var(--good);} .g2{--gc:var(--warning);--gink:#111;} .g3{--gc:var(--serious);}
+  .g4{--gc:var(--severe);} .g5{--gc:var(--critical);}
+  /* The proposal and the plan, under the cards. */
+  .govr{margin-top:8px;padding:10px 12px;border-radius:10px;border:1px solid var(--critical);
+    background:color-mix(in srgb,var(--critical) 10%,var(--surface));}
+  .govr-t{font-size:13.5px;color:var(--ink);margin-bottom:8px;line-height:1.3;}
+  .greq{margin:10px 0 4px;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--surface-2);}
+  .greq-t{font-size:13px;color:var(--ink-2);line-height:1.35;margin-bottom:8px;}
+  .greq-wo{font-size:12.5px;color:var(--warn-ink);font-weight:650;margin-top:6px;}
+  .greq-wo:empty{display:none;}
+  /* THE MACHINE PHOTOGRAPHS. One row per required or offered category; a
+     taken one shows its thumbnail, an untaken required one is unmistakably
+     open. Sits above the point list because it is about the machine, not a
+     point, and because the Save gate sends the inspector here. */
+  .mphotos{margin-bottom:12px;border:1px solid var(--border);border-radius:12px;background:var(--surface);overflow:hidden;}
+  .mphotos>summary{list-style:none;display:flex;align-items:center;gap:8px;padding:10px 12px;cursor:pointer;
+    font-size:14px;font-weight:700;color:var(--ink);}
+  .mphotos>summary::-webkit-details-marker{display:none;}
+  .mphotos>summary .mpc{margin-left:auto;font-size:12.5px;font-weight:650;color:var(--muted);}
+  .mphotos>summary .mpc.miss{color:var(--crit-ink);}
+  .mphotos>summary::after{content:"▸";color:var(--muted);font-size:13px;}
+  .mphotos[open]>summary::after{content:"▾";}
+  .mprow{display:flex;align-items:center;gap:10px;padding:8px 12px;border-top:1px solid var(--line);}
+  .mprow .mpt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;}
+  .mprow .mpt b{font-size:13.5px;color:var(--ink);}
+  .mprow .mpt span{font-size:12px;color:var(--muted);line-height:1.25;}
+  .mprow .mpt .req{color:var(--crit-ink);font-weight:650;}
+  .mprow .mpt .has{color:var(--good);font-weight:650;}
+  .mprow img{width:52px;height:52px;object-fit:cover;border-radius:8px;background:var(--surface-3);flex:0 0 52px;}
+  .mprow .mpb{flex:0 0 auto;min-height:40px;padding:8px 12px;border-radius:10px;border:1px solid var(--border);
+    background:var(--surface-2);color:var(--ink);font-weight:700;font-size:13.5px;cursor:pointer;font-family:inherit;}
+  .mprow .mpb.pri{background:var(--accent);color:var(--accent-ink);border-color:transparent;}
+  .mprow .mdel2{flex:0 0 auto;width:36px;height:36px;border-radius:50%;border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);cursor:pointer;}
+  .mpguide{padding:8px 12px 10px;font-size:12px;color:var(--muted);border-top:1px solid var(--line);line-height:1.3;}
+  /* A photograph's category, on its tile. */
+  .mtile .mcat{position:absolute;left:4px;bottom:4px;max-width:calc(100% - 8px);padding:2px 6px;border-radius:6px;
+    background:rgba(0,0,0,.62);color:#fff;font-size:10.5px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;border:none;font-family:inherit;}
   .btn{display:block;width:100%;min-height:44px;padding:10px 14px;border-radius:12px;border:none;font-size:15.5px;font-weight:700;cursor:pointer;
     font-family:inherit;transition:opacity .1s;}
   .btn:active{opacity:.86;}
@@ -1430,6 +1466,15 @@
 
   <div class="card" id="cardComponent">
     <h2><span class="rbadge" id="secBadge"></span><span id="secPosTitle">Component</span></h2>
+    <!-- THE MACHINE PHOTOGRAPHS — about the machine, not a point. Every
+         inspection carries a whole-machine overview; an undercarriage round
+         adds both sides, a tray round the whole tray, a GET round the whole
+         assembly. Drawn by renderMachinePhotos() from machineSlots(type). -->
+    <details class="mphotos" id="mphotos">
+      <summary><span data-i18n="ph_title">Machine photographs</span><span class="mpc" id="mpCount"></span></summary>
+      <div id="mpRows"></div>
+      <div class="mpguide" data-i18n="ph_guide">Fill the frame, hold the phone still, keep the subject in focus and evenly lit. Wipe the lens.</div>
+    </details>
     <div class="posnav" id="posnav"></div>
     <div class="posLabel hint" id="posLabel"></div>
 
@@ -1453,12 +1498,49 @@
       <button class="btn ghost" id="videoBtn" type="button">🎥 <span data-i18n="btn_video">Video</span></button>
     </div>
 
-    <label class="fld" id="gradeFld"><span data-i18n="lbl_grade">Grade / condition</span>
-      <div class="seg gradeseg" id="gradeSeg">
-        <button class="g-A" data-g="A">A</button><button class="g-B" data-g="B">B</button>
-        <button class="g-C" data-g="C">C</button><button class="g-X" data-g="X">X</button>
+    <!-- THE CONDITION GRADE, 1 TO 5. Five cards, each the number, the name and
+         what that number means on THIS kind of round — a magnetic plug's 3 is
+         "fine metal filings", a lubrication point's 3 is "dirty lubricant or a
+         small leak". The cards are drawn by renderGrade() from grade.js, so
+         the meanings live in one table for the phone, the office and the
+         printed sheet. There is no separate severity: the grade IS the
+         assessment, and the ISO class is derived from it on export. -->
+    <div class="fld" id="gradeFld"><span data-i18n="lbl_grade">Condition grade</span>
+      <div class="gcards" id="gradeSeg" role="radiogroup"></div>
+      <!-- A condition the matrix, a limit or a measurement calls critical is
+           proposed as 5. The inspector may confirm or raise a grade freely;
+           lowering one below the proposal needs a reason, and the reason is
+           kept on the record with who and when. -->
+      <div class="govr hidden" id="gradeOvr">
+        <div class="govr-t" id="gradeOvrText"></div>
+        <label class="fld"><span data-i18n="g_ovr_why">Why is it not 5?</span>
+          <input id="gradeWhy" type="text" autocomplete="off"></label>
       </div>
-    </label>
+    </div>
+    <!-- WHAT A GRADE OF 3, 4 OR 5 HAS TO SAY. A defect is not a plan until
+         somebody is named, a date is set and the machine's status is stated.
+         The action itself is chosen in the coded block below; this is the
+         plan around it, and it shows only once the grade calls for one. -->
+    <div class="greq hidden" id="gradeReq">
+      <div class="greq-t" id="gradeReqText"></div>
+      <div class="row">
+        <label class="fld"><span data-i18n="g_resp">Responsible person / team</span>
+          <input id="gResp" type="text" autocomplete="off" list="respList"></label>
+        <label class="fld"><span data-i18n="g_target">Target date</span>
+          <input id="gTarget" type="date"></label>
+      </div>
+      <datalist id="respList"></datalist>
+      <label class="fld"><span data-i18n="g_opstat">Equipment operating status</span>
+        <select id="gOpstat">
+          <option value="" data-i18n="g_op_none">— not stated —</option>
+          <option value="RUN" data-i18n="g_op_run">Running</option>
+          <option value="RES" data-i18n="g_op_res">Running with restriction</option>
+          <option value="STOP" data-i18n="g_op_stop">Stopped</option>
+        </select></label>
+      <label class="chk hidden" id="gNotifyWrap"><input type="checkbox" id="gNotify">
+        <span data-i18n="g_notify">Supervisor / planner notified immediately</span></label>
+      <div class="greq-wo" id="gWoHint"></div>
+    </div>
     <!-- GET: a millimetre is welcome, never demanded. The round is complete on
          grades alone, so this sits quietly under the grade rather than taking
          over the screen the way the undercarriage sheet does. -->
@@ -1565,24 +1647,11 @@
         </div>
       </div>
     </div>
-    <!-- A/B/C/X is the technician's answer. ISO severity is what that answer
-         MEANS, and it is derived from it — not a second opinion offered beside
-         it. This was a pressable segmented control, so a fitter could mark a
-         plug X and then press Incipient, and the record went out carrying both.
-         Nothing downstream can resolve that: the report reads one, the KPI
-         reads the other, and neither is wrong. The technician chooses the
-         grade; the office is where a severity may deliberately differ, with a
-         reason attached. -->
-    <div class="fld"><span data-i18n="lbl_sev">Severity (ISO 14224)</span>
-      <div class="seg sevseg" id="sevSeg" aria-readonly="true"
-           data-i18n-title="sev_derived_a" title="ISO severity, derived from the condition code">
-        <span class="s-NOF" data-s="NOF" data-i18n="sev_NOF">No failure</span>
-        <span class="s-INC" data-s="INC" data-i18n="sev_INC">Incipient</span>
-        <span class="s-DEG" data-s="DEG" data-i18n="sev_DEG">Degraded</span>
-        <span class="s-CRI" data-s="CRI" data-i18n="sev_CRI">Critical</span>
-      </div>
-      <em class="derived" data-i18n="sev_derived">Set automatically by the condition code</em>
-    </div>
+    <!-- The read-only "Severity (ISO 14224)" strip lived here. It was derived
+         from the grade and could never be pressed, so it was a second row
+         saying the same thing in other words. The grade above is the one
+         assessment; the ISO class it maps to goes out on export (sevIso). -->
+    <div class="fld hidden" id="sevSeg" aria-hidden="true"></div>
     <!-- On a measurement round the answer is a number and the coded fields are
          the exception: nearly every one of forty-four points is "no failure",
          and 430 px of ISO 14224 pickers sat under every one of them. Behind one
@@ -1940,6 +2009,11 @@
      but attaching one already on the phone is not an exception — it is what
      happens whenever somebody shot the machine before they could get the app
      open. A round that cannot accept those loses the evidence entirely. -->
+<!-- What a point's photograph is of. Opened from the chip on its tile. -->
+<dialog id="catDlg"><div class="dlg-in"><h3 data-i18n="ph_cat">What is this photograph of?</h3>
+  <div class="srcopts" id="catList"></div>
+  <div class="srcopts"><button type="button" class="btn quiet" onclick="document.getElementById('catDlg').close()" data-i18n="src_cancel">Cancel</button></div>
+</div></dialog>
 <dialog id="srcDlg"><div class="dlg-in"><h3 id="srcTitle"></h3>
   <div class="srcopts">
     <button class="btn primary" id="srcLive" type="button"></button>
@@ -1970,6 +2044,7 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
+<<<<<<< HEAD
 <script src="native.js?v=242"></script>
 <script src="upload-defaults.js?v=242"></script>
 <script src="hme.js?v=242"></script>
@@ -1995,6 +2070,34 @@
 <script src="lube-overrides.js?v=242"></script>
 <script src="lube2027.js?v=242"></script>
 <script src="report-core.js?v=242"></script>
+=======
+<script src="native.js?v=241"></script>
+<script src="upload-defaults.js?v=241"></script>
+<script src="hme.js?v=241"></script>
+<script src="mp-fc.js?v=241"></script>
+<script src="hme-cascade.js?v=241"></script>
+<script src="assets.js?v=241"></script>
+<script src="temp-limits.js?v=241"></script>
+<script src="normalize.js?v=241"></script>
+<script src="grade.js?v=241"></script>
+<script src="due.js?v=241"></script>
+<script src="wear.js?v=241"></script>
+<script src="wear-figs.js?v=241"></script>
+<script src="wear-map.js?v=241"></script>
+<script src="machine-photos.js?v=241"></script>
+<script src="machine-fig.js?v=241"></script>
+<script src="get.js?v=241"></script>
+<script src="points.js?v=241"></script>
+<script src="uc-points.js?v=241"></script>
+<script src="inspect-guide.js?v=241"></script>
+<script src="get-figs.js?v=241"></script>
+<script src="body-points.js?v=241"></script>
+<script src="body-map.js?v=241"></script>
+<script src="lube.js?v=241"></script>
+<script src="lube-overrides.js?v=241"></script>
+<script src="lube2027.js?v=241"></script>
+<script src="report-core.js?v=241"></script>
+>>>>>>> 69ea133 (Grades 1–5 — work in progress on the grading branch)
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2202,7 +2305,36 @@ const I18N = {
     sw_noanswer:"Could not check the offline copy.",
     pick_search:"Search…", pick_recent:"Recently on this phone", video_too_long:["Video too long","Please record a clip of 1 minute or less."],
     shot_placeholder:"No photo yet.",
-    lbl_grade:"Grade / condition", lbl_particle:"Particle count", lbl_comp:"Component hrs", lbl_oil:"Oil hrs",
+    lbl_grade:"Condition grade", lbl_particle:"Particle count", lbl_comp:"Component hrs", lbl_oil:"Oil hrs",
+    /* The 1–5 grade: the proposal, the plan it asks for, the photographs. */
+    g_ovr_why:"Why is it not 5?",
+    g_ovr_defect:"This failure mode is rated critical: 5 is proposed. You set {g} — say why.",
+    g_ovr_temp:"The reading is past the alarm limit: 5 is proposed. You set {g} — say why.",
+    g_ovr_wear:"The measurement is past the condemn limit: 5 is proposed. You set {g} — say why.",
+    g_req_3:"A 3 is a defect to plan: choose the action below, name who will do it and set a target date.",
+    g_req_4:"A 4 is urgent: action, a comment on what was found, a close-up of the defect, and a target date.",
+    g_req_5:"A 5 stops the machine: notify the supervisor now, then record the action, a comment, a close-up of the defect and the target date.",
+    g_resp:"Responsible person / team", g_target:"Target date", g_opstat:"Equipment operating status",
+    g_op_none:"— not stated —", g_op_run:"Running", g_op_res:"Running with restriction", g_op_stop:"Stopped",
+    g_notify:"Supervisor / planner notified immediately",
+    g_wo_req:"No work order yet — WO required",
+    req_target:"a target date", req_comment:"a comment", req_closeup:"a close-up photograph of the defect or component",
+    req_notify:"the notification tick", req_why:"a reason for setting it below the proposed 5",
+    m_need_grade_t:"{g} needs more than a grade",
+    m_need_grade_m:"{k} is graded {g}, so it needs {x}. Planning cannot act on a finding that does not say what is wrong or what to do.",
+    ph_title:"Machine photographs", ph_req:"Required", ph_opt:"Optional", ph_take:"Take", ph_retake:"Retake",
+    ph_done:"{n} of {r} required photographs taken",
+    ph_OVERVIEW:"Equipment overview", ph_OVERVIEW_h:"The whole machine in frame — not a close-up.",
+    ph_LEFT:"Left side", ph_LEFT_h:"The whole left undercarriage, idler to sprocket.",
+    ph_RIGHT:"Right side", ph_RIGHT_h:"The whole right undercarriage, idler to sprocket.",
+    ph_BODY:"Whole dump body / tray", ph_BODY_h:"The whole tray in frame.",
+    ph_GET:"Whole GET assembly", ph_GET_h:"Every tooth and shroud in one frame.",
+    ph_COMPONENT:"Component", ph_DEFECT:"Defect close-up", ph_MEASURE:"Measurement",
+    ph_PLATE:"Identification plate", ph_EXTRA:"Additional",
+    ph_cat:"What is this photograph of?",
+    ph_guide:"Fill the frame, hold the phone still, keep the subject in focus and evenly lit. Wipe the lens.",
+    m_need_photo_t:"Photographs missing",
+    m_need_photo_m:"This inspection still needs: {x}. The round is kept as a draft until they are taken.",
     lbl_prio:"Work request priority (1C)",
     opt_prio_none:"— not set —", opt_prio_fit:"Fits what was found", opt_prio_other:"All priorities",
     lbl_comment:"Comment / defect", ph_comment:"notes…",
@@ -2687,7 +2819,35 @@ const I18N = {
     sw_noanswer:"Не удалось проверить офлайн-копию.",
     pick_search:"Поиск…", pick_recent:"Недавние на этом телефоне", video_too_long:["Видео слишком длинное","Запишите ролик не длиннее 1 минуты."],
     shot_placeholder:"Нет фото.",
-    lbl_grade:"Степень / состояние", lbl_particle:"Количество частиц", lbl_comp:"Наработка компонента", lbl_oil:"Наработка масла",
+    lbl_grade:"Оценка состояния", lbl_particle:"Количество частиц", lbl_comp:"Наработка компонента", lbl_oil:"Наработка масла",
+    g_ovr_why:"Почему не 5?",
+    g_ovr_defect:"Этот вид отказа считается критическим: предлагается 5. Вы поставили {g} — укажите причину.",
+    g_ovr_temp:"Показание выше аварийного предела: предлагается 5. Вы поставили {g} — укажите причину.",
+    g_ovr_wear:"Замер за браковочным пределом: предлагается 5. Вы поставили {g} — укажите причину.",
+    g_req_3:"3 — дефект, который нужно запланировать: выберите действие ниже, укажите исполнителя и срок.",
+    g_req_4:"4 — срочно: действие, комментарий о находке, крупный план дефекта и срок.",
+    g_req_5:"5 — машина останавливается: немедленно уведомите руководителя, затем запишите действие, комментарий, крупный план дефекта и срок.",
+    g_resp:"Ответственный / бригада", g_target:"Срок", g_opstat:"Состояние техники",
+    g_op_none:"— не указано —", g_op_run:"В работе", g_op_res:"В работе с ограничением", g_op_stop:"Остановлена",
+    g_notify:"Руководитель / планировщик уведомлён немедленно",
+    g_wo_req:"Заявки пока нет — требуется заявка",
+    req_target:"срок", req_comment:"комментарий", req_closeup:"крупный план дефекта или узла",
+    req_notify:"отметку об уведомлении", req_why:"причину оценки ниже предложенной 5",
+    m_need_grade_t:"Для «{g}» нужна не только оценка",
+    m_need_grade_m:"{k} оценено как {g}, поэтому нужно указать: {x}. По находке без дефекта и действия планирование работать не может.",
+    ph_title:"Фотографии машины", ph_req:"Обязательно", ph_opt:"По желанию", ph_take:"Снять", ph_retake:"Переснять",
+    ph_done:"Снято {n} из {r} обязательных",
+    ph_OVERVIEW:"Общий вид машины", ph_OVERVIEW_h:"Вся машина в кадре — не крупный план.",
+    ph_LEFT:"Левая сторона", ph_LEFT_h:"Вся левая ходовая, от натяжного колеса до звёздочки.",
+    ph_RIGHT:"Правая сторона", ph_RIGHT_h:"Вся правая ходовая, от натяжного колеса до звёздочки.",
+    ph_BODY:"Кузов целиком", ph_BODY_h:"Весь кузов в кадре.",
+    ph_GET:"Рабочий орган целиком", ph_GET_h:"Все зубья и защиты в одном кадре.",
+    ph_COMPONENT:"Узел", ph_DEFECT:"Дефект крупным планом", ph_MEASURE:"Замер",
+    ph_PLATE:"Заводская табличка", ph_EXTRA:"Дополнительно",
+    ph_cat:"Что на этой фотографии?",
+    ph_guide:"Заполните кадр, держите телефон неподвижно, объект в фокусе и равномерно освещён. Протрите объектив.",
+    m_need_photo_t:"Не хватает фотографий",
+    m_need_photo_m:"Для этого осмотра ещё нужны: {x}. Осмотр сохраняется как черновик, пока они не сняты.",
     lbl_prio:"Приоритет заявки (1С)",
     opt_prio_none:"— не указан —", opt_prio_fit:"Подходит к находке", opt_prio_other:"Все приоритеты",
     lbl_comment:"Комментарий / дефект", ph_comment:"заметки…",
@@ -3205,12 +3365,13 @@ if(eqCat!=="ALL" && !CAT_COUNT[eqCat]) eqCat="ALL";
 function classForCat(cat){ return CAT2CLS[cat] || "GEN"; }
 
 /* Recommended actions come from the matrix — see ACTIONS above. */
-// Inspection grade scale is A / B / C / X, X being the worst (confirmed with the
-// reliability team). Grade only suggests the ISO severity — the inspector can override.
-const GRADE_SEV={A:"NOF",B:"INC",C:"DEG",X:"CRI"};
-/* The same mapping read the other way, so a limit table that concludes a
-   severity can propose the condition code the technician actually answers in. */
-const SEV_GRADE={NOF:"A",INC:"B",DEG:"C",CRI:"X"};
+/* THE GRADE IS 1 TO 5 AND LIVES IN grade.js. It replaced A/B/C/X. Everything
+   here reads the integer through GRADE.num(), which also accepts the old
+   letters off a record written before the change, so a round captured on
+   build 240 and opened on this one still shows its grade. The ISO 14224
+   severity class is DERIVED — GRADE.iso(n) — and is written onto the record
+   only as the class the grade exports as; nothing here sets it by hand. */
+const gradeIso = g => GRADE.iso(g) || "";
 
 /* WRITING TO localStorage CAN THROW, AND ONE OF THESE RAN AT TOP LEVEL.
 
@@ -3875,6 +4036,7 @@ function fillTypeSel(){ $("typeSel").innerHTML=TYPE_ORDER.map(k=>`<option value=
 $("typeSel").onchange=(e)=>{ type=e.target.value; lsSet("insp_type",type);
   draft={positions:{}}; editing=null; curItem=""; applyForm(); setEditing(null); };
 function renderChips(){ const tr=currentTree();
+  try{ renderMachinePhotos(); }catch(e){}
   if(wearType() && curEquip && ucStatus(curEquip).ok && ucView==="map"){ renderUCMap(); return; }
   if(getType() && curEquip && getStatus(curEquip).ok && ucView==="map"){ renderGETMap(); return; }
   if(tr){ renderComponentNav(tr); return; }         // registered unit -> L7/L8/L9 cascade cards
@@ -4202,8 +4364,8 @@ async function takePhoto(){
     const p=curP(); (p.photos ||= []);
     // Shrunk here, once, with the button still disabled — not at sync time, when
     // the inspector has driven away and the link is the thing being waited on.
-    if(p.photos.length<MAX_PHOTOS) p.photos.push(await intake(f));
-    renderMedia(); renderChips();
+    addPos(p, await intake(f), "COMPONENT");
+    renderMedia(); renderChips(); renderGrade();
   } finally { renderMedia(); }                      // re-derives the disabled state
 }
 /* Ask where it comes from. Both buttons ask, and both offer the same two
@@ -4264,7 +4426,7 @@ $("videoBtn").onclick=guard(async ()=>{
    it is the whole implementation on the web. */
 $("camera").onchange=guard(async (e)=>{ const f=e.target.files[0]; e.target.value=""; if(!f) return;
   const s=await intake(f);
-  const p=curP(); (p.photos ||= []); if(p.photos.length<MAX_PHOTOS) p.photos.push(s); renderMedia(); renderChips(); });
+  const p=curP(); addPos(p, s, "COMPONENT"); renderMedia(); renderChips(); renderGrade(); });
 /* One place that decides whether a clip is short enough, because a clip picked
    out of the gallery has to clear the same bar as one taken here — and the way
    that goes wrong is a second copy of the rule that forgets to. Resolves true
@@ -4324,10 +4486,10 @@ async function addPicked(picked){
       if(room<=0){ skipped++; continue; }
       /* Shrunk on the way in, exactly like a photograph taken here — a 12 MP
          frame out of the gallery is the same 4 MB on the link otherwise. */
-      p.photos.push(await intake(f)); room--;
+      addPos(p, await intake(f), "COMPONENT"); room--;
     }
     if(!p.photos.length) delete p.photos;
-    renderMedia(); renderChips();
+    renderMedia(); renderChips(); renderGrade();
     if(skipped) dlg([t("gal_full_t"), t("gal_full_b",{n:skipped, p:MAX_PHOTOS})]);
   } finally { renderMedia(); }
 }
@@ -4338,13 +4500,114 @@ function urlPool(){ let held=[];
   return { url(b){ const u=URL.createObjectURL(b); held.push(u); return u; },
            free(){ held.forEach(u=>{ try{ URL.revokeObjectURL(u); }catch(_){ } }); held=[]; } }; }
 const mediaPool=urlPool(), pendPool=urlPool();
+/* ===================== photograph categories =====================
+   Every photograph says what it is of. A point's photographs are of the
+   component by construction; the inspector can relabel one as the defect
+   close-up, a measurement, a plate or an extra. The machine-level ones —
+   overview, left, right, tray, GET assembly — live on a pseudo-position of
+   their own, GEN_KEY, so they travel every path a point's photographs already
+   travel (IndexedDB, the manifest, upload, ZIP, the report) with no new
+   plumbing, and are simply never a point: nothing grades them, nothing counts
+   them as a reading, and the office files them as the machine's. */
+const GEN_KEY="__general";
+const PHOTO_CATS=["OVERVIEW","LEFT","RIGHT","BODY","GET","COMPONENT","DEFECT","MEASURE","PLATE","EXTRA"];
+const POINT_CATS=["COMPONENT","DEFECT","MEASURE","PLATE","EXTRA"];
+function photoCatLabel(c){ return t("ph_"+c); }
+/* Which machine photographs THIS round asks for. Required ones block Save. */
+function machineSlots(ty){
+  const s=[{cat:"OVERVIEW",req:1}];
+  if(ty==="UC") s.push({cat:"LEFT",req:1},{cat:"RIGHT",req:1});
+  if(ty==="TB") s.push({cat:"BODY",req:1});
+  if(ty==="GET") s.push({cat:"GET",req:1});
+  s.push({cat:"PLATE",req:0},{cat:"EXTRA",req:0});
+  return s;
+}
+function attCat(p,blob){ const e=attMap(p)&&attMap(p)[attIdOf(blob)]; return (e&&e.category)||""; }
+function setAttCat(p,blob,cat){ const aid=attIdOf(blob); if(!aid) return; const m=(p.att ||= {}); (m[aid] ||= {}).category=cat; attSeq(p,aid); }
+function genPhotos(d,cat){ const p=(d.positions||{})[GEN_KEY]; if(!p) return [];
+  return photosOf(p).filter(b=>attCat(p,b)===cat); }
+/* The required categories a draft does not yet carry. */
+function photoGaps(d,ty){
+  return machineSlots(ty).filter(s=>s.req && !genPhotos(d,s.cat).length).map(s=>s.cat);
+}
+/* A close-up on the point: the defect, or the component itself. A photograph
+   from before categories existed is of the component, which is what it was. */
+function hasCloseup(p){
+  return photosOf(p).some(b=>{ const c=attCat(p,b); return !c || c==="COMPONENT" || c==="DEFECT"; });
+}
+/* Put a photograph on a position with its category written down at once, so
+   the manifest that names the file later already knows what it is of. */
+function addPos(p,blob,cat){ (p.photos ||= []); if(p.photos.length>=MAX_PHOTOS) return false;
+  p.photos.push(blob); setAttCat(p,blob,cat||"COMPONENT"); return true; }
+function rememberResp(name){
+  try{ let s=JSON.parse(localStorage.getItem("cm_resp_seen")||"[]"); s=[name].concat(s.filter(x=>x!==name)).slice(0,20);
+    localStorage.setItem("cm_resp_seen",JSON.stringify(s)); }catch(e){}
+}
+async function takeMachinePhoto(cat){
+  const s=await chooseSource("photo"); if(!s) return;
+  const p=(draft.positions[GEN_KEY] ||= {});
+  if(s==="live"){
+    const f = await (window.CMNative ? CMNative.photo() : new Promise(res=>{
+      const el=$("camera"); const on=()=>{ el.removeEventListener("change",on);
+        const x=el.files&&el.files[0]; el.value=""; res(x||null); };
+      el.addEventListener("change",on); el.click(); }));
+    if(!f) return;
+    addPos(p, await intake(f), cat);
+  } else {
+    let got=null;
+    if(window.CMNative && CMNative.pick){ try{ got=await CMNative.pick({limit:1}); }catch(_){ got=null; } }
+    if(!got){ got=await new Promise(res=>{ const g=$("gallery"); g.accept="image/*"; g.multiple=false;
+      const on=()=>{ g.removeEventListener("change",on); const x=[...(g.files||[])]; g.value=""; res(x); };
+      g.addEventListener("change",on); g.click(); }); }
+    if(got && got[0]) addPos(p, await intake(got[0]), cat);
+  }
+  renderMachinePhotos(); draftFlush();
+}
+function dropMachinePhoto(cat,i){
+  const p=draft.positions[GEN_KEY]; if(!p) return;
+  const b=genPhotos(draft,cat)[i]; if(!b) return;
+  p.photos=p.photos.filter(x=>x!==b);
+  if(!p.photos.length){ delete draft.positions[GEN_KEY]; }
+  renderMachinePhotos(); draftFlush();
+}
+const mpPool=urlPool();
+function renderMachinePhotos(){
+  const box=$("mpRows"); if(!box) return;
+  mpPool.free();
+  const slots=machineSlots(type); let have=0, need=0;
+  box.innerHTML=slots.map(s=>{
+    const ph=genPhotos(draft,s.cat);
+    if(s.req){ need++; if(ph.length) have++; }
+    const img=ph[0]?`<img src="${mpPool.url(ph[0])}" alt="${esc(photoCatLabel(s.cat))}">`:"";
+    const st = ph.length ? `<span class="has">✓</span>`
+             : s.req ? `<span class="req">${esc(t("ph_req"))}</span>` : `<span>${esc(t("ph_opt"))}</span>`;
+    return `<div class="mprow" data-cat="${s.cat}">${img}
+      <div class="mpt"><b>${esc(photoCatLabel(s.cat))}</b><span>${esc(t("ph_"+s.cat+"_h")===("ph_"+s.cat+"_h")?"":t("ph_"+s.cat+"_h"))}</span>${st}</div>
+      ${ph.length?`<button type="button" class="mdel2" data-drop="${s.cat}" aria-label="${esc(t("media_del"))}">✕</button>`:""}
+      <button type="button" class="mpb${s.req&&!ph.length?" pri":""}" data-take="${s.cat}">${esc(ph.length?t("ph_retake"):t("ph_take"))}</button>
+    </div>`; }).join("");
+  const c=$("mpCount"); if(c){ c.textContent=t("ph_done",{n:have,r:need}); c.classList.toggle("miss", have<need); }
+  box.querySelectorAll("[data-take]").forEach(b=>b.onclick=guard(()=>takeMachinePhoto(b.dataset.take)));
+  box.querySelectorAll("[data-drop]").forEach(b=>b.onclick=()=>dropMachinePhoto(b.dataset.drop,0));
+}
+function openMachinePhotos(){ const d=$("mphotos"); if(d){ d.open=true; d.scrollIntoView({behavior:"smooth",block:"start"}); } }
+/* Relabel one of a point's photographs. */
+function pickPhotoCat(i){
+  const p=curP(); const b=(p.photos||[])[i]; if(!b) return;
+  const cur=attCat(p,b)||"COMPONENT";
+  const dlgEl=$("catDlg"); if(!dlgEl) return;
+  $("catList").innerHTML=POINT_CATS.map(c=>`<button type="button" class="btn ${c===cur?"primary":"ghost"}" data-c="${c}">${esc(photoCatLabel(c))}</button>`).join("");
+  $("catList").querySelectorAll("[data-c]").forEach(x=>x.onclick=()=>{ setAttCat(p,b,x.dataset.c); dlgEl.close(); renderMedia(); renderGrade(); });
+  dlgEl.showModal();
+}
 function renderMedia(){ const p=draft.positions[curItem]||{}; const ph=p.photos||[]; let h="";
   mediaPool.free();
   /* alt is not decoration here: a blob URL that has been revoked, or a photo
      that failed to decode, leaves a blank tile with nothing to say what it was
      — and an inspector counting photographs cannot tell an empty strip from a
      broken one. */
-  ph.forEach((b,i)=>{ h+=`<div class="mtile"><img src="${mediaPool.url(b)}" alt="${esc(t("media_photo_n",{n:i+1}))}"><button class="mdel" data-ph="${i}" aria-label="${esc(t("media_del"))}">✕</button></div>`; });
+  ph.forEach((b,i)=>{ const c=attCat(p,b)||"COMPONENT";
+    h+=`<div class="mtile"><img src="${mediaPool.url(b)}" alt="${esc(t("media_photo_n",{n:i+1}))}"><button class="mdel" data-ph="${i}" aria-label="${esc(t("media_del"))}">✕</button><button type="button" class="mcat" data-cat="${i}" title="${esc(t("ph_cat"))}">${esc(photoCatLabel(c))}</button></div>`; });
   if(p.video) h+=`<div class="mtile"><video src="${mediaPool.url(p.video)}" muted playsinline></video><span class="vbadge">▶ video</span><button class="mdel" data-vid="1" aria-label="${esc(t("media_del"))}">✕</button></div>`;
   if(!ph.length && !p.video) h=`<div class="empty-m">${t("media_empty")}</div>`;
   $("mediastrip").innerHTML=h;
@@ -4353,21 +4616,39 @@ function renderMedia(){ const p=draft.positions[curItem]||{}; const ph=p.photos|
   $("mediaHint").textContent=t("media_hint",{p:MAX_PHOTOS, s:MAX_VIDEO_SEC});
   $("takeBtn").disabled = ph.length>=MAX_PHOTOS;
   $("videoBtn").disabled = !!p.video;
+  $("mediastrip").querySelectorAll(".mcat").forEach(btn=>btn.onclick=()=>pickPhotoCat(+btn.dataset.cat));
   $("mediastrip").querySelectorAll(".mdel").forEach(btn=>btn.onclick=()=>{ const p=curP();
     if(btn.dataset.ph!==undefined){ p.photos.splice(+btn.dataset.ph,1); if(!p.photos.length) delete p.photos; }
     else { delete p.video; } renderMedia(); renderChips(); }); }
 
 /* ===================== grade + fields ===================== */
 $("gradeSeg").addEventListener("click",(e)=>{ const b=e.target.closest("button[data-g]"); if(!b) return;
-  const p=curP(); p.grade=(p.grade===b.dataset.g)?null:b.dataset.g;
-  /* The mapping, every time — not only when severity happens to be blank. It
-     was "suggest", which meant a grade corrected from X to A left CRI behind. */
-  if(p.grade) p.sev=GRADE_SEV[p.grade]||"";
+  const p=curP(); const n=GRADE.num(b.dataset.g);
+  p.grade=(GRADE.num(p.grade)===n)?null:n;
+  /* The ISO class, every time — not only when it happens to be blank. It was
+     "suggest", which meant a grade corrected from the worst to the best left
+     CRI behind. */
+  if(p.grade) p.sev=gradeIso(p.grade);
   else delete p.sev;
   delete p.sevMan;
   /* A technician's own answer, so the limit table stops proposing over it. */
   p.gradeMan=1; delete p.gradeAuto;
   renderGrade(); renderSev(); renderChips(); });
+/* Which meaning column this round reads — see GRADE.family. The dump body's
+   graded checks are a walk-around; a lubrication point reads the oil text. */
+function gradeFamilyType(){ return type; }
+/* THE FIVE CARDS. Drawn every time the point changes, because the meaning
+   under each number depends on the round, and the proposal (see gradeOvr)
+   depends on what has been found at this point so far. */
+function renderGradeCards(){
+  const box=$("gradeSeg"); if(!box) return;
+  const p=posRO(); const g=GRADE.num(p.grade);
+  const ty=gradeFamilyType();
+  box.innerHTML=GRADE.LEVELS.map(n=>`<button type="button" class="gcard ${GRADE.cls(n)}${g===n?" on":""}" data-g="${n}" role="radio" aria-checked="${g===n?"true":"false"}">
+      <span class="gn">${n}</span>
+      <span class="gt"><b>${esc(GRADE.label(n,lang))}</b><span class="gm">${esc(GRADE.meaning(n,ty,lang))}</span></span>
+    </button>`).join("");
+}
 /* A/B/C/X is a walk-around's answer. A measured station's answer is a number,
    and offering a grade beside it invites two answers to one question — which
    then disagree in the report. The undercarriage is the exception that proves
@@ -4383,10 +4664,65 @@ function gradeApplies(){
 function renderGrade(){
   const fld=$("gradeFld");
   if(fld) fld.classList.toggle("hidden", !gradeApplies());
-  const g=posRO().grade; $("gradeSeg").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x.dataset.g===g)); }
-function renderSev(){ const p=posRO(); const v=p.sev||GRADE_SEV[p.grade]||"";
-  $("sevSeg").querySelectorAll("[data-s]").forEach(x=>x.classList.toggle("on",x.dataset.s===v));
-  renderISOFold(); }   // anything but "no failure" needs the coded fields open
+  renderGradeCards();
+  renderGradeOvr();
+  renderGradeReq(); }
+/* Severity is no longer on the screen. The name stays because a dozen call
+   sites ask for the coded fields to follow the grade, and that is still true. */
+function renderSev(){ renderISOFold(); }   // anything but "no failure" needs the coded fields open
+/* ---- the critical proposal --------------------------------------------------
+   Three things can say "this is a 5" before the inspector does: a failure
+   mode the matrix rates critical, a reading past its limit, and a temperature
+   past its alarm. Each proposes 5; the inspector may agree or go higher, and
+   may go lower with a reason. The reason and the proposal are kept on the
+   record (gradeSug, gradeWhy) so the office can see the judgement, not just
+   its result. */
+function gradeProposal(p,k){
+  if(!p) return null;
+  k = k || curItem;
+  const d=p.defect ? DEFECT_BY[upDefect(p.defect)] : null;
+  if(d && d.defaultSeverity==="Critical") return {n:5, why:"defect"};
+  if(TYPE_META[type] && TYPE_META[type].temp && p.tempV!=null && p.tempV!==""){
+    if(tempSeverity(p.tempV,tempLimit(tempCtx()))==="CRI") return {n:5, why:"temp"};
+  }
+  if(p.mm!=null && p.mm!=="" && curEquip && k){
+    try{ const w=wearOut({equip:curEquip,type,positions:{}},k,p);
+      if(w && w.wearPct!=="" && GRADE.fromWorn(w.wearPct)===5) return {n:5, why:"wear"}; }catch(e){}
+  }
+  return null;
+}
+function renderGradeOvr(){
+  const box=$("gradeOvr"); if(!box) return;
+  const p=posRO(); const sug=gradeProposal(p); const g=GRADE.num(p.grade);
+  const lower = !!(sug && g && g<sug.n);
+  box.classList.toggle("hidden", !lower);
+  if(lower){
+    $("gradeOvrText").textContent=t("g_ovr_"+sug.why,{n:sug.n, g:GRADE.label(g,lang)});
+    $("gradeWhy").value=p.gradeWhy||"";
+  }
+}
+$("gradeWhy").addEventListener("input",()=>{ const p=curP(); p.gradeWhy=$("gradeWhy").value.trim(); });
+/* ---- what a grade of 3, 4 or 5 asks for ------------------------------------ */
+function renderGradeReq(){
+  const box=$("gradeReq"); if(!box) return;
+  const p=posRO(); const g=GRADE.num(p.grade); const req=GRADE.requires(g);
+  const on=!!(g && GRADE.isFinding(g) && gradeApplies());
+  box.classList.toggle("hidden", !on);
+  if(!on) return;
+  $("gradeReqText").textContent=t("g_req_"+g);
+  $("gResp").value=p.resp||""; $("gTarget").value=p.target||""; $("gOpstat").value=p.opstat||"";
+  $("gNotifyWrap").classList.toggle("hidden", !req.notify);
+  $("gNotify").checked=!!p.notified;
+  $("gWoHint").textContent = p.wo ? "" : t("g_wo_req");
+  const dl=$("respList"); if(dl && !dl.children.length){
+    let seen=[]; try{ seen=JSON.parse(localStorage.getItem("cm_resp_seen")||"[]"); }catch(e){}
+    dl.innerHTML=seen.map(s=>`<option value="${esc(s)}">`).join("");
+  }
+}
+$("gResp").addEventListener("input",()=>{ curP().resp=$("gResp").value.trim(); });
+$("gTarget").addEventListener("change",()=>{ curP().target=$("gTarget").value; });
+$("gOpstat").addEventListener("change",()=>{ curP().opstat=$("gOpstat").value; });
+$("gNotify").addEventListener("change",()=>{ curP().notified=$("gNotify").checked?1:0; });
 /* Evidence is a toggle, not a required field: tapping the chosen one again
    clears it, because a fitter who taps by accident must be able to undo it
    without a verdict quietly hardening around the wrong answer. */
@@ -5115,7 +5451,7 @@ function ucState(k){
   const [pt0]=ucSplit(k);
   if(UC_EXTRA_BY[pt0] && p.mm==null)
     return (p.grade||p.sev||p.defect||p.comment)
-      ? (GRADE_SEV[p.grade]==="CRI"?"act" : GRADE_SEV[p.grade]==="DEG"?"watch" : "done") : "";
+      ? (GRADE.num(p.grade)>=4?"act" : GRADE.num(p.grade)===3?"watch" : "done") : "";
   if(p.mm==null) return "";
   const st=ucStatus(curEquip); if(!st.ok) return "done";
   const [pt,pos]=ucSplit(k);
@@ -5437,7 +5773,7 @@ function getState(k){
     if(pct!=null) return pct>=100?"act" : pct>=80?"watch" : "done";
   }
   if(p.grade||p.sev||p.defect||p.comment)
-    return GRADE_SEV[p.grade]==="CRI"?"act" : GRADE_SEV[p.grade]==="DEG"?"watch" : "done";
+    return GRADE.num(p.grade)>=4?"act" : GRADE.num(p.grade)===3?"watch" : "done";
   return "";
 }
 function getTally(){
@@ -5718,7 +6054,8 @@ function renderTempHint(){ if(!TYPE_META[type].temp) return;
   const n=parseFloat(v);
   if(v!=="" && !isNaN(n)){
     const sv=tempSeverity(v,lim); const an=parseFloat(a);
-    h+=`<span class="pill" style="background:${SEV_HEX[sv]||"#888"}">${t("sev_"+sv)}</span>`;
+    const gn=GRADE.fromIso(sv);
+    h+=`<span class="pill" style="background:${GRADE.hex(gn)};color:${GRADE.ink(gn)}">${esc(GRADE.label(gn,lang)||t("sev_"+sv))}</span>`;
     if(a!=="" && !isNaN(an)) h+=`<span>Δ ${Math.round((n-an)*10)/10} °C ${t("temp_rise")}</span>`;
   }
   $("tempLim").innerHTML=h; }
@@ -5730,9 +6067,10 @@ function syncTempSev(){ if(!TYPE_META[type].temp || !curItem) return;
      control did — a reading past its limit setting CRI under a grade of A. */
   if(p){
     const sv=tempSeverity(p.tempV,tempLimit(tempCtx()));
-    const g=sv?SEV_GRADE[sv]:"";
-    if(g && !p.gradeMan && p.grade!==g){ p.grade=g; p.gradeAuto=1; p.sev=GRADE_SEV[g]||""; 
+    const g=sv?GRADE.fromIso(sv):null;
+    if(g && !p.gradeMan && GRADE.num(p.grade)!==g){ p.grade=g; p.gradeAuto=1; p.sev=gradeIso(g);
       renderGrade(); renderSev(); }
+    else renderGradeOvr();
   }
   renderTempHint(); }
 function updateActionBtn(){ const a=(draft.positions[curItem]||{}).action;
@@ -5767,10 +6105,12 @@ function normDecAll(){ ["ucMM","tempV","tempA"].forEach(id=>{ const el=$(id); if
    disappears the moment the inspector moves to the next compartment — the
    reading was taken, it was on screen, and it is gone with nothing to say so.
    p.prod / p.other are the lubrication round's whole answer. */
-function hasData(p){ return (p.mm!=null&&p.mm!=="")||p.reason||p.grade||p.sev||p.action||p.prio||p.wo||(p.photos&&p.photos.length)||p.video||p.particle||p.comp||p.oil||p.comment||p.defect||p.cause||p.tempV||p.prod||p.other||p.samp; }
-/* The severity that actually applies: what the inspector set, or what the grade
-   implies. Everything that reasons about how bad a finding is goes through here. */
-function effSev(p){ return (p&&(p.sev||GRADE_SEV[p.grade]))||""; }
+function hasData(p){ return (p.mm!=null&&p.mm!=="")||p.reason||p.grade||p.sev||p.action||p.prio||p.wo||(p.photos&&p.photos.length)||p.video||p.particle||p.comp||p.oil||p.comment||p.defect||p.cause||p.tempV||p.prod||p.other||p.samp||p.resp||p.target||p.opstat; }
+/* The ISO class that applies: derived from the grade, or the stored class on
+   a record from before grades decided it. Everything that reasons about how
+   bad a finding is in ISO terms — the priority hint, the 1C export code, the
+   coded-fields fold — goes through here. */
+function effSev(p){ return (p&&(gradeIso(p.grade)||p.sev))||""; }
 /* ---- the round in progress is never lost -----------------------------------
 
    Before this, `draft` lived only in memory. A phone locking and being
@@ -5912,7 +6252,7 @@ function isoFoldable(){ return !!TYPE_META[type].wear || !!TYPE_META[type].lube;
 function isoWanted(){
   const p = draft.positions[curItem] || {};
   return !!(p.defect || p.cause || p.action || p.wo || p.prio || p.detect)
-      || (!!p.sev && p.sev !== "NOF");
+      || GRADE.isFinding(p.grade) || (!p.grade && !!p.sev && p.sev !== "NOF");
 }
 function renderISOFold(){
   const tog=$("isoTog"), body=$("isoBody"); if(!tog||!body) return;
@@ -6133,12 +6473,16 @@ $("pickList").onclick=(e)=>{ const b=e.target.closest(".pickitem"); if(!b) retur
     // A cause only means something under the defect it was chosen for.
     const cs=causesFor(curItem,p.defect);
     if(![...cs.primary,...cs.general].some(c=>c.code===p.cause)) p.cause="";
-    // The matrix knows how bad this mode usually is. Offer it; do not impose it.
+    // The matrix knows how bad this mode usually is. Offer it; do not impose it:
+    // a grade the inspector has set by hand stays, and a critical mode against
+    // a lower grade asks for a reason instead (see gradeProposal).
     const d=DEFECT_BY[p.defect];
-    if(d && d.defaultSeverity && !p.sevMan){
+    if(d && d.defaultSeverity && !p.gradeMan){
       const m={"No failure":"NOF",Incipient:"INC",Degraded:"DEG",Critical:"CRI"};
-      if(m[d.defaultSeverity]) { p.sev=m[d.defaultSeverity]; renderSev(); }
+      const g=GRADE.fromIso(m[d.defaultSeverity]);
+      if(g){ p.grade=g; p.gradeAuto=1; p.sev=gradeIso(g); }
     }
+    renderGrade(); renderSev();
   }
   else { p.cause=k||""; }
   if(!hasData(p)) delete draft.positions[curItem];
@@ -6271,7 +6615,9 @@ function resetForm(){ draft={positions:{}}; curEquip=""; curItem=""; draftSig=""
 function editRecord(rec){ if(rec.cls && CLASSES[rec.cls]){ eqClass=rec.cls; lsSet("equip_class",eqClass); }
   if(rec.type && TYPE_META[rec.type]){ type=rec.type; lsSet("insp_type",type); }
   draft={positions:{}};
-  for(const [k,pp] of Object.entries(rec.positions)) draft.positions[k]={grade:pp.grade,sev:pp.sev,sevMan:pp.sevMan||0,action:pp.action,wo:pp.wo,particle:pp.particle,comp:pp.comp,oil:pp.oil,comment:pp.comment,defect:pp.defect,cause:pp.cause,tempV:pp.tempV||"",tempA:pp.tempA||"",tempM:pp.tempM||"",
+  for(const [k,pp] of Object.entries(rec.positions)) draft.positions[k]={grade:GRADE.num(pp.grade),sev:gradeIso(pp.grade)||pp.sev||"",sevMan:pp.sevMan||0,
+    gradeMan:pp.gradeMan||0, gradeSug:pp.gradeSug||null, gradeWhy:pp.gradeWhy||"", gradeAudit:pp.gradeAudit||null,
+    resp:pp.resp||"", target:pp.target||"", opstat:pp.opstat||"", notified:pp.notified||0,action:pp.action,wo:pp.wo,particle:pp.particle,comp:pp.comp,oil:pp.oil,comment:pp.comment,defect:pp.defect,cause:pp.cause,tempV:pp.tempV||"",tempA:pp.tempA||"",tempM:pp.tempM||"",
     prio:pp.prio||"",
     mm:(pp.mm==null?null:Number(pp.mm)),stood:pp.stood?1:0,reason:pp.reason||"",detect:pp.detect||"",
     /* Same four fields, coming back. Reopening a lubrication round to fix a
@@ -6302,7 +6648,7 @@ function editRecord(rec){ if(rec.cls && CLASSES[rec.cls]){ eqClass=rec.cls; lsSe
   curEquip=rec.equip||""; updateEquipBtn(); $("date").value=rec.date; $("smu").value=rec.smu||""; if(rec.by) $("inspector").value=rec.by;
   gps=rec.gps||null; renderGps(); $("supName").value=rec.sup||""; loadSign(rec.sign||null);
   // items() is empty for a unit this type has no walk for — indexing it threw.
-  curItem=Object.keys(draft.positions)[0]||(items()[0]||{}).k||"";
+  curItem=Object.keys(draft.positions).filter(k=>k!==GEN_KEY)[0]||(items()[0]||{}).k||"";
   applyForm(); loadPos(); setEditing(rec); showPane("paneCapture"); }
 $("cancelEdit").onclick=()=>resetForm();
 
@@ -6326,26 +6672,72 @@ $("saveBtn").onclick=async ()=>{
      whatever is top of the list, which is worse than an honest blank.
      Severity is the effective one, so an inspector who raises a B to Critical
      by hand is held to the same standard as a grade of X. */
+  /* WHAT EACH GRADE HAS TO CARRY — GRADE.requires(n), one table for the phone
+     and the office. 3 needs an action and a target date; 4 adds a comment and
+     a close-up of the defect; 5 adds the defect code and the notification.
+     Still deliberately nothing below 3: a rule that blocks too often gets
+     satisfied with whatever is top of the list, which is worse than an honest
+     blank. A record from before grades that still carries CRI by hand is
+     held to the old standard: defect and action. */
+  const who=$("inspector").value.trim();
   for(const [k,p] of Object.entries(draft.positions)){
-    const sev=p.sev||GRADE_SEV[p.grade]||"";
-    if(sev!=="CRI") continue;
+    if(k===GEN_KEY) continue;
+    const g=GRADE.num(p.grade); const req=g?GRADE.requires(g):(effSev(p)==="CRI"?{defect:1,action:1}:{});
     const miss=[];
-    if(!p.defect) miss.push(t("req_defect"));
-    if(!p.action) miss.push(t("req_action"));
-    if(!miss.length) continue;
-    // Put them on the position that needs it, not just an error at the bottom.
-    if(curItem!==k){ saveCur(); curItem=k; loadPos(); renderChips(); }
-    dlg([t("m_need_crit_t"), t("m_need_crit_m",{k, x:miss.join(", ")})]);
-    return;
+    if(req.defect && !p.defect) miss.push(t("req_defect"));
+    if(req.action && !p.action) miss.push(t("req_action"));
+    if(req.target && !p.target) miss.push(t("req_target"));
+    if(req.comment && !p.comment) miss.push(t("req_comment"));
+    if(req.closeup && !hasCloseup(p)) miss.push(t("req_closeup"));
+    if(req.notify && !p.notified) miss.push(t("req_notify"));
+    /* A proposal of 5 that the inspector set below 5 has to say why. */
+    const sug=gradeProposal(p,k);
+    if(sug && g && g<sug.n){ p.gradeSug=sug.n; if(!p.gradeWhy) miss.push(t("req_why")); }
+    else if(sug && g) p.gradeSug=sug.n;
+    else delete p.gradeSug;
+    if(miss.length){
+      // Put them on the position that needs it, not just an error at the bottom.
+      if(curItem!==k){ saveCur(); curItem=k; loadPos(); renderChips(); }
+      const gl=g?GRADE.label(g,lang):t("sev_CRI");
+      dlg([t("m_need_grade_t",{g:gl}), t("m_need_grade_m",{k, g:gl, x:miss.join(", ")})]);
+      return;
+    }
+    /* THE TRAIL. A grade that moved on an edit, or was set under a proposal,
+       is written down with who, when, from, to and why — the judgement, not
+       only its result. Not re-written when nothing moved. */
+    const prev = editing ? GRADE.num(((editing.positions||{})[k]||{}).grade) : null;
+    const lowered = !!(sug && g && g<sug.n);
+    if((editing && prev!==g) || lowered){
+      const a=(p.gradeAudit ||= []); const last=a[a.length-1];
+      const e={at:new Date().toISOString(), by:who, from:prev, to:g, sug:sug?sug.n:null, why:p.gradeWhy||""};
+      if(!(last && last.from===e.from && last.to===e.to && last.sug===e.sug && last.why===e.why)) a.push(e);
+    }
+    if(p.resp) rememberResp(p.resp);
   }
+  /* THE PHOTOGRAPHS THE ROUND HAS TO HAVE — an overview of the whole machine
+     on every inspection, both sides of an undercarriage, the whole tray, the
+     whole GET assembly. Missing ones are named; the draft stays. */
+  if(!editing || (editing.phv||1)>=2){ const missP=photoGaps(draft, type);
+    if(missP.length){ renderMachinePhotos(); openMachinePhotos();
+      dlg([t("m_need_photo_t"), t("m_need_photo_m",{x:missP.map(c=>photoCatLabel(c)).join(", ")})]); return; } }
   const id = editing ? editing.id : `${type}__${equip}__${date}__${DEVICE}__${Date.now()}`;
   const created = editing ? (editing.created||new Date().toISOString()) : new Date().toISOString();
   if(!gps) await getGps(true);   // best effort — never blocks the save
   const rec={ id, cls:eqClass, type, equip, date, smu:$("smu").value.trim(), by:$("inspector").value.trim(),
     sup:$("supName").value.trim(), sign:await signBlob(), gps:gps||null, dev:DEVICE, positions:{}, created, up:0, upTo:{},
-    rev:(editing?(editing.rev||0)+1:1) };
+    rev:(editing?(editing.rev||0)+1:1),
+    /* Which photograph rules this round was captured under. 2 = the machine
+       overview (and sides, tray, assembly) is required. A round from before
+       is not held to a photograph nobody at the crib room can take. */
+    phv:(editing?(editing.phv||1):2) };
   for(const [k,p] of Object.entries(draft.positions))
-    rec.positions[k]={ grade:p.grade||null, sev:p.sev||"", sevMan:p.sevMan||0, action:p.action||"", wo:p.wo||"", particle:p.particle||"", comp:p.comp||"", oil:p.oil||"", defect:p.defect||"", cause:p.cause||"", comment:p.comment||"", tempV:p.tempV||"", tempA:p.tempA||"", tempM:p.tempM||"", detect:p.detect||DETECT_DEFAULT,
+    rec.positions[k]={ grade:GRADE.num(p.grade)||null, sev:gradeIso(p.grade)||p.sev||"", sevMan:p.sevMan||0,
+      /* The judgement around the grade: set by hand or proposed, what was
+         proposed, why it was lowered, and the trail of every change. */
+      gradeMan:p.gradeMan?1:0, gradeSug:p.gradeSug||null, gradeWhy:p.gradeWhy||"", gradeAudit:p.gradeAudit||null,
+      /* The plan a grade of 3, 4 or 5 has to carry. */
+      resp:p.resp||"", target:p.target||"", opstat:p.opstat||"", notified:p.notified?1:0,
+      action:p.action||"", wo:p.wo||"", particle:p.particle||"", comp:p.comp||"", oil:p.oil||"", defect:p.defect||"", cause:p.cause||"", comment:p.comment||"", tempV:p.tempV||"", tempA:p.tempA||"", tempM:p.tempM||"", detect:p.detect||DETECT_DEFAULT,
       prio:p.prio||"",
       /* The lubrication round's WHOLE answer, and it was not on this list.
          Every other field a compartment can hold was copied out of the draft
@@ -7683,9 +8075,8 @@ function teamSave(a){
 const teamKey=r=>`${r.t}|${r.u}|${r.d}`;
 /* One compact row per inspection — the phone needs who/when/how bad, not the
    full record, and 2000 of these stay well inside the storage budget. */
-const GRADE_RANK={A:0,B:1,C:2,X:3};
-// GRADE_HEX is declared further down this script; this list renders before it.
-const GRADE_TINT={A:"#0ca30c",B:"#fab219",C:"#ec835a",X:"#d03b3b"};
+/* The worst grade on a round, as a number 1..5, read through GRADE.num so a
+   row cached from a phone still on the letters ranks with the rest. */
 /* The round type as this app keys it. Trimmed and upper-cased, because the
    folder is written by more than one thing and case is not a round type. */
 function teamType(v){ const s=String(v==null?"":v).trim().toUpperCase(); return s||"MP"; }
@@ -7713,9 +8104,7 @@ function teamDate(v){
   return s;
 }
 function teamRow(r){
-  let worst="";
-  (r.items||[]).forEach(i=>{ const g=i.grade||"";
-    if(GRADE_RANK[g]!=null && (worst===""||GRADE_RANK[g]>GRADE_RANK[worst])) worst=g; });
+  const worst=GRADE.worst(r.items||[])||"";
   /* Baselines change how every later reading on that unit is scored, so they
      cannot stay on the phone that set them. They are rare, so carrying them on
      the summary row costs nothing worth counting. */
@@ -8273,8 +8662,8 @@ function renderTeam(){
     return;
   }
   box.innerHTML=rows.slice(0,60).map(r=>{
-    const sev=GRADE_SEV[r.g]||"";
-    const cls=sev==="CRI"?"over":sev==="DEG"?"soon":"";
+    const gn=GRADE.num(r.g);
+    const cls=gn>=4?"over":gn===3?"soon":"";
     const age=daysBetween(r.d);
     const clash=cfHas(r);
     /* The type on the row, so one list of everything is still readable. It is
@@ -8282,7 +8671,7 @@ function renderTeam(){
        the same thing is one more thing to learn. */
     const tag=teamShow?"":`<span class="tag" data-r="${esc(r.t)}">${esc(r.t)}</span>`;
     return `<button class="dueitem ${cls}" data-u="${esc(r.u)}" data-k="${esc(r.u+"|"+r.d+"|"+r.t)}">
-      <span class="u">${tag}${esc(r.u)}${r.g?` · <span style="color:${GRADE_TINT[r.g]||"var(--muted)"};font-weight:700">${esc(r.g)}</span>`:""}${clash?` · <span style="color:var(--warn-ink);font-weight:700">⑂</span>`:""}</span>
+      <span class="u">${tag}${esc(r.u)}${gn?` · <span style="color:${GRADE.css(gn)};font-weight:700">${esc(GRADE.label(gn,lang))}</span>`:""}${clash?` · <span style="color:var(--warn-ink);font-weight:700">⑂</span>`:""}</span>
       <span class="d">${esc(r.d)}${age!=null?` · ${t("due_days").replace("{n}",age)}`:""}${r.by?` · ${esc(r.by)}`:""}${clash?` · ${esc(t("team_clash_one"))}`:""}</span></button>`;
   }).join("");
   /* Tapping a row used to start a NEW round on that machine, which is the one
@@ -8661,9 +9050,7 @@ async function trendFor(unit,ty){
   try{
     for(const rec of await dbAll()){
       if((rec.equip||"").toUpperCase()!==u || (rec.type||"MP")!==ty || !rec.date) continue;
-      let worst="";
-      Object.values(rec.positions||{}).forEach(p=>{ const g=p.grade||"";
-        if(GRADE_RANK[g]!=null && (worst===""||GRADE_RANK[g]>GRADE_RANK[worst])) worst=g; });
+      const worst=GRADE.worst(Object.values(rec.positions||{}))||"";
       by.set(rec.date,{d:rec.date,g:worst});
     }
   }catch(e){ /* the cache alone is still worth drawing */ }
@@ -8676,12 +9063,12 @@ async function renderTrend(){
   const rows=await trendFor(curEquip,type);
   if(run!==trendRun) return;
   if(rows.length<2){ el.classList.add("hidden"); el.innerHTML=""; return; }
-  const rank=r=>GRADE_RANK[r.g]!=null?GRADE_RANK[r.g]:-1;
+  const rank=r=>{ const n=GRADE.num(r.g); return n?n-1:-1; };
   const bars=rows.map(r=>{
     const k=rank(r);
-    const h=k<0?4:6+k*6;                         // A is a stub, X is full height
-    const c=k<0?"var(--none)":GRADE_TINT[r.g];
-    return `<i style="height:${h}px;background:${c}" title="${esc(r.d)}${r.g?" · "+esc(r.g):""}"></i>`;
+    const h=k<0?4:6+k*5;                         // 1 is a stub, 5 is full height
+    const c=k<0?"var(--none)":GRADE.css(k+1);
+    return `<i style="height:${h}px;background:${c}" title="${esc(r.d)}${k>=0?" · "+esc(GRADE.label(k+1,lang)):""}"></i>`;
   }).join("");
   // Compare the newest against the best of what came before it: one bad round
   // after a run of good ones is exactly what should be called out.
@@ -8722,7 +9109,38 @@ function showPane(id){
      inspector walks it again. */
   if(id==="paneDue" && typeof renderDue==="function") renderDue();
 }
+/* THE GRADE MIGRATION, ON THE PHONE.
+
+   Every reader on this build already takes a letter through GRADE.num, so a
+   record captured on the old scale reads, uploads and prints correctly as it
+   stands. This pass makes the STORED copies say the number too — the queue,
+   the team cache and the last-done index — once, so that nothing on the
+   handset still carries A/B/C/X after the migration has run everywhere else,
+   and a later reader that forgets the letters cannot be surprised by one.
+   Idempotent: a second run finds nothing to change. Photographs, comments,
+   measurements and manifests are not touched. */
+async function migrateLocalGrades(){
+  let recs=0, items=0, rows=0;
+  try{
+    for(const rec of await dbAll()){
+      let changed=false;
+      for(const [k,p] of Object.entries(rec.positions||{})){
+        if(!p||typeof p!=="object") continue;
+        if(GRADE.isLegacy(p.grade)){ p.grade=GRADE.num(p.grade); p.sev=gradeIso(p.grade)||p.sev||""; changed=true; items++; }
+      }
+      if(changed){ await dbPut(rec); recs++; }
+    }
+  }catch(e){}
+  try{
+    const all=teamAllUncached(); let ch=false;
+    all.forEach(r=>{ if(r && GRADE.isLegacy(r.g)){ r.g=GRADE.num(r.g); ch=true; rows++; } });
+    if(ch){ localStorage.setItem(TEAM_KEY, JSON.stringify(all)); teamCache=null; }
+  }catch(e){}
+  try{ localStorage.setItem("cm_grade5_v1", JSON.stringify({at:new Date().toISOString(), recs, items, rows})); }catch(e){}
+  return {recs, items, rows};
+}
 document.addEventListener("DOMContentLoaded",()=>{
+  migrateLocalGrades().catch(()=>{});
   const g=$("yardGo"); if(g) g.onclick=guard(async()=>{ await yardCheck(); });
   /* Opened by hand stays open for the rest of the session: somebody who wanted
      to read the six checks does not want them folding away behind them. */
@@ -9154,6 +9572,12 @@ function ddmmyyyy(iso){ const m=String(iso).match(/(\d{4})-(\d{2})-(\d{2})/); re
 function fileName(equip,item,date,ext,suffix,isComp){
   const head = isComp ? `${equip}.${item}` : `${equip}_${String(item).replace(/\./g,"-")}`;
   return `${head}_${ddmmyyyy(date)}_${suffix}.${ext}`; }
+/* A machine photograph is named by what it is of, not by a point it does not
+   have: TK146_OVERVIEW_03.09.2026_MP.jpg. The category is a word from
+   PHOTO_CATS, so the name still matches the folder's <UNIT>_<x>_<DATE>_<TYPE>
+   standard and every sweep that reads it. */
+function genFileName(equip,cat,date,ext,suffix){
+  return `${equip}_${cat||"MACHINE"}_${ddmmyyyy(date)}_${suffix}.${ext}`; }
 function extOf(blob){ const t=(blob.type||"").toLowerCase(); if(t.includes("png"))return"png"; if(t.includes("webp"))return"webp"; return "jpg"; }
 async function buildPackage(){
   const all=await dbAll(); const files=[]; const grades={}, notes={};
@@ -9167,7 +9591,7 @@ async function buildPackage(){
     const isComp = usesRegister(rec.type) && rec.equip && !!componentsForUnit(rec.equip);
     for(const [k,p] of positionsOf(rec)){
       const ph=photosOf(p);
-      for(let i=0;i<ph.length;i++){ const ext=extOf(ph[i]); const base=fileName(rec.equip,k,rec.date,ext,suffix,isComp);
+      for(let i=0;i<ph.length;i++){ const ext=extOf(ph[i]); const base=(k===GEN_KEY)?genFileName(rec.equip,attCat(p,ph[i]),rec.date,ext,suffix):fileName(rec.equip,k,rec.date,ext,suffix,isComp);
         /* Same rule as filesForRecord: the ordinal belongs to the attachment,
            not to where it happens to sit in the array today. */
         const aid=attIdOf(ph[i]);
@@ -9176,13 +9600,16 @@ async function buildPackage(){
         files.push({name, data:new Uint8Array(await ph[i].arrayBuffer())}); }
       if(isBlob(p.video)){ const vext=(p.video.type||"").includes("quicktime")?"mov":"mp4";
         files.push({name:fileName(rec.equip,k,rec.date,vext,suffix,isComp), data:new Uint8Array(await p.video.arrayBuffer())}); }
-      if(p.grade) grades[`${rec.equip}|${rec.date}|${k}`]=p.grade;
+      if(GRADE.num(p.grade)) grades[`${rec.equip}|${rec.date}|${k}`]=GRADE.num(p.grade);
       const nk=`${rec.equip}|${rec.date}|${k}`; const n={};
       if(p.particle)n.particleCount=p.particle; if(p.comp)n.componentHours=p.comp; if(p.oil)n.oilHours=p.oil;
       if(p.defect){ const d=DEFECT_BY[upDefect(p.defect)]; n.defect=defectLabel(p.defect,"en"); n.defectCode=p.defect;
         if(d){ n.isoMechanism=d.iso14224; n.isoFailureMode=d.iso14224; } }
       if(p.cause){ n.cause=causeLabel(p.cause,"en"); n.causeCode=p.cause; }
-      if(p.sev)n.severity=p.sev; if(p.action)n.action=actionLabel(p.action,"en"); if(p.wo)n.workOrder=p.wo;
+      if(effSev(p))n.severity=effSev(p); if(p.action)n.action=actionLabel(p.action,"en"); if(p.wo)n.workOrder=p.wo;
+      if(GRADE.num(p.grade)) n.gradeName=GRADE.name(p.grade,"en");
+      if(p.resp)n.responsible=p.resp; if(p.target)n.targetDate=p.target; if(p.opstat)n.operatingStatus=p.opstat;
+      if(p.notified)n.notified=1; if(p.gradeWhy)n.gradeReason=p.gradeWhy;
       if(p.prio){ n.priority=p.prio; n.priorityLabel=prioLabel(p.prio,"en"); }
       if(p.tempV){ n.temperatureC=p.tempV; if(p.tempA)n.ambientC=p.tempA; if(p.tempM)n.tempMethod=p.tempM; }
       /* The lubrication round's whole answer. The PRODUCT is sent, never the
@@ -9239,7 +9666,8 @@ async function buildPackage(){
     sup:rec.sup||"", gps:rec.gps||null, dev:rec.dev||"", signed:rec.sign?1:0,
     items:Object.entries(rec.positions).map(([k,p])=>{
       const d=DEFECT_BY[upDefect(p.defect)]||null;
-      return { key:k, label:itemLabelFor(rec,k)||"", grade:p.grade||"", sev:p.sev||"", action:p.action||"",
+      return { key:k, label:itemLabelFor(rec,k)||"", general:(k===GEN_KEY?1:0), grade:GRADE.num(p.grade)||"", sev:effSev(p), action:p.action||"",
+        ...gradeExtras(p),
         actionLabel:p.action?actionLabel(p.action,"en"):"", wo:p.wo||"",
         prio:p.prio||"", prioLabel:p.prio?prioLabel(p.prio,"en"):"",
         defectCode:p.defect||"", defect:p.defect?defectLabel(p.defect,"en"):"",
@@ -9260,7 +9688,9 @@ async function buildPackage(){
     })
   }));
   files.push({name:"entries.json", data:new TextEncoder().encode(JSON.stringify(
-    {type:"cm-inspection-entries",version:2,exported:todayISO(),records,grades,notes},null,2))});
+    /* version 3: grades are integers 1..5. A version-2 file carries letters,
+       and every reader normalises them through GRADE.num on the way in. */
+    {type:"cm-inspection-entries",version:3,gradeScale:"1-5",exported:todayISO(),records,grades,notes},null,2))});
   return {files, count:all.length};
 }
 $("exportBtn").onclick=guard(async ()=>{ const {files,count}=await buildPackage(); if(!count){ dlg(t("m_nothing_export")); return; }
@@ -9271,10 +9701,17 @@ $("shareBtn").onclick=guard(async ()=>{ const {files,count}=await buildPackage()
   if(navigator.canShare && navigator.canShare({files:[zf]})){ try{ await navigator.share({files:[zf],title:"Truck inspection"}); }catch(e){} } else dlg(t("m_share_na")); });
 
 /* ===================== PDF condition-monitoring report ===================== */
-const GRADE_HEX={A:"#0ca30c",B:"#fab219",C:"#ec835a",X:"#d03b3b"};
-const SEV_HEX={NOF:"#0ca30c",INC:"#fab219",DEG:"#ec835a",CRI:"#d03b3b"};
+/* Colours come from grade.js — GRADE.hex(n) — one table for every surface. */
+/* THE FIELDS THAT TRAVEL WITH A GRADE, on every route out of the phone: the
+   server sidecar, the ZIP, the report. One function so the three cannot drift. */
+function gradeExtras(p){
+  return { gradeMan:p.gradeMan?1:0, gradeSug:p.gradeSug||"", gradeWhy:p.gradeWhy||"",
+           gradeAudit:Array.isArray(p.gradeAudit)?p.gradeAudit:[],
+           resp:p.resp||"", target:p.target||"", opstat:p.opstat||"", notified:p.notified?1:0 };
+}
 function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function itemLabelFor(rec,k){
+  if(k===GEN_KEY) return t("ph_title");
   /* An undercarriage point is named by the walk, not the component tree. Without
      this the app called it "Track roller — Left 6" on screen and exported a bare
      ROLLER.L6, so Drive, the CSV, the dashboard and 1C all lost the name. */
@@ -9526,7 +9963,8 @@ async function rptRecords(onlyId){
               evid:p.evid||"", samp:(p.samp?1:0) })
         : null;
       items.push({ key:k, name:nm.name, nameAlt:nm.nameAlt, code:nm.code, lube,
-        grade:p.grade||"", sev:effSev(p),
+        general:(k===GEN_KEY?1:0), cats:photosOf(p).map(b=>attCat(p,b)||"COMPONENT"),
+        grade:GRADE.num(p.grade)||"", sev:effSev(p), ...gradeExtras(p),
         defect:p.defect?defectLabel(p.defect):"", defectCode:p.defect?upDefect(p.defect):"",
         iso:d?d.iso14224:"", cause:p.cause?causeLabel(p.cause):"",
         action:p.action?actionLabel(p.action):"", prio:p.prio||"",
@@ -9662,7 +10100,9 @@ function teamRecToReport(rec){
             samp:it.lubeSampled?1:0 })
       : null;
     return { key:it.key, name:nm.name, nameAlt:nm.nameAlt, code:nm.code, lube,
-             grade:it.grade||"", sev:it.sev||"",
+             general:it.general?1:0, cats:(it.att||[]).map(e=>e.category||"COMPONENT"),
+             grade:GRADE.num(it.grade)||"", sev:gradeIso(it.grade)||it.sev||"",
+             resp:it.resp||"", target:it.target||"", opstat:it.opstat||"", gradeWhy:it.gradeWhy||"",
              defect:it.defect||"", defectCode:it.defectCode||"", iso:it.iso||"",
              cause:it.cause||"", action:it.actionLabel||it.action||"",
              prio:it.prio||"", prioLabel:it.prioLabel||"", wo:it.wo||"",
@@ -9716,7 +10156,7 @@ async function openRound(key){
     const band=pct==null?"":(pct>=100?"act":pct>=80?"watch":"");
     const val = mm!=null ? esc(String(mm))
       : it.reason ? `<span class="na">${esc(it.reasonLabel||it.reason)}</span>`
-      : it.grade ? esc(it.grade) : `<span class="na">—</span>`;
+      : GRADE.num(it.grade) ? `<span style="color:${GRADE.css(it.grade)};font-weight:700">${esc(GRADE.label(it.grade,lang))}</span>` : `<span class="na">—</span>`;
     const sub=[ ref?`${ref.n} → ${ref.c} mm`:"", it.defect||"", it.comment||"" ]
       .filter(Boolean).join(" · ");
     return `<div class="rdrow ${band}">
@@ -11007,7 +11447,7 @@ async function filesForRecord(rec){
   const out=[];
   for(const [k,p] of positionsOf(rec)){
     const ph=photosOf(p);
-    for(let i=0;i<ph.length;i++){ const ext=extOf(ph[i]); const base=fileName(rec.equip,k,rec.date,ext,suffix,isComp);
+    for(let i=0;i<ph.length;i++){ const ext=extOf(ph[i]); const base=(k===GEN_KEY)?genFileName(rec.equip,attCat(p,ph[i]),rec.date,ext,suffix):fileName(rec.equip,k,rec.date,ext,suffix,isComp);
       /* The attachment's own ordinal, allocated once when it was taken. Using
          i+1 here meant deleting one photograph renamed every photograph after
          it, and the rename overwrote a different component on the server. */
@@ -11288,8 +11728,9 @@ function recToExport(rec){
       const det=p.detect||DETECT_DEFAULT;
       // Codes leave the app in the shape 1C expects: v4 for the mode, the cause,
       // the action and the severity. The app's own severity codes stay internal.
-      return { key:k, label:itemLabelFor(rec,k)||"", grade:p.grade||"", sev:p.sev||"",
+      return { key:k, label:itemLabelFor(rec,k)||"", general:(k===GEN_KEY?1:0), grade:GRADE.num(p.grade)||"", sev:effSev(p),
         sevIso:SEV_V4[effSev(p)]||"", action:p.action||"",
+        ...gradeExtras(p),
         actionIso:p.action?upAction(p.action):"",
         actionLabel:p.action?actionLabel(p.action,"en"):"", wo:p.wo||"",
         prio:p.prio||"", prioLabel:p.prio?prioLabel(p.prio,"en"):"", defectCode:p.defect||"",
@@ -11325,6 +11766,7 @@ function recToExport(rec){
             return { schemaVersion:e.schemaVersion||1, attachmentId:aid, seq:e.seq||0,
                      inspectionId:e.inspectionId||"", pointId:e.pointId||"",
                      generalEvidence:e.generalEvidence?1:0,
+                     category:e.category||"",
                      mediaType:e.mediaType||"", mimeType:e.mimeType||"",
                      storedName:e.storedName||"", originalFilename:e.originalFilename||"",
                      byteSize:Number(e.byteSize)||0, sha256:e.sha256||"",

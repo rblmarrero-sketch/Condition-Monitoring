@@ -62,6 +62,8 @@
     'prio', 'prioLabel', 'priority', 'wo', 'workOrder',
     /* who and when */
     'owner', 'due', 'status', 'dispBy', 'dispReason',
+    /* the plan a grade of 3, 4 or 5 carries, and the judgement around the grade */
+    'resp', 'target', 'opstat', 'notified', 'gradeWhy', 'gradeSug', 'gradeMan', 'gradeAudit',
     /* the inspector's own words */
     'comment', 'note', 'notes',
     /* lubrication */

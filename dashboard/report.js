@@ -295,8 +295,14 @@
           name: nameFor(rec, it),
           nameAlt: altName.get(rec.type + "|" + it.key) || "",
           code: nameFor(rec, it) === it.key ? "" : it.key,
-          grade: it.grade || "",
-          sev: typeof sevOf === "function" ? sevOf(rec, it) : (it.sev || ""),
+          /* The grade as the number, and the ISO class it exports as — the
+             engine shows the class only where there is no grade. */
+          grade: (typeof GRADE !== "undefined" ? GRADE.num(it.grade) : it.grade) || "",
+          sev: (typeof GRADE !== "undefined" && typeof sevOf === "function")
+                 ? (GRADE.iso(sevOf(rec, it)) || it.sev || "") : (it.sev || ""),
+          general: it.general ? 1 : 0,
+          cats: (Array.isArray(it.att) ? it.att : []).map(e => (e && e.category) || "COMPONENT"),
+          resp: it.resp || "", target: it.target || "", opstat: it.opstat || "", gradeWhy: it.gradeWhy || "",
           defect: it.defect || "", defectCode: it.defectCode || "", iso: it.iso || "",
           cause: it.cause || "", action: it.actionLabel || "",
           prio: it.prio || "", prioLabel: it.prioLabel || "", wo: it.wo || "",
@@ -438,7 +444,7 @@
     const pareto = {};
     R.forEach(r => (r.items || []).forEach(it => {
       const w = typeof wearOf === "function" ? wearOf(r, it) : null;
-      const bad = it.grade === "C" || it.grade === "X" || it.defect
+      const bad = (typeof GRADE !== "undefined" && GRADE.isFinding(it.grade)) || it.defect
         || (w && (w.band === "act" || w.band === "watch"));
       if (bad) pareto[it.key] = (pareto[it.key] || 0) + 1;
     }));

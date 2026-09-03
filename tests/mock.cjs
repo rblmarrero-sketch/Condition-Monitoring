@@ -22,7 +22,11 @@ function seed(n) {
   for (let i = 1; i <= n; i++) {
     const u = 'TK' + String(100 + i), d = `2026-07-${String((i % 28) + 1).padStart(2, '0')}`;
     FILES.push({ name: `${u}_${d.split('-').reverse().join('.')}_MP.json`, id: 'j' + i,
-      updated: 1000000 + i * 1000, size: 400, json: sidecar(u, d, 'MP', ['A', 'C', 'X'][i % 3]) });
+      /* Grades are 1..5. Every seventh round still carries the old letter
+         (A/C/X — the same three grades) so every reader's normalisation is
+         exercised on every run without moving a single count. */
+      updated: 1000000 + i * 1000, size: 400,
+      json: sidecar(u, d, 'MP', (i % 7 === 0) ? ['A', 'C', 'X'][i % 3] : [1, 3, 5][i % 3]) });
     FILES.push({ name: `${u}_4C_${d.split('-').reverse().join('.')}_MP.jpg`, id: 'p' + i,
       updated: 1000000 + i * 1000, size: 90000 });
   }
@@ -133,7 +137,7 @@ http.createServer((req, res) => {
       const i = FILES.length;
       FILES.push({ name: `${unit}_${date.split('-').reverse().join('.')}_${ty}.json`,
                    id: 'r' + i, updated: 7000000 + i, size: 400,
-                   json: sidecar(unit, date, ty, 'C') });
+                   json: sidecar(unit, date, ty, 3) });
     }
     /* A ROUND SHAPED LIKE TK115: photographs on a point with NO KEY.
 
@@ -182,7 +186,7 @@ http.createServer((req, res) => {
       const [nInsp, nUnit] = sc.split(',').map(Number);
       const PRE = ['TK','EX','DZ','LD','GR','DR','CR','SC'];
       const TY  = ['MP','FC','INSP','UC','TB','GET','LUBE','TEMP'];
-      const GR  = ['A','A','B','B','C','C','X'];
+      const GR  = [1,1,2,2,3,3,5];
       const units = [];
       for (let i = 0; i < (nUnit || 1128); i++)
         units.push(PRE[i % PRE.length] + String(100 + Math.floor(i / PRE.length)).padStart(3, '0'));
@@ -201,7 +205,7 @@ http.createServer((req, res) => {
           const g = GR[(i + k) % GR.length];
           items.push({ key: 'P' + k, label: 'Component ' + k, grade: g,
                        photos: (k % 3 === 0) ? 1 : 0, video: 0,
-                       action: g === 'X' ? 'REPL' : (g === 'C' ? 'MON' : ''),
+                       action: g === 5 ? 'REPL' : (g === 3 ? 'MON' : ''),
                        comment: '' });
         }
         FILES.push({ name: unit + '_' + dd + '_' + ty + '.json', id: 's' + i,
@@ -217,7 +221,7 @@ http.createServer((req, res) => {
     if (u.searchParams.get('add')) {                      // a phone uploads one more
       const i = 900 + Number(u.searchParams.get('add'));
       FILES.push({ name: `TK${i}_31.07.2026_MP.json`, id: 'j' + i, updated: 9000000 + i, size: 400,
-                   json: sidecar('TK' + i, '2026-07-31', 'MP', 'X') });
+                   json: sidecar('TK' + i, '2026-07-31', 'MP', 5) });
     }
     res.writeHead(200, cors); return res.end('ok');
   }

@@ -32,7 +32,7 @@ window.CM_DATA = {
         {
           "key": "4C",
           "label": "4C LEFT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -42,7 +42,7 @@ window.CM_DATA = {
         {
           "key": "4D",
           "label": "4D RIGHT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -52,7 +52,7 @@ window.CM_DATA = {
         {
           "key": "4E",
           "label": "4E LEFT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": 6018,
           "oilHours": null,
@@ -62,7 +62,7 @@ window.CM_DATA = {
         {
           "key": "4F",
           "label": "4F RIGHT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": 6018,
           "oilHours": null,
@@ -80,7 +80,7 @@ window.CM_DATA = {
         {
           "key": "4C",
           "label": "4C LEFT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -90,7 +90,7 @@ window.CM_DATA = {
         {
           "key": "4D",
           "label": "4D RIGHT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -100,7 +100,7 @@ window.CM_DATA = {
         {
           "key": "4E",
           "label": "4E LEFT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -110,7 +110,7 @@ window.CM_DATA = {
         {
           "key": "4F",
           "label": "4F RIGHT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -128,7 +128,7 @@ window.CM_DATA = {
         {
           "key": "4C",
           "label": "4C LEFT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -138,7 +138,7 @@ window.CM_DATA = {
         {
           "key": "4D",
           "label": "4D RIGHT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -148,7 +148,7 @@ window.CM_DATA = {
         {
           "key": "4E",
           "label": "4E LEFT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -158,7 +158,7 @@ window.CM_DATA = {
         {
           "key": "4F",
           "label": "4F RIGHT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -176,7 +176,7 @@ window.CM_DATA = {
         {
           "key": "4C",
           "label": "4C LEFT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -186,7 +186,7 @@ window.CM_DATA = {
         {
           "key": "4D",
           "label": "4D RIGHT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -196,7 +196,7 @@ window.CM_DATA = {
         {
           "key": "4E",
           "label": "4E LEFT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -206,7 +206,7 @@ window.CM_DATA = {
         {
           "key": "4F",
           "label": "4F RIGHT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -224,7 +224,7 @@ window.CM_DATA = {
         {
           "key": "4C",
           "label": "4C LEFT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -234,7 +234,7 @@ window.CM_DATA = {
         {
           "key": "4D",
           "label": "4D RIGHT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -244,7 +244,7 @@ window.CM_DATA = {
         {
           "key": "4E",
           "label": "4E LEFT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -254,7 +254,7 @@ window.CM_DATA = {
         {
           "key": "4F",
           "label": "4F RIGHT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -272,7 +272,7 @@ window.CM_DATA = {
         {
           "key": "4C",
           "label": "4C Left Bearing",
-          "grade": "X",
+          "grade": 5,
           "particleCount": null,
           "componentHours": 6018,
           "oilHours": null,
@@ -282,7 +282,7 @@ window.CM_DATA = {
         {
           "key": "4D",
           "label": "4D",
-          "grade": "X",
+          "grade": 5,
           "particleCount": null,
           "componentHours": 6018,
           "oilHours": null,
@@ -292,7 +292,7 @@ window.CM_DATA = {
         {
           "key": "4E",
           "label": "4E LEFT REAR FINAL DRIVE",
-          "grade": "X",
+          "grade": 5,
           "particleCount": null,
           "componentHours": 6018,
           "oilHours": null,
@@ -302,7 +302,7 @@ window.CM_DATA = {
         {
           "key": "4F",
           "label": "4F RIGHT REAR FINAL DRIVE",
-          "grade": "X",
+          "grade": 5,
           "particleCount": null,
           "componentHours": 6018,
           "oilHours": null,
@@ -320,7 +320,7 @@ window.CM_DATA = {
         {
           "key": "4C",
           "label": "4C LEFT REAR FINAL DRIVE",
-          "grade": "X",
+          "grade": 5,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -330,7 +330,7 @@ window.CM_DATA = {
         {
           "key": "4D",
           "label": "4D RIGHT REAR FINAL DRIVE",
-          "grade": "X",
+          "grade": 5,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -340,7 +340,7 @@ window.CM_DATA = {
         {
           "key": "4E",
           "label": "4E LEFT REAR FINAL DRIVE",
-          "grade": "X",
+          "grade": 5,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -350,7 +350,7 @@ window.CM_DATA = {
         {
           "key": "4F",
           "label": "4F RIGHT REAR FINAL DRIVE",
-          "grade": "X",
+          "grade": 5,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -368,7 +368,7 @@ window.CM_DATA = {
         {
           "key": "4C",
           "label": "4C LEFT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -378,7 +378,7 @@ window.CM_DATA = {
         {
           "key": "4D",
           "label": "4D RIGHT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -388,7 +388,7 @@ window.CM_DATA = {
         {
           "key": "4E",
           "label": "4E LEFT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -398,7 +398,7 @@ window.CM_DATA = {
         {
           "key": "4F",
           "label": "4F RIGHT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -416,7 +416,7 @@ window.CM_DATA = {
         {
           "key": "4C",
           "label": "4C LEFT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -426,7 +426,7 @@ window.CM_DATA = {
         {
           "key": "4D",
           "label": "4D RIGHT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -436,7 +436,7 @@ window.CM_DATA = {
         {
           "key": "4E",
           "label": "4E LEFT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -446,7 +446,7 @@ window.CM_DATA = {
         {
           "key": "4F",
           "label": "4F RIGHT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -464,7 +464,7 @@ window.CM_DATA = {
         {
           "key": "4C",
           "label": "4C LEFT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -474,7 +474,7 @@ window.CM_DATA = {
         {
           "key": "4D",
           "label": "4D RIGHT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -484,7 +484,7 @@ window.CM_DATA = {
         {
           "key": "4E",
           "label": "4E LEFT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -494,7 +494,7 @@ window.CM_DATA = {
         {
           "key": "4F",
           "label": "4F RIGHT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -512,7 +512,7 @@ window.CM_DATA = {
         {
           "key": "4C",
           "label": "4C LEFT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -522,7 +522,7 @@ window.CM_DATA = {
         {
           "key": "4D",
           "label": "4D RIGHT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -532,7 +532,7 @@ window.CM_DATA = {
         {
           "key": "4E",
           "label": "4E LEFT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -542,7 +542,7 @@ window.CM_DATA = {
         {
           "key": "4F",
           "label": "4F RIGHT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -560,7 +560,7 @@ window.CM_DATA = {
         {
           "key": "4C",
           "label": "4C LEFT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -570,7 +570,7 @@ window.CM_DATA = {
         {
           "key": "4D",
           "label": "4D RIGHT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -580,7 +580,7 @@ window.CM_DATA = {
         {
           "key": "4E",
           "label": "4E LEFT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -590,7 +590,7 @@ window.CM_DATA = {
         {
           "key": "4F",
           "label": "4F RIGHT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -608,7 +608,7 @@ window.CM_DATA = {
         {
           "key": "4C",
           "label": "4C LEFT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -618,7 +618,7 @@ window.CM_DATA = {
         {
           "key": "4D",
           "label": "4D RIGHT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -628,7 +628,7 @@ window.CM_DATA = {
         {
           "key": "4E",
           "label": "4E LEFT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -638,7 +638,7 @@ window.CM_DATA = {
         {
           "key": "4F",
           "label": "4F RIGHT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -656,7 +656,7 @@ window.CM_DATA = {
         {
           "key": "4C",
           "label": "4C LEFT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -666,7 +666,7 @@ window.CM_DATA = {
         {
           "key": "4D",
           "label": "4D RIGHT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -676,7 +676,7 @@ window.CM_DATA = {
         {
           "key": "4E",
           "label": "4E LEFT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -686,7 +686,7 @@ window.CM_DATA = {
         {
           "key": "4F",
           "label": "4F RIGHT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -704,7 +704,7 @@ window.CM_DATA = {
         {
           "key": "4C",
           "label": "4C LEFT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -714,7 +714,7 @@ window.CM_DATA = {
         {
           "key": "4D",
           "label": "4D RIGHT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -724,7 +724,7 @@ window.CM_DATA = {
         {
           "key": "4E",
           "label": "4E LEFT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -734,7 +734,7 @@ window.CM_DATA = {
         {
           "key": "4F",
           "label": "4F RIGHT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -752,7 +752,7 @@ window.CM_DATA = {
         {
           "key": "4C",
           "label": "4C LEFT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -762,7 +762,7 @@ window.CM_DATA = {
         {
           "key": "4D",
           "label": "4D RIGHT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -772,7 +772,7 @@ window.CM_DATA = {
         {
           "key": "4E",
           "label": "4E LEFT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,
@@ -782,7 +782,7 @@ window.CM_DATA = {
         {
           "key": "4F",
           "label": "4F RIGHT REAR FINAL DRIVE",
-          "grade": "C",
+          "grade": 3,
           "particleCount": null,
           "componentHours": null,
           "oilHours": null,

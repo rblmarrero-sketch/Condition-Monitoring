@@ -94,7 +94,7 @@ const pane = p => p.evaluate(() => [...document.querySelectorAll('main > .pane')
   await p.fill('#smu', '18422');
   const k = await p.evaluate(() => items()[0].k);
   await p.evaluate(k => { saveCur(); curItem = k; loadPos(); renderChips(); }, k);
-  await p.evaluate(() => document.querySelector('#gradeSeg [data-g="C"]').click());
+  await p.evaluate(() => document.querySelector('#gradeSeg [data-g="3"]').click());
   await p.evaluate(() => { draft.positions[curItem].comment = 'fine swarf, ~2 mm chips'; });
   await p.click('#tabbar [data-pane="paneSystem"]'); await p.waitForTimeout(200);
   await p.click('#tabbar [data-pane="paneQueue"]'); await p.waitForTimeout(200);
@@ -113,7 +113,7 @@ const pane = p => p.evaluate(() => [...document.querySelectorAll('main > .pane')
   const badge = (p, id) => p.evaluate(i => { const e = document.getElementById(i);
     return e.classList.contains('hidden') ? '' : e.textContent; }, id);
   ok('nothing waiting, no queue badge', (await badge(p, 'tabQ')) === '', await badge(p, 'tabQ'));
-  await p.evaluate(() => { document.querySelector('#gradeSeg [data-g="C"]'); });
+  await p.evaluate(() => { document.querySelector('#gradeSeg [data-g="3"]'); });
   await p.evaluate(() => { draft.positions[curItem].defect = 'DT14-03'; draft.positions[curItem].action = 'MON'; });
   /* Offline for the save, deliberately.
 
@@ -223,7 +223,7 @@ const pane = p => p.evaluate(() => [...document.querySelectorAll('main > .pane')
   await p.evaluate(() => selectEquip('TK150')); await p.waitForTimeout(300);
   await p.fill('#inspector', 'R. Marrero');
   await p.evaluate(() => { const k = items()[0].k; saveCur(); curItem = k; loadPos(); renderChips(); });
-  await p.evaluate(() => document.querySelector('#gradeSeg [data-g="X"]').click());
+  await p.evaluate(() => document.querySelector('#gradeSeg [data-g="5"]').click());
   await p.evaluate(() => { draft.positions[curItem].defect = 'DT14-03'; draft.positions[curItem].action = 'REP'; });
   await p.click('#saveBtn'); await p.waitForTimeout(700);
   if (await p.evaluate(() => document.getElementById('dlg').open)) { await p.click('#dlgOk'); await p.waitForTimeout(200); }
@@ -347,7 +347,7 @@ const pane = p => p.evaluate(() => [...document.querySelectorAll('main > .pane')
   await p.evaluate(() => selectEquip('TK146'));
   await p.fill('#inspector', 'R. Marrero');
   await p.evaluate(() => { const k = items()[0].k; saveCur(); curItem = k; loadPos(); renderChips(); });
-  await p.evaluate(() => document.querySelector('#gradeSeg [data-g="B"]').click());
+  await p.evaluate(() => document.querySelector('#gradeSeg [data-g="2"]').click());
   await p.evaluate(() => { draft.positions[curItem].comment = 'typed sideways'; });
   await p.setViewportSize({ width: 844, height: 390 });
   await p.waitForTimeout(400);

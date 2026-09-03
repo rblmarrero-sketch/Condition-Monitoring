@@ -40,6 +40,8 @@ function mkDrive(){
       getBlob:()=>({getDataAsString:()=>f._buf.toString('utf8'),getBytes:()=>f._buf,
                     getContentType:()=>MIMES[ext]||'application/json'}),
       getParents:()=>it(dir?[dir]:[]),
+      /* DriveApp's File.setContent: the same file, new bytes, new stamp. */
+      setContent:s=>{ f._buf=Buffer.from(String(s)); f._updated=stamp(); return f; },
       setTrashed:v=>{ if(v){ trashed.push(full); delete dir._files[name]; } }};
     byId[f._id]=f; return f;
   }
@@ -107,7 +109,11 @@ function mkDrive(){
        it unsigned bytes here would let a wrong fold pass the suite and fail on
        Google, so the shim reproduces the signedness rather than the intent. */
     Utilities:{ ...require('./gsdigest.cjs'),base64Decode:s=>Buffer.from(s,'base64'),base64Encode:b=>Buffer.from(b).toString('base64'),
-               newBlob:(bytes,ct,name)=>({bytes,ct,name})},
+               /* A Blob answers for its own bytes and text, as the real one
+                  does; rewriteObject_ reads the document back out of one. */
+               newBlob:(bytes,ct,name)=>({bytes,ct,name,
+                 getBytes:()=>Buffer.isBuffer(bytes)?bytes:Buffer.from(String(bytes)),
+                 getDataAsString:()=>(Buffer.isBuffer(bytes)?bytes:Buffer.from(String(bytes))).toString('utf8')})},
     ContentService:{MimeType:{JSON:'json'},createTextOutput:s=>({setMimeType:()=>JSON.parse(s)})},
     Logger:{log:()=>{}},
     PropertiesService:{getScriptProperties:()=>({getProperty:k=>props[k]===undefined?null:props[k],
@@ -143,6 +149,15 @@ http.createServer((req,res)=>{
                  res.end(JSON.stringify(o));};
   if(u.pathname==='/__seed'){ seed(); res.writeHead(200,cors); return res.end('ok'); }
   if(u.pathname==='/__files') return send({files:D.listAll(),trashed:D.trashed});
+  /* Plant a file exactly as it is, bypassing the script — the same door
+     ya-srv.cjs offers, for the same reason: the one state a test cannot
+     reach through the API is a document the script itself would refuse. */
+  if(u.pathname==='/__put'){
+    const chunks=[]; req.on('data',c=>chunks.push(c)); req.on('end',()=>{
+      D.put(u.searchParams.get('key')||'x', Buffer.concat(chunks));
+      res.writeHead(200,cors); res.end('ok'); });
+    return;
+  }
   /* ?mode=truncate&keep=0.25  store only the first quarter of every photograph
      ?mode=flip                store the same LENGTH with the last byte changed
      ?off=1                    store faithfully again */

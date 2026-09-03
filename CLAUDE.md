@@ -228,6 +228,33 @@ times too wide. `tests/interval.cjs` fails if one comes back.
 
 ---
 
+## Grades are 1 to 5, and the table is `mobile/grade.js`
+
+**1 Normal · 2 Incipient · 3 Degraded · 4 Severe · 5 Critical.** The grade is the
+inspector's assessment and the ONLY condition field a record carries; there is
+no severity control anywhere. Name, colour, the ISO 14224 class it exports as
+(`GRADE.iso`: 1 NOF, 2 INC, 3 DEG, 4 DEG, 5 CRI), the meaning per round type
+and what each grade requires before Save (`GRADE.requires`) all come off the
+integer, from that one file, which both surfaces and `report-core.js` load.
+
+It replaced A/B/C/X. **Never write a letter again, and never compare against
+one.** Every ingest path reads a value through `GRADE.num()` (A→1, B→2, C→3,
+D→4, X→5, numbers as themselves, anything else null), because letters still
+exist in sidecars written before the change, in old team-cache rows and in
+fixtures. The migration of the folder itself is `docs/yandex/migrate-grades.js`
+(backs up every document locally and under `_meta/backup/`, idempotent,
+reconciles counts before and after); it needs a backend that offers
+`op:rewrite`, i.e. `function.js` deployed after this change.
+
+The dashboard's `sevOf()` returns the grade NUMBER (a measured point's from its
+remaining life via `GRADE.fromWorn`), and `SEV[n]` is keyed by it — attention
+is `>= 3`, critical is `=== 5`. A URL `?sev=CRI` still opens: `sevKey()` maps
+the old codes.
+
+Machine-level photographs (overview, left, right, tray, GET assembly) live on
+the pseudo-position `__general` on the phone; the dashboard keys that item
+`MACHINE` and marks it `general`, and nothing may count it as a point.
+
 ## The defect class this project keeps producing
 
 Almost every real defect found here has one shape: **a real value rendered as

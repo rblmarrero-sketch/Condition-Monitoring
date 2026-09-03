@@ -58,6 +58,7 @@ const ESSENTIAL = [
   "./assets.js?v=" + BUILD,
   "./temp-limits.js?v=" + BUILD,
   "./normalize.js?v=" + BUILD,
+  "./grade.js?v=" + BUILD,
   "./due.js?v=" + BUILD,
   "./wear.js?v=" + BUILD,
   "./wear-figs.js?v=" + BUILD,

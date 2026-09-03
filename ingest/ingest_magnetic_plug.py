@@ -210,7 +210,12 @@ def parse_workbook(xlsm_path, photo_mode, photo_root, source_name):
             positions.append({
                 "key": key,
                 "label": _short_pos_label(header, key),
-                "grade": str(grade) if grade is not None else None,
+                # The grade is 1..5 (mobile/grade.js). The workbook writes the
+                # old letters; A->1, B->2, C->3, D->4, X->5, and a digit stays.
+                "grade": (
+                    {"A": 1, "B": 2, "C": 3, "D": 4, "X": 5}.get(str(grade).strip().upper(),
+                        int(str(grade).strip()) if str(grade).strip() in ("1", "2", "3", "4", "5") else None)
+                    if grade is not None else None),
                 "particleCount": particle,
                 "componentHours": comp_hrs,
                 "oilHours": oil_hrs,

@@ -44,8 +44,8 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
   /* Two findings the review list exists for, made with the page's own rule:
      one whose grade and stored condition disagree, one with no grade at all. */
   await p.evaluate(() => {
-    const a = RECS.find(x => !x._void && x.items && x.items[0] && x.items[0].grade === 'A'); if (a) a.items[0].sev = 'DEG';
-    const c = RECS.find(x => !x._void && x.items && x.items[0] && x.items[0].grade === 'C'); if (c) { delete c.items[0].grade; c.items[0].sev = 'DEG'; }
+    const a = RECS.find(x => !x._void && x.items && x.items[0] && x.items[0].grade === 1); if (a) a.items[0].sev = 'DEG';
+    const c = RECS.find(x => !x._void && x.items && x.items[0] && x.items[0].grade === 3); if (c) { delete c.items[0].grade; c.items[0].sev = 'DEG'; }
     renderAll();
   });
   await p.waitForTimeout(300);

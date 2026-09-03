@@ -642,14 +642,26 @@
       f_status:"Standing",
       by_who:"Inspected by", sup:"Verified by", nosign:"not signed off",
       gps:"Location", none_att:"None flagged.",
+      /* What a machine photograph is of. */
+      cat_OVERVIEW:"Equipment overview", cat_LEFT:"Left side", cat_RIGHT:"Right side",
+      cat_BODY:"Whole dump body", cat_GET:"Whole GET assembly", cat_COMPONENT:"Component",
+      cat_DEFECT:"Defect close-up", cat_MEASURE:"Measurement", cat_PLATE:"Identification plate",
+      cat_EXTRA:"Additional",
+      /* The plan a graded finding carries. */
+      c_resp:"Responsible", c_target:"Target date", c_opstat:"Status",
+      op_RUN:"Running", op_RES:"Restricted", op_STOP:"Stopped",
+      g_why:"Graded below the proposed 5 —",
       legend:"How to read this report",
       lg_grade:"Condition grade", lg_sev:"Severity (ISO 14224)",
       lg_wear:"Wear measurement", lg_iso:"Coding",
       lg_wear_d:"Wear is how far a part has travelled from its new dimension towards the condemn limit, as a percentage. 100% means the part is at the limit and should come off. Above 80% it should be planned into the next shutdown. Each figure is judged against the reference for that machine’s model, or against the machine’s own baseline where one was taken while the undercarriage was new.",
       lg_iso_d:"Failure modes, causes and severity are coded to ISO 14224:2016, so findings can be counted, trended and compared across the fleet rather than read one report at a time.",
       band_ok:"Serviceable", band_watch:"Watch", band_act:"At or past condemn",
-      g_A:"Normal — no action", g_B:"Monitor — look again next round",
-      g_C:"Attention — plan the work", g_X:"Critical — act now",
+      g_1:"Normal — good condition, continue operation",
+      g_2:"Incipient — early warning, monitor and inspect sooner",
+      g_3:"Degraded — defect found, plan repair",
+      g_4:"Severe — serious defect, repair soon",
+      g_5:"Critical — unsafe or failure likely, stop and inspect immediately",
       s_NOF:"No failure — the item is doing its job",
       s_INC:"Incipient — a fault is starting, function is not affected yet",
       s_DEG:"Degraded — still working, but not to specification",
@@ -739,6 +751,13 @@
       f_status:"Статус",
       by_who:"Осмотр выполнил", sup:"Проверил", nosign:"не подписано",
       gps:"Координаты", none_att:"Не отмечено.",
+      cat_OVERVIEW:"Общий вид машины", cat_LEFT:"Левая сторона", cat_RIGHT:"Правая сторона",
+      cat_BODY:"Кузов целиком", cat_GET:"Рабочий орган целиком", cat_COMPONENT:"Узел",
+      cat_DEFECT:"Дефект крупным планом", cat_MEASURE:"Замер", cat_PLATE:"Заводская табличка",
+      cat_EXTRA:"Дополнительно",
+      c_resp:"Ответственный", c_target:"Срок", c_opstat:"Состояние",
+      op_RUN:"В работе", op_RES:"С ограничением", op_STOP:"Остановлена",
+      g_why:"Оценка ниже предложенной 5 —",
       legend:"Как читать этот отчёт",
       lg_grade:"Оценка состояния", lg_sev:"Категория (ИСО 14224)",
       lg_wear:"Измерение износа", lg_iso:"Кодирование",
@@ -749,8 +768,11 @@
          band, two names, and a fitter comparing the page to the screen had to
          work out they meant the same thing. */
       band_ok:"Годен", band_watch:"Наблюдать", band_act:"На пределе или за ним",
-      g_A:"Норма — действий не требуется", g_B:"Наблюдение — проверить в следующий раз",
-      g_C:"Внимание — запланировать работы", g_X:"Критично — действовать сразу",
+      g_1:"Норма — хорошее состояние, продолжать эксплуатацию",
+      g_2:"Начальный — раннее предупреждение, наблюдать и осмотреть раньше срока",
+      g_3:"Ухудшенное — обнаружен дефект, запланировать ремонт",
+      g_4:"Серьёзное — серьёзный дефект, ремонт в ближайшее время",
+      g_5:"Критическое — опасно или вероятен отказ, остановить и осмотреть немедленно",
       s_NOF:"Без отказа — узел выполняет свою функцию",
       s_INC:"Зарождающийся — дефект начался, функция пока не затронута",
       s_DEG:"Частичный — работает, но не по требованиям",
@@ -774,12 +796,27 @@
      print that has been in a cab. #0a7134 is 6.13:1 under the same white, reads
      as the same colour, and is now the one green the phone, the dashboard and
      this sheet all use. */
-  var GRADE_HEX = { A:"#0a7134", B:"#fab219", C:"#ec835a", X:"#d03b3b" };
-  /* Worst wins. X is the worst on this fleet's scale, confirmed with the
-     reliability team, and A is not a finding at all. */
-  var GRADE_RANK = { A:0, B:1, C:2, X:3 };
-  var SEV_HEX   = { NOF:"#0a7134", INC:"#fab219", DEG:"#ec835a", CRI:"#d03b3b" };
-  CMR.GRADE_HEX = GRADE_HEX; CMR.SEV_HEX = SEV_HEX;
+  /* THE GRADE IS 1..5 — grade.js is the one table. This file is loaded after
+     it on both surfaces; the fallback below exists only so a tool that loads
+     this engine alone still reads a record. Colours keyed by the number; a
+     letter off an old record is read through gnum() first, everywhere. */
+  var GR = (typeof GRADE !== "undefined" && GRADE) ? GRADE : null;
+  var GRADE_HEX = GR ? GR.HEX : { 1:"#0a7134", 2:"#fab219", 3:"#ec835a", 4:"#d9511f", 5:"#c8232c" };
+  var LEGACY_G = { A:1, B:2, C:3, D:4, X:5 };
+  function gnum(v){
+    if(GR) return GR.num(v);
+    if(v==null||v==="") return null;
+    var s=String(v).trim().toUpperCase();
+    if(/^[1-5]$/.test(s)) return Number(s);
+    return LEGACY_G[s]||null;
+  }
+  var GNAME = { en:{1:"Normal",2:"Incipient",3:"Degraded",4:"Severe",5:"Critical"},
+                ru:{1:"Норма",2:"Начальный",3:"Ухудшенное",4:"Серьёзное",5:"Критическое"} };
+  var curLang = "en";
+  function gname(n){ n=gnum(n); if(!n) return ""; return GR ? GR.name(n,curLang) : (GNAME[curLang]||GNAME.en)[n]; }
+  var GRADE_LEVELS = [1,2,3,4,5];
+  var SEV_HEX   = { NOF:GRADE_HEX[1], INC:GRADE_HEX[2], DEG:GRADE_HEX[3], CRI:GRADE_HEX[5] };
+  CMR.GRADE_HEX = GRADE_HEX; CMR.SEV_HEX = SEV_HEX; CMR.gradeNum = gnum;
 
   function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g, function(c){
     return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
@@ -1038,10 +1075,17 @@
 
   /* ---- chips and bars, drawn one way ------------------------------------ */
   /* White on the amber is barely legible in print; the amber chips take dark ink. */
-  function ink(hex){ return hex===GRADE_HEX.B ? "#3d2c00" : "#fff"; }
-  function gradeChip(g){ if(!g) return "";
-    var c=GRADE_HEX[g]||"#8a939b";
-    return '<span class="g" style="background:'+c+';color:'+ink(c)+'">'+esc(g)+'</span>'; }
+  function ink(hex){ return hex===GRADE_HEX[2] ? "#3d2c00" : "#fff"; }
+  /* The number and the name, always together — "4 – Severe" — in the
+     reader's language. A record from before the change carries a letter and
+     is read through gnum(). */
+  function gradeChip(g){ var n=gnum(g); if(!n) return "";
+    var c=GRADE_HEX[n]||"#8a939b";
+    return '<span class="g" style="background:'+c+';color:'+ink(c)+'">'+n+' – '+esc(gname(n))+'</span>'; }
+  /* The ISO class chip is shown only where there is no grade to show: a
+     graded point's class is derived from the grade and would only repeat it
+     in other words. */
+  function sevIf(ctx,it){ return gnum(it&&it.grade) ? "" : sevChip(ctx, it&&it.sev); }
   /* The severity word is a technical term and gets both languages like every
      other one — inside the chip, on a second line, rather than beside it: a
      chip that says one thing in two words has to stay one chip. */
@@ -1052,7 +1096,7 @@
       + (b && b!==a ? '<span class="alt2">'+esc(b)+'</span>' : "") + '</span>'; }
   function wearBar(pct){
     var p=Math.max(0,Math.min(130,Number(pct)||0));
-    var col = p>=100?GRADE_HEX.X : p>=80?GRADE_HEX.C : GRADE_HEX.A;
+    var col = p>=100?GRADE_HEX[5] : p>=80?GRADE_HEX[3] : GRADE_HEX[1];
     return '<span class="wb"><i style="width:'+Math.round(p/130*100)+'%;background:'+col+'"></i></span>';
   }
   CMR.wearBar = wearBar;
@@ -1076,6 +1120,19 @@
   /* The 1C work-request priority, if the inspector set one. It rides with the
      action because that is the moment it means something — a job to be queued,
      not a judgement about the part. */
+  /* The plan a graded finding carries from the machine: who, by when, and
+     whether the machine is running — and the reason when the inspector graded
+     below a proposed 5. Printed under the action wherever the action prints. */
+  function planTag(T, it) {
+    if (!it) return "";
+    var bits = [];
+    if (it.resp) bits.push(T.I("c_resp") + ": " + esc(it.resp));
+    if (it.target) bits.push(T.I("c_target") + ": " + esc(it.target));
+    if (it.opstat) bits.push(T.I("c_opstat") + ": " + esc(T.I("op_" + it.opstat)));
+    var h = bits.length ? '<div class="code">' + bits.join(" · ") + '</div>' : "";
+    if (it.gradeWhy) h += '<div class="code">' + esc(T.I("g_why")) + ' ' + esc(it.gradeWhy) + '</div>';
+    return h;
+  }
   function prioTag(it) {
     if (!it || !it.prio) return "";
     var hot = it.prio === "P1" ? SEV_HEX.CRI : it.prio === "P2" ? SEV_HEX.DEG : "#5b6670";
@@ -1102,7 +1159,7 @@
   /* ---- what the whole export adds up to ---------------------------------- */
   function scan(recs){
     var s={ rounds:recs.length, units:{}, unitN:0, types:{}, typeLabel:{},
-            grade:{A:0,B:0,C:0,X:0}, pts:0, act:[], crit:0, total:0,
+            grade:{1:0,2:0,3:0,4:0,5:0}, pts:0, act:[], crit:0, total:0,
             first:"", last:"", wear:{ok:0,watch:0,act:0} };
     recs.forEach(function(rec){
       if(!s.units[rec.equip]){ s.units[rec.equip]=1; s.unitN++; }
@@ -1110,13 +1167,15 @@
       if(rec.date){ if(!s.first||rec.date<s.first) s.first=rec.date;
                     if(!s.last ||rec.date>s.last ) s.last =rec.date; }
       rec.items.forEach(function(it){
+        if(it.general) return;                     // the machine's photographs, not a point
         s.pts++;
-        if(it.grade && s.grade[it.grade]!=null) s.grade[it.grade]++;
+        var gn=gnum(it.grade);
+        if(gn) s.grade[gn]++;
         if(it.w && it.w.band) s.wear[it.w.band]++;
-        var bad = it.grade==="C"||it.grade==="X"||it.sev==="DEG"||it.sev==="CRI"
+        var bad = gn>=3||(!gn&&(it.sev==="DEG"||it.sev==="CRI"))
                   ||(it.w&&(it.w.band==="act"||it.w.band==="watch"));
-        if(bad||it.action||it.defect) s.act.push({rec:rec, it:it, w:it.w, sev:it.sev});
-        if(it.grade==="X"||it.sev==="CRI"||(it.w&&it.w.band==="act")) s.crit++;
+        if(bad||it.action||it.defect) s.act.push({rec:rec, it:it, w:it.w, sev:it.sev, g:gn});
+        if(gn===5||(!gn&&it.sev==="CRI")||(it.w&&it.w.band==="act")) s.crit++;
       });
     });
     /* Thirty-one rows saying "DZ002 undercarriage past condemn" is not a work
@@ -1140,10 +1199,12 @@
       g.act.sort(function(a,b){return b.pct-a.pct;});
       g.watch.sort(function(a,b){return b.pct-a.pct;});
       g.sev = g.act.length ? "CRI" : "DEG"; s.act.push(g); });
-    var rank={X:0,C:1,B:2,A:3}, srank={CRI:0,DEG:1,INC:2,NOF:3};
+    /* Worst first: the grade, 5 down to 1; a roll-up or an ungraded point
+       ranks by its ISO class. */
+    var srank={CRI:0,DEG:2,INC:3,NOF:4};
+    var rk=function(f){ var n=f.g!=null?f.g:gnum(f.it&&f.it.grade); if(n) return 5-n; return srank[f.sev]==null?5:srank[f.sev]; };
     s.act.sort(function(a,b){
-      return (srank[a.sev]==null?4:srank[a.sev])-(srank[b.sev]==null?4:srank[b.sev])
-        || (rank[a.it.grade]==null?4:rank[a.it.grade])-(rank[b.it.grade]==null?4:rank[b.it.grade])
+      return rk(a)-rk(b)
         || ((b.w&&b.w.pct)||0)-((a.w&&a.w.pct)||0)
         || String(a.rec.equip).localeCompare(String(b.rec.equip)); });
     return s;
@@ -1157,9 +1218,9 @@
      grades and severities — so a graded round with no measurement over its
      limit announced "0 of 11 points worth watching. Plan the work." Zero of
      eleven, and plan the work. */
-  function isAct(it){ return it.grade==="X"||it.sev==="CRI"||(it.w&&it.w.band==="act"); }
-  function isWatch(it){ return it.grade==="C"||it.grade==="B"||it.sev==="DEG"
-                            ||it.sev==="INC"||(it.w&&it.w.band==="watch"); }
+  function isAct(it){ var n=gnum(it.grade); return n===5||(!n&&it.sev==="CRI")||(it.w&&it.w.band==="act"); }
+  function isWatch(it){ var n=gnum(it.grade); return (n>=2&&n<=4)||(!n&&(it.sev==="DEG"||it.sev==="INC"))
+                            ||(it.w&&it.w.band==="watch"); }
   function flagged(rec){ return (rec.items||[]).filter(function(it){
     return isAct(it)||isWatch(it); }); }
   function verdict(rec){
@@ -1438,8 +1499,8 @@
   function notableTable(ctx, T, list) {
     var h = '<div class="subhd" style="margin-top:13px;">' + T.I("notable") + '</div><table><tr>'
       + '<th style="width:168px">' + T.L("c_item") + '</th>'
-      + '<th class="c" style="width:34px">' + T.L("c_grade") + '</th>'
-      + '<th style="width:74px">' + T.L("c_sev") + '</th>'
+      + '<th class="c" style="width:96px">' + T.L("c_grade") + '</th>'
+      + '<th style="width:60px">' + T.L("c_sev") + '</th>'
       + '<th style="width:158px">' + T.L("c_defect") + '</th>'
       + '<th style="width:130px">' + T.L("c_cause") + '</th>'
       + '<th>' + T.L("c_do") + '</th></tr>';
@@ -1453,15 +1514,15 @@
       if (it.lube && it.lube.product) read.unshift(it.lube.product);
       if (it.comment) read.push(it.comment);
       h += '<tr class="' + (i % 2 ? "zebra" : "") + '">'
-        + '<td class="stripe" style="border-left-color:' + (SEV_HEX[it.sev] || GRADE_HEX[it.grade] || "transparent") + '">'
+        + '<td class="stripe" style="border-left-color:' + (GRADE_HEX[gnum(it.grade)] || SEV_HEX[it.sev] || "transparent") + '">'
           + nameCell(T, it) + '</td>'
         + '<td class="c">' + gradeChip(it.grade) + '</td>'
-        + '<td>' + sevChip(ctx, it.sev) + '</td>'
+        + '<td>' + sevIf(ctx, it) + '</td>'
         + '<td>' + (it.defect ? esc(it.defect) : "") + (it.iso ? '<div class="code">ISO ' + esc(it.iso) + '</div>' : "") + '</td>'
         + '<td>' + (it.cause ? esc(it.cause) : "") + '</td>'
         + '<td>' + (it.action ? '<b>' + esc(it.action) + '</b>' + prioTag(it)
             + (it.wo ? ' <span class="code">[' + esc(it.wo) + ']</span>' : "") + (read.length ? "<br>" : "") : "")
-          + esc(read.join(" · ")) + '</td></tr>';
+          + esc(read.join(" · ")) + planTag(T, it) + '</td></tr>';
     });
     return h + '</table>';
   }
@@ -1496,8 +1557,7 @@
       out.push({ nb: false, html: '<div class="sec">'
         + '<div class="subhd">' + T.I("gen_t") + '</div>'
         + '<div class="genrow">'
-        + rec.general.map(function (u) {
-            return '<figure><img src="' + esc(u) + '" alt=""></figure>'; }).join("")
+        + rec.general.map(function (u) { return genShot(T, u); }).join("")
         + '</div>'
         + '<div class="genwhy">' + T.I("gen_sub") + '</div></div>' });
     }
@@ -1639,7 +1699,7 @@
          On a wear round the grid and the drawing are the record, so nothing
          goes on the board at all. */
       var told = rec.items.filter(function (it) {
-        return it.grade === "B" || it.grade === "C" || it.grade === "X" || it.defect
+        return gnum(it.grade) >= 2 || it.defect
           || it.action || it.comment || it.sev === "DEG" || it.sev === "CRI"
           || (it.photos && it.photos.length);
       });
@@ -1800,7 +1860,7 @@
       /* Anything a reader would come looking for. Photographs count on their
          own: somebody walked to the machine and took one. */
       var told = rec.items.filter(function (it) {
-        return it.grade === "B" || it.grade === "C" || it.grade === "X" || it.defect
+        return gnum(it.grade) >= 2 || it.defect
           || it.action || it.comment || it.sev === "DEG" || it.sev === "CRI"
           || (it.photos && it.photos.length);
       });
@@ -1844,7 +1904,7 @@
   /* The round's verdict as a chip, in the vocabulary the summary table already
      uses, so the two cannot say different things about one round. */
   function verdictChip(ctx, T, vc) {
-    var VC = { ok: ["v_ok", GRADE_HEX.A], watch: ["v_watch", GRADE_HEX.C], act: ["v_act", GRADE_HEX.X] };
+    var VC = { ok: ["v_ok", GRADE_HEX[1]], watch: ["v_watch", GRADE_HEX[3]], act: ["v_act", GRADE_HEX[5]] };
     var v = VC[vc] || VC.ok;
     return '<span class="c"><span class="vdot" style="background:' + v[1] + '"></span>'
       + T.I(v[0]) + '</span>';
@@ -2089,6 +2149,7 @@
       + prioTag(it) + (it.wo ? ' <span class="code">' + esc(T("c_wo")) + ' ' + esc(it.wo) + '</span>' : ""));
     else if (it.wo || (it.prio && !sh.prio)) row(T.L("c_wo"),
       (it.prio && !sh.prio ? prioTag(it) + " " : "") + '<span class="num">' + esc(it.wo || "") + '</span>');
+    if (it.resp || it.target || it.opstat || it.gradeWhy) row(T.L("c_resp"), planTag(T, it));
     /* The lubrication round's whole answer. It is NOT a reading: a reading is
        a figure and gets tabular numerals, while this is a product name, how the
        fitter knows it, and whether a sample went with it. Folding it into the
@@ -2122,7 +2183,7 @@
       + (it.code && it.name && it.name !== it.code
           ? '<div class="pn">' + T.both(dropCode(it.code, it.name),
               dropCode(it.code, it.nameAlt), "") + '</div>' : "")
-      + ((it.grade || it.sev) ? '<div class="chips">' + gradeChip(it.grade) + sevChip(ctx, it.sev) + '</div>' : "")
+      + ((it.grade || it.sev) ? '<div class="chips">' + gradeChip(it.grade) + sevIf(ctx, it) + '</div>' : "")
       + (rows ? '<dl>' + rows + '</dl>' : "")
       + (it.comment ? '<div class="cm">' + esc(it.comment) + '</div>' : "")
       + '</div></div>';
@@ -2137,8 +2198,8 @@
         + '<span>' + T.I(k) + '</span></span>';
     };
     return '<div class="mapkey">'
-      + i(GRADE_HEX.A, false, "band_ok") + i(GRADE_HEX.C, false, "band_watch")
-      + i(GRADE_HEX.X, false, "band_act") + i("#e6eaee", true, "map_na")
+      + i(GRADE_HEX[1], false, "band_ok") + i(GRADE_HEX[3], false, "band_watch")
+      + i(GRADE_HEX[5], false, "band_act") + i("#e6eaee", true, "map_na")
       + '</div>';
   }
 
@@ -2156,11 +2217,18 @@
      the reference beside it, so nothing is hidden from whoever reads the row. */
   function sane(recs) {
     return recs.map(function (rec) {
-      if (!(rec.items || []).some(function (it) {
-            return it.w && it.w.pct != null && Number(it.w.pct) < 0; })) return rec;
+      var hasNeg = (rec.items || []).some(function (it) {
+            return it.w && it.w.pct != null && Number(it.w.pct) < 0; });
+      /* THE MACHINE'S PHOTOGRAPHS ARE NOT A POINT. The phone carries them on a
+         pseudo-position so they travel every path a point's do; here they
+         come off the point list — which is counted, measured and verdicted —
+         and join the round's general photographs, captioned by what each is
+         of (overview, left side, tray…). */
+      var gen = (rec.items || []).filter(function (it) { return it && it.general; });
+      if (!hasNeg && !gen.length) return rec;
       var copy = {}, k;
       for (k in rec) copy[k] = rec[k];
-      copy.items = rec.items.map(function (it) {
+      copy.items = rec.items.filter(function (it) { return !(it && it.general); }).map(function (it) {
         if (!it.w || it.w.pct == null || Number(it.w.pct) >= 0) return it;
         var w = {}, c = {}, x;
         for (x in it.w) w[x] = it.w[x];
@@ -2169,8 +2237,23 @@
         c.w = w;
         return c;
       });
+      if (gen.length) {
+        var g = (rec.general || []).slice();
+        gen.forEach(function (it) {
+          (it.photos || []).forEach(function (u, i) {
+            g.push({ u: u, cat: (it.cats && it.cats[i]) || "" }); });
+        });
+        copy.general = g;
+      }
       return copy;
     });
+  }
+  /* A general photograph is a URL, or a {u, cat} pair when the phone said
+     what it is of. One reader for both shapes. */
+  function genShot(T, x) {
+    var u = (x && typeof x === "object") ? x.u : x;
+    var cat = (x && typeof x === "object" && x.cat) ? x.cat : "";
+    return '<figure><img src="' + esc(u) + '">' + (cat ? '<figcaption>' + esc(T.I("cat_" + cat)) + '</figcaption>' : "") + '</figure>';
   }
   /* The rule, reachable by the suite. It decides what a document calls
      itself, so it is asked directly rather than inferred from rendered text —
@@ -2178,6 +2261,7 @@
   CMR.__status = docStatus;
   CMR.sections = function (ctx) {
     var T = makeT(ctx.lang, ctx.bi !== false);
+    curLang = (ctx.lang==="ru") ? "ru" : "en";
     var recs = sane(ctx.records).sort(function(a,b){
       return String(a.date||"").localeCompare(String(b.date||""))
         || String(a.equip).localeCompare(String(b.equip)); });
@@ -2254,14 +2338,14 @@
     var stampTxt = today+" "+sp.hh+":"+sp.mm;
 
     /* ---------- 1. the answer ---------- */
-    var graded = X.grade.A+X.grade.B+X.grade.C+X.grade.X;
-    var bar = ["A","B","C","X"].map(function(g){ var n=X.grade[g]; if(!n) return "";
+    var graded = GRADE_LEVELS.reduce(function(a,g){ return a+X.grade[g]; }, 0);
+    var bar = GRADE_LEVELS.map(function(g){ var n=X.grade[g]; if(!n) return "";
       return '<span style="width:'+(n/graded*100).toFixed(2)+'%;background:'+GRADE_HEX[g]+'"></span>'; }).join("");
     /* Wrapped, not bare. .barkey .i is a flex row, so a loose translation span
        would land BESIDE the label as its own flex item rather than under it. */
-    var key = ["A","B","C","X"].map(function(g){ var n=X.grade[g]; if(!n) return "";
+    var key = GRADE_LEVELS.map(function(g){ var n=X.grade[g]; if(!n) return "";
       return '<span class="i"><span class="sw" style="background:'+GRADE_HEX[g]+'"></span><b>'
-        +n+'</b> <span>'+T.L("g_"+g)+'</span></span>'; }).join("");
+        +n+'</b> <span>'+g+' – '+T.L("g_"+g)+'</span></span>'; }).join("");
     var typeLine = Object.keys(X.types).map(function(k){
       return X.types[k]+" "+esc(X.typeLabel[k]||k); }).join(" · ");
     var wearN = X.wear.ok+X.wear.watch+X.wear.act;
@@ -2270,7 +2354,7 @@
       var v=verdict(rec);
       var unread = rec.wear ? rec.items.filter(function(it){ return it.w && it.w.mm==null; }).length : 0;
       var v2 = (v==="ok"&&unread) ? "watch" : v;
-      var col = v2==="act"?GRADE_HEX.X : v2==="watch"?GRADE_HEX.C : GRADE_HEX.A;
+      var col = v2==="act"?GRADE_HEX[5] : v2==="watch"?GRADE_HEX[3] : GRADE_HEX[1];
       var mine = X.act.filter(function(f){ return f.rec===rec; });
       var seen=[];
       mine.forEach(function(f){
@@ -2307,10 +2391,10 @@
         + '<div class="stat"><div class="k">'+T.L("pts")+'</div><div class="v">'+X.pts+'</div>'
           + '<div class="s">'+esc(X.first||"—")+(X.last&&X.last!==X.first?" → "+esc(X.last):"")+'</div></div>'
         + '<div class="stat"><div class="k">'+T.L("work")+'</div>'
-          + '<div class="v" style="color:'+(X.total?GRADE_HEX.C:GRADE_HEX.A)+'">'+X.total+'</div>'
+          + '<div class="v" style="color:'+(X.total?GRADE_HEX[3]:GRADE_HEX[1])+'">'+X.total+'</div>'
           + '<div class="s">'+T.I("findings")+'</div></div>'
         + '<div class="stat"><div class="k">'+T.L("now")+'</div>'
-          + '<div class="v" style="color:'+(X.crit?GRADE_HEX.X:GRADE_HEX.A)+'">'+X.crit+'</div>'
+          + '<div class="v" style="color:'+(X.crit?GRADE_HEX[5]:GRADE_HEX[1])+'">'+X.crit+'</div>'
           + '<div class="s">'+T.I("now_s")+'</div></div>'
       + '</div>'
       + (graded ? '<div style="margin-top:20px;"><div class="eyebrow" style="margin-bottom:8px;">'
@@ -2323,9 +2407,9 @@
         + '<th>'+T.L("c_find")+'</th></tr>'+glance+'</table></div>'
       + (wearN ? '<div style="margin-top:20px;"><div class="eyebrow" style="margin-bottom:8px;">'
           + T.I("uc_cond")+'</div><div class="barkey" style="margin-top:0;">'
-          + '<span class="i"><span class="sw" style="background:'+GRADE_HEX.A+'"></span><b>'+X.wear.ok+'</b> '+T.I("band_ok")+'</span>'
-          + '<span class="i"><span class="sw" style="background:'+GRADE_HEX.C+'"></span><b>'+X.wear.watch+'</b> '+T.I("band_watch")+'</span>'
-          + '<span class="i"><span class="sw" style="background:'+GRADE_HEX.X+'"></span><b>'+X.wear.act+'</b> '+T.I("band_act")+'</span>'
+          + '<span class="i"><span class="sw" style="background:'+GRADE_HEX[1]+'"></span><b>'+X.wear.ok+'</b> '+T.I("band_ok")+'</span>'
+          + '<span class="i"><span class="sw" style="background:'+GRADE_HEX[3]+'"></span><b>'+X.wear.watch+'</b> '+T.I("band_watch")+'</span>'
+          + '<span class="i"><span class="sw" style="background:'+GRADE_HEX[5]+'"></span><b>'+X.wear.act+'</b> '+T.I("band_act")+'</span>'
           + '</div></div>' : "")
       + '</div>'});
 
@@ -2344,7 +2428,7 @@
         + '<th style="width:130px">'+T.L("c_do")+'</th>'
         + '<th class="c" style="width:54px">'+T.L("c_date")+'</th></tr>';
       X.act.forEach(function(f,i){
-        var rec=f.rec, it=f.it||{}, col=SEV_HEX[f.sev]||GRADE_HEX[it.grade]||"#c9d0d6";
+        var rec=f.rec, it=f.it||{}, col=GRADE_HEX[gnum(it.grade)]||SEV_HEX[f.sev]||"#c9d0d6";
         var todo = it.action
           ? '<b>'+esc(it.action)+'</b>'+prioTag(it)
             +(it.wo?'<div class="code">'+esc(T("c_wo"))+' '+esc(it.wo)+'</div>':"")
@@ -2372,7 +2456,7 @@
                    (!it.defect&&it.comment)?esc(it.comment):"" ].filter(Boolean).join("<br>");
         wl += head
           + '<td>'+nameCell(T,it)+'</td>'
-          + '<td>'+(find||"—")+'<div style="margin-top:3px;">'+gradeChip(it.grade)+' '+sevChip(ctx,f.sev)+'</div>'
+          + '<td>'+(find||"—")+'<div style="margin-top:3px;">'+gradeChip(it.grade)+' '+(gnum(it.grade)?"":sevChip(ctx,f.sev))+'</div>'
             + (it.defectCode?'<div class="code">'+esc(it.defectCode)+(it.iso?' · ISO '+esc(it.iso):"")+'</div>':"")+'</td>'
           + '<td>'+(it.cause?esc(it.cause):'<span class="muted">'+T.I("cause_tbd")+'</span>')+'</td>'
           + '<td>'+todo+'</td>' + tail;
@@ -2399,7 +2483,7 @@
          thirty-four points again above it, in a table whose grade, severity and
          defect columns are all empty, was two pages saying one thing. */
       var notable = rec.items.filter(function(it){
-        var said = it.grade==="B"||it.grade==="C"||it.grade==="X"||it.defect||it.action
+        var said = gnum(it.grade)>=2||it.defect||it.action
           ||it.comment||it.sev==="DEG"||it.sev==="CRI";
         return isWear ? said : (said || (it.w&&(it.w.band==="act"||it.w.band==="watch"))); });
       var quiet = rec.items.length - notable.length;
@@ -2478,7 +2562,7 @@
          same inspection. */
       if((rec.general||[]).length){
         var gp=cont+'<div class="subhd" style="margin-top:11px;">'+T.I("gen_t")+'</div><div class="shots">';
-        rec.general.forEach(function(u){ gp+='<figure><img src="'+esc(u)+'"></figure>'; });
+        rec.general.forEach(function(u){ gp+=genShot(T,u); });
         extra.push({nb:false, html:gp+'</div></div></div>'});
       }
       if(rec.gap && rec.gap.missing>0){
@@ -2506,7 +2590,7 @@
     });
 
     /* ---------- 4. how to read any of it ---------- */
-    var gl=["A","B","C","X"].map(function(g){
+    var gl=GRADE_LEVELS.map(function(g){
       return '<div class="lgrow">'+gradeChip(g)+'<div class="t">'+T.S("g_"+g)+'</div></div>'; }).join("");
     var sl=["NOF","INC","DEG","CRI"].map(function(s){
       return '<div class="lgrow">'+sevChip(ctx,s)+'<div class="t">'+T.S("s_"+s)+'</div></div>'; }).join("");

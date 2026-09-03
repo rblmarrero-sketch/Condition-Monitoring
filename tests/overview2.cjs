@@ -66,7 +66,7 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
      the review headline exists for — so that headline has something to
      count and somewhere to go. Made with the page's own rule, not a copy. */
   await p.evaluate(() => {
-    const r = RECS.find(x => !x._void && x.items && x.items[0] && x.items[0].grade === 'A');
+    const r = RECS.find(x => !x._void && x.items && x.items[0] && x.items[0].grade === 1);
     if (r) { r.items[0].sev = 'DEG'; renderAll(); }
   });
   await p.waitForTimeout(300);
@@ -76,7 +76,7 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
     const latest = {};
     recs.forEach(r => { if (!latest[r.equip] || (r.date || '') > (latest[r.equip].date || '')) latest[r.equip] = r; });
     let crit = 0, deg = 0;
-    Object.values(latest).forEach(r => { const w = worstOf(r); if (w === 'CRI') crit++; else if (w === 'DEG') deg++; });
+    Object.values(latest).forEach(r => { const w = worstOf(r); if (w === 5) crit++; else if (w === 3) deg++; });
     const act = f.filter(x => actionRequired(x.r, x.i)).length;
     const noown = f.filter(x => actionRequired(x.r, x.i) && !x.i.owner).length;
     const over = dueTabRows().filter(r => r.st === 'over').length;
@@ -123,12 +123,12 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
   };
   let r = await press('kpiCrit');
   ok('Critical equipment stays on Overview and filters the table to Critical',
-     r.tab === 'overview' && r.sev === 'CRI', r.tab + ' · sev=' + r.sev);
-  ok('  the address says so', /#overview\?.*sev=CRI/.test(r.hash), r.hash);
+     r.tab === 'overview' && r.sev === 5, r.tab + ' · sev=' + r.sev);
+  ok('  the address says so', /#overview\?.*sev=5/.test(r.hash), r.hash);
   ok('  and every row shown is Critical', r.fleetRows > 0 && r.fleetSevs.every(s => /critical/i.test(s)),
      r.fleetRows + ' rows: ' + r.fleetSevs.slice(0, 3).join(' | '));
   r = await press('kpiDeg');
-  ok('Degraded equipment filters the table to Degraded', r.tab === 'overview' && r.sev === 'DEG', r.tab + ' · sev=' + r.sev);
+  ok('Degraded equipment filters the table to Degraded', r.tab === 'overview' && r.sev === 3, r.tab + ' · sev=' + r.sev);
   ok('  and every row shown is Degraded', r.fleetRows > 0 && r.fleetSevs.every(s => /degraded/i.test(s)),
      r.fleetRows + ' rows: ' + r.fleetSevs.slice(0, 3).join(' | '));
   r = await press('kpiOver');

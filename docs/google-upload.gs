@@ -108,6 +108,7 @@ function doPost(e) {
     if (b.op === 'delete')  return json(deleteRecord_(b));
     if (b.op === 'delfile') return json(deleteFile_(b));
     if (b.op === 'resolve') return json(resolveConflict_(b));
+    if (b.op === 'rewrite') return json(rewriteObject_(b));
 
     /* Several files in one request.
 
@@ -509,6 +510,55 @@ function resolveConflict_(b) {
   return { ok: true, key: doc.key, keep: keep, at: doc.at };
 }
 
+/* REWRITE ONE JSON DOCUMENT IN PLACE, WITH THE ORIGINAL KEPT.
+
+   Field for field the same operation as docs/yandex/function.js
+   rewriteObject(). This backend is retired and is not deployed; it is kept in
+   step because two backends for one document have to agree about what the
+   document IS. The grade migration uses it to turn a letter grade into its
+   number without changing the file's name, owner or place in the index.
+   Admin-gated; JSON only; the original bytes go to _meta/backup/<stamp>/
+   first; identical bytes are a no-op. */
+function rewriteObject_(b) {
+  if (!ADMIN_SECRET) return { ok: false, error:
+    'Rewrite is switched off. Set ADMIN_SECRET in the Apps Script and deploy a new version.' };
+  if (String(b.admin || '') !== ADMIN_SECRET) return { ok: false, error: 'Wrong admin password' };
+  var key = String(b.id || b.key || '').replace(/^\/+/, '');
+  if (!key) return { ok: false, error: 'Missing object key' };
+  if (!b.file) return { ok: false, error: 'Missing file content' };
+  var why = String(b.why || '').trim();
+  if (!why) return { ok: false, error: 'A reason is required' };
+  var bytes = Utilities.base64Decode(b.file);
+  var text = Utilities.newBlob(bytes).getDataAsString();
+  try { JSON.parse(text); } catch (errJ) { return { ok: false, error: 'New content is not JSON' }; }
+  var want = sha256Hex_(bytes);
+  /* Located by a Drive id or a path, whichever the tool was handed by ?action=list. */
+  var all = [];
+  collect_(rootFolder_(), '', all, 0, '');
+  var hit = null;
+  for (var i = 0; i < all.length; i++) {
+    if (all[i].id === key || all[i].path === key || all[i].name === key) { hit = all[i]; break; }
+  }
+  if (!hit) return { ok: false, error: 'No object called ' + key };
+  if (!/\.json$/i.test(hit.name)) return { ok: false, error: 'Only JSON documents can be rewritten' };
+  var f = DriveApp.getFileById(hit.id);
+  var was = f.getBlob().getBytes();
+  var wasSha = sha256Hex_(was);
+  if (wasSha === want) return { ok: true, key: key, unchanged: true, sha256: want };
+  if (b.ifSha && String(b.ifSha) !== wasSha) return { ok: false, error: 'Object changed since it was read', sha256: wasSha };
+  var at = new Date().toISOString();
+  var stamp = at.replace(/[:.]/g, '-');
+  var bdir = folderPath_(rootFolder_(), META_DIR + '/backup/' + stamp);
+  var bf = bdir.createFile(Utilities.newBlob(was, 'application/json', hit.name));
+  try { bf.setDescription((f.getDescription() || '') + ' cm-why:' + why.slice(0, 200)); } catch (errD) {}
+  f.setContent(text);
+  var back = DriveApp.getFileById(hit.id).getBlob().getBytes();
+  var storedSha = sha256Hex_(back);
+  if (storedSha !== want) return { ok: false, error: 'stored bytes do not match what was sent', key: key, backup: bf.getId() };
+  if (/\.json$/i.test(hit.name) && !/\.(edit|conflict|file|defer)\.json$/i.test(hit.name)) indexTouch_();
+  return { ok: true, key: key, backup: bf.getId(), was: wasSha, sha256: storedSha, at: at, by: String(b.by || '').slice(0, 80) };
+}
+
 /* Deletion. Guarded by ADMIN_SECRET, which is deliberately NOT the same secret
    the phones carry — that one is published with the app. Files are trashed, not
    purged, so Drive keeps them for 30 days, and every deletion leaves a log. */
@@ -716,13 +766,22 @@ function indexDrop_(key) {
    "In the system" wants who did what, when, and how bad — six fields. Sending
    the whole record to answer that is sending a megabyte to draw a list. Built
    here from the shard already in memory, so it costs nothing to offer both. */
-var GRADE_RANK_ = { A: 0, B: 1, C: 2, X: 3 };
+/* The grade is 1..5 (see mobile/grade.js). A sidecar written before the
+   change carries A/B/C/X; both are read, and the row always says a number —
+   the same normalisation GRADE.num applies, kept here in step with it. */
+var GRADE_LEGACY_ = { A: 1, B: 2, C: 3, D: 4, X: 5 };
+function gradeNum_(v) {
+  if (v == null || v === '') return null;
+  var s = String(v).trim().toUpperCase();
+  if (/^[1-5]$/.test(s)) return Number(s);
+  return GRADE_LEGACY_[s] || null;
+}
 function slimRow_(r) {
   var worst = '', base = [];
   var items = r.items || [];
   for (var i = 0; i < items.length; i++) {
-    var it = items[i] || {}, g = it.grade;
-    if (GRADE_RANK_[g] != null && (worst === '' || GRADE_RANK_[g] > GRADE_RANK_[worst])) worst = g;
+    var it = items[i] || {}, g = gradeNum_(it.grade);
+    if (g != null && (worst === '' || g > worst)) worst = g;
     /* A baseline changes how every later reading on that unit is scored, so it
        cannot stay on the phone that set it. Rare, and a few bytes when present.
        This must stay identical to teamRow() in the app — the suite compares the
@@ -1005,9 +1064,12 @@ function readRecords_(p) {
      records array — so the old filter read them back as inspections and every
      round arrived twice. Nothing errors when that happens; the fleet simply
      doubles. The type check below is the belt to this braces. */
+  /* _meta/backup holds the pre-rewrite copy of a sidecar under its own name
+     (see rewriteObject_); read back as an inspection it would double the round. */
   var sidecars = all.filter(function (f) {
     return /\.json$/i.test(f.name) && f.updated > after &&
-           f.path.indexOf(INDEX_DIR + '/') !== 0;
+           f.path.indexOf(INDEX_DIR + '/') !== 0 &&
+           f.path.indexOf(META_DIR + '/backup/') !== 0;
   }).sort(function (a, b) { return a.updated - b.updated; });
 
   var records = [], edits = [], conflicts = [], deleted = [], deferrals = [],
