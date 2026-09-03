@@ -200,8 +200,22 @@
     nav.tabs .nb{position:absolute;top:3px;right:7px;min-width:8px;height:8px;
       padding:0;font-size:0;line-height:0;}
   }
+  /* ── KEYBOARD ────────────────────────────────────────────────────────────
+     One ring for everything that takes focus, so a reader on the keyboard can
+     always see where they are. Mouse clicks do not show it. */
+  button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,
+  [tabindex]:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
   @media (max-width:820px){
     :root{--sbw:0px;}
+    /* The top bar was one row 504px wide on a 390px phone: the source chip,
+       Data sources, EN/RU, the theme and the build number pushed the page
+       sideways. It wraps, the search takes a row of its own, and the chip
+       gives way before anything else does. */
+    header.app{flex-wrap:wrap;height:auto;padding:6px 10px;row-gap:6px;}
+    header.app .gsearch{flex:1 1 100%;max-width:none;order:-1;}
+    header.app .spacer{display:none;}
+    header.app #srcChip{min-width:0;max-width:44vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    header.app .ver{margin-left:auto;}
     nav.tabs{position:sticky;top:0;right:0;bottom:auto;width:auto;z-index:22;
       flex-direction:row;overflow-x:auto;overflow-y:hidden;
       border-right:0;padding:8px 10px;}
@@ -2034,6 +2048,30 @@
     .section > *:not(h2):not(.sub){margin-left:14px;margin-right:14px;}
     .controls{padding:10px 12px;gap:10px;}
   }
+  /* ── TOUCH ──────────────────────────────────────────────────────────────
+     A control a finger presses is at least 36px tall. The desktop sizes stay
+     as they are: a mouse does not need the room and the tables would lose
+     ten rows to it. Both a coarse pointer and a narrow window count, because
+     a phone reports the first and a small tablet window only the second. */
+  @media (pointer:coarse), (max-width:900px){
+    .btn.sm,.minibtn,.seg button,.subtabs button,.xf,.tile .legend button,.method>summary,.defs>summary,
+    .lang button,#themeBtn,#srcChip,.covr,.pager .btn,#histView button,#actView button{min-height:36px;}
+    .btn.sm,.minibtn{padding:6px 12px;}
+    .xf{padding:4px 8px;}
+    .prow[data-drill]{min-height:36px;padding:6px 0;}
+    input[type=checkbox],.seltbl input[type=checkbox],.selcol input,#fVoid{width:20px;height:20px;}
+    nav.tabs button{min-height:40px;}
+    .cpv{min-height:36px;}
+    header.app .btn,.btn{min-height:36px;}
+    .iedit,table.grid select,table.grid input{min-height:36px;}
+    .insp .head .btn{min-height:32px;}
+    .railtog{min-width:36px;}
+    .voidtog{min-height:36px;display:inline-flex;align-items:center;gap:8px;}
+  }
+  /* A segmented control that does not fit a phone wraps to a second row;
+     clipped, its last option ("All") was simply not there. */
+  @media (max-width:640px){ .seg{display:flex;flex-wrap:wrap;} .seg button{flex:1 1 auto;} }
+
 </style>
 </head>
 <body>
@@ -2051,7 +2089,7 @@
   <div class="gsearch" role="search">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
          stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
-    <input id="gq" type="search" autocomplete="off" role="combobox"
+    <input id="gq" type="search" autocomplete="off" role="combobox" data-i18n-aria="g_ph" aria-label="Search"
            aria-expanded="false" aria-controls="gres" aria-autocomplete="list"
            data-i18n-ph="g_ph" placeholder="Search unit, component, defect, action, person, WO…">
     <div id="gres" class="gres hidden" role="listbox" aria-label="Search results"></div>
@@ -2427,7 +2465,7 @@
   </div>
 </div>
 
-<nav class="tabs" id="tabs">
+<nav class="tabs" id="tabs" aria-label="Pages">
   <div class="brand"><div class="bmark">CM</div>
     <div><div class="t1">Condition Monitoring</div><div class="t2" id="sub" data-i18n="sub">Fleet dashboard</div></div>
     <button class="railtog" id="railTog" type="button" aria-expanded="true"
@@ -2688,7 +2726,7 @@
            four siblings here put a dropdown off the side of a phone. -->
       <div class="field"><label for="equipSel" data-i18n="tab_equipment">Equipment</label>
         <span class="eqpick">
-          <input id="equipQ" type="search" data-i18n-ph="eq_findph" placeholder="Filter machines…">
+          <input id="equipQ" type="search" data-i18n-ph="eq_findph" data-i18n-aria="eq_findph" aria-label="Filter machines" placeholder="Filter machines…">
           <select id="equipSel"></select>
           <span class="hint" id="equipShown"></span>
         </span></div>
@@ -2990,7 +3028,7 @@
         <div class="rstep"><div class="rnum">2</div><div class="rbody">
           <label for="rTarget" id="rTargetLbl" data-i18n="r_target">Which</label>
           <span class="eqpick">
-            <input id="rTargetQ" type="search" data-i18n-ph="eq_findph" placeholder="Filter…">
+            <input id="rTargetQ" type="search" data-i18n-ph="eq_findph" data-i18n-aria="eq_findph" aria-label="Filter" placeholder="Filter…">
             <select id="rTarget"></select>
             <span class="hint" id="rTargetShown"></span>
           </span></div></div>
@@ -3116,27 +3154,27 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=239"></script>
-<script src="../mobile/hme.js?v=239"></script>
-<script src="../mobile/mp-fc.js?v=239"></script>
-<script src="../mobile/hme-cascade.js?v=239"></script>
-<script src="../mobile/temp-limits.js?v=239"></script>
+<script src="../data/magnetic_plug.js?v=240"></script>
+<script src="../mobile/hme.js?v=240"></script>
+<script src="../mobile/mp-fc.js?v=240"></script>
+<script src="../mobile/hme-cascade.js?v=240"></script>
+<script src="../mobile/temp-limits.js?v=240"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=239"></script>
-<script src="../mobile/normalize.js?v=239"></script>
-<script src="../mobile/due.js?v=239"></script>
-<script src="../mobile/wear.js?v=239"></script>
-<script src="../mobile/wear-map.js?v=239"></script>
-<script src="../mobile/lube.js?v=239"></script>
-<script src="../mobile/lube-overrides.js?v=239"></script>
-<script src="../mobile/lube2027.js?v=239"></script>
-<script src="../mobile/lube-tds.js?v=239"></script>
+<script src="../mobile/assets.js?v=240"></script>
+<script src="../mobile/normalize.js?v=240"></script>
+<script src="../mobile/due.js?v=240"></script>
+<script src="../mobile/wear.js?v=240"></script>
+<script src="../mobile/wear-map.js?v=240"></script>
+<script src="../mobile/lube.js?v=240"></script>
+<script src="../mobile/lube-overrides.js?v=240"></script>
+<script src="../mobile/lube2027.js?v=240"></script>
+<script src="../mobile/lube-tds.js?v=240"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=239"></script>
-<script src="../mobile/machine-photos.js?v=239"></script>
+<script src="../mobile/upload-defaults.js?v=240"></script>
+<script src="../mobile/machine-photos.js?v=240"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3145,17 +3183,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=239"></script>
-<script src="../mobile/get.js?v=239"></script>
-<script src="../mobile/points.js?v=239"></script>
-<script src="../mobile/uc-points.js?v=239"></script>
-<script src="../mobile/inspect-guide.js?v=239"></script>
-<script src="../mobile/get-figs.js?v=239"></script>
-<script src="../mobile/body-points.js?v=239"></script>
-<script src="../mobile/body-map.js?v=239"></script>
-<script src="../mobile/jspdf.umd.min.js?v=239"></script>
-<script src="../mobile/html2canvas.min.js?v=239"></script>
-<script src="../mobile/report-core.js?v=239"></script>
+<script src="../mobile/machine-fig.js?v=240"></script>
+<script src="../mobile/get.js?v=240"></script>
+<script src="../mobile/points.js?v=240"></script>
+<script src="../mobile/uc-points.js?v=240"></script>
+<script src="../mobile/inspect-guide.js?v=240"></script>
+<script src="../mobile/get-figs.js?v=240"></script>
+<script src="../mobile/body-points.js?v=240"></script>
+<script src="../mobile/body-map.js?v=240"></script>
+<script src="../mobile/jspdf.umd.min.js?v=240"></script>
+<script src="../mobile/html2canvas.min.js?v=240"></script>
+<script src="../mobile/report-core.js?v=240"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4712,6 +4750,7 @@ function applyLang(){
   document.querySelectorAll("[data-i18n]").forEach(el=>el.textContent=t(el.dataset.i18n));
   document.querySelectorAll("[data-i18n-ph]").forEach(el=>el.placeholder=t(el.dataset.i18nPh));
   /* Both, from one key — a title is a tooltip, aria-label is what is read. */
+  document.querySelectorAll("[data-i18n-aria]").forEach(el=>{ el.setAttribute("aria-label", t(el.dataset.i18nAria)); });
   document.querySelectorAll("[data-i18n-title]").forEach(el=>{
     const s2=t(el.dataset.i18nTitle); el.title=s2; el.setAttribute("aria-label",s2); });
   document.querySelectorAll(".lang button").forEach(b=>b.classList.toggle("on",b.dataset.lang===lang));
@@ -6130,10 +6169,12 @@ function askDisposition(targets, done, extra){
   $("dispReason").value=""; $("dispMsg").textContent="";
   let who=""; try{ who=localStorage.getItem("cm_dash_who")||""; }catch(e){}
   $("dispBy").value=who;
+  if($("dispBox").classList.contains("hidden")) ovPush("dispBox");
   $("dispBox").classList.remove("hidden"); $("dispScrim").classList.remove("hidden");
   $("dispReason").focus();
 }
 function dispClose(){
+  ovClosed("dispBox");
   $("dispBox").classList.add("hidden"); $("dispScrim").classList.add("hidden");
   const c=dispCtx; dispCtx=null;
   /* The select still shows NOACT from the click that opened this. Repaint so
@@ -6430,12 +6471,12 @@ function renderActions(){
                  findings that is the reason nobody assigned any. -->
             <td class="ed"><input class="iedit iown" list="ownerNames" data-f="owner"
                 value="${esc(i.owner||"")}" placeholder="${esc(t("a_assign"))}"
-                title="${esc(t("a_ed_owner"))}"></td>
+                title="${esc(t("a_ed_owner"))}" aria-label="${esc(t("a_ed_owner"))} · ${esc(r.equip)} ${esc(i.key)}"></td>
             <td class="ed"><input class="iedit idue ${od?"late":(dd!=null&&dd<=7?"soon":"")}" type="date"
-                data-f="due" value="${esc(i.due||"")}" title="${esc(t("a_ed_due"))}"></td>
+                data-f="due" value="${esc(i.due||"")}" title="${esc(t("a_ed_due"))}" aria-label="${esc(t("a_ed_due"))} · ${esc(r.equip)} ${esc(i.key)}"></td>
             <td class="num mono">${age==null?"":age}</td>
             <td class="ed"><select class="iedit ist s-${esc(String(i.status||"open"))}" data-f="status"
-                title="${esc(t("a_ed_st"))}">${FSTATUS.map(x=>
+                title="${esc(t("a_ed_st"))}" aria-label="${esc(t("a_ed_st"))} · ${esc(r.equip)} ${esc(i.key)}">${FSTATUS.map(x=>
                   `<option value="${esc(x.k)}"${String(i.status||"")===x.k?" selected":""}>${esc(x[lang]||x.en)}</option>`).join("")}</select>${
               i.prio?` <span class="prio ${prioClass(i.prio)}" title="${esc(prioName(i.prio))}">${esc(i.prio)}</span>`:""}${
               ast.k==="triage"
@@ -7961,9 +8002,10 @@ function openFollow(rk, ik){
   let who=""; try{ who=localStorage.getItem("cm_dash_who")||""; }catch(e){}
   $("follBy").value=who;
   $("follMsg").textContent = it.planBy ? t("a_lastby",{by:it.planBy, at:(it.planAt||"").slice(0,10)}) : "";
+  if($("follOv").classList.contains("hidden")) ovPush("follOv");
   $("follOv").classList.remove("hidden");
 }
-function closeFollow(){ $("follOv").classList.add("hidden"); follKey=null; }
+function closeFollow(){ $("follOv").classList.add("hidden"); follKey=null; ovClosed("follOv"); }
 /* ---------- one patch, one finding or ninety ----------
 
    The drawer could set an owner and a date; the register could not. So planning
@@ -8437,6 +8479,7 @@ function openEdit(key,keepMsg){
     g.addEventListener("change",()=>syncOvr(g.dataset.k));
   });
   $("edItems").querySelectorAll('[data-f="grade"]').forEach(g=>syncOvr(g.dataset.k));
+  if($("editOv").classList.contains("hidden")) ovPush("editOv");
   $("editOv").classList.remove("hidden");
 }
 /* The choice between two phones' versions of the same round. Both are listed
@@ -8728,6 +8771,7 @@ function openOrphan(rk){
   fill(""); $("opSearch").value="";
   $("opSearch").oninput=()=>fill($("opSearch").value);
   renderOrphan();
+  if($("opOv").classList.contains("hidden")) ovPush("opOv");
   $("opOv").classList.remove("hidden");
 }
 /* One fetch pass at a time — see renderOrphan. Without this the redraw at the
@@ -8841,7 +8885,7 @@ function renderOrphan(){
     };
   });
 }
-function closeOrphan(){ $("opOv").classList.add("hidden"); opKey=null; opSel.clear(); }
+function closeOrphan(){ $("opOv").classList.add("hidden"); opKey=null; opSel.clear(); ovClosed("opOv"); }
 /* One write, carrying every decision made in this panel, through the same
    sidecar every other correction uses. */
 function saveAssign(patch, onDone, opts){
@@ -9065,8 +9109,9 @@ async function keepVersion(dev){
   }
 }
 const rec_devs=k=>{ const r=RECS.find(x=>ekOf(x)===k); return r&&r._devs; };
-$("edClose").onclick=()=>$("editOv").classList.add("hidden");
-$("editOv").onclick=e=>{ if(e.target.id==="editOv") $("editOv").classList.add("hidden"); };
+function closeEdit(){ $("editOv").classList.add("hidden"); ovClosed("editOv"); }
+$("edClose").onclick=closeEdit;
+$("editOv").onclick=e=>{ if(e.target.id==="editOv") closeEdit(); };
 
 /* Only what actually moved. Comparing against the value the control opened with
    means an untouched field is never written, and clearing one on purpose still
@@ -9321,7 +9366,7 @@ $("edDelete").onclick=async ()=>{
     dropLocal(edKey);
     msg.textContent=t("ed_del_local");
     $("edAdmin").value=""; $("edConfirm").value="";
-    $("editOv").classList.add("hidden");
+    closeEdit();
     return;
   }
   /* No client-side refusal on an empty box. Deletion is OFF at the script until
@@ -9619,7 +9664,7 @@ async function pullDrivePhotos(recs, after){
    and it never takes the reader off the machine they are looking at. */
 let drwKey=null;
 function drwClose(){
-  $("drw").classList.add("hidden"); $("drwScrim").classList.add("hidden");
+  $("drw").classList.add("hidden"); $("drwScrim").classList.add("hidden"); ovClosed("drw");
   drwKey=null;
   /* Focus goes back where it came from, or it goes nowhere and the keyboard
      reader is stranded at the top of the document. */
@@ -9703,7 +9748,7 @@ function openPos(rk, ik){
      <div class="row" style="margin-top:12px;gap:8px">
        <button type="button" class="btn" id="drwHist">${esc(t("drw_hist",{u:rec.equip}))}</button></div>`;
   const dh=$("drwHist");
-  if(dh) dh.onclick=()=>{ drwClose(); selectEquip(rec.equip); showTab("equipment", true); renderHistory(); };
+  if(dh) dh.onclick=()=>{ ovLeave("drw"); drwClose(); selectEquip(rec.equip); showTab("equipment", false); renderHistory(); };
   $("drwBody").querySelectorAll("[data-i]").forEach(el=>{
     /* The editor needs to know which record and which FILE it is looking at,
        or a recipe would be stored against a picture rather than against the
@@ -9711,6 +9756,7 @@ function openPos(rk, ik){
     el.onclick=()=>openLB(med.map(m=>[m.src,m.kind]), Number(el.dataset.i)||0, cap,
       { rk, ik, names:med.map(m=>m.name||m.file||""), name:(med[Number(el.dataset.i)||0]||{}).name||"" });
   });
+  if($("drw").classList.contains("hidden")) ovPush("drw");
   $("drw").classList.remove("hidden"); $("drwScrim").classList.remove("hidden");
   $("drwClose").focus();
 }
@@ -9813,6 +9859,7 @@ function openUnit(unit){
   if(uc) uc.onclick=()=>{ drwClose(); $("fClass").value=uc.dataset.ucls; renderAll(); };
   $("uHist").onclick=()=>{ drwClose(); showTab("equipment"); selectEquip(unit); renderHistory(); };
   $("uActs").onclick=()=>{ drwClose(); setDrillTo("unit",unit); showTab("actions"); };
+  if($("drw").classList.contains("hidden")) ovPush("drw");
   $("drw").classList.remove("hidden"); $("drwScrim").classList.remove("hidden");
   $("drwClose").focus();
 }
@@ -9838,7 +9885,7 @@ function lbShow(){
   $("lbcap").textContent=lbCap+(many?`   ${lbIx+1} / ${lbSet.length}`:"");
 }
 function openLB(set,ix,cap,ctx){ lbSet=set||[]; lbIx=Math.max(0,Math.min(ix|0,lbSet.length-1));
-  lbCap=cap||""; lbCtx=ctx||null; lbShow(); $("lb").classList.add("open");
+  lbCap=cap||""; lbCtx=ctx||null; lbShow(); if(!$("lb").classList.contains("open")) ovPush("lb"); $("lb").classList.add("open");
   pxSync(); }
 
 /* ── NON-DESTRUCTIVE PHOTO EDITING ──────────────────────────────────────────
@@ -10226,7 +10273,7 @@ function lbStep(d){ if(lbSet.length<2) return;
   lbIx=(lbIx+d+lbSet.length)%lbSet.length; lbShow();
   if(lbCtx && lbCtx.names) lbCtx.name=lbCtx.names[lbIx]||lbCtx.name;
   pxSync(); }
-function lbClose(){ $("lb").classList.remove("open"); pxClosePanel();
+function lbClose(){ const was=$("lb").classList.contains("open"); $("lb").classList.remove("open"); pxClosePanel(); if(was) ovClosed("lb");
   lbCtx=null; pxRecipe=null; pxDraft=null; pxOrigSrc=""; $("lbimg").src="";
   const v=$("lbvid"); v.pause(); v.removeAttribute("src"); v.load(); lbSet=[]; }
 document.querySelectorAll("#histView button[data-hv]").forEach(b=>{
@@ -10592,7 +10639,8 @@ function showTab(t,push){
      attached" for the rest of the session on a dashboard that had one. */
   if(t==="sync") setTimeout(()=>{ try{ renderSync(); }catch(e){} },0);
   tabs.forEach(x=>{ const s=$("tab-"+x); if(s) s.classList.toggle("hidden", x!==t); });
-  $("tabs").querySelectorAll("button").forEach(b=>b.classList.toggle("active",b.dataset.tab===t));
+  $("tabs").querySelectorAll("button").forEach(b=>{ const on=b.dataset.tab===t; b.classList.toggle("active",on);
+    if(b.dataset.tab){ if(on) b.setAttribute("aria-current","page"); else b.removeAttribute("aria-current"); } });
   /* The bar at the top narrows the RECORDS being analysed — a type, a class, a
      period. The due list is not about records, it is about the fleet as it
      stands now, and a period filter applied to it would be actively wrong: a
@@ -10711,7 +10759,45 @@ function urlRead(from){
    object, split "[object PopStateEvent]" on "?", looked for a tab called
    "[object PopStateEvent]", found none and did nothing. Back and forward were
    wired to a function that could never act, and silently. */
-addEventListener("popstate", ()=>urlRead());
+/* BACK CLOSES THE DRAWER, NOT THE PAGE.
+
+   A drawer, a sheet or the lightbox is a place the reader went INTO, and on
+   a phone the Back button is how they expect to come out of it. Without
+   this, Back from an open drawer left the page underneath it — the drawer
+   still open on top of the previous tab, or the site left entirely. Each
+   overlay pushes one history entry when it opens; Back pops it and closes
+   the overlay; closing it by its own button pops the entry silently. */
+const OV_STACK=[];
+let OV_SKIP=0;
+function ovPush(name){
+  OV_STACK.push(name);
+  try{ history.pushState({cmOverlay:name},"",location.href); }catch(e){}
+}
+/* Leaving an overlay FOR ANOTHER PAGE: the entry it pushed becomes the page
+   being navigated to, rather than being popped — a pop is asynchronous and
+   would land after the navigation, on the wrong page. */
+function ovLeave(name){
+  const ix=OV_STACK.lastIndexOf(name); if(ix>=0) OV_STACK.splice(ix,1);
+  try{ if(history.state && history.state.cmOverlay===name) history.replaceState(null,"",location.href); }catch(e){}
+}
+function ovClosed(name){
+  const ix=OV_STACK.lastIndexOf(name); if(ix<0) return;
+  OV_STACK.splice(ix,1);
+  if(history.state && history.state.cmOverlay===name){ OV_SKIP++; try{ history.back(); }catch(e){ OV_SKIP--; } }
+}
+const OV_CLOSERS={ drw:()=>drwClose(), follOv:()=>closeFollow(), editOv:()=>closeEdit(), opOv:()=>closeOrphan(),
+                   lb:()=>lbClose(), dfBox:()=>dfClose(), dispBox:()=>dispClose() };
+function ovPopped(){
+  if(!OV_STACK.length) return false;
+  const name=OV_STACK.pop();
+  const f=OV_CLOSERS[name]; if(f){ try{ f(); }catch(e){} }
+  return true;
+}
+addEventListener("popstate", ()=>{
+  if(OV_SKIP>0){ OV_SKIP--; return; }          // our own history.back() after a button close
+  if(ovPopped()) return;                        // Back closed an overlay; the page stays
+  urlRead();
+});
 /* AND SO IS SOMEBODY CHANGING THE ADDRESS THEMSELVES.
 
    popstate does not fire for a hash typed into the bar, or for a link to a
@@ -12751,10 +12837,11 @@ function askDefer(key){
   $("dfBy").value=(cur&&cur.by)||who;
   $("dfMsg").textContent="";
   $("dfClear").hidden=!cur;
+  if($("dfBox").classList.contains("hidden")) ovPush("dfBox");
   $("dfBox").classList.remove("hidden"); $("dfScrim").classList.remove("hidden");
   $("dfWhy").focus();
 }
-function dfClose(){ $("dfBox").classList.add("hidden"); $("dfScrim").classList.add("hidden"); dfCtx=null; }
+function dfClose(){ $("dfBox").classList.add("hidden"); $("dfScrim").classList.add("hidden"); dfCtx=null; ovClosed("dfBox"); }
 function dfSave(clear){
   if(!dfCtx) return;
   const why=$("dfWhy").value.trim(), by=$("dfBy").value.trim(), until=$("dfUntil").value||null;
@@ -13893,8 +13980,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=239"></script>
-<script src="sync-adapter.js?v=239"></script>
-<script src="report.js?v=239"></script>
+<script src="drive.js?v=240"></script>
+<script src="sync-adapter.js?v=240"></script>
+<script src="report.js?v=240"></script>
 </body>
 </html>
