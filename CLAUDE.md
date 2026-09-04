@@ -132,6 +132,7 @@ this path, because each was added to close a real gap:
 | the radio comes back | `online` → check |
 | a newer BUILD is seen | `reg.update()` starts the download **immediately**, without waiting for a tap |
 | the download completes | the worker takes over only once every essential file is cached — `sw.js` refuses to `skipWaiting()` on an incomplete precache |
+| a build downloaded short | the worker stays in waiting and never takes over incomplete; every five-minute check asks it to finish (`sw-heal`), and `healSoon` calls `skipWaiting()` the moment every essential file is in — a dropped fetch costs minutes, not a tap (`tests/updheal.cjs`) |
 | the round is saved | `applyUpdateIfIdle()` — reloads the moment the app is idle, so the new build lands between rounds and never mid-capture |
 | nothing else worked | the banner, and `#forceUpdate` → `updateNow()`: asks the worker to fetch the build, waits for it to be proven complete, reloads. If it cannot finish, nothing changes and the label says so |
 

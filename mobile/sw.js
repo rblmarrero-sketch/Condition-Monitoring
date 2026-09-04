@@ -36,7 +36,7 @@
        explains itself and offers a retry — because an honest offline page is
        recoverable and a browser error page is not. */
 
-const BUILD = "256";
+const BUILD = "257";
 const CACHE = "plug-capture-v" + BUILD;
 
 /* Without these the app is not an app: no page, no equipment register, no
@@ -202,7 +202,18 @@ function healSoon() {
   if (healing) return;
   healing = true;
   precache()
-    .then(m => { if (m.length) console.warn("[sw] still missing:", m); })
+    .then(m => {
+      if (m.length) { console.warn("[sw] still missing:", m); return; }
+      /* COMPLETE NOW, SO TAKE OVER NOW. A worker whose install came up one
+         file short stays in waiting (see install), and reg.update() will not
+         install it again — the bytes have not changed. Until build 257 the
+         only thing that ever finished it was the Update button: a phone that
+         dropped one fetch on a thin link stayed on the old build until a
+         technician tapped, which is the rule this app exists to break. Once
+         every essential file is in, this is the same call install makes. On a
+         worker that is already in charge it is a no-op. */
+      return self.skipWaiting();
+    })
     .catch(() => {})
     .then(() => { setTimeout(() => { healing = false; }, 30000); });
 }
