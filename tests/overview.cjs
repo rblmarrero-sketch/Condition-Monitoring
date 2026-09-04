@@ -30,6 +30,10 @@ const PLANT = `(function(){
   if (!(g.photos || []).length) delete draft.positions[GEN_KEY];
   for (const [k, p] of Object.entries(draft.positions)) {
     if (!PLAN || k === GEN_KEY || !p) continue;
+    /* Since build 254 a position with a photograph or a finding needs a
+       grade: a suite that planted photographs without one gets 1 – Normal,
+       the honest grade for a fixture with nothing wrong in it. */
+    if (!GRADE.num(p.grade) && gradeAppliesTo(k) && hasEvidence(p)) { p.grade = 1; n++; }
     const gr = GRADE.num(p.grade); if (!gr) continue;
     const req = GRADE.requires(gr);
     if (req.action && !p.action) { p.action = 'MON'; n++; }
@@ -58,6 +62,10 @@ const PHOTOS = `(function(){
   if (!(g.photos || []).length) delete draft.positions[GEN_KEY];
   for (const [k, p] of Object.entries(draft.positions)) {
     if (!PLAN || k === GEN_KEY || !p) continue;
+    /* Since build 254 a position with a photograph or a finding needs a
+       grade: a suite that planted photographs without one gets 1 – Normal,
+       the honest grade for a fixture with nothing wrong in it. */
+    if (!GRADE.num(p.grade) && gradeAppliesTo(k) && hasEvidence(p)) { p.grade = 1; n++; }
     const gr = GRADE.num(p.grade); if (!gr) continue;
     const req = GRADE.requires(gr);
     if (req.action && !p.action) { p.action = 'MON'; n++; }

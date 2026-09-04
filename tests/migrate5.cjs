@@ -121,6 +121,56 @@ async function exercise(name, port, srv, seedExtra) {
   const recs = await get({ action: 'records', after: 0, max: 100, index: 0 });
   const grades = []; (recs.records || []).forEach(r => (r.items || []).forEach(i => grades.push(i.grade)));
   ok('action=records now hands out numbers only', grades.length >= 3 && grades.every(g => typeof g === 'number' && g >= 1 && g <= 5), JSON.stringify(grades));
+
+  /* ---- --derive: the round's own grade, written onto the folder by the same
+     rule the phone now applies at save. Three rounds are planted the way the
+     folder really holds them: an undercarriage survey measured and ungraded
+     (its reading is its condition), a plug round photographed and ungraded on
+     a build that let it through (nothing to score — left without, and named),
+     and a graded round already carrying its g (untouched). */
+  console.log(`   -- derive on ${name}`);
+  const plant = async (unit, date, ty, rec) => {
+    const dmy = date.split('-').reverse().join('.');
+    const side = JSON.stringify({ type: 'cm-inspection-entries', version: 2, records: [Object.assign({ equip: unit, date, type: ty, by: 'B. Ivanov', cls: 'DOZ', dev: 'DBBBB' }, rec)] });
+    return post({ op: 'batch', dev: 'DBBBB', folder: `${ty}/2026-04`, files: [{ name: `${unit}_${dmy}_${ty}.json`, file: Buffer.from(side).toString('base64'), contentType: 'application/json' }] });
+  };
+  await plant('DZ021', '2026-04-02', 'UC', { items: [{ key: 'IDLER', label: 'Idler', wearPct: 62, mm: 40 }, { key: 'SPROCKET', label: 'Sprocket', wearPct: 20 }] });
+  await plant('TK149', '2026-04-03', 'MP', { items: [{ key: '4C', label: 'Left Rear Final Drive', photos: 2 }] });
+  await plant('TK150', '2026-04-04', 'MP', { g: 2, items: [{ key: '4C', label: 'Left Rear Final Drive', grade: 2 }] });
+  await plant('TK151', '2026-04-05', 'TB', { items: [{ key: 'H21', label: 'Front plate', mm: 7.5, refSrc: 'tray:HM400?' }] });
+  const G = require(path.join(ROOT, 'mobile/grade.js'));
+  const wantUC = G.fromWorn(62);
+  const snapD0 = await readAll();
+  const liveNow = () => readAll().then(s => Object.fromEntries(Object.entries(s).filter(([k]) => !/^_meta\/backup\//.test(k))));
+  const dscan = run(['--derive', '--scan'], env);
+  ok('derive --scan says how many can carry a grade, and names the one that cannot',
+     dscan.code === 0 && /round grades: \d+ of \d+ records carry one, \d+ can; would rewrite [1-9]/.test(dscan.out) && /left without, by design \(1\): TK149 2026-04-03 MP/.test(dscan.out),
+     dscan.out.split('\n').filter(l => /round grades|left without/.test(l)).join(' | '));
+  ok('  and a measured round with no remaining life on it is named apart, as left for the office', /remaining life not on the record[^\n]*\(1\): TK151 2026-04-05 TB/.test(dscan.out), (dscan.out.match(/remaining life[^\n]*/) || [''])[0].slice(0, 120));
+  ok('  and changed nothing', JSON.stringify(await readAll()) === JSON.stringify(snapD0));
+  const dver0 = run(['--derive', '--verify'], env);
+  ok('derive --verify before the run says NOT RECONCILED', dver0.code === 2 && /NOT RECONCILED: [1-9]\d* record/.test(dver0.out), dver0.out.trim().split('\n').pop());
+  const dirD = fs.mkdtempSync(path.join(os.tmpdir(), 'grade-derive-'));
+  const dapply = run(['--derive', '--apply', '--backup', dirD], Object.assign({ ADMIN_SECRET: admin }, env));
+  console.log(dapply.out.split('\n').map(l => '      ' + l).join('\n'));
+  ok('derive --apply writes and RECONCILES', dapply.code === 0 && /RECONCILED: same documents/.test(dapply.out) && /round grades: \d+ → \d+ of \d+ records; \d+ can carry one/.test(dapply.out), 'exit ' + dapply.code);
+  const live1 = await liveNow();
+  const recOf = (snap, re) => { const k = Object.keys(snap).find(k => re.test(k)); try { return JSON.parse(snap[k]).records[0]; } catch (e) { return null; } };
+  const uc = recOf(live1, /DZ021_02\.04\.2026_UC\.json$/), mp = recOf(live1, /TK149_03\.04\.2026_MP\.json$/), kept = recOf(live1, /TK150_04\.04\.2026_MP\.json$/), old = recOf(live1, /TK146_09\.03\.2026_MP\.json$/);
+  ok('  the measured survey now carries g scored from its worst reading', uc && uc.g === wantUC, JSON.stringify({ g: uc && uc.g, want: wantUC }));
+  ok('  a graded round of the old folder carries the grade of its worst point', old && old.g === 3, JSON.stringify(old && old.g));
+  ok('  the ungraded, unmeasured plug round is left without one', mp && mp.g == null, JSON.stringify(mp && mp.g));
+  ok('  a round that already carried g is untouched, byte for byte', kept && kept.g === 2 && live1[Object.keys(live1).find(k => /TK150_04/.test(k))] === snapD0[Object.keys(snapD0).find(k => /TK150_04/.test(k))]);
+  ok('  no grade on any point moved', (() => { let same = true; for (const k of Object.keys(live1)) { let a, b; try { a = JSON.parse(snapD0[k]); b = JSON.parse(live1[k]); } catch (e) { continue; }
+    if (!a || !a.records || !b || !b.records) continue; a.records.forEach((r, i) => (r.items || []).forEach((it, j) => { if (JSON.stringify(it) !== JSON.stringify(((b.records[i] || {}).items || [])[j])) same = false; })); } return same; })());
+  ok('  the originals are in the local backup directory', fs.readdirSync(dirD).filter(f => f !== 'tally.json').length >= 3, fs.readdirSync(dirD).length);
+  const dtwice = run(['--derive', '--apply', '--backup', dirD], Object.assign({ ADMIN_SECRET: admin }, env));
+  ok('a second derive --apply rewrites 0', dtwice.code === 0 && /rewriting 0 document/.test(dtwice.out) && /RECONCILED/.test(dtwice.out), (dtwice.out.match(/rewriting \d+ document/) || [])[0]);
+  const dver = run(['--derive', '--verify'], env);
+  ok('derive --verify RECONCILES: every record that can carry a round grade does', dver.code === 0 && /RECONCILED: every record/.test(dver.out) && /TK149 2026-04-03 MP/.test(dver.out), dver.out.trim().split('\n').slice(-2).join(' | '));
+  const recs2 = await get({ action: 'records', after: 0, max: 100, index: 0 });
+  const ucOut = (recs2.records || []).find(r => r.equip === 'DZ021');
+  ok('action=records hands the round grade out', ucOut && ucOut.g === wantUC, JSON.stringify(ucOut && ucOut.g));
 }
 
 (async () => {

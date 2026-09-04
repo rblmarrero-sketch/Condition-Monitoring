@@ -103,12 +103,16 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
   console.log("\n── the same predicate survives a filter");
   const filtered2 = await p.evaluate(() => {
     setDrill("sev", 5);
-    renderActions();
+    /* Since build 254 only the page that is open is painted, so each number
+       is read from its page with that page open — the way a reader meets it. */
+    showTab("actions", true); renderActions();
+    const rows = document.querySelectorAll("#actionTbl tbody tr").length;
+    showTab("overview", true);
     const f = findings(filtered());
     return { predicate: f.filter(x => actionRequired(x.r, x.i)).length,
              nav: Number($("nbAct").textContent || 0),
              kpi: Number(document.querySelector("#kpiAct .v").textContent || 0),
-             rows: document.querySelectorAll("#actionTbl tbody tr").length };
+             rows };
   });
   ok(filtered2.nav === filtered2.predicate && filtered2.kpi === filtered2.predicate,
      "narrowed to Critical, the badge and tile still agree",

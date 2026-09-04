@@ -63,14 +63,18 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
       diagShown: document.getElementById('syHealth').checkVisibility(),
       tall: +(document.documentElement.scrollHeight / innerHeight).toFixed(2),
       review: sevConflicts().length,
+      /* Since build 254 the list also names every ROUND nobody graded — a
+         plug round saved with photographs and no assessment. The fixture may
+         hold some; they are counted, not mistaken for the two findings. */
+      ungraded: sevConflicts().filter(x => x.why === 'ungraded').length,
       tile: Number((document.querySelector('#syncKpis [data-kpi="syGrade"] .v') || {}).textContent) };
   });
   ok('the review list, the correction list and the evidence list come before the diagnostics',
      S.order.sev < S.order.quar && S.order.quar < S.order.gaps && S.order.gaps < S.order.admin, JSON.stringify(S.order));
   ok('Admin diagnostics is collapsed by default', S.adminOpen === false && !S.diagShown);
   ok('the page is under two screens with it collapsed', S.tall <= 2, S.tall + ' screens');
-  ok('the review list has the two findings and the tile agrees', S.sev.length === 2 && S.tile === S.review && S.review === 2,
-     S.sev.length + ' rows, tile ' + S.tile);
+  ok('the review list has the two findings, the ungraded rounds, and the tile agrees', S.sev.length === 2 + S.ungraded && S.tile === S.review && S.review === 2 + S.ungraded,
+     S.sev.length + ' rows (' + S.ungraded + ' ungraded rounds), tile ' + S.tile);
   ok('a finding with no grade says: Grade missing. Review the inspection and select a grade from 1 to 5.',
      S.sev.some(x => /Grade missing\. Review the inspection and select a grade from 1 to 5\./.test(x)), S.sev.join(' | ').slice(0, 200));
   ok('a grade that contradicts the stored condition says so, and that the condition follows the grade',

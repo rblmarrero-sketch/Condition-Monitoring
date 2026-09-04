@@ -143,6 +143,21 @@
   function ink(n)        { n = num(n); return n ? INK[n] : '#fff'; }
   function cls(n)        { n = num(n); return n ? 'g' + n : 'g0'; }
 
+  /* THE ROUND'S GRADE: the worst of its positions. A graded position counts by
+     its grade; a measured one — undercarriage, tray, teeth — by the grade its
+     remaining life maps to, the same rule the dashboard scores it with. The
+     machine's own photographs carry no grade. Null when nothing on the round
+     says anything, which is a fact worth keeping distinct from "1". */
+  function roundGrade(items) {
+    var w = 0;
+    (items || []).forEach(function (i) {
+      if (!i || i.general || i.key === '__general') return;
+      var n = num(i.grade);
+      if (!n && i.wearPct !== '' && i.wearPct != null && isFinite(Number(i.wearPct))) n = fromWorn(Number(i.wearPct));
+      if (n && n > w) w = n;
+    });
+    return w || null;
+  }
   /* The worst of a list — the number a round is summarised by. */
   function worst(list) {
     var w = null;
@@ -187,7 +202,7 @@
     LEVELS: LEVELS, LEGACY: LEGACY, ISO: ISO, HEX: HEX, CSS: CSS,
     num: num, isLegacy: isLegacy, name: name, gloss: gloss, action: action, label: label,
     meaning: meaning, family: family, iso: iso, fromIso: fromIso,
-    css: css, hex: hex, ink: ink, cls: cls, worst: worst,
+    css: css, hex: hex, ink: ink, cls: cls, worst: worst, roundGrade: roundGrade,
     isFinding: isFinding, isCritical: isCritical,
     fromRemaining: fromRemaining, fromWorn: fromWorn, requires: requires,
     NAME: NAME, MEANING: MEANING, ACTION: ACTION, GLOSS: GLOSS

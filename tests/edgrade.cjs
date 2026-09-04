@@ -79,8 +79,9 @@ process.on('exit', bye); process.on('SIGINT', () => { bye(); process.exit(1); })
      the latest round for each unit, and TK146 has later ones. Asserting there
      read "still Degraded" against a dashboard that had applied the correction
      perfectly — a test failure wearing the costume of the bug. */
-  await p.evaluate(() => { const tr = [...document.querySelectorAll('tr[data-u]')]
-    .find(t => t.getAttribute('data-u') === 'TK146'); if (tr) tr.click(); });
+  /* Opened the way a reader opens it — the Equipment page, this unit — since
+     build 254 paints a page only when it is shown. */
+  await p.evaluate(() => { showTab('equipment', true); const s = document.getElementById('equipSel'); s.value = 'TK146'; s.dispatchEvent(new Event('change')); });
   await p.waitForTimeout(900);
   const card = await p.evaluate(() => {
     const hit = [...document.querySelectorAll('#history *')]

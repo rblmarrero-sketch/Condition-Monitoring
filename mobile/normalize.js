@@ -78,8 +78,11 @@
        the measurement to mean anything — their input, not the app's, so a
        point carrying it is a point somebody worked on. */
     'stood',
-    /* evidence */
-    'photo', 'photos', 'video', 'attachments', 'media'
+    /* evidence — and the manifest that names each file since build 196 */
+    'photo', 'photos', 'video', 'attachments', 'media', 'att',
+    /* an undercarriage reason code: why the reading is what it is, chosen by
+       the technician, carried in both languages */
+    'reason', 'reasonLabel', 'reasonRu'
   ];
 
   /* HOW MANY PHOTOGRAPHS THIS POINT ACTUALLY CLAIMS.
@@ -126,7 +129,7 @@
     }
     return 0;
   }
-  var MEDIA_FIELDS = ['photos', 'photo', 'video', 'attachments', 'media'];
+  var MEDIA_FIELDS = ['photos', 'photo', 'video', 'attachments', 'media', 'att'];
 
   /* "Carries nothing" has to cover every shape a blank arrives in. A count of
      zero photographs is not a photograph; an empty array is not evidence; a
@@ -176,7 +179,8 @@
     'recommendation', 'rec', 'action', 'actionLabel',
     'prio', 'priority', 'wo', 'workOrder',
     'comment', 'note', 'notes',
-    'photo', 'photos', 'video', 'attachments', 'media',
+    'photo', 'photos', 'video', 'attachments', 'media', 'att',
+    'reason', 'reasonLabel', 'reasonRu',
     /* A temperature IS a measurement, and the product found in a component IS
        what the lubrication round records — both are things an inspector wrote
        down, so both belong on the short list. Left off the first draft of it
@@ -298,7 +302,9 @@
     'at', 'modified', 'rev', 'version', 'v', 'schema', 'src', 'source',
     'origin', 'imported', 'importedAt', 'dev', 'device', 'sync', 'synced',
     'syncState', 'up', 'upAt', 'dirty', 'touched', 'open', 'expanded',
-    'selected', 'active', 'focus', 'ui', 'state', 'draft', 'valid', 'dirtyUi'
+    'selected', 'active', 'focus', 'ui', 'state', 'draft', 'valid', 'dirtyUi',
+    /* the flag that marks the machine's own photograph holder */
+    'general'
   ];
   function isMeta(k) {
     if (k === 'key' || k === 'label' || k === 'name') return true;

@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=253">
+<link rel="manifest" href="manifest.webmanifest?v=254">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=253">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=253">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=253">
+<link rel="apple-touch-icon" href="icon-192.png?v=254">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=254">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=254">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2065,32 +2065,32 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=253"></script>
-<script src="upload-defaults.js?v=253"></script>
-<script src="hme.js?v=253"></script>
-<script src="mp-fc.js?v=253"></script>
-<script src="hme-cascade.js?v=253"></script>
-<script src="assets.js?v=253"></script>
-<script src="temp-limits.js?v=253"></script>
-<script src="normalize.js?v=253"></script>
-<script src="grade.js?v=253"></script>
-<script src="due.js?v=253"></script>
-<script src="wear.js?v=253"></script>
-<script src="wear-figs.js?v=253"></script>
-<script src="wear-map.js?v=253"></script>
-<script src="machine-photos.js?v=253"></script>
-<script src="machine-fig.js?v=253"></script>
-<script src="get.js?v=253"></script>
-<script src="points.js?v=253"></script>
-<script src="uc-points.js?v=253"></script>
-<script src="inspect-guide.js?v=253"></script>
-<script src="get-figs.js?v=253"></script>
-<script src="body-points.js?v=253"></script>
-<script src="body-map.js?v=253"></script>
-<script src="lube.js?v=253"></script>
-<script src="lube-overrides.js?v=253"></script>
-<script src="lube2027.js?v=253"></script>
-<script src="report-core.js?v=253"></script>
+<script src="native.js?v=254"></script>
+<script src="upload-defaults.js?v=254"></script>
+<script src="hme.js?v=254"></script>
+<script src="mp-fc.js?v=254"></script>
+<script src="hme-cascade.js?v=254"></script>
+<script src="assets.js?v=254"></script>
+<script src="temp-limits.js?v=254"></script>
+<script src="normalize.js?v=254"></script>
+<script src="grade.js?v=254"></script>
+<script src="due.js?v=254"></script>
+<script src="wear.js?v=254"></script>
+<script src="wear-figs.js?v=254"></script>
+<script src="wear-map.js?v=254"></script>
+<script src="machine-photos.js?v=254"></script>
+<script src="machine-fig.js?v=254"></script>
+<script src="get.js?v=254"></script>
+<script src="points.js?v=254"></script>
+<script src="uc-points.js?v=254"></script>
+<script src="inspect-guide.js?v=254"></script>
+<script src="get-figs.js?v=254"></script>
+<script src="body-points.js?v=254"></script>
+<script src="body-map.js?v=254"></script>
+<script src="lube.js?v=254"></script>
+<script src="lube-overrides.js?v=254"></script>
+<script src="lube2027.js?v=254"></script>
+<script src="report-core.js?v=254"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2229,6 +2229,7 @@ const I18N = {
     set_copied:"Setup link copied.",
     m_cfg_ok:["Settings applied ✔","This phone is now pointed at the same destinations. Capture as usual."],
     m_data_missing:"Some data did not load ({x}) — lists will be incomplete. Tap ⟳ while online.",
+    m_need_g_t:"Grade needed", m_need_g_m:"{k} has a photograph or a finding but no grade. Choose 1 to 5 — the grade is the assessment.",
     m_cfg_bad:["Setup code not recognised","Ask the other phone to tap “Show setup code” again, and scan the whole square."],
     set_help_gas:"Google Drive: open script.google.com, paste docs/google-upload.gs, set ROOT_FOLDER_ID to your Drive folder, then Deploy → Web app with Execute as “Me” and Who has access “Anyone”. Copy the /exec URL here. Re-deploy a NEW VERSION after every edit or the old code keeps running.",
     set_url:"Upload URL", set_hdr:"Secret header (optional)", set_folder:"Folder — e.g. {TYPE}/{UNIT}/{YYYY-MM-DD}",
@@ -2746,6 +2747,7 @@ const I18N = {
     set_copied:"Ссылка скопирована.",
     m_cfg_ok:["Настройки применены ✔","Телефон настроен на те же адресаты. Работайте как обычно."],
     m_data_missing:"Часть данных не загрузилась ({x}) — списки будут неполными. Нажмите ⟳ при интернете.",
+    m_need_g_t:"Нужна оценка", m_need_g_m:"{k}: есть фотография или находка, но нет оценки. Выберите от 1 до 5 — оценка и есть заключение.",
     m_cfg_bad:["Код не распознан","Попросите показать код настроек ещё раз и снимите весь квадрат целиком."],
     set_help_gas:"Google Диск: откройте script.google.com, вставьте docs/google-upload.gs, укажите ROOT_FOLDER_ID вашей папки Диска, затем Deploy → Web app: «Execute as: Me», «Who has access: Anyone». Скопируйте URL /exec сюда. После каждой правки развёртывайте НОВУЮ ВЕРСИЮ, иначе работает старый код.",
     set_url:"URL отправки", set_hdr:"Секретный заголовок (необяз.)", set_folder:"Папка — напр. {TYPE}/{UNIT}/{YYYY-MM-DD}",
@@ -4666,15 +4668,18 @@ function renderGradeCards(){
    then disagree in the report. The undercarriage is the exception that proves
    it: its three visual checks (adjuster and recoil, frame and guards, chain
    sag) have nothing to caliper, so they are graded and keep the control. */
-function gradeApplies(){
+function gradeApplies(){ return gradeAppliesTo(curItem); }
+function gradeAppliesTo(k){
   /* A lubrication compartment is graded on the same 1–5 scale, with the oil
      meanings under each card (grade.js, family "lube"). */
   if(lubeType()) return true;
   if(!wearType()) return true;
   if(bodyType()) return false;                       // every tray station is measured
-  const [pt]=ucSplit(curItem||"");
+  const [pt]=ucSplit(k||"");
   return !!UC_EXTRA_BY[pt];
 }
+/* Something was seen: a photograph, a clip, a defect, words. */
+function hasEvidence(p){ return !!((p.photos||[]).length || p.video || p.defect || p.comment); }
 function renderGrade(){
   const fld=$("gradeFld");
   if(fld) fld.classList.toggle("hidden", !gradeApplies());
@@ -6724,6 +6729,16 @@ $("saveBtn").onclick=async ()=>{
     const req = g ? (strict ? GRADE.requires(g) : (g===5?{defect:1,action:1}:{}))
                   : (effSev(p)==="CRI"?{defect:1,action:1}:{});
     const miss=[];
+    /* A POSITION WITH EVIDENCE AND NO GRADE. Eleven plug rounds in the folder
+       were saved with photographs on every plug and a grade on none, and
+       every screen downstream showed them as "no condition". The grade is the
+       finding; a photograph without one is a picture nobody assessed. Not for
+       a measured station, whose condition is its reading. */
+    if(strict && !g && gradeAppliesTo(k) && hasEvidence(p)){
+      if(curItem!==k){ saveCur(); curItem=k; loadPos(); renderChips(); }
+      dlg([t("m_need_g_t"), t("m_need_g_m",{k})]);
+      return;
+    }
     if(req.defect && !p.defect) miss.push(t("req_defect"));
     if(req.action && !p.action) miss.push(t("req_action"));
     if(req.target && !p.target) miss.push(t("req_target"));
@@ -8144,7 +8159,7 @@ function teamDate(v){
   return s;
 }
 function teamRow(r){
-  const worst=GRADE.worst(r.items||[])||"";
+  const worst=GRADE.num(r.g)||GRADE.roundGrade(r.items||[])||"";
   /* Baselines change how every later reading on that unit is scored, so they
      cannot stay on the phone that set them. They are rare, so carrying them on
      the summary row costs nothing worth counting. */
@@ -9160,6 +9175,12 @@ function showPane(id){
    Idempotent: a second run finds nothing to change. Photographs, comments,
    measurements and manifests are not touched. */
 async function migrateLocalGrades(){
+  /* The history rows this phone cached before build 254 carry no round
+     grade. They are NOT re-fetched from here: dropping the cursor would read
+     a big folder in full on every phone (tests/bigfolder.cjs), and it is not
+     needed — migrate-grades.js --derive REWRITES each record, a rewrite is a
+     new object under the cursor's clock, and the ordinary incremental pull
+     brings the rewritten round back with its g and rebuilds the row. */
   let recs=0, items=0, rows=0;
   try{
     for(const rec of await dbAll()){
@@ -10390,6 +10411,11 @@ function applyLang(){ document.documentElement.lang=lang;
   $("secPosTitle").textContent=TYPE_META[type].title[lang]||TYPE_META[type].title.en;
   $("posLabel").textContent = posHeading(curItem);
   updateDefectCauseBtns(); updateActionBtn(); renderSev(); renderMedia(); renderGps(); renderTempHint(); renderDue(); renderTeam(); renderLastDone(); renderTrend();
+  /* The grade cards, the machine-photograph rows and the signature fold are
+     built in code with the words of the language at the time — so a switch
+     left "1 – Normal", "Equipment overview · Required · Take" and "Add a
+     supervisor signature" standing on a Russian screen. Repainted. */
+  renderGrade(); renderMachinePhotos(); renderSignFold();
   renderHdr();   // the summary names the round, so it changes language too
   updateSaveLabel(); if(editing) $("editBannerText").textContent=t("editing_hint").replace("{x}",editing.equip); $("cancelEdit").textContent=t("btn_cancel");
   setNet(); renderPending();
@@ -10463,7 +10489,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="253";
+const BUILD="254";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -11760,6 +11786,14 @@ async function syncDefer(dests){
   if(touched) deferSave(m);
 }
 function recToExport(rec){
+  const out=recToExport0(rec);
+  /* The round's own grade, so a list that never opens the round — the
+     phone's history, the office's index — can say its condition without a
+     second rule for deriving it. */
+  out.g=GRADE.roundGrade(out.items)||"";
+  return out;
+}
+function recToExport0(rec){
   // id + rev travel with every record — see the note in buildEntriesJson().
   return { id:rec.id||"", rev:rec.rev||1,
     equip:rec.equip, date:rec.date, type:rec.type||"MP", cls:rec.cls||"", by:rec.by||"", smu:rec.smu||"",

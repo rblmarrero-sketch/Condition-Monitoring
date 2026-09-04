@@ -1229,6 +1229,8 @@
     border:1px dashed var(--border);border-radius:6px;cursor:pointer;font-size:12px;color:var(--ink-2);}
   .edmtools .madd:hover{border-color:var(--accent);color:var(--accent);}
   .edmtools .pxstr select{min-width:160px;}
+  .edfold>summary{cursor:pointer;color:var(--muted);font-size:var(--t-small);padding:8px 4px;margin-bottom:10px;list-style:none;}
+  .edfold>summary::before{content:"▸ ";} .edfold[open]>summary::before{content:"▾ ";}
   /* A tile with somewhere to go says so before it is pressed. */
   .kpi.go{cursor:pointer;}
   .kpi.go:hover{border-color:color-mix(in srgb,var(--kc,var(--border)) 55%,var(--border));
@@ -3232,28 +3234,28 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=253"></script>
-<script src="../mobile/hme.js?v=253"></script>
-<script src="../mobile/mp-fc.js?v=253"></script>
-<script src="../mobile/hme-cascade.js?v=253"></script>
-<script src="../mobile/temp-limits.js?v=253"></script>
+<script src="../data/magnetic_plug.js?v=254"></script>
+<script src="../mobile/hme.js?v=254"></script>
+<script src="../mobile/mp-fc.js?v=254"></script>
+<script src="../mobile/hme-cascade.js?v=254"></script>
+<script src="../mobile/temp-limits.js?v=254"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=253"></script>
-<script src="../mobile/normalize.js?v=253"></script>
-<script src="../mobile/grade.js?v=253"></script>
-<script src="../mobile/due.js?v=253"></script>
-<script src="../mobile/wear.js?v=253"></script>
-<script src="../mobile/wear-map.js?v=253"></script>
-<script src="../mobile/lube.js?v=253"></script>
-<script src="../mobile/lube-overrides.js?v=253"></script>
-<script src="../mobile/lube2027.js?v=253"></script>
-<script src="../mobile/lube-tds.js?v=253"></script>
+<script src="../mobile/assets.js?v=254"></script>
+<script src="../mobile/normalize.js?v=254"></script>
+<script src="../mobile/grade.js?v=254"></script>
+<script src="../mobile/due.js?v=254"></script>
+<script src="../mobile/wear.js?v=254"></script>
+<script src="../mobile/wear-map.js?v=254"></script>
+<script src="../mobile/lube.js?v=254"></script>
+<script src="../mobile/lube-overrides.js?v=254"></script>
+<script src="../mobile/lube2027.js?v=254"></script>
+<script src="../mobile/lube-tds.js?v=254"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=253"></script>
-<script src="../mobile/machine-photos.js?v=253"></script>
+<script src="../mobile/upload-defaults.js?v=254"></script>
+<script src="../mobile/machine-photos.js?v=254"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3262,17 +3264,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=253"></script>
-<script src="../mobile/get.js?v=253"></script>
-<script src="../mobile/points.js?v=253"></script>
-<script src="../mobile/uc-points.js?v=253"></script>
-<script src="../mobile/inspect-guide.js?v=253"></script>
-<script src="../mobile/get-figs.js?v=253"></script>
-<script src="../mobile/body-points.js?v=253"></script>
-<script src="../mobile/body-map.js?v=253"></script>
-<script src="../mobile/jspdf.umd.min.js?v=253"></script>
-<script src="../mobile/html2canvas.min.js?v=253"></script>
-<script src="../mobile/report-core.js?v=253"></script>
+<script src="../mobile/machine-fig.js?v=254"></script>
+<script src="../mobile/get.js?v=254"></script>
+<script src="../mobile/points.js?v=254"></script>
+<script src="../mobile/uc-points.js?v=254"></script>
+<script src="../mobile/inspect-guide.js?v=254"></script>
+<script src="../mobile/get-figs.js?v=254"></script>
+<script src="../mobile/body-points.js?v=254"></script>
+<script src="../mobile/body-map.js?v=254"></script>
+<script src="../mobile/jspdf.umd.min.js?v=254"></script>
+<script src="../mobile/html2canvas.min.js?v=254"></script>
+<script src="../mobile/report-core.js?v=254"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -3584,6 +3586,7 @@ const I18N={
   sy_sev_sub:"A severity is not a field somebody types here — it is read off the grade (A→Normal, B→Incipient, C→Degraded, X→Critical), or off the millimetres on an undercarriage round. These are the places a record carries a severity that neither of those produces, so the board is showing a finding no one can re-derive. The fix is always the GRADE: set it and the severity follows. Rounds imported from the original spreadsheets are where nearly all of these come from.",
   sy_sev_go:"Review grade",
   sy_sev_ng:"Grade missing. Review the inspection and select a grade from 1 to 5. The recorded condition ({s}) still counts until then.",
+  sy_sev_ug:"No grade on any of its {n} positions. Open the inspection and grade what was seen; until then the round carries no condition.",
   sy_sev_cf:"Grade {g} and the previous condition ({was}) do not match. Review the grade; the condition will update automatically.",
   sy_sev_ct:"{n} to settle · {u} with no grade · {c} contradicting their grade",
   sy_h_files:"Files on the server", sy_h_last:"Last asked",
@@ -4044,6 +4047,7 @@ const I18N={
   ed_point_hint:"Choosing another point moves this finding, with its photographs, under it.",
   ed_gps_half:"A location is both a latitude and a longitude — fill both, or clear both to remove it.",
   ed_add_photo:"Add a photograph", ed_mcat:"Of", ed_cat_none:"uncategorised",
+  ed_fold:"{n} positions with nothing recorded — show them",
   ed_to_machine:"→ the machine, as…", ed_to_point:"→ under a point…", ed_photo_moved:"Photograph filed under {to}.",
   ed_gps_bad:"Latitude must be between −90 and 90 and longitude between −180 and 180, as decimal degrees.",
   ed_who:"Inspected by", ed_sup:"Verified by",
@@ -4347,6 +4351,7 @@ const I18N={
   sy_sev_none:"Каждая степень на экране выведена из оценки или из измерения.",
   sy_sev_sub:"Степень здесь не вводят вручную — она читается из оценки (A→Норма, B→Зарождающийся, C→Ухудшение, X→Критично) либо из миллиметров на обходе ходовой. Здесь перечислены записи со степенью, которую не даёт ни то, ни другое: на экране стоит находка, которую невозможно перепроверить. Исправляется всегда ОЦЕНКА: поставьте её, и степень появится сама. Почти все такие случаи пришли из первоначальных таблиц.",
   sy_sev_go:"Проверить оценку",
+  sy_sev_ug:"Ни на одной из {n} точек нет оценки. Откройте осмотр и оцените увиденное; до тех пор обход не несёт состояния.",
   sy_sev_ng:"Оценка не указана. Откройте осмотр и выберите оценку от 1 до 5. Записанное состояние ({s}) пока учитывается.",
   sy_sev_cf:"Оценка {g} и прежнее состояние ({was}) не совпадают. Проверьте оценку — состояние обновится автоматически.",
   sy_sev_ct:"К разбору: {n} · без оценки: {u} · расходятся с оценкой: {c}",
@@ -4796,6 +4801,7 @@ const I18N={
   ed_point_hint:"Выбор другой точки переносит эту находку вместе с фотографиями под неё.",
   ed_gps_half:"Местоположение — это широта и долгота вместе: заполните оба поля или очистите оба, чтобы удалить.",
   ed_add_photo:"Добавить фотографию", ed_mcat:"Что снято", ed_cat_none:"без категории",
+  ed_fold:"Точек без записей: {n} — показать",
   ed_to_machine:"→ к машине, как…", ed_to_point:"→ под точку…", ed_photo_moved:"Фотография перенесена: {to}.",
   ed_gps_bad:"Широта от −90 до 90, долгота от −180 до 180, в десятичных градусах.",
   ed_who:"Осмотр выполнил", ed_sup:"Проверил",
@@ -4871,7 +4877,7 @@ function applyLang(){
   document.querySelectorAll(".lang button").forEach(b=>b.classList.toggle("on",b.dataset.lang===lang));
   railApply(document.body.classList.contains("railshut"));
   // Everything built in code has to be repainted, not just the static markup.
-  refreshControls(); renderAll(); refreshSources(); refreshReportTargets();
+  refreshControls(); renderAll(true); refreshSources(); refreshReportTargets();
   // The edit panel is built when it opens, so a switch made with it open leaves
   // it in the old language. Repaint the part that is generated rather than
   // reopening the panel, which would throw away selections not yet saved.
@@ -5088,6 +5094,14 @@ function sevConflicts(){
         const map=GRADE.iso(g)||"";
         if(map && String(i.sev).toUpperCase()!==map) out.push({r,i,why:"conflict",was:sevKey(i.sev),now:g});
       });
+      /* A ROUND NOBODY GRADED. Every point without a grade and without an old
+         severity — a plug round saved with photographs and no assessment, on
+         a build that let it through. Not a measured round: those carry their
+         condition in the reading. One row per round, because the answer is
+         to open the round and grade what was seen. */
+      const pts=(r.items||[]).filter(i=>i && !i.general);
+      if(pts.length && !pts.some(i=>gradeNum(i.grade) || i.sev || (wearOf(r,i)||{}).band))
+        out.push({r,i:null,why:"ungraded",n:pts.length});
     });
   }catch(e){}
   return out;
@@ -7186,18 +7200,28 @@ function generalMedia(rec){
    the store holds. serverMediaOf() is that measurement, and it is now the only
    one: the sync tiles, the correction panel and this all ask it. */
 function evidenceGap(rec){
-  let expected=0, received=0;
+  let expected=0, received=0, withdrawn=0;
   (rec.items||[]).forEach(i=>{
     const n=window.CMNorm ? CMNorm.explain(i).photos : 0;
     if(!n) return;
     expected+=n;
-    /* Capped at the claim: a folder holding a stray extra file must not make a
+    /* WITHDRAWN IS NOT MISSING. The office can take a photograph off the record
+       — a thumb over the lens, a duplicate — and it stays in the folder. This
+       counted only what was still shown, so TK156's round on 14 August, all
+       sixteen files present and eleven of them withdrawn, read "11 missing"
+       on Data & Sync for three weeks: a false alarm about evidence that had
+       arrived. What the phone claimed against what the folder HOLDS, and the
+       withdrawn ones said separately.
+
+       Capped at the claim: a folder holding a stray extra file must not make a
        round read as more-than-complete and cancel out a genuine shortfall
        somewhere else on the same document. */
-    const held=serverMediaOf(i,rec).filter(m=>m.kind!=="video").length;
+    const all=serverMediaOfAll(i,rec).filter(m=>m.kind!=="video");
+    const held=all.length;
+    withdrawn+=all.filter(m=>m.hidden).length;
     received+=Math.min(held, n);
   });
-  return { expected, received, missing:Math.max(0, expected-received) };
+  return { expected, received, missing:Math.max(0, expected-received), withdrawn };
 }
 function mediaAll(it,rec){
   const out=[], seen=new Set();
@@ -7294,7 +7318,11 @@ function serverMediaOf(it,rec){
      decorates an entry must not be handing its decoration to the next one. */
   return passMemo(it, ()=>serverMediaOf0(it,rec)).map(m=>Object.assign({},m));
 }
-function serverMediaOf0(it,rec){
+/* The same, with the photographs the office withdrew still in the list and
+   marked — for the one question ("did what the phone claimed arrive?") that
+   must not be answered by what is currently shown. */
+function serverMediaOfAll(it,rec){ return serverMediaOf0(it,rec,true).map(m=>Object.assign({},m)); }
+function serverMediaOf0(it,rec,keepHidden){
   let has=null;
   try{ has=(window.CMDrive&&CMDrive.hasName)?CMDrive.hasName:null; }catch(e){ has=null; }
   if(!has||!it||!rec) return [];
@@ -7327,7 +7355,9 @@ function serverMediaOf0(it,rec){
   const mine=out.filter(m=>!plan.moved.has(m.name));
   const here=new Set(mine.map(m=>m.name));
   const come=((it&&it.key&&plan.toPoint.get(it.key))||[]).filter(m=>!here.has(m.name));
-  return mine.concat(come).filter(m=>!hid.has(m.name));
+  const all=mine.concat(come);
+  if(keepHidden){ all.forEach(m=>{ m.hidden=hid.has(m.name); }); return all; }
+  return all.filter(m=>!hid.has(m.name));
 }
 /* The names this point's photographs WOULD have, in the order the phone writes
    them. Used to say which files a shortfall is waiting for — a person hunting
@@ -7913,7 +7943,7 @@ function renderHistory(){
                  fault was found is half of whether the programme is working:
                  a fleet whose findings all arrive by "operator report" is not
                  being condition-monitored, it is being told. */
-              i.detectionLabel||i.detection?`<dt>${esc(t("th_detect"))}</dt><dd>${esc(i.detectionLabel||i.detection)}</dd>`:""}${
+              i.detectionLabel||i.detection?`<dt>${esc(t("th_detect"))}</dt><dd>${esc(detName(i.detection,i.detectionLabel))}</dd>`:""}${
               /* The app challenged this number and the inspector measured
                  again and stood by it. That is exactly the reading a reliability
                  engineer wants flagged, not hidden. */
@@ -7995,7 +8025,7 @@ function elig(ty){
   /* Class as well as model: "KOMATSU" is on the register as an articulated
      truck and as a loader, and resolving on the model alone answers for the
      wrong machine. */
-  if(ty==="LUBE") return a=>!!(window.LUBE && LUBE.of(a.m||"", a.cls||""));
+  if(ty==="LUBE") return a=>!!(window.LUBE && lubeOf(a.m||"", a.cls||""));
   return null;
 }
 function coverageRows(){
@@ -8602,6 +8632,11 @@ function fillPicker(f,key,q){
    — so a grade can be confirmed or changed with the evidence in view rather
    than from the position's code alone. Nothing here is editable; it is what
    the controls beneath are judged against. */
+/* The detection method by its code, in the reader's language — the phone
+   froze an English label at capture, and a Russian reader saw "Visual
+   inspection" on a Russian screen. */
+const DET_BY={}; ((window.HME&&HME.detection)||[]).forEach(d=>{ DET_BY[d.code]=d; });
+function detName(code,label){ const d=DET_BY[code]; return d ? (d[lang]||d.en) : (label||code||""); }
 function edFacts(rec,i){
   const med=(()=>{ try{ return mediaOf(i,rec); }catch(e){ return []; } })();
   const row=(k,v)=>v==null||v===""?"":`<dt>${esc(k)}</dt><dd>${v}</dd>`;
@@ -8616,7 +8651,7 @@ function edFacts(rec,i){
       row(t("th_cause"), esc(i.cause||""))+
       row(t("w_th_meas"), (w&&w.mm!=null)?`<b>${esc(w.mm)}</b> mm${w.wearPct!=null?` · ${esc(w.wearPct)}%`:""}`:"")+
       row(t("th_temp"), (i.tempV!=null&&i.tempV!=="")?esc(i.tempV)+" °C":"")+
-      row(t("th_detect"), esc(i.detectionLabel||i.detection||""))+
+      row(t("th_detect"), esc(detName(i.detection,i.detectionLabel)))+
       row(t("hh_action"), esc(i.actionLabel||(i.action?actionName(i.action):"")))+
       row(t("th_prio"), i.prio?esc(prioName(i.prio)):"")+
       row(t("d_resp"), esc(i.resp||""))+row(t("d_target"), esc(i.target||""))+
@@ -8762,7 +8797,7 @@ function openEdit(key,keepMsg){
   }
 
 
-  $("edItems").innerHTML=(rec.items||[]).filter(i=>!i.general).map((i,n)=>{
+  const edCards=(rec.items||[]).filter(i=>!i.general).map((i,n)=>{
     const sev=sevOf(rec,i);
     const rk0=i._from||i.key;              // the key the marker is filed under
     /* THE ONE CASE WITH NOTHING TO CHANGE, AND SO NO WAY TO FINISH.
@@ -8842,7 +8877,18 @@ function openEdit(key,keepMsg){
         <div class="field"><label>${esc(t("ed_comment"))}</label>
           <input data-f="comment" data-k="${esc(rk0)}" type="text" value="${esc(i.comment||"")}"></div>
       </div></div>`;
-  }).join("")||`<div class="empty"><b>${esc(t("ed_nothing"))}</b><span>${esc(t("ed_nothing_sub"))}</span></div>`;
+  });
+  /* THE POSITIONS THAT CARRY SOMETHING COME FIRST. A dump-body survey lists
+     sixty stations and a reviewer wants the eleven with a reading; the rest
+     fold away under one line, and a click brings them back. */
+  { const items=(rec.items||[]).filter(i=>!i.general);
+    const full=[], empty=[];
+    edCards.forEach((h,ix)=>(itemEmpty(items[ix])?empty:full).push(h));
+    $("edItems").innerHTML = (full.join("") + (empty.length>2
+      ? `<details class="edfold"><summary>${esc(t("ed_fold",{n:empty.length}))}</summary>${empty.join("")}</details>`
+      : empty.join("")))||`<div class="empty"><b>${esc(t("ed_nothing"))}</b><span>${esc(t("ed_nothing_sub"))}</span></div>`;
+  }
+  (()=>{
 
   // Fill the two searchable pickers before the codes below are applied to them.
   (rec.items||[]).forEach(i=>{ fillPicker("defectCode",i.key,""); fillPicker("causeCode",i.key,""); });
@@ -8925,6 +8971,7 @@ function openEdit(key,keepMsg){
     openLB(med.map(m=>[m.orig||m.src,m.kind]), ix, `${rec2.equip} · ${ik} · ${rec2.date}`,
       { rk, ik, names:med.map(m=>m.name||""), name:(med[ix]||{}).name||"" });
   });
+  })();
   if($("editOv").classList.contains("hidden")) ovPush("editOv");
   $("editOv").classList.remove("hidden");
 }
@@ -10216,7 +10263,7 @@ function openPos(rk, ik){
        row(t("d_gwhy"), i.gradeWhy?`<b>${esc(i.gradeWhy)}</b>`:"") +
        row(t("d_gaudit"), Array.isArray(i.gradeAudit)&&i.gradeAudit.length
          ? `<ul class="gaudit">${i.gradeAudit.map(a=>`<li><span class="mono">${esc(String(a.at||"").slice(0,16).replace("T"," "))}</span> ${esc(a.by||"")}: ${a.from?esc(GRADE.label(a.from,lang)):"—"} → ${a.to?esc(GRADE.label(a.to,lang)):"—"}${a.sug?` <span class="muted">(${esc(t("d_gsug"))} ${a.sug})</span>`:""}${a.why?` — ${esc(a.why)}`:""}</li>`).join("")}</ul>` : "") +
-       row(t("th_detect"), esc(i.detectionLabel||i.detection||"")) +
+       row(t("th_detect"), esc(detName(i.detection,i.detectionLabel))) +
        /* The app challenged this reading and the inspector measured again and
           stood by it — exactly the number a reliability engineer wants flagged,
           not hidden. And a baseline set at the machine changes what every
@@ -11133,6 +11180,7 @@ $("themeBtn").onclick=()=>{ const c=document.documentElement.getAttribute("data-
 let CUR_TAB="overview";
 function showTab(t,push){
   CUR_TAB=t;
+  renderTabIfDirty(t);
   const tabs=[...$("tabs").querySelectorAll("button[data-tab]")].map(b=>b.dataset.tab);
   /* The sync panel is the only one whose answer depends on the backend having
      finished attaching. drive.js swaps in the shipped default asynchronously
@@ -11763,7 +11811,10 @@ $("histRpt").onclick=()=>runReport("unit", $("equipSel").value, $("histRpt"));
 /* ---------- init ---------- */
 function refreshControls(){
   // the phone's order, not the alphabet — the two ends list types the same way
-  const types=[...new Set(RECS.map(r=>r.type))]
+  /* Every round type the site runs, whether or not one is loaded: a type that
+     disappears from the filter when it has no rounds reads as a type the
+     dashboard does not know, and the schedule lists them all regardless. */
+  const types=[...new Set(TYPE_ORDER.concat(RECS.map(r=>r.type)))].filter(Boolean)
     .sort((a,b)=>(TYPE_ORDER.indexOf(a)+1||99)-(TYPE_ORDER.indexOf(b)+1||99));
   $("fType").innerHTML=`<option value="">${esc(t("f_alltypes"))}</option>`
     +types.map(ty=>`<option value="${esc(ty)}">${esc(TYPE_LABEL[ty]||ty)}</option>`).join("");
@@ -12028,7 +12079,7 @@ function lubeProgramme(){
   /* The denominator: every compartment on every unit the reference covers. */
   const seenModel = {};
   (window.ASSETS||[]).forEach(a=>{
-    const r = LUBE.of(a.m||"", a.cls||"");
+    const r = lubeOf(a.m||"", a.cls||"");
     if(!r) return;
     out.covered++;
     const key = r.cls + "|" + r.m;
@@ -12309,7 +12360,7 @@ function lubeRequirements(){
   const counts = lubeModelKeys();
   Object.keys(counts).forEach(mk=>{
     const i = mk.indexOf("|");
-    const r = LUBE.of(mk.slice(i+1), mk.slice(0,i));
+    const r = lubeOf(mk.slice(i+1), mk.slice(0,i));
     if(!r) return;
     r.comps.forEach(c=>{
       if(!c.t) return;                    /* no lubricant type on this one yet */
@@ -12430,7 +12481,7 @@ function lubeBase(){
   LUBE_BASE = {};
   LUBE.models.forEach(k=>{
     const i = k.indexOf("|");
-    const r = LUBE.of(k.slice(i+1), k.slice(0,i));
+    const r = lubeOf(k.slice(i+1), k.slice(0,i));
     if(r) LUBE_BASE[k] = JSON.parse(JSON.stringify(r.comps));
   });
   return LUBE_BASE;
@@ -12443,7 +12494,7 @@ function lubeApplyOverrides(){
   const base = lubeBase(), ov = lubeOverrides();
   LUBE.models.forEach(k=>{
     const i = k.indexOf("|");
-    const r = LUBE.of(k.slice(i+1), k.slice(0,i));
+    const r = lubeOf(k.slice(i+1), k.slice(0,i));
     if(!r || !base[k]) return;
     r.comps = JSON.parse(JSON.stringify(base[k]));
     const o = ov[k]; if(!o) return;
@@ -12478,7 +12529,7 @@ let lrModel = null;
 function lubeModelKeys(){
   const keys = {};
   (window.ASSETS||[]).forEach(a=>{
-    const r = window.LUBE ? LUBE.of(a.m||"", a.cls||"") : null;
+    const r = lubeOf(a.m||"", a.cls||"");
     if(!r) return;
     const k = r.cls + "|" + r.m;
     keys[k] = (keys[k]||0) + 1;
@@ -12502,7 +12553,7 @@ function renderLubeRef(){
 
   const i = lrModel.indexOf("|");
   const cls = lrModel.slice(0, i), m = lrModel.slice(i+1);
-  const r = LUBE.of(m, cls);
+  const r = lubeOf(m, cls);
   const o = ov[lrModel] || {};
   const cell = (k, f, v, ph, num) =>
     `<input class="lrin${num?" num":""}" data-k="${esc(k)}" data-f="${esc(f)}" ` +
@@ -12656,7 +12707,7 @@ function lubeSeenByModel(){
   const out = {};
   filtered().filter(r=>r.type==="LUBE").forEach(r=>{
     const a = ASSET_BY[r.equip] || {};
-    const ref = window.LUBE ? LUBE.of(a.m||"", a.cls||"") : null;
+    const ref = lubeOf(a.m||"", a.cls||"");
     if(!ref) return;
     const mk = ref.cls + "|" + ref.m;
     (r.items||[]).forEach(i=>{
@@ -12682,7 +12733,7 @@ function renderLubeMtx(){
      decision, and forty rows of it is a sheet nobody reads. */
   const rows = {};
   (window.ASSETS||[]).forEach(a=>{
-    const r = LUBE.of(a.m||"", a.cls||""); if(!r) return;
+    const r = lubeOf(a.m||"", a.cls||""); if(!r) return;
     const k = r.cls + "|" + r.m;
     if(!rows[k]) rows[k] = { cls:r.cls, m:r.m, n:0, comps:r.comps, alias:r.alias };
     rows[k].n++;
@@ -12838,7 +12889,7 @@ function renderLubeGaps(){
      Hilux are one decision, not seventy rows. */
   const miss = {};
   (window.ASSETS||[]).forEach(a=>{
-    if(LUBE.of(a.m||"", a.cls||"")) return;
+    if(lubeOf(a.m||"", a.cls||"")) return;
     const m = (a.m||"").trim() || "\u2014", k = (a.cls||"") + "|" + m;
     (miss[k] || (miss[k] = { cls:a.cls||"", m, n:0 })).n++;
   });
@@ -12848,12 +12899,12 @@ function renderLubeGaps(){
   /* Half two: references that reach no machine at all. The import marks these
      with class "?" and a count of zero, which is exactly the state of knowing
      and not telling. */
-  /* Keyed "CLS|Model", and LUBE.of(model, cls) takes that exact pair straight to
+  /* Keyed "CLS|Model", and lubeOf(model, cls) takes that exact pair straight to
      the entry — including the "?" class the import uses for a name it could not
      place, which is the population this half is about. */
   const drows = LUBE.models.map(k=>{
     const cls = k.slice(0, k.indexOf("|")), m = k.slice(cls.length + 1);
-    const r = LUBE.of(m, cls);
+    const r = lubeOf(m, cls);
     return { cls, m, n:(r && r.n) || 0, comps:(r && r.comps ? r.comps.length : 0) };
   }).filter(r=>!r.n).sort((a,b)=> b.comps - a.comps || (a.m<b.m?-1:1));
 
@@ -12928,7 +12979,7 @@ function renderLubeGaps(){
 function lubeCsv(){
   const rows = {};
   (window.ASSETS||[]).forEach(a=>{
-    const r = window.LUBE ? LUBE.of(a.m||"", a.cls||"") : null; if(!r) return;
+    const r = lubeOf(a.m||"", a.cls||""); if(!r) return;
     const k = r.cls + "|" + r.m;
     if(!rows[k]) rows[k] = { cls:r.cls, m:r.m, n:0, comps:r.comps, alias:r.alias };
     rows[k].n++;
@@ -12966,7 +13017,7 @@ function lpoRows(cls){
   const counts = lubeModelKeys();
   return Object.keys(counts).map(k=>{
     const i = k.indexOf("|");
-    const r = LUBE.of(k.slice(i+1), k.slice(0,i));
+    const r = lubeOf(k.slice(i+1), k.slice(0,i));
     return r ? { key:k, cls:r.cls, m:r.m, n:counts[k], comps:r.comps, alias:r.alias } : null;
   }).filter(r => r && (!cls || r.cls === cls))
     .sort((a,b)=> a.cls === b.cls ? (b.n - a.n || (a.m < b.m ? -1 : 1))
@@ -13455,6 +13506,17 @@ function lubeGo(k){
 }
 window.lubeGo=lubeGo;
 
+/* lubeOf() is a walk of the standard for one model; eight sub-renderers each
+   asked it for all 1,128 machines, which was 500 ms per repaint of a sheet
+   nobody was looking at. The answer for a model does not change within a
+   session unless the standard is switched, so it is asked once. */
+const LUBE_MEMO=new Map();
+function lubeOf(m,c){
+  if(!window.LUBE) return null;
+  const k=String(m||"")+"|"+String(c||"")+"|"+String(LUBE.std||LUBE.year||LUBE.version||"");
+  if(!LUBE_MEMO.has(k)) LUBE_MEMO.set(k, LUBE.of(m||"",c||""));
+  return LUBE_MEMO.get(k);
+}
 function renderLubeTab(){
   /* It used to open filtered to the BIGGEST class, and the biggest class is GEN
      — 940 of the 1,128 machines on site, which is every light vehicle, genset,
@@ -13471,7 +13533,7 @@ function renderLubeTab(){
      can never lead to an empty sheet. */
   const cls = [];
   (window.ASSETS||[]).forEach(a=>{
-    const r = window.LUBE ? LUBE.of(a.m||"", a.cls||"") : null;
+    const r = lubeOf(a.m||"", a.cls||"");
     if(r && cls.indexOf(r.cls) < 0) cls.push(r.cls);
   });
   cls.sort();
@@ -13603,7 +13665,7 @@ function mediaPopulations(){
          number that answers "what have I clicked on" while claiming to answer
          "what arrived from the field" is the worst kind this project makes. */
       let got=0;
-      try{ got = serverMediaOf(i,r).filter(m=>m.kind==="photo").length; }catch(e){}
+      try{ got = serverMediaOfAll(i,r).filter(m=>m.kind==="photo").length; }catch(e){}
       P.mobReceived += Math.min(got, exp);
     });
   });
@@ -13705,7 +13767,7 @@ function syncScan(){
         const claim = window.CMNorm ? CMNorm.photoCount(i.photos) : 0;
         if(!claim) return;
         exExpected += claim;
-        exPresent  += Math.min(serverMediaOf(i,r).filter(m=>m.kind==="photo").length, claim);
+        exPresent  += Math.min(serverMediaOfAll(i,r).filter(m=>m.kind==="photo").length, claim);
       });
       return;
     }
@@ -13721,7 +13783,11 @@ function syncScan(){
       if(bundledMedia(r,null)) return;      // ships with the app; never a late delivery
       const claim = window.CMNorm ? CMNorm.photoCount(i.photos) : 0;
       if(!claim) return;
-      const held = serverMediaOf(i,r).filter(m=>m.kind==="photo").length;
+      /* WITHDRAWN IS NOT MISSING: what the folder HOLDS, the office's
+         withdrawals included — see evidenceGap(). TK156's plug round of 14
+         August, all sixteen files present and eleven withdrawn, sat on this
+         table as "11 missing" for three weeks. */
+      const held = serverMediaOfAll(i,r).filter(m=>m.kind==="photo").length;
       expected += claim;
       present  += Math.min(held, claim);
       /* A shortfall is named by the point and by the file names the phone
@@ -13872,7 +13938,7 @@ function renderSevGaps(){
     if(ct){ ct.textContent=""; ct.className="sub"; }
     return;
   }
-  const nu=rows.filter(x=>x.why==="nograde").length;
+  const nu=rows.filter(x=>x.why==="nograde"||x.why==="ungraded").length;
   if(ct){
     ct.textContent=t("sy_sev_ct",{n:rows.length,u:nu,c:rows.length-nu});
     ct.className="sub warn";
@@ -13880,6 +13946,10 @@ function renderSevGaps(){
   const sevL=s=>(SEV[s]&&SEV[s].l)||s||t("ed_none");
   box.innerHTML=rows.map(x=>{
     const k=ekOf(x.r);
+    if(x.why==="ungraded")
+      return `<li><b>${esc(x.r.equip)}</b> · ${esc(TYPE_LABEL[x.r.type]||x.r.type)} · ${esc(x.r.date)}`
+        + `<div class="muted">${esc(t("sy_sev_ug",{n:x.n}))}</div>`
+        + `<button class="btn" data-sevgo="${esc(k)}">${esc(t("sy_sev_go"))}</button></li>`;
     const why = x.why==="nograde"
       ? t("sy_sev_ng",{s:sevL(x.was)})
       : t("sy_sev_cf",{g:GRADE.label(x.i.grade,lang),now:sevL(x.now),was:sevL(x.was)});
@@ -14247,7 +14317,7 @@ function renderNavCounts(){
   }catch(e){}
   try{ nb("nbSync", syncBadge((RENDER_LIVE && renderSync.scan) || syncScan())); }catch(e){}
 }
-function renderAll(){
+function renderAll(all){
   /* What survived the filters, beside the controls that did the filtering. */
   try{ const el=$("fCount");
       /* The denominator is what the page holds BEFORE the toolbar touched it.
@@ -14265,10 +14335,35 @@ function renderAll(){
      re-render at fleet size paid half a second twice. Inside one pass the
      folder cannot change between the two, so the badge reads the panel's
      scan; outside a pass each still scans for itself. */
+  /* ONLY THE PAGE THAT IS OPEN IS PAINTED. Every pass repainted all nine
+     pages, and at 80 inspections the lubrication sheet alone cost half a
+     second — for a reader who was looking at Overview. A filter change is now
+     the visible page plus the strip above it; the others are marked stale and
+     painted the moment they are opened, from the same filters. */
   RENDER_LIVE=true;
   try{
-  renderChips(); renderConflictBar(); renderKpis(); renderCoverage(); renderTrend(); renderFleet(); renderFailure(); renderWearTab(); renderActions(); renderHistory(); renderLubeTab(); renderDueTab(); renderSync(); renderNavCounts();
+    renderChips(); renderConflictBar();
+    /* A language switch is the one change that has to reach every page at
+       once: the static labels are translated in place, and a page left stale
+       would sit half in each language until it was opened. Rare, so the cost
+       of painting all nine is paid once. */
+    const cur=TAB_RENDER[CUR_TAB]?CUR_TAB:"overview";
+    Object.keys(TAB_RENDER).forEach(k=>{ if(k===cur||all){ TAB_RENDER[k](); TAB_DIRTY.delete(k); } else TAB_DIRTY.add(k); });
+    renderNavCounts();
   }finally{ RENDER_LIVE=false; renderSync.scan=null; PASS_MEMO=null; } }
+const TAB_RENDER={
+  overview:()=>{ renderKpis(); renderCoverage(); renderTrend(); renderFleet(); },
+  failure:()=>renderFailure(), wear:()=>renderWearTab(), actions:()=>renderActions(),
+  equipment:()=>renderHistory(), lube:()=>renderLubeTab(), due:()=>renderDueTab(), sync:()=>renderSync(),
+};
+const TAB_DIRTY=new Set();
+/* A page opened stale is painted before it is seen, inside a pass of its own. */
+function renderTabIfDirty(t){
+  if(!TAB_DIRTY.has(t) || !TAB_RENDER[t]) return;
+  RENDER_LIVE=true;
+  try{ TAB_RENDER[t](); TAB_DIRTY.delete(t); }
+  finally{ RENDER_LIVE=false; renderSync.scan=null; PASS_MEMO=null; }
+}
 var RENDER_LIVE=false;           // var: hoisted, so a render before this line reads false, not a TDZ error
 /* WORK THAT IS THE SAME FOR THE WHOLE PASS IS DONE ONCE IN THE PASS.
    serverMediaOf() asks the folder index what it holds for a point, and three
@@ -14498,8 +14593,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=253"></script>
-<script src="sync-adapter.js?v=253"></script>
-<script src="report.js?v=253"></script>
+<script src="drive.js?v=254"></script>
+<script src="sync-adapter.js?v=254"></script>
+<script src="report.js?v=254"></script>
 </body>
 </html>

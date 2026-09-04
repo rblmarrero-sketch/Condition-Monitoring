@@ -258,6 +258,15 @@ fixtures. The migration of the folder itself is `docs/yandex/migrate-grades.js`
 reconciles counts before and after); it needs a backend that offers
 `op:rewrite`, i.e. `function.js` deployed after this change.
 
+**A round carries its own grade, `g`**, since build 254: `GRADE.roundGrade(items)`
+— the worst of its positions, a measured station scored from its remaining life,
+the machine's own photographs skipped, null when nothing is recorded. The phone
+writes it at Save (`recToExport`), the history row reads it (`teamRow`), and
+`migrate-grades.js --derive` writes it onto the rounds already in the folder by
+the same function. A round with neither a grade nor a reading is left without
+one and listed under "Grade review required" — never invent a 1. Save refuses a
+position that has evidence and no grade on a graded round type (`gradeAppliesTo`).
+
 The dashboard's `sevOf()` returns the grade NUMBER (a measured point's from its
 remaining life via `GRADE.fromWorn`), and `SEV[n]` is keyed by it — attention
 is `>= 3`, critical is `=== 5`. A URL `?sev=CRI` still opens: `sevKey()` maps

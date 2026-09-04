@@ -121,6 +121,7 @@ const openHist = async (p,unit) => {
      `${after.sev} / ${after.wo}`);
 
   console.log('\nvoid');
+  await p.click('nav.tabs button[data-tab="overview"]'); await p.waitForTimeout(300);
   const kpiBefore=await p.textContent('#kpis');
   await openHist(p,'TK146');
   await p.click('[data-edit="TK146|2026-03-09|MP"]'); await p.waitForTimeout(300);
@@ -143,9 +144,11 @@ const openHist = async (p,unit) => {
 
   ok('the record still exists — nothing destroyed', (await rec(p))!==null);
   ok('but it is out of the counts', (await rec(p))._void===true);
+  /* The headline strip is on the Overview page, and since build 254 a page
+     is painted when it is shown — so it is read there, the way a reader does. */
+  await p.click('nav.tabs button[data-tab="overview"]'); await p.waitForTimeout(300);
   const kpiAfter=await p.textContent('#kpis');
   ok('the KPIs changed',kpiBefore!==kpiAfter);
-  await p.click('nav.tabs button[data-tab="overview"]'); await p.waitForTimeout(300);
   // the fleet table shows one row per unit (latest inspection), and the bundled
   // TK146 is newer — so assert on the count of rows the filter yields instead
   const nVis=()=>p.evaluate(()=>CMDash.allRecs().filter(r=>!r._void).length);

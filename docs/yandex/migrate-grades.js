@@ -36,7 +36,20 @@
 
    The backend must be running a function.js that offers op:rewrite (see
    docs/yandex/VM-SETUP.md §12 for how a backend change is deployed). Against
-   an older backend --apply stops before writing anything and says why. */
+   an older backend --apply stops before writing anything and says why.
+
+   --derive (second pass, after build 254)
+     Writes the ROUND'S OWN GRADE, `g`, onto every record that can carry one
+     and does not yet: the worst of its positions, a measured station scored
+     by its remaining life — the rule in mobile/grade.js (roundGrade), the
+     same one the phone applies at Save since build 254. Item grades are not
+     touched; a record with neither a grade nor a reading is left without and
+     named, because inventing a 1 for it would be a false reassurance.
+     node docs/yandex/migrate-grades.js --derive --scan
+     node docs/yandex/migrate-grades.js --derive --apply --backup ./grade-backup-2
+     node docs/yandex/migrate-grades.js --derive --verify
+     The same safeguards apply: backups in both places, ifSha, idempotent,
+     RECONCILED only when every record that can carry g does. */
 'use strict';
 const fs = require('fs'), path = require('path'), crypto = require('crypto');
 
@@ -128,6 +141,70 @@ function tally(docs) {
 }
 const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 
+/* ---- --derive: THE ROUND'S OWN GRADE ON EVERY RECORD THAT CAN HAVE ONE -----
+   47 of the folder's 80 rounds carried no graded point: the measured rounds
+   (undercarriage, dump body) whose condition is in their readings, and a
+   handful of plug rounds saved without an assessment. Every list that never
+   opens a round — the phone's history, the office's index — said "no grade"
+   for all of them. Since build 254 the phone writes `g`, the worst of its
+   positions with a measured station scored by its remaining life; this writes
+   the same number, by the same rule (mobile/grade.js roundGrade), onto every
+   record already in the folder. A round with neither grade nor reading is left
+   without one and named, because inventing a 1 for it would be the false
+   reassurance this project exists to prevent. */
+let GRADE = null;
+async function loadGrade() {
+  if (GRADE) return GRADE;
+  try { GRADE = require(path.join(__dirname, '..', '..', 'mobile', 'grade.js')); return GRADE; } catch (e) {}
+  const url = 'https://raw.githubusercontent.com/rblmarrero-sketch/Condition-Monitoring/claude/magnetic-plug-dashboard-llv4wc/mobile/grade.js';
+  const src = await (await fetch(url)).text();
+  const tmp = path.join(require('os').tmpdir(), 'cm-grade-' + process.pid + '.js');
+  fs.writeFileSync(tmp, src); GRADE = require(tmp); return GRADE;
+}
+function deriveDoc(doc, byKey) {
+  let changed = 0;
+  const copy = JSON.parse(JSON.stringify(doc));
+  const setG = r => { if (!r || num(r.g)) return; const g = GRADE.roundGrade(r.items || []); if (g) { r.g = g; changed++; } };
+  if (copy && Array.isArray(copy.records) && copy.type !== 'cm-index-shard') copy.records.forEach(setG);
+  if (copy && copy.type === 'cm-index-shard' && Array.isArray(copy.records))
+    copy.records.forEach(row => { if (!row || num(row.g)) return; const src = byKey.get(`${row.u}|${row.d}|${row.t}`);
+      const g = src ? GRADE.roundGrade(src.items || []) : null; if (g) { row.g = g; changed++; } });
+  return changed ? { doc: copy, changed } : null;
+}
+/* Records by their filing key, from the sidecars, so a shard row can be
+   scored from the round it summarises. */
+function recordsByKey(docs) {
+  const m = new Map();
+  docs.forEach(d => { const doc = d.doc; if (!doc || doc.type === 'cm-index-shard' || !Array.isArray(doc.records)) return;
+    doc.records.forEach(r => { if (r && r.equip && r.date && r.type) m.set(`${r.equip}|${r.date}|${r.type}`, r); }); });
+  return m;
+}
+/* Two kinds of record carry no round grade, and they are not the same
+   problem:
+     without    — no grade on any point and no reading: nobody assessed it.
+                  An engineer grades it in the office's correction panel.
+     unresolved — measured (millimetres on the record) but the remaining life
+                  was never computed at capture, because the phone had no
+                  confirmed reference for the tray or track then (refSrc
+                  "tray:HM400?", or none). The office resolves these from
+                  today's register and shows a grade; the RECORD's own g is
+                  left empty rather than computed here from a different
+                  table, and they are named so the difference is visible. */
+function gTally(docs) {
+  const t = { records: 0, withG: 0, derivable: 0, without: [], unresolved: [] };
+  const hasMM = it => it && it.mm !== '' && it.mm != null && !isNaN(Number(it.mm));
+  docs.forEach(d => { const doc = d.doc; if (!doc || doc.type === 'cm-index-shard' || !Array.isArray(doc.records)) return;
+    doc.records.forEach(r => { if (!r) return; t.records++;
+      const have = num(r.g), can = GRADE ? GRADE.roundGrade(r.items || []) : null;
+      if (have) t.withG++; if (have || can) t.derivable++;
+      if (!have && !can) ((r.items || []).some(hasMM) ? t.unresolved : t.without).push(`${r.equip} ${r.date} ${r.type}`); }); });
+  return t;
+}
+const sayRest = g => {
+  if (g.without.length) console.log(`no grade and no reading — left without, by design (${g.without.length}): ${g.without.join('; ')}`);
+  if (g.unresolved.length) console.log(`measured, remaining life not on the record (no confirmed reference at capture) — left for the office (${g.unresolved.length}): ${g.unresolved.join('; ')}`);
+};
+
 async function scan(label) {
   const files = await listJson();
   const docs = [];
@@ -141,9 +218,27 @@ async function scan(label) {
 
 (async () => {
   const mode = has('--apply') ? 'apply' : has('--verify') ? 'verify' : 'scan';
+  const derive = has('--derive');
+  if (derive) await loadGrade();
   const backupDir = after('--backup') || (mode === 'verify' ? (args[args.indexOf('--verify') + 1] || '') : '');
   console.log(`grade migration · ${mode} · ${URL_}`);
   const before = await scan('before');
+  if (derive && mode === 'scan') {
+    const byKey = recordsByKey(before.docs);
+    const todo = before.docs.filter(d => d.doc && deriveDoc(d.doc, byKey));
+    const g = gTally(before.docs);
+    console.log(`round grades: ${g.withG} of ${g.records} records carry one, ${g.derivable} can; would rewrite ${todo.length} document(s)`);
+    sayRest(g);
+    process.exit(0);
+  }
+  if (derive && mode === 'verify') {
+    const g = gTally(before.docs);
+    const ok = g.withG === g.derivable;
+    console.log(`round grades: ${g.withG} of ${g.records} records carry one; ${g.derivable} can`);
+    sayRest(g);
+    console.log(ok ? 'RECONCILED: every record that can carry a round grade does' : `NOT RECONCILED: ${g.derivable - g.withG} record(s) could carry a grade and do not`);
+    process.exit(ok ? 0 : 2);
+  }
   if (mode === 'scan') {
     const todo = before.docs.filter(d => d.doc && migrateDoc(d.doc));
     console.log(`would rewrite ${todo.length} document(s): ` + todo.slice(0, 20).map(d => d.f.name).join(', ') + (todo.length > 20 ? ' …' : ''));
@@ -169,11 +264,14 @@ async function scan(label) {
   if (!ping.ok) { console.log('backend refused ping: ' + ping.error); process.exit(2); }
   fs.mkdirSync(backupDir, { recursive: true });
   fs.writeFileSync(path.join(backupDir, 'tally.json'), JSON.stringify(before.t, null, 2));
-  const todo = before.docs.filter(d => d.doc && migrateDoc(d.doc));
+  const byKey = derive ? recordsByKey(before.docs) : null;
+  const change = doc => derive ? deriveDoc(doc, byKey) : migrateDoc(doc);
+  const g0 = derive ? gTally(before.docs) : null;
+  const todo = before.docs.filter(d => d.doc && change(d.doc));
   console.log(`rewriting ${todo.length} document(s), originals kept in ${backupDir} and on the server under _meta/backup/`);
   let done = 0, unchanged = 0, failed = 0;
   for (const d of todo) {
-    const m = migrateDoc(d.doc);
+    const m = change(d.doc);
     const out = Buffer.from(JSON.stringify(m.doc, null, 2), 'utf8');
     const local = path.join(backupDir, (d.f.path || d.f.name).replace(/[\\/]/g, '__'));
     fs.writeFileSync(local, d.buf);
@@ -194,6 +292,12 @@ async function scan(label) {
   ['documents', 'sidecars', 'markers', 'records', 'items', 'photosClaimed', 'graded'].forEach(k => {
     if (t0[k] !== t1[k]) { ok = false; console.log(`FAIL: ${k} before=${t0[k]} after=${t1[k]}`); } });
   if (!same(t0.byGrade, t1.byGrade)) { ok = false; console.log('FAIL: grade distribution moved', t0.byGrade, t1.byGrade); }
+  if (derive) {
+    const g1 = gTally(afterScan.docs);
+    console.log(`round grades: ${g0.withG} → ${g1.withG} of ${g1.records} records; ${g1.derivable} can carry one`);
+    if (g1.withG !== g1.derivable) { ok = false; console.log(`FAIL: ${g1.derivable - g1.withG} record(s) could carry a round grade and do not`); }
+    sayRest(g1);
+  }
   console.log(ok ? 'RECONCILED: same documents, records, items and photographs; same grades, now all numbers'
                  : 'NOT RECONCILED — see above; originals are in ' + backupDir + ' and under _meta/backup/');
   process.exit(ok ? 0 : 2);

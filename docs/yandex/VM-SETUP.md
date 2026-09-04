@@ -478,6 +478,33 @@ Running `--apply` twice changes nothing the second time. Photographs are never
 touched. If anything says `NOT RECONCILED`, stop and send the output to whoever
 made the change — the originals are all still there.
 
+### The round-grade pass (once, after build 254)
+
+Build 254 gives every round its own grade, `g` — the worst of its positions,
+a measured undercarriage or dump-body station scored by its remaining life.
+Phones write it at Save from 254 on; the rounds already in the folder do not
+have it, and every list that never opens a round (the phone's history, the
+office's index) said "no condition" for them. The same tool writes it onto the
+folder by the same rule. It needs nothing new on the server — `op:rewrite` is
+already there from the pass above — and it does not change a single point
+grade: only `g` on the records that can carry one.
+
+```
+set CM_URL=https://baimskaya-cm.duckdns.org
+set ADMIN_SECRET=<the admin password from /opt/cm/cm.env — type it, never store it>
+node docs\yandex\migrate-grades.js --derive --scan
+node docs\yandex\migrate-grades.js --derive --apply --backup .\grade-backup-2
+node docs\yandex\migrate-grades.js --derive --verify
+```
+
+`--scan` says how many records carry a round grade, how many can, and names
+the ones that cannot — a round with no grade on any point and no reading is
+left without one, by design, and needs an engineer to grade it in the
+dashboard's correction panel (the "Grade review required" list names them).
+`--apply` ends with `RECONCILED` only when every record that can carry a grade
+does and the counts and point grades are exactly as before. `--verify` proves
+it again, and can be run at any time afterwards.
+
 ---
 
 ## What this costs you that a function did not

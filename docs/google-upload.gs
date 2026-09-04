@@ -777,7 +777,11 @@ function gradeNum_(v) {
   return GRADE_LEGACY_[s] || null;
 }
 function slimRow_(r) {
-  var worst = '', base = [];
+  /* The round's own grade when the phone wrote one (build 254 on): it already
+     folds in the measured stations, which no grade field here can. Older
+     rounds fall back to the worst graded point, as before. */
+  var worst = gradeNum_(r.g), base = [];
+  if (worst == null) worst = '';
   var items = r.items || [];
   for (var i = 0; i < items.length; i++) {
     var it = items[i] || {}, g = gradeNum_(it.grade);
