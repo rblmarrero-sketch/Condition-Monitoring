@@ -1223,6 +1223,12 @@
   .edshots.wide{grid-template-columns:repeat(4,minmax(0,1fr));}
   .edshots figure{margin:0;}
   .edshots figcaption{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.3;}
+  .edshots select{width:100%;max-width:100%;margin-top:3px;font-size:11px;padding:2px 4px;min-height:24px;}
+  .edmtools{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:10px;}
+  .edmtools .madd{width:auto;height:32px;padding:0 10px;display:inline-flex;align-items:center;gap:6px;
+    border:1px dashed var(--border);border-radius:6px;cursor:pointer;font-size:12px;color:var(--ink-2);}
+  .edmtools .madd:hover{border-color:var(--accent);color:var(--accent);}
+  .edmtools .pxstr select{min-width:160px;}
   /* A tile with somewhere to go says so before it is pressed. */
   .kpi.go{cursor:pointer;}
   .kpi.go:hover{border-color:color-mix(in srgb,var(--kc,var(--border)) 55%,var(--border));
@@ -3226,28 +3232,28 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=252"></script>
-<script src="../mobile/hme.js?v=252"></script>
-<script src="../mobile/mp-fc.js?v=252"></script>
-<script src="../mobile/hme-cascade.js?v=252"></script>
-<script src="../mobile/temp-limits.js?v=252"></script>
+<script src="../data/magnetic_plug.js?v=253"></script>
+<script src="../mobile/hme.js?v=253"></script>
+<script src="../mobile/mp-fc.js?v=253"></script>
+<script src="../mobile/hme-cascade.js?v=253"></script>
+<script src="../mobile/temp-limits.js?v=253"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=252"></script>
-<script src="../mobile/normalize.js?v=252"></script>
-<script src="../mobile/grade.js?v=252"></script>
-<script src="../mobile/due.js?v=252"></script>
-<script src="../mobile/wear.js?v=252"></script>
-<script src="../mobile/wear-map.js?v=252"></script>
-<script src="../mobile/lube.js?v=252"></script>
-<script src="../mobile/lube-overrides.js?v=252"></script>
-<script src="../mobile/lube2027.js?v=252"></script>
-<script src="../mobile/lube-tds.js?v=252"></script>
+<script src="../mobile/assets.js?v=253"></script>
+<script src="../mobile/normalize.js?v=253"></script>
+<script src="../mobile/grade.js?v=253"></script>
+<script src="../mobile/due.js?v=253"></script>
+<script src="../mobile/wear.js?v=253"></script>
+<script src="../mobile/wear-map.js?v=253"></script>
+<script src="../mobile/lube.js?v=253"></script>
+<script src="../mobile/lube-overrides.js?v=253"></script>
+<script src="../mobile/lube2027.js?v=253"></script>
+<script src="../mobile/lube-tds.js?v=253"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=252"></script>
-<script src="../mobile/machine-photos.js?v=252"></script>
+<script src="../mobile/upload-defaults.js?v=253"></script>
+<script src="../mobile/machine-photos.js?v=253"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3256,17 +3262,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=252"></script>
-<script src="../mobile/get.js?v=252"></script>
-<script src="../mobile/points.js?v=252"></script>
-<script src="../mobile/uc-points.js?v=252"></script>
-<script src="../mobile/inspect-guide.js?v=252"></script>
-<script src="../mobile/get-figs.js?v=252"></script>
-<script src="../mobile/body-points.js?v=252"></script>
-<script src="../mobile/body-map.js?v=252"></script>
-<script src="../mobile/jspdf.umd.min.js?v=252"></script>
-<script src="../mobile/html2canvas.min.js?v=252"></script>
-<script src="../mobile/report-core.js?v=252"></script>
+<script src="../mobile/machine-fig.js?v=253"></script>
+<script src="../mobile/get.js?v=253"></script>
+<script src="../mobile/points.js?v=253"></script>
+<script src="../mobile/uc-points.js?v=253"></script>
+<script src="../mobile/inspect-guide.js?v=253"></script>
+<script src="../mobile/get-figs.js?v=253"></script>
+<script src="../mobile/body-points.js?v=253"></script>
+<script src="../mobile/body-map.js?v=253"></script>
+<script src="../mobile/jspdf.umd.min.js?v=253"></script>
+<script src="../mobile/html2canvas.min.js?v=253"></script>
+<script src="../mobile/report-core.js?v=253"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4037,6 +4043,8 @@ const I18N={
   ed_point:"Component (point)", ed_point_taken:"already has a finding",
   ed_point_hint:"Choosing another point moves this finding, with its photographs, under it.",
   ed_gps_half:"A location is both a latitude and a longitude — fill both, or clear both to remove it.",
+  ed_add_photo:"Add a photograph", ed_mcat:"Of", ed_cat_none:"uncategorised",
+  ed_to_machine:"→ the machine, as…", ed_to_point:"→ under a point…", ed_photo_moved:"Photograph filed under {to}.",
   ed_gps_bad:"Latitude must be between −90 and 90 and longitude between −180 and 180, as decimal degrees.",
   ed_who:"Inspected by", ed_sup:"Verified by",
   ed_smu_rate:"This machine has {n} hour-meter readings and runs {r} h/day by its own record — the due list uses that instead of the fleet assumption.",
@@ -4787,6 +4795,8 @@ const I18N={
   ed_point:"Компонент (точка)", ed_point_taken:"уже есть находка",
   ed_point_hint:"Выбор другой точки переносит эту находку вместе с фотографиями под неё.",
   ed_gps_half:"Местоположение — это широта и долгота вместе: заполните оба поля или очистите оба, чтобы удалить.",
+  ed_add_photo:"Добавить фотографию", ed_mcat:"Что снято", ed_cat_none:"без категории",
+  ed_to_machine:"→ к машине, как…", ed_to_point:"→ под точку…", ed_photo_moved:"Фотография перенесена: {to}.",
   ed_gps_bad:"Широта от −90 до 90, долгота от −180 до 180, в десятичных градусах.",
   ed_who:"Осмотр выполнил", ed_sup:"Проверил",
   ed_smu_rate:"У машины {n} показаний счётчика, по ним наработка {r} ч/сут — план строится по ней, а не по допущению для парка.",
@@ -6998,7 +7008,7 @@ function assignPlan(rec){
         seen.add(m.name);
         const d=a[m.name]; if(!d) return;
         if(d.exclude) plan.excluded.set(m.name, d);
-        if(d.general){ plan.moved.add(m.name); plan.general.push(Object.assign({},m,{from:i.key})); }
+        if(d.general){ plan.moved.add(m.name); plan.general.push(Object.assign({},m,{from:i.key, cat:d.cat||""})); }
         else if(d.point && d.point!==i.key){
           plan.moved.add(m.name);
           const l=plan.toPoint.get(d.point)||[]; l.push(m); plan.toPoint.set(d.point,l);
@@ -7027,7 +7037,7 @@ function assignPlan(rec){
       const src=(()=>{ try{ return (folderPhotos||{})[n]||""; }catch(e){ return ""; } })();
       const m={ name:n, src:src, kind:/\.(mp4|mov|webm)$/i.test(n)?"video":"photo", found:1 };
       if(d.exclude) plan.excluded.set(n, d);
-      if(d.general) plan.general.push(Object.assign({},m,{from:null}));
+      if(d.general) plan.general.push(Object.assign({},m,{from:null, cat:d.cat||""}));
       else if(d.point){ const l=plan.toPoint.get(d.point)||[]; l.push(m); plan.toPoint.set(d.point,l); }
     });
   }
@@ -8596,9 +8606,11 @@ function edFacts(rec,i){
   const med=(()=>{ try{ return mediaOf(i,rec); }catch(e){ return []; } })();
   const row=(k,v)=>v==null||v===""?"":`<dt>${esc(k)}</dt><dd>${v}</dd>`;
   const w=(()=>{ try{ return wearOf(rec,i); }catch(e){ return null; } })();
-  const shots=med.length?`<div class="edshots">${med.map((m,ix)=>m.kind==="video"
+  const toMach=m=>drvOn()?`<select class="edtomach" data-name="${esc(m.name)}" title="${esc(t("ed_to_machine"))}">
+      <option value="">${esc(t("ed_to_machine"))}</option>${MACHINE_CATS.map(c=>`<option value="${c}">${esc(edCatLabel(c))}</option>`).join("")}</select>`:"";
+  const shots=med.length?`<div class="edshots">${med.map((m,ix)=>`<figure>${m.kind==="video"
       ?`<video preload="metadata" src="${esc(m.src)}" data-shot="${ix}"></video>`
-      :`<img loading="lazy" src="${esc(m.src)}" alt="${esc(i.key)}" data-shot="${ix}">`).join("")}</div>`:"";
+      :`<img loading="lazy" src="${esc(m.src)}" alt="${esc(i.key)}" data-shot="${ix}">`}${toMach(m)}</figure>`).join("")}</div>`:"";
   const facts=`<dl class="kv">${
       row(t("th_defect"), i.defect?esc(i.defect)+(i.defectCode?` <span class="muted">${esc(i.defectCode)}</span>`:""):"")+
       row(t("th_cause"), esc(i.cause||""))+
@@ -8628,16 +8640,52 @@ function edCatLabel(c){
   if(!c) return "";
   try{ const D=window.CMR&&CMR.dict; return (D&&D[lang]&&D[lang]["cat_"+c])||(D&&D.en&&D.en["cat_"+c])||c; }catch(e){ return c; }
 }
+/* The categories a machine photograph can be of — the phone's list less the
+   ones that belong to a point. */
+const MACHINE_CATS=["OVERVIEW","LEFT","RIGHT","BODY","GET","PLATE","EXTRA"];
+/* The name the phone would have given it: <UNIT>_<CAT>_<dd.mm.yyyy>_<TYPE>,
+   then _2, _3 for a second of the same kind. */
+function machineMediaName(rec, cat, file){
+  const d=String(rec.date||"").split("-"); const dmy=d.length===3?`${d[2]}.${d[1]}.${d[0]}`:String(rec.date||"");
+  const ext=((file.type||"").includes("png")?"png":(file.type||"").includes("webp")?"webp":"jpg");
+  const base=`${rec.equip}_${cat}_${dmy}_${rec.type}`;
+  const taken=n=>(folderPhotos&&folderPhotos[n])||(window.CMDrive&&CMDrive.hasName&&CMDrive.hasName(n));
+  if(!PHOTO_EXT.some(e=>taken(`${base}.${e}`))) return `${base}.${ext}`;
+  for(let i=2;i<=MEDIA_MAX;i++) if(!PHOTO_EXT.some(e=>taken(`${base}_${i}.${e}`))) return `${base}_${i}.${ext}`;
+  return null;
+}
 function edMachineCard(rec){
   const {med}=edMachineMedia(rec);
+  const pts=orphanPointOptions(rec).filter(o=>!/^(MACHINE|__general)$/.test(o.k));
+  const toPoint=m=>`<select class="edtopt" data-name="${esc(m.name)}" title="${esc(t("ed_to_point"))}">
+      <option value="">${esc(t("ed_to_point"))}</option>${pts.map(o=>`<option value="${esc(o.k)}">${esc(o.k)} · ${esc(o.l)}</option>`).join("")}</select>`;
   const shots=med.length?`<div class="edshots wide">${med.map((m,ix)=>`<figure>${m.kind==="video"
       ?`<video preload="metadata" src="${esc(m.src)}" data-mshot="${ix}"></video>`
-      :`<img loading="lazy" src="${esc(m.src)}" alt="${esc(edCatLabel(m.cat))}" data-mshot="${ix}">`}${
-      m.cat?`<figcaption>${esc(edCatLabel(m.cat))}</figcaption>`:""}</figure>`).join("")}</div>`
+      :`<img loading="lazy" src="${esc(m.src)}" alt="${esc(edCatLabel(m.cat))}" data-mshot="${ix}">`}
+      <figcaption>${esc(edCatLabel(m.cat)||t("ed_cat_none"))}</figcaption>${drvOn()?toPoint(m):""}</figure>`).join("")}</div>`
     : `<div class="muted">${esc(t("ed_machine_none"))}</div>`;
+  /* Adding is a write to the folder, so it is offered only where the folder
+     can be written; the category is chosen before the file, because a
+     machine photograph without a category is a picture nobody can file. */
+  const add=drvOn()?`<div class="edmtools">
+      <label class="pxstr"><span>${esc(t("ed_mcat"))}</span><select id="edMcat">${MACHINE_CATS.map(c=>`<option value="${c}">${esc(edCatLabel(c))}</option>`).join("")}</select></label>
+      <label class="madd" id="edMadd" title="${esc(t("ed_add_photo"))}">+ <span>${esc(t("ed_add_photo"))}</span><input type="file" accept="image/*" multiple hidden></label>
+      <span class="pxmsg" id="edMmsg"></span></div>`:"";
   return `<div class="srchead"><span class="ico">🚜</span><div><b>${esc(t("ed_machine"))}</b>
       <div class="muted">${esc(t("ed_machine_sub"))}</div></div><span class="state">${med.length}</span></div>
-    <div class="srcbody">${shots}</div>`;
+    <div class="srcbody">${shots}${add}</div>`;
+}
+/* A photograph filed elsewhere: as the machine's, or under a point. One
+   marker write, then the panel reopens on what the record now says. */
+function edAssignPost(patch){
+  const rec=RECS.find(r=>ekOf(r)===edKey); if(!rec) return false;
+  const keep=edits[edKey]||{};
+  const by=$("edBy").value.trim(), at=new Date().toISOString();
+  const asg=Object.assign({}, keep[ASSIGN_KEY]||{});
+  Object.keys(patch).forEach(n=>{ const prev=Object.assign({}, asg[n]||{}); delete prev.general; delete prev.point; delete prev.cat;
+    asg[n]=Object.assign(prev, patch[n], {by, at}); });
+  return edPost({ items:keep.items||{}, fields:keep.fields||{}, note:keep.note||"",
+                  void:!!keep.void, reason:keep.reason||"", [ASSIGN_KEY]:asg });
 }
 /* The points a finding may be filed under: the reference list for this class
    and round plus the points this inspection already has. A point that already
@@ -8839,6 +8887,32 @@ function openEdit(key,keepMsg){
   $("edItems").querySelectorAll('[data-f="grade"]').forEach(g=>syncOvr(g.dataset.k));
   /* A photograph in the review opens in the lightbox with its record and
      file named, so the editor there stores against the evidence it belongs to. */
+  /* Adding a machine photograph from the office: named as the phone would
+     name it, uploaded, then filed as the machine's with its category. */
+  { const inp=$("edMachine").querySelector("#edMadd input"), mm=$("edMmsg");
+    if(inp) inp.onchange=async ()=>{
+      const files=[...(inp.files||[])]; inp.value=""; if(!files.length) return;
+      const cat=($("edMcat")||{}).value||"OVERVIEW";
+      if(!$("edBy").value.trim()){ mm.textContent=t("ed_needname"); return; }
+      const patch={};
+      for(let n=0;n<files.length;n++){
+        mm.textContent=t("ph_adding",{i:n+1,n:files.length});
+        const name=machineMediaName(rec,cat,files[n]);
+        if(!name){ mm.textContent=t("ph_full",{n:MEDIA_MAX}); return; }
+        try{ const r=await CMDrive.putMedia(name, files[n]); patch[(r&&r.name)||name]={general:1, cat, found:1}; }
+        catch(e){ mm.textContent=t("ph_addfail",{e:(e&&e.message)||e}); return; }
+      }
+      assignEpoch++;
+      if(edAssignPost(patch)){ openEdit(edKey,true); $("edMsg").textContent=t("ph_added",{n:files.length}); renderHistory(); }
+    }; }
+  $("edMachine").querySelectorAll(".edtopt").forEach(sel=>sel.onchange=()=>{
+    const k=sel.value; if(!k) return;
+    if(edAssignPost({[sel.dataset.name]:{point:k, found:1}})){ openEdit(edKey,true); $("edMsg").textContent=t("ed_photo_moved",{to:k}); renderHistory(); }
+  });
+  $("edItems").querySelectorAll(".edtomach").forEach(sel=>sel.onchange=()=>{
+    const c=sel.value; if(!c) return;
+    if(edAssignPost({[sel.dataset.name]:{general:1, cat:c, found:1}})){ openEdit(edKey,true); $("edMsg").textContent=t("ed_photo_moved",{to:t("ed_machine")}); renderHistory(); }
+  });
   $("edMachine").querySelectorAll("[data-mshot]").forEach(el=>el.onclick=()=>{
     const {gi,med}=edMachineMedia(rec); const ix=Number(el.dataset.mshot)||0;
     openLB(med.map(m=>[m.orig||m.src,m.kind]), ix, `${rec.equip} · ${rec.date}`,
@@ -14424,8 +14498,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=252"></script>
-<script src="sync-adapter.js?v=252"></script>
-<script src="report.js?v=252"></script>
+<script src="drive.js?v=253"></script>
+<script src="sync-adapter.js?v=253"></script>
+<script src="report.js?v=253"></script>
 </body>
 </html>

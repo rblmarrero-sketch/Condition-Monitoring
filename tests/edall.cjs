@@ -41,7 +41,13 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
   await p.evaluate(() => {
     window.__w = [];
     CMDrive.saveEdit = d => { window.__w.push(JSON.parse(JSON.stringify(d))); return Promise.resolve({ ok: true }); };
-    CMDrive.hasName = () => true;
+    /* The folder, stood in for: every field photograph is safely there; a
+       machine photograph is there once the office has uploaded it. */
+    window.__put = [];
+    CMDrive.hasName = n => window.__put.includes(n) || !/_(OVERVIEW|LEFT|RIGHT|BODY|GET|PLATE|EXTRA)_/.test(n);
+    /* The folder, stood in for: what the office uploads is indexed and cached
+       the way drive.js does it, so the panel can find what it just added. */
+    CMDrive.putMedia = async (name, file) => { const url = URL.createObjectURL(file); window.__put.push(name); CMDash.addPhoto(name, url); return { name, url, id: "up" + window.__put.length }; };
     try { localStorage.setItem("cm_dash_who", "R. Marrero"); } catch (e) {}
   });
   const lastDoc = () => p.evaluate(() => window.__w[window.__w.length - 1] || null);
@@ -138,6 +144,42 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
   await save();
   const back = await p.evaluate(({ rk, ik }) => { const r = RECS.find(x => ekOf(x) === rk); const i = r.items.find(x => x.key === ik); return { has: !!i, from: i && i._from, photos: i ? mediaOf(i, r).length : -1 }; }, target);
   ok(back.has && !back.from && back.photos === target.photos, "and it can be moved back", JSON.stringify(back));
+
+  console.log("\n── a machine photograph added from the office");
+  const mcount = () => p.evaluate(() => document.querySelectorAll("#edMachine [data-mshot]").length);
+  const m0 = await mcount();
+  const jpgB64 = await p.evaluate(() => { const c = document.createElement("canvas"); c.width = 640; c.height = 480; const x = c.getContext("2d"); x.fillStyle = "#4b6a3b"; x.fillRect(0, 0, 640, 480); return c.toDataURL("image/jpeg", 0.8).split(",")[1]; });
+  ok(!!(await p.$("#edMadd input")) && !!(await p.$("#edMcat")), "the machine card offers to add a photograph, with what it is of");
+  await p.selectOption("#edMcat", "LEFT");
+  await p.setInputFiles("#edMadd input", { name: "left.jpg", mimeType: "image/jpeg", buffer: Buffer.from(jpgB64, "base64") });
+  await p.waitForTimeout(1200);
+  const put = await p.evaluate(({ rk }) => { const r = RECS.find(x => ekOf(x) === rk); const d = String(r.date).split("-");
+    return { names: window.__put, want: `${r.equip}_LEFT_${d[2]}.${d[1]}.${d[0]}_${r.type}.jpg` }; }, target);
+  ok(put.names.length === 1 && put.names[0] === put.want, "it is uploaded under the name the phone would have given it", put.names[0] + " (want " + put.want + ")");
+  doc = await lastDoc();
+  const filed = doc && doc.assign && doc.assign[put.names[0]];
+  ok(filed && filed.general === 1 && filed.cat === "LEFT" && filed.found === 1, "and filed as the machine's, as Left side, by name", JSON.stringify(filed));
+  ok((await mcount()) === m0 + 1, "the machine card shows it", (await mcount()) + " shot(s)");
+  const cap = await p.evaluate(() => [...document.querySelectorAll("#edMachine figcaption")].map(f => f.textContent));
+  ok(cap.some(c => /left/i.test(c)), "labelled Left side", cap.join(" | "));
+  const gen = await p.evaluate(({ rk }) => { const r = RECS.find(x => ekOf(x) === rk); return CMReport.normalise([r], { photos: true })[0].general.map(g => typeof g === "object" ? g.cat : "?"); }, target);
+  ok(gen.includes("LEFT"), "and the report is handed it with what it is of", gen.join(","));
+
+  console.log("\n── a point's photograph filed as the machine's, and back");
+  const pn = await p.evaluate(({ ik }) => { const s = document.querySelector('#edItems .edfacts[data-ik="' + CSS.escape(ik) + '"] .edtomach'); return s ? s.dataset.name : null; }, target);
+  ok(!!pn, "each point photograph offers to be filed as the machine's", pn);
+  await p.selectOption('#edItems .edfacts[data-ik="' + target.ik + '"] .edtomach', "OVERVIEW");
+  await p.waitForTimeout(900);
+  const moved = await p.evaluate(({ rk, ik, pn }) => { const r = RECS.find(x => ekOf(x) === rk); const it = r.items.find(i => i.key === ik);
+    return { onPoint: mediaOf(it, r).some(m => m.name === pn), onMachine: generalMedia(r).some(m => m.name === pn && m.cat === "OVERVIEW"),
+      shots: document.querySelectorAll("#edMachine [data-mshot]").length }; }, Object.assign({ pn }, target));
+  ok(!moved.onPoint && moved.onMachine, "it leaves the point and appears as the machine's overview", JSON.stringify(moved));
+  ok(moved.shots === m0 + 2, "the machine card counts it", moved.shots + " shot(s)");
+  await p.selectOption('#edMachine .edtopt[data-name="' + pn + '"]', target.ik);
+  await p.waitForTimeout(900);
+  const back2 = await p.evaluate(({ rk, ik, pn }) => { const r = RECS.find(x => ekOf(x) === rk); const it = r.items.find(i => i.key === ik);
+    return { onPoint: mediaOf(it, r).some(m => m.name === pn), onMachine: generalMedia(r).some(m => m.name === pn) }; }, Object.assign({ pn }, target));
+  ok(back2.onPoint && !back2.onMachine, "and can be filed back under the point", JSON.stringify(back2));
 
   ok(errs.length === 0, "no page errors", errs.join(" | ") || "none");
   console.log(fail ? `\nFAILED ${fail}` : "\nall passed");

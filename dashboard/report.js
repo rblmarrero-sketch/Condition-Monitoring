@@ -268,7 +268,7 @@
          no single inspection point. It has no item to be printed under, so
          until now classifying one removed it from the report entirely. */
       general: wantPhotos && window.CMDash && CMDash.generalMedia
-        ? CMDash.generalMedia(rec).filter(m => m.kind !== "video" && !m.excluded).map(m => m.src)
+        ? CMDash.generalMedia(rec).filter(m => m.kind !== "video" && !m.excluded).map(m => m.cat ? { u: m.src, cat: m.cat } : m.src)
         : [],
       /* What this inspection says it photographed, against what actually
          reached this dashboard. A report that prints four pictures where six
