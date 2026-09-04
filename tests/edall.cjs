@@ -19,7 +19,7 @@
        reads the finding under the new key with its photographs, the empty
        position it landed on is gone, and the panel reopens on it with the
        control set to the new point and the marker still filed under the old;
-     · a point that already carries a finding is offered but not selectable.
+     · a point that already carries a finding is offered as a swap (edswap.cjs).
 
    Run: node tests/edall.cjs [port]   (needs tests/ed-srv.cjs on 8093) */
 const { chromium } = require(require("./pw.cjs"));
@@ -113,13 +113,15 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
   const sel = await p.evaluate(({ ik }) => {
     const s = document.querySelector('#edItems [data-f="key"][data-k="' + CSS.escape(ik) + '"]');
     if (!s) return null;
-    const opts = [...s.options].map(o => ({ k: o.value, l: o.dataset.l, disabled: o.disabled, selected: o.selected }));
+    const opts = [...s.options].map(o => ({ k: o.value, l: o.dataset.l, disabled: o.disabled, taken: o.dataset.taken === "1", swap: o.textContent.indexOf(t("ed_point_swap", { k: s.dataset.init })) >= 0, selected: o.selected }));
     return { init: s.dataset.init, value: s.value, opts };
   }, target);
   ok(sel && sel.value === target.ik && sel.init === target.ik, "the component control shows the point the finding is under", sel && sel.value);
-  ok(sel && sel.opts.some(o => o.disabled), "a point that already carries a finding is offered but not selectable", sel && sel.opts.filter(o => o.disabled).map(o => o.k).slice(0, 3).join(","));
+  /* Since build 258 a taken point is offered as a SWAP rather than refused —
+     tests/edswap.cjs proves the swap; here it must only be marked as one. */
+  ok(sel && sel.opts.some(o => o.taken) && sel.opts.filter(o => o.taken).every(o => o.swap && !o.disabled), "a point that already carries a finding is offered as a swap", sel && sel.opts.filter(o => o.taken).map(o => o.k).slice(0, 3).join(","));
   ok(sel && !sel.opts.some(o => o.k === "MACHINE"), "and the machine's pseudo-point is never offered as a component");
-  const free = sel.opts.find(o => !o.disabled && o.k !== target.ik);
+  const free = sel.opts.find(o => !o.disabled && !o.taken && o.k !== target.ik);
   ok(!!free, "and there is a free point to move to", free && free.k);
   const before = await p.evaluate(({ rk }) => RECS.find(x => ekOf(x) === rk).items.filter(i => !i.general).length, target);
   await p.selectOption('#edItems [data-f="key"][data-k="' + target.ik + '"]', free.k);

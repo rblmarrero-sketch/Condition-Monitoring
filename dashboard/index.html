@@ -1403,6 +1403,9 @@
   .sheetbody{padding:18px 20px 22px;overflow-y:auto;overscroll-behavior:contain;}
   .sheetbody .lede{margin:0 0 16px;color:var(--ink-2);font-size:13px;}
   .srccard{border:1px solid var(--border);border-radius:12px;margin-bottom:14px;overflow:hidden;background:var(--surface);}
+  .srccard.edrm{opacity:.5;outline:2px dashed var(--bad);} .srccard.edrm .srcbody{display:none;}
+  .edrmbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:6px 12px 10px;font-size:var(--t-small);color:var(--muted);}
+  .edremoved{margin:0 0 10px;padding:8px 12px;border:1px dashed var(--border);border-radius:10px;font-size:var(--t-small);color:var(--muted);display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
   .srccard.on{border-color:var(--accent);}
   .srchead{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;background:var(--surface-2);}
   .srchead .ico{font-size:20px;line-height:1;} .srchead b{font-size:14px;}
@@ -3237,28 +3240,28 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=257"></script>
-<script src="../mobile/hme.js?v=257"></script>
-<script src="../mobile/mp-fc.js?v=257"></script>
-<script src="../mobile/hme-cascade.js?v=257"></script>
-<script src="../mobile/temp-limits.js?v=257"></script>
+<script src="../data/magnetic_plug.js?v=258"></script>
+<script src="../mobile/hme.js?v=258"></script>
+<script src="../mobile/mp-fc.js?v=258"></script>
+<script src="../mobile/hme-cascade.js?v=258"></script>
+<script src="../mobile/temp-limits.js?v=258"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=257"></script>
-<script src="../mobile/normalize.js?v=257"></script>
-<script src="../mobile/grade.js?v=257"></script>
-<script src="../mobile/due.js?v=257"></script>
-<script src="../mobile/wear.js?v=257"></script>
-<script src="../mobile/wear-map.js?v=257"></script>
-<script src="../mobile/lube.js?v=257"></script>
-<script src="../mobile/lube-overrides.js?v=257"></script>
-<script src="../mobile/lube2027.js?v=257"></script>
-<script src="../mobile/lube-tds.js?v=257"></script>
+<script src="../mobile/assets.js?v=258"></script>
+<script src="../mobile/normalize.js?v=258"></script>
+<script src="../mobile/grade.js?v=258"></script>
+<script src="../mobile/due.js?v=258"></script>
+<script src="../mobile/wear.js?v=258"></script>
+<script src="../mobile/wear-map.js?v=258"></script>
+<script src="../mobile/lube.js?v=258"></script>
+<script src="../mobile/lube-overrides.js?v=258"></script>
+<script src="../mobile/lube2027.js?v=258"></script>
+<script src="../mobile/lube-tds.js?v=258"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=257"></script>
-<script src="../mobile/machine-photos.js?v=257"></script>
+<script src="../mobile/upload-defaults.js?v=258"></script>
+<script src="../mobile/machine-photos.js?v=258"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3267,17 +3270,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=257"></script>
-<script src="../mobile/get.js?v=257"></script>
-<script src="../mobile/points.js?v=257"></script>
-<script src="../mobile/uc-points.js?v=257"></script>
-<script src="../mobile/inspect-guide.js?v=257"></script>
-<script src="../mobile/get-figs.js?v=257"></script>
-<script src="../mobile/body-points.js?v=257"></script>
-<script src="../mobile/body-map.js?v=257"></script>
-<script src="../mobile/jspdf.umd.min.js?v=257"></script>
-<script src="../mobile/html2canvas.min.js?v=257"></script>
-<script src="../mobile/report-core.js?v=257"></script>
+<script src="../mobile/machine-fig.js?v=258"></script>
+<script src="../mobile/get.js?v=258"></script>
+<script src="../mobile/points.js?v=258"></script>
+<script src="../mobile/uc-points.js?v=258"></script>
+<script src="../mobile/inspect-guide.js?v=258"></script>
+<script src="../mobile/get-figs.js?v=258"></script>
+<script src="../mobile/body-points.js?v=258"></script>
+<script src="../mobile/body-map.js?v=258"></script>
+<script src="../mobile/jspdf.umd.min.js?v=258"></script>
+<script src="../mobile/html2canvas.min.js?v=258"></script>
+<script src="../mobile/report-core.js?v=258"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4048,7 +4051,11 @@ const I18N={
   ed_machine:"The machine", ed_machine_sub:"The photographs of the machine itself — overview, sides, tray, plate. Open one to crop, caption or exclude it.",
   ed_machine_none:"No machine photographs on this round.",
   ed_point:"Component (point)", ed_point_taken:"already has a finding",
-  ed_point_hint:"Choosing another point moves this finding, with its photographs, under it.",
+  ed_point_hint:"Choosing another point moves this finding, with its photographs, under it. Choosing one that already has a finding swaps the two.",
+  ed_point_swap:"swap with {k}",
+  ed_rm:"Remove this position", ed_rm_undo:"Keep it", ed_rm_marked:"Marked for removal — saved with the correction",
+  ed_rm_photos:"Has photographs — withdraw or re-file them first",
+  ed_removed:"Removed from this round:", ed_restore:"Restore {k}",
   ed_gps_half:"A location is both a latitude and a longitude — fill both, or clear both to remove it.",
   ed_add_photo:"Add a photograph", ed_mcat:"Of", ed_cat_none:"uncategorised",
   ed_fold:"{n} positions with no finding (a reading only, or nothing) — show them",
@@ -4803,7 +4810,11 @@ const I18N={
   ed_machine:"Сама машина", ed_machine_sub:"Фотографии самой машины — общий вид, стороны, кузов, табличка. Откройте, чтобы кадрировать, подписать или исключить.",
   ed_machine_none:"Фотографий машины в этом обходе нет.",
   ed_point:"Компонент (точка)", ed_point_taken:"уже есть находка",
-  ed_point_hint:"Выбор другой точки переносит эту находку вместе с фотографиями под неё.",
+  ed_point_hint:"Выбор другой точки переносит эту находку вместе с фотографиями под неё. Выбор точки, где уже есть находка, меняет их местами.",
+  ed_point_swap:"поменять с {k}",
+  ed_rm:"Удалить эту позицию", ed_rm_undo:"Оставить", ed_rm_marked:"Помечена к удалению — сохранится вместе с исправлением",
+  ed_rm_photos:"Есть фотографии — сначала скройте или переместите их",
+  ed_removed:"Удалено из этого обхода:", ed_restore:"Вернуть {k}",
   ed_gps_half:"Местоположение — это широта и долгота вместе: заполните оба поля или очистите оба, чтобы удалить.",
   ed_add_photo:"Добавить фотографию", ed_mcat:"Что снято", ed_cat_none:"без категории",
   ed_fold:"Точек без замечаний (только замер или пусто): {n} — показать",
@@ -5265,8 +5276,17 @@ function applyEdits(r){
   }
   const per=e.items||{};
   out._edited=Object.keys(per);
+  /* A POSITION LOGGED BY MISTAKE. A thumb on the wrong row in the field adds a
+     point with nothing on it, and every count downstream — positions walked,
+     the fold, the sheet — carries it. The office removes it here: the marker
+     says so, the sidecar is untouched, and the round names what was removed
+     so the panel can put it back. Only a position with no photographs may
+     go (openEdit refuses the rest), so no file is ever left without a home. */
+  const removed=[];
   out.items=(r.items||[]).map(i=>{
     const p=per[i.key]; if(!p) return i;
+    if(p.removed && String(p.removed)!=="0" && String(p.removed)!=="false"){
+      removed.push({key:i.key, label:i.label||"", by:e.by||"", at:e.at||""}); return null; }
     // Only fields actually set in the correction win; a blank means "unchanged",
     // so clearing a value is done by writing "" explicitly, not by omission.
     const m=Object.assign({},i);
@@ -5290,6 +5310,8 @@ function applyEdits(r){
   });
   /* The point a finding was moved onto may already exist on the record as an
      empty position the phone listed. One key, one item: the empty one goes. */
+  out.items=out.items.filter(Boolean);
+  if(removed.length) out._removed=removed;
   const movedTo=new Set(out.items.filter(x=>x._from).map(x=>x.key));
   if(movedTo.size) out.items=out.items.filter(x=>!(!x._from && movedTo.has(x.key) && itemEmpty(x)));
   return out;
@@ -8757,8 +8779,20 @@ function pointOptions(rec,i){
   const others=(rec.items||[]).filter(x=>x!==i && !x.general && !itemEmpty(x));
   return opts.map(o=>({k:o.k, l:o.l, taken: o.k!==i.key && others.some(x=>x.key===o.k)}));
 }
+/* Positions the office has marked for removal in THIS panel, before Save.
+   Cleared when another round is opened; kept across a keepMsg repaint. */
+let edRemoved=new Set(), edRemovedFor=null;
+/* A position may leave the round only when no file in the folder is filed
+   under it — a photograph left behind would surface as an orphan needing a
+   point, which is the panel this one exists to empty. */
+function edHasPhotos(rec,i){
+  try{ if(mediaOf(i,rec,true).length) return true; }catch(e){}
+  try{ if(window.CMNorm && CMNorm.photoCount(i.photos)) return true; }catch(e){}
+  return attOf(i).length>0;
+}
 function openEdit(key,keepMsg){
   const rec=RECS.find(r=>ekOf(r)===key); if(!rec) return;
+  if(edRemovedFor!==key){ edRemoved=new Set(); edRemovedFor=key; }
   edKey=key;
   const held=keepMsg?$("edMsg").textContent:"";
   $("edTitle").textContent=`${rec.equip} · ${TYPE_LABEL[rec.type]||rec.type} · ${rec.date}`;
@@ -8837,10 +8871,13 @@ function openEdit(key,keepMsg){
     const gN=gradeNum(i.grade);
     const stale = !!(gN && i.sev && !(wearOf(rec,i)||{}).band
                      && String(i.sev).toUpperCase()!==(GRADE.iso(gN)||""));
-    return `<div class="srccard" style="margin-bottom:10px"><div class="srchead">
+    const rm=edRemoved.has(rk0), hasPh=edHasPhotos(rec,i);
+    return `<div class="srccard${rm?" edrm":""}" style="margin-bottom:10px" data-edcard="${esc(rk0)}"><div class="srchead">
       <span class="ico" style="${gN?`background:${SEVC[gN]};color:${GRADE.ink(gN)}`:""}">${gN?gN:"·"}</span><div><b>${esc(i.key)}</b>
       <div class="muted">${esc(i.label||"")}${i.comment?` — “${esc(i.comment)}”`:""}</div></div>
       <span class="state">${sev?esc(SEV[sev]?SEV[sev].l:sev):esc(t("ed_nosev"))}</span></div>
+      <div class="edrmbar">${rm?`<span>${esc(t("ed_rm_marked"))}</span><button type="button" class="btn small" data-edrm="${esc(rk0)}">${esc(t("ed_rm_undo"))}</button>`
+        :`<button type="button" class="btn small" data-edrm="${esc(rk0)}"${hasPh?" disabled":""} title="${hasPh?esc(t("ed_rm_photos")):""}">${esc(t("ed_rm"))}</button>${hasPh?`<span>${esc(t("ed_rm_photos"))}</span>`:""}`}</div>
       ${edFacts(rec,i)}
       <div class="srcbody">
         ${stale?`<div class="note" style="margin-top:0">
@@ -8861,7 +8898,7 @@ function openEdit(key,keepMsg){
                thing an inspector is most likely to have got wrong in the dark
                at -40. The only route was to void the round and re-capture it. -->
           <div class="field"><label>${esc(t("ed_point"))}</label><select data-f="key" data-k="${esc(rk0)}" data-init="${esc(i.key)}" title="${esc(t("ed_point_hint"))}">
-            ${pointOptions(rec,i).map(o=>`<option value="${esc(o.k)}" data-l="${esc(o.l)}"${o.k===i.key?" selected":""}${o.taken?" disabled":""}>${esc(o.k)} · ${esc(o.l)}${o.taken?" — "+esc(t("ed_point_taken")):""}</option>`).join("")}
+            ${pointOptions(rec,i).map(o=>`<option value="${esc(o.k)}" data-l="${esc(o.l)}"${o.taken?' data-taken="1"':""}${o.k===i.key?" selected":""}>${esc(o.k)} · ${esc(o.l)}${o.taken?" — "+esc(t("ed_point_swap",{k:i.key})):""}</option>`).join("")}
           </select></div>
           <div class="field"><label>${esc(t("ed_grade"))}</label><select data-f="grade" data-k="${esc(rk0)}" data-init="${gN||""}">
             <option value="">${esc(t("ed_none"))}</option>
@@ -8906,7 +8943,9 @@ function openEdit(key,keepMsg){
   { const items=(rec.items||[]).filter(i=>!i.general);
     const full=[], empty=[];
     edCards.forEach((h,ix)=>(edQuiet(items[ix])?empty:full).push(h));
-    $("edItems").innerHTML = (full.join("") + (empty.length>2
+    const gone=(rec._removed||[]).map(x=>`<span><b>${esc(x.key)}</b> ${esc(x.label||"")}${x.by?` · ${esc(x.by)}`:""}</span><button type="button" class="btn small" data-edrestore="${esc(x.key)}">${esc(t("ed_restore",{k:x.key}))}</button>`).join("");
+    const goneLine=gone?`<div class="edremoved"><span>${esc(t("ed_removed"))}</span>${gone}</div>`:"";
+    $("edItems").innerHTML = goneLine + (full.join("") + (empty.length>2
       ? `<details class="edfold"><summary>${esc(t("ed_fold",{n:empty.length}))}</summary>${empty.join("")}</details>`
       : empty.join("")))||`<div class="empty"><b>${esc(t("ed_nothing"))}</b><span>${esc(t("ed_nothing_sub"))}</span></div>`;
   }
@@ -8976,6 +9015,15 @@ function openEdit(key,keepMsg){
   $("edMachine").querySelectorAll(".edtopt").forEach(sel=>sel.onchange=()=>{
     const k=sel.value; if(!k) return;
     if(edAssignPost({[sel.dataset.name]:{point:k, found:1}})){ openEdit(edKey,true); $("edMsg").textContent=t("ed_photo_moved",{to:k}); renderHistory(); }
+  });
+  $("edItems").querySelectorAll("[data-edrm]").forEach(b=>b.onclick=()=>{
+    const k=b.dataset.edrm; if(edRemoved.has(k)) edRemoved.delete(k); else edRemoved.add(k);
+    openEdit(edKey,true);
+  });
+  $("edItems").querySelectorAll("[data-edrestore]").forEach(b=>b.onclick=()=>{
+    const items=mergedItems(); (items[b.dataset.edrestore]||(items[b.dataset.edrestore]={})).removed=0;
+    if(edPost({ items, fields:mergedFields(), note:$("edNote").value.trim(), void:!!(rec&&rec._void), reason:(rec&&rec._reason)||"",
+                [ASSIGN_KEY]:Object.assign({}, (edits[edKey]||{})[ASSIGN_KEY]||{}) })) openEdit(edKey,true);
   });
   $("edItems").querySelectorAll(".edtomach").forEach(sel=>sel.onchange=()=>{
     const c=sel.value; if(!c) return;
@@ -9722,6 +9770,25 @@ function mergedItems(){
   const now=collectEdit(), out={};
   Object.keys(prior).forEach(k=>out[k]=Object.assign({},prior[k]));
   Object.keys(now).forEach(k=>out[k]=Object.assign({},out[k]||{},now[k]));
+  edRemoved.forEach(k=>{ (out[k]||(out[k]={})).removed=1; });
+  /* TWO FINDINGS ON EACH OTHER'S POINTS. Left and right rear are a thumb apart
+     on a phone at −40, and a round where both are logged used to refuse every
+     other point in this picker as "already has a finding" — so the one
+     correction that case needs could not be made. Choosing a taken point now
+     means swap: the other finding takes this one's key in the same marker,
+     each with its photographs, and neither is ever two on one key. */
+  const rec=RECS.find(r=>ekOf(r)===edKey);
+  if(rec){
+    Object.keys(out).forEach(k=>{
+      const nk=out[k].key; if(!nk) return;
+      const me=(rec.items||[]).find(x=>(x._from||x.key)===k); if(!me || nk===me.key) return;
+      const other=(rec.items||[]).find(x=>x!==me && !x.general && x.key===nk && !itemEmpty(x)); if(!other) return;
+      const ok2=other._from||other.key;
+      if(out[ok2] && out[ok2].key) return;                 // already going somewhere by the office's own hand
+      const lbl=(pointOptions(rec,other).find(o=>o.k===me.key)||{}).l||me.label||"";
+      out[ok2]=Object.assign({}, out[ok2]||{}, {key:me.key, label:lbl});
+    });
+  }
   return out;
 }
 /* Apply first, upload after.
@@ -14623,8 +14690,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=257"></script>
-<script src="sync-adapter.js?v=257"></script>
-<script src="report.js?v=257"></script>
+<script src="drive.js?v=258"></script>
+<script src="sync-adapter.js?v=258"></script>
+<script src="report.js?v=258"></script>
 </body>
 </html>
