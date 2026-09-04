@@ -49,7 +49,14 @@
      node docs/yandex/migrate-grades.js --derive --apply --backup ./grade-backup-2
      node docs/yandex/migrate-grades.js --derive --verify
      The same safeguards apply: backups in both places, ifSha, idempotent,
-     RECONCILED only when every record that can carry g does. */
+     RECONCILED only when every record that can carry g does.
+
+     A measured station is scored from the remaining life ON THE RECORD — the
+     phone's table at capture. The office recomputes from today's standard,
+     and where a limit was revised after the round was walked the two differ
+     (TK117's tray, measured on 23 Aug 2026 against the 8 mm liner limit that
+     was revised to 3 mm the same day: the record says 5, the office shows 4).
+     g is what the phone knew; the office's grade is today's arithmetic. */
 'use strict';
 const fs = require('fs'), path = require('path'), crypto = require('crypto');
 
