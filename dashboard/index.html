@@ -1220,6 +1220,9 @@
   .edshots img,.edshots video{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:6px;cursor:zoom-in;display:block;}
   .edfacts dl.kv{margin:0;}
   .edfacts .cm{font-style:italic;color:var(--ink-2);font-size:var(--t-small);margin-top:6px;}
+  .edshots.wide{grid-template-columns:repeat(4,minmax(0,1fr));}
+  .edshots figure{margin:0;}
+  .edshots figcaption{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.3;}
   /* A tile with somewhere to go says so before it is pressed. */
   .kpi.go{cursor:pointer;}
   .kpi.go:hover{border-color:color-mix(in srgb,var(--kc,var(--border)) 55%,var(--border));
@@ -2366,8 +2369,22 @@
               <input id="edSup" data-rf="sup" type="text"></div>
           </div>
           <div class="muted" id="edSmuHint" style="font-size:11.5px;margin-top:2px"></div>
+          <div class="row" style="margin-top:10px">
+            <div class="field"><label for="edLat" data-i18n="ed_lat">Latitude</label>
+              <input id="edLat" data-rf="lat" type="text" inputmode="decimal" placeholder="66.6009"></div>
+            <div class="field"><label for="edLon" data-i18n="ed_lon">Longitude</label>
+              <input id="edLon" data-rf="lon" type="text" inputmode="decimal" placeholder="164.4749"></div>
+            <div class="field"><label data-i18n="ed_gps">Location (GPS)</label>
+              <div class="muted" id="edGpsHint" style="font-size:11.5px;padding-top:7px"></div></div>
+          </div>
         </div>
       </div>
+
+      <!-- The machine's own photographs — overview, sides, tray, plate. They
+           were listed nowhere in this panel, and on a round captured since
+           build 243 the pseudo-point that carries them appeared as a component
+           with a grade control. -->
+      <div class="srccard" id="edMachine" style="margin-bottom:14px"></div>
 
       <div id="edItems"></div>
 
@@ -3209,28 +3226,28 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=251"></script>
-<script src="../mobile/hme.js?v=251"></script>
-<script src="../mobile/mp-fc.js?v=251"></script>
-<script src="../mobile/hme-cascade.js?v=251"></script>
-<script src="../mobile/temp-limits.js?v=251"></script>
+<script src="../data/magnetic_plug.js?v=252"></script>
+<script src="../mobile/hme.js?v=252"></script>
+<script src="../mobile/mp-fc.js?v=252"></script>
+<script src="../mobile/hme-cascade.js?v=252"></script>
+<script src="../mobile/temp-limits.js?v=252"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=251"></script>
-<script src="../mobile/normalize.js?v=251"></script>
-<script src="../mobile/grade.js?v=251"></script>
-<script src="../mobile/due.js?v=251"></script>
-<script src="../mobile/wear.js?v=251"></script>
-<script src="../mobile/wear-map.js?v=251"></script>
-<script src="../mobile/lube.js?v=251"></script>
-<script src="../mobile/lube-overrides.js?v=251"></script>
-<script src="../mobile/lube2027.js?v=251"></script>
-<script src="../mobile/lube-tds.js?v=251"></script>
+<script src="../mobile/assets.js?v=252"></script>
+<script src="../mobile/normalize.js?v=252"></script>
+<script src="../mobile/grade.js?v=252"></script>
+<script src="../mobile/due.js?v=252"></script>
+<script src="../mobile/wear.js?v=252"></script>
+<script src="../mobile/wear-map.js?v=252"></script>
+<script src="../mobile/lube.js?v=252"></script>
+<script src="../mobile/lube-overrides.js?v=252"></script>
+<script src="../mobile/lube2027.js?v=252"></script>
+<script src="../mobile/lube-tds.js?v=252"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=251"></script>
-<script src="../mobile/machine-photos.js?v=251"></script>
+<script src="../mobile/upload-defaults.js?v=252"></script>
+<script src="../mobile/machine-photos.js?v=252"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3239,17 +3256,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=251"></script>
-<script src="../mobile/get.js?v=251"></script>
-<script src="../mobile/points.js?v=251"></script>
-<script src="../mobile/uc-points.js?v=251"></script>
-<script src="../mobile/inspect-guide.js?v=251"></script>
-<script src="../mobile/get-figs.js?v=251"></script>
-<script src="../mobile/body-points.js?v=251"></script>
-<script src="../mobile/body-map.js?v=251"></script>
-<script src="../mobile/jspdf.umd.min.js?v=251"></script>
-<script src="../mobile/html2canvas.min.js?v=251"></script>
-<script src="../mobile/report-core.js?v=251"></script>
+<script src="../mobile/machine-fig.js?v=252"></script>
+<script src="../mobile/get.js?v=252"></script>
+<script src="../mobile/points.js?v=252"></script>
+<script src="../mobile/uc-points.js?v=252"></script>
+<script src="../mobile/inspect-guide.js?v=252"></script>
+<script src="../mobile/get-figs.js?v=252"></script>
+<script src="../mobile/body-points.js?v=252"></script>
+<script src="../mobile/body-map.js?v=252"></script>
+<script src="../mobile/jspdf.umd.min.js?v=252"></script>
+<script src="../mobile/html2canvas.min.js?v=252"></script>
+<script src="../mobile/report-core.js?v=252"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4012,6 +4029,15 @@ const I18N={
   ed_mv_was:"Re-filed from {k}",
   ed_mv_by:"by {b} on {d}",
   ed_smu:"Hour meter", ed_smuph:"SMU at this inspection",
+  ed_gps:"Location (GPS)", ed_lat:"Latitude", ed_lon:"Longitude",
+  ed_gps_none:"No location stamped at the machine — type one to add it.",
+  ed_gps_hint:"Stamped at the machine · open in maps. Clear both boxes to remove it.",
+  ed_machine:"The machine", ed_machine_sub:"The photographs of the machine itself — overview, sides, tray, plate. Open one to crop, caption or exclude it.",
+  ed_machine_none:"No machine photographs on this round.",
+  ed_point:"Component (point)", ed_point_taken:"already has a finding",
+  ed_point_hint:"Choosing another point moves this finding, with its photographs, under it.",
+  ed_gps_half:"A location is both a latitude and a longitude — fill both, or clear both to remove it.",
+  ed_gps_bad:"Latitude must be between −90 and 90 and longitude between −180 and 180, as decimal degrees.",
   ed_who:"Inspected by", ed_sup:"Verified by",
   ed_smu_rate:"This machine has {n} hour-meter readings and runs {r} h/day by its own record — the due list uses that instead of the fleet assumption.",
   ed_smu_norate:"{n} hour-meter reading(s) on this machine. Two, far enough apart, and the due list schedules it on what it actually does rather than on the fleet's 20 h/day.",
@@ -4753,6 +4779,15 @@ const I18N={
   ed_mv_was:"Перенесён из {k}",
   ed_mv_by:"— {b}, {d}",
   ed_smu:"Счётчик наработки", ed_smuph:"наработка на момент осмотра",
+  ed_gps:"Местоположение (GPS)", ed_lat:"Широта", ed_lon:"Долгота",
+  ed_gps_none:"У машины координаты не записаны — введите, чтобы добавить.",
+  ed_gps_hint:"Записано у машины · открыть на карте. Очистите оба поля, чтобы удалить.",
+  ed_machine:"Сама машина", ed_machine_sub:"Фотографии самой машины — общий вид, стороны, кузов, табличка. Откройте, чтобы кадрировать, подписать или исключить.",
+  ed_machine_none:"Фотографий машины в этом обходе нет.",
+  ed_point:"Компонент (точка)", ed_point_taken:"уже есть находка",
+  ed_point_hint:"Выбор другой точки переносит эту находку вместе с фотографиями под неё.",
+  ed_gps_half:"Местоположение — это широта и долгота вместе: заполните оба поля или очистите оба, чтобы удалить.",
+  ed_gps_bad:"Широта от −90 до 90, долгота от −180 до 180, в десятичных градусах.",
   ed_who:"Осмотр выполнил", ed_sup:"Проверил",
   ed_smu_rate:"У машины {n} показаний счётчика, по ним наработка {r} ч/сут — план строится по ней, а не по допущению для парка.",
   ed_smu_norate:"Показаний счётчика у машины: {n}. Если их два и с достаточным интервалом, план строится по фактической наработке, а не по 20 ч/сут для парка.",
@@ -5172,6 +5207,16 @@ function applyEdits(r){
   const F=e.fields||{};
   ["smu","by","sup"].forEach(function(k){
     if(F[k]!==undefined && F[k]!==null){ out[k]=F[k]; out["_f_"+k]=1; } });
+  /* The location. Both halves typed and numeric replace the stamp; both
+     cleared on purpose remove it; one half alone keeps the other from the
+     record, so a typo in one box does not silently drop the machine into the
+     sea. */
+  if(F.lat!==undefined || F.lon!==undefined){
+    const la = F.lat!==undefined ? parseFloat(F.lat) : (r.gps?Number(r.gps.lat):NaN);
+    const lo = F.lon!==undefined ? parseFloat(F.lon) : (r.gps?Number(r.gps.lon):NaN);
+    if(isFinite(la) && isFinite(lo)){ out.gps={lat:la, lon:lo, acc:null, office:1}; out._f_gps=1; }
+    else if(String(F.lat==null?"":F.lat)==="" && String(F.lon==null?"":F.lon)===""){ delete out.gps; out._f_gps=1; }
+  }
   /* ---- the round was filed against the wrong machine, day or round --------
      A move rewrites the identity and leaves a trail of what it used to be, so
      the change is visible on the record rather than being a silent rename.
@@ -5205,10 +5250,31 @@ function applyEdits(r){
        reason — right on screen, because sevOf() reads letters, and wrong in
        anything that compares the grade to a number. Same rule as ingest. */
     if(m.grade!=null && m.grade!=="" && gradeNum(m.grade)!==m.grade) m.grade=gradeNum(m.grade)||"";
+    /* A FINDING FILED UNDER THE WRONG POINT. The marker names the new key;
+       the finding, its photographs (on its manifest, and by assignment for
+       files named after the old key) and its label move with it. The marker
+       stays filed under the key the phone wrote, which is what `_from`
+       carries back to the panel. */
+    if(p.key!==undefined && p.key!==null && p.key!=="" && p.key!==i.key) m._from=i.key;
     m._edited=1;
     return m;
   });
+  /* The point a finding was moved onto may already exist on the record as an
+     empty position the phone listed. One key, one item: the empty one goes. */
+  const movedTo=new Set(out.items.filter(x=>x._from).map(x=>x.key));
+  if(movedTo.size) out.items=out.items.filter(x=>!(!x._from && movedTo.has(x.key) && itemEmpty(x)));
   return out;
+}
+/* Nothing recorded on it: no grade, no defect, no words, no reading, no
+   photograph. The shape of a position walked past. */
+function itemEmpty(x){
+  if(!x) return true;
+  if(gradeNum(x.grade)) return false;
+  if(x.defect||x.comment||x.cause||x.action) return false;
+  if(x.mm!=null && x.mm!=="") return false;
+  if(x.photo || (Array.isArray(x.photos)&&x.photos.length) || x.video) return false;
+  if(attOf(x).length) return false;
+  return true;
 }
 /* ── the lubrication answer on a position card ────────────────────────────
    The verdict is COMPUTED here from lube.js, never read off the record. The
@@ -8545,6 +8611,47 @@ function edFacts(rec,i){
       row(t("hh_by"), esc(rec.by||""))}</dl>`;
   return `<div class="edfacts${shots?"":" nopic"}" data-rk="${esc(ekOf(rec))}" data-ik="${esc(i.key)}">${shots}<div>${facts}</div></div>`;
 }
+/* The machine's own photographs on this round: filed as general evidence by
+   the office, or carried on the phone's pseudo-point. One list, each once. */
+function edMachineMedia(rec){
+  const gi=(rec.items||[]).find(i=>i.general);
+  const med=[]; const seen=new Set();
+  const add=m=>{ if(!m||!m.name||seen.has(m.name)) return; seen.add(m.name); med.push(m); };
+  try{ generalMedia(rec).forEach(add); }catch(e){}
+  if(gi){ try{ mediaOf(gi,rec).forEach(add); }catch(e){} }
+  const base=v=>String(v||"").split("/").pop();
+  const catOf=n=>{ if(!gi) return ""; const e=attOf(gi).find(x=>attName(x)===n || base(attName(x))===base(n)); return (e&&e.category)||""; };
+  med.forEach(m=>{ m.cat=m.cat||catOf(m.name); });
+  return { gi, med };
+}
+function edCatLabel(c){
+  if(!c) return "";
+  try{ const D=window.CMR&&CMR.dict; return (D&&D[lang]&&D[lang]["cat_"+c])||(D&&D.en&&D.en["cat_"+c])||c; }catch(e){ return c; }
+}
+function edMachineCard(rec){
+  const {med}=edMachineMedia(rec);
+  const shots=med.length?`<div class="edshots wide">${med.map((m,ix)=>`<figure>${m.kind==="video"
+      ?`<video preload="metadata" src="${esc(m.src)}" data-mshot="${ix}"></video>`
+      :`<img loading="lazy" src="${esc(m.src)}" alt="${esc(edCatLabel(m.cat))}" data-mshot="${ix}">`}${
+      m.cat?`<figcaption>${esc(edCatLabel(m.cat))}</figcaption>`:""}</figure>`).join("")}</div>`
+    : `<div class="muted">${esc(t("ed_machine_none"))}</div>`;
+  return `<div class="srchead"><span class="ico">🚜</span><div><b>${esc(t("ed_machine"))}</b>
+      <div class="muted">${esc(t("ed_machine_sub"))}</div></div><span class="state">${med.length}</span></div>
+    <div class="srcbody">${shots}</div>`;
+}
+/* The points a finding may be filed under: the reference list for this class
+   and round plus the points this inspection already has. A point that already
+   carries a finding of its own is offered but not selectable — two findings
+   under one key is one of them vanishing. */
+function pointOptions(rec,i){
+  /* Never the machine's own pseudo-point: it is where the overview and the
+     sides live, and a finding filed there would vanish from every component
+     list. */
+  const gen=new Set((rec.items||[]).filter(x=>x.general).map(x=>x.key).concat(["MACHINE","__general"]));
+  const opts=orphanPointOptions(rec).filter(o=>!gen.has(o.k));
+  const others=(rec.items||[]).filter(x=>x!==i && !x.general && !itemEmpty(x));
+  return opts.map(o=>({k:o.k, l:o.l, taken: o.k!==i.key && others.some(x=>x.key===o.k)}));
+}
 function openEdit(key,keepMsg){
   const rec=RECS.find(r=>ekOf(r)===key); if(!rec) return;
   edKey=key;
@@ -8583,11 +8690,16 @@ function openEdit(key,keepMsg){
 
   /* The round's own fields. `data-init` is what the control opened with, so an
      untouched box is never written and one cleared on purpose still is. */
-  [["edSmu","smu"],["edWho","by"],["edSup","sup"]].forEach(([id,f])=>{
+  [["edSmu","smu"],["edWho","by"],["edSup","sup"],["edLat","lat"],["edLon","lon"]].forEach(([id,f])=>{
     const el=$(id); if(!el) return;
-    el.value=String(rec[f]==null?"":rec[f]);
+    const v=(f==="lat"||f==="lon") ? (rec.gps&&rec.gps[f]!=null?rec.gps[f]:"") : rec[f];
+    el.value=String(v==null?"":v);
     el.dataset.init=el.value;
   });
+  { const gh=$("edGpsHint"); if(gh) gh.innerHTML = rec.gps
+      ? `<a class="meta" href="https://www.google.com/maps?q=${esc(rec.gps.lat)},${esc(rec.gps.lon)}" target="_blank" rel="noopener">📍 ${esc(t("ed_gps_hint"))}</a>`
+      : esc(t("ed_gps_none")); }
+  { const mc=$("edMachine"); if(mc) mc.innerHTML=edMachineCard(rec); }
   /* Why the hour meter is worth typing in. A machine with two readings is
      scheduled on what it actually does; one with none is scheduled on the
      fleet's assumption, and the difference is days. */
@@ -8602,8 +8714,9 @@ function openEdit(key,keepMsg){
   }
 
 
-  $("edItems").innerHTML=(rec.items||[]).map((i,n)=>{
+  $("edItems").innerHTML=(rec.items||[]).filter(i=>!i.general).map((i,n)=>{
     const sev=sevOf(rec,i);
+    const rk0=i._from||i.key;              // the key the marker is filed under
     /* THE ONE CASE WITH NOTHING TO CHANGE, AND SO NO WAY TO FINISH.
 
        A point whose grade already outranks a stale stored severity shows the
@@ -8629,7 +8742,7 @@ function openEdit(key,keepMsg){
           <p>${esc(t("ed_stale",{g:GRADE.label(gN,lang),
                 now:GRADE.label(gN,lang),
                 was:(SEV[sevKey(i.sev)]||{}).l||i.sev}))}</p>
-          <label class="agree"><input type="checkbox" data-cfok="${esc(i.key)}">
+          <label class="agree"><input type="checkbox" data-cfok="${esc(rk0)}">
             <span>${esc(t("ed_stale_ok",{now:GRADE.label(gN,lang)}))}</span></label>
         </div>`:""}
         <div class="row">
@@ -8642,7 +8755,10 @@ function openEdit(key,keepMsg){
                was recommended for lets the office fix everything except the
                thing an inspector is most likely to have got wrong in the dark
                at -40. The only route was to void the round and re-capture it. -->
-          <div class="field"><label>${esc(t("ed_grade"))}</label><select data-f="grade" data-k="${esc(i.key)}" data-init="${gN||""}">
+          <div class="field"><label>${esc(t("ed_point"))}</label><select data-f="key" data-k="${esc(rk0)}" data-init="${esc(i.key)}" title="${esc(t("ed_point_hint"))}">
+            ${pointOptions(rec,i).map(o=>`<option value="${esc(o.k)}" data-l="${esc(o.l)}"${o.k===i.key?" selected":""}${o.taken?" disabled":""}>${esc(o.k)} · ${esc(o.l)}${o.taken?" — "+esc(t("ed_point_taken")):""}</option>`).join("")}
+          </select></div>
+          <div class="field"><label>${esc(t("ed_grade"))}</label><select data-f="grade" data-k="${esc(rk0)}" data-init="${gN||""}">
             <option value="">${esc(t("ed_none"))}</option>
             ${GRADE.LEVELS.map(g=>`<option value="${g}"${g===gN?" selected":""}>${esc(GRADE.label(g,lang))} — ${esc(GRADE.meaning(g,rec.type,lang))}</option>`).join("")}
           </select></div>
@@ -8650,7 +8766,7 @@ function openEdit(key,keepMsg){
                grade IS the assessment. What a lowered grade needs is a reason,
                and that box opens only when the grade chosen is below the one
                the phone recorded. -->
-          <div class="field hidden" data-gwhy="${esc(i.key)}"><label>${esc(t("ed_gwhy"))}</label>
+          <div class="field hidden" data-gwhy="${esc(rk0)}"><label>${esc(t("ed_gwhy"))}</label>
             <input type="text" value="${esc(i.gradeWhy||"")}" placeholder="${esc(t("ed_gwhy_ph"))}"></div>
           <!-- The override reason field lived here. It existed because severity
                could be moved away from its grade deliberately, and an override
@@ -8658,25 +8774,25 @@ function openEdit(key,keepMsg){
                later. Severity is now derived, so there is no override to
                justify. Any sevReason already on a record is left on the record
                and in the audit trail; it is simply no longer editable. -->
-          <div class="field ovr hidden" data-ovr="${esc(i.key)}">
+          <div class="field ovr hidden" data-ovr="${esc(rk0)}">
           </div>
-          <div class="field"><label>${esc(t("ed_rec"))}</label><select data-f="action" data-k="${esc(i.key)}">
+          <div class="field"><label>${esc(t("ed_rec"))}</label><select data-f="action" data-k="${esc(rk0)}">
             ${actionOpts().map(([v,l])=>`<option value="${esc(v)}"${v&&v===i.action?" selected":""}>${esc(l)}</option>`).join("")}
           </select></div>
         </div>
         <div class="row">
-          <div class="field"><label>${esc(t("ed_prio"))}</label><select data-f="prio" data-k="${esc(i.key)}">
+          <div class="field"><label>${esc(t("ed_prio"))}</label><select data-f="prio" data-k="${esc(rk0)}">
             ${prioOpts().map(([v,l])=>`<option value="${esc(v)}"${v&&v===i.prio?" selected":""}>${esc(l)}</option>`).join("")}
           </select></div>
           <div class="field"><label>${esc(t("ed_wo"))}</label>
-            <input data-f="wo" data-k="${esc(i.key)}" type="text" value="${esc(i.wo||"")}"></div>
+            <input data-f="wo" data-k="${esc(rk0)}" type="text" value="${esc(i.wo||"")}"></div>
         </div>
         <div class="row">
           ${picker("defectCode",i.key,t("ed_defect"))}
           ${picker("causeCode",i.key,t("ed_cause"))}
         </div>
         <div class="field"><label>${esc(t("ed_comment"))}</label>
-          <input data-f="comment" data-k="${esc(i.key)}" type="text" value="${esc(i.comment||"")}"></div>
+          <input data-f="comment" data-k="${esc(rk0)}" type="text" value="${esc(i.comment||"")}"></div>
       </div></div>`;
   }).join("")||`<div class="empty"><b>${esc(t("ed_nothing"))}</b><span>${esc(t("ed_nothing_sub"))}</span></div>`;
 
@@ -8723,6 +8839,11 @@ function openEdit(key,keepMsg){
   $("edItems").querySelectorAll('[data-f="grade"]').forEach(g=>syncOvr(g.dataset.k));
   /* A photograph in the review opens in the lightbox with its record and
      file named, so the editor there stores against the evidence it belongs to. */
+  $("edMachine").querySelectorAll("[data-mshot]").forEach(el=>el.onclick=()=>{
+    const {gi,med}=edMachineMedia(rec); const ix=Number(el.dataset.mshot)||0;
+    openLB(med.map(m=>[m.orig||m.src,m.kind]), ix, `${rec.equip} · ${rec.date}`,
+      { rk:ekOf(rec), ik:(gi&&gi.key)||"MACHINE", names:med.map(m=>m.name||""), name:(med[ix]||{}).name||"" });
+  });
   $("edItems").querySelectorAll(".edfacts [data-shot]").forEach(el=>el.onclick=()=>{
     const box=el.closest(".edfacts"); const rk=box.dataset.rk, ik=box.dataset.ik;
     const rec2=RECS.find(r=>ekOf(r)===rk); const it2=rec2&&(rec2.items||[]).find(x=>x.key===ik); if(!it2) return;
@@ -9371,7 +9492,7 @@ $("editOv").onclick=e=>{ if(e.target.id==="editOv") closeEdit(); };
 /* The round's own fields, by the same rule as the items: only what moved. */
 function collectFields(){
   const out={};
-  [["edSmu","smu"],["edWho","by"],["edSup","sup"]].forEach(([id,f])=>{
+  [["edSmu","smu"],["edWho","by"],["edSup","sup"],["edLat","lat"],["edLon","lon"]].forEach(([id,f])=>{
     const el=$(id); if(!el) return;
     const v=(el.value||"").trim();
     if(v===(el.dataset.init||"")) return;
@@ -9391,6 +9512,7 @@ function collectEdit(){
     if(!v) return;                       // cleared: nothing to derive from it
     if(f==="action"){ if(v) items[k].actionLabel=actionName(v,"en"); }
     if(f==="grade"){ items[k].grade=gradeNum(v)||""; }
+    if(f==="key"){ const o=el.selectedOptions&&el.selectedOptions[0]; if(o&&o.dataset.l) items[k].label=o.dataset.l; }
     if(f==="prio"){ if(v) items[k].prioLabel=prioName(v,"en"); }
     if(f==="defectCode"){ const d=DEF[upDefect(v)];
       if(d){ items[k].defect=d.en; items[k].iso=d.iso14224||""; items[k].isoMode=d.iso14224||""; } }
@@ -9505,8 +9627,28 @@ $("edSave").onclick=()=>{
      mis-click, for ever. */
   const gaps=overrideGaps(items);
   if(gaps.length){ $("edMsg").textContent=t("ed_ovr_need",{k:gaps.slice(0,3).join(", ")}); return; }
+  /* A location is two numbers or none. Half of one is refused here, out
+     loud, rather than written and silently ignored. */
+  { const la=($("edLat").value||"").trim(), lo=($("edLon").value||"").trim();
+    if((la==="")!==(lo==="")){ $("edMsg").textContent=t("ed_gps_half"); return; }
+    if(la!=="" && !(isFinite(parseFloat(la)) && isFinite(parseFloat(lo)) && Math.abs(parseFloat(la))<=90 && Math.abs(parseFloat(lo))<=180)){
+      $("edMsg").textContent=t("ed_gps_bad"); return; } }
+  /* A finding moved to another point: every photograph it holds is filed
+     there by name as well, so a file named after the OLD key — the way phones
+     before the manifest named them — still follows. The manifest ones follow
+     on their own; this is belt and braces, and it is what makes the move
+     whole on every round in the folder. */
+  const keep=edits[edKey]||{};
+  const asg=Object.assign({}, keep[ASSIGN_KEY]||{});
+  const by=$("edBy").value.trim(), at=new Date().toISOString();
+  Object.keys(items).forEach(k=>{
+    const nk=items[k].key; if(!nk) return;
+    const it=(rec&&rec.items||[]).find(x=>(x._from||x.key)===k); if(!it||nk===it.key) return;
+    mediaOf(it,rec,true).forEach(m=>{ if(!m.name) return;
+      asg[m.name]=Object.assign({}, asg[m.name]||{}, {point:nk, found:1, by, at}); delete asg[m.name].general; });
+  });
   if(edPost({ items, fields:mergedFields(), note:$("edNote").value.trim(),
-              void:!!(rec&&rec._void), reason:(rec&&rec._reason)||"" })) openEdit(edKey,true);
+              void:!!(rec&&rec._void), reason:(rec&&rec._reason)||"", [ASSIGN_KEY]:asg })) openEdit(edKey,true);
 };
 /* ---- re-filing a round onto the machine it was actually taken on ---------
    The three identity fields, filled from where the round currently reads and
@@ -14282,8 +14424,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=251"></script>
-<script src="sync-adapter.js?v=251"></script>
-<script src="report.js?v=251"></script>
+<script src="drive.js?v=252"></script>
+<script src="sync-adapter.js?v=252"></script>
+<script src="report.js?v=252"></script>
 </body>
 </html>
