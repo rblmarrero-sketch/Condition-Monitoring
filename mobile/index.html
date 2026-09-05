@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=262">
+<link rel="manifest" href="manifest.webmanifest?v=263">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=262">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=262">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=262">
+<link rel="apple-touch-icon" href="icon-192.png?v=263">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=263">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=263">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2065,33 +2065,33 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=262"></script>
-<script src="upload-defaults.js?v=262"></script>
-<script src="hme.js?v=262"></script>
-<script src="mp-fc.js?v=262"></script>
-<script src="hme-cascade.js?v=262"></script>
-<script src="assets.js?v=262"></script>
-<script src="temp-limits.js?v=262"></script>
-<script src="normalize.js?v=262"></script>
-<script src="grade.js?v=262"></script>
-<script src="edits.js?v=262"></script>
-<script src="due.js?v=262"></script>
-<script src="wear.js?v=262"></script>
-<script src="wear-figs.js?v=262"></script>
-<script src="wear-map.js?v=262"></script>
-<script src="machine-photos.js?v=262"></script>
-<script src="machine-fig.js?v=262"></script>
-<script src="get.js?v=262"></script>
-<script src="points.js?v=262"></script>
-<script src="uc-points.js?v=262"></script>
-<script src="inspect-guide.js?v=262"></script>
-<script src="get-figs.js?v=262"></script>
-<script src="body-points.js?v=262"></script>
-<script src="body-map.js?v=262"></script>
-<script src="lube.js?v=262"></script>
-<script src="lube-overrides.js?v=262"></script>
-<script src="lube2027.js?v=262"></script>
-<script src="report-core.js?v=262"></script>
+<script src="native.js?v=263"></script>
+<script src="upload-defaults.js?v=263"></script>
+<script src="hme.js?v=263"></script>
+<script src="mp-fc.js?v=263"></script>
+<script src="hme-cascade.js?v=263"></script>
+<script src="assets.js?v=263"></script>
+<script src="temp-limits.js?v=263"></script>
+<script src="normalize.js?v=263"></script>
+<script src="grade.js?v=263"></script>
+<script src="edits.js?v=263"></script>
+<script src="due.js?v=263"></script>
+<script src="wear.js?v=263"></script>
+<script src="wear-figs.js?v=263"></script>
+<script src="wear-map.js?v=263"></script>
+<script src="machine-photos.js?v=263"></script>
+<script src="machine-fig.js?v=263"></script>
+<script src="get.js?v=263"></script>
+<script src="points.js?v=263"></script>
+<script src="uc-points.js?v=263"></script>
+<script src="inspect-guide.js?v=263"></script>
+<script src="get-figs.js?v=263"></script>
+<script src="body-points.js?v=263"></script>
+<script src="body-map.js?v=263"></script>
+<script src="lube.js?v=263"></script>
+<script src="lube-overrides.js?v=263"></script>
+<script src="lube2027.js?v=263"></script>
+<script src="report-core.js?v=263"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -10581,7 +10581,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="262";
+const BUILD="263";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -12736,14 +12736,27 @@ if("serviceWorker" in navigator && window.isSecureContext){ let reloaded=false;
      half-hourly build check. So: reload only when the reload cannot cost
      anything — nothing typed, nothing part-captured, nothing being edited.
      Otherwise say so and let the person choose the moment. */
+  /* A DRAFT IS WORK ONLY WHILE SOMEBODY IS WORKING ON IT. Until build 263 a
+     round with any position on it made the phone "busy" for as long as it
+     stayed open — and a round left half-walked on a phone in a pocket blocked
+     every update for as long as that draft lived, which can be days. The
+     draft is written to the database within half a second of every change
+     and offered back after any reload (offerDraft), so a reload costs nothing
+     once the hands are off the phone: after IDLE_MS with no touch, no key and
+     nothing typed, the update lands and the round comes straight back, without
+     a question, on the new build. A dialog stays a reason to wait: a question
+     on screen is a person mid-answer. */
+  const IDLE_MS=180000;
+  const idle=()=>Date.now()-lastInput>=IDLE_MS;
   const busy = () => {
     try{
+      if(document.getElementById("dlg") && document.getElementById("dlg").open) return true;
+      if(idle()) return false;
       if(typeof editing !== "undefined" && editing) return true;
       if(typeof draft !== "undefined" && draft && draft.positions
          && Object.keys(draft.positions).length) return true;
       const a=document.activeElement;
       if(a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)) return true;
-      if(document.getElementById("dlg") && document.getElementById("dlg").open) return true;
       if(typeof ucSheetOn === "function" && ucSheetOn()) return true;
     }catch(e){ return true; }        // cannot tell → assume they are working
     return false;
@@ -12779,13 +12792,13 @@ if("serviceWorker" in navigator && window.isSecureContext){ let reloaded=false;
     // so this must not latch the handler off — a phone that installs the app
     // and gets a fix five minutes later still takes the fix without a tap.
     if(!seenController){ seenController = true; return; }
-    if(!busy()){ reloaded=true; location.reload(); return; }
+    if(!busy()){ reloaded=true; reloadForUpdate(); return; }
     window.__updateWaiting=true;
     const bar=document.getElementById("staleBar");
     if(bar){
       document.getElementById("staleTxt").textContent=t("upd_ready");
       document.getElementById("staleGo").textContent=t("upd_go");
-      document.getElementById("staleGo").onclick=()=>location.reload();
+      document.getElementById("staleGo").onclick=()=>reloadForUpdate();
       bar.classList.remove("hidden");
     }
     /* A slow poll as the backstop. The hooks below catch every ordinary way of
@@ -12891,7 +12904,20 @@ function applyUpdateIfIdle(){
   try{ if(window.__swBusy && window.__swBusy()) return; }catch(e){ return; }
   window.__updateWaiting=false;
   clearInterval(window.__updTimer);
-  location.reload();
+  reloadForUpdate();
+}
+/* The reload that puts a new build in charge: the draft goes to the database
+   first, and the next boot is told to bring it back without asking — this is
+   the app's own reload, not a crash, so "carry on?" would be a question with
+   only one honest answer. */
+let lastInput=Date.now();
+["pointerdown","keydown","input","touchstart"].forEach(ev=>addEventListener(ev,()=>{ lastInput=Date.now(); },{passive:true,capture:true}));
+window.__idleSince=ms=>{ lastInput=Date.now()-ms; };     // tests set the clock
+function reloadForUpdate(){
+  try{ sessionStorage.setItem("cm_resume_silent","1"); }catch(e){}
+  let p=null; try{ p=(typeof draftFlush==="function")?draftFlush():null; }catch(e){ p=null; }
+  const go=()=>{ try{ location.reload(); }catch(e){} };
+  if(p && p.then) p.then(go,go); else go();
 }
 function withTimeoutMs(p,ms){ return Promise.race([p,
   new Promise((_,rej)=>setTimeout(()=>rej(new Error("timeout")),ms))]); }
@@ -13063,7 +13089,9 @@ async function offerDraft(){
   const n=d && d.positions ? Object.keys(d.positions).length : 0;
   if(!n || !d.equip) return;
   const ty=d.type||"MP";
-  const carry=await ask(t("res_t"),
+  let silent=false;
+  try{ silent=sessionStorage.getItem("cm_resume_silent")==="1"; sessionStorage.removeItem("cm_resume_silent"); }catch(e){}
+  const carry=silent ? true : await ask(t("res_t"),
     t("res_m",{u:d.equip, r:t("type_"+ty), n:n, d:(d.date||"")}), t("res_go"));
   if(!carry){
     /* Only on an explicit no — carry===false. A dismissal (Esc, the backdrop,

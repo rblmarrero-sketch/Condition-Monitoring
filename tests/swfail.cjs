@@ -280,7 +280,10 @@ const bodyText = (p) => p.evaluate(() => (document.body && document.body.innerTe
     ok('and when it cannot tell, it assumes they are',
       /catch\(e\)\{ return true; \}/.test(src));
     ok('the banner offers the reload instead of taking it',
-      /staleGo"\)\.onclick=\(\)=>location\.reload\(\)/.test(src));
+      /* Since build 263 the reload goes through reloadForUpdate(), which flushes
+         the draft first and marks the resume silent — still a reload the
+         banner offers rather than takes. */
+      /staleGo"\)\.onclick=\(\)=>(location\.reload|reloadForUpdate)\(\)/.test(src));
 
     const sw = fs.readFileSync(ROOT + '/mobile/sw.js', 'utf8');
     ok('and the previous build stays cached for the page still running on it',

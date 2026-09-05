@@ -191,6 +191,57 @@ async function evalSettled(p, fn){
     await ctx.close();
   }
 
+  console.log('\n  a round left half-walked does not block the update for ever — and comes back by itself');
+  {
+    /* Until build 263 a draft with any position on it made the phone "busy"
+       for as long as it stayed open: a round abandoned in a pocket blocked
+       every update for days. The draft is in the database within half a
+       second of every change and comes back after a reload, so once the hands
+       are off the phone the update may land — and the round must be on the
+       screen again afterwards, photograph and all, with no question asked. */
+    BUMP = null;
+    const ctx = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true, hasTouch: true });
+    const p = await ctx.newPage();
+    p.on('pageerror', e => fails.push('PAGEERROR ' + e.message));
+    await p.addInitScript(() => localStorage.setItem('up_dests', '[]'));
+    await p.goto(APP, { waitUntil: 'load' });
+    await p.evaluate(() => navigator.serviceWorker.ready).catch(() => {});
+    await settle(p, 6000);
+    const before = await buildOf(p);
+    await p.evaluate(() => { const s = document.getElementById('typeSel'); s.value = 'MP'; s.dispatchEvent(new Event('change')); });
+    await p.waitForTimeout(300);
+    await p.evaluate(() => selectEquip('TK152'));
+    await p.waitForTimeout(500);
+    await p.evaluate(() => {
+      const k = items()[0].k; curItem = k; loadPos();
+      const pp = curP(); pp.grade = 3; pp.defect = 'DT14-03';
+      const bytes = new Uint8Array([0xff, 0xd8, 0xff, 0xdb, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0xff, 0xd9]);
+      addPos(pp, attWrap(new File([bytes], 'x.jpg', { type: 'image/jpeg' })), 'COMPONENT');
+      const e = document.getElementById('comment'); e.value = 'left half-walked'; e.dispatchEvent(new Event('input', { bubbles: true }));
+      saveCur(); draftKeep();
+    });
+    await p.waitForTimeout(800);
+    const had = await p.evaluate(() => { const pp = draft.positions[curItem] || {}; return { photos: (pp.photos || []).length, comment: pp.comment }; });
+    ok('a round is half-walked, with a photograph and a comment', had.photos === 1 && had.comment === 'left half-walked', JSON.stringify(had));
+
+    BUMP = '997';
+    let reloads = 0; p.on('framenavigated', f => { if (f === p.mainFrame()) reloads++; });
+    await evalSettled(p, () => checkForNewBuild());
+    await p.waitForFunction(() => !!window.__updateWaiting, null, { timeout: 45000 }).catch(() => {});
+    ok('the new build is downloaded and held while they are working', (await p.evaluate(() => !!window.__updateWaiting)) && reloads === 0 && (await buildOf(p)) === before, reloads + ' reloads');
+
+    /* Three minutes pass with the phone untouched. */
+    await evalSettled(p, () => window.__idleSince(200000));
+    await p.waitForFunction(() => typeof BUILD !== 'undefined' && BUILD === '997', null, { timeout: 30000 }).catch(() => {});
+    ok('once the hands are off it, the update lands by itself', (await buildOf(p)) === '997', before + ' → ' + (await buildOf(p)));
+    await p.waitForTimeout(2500);
+    const back = await evalSettled(p, () => ({ dlg: !!(document.getElementById('dlg') || {}).open, equip: curEquip,
+      photos: ((draft.positions || {})[curItem] || {}).photos ? draft.positions[curItem].photos.length : 0,
+      comment: ((draft.positions || {})[curItem] || {}).comment || '' }));
+    ok('and the round is back on the screen, photograph and comment intact, with no question asked', !back.dlg && back.equip === 'TK152' && back.photos === 1 && back.comment === 'left half-walked', JSON.stringify(back));
+    await ctx.close();
+  }
+
   console.log('\n  an update that cannot finish never takes over');
   {
     BUMP = null;
