@@ -3240,28 +3240,29 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=259"></script>
-<script src="../mobile/hme.js?v=259"></script>
-<script src="../mobile/mp-fc.js?v=259"></script>
-<script src="../mobile/hme-cascade.js?v=259"></script>
-<script src="../mobile/temp-limits.js?v=259"></script>
+<script src="../data/magnetic_plug.js?v=260"></script>
+<script src="../mobile/hme.js?v=260"></script>
+<script src="../mobile/mp-fc.js?v=260"></script>
+<script src="../mobile/hme-cascade.js?v=260"></script>
+<script src="../mobile/temp-limits.js?v=260"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=259"></script>
-<script src="../mobile/normalize.js?v=259"></script>
-<script src="../mobile/grade.js?v=259"></script>
-<script src="../mobile/due.js?v=259"></script>
-<script src="../mobile/wear.js?v=259"></script>
-<script src="../mobile/wear-map.js?v=259"></script>
-<script src="../mobile/lube.js?v=259"></script>
-<script src="../mobile/lube-overrides.js?v=259"></script>
-<script src="../mobile/lube2027.js?v=259"></script>
-<script src="../mobile/lube-tds.js?v=259"></script>
+<script src="../mobile/assets.js?v=260"></script>
+<script src="../mobile/normalize.js?v=260"></script>
+<script src="../mobile/grade.js?v=260"></script>
+<script src="../mobile/edits.js?v=260"></script>
+<script src="../mobile/due.js?v=260"></script>
+<script src="../mobile/wear.js?v=260"></script>
+<script src="../mobile/wear-map.js?v=260"></script>
+<script src="../mobile/lube.js?v=260"></script>
+<script src="../mobile/lube-overrides.js?v=260"></script>
+<script src="../mobile/lube2027.js?v=260"></script>
+<script src="../mobile/lube-tds.js?v=260"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=259"></script>
-<script src="../mobile/machine-photos.js?v=259"></script>
+<script src="../mobile/upload-defaults.js?v=260"></script>
+<script src="../mobile/machine-photos.js?v=260"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3270,17 +3271,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=259"></script>
-<script src="../mobile/get.js?v=259"></script>
-<script src="../mobile/points.js?v=259"></script>
-<script src="../mobile/uc-points.js?v=259"></script>
-<script src="../mobile/inspect-guide.js?v=259"></script>
-<script src="../mobile/get-figs.js?v=259"></script>
-<script src="../mobile/body-points.js?v=259"></script>
-<script src="../mobile/body-map.js?v=259"></script>
-<script src="../mobile/jspdf.umd.min.js?v=259"></script>
-<script src="../mobile/html2canvas.min.js?v=259"></script>
-<script src="../mobile/report-core.js?v=259"></script>
+<script src="../mobile/machine-fig.js?v=260"></script>
+<script src="../mobile/get.js?v=260"></script>
+<script src="../mobile/points.js?v=260"></script>
+<script src="../mobile/uc-points.js?v=260"></script>
+<script src="../mobile/inspect-guide.js?v=260"></script>
+<script src="../mobile/get-figs.js?v=260"></script>
+<script src="../mobile/body-points.js?v=260"></script>
+<script src="../mobile/body-map.js?v=260"></script>
+<script src="../mobile/jspdf.umd.min.js?v=260"></script>
+<script src="../mobile/html2canvas.min.js?v=260"></script>
+<script src="../mobile/report-core.js?v=260"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -5224,97 +5225,13 @@ function applyEdits(r){
   const ek=ekOf(r);
   const e=edits[ek];
   if(!e) return r;
-  const out=Object.assign({},r);
-  /* The address this correction is filed under, carried onto the corrected
-     record so the next edit, report or void goes to the same place — see ekOf.
-     Set unconditionally, not only on a move: a record that acquires a move
-     later must already be answering to its filing address, or the write that
-     adds the move would go somewhere else. */
-  out._ek=ek;
-  out._void=!!e.void; out._reason=e.reason||""; out._editBy=e.by||""; out._editAt=e.at||"";
-  out._note=e.note||"";
-  /* Round-level corrections. The hour meter is the one that matters most and
-     was the one with no way to fix it: the due list schedules on hours, the
-     wear forecast projects on hours, and a machine's own operating rate is
-     measured from two of them. A round that came back with the meter blank or
-     mistyped put a wrong date in front of a planner, and the only remedy was
-     to void the round and re-walk the machine.
-
-     The unit, the date and the round type are a MOVE, not a field edit, and
-     they go through `e.move` below — a correction that changed them in place
-     would orphan the very marker doing the changing, because the marker is
-     filed under the three of them. */
-  const F=e.fields||{};
-  ["smu","by","sup"].forEach(function(k){
-    if(F[k]!==undefined && F[k]!==null){ out[k]=F[k]; out["_f_"+k]=1; } });
-  /* The location. Both halves typed and numeric replace the stamp; both
-     cleared on purpose remove it; one half alone keeps the other from the
-     record, so a typo in one box does not silently drop the machine into the
-     sea. */
-  if(F.lat!==undefined || F.lon!==undefined){
-    const la = F.lat!==undefined ? parseFloat(F.lat) : (r.gps?Number(r.gps.lat):NaN);
-    const lo = F.lon!==undefined ? parseFloat(F.lon) : (r.gps?Number(r.gps.lon):NaN);
-    if(isFinite(la) && isFinite(lo)){ out.gps={lat:la, lon:lo, acc:null, office:1}; out._f_gps=1; }
-    else if(String(F.lat==null?"":F.lat)==="" && String(F.lon==null?"":F.lon)===""){ delete out.gps; out._f_gps=1; }
-  }
-  /* ---- the round was filed against the wrong machine, day or round --------
-     A move rewrites the identity and leaves a trail of what it used to be, so
-     the change is visible on the record rather than being a silent rename.
-     Only the three parts that are actually different count as moved; a "move"
-     that changes nothing is not one, and must not put a badge on a record. */
-  const mv=e.move||null;
-  if(mv){
-    const was={equip:out.equip, date:out.date, type:out.type};
-    ["equip","date","type"].forEach(function(k){
-      if(mv[k] && mv[k]!==out[k]) out[k]=mv[k]; });
-    const changed=["equip","date","type"].filter(function(k){ return was[k]!==out[k]; });
-    if(changed.length){
-      out._moved=changed; out._wasKey=recKey(was);
-      out._moveBy=mv.by||e.by||""; out._moveAt=mv.at||e.at||"";
-      out._moveWhy=mv.why||"";
-    }
-  }
-  const per=e.items||{};
-  out._edited=Object.keys(per);
-  /* A POSITION LOGGED BY MISTAKE. A thumb on the wrong row in the field adds a
-     point with nothing on it, and every count downstream — positions walked,
-     the fold, the sheet — carries it. The office removes it here: the marker
-     says so, the sidecar is untouched, and the round names what was removed
-     so the panel can put it back. Only a position with no photographs may
-     go (openEdit refuses the rest), so no file is ever left without a home. */
-  const removed=[];
-  out.items=(r.items||[]).map(i=>{
-    const p=per[i.key]; if(!p) return i;
-    if(p.removed && String(p.removed)!=="0" && String(p.removed)!=="false"){
-      removed.push({key:i.key, label:i.label||"", by:e.by||"", at:e.at||""}); return null; }
-    // Only fields actually set in the correction win; a blank means "unchanged",
-    // so clearing a value is done by writing "" explicitly, not by omission.
-    const m=Object.assign({},i);
-    Object.keys(p).forEach(k=>{ if(p[k]!==undefined && p[k]!==null) m[k]=p[k]; });
-    /* NORMALISED ON THE WAY IN — THIS WAY IN TOO. A marker written by the
-       office before the 1–5 build carries the grade as a letter, and this
-       overlay runs AFTER rebuild() has already turned the sidecar's grade
-       into a number: copied verbatim, the letter came back. Seven findings on
-       three live rounds read "C" and "X" on the deployed page for exactly that
-       reason — right on screen, because sevOf() reads letters, and wrong in
-       anything that compares the grade to a number. Same rule as ingest. */
-    if(m.grade!=null && m.grade!=="" && gradeNum(m.grade)!==m.grade) m.grade=gradeNum(m.grade)||"";
-    /* A FINDING FILED UNDER THE WRONG POINT. The marker names the new key;
-       the finding, its photographs (on its manifest, and by assignment for
-       files named after the old key) and its label move with it. The marker
-       stays filed under the key the phone wrote, which is what `_from`
-       carries back to the panel. */
-    if(p.key!==undefined && p.key!==null && p.key!=="" && p.key!==i.key) m._from=i.key;
-    m._edited=1;
-    return m;
-  });
-  /* The point a finding was moved onto may already exist on the record as an
-     empty position the phone listed. One key, one item: the empty one goes. */
-  out.items=out.items.filter(Boolean);
-  if(removed.length) out._removed=removed;
-  const movedTo=new Set(out.items.filter(x=>x._from).map(x=>x.key));
-  if(movedTo.size) out.items=out.items.filter(x=>!(!x._from && movedTo.has(x.key) && itemEmpty(x)));
-  return out;
+  /* ONE RULE, SHARED WITH THE PHONE: mobile/edits.js. Everything a marker can
+     do to a round — the hour meter, the location, a move of its filing
+     address, a grade, a finding moved to another point, a position removed —
+     is applied there, so the inspector's history and this page read the same
+     corrected round. The dashboard only supplies what is its own: how a grade
+     is read, what an empty position is, and the filing key. */
+  return CMEdits.apply(r, e, { gradeNum, itemEmpty, recKey, ek });
 }
 /* Nothing recorded on it: no grade, no defect, no words, no reading, no
    photograph. The shape of a position walked past. */
@@ -14690,8 +14607,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=259"></script>
-<script src="sync-adapter.js?v=259"></script>
-<script src="report.js?v=259"></script>
+<script src="drive.js?v=260"></script>
+<script src="sync-adapter.js?v=260"></script>
+<script src="report.js?v=260"></script>
 </body>
 </html>

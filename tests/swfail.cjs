@@ -174,7 +174,7 @@ const bodyText = (p) => p.evaluate(() => (document.body && document.body.innerTe
        missing, and activate must not sweep the old caches. */
     const sw = fs.readFileSync(ROOT + '/mobile/sw.js', 'utf8');
     ok('install refuses to take over when essentials are missing',
-      /if\s*\(missing\.length\)[\s\S]*?return;[\s\S]*?await self\.skipWaiting\(\)/.test(sw));
+      /if\s*\(missing\.length\)[\s\S]*?throw new Error\("incomplete[\s\S]*?await self\.skipWaiting\(\)/.test(sw));
     ok('and "./" is not required, since not every host serves a directory index',
       !/const ESSENTIAL = \[\s*\n\s*"\.\/",/.test(sw));
     /* Sweeping is inside the "essentials all present" branch and nowhere else,

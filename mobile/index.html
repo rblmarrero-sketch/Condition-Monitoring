@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=259">
+<link rel="manifest" href="manifest.webmanifest?v=260">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=259">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=259">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=259">
+<link rel="apple-touch-icon" href="icon-192.png?v=260">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=260">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=260">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2065,32 +2065,33 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=259"></script>
-<script src="upload-defaults.js?v=259"></script>
-<script src="hme.js?v=259"></script>
-<script src="mp-fc.js?v=259"></script>
-<script src="hme-cascade.js?v=259"></script>
-<script src="assets.js?v=259"></script>
-<script src="temp-limits.js?v=259"></script>
-<script src="normalize.js?v=259"></script>
-<script src="grade.js?v=259"></script>
-<script src="due.js?v=259"></script>
-<script src="wear.js?v=259"></script>
-<script src="wear-figs.js?v=259"></script>
-<script src="wear-map.js?v=259"></script>
-<script src="machine-photos.js?v=259"></script>
-<script src="machine-fig.js?v=259"></script>
-<script src="get.js?v=259"></script>
-<script src="points.js?v=259"></script>
-<script src="uc-points.js?v=259"></script>
-<script src="inspect-guide.js?v=259"></script>
-<script src="get-figs.js?v=259"></script>
-<script src="body-points.js?v=259"></script>
-<script src="body-map.js?v=259"></script>
-<script src="lube.js?v=259"></script>
-<script src="lube-overrides.js?v=259"></script>
-<script src="lube2027.js?v=259"></script>
-<script src="report-core.js?v=259"></script>
+<script src="native.js?v=260"></script>
+<script src="upload-defaults.js?v=260"></script>
+<script src="hme.js?v=260"></script>
+<script src="mp-fc.js?v=260"></script>
+<script src="hme-cascade.js?v=260"></script>
+<script src="assets.js?v=260"></script>
+<script src="temp-limits.js?v=260"></script>
+<script src="normalize.js?v=260"></script>
+<script src="grade.js?v=260"></script>
+<script src="edits.js?v=260"></script>
+<script src="due.js?v=260"></script>
+<script src="wear.js?v=260"></script>
+<script src="wear-figs.js?v=260"></script>
+<script src="wear-map.js?v=260"></script>
+<script src="machine-photos.js?v=260"></script>
+<script src="machine-fig.js?v=260"></script>
+<script src="get.js?v=260"></script>
+<script src="points.js?v=260"></script>
+<script src="uc-points.js?v=260"></script>
+<script src="inspect-guide.js?v=260"></script>
+<script src="get-figs.js?v=260"></script>
+<script src="body-points.js?v=260"></script>
+<script src="body-map.js?v=260"></script>
+<script src="lube.js?v=260"></script>
+<script src="lube-overrides.js?v=260"></script>
+<script src="lube2027.js?v=260"></script>
+<script src="report-core.js?v=260"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -8158,7 +8159,77 @@ function teamDate(v){
   if(m) return m[3]+"-"+p2(m[2])+"-"+p2(m[1]);
   return s;
 }
+/* THE OFFICE'S CORRECTIONS, ON THIS PHONE. A marker the dashboard wrote —
+   a grade put on a round that arrived without one, a finding moved to the
+   right point, a position removed, the hour meter fixed — arrives on the same
+   read as the records, and until build 260 only the void was applied here.
+   "I already put the grade in the dashboard; in the mobile still nothing."
+   The markers are kept, last written wins, and every team round is read
+   through mobile/edits.js — the one rule the dashboard reads through too. */
+const TEAM_ED="cm_team_edits";
+let edCache=null;
+function teamEditsAll(){ if(edCache) return edCache; try{ edCache=JSON.parse(localStorage.getItem(TEAM_ED)||"{}"); }catch(e){ edCache={}; } return edCache; }
+function teamEditKey(k){ const p=String(k||"").split("|"); if(p.length!==3) return "";
+  return `${teamType(p[2])}|${p[0].toUpperCase()}|${teamDate(p[1])}`; }
+const teamRecKey=r=>`${teamType(r.type)}|${(r.equip||"").toUpperCase()}|${teamDate(r.date)}`;
+/* Nothing recorded on it — the phone's reading of the same question the
+   dashboard's itemEmpty() answers: a position a finding may be absorbed into. */
+function teamItemEmpty(x){
+  if(!x) return true;
+  if(GRADE.num(x.grade)) return false;
+  if(x.defect||x.comment||x.cause||x.action) return false;
+  if(x.mm!=null && x.mm!=="") return false;
+  if(window.CMNorm && CMNorm.photoCount(x.photos)) return false;
+  return !(Array.isArray(x.att) && x.att.length);
+}
+function teamApplied(r){
+  if(!r || !window.CMEdits) return r;
+  const e=teamEditsAll()[teamRecKey(r)]; if(!e) return r;
+  return CMEdits.apply(r, e, { gradeNum:GRADE.num, itemEmpty:teamItemEmpty });
+}
+/* Keep what arrived, newest per round; hand back the rounds whose marker is
+   new to this phone so their rows can be read again. */
+function teamEditsStore(eds){
+  if(!eds || !eds.length || !window.CMEdits) return [];
+  const all=teamEditsAll(); const changed=[];
+  const fresh=CMEdits.latest(eds, teamEditKey);
+  Object.keys(fresh).forEach(k=>{ const e=fresh[k], have=all[k];
+    if(have && String(have.at||"")>=String(e.at||"")) return;
+    all[k]=e; changed.push(k); });
+  if(changed.length){ try{ lsSet(TEAM_ED, JSON.stringify(all)); }catch(e){} }
+  return changed;
+}
+/* A marker for a round this phone already holds: read the round again through
+   it, so the row says what the office decided. Rounds not held are left; the
+   next full read brings them with their markers. */
+async function teamReapply(keys){
+  if(!keys || !keys.length) return 0;
+  const have=new Map(teamAll().map(x=>[teamKey(x),x])); let n=0, fetched=0;
+  const g=loadDests().find(d=>d.id==="gas" && d.url);
+  for(const k of keys){
+    /* The store keys markers type|unit|date; a stashed round is filed
+       unit|date|type (teamFullId) — the shape the team list hands to
+       openTeamRow. */
+    const p=k.split("|"); const fid=TEAM_ID+`${p[1]}|${p[2]}|${p[0]}`;
+    let rec=null; try{ rec=await dbGet(fid); }catch(e){}
+    /* A round this phone holds only as a row (the index path sends rows, not
+       records): fetch it, a few per pull, so the correction can be read over
+       it. The marker is kept either way and applies the moment the round is
+       opened or arrives. */
+    if(!rec && g && navigator.onLine && fetched<8 && have.has(k)){
+      fetched++;
+      try{ await teamFetchOne(g, `${p[1]}|${p[2]}|${p[0]}`); }catch(e){}
+      try{ rec=await dbGet(fid); }catch(e){}
+    }
+    if(!rec) continue;
+    const row=teamRow(rec); if(!row.u||!row.d) continue;
+    have.set(teamKey(row), row); n++;
+  }
+  if(n) teamSave([...have.values()]);
+  return n;
+}
 function teamRow(r){
+  r=teamApplied(r);
   const worst=GRADE.num(r.g)||GRADE.roundGrade(r.items||[])||"";
   /* Baselines change how every later reading on that unit is scored, so they
      cannot stay on the phone that set them. They are rare, so carrying them on
@@ -8543,9 +8614,15 @@ async function teamPull(manual,full,from){
        HELD, not what arrived. Short-circuiting the message meant the warning
        stopped being shown the moment the folder went quiet, which is precisely
        when nobody would think to look. */
+    /* Markers first, so a round arriving on this very read is summarised
+       through its correction; then the rounds; then the voids. */
+    const edKeys=teamEditsStore(j.edits||[]);
     const {added,saved,stash}= viaIndex ? teamMergeRows(j.rows||[], !!full && !j.upToDate)
                                         : teamMerge(j.records||[], !!full);
     const voided=teamVoid(j.edits||[]);   // after the merge, so a re-uploaded record is voided too
+    try{ await stash; }catch(e){}
+    const reread=await teamReapply(edKeys);
+    if(reread){ teamCache=null; try{ renderTeam(); }catch(e){} }
     /* A round DELETED from the office, not withdrawn. Its files are gone from
        the folder, so nothing arrives to contradict what this phone already
        wrote down — only the marker says it went. Applied the same way a void
@@ -10201,7 +10278,7 @@ function teamRefFor(rec,key){
 
 let roundRec=null;
 async function openRound(key){
-  const rec=await dbGet(TEAM_ID+key);
+  const rec=teamApplied(await dbGet(TEAM_ID+key));
   if(!rec){ dlg(t("rd_gone")); return; }
   roundRec=rec;
   const a=ASSET_BY[rec.equip]||{};
@@ -10489,7 +10566,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="259";
+const BUILD="260";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -11985,8 +12062,12 @@ function checkReady(){
        second later. Only speak up if it is still true once the page has
        settled. */
     renderReady(null);
-    setTimeout(()=>{ if(run===readyRun && !(navigator.serviceWorker||{}).controller)
-      renderReady({kind:"bad", have:0, need:ESSENTIAL_N}); }, 12000);
+    /* If a worker has landed by then, ASK it — a check that only ever spoke
+       when the worker was still missing stayed silent for good on a phone
+       whose first install took a few seconds longer than this timer. */
+    setTimeout(()=>{ if(run!==readyRun) return;
+      if((navigator.serviceWorker||{}).controller) checkReady();
+      else renderReady({kind:"bad", have:0, need:ESSENTIAL_N}); }, 12000);
     return;
   }
   const ch=new MessageChannel();
@@ -12006,6 +12087,8 @@ let ESSENTIAL_N=16;   // the SW is the authority; this is only the first paint
    is the one that catches a phone that has been sitting in a locker since the
    files were evicted. */
 document.addEventListener("visibilitychange",()=>{ if(!document.hidden) checkReady(); });
+/* And the moment a worker takes charge, whenever that is. */
+if("serviceWorker" in navigator) navigator.serviceWorker.addEventListener("controllerchange",()=>setTimeout(checkReady,300));
 setTimeout(checkReady, 2200);
 
 /* ===================== ready for the field =====================

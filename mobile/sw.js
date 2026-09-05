@@ -36,7 +36,7 @@
        explains itself and offers a retry — because an honest offline page is
        recoverable and a browser error page is not. */
 
-const BUILD = "259";
+const BUILD = "260";
 const CACHE = "plug-capture-v" + BUILD;
 
 /* Without these the app is not an app: no page, no equipment register, no
@@ -59,6 +59,7 @@ const ESSENTIAL = [
   "./temp-limits.js?v=" + BUILD,
   "./normalize.js?v=" + BUILD,
   "./grade.js?v=" + BUILD,
+  "./edits.js?v=" + BUILD,
   "./due.js?v=" + BUILD,
   "./wear.js?v=" + BUILD,
   "./wear-figs.js?v=" + BUILD,
@@ -122,13 +123,31 @@ function withTimeout(p, ms) {
 
 /* Two attempts per file, then give up on that one. A pit link drops single
    requests constantly; retrying once turns most of those into a success and
-   costs nothing when the first try works. */
+   costs nothing when the first try works.
+
+   THE DEADLINE COVERS THE WHOLE FILE, NOT THE FIRST BYTE. Until build 260 the
+   15 s timeout raced fetch(), which resolves when the HEADERS arrive; the
+   body then streamed into the cache with no limit at all. A phone on 256 with
+   signal sat under "Build v259 is downloading itself" for a whole shift: one
+   stalled stream held the install open indefinitely, and while an install is
+   open every later check does nothing, because update() will not start a
+   second one. The signal now aborts headers and body together — a stalled
+   stream costs FILE_WAIT and is retried, and an install that cannot finish
+   fails (see install) so the next check starts it again. */
+const FILE_WAIT = 90000;
 async function fetchInto(cache, url, tries) {
   for (let i = 0; i < (tries || 2); i++) {
+    const ac = (typeof AbortController === "function") ? new AbortController() : null;
+    const timer = setTimeout(() => { try { if (ac) ac.abort(); } catch (_) {} }, FILE_WAIT);
     try {
-      const res = await withTimeout(fetch(new Request(url, { cache: "reload" })), 15000);
-      if (res && res.ok) { await cache.put(url, res.clone()); return true; }
-    } catch (e) { /* try again, then move on */ }
+      const res = await fetch(new Request(url, { cache: "reload" }), ac ? { signal: ac.signal } : {});
+      if (res && res.ok) {
+        const buf = await res.arrayBuffer();               // the body, under the same deadline
+        await cache.put(url, new Response(buf, { status: 200, headers: res.headers }));
+        clearTimeout(timer); return true;
+      }
+    } catch (e) { /* aborted, dropped or refused — try again, then move on */ }
+    clearTimeout(timer);
   }
   return false;
 }
@@ -152,14 +171,31 @@ async function precache() {
 
 self.addEventListener("install", (e) => {
   e.waitUntil((async () => {
-    const missing = await precache();
+    /* Two passes: the second asks only for what the first left short, so a
+       single dropped file does not fail the whole download. */
+    let missing = await precache();
+    if (missing.length) { await new Promise(r => setTimeout(r, 1000)); missing = await precache(); }
     if (missing.length) {
-      /* Do NOT skipWaiting. This build cannot run, so it must not be allowed to
-         take over from one that can. It stays in waiting; the old worker keeps
-         serving; the app keeps working. The next visit tries again, and the
-         page's own build check will still say a new version exists — which is
-         true, and honest, rather than a phone that will not open. */
-      console.warn("[sw] install incomplete, staying in waiting:", missing);
+      /* This build cannot run, so it must not take over from one that can —
+         and it must not LINGER either. Until build 260 an incomplete install
+         returned normally and the worker sat in "waiting" for ever: the old
+         page's checks call reg.update(), which installs nothing when the
+         bytes on the server have not changed, so a phone that dropped one
+         file stayed on the old build until somebody tapped Update. Failing
+         the install makes the worker redundant; the next ordinary check —
+         from ANY build of the page, every five minutes — installs it afresh,
+         and what is already in this build's cache is not fetched again. The
+         old worker keeps serving throughout; nothing is deleted. */
+      /* Only when there is a build in charge to keep serving. A phone's very
+         FIRST install on a bad link has nothing to fall back to: an incomplete
+         worker that activates can at least serve the offline page and finish
+         itself on the next open (activate → healSoon), where no worker at all
+         hands the inspector the browser's own error. */
+      if (self.registration && self.registration.active) {
+        console.warn("[sw] install incomplete, failing so the next check retries:", missing);
+        throw new Error("incomplete: " + missing.join(", "));
+      }
+      console.warn("[sw] first install incomplete, activating to serve what it has:", missing);
       return;
     }
     await self.skipWaiting();

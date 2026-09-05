@@ -132,7 +132,8 @@ this path, because each was added to close a real gap:
 | the radio comes back | `online` → check |
 | a newer BUILD is seen | `reg.update()` starts the download **immediately**, without waiting for a tap |
 | the download completes | the worker takes over only once every essential file is cached — `sw.js` refuses to `skipWaiting()` on an incomplete precache |
-| a build downloaded short | the worker stays in waiting and never takes over incomplete; every five-minute check asks it to finish (`sw-heal`), and `healSoon` calls `skipWaiting()` the moment every essential file is in — a dropped fetch costs minutes, not a tap (`tests/updheal.cjs`) |
+| a download stalls | every file is fetched under one deadline for headers AND body (`FILE_WAIT`, abortable). Until build 260 the timeout raced fetch(), which resolves on the headers, so a stalled stream held an install open for a whole shift and every later check did nothing (`tests/updheal.cjs`) |
+| a build cannot finish downloading | the install FAILS (throws) when a build is already in charge, so the worker is redundant rather than parked in waiting; the next ordinary check from ANY build of the page installs it afresh, reusing what is cached. A phone's very first install still activates incomplete, to serve the offline page (`tests/updheal.cjs`, `tests/swfail.cjs`) |
 | the round is saved | `applyUpdateIfIdle()` — reloads the moment the app is idle, so the new build lands between rounds and never mid-capture |
 | nothing else worked | the banner, and `#forceUpdate` → `updateNow()`: asks the worker to fetch the build, waits for it to be proven complete, reloads. If it cannot finish, nothing changes and the label says so |
 
