@@ -530,7 +530,16 @@ cannot write files under `/opt/cm`, so the keys live in `cm.env`. Generate them
 once and append them — this prints two lines and adds them to the file:
 
 ```
-sudo bash -c 'node -e "const c=require(\"crypto\");const e=c.createECDH(\"prime256v1\");e.generateKeys();const b=x=>x.toString(\"base64\").replace(/\\+/g,\"-\").replace(/\\//g,\"_\").replace(/=+\$/,\"\");console.log(\"VAPID_PUBLIC=\"+b(e.getPublicKey()));console.log(\"VAPID_PRIVATE=\"+b(e.getPrivateKey()));console.log(\"VAPID_SUBJECT=mailto:cm@baimskaya.invalid\")" >> /opt/cm/cm.env'
+sudo grep -q VAPID_PUBLIC /opt/cm/cm.env && echo "keys already there — skip to the deploy" || true
+cat > /tmp/vapid.js <<'JS'
+const c=require('crypto');const e=c.createECDH('prime256v1');e.generateKeys();
+const b=x=>x.toString('base64').replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+console.log('VAPID_PUBLIC='+b(e.getPublicKey()));
+console.log('VAPID_PRIVATE='+b(e.getPrivateKey()));
+console.log('VAPID_SUBJECT=mailto:cm@baimskaya.invalid');
+JS
+node /tmp/vapid.js | sudo tee -a /opt/cm/cm.env >/dev/null && rm /tmp/vapid.js
+sudo grep -c VAPID /opt/cm/cm.env      # 3
 sudo tail -3 /opt/cm/cm.env
 ```
 
