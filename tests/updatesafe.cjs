@@ -30,10 +30,15 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
 
 /* The real app, with two levers a deploy has: ship a newer build number, or
    have one of its files fail to arrive. */
-let BUMP = null, BLOCK = null;
+let BUMP = null, BLOCK = null, DOWN = false;
 const MIME = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'application/json',
                '.webmanifest': 'application/manifest+json', '.png': 'image/png' };
 const srv = http.createServer((req, res) => {
+  /* No signal for the WORKER too. setOffline() stops the page's requests and
+     not the worker's, and the app now asks the server through the worker when
+     the page cannot get through — which on a real phone with no signal fails
+     just the same. */
+  if (DOWN) { try { req.socket.destroy(); } catch (e) {} return; }
   const u = new URL(req.url, 'http://x');
   const p = u.pathname === '/' ? '/index.html' : u.pathname;
   if (BLOCK && p.indexOf(BLOCK) >= 0 && u.searchParams.get('v') === BUMP) { res.writeHead(503); return res.end('no'); }
@@ -113,12 +118,13 @@ async function installed(p, APP) {
     await installed(p, APP);
     const before = await footing(p);
     ok('installed and offline-ready to begin with', before.reg && before.caches >= 1 && /good/.test(before.ready), JSON.stringify(before));
-    await ctx.setOffline(true);
+    await ctx.setOffline(true); DOWN = true;
     await tapUpdate(p);
-    ok('it says there is no signal, and that the app is kept', await waitLabel(p, await word(p, 'upd_nosig'), 5000), await label(p));
+    ok('it says there is no signal, and that the app is kept', await waitLabel(p, await word(p, 'upd_nosig'), 8000), await label(p));
     await p.waitForTimeout(1500);
     const after = await footing(p);
     ok('the worker and the cache are still there', after.reg && after.caches >= 1, JSON.stringify(after));
+    DOWN = false;
     /* The thing the field saw: open the app again with no signal. */
     let opened = false;
     try { await p.goto(APP, { waitUntil: 'load' }); opened = true; } catch (e) { opened = false; }

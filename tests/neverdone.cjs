@@ -48,6 +48,8 @@ async function phone(b, hist) {
     /* In the pit: the register and the index are all this needs, and a repair
        fetching the folder mid-test would move the numbers under it. */
     Object.defineProperty(navigator, 'onLine', { get: () => false });
+    // and a port nobody listens on: the app no longer gates a pull on the flag
+    localStorage.setItem('up_dests', JSON.stringify([{ id: 'gas', on: true, url: 'http://127.0.0.1:9/exec', sec: '', folder: '' }]));
     localStorage.setItem('cm_hist', JSON.stringify(h || {}));
     localStorage.setItem('cm_hist_at', JSON.stringify({ at: Date.now(), n: 0 }));
   }, hist || {});

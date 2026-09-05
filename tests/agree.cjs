@@ -139,6 +139,8 @@ const shape = p => p.evaluate(() => ({
     const VIRGIN = Object.fromEntries(Object.keys(PILE).map(k => [k, { d: '2026-07-31' }]));
     await p.addInitScript(h => {
       Object.defineProperty(navigator, 'onLine', { get: () => false });
+      // and a port nobody listens on: the app no longer gates a pull on the flag
+      localStorage.setItem('up_dests', JSON.stringify([{ id: 'gas', on: true, url: 'http://127.0.0.1:9/exec', sec: '', folder: '' }]));
       localStorage.setItem('cm_hist', JSON.stringify(h));
       localStorage.setItem('cm_hist_at', JSON.stringify({ at: Date.now(), n: 0 }));
     }, VIRGIN);

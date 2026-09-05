@@ -36,7 +36,7 @@
        explains itself and offers a retry — because an honest offline page is
        recoverable and a browser error page is not. */
 
-const BUILD = "263";
+const BUILD = "264";
 const CACHE = "plug-capture-v" + BUILD;
 
 /* Without these the app is not an app: no page, no equipment register, no
@@ -452,4 +452,34 @@ self.addEventListener("message", (e) => {
   }
   if (d.type === "sw-heal") healSoon();
   if (d.type === "sw-skip") self.skipWaiting();
+  /* THE SECOND PATH TO THE SERVER. The page asks the worker to read the build
+     on the server, because the worker runs in its own process with its own
+     connection — on iOS a page brought back from the background can have every
+     fetch fail until it is loaded again while the worker is fine. If the
+     server is ahead the worker starts the update itself, so a page that
+     cannot reach anything still gets the build. Answers on the port it was
+     handed: {server, updating} or {err}. */
+  if (d.type === "sw-check") {
+    e.waitUntil((async () => {
+      const port = e.ports && e.ports[0];
+      const out = { type: "sw-check", build: BUILD };
+      const ac = (typeof AbortController === "function") ? new AbortController() : null;
+      const timer = setTimeout(() => { try { if (ac) ac.abort(); } catch (_) {} }, 25000);
+      try {
+        const res = await fetch(new Request("./sw.js?swts=" + Date.now(), { cache: "no-store" }), ac ? { signal: ac.signal } : {});
+        if (!res.ok) throw new Error("http " + res.status);
+        const m = (await res.text()).match(/const BUILD\s*=\s*"([^"]+)"/);
+        if (!m) throw new Error("http unreadable");
+        out.server = m[1];
+        if (out.server !== BUILD && self.registration && self.registration.update) {
+          try { await self.registration.update(); out.updating = true; }
+          catch (err) { out.err = "update: " + String((err && err.message) || err); }
+        }
+      } catch (err) {
+        out.err = (err && err.name === "AbortError") ? "timeout" : String((err && err.message) || err);
+      }
+      clearTimeout(timer);
+      if (port) port.postMessage(out);
+    })());
+  }
 });

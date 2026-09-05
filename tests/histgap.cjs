@@ -58,8 +58,9 @@ async function phone(b, seed) {
     /* Offline on purpose for most of these: the repair must work on a phone
        in the pit, out of the rounds it is already holding. */
     if (s.offline) Object.defineProperty(navigator, 'onLine', { get: () => false });
-    else localStorage.setItem('up_dests', JSON.stringify(
-      [{ id: 'gas', on: true, url: s.url, sec: '', folder: '' }]));
+    // offline is a port nobody listens on: the app no longer gates a pull on the flag
+    localStorage.setItem('up_dests', JSON.stringify(
+      [{ id: 'gas', on: true, url: s.offline ? 'http://127.0.0.1:9/exec' : s.url, sec: '', folder: '' }]));
     localStorage.setItem('cm_team', JSON.stringify(s.team || []));
     if (s.hist) localStorage.setItem('cm_hist', JSON.stringify(s.hist));
     if (s.cursor) localStorage.setItem('cm_team_cursor', String(s.cursor));

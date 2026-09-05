@@ -47,8 +47,10 @@ async function phone(b, seed) {
   p.on('pageerror', e => fails.push('PAGEERROR ' + e.message));
   await p.addInitScript(s => {
     if (s.offline) Object.defineProperty(navigator, 'onLine', { get: () => false });
+    /* Offline is a network that answers nothing, not a flag: the app no longer
+       gates a pull on navigator.onLine, so the pit is a port nobody listens on. */
     localStorage.setItem('up_dests', JSON.stringify(
-      [{ id: 'gas', on: true, url: s.url, sec: '', folder: '' }]));
+      [{ id: 'gas', on: true, url: s.offline ? 'http://127.0.0.1:9/exec' : s.url, sec: '', folder: '' }]));
     localStorage.setItem('cm_team_full_v1', '1');
     localStorage.setItem('cm_hist_full_v1', '1');
     if (s.hist) localStorage.setItem('cm_hist', JSON.stringify(s.hist));

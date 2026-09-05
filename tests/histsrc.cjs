@@ -49,8 +49,9 @@ async function phone(b, seed) {
   p.on('console', m => { if (m.type() === 'error' && !/ERR_|Failed to load resource/.test(m.text())) fails.push('CONSOLE ' + m.text()); });
   await p.addInitScript(s => {
     if (s.offline) Object.defineProperty(navigator, 'onLine', { get: () => false });
-    else localStorage.setItem('up_dests', JSON.stringify(
-      [{ id: 'gas', on: true, url: s.url, sec: '', folder: '' }]));
+    // offline is a port nobody listens on: the app no longer gates a pull on the flag
+    localStorage.setItem('up_dests', JSON.stringify(
+      [{ id: 'gas', on: true, url: s.offline ? 'http://127.0.0.1:9/exec' : s.url, sec: '', folder: '' }]));
     localStorage.setItem('cm_team_full_v1', '1');
     localStorage.setItem('cm_hist_full_v1', '1');
     if (s.hist) localStorage.setItem('cm_hist', JSON.stringify(s.hist));

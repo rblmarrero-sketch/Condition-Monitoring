@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=263">
+<link rel="manifest" href="manifest.webmanifest?v=264">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=263">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=263">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=263">
+<link rel="apple-touch-icon" href="icon-192.png?v=264">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=264">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=264">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -623,6 +623,7 @@
     border-radius:10px;min-width:44px;min-height:44px;padding:0;font-size:17px;
     cursor:pointer;margin-left:auto;flex:none;}
   .ver{text-align:center;color:var(--muted);font-size:11px;margin:2px 0 8px;}
+  #updDiag{margin-top:-4px;} #updDiag.bad{color:var(--warn-ink);}
   .syncbar{display:flex;align-items:center;flex-wrap:wrap;gap:8px 10px;font-size:12.5px;color:var(--ink-2);background:var(--surface);
     border:1px solid var(--border);border-radius:12px;padding:10px 14px;margin-bottom:12px;}
   .syncbar .dot{width:9px;height:9px;border-radius:50%;background:var(--muted);flex:none;}
@@ -1873,6 +1874,10 @@
     <button type="button" id="staleGo"></button>
   </div>
   <div class="ver" id="verLine">build v<span id="verNum">?</span> · <span id="verNote">updates itself, says when it is ready</span> ·   <a href="#" id="forceUpdate" class="verlink">⟳ Update</a></div>
+  <!-- What the last check actually observed. A label that only ever says "No
+       signal" is undiagnosable over a radio; this line names the host, the
+       reason, when the server last answered and when the next try is. -->
+  <div class="ver" id="updDiag"></div>
 </main>
 
 <!-- Four, in the order of the shift: what is due, then walking it, then
@@ -2065,33 +2070,33 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=263"></script>
-<script src="upload-defaults.js?v=263"></script>
-<script src="hme.js?v=263"></script>
-<script src="mp-fc.js?v=263"></script>
-<script src="hme-cascade.js?v=263"></script>
-<script src="assets.js?v=263"></script>
-<script src="temp-limits.js?v=263"></script>
-<script src="normalize.js?v=263"></script>
-<script src="grade.js?v=263"></script>
-<script src="edits.js?v=263"></script>
-<script src="due.js?v=263"></script>
-<script src="wear.js?v=263"></script>
-<script src="wear-figs.js?v=263"></script>
-<script src="wear-map.js?v=263"></script>
-<script src="machine-photos.js?v=263"></script>
-<script src="machine-fig.js?v=263"></script>
-<script src="get.js?v=263"></script>
-<script src="points.js?v=263"></script>
-<script src="uc-points.js?v=263"></script>
-<script src="inspect-guide.js?v=263"></script>
-<script src="get-figs.js?v=263"></script>
-<script src="body-points.js?v=263"></script>
-<script src="body-map.js?v=263"></script>
-<script src="lube.js?v=263"></script>
-<script src="lube-overrides.js?v=263"></script>
-<script src="lube2027.js?v=263"></script>
-<script src="report-core.js?v=263"></script>
+<script src="native.js?v=264"></script>
+<script src="upload-defaults.js?v=264"></script>
+<script src="hme.js?v=264"></script>
+<script src="mp-fc.js?v=264"></script>
+<script src="hme-cascade.js?v=264"></script>
+<script src="assets.js?v=264"></script>
+<script src="temp-limits.js?v=264"></script>
+<script src="normalize.js?v=264"></script>
+<script src="grade.js?v=264"></script>
+<script src="edits.js?v=264"></script>
+<script src="due.js?v=264"></script>
+<script src="wear.js?v=264"></script>
+<script src="wear-figs.js?v=264"></script>
+<script src="wear-map.js?v=264"></script>
+<script src="machine-photos.js?v=264"></script>
+<script src="machine-fig.js?v=264"></script>
+<script src="get.js?v=264"></script>
+<script src="points.js?v=264"></script>
+<script src="uc-points.js?v=264"></script>
+<script src="inspect-guide.js?v=264"></script>
+<script src="get-figs.js?v=264"></script>
+<script src="body-points.js?v=264"></script>
+<script src="body-map.js?v=264"></script>
+<script src="lube.js?v=264"></script>
+<script src="lube-overrides.js?v=264"></script>
+<script src="lube2027.js?v=264"></script>
+<script src="report-core.js?v=264"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2420,10 +2425,24 @@ const I18N = {
     uc_no_tracks:"The undercarriage round is for tracked dozers and excavators.",
     uc_no_unknown:"This unit is not in the register, so there is no model to measure against.",
     upd_avail:"Build v{n} is downloading itself — this phone is on v{cur}. Nothing to do.",
+    upd_found_wait:"Build v{n} is on the server — the download has not started ({why}). This phone is on v{cur}; it keeps trying by itself.",
     upd_go:"Update now",
-    upd_nosig:"No signal — the app you have is kept. Try again in coverage.",
+    upd_nosig:"No signal — the app you have is kept. It tries again by itself when there is one.",
+    upd_unreach:"Could not reach {host} — {why}. The app you have is kept; it tries again by itself.",
+    upd_trying:"⟳ Asking {host}…",
     upd_current:"On the latest build.",
+    upd_partial:"On the latest build. The offline copy is still completing itself.",
     upd_fail:"The download could not finish — nothing changed. Try again in coverage.",
+    upd_why_timeout:"no answer in {s} s", upd_why_http:"the server answered {s}", upd_why_net:"the request failed: {s}", upd_why_off:"no network", upd_why_nosw:"no worker to ask",
+    ud_app:"installed app", ud_tab:"browser tab",
+    ud_never:"not checked yet",
+    ud_ok:"checked {t} · the server has v{n}",
+    ud_ok_new:"checked {t} · v{n} is on the server and downloading",
+    ud_ok_wait:"checked {t} · v{n} is on the server, download not started ({why}) · next try {next}",
+    ud_via_sw:"through the worker",
+    ud_fail:"check at {t} failed — {why} · last reached {last} · next try {next}",
+    ud_last_never:"never",
+    ud_stuck:"This page has not reached the server for {m} min while the phone reports a network — it reloads itself when idle.",
     unit_guess:"{u} is not in the asset register. Showing the standard {c} component list — check it fits the machine, and ask for the register to be updated.",
     uc_fig_hide:"Hide the diagram", uc_fig_show:"Show the diagram",
     g_show:"How to check this", g_hide:"Hide how to check this",
@@ -2656,9 +2675,12 @@ const I18N = {
     rdy_off_part:"{n} of {of} files are here. Fix this before you go.",
     rdy_off_none:"Not installed for offline use yet. Open the app once with signal.",
     rdy_off_slow:"The offline copy did not answer. Try again in a moment.",
-    rdy_bld_t:"Up to date", rdy_bld_ok:"Build {n}, the newest there is.",
+    rdy_bld_t:"Up to date", rdy_bld_ok:"Build {n}, the newest there is (checked {t}).",
     rdy_bld_new:"A newer build is downloading. Keep signal until it finishes.",
+    rdy_bld_wait:"Build {n} is on the server but the download has not started ({why}). Keep signal — it keeps trying.",
     rdy_bld_off:"Cannot check without signal — running build {n}.",
+    rdy_bld_fail:"Could not reach the server at {t} ({why}) — running build {n}. It keeps trying by itself.",
+    rdy_bld_never:"Not checked yet — running build {n}.",
     rdy_sto_t:"Room for photographs", rdy_sto_ok:"About {n} more photographs fit ({p}% used).",
     rdy_sto_low:"Only about {n} photographs fit ({p}% used). Delete rounds already in the cloud.",
     rdy_sto_evict:"The phone may clear this app's storage. Tap to ask it not to.",
@@ -2930,10 +2952,24 @@ const I18N = {
     uc_no_tracks:"Осмотр ходовой части — для гусеничных бульдозеров и экскаваторов.",
     uc_no_unknown:"Этой единицы нет в реестре, поэтому не с чем сравнивать.",
     upd_avail:"Сборка v{n} загружается сама — на телефоне v{cur}. Делать ничего не нужно.",
+    upd_found_wait:"Сборка v{n} есть на сервере — загрузка не началась ({why}). На телефоне v{cur}; приложение повторяет само.",
     upd_go:"Обновить",
-    upd_nosig:"Нет сигнала — текущая версия сохранена. Повторите при связи.",
+    upd_nosig:"Нет сигнала — текущая версия сохранена. Приложение повторит само, когда появится связь.",
+    upd_unreach:"Не удалось связаться с {host} — {why}. Текущая версия сохранена; приложение повторяет само.",
+    upd_trying:"⟳ Запрос к {host}…",
     upd_current:"Установлена последняя сборка.",
+    upd_partial:"Установлена последняя сборка. Офлайн-копия ещё дозагружается.",
     upd_fail:"Загрузка не завершилась — ничего не изменилось. Повторите при связи.",
+    upd_why_timeout:"нет ответа за {s} с", upd_why_http:"сервер ответил {s}", upd_why_net:"запрос не прошёл: {s}", upd_why_off:"нет сети", upd_why_nosw:"некого спросить",
+    ud_app:"установленное приложение", ud_tab:"вкладка браузера",
+    ud_never:"ещё не проверялось",
+    ud_ok:"проверено {t} · на сервере v{n}",
+    ud_ok_new:"проверено {t} · v{n} на сервере, загружается",
+    ud_ok_wait:"проверено {t} · v{n} на сервере, загрузка не началась ({why}) · следующая попытка {next}",
+    ud_via_sw:"через воркер",
+    ud_fail:"проверка {t} не удалась — {why} · последний ответ {last} · следующая попытка {next}",
+    ud_last_never:"никогда",
+    ud_stuck:"Эта страница {m} мин не может связаться с сервером, хотя телефон сообщает о сети — она перезагрузится сама в простое.",
     unit_guess:"{u} нет в реестре оборудования. Показан стандартный перечень узлов «{c}» — проверьте соответствие машине и запросите обновление реестра.",
     uc_fig_hide:"Скрыть схему", uc_fig_show:"Показать схему",
     g_show:"Как проверять", g_hide:"Скрыть как проверять",
@@ -3150,9 +3186,12 @@ const I18N = {
     rdy_off_part:"На телефоне {n} из {of} файлов. Исправьте до выезда.",
     rdy_off_none:"Ещё не установлено для работы без связи. Откройте приложение при связи.",
     rdy_off_slow:"Офлайн-копия не ответила. Повторите через мгновение.",
-    rdy_bld_t:"Актуальная версия", rdy_bld_ok:"Сборка {n}, новее нет.",
+    rdy_bld_t:"Актуальная версия", rdy_bld_ok:"Сборка {n}, новее нет (проверено {t}).",
     rdy_bld_new:"Загружается новая сборка. Не теряйте связь до конца.",
+    rdy_bld_wait:"Сборка {n} есть на сервере, но загрузка не началась ({why}). Держите связь — приложение повторяет.",
     rdy_bld_off:"Без связи проверить нельзя — сборка {n}.",
+    rdy_bld_fail:"Сервер недоступен в {t} ({why}) — сборка {n}. Приложение повторяет само.",
+    rdy_bld_never:"Ещё не проверялось — сборка {n}.",
     rdy_sto_t:"Место под фотографии", rdy_sto_ok:"Поместится ещё около {n} фото ({p}% занято).",
     rdy_sto_low:"Поместится всего около {n} фото ({p}% занято). Удалите обходы, которые уже в облаке.",
     rdy_sto_evict:"Телефон может очистить память приложения. Нажмите, чтобы запретить.",
@@ -8051,7 +8090,7 @@ async function cfRecheck(signal){
   const open=cfOpen();
   if(!open.length) return 0;
   const g=loadDests().find(d=>d.id==="gas" && d.url);
-  if(!g || !navigator.onLine) return 0;
+  if(!g) return 0;
   const ask=async pr=>{
     const q=new URLSearchParams(pr);
     if(g.sec) q.set("secret",g.sec);
@@ -8219,7 +8258,7 @@ async function teamReapply(keys){
        records): fetch it, a few per pull, so the correction can be read over
        it. The marker is kept either way and applies the moment the round is
        opened or arrives. */
-    if(!rec && g && navigator.onLine && fetched<8 && have.has(k)){
+    if(!rec && g && fetched<8 && have.has(k)){
       fetched++;
       try{ await teamFetchOne(g, `${p[1]}|${p[2]}|${p[0]}`); }catch(e){}
       try{ rec=await dbGet(fid); }catch(e){}
@@ -8529,7 +8568,10 @@ async function teamPull(manual,full,from){
   teamAt=Date.now();
   const g=loadDests().find(d=>d.id==="gas" && d.url);
   if(!g){ if(manual) msg.textContent=t("team_nodrive"); return false; }
-  if(!navigator.onLine){ if(manual) msg.textContent=t("team_offline"); return false; }
+  /* No navigator.onLine gate. The flag means an interface is attached and is
+     wrong in both directions; the request is the test. A phone that really
+     has no network fails the fetch in a millisecond and is treated as offline
+     in the catch below — not as a failed pull, and without a note. */
 
   // Pressing a button must visibly do something, even before the reply lands.
   if(manual) msg.textContent=t("team_checking");
@@ -8747,6 +8789,8 @@ async function teamPull(manual,full,from){
     return true;                               // the folder actually answered
   }catch(e){
     if(!mine()) return false;                      // superseded by a newer press
+    // Offline by the phone's own account is not a failed pull, and gets no note.
+    if(!navigator.onLine){ if(manual) msg.textContent=t("team_offline"); renderNet(); return false; }
     netSeen(false);
     /* Timed out, unreachable, CORS, DNS — whichever it was, this phone did not
        hear from the fleet, and the due list has to stop implying it did. */
@@ -9038,7 +9082,9 @@ async function openTeamRow(k){
   if(await dbGet(TEAM_ID+k)) return openRound(k);
   const g=loadDests().find(d=>d.id==="gas" && d.url);
   if(!g){ dlg(t("rd_nodrive")); return; }
-  if(!navigator.onLine){ dlg(t("rd_offline")); return; }
+  /* No navigator.onLine gate: that flag says an interface is attached, and it
+     is wrong in both directions. The fetch is the test; a failure lands on
+     rd_unreach below in a second. */
   dlg(t("rd_fetching"));
   teamPin=TEAM_ID+k;                           // spare it from the trim it may trigger
   let why="unreachable";
@@ -9064,7 +9110,7 @@ async function teamHealOnce(){
   if(!teamAll().length) return;                          // nothing listed, nothing to heal
   if((await dbTeam()).length) { lsSet(TEAM_HEAL,"1"); return; }
   const g=loadDests().find(d=>d.id==="gas" && d.url);
-  if(!g || !navigator.onLine) return;                    // try again next launch
+  if(!g) return;                                         // try again next launch
   teamHealed=true;
   // A full re-read is the only call that returns records already behind the
   // cursor. It goes as a manual pull on purpose: the ordinary boot pull has
@@ -9156,7 +9202,7 @@ async function histHealOnce(){
   if(histHealing) return;
   try{ if(localStorage.getItem(HIST_HEAL)) return; }catch(e){ return; }
   const g=loadDests().find(d=>d.id==="gas" && d.url);
-  if(!g || !navigator.onLine) return;                    // try again next launch
+  if(!g) return;                                         // try again next launch
   histHealing=true;
   try{
     /* Manual, so the automatic-pull gap cannot swallow it and leave the phone
@@ -9358,7 +9404,6 @@ function dueMachines(){
 }
 $("dueFull").onclick=async ()=>{
   const btn=$("dueFull"), msg=$("dueFullMsg");
-  if(!navigator.onLine){ msg.textContent=t("due_full_off"); return; }
   const before=dueMachines();
   btn.disabled=true; msg.textContent=t("due_full_go");
   try{
@@ -10350,7 +10395,7 @@ $("roundRpt").onclick=async ()=>{
        photographs on it has to be distinguishable from a round where none were
        taken, or the office quietly concludes the inspector took none. */
     const gas=loadDests().find(d=>d.id==="gas" && d.url);
-    if(gas && navigator.onLine){
+    if(gas){
       /* Same reasoning as rptMap: the pictures are worth fetching and not worth
          the document. A malformed reply, a blob the decoder will not take —
          none of that is a reason for the inspector to get no sheet. */
@@ -10581,7 +10626,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="263";
+const BUILD="264";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -11685,7 +11730,9 @@ let syncing=false, lastErr="", syncingId=null;
 let RCPT=null;
 async function syncNow(manual){
   if(syncing) return; if(!UP.on){ renderSync(); return; }
-  if(!navigator.onLine){ renderSync(); return; }
+  /* No navigator.onLine gate: a flag stuck at false would have kept every
+     round on this phone for ever. A send with no network fails at once and
+     the retry clock backs off; the pill still reads "Offline" off the flag. */
   syncing=true; lastErr=""; renderSync();
   try{
     const dests=activeDests();
@@ -12184,10 +12231,19 @@ async function yardCheck(){
           navigator.serviceWorker.controller.postMessage({type:"sw-heal"}); }catch(e){}
         await new Promise(r=>setTimeout(r,6000)); } },"offline");
 
-    /* 2. is it the newest build */
-    if(!navigator.onLine) add("warn",t("rdy_bld_t"),t("rdy_bld_off",{n:BUILD}),null,"build");
-    else if(window.__updTimer) add("warn",t("rdy_bld_t"),t("rdy_bld_new"),null,"build");
-    else add("ok",t("rdy_bld_t"),t("rdy_bld_ok",{n:BUILD}),null,"build");
+    /* 2. is it the newest build — from what the check actually observed, never
+       from navigator.onLine. "Build N, the newest there is" used to be said on
+       a phone that had reached nobody. */
+    const U=window.__upd||{};
+    if(window.__updTimer) add("warn",t("rdy_bld_t"),t("rdy_bld_new"),null,"build");
+    else if(!U.at) add("warn",t("rdy_bld_t"),t("rdy_bld_never",{n:BUILD}),null,"build");
+    else if(!U.server) add(navigator.onLine?"bad":"warn",t("rdy_bld_t"),
+      navigator.onLine ? t("rdy_bld_fail",{t:hhmm(U.failAt),why:U.why,n:BUILD}) : t("rdy_bld_off",{n:BUILD}),
+      { label:t("rdy_fix_retry"), run:async()=>{ await checkForNewBuild(); } },"build");
+    else if(U.server!==BUILD && U.started) add("warn",t("rdy_bld_t"),t("rdy_bld_new"),null,"build");
+    else if(U.server!==BUILD) add("bad",t("rdy_bld_t"),t("rdy_bld_wait",{n:U.server,why:U.why}),
+      { label:t("rdy_fix_retry"), run:async()=>{ await checkForNewBuild(); } },"build");
+    else add("ok",t("rdy_bld_t"),t("rdy_bld_ok",{n:BUILD,t:hhmm(U.okAt)}),null,"build");
 
     /* 3. room for the photographs the shift will take */
     const st=await within(5000, ()=>storageInfo(), null);
@@ -12395,10 +12451,8 @@ async function runSpeedCheck(){
   const row=(k,v,cls)=>{ lines.push('<div class="sp-r'+(cls?" "+cls:"")+'"><span>'+esc(k)+'</span><b>'+esc(v)+'</b></div>'); say(); };
   lines.length=0; say();
 
-  if(!navigator.onLine){
-    row(t("sp_link"), t("sp_offline"), "bad");
-    btn.disabled=false; btn.textContent=t("sp_run"); return;
-  }
+  // Advisory only: the probe itself is the test of the link.
+  if(!navigator.onLine) row(t("sp_link"), t("sp_offline"), "warn");
 
   /* The control first. If this is already dead there is nothing to compare
      against and saying so beats a page of numbers about Google. */
@@ -12650,10 +12704,17 @@ document.addEventListener("visibilitychange",()=>{
    the queue, where the detail and the retry live. */
 let netOkAt=0, netFailAt=0;
 function netSeen(ok){ if(ok) netOkAt=Date.now(); else netFailAt=Date.now(); renderNet(); }
+/* When the flag last went false. A server that answered AFTER that is the
+   flag lying, and the pill says what the server proved; a server that answered
+   before the radio went off proves nothing about now. */
+let offSince=navigator.onLine?0:Date.now();
+addEventListener("offline",()=>{ offSince=Date.now(); });
 async function netState(){
   if(!UP.on) return {cls:"off", txt:t("net_nosync")};
   let pend=0; try{ pend=(await dbAll()).filter(r=>!r.up).length; }catch(e){}
-  if(!navigator.onLine)          return {cls:pend?"warn":"off", txt:t("net_off")};
+  /* The flag, unless the evidence contradicts it: a server that answered after
+     the flag went false is a server that answered. */
+  if(!navigator.onLine && !(netOkAt>offSince && netOkAt>netFailAt)) return {cls:pend?"warn":"off", txt:t("net_off")};
   if(lastErr)                    return {cls:"err",  txt:t("net_failing")};
   // Attached to a network, but the last thing we tried did not get through and
   // nothing has since. That is the pit, and it is not "online".
@@ -12853,37 +12914,182 @@ if("serviceWorker" in navigator && window.isSecureContext){ let reloaded=false;
    Which means the banner is now information, not an instruction. It appears
    only if somebody is working when an update is ready, and it goes away by
    itself the moment they are not. */
-async function checkForNewBuild(){
-  if(!navigator.onLine) return;
+/* THE CHECK KEEPS ITS OWN RECORD AND ITS OWN CLOCK.
+
+   Field report, build 262, a Safari tab on a phone with signal: the pill read
+   "No signal", the Update link read "No signal", and the installed app on the
+   same phone reached the server in the same minute. Three things were wrong
+   with the check as it stood, and none of them was the signal:
+
+     · one attempt, eight seconds, then nothing until the five-minute timer —
+       on a one-bar link 22 KB of sw.js can take longer than that, and a tab
+       whose network stack is wedged (iOS does this to a page brought back
+       from the background) never recovers, because nothing here ever tried
+       anything different;
+     · "No signal" for every failure — a timeout, a 404, a worker that would
+       not answer — so nobody could tell over a radio what had actually
+       happened;
+     · the readiness card said "Build N, the newest there is" on the strength
+       of navigator.onLine alone, having asked nobody.
+
+   Now: the page asks, and if the page cannot get through the WORKER asks —
+   Safari runs workers out of process with their own connection, so a page
+   whose fetches all fail is not proof the phone cannot reach the server. A
+   failed check re-arms itself, 20 s backing off to 5 min, and the System
+   screen shows what the last check saw: host, reason, when the server last
+   answered, when the next try is. navigator.onLine gates nothing; it is a
+   hint for the wording and no more. */
+const CHECK_WAIT=25000;                          // headers AND body of sw.js, on a one-bar link
+let CHECK_MIN=20000, CHECK_MAX=300000;           // retry after a failure: 20 s, backing off to 5 min
+let STUCK_N=5, STUCK_MS=480000, STUCK_GAP=3600000;   // see stuckHeal
+const UPD={at:0, okAt:0, failAt:0, why:"", server:null, via:"", started:false, stuck:0, stuckSince:0, next:0};
+window.__upd=UPD;                                // the record, for the System screen and the tests
+let checkTimer=null, checkBusy=null, checkWait=CHECK_MIN;
+window.__updPace=o=>{ o=o||{}; if(o.min){ CHECK_MIN=o.min; checkWait=o.min; } if(o.max) CHECK_MAX=o.max;
+  if(o.stuckN) STUCK_N=o.stuckN; if(o.stuckMs!=null) STUCK_MS=o.stuckMs; if(o.stuckGap!=null) STUCK_GAP=o.stuckGap; };
+const updHost=()=>location.host||"the server";
+const hhmm=ms=>{ const d=new Date(ms); return String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0"); };
+const inSecs=ms=>{ const s=Math.max(0,Math.round((ms-Date.now())/1000)); return s>=90 ? Math.round(s/60)+" min" : s+" s"; };
+function whyOf(e){
+  const m=String((e&&e.message)||e||"");
+  if(e && e.name==="AbortError" || /^timeout/i.test(m)) return t("upd_why_timeout",{s:Math.round(CHECK_WAIT/1000)});
+  if(/^http /.test(m)) return t("upd_why_http",{s:m.slice(5)});
+  if(/^no worker/.test(m)) return t("upd_why_nosw");
+  if(!navigator.onLine) return t("upd_why_off");
+  return t("upd_why_net",{s:m.slice(0,60)||"?"});
+}
+/* The page's own path: sw.js past every cache, headers and body under one deadline. */
+async function fetchServerBuild(){
+  const ac=(typeof AbortController==="function")?new AbortController():null;
+  const timer=setTimeout(()=>{ try{ if(ac) ac.abort(); }catch(_){} }, CHECK_WAIT);
   try{
-    const res=await withTimeoutMs(fetch("sw.js?ts="+Date.now(),{cache:"no-store"}), 8000);
-    if(!res || !res.ok) return;
+    const res=await fetch("sw.js?ts="+Date.now(), ac?{cache:"no-store",signal:ac.signal}:{cache:"no-store"});
+    if(!res.ok) throw new Error("http "+res.status);
     const m=(await res.text()).match(/const BUILD\s*=\s*"([^"]+)"/);
-    if(!m || m[1]===BUILD) return;
+    if(!m) throw new Error("http unreadable");
+    return m[1];
+  } finally{ clearTimeout(timer); }
+}
+/* The worker's path. It fetches sw.js from its own process and, if the server
+   is ahead, starts the update from in there (self.registration.update()). */
+function swServerBuild(){
+  return new Promise((res,rej)=>{
+    const ctl=("serviceWorker" in navigator) && navigator.serviceWorker.controller;
+    if(!ctl) return rej(new Error("no worker"));
+    const ch=new MessageChannel(); const tm=setTimeout(()=>rej(new Error("timeout")), CHECK_WAIT+5000);
+    ch.port1.onmessage=e=>{ clearTimeout(tm); const d=e.data||{}; if(d.server) res(d); else rej(new Error(d.err||"no answer")); };
+    try{ ctl.postMessage({type:"sw-check"},[ch.port2]); }catch(e){ clearTimeout(tm); rej(e); }
+  });
+}
+function armCheck(ms){
+  clearTimeout(checkTimer); UPD.next=Date.now()+ms;
+  checkTimer=setTimeout(()=>{ checkTimer=null; checkForNewBuild(); }, ms);
+}
+function checkForNewBuild(){
+  if(checkBusy) return checkBusy;               // one in flight; a second caller shares it
+  checkBusy=(async()=>{
+    clearTimeout(checkTimer); checkTimer=null; UPD.next=0;
+    UPD.at=Date.now(); UPD.via="";
+    let want=null, err=null;
+    try{ want=await fetchServerBuild(); }
+    catch(e){ err=e;
+      try{ const d=await swServerBuild(); want=d.server; UPD.via="sw"; }catch(_){ /* both paths failed */ } }
+    if(!want){
+      UPD.failAt=Date.now(); UPD.why=whyOf(err); UPD.server=null; UPD.started=false;
+      /* A phone that says it has a network and cannot reach anything through
+         this page is counted; a phone that says it has none is simply offline. */
+      if(navigator.onLine){ UPD.stuck++; if(!UPD.stuckSince) UPD.stuckSince=UPD.at; }
+      else { UPD.stuck=0; UPD.stuckSince=0; }
+      armCheck(checkWait); checkWait=Math.min(checkWait*1.8, CHECK_MAX);
+      renderUpdDiag(); stuckHeal();
+      return false;
+    }
+    UPD.okAt=Date.now(); UPD.why=""; UPD.server=want; UPD.stuck=0; UPD.stuckSince=0; checkWait=CHECK_MIN;
+    if(want===BUILD){ UPD.started=false; renderUpdDiag(); return true; }
 
     /* Found one. Start it downloading NOW rather than waiting for a tap: this
        is the step that was missing, and it is the one that decides whether the
        phone is current when it leaves the yard. The worker fetches into its own
-       cache and only takes over once every essential file is in — see sw.js. */
+       cache and only takes over once every essential file is in — see sw.js.
+       And SAY whether it started: update() rejecting on a bad link used to be
+       swallowed, and the banner claimed a download that was not happening. */
+    let started=false, why="";
     if("serviceWorker" in navigator){
       try{
         const reg=await navigator.serviceWorker.getRegistration();
-        if(reg && reg.update) await reg.update();
-        /* A build that downloaded short is sitting in waiting, and update()
-           above did nothing for it — same bytes, no new install. Ask it to
-           finish its cache; sw.js takes over by itself the moment it is
-           complete. Every five-minute check retries, so a dropped fetch costs
-           minutes, not a tap. */
-        if(reg && reg.waiting){ try{ reg.waiting.postMessage({type:"sw-heal"}); }catch(_){} }
-      }catch(_){}
+        if(!reg) why=t("upd_why_nosw");
+        else{
+          if(reg.installing) started=true;
+          else{
+            try{ await reg.update(); }catch(e){ why=whyOf(e); }
+            started=!!(reg.installing||reg.waiting);
+            if(!started && !why){ await new Promise(r=>setTimeout(r,1500)); started=!!(reg.installing||reg.waiting); }
+          }
+          /* A build that downloaded short is sitting in waiting, and update()
+             above did nothing for it — same bytes, no new install. Ask it to
+             finish its cache; sw.js takes over by itself the moment it is
+             complete. Every check retries, so a dropped fetch costs minutes,
+             not a tap. */
+          if(reg.waiting){ try{ reg.waiting.postMessage({type:"sw-heal"}); }catch(_){} }
+        }
+      }catch(e){ why=whyOf(e); }
+    } else why=t("upd_why_nosw");
+    UPD.started=started;
+    if(started){ UPD.why=""; showUpdateBanner(want); }
+    else{
+      /* The server is ahead and nothing is downloading. Not a verdict either:
+         try again on the failure clock, and say so where somebody can read it. */
+      UPD.why=why||t("upd_why_net",{s:"?"});
+      showUpdateBanner(want, UPD.why);
+      armCheck(checkWait); checkWait=Math.min(checkWait*1.8, CHECK_MAX);
     }
-    showUpdateBanner(m[1]);
-  }catch(_){}                                   // offline, slow, blocked — all fine, say nothing
+    renderUpdDiag();
+    return true;
+  })().catch(()=>false).finally(()=>{ checkBusy=null; });
+  return checkBusy;
+}
+/* A page that has not reached the server for STUCK_MS across STUCK_N tries,
+   through either path, while the phone reports a network: the page's own
+   network stack is the likeliest fault — iOS is known to leave a page brought
+   back from the background with every fetch failing until it is loaded again.
+   A reload under a worker is served from the cache, costs nothing offline,
+   flushes the draft first (reloadForUpdate) and restores it. Once an hour at
+   most, never mid-round. */
+function stuckHeal(){
+  if(!(UPD.stuck>=STUCK_N && UPD.stuckSince && Date.now()-UPD.stuckSince>=STUCK_MS)) return false;
+  if(!navigator.onLine) return false;
+  if(!(("serviceWorker" in navigator) && navigator.serviceWorker.controller)) return false;   // no worker → a network load, and the network is what is failing
+  let last=0; try{ last=Number(localStorage.getItem("cm_stuck_reload")||0); }catch(e){}
+  if(Date.now()-last<STUCK_GAP) return false;
+  try{ if(window.__swBusy && window.__swBusy()) return false; }catch(e){ return false; }
+  try{ localStorage.setItem("cm_stuck_reload",String(Date.now())); }catch(e){}
+  reloadForUpdate();
+  return true;
+}
+/* Standalone or in a browser tab — the two keep separate storage and separate
+   workers on iOS, so which one is speaking matters when reading this line. */
+function updSurface(){
+  try{ if(navigator.standalone===true || (matchMedia && matchMedia("(display-mode: standalone)").matches)) return t("ud_app"); }catch(e){}
+  return t("ud_tab");
+}
+function renderUpdDiag(){
+  const el=$("updDiag"); if(!el) return;
+  let s;
+  if(!UPD.at) s=t("ud_never");
+  else if(UPD.server){
+    const via=UPD.via==="sw" ? " ("+t("ud_via_sw")+")" : "";
+    if(UPD.server===BUILD) s=t("ud_ok",{t:hhmm(UPD.okAt),n:UPD.server})+via;
+    else if(UPD.started) s=t("ud_ok_new",{t:hhmm(UPD.okAt),n:UPD.server})+via;
+    else s=t("ud_ok_wait",{t:hhmm(UPD.okAt),n:UPD.server,why:UPD.why,next:UPD.next?inSecs(UPD.next):"—"})+via;
+  } else s=t("ud_fail",{t:hhmm(UPD.failAt),why:UPD.why,last:UPD.okAt?hhmm(UPD.okAt):t("ud_last_never"),next:UPD.next?inSecs(UPD.next):"—"});
+  if(UPD.stuck>=STUCK_N && UPD.stuckSince) s+=" · "+t("ud_stuck",{m:Math.round((Date.now()-UPD.stuckSince)/60000)});
+  el.textContent=updSurface()+" · "+s;
+  el.classList.toggle("bad", !!UPD.at && !UPD.server);
 }
 
-function showUpdateBanner(ver){
+function showUpdateBanner(ver, why){
   const bar=$("staleBar"); if(!bar) return;
-  $("staleTxt").textContent=t("upd_avail",{n:ver||"?",cur:BUILD});
+  $("staleTxt").textContent=why ? t("upd_found_wait",{n:ver||"?",cur:BUILD,why}) : t("upd_avail",{n:ver||"?",cur:BUILD});
   $("staleGo").textContent=t("upd_go");
   bar.classList.remove("hidden");
   /* This banner appears when a newer build has been FOUND and the download has
@@ -12924,6 +13130,8 @@ function withTimeoutMs(p,ms){ return Promise.race([p,
 document.addEventListener("visibilitychange",()=>{ if(!document.hidden){ checkForNewBuild(); applyUpdateIfIdle(); } });
 addEventListener("online",()=>checkForNewBuild());
 setTimeout(checkForNewBuild, 1500);
+renderUpdDiag();
+setInterval(()=>{ if(UPD.next && !document.hidden) renderUpdDiag(); }, 5000);   // the "next try" countdown
 /* A phone is opened at the start of a shift and not closed again, so "check on
    open" can mean "check once, twelve hours ago". Every five minutes instead of
    every thirty: the request is a few hundred bytes, and the difference decides
@@ -12951,29 +13159,33 @@ const fu=$("forceUpdate");
 async function updateNow(){
   const say=s=>{ if(fu) fu.textContent=s; };
   const old=fu?fu.textContent:"", restore=(ms)=>setTimeout(()=>say(old), ms||3500);
-  if(!navigator.onLine){ say(t("upd_nosig")); restore(); return false; }
-  say("⟳ …");
+  say(t("upd_trying",{host:updHost()}));
   if(!("serviceWorker" in navigator) || !window.isSecureContext){ location.reload(); return true; }
-  /* What build is on the server? Fetched past every cache, like checkForNewBuild. */
-  let want=null;
-  try{
-    const res=await withTimeoutMs(fetch("sw.js?ts="+Date.now(),{cache:"no-store"}), 8000);
-    const m=res&&res.ok ? (await res.text()).match(/const BUILD\s*=\s*"([^"]+)"/) : null;
-    want=m?m[1]:null;
-  }catch(_){}
-  if(!want){ say(t("upd_nosig")); restore(); return false; }
+  /* What build is on the server? The same check the app runs by itself — both
+     paths, the full deadline, and a record of what happened. No navigator.onLine
+     gate: the flag is a hint for the wording below, not a reason not to ask. */
+  await checkForNewBuild();
+  const want=UPD.server;
+  if(!want){
+    /* Say what was seen. "No signal" only when the phone itself reports no
+       network; otherwise the host and the reason, because a tab that cannot
+       reach anything on a phone with signal is a different problem from a
+       pit, and the person reading this has to be able to tell them apart. */
+    say(navigator.onLine ? t("upd_unreach",{host:updHost(),why:UPD.why}) : t("upd_nosig"));
+    restore(6000); return false;
+  }
   let reg=null;
   try{ reg=await navigator.serviceWorker.getRegistration(); }catch(_){}
   if(!reg){ try{ reg=await navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}); }catch(_){} }
   if(want===BUILD){
     /* Nothing newer. The only useful thing left is to finish a cache that is
        short of a file, which the worker does in place; then a plain reload
-       serves whatever it now holds. */
+       serves whatever it now holds. A worker that does not answer is not "no
+       signal" — the server just did — so say what it is. */
     const ctl=navigator.serviceWorker.controller;
     if(ctl){ try{ ctl.postMessage({type:"sw-heal"}); }catch(_){} }
     const okNow=await swHealthOk(20000);
-    if(okNow){ say(t("upd_current")); restore(); return true; }
-    say(t("upd_nosig")); restore(); return false;
+    say(t(okNow?"upd_current":"upd_partial")); restore(); return okNow;
   }
   /* Newer. Start the worker fetching it — into a NEW cache, nothing running is
      touched — and wait for it to be proven complete and take over. sw.js only
@@ -13235,13 +13447,13 @@ window.addEventListener("online", pullIn);
    notice. teamPull is incremental — it sends a cursor and gets back only what
    is new — and it already refuses automatic calls inside TEAM_MIN_GAP, so a
    timer cannot turn into a request storm. */
-setInterval(()=>{ if(!document.hidden && navigator.onLine) pullIn(); }, 300000);
+setInterval(()=>{ if(!document.hidden) pullIn(); }, 300000);
 /* Picking the phone up is the strongest signal that the world may have moved:
    out of the pit, back in the yard, on camp wifi. The outbound side already
    listens to this; the inbound side did not, so the walk back to the crib room
    refreshed what was leaving and not what was arriving. */
 document.addEventListener("visibilitychange",()=>{
-  if(!document.hidden && navigator.onLine) pullIn();
+  if(!document.hidden) pullIn();
 });
 </script>
 </body>

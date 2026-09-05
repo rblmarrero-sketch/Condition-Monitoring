@@ -145,8 +145,9 @@ function dictKeys() {
          way to get there: loadDests() falls back to the packaged default, and
          the fixture would then be testing a real unreachable endpoint.) */
       if (!s.url) Object.defineProperty(navigator, 'onLine', { get: () => false });
-      else localStorage.setItem('up_dests', JSON.stringify(
-        [{ id: 'gas', on: true, url: s.url, sec: '', folder: '' }]));
+      // the pit is a port nobody listens on: the app no longer gates a pull on the flag
+      localStorage.setItem('up_dests', JSON.stringify(
+        [{ id: 'gas', on: true, url: s.url || 'http://127.0.0.1:9/exec', sec: '', folder: '' }]));
     }, seed);
     await p.goto(BASE + '/mobile/index.html', { waitUntil: 'load' });
     await p.waitForTimeout(1400);

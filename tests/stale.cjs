@@ -28,6 +28,10 @@ async function open(b, swBuild, opts={}) {
   if(swBuild!==undefined) await p.route('**/sw.js*', r=>r.fulfill({status:200,
     contentType:'application/javascript', body:`const BUILD = "${swBuild}";`}));
   if(opts.fail) await p.route('**/sw.js*', r=>r.abort());
+  /* No signal is a network that answers nothing, not a flag. The app no longer
+     gates the check on navigator.onLine — it asks, and a routed answer would
+     get through setOffline — so the pit is a request that fails. */
+  if(opts.offline) await p.route('**/sw.js*', r=>r.abort('internetdisconnected'));
   await p.goto(B+'/mobile/index.html',{waitUntil:'load'});
   if(opts.offline) await ctx.setOffline(true);   // load first, then lose the signal
   await p.waitForTimeout(2600);
