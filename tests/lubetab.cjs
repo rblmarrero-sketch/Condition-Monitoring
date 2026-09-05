@@ -47,8 +47,14 @@ const SEED = (n) => {
                    lubeEvidence: j === 0 ? "label" : "told",
                    lubeSampled: j === 0 ? 1 : 0 });
     });
+    /* Dated a few days ago, not on a calendar date: "current" is measured
+       against a drain window from TODAY, and a literal date is a suite with a
+       shelf life — it passed until the shortest window (18 days at this site's
+       utilisation) ran out from under it, and then reported the panel broken
+       for counting exactly as it should. */
+    const d = new Date(Date.now() - 3 * 86400000);
     RECS.push({ id: "seed" + i, equip: x.u, type: "LUBE",
-                date: "2026-08-18", by: "Test", items });
+                date: d.toISOString().slice(0, 10), by: "Test", items });
   });
   renderAll(); showTab("lube"); lubeGo("matrix");
   return pick;

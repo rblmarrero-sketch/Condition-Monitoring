@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=264">
+<link rel="manifest" href="manifest.webmanifest?v=265">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=264">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=264">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=264">
+<link rel="apple-touch-icon" href="icon-192.png?v=265">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=265">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=265">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2070,33 +2070,33 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=264"></script>
-<script src="upload-defaults.js?v=264"></script>
-<script src="hme.js?v=264"></script>
-<script src="mp-fc.js?v=264"></script>
-<script src="hme-cascade.js?v=264"></script>
-<script src="assets.js?v=264"></script>
-<script src="temp-limits.js?v=264"></script>
-<script src="normalize.js?v=264"></script>
-<script src="grade.js?v=264"></script>
-<script src="edits.js?v=264"></script>
-<script src="due.js?v=264"></script>
-<script src="wear.js?v=264"></script>
-<script src="wear-figs.js?v=264"></script>
-<script src="wear-map.js?v=264"></script>
-<script src="machine-photos.js?v=264"></script>
-<script src="machine-fig.js?v=264"></script>
-<script src="get.js?v=264"></script>
-<script src="points.js?v=264"></script>
-<script src="uc-points.js?v=264"></script>
-<script src="inspect-guide.js?v=264"></script>
-<script src="get-figs.js?v=264"></script>
-<script src="body-points.js?v=264"></script>
-<script src="body-map.js?v=264"></script>
-<script src="lube.js?v=264"></script>
-<script src="lube-overrides.js?v=264"></script>
-<script src="lube2027.js?v=264"></script>
-<script src="report-core.js?v=264"></script>
+<script src="native.js?v=265"></script>
+<script src="upload-defaults.js?v=265"></script>
+<script src="hme.js?v=265"></script>
+<script src="mp-fc.js?v=265"></script>
+<script src="hme-cascade.js?v=265"></script>
+<script src="assets.js?v=265"></script>
+<script src="temp-limits.js?v=265"></script>
+<script src="normalize.js?v=265"></script>
+<script src="grade.js?v=265"></script>
+<script src="edits.js?v=265"></script>
+<script src="due.js?v=265"></script>
+<script src="wear.js?v=265"></script>
+<script src="wear-figs.js?v=265"></script>
+<script src="wear-map.js?v=265"></script>
+<script src="machine-photos.js?v=265"></script>
+<script src="machine-fig.js?v=265"></script>
+<script src="get.js?v=265"></script>
+<script src="points.js?v=265"></script>
+<script src="uc-points.js?v=265"></script>
+<script src="inspect-guide.js?v=265"></script>
+<script src="get-figs.js?v=265"></script>
+<script src="body-points.js?v=265"></script>
+<script src="body-map.js?v=265"></script>
+<script src="lube.js?v=265"></script>
+<script src="lube-overrides.js?v=265"></script>
+<script src="lube2027.js?v=265"></script>
+<script src="report-core.js?v=265"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -10626,7 +10626,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="264";
+const BUILD="265";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -12234,9 +12234,15 @@ async function yardCheck(){
     /* 2. is it the newest build — from what the check actually observed, never
        from navigator.onLine. "Build N, the newest there is" used to be said on
        a phone that had reached nobody. */
+    /* Ask rather than guess: the card can open before the boot check has run,
+       or while one is in flight — a check that has not finished is not a
+       failure, and a card is not the place to report one as such. */
     const U=window.__upd||{};
+    if(!U.at || checkBusy) await within(6000, ()=>checkForNewBuild(), null);
+    const inFlight = !!(U.at && U.at>U.okAt && U.at>U.failAt);
     if(window.__updTimer) add("warn",t("rdy_bld_t"),t("rdy_bld_new"),null,"build");
-    else if(!U.at) add("warn",t("rdy_bld_t"),t("rdy_bld_never",{n:BUILD}),null,"build");
+    else if(!U.at || inFlight) add("warn",t("rdy_bld_t"),t("rdy_bld_never",{n:BUILD}),
+      { label:t("rdy_fix_retry"), run:async()=>{ await checkForNewBuild(); } },"build");
     else if(!U.server) add(navigator.onLine?"bad":"warn",t("rdy_bld_t"),
       navigator.onLine ? t("rdy_bld_fail",{t:hhmm(U.failAt),why:U.why,n:BUILD}) : t("rdy_bld_off",{n:BUILD}),
       { label:t("rdy_fix_retry"), run:async()=>{ await checkForNewBuild(); } },"build");
@@ -13062,7 +13068,7 @@ function stuckHeal(){
   let last=0; try{ last=Number(localStorage.getItem("cm_stuck_reload")||0); }catch(e){}
   if(Date.now()-last<STUCK_GAP) return false;
   try{ if(window.__swBusy && window.__swBusy()) return false; }catch(e){ return false; }
-  try{ localStorage.setItem("cm_stuck_reload",String(Date.now())); }catch(e){}
+  lsSet("cm_stuck_reload", Date.now());
   reloadForUpdate();
   return true;
 }
