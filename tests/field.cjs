@@ -54,9 +54,13 @@ const ready = p => p.evaluate(() => [...document.querySelectorAll('.yardrow')].m
   await p.waitForTimeout(5500);
   const yard = await ready(p);
   yard.forEach(r => note(r.k.padEnd(4), r.t + ' — ' + r.s));
-  ok('every readiness question is answered', yard.length === 6, yard.length + ' checks');
+  ok('every readiness question is answered', yard.length === 7, yard.length + ' checks');
+  /* The one row allowed amber here: this backend is the Apps Script, which
+     cannot wake a phone, and the card says so. Every other row must be green. */
+  const bgT = await p.evaluate(() => t('rdy_bg_t'));
+  const green = r => r.k === 'ok' || (r.t === bgT && r.k === 'warn');
   ok('and on a clean phone with signal they all pass',
-     yard.every(r => r.k === 'ok'), yard.filter(r => r.k !== 'ok').map(r => r.t).join(', ') || 'all green');
+     yard.every(green), yard.filter(r => !green(r)).map(r => r.t).join(', ') || 'all green');
 
   /* ---- 2. the signal goes, and the work starts -------------------------- */
   /* The pit. Every round type, captured with nothing but the phone. */
@@ -166,7 +170,7 @@ const ready = p => p.evaluate(() => [...document.querySelectorAll('.yardrow')].m
   await p.waitForTimeout(5500);
   const end = await ready(p);
   ok('the readiness card is green once the work is away',
-     end.every(r => r.k === 'ok'), end.filter(r => r.k !== 'ok').map(r => r.t + ': ' + r.s).join(' | ') || 'all green');
+     end.every(green), end.filter(r => !green(r)).map(r => r.t + ': ' + r.s).join(' | ') || 'all green');
 
   /* ---- 6. the paper ----------------------------------------------------- */
   console.log('\nand the report comes out');

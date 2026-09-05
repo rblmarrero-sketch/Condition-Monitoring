@@ -109,6 +109,13 @@ function doPost(e) {
     if (b.op === 'delfile') return json(deleteFile_(b));
     if (b.op === 'resolve') return json(resolveConflict_(b));
     if (b.op === 'rewrite') return json(rewriteObject_(b));
+    /* Push subscriptions — the same document the Yandex function keeps under
+       _meta/push, so the two backends agree on what a subscription IS. This
+       one stores and withdraws them; it cannot SEND a push (there is no
+       long-running process here), and action=vapid says so. */
+    if (b.op === 'subscribe')   return json(pushSubscribe_(b));
+    if (b.op === 'unsubscribe') return json(pushUnsubscribe_(b));
+    if (b.op === 'push')        return json({ ok: false, error: 'This backend cannot send push messages' });
 
     /* Several files in one request.
 
@@ -301,6 +308,7 @@ function doGet(e) {
     if (p.action === 'list') return json(listFiles_(p.folder || '', p.ext || ''));
     if (p.action === 'file') return json(readFile_(p.id));
     if (p.action === 'files') return json(readFiles_(p.ids));
+    if (p.action === 'vapid') return json({ ok: false, error: 'No VAPID keys on this endpoint' });
     return json({ ok: false, error: 'Unknown action: ' + p.action });
   } catch (err) {
     return json({ ok: false, error: String((err && err.message) || err) });
@@ -369,6 +377,37 @@ function saveEdit_(b) {
   while (old.hasNext()) old.next().setTrashed(true);      // one marker per record
   dir.createFile(Utilities.newBlob(JSON.stringify(doc, null, 2), 'application/json', name));
   return { ok: true, saved: name, at: doc.at };
+}
+
+/* ── a phone's push subscription ────────────────────────────────────────────
+   _meta/push/<sha256(endpoint)[0:32]>.json — {endpoint, keys:{p256dh, auth},
+   dev, lang, ua, at}. Field for field what docs/yandex/function.js writes. */
+function pushKey_(ep) {
+  var d = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, String(ep));
+  var hex = ''; for (var i = 0; i < d.length; i++) hex += ('0' + (d[i] & 255).toString(16)).slice(-2);
+  return hex.slice(0, 32) + '.json';
+}
+function pushSubscribe_(b) {
+  var s = b.sub || {};
+  if (!s.endpoint || !s.keys || !s.keys.p256dh || !s.keys.auth) return { ok: false, error: 'Missing subscription' };
+  if (!/^https?:\/\//.test(s.endpoint)) return { ok: false, error: 'Bad endpoint' };
+  var doc = { endpoint: s.endpoint, keys: { p256dh: String(s.keys.p256dh), auth: String(s.keys.auth) },
+              dev: String(b.dev || '').replace(/[^A-Za-z0-9_-]+/g, '').slice(0, 24),
+              lang: b.lang === 'ru' ? 'ru' : 'en', ua: String(b.ua || '').slice(0, 160), at: new Date().toISOString() };
+  var dir = folderPath_(rootFolder_(), META_DIR + '/push');
+  var name = pushKey_(s.endpoint);
+  var old = dir.getFilesByName(name);
+  while (old.hasNext()) old.next().setTrashed(true);          // one document per phone
+  dir.createFile(Utilities.newBlob(JSON.stringify(doc, null, 2), 'application/json', name));
+  return { ok: true, id: META_DIR + '/push/' + name, key: '' };
+}
+function pushUnsubscribe_(b) {
+  if (!b.endpoint) return { ok: false, error: 'Missing endpoint' };
+  try {
+    var old = folderPath_(rootFolder_(), META_DIR + '/push').getFilesByName(pushKey_(b.endpoint));
+    while (old.hasNext()) old.next().setTrashed(true);
+  } catch (e) { /* nothing to withdraw */ }
+  return { ok: true };
 }
 
 /* ── two phones, one inspection ───────────────────────────────────────────────

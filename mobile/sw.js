@@ -36,7 +36,7 @@
        explains itself and offers a retry — because an honest offline page is
        recoverable and a browser error page is not. */
 
-const BUILD = "265";
+const BUILD = "266";
 const CACHE = "plug-capture-v" + BUILD;
 
 /* Without these the app is not an app: no page, no equipment register, no
@@ -452,6 +452,16 @@ self.addEventListener("message", (e) => {
   }
   if (d.type === "sw-heal") healSoon();
   if (d.type === "sw-skip") self.skipWaiting();
+  /* The page mirrors what the worker needs to act alone — backend URL, read
+     secret, cursor, device, language — into the config cache; and the test
+     seam: a wake by message runs exactly what a push runs. */
+  if (d.type === "sw-config") e.waitUntil(cfgPut("./__config", d.cfg || {}));
+  if (d.type === "sw-wake") {
+    e.waitUntil((async () => {
+      const out = await wake("message", d.data || {});
+      const port = e.ports && e.ports[0]; if (port) port.postMessage(out);
+    })());
+  }
   /* THE SECOND PATH TO THE SERVER. The page asks the worker to read the build
      on the server, because the worker runs in its own process with its own
      connection — on iOS a page brought back from the background can have every
@@ -482,4 +492,160 @@ self.addEventListener("message", (e) => {
       if (port) port.postMessage(out);
     })());
   }
+});
+
+/* ===================== waking without anybody opening the app =====================
+   A closed web app runs nothing. On an iPhone the one thing that can start
+   this worker while the app is closed is a push message from the endpoint —
+   sent when a build ships, when the folder changes and once a day before
+   shift (docs/yandex/server.js) — and the worker must answer every push with
+   a notification or iOS stops delivering them. On Android, Periodic
+   Background Sync and Background Sync wake it as well. All of them run the
+   same routine, and so does a "sw-wake" message from the page or a test:
+
+     1. the build: read sw.js on the server; if it is ahead, install it
+        (registration.update — a complete download takes over by itself);
+     2. this build's own cache: finish anything short;
+     3. the fleet list: ask the backend for what is new since the phone's
+        cursor and keep the reply for the page to merge at its next open, so
+        the due list is fresh even when that open is in the pit;
+     4. the queue: count the rounds on this phone that have not been sent —
+        the worker cannot send them (that needs the page), but it can say so;
+     5. the verdict: "Ready for the field" or "Not ready", with the build,
+        the file count, the fleet list's age and the queue, as a notification.
+   Everything is bounded: a push handler on iOS gets seconds, not minutes. */
+const CFG_CACHE = "cm-config";
+async function cfgGet(k) {
+  try { const c = await caches.open(CFG_CACHE); const r = await c.match(k); return r ? await r.json() : null; }
+  catch (e) { return null; }
+}
+async function cfgPut(k, obj) {
+  try { const c = await caches.open(CFG_CACHE);
+        await c.put(k, new Response(JSON.stringify(obj), { headers: { "Content-Type": "application/json" } })); }
+  catch (e) { /* storage full or gone; the page will still ask */ }
+}
+const WAKE_T = {
+  en: { ready: "Ready for the field", notready: "Not ready for the field",
+        build: "build {n}", newer: "build {n} downloading", files: "{n} of {of} files on the phone",
+        fleet: "fleet list as of {t}", fleetOld: "fleet list not refreshed ({why})",
+        queue: "{n} round(s) still to send — open the app" },
+  ru: { ready: "Готово к выезду", notready: "К выезду не готово",
+        build: "сборка {n}", newer: "загружается сборка {n}", files: "на телефоне {n} из {of} файлов",
+        fleet: "список парка на {t}", fleetOld: "список парка не обновлён ({why})",
+        queue: "не отправлено обходов: {n} — откройте приложение" },
+};
+function tr(lang, k, v) {
+  let s = (WAKE_T[lang] || WAKE_T.en)[k] || WAKE_T.en[k] || k;
+  Object.keys(v || {}).forEach(x => { s = s.split("{" + x + "}").join(String(v[x])); });
+  return s;
+}
+const hhmm = ms => { const d = new Date(ms); return String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0"); };
+function fetchTimed(url, ms) {
+  const ac = (typeof AbortController === "function") ? new AbortController() : null;
+  const t = setTimeout(() => { try { if (ac) ac.abort(); } catch (_) {} }, ms);
+  return fetch(url, ac ? { signal: ac.signal, cache: "no-store" } : { cache: "no-store" }).finally(() => clearTimeout(t));
+}
+/* The page's queue, read the way the page stores it (plug_capture / inspections):
+   a record is waiting when it is not the draft, not a team copy and not up. */
+function queuePending() {
+  return new Promise(res => {
+    const tm = setTimeout(() => res(null), 3000);
+    try {
+      const rq = indexedDB.open("plug_capture");
+      rq.onerror = () => { clearTimeout(tm); res(null); };
+      rq.onupgradeneeded = () => { try { rq.transaction.abort(); } catch (_) {} };   // never CREATE the page's database
+      rq.onsuccess = () => {
+        const db = rq.result;
+        try {
+          if (!db.objectStoreNames.contains("inspections")) { db.close(); clearTimeout(tm); return res(0); }
+          const g = db.transaction("inspections", "readonly").objectStore("inspections").getAll();
+          g.onsuccess = () => { clearTimeout(tm);
+            const n = (g.result || []).filter(r => r && r.id !== "__draft__" && String(r.id).indexOf("__team__") !== 0 && !r.up).length;
+            db.close(); res(n); };
+          g.onerror = () => { clearTimeout(tm); db.close(); res(null); };
+        } catch (e) { clearTimeout(tm); try { db.close(); } catch (_) {} res(null); }
+      };
+    } catch (e) { clearTimeout(tm); res(null); }
+  });
+}
+let waking = null;
+function wake(reason, data) {
+  if (waking) return waking;
+  waking = doWake(reason, data).catch(e => ({ reason, error: String((e && e.message) || e) }))
+    .then(out => { waking = null; return out; });
+  return waking;
+}
+async function doWake(reason, data) {
+  const out = { reason, kind: (data && data.kind) || reason, at: Date.now(), build: BUILD };
+  /* 1. the build on the server */
+  try {
+    const res = await fetchTimed("./sw.js?swts=" + Date.now(), 20000);
+    if (!res.ok) throw new Error("http " + res.status);
+    const m = (await res.text()).match(/const BUILD\s*=\s*"([^"]+)"/);
+    out.server = m ? m[1] : null;
+  } catch (e) { out.server = null; out.buildErr = String((e && e.message) || e); }
+  if (out.server && out.server !== BUILD && self.registration && self.registration.update) {
+    try { await self.registration.update(); } catch (e) { out.updateErr = String((e && e.message) || e); }
+    /* Give the new worker's install a bounded moment; a complete one takes over by itself. */
+    const until = Date.now() + 25000;
+    while (Date.now() < until && self.registration.installing) await new Promise(r => setTimeout(r, 500));
+    out.newer = !!(self.registration.waiting || self.registration.installing);
+  }
+  /* 2. this build's own cache */
+  let missing = await missingEssentials();
+  if (missing.length) { try { await precache(); } catch (_) {} missing = await missingEssentials(); }
+  out.have = ESSENTIAL.length - missing.length; out.need = ESSENTIAL.length;
+  /* 3. the fleet list, for the page's next open */
+  const cfg = (await cfgGet("./__config")) || {};
+  const lang = cfg.lang === "ru" ? "ru" : "en"; out.lang = lang;
+  if (cfg.url) {
+    try {
+      /* The same two doors the page uses: the index if the deployment has
+         one, the records otherwise — the reply is kept with which door it
+         came through, so the page merges it the way it merges its own. */
+      const ask = async p => { const q = new URLSearchParams(p); if (cfg.sec) q.set("secret", cfg.sec);
+        const res = await fetchTimed(cfg.url + (cfg.url.indexOf("?") < 0 ? "?" : "&") + q.toString(), 20000); return res.json(); };
+      let j = await ask({ action: "index", slim: "1", since: String(cfg.cursor || 0) }), via = "index";
+      if (!(j && j.ok !== false && j.v)) {
+        if (j && j.ok === false && !/unknown action/i.test(j.error || "")) throw new Error(j.error);
+        j = await ask({ action: "records", after: String(cfg.cursor || 0), index: "0" }); via = "records";
+      }
+      if (j && j.ok !== false && (j.v || j.records)) {
+        await cfgPut("./__team-prefetch", { since: Number(cfg.cursor || 0), at: Date.now(), via, reply: j });
+        out.fleetAt = Date.now(); out.fleetRows = ((via === "index" ? j.rows : j.records) || []).length; out.fleetVia = via;
+      } else out.fleetErr = (j && j.error) || "no reply";
+    } catch (e) { out.fleetErr = String((e && e.message) || e); }
+  } else out.fleetErr = "no backend configured";
+  /* 4. the queue */
+  out.pending = await queuePending();
+  /* 5. the verdict — and the notification iOS requires */
+  out.ready = !missing.length && !(out.pending > 0);
+  const lines = [tr(lang, "build", { n: BUILD }) + (out.server && out.server !== BUILD ? " · " + tr(lang, "newer", { n: out.server }) : ""),
+                 tr(lang, "files", { n: out.have, of: out.need }),
+                 out.fleetAt ? tr(lang, "fleet", { t: hhmm(out.fleetAt) }) : tr(lang, "fleetOld", { why: out.fleetErr || "?" })];
+  if (out.pending > 0) lines.push(tr(lang, "queue", { n: out.pending }));
+  out.title = tr(lang, out.ready ? "ready" : "notready"); out.body = lines.join("\n");
+  try {
+    await self.registration.showNotification(out.title, { body: out.body, tag: "cm-ready", renotify: false,
+      icon: "./icon-192.png", badge: "./icon-192.png", data: { kind: out.kind, ready: out.ready, at: out.at } });
+    out.notified = true;
+  } catch (e) { out.notifyErr = String((e && e.message) || e); }
+  await cfgPut("./__last-wake", out);
+  return out;
+}
+self.addEventListener("push", e => {
+  let d = {}; try { d = e.data ? e.data.json() : {}; } catch (_) { d = {}; }
+  e.waitUntil(wake("push", d));
+});
+self.addEventListener("periodicsync", e => { if (e.tag === "cm-upkeep") e.waitUntil(wake("periodicsync", { kind: "periodic" })); });
+self.addEventListener("sync", e => { if (e.tag === "cm-upkeep") e.waitUntil(wake("sync", { kind: "sync" })); });
+/* Tapping the notification opens the app — which then sends its queue and
+   merges the prefetched fleet list by itself. */
+self.addEventListener("notificationclick", e => {
+  e.notification.close();
+  e.waitUntil((async () => {
+    const cs = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
+    for (const c of cs) { if ("focus" in c) { try { await c.focus(); return; } catch (_) {} } }
+    try { await self.clients.openWindow("./"); } catch (_) {}
+  })());
 });

@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=265">
+<link rel="manifest" href="manifest.webmanifest?v=266">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=265">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=265">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=265">
+<link rel="apple-touch-icon" href="icon-192.png?v=266">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=266">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=266">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2070,33 +2070,33 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=265"></script>
-<script src="upload-defaults.js?v=265"></script>
-<script src="hme.js?v=265"></script>
-<script src="mp-fc.js?v=265"></script>
-<script src="hme-cascade.js?v=265"></script>
-<script src="assets.js?v=265"></script>
-<script src="temp-limits.js?v=265"></script>
-<script src="normalize.js?v=265"></script>
-<script src="grade.js?v=265"></script>
-<script src="edits.js?v=265"></script>
-<script src="due.js?v=265"></script>
-<script src="wear.js?v=265"></script>
-<script src="wear-figs.js?v=265"></script>
-<script src="wear-map.js?v=265"></script>
-<script src="machine-photos.js?v=265"></script>
-<script src="machine-fig.js?v=265"></script>
-<script src="get.js?v=265"></script>
-<script src="points.js?v=265"></script>
-<script src="uc-points.js?v=265"></script>
-<script src="inspect-guide.js?v=265"></script>
-<script src="get-figs.js?v=265"></script>
-<script src="body-points.js?v=265"></script>
-<script src="body-map.js?v=265"></script>
-<script src="lube.js?v=265"></script>
-<script src="lube-overrides.js?v=265"></script>
-<script src="lube2027.js?v=265"></script>
-<script src="report-core.js?v=265"></script>
+<script src="native.js?v=266"></script>
+<script src="upload-defaults.js?v=266"></script>
+<script src="hme.js?v=266"></script>
+<script src="mp-fc.js?v=266"></script>
+<script src="hme-cascade.js?v=266"></script>
+<script src="assets.js?v=266"></script>
+<script src="temp-limits.js?v=266"></script>
+<script src="normalize.js?v=266"></script>
+<script src="grade.js?v=266"></script>
+<script src="edits.js?v=266"></script>
+<script src="due.js?v=266"></script>
+<script src="wear.js?v=266"></script>
+<script src="wear-figs.js?v=266"></script>
+<script src="wear-map.js?v=266"></script>
+<script src="machine-photos.js?v=266"></script>
+<script src="machine-fig.js?v=266"></script>
+<script src="get.js?v=266"></script>
+<script src="points.js?v=266"></script>
+<script src="uc-points.js?v=266"></script>
+<script src="inspect-guide.js?v=266"></script>
+<script src="get-figs.js?v=266"></script>
+<script src="body-points.js?v=266"></script>
+<script src="body-map.js?v=266"></script>
+<script src="lube.js?v=266"></script>
+<script src="lube-overrides.js?v=266"></script>
+<script src="lube2027.js?v=266"></script>
+<script src="report-core.js?v=266"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2681,6 +2681,19 @@ const I18N = {
     rdy_bld_off:"Cannot check without signal — running build {n}.",
     rdy_bld_fail:"Could not reach the server at {t} ({why}) — running build {n}. It keeps trying by itself.",
     rdy_bld_never:"Not checked yet — running build {n}.",
+    rdy_bg_t:"Updates while the app is closed",
+    rdy_bg_on:"On. This phone is woken when a build ships, when the fleet list changes and before each shift, and told whether it is ready.",
+    rdy_bg_ask:"Allow notifications once, and the phone keeps itself updated and checked without being opened.",
+    rdy_bg_denied:"Notifications are blocked for this app in the phone's Settings. Until they are allowed, updates land only while the app is open.",
+    rdy_bg_install:"Add the app to the Home Screen (Share → Add to Home Screen). A browser tab cannot be woken while closed.",
+    rdy_bg_nobackend:"The server does not offer background wake-ups yet ({why}).",
+    rdy_bg_unreach:"Could not reach the server to set this up ({why}). It is tried again at every open.",
+    rdy_bg_nosupport:"This phone's browser cannot wake a closed app. Updates land while the app is open.",
+    rdy_bg_failed:"Could not register this phone for wake-ups ({why}). It is tried again at every open.",
+    rdy_fix_allow:"Allow notifications",
+    rdy_v_bg:"Ready — updates only while open",
+    rdy_bar_not:"Not ready for the field — {s}. Tap to see what.",
+    rdy_notif_not:"Not ready for the field", rdy_notif_ok:"Ready for the field",
     rdy_sto_t:"Room for photographs", rdy_sto_ok:"About {n} more photographs fit ({p}% used).",
     rdy_sto_low:"Only about {n} photographs fit ({p}% used). Delete rounds already in the cloud.",
     rdy_sto_evict:"The phone may clear this app's storage. Tap to ask it not to.",
@@ -3192,6 +3205,19 @@ const I18N = {
     rdy_bld_off:"Без связи проверить нельзя — сборка {n}.",
     rdy_bld_fail:"Сервер недоступен в {t} ({why}) — сборка {n}. Приложение повторяет само.",
     rdy_bld_never:"Ещё не проверялось — сборка {n}.",
+    rdy_bg_t:"Обновления при закрытом приложении",
+    rdy_bg_on:"Включено. Телефон будят при выходе сборки, при изменении списка парка и перед сменой, и сообщают, готов ли он.",
+    rdy_bg_ask:"Разрешите уведомления один раз — и телефон будет обновляться и проверяться сам, без открытия приложения.",
+    rdy_bg_denied:"Уведомления для приложения запрещены в Настройках телефона. Пока так, обновления приходят только при открытом приложении.",
+    rdy_bg_install:"Добавьте приложение на экран «Домой» (Поделиться → На экран «Домой»). Вкладку браузера разбудить нельзя.",
+    rdy_bg_nobackend:"Сервер пока не умеет будить телефоны ({why}).",
+    rdy_bg_unreach:"Не удалось связаться с сервером для настройки ({why}). Повторяется при каждом открытии.",
+    rdy_bg_nosupport:"Браузер этого телефона не умеет будить закрытое приложение. Обновления приходят при открытом приложении.",
+    rdy_bg_failed:"Не удалось зарегистрировать телефон для пробуждений ({why}). Повторяется при каждом открытии.",
+    rdy_fix_allow:"Разрешить уведомления",
+    rdy_v_bg:"Готово — обновления только при открытом приложении",
+    rdy_bar_not:"К выезду не готово — {s}. Нажмите, чтобы посмотреть.",
+    rdy_notif_not:"К выезду не готово", rdy_notif_ok:"Готово к выезду",
     rdy_sto_t:"Место под фотографии", rdy_sto_ok:"Поместится ещё около {n} фото ({p}% занято).",
     rdy_sto_low:"Поместится всего около {n} фото ({p}% занято). Удалите обходы, которые уже в облаке.",
     rdy_sto_evict:"Телефон может очистить память приложения. Нажмите, чтобы запретить.",
@@ -8553,18 +8579,24 @@ const TEAM_TIMEOUT_FULL=150000;
    to move there. That separation is the whole of the fix: a scan that is
    walking a folder in six-hundred-file steps needs a position, and the stored
    cursor is not a position — it is a claim about what is already held. */
-async function teamPull(manual,full,from){
+async function teamPull(manual,full,from,pre){
   const msg=$("teamMsg"); if(!msg) return false;
   if(teamBusy){
     // A hung request must never wedge the button. fetch() has no timeout of its
     // own, so on weak signal the startup pull could sit open indefinitely and
     // every later press returned here — doing nothing, silently.
-    if(!manual) return false;
-    if(teamAbort){ try{ teamAbort.abort(); }catch(_){ } }
+    /* A pull carrying what the worker prefetched is not dropped for a pull in
+       flight — the startup send's own pull is usually in flight at exactly
+       that moment. It waits its turn, bounded. */
+    if(!manual && pre){ await new Promise(r=>{ const t0=Date.now(); const t=setInterval(()=>{ if(!teamBusy || Date.now()-t0>30000){ clearInterval(t); r(); } },100); }); }
+    else if(!manual) return false;
+    else if(teamAbort){ try{ teamAbort.abort(); }catch(_){ } }
   }
   // syncNow() calls this whenever it finishes, and a dead destination can make
   // that happen repeatedly — don't turn a retry loop into a request storm.
-  if(!manual && Date.now()-teamAt < TEAM_MIN_GAP) return false;
+  /* A pull carrying what the worker prefetched never waits: it costs no
+     request, and the startup send has usually just set teamAt. */
+  if(!manual && !pre && Date.now()-teamAt < TEAM_MIN_GAP) return false;
   teamAt=Date.now();
   const g=loadDests().find(d=>d.id==="gas" && d.url);
   if(!g){ if(manual) msg.textContent=t("team_nodrive"); return false; }
@@ -8628,8 +8660,16 @@ async function teamPull(manual,full,from){
        every record the way it always has — so nobody has to be told which
        deployment they are on, and a phone updated before the script is not a
        phone that stops working. */
-    let j=null, txt="", viaIndex=false;
-    if(idxCap(g.url)!==false){
+    let j=null, txt="", viaIndex=false, usedPre=false;
+    /* A reply the WORKER fetched while the app was closed (a push, a periodic
+       wake), kept for this open. It counts only if it continues from exactly
+       this cursor; otherwise it is stale and the folder is asked as usual. */
+    if(pre && pre.reply && Number(pre.since)===after && pre.reply.ok!==false && (pre.reply.v || pre.reply.records)){
+      j=pre.reply; viaIndex=(pre.via==="index" && !!pre.reply.v); usedPre=true;
+      if(viaIndex) setIdxCap(g.url,true);
+      teamPrefetchDrop();                        // used; a second open must not merge it twice
+    } else if(pre && Number(pre.since)<after) teamPrefetchDrop();   // older than what this phone already holds
+    if(!j && idxCap(g.url)!==false){
       const r2=await ask({action:"index", slim:"1", since:String(after)});
       if(!mine()) return false;
       if(r2.j && r2.j.ok!==false && r2.j.v){
@@ -8663,7 +8703,7 @@ async function teamPull(manual,full,from){
       histNote(j.error||"refused"); renderDue();
       return false;
     }
-    netSeen(true);                                  // Drive answered — that is "online"
+    if(!usedPre) netSeen(true);                     // Drive answered — that is "online"
     /* When the script says nothing has changed it has answered without opening
        a single file, and j.rows is empty — but the reply still goes through the
        whole tail below rather than returning here. A clash that two phones
@@ -8765,7 +8805,7 @@ async function teamPull(manual,full,from){
     if(saved && nextCur){
       const was=Number(localStorage.getItem(TEAM_CUR)||0)||0;
       const now=Number(nextCur)||0;
-      if(now>was || !was) lsSet(TEAM_CUR,String(nextCur));
+      if(now>was || !was){ lsSet(TEAM_CUR,String(nextCur)); try{ mirrorSwConfig(); }catch(e){} }
     }
     /* A complete read that stored everything is the one thing that can retire
        the repair flag — and only then, or the next pull goes straight back to
@@ -10626,7 +10666,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="265";
+const BUILD="266";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -12091,10 +12131,13 @@ function openSettings(){ destsToForm(loadDests()); $("upPx").value=pxSetting();
    yet, or still checking on a first load, would only be noise. */
 function renderReady(state){
   const el=$("readyBar"); if(!el) return;
+  /* The offline copy's own verdict always outranks the yard's on this bar. */
+  delete el.dataset.yard; el.onclick=null;
   if(!state){ el.className="ready"; el.textContent=""; return; }
   if(state.kind==="ok"){
     el.className="ready good";
     el.innerHTML='<span class="dot"></span><span>'+esc(t("rdy_ok"))+'</span>';
+    if(lastYard && lastYard.v.k!=="ok") renderYardBar();   // the copy is fine; the field check may not be
     return;
   }
   if(state.kind==="busy"){
@@ -12202,9 +12245,49 @@ function yardVerdict(rows){
   if(hasKey("refs"))     return {k:"bad",  s:"rdy_v_setup"};
   if(hasKey("queue"))    return {k:"warn", s:"rdy_v_photos"};
   if(hasKey("build"))    return {k:"warn", s:"rdy_v_update"};
+  if(hasKey("bg"))       return {k:"warn", s:"rdy_v_bg"};
   if(has("warn"))        return {k:"warn", s:"rdy_v_old"};
   return {k:"ok", s:"rdy_v_ready"};
 }
+/* THE CHECK RUNS ITSELF. It used to run when the System screen opened, which
+   is a screen a technician opens after something has gone wrong. It now runs
+   at boot, after every send, every ten minutes while the app is in front, and
+   whenever the app comes back to the front; the verdict goes to the bar at the
+   top of the capture screen, and — when notifications are allowed — to a
+   notification when the phone stops being ready, so nobody has to look. */
+let lastYard=null;
+/* The verdicts worth interrupting somebody for: work that is not away, an
+   update that did not finish, a phone that is out of room. "Some data is
+   old" and "updates only while open" stay on the card, not on the bar. */
+const YARD_LOUD={rdy_v_photos:1, rdy_v_update:1, rdy_v_storage:1, rdy_v_setup:1};
+const yardLoud=v=>v && (v.k==="bad" || !!YARD_LOUD[v.s]);
+function renderYardBar(){
+  const el=$("readyBar"); if(!el || !lastYard) return;
+  const v=lastYard.v;
+  /* The bar belongs to the offline-copy check when THAT is bad; the yard
+     verdict speaks only over a good copy, and only when it has something to say. */
+  if(!el.classList.contains("good") && !el.dataset.yard) return;
+  if(!yardLoud(v)){ if(el.dataset.yard){ delete el.dataset.yard; el.onclick=null; checkReady(); } return; }
+  el.dataset.yard="1";
+  el.className="ready "+(v.k==="bad"?"bad":"warn");
+  el.innerHTML='<b>'+esc(t("rdy_bar_not",{s:t(v.s)}))+'</b>';
+  el.onclick=()=>showPane("paneSystem");
+}
+let yardNotified="";
+async function yardNotify(v){
+  try{
+    if(!("Notification" in window) || Notification.permission!=="granted") return;
+    if(!("serviceWorker" in navigator)) return;
+    const key=yardLoud(v)?v.s:"ok";
+    if(key===yardNotified) return;                 // say it once per change, not once per check
+    yardNotified=key;
+    if(key==="ok") return;                         // silence is the good news; the worker says "Ready" on its wakes
+    const reg=await navigator.serviceWorker.ready;
+    await reg.showNotification(t("rdy_notif_not"),{ body:t(v.s), tag:"cm-ready", renotify:false, icon:"icon-192.png", badge:"icon-192.png" });
+  }catch(e){}
+}
+setTimeout(()=>{ try{ yardCheck(); }catch(e){} }, 5000);
+setInterval(()=>{ if(!document.hidden){ try{ yardCheck(); }catch(e){} } }, 600000);
 /* NOT renderReady(). There is already one of those, and it drives the one-line
    bar at the top of the capture screen — declared later in the file, so mine
    silently replaced it and the bar stopped speaking at all. Two answers to two
@@ -12280,6 +12363,23 @@ async function yardCheck(){
       else add("ok",t("rdy_q_t"),t("rdy_q_ok"),null,"queue");
     }
 
+    /* 5b. can this phone be woken while the app is closed */
+    {
+      const ps=await within(12000, ()=>pushSetup(), {k:"unreach", why:"timeout"});
+      const why=(ps&&ps.why)||"";
+      if(ps.k==="on") add("ok",t("rdy_bg_t"),t("rdy_bg_on"),null,"bg");
+      else if(ps.k==="default") add("warn",t("rdy_bg_t"),t("rdy_bg_ask"),
+        { label:t("rdy_fix_allow"), run:async()=>{ await pushAllow(); } },"bg");
+      else if(ps.k==="denied") add("warn",t("rdy_bg_t"),t("rdy_bg_denied"),null,"bg");
+      else if(ps.k==="install") add("warn",t("rdy_bg_t"),t("rdy_bg_install"),null,"bg");
+      else if(ps.k==="nosupport") add("warn",t("rdy_bg_t"),t("rdy_bg_nosupport"),null,"bg");
+      else if(ps.k==="nobackend") add("warn",t("rdy_bg_t"),t("rdy_bg_nobackend",{why}),null,"bg");
+      else if(ps.k==="failed") add("warn",t("rdy_bg_t"),t("rdy_bg_failed",{why}),
+        { label:t("rdy_fix_retry"), run:async()=>{} },"bg");
+      else if(ps.k!=="nodest") add("warn",t("rdy_bg_t"),t("rdy_bg_unreach",{why}),
+        { label:t("rdy_fix_retry"), run:async()=>{} },"bg");
+    }
+
     /* 6. the machines, the limits and the lubricants */
     const units=(window.ASSETS||[]).length;
     const refs=!!(window.WEAR&&WEAR.map)&&!!window.BODY&&!!window.LUBE;
@@ -12297,6 +12397,9 @@ async function yardCheck(){
   /* The verdict in one line, in the words the brief asked for, so a technician
      never has to read six rows to learn whether they can leave. */
   const v=yardVerdict(rows);
+  lastYard={rows, v, at:Date.now()};
+  window.__yard=lastYard;
+  renderYardBar(); yardNotify(v);
   const badge=$("yardBadge");
   if(badge){ badge.textContent = t(v.s);
              badge.className = "count-badge "+(v.k==="ok"?"ok":v.k==="warn"?"warn":"bad"); }
@@ -12330,9 +12433,7 @@ async function yardCheck(){
 /* Run it where it is useful: when the screen that carries it opens, and again
    when the app comes back to the front — an inspector who walked outside, got a
    bar of signal and came back is exactly who this is for. */
-document.addEventListener("visibilitychange",()=>{
-  if(!document.hidden && document.getElementById("paneSystem")
-     && document.getElementById("paneSystem").classList.contains("on")) yardCheck(); });
+document.addEventListener("visibilitychange",()=>{ if(!document.hidden) yardCheck(); });
 function swHealth(){
   const el=$("swHealth"); if(!el) return;
   if(!("serviceWorker" in navigator) || !navigator.serviceWorker.controller){
@@ -12679,7 +12780,8 @@ async function armRetry(){
 }
 /* Every finish re-arms, whether it worked or not: cleared queue → disarmed,
    anything left → another attempt scheduled. */
-const syncThenArm = (manual)=>syncNow(manual).finally(armRetry);
+const syncThenArm = (manual)=>syncNow(manual).finally(()=>{ armRetry();
+  setTimeout(()=>{ try{ yardCheck(); }catch(e){} }, 800); });   // the verdict follows every send
 
 /* Through the seam: inside the shell this is the OS telling us the connection
    changed, which fires in the cases navigator.onLine sleeps through. On the
@@ -13161,6 +13263,85 @@ setInterval(checkForNewBuild, 300000);
    complete and take over, and reload. If the download cannot finish, nothing
    has changed and the app says so. No path here unregisters a worker or
    deletes a cache — tests/updatesafe.cjs reads this file to make sure. */
+/* ===================== woken while closed =====================
+   The worker can act alone (sw.js: wake) only if it knows what the page knows:
+   the backend, the read secret, the cursor, the device, the language. The page
+   mirrors those into the config cache at boot, after every pull and every few
+   minutes — a put, never a delete. And it registers this phone to be woken:
+   a push subscription with the server's VAPID key (one "Allow notifications"
+   tap, once, on an installed app — the one thing a page cannot do alone), and
+   Periodic Background Sync where the browser offers it. */
+async function mirrorSwConfig(){
+  try{
+    if(!("caches" in window)) return false;
+    const g=loadDests().find(d=>d.id==="gas" && d.url);
+    const cfg={ url:g?g.url:"", sec:g?(g.sec||""):"", cursor:Number(localStorage.getItem(TEAM_CUR)||0)||0,
+                dev:DEVICE, lang, build:BUILD, at:Date.now() };
+    const c=await caches.open("cm-config");
+    await c.put("./__config", new Response(JSON.stringify(cfg),{headers:{"Content-Type":"application/json"}}));
+    return true;
+  }catch(e){ return false; }
+}
+const PUSH_EP="cm_push_ep", PUSH_KEY="cm_vapid";
+function pushSupported(){ return ("serviceWorker" in navigator) && ("PushManager" in window) && ("Notification" in window); }
+function isStandalone(){ try{ return navigator.standalone===true || matchMedia("(display-mode: standalone)").matches; }catch(e){ return false; } }
+function b64uToU8(s){ const p="=".repeat((4-s.length%4)%4); const b=atob((s+p).replace(/-/g,"+").replace(/_/g,"/")); const u=new Uint8Array(b.length); for(let i=0;i<b.length;i++) u[i]=b.charCodeAt(i); return u; }
+async function backendPost(g, body){
+  const res=await withTimeoutMs(fetch(g.url,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+    body:JSON.stringify(Object.assign({secret:g.sec||""},body))}), 15000);
+  return res.json();
+}
+let pushBusy=null;
+function pushSetup(){ if(pushBusy) return pushBusy; pushBusy=pushSetupNow().finally(()=>{ pushBusy=null; }); return pushBusy; }
+async function pushSetupNow(){
+  await mirrorSwConfig();
+  if(!pushSupported()) return {k: isStandalone()?"nosupport":"install"};
+  const perm=Notification.permission;
+  if(perm!=="granted") return {k: perm==="denied"?"denied":(isStandalone()||!/iP(hone|ad)/.test(navigator.userAgent)?"default":"install")};
+  const g=loadDests().find(d=>d.id==="gas" && d.url);
+  if(!g) return {k:"nodest"};
+  let reg=null; try{ reg=await withTimeoutMs(navigator.serviceWorker.ready, 8000); }catch(e){ return {k:"failed", why:"no worker"}; }
+  /* The server's key. A phone subscribed under an older key re-subscribes. */
+  let key=null;
+  try{
+    const q=new URLSearchParams({action:"vapid"}); if(g.sec) q.set("secret",g.sec);
+    const r=await withTimeoutMs(fetch(g.url+(g.url.indexOf("?")<0?"?":"&")+q.toString()), 10000);
+    const j=await r.json();
+    if(j && j.ok && j.key) key=j.key; else return {k:"nobackend", why:(j&&j.error)||"no key"};
+  }catch(e){ return {k:"unreach", why:String((e&&e.message)||e).slice(0,60)}; }
+  const stored=localStorage.getItem(PUSH_KEY)||"";
+  let sub=null;
+  try{ sub=await reg.pushManager.getSubscription(); }catch(e){ sub=null; }
+  if(sub && stored && stored!==key){
+    try{ await backendPost(g,{op:"unsubscribe", endpoint:sub.endpoint}); }catch(e){}
+    try{ await sub.unsubscribe(); }catch(e){}
+    sub=null;
+  }
+  if(!sub){
+    try{ sub=await withTimeoutMs(reg.pushManager.subscribe({userVisibleOnly:true, applicationServerKey:b64uToU8(key)}), 20000); }
+    catch(e){ return {k:"failed", why:String((e&&e.message)||e).slice(0,80)}; }
+  }
+  if(localStorage.getItem(PUSH_EP)!==sub.endpoint || stored!==key){
+    try{
+      const r=await backendPost(g,{op:"subscribe", sub:sub.toJSON(), dev:DEVICE, lang, ua:navigator.userAgent});
+      if(!(r && r.ok)) return {k:"failed", why:(r&&r.error)||"refused"};
+    }catch(e){ return {k:"unreach", why:String((e&&e.message)||e).slice(0,60)}; }
+    lsSet(PUSH_EP, sub.endpoint); lsSet(PUSH_KEY, key);
+  }
+  /* Android: a periodic wake as well, where the browser offers one. */
+  try{ if(reg.periodicSync) await reg.periodicSync.register("cm-upkeep",{minInterval:3600000}); }catch(e){}
+  return {k:"on", ep:sub.endpoint};
+}
+/* The one tap: must run inside a user gesture. */
+async function pushAllow(){
+  try{ if(!("Notification" in window)) return "nosupport"; const p=await Notification.requestPermission(); if(p==="granted") await pushSetup(); return p; }
+  catch(e){ return "failed"; }
+}
+window.__pushSetup=pushSetup;
+mirrorSwConfig();
+setTimeout(()=>{ pushSetup().catch(()=>{}); }, 3000);
+setInterval(()=>{ mirrorSwConfig(); }, 300000);
+
 const fu=$("forceUpdate");
 async function updateNow(){
   const say=s=>{ if(fu) fu.textContent=s; };
@@ -13424,9 +13605,21 @@ try{ if(histRepair()) renderDue&&renderDue(); }catch(e){}
    finishing, which is the reassuring direction of this project's oldest
    failure. A repair that needs the folder waits for a launch that has it. */
 const healIfReached = ok => ok ? histHealOnce().then(teamHealOnce) : null;
-const pullIn = () => teamPull(false).then(healIfReached)
+/* What the worker fetched while the app was closed. Read here, dropped by
+   teamPull once it has been merged — not before, or a pull that could not use
+   it (busy, cursor moved) would have thrown it away unread. */
+async function teamPrefetched(){
+  try{
+    if(!("caches" in window)) return null;
+    const c=await caches.open("cm-config");
+    const r=await c.match("./__team-prefetch"); if(!r) return null;
+    return await r.json();
+  }catch(e){ return null; }
+}
+function teamPrefetchDrop(){ try{ caches.open("cm-config").then(c=>c.delete("./__team-prefetch")).catch(()=>{}); }catch(e){} }
+const pullIn = (pre) => teamPull(false,false,null,pre).then(healIfReached)
   .catch(e=>{ histNote((e&&e.message)||e); renderDue&&renderDue(); });
-pullIn();
+teamPrefetched().then(pre=>pullIn(pre||undefined));
 window.addEventListener("online", pullIn);
 
 /* ── WHAT COMES IN HAS TO ARRIVE BY ITSELF TOO ─────────────────────────────

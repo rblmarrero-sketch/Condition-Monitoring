@@ -507,6 +507,66 @@ it again, and can be run at any time afterwards.
 
 ---
 
+## 13. Waking the phones while the app is closed
+
+A closed web app runs nothing. The only thing that can start its worker on an
+iPhone is a push message from this server, and the worker must answer with a
+notification. From this version the server sends one:
+
+- when a new build appears on GitHub Pages (it reads `mobile/sw.js` every five
+  minutes and remembers the last build in the bucket, so a restart misses nothing);
+- when the folder changes — a round or a correction landed (three minutes after
+  the last change, at most once every fifteen);
+- once a day before the shift, at `PUSH_DAILY_UTC` (default `18:00` UTC = 06:00
+  at Baimskaya), whether or not anything changed.
+
+The phone's worker then fetches the build, refreshes the fleet list, counts its
+queue and shows **Ready for the field** or **Not ready for the field** — with
+nobody opening the app. The one thing a phone must do once: tap **Allow
+notifications** on the readiness card, on the installed (Home Screen) app.
+
+**The keys.** Push needs a key pair (VAPID). The service runs as `nobody` and
+cannot write files under `/opt/cm`, so the keys live in `cm.env`. Generate them
+once and append them — this prints two lines and adds them to the file:
+
+```
+sudo bash -c 'node -e "const c=require(\"crypto\");const e=c.createECDH(\"prime256v1\");e.generateKeys();const b=x=>x.toString(\"base64\").replace(/\\+/g,\"-\").replace(/\\//g,\"_\").replace(/=+\$/,\"\");console.log(\"VAPID_PUBLIC=\"+b(e.getPublicKey()));console.log(\"VAPID_PRIVATE=\"+b(e.getPrivateKey()));console.log(\"VAPID_SUBJECT=mailto:cm@baimskaya.invalid\")" >> /opt/cm/cm.env'
+sudo tail -3 /opt/cm/cm.env
+```
+
+Then deploy the two files as in §12 and restart. The log says where the keys
+came from:
+
+```
+sudo journalctl -u cm -n 5 --no-pager
+```
+
+`push keys: environment` is right. `push keys: memory only …` means `cm.env`
+has no keys and the file could not be written — the phones would have to
+re-subscribe after every restart; add the keys as above.
+
+**Never regenerate the keys casually.** A new pair invalidates every phone's
+subscription; the phones notice at their next open (the key they subscribed
+with no longer matches `action=vapid`) and re-subscribe by themselves, but a
+phone that is not opened for a week gets no wake-ups for that week.
+
+**Optional settings** in `cm.env`: `PUSH_POLL_MS` (default 300000),
+`PUSH_FOLDER_DELAY_MS` (180000), `PUSH_FOLDER_GAP_MS` (900000),
+`PUSH_DAILY_UTC` (`18:00`), `PAGES_SW_URL` (the Pages `sw.js`).
+
+**Checking it works.** `?action=vapid` on the endpoint must answer
+`{"ok":true,"key":"…"}`. After a phone has allowed notifications, its
+subscription is in the bucket under `_meta/push/`. A push on demand, for a test:
+
+```
+curl -s -X POST https://baimskaya-cm.duckdns.org -H 'Content-Type: text/plain' \
+  -d '{"op":"push","kind":"test","admin":"<the admin password — type it, never store it>"}'
+```
+
+The reply counts `sent`, `gone` (subscriptions the push service says are dead,
+dropped) and `failed`. Every phone that received it shows a notification within
+seconds.
+
 ## What this costs you that a function did not
 
 **Money:** a few dollars a month instead of near-zero. Small.

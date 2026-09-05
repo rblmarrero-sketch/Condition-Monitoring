@@ -697,6 +697,140 @@ async function diagnose() {
   } catch (e) { return { ok: false, error: String(e.message || e) }; }
 }
 
+/* ---- waking a phone that is closed: Web Push ----------------------------
+   A web app that is not open runs nothing, and on an iPhone the only thing
+   that can wake it is a push message, which the worker must answer with a
+   notification. So the endpoint keeps the phones' push subscriptions under
+   _meta/push, and server.js sends to all of them when a build ships, when the
+   folder changes, and once a day before shift. The worker on the phone then
+   fetches the build, refreshes the fleet list and says "Ready for the field"
+   or "Not ready" — without anybody opening the app.
+
+   Dependency-free like the rest of this file: RFC 8291/8188 (aes128gcm) and
+   RFC 8292 (VAPID) by hand with node:crypto. tests/bgpush.cjs holds
+   pushEncrypt to the RFC's own test vector.
+
+   Keys: VAPID_PUBLIC / VAPID_PRIVATE (base64url, raw P-256) and VAPID_SUBJECT
+   in the environment; on the VM server.js generates them once into VAPID_FILE
+   when the environment has none. A phone compares the key it subscribed with
+   against action=vapid at every open and re-subscribes when it changed. */
+const PUSH_DIR = '_meta/push';
+const b64u = b => Buffer.from(b).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+const unb64u = s => Buffer.from(String(s || '').replace(/-/g, '+').replace(/_/g, '/'), 'base64');
+let VAPID = { publicKey: env('VAPID_PUBLIC'), privateKey: env('VAPID_PRIVATE'),
+              subject: env('VAPID_SUBJECT') || 'mailto:condition-monitoring@baimskaya.invalid' };
+function vapidGenerate() {
+  const e = crypto.createECDH('prime256v1'); e.generateKeys();
+  return { publicKey: b64u(e.getPublicKey()), privateKey: b64u(e.getPrivateKey()) };
+}
+function vapidSet(k) { VAPID = Object.assign({}, VAPID, k || {}); }
+function vapidReady() { return !!(VAPID.publicKey && VAPID.privateKey); }
+function vapidPublic() { return VAPID.publicKey; }
+function vapidPrivateKeyObject() {
+  const pub = unb64u(VAPID.publicKey);                    // 65 bytes: 0x04, x, y
+  return crypto.createPrivateKey({ format: 'jwk', key: { kty: 'EC', crv: 'P-256',
+    x: b64u(pub.subarray(1, 33)), y: b64u(pub.subarray(33, 65)), d: VAPID.privateKey } });
+}
+/* RFC 8292: a signed JWT for the push service's origin, twelve hours. */
+function vapidAuth(endpoint) {
+  const aud = new URL(endpoint).origin;
+  const enc = o => b64u(Buffer.from(JSON.stringify(o)));
+  const head = enc({ typ: 'JWT', alg: 'ES256' });
+  const body = enc({ aud, exp: Math.floor(Date.now() / 1000) + 12 * 3600, sub: VAPID.subject });
+  const sig = crypto.sign('sha256', Buffer.from(head + '.' + body),
+                          { key: vapidPrivateKeyObject(), dsaEncoding: 'ieee-p1363' });
+  return 'vapid t=' + head + '.' + body + '.' + b64u(sig) + ', k=' + VAPID.publicKey;
+}
+/* RFC 8291 with RFC 8188 framing. `fixed` injects the sender key and the salt
+   so the RFC's Appendix A vector can be reproduced byte for byte. */
+function pushEncrypt(payload, p256dh, auth, fixed) {
+  const local = crypto.createECDH('prime256v1');
+  if (fixed && fixed.privateKey) local.setPrivateKey(unb64u(fixed.privateKey)); else local.generateKeys();
+  const localPub = local.getPublicKey();
+  const clientPub = unb64u(p256dh);
+  const secret = local.computeSecret(clientPub);
+  const salt = fixed && fixed.salt ? unb64u(fixed.salt) : crypto.randomBytes(16);
+  const hk = (ikm, s, info, n) => Buffer.from(crypto.hkdfSync('sha256', ikm, s, info, n));
+  const ikm = hk(secret, unb64u(auth), Buffer.concat([Buffer.from('WebPush: info\0'), clientPub, localPub]), 32);
+  const cek = hk(ikm, salt, Buffer.from('Content-Encoding: aes128gcm\0'), 16);
+  const nonce = hk(ikm, salt, Buffer.from('Content-Encoding: nonce\0'), 12);
+  const c = crypto.createCipheriv('aes-128-gcm', cek, nonce);
+  const enc = Buffer.concat([c.update(Buffer.concat([Buffer.from(payload), Buffer.from([2])])), c.final(), c.getAuthTag()]);
+  const rs = Buffer.alloc(4); rs.writeUInt32BE(4096);
+  return Buffer.concat([salt, rs, Buffer.from([localPub.length]), localPub, enc]);
+}
+const subKey = ep => PUSH_DIR + '/' + sha256(String(ep)).slice(0, 32) + '.json';
+/* THE DOCUMENT: {endpoint, keys:{p256dh, auth}, dev, lang, ua, at}. */
+async function pushSubscribe(b) {
+  const s = b.sub || {};
+  if (!s.endpoint || !s.keys || !s.keys.p256dh || !s.keys.auth) return { ok: false, error: 'Missing subscription' };
+  if (!/^https?:\/\//.test(s.endpoint)) return { ok: false, error: 'Bad endpoint' };
+  const doc = { endpoint: s.endpoint, keys: { p256dh: String(s.keys.p256dh), auth: String(s.keys.auth) },
+                dev: String(b.dev || '').replace(/[^A-Za-z0-9_-]+/g, '').slice(0, 24),
+                lang: b.lang === 'ru' ? 'ru' : 'en', ua: String(b.ua || '').slice(0, 160), at: new Date().toISOString() };
+  await putObj(subKey(s.endpoint), Buffer.from(JSON.stringify(doc)), 'application/json', doc.dev);
+  return { ok: true, id: subKey(s.endpoint), key: VAPID.publicKey };
+}
+async function pushUnsubscribe(b) {
+  if (!b.endpoint) return { ok: false, error: 'Missing endpoint' };
+  try { await delObj(subKey(b.endpoint)); } catch (e) { /* already gone */ }
+  return { ok: true };
+}
+async function pushList() {
+  const out = [];
+  for (const f of await listAll(PUSH_DIR + '/')) {
+    if (!/\.json$/i.test(f.name) || f.name.charAt(0) === '_') continue;
+    try { const d = JSON.parse((await getObj(f.key)).body.toString('utf8'));
+          if (d && d.endpoint && d.keys) out.push(Object.assign({ key: f.key }, d)); }
+    catch (e) { /* an unreadable subscription is skipped, not fatal */ }
+  }
+  return out;
+}
+/* What server.js remembers between restarts: the build it last saw on Pages. */
+async function pushStateGet() {
+  try { return JSON.parse((await getObj(PUSH_DIR + '/_state.json')).body.toString('utf8')) || {}; } catch (e) { return {}; }
+}
+async function pushStateSet(o) {
+  await putObj(PUSH_DIR + '/_state.json', Buffer.from(JSON.stringify(o || {})), 'application/json', '');
+}
+function pushSend(sub, payload, opts) {
+  return new Promise((res, rej) => {
+    const u = new URL(sub.endpoint);
+    const body = pushEncrypt(JSON.stringify(payload), sub.keys.p256dh, sub.keys.auth);
+    const headers = { 'Content-Type': 'application/octet-stream', 'Content-Encoding': 'aes128gcm',
+                      'Content-Length': String(body.length), 'TTL': String((opts && opts.ttl) || 86400),
+                      'Urgency': (opts && opts.urgency) || 'high', 'Authorization': vapidAuth(sub.endpoint) };
+    if (opts && opts.topic) headers.Topic = opts.topic;
+    const mod = u.protocol === 'http:' ? require('http') : https;
+    const req = mod.request({ host: u.hostname, port: u.port || undefined, method: 'POST',
+                              path: u.pathname + u.search, headers }, r => { r.resume(); r.on('end', () => res(r.statusCode)); });
+    req.setTimeout(15000, () => req.destroy(new Error('push timeout')));
+    req.on('error', rej);
+    req.end(body);
+  });
+}
+/* Every phone, one by one. 404/410 is the push service saying the
+   subscription is dead, and it is dropped; anything else is counted and left
+   for the next push. Returns the counts, so the caller can log a number. */
+async function pushAll(payload, opts) {
+  if (!vapidReady()) return { ok: false, error: 'No VAPID keys', sent: 0, gone: 0, failed: 0, total: 0 };
+  const subs = await pushList();
+  const out = { ok: true, sent: 0, gone: 0, failed: 0, total: subs.length, kind: payload && payload.kind };
+  for (const s of subs) {
+    try {
+      const st = await pushSend(s, Object.assign({ at: new Date().toISOString(), lang: s.lang || 'en' }, payload || {}), opts);
+      if (st >= 200 && st < 300) out.sent++;
+      else if (st === 404 || st === 410) { out.gone++; try { await delObj(s.key); } catch (e) {} }
+      else out.failed++;
+    } catch (e) { out.failed++; }
+  }
+  return out;
+}
+/* The folder changed: something for server.js to debounce into a push. */
+let onFolderChange = null;
+exports.onFolderChange = fn => { onFolderChange = fn; };
+function folderChanged(what) { try { if (onFolderChange) onFolderChange(what); } catch (e) { /* never fails a save */ } }
+
 /* ---- the door -----------------------------------------------------------
    One handler, both verbs, because that is what the clients send. */
 exports.handler = async function (event) {
@@ -711,6 +845,9 @@ exports.handler = async function (event) {
       if (q.action === 'list')    return json(await listFiles(q.folder || '', q.ext || ''));
       if (q.action === 'file')    return json(await readFile(q.id));
       if (q.action === 'files')   return json(await readFiles(q.ids));
+      /* The public half of the push key pair — what a phone subscribes with. */
+      if (q.action === 'vapid')   return json(vapidReady() ? { ok: true, key: vapidPublic() }
+                                                           : { ok: false, error: 'No VAPID keys on this endpoint' });
       /* 'index' is deliberately not implemented yet. Both clients already
          handle an endpoint without it — they fall back to records, and to
          list+file — because deployments in the field are never all on the same
@@ -726,7 +863,14 @@ exports.handler = async function (event) {
     if (SECRET && b.secret !== SECRET) return json({ ok: false, error: 'Bad or missing secret' });
     if (b.op === 'ping') return json({ ok: true, write: true, batch: true,
       canDelete: !!ADMIN, index: false, media: MEDIA_MAX, at: await indexAt() });
-    if (b.op === 'edit')    return json(await saveEdit(b));
+    if (b.op === 'edit')    { const r = await saveEdit(b); if (r && r.ok) folderChanged('edit'); return json(r); }
+    if (b.op === 'subscribe')   return json(await pushSubscribe(b));
+    if (b.op === 'unsubscribe') return json(await pushUnsubscribe(b));
+    /* A push on demand — admin only, the same gate as deletion. */
+    if (b.op === 'push') {
+      if (!ADMIN || String(b.admin || '') !== ADMIN) return json({ ok: false, error: 'Push is admin-only. Send the admin secret as "admin".' });
+      return json(await pushAll({ kind: String(b.kind || 'manual') }, { topic: 'cm-' + String(b.kind || 'manual').slice(0, 20), ttl: 6 * 3600, urgency: 'high' }));
+    }
     if (b.op === 'delete')  return json(await deleteRecord(b));
     if (b.op === 'delfile') return json(await deleteFile(b));
     if (b.op === 'resolve') return json(await resolveConflict(b));
@@ -747,9 +891,10 @@ exports.handler = async function (event) {
               if (r.ok) saved.push(r); else failed.push({ name: one.name, error: r.error }); }
         catch (e) { failed.push({ name: one.name, error: String(e.message || e) }); }
       }
+      if (saved.some(s => isSidecar(s.name))) folderChanged('batch');
       return json({ ok: true, batch: true, saved, failed });
     }
-    return json(await saveOne(b));
+    { const r = await saveOne(b); if (r && r.ok && isSidecar(r.name)) folderChanged('save'); return json(r); }
   } catch (e) {
     return json({ ok: false, error: String((e && e.message) || e) });
   }
@@ -759,4 +904,6 @@ exports.handler = async function (event) {
    bucket so the suite that proves the Apps Script proves this too. */
 exports._internals = { listAll, saveOne, readRecords, listFiles, readFile, readFiles,
                        saveEdit, deleteRecord, deleteFile, resolveConflict, diagnose, keyFile, keyFromSidecar,
-                       markConflict, isSidecar };
+                       markConflict, isSidecar,
+                       vapidGenerate, vapidSet, vapidReady, vapidPublic, vapidAuth, pushEncrypt,
+                       pushSubscribe, pushUnsubscribe, pushList, pushAll, pushSend, pushStateGet, pushStateSet };

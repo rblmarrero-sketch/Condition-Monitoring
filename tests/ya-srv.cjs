@@ -83,6 +83,16 @@ const body = src
 const mod = { exports: {} };
 const real = new Function('exports', 'module', 'require', 'process', 'BUCKET_', body)(
   mod.exports, mod, require, process, B);
+/* The push triggers, when a suite asks for them (tests/bgpush.cjs): the same
+   startPushTriggers server.js runs on the VM, pointed at a sw.js the suite
+   controls and on a clock the suite sets. VAPID keys arrive in the environment
+   exactly as cm.env would carry them. */
+let PUSH = null;
+if (process.env.CM_PUSH_TRIGGERS) {
+  PUSH = WRAP.startPushTriggers(real, { swUrl: process.env.CM_PUSH_SW, pollMs: Number(process.env.CM_PUSH_POLL_MS || 600000),
+    folderDelayMs: Number(process.env.CM_PUSH_FOLDER_MS || 500), folderGapMs: Number(process.env.CM_PUSH_GAP_MS || 0),
+    dailyUtc: 'never', log: m => console.log('[push] ' + m) });
+}
 
 /* ---- the fixture --------------------------------------------------------
    Byte for byte what ed-srv.cjs seeds. Not "something similar": tests/yandex.cjs
@@ -139,6 +149,19 @@ http.createServer(async (req, res) => {
   if (u.pathname === '/__keys') {
     res.writeHead(200, Object.assign({ 'Content-Type': 'application/json' }, cors));
     return res.end(JSON.stringify({ keys: B.keys() }));
+  }
+  /* Fire a trigger now rather than waiting for its clock. */
+  if (u.pathname.indexOf('/__push/') === 0) {
+    const what = u.pathname.slice(8);
+    let r = null;
+    try { if (!PUSH) r = { error: 'triggers off' };
+          else if (what === 'poll') r = await PUSH.pollBuild();
+          else if (what === 'daily') r = await PUSH.pushDaily();
+          else if (what === 'folder') r = await PUSH.pushFolder();
+          else if (what === 'log') r = PUSH.state.log; }
+    catch (e) { r = { error: String(e.message || e) }; }
+    res.writeHead(200, Object.assign({ 'Content-Type': 'application/json' }, cors));
+    return res.end(JSON.stringify(r));
   }
   if (u.pathname === '/exec') {
     /* Through the REAL wrapper, not a copy of it.
