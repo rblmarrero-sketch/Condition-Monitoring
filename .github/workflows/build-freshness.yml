@@ -30,7 +30,7 @@ jobs:
     name: Shipped files changed without a build increment
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           # bump.cjs asks git WHEN the current BUILD was introduced, so it needs
           # the history to answer from. The default shallow clone cannot, and the
@@ -39,7 +39,7 @@ jobs:
           # nothing. Full history makes the question answerable.
           fetch-depth: 0
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: '20'
 
@@ -74,7 +74,7 @@ jobs:
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Wait for Pages to publish
         # Pages is not synchronous with the push. Poll rather than sleep a fixed
