@@ -25,6 +25,9 @@ const srv=http.createServer((req,res)=>{
  const send=o=>{res.writeHead(200,Object.assign({'Content-Type':'application/json'},cors));res.end(JSON.stringify(o));};
  /* the Apps Script destination */
  if(u.pathname==='/exec'){
+   /* A read — the phone asking for the push key at boot — is not an upload
+      and is not counted among them. */
+   if(req.method==='GET'){ res.writeHead(200,Object.assign({'Content-Type':'application/json'},cors)); return res.end(JSON.stringify({ok:false,error:'Unknown action: '+(u.searchParams.get('action')||'')})); }
    let b=''; req.on('data',c=>b+=c);
    return req.on('end',()=>{
      let j=null; try{ j=JSON.parse(b); }catch(e){}
