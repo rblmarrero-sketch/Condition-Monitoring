@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=261">
+<link rel="manifest" href="manifest.webmanifest?v=262">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=261">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=261">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=261">
+<link rel="apple-touch-icon" href="icon-192.png?v=262">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=262">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=262">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2065,33 +2065,33 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=261"></script>
-<script src="upload-defaults.js?v=261"></script>
-<script src="hme.js?v=261"></script>
-<script src="mp-fc.js?v=261"></script>
-<script src="hme-cascade.js?v=261"></script>
-<script src="assets.js?v=261"></script>
-<script src="temp-limits.js?v=261"></script>
-<script src="normalize.js?v=261"></script>
-<script src="grade.js?v=261"></script>
-<script src="edits.js?v=261"></script>
-<script src="due.js?v=261"></script>
-<script src="wear.js?v=261"></script>
-<script src="wear-figs.js?v=261"></script>
-<script src="wear-map.js?v=261"></script>
-<script src="machine-photos.js?v=261"></script>
-<script src="machine-fig.js?v=261"></script>
-<script src="get.js?v=261"></script>
-<script src="points.js?v=261"></script>
-<script src="uc-points.js?v=261"></script>
-<script src="inspect-guide.js?v=261"></script>
-<script src="get-figs.js?v=261"></script>
-<script src="body-points.js?v=261"></script>
-<script src="body-map.js?v=261"></script>
-<script src="lube.js?v=261"></script>
-<script src="lube-overrides.js?v=261"></script>
-<script src="lube2027.js?v=261"></script>
-<script src="report-core.js?v=261"></script>
+<script src="native.js?v=262"></script>
+<script src="upload-defaults.js?v=262"></script>
+<script src="hme.js?v=262"></script>
+<script src="mp-fc.js?v=262"></script>
+<script src="hme-cascade.js?v=262"></script>
+<script src="assets.js?v=262"></script>
+<script src="temp-limits.js?v=262"></script>
+<script src="normalize.js?v=262"></script>
+<script src="grade.js?v=262"></script>
+<script src="edits.js?v=262"></script>
+<script src="due.js?v=262"></script>
+<script src="wear.js?v=262"></script>
+<script src="wear-figs.js?v=262"></script>
+<script src="wear-map.js?v=262"></script>
+<script src="machine-photos.js?v=262"></script>
+<script src="machine-fig.js?v=262"></script>
+<script src="get.js?v=262"></script>
+<script src="points.js?v=262"></script>
+<script src="uc-points.js?v=262"></script>
+<script src="inspect-guide.js?v=262"></script>
+<script src="get-figs.js?v=262"></script>
+<script src="body-points.js?v=262"></script>
+<script src="body-map.js?v=262"></script>
+<script src="lube.js?v=262"></script>
+<script src="lube-overrides.js?v=262"></script>
+<script src="lube2027.js?v=262"></script>
+<script src="report-core.js?v=262"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -8231,9 +8231,21 @@ async function teamReapply(keys){
   if(n) teamSave([...have.values()]);
   return n;
 }
+/* A measured station scored against THIS phone's reference for the machine —
+   the same resolution openRound() draws the percentage column from, and the
+   same one the office's wearOf() applies. A tray walked before the register
+   knew its model carries no remaining life on the record at all; the office
+   showed it Critical and the phone's history showed nothing. */
+function teamLife(r){
+  const meta=TYPE_META[r.type]||{};
+  if(!(meta.wear||meta.get) || !window.WEAR) return null;
+  return it=>{ const mm=(it.mm===""||it.mm==null)?null:Number(it.mm); if(mm==null||!isFinite(mm)) return null;
+    let ref=null; try{ ref=teamRefFor(r,it.key); }catch(e){ ref=null; }
+    if(!ref) return null; const w=WEAR.wear(ref,mm); return (w==null||!isFinite(w))?null:Math.round(w); };
+}
 function teamRow(r){
   r=teamApplied(r);
-  const worst=GRADE.num(r.g)||GRADE.roundGrade(r.items||[])||"";
+  const worst=GRADE.num(r.g)||GRADE.roundGrade(r.items||[], teamLife(r))||"";
   /* Baselines change how every later reading on that unit is scored, so they
      cannot stay on the phone that set them. They are rare, so carrying them on
      the summary row costs nothing worth counting. */
@@ -10569,7 +10581,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="261";
+const BUILD="262";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

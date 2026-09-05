@@ -148,12 +148,24 @@
      remaining life maps to, the same rule the dashboard scores it with. The
      machine's own photographs carry no grade. Null when nothing on the round
      says anything, which is a fact worth keeping distinct from "1". */
-  function roundGrade(items) {
+  /* life(item) → worn %, or null: the caller's OWN reading of a measured
+     station against TODAY'S standard, where it has one. The figure stored on
+     the record is what the phone's table said at capture — and a tray walked
+     before the register knew its model carries none, while one measured
+     before a limit was revised carries a stale one. The office recomputes
+     (wearOf); a phone summarising a team round does the same (teamRefFor); a
+     phone at Save has only its own fresh figure. One rule, whichever it is. */
+  function roundGrade(items, life) {
     var w = 0;
     (items || []).forEach(function (i) {
       if (!i || i.general || i.key === '__general') return;
       var n = num(i.grade);
-      if (!n && i.wearPct !== '' && i.wearPct != null && isFinite(Number(i.wearPct))) n = fromWorn(Number(i.wearPct));
+      if (!n) {
+        var p = null;
+        if (typeof life === 'function') { try { p = life(i); } catch (e) { p = null; } }
+        if (p == null && i.wearPct !== '' && i.wearPct != null && isFinite(Number(i.wearPct))) p = Number(i.wearPct);
+        if (p != null && isFinite(Number(p))) n = fromWorn(Number(p));
+      }
       if (n && n > w) w = n;
     });
     return w || null;
