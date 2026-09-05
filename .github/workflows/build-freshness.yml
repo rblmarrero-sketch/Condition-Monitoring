@@ -175,9 +175,18 @@ jobs:
         run: |
           set -euo pipefail
           BASE="https://rblmarrero-sketch.github.io/Condition-Monitoring"
-          curl -fsSL --max-time 30 "$BASE/mobile/sw.js?ci=$GITHUB_SHA" \
-            | grep -q "normalize.js" \
-            || { echo "::error::The service worker does not precache normalize.js — an offline phone would run without it."; exit 1; }
+          # Read the file first, THEN search it. Piped straight into grep -q,
+          # grep exits at the first match and closes the pipe while curl is
+          # still writing; curl reports "failure writing output" and, under
+          # pipefail, a build that WAS published got a red tick — builds 254
+          # to 262, every one of them fine on the public URLs, and the
+          # maintainer got a failure e-mail for each. A guard that cries wolf
+          # is the noise a real failure hides in.
+          SW=$(curl -fsSL --max-time 30 "$BASE/mobile/sw.js?ci=$GITHUB_SHA")
+          if ! grep -q "normalize.js" <<< "$SW"; then
+            echo "::error::The service worker does not precache normalize.js — an offline phone would run without it."
+            exit 1
+          fi
           echo "sw.js precaches normalize.js"
 
       - name: Summary
