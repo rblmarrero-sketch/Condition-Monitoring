@@ -36,7 +36,7 @@
        explains itself and offers a retry — because an honest offline page is
        recoverable and a browser error page is not. */
 
-const BUILD = "266";
+const BUILD = "267";
 const CACHE = "plug-capture-v" + BUILD;
 
 /* Without these the app is not an app: no page, no equipment register, no
@@ -455,7 +455,7 @@ self.addEventListener("message", (e) => {
   /* The page mirrors what the worker needs to act alone — backend URL, read
      secret, cursor, device, language — into the config cache; and the test
      seam: a wake by message runs exactly what a push runs. */
-  if (d.type === "sw-config") e.waitUntil(cfgPut("./__config", d.cfg || {}));
+  if (d.type === "sw-config") e.waitUntil(cfgPut("__config", d.cfg || {}));
   if (d.type === "sw-wake") {
     e.waitUntil((async () => {
       const out = await wake("message", d.data || {});
@@ -514,7 +514,7 @@ self.addEventListener("message", (e) => {
      5. the verdict: "Ready for the field" or "Not ready", with the build,
         the file count, the fleet list's age and the queue, as a notification.
    Everything is bounded: a push handler on iOS gets seconds, not minutes. */
-const CFG_CACHE = "cm-config";
+const CFG_CACHE = "cm_config";
 async function cfgGet(k) {
   try { const c = await caches.open(CFG_CACHE); const r = await c.match(k); return r ? await r.json() : null; }
   catch (e) { return null; }
@@ -596,7 +596,7 @@ async function doWake(reason, data) {
   if (missing.length) { try { await precache(); } catch (_) {} missing = await missingEssentials(); }
   out.have = ESSENTIAL.length - missing.length; out.need = ESSENTIAL.length;
   /* 3. the fleet list, for the page's next open */
-  const cfg = (await cfgGet("./__config")) || {};
+  const cfg = (await cfgGet("__config")) || {};
   const lang = cfg.lang === "ru" ? "ru" : "en"; out.lang = lang;
   if (cfg.url) {
     try {
@@ -611,7 +611,7 @@ async function doWake(reason, data) {
         j = await ask({ action: "records", after: String(cfg.cursor || 0), index: "0" }); via = "records";
       }
       if (j && j.ok !== false && (j.v || j.records)) {
-        await cfgPut("./__team-prefetch", { since: Number(cfg.cursor || 0), at: Date.now(), via, reply: j });
+        await cfgPut("__team-prefetch", { since: Number(cfg.cursor || 0), at: Date.now(), via, reply: j });
         out.fleetAt = Date.now(); out.fleetRows = ((via === "index" ? j.rows : j.records) || []).length; out.fleetVia = via;
       } else out.fleetErr = (j && j.error) || "no reply";
     } catch (e) { out.fleetErr = String((e && e.message) || e); }
@@ -630,7 +630,7 @@ async function doWake(reason, data) {
       icon: "./icon-192.png", badge: "./icon-192.png", data: { kind: out.kind, ready: out.ready, at: out.at } });
     out.notified = true;
   } catch (e) { out.notifyErr = String((e && e.message) || e); }
-  await cfgPut("./__last-wake", out);
+  await cfgPut("__last-wake", out);
   return out;
 }
 self.addEventListener("push", e => {

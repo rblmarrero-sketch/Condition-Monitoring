@@ -54,9 +54,11 @@ const ready = p => p.evaluate(() => [...document.querySelectorAll('.yardrow')].m
   await p.waitForTimeout(5500);
   const yard = await ready(p);
   yard.forEach(r => note(r.k.padEnd(4), r.t + ' — ' + r.s));
-  ok('every readiness question is answered', yard.length === 7, yard.length + ' checks');
-  /* The one row allowed amber here: this backend is the Apps Script, which
-     cannot wake a phone, and the card says so. Every other row must be green. */
+  /* Six, not seven: the wake-up row appears only where a person can act on
+     it, and this backend is the Apps Script, which cannot wake a phone. */
+  ok('every readiness question is answered', yard.length === 6, yard.length + ' checks');
+  /* Should the row appear anyway (a backend that can, permission not yet
+     given), amber is right for it. Every other row must be green. */
   const bgT = await p.evaluate(() => t('rdy_bg_t'));
   const green = r => r.k === 'ok' || (r.t === bgT && r.k === 'warn');
   ok('and on a clean phone with signal they all pass',

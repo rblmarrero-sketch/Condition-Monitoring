@@ -223,14 +223,14 @@ async function phone(b, APP, opts) {
     ok('the phone subscribed itself with the server\'s key, with nothing tapped beyond the permission', ps.k === 'on', JSON.stringify(ps));
     const onServer = await keysOnServer();
     ok('  and the endpoint holds its subscription', onServer.length === 2, onServer.length + ' subscriptions');
-    const cfg = await p.evaluate(async () => { const c = await caches.open('cm-config'); const r = await c.match('./__config'); return r ? r.json() : null; });
+    const cfg = await p.evaluate(async () => { const c = await caches.open('cm_config'); const r = await c.match('__config'); return r ? r.json() : null; });
     ok('the worker has been told the backend, the cursor, the device and the language', cfg && cfg.url && cfg.dev && cfg.lang && typeof cfg.cursor === 'number', JSON.stringify(cfg));
 
     let w = await swWake(p, { kind: 'daily' });
     ok('a wake with nothing wrong: ready, every file, fleet list fetched, nothing queued', w.ready === true && w.have === w.need && w.fleetAt > 0 && w.pending === 0 && w.notified === true, JSON.stringify(w).slice(0, 300));
     let n = await notifs(p);
     ok('  and it says so in a notification', n.length === 1 && n[0].title === 'Ready for the field' && /build/.test(n[0].body), JSON.stringify(n));
-    const pre = await p.evaluate(async () => { const c = await caches.open('cm-config'); const r = await c.match('./__team-prefetch'); return r ? r.json() : null; });
+    const pre = await p.evaluate(async () => { const c = await caches.open('cm_config'); const r = await c.match('__team-prefetch'); return r ? r.json() : null; });
     ok('  the fleet list is kept for the next open, from this phone\'s cursor', pre && pre.since === cfg.cursor && pre.reply && (pre.via === 'index' ? !!pre.reply.v : !!pre.reply.records), pre && JSON.stringify({ since: pre.since, via: pre.via }));
 
     await p.evaluate(async () => { await dbPut({ id: 'up__push1', equip: 'TK146', date: '2026-09-05', type: 'MP', positions: {}, created: new Date().toISOString(), up: 0, rev: 1 }); });
@@ -258,13 +258,13 @@ async function phone(b, APP, opts) {
     ok('a round on TK172 lands on the folder while the app is closed', (await plant('TK172', '2026-09-05', 'MP')).ok);
     const w = await swWake(p, { kind: 'folder' });
     ok('the worker prefetched it', w.fleetAt > 0 && w.fleetRows >= 1, JSON.stringify({ rows: w.fleetRows, via: w.fleetVia, err: w.fleetErr }));
-    const kept = await p.evaluate(async () => { const c = await caches.open('cm-config'); const r = await c.match('./__team-prefetch'); return r ? r.json() : null; });
+    const kept = await p.evaluate(async () => { const c = await caches.open('cm_config'); const r = await c.match('__team-prefetch'); return r ? r.json() : null; });
     await ctx.setOffline(true);
     await p.reload({ waitUntil: 'load' }); await p.waitForTimeout(3000);
     const dbg = await p.evaluate(() => ({ cur: localStorage.getItem('cm_team_cursor'), short: (typeof histIsShort === 'function') ? histIsShort() : '?', n: teamAll().length, last: teamAll().map(x => x.u).slice(-5) }));
     ok('opened in the pit, TK172 is on the list', await p.evaluate(() => teamAll().some(x => x.u === 'TK172')),
        JSON.stringify(dbg) + ' prefetch since ' + (kept && kept.since) + ' via ' + (kept && kept.via) + ' records=' + JSON.stringify(kept && kept.reply && (kept.reply.records || []).map(r => r.equip)));
-    ok('  and the prefetch was consumed', await p.evaluate(async () => !(await (await caches.open('cm-config')).match('./__team-prefetch'))));
+    ok('  and the prefetch was consumed', await p.evaluate(async () => !(await (await caches.open('cm_config')).match('__team-prefetch'))));
     await ctx.setOffline(false);
     await ctx.close();
   }

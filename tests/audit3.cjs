@@ -357,7 +357,9 @@ const swHealth = p => p.evaluate(() => new Promise(res => {
   ok('and they are warmed in afterwards, so Report is still instant', heavyLater === 4,
      heavyLater + ' of 4 warmed once the worker was in charge');
   const heavyCached = await f.evaluate(async () => {
-    const c = await caches.open((await caches.keys()).find(k => /cm-/.test(k)) || (await caches.keys())[0]);
+    /* The app's own cache, by its name — the worker keeps a second, small
+       cache for its wake-up configuration, and "whichever comes first" picked it. */
+    const c = await caches.open((await caches.keys()).find(k => /^plug-capture-v/.test(k)) || (await caches.keys())[0]);
     const ks = (await c.keys()).map(r => r.url);
     return ['jspdf.umd.min.js', 'html2canvas.min.js', 'jsQR.js', 'qrcode.js']
       .filter(n => ks.some(u => u.includes(n))).length;

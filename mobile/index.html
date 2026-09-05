@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=266">
+<link rel="manifest" href="manifest.webmanifest?v=267">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=266">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=266">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=266">
+<link rel="apple-touch-icon" href="icon-192.png?v=267">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=267">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=267">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2070,33 +2070,33 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=266"></script>
-<script src="upload-defaults.js?v=266"></script>
-<script src="hme.js?v=266"></script>
-<script src="mp-fc.js?v=266"></script>
-<script src="hme-cascade.js?v=266"></script>
-<script src="assets.js?v=266"></script>
-<script src="temp-limits.js?v=266"></script>
-<script src="normalize.js?v=266"></script>
-<script src="grade.js?v=266"></script>
-<script src="edits.js?v=266"></script>
-<script src="due.js?v=266"></script>
-<script src="wear.js?v=266"></script>
-<script src="wear-figs.js?v=266"></script>
-<script src="wear-map.js?v=266"></script>
-<script src="machine-photos.js?v=266"></script>
-<script src="machine-fig.js?v=266"></script>
-<script src="get.js?v=266"></script>
-<script src="points.js?v=266"></script>
-<script src="uc-points.js?v=266"></script>
-<script src="inspect-guide.js?v=266"></script>
-<script src="get-figs.js?v=266"></script>
-<script src="body-points.js?v=266"></script>
-<script src="body-map.js?v=266"></script>
-<script src="lube.js?v=266"></script>
-<script src="lube-overrides.js?v=266"></script>
-<script src="lube2027.js?v=266"></script>
-<script src="report-core.js?v=266"></script>
+<script src="native.js?v=267"></script>
+<script src="upload-defaults.js?v=267"></script>
+<script src="hme.js?v=267"></script>
+<script src="mp-fc.js?v=267"></script>
+<script src="hme-cascade.js?v=267"></script>
+<script src="assets.js?v=267"></script>
+<script src="temp-limits.js?v=267"></script>
+<script src="normalize.js?v=267"></script>
+<script src="grade.js?v=267"></script>
+<script src="edits.js?v=267"></script>
+<script src="due.js?v=267"></script>
+<script src="wear.js?v=267"></script>
+<script src="wear-figs.js?v=267"></script>
+<script src="wear-map.js?v=267"></script>
+<script src="machine-photos.js?v=267"></script>
+<script src="machine-fig.js?v=267"></script>
+<script src="get.js?v=267"></script>
+<script src="points.js?v=267"></script>
+<script src="uc-points.js?v=267"></script>
+<script src="inspect-guide.js?v=267"></script>
+<script src="get-figs.js?v=267"></script>
+<script src="body-points.js?v=267"></script>
+<script src="body-map.js?v=267"></script>
+<script src="lube.js?v=267"></script>
+<script src="lube-overrides.js?v=267"></script>
+<script src="lube2027.js?v=267"></script>
+<script src="report-core.js?v=267"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -10666,7 +10666,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="266";
+const BUILD="267";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -12363,7 +12363,10 @@ async function yardCheck(){
       else add("ok",t("rdy_q_t"),t("rdy_q_ok"),null,"queue");
     }
 
-    /* 5b. can this phone be woken while the app is closed */
+    /* 5b. can this phone be woken while the app is closed. A row only where
+       a person can do something about the answer — allow, install, retry.
+       A backend or a browser that cannot do it is not this technician's to
+       fix, and a card that stays open over it is a card nobody reads. */
     {
       const ps=await within(12000, ()=>pushSetup(), {k:"unreach", why:"timeout"});
       const why=(ps&&ps.why)||"";
@@ -12372,12 +12375,12 @@ async function yardCheck(){
         { label:t("rdy_fix_allow"), run:async()=>{ await pushAllow(); } },"bg");
       else if(ps.k==="denied") add("warn",t("rdy_bg_t"),t("rdy_bg_denied"),null,"bg");
       else if(ps.k==="install") add("warn",t("rdy_bg_t"),t("rdy_bg_install"),null,"bg");
-      else if(ps.k==="nosupport") add("warn",t("rdy_bg_t"),t("rdy_bg_nosupport"),null,"bg");
-      else if(ps.k==="nobackend") add("warn",t("rdy_bg_t"),t("rdy_bg_nobackend",{why}),null,"bg");
       else if(ps.k==="failed") add("warn",t("rdy_bg_t"),t("rdy_bg_failed",{why}),
         { label:t("rdy_fix_retry"), run:async()=>{} },"bg");
-      else if(ps.k!=="nodest") add("warn",t("rdy_bg_t"),t("rdy_bg_unreach",{why}),
-        { label:t("rdy_fix_retry"), run:async()=>{} },"bg");
+      /* nobackend, nosupport, nodest: nothing to ask of anybody here.
+         unreach: the pit — a server out of reach is the ordinary state of a
+         phone out there, not a thing to fix before leaving; it is tried again
+         at every open and every check. */
     }
 
     /* 6. the machines, the limits and the lubricants */
@@ -13277,8 +13280,8 @@ async function mirrorSwConfig(){
     const g=loadDests().find(d=>d.id==="gas" && d.url);
     const cfg={ url:g?g.url:"", sec:g?(g.sec||""):"", cursor:Number(localStorage.getItem(TEAM_CUR)||0)||0,
                 dev:DEVICE, lang, build:BUILD, at:Date.now() };
-    const c=await caches.open("cm-config");
-    await c.put("./__config", new Response(JSON.stringify(cfg),{headers:{"Content-Type":"application/json"}}));
+    const c=await caches.open("cm_config");
+    await c.put("__config", new Response(JSON.stringify(cfg),{headers:{"Content-Type":"application/json"}}));
     return true;
   }catch(e){ return false; }
 }
@@ -13291,24 +13294,31 @@ async function backendPost(g, body){
     body:JSON.stringify(Object.assign({secret:g.sec||""},body))}), 15000);
   return res.json();
 }
-let pushBusy=null;
+let pushBusy=null, pushKeyMemo={url:"", key:"", at:0};
 function pushSetup(){ if(pushBusy) return pushBusy; pushBusy=pushSetupNow().finally(()=>{ pushBusy=null; }); return pushBusy; }
 async function pushSetupNow(){
   await mirrorSwConfig();
+  const g=loadDests().find(d=>d.id==="gas" && d.url);
+  if(!g) return {k:"nodest"};
+  /* The server first: a backend that cannot wake phones makes every question
+     about this phone moot, and the card must not ask for a tap that would buy
+     nothing. The key is remembered ten minutes; a phone subscribed under an
+     older key re-subscribes. */
+  let key=null;
+  if(pushKeyMemo.url===g.url && Date.now()-pushKeyMemo.at<600000 && pushKeyMemo.key) key=pushKeyMemo.key;
+  else{
+    try{
+      const q=new URLSearchParams({action:"vapid"}); if(g.sec) q.set("secret",g.sec);
+      const r=await withTimeoutMs(fetch(g.url+(g.url.indexOf("?")<0?"?":"&")+q.toString()), 10000);
+      const j=await r.json();
+      if(j && j.ok && j.key){ key=j.key; pushKeyMemo={url:g.url, key, at:Date.now()}; }
+      else return {k:"nobackend", why:(j&&j.error)||"no key"};
+    }catch(e){ return {k:"unreach", why:String((e&&e.message)||e).slice(0,60)}; }
+  }
   if(!pushSupported()) return {k: isStandalone()?"nosupport":"install"};
   const perm=Notification.permission;
   if(perm!=="granted") return {k: perm==="denied"?"denied":(isStandalone()||!/iP(hone|ad)/.test(navigator.userAgent)?"default":"install")};
-  const g=loadDests().find(d=>d.id==="gas" && d.url);
-  if(!g) return {k:"nodest"};
   let reg=null; try{ reg=await withTimeoutMs(navigator.serviceWorker.ready, 8000); }catch(e){ return {k:"failed", why:"no worker"}; }
-  /* The server's key. A phone subscribed under an older key re-subscribes. */
-  let key=null;
-  try{
-    const q=new URLSearchParams({action:"vapid"}); if(g.sec) q.set("secret",g.sec);
-    const r=await withTimeoutMs(fetch(g.url+(g.url.indexOf("?")<0?"?":"&")+q.toString()), 10000);
-    const j=await r.json();
-    if(j && j.ok && j.key) key=j.key; else return {k:"nobackend", why:(j&&j.error)||"no key"};
-  }catch(e){ return {k:"unreach", why:String((e&&e.message)||e).slice(0,60)}; }
   const stored=localStorage.getItem(PUSH_KEY)||"";
   let sub=null;
   try{ sub=await reg.pushManager.getSubscription(); }catch(e){ sub=null; }
@@ -13611,12 +13621,12 @@ const healIfReached = ok => ok ? histHealOnce().then(teamHealOnce) : null;
 async function teamPrefetched(){
   try{
     if(!("caches" in window)) return null;
-    const c=await caches.open("cm-config");
-    const r=await c.match("./__team-prefetch"); if(!r) return null;
+    const c=await caches.open("cm_config");
+    const r=await c.match("__team-prefetch"); if(!r) return null;
     return await r.json();
   }catch(e){ return null; }
 }
-function teamPrefetchDrop(){ try{ caches.open("cm-config").then(c=>c.delete("./__team-prefetch")).catch(()=>{}); }catch(e){} }
+function teamPrefetchDrop(){ try{ caches.open("cm_config").then(c=>c.delete("__team-prefetch")).catch(()=>{}); }catch(e){} }
 const pullIn = (pre) => teamPull(false,false,null,pre).then(healIfReached)
   .catch(e=>{ histNote((e&&e.message)||e); renderDue&&renderDue(); });
 teamPrefetched().then(pre=>pullIn(pre||undefined));
