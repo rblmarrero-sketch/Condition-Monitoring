@@ -3240,29 +3240,29 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=267"></script>
-<script src="../mobile/hme.js?v=267"></script>
-<script src="../mobile/mp-fc.js?v=267"></script>
-<script src="../mobile/hme-cascade.js?v=267"></script>
-<script src="../mobile/temp-limits.js?v=267"></script>
+<script src="../data/magnetic_plug.js?v=268"></script>
+<script src="../mobile/hme.js?v=268"></script>
+<script src="../mobile/mp-fc.js?v=268"></script>
+<script src="../mobile/hme-cascade.js?v=268"></script>
+<script src="../mobile/temp-limits.js?v=268"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=267"></script>
-<script src="../mobile/normalize.js?v=267"></script>
-<script src="../mobile/grade.js?v=267"></script>
-<script src="../mobile/edits.js?v=267"></script>
-<script src="../mobile/due.js?v=267"></script>
-<script src="../mobile/wear.js?v=267"></script>
-<script src="../mobile/wear-map.js?v=267"></script>
-<script src="../mobile/lube.js?v=267"></script>
-<script src="../mobile/lube-overrides.js?v=267"></script>
-<script src="../mobile/lube2027.js?v=267"></script>
-<script src="../mobile/lube-tds.js?v=267"></script>
+<script src="../mobile/assets.js?v=268"></script>
+<script src="../mobile/normalize.js?v=268"></script>
+<script src="../mobile/grade.js?v=268"></script>
+<script src="../mobile/edits.js?v=268"></script>
+<script src="../mobile/due.js?v=268"></script>
+<script src="../mobile/wear.js?v=268"></script>
+<script src="../mobile/wear-map.js?v=268"></script>
+<script src="../mobile/lube.js?v=268"></script>
+<script src="../mobile/lube-overrides.js?v=268"></script>
+<script src="../mobile/lube2027.js?v=268"></script>
+<script src="../mobile/lube-tds.js?v=268"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=267"></script>
-<script src="../mobile/machine-photos.js?v=267"></script>
+<script src="../mobile/upload-defaults.js?v=268"></script>
+<script src="../mobile/machine-photos.js?v=268"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3271,17 +3271,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=267"></script>
-<script src="../mobile/get.js?v=267"></script>
-<script src="../mobile/points.js?v=267"></script>
-<script src="../mobile/uc-points.js?v=267"></script>
-<script src="../mobile/inspect-guide.js?v=267"></script>
-<script src="../mobile/get-figs.js?v=267"></script>
-<script src="../mobile/body-points.js?v=267"></script>
-<script src="../mobile/body-map.js?v=267"></script>
-<script src="../mobile/jspdf.umd.min.js?v=267"></script>
-<script src="../mobile/html2canvas.min.js?v=267"></script>
-<script src="../mobile/report-core.js?v=267"></script>
+<script src="../mobile/machine-fig.js?v=268"></script>
+<script src="../mobile/get.js?v=268"></script>
+<script src="../mobile/points.js?v=268"></script>
+<script src="../mobile/uc-points.js?v=268"></script>
+<script src="../mobile/inspect-guide.js?v=268"></script>
+<script src="../mobile/get-figs.js?v=268"></script>
+<script src="../mobile/body-points.js?v=268"></script>
+<script src="../mobile/body-map.js?v=268"></script>
+<script src="../mobile/jspdf.umd.min.js?v=268"></script>
+<script src="../mobile/html2canvas.min.js?v=268"></script>
+<script src="../mobile/report-core.js?v=268"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -3329,6 +3329,23 @@ const upDefect=c=>LEG.defects[c]||c, upCause=c=>LEG.causes[c]||c;
 const upComp=c=>LEG.components[c]||c, upAction=c=>LEG.actions[c]||c;
 const defName=(c,l)=>{ const d=DEF[upDefect(c)]; return d?(d[l||lang]||d.en):(LEG.labels[c]||c); };
 const causeName=(c,l)=>{ const x=CAUSE_BY[upCause(c)]; return x?(x[l||lang]||x.en):(LEG.labels[c]||c); };
+/* THE NAME OF A FINDING IS RESOLVED IN THE LANGUAGE ON SCREEN, NEVER READ
+   OFF THE RECORD. A record carries the text the inspector's phone showed at
+   capture — Russian on a Russian phone — and the failure-analysis table and
+   its Pareto printed that text as it stood: an English dashboard listed
+   "F62 · Разгрузочная часть" beside "Ferrous debris", and the same coded
+   defect captured on two phones in two languages was two Pareto bars.
+   The CODE is the fact; the label is looked up here, per language. Free text
+   with no code is the inspector's own words and stays as typed. */
+const defectKeyOf=i=>upDefect(String((i&&i.defectCode)||""))||String((i&&i.defect)||"");
+const causeKeyOf=i=>upCause(String((i&&i.causeCode)||""))||String((i&&i.cause)||"");
+const defectKeyLabel=(k,l)=>DEF[k]?defName(k,l):k;
+const causeKeyLabel=(k,l)=>CAUSE_BY[k]?causeName(k,l):k;
+function findingName(rec,i,lg){
+  const k=defectKeyOf(i);
+  if(k) return defectKeyLabel(k,lg);
+  return ptLabel(rec,i,lg)||i.key||"";
+}
 /* Specific causes first, general behind the expander — the same split the phone
    makes, from the same table. 74% of the matrix is the general tail. */
 function causesFor(compCode,defectCode){
@@ -5468,8 +5485,8 @@ function filtered(inclVoid){
     if(drill.sev||drill.defect||drill.cause){
       const hit=(r.items||[]).some(i=>
         (!drill.sev    || String(sevOf(r,i))===String(drill.sev)) &&
-        (!drill.defect || i.defect===drill.defect) &&
-        (!drill.cause  || i.cause===drill.cause));
+        (!drill.defect || defectKeyOf(i)===drill.defect) &&
+        (!drill.cause  || causeKeyOf(i)===drill.cause));
       if(!hit) return false;
     }
     return true;
@@ -5518,8 +5535,8 @@ function renderChips(){
   if(drill.month)  add(t("c_month"), drill.month, ()=>setDrill("month",drill.month));
   if(drill.sev)    add(t("c_sev"), SEV[drill.sev]?SEV[drill.sev].l:drill.sev, ()=>setDrill("sev",drill.sev));
   if($("fGrade")) $("fGrade").value = drill.sev ? String(drill.sev) : "";
-  if(drill.defect) add(t("c_defect"), drill.defect, ()=>setDrill("defect",drill.defect));
-  if(drill.cause)  add(t("c_cause"), drill.cause, ()=>setDrill("cause",drill.cause));
+  if(drill.defect) add(t("c_defect"), defectKeyLabel(drill.defect), ()=>setDrill("defect",drill.defect));
+  if(drill.cause)  add(t("c_cause"), causeKeyLabel(drill.cause), ()=>setDrill("cause",drill.cause));
   const box=$("chips");
   /* THE ADDRESS FOLLOWS THE SCREEN, from the one place that already knows what
      every filter is set to. Written without a history entry: changing a filter
@@ -5567,7 +5584,7 @@ function notable(rec){
     return GRADE.isFinding(sevOf(rec,i))||i.defectCode||(w&&(w.band==="act"||w.band==="watch")); });
 }
 function topFinding(rec){
-  const d=(rec.items||[]).map(i=>i.defect).filter(Boolean)[0];
+  const d=(rec.items||[]).map(i=>{ const k=defectKeyOf(i); return k?defectKeyLabel(k):""; }).filter(Boolean)[0];
   if(d) return d;
   if(!isWearType(rec.type)) return "";
   const w=(rec.items||[]).map(i=>wearOf(rec,i)).filter(x=>x&&x.wearPct!=null)
@@ -5997,11 +6014,14 @@ function pareto(el,pairs,colorFn,drillKey,why,total){
   const max=pairs[0][1];
   const sum=total || pairs.reduce((a,[,n])=>a+n,0);
   let run=0, cutAt=-1;
-  const rows=pairs.map(([label,n,sub],ix)=>{
+  /* [label, n, sub, key]: the label is what is printed, in the language on
+     screen; the key is what the drill files under — the code, where there is
+     one — so the bar reads right in either language and filters the same. */
+  const rows=pairs.map(([label,n,sub,key],ix)=>{
     run+=n; const cum=sum?run/sum*100:0;
     const vital = cutAt<0;
     if(cutAt<0 && cum>=80) cutAt=ix;             // the row that crosses 80%
-    return {label,n,sub,cum,vital};
+    return {label,n,sub,cum,vital,key:key||label};
   });
   const nVital = cutAt<0 ? rows.length : cutAt+1;
   const head = sum ? `<div class="phead">${esc(t("p_vital",{k:nVital,n:rows.length,
@@ -6011,11 +6031,11 @@ function pareto(el,pairs,colorFn,drillKey,why,total){
      one currently selected. It was a div with a click handler, which a keyboard
      cannot reach and a screen reader announces as text. */
   el.innerHTML = head + rows.map((r,ix)=>`
-    <${drillKey?"button type=\"button\"":"div"} class="prow${drillKey&&drill[drillKey]===r.label?" sel":""}${r.vital?" vital":""}" ${
-      drillKey?`data-drill="${esc(r.label)}" title="${esc(t("p_tip",{l:r.label, n:r.n, p:Math.round(r.cum)}))} · ${esc(t("p_click"))}" aria-pressed="${
-        drill[drillKey]===r.label?"true":"false"}"`:`title="${esc(t("p_tip",{l:r.label, n:r.n, p:Math.round(r.cum)}))}"`}>
+    <${drillKey?"button type=\"button\"":"div"} class="prow${drillKey&&drill[drillKey]===r.key?" sel":""}${r.vital?" vital":""}" ${
+      drillKey?`data-drill="${esc(r.key)}" title="${esc(t("p_tip",{l:r.label, n:r.n, p:Math.round(r.cum)}))} · ${esc(t("p_click"))}" aria-pressed="${
+        drill[drillKey]===r.key?"true":"false"}"`:`title="${esc(t("p_tip",{l:r.label, n:r.n, p:Math.round(r.cum)}))}"`}>
       <div class="lbl" title="${esc(r.label)}">${esc(r.label)}${r.sub?` <small>${esc(r.sub)}</small>`:""}</div>
-      <div class="ptrack"><div class="pfill" style="width:${Math.max(2,r.n/max*100)}%;background:${colorFn?colorFn(r.label):"var(--accent)"}"></div></div>
+      <div class="ptrack"><div class="pfill" style="width:${Math.max(2,r.n/max*100)}%;background:${colorFn?colorFn(r.key):"var(--accent)"}"></div></div>
       <div class="n">${r.n}</div>
       <div class="cum" title="${esc(t("p_cum"))}">${Math.round(r.cum)}%</div></${drillKey?"button":"div"}>`
     + (ix===cutAt && ix<rows.length-1 ? `<div class="pcut"><span>${esc(t("p_cut"))}</span></div>` : "")).join("");
@@ -6026,15 +6046,17 @@ function renderFailure(){
   /* The list is capped at fifteen but the cumulative must be a share of ALL
      coded findings, not of the fifteen shown — otherwise the last visible row
      always reads 100% and the chart claims the shortlist is the whole story. */
-  const cnt=(keyFn,subFn)=>{ const m=new Map(); let total=0;
+  /* Counted by KEY (the code where there is one), printed by label in the
+     language on screen — see defectKeyOf. */
+  const cnt=(keyFn,subFn,labelFn)=>{ const m=new Map(); let total=0;
     f.forEach(x=>{ const k=keyFn(x); if(!k) return; total++;
       const e=m.get(k)||{n:0,sub:subFn?subFn(x):""}; e.n++; m.set(k,e); });
-    const all=[...m.entries()].map(([k,v])=>[k,v.n,v.sub]).sort((a,b)=>b[1]-a[1]);
+    const all=[...m.entries()].map(([k,v])=>[labelFn?labelFn(k):k,v.n,v.sub,k]).sort((a,b)=>b[1]-a[1]);
     return { rows:all.slice(0,15), total, kinds:all.length };
   };
   const src=f.length ? t("e_found",{n:f.length}) : t("e_found_none");
-  const d=cnt(x=>x.i.defect, x=>x.i.defectCode?`· ${x.i.defectCode}`:"");
-  const c=cnt(x=>x.i.cause,  x=>x.i.causeCode?`· ${x.i.causeCode}`:"");
+  const d=cnt(x=>defectKeyOf(x.i), x=>x.i.defectCode?`· ${x.i.defectCode}`:"", k=>defectKeyLabel(k));
+  const c=cnt(x=>causeKeyOf(x.i),  x=>x.i.causeCode?`· ${x.i.causeCode}`:"",  k=>causeKeyLabel(k));
   const i=cnt(x=>{ const m=ISO_BY[x.i.iso]; return x.i.iso?`${x.i.iso} ${m?(m[lang]||m.en||m):""}`:""; });
   pareto($("paretoDefect"), d.rows, null, "defect",
     f.length ? src+t("e_defect_tail") : src, d.total);
@@ -6057,8 +6079,8 @@ function renderFailAffected(f){
      right either way, but "3 findings, worst Critical" must be about the
      defect that was pressed, not about whatever else that round found. */
   if(drill.defect || drill.cause || drill.sev)
-    f=f.filter(x=>(!drill.defect || x.i.defect===drill.defect)
-               && (!drill.cause  || x.i.cause===drill.cause)
+    f=f.filter(x=>(!drill.defect || defectKeyOf(x.i)===drill.defect)
+               && (!drill.cause  || causeKeyOf(x.i)===drill.cause)
                && (!drill.sev    || sevOf(x.r,x.i)===drill.sev));
   const rb=$("failReset");
   if(rb){ rb.hidden=!active.length; rb.onclick=()=>{ clearDrill(); }; }
@@ -6071,7 +6093,7 @@ function renderFailAffected(f){
     /* The worst finding names the row. A measured position has no defect
        text — its finding is a number against a limit — so it is named by the
        component, never left as a dash beside "Critical". */
-    const sv=sevOf(x.r,x.i); if(sevRank(sv)>sevRank(e.worst)){ e.worst=sv; e.top=x.i.defect||x.i.label||x.i.key||e.top; }
+    const sv=sevOf(x.r,x.i); if(sevRank(sv)>sevRank(e.worst)){ e.worst=sv; e.top=findingName(x.r,x.i)||e.top; }
     if((x.r.date||"")>e.last) e.last=x.r.date||"";
     if(actionRequired(x.r,x.i)) e.open++;
     byU.set(u,e);
@@ -14607,8 +14629,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=267"></script>
-<script src="sync-adapter.js?v=267"></script>
-<script src="report.js?v=267"></script>
+<script src="drive.js?v=268"></script>
+<script src="sync-adapter.js?v=268"></script>
+<script src="report.js?v=268"></script>
 </body>
 </html>

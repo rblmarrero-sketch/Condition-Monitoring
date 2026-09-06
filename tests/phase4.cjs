@@ -117,7 +117,8 @@ const note = (n, d) => console.log('  ....  ' + n + (d !== undefined ? '   ' + d
   const G = await p.evaluate(() => {
     /* filtered() keeps whole rounds; the machines that carry the pressed
        defect are the ones with a point that names it. */
-    const f = findings(filtered()), mine = f.filter(x => x.i.defect === drill.defect);
+    /* By the app's own key — the code where there is one — not the frozen text. */
+    const f = findings(filtered()), mine = f.filter(x => defectKeyOf(x.i) === drill.defect);
     const units = new Set(mine.map(x => x.r.equip)).size;
     const rows = [...document.querySelectorAll('#failAffTbl tbody tr')];
     const m = /of\s*([\d.,\u00a0\u202f ]+)/.exec((document.querySelector('#failAffShown') || {}).textContent || '');
@@ -125,7 +126,7 @@ const note = (n, d) => console.log('  ....  ' + n + (d !== undefined ? '   ' + d
     const perUnit = {}; mine.forEach(x => { perUnit[x.r.equip] = (perUnit[x.r.equip] || 0) + 1; });
     return { defect: drill.defect, reset: document.getElementById('failReset').hidden, hash: location.hash,
       affTotal: m ? Number(m[1].replace(/\D/g, '')) : rows.length, units,
-      allCarry: mine.length > 0 && filtered().every(r => r.items.some(i => i.defect === drill.defect)),
+      allCarry: mine.length > 0 && filtered().every(r => r.items.some(i => defectKeyOf(i) === drill.defect)),
       countsRight: rows.every((tr, n) => cells[n] === perUnit[tr.dataset.u]),
       lead: document.getElementById('failAffLead').textContent };
   });
