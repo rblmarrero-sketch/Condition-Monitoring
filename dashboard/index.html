@@ -504,8 +504,11 @@
     font:600 10px/1 system-ui,sans-serif;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);}
   .pcut::before,.pcut::after{content:"";flex:1;height:0;border-top:1px dashed var(--border);}
   /* the P-F diagram */
-  .pfwrap{overflow-x:auto;}
-  .pfsvg{width:100%;min-width:560px;height:auto;display:block;}
+  /* The chart is drawn at the width it has (renderPF measures the box), so
+     there is nothing to scroll and no label is scaled or clipped. A 560px
+     minimum in a 549px column put a scrollbar under it on a 1366 laptop. */
+  .pfwrap{overflow:visible;}
+  .pfsvg{width:100%;height:auto;display:block;}
   .pfax{stroke:var(--border);stroke-width:1;}
   .pfl{fill:var(--muted);font:600 10px ui-monospace,SFMono-Regular,Menlo,monospace;}
   .pff{stroke:var(--critical);stroke-width:1.5;stroke-dasharray:6 4;}
@@ -3240,29 +3243,29 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=269"></script>
-<script src="../mobile/hme.js?v=269"></script>
-<script src="../mobile/mp-fc.js?v=269"></script>
-<script src="../mobile/hme-cascade.js?v=269"></script>
-<script src="../mobile/temp-limits.js?v=269"></script>
+<script src="../data/magnetic_plug.js?v=270"></script>
+<script src="../mobile/hme.js?v=270"></script>
+<script src="../mobile/mp-fc.js?v=270"></script>
+<script src="../mobile/hme-cascade.js?v=270"></script>
+<script src="../mobile/temp-limits.js?v=270"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=269"></script>
-<script src="../mobile/normalize.js?v=269"></script>
-<script src="../mobile/grade.js?v=269"></script>
-<script src="../mobile/edits.js?v=269"></script>
-<script src="../mobile/due.js?v=269"></script>
-<script src="../mobile/wear.js?v=269"></script>
-<script src="../mobile/wear-map.js?v=269"></script>
-<script src="../mobile/lube.js?v=269"></script>
-<script src="../mobile/lube-overrides.js?v=269"></script>
-<script src="../mobile/lube2027.js?v=269"></script>
-<script src="../mobile/lube-tds.js?v=269"></script>
+<script src="../mobile/assets.js?v=270"></script>
+<script src="../mobile/normalize.js?v=270"></script>
+<script src="../mobile/grade.js?v=270"></script>
+<script src="../mobile/edits.js?v=270"></script>
+<script src="../mobile/due.js?v=270"></script>
+<script src="../mobile/wear.js?v=270"></script>
+<script src="../mobile/wear-map.js?v=270"></script>
+<script src="../mobile/lube.js?v=270"></script>
+<script src="../mobile/lube-overrides.js?v=270"></script>
+<script src="../mobile/lube2027.js?v=270"></script>
+<script src="../mobile/lube-tds.js?v=270"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=269"></script>
-<script src="../mobile/machine-photos.js?v=269"></script>
+<script src="../mobile/upload-defaults.js?v=270"></script>
+<script src="../mobile/machine-photos.js?v=270"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3271,17 +3274,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=269"></script>
-<script src="../mobile/get.js?v=269"></script>
-<script src="../mobile/points.js?v=269"></script>
-<script src="../mobile/uc-points.js?v=269"></script>
-<script src="../mobile/inspect-guide.js?v=269"></script>
-<script src="../mobile/get-figs.js?v=269"></script>
-<script src="../mobile/body-points.js?v=269"></script>
-<script src="../mobile/body-map.js?v=269"></script>
-<script src="../mobile/jspdf.umd.min.js?v=269"></script>
-<script src="../mobile/html2canvas.min.js?v=269"></script>
-<script src="../mobile/report-core.js?v=269"></script>
+<script src="../mobile/machine-fig.js?v=270"></script>
+<script src="../mobile/get.js?v=270"></script>
+<script src="../mobile/points.js?v=270"></script>
+<script src="../mobile/uc-points.js?v=270"></script>
+<script src="../mobile/inspect-guide.js?v=270"></script>
+<script src="../mobile/get-figs.js?v=270"></script>
+<script src="../mobile/body-points.js?v=270"></script>
+<script src="../mobile/body-map.js?v=270"></script>
+<script src="../mobile/jspdf.umd.min.js?v=270"></script>
+<script src="../mobile/html2canvas.min.js?v=270"></script>
+<script src="../mobile/report-core.js?v=270"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4045,6 +4048,7 @@ const I18N={
   fold_fail:"Could not read that folder: {e}",
   month_insp:"{m} · {n} inspection(s)",
   hist_none:"No inspections recorded.",
+  hist_none_f:"No {f} inspections for this equipment.", hist_sub_f:"{n} matching inspection(s) · newest first", hist_f_any:"matching",
   ed_round:"The round itself",
   ed_round_sub:"The hour meter and the two names. The unit, the date and the round type are what this record is filed under — correcting those is a re-file, at the bottom of this panel.",
   ed_mv:"Re-file this round",
@@ -4804,6 +4808,7 @@ const I18N={
   fold_fail:"Не удалось прочитать папку: {e}",
   month_insp:"{m} · осмотров: {n}",
   hist_none:"Осмотры не записаны.",
+  hist_none_f:"По этой единице нет осмотров: {f}.", hist_sub_f:"подходящих осмотров: {n} · сначала новые", hist_f_any:"по фильтру",
   ed_round:"Сам обход",
   ed_round_sub:"Моточасы и две фамилии. Единица, дата и тип обхода — это адрес документа; их правка — это перенос, внизу этой панели.",
   ed_mv:"Перенести обход",
@@ -6173,7 +6178,15 @@ function renderPF(){
     pH = lastH + toP/rate; }
   const pfHours = (pH!=null && row.hours!=null) ? (lastH+row.hours)-pH : null;
 
-  const W=760,H=260,L=54,R=18,T=16,B=34;
+  /* Drawn at the width of its box, never wider: the type stays 10px and the
+     right-hand axis label stays on the paper at every window this dashboard
+     is used at (tests/pfwidth.cjs). Redrawn when the window changes. */
+  const box=$("pfChart"); const cw=box ? box.clientWidth : 0;
+  /* Drawn while its page is hidden, the box has no width: draw at the default
+     now and again on the next frame, when the page is on screen. */
+  if(!cw && !renderPF.again){ renderPF.again=true;
+    requestAnimationFrame(()=>{ renderPF.again=false; if($("pfChart") && $("pfChart").clientWidth) renderPF(); }); }
+  const W=Math.max(320, Math.min(1400, cw||760)), H=W<480?220:260, L=54,R=18,T=16,B=34;
   const xs=h=>L+(h/Math.max(endH,1))*(W-L-R);
   const lo=Math.min(n,c0,...pts.map(p=>p.mm)), hi=Math.max(n,c0,...pts.map(p=>p.mm));
   const pad=(hi-lo)*0.12||1;
@@ -6188,7 +6201,7 @@ function renderPF(){
   const band = pH!=null && pfHours!=null && pfHours>0
     ? `<rect x="${xs(Math.max(0,pH))}" y="${T}" width="${Math.max(0,xs(lastH+row.hours)-xs(Math.max(0,pH)))}" height="${H-T-B}" class="pfband"/>` : "";
   $("pfChart").innerHTML=
-   `<div class="pfwrap"><svg viewBox="0 0 ${W} ${H}" class="pfsvg" role="img"
+   `<div class="pfwrap"><svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" class="pfsvg" role="img"
       aria-label="${esc(t("pf_title"))}">
       ${band}
       <line x1="${L}" y1="${H-B}" x2="${W-R}" y2="${H-B}" class="pfax"/>
@@ -7825,13 +7838,56 @@ function renderHistList(recs){
       <span class="spacer"></span><span>${esc(t("hv_open"))}</span></div>`;
 }
 
+/* THE HISTORY OBEYS THE FILTERS ON THE PAGE.
+
+   Public defect, build 268: Grade "5 – Critical" chosen, Equipment History
+   opened, the address reading #equipment?sev=5, the Critical chip on the bar
+   — and CR002 listed with "3 – Degraded". The history read RECS directly and
+   ignored every filter the chip bar was announcing. A visible filter and the
+   records under it must never contradict each other, so:
+     · the machine list holds only machines with a matching inspection;
+     · the chosen machine moves on if it stops matching;
+     · the list shows only the matching rounds, and on a grade, defect or
+       cause filter only the matching positions on them;
+     · a machine named in the address that has nothing matching stays chosen
+       and says so — "No Critical inspections for this equipment." — rather
+       than silently becoming another machine;
+     · removing the filter restores the whole history. */
+function anyFilterOn(){
+  return !!($("fType").value || $("fClass").value || +$("fRange").value || ($("fQ").value||"").trim()
+    || ($("fDq")&&$("fDq").value) || drill.sev || drill.defect || drill.cause || drill.unit || drill.owner || drill.month);
+}
+/* A position matches the finding-level filters the way filtered() decides a
+   round does — the same three tests, applied to the one position. */
+function histItemOn(r,i){
+  if(drill.sev && String(sevOf(r,i))!==String(drill.sev)) return false;
+  if(drill.defect && defectKeyOf(i)!==drill.defect) return false;
+  if(drill.cause && causeKeyOf(i)!==drill.cause) return false;
+  return true;
+}
+function histRecs(unit){
+  const base = anyFilterOn() ? filtered(true) : RECS;
+  const showVoid = $("fVoid") && $("fVoid").checked;
+  let recs = base.filter(r=>r.equip===unit);
+  if(drill.sev||drill.defect||drill.cause)
+    recs = recs.map(r=>Object.assign({}, r, { items:(r.items||[]).filter(i=>histItemOn(r,i)) })).filter(r=>r.items.length);
+  return recs;
+}
+/* What to call the filter in the empty state: the grade's own name when the
+   grade is the only filter, "matching" otherwise. */
+function histFilterName(){
+  const only = drill.sev && !(($("fType").value)||$("fClass").value||+$("fRange").value||($("fQ").value||"").trim()||($("fDq")&&$("fDq").value)||drill.defect||drill.cause||drill.unit||drill.owner||drill.month);
+  return only ? (GRADE.name(Number(drill.sev), lang) || SEV[drill.sev].l) : t("hist_f_any");
+}
 function renderHistory(){
-  const e=$("equipSel").value; const recs=RECS.filter(r=>r.equip===e);
+  fillEquip();                                   // the list follows the filters
+  const e=$("equipSel").value; const recs=histRecs(e);
+  const on=anyFilterOn();
   $("histTitle").textContent=t("hist_title",{x:e||""});
-  $("histSub").textContent=recs.length?t("hist_sub",{n:recs.length}):t("hist_none");
+  $("histSub").textContent=recs.length ? t(on?"hist_sub_f":"hist_sub",{n:recs.length}) : (on?t("hist_none_f",{f:histFilterName()}):t("hist_none"));
   document.querySelectorAll("#histView button[data-hv]").forEach(b=>
     b.classList.toggle("on", b.dataset.hv===histView));
-  if(!recs.length){ $("history").innerHTML=`<div class="empty">${esc(t("e_nodata"))}</div>`; return; }
+  if(!recs.length){ $("history").innerHTML=`<div class="empty">${esc(on?t("hist_none_f",{f:histFilterName()}):t("e_nodata"))}</div>`; return; }
   if(histView==="list"){
     $("history").innerHTML=renderHistList(recs);
     $("history").querySelectorAll("tr.hrow").forEach(tr=>{
@@ -11279,6 +11335,7 @@ function urlWrite(push){
        actions" and "the overdue rounds" are things people send each other. */
     if(CUR_TAB==="actions" && typeof aFilterState==="string" && aFilterState!=="open") q.set("af", aFilterState);
     if(CUR_TAB==="due" && $("ddScope") && $("ddScope").value && $("ddScope").value!=="over") q.set("dd", $("ddScope").value);
+    if(CUR_TAB==="equipment" && $("equipSel") && $("equipSel").value) q.set("eq", $("equipSel").value);
     const qs=q.toString();
     const h="#"+(CUR_TAB||"overview")+(qs?"?"+qs:"");
     if(location.hash===h) return;
@@ -11327,7 +11384,13 @@ function urlRead(from){
     urlQuiet--;
     const tabs=[...$("tabs").querySelectorAll("button[data-tab]")].map(b=>b.dataset.tab);
     if(tab && tabs.includes(tab)) showTab(tab);
-    rebuild(); refreshControls(); renderAll();
+    rebuild(); refreshControls();
+    /* The machine the address names, chosen AFTER the filters above are in
+       force and BEFORE anything is drawn — pinned, so a machine with nothing
+       matching is shown empty and said so, not swapped for another. */
+    const eq=q.get("eq");
+    if(tab==="equipment" && eq && (window.__units||[]).includes(eq)) selectEquip(eq, true);
+    renderAll();
     return true;
   }catch(e){ urlQuiet=0; return false; }
 }
@@ -11798,33 +11861,66 @@ $("rGo").onclick=()=>runReport($("rScope").value, $("rTarget").value, $("rGo"),
    that a small fleet never notices it and small enough that a large one costs
    nothing. */
 const EQ_CAP=60;
+/* Units in the order a fleet reads them: TK9 before TK10, DZ before EX by
+   letter — a plain string sort put TK10 before TK9. */
+function natCmp(a,b){
+  const ax=String(a).match(/\d+|\D+/g)||[], bx=String(b).match(/\d+|\D+/g)||[];
+  for(let i=0;i<Math.max(ax.length,bx.length);i++){
+    const x=ax[i], y=bx[i]; if(x==null) return -1; if(y==null) return 1;
+    const nx=/^\d/.test(x), ny=/^\d/.test(y);
+    if(nx&&ny){ const d=Number(x)-Number(y); if(d) return d; }
+    else { const d=x.localeCompare(y,undefined,{sensitivity:"base"}); if(d) return d; }
+  }
+  return 0;
+}
+/* The machines the history may show: every machine when nothing is filtered,
+   only those with a matching inspection when something is — see renderHistory. */
+function histUnits(){
+  if(!anyFilterOn()) return window.__units||[];
+  return [...new Set(filtered(true).map(r=>r.equip).filter(Boolean))].sort(natCmp);
+}
+/* A machine named in the address is kept even when it matches nothing, so the
+   page can say so instead of quietly showing another machine. Cleared the
+   moment the reader picks a machine themselves. */
+let histPin="", histPinSig="";
+/* The filters as one string, so the pin can tell when they have changed. */
+function filterSig(){
+  return [$("fType").value,$("fClass").value,$("fRange").value,($("fQ").value||"").trim(),($("fDq")&&$("fDq").value)||"",
+          drill.sev,drill.defect,drill.cause,drill.unit,drill.owner,drill.month].join("|");
+}
 function fillEquip(){
   const sel=$("equipSel"); if(!sel) return;
-  const all=window.__units||[];
+  /* The pin belongs to the address it came from: the moment the reader
+     changes a filter, the machine is chosen the ordinary way again. */
+  if(histPin && filterSig()!==histPinSig) histPin="";
+  const all=histUnits();
   const q=(($("equipQ")||{}).value||"").trim().toUpperCase();
-  const prev=sel.value;
+  const prev=histPin||sel.value;
   const hit=q ? all.filter(u=>String(u).toUpperCase().indexOf(q)>=0) : all.slice();
-  if(prev && all.includes(prev) && !hit.includes(prev)) hit.unshift(prev);
+  const keep = prev && ((window.__units||[]).includes(prev)) && (histPin===prev || all.includes(prev));
+  if(keep && !hit.includes(prev)) hit.unshift(prev);
   /* The selected machine is always rendered, whatever the cap or the filter —
      a select whose value is not among its options reports an empty string, and
      every reader of this control would then be looking at the wrong unit. */
   const show=hit.slice(0, EQ_CAP);
-  if(prev && all.includes(prev) && !show.includes(prev)) show.unshift(prev);
+  if(keep && !show.includes(prev)) show.unshift(prev);
   sel.innerHTML=show.map(u=>`<option value="${esc(u)}">${esc(u)}</option>`).join("");
-  if(show.includes(prev)) sel.value=prev; else if(show.length) sel.value=show[0];
+  if(keep && show.includes(prev)) sel.value=prev; else if(show.length) sel.value=show[0];
   const shown=$("equipShown");
   if(shown) shown.textContent = hit.length>show.length
     ? t("eq_more",{n:show.length, of:hit.length})
     : (q && hit.length!==all.length ? t("shown_n",{n:hit.length, of:all.length}) : "");
 }
-/* Choosing a machine from somewhere else — a drawer, a KPI, a search result —
-   must work whether or not that machine is one of the sixty currently drawn.
-   Setting .value on a select that does not carry the option silently leaves it
-   on the previous unit, which would show one machine's history under another
-   machine's name. */
-function selectEquip(unit){
+/* Choosing a machine from somewhere else — a drawer, a KPI, a search result,
+   the address — must work whether or not that machine is one of the sixty
+   currently drawn. Setting .value on a select that does not carry the option
+   silently leaves it on the previous unit, which would show one machine's
+   history under another machine's name. `pin` keeps it chosen even when the
+   filters on the page leave it with nothing to show. */
+function selectEquip(unit, pin){
   const sel=$("equipSel"); if(!sel || !unit) return false;
   const q=$("equipQ"); if(q) q.value="";
+  histPin = pin ? unit : ""; histPinSig = pin ? filterSig() : "";
   fillEquip();
   if(!Array.from(sel.options).some(o=>o.value===unit)){
     const o=document.createElement("option");
@@ -14480,7 +14576,9 @@ document.addEventListener("keydown",e=>{
   if(e.key==="/"&&!/^(INPUT|SELECT|TEXTAREA)$/.test(document.activeElement.tagName)){ e.preventDefault(); $("fQ").focus(); }
   if(e.key==="Escape"&&document.activeElement===$("fQ")){ $("fQ").value=""; renderAll(); $("fQ").blur(); }
 });
-$("equipSel").onchange=renderHistory;
+/* A machine is a place the reader went to: it goes in the address as its own
+   entry, so Back returns to the previous machine with the filters intact. */
+$("equipSel").onchange=()=>{ histPin=""; renderHistory(); try{ urlWrite(true); }catch(e){} };
 $("ddType").onchange=renderDueTab; $("ddScope").onchange=()=>{ renderDueTab(); urlWrite(false); };
 $("ddQ").oninput=renderDueTab;
 $("ddCsv").onclick=dueCsv;
@@ -14489,6 +14587,12 @@ $("follX").onclick=closeFollow;
 $("follSave").onclick=saveFollow;
 $("follOv").onclick=e=>{ if(e.target.id==="follOv") closeFollow(); };
 $("pfSel").onchange=e=>{ pfKey=e.target.value; renderPF(); };
+/* The chart is drawn at the width of its box, so a window that changes width
+   gets it drawn again — debounced, and only while the page that holds it is
+   the one on screen. */
+let pfResizeT=null;
+addEventListener("resize",()=>{ clearTimeout(pfResizeT);
+  pfResizeT=setTimeout(()=>{ if(CUR_TAB==="failure"){ try{ renderPF(); }catch(e){} } }, 150); });
 $("wearCsv").onclick=wearCsv;
 $("lubeCsv").onclick=lubeCsv;
 $("lrModel").onchange=()=>{ lrModel=$("lrModel").value; renderLubeRef(); };
@@ -14629,8 +14733,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=269"></script>
-<script src="sync-adapter.js?v=269"></script>
-<script src="report.js?v=269"></script>
+<script src="drive.js?v=270"></script>
+<script src="sync-adapter.js?v=270"></script>
+<script src="report.js?v=270"></script>
 </body>
 </html>
