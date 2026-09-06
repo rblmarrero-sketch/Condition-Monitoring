@@ -1932,20 +1932,17 @@
   .celled{width:100%;min-width:110px;height:32px;padding:2px 8px;border:1px solid var(--accent);
     border-radius:var(--r-sm,8px);background:var(--surface);color:var(--ink);font:inherit;font-size:var(--t-body,13px);}
   /* The attention rank on Overview: the position in the order and its reason. */
-  .attn{display:inline-flex;align-items:center;gap:6px;margin-right:6px;vertical-align:middle;font-weight:600;font-size:var(--t-small,12px);
-    line-height:1.15;white-space:nowrap;}
-  .attn i{flex:none;}
-  /* Below 1500px the column is the rank alone — the word rides on the title
-     and stays in the accessibility tree; a table that scrolls sideways to
-     make room for "Unassigned action" is a table nobody reads. */
-  @media (max-width:1499px){ .attn span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;} }
-  .attn i{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:999px;
-    font-style:normal;font-size:11px;font-weight:700;font-variant-numeric:tabular-nums;
-    background:var(--muted-bg,var(--border));color:var(--muted);}
-  .attn.a0 i{background:var(--critical);color:#fff;} .attn.a1 i{background:var(--severe,var(--serious));color:#fff;}
-  .attn.a2 i,.attn.a3 i{background:color-mix(in srgb,var(--warning) 28%,transparent);color:var(--warn-ink);}
-  .attn.a4 i{background:color-mix(in srgb,var(--serious) 22%,transparent);color:var(--ink);}
-  .attn.a6{color:var(--muted);font-weight:500;}
+  /* The reason a machine is where it is. Where the reason IS the grade the
+     pill already says it, and the word stays in the accessibility tree only
+     (.sr); where it is something the pill cannot say — an overdue action, an
+     action nobody owns — it is a small tag on a second line under the pill
+     (.tag), so the column never grows wider than the pill. */
+  .attn{font-weight:600;font-size:var(--t-micro,11px);line-height:1.5;white-space:nowrap;}
+  .attn.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);}
+  .attn.tag{display:block;width:max-content;margin-top:3px;padding:0 7px;border-radius:999px;
+    color:var(--warn-ink);background:color-mix(in srgb,var(--warning) 16%,transparent);
+    border:1px solid color-mix(in srgb,var(--warning) 40%,transparent);}
+  .attn i{display:none;}
   .who i{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;
     background:var(--surface-3);color:var(--ink-2);font-weight:700;font-size:var(--t-micro);line-height:1;font-family:inherit;font-style:normal;
     letter-spacing:.02em;}
@@ -6084,13 +6081,19 @@ const ATTN=[["ov_p_crit","c"],["ov_p_sev","s"],["ov_p_over","s"],["ov_p_noown","
 function attentionOf(open, worst){
   let sv=0; (open||[]).forEach(x=>{ const s=sevRank(sevOf(x.r,x.i)); if(s>sv) sv=s; });
   if(sv<sevRank(worst||0)) sv=sevRank(worst||0);
-  if(sv>=5) return {rank:0, key:ATTN[0][0], c:ATTN[0][1]};
-  if(sv===4) return {rank:1, key:ATTN[1][0], c:ATTN[1][1]};
-  if((open||[]).some(x=>fOverdue(x.i))) return {rank:2, key:ATTN[2][0], c:ATTN[2][1]};
-  if((open||[]).length && !(open||[]).some(x=>x.i.owner||x.i.resp)) return {rank:3, key:ATTN[3][0], c:ATTN[3][1]};
-  if(sv===3) return {rank:4, key:ATTN[4][0], c:ATTN[4][1]};
-  if(sv===2) return {rank:5, key:ATTN[5][0], c:ATTN[5][1]};
-  return {rank:6, key:ATTN[6][0], c:ATTN[6][1]};
+  /* `sev` is the grade that put the machine where it is — the worst finding
+     still open on it, or the latest round's worst — and it is the grade the
+     Priority cell shows. The latest round's own worst can be lower (a
+     critical plug finding from March, a clean filter round in May), and
+     showing that one beside "Critical" read as two numbers that disagreed. */
+  const at=(r)=>({rank:r, key:ATTN[r][0], c:ATTN[r][1], sev:sv});
+  if(sv>=5) return at(0);
+  if(sv===4) return at(1);
+  if((open||[]).some(x=>fOverdue(x.i))) return at(2);
+  if((open||[]).length && !(open||[]).some(x=>x.i.owner||x.i.resp)) return at(3);
+  if(sv===3) return at(4);
+  if(sv===2) return at(5);
+  return at(6);
 }
 /* One row per machine, and everything a planner needs to decide whether to walk
    to it: what it is, what was found, who owns the work and when the next round
@@ -6224,8 +6227,9 @@ function renderFleet(){
     const attn=KEY[r.equip].attn;
     h+=`<tr data-u="${esc(r.equip)}" style="cursor:pointer">
       <td><b>${esc(r.equip)}</b></td>
-      <td class="nw" title="${esc(t(attn.key))}"><span class="attn a${attn.rank}"><i>${attn.rank<6?attn.rank+1:"\u2014"}</i><span>${esc(t(attn.key))}</span></span>${
-        w?`<span class="pill ${SEV[w].c}" title="${esc(t("th_worst"))}">${SEV[w].l}</span>`:'<span class="muted">\u2014</span>'}</td>
+      <td class="nw" title="${esc(t(attn.key))}">${
+        attn.sev?`<span class="pill ${SEV[attn.sev].c}" title="${esc(t("th_worst"))}">${SEV[attn.sev].l}</span>`:'<span class="muted">\u2014</span>'
+        }<span class="attn a${attn.rank}${attn.rank===2||attn.rank===3?" tag":" sr"}">${esc(t(attn.key))}</span></td>
       <td>${clsOf(r)?`<button class="xf" data-xcls="${esc(clsOf(r))}" title="${esc(t("xf_cls"))}">${esc(clsOf(r))}</button>`:'<span class="muted">\u2014</span>'}</td>
       <td>${top?esc(top):'<span class="muted">\u2014</span>'}<div class="muted" style="font-size:11px;margin-top:2px"><span class="tag">${esc(TYPE_LABEL[r.type]||r.type)}</span><span class="mono">${esc(r.date||"")}</span>${r.by?` · ${esc(r.by)}`:""}</div></td>
       <td class="hide-m"><span class="mono">${esc(r.date||"")}</span><div class="muted" style="font-size:11px;margin-top:2px">${esc(r.by||"")}</div></td>
