@@ -110,6 +110,35 @@ const RENDER = (unit, L) => {
     }
   }
 
+  /* The two lines the field screenshot showed with their markup printed:
+     a machine photograph's caption and the "Evidence incomplete" note. The
+     engine is handed a round with a general photograph and a gap directly,
+     the way the phone hands it one, in both languages. */
+  console.log('\nthe photograph caption and the evidence note');
+  for (const L of ['en', 'ru']) {
+    const R = await p.evaluate(L => {
+      const png = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+      const secs = CMR.sections({ lang: L, mode: 'unit', title: 'x', titleAlt: 'y', stamp: new Date(), sevLabel: s => s, sevLabelAlt: s => s,
+        records: [{ equip: 'EX015', clsLabel: 'EXCAVATOR', model: 'PC2000', type: 'UC', typeLabel: 'UC', date: '2026-09-06', by: 'S', smu: '1',
+          gap: { missing: 2, expected: 5, received: 3 },
+          items: [{ key: '__general', name: 'Machine', nameAlt: 'Машина', general: 1, cats: ['OVERVIEW', 'GET'], photos: [png, png], grade: '', sev: '' },
+                  { key: 'IDLER.L-OUT', name: 'Idler tread — Left · outer', nameAlt: 'Направляющее колесо — Слева · внешнее', grade: 1, sev: 'NOF',
+                    action: L === 'ru' ? 'Наблюдать' : 'Monitor', actionAlt: L === 'ru' ? 'Monitor' : 'Наблюдать', opstat: 'RUN', gradeWhy: 'looks fine',
+                    w: { mm: 23, newMM: 20, condemnMM: 29, pct: 33, band: 'done' } }] }] });
+      const d = document.createElement('div'); d.className = 'rp'; d.innerHTML = '<div style="width:760px">' + secs.map(s => s.html).join('') + '</div>';
+      document.body.appendChild(d);
+      const text = d.innerText;
+      const caps = [...d.querySelectorAll('figcaption')].map(f => ({ text: f.textContent.trim(), alt: (f.querySelector('.alti') || {}).textContent || '' }));
+      const gap = (text.match(/(Evidence incomplete|Фотоматериал неполный)[^\n]*/) || [''])[0];
+      d.remove();
+      return { markup: /<\/?span|class="/.test(text), caps, gap };
+    }, L);
+    const other = L === 'en' ? CYR : LAT;
+    ok('in ' + L.toUpperCase() + ' no markup is printed as text', !R.markup);
+    ok('  the captions are paired, not escaped', R.caps.length === 2 && R.caps.every(c => other.test(c.alt) && !/[<>]/.test(c.text)), JSON.stringify(R.caps));
+    ok('  the evidence note is paired, not escaped', !!R.gap && other.test(R.gap) && !/[<>]/.test(R.gap) && /2/.test(R.gap) && /5/.test(R.gap), R.gap.slice(0, 120));
+  }
+
   await b.close();
   console.log(fails.length ? '\nFAILED: ' + fails.length + '\n' + fails.join('\n') : '\nall green');
   process.exit(fails.length ? 1 : 0);
