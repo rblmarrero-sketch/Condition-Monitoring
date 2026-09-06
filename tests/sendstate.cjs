@@ -127,7 +127,10 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
     const rows = [...document.querySelectorAll("#pending .pitem")];
     return rows.map(x => (x.querySelector(".up") || {}).textContent || "");
   });
-  ok(fin.some(t => /accepted/i.test(t)),
+  /* The word for "every file accepted" is the dictionary's ("Sent successfully"); what
+     must hold is that it is said, and that no row claims the cloud. */
+  const sentWord = await p.evaluate(() => I18N.en.up_yes);
+  ok(fin.some(t => t.indexOf(sentWord) === 0),
     "it names acceptance, not a cloud", fin.join(" | "));
   ok(fin.every(t => !/in the cloud/i.test(t)),
     "the unverifiable claim is gone", fin.join(" | "));

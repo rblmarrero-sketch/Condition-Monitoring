@@ -120,7 +120,7 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
       .map(r => ((r.querySelector(".up") || {}).textContent || "").trim()) };
   });
   const joined = rows.texts.join(" | ");
-  ok(/confirmed on the server/i.test(joined),
+  ok(/confirmed on (the )?server/i.test(joined),
     "a confirmed round says the server listed it", joined.slice(0, 130));
   ok(/server is missing/i.test(joined),
     "and a short one says what is missing rather than claiming success",

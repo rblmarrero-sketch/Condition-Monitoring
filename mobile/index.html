@@ -518,6 +518,37 @@
      team has done, then the due list. Reaching the due list meant scrolling
      past everything, and the capture screen never ended. Each is its own pane
      now, switched from the bar at the bottom of the thumb's reach. */
+  /* the four steps */
+  .steps{display:flex;gap:var(--s1);margin:0 0 var(--s3);}
+  .steps button{flex:1;min-width:0;min-height:var(--tap);border:1px solid var(--border);background:var(--surface);
+    border-radius:var(--r);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+    font:inherit;font-size:10.5px;font-weight:650;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;
+    padding:4px 2px;cursor:pointer;font-family:inherit;}
+  .steps button b{font-size:13px;line-height:1;font-variant-numeric:tabular-nums;}
+  .steps button span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  /* A 320 px screen has room for four numbers and one word: the current step's. */
+  @media (max-width:360px){ .steps button:not(.on) span{display:none;} .steps button{gap:0;} }
+  .steps button.done{color:var(--good);}
+  .steps button.done b::after{content:" ✓";font-size:10px;}
+  .steps button.on{color:var(--accent);border-color:var(--accent);background:var(--accent-soft);}
+  .steps button:focus-visible{outline:2px solid var(--accent);outline-offset:1px;}
+  .savedcard{border-color:color-mix(in srgb,var(--good) 45%,var(--border));background:color-mix(in srgb,var(--good) 8%,var(--surface));}
+  .savedcard h2{color:var(--good);}
+  .review{display:grid;grid-template-columns:auto 1fr;gap:var(--s1) var(--s3);margin:0 0 var(--s2);}
+  .review .rvrow{display:contents;}
+  .review dt,.review .k{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding-top:2px;}
+  .review dd,.review .v{margin:0;font-size:14px;min-width:0;overflow-wrap:anywhere;}
+  .review .bad .v{color:var(--warn-ink);font-weight:650;}
+  details.more{margin:var(--s2) 0;border-top:1px solid var(--border);padding-top:var(--s2);}
+  details.more>summary{cursor:pointer;list-style:none;min-height:var(--tap);display:flex;align-items:center;gap:6px;
+    font-weight:650;color:var(--muted);font-size:13px;}
+  details.more>summary::-webkit-details-marker{display:none;}
+  details.more>summary::before{content:"›";display:inline-block;transition:transform .15s;}
+  details.more[open]>summary::before{transform:rotate(90deg);}
+  /* The connection pill says a whole sentence now; on a 320 px screen it is
+     cut with an ellipsis rather than pushing the header sideways. The full
+     sentence is its title and the Saved screen. */
+  header #netStatus{max-width:min(46vw,240px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .pane{display:none;}
   .pane.on{display:block;}
   #saveBtn{margin-bottom:10px;}
@@ -1441,6 +1472,25 @@
        question nobody thinks to ask is answered by a thing they have to go and
        look for exactly never. -->
   <div class="ready" id="readyBar" role="status" aria-live="polite"></div>
+  <!-- FOUR STEPS, ALWAYS ON SCREEN. The technician always knows where they
+       are: setting up, recording findings, reviewing, saved. Each chip is a
+       door to that step; nothing is hidden from a script, only folded. -->
+  <div class="steps" id="stepBar" role="tablist" aria-label="Inspection steps">
+    <button type="button" role="tab" data-step="1"><b>1</b><span data-i18n="step_setup">Inspection</span></button>
+    <button type="button" role="tab" data-step="2"><b>2</b><span data-i18n="step_findings">Findings</span></button>
+    <button type="button" role="tab" data-step="3"><b>3</b><span data-i18n="step_review">Review</span></button>
+    <button type="button" role="tab" data-step="4"><b>4</b><span data-i18n="step_saved">Saved</span></button>
+  </div>
+  <!-- STEP 4. The round is on the phone and queued; the technician is told so
+       in their own words and handed the next machine. -->
+  <div class="card savedcard hidden" id="savedCard" role="status">
+    <h2>✓ <span data-i18n="saved_t">Saved on this phone</span></h2>
+    <div class="hint" id="savedText"></div>
+    <div class="row">
+      <button type="button" class="btn primary" id="savedNext" data-i18n="saved_next">Next machine</button>
+      <button type="button" class="btn ghost" id="savedOpen" data-i18n="saved_open">Open Saved</button>
+    </div>
+  </div>
   <!-- Which machine, when, and who — seven controls that are answered once and
        then scrolled past on every one of forty-four points. Once a unit is
        chosen the card folds to the line that names it; the heading is the way
@@ -1682,21 +1732,14 @@
          row, and the row opens itself the moment there is anything to code. -->
     <button type="button" class="foldrow hidden" id="isoTog"></button>
     <div id="isoBody">
-    <label class="fld"><span data-i18n="lbl_detect">How it was found (ISO 14224)</span>
-      <button type="button" class="picker-btn" id="detectBtn"></button>
-    </label>
-    <div id="mpFields">
-      <div class="row">
-        <label class="fld"><span data-i18n="lbl_particle">Particle count</span><input id="particle" type="text" inputmode="numeric"></label>
-        <label class="fld"><span data-i18n="lbl_comp">Component hrs</span><input id="comp" type="number" inputmode="numeric"></label>
-      </div>
-      <label class="fld"><span data-i18n="lbl_oil">Oil hrs</span><input id="oil" type="number" inputmode="numeric"></label>
-    </div>
+    <!-- THE FINDING, in the order a technician thinks: what is wrong, a note,
+         what to do, how urgent. The classification fields — how it was found,
+         hours, particle count, the direct cause, the 1C number — are behind
+         "Additional details" and open only when they are wanted; the direct
+         cause appears once a defect has been named, because it is a cause OF
+         that defect. -->
     <label class="fld"><span data-i18n="lbl_defect">Defect / failure mode</span>
       <button type="button" class="picker-btn" id="defectBtn"></button>
-    </label>
-    <label class="fld"><span data-i18n="lbl_cause">Direct cause</span>
-      <button type="button" class="picker-btn" id="causeBtn"></button>
     </label>
     <label class="fld" id="commentFld"><span data-i18n="lbl_comment">Comment</span>
       <div class="withbtn">
@@ -1710,8 +1753,24 @@
     <label class="fld" id="prioFld"><span data-i18n="lbl_prio">Work request priority (1C)</span>
       <button type="button" class="picker-btn" id="prioBtn"></button>
     </label>
-    <label class="fld"><span data-i18n="lbl_wo">1C notification / WO no. (optional)</span>
-      <input id="wo" type="text" autocomplete="off"></label>
+    <details class="more" id="moreDetails">
+      <summary data-i18n="more_details">Additional details</summary>
+      <label class="fld" id="causeFld"><span data-i18n="lbl_cause">Direct cause</span>
+        <button type="button" class="picker-btn" id="causeBtn"></button>
+      </label>
+      <label class="fld"><span data-i18n="lbl_detect">How it was found (ISO 14224)</span>
+        <button type="button" class="picker-btn" id="detectBtn"></button>
+      </label>
+      <div id="mpFields">
+        <div class="row">
+          <label class="fld"><span data-i18n="lbl_particle">Particle count</span><input id="particle" type="text" inputmode="numeric"></label>
+          <label class="fld"><span data-i18n="lbl_comp">Component hrs</span><input id="comp" type="number" inputmode="numeric"></label>
+        </div>
+        <label class="fld"><span data-i18n="lbl_oil">Oil hrs</span><input id="oil" type="number" inputmode="numeric"></label>
+      </div>
+      <label class="fld"><span data-i18n="lbl_wo">1C notification / WO no. (optional)</span>
+        <input id="wo" type="text" autocomplete="off"></label>
+    </details>
     <div class="hint" data-i18n="hint_fields">Fields save automatically. Switch items with the buttons above.</div>
     </div><!-- /isoBody -->
     </div><!-- /captureBox -->
@@ -1720,6 +1779,15 @@
   <!-- Optional, and used on a minority of records — but a 150 px signature
        canvas sat open under every round whether or not a supervisor was within
        a hundred kilometres. Behind a row, and the row says it is optional. -->
+  <!-- STEP 3. One screen that says what is about to be finished: the machine,
+       the round, the points, the worst grade, what is still required, the
+       photographs, the actions. Drawn from the draft, never from the form. -->
+  <div class="card hidden" id="cardReview">
+    <h2 data-i18n="rv_title">Review</h2>
+    <div class="review" id="reviewList"></div>
+    <div class="hint" data-i18n="rv_hint">Check the summary, then finish. The inspection is saved on this phone first and sent by itself when there is signal.</div>
+  </div>
+
   <div class="card" id="cardSign">
     <h2 data-i18n="sec_sign">Supervisor sign-off</h2>
     <button type="button" class="foldrow" id="signTog"></button>
@@ -1888,10 +1956,10 @@
      is the question asked before the first round of the day and the one that
      was previously three screens down. -->
 <nav class="tabbar" id="tabbar">
-  <button type="button" data-pane="paneCapture" class="on"><span class="ti">✎</span><span data-i18n="tab_capture">Capture</span></button>
+  <button type="button" data-pane="paneCapture" class="on"><span class="ti">✎</span><span data-i18n="tab_capture">Inspect</span></button>
+  <button type="button" data-pane="paneQueue"><span class="ti">💾</span><span data-i18n="tab_queue">Saved</span><span class="tb hidden" id="tabQ"></span></button>
   <button type="button" data-pane="paneDue"><span class="ti">⏱</span><span data-i18n="tab_due">Due</span><span class="tb hidden" id="tabD"></span></button>
-  <button type="button" data-pane="paneQueue"><span class="ti">📤</span><span data-i18n="tab_queue">Queue</span><span class="tb hidden" id="tabQ"></span></button>
-  <button type="button" data-pane="paneSystem"><span class="ti">🗂</span><span data-i18n="tab_system">System</span><span class="tb hidden" id="tabS"></span></button>
+  <button type="button" data-pane="paneSystem"><span class="ti">⇅</span><span data-i18n="tab_system">Sync</span><span class="tb hidden" id="tabS"></span></button>
 </nav>
 
 <div id="setOv" class="pick-ov hidden">
@@ -2342,8 +2410,8 @@ const I18N = {
     opt_prio_none:"— not set —", opt_prio_fit:"Fits what was found", opt_prio_other:"All priorities",
     lbl_comment:"Comment / defect", ph_comment:"notes…",
     hint_fields:"Fields save automatically. Switch items with the buttons above.",
-    btn_save:"✔ Save", btn_update:"✔ Update", editing_hint:"Editing {x} — change fields, then Update.",
-    sec_onphone:"On this phone", empty_none:"Nothing captured yet.",
+    btn_save:"✔ Finish inspection", btn_update:"✔ Update", editing_hint:"Editing {x} — change fields, then Update.",
+    sec_onphone:TERMS.en.saved_here, empty_none:"Nothing saved yet.",
     btn_share:"Share", btn_export:"Export ZIP", btn_report:"PDF · every round on this phone",
     /* Five rounds in the queue and a superintendent who wants one of them. */
     rpt1_title:"PDF for this round only", scan_hint:"Point at the unit's QR code", btn_cancel:"Cancel", dlg_ok:"OK",
@@ -2628,14 +2696,21 @@ const I18N = {
     m_merge_sent:["Round exported ✔","Send the file to the other phone (AirDrop / WhatsApp / e-mail), then tap “Receive round” there."],
     m_merge_bad:["Not a round file","Choose a file created by “Send round” on the other phone."],
     m_merged:["Merged ✔","{a} new inspection(s), {b} item(s) added to existing ones, {c} already present."],
-    tab_capture:"Capture", tab_queue:"Queue", tab_system:"System", tab_due:"Due",
+    tab_capture:"Inspect", tab_queue:"Saved", tab_system:"Sync", tab_due:"Due",
+    step_setup:"Inspection", step_findings:"Findings", step_review:"Review", step_saved:"Saved",
+    saved_t:TERMS.en.saved_here, saved_next:"Next machine", saved_open:"Open Saved",
+    saved_line:"{u} · {ty} · {st}",
+    rv_title:"Review", rv_hint:"Check the summary, then finish. The inspection is saved on this phone first and sent by itself when there is signal.",
+    rv_equip:"Equipment", rv_type:"Inspection", rv_when:"Date · inspector", rv_points:"Points recorded", rv_points_v:"{n} of {of}",
+    rv_top:"Highest grade", rv_photos:"Photographs", rv_actions:"Recommended actions", rv_missing:"Still required", rv_complete:"Nothing — ready to finish", rv_none:"None",
+    more_details:"Additional details", net_sending:TERMS.en.sending,
     set_theme:"Appearance", theme_auto:"Auto", theme_light:"Light", theme_dark:"Dark",
     theme_hint:"Auto follows the phone. Night shift in a dark cab and a bright bench are different problems.",
     /* "Synced" is a claim about a system this phone cannot see. What it can
        see is that every round it holds has been accepted, file by file, by every
        destination that is switched on — so that is what the pill says. */
-    net_synced:"All sent", net_waiting:"{n} waiting", net_off:"Offline",
-    net_nosignal:"No signal", net_failing:"Upload failing", net_nosync:"Not syncing",
+    net_synced:TERMS.en.all_sent, net_waiting:"{n} waiting to send", net_off:TERMS.en.offline_saved,
+    net_nosignal:TERMS.en.offline_saved, net_failing:TERMS.en.attention, net_nosync:TERMS.en.attention,
     lbl_detect:"How it was found (ISO 14224)",
     opt_more_causes:"▾ More causes — general",
     opt_action_fit:"Fits this severity", opt_action_other:"Other actions",
@@ -2657,7 +2732,7 @@ const I18N = {
     /* Per round, on its own row. The bar at the top of the queue says how many
        are waiting; it cannot say WHICH, and "which" is the only question that
        matters when somebody is about to delete one to free space. */
-    sec_ready:"Ready for the field", btn_ready_again:"Check again",
+    sec_ready:"Field readiness", btn_ready_again:"Check again",
     ready_hint:"Run this while you still have signal. Anything amber here is something you cannot fix at the machine.",
     ready_ok:"Ready", ready_n:"{n} to fix",
     /* The verdicts, in the words a technician needs before walking out of
@@ -2676,7 +2751,7 @@ const I18N = {
     ready_all:"All {n} checks passed — tap to read them",
     rdy_off_t:"Works with no signal", rdy_off_ok:"The whole app is on the phone — {n} files.",
     rdy_off_part:"{n} of {of} files are here. Fix this before you go.",
-    rdy_off_none:"Not installed for offline use yet. Open the app once with signal.",
+    rdy_off_none:"Not installed for offline use yet. Connect once before leaving.",
     rdy_off_slow:"The offline copy did not answer. Try again in a moment.",
     rdy_bld_t:"Up to date", rdy_bld_ok:"Build {n}, the newest there is (checked {t}).",
     rdy_bld_new:"A newer build is downloading. Keep signal until it finishes.",
@@ -2698,14 +2773,14 @@ const I18N = {
     rdy_bar_not:"Not ready for the field — {s}. Tap to see what.",
     rdy_notif_not:"Not ready for the field", rdy_notif_ok:"Ready for the field",
     rdy_sto_t:"Room for photographs", rdy_sto_ok:"About {n} more photographs fit ({p}% used).",
-    rdy_sto_low:"Only about {n} photographs fit ({p}% used). Delete rounds already in the cloud.",
+    rdy_sto_low:"Only about {n} photographs fit ({p}% used). Free storage: delete inspections already sent.",
     rdy_sto_evict:"The phone may clear this app's storage. Tap to ask it not to.",
     rdy_sto_unknown:"This phone will not say how much room is left.",
     rdy_up_t:"Somewhere to send rounds", rdy_up_ok:"{n} destination(s) switched on.",
     rdy_up_none:"No destination set. Rounds will stay on this phone only.",
     rdy_q_t:"Nothing left over", rdy_q_ok:"Everything captured is in the cloud.",
-    rdy_q_pend:"{n} round(s) still on this phone. Send them before you go.",
-    rdy_ref_t:"Machines and limits loaded", rdy_ref_ok:"{n} units, wear limits and lubricants.",
+    rdy_q_pend:"{n} inspection(s) are safely stored on this phone and waiting to send.",
+    rdy_ref_t:"Equipment register and inspection definitions", rdy_ref_ok:"{n} units, every inspection type, wear limits and lubricants.",
     rdy_ref_bad:"Reference data is missing. Reload the app with signal.",
     rdy_fix_persist:"Ask", rdy_fix_send:"Send now", rdy_fix_heal:"Repair",
     /* WHAT IS TRUE, NOT WHAT IS HOPED. "In the cloud" was a claim about a place
@@ -2713,7 +2788,7 @@ const I18N = {
        more useful: which destination accepted which file. So the row says that,
        and stops there — "confirmed in the dashboard" is a different sentence and
        needs a read back from the server, which this build does not do. */
-    up_yes:"Sent — every file accepted", up_wait:"Waiting to send", up_part:"Sending {n}/{of}",
+    up_yes:TERMS.en.sent, up_wait:TERMS.en.waiting, up_part:"Sending {n}/{of}",
     up_missing:"waiting for {d}",
     /* The state the list used to hide. The round's findings go up first, on
        their own, in ten kilobytes; the photographs follow over the next several
@@ -2725,12 +2800,12 @@ const I18N = {
   /* Not "sent". The phone went back and asked, and the server listed every
      file — the only state in this app that is about the folder rather than
      about the conversation that filled it. */
-  up_conf:"Confirmed on the server — {n} file(s) listed",
-  up_verif:"Verified byte for byte — the store read back all {n} file(s)",
+  up_conf:TERMS.en.confirmed+" — {n} file(s)",
+  up_verif:TERMS.en.verified+" — {n} file(s)",
   up_short:"Sent, but the server is missing {n} of {of} files",
     up_sending:"Sending now",
-    up_err:"Needs attention",
-    up_never:"Saved on this phone only", up_at:"sent {t}",
+    up_err:TERMS.en.attention,
+    up_never:TERMS.en.saved_here, up_at:"sent {t}",
     del_t_unsent:"This has not been uploaded",
     del_m_unsent:"{x} is only on this phone. Deleting it destroys {d} for good — there is no copy anywhere else and it cannot be undone.",
     del_t_unver:"Delete from this phone?",
@@ -2889,8 +2964,8 @@ const I18N = {
     opt_prio_none:"— не указан —", opt_prio_fit:"Подходит к находке", opt_prio_other:"Все приоритеты",
     lbl_comment:"Комментарий / дефект", ph_comment:"заметки…",
     hint_fields:"Поля сохраняются автоматически. Переключайте пункты кнопками выше.",
-    btn_save:"✔ Сохранить", btn_update:"✔ Обновить", editing_hint:"Редактирование {x} — измените поля и нажмите «Обновить».",
-    sec_onphone:"На этом телефоне", empty_none:"Пока ничего не снято.",
+    btn_save:"✔ Завершить осмотр", btn_update:"✔ Обновить", editing_hint:"Редактирование {x} — измените поля и нажмите «Обновить».",
+    sec_onphone:TERMS.ru.saved_here, empty_none:"Пока ничего не сохранено.",
     btn_share:"Поделиться", btn_export:"Экспорт ZIP", btn_report:"PDF · все обходы на телефоне",
     rpt1_title:"PDF только по этому обходу", scan_hint:"Наведите на QR-код трака", btn_cancel:"Отмена", dlg_ok:"ОК",
     rep_title:"Отчёт по мониторингу состояния", rep_generated:"Сформировано", rep_building:["Формирование отчёта…","Готовится PDF — это может занять несколько секунд."],
@@ -3160,11 +3235,18 @@ const I18N = {
     m_merge_sent:["Обход выгружен ✔","Передайте файл на второй телефон (AirDrop / WhatsApp / почта) и нажмите там «Принять обход»."],
     m_merge_bad:["Неверный файл","Выберите файл, созданный кнопкой «Отправить обход» на другом телефоне."],
     m_merged:["Объединено ✔","Новых осмотров: {a}, добавлено позиций: {b}, уже было: {c}."],
-    tab_capture:"Осмотр", tab_queue:"Очередь", tab_system:"Система", tab_due:"Срок",
+    tab_capture:"Осмотр", tab_queue:"Сохранено", tab_system:"Связь", tab_due:"Срок",
+    step_setup:"Осмотр", step_findings:"Находки", step_review:"Проверка", step_saved:"Сохранено",
+    saved_t:TERMS.ru.saved_here, saved_next:"Следующая машина", saved_open:"Открыть «Сохранено»",
+    saved_line:"{u} · {ty} · {st}",
+    rv_title:"Проверка", rv_hint:"Проверьте сводку и завершите. Осмотр сначала сохраняется на этом телефоне и отправляется сам, когда появится связь.",
+    rv_equip:"Техника", rv_type:"Осмотр", rv_when:"Дата · инспектор", rv_points:"Точек записано", rv_points_v:"{n} из {of}",
+    rv_top:"Высшая оценка", rv_photos:"Фотографий", rv_actions:"Рекомендуемые действия", rv_missing:"Ещё требуется", rv_complete:"Ничего — можно завершать", rv_none:"Нет",
+    more_details:"Дополнительные сведения", net_sending:TERMS.ru.sending,
     set_theme:"Оформление", theme_auto:"Авто", theme_light:"Светлое", theme_dark:"Тёмное",
     theme_hint:"«Авто» — как на телефоне. Ночная смена в тёмной кабине и яркий стол — разные задачи.",
-    net_synced:"Всё отправлено", net_waiting:"Ожидает: {n}", net_off:"Офлайн",
-    net_nosignal:"Нет связи", net_failing:"Ошибка отправки", net_nosync:"Без отправки",
+    net_synced:TERMS.ru.all_sent, net_waiting:"Ожидает отправки: {n}", net_off:TERMS.ru.offline_saved,
+    net_nosignal:TERMS.ru.offline_saved, net_failing:TERMS.ru.attention, net_nosync:TERMS.ru.attention,
     lbl_detect:"Как обнаружено (ИСО 14224)",
     opt_more_causes:"▾ Другие причины — общие",
     opt_action_fit:"Подходит по критичности", opt_action_other:"Другие действия",
@@ -3200,7 +3282,7 @@ const I18N = {
     ready_all:"Все проверки пройдены ({n}) — нажмите, чтобы посмотреть",
     rdy_off_t:"Работает без связи", rdy_off_ok:"Всё приложение на телефоне — {n} файлов.",
     rdy_off_part:"На телефоне {n} из {of} файлов. Исправьте до выезда.",
-    rdy_off_none:"Ещё не установлено для работы без связи. Откройте приложение при связи.",
+    rdy_off_none:"Ещё не установлено для работы без связи. Подключитесь один раз до выезда.",
     rdy_off_slow:"Офлайн-копия не ответила. Повторите через мгновение.",
     rdy_bld_t:"Актуальная версия", rdy_bld_ok:"Сборка {n}, новее нет (проверено {t}).",
     rdy_bld_new:"Загружается новая сборка. Не теряйте связь до конца.",
@@ -6257,7 +6339,7 @@ async function draftFlush(){
     await dbPut(snap); draftSig=sig;
   }catch(e){ /* the reading on screen is still the thing that matters */ }
 }
-function draftKeep(){ clearTimeout(draftT); draftT=setTimeout(draftFlush, 400); }
+function draftKeep(){ clearTimeout(draftT); draftT=setTimeout(draftFlush, 400); reviewSoon(); }
 /* The two moments the browser gives you before it may never run your code
    again. pagehide fires where beforeunload does not, on iOS especially. */
 addEventListener("pagehide", ()=>{ draftFlush(); });
@@ -6307,7 +6389,9 @@ function posHeading(k){
    opened it to correct the hours does not then want it sitting there for the
    next thirty-five readings, and this is the moment the room is needed. */
 let hdrLastItem = null;
-function loadPos(){
+/* A cause is a cause OF a defect: the field shows once one is named. */
+function causeGate(){ const f=$("causeFld"); if(!f) return; const p=(draft.positions||{})[curItem]||{}; f.classList.toggle("hidden", !p.defect); }
+function loadPos(){ causeGate();
   if(curItem && curItem!==hdrLastItem){
     hdrLastItem=curItem; if(hdrOpen){ hdrOpen=false; renderHdr(); }
     /* Moving to the next point is the moment a reading is finished, and it is
@@ -6393,6 +6477,7 @@ function renderHdr(){
   card.classList.toggle("folded", fold);
   sum.classList.toggle("hidden", !fold);
   body.classList.toggle("hidden", fold);
+  renderSteps();
   if(!fold) return;
   const a=ASSET_BY[curEquip]||{};
   $("hsUnit").textContent = curEquip + (a.cat? " · "+a.cat : "");
@@ -6405,7 +6490,98 @@ function renderHdr(){
   const by=$("inspector").value.trim(); if(by) bits.push(by);
   $("hsMeta").textContent = bits.join(" · ");
 }
-function openHdr(){ hdrOpen=true; renderHdr(); }
+function openHdr(){ hdrOpen=true; hideSaved(); renderHdr(); }
+/* ── THE FOUR STEPS ──────────────────────────────────────────────────────────
+   Where the technician is, read off the state and never stored: no machine
+   or the header open → 1; a machine chosen and the header folded → 2; the
+   review asked for → 3; a round just saved → 4. A chip is a door to its
+   step. Nothing is hidden from a script by this — cards fold, they do not
+   disappear — so every path that worked before still works. */
+let reviewOpen=false;
+function stepNow(){
+  if(!$("savedCard").classList.contains("hidden")) return 4;
+  if(!curEquip || !hdrFolded()) return 1;
+  return reviewOpen ? 3 : 2;
+}
+function renderSteps(){
+  const bar=$("stepBar"); if(!bar) return;
+  const now=stepNow();
+  bar.querySelectorAll("button").forEach(b=>{ const n=Number(b.dataset.step);
+    b.classList.toggle("on", n===now); b.classList.toggle("done", n<now);
+    b.setAttribute("aria-selected", n===now?"true":"false"); });
+}
+function goStep(n){
+  if(n===1){ hideSaved(); openHdr(); scrollTo({top:0,behavior:"smooth"}); }
+  else if(n===2){ if(!curEquip){ openHdr(); return; } hideSaved(); reviewOpen=false; hdrOpen=false; renderHdr();
+    const c=$("cardComponent"); if(c) c.scrollIntoView({behavior:"smooth",block:"start"}); }
+  else if(n===3){ if(!curEquip){ openHdr(); return; } hideSaved(); saveCur(); reviewOpen=true; hdrOpen=false; renderHdr(); renderReview();
+    const c=$("cardReview"); if(c && !c.classList.contains("hidden")) c.scrollIntoView({behavior:"smooth",block:"start"}); }
+  else if(n===4){ showPane("paneQueue"); }
+  renderSteps();
+}
+document.querySelectorAll("#stepBar button").forEach(b=>b.onclick=()=>goStep(Number(b.dataset.step)));
+/* ── STEP 3, THE REVIEW ──────────────────────────────────────────────────────
+   What Save will check, said before Save is pressed, in one list: the
+   machine, the round, who and when, how many points carry something, the
+   worst grade, the photographs, the actions, and everything still required
+   — the same rules Save applies (GRADE.requires, the machine photographs),
+   read here without blocking anything. */
+let reviewT=null;
+function reviewSoon(){ clearTimeout(reviewT); reviewT=setTimeout(renderReview, 250); }
+function reviewMissing(){
+  const out=[];
+  if(!curEquip) out.push(t("lbl_truck"));
+  if(!$("inspector").value.trim()) out.push(t("lbl_inspector"));
+  const strict=!editing||(editing.phv||1)>=2;
+  for(const [k,p] of Object.entries(draft.positions||{})){
+    if(k===GEN_KEY) continue;
+    const g=GRADE.num(p.grade);
+    if(strict && !g && gradeAppliesTo(k) && hasEvidence(p)){ out.push(k+": "+t("lbl_grade")); continue; }
+    const req=g ? (strict ? GRADE.requires(g) : (g===5?{defect:1,action:1}:{})) : {};
+    const m=[];
+    if(req.defect && !p.defect) m.push(t("req_defect"));
+    if(req.action && !p.action) m.push(t("req_action"));
+    if(req.target && !p.target) m.push(t("req_target"));
+    if(req.comment && !p.comment) m.push(t("req_comment"));
+    if(req.closeup && !hasCloseup(p)) m.push(t("req_closeup"));
+    if(req.notify && !p.notified) m.push(t("req_notify"));
+    if(m.length) out.push(k+": "+m.join(", "));
+  }
+  if(strict){ try{ const mp=photoGaps(draft,type); if(mp.length) out.push(t("ph_title")+": "+mp.map(c=>photoCatLabel(c)).join(", ")); }catch(e){} }
+  return out;
+}
+function renderReview(){
+  const card=$("cardReview"), list=$("reviewList"); if(!card||!list) return;
+  const pos=Object.entries(draft.positions||{}).filter(([k])=>k!==GEN_KEY);
+  const has=!!curEquip && pos.length>0;
+  card.classList.toggle("hidden", !has);
+  renderSteps();
+  if(!has) return;
+  const N=items().length;
+  const done=pos.filter(([k,p])=>GRADE.num(p.grade)||(p.mm!=null&&p.mm!=="")||hasEvidence(p)).length;
+  let top=null; pos.forEach(([k,p])=>{ const g=GRADE.num(p.grade); if(g&&(!top||g>top)) top=g; });
+  const photos=pos.reduce((a,[k,p])=>a+(p.photos||[]).length,0)+((draft.positions[GEN_KEY]||{}).photos||[]).length;
+  const acts=pos.filter(([k,p])=>p.action&&p.action!=="MON").map(([k,p])=>k+": "+actionLabel(p.action,lang));
+  const miss=reviewMissing();
+  const a=ASSET_BY[curEquip]||{};
+  const rows=[["rv_equip", curEquip+(a.cat?" · "+a.cat:"")],["rv_type", type+" · "+t("type_"+type)],
+    ["rv_when", [$("date").value,$("inspector").value.trim()].filter(Boolean).join(" · ")||"—"],
+    ["rv_points", t("rv_points_v",{n:done,of:N})],["rv_top", top?GRADE.label(top,lang):"—"],
+    ["rv_photos", String(photos)],["rv_actions", acts.length?acts.join("; "):t("rv_none")],
+    ["rv_missing", miss.length?miss.join("; "):t("rv_complete"), miss.length?"bad":"ok"]];
+  list.innerHTML=rows.map(([k,v,c])=>`<div class="rvrow ${c||""}"><span class="k">${esc(t(k))}</span><span class="v">${esc(v)}</span></div>`).join("");
+  window.__review={done,N,top,photos,acts,miss};
+}
+/* ── STEP 4 ── */
+function showSaved(rec){
+  const c=$("savedCard"); if(!c) return;
+  $("savedText").textContent=t("saved_line",{u:rec.equip, ty:t("type_"+rec.type), st:TERMS.t(lang,"waiting")});
+  c.classList.remove("hidden"); reviewOpen=false; renderSteps();
+  scrollTo({top:0,behavior:"smooth"});
+}
+function hideSaved(){ const c=$("savedCard"); if(c && !c.classList.contains("hidden")){ c.classList.add("hidden"); renderSteps(); } }
+if($("savedNext")) $("savedNext").onclick=()=>{ hideSaved(); openHdr(); const b=$("equipBtn"); if(b) b.focus(); };
+if($("savedOpen")) $("savedOpen").onclick=()=>showPane("paneQueue");
 /* ── the machines this phone actually works on ────────────────────────────
    The register holds 1,128 units. An inspector's working set on any given day
    is a handful: the line they are walking, the truck they came back to because
@@ -6561,6 +6737,7 @@ $("pickList").onclick=(e)=>{ const b=e.target.closest(".pickitem"); if(!b) retur
   const p=curP();
   if(pickMode==="defect"){
     p.defect=k||"";
+    causeGate();
     // A cause only means something under the defect it was chosen for.
     const cs=causesFor(curItem,p.defect);
     if(![...cs.primary,...cs.general].some(c=>c.code===p.cause)) p.cause="";
@@ -6756,7 +6933,7 @@ function editRecord(rec){ if(rec.cls && CLASSES[rec.cls]){ eqClass=rec.cls; lsSe
   gps=rec.gps||null; renderGps(); $("supName").value=rec.sup||""; loadSign(rec.sign||null);
   // items() is empty for a unit this type has no walk for — indexing it threw.
   curItem=Object.keys(draft.positions).filter(k=>k!==GEN_KEY)[0]||(items()[0]||{}).k||"";
-  applyForm(); loadPos(); setEditing(rec); showPane("paneCapture"); }
+  applyForm(); loadPos(); setEditing(rec); hideSaved(); reviewOpen=false; showPane("paneCapture"); }
 $("cancelEdit").onclick=()=>resetForm();
 
 /* ===================== save to queue ===================== */
@@ -6894,6 +7071,7 @@ $("saveBtn").onclick=async ()=>{
   clearTimeout(draftT); draftT=null; draftSig="";
   try{ await dbDel(DRAFT_ID); }catch(e){}
   resetForm(); renderPending(); renderDue(); syncThenArm();
+  showSaved(rec);
   /* The round is away and the form is clear: if an update has been waiting
      for somebody to stop working, this is that moment. */
   setTimeout(applyUpdateIfIdle, 400);
@@ -9331,7 +9509,7 @@ function showPane(id){
   window.scrollTo({top:0});
   // The signature canvas cannot be measured while its pane is display:none, so a
   // pad sized then would come back one pixel tall.
-  if(id==="paneCapture") sizeSignPad();
+  if(id==="paneCapture"){ sizeSignPad(); renderReview(); renderSteps(); }
   /* Each screen refreshed on the way in, because every one of them shows a
      figure that goes stale: a storage reading, a queue count, a last-done date.
      Stale reassurance is the thing all three of these cards exist to replace.
@@ -12409,7 +12587,8 @@ async function yardCheck(){
   window.__yard=lastYard;
   renderYardBar(); yardNotify(v);
   const badge=$("yardBadge");
-  if(badge){ badge.textContent = t(v.s);
+  if(badge){ badge.textContent = TERMS.t(lang, v.k==="ok"?"ready":v.k==="warn"?"ready_warn":"not_ready");
+             badge.title = t(v.s);
              badge.className = "count-badge "+(v.k==="ok"?"ok":v.k==="warn"?"warn":"bad"); }
   /* Six green ticks is a wall of good news, and this card exists to surface the
      one row that is NOT. When they all pass it collapses to a line saying so,
@@ -12421,7 +12600,7 @@ async function yardCheck(){
     if(bad) card.classList.remove("folded");
     else if(!card.dataset.opened) card.classList.add("folded");
     const sum=$("yardSum");
-    if(sum) sum.textContent = bad ? "" : t("ready_all",{n:rows.length});
+    if(sum) sum.textContent = bad ? t(v.s) : t("ready_all",{n:rows.length});
   }
   list.innerHTML="";
   rows.forEach(r=>{
@@ -12835,6 +13014,7 @@ async function netState(){
   // Attached to a network, but the last thing we tried did not get through and
   // nothing has since. That is the pit, and it is not "online".
   if(netFailAt>netOkAt)          return {cls:"warn", txt:t("net_nosignal")};
+  if(pend && syncingId)          return {cls:"warn", txt:t("net_sending")};
   if(pend)                       return {cls:"warn", txt:t("net_waiting",{n:pend})};
   return {cls:"on", txt:t("net_synced")};
 }
@@ -12846,6 +13026,7 @@ async function renderNet(){
   if(run!==netRun) return;                       // a newer render already won
   el.className="st "+st.cls;
   el.innerHTML=`<span class="d"></span>${esc(st.txt)}`;
+  el.title=st.txt;
 }
 const setNet=renderNet;                          // the old name, still called at init
 $("netStatus").onclick=()=>showPane("paneQueue");

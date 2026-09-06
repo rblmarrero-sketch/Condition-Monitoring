@@ -44,7 +44,9 @@ const short = await p.evaluate(()=>document.body.scrollHeight);
 await p.click('#isoTog'); await p.waitForTimeout(400);
 ok('one tap opens them', await vis(p,'#isoBody'));
 const tall = await p.evaluate(()=>document.body.scrollHeight);
-ok('and the fold is worth having', tall-short>380, 'the round is '+(tall-short)+'px shorter folded');
+/* The engineering fields sit behind "Additional details" now, so the fold
+   covers the finding block only — still worth a screen's third on a phone. */
+ok('and the fold is worth having', tall-short>150, 'the round is '+(tall-short)+'px shorter folded');
 await p.click('#isoTog'); await p.waitForTimeout(300);
 ok('and folds again', !(await vis(p,'#isoBody')));
 
