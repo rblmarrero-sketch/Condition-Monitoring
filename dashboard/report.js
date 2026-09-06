@@ -182,8 +182,15 @@
       return g ? { html: window.CMR.fitMap(g.html), key: g.key } : { html: "", key: null };
     }
     if (rec.type !== "UC") return { html: "", key: null };
-    const prof = a.m && WEAR.modelFor ? WEAR.modelFor(a.m) : null;
-    if (!prof) return { html: "", key: null };
+    /* A model the wear reference has no profile for — the PC2000 on EX015 —
+       used to get NO drawing at all: the sheet printed its readings under
+       names and left the walk unpictured, while EX009's sheet had the
+       picture. The walk is the same walk on every tracked machine; what the
+       profile adds is the roller count and the frame shape. Draw it with the
+       reference's defaults rather than not at all, and the capture screen's
+       own frame fallback stands underneath as it does on the phone. */
+    const prof = (a.m && WEAR.modelFor ? WEAR.modelFor(a.m) : null)
+               || { rollers: WEAR.rollersDefault || 8, frame: "oval" };
     /* The photographed walk, exactly as the capture screen draws it — same
        module, same numbering, same eleven names underneath. */
     const u = WEAR.reportUCMap && WEAR.reportUCMap({
@@ -304,7 +311,15 @@
           cats: (Array.isArray(it.att) ? it.att : []).map(e => (e && e.category) || "COMPONENT"),
           resp: it.resp || "", target: it.target || "", opstat: it.opstat || "", gradeWhy: it.gradeWhy || "",
           defect: it.defect || "", defectCode: it.defectCode || "", iso: it.iso || "",
-          cause: it.cause || "", action: it.actionLabel || "",
+          cause: it.cause || "",
+          /* The action by its CODE, in the language on screen, with the other
+             language beside it — the label frozen on the record is the phone's
+             language at capture, and an English sheet printed "Monitor /
+             re-inspect next PM" under a Russian heading with no Russian line. */
+          action: it.action && typeof actionName === "function" ? actionName(it.action)
+                  : (it.actionLabel || ""),
+          actionAlt: it.action && typeof actionName === "function"
+                  ? inOther(() => actionName(it.action)) : "",
           prio: it.prio || "", prioLabel: it.prioLabel || "", wo: it.wo || "",
           comment: it.comment || "", readings: read,
           lube: lubeBlock(rec, it),

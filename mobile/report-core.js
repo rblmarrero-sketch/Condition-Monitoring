@@ -586,7 +586,7 @@
       meas_UC:"Undercarriage measurements", meas_TB:"Dump body thickness",
       meas_GET:"Ground engaging tools", meas_LUBE:"Lubricant found in each compartment",
       map_TB:"Where the wear is", zone_t:"By zone",
-      c_zone:"Zone", c_taken:"Read", c_thin:"Thinnest", c_at:"At",
+      c_zone:"Zone", c_taken:"Read", c_thin:"Thinnest", c_at:"Station",
       f_date:"Date", f_cat:"Equipment", f_model:"Model", f_unit:"Unit",
       f_smu:"SMU", f_pts:"Points", f_by:"Inspected by", f_sup:"Verified by",
       allok:"All {n} points normal. Nothing to do on this machine.",
@@ -1133,9 +1133,9 @@
     var bits = [];
     if (it.resp) bits.push(T.I("c_resp") + ": " + esc(it.resp));
     if (it.target) bits.push(T.I("c_target") + ": " + esc(it.target));
-    if (it.opstat) bits.push(T.I("c_opstat") + ": " + esc(T.I("op_" + it.opstat)));
+    if (it.opstat) bits.push(T.I("c_opstat") + ": " + T.I("op_" + it.opstat));
     var h = bits.length ? '<div class="code">' + bits.join(" · ") + '</div>' : "";
-    if (it.gradeWhy) h += '<div class="code">' + esc(T.I("g_why")) + ' ' + esc(it.gradeWhy) + '</div>';
+    if (it.gradeWhy) h += '<div class="code">' + T.I("g_why") + ' ' + esc(it.gradeWhy) + '</div>';
     return h;
   }
   function prioTag(it) {
@@ -1274,7 +1274,9 @@
             + (L.off && L.want
                 ? '<div class="code">' + esc(T("c_lube_off")) + ': ' + esc(L.want) + '</div>'
                 : "") + '</td>'
-          + '<td>' + (L.evid ? T.both(L.evid.en, L.evid.ru, "") : '<span class="muted">—</span>') + '</td>'
+          /* A fixed en/ru couple: the reader's language leads (T.both would
+             put English first on a Russian sheet — tests/rptall.cjs). */
+          + '<td>' + (L.evid ? T.enru(L.evid.en, L.evid.ru, "") : '<span class="muted">—</span>') + '</td>'
           + '<td class="c">' + (L.samp ? "\u25CF" : "\u25CB") + '</td>'
           + '</tr>'; });
       return x + '</table>'; };
@@ -1569,7 +1571,7 @@
     if (rec.gap && rec.gap.missing > 0) {
       out.push({ nb: false, html: '<div class="sec"><div class="evgap">'
         + '<b>' + T.I("ev_gap_t") + '</b> '
-        + esc(T.I("ev_gap", { n: rec.gap.missing, e: rec.gap.expected, r: rec.gap.received }))
+        + T.I("ev_gap", { n: rec.gap.missing, e: rec.gap.expected, r: rec.gap.received })
         + '</div></div>' });
     }
     return out;
@@ -2057,7 +2059,7 @@
   function shared(list) {
     var out = {};
     if (list.length < 3) return out;
-    ["defect", "cause", "action", "iso", "prio"].forEach(function (f) {
+    ["defect", "cause", "action", "actionAlt", "iso", "prio"].forEach(function (f) {
       var v = list[0][f];
       if (v && list.every(function (it) { return it[f] === v; })) out[f] = v;
     });
@@ -2071,13 +2073,13 @@
        already knows what order they come in. */
     if (oneLine) return '<div class="ocommon"><b>' + T.I("common_n", { n: n }) + '</b>'
       + [sh.defect ? esc(sh.defect) : "", sh.cause ? esc(sh.cause) : "",
-         sh.action ? '<b>' + esc(sh.action) + '</b>' : ""].filter(Boolean).join(" · ")
+         sh.action ? '<b>' + T.both(sh.action, sh.actionAlt, "alti") + '</b>' : ""].filter(Boolean).join(" · ")
       + '</div>';
     var rows = "";
     if (sh.defect) rows += '<dt>' + T.L("c_defect") + '</dt><dd>' + esc(sh.defect)
       + (sh.iso ? ' <span class="code">ISO ' + esc(sh.iso) + '</span>' : "") + '</dd>';
     if (sh.cause) rows += '<dt>' + T.L("c_cause") + '</dt><dd>' + esc(sh.cause) + '</dd>';
-    if (sh.action) rows += '<dt>' + T.L("c_action") + '</dt><dd><b>' + esc(sh.action) + '</b>'
+    if (sh.action) rows += '<dt>' + T.L("c_action") + '</dt><dd><b>' + T.both(sh.action, sh.actionAlt, "alti") + '</b>'
       + (sh.prio ? prioTag({ prio: sh.prio }) : "") + '</dd>';
     return '<div class="common"><div class="k">' + T.I("common_n", { n: n }) + '</div>'
       + '<dl>' + rows + '</dl></div>';
@@ -2150,7 +2152,8 @@
     if (it.defect && !sh.defect) row(T.L("c_defect"), esc(it.defect)
       + (it.iso ? ' <span class="code">ISO ' + esc(it.iso) + '</span>' : ""));
     if (it.cause && !sh.cause) row(T.L("c_cause"), esc(it.cause));
-    if (it.action && !sh.action) row(T.L("c_action"), '<b>' + esc(it.action) + '</b>'
+    /* The action in both languages: the host resolves it by code (actionAlt). */
+    if (it.action && !sh.action) row(T.L("c_action"), '<b>' + T.both(it.action, it.actionAlt, "alti") + '</b>'
       + prioTag(it) + (it.wo ? ' <span class="code">' + esc(T("c_wo")) + ' ' + esc(it.wo) + '</span>' : ""));
     else if (it.wo || (it.prio && !sh.prio)) row(T.L("c_wo"),
       (it.prio && !sh.prio ? prioTag(it) + " " : "") + '<span class="num">' + esc(it.wo || "") + '</span>');
@@ -2258,7 +2261,7 @@
   function genShot(T, x) {
     var u = (x && typeof x === "object") ? x.u : x;
     var cat = (x && typeof x === "object" && x.cat) ? x.cat : "";
-    return '<figure><img src="' + esc(u) + '">' + (cat ? '<figcaption>' + esc(T.I("cat_" + cat)) + '</figcaption>' : "") + '</figure>';
+    return '<figure><img src="' + esc(u) + '">' + (cat ? '<figcaption>' + T.I("cat_" + cat) + '</figcaption>' : "") + '</figure>';
   }
   /* The rule, reachable by the suite. It decides what a document calls
      itself, so it is asked directly rather than inferred from rendered text —
@@ -2573,7 +2576,7 @@
       if(rec.gap && rec.gap.missing>0){
         extra.push({nb:false, html:cont+'<div class="evgap" style="margin-top:11px;"><b>'
           +T.I("ev_gap_t")+'</b> '
-          +esc(T.I("ev_gap",{n:rec.gap.missing, e:rec.gap.expected, r:rec.gap.received}))
+          +T.I("ev_gap",{n:rec.gap.missing, e:rec.gap.expected, r:rec.gap.received})
           +'</div></div></div>'});
       }
 
