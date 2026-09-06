@@ -2799,6 +2799,10 @@ const I18N = {
     rdy_bg_failed:"Could not register this phone for wake-ups ({why}). It is tried again at every open.",
     rdy_fix_allow:"Allow notifications",
     rdy_v_bg:"Ready — updates only while open",
+    rdy_cam_t:"Camera",
+    rdy_cam_ok:"Available. Photographs and code scanning use it.",
+    rdy_cam_denied:"Blocked for this app in the phone's Settings. Photographs still work through the camera app; code scanning needs it allowed.",
+    rdy_v_camera:"Ready with warning — check the camera",
     rdy_bar_not:"Not ready for the field — {s}. Tap to see what.",
     rdy_notif_not:"Not ready for the field", rdy_notif_ok:"Ready for the field",
     rdy_sto_t:"Room for photographs", rdy_sto_ok:"About {n} more photographs fit ({p}% used).",
@@ -3331,6 +3335,10 @@ const I18N = {
     rdy_bg_failed:"Не удалось зарегистрировать телефон для пробуждений ({why}). Повторяется при каждом открытии.",
     rdy_fix_allow:"Разрешить уведомления",
     rdy_v_bg:"Готово — обновления только при открытом приложении",
+    rdy_cam_t:"Камера",
+    rdy_cam_ok:"Доступна. Используется для фото и сканирования кодов.",
+    rdy_cam_denied:"Заблокирована для этого приложения в настройках телефона. Фото по-прежнему делаются через приложение камеры; для сканирования кодов нужно разрешение.",
+    rdy_v_camera:"Готово с предупреждением — проверьте камеру",
     rdy_bar_not:"К выезду не готово — {s}. Нажмите, чтобы посмотреть.",
     rdy_notif_not:"К выезду не готово", rdy_notif_ok:"Готово к выезду",
     rdy_sto_t:"Место под фотографии", rdy_sto_ok:"Поместится ещё около {n} фото ({p}% занято).",
@@ -10784,6 +10792,9 @@ function onScanned(text){
 }
 function extractUnit(text){ if(!text) return null; const m=String(text).match(/([A-Za-z]{1,4}\s?\d+)/); return m?m[1].toUpperCase().replace(/\s+/g,""):String(text).trim().toUpperCase(); }
 async function startScan(){ if(!await needScan()){ dlg(t("m_lib_scan")); return; }
+  /* The readiness card trusts a "denied" camera only once the phone has
+     actually been asked — this is the one place it is asked. */
+  lsSet(CAM_ASKED_K,"1");
   try{ scanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:"environment"}}}); }catch(e){ $("qrPhoto").click(); return; }
   const v=$("scanVideo"); v.srcObject=scanStream; await v.play(); $("scanOverlay").classList.remove("hidden");
   const tick=()=>{ if(v.readyState>=2){ qrCanvas.width=v.videoWidth; qrCanvas.height=v.videoHeight; qctx.drawImage(v,0,0,qrCanvas.width,qrCanvas.height);
@@ -12473,6 +12484,33 @@ function within(ms, work, onTimeout){
 }
 /* The whole card's verdict, in the words a technician needs. Worst wins: a
    phone with old reference data AND no room is told about the room. */
+/* What the phone says about its camera: ok (a camera is listed, or access
+   has been granted), denied (this app is blocked in Settings), none (the
+   phone lists its devices and no camera is among them), unknown (it cannot
+   say — nothing is claimed). Labels are empty until a grant, so the KIND is
+   what is read, never the name. */
+const CAM_ASKED_K="cm_cam_asked";
+async function cameraState(){
+  const md=navigator.mediaDevices;
+  let perm="";
+  try{ if(navigator.permissions && navigator.permissions.query){
+    const st=await navigator.permissions.query({name:"camera"}); perm=st&&st.state||""; } }catch(e){ perm=""; }
+  /* A refusal exists only after a question. Some browsers answer "denied"
+     for anything not yet granted; a phone that has never opened the scanner
+     has refused nothing, and is not told it has. */
+  let asked=""; try{ asked=localStorage.getItem(CAM_ASKED_K)||""; }catch(e){}
+  if(perm==="denied" && asked==="1") return {k:"denied"};
+  if(perm==="denied") perm="";
+  if(!md || !md.enumerateDevices) return {k: perm==="granted" ? "ok" : "unknown"};
+  let devs=[]; try{ devs=await md.enumerateDevices(); }catch(e){ return {k: perm==="granted" ? "ok" : "unknown"}; }
+  const cams=devs.filter(d=>d.kind==="videoinput");
+  if(cams.length || perm==="granted") return {k:"ok", n:cams.length};
+  /* No camera among the devices listed. Before a grant a browser may list
+     nothing, or a microphone and nothing else, whether or not a camera is
+     there — so this is not "no camera", it is "cannot say", and the card
+     says nothing. The blocked case above is the one that costs a shift. */
+  return {k:"unknown"};
+}
 function yardVerdict(rows){
   const has=k=>rows.some(r=>r.k===k);
   const hasKey=key=>rows.some(r=>r.key===key && r.k!=="ok");
@@ -12483,6 +12521,7 @@ function yardVerdict(rows){
   if(hasKey("queue"))    return {k:"warn", s:"rdy_v_photos"};
   if(hasKey("build"))    return {k:"warn", s:"rdy_v_update"};
   if(hasKey("bg"))       return {k:"warn", s:"rdy_v_bg"};
+  if(hasKey("camera"))   return {k:"warn", s:"rdy_v_camera"};
   if(has("warn"))        return {k:"warn", s:"rdy_v_old"};
   return {k:"ok", s:"rdy_v_ready"};
 }
@@ -12618,6 +12657,17 @@ async function yardCheck(){
          unreach: the pit — a server out of reach is the ordinary state of a
          phone out there, not a thing to fix before leaving; it is tried again
          at every open and every check. */
+    }
+
+    /* 5c. the camera. Photographs go through the phone's own camera app
+       (<input capture>), which needs no grant; the scanner needs the camera
+       itself. A row only where the phone actually answers — a browser that
+       lists no camera and has not been asked is not "no camera", and this
+       card never says what it cannot verify. */
+    {
+      const cam=await within(4000, ()=>cameraState(), {k:"unknown"});
+      if(cam.k==="denied") add("warn",t("rdy_cam_t"),t("rdy_cam_denied"),null,"camera");
+      else if(cam.k==="ok") add("ok",t("rdy_cam_t"),t("rdy_cam_ok"),null,"camera");
     }
 
     /* 6. the machines, the limits and the lubricants */
