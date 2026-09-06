@@ -160,10 +160,12 @@ function proseUnderTitles() {
 
   console.log("\n── methodology is available, not compulsory");
   const meth = await p.evaluate(() => {
-    const d = [...document.querySelectorAll("details.method")];
-    return { n: d.length, open: d.filter(x => x.open).length };
+    const d = [...document.querySelectorAll("details.defs, details.method")];
+    const per = ['overview','failure','wear','actions','due','lube','sync'].map(k => document.querySelectorAll('#tab-' + k + ' details.defs').length);
+    return { n: d.length, open: d.filter(x => x.open).length, per };
   });
   ok(meth.n >= 8, "every long explanation is behind a disclosure", meth.n + " of them");
+  ok(meth.per.every(n => n === 1), "one Definitions control per page, not one per card", meth.per.join(','));
   ok(meth.open === 0, "and none of them opens by default");
   const prose = proseUnderTitles();
   ok(prose.length === 0, "no title is followed by a paragraph", prose.join(" | "));
@@ -195,6 +197,9 @@ function proseUnderTitles() {
   ok(tiny.length === 0, "no readable text is under 11px", tiny.slice(0, 4).join(" | "));
 
   console.log("\n── the filter toolbar is one row, and the search fits");
+  /* On a page that HAS the bar: the support pages put the record filters
+     away, and the loop above may have left the page on one of them. */
+  await p.evaluate(() => showTab("overview"));
   for (const w of [1280, 1366, 1920]) {
     await p.setViewportSize({ width: w, height: 800 });
     await p.waitForTimeout(250);
@@ -253,23 +258,23 @@ function proseUnderTitles() {
      what the cell IS is the contract. */
   const reg = await p.evaluate(() => {
     const rows = [...document.querySelectorAll("#actionTbl tbody tr")];
-    const none = rows.find(r => r.querySelector(".iown") && !r.querySelector(".iown").value);
-    const ph = none ? none.querySelector(".iown") : null;
+    const none = rows.find(r => r.querySelector(".who.none"));
+    const ph = none ? none.querySelector(".who.none span") : null;
     return { sort: actSort.k, n: rows.length,
              firstSev: rows.length ? (rows[0].querySelector(".sevcell") || {}).textContent || "" : "",
              sel: rows.length ? !!rows[0].querySelector(".selcol .asel") : false,
-             edits: rows.length ? ["iown", "idue", "ist"].filter(c => rows[0].querySelector("." + c)).length : 0,
-             ownerInk: ph ? getComputedStyle(ph, "::placeholder").color : "",
-             ownerText: ph ? ph.placeholder.trim() : "" };
+             edits: rows.length ? rows[0].querySelectorAll("input:not(.asel), select").length : 0,
+             ownerInk: ph ? getComputedStyle(ph).color : "",
+             ownerText: ph ? ph.textContent.trim() : "" };
   });
   ok(reg.sort === "queue", "sorted as a queue, not by one column", reg.sort);
   if (reg.n) ok(/crit/i.test(reg.firstSev.trim()), "critical work is at the top", reg.firstSev.trim());
-  /* A register you can only read is a list. Owner, date and status are edited
-     where they are read, and a tick-box column makes a week's planning one
-     gesture instead of eighty-two. */
+  /* The row is read; the drawer it opens is where it is edited. A form
+     control in every row was thousands of live fields at fleet size. The
+     tick-box column still makes a week's planning one gesture. */
   if (reg.n) {
     ok(reg.sel, "every row can be selected");
-    ok(reg.edits === 3, "owner, due date and status are editable in the row", reg.edits + " of 3");
+    ok(reg.edits === 0, "no owner, date or status control lives in the row", reg.edits + " field(s)");
   }
   /* An unassigned action has to say so in words, not only by being empty. */
   if (reg.ownerText) ok(reg.ownerText.length > 2, "an unassigned action says so in words", reg.ownerText);

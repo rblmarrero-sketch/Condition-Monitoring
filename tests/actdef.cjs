@@ -79,7 +79,7 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
       pagerTotal: (() => {
         const el = document.querySelector("#actionTbl .pager .muted");
         if (!el) return null;                       // short enough not to page
-        const m = /of\s*([\d.,\u00a0\u202f]+)/.exec(el.textContent || "");
+        const m = /([\d.,\u00a0\u202f]+)\s*matching/.exec(el.textContent || "");
         return m ? Number(m[1].replace(/[^\d]/g, "")) : null;
       })(),
       registerAll: actionRows().length,
@@ -185,14 +185,19 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
   console.log("\n── the dialog is the only way in through the interface");
   await p.evaluate(() => { clearDrill(); showTab("actions"); actView = "table"; renderActions(); });
   await p.waitForTimeout(400);
+  /* The register's rows are read-outs; a status is set in the drawer the
+     row opens, and the drawer guards this one the way the row used to. */
   const dlg = await p.evaluate(() => {
     window.__w = [];
-    const s = document.querySelector("#actionTbl .ist");
+    const tr = document.querySelector("#actionTbl tbody tr.hrow");
+    openFollow(tr.dataset.fu, tr.dataset.fi);
+    const s = document.getElementById("follStatus");
     s.value = "NOACT"; s.dispatchEvent(new Event("change", { bubbles: true }));
     return { open: !document.getElementById("dispBox").classList.contains("hidden"),
-             writes: window.__w.length };
+             reverted: s.value !== "NOACT", writes: window.__w.length };
   });
-  ok(dlg.open, "picking No action required opens the disposition dialog");
+  ok(dlg.open, "picking No action required in the drawer opens the disposition dialog");
+  ok(dlg.reverted, "and the drawer's status list goes back until it is answered");
   ok(dlg.writes === 0, "and writes nothing until it is answered", dlg.writes + " write(s)");
   await p.click("#dispSave"); await p.waitForTimeout(300);
   const refuse = await p.evaluate(() => ({ msg: $("dispMsg").textContent,

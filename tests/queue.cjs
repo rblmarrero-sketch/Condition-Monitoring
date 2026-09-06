@@ -50,27 +50,27 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
   });
   await p.waitForTimeout(400);
 
-  console.log("\n── the row is editable where it is read");
+  console.log("\n── the row is read; the drawer it opens is where it is edited");
   const shape = await p.evaluate(() => {
     const r = document.querySelector("#actionTbl tbody tr");
     return { rows: document.querySelectorAll("#actionTbl tbody tr").length,
              sel: !!r.querySelector(".selcol .asel"), head: !!document.getElementById("aAll"),
-             own: !!r.querySelector(".iown"), due: !!r.querySelector(".idue"),
-             st: !!r.querySelector(".ist"),
-             names: document.querySelectorAll("#ownerNames option").length >= 0 };
+             fields: r.querySelectorAll("input:not(.asel), select").length,
+             own: !!r.querySelector(".who"), st: !!r.querySelector(".st") };
   });
   ok(shape.rows > 0, "the register has rows to plan", shape.rows + " rows");
   ok(shape.sel && shape.head, "every row ticks, and so does the header");
-  ok(shape.own && shape.due && shape.st, "owner, due date and status are fields, not read-outs");
+  ok(shape.fields === 0 && shape.own && shape.st, "owner and status are read-outs, not fields", shape.fields + " field(s)");
 
-  console.log("\n── one field, one write");
-  await p.evaluate(() => { const s = document.querySelector("#actionTbl .ist");
-    s.value = "WIP"; s.dispatchEvent(new Event("change", { bubbles: true })); });
-  await p.waitForTimeout(800);
+  console.log("\n── one finding, one write, through the drawer");
+  await p.evaluate(() => { const tr = document.querySelector("#actionTbl tbody tr.hrow");
+    openFollow(tr.dataset.fu, tr.dataset.fi);
+    $("follStatus").value = "WIP"; $("follBy").value = "R. Marrero"; });
+  await p.click("#follSave"); await p.waitForTimeout(900);
   const one = await p.evaluate(() => ({
     writes: window.__writes.length,
-    wip: [...document.querySelectorAll("#actionTbl .ist")].filter(x => x.value === "WIP").length }));
-  ok(one.writes === 1, "changing a status writes once", one.writes + " write(s)");
+    wip: [...document.querySelectorAll("#actionTbl .st.s-WIP")].length }));
+  ok(one.writes === 1, "saving the drawer writes once", one.writes + " write(s)");
   ok(one.wip === 1, "and the row shows it without a reload", one.wip);
 
   console.log("\n── a week's planning is one gesture");
@@ -99,8 +99,8 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
   const bulk = await p.evaluate(() => ({
     writes: window.__writes.length,
     items: window.__writes.reduce((a, d) => a + Object.keys(d.items).length, 0),
-    owns: [...document.querySelectorAll("#actionTbl .iown")].filter(x => x.value === "Petrov").length,
-    dues: [...document.querySelectorAll("#actionTbl .idue")].filter(x => x.value === "2026-09-04").length,
+    owns: [...document.querySelectorAll("#actionTbl .who span")].filter(x => x.textContent === "Petrov").length,
+    dues: [...document.querySelectorAll("#actionTbl .due b")].filter(x => x.textContent === "2026-09-04").length,
     hidden: document.getElementById("selBar").hidden }));
   /* The proof the separator survives: five findings actually carry the owner.
      With the NUL key they carried nothing and nothing threw. */

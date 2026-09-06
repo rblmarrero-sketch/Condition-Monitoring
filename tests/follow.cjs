@@ -93,8 +93,11 @@ const rowsOf = () => [...document.querySelectorAll('#actionTbl .wlu')].flatMap(u
      and owner is only one of the four things it can be missing. Both numbers
      are still there — this reads whichever card carries the unowned figure
      rather than the slot it happens to sit in. */
-  ok('and says how many have nobody against them',
-     /NOBODY OWNS IT=4/.test(k.join(' ')), k.join(' | '));
+  /* The label, from the app: it has been "NOBODY OWNS IT" and is now
+     "Unassigned actions"; what must hold is the count under the app's word. */
+  const unLbl = await p.evaluate(() => I18N.en.a_k_unowned);
+  const unRe = n => new RegExp(unLbl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '=' + n, 'i');
+  ok('and says how many have nobody against them', unRe(4).test(k.join(' ')), k.join(' | '));
   /* The label, from the app. This matched the literal "NEEDS TRIAGE" — a
      hospital word on a screen shared by a reliability engineer, a planner and a
      fitter, none of whom use it. What must be true is that the count of
@@ -174,7 +177,7 @@ const rowsOf = () => [...document.querySelectorAll('#actionTbl .wlu')].flatMap(u
   k = await p.evaluate(kpis);
   note('tracker', k.join('  '));
   ok('the overdue count picks it up', /OVERDUE=1/.test(k.join(' ')), k[1]);
-  ok('and the unowned count drops', /NOBODY OWNS IT=3/.test(k.join(' ')), k[2]);
+  ok('and the unowned count drops', unRe(3).test(k.join(' ')), k.join(' | '));
   /* The single green nub became a bar segmented by state, because "planned"
      and "nobody has looked at it" are different kinds of not-done and one bar
      hid which of them you had. */

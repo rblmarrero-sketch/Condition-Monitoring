@@ -110,7 +110,7 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
       await new Promise(r => setTimeout(r, 450));
       const pagerTotal = () => {
         const el = document.querySelector('#actionTbl .pager .muted');
-        if (el) { const m = /of\s*([\d.,  ]+)/.exec(el.textContent || ''); if (m) return Number(m[1].replace(/\D/g, '')); }
+        if (el) { const m = /([\d.,\u00a0\u202f]+)\s*matching/.exec(el.textContent || ''); if (m) return Number(m[1].replace(/\D/g, '')); }
         return document.querySelectorAll('#actionTbl tbody tr').length;
       };
       return { tab: CUR_TAB, hash: location.hash, af: aFilt(), sev: drill.sev,

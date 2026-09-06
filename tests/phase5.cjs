@@ -98,15 +98,16 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
     tabs: [...document.querySelectorAll('#lubeSub [role="tab"]')].length,
     showing: [...document.querySelectorAll('#tab-lube .lsub')].filter(d => !d.classList.contains('hidden')).length,
     method: document.querySelectorAll('#tab-lube details.method').length,
-    open: document.querySelectorAll('#tab-lube details.method[open]').length,
+    defs: document.querySelectorAll('#tab-lube details.defs').length,
+    open: document.querySelectorAll('#tab-lube details[open]').length,
     tall: +(document.documentElement.scrollHeight / innerHeight).toFixed(2) }));
   ok('seven views as tabs, one showing', L.tabs === 7 && L.showing === 1, L.tabs + ' tabs, ' + L.showing + ' showing');
-  ok('methodology is behind a control on every view, none open by default', L.method >= 7 && L.open === 0, L.method + ' / ' + L.open);
+  ok('one Definitions control for the page, no per-view "How this is counted", none open by default', L.defs === 1 && L.method === 0 && L.open === 0, L.defs + ' defs / ' + L.method + ' method / ' + L.open + ' open');
   await p.evaluate(() => lubeGo('exc')); await p.waitForTimeout(400);
   const G = await p.evaluate(() => {
     const mrows = (() => { const miss = {}; (window.ASSETS || []).forEach(a => { if (LUBE.of(a.m || '', a.cls || '')) return;
       const k = (a.cls || '') + '|' + (a.m || ''); miss[k] = 1; }); return Object.keys(miss).length; })();
-    const m = /of\s*([\d.,   ]+)/.exec((document.querySelector('#lgNoRef') && document.querySelector('#lgNoRef').parentNode.querySelector('.pager .muted') || {}).textContent || '');
+    const m = /([\d.,\u00a0\u202f]+)\s*matching/.exec((document.querySelector('#lgNoRef') && document.querySelector('#lgNoRef').parentNode.querySelector('.pager .muted') || {}).textContent || '');
     return { rows: document.querySelectorAll('#lgNoRef tbody tr').length, stated: m ? Number(m[1].replace(/\D/g, '')) : null, truth: mrows,
       note: document.getElementById('lgNote').textContent, tall: +(document.documentElement.scrollHeight / innerHeight).toFixed(2) };
   });

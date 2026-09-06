@@ -85,14 +85,14 @@ const PAGE = 50;
     const rows = await count('actions', 'table.seltbl tbody tr');
     const txt = await pagerText('actions');
     ok(rows > 0 && rows <= PAGE, 'the action register draws at most one page', rows + ' row(s)');
-    ok(/of\s*1[,.]?000/.test(txt), 'and says how many there are altogether', txt);
+    ok(/1[,.]?000\s*matching/.test(txt), 'and says how many there are altogether', txt);
   }
   await tab('due');
   {
     const rows = await count('due', '#ddList tbody tr');
     const txt = await pagerText('due');
     ok(rows > 0 && rows <= PAGE, 'the due list draws at most one page', rows + ' row(s)');
-    ok(/of\s*\d/.test(txt), 'and says how many are behind it', txt);
+    ok(/\d\s*matching/.test(txt), 'and says how many are behind it', txt);
   }
   await tab('overview');
   {
@@ -112,8 +112,8 @@ const PAGE = 50;
        rather than a property of paging, and it failed the moment the register
        moved to 25 rows to fit a 1366 laptop. The relationship is the thing
        worth holding: no row skipped, none shown twice. */
-    const endOf = s2 => { const m = String(s2).replace(/[\s\u00a0,]/g, '').match(/^(\d+)\D+(\d+)/); return m ? +m[2] : null; };
-    const startOf = s2 => { const m = String(s2).replace(/[\s\u00a0,]/g, '').match(/^(\d+)/); return m ? +m[1] : null; };
+    const range = s2 => { const m = String(s2).replace(/[\s\u00a0\u202f,]/g, '').match(/(\d+)[–-](\d+)$/); return m ? [+m[1], +m[2]] : [null, null]; };
+    const endOf = s2 => range(s2)[1], startOf = s2 => range(s2)[0];
     ok(before !== after && startOf(after) === endOf(before) + 1,
        'Next moves to the next page, continuing where the first ended',
        `${before} → ${after}`);
@@ -122,15 +122,18 @@ const PAGE = 50;
     ok((await pagerText('actions')) === before, 'and Previous comes back', before);
   }
   {
-    await p.evaluate(() => document.querySelector('#tab-actions [data-pg$=":all"]').click());
+    /* No "show all": a thousand findings is never drawn at once. The reader
+       may ask for a hundred a page, and the whole list is still stated. */
+    const all = await p.evaluate(() => !!document.querySelector('#tab-actions [data-pg$=":all"]'));
+    ok(!all, 'there is no "show all" on a list this size');
+    await p.evaluate(() => document.querySelector('#tab-actions [data-pg$=":size:100"]').click());
     await p.waitForTimeout(900);
     const rows = await count('actions', 'table.seltbl tbody tr');
-    ok(rows === N, 'Show all really shows all of them', rows + ' row(s)');
-    const back = await p.evaluate(() => !!document.querySelector('#tab-actions [data-pg$=":page"]'));
-    ok(back, 'and offers the way back');
-    await p.evaluate(() => document.querySelector('#tab-actions [data-pg$=":page"]').click());
+    ok(rows === 100, 'a hundred a page draws exactly a hundred', rows + ' row(s)');
+    ok(/1[,.]?000\s*matching/.test(await pagerText('actions')), 'and still states the whole list', await pagerText('actions'));
+    await p.evaluate(() => document.querySelector('#tab-actions [data-pg$=":size:25"]').click());
     await p.waitForTimeout(600);
-    ok((await count('actions', 'table.seltbl tbody tr')) <= PAGE, 'which works', 'back to a page');
+    ok((await count('actions', 'table.seltbl tbody tr')) <= PAGE, 'and back to a short page', 'back to a page');
   }
 
   console.log('\n3. SELECT-ALL NEVER REACHES PAST WHAT IS ON SCREEN');
@@ -169,7 +172,7 @@ const PAGE = 50;
       $('equipQ').value = pre;
       $('equipQ').dispatchEvent(new Event('input', { bubbles: true }));
       return { pre, n: $('equipSel').options.length,
-               allMatch: [...$('equipSel').options].every(o => o.value.toUpperCase().indexOf(pre.toUpperCase()) >= 0),
+               allMatch: [...$('equipSel').options].every(o => unitSearchText(o.value).indexOf(pre.toUpperCase()) >= 0),
                shown: $('equipShown').textContent };
     });
     ok(r.n > 0 && r.n < all, `typing "${r.pre}" narrows it`, r.n + ' of ' + all);

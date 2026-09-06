@@ -65,19 +65,21 @@ const shown = (p, sel) => p.evaluate(s => { const e = document.querySelector(s);
     }
     const predicate = findings(filtered()).filter(x => actionRequired(x.r, x.i)).length;
     const pager = document.querySelector('#actionTbl .pager .muted');
-    const m = pager && /of\s*([\d.,  ]+)/.exec(pager.textContent || '');
+    const m = pager && /([\d.,\u00a0\u202f]+)\s*matching/.exec(pager.textContent || '');
     return { title: (document.querySelector('#tab-actions h2') || {}).textContent, rows: rows.length, ordered,
              predicate, stated: m ? Number(m[1].replace(/\D/g, '')) : null,
-             ownerEdit: !!document.querySelector('#actionTbl .iedit[data-f="owner"]'),
-             dueEdit: !!document.querySelector('#actionTbl .iedit[data-f="due"]'),
-             statusEdit: !!document.querySelector('#actionTbl .iedit[data-f="status"]'),
+             fields: document.querySelectorAll('#actionTbl tbody input:not(.asel), #actionTbl tbody select').length,
+             owner: !!document.querySelector('#actionTbl tbody .who'), status: !!document.querySelector('#actionTbl tbody .st'),
+             sizes: [...document.querySelectorAll('#actionTbl .pgsz button')].map(b => b.textContent.trim()).join(','),
+             showAll: !!document.querySelector('#actionTbl [data-pg$=":all"]'),
              csv: !!document.getElementById('csvBtn'), hash: location.hash };
   });
   ok('the page is called Maintenance Actions', /Maintenance Actions/.test(A.title || ''), A.title);
   ok('one page is at most 25 actions', A.rows > 0 && A.rows <= 25, A.rows + ' rows');
   ok('  and the pager states the whole outstanding set', A.stated === A.predicate, A.stated + ' vs ' + A.predicate);
   ok('the default order is Critical, then overdue, then oldest', A.ordered);
-  ok('owner, due date and status are editable in the row', A.ownerEdit && A.dueEdit && A.statusEdit);
+  ok('the rows are read-outs — no owner, date or status control in every row', A.fields === 0 && A.owner && A.status, A.fields + ' field(s)');
+  ok('  25, 50 or 100 rows a page, and no "show all"', A.sizes === '25,50,100' && !A.showAll, A.sizes);
   ok('CSV export is offered', A.csv);
   ok('the address names the page', /^#actions/.test(A.hash), A.hash);
 
@@ -136,6 +138,8 @@ const shown = (p, sel) => p.evaluate(s => { const e = document.querySelector(s);
   });
   note('tabs', D.tabs.map(x => x.label + ' ' + x.n).join(' · '));
   ok('the page is called Inspection Schedule', /Inspection Schedule/.test(D.title || ''), D.title);
+  /* The page size, from the page: 25 since build 271, and never a number this suite owns. */
+  const PAGE_SIZE_DEFAULT_T = await p.evaluate(() => PAGE_SIZE_DEFAULT);
   ok('four named tabs: Overdue, Due soon, Deferred, All', D.tabs.map(x => x.k).join(',') === 'over,soon,put,all'
      && D.tabs.map(x => x.label).join('|') === 'Overdue|Due soon|Deferred|All', D.tabs.map(x => x.label).join('|'));
   ok('the Overview door lands on the Overdue tab', D.scope === 'over' && D.tabs[0].on, D.scope);
@@ -144,7 +148,7 @@ const shown = (p, sel) => p.evaluate(s => { const e = document.querySelector(s);
   ok('Due soon counts only due soon', D.tabs[1].n === (D.st.soon || 0), D.tabs[1].n + ' vs ' + (D.st.soon || 0));
   ok('Deferred counts the put-off rounds', D.tabs[2].n === ((D.st.put || 0) + (D.st.off || 0)), String(D.tabs[2].n));
   ok('All counts every unit-round with history', D.tabs[3].n === D.all, D.tabs[3].n + ' vs ' + D.all);
-  ok('the Overdue list draws one page of exactly the overdue rows', D.rows === Math.min(50, D.st.over || 0), D.rows + ' of ' + (D.st.over || 0));
+  ok('the Overdue list draws one page of exactly the overdue rows', D.rows === Math.min(PAGE_SIZE_DEFAULT_T, D.st.over || 0), D.rows + ' of ' + (D.st.over || 0));
   ok('every row offers "Start inspection"', D.starts.length === 1 && D.starts[0] === 'Start inspection', D.starts.join('|'));
   ok('  and "Defer inspection"', D.defers.length === 1 && D.defers[0] === 'Defer inspection', D.defers.join('|'));
 
@@ -152,7 +156,7 @@ const shown = (p, sel) => p.evaluate(s => { const e = document.querySelector(s);
   const allTab = await p.evaluate(() => ({ hash: location.hash, scope: document.getElementById('ddScope').value,
     rows: document.querySelectorAll('#ddList tbody tr').length, n: dueTabRows().length }));
   ok('pressing All shows every row (one page of them) and writes dd=all', allTab.scope === 'all' && /dd=all/.test(allTab.hash)
-     && allTab.rows === Math.min(50, allTab.n), JSON.stringify(allTab));
+     && allTab.rows === Math.min(PAGE_SIZE_DEFAULT_T, allTab.n), JSON.stringify(allTab));
   await p.evaluate(() => { location.hash = '#due?dd=put'; });
   await p.waitForTimeout(500);
   const putTab = await p.evaluate(() => ({ scope: document.getElementById('ddScope').value,

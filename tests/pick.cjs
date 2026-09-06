@@ -19,7 +19,7 @@ const count=(p,f)=>p.$eval(`#edItems [data-count="${f}"]`,e=>e.textContent.trim(
   await p.waitForFunction(()=>/^(✅|❌|No)/.test(document.getElementById('drvMsg').textContent.trim()),null,{timeout:20000});
   await p.click('#dataClose');
   await p.click('nav.tabs button[data-tab="equipment"]'); await p.waitForTimeout(200);
-  await p.selectOption('#equipSel','TK146'); await p.waitForTimeout(300);
+  await p.evaluate(() => cmbSet('equipSel','TK146')); await p.waitForTimeout(300);
   await p.click('[data-edit="TK146|2026-03-09|MP"]'); await p.waitForTimeout(400);
 
   const allDef=await nOpts(p,'defectCode'), allCau=await nOpts(p,'causeCode');

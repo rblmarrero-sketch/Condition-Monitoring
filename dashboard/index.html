@@ -1457,8 +1457,28 @@
   }
   .eqpick > .hint{font-size:11px;color:var(--muted);}
   .pager{display:flex;align-items:center;gap:10px;padding:8px 10px;
-    border-top:1px solid var(--border);background:var(--surface-2);font-size:12px;}
+    border-top:1px solid var(--border);background:var(--surface-2);font-size:12px;flex-wrap:wrap;}
   .pager .spacer{flex:1;}
+  .pgsz{display:inline-flex;gap:2px;align-items:center;}
+  .pgsz .btn.on{border-color:var(--accent);color:var(--accent);font-weight:700;}
+  table.grid td.go,table.grid th.go{width:16px;color:var(--muted);text-align:right;padding-right:8px;}
+  /* The searchable picker: a box, and a list of the rows in view. */
+  .cmb{position:absolute;left:0;z-index:40;min-width:100%;width:max-content;max-width:min(460px,calc(100vw - 40px));
+    background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:var(--e2);overflow:hidden;}
+  .cmbs{overflow:auto;position:relative;overscroll-behavior:contain;}
+  .cmbpad{position:relative;}
+  .cmbw{position:absolute;left:0;right:0;top:0;}
+  .cmbr{height:34px;box-sizing:border-box;display:flex;align-items:center;gap:10px;padding:0 12px;cursor:pointer;
+    font-size:13px;white-space:nowrap;overflow:hidden;}
+  .cmbr b{font-weight:600;font-variant-numeric:tabular-nums;flex:0 0 auto;}
+  .cmbr span{color:var(--muted);font-size:12px;overflow:hidden;text-overflow:ellipsis;}
+  .cmbr:hover{background:var(--surface-2);}
+  .cmbr.act{background:color-mix(in srgb,var(--accent) 14%,transparent);}
+  .cmbr.cur b{color:var(--accent);}
+  .cmbf{border-top:1px solid var(--border);padding:5px 12px;font-size:11px;color:var(--muted);background:var(--surface-2);}
+  /* The value, out of sight: still the element scripts and the address read. */
+  select.cmbsel{position:absolute !important;width:0 !important;height:0 !important;min-height:0 !important;min-width:0 !important;
+    opacity:0;overflow:hidden;pointer-events:none;margin:0 !important;padding:0 !important;border:0 !important;}
   ul.plainlist{list-style:none;margin:6px 0 0;padding:0;max-height:220px;overflow:auto;}
   ul.plainlist li{padding:4px 0;border-bottom:1px solid var(--border);font-size:12px;
     display:flex;align-items:center;gap:8px;}
@@ -2303,7 +2323,8 @@
         <div class="hint" data-i18n="a_plan_hint">Who owns it and when it is due. Everything else on this page is a description of a problem; this is the part that changes it.</div>
         <div class="grid2">
           <div class="field"><label for="follOwner" data-i18n="th_owner">Responsible</label>
-            <input id="follOwner" type="text" data-i18n-ph="a_owner_ph" placeholder="who owns it"></div>
+            <input id="follOwner" type="text" list="ownerNames" data-i18n-ph="a_owner_ph" placeholder="who owns it">
+            <datalist id="ownerNames"></datalist></div>
           <div class="field"><label for="follDue" data-i18n="th_due">Due</label>
             <input id="follDue" type="date"></div>
           <div class="field"><label for="follStatus" data-i18n="th_status">Status</label>
@@ -2692,6 +2713,20 @@
         <span class="pgsub" id="failLead"></span></div>
       <span class="spacer"></span>
       <button type="button" class="btn sm" id="failReset" hidden data-i18n="fa_reset">Reset filters</button>
+      <!-- ONE "DEFINITIONS" FOR THE PAGE, as on Overview: the P–F panel used
+           to carry its own "How this is counted" and nothing else on the page
+           did, so the explanation of the one chart people ask about was in a
+           different place from the explanation of everything else. -->
+      <details class="defs" id="faDefs">
+        <summary data-i18n="ov_defs">Definitions</summary>
+        <div class="defsbody"><dl>
+          <dt data-i18n="s_pareto">Top failure modes (Pareto)</dt><dd data-i18n="s_pareto_sub">Coded defect types ranked by frequency — this is your defect-elimination shortlist.</dd>
+          <dt data-i18n="s_cause">Direct causes</dt><dd data-i18n="s_cause_sub">Why those defects occurred, as recorded at inspection.</dd>
+          <dt data-i18n="pf_title">P-F interval — detection to functional failure</dt><dd data-i18n="pf_sub">Measured wear against its limit. P is where the part becomes a finding (80% worn); F is condemn. The gap between them is the warning the round buys you — if it is shorter than the inspection interval, the round will miss it.</dd>
+          <dt data-i18n="s_iso">ISO 14224 failure mechanism</dt><dd data-i18n="s_iso_sub">Table B.2 mechanism classes — comparable across sites and benchmarks.</dd>
+          <dt data-i18n="fa_affected">Affected equipment</dt><dd data-i18n="fa_affected_sub">Machines carrying the defects above, narrowed by whichever bar has been pressed.</dd>
+        </dl></div>
+      </details>
     </div>
     <div class="grid12">
     <div class="section g7">
@@ -2710,8 +2745,6 @@
          monthly round is often enough to catch anything at all. -->
     <div class="section g6">
       <h2 data-i18n="pf_title">P-F interval — detection to functional failure</h2>
-      <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
-        <div class="sub" data-i18n="pf_sub">Measured wear against its limit. P is where the part becomes a finding (80% worn); F is condemn. The gap between them is the warning the round buys you — if it is shorter than the inspection interval, the round will miss it.</div></details>
       <div class="row" style="margin-bottom:10px;gap:10px;align-items:end;flex-wrap:wrap">
         <div class="field" style="min-width:280px"><label for="pfSel" data-i18n="pf_pick">Position</label>
           <select id="pfSel"></select></div>
@@ -2746,9 +2779,13 @@
     <div class="kpis" id="wearKpis"></div>
     <div class="section">
       <div class="secthd"><h2 data-i18n="w_title">Wear and remaining life</h2>
-        <span class="spacer"></span><span class="hint" id="wearLead"></span></div>
-      <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
-        <div class="sub" data-i18n="w_sub">Every measured position, latest reading first. Life is projected from this position's own history — two readings at least, and the app says so when it will not guess.</div></details>
+        <span class="spacer"></span><span class="hint" id="wearLead"></span>
+        <details class="defs" id="wDefs">
+          <summary data-i18n="ov_defs">Definitions</summary>
+          <div class="defsbody"><dl>
+            <dt data-i18n="w_title">Wear and remaining life</dt><dd data-i18n="w_sub">Every measured position, latest reading first. Life is projected from this position's own history — two readings at least, and the app says so when it will not guess.</dd>
+          </dl></div>
+        </details></div>
       <!-- The same segmented control the register uses. Two filters that do the
            same job should not be two different shapes. -->
       <div class="row" style="margin:14px 0 12px;gap:12px;align-items:center;flex-wrap:wrap">
@@ -2770,9 +2807,19 @@
   <section id="tab-actions" class="hidden">
     <div class="kpis" id="actKpis"></div>
     <div class="section">
-      <h2 data-i18n="s_act">Action register</h2>
-      <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
-        <div class="sub" data-i18n="s_act_sub">Every finding that needs work, worst first. Give it an owner and a date, and it stops being a list and starts being a plan.</div></details>
+      <div class="secthd"><h2 data-i18n="s_act">Action register</h2>
+        <span class="spacer"></span>
+        <details class="defs" id="aDefs">
+          <summary data-i18n="ov_defs">Definitions</summary>
+          <div class="defsbody"><dl>
+            <dt data-i18n="s_act">Action register</dt><dd data-i18n="s_act_sub">Every finding that needs work, worst first. Give it an owner and a date, and it stops being a list and starts being a plan.</dd>
+            <dt data-i18n="a_k_open">Still open</dt><dd data-i18n="a_d_open">Findings that need work and are not closed, including those not yet planned.</dd>
+            <dt data-i18n="a_k_overdue">Overdue</dt><dd data-i18n="a_d_overdue">Open actions past their due date.</dd>
+            <dt data-i18n="a_k_triage">Actions requiring planning</dt><dd data-i18n="a_d_triage">Findings with no job, owner or date, so they cannot be planned yet.</dd>
+            <dt data-i18n="a_k_unowned">Unassigned actions</dt><dd data-i18n="a_d_noown">Open actions with no responsible person named.</dd>
+            <dt data-i18n="a_k_done">Closed out</dt><dd data-i18n="a_d_done">Done, verified, or disposed as not needed with a reason and a name.</dd>
+          </dl></div>
+        </details></div>
       <div id="actBar" style="margin:2px 0 16px"></div>
       <div class="row" style="margin-bottom:14px;gap:12px;align-items:center;flex-wrap:wrap">
         <!-- All four answers on screen. A four-option dropdown hides three of
@@ -2845,9 +2892,16 @@
   <section id="tab-due" class="hidden">
     <div class="kpis" id="dueKpis"></div>
     <div class="section">
-      <h2 data-i18n="dd_title">Every round, against the clock it is scheduled on</h2>
-      <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
-        <div class="sub" data-i18n="dd_sub">Hours, not days — a machine parked for three weeks has not worn. Each row is one unit and one round, counted from the last one recorded anywhere in the system and at the machine's own operating rate where two hour-meter readings have measured it. A round somebody chose not to walk says so, with the reason they gave.</div></details>
+      <div class="secthd"><h2 data-i18n="dd_title">Every round, against the clock it is scheduled on</h2>
+        <span class="spacer"></span>
+        <details class="defs" id="ddDefs">
+          <summary data-i18n="ov_defs">Definitions</summary>
+          <div class="defsbody"><dl>
+            <dt data-i18n="dd_title">Inspection Schedule</dt><dd data-i18n="dd_sub">Hours, not days — a machine parked for three weeks has not worn. Each row is one unit and one round, counted from the last one recorded anywhere in the system and at the machine's own operating rate where two hour-meter readings have measured it. A round somebody chose not to walk says so, with the reason they gave.</dd>
+            <dt data-i18n="dd_c_rate">Operating hours/day</dt><dd data-i18n="dd_d_rate">The machine's own hours per day, from two hour-meter readings; 20 h/day where it has not been measured.</dd>
+            <dt data-i18n="dd_c_why">Deferral reason</dt><dd data-i18n="dd_d_why">The reason the inspector recorded for not walking the round.</dd>
+          </dl></div>
+        </details></div>
       <!-- FOUR VIEWS, NAMED, ALL ON SCREEN. Overdue, Due soon, Deferred, All —
            the four answers a planner wants, as tabs with their counts, so the
            choice is informed and costs one press. The <select> underneath is
@@ -2881,6 +2935,25 @@
          views of one subject, so they are seven tabs. Every one still renders
          on every refresh — nothing here changes what is counted, only what is
          in front of you. -->
+    <!-- One Definitions control for the seven views. Each view carried its
+         own "How this is counted"; the reader who wanted the method for the
+         matrix had to find the matrix first. -->
+    <div class="pagehd">
+      <div class="pgt"><h1 data-i18n="tab_lube">Lubrication</h1></div>
+      <span class="spacer"></span>
+      <details class="defs" id="lubeDefs">
+        <summary data-i18n="ov_defs">Definitions</summary>
+        <div class="defsbody"><dl>
+          <dt data-i18n="lp_title2">Programme coverage</dt><dd data-i18n="lp_sub">How much of the fleet is audited, verified and standardised — against the register, not against the machines somebody happened to visit.</dd>
+          <dt data-i18n="ls_title">Deciding the standard</dt><dd data-i18n="ls_sub">Not product by product — requirement by requirement.</dd>
+          <dt data-i18n="lc_title">The 2027 shelf against the recommendations</dt><dd data-i18n="lc_sub">Specification 02 rev CO-05 is what the site may actually buy. The fleet matrices say what should go in each compartment.</dd>
+          <dt data-i18n="lr_title">Machine reference</dt><dd data-i18n="lr_sub">Capacities, specifications and intervals, per model.</dd>
+          <dt data-i18n="lm_title">Fleet matrix</dt><dd data-i18n="lm_sub">Every asset class on one sheet. Colour is identity and nothing else: which product, never how good it is.</dd>
+          <dt data-i18n="lg_title">Not on the sheet</dt><dd data-i18n="lg_sub">The matrix can only show a machine where the register's spelling of its model and the reference's spelling of its model meet. Both halves are listed: nothing is dropped quietly.</dd>
+          <dt data-i18n="lpo_title">Shop posters</dt><dd data-i18n="lpo_sub">The sheet that goes on the workshop wall. The preview is shown reduced — it prints at full size.</dd>
+        </dl></div>
+      </details>
+    </div>
     <div class="subtabs" id="lubeSub" role="tablist" aria-label="Lubrication"></div>
 
 
@@ -2893,16 +2966,12 @@
         <span class="spacer"></span><span class="hdfacts" id="lubeProgHd"></span></div>
       <div id="lubeProg"></div>
       <div class="insight" id="lubeProgNote"></div>
-      <details class="method"><summary data-i18n="methodology">Methodology</summary>
-        <div class="sub" data-i18n="lp_sub">How much of the fleet is audited, verified and standardised — against the register, not against the machines somebody happened to visit. Every number states its denominator, because those two get mistaken for each other and that is how a programme reports 90% and means 90% of eleven machines.</div></details>
     </div>
 
     </div>
     <div class="lsub" data-lsub="std">
     <div class="section">
       <h2 data-i18n="ls_title">Deciding the standard</h2>
-      <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
-        <div class="sub" data-i18n="ls_sub">Not product by product — requirement by requirement. Machines that need the same thing are one decision, however many badges are on them. Choose, and the matrix and the posters re-read.</div></details>
       <div class="scrollbox" style="--sb:520px;border-top:0"><div id="lsList"></div></div>
       <div class="sub" id="lsNote" style="margin-top:12px"></div>
     </div>
@@ -2911,8 +2980,6 @@
     <div class="lsub" data-lsub="rec">
     <div class="section">
       <h2 data-i18n="lc_title">The 2027 shelf against the recommendations</h2>
-      <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
-        <div class="sub" data-i18n="lc_sub">Specification 02 rev CO-05 is what the site may actually buy. The fleet matrices say what should go in each compartment. Where the two do not line up, somebody has either told a fitter to use an oil nobody ordered, or ordered an oil for nothing — and the season is a third answer neither of them can show.</div></details>
       <div class="kpis" id="lcKpis"></div>
       <div class="scrollbox" style="--sb:480px;border-top:0"><div id="lcLists"></div></div>
     </div>
@@ -2921,8 +2988,6 @@
     <div class="lsub" data-lsub="ref">
     <div class="section">
       <h2 data-i18n="lr_title">Machine reference</h2>
-      <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
-        <div class="sub" data-i18n="lr_sub">Capacities, specifications and intervals, per model. A capacity is the one number here that causes a failure on its own — an under-filled final drive seizes, an over-filled one blows a seal — so changing it asks where the figure came from.</div></details>
       <div class="row" style="margin:14px 0 12px;gap:12px;align-items:flex-end;flex-wrap:wrap">
         <label class="fld"><span data-i18n="lr_model">Model</span>
           <select id="lrModel"></select></label>
@@ -2942,8 +3007,6 @@
     <div class="lsub" data-lsub="matrix">
     <div class="section">
       <h2 data-i18n="lm_title">Fleet matrix</h2>
-      <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
-        <div class="sub" data-i18n="lm_sub">Every asset class on one sheet — compartment, capacity, interval, and the oil that belongs in it. Colour is identity and nothing else: which product, never how good it is.</div></details>
       <div class="row" style="margin:14px 0 12px;gap:12px;align-items:center;flex-wrap:wrap">
         <div class="seg" id="lmSeg"></div>
         <span style="flex:1"></span>
@@ -2964,8 +3027,6 @@
     <div class="lsub" data-lsub="exc">
     <div class="section">
       <h2 data-i18n="lg_title">Not on the sheet</h2>
-      <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
-        <div class="sub" data-i18n="lg_sub">The matrix can only show a machine where the register's spelling of its model and the reference's spelling of its model meet. Where they miss each other, the machine has no lubrication standard and nothing above says so. Both halves are listed here: nothing is dropped quietly.</div></details>
       <div class="grid12" style="margin-top:14px">
         <div class="g6">
           <div class="fld"><span data-i18n="lg_nomodel">Machines with no reference</span></div>
@@ -2984,8 +3045,6 @@
     <div class="lsub" data-lsub="shop">
     <div class="section">
       <h2 data-i18n="lpo_title">Shop posters</h2>
-      <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
-        <div class="sub" data-i18n="lpo_sub">The sheet that goes on the workshop wall. A standard that lives only in a database is not a standard — this is the version a fitter reads at arm's length with a head-torch, so it is bilingual, it is large, and it says what to do when the right drum is empty.</div></details>
       <div class="row" style="margin:14px 0 12px;gap:12px;align-items:flex-end;flex-wrap:wrap">
         <label class="fld"><span data-i18n="lpo_which">Sheet</span>
           <select id="lpoWhich">
@@ -3031,28 +3090,36 @@
          field-name diagnostics — is for whoever administers the folder, and it
          is one collapsed control at the bottom rather than the right-hand
          column the decisions used to be found beneath. -->
+    <div class="pagehd">
+      <div class="pgt"><h1 data-i18n="tab_sync">Data &amp; Sync</h1></div>
+      <span class="spacer"></span>
+      <!-- The three decisions on this page, defined once. The reconciliation
+           arithmetic and the field diagnostics stay under Admin diagnostics. -->
+      <details class="defs" id="syDefs">
+        <summary data-i18n="ov_defs">Definitions</summary>
+        <div class="defsbody"><dl>
+          <dt data-i18n="sy_sev">Grade review required</dt><dd data-i18n="sy_sev_sub">Condition is never typed here — it follows the grade (1 Normal, 2 Incipient, 3 Degraded, 4 Severe, 5 Critical), or the millimetres on a measured round. Listed here are findings whose recorded condition neither of those produces, and rounds with no grade and no reading at all. The correction is always the grade: set it and the condition follows.</dd>
+          <dt data-i18n="sy_quar">Inspections requiring correction</dt><dd data-i18n="sy_quar_sub">A record missing the identity it needs to be filed — unit, date or round — or carrying an inspection point nobody has identified. Nothing is deleted; the inspection is on hold here so it is visible rather than silently dropped from every count.</dd>
+          <dt data-i18n="sy_gaps">Records waiting on evidence</dt><dd data-i18n="sy_gaps_sub">Every photograph and video a record says it has, checked against the file names the server actually holds. A record is waiting when one of its own attachments has not arrived.</dd>
+        </dl></div>
+      </details>
+    </div>
     <div class="kpis" id="syncKpis"></div>
     <div class="section" id="sySevBox" tabindex="-1" style="margin-bottom:var(--s4)">
       <div class="secthd"><h2 data-i18n="sy_sev">Grade review required</h2>
         <span class="spacer"></span><span class="hint" id="sySevCt"></span></div>
       <ul class="synone" id="sySev"></ul>
-      <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
-        <div class="sub" data-i18n="sy_sev_sub">A severity is not a field somebody types here — it is read off the grade (A→Normal, B→Incipient, C→Degraded, X→Critical), or off the millimetres on an undercarriage round. These are the places a record carries a severity that neither of those produces, so the board is showing a finding no one can re-derive. The fix is always the GRADE: set it and the severity follows. Rounds imported from the original spreadsheets are where nearly all of these come from.</div></details>
     </div>
     <div class="section" style="margin-bottom:var(--s4)">
       <div class="secthd"><h2 data-i18n="sy_quar">Inspections requiring correction</h2>
         <span class="spacer"></span><span class="hint" id="syQuarHint"></span></div>
       <div class="tblwrap scrollbox" style="--sb:260px"><table class="grid" id="syQuarTbl"></table></div>
-      <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
-        <div class="sub" data-i18n="sy_quar_sub">A record missing the identity it needs to be filed — unit, date or round — or carrying an inspection point nobody has identified. Nothing is deleted; the inspection is on hold here so it is visible rather than silently dropped from every count.</div></details>
     </div>
     <div class="section" style="margin-bottom:var(--s4)">
       <div class="secthd"><h2 data-i18n="sy_gaps">Records waiting on evidence</h2>
         <span class="spacer"></span><span class="hint" id="syGapHint"></span></div>
       <div class="tblwrap scrollbox" style="--sb:300px"><table class="grid" id="syGapTbl"></table></div>
       <div class="shown" id="syGapShown"></div>
-      <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
-        <div class="sub" data-i18n="sy_gaps_sub">Every photograph and video a record says it has, checked against the file names the server actually holds. A record is waiting when one of its own attachments has not arrived.</div></details>
     </div>
     <details class="method admin" id="syAdmin">
       <summary data-i18n="sy_diag">Admin diagnostics</summary>
@@ -3073,7 +3140,7 @@
             <div class="secthd"><h2 data-i18n="sy_recon">Where the number comes from</h2></div>
             <dl class="kv" id="syRecon"></dl>
             <div class="sub" id="syImport"></div>
-            <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
+            <details class="method"><summary data-i18n="methodology">Methodology</summary>
               <div class="sub" data-i18n="sy_recon_sub">Read down. Each line is a source or a rule, and the last one is the figure every other screen counts. The folder is the only source of rounds — the sixteen imported from the original spreadsheets were written into it on 29 August 2026 and are no longer counted separately. A round two phones both sent is one round with a conflict to settle, not two rounds.</div></details>
           </div>
         </div>
@@ -3081,7 +3148,7 @@
         <ul class="synone" id="syDiag"></ul>
         <div class="secthd" style="margin-top:var(--s4)"><h2 data-i18n="sy_unknown">Not measurable from here</h2></div>
         <ul class="synone" id="syUnknown"></ul>
-        <details class="method"><summary data-i18n="how_counted">How this is counted</summary>
+        <details class="method"><summary data-i18n="methodology">Methodology</summary>
           <div class="sub" data-i18n="sy_unknown_sub">These need a backend that issues a durable receipt per record and a hash per attachment. This one stores files in folders, so the dashboard cannot prove delivery latency, detect a corrupted upload or count a suppressed duplicate. They are listed rather than reported as zero.</div></details>
       </div>
     </details>
@@ -3243,29 +3310,29 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=270"></script>
-<script src="../mobile/hme.js?v=270"></script>
-<script src="../mobile/mp-fc.js?v=270"></script>
-<script src="../mobile/hme-cascade.js?v=270"></script>
-<script src="../mobile/temp-limits.js?v=270"></script>
+<script src="../data/magnetic_plug.js?v=271"></script>
+<script src="../mobile/hme.js?v=271"></script>
+<script src="../mobile/mp-fc.js?v=271"></script>
+<script src="../mobile/hme-cascade.js?v=271"></script>
+<script src="../mobile/temp-limits.js?v=271"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=270"></script>
-<script src="../mobile/normalize.js?v=270"></script>
-<script src="../mobile/grade.js?v=270"></script>
-<script src="../mobile/edits.js?v=270"></script>
-<script src="../mobile/due.js?v=270"></script>
-<script src="../mobile/wear.js?v=270"></script>
-<script src="../mobile/wear-map.js?v=270"></script>
-<script src="../mobile/lube.js?v=270"></script>
-<script src="../mobile/lube-overrides.js?v=270"></script>
-<script src="../mobile/lube2027.js?v=270"></script>
-<script src="../mobile/lube-tds.js?v=270"></script>
+<script src="../mobile/assets.js?v=271"></script>
+<script src="../mobile/normalize.js?v=271"></script>
+<script src="../mobile/grade.js?v=271"></script>
+<script src="../mobile/edits.js?v=271"></script>
+<script src="../mobile/due.js?v=271"></script>
+<script src="../mobile/wear.js?v=271"></script>
+<script src="../mobile/wear-map.js?v=271"></script>
+<script src="../mobile/lube.js?v=271"></script>
+<script src="../mobile/lube-overrides.js?v=271"></script>
+<script src="../mobile/lube2027.js?v=271"></script>
+<script src="../mobile/lube-tds.js?v=271"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=270"></script>
-<script src="../mobile/machine-photos.js?v=270"></script>
+<script src="../mobile/upload-defaults.js?v=271"></script>
+<script src="../mobile/machine-photos.js?v=271"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3274,17 +3341,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=270"></script>
-<script src="../mobile/get.js?v=270"></script>
-<script src="../mobile/points.js?v=270"></script>
-<script src="../mobile/uc-points.js?v=270"></script>
-<script src="../mobile/inspect-guide.js?v=270"></script>
-<script src="../mobile/get-figs.js?v=270"></script>
-<script src="../mobile/body-points.js?v=270"></script>
-<script src="../mobile/body-map.js?v=270"></script>
-<script src="../mobile/jspdf.umd.min.js?v=270"></script>
-<script src="../mobile/html2canvas.min.js?v=270"></script>
-<script src="../mobile/report-core.js?v=270"></script>
+<script src="../mobile/machine-fig.js?v=271"></script>
+<script src="../mobile/get.js?v=271"></script>
+<script src="../mobile/points.js?v=271"></script>
+<script src="../mobile/uc-points.js?v=271"></script>
+<script src="../mobile/inspect-guide.js?v=271"></script>
+<script src="../mobile/get-figs.js?v=271"></script>
+<script src="../mobile/body-points.js?v=271"></script>
+<script src="../mobile/body-map.js?v=271"></script>
+<script src="../mobile/jspdf.umd.min.js?v=271"></script>
+<script src="../mobile/html2canvas.min.js?v=271"></script>
+<script src="../mobile/report-core.js?v=271"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -3368,7 +3435,7 @@ const I18N={
   datasources:"Data sources", close:"Close", theme:"Light / dark",
   srctitle:"Where the dashboard is reading from",
 
-  g_ph:"Search unit, component, defect, action, person, WO\u2026",
+  g_ph:"Global search: unit, component, defect, action, person, WO\u2026",
   g_equipment:"Equipment", g_inspections:"Inspections", g_findings:"Findings",
   g_actions:"Maintenance actions", g_none:"Nothing matches that.",
   tab_overview:"Overview", tab_failure:"Failure Analysis", tab_actions:"Maintenance Actions",
@@ -3399,6 +3466,14 @@ const I18N={
   w_lead:"{n} measured position(s) on {m} machine(s)", w_ref:"New → condemn",
   drw_hist:"Open the history of {u}",
   fa_reset:"Reset filters", fa_affected:"Affected equipment",
+  fa_affected_sub:"Machines carrying the defects above, narrowed by whichever bar has been pressed.",
+  a_d_open:"Findings that need work and are not closed, including those not yet planned.",
+  a_d_overdue:"Open actions past their due date.",
+  a_d_triage:"Findings with no job, owner or date, so they cannot be planned yet.",
+  a_d_noown:"Open actions with no responsible person named.",
+  a_d_done:"Done, verified, or disposed as not needed with a reason and a name.",
+  dd_d_rate:"The machine's own hours per day, from two hour-meter readings; 20 h/day where it has not been measured.",
+  dd_d_why:"The reason the inspector recorded for not walking the round.",
   fa_lead:"{n} coded finding(s) on {m} machine(s)",
   fa_aff_all:"every machine with a coded finding · {n}", fa_aff_filtered:"narrowed by the bar you pressed · {n} machine(s)",
   fa_th_last:"Last found", fa_none:"No machine carries a finding in this selection.",
@@ -3451,7 +3526,6 @@ const I18N={
   hv_open:"Open the full record",
   cv_title2:"Inspection compliance",
   tr_title2:"Condition trend",
-  how_counted:"How this is counted",
   cv_all:"Show all {n} rounds",
   cv_less:"Show fewer",
   cv_fleet:"of {n} machines",
@@ -3561,7 +3635,7 @@ const I18N={
   f_type:"Inspection type", f_class:"Equipment class", f_period:"Period", f_search:"Search",
   f_alltime:"All time", f_30:"Last 30 days", f_90:"Last 90 days", f_365:"Last 12 months",
   f_alltypes:"All types", f_allclasses:"All classes", f_allgrades:"All grades", f_grade_s:"Grade", f_grade:"Condition grade",
-  f_qph:"Unit, defect, action, inspector…",
+  f_qph:"Filter records: unit, defect, action, inspector…",
   f_void:"Show voided",
   f_voidtip:"Voided inspections are withdrawn from every count, but nothing is deleted",
   clearall:"Clear all", remove:"Remove",
@@ -3595,7 +3669,7 @@ const I18N={
   sy_r_less:"less", sy_r_dupe:"Same round from more than one source", sy_r_rival:"Two phones, one round",
   sy_r_total:"Inspections in the system", sy_r_void:"Withdrawn, kept for the trail",
   sy_r_live:"Inspections that count as work",
-  sy_k_recs:"Inspections loaded", sy_k_recs_s:"{n} on hold, cannot be filed",
+  sy_k_recs:"Inspections loaded", sy_k_recs_s:"{n} requiring correction",
   sy_k_media:"Field photos received", sy_k_media_s:"{n} of {of} field photos",
   sy_k_media_na:"Field-photo reconciliation unavailable",
   sy_h_pop:"Where the photographs are",
@@ -3606,11 +3680,11 @@ const I18N={
   sy_k_wait:"Waiting on media", sy_k_wait_s:"records missing an attachment",
   sy_k_crit:"Critical waiting", sy_k_crit_s:"a Critical with no evidence yet",
   sy_k_conf:"Conflicts", sy_k_conf_s:"two phones, one round",
-  sy_k_grade:"Grade review", sy_k_grade_s:"a severity its grade cannot explain",
+  sy_k_grade:"Grade review", sy_k_grade_s:"Grade and condition do not match",
   sy_k_grade_go:"Show the list",
   sy_sev:"Grade review required",
   sy_sev_none:"Every severity on the board is derived from a grade or a measurement.",
-  sy_sev_sub:"A severity is not a field somebody types here — it is read off the grade (A→Normal, B→Incipient, C→Degraded, X→Critical), or off the millimetres on an undercarriage round. These are the places a record carries a severity that neither of those produces, so the board is showing a finding no one can re-derive. The fix is always the GRADE: set it and the severity follows. Rounds imported from the original spreadsheets are where nearly all of these come from.",
+  sy_sev_sub:"Condition is never typed here — it follows the grade (1 Normal, 2 Incipient, 3 Degraded, 4 Severe, 5 Critical), or the millimetres on a measured round. Listed here are findings whose recorded condition neither of those produces, and rounds with no grade and no reading at all. The correction is always the grade: set it and the condition follows.",
   sy_sev_go:"Review grade",
   sy_sev_ng:"Grade missing. Review the inspection and select a grade from 1 to 5. The recorded condition ({s}) still counts until then.",
   sy_sev_ug:"No grade on any of its {n} positions. Open the inspection and grade what was seen; until then the round carries no condition.",
@@ -3635,13 +3709,13 @@ const I18N={
   sy_d_none:"Nothing to report — no records needed repair on import.",
   sy_d_unknown:"{n} field name(s) this build does not classify — {f}. Not treated as findings; reported so they can be classified.",
   sy_d_why:"{u} · {d} is on hold. Recorded here: {e}. Housekeeping only: {h}. Unclassified: {k}.",
-  sy_quar:"Data correction required",
-  eq_findph:"Filter machines\u2026",
+  sy_quar:"Inspections requiring correction",
+  eq_findph:"Search equipment: unit, class, model\u2026",
+  cmb_n:"{n} of {of}", cmb_all:"{n} \u2014 type to narrow, \u2191\u2193 to move, Enter to choose", cmb_none:"No match",
+  r_month_l:"Month", r_unit_l:"Equipment",
   pg_prev:"Previous", pg_next:"Next",
-  pg_of:"{a}–{b} of {n}",
-  pg_show_all:"Show all {n}",
-  pg_all:"Showing all {n}",
-  pg_back:"Back to {n} at a time",
+  pg_of:"{n} matching · showing {a}–{b}",
+  pg_per:"Rows per page",
   sy_gaps_sub:"Every photograph and video a record says it has, checked against the file names the server actually holds. A record is waiting when one of its own attachments has not arrived.",
   sy_unknown_sub:"These need a backend that issues a durable receipt per record and a hash per attachment. This one stores files in folders, so the dashboard cannot prove delivery latency, detect a corrupted upload or count a suppressed duplicate. They are listed rather than reported as zero.",
   sy_quar_sub:"A record missing the identity it needs to be filed — unit, date or round — or carrying an inspection point nobody has identified. Nothing is deleted; the inspection is on hold here so it is visible rather than silently dropped from every count.",
@@ -3903,7 +3977,7 @@ const I18N={
   a_show:"Show", a_f_open:"Still open", a_f_over:"Overdue", a_f_owned:"Has an owner", a_f_all:"Everything",
   a_k_open:"STILL OPEN", a_k_open_s:"of {n} finding(s)",
   a_k_overdue:"OVERDUE", a_k_overdue_s:"past the date, still open",
-  a_k_unowned:"NOBODY OWNS IT", a_k_unowned_s:"no name against the job",
+  a_k_unowned:"Unassigned actions", a_k_unowned_s:"no responsible person named",
   a_k_oldest:"OLDEST OPEN", a_k_oldest_s:"since it was found",
   a_k_done:"CLOSED OUT", a_k_done_s:"done, verified or not needed",
   a_bar:"{d} of {n} closed out \u2014 {p}%",
@@ -4092,7 +4166,7 @@ const I18N={
   tab_due:"Inspection Schedule",
   dd_title:"Inspection Schedule", dd_soon:"Due soon",
   dd_sub:"Hours, not days — a machine parked for three weeks has not worn. Each row is one unit and one round, counted from the last one recorded anywhere in the system and at the machine's own operating rate where two hour-meter readings have measured it. A round somebody chose not to walk says so, with the reason they gave.",
-  dd_round:"Round", dd_show:"Show", dd_find:"Unit", dd_findph:"unit number",
+  dd_round:"Round", dd_show:"Show", dd_find:"Search this table", dd_findph:"unit number",
   dd_missed:"Overdue", dd_due:"Overdue & due soon",
   dd_put:"Deferred", dd_all:"All",
   dd_all_rounds:"All rounds", dd_csv:"Export CSV",
@@ -4102,7 +4176,7 @@ const I18N={
   dd_k_why:"Explained", dd_k_why_s:"of {n} past due carry a reason",
   dd_none:"Nothing in this view.",
   dd_c_unit:"Unit", dd_c_round:"Round", dd_c_last:"Last done",
-  dd_c_due:"Due", dd_c_rate:"h/day", dd_c_why:"Why it was not walked",
+  dd_c_due:"Due", dd_c_rate:"Operating hours/day", dd_c_why:"Deferral reason",
   dd_start:"Start inspection", dd_start_t:"Open this machine and this round on the phone app",
   dd_defer:"Defer inspection", dd_defer_edit:"Edit deferral", dd_defer_t:"Put this round off, with a reason",
   dd_defer_title:"Put this round off", dd_why:"Reason", dd_until:"Review on",
@@ -4135,7 +4209,7 @@ const I18N={
   ov_d_review:"Findings whose recorded severity does not match their grade. Review the grade; severity follows it. Opens Data & Sync.",
   th_grade:"Grade", th_reqact:"Required action", th_defcomp:"Component · top defect",
   ov_noact:"no open work", ov_act_due:"action due {d}", ov_act_over:"action overdue {n} d",
-  shown_n:"Showing {n} of {of}",
+  shown_n:"Showing {n} of {of}", match_of:"{n} matching of {of}",
   dd_foot:"h/day is the machine's own measured rate; * marks the fleet assumption of {r} h/day, used until two hour-meter readings have measured that machine. \u201cDue\u201d counts hours, and the days beside it are those hours at that rate.",
   due_over:"overdue {n} d", due_in:"in {n} d", due_h:"{n} h", due_days:"{n} d ago",
   due_why_wear:"wear, not the interval",
@@ -4145,7 +4219,7 @@ const I18N={
   datasources:"Источники данных", close:"Закрыть", theme:"Светлая / тёмная",
   srctitle:"Откуда панель читает данные",
 
-  g_ph:"\u041f\u043e\u0438\u0441\u043a: \u0435\u0434\u0438\u043d\u0438\u0446\u0430, \u0443\u0437\u0435\u043b, \u0434\u0435\u0444\u0435\u043a\u0442, \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0435, \u0447\u0435\u043b\u043e\u0432\u0435\u043a, \u0417\u041d\u2026",
+  g_ph:"\u0413\u043b\u043e\u0431\u0430\u043b\u044c\u043d\u044b\u0439 \u043f\u043e\u0438\u0441\u043a: \u0435\u0434\u0438\u043d\u0438\u0446\u0430, \u0443\u0437\u0435\u043b, \u0434\u0435\u0444\u0435\u043a\u0442, \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0435, \u0447\u0435\u043b\u043e\u0432\u0435\u043a, \u0417\u041d\u2026",
   g_equipment:"\u0422\u0435\u0445\u043d\u0438\u043a\u0430", g_inspections:"\u041e\u0441\u043c\u043e\u0442\u0440\u044b", g_findings:"\u041d\u0430\u0445\u043e\u0434\u043a\u0438",
   g_actions:"\u0420\u0430\u0431\u043e\u0442\u044b", g_none:"\u041d\u0438\u0447\u0435\u0433\u043e \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\u043e.",
   tab_overview:"Обзор", tab_failure:"Анализ отказов", tab_actions:"Работы по обслуживанию",
@@ -4176,6 +4250,14 @@ const I18N={
   w_lead:"\u0437\u0430\u043c\u0435\u0440\u0435\u043d\u043d\u044b\u0445 \u0442\u043e\u0447\u0435\u043a: {n} \u043d\u0430 {m} \u043c\u0430\u0448\u0438\u043d\u0430\u0445", w_ref:"\u041d\u043e\u0432\u043e\u0435 \u2192 \u043f\u0440\u0435\u0434\u0435\u043b",
   drw_hist:"\u041e\u0442\u043a\u0440\u044b\u0442\u044c \u0438\u0441\u0442\u043e\u0440\u0438\u044e {u}",
   fa_reset:"\u0421\u0431\u0440\u043e\u0441\u0438\u0442\u044c \u0444\u0438\u043b\u044c\u0442\u0440\u044b", fa_affected:"\u0417\u0430\u0442\u0440\u043e\u043d\u0443\u0442\u0430\u044f \u0442\u0435\u0445\u043d\u0438\u043a\u0430",
+  fa_affected_sub:"\u041c\u0430\u0448\u0438\u043d\u044b \u0441 \u0434\u0435\u0444\u0435\u043a\u0442\u0430\u043c\u0438, \u043f\u043e\u043a\u0430\u0437\u0430\u043d\u043d\u044b\u043c\u0438 \u0432\u044b\u0448\u0435, \u0441\u0443\u0436\u0435\u043d\u043d\u044b\u0435 \u043d\u0430\u0436\u0430\u0442\u043e\u0439 \u043f\u043e\u043b\u043e\u0441\u043e\u0439.",
+  a_d_open:"\u041d\u0430\u0445\u043e\u0434\u043a\u0438, \u0442\u0440\u0435\u0431\u0443\u044e\u0449\u0438\u0435 \u0440\u0430\u0431\u043e\u0442 \u0438 \u043d\u0435 \u0437\u0430\u043a\u0440\u044b\u0442\u044b\u0435, \u0432\u043a\u043b\u044e\u0447\u0430\u044f \u0435\u0449\u0451 \u043d\u0435 \u0437\u0430\u043f\u043b\u0430\u043d\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u044b\u0435.",
+  a_d_overdue:"\u041e\u0442\u043a\u0440\u044b\u0442\u044b\u0435 \u0440\u0430\u0431\u043e\u0442\u044b \u0441 \u043f\u0440\u043e\u0448\u0435\u0434\u0448\u0438\u043c \u0441\u0440\u043e\u043a\u043e\u043c.",
+  a_d_triage:"\u041d\u0430\u0445\u043e\u0434\u043a\u0438 \u0431\u0435\u0437 \u0440\u0430\u0431\u043e\u0442\u044b, \u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u043e\u0433\u043e \u0438\u043b\u0438 \u0441\u0440\u043e\u043a\u0430 \u2014 \u0438\u0445 \u043f\u043e\u043a\u0430 \u043d\u0435\u043b\u044c\u0437\u044f \u0437\u0430\u043f\u043b\u0430\u043d\u0438\u0440\u043e\u0432\u0430\u0442\u044c.",
+  a_d_noown:"\u041e\u0442\u043a\u0440\u044b\u0442\u044b\u0435 \u0440\u0430\u0431\u043e\u0442\u044b \u0431\u0435\u0437 \u043d\u0430\u0437\u043d\u0430\u0447\u0435\u043d\u043d\u043e\u0433\u043e \u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u043e\u0433\u043e.",
+  a_d_done:"\u0412\u044b\u043f\u043e\u043b\u043d\u0435\u043d\u043e, \u043f\u0440\u043e\u0432\u0435\u0440\u0435\u043d\u043e \u0438\u043b\u0438 \u043e\u0431\u043e\u0441\u043d\u043e\u0432\u0430\u043d\u043d\u043e \u043d\u0435 \u0442\u0440\u0435\u0431\u0443\u0435\u0442\u0441\u044f \u2014 \u0441 \u043f\u0440\u0438\u0447\u0438\u043d\u043e\u0439 \u0438 \u0438\u043c\u0435\u043d\u0435\u043c.",
+  dd_d_rate:"\u0421\u043e\u0431\u0441\u0442\u0432\u0435\u043d\u043d\u0430\u044f \u043d\u0430\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u043c\u0430\u0448\u0438\u043d\u044b \u0432 \u0447\u0430\u0441\u0430\u0445 \u0432 \u0441\u0443\u0442\u043a\u0438 \u043f\u043e \u0434\u0432\u0443\u043c \u043f\u043e\u043a\u0430\u0437\u0430\u043d\u0438\u044f\u043c \u0441\u0447\u0451\u0442\u0447\u0438\u043a\u0430; 20 \u0447/\u0441\u0443\u0442, \u0435\u0441\u043b\u0438 \u043d\u0435 \u0438\u0437\u043c\u0435\u0440\u0435\u043d\u0430.",
+  dd_d_why:"\u041f\u0440\u0438\u0447\u0438\u043d\u0430, \u043a\u043e\u0442\u043e\u0440\u0443\u044e \u0438\u043d\u0441\u043f\u0435\u043a\u0442\u043e\u0440 \u0437\u0430\u043f\u0438\u0441\u0430\u043b, \u043d\u0435 \u0432\u044b\u043f\u043e\u043b\u043d\u0438\u0432 \u043e\u0431\u0445\u043e\u0434.",
   fa_lead:"\u043a\u043e\u0434\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u044b\u0445 \u043d\u0430\u0445\u043e\u0434\u043e\u043a: {n} \u043d\u0430 {m} \u043c\u0430\u0448\u0438\u043d\u0430\u0445",
   fa_aff_all:"\u0432\u0441\u0435 \u043c\u0430\u0448\u0438\u043d\u044b \u0441 \u043a\u043e\u0434\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u043e\u0439 \u043d\u0430\u0445\u043e\u0434\u043a\u043e\u0439 \u00b7 {n}", fa_aff_filtered:"\u043f\u043e \u043d\u0430\u0436\u0430\u0442\u043e\u043c\u0443 \u0441\u0442\u043e\u043b\u0431\u0446\u0443 \u00b7 \u043c\u0430\u0448\u0438\u043d: {n}",
   fa_th_last:"\u041f\u043e\u0441\u043b\u0435\u0434\u043d\u044f\u044f \u043d\u0430\u0445\u043e\u0434\u043a\u0430", fa_none:"\u0412 \u044d\u0442\u043e\u0439 \u0432\u044b\u0431\u043e\u0440\u043a\u0435 \u043d\u0438 \u043e\u0434\u043d\u0430 \u043c\u0430\u0448\u0438\u043d\u0430 \u043d\u0435 \u043d\u0435\u0441\u0451\u0442 \u043d\u0430\u0445\u043e\u0434\u043e\u043a.",
@@ -4228,7 +4310,6 @@ const I18N={
   hv_open:"Открыть полную запись",
   cv_title2:"Соблюдение сроков осмотров",
   tr_title2:"Динамика состояния",
-  how_counted:"Как это считается",
   cv_all:"Показать все обходы: {n}",
   cv_less:"Свернуть",
   cv_fleet:"из {n} машин",
@@ -4338,7 +4419,7 @@ const I18N={
   f_type:"Тип осмотра", f_class:"Класс техники", f_period:"Период", f_search:"Поиск",
   f_alltime:"За всё время", f_30:"Последние 30 дней", f_90:"Последние 90 дней", f_365:"Последние 12 мес.",
   f_alltypes:"Все типы", f_allclasses:"Все классы", f_allgrades:"Все оценки", f_grade_s:"Оценка", f_grade:"Оценка состояния",
-  f_qph:"Ед., дефект, действие, инспектор…",
+  f_qph:"Фильтр записей: единица, дефект, действие, инспектор…",
   f_void:"Показать отозванные",
   f_voidtip:"Отозванные осмотры исключены из всех подсчётов, но ничего не удалено",
   clearall:"Очистить всё", remove:"Убрать",
@@ -4367,7 +4448,7 @@ const I18N={
   sy_r_less:"минус", sy_r_dupe:"Один обход из нескольких источников", sy_r_rival:"Два телефона, один обход",
   sy_r_total:"Обходов в системе", sy_r_void:"Аннулировано, оставлено для истории",
   sy_r_live:"Обходов, считающихся работой",
-  sy_k_recs:"Записей в системе", sy_k_recs_s:"{n} невозможно разложить",
+  sy_k_recs:"Записей в системе", sy_k_recs_s:"требуют исправления: {n}",
   sy_k_media:"Фото с поля получены", sy_k_media_s:"{n} из {of} полевых фото",
   sy_k_media_na:"Сверка полевых фото недоступна",
   sy_h_pop:"Где находятся фотографии",
@@ -4378,11 +4459,11 @@ const I18N={
   sy_k_wait:"Ждут материалов", sy_k_wait_s:"записей без вложения",
   sy_k_crit:"Критичные в ожидании", sy_k_crit_s:"критичное без подтверждения",
   sy_k_conf:"Конфликты", sy_k_conf_s:"два телефона, один обход",
-  sy_k_grade:"Проверка оценки", sy_k_grade_s:"степень, не объяснимая оценкой",
+  sy_k_grade:"Проверка оценки", sy_k_grade_s:"Оценка и состояние не совпадают",
   sy_k_grade_go:"Показать список",
   sy_sev:"Требуется проверка оценки",
   sy_sev_none:"Каждая степень на экране выведена из оценки или из измерения.",
-  sy_sev_sub:"Степень здесь не вводят вручную — она читается из оценки (A→Норма, B→Зарождающийся, C→Ухудшение, X→Критично) либо из миллиметров на обходе ходовой. Здесь перечислены записи со степенью, которую не даёт ни то, ни другое: на экране стоит находка, которую невозможно перепроверить. Исправляется всегда ОЦЕНКА: поставьте её, и степень появится сама. Почти все такие случаи пришли из первоначальных таблиц.",
+  sy_sev_sub:"Состояние здесь не вводят вручную — оно следует из оценки (1 Норма, 2 Зарождающийся, 3 Ухудшение, 4 Серьёзно, 5 Критично) либо из миллиметров на обходе с замерами. Здесь перечислены находки, у которых записанное состояние не даёт ни то, ни другое, и обходы без оценки и без замера. Исправляется всегда оценка: поставьте её, и состояние появится само.",
   sy_sev_go:"Проверить оценку",
   sy_sev_ug:"Ни на одной из {n} точек нет оценки. Откройте осмотр и оцените увиденное; до тех пор обход не несёт состояния.",
   sy_sev_more:"и ещё {n} — показать",
@@ -4407,13 +4488,13 @@ const I18N={
   sy_d_none:"Сообщать нечего — при импорте ничего исправлять не потребовалось.",
   sy_d_unknown:"Неклассифицированных имён полей: {n} — {f}. Находками не считаются; сообщается для классификации.",
   sy_d_why:"{u} · {d} на удержании. Записано: {e}. Только служебное: {h}. Не классифицировано: {k}.",
-  sy_quar:"Требуется исправление данных",
-  eq_findph:"Фильтр машин\u2026",
+  sy_quar:"Осмотры, требующие исправления",
+  eq_findph:"Поиск техники: номер, класс, модель\u2026",
+  cmb_n:"{n} из {of}", cmb_all:"{n} — вводите текст, ↑↓ для перехода, Enter для выбора", cmb_none:"Ничего не найдено",
+  r_month_l:"Месяц", r_unit_l:"Техника",
   pg_prev:"Назад", pg_next:"Вперёд",
-  pg_of:"{a}–{b} из {n}",
-  pg_show_all:"Показать все {n}",
-  pg_all:"Показаны все {n}",
-  pg_back:"Снова по {n}",
+  pg_of:"совпадений: {n} · показаны {a}–{b}",
+  pg_per:"Строк на странице",
   sy_gaps_sub:"Каждая фотография и видео, о которых заявляет запись, сверены с именами файлов, которые действительно есть на сервере. Запись ждёт, если какое-то из её вложений не пришло.",
   sy_unknown_sub:"Для этого нужен бэкенд, выдающий устойчивую квитанцию на запись и хеш на вложение. Этот хранит файлы в папках, поэтому панель не может доказать задержку доставки, обнаружить повреждённую загрузку или посчитать подавленный дубликат. Они перечислены, а не показаны нулями.",
   sy_quar_sub:"Запись без данных, нужных для размещения, — машины, даты или обхода — либо с точкой осмотра, которую никто не определил. Ничего не удаляется; осмотр стоит здесь на паузе, чтобы его было видно, а не молча выброшен из всех подсчётов.",
@@ -4664,7 +4745,7 @@ const I18N={
   a_f_owned:"С ответственным", a_f_all:"Все",
   a_k_open:"ОТКРЫТО", a_k_open_s:"из {n}",
   a_k_overdue:"ПРОСРОЧЕНО", a_k_overdue_s:"срок прошёл, ещё не закрыто",
-  a_k_unowned:"БЕЗ ОТВЕТСТВЕННОГО", a_k_unowned_s:"имя не назначено",
+  a_k_unowned:"Работы без ответственного", a_k_unowned_s:"ответственный не назначен",
   a_k_oldest:"САМОЕ СТАРОЕ", a_k_oldest_s:"с момента обнаружения",
   a_k_done:"ЗАКРЫТО", a_k_done_s:"выполнено, проверено или не требуется",
   a_bar:"Закрыто {d} из {n} — {p}%",
@@ -4849,7 +4930,7 @@ const I18N={
   tab_due:"График осмотров",
   dd_title:"График осмотров", dd_soon:"Скоро срок",
   dd_sub:"Часы, а не дни: машина, простоявшая три недели, не износилась. Строка — это одна единица и один обход, отсчитанный от последнего, записанного где угодно в системе, и по собственной наработке машины, если её измерили два показания счётчика. Если обход решили не делать — здесь написано, почему.",
-  dd_round:"Обход", dd_show:"Показать", dd_find:"Единица", dd_findph:"номер единицы",
+  dd_round:"Обход", dd_show:"Показать", dd_find:"Поиск по таблице", dd_findph:"номер единицы",
   dd_missed:"Просрочено", dd_due:"Просрочено и скоро",
   dd_put:"Отложено", dd_all:"Все",
   dd_all_rounds:"Все обходы", dd_csv:"Выгрузить CSV",
@@ -4859,7 +4940,7 @@ const I18N={
   dd_k_why:"С причиной", dd_k_why_s:"из {n} просроченных объяснены",
   dd_none:"В этом представлении пусто.",
   dd_c_unit:"Единица", dd_c_round:"Обход", dd_c_last:"Последний раз",
-  dd_c_due:"Срок", dd_c_rate:"ч/сут", dd_c_why:"Почему не сделан",
+  dd_c_due:"Срок", dd_c_rate:"Наработка, ч/сут", dd_c_why:"Причина переноса",
   dd_start:"Начать осмотр", dd_start_t:"Открыть эту машину и этот обход в приложении",
   dd_defer:"Отложить осмотр", dd_defer_edit:"Изменить отсрочку", dd_defer_t:"Отложить обход с указанием причины",
   dd_defer_title:"Отложить обход", dd_why:"Причина", dd_until:"Пересмотреть",
@@ -4892,7 +4973,7 @@ const I18N={
   ov_d_review:"Находки, у которых записанная степень не совпадает с оценкой. Проверьте оценку — степень следует за ней. Открывает «Данные и синхронизация».",
   th_grade:"Оценка", th_reqact:"Требуемое действие", th_defcomp:"Узел · основной дефект",
   ov_noact:"нет открытых работ", ov_act_due:"срок {d}", ov_act_over:"просрочено {n} дн.",
-  shown_n:"Показано {n} из {of}",
+  shown_n:"Показано {n} из {of}", match_of:"совпадений: {n} из {of}",
   dd_foot:"ч/сут — собственная измеренная наработка машины; * означает допущение по парку в {r} ч/сут, которое действует, пока машину не измерили два показания счётчика. «Срок» считается в часах, дни рядом — это те же часы при этой наработке.",
   due_over:"просрочено {n} дн.", due_in:"через {n} дн.", due_h:"{n} ч", due_days:"{n} дн. назад",
   due_why_wear:"по износу, не по интервалу",
@@ -6124,7 +6205,7 @@ function renderFailAffected(f){
     tr.onclick=go;
     tr.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } };
   });
-  if($("failAffShown")) $("failAffShown").innerHTML=`<span>${esc(t("shown_n",{n:pg.rows.length, of:rows.length}))}</span>`+pg.strip;
+  if($("failAffShown")) $("failAffShown").innerHTML=`<span>${esc(t("pg_of",{n:num(rows.length), a:num(pg.from||0), b:num(pg.to||0)}))}</span>`+pg.strip;
 }
 
 /* ---------- the P-F interval ----------
@@ -6453,7 +6534,13 @@ function renderSelBar(){
    only — a page number is not a preference, and coming back tomorrow on page
    seven of a list that has changed underneath is worse than starting at the
    top. */
-const PAGE_SIZE_DEFAULT=50;
+/* TWENTY-FIVE, AND THE READER MAY ASK FOR FIFTY OR A HUNDRED. There is no
+   "show all": at a thousand inspections the register is several thousand
+   findings, and a table that draws every one of them is a table that takes
+   seconds to paint and a page that scrolls for minutes. Sorting and filtering
+   are always over the WHOLE list; the page is only which slice is drawn. */
+const PAGE_SIZE_DEFAULT=25;
+const PAGE_SIZES=[25,50,100];
 const PAGE_SIZE=PAGE_SIZE_DEFAULT;
 /* A MEASUREMENT TABLE IS DENSER THAN A LIST OF ROUNDS.
 
@@ -6476,13 +6563,21 @@ function pageReset(key){ pageAt.delete(key); }
    that drew the list in the first place. */
 function paged(key, rows, render, size){
   const n=rows.length;
-  const PAGE_SIZE=size||PAGE_SIZE_DEFAULT;
-  const st=pageAt.get(key)||{ i:0, all:false };
-  if(st.all || n<=PAGE_SIZE){
-    return { rows, strip: n>PAGE_SIZE
-      ? `<div class="pager"><span class="muted">${esc(t("pg_all",{n:num(n)}))}</span>
-           <span class="spacer"></span>
-           <button type="button" class="btn sm" data-pg="${esc(key)}:page">${esc(t("pg_back",{n:PAGE_SIZE}))}</button></div>`
+  const base=size||PAGE_SIZE_DEFAULT;
+  const st=pageAt.get(key)||{ i:0, size:0 };
+  const PAGE_SIZE=PAGE_SIZES.indexOf(st.size)>=0 ? st.size : base;
+  if(!pagedWired.has(key)) pagedWired.set(key, render);
+  /* The size choice is offered only where it changes something: a list that
+     fits the smallest page has nothing to choose. */
+  const sizes = n>PAGE_SIZES[0]
+    ? `<span class="pgsz" role="group" aria-label="${esc(t("pg_per"))}">`+PAGE_SIZES.map(s=>
+        `<button type="button" class="btn sm${s===PAGE_SIZE?" on":""}" data-pg="${esc(key)}:size:${s}" aria-pressed="${s===PAGE_SIZE?"true":"false"}">${s}</button>`).join("")+`</span>`
+    : "";
+  if(n<=PAGE_SIZE){
+    pageAt.set(key,{ i:0, size:st.size||0 });
+    return { rows, from:n?1:0, to:n, n, strip: sizes
+      ? `<div class="pager"><span class="muted">${esc(t("pg_of",{a:num(n?1:0), b:num(n), n:num(n)}))}</span>
+           <span class="spacer"></span>${sizes}</div>`
       : "" };
   }
   const pages=Math.ceil(n/PAGE_SIZE);
@@ -6493,23 +6588,21 @@ function paged(key, rows, render, size){
     <span class="muted">${esc(t("pg_of",{a:num(from+1), b:num(to), n:num(n)}))}</span>
     <button type="button" class="btn sm" data-pg="${esc(key)}:next"${i<pages-1?"":" disabled"}>${esc(t("pg_next"))}</button>
     <span class="spacer"></span>
-    <button type="button" class="btn sm" data-pg="${esc(key)}:all">${esc(t("pg_show_all",{n:num(n)}))}</button>
+    ${sizes}
   </div>`;
-  pageAt.set(key,{ i, all:false });
-  if(!pagedWired.has(key)) pagedWired.set(key, render);
-  return { rows: rows.slice(from,to), strip };
+  pageAt.set(key,{ i, size:st.size||0 });
+  return { rows: rows.slice(from,to), strip, from:from+1, to, n };
 }
 const pagedWired=new Map();
 /* One listener for every pager on the page, so a table redrawn from scratch
    does not need its buttons re-bound and cannot be left with dead ones. */
 document.addEventListener("click", e=>{
   const b=e.target.closest("[data-pg]"); if(!b) return;
-  const [key,what]=String(b.dataset.pg).split(":");
-  const st=pageAt.get(key)||{ i:0, all:false };
+  const [key,what,arg]=String(b.dataset.pg).split(":");
+  const st=pageAt.get(key)||{ i:0, size:0 };
   if(what==="next") st.i=(st.i||0)+1;
   else if(what==="prev") st.i=Math.max(0,(st.i||0)-1);
-  else if(what==="all"){ st.all=true; }
-  else if(what==="page"){ st.all=false; st.i=0; }
+  else if(what==="size"){ const s=Number(arg); if(PAGE_SIZES.indexOf(s)>=0){ st.size=s; st.i=0; } }
   pageAt.set(key,st);
   const r=pagedWired.get(key); if(r) r();
 });
@@ -6606,9 +6699,6 @@ function renderActions(){
   const initials0=n=>String(n||"").split(/[\s.]+/).filter(Boolean)
     .slice(0,2).map(w=>w[0]).join("").toUpperCase()||"?";
   const daysTo0=d=>Math.round((Date.parse(d+"T00:00:00Z")-Date.parse(todayISO()+"T00:00:00Z"))/864e5);
-  if($("actShown")) $("actShown").innerHTML=
-    `<span>${esc(t("shown_n",{n:shown.length, of:rows.length}))}</span>`;
-
   /* TABLE, by default. Grouping four findings under one machine stops the
      unit, the round and the date being written out four times — which is real
      — but it also means the register cannot be sorted by what a planner
@@ -6631,7 +6721,7 @@ function renderActions(){
     });
     const cols=[[actSort.k==="queue"?"queue":"sev",t("th_sev")],["unit",t("th_unit")],["comp",t("a_th_comp")],
                 ["date",t("th_date")],["act",t("a_th_find")],["owner",t("a_th_owner")],
-                ["due",t("a_th_due")],["age",t("a_th_age")],["st",t("a_th_status")]];
+                ["due",t("a_th_due")],["age",t("a_th_age")],["st",t("a_th_status")],["",""]];
     /* Everything on screen, ticked or cleared in one press. It is scoped to what
        is SHOWN, not to the whole register — a select-all that silently reaches
        past the filter is how somebody reassigns four hundred findings meaning to
@@ -6644,10 +6734,14 @@ function renderActions(){
     const pgT=paged("actions-table", list, renderActions, PAGE_SIZE_ACT);
     const page=pgT.rows;
     const allOn = !!page.length && page.every(({r,i})=>aSel.has(selId(ekOf(r),i.key)));
-    const owners=ownerList();
+    /* "555 matching · showing 1–25", and how big the whole register is when
+       the filter has narrowed it. "Showing 555 of 555" said neither. */
+    if($("actShown")) $("actShown").innerHTML=
+      `<span>${esc(t("pg_of",{n:num(list.length), a:num(pgT.from||0), b:num(pgT.to||0)}))}${
+        list.length!==rows.length ? " · "+esc(t("a_k_open_s",{n:num(rows.length)})) : ""}</span>`;
     $("actionTbl").innerHTML=`<div class="tblwrap scrollbox" style="--sb:520px"><table class="grid seltbl">
       <thead><tr><th class="selcol"><input type="checkbox" id="aAll"${allOn?" checked":""}
-          title="${esc(t("a_sel_all"))}" aria-label="${esc(t("a_sel_all"))}"></th>${cols.map(([k,l])=>
+          title="${esc(t("a_sel_all"))}" aria-label="${esc(t("a_sel_all"))}"></th>${cols.map(([k,l])=> !k ? `<th class="go"></th>` :
         `<th class="sortable${actSort.k===k?" on":""}" data-asort="${k}"${
           k==="queue"?` title="${esc(t("a_queue_tip"))}"`:""}>${esc(l)}<span class="arrow">${
           actSort.k===k?(actSort.dir>0?"▲":"▼"):"↕"}</span></th>`).join("")}</tr></thead><tbody>`
@@ -6679,52 +6773,37 @@ function renderActions(){
             <td title="${esc((i.defect||"")+(i.actionLabel?" \u2192 "+i.actionLabel:""))}">
               <span class="trunc">${i.defect?esc(i.defect):'<span class="muted">\u2014</span>'}${
                 i.actionLabel?` <span class="muted">\u2192 ${esc(i.actionLabel)}</span>`:""}</span></td>
-            <!-- Editable where it is read. Assigning an owner used to mean
-                 opening a drawer, typing, saving and closing; on eighty-two
-                 findings that is the reason nobody assigned any. -->
-            <td class="ed"><input class="iedit iown" list="ownerNames" data-f="owner"
-                value="${esc(i.owner||"")}" placeholder="${esc(t("a_assign"))}"
-                title="${esc(t("a_ed_owner"))}" aria-label="${esc(t("a_ed_owner"))} · ${esc(r.equip)} ${esc(i.key)}"></td>
-            <td class="ed"><input class="iedit idue ${od?"late":(dd!=null&&dd<=7?"soon":"")}" type="date"
-                data-f="due" value="${esc(i.due||"")}" title="${esc(t("a_ed_due"))}" aria-label="${esc(t("a_ed_due"))} · ${esc(r.equip)} ${esc(i.key)}"></td>
+            <!-- READ-OUTS, NOT FIELDS. Every row used to carry an owner box,
+                 a date box and a status list: at a thousand inspections that
+                 is thousands of live form controls on one page, and a table
+                 nobody can scan. The row is read here and edited in the drawer
+                 it opens; the tick column and the bar above it do a week's
+                 assignments in one gesture. -->
+            <td>${i.owner
+                ? `<span class="who"><i>${esc(initials0(i.owner))}</i><span>${esc(i.owner)}</span></span>`
+                : `<span class="who none"><i>+</i><span>${esc(t("a_assign"))}</span></span>`}</td>
+            <td>${i.due
+                ? `<span class="due ${od?"late":(dd!=null&&dd<=7?"soon":"")}"><b>${esc(i.due)}</b>${
+                    od?`<i>${esc(t("a_late"))}</i>`:(dd!=null&&dd<=7?`<i>${esc(t("a_in_d",{d:dd}))}</i>`:"")}</span>`
+                : '<span class="muted">—</span>'}</td>
             <td class="num mono">${age==null?"":age}</td>
-            <td class="ed"><select class="iedit ist s-${esc(String(i.status||"open"))}" data-f="status"
-                title="${esc(t("a_ed_st"))}" aria-label="${esc(t("a_ed_st"))} · ${esc(r.equip)} ${esc(i.key)}">${FSTATUS.map(x=>
-                  `<option value="${esc(x.k)}"${String(i.status||"")===x.k?" selected":""}>${esc(x[lang]||x.en)}</option>`).join("")}</select>${
+            <td><span class="st s-${esc(String(i.status||"open"))}">${esc(stName(i.status))}</span>${
               i.prio?` <span class="prio ${prioClass(i.prio)}" title="${esc(prioName(i.prio))}">${esc(i.prio)}</span>`:""}${
               ast.k==="triage"
                 ? `<span class="tri" title="${esc(t("as_triage_t",{f:actionMissText(ast.miss)}))}">${
                      esc(t("as_triage"))}<i>${esc(actionMissText(ast.miss))}</i></span>` : ""}</td>
+            <td class="go" aria-hidden="true">›</td>
           </tr>`;
-        }).join("")+`</tbody></table></div>` + pgT.strip
-      + `<datalist id="ownerNames">${owners.map(o=>`<option value="${esc(o)}"></option>`).join("")}</datalist>`;
-    /* A row opens the drawer. A control inside a row does its own job and must
-       not also open the drawer under the reader's hands. */
+        }).join("")+`</tbody></table></div>` + pgT.strip;
+    /* A row opens the drawer — the one place a finding is edited. The tick
+       box does its own job and must not also open the drawer under the
+       reader's hands. */
     $("actionTbl").querySelectorAll("tr.hrow").forEach(tr=>{
-      const go=e=>{ if(e && e.target.closest(".iedit,.selcol")) return;
+      const go=e=>{ if(e && e.target.closest(".selcol")) return;
                     openFollow(tr.dataset.fu, tr.dataset.fi); };
       tr.onclick=go;
-      tr.onkeydown=e=>{ if((e.key==="Enter"||e.key===" ") && !e.target.closest(".iedit,.selcol")){
+      tr.onkeydown=e=>{ if((e.key==="Enter"||e.key===" ") && !e.target.closest(".selcol")){
         e.preventDefault(); go(null); } };
-    });
-    /* Inline edit: commit on change, which for a date and a select is the press
-       and for a name is leaving the field. */
-    $("actionTbl").querySelectorAll(".iedit").forEach(el=>{
-      el.onchange=()=>{
-        const tr=el.closest("tr");
-        /* Every other status is a workflow step. This one is a judgement that
-           closes a C or X exception, so it cannot be set by picking it from a
-           list — it needs a reason and a name, and without them the finding
-           stays in triage rather than quietly leaving the register. */
-        if(el.dataset.f==="status" && el.value==="NOACT"){
-          askDisposition({rk:tr.dataset.fu, ik:tr.dataset.fi}, ()=>renderActions());
-          return;
-        }
-        const patch={}; patch[el.dataset.f]= el.dataset.f==="owner" ? el.value.trim() : el.value;
-        el.classList.add("saving");
-        patchItems([{rk:tr.dataset.fu, ik:tr.dataset.fi}], patch, $("actShown"))
-          .catch(()=>{}).then(()=>renderActions());
-      };
     });
     const pick=(cb,on)=>{
       const p=selOf(cb), id=selId(p.rk,p.ik);
@@ -8339,6 +8418,8 @@ function openFollow(rk, ik){
   const sv=sevOf(rec,it);
   $("follSev").innerHTML = sv?`<span class="pill ${SEV[sv].c}">${esc(SEV[sv].l)}</span>`:"";
   $("follOwner").value=it.owner||"";
+  /* Every name already used, so assigning is picking a spelling that exists. */
+  const dl=$("ownerNames"); if(dl) dl.innerHTML=ownerList().map(o=>`<option value="${esc(o)}"></option>`).join("");
   $("follDue").value=it.due||"";
   $("follWo").value=it.wo||"";
   $("follPlan").value=it.plan||"";
@@ -8368,6 +8449,20 @@ function openFollow(rk, ik){
   $("follOv").classList.remove("hidden");
 }
 function closeFollow(){ $("follOv").classList.add("hidden"); follKey=null; ovClosed("follOv"); }
+/* Every other status is a workflow step. "No action required" is a judgement
+   that closes a graded exception, so it cannot be set by picking it from a
+   list — it needs a reason and a name. The register's inline list used to
+   guard this; now that the drawer is the one place a status is set, the
+   drawer guards it: choosing it opens the disposition dialog, and the list
+   goes back to what it was until that is answered. */
+if($("follStatus")) $("follStatus").addEventListener("change", ()=>{
+  const sel=$("follStatus"); if(sel.value!=="NOACT" || !follKey) return;
+  const rec=RECS.find(r=>ekOf(r)===follKey);
+  const it=rec&&(rec.items||[]).find(x=>x.key===follItem);
+  if(it && String(it.status||"")==="NOACT") return;
+  sel.value=String((it&&it.status)||"");
+  askDisposition({rk:follKey, ik:follItem}, ()=>{ closeFollow(); renderActions(); });
+});
 /* ---------- one patch, one finding or ninety ----------
 
    The drawer could set an owner and a date; the register could not. So planning
@@ -11281,7 +11376,11 @@ function showTab(t,push){
      machine that IS up to date look like one nobody has ever been to. So the
      tab carries its own controls and the global bar is put away while it is
      open, rather than sitting there inert above a list it does not touch. */
-  const own = t==="due";
+  /* The same holds for the support pages: the lubrication programme is read
+     off the register, Data & Sync reconciles the whole folder, and a report
+     is chosen by machine or date — none of them is narrowed by the bar, so a
+     bar shown above them would be a promise the page does not keep. */
+  const own = t==="due" || t==="lube" || t==="sync" || t==="reports";
   const bar = document.querySelector("main > .controls");
   if(bar) bar.classList.toggle("hidden", own);
   if($("chips")) $("chips").classList.toggle("hidden", own);
@@ -11576,24 +11675,32 @@ function gGo(kind,key,pt){
 })();
 
 /* ---------- reports ---------- */
-function refreshReportTargets(){
-  const scope=$("rScope").value, sel=$("rTarget"); const prev=sel.value;
-  let opts=[];
-  if(scope==="one"){ $("rTargetLbl").textContent=t("r_target");
+/* Everything a report can be about, for the scope chosen: [value, label,
+   searchable text, sub-label]. The picker's list and the hidden <select> are
+   both drawn from this one function, so they cannot offer different things. */
+function reportTargetOpts(scope){
+  if(scope==="one")
     /* Newest first: somebody picking a single round in a list is almost always
        after the one that just came in. */
-    opts=RECS.filter(r=>!r._void).slice()
-      .sort((a,b)=>(b.date||"").localeCompare(a.date||"")||a.equip.localeCompare(b.equip))
+    return RECS.filter(r=>!r._void).slice()
+      .sort((a,b)=>(b.date||"").localeCompare(a.date||"")||natCmp(a.equip,b.equip))
       .slice(0,400)
-      .map(r=>[ekOf(r), `${r.equip} · ${r.date} · ${TYPE_LABEL[r.type]||r.type}`]); }
-  else if(scope==="unit"){ $("rTargetLbl").textContent="Equipment";
-    opts=[...new Set(RECS.map(r=>r.equip))].sort().map(u=>[u,u]); }
-  else if(scope==="round"){ $("rTargetLbl").textContent="Inspection date";
-    opts=[...new Set(RECS.map(r=>r.date).filter(Boolean))].sort().reverse()
-      .map(d=>[d,`${d} · ${new Set(RECS.filter(r=>r.date===d).map(r=>r.equip)).size} unit(s)`]); }
-  else { $("rTargetLbl").textContent="Month";
-    opts=[...new Set(RECS.map(r=>(r.date||"").slice(0,7)).filter(Boolean))].sort().reverse()
-      .map(m=>[m,t("month_insp",{m,n:RECS.filter(r=>(r.date||"").slice(0,7)===m).length})]); }
+      .map(r=>{ const a=ASSET_BY[r.equip]||{};
+        return [ekOf(r), `${r.equip} · ${r.date} · ${TYPE_LABEL[r.type]||r.type}`,
+                (r.equip+" "+r.date+" "+(TYPE_LABEL[r.type]||r.type)+" "+r.type+" "+(a.cls||"")+" "+(a.m||"")).toUpperCase(), ""]; });
+  if(scope==="unit")
+    return [...new Set(RECS.map(r=>r.equip))].sort(natCmp).map(u=>{ const a=ASSET_BY[u]||{};
+      return [u, u, (u+" "+(a.cls||"")+" "+(a.cat||"")+" "+(a.mk||"")+" "+(a.m||"")).toUpperCase(), [a.cls,a.m].filter(Boolean).join(" · ")]; });
+  if(scope==="round")
+    return [...new Set(RECS.map(r=>r.date).filter(Boolean))].sort().reverse()
+      .map(d=>[d,`${d} · ${new Set(RECS.filter(r=>r.date===d).map(r=>r.equip)).size} unit(s)`]);
+  return [...new Set(RECS.map(r=>(r.date||"").slice(0,7)).filter(Boolean))].sort().reverse()
+    .map(m=>[m,t("month_insp",{m,n:RECS.filter(r=>(r.date||"").slice(0,7)===m).length})]);
+}
+function refreshReportTargets(){
+  const scope=$("rScope").value, sel=$("rTarget"); const prev=sel.value;
+  $("rTargetLbl").textContent = scope==="one" ? t("r_target") : scope==="unit" ? t("r_unit_l") : scope==="round" ? t("th_date") : t("r_month_l");
+  let opts=reportTargetOpts(scope);
   /* SEARCHED AND BOUNDED, for the same reason as the equipment picker.
 
      "Every unit" is a thousand options on this site's real fleet, and a report
@@ -11601,8 +11708,8 @@ function refreshReportTargets(){
      stops the control being built at fleet size when nothing has been typed.
      The currently chosen target is always rendered, so a selection made
      elsewhere is never silently dropped. */
-  const q=(($("rTargetQ")||{}).value||"").trim().toUpperCase();
-  if(q) opts=opts.filter(([v,l])=>(v+" "+l).toUpperCase().indexOf(q)>=0);
+  const q=cmbQ("rTarget","rTargetQ").toUpperCase();
+  if(q) opts=opts.filter(o=>(o[2]||(o[0]+" "+o[1]).toUpperCase()).indexOf(q)>=0);
   const all=opts.length;
   let show=opts.slice(0, EQ_CAP);
   if(prev && opts.some(o=>o[0]===prev) && !show.some(o=>o[0]===prev)){
@@ -11614,7 +11721,6 @@ function refreshReportTargets(){
   if(shown) shown.textContent = all>show.length ? t("eq_more",{n:show.length, of:all}) : "";
   try{ renderReportPreview(); renderRecentReports(); }catch(e){}
 }
-if($("rTargetQ")) $("rTargetQ").oninput=refreshReportTargets;
 $("rScope").onchange=refreshReportTargets;
 /* WHAT THE PDF WILL CONTAIN, BEFORE IT IS MADE. A report is a document
    somebody hands to a meeting; the size and the status of it are decided
@@ -11894,9 +12000,9 @@ function fillEquip(){
      changes a filter, the machine is chosen the ordinary way again. */
   if(histPin && filterSig()!==histPinSig) histPin="";
   const all=histUnits();
-  const q=(($("equipQ")||{}).value||"").trim().toUpperCase();
+  const q=cmbQ("equipSel","equipQ").toUpperCase();
   const prev=histPin||sel.value;
-  const hit=q ? all.filter(u=>String(u).toUpperCase().indexOf(q)>=0) : all.slice();
+  const hit=q ? all.filter(u=>unitSearchText(u).indexOf(q)>=0) : all.slice();
   const keep = prev && ((window.__units||[]).includes(prev)) && (histPin===prev || all.includes(prev));
   if(keep && !hit.includes(prev)) hit.unshift(prev);
   /* The selected machine is always rendered, whatever the cap or the filter —
@@ -11909,7 +12015,7 @@ function fillEquip(){
   const shown=$("equipShown");
   if(shown) shown.textContent = hit.length>show.length
     ? t("eq_more",{n:show.length, of:hit.length})
-    : (q && hit.length!==all.length ? t("shown_n",{n:hit.length, of:all.length}) : "");
+    : (q && hit.length!==all.length ? t("match_of",{n:hit.length, of:all.length}) : "");
 }
 /* Choosing a machine from somewhere else — a drawer, a KPI, a search result,
    the address — must work whether or not that machine is one of the sixty
@@ -11919,7 +12025,7 @@ function fillEquip(){
    filters on the page leave it with nothing to show. */
 function selectEquip(unit, pin){
   const sel=$("equipSel"); if(!sel || !unit) return false;
-  const q=$("equipQ"); if(q) q.value="";
+  cmbReset("equipSel");
   histPin = pin ? unit : ""; histPinSig = pin ? filterSig() : "";
   fillEquip();
   if(!Array.from(sel.options).some(o=>o.value===unit)){
@@ -11927,9 +12033,138 @@ function selectEquip(unit, pin){
     o.value=unit; o.textContent=unit; sel.insertBefore(o, sel.firstChild);
   }
   sel.value=unit;
+  cmbReset("equipSel");
   return sel.value===unit;
 }
-if($("equipQ")) $("equipQ").oninput=()=>{ fillEquip(); renderHistory(); };
+/* What a machine can be found by: its number, its class, its make and model.
+   Typing "PC2000" or "DOZ" lists machines, not nothing. */
+function unitSearchText(u){
+  const a=ASSET_BY[u]||{};
+  return (u+" "+(a.cls||"")+" "+(a.cat||"")+" "+(a.mk||"")+" "+(a.m||"")).toUpperCase();
+}
+
+/* ── SEARCHABLE PICKERS ──────────────────────────────────────────────────────
+
+   A <select> with a thousand machines in it is a control nobody scrolls, and
+   one built at fleet size is a page that stalls. Each large picker keeps its
+   <select> as the VALUE — what the page reads, what the address stores, what
+   a script sets — but out of sight. In front of it is a text box and a list
+   that draws only the dozen rows in view of the WHOLE fleet: natural order
+   (TK9 before TK10), searched by unit number, class and model, walked with
+   the arrow keys, chosen with Enter or a click.
+
+   cmbSet(id, value) is how anything else chooses: it puts the value on the
+   <select> (adding the option if the capped list did not carry it), fires
+   change so the page reacts exactly as it does to a person, and shows the
+   choice in the box. */
+const CMB={}, CMB_ROW=34, CMB_VIS=9;
+function cmbAttach(selId, o){
+  const sel=$(selId); if(!sel || CMB[selId]) return CMB[selId]||null;
+  o=o||{};
+  let inp=o.input ? $(o.input) : null;
+  if(!inp){
+    inp=document.createElement("input"); inp.type="search"; inp.id=selId+"Q";
+    /* Labelled by the same words as the select it stands in for. */
+    const lab=document.querySelector(`label[for="${selId}"]`);
+    if(lab){ if(lab.dataset.i18n) inp.dataset.i18nAria=lab.dataset.i18n; inp.setAttribute("aria-label", lab.textContent.trim()); }
+    sel.parentNode.insertBefore(inp, sel);
+  }
+  inp.autocomplete="off"; inp.setAttribute("role","combobox"); inp.setAttribute("aria-expanded","false");
+  inp.setAttribute("aria-autocomplete","list"); inp.setAttribute("aria-haspopup","listbox");
+  const pop=document.createElement("div"); pop.className="cmb hidden"; pop.id=selId+"List"; pop.setAttribute("role","listbox");
+  pop.innerHTML=`<div class="cmbs"><div class="cmbpad"><div class="cmbw"></div></div></div><div class="cmbf"></div>`;
+  inp.setAttribute("aria-controls", pop.id);
+  inp.parentNode.insertBefore(pop, inp.nextSibling);
+  const host=inp.parentNode; if(getComputedStyle(host).position==="static") host.style.position="relative";
+  sel.classList.add("cmbsel"); sel.setAttribute("aria-hidden","true"); sel.tabIndex=-1;
+  const C={ id:selId, sel, inp, pop, o, list:[], all:0, act:-1, open:false, typing:false };
+  C.scr=pop.querySelector(".cmbs"); C.pad=pop.querySelector(".cmbpad"); C.win=pop.querySelector(".cmbw"); C.foot=pop.querySelector(".cmbf");
+  CMB[selId]=C;
+  const labelOf=()=>{ const op=sel.options[sel.selectedIndex]; return op ? op.textContent : ""; };
+  C.sync=()=>{ if(!C.typing) inp.value=labelOf(); };
+  const items=()=> o.items ? o.items() : [...sel.options].filter(op=>op.value!=="").map(op=>({ v:op.value, l:op.textContent, s:op.textContent.toUpperCase() }));
+  const q=()=> C.typing ? inp.value.trim().toUpperCase() : "";
+  const filter=()=>{ const all=items(); const toks=q().split(/\s+/).filter(Boolean);
+    C.all=all.length;
+    C.list = toks.length ? all.filter(it=>{ const s=it.s||(it.l||"").toUpperCase(); return toks.every(tk=>s.indexOf(tk)>=0); }) : all;
+    C.scr.style.height=(Math.max(1,Math.min(C.list.length,CMB_VIS))*CMB_ROW)+"px"; };
+  /* Only the rows in view exist as elements; the rest is height. */
+  const draw=()=>{
+    const n=C.list.length;
+    C.pad.style.height=(n*CMB_ROW)+"px";
+    const first=Math.max(0, Math.floor(C.scr.scrollTop/CMB_ROW)-2);
+    const last=Math.min(n, first+CMB_VIS+5);
+    C.win.style.transform=`translateY(${first*CMB_ROW}px)`;
+    const cur=sel.value;
+    C.win.innerHTML=C.list.slice(first,last).map((it,k)=>{ const ix=first+k;
+      return `<div class="cmbr${ix===C.act?" act":""}${it.v===cur?" cur":""}" role="option" id="${pop.id}-${ix}" aria-selected="${ix===C.act?"true":"false"}" data-ix="${ix}"><b>${esc(it.l)}</b>${it.sub?`<span>${esc(it.sub)}</span>`:""}</div>`; }).join("");
+    C.foot.textContent = n ? (n<C.all ? t("cmb_n",{n:num(n), of:num(C.all)}) : t("cmb_all",{n:num(n)})) : t("cmb_none");
+    if(C.act>=0) inp.setAttribute("aria-activedescendant", `${pop.id}-${C.act}`); else inp.removeAttribute("aria-activedescendant");
+  };
+  const keep=()=>{ if(C.act<0) return; const top=C.act*CMB_ROW, bot=top+CMB_ROW;
+    if(top<C.scr.scrollTop) C.scr.scrollTop=top; else if(bot>C.scr.scrollTop+C.scr.clientHeight) C.scr.scrollTop=bot-C.scr.clientHeight; };
+  const show=()=>{ if(C.open) return; C.open=true; filter();
+    C.act=Math.max(0, C.list.findIndex(it=>it.v===sel.value));
+    pop.classList.remove("hidden"); pop.style.top=(inp.offsetTop+inp.offsetHeight+4)+"px";
+    inp.setAttribute("aria-expanded","true"); keep(); draw(); };
+  const hide=()=>{ const was=C.open||C.typing; C.open=false; C.typing=false;
+    pop.classList.add("hidden"); inp.setAttribute("aria-expanded","false"); inp.removeAttribute("aria-activedescendant");
+    C.sync(); if(was && o.onType) o.onType(""); };
+  const pick=ix=>{ const it=C.list[ix]; if(!it) return; C.typing=false; C.open=false;
+    pop.classList.add("hidden"); inp.setAttribute("aria-expanded","false");
+    cmbSet(selId, it.v); };
+  C.show=show; C.hide=hide; C.draw=draw; C.filter=filter;
+  inp.addEventListener("input", ()=>{ C.typing=true;
+    if(!C.open){ C.open=true; pop.classList.remove("hidden"); pop.style.top=(inp.offsetTop+inp.offsetHeight+4)+"px"; inp.setAttribute("aria-expanded","true"); }
+    filter(); C.act=C.list.length?0:-1; C.scr.scrollTop=0; draw();
+    if(o.onType) o.onType(inp.value.trim()); });
+  inp.addEventListener("keydown", e=>{
+    const n=C.list.length;
+    if(e.key==="ArrowDown"||e.key==="ArrowUp"){ e.preventDefault(); if(!C.open){ show(); return; } if(!n) return;
+      C.act=(C.act+(e.key==="ArrowDown"?1:-1)+n)%n; keep(); draw(); }
+    else if(e.key==="PageDown"||e.key==="PageUp"){ if(!C.open||!n) return; e.preventDefault();
+      C.act=Math.max(0,Math.min(n-1, C.act+(e.key==="PageDown"?CMB_VIS:-CMB_VIS))); keep(); draw(); }
+    else if(e.key==="Home"||e.key==="End"){ if(!C.open||!n) return; e.preventDefault(); C.act=e.key==="Home"?0:n-1; keep(); draw(); }
+    else if(e.key==="Enter"){ if(C.open){ e.preventDefault(); pick(C.act); } }
+    else if(e.key==="Escape"){ if(C.open||C.typing){ e.preventDefault(); e.stopPropagation(); hide(); } }
+    else if(e.key==="Tab"){ hide(); }
+  });
+  inp.addEventListener("focus", ()=>{ try{ inp.select(); }catch(e){} });
+  inp.addEventListener("click", ()=>{ if(!C.open) show(); });
+  inp.addEventListener("blur", ()=>{ setTimeout(()=>{ if(document.activeElement!==inp) hide(); }, 120); });
+  pop.addEventListener("mousedown", e=>{ e.preventDefault(); const r=e.target.closest(".cmbr"); if(r) pick(Number(r.dataset.ix)); });
+  C.scr.addEventListener("scroll", draw);
+  sel.addEventListener("change", C.sync);
+  new MutationObserver(C.sync).observe(sel,{ childList:true });
+  C.sync();
+  return C;
+}
+function cmbSet(selId, v){
+  const sel=$(selId); if(!sel) return false;
+  v=String(v);
+  if(![...sel.options].some(op=>op.value===v)){ const op=document.createElement("option"); op.value=v; op.textContent=v; sel.insertBefore(op, sel.firstChild); }
+  sel.value=v;
+  const C=CMB[selId]; if(C){ C.typing=false; }
+  sel.dispatchEvent(new Event("change",{ bubbles:true }));
+  if(C) C.sync();
+  return sel.value===v;
+}
+/* The text typed into a picker — only while somebody is typing it. At rest
+   the box shows the chosen item, which is not a query. */
+function cmbQ(selId, inputId){
+  const C=CMB[selId]; if(C) return C.typing ? C.inp.value.trim() : "";
+  const el=$(inputId||selId+"Q"); return el ? String(el.value||"").trim() : "";
+}
+function cmbReset(selId){ const C=CMB[selId]; if(!C) return; C.typing=false; if(C.open) C.hide(); else C.sync(); }
+function cmbInit(){
+  cmbAttach("equipSel", { input:"equipQ",
+    items:()=>histUnits().map(u=>{ const a=ASSET_BY[u]||{}; return { v:u, l:u, sub:[a.cls,a.m].filter(Boolean).join(" · "), s:unitSearchText(u) }; }),
+    onType:()=>{ fillEquip(); renderHistory(); } });
+  cmbAttach("rTarget", { input:"rTargetQ",
+    items:()=>reportTargetOpts($("rScope").value).map(o=>({ v:o[0], l:o[1], s:o[2]||(o[0]+" "+o[1]).toUpperCase(), sub:o[3]||"" })),
+    onType:()=>refreshReportTargets() });
+  cmbAttach("pfSel"); cmbAttach("lrModel"); cmbAttach("lpoModel");
+}
 $("histRpt").onclick=()=>runReport("unit", $("equipSel").value, $("histRpt"));
 
 /* ---------- init ---------- */
@@ -11949,7 +12184,7 @@ function refreshControls(){
     $("fGrade").innerHTML=`<option value="">${esc(t("f_allgrades"))}</option>`+GRADE.LEVELS.map(n=>`<option value="${n}">${esc(GRADE.label(n,lang))}</option>`).join("");
     $("fGrade").value = drill.sev ? String(drill.sev) : (was||"");
   }
-  const units=[...new Set(RECS.map(r=>r.equip))].sort();
+  const units=[...new Set(RECS.map(r=>r.equip))].sort(natCmp);
   window.__units=units;
   fillEquip();
   $("sevLegend").innerHTML=Object.entries(SEV).map(([k,v])=>`<span><span class="sw" style="background:${SEVC[k]}"></span>${v.l}</span>`).join("");
@@ -12149,7 +12384,7 @@ function renderWearTab(){
   });
   $("wearNote").textContent = t("w_note",{s:rows.length, n:all.length, h:WEAR.MIN_HOURS, d:WEAR.MIN_DAYS});
   if($("wearShown")) $("wearShown").innerHTML=
-    `<span>${esc(t("shown_n",{n:rows.length, of:all.length}))}</span>` + pg.strip;
+    `<span>${esc(t("pg_of",{n:num(rows.length), a:num(pg.from||0), b:num(pg.to||0)}))}</span>` + pg.strip;
 }
 function wearCsv(){
   const rows=wearRows(filtered());
@@ -12985,7 +13220,7 @@ function renderLubeMtx(){
   const all = Object.values(rows), shownN = list.reduce((a,r)=>a+r.n,0),
         allN = all.reduce((a,r)=>a+r.n,0);
   $("lmShown").innerHTML =
-    `<span>${esc(t("shown_n",{n:list.length, of:all.length}))} \u00b7 ${
+    `<span>${esc(t("match_of",{n:list.length, of:all.length}))} \u00b7 ${
       esc(t("lg_units"))} ${esc(fmtN(shownN))}</span>` +
     (list.length < all.length
       ? `<span class="spacer"></span><span>${esc(t("lg_hidden",{n:allN-shownN}))}</span>`
@@ -14579,6 +14814,7 @@ document.addEventListener("keydown",e=>{
 /* A machine is a place the reader went to: it goes in the address as its own
    entry, so Back returns to the previous machine with the filters intact. */
 $("equipSel").onchange=()=>{ histPin=""; renderHistory(); try{ urlWrite(true); }catch(e){} };
+cmbInit();
 $("ddType").onchange=renderDueTab; $("ddScope").onchange=()=>{ renderDueTab(); urlWrite(false); };
 $("ddQ").oninput=renderDueTab;
 $("ddCsv").onclick=dueCsv;
@@ -14733,8 +14969,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=270"></script>
-<script src="sync-adapter.js?v=270"></script>
-<script src="report.js?v=270"></script>
+<script src="drive.js?v=271"></script>
+<script src="sync-adapter.js?v=271"></script>
+<script src="report.js?v=271"></script>
 </body>
 </html>

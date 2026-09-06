@@ -97,7 +97,7 @@ const note = (n, d) => console.log('  ....  ' + n + (d !== undefined ? '   ' + d
     const f = findings(filtered());
     const units = new Set(f.map(x => x.r.equip)).size;
     const rows = [...document.querySelectorAll('#failAffTbl tbody tr')];
-    const m = /of\s*([\d.,  ]+)/.exec((document.querySelector('#failAffShown') || {}).textContent || '');
+    const m = /([\d.,\u00a0\u202f]+)\s*matching/.exec((document.querySelector('#failAffShown') || {}).textContent || '');
     return { side: Math.abs(y('#paretoDefect') - y('#paretoCause')) < 80,
       reset: document.getElementById('failReset').hidden,
       tips: [...document.querySelectorAll('#paretoDefect .prow')].every(r => /\d+ finding|находок: \d+/.test(r.title) && /%/.test(r.title)),
@@ -121,7 +121,7 @@ const note = (n, d) => console.log('  ....  ' + n + (d !== undefined ? '   ' + d
     const f = findings(filtered()), mine = f.filter(x => defectKeyOf(x.i) === drill.defect);
     const units = new Set(mine.map(x => x.r.equip)).size;
     const rows = [...document.querySelectorAll('#failAffTbl tbody tr')];
-    const m = /of\s*([\d.,\u00a0\u202f ]+)/.exec((document.querySelector('#failAffShown') || {}).textContent || '');
+    const m = /([\d.,\u00a0\u202f]+)\s*matching/.exec((document.querySelector('#failAffShown') || {}).textContent || '');
     const cells = rows.map(tr => Number(tr.children[4].textContent));
     const perUnit = {}; mine.forEach(x => { perUnit[x.r.equip] = (perUnit[x.r.equip] || 0) + 1; });
     return { defect: drill.defect, reset: document.getElementById('failReset').hidden, hash: location.hash,
@@ -141,7 +141,7 @@ const note = (n, d) => console.log('  ....  ' + n + (d !== undefined ? '   ' + d
   await p.evaluate(() => drwClose());
   await p.click('#failReset'); await p.waitForTimeout(400);
   const R = await p.evaluate(() => ({ defect: drill.defect, reset: document.getElementById('failReset').hidden,
-    total: (() => { const m = /of\s*([\d.,  ]+)/.exec((document.querySelector('#failAffShown') || {}).textContent || ''); return m ? Number(m[1].replace(/\D/g, '')) : document.querySelectorAll('#failAffTbl tbody tr').length; })() }));
+    total: (() => { const m = /([\d.,\u00a0\u202f]+)\s*matching/.exec((document.querySelector('#failAffShown') || {}).textContent || ''); return m ? Number(m[1].replace(/\D/g, '')) : document.querySelectorAll('#failAffTbl tbody tr').length; })() }));
   ok('Reset clears the filter and hides itself', !R.defect && R.reset === true, JSON.stringify(R));
   ok('  and the table is whole again', R.total === F.affTotal, R.total + ' vs ' + F.affTotal);
 

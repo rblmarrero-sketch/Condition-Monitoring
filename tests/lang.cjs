@@ -65,7 +65,7 @@ const cyr=s=>/[А-Яа-яЁё]/.test(s);
   await p.screenshot({path:OUT+'/dash-ru.png'});
   await p.click('#dataClose');
   await p.click('nav.tabs button[data-tab="equipment"]'); await p.waitForTimeout(200);
-  await p.selectOption('#equipSel','TK146'); await p.waitForTimeout(400);
+  await p.evaluate(() => cmbSet('equipSel','TK146')); await p.waitForTimeout(400);
   ok('history heading translates', cyr(await p.textContent('#histTitle')), (await p.textContent('#histTitle')).trim());
   const eb=await p.$('[data-edit]');
   if(eb){ await eb.click(); await p.waitForTimeout(400);

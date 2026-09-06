@@ -340,3 +340,20 @@ Two traps that have each cost an hour:
 - **`pkill -f runall` matches its own wrapper shell** and kills the sweep you
   just started. Never put the pattern and the launch in one command line; use a
   pattern that cannot match itself, e.g. `pkill -f 'run[a]ll.sh'`.
+
+Three dashboard conventions a suite has to respect since build 271:
+
+- **The large pickers are comboboxes** (`cmbAttach`): `#equipSel`, `#rTarget`,
+  `#pfSel`, `#lrModel`, `#lpoModel` are still the value the page reads, but
+  they are out of sight (0×0). Choose with `cmbSet("equipSel","TK146")`, never
+  `page.selectOption` on the hidden select; type into `#equipQ` / `#rTargetQ`
+  to search. A typed query counts only while typing — at rest the box shows
+  the chosen item.
+- **Every table pages at 25 and offers 50 and 100; there is no "show all".**
+  A suite that needs the whole list presses `[data-pg="<key>:size:100"]` and
+  walks `:next`. The pager says `N matching · showing a–b`; parse the count
+  off `(\d[\d,]*)\s*matching`, not off "of".
+- **The action register's rows are read-outs.** Owner, due, WO, priority,
+  plan and status are edited in the drawer a row opens (`openFollow`,
+  `#follOv`), and "No action required" chosen there opens the disposition
+  dialog exactly as the inline list used to.

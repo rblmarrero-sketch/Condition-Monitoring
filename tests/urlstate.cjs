@@ -137,9 +137,9 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
     const seg = document.querySelector('[data-wb="all"]'); if (seg) seg.click();
     await new Promise(r => setTimeout(r, 400));
     const m = String((document.getElementById('wearShown') || {}).textContent || '')
-      .match(/(\d[\d\s, ]*)\D+(\d[\d\s, ]*)/);
+      .match(/(\d[\d\s,\u00a0\u202f]*)\s*matching/);
     return { rows: document.querySelectorAll('#wearTbl tbody tr').length,
-             total: m ? Number(m[2].replace(/\D/g, '')) : null,
+             total: m ? Number(m[1].replace(/\D/g, '')) : null,
              pager: !!document.querySelector('[data-pg^="wear"]') };
   });
   console.log('   ' + JSON.stringify(w));

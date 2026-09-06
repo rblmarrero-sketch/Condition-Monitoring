@@ -111,9 +111,16 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
        A structural test, not a cosmetic one. */
     /* Both lists page at 25 now; this guard is about the WHOLE list, so
        ask each pager for all of it before counting. */
-    ["lgNoRef", "lgNoMach"].forEach(k => { const b = document.querySelector('[data-pg="' + k + ':all"]'); if (b) b.click(); });
-    const rows = id => [...document.querySelectorAll("#" + id + " tbody tr")]
-      .filter(tr => !tr.querySelector("td[colspan]"));
+    /* There is no "show all" any more: walk the pages at a hundred a time and
+       keep every row (a detached row still reads). */
+    const rows = id => { const out = [];
+      const sz = document.querySelector('[data-pg="' + id + ':size:100"]'); if (sz) sz.click();
+      for (let g = 0; g < 40; g++) {
+        out.push(...[...document.querySelectorAll("#" + id + " tbody tr")].filter(tr => !tr.querySelector("td[colspan]")));
+        const nx = document.querySelector('[data-pg="' + id + ':next"]'); if (!nx || nx.disabled) break; nx.click();
+      }
+      const first = document.querySelector('[data-pg="' + id + ':size:25"]'); if (first) first.click();
+      return out; };
     const noRef = rows("lgNoRef"), noMach = rows("lgNoMach");
     const unitsOf = trs => trs.reduce((a, tr) =>
       a + Number((tr.lastElementChild.textContent || "0").replace(/[^\d]/g, "") || 0), 0);
@@ -151,9 +158,13 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
      to stay a QUESTION: the moment a resemblance reads as a decision, somebody
      puts a loader on a truck's compartments. */
   const sug = await p.evaluate(() => {
-    const ba = document.querySelector('[data-pg="lgNoRef:all"]'); if (ba) ba.click();
-    const rows = [...document.querySelectorAll("#lgNoRef tbody tr")]
-      .filter(tr => !tr.querySelector("td[colspan]"));
+    const rows = (() => { const out = [];
+      const sz = document.querySelector('[data-pg="lgNoRef:size:100"]'); if (sz) sz.click();
+      for (let g = 0; g < 40; g++) {
+        out.push(...[...document.querySelectorAll("#lgNoRef tbody tr")].filter(tr => !tr.querySelector("td[colspan]")));
+        const nx = document.querySelector('[data-pg="lgNoRef:next"]'); if (!nx || nx.disabled) break; nx.click();
+      }
+      return out; })();
     const withOne = rows.filter(tr => tr.querySelector(".maybe"));
     return {
       rows: rows.length,

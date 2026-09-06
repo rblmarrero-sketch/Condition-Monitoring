@@ -34,7 +34,7 @@ async function dash(b){
 }
 const openHist = async (p,unit) => {
   await p.click('nav.tabs button[data-tab="equipment"]'); await p.waitForTimeout(200);
-  await p.selectOption('#equipSel',unit); await p.waitForTimeout(300);
+  await p.evaluate(u => cmbSet('equipSel', u), unit); await p.waitForTimeout(300);
 };
 
 (async()=>{
