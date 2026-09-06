@@ -104,6 +104,9 @@ const connect = (p, path) => p.evaluate(u => {
   await act(p, '#drvGo', 15000);
   ok('only the new one comes down', (await p.evaluate(() => CMDash.driveCount())) === 41,
      String(await p.evaluate(() => CMDash.driveCount())));
+  /* Overview draws the ten highest-priority machines; a new, healthy unit is
+     not one of them. Ask for the whole register before looking for it. */
+  await p.evaluate(() => { fleetAll = true; renderFleet(); });
   ok('and it is in the fleet table',
      (await p.textContent('#fleetTbl')).includes('TK901'));
 

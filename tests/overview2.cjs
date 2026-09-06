@@ -118,7 +118,8 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
                actRows: pagerTotal(),
                dueRows: document.querySelectorAll('#ddList tbody tr, #ddList .duerow, #ddList tr').length,
                fleetRows: document.querySelectorAll('#fleetTbl tbody tr').length,
-               fleetSevs: [...document.querySelectorAll('#fleetTbl tbody tr td:nth-child(2)')].map(x => x.textContent.trim()) };
+               /* The grade is the pill, wherever its column sits — Priority leads the row since Phase 4. */
+               fleetSevs: [...document.querySelectorAll('#fleetTbl tbody tr')].map(tr => ((tr.querySelector('.pill') || {}).textContent || '').trim()) };
     }, id);
   };
   let r = await press('kpiCrit');
@@ -172,7 +173,8 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
              compBtn: !!(comp && comp.querySelector('button')),
              cols, rows: rows.length, machines,
              firstRowY: rows[0] ? Math.round(rows[0].getBoundingClientRect().top) : null,
-             sample: rows.slice(0, 3).map(tr => ({ u: cell(tr, 'equip').trim(), g: cell(tr, 'sev').trim(),
+             /* The grade rides in the Priority column since Phase 4 (rank, then pill). */
+             sample: rows.slice(0, 3).map(tr => ({ u: cell(tr, 'equip').trim(), g: ((tr.querySelector('.pill') || {}).textContent || '').trim(),
                act: cell(tr, 'act').replace(/\s+/g, ' ').trim().slice(0, 60),
                st: ((tr.children[cols.indexOf('act')] || {}).querySelector
                     ? ((tr.children[cols.indexOf('act')].querySelector('.fstat') || {}).textContent || cell(tr, 'act')) : '').trim() })),
@@ -182,7 +184,7 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
      lay.covY + ' vs ' + lay.trendY);
   ok('the compliance figure carries its denominator and is a door to the schedule',
      /\d+\s*of\s*\d+/.test(lay.comp) && lay.compBtn, lay.comp.slice(0, 60));
-  ['equip', 'sev', 'defect', 'act', 'owner', 'adue', 'due'].forEach(k =>
+  ['equip', 'prio', 'defect', 'act', 'owner', 'adue', 'due'].forEach(k =>
     ok('the table has a ' + k + ' column', lay.cols.includes(k), lay.cols.join(',')));
   ok('the table shows at most ten machines on Overview', lay.rows > 0 && lay.rows <= 10, lay.rows + ' of ' + lay.machines);
   ok('  and says how many there are in all', new RegExp('\\b' + lay.machines + '\\b').test(lay.shown), lay.shown);
@@ -191,7 +193,8 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
   ok('the grade column names the severity, not a code', lay.sample.every(s => /critical|degraded|incipient|normal|no failure/i.test(s.g)),
      lay.sample.map(s => s.g).join(' | '));
   ok('the action cell carries its status, in plain words',
-     lay.sample.every(s => /planning required|open|planned|in progress|no open work/i.test(s.st)),
+     /* "Owner required", "Priority required": what is missing, named — Phase 4. */
+     lay.sample.every(s => /planning required|required|open|planned|in progress|no open work/i.test(s.st)),
      lay.sample.map(s => s.st).join(' | '));
   const wide = await p.evaluate(() => {
     const w = document.querySelector('#fleetTbl').closest('.tblwrap');

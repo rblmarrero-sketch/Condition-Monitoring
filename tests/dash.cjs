@@ -77,7 +77,8 @@ const recs = () => {
   ok('clear all empties the search box', (await p.inputValue('#fQ')) === '');
 
   console.log('\nsorting');
-  const firstBy = k => p.$$eval('#fleetTbl tbody tr td:first-child', a => a.map(x => x.textContent.trim())[0]);
+  /* The unit is what the cell IS, never the first column: Priority leads the row since Phase 4. */
+  const firstBy = k => p.$$eval('#fleetTbl tbody tr td b', a => a.map(x => x.textContent.trim())[0]);
   await p.click('#fleetTbl th[data-sort="equip"]'); await p.waitForTimeout(200);
   const asc = await firstBy();
   await p.click('#fleetTbl th[data-sort="equip"]'); await p.waitForTimeout(200);

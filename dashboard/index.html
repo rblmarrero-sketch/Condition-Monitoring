@@ -396,7 +396,9 @@
      190 left the search field nowhere to go and pushed "Show voided" onto a
      second row. The full option text is still in the list when it opens; the
      closed control only has to be readable. */
-  .controls .field select{min-width:0;max-width:154px;text-overflow:ellipsis;}
+  /* 128, not 154: at 1920 five selects at their longest option left the search
+     245px — narrower than a real query. Long options ellipsise. */
+  .controls .field select{min-width:0;max-width:128px;text-overflow:ellipsis;}
   /* Below 1500 the three selects, their labels, the void toggle and Reset left
      the search box at 220px — narrower than the placeholder it holds. Search is
      the control that has to carry a sentence, so it keeps its width and the
@@ -412,7 +414,12 @@
      It takes the row's slack now, up to a limit — a search field the width of
      the page is its own kind of wrong. The icon is a background image so the
      text never has to share the line with an element. */
-  .controls input[type=search]{flex:1 1 220px;min-width:200px;max-width:440px;
+  /* The search is the one control that grows: five selects at 1920 widen to
+     their longest option and squeezed it to 247px, where a real query
+     ("TK146 ferrous debris heavy monitor", 269px) scrolled out of sight. */
+  /* Grows three times as fast as the selects beside it, so on a wide screen the
+     spare room goes to the query rather than to five dropdowns. */
+  .controls input[type=search]{flex:3 1 240px;min-width:240px;max-width:480px;
     padding-left:28px;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235a6b76' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='6.5'/%3E%3Cpath d='m16 16 4.5 4.5'/%3E%3C/svg%3E");
     background-repeat:no-repeat;background-position:7px 50%;background-size:14px 14px;}
@@ -1118,7 +1125,12 @@
   @media (max-width:1330px){
     .controls{gap:8px;}
     .controls .field select{max-width:92px;}
-    .controls input[type=search]{min-width:180px;}
+    /* Narrow screens keep the bar on one row first; the search may shrink to
+       180px here and scroll a long query. From 1300px up it holds 280px, which
+       is a real query ("TK146 ferrous debris heavy monitor" is 269px). */
+    /* The BASIS matters, not only the minimum: a wrapping flex row breaks the
+       line on the sum of bases before it lets anything shrink. */
+    .controls input[type=search]{flex-basis:180px;min-width:180px;}
   }
   /* Four selects and their four words no longer share a laptop's toolbar
      with the search sentence. Below 1400 the words go to screen readers only
@@ -1800,6 +1812,7 @@
   .rbody select{max-width:100%;}
   .rbody .eqpick{max-width:420px;}
   .rbody .eqpick>input[type=search]{flex:0 0 auto;height:auto;width:240px;max-width:100%;}
+  .rpreview .rest{margin-top:6px;font-size:var(--t-small,12px);color:var(--muted);font-variant-numeric:tabular-nums;}
   .rpreview{margin-top:var(--s3);padding:var(--s3) var(--s4);border-radius:var(--r);background:var(--surface-2);
     border-left:3px solid var(--accent);font-size:var(--t-small);color:var(--ink-2);line-height:1.5;}
   .rpreview:empty{display:none;}
@@ -1901,6 +1914,38 @@
   .wlr:hover .go{opacity:1;transform:translateX(2px);}
   /* Who owns it, as a face-sized thing rather than a column of names. */
   .who{display:inline-flex;align-items:center;gap:7px;min-width:0;white-space:nowrap;}
+  /* A missing item, named: "Owner required". Warning ink, no icon, so a row
+     with three of them still reads as one line. */
+  .need{display:inline-flex;align-items:center;margin-left:4px;padding:1px 7px;border-radius:999px;
+    white-space:nowrap;font-weight:600;font-size:var(--t-micro);line-height:1.6;
+    color:var(--warn-ink);background:color-mix(in srgb,var(--warning) 16%,transparent);
+    border:1px solid color-mix(in srgb,var(--warning) 40%,transparent);}
+  .need.more{font-weight:500;}
+  .need.q{line-height:1.35;padding:0 6px;margin-left:0;}
+  .syxq{display:grid;grid-template-columns:max-content 1fr;gap:2px 10px;margin:6px 0 4px;font-size:var(--t-small,12px);}
+  .syxq dt{color:var(--muted);font-weight:600;white-space:nowrap;} .syxq dd{margin:0;}
+  #syQuarTbl td.syx{white-space:normal;} #syQuarTbl tbody tr{height:auto;}
+  .syfix{min-height:32px;padding:4px 10px;}
+  td.ed{cursor:text;}
+  td.ed:hover{background:color-mix(in srgb,var(--accent) 7%,transparent);}
+  td.ed.editing{padding:2px 6px;}
+  .celled{width:100%;min-width:110px;height:32px;padding:2px 8px;border:1px solid var(--accent);
+    border-radius:var(--r-sm,8px);background:var(--surface);color:var(--ink);font:inherit;font-size:var(--t-body,13px);}
+  /* The attention rank on Overview: the position in the order and its reason. */
+  .attn{display:inline-flex;align-items:center;gap:6px;margin-right:6px;vertical-align:middle;font-weight:600;font-size:var(--t-small,12px);
+    line-height:1.15;white-space:nowrap;}
+  .attn i{flex:none;}
+  /* Below 1500px the column is the rank alone — the word rides on the title
+     and stays in the accessibility tree; a table that scrolls sideways to
+     make room for "Unassigned action" is a table nobody reads. */
+  @media (max-width:1499px){ .attn span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;} }
+  .attn i{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:999px;
+    font-style:normal;font-size:11px;font-weight:700;font-variant-numeric:tabular-nums;
+    background:var(--muted-bg,var(--border));color:var(--muted);}
+  .attn.a0 i{background:var(--critical);color:#fff;} .attn.a1 i{background:var(--severe,var(--serious));color:#fff;}
+  .attn.a2 i,.attn.a3 i{background:color-mix(in srgb,var(--warning) 28%,transparent);color:var(--warn-ink);}
+  .attn.a4 i{background:color-mix(in srgb,var(--serious) 22%,transparent);color:var(--ink);}
+  .attn.a6{color:var(--muted);font-weight:500;}
   .who i{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;
     background:var(--surface-3);color:var(--ink-2);font-weight:700;font-size:var(--t-micro);line-height:1;font-family:inherit;font-style:normal;
     letter-spacing:.02em;}
@@ -2797,9 +2842,13 @@
        once, and the hours-to-condemn the phone already computes never reached
        the people who order the parts. -->
   <section id="tab-wear" class="hidden">
+    <div class="pagehd">
+      <div class="pgt"><h1 data-i18n="w_title">Wear and remaining life</h1>
+        <span class="pgsub" data-i18n="w_purpose">Every measured position with its projected remaining life, so a worn component is replaced before it fails.</span></div>
+    </div>
     <div class="kpis" id="wearKpis"></div>
     <div class="section">
-      <div class="secthd"><h2 data-i18n="w_title">Wear and remaining life</h2>
+      <div class="secthd"><h2 data-i18n="w_h2">Measured positions</h2>
         <span class="spacer"></span><span class="hint" id="wearLead"></span>
         <details class="defs" id="wDefs">
           <summary data-i18n="ov_defs">Definitions</summary>
@@ -2826,9 +2875,13 @@
   </section>
 
   <section id="tab-actions" class="hidden">
+    <div class="pagehd">
+      <div class="pgt"><h1 data-i18n="s_act">Maintenance Actions</h1>
+        <span class="pgsub" data-i18n="a_purpose">Every finding that needs work: who owns it, by when, and what is still missing.</span></div>
+    </div>
     <div class="kpis" id="actKpis"></div>
     <div class="section">
-      <div class="secthd"><h2 data-i18n="s_act">Action register</h2>
+      <div class="secthd"><h2 data-i18n="a_h2">Action register</h2>
         <span class="spacer"></span>
         <details class="defs" id="aDefs">
           <summary data-i18n="ov_defs">Definitions</summary>
@@ -2867,6 +2920,10 @@
   </section>
 
   <section id="tab-equipment" class="hidden">
+    <div class="pagehd">
+      <div class="pgt"><h1 data-i18n="tab_equipment">Equipment History</h1>
+        <span class="pgsub" data-i18n="eq_purpose">One machine's full record: every inspection, finding, photograph and action, newest first.</span></div>
+    </div>
     <div class="controls">
       <!-- A picker with a thousand machines in it is a picker nobody scrolls.
            The box above filters what the list offers; the list itself stays a
@@ -2911,9 +2968,13 @@
        nobody read the list. Both halves are here: the schedule, computed from
        the same due.js the phones use, and the reasons the inspectors gave. -->
   <section id="tab-due" class="hidden">
+    <div class="pagehd">
+      <div class="pgt"><h1 data-i18n="dd_title">Inspection Schedule</h1>
+        <span class="pgsub" data-i18n="dd_purpose">Which rounds are overdue, due soon or never inspected, from the same intervals the phones use.</span></div>
+    </div>
     <div class="kpis" id="dueKpis"></div>
     <div class="section">
-      <div class="secthd"><h2 data-i18n="dd_title">Every round, against the clock it is scheduled on</h2>
+      <div class="secthd"><h2 data-i18n="dd_h2">Rounds by due date</h2>
         <span class="spacer"></span>
         <details class="defs" id="ddDefs">
           <summary data-i18n="ov_defs">Definitions</summary>
@@ -2935,7 +2996,9 @@
           <option value="over" data-i18n="dd_missed">Overdue</option>
           <option value="soon" data-i18n="dd_soon">Due soon</option>
           <option value="due" data-i18n="dd_due">Overdue &amp; due soon</option>
+          <option value="never" data-i18n="dd_never">Never inspected</option>
           <option value="put" data-i18n="dd_put">Deferred</option>
+          <option value="done" data-i18n="dd_done">Completed</option>
           <option value="all" data-i18n="dd_all">All</option>
         </select></label>
         <span class="spacer"></span>
@@ -3206,13 +3269,19 @@
         <div class="rstep"><div class="rnum">3</div><div class="rbody">
           <label data-i18n="r_opts">Options</label>
           <div class="row" style="gap:12px;flex-wrap:wrap">
+            <div class="field"><label for="rLang" data-i18n="r_lang">Language</label><select id="rLang">
+              <option value="en">English</option>
+              <option value="ru">Русский</option>
+              <option value="both" data-i18n="r_lang_both">English + Russian</option>
+            </select></div>
             <div class="field"><label for="rPhotos" data-i18n="r_photos">Photos</label><select id="rPhotos">
               <option value="1" data-i18n="r_withphotos">Include photos</option>
               <option value="0" data-i18n="r_nophotos">No photos (smaller file)</option>
             </select></div>
             <div class="field"><label for="rScale" data-i18n="r_scale">Quality</label><select id="rScale">
-              <option value="1.8">Standard</option>
-              <option value="2.4">High (larger file)</option>
+              <option value="1.8" data-i18n="r_q_std">Standard</option>
+              <option value="2.4" data-i18n="r_q_high">High (larger file)</option>
+              <option value="1.4" data-i18n="r_q_small">Small file (slow link)</option>
             </select></div>
           </div></div></div>
         <div class="rpreview" id="rPreview"></div>
@@ -3342,6 +3411,24 @@
 <script src="../mobile/assets.js?v=273"></script>
 <script src="../mobile/normalize.js?v=273"></script>
 <script src="../mobile/terms.js?v=273"></script>
+<!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
+     phone's very first load on a one-bar link got index.html and nothing
+     else, the language table below then read TERMS.en at load, the main
+     script died on that line, and the service worker was never registered —
+     so the next open with no signal was Safari's error page rather than the
+     offline page the worker exists to serve (tests/swfail.cjs, build 273).
+     If the dictionary is missing, every key answers with its own name so
+     the page boots, registers the worker, and heals itself on the next
+     complete download. -->
+<script>
+if (!window.TERMS) {
+  window.TERMS = (function () {
+    var words = new Proxy({}, { get: function (o, k) { return typeof k === "string" ? k.replace(/_/g, " ") : undefined; } });
+    return { en: words, ru: words, t: function (l, k) { return String(k).replace(/_/g, " "); },
+             keys: function () { return []; }, banned: [], offends: function () { return ""; }, __shim: true };
+  })();
+}
+</script>
 <script src="../mobile/grade.js?v=273"></script>
 <script src="../mobile/edits.js?v=273"></script>
 <script src="../mobile/due.js?v=273"></script>
@@ -3564,10 +3651,14 @@ const I18N={
   a_th_due:"Due",
   a_th_age:"Age",
   a_th_status:"Status",
+  a_th_wo:TERMS.en.wo, a_ed_tip:"Press to edit here; Enter saves, Escape cancels",
+  th_priority:TERMS.en.priority,
+  ov_p_crit:"Critical", ov_p_sev:"Severe", ov_p_over:"Overdue action", ov_p_noown:"Unassigned action",
+  ov_p_deg:"Degraded", ov_p_inc:"Incipient", ov_p_none:"No attention needed",
   av_table:"Table",
   av_unit:"By machine",
   av_group:"How to show the register",
-  a_th_find:"Finding → action",
+  a_th_find:"Finding",
   lp_title2:"Programme coverage",
   methodology:"Methodology",
   lp_th_metric:"Metric",
@@ -3751,6 +3842,21 @@ const I18N={
      somebody back to the machine. */
   sy_fix_point:"Inspection point needs identification. Select the correct component before approving this finding.",
   sy_fix_open:"Open it to correct.",
+  sy_x_valid:"Still counted", sy_x_who:"Who corrects it", sy_x_action:"Action", sy_x_affects:"Affects", sy_fixbtn:"Correct",
+  sy_v_equip:"Nothing — an inspection with no machine is counted nowhere until it is corrected.",
+  sy_v_date:"Nothing — an inspection with no date is counted nowhere until it is corrected.",
+  sy_v_type:"Nothing — an inspection with no round type is counted nowhere until it is corrected.",
+  sy_v_point:"Readings, grade and actions count; this finding is not on any component yet.",
+  sy_v_photo:"Everything counts; the photographs are not yet attached to a component.",
+  sy_v_photomiss:"Readings, grade and actions count; the photographs have not arrived.",
+  sy_o_equip:"The inspector, from the phone that captured it.", sy_o_date:"The inspector, from the phone that captured it.",
+  sy_o_type:"The inspector, from the phone that captured it.",
+  sy_o_point:"Reliability engineer, on this dashboard.", sy_o_photo:"Reliability engineer, on this dashboard.",
+  sy_o_photomiss:"Synchronisation — the phone still holds the files to send.",
+  sy_e_equip:"Schedule, equipment history, maintenance actions.", sy_e_date:"Schedule, equipment history, maintenance actions.",
+  sy_e_type:"Schedule, equipment history, maintenance actions.",
+  sy_e_point:"Failure analysis, maintenance actions.",
+  sy_e_photo:"Equipment history gallery, reports.", sy_e_photomiss:"Equipment history gallery, reports.",
   /* A photograph with no component is a DIFFERENT correction from a reading
      with no component: the evidence is right there to look at, and the engineer
      may reasonably decide it belongs to the inspection as a whole rather than
@@ -4108,7 +4214,7 @@ const I18N={
   g_generic:"Some limits shown are generic starting points, not the supplier's wear charts. The trend is real; the percentages move when the real figures are loaded.",
   g_nocost:"No cost per hour or per tonne is given. This system holds neither part prices nor payload, and a cost figure built on neither would be the most quoted number here and the least true.",
   r_title:"Reports",
-  r_sub:"Bilingual EN / RU PDF. Each inspection type prints its own layout.",
+  r_sub:"PDF in English, in Russian, or both on one sheet. Each inspection type prints its own layout.",
   r_opts:"Options", r_recent:"Recent reports", r_recent_none:"Nothing generated yet in this browser.",
   r_again:"Generate again", r_recent_hint:"{n} kept, newest first",
   r_prev_none:"Choose what to report on and the summary appears here.",
@@ -4122,6 +4228,8 @@ const I18N={
   r_month:"Fleet summary — one month", r_target:"Which",
   r_photos:"Photos", r_withphotos:"Include photos", r_nophotos:"No photos (smaller file)",
   r_scale:"Quality", r_go:"📄 Generate PDF", r_nodata:"— no data —",
+  r_lang:"Language", r_lang_both:"English + Russian", r_q_std:"Standard", r_q_high:"High (larger file)", r_q_small:"Small file (slow link)",
+  r_est:"About {p} page(s) · about {s} MB · {n} photograph(s) · roughly {t} s to make", r_est_wait:"Estimating…",
   r_one:"This inspection", r_one_go:"📄 Report", r_unit_go:"📄 Report on this machine",
   r_none:"Nothing to report on yet.", r_building:"Building…",
   r_fetching:"Photos {d}/{n}…", r_rendering:"Page {i} of {n}…",
@@ -4192,6 +4300,11 @@ const I18N={
   dd_round:"Round", dd_show:"Show", dd_find:"Search this table", dd_findph:"unit number",
   dd_missed:TERMS.en.overdue, dd_due:"Overdue & due soon",
   dd_put:TERMS.en.deferred, dd_all:"All",
+  dd_never:TERMS.en.never_inspected, dd_done:TERMS.en.completed,
+  dd_h2:"Rounds by due date", dd_purpose:"Which rounds are overdue, due soon or never inspected, from the same intervals the phones use.",
+  a_h2:"Action register", a_purpose:"Every finding that needs work: who owns it, by when, and what is still missing.",
+  w_h2:"Measured positions", w_purpose:"Every measured position with its projected remaining life, so a worn component is replaced before it fails.",
+  eq_purpose:"One machine's full record: every inspection, finding, photograph and action, newest first.",
   dd_all_rounds:"All rounds", dd_csv:"Export CSV",
   dd_k_missed:"Overdue", dd_k_missed_s:"of {n} unit-rounds with history",
   dd_k_soon:"Due soon", dd_k_soon_s:"inside the last fifth of the interval",
@@ -4349,10 +4462,14 @@ const I18N={
   a_th_due:"Срок",
   a_th_age:"Дней",
   a_th_status:"Статус",
+  a_th_wo:TERMS.ru.wo, a_ed_tip:"Нажмите, чтобы изменить здесь; Enter — сохранить, Escape — отменить",
+  th_priority:TERMS.ru.priority,
+  ov_p_crit:"Критично", ov_p_sev:"Серьёзно", ov_p_over:"Срок прошёл", ov_p_noown:"Без владельца",
+  ov_p_deg:"Ухудшение", ov_p_inc:"Начальная стадия", ov_p_none:"Без внимания",
   av_table:"Таблица",
   av_unit:"По машинам",
   av_group:"Как показать реестр",
-  a_th_find:"Находка → действие",
+  a_th_find:"Находка",
   lp_title2:"Охват программы",
   methodology:"Методика",
   lp_th_metric:"Показатель",
@@ -4526,6 +4643,21 @@ const I18N={
   sy_fix_type:"Нет типа обхода — телефон, который делал осмотр, должен отправить его заново.",
   sy_fix_point:"Точка осмотра не определена. Укажите нужный узел, прежде чем утверждать эту находку.",
   sy_fix_open:"Откройте для правки.",
+  sy_x_valid:"Что учитывается", sy_x_who:"Кто исправляет", sy_x_action:"Действие", sy_x_affects:"На что влияет", sy_fixbtn:"Исправить",
+  sy_v_equip:"Ничего — осмотр без машины нигде не учитывается, пока не исправлен.",
+  sy_v_date:"Ничего — осмотр без даты нигде не учитывается, пока не исправлен.",
+  sy_v_type:"Ничего — осмотр без типа обхода нигде не учитывается, пока не исправлен.",
+  sy_v_point:"Замеры, оценка и действия учитываются; эта находка пока не привязана к узлу.",
+  sy_v_photo:"Учитывается всё; фотографии пока не привязаны к узлу.",
+  sy_v_photomiss:"Замеры, оценка и действия учитываются; фотографии не дошли.",
+  sy_o_equip:"Инспектор, с телефона, на котором сделан осмотр.", sy_o_date:"Инспектор, с телефона, на котором сделан осмотр.",
+  sy_o_type:"Инспектор, с телефона, на котором сделан осмотр.",
+  sy_o_point:"Инженер по надёжности, на этой панели.", sy_o_photo:"Инженер по надёжности, на этой панели.",
+  sy_o_photomiss:"Синхронизация — файлы ещё на телефоне.",
+  sy_e_equip:"График, история по технике, работы по обслуживанию.", sy_e_date:"График, история по технике, работы по обслуживанию.",
+  sy_e_type:"График, история по технике, работы по обслуживанию.",
+  sy_e_point:"Анализ отказов, работы по обслуживанию.",
+  sy_e_photo:"Галерея в истории по технике, отчёты.", sy_e_photomiss:"Галерея в истории по технике, отчёты.",
   sy_w_photo:"Фото получены; требуется привязка к узлу",
   op_title:"Назначение фотографий", op_sub:"{u} · {d} · {t}",
   op_lead:"Фотографий без привязки к узлу: {n}. Укажите, какую точку осмотра показывает каждая, или оставьте как общий материал по осмотру. Ничего не удаляется и ничего не угадывается.",
@@ -4876,7 +5008,7 @@ const I18N={
   g_generic:"Часть пределов — типовые ориентиры, а не карты износа поставщика. Тенденция реальна; проценты изменятся, когда будут загружены настоящие цифры.",
   g_nocost:"Стоимость за час или за тонну не приводится. В системе нет ни цен на детали, ни объёмов, а цифра, построенная ни на чём, стала бы самым цитируемым и самым недостоверным числом в отчёте.",
   r_title:"Отчёты",
-  r_sub:"Двуязычный PDF EN / RU. Каждый тип осмотра печатается по-своему.",
+  r_sub:"PDF на английском, на русском или на обоих языках. Каждый тип осмотра печатается по-своему.",
   r_opts:"Параметры", r_recent:"Недавние отчёты", r_recent_none:"В этом браузере ещё ничего не формировалось.",
   r_again:"Сформировать снова", r_recent_hint:"сохранено: {n}, новые сверху",
   r_prev_none:"Выберите, о чём отчёт, и здесь появится сводка.",
@@ -4890,6 +5022,8 @@ const I18N={
   r_month:"Сводка по парку — месяц", r_target:"Что именно",
   r_photos:"Фото", r_withphotos:"С фото", r_nophotos:"Без фото (меньше файл)",
   r_scale:"Качество", r_go:"📄 Сформировать PDF", r_nodata:"— нет данных —",
+  r_lang:"Язык", r_lang_both:"Английский + русский", r_q_std:"Стандарт", r_q_high:"Высокое (больше файл)", r_q_small:"Малый файл (слабая связь)",
+  r_est:"Около {p} стр. · около {s} МБ · фото: {n} · примерно {t} с на формирование", r_est_wait:"Оценка…",
   r_one:"Этот осмотр", r_one_go:"📄 Отчёт", r_unit_go:"📄 Отчёт по этой машине",
   r_none:"Пока не о чем отчитываться.", r_building:"Формирую…",
   r_fetching:"Фото {d}/{n}…", r_rendering:"Страница {i} из {n}…",
@@ -4957,6 +5091,11 @@ const I18N={
   dd_round:"Обход", dd_show:"Показать", dd_find:"Поиск по таблице", dd_findph:"номер единицы",
   dd_missed:TERMS.ru.overdue, dd_due:"Просрочено и скоро",
   dd_put:TERMS.ru.deferred, dd_all:"Все",
+  dd_never:TERMS.ru.never_inspected, dd_done:TERMS.ru.completed,
+  dd_h2:"Обходы по сроку", dd_purpose:"Какие обходы просрочены, скоро или ещё ни разу не проводились — по тем же интервалам, что и на телефонах.",
+  a_h2:"Реестр работ", a_purpose:"Каждая находка, требующая работ: кто отвечает, к какому сроку и чего ещё не хватает.",
+  w_h2:"Замеренные точки", w_purpose:"Каждая замеренная точка с прогнозом остаточного ресурса, чтобы заменить изношенный узел до отказа.",
+  eq_purpose:"Полная история одной машины: все осмотры, находки, фотографии и действия, начиная с последних.",
   dd_all_rounds:"Все обходы", dd_csv:"Выгрузить CSV",
   dd_k_missed:"Просрочено", dd_k_missed_s:"из {n} пар «единица — обход» с историей",
   dd_k_soon:"Скоро срок", dd_k_soon_s:"в последней пятой части интервала",
@@ -5931,7 +6070,25 @@ function complianceNow(){
 }
 
 /* ---------- fleet table ---------- */
-let fleetSort={k:"sev",dir:-1};
+let fleetSort={k:"prio",dir:1};
+/* ATTENTION ORDER — one rule for "what needs me first", stated once.
+     1 Critical  2 Severe  3 Overdue action  4 Unassigned action  5 Degraded  6 Incipient
+   A critical finding outranks an overdue date on a lesser one; an action nobody
+   owns outranks a degraded reading somebody is already planning. `open` is the
+   machine's outstanding work ([{r,i}]), `worst` the worst grade on its latest
+   round. Returns {rank, key} — key is the i18n word the Priority cell shows. */
+const ATTN=[["ov_p_crit","c"],["ov_p_sev","s"],["ov_p_over","s"],["ov_p_noown","w"],["ov_p_deg","w"],["ov_p_inc","n"],["ov_p_none","n"]];
+function attentionOf(open, worst){
+  let sv=0; (open||[]).forEach(x=>{ const s=sevRank(sevOf(x.r,x.i)); if(s>sv) sv=s; });
+  if(sv<sevRank(worst||0)) sv=sevRank(worst||0);
+  if(sv>=5) return {rank:0, key:ATTN[0][0], c:ATTN[0][1]};
+  if(sv===4) return {rank:1, key:ATTN[1][0], c:ATTN[1][1]};
+  if((open||[]).some(x=>fOverdue(x.i))) return {rank:2, key:ATTN[2][0], c:ATTN[2][1]};
+  if((open||[]).length && !(open||[]).some(x=>x.i.owner||x.i.resp)) return {rank:3, key:ATTN[3][0], c:ATTN[3][1]};
+  if(sv===3) return {rank:4, key:ATTN[4][0], c:ATTN[4][1]};
+  if(sv===2) return {rank:5, key:ATTN[5][0], c:ATTN[5][1]};
+  return {rank:6, key:ATTN[6][0], c:ATTN[6][1]};
+}
 /* One row per machine, and everything a planner needs to decide whether to walk
    to it: what it is, what was found, who owns the work and when the next round
    falls. It used to carry the finding and nothing about the response — worst
@@ -5992,7 +6149,9 @@ function renderFleet(){
   Object.values(byU).forEach(r=>{
     const u=r.equip, lead=leadOf(u), dd=due[String(u).toUpperCase()];
     const as=lead?actionState(lead.r,lead.i):null;
+    const attn=attentionOf(itemsU[u]||[], worstOf(r));
     KEY[u]={ equip:u, cls:clsOf(r), type:r.type, date:r.date||"",
+      prio:attn.rank, attn,
       sev:sevRank(worstOf(r)), find:notable(r).length,
       open:(itemsU[u]||[]).length,
       owner:(ownersOf(u)[0]||"\uffff"),
@@ -6014,7 +6173,10 @@ function renderFleet(){
      round. The round type and date ride in the defect cell, and the status
      rides under the action: each says something ABOUT the cell it sits in,
      and as a column of its own it pushed the table off a 1366 screen. */
-  const cols=[["equip",t("th_unit"),""],["sev",t("th_grade"),""],["cls",t("th_class"),""],
+  /* Priority and grade are ONE column: the rank in the attention order, then
+     the grade pill the rank is mostly made of. As two columns the Russian
+     table ran 180px past a 1366 screen (tests/overview2.cjs). */
+  const cols=[["equip",t("th_unit"),""],["prio",t("th_priority"),""],["cls",t("th_class"),""],
               ["defect",t("th_defcomp"),""],["date",t("th_inspected"),"hide-m"],["find",t("th_find"),"r hide-m"],
               ["act",t("th_reqact"),""],["open",t("th_open"),"r"],
               ["owner",t("th_owner"),""],["adue",t("th_due"),""],["due",t("th_nextdue"),""]];
@@ -6056,9 +6218,11 @@ function renderFleet(){
     /* Every cell that names a thing you can filter by IS the filter for it.
        A class you can read but not click is a class you then go and find in a
        dropdown, which is the same information costing two more actions. */
+    const attn=KEY[r.equip].attn;
     h+=`<tr data-u="${esc(r.equip)}" style="cursor:pointer">
       <td><b>${esc(r.equip)}</b></td>
-      <td>${w?`<span class="pill ${SEV[w].c}" title="${esc(t("th_worst"))}">${SEV[w].l}</span>`:'<span class="muted">\u2014</span>'}</td>
+      <td class="nw" title="${esc(t(attn.key))}"><span class="attn a${attn.rank}"><i>${attn.rank<6?attn.rank+1:"\u2014"}</i><span>${esc(t(attn.key))}</span></span>${
+        w?`<span class="pill ${SEV[w].c}" title="${esc(t("th_worst"))}">${SEV[w].l}</span>`:'<span class="muted">\u2014</span>'}</td>
       <td>${clsOf(r)?`<button class="xf" data-xcls="${esc(clsOf(r))}" title="${esc(t("xf_cls"))}">${esc(clsOf(r))}</button>`:'<span class="muted">\u2014</span>'}</td>
       <td>${top?esc(top):'<span class="muted">\u2014</span>'}<div class="muted" style="font-size:11px;margin-top:2px"><span class="tag">${esc(TYPE_LABEL[r.type]||r.type)}</span><span class="mono">${esc(r.date||"")}</span>${r.by?` · ${esc(r.by)}`:""}</div></td>
       <td class="hide-m"><span class="mono">${esc(r.date||"")}</span><div class="muted" style="font-size:11px;margin-top:2px">${esc(r.by||"")}</div></td>
@@ -6066,7 +6230,7 @@ function renderFleet(){
       <td>${lead
           ? (lead.i.action ? esc(actionName(lead.i.action)) : `<span class="muted">—</span>`)
             + `<div class="fstat" style="margin-top:3px">${as && as.k==="triage"
-                ? `<span class="triage">${esc(t("as_triage"))}</span>`
+                ? needChips(as.miss, 1, true)
                 : `<span class="muted">${esc(stName(lead.i.status))}</span>`}</div>`
           : `<span class="muted">${esc(t("ov_noact"))}</span>`}</td>
       <td class="mono r">${open.length
@@ -6092,7 +6256,7 @@ function renderFleet(){
     const k=th.dataset.sort;
     // a new column starts on the reading people expect: worst/newest first
     if(fleetSort.k===k) fleetSort.dir*=-1;
-    else fleetSort={k,dir:(k==="sev"||k==="find"||k==="date"||k==="open")?-1:1};
+    else fleetSort={k,dir:(k==="sev"||k==="find"||k==="date"||k==="open")?-1:1};   // prio: rank 0 is most urgent, ascending
     renderFleet(); });
   /* The cross-filters have to claim the click before the row does, or pressing
      a class would open a machine's history instead of filtering by class. */
@@ -6448,6 +6612,84 @@ const ACT_MISS_LABEL={ action:"as_m_action", prio:"as_m_prio", owner:"as_m_owner
 function actionMissText(miss){
   return (miss||[]).map(m=>t(ACT_MISS_LABEL[m]||m)).join(", ");
 }
+/* WHAT IS MISSING, NAMED. "Planning required" said that something was missing
+   and made the reader open the row to learn what. Each missing item is its own
+   chip — Owner required, Due date required, Action required, Priority
+   required, Work order required, Reason required — from the shared dictionary,
+   so the phone, the register and the report say it in the same words. `max`
+   folds the rest into "+n" where a cell has no room for four. */
+const NEED_KEY={ action:"need_action", owner:"need_owner", due:"need_due", prio:"need_prio", wo:"need_wo", disp:"need_reason" };
+function needChips(miss, max, quiet){
+  const xs=(miss||[]).map(m=>NEED_KEY[m]).filter(Boolean);
+  if(!xs.length) return "";
+  const all=xs.map(x=>TERMS.t(lang,x)).join(", ");
+  const shown=max?xs.slice(0,max):xs, rest=xs.length-shown.length;
+  /* `quiet`: one chip and no "+n" — for a cell that already carries a status
+     word and has one line to spare; the title names the rest. */
+  return shown.map(k=>`<span class="need${quiet?" q":""}" title="${esc(all)}">${esc(TERMS.t(lang,k))}</span>`).join("")
+       + (rest&&!quiet?`<span class="need more" title="${esc(all)}">+${rest}</span>`:"");
+}
+/* A work order is asked for once the job is planned or under way: a finding
+   still waiting for an owner has nothing to raise one against yet. Not part of
+   actionState, so the count of outstanding actions does not move. */
+function woWanted(i){ const st=String(i.status||""); return (st==="PLAN"||st==="WIP") && !i.wo; }
+/* ── EDIT IN THE CELL ───────────────────────────────────────────────────────
+   One editor at a time, in the cell that was pressed, for that finding only.
+   It is built when pressed and removed when done, so the table never holds a
+   form control it is not using. The commit goes through patchItems — the same
+   audited, optimistic, rolled-back-together write the drawer and the bulk bar
+   use — so an inline change is not a second kind of edit with its own rules.
+   "No action needed" is a decision with an author and a reason: choosing it
+   here opens the disposition dialog exactly as the drawer does. */
+let cellEd=null;
+function cellEditCancel(){
+  if(cellEd && !cellEd.done){ cellEd.done=true; cellEd.td.innerHTML=cellEd.keep; cellEd.td.classList.remove("editing"); }
+  cellEd=null;
+}
+function cellEdit(td, rk, ik){
+  if(cellEd && cellEd.td===td) return;
+  cellEditCancel();
+  const rec=RECS.find(r=>ekOf(r)===rk); if(!rec) return;
+  const it=(rec.items||[]).find(x=>x.key===ik); if(!it) return;
+  const f=td.dataset.ed, keep=td.innerHTML;
+  let el;
+  if(f==="status"){
+    el=document.createElement("select");
+    el.innerHTML=FSTATUS.map(x=>`<option value="${esc(x.k)}"${String(it.status||"")===x.k?" selected":""}>${esc(x[lang]||x.en)}</option>`).join("");
+  }else{
+    el=document.createElement("input");
+    el.type = f==="due" ? "date" : "text";
+    el.value = it[f]||"";
+    if(f==="owner"){
+      el.setAttribute("list","ownerNames");
+      const dl=$("ownerNames"); if(dl) dl.innerHTML=ownerList().map(o=>`<option value="${esc(o)}"></option>`).join("");
+      el.placeholder=TERMS.t(lang,"owner");
+    }
+    if(f==="wo") el.placeholder=t("th_wo");
+  }
+  el.className="celled"; el.setAttribute("aria-label", td.title||f);
+  td.innerHTML=""; td.appendChild(el); td.classList.add("editing");
+  const st={td, keep, rk, ik, f, el, done:false}; cellEd=st;
+  const finish=save=>{
+    if(st.done) return; st.done=true; if(cellEd===st) cellEd=null;
+    const v=String(el.value||"").trim(), cur=String(it[f]||"");
+    const back=()=>{ td.innerHTML=keep; td.classList.remove("editing"); };
+    if(!save || v===cur){ back(); return; }
+    if(f==="status" && v==="NOACT"){ back(); askDisposition([{rk,ik}]); return; }
+    const patch={}; patch[f]=v;
+    /* The optimistic repaint inside patchItems replaces this row. If the write
+       is refused the table is redrawn from what is actually held, and the
+       drawer opens with the reason, since a cell has nowhere to print one. */
+    patchItems([{rk,ik}], patch, null).catch(()=>{ renderActions(); openFollow(rk,ik); });
+  };
+  el.onkeydown=e=>{ e.stopPropagation();
+    if(e.key==="Enter"){ e.preventDefault(); finish(true); }
+    else if(e.key==="Escape"){ e.preventDefault(); finish(false); } };
+  el.onclick=e=>e.stopPropagation();
+  el.onblur=()=>setTimeout(()=>finish(true),0);
+  if(f==="status") el.onchange=()=>finish(true);
+  el.focus();
+}
 const ini=n=>String(n||"").split(/[\s.]+/).filter(Boolean)
   .slice(0,2).map(x=>x[0]).join("").toUpperCase()||"?";
 /* setDrill toggles, which is right for a chart bar you press twice. Arriving
@@ -6746,7 +6988,8 @@ function renderActions(){
      name on it. Both shapes, and the sortable one opens. */
   if(actView==="table"){
     const val=(x,k)=>({ queue:0, sev:sevRank(sevOf(x.r,x.i)), unit:x.r.equip, comp:x.i.label||x.i.key,
-      date:x.r.date||"", act:(x.i.defect||"")+" "+(x.i.actionLabel||""), owner:x.i.owner||"",
+      date:x.r.date||"", act:(x.i.defect||""), req:(x.i.actionLabel||(x.i.action?actionName(x.i.action):"")||"￿"),
+      owner:x.i.owner||"￿", wo:x.i.wo||"￿",
       due:x.i.due||"9999-99-99", age:(fAgeDays(x.r,x.i)||0), st:stName(x.i.status) }[k]);
     const list=shown.slice().sort((a,b)=>{
       if(actSort.k==="queue"){
@@ -6759,9 +7002,13 @@ function renderActions(){
       const c=typeof p1==="number"?p1-p2:String(p1).localeCompare(String(p2));
       return (c || a.r.equip.localeCompare(b.r.equip))*actSort.dir;
     });
-    const cols=[[actSort.k==="queue"?"queue":"sev",t("th_sev")],["unit",t("th_unit")],["comp",t("a_th_comp")],
-                ["date",t("th_date")],["act",t("a_th_find")],["owner",t("a_th_owner")],
-                ["due",t("a_th_due")],["age",t("a_th_age")],["st",t("a_th_status")],["",""]];
+    /* Priority · Equipment · Component · Finding · Required action · Owner ·
+       Due · Status · Work order. The date and the age ride on the component
+       cell's title and in the drawer; the work order has a column because it
+       is the one thing the planning meeting asks for that nothing showed. */
+    const cols=[[actSort.k==="queue"?"queue":"sev",t("th_priority")],["unit",t("th_unit")],["comp",t("a_th_comp")],
+                ["act",t("a_th_find")],["req",t("th_reqact")],["owner",t("a_th_owner")],
+                ["due",t("a_th_due")],["st",t("a_th_status")],["wo",t("a_th_wo")],["",""]];
     /* Everything on screen, ticked or cleared in one press. It is scoped to what
        is SHOWN, not to the whole register — a select-all that silently reaches
        past the filter is how somebody reassigns four hundred findings meaning to
@@ -6793,45 +7040,45 @@ function renderActions(){
           return `<tr class="hrow${aSel.has(sid)?" picked":""}" tabindex="0" data-fu="${esc(ekOf(r))}" data-fi="${esc(i.key)}">
             <td class="selcol"><input type="checkbox" class="asel"${
               aSel.has(sid)?" checked":""} aria-label="${esc(t("a_sel_one",{u:r.equip}))}"></td>
-            <td>${sv?`<span class="sevcell" style="--sc:${sc}"><i></i>${esc(SEV[sv].l)}</span>`
-                    :'<span class="muted">—</span>'}</td>
+            <!-- Priority: the grade the finding carries, and the stoppage
+                 priority beside it once somebody has set one. -->
+            <td class="nw">${sv?`<span class="sevcell" style="--sc:${sc}"><i></i>${esc(SEV[sv].l)}</span>`
+                    :'<span class="muted">—</span>'}${
+              i.prio?` <span class="prio ${prioClass(i.prio)}" title="${esc(prioName(i.prio))}">${esc(i.prio)}</span>`:""}</td>
             <td><b>${esc(r.equip)}</b></td>
             <!-- One line per cell. A second line under the component and
                  another under the action put the rows at 57px; the register is
                  scanned, and what those lines carried is on the title and in
-                 the drawer a click away. -->
-            <td title="${esc((ptLabel(r,i)||i.key)+" · "+i.key+" · "+(TYPE_LABEL[r.type]||r.type))}">
+                 the drawer a click away. The round, its date and the age of
+                 the finding ride on the component's title. -->
+            <td title="${esc((ptLabel(r,i)||i.key)+" · "+i.key+" · "+(TYPE_LABEL[r.type]||r.type)+" · "+(r.date||"")+(age!=null?" · "+age+" d":""))}">
               <span class="trunc">${ptLabelHTML(r,i)}
                 <span class="muted">${esc(i.key)}</span></span></td>
-            <td class="mono">${esc(r.date||"")}</td>
-            <!-- The finding, then what to do about it, on one line. The
-                 defect was moved to the title to buy row height and that was
-                 wrong twice over: it is what the Pareto drill-down filters on,
-                 so a register following a drill-down showed no evidence of it,
-                 and it is the thing a planner is scanning for. It leads the
-                 cell; the action follows it, muted. -->
-            <td title="${esc((i.defect||"")+(i.actionLabel?" \u2192 "+i.actionLabel:""))}">
-              <span class="trunc">${i.defect?esc(i.defect):'<span class="muted">\u2014</span>'}${
-                i.actionLabel?` <span class="muted">\u2192 ${esc(i.actionLabel)}</span>`:""}</span></td>
-            <!-- READ-OUTS, NOT FIELDS. Every row used to carry an owner box,
-                 a date box and a status list: at a thousand inspections that
-                 is thousands of live form controls on one page, and a table
-                 nobody can scan. The row is read here and edited in the drawer
-                 it opens; the tick column and the bar above it do a week's
-                 assignments in one gesture. -->
-            <td class="nw">${i.owner
+            <!-- The finding is what the Pareto drill-down filters on and the
+                 thing a planner is scanning for; the required action is what
+                 somebody committed to do about it, in its own column. -->
+            <td title="${esc(i.defect||"")}"><span class="trunc">${i.defect?esc(i.defect):'<span class="muted">—</span>'}</span></td>
+            <td title="${esc(i.actionLabel||(i.action?actionName(i.action):""))}"><span class="trunc">${
+              i.actionLabel||i.action ? esc(i.actionLabel||actionName(i.action))
+                : `<span class="need">${esc(TERMS.t(lang,"need_action"))}</span>`}</span></td>
+            <!-- READ-OUTS THAT EDIT ON A CLICK. The row carries no live form
+                 control — at a thousand inspections that was thousands of
+                 boxes on one page. Pressing the owner, the due date, the status
+                 or the work order opens an editor IN THAT CELL, for that row
+                 only; Enter saves through the same audited write the drawer
+                 uses, Escape puts the read-out back. The tick column and the
+                 bar above it do a week's assignments in one gesture. -->
+            <td class="nw ed" data-ed="owner" title="${esc(t("a_ed_tip"))}">${i.owner
                 ? `<span class="who"><i>${esc(initials0(i.owner))}</i><span>${esc(i.owner)}</span></span>`
                 : `<span class="who none"><i>+</i><span>${esc(TERMS.t(lang,"owner_unassigned"))}</span></span>`}</td>
-            <td>${i.due
+            <td class="ed" data-ed="due" title="${esc(t("a_ed_tip"))}">${i.due
                 ? `<span class="due ${od?"late":(dd!=null&&dd<=7?"soon":"")}"><b>${esc(i.due)}</b>${
                     od?`<i>${esc(t("a_late"))}</i>`:(dd!=null&&dd<=7?`<i>${esc(t("a_in_d",{d:dd}))}</i>`:"")}</span>`
-                : '<span class="muted">—</span>'}</td>
-            <td class="num mono">${age==null?"":age}</td>
-            <td class="nw"><span class="st s-${esc(String(i.status||"open"))}">${esc(stName(i.status))}</span>${
-              i.prio?` <span class="prio ${prioClass(i.prio)}" title="${esc(prioName(i.prio))}">${esc(i.prio)}</span>`:""}${
-              ast.k==="triage"
-                ? `<span class="tri" title="${esc(t("as_triage_t",{f:actionMissText(ast.miss)}))}">${
-                     esc(t("as_triage"))}<i>${esc(actionMissText(ast.miss))}</i></span>` : ""}</td>
+                : `<span class="need">${esc(TERMS.t(lang,"need_due"))}</span>`}</td>
+            <td class="nw ed" data-ed="status" title="${esc(t("a_ed_tip"))}"><span class="st s-${esc(String(i.status||"open"))}">${esc(stName(i.status))}</span>${
+              ast.k==="triage" ? needChips(ast.miss.filter(m=>m!=="owner"&&m!=="due"), 2) : ""}</td>
+            <td class="nw ed mono" data-ed="wo" title="${esc(t("a_ed_tip"))}">${i.wo ? esc(i.wo)
+                : (woWanted(i) ? `<span class="need">${esc(TERMS.t(lang,"need_wo"))}</span>` : '<span class="muted">—</span>')}</td>
             <td class="go" aria-hidden="true">›</td>
           </tr>`;
         }).join("")+`</tbody></table></div>` + pgT.strip;
@@ -6840,6 +7087,8 @@ function renderActions(){
        reader's hands. */
     $("actionTbl").querySelectorAll("tr.hrow").forEach(tr=>{
       const go=e=>{ if(e && e.target.closest(".selcol")) return;
+                    const ed=e && e.target.closest("td.ed");
+                    if(ed){ cellEdit(ed, tr.dataset.fu, tr.dataset.fi); return; }
                     openFollow(tr.dataset.fu, tr.dataset.fi); };
       tr.onclick=go;
       tr.onkeydown=e=>{ if((e.key==="Enter"||e.key===" ") && !e.target.closest(".selcol")){
@@ -11792,7 +12041,26 @@ function renderReportPreview(){
     html=t("r_prev_month",{m:esc(target), n:recs.length, u:units});
   }
   if(!photos) html+=` <span class="muted">· ${esc(t("r_prev_nophoto"))}</span>`;
-  el.innerHTML=html;
+  el.innerHTML=html+`<div class="rest" id="rEst">${esc(t("r_est_wait"))}</div>`;
+  reportEstimateSoon(scope,target);
+}
+/* WHAT IT WILL COST, BEFORE IT IS MADE: pages, size and time, from the same
+   sections laid out at the same width the paginator uses — measured, not
+   rasterised, so it takes a moment where the PDF takes a minute. Debounced,
+   and a stale answer is dropped when the choice has moved on. */
+let rEstT=null, rEstKey="";
+function reportEstimateSoon(scope,target){
+  clearTimeout(rEstT);
+  rEstT=setTimeout(async ()=>{
+    const el=$("rEst"); if(!el || !window.CMReport || !CMReport.estimate) return;
+    const o=reportOpts(); const key=[scope,target,o.lang,o.bi,o.photos,o.scale].join("|");
+    rEstKey=key;
+    try{
+      const e=await CMReport.estimate(scope,target,o);
+      if(rEstKey!==key || !$("rEst")) return;
+      $("rEst").textContent = e ? t("r_est",{p:e.pages, s:(e.bytes/1048576).toFixed(1), n:e.photos, t:e.seconds}) : "";
+    }catch(err){ if($("rEst")) $("rEst").textContent=""; }
+  }, 150);
 }
 /* WHAT WAS GENERATED, in this browser, newest first — so the report that
    went to Tuesday's meeting can be produced again on Wednesday without
@@ -11821,7 +12089,7 @@ function renderRecentReports(){
     const x=list[Number(b.dataset.ragain)]; if(!x) return;
     $("rScope").value=x.scope; refreshReportTargets();
     if(!selectReportTarget(x.target)) return;
-    runReport(x.scope, x.target, $("rGo"), { msg:$("rMsg"), photos:$("rPhotos").value==="1", scale:parseFloat($("rScale").value) });
+    runReport(x.scope, x.target, $("rGo"), reportOpts());
   });
 }
 /* Choose a target that the bounded picker may not be showing. */
@@ -11834,6 +12102,25 @@ function selectReportTarget(v){
 }
 if($("rTarget")) $("rTarget").onchange=renderReportPreview;
 if($("rPhotos")) $("rPhotos").onchange=renderReportPreview;
+if($("rScale")) $("rScale").onchange=renderReportPreview;
+/* THE REPORT'S LANGUAGE IS CHOSEN, NOT IMPOSED. English, Russian, or both on
+   one sheet — remembered per browser, defaulting to the screen's language.
+   Every way of making a report reads the same options. */
+const RLANG_K="cm_dash_rlang";
+function reportLang(){ const v=($("rLang")||{}).value||""; return v||lang; }
+function reportOpts(){
+  const v=reportLang(), sc=parseFloat(($("rScale")||{}).value)||1.8;
+  return { msg:$("rMsg"), photos:($("rPhotos")||{}).value==="1", scale:sc,
+           lang: v==="both" ? lang : v, bi: v==="both",
+           /* the small-file point on the curve: a lower scale AND a tighter JPEG */
+           jpeg: sc<1.6 ? 0.8 : undefined };
+}
+if($("rLang")){
+  let v=""; try{ v=localStorage.getItem(RLANG_K)||""; }catch(e){}
+  $("rLang").value = (v==="en"||v==="ru"||v==="both") ? v : lang;
+  if(!$("rLang").value) $("rLang").value="en";
+  $("rLang").onchange=()=>{ try{ localStorage.setItem(RLANG_K,$("rLang").value); }catch(e){} renderReportPreview(); };
+}
 
 /* One way to build a report, called from three places.
 
@@ -11955,7 +12242,7 @@ async function runReport(scope, target, btn, opts){
          still rendering is the report that disagrees with the screen. */
       await pxDeriveAll(recs);
     }
-    const n = await window.CMReport.generate(scope, target, {photos, scale},
+    const n = await window.CMReport.generate(scope, target, {photos, scale, lang:opts.lang, bi:opts.bi, jpeg:opts.jpeg},
       (i,total)=>say(t("r_rendering",{i,n:total})));
     /* A single-record report is a document that was issued to somebody, so it
        goes on the record with its status and the content revision it describes.
@@ -11983,8 +12270,7 @@ async function runReport(scope, target, btn, opts){
   }
   finally{ if(btn) btn.disabled=false; }
 }
-$("rGo").onclick=()=>runReport($("rScope").value, $("rTarget").value, $("rGo"),
-  { msg:$("rMsg"), photos:$("rPhotos").value==="1", scale:parseFloat($("rScale").value) });
+$("rGo").onclick=()=>runReport($("rScope").value, $("rTarget").value, $("rGo"), reportOpts());
 /* THE MACHINE PICKER, FILTERED.
 
    One option per machine and 1,128 machines: nobody scrolls that, so people
@@ -13667,6 +13953,43 @@ function dueTabRows(){
                 || a.ty.localeCompare(b.ty));
   return out;
 }
+/* MACHINES NO ROUND HAS EVER REACHED — the phone's neverRows, by the same
+   rule. Every machine in the register whose class is on a round (due.js
+   onClass and byClass, or a class this folder has walked that round on) and
+   for which no round of that type is recorded anywhere. A class nobody has
+   put on any round proposes nothing: the office cannot invent a programme any
+   more than the phone can. Kept apart from dueTabRows because these rows have
+   no last date and no clock — every reader of that list does arithmetic on
+   both. */
+function dueNeverRows(only){
+  const out=[];
+  if(!window.ASSETS || !window.DUE) return out;
+  const have={};
+  RECS.forEach(r=>{ if(!r || r._void || !r.equip || !r.date) return;
+    have[(r.type||"MP")+"|"+String(r.equip).toUpperCase()]=1; });
+  const on={}; const add=(k,ty)=>{ if(!k||!ty) return; (on[k]||(on[k]=new Set())).add(ty); };
+  const E=DUE.EVERY||{};
+  Object.keys(E).forEach(ty=>{ const sp=E[ty]||{};
+    if(sp.byClass) Object.keys(sp.byClass).forEach(k=>add(k,ty));
+    if(sp.onClass) sp.onClass.forEach(k=>add(k,ty)); });
+  Object.keys(have).forEach(key=>{ const [ty,unit]=key.split("|");
+    const a=ASSET_BY[unit]; if(a && a.cls) add(String(a.cls).toUpperCase(),ty); });
+  (window.ASSETS||[]).forEach(a=>{
+    if(!a || !a.n) return;
+    const k=String(a.cls||"").toUpperCase(); if(!k || k==="GEN" || k==="ALL") return;
+    const rounds=on[k]; if(!rounds) return;
+    const unit=String(a.n).toUpperCase();
+    rounds.forEach(ty=>{
+      if(only && ty!==only) return;
+      if(!TYPE_LABEL[ty]) return;
+      if(have[ty+"|"+unit]) return;
+      const d=deferrals[ty+"|"+unit]||null;
+      out.push({ty, unit, cls:k, last:null, n:null, d, st:"never", late:false, never:true});
+    });
+  });
+  out.sort((x,y)=>x.unit.localeCompare(y.unit,undefined,{numeric:true}) || x.ty.localeCompare(y.ty));
+  return out;
+}
 /* The Due tab, opened already narrowed to the thing that was pressed. */
 function dueGo(scope){
   if($("ddScope")) $("ddScope").value=scope;
@@ -13683,6 +14006,9 @@ function renderDueTab(){
   const scope=($("ddScope")||{}).value||"over";
   const q=(($("ddQ")||{}).value||"").trim().toUpperCase();
   const all=dueTabRows().filter(r=>(!only || r.ty===only) && (!q || r.unit.indexOf(q)>=0));
+  const never=dueNeverRows(only).filter(r=>!q || r.unit.indexOf(q)>=0);
+  const nNever=never.length;
+  const nDone=all.filter(r=>r.st==="ok").length;
   const nOver=all.filter(r=>r.st==="over").length;
   const nSoon=all.filter(r=>r.st==="soon").length;
   const nPut =all.filter(r=>r.st==="put").length;
@@ -13709,12 +14035,16 @@ function renderDueTab(){
     if($("ddScope")) $("ddScope").value=b.dataset.dd;
     renderDueTab(); urlWrite(false);
   });
-  /* The four views as tabs, each carrying its count. "due" (overdue and due
-     soon together) stays a valid scope for an address that names it, but it
-     is not a tab: two tabs that overlap are a tab nobody can explain. */
+  /* Six views as tabs, each carrying its count: Overdue · Due soon · Never
+     inspected · Deferred · Completed · All. "due" (overdue and due soon
+     together) stays a valid scope for an address that names it, but it is not
+     a tab: two tabs that overlap are a tab nobody can explain. "Completed" is
+     a round walked within its interval and not yet due again — the rows the
+     other tabs leave out, so the six add up to All. */
   const seg=$("ddSeg");
   if(seg){
-    const views=[["over","dd_missed",nOver],["soon","dd_soon",nSoon],["put","dd_put",nPut+nOff],["all","dd_all",all.length]];
+    const views=[["over","dd_missed",nOver],["soon","dd_soon",nSoon],["never","dd_never",nNever],
+                 ["put","dd_put",nPut+nOff],["done","dd_done",nDone],["all","dd_all",all.length+nNever]];
     seg.innerHTML=views.map(([k,lab,n])=>
       `<button type="button" role="tab" data-dd="${k}" aria-selected="${scope===k?"true":"false"}"${
         scope===k?' class="on"':''}>${esc(t(lab))}<span class="n">${n}</span></button>`).join("");
@@ -13730,7 +14060,9 @@ function renderDueTab(){
       };
     });
   }
-  const show = scope==="all" ? all
+  const show = scope==="all" ? all.concat(never)
+             : scope==="never" ? never
+             : scope==="done" ? all.filter(r=>r.st==="ok")
              : scope==="put" ? all.filter(r=>r.st==="put"||r.st==="off")
              : scope==="due" ? all.filter(r=>r.st==="over"||r.st==="soon")
              : scope==="soon" ? all.filter(r=>r.st==="soon")
@@ -13746,6 +14078,19 @@ function renderDueTab(){
     <th>${esc(t("dd_c_why"))}</th><th></th></tr></thead><tbody>`
     + kept.map(r=>{
       const n=r.n;
+      if(!n) return `<tr class="dd-never">
+        <td><b>${esc(r.unit)}</b></td>
+        <td>${esc(r.ty)} · <span class="muted">${esc(t("type_"+r.ty)||r.ty)}</span></td>
+        <td><span class="need">${esc(TERMS.t(lang,"never_inspected"))}</span></td>
+        <td class="r"><span class="muted">—</span></td>
+        <td class="r"><span class="muted">—</span></td>
+        <td>${r.d ? esc(r.d.until?t("dd_put_to",{d:r.d.until}):t("dd_not_doing"))+" — "+esc(r.d.why||"") : ""}</td>
+        <td class="ddact">
+          <a class="minibtn" href="${esc(unitLink(r.unit,r.ty))}" target="_blank" rel="noopener"
+             title="${esc(t("dd_start_t"))}">${esc(t("dd_start"))}</a>
+          <button type="button" class="minibtn" data-defer="${esc(r.ty+"|"+r.unit)}"
+             title="${esc(t("dd_defer_t"))}">${esc(r.d?t("dd_defer_edit"):t("dd_defer"))}</button>
+        </td></tr>`;
       const when = n.over ? `<b style="color:var(--critical)">${esc(t("due_over",{n:numAbs(n.dueInDays)}))}</b>`
                           : esc(t("due_in",{n:numAbs(n.dueInDays)}));
       const why = r.d
@@ -13850,15 +14195,22 @@ function dueCsv(){
   const only=($("ddType")||{}).value||"";
   const q=(($("ddQ")||{}).value||"").trim().toUpperCase();
   const scope=($("ddScope")||{}).value||"over";
-  dueTabRows()
-    .filter(r=>(!only || r.ty===only) && (!q || r.unit.indexOf(q)>=0))
+  /* The same rows the screen shows for this scope — never-inspected rows
+     included, with no dates or clock, so the sheet cannot claim a last date
+     for a machine that has none. */
+  const tabRows=dueTabRows().filter(r=>(!only || r.ty===only) && (!q || r.unit.indexOf(q)>=0));
+  const never=(scope==="all"||scope==="never") ? dueNeverRows(only).filter(r=>!q || r.unit.indexOf(q)>=0) : [];
+  tabRows
     .filter(r=> scope==="all" ? true
+              : scope==="never" ? false
+              : scope==="done" ? r.st==="ok"
               : scope==="put" ? (r.st==="put"||r.st==="off")
               : scope==="due" ? (r.st==="over"||r.st==="soon")
               : scope==="soon" ? r.st==="soon"
               : r.st==="over")
-    .forEach(r=>rows.push([r.unit, r.ty, r.last.d, r.n.daysSince, r.n.dueInDays,
-    r.n.dueInHours, r.n.rate, r.n.measured?1:0, r.st,
+    .concat(never)
+    .forEach(r=>rows.push([r.unit, r.ty, r.n?r.last.d:"", r.n?r.n.daysSince:"", r.n?r.n.dueInDays:"",
+    r.n?r.n.dueInHours:"", r.n?r.n.rate:"", r.n?(r.n.measured?1:0):"", r.st,
     (r.d&&r.d.why)||"", (r.d&&r.d.by)||"", (r.d&&r.d.until)||""]));
   const csv=rows.map(r=>r.map(v=>{ const x=String(v==null?"":v);
     return /[",\n]/.test(x) ? '"'+x.replace(/"/g,'""')+'"' : x; }).join(",")).join("\n");
@@ -14665,14 +15017,24 @@ function renderSync(){
             if(!tl) return w;
             return tl.received>0 ? "photo" : "photomiss";
           };
+          /* EVERY EXCEPTION ANSWERS FIVE QUESTIONS: what is wrong, what of
+             it still counts, who corrects it, what to do, and what it affects
+             — and carries the button that does it. A row naming a defect and
+             nothing else sends the reader to work out the rest. */
+          const ws=why.map(w=>lbl(w,r));
+          const one=(pre)=>[...new Set(ws.map(w=>t(pre+w)))].join(" ");
           return `<tr${canOpen?` class="hrow" tabindex="0" data-quargo="${esc(ekOf(r))}"`:""}>
           <td><b>${esc(r.equip||t("sy_blank"))}</b></td>
           <td class="mono">${esc(r.date||t("sy_blank"))}</td>
           <td>${esc(TYPE_LABEL[r.type]||r.type||t("sy_blank"))}</td>
-          <td>${why.map(w=>`<span class="tri">${esc(t("sy_w_"+lbl(w,r)))}</span>`).join(" ")}
-              <div class="muted" style="font-size:11.5px;margin-top:3px">${
-                esc(why.map(w=>t("sy_fix_"+lbl(w,r))).join(" "))}${
-                canOpen?" "+esc(t("sy_fix_open")):""}</div></td></tr>`;
+          <td class="syx">${ws.map(w=>`<span class="tri">${esc(t("sy_w_"+w))}</span>`).join(" ")}
+              <dl class="syxq">
+                <dt>${esc(t("sy_x_valid"))}</dt><dd>${esc(one("sy_v_"))}</dd>
+                <dt>${esc(t("sy_x_who"))}</dt><dd>${esc(one("sy_o_"))}</dd>
+                <dt>${esc(t("sy_x_action"))}</dt><dd>${esc(one("sy_fix_"))}</dd>
+                <dt>${esc(t("sy_x_affects"))}</dt><dd>${esc(one("sy_e_"))}</dd>
+              </dl>${
+              canOpen?`<button type="button" class="minibtn syfix" data-quargo="${esc(ekOf(r))}">${esc(t("sy_fixbtn"))}</button>`:""}</td></tr>`;
         }).join("")
       +`</tbody>`;
   }

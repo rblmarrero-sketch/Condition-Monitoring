@@ -357,3 +357,35 @@ Three dashboard conventions a suite has to respect since build 271:
   plan and status are edited in the drawer a row opens (`openFollow`,
   `#follOv`), and "No action required" chosen there opens the disposition
   dialog exactly as the inline list used to.
+  Since Phase 4 the owner, due, status and work-order cells ALSO edit in
+  place on a click (`cellEdit`): one editor at a time, built on the click and
+  gone on Enter/Escape/blur, committed through `patchItems` like everything
+  else — so a suite may assert that no `input`/`select` lives in the rows at
+  rest, and must click a `td.ed` cell (not the row) to get one.
+- **Overview ranks attention in ONE stated order** (`attentionOf`: Critical,
+  Severe, overdue action, unassigned action, Degraded, Incipient) and the
+  grade pill lives INSIDE that Priority column (`th[data-sort="prio"]`) —
+  there is no separate grade column, because as two columns the Russian
+  table ran 180 px past a 1366 screen. Read the grade off `.pill`, the rank
+  off `.attn`.
+- **The schedule has six tabs** — Overdue · Due soon · Never inspected ·
+  Deferred · Completed · All — and the five add up to All. Never-inspected
+  rows come from `dueNeverRows()` (the phone's `neverRows` rule: a machine
+  whose class is on a round with nothing recorded for it), carry no last
+  date and no clock, and are excluded from `dueTabRows()`, whose every reader
+  does arithmetic on both. Read tab counts by `data-dd` key, never by position.
+- **Reports are made in ONE language or both** (`#rLang` / `cm_dash_rlang`
+  on the dashboard, `#repLang` / `cm_rep_lang` on the phone). The bilingual
+  switch is `ctx.bi`; `report.js` swaps the screen's `lang` for the report's
+  only while the sections are built (`withReport`) and puts it back, so a
+  suite can assert the screen language is untouched afterwards.
+  `CMReport.sectionsFor` returns the document without a PDF and
+  `CMReport.estimate` its page count from a real layout — use those, never a
+  rasterised PDF, to test wording.
+
+**`TERMS` must never be a hard dependency of boot.** Both pages carry a shim
+right after the `terms.js` script tag: if the file did not arrive, every key
+answers with its own name so the page still boots and registers the worker.
+Build 273 shipped without it, the language table read `TERMS.en` at load, and
+a phone whose first load got `index.html` and nothing else had no worker and
+no offline page (`tests/swfail.cjs`).

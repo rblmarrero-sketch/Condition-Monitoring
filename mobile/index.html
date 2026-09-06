@@ -173,6 +173,8 @@
     min-width:44px;min-height:44px;padding:0 10px;font-size:13px;font-weight:700;
     cursor:pointer;letter-spacing:.02em;}
   .lang button.on{background:var(--accent);color:var(--accent-ink);}
+  .replang{display:flex;align-items:center;gap:10px;margin-bottom:12px;font-size:14px;color:var(--ink-2);}
+  .replang select{flex:0 1 220px;min-height:40px;}
   /* The sync pill. It reports whether the work is safe, which is the only thing
      worth a permanent place in the header, and tapping it goes to the queue. */
   header .st{font-size:12.5px;font-weight:650;padding:0 13px;border-radius:999px;
@@ -1832,6 +1834,14 @@
          the round card read as the same document; it is not. That one is one
          round on one machine, this is every round still on this phone —
          a shift's work as one sheet, with the cross-machine list on the front. -->
+    <!-- English, Russian, or both on one sheet — the reader's choice, kept.
+         Both is what the sheet has always been; it is no longer forced. -->
+    <label class="replang"><span data-i18n="rep_lang">Report language</span>
+      <select id="repLang">
+        <option value="both" data-i18n="rep_lang_both">English + Russian</option>
+        <option value="en">English</option>
+        <option value="ru">Русский</option>
+      </select></label>
     <button class="btn ghost" id="reportBtn" style="margin-bottom:16px">📄 <span data-i18n="btn_report">PDF · every round on this phone</span></button>
   </div>
 </div><!-- /paneQueue -->
@@ -2149,6 +2159,24 @@
 <script src="temp-limits.js?v=273"></script>
 <script src="normalize.js?v=273"></script>
 <script src="terms.js?v=273"></script>
+<!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
+     phone's very first load on a one-bar link got index.html and nothing
+     else, the language table below then read TERMS.en at load, the main
+     script died on that line, and the service worker was never registered —
+     so the next open with no signal was Safari's error page rather than the
+     offline page the worker exists to serve (tests/swfail.cjs, build 273).
+     If the dictionary is missing, every key answers with its own name so
+     the page boots, registers the worker, and heals itself on the next
+     complete download. -->
+<script>
+if (!window.TERMS) {
+  window.TERMS = (function () {
+    var words = new Proxy({}, { get: function (o, k) { return typeof k === "string" ? k.replace(/_/g, " ") : undefined; } });
+    return { en: words, ru: words, t: function (l, k) { return String(k).replace(/_/g, " "); },
+             keys: function () { return []; }, banned: [], offends: function () { return ""; }, __shim: true };
+  })();
+}
+</script>
 <script src="grade.js?v=273"></script>
 <script src="edits.js?v=273"></script>
 <script src="due.js?v=273"></script>
@@ -2413,6 +2441,7 @@ const I18N = {
     btn_save:"✔ Finish inspection", btn_update:"✔ Update", editing_hint:"Editing {x} — change fields, then Update.",
     sec_onphone:TERMS.en.saved_here, empty_none:"Nothing saved yet.",
     btn_share:"Share", btn_export:"Export ZIP", btn_report:"PDF · every round on this phone",
+    rep_lang:"Report language", rep_lang_both:"English + Russian",
     /* Five rounds in the queue and a superintendent who wants one of them. */
     rpt1_title:"PDF for this round only", scan_hint:"Point at the unit's QR code", btn_cancel:"Cancel", dlg_ok:"OK",
     rep_title:"Condition Monitoring Inspection Report", rep_generated:"Generated", rep_building:["Building report…","Preparing the PDF — this can take a few seconds."],
@@ -2967,6 +2996,7 @@ const I18N = {
     btn_save:"✔ Завершить осмотр", btn_update:"✔ Обновить", editing_hint:"Редактирование {x} — измените поля и нажмите «Обновить».",
     sec_onphone:TERMS.ru.saved_here, empty_none:"Пока ничего не сохранено.",
     btn_share:"Поделиться", btn_export:"Экспорт ZIP", btn_report:"PDF · все обходы на телефоне",
+    rep_lang:"Язык отчёта", rep_lang_both:"Английский + русский",
     rpt1_title:"PDF только по этому обходу", scan_hint:"Наведите на QR-код трака", btn_cancel:"Отмена", dlg_ok:"ОК",
     rep_title:"Отчёт по мониторингу состояния", rep_generated:"Сформировано", rep_building:["Формирование отчёта…","Готовится PDF — это может занять несколько секунд."],
     rep_page:"Формирование… {i} из {n}",
@@ -10598,7 +10628,7 @@ $("roundRpt").onclick=async ()=>{
   if(!await needPdf()){ dlg(t("m_lib_pdf")); return; }
   dlg(t("rep_building"));
   try{
-    const norm=teamRecToReport(rec);
+    const norm=withRepLang(()=>teamRecToReport(rec));
     /* THE DRAWING FIRST, before anything that touches the network.
 
        It is built from files this phone already has, so it costs nothing and
@@ -10611,8 +10641,8 @@ $("roundRpt").onclick=async ()=>{
           model:(ASSET_BY[rec.equip]||{}).m||"", cat:(ASSET_BY[rec.equip]||{}).cat||"" }) : "";
     const art0=url0?await CMR.inlinePhoto(url0):"";
     await needMap();
-    const m0=rptMap(rec, norm.items, art0);
-    norm.mapHTML=m0.html; norm.mapKey=m0.key; mapNote(norm, m0.why);
+    const m0=withRepLang(()=>rptMap(rec, norm.items, art0));
+    norm.mapHTML=m0.html; norm.mapKey=m0.key; withRepLang(()=>mapNote(norm, m0.why));
     /* The readings came with the round; the pictures did not. Fetch them now,
        and if they cannot be fetched SAY SO ON THE SHEET — a report with no
        photographs on it has to be distinguishable from a round where none were
@@ -10632,14 +10662,7 @@ $("roundRpt").onclick=async ()=>{
     } else addNote(norm, gas ? "rep_nophoto_off" : "rep_nophoto_nodrive");
     $("dlgMsg").textContent=t("rep_building")[1];
     const doc=await CMR.paginate({
-      sections:CMR.sections({ lang, mode:"unit", title:t("rep_title"),
-        titleAlt:inOtherLang(()=>t("rep_title")), stamp:new Date(),
-        sevLabel:s=>GRADE.name(GRADE.fromIso(s),lang)||t("sev_"+s), sevLabelAlt:s=>inOtherLang(()=>GRADE.name(GRADE.fromIso(s),lang)||t("sev_"+s)),
-        /* The report asks for the forecast rather than working one out, so the
-           sheet and the screen can never quote different hours for the same
-           part. One implementation, in wear.js. */
-        forecast:(ref,series)=>(window.WEAR?WEAR.forecast(ref,series):null),
-        records:[norm] }),
+      sections:withRepLang(()=>CMR.sections(repSpec({ mode:"unit", records:[norm] }))),
       jsPDF:window.jspdf.jsPDF, html2canvas:window.html2canvas,
       scale:PHONE_PDF.scale, jpeg:PHONE_PDF.jpeg, onProgress:rptSay,
       docId:`CM-${rec.equip}-${rec.date}` });
@@ -10657,14 +10680,45 @@ $("roundRpt").onclick=async ()=>{
 function rptSay(i,n){
   const el=$("dlgMsg"); if(el) el.textContent=t("rep_page",{i,n});
 }
+/* THE SHEET'S LANGUAGE — English, Russian or both — chosen once on the Saved
+   screen and kept. Both is what the sheet has always been and stays the
+   default; a single language is for the reader who asked for one. Every
+   report this phone makes reads the same choice, through repSpec. */
+const REP_LANG_K="cm_rep_lang";
+function repLang(){ let v=""; try{ v=localStorage.getItem(REP_LANG_K)||""; }catch(e){} return (v==="en"||v==="ru")?v:"both"; }
+function repCtx(){ const v=repLang(); return { lang: v==="both"?lang:v, bi: v==="both" }; }
+/* t() answers in whatever `lang` is, so the screen's language is swapped for
+   the report's for exactly as long as fn runs, and put back whatever happens. */
+function withRepLang(fn){
+  const c=repCtx(); if(c.lang===lang) return fn();
+  const was=lang; lang=c.lang;
+  try{ return fn(); } finally{ lang=was; }
+}
+/* Everything CMR.sections needs from this host, in the report's language.
+   ONE place, or the round sheet and the shift report drift — they did: the
+   forecast was passed by one and not the other, and the same part quoted
+   different hours on two sheets from the same phone. */
+function repSpec(extra){
+  const c=repCtx();
+  return Object.assign({ lang:c.lang, bi:c.bi, title:t("rep_title"),
+    titleAlt: c.bi ? inOtherLang(()=>t("rep_title")) : "", stamp:new Date(),
+    sevLabel:s=>GRADE.name(GRADE.fromIso(s),lang)||t("sev_"+s),
+    sevLabelAlt: c.bi ? (s=>inOtherLang(()=>GRADE.name(GRADE.fromIso(s),lang)||t("sev_"+s))) : null,
+    forecast:(ref,series)=>(window.WEAR?WEAR.forecast(ref,series):null) }, extra||{});
+}
+if($("repLang")){
+  $("repLang").value=repLang();
+  $("repLang").onchange=()=>{ try{ localStorage.setItem(REP_LANG_K,$("repLang").value); }catch(e){} };
+}
 async function buildReportSections(onlyId){
-  return CMR.sections({ lang, mode:onlyId?"unit":undefined, title:t("rep_title"),
-    titleAlt:inOtherLang(()=>t("rep_title")), stamp:new Date(),
-    sevLabel:s=>GRADE.name(GRADE.fromIso(s),lang)||t("sev_"+s), sevLabelAlt:s=>inOtherLang(()=>GRADE.name(GRADE.fromIso(s),lang)||t("sev_"+s)),
-    /* Both call sites, or the fleet report and the single-machine sheet quote
-       different hours for the same part - the drift this module exists to stop. */
-    forecast:(ref,series)=>(window.WEAR?WEAR.forecast(ref,series):null),
-    records: await rptRecords(onlyId) });
+  /* The records are read from this phone's own store — quick — and their
+     labels are built as they are read, so the read runs under the report's
+     language too. */
+  const c=repCtx(); const was=lang; if(c.lang!==lang) lang=c.lang;
+  try{
+    const records=await rptRecords(onlyId);
+    return CMR.sections(repSpec({ mode:onlyId?"unit":undefined, records }));
+  } finally{ lang=was; }
 }
 /* One round on this phone, as its own sheet — the thing an inspector asks for
    in the office after a shift of five. It is NOT the round overlay's report:

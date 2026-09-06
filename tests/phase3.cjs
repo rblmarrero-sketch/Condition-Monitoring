@@ -66,7 +66,7 @@ const shown = (p, sel) => p.evaluate(s => { const e = document.querySelector(s);
     const predicate = findings(filtered()).filter(x => actionRequired(x.r, x.i)).length;
     const pager = document.querySelector('#actionTbl .pager .muted');
     const m = pager && /([\d.,\u00a0\u202f]+)\s*matching/.exec(pager.textContent || '');
-    return { title: (document.querySelector('#tab-actions h2') || {}).textContent, rows: rows.length, ordered,
+    return { title: (document.querySelector('#tab-actions .pagehd h1') || document.querySelector('#tab-actions h2') || {}).textContent, rows: rows.length, ordered,
              predicate, stated: m ? Number(m[1].replace(/\D/g, '')) : null,
              fields: document.querySelectorAll('#actionTbl tbody input:not(.asel), #actionTbl tbody select').length,
              owner: !!document.querySelector('#actionTbl tbody .who'), status: !!document.querySelector('#actionTbl tbody .st'),
@@ -132,29 +132,34 @@ const shown = (p, sel) => p.evaluate(s => { const e = document.querySelector(s);
     const rows = document.querySelectorAll('#ddList tbody tr').length;
     const starts = [...document.querySelectorAll('#ddList .ddact a')].map(a => a.textContent.trim());
     const defers = [...document.querySelectorAll('#ddList .ddact button')].map(a => a.textContent.trim());
-    return { title: (document.querySelector('#tab-due h2') || {}).textContent, tabs, st, rows, hash: location.hash,
+    return { title: (document.querySelector('#tab-due .pagehd h1') || document.querySelector('#tab-due h2') || {}).textContent, tabs, st, rows, hash: location.hash,
              scope: document.getElementById('ddScope').value, starts: [...new Set(starts)], defers: [...new Set(defers)],
-             all: dueTabRows().length };
+             all: dueTabRows().length, never: (typeof dueNeverRows === 'function' ? dueNeverRows().length : 0) };
   });
   note('tabs', D.tabs.map(x => x.label + ' ' + x.n).join(' · '));
   ok('the page is called Inspection Schedule', /Inspection Schedule/.test(D.title || ''), D.title);
   /* The page size, from the page: 25 since build 271, and never a number this suite owns. */
   const PAGE_SIZE_DEFAULT_T = await p.evaluate(() => PAGE_SIZE_DEFAULT);
-  ok('four named tabs: Overdue, Due soon, Deferred, All', D.tabs.map(x => x.k).join(',') === 'over,soon,put,all'
-     && D.tabs.map(x => x.label).join('|') === 'Overdue|Due soon|Deferred|All', D.tabs.map(x => x.label).join('|'));
+  /* Six since Phase 4: Never inspected and Completed joined the four, and the
+     five add up to All. Counts are read by KEY, never by position. */
+  const tb = k => D.tabs.find(x => x.k === k) || { n: -1 };
+  ok('six named tabs: Overdue, Due soon, Never inspected, Deferred, Completed, All', D.tabs.map(x => x.k).join(',') === 'over,soon,never,put,done,all'
+     && D.tabs.map(x => x.label).join('|') === 'Overdue|Due soon|Never inspected|Deferred|Completed|All', D.tabs.map(x => x.label).join('|'));
   ok('the Overview door lands on the Overdue tab', D.scope === 'over' && D.tabs[0].on, D.scope);
   ok('  and the address says so', /^#due/.test(D.hash), D.hash);
-  ok('Overdue counts what the schedule calls overdue', D.tabs[0].n === (D.st.over || 0), D.tabs[0].n + ' vs ' + (D.st.over || 0));
-  ok('Due soon counts only due soon', D.tabs[1].n === (D.st.soon || 0), D.tabs[1].n + ' vs ' + (D.st.soon || 0));
-  ok('Deferred counts the put-off rounds', D.tabs[2].n === ((D.st.put || 0) + (D.st.off || 0)), String(D.tabs[2].n));
-  ok('All counts every unit-round with history', D.tabs[3].n === D.all, D.tabs[3].n + ' vs ' + D.all);
+  ok('Overdue counts what the schedule calls overdue', tb('over').n === (D.st.over || 0), tb('over').n + ' vs ' + (D.st.over || 0));
+  ok('Due soon counts only due soon', tb('soon').n === (D.st.soon || 0), tb('soon').n + ' vs ' + (D.st.soon || 0));
+  ok('Deferred counts the put-off rounds', tb('put').n === ((D.st.put || 0) + (D.st.off || 0)), String(tb('put').n));
+  ok('Completed counts the rounds walked within their interval', tb('done').n === (D.st.ok || 0), tb('done').n + ' vs ' + (D.st.ok || 0));
+  ok('Never inspected counts the machines no round of that type has reached', tb('never').n === D.never && D.never > 0, String(tb('never').n));
+  ok('All counts every unit-round with history plus the never-inspected', tb('all').n === D.all + D.never, tb('all').n + ' vs ' + (D.all + D.never));
   ok('the Overdue list draws one page of exactly the overdue rows', D.rows === Math.min(PAGE_SIZE_DEFAULT_T, D.st.over || 0), D.rows + ' of ' + (D.st.over || 0));
   ok('every row offers "Start inspection"', D.starts.length === 1 && D.starts[0] === 'Start inspection', D.starts.join('|'));
   ok('  and "Defer inspection"', D.defers.length === 1 && D.defers[0] === 'Defer inspection', D.defers.join('|'));
 
   await p.click('#ddSeg [data-dd="all"]'); await p.waitForTimeout(300);
   const allTab = await p.evaluate(() => ({ hash: location.hash, scope: document.getElementById('ddScope').value,
-    rows: document.querySelectorAll('#ddList tbody tr').length, n: dueTabRows().length }));
+    rows: document.querySelectorAll('#ddList tbody tr').length, n: dueTabRows().length + dueNeverRows().length }));
   ok('pressing All shows every row (one page of them) and writes dd=all', allTab.scope === 'all' && /dd=all/.test(allTab.hash)
      && allTab.rows === Math.min(PAGE_SIZE_DEFAULT_T, allTab.n), JSON.stringify(allTab));
   await p.evaluate(() => { location.hash = '#due?dd=put'; });

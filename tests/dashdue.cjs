@@ -236,7 +236,10 @@ const rows = p => p.$$eval('#ddList tbody tr', a => a.map(tr => ({
      r.length > 0 && r.every(x => /^TK10/.test(x.unit)), r.map(x => x.unit).join(' '));
   await p.fill('#ddQ', 'TK106'); await p.waitForTimeout(250);
   r = await rows(p);
-  ok('down to one machine', r.length === 1 && r[0].unit === 'TK106', r.map(x => x.unit).join(' '));
+  /* Since Phase 4 the All view also lists the rounds this machine has never
+     had, so "one machine" is every row being TK106 — not one row. */
+  ok('down to one machine', r.length >= 1 && r.every(x => x.unit === 'TK106'), r.map(x => x.unit).join(' '));
+  const onScreen = r.length;
   /* An export that quietly widens back to the whole fleet is how a filtered
      screen becomes an unfiltered spreadsheet with nobody noticing. */
   const csv = await p.evaluate(() => {
@@ -251,7 +254,7 @@ const rows = p => p.$$eval('#ddList tbody tr', a => a.map(tr => ({
   });
   const lines = csv.trim().split('\n');
   ok('the export is the list on screen, not the whole fleet',
-     lines.length === 2 && /TK106/.test(lines[1]), `${lines.length - 1} row(s)`);
+     lines.length === onScreen + 1 && lines.slice(1).every(l => /^TK106,/.test(l)), `${lines.length - 1} row(s) for ${onScreen} on screen`);
   ok('and it carries the reason column even when this row has none',
      /^unit,round,/.test(lines[0].replace(/^\ufeff/, '')) && /reason/.test(lines[0]), lines[0].slice(0, 60));
   await p.fill('#ddQ', ''); await p.waitForTimeout(250);

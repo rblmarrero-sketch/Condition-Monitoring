@@ -38,8 +38,21 @@
      pass covered report-core's own strings and stopped at the section
      boundary, so the Pareto page came out in one language inside a document
      where every other heading carried both. */
-  const RT = () => window.CMR.makeT(typeof lang !== "undefined" ? lang : "en", true);
-  const B = (T, k, v) => T.both(L(k, v), inOther(() => L(k, v)));
+  /* ONE LANGUAGE, OR BOTH — the report's choice, not the screen's. RBI is
+     the bilingual switch every section built here reads; the report language
+     is set by swapping the dashboard's own `lang` for exactly as long as the
+     sections are being built (withReport), so t() answers in the report's
+     language and the screen never notices. */
+  let RBI = true;
+  const RT = () => window.CMR.makeT(typeof lang !== "undefined" ? lang : "en", RBI);
+  const B = (T, k, v) => RBI ? T.both(L(k, v), inOther(() => L(k, v))) : esc(L(k, v));
+  function withReport(opts, fn) {
+    const wantL = opts && opts.lang, wantB = !(opts && opts.bi === false);
+    const hadL = typeof lang !== "undefined", wasL = hadL ? lang : null, wasB = RBI;
+    if (hadL && (wantL === "en" || wantL === "ru")) lang = wantL;
+    RBI = wantB;
+    try { return fn(); } finally { if (hadL) lang = wasL; RBI = wasB; }
+  }
 
   function recsForScope(scope, target) {
     const R = allRecs().filter(r => !r._void);
@@ -572,16 +585,17 @@
       return n ? GRADE.name(n, typeof lang !== "undefined" ? lang : "en") : s; };
     return {
       lang: typeof lang !== "undefined" ? lang : "en",
+      bi: RBI,
       /* A single inspection is a unit report with one round in it — the same
          sheet, no cover and no triage list, which is what "one" means. */
       mode: (scope === "one" || scope === "unit") ? "unit" : undefined,
       title: L("rep_title_doc"),
-      titleAlt: inOther(() => L("rep_title_doc")),
+      titleAlt: RBI ? inOther(() => L("rep_title_doc")) : "",
       sub: scope ? `${L("r_" + scope)} — ${target}` : "",
-      subAlt: scope ? `${inOther(() => L("r_" + scope))} — ${target}` : "",
+      subAlt: (scope && RBI) ? `${inOther(() => L("r_" + scope))} — ${target}` : "",
       stamp: opts.stamp || new Date(),
       sevLabel: sev,
-      sevLabelAlt: s => inOther(() => sev(s)),
+      sevLabelAlt: RBI ? (s => inOther(() => sev(s))) : null,
       /* The millimetre table's last column is "hours left on it", and the
          engine asks the HOST for it rather than working it out - so that the
          phone's sheet and the dashboard's sheet cannot quote different hours
@@ -623,6 +637,63 @@
   }
 
   /* ---------------------------------------------------------------------- */
+  /* The host sections a scope adds to the core's. A Pareto needs a population
+     to rank — one machine, or one round of one machine, is not one. GET is
+     analysed wherever there is a GET round, including on one machine, because
+     the questions it answers are about that machine. Built under the report's
+     language, so call it inside withReport. */
+  function extraFor(scope, recs) {
+    const extra = [];
+    if (scope !== "unit" && scope !== "one") { const s = paretoSection(recs); if (s) extra.push(s); }
+    { const g = getSection(recs); if (g) extra.push(g); }
+    return extra;
+  }
+  /* The document as sections, in the language asked for, with no PDF made:
+     what the estimate lays out, and what a suite reads. */
+  function sectionsFor(scope, target, opts) {
+    opts = opts || {};
+    if (!window.CMR) return [];
+    const recs = recsForScope(scope, target);
+    if (!recs.length) return [];
+    return withReport(opts, () => window.CMR.sections(
+      ctxFor(recs, Object.assign({}, opts, { scope, target, extra: extraFor(scope, recs), art: opts.art || {} }))));
+  }
+  /* WHAT THE PDF WILL COST, BEFORE IT IS MADE. The sections are laid out at
+     the paginator's own width and walked with the paginator's own page
+     arithmetic — a section that will not fit the room left starts a new page,
+     one taller than a page spans — so the page count is the count the PDF
+     will have, give or take a cut. Size and time are calibrated guesses and
+     say so ("about"). Nothing is rasterised. */
+  async function estimate(scope, target, opts) {
+    if (!window.CMR || document.getElementById("rptRoot")) return null;
+    const secs = sectionsFor(scope, target, opts);
+    if (!secs.length) return null;
+    const holder = document.createElement("div"); holder.id = "rptRoot";
+    holder.style.cssText = "position:fixed;left:-99999px;top:0;width:760px;background:#fff;z-index:-1;";
+    const st = document.createElement("style"); st.textContent = window.CMR.CSS;
+    document.head.appendChild(st);
+    holder.innerHTML = secs.map(x => '<div class="secwrap">' + x.html + '</div>').join("");
+    document.body.appendChild(holder);
+    try {
+      await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+      const PW = 595, PH = 842, M = 38, FOOT = 22, cw = PW - 2 * M, roomPt = PH - M - FOOT - M;
+      const k = cw / 760, roomPx = roomPt / k;
+      let pages = 1, y = 0;
+      [...holder.children].forEach((el, i) => {
+        let h = el.getBoundingClientRect().height; if (h <= 0) return;
+        const gap = (secs[i].gap != null ? secs[i].gap : 14) / k;
+        if (secs[i].nb && y > 0) { pages++; y = 0; }
+        else if (y > 0 && h <= roomPx && y + h > roomPx) { pages++; y = 0; }
+        while (h > roomPx - y) { h -= (roomPx - y); pages++; y = 0; }
+        y += h + gap;
+      });
+      const photos = (opts && opts.photos === false) ? 0 : holder.querySelectorAll("figure img").length;
+      const sc = Number(opts && opts.scale) || 1.8, q = (sc / 1.8) * (sc / 1.8);
+      const bytes = Math.round((pages * 60000 + photos * 70000) * q);
+      const seconds = Math.max(2, Math.round(pages * 1.6 * q + photos * 0.4));
+      return { pages, photos, bytes, seconds, sections: secs.length };
+    } finally { st.remove(); holder.remove(); }
+  }
   async function generate(scope, target, opts, onProgress) {
     if (!(window.jspdf && window.jspdf.jsPDF) || !window.html2canvas)
       throw new Error("PDF engine not loaded (jsPDF / html2canvas).");
@@ -631,27 +702,19 @@
     const recs = recsForScope(scope, target);
     if (!recs.length) throw new Error("No inspections match that selection.");
 
-    const extra = [];
-    /* A Pareto needs a population to rank. One machine, or one round of one
-       machine, is not one — the measurement history in the core says more. */
-    if (scope !== "unit" && scope !== "one") { const s = paretoSection(recs); if (s) extra.push(s); }
-    /* GET is analysed wherever there is a GET round to analyse — including on
-       one machine, because the questions it answers (which position is eating
-       the metal, is one side wearing harder) are about that machine and do not
-       need a fleet behind them. */
-    { const g = getSection(recs); if (g) extra.push(g); }
-
     const art = await artFor(recs);
 
     const st = document.createElement("style"); st.textContent = EXTRA_CSS;
     document.head.appendChild(st);
     try {
-      const sections = window.CMR.sections(
-        ctxFor(recs, Object.assign({}, opts, { scope, target, extra, art })));
+      /* Built under the report's language and bilingual setting, synchronously,
+         so the screen's own language is back before anything else can paint. */
+      const sections = withReport(opts, () => window.CMR.sections(
+        ctxFor(recs, Object.assign({}, opts, { scope, target, extra: extraFor(scope, recs), art }))));
       const stamp = new Date().toISOString().slice(0, 10);
       const doc = await window.CMR.paginate({
         sections, jsPDF: window.jspdf.jsPDF, html2canvas: window.html2canvas,
-        scale: Number(opts.scale) || 2, h2c: { useCORS: true },
+        scale: Number(opts.scale) || 2, jpeg: opts.jpeg, h2c: { useCORS: true },
         docId: `CM-${String(target).replace(/[^\w.-]+/g, "_")}-${stamp}`,
         onProgress,
       });
@@ -661,5 +724,5 @@
     } finally { st.remove(); }
   }
 
-  window.CMReport = { generate, recsForScope, normalise, ctxFor, artFor, getSection, getStats };
+  window.CMReport = { generate, recsForScope, normalise, ctxFor, artFor, getSection, getStats, sectionsFor, estimate, withReport };
 })();

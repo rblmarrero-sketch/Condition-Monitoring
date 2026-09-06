@@ -813,6 +813,7 @@
   var GNAME = { en:{1:"Normal",2:"Incipient",3:"Degraded",4:"Severe",5:"Critical"},
                 ru:{1:"Норма",2:"Начальный",3:"Ухудшенное",4:"Серьёзное",5:"Критическое"} };
   var curLang = "en";
+  var curBi = true;   // set with curLang by CMR.sections; read by gradeChip
   function gname(n){ n=gnum(n); if(!n) return ""; return GR ? GR.name(n,curLang) : (GNAME[curLang]||GNAME.en)[n]; }
   var GRADE_LEVELS = [1,2,3,4,5];
   var SEV_HEX   = { NOF:GRADE_HEX[1], INC:GRADE_HEX[2], DEG:GRADE_HEX[3], CRI:GRADE_HEX[5] };
@@ -1084,7 +1085,9 @@
      chip, so a chip that says one thing stays one chip. */
   function gradeChip(g){ var n=gnum(g); if(!n) return "";
     var c=GRADE_HEX[n]||"#8a939b", a=gname(n);
-    var b=GR ? GR.name(n, curLang==="ru"?"en":"ru") : "";
+    /* The second language only on a bilingual sheet — curBi is set with
+       curLang by CMR.sections. */
+    var b=(GR && curBi) ? GR.name(n, curLang==="ru"?"en":"ru") : "";
     return '<span class="g" style="background:'+c+';color:'+ink(c)+'">'+n+' – '+esc(a)
       + (b && b!==a ? '<span class="alt2">'+esc(b)+'</span>' : "") + '</span>'; }
   /* The ISO class chip is shown only where there is no grade to show: a
@@ -2268,8 +2271,13 @@
      a test that reads the banner proves the wording, not the judgement. */
   CMR.__status = docStatus;
   CMR.sections = function (ctx) {
+    /* A single-language document carries no second rendering anywhere — not
+       in the title, the eyebrow or the severity chips, which the host hands
+       over already translated and the core would otherwise print regardless. */
+    if (ctx.bi === false) ctx = Object.assign({}, ctx, { titleAlt: "", subAlt: "", sevLabelAlt: null });
     var T = makeT(ctx.lang, ctx.bi !== false);
     curLang = (ctx.lang==="ru") ? "ru" : "en";
+    curBi = ctx.bi !== false;
     var recs = sane(ctx.records).sort(function(a,b){
       return String(a.date||"").localeCompare(String(b.date||""))
         || String(a.equip).localeCompare(String(b.equip)); });
