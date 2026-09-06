@@ -86,21 +86,25 @@ const SEED = `(() => {
   /* The count sits ON the control that filters to it. It used to be a sentence
      under the controls — "7 missed · 3 due soon" — which answered "how bad is
      it" in one place and "show me" in another, two taps apart. */
+  /* The labels, from the app's own dictionary — they have been "Missed" and
+     "Put off" and are "Overdue" and "Deferred"; the count is what matters. */
+  const L = await p.evaluate(() => ({ over: I18N.en.due_missed, soon: I18N.en.due_soon, put: I18N.en.due_putoff }));
+  const isOver = x => new RegExp('^' + L.over).test(x);
   const pills = await p.$$eval('#dueScopeF button',
     a => a.map(b => b.textContent.replace(/\s+/g, ' ').trim()));
   ok('the count is on the screen, not left to be measured by eye',
-    pills.some(x => /Missed ?\d/.test(x)) && pills.some(x => /Due soon ?\d/.test(x)),
+    pills.some(x => new RegExp('^' + L.over + ' ?\\d').test(x)) && pills.some(x => new RegExp('^' + L.soon + ' ?\\d').test(x)),
     pills.join(' | '));
   ok('and pressing one narrows the list to exactly what it counted',
     await (async () => {
-      const n = Number((pills.find(x => /^Missed/.test(x)) || '').replace(/\D+/g, ''));
+      const n = Number((pills.find(isOver) || '').replace(/\D+/g, ''));
       await p.click('#dueScopeF [data-sc="over"]'); await p.waitForTimeout(250);
       const got = await p.$$eval('#dueList .duerow', a => a.length);
       await p.click('#dueScopeF [data-sc="over"]'); await p.waitForTimeout(250);
       return got === n;
-    })(), pills.find(x => /^Missed/.test(x)));
+    })(), pills.find(isOver));
   const badge = await p.evaluate(() => document.getElementById('dueCount').textContent);
-  const nMissed = Number((pills.find(x => /^Missed/.test(x)) || '').replace(/\D+/g, ''));
+  const nMissed = Number((pills.find(isOver) || '').replace(/\D+/g, ''));
   /* One number, one meaning. The badge counted overdue-and-due-soon while the
      tab beside it counted overdue, so the same card carried two totals for
      itself and nothing said which was which. */
@@ -172,7 +176,7 @@ const SEED = `(() => {
      asking for a reason is that somebody can find out later what was put off
      and why, so the number is on the pill that shows them. */
   ok('but it is still counted, as put off',
-    put.pills.some(x => /Put off ?[1-9]/.test(x)), put.pills.join(' | '));
+    put.pills.some(x => new RegExp('^' + L.put + ' ?[1-9]').test(x)), put.pills.join(' | '));
   const shown = await p.evaluate(async () => { dueScope = 'all';
     renderDue(); await new Promise(r => setTimeout(r, 150));
     const r = [...document.querySelectorAll('.dueitem')].find(x => /TK101/.test(x.textContent));

@@ -57,8 +57,11 @@ const key = e => new KeyboardEvent('keydown', { key: e, bubbles: true, cancelabl
              gone: [en.how_counted, ru.how_counted, en.pg_show_all, en.pg_all],
              letters: /\b[ABCX]→/.test(en.sy_sev_sub + ru.sy_sev_sub) };
   });
-  ok('Unassigned actions · Operating hours/day · Deferral reason · requiring correction · Grade and condition do not match',
-     W.en[0] === 'Unassigned actions' && W.en[1] === 'Operating hours/day' && W.en[2] === 'Deferral reason'
+  /* The schedule words come from the shared dictionary (mobile/terms.js): the
+     column that was "Deferral reason" is whatever the dictionary calls it. */
+  const TERMS = require('../mobile/terms.js');
+  ok('Unassigned actions · Operating hours/day · ' + TERMS.en.defer_reason + ' · requiring correction · Grade and condition do not match',
+     W.en[0] === 'Unassigned actions' && W.en[1] === TERMS.en.hours_per_day && W.en[2] === TERMS.en.defer_reason
      && /requiring correction/.test(W.en[3]) && W.en[4] === 'Grade and condition do not match' && /requiring correction/.test(W.en[5]), W.en.join(' | '));
   ok('  and every one of them is Russian in Russian', W.ru.every(s => /[А-Яа-я]/.test(s)), W.ru.join(' | '));
   ok('"How this is counted" and "Show all" no longer exist as words', W.gone.every(x => x === undefined), JSON.stringify(W.gone));
@@ -189,7 +192,7 @@ const key = e => new KeyboardEvent('keydown', { key: e, bubbles: true, cancelabl
   const Ru = await p.evaluate(() => { showTab('due', true); const heads = [...document.querySelectorAll('#ddList th')].map(x => x.textContent.trim());
     showTab('actions', true); const k = [...document.querySelectorAll('#actKpis .kpi .k')].map(x => x.textContent.trim());
     return { heads, k, defs: [...document.querySelectorAll('details.defs > summary')].map(s => s.textContent.trim()), eq: $('equipQ').placeholder, shown: $('actShown').textContent.trim() }; });
-  ok('Russian headings: Наработка, ч/сут · Причина переноса', Ru.heads.some(h => /Наработка/.test(h)) && Ru.heads.some(h => /Причина переноса/.test(h)), Ru.heads.join(' | '));
+  ok('Russian headings: ' + TERMS.ru.hours_per_day + ' · ' + TERMS.ru.defer_reason, Ru.heads.includes(TERMS.ru.hours_per_day) && Ru.heads.includes(TERMS.ru.defer_reason), Ru.heads.join(' | '));
   ok('  cards: Работы без ответственного', Ru.k.some(x => /без ответственного/i.test(x)), Ru.k.join(' | '));
   ok('  Definitions → Определения, on every page', Ru.defs.length === 7 && Ru.defs.every(s => s === 'Определения'), Ru.defs.join(','));
   ok('  the picker and the pager speak Russian', /Поиск техники/.test(Ru.eq) && /совпадений/.test(Ru.shown), Ru.eq + ' · ' + Ru.shown);

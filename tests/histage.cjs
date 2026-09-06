@@ -112,7 +112,7 @@ function dictKeys() {
      "never done" on its row, and that is a different sentence from "this phone
      has no history at all". */
   ok('due_never still means a machine that has never been done',
-     (D.langs.en || []).includes('due_never') && /due_never:"never done"/.test(SRC));
+     (D.langs.en || []).includes('due_never') && /due_never:"never inspected"/.test(SRC));
 
   console.log('\na failure inside teamPull is recorded where it happens');
   /* teamPull() catches its own errors and returns undefined, so a .catch() on

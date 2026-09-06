@@ -66,23 +66,20 @@ const TABS = ['overview', 'failure', 'wear', 'actions', 'due', 'equipment', 'lub
     if (h > 8000) tall.push(tb + ' ' + h + 'px');
   }
   ok('no tab is more than eight screens tall', tall.length === 0, tall.join(' | ') || 'all under');
+  /* One page scroll. The two longest registers used to sit in viewports of
+     their own with a scrollbar each; they page instead, and no box on a
+     desktop page scrolls inside itself. */
   const bounded = await p.evaluate(() => {
     const out = {};
     ['wear', 'actions'].forEach(tb => { showTab(tb);
       const sec = document.querySelector('section:not(.hidden)');
-      out[tb] = [...sec.querySelectorAll('.scrollbox')].length;
+      out[tb] = [...sec.querySelectorAll('.scrollbox')].filter(b => b.scrollHeight > b.clientHeight + 1).length;
     });
     return out;
   });
-  ok('the two longest registers each sit in a viewport of their own',
-    bounded.wear > 0 && bounded.actions > 0, JSON.stringify(bounded));
+  ok('neither long register scrolls inside its own box on a desktop', bounded.wear === 0 && bounded.actions === 0, JSON.stringify(bounded));
   await p.evaluate(() => showTab('wear'));
   await p.waitForTimeout(400);
-  const sticky = await p.evaluate(() => {
-    const th = document.querySelector('#wearTbl thead th');
-    return th ? getComputedStyle(th).position : 'none';
-  });
-  ok('and its header stays put while the rows move', sticky === 'sticky', sticky);
   const shown = await p.evaluate(() => (document.getElementById('wearShown') || {}).innerText || '');
   ok('and it says what is on screen out of what exists', /\d/.test(shown), shown.trim());
 

@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=272">
+<link rel="manifest" href="manifest.webmanifest?v=273">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=272">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=272">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=272">
+<link rel="apple-touch-icon" href="icon-192.png?v=273">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=273">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=273">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -189,7 +189,7 @@
      to go yet, so it is the last one that should be hard to read. */
   header .st.off{color:var(--ink-2);}
   main{padding:12px 12px 0;max-width:640px;margin:0 auto;}
-  .card{--cpad:13px;background:var(--surface);border:1px solid var(--border);border-radius:14px;
+  .card{--cpad:13px;background:var(--surface);border:1px solid var(--border);border-radius:10px;
     padding:0 var(--cpad) 12px;margin-bottom:10px;box-shadow:var(--shadow);}
   /* A rule under the heading gives each card a head, so the eye finds the start
      of a section instead of reading one long column of labels. */
@@ -250,7 +250,7 @@
      nothing to read the hierarchy from because everything was emphatic. */
   input:not([type="checkbox"]):not([type="radio"]),select,textarea{width:100%;min-width:0;max-width:100%;
     min-height:44px;background:var(--surface-2);color:var(--ink);border:1px solid var(--border);
-    border-radius:11px;padding:10px 12px;font-size:16px;font-family:inherit;-webkit-appearance:none;appearance:none;}
+    border-radius:10px;padding:10px 12px;font-size:16px;font-family:inherit;-webkit-appearance:none;appearance:none;}
   input[inputmode="numeric"],input[inputmode="decimal"],input[type="number"],input[type="date"]{font-variant-numeric:tabular-nums;}
   ::placeholder{color:var(--muted);opacity:1;}
   select{background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
@@ -260,12 +260,12 @@
   .row{display:flex;gap:8px;} .row > *{flex:1 1 0;min-width:0;}
   .withbtn{display:flex;gap:8px;align-items:stretch;}
   .withbtn > input, .withbtn > textarea{flex:1;min-width:0;}
-  .iconbtn{flex:none;min-height:44px;white-space:nowrap;background:var(--surface-3);color:var(--ink);border:1px solid var(--border);border-radius:11px;padding:0 13px;font-size:14.5px;font-weight:650;cursor:pointer;}
+  .iconbtn{flex:none;min-height:44px;white-space:nowrap;background:var(--surface-3);color:var(--ink);border:1px solid var(--border);border-radius:10px;padding:0 13px;font-size:14.5px;font-weight:650;cursor:pointer;}
   .withbtn > textarea + .iconbtn{align-self:flex-start;width:44px;padding:0;font-size:18px;}
   .iconbtn.rec{background:var(--critical);color:#fff;border-color:transparent;animation:pulse 1s infinite;}
   @keyframes pulse{50%{opacity:.55;}}
   .seg{display:flex;gap:6px;flex-wrap:wrap;}
-  .seg button{min-height:44px;flex:1;min-width:56px;padding:10px 8px;border-radius:11px;border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);font-size:15px;font-weight:650;cursor:pointer;transition:background .1s,color .1s;}
+  .seg button{min-height:44px;flex:1;min-width:56px;padding:10px 8px;border-radius:10px;border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);font-size:15px;font-weight:650;cursor:pointer;transition:background .1s,color .1s;}
   /* Severity is the one row of four whose labels are words, and in Russian they
      are long words with no space to break at — "Зарождающийся" is 133 px in an
      81 px button, so three of the four choices were sliced off mid-word on the
@@ -286,7 +286,7 @@
   .seg button:active{background:var(--surface-3);}
   .seg button.on:active{opacity:.85;background:var(--accent);}
   .posnav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;}
-  .posnav button{flex:1 1 auto;min-width:56px;min-height:44px;padding:11px 10px;border-radius:12px;border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);font-weight:700;font-size:14px;cursor:pointer;position:relative;}
+  .posnav button{flex:1 1 auto;min-width:56px;min-height:44px;padding:11px 10px;border-radius:10px;border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);font-weight:700;font-size:14px;cursor:pointer;position:relative;}
   .posnav button.on{background:var(--ink);color:var(--page);border-color:transparent;}
   /* component cascade (L7 cards -> L8 -> L9) */
   .casc{margin-bottom:10px;}
@@ -294,7 +294,7 @@
   .crumb button{background:none;border:none;color:var(--accent);font-weight:650;font-size:12.5px;cursor:pointer;padding:2px 0;}
   .crumb .sep{color:var(--muted);}
   .cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-  .cards button{display:flex;flex-direction:column;gap:3px;align-items:flex-start;text-align:left;background:var(--surface-2);border:1px solid var(--border);border-radius:11px;padding:13px 12px;cursor:pointer;position:relative;}
+  .cards button{display:flex;flex-direction:column;gap:3px;align-items:flex-start;text-align:left;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:13px 12px;cursor:pointer;position:relative;}
   .cards button:active{background:var(--surface-3);}
   .cards button.on{background:var(--accent-soft);}
   .cards button .cc{font-size:10.5px;color:var(--muted);font-weight:700;letter-spacing:.05em;}
@@ -319,7 +319,7 @@
      is a sentence, and five sentences do not fit five buttons across a phone. */
   .gcards{display:flex;flex-direction:column;gap:6px;}
   .gcard{display:flex;align-items:center;gap:10px;width:100%;min-height:52px;padding:8px 10px 8px 12px;
-    border-radius:11px;border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);
+    border-radius:10px;border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);
     text-align:left;cursor:pointer;position:relative;overflow:hidden;font-family:inherit;
     transition:background .1s,color .1s;}
   .gcard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--gc);}
@@ -348,7 +348,7 @@
      taken one shows its thumbnail, an untaken required one is unmistakably
      open. Sits above the point list because it is about the machine, not a
      point, and because the Save gate sends the inspector here. */
-  .mphotos{margin-bottom:12px;border:1px solid var(--border);border-radius:12px;background:var(--surface);overflow:hidden;}
+  .mphotos{margin-bottom:12px;border:1px solid var(--border);border-radius:10px;background:var(--surface);overflow:hidden;}
   .mphotos>summary{list-style:none;display:flex;align-items:center;gap:8px;padding:10px 12px;cursor:pointer;
     font-size:14px;font-weight:700;color:var(--ink);}
   .mphotos>summary::-webkit-details-marker{display:none;}
@@ -371,7 +371,7 @@
   /* A photograph's category, on its tile. */
   .mtile .mcat{position:absolute;left:4px;bottom:4px;max-width:calc(100% - 8px);padding:2px 6px;border-radius:6px;
     background:rgba(0,0,0,.62);color:#fff;font-size:10.5px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;border:none;font-family:inherit;}
-  .btn{display:block;width:100%;min-height:44px;padding:10px 14px;border-radius:12px;border:none;font-size:15.5px;font-weight:700;cursor:pointer;
+  .btn{display:block;width:100%;min-height:44px;padding:10px 14px;border-radius:10px;border:none;font-size:15.5px;font-weight:700;cursor:pointer;
     font-family:inherit;transition:opacity .1s;}
   .btn:active{opacity:.86;}
   /* A button that cannot be pressed has to look like one. There was no rule
@@ -389,12 +389,12 @@
      own line ever does. The targets keep their size; the text gets the width. */
   .pitem{display:grid;grid-template-columns:auto minmax(0,1fr);
     grid-template-areas:"thumb meta" "thumb acts";gap:2px 12px;align-items:center;
-    background:var(--surface-2);border:1px solid var(--border);border-radius:12px;
+    background:var(--surface-2);border:1px solid var(--border);border-radius:10px;
     padding:10px 12px;cursor:pointer;}
   .pitem .thumb{grid-area:thumb;align-self:start;}
   .pitem .meta{grid-area:meta;}
   .pitem .acts{grid-area:acts;display:flex;justify-content:flex-end;align-items:center;}
-  .pitem .thumb{width:52px;height:52px;border-radius:9px;object-fit:cover;background:var(--surface-3);flex:none;}
+  .pitem .thumb{width:52px;height:52px;border-radius:8px;object-fit:cover;background:var(--surface-3);flex:none;}
   .pitem .meta{min-width:0;} .pitem .meta .a{font-weight:700;} .pitem .meta .b{font-size:12.5px;color:var(--muted);}
   .tag{display:inline-block;font-size:10.5px;font-weight:700;padding:1px 6px;border-radius:6px;background:var(--accent);color:#fff;margin-right:6px;vertical-align:middle;}
   /* A queue of nine rounds across four types is where the colour earns its
@@ -509,7 +509,9 @@
      collapsing bars, a web view that is not full height) the bottom chrome
      stops being at the bottom of the screen and floats up into the page, with
      content visible below it. Set from the visualViewport API; see setVVB(). */
-  :root{--vvb:0px;}
+  /* THE SPACING AND RADIUS SCALE, shared with the dashboard: 4 · 8 · 12 · 16 · 24,
+     corners 8 or 10 px, pills round. A control is 44 px or taller. */
+  :root{--vvb:0px; --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --r-sm:8px; --r:10px; --tap:44px;}
 
   /* ── one job per screen ──────────────────────────────────────────────────
      The app used to be one long scroll: capture, then the queue, then what the
@@ -598,7 +600,7 @@
     header{padding:calc(env(safe-area-inset-top) + 2px) 12px 2px;gap:8px;}
     header .t{font-size:14px;}
     main{padding:10px 12px;}
-    .card{--cpad:12px;padding:0 var(--cpad) 10px;margin-bottom:9px;border-radius:12px;}
+    .card{--cpad:12px;padding:0 var(--cpad) 10px;margin-bottom:9px;border-radius:10px;}
     .card h2{margin-bottom:8px;padding:9px var(--cpad) 7px;}
     label.fld{margin-bottom:8px;}
     .tabbar button{min-height:44px;font-size:10px;}
@@ -625,19 +627,19 @@
   .ver{text-align:center;color:var(--muted);font-size:11px;margin:2px 0 8px;}
   #updDiag{margin-top:-4px;} #updDiag.bad{color:var(--warn-ink);}
   .syncbar{display:flex;align-items:center;flex-wrap:wrap;gap:8px 10px;font-size:12.5px;color:var(--ink-2);background:var(--surface);
-    border:1px solid var(--border);border-radius:12px;padding:10px 14px;margin-bottom:12px;}
+    border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:12px;}
   .syncbar .dot{width:9px;height:9px;border-radius:50%;background:var(--muted);flex:none;}
   .syncbar.on .dot{background:var(--good);} .syncbar.pend .dot{background:var(--warning);}
   .syncbar.err .dot{background:var(--critical);} .syncbar .sp{flex:1 1 120px;min-width:0;}
-  .syncbar button{border:1px solid var(--border);background:var(--surface-2);color:var(--accent);border-radius:9px;
+  .syncbar button{border:1px solid var(--border);background:var(--surface-2);color:var(--accent);border-radius:8px;
     min-width:44px;min-height:44px;padding:0 14px;font-size:13px;font-weight:650;cursor:pointer;flex:none;}
   .syncbar button#syncSet{padding:0;font-size:16px;}
-  .editbar{display:flex;align-items:center;flex-wrap:wrap;gap:8px 10px;background:color-mix(in srgb,var(--accent) 16%,var(--surface));border:1px solid color-mix(in srgb,var(--accent) 45%,var(--border));border-radius:12px;padding:10px 14px;margin-bottom:10px;font-size:13.5px;}
+  .editbar{display:flex;align-items:center;flex-wrap:wrap;gap:8px 10px;background:color-mix(in srgb,var(--accent) 16%,var(--surface));border:1px solid color-mix(in srgb,var(--accent) 45%,var(--border));border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:13.5px;}
   .editbar span{flex:1 1 120px;min-width:0;color:var(--ink);}
   .linkbtn{background:none;border:none;color:var(--accent);font-weight:700;font-size:15px;
     cursor:pointer;min-width:44px;min-height:44px;padding:0 8px;}
   .hidden{display:none!important;}
-  .dest{border:1px solid var(--border);border-radius:12px;padding:12px 12px 2px;margin-bottom:14px;background:var(--surface-2);}
+  .dest{border:1px solid var(--border);border-radius:10px;padding:12px 12px 2px;margin-bottom:14px;background:var(--surface-2);}
   .dest.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--surface-2));}
   .dest.needurl{border-color:var(--warn-ink);}
   .dest .need{color:var(--warn-ink);font-size:12.5px;margin:-6px 0 12px;}
@@ -677,7 +679,7 @@
      reading order (reference first, number last) is right on paper and wrong on
      a phone, and one of them has to give without the markup forking. */
   #ucFields.dock{display:flex;flex-direction:column;background:var(--surface);
-    border:1px solid var(--border);border-radius:14px;padding:12px;margin:2px 0 12px;}
+    border:1px solid var(--border);border-radius:10px;padding:12px;margin:2px 0 12px;}
   #ucFields.dock .sh-head{display:block;padding:0 0 4px;margin:0;order:1;}
   #ucFields.dock .uclast{order:2;}
   #ucFields.dock .ucref{order:3;margin:0 0 6px;}
@@ -690,7 +692,7 @@
   #ucFields.dock #mediastrip{order:7;margin:2px 0 6px;}
   #ucFields.dock #mediaRow{order:8;margin:0;}
   #ucFields.dock .sh-nav{order:9;display:flex;gap:8px;margin-top:8px;}
-  #ucFields.dock .sh-nav button{flex:1;min-width:0;min-height:44px;border-radius:11px;
+  #ucFields.dock .sh-nav button{flex:1;min-width:0;min-height:44px;border-radius:10px;
     background:var(--surface-2);border:1px solid var(--border);color:var(--ink);
     font-weight:650;font-size:14px;line-height:1;font-family:inherit;cursor:pointer;}
   #ucFields.dock .sh-nav button.pri{background:var(--accent);border-color:var(--accent);
@@ -733,7 +735,7 @@
   .sh-t span{display:block;font-size:12px;color:var(--muted);margin-top:2px;
     font-variant-numeric:tabular-nums;}
   /* 44 px is the floor for a gloved thumb; close was two short of it. */
-  .sh-row button{flex:0 0 auto;width:44px;height:44px;border-radius:13px;border:1px solid var(--line);
+  .sh-row button{flex:0 0 auto;width:44px;height:44px;border-radius:10px;border:1px solid var(--line);
     background:var(--surface-2);color:var(--ink-2);font-size:17px;cursor:pointer;}
   .sh-nav{display:none;}
   .sh-nav button:disabled{opacity:.4;}
@@ -743,7 +745,7 @@
   .ucfigtog{width:100%;font-weight:600;font-size:12.5px;line-height:1;font-family:inherit;color:var(--muted);
     background:none;border:0;border-bottom:1px dashed var(--line);padding:9px 0 10px;
     margin:0 0 10px;cursor:pointer;text-align:left;}
-  .ucfig{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;
+  .ucfig{background:var(--surface-2);border:1px solid var(--line);border-radius:10px;
     padding:9px;margin-bottom:11px;text-align:center;}
   .ucfig svg{width:100%;max-width:340px;height:auto;display:block;margin:0 auto;}
   /* Context for the number, not the headline above it. At 12.5 px semibold in
@@ -814,7 +816,7 @@
   .prog.full b{color:var(--good);}
   /* Setting a baseline changes how every later reading on this unit is judged.
      That deserves a sentence saying so before the button, not a bare switch. */
-  .ucbase{background:var(--surface-2);border:1px solid var(--line);border-radius:11px;
+  .ucbase{background:var(--surface-2);border:1px solid var(--line);border-radius:10px;
     padding:11px 12px;margin:0 0 8px;font-size:12.5px;line-height:1.5;color:var(--ink-2);}
   .ucbase .bw{margin:0 0 9px;}
   .ucbase .bw b{color:var(--ink);font-variant-numeric:tabular-nums;}
@@ -862,7 +864,7 @@
   /* The channel is drawn as a channel — recessed, with the two limit zones
      painted into it — so it reads as a scale and not as a progress bar. The
      two are different claims and they are eight millimetres apart on screen. */
-  .wg-t{position:relative;height:14px;border-radius:7px;overflow:hidden;
+  .wg-t{position:relative;height:14px;border-radius:8px;overflow:hidden;
     background:linear-gradient(90deg,
       color-mix(in srgb,var(--good) 26%,var(--surface-2)) 0 80%,
       color-mix(in srgb,var(--warning) 40%,var(--surface-2)) 80% 100%);
@@ -873,7 +875,7 @@
      along the part is, light enough that the zone under it still says which
      zone it is. */
   .wg-t u{position:absolute;inset:0 0 0 0;width:var(--w,0%);max-width:100%;
-    background:rgba(0,0,0,.13);border-radius:7px 0 0 7px;text-decoration:none;
+    background:rgba(0,0,0,.13);border-radius:8px 0 0 8px;text-decoration:none;
     transition:width .28s cubic-bezier(.2,.7,.3,1);}
   /* Past condemn the pin would sit off the end of the track and say nothing.
      It pins to the edge and the whole channel goes red instead. */
@@ -891,7 +893,7 @@
   .wg .band{grid-column:2;justify-self:start;}
   @media (prefers-reduced-motion:reduce){
     .wg-t u,.wg-t i{transition:none;} }
-  .ucwarn{background:color-mix(in srgb,var(--critical) 12%,var(--surface));border:1px solid var(--critical);border-radius:12px;
+  .ucwarn{background:color-mix(in srgb,var(--critical) 12%,var(--surface));border:1px solid var(--critical);border-radius:10px;
     padding:12px 13px;margin:0 0 12px;}
   .ucwarn .uw-t{font-size:13.5px;line-height:1.5;color:var(--critical);font-weight:600;}
   .ucwarn .uw-ok{display:flex;gap:9px;align-items:flex-start;margin-top:10px;font-size:13px;
@@ -918,20 +920,20 @@
     border:1px solid var(--line);border-radius:999px;padding:9px 13px;cursor:pointer;}
   .chips button.on{background:color-mix(in srgb,var(--warning) 16%,var(--surface));border-color:var(--warn-ink);color:var(--warn-ink);}
   .stale{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between;
-    background:var(--accent-soft);border:1px solid var(--accent);border-radius:12px;
+    background:var(--accent-soft);border:1px solid var(--accent);border-radius:10px;
     padding:12px 14px;margin:0 0 12px;font-size:13.5px;color:var(--ink);line-height:1.45;}
   .stale button{font-weight:700;font-size:13px;line-height:1;font-family:inherit;color:var(--accent-ink);background:var(--accent);
-    border:0;display:inline-flex;align-items:center;border-radius:9px;min-height:44px;padding:0 16px;cursor:pointer;white-space:nowrap;}
+    border:0;display:inline-flex;align-items:center;border-radius:8px;min-height:44px;padding:0 16px;cursor:pointer;white-space:nowrap;}
   .verlink{color:var(--accent);font-weight:700;text-decoration:none;
     display:inline-flex;align-items:center;min-height:44px;padding:0 10px;margin:-10px 0;}
   .guess{background:color-mix(in srgb,var(--warning) 14%,var(--surface));
-    border:1px solid var(--warning);border-radius:11px;padding:11px 13px;margin:0 0 10px;
+    border:1px solid var(--warning);border-radius:10px;padding:11px 13px;margin:0 0 10px;
     font-size:12.5px;line-height:1.5;color:var(--ink);}
   /* Eight rollers and a 44 px tap target do not both fit inside the card's
      padding, so the map takes the full width of the pane. It is a drawing of a
      machine, not a paragraph — it can sit edge to edge. */
   .ucmapwrap{background:var(--surface-2);border:1px solid var(--line);
-    border-radius:12px;padding:3px 2px;position:relative;overflow:hidden;
+    border-radius:10px;padding:3px 2px;position:relative;overflow:hidden;
     /* posnav is a flex row, so the map has to claim the width rather than
        stretch into it */
     flex:0 0 auto;}
@@ -1033,7 +1035,7 @@
      This is what the old 300x640 portrait drawing could not do at any sheet
      height, and why tapping a station used to bury the map. */
   .bodymap{width:100%;height:100%;display:block;}
-  .tbwrap{background:var(--surface);border:1px solid var(--line);border-radius:13px;
+  .tbwrap{background:var(--surface);border:1px solid var(--line);border-radius:10px;
     padding:5px 4px;flex:0 0 auto;aspect-ratio:640/330;display:flex;align-items:center;
     justify-content:center;width:100%;margin-bottom:9px;}
   body.tbreading .tbwrap{flex:1 1 auto;aspect-ratio:auto;min-height:150px;}
@@ -1113,7 +1115,7 @@
   .tbnote.open button span{white-space:normal;overflow:visible;}
   .ucmembers{flex:0 0 100%;display:flex;flex-wrap:wrap;gap:7px;margin:9px 0 0;}
   .ucmembers button{min-width:56px;min-height:44px;padding:6px 14px;border:1px solid var(--line);
-    background:var(--surface);color:var(--ink);border-radius:12px;font-weight:700;font-size:13px;line-height:1;font-family:inherit;cursor:pointer;}
+    background:var(--surface);color:var(--ink);border-radius:10px;font-weight:700;font-size:13px;line-height:1;font-family:inherit;cursor:pointer;}
   .ucmembers button.on{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);}
   .ucmembers button.done{border-color:var(--good);}
   .ucmembers button.watch{border-color:var(--warn-ink);}
@@ -1201,7 +1203,7 @@
      below. Repeating the drawing would only make the pane longer and push the
      first roller off the screen. */
   .mfig{margin:0 0 10px;background:var(--surface-2);border:1px solid var(--line);
-    border-radius:12px;padding:6px 8px 4px;position:relative;}
+    border-radius:10px;padding:6px 8px 4px;position:relative;}
   .mfig svg{display:block;width:100%;height:auto;max-height:132px;}
   .mfig img{display:block;width:100%;height:auto;max-height:132px;object-fit:contain;}
   .mfig figcaption{position:absolute;left:12px;top:8px;font-size:11px;font-weight:700;
@@ -1264,15 +1266,15 @@
   .uctally .watch{color:var(--warn-ink);}  .uctally .watch i{background:var(--warning);border-color:var(--warn-ink);}
   .uctally .act{color:var(--critical);}   .uctally .act i{background:var(--critical);border-color:var(--critical);}
   .uctally .na i{background:var(--surface-3);border-color:var(--muted);border-style:dashed;}
-  .ucblock{background:var(--surface-2);border:1px dashed var(--line);border-radius:12px;
+  .ucblock{background:var(--surface-2);border:1px dashed var(--line);border-radius:10px;
     padding:18px 16px;text-align:center;color:var(--muted);font-size:13.5px;line-height:1.55;}
   .tempbar .pill{border-radius:999px;padding:2px 10px;font-weight:700;color:#fff;font-size:12px;}
   /* supervisor sign-off */
-  .signpad{width:100%;height:132px;background:#fff;border:1px solid var(--border);border-radius:12px;display:block;touch-action:none;}
+  .signpad{width:100%;height:132px;background:#fff;border:1px solid var(--border);border-radius:10px;display:block;touch-action:none;}
   /* inspection due list */
   .duelist{display:flex;flex-direction:column;gap:8px;}
   .dueitem{display:flex;align-items:center;gap:10px;background:var(--surface-2);border:1px solid var(--border);
-    border-left:4px solid var(--muted);border-radius:12px;padding:9px 12px;cursor:pointer;text-align:left;width:100%;color:var(--ink);font:inherit;}
+    border-left:4px solid var(--muted);border-radius:10px;padding:9px 12px;cursor:pointer;text-align:left;width:100%;color:var(--ink);font:inherit;}
   .dueitem.ok{border-left-color:var(--good);} .dueitem.soon{border-left-color:var(--warn-ink);}
   .dueitem.over{border-left-color:var(--critical);}
   /* The machine number is what the row is FOR. It had the flexible half and
@@ -1305,7 +1307,7 @@
      "forget it". */
   .duerow{display:flex;align-items:stretch;gap:6px;}
   .duerow .dueitem{flex:1 1 auto;min-width:0;}
-  .dueforget{flex:0 0 auto;width:44px;border:1px solid var(--border);border-radius:12px;
+  .dueforget{flex:0 0 auto;width:44px;border:1px solid var(--border);border-radius:10px;
     background:var(--surface-2);color:var(--muted);font-size:18px;line-height:1;cursor:pointer;}
   .dueforget:hover{color:var(--ink);border-color:var(--ink-2);}
   /* Put off, or not being done. Neither is an error and neither is fine, so
@@ -1313,7 +1315,7 @@
      is the part worth reading. */
   .dueitem.put{border-left-color:var(--ink-2);} .dueitem.off{border-left-color:var(--muted);}
   .findbox{width:100%;box-sizing:border-box;margin:0 0 8px;padding:9px 11px;
-    border:1px solid var(--border);border-radius:9px;background:var(--surface-2);
+    border:1px solid var(--border);border-radius:8px;background:var(--surface-2);
     color:var(--ink);font-size:16px;font-family:inherit;}
   .findbox:focus{outline:none;border-color:var(--accent);}
   /* Never done is not overdue and not due soon — it is a machine with no
@@ -1323,14 +1325,14 @@
   #dueList .dueput{flex:1 1 100%;font-size:11.5px;color:var(--ink-2);text-align:left;margin-top:4px;
     white-space:normal;line-height:1.35;}
   .chipbtn{padding:8px 12px;font-size:13px;min-width:0;}
-  dialog{border:none;border-radius:16px;background:var(--surface);color:var(--ink);max-width:92vw;width:420px;padding:0;}
+  dialog{border:none;border-radius:10px;background:var(--surface);color:var(--ink);max-width:92vw;width:420px;padding:0;}
   dialog::backdrop{background:rgba(0,0,0,.6);}
   .dlg-in{padding:20px;} .dlg-in h3{margin:0 0 8px;} .dlg-in p{color:var(--ink-2);font-size:14px;}
   /* Stacked, not side by side: the two ways of getting a photograph are equals,
      and a row of three would put the labels back to two words each. */
   /* The speed check reads as a short report, not a form: a column of
      name/number rows, then one sentence that says what to do about them. */
-  .speed{margin-top:12px;padding:12px 14px;border-radius:12px;background:var(--surface-2);
+  .speed{margin-top:12px;padding:12px 14px;border-radius:10px;background:var(--surface-2);
     border:1px solid var(--line);font-size:13px;}
   .sp-r{display:flex;justify-content:space-between;gap:12px;padding:5px 0;
     border-bottom:1px solid var(--line);}
@@ -1346,7 +1348,7 @@
   .btn.quiet{background:none;color:var(--muted);border:none;font-weight:600;font-size:15px;padding:10px;}
   .scan-ov{position:fixed;inset:0;background:#000;z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;}
   .scan-ov video{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
-  .scan-frame{position:relative;width:66vw;max-width:280px;aspect-ratio:1;border:3px solid #fff;border-radius:18px;box-shadow:0 0 0 100vmax rgba(0,0,0,.5);}
+  .scan-frame{position:relative;width:66vw;max-width:280px;aspect-ratio:1;border:3px solid #fff;border-radius:10px;box-shadow:0 0 0 100vmax rgba(0,0,0,.5);}
   .scan-hint{position:absolute;bottom:120px;color:#fff;font-size:15px;background:rgba(0,0,0,.5);padding:8px 14px;border-radius:10px;text-align:center;}
   .scan-ov .btn{position:absolute;bottom:40px;width:200px;}
   /* media strip (multi-photo + video) */
@@ -1361,7 +1363,7 @@
   #videoBtn{flex:0 0 auto;width:auto;padding:0 14px;}
   /* Reads as a field, behaves as a button — the chevron is what says it opens. */
   .picker-btn{width:100%;min-height:44px;text-align:left;background:var(--surface-2);color:var(--ink);border:1px solid var(--border);
-    border-radius:11px;padding:10px 34px 10px 12px;font-size:16px;font-family:inherit;cursor:pointer;position:relative;
+    border-radius:10px;padding:10px 34px 10px 12px;font-size:16px;font-family:inherit;cursor:pointer;position:relative;
     background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
     background-position:calc(100% - 17px) calc(50% + 1px),calc(100% - 12px) calc(50% + 1px);
     background-size:5px 5px,5px 5px;background-repeat:no-repeat;}
@@ -1371,7 +1373,7 @@
   .pick-ov{position:fixed;inset:0;background:var(--page);z-index:210;display:flex;flex-direction:column;}
   .pickhead{display:flex;gap:8px;align-items:center;padding:calc(env(safe-area-inset-top) + 12px) 14px 12px;background:var(--surface);border-bottom:1px solid var(--border);}
   .pickhead input{flex:1;min-width:0;}
-  .pickback{flex:none;width:44px;height:44px;border-radius:12px;border:1px solid var(--border);background:var(--surface-2);color:var(--accent);font-size:26px;line-height:1;cursor:pointer;}
+  .pickback{flex:none;width:44px;height:44px;border-radius:10px;border:1px solid var(--border);background:var(--surface-2);color:var(--accent);font-size:26px;line-height:1;cursor:pointer;}
   /* A .btn is a full-width block — that is what a form wants and what a header
      cannot have. Dropped into a flex row it claimed the whole width and left
      the title a few pixels to wrap in. Sized to its own text here, and never
@@ -1395,7 +1397,7 @@
   .rdrow .na{font-weight:500;font-size:12px;color:var(--muted);}
   /* Somebody else's round, and it says so before anything else on the page. */
   .rdown{background:var(--accent-soft);color:var(--ink);border:1px solid var(--border);
-    border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.45;margin:4px 0 6px;}
+    border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.45;margin:4px 0 6px;}
   /* Two states, two weights, on purpose.
 
      Ready is a slim line — present enough to glance at and trust, quiet enough
@@ -1412,7 +1414,7 @@
     border:1px solid color-mix(in srgb,var(--warning) 48%,var(--border));}
   .ready.bad b{display:block;font-size:14px;margin-bottom:3px;color:var(--ink);}
   .ready.bad .sub{color:var(--muted);}
-  .ready.bad button{margin-top:10px;width:100%;min-height:46px;border:0;border-radius:9px;
+  .ready.bad button{margin-top:10px;width:100%;min-height:46px;border:0;border-radius:8px;
     font:650 15px system-ui,-apple-system,sans-serif;background:var(--accent);color:#1a1a19;}
   .ready.bad button[disabled]{opacity:.6;}
   .ready.busy{display:flex;align-items:center;gap:7px;padding:6px 11px;color:var(--muted);}
@@ -2070,33 +2072,34 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=272"></script>
-<script src="upload-defaults.js?v=272"></script>
-<script src="hme.js?v=272"></script>
-<script src="mp-fc.js?v=272"></script>
-<script src="hme-cascade.js?v=272"></script>
-<script src="assets.js?v=272"></script>
-<script src="temp-limits.js?v=272"></script>
-<script src="normalize.js?v=272"></script>
-<script src="grade.js?v=272"></script>
-<script src="edits.js?v=272"></script>
-<script src="due.js?v=272"></script>
-<script src="wear.js?v=272"></script>
-<script src="wear-figs.js?v=272"></script>
-<script src="wear-map.js?v=272"></script>
-<script src="machine-photos.js?v=272"></script>
-<script src="machine-fig.js?v=272"></script>
-<script src="get.js?v=272"></script>
-<script src="points.js?v=272"></script>
-<script src="uc-points.js?v=272"></script>
-<script src="inspect-guide.js?v=272"></script>
-<script src="get-figs.js?v=272"></script>
-<script src="body-points.js?v=272"></script>
-<script src="body-map.js?v=272"></script>
-<script src="lube.js?v=272"></script>
-<script src="lube-overrides.js?v=272"></script>
-<script src="lube2027.js?v=272"></script>
-<script src="report-core.js?v=272"></script>
+<script src="native.js?v=273"></script>
+<script src="upload-defaults.js?v=273"></script>
+<script src="hme.js?v=273"></script>
+<script src="mp-fc.js?v=273"></script>
+<script src="hme-cascade.js?v=273"></script>
+<script src="assets.js?v=273"></script>
+<script src="temp-limits.js?v=273"></script>
+<script src="normalize.js?v=273"></script>
+<script src="terms.js?v=273"></script>
+<script src="grade.js?v=273"></script>
+<script src="edits.js?v=273"></script>
+<script src="due.js?v=273"></script>
+<script src="wear.js?v=273"></script>
+<script src="wear-figs.js?v=273"></script>
+<script src="wear-map.js?v=273"></script>
+<script src="machine-photos.js?v=273"></script>
+<script src="machine-fig.js?v=273"></script>
+<script src="get.js?v=273"></script>
+<script src="points.js?v=273"></script>
+<script src="uc-points.js?v=273"></script>
+<script src="inspect-guide.js?v=273"></script>
+<script src="get-figs.js?v=273"></script>
+<script src="body-points.js?v=273"></script>
+<script src="body-map.js?v=273"></script>
+<script src="lube.js?v=273"></script>
+<script src="lube-overrides.js?v=273"></script>
+<script src="lube2027.js?v=273"></script>
+<script src="report-core.js?v=273"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2533,8 +2536,8 @@ const I18N = {
     due_basis_cal:"Every {n} days · this round is not scheduled on hours",
     due_basis_own:"{n} on the machine's own rate",
     due_why_wear:"wear, not the interval",
-    lbl_due_round:"Round", due_all_rounds:"All rounds", due_missed:"Missed",
-    due_n_over:"{n} missed", due_n_soon:"{n} due soon", due_n_put:"{n} put off",
+    lbl_due_round:"Round", due_all_rounds:"All rounds", due_missed:TERMS.en.overdue,
+    due_n_over:"{n} overdue", due_n_soon:"{n} due soon", due_n_put:"{n} deferred",
     due_every:"every {h} h", due_at_rate:"{r} h/day assumed",
     /* An installed app and the browser are separate stores on iOS — same URL,
        same build, different history. So the list has to say when it last heard
@@ -2544,15 +2547,15 @@ const I18N = {
     hist_never:"⚠ this phone has never loaded the fleet's history",
     hist_short:"⚠ this phone ran out of room — its history is incomplete",
     due_cover:"covering {n} of {m} machines",
-    due_never_p:"Never done",
+    due_never_p:TERMS.en.never_inspected,
     due_more:"+{n} more — narrow by round to see them",
-    due_stray:"⚠ {n} dates here are not in the system — loaded from a file, or left from an older sync — so nothing is scheduled on them and those machines count as never done",
-    due_stray1:"⚠ 1 date here is not in the system — loaded from a file, or left from an older sync — so nothing is scheduled on it and that machine counts as never done",
+    due_stray:"⚠ {n} dates here are not in the system — loaded from a file, or left from an older sync — so nothing is scheduled on them and those machines count as never inspected",
+    due_stray1:"⚠ 1 date here is not in the system — loaded from a file, or left from an older sync — so nothing is scheduled on it and that machine counts as never inspected",
     due_bad:"⚠ the system cannot read {n} of its own files — those inspections reach nobody; report it",
     due_unk:"⚠ {n} round(s) cannot be scheduled — an unknown round type, or a date this app cannot read",
     due_find:"Find a machine — CR006, DZ003…",
     due_found:"{n} row(s) for “{q}” — every round, whatever its state",
-    due_none_found:"Nothing scheduled for “{q}”. It is in the register — no round has ever been walked on this kind of machine, so none is proposed.",
+    due_none_found:"Nothing scheduled for “{q}”. It is in the register — no inspection has ever been completed on this kind of machine, so none is proposed.",
     due_reg_row:"in the register · no round proposed · tap to start one",
     btn_due_only:"Keep only what the system has",
     due_only_go:"Dropped {n}. Now {m} machines, all from the system.",
@@ -2566,15 +2569,15 @@ const I18N = {
     due_stale:"Nothing due from what this phone knows — but its fleet history was last updated {t}. Refresh before relying on it.",
     due_not:"Not doing this one",
     due_not_t:"{u} — not doing this round?",
-    due_not_m:"{ty}. Put it off to a date, or say it is not being done at all. Either way the reason is kept, so the office can see what was missed and why.",
-    due_put_n:"+{n} d", due_put_to:"put off to {d}", due_off:"Not being done",
+    due_not_m:"{ty}. Defer it to a date, or say it is not being done at all. Either way the reason is kept, so the office can see what was not completed and why.",
+    due_put_n:"+{n} d", due_put_to:"deferred to {d}", due_off:"Not being done",
     due_why:"Reason", due_why_ph:"in the workshop · off site · no access",
     due_why_need:"Say why — this is the part somebody will read later.",
     due_overdue:"Overdue & due soon", due_all:"All",
     /* On a pill, not in a dropdown: the count beside it says how many, so the
        label only has to say which. "Missed only" and "All units with history"
        were written to be read one at a time with the others hidden. */
-    due_soon:"Due soon", due_putoff:"Put off",
+    due_soon:TERMS.en.due_soon, due_putoff:TERMS.en.deferred,
     btn_due_full:"Get the full fleet history",
     due_full_go:"Reading the whole folder\u2026",
     due_full_ok:"{n} machine(s) added \u2014 now covering {m}.",
@@ -2583,7 +2586,7 @@ const I18N = {
     due_full_off:"No signal. Try again where there is one.",
     due_full_fail:"Could not read the folder.",
     btn_due_import:"Load history file", due_days:"{n} d ago", due_over:"overdue {n} d", due_in:"in {n} d",
-    due_never:"never done", due_empty:"Nothing is due right now.",
+    due_never:"never inspected", due_empty:"Nothing is due right now.",
     due_hint:"Built from what this phone has recorded plus everything in the system above. Load an entries.json exported from the dashboard to seed the whole fleet's last-done dates.",
     m_due_loaded:["History loaded ✔","{n} unit/type dates added to the due list."],
     sec_team:"In the system", btn_team_refresh:"Check for new",
@@ -3073,18 +3076,18 @@ const I18N = {
     due_basis_cal:"Каждые {n} суток · этот осмотр не планируется по часам",
     due_basis_own:"{n} — по фактической наработке",
     due_why_wear:"по износу, не по интервалу",
-    lbl_due_round:"Осмотр", due_all_rounds:"Все виды", due_missed:"Пропущено",
-    due_n_over:"пропущено: {n}", due_n_soon:"скоро: {n}", due_n_put:"отложено: {n}",
+    lbl_due_round:"Осмотр", due_all_rounds:"Все виды", due_missed:TERMS.ru.overdue,
+    due_n_over:"просрочено: {n}", due_n_soon:"скоро: {n}", due_n_put:"отложено: {n}",
     due_every:"каждые {h} ч", due_at_rate:"принято {r} ч/сутки",
     hist_at:"история парка обновлена {t}", hist_now:"только что",
     hist_min:"{n} мин назад", hist_hr:"{n} ч назад", hist_day:"{n} д назад",
     hist_never:"⚠ этот телефон ещё ни разу не загружал историю парка",
     hist_short:"⚠ на телефоне не хватило места — история неполная",
     due_cover:"охвачено машин: {n} из {m}",
-    due_never_p:"Ни разу",
+    due_never_p:TERMS.ru.never_inspected,
     due_more:"ещё {n} — выберите тип осмотра, чтобы увидеть",
-    due_stray:"⚠ {n} дат здесь нет в системе — загружены из файла или остались от прежней синхронизации — поэтому по ним ничего не планируется, а машины считаются необслуженными",
-    due_stray1:"⚠ 1 даты здесь нет в системе — загружена из файла или осталась от прежней синхронизации — поэтому по ней ничего не планируется, а машина считается необслуженной",
+    due_stray:"⚠ {n} дат здесь нет в системе — загружены из файла или остались от прежней синхронизации — поэтому по ним ничего не планируется, а машины считаются не проходившими осмотр",
+    due_stray1:"⚠ 1 даты здесь нет в системе — загружена из файла или осталась от прежней синхронизации — поэтому по ней ничего не планируется, а машина считается не проходившей осмотр",
     due_bad:"⚠ система не может прочитать {n} из своих файлов — эти осмотры не доходят ни до кого; сообщите об этом",
     due_unk:"⚠ {n} обход(ов) невозможно запланировать — неизвестный тип обхода или нечитаемая дата",
     due_find:"Найти машину — CR006, DZ003…",
@@ -3103,12 +3106,12 @@ const I18N = {
     due_short:"На телефоне закончилось место, часть истории парка потеряна, и этот список неполный. Освободите место, затем нажмите «Проверить новые» в «Системе» — недостающие осмотры будут прочитаны заново.",
     due_not:"Не выполняем",
     due_not_t:"{u} — не выполняем этот осмотр?",
-    due_not_m:"{ty}. Отложите на срок или укажите, что осмотр не будет выполнен. В обоих случаях причина сохраняется — офис увидит, что пропущено и почему.",
+    due_not_m:"{ty}. Отложите на срок или укажите, что осмотр не будет выполнен. В обоих случаях причина сохраняется — офис увидит, что не выполнено и почему.",
     due_put_n:"+{n} сут", due_put_to:"отложено до {d}", due_off:"Не выполняется",
     due_why:"Причина", due_why_ph:"в ремонте · вне участка · нет доступа",
     due_why_need:"Укажите причину — её будут читать позже.",
     due_overdue:"Просроченные и скоро", due_all:"Все",
-    due_soon:"Скоро срок", due_putoff:"Отложено",
+    due_soon:TERMS.ru.due_soon, due_putoff:TERMS.ru.deferred,
     btn_due_full:"Загрузить историю всего парка",
     due_full_go:"Читаю всю папку\u2026",
     due_full_ok:"Добавлено машин: {n}. Теперь охвачено: {m}.",
@@ -10668,7 +10671,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="272";
+const BUILD="273";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

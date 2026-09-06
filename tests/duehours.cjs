@@ -206,8 +206,9 @@ const mk = `((id,ty,u,d,smu,pos)=>({id,type:ty,equip:u,date:d,by:'S. Volkov',sup
              pills: [...document.querySelectorAll('#dueScopeF button')]
                       .map(b => b.textContent.replace(/\s+/g, ' ').trim()) };
   });
+  const I18Nover = await p.evaluate(() => I18N.en.due_missed);
   ok('and across every round it counts what was missed instead',
-    all.pills.some(x => /Missed ?\d/.test(x)) && /20 h\/day/.test(all.basis),
+    all.pills.some(x => new RegExp('^' + I18Nover + ' ?\\d').test(x)) && /20 h\/day/.test(all.basis),
     all.pills.join(' | ') + '  —  ' + all.basis);
 
   console.log('\n  the second measurement brings the round forward');

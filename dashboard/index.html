@@ -646,7 +646,7 @@
   .tag{display:inline-block;font-size:var(--t-micro);font-weight:700;padding:1px 6px;border-radius:6px;background:var(--surface-3);color:var(--ink-2);margin-right:5px;}
   .muted{color:var(--muted);} .mono{font-variant-numeric:tabular-nums;}
   /* history */
-  .insp{border:1px solid var(--border);border-radius:12px;margin-bottom:16px;overflow:hidden;}
+  .insp{border:1px solid var(--border);border-radius:10px;margin-bottom:16px;overflow:hidden;}
   .insp .head{display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:12px 16px;background:var(--surface-2);border-bottom:1px solid var(--border);}
   .insp .head .date{font-weight:640;} .insp .head .meta{color:var(--ink-2);font-size:12.5px;} .insp .head .spacer{flex:1;}
   /* FOUR, at desktop. auto-fill with a 230px floor put three across and left
@@ -758,7 +758,7 @@
   .pgwhy{grid-column:1 / -1;display:flex;align-items:center;gap:8px;
     font-size:10.5px;color:var(--muted);line-height:1.35;}
   .pgwhy .w{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .pgwhy .from{display:inline-block;margin-left:8px;padding:1px 7px;border-radius:20px;
+  .pgwhy .from{display:inline-block;margin-left:8px;padding:1px 7px;border-radius:999px;
     background:var(--border);color:var(--muted);font-size:11px;font-weight:700;
     white-space:nowrap;}
 
@@ -774,7 +774,7 @@
      Read at arm's length in a cold workshop by somebody in gloves holding a
      drum pump. Large type, both languages stacked rather than run together,
      and the row with no answer shouting rather than sitting quietly blank. */
-  .posterbox{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;
+  .posterbox{background:var(--surface-2);border:1px solid var(--border);border-radius:10px;
     padding:16px;overflow-x:auto;contain:paint;}
   /* The poster is sized for a wall — 26px headings, 15px product names read at
      arm's length. At full size ON SCREEN it dwarfed the page around it, so the
@@ -1277,7 +1277,7 @@
     overflow:hidden;text-overflow:ellipsis;max-width:15ch;}
   .dispbox{position:fixed;z-index:70;left:50%;top:50%;transform:translate(-50%,-50%);
     width:min(420px,calc(100vw - 32px));background:var(--surface);
-    border:1px solid var(--border);border-radius:12px;box-shadow:var(--e3,0 18px 48px rgba(0,0,0,.28));
+    border:1px solid var(--border);border-radius:10px;box-shadow:var(--e3,0 18px 48px rgba(0,0,0,.28));
     padding:var(--s4);display:flex;flex-direction:column;gap:var(--s3);}
   .dispbox.hidden{display:none;}
   .dispbox h3{margin:0;font-weight:700;font-size:15px;line-height:1.3;font-family:inherit;}
@@ -1398,14 +1398,14 @@
   /* The sheet is the scroller, not the overlay: a sticky header inside a
      scrolling overlay pins to the overlay's top, which sits above the sheet's
      padding — so content scrolled past it in the gap. */
-  .sheet{background:var(--page);border:1px solid var(--border);border-radius:16px;max-width:640px;width:100%;
+  .sheet{background:var(--page);border:1px solid var(--border);border-radius:10px;max-width:640px;width:100%;
     box-shadow:0 20px 60px rgba(0,0,0,.3);display:flex;flex-direction:column;max-height:calc(100vh - 80px);}
   .sheethead{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px;
-    border-bottom:1px solid var(--border);background:var(--page);border-radius:16px 16px 0 0;flex:none;}
+    border-bottom:1px solid var(--border);background:var(--page);border-radius:10px 16px 0 0;flex:none;}
   .sheethead b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .sheetbody{padding:18px 20px 22px;overflow-y:auto;overscroll-behavior:contain;}
   .sheetbody .lede{margin:0 0 16px;color:var(--ink-2);font-size:13px;}
-  .srccard{border:1px solid var(--border);border-radius:12px;margin-bottom:14px;overflow:hidden;background:var(--surface);}
+  .srccard{border:1px solid var(--border);border-radius:10px;margin-bottom:14px;overflow:hidden;background:var(--surface);}
   .srccard.edrm{opacity:.5;outline:2px dashed var(--critical);} .srccard.edrm .srcbody{display:none;}
   .edrmbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:6px 12px 10px;font-size:var(--t-small);color:var(--muted);}
   .edremoved{margin:0 0 10px;padding:8px 12px;border:1px dashed var(--border);border-radius:10px;font-size:var(--t-small);color:var(--muted);display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
@@ -1621,7 +1621,7 @@
        1600px screen — the one every office actually has — spent 360px on
        nothing while the tables below scrolled for forty screens. */
     --page-max:1680px;
-    --r-sm:8px; --r:12px; --r-lg:16px; --r-xl:22px;
+    --r-sm:8px; --r:10px; --r-lg:10px; --r-xl:12px;
     --e1:0 1px 2px rgba(11,11,11,.05), 0 1px 3px rgba(11,11,11,.04);
     --e2:0 2px 4px rgba(11,11,11,.05), 0 8px 24px -6px rgba(11,11,11,.10);
     --e3:0 8px 16px -4px rgba(11,11,11,.10), 0 24px 60px -12px rgba(11,11,11,.22);
@@ -1895,7 +1895,7 @@
   .wlr .go{color:var(--muted);font-size:15px;opacity:0;transition:opacity .13s,transform .13s;}
   .wlr:hover .go{opacity:1;transform:translateX(2px);}
   /* Who owns it, as a face-sized thing rather than a column of names. */
-  .who{display:inline-flex;align-items:center;gap:7px;min-width:0;}
+  .who{display:inline-flex;align-items:center;gap:7px;min-width:0;white-space:nowrap;}
   .who i{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;
     background:var(--surface-3);color:var(--ink-2);font-weight:700;font-size:var(--t-micro);line-height:1;font-family:inherit;font-style:normal;
     letter-spacing:.02em;}
@@ -2055,8 +2055,18 @@
   table.grid th{position:sticky;top:0;z-index:1;background:var(--surface);
     font-weight:700;font-size:var(--t-micro);line-height:1.3;font-family:inherit;letter-spacing:.08em;text-transform:uppercase;
     color:var(--muted);padding:11px 10px;border-bottom:1px solid var(--border);}
-  table.grid td{padding:11px 10px;border-bottom:1px solid var(--border);
+  /* A row is 40–48 px: one line of text, or a 24 px avatar, and no more.
+     Cells that carry a pill or a name do not wrap. */
+  table.grid td{padding:8px 10px;border-bottom:1px solid var(--border);
     font-variant-numeric:tabular-nums;}
+  table.grid tbody tr{height:40px;}
+  table.grid td.nw{white-space:nowrap;}
+  /* The two registers are one line a row: the text columns ellipsize (.trunc)
+     and the rest never wrap; a narrow window scrolls the table in its box
+     rather than doubling every row. */
+  #actionTbl table.grid td,#ddList table.grid td{white-space:nowrap;}
+  table.grid .tri i{display:none;}
+  .ddact .minibtn{min-height:32px;padding:4px 8px;}
   table.grid tbody tr{transition:background .12s;}
   table.grid tbody tr:hover td{background:color-mix(in srgb,var(--accent) 5%,var(--surface));}
   table.grid tbody tr:last-child td{border-bottom:0;}
@@ -3099,7 +3109,7 @@
         <summary data-i18n="ov_defs">Definitions</summary>
         <div class="defsbody"><dl>
           <dt data-i18n="sy_sev">Grade review required</dt><dd data-i18n="sy_sev_sub">Condition is never typed here — it follows the grade (1 Normal, 2 Incipient, 3 Degraded, 4 Severe, 5 Critical), or the millimetres on a measured round. Listed here are findings whose recorded condition neither of those produces, and rounds with no grade and no reading at all. The correction is always the grade: set it and the condition follows.</dd>
-          <dt data-i18n="sy_quar">Inspections requiring correction</dt><dd data-i18n="sy_quar_sub">A record missing the identity it needs to be filed — unit, date or round — or carrying an inspection point nobody has identified. Nothing is deleted; the inspection is on hold here so it is visible rather than silently dropped from every count.</dd>
+          <dt data-i18n="sy_quar">Inspections requiring correction</dt><dd data-i18n="sy_quar_sub">A record missing the identity it needs to be filed — unit, date or round — or carrying an inspection point nobody has identified. Nothing is deleted; the inspection is listed here for correction so it is visible rather than silently dropped from every count.</dd>
           <dt data-i18n="sy_gaps">Records waiting on evidence</dt><dd data-i18n="sy_gaps_sub">Every photograph and video a record says it has, checked against the file names the server actually holds. A record is waiting when one of its own attachments has not arrived.</dd>
         </dl></div>
       </details>
@@ -3146,7 +3156,7 @@
         </div>
         <div class="secthd" style="margin-top:var(--s4)"><h2 data-i18n="sy_diag_h">Field diagnostics</h2></div>
         <ul class="synone" id="syDiag"></ul>
-        <div class="secthd" style="margin-top:var(--s4)"><h2 data-i18n="sy_unknown">Not measurable from here</h2></div>
+        <div class="secthd" style="margin-top:var(--s4)"><h2 data-i18n="sy_unknown">What this dashboard cannot check</h2></div>
         <ul class="synone" id="syUnknown"></ul>
         <details class="method"><summary data-i18n="methodology">Methodology</summary>
           <div class="sub" data-i18n="sy_unknown_sub">These need a backend that issues a durable receipt per record and a hash per attachment. This one stores files in folders, so the dashboard cannot prove delivery latency, detect a corrupted upload or count a suppressed duplicate. They are listed rather than reported as zero.</div></details>
@@ -3172,7 +3182,7 @@
           <select id="rScope">
             <option value="one" data-i18n="r_one">One inspection</option>
             <option value="unit" data-i18n="r_unit" selected>One machine — its history and trend</option>
-            <option value="round" data-i18n="r_round">One date — every machine walked that day</option>
+            <option value="round" data-i18n="r_round">Round — one date, all units</option>
             <option value="month" data-i18n="r_month">Fleet summary — one month</option>
           </select></div></div>
         <div class="rstep"><div class="rnum">2</div><div class="rbody">
@@ -3310,29 +3320,30 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=272"></script>
-<script src="../mobile/hme.js?v=272"></script>
-<script src="../mobile/mp-fc.js?v=272"></script>
-<script src="../mobile/hme-cascade.js?v=272"></script>
-<script src="../mobile/temp-limits.js?v=272"></script>
+<script src="../data/magnetic_plug.js?v=273"></script>
+<script src="../mobile/hme.js?v=273"></script>
+<script src="../mobile/mp-fc.js?v=273"></script>
+<script src="../mobile/hme-cascade.js?v=273"></script>
+<script src="../mobile/temp-limits.js?v=273"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=272"></script>
-<script src="../mobile/normalize.js?v=272"></script>
-<script src="../mobile/grade.js?v=272"></script>
-<script src="../mobile/edits.js?v=272"></script>
-<script src="../mobile/due.js?v=272"></script>
-<script src="../mobile/wear.js?v=272"></script>
-<script src="../mobile/wear-map.js?v=272"></script>
-<script src="../mobile/lube.js?v=272"></script>
-<script src="../mobile/lube-overrides.js?v=272"></script>
-<script src="../mobile/lube2027.js?v=272"></script>
-<script src="../mobile/lube-tds.js?v=272"></script>
+<script src="../mobile/assets.js?v=273"></script>
+<script src="../mobile/normalize.js?v=273"></script>
+<script src="../mobile/terms.js?v=273"></script>
+<script src="../mobile/grade.js?v=273"></script>
+<script src="../mobile/edits.js?v=273"></script>
+<script src="../mobile/due.js?v=273"></script>
+<script src="../mobile/wear.js?v=273"></script>
+<script src="../mobile/wear-map.js?v=273"></script>
+<script src="../mobile/lube.js?v=273"></script>
+<script src="../mobile/lube-overrides.js?v=273"></script>
+<script src="../mobile/lube2027.js?v=273"></script>
+<script src="../mobile/lube-tds.js?v=273"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=272"></script>
-<script src="../mobile/machine-photos.js?v=272"></script>
+<script src="../mobile/upload-defaults.js?v=273"></script>
+<script src="../mobile/machine-photos.js?v=273"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3341,17 +3352,17 @@
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=272"></script>
-<script src="../mobile/get.js?v=272"></script>
-<script src="../mobile/points.js?v=272"></script>
-<script src="../mobile/uc-points.js?v=272"></script>
-<script src="../mobile/inspect-guide.js?v=272"></script>
-<script src="../mobile/get-figs.js?v=272"></script>
-<script src="../mobile/body-points.js?v=272"></script>
-<script src="../mobile/body-map.js?v=272"></script>
-<script src="../mobile/jspdf.umd.min.js?v=272"></script>
-<script src="../mobile/html2canvas.min.js?v=272"></script>
-<script src="../mobile/report-core.js?v=272"></script>
+<script src="../mobile/machine-fig.js?v=273"></script>
+<script src="../mobile/get.js?v=273"></script>
+<script src="../mobile/points.js?v=273"></script>
+<script src="../mobile/uc-points.js?v=273"></script>
+<script src="../mobile/inspect-guide.js?v=273"></script>
+<script src="../mobile/get-figs.js?v=273"></script>
+<script src="../mobile/body-points.js?v=273"></script>
+<script src="../mobile/body-map.js?v=273"></script>
+<script src="../mobile/jspdf.umd.min.js?v=273"></script>
+<script src="../mobile/html2canvas.min.js?v=273"></script>
+<script src="../mobile/report-core.js?v=273"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -3445,7 +3456,7 @@ const I18N={
   pf_sub:"Measured wear against its limit. P is where the part becomes a finding (80% worn); F is condemn. The gap between them is the warning the round buys you \u2014 if it is shorter than the inspection interval, the round will miss it.",
   pf_pick:"Position", pf_p:"becomes a finding", pf_f:"condemn",
   pf_h:"h on the meter", pf_hc:"h (from dates)",
-  pf_note:"{u} \u00b7 {p}: about {h} running hours \u2014 roughly {d} days \u2014 between the reading crossing P and the part reaching condemn. Inspect more often than that or the warning is missed.",
+  pf_note:"{u} \u00b7 {p}: about {h} running hours \u2014 roughly {d} days \u2014 between the reading crossing P and the part reaching condemn. Inspect more often than that, or the warning comes too late.",
   pf_note_no:"{u} \u00b7 {p}: not enough movement between readings to measure a P\u2013F interval yet.",
   pf_none:"No P\u2013F interval to draw yet",
   pf_none_s:"It needs a position measured at least twice, with a condemn figure. Undercarriage, GET and tray rounds produce these.",
@@ -3469,7 +3480,7 @@ const I18N={
   fa_affected_sub:"Machines carrying the defects above, narrowed by whichever bar has been pressed.",
   a_d_open:"Findings that need work and are not closed, including those not yet planned.",
   a_d_overdue:"Open actions past their due date.",
-  a_d_triage:"Findings with no job, owner or date, so they cannot be planned yet.",
+  a_d_triage:"Findings missing an action, an owner or a due date, so they cannot be planned yet.",
   a_d_noown:"Open actions with no responsible person named.",
   a_d_done:"Done, verified, or disposed as not needed with a reason and a name.",
   dd_d_rate:"The machine's own hours per day, from two hour-meter readings; 20 h/day where it has not been measured.",
@@ -3538,7 +3549,7 @@ const I18N={
   lt_exc:"Exceptions",
   lt_shop:"Shop materials",
   a_th_comp:"Component",
-  a_th_owner:"Responsible",
+  a_th_owner:TERMS.en.owner,
   a_th_due:"Due",
   a_th_age:"Age",
   a_th_status:"Status",
@@ -3682,7 +3693,7 @@ const I18N={
   sy_k_conf:"Conflicts", sy_k_conf_s:"two phones, one round",
   sy_k_grade:"Grade review", sy_k_grade_s:"Grade and condition do not match",
   sy_k_grade_go:"Show the list",
-  sy_sev:"Grade review required",
+  sy_sev:TERMS.en.grade_review,
   sy_sev_none:"Every severity on the board is derived from a grade or a measurement.",
   sy_sev_sub:"Condition is never typed here — it follows the grade (1 Normal, 2 Incipient, 3 Degraded, 4 Severe, 5 Critical), or the millimetres on a measured round. Listed here are findings whose recorded condition neither of those produces, and rounds with no grade and no reading at all. The correction is always the grade: set it and the condition follows.",
   sy_sev_go:"Review grade",
@@ -3693,7 +3704,7 @@ const I18N={
   sy_sev_ct:"{n} to settle · {u} with no grade · {c} contradicting their grade",
   sy_h_files:"Files on the server", sy_h_last:"Last asked",
   sy_h_att:"Attachments accounted for", sy_h_held:"Inspections requiring correction",
-  sy_h_excl:"On held inspections", sy_h_excl_m:"{n} not in the folder",
+  sy_h_excl:"On inspections needing correction", sy_h_excl_m:"{n} not in the folder",
   sy_notlinked:"no backend attached — nothing to compare against",
   sy_nolink:"Nothing to compare against yet", sy_nolink_s:"The file list has not arrived from the server. Until it does there is nothing to check these attachments against, and reporting 0% would describe this browser rather than the field. It fills in when the data source refreshes.",
   sy_never:"never", sy_justnow:"just now", sy_min:"{n} min ago",
@@ -3708,7 +3719,7 @@ const I18N={
   sy_d_empty:"Removed {n} completely empty inspection row(s) during import, across {r} inspection(s). No recorded information was affected.",
   sy_d_none:"Nothing to report — no records needed repair on import.",
   sy_d_unknown:"{n} field name(s) this build does not classify — {f}. Not treated as findings; reported so they can be classified.",
-  sy_d_why:"{u} · {d} is on hold. Recorded here: {e}. Housekeeping only: {h}. Unclassified: {k}.",
+  sy_d_why:"{u} · {d} needs correction. Recorded here: {e}. Housekeeping only: {h}. Unclassified: {k}.",
   sy_quar:"Inspections requiring correction",
   eq_findph:"Search equipment: unit, class, model\u2026",
   cmb_n:"{n} of {of}", cmb_all:"{n} \u2014 type to narrow, \u2191\u2193 to move, Enter to choose", cmb_none:"No match",
@@ -3718,7 +3729,7 @@ const I18N={
   pg_per:"Rows per page",
   sy_gaps_sub:"Every photograph and video a record says it has, checked against the file names the server actually holds. A record is waiting when one of its own attachments has not arrived.",
   sy_unknown_sub:"These need a backend that issues a durable receipt per record and a hash per attachment. This one stores files in folders, so the dashboard cannot prove delivery latency, detect a corrupted upload or count a suppressed duplicate. They are listed rather than reported as zero.",
-  sy_quar_sub:"A record missing the identity it needs to be filed — unit, date or round — or carrying an inspection point nobody has identified. Nothing is deleted; the inspection is on hold here so it is visible rather than silently dropped from every count.",
+  sy_quar_sub:"A record missing the identity it needs to be filed — unit, date or round — or carrying an inspection point nobody has identified. Nothing is deleted; the inspection is listed here for correction so it is visible rather than silently dropped from every count.",
   /* What to DO, per fault, in the words of somebody who would do it. */
   sy_fix_equip:"No unit number — the phone that captured it must re-send it.",
   sy_fix_date:"No date — the phone that captured it must re-send it.",
@@ -3828,10 +3839,10 @@ const I18N={
      below already names the missing fields. */
   as_open:"Open", as_triage:"Planning required", as_closed:"Closed",
   as_noaction:"No action required", as_none:"\u2014",
-  as_triage_t:"Nobody can act on this yet \u2014 still missing: {f}",
+  as_triage_t:"Cannot be planned yet \u2014 missing: {f}",
   as_m_action:"recommended action", as_m_prio:"priority", as_m_owner:"responsible",
   as_m_due:"due date", as_m_disp:"authorised reason and approver",
-  a_k_triage:"Actions requiring planning", a_k_triage_s:"findings with no job, owner or date",
+  a_k_triage:"Actions requiring planning", a_k_triage_s:"missing an action, an owner or a due date",
   a_f_triage:"Planning required", a_f_crit:"Critical", a_f_week:"Due this week", a_f_noown:"Unassigned actions",
   k_act_tri:"{n} not yet planned",
   u_disposed:"Dispositioned",
@@ -3845,7 +3856,7 @@ const I18N={
   c_unit:"Unit", c_sev:"Grade", c_defect:"Defect", c_cause:"Cause",
 
   k_insp:"Inspections", k_find:"Findings", k_att:"Needs attention",
-  k_comp:"Compliance", k_comp_s:"{n} of {of} rounds walked before they were overdue",
+  k_comp:"Compliance", k_comp_s:"{n} of {of} rounds completed before they were overdue",
   u_rounds:"Inspections", u_open:"Open work", u_recent:"Recent rounds",
   u_noopen:"Nothing open on this machine.", u_nofind:"nothing raised",
   u_more:"and {n} more", u_hist:"Full history", u_acts:"In the register",
@@ -3858,7 +3869,7 @@ const I18N={
   a_ed_st:"Move it along. Saves on change.",
   f_dq:"Data quality — what is missing from what was found", f_dq_s:"Quality",
   dq_all:"Everything", dq_any:"Anything missing", dq_cond:"Condition missing",
-  dq_defect:"Defect missing", dq_action:"Action missing", dq_owner:"Nobody responsible",
+  dq_defect:"Defect missing", dq_action:"Action missing", dq_owner:TERMS.en.owner_unassigned,
   dq_due:"Due date missing", c_dq:"Quality",
   f_reset:"Reset", f_reset_n:"Reset ({n})",
   f_reset_t:"Clear every filter and drill-down and go back to the whole fleet",
@@ -3948,12 +3959,12 @@ const I18N={
   ds_notset:"not set up", ds_notloaded:"set up — not loaded yet", ds_notopened:"not opened",
   ds_insp:"{n} inspection(s)", ds_indexed:"{n} files indexed", ds_inbrowser:"{n} record(s) in this browser",
   ds_photosn:"{n} photos", ds_voidn:"{n} voided",
-  cv_title:"Coverage — was the round actually walked",
-  cv_sub:"Compliance is rounds walked before they were overdue, of every round that came due. Coverage is machines each round applies to, against machines it reached, in the period selected above. A finding you never went to look for is not an absence of findings.",
+  cv_title:"Coverage — was the inspection actually completed",
+  cv_sub:"Compliance is rounds completed before they were overdue, of every round that came due. Coverage is machines each round applies to, against machines it reached, in the period selected above. A finding you never went to look for is not an absence of findings.",
   cv_th_round:"Round", cv_th_seen:"Reached", cv_th_insp:"Insp.",
   cv_th_never:"Never", cv_th_over:"Overdue", cv_th_who:"By",
   cv_every:"every {d} days", cv_every_h:"every {h} h", cv_every_h_cls:"{h} h {c}", cv_carried:"(carried forward)", cv_scoped:"machines this round fits", cv_p_days:"the last {d} days", cv_p_all:"all time",
-  cv_note:"Against a register of {n} unit(s), over {p}. \u201cNever done\u201d and \u201coverdue\u201d look at the whole history, not just the period, because a machine is overdue whatever window you are reading.",
+  cv_note:"Against a register of {n} unit(s), over {p}. \u201cNever inspected\u201d and \u201coverdue\u201d look at the whole history, not just the period, because a machine is overdue whatever window you are reading.",
   cv_empty:"Nothing to measure coverage against in this selection.",
   tr_title:"Direction — is the fleet getting better or worse",
   tr_sub:"Findings by month, worst on top. Read the shape, not the last bar: one month is a sample, three is a trend.",
@@ -3970,7 +3981,7 @@ const I18N={
   a_st_open:"Not started", a_st_PLAN:"Planned", a_st_WIP:"In progress", a_st_DONE:"Closed",
   a_assign:"Assign", a_in_d:"in {d}d",
   a_none:"Nothing here", a_none_s:"No finding matches this filter — try Everything.",
-  th_owner:"Responsible", th_due:"Due", th_status:"Status",
+  th_owner:TERMS.en.owner, th_due:"Due", th_status:TERMS.en.status,
   th_class:"Class", th_open:"Open", th_nextdue:"Next due", th_noowner:"unassigned",
   xf_cls:"Show only this class", xf_open:"Open the register for this machine",
   xf_open_over:"{n} past its date \u2014 open the register for this machine",
@@ -4107,7 +4118,7 @@ const I18N={
   hist_title:"Inspection history — {x}", hist_sub:"{n} inspection(s) · newest first",
   src_imported:"imported file",
   sub_count:"{n} inspection(s) · {u} unit(s)", sub_imported:" · {n} imported",
-  dl_new:"✅ {n} new inspection(s) — {h} held from Drive", dl_upto:"✅ Up to date — {h} inspection(s) held from Drive",
+  dl_new:"✅ {n} new inspection(s) — {h} in the folder", dl_upto:"✅ Up to date — {h} inspection(s) in the folder",
   dl_photos:", {n} photo/video file(s) indexed (they download as you open a unit).",
   dl_failed:" {n} file(s) could not be read.", dl_more:" More is waiting — click Load again to continue.",
   dl_connected:"✅ Connected — folder “{x}”.", dl_needurl:"Paste the /exec URL first.",
@@ -4167,22 +4178,22 @@ const I18N={
   dd_title:"Inspection Schedule", dd_soon:"Due soon",
   dd_sub:"Hours, not days — a machine parked for three weeks has not worn. Each row is one unit and one round, counted from the last one recorded anywhere in the system and at the machine's own operating rate where two hour-meter readings have measured it. A round somebody chose not to walk says so, with the reason they gave.",
   dd_round:"Round", dd_show:"Show", dd_find:"Search this table", dd_findph:"unit number",
-  dd_missed:"Overdue", dd_due:"Overdue & due soon",
-  dd_put:"Deferred", dd_all:"All",
+  dd_missed:TERMS.en.overdue, dd_due:"Overdue & due soon",
+  dd_put:TERMS.en.deferred, dd_all:"All",
   dd_all_rounds:"All rounds", dd_csv:"Export CSV",
   dd_k_missed:"Overdue", dd_k_missed_s:"of {n} unit-rounds with history",
   dd_k_soon:"Due soon", dd_k_soon_s:"inside the last fifth of the interval",
-  dd_k_put:"Deferred", dd_k_put_s:"put off by an inspector, reason recorded",
+  dd_k_put:TERMS.en.deferred, dd_k_put_s:"deferred by an inspector, reason recorded",
   dd_k_why:"Explained", dd_k_why_s:"of {n} past due carry a reason",
   dd_none:"Nothing in this view.",
   dd_c_unit:"Unit", dd_c_round:"Round", dd_c_last:"Last done",
-  dd_c_due:"Due", dd_c_rate:"Operating hours/day", dd_c_why:"Deferral reason",
+  dd_c_due:"Due", dd_c_rate:TERMS.en.hours_per_day, dd_c_why:TERMS.en.defer_reason,
   dd_start:"Start inspection", dd_start_t:"Open this machine and this round on the phone app",
   dd_defer:"Defer inspection", dd_defer_edit:"Edit deferral", dd_defer_t:"Put this round off, with a reason",
   dd_defer_title:"Put this round off", dd_why:"Reason", dd_until:"Review on",
   dd_by:"Deferred by", dd_defer_save:"Save", dd_undefer:"Cancel the deferral",
   dd_need:"A reason and a name are both required.",
-  dd_put_to:"put off to {d}", dd_not_doing:"not being done",
+  dd_put_to:"deferred to {d}", dd_not_doing:"not being done",
   eq_more:"Showing {n} of {of} — type to narrow",
   ov_top:"Showing the {n} highest-priority of {of} machines",
   ov_all:"View all equipment",
@@ -4322,7 +4333,7 @@ const I18N={
   lt_exc:"Исключения",
   lt_shop:"Материалы цеха",
   a_th_comp:"Узел",
-  a_th_owner:"Ответственный",
+  a_th_owner:TERMS.ru.owner,
   a_th_due:"Срок",
   a_th_age:"Дней",
   a_th_status:"Статус",
@@ -4461,7 +4472,7 @@ const I18N={
   sy_k_conf:"Конфликты", sy_k_conf_s:"два телефона, один обход",
   sy_k_grade:"Проверка оценки", sy_k_grade_s:"Оценка и состояние не совпадают",
   sy_k_grade_go:"Показать список",
-  sy_sev:"Требуется проверка оценки",
+  sy_sev:TERMS.ru.grade_review,
   sy_sev_none:"Каждая степень на экране выведена из оценки или из измерения.",
   sy_sev_sub:"Состояние здесь не вводят вручную — оно следует из оценки (1 Норма, 2 Зарождающийся, 3 Ухудшение, 4 Серьёзно, 5 Критично) либо из миллиметров на обходе с замерами. Здесь перечислены находки, у которых записанное состояние не даёт ни то, ни другое, и обходы без оценки и без замера. Исправляется всегда оценка: поставьте её, и состояние появится само.",
   sy_sev_go:"Проверить оценку",
@@ -4472,7 +4483,7 @@ const I18N={
   sy_sev_ct:"К разбору: {n} · без оценки: {u} · расходятся с оценкой: {c}",
   sy_h_files:"Файлов на сервере", sy_h_last:"Последний запрос",
   sy_h_att:"Вложений учтено", sy_h_held:"Осмотры, требующие исправления",
-  sy_h_excl:"На отложенных осмотрах", sy_h_excl_m:"{n} нет в папке",
+  sy_h_excl:"На осмотрах, требующих исправления", sy_h_excl_m:"{n} нет в папке",
   sy_notlinked:"хранилище не подключено — не с чем сравнивать",
   sy_nolink:"Пока не с чем сравнивать", sy_nolink_s:"Список файлов ещё не получен с сервера. Пока его нет, сверять вложения не с чем, а «0%» описывал бы этот браузер, а не работу в поле. Данные появятся после обновления источника.",
   sy_never:"никогда", sy_justnow:"только что", sy_min:"{n} мин назад",
@@ -4487,7 +4498,7 @@ const I18N={
   sy_d_empty:"При импорте удалено полностью пустых строк осмотра: {n}, в {r} осмотр(ах). Записанные данные не затронуты.",
   sy_d_none:"Сообщать нечего — при импорте ничего исправлять не потребовалось.",
   sy_d_unknown:"Неклассифицированных имён полей: {n} — {f}. Находками не считаются; сообщается для классификации.",
-  sy_d_why:"{u} · {d} на удержании. Записано: {e}. Только служебное: {h}. Не классифицировано: {k}.",
+  sy_d_why:"{u} · {d} требует исправления. Записано: {e}. Только служебное: {h}. Не классифицировано: {k}.",
   sy_quar:"Осмотры, требующие исправления",
   eq_findph:"Поиск техники: номер, класс, модель\u2026",
   cmb_n:"{n} из {of}", cmb_all:"{n} — вводите текст, ↑↓ для перехода, Enter для выбора", cmb_none:"Ничего не найдено",
@@ -4497,7 +4508,7 @@ const I18N={
   pg_per:"Строк на странице",
   sy_gaps_sub:"Каждая фотография и видео, о которых заявляет запись, сверены с именами файлов, которые действительно есть на сервере. Запись ждёт, если какое-то из её вложений не пришло.",
   sy_unknown_sub:"Для этого нужен бэкенд, выдающий устойчивую квитанцию на запись и хеш на вложение. Этот хранит файлы в папках, поэтому панель не может доказать задержку доставки, обнаружить повреждённую загрузку или посчитать подавленный дубликат. Они перечислены, а не показаны нулями.",
-  sy_quar_sub:"Запись без данных, нужных для размещения, — машины, даты или обхода — либо с точкой осмотра, которую никто не определил. Ничего не удаляется; осмотр стоит здесь на паузе, чтобы его было видно, а не молча выброшен из всех подсчётов.",
+  sy_quar_sub:"Запись без данных, нужных для размещения, — машины, даты или обхода — либо с точкой осмотра, которую никто не определил. Ничего не удаляется; осмотр показан здесь для исправления, чтобы его было видно, а не молча выброшен из всех подсчётов.",
   sy_fix_equip:"Нет номера машины — телефон, который делал осмотр, должен отправить его заново.",
   sy_fix_date:"Нет даты — телефон, который делал осмотр, должен отправить его заново.",
   sy_fix_type:"Нет типа обхода — телефон, который делал осмотр, должен отправить его заново.",
@@ -4589,10 +4600,10 @@ const I18N={
   px_nothing:"Пока нечего сохранять — кадрируйте, поверните, приблизьте или добавьте подпись.",
   as_open:"Открыто", as_triage:"Требуется планирование", as_closed:"Закрыто",
   as_noaction:"Действий не требуется", as_none:"\u2014",
-  as_triage_t:"Пока действовать некому \u2014 не хватает: {f}",
+  as_triage_t:"Пока нельзя запланировать \u2014 не хватает: {f}",
   as_m_action:"рекомендуемое действие", as_m_prio:"приоритет", as_m_owner:"ответственный",
   as_m_due:"срок", as_m_disp:"обоснование и утверждающий",
-  a_k_triage:"Действия, требующие планирования", a_k_triage_s:"находки без работы, ответственного и срока",
+  a_k_triage:"Действия, требующие планирования", a_k_triage_s:"нет действия, ответственного или срока",
   a_f_triage:"Требуется планирование", a_f_crit:"Критичные", a_f_week:"Срок на неделе", a_f_noown:"Без ответственного",
   k_act_tri:"{n} без плана",
   u_disposed:"Решение принято",
@@ -4619,7 +4630,7 @@ const I18N={
   a_ed_st:"Изменить статус. Сохраняется сразу.",
   f_dq:"Качество данных — чего не хватает в том, что нашли", f_dq_s:"Качество",
   dq_all:"Всё", dq_any:"Чего-либо не хватает", dq_cond:"Нет состояния",
-  dq_defect:"Нет дефекта", dq_action:"Нет действия", dq_owner:"Нет ответственного",
+  dq_defect:"Нет дефекта", dq_action:"Нет действия", dq_owner:TERMS.ru.owner_unassigned,
   dq_due:"Нет срока", c_dq:"Качество",
   f_reset:"Сброс", f_reset_n:"Сброс ({n})",
   f_reset_t:"Снять все фильтры и уточнения и вернуться ко всему парку",
@@ -4715,12 +4726,12 @@ const I18N={
   ds_notset:"не настроено", ds_notloaded:"настроено — ещё не загружено", ds_notopened:"не открыто",
   ds_insp:"осмотров: {n}", ds_indexed:"файлов в индексе: {n}", ds_inbrowser:"записей в этом браузере: {n}",
   ds_photosn:"фото: {n}", ds_voidn:"отозвано: {n}",
-  cv_title:"Охват — обход действительно выполнен?",
+  cv_title:"Охват — осмотр действительно выполнен?",
   cv_sub:"Соблюдение сроков — обходы, пройденные до просрочки, из всех наступивших. Охват — машины, к которым применим обход, против машин, до которых он дошёл, за выбранный период. Отсутствие дефектов там, где никто не смотрел, — это не отсутствие дефектов.",
   cv_th_round:"Обход", cv_th_seen:"Охват", cv_th_insp:"Осм.",
   cv_th_never:"Ни разу", cv_th_over:"Просроч.", cv_th_who:"Кто",
   cv_every:"каждые {d} сут", cv_every_h:"каждые {h} ч", cv_every_h_cls:"{h} ч — {c}", cv_carried:"(перенесено)", cv_scoped:"машины, к которым применим обход", cv_p_days:"последние {d} сут", cv_p_all:"всё время",
-  cv_note:"По реестру из {n} ед., за {p}. «Ни разу» и «просрочено» считаются по всей истории, а не только по периоду.",
+  cv_note:"По реестру из {n} ед., за {p}. «Не проводился» и «просрочено» считаются по всей истории, а не только по периоду.",
   cv_empty:"В этой выборке нечего сопоставить с охватом.",
   tr_title:"Динамика — парк улучшается или ухудшается?",
   tr_sub:"Дефекты по месяцам, худшее сверху. Смотрите на форму, а не на последний столбец: один месяц — это выборка, три — тенденция.",
@@ -4737,7 +4748,7 @@ const I18N={
   a_st_open:"Не начато", a_st_PLAN:"Запланировано", a_st_WIP:"В работе", a_st_DONE:"Закрыто",
   a_assign:"Назначить", a_in_d:"через {d} сут",
   a_none:"Здесь пусто", a_none_s:"Под этот фильтр ничего не подходит — попробуйте «Все».",
-  th_owner:"Ответственный", th_due:"Срок", th_status:"Статус",
+  th_owner:TERMS.ru.owner, th_due:"Срок", th_status:TERMS.ru.status,
   th_class:"Класс", th_open:"В работе", th_nextdue:"След. срок", th_noowner:"не назначен",
   xf_cls:"Показать только этот класс", xf_open:"Открыть реестр по этой машине",
   xf_open_over:"{n} просрочено \u2014 открыть реестр по этой машине",
@@ -4874,7 +4885,7 @@ const I18N={
   hist_title:"История осмотров — {x}", hist_sub:"осмотров: {n} · сначала новые",
   src_imported:"импортированный файл",
   sub_count:"осмотров: {n} · ед.: {u}", sub_imported:" · импортировано: {n}",
-  dl_new:"✅ Новых осмотров: {n} — с Диска всего: {h}", dl_upto:"✅ Актуально — с Диска всего: {h}",
+  dl_new:"✅ Новых осмотров: {n} — в папке всего: {h}", dl_upto:"✅ Актуально — в папке всего: {h}",
   dl_photos:", фото/видео в индексе: {n} (скачиваются при открытии единицы).",
   dl_failed:" Не удалось прочитать файлов: {n}.", dl_more:" Есть ещё — нажмите «Загрузить» снова.",
   dl_connected:"✅ Связь есть — папка «{x}».", dl_needurl:"Сначала вставьте адрес /exec.",
@@ -4931,16 +4942,16 @@ const I18N={
   dd_title:"График осмотров", dd_soon:"Скоро срок",
   dd_sub:"Часы, а не дни: машина, простоявшая три недели, не износилась. Строка — это одна единица и один обход, отсчитанный от последнего, записанного где угодно в системе, и по собственной наработке машины, если её измерили два показания счётчика. Если обход решили не делать — здесь написано, почему.",
   dd_round:"Обход", dd_show:"Показать", dd_find:"Поиск по таблице", dd_findph:"номер единицы",
-  dd_missed:"Просрочено", dd_due:"Просрочено и скоро",
-  dd_put:"Отложено", dd_all:"Все",
+  dd_missed:TERMS.ru.overdue, dd_due:"Просрочено и скоро",
+  dd_put:TERMS.ru.deferred, dd_all:"Все",
   dd_all_rounds:"Все обходы", dd_csv:"Выгрузить CSV",
   dd_k_missed:"Просрочено", dd_k_missed_s:"из {n} пар «единица — обход» с историей",
   dd_k_soon:"Скоро срок", dd_k_soon_s:"в последней пятой части интервала",
-  dd_k_put:"Отложено", dd_k_put_s:"отложено инспектором, причина записана",
+  dd_k_put:TERMS.ru.deferred, dd_k_put_s:"отложено инспектором, причина записана",
   dd_k_why:"С причиной", dd_k_why_s:"из {n} просроченных объяснены",
   dd_none:"В этом представлении пусто.",
   dd_c_unit:"Единица", dd_c_round:"Обход", dd_c_last:"Последний раз",
-  dd_c_due:"Срок", dd_c_rate:"Наработка, ч/сут", dd_c_why:"Причина переноса",
+  dd_c_due:"Срок", dd_c_rate:TERMS.ru.hours_per_day, dd_c_why:TERMS.ru.defer_reason,
   dd_start:"Начать осмотр", dd_start_t:"Открыть эту машину и этот обход в приложении",
   dd_defer:"Отложить осмотр", dd_defer_edit:"Изменить отсрочку", dd_defer_t:"Отложить обход с указанием причины",
   dd_defer_title:"Отложить обход", dd_why:"Причина", dd_until:"Пересмотреть",
@@ -6779,15 +6790,15 @@ function renderActions(){
                  nobody can scan. The row is read here and edited in the drawer
                  it opens; the tick column and the bar above it do a week's
                  assignments in one gesture. -->
-            <td>${i.owner
+            <td class="nw">${i.owner
                 ? `<span class="who"><i>${esc(initials0(i.owner))}</i><span>${esc(i.owner)}</span></span>`
-                : `<span class="who none"><i>+</i><span>${esc(t("a_assign"))}</span></span>`}</td>
+                : `<span class="who none"><i>+</i><span>${esc(TERMS.t(lang,"owner_unassigned"))}</span></span>`}</td>
             <td>${i.due
                 ? `<span class="due ${od?"late":(dd!=null&&dd<=7?"soon":"")}"><b>${esc(i.due)}</b>${
                     od?`<i>${esc(t("a_late"))}</i>`:(dd!=null&&dd<=7?`<i>${esc(t("a_in_d",{d:dd}))}</i>`:"")}</span>`
                 : '<span class="muted">—</span>'}</td>
             <td class="num mono">${age==null?"":age}</td>
-            <td><span class="st s-${esc(String(i.status||"open"))}">${esc(stName(i.status))}</span>${
+            <td class="nw"><span class="st s-${esc(String(i.status||"open"))}">${esc(stName(i.status))}</span>${
               i.prio?` <span class="prio ${prioClass(i.prio)}" title="${esc(prioName(i.prio))}">${esc(i.prio)}</span>`:""}${
               ast.k==="triage"
                 ? `<span class="tri" title="${esc(t("as_triage_t",{f:actionMissText(ast.miss)}))}">${
@@ -6886,7 +6897,7 @@ function renderActions(){
             <span class="t2">${i.actionLabel?esc(i.actionLabel):""}</span></span>
           <span class="cell hide-s">${i.owner
               ? `<span class="who"><i>${esc(initials(i.owner))}</i><span>${esc(i.owner)}</span></span>`
-              : `<span class="who none"><i>+</i><span>${esc(t("a_assign"))}</span></span>`}</span>
+              : `<span class="who none"><i>+</i><span>${esc(TERMS.t(lang,"owner_unassigned"))}</span></span>`}</span>
           <span class="cell hide-s">${i.due
               ? `<span class="due ${od?"late":(dd!=null&&dd<=7?"soon":"")}"><b>${esc(i.due.slice(5))}</b><i>${
                   esc(od?t("a_late"):(dd!=null?t("a_in_d",{d:dd}):""))}</i></span>`
@@ -14969,8 +14980,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=272"></script>
-<script src="sync-adapter.js?v=272"></script>
-<script src="report.js?v=272"></script>
+<script src="drive.js?v=273"></script>
+<script src="sync-adapter.js?v=273"></script>
+<script src="report.js?v=273"></script>
 </body>
 </html>
