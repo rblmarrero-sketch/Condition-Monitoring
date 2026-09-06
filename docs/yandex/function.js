@@ -802,8 +802,11 @@ function pushSend(sub, payload, opts) {
                       'Urgency': (opts && opts.urgency) || 'high', 'Authorization': vapidAuth(sub.endpoint) };
     if (opts && opts.topic) headers.Topic = opts.topic;
     const mod = u.protocol === 'http:' ? require('http') : https;
+    /* The status AND the first line of the body: Apple says WHY in the body
+       ("VapidPkHashMismatch", "BadJwtToken"), and a number alone does not. */
     const req = mod.request({ host: u.hostname, port: u.port || undefined, method: 'POST',
-                              path: u.pathname + u.search, headers }, r => { r.resume(); r.on('end', () => res(r.statusCode)); });
+                              path: u.pathname + u.search, headers }, r => {
+      let b = ''; r.on('data', c => { if (b.length < 300) b += c; }); r.on('end', () => res({ status: r.statusCode, body: b.slice(0, 200) })); });
     req.setTimeout(15000, () => req.destroy(new Error('push timeout')));
     req.on('error', rej);
     req.end(body);
@@ -824,10 +827,11 @@ async function pushAll(payload, opts) {
        and the service's host, never the endpoint itself. */
     const who = { dev: s.dev || '', host: (() => { try { return new URL(s.endpoint).hostname; } catch (e) { return ''; } })(), since: s.at || '' };
     try {
-      const st = await pushSend(s, Object.assign({ at: new Date().toISOString(), lang: s.lang || 'en' }, payload || {}), opts);
+      const r = await pushSend(s, Object.assign({ at: new Date().toISOString(), lang: s.lang || 'en' }, payload || {}), opts);
+      const st = r.status;
       if (st >= 200 && st < 300) out.sent++;
       else if (st === 404 || st === 410) { out.gone++; try { await delObj(s.key); } catch (e) {} }
-      else { out.failed++; out.why.push(Object.assign(who, { status: st, hint: pushHint(st) })); }
+      else { out.failed++; out.why.push(Object.assign(who, { status: st, said: String(r.body || '').replace(/\s+/g, ' ').trim(), hint: pushHint(st) })); }
     } catch (e) { out.failed++; out.why.push(Object.assign(who, { error: String((e && e.message) || e) })); }
   }
   if (out.failed) { try { console.log('[push] ' + (out.kind || '') + ' failed ' + out.failed + '/' + out.total + ': ' + JSON.stringify(out.why)); } catch (e) {} }

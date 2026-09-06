@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=271">
+<link rel="manifest" href="manifest.webmanifest?v=272">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=271">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=271">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=271">
+<link rel="apple-touch-icon" href="icon-192.png?v=272">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=272">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=272">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2070,33 +2070,33 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=271"></script>
-<script src="upload-defaults.js?v=271"></script>
-<script src="hme.js?v=271"></script>
-<script src="mp-fc.js?v=271"></script>
-<script src="hme-cascade.js?v=271"></script>
-<script src="assets.js?v=271"></script>
-<script src="temp-limits.js?v=271"></script>
-<script src="normalize.js?v=271"></script>
-<script src="grade.js?v=271"></script>
-<script src="edits.js?v=271"></script>
-<script src="due.js?v=271"></script>
-<script src="wear.js?v=271"></script>
-<script src="wear-figs.js?v=271"></script>
-<script src="wear-map.js?v=271"></script>
-<script src="machine-photos.js?v=271"></script>
-<script src="machine-fig.js?v=271"></script>
-<script src="get.js?v=271"></script>
-<script src="points.js?v=271"></script>
-<script src="uc-points.js?v=271"></script>
-<script src="inspect-guide.js?v=271"></script>
-<script src="get-figs.js?v=271"></script>
-<script src="body-points.js?v=271"></script>
-<script src="body-map.js?v=271"></script>
-<script src="lube.js?v=271"></script>
-<script src="lube-overrides.js?v=271"></script>
-<script src="lube2027.js?v=271"></script>
-<script src="report-core.js?v=271"></script>
+<script src="native.js?v=272"></script>
+<script src="upload-defaults.js?v=272"></script>
+<script src="hme.js?v=272"></script>
+<script src="mp-fc.js?v=272"></script>
+<script src="hme-cascade.js?v=272"></script>
+<script src="assets.js?v=272"></script>
+<script src="temp-limits.js?v=272"></script>
+<script src="normalize.js?v=272"></script>
+<script src="grade.js?v=272"></script>
+<script src="edits.js?v=272"></script>
+<script src="due.js?v=272"></script>
+<script src="wear.js?v=272"></script>
+<script src="wear-figs.js?v=272"></script>
+<script src="wear-map.js?v=272"></script>
+<script src="machine-photos.js?v=272"></script>
+<script src="machine-fig.js?v=272"></script>
+<script src="get.js?v=272"></script>
+<script src="points.js?v=272"></script>
+<script src="uc-points.js?v=272"></script>
+<script src="inspect-guide.js?v=272"></script>
+<script src="get-figs.js?v=272"></script>
+<script src="body-points.js?v=272"></script>
+<script src="body-map.js?v=272"></script>
+<script src="lube.js?v=272"></script>
+<script src="lube-overrides.js?v=272"></script>
+<script src="lube2027.js?v=272"></script>
+<script src="report-core.js?v=272"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -10668,7 +10668,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="271";
+const BUILD="272";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -13324,7 +13324,17 @@ async function pushSetupNow(){
   const stored=localStorage.getItem(PUSH_KEY)||"";
   let sub=null;
   try{ sub=await reg.pushManager.getSubscription(); }catch(e){ sub=null; }
-  if(sub && stored && stored!==key){
+  /* THE KEY THE SUBSCRIPTION WAS ACTUALLY MADE WITH, read off the subscription
+     itself where the browser offers it — not off what this page remembers
+     storing. A subscription made under one server key and pushed under
+     another is refused by the push service (Apple: 403 VapidPkHashMismatch),
+     and the page's own note of the key is empty exactly when that happened
+     before it was written: the phone then kept re-sending a subscription no
+     push could ever reach. */
+  let madeWith=stored;
+  try{ const k0=sub && sub.options && sub.options.applicationServerKey;
+       if(k0) madeWith=btoa(String.fromCharCode.apply(null, new Uint8Array(k0))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,""); }catch(e){}
+  if(sub && madeWith && madeWith!==key){
     try{ await backendPost(g,{op:"unsubscribe", endpoint:sub.endpoint}); }catch(e){}
     try{ await sub.unsubscribe(); }catch(e){}
     sub=null;
@@ -13333,7 +13343,7 @@ async function pushSetupNow(){
     try{ sub=await withTimeoutMs(reg.pushManager.subscribe({userVisibleOnly:true, applicationServerKey:b64uToU8(key)}), 20000); }
     catch(e){ return {k:"failed", why:String((e&&e.message)||e).slice(0,80)}; }
   }
-  if(localStorage.getItem(PUSH_EP)!==sub.endpoint || stored!==key){
+  if(localStorage.getItem(PUSH_EP)!==sub.endpoint || stored!==key || madeWith!==key){
     try{
       const r=await backendPost(g,{op:"subscribe", sub:sub.toJSON(), dev:DEVICE, lang, ua:navigator.userAgent});
       if(!(r && r.ok)) return {k:"failed", why:(r&&r.error)||"refused"};

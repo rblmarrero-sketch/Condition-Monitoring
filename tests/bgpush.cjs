@@ -127,7 +127,7 @@ async function phone(b, APP, opts) {
 
 (async () => {
   PS.srv = http.createServer((req, res) => { const ch = []; req.on('data', c => ch.push(c)); req.on('end', () => {
-    pushed.push({ url: req.url, headers: req.headers, body: Buffer.concat(ch) }); const st = statusFor(req.url); res.writeHead(st); res.end(); }); });
+    pushed.push({ url: req.url, headers: req.headers, body: Buffer.concat(ch) }); const st = statusFor(req.url); res.writeHead(st); res.end(st === 403 ? '{"reason":"VapidPkHashMismatch"}' : ''); }); });
   await new Promise(r => PS.srv.listen(0, r)); PS.url = 'http://127.0.0.1:' + PS.srv.address().port;
   await new Promise(r => app.listen(0, r));
   const APP = 'http://127.0.0.1:' + app.address().port + '/mobile/index.html';
@@ -217,7 +217,7 @@ async function phone(b, APP, opts) {
     const f3 = await fetch(YAB + '/__push/daily').then(r => r.json());
     ok('a refused push is counted AND explained: the device, the push service\'s host, the status and what it means',
        f3.failed === 1 && Array.isArray(f3.why) && f3.why.length === 1 && f3.why[0].status === 403 && f3.why[0].dev === 'DAAAA'
-       && f3.why[0].host === '127.0.0.1' && /key/.test(f3.why[0].hint) && !/push\/A/.test(JSON.stringify(f3.why)), JSON.stringify(f3));
+       && f3.why[0].host === '127.0.0.1' && /key/.test(f3.why[0].hint) && /VapidPkHashMismatch/.test(f3.why[0].said) && !/push\/A/.test(JSON.stringify(f3.why)), JSON.stringify(f3));
     ok('  and the subscription is kept — the phone re-subscribes at its next open', (await keysOnServer()).length === 1);
     ok('  the server log carries the same line', await until(() => yaLog.some(l => /\[push\].*failed 1\/1.*403/.test(l)), 2000), yaLog.filter(l => /\[push\]/.test(l)).slice(-1).join(''));
     statusFor = () => 201;
