@@ -1329,6 +1329,11 @@
   /* Same height as the selects it sits beside. A toolbar of controls that do
      not line up reads as three toolbars. */
   .resetb{margin-left:auto;flex:0 0 auto;min-height:36px;padding:0 13px;}
+  /* the second row of the toolbar, and the "filtered" mark on the first */
+  .controls.more{position:static;margin-top:-10px;padding-top:10px;border-top-left-radius:0;border-top-right-radius:0;box-shadow:none;}
+  .controls .dqtog .n{display:inline-grid;place-items:center;min-width:18px;height:18px;margin-left:6px;padding:0 5px;border-radius:999px;
+    background:var(--accent);color:var(--accent-ink,#fff);font-size:11px;font-weight:700;}
+  body.filtered main > .controls:not(.more){border-left:3px solid var(--accent);}
   .resetb[disabled]{opacity:.4;cursor:default;}
   @media (max-width:1500px){ .hide-m{display:none !important;} }
   .chip{display:inline-flex;align-items:center;gap:7px;background:color-mix(in srgb,var(--accent) 14%,var(--surface));
@@ -2604,6 +2609,10 @@
     <div class="field"><label for="fRange" data-i18n="f_period">Period</label><select id="fRange">
       <option value="0" data-i18n="f_alltime">All time</option><option value="30" data-i18n="f_30">Last 30 days</option>
       <option value="90" data-i18n="f_90">Last 90 days</option><option value="365" data-i18n="f_365">Last 12 months</option></select></div>
+    <!-- The state of the work a finding raised: open, planned, in progress,
+         closed, no action required. A record survives when any of its
+         findings is in that state; the register narrows to the finding. -->
+    <div class="field"><label for="fStatus" data-i18n="f_status_s" data-i18n-title="f_status" title="Maintenance action status">Status</label><select id="fStatus"></select></div>
     <!-- Not wrapped in a .field: the wrapper was the flex child, so the grow
          factor on the input did nothing and a 26-character query still scrolled
          inside a 200px box. The label is visually hidden either way. -->
@@ -2618,25 +2627,27 @@
          the width of its own placeholder — so the newcomer yields: at rest it
          is a 34px toggle, and it opens into the select when somebody wants it
          or whenever it is actually filtering something. -->
-    <button type="button" class="btn dqtog" id="fDqTog" aria-expanded="false"
-      data-i18n-title="f_dq" title="Data quality — what is missing from what was found">⚑</button>
-    <label class="vh" for="fDq" data-i18n="f_dq_s">Quality</label>
-    <div class="field dqf hidden"><select id="fDq" data-i18n-title="f_dq" title="Data quality — what is missing from what was found">
+    <!-- The rarer filters — data quality, voided rounds — behind one control
+         that says how many of them are set, so the row stays one row. -->
+    <button type="button" class="btn dqtog" id="fMore" aria-expanded="false" aria-controls="fMoreRow"><span data-i18n="f_more">More filters</span><span class="n hidden" id="fMoreN"></span></button>
+    <span class="fcount" id="fCount"></span>
+    <!-- Always here, so "how do I get back to the whole fleet" is answered by
+         looking rather than by remembering. -->
+    <button class="btn resetb" id="fReset" data-i18n="f_reset"
+      data-i18n-title="f_reset_t" title="Clear every filter and drill-down">Clear all</button>
+  </div>
+  <div class="controls more hidden" id="fMoreRow">
+    <div class="field dqf"><label for="fDq" data-i18n="f_dq_s" data-i18n-title="f_dq" title="Data quality — what is missing from what was found">Data quality</label><select id="fDq" data-i18n-title="f_dq" title="Data quality — what is missing from what was found">
         <option value="" data-i18n="dq_all">Everything</option>
         <option value="any" data-i18n="dq_any">Anything missing</option>
         <option value="cond" data-i18n="dq_cond">Condition missing</option>
         <option value="defect" data-i18n="dq_defect">Defect missing</option>
         <option value="action" data-i18n="dq_action">Action missing</option>
-        <option value="owner" data-i18n="dq_owner">Nobody responsible</option>
+        <option value="owner" data-i18n="dq_owner">Owner not assigned</option>
         <option value="due" data-i18n="dq_due">Due date missing</option>
       </select></div>
-    <span class="fcount" id="fCount"></span>
     <label class="voidtog" data-i18n-title="f_voidtip" title="Voided inspections are withdrawn from every count, but nothing is deleted">
       <input type="checkbox" id="fVoid"><span data-i18n="f_void">Show voided</span></label>
-    <!-- Always here, so "how do I get back to the whole fleet" is answered by
-         looking rather than by remembering. -->
-    <button class="btn resetb" id="fReset" data-i18n="f_reset"
-      data-i18n-title="f_reset_t" title="Clear every filter and drill-down">Reset</button>
   </div>
   <div class="chips" id="chips"></div>
 
@@ -3867,11 +3878,12 @@ const I18N={
   a_ed_owner:"Type or pick a name. Saves when you leave the field.",
   a_ed_due:"Set the date this is due. Saves on change.",
   a_ed_st:"Move it along. Saves on change.",
-  f_dq:"Data quality — what is missing from what was found", f_dq_s:"Quality",
+  f_dq:"Data quality — what is missing from what was found", f_dq_s:"Data quality",
   dq_all:"Everything", dq_any:"Anything missing", dq_cond:"Condition missing",
   dq_defect:"Defect missing", dq_action:"Action missing", dq_owner:TERMS.en.owner_unassigned,
-  dq_due:"Due date missing", c_dq:"Quality",
-  f_reset:"Reset", f_reset_n:"Reset ({n})",
+  dq_due:"Due date missing", c_dq:"Data quality",
+  f_reset:"Clear all", f_reset_n:"Clear all ({n})",
+  f_status:"Maintenance action status", f_status_s:"Status", f_allstatus:"All statuses", f_more:"More filters", c_status:"Status",
   f_reset_t:"Clear every filter and drill-down and go back to the whole fleet",
   k_week:"Due this week", k_week_clear:"Nothing past due", k_week_over:"{n} already overdue",
   k_week_t:"Rounds coming due in the next seven days, on the current Type and Class filters. Opens the due list.",
@@ -4628,11 +4640,12 @@ const I18N={
   a_ed_owner:"Введите или выберите имя. Сохраняется при уходе из поля.",
   a_ed_due:"Укажите срок. Сохраняется сразу.",
   a_ed_st:"Изменить статус. Сохраняется сразу.",
-  f_dq:"Качество данных — чего не хватает в том, что нашли", f_dq_s:"Качество",
+  f_dq:"Качество данных — чего не хватает в том, что нашли", f_dq_s:"Качество данных",
   dq_all:"Всё", dq_any:"Чего-либо не хватает", dq_cond:"Нет состояния",
   dq_defect:"Нет дефекта", dq_action:"Нет действия", dq_owner:TERMS.ru.owner_unassigned,
-  dq_due:"Нет срока", c_dq:"Качество",
-  f_reset:"Сброс", f_reset_n:"Сброс ({n})",
+  dq_due:"Нет срока", c_dq:"Качество данных",
+  f_reset:"Сбросить все", f_reset_n:"Сбросить все ({n})",
+  f_status:"Статус работы", f_status_s:"Статус", f_allstatus:"Все статусы", f_more:"Ещё фильтры", c_status:"Статус",
   f_reset_t:"Снять все фильтры и уточнения и вернуться ко всему парку",
   k_week:"Срок на этой неделе", k_week_clear:"Просрочек нет", k_week_over:"{n} уже просрочено",
   k_week_t:"Обходы, срок которых наступает в ближайшие семь дней, с учётом фильтров «Тип» и «Класс». Открывает список сроков.",
@@ -5550,15 +5563,27 @@ function setDrill(k,v){ drill[k] = (drill[k]===v ? "" : v); renderAll(); }
 function clearDrill(){ drill={sev:"",defect:"",cause:"",unit:"",owner:"",month:""}; renderAll(); }
 function matchesText(r,q){
   if(!q) return true;
-  const hay=[r.equip,r.by,r.type,r.date].concat(
-    (r.items||[]).flatMap(i=>[i.key,i.label,i.defect,i.cause,i.comment,i.wo,i.actionLabel,i.prio]));
+  const a=ASSET_BY[r.equip]||{};
+  const hay=[r.equip,r.by,r.type,r.date,a.cls,a.cat,a.m].concat(
+    (r.items||[]).flatMap(i=>[i.key,i.label,i.defect,i.defectCode,i.cause,i.comment,i.wo,i.actionLabel,i.prio,i.owner]));
   return hay.some(v=>String(v||"").toLowerCase().includes(q));
 }
 /* inclVoid lets a caller ask the same question with the voided rounds put back,
    which is the only honest way to say how many the void filter is holding out. */
+/* Is this finding in the state the Status filter names? "open" is work
+   outstanding with no status yet recorded; DONE takes VERIFIED with it. */
+function statusIs(r,i,st){
+  if(!st) return true;
+  const s=String(i.status||"");
+  if(st==="open") return !s && actionRequired(r,i);
+  if(st==="DONE") return s==="DONE"||s==="VERIFIED";
+  return s===st;
+}
+const fStatusVal=()=>($("fStatus")&&$("fStatus").value)||"";
 function filtered(inclVoid){
   const ty=$("fType").value, c=$("fClass").value, days=+$("fRange").value;   // not "t" — that is t()
   const dq=($("fDq")&&$("fDq").value)||"";
+  const st=fStatusVal();
   const cutoff=days? DUE.daysAgo(days):null;
   const q=($("fQ").value||"").trim().toLowerCase();
   const showVoid=inclVoid||($("fVoid")&&$("fVoid").checked);
@@ -5575,6 +5600,7 @@ function filtered(inclVoid){
     if(dq && !(r.items||[]).some(i=>{ const m=dqMissing(r,i);
         return dq==="any" ? m.length>0 : m.includes(dq); })) return false;
     if(drill.month&&String(r.date||"").slice(0,7)!==drill.month) return false;
+    if(st && !(r.items||[]).some(i=>!i.general && statusIs(r,i,st))) return false;
     /* Owner is per finding, so a record survives if any of its findings is
        theirs — and the register, which lists findings, narrows the rest. */
     if(drill.owner&&!(r.items||[]).some(i=>(i.owner||"")===drill.owner)) return false;
@@ -5624,6 +5650,7 @@ function renderChips(){
   if($("fType").value)  add(t("c_type"), TYPE_LABEL[$("fType").value]||$("fType").value, ()=>{ $("fType").value=""; renderAll(); });
   if($("fClass").value) add(t("c_class"), $("fClass").value, ()=>{ $("fClass").value=""; renderAll(); });
   if(+$("fRange").value) add(t("c_period"), $("fRange").selectedOptions[0].textContent, ()=>{ $("fRange").value="0"; renderAll(); });
+  if(fStatusVal()) add(t("c_status"), $("fStatus").selectedOptions[0].textContent, ()=>{ $("fStatus").value=""; renderAll(); });
   if(($("fQ").value||"").trim()) add(t("c_search"), $("fQ").value.trim(), ()=>{ $("fQ").value=""; renderAll(); });
   if($("fDq")&&$("fDq").value) add(t("c_dq"), $("fDq").selectedOptions[0].textContent,
     ()=>{ $("fDq").value=""; renderAll(); });
@@ -5640,7 +5667,8 @@ function renderChips(){
      refines the page you are on, it does not navigate — but it rides in the
      entry, so Back returns to the previous page WITH the filters it had. */
   if(typeof urlWrite==="function") urlWrite(false);
-  dqSync();
+  moreSync();
+  document.body.classList.toggle("filtered", c.length>0);
   const rb=$("fReset");
   if(rb){
     rb.disabled=!c.length;
@@ -5656,6 +5684,7 @@ function renderChips(){
    toolbar. Two clear controls that clear different amounts is worse than one. */
 function clearFilters(){
   $("fType").value=""; $("fClass").value=""; $("fRange").value="0"; $("fQ").value="";
+  if($("fStatus")) $("fStatus").value="";
   if($("fDq")) $("fDq").value="";
   if($("fGrade")) $("fGrade").value="";
   clearDrill();                        // ends with renderAll(), so the cleared controls take effect
@@ -7944,12 +7973,13 @@ function renderHistList(recs){
        than silently becoming another machine;
      · removing the filter restores the whole history. */
 function anyFilterOn(){
-  return !!($("fType").value || $("fClass").value || +$("fRange").value || ($("fQ").value||"").trim()
+  return !!($("fType").value || $("fClass").value || +$("fRange").value || ($("fQ").value||"").trim() || fStatusVal()
     || ($("fDq")&&$("fDq").value) || drill.sev || drill.defect || drill.cause || drill.unit || drill.owner || drill.month);
 }
 /* A position matches the finding-level filters the way filtered() decides a
    round does — the same three tests, applied to the one position. */
 function histItemOn(r,i){
+  if(fStatusVal() && !statusIs(r,i,fStatusVal())) return false;
   if(drill.sev && String(sevOf(r,i))!==String(drill.sev)) return false;
   if(drill.defect && defectKeyOf(i)!==drill.defect) return false;
   if(drill.cause && causeKeyOf(i)!==drill.cause) return false;
@@ -7959,14 +7989,14 @@ function histRecs(unit){
   const base = anyFilterOn() ? filtered(true) : RECS;
   const showVoid = $("fVoid") && $("fVoid").checked;
   let recs = base.filter(r=>r.equip===unit);
-  if(drill.sev||drill.defect||drill.cause)
+  if(drill.sev||drill.defect||drill.cause||fStatusVal())
     recs = recs.map(r=>Object.assign({}, r, { items:(r.items||[]).filter(i=>histItemOn(r,i)) })).filter(r=>r.items.length);
   return recs;
 }
 /* What to call the filter in the empty state: the grade's own name when the
    grade is the only filter, "matching" otherwise. */
 function histFilterName(){
-  const only = drill.sev && !(($("fType").value)||$("fClass").value||+$("fRange").value||($("fQ").value||"").trim()||($("fDq")&&$("fDq").value)||drill.defect||drill.cause||drill.unit||drill.owner||drill.month);
+  const only = drill.sev && !(($("fType").value)||$("fClass").value||+$("fRange").value||($("fQ").value||"").trim()||fStatusVal()||($("fDq")&&$("fDq").value)||drill.defect||drill.cause||drill.unit||drill.owner||drill.month);
   return only ? (GRADE.name(Number(drill.sev), lang) || SEV[drill.sev].l) : t("hist_f_any");
 }
 function renderHistory(){
@@ -11392,8 +11422,9 @@ function showTab(t,push){
      is chosen by machine or date — none of them is narrowed by the bar, so a
      bar shown above them would be a promise the page does not keep. */
   const own = t==="due" || t==="lube" || t==="sync" || t==="reports";
-  const bar = document.querySelector("main > .controls");
+  const bar = document.querySelector("main > .controls:not(.more)");
   if(bar) bar.classList.toggle("hidden", own);
+  if(typeof moreSync==="function") moreSync();
   if($("chips")) $("chips").classList.toggle("hidden", own);
   /* A new page is a new history entry; restoring one is not. */
   if(typeof urlWrite==="function") urlWrite(!!push);
@@ -11417,7 +11448,7 @@ $("tabs").onclick=e=>{ const b=e.target.closest("button[data-tab]"); if(b) showT
    Kept short and readable, so the address bar stays something a person can
    look at: #actions?type=MP&unit=TK149 */
 const URL_KEYS=[["type","fType"],["class","fClass"],["range","fRange"],
-                ["q","fQ"],["dq","fDq"]];
+                ["q","fQ"],["dq","fDq"],["st","fStatus"]];
 let urlQuiet=0;                       // set while applying, so writing does not loop
 /* THE ADDRESS SOMEBODY ARRIVED ON, CAPTURED BEFORE ANYTHING CAN OVERWRITE IT.
 
@@ -12002,7 +12033,7 @@ function histUnits(){
 let histPin="", histPinSig="";
 /* The filters as one string, so the pin can tell when they have changed. */
 function filterSig(){
-  return [$("fType").value,$("fClass").value,$("fRange").value,($("fQ").value||"").trim(),($("fDq")&&$("fDq").value)||"",
+  return [$("fType").value,$("fClass").value,$("fRange").value,($("fQ").value||"").trim(),($("fDq")&&$("fDq").value)||"",fStatusVal(),
           drill.sev,drill.defect,drill.cause,drill.unit,drill.owner,drill.month].join("|");
 }
 function fillEquip(){
@@ -12194,6 +12225,12 @@ function refreshControls(){
     const was=$("fGrade").value;
     $("fGrade").innerHTML=`<option value="">${esc(t("f_allgrades"))}</option>`+GRADE.LEVELS.map(n=>`<option value="${n}">${esc(GRADE.label(n,lang))}</option>`).join("");
     $("fGrade").value = drill.sev ? String(drill.sev) : (was||"");
+  }
+  if($("fStatus")){
+    const was=$("fStatus").value;
+    $("fStatus").innerHTML=`<option value="">${esc(t("f_allstatus"))}</option>`
+      +FSTATUS.map(x=>[x.k||"open", x[lang]||x.en]).map(([k,l])=>`<option value="${esc(k)}">${esc(l)}</option>`).join("");
+    $("fStatus").value=was;
   }
   const units=[...new Set(RECS.map(r=>r.equip))].sort(natCmp);
   window.__units=units;
@@ -14765,24 +14802,30 @@ if($("fGrade")) $("fGrade").onchange=()=>{ const v=Number($("fGrade").value)||nu
 /* Open it, and keep it open while it is filtering: a control that hides itself
    while it is still narrowing the page is how somebody spends ten minutes
    wondering where half the fleet went. */
+/* The second row opens when asked, or whenever one of its filters is set —
+   a filter that is on but out of sight is a filter nobody can find to turn
+   off. The button counts what is set. */
+let moreOpen=false;
+function moreSync(){
+  const row=$("fMoreRow"), tog=$("fMore"), n=$("fMoreN"); if(!row||!tog) return;
+  const set=(($("fDq")&&$("fDq").value)?1:0)+(($("fVoid")&&$("fVoid").checked)?1:0);
+  const own=!!document.querySelector("main > .controls.hidden:not(.more)");
+  const open=(moreOpen||set>0) && !own;
+  row.classList.toggle("hidden", !open);
+  tog.classList.toggle("on", set>0);
+  tog.setAttribute("aria-expanded", open?"true":"false");
+  if(n){ n.textContent=String(set); n.classList.toggle("hidden", !set); }
+}
 function dqSync(){
   const on=!!($("fDq")&&$("fDq").value);
-  const box=document.querySelector(".dqf");
-  const tog=$("fDqTog");
-  if(!box||!tog) return;
-  const open = on || tog.getAttribute("aria-expanded")==="true";
-  box.classList.toggle("hidden", !open);
-  tog.classList.toggle("on", on);
-  tog.setAttribute("aria-expanded", open?"true":"false");
+  moreSync();
 }
-$("fDqTog").onclick=()=>{
-  const tog=$("fDqTog");
-  const open=tog.getAttribute("aria-expanded")==="true";
-  if(open && $("fDq").value){ $("fDq").value=""; renderAll(); }      // shutting it clears it
-  tog.setAttribute("aria-expanded", open?"false":"true");
-  dqSync();
-  if(!open) $("fDq").focus();
+$("fMore").onclick=()=>{
+  moreOpen=!($("fMore").getAttribute("aria-expanded")==="true");
+  moreSync();
+  if(moreOpen) $("fDq").focus();
 };
+if($("fStatus")) $("fStatus").onchange=()=>renderAll();
 $("fReset").onclick=clearFilters;
 /* The Definitions popover closes the way every popover is expected to: on
    Escape, and on a press anywhere outside it. */
