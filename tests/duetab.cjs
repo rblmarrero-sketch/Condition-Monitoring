@@ -84,8 +84,10 @@ const rows = p => p.$$eval('#dueList .duerow', a => a.length);
   console.log('four tabs, in the order of the shift');
   const tabs = await p.$$eval('#tabbar button[data-pane]', a => a.map(x => x.dataset.pane));
   ok('there are four of them', tabs.length === 4, tabs.join(' '));
-  ok('and Due is one, second after Capture',
-     tabs[0] === 'paneCapture' && tabs[1] === 'paneDue', tabs.join(' > '));
+  /* Inspect · Saved · Due · Sync since Phase 2: the order of the shift is
+     capture, what was captured, what is next, and the link. */
+  ok('and Due is one, third after Inspect and Saved',
+     tabs[0] === 'paneCapture' && tabs[1] === 'paneQueue' && tabs[2] === 'paneDue', tabs.join(' > '));
   ok('every tab opens a pane that exists',
      await p.evaluate(t => t.every(x => !!document.getElementById(x)), tabs));
   /* It used to be three screens down inside System. */

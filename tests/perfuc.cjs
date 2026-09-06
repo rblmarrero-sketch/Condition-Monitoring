@@ -38,7 +38,11 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
   ok('a keystroke in the measurement box is under 25 ms', r.perKey < 25, Math.round(r.perKey * 10) / 10 + ' ms');
   ok('the DOM stays under 4000 nodes', r.nodes < 4000, String(r.nodes));
 
-  /* Walking the whole round must not leak nodes or listeners. */
+  /* Walking the whole round must not leak nodes or listeners. The review card
+     redraws itself a quarter-second after the last touch (reviewSoon), so the
+     baseline is taken once that has happened — otherwise its first drawing
+     counts as a leak. */
+  await p.waitForTimeout(400);
   const before = await p.evaluate(() => document.querySelectorAll('*').length);
   await p.evaluate(() => { for (let i = 0; i < 5; i++) ucOrder().forEach(k => pickComponent(k)); });
   await p.waitForTimeout(300);

@@ -121,7 +121,10 @@ const attr = p => p.evaluate(() => document.documentElement.getAttribute('data-t
   // navigator.onLine true, Drive unreachable. The old pill said "online".
   await p.evaluate(() => netSeen(false)); await p.waitForTimeout(300);
   const nosig = await pill(p);
-  ok('a network that delivers nothing is not "online"', nosig.t === 'No signal', JSON.stringify(nosig));
+  /* The pill speaks the field's words since Phase 2 (terms.js): "Offline —
+     work saved here" whether the radio is off or the link delivers nothing;
+     the host and the reason are named under the version line, not here. */
+  ok('a network that delivers nothing is not "online"', /^Offline/.test(nosig.t) && !/online/i.test(nosig.t), JSON.stringify(nosig));
   ok('and it is not shown as good', !nosig.c.includes('on') || nosig.c.includes('warn'), nosig.c);
   ok('the app never claims "online" anywhere in the header',
     !/online/i.test(await p.textContent('header')), await p.textContent('header'));
@@ -133,12 +136,12 @@ const attr = p => p.evaluate(() => document.documentElement.getAttribute('data-t
   console.log('\n  the other states');
   await ctx.setOffline(true);
   await p.evaluate(() => dispatchEvent(new Event('offline'))); await p.waitForTimeout(400);
-  ok('radio off reads offline', (await pill(p)).t === 'Offline', JSON.stringify(await pill(p)));
+  ok('radio off reads offline', /^Offline/.test((await pill(p)).t), JSON.stringify(await pill(p)));
   await ctx.setOffline(false);
   await p.evaluate(() => dispatchEvent(new Event('online'))); await p.waitForTimeout(400);
   await p.evaluate(() => { lastErr = 'SharePoint: HTTP 500'; renderNet(); }); await p.waitForTimeout(300);
   const err = await pill(p);
-  ok('a failing upload is called a failure', err.t === 'Upload failing', JSON.stringify(err));
+  ok('a failing upload is called out, not reassured', err.t === 'Needs attention' && /err/.test(err.c), JSON.stringify(err));
   ok('and shown in the critical colour', err.c.includes('err'));
   await p.evaluate(() => { lastErr = ''; renderNet(); }); await p.waitForTimeout(300);
 

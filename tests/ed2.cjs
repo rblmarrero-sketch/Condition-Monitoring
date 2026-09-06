@@ -155,6 +155,8 @@ const openHist = async (p,unit) => {
   ok('the voided round is excluded from what the dashboard counts',
      (await p.evaluate(()=>{const k='TK146|2026-03-09|MP';
        return CMDash.allRecs().filter(r=>`${r.equip}|${r.date}|${r.type}`===k && !r._void).length;}))===0);
+  /* The voided switch sits behind "More filters" since Phase 3. */
+  await p.evaluate(() => { if ($('fMoreRow').classList.contains('hidden')) $('fMore').click(); });
   await p.check('#fVoid'); await p.waitForTimeout(300);
   ok('"Show voided" is honoured by the filter',
      (await p.evaluate(()=>document.getElementById('fVoid').checked))===true);

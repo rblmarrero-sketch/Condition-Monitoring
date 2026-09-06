@@ -54,7 +54,7 @@ const vis = (p, sel) => p.evaluate(s => { const e = document.querySelector(s);
   ok('and the PDF', !(await vis(p, '#reportBtn')));
   /* The card the buttons belonged to still speaks. */
   ok('the screen still says why it is empty',
-     /Nothing captured/i.test(await p.textContent('#pending')),
+     /Nothing (captured|saved)/i.test(await p.textContent('#pending')),
      (await p.textContent('#pending')).trim().slice(0, 40));
 
   console.log('\nthe gear that opened the same sheet as the other gear');

@@ -108,7 +108,8 @@ const SEED = `(async () => {
   });
   const dz2 = fleet.find(r=>r.equip==='DZ002'), dz1 = fleet.find(r=>r.equip==='DZ001');
   ok('the worn dozer is listed', !!dz2, JSON.stringify(dz2));
-  ok('and is marked Critical', dz2 && /Critical/i.test(dz2.sev), dz2&&dz2.sev);
+  /* The grade rides in the Priority column since Phase 4. */
+  ok('and is marked Critical', dz2 && /Critical/i.test(dz2.prio || dz2.sev || ''), dz2&&(dz2.prio||dz2.sev));
   ok('the healthy one is not', dz1 && !/Critical/i.test(dz1.sev), dz1&&dz1.sev);
   ok('its top finding names the wear, not a dash',
     dz2 && /condemn|worst/i.test(dz2.defect), dz2&&dz2.defect);
