@@ -65,6 +65,24 @@ const alts = h => (h.match(/class="alt[l2i]?"/g) || []).length;
     ok('an estimate: pages, size and time, with nothing left behind', E.e && E.e.pages >= 1 && E.e.bytes > 10000 && E.e.seconds >= 2 && !E.root, JSON.stringify(E.e));
     ok('  a higher quality costs more bytes', E.e2 && E.e2.bytes > E.e.bytes, E.e.bytes + ' → ' + E.e2.bytes);
 
+    /* THE MATRIX: every round type this fixture holds × English · Russian ·
+       both — the single-language sheets carry no second rendering, the
+       bilingual ones do, and none of the twenty-four throws. */
+    const MX = await p.evaluate(() => {
+      const one = { MP: 'TK101' };
+      const mk = (u, ty, i) => ({ equip: u, date: '2026-08-0' + (1 + i), type: ty, cls: 'HT', by: 'Ivanov', smu: '1200', items: [{ key: '4C', label: 'Left Rear Final Drive', grade: 3, defect: 'Ferrous debris', action: 'SCH', actionLabel: 'Schedule repair' }] });
+      const types = ['MP', 'FC', 'INSP', 'TEMP', 'UC', 'GET', 'TB', 'LUBE'];
+      CMDash.importRecords(types.map((ty, i) => mk('TK19' + i, ty, i)));
+      const out = [];
+      types.forEach((ty, i) => { const key = 'TK19' + i + '|2026-08-0' + (1 + i) + '|' + ty;
+        [['en', false], ['ru', false], ['en', true]].forEach(([l, bi]) => {
+          try { const h = CMReport.sectionsFor('one', key, { lang: l, bi, photos: false }).map(x => x.html).join('');
+                const n = (h.match(/class="alt[l2i]?"/g) || []).length;
+                out.push({ ty, l, bi, secs: h.length > 200, alts: n, ok: bi ? n > 0 : n === 0 }); }
+          catch (e) { out.push({ ty, l, bi, err: String(e.message || e) }); } }); });
+      return { out, lang }; });
+    ok('the matrix: eight round types × EN · RU · both, all built, single-language sheets clean', MX.out.length === 24 && MX.out.every(x => x.ok && x.secs) && MX.lang === 'en',
+       MX.out.filter(x => !(x.ok && x.secs)).map(x => x.ty + '/' + x.l + (x.bi ? '+' : '') + (x.err ? ' ' + x.err : ' alts=' + x.alts)).join(' | ') || '24 of 24');
     await p.evaluate(() => { $('rScope').value = 'unit'; refreshReportTargets(); cmbSet('rTarget', 'TK101'); renderReportPreview(); });
     await p.waitForTimeout(900);
     const P = await p.evaluate(() => ({ est: ($('rEst') || {}).textContent || '', prev: $('rPreview').textContent }));

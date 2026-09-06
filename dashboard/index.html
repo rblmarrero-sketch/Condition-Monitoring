@@ -2214,7 +2214,10 @@
   }
   /* A segmented control that does not fit a phone wraps to a second row;
      clipped, its last option ("All") was simply not there. */
-  @media (max-width:640px){ .seg{display:flex;flex-wrap:wrap;} .seg button{flex:1 1 auto;} }
+  /* Up to 1000px, not 640: at 200% zoom a 1366 laptop is a 683px viewport and
+     eight segments in one line put three of them past the right edge
+     (tests/zoom200.cjs). Wrapped segments are all reachable. */
+  @media (max-width:1000px){ .seg{display:flex;flex-wrap:wrap;} .seg button{flex:1 1 auto;} }
 
 </style>
 </head>
