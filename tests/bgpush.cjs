@@ -209,6 +209,17 @@ async function phone(b, APP, opts) {
     pushed.length = 0;
     const g = await fetch(YAB + '/__push/daily').then(r => r.json());
     ok('a subscription the push service says is gone is dropped', g.sent === 1 && g.gone === 1 && (await keysOnServer()).length === 1, JSON.stringify(g) + ' left ' + (await keysOnServer()).length);
+    /* A refusal is NAMED. The field's first test push came back "failed: 1"
+       and nothing else — the maintainer could not tell a dead network from a
+       phone subscribed under an earlier key pair. */
+    statusFor = url => url.endsWith('/push/A') ? 403 : 201;
+    pushed.length = 0;
+    const f3 = await fetch(YAB + '/__push/daily').then(r => r.json());
+    ok('a refused push is counted AND explained: the device, the push service\'s host, the status and what it means',
+       f3.failed === 1 && Array.isArray(f3.why) && f3.why.length === 1 && f3.why[0].status === 403 && f3.why[0].dev === 'DAAAA'
+       && f3.why[0].host === '127.0.0.1' && /key/.test(f3.why[0].hint) && !/push\/A/.test(JSON.stringify(f3.why)), JSON.stringify(f3));
+    ok('  and the subscription is kept — the phone re-subscribes at its next open', (await keysOnServer()).length === 1);
+    ok('  the server log carries the same line', await until(() => yaLog.some(l => /\[push\].*failed 1\/1.*403/.test(l)), 2000), yaLog.filter(l => /\[push\]/.test(l)).slice(-1).join(''));
     statusFor = () => 201;
     BUMP = null;
   }

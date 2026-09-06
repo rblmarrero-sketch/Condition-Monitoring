@@ -815,16 +815,32 @@ function pushSend(sub, payload, opts) {
 async function pushAll(payload, opts) {
   if (!vapidReady()) return { ok: false, error: 'No VAPID keys', sent: 0, gone: 0, failed: 0, total: 0 };
   const subs = await pushList();
-  const out = { ok: true, sent: 0, gone: 0, failed: 0, total: subs.length, kind: payload && payload.kind };
+  const out = { ok: true, sent: 0, gone: 0, failed: 0, total: subs.length, kind: payload && payload.kind, why: [] };
   for (const s of subs) {
+    /* A failure is named, never only counted: "failed: 1" told the maintainer
+       nothing about a phone that had subscribed under one key pair and was
+       being pushed under another. The push service's status code, or the
+       network error, goes on the reply and into the log — with the device
+       and the service's host, never the endpoint itself. */
+    const who = { dev: s.dev || '', host: (() => { try { return new URL(s.endpoint).hostname; } catch (e) { return ''; } })(), since: s.at || '' };
     try {
       const st = await pushSend(s, Object.assign({ at: new Date().toISOString(), lang: s.lang || 'en' }, payload || {}), opts);
       if (st >= 200 && st < 300) out.sent++;
       else if (st === 404 || st === 410) { out.gone++; try { await delObj(s.key); } catch (e) {} }
-      else out.failed++;
-    } catch (e) { out.failed++; }
+      else { out.failed++; out.why.push(Object.assign(who, { status: st, hint: pushHint(st) })); }
+    } catch (e) { out.failed++; out.why.push(Object.assign(who, { error: String((e && e.message) || e) })); }
   }
+  if (out.failed) { try { console.log('[push] ' + (out.kind || '') + ' failed ' + out.failed + '/' + out.total + ': ' + JSON.stringify(out.why)); } catch (e) {} }
   return out;
+}
+/* What a status from the push service usually means, in one line. */
+function pushHint(st) {
+  if (st === 401 || st === 403) return 'the push service refused this server\'s key: the phone subscribed under a different key pair — it re-subscribes by itself at its next open';
+  if (st === 400) return 'the push service rejected the message';
+  if (st === 413) return 'the message is too large';
+  if (st === 429) return 'the push service is rate-limiting this server';
+  if (st >= 500) return 'the push service is having trouble; it will be retried at the next push';
+  return '';
 }
 /* The folder changed: something for server.js to debounce into a push. */
 let onFolderChange = null;
