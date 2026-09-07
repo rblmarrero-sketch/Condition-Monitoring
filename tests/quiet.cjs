@@ -138,7 +138,9 @@ const vis = (p, sel) => p.evaluate(s => { const e = document.querySelector(s);
 
   console.log('\ntwo refresh icons nobody could tell apart');
   ok('the everyday one is the button',
-     await vis(p, '#teamRefresh') && /check for new/i.test(await p.textContent('#teamRefresh')),
+     /* "Refresh" since the wording pass: the word a technician uses, and the
+        same word the dashboard's own control carries. */
+     await vis(p, '#teamRefresh') && /refresh|обнов/i.test(await p.textContent('#teamRefresh')),
      (await p.textContent('#teamRefresh')).trim());
   /* Re-reading the whole folder is a recovery action for the rare case where
      two devices hold different subsets. Offered, but not as a second button of

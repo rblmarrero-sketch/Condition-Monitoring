@@ -21,6 +21,7 @@
 (function (root) {
   const en = {
     /* condition */
+    equipment: "Equipment",
     grade: "Condition Grade", grade_short: "Grade", severity: "Severity",
     finding_critical: "Critical finding", finding_severe: "Severe finding", finding_degraded: "Degraded finding",
     component: "Component", point: "Inspection point", failure_mode: "Failure mode", direct_cause: "Direct cause",
@@ -50,6 +51,7 @@
     ready: "Ready", ready_warn: "Ready with warning", not_ready: "Not ready",
   };
   const ru = {
+    equipment: "Техника",
     grade: "Оценка состояния", grade_short: "Оценка", severity: "Степень",
     finding_critical: "Критичная находка", finding_severe: "Серьёзная находка", finding_degraded: "Находка с ухудшением",
     component: "Узел", point: "Точка осмотра", failure_mode: "Вид отказа", direct_cause: "Непосредственная причина",

@@ -1480,7 +1480,7 @@
 </head>
 <body>
 <header>
-  <span class="t" data-i18n="app_title">Truck Inspection</span>
+  <span class="t" data-i18n="app_title">Condition Monitoring</span>
   <span class="lang"><button data-lang="en" class="on">EN</button><button data-lang="ru">RU</button></span>
   <button class="btn-set" id="setBtn" data-i18n-title="set_title" title="Settings">⚙</button>
   <button type="button" class="st" id="netStatus" data-i18n-title="net_title" title="Connection">…</button>
@@ -1540,7 +1540,7 @@
     <label class="fld"><span data-i18n="lbl_class">Equipment</span>
       <button type="button" class="picker-btn" id="classBtn"></button>
     </label>
-    <label class="fld"><span data-i18n="lbl_truck">Truck / Unit</span>
+    <label class="fld"><span data-i18n="lbl_truck">Equipment</span>
       <div class="withbtn">
         <button type="button" class="picker-btn" id="equipBtn"></button>
         <button type="button" class="iconbtn" id="scanBtn">🔳 <span data-i18n="btn_scan">Scan</span></button>
@@ -1549,7 +1549,7 @@
     <input id="qrPhoto" type="file" accept="image/*" capture="environment" class="hidden">
     <div class="row">
       <label class="fld"><span data-i18n="lbl_date">Date</span><input id="date" type="date"></label>
-      <label class="fld"><span data-i18n="lbl_smu">SMU / machine hrs</span><input id="smu" type="number" inputmode="numeric" data-i18n-ph="ph_smu" placeholder="e.g. 6018"></label>
+      <label class="fld"><span data-i18n="lbl_smu">Machine hours</span><input id="smu" type="number" inputmode="numeric" data-i18n-ph="ph_smu" placeholder="e.g. 6018"></label>
     </div>
     <label class="fld"><span data-i18n="lbl_inspector">Inspected by</span>
       <input id="inspector" type="text" data-i18n-ph="ph_inspector" placeholder="name / badge no." autocomplete="name"></label>
@@ -1877,8 +1877,8 @@
     <h2><span data-i18n="sec_onphone">On this phone</span> <span class="count-badge" id="qCount">0</span></h2>
     <div class="pending" id="pending"></div>
     <div class="row" style="margin-top:12px">
-      <button class="btn ghost" id="mergeOut">⇄ <span data-i18n="btn_merge_out">Send round</span></button>
-      <button class="btn ghost" id="mergeIn">📥 <span data-i18n="btn_merge_in">Receive round</span></button>
+      <button class="btn ghost" id="mergeOut">⇄ <span data-i18n="btn_merge_out">Share inspection</span></button>
+      <button class="btn ghost" id="mergeIn">📥 <span data-i18n="btn_merge_in">Import team inspection</span></button>
     </div>
     <div class="hint" style="margin-top:8px" data-i18n="merge_hint">Two inspectors on the same round: each phone sends its round, the other receives it. Duplicates are merged, never doubled.</div>
     <input id="mergeFile" type="file" accept=".json,application/json" class="hidden">
@@ -1929,7 +1929,7 @@
   </div>
 
   <div class="card">
-    <h2><span data-i18n="sec_team">In the system</span> <span class="count-badge" id="teamCount">0</span></h2>
+    <h2><span data-i18n="sec_team">Team inspections</span> <span class="count-badge" id="teamCount">0</span></h2>
     <div class="hint" id="teamScope" style="margin:-4px 0 8px"></div>
     <div class="tfilter" id="teamFilter"></div>
     <div class="duelist" id="teamList"></div>
@@ -1943,10 +1943,10 @@
          subsets and only a clean re-read of the whole folder can reconcile
          them. Same weight, indistinguishable icons, opposite frequencies. -->
     <div class="row" style="margin-top:12px">
-      <button class="btn ghost" id="teamRefresh">⟳ <span data-i18n="btn_team_refresh">Check for new</span></button>
+      <button class="btn ghost" id="teamRefresh">⟳ <span data-i18n="btn_team_refresh">Refresh</span></button>
     </div>
     <button type="button" class="linkrow" id="teamReload" data-i18n-title="team_reload_hint"
-      ><span data-i18n="btn_team_reload">Read the whole folder again</span></button>
+      ><span data-i18n="btn_team_reload">Reload everything</span></button>
     <div class="hint" id="teamMsg" style="margin-top:8px"></div>
     <div class="hint" style="margin-top:8px" data-i18n="team_hint">Everything the whole team has uploaded, not just this phone. Refreshes itself after each upload and is kept for offline — so the Due tab knows about rounds someone else did.</div>
   </div>
@@ -2009,7 +2009,7 @@
          nobody is in is a control that teaches people to ignore controls. -->
     <button class="btn ghost hidden" id="dueOnly" style="margin-top:8px">🧹 <span data-i18n="btn_due_only">Keep only what the system has</span></button>
     <button class="btn ghost" id="dueImport" style="margin-top:8px">📥 <span data-i18n="btn_due_import">Load history file</span></button>
-    <div class="hint" style="margin-top:8px" data-i18n="due_hint">Built from what this phone has recorded. Load an entries.json exported from the dashboard to seed the whole fleet's last-done dates.</div>
+    <div class="hint" style="margin-top:8px" data-i18n="due_hint">Built from what this phone has recorded and what the team has sent. A history file from the dashboard fills in the rest of the fleet.</div>
     <input id="dueFile" type="file" accept=".json,application/json" class="hidden">
   </div>
 </div><!-- /paneDue -->
@@ -2360,13 +2360,13 @@ const $ = (id)=>document.getElementById(id);
 
 /* ===================== i18n ===================== */
 const I18N = {
-  en:{ app_title:"Truck Inspection", net_online:"online", net_offline:"offline — OK",
+  en:{ app_title:"Condition Monitoring", net_online:"online", net_offline:"offline — OK",
     sec_inspection:"Inspection", hdr_change:"Change",
     res_t:"Carry on where you left off?",
     res_m:"{u} · {r} — {n} reading(s) taken on {d} and not yet saved.",
     res_go:"Carry on",
     prog_n:"{d}/{n}", prog_all:"{n}/{n} done",
-    iso_show:"Report a finding", iso_hide:"Hide the finding fields", lbl_class:"Equipment", lbl_type:"Inspection type", lbl_truck:"Truck / Unit", ph_truck:"e.g. TK158", btn_scan:"Scan",
+    iso_show:"Report a finding", iso_hide:"Hide the finding fields", lbl_class:"Equipment", lbl_type:"Inspection type", lbl_truck:TERMS.en.equipment, ph_truck:"e.g. TK158", btn_scan:"Scan",
     lbl_defect:"Defect / failure mode", lbl_cause:"Direct cause",
     sync_off:"Auto-upload is off — findings stay on this phone.", sync_setup:"Set up",
     sync_ok:"All sent.", sync_pending:"{n} inspection(s) waiting to upload", sync_running:"Sending automatically…",
@@ -2444,7 +2444,7 @@ const I18N = {
     opt_none:"— none / OK —", opt_cause_tbd:"— to be confirmed —", opt_cause_pick:"Select a defect first",
     opt_all_equip:"All equipment", opt_pick_unit:"Tap to choose a unit…", opt_use:"Use", opt_add_unit:"Type a unit number to add one not in the register", opt_pick_item:"Choose component…", opt_show_all:"⋯ show all failure modes",
     need_unit:"Choose the unit first — its real components will load here.", nav_systems:"Systems", nav_whole:"Inspect whole", nav_choose:"Choose a component to inspect ↑", opt_search_all:"Search all components",
-    lbl_date:"Date", lbl_smu:"SMU / machine hrs", ph_smu:"e.g. 6018",
+    lbl_date:"Date", lbl_smu:"Machine hours", ph_smu:"e.g. 6018",
     btn_take:"Add photo", btn_video:"Video", btn_retake:"Retake",
     src_t_photo:"Add a photograph", src_t_video:"Add a video",
     src_take:"📷 Take one now", src_record:"🎥 Record one now",
@@ -2501,7 +2501,7 @@ const I18N = {
     m_need_photo_m:"This inspection still needs: {x}. The round is kept as a draft until they are taken.",
     lbl_prio:"Work request priority (1C)",
     opt_prio_none:"— not set —", opt_prio_fit:"Fits what was found", opt_prio_other:"All priorities",
-    lbl_comment:"Comment / defect", ph_comment:"notes…",
+    lbl_comment:"Finding or comment", ph_comment:"notes…",
     hint_fields:"Fields save automatically. Switch items with the buttons above.",
     btn_save:"✔ Finish inspection", btn_update:"✔ Update", editing_hint:"Editing {x} — change fields, then Update.",
     sec_onphone:TERMS.en.saved_here, empty_none:"Nothing saved yet.",
@@ -2755,9 +2755,9 @@ const I18N = {
     due_full_fail:"Could not read the folder.",
     btn_due_import:"Load history file", due_days:"{n} d ago", due_over:"overdue {n} d", due_in:"in {n} d",
     due_never:"never inspected", due_empty:"Nothing is due right now.",
-    due_hint:"Built from what this phone has recorded plus everything in the system above. Load an entries.json exported from the dashboard to seed the whole fleet's last-done dates.",
+    due_hint:"Built from what this phone has recorded and what the team has sent. A history file from the dashboard fills in the rest of the fleet.",
     m_due_loaded:["History loaded ✔","{n} unit/type dates added to the due list."],
-    sec_team:"In the system", btn_team_refresh:"Check for new",
+    sec_team:"Team inspections", btn_team_refresh:"Refresh",
     /* a round somebody else uploaded, opened here */
     rd_owned:"Someone else's round — {by}. Shown as it was uploaded; it cannot be changed on this phone.",
     rd_empty:"This round has no positions recorded.",
@@ -2767,13 +2767,13 @@ const I18N = {
     rd_offline:["No signal","This round has not been downloaded to this phone yet. Open it once you are back in range."],
     rd_nodrive:["No data source","No data source is set up on this phone, so rounds cannot be fetched. Set one up under Sync."],
     rd_unreach:["Could not reach the folder","The round is in the system — this phone could not get to it. Weak signal, or the /exec address in ⚙ is wrong. Try again in coverage."],
-    team_hint:"Everything the whole team has uploaded, not just this phone. Refreshes itself after each upload and is kept for offline — so the Due tab knows about rounds someone else did.",
-    team_none:"Nothing pulled yet — tap “Check for new”.",
+    team_hint:"Every inspection the team has sent, not just this phone's. Refreshes itself and is kept for offline — so the Due tab knows about rounds someone else did.",
+    team_none:"Nothing yet — tap “Refresh”.",
     team_nodrive:"Set up the main backend in ⚙ to see the team's inspections.",
     team_offline:"Offline — showing what was last pulled.",
     team_unreach:"Could not reach the system — weak signal, or the URL in ⚙ is wrong.",
     team_checking:"Checking the system…",
-    btn_team_reload:"Read the whole folder again",
+    btn_team_reload:"Reload everything",
     team_reload_hint:"Forget what is stored here and read the whole folder again.",
     team_full:"⚠ No room left on this phone — export or clear old inspections, then reload.",
     m_storage_full:["No room left","This phone's storage is full. Export and clear some inspections, then try again."],
@@ -2790,11 +2790,11 @@ const I18N = {
     team_new:"{n} new · {t} in the system", team_upto:"Up to date · {t} in the system",
     team_by:"by {n}", team_you:"this phone",
     team_last:"Last done {d} ({n} d ago){by}",
-    btn_merge_out:"Send round", btn_merge_in:"Receive round",
+    btn_merge_out:"Share inspection", btn_merge_in:"Import team inspection",
     merge_hint:"Two inspectors on the same round: each phone sends its round, the other receives it. Duplicates are merged, never doubled.",
     m_merge_empty:["Nothing to send","Capture at least one inspection first."],
-    m_merge_sent:["Round exported ✔","Send the file to the other phone (AirDrop / WhatsApp / e-mail), then tap “Receive round” there."],
-    m_merge_bad:["Not a round file","Choose a file created by “Send round” on the other phone."],
+    m_merge_sent:["Inspection exported ✔","Send the file to the other phone (AirDrop / WhatsApp / e-mail), then tap “Import team inspection” there."],
+    m_merge_bad:["Not an inspection file","Choose a file created by “Share inspection” on the other phone."],
     m_merged:["Merged ✔","{a} new inspection(s), {b} item(s) added to existing ones, {c} already present."],
     tab_capture:"Inspect", tab_queue:"Saved", tab_system:"Sync", tab_due:"Due",
     step_setup:"Inspection", step_findings:"Findings", step_review:"Review", step_saved:"Saved",
@@ -2859,7 +2859,7 @@ const I18N = {
     rdy_bld_off:"Cannot check without signal — running build {n}.",
     rdy_bld_fail:"Could not reach the server at {t} ({why}) — running build {n}. It keeps trying by itself.",
     rdy_bld_never:"Not checked yet — running build {n}.",
-    rdy_bg_t:"Updates while the app is closed",
+    rdy_bg_t:"Stays up to date on its own",
     rdy_bg_on:"On. This phone is woken when a build ships, when the fleet list changes and before each shift, and told whether it is ready.",
     rdy_bg_ask:"Allow notifications once, and the phone keeps itself updated and checked without being opened.",
     rdy_bg_denied:"Notifications are blocked for this app in the phone's Settings. Until they are allowed, updates land only while the app is open.",
@@ -2880,7 +2880,7 @@ const I18N = {
     rdy_sto_low:"Only about {n} photographs fit ({p}% used). Free storage: delete inspections already sent.",
     rdy_sto_evict:"The phone may clear this app's storage. Tap to ask it not to.",
     rdy_sto_unknown:"This phone will not say how much room is left.",
-    rdy_up_t:"Somewhere to send rounds", rdy_up_ok:"{n} destination(s) switched on.",
+    rdy_up_t:"Somewhere to send rounds", rdy_up_ok:"Set up. Finished inspections send themselves.",
     rdy_up_none:"No destination set. Rounds will stay on this phone only.",
     rdy_q_t:"Nothing left over", rdy_q_ok:"Everything captured is in the cloud.",
     rdy_q_pend:"{n} inspection(s) are safely stored on this phone and waiting to send.",
@@ -2930,7 +2930,7 @@ const I18N = {
     m_no_qr:["No QR found","Couldn't read a QR in that photo. Try again — closer and well-lit."],
     m_dictation:["Dictation","Tap the comment box, then tap the 🎤 microphone key on your phone's keyboard to dictate."],
   },
-  ru:{ app_title:"Осмотр самосвала", net_online:"онлайн", net_offline:"офлайн — ОК",
+  ru:{ app_title:"Мониторинг состояния", net_online:"онлайн", net_offline:"офлайн — ОК",
     sec_inspection:"Осмотр", hdr_change:"Изменить",
     res_t:"Продолжить начатое?",
     res_m:"{u} · {r} — замеров: {n}, дата {d}, ещё не сохранено.",
@@ -3066,7 +3066,7 @@ const I18N = {
     m_need_photo_m:"Для этого осмотра ещё нужны: {x}. Осмотр сохраняется как черновик, пока они не сняты.",
     lbl_prio:"Приоритет заявки (1С)",
     opt_prio_none:"— не указан —", opt_prio_fit:"Подходит к находке", opt_prio_other:"Все приоритеты",
-    lbl_comment:"Комментарий / дефект", ph_comment:"заметки…",
+    lbl_comment:"Находка или комментарий", ph_comment:"заметки…",
     hint_fields:"Поля сохраняются автоматически. Переключайте пункты кнопками выше.",
     btn_save:"✔ Завершить осмотр", btn_update:"✔ Обновить", editing_hint:"Редактирование {x} — измените поля и нажмите «Обновить».",
     sec_onphone:TERMS.ru.saved_here, empty_none:"Пока ничего не сохранено.",
@@ -3307,9 +3307,9 @@ const I18N = {
     due_full_fail:"Не удалось прочитать папку.",
     btn_due_import:"Загрузить историю", due_days:"{n} дн. назад", due_over:"просрочено {n} дн.", due_in:"через {n} дн.",
     due_never:"не проводился", due_empty:"Сейчас ничего не требуется.",
-    due_hint:"Строится по данным этого телефона и по всему, что есть в системе выше. Загрузите entries.json из дашборда, чтобы подтянуть даты по всему парку.",
+    due_hint:"Строится по данным этого телефона и по тому, что отправила бригада. Файл истории из дашборда дополнит остальную технику.",
     m_due_loaded:["История загружена ✔","Добавлено дат: {n}."],
-    sec_team:"В системе", btn_team_refresh:"Проверить новые",
+    sec_team:"Осмотры бригады", btn_team_refresh:"Обновить",
     rd_owned:"Обход другого инспектора — {by}. Показан как загружен; изменить его на этом телефоне нельзя.",
     rd_empty:"В этом обходе нет записанных точек.",
     rd_gone:["Обход недоступен","Не удалось его получить. Возможно, он отозван или старше, чем хранит папка."],
@@ -3323,7 +3323,7 @@ const I18N = {
     team_offline:"Нет сети — показано последнее загруженное.",
     team_unreach:"Не удалось связаться с хранилищем — слабый сигнал или неверный адрес в ⚙.",
     team_checking:"Проверяем хранилище…",
-    btn_team_reload:"Перечитать всю папку",
+    btn_team_reload:"Загрузить всё заново",
     team_reload_hint:"Забыть сохранённое здесь и перечитать всю папку.",
     team_full:"⚠ На телефоне нет места — выгрузите или очистите старые осмотры и повторите.",
     m_storage_full:["Нет места","Память телефона заполнена. Выгрузите и очистите часть осмотров и повторите."],
@@ -3340,7 +3340,7 @@ const I18N = {
     team_new:"Новых: {n} · всего в системе: {t}", team_upto:"Актуально · в системе: {t}",
     team_by:"— {n}", team_you:"этот телефон",
     team_last:"Последний: {d} ({n} дн. назад){by}",
-    btn_merge_out:"Отправить обход", btn_merge_in:"Принять обход",
+    btn_merge_out:"Поделиться осмотром", btn_merge_in:"Загрузить осмотр бригады",
     merge_hint:"Два инспектора на одном обходе: каждый телефон отправляет свой файл, второй его принимает. Дубликаты объединяются, а не удваиваются.",
     m_merge_empty:["Нечего отправлять","Сначала снимите хотя бы один осмотр."],
     m_merge_sent:["Обход выгружен ✔","Передайте файл на второй телефон (AirDrop / WhatsApp / почта) и нажмите там «Принять обход»."],
@@ -3401,7 +3401,7 @@ const I18N = {
     rdy_bld_off:"Без связи проверить нельзя — сборка {n}.",
     rdy_bld_fail:"Сервер недоступен в {t} ({why}) — сборка {n}. Приложение повторяет само.",
     rdy_bld_never:"Ещё не проверялось — сборка {n}.",
-    rdy_bg_t:"Обновления при закрытом приложении",
+    rdy_bg_t:"Обновляется самостоятельно",
     rdy_bg_on:"Включено. Телефон будят при выходе сборки, при изменении списка парка и перед сменой, и сообщают, готов ли он.",
     rdy_bg_ask:"Разрешите уведомления один раз — и телефон будет обновляться и проверяться сам, без открытия приложения.",
     rdy_bg_denied:"Уведомления для приложения запрещены в Настройках телефона. Пока так, обновления приходят только при открытом приложении.",
@@ -3422,7 +3422,7 @@ const I18N = {
     rdy_sto_low:"Поместится всего около {n} фото ({p}% занято). Удалите обходы, которые уже в облаке.",
     rdy_sto_evict:"Телефон может очистить память приложения. Нажмите, чтобы запретить.",
     rdy_sto_unknown:"Телефон не сообщает, сколько места осталось.",
-    rdy_up_t:"Есть куда отправлять", rdy_up_ok:"Включено назначений: {n}.",
+    rdy_up_t:"Есть куда отправлять", rdy_up_ok:"Настроено. Завершённые осмотры отправляются сами.",
     rdy_up_none:"Назначение не задано. Обходы останутся только на телефоне.",
     rdy_q_t:"Ничего не осталось", rdy_q_ok:"Всё записанное — в облаке.",
     rdy_q_pend:"На телефоне ещё обходов: {n}. Отправьте до выезда.",
