@@ -382,6 +382,26 @@ Three dashboard conventions a suite has to respect since build 271:
   `CMReport.sectionsFor` returns the document without a PDF and
   `CMReport.estimate` its page count from a real layout — use those, never a
   rasterised PDF, to test wording.
+- **The report estimate's time is MEASURED, and the panel learns it.** Twenty-
+  two seconds a page is what the matrix harness timed (one page 26 s, two 65 s,
+  nine 207 s), and it is the same at every quality because the cost is
+  html2canvas laying the page out, not the resolution — so quality is in the
+  size (~200 kB a page × the 1.5 power of the scale ratio) and not in the time.
+  `generate` times itself and folds the result into `cm_rpt_secpp`, so the
+  figure a planner is quoted is their own machine's. It was 1.6 s a page and
+  promised fourteen seconds for a report that takes three and a half minutes;
+  `tests/rptest.cjs` makes a real PDF and holds the estimate against it.
+- **The lubrication fleet matrix pages at 25 like every other table.** Rows
+  page; the columns and the legend come from the whole filtered list, so the
+  sheet's shape does not change as you turn the page, and a page that opens
+  mid-class repeats the class heading. A suite that wants a particular model
+  narrows with the class chip or presses `[data-pg="lubeMtx:size:100"]`.
+- **A photograph can be marked, and a mark is part of the recipe.** `marks` in
+  the `px` recipe — rings and arrows in fractions of the rotated, straightened
+  frame, drawn onto the canvas BEFORE the crop so a crop clips them. The
+  original is still never written to. `pxVisual` and `pxTouched` both count
+  them, so a marked frame gets a derivative and a bare drag of nothing does
+  not (`tests/pxmark.cjs`).
 
 **`TERMS` must never be a hard dependency of boot.** Both pages carry a shim
 right after the `terms.js` script tag: if the file did not arrive, every key
