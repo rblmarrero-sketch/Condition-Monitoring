@@ -17,7 +17,7 @@ const SIZES=[[320,568,'iPhone SE 1'],[360,640,'small Android'],[375,667,'iPhone 
     await p.waitForTimeout(400);
     await p.evaluate(()=>{const s=document.getElementById('typeSel');s.value='UC';s.dispatchEvent(new Event('change'));});
     await p.waitForTimeout(250);
-    await p.evaluate(()=>selectEquip('DZ001'));
+    await p.evaluate(() => { selectEquip('DZ001'); goStep(2); });
     await p.waitForTimeout(800);
     await p.evaluate(()=>pickComponent(ucOrder()[8]));
     await p.waitForTimeout(400);

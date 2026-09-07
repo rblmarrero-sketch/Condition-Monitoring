@@ -41,7 +41,7 @@ async function settled(p) {
 const cls = (p, k) => p.evaluate(x => {
   const g = document.querySelector(`.um-spot[data-uc="${x}"]`);
   return g ? g.getAttribute('class') : null; }, k);
-const enter = async (p, v) => { await p.fill('#ucMM', String(v)); await p.waitForTimeout(200); };
+const enter = async (p, v) => { await p.evaluate(() => goStep(2)); await p.fill('#ucMM', String(v)); await p.waitForTimeout(200); };
 
 (async () => {
   const b = await chromium.launch();
@@ -55,7 +55,7 @@ const enter = async (p, v) => { await p.fill('#ucMM', String(v)); await p.waitFo
      everything is reachable, nothing is a bare code, and a gloved thumb can
      hit it. */
   console.log('the map is what you land on');
-  await p.evaluate(() => selectEquip('DZ001'));          // KOMATSU D155A.5
+  await p.evaluate(() => { selectEquip('DZ001'); goStep(2); });          // KOMATSU D155A.5
   await p.waitForFunction(() => !!document.querySelector('#posnav .ucgroups button'),
                           null, { timeout: 15000 });
   await p.waitForTimeout(300);
@@ -112,7 +112,7 @@ const enter = async (p, v) => { await p.fill('#ucMM', String(v)); await p.waitFo
      await p.evaluate(() => curItem) === 'GROUSER.L', await p.evaluate(() => curItem));
 
   console.log('\nthe whole frame has to fit the phone');
-  await p.evaluate(() => selectEquip('DZ001'));
+  await p.evaluate(() => { selectEquip('DZ001'); goStep(2); });
   await p.waitForTimeout(700);
   ok('nothing scrolls sideways', await p.evaluate(()=>
     [...document.querySelectorAll('.ucmapwrap')].every(w=>w.scrollWidth <= w.clientWidth + 2)));
@@ -144,7 +144,7 @@ const enter = async (p, v) => { await p.fill('#ucMM', String(v)); await p.waitFo
     && window.innerWidth === 412), await p.evaluate(()=>innerWidth+' innerWidth'));
 
   console.log('\nkeyboard and gloves');
-  await p.evaluate(() => selectEquip('DZ001'));
+  await p.evaluate(() => { selectEquip('DZ001'); goStep(2); });
   await p.waitForTimeout(600);
   await p.evaluate(() => document.querySelector('.ucmap [data-ucg="8"]').focus());
   await p.keyboard.press('Enter');
@@ -208,7 +208,7 @@ const enter = async (p, v) => { await p.fill('#ucMM', String(v)); await p.waitFo
   await w.evaluate(() => { const s = document.getElementById('typeSel');
     s.value = 'UC'; s.dispatchEvent(new Event('change')); });
   await w.waitForTimeout(350);
-  await w.evaluate(() => selectEquip('DZ001'));
+  await w.evaluate(() => { selectEquip('DZ001'); goStep(2); });
   await w.waitForTimeout(800);
   /* One picture now, so there is nothing to stack — what still matters on a
      wide screen is that the picture does not stretch to fill it and leave the

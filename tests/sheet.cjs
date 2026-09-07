@@ -50,7 +50,7 @@ async function settled(p) {
   await p.evaluate(() => { const s = document.getElementById('typeSel');
     s.value = 'UC'; s.dispatchEvent(new Event('change')); });
   await p.waitForTimeout(350);
-  await p.evaluate(() => selectEquip('DZ001'));
+  await p.evaluate(() => { selectEquip('DZ001'); goStep(2); });
   await p.waitForTimeout(700);
 
   console.log('the map alone, before anything is picked');
@@ -151,7 +151,7 @@ async function settled(p) {
   console.log('\nwalking the round without going back to the map');
   ok('Back is dead on the first point', await p.evaluate(() =>
     document.getElementById('ucPrev').disabled));
-  await p.fill('#ucMM', '23');
+  await p.evaluate(() => goStep(2)); await p.fill('#ucMM', '23');
   await p.waitForTimeout(250);
   ok('the reading scores in place', /16%/.test(await txt(p, '#ucRead')), await txt(p, '#ucRead'));
   ok('and the count in the header moves', /1 taken/.test(await txt(p, '#ucSheetCount')),
@@ -181,7 +181,7 @@ async function settled(p) {
 
   console.log('  the keypad go-key does the same, so a round needs no buttons');
   await p.click('#ucNext'); await p.waitForTimeout(350);
-  await p.fill('#ucMM', '24');
+  await p.evaluate(() => goStep(2)); await p.fill('#ucMM', '24');
   await p.press('#ucMM', 'Enter');
   await p.waitForTimeout(450);
   ok('Enter stores the reading and moves on',
@@ -203,10 +203,10 @@ async function settled(p) {
   await p.waitForTimeout(700);
   ok('the sheet shows what it read last round',
     /last round 244 mm · 2026-07-01/.test(await txt(p, '#ucLast')), await txt(p, '#ucLast'));
-  await p.fill('#ucMM', '241'); await p.waitForTimeout(400);
+  await p.evaluate(() => goStep(2)); await p.fill('#ucMM', '241'); await p.waitForTimeout(400);
   ok('a normal change is not flagged', await p.evaluate(() =>
     !document.getElementById('ucLast').classList.contains('jump')));
-  await p.fill('#ucMM', '180'); await p.waitForTimeout(400);
+  await p.evaluate(() => goStep(2)); await p.fill('#ucMM', '180'); await p.waitForTimeout(400);
   ok('a reading nowhere near last time is', await p.evaluate(() =>
     document.getElementById('ucLast').classList.contains('jump')));
   ok('but it is still recorded — a flag, never a block',

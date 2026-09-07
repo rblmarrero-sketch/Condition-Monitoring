@@ -77,7 +77,7 @@ const OFF_PARTS = () => {
     (window.ASSETS || []).filter(a => getStatus(a.n).ok).map(a => a.n));
   let bare = [], offAll = [];
   for (const u of units) {
-    await p.evaluate(x => selectEquip(x), u);
+    await p.evaluate(x => { selectEquip(x); goStep(2); }, u);
     await p.waitForTimeout(90);
     const r = await p.evaluate(() => {
       const sv = document.querySelector('#posnav .ucmap');
@@ -97,7 +97,7 @@ const OFF_PARTS = () => {
      on one that has none it is the everyday path. Same code either way. */
   for (const [unit, tool] of [['LD004', 'bucket'], ['DZ010', 'blade'],
                               ['LD012', 'bucket'], ['RB001', 'bucket'], ['EX013', 'bucket']]) {
-    await p.evaluate(x => selectEquip(x), unit);
+    await p.evaluate(x => { selectEquip(x); goStep(2); }, unit);
     await p.waitForTimeout(400);
     await p.evaluate(() => { const i = document.querySelector('.um-photo'); if (i) WEAR.photoGone(i); });
     await p.waitForTimeout(200);
@@ -110,7 +110,7 @@ const OFF_PARTS = () => {
 
   /* ---- the photograph still wins where there is one ---------------------- */
   console.log('\n  a photograph, where one exists, is still what you see');
-  await p.evaluate(() => selectEquip('DZ010'));
+  await p.evaluate(() => { selectEquip('DZ010'); goStep(2); });
   await p.waitForTimeout(500);
   const withPhoto = await p.evaluate(() => {
     const sv = document.querySelector('#posnav .ucmap');

@@ -82,6 +82,8 @@ const srv = http.createServer((req, res) => {
   // ---- defect picker offline ----
   await p.evaluate(() => { const ts = document.getElementById('typeSel'); ts.value = 'MP'; ts.dispatchEvent(new Event('change')); });
   await p.waitForTimeout(250);
+  /* Positions and the defect picker are on the Findings step. */
+  await p.evaluate(() => goStep(2)); await p.waitForTimeout(250);
   await p.click('#posnav button[data-pos]'); await p.waitForTimeout(200);
   await p.click('#defectBtn'); await p.waitForTimeout(350);
   const defs = await p.$$eval('#pickList .pickitem', a => a.length);

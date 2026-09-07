@@ -34,7 +34,7 @@ const outline = (p, sel) => p.evaluate(s => {
   await p.evaluate(() => { document.getElementById('typeSel').value = 'INSP';
     document.getElementById('typeSel').dispatchEvent(new Event('change')); });
   await p.waitForTimeout(250);
-  await p.evaluate(() => selectEquip('TK032'));
+  await p.evaluate(() => { selectEquip('TK032'); goStep(2); });
   await p.waitForTimeout(400);
 
   console.log('systems, before drilling in');
@@ -101,7 +101,7 @@ const outline = (p, sel) => p.evaluate(s => {
   await p.evaluate(() => { document.getElementById('typeSel').value = 'MP';
     document.getElementById('typeSel').dispatchEvent(new Event('change')); });
   await p.waitForTimeout(300);
-  await p.evaluate(() => selectEquip('TK032'));
+  await p.evaluate(() => { selectEquip('TK032'); goStep(2); });
   await p.waitForTimeout(300);
   const first = await p.evaluate(() => items()[0].k);
   await p.evaluate(k => { saveCur(); curItem = k; loadPos(); renderChips(); }, first);

@@ -32,6 +32,22 @@ function seed(n) {
   }
 }
 seed(Number(process.env.CM_SEED || 40));
+/* ROUNDS DATED FROM TODAY, not from a fixed month. `seed` puts everything in
+   July 2026, which is months past every interval — so a schedule built on it
+   is entirely overdue and a test of "due soon" or "completed" has nothing to
+   look at. This spreads n plug rounds over the last `span` days, which at
+   250 h and 20 h/day straddles the 12.5-day interval and lands rounds in
+   every category. */
+function seedFresh(n, span) {
+  const day = 86400000, now = Date.now();
+  for (let i = 1; i <= n; i++) {
+    const back = Math.round(((i - 1) / Math.max(1, n - 1)) * (span || 20));
+    const d = new Date(now - back * day).toISOString().slice(0, 10);
+    const u = 'TK' + String(300 + i);
+    FILES.push({ name: `${u}_${d.split('-').reverse().join('.')}_MP.json`, id: 'f' + i,
+      updated: 2000000 + i * 1000, size: 400, json: sidecar(u, d, 'MP', [1, 3, 5][i % 3]) });
+  }
+}
 
 const stats = { records: 0, list: 0, file: 0, health: 0 };
 const MEDIA = /\.(jpe?g|png|webp|mp4|mov)$/i;
@@ -120,6 +136,8 @@ http.createServer((req, res) => {
   if (u.pathname === '/__reset') {
     Object.keys(stats).forEach(k => stats[k] = 0);
     if (u.searchParams.get('n')) seed(Number(u.searchParams.get('n')));
+    if (u.searchParams.get('fresh')) seedFresh(Number(u.searchParams.get('fresh')) || 12,
+                                               Number(u.searchParams.get('span')) || 20);
     if (u.searchParams.get('bad')) {                      // sidecars the backend cannot parse
       const n = Number(u.searchParams.get('bad')) || 1;
       for (let i = 1; i <= n; i++) {

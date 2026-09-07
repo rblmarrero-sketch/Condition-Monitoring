@@ -111,7 +111,7 @@ const seed = (p, unit, rows) => p.evaluate(async ({ unit, rows }) => {
   await p.waitForTimeout(300);
   await seed(p, 'DZ001', [{ date: '2026-01-10', smu: 1000, k: 'ROLLER.L1', mm: 250 },
                           { date: '2026-05-10', smu: 4000, k: 'ROLLER.L1', mm: 230 }]);
-  await p.evaluate(() => selectEquip('DZ001')); await p.waitForTimeout(900);
+  await p.evaluate(() => { selectEquip('DZ001'); goStep(2); }); await p.waitForTimeout(900);
   /* The header folds once the unit and the name are settled, and the hour
      meter is behind it — tap Change first, the way a person does. */
   await p.evaluate(() => { const h = document.getElementById('hdrSum');
@@ -120,7 +120,7 @@ const seed = (p, unit, rows) => p.evaluate(async ({ unit, rows }) => {
   await p.fill('#smu', '5000'); await p.waitForTimeout(150);
   await p.evaluate(() => { curItem = 'ROLLER.L1'; loadPos(); renderChips(); });
   await p.waitForTimeout(500);
-  await p.fill('#ucMM', '224'); await p.waitForTimeout(700);
+  await p.evaluate(() => goStep(2)); await p.fill('#ucMM', '224'); await p.waitForTimeout(700);
   const line = await txt(p, '#ucFcast');
   ok('the line is on the capture screen', line.length > 0, line);
   ok('it gives hours, not a percentage', /h left/.test(line) && !/%/.test(line), line);
@@ -153,12 +153,12 @@ const seed = (p, unit, rows) => p.evaluate(async ({ unit, rows }) => {
   /* A reading the app cannot believe cannot produce a wear rate it can believe.
      "About 400 h left" printed under "88 mm is larger than the new figure of
      80 mm" is the app arguing with itself in front of the inspector. */
-  await p.fill('#ucMM', '260'); await p.waitForTimeout(700);
+  await p.evaluate(() => goStep(2)); await p.fill('#ucMM', '260'); await p.waitForTimeout(700);
   ok('an impossible reading is challenged', await p.evaluate(() =>
     !document.getElementById('ucWarn').classList.contains('hidden')));
   ok('and the forecast says nothing at all', (await txt(p, '#ucFcast')) === '',
     await txt(p, '#ucFcast'));
-  await p.fill('#ucMM', '224'); await p.waitForTimeout(700);
+  await p.evaluate(() => goStep(2)); await p.fill('#ucMM', '224'); await p.waitForTimeout(700);
   ok('a believable reading brings it back', (await txt(p, '#ucFcast')).length > 0,
     await txt(p, '#ucFcast'));
 

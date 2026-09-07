@@ -97,6 +97,9 @@ const draw = p => p.evaluate(() => {
     await p.waitForTimeout(800);
     let f = await fold(p);
     ok('hidden, offering to add one', f.hidden === true && f.row.indexOf(await p.evaluate(() => t('sign_add'))) >= 0, f.row);
+    /* The sign-off is on the Review step, where Finish is — and Review needs a
+       machine and a round, because that is what it reviews. */
+    await p.evaluate(() => { selectEquip('TK101'); goStep(3); }); await p.waitForTimeout(400);
     await tap(p); await p.fill('#supName', 'S. Volkov'); f = await fold(p);
     ok('typing a name while open keeps it open', f.hidden === false, JSON.stringify(f));
     await tap(p); f = await fold(p);

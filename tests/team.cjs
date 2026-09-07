@@ -29,7 +29,9 @@ const reset = q => fetch(BASE + '/__reset' + (q || '')).then(r => r.text());
   await p.waitForTimeout(600);
 
   console.log('before Drive is set up');
-  ok('the card is there and says nothing is pulled', /Nothing pulled yet/.test(await p.textContent('#teamList')),
+  /* "Nothing yet — tap Refresh" since the wording pass: the control it names
+     is called Refresh now, and the sentence has to name the control. */
+  ok('the card is there and says nothing has arrived', /Nothing yet/.test(await p.textContent('#teamList')),
      (await p.textContent('#teamList')).trim().slice(0, 60));
   await p.evaluate(() => showPane('paneSystem'));
   await p.click('#teamRefresh'); await p.waitForTimeout(300);

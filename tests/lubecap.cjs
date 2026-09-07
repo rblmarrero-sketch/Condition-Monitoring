@@ -69,7 +69,7 @@ const eq = (g, w, what) => ok(JSON.stringify(g) === JSON.stringify(w),
 
   await p.selectOption("#typeSel", "LUBE");
   await p.waitForTimeout(150);
-  await p.evaluate(u => selectEquip(u), unit);
+  await p.evaluate(u => { selectEquip(u); goStep(2); }, unit);
   await p.waitForTimeout(250);
 
   console.log("── the panel is on screen, and the wrong ones are not");
@@ -287,6 +287,9 @@ const eq = (g, w, what) => ok(JSON.stringify(g) === JSON.stringify(w),
   }
 
   console.log("── evidence is a real control and toggles off");
+  /* The lubricant fields are part of the finding, so they are on the Findings
+     step, where a thumb reaches them. */
+  await p.evaluate(() => goStep(2)); await p.waitForTimeout(250);
   const nEvid = await p.$$eval("#lubeEvid button", bs => bs.length);
   ok(nEvid >= 3, "the evidence choices are rendered: " + nEvid);
   await p.click("#lubeEvid button[data-e='label']");

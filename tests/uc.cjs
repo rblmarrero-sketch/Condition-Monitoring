@@ -26,7 +26,7 @@ const vis = (p, sel) => p.evaluate(s => {
   return !!e && !e.classList.contains('hidden') && getComputedStyle(e).display !== 'none' && e.getClientRects().length > 0;
 }, sel);
 const txt = async (p, sel) => (await p.textContent(sel).catch(() => '') || '').replace(/\s+/g, ' ').trim();
-const enter = async (p, v) => { await p.fill('#ucMM', String(v)); await p.waitForTimeout(180); };
+const enter = async (p, v) => { await p.evaluate(() => goStep(2)); await p.fill('#ucMM', String(v)); await p.waitForTimeout(180); };
 
 (async () => {
   const b = await chromium.launch();
@@ -40,19 +40,19 @@ const enter = async (p, v) => { await p.fill('#ucMM', String(v)); await p.waitFo
   ok('it asks for a machine first', /unit|Выбер|Pick/i.test(await txt(p, '#posnav')), await txt(p, '#posnav'));
 
   console.log('\nmachines that must be turned away');
-  await p.evaluate(() => selectEquip('EX017'));          // HITACHI ZX210W-5A, wheeled
+  await p.evaluate(() => { selectEquip('EX017'); goStep(2); });          // HITACHI ZX210W-5A, wheeled
   await p.waitForTimeout(400);
   ok('the wheeled excavator is refused', /tyres|шинах/i.test(await txt(p, '#posnav')), await txt(p, '#posnav'));
   ok('it names the model so nobody has to guess',
     (await txt(p, '#posnav')).includes('ZX210W'), await txt(p, '#posnav'));
   ok('and the capture form stays shut', !(await vis(p, '#captureBox')));
 
-  await p.evaluate(() => selectEquip('TK032'));          // a haul truck
+  await p.evaluate(() => { selectEquip('TK032'); goStep(2); });          // a haul truck
   await p.waitForTimeout(400);
   ok('a haul truck is refused too', /tracked|гусенич/i.test(await txt(p, '#posnav')), await txt(p, '#posnav'));
 
   console.log('\na dozer that is in the register');
-  await p.evaluate(() => selectEquip('DZ001'));          // KOMATSU D155A.5
+  await p.evaluate(() => { selectEquip('DZ001'); goStep(2); });          // KOMATSU D155A.5
   await p.waitForTimeout(500);
   const walk = await p.evaluate(() => items().length);
   /* 36 measured points plus the three condition checks the client's catalog
@@ -225,7 +225,7 @@ const enter = async (p, v) => { await p.fill('#ucMM', String(v)); await p.waitFo
     await p.evaluate(() => !draft.positions['ROLLER.L1']));
 
   console.log('\nthe SD90, whose reference is the thing that is wrong');
-  await p.evaluate(() => selectEquip('DZ018'));         // SHANTUI SD90-C5
+  await p.evaluate(() => { selectEquip('DZ018'); goStep(2); });         // SHANTUI SD90-C5
   await p.waitForTimeout(500);
   await p.click('[data-nav="root"]').catch(()=>{}); await p.waitForTimeout(200);
   await p.click('[data-l7="BUSH"]'); await p.waitForTimeout(250);
@@ -240,7 +240,7 @@ const enter = async (p, v) => { await p.fill('#ucMM', String(v)); await p.waitFo
     /another model/.test(await txt(p, '#ucRefLine')), await txt(p, '#ucRefLine'));
 
   console.log('\nthe idler counts up, and the app knows it');
-  await p.evaluate(() => selectEquip('DZ001'));
+  await p.evaluate(() => { selectEquip('DZ001'); goStep(2); });
   await p.waitForTimeout(500);
   await p.click('[data-nav="root"]').catch(()=>{}); await p.waitForTimeout(200);
   await p.click('[data-l7="IDLER"]'); await p.waitForTimeout(250);
@@ -272,7 +272,7 @@ const enter = async (p, v) => { await p.fill('#ucMM', String(v)); await p.waitFo
   await p.waitForTimeout(400);
   ok('magnetic plug is unaffected', !(await vis(p, '#ucFields')) && (await p.$$('#posnav [data-pos]')).length > 0);
   await setType(p, 'INSP');
-  await p.evaluate(() => selectEquip('TK032'));
+  await p.evaluate(() => { selectEquip('TK032'); goStep(2); });
   await p.waitForTimeout(500);
   ok('the component inspection still builds its tree',
     (await p.$$('#posnav [data-l7]')).length > 0 && !(await vis(p, '#ucFields')));
