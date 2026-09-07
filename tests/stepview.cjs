@@ -166,7 +166,24 @@ const coherent = s => s.tabs.filter(t => t.sel === 'true').length === 1 && s.sel
   s = await snap();
   ok('  the finished round is step 4, and the tab names the card that is showing', s.step === 4 && s.selected === '4' && s.controls === 'savedCard' && coherent(s), JSON.stringify({ step: s.step, controls: s.controls }));
 
-  console.log('\n7. DESTINATIONS ARE NOT STEPS');
+  console.log('\n7. THE MACHINE PHOTOGRAPHS FOLD ONCE THEY ARE TAKEN');
+  {
+    const st = await p.evaluate(() => ({ open: document.getElementById('mphotos').open,
+      inSetup: !!document.getElementById('viewSetup').querySelector('#mphotos') }));
+    ok('they belong to the Inspection step, and stay open while the round owes them', st.inSetup, JSON.stringify(st));
+    /* The round finished in section 6, so this one starts owing them again. */
+    await p.evaluate(() => { selectEquip('TK101'); }); await p.waitForTimeout(400);
+    await p.evaluate(PHOTOS); await p.waitForTimeout(500);
+    const folded = await p.evaluate(() => ({ open: document.getElementById('mphotos').open,
+      count: document.getElementById('mpCount').textContent }));
+    ok('  and fold themselves once the round has them', !folded.open && /1 of 1/.test(folded.count), JSON.stringify(folded));
+    await p.evaluate(() => { document.getElementById('mphotos').open = true; renderMachinePhotos(); });
+    await p.waitForTimeout(200);
+    ok('  but never fold again on a technician who has just opened them',
+       await p.evaluate(() => document.getElementById('mphotos').open));
+  }
+
+  console.log('\n8. DESTINATIONS ARE NOT STEPS');
   await p.click('#tabbar button[data-pane="paneDue"]'); await p.waitForTimeout(500);
   s = await snap();
   ok('the bottom bar changes destination, and only one is on screen', s.panes.join(',') === 'paneDue', s.panes.join(','));
@@ -177,7 +194,7 @@ const coherent = s => s.tabs.filter(t => t.sel === 'true').length === 1 && s.sel
   s = await snap();
   ok('and Inspect comes back to one step, coherently', s.panes.join(',') === 'paneCapture' && coherent(s), JSON.stringify({ panes: s.panes, step: s.step, shown: s.shown }));
 
-  console.log('\n8. A WIDE WINDOW IS STILL ONE TASK AT A TIME');
+  console.log('\n9. A WIDE WINDOW IS STILL ONE TASK AT A TIME');
   for (const [w, h] of [[834, 1112], [1280, 900], [1440, 900]]) {
     await p.setViewportSize({ width: w, height: h }); await p.waitForTimeout(400);
     const q = await snap();
@@ -187,7 +204,7 @@ const coherent = s => s.tabs.filter(t => t.sel === 'true').length === 1 && s.sel
   }
   await p.setViewportSize({ width: 390, height: 844 });
 
-  console.log('\n9. RUSSIAN');
+  console.log('\n10. RUSSIAN');
   await p.evaluate(() => { const btn = document.querySelector('.lang button[data-lang="ru"]'); if (btn) btn.click(); }); await p.waitForTimeout(500);
   const R = await p.evaluate(() => ({ toFind: document.getElementById('toFind').textContent.trim(),
     tabs: [...document.querySelectorAll('#stepBar button span')].map(x => x.textContent.trim()).join('|') }));

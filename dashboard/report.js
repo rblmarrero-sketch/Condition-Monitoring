@@ -658,12 +658,43 @@
     return withReport(opts, () => window.CMR.sections(
       ctxFor(recs, Object.assign({}, opts, { scope, target, extra: extraFor(scope, recs), art: opts.art || {} }))));
   }
+  /* HOW LONG A PAGE ACTUALLY TAKES, AND HOW BIG IT ACTUALLY IS.
+     Both figures used to be guesses, and the time one was wrong by fifteen
+     times: 1.6 s a page, against documents that were timed. The matrix
+     harness generated the whole scope × language × evidence × quality grid
+     from one seeded fixture and recorded every run — one page 26 s, two
+     pages 65 s, nine pages 207 s. That is a little over twenty seconds a
+     page, and it is the SAME at every quality (207 / 209 / 208 s for the
+     small, standard and high renderings of the same nine pages), because
+     what costs the time is html2canvas laying each page out, not the
+     resolution it is finally rasterised at. So quality is out of the time
+     and stays in the size.
+     Size does move with quality, but not with its square: 1.8 → 2.4 measured
+     1.50×, where the square would have said 1.78×. About 200 kB a page at
+     the standard scale, times the 1.5 power of the scale ratio.
+     RATE_PP is only the figure to start from. A real office machine is not
+     this one, so `generate` times itself and `noteRate` folds the result in;
+     from a planner's second report onwards the panel is quoting their own
+     computer back to them. */
+  const RATE_K = "cm_rpt_secpp", RATE_PP = 22, RATE_MIN = 1, RATE_MAX = 180;
+  function rate() {
+    let v = 0; try { v = parseFloat(localStorage.getItem(RATE_K) || ""); } catch (e) {}
+    return (v >= RATE_MIN && v <= RATE_MAX) ? v : RATE_PP;
+  }
+  function noteRate(pages, ms) {
+    if (!(pages > 0) || !(ms > 0)) return;
+    const seen = Math.min(RATE_MAX, Math.max(RATE_MIN, (ms / 1000) / pages));
+    /* Weighted towards what has been seen before, so one report made while
+       the machine was busy with something else does not become the figure
+       every later estimate is quoted from. */
+    const next = Math.round((rate() * 0.6 + seen * 0.4) * 10) / 10;
+    try { localStorage.setItem(RATE_K, String(next)); } catch (e) {}
+  }
   /* WHAT THE PDF WILL COST, BEFORE IT IS MADE. The sections are laid out at
      the paginator's own width and walked with the paginator's own page
      arithmetic — a section that will not fit the room left starts a new page,
      one taller than a page spans — so the page count is the count the PDF
-     will have, give or take a cut. Size and time are calibrated guesses and
-     say so ("about"). Nothing is rasterised. */
+     will have, give or take a cut. Nothing is rasterised. */
   async function estimate(scope, target, opts) {
     if (!window.CMR || document.getElementById("rptRoot")) return null;
     const secs = sectionsFor(scope, target, opts);
@@ -688,10 +719,12 @@
         y += h + gap;
       });
       const photos = (opts && opts.photos === false) ? 0 : holder.querySelectorAll("figure img").length;
-      const sc = Number(opts && opts.scale) || 1.8, q = (sc / 1.8) * (sc / 1.8);
-      const bytes = Math.round((pages * 60000 + photos * 70000) * q);
-      const seconds = Math.max(2, Math.round(pages * 1.6 * q + photos * 0.4));
-      return { pages, photos, bytes, seconds, sections: secs.length };
+      const sc = Number(opts && opts.scale) || 1.8;
+      const q = Math.pow(sc / 1.8, 1.5) * (opts && opts.jpeg ? 0.8 : 1);
+      const bytes = Math.round(pages * 200000 * q);
+      const secPp = rate();
+      const seconds = Math.max(3, Math.round(pages * secPp + photos * 1.5));
+      return { pages, photos, bytes, seconds, secPp, sections: secs.length };
     } finally { st.remove(); holder.remove(); }
   }
   async function generate(scope, target, opts, onProgress) {
@@ -706,6 +739,7 @@
 
     const st = document.createElement("style"); st.textContent = EXTRA_CSS;
     document.head.appendChild(st);
+    const t0 = Date.now();
     try {
       /* Built under the report's language and bilingual setting, synchronously,
          so the screen's own language is back before anything else can paint. */
@@ -719,10 +753,14 @@
         onProgress,
       });
       const safe = String(target).replace(/[^\w.-]+/g, "_");
+      const n = doc.getNumberOfPages();
+      /* Before the save, so the figure is the making and not the browser's
+         download dialog. */
+      noteRate(n, Date.now() - t0);
       doc.save(`CM_${scope}_${safe}_${stamp}.pdf`);
-      return doc.getNumberOfPages();
+      return n;
     } finally { st.remove(); }
   }
 
-  window.CMReport = { generate, recsForScope, normalise, ctxFor, artFor, getSection, getStats, sectionsFor, estimate, withReport };
+  window.CMReport = { generate, recsForScope, normalise, ctxFor, artFor, getSection, getStats, sectionsFor, estimate, withReport, rate, noteRate };
 })();

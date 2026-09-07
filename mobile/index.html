@@ -4850,6 +4850,9 @@ function dropMachinePhoto(cat,i){
   renderMachinePhotos(); draftFlush();
 }
 const mpPool=urlPool();
+/* Whether the machine-photograph list has already folded itself for this
+   round, so it does so once and not on every repaint. */
+let mpFolded=false;
 function renderMachinePhotos(){
   const box=$("mpRows"); if(!box) return;
   mpPool.free();
@@ -4868,8 +4871,23 @@ function renderMachinePhotos(){
   const c=$("mpCount"); if(c){ c.textContent=t("ph_done",{n:have,r:need}); c.classList.toggle("miss", have<need); }
   box.querySelectorAll("[data-take]").forEach(b=>b.onclick=guard(()=>takeMachinePhoto(b.dataset.take)));
   box.querySelectorAll("[data-drop]").forEach(b=>b.onclick=()=>dropMachinePhoto(b.dataset.drop,0));
+  /* ONCE THE ROUND HAS THE PHOTOGRAPHS IT OWES, THE LIST FOLDS ITSELF. Five
+     rows of thumbnails and buttons stay open for the whole round otherwise,
+     at the top of the step, above the fields still being filled in — and
+     they are finished work. It folds ONCE, on the change from owing to not
+     owing, and never against a technician who has opened it since: reopening
+     something a person just opened is worse than the height it saves. */
+  const d=$("mphotos");
+  if(d){
+    const done = need>0 && have>=need;
+    if(done && !mpFolded && !d.dataset.opened){ d.open=false; }
+    if(!done) d.dataset.opened="";          // owing again: it may fold again later
+    mpFolded=done;
+  }
 }
-function openMachinePhotos(){ const d=$("mphotos"); if(d){ d.open=true; d.scrollIntoView({behavior:"smooth",block:"start"}); } }
+function openMachinePhotos(){ const d=$("mphotos"); if(d){ d.open=true; d.dataset.opened="1"; d.scrollIntoView({behavior:"smooth",block:"start"}); } }
+/* A technician who opens it keeps it open. */
+if($("mphotos")) $("mphotos").addEventListener("toggle",()=>{ if($("mphotos").open) $("mphotos").dataset.opened="1"; });
 /* Relabel one of a point's photographs. */
 $("catCancel").onclick=()=>$("catDlg").close();
 function pickPhotoCat(i){
@@ -6836,6 +6854,7 @@ function selectEquip(n){ n=(n||"").trim().toUpperCase().replace(/\s+/g,""); curE
   if(a){ eqCat=a.cat||"— UNCATEGORISED —"; lsSet("equip_cat",eqCat); }
   const cls=assetClassOf(n); if(cls){ eqClass=cls; lsSet("equip_class",eqClass); }
   draft={positions:{}}; editing=null; curItem=""; hdrOpen=false;
+  mpFolded=false; { const d=$("mphotos"); if(d){ d.open=true; d.dataset.opened=""; } }
   applyForm(); setEditing(null); updateEquipBtn();
   renderLastDone(); renderTrend(); }
 let pickMode=null, showAllDefects=false, showAllCauses=false;

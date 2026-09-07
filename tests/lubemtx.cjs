@@ -58,8 +58,28 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
   ok(land.rows > 1, "more than one class heading is on the sheet", String(land.rows));
 
   /* The machine from the report, by name. Not "some HT model" — the one the
-     engineer went looking for and could not find. */
-  ok(/TR60/.test(land.text), "the model reported missing is on the sheet");
+     engineer went looking for and could not find.
+
+     THE SHEET PAGES AT TWENTY-FIVE NOW, like every other table here; eighty-
+     seven models was six screens of scrolling. So "on the sheet" can no longer
+     mean "in the first twenty-five rows", and the guard becomes what the
+     original complaint was actually about: can somebody looking for this
+     machine REACH it, through the sheet's own controls. Two routes, both the
+     reader's — the class chip a haul truck lives under, and asking for the
+     whole list a hundred at a time. */
+  await p.evaluate(() => { lubeShow = "HT"; renderLubeTab(); });
+  await p.waitForTimeout(300);
+  const byChip = await p.evaluate(() => document.getElementById("lubeMtx").textContent || "");
+  ok(/TR60/.test(byChip), "the model reported missing is on its class's sheet");
+  await p.evaluate(() => { lubeShow = ""; renderLubeTab(); });
+  await p.waitForTimeout(200);
+  const big = await p.$('[data-pg="lubeMtx:size:100"]');
+  ok(!!big, "  the sheet offers a bigger page, because it is longer than one");
+  if (big) { await big.click(); await p.waitForTimeout(400); }
+  const allText = await p.evaluate(() => document.getElementById("lubeMtx").textContent || "");
+  ok(/TR60/.test(allText), "  and it is on the unfiltered sheet once the whole list is asked for");
+  await p.evaluate(() => { pageReset("lubeMtx"); lubeShow = ""; renderLubeTab(); });
+  await p.waitForTimeout(300);
   const tr = await p.evaluate(() => {
     const r = LUBE.of("NHL TR60", "HT");
     return r ? { n: r.n, comps: r.comps.length } : null;

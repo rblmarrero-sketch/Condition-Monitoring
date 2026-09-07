@@ -336,7 +336,12 @@
   color:#8b939b;padding-top:2px;}
 #rptRoot .common dd{font-size:11px;line-height:1.35;}
 #rptRoot .common dd b{font-weight:700;}
-#rptRoot .board{display:grid;gap:12px 11px;margin-top:12px;}
+/* A CARD IS AS TALL AS WHAT IS IN IT. Grid stretches every cell in a row to
+   the tallest of them, so one position with a long comment made the three
+   beside it into tall empty boxes — on a magnetic-plug sheet with one wordy
+   finding that is most of a page of white, and on paper white is the one
+   thing that cannot be scrolled past. */
+#rptRoot .board{display:grid;gap:12px 11px;margin-top:12px;align-items:start;}
 #rptRoot .cel{border:1px solid #dfe4e9;border-radius:6px;overflow:hidden;background:#fff;
   page-break-inside:avoid;}
 #rptRoot .cel .ph{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:#f2f5f7;}

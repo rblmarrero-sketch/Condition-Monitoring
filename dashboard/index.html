@@ -1171,6 +1171,22 @@
   .pxcrop{position:absolute;border:1px solid #fff;box-shadow:0 0 0 9999px rgba(0,0,0,.55);
     cursor:move;}
   .pxcrop.hidden{display:none;}
+  /* The marks while the panel is open. Stretched to the picture, so a mark's
+     box in fractions is its box on screen; the strokes are told not to scale
+     with it, or a wide photograph would draw thin verticals and fat
+     horizontals. The dark stroke under the bright one is the same pairing the
+     canvas uses, for the same reason: neither colour alone survives both a
+     bright casting and a shadow. */
+  .pxmarks{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;}
+  .pxmarks.hidden{display:none;}
+  .pxmarks .u{fill:none;stroke:rgba(0,0,0,.72);stroke-width:6;stroke-linecap:round;
+    stroke-linejoin:round;vector-effect:non-scaling-stroke;}
+  .pxmarks .o{fill:none;stroke:#ffc400;stroke-width:3;stroke-linecap:round;
+    stroke-linejoin:round;vector-effect:non-scaling-stroke;}
+  .lb.marking .pxstage{cursor:crosshair;}
+  .pxml{font-weight:600;font-size:var(--t-micro);line-height:1;color:var(--muted);
+    text-transform:uppercase;letter-spacing:.04em;}
+  .pxhint{font-size:var(--t-micro);color:var(--muted);}
   .pxcrop i{position:absolute;width:14px;height:14px;background:#fff;border-radius:2px;
     box-shadow:0 0 0 1px rgba(0,0,0,.4);}
   .pxcrop i[data-h="nw"]{left:-7px;top:-7px;cursor:nwse-resize;}
@@ -1922,6 +1938,20 @@
     border:1px solid color-mix(in srgb,var(--warning) 40%,transparent);}
   .need.more{font-weight:500;}
   .need.q{line-height:1.35;padding:0 6px;margin-left:0;}
+  .colpick{position:relative;}
+  .colpick>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:7px;
+    min-height:34px;padding:6px 12px;border:1px solid var(--border);border-radius:var(--r-sm,8px);
+    background:var(--surface-2);color:var(--ink-2);font-weight:600;font-size:var(--t-small,12px);}
+  .colpick>summary::-webkit-details-marker{display:none;}
+  .colpick[open]>summary{background:var(--surface);color:var(--ink);border-color:var(--accent);}
+  .colpick>summary .n{font-variant-numeric:tabular-nums;opacity:.7;}
+  .colpickbody{position:absolute;right:0;top:calc(100% + 6px);z-index:30;min-width:210px;
+    padding:var(--s2);border:1px solid var(--border);border-radius:var(--r);
+    background:var(--surface);box-shadow:var(--e3,0 18px 48px rgba(0,0,0,.28));}
+  .colpickbody label{display:flex;align-items:center;gap:9px;min-height:34px;padding:2px 8px;
+    border-radius:var(--r-sm,8px);font-size:var(--t-small,12px);cursor:pointer;}
+  .colpickbody label:hover{background:var(--surface-2);}
+  .colpickbody label.fixed{opacity:.55;cursor:default;}
   .syxq{display:grid;grid-template-columns:max-content 1fr;gap:2px 10px;margin:6px 0 4px;font-size:var(--t-small,12px);}
   .syxq dt{color:var(--muted);font-weight:600;white-space:nowrap;} .syxq dd{margin:0;}
   #syQuarTbl td.syx{white-space:normal;} #syQuarTbl tbody tr{height:auto;}
@@ -2909,6 +2939,15 @@
             <span data-i18n="av_unit">By machine</span></button>
         </div>
         <span style="flex:1"></span>
+        <!-- WHICH COLUMNS THIS PLANNER WANTS. Nine columns is the register at
+             its fullest; a planner working a week of assignments wants four of
+             them, and one working a shutdown wants the work orders. The
+             machine cannot be hidden — a row with no machine on it names
+             nothing. -->
+        <details class="colpick" id="actCols">
+          <summary title="" data-i18n-title="a_cols_t"><span data-i18n="a_cols">Columns</span><span class="n" id="actColsN"></span></summary>
+          <div class="colpickbody" id="actColsBody"></div>
+        </details>
         <button class="btn" id="csvBtn" data-i18n="csv">⬇ Export CSV</button>
       </div>
       <!-- Appears only with something ticked. A bar that is always there,
@@ -3098,6 +3137,7 @@
       </div>
       <div class="shown" id="lmShown"></div>
       <div class="tblwrap mtxwrap scrollbox" style="--sb:600px"><table class="grid mtx" id="lubeMtx"></table></div>
+      <div id="lubeMtxPg"></div>
       <div id="lubeLegend" class="lgnd"></div>
       <div class="sub" id="lubeNote" style="margin-top:10px"></div>
     </div>
@@ -3311,6 +3351,13 @@
          out from under it, and a drag under zoom stored a frame nobody had
          drawn. -->
     <div class="pxframe" id="pxFrame"><img id="lbimg" alt="">
+      <!-- The marks while they are being drawn. Fractions of the picture, laid
+           inside the element that zooms, exactly as the crop box is — so a ring
+           drawn at 300% is on the pixels it was drawn on. Once the panel closes
+           the marks are painted into the canvas instead, because that is what
+           is stored and what the report will show. -->
+      <svg class="pxmarks hidden" id="pxMarks" viewBox="0 0 1000 1000"
+           preserveAspectRatio="none" aria-hidden="true" focusable="false"></svg>
       <div class="pxcrop hidden" id="pxCrop">
         <i data-h="nw"></i><i data-h="ne"></i><i data-h="sw"></i><i data-h="se"></i>
       </div>
@@ -3343,6 +3390,19 @@
           <option value="1.3333" data-i18n="px_r_43">4:3</option>
           <option value="1.7778" data-i18n="px_r_169">16:9</option>
         </select></label>
+    </div>
+    <!-- POINTING AT THE THING. A caption can say what is wrong; only a mark on
+         the frame can say where. Two shapes, drawn by dragging on the picture,
+         stored in the recipe beside the crop and taken off again just as
+         easily. -->
+    <div class="pxrow">
+      <span class="pxml" data-i18n="px_mark">Mark</span>
+      <button class="btn" id="pxRing" aria-pressed="false"
+              data-i18n-title="px_ring" title="Ring — draw around it">◯</button>
+      <button class="btn" id="pxArrow" aria-pressed="false"
+              data-i18n-title="px_arrow" title="Arrow — point at it">↗</button>
+      <button class="btn" id="pxNoMark" data-i18n="px_marks_clear">Clear marks</button>
+      <span class="pxhint" id="pxMarkHint"></span>
     </div>
     <div class="pxrow">
       <label class="pxcap"><span data-i18n="px_caption">Caption</span>
@@ -3652,6 +3712,7 @@ const I18N={
   a_th_age:"Age",
   a_th_status:"Status",
   a_th_wo:TERMS.en.wo, a_ed_tip:"Press to edit here; Enter saves, Escape cancels",
+  a_cols:"Columns", a_cols_t:"Choose which columns the register shows",
   th_priority:TERMS.en.priority,
   ov_p_crit:"Critical", ov_p_sev:"Severe", ov_p_over:"Overdue action", ov_p_noown:"Unassigned action",
   ov_p_deg:"Degraded", ov_p_inc:"Incipient", ov_p_none:"No attention needed",
@@ -3928,6 +3989,9 @@ const I18N={
   sy_u_receipt:"Proof the server can read an inspection back after storing it — checked on the phone now, not yet proven from this end.",
   px_edit:"Edit photo", px_rotl:"Rotate left", px_rotr:"Rotate right",
   px_straighten:"Straighten", px_zoom:"Zoom", px_crop:"Crop", px_r_none:"Full frame",
+  px_mark:"Mark", px_ring:"Ring — draw around it", px_arrow:"Arrow — point at it",
+  px_marks_clear:"Clear marks", px_mark_draw:"Drag on the photograph to draw it.",
+  px_mark_n:"{n} mark(s) on this photograph", px_mark_none:"Nothing marked",
   px_undo:"Undo", px_redo:"Redo",
   px_r_free:"Freeform", px_r_1:"1:1", px_r_43:"4:3", px_r_169:"16:9",
   px_caption:"Caption", px_prefer:"Use in the report",
@@ -4229,7 +4293,8 @@ const I18N={
   r_photos:"Photos", r_withphotos:"Include photos", r_nophotos:"No photos (smaller file)",
   r_scale:"Quality", r_go:"📄 Generate PDF", r_nodata:"— no data —",
   r_lang:"Language", r_lang_both:"English + Russian", r_q_std:"Standard", r_q_high:"High (larger file)", r_q_small:"Small file (slow link)",
-  r_est:"About {p} page(s) · about {s} MB · {n} photograph(s) · roughly {t} s to make", r_est_wait:"Estimating…",
+  r_est:"About {p} page(s) · about {s} MB · {n} photograph(s) · roughly {t} to make", r_est_wait:"Estimating…",
+  r_est_s:"{n} s", r_est_m:"{n} min",
   r_one:"This inspection", r_one_go:"📄 Report", r_unit_go:"📄 Report on this machine",
   r_none:"Nothing to report on yet.", r_building:"Building…",
   r_fetching:"Photos {d}/{n}…", r_rendering:"Page {i} of {n}…",
@@ -4463,6 +4528,7 @@ const I18N={
   a_th_age:"Дней",
   a_th_status:"Статус",
   a_th_wo:TERMS.ru.wo, a_ed_tip:"Нажмите, чтобы изменить здесь; Enter — сохранить, Escape — отменить",
+  a_cols:"Столбцы", a_cols_t:"Выберите, какие столбцы показывать",
   th_priority:TERMS.ru.priority,
   ov_p_crit:"Критично", ov_p_sev:"Серьёзно", ov_p_over:"Срок прошёл", ov_p_noown:"Без владельца",
   ov_p_deg:"Ухудшение", ov_p_inc:"Начальная стадия", ov_p_none:"Без внимания",
@@ -4720,6 +4786,9 @@ const I18N={
   sy_u_receipt:"Доказательство, что сервер может прочитать осмотр обратно — телефон это проверяет, с этой стороны пока нет.",
   px_edit:"Правка фото", px_rotl:"Повернуть влево", px_rotr:"Повернуть вправо",
   px_straighten:"Выравнивание", px_zoom:"Масштаб", px_crop:"Кадрирование", px_r_none:"Весь кадр",
+  px_mark:"Отметка", px_ring:"Овал — обвести", px_arrow:"Стрелка — указать",
+  px_marks_clear:"Убрать отметки", px_mark_draw:"Проведите по фотографии, чтобы нарисовать.",
+  px_mark_n:"Отметок на фотографии: {n}", px_mark_none:"Отметок нет",
   px_undo:"Отменить", px_redo:"Вернуть",
   px_r_free:"Произвольно", px_r_1:"1:1", px_r_43:"4:3", px_r_169:"16:9",
   px_caption:"Подпись", px_prefer:"Использовать в отчёте",
@@ -5023,7 +5092,8 @@ const I18N={
   r_photos:"Фото", r_withphotos:"С фото", r_nophotos:"Без фото (меньше файл)",
   r_scale:"Качество", r_go:"📄 Сформировать PDF", r_nodata:"— нет данных —",
   r_lang:"Язык", r_lang_both:"Английский + русский", r_q_std:"Стандарт", r_q_high:"Высокое (больше файл)", r_q_small:"Малый файл (слабая связь)",
-  r_est:"Около {p} стр. · около {s} МБ · фото: {n} · примерно {t} с на формирование", r_est_wait:"Оценка…",
+  r_est:"Около {p} стр. · около {s} МБ · фото: {n} · примерно {t} на формирование", r_est_wait:"Оценка…",
+  r_est_s:"{n} с", r_est_m:"{n} мин",
   r_one:"Этот осмотр", r_one_go:"📄 Отчёт", r_unit_go:"📄 Отчёт по этой машине",
   r_none:"Пока не о чем отчитываться.", r_building:"Формирую…",
   r_fetching:"Фото {d}/{n}…", r_rendering:"Страница {i} из {n}…",
@@ -6895,7 +6965,36 @@ document.addEventListener("click", e=>{
   pageAt.set(key,st);
   const r=pagedWired.get(key); if(r) r();
 });
+/* WHICH COLUMNS THE REGISTER SHOWS. Remembered per browser, because it is a
+   preference of the person reading rather than a property of the data. The
+   machine is not in the list: a row that does not say which machine it is
+   about is a row nobody can act on. */
+const ACOLS_K="cm_dash_actcols";
+const ACOL_ALL=["sev","comp","act","req","owner","due","st","wo"];
+let actCols=(()=>{ try{ const v=JSON.parse(localStorage.getItem(ACOLS_K)||"null");
+  return Array.isArray(v) ? ACOL_ALL.filter(k=>v.indexOf(k)>=0) : ACOL_ALL.slice(); }
+  catch(e){ return ACOL_ALL.slice(); } })();
+const acolOn=k=>k==="unit"||k==="queue"||actCols.indexOf(k)>=0;
+function renderActCols(){
+  const box=$("actColsBody"), n=$("actColsN"); if(!box) return;
+  const name={ sev:t("th_priority"), comp:t("a_th_comp"), act:t("a_th_find"), req:t("th_reqact"),
+               owner:t("a_th_owner"), due:t("a_th_due"), st:t("a_th_status"), wo:t("a_th_wo") };
+  box.innerHTML=`<label class="fixed"><input type="checkbox" checked disabled>${esc(t("th_unit"))}</label>`
+    + ACOL_ALL.map(k=>`<label><input type="checkbox" data-acol="${k}"${acolOn(k)?" checked":""}>${esc(name[k])}</label>`).join("");
+  if(n) n.textContent=(actCols.length+1)+"/"+(ACOL_ALL.length+1);
+  box.querySelectorAll("[data-acol]").forEach(cb=>cb.onchange=()=>{
+    const k=cb.dataset.acol;
+    actCols = cb.checked ? ACOL_ALL.filter(x=>x===k||actCols.indexOf(x)>=0)
+                         : actCols.filter(x=>x!==k);
+    /* Never nothing: unticking the last one would leave a table of machine
+       numbers and no finding, which is not a register. */
+    if(!actCols.length){ actCols=[k]; cb.checked=true; }
+    try{ localStorage.setItem(ACOLS_K, JSON.stringify(actCols)); }catch(e){}
+    renderActCols(); renderActions();
+  });
+}
 function renderActions(){
+  renderActCols();
   const rows=actionRows();
   /* The tracker answers the meeting's question before the table does. */
   let overdue=0, oldest=0, owned=0, triage=0, required=0, disposed=0;
@@ -7015,7 +7114,11 @@ function renderActions(){
        is the one thing the planning meeting asks for that nothing showed. */
     const cols=[[actSort.k==="queue"?"queue":"sev",t("th_priority")],["unit",t("th_unit")],["comp",t("a_th_comp")],
                 ["act",t("a_th_find")],["req",t("th_reqact")],["owner",t("a_th_owner")],
-                ["due",t("a_th_due")],["st",t("a_th_status")],["wo",t("a_th_wo")],["",""]];
+                ["due",t("a_th_due")],["st",t("a_th_status")],["wo",t("a_th_wo")],["",""]]
+      .filter(([k])=>!k || acolOn(k));
+    /* A sort on a column that has just been hidden is a sort nobody can see;
+       the register falls back to the queue it opens in. */
+    if(actSort.k!=="queue" && !acolOn(actSort.k)) actSort={k:"queue",dir:-1};
     /* Everything on screen, ticked or cleared in one press. It is scoped to what
        is SHOWN, not to the whole register — a select-all that silently reaches
        past the filter is how somebody reassigns four hundred findings meaning to
@@ -7049,25 +7152,25 @@ function renderActions(){
               aSel.has(sid)?" checked":""} aria-label="${esc(t("a_sel_one",{u:r.equip}))}"></td>
             <!-- Priority: the grade the finding carries, and the stoppage
                  priority beside it once somebody has set one. -->
-            <td class="nw">${sv?`<span class="sevcell" style="--sc:${sc}"><i></i>${esc(SEV[sv].l)}</span>`
+            ${!acolOn("sev")?"":`<td class="nw">${sv?`<span class="sevcell" style="--sc:${sc}"><i></i>${esc(SEV[sv].l)}</span>`
                     :'<span class="muted">—</span>'}${
-              i.prio?` <span class="prio ${prioClass(i.prio)}" title="${esc(prioName(i.prio))}">${esc(i.prio)}</span>`:""}</td>
+              i.prio?` <span class="prio ${prioClass(i.prio)}" title="${esc(prioName(i.prio))}">${esc(i.prio)}</span>`:""}</td>`}
             <td><b>${esc(r.equip)}</b></td>
             <!-- One line per cell. A second line under the component and
                  another under the action put the rows at 57px; the register is
                  scanned, and what those lines carried is on the title and in
                  the drawer a click away. The round, its date and the age of
                  the finding ride on the component's title. -->
-            <td title="${esc((ptLabel(r,i)||i.key)+" · "+i.key+" · "+(TYPE_LABEL[r.type]||r.type)+" · "+(r.date||"")+(age!=null?" · "+age+" d":""))}">
+            ${!acolOn("comp")?"":`<td title="${esc((ptLabel(r,i)||i.key)+" · "+i.key+" · "+(TYPE_LABEL[r.type]||r.type)+" · "+(r.date||"")+(age!=null?" · "+age+" d":""))}">
               <span class="trunc">${ptLabelHTML(r,i)}
-                <span class="muted">${esc(i.key)}</span></span></td>
+                <span class="muted">${esc(i.key)}</span></span></td>`}
             <!-- The finding is what the Pareto drill-down filters on and the
                  thing a planner is scanning for; the required action is what
                  somebody committed to do about it, in its own column. -->
-            <td title="${esc(i.defect||"")}"><span class="trunc">${i.defect?esc(i.defect):'<span class="muted">—</span>'}</span></td>
-            <td title="${esc(i.actionLabel||(i.action?actionName(i.action):""))}"><span class="trunc">${
+            ${!acolOn("act")?"":`<td title="${esc(i.defect||"")}"><span class="trunc">${i.defect?esc(i.defect):'<span class="muted">—</span>'}</span></td>`}
+            ${!acolOn("req")?"":`<td title="${esc(i.actionLabel||(i.action?actionName(i.action):""))}"><span class="trunc">${
               i.actionLabel||i.action ? esc(i.actionLabel||actionName(i.action))
-                : `<span class="need">${esc(TERMS.t(lang,"need_action"))}</span>`}</span></td>
+                : `<span class="need">${esc(TERMS.t(lang,"need_action"))}</span>`}</span></td>`}
             <!-- READ-OUTS THAT EDIT ON A CLICK. The row carries no live form
                  control — at a thousand inspections that was thousands of
                  boxes on one page. Pressing the owner, the due date, the status
@@ -7075,17 +7178,17 @@ function renderActions(){
                  only; Enter saves through the same audited write the drawer
                  uses, Escape puts the read-out back. The tick column and the
                  bar above it do a week's assignments in one gesture. -->
-            <td class="nw ed" data-ed="owner" title="${esc(t("a_ed_tip"))}">${i.owner
+            ${!acolOn("owner")?"":`<td class="nw ed" data-ed="owner" title="${esc(t("a_ed_tip"))}">${i.owner
                 ? `<span class="who"><i>${esc(initials0(i.owner))}</i><span>${esc(i.owner)}</span></span>`
-                : `<span class="who none"><i>+</i><span>${esc(TERMS.t(lang,"owner_unassigned"))}</span></span>`}</td>
-            <td class="ed" data-ed="due" title="${esc(t("a_ed_tip"))}">${i.due
+                : `<span class="who none"><i>+</i><span>${esc(TERMS.t(lang,"owner_unassigned"))}</span></span>`}</td>`}
+            ${!acolOn("due")?"":`<td class="ed" data-ed="due" title="${esc(t("a_ed_tip"))}">${i.due
                 ? `<span class="due ${od?"late":(dd!=null&&dd<=7?"soon":"")}"><b>${esc(i.due)}</b>${
                     od?`<i>${esc(t("a_late"))}</i>`:(dd!=null&&dd<=7?`<i>${esc(t("a_in_d",{d:dd}))}</i>`:"")}</span>`
-                : `<span class="need">${esc(TERMS.t(lang,"need_due"))}</span>`}</td>
-            <td class="nw ed" data-ed="status" title="${esc(t("a_ed_tip"))}"><span class="st s-${esc(String(i.status||"open"))}">${esc(stName(i.status))}</span>${
-              ast.k==="triage" ? needChips(ast.miss.filter(m=>m!=="owner"&&m!=="due"), 2) : ""}</td>
-            <td class="nw ed mono" data-ed="wo" title="${esc(t("a_ed_tip"))}">${i.wo ? esc(i.wo)
-                : (woWanted(i) ? `<span class="need">${esc(TERMS.t(lang,"need_wo"))}</span>` : '<span class="muted">—</span>')}</td>
+                : `<span class="need">${esc(TERMS.t(lang,"need_due"))}</span>`}</td>`}
+            ${!acolOn("st")?"":`<td class="nw ed" data-ed="status" title="${esc(t("a_ed_tip"))}"><span class="st s-${esc(String(i.status||"open"))}">${esc(stName(i.status))}</span>${
+              ast.k==="triage" ? needChips(ast.miss.filter(m=>m!=="owner"&&m!=="due"), 2) : ""}</td>`}
+            ${!acolOn("wo")?"":`<td class="nw ed mono" data-ed="wo" title="${esc(t("a_ed_tip"))}">${i.wo ? esc(i.wo)
+                : (woWanted(i) ? `<span class="need">${esc(TERMS.t(lang,"need_wo"))}</span>` : '<span class="muted">—</span>')}</td>`}
             <td class="go" aria-hidden="true">›</td>
           </tr>`;
         }).join("")+`</tbody></table></div>` + pgT.strip;
@@ -7446,7 +7549,9 @@ function assignPlan(rec){
    the inspector took is still never written to. */
 const PXD=new Map();                              // name -> {sig, url}
 const pxDeriving=new Map();                       // name|sig -> promise
-function pxVisual(r){ const n=pxNorm(r); return !!(n.rot||n.straighten||n.crop); }
+/* Does the recipe change the PIXELS? A caption does not, so it needs no
+   derivative; a mark does, so it does. */
+function pxVisual(r){ const n=pxNorm(r); return !!(n.rot||n.straighten||n.crop||pxMarksOf(n).length); }
 function pxSig(rk,name,orig){
   const r=pxAll(rk)[pxKey(name)];
   return (r && pxVisual(r)) ? JSON.stringify(pxNorm(r))+"|"+orig : "";
@@ -10968,12 +11073,12 @@ function pxGet(rk,name){
   const r=pxAll(rk)[pxKey(name)];
   return r ? JSON.parse(JSON.stringify(r)) : null;
 }
-const PX_BLANK={rot:0, straighten:0, crop:null, caption:"", preferred:0};
+const PX_BLANK={rot:0, straighten:0, crop:null, caption:"", preferred:0, marks:null};
 /* How many earlier renditions of one photograph are kept beside the current
    one. Twenty is more edits than any frame in this folder has had, and it
    bounds a sidecar that is otherwise unbounded on somebody's afternoon. */
 const PX_HIST_MAX=20;
-/* Only the five fields that describe the picture. `hist`, `v`, `by`, `at` and
+/* Only the fields that describe the picture. `hist`, `v`, `by`, `at` and
    `fp` are ABOUT the recipe rather than part of it, and letting them through
    here would make two identical renditions compare as different. */
 function pxNorm(r){
@@ -10985,7 +11090,62 @@ function pxNorm(r){
    must not create a derivative or an audit entry. */
 function pxTouched(r){
   const n=pxNorm(r);
-  return !!(n.rot || n.straighten || n.crop || n.caption || n.preferred);
+  return !!(n.rot || n.straighten || n.crop || n.caption || n.preferred || pxMarksOf(n).length);
+}
+/* WHAT A MARK IS.
+
+   "There is ferrous debris on the outboard half of the plug face" is a
+   sentence; the photograph is the evidence; and between them there was
+   nothing saying WHERE. A planner in Bilibino reading a report of nine
+   photographs has no way to know which corner of which frame the finding is
+   about, and a caption cannot point.
+
+   So a mark is a ring or an arrow, stored in the recipe like everything else
+   — fractions of the rotated, straightened frame, the same coordinate space
+   the crop is in, drawn onto the canvas BEFORE the crop so that cropping
+   clips the drawing exactly as it clips the picture. The photograph the
+   inspector took is still never written to: take the marks off and the
+   original comes back byte for byte, which is the whole reason the editor
+   works this way.
+
+   Two shapes and no more. A drawing tool grows a colour picker, a text tool
+   and a freehand pen, and then the evidence has somebody's handwriting on
+   it. A ring says "here" and an arrow says "here, from there". */
+const PX_MARK_KINDS=["ring","arrow"];
+function pxMarksOf(r){
+  const m=(r&&r.marks)||[];
+  return Array.isArray(m) ? m.filter(x=>x && PX_MARK_KINDS.indexOf(x.t)>=0) : [];
+}
+/* Drawn on the FULL frame, in its own pixels, so a mark is the same thickness
+   whether the rendition is 2000 px for a report or 400 px for a thumbnail.
+   Every stroke is laid twice — a dark one under a bright one — because a thin
+   amber line vanishes on a clean casting and a thin dark one vanishes in a
+   shadow, and a photograph of a magnetic plug has both in the same frame. */
+function pxDrawMarks(x, w, h, marks){
+  const lw=Math.max(2, Math.round(Math.min(w,h)*0.0075));
+  const pass=(colour,extra)=>{
+    x.save();
+    x.strokeStyle=colour; x.lineWidth=lw+extra; x.lineJoin="round"; x.lineCap="round";
+    marks.forEach(m=>{
+      const px=m.x*w, py=m.y*h, pw=m.w*w, ph=m.h*h;
+      x.beginPath();
+      if(m.t==="ring"){
+        x.ellipse(px+pw/2, py+ph/2, Math.abs(pw/2), Math.abs(ph/2), 0, 0, Math.PI*2);
+        x.stroke();
+      }else{
+        const ex=px+pw, ey=py+ph, a=Math.atan2(ph,pw);
+        const len=Math.max(lw*4, Math.min(Math.hypot(pw,ph)*0.28, Math.min(w,h)*0.09));
+        x.moveTo(px,py); x.lineTo(ex,ey); x.stroke();
+        x.beginPath();
+        x.moveTo(ex,ey); x.lineTo(ex-len*Math.cos(a-0.4), ey-len*Math.sin(a-0.4));
+        x.moveTo(ex,ey); x.lineTo(ex-len*Math.cos(a+0.4), ey-len*Math.sin(a+0.4));
+        x.stroke();
+      }
+    });
+    x.restore();
+  };
+  pass("rgba(0,0,0,.72)", lw);
+  pass("#ffc400", 0);
 }
 /* The recipe, applied. Rotation in 90° steps swaps the axes; straighten is a
    small rotation about the centre with the frame kept full; crop is in
@@ -11003,6 +11163,11 @@ function pxRender(img, recipe, maxW){
   c1.width=bw; c1.height=bh;
   const x1=c1.getContext("2d");
   x1.translate(bw/2,bh/2); x1.rotate(rad); x1.drawImage(img,-sw/2,-sh/2);
+  x1.setTransform(1,0,0,1,0,0);
+  /* Step 1b — the marks, on the whole frame and before the crop, so a crop
+     clips them exactly as it clips what they point at. */
+  const marks=pxMarksOf(r);
+  if(marks.length) pxDrawMarks(x1, bw, bh, marks);
   /* Step 2 — crop, in fractions, so the same recipe survives a re-render at a
      different size and a later rotation. */
   let out=c1;
@@ -11073,7 +11238,7 @@ function pxSync(){
   if(!editable){ pxRecipe=null; pxDraft=null; return; }
   pxRecipe=pxGet(lbCtx.rk, lbCtx.name) || null;
   pxDraft=pxNorm(pxRecipe);
-  pxCompare=false; pxWipe=false;
+  pxCompare=false; pxWipe=false; pxTool="";
   /* A different photograph is a different history. Carrying the stack across
      would let Undo apply one frame's crop to another. */
   pxUndoClear();
@@ -11131,7 +11296,7 @@ function pxOpenPanel(){
   pxSyncControls();
   pxDispLoad();
   const busy=pxPending();
-  ["pxRotL","pxRotR","pxStr","pxRatio","pxCap","pxPref","pxSave"].forEach(id=>{
+  ["pxRotL","pxRotR","pxStr","pxRatio","pxCap","pxPref","pxSave","pxRing","pxArrow"].forEach(id=>{
     const el=$(id); if(el) el.disabled=busy; });
   pxPaint(); pxCropSync();
 }
@@ -11277,7 +11442,11 @@ function pxClosePanel(){
   $("pxCrop").classList.add("hidden");
   $("pxMsg").textContent="";
   pxZoomReset();
+  pxTool=""; $("lb").classList.remove("marking");
   if(lbCtx){ pxDraft=pxNorm(pxRecipe); pxCompare=false; pxWipe=false; pxPaint(); pxBadge(); }
+  /* Shut, the marks come off the overlay and go into the picture, which is
+     where they live once they are stored. */
+  pxMarksSync();
 }
 /* Is the original still on its way up? Then there is nothing to edit yet. */
 function pxPending(){
@@ -11339,8 +11508,13 @@ function pxZoomReset(){ pxZ=1; pxPanX=0; pxPanY=0; pxApplyZoom(); }
 function pxCropSync(){
   const box=$("pxCrop"), img=$("lbimg");
   if(!box||!img) return;
+  /* The marks are redrawn from here rather than from a dozen call sites,
+     because every one of them is already a place the picture's state changed
+     — and a mark that repaints on some of them and not others is exactly the
+     kind of half-shown thing this project keeps producing. */
+  pxMarksSync();
   const c=pxDraft&&pxDraft.crop;
-  const on=!!c && !pxCompare;
+  const on=!!c && !pxCompare && !pxTool;
   box.classList.toggle("hidden", !on);
   $("lb").classList.toggle("cropping", on);
   if(!on) return;
@@ -11349,9 +11523,58 @@ function pxCropSync(){
   box.style.width=(c.w*100)+"%";
   box.style.height=(c.h*100)+"%";
 }
-/* Pointer work on the stage: a corner resizes, the box moves, and anywhere else
-   pans when zoomed in. One handler, because they are the same gesture with
-   different targets. */
+/* THE MARKS ON SCREEN, WHILE THEY ARE BEING DRAWN.
+
+   The same geometry the canvas uses, in an SVG stretched over the picture, so
+   what is dragged is what is stored and there is no second idea of where a
+   ring is. Painted only while the panel is open; once it closes the canvas
+   carries them, and two drawings of one mark would double every stroke. */
+let pxTool="";
+function pxMarkSvg(list){
+  const K=1000;
+  return list.map(m=>{
+    const x=m.x*K, y=m.y*K, w=m.w*K, h=m.h*K;
+    if(m.t==="ring")
+      return `<ellipse cx="${x+w/2}" cy="${y+h/2}" rx="${Math.abs(w/2)}" ry="${Math.abs(h/2)}" class="C"/>`;
+    /* The head is drawn in the SVG's own square space and would shear on a
+       non-square picture; at this size that is a few pixels of a chevron, and
+       the canvas — the thing that is saved and printed — draws it true. */
+    const ex=x+w, ey=y+h, a=Math.atan2(h,w), len=Math.max(24, Math.min(Math.hypot(w,h)*0.28, 90));
+    return `<path d="M${x} ${y}L${ex} ${ey}M${ex} ${ey}L${ex-len*Math.cos(a-0.4)} ${
+      ey-len*Math.sin(a-0.4)}M${ex} ${ey}L${ex-len*Math.cos(a+0.4)} ${ey-len*Math.sin(a+0.4)}" class="C"/>`;
+  }).join("");
+}
+function pxMarksSync(){
+  const sv=$("pxMarks"); if(!sv) return;
+  const open=!$("pxPanel").classList.contains("hidden");
+  const list=(!pxCompare && open && pxDraft) ? pxMarksOf(pxDraft) : [];
+  sv.classList.toggle("hidden", !list.length);
+  if(list.length){
+    const g=pxMarkSvg(list);
+    sv.innerHTML=g.replace(/class="C"/g,'class="u"')+g.replace(/class="C"/g,'class="o"');
+  }else sv.innerHTML="";
+  const n=pxDraft?pxMarksOf(pxDraft).length:0;
+  /* The count is the fact and comes first; the instruction is only wanted
+     while a tool is armed and there is still nothing to count. */
+  const hint=$("pxMarkHint");
+  if(hint) hint.textContent = n ? t("px_mark_n",{n}) : (pxTool ? t("px_mark_draw") : "");
+  const clr=$("pxNoMark"); if(clr) clr.disabled=!n;
+  $("pxRing").setAttribute("aria-pressed", pxTool==="ring"?"true":"false");
+  $("pxArrow").setAttribute("aria-pressed", pxTool==="arrow"?"true":"false");
+  $("pxRing").classList.toggle("on", pxTool==="ring");
+  $("pxArrow").classList.toggle("on", pxTool==="arrow");
+  $("lb").classList.toggle("marking", !!pxTool);
+}
+function pxToolSet(k){
+  pxTool = (pxTool===k) ? "" : k;
+  /* Framing and marking are two different things to do with a drag, and one
+     pointer cannot mean both. Arming a mark puts the crop box away; it does
+     not throw the crop away. */
+  pxCropSync();
+}
+/* Pointer work on the stage: a corner resizes, the box moves, a mark is drawn,
+   and anywhere else pans when zoomed in. One handler, because they are the
+   same gesture with different targets. */
 (function(){
   const stage=$("pxStage"); if(!stage) return;
   let mode=null, handle=null, start=null;
@@ -11369,7 +11592,10 @@ function pxCropSync(){
     if($("pxPanel").classList.contains("hidden")) return;   // not editing
     const h=e.target.closest("[data-h]");
     const inBox=e.target.closest(".pxcrop");
-    if(h){ mode="resize"; handle=h.dataset.h; }
+    /* An armed tool wins the drag: somebody who has pressed Ring means to draw
+       one, not to pan. */
+    if(pxTool){ mode="mark"; }
+    else if(h){ mode="resize"; handle=h.dataset.h; }
     else if(inBox){ mode="move"; }
     else if(pxZ>1){ mode="pan"; }
     else return;
@@ -11385,6 +11611,24 @@ function pxCropSync(){
       pxPanX=start.panX+(e.clientX-start.cx)/pxZ;
       pxPanY=start.panY+(e.clientY-start.cy)/pxZ;
       pxApplyZoom(); return;
+    }
+    if(mode==="mark"){
+      if(!pxDragMarked){ pxMark(); pxDragMarked=true;
+        pxDraft.marks=pxMarksOf(pxDraft).concat([{t:pxTool, x:clamp(start.p.x), y:clamp(start.p.y), w:0, h:0}]); }
+      const p=frac(e), list=pxMarksOf(pxDraft), m=list[list.length-1];
+      if(!m) return;
+      /* A ring is a box and is drawn from its corner; an arrow is a line and
+         is drawn from where the pointer went down to where it is now. So a
+         ring's box is normalised and an arrow's is not — a negative width is
+         an arrow pointing left, which is the whole point of it. */
+      if(pxTool==="ring"){
+        const x1=Math.min(start.p.x,p.x), y1=Math.min(start.p.y,p.y);
+        m.x=clamp(x1); m.y=clamp(y1);
+        m.w=clamp(Math.max(x1,p.x))-m.x; m.h=clamp(Math.max(y1,p.y))-m.y;
+      }else{
+        m.w=clamp(p.x)-m.x; m.h=clamp(p.y)-m.y;
+      }
+      pxMarksSync(); return;
     }
     if(!start.crop) return;
     const p=frac(e), dx=p.x-start.p.x, dy=p.y-start.p.y;
@@ -11414,10 +11658,25 @@ function pxCropSync(){
   });
   const end=e=>{
     if(!mode) return;
-    const wasCrop = mode!=="pan";
+    const wasMark = mode==="mark";
+    const wasCrop = mode!=="pan" && !wasMark;
     mode=null; handle=null; start=null;
     stage.classList.remove("grabbing");
     try{ stage.releasePointerCapture(e.pointerId); }catch(err){}
+    if(wasMark){
+      /* A tap is not a mark. A ring of nothing and an arrow of no length are
+         invisible on the picture and would still make the recipe "edited",
+         which is how a photograph acquires a derivative that looks identical
+         to the original and an audit entry nobody can account for. */
+      const list=pxMarksOf(pxDraft), m=list[list.length-1];
+      if(m && Math.hypot(m.w, m.h) < 0.02){
+        pxDraft.marks=list.slice(0,-1);
+        pxUndo.pop(); pxUndoBtns();               // and the step it took, with it
+      }
+      if(!pxMarksOf(pxDraft).length) pxDraft.marks=null;
+      pxMarksSync();
+      return;
+    }
     /* The frame under the box does not change with the box, so there is
        nothing to repaint; the crop is painted when the panel closes. */
     if(wasCrop) pxCropSync();
@@ -11502,6 +11761,12 @@ $("pxRatio").onchange=()=>{
     pxPaint(); pxCropSync();
   });
 };
+$("pxRing").onclick=()=>pxToolSet("ring");
+$("pxArrow").onclick=()=>pxToolSet("arrow");
+$("pxNoMark").onclick=()=>{
+  if(!pxDraft || !pxMarksOf(pxDraft).length) return;
+  pxMark(); pxDraft.marks=null; pxTool=""; pxMarksSync(); pxCropSync();
+};
 $("pxCap").onfocus=()=>pxMark();          // one step for the whole caption
 $("pxCap").oninput=()=>{ pxDraft.caption=$("pxCap").value; };
 $("pxPref").onchange=()=>{ pxMark(); pxDraft.preferred=$("pxPref").checked?1:0; };
@@ -11516,7 +11781,7 @@ $("pxReset").onclick=()=>{
      unedited photograph is a no-op, not a pending deletion. */
   pxWipe=pxTouched(pxRecipe);
   pxMark();                                   // Reset is itself undoable
-  pxDraft=pxNorm(null); pxCompare=false;
+  pxDraft=pxNorm(null); pxCompare=false; pxTool="";
   $("pxStr").value="0"; $("pxStrV").textContent="0°"; $("pxRatio").value="";
   $("pxCap").value=""; $("pxPref").checked=false;
   pxZoomReset(); pxPaint(); pxCropSync();
@@ -11591,7 +11856,7 @@ $("pxSave").onclick=()=>{
     const hist=(priorOne&&Array.isArray(priorOne.hist)?priorOne.hist.slice():[]);
     if(priorOne && pxTouched(priorOne)){
       const h=pxNorm(priorOne);
-      hist.push({ rot:h.rot, straighten:h.straighten, crop:h.crop,
+      hist.push({ rot:h.rot, straighten:h.straighten, crop:h.crop, marks:h.marks,
                   caption:h.caption, preferred:h.preferred,
                   by:priorOne.by||"", at:priorOne.at||"", fp:priorOne.fp||"" });
       while(hist.length>PX_HIST_MAX) hist.shift();
@@ -12055,6 +12320,15 @@ function renderReportPreview(){
    sections laid out at the same width the paginator uses — measured, not
    rasterised, so it takes a moment where the PDF takes a minute. Debounced,
    and a stale answer is dropped when the choice has moved on. */
+/* A three-minute wait written as "200 s" is a number a planner has to convert
+   before it means anything. Under a minute stays in seconds; above it, minutes,
+   because nobody plans their afternoon to the second. */
+function mmss(s){
+  s=Math.max(0,Math.round(Number(s)||0));
+  if(s<60) return t("r_est_s",{n:s});
+  const m=Math.round(s/60);
+  return t("r_est_m",{n:m});
+}
 let rEstT=null, rEstKey="";
 function reportEstimateSoon(scope,target){
   clearTimeout(rEstT);
@@ -12065,7 +12339,7 @@ function reportEstimateSoon(scope,target){
     try{
       const e=await CMReport.estimate(scope,target,o);
       if(rEstKey!==key || !$("rEst")) return;
-      $("rEst").textContent = e ? t("r_est",{p:e.pages, s:(e.bytes/1048576).toFixed(1), n:e.photos, t:e.seconds}) : "";
+      $("rEst").textContent = e ? t("r_est",{p:e.pages, s:(e.bytes/1048576).toFixed(1), n:e.photos, t:mmss(e.seconds)}) : "";
     }catch(err){ if($("rEst")) $("rEst").textContent=""; }
   }, 150);
 }
@@ -13473,10 +13747,28 @@ function renderLubeMtx(){
   }));
   const mixed = k => Object.keys(colProd[k] || {}).length > 1;
 
+  /* EIGHTY-SEVEN MODELS IS SIX SCREENS OF SHEET. Every other table on the
+     dashboard pages at twenty-five and this one did not, so the fleet matrix
+     was the one place a reader still scrolled past everything to reach
+     anything.
+     What is paged is the ROWS and only the rows. The columns are worked out
+     from the whole filtered list above, and the legend from every row walked
+     below, so a compartment does not appear and disappear as you turn the
+     page and a colour is explained wherever it is seen. A sheet whose shape
+     changes underneath you is worse than a long one. */
+  const pgM = paged("lubeMtx", list, renderLubeMtx, PAGE_SIZE_DEFAULT);
+  const first = list.indexOf(pgM.rows[0]), last = first + pgM.rows.length;
   let lastCls = null, body = "";
-  list.forEach(r=>{
+  list.forEach((r, ix)=>{
+    const on = ix >= first && ix < last;
+    /* A page that opens in the middle of a class still says which class it is
+       in: the heading is repeated at the top of the page, not left behind on
+       the previous one. */
     if(r.cls !== lastCls){
       lastCls = r.cls;
+      if(on) body += `<tr class="clsrow"><td colspan="${colSet.length+1}">${
+        esc(t("cls_"+r.cls) || r.cls)}</td></tr>`;
+    }else if(on && !body){
       body += `<tr class="clsrow"><td colspan="${colSet.length+1}">${
         esc(t("cls_"+r.cls) || r.cls)}</td></tr>`;
     }
@@ -13524,7 +13816,7 @@ function renderLubeMtx(){
         (off ? `<i class="warnv">${esc(t("lm_offstd",{p:lubeShort(std.p)}))}</i>` : "")+
         `</td>`;
     }).join("");
-    body += `<tr><td class="mdl"><b>${esc(r.m)}</b><i>×${r.n}${
+    if(on) body += `<tr><td class="mdl"><b>${esc(r.m)}</b><i>×${r.n}${
       r.alias?` · ${esc(t("lm_alias",{m:r.alias.is}))}`:""}</i></td>${cells}</tr>`;
   });
 
@@ -13566,6 +13858,10 @@ function renderLubeMtx(){
     (list.length < all.length
       ? `<span class="spacer"></span><span>${esc(t("lg_hidden",{n:allN-shownN}))}</span>`
       : "");
+  /* Under the sheet, where every other paged table on the dashboard puts it —
+     not folded into the count line, which is a sentence about the filter and
+     not a control. */
+  $("lubeMtxPg").innerHTML = pgM.strip;
 }
 
 /* ===================== what the matrix cannot draw =====================
