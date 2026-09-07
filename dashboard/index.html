@@ -1922,6 +1922,20 @@
     border:1px solid color-mix(in srgb,var(--warning) 40%,transparent);}
   .need.more{font-weight:500;}
   .need.q{line-height:1.35;padding:0 6px;margin-left:0;}
+  .colpick{position:relative;}
+  .colpick>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:7px;
+    min-height:34px;padding:6px 12px;border:1px solid var(--border);border-radius:var(--r-sm,8px);
+    background:var(--surface-2);color:var(--ink-2);font-weight:600;font-size:var(--t-small,12px);}
+  .colpick>summary::-webkit-details-marker{display:none;}
+  .colpick[open]>summary{background:var(--surface);color:var(--ink);border-color:var(--accent);}
+  .colpick>summary .n{font-variant-numeric:tabular-nums;opacity:.7;}
+  .colpickbody{position:absolute;right:0;top:calc(100% + 6px);z-index:30;min-width:210px;
+    padding:var(--s2);border:1px solid var(--border);border-radius:var(--r);
+    background:var(--surface);box-shadow:var(--e3,0 18px 48px rgba(0,0,0,.28));}
+  .colpickbody label{display:flex;align-items:center;gap:9px;min-height:34px;padding:2px 8px;
+    border-radius:var(--r-sm,8px);font-size:var(--t-small,12px);cursor:pointer;}
+  .colpickbody label:hover{background:var(--surface-2);}
+  .colpickbody label.fixed{opacity:.55;cursor:default;}
   .syxq{display:grid;grid-template-columns:max-content 1fr;gap:2px 10px;margin:6px 0 4px;font-size:var(--t-small,12px);}
   .syxq dt{color:var(--muted);font-weight:600;white-space:nowrap;} .syxq dd{margin:0;}
   #syQuarTbl td.syx{white-space:normal;} #syQuarTbl tbody tr{height:auto;}
@@ -2909,6 +2923,15 @@
             <span data-i18n="av_unit">By machine</span></button>
         </div>
         <span style="flex:1"></span>
+        <!-- WHICH COLUMNS THIS PLANNER WANTS. Nine columns is the register at
+             its fullest; a planner working a week of assignments wants four of
+             them, and one working a shutdown wants the work orders. The
+             machine cannot be hidden — a row with no machine on it names
+             nothing. -->
+        <details class="colpick" id="actCols">
+          <summary title="" data-i18n-title="a_cols_t"><span data-i18n="a_cols">Columns</span><span class="n" id="actColsN"></span></summary>
+          <div class="colpickbody" id="actColsBody"></div>
+        </details>
         <button class="btn" id="csvBtn" data-i18n="csv">⬇ Export CSV</button>
       </div>
       <!-- Appears only with something ticked. A bar that is always there,
@@ -3652,6 +3675,7 @@ const I18N={
   a_th_age:"Age",
   a_th_status:"Status",
   a_th_wo:TERMS.en.wo, a_ed_tip:"Press to edit here; Enter saves, Escape cancels",
+  a_cols:"Columns", a_cols_t:"Choose which columns the register shows",
   th_priority:TERMS.en.priority,
   ov_p_crit:"Critical", ov_p_sev:"Severe", ov_p_over:"Overdue action", ov_p_noown:"Unassigned action",
   ov_p_deg:"Degraded", ov_p_inc:"Incipient", ov_p_none:"No attention needed",
@@ -4463,6 +4487,7 @@ const I18N={
   a_th_age:"Дней",
   a_th_status:"Статус",
   a_th_wo:TERMS.ru.wo, a_ed_tip:"Нажмите, чтобы изменить здесь; Enter — сохранить, Escape — отменить",
+  a_cols:"Столбцы", a_cols_t:"Выберите, какие столбцы показывать",
   th_priority:TERMS.ru.priority,
   ov_p_crit:"Критично", ov_p_sev:"Серьёзно", ov_p_over:"Срок прошёл", ov_p_noown:"Без владельца",
   ov_p_deg:"Ухудшение", ov_p_inc:"Начальная стадия", ov_p_none:"Без внимания",
@@ -6895,7 +6920,36 @@ document.addEventListener("click", e=>{
   pageAt.set(key,st);
   const r=pagedWired.get(key); if(r) r();
 });
+/* WHICH COLUMNS THE REGISTER SHOWS. Remembered per browser, because it is a
+   preference of the person reading rather than a property of the data. The
+   machine is not in the list: a row that does not say which machine it is
+   about is a row nobody can act on. */
+const ACOLS_K="cm_dash_actcols";
+const ACOL_ALL=["sev","comp","act","req","owner","due","st","wo"];
+let actCols=(()=>{ try{ const v=JSON.parse(localStorage.getItem(ACOLS_K)||"null");
+  return Array.isArray(v) ? ACOL_ALL.filter(k=>v.indexOf(k)>=0) : ACOL_ALL.slice(); }
+  catch(e){ return ACOL_ALL.slice(); } })();
+const acolOn=k=>k==="unit"||k==="queue"||actCols.indexOf(k)>=0;
+function renderActCols(){
+  const box=$("actColsBody"), n=$("actColsN"); if(!box) return;
+  const name={ sev:t("th_priority"), comp:t("a_th_comp"), act:t("a_th_find"), req:t("th_reqact"),
+               owner:t("a_th_owner"), due:t("a_th_due"), st:t("a_th_status"), wo:t("a_th_wo") };
+  box.innerHTML=`<label class="fixed"><input type="checkbox" checked disabled>${esc(t("th_unit"))}</label>`
+    + ACOL_ALL.map(k=>`<label><input type="checkbox" data-acol="${k}"${acolOn(k)?" checked":""}>${esc(name[k])}</label>`).join("");
+  if(n) n.textContent=(actCols.length+1)+"/"+(ACOL_ALL.length+1);
+  box.querySelectorAll("[data-acol]").forEach(cb=>cb.onchange=()=>{
+    const k=cb.dataset.acol;
+    actCols = cb.checked ? ACOL_ALL.filter(x=>x===k||actCols.indexOf(x)>=0)
+                         : actCols.filter(x=>x!==k);
+    /* Never nothing: unticking the last one would leave a table of machine
+       numbers and no finding, which is not a register. */
+    if(!actCols.length){ actCols=[k]; cb.checked=true; }
+    try{ localStorage.setItem(ACOLS_K, JSON.stringify(actCols)); }catch(e){}
+    renderActCols(); renderActions();
+  });
+}
 function renderActions(){
+  renderActCols();
   const rows=actionRows();
   /* The tracker answers the meeting's question before the table does. */
   let overdue=0, oldest=0, owned=0, triage=0, required=0, disposed=0;
@@ -7015,7 +7069,11 @@ function renderActions(){
        is the one thing the planning meeting asks for that nothing showed. */
     const cols=[[actSort.k==="queue"?"queue":"sev",t("th_priority")],["unit",t("th_unit")],["comp",t("a_th_comp")],
                 ["act",t("a_th_find")],["req",t("th_reqact")],["owner",t("a_th_owner")],
-                ["due",t("a_th_due")],["st",t("a_th_status")],["wo",t("a_th_wo")],["",""]];
+                ["due",t("a_th_due")],["st",t("a_th_status")],["wo",t("a_th_wo")],["",""]]
+      .filter(([k])=>!k || acolOn(k));
+    /* A sort on a column that has just been hidden is a sort nobody can see;
+       the register falls back to the queue it opens in. */
+    if(actSort.k!=="queue" && !acolOn(actSort.k)) actSort={k:"queue",dir:-1};
     /* Everything on screen, ticked or cleared in one press. It is scoped to what
        is SHOWN, not to the whole register — a select-all that silently reaches
        past the filter is how somebody reassigns four hundred findings meaning to
@@ -7049,25 +7107,25 @@ function renderActions(){
               aSel.has(sid)?" checked":""} aria-label="${esc(t("a_sel_one",{u:r.equip}))}"></td>
             <!-- Priority: the grade the finding carries, and the stoppage
                  priority beside it once somebody has set one. -->
-            <td class="nw">${sv?`<span class="sevcell" style="--sc:${sc}"><i></i>${esc(SEV[sv].l)}</span>`
+            ${!acolOn("sev")?"":`<td class="nw">${sv?`<span class="sevcell" style="--sc:${sc}"><i></i>${esc(SEV[sv].l)}</span>`
                     :'<span class="muted">—</span>'}${
-              i.prio?` <span class="prio ${prioClass(i.prio)}" title="${esc(prioName(i.prio))}">${esc(i.prio)}</span>`:""}</td>
+              i.prio?` <span class="prio ${prioClass(i.prio)}" title="${esc(prioName(i.prio))}">${esc(i.prio)}</span>`:""}</td>`}
             <td><b>${esc(r.equip)}</b></td>
             <!-- One line per cell. A second line under the component and
                  another under the action put the rows at 57px; the register is
                  scanned, and what those lines carried is on the title and in
                  the drawer a click away. The round, its date and the age of
                  the finding ride on the component's title. -->
-            <td title="${esc((ptLabel(r,i)||i.key)+" · "+i.key+" · "+(TYPE_LABEL[r.type]||r.type)+" · "+(r.date||"")+(age!=null?" · "+age+" d":""))}">
+            ${!acolOn("comp")?"":`<td title="${esc((ptLabel(r,i)||i.key)+" · "+i.key+" · "+(TYPE_LABEL[r.type]||r.type)+" · "+(r.date||"")+(age!=null?" · "+age+" d":""))}">
               <span class="trunc">${ptLabelHTML(r,i)}
-                <span class="muted">${esc(i.key)}</span></span></td>
+                <span class="muted">${esc(i.key)}</span></span></td>`}
             <!-- The finding is what the Pareto drill-down filters on and the
                  thing a planner is scanning for; the required action is what
                  somebody committed to do about it, in its own column. -->
-            <td title="${esc(i.defect||"")}"><span class="trunc">${i.defect?esc(i.defect):'<span class="muted">—</span>'}</span></td>
-            <td title="${esc(i.actionLabel||(i.action?actionName(i.action):""))}"><span class="trunc">${
+            ${!acolOn("act")?"":`<td title="${esc(i.defect||"")}"><span class="trunc">${i.defect?esc(i.defect):'<span class="muted">—</span>'}</span></td>`}
+            ${!acolOn("req")?"":`<td title="${esc(i.actionLabel||(i.action?actionName(i.action):""))}"><span class="trunc">${
               i.actionLabel||i.action ? esc(i.actionLabel||actionName(i.action))
-                : `<span class="need">${esc(TERMS.t(lang,"need_action"))}</span>`}</span></td>
+                : `<span class="need">${esc(TERMS.t(lang,"need_action"))}</span>`}</span></td>`}
             <!-- READ-OUTS THAT EDIT ON A CLICK. The row carries no live form
                  control — at a thousand inspections that was thousands of
                  boxes on one page. Pressing the owner, the due date, the status
@@ -7075,17 +7133,17 @@ function renderActions(){
                  only; Enter saves through the same audited write the drawer
                  uses, Escape puts the read-out back. The tick column and the
                  bar above it do a week's assignments in one gesture. -->
-            <td class="nw ed" data-ed="owner" title="${esc(t("a_ed_tip"))}">${i.owner
+            ${!acolOn("owner")?"":`<td class="nw ed" data-ed="owner" title="${esc(t("a_ed_tip"))}">${i.owner
                 ? `<span class="who"><i>${esc(initials0(i.owner))}</i><span>${esc(i.owner)}</span></span>`
-                : `<span class="who none"><i>+</i><span>${esc(TERMS.t(lang,"owner_unassigned"))}</span></span>`}</td>
-            <td class="ed" data-ed="due" title="${esc(t("a_ed_tip"))}">${i.due
+                : `<span class="who none"><i>+</i><span>${esc(TERMS.t(lang,"owner_unassigned"))}</span></span>`}</td>`}
+            ${!acolOn("due")?"":`<td class="ed" data-ed="due" title="${esc(t("a_ed_tip"))}">${i.due
                 ? `<span class="due ${od?"late":(dd!=null&&dd<=7?"soon":"")}"><b>${esc(i.due)}</b>${
                     od?`<i>${esc(t("a_late"))}</i>`:(dd!=null&&dd<=7?`<i>${esc(t("a_in_d",{d:dd}))}</i>`:"")}</span>`
-                : `<span class="need">${esc(TERMS.t(lang,"need_due"))}</span>`}</td>
-            <td class="nw ed" data-ed="status" title="${esc(t("a_ed_tip"))}"><span class="st s-${esc(String(i.status||"open"))}">${esc(stName(i.status))}</span>${
-              ast.k==="triage" ? needChips(ast.miss.filter(m=>m!=="owner"&&m!=="due"), 2) : ""}</td>
-            <td class="nw ed mono" data-ed="wo" title="${esc(t("a_ed_tip"))}">${i.wo ? esc(i.wo)
-                : (woWanted(i) ? `<span class="need">${esc(TERMS.t(lang,"need_wo"))}</span>` : '<span class="muted">—</span>')}</td>
+                : `<span class="need">${esc(TERMS.t(lang,"need_due"))}</span>`}</td>`}
+            ${!acolOn("st")?"":`<td class="nw ed" data-ed="status" title="${esc(t("a_ed_tip"))}"><span class="st s-${esc(String(i.status||"open"))}">${esc(stName(i.status))}</span>${
+              ast.k==="triage" ? needChips(ast.miss.filter(m=>m!=="owner"&&m!=="due"), 2) : ""}</td>`}
+            ${!acolOn("wo")?"":`<td class="nw ed mono" data-ed="wo" title="${esc(t("a_ed_tip"))}">${i.wo ? esc(i.wo)
+                : (woWanted(i) ? `<span class="need">${esc(TERMS.t(lang,"need_wo"))}</span>` : '<span class="muted">—</span>')}</td>`}
             <td class="go" aria-hidden="true">›</td>
           </tr>`;
         }).join("")+`</tbody></table></div>` + pgT.strip;
