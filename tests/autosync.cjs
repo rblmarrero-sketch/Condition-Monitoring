@@ -73,7 +73,7 @@ const pend = p => p.evaluate(async () => (await dbAll()).filter(r => !r.up).leng
     saveCur();
   });
   await p.evaluate(PLANT);
-  await p.click('#saveBtn'); await p.waitForTimeout(900); await dismiss(p);
+  await p.evaluate(() => goStep(3)); await p.waitForTimeout(200); await p.click('#saveBtn'); await p.waitForTimeout(900); await dismiss(p);
 
   ok('the round is stored and queued', (await pend(p)) === 1, String(await pend(p)));
   const armed = await p.evaluate(async () => {

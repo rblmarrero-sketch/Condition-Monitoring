@@ -86,7 +86,7 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
   await p.fill('#inspector', 'R. Marrero');
   await p.fill('#smu', '12345');
   await p.evaluate(PLANT);
-  await p.click('#saveBtn'); await p.waitForTimeout(700);
+  await p.evaluate(() => goStep(3)); await p.waitForTimeout(200); await p.click('#saveBtn'); await p.waitForTimeout(700);
   for (let i = 0; i < 3; i++) { if (await p.evaluate(() => document.getElementById('dlg').open)) { await p.click('#dlgOk'); await p.waitForTimeout(250); } }
 
   const rec = await p.evaluate(async () => {

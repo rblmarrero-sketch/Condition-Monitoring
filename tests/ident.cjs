@@ -47,7 +47,7 @@ const dismiss = async p => { for (let i = 0; i < 3; i++) {
     pp.cause = 'CA-WEAR'; pp.action = 'RA-04'; pp.prio = 'P2'; saveCur();
   });
   await p.evaluate(PLANT);
-  await p.click('#saveBtn'); await p.waitForTimeout(700); await dismiss(p);
+  await p.evaluate(() => goStep(3)); await p.waitForTimeout(200); await p.click('#saveBtn'); await p.waitForTimeout(700); await dismiss(p);
 
   const first = await p.evaluate(async () => {
     const r = (await dbAll()).filter(x => x.equip === 'TK151' && x.type === 'MP')
@@ -79,7 +79,7 @@ const dismiss = async p => { for (let i = 0; i < 3; i++) {
     saveCur();
   });
   await p.evaluate(PLANT);
-  await p.click('#saveBtn'); await p.waitForTimeout(700); await dismiss(p);
+  await p.evaluate(() => goStep(3)); await p.waitForTimeout(200); await p.click('#saveBtn'); await p.waitForTimeout(700); await dismiss(p);
   const after = await p.evaluate(async id => {
     const r = await dbGet(id);
     const all = (await dbAll()).filter(x => x.equip === 'TK151' && x.type === 'MP');

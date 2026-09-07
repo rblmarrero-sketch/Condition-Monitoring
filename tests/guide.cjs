@@ -61,7 +61,7 @@ http.createServer((req,res)=>{const u=new URL(req.url,'http://x');const p=path.j
  console.log('\nthe drawing, on a GET round');
  await p.evaluate(()=>{const s=document.getElementById('typeSel');s.value='GET';s.dispatchEvent(new Event('change'));});
  await p.waitForTimeout(300);
- await p.evaluate(()=>selectEquip('EX001'));
+ await p.evaluate(() => { selectEquip('EX001'); goStep(2); });
  await p.waitForTimeout(800);
  await p.evaluate(()=>{const n=document.querySelector('#posnav .ucmap [data-ucg]'); if(n)n.dispatchEvent(new MouseEvent('click',{bubbles:true}));});
  await p.waitForTimeout(400);
@@ -110,7 +110,7 @@ http.createServer((req,res)=>{const u=new URL(req.url,'http://x');const p=path.j
  for(const [ty,unit,label] of [['UC','DZ001','undercarriage'],['GET','EX001','GET']]){
    await p.evaluate(t=>{const s=document.getElementById('typeSel');s.value=t;s.dispatchEvent(new Event('change'));},ty);
    await p.waitForTimeout(300);
-   await p.evaluate(u=>selectEquip(u),unit);
+   await p.evaluate(u => { selectEquip(u); goStep(2); },unit);
    await p.waitForTimeout(800);
    // pick a point — the method belongs to a position, not to the round
    await p.evaluate(()=>{const n=document.querySelector('#posnav .ucmap [data-ucg]'); if(n)n.dispatchEvent(new MouseEvent('click',{bubbles:true}));});

@@ -195,7 +195,7 @@ const dims = `(async (blob) => {
   /* ---------------------------------------------------------------- 4 */
   console.log('\nwhat leaves the phone, and in what order');
   await p.evaluate(PLANT);
-  await p.click('#saveBtn'); await p.waitForTimeout(600); await dismiss(p);
+  await p.evaluate(() => goStep(3)); await p.waitForTimeout(200); await p.click('#saveBtn'); await p.waitForTimeout(600); await dismiss(p);
   await p.evaluate(async () => {
     for (let i = 0; i < 60; i++) {
       if (!(await dbAll()).filter(r => !r.up).length) return;

@@ -64,7 +64,7 @@ const PLAN = [
     for (let n = 0; n < units.length; n++) {
       const u = units[n];
       await setType(p, ty);
-      await p.evaluate(x => selectEquip(x), u);
+      await p.evaluate(x => { selectEquip(x); goStep(2); }, u);
       await p.waitForTimeout(ty === 'UC' ? 700 : 350);
 
       const wrote = await p.evaluate(({ ty, n }) => {
@@ -106,7 +106,7 @@ const PLAN = [
       // the sheet is modal over the page — the round ends before it is saved
       if (ty === 'UC') { await p.evaluate(() => { if (ucSheetOn()) ucCloseSheet(); }); await p.waitForTimeout(250); }
       await p.evaluate(PLANT);
-      await p.click('#saveBtn'); await p.waitForTimeout(500);
+      await p.evaluate(() => goStep(3)); await p.waitForTimeout(200); await p.click('#saveBtn'); await p.waitForTimeout(500);
       await dismiss(p);
       expected++;
 
@@ -163,7 +163,7 @@ const PLAN = [
   console.log('\n  the regressions this pass fixed');
   // switching away from UC with the sheet up must tear it down
   await setType(p, 'UC');
-  await p.evaluate(() => selectEquip('DZ001'));
+  await p.evaluate(() => { selectEquip('DZ001'); goStep(2); });
   await p.waitForTimeout(700);
   // the map is a photograph with numbers on it now; the named chips under it
   // are the same targets and are ordinary buttons
@@ -173,7 +173,7 @@ const PLAN = [
   const wasOpen = await p.evaluate(() => ucSheetOn());
   ok('the measure sheet opens from the machine', wasOpen);
   await setType(p, 'MP');
-  await p.evaluate(() => selectEquip('TK146'));
+  await p.evaluate(() => { selectEquip('TK146'); goStep(2); });
   await p.waitForTimeout(400);
   const after = await p.evaluate(() => {
     const t = document.getElementById('takeBtn'), c = document.getElementById('comment');
@@ -231,7 +231,7 @@ const PLAN = [
 
   // a comma decimal is a decimal
   await setType(p, 'UC');
-  await p.evaluate(() => selectEquip('DZ001'));
+  await p.evaluate(() => { selectEquip('DZ001'); goStep(2); });
   await p.waitForTimeout(600);
   const comma = await p.evaluate(() => {
     const ks = items().map(x => x.k); saveCur(); curItem = ks[0]; loadPos();
@@ -261,7 +261,7 @@ const PLAN = [
 
   // the last point's button says Done — it has to mean it
   await setType(p, 'UC');
-  await p.evaluate(() => selectEquip('DZ001'));
+  await p.evaluate(() => { selectEquip('DZ001'); goStep(2); });
   await p.waitForTimeout(600);
   const done = await p.evaluate(() => {
     const o = ucOrder(); saveCur(); curItem = o[o.length - 1]; loadPos();

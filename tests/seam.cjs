@@ -89,7 +89,7 @@ async function boot(ctx, native) {
     // photograph — same shape, whichever path
     await p.evaluate(() => { const s = document.getElementById('typeSel'); s.value = 'MP'; s.dispatchEvent(new Event('change')); });
     await p.waitForTimeout(250);
-    await p.evaluate(() => selectEquip('TK151'));
+    await p.evaluate(() => { selectEquip('TK151'); goStep(2); });
     await p.waitForTimeout(400);
 
     if (native) {
@@ -160,7 +160,7 @@ async function boot(ctx, native) {
     if (native) ok(what + ': and the answer is the real one, not navigator.onLine', net.real === true);
 
     // deep link
-    await p.evaluate(() => selectEquip('TK146'));
+    await p.evaluate(() => { selectEquip('TK146'); goStep(2); });
     await p.waitForTimeout(300);
     if (native) {
       await p.evaluate(() => window.__fireUrl && window.__fireUrl('cm://unit/TK151?type=MP'));

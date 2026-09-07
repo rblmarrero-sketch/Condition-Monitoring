@@ -52,9 +52,9 @@ const PLAN = [
       const u = units[n];
       const tag = ty + ' ' + u;
       await setType(p, ty);
-      await p.fill('#inspector', 'R. Marrero ' + n);
-      await p.fill('#smu', String(10000 + n));
-      await p.evaluate(x => selectEquip(x), u);
+      await p.evaluate(() => goStep(1)); await p.fill('#inspector', 'R. Marrero ' + n);
+      await p.evaluate(() => goStep(1)); await p.fill('#smu', String(10000 + n));
+      await p.evaluate(x => { selectEquip(x); goStep(2); }, u);
       await p.waitForTimeout(ty === 'UC' ? 700 : 350);
       /* selectEquip clears the header fields with the draft — set them after.
          The card folds itself once the unit and the name are both settled, so
@@ -62,12 +62,12 @@ const PLAN = [
       await p.evaluate(() => { const b = document.getElementById('hdrSum');
         if (b && !b.classList.contains('hidden')) b.click(); });
       await p.waitForTimeout(150);
-      await p.fill('#inspector', 'R. Marrero ' + n);
-      await p.fill('#smu', String(10000 + n));
+      await p.evaluate(() => goStep(1)); await p.fill('#inspector', 'R. Marrero ' + n);
+      await p.evaluate(() => goStep(1)); await p.fill('#smu', String(10000 + n));
       await p.evaluate(() => { const b = document.getElementById('signTog');
         if (b && document.getElementById('signBody').classList.contains('hidden')) b.click(); });
       await p.waitForTimeout(150);
-      await p.fill('#supName', 'A. Supervisor');
+      await p.evaluate(() => goStep(3)); await p.fill('#supName', 'A. Supervisor');
 
       const wrote = await p.evaluate(({ ty, n }) => {
         const ks = items().map(x => x.k); if (!ks.length) return { err: 'no positions' };
@@ -96,7 +96,7 @@ const PLAN = [
 
       if (ty === 'UC') await closeSheet(p);
       await p.evaluate(PLANT);
-      await p.click('#saveBtn'); await p.waitForTimeout(500); await dismiss(p);
+      await p.evaluate(() => goStep(3)); await p.waitForTimeout(200); await p.click('#saveBtn'); await p.waitForTimeout(500); await dismiss(p);
 
       const saved = await p.evaluate(async ({ u, ty }) => {
         const all = await dbAll();
@@ -161,7 +161,7 @@ const PLAN = [
       }, { ty, keys: wrote.keys });
       if (ty === 'UC') await closeSheet(p);
       await p.evaluate(PLANT);
-      await p.click('#saveBtn'); await p.waitForTimeout(500); await dismiss(p);
+      await p.evaluate(() => goStep(3)); await p.waitForTimeout(200); await p.click('#saveBtn'); await p.waitForTimeout(500); await dismiss(p);
 
       const after = await p.evaluate(async ({ u, ty, id, k }) => {
         const all = await dbAll();

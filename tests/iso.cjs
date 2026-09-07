@@ -19,24 +19,24 @@ const T=(t)=>p.evaluate(x=>{const s=document.getElementById('typeSel');s.value=x
 
 console.log('a round that IS the coding keeps them open');
 await T('MP'); await p.waitForTimeout(300);
-await p.evaluate(()=>selectEquip('TK032')); await p.waitForTimeout(800);
+await p.evaluate(() => { selectEquip('TK032'); goStep(2); }); await p.waitForTimeout(800);
 ok('magnetic plug: the fields are there, with no row to open', await vis(p,'#isoBody') && !(await vis(p,'#isoTog')));
 await T('INSP'); await p.waitForTimeout(300);
-await p.evaluate(()=>selectEquip('TK032')); await p.waitForTimeout(800);
+await p.evaluate(() => { selectEquip('TK032'); goStep(2); }); await p.waitForTimeout(800);
 await p.evaluate(()=>{const n=document.querySelector('#posnav [data-l7]'); if(n)n.dispatchEvent(new MouseEvent('click',{bubbles:true}));});
 await p.waitForTimeout(400);
 await p.evaluate(()=>{const n=document.querySelector('#posnav [data-l8]'); if(n)n.dispatchEvent(new MouseEvent('click',{bubbles:true}));});
 await p.waitForTimeout(500);
 ok('component inspection: the same', await vis(p,'#isoBody') && !(await vis(p,'#isoTog')));
 await T('GET'); await p.waitForTimeout(300);
-await p.evaluate(()=>selectEquip('EX001')); await p.waitForTimeout(900);
+await p.evaluate(() => { selectEquip('EX001'); goStep(2); }); await p.waitForTimeout(900);
 await p.evaluate(()=>{const n=document.querySelector('#posnav .ucmap [data-ucg]'); if(n)n.dispatchEvent(new MouseEvent('click',{bubbles:true}));});
 await p.waitForTimeout(600);
 ok('GET, which is graded: the same', await vis(p,'#isoBody') && !(await vis(p,'#isoTog')));
 
 console.log('\na measurement round folds them');
 await T('UC'); await p.waitForTimeout(300);
-await p.evaluate(()=>selectEquip('DZ001')); await p.waitForTimeout(900);
+await p.evaluate(() => { selectEquip('DZ001'); goStep(2); }); await p.waitForTimeout(900);
 await p.evaluate(()=>{curItem='ROLLER.L1';loadPos();renderChips();}); await p.waitForTimeout(500);
 ok('undercarriage: folded, with a row that says what is behind it',
    !(await vis(p,'#isoBody')) && await vis(p,'#isoTog'), (await p.textContent('#isoTog')).trim());

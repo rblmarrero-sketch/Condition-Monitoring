@@ -127,7 +127,7 @@ const pane = p => p.evaluate(() => [...document.querySelectorAll('main > .pane')
      So take the signal away first. */
   await ctx.setOffline(true);
   await p.evaluate(PLANT);
-  await p.click('#saveBtn'); await p.waitForTimeout(600);
+  await p.evaluate(() => goStep(3)); await p.waitForTimeout(200); await p.click('#saveBtn'); await p.waitForTimeout(600);
   if (await p.evaluate(() => document.getElementById('dlg').open)) { await p.click('#dlgOk'); await p.waitForTimeout(200); }
   await p.waitForTimeout(400);
   ok('a round saved with no signal shows on the queue tab', (await badge(p, 'tabQ')) === '1', await badge(p, 'tabQ'));
@@ -228,7 +228,7 @@ const pane = p => p.evaluate(() => [...document.querySelectorAll('main > .pane')
   await p.evaluate(() => document.querySelector('#gradeSeg [data-g="5"]').click());
   await p.evaluate(() => { draft.positions[curItem].defect = 'DT14-03'; draft.positions[curItem].action = 'REP'; });
   await p.evaluate(PLANT);
-  await p.click('#saveBtn'); await p.waitForTimeout(700);
+  await p.evaluate(() => goStep(3)); await p.waitForTimeout(200); await p.click('#saveBtn'); await p.waitForTimeout(700);
   if (await p.evaluate(() => document.getElementById('dlg').open)) { await p.click('#dlgOk'); await p.waitForTimeout(200); }
   await p.evaluate(() => selectEquip('TK150')); await p.waitForTimeout(500);
   ok('the unsent round is in the trend', await vis(p, '#trend'));
@@ -248,25 +248,27 @@ const pane = p => p.evaluate(() => [...document.querySelectorAll('main > .pane')
   console.log('\ntablet');
   for (const [name, vp] of [['portrait', [834, 1112, false]], ['landscape', [1194, 834, false]]]) {
     ({ ctx, p } = await app(b, vp));
-    ok(`iPad ${name}: no tab bar`, !(await vis(p, '#tabbar')));
-    /* All four, and the ORDER is the DOM's, not the tab bar's — the due pane
-       is written after System in the markup and placed by the grid. On a
-       tablet there is room for everything, so nothing is behind a tab. */
-    ok(`iPad ${name}: every pane at once`,
-      (await pane(p)).slice().sort().join() ===
-        ['paneCapture','paneDue','paneQueue','paneSystem'].join(),
-      JSON.stringify(await pane(p)));
-    ok(`iPad ${name}: two columns`, await p.evaluate(() => {
-      const a = document.getElementById('cardInspection').getBoundingClientRect();
-      const q = document.getElementById('pending').getBoundingClientRect();
-      return q.left > a.right - 2; }));
+    /* A TABLET IS STILL ONE TASK AT A TIME. This block used to require the
+       opposite — no tab bar, all four destinations on screen at once, in two
+       columns — and that is exactly the state an audit of the published build
+       reported as broken: setup, findings, review, sign-off, the saved list,
+       readiness and the due list in one column thousands of pixels tall, with
+       the step chips looking inert because everything was already showing. */
+    ok(`iPad ${name}: the tab bar is there`, await vis(p, '#tabbar'));
+    ok(`iPad ${name}: one destination`, JSON.stringify(await pane(p)) === '["paneCapture"]', JSON.stringify(await pane(p)));
+    ok(`iPad ${name}: one step of it`, await p.evaluate(() =>
+      ['viewSetup','viewFind','viewReview'].filter(i => !document.getElementById(i).hasAttribute('hidden')).length === 1));
     ok(`iPad ${name}: no sideways scroll`, !(await overflows(p)));
     // The F5 complaint was 150-character lines. Roughly 80 characters at 16 px is
     // about 640 px of text, so cap the form column near that and well under half
     // the screen — the point is that it stopped stretching to fit.
+    /* The second half of this used to be "and under 62% of the screen",
+       which was another way of saying "it is one of two columns". There is one
+       column now, so the rule that matters is the measure itself: capped near
+       eighty characters, and not squeezed to nothing either. */
     ok(`iPad ${name}: the column is capped, not stretched`, await p.evaluate(() => {
       const w = document.getElementById('cardInspection').getBoundingClientRect().width;
-      return w < 700 && w < innerWidth * 0.62; }),
+      return w < 700 && w > 420; }),
       String(await p.evaluate(() => Math.round(document.getElementById('cardInspection').getBoundingClientRect().width))));
     await ctx.close();
   }
@@ -351,7 +353,12 @@ const pane = p => p.evaluate(() => [...document.querySelectorAll('main > .pane')
   await p.fill('#inspector', 'R. Marrero');
   await p.evaluate(() => { const k = items()[0].k; saveCur(); curItem = k; loadPos(); renderChips(); });
   await p.evaluate(() => document.querySelector('#gradeSeg [data-g="2"]').click());
-  await p.evaluate(() => { draft.positions[curItem].comment = 'typed sideways'; });
+  /* Typed, not poked into the model: the form is the source of what a round
+     holds, and a step change writes the form into the draft — so a comment
+     that never went through the field is a comment the app is right to
+     overwrite. */
+  await p.evaluate(() => { const c = document.getElementById('comment');
+    c.value = 'typed sideways'; c.dispatchEvent(new Event('input', { bubbles: true })); saveCur(); });
   await p.setViewportSize({ width: 844, height: 390 });
   await p.waitForTimeout(400);
   ok('nothing was lost turning it', await p.evaluate(() =>
@@ -359,13 +366,19 @@ const pane = p => p.evaluate(() => [...document.querySelectorAll('main > .pane')
     Object.values(draft.positions).some(x => x.comment === 'typed sideways')));
   ok('the tab bar is still there — this is a phone, not a tablet', await vis(p, '#tabbar'));
   ok('still one pane at a time', JSON.stringify(await pane(p)) === '["paneCapture"]', JSON.stringify(await pane(p)));
-  ok('the two halves of the form sit side by side', await p.evaluate(() => {
-    const a = document.getElementById('cardInspection').getBoundingClientRect();
-    const c = document.getElementById('cardComponent').getBoundingClientRect();
-    return c.left > a.right - 2; }));
-  ok('Save is reachable without hunting', await p.evaluate(() => {
+  /* The setup card and the findings card were placed side by side here, because
+     with both on one landscape screen three fields was all it could show. They
+     are separate steps now, so only one of them is ever on screen — which is
+     the same complaint answered better. */
+  ok('one step on screen, and the measure is capped', await p.evaluate(() => {
+    const shown = ['viewSetup','viewFind','viewReview'].filter(i => !document.getElementById(i).hasAttribute('hidden'));
+    const m = document.querySelector('main').getBoundingClientRect();
+    return shown.length === 1 && m.width <= 780; }));
+  await p.evaluate(() => goStep(3)); await p.waitForTimeout(250);
+  ok('Save is reachable without hunting, on the step that carries it', await p.evaluate(() => {
     const r = document.getElementById('saveBtn').getBoundingClientRect();
     return r.width > 0 && r.top < 900; }));
+  await p.evaluate(() => goStep(2)); await p.waitForTimeout(250);
   ok('no sideways scroll', !(await overflows(p)));
   /* Two rules that pull against each other, so they are checked together: the
      header must not eat a landscape screen, and its controls must still be big
@@ -385,10 +398,12 @@ const pane = p => p.evaluate(() => [...document.querySelectorAll('main > .pane')
   await p.waitForTimeout(300);
   ok('and turning it back loses nothing either', await p.evaluate(() =>
     curEquip === 'TK146' && Object.values(draft.positions).some(x => x.comment === 'typed sideways')));
-  ok('back to one column', await p.evaluate(() => {
-    const a = document.getElementById('cardInspection').getBoundingClientRect();
-    const c = document.getElementById('cardComponent').getBoundingClientRect();
-    return c.top > a.bottom - 2; }));
+  /* Nothing sits beside anything at any size now: one step is on screen and
+     the cards inside it stack. */
+  ok('back to one step, stacked', await p.evaluate(() => {
+    const shown = ['viewSetup','viewFind','viewReview'].filter(i => !document.getElementById(i).hasAttribute('hidden'));
+    const cards = [...document.querySelector('#' + shown[0]).querySelectorAll(':scope > .card')].map(c => c.getBoundingClientRect());
+    return shown.length === 1 && cards.every((c, i) => i === 0 || c.top >= cards[i - 1].bottom - 2); }));
   ok('no sideways scroll in portrait either', !(await overflows(p)));
   await ctx.close();
 

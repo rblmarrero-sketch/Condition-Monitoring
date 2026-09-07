@@ -159,7 +159,7 @@ async function evalSettled(p, fn){
     console.log('\n  and it lands by itself the moment they are free — no tap');
     await evalSettled(p, () => { document.getElementById('comment').blur(); });
     await p.evaluate(PLANT);
-    await p.click('#saveBtn');
+    await p.evaluate(() => goStep(3)); await p.waitForTimeout(200); await p.click('#saveBtn');
     await p.waitForTimeout(900);
     /* Saving is what releases the held update, so from here on the page can
        reload underneath any of these calls — and the reload IS the pass

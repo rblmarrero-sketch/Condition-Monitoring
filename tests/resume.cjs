@@ -70,7 +70,7 @@ srv.listen(8091,async()=>{
     sequence in the pit, not a tidy one that starts from nothing. */
  dieAfter=2;
  await p.evaluate(PLANT);
- await p.click('#saveBtn');
+ await p.evaluate(() => goStep(3)); await p.waitForTimeout(200); await p.click('#saveBtn');
  await p.waitForTimeout(500);
  const TOTAL=N+2;                                   // the photographs, the sidecar and the machine overview
 

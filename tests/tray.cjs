@@ -40,7 +40,7 @@ async function boot(ctx){
 async function openTray(p, unit){
   await p.evaluate(() => { const s = document.getElementById('typeSel'); s.value = 'TB'; s.dispatchEvent(new Event('change')); });
   await p.waitForTimeout(200);
-  await p.evaluate(u => selectEquip(u), unit);
+  await p.evaluate(u => { selectEquip(u); goStep(2); }, unit);
   await p.waitForTimeout(500);
 }
 const put = (p, k, v) => p.evaluate(a => { pickComponent(a[0]);
@@ -460,11 +460,11 @@ const put = (p, k, v) => p.evaluate(a => { pickComponent(a[0]);
 
   /* ---- 8. it survives the round being saved ----------------------------- */
   console.log('\nsaved, reported, and still right');
-  await p.fill('#inspector', 'R. Marrero');
+  await p.evaluate(() => goStep(1)); await p.fill('#inspector', 'R. Marrero');
   await p.evaluate(() => { saveCur(); ucCloseSheet(); });
   await p.waitForTimeout(200);
   await p.evaluate(PLANT);
-  await p.click('#saveBtn');
+  await p.evaluate(() => goStep(3)); await p.waitForTimeout(200); await p.click('#saveBtn');
   await p.waitForTimeout(1200);
   const saved = await p.evaluate(async () => {
     const all = await dbAll(), rec = all.find(r => r.type === 'TB');

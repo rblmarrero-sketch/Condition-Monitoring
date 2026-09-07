@@ -100,10 +100,10 @@ const swHealth = p => p.evaluate(() => new Promise(res => {
   // an undercarriage round: measurements, a photograph, a signature
   await p.evaluate(() => { const s = document.getElementById('typeSel'); s.value = 'UC'; s.dispatchEvent(new Event('change')); });
   await p.waitForTimeout(400);
-  await p.evaluate(() => selectEquip('DZ001'));
+  await p.evaluate(() => { selectEquip('DZ001'); goStep(2); });
   await p.waitForTimeout(900);
-  await p.fill('#inspector', 'R. Marrero');
-  await p.fill('#smu', '9100');
+  await p.evaluate(() => goStep(1)); await p.fill('#inspector', 'R. Marrero');
+  await p.evaluate(() => goStep(1)); await p.fill('#smu', '9100');
   const built = await p.evaluate(async () => {
     // four readings and one photograph, the shape of a real partial round
     const keys = ['IDLER.L-OUT', 'IDLER.L-IN', 'ROLLER.L1', 'GROUSER.L'];
@@ -136,7 +136,7 @@ const swHealth = p => p.evaluate(() => new Promise(res => {
 
   const t0 = Date.now();
   await p.evaluate(PLANT);
-  await p.click('#saveBtn'); await p.waitForTimeout(600); await dismiss(p);
+  await p.evaluate(() => goStep(3)); await p.waitForTimeout(200); await p.click('#saveBtn'); await p.waitForTimeout(600); await dismiss(p);
   await p.evaluate(async () => { for (let i = 0; i < 80; i++) {
     if (!(await dbAll()).filter(r => !r.up).length) return; await new Promise(r => setTimeout(r, 300)); } });
   const took = Date.now() - t0;
@@ -199,7 +199,7 @@ const swHealth = p => p.evaluate(() => new Promise(res => {
 
   await cold.evaluate(() => { const s = document.getElementById('typeSel'); s.value = 'UC'; s.dispatchEvent(new Event('change')); });
   await cold.waitForTimeout(400);
-  await cold.evaluate(() => selectEquip('DZ010'));
+  await cold.evaluate(() => { selectEquip('DZ010'); goStep(2); });
   await cold.waitForFunction(() => !!document.querySelector('#posnav .ucgroups button'), null, { timeout: 15000 }).catch(() => {});
   const offMap = await cold.evaluate(async () => {
     const img = document.querySelector('#posnav .ucmap image');
@@ -220,20 +220,20 @@ const swHealth = p => p.evaluate(() => new Promise(res => {
   await cold.evaluate(() => { const s = document.getElementById('hdrSum');
     if (s && !s.classList.contains('hidden')) s.click(); });
   await cold.waitForTimeout(200);
-  await cold.fill('#inspector', 'B. Ivanov');
-  await cold.fill('#smu', '4400');
+  await cold.evaluate(() => goStep(1)); await cold.fill('#inspector', 'B. Ivanov');
+  await cold.evaluate(() => goStep(1)); await cold.fill('#smu', '4400');
   /* Through the real field, not by poking the draft: saveCur() reads the
      millimetre box, so setting p.mm behind it and then saving wipes it and the
      round goes out empty. */
   await cold.evaluate(() => { saveCur(); curItem = 'ROLLER.L3'; loadPos(); });
   await cold.waitForTimeout(300);
-  await cold.fill('#ucMM', '250');
+  await cold.evaluate(() => goStep(2)); await cold.fill('#ucMM', '250');
   await cold.waitForTimeout(300);
   // the measurement sheet is over the Save button, as it should be
   await cold.click('#ucClose');
   await cold.waitForTimeout(400);
   await cold.evaluate(PLANT);
-  await cold.click('#saveBtn'); await cold.waitForTimeout(700); await dismiss(cold);
+  await cold.evaluate(() => goStep(3)); await cold.waitForTimeout(200); await cold.click('#saveBtn'); await cold.waitForTimeout(700); await dismiss(cold);
   const queued = await cold.evaluate(async () => (await dbAll()).filter(r => !r.up).length);
   ok('it is saved and queued, not refused', queued >= 1, queued + ' waiting');
   const bar = ((await cold.textContent('#syncBar')) || '').replace(/\s+/g, ' ').trim();

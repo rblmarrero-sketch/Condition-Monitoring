@@ -73,7 +73,7 @@ srv.listen(8083,async()=>{
      pos.grade='B'; renderMedia(); renderChips();
    });
    await p.evaluate(PLANT);
-   await p.click('#saveBtn');
+   await p.evaluate(() => goStep(3)); await p.waitForTimeout(200); await p.click('#saveBtn');
    await p.waitForTimeout(6000);
    const st=await (await fetch(B+'/__stat')).json();
    const cap=await p.evaluate(()=>localStorage.getItem('up_batch'));

@@ -61,7 +61,7 @@ const CAM = () => {
                                   ['UC', 'DZ001', 'undercarriage'],
                                   ['TB', 'TK101', 'dump body liner']]) {
     await T(ty); await p.waitForTimeout(350);
-    await p.evaluate(u => selectEquip(u), unit); await p.waitForTimeout(900);
+    await p.evaluate(u => { selectEquip(u); goStep(2); }, unit); await p.waitForTimeout(900);
     await openFirst(); await p.waitForTimeout(700);
     const r = await p.evaluate(CAM);
     ok(name + ': a photo button is on screen', !!(r.take && r.take.on),
@@ -83,7 +83,7 @@ const CAM = () => {
      camera at all. */
   for (const [ty, unit, name] of [['UC', 'DZ001', 'undercarriage'], ['TB', 'TK101', 'dump body liner']]) {
     await T(ty); await p.waitForTimeout(350);
-    await p.evaluate(u => selectEquip(u), unit); await p.waitForTimeout(900);
+    await p.evaluate(u => { selectEquip(u); goStep(2); }, unit); await p.waitForTimeout(900);
     await openFirst(); await p.waitForTimeout(700);
     const st = await p.evaluate(() => {
       const g = id => { const e = document.getElementById(id);

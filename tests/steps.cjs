@@ -50,7 +50,15 @@ const SRC = fs.readFileSync(path.join(__dirname, '..', 'mobile', 'index.html'), 
   ok('  the review and the saved card are out of the way', !(await vis('cardReview')) && !(await vis('savedCard')));
   await p.evaluate(() => { selectEquip('TK101'); }); await p.waitForTimeout(400);
   s = await step();
-  ok('a machine and an inspector fold the header: step 2, step 1 ticked', s.now === 2 && s.on === '2' && s.done === '1', JSON.stringify(s));
+  /* Choosing the machine no longer jumps to Findings: hours, the inspector and
+     the machine photographs are still on the setup step, and skipping past
+     them is how a round arrives with no evidence. Continue does the moving —
+     the step is state now, not something read back off the screen
+     (tests/stepview.cjs). */
+  ok('choosing a machine leaves the technician on the setup step to finish it', s.now === 1 && s.on === '1', JSON.stringify(s));
+  await p.evaluate(() => goStep(2)); await p.waitForTimeout(400);
+  s = await step();
+  ok('  and Continue moves to step 2 with step 1 ticked', s.now === 2 && s.on === '2' && s.done === '1', JSON.stringify(s));
   const g4 = await p.evaluate(async () => { document.querySelector('#gradeSeg .gcard[data-g="4"]').click(); await new Promise(r => setTimeout(r, 500)); saveCur(); renderReview();
     return { grade: draft.positions[curItem].grade, review: !document.getElementById('cardReview').classList.contains('hidden'), miss: (window.__review || {}).miss, top: (window.__review || {}).top }; });
   ok('a grade of 4 on a point brings the review card up', g4.grade === 4 && g4.review, JSON.stringify({ grade: g4.grade, review: g4.review }));

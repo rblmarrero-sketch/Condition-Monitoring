@@ -49,7 +49,7 @@ const openBase = async (p) => { await p.evaluate(() => {
   /* DZ017, Shantui SD90. wear.js says it outright: the bushings measure 114-116
      against a "new" of 79, which is impossible, and the note reads "Set a
      baseline instead." */
-  await p.evaluate(() => selectEquip('DZ017')); await p.waitForTimeout(900);
+  await p.evaluate(() => { selectEquip('DZ017'); goStep(2); }); await p.waitForTimeout(900);
   await point(p, 'BUSH.L'); await p.waitForTimeout(400);
   await p.fill('#ucMM', '116'); await p.waitForTimeout(500);
   ok('116 mm on a "new" of 79 mm scores nothing at all',
@@ -186,14 +186,14 @@ const openBase = async (p) => { await p.evaluate(() => {
   console.log('\n  the rounds it does not belong to');
   await p.evaluate(() => { const s = document.getElementById('typeSel'); s.value = 'TB'; s.dispatchEvent(new Event('change')); });
   await p.waitForTimeout(400);
-  await p.evaluate(() => selectEquip('TK101')); await p.waitForTimeout(900);
+  await p.evaluate(() => { selectEquip('TK101'); goStep(2); }); await p.waitForTimeout(900);
   await p.evaluate(() => { const k = ucOrder()[0]; saveCur(); curItem = k; loadPos(); renderChips(); });
   await p.waitForTimeout(600);
   ok('the dump body has no per-station catalogue to override yet, so no row',
     !(await vis(p, '#ucBaseTog')));
   await p.evaluate(() => { const s = document.getElementById('typeSel'); s.value = 'GET'; s.dispatchEvent(new Event('change')); });
   await p.waitForTimeout(400);
-  await p.evaluate(() => selectEquip('EX001')); await p.waitForTimeout(900);
+  await p.evaluate(() => { selectEquip('EX001'); goStep(2); }); await p.waitForTimeout(900);
   ok('nor the GET round, which has its own reference table', !(await vis(p, '#ucBaseTog')));
 
   console.log('\n  Russian');
@@ -201,7 +201,7 @@ const openBase = async (p) => { await p.evaluate(() => {
   await p.waitForTimeout(300);
   await p.evaluate(() => document.querySelector('.lang button[data-lang="ru"]').click());
   await p.waitForTimeout(600);
-  await p.evaluate(() => selectEquip('DZ001')); await p.waitForTimeout(900);
+  await p.evaluate(() => { selectEquip('DZ001'); goStep(2); }); await p.waitForTimeout(900);
   await point(p, 'ROLLER.L2'); await p.waitForTimeout(400);
   await p.fill('#ucMM', '246'); await p.waitForTimeout(400);
   await openBase(p);

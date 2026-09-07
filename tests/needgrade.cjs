@@ -64,14 +64,14 @@ const SHOT = `(function(){ const bytes=new Uint8Array([0xff,0xd8,0xff,0xdb,1,2,3
   await p.fill('#inspector', 'R. Marrero'); await p.fill('#smu', '6100');
   ok('one photograph on it', (await p.evaluate(SHOT)) === 1);
   await p.evaluate(PHOTOS);
-  await p.click('#saveBtn'); await p.waitForTimeout(500);
+  await p.evaluate(() => goStep(3)); await p.waitForTimeout(200); await p.click('#saveBtn'); await p.waitForTimeout(500);
   let d = await dlgTxt(p);
   ok('Save refuses', (await p.evaluate(async () => (await dbAll()).length)) === 0, d.slice(0, 80));
   ok('and says a grade is needed, naming the position', d.indexOf(await p.evaluate(() => t('m_need_g_t'))) >= 0 && d.indexOf(first) >= 0, d.slice(0, 120));
   await closeDlg(p);
   await p.evaluate(() => document.querySelector('#gradeSeg [data-g="1"]').click());
   await p.waitForTimeout(200);
-  await p.click('#saveBtn'); await p.waitForTimeout(600);
+  await p.evaluate(() => goStep(3)); await p.waitForTimeout(200); await p.click('#saveBtn'); await p.waitForTimeout(600);
   d = await dlgTxt(p);
   ok('graded 1, it saves', /Saved|saved on this phone/i.test(d), d.slice(0, 80));
   await closeDlg(p);
@@ -92,7 +92,7 @@ const SHOT = `(function(){ const bytes=new Uint8Array([0xff,0xd8,0xff,0xdb,1,2,3
   await p.evaluate(() => ['inspector', 'smu'].forEach((id, n) => { const e = document.getElementById(id); e.value = n ? '6100' : 'R. Marrero'; e.dispatchEvent(new Event('input')); e.dispatchEvent(new Event('change')); }));
   ok('a photograph on the measured station', (await p.evaluate(SHOT)) === 1, uc);
   await p.evaluate(PHOTOS);
-  await p.click('#saveBtn'); await p.waitForTimeout(700);
+  await p.evaluate(() => goStep(3)); await p.waitForTimeout(200); await p.click('#saveBtn'); await p.waitForTimeout(700);
   d = await dlgTxt(p);
   ok('it saves without a grade — its reading is its condition', /Saved|saved on this phone/i.test(d), d.slice(0, 100));
   await closeDlg(p);

@@ -122,7 +122,7 @@ const NEW = '{TYPE}/{UNIT}/{YYYY-MM-DD}';
   });
   const today = await p.evaluate(() => document.getElementById('date').value);
   await p.evaluate(PLANT);
-  await p.click('#saveBtn'); await p.waitForTimeout(600); await dismiss(p);
+  await p.evaluate(() => goStep(3)); await p.waitForTimeout(200); await p.click('#saveBtn'); await p.waitForTimeout(600); await dismiss(p);
   await p.evaluate(async () => {
     for (let i = 0; i < 60; i++) {
       if (!(await dbAll()).filter(r => !r.up).length) return;

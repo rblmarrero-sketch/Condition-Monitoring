@@ -39,7 +39,7 @@ async function start(p, unit) {
 const pick = (p, k) => p.evaluate(k => { saveCur(); curItem = k; loadPos(); renderChips(); }, k);
 const setGrade = (p, g) => p.evaluate(g =>
   document.querySelector(`#gradeSeg [data-g="${g}"]`).click(), g);
-const save = async p => { await p.evaluate(PHOTOS); await p.click('#saveBtn'); await p.waitForTimeout(500); };
+const save = async p => { await p.evaluate(PHOTOS); await p.evaluate(() => goStep(3)); await p.waitForTimeout(200); await p.click('#saveBtn'); await p.waitForTimeout(500); };
 
 (async () => {
   const b = await chromium.launch();

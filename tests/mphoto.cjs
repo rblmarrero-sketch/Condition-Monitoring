@@ -84,12 +84,12 @@ const srv = http.createServer((req, res) => {
   console.log('\na magnetic-plug round on TK147, component 4C selected');
   await p.evaluate(() => { const s = document.getElementById('typeSel'); s.value = 'MP'; s.dispatchEvent(new Event('change')); });
   await p.waitForTimeout(300);
-  await p.evaluate(() => selectEquip('TK147'));
+  await p.evaluate(() => { selectEquip('TK147'); goStep(2); });
   await p.waitForTimeout(500);
   await p.evaluate(() => { const k = items()[0].k; pickComponent(k); });
   await p.waitForTimeout(300);
-  await p.fill('#inspector', 'R. Marrero');
-  await p.fill('#smu', '6100');
+  await p.evaluate(() => goStep(1)); await p.fill('#inspector', 'R. Marrero');
+  await p.evaluate(() => goStep(1)); await p.fill('#smu', '6100');
   const s0 = await state();
   ok('nothing photographed yet, and the checklist says 0 of 1', s0.overview === 0 && s0.comp === 0 && /0 of 1/.test(s0.count), JSON.stringify(s0));
 
@@ -116,6 +116,9 @@ const srv = http.createServer((req, res) => {
 
   console.log('\nthe component\'s own Add photo → camera');
   {
+    /* The machine's photographs are part of setting the round up; a
+       component's belong to the finding. Two steps, two sets of controls. */
+    await p.evaluate(() => goStep(2)); await p.waitForTimeout(250);
     const r = await shoot(() => via(() => p.click('#takeBtn'), '#srcLive'), await jpg('#803030', 640, 480));
     ok('the chooser came from the component camera control', r.id === 'camera', r.id);
     await p.waitForFunction(() => ((draft.positions[curItem] || {}).photos || []).length === 1, null, { timeout: 15000 }).catch(() => {});
@@ -140,7 +143,7 @@ const srv = http.createServer((req, res) => {
   {
     await p.evaluate(() => document.querySelector('#gradeSeg [data-g="1"]').click());
     await p.waitForTimeout(200);
-    await p.click('#saveBtn');
+    await p.evaluate(() => goStep(3)); await p.waitForTimeout(200); await p.click('#saveBtn');
     await p.waitForTimeout(800);
     const d = await p.evaluate(() => (document.getElementById('dlg') || {}).textContent || '');
     ok('Save goes through with the overview it asked for', /Saved|saved on this phone/i.test(d), d.replace(/\s+/g, ' ').slice(0, 120));

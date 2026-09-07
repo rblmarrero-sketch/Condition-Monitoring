@@ -25,11 +25,16 @@ await p.evaluate(()=>selectEquip('DZ001')); await p.waitForTimeout(700);
 ok('with a name, picking a unit folds it', !(await vis(p,'#hdrBody')) && await vis(p,'#hdrSum'));
 ok('and the fold names the unit', /DZ001/.test(await p.textContent('#hsUnit')), await p.textContent('#hsUnit'));
 ok('with the round and the date', /Undercarriage/i.test(await p.textContent('#hsMeta')), await p.textContent('#hsMeta'));
-const before = await p.evaluate(()=>document.getElementById('cardComponent').getBoundingClientRect().top+scrollY);
+/* What the fold buys, measured on the step that holds it. It used to be read
+   off where the findings card started, and the findings card is a step of its
+   own now — it never shares a screen with this one, so it could not move and
+   the figure was always nought. The setup step's own height is the honest
+   measure of what folding saves. */
+const before = await p.evaluate(()=>Math.round(document.getElementById('viewSetup').getBoundingClientRect().height));
 await p.click('#hdrSum'); await p.waitForTimeout(300);
 ok('tapping it opens it again', await vis(p,'#hdrBody') && !(await vis(p,'#hdrSum')));
-const after = await p.evaluate(()=>document.getElementById('cardComponent').getBoundingClientRect().top+scrollY);
-ok('and the fold is worth having', after-before>250, 'the round starts '+(after-before)+'px further down when it is open');
+const after = await p.evaluate(()=>Math.round(document.getElementById('viewSetup').getBoundingClientRect().height));
+ok('and the fold is worth having', after-before>250, 'the setup step is '+(after-before)+'px taller with the header open');
 await p.evaluate(()=>selectEquip('DZ002')); await p.waitForTimeout(700);
 ok('the name shows in the fold', /R. Marrero/.test(await p.textContent('#hsMeta')), await p.textContent('#hsMeta'));
 /* Typing must never move the card out from under the thumb: the name and the
@@ -54,7 +59,7 @@ await p.evaluate(()=>{ window.__dlg=[]; });
 p.on('dialog',d=>d.dismiss().catch(()=>{}));
 await p.evaluate(()=>{curItem='GROUSER.L';loadPos();draft.positions['GROUSER.L']={mm:60};});
 await p.evaluate(PLANT);
-await p.click('#saveBtn'); await p.waitForTimeout(600);
+await p.evaluate(() => goStep(3)); await p.waitForTimeout(200); await p.click('#saveBtn'); await p.waitForTimeout(600);
 ok('a save blocked on the inspector opens the header that holds it', await vis(p,'#hdrBody'));
 /* dlg() is <dialog>.showModal(), so the page behind it is inert — the field is
    there and waiting, but not typeable until OK is pressed. */

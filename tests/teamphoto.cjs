@@ -82,7 +82,7 @@ async function phone(b, withDrive) {
     return { unit:'TK151', keys:[ks[0], ks[1]] };
   });
   await A.p.evaluate(PLANT);
-  await A.p.click('#saveBtn');
+  await A.p.evaluate(() => goStep(3)); await A.p.waitForTimeout(200); await A.p.click('#saveBtn');
   await A.p.waitForTimeout(7000);
   const onDrive = await (await fetch(`${EXEC}?action=list&ext=.jpg`)).json();
   /* The folder is not empty to begin with — the fixture has other machines in
@@ -216,7 +216,7 @@ async function phone(b, withDrive) {
     renderMedia(); renderChips();
   });
   await A2.p.evaluate(PLANT);
-  await A2.p.click('#saveBtn');
+  await A2.p.evaluate(() => goStep(3)); await A2.p.waitForTimeout(200); await A2.p.click('#saveBtn');
   await A2.p.waitForTimeout(7000);
   const filed = await (await fetch(`${EXEC}?action=list&ext=.jpg`)).json();
   const flat = (filed.files || []).filter(f => /^DZ002_/.test(f.name) && !/_(OVERVIEW|LEFT|RIGHT|BODY|GET|PLATE|EXTRA)_/.test(f.name));

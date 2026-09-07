@@ -40,7 +40,7 @@ const dismiss = async p => { for (let i = 0; i < 3; i++) {
 
   console.log('\n  the field only exists once there is a job to raise');
   await setType(p, 'MP');
-  await p.evaluate(() => selectEquip('TK151'));
+  await p.evaluate(() => { selectEquip('TK151'); goStep(2); });
   await p.waitForTimeout(400);
   const hiddenAtFirst = await p.evaluate(() => document.getElementById('prioFld').classList.contains('hidden'));
   ok('nothing to raise, nothing to prioritise', hiddenAtFirst);
@@ -97,10 +97,10 @@ const dismiss = async p => { for (let i = 0; i < 3; i++) {
     pp.action = 'REP'; pp.prio = 'P2'; pp.wo = 'WR-9001';
     saveCur();
   }, key);
-  await p.fill('#inspector', 'R. Marrero');
-  await p.fill('#smu', '12345');
+  await p.evaluate(() => goStep(1)); await p.fill('#inspector', 'R. Marrero');
+  await p.evaluate(() => goStep(1)); await p.fill('#smu', '12345');
   await p.evaluate(PLANT);
-  await p.click('#saveBtn'); await p.waitForTimeout(600); await dismiss(p);
+  await p.evaluate(() => goStep(3)); await p.waitForTimeout(200); await p.click('#saveBtn'); await p.waitForTimeout(600); await dismiss(p);
 
   const stored = await p.evaluate(async k => {
     const all = await dbAll();

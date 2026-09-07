@@ -100,7 +100,7 @@ srv.listen(8078,async()=>{
      pos.grade='B'; renderMedia(); renderChips();
    }, opts.photos||5);
    await p.evaluate(PLANT);
-   await p.click('#saveBtn');
+   await p.evaluate(() => goStep(3)); await p.waitForTimeout(200); await p.click('#saveBtn');
    await p.waitForTimeout(opts.wait||9000);
    if(opts.recover){
      await p.evaluate(async u=>fetch(u+'/__heal'),B).catch(()=>{});

@@ -553,6 +553,28 @@
   header #netStatus{max-width:min(46vw,240px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .pane{display:none;}
   .pane.on{display:block;}
+  /* ONE STEP ON SCREEN. The three steps of an inspection were three regions of
+     one 6,000px page: the chips scrolled between them, so pressing "Findings"
+     with nothing chosen did nothing anybody could see, and every screen the
+     technician was NOT working on was still under their thumb. A view is
+     hidden with the attribute, so a screen reader and the keyboard lose it
+     too — a panel that is only visually gone is still a panel to tab through. */
+  .view[hidden]{display:none!important;}
+  /* Back and Continue, at the foot of each step. */
+  .stepnav{display:flex;align-items:center;gap:var(--s3);margin:var(--s4) 0 var(--s2);}
+  .stepnav .spacer{flex:1;}
+  .stepnav .btn{min-height:var(--tap);padding:10px 18px;}
+  /* The machine being walked, on every step after the first. */
+  .stepctx{display:flex;align-items:center;gap:8px;width:100%;margin:0 0 var(--s3);
+    padding:9px 12px;min-height:40px;border:1px solid var(--border);border-radius:var(--r);
+    background:var(--surface);color:var(--ink);font:inherit;font-size:13px;text-align:left;cursor:pointer;}
+  .stepctx b{font-weight:700;} .stepctx i{font-style:normal;color:var(--ink-2);min-width:0;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .stepctx .go{margin-left:auto;color:var(--ink-2);}
+  /* What is missing, when a step will not open. */
+  .stepmsg{margin:0 0 var(--s3);padding:10px 12px;border-radius:var(--r);font-size:13px;font-weight:600;
+    color:var(--warn-ink);background:color-mix(in srgb,var(--warning) 16%,transparent);
+    border:1px solid color-mix(in srgb,var(--warning) 42%,transparent);}
   #saveBtn{margin-bottom:10px;}
   /* Save is the one control that must never be hunted for — least of all on a
      phone turned sideways, where the form is longer than three screens. It is
@@ -603,21 +625,22 @@
   /* Height matters as much as width: a phone turned sideways is 844 px wide and
      390 px tall, and two columns there means one card per screenful and a long
      scroll with no way between panes. Tablets are wide AND tall. */
+  /* A WIDE WINDOW IS STILL ONE TASK AT A TIME.
+     This block used to set `.pane{display:block}` and hide the tab bar, so at
+     820px and up every destination rendered at once: setup, findings, review,
+     sign-off, the saved list, readiness, the whole system card and the due
+     list, in one column six thousand pixels tall, with the step chips looking
+     inert because everything they could reveal was already on screen. It is
+     the defect an audit of the published build reported, and it is this
+     project's signature defect in its purest form — a control that does
+     nothing, because there is nothing left for it to do.
+     A wide window now gets what a wide window is actually good for: room to
+     breathe and a cap on the measure. The destinations stay destinations. */
   @media (min-width: 820px) and (min-height: 560px){
-    body{padding-bottom:32px;}
-    main{max-width:1180px;padding:20px;display:grid;gap:0 20px;
-         grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start;}
-    .pane{display:block;}                      /* the tab state stops applying */
-    #paneCapture{grid-column:1;grid-row:1 / span 4;}
-    #paneDue{grid-column:2;grid-row:1;}
-    #paneQueue{grid-column:2;grid-row:2;}
-    #paneSystem{grid-column:2;grid-row:3;}
-    main > .ver{grid-column:1 / -1;}
-    .tabbar{display:none;}
+    /* 720 less the padding is a form column of about 680px — roughly eighty
+       characters, which is the measure this cap exists for. */
+    main{max-width:720px;padding:20px;margin:0 auto;}
     .card{padding:20px;}
-  }
-  @media (min-width: 1180px) and (min-height: 560px){
-    main{grid-template-columns:minmax(0,7fr) minmax(0,5fr);}
   }
 
   /* ── landscape phone ─────────────────────────────────────────────────────
@@ -643,15 +666,15 @@
     #saveBtn{left:auto;width:min(260px,42vw);bottom:calc(env(safe-area-inset-bottom) + 52px);}
     body{padding-bottom:104px;}
   }
-  /* Sideways there is width but almost no height, so the two halves of a round —
-     which unit, and what is on the plug — go beside each other instead of one
-     above the other. Three fields visible at a time was not a usable form. */
+  /* Sideways there is width and almost no height. This used to put the setup
+     card and the findings card side by side, because with both of them on one
+     screen three fields was all a landscape phone could show. They are two
+     STEPS now and never share a screen, so there is nothing to place beside
+     anything — and the complaint it answered is answered better: the step on
+     screen is the only thing on screen. What is left is the measure, which
+     without a cap would run the width of a 900px landscape phone. */
   @media (max-height: 500px) and (orientation: landscape) and (min-width: 740px){
-    main{max-width:100%;}
-    #paneCapture.on{display:grid;align-items:start;gap:0 14px;
-      grid-template-columns:minmax(0,5fr) minmax(0,7fr);}
-    #cardComponent{grid-column:2;grid-row:1 / span 5;}
-    #paneCapture > *:not(#cardComponent){grid-column:1;}
+    main{max-width:760px;}
   }
   .hint{font-size:12.5px;color:var(--muted);margin-top:6px;} #setMsg{white-space:pre-wrap;word-break:break-word;user-select:text;}
   .btn-set{border:1px solid var(--border);background:var(--surface-2);color:var(--ink-2);
@@ -1478,11 +1501,19 @@
        are: setting up, recording findings, reviewing, saved. Each chip is a
        door to that step; nothing is hidden from a script, only folded. -->
   <div class="steps" id="stepBar" role="tablist" aria-label="Inspection steps">
-    <button type="button" role="tab" data-step="1"><b>1</b><span data-i18n="step_setup">Inspection</span></button>
-    <button type="button" role="tab" data-step="2"><b>2</b><span data-i18n="step_findings">Findings</span></button>
-    <button type="button" role="tab" data-step="3"><b>3</b><span data-i18n="step_review">Review</span></button>
-    <button type="button" role="tab" data-step="4"><b>4</b><span data-i18n="step_saved">Saved</span></button>
+    <button type="button" role="tab" id="stepTab1" data-step="1" aria-controls="viewSetup"><b>1</b><span data-i18n="step_setup">Inspection</span></button>
+    <button type="button" role="tab" id="stepTab2" data-step="2" aria-controls="viewFind"><b>2</b><span data-i18n="step_findings">Findings</span></button>
+    <button type="button" role="tab" id="stepTab3" data-step="3" aria-controls="viewReview"><b>3</b><span data-i18n="step_review">Review</span></button>
+    <button type="button" role="tab" id="stepTab4" data-step="4" aria-controls="paneQueue"><b>4</b><span data-i18n="step_saved">Saved</span></button>
   </div>
+  <!-- WHICH MACHINE, ON EVERY STEP. The setup card is a view of its own now,
+       so from Findings onward nothing on screen said what was being walked.
+       One line, and pressing it goes back to change it. -->
+  <button type="button" class="stepctx hidden" id="stepCtx"></button>
+  <!-- WHY A STEP WOULD NOT OPEN. Pressing Findings with no machine chosen used
+       to do nothing at all: the handler returned, the screen did not move, and
+       the technician was left to guess. It says what is missing instead. -->
+  <div class="stepmsg hidden" id="stepMsg" role="status" aria-live="polite"></div>
   <!-- STEP 4. The round is on the phone and queued; the technician is told so
        in their own words and handed the next machine. -->
   <div class="card savedcard hidden" id="savedCard" role="status">
@@ -1497,6 +1528,7 @@
        then scrolled past on every one of forty-four points. Once a unit is
        chosen the card folds to the line that names it; the heading is the way
        back in. -->
+  <section class="view" id="viewSetup" role="tabpanel" aria-labelledby="stepTab1" tabindex="-1">
   <div class="card" id="cardInspection">
     <h2 data-i18n="sec_inspection">Inspection</h2>
     <button type="button" class="hdrsum hidden" id="hdrSum">
@@ -1529,21 +1561,37 @@
          what the app knows about this machine — somebody did it last Tuesday,
          it has been getting worse for five rounds — and folding the header away
          is exactly the moment you still want them. -->
+    <!-- THE MACHINE'S OWN PHOTOGRAPHS ARE PART OF SETTING THE ROUND UP, not
+         of a component. They were at the top of the findings form, where a
+         technician reached them only after choosing a station — and where the
+         round they belong to was two screens away. -->
+    <!-- The two file inputs the machine photographs use. A file input inside a
+         hidden view cannot open a chooser at all, so they travel with the
+         block that presses them. -->
+    <input id="mcamera" type="file" accept="image/*" capture="environment" class="hidden">
+    <input id="mgallery" type="file" accept="image/*" class="hidden">
+    <details class="mphotos" id="mphotos" open>
+      <summary><span data-i18n="ph_title">Machine photographs</span><span class="mpc" id="mpCount"></span></summary>
+      <div id="mpRows"></div>
+      <div class="mpguide" data-i18n="ph_guide">Fill the frame, hold the phone still, keep the subject in focus and evenly lit. Wipe the lens.</div>
+    </details>
     <div class="hint hidden" id="lastDone" style="margin:2px 0 0;font-weight:600;color:var(--accent)"></div>
     <div class="trend hidden" id="trend"></div>
   </div>
 
+  <div class="stepnav">
+    <span class="spacer"></span>
+    <button type="button" class="btn primary" id="toFind" data-i18n="nav_to_find">Continue to findings →</button>
+  </div>
+  </section><!-- /viewSetup -->
+
+  <section class="view" id="viewFind" role="tabpanel" aria-labelledby="stepTab2" tabindex="-1" hidden>
   <div class="card" id="cardComponent">
     <h2><span class="rbadge" id="secBadge"></span><span id="secPosTitle">Component</span></h2>
     <!-- THE MACHINE PHOTOGRAPHS — about the machine, not a point. Every
          inspection carries a whole-machine overview; an undercarriage round
          adds both sides, a tray round the whole tray, a GET round the whole
          assembly. Drawn by renderMachinePhotos() from machineSlots(type). -->
-    <details class="mphotos" id="mphotos" open>
-      <summary><span data-i18n="ph_title">Machine photographs</span><span class="mpc" id="mpCount"></span></summary>
-      <div id="mpRows"></div>
-      <div class="mpguide" data-i18n="ph_guide">Fill the frame, hold the phone still, keep the subject in focus and evenly lit. Wipe the lens.</div>
-    </details>
     <div class="posnav" id="posnav"></div>
     <div class="posLabel hint" id="posLabel"></div>
 
@@ -1563,8 +1611,6 @@
          #camera and #gallery for them, whose standing handlers file every
          photograph on the current component: the overview landed on 4C as a
          "Component" shot, the checklist stayed at 0 of 1, and Save refused. -->
-    <input id="mcamera" type="file" accept="image/*" capture="environment" class="hidden">
-    <input id="mgallery" type="file" accept="image/*" class="hidden">
     <!-- Two buttons of equal weight said the two were an equal choice. Nearly
          every record carries photographs and almost none carries a video, so
          the photo button takes the row and the video sits beside it at the
@@ -1781,10 +1827,18 @@
   <!-- Optional, and used on a minority of records — but a 150 px signature
        canvas sat open under every round whether or not a supervisor was within
        a hundred kilometres. Behind a row, and the row says it is optional. -->
+  <div class="stepnav">
+    <button type="button" class="btn ghost" id="backSetup" data-i18n="nav_back_setup">← Inspection</button>
+    <span class="spacer"></span>
+    <button type="button" class="btn primary" id="toReview" data-i18n="nav_to_review">Review inspection →</button>
+  </div>
+  </section><!-- /viewFind -->
+
+  <section class="view" id="viewReview" role="tabpanel" aria-labelledby="stepTab3" tabindex="-1" hidden>
   <!-- STEP 3. One screen that says what is about to be finished: the machine,
        the round, the points, the worst grade, what is still required, the
        photographs, the actions. Drawn from the draft, never from the form. -->
-  <div class="card hidden" id="cardReview">
+  <div class="card" id="cardReview">
     <h2 data-i18n="rv_title">Review</h2>
     <div class="review" id="reviewList"></div>
     <div class="hint" data-i18n="rv_hint">Check the summary, then finish. The inspection is saved on this phone first and sent by itself when there is signal.</div>
@@ -1802,12 +1856,23 @@
     </div>
   </div>
 
+  <div class="stepnav">
+    <button type="button" class="btn ghost" id="backFind" data-i18n="nav_back_find">← Findings</button>
+  </div>
+  <!-- THE ONE CONTROL THAT FINISHES A ROUND, AND IT IS ON THE REVIEW SCREEN.
+       It used to sit at the foot of the findings form, where it was pressed
+       with the summary unread and two screens of form still above it. -->
+  <button class="btn primary" id="saveBtn">✔ Save</button>
+  </section><!-- /viewReview -->
+
+  <!-- Neither belongs to a step: one says the register did not load, the other
+       says this round is an edit of a record that already exists. Both are
+       true on every screen and stay outside the views. -->
   <div id="dataWarn" class="editbar hidden" style="background:color-mix(in srgb,var(--critical) 16%,var(--surface));border-color:color-mix(in srgb,var(--critical) 45%,var(--border))"><span id="dataWarnText"></span><button type="button" id="dataWarnFix" class="linkbtn" data-i18n-title="reload_title" title="Reload">⟳</button></div>
 <div id="editBanner" class="editbar hidden"><span id="editBannerText"></span><button type="button" id="cancelEdit" class="linkbtn"></button></div>
-  <button class="btn primary" id="saveBtn">✔ Save</button>
 </div><!-- /paneCapture -->
 
-<div class="pane" id="paneQueue">
+<div class="pane" id="paneQueue" role="tabpanel" aria-labelledby="stepTab4">
   <div class="card">
     <h2><span data-i18n="sec_onphone">On this phone</span> <span class="count-badge" id="qCount">0</span></h2>
     <div class="pending" id="pending"></div>
@@ -2442,6 +2507,12 @@ const I18N = {
     sec_onphone:TERMS.en.saved_here, empty_none:"Nothing saved yet.",
     btn_share:"Share", btn_export:"Export ZIP", btn_report:"PDF · every round on this phone",
     rep_lang:"Report language", rep_lang_both:"English + Russian",
+    nav_to_find:"Continue to findings →", nav_to_review:"Review inspection →",
+    nav_back_setup:"← Inspection", nav_back_find:"← Findings",
+    step_need_equip:"Choose the equipment first — the findings are recorded against it.",
+    step_need_type:"Choose the inspection type first.",
+    step_ctx_t:"Change the equipment, date or inspector",
+    rv_empty:"Nothing recorded yet. Go back to Findings and record at least one inspection point.",
     /* Five rounds in the queue and a superintendent who wants one of them. */
     rpt1_title:"PDF for this round only", scan_hint:"Point at the unit's QR code", btn_cancel:"Cancel", dlg_ok:"OK",
     rep_title:"Condition Monitoring Inspection Report", rep_generated:"Generated", rep_building:["Building report…","Preparing the PDF — this can take a few seconds."],
@@ -3001,6 +3072,12 @@ const I18N = {
     sec_onphone:TERMS.ru.saved_here, empty_none:"Пока ничего не сохранено.",
     btn_share:"Поделиться", btn_export:"Экспорт ZIP", btn_report:"PDF · все обходы на телефоне",
     rep_lang:"Язык отчёта", rep_lang_both:"Английский + русский",
+    nav_to_find:"К находкам →", nav_to_review:"К проверке →",
+    nav_back_setup:"← Осмотр", nav_back_find:"← Находки",
+    step_need_equip:"Сначала выберите технику — находки записываются по ней.",
+    step_need_type:"Сначала выберите тип осмотра.",
+    step_ctx_t:"Изменить технику, дату или инспектора",
+    rv_empty:"Пока ничего не записано. Вернитесь к находкам и запишите хотя бы одну точку осмотра.",
     rpt1_title:"PDF только по этому обходу", scan_hint:"Наведите на QR-код трака", btn_cancel:"Отмена", dlg_ok:"ОК",
     rep_title:"Отчёт по мониторингу состояния", rep_generated:"Сформировано", rep_building:["Формирование отчёта…","Готовится PDF — это может занять несколько секунд."],
     rep_page:"Формирование… {i} из {n}",
@@ -6500,6 +6577,9 @@ function updateEquipBtn(){ const a=ASSET_BY[curEquip];
    state you are put in when something is missing, never a state you are left
    in by accident. */
 let hdrOpen = false;
+/* Which destination is on screen. Declared here rather than beside showPane,
+   because renderSteps() reads it and runs long before that line does. */
+let CUR_PANE = "paneCapture";
 /* Folded means settled, and it is not settled until every answer Save will
    demand is in it. On a phone straight out of the box that is the name — fold
    before it is typed and the first round of somebody's first shift ends at a
@@ -6528,7 +6608,11 @@ function renderHdr(){
   const by=$("inspector").value.trim(); if(by) bits.push(by);
   $("hsMeta").textContent = bits.join(" · ");
 }
-function openHdr(){ hdrOpen=true; hideSaved(); renderHdr(); }
+/* Opening the setup card means going to the step that holds it — it is a view
+   of its own now, so unfolding a card inside a hidden view would show nobody
+   anything. Every "the save needs the inspector's name" path comes through
+   here, and each of them has to end with that field on screen. */
+function openHdr(){ hdrOpen=true; hideSaved(); if(typeof curStep!=="undefined") curStep=1; renderHdr(); }
 /* ── THE FOUR STEPS ──────────────────────────────────────────────────────────
    Where the technician is, read off the state and never stored: no machine
    or the header open → 1; a machine chosen and the header folded → 2; the
@@ -6536,28 +6620,127 @@ function openHdr(){ hdrOpen=true; hideSaved(); renderHdr(); }
    step. Nothing is hidden from a script by this — cards fold, they do not
    disappear — so every path that worked before still works. */
 let reviewOpen=false;
-function stepNow(){
-  if(!$("savedCard").classList.contains("hidden")) return 4;
-  if(!curEquip || !hdrFolded()) return 1;
-  return reviewOpen ? 3 : 2;
+/* THE STEP IS STATE, NOT AN INFERENCE. It was read back out of the screen —
+   "the header is open, so we must be on step 1" — which meant the chips could
+   not move the technician anywhere the screen was not already, and pressing
+   one with nothing chosen returned in silence. One number, one view. */
+let curStep=1;
+const STEP_VIEW={1:"viewSetup", 2:"viewFind", 3:"viewReview"};
+/* Step 4 is "the round is saved" — reached either by finishing it, which puts
+   the confirmation card on screen, or by opening the Saved destination. */
+function savedUp(){ const c=$("savedCard");
+  /* On screen, not merely un-hidden: the card lives in the Inspect
+     destination, so while Saved is open it is behind another pane and must
+     not be what the step-4 tab points a screen reader at. */
+  return !!c && !c.classList.contains("hidden") && CUR_PANE==="paneCapture"; }
+function stepNow(){ return (CUR_PANE==="paneQueue" || savedUp()) ? 4 : curStep; }
+/* WHAT A STEP NEEDS BEFORE IT WILL OPEN, in the words a technician would use.
+   Empty string means it will open. Findings and Review both need a machine and
+   a round, because without them there are no points to record against. */
+function stepReady(n){
+  if(n<=1 || n===4) return "";
+  if(!curEquip) return t("step_need_equip");
+  if(!type) return t("step_need_type");
+  return "";
+}
+function stepSay(msg){
+  const el=$("stepMsg"); if(!el) return;
+  el.textContent=msg||""; el.classList.toggle("hidden", !msg);
+}
+/* The machine on every step but the first, and a way back to change it. */
+function renderStepCtx(){
+  const el=$("stepCtx"); if(!el) return;
+  const show = !!curEquip && curStep>1;
+  el.classList.toggle("hidden", !show);
+  if(!show) return;
+  const a=ASSET_BY[curEquip]||{};
+  const bits=[type+" · "+t("type_"+type)];
+  const d=$("date").value; if(d) bits.push(d);
+  const by=$("inspector").value.trim(); if(by) bits.push(by);
+  el.innerHTML=`<b>${esc(curEquip)}</b>${a.cat?`<i>${esc(a.cat)}</i>`:""}<i>${esc(bits.join(" · "))}</i><span class="go">✎</span>`;
+  el.title=t("step_ctx_t");
 }
 function renderSteps(){
   const bar=$("stepBar"); if(!bar) return;
   const now=stepNow();
+  /* Step 4's panel is whichever of the two is actually on screen, so the tab
+     never points a screen reader at something that is not there. */
+  const t4=$("stepTab4"); if(t4) t4.setAttribute("aria-controls", savedUp() ? "savedCard" : "paneQueue");
   bar.querySelectorAll("button").forEach(b=>{ const n=Number(b.dataset.step);
     b.classList.toggle("on", n===now); b.classList.toggle("done", n<now);
-    b.setAttribute("aria-selected", n===now?"true":"false"); });
+    b.setAttribute("aria-selected", n===now?"true":"false");
+    /* Only the selected tab is in the tab order; the arrow keys walk the rest,
+       which is how a tablist is meant to behave. */
+    b.tabIndex = n===now ? 0 : -1;
+  });
+  /* ONE VIEW ON SCREEN, and the others gone from the keyboard and the screen
+     reader as well as from sight. */
+  Object.entries(STEP_VIEW).forEach(([n,id])=>{
+    const v=$(id); if(!v) return;
+    const on = Number(n)===curStep && CUR_PANE==="paneCapture";
+    v.hidden=!on; v.classList.toggle("on", on);
+  });
+  renderStepCtx();
+  /* A refusal that outlives its reason is a false alarm. The moment the
+     machine and the round are chosen, the sentence saying they are not goes. */
+  if(!$("stepMsg").classList.contains("hidden") && !stepReady(2)) stepSay("");
 }
-function goStep(n){
-  if(n===1){ hideSaved(); openHdr(); scrollTo({top:0,behavior:"smooth"}); }
-  else if(n===2){ if(!curEquip){ openHdr(); return; } hideSaved(); reviewOpen=false; hdrOpen=false; renderHdr();
-    const c=$("cardComponent"); if(c) c.scrollIntoView({behavior:"smooth",block:"start"}); }
-  else if(n===3){ if(!curEquip){ openHdr(); return; } hideSaved(); saveCur(); reviewOpen=true; hdrOpen=false; renderHdr(); renderReview();
-    const c=$("cardReview"); if(c && !c.classList.contains("hidden")) c.scrollIntoView({behavior:"smooth",block:"start"}); }
-  else if(n===4){ showPane("paneQueue"); }
+/* Move to a step. Refuses only with a reason on screen, never in silence, and
+   never loses what has been typed: the open position is written to the draft
+   before the view changes. */
+function goStep(n, opts){
+  opts=opts||{};
+  if(n===4){ showPane("paneQueue"); return; }
+  const why=stepReady(n);
+  if(why){
+    stepSay(why);
+    /* Put them where the missing thing is, rather than nowhere. */
+    if(curStep!==1){ curStep=1; renderSteps(); }
+    openHdr();
+    const b=$(curEquip?"typeSel":"equipBtn"); if(b && opts.focus!==false){ try{ b.focus(); }catch(e){} }
+    return;
+  }
+  stepSay("");
+  hideSaved();
+  /* Whatever is in the form belongs to the draft before the form leaves. */
+  try{ saveCur(); }catch(e){}
+  const was=curStep;
+  curStep=n;
+  reviewOpen=(n===3);
+  if(n===1) hdrOpen=true;
+  renderHdr();          // calls renderSteps()
+  if(n===3){ renderReview(); sizeSignPad(); }
+  /* Deliberately does NOT choose a position. Opening the first one looks
+     helpful and is not: on a wear round it opens the measurement sheet, which
+     is reading mode — the route, its notes and the choice of station all go
+     away, and the technician lands inside a station nobody picked. Findings
+     opens on the round; the station is theirs to choose. */
+  /* The top of the new step, not wherever the last one was scrolled to. */
+  if(was!==n) scrollTo({top:0, behavior: opts.smooth===false?"auto":"smooth"});
+  /* Focus lands on the panel itself: a screen reader then reads the step, and
+     the next Tab is the first control of that step rather than the last
+     control of the one before it. */
+  if(opts.focus!==false){ const v=$(STEP_VIEW[n]); if(v){ try{ v.focus({preventScroll:true}); }catch(e){} } }
   renderSteps();
 }
 document.querySelectorAll("#stepBar button").forEach(b=>b.onclick=()=>goStep(Number(b.dataset.step)));
+/* Left and right walk the steps, Home and End jump to the ends — the keyboard
+   contract every tablist carries. */
+if($("stepBar")) $("stepBar").onkeydown=e=>{
+  const d=e.key==="ArrowRight"?1:e.key==="ArrowLeft"?-1:0;
+  const jump=e.key==="Home"?1:e.key==="End"?4:0;
+  if(!d && !jump) return;
+  e.preventDefault();
+  const now=stepNow();
+  const n = jump || Math.min(4, Math.max(1, now+d));
+  goStep(n);
+  const b=$("stepTab"+stepNow()); if(b) b.focus();
+};
+if($("toFind")) $("toFind").onclick=()=>goStep(2);
+if($("toReview")) $("toReview").onclick=()=>goStep(3);
+if($("backSetup")) $("backSetup").onclick=()=>goStep(1);
+if($("backFind")) $("backFind").onclick=()=>goStep(2);
+if($("stepCtx")) $("stepCtx").onclick=()=>goStep(1);
 /* ── STEP 3, THE REVIEW ──────────────────────────────────────────────────────
    What Save will check, said before Save is pressed, in one list: the
    machine, the round, who and when, how many points carry something, the
@@ -6592,9 +6775,12 @@ function renderReview(){
   const card=$("cardReview"), list=$("reviewList"); if(!card||!list) return;
   const pos=Object.entries(draft.positions||{}).filter(([k])=>k!==GEN_KEY);
   const has=!!curEquip && pos.length>0;
-  card.classList.toggle("hidden", !has);
-  renderSteps();
-  if(!has) return;
+  /* The card is the Review step. An empty round still gets the step — and is
+     told, on it, that nothing has been recorded yet — rather than arriving at
+     a screen with nothing on it at all. */
+  card.classList.remove("hidden");
+  if(!has){ list.innerHTML=`<div class="rvrow"><span class="k">${esc(t("rv_empty"))}</span></div>`;
+            window.__review={done:0,N:0,top:null,photos:0,acts:[],miss:[]}; renderSteps(); return; }
   const N=items().length;
   const done=pos.filter(([k,p])=>GRADE.num(p.grade)||(p.mm!=null&&p.mm!=="")||hasEvidence(p)).length;
   let top=null; pos.forEach(([k,p])=>{ const g=GRADE.num(p.grade); if(g&&(!top||g>top)) top=g; });
@@ -6614,7 +6800,9 @@ function renderReview(){
 function showSaved(rec){
   const c=$("savedCard"); if(!c) return;
   $("savedText").textContent=t("saved_line",{u:rec.equip, ty:t("type_"+rec.type), st:TERMS.t(lang,"waiting")});
-  c.classList.remove("hidden"); reviewOpen=false; renderSteps();
+  /* The form behind the card has been reset, so the technician is at the
+     start of the next round, not still standing on the review of the last. */
+  c.classList.remove("hidden"); reviewOpen=false; curStep=1; renderSteps();
   scrollTo({top:0,behavior:"smooth"});
 }
 function hideSaved(){ const c=$("savedCard"); if(c && !c.classList.contains("hidden")){ c.classList.add("hidden"); renderSteps(); } }
@@ -7020,6 +7208,7 @@ $("saveBtn").onclick=async ()=>{
        a measured station, whose condition is its reading. */
     if(strict && !g && gradeAppliesTo(k) && hasEvidence(p)){
       if(curItem!==k){ saveCur(); curItem=k; loadPos(); renderChips(); }
+      goStep(2, {focus:false});
       dlg([t("m_need_g_t"), t("m_need_g_m",{k})]);
       return;
     }
@@ -7037,6 +7226,7 @@ $("saveBtn").onclick=async ()=>{
     if(miss.length){
       // Put them on the position that needs it, not just an error at the bottom.
       if(curItem!==k){ saveCur(); curItem=k; loadPos(); renderChips(); }
+      goStep(2, {focus:false});
       const gl=g?GRADE.label(g,lang):t("sev_CRI");
       dlg([t("m_need_grade_t",{g:gl}), t("m_need_grade_m",{k, g:gl, x:miss.join(", ")})]);
       return;
@@ -9542,12 +9732,17 @@ async function renderTrend(){
    list and back. On a tablet every pane is on screen at once and the CSS
    overrides these classes, which is why nothing here reads them back. */
 function showPane(id){
+  CUR_PANE=id;
   document.querySelectorAll("main > .pane").forEach(p=>p.classList.toggle("on",p.id===id));
   document.querySelectorAll("#tabbar button").forEach(b=>b.classList.toggle("on",b.dataset.pane===id));
   window.scrollTo({top:0});
   // The signature canvas cannot be measured while its pane is display:none, so a
   // pad sized then would come back one pixel tall.
-  if(id==="paneCapture"){ sizeSignPad(); renderReview(); renderSteps(); }
+  if(id==="paneCapture"){ sizeSignPad(); renderReview(); }
+  /* On EVERY destination, not only this one: step 4 IS the Saved destination,
+     so leaving Inspect has to move the selected tab with it. It did not, and
+     the bar went on claiming a step nobody was on. */
+  renderSteps();
   /* Each screen refreshed on the way in, because every one of them shows a
      figure that goes stale: a storage reading, a queue count, a last-done date.
      Stale reassurance is the thing all three of these cards exist to replace.
