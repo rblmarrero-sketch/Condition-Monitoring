@@ -1870,8 +1870,17 @@
                 return esc(it.name || it.key) + ' <span class="num">' + esc(it.w.pct) + '%</span>'; }).join(" · ")
             + (over.length > 6 ? " · +" + (over.length - 6) : "") + '</span></div>' : "")
         + maps + '</div>';
-      secs.push({ nb: n > 0, html: top });
-      measSections(ctx, T, rec, sign, !!maps).forEach(function (x) { secs.push(x); });
+      /* THE SHAPE OF A UNIT REPORT, STATED RATHER THAN LEFT TO THE ARITHMETIC.
+         One: the machine, the verdict, the drawings and the key that explains
+         them — whole, on one sheet (`fit`). Two: what was measured on this
+         visit. Then the history, which always starts a page of its own. Before
+         this the three ran together and the fold landed wherever the pixels
+         put it, which is how a legend came to be split across two sheets. */
+      secs.push({ nb: n > 0, fit: !!maps, html: top });
+      measSections(ctx, T, rec, sign, !!maps).forEach(function (x, ix) {
+        if (ix === 0) x = Object.assign({}, x, { nb: true });
+        secs.push(x);
+      });
       /* A round that has BOTH gets both. Only the wear-less case is folded into
          measSections above, so this must not double-render it. */
       if (rec.items.some(function (it) { return it.w && it.w.mm != null; }))
@@ -1891,8 +1900,13 @@
     });
 
     if (older.length) {
-      wearHistorySections(ctx, T, latest, older).forEach(function (x) { secs.push(x); });
-      earlierRoundSections(ctx, T, older).forEach(function (x) { secs.push(x); });
+      /* WHAT WENT BEFORE STARTS ITS OWN PAGE. A reader who wants this visit
+         should be able to stop at the end of a sheet; one who wants the trend
+         should find it at the top of one. Half a history under the tail of a
+         current round is neither. */
+      var hist = wearHistorySections(ctx, T, latest, older)
+        .concat(earlierRoundSections(ctx, T, older));
+      hist.forEach(function (x, ix) { secs.push(ix === 0 ? Object.assign({}, x, { nb: true }) : x); });
     }
     return secs;
   }
@@ -2714,7 +2728,13 @@
     /* Units of MEANING: a reading and its number, a card and its caption, a key
        entry and its label. Anything a reader has to hold in one glance belongs
        on this list. */
-    var q = el.querySelectorAll("tr,.lgrow,.pkey > div,.ckey > div,figure,.cell");
+    /* `> *`, not `> div`. The numbers key under a machine drawing is built out
+       of SPANs, so for as long as this said "div" not one of its entries was an
+       atom and the fold went straight through the last row: a unit report of an
+       excavator came back with "Track frame / guards" and "Track sag / top
+       chain" on page one and their Russian sub-labels alone on page two — a
+       whole sheet of paper carrying two fragments of a caption. */
+    var q = el.querySelectorAll("tr,.lgrow,.pkey > *,.ckey > *,.mapkey > *,figure,.cell");
     for (var i = 0; i < q.length; i++) {
       var r = q[i].getBoundingClientRect();
       if (r.height <= 0 || r.height > 520) continue;
@@ -2790,6 +2810,53 @@
     });
     return dropped;
   };
+  /* THE DRAWING AND THE KEY THAT EXPLAINS IT BELONG ON ONE SHEET.
+
+     A machine drawing is what somebody carries to the machine, and a key that
+     turns eleven numbered pucks into part names is not an appendix to it — it
+     is the half that makes the other half mean anything. Split across a fold
+     they are two useless pages: numbers with no names, then names with no
+     numbers.
+
+     Keeping the fold out of a key entry (atomBands) stops the worst of it, but
+     it only moves the cut; the block was still taller than a page and still
+     ended up in two places. So a section marked `fit` is measured against the
+     room a page actually has and, if it is over, the drawing is narrowed until
+     it is not — five per cent at a time, down to a floor of sixty, because the
+     drawing's scale is set by its WIDTH (a puck is only readable if the frame
+     is wide enough to separate the pucks) and a drawing shrunk past that point
+     is no longer worth printing. If sixty per cent is still not enough the
+     block is left alone and cut as before: a squinted-at drawing is worse than
+     a two-page one, and this is a layout adjustment, never a crop. Nothing is
+     ever hidden — the return value says what it took, so a caller can tell the
+     difference between "fitted" and "gave up". */
+  CMR.FIT_MIN = 0.6;
+  CMR.fitPage = function (el, roomPx) {
+    if (!el || !(roomPx > 0)) return 1;
+    var maps = el.querySelector(".ucmaps");
+    var h = el.getBoundingClientRect().height;
+    if (h <= roomPx || !maps) return 1;
+    var w = 1;
+    maps.style.marginLeft = "auto"; maps.style.marginRight = "auto";
+    while (h > roomPx && w > CMR.FIT_MIN + 0.001) {
+      w = Math.round((w - 0.05) * 100) / 100;
+      maps.style.width = (w * 100) + "%";
+      h = el.getBoundingClientRect().height;
+    }
+    if (h > roomPx) {                       // could not be done; put it back
+      maps.style.width = ""; maps.style.marginLeft = ""; maps.style.marginRight = "";
+      return 0;
+    }
+    return w;
+  };
+  /* Run the fit over a laid-out document. One reader for the PDF and for the
+     estimate, so the page count is the count of the pages that get made. */
+  CMR.fitAll = function (holder, sections, roomPx) {
+    var els = Array.prototype.slice.call(holder.children), out = [];
+    for (var i = 0; i < els.length; i++)
+      if (sections[i] && sections[i].fit) out.push(CMR.fitPage(els[i], roomPx));
+    return out;
+  };
   CMR.paginate = async function (opts) {
     var holder = document.createElement("div");
     holder.id = "rptRoot";
@@ -2804,6 +2871,9 @@
       var doc = new opts.jsPDF({unit:"pt",format:"a4"});
       var PW=595, PH=842, M=38, FOOT=22, cw=PW-2*M, top=M, bottom=PH-M-FOOT;
       var els = Array.prototype.slice.call(holder.children);
+      /* Fit before anything is measured or rasterised, so the page count, the
+         cut points and the picture all agree about one layout. */
+      CMR.fitAll(holder, opts.sections, (bottom - top) / (cw / 760));
       var y=top, drew=false;
       for(var i=0;i<els.length;i++){
         if(opts.onProgress) opts.onProgress(i+1, els.length);

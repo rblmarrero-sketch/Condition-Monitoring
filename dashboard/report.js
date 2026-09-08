@@ -714,9 +714,13 @@
       await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
       const PW = 595, PH = 842, M = 38, FOOT = 22, cw = PW - 2 * M, roomPt = PH - M - FOOT - M;
       const k = cw / 760, roomPx = roomPt / k;
-      let pages = 1, y = 0;
+      /* The same fit the PDF makes. A drawing narrowed there and not here would
+         make the estimate count a page the document does not have. */
+      if (window.CMR.fitAll) window.CMR.fitAll(holder, secs, roomPx);
+      let pages = 1, y = 0, contentPx = 0;
       [...holder.children].forEach((el, i) => {
         let h = el.getBoundingClientRect().height; if (h <= 0) return;
+        contentPx += h;
         const gap = (secs[i].gap != null ? secs[i].gap : 14) / k;
         if (secs[i].nb && y > 0) { pages++; y = 0; }
         else if (y > 0 && h <= roomPx && y + h > roomPx) { pages++; y = 0; }
@@ -726,7 +730,16 @@
       const photos = (opts && opts.photos === false) ? 0 : holder.querySelectorAll("figure img").length;
       const sc = Number(opts && opts.scale) || 1.8;
       const q = Math.pow(sc / 1.8, 1.5) * (opts && opts.jpeg ? 0.8 : 1);
-      const bytes = Math.round(pages * 200000 * q);
+      /* SIZE FOLLOWS THE INK, NOT THE PAPER. Each page is a JPEG of what is on
+         it, so a page that is a fifth full costs about a fifth of a full one —
+         and a document forced onto a second page by a deliberate break (the
+         history always starting its own sheet) does not double in size because
+         of it. Counting pages said 0.38 MB for a report that came out at 0.12.
+         So the measure is how many pages' WORTH of content there is, which is
+         the laid-out height over the room a page has, at about 200 kB a page
+         at the standard scale. */
+      const inkPages = Math.max(0.35, contentPx / roomPx);
+      const bytes = Math.round(inkPages * 200000 * q);
       const secPp = rate();
       const seconds = Math.max(3, Math.round(pages * secPp + photos * 1.5));
       return { pages, photos, bytes, seconds, secPp, sections: secs.length };
