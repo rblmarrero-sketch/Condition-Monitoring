@@ -402,6 +402,34 @@ Three dashboard conventions a suite has to respect since build 271:
   original is still never written to. `pxVisual` and `pxTouched` both count
   them, so a marked frame gets a derivative and a bare drag of nothing does
   not (`tests/pxmark.cjs`).
+- **A unit report has a stated shape, and page one is fitted to hold it.**
+  Page 1 the machine, the verdict, the drawings and the key; page 2 what was
+  measured on this visit; then the history, which always starts a page of its
+  own (`nb` on the first of each). A section marked `fit` is measured against
+  the room a page has and its drawing narrowed 5% at a time — never cropped,
+  never past `CMR.FIT_MIN` (0.6), because a puck is only readable if the frame
+  separates the pucks. `atomBands` is the list of things a fold may not fall
+  inside and it reads `> *`, not `> div`: the numbers key is SPANs, and while
+  it said "div" a fold went through a key row and put two Russian sub-labels
+  alone on a page (`tests/rptfit.cjs`).
+- **Every tablist obeys four rules and a suite finds them for itself**
+  (`tests/tabsa11y.cjs`): one tab selected, the selected tab matching the panel
+  shown, each tab controlling one LABELLED panel, one stop in the keyboard
+  order. Two things are navs and must NOT become tablists — the office page
+  navigation and the phone's destination bar — and both say where you are with
+  `aria-current="page"`, because a CSS class is not read to anybody.
+- **Scale is measured on BOTH surfaces, at the size the folder reaches**
+  (`tests/bigday.cjs`): 1,000 inspections over 10,000 findings, and the phone
+  as well as the office. `scaleload.cjs` proves the office survives it and
+  `perf.cjs` times 80 and 400 rounds; this times what a person does at the
+  full size. The slowest thing on either surface is choosing a machine on the
+  phone.
+- **Russian on a tablet is its own acceptance** (`tests/tabletru.cjs`): 768 and
+  1024, every page, in Russian, because Russian is longer and a tablet is
+  narrower and the two together are what put the overview table 180 px past a
+  screen. Its scan asks the LAYOUT whether an ancestor scrolls rather than
+  naming containers, ignores one-pixel screen-reader labels, and proves it can
+  still see by planting two faults and finding them.
 
 **`TERMS` must never be a hard dependency of boot.** Both pages carry a shim
 right after the `terms.js` script tag: if the file did not arrive, every key
