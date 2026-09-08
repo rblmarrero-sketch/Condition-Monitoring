@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=280">
+<link rel="manifest" href="manifest.webmanifest?v=281">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=280">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=280">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=280">
+<link rel="apple-touch-icon" href="icon-192.png?v=281">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=281">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=281">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2031,7 +2031,7 @@
      is the question asked before the first round of the day and the one that
      was previously three screens down. -->
 <nav class="tabbar" id="tabbar">
-  <button type="button" data-pane="paneCapture" class="on"><span class="ti">✎</span><span data-i18n="tab_capture">Inspect</span></button>
+  <button type="button" data-pane="paneCapture" class="on" aria-current="page"><span class="ti">✎</span><span data-i18n="tab_capture">Inspect</span></button>
   <button type="button" data-pane="paneQueue"><span class="ti">💾</span><span data-i18n="tab_queue">Saved</span><span class="tb hidden" id="tabQ"></span></button>
   <button type="button" data-pane="paneDue"><span class="ti">⏱</span><span data-i18n="tab_due">Due</span><span class="tb hidden" id="tabD"></span></button>
   <button type="button" data-pane="paneSystem"><span class="ti">⇅</span><span data-i18n="tab_system">Sync</span><span class="tb hidden" id="tabS"></span></button>
@@ -2215,15 +2215,15 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=280"></script>
-<script src="upload-defaults.js?v=280"></script>
-<script src="hme.js?v=280"></script>
-<script src="mp-fc.js?v=280"></script>
-<script src="hme-cascade.js?v=280"></script>
-<script src="assets.js?v=280"></script>
-<script src="temp-limits.js?v=280"></script>
-<script src="normalize.js?v=280"></script>
-<script src="terms.js?v=280"></script>
+<script src="native.js?v=281"></script>
+<script src="upload-defaults.js?v=281"></script>
+<script src="hme.js?v=281"></script>
+<script src="mp-fc.js?v=281"></script>
+<script src="hme-cascade.js?v=281"></script>
+<script src="assets.js?v=281"></script>
+<script src="temp-limits.js?v=281"></script>
+<script src="normalize.js?v=281"></script>
+<script src="terms.js?v=281"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2242,25 +2242,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=280"></script>
-<script src="edits.js?v=280"></script>
-<script src="due.js?v=280"></script>
-<script src="wear.js?v=280"></script>
-<script src="wear-figs.js?v=280"></script>
-<script src="wear-map.js?v=280"></script>
-<script src="machine-photos.js?v=280"></script>
-<script src="machine-fig.js?v=280"></script>
-<script src="get.js?v=280"></script>
-<script src="points.js?v=280"></script>
-<script src="uc-points.js?v=280"></script>
-<script src="inspect-guide.js?v=280"></script>
-<script src="get-figs.js?v=280"></script>
-<script src="body-points.js?v=280"></script>
-<script src="body-map.js?v=280"></script>
-<script src="lube.js?v=280"></script>
-<script src="lube-overrides.js?v=280"></script>
-<script src="lube2027.js?v=280"></script>
-<script src="report-core.js?v=280"></script>
+<script src="grade.js?v=281"></script>
+<script src="edits.js?v=281"></script>
+<script src="due.js?v=281"></script>
+<script src="wear.js?v=281"></script>
+<script src="wear-figs.js?v=281"></script>
+<script src="wear-map.js?v=281"></script>
+<script src="machine-photos.js?v=281"></script>
+<script src="machine-fig.js?v=281"></script>
+<script src="get.js?v=281"></script>
+<script src="points.js?v=281"></script>
+<script src="uc-points.js?v=281"></script>
+<script src="inspect-guide.js?v=281"></script>
+<script src="get-figs.js?v=281"></script>
+<script src="body-points.js?v=281"></script>
+<script src="body-map.js?v=281"></script>
+<script src="lube.js?v=281"></script>
+<script src="lube-overrides.js?v=281"></script>
+<script src="lube2027.js?v=281"></script>
+<script src="report-core.js?v=281"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -9753,7 +9753,16 @@ async function renderTrend(){
 function showPane(id){
   CUR_PANE=id;
   document.querySelectorAll("main > .pane").forEach(p=>p.classList.toggle("on",p.id===id));
-  document.querySelectorAll("#tabbar button").forEach(b=>b.classList.toggle("on",b.dataset.pane===id));
+  /* The bar said which destination was open with a class and nothing else, so
+     a screen reader read four identical buttons and could not say which screen
+     the phone was on. aria-current is the attribute for that on a nav — it is
+     navigation, not a tablist, because these are four screens and not four
+     views of one thing. */
+  document.querySelectorAll("#tabbar button").forEach(b=>{
+    const on = b.dataset.pane===id;
+    b.classList.toggle("on", on);
+    if(on) b.setAttribute("aria-current","page"); else b.removeAttribute("aria-current");
+  });
   window.scrollTo({top:0});
   // The signature canvas cannot be measured while its pane is display:none, so a
   // pad sized then would come back one pixel tall.
@@ -11128,7 +11137,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="280";
+const BUILD="281";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
