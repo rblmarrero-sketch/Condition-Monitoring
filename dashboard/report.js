@@ -706,6 +706,11 @@
     holder.innerHTML = secs.map(x => '<div class="secwrap">' + x.html + '</div>').join("");
     document.body.appendChild(holder);
     try {
+      /* The same pass the PDF makes, so the page count is the count of the
+         document that will actually be produced — a photograph that will be
+         dropped there must not occupy a page here. Shorter deadline: this is a
+         debounced panel, not a document somebody is waiting on. */
+      if (window.CMR.settleImages) await window.CMR.settleImages(holder, 4000);
       await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
       const PW = 595, PH = 842, M = 38, FOOT = 22, cw = PW - 2 * M, roomPt = PH - M - FOOT - M;
       const k = cw / 760, roomPx = roomPt / k;

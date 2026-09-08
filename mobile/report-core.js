@@ -88,13 +88,33 @@
 #rptRoot td.r,#rptRoot th.r{text-align:right;}
 #rptRoot td.n{font-variant-numeric:tabular-nums;white-space:nowrap;}
 #rptRoot td.stripe{border-left:3px solid transparent;padding-left:8px;}
+/* The inspector's own words, under the row they belong to: the same stripe,
+   no rule between them, and set slightly quieter than the columns so the
+   table still scans as rows.
+
+   NAMED "rnote" AND NOT "note" ON PURPOSE. The report is built inside the
+   host page, and the host's own stylesheet is not scoped away from it — the
+   dashboard has a .note callout built with color-mix(), whose computed value
+   is a modern colour function html2canvas cannot parse, so every round and
+   month PDF failed to rasterise the moment a row here was called "note". A
+   class the report invents has to be a word the host does not use.
+   (And no back-ticks in this comment: it lives inside the template literal
+   that IS the stylesheet, and one would end it.) */
+#rptRoot tr.rnote td{border-top:0;padding-top:0;color:#4a545e;}
 #rptRoot .unit{font-weight:750;letter-spacing:-.01em;white-space:nowrap;}
 #rptRoot .code{font-size:9px;color:#7b858e;font-variant-numeric:tabular-nums;
   letter-spacing:.02em;white-space:nowrap;}
 
 /* chips */
+/* A chip is one thing and stays on one line. In the Russian and bilingual
+   sheets "3 – Degraded" wrapped inside a 96-point column and printed as three
+   stacked fragments beside rows whose shorter words happened to fit — the same
+   grade looking like two different objects on one page. The second language,
+   where there is one, is its own line by design (.alt2). */
 #rptRoot .g{display:inline-block;min-width:17px;text-align:center;color:#fff;
-  font-size:10px;font-weight:800;border-radius:3px;padding:1px 5px;line-height:1.4;}
+  font-size:10px;font-weight:800;border-radius:3px;padding:1px 5px;line-height:1.4;
+  white-space:nowrap;}
+#rptRoot .g .alt2{white-space:nowrap;}
 /* Outlined, never filled. A solid chip beside a solid severity chip reads as a
    second opinion on how bad the part is; the priority is not that — it is how
    the job gets scheduled. The outline keeps the urgency colour and says so. */
@@ -1511,13 +1531,36 @@
     return out;
   }
 
+  /* A COMMENT LONGER THAN THIS IS PROSE, NOT A CELL.
+
+     Found by looking at page four of a real round report: an inspector's
+     three-hundred-character note about gear-tooth spalling was squeezed into
+     the last column — a hundred and fifty points wide once the five fixed
+     columns had taken their share — and ran forty lines down the page, while
+     the grade, the finding and the action sat alone at the top of a row seven
+     hundred points tall. Every other cell in that row was empty space made by
+     one sentence.
+
+     So a long note leaves the row and becomes a full-width line under it,
+     which is how it reads anyway. The cut is where a phrase stops being a
+     label: "Emulsified oil on the plug face." stays in the cell, and the
+     paragraph about the sample being taken cold does not. */
+  var NOTE_INLINE_MAX = 90;
   function notableTable(ctx, T, list) {
+    /* AND A COLUMN NOBODY IN THIS TABLE HAS ANYTHING FOR IS NOT A COLUMN.
+       Severity was replaced by the grade and is empty on every modern round;
+       a cause is recorded on a minority of findings. Printing them regardless
+       spent 190 of 760 points on white space and took it from the column that
+       carries the sentence somebody has to read. */
+    var hasSev = list.some(function (it) { return !!sevIf(ctx, it); });
+    var hasCause = list.some(function (it) { return !!it.cause; });
+    var cols = 3 + (hasSev ? 1 : 0) + (hasCause ? 1 : 0) + 1;
     var h = '<div class="subhd" style="margin-top:13px;">' + T.I("notable") + '</div><table><tr>'
       + '<th style="width:168px">' + T.L("c_item") + '</th>'
-      + '<th class="c" style="width:96px">' + T.L("c_grade") + '</th>'
-      + '<th style="width:60px">' + T.L("c_sev") + '</th>'
-      + '<th style="width:158px">' + T.L("c_defect") + '</th>'
-      + '<th style="width:130px">' + T.L("c_cause") + '</th>'
+      + '<th class="c" style="width:116px">' + T.L("c_grade") + '</th>'
+      + (hasSev ? '<th style="width:60px">' + T.L("c_sev") + '</th>' : "")
+      + '<th style="width:150px">' + T.L("c_defect") + '</th>'
+      + (hasCause ? '<th style="width:110px">' + T.L("c_cause") + '</th>' : "")
       + '<th>' + T.L("c_do") + '</th></tr>';
     list.forEach(function (it, i) {
       var read = (it.readings || []).slice();
@@ -1527,17 +1570,27 @@
          the table for "what is actually in these machines" must not have to
          open every detail cell to find out. */
       if (it.lube && it.lube.product) read.unshift(it.lube.product);
-      if (it.comment) read.push(it.comment);
-      h += '<tr class="' + (i % 2 ? "zebra" : "") + '">'
+      var note = "";
+      if (it.comment) {
+        if (String(it.comment).length > NOTE_INLINE_MAX) note = String(it.comment);
+        else read.push(it.comment);
+      }
+      var zebra = (i % 2 ? "zebra" : "");
+      h += '<tr class="' + zebra + '">'
         + '<td class="stripe" style="border-left-color:' + (GRADE_HEX[gnum(it.grade)] || SEV_HEX[it.sev] || "transparent") + '">'
           + nameCell(T, it) + '</td>'
         + '<td class="c">' + gradeChip(it.grade) + '</td>'
-        + '<td>' + sevIf(ctx, it) + '</td>'
+        + (hasSev ? '<td>' + sevIf(ctx, it) + '</td>' : "")
         + '<td>' + (it.defect ? esc(it.defect) : "") + (it.iso ? '<div class="code">ISO ' + esc(it.iso) + '</div>' : "") + '</td>'
-        + '<td>' + (it.cause ? esc(it.cause) : "") + '</td>'
+        + (hasCause ? '<td>' + (it.cause ? esc(it.cause) : "") + '</td>' : "")
         + '<td>' + (it.action ? '<b>' + esc(it.action) + '</b>' + prioTag(it)
             + (it.wo ? ' <span class="code">[' + esc(it.wo) + ']</span>' : "") + (read.length ? "<br>" : "") : "")
           + esc(read.join(" · ")) + planTag(T, it) + '</td></tr>';
+      /* Under its own row and inside the same stripe, so it is unmistakably
+         about the position above and not a new one. */
+      if (note) h += '<tr class="' + zebra + ' rnote"><td class="stripe" colspan="' + cols
+        + '" style="border-left-color:' + (GRADE_HEX[gnum(it.grade)] || SEV_HEX[it.sev] || "transparent") + '">'
+        + esc(note) + '</td></tr>';
     });
     return h + '</table>';
   }
@@ -2698,6 +2751,45 @@
     return best > floor ? Math.floor(best) : cut;
   }
 
+  /* A PHOTOGRAPH THAT NEVER ARRIVED MUST NOT PRINT AS A GREY RECTANGLE.
+
+     html2canvas rasterises whatever is laid out, and an <img> whose source
+     404s lays out at its box size with nothing in it. In a signed report that
+     is the worst kind of thing this project produces: a reader sees a blank
+     frame and cannot tell whether the photograph failed to print, or the
+     inspector photographed a blank plug, or something was removed. The
+     document already SAYS what is outstanding — the preliminary banner and the
+     evidence-gap block count the photographs that have not reached the office
+     — so a placeholder beside that sentence is a second, wordless, wrong
+     answer to a question already answered properly.
+
+     Every image is given until `wait` to decide, and the ones that failed are
+     taken out along with the figure and caption around them, before anything
+     is measured or rasterised — so the page count is the count of a document
+     with nothing missing from it. Not a timeout on the whole set: a slow
+     photograph and a dead one look identical for as long as the slow one is
+     still coming, and the only honest way to tell them apart is to wait. */
+  CMR.settleImages = async function (root, wait) {
+    var imgs = Array.prototype.slice.call((root || document).querySelectorAll("img"));
+    if (!imgs.length) return 0;
+    await Promise.all(imgs.map(function (im) {
+      if (im.complete) return null;
+      return new Promise(function (res) {
+        var done = false, fin = function () { if (!done) { done = true; res(); } };
+        im.addEventListener("load", fin, { once: true });
+        im.addEventListener("error", fin, { once: true });
+        setTimeout(fin, wait || 15000);
+      });
+    }));
+    var dropped = 0;
+    imgs.forEach(function (im) {
+      if (im.complete && im.naturalWidth > 0) return;
+      dropped++;
+      var fig = im.closest ? im.closest("figure") : null;
+      (fig || im).remove();
+    });
+    return dropped;
+  };
   CMR.paginate = async function (opts) {
     var holder = document.createElement("div");
     holder.id = "rptRoot";
@@ -2706,6 +2798,7 @@
     document.head.appendChild(st);
     holder.innerHTML = opts.sections.map(function(s){ return '<div class="secwrap">'+s.html+'</div>'; }).join("");
     document.body.appendChild(holder);
+    await CMR.settleImages(holder);
     await new Promise(function(r){ requestAnimationFrame(function(){ requestAnimationFrame(r); }); });
     try{
       var doc = new opts.jsPDF({unit:"pt",format:"a4"});
