@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=281">
+<link rel="manifest" href="manifest.webmanifest?v=282">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=281">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=281">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=281">
+<link rel="apple-touch-icon" href="icon-192.png?v=282">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=282">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=282">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -344,7 +344,14 @@
   .govr-t{font-size:13.5px;color:var(--ink);margin-bottom:8px;line-height:1.3;}
   .greq{margin:10px 0 4px;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--surface-2);}
   .greq-t{font-size:13px;color:var(--ink-2);line-height:1.35;margin-bottom:8px;}
-  .greq-wo{font-size:12.5px;color:var(--warn-ink);font-weight:650;margin-top:6px;}
+  /* A PROMPT, NOT AN ALARM. This said "WO required" in bold amber, and nothing
+     in the app requires a work order to save — GRADE.requires has no `wo` at
+     any grade, and the Save gate never asks for one. An inspector at the
+     machine read it as a block on a round they could not raise a work order
+     for anyway: that is the office's job, and raising it is what the finding
+     they are recording exists to trigger. So it reads as the note it is, in
+     the same grey as every other note. */
+  .greq-wo{font-size:12.5px;color:var(--muted);font-weight:500;margin-top:6px;}
   .greq-wo:empty{display:none;}
   /* THE MACHINE PHOTOGRAPHS. One row per required or offered category; a
      taken one shows its thumbnail, an untaken required one is unmistakably
@@ -2215,15 +2222,15 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=281"></script>
-<script src="upload-defaults.js?v=281"></script>
-<script src="hme.js?v=281"></script>
-<script src="mp-fc.js?v=281"></script>
-<script src="hme-cascade.js?v=281"></script>
-<script src="assets.js?v=281"></script>
-<script src="temp-limits.js?v=281"></script>
-<script src="normalize.js?v=281"></script>
-<script src="terms.js?v=281"></script>
+<script src="native.js?v=282"></script>
+<script src="upload-defaults.js?v=282"></script>
+<script src="hme.js?v=282"></script>
+<script src="mp-fc.js?v=282"></script>
+<script src="hme-cascade.js?v=282"></script>
+<script src="assets.js?v=282"></script>
+<script src="temp-limits.js?v=282"></script>
+<script src="normalize.js?v=282"></script>
+<script src="terms.js?v=282"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2242,25 +2249,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=281"></script>
-<script src="edits.js?v=281"></script>
-<script src="due.js?v=281"></script>
-<script src="wear.js?v=281"></script>
-<script src="wear-figs.js?v=281"></script>
-<script src="wear-map.js?v=281"></script>
-<script src="machine-photos.js?v=281"></script>
-<script src="machine-fig.js?v=281"></script>
-<script src="get.js?v=281"></script>
-<script src="points.js?v=281"></script>
-<script src="uc-points.js?v=281"></script>
-<script src="inspect-guide.js?v=281"></script>
-<script src="get-figs.js?v=281"></script>
-<script src="body-points.js?v=281"></script>
-<script src="body-map.js?v=281"></script>
-<script src="lube.js?v=281"></script>
-<script src="lube-overrides.js?v=281"></script>
-<script src="lube2027.js?v=281"></script>
-<script src="report-core.js?v=281"></script>
+<script src="grade.js?v=282"></script>
+<script src="edits.js?v=282"></script>
+<script src="due.js?v=282"></script>
+<script src="wear.js?v=282"></script>
+<script src="wear-figs.js?v=282"></script>
+<script src="wear-map.js?v=282"></script>
+<script src="machine-photos.js?v=282"></script>
+<script src="machine-fig.js?v=282"></script>
+<script src="get.js?v=282"></script>
+<script src="points.js?v=282"></script>
+<script src="uc-points.js?v=282"></script>
+<script src="inspect-guide.js?v=282"></script>
+<script src="get-figs.js?v=282"></script>
+<script src="body-points.js?v=282"></script>
+<script src="body-map.js?v=282"></script>
+<script src="lube.js?v=282"></script>
+<script src="lube-overrides.js?v=282"></script>
+<script src="lube2027.js?v=282"></script>
+<script src="report-core.js?v=282"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2481,7 +2488,7 @@ const I18N = {
     g_resp:"Responsible person / team", g_target:"Target date", g_opstat:"Equipment operating status",
     g_op_none:"— not stated —", g_op_run:"Running", g_op_res:"Running with restriction", g_op_stop:"Stopped",
     g_notify:"Supervisor / planner notified immediately",
-    g_wo_req:"No work order yet — WO required",
+    g_wo_req:"No work order raised for this yet",
     req_target:"a target date", req_comment:"a comment", req_closeup:"a close-up photograph of the defect or component",
     req_notify:"the notification tick", req_why:"a reason for setting it below the proposed 5",
     m_need_grade_t:"{g} needs more than a grade",
@@ -3046,7 +3053,7 @@ const I18N = {
     g_resp:"Ответственный / бригада", g_target:"Срок", g_opstat:"Состояние техники",
     g_op_none:"— не указано —", g_op_run:"В работе", g_op_res:"В работе с ограничением", g_op_stop:"Остановлена",
     g_notify:"Руководитель / планировщик уведомлён немедленно",
-    g_wo_req:"Заявки пока нет — требуется заявка",
+    g_wo_req:"Заявка на это ещё не создана",
     req_target:"срок", req_comment:"комментарий", req_closeup:"крупный план дефекта или узла",
     req_notify:"отметку об уведомлении", req_why:"причину оценки ниже предложенной 5",
     m_need_grade_t:"Для «{g}» нужна не только оценка",
@@ -11137,7 +11144,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="281";
+const BUILD="282";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
