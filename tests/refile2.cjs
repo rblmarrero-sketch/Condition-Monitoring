@@ -106,6 +106,46 @@ const ok = (c, n, d) => { console.log((c ? "  PASS  " : "  FAIL  ") + n + (d !==
      "the office shows it on the machine", office.machine.join(" | "));
   ok(office.onPoint.length === 1 && office.onPoint[0] === office.names[1],
      "  and no longer on the component", office.onPoint.join(" | "));
+
+  /* FILED AS THE MACHINE'S IS A PLACEMENT, NOT ONLY A MOVE.
+
+     A photograph already on the machine's position, filed as the machine's,
+     has NOT moved — and the first pass at reading the shared rule skipped it
+     on exactly that basis. It stayed on screen and fell out of the list that
+     carries the CATEGORY, so a left-side view uploaded as one was captioned
+     "uncategorised". `moved` decides only whether it leaves the position it
+     arrived on; it never decides whether the decision is honoured. */
+  const cat = await p.evaluate(px => {
+    /* IMPORTED, not poked into a derived record: rebuild() re-derives RECS
+       from their sources, so an item pushed onto the copy on screen is gone
+       the moment anything saves. importRecords is a source. */
+    const src = { equip: "TK146", date: "2026-06-11", type: "MP", cls: "HT", by: "S. Volkov",
+      items: [{ key: "4C", label: "LF" },
+              { key: "__general", general: 1, label: "Machine", photos: 1,
+                att: [{ attachmentId: "g1", seq: 1, category: "OVERVIEW",
+                        mediaType: "photo", storedName: "", serverObjectId: "" }] }] };
+    const nm = "TK146_OVERVIEW_11.06.2026_MP.jpg";
+    const folder = new Set([nm]);
+    window.CMDash.addPhoto(nm, px);
+    CMDrive.hasName = n => folder.has(n);
+    CMDrive.names = () => [...folder];
+    CMDrive.configured = () => true;
+    CMDrive.saveEdit = () => Promise.resolve({ ok: true });
+    window.CMDash.importRecords([src]);
+    const rk = "TK146|2026-06-11|MP";
+    /* Re-labelled, not moved: it is the machine's and stays the machine's. */
+    window.CMDash.setEdits([{ key: rk, by: "R", at: new Date().toISOString(),
+      assign: { [nm]: { general: 1, cat: "LEFT" } } }]);
+    const r2 = RECS.find(x => ekOf(x) === rk);
+    const m = r2 ? generalMedia(r2).find(x => x.name === nm) : null;
+    return { name: nm, cat: m && m.cat, listed: !!m,
+             shown: (function () { try { return edMachineMedia(r2).med.map(z => z.cat); } catch (e) { return ["(err) " + e.message]; } })() };
+  }, PX1);
+  ok(cat.listed, "a machine photograph re-labelled in the office is still the machine's", cat.name);
+  ok(cat.cat === "LEFT", "  and carries what the office said it is of", String(cat.cat));
+  ok(cat.shown.indexOf("LEFT") >= 0,
+     "  so the machine card captions it, instead of calling it uncategorised",
+     JSON.stringify(cat.shown));
   ok(errs.length === 0, "no page errors on the office", errs.slice(0, 3).join(" | ") || "none");
   await p.close();
 

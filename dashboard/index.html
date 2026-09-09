@@ -3464,17 +3464,17 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=287"></script>
-<script src="../mobile/hme.js?v=287"></script>
-<script src="../mobile/mp-fc.js?v=287"></script>
-<script src="../mobile/hme-cascade.js?v=287"></script>
-<script src="../mobile/temp-limits.js?v=287"></script>
+<script src="../data/magnetic_plug.js?v=288"></script>
+<script src="../mobile/hme.js?v=288"></script>
+<script src="../mobile/mp-fc.js?v=288"></script>
+<script src="../mobile/hme-cascade.js?v=288"></script>
+<script src="../mobile/temp-limits.js?v=288"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=287"></script>
-<script src="../mobile/normalize.js?v=287"></script>
-<script src="../mobile/terms.js?v=287"></script>
+<script src="../mobile/assets.js?v=288"></script>
+<script src="../mobile/normalize.js?v=288"></script>
+<script src="../mobile/terms.js?v=288"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3493,19 +3493,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=287"></script>
-<script src="../mobile/edits.js?v=287"></script>
-<script src="../mobile/due.js?v=287"></script>
-<script src="../mobile/wear.js?v=287"></script>
-<script src="../mobile/wear-map.js?v=287"></script>
-<script src="../mobile/lube.js?v=287"></script>
-<script src="../mobile/lube-overrides.js?v=287"></script>
-<script src="../mobile/lube2027.js?v=287"></script>
-<script src="../mobile/lube-tds.js?v=287"></script>
+<script src="../mobile/grade.js?v=288"></script>
+<script src="../mobile/edits.js?v=288"></script>
+<script src="../mobile/due.js?v=288"></script>
+<script src="../mobile/wear.js?v=288"></script>
+<script src="../mobile/wear-map.js?v=288"></script>
+<script src="../mobile/lube.js?v=288"></script>
+<script src="../mobile/lube-overrides.js?v=288"></script>
+<script src="../mobile/lube2027.js?v=288"></script>
+<script src="../mobile/lube-tds.js?v=288"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=287"></script>
-<script src="../mobile/machine-photos.js?v=287"></script>
+<script src="../mobile/upload-defaults.js?v=288"></script>
+<script src="../mobile/machine-photos.js?v=288"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3514,17 +3514,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=287"></script>
-<script src="../mobile/get.js?v=287"></script>
-<script src="../mobile/points.js?v=287"></script>
-<script src="../mobile/uc-points.js?v=287"></script>
-<script src="../mobile/inspect-guide.js?v=287"></script>
-<script src="../mobile/get-figs.js?v=287"></script>
-<script src="../mobile/body-points.js?v=287"></script>
-<script src="../mobile/body-map.js?v=287"></script>
-<script src="../mobile/jspdf.umd.min.js?v=287"></script>
-<script src="../mobile/html2canvas.min.js?v=287"></script>
-<script src="../mobile/report-core.js?v=287"></script>
+<script src="../mobile/machine-fig.js?v=288"></script>
+<script src="../mobile/get.js?v=288"></script>
+<script src="../mobile/points.js?v=288"></script>
+<script src="../mobile/uc-points.js?v=288"></script>
+<script src="../mobile/inspect-guide.js?v=288"></script>
+<script src="../mobile/get-figs.js?v=288"></script>
+<script src="../mobile/body-points.js?v=288"></script>
+<script src="../mobile/body-map.js?v=288"></script>
+<script src="../mobile/jspdf.umd.min.js?v=288"></script>
+<script src="../mobile/html2canvas.min.js?v=288"></script>
+<script src="../mobile/report-core.js?v=288"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -7631,12 +7631,19 @@ function assignPlan(rec){
         if(d.exclude) plan.excluded.set(m.name, d);
         /* CMEdits.fileOf is the rule, and the phone reads the same one — this
            used to be the only implementation of it, so a photograph the office
-           moved stayed where it was captured on every phone in the fleet. */
+           moved stayed where it was captured on every phone in the fleet.
+
+           FILED AS THE MACHINE'S IS A PLACEMENT, NOT ONLY A MOVE. A photograph
+           already on the machine's position and filed as the machine's has not
+           moved, and skipping it on that basis dropped it out of the general
+           list — where the CATEGORY lives. It went on being shown, off the
+           position's own list, labelled "uncategorised": a left-side view of a
+           machine, uploaded as one, captioned as nothing. `moved` decides only
+           whether it leaves the position it arrived on. */
         const f=CMEdits.fileOf(a, m.name, i.key, !!i.general);
-        if(!f.moved) return;
-        plan.moved.add(m.name);
+        if(f.moved) plan.moved.add(m.name);
         if(f.general) plan.general.push(Object.assign({},m,{from:i.key, cat:f.cat}));
-        else { const l=plan.toPoint.get(f.key)||[]; l.push(m); plan.toPoint.set(f.key,l); }
+        else if(f.moved){ const l=plan.toPoint.get(f.key)||[]; l.push(m); plan.toPoint.set(f.key,l); }
       });
     });
     /* A PHOTOGRAPH FOUND IN THE FOLDER AND FILED BY HAND.
@@ -15892,8 +15899,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=287"></script>
-<script src="sync-adapter.js?v=287"></script>
-<script src="report.js?v=287"></script>
+<script src="drive.js?v=288"></script>
+<script src="sync-adapter.js?v=288"></script>
+<script src="report.js?v=288"></script>
 </body>
 </html>
