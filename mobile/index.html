@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=283">
+<link rel="manifest" href="manifest.webmanifest?v=284">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=283">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=283">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=283">
+<link rel="apple-touch-icon" href="icon-192.png?v=284">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=284">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=284">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2222,15 +2222,15 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=283"></script>
-<script src="upload-defaults.js?v=283"></script>
-<script src="hme.js?v=283"></script>
-<script src="mp-fc.js?v=283"></script>
-<script src="hme-cascade.js?v=283"></script>
-<script src="assets.js?v=283"></script>
-<script src="temp-limits.js?v=283"></script>
-<script src="normalize.js?v=283"></script>
-<script src="terms.js?v=283"></script>
+<script src="native.js?v=284"></script>
+<script src="upload-defaults.js?v=284"></script>
+<script src="hme.js?v=284"></script>
+<script src="mp-fc.js?v=284"></script>
+<script src="hme-cascade.js?v=284"></script>
+<script src="assets.js?v=284"></script>
+<script src="temp-limits.js?v=284"></script>
+<script src="normalize.js?v=284"></script>
+<script src="terms.js?v=284"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2249,25 +2249,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=283"></script>
-<script src="edits.js?v=283"></script>
-<script src="due.js?v=283"></script>
-<script src="wear.js?v=283"></script>
-<script src="wear-figs.js?v=283"></script>
-<script src="wear-map.js?v=283"></script>
-<script src="machine-photos.js?v=283"></script>
-<script src="machine-fig.js?v=283"></script>
-<script src="get.js?v=283"></script>
-<script src="points.js?v=283"></script>
-<script src="uc-points.js?v=283"></script>
-<script src="inspect-guide.js?v=283"></script>
-<script src="get-figs.js?v=283"></script>
-<script src="body-points.js?v=283"></script>
-<script src="body-map.js?v=283"></script>
-<script src="lube.js?v=283"></script>
-<script src="lube-overrides.js?v=283"></script>
-<script src="lube2027.js?v=283"></script>
-<script src="report-core.js?v=283"></script>
+<script src="grade.js?v=284"></script>
+<script src="edits.js?v=284"></script>
+<script src="due.js?v=284"></script>
+<script src="wear.js?v=284"></script>
+<script src="wear-figs.js?v=284"></script>
+<script src="wear-map.js?v=284"></script>
+<script src="machine-photos.js?v=284"></script>
+<script src="machine-fig.js?v=284"></script>
+<script src="get.js?v=284"></script>
+<script src="points.js?v=284"></script>
+<script src="uc-points.js?v=284"></script>
+<script src="inspect-guide.js?v=284"></script>
+<script src="get-figs.js?v=284"></script>
+<script src="body-points.js?v=284"></script>
+<script src="body-map.js?v=284"></script>
+<script src="lube.js?v=284"></script>
+<script src="lube-overrides.js?v=284"></script>
+<script src="lube2027.js?v=284"></script>
+<script src="report-core.js?v=284"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -11146,7 +11146,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="283";
+const BUILD="284";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -12278,10 +12278,20 @@ async function syncNow(manual){
           // actions, who and when. Once it lands the dashboard has the inspection
           // and the team's due list is right, even if the photographs are still
           // climbing out over the next ten minutes.
-          const meta={type:"cm-inspection-entries",version:2,records:[recToExport(rec)]};
-          payload=[{name:`${rec.equip}_${ddmmyyyy(rec.date)}_${rec.type}.json`,
-                    blob:new Blob([JSON.stringify(meta,null,2)],{type:"application/json"}),
-                    type:"application/json"}];
+          /* THE NAMES ARE WORKED OUT BEFORE THE ROUND IS WRITTEN DOWN.
+
+             filesForRecord() is what decides what each photograph is called
+             and stamps that name onto its manifest entry — and the sidecar
+             used to be serialised on the line above it. So every att entry
+             that has ever left this phone carried storedName:"", the one
+             field the manifest exists for. The office was left predicting
+             names again, and for a machine photograph — filed by category,
+             on a position keyed MACHINE — the prediction could not match, so
+             files sitting in the folder read as never having arrived.
+
+             Same order on the wire: the sidecar still goes first. It is
+             merely written after there is something true to write. */
+          const files=[];
           for(const f of await filesForRecord(rec)){
             /* THE BYTES THAT ACTUALLY LEAVE, HASHED AS THEY LEAVE.
 
@@ -12298,9 +12308,17 @@ async function syncNow(manual){
                wire hash is what the receipt can be judged against, and only
                the wire hash. */
             const wire=await maybeShrink(f.blob,f.name);
-            payload.push({name:f.name, blob:wire, type:f.blob.type, aid:f.aid||"",
-                          wireSha:await sha256Of(wire), wireSize:wire.size});
+            files.push({name:f.name, blob:wire, type:f.blob.type, aid:f.aid||"",
+                        wireSha:await sha256Of(wire), wireSize:wire.size});
           }
+          const meta={type:"cm-inspection-entries",version:2,records:[recToExport(rec)]};
+          payload=[{name:`${rec.equip}_${ddmmyyyy(rec.date)}_${rec.type}.json`,
+                    blob:new Blob([JSON.stringify(meta,null,2)],{type:"application/json"}),
+                    type:"application/json"}].concat(files);
+          /* The names it just learned are kept, so a resume after a kill does
+             not have to work them out a second time — and so this phone's own
+             copy of the round says what its photographs are called. */
+          try{ await dbPut(rec); }catch(e){}
         }catch(e){ lastErr="Could not read "+rec.equip+": "+(e.message||e); continue; }
       }
       const errs=[];

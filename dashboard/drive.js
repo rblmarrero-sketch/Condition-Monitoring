@@ -420,7 +420,15 @@
           const nm = key ? key.split("/").pop() : String((e && e.storedName) || "");
           if (nm && index[nm] && !(nm in fetched)) names.push(nm);
         }
-        const base = window.CMDash.photoBase(it, rec);
+        /* EVERY name the point could be under, not just the first.
+           A machine-level photograph is filed by its category — OVERVIEW,
+           PLATE, LEFT — while the point itself is keyed MACHINE, so the first
+           candidate is the one name those files are never under. This asked
+           for that one and stopped, and the pictures were never fetched: not
+           shown, not classifiable, and counted as never having arrived. */
+        const bases = window.CMDash.photoBases
+          ? window.CMDash.photoBases(it, rec)
+          : [window.CMDash.photoBase(it, rec)];
         // The same candidate list the history uses, so a record whose photos were
         // kept under "~DEVICE" after a two-phone clash still gets them fetched.
         // The whole range the phone can produce, not the first five: it stopped
@@ -428,11 +436,13 @@
         // and a clip had three photos and the clip left behind on Drive. Every
         // candidate is checked against the index before it becomes a request,
         // so a longer list costs lookups, not round trips.
-        for (const nm of window.CMDash.photoNames(base, rec)) {
-          if (index[nm] && !(nm in fetched)) names.push(nm);
-        }
-        for (const nm of window.CMDash.videoNames(base, rec)) {
-          if (index[nm] && !(nm in fetched)) names.push(nm);
+        for (const base of bases) {
+          for (const nm of window.CMDash.photoNames(base, rec)) {
+            if (index[nm] && !(nm in fetched)) names.push(nm);
+          }
+          for (const nm of window.CMDash.videoNames(base, rec)) {
+            if (index[nm] && !(nm in fetched)) names.push(nm);
+          }
         }
       }
       const stem = `${rec.equip}_${(rec.date || "").split("-").reverse().join(".")}_${rec.type}_SIGN`;

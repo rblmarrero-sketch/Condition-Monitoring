@@ -198,7 +198,11 @@ async function installed(p, APP) {
     await p.waitForTimeout(1500);
     const rows = await p.evaluate(() => (document.getElementById('yardList') || {}).innerText || '');
     const okPhrase = (await word(p, 'rdy_bld_ok', { n: '0', t: '0' })).split('0')[0].trim();
-    const failPhrase = (await word(p, 'rdy_bld_fail', { t: 'T', why: 'W', n: 'N' })).split('T')[0].trim();
+    /* The line names the host it asked, so the expected phrase has to carry the
+       same one the card will render — the app's own origin, not the mock's.
+       Left as {h}, this asserted against a placeholder and could never match. */
+    const failHost = (await upd(p)).host || (await p.evaluate(() => location.host));
+    const failPhrase = (await word(p, 'rdy_bld_fail', { t: 'T', why: 'W', n: 'N', h: failHost })).split('T')[0].trim();
     ok('it does not claim the newest build on the strength of a flag', rows.indexOf(okPhrase) < 0, okPhrase + ' | ' + rows.replace(/\s+/g, ' ').slice(0, 160));
     ok('  it says the server could not be reached, with the reason', rows.indexOf(failPhrase) >= 0 && rows.indexOf((await upd(p)).why) >= 0, failPhrase);
     FAIL = null;

@@ -3460,17 +3460,17 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=283"></script>
-<script src="../mobile/hme.js?v=283"></script>
-<script src="../mobile/mp-fc.js?v=283"></script>
-<script src="../mobile/hme-cascade.js?v=283"></script>
-<script src="../mobile/temp-limits.js?v=283"></script>
+<script src="../data/magnetic_plug.js?v=284"></script>
+<script src="../mobile/hme.js?v=284"></script>
+<script src="../mobile/mp-fc.js?v=284"></script>
+<script src="../mobile/hme-cascade.js?v=284"></script>
+<script src="../mobile/temp-limits.js?v=284"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=283"></script>
-<script src="../mobile/normalize.js?v=283"></script>
-<script src="../mobile/terms.js?v=283"></script>
+<script src="../mobile/assets.js?v=284"></script>
+<script src="../mobile/normalize.js?v=284"></script>
+<script src="../mobile/terms.js?v=284"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3489,19 +3489,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=283"></script>
-<script src="../mobile/edits.js?v=283"></script>
-<script src="../mobile/due.js?v=283"></script>
-<script src="../mobile/wear.js?v=283"></script>
-<script src="../mobile/wear-map.js?v=283"></script>
-<script src="../mobile/lube.js?v=283"></script>
-<script src="../mobile/lube-overrides.js?v=283"></script>
-<script src="../mobile/lube2027.js?v=283"></script>
-<script src="../mobile/lube-tds.js?v=283"></script>
+<script src="../mobile/grade.js?v=284"></script>
+<script src="../mobile/edits.js?v=284"></script>
+<script src="../mobile/due.js?v=284"></script>
+<script src="../mobile/wear.js?v=284"></script>
+<script src="../mobile/wear-map.js?v=284"></script>
+<script src="../mobile/lube.js?v=284"></script>
+<script src="../mobile/lube-overrides.js?v=284"></script>
+<script src="../mobile/lube2027.js?v=284"></script>
+<script src="../mobile/lube-tds.js?v=284"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=283"></script>
-<script src="../mobile/machine-photos.js?v=283"></script>
+<script src="../mobile/upload-defaults.js?v=284"></script>
+<script src="../mobile/machine-photos.js?v=284"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3510,17 +3510,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=283"></script>
-<script src="../mobile/get.js?v=283"></script>
-<script src="../mobile/points.js?v=283"></script>
-<script src="../mobile/uc-points.js?v=283"></script>
-<script src="../mobile/inspect-guide.js?v=283"></script>
-<script src="../mobile/get-figs.js?v=283"></script>
-<script src="../mobile/body-points.js?v=283"></script>
-<script src="../mobile/body-map.js?v=283"></script>
-<script src="../mobile/jspdf.umd.min.js?v=283"></script>
-<script src="../mobile/html2canvas.min.js?v=283"></script>
-<script src="../mobile/report-core.js?v=283"></script>
+<script src="../mobile/machine-fig.js?v=284"></script>
+<script src="../mobile/get.js?v=284"></script>
+<script src="../mobile/points.js?v=284"></script>
+<script src="../mobile/uc-points.js?v=284"></script>
+<script src="../mobile/inspect-guide.js?v=284"></script>
+<script src="../mobile/get-figs.js?v=284"></script>
+<script src="../mobile/body-points.js?v=284"></script>
+<script src="../mobile/body-map.js?v=284"></script>
+<script src="../mobile/jspdf.umd.min.js?v=284"></script>
+<script src="../mobile/html2canvas.min.js?v=284"></script>
+<script src="../mobile/report-core.js?v=284"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -7275,13 +7275,25 @@ function renderActions(){
   const pg=paged("actions", units, renderActions, PAGE_SIZE_ACT);
   if($("actShown")) $("actShown").innerHTML=
     `<span>${esc(t("shown_n",{n:pg.rows.length, of:byUnit.size}))} \u00b7 ${esc(String(rows.length))}</span>`;
+  /* How many of the groups the reader can actually SEE are folded. The button
+     used to read its label off aOpenUnits — the set of machines opened BY HAND
+     — which is empty on a page whose groups are all open because they are all
+     critical. It said "Expand all" over a fully expanded list, and pressing it
+     only filled the set: a control that describes the wrong thing and then
+     does nothing. Counted here, from the same flag that draws each group. */
+  let shutSeen=0;
   $("actionTbl").innerHTML=pg.rows.map(([unit,list])=>{
     const worst=list.map(({r,i})=>sevOf(r,i)).sort((a,b)=>sevRank(b)-sevRank(a))[0];
     const a=ASSET_BY[unit]||{};
     const late=list.filter(({i})=>fOverdue(i)).length;
-    /* A machine with something late, or something critical, is never folded:
-       the whole point of the page is that those are seen. */
-    const shut = bigList && !late && sevRank(worst) < 3 && !aOpenUnits.has(unit);
+    /* A machine with something late, or something critical, is never folded
+       BY DEFAULT: the whole point of the page is that those are seen. A reader
+       who folds one anyway is obeyed — aFold holds the choices they made, so
+       clicking the header of an always-open group closes it instead of being
+       swallowed. */
+    const shut = aFold.has(unit) ? !!aFold.get(unit)
+               : (bigList && !late && sevRank(worst) < 3);
+    if(shut) shutSeen++;
     return `<div class="wlu${shut?" shut":""}" data-unit="${esc(unit)}">
       <button type="button" class="wlh" data-unit="${esc(unit)}"
         aria-expanded="${shut?"false":"true"}">
@@ -7323,23 +7335,30 @@ function renderActions(){
   /* Opening a machine is remembered, so a save that repaints the list does not
      fold everything the reader had just opened. */
   $("actionTbl").querySelectorAll(".wlh[data-unit]").forEach(h=>h.onclick=()=>{
-    const u=h.dataset.unit;
-    if(aOpenUnits.has(u)) aOpenUnits.delete(u); else aOpenUnits.add(u);
+    /* Read the group's state off the button that draws it, not off a set that
+       only knows about half the reasons a group is open. */
+    aFold.set(h.dataset.unit, h.getAttribute("aria-expanded")==="true");
     renderActions();
   });
+  /* Says what the page is, and does what it says: with anything folded it
+     opens everything, otherwise it closes everything. */
   if(bigList) $("actionTbl").insertAdjacentHTML("afterbegin",
     `<div class="wlall"><button type="button" id="wlAll">${
-      esc(aOpenUnits.size ? t("a_fold") : t("a_unfold"))}</button></div>`);
+      esc(shutSeen ? t("a_unfold") : t("a_fold"))}</button></div>`);
   const all=$("wlAll");
   if(all) all.onclick=()=>{
-    if(aOpenUnits.size) aOpenUnits.clear(); else byUnit.forEach((_,u)=>aOpenUnits.add(u));
+    const open=shutSeen>0;
+    byUnit.forEach((_,u)=>aFold.set(u, !open));
     renderActions();
   };
 }
 /* The register's filter lives in the URL-free state the rest of the page uses,
    so the cards and the segmented control cannot disagree about it. */
 let aFilterState="open";
-const aOpenUnits=new Set();
+/* unit -> true FOLDED, false OPEN. A choice the reader made, kept apart from
+   the default so a repaint cannot undo it, and so the default can change
+   (a finding falls overdue) without overruling them. */
+const aFold=new Map();
 const aFilt=()=>aFilterState;
 function setAFilt(v){ aFilterState=v; renderActions(); try{ urlWrite(false); }catch(e){} }
 $("csvBtn").onclick=()=>{
@@ -7373,6 +7392,11 @@ $("csvBtn").onclick=()=>{
 let folderPhotos=null;   // name -> objectURL, from the folder pick or from Drive
 let folderName="";       // for the status chip
 // The agreed file name for an item's photo, minus the extension.
+/* The categories a machine photograph can be of — the phone's list less the
+   ones that belong to a point. Declared here because photoBases() reads it:
+   it used to sit beside the photo editor, six thousand lines further down,
+   and a `const` is not hoisted. */
+const MACHINE_CATS=["OVERVIEW","LEFT","RIGHT","BODY","GET","PLATE","EXTRA"];
 function photoBase(it,rec){ return photoBases(it,rec)[0]; }
 /* BOTH names a photograph could be filed under, the likelier one first.
 
@@ -7415,7 +7439,41 @@ function photoBases(it,rec){
   const d=(rec.date||"").split("-").reverse().join("."), k=(it.key==null?"":String(it.key));
   const tail=`_${d}_${rec.type}`;
   const dot=`${rec.equip}.${k}${tail}`, us=`${rec.equip}_${k.replace(/\./g,"-")}${tail}`;
-  return usesRegister(rec.type) ? (dot===us?[dot]:[dot,us]) : (us===dot?[us]:[us,dot]);
+  const base = usesRegister(rec.type) ? (dot===us?[dot]:[dot,us]) : (us===dot?[us]:[us,dot]);
+  /* THE MACHINE'S OWN PHOTOGRAPHS ARE FILED BY CATEGORY, NOT BY "MACHINE".
+
+     The phone keeps the overview, the two sides, the tray, the GET assembly
+     and the plate on one pseudo-position, and writes each file under the
+     CATEGORY it was taken as:
+
+         EX001_OVERVIEW_08.09.2026_FC_1.jpg
+         EX001_PLATE_08.09.2026_FC_2.jpg
+
+     Ingest keys that position MACHINE so nothing counts it as a point, and
+     this then looked for EX001_MACHINE_… — a name the phone writes only when
+     a photograph has no category at all. So on Data & Sync the machine
+     photographs of seven rounds read as "not arrived" while every one of them
+     was sitting in the folder, and the same prediction is what drive.js asks
+     for, so they were never even fetched to be looked at.
+
+     The categories the round itself declares come first, because they are a
+     fact rather than a guess; the rest of the list follows, because a round
+     written before categories existed carries none. Finding a file is a
+     LOOKUP — every candidate is checked against the index before it becomes a
+     request — so offering the whole set costs lookups, not round trips.
+
+     The uncategorised form leads, and in the phone's own spelling — underscore,
+     never the register's dot — because photoBase() takes the first of this
+     list to NAME a photograph added from a desk, and a name nothing else looks
+     for is how a picture uploaded here becomes invisible here. */
+  if(!(it.general || k==="MACHINE" || k==="__general")) return base;
+  const out=[], seen=new Set();
+  const push=n=>{ if(n && !seen.has(n)){ seen.add(n); out.push(n); } };
+  push(`${rec.equip}_MACHINE${tail}`);
+  attOf(it).map(e=>String((e&&e.category)||"").toUpperCase()).filter(Boolean)
+    .concat(MACHINE_CATS).forEach(c=>push(`${rec.equip}_${c}${tail}`));
+  base.forEach(push);
+  return out;
 }
 /* Every name a photo could be under, best first. The "~DEVICE" copies exist
    because two phones inspected the same unit on the same day and the script kept
@@ -7866,6 +7924,25 @@ function expectedNames(it,rec,n){
      photographs, by name, are missing". */
   const man=attOf(it).map(attName).filter(Boolean);
   if(man.length) return man.slice(0,n);
+  /* A MANIFEST THAT NAMES NOTHING IS NOT A MANIFEST.
+
+     Every round in the folder carries att entries with an empty storedName —
+     the phone serialised the sidecar before it worked the names out — so the
+     line above falls through, and for a machine photograph what follows must
+     still be a name the phone could have written. Its category is on the
+     manifest even when its name is not, so the shortfall is named per
+     category, in the order the attachments were taken. */
+  const gen = it.general || it.key==="MACHINE" || it.key==="__general";
+  if(gen && rec.equip){
+    const d=(rec.date||"").split("-").reverse().join(".");
+    const es=attOf(it).slice(0,n);
+    if(es.length) return es.map((e,ix)=>{
+      const c=String((e&&e.category)||"MACHINE").toUpperCase();
+      const seq=Number(e&&e.seq)||(ix+1);
+      const b=`${rec.equip}_${c}_${d}_${rec.type}`;
+      return n<=1 && seq<=1 ? `${b}.jpg` : `${b}_${seq}.jpg`;
+    });
+  }
   const b=photoBases(it,rec)[0], out=[];
   if(!b) return out;                 // no key, so no name anybody could search for
   /* The phone's own rule: <base>.jpg when a point has exactly one photograph,
@@ -7881,7 +7958,7 @@ function photoSrc(it,rec){ const m=mediaOf(it,rec); return m.length?m[0].src:nul
 /* Bridge for drive.js — RECS, imported and folderPhotos are `let`s in this script,
    so they are not reachable as window properties from another file. */
 window.CMDash={
-  photoBase, photoNames, videoNames, mediaOf, generalMedia, evidenceGap,
+  photoBase, photoBases, photoNames, videoNames, mediaOf, generalMedia, evidenceGap,
   addPhoto(name,url){ (folderPhotos ||= {})[name]=url; },
   importRecords(recs){
     recs.forEach(r=>{ const k=`${r.equip}|${r.date}|${r.type}`;
@@ -9233,9 +9310,6 @@ function edCatLabel(c){
   if(!c) return "";
   try{ const D=window.CMR&&CMR.dict; return (D&&D[lang]&&D[lang]["cat_"+c])||(D&&D.en&&D.en["cat_"+c])||c; }catch(e){ return c; }
 }
-/* The categories a machine photograph can be of — the phone's list less the
-   ones that belong to a point. */
-const MACHINE_CATS=["OVERVIEW","LEFT","RIGHT","BODY","GET","PLATE","EXTRA"];
 /* The name the phone would have given it: <UNIT>_<CAT>_<dd.mm.yyyy>_<TYPE>,
    then _2, _3 for a second of the same kind. */
 function machineMediaName(rec, cat, file){
@@ -15738,8 +15812,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=283"></script>
-<script src="sync-adapter.js?v=283"></script>
-<script src="report.js?v=283"></script>
+<script src="drive.js?v=284"></script>
+<script src="sync-adapter.js?v=284"></script>
+<script src="report.js?v=284"></script>
 </body>
 </html>
