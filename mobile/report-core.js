@@ -138,6 +138,59 @@
 #rptRoot .v-ok{background:#eef6ef;color:#146b2c;}
 #rptRoot .v-watch{background:#fdf5e3;color:#8a6100;}
 #rptRoot .v-act{background:#fcecea;color:#98201a;}
+/* THE CONDITION-RATING STRIP — the reference layout's rating/level/decision
+   block, compact enough to sit on a page that already holds a drawing. One
+   row: the numeric rating (the single source), the plain word, the decision,
+   and the scale line beneath so the number is never colour-alone. */
+#rptRoot .rrate{display:flex;align-items:stretch;gap:0;margin-top:11px;
+  border:1px solid #d7dde1;border-radius:5px;overflow:hidden;}
+#rptRoot .rrate .rc{padding:5px 11px;border-right:1px solid #e4e9ec;}
+#rptRoot .rrate .rc:last-child{border-right:0;flex:1;}
+#rptRoot .rrate .rk{font-size:8px;font-weight:700;letter-spacing:.13em;
+  color:#7b858e;text-transform:uppercase;}
+#rptRoot .rrate .rv{font-size:12.5px;font-weight:750;font-variant-numeric:tabular-nums;
+  line-height:1.25;}
+#rptRoot .rrate .rd{border-left:5px solid #16242c;}
+#rptRoot .rscale{font-size:8.5px;color:#7b858e;margin-top:4px;letter-spacing:.02em;}
+#rptRoot .rscale b{color:#3d474f;font-weight:700;}
+/* THE DATA · EVIDENCE · REVIEW · APPROVAL strip — one honest row: what the
+   office holds, not what it approves. A synchronised round is not approved,
+   and this says so. */
+#rptRoot .sstrip{display:flex;border:1px solid #d7dde1;border-radius:5px;
+  overflow:hidden;margin-top:14px;}
+#rptRoot .sstrip .sc{flex:1;padding:5px 10px;border-right:1px solid #e4e9ec;}
+#rptRoot .sstrip .sc:last-child{border-right:0;}
+#rptRoot .sstrip .sk{font-size:8px;font-weight:700;letter-spacing:.13em;
+  color:#7b858e;text-transform:uppercase;}
+#rptRoot .sstrip .sv{font-size:9.5px;font-weight:650;margin-top:1px;}
+#rptRoot .sstrip .sv.pend{color:#8a6100;}
+#rptRoot .sstrip .sv.ok{color:#146b2c;}
+/* THE APPROVAL / SIGN-OFF TABLE — three roles, the reference's own. The
+   technician's line is filled from the record; review and approval stay open
+   lines, because the app has no field that records them and inventing one
+   would be the false reassurance this project exists to prevent. */
+#rptRoot .appr{width:100%;border-collapse:collapse;margin-top:15px;
+  font-size:9px;}
+#rptRoot .appr th{text-align:left;font-size:8px;font-weight:700;
+  letter-spacing:.11em;color:#7b858e;text-transform:uppercase;
+  border-bottom:1.5px solid #c4ccd1;padding:0 8px 3px;}
+#rptRoot .appr td{border-bottom:1px solid #e4e9ec;padding:6px 8px;
+  vertical-align:bottom;}
+#rptRoot .appr td.rl{font-weight:700;color:#3d474f;white-space:nowrap;}
+#rptRoot .appr td .sg{display:inline-block;min-width:130px;border-bottom:1px solid #98a2a9;
+  height:13px;}
+#rptRoot .appr td .nm{font-weight:650;}
+/* THE MAINTENANCE-ACTION STRIP — recorded action, direct cause, and the
+   control fields (owner, work order, due), each honest as "Not recorded"
+   when the round does not carry it. */
+#rptRoot .mact{display:flex;flex-wrap:wrap;gap:3px 20px;margin-top:12px;
+  padding:7px 11px;border:1px solid #d7dde1;border-radius:5px;
+  background:#f6f8f9;}
+#rptRoot .mact .f{font-size:9.5px;}
+#rptRoot .mact .f i{font-style:normal;color:#7b858e;letter-spacing:.08em;
+  text-transform:uppercase;font-size:8px;display:block;}
+#rptRoot .mact .f b{font-weight:700;}
+#rptRoot .mact .miss{color:#8a6100;font-weight:650;}
 
 /* undercarriage measurement grid — two columns of readings, not one long list,
    and both halves in ONE table so a row is a full-width band. See the comment
@@ -665,6 +718,25 @@
          where it is drawn. */
       st_mark:"PRELIMINARY",
       f_status:"Standing",
+      rr_report:"REPORT",
+      rr_rating:"CONDITION RATING", rr_level:"LEVEL", rr_decision:"DECISION",
+      rr_scale:"Condition scale",
+      rr_none:"Not rated",
+      dec_1:"Continue normal monitoring",
+      dec_2:"Monitor at the next planned inspection",
+      dec_3:"Plan corrective work",
+      dec_4:"Repair soon; control operation",
+      dec_5:"Maintenance decision required",
+      dec_0:"No condition rating recorded",
+      ss_data:"DATA", ss_evidence:"EVIDENCE", ss_review:"REVIEW", ss_approval:"APPROVAL",
+      ss_pending:"Pending", ss_recv:"{r}/{e} received", ss_ev_none:"None expected",
+      ss_delivered:"Received", ss_held:"On the phone",
+      ap_role:"ROLE", ap_name:"NAME", ap_status:"STATUS", ap_date:"DATE / SIGNATURE",
+      ap_tech:"CM Technician", ap_rel:"Reliability Engineer", ap_sup:"Maintenance Supervisor",
+      ap_tech_s:"Inspection complete", ap_rel_s:"Reviewed / returned",
+      ap_sup_s:"Approved / work required",
+      ma_head:"Maintenance action", ma_action:"Recorded action", ma_cause:"Direct cause",
+      ma_owner:"Owner", ma_wo:"Work order", ma_due:"Due date", ma_none:"Not recorded",
       by_who:"Inspected by", sup:"Verified by", nosign:"not signed off",
       gps:"Location", none_att:"None flagged.",
       /* What a machine photograph is of. */
@@ -774,6 +846,25 @@
       st_undel_s:"ещё не получен офисом",
       st_mark:"PRELIMINARY",
       f_status:"Статус",
+      rr_report:"ОТЧЁТ",
+      rr_rating:"ОЦЕНКА СОСТОЯНИЯ", rr_level:"УРОВЕНЬ", rr_decision:"РЕШЕНИЕ",
+      rr_scale:"Шкала состояния",
+      rr_none:"Без оценки",
+      dec_1:"Продолжать обычный контроль",
+      dec_2:"Проверить на следующем плановом осмотре",
+      dec_3:"Запланировать корректирующие работы",
+      dec_4:"Скорый ремонт; ограничить эксплуатацию",
+      dec_5:"Требуется решение по обслуживанию",
+      dec_0:"Оценка состояния не записана",
+      ss_data:"ДАННЫЕ", ss_evidence:"ФОТО", ss_review:"ПРОВЕРКА", ss_approval:"УТВЕРЖДЕНИЕ",
+      ss_pending:"Ожидает", ss_recv:"{r}/{e} получено", ss_ev_none:"Не ожидается",
+      ss_delivered:"Получено", ss_held:"На телефоне",
+      ap_role:"РОЛЬ", ap_name:"ИМЯ", ap_status:"СТАТУС", ap_date:"ДАТА / ПОДПИСЬ",
+      ap_tech:"Техник CM", ap_rel:"Инженер по надёжности", ap_sup:"Мастер по обслуживанию",
+      ap_tech_s:"Осмотр завершён", ap_rel_s:"Проверено / возвращено",
+      ap_sup_s:"Утверждено / требуется работа",
+      ma_head:"Действие по обслуживанию", ma_action:"Записанное действие", ma_cause:"Прямая причина",
+      ma_owner:"Ответственный", ma_wo:"Наряд-заказ", ma_due:"Срок", ma_none:"Не записано",
       by_who:"Осмотр выполнил", sup:"Проверил", nosign:"не подписано",
       gps:"Координаты", none_att:"Не отмечено.",
       cat_OVERVIEW:"Общий вид машины", cat_LEFT:"Левая сторона", cat_RIGHT:"Правая сторона",
@@ -1697,6 +1788,117 @@
       + T.I(st.final ? "st_final" : "st_prelim") + '</b>'
       + (st.final || !st.undelivered ? "" : ' <span class="quiet">' + T.I("st_undel_s") + '</span>');
   }
+  /* ── THE HYBRID SINGLE-INSPECTION FORMAL BLOCKS ──────────────────────────
+     Compact enough for a page that already holds a drawing, formal enough to
+     be a reliability-department report. Every one is driven by the saved
+     record; nothing here invents a value. Shared, so the phone and the office
+     print the identical block from the identical round. */
+
+  /* The round's condition rating IS the worst graded point on it — the one
+     numeric source, from which the word and the decision both follow. There is
+     no separate severity to contradict it. Null when nothing was graded, which
+     is a state the sheet must be able to say rather than paper over with a 1. */
+  function roundRating(rec) {
+    var worst = 0;
+    (rec.items || []).forEach(function (it) {
+      var n = gnum(it.grade); if (n > worst) worst = n; });
+    return worst || null;
+  }
+  /* REPORT <TYPE>-<UNIT>-<YYYYMMDD>, deterministic from the record so the same
+     round names the same report from either surface and on every reprint. */
+  function reportNo(rec) {
+    var d = String(rec.date || "").replace(/-/g, "");
+    return (rec.type || "CM") + "-" + (rec.equip || "?") + (d ? "-" + d : "");
+  }
+  /* The rating / level / decision strip and the scale line. The number is
+     never colour-alone: the word sits beside it and the scale beneath. */
+  function ratingBar(T, rec) {
+    var n = roundRating(rec);
+    var col = n ? GRADE_HEX[n] : "#7b858e";
+    /* Just the word — "Degraded", not "Degraded — defect found, plan repair".
+       The grade label carries its operational meaning after an em-dash, and
+       that meaning is already the DECISION cell beside it; repeating it here
+       would fill the strip twice over. One source (grade.js via g_N), read for
+       the two different jobs. */
+    var gw = function (k) { return String(T(k)).split(" — ")[0]; };
+    var gwA = function (k) { return String(T.alt(k)).split(" — ")[0]; };
+    var level = n ? T.both(n + " – " + gw("g_" + n),
+                           n + " – " + gwA("g_" + n)) : T.I("rr_none");
+    var dec = T.I("dec_" + (n || 0));
+    var scale = '<div class="rscale"><b>' + esc(T("rr_scale")) + ':</b> '
+      + GRADE_LEVELS.map(function (g) { return g + " " + esc(gw("g_" + g)); }).join(" · ")
+      + '</div>';
+    return '<div class="rrate">'
+      + '<div class="rc" style="border-left:5px solid ' + col + '">'
+        + '<div class="rk">' + esc(T("rr_rating")) + '</div>'
+        + '<div class="rv" style="color:' + col + '">' + (n || "—") + '</div></div>'
+      + '<div class="rc"><div class="rk">' + esc(T("rr_level")) + '</div>'
+        + '<div class="rv">' + level + '</div></div>'
+      + '<div class="rc rd"><div class="rk">' + esc(T("rr_decision")) + '</div>'
+        + '<div class="rv">' + dec + '</div></div>'
+      + '</div>' + scale;
+  }
+  /* DATA · EVIDENCE · REVIEW · APPROVAL — honest about what the office holds
+     versus what it has approved. A synchronised round is not an approved one,
+     and there is no field in the record that records a review or an approval,
+     so those two read Pending rather than borrow the delivery state. */
+  function statusStrip(T, rec) {
+    var g = rec.gap;
+    var dataOk = rec.delivered;
+    var ev = !g || !g.expected ? { txt: T("ss_ev_none"), ok: true }
+           : { txt: T("ss_recv", { r: g.received, e: g.expected }),
+               ok: g.missing === 0 };
+    function cell(k, txt, cls) {
+      return '<div class="sc"><div class="sk">' + esc(k) + '</div>'
+        + '<div class="sv ' + (cls || "") + '">' + esc(txt) + '</div></div>';
+    }
+    return '<div class="sstrip">'
+      + cell(T("ss_data"), dataOk ? T("ss_delivered") : T("ss_held"), dataOk ? "ok" : "pend")
+      + cell(T("ss_evidence"), ev.txt, ev.ok ? "ok" : "pend")
+      + cell(T("ss_review"), T("ss_pending"), "pend")
+      + cell(T("ss_approval"), T("ss_pending"), "pend")
+      + '</div>';
+  }
+  /* The maintenance-action strip: the recorded action and direct cause of the
+     round's worst finding, and the control fields. Each is "Not recorded" when
+     the round does not carry it — never invented. */
+  function actionStrip(T, rec) {
+    var flagged = (rec.items || []).filter(function (it) {
+      return it.action || it.defect || it.cause || gnum(it.grade) >= 3; });
+    if (!flagged.length) return "";
+    flagged.sort(function (a, b) { return gnum(b.grade) - gnum(a.grade); });
+    var it = flagged[0];
+    var miss = '<b class="miss">' + esc(T("ma_none")) + '</b>';
+    function f(k, v) {
+      return '<span class="f"><i>' + esc(k) + '</i>' + (v ? '<b>' + esc(v) + '</b>' : miss) + '</span>';
+    }
+    return '<div class="mact">'
+      + f(T("ma_action"), it.action || "")
+      + f(T("ma_cause"), it.cause || it.defect || "")
+      + f(T("ma_owner"), it.resp || "")
+      + f(T("ma_wo"), it.wo || "")
+      + f(T("ma_due"), it.target || "")
+      + '</div>';
+  }
+  /* The three-role approval table. The technician's row is filled from the
+     record; the reliability and supervisor rows stay open lines, because the
+     application holds no field that records them — an inked line a person signs
+     is honest where a printed "Approved" nobody granted would not be. */
+  function approvalBlock(T, rec) {
+    function row(role, name, status, date, open) {
+      return '<tr><td class="rl">' + esc(role) + '</td>'
+        + '<td>' + (open ? '<span class="sg"></span>' : '<span class="nm">' + esc(name) + '</span>') + '</td>'
+        + '<td>' + esc(status) + '</td>'
+        + '<td>' + (date ? '<span class="nm">' + esc(date) + '</span>' : '<span class="sg"></span>') + '</td></tr>';
+    }
+    return '<table class="appr"><thead><tr>'
+      + '<th>' + esc(T("ap_role")) + '</th><th>' + esc(T("ap_name")) + '</th>'
+      + '<th>' + esc(T("ap_status")) + '</th><th>' + esc(T("ap_date")) + '</th></tr></thead><tbody>'
+      + row(T("ap_tech"), rec.by || T("ma_none"), T("ap_tech_s"), rec.by ? (rec.date || "") : "", !rec.by)
+      + row(T("ap_rel"), "", T("ap_rel_s"), "", true)
+      + row(T("ap_sup"), "", T("ap_sup_s"), "", true)
+      + '</tbody></table>';
+  }
   function unitSheets(ctx, T, recs) {
     var secs = [];
     /* One full sheet per inspection TYPE, not per round.
@@ -1739,11 +1941,18 @@
             ? T.S("method_" + rec.type)
             : T.both(rec.typeLabel || rec.type, rec.typeAlt)) + '</div>'
         + '<div class="m2">'
+          + fld(T.I("rr_report"), '<span class="unum">' + esc(reportNo(rec)) + '</span>')
           + fld(T.I("f_unit"), '<span class="unum">' + esc(rec.equip) + '</span>')
           + fld(T.I("f_cat"), esc(rec.clsLabel || ""))
           + (rec.model ? fld(T.I("f_model"), esc(rec.model)) : "")
           + fld(T.I("f_date"), '<b>' + esc(rec.date || "") + '</b>')
           + (rec.smu ? fld(T.I("f_smu"), '<b>' + esc(rec.smu) + '</b>') : "")
+          /* Inspector and location on the strip too, when recorded — the
+             reference's metadata row carries them and the sheet has room in a
+             flex line that already wraps. */
+          + (rec.by ? fld(T.I("f_by"), esc(rec.by)) : "")
+          + (rec.gps ? fld(T.I("gps"), '<span class="num">'
+              + rec.gps.lat.toFixed(4) + ', ' + rec.gps.lon.toFixed(4) + '</span>') : "")
           + fld(T.I("f_pts"), '<b>' + rec.items.length + '</b>')
         + '</div>'
         + (mine.length > 1
@@ -1759,6 +1968,13 @@
         + (rec.note ? '<div class="quiet" style="margin-top:7px;">'
               + T.both(rec.note, rec.noteAlt, "altl") + '</div>' : "")
         + '</div>';
+      /* The rating / level / decision strip and scale, under the masthead.
+         Added per branch, NOT baked into `head` — a wear round's first page is
+         the masthead plus the track drawing, measured to the millimetre against
+         the A4 fold (pagecut.cjs, tray.cjs), and a 46px strip there slices the
+         drawing. The wear round already states its rating as the verdict chip;
+         the compact rating bar goes on the sheets that have room for it. */
+      var rbar = ratingBar(T, rec);
 
       /* A cell is earned by having something to show or something to say. A
          position with nothing but the machine's hours on it is not a finding,
@@ -1805,13 +2021,20 @@
       } else if (board.length) {
         body = notableTable(ctx, T, board) + restLine(T, rest, false);
       }
+      /* The maintenance-action strip, on the graded single-inspection sheets
+         that are not wear rounds — MP, FC, TEMP, GET. A wear round already
+         carries its "required maintenance" as the over/verdict lines and the
+         measurement register, so it is not doubled there. Driven by the round's
+         worst finding; each control field honest as "Not recorded" when absent. */
+      if (!isWear && board.length) body += actionStrip(T, rec);
 
-      var sign = '<div class="shsign">'
-        + '<div><div class="rl">' + T.L("f_by") + '</div><div class="ln"></div>'
-          + '<div class="nm">' + esc(rec.by || "—") + '</div></div>'
-        + '<div><div class="rl">' + T.L("f_sup") + '</div>'
-          + '<div class="ln">' + (rec.signUrl ? '<img src="' + rec.signUrl + '">' : "") + '</div>'
-          + '<div class="nm">' + esc(rec.sup || T("nosign")) + '</div></div></div>';
+      /* The sign-off is now the reference's status strip plus the three-role
+         approval table — the formal half of the hybrid, on the final page of
+         every round through the same `sign` string every branch already
+         threads to its last section. Honest throughout: the strip says what
+         the office holds, the table leaves review and approval as open lines
+         because no field records them. */
+      var sign = statusStrip(T, rec) + approvalBlock(T, rec);
 
       /* A lubrication round has nothing to MEASURE and is still not one page.
          The audit is the compartment table - what is actually in each one, how
@@ -1821,7 +2044,7 @@
          and still the thing being reported on. */
       var isLube = rec.items.some(function (it) { return it.lube; });
       if (!isWear && isLube) {
-        secs.push({ nb: n > 0, html: '<div class="sec">' + head + body + '</div>' });
+        secs.push({ nb: n > 0, html: '<div class="sec">' + head + rbar + body + '</div>' });
         lubeSections(ctx, T, rec, sign).forEach(function (x) { secs.push(x); });
         evidenceSections(T, rec).forEach(function (x) { secs.push(x); });
         return;
@@ -1842,7 +2065,7 @@
       if (!isWear) {
         var oneMap = rec.mapHTML
           ? CMR.mapBlock(T, rec.mapHTML, 11, rec.zones, rec.mapKey) : "";
-        secs.push({ nb: n > 0, html: '<div class="sec">' + head + body
+        secs.push({ nb: n > 0, html: '<div class="sec">' + head + rbar + body
           + (oneMap ? "" : sign) + '</div>' });
         if (oneMap) secs.push({ nb: false, html: '<div class="sec">' + oneMap + sign + '</div>' });
         evidenceSections(T, rec).forEach(function (x) { secs.push(x); });
