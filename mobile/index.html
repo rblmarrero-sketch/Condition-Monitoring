@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=284">
+<link rel="manifest" href="manifest.webmanifest?v=285">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=284">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=284">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=284">
+<link rel="apple-touch-icon" href="icon-192.png?v=285">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=285">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=285">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2222,15 +2222,15 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=284"></script>
-<script src="upload-defaults.js?v=284"></script>
-<script src="hme.js?v=284"></script>
-<script src="mp-fc.js?v=284"></script>
-<script src="hme-cascade.js?v=284"></script>
-<script src="assets.js?v=284"></script>
-<script src="temp-limits.js?v=284"></script>
-<script src="normalize.js?v=284"></script>
-<script src="terms.js?v=284"></script>
+<script src="native.js?v=285"></script>
+<script src="upload-defaults.js?v=285"></script>
+<script src="hme.js?v=285"></script>
+<script src="mp-fc.js?v=285"></script>
+<script src="hme-cascade.js?v=285"></script>
+<script src="assets.js?v=285"></script>
+<script src="temp-limits.js?v=285"></script>
+<script src="normalize.js?v=285"></script>
+<script src="terms.js?v=285"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2249,25 +2249,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=284"></script>
-<script src="edits.js?v=284"></script>
-<script src="due.js?v=284"></script>
-<script src="wear.js?v=284"></script>
-<script src="wear-figs.js?v=284"></script>
-<script src="wear-map.js?v=284"></script>
-<script src="machine-photos.js?v=284"></script>
-<script src="machine-fig.js?v=284"></script>
-<script src="get.js?v=284"></script>
-<script src="points.js?v=284"></script>
-<script src="uc-points.js?v=284"></script>
-<script src="inspect-guide.js?v=284"></script>
-<script src="get-figs.js?v=284"></script>
-<script src="body-points.js?v=284"></script>
-<script src="body-map.js?v=284"></script>
-<script src="lube.js?v=284"></script>
-<script src="lube-overrides.js?v=284"></script>
-<script src="lube2027.js?v=284"></script>
-<script src="report-core.js?v=284"></script>
+<script src="grade.js?v=285"></script>
+<script src="edits.js?v=285"></script>
+<script src="due.js?v=285"></script>
+<script src="wear.js?v=285"></script>
+<script src="wear-figs.js?v=285"></script>
+<script src="wear-map.js?v=285"></script>
+<script src="machine-photos.js?v=285"></script>
+<script src="machine-fig.js?v=285"></script>
+<script src="get.js?v=285"></script>
+<script src="points.js?v=285"></script>
+<script src="uc-points.js?v=285"></script>
+<script src="inspect-guide.js?v=285"></script>
+<script src="get-figs.js?v=285"></script>
+<script src="body-points.js?v=285"></script>
+<script src="body-map.js?v=285"></script>
+<script src="lube.js?v=285"></script>
+<script src="lube-overrides.js?v=285"></script>
+<script src="lube2027.js?v=285"></script>
+<script src="report-core.js?v=285"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -9445,6 +9445,29 @@ async function teamPhotosFor(g,rec,say){
       if(!(b.toLowerCase() in byBase)) byBase[b.toLowerCase()]=it.key;
     }
   });
+  /* THE MACHINE'S OWN PHOTOGRAPHS ARE NOT NAMED AFTER A POSITION.
+
+     genFileName writes <UNIT>_<CATEGORY>_<date>_<TYPE> — OVERVIEW, LEFT, GET,
+     the plate — while every base above is built from a position KEY, and the
+     general position's key is "__general", which no file is ever called. So a
+     round pulled from the team folder arrived with the overview, both sides
+     and the tray silently dropped: matched by nothing, listed nowhere, and
+     the inspector reading it on a phone had no way to know a picture existed.
+     Same defect the office had, on the surface that is actually in the pit.
+
+     The categories the round declares come first because they are a fact; the
+     rest follow for a round captured before categories existed. */
+  {
+    const cats=[];
+    (rec.items||[]).forEach(it=>{ if(!(it.general||it.key===GEN_KEY||it.key==="MACHINE")) return;
+      (Array.isArray(it.att)?it.att:[]).forEach(e=>{
+        const c=String((e&&e.category)||"").toUpperCase(); if(c && cats.indexOf(c)<0) cats.push(c); }); });
+    ["MACHINE"].concat(PHOTO_CATS).forEach(c=>{ if(cats.indexOf(c)<0) cats.push(c); });
+    cats.forEach(c=>{
+      const b=genFileName(rec.equip,c,rec.date,"x",suffix).slice(0,-2);
+      if(!(b.toLowerCase() in byBase)) byBase[b.toLowerCase()]=GEN_KEY;
+    });
+  }
   /* <base>[_n][~DEVICE].<ext> — the shape buildPackage() writes. The device
      copy exists because two phones inspected the same unit on the same day and
      the script kept both rather than letting the second overwrite the first. */
@@ -9496,7 +9519,12 @@ async function teamPhotosFor(g,rec,say){
       /* Shrunk here exactly as a local photograph is, so a sheet printed from
          a team round weighs what the same sheet printed on the phone that
          captured it weighs. */
-      try{ (out[meta.key] ||= []).push(await blobToThumb(b64Blob(f.data,f.mime),420)); }catch(e){}
+      /* The key is created only once there is a photograph to put in it. The
+         `||=` used to run before the decode, so a file that would not decode
+         left the position carrying an empty list — a position that says it
+         has photographs and has none. */
+      try{ const th=await blobToThumb(b64Blob(f.data,f.mime),420);
+           (out[meta.key] ||= []).push(th); }catch(e){}
     }
   }
   if(say) say(hits.length,hits.length);
@@ -11146,7 +11174,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="284";
+const BUILD="285";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

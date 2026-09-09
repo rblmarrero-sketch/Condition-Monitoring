@@ -1253,6 +1253,10 @@
   .edfacts .cm{font-style:italic;color:var(--ink-2);font-size:var(--t-small);margin-top:6px;}
   .edshots.wide{grid-template-columns:repeat(4,minmax(0,1fr));}
   .edshots figure{margin:0;}
+  /* Filed here, still arriving. A blank tile that says so beats a count of
+     zero, which is what this panel used to show for a photograph it had. */
+  .edshots figure.pending img{background:var(--line);border:1px dashed var(--muted);
+    opacity:.55;cursor:default;}
   .edshots figcaption{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.3;}
   .edshots select{width:100%;max-width:100%;margin-top:3px;font-size:11px;padding:2px 4px;min-height:24px;}
   .edmtools{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:10px;}
@@ -3460,17 +3464,17 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=284"></script>
-<script src="../mobile/hme.js?v=284"></script>
-<script src="../mobile/mp-fc.js?v=284"></script>
-<script src="../mobile/hme-cascade.js?v=284"></script>
-<script src="../mobile/temp-limits.js?v=284"></script>
+<script src="../data/magnetic_plug.js?v=285"></script>
+<script src="../mobile/hme.js?v=285"></script>
+<script src="../mobile/mp-fc.js?v=285"></script>
+<script src="../mobile/hme-cascade.js?v=285"></script>
+<script src="../mobile/temp-limits.js?v=285"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=284"></script>
-<script src="../mobile/normalize.js?v=284"></script>
-<script src="../mobile/terms.js?v=284"></script>
+<script src="../mobile/assets.js?v=285"></script>
+<script src="../mobile/normalize.js?v=285"></script>
+<script src="../mobile/terms.js?v=285"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3489,19 +3493,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=284"></script>
-<script src="../mobile/edits.js?v=284"></script>
-<script src="../mobile/due.js?v=284"></script>
-<script src="../mobile/wear.js?v=284"></script>
-<script src="../mobile/wear-map.js?v=284"></script>
-<script src="../mobile/lube.js?v=284"></script>
-<script src="../mobile/lube-overrides.js?v=284"></script>
-<script src="../mobile/lube2027.js?v=284"></script>
-<script src="../mobile/lube-tds.js?v=284"></script>
+<script src="../mobile/grade.js?v=285"></script>
+<script src="../mobile/edits.js?v=285"></script>
+<script src="../mobile/due.js?v=285"></script>
+<script src="../mobile/wear.js?v=285"></script>
+<script src="../mobile/wear-map.js?v=285"></script>
+<script src="../mobile/lube.js?v=285"></script>
+<script src="../mobile/lube-overrides.js?v=285"></script>
+<script src="../mobile/lube2027.js?v=285"></script>
+<script src="../mobile/lube-tds.js?v=285"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=284"></script>
-<script src="../mobile/machine-photos.js?v=284"></script>
+<script src="../mobile/upload-defaults.js?v=285"></script>
+<script src="../mobile/machine-photos.js?v=285"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3510,17 +3514,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=284"></script>
-<script src="../mobile/get.js?v=284"></script>
-<script src="../mobile/points.js?v=284"></script>
-<script src="../mobile/uc-points.js?v=284"></script>
-<script src="../mobile/inspect-guide.js?v=284"></script>
-<script src="../mobile/get-figs.js?v=284"></script>
-<script src="../mobile/body-points.js?v=284"></script>
-<script src="../mobile/body-map.js?v=284"></script>
-<script src="../mobile/jspdf.umd.min.js?v=284"></script>
-<script src="../mobile/html2canvas.min.js?v=284"></script>
-<script src="../mobile/report-core.js?v=284"></script>
+<script src="../mobile/machine-fig.js?v=285"></script>
+<script src="../mobile/get.js?v=285"></script>
+<script src="../mobile/points.js?v=285"></script>
+<script src="../mobile/uc-points.js?v=285"></script>
+<script src="../mobile/inspect-guide.js?v=285"></script>
+<script src="../mobile/get-figs.js?v=285"></script>
+<script src="../mobile/body-points.js?v=285"></script>
+<script src="../mobile/body-map.js?v=285"></script>
+<script src="../mobile/jspdf.umd.min.js?v=285"></script>
+<script src="../mobile/html2canvas.min.js?v=285"></script>
+<script src="../mobile/report-core.js?v=285"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -7397,6 +7401,11 @@ let folderName="";       // for the status chip
    it used to sit beside the photo editor, six thousand lines further down,
    and a `const` is not hoisted. */
 const MACHINE_CATS=["OVERVIEW","LEFT","RIGHT","BODY","GET","PLATE","EXTRA"];
+/* A photograph the folder holds and this browser has not fetched yet. It is
+   carried with a transparent pixel rather than an empty src — `src=""` asks
+   the browser for the page again and draws a broken image — and the tile is
+   replaced by the picture on the repaint that follows the fetch. */
+const PX_PENDING="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
 function photoBase(it,rec){ return photoBases(it,rec)[0]; }
 /* BOTH names a photograph could be filed under, the likelier one first.
 
@@ -7436,10 +7445,36 @@ function photoBases(it,rec){
 
      `rec` still has to be a record; an item that is not there has no name. */
   if(!it || !rec) return [];
-  const d=(rec.date||"").split("-").reverse().join("."), k=(it.key==null?"":String(it.key));
-  const tail=`_${d}_${rec.type}`;
-  const dot=`${rec.equip}.${k}${tail}`, us=`${rec.equip}_${k.replace(/\./g,"-")}${tail}`;
-  const base = usesRegister(rec.type) ? (dot===us?[dot]:[dot,us]) : (us===dot?[us]:[us,dot]);
+  /* A ROUND THAT HAS BEEN RE-FILED IS STILL IN THE FOLDER UNDER ITS OLD NAME.
+
+     The correction panel says, in so many words, "the findings, photographs
+     and corrections travel with it". The photographs did not. Every name here
+     is built from equip, date and type, and a move REWRITES all three — so a
+     round corrected onto the machine it was actually walked lost every
+     photograph it had: not shown on any card, absent from the report, and
+     counted by the evidence audit as never having arrived. The pictures were
+     never touched; only the question changed.
+
+     `_wasKey` is the identity the round arrived with, which is the identity
+     the folder is written under. Both are offered, the current one first — a
+     photograph added from a desk after the move is named under the new
+     identity, and it must be found too. */
+  const ids=[{e:rec.equip, d:rec.date, t:rec.type}];
+  if(rec._moved && rec._wasKey){
+    const w=String(rec._wasKey).split("|");
+    if(w.length===3 && (w[0]!==rec.equip || w[1]!==rec.date || w[2]!==rec.type))
+      ids.push({e:w[0], d:w[1], t:w[2]});
+  }
+  const all=[], seenAll=new Set();
+  ids.forEach(id=>photoBasesFor(it,rec,id).forEach(n=>{
+    if(n && !seenAll.has(n)){ seenAll.add(n); all.push(n); } }));
+  return all;
+}
+function photoBasesFor(it,rec,id){
+  const d=(id.d||"").split("-").reverse().join("."), k=(it.key==null?"":String(it.key));
+  const tail=`_${d}_${id.t}`;
+  const dot=`${id.e}.${k}${tail}`, us=`${id.e}_${k.replace(/\./g,"-")}${tail}`;
+  const base = usesRegister(id.t) ? (dot===us?[dot]:[dot,us]) : (us===dot?[us]:[us,dot]);
   /* THE MACHINE'S OWN PHOTOGRAPHS ARE FILED BY CATEGORY, NOT BY "MACHINE".
 
      The phone keeps the overview, the two sides, the tray, the GET assembly
@@ -7469,9 +7504,9 @@ function photoBases(it,rec){
   if(!(it.general || k==="MACHINE" || k==="__general")) return base;
   const out=[], seen=new Set();
   const push=n=>{ if(n && !seen.has(n)){ seen.add(n); out.push(n); } };
-  push(`${rec.equip}_MACHINE${tail}`);
+  push(`${id.e}_MACHINE${tail}`);
   attOf(it).map(e=>String((e&&e.category)||"").toUpperCase()).filter(Boolean)
-    .concat(MACHINE_CATS).forEach(c=>push(`${rec.equip}_${c}${tail}`));
+    .concat(MACHINE_CATS).forEach(c=>push(`${id.e}_${c}${tail}`));
   base.forEach(push);
   return out;
 }
@@ -7571,8 +7606,26 @@ function assignPlan(rec){
   if(Object.keys(a).length){
     const seen=new Set();
     (rec.items||[]).forEach(i=>{
-      /* mediaAll, never mediaOf - this is what mediaOf is being built out of. */
-      mediaAll(i,rec).forEach(m=>{
+      /* THE FOLDER, NOT THIS BROWSER'S DOWNLOADS.
+
+         mediaAll() only names a photograph once its bytes are in folderPhotos,
+         and folderPhotos is filled lazily — by opening a unit's history. So a
+         re-filing made yesterday was applied only on a page that had already
+         fetched the picture: on Data & Sync, which fetches none, EVERY move
+         was silently ignored, the machine card read 0 photographs, the
+         photograph still sat under the point it had been moved off, and the
+         evidence audit gave a different answer before and after somebody
+         scrolled a thumbnail into view. A decision that only takes effect
+         once you look at it is not a decision.
+
+         The names come from the index now, with whatever bytes are in hand
+         attached; a photograph still downloading is carried with an empty src
+         and fills in on the repaint that follows the fetch. */
+      const byName=new Map();
+      mediaAll(i,rec).forEach(m=>byName.set(m.name,m));
+      serverNamesOf(i,rec).forEach(m=>{ if(!byName.has(m.name))
+        byName.set(m.name, {name:m.name, kind:m.kind, src:PX_PENDING, pending:1}); });
+      [...byName.values()].forEach(m=>{
         seen.add(m.name);
         const d=a[m.name]; if(!d) return;
         if(d.exclude) plan.excluded.set(m.name, d);
@@ -7874,11 +7927,26 @@ function serverMediaOf(it,rec){
      decorates an entry must not be handing its decoration to the next one. */
   return passMemo(it, ()=>serverMediaOf0(it,rec)).map(m=>Object.assign({},m));
 }
-/* The same, with the photographs the office withdrew still in the list and
-   marked — for the one question ("did what the phone claimed arrive?") that
-   must not be answered by what is currently shown. */
-function serverMediaOfAll(it,rec){ return serverMediaOf0(it,rec,true).map(m=>Object.assign({},m)); }
-function serverMediaOf0(it,rec,keepHidden){
+/* WHAT THE FOLDER HOLDS FOR WHAT THIS POINT CLAIMED — and nothing about where
+   anybody has since decided the pictures belong.
+
+   "Did what the phone claimed arrive?" is a question about the folder. It was
+   being answered through the re-filing plan, which moves a photograph off the
+   point it was captured on the moment somebody files it as the machine's. So
+   an office that tidied a plug photograph onto the machine overview turned a
+   complete round into "1 attachment has not arrived" — a false alarm about a
+   file that is in the folder, on the record, and on screen two panels away.
+   Withdrawal was fixed for exactly this reason; re-filing is the same error
+   with a different verb.
+
+   So the audit reads the folder directly: manifest first, then the names this
+   point could be under, each checked against the index. Hidden entries are
+   marked rather than dropped, because withdrawn is not missing either. */
+function serverMediaOfAll(it,rec){
+  const hid=hiddenSet(it);
+  return serverNamesOf(it,rec).map(m=>Object.assign({},m,{hidden:hid.has(m.name)}));
+}
+function serverNamesOf(it,rec){
   let has=null;
   try{ has=(window.CMDrive&&CMDrive.hasName)?CMDrive.hasName:null; }catch(e){ has=null; }
   if(!has||!it||!rec) return [];
@@ -7905,15 +7973,17 @@ function serverMediaOf0(it,rec,keepHidden){
       seen.add(n); out.push({name:n,kind:"video"}); break;
     }
   }
-  /* The same re-filing rules the display obeys, so a photograph moved to
-     another point is not counted twice or counted in the wrong place. */
+  return out;
+}
+/* The same list, as the SCREENS should show it: the re-filing the office has
+   done applied, and anything withdrawn taken off. */
+function serverMediaOf0(it,rec){
+  const out=serverNamesOf(it,rec).map(m=>Object.assign({},m));
   const plan=assignPlan(rec), hid=hiddenSet(it);
   const mine=out.filter(m=>!plan.moved.has(m.name));
   const here=new Set(mine.map(m=>m.name));
   const come=((it&&it.key&&plan.toPoint.get(it.key))||[]).filter(m=>!here.has(m.name));
-  const all=mine.concat(come);
-  if(keepHidden){ all.forEach(m=>{ m.hidden=hid.has(m.name); }); return all; }
-  return all.filter(m=>!hid.has(m.name));
+  return mine.concat(come).filter(m=>!hid.has(m.name));
 }
 /* The names this point's photographs WOULD have, in the order the phone writes
    them. Used to say which files a shortfall is waiting for — a person hunting
@@ -7959,7 +8029,11 @@ function photoSrc(it,rec){ const m=mediaOf(it,rec); return m.length?m[0].src:nul
    so they are not reachable as window properties from another file. */
 window.CMDash={
   photoBase, photoBases, photoNames, videoNames, mediaOf, generalMedia, evidenceGap,
-  addPhoto(name,url){ (folderPhotos ||= {})[name]=url; },
+  /* The bytes landing changes what the re-filing plan can show: an entry
+     carried as pending becomes the picture. Without this the plan stayed
+     cached with the placeholder for the life of the tab, and a photograph the
+     office had filed on the machine never appeared however long you waited. */
+  addPhoto(name,url){ (folderPhotos ||= {})[name]=url; assignEpoch++; },
   importRecords(recs){
     recs.forEach(r=>{ const k=`${r.equip}|${r.date}|${r.type}`;
       imported=imported.filter(x=>`${x.equip}|${x.date}|${x.type}`!==k); imported.push(r); });
@@ -9278,7 +9352,7 @@ function edFacts(rec,i){
   const w=(()=>{ try{ return wearOf(rec,i); }catch(e){ return null; } })();
   const toMach=m=>drvOn()?`<select class="edtomach" data-name="${esc(m.name)}" title="${esc(t("ed_to_machine"))}">
       <option value="">${esc(t("ed_to_machine"))}</option>${MACHINE_CATS.map(c=>`<option value="${c}">${esc(edCatLabel(c))}</option>`).join("")}</select>`:"";
-  const shots=med.length?`<div class="edshots">${med.map((m,ix)=>`<figure>${m.kind==="video"
+  const shots=med.length?`<div class="edshots">${med.map((m,ix)=>`<figure${m.pending?' class="pending"':""}>${m.kind==="video"
       ?`<video preload="metadata" src="${esc(m.src)}" data-shot="${ix}"></video>`
       :`<img loading="lazy" src="${esc(m.src)}" alt="${esc(i.key)}" data-shot="${ix}">`}${toMach(m)}</figure>`).join("")}</div>`:"";
   const facts=`<dl class="kv">${
@@ -9326,7 +9400,7 @@ function edMachineCard(rec){
   const pts=orphanPointOptions(rec).filter(o=>!/^(MACHINE|__general)$/.test(o.k));
   const toPoint=m=>`<select class="edtopt" data-name="${esc(m.name)}" title="${esc(t("ed_to_point"))}">
       <option value="">${esc(t("ed_to_point"))}</option>${pts.map(o=>`<option value="${esc(o.k)}">${esc(o.k)} · ${esc(o.l)}</option>`).join("")}</select>`;
-  const shots=med.length?`<div class="edshots wide">${med.map((m,ix)=>`<figure>${m.kind==="video"
+  const shots=med.length?`<div class="edshots wide">${med.map((m,ix)=>`<figure${m.pending?' class="pending"':""}>${m.kind==="video"
       ?`<video preload="metadata" src="${esc(m.src)}" data-mshot="${ix}"></video>`
       :`<img loading="lazy" src="${esc(m.src)}" alt="${esc(edCatLabel(m.cat))}" data-mshot="${ix}">`}
       <figcaption>${esc(edCatLabel(m.cat)||t("ed_cat_none"))}</figcaption>${drvOn()?toPoint(m):""}</figure>`).join("")}</div>`
@@ -15812,8 +15886,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=284"></script>
-<script src="sync-adapter.js?v=284"></script>
-<script src="report.js?v=284"></script>
+<script src="drive.js?v=285"></script>
+<script src="sync-adapter.js?v=285"></script>
+<script src="report.js?v=285"></script>
 </body>
 </html>
