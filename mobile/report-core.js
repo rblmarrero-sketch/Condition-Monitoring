@@ -763,6 +763,17 @@
       rc_head:"Report controls", rc_source:"Source identified",
       rc_rev_req:"Reviewer required", rc_appr_req:"Approval required",
       ap_sec:"Approval and sign-off",
+      sm_title:"Equipment Condition Summary", sm_sub:"One machine · latest of each inspection type",
+      sm_over:"Equipment overview", sm_latest_smu:"Latest SMU", sm_report_date:"Report date",
+      sm_cond_head:"Overall condition",
+      sm_insp:"Inspection", sm_last:"Last completed", sm_result:"Key result", sm_next:"Next step",
+      sm_notdone:"Not inspected", sm_na:"Not applicable",
+      sm_decision:"Equipment decision",
+      sm_dec_crit:"This machine has a Condition 5 item requiring a maintenance decision before continued service.",
+      sm_dec_plan:"This machine has findings that require planned maintenance. Confirm owner, work order and target date.",
+      sm_dec_ok:"No finding on this machine requires action; continue normal monitoring.",
+      sm_actions:"Consolidated actions", sm_evidence:"Condition evidence",
+      sm_none:"No completed round", sm_clean:"All points normal",
       by_who:"Inspected by", sup:"Verified by", nosign:"not signed off",
       gps:"Location", none_att:"None flagged.",
       /* What a machine photograph is of. */
@@ -901,6 +912,17 @@
       rc_head:"Контроль отчёта", rc_source:"Источник определён",
       rc_rev_req:"Требуется проверка", rc_appr_req:"Требуется утверждение",
       ap_sec:"Утверждение и подпись",
+      sm_title:"Сводка состояния техники", sm_sub:"Одна машина · последний осмотр каждого типа",
+      sm_over:"Обзор техники", sm_latest_smu:"Последняя наработка", sm_report_date:"Дата отчёта",
+      sm_cond_head:"Общее состояние",
+      sm_insp:"Осмотр", sm_last:"Последний выполнен", sm_result:"Ключевой результат", sm_next:"Следующий шаг",
+      sm_notdone:"Не осмотрено", sm_na:"Неприменимо",
+      sm_decision:"Решение по технике",
+      sm_dec_crit:"На машине есть позиция уровня 5, требующая решения по обслуживанию до дальнейшей эксплуатации.",
+      sm_dec_plan:"На машине есть замечания, требующие планового обслуживания. Укажите ответственного, наряд и срок.",
+      sm_dec_ok:"Ни одно замечание на машине не требует действий; продолжать обычный контроль.",
+      sm_actions:"Сводные действия", sm_evidence:"Фотоматериал состояния",
+      sm_none:"Нет завершённого осмотра", sm_clean:"Все точки в норме",
       by_who:"Осмотр выполнил", sup:"Проверил", nosign:"не подписано",
       gps:"Координаты", none_att:"Не отмечено.",
       cat_OVERVIEW:"Общий вид машины", cat_LEFT:"Левая сторона", cat_RIGHT:"Правая сторона",
@@ -2344,6 +2366,121 @@
      No cap. There was one at six, from when a round cost most of a sheet; at a
      fifth of a sheet a machine's whole history is a few pages, which is what a
      unit report is for. */
+  /* ── THE EQUIPMENT CONDITION SUMMARY (Report family C) ────────────────────
+     One machine, the latest completed round of each inspection type, in a
+     cross-type comparison — the reference's page-1 table — then the machine's
+     open actions consolidated and the sign-off. Not a full sheet per type (that
+     is the unit report); a single comparison a planner reads at a glance. */
+  function summarySheets(ctx, T, recs) {
+    var secs = [], p2 = function (n) { return String(n).padStart(2, "0"); };
+    var st = ctx.stamp || new Date();
+    var sp = (typeof DUE !== "undefined" && DUE.parts) ? DUE.parts(st)
+           : { y: String(st.getFullYear()), m: p2(st.getMonth() + 1), d: p2(st.getDate()) };
+    var today = sp.y + "-" + sp.m + "-" + sp.d;
+    var equip = (recs[0] || {}).equip || "", model = "", cls = "", smu = 0, latest = {};
+    recs.forEach(function (r) {
+      if (r.model) model = r.model; if (r.clsLabel) cls = r.clsLabel;
+      var n = parseFloat(String(r.smu || "").replace(/[^\d.]/g, "")); if (n > smu) smu = n;
+      if (!latest[r.type] || String(r.date || "") >= String(latest[r.type].date || "")) latest[r.type] = r;
+    });
+    /* The seven report types the site runs, in a fixed order so the summary of
+       any machine reads the same way. A type with no round is "Not inspected";
+       nothing here is ever left to imply Normal. */
+    var TYPES = ["MP", "FC", "TEMP", "UC", "GET", "TB", "LUBE"];
+    var worst = 0;
+    var rows = TYPES.map(function (ty) {
+      var r = latest[ty];
+      var label = T.both(T("method_" + ty), T.alt("method_" + ty));
+      if (!r) return '<tr><td>' + label + '</td>'
+        + '<td class="c muted">—</td><td class="c muted">—</td>'
+        + '<td class="c"><span class="muted">' + esc(T("sm_notdone")) + '</span></td>'
+        + '<td class="muted">—</td><td class="muted">—</td></tr>';
+      var rn = roundRating(r); if (rn > worst) worst = rn;
+      var col = rn ? GRADE_HEX[rn] : "#7b858e";
+      var wf = null;
+      (r.items || []).forEach(function (it) { if (it.general) return;
+        if (it.defect && (!wf || gnum(it.grade) > gnum(wf.grade))) wf = it; });
+      var keyres = (wf && wf.defect) ? esc(wf.defect)
+        : (rn >= 2 ? '<span class="muted">—</span>' : esc(T("sm_clean")));
+      return '<tr>'
+        + '<td class="stripe" style="border-left-color:' + col + '">' + label + '</td>'
+        + '<td class="c n">' + esc(r.date || "") + '</td>'
+        + '<td class="c n">' + (r.smu ? esc(r.smu) : "—") + '</td>'
+        + '<td class="c">' + (rn ? '<b style="color:' + col + '">' + rn + ' – ' + esc(gword(T, rn)) + '</b>'
+            : '<span class="muted">—</span>') + '</td>'
+        + '<td>' + keyres + '</td>'
+        + '<td>' + (rn ? T.I("dec_" + rn) : '<span class="muted">—</span>') + '</td></tr>';
+    }).join("");
+    var decKey = worst >= 5 ? "sm_dec_crit" : worst >= 3 ? "sm_dec_plan" : "sm_dec_ok";
+
+    var head = '<div class="sec">'
+      + '<div class="mhead"><div class="eyebrow">' + T.I("sub") + '</div>'
+        + '<div class="rno"><i>' + T.I("rr_report") + '</i>EQ-' + esc(equip) + '-' + esc(today.replace(/-/g, "")) + '</div></div>'
+      + '<div class="m1">' + T.I("sm_title") + '</div>'
+      + '<div class="msub"><span class="unum">' + esc(equip) + '</span>'
+        + (model ? ' · ' + esc(model) : '') + (smu ? ' · <b>' + esc(String(smu)) + '</b> h' : '')
+        + ' · ' + T.I("sm_report_date") + ' ' + esc(today) + '</div>'
+      + '<div class="rule" style="margin:11px 0 0"></div>'
+      /* The overview strip — the reference's EQUIPMENT / MODEL / LATEST SMU /
+         REPORT DATE. */
+      + '<div class="mstrip" style="margin-top:12px">'
+        + '<div class="ms"><i>' + T.I("f_unit") + '</i><b>' + esc(equip) + '</b></div>'
+        + '<div class="ms"><i>' + T.I("f_model") + '</i><b>' + (model ? esc(model) : esc(cls) || '<span class="miss">' + esc(T("ma_none")) + '</span>') + '</b></div>'
+        + '<div class="ms"><i>' + T.I("sm_latest_smu") + '</i><b>' + (smu ? esc(String(smu)) + ' h' : '<span class="miss">' + esc(T("ma_none")) + '</span>') + '</b></div>'
+        + '<div class="ms"><i>' + T.I("sm_report_date") + '</i><b>' + esc(today) + '</b></div>'
+      + '</div>'
+      + '<div style="margin-top:20px;"><div class="eyebrow" style="margin-bottom:9px;">' + T.I("sm_cond_head") + '</div>'
+        + '<table><tr><th>' + T.L("sm_insp") + '</th>'
+        + '<th class="c" style="width:74px">' + T.L("sm_last") + '</th>'
+        + '<th class="c" style="width:56px">SMU</th>'
+        + '<th class="c" style="width:96px">' + T.L("rr_rating") + '</th>'
+        + '<th style="width:150px">' + T.L("sm_result") + '</th>'
+        + '<th>' + T.L("sm_next") + '</th></tr>' + rows + '</table></div>'
+      + '<div class="verdict v-' + (worst >= 5 ? "act" : worst >= 3 ? "watch" : "ok") + '" style="margin-top:16px">'
+        + '<b>' + T.I("sm_decision") + '.</b> ' + T.S(decKey) + '</div>'
+      + '<div style="margin-top:16px;"><div class="eyebrow" style="margin-bottom:8px;">' + T.I("rc_head") + '</div>'
+        + fleetControls(T, recs) + '</div>'
+      + '</div>';
+    secs.push({ nb: false, html: head });
+
+    /* Page 2: the machine's open actions, consolidated, then the sign-off. */
+    var X = scan(recs);
+    var wl = '<div class="sec"><div class="sechd"><span class="n">01</span>'
+      + '<span class="h2">' + T.I("sm_actions") + '</span></div>';
+    if (!X.act.length) {
+      wl += '<div class="verdict v-ok">' + T.S("work_none") + '</div>';
+    } else {
+      wl += '<table><tr>'
+        + '<th style="width:118px">' + T.L("c_type") + '</th>'
+        + '<th style="width:150px">' + T.L("c_comp") + '</th>'
+        + '<th>' + T.L("c_do") + '</th>'
+        + '<th style="width:96px">' + T.L("ma_owner") + '</th>'
+        + '<th style="width:80px">' + T.L("ma_wo") + '</th>'
+        + '<th class="c" style="width:70px">' + T.L("ma_due") + '</th></tr>';
+      X.act.forEach(function (f, i) {
+        var rec = f.rec, it = f.it || {}, col = GRADE_HEX[gnum(it.grade)] || SEV_HEX[f.sev] || "#c9d0d6";
+        var comp = f.roll ? T.I("uc_cond") : (it.name || it.key || "—");
+        var doit = it.action ? esc(it.action) : (f.roll ? esc(T("uc_over", { n: f.act.length })) : '<span class="muted">' + T.I("do_tbd") + '</span>');
+        var miss = '<span class="muted">' + esc(T("ma_none")) + '</span>';
+        wl += '<tr class="' + (i % 2 ? "zebra" : "") + '">'
+          + '<td class="stripe" style="border-left-color:' + col + '"><span class="unit" style="font-size:11px">' + esc(rec.typeLabel || rec.type) + '</span></td>'
+          + '<td>' + esc(comp) + '</td>'
+          + '<td>' + doit + prioTag(it) + '</td>'
+          + '<td>' + (it.resp ? esc(it.resp) : miss) + '</td>'
+          + '<td>' + (it.wo ? esc(it.wo) : miss) + '</td>'
+          + '<td class="c n">' + (it.target ? esc(it.target) : miss) + '</td></tr>';
+      });
+      wl += '</table>';
+    }
+    /* The report controls are on page 1; page 2 closes with the three-role
+       sign-off, all lines open on a whole-machine summary. */
+    wl += approvalBlock(T, {});
+    secs.push({ nb: true, html: wl + '</div>' });
+
+    secs.status = docStatus(recs);
+    secs.status.word = T("st_mark");
+    return secs;
+  }
   function earlierRoundSections(ctx, T, older) {
     var out = [];
     older.forEach(function (rec) {
@@ -2767,6 +2904,7 @@
        fleet cover, a triage list or a legend page — it needs the round. */
     var oneMachine = X.unitN === 1;
     var mode = ctx.mode || (oneMachine ? "unit" : "fleet");
+    if (mode === "summary") return summarySheets(ctx, T, recs);
     if (mode === "unit") {
       var byNew = recs.slice().reverse();          // newest round first
       var sheets = unitSheets(ctx, T, byNew);

@@ -60,7 +60,10 @@
        asks for. The card is the round; the report should be that round and
        nothing else. */
     if (scope === "one") return R.filter(r => `${r.equip}|${r.date}|${r.type}` === target);
-    if (scope === "unit")  return R.filter(r => r.equip === target)
+    /* The equipment condition summary is one machine's rounds too — the engine
+       picks the latest of each type from them. Same records as `unit`, a
+       different report. */
+    if (scope === "unit" || scope === "summary") return R.filter(r => r.equip === target)
       .sort((a, b) => (a.date || "").localeCompare(b.date || ""));
     if (scope === "round") return R.filter(r => r.date === target)
       .sort((a, b) => a.equip.localeCompare(b.equip));
@@ -588,7 +591,8 @@
       bi: RBI,
       /* A single inspection is a unit report with one round in it — the same
          sheet, no cover and no triage list, which is what "one" means. */
-      mode: (scope === "one" || scope === "unit") ? "unit" : undefined,
+      mode: scope === "summary" ? "summary"
+          : (scope === "one" || scope === "unit") ? "unit" : undefined,
       title: L("rep_title_doc"),
       titleAlt: RBI ? inOther(() => L("rep_title_doc")) : "",
       sub: scope ? `${L("r_" + scope)} — ${target}` : "",
