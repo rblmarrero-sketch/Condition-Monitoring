@@ -40,12 +40,37 @@ const OFFICE_RUN = `(async function(){
   const T = {}; const time = (k, f) => { const t0 = performance.now(); f(); T[k] = Math.round(performance.now() - t0); };
   showTab('overview', true);
   time('all', () => renderAll());
-  let worst = 0, which = '';
-  for (const tab of ['failure','wear','actions','due','equipment','lube','sync','reports','overview']) {
-    const t0 = performance.now(); showTab(tab, true); const d = performance.now() - t0;
-    if (d > worst) { worst = d; which = tab; }
+  /* THREE PASSES, AND THE MEDIAN OF EACH TAB — because one sample of the
+     slowest page measures whatever else this machine was doing at that
+     instant, not the page. It failed at random on both sides of a change that
+     did not touch it: 692 ms and 1015 ms from the same build, minutes apart.
+     A budget that trips on load is noise a real regression hides in.
+
+     The median, not the best: a lucky run is as misleading as an unlucky one.
+     Whole cycles rather than three shows of one tab, so every sample is a
+     genuine switch from a different page.
+
+     And the sample has to be a COLD one. A page already built shows again in
+     a millisecond, so three straight cycles measure the cache and can never
+     fail; renderAll() before each cycle puts every page back in the state a
+     planner meets it in — the folder has just refreshed and they move to the
+     screen they want. */
+  const TABS = ['failure','wear','actions','due','equipment','lube','sync','reports','overview'];
+  const runs = {}; TABS.forEach(t => runs[t] = []);
+  for (let pass = 0; pass < 3; pass++) {
+    renderAll();
+    for (const tab of TABS) {
+      const t0 = performance.now(); showTab(tab, true);
+      runs[tab].push(performance.now() - t0);
+    }
   }
+  let worst = 0, which = '';
+  TABS.forEach(tab => {
+    const m = runs[tab].sort((a, b) => a - b)[1];      // median of three
+    if (m > worst) { worst = m; which = tab; }
+  });
   T.tab = Math.round(worst); T.tabWorst = which;
+  T.tabAll = Math.round(Math.max.apply(null, TABS.map(t => runs[t][2])));
   showTab('overview', true);
   time('filter', () => { $('fGrade').value = '5'; $('fGrade').dispatchEvent(new Event('change')); });
   time('filterOff', () => { $('fGrade').value = ''; $('fGrade').dispatchEvent(new Event('change')); });
@@ -93,7 +118,9 @@ const OFFICE_RUN = `(async function(){
   const T = await p.evaluate(OFFICE_RUN);
   console.log("   " + JSON.stringify(T));
   ok("a full re-render", T.all <= OFFICE.all, T.all + " ms of " + OFFICE.all);
-  ok("moving between pages", T.tab <= OFFICE.tab, T.tab + " ms of " + OFFICE.tab + " (worst: " + T.tabWorst + ")");
+  ok("moving between pages", T.tab <= OFFICE.tab,
+     T.tab + " ms of " + OFFICE.tab + " (worst: " + T.tabWorst
+     + ", slowest single sample " + T.tabAll + " ms)");
   ok("changing the grade filter", T.filter <= OFFICE.filter, T.filter + " ms of " + OFFICE.filter);
   ok("  and clearing it", T.filterOff <= OFFICE.filter, T.filterOff + " ms of " + OFFICE.filter);
   ok("opening a machine's history", T.history <= OFFICE.history, T.history + " ms of " + OFFICE.history);
