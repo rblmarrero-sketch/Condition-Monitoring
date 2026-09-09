@@ -388,14 +388,30 @@
    brought with them. So a single-machine report drops the cover, the work list
    and the legend, and prints the round the way the workbook does — the positions
    across, the photograph at the top of each, and what was found underneath. */
-#rptRoot .mast{border-bottom:2.5px solid #16242c;padding-bottom:9px;margin-bottom:13px;}
-#rptRoot .mast .m1{font-size:22px;font-weight:800;letter-spacing:-.02em;line-height:1.1;}
-#rptRoot .mast .m2{display:flex;flex-wrap:wrap;gap:3px 18px;margin-top:7px;}
-#rptRoot .mast .m2 .f{font-size:10.5px;}
-#rptRoot .mast .m2 .f i{font-style:normal;color:#7b858e;letter-spacing:.09em;
-  text-transform:uppercase;font-size:8.5px;font-weight:700;margin-right:5px;}
-#rptRoot .mast .m2 .f b{font-weight:700;font-variant-numeric:tabular-nums;}
-#rptRoot .mast .unum{font-size:15px;font-weight:800;letter-spacing:-.01em;}
+#rptRoot .mast{border-bottom:2.5px solid #16242c;padding-bottom:7px;margin-bottom:8px;}
+/* The reference masthead: an eyebrow with the report number to its right, the
+   inspection title, then the unit and date on one quiet subtitle line. Clean
+   and fixed — the old header was a single flex row of eight fields that wrapped
+   into a soup. */
+#rptRoot .mast .mhead{display:flex;justify-content:space-between;align-items:baseline;gap:12px;}
+#rptRoot .mast .rno{font-size:10px;font-weight:700;letter-spacing:.06em;color:#5b6670;
+  font-variant-numeric:tabular-nums;white-space:nowrap;}
+#rptRoot .mast .rno i{font-style:normal;color:#9aa2a9;font-weight:700;margin-right:5px;letter-spacing:.11em;}
+#rptRoot .mast .m1{font-size:20px;font-weight:800;letter-spacing:-.02em;line-height:1.1;margin-top:3px;}
+#rptRoot .mast .msub{font-size:11px;color:#5b6670;margin-top:3px;font-weight:600;}
+#rptRoot .mast .msub .unum{font-size:12px;font-weight:800;color:#16242c;letter-spacing:-.01em;}
+#rptRoot .mast .msub b{font-variant-numeric:tabular-nums;color:#3d474f;}
+/* The metadata strip — four evenly spaced labelled cells, the reference's own
+   MODEL / SMU / INSPECTED BY / LOCATION row. */
+#rptRoot .mstrip{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;
+  border:1px solid #d7dde1;border-radius:5px;overflow:hidden;margin-top:8px;}
+#rptRoot .mstrip .ms{padding:4px 10px;border-right:1px solid #e4e9ec;min-width:0;}
+#rptRoot .mstrip .ms:last-child{border-right:0;}
+#rptRoot .mstrip .ms i{display:block;font-style:normal;color:#7b858e;letter-spacing:.1em;
+  text-transform:uppercase;font-size:8px;font-weight:700;}
+#rptRoot .mstrip .ms b{font-weight:700;font-size:11.5px;font-variant-numeric:tabular-nums;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block;}
+#rptRoot .mstrip .ms .miss{color:#9aa2a9;font-weight:600;}
 
 /* When every position says the same thing, the sheet says it once. Four columns
    repeating one defect, one cause and one action is four times the ink for the
@@ -1710,9 +1726,18 @@
      own way - lube returns early, a graded round returns early, a wear round
      runs to the bottom - and a block written into only one of those branches
      reaches only one kind of round, which is exactly what happened first. */
-  function evidenceSections(T, rec) {
+  /* The trailing evidence sections are now only the missing-photograph note.
+     The general evidence — the equipment overview and machine photographs —
+     used to be pushed here, at the very end, which stranded the whole-machine
+     photograph on a page of its own AFTER the findings; it leads the sheet now
+     through generalBlock(), so an inspector sees the machine first. This keeps
+     the honest "some photographs did not arrive" note where it belongs, under
+     the round it is about. `wear` rounds still carry their left/right and whole
+     machine photographs here, after the measurements, which is the reference's
+     own undercarriage order (drawing, readings, then the required photographs). */
+  function evidenceSections(T, rec, keepGeneral) {
     var out = [];
-    if ((rec.general || []).length) {
+    if (keepGeneral && (rec.general || []).length) {
       out.push({ nb: false, html: '<div class="sec">'
         + '<div class="subhd">' + T.I("gen_t") + '</div>'
         + '<div class="genrow">'
@@ -1812,7 +1837,7 @@
   }
   /* The rating / level / decision strip and the scale line. The number is
      never colour-alone: the word sits beside it and the scale beneath. */
-  function ratingBar(T, rec) {
+  function ratingBar(T, rec, compact) {
     var n = roundRating(rec);
     var col = n ? GRADE_HEX[n] : "#7b858e";
     /* Just the word — "Degraded", not "Degraded — defect found, plan repair".
@@ -1836,7 +1861,7 @@
         + '<div class="rv">' + level + '</div></div>'
       + '<div class="rc rd"><div class="rk">' + esc(T("rr_decision")) + '</div>'
         + '<div class="rv">' + dec + '</div></div>'
-      + '</div>' + scale;
+      + '</div>' + (compact ? "" : scale);
   }
   /* DATA · EVIDENCE · REVIEW · APPROVAL — honest about what the office holds
      versus what it has approved. A synchronised round is not an approved one,
@@ -1899,6 +1924,42 @@
       + row(T("ap_sup"), "", T("ap_sup_s"), "", true)
       + '</tbody></table>';
   }
+  /* The four-cell metadata strip — the reference's MODEL / SMU / INSPECTED BY /
+     LOCATION row, always four cells so the strip keeps its shape, each honest
+     as "Not recorded" when the round does not carry it. The fourth cell is the
+     location when there is one, else the verifier, else the equipment class —
+     the reference varies its fourth field by inspection type. */
+  function metaStrip(T, rec) {
+    /* Labels bilingual (T.I) like the rest of the report, so a bilingual sheet
+       pairs them and a single-language sheet shows the one — the same rule
+       every other label on the page obeys. */
+    function ms(labelKey, val) {
+      return '<div class="ms"><i>' + T.I(labelKey) + '</i>'
+        + (val ? '<b>' + val + '</b>' : '<b class="miss">' + esc(T("ma_none")) + '</b>') + '</div>';
+    }
+    var loc = rec.gps ? { k: "gps", v: esc(rec.gps.lat.toFixed(4) + ', ' + rec.gps.lon.toFixed(4)) }
+            : rec.sup ? { k: "f_sup", v: esc(rec.sup) }
+            : { k: "f_cat", v: esc(rec.clsLabel || "") };
+    return '<div class="mstrip">'
+      + ms("f_model", esc(rec.model || rec.clsLabel || ""))
+      + ms("f_smu", rec.smu ? esc(rec.smu) + ' h' : "")
+      + ms("f_by", esc(rec.by || ""))
+      + ms(loc.k, loc.v)
+      + '</div>';
+  }
+  /* The machine's own evidence — the equipment overview and the general
+     photographs — rendered as an inline block so it leads the sheet rather
+     than being stranded on a page of its own after the findings. An inspector
+     opening the report sees the machine first, then the components. */
+  function generalBlock(T, rec) {
+    if (!(rec.general || []).length) return "";
+    return '<div class="genwrap" style="margin-top:14px">'
+      + '<div class="subhd">' + T.I("gen_t") + '</div>'
+      + '<div class="genrow">'
+      + rec.general.map(function (u) { return genShot(T, u); }).join("")
+      + '</div>'
+      + '<div class="genwhy">' + T.I("gen_sub") + '</div></div>';
+  }
   function unitSheets(ctx, T, recs) {
     var secs = [];
     /* One full sheet per inspection TYPE, not per round.
@@ -1929,45 +1990,43 @@
     latest.forEach(function (rec, n) {
       var isWear = !!rec.wear;
       var mine = byType[rec.type] || [rec];
-      function fld(k, v) {
-        return '<span class="f"><i>' + k + '</i>' + v + '</span>';
-      }
+      /* THE MASTHEAD, TO THE REFERENCE'S OWN SHAPE.
+         Eyebrow with the report number opposite it; the inspection title; the
+         unit and date on one subtitle line; then a four-cell metadata strip.
+         The old header packed unit, class, model, date, SMU, inspector, GPS and
+         a point count into one flex row that wrapped into an unreadable block —
+         this splits identity (title/subtitle), reference number (eyebrow) and
+         metadata (strip) into the three places the reference keeps them. */
       var head =
         '<div class="mast">'
-        + '<div class="eyebrow">' + T.I("sub") + '</div>'
+        + '<div class="mhead">'
+          + '<div class="eyebrow">' + T.I("sub") + '</div>'
+          + '<div class="rno"><i>' + T.I("rr_report") + '</i>' + esc(reportNo(rec)) + '</div>'
+        + '</div>'
         /* A type the dictionary has never heard of falls back to the label the
            host resolved, not to the name of the key. */
         + '<div class="m1">' + (T.key("method_" + rec.type, "")
             ? T.S("method_" + rec.type)
             : T.both(rec.typeLabel || rec.type, rec.typeAlt)) + '</div>'
-        + '<div class="m2">'
-          + fld(T.I("rr_report"), '<span class="unum">' + esc(reportNo(rec)) + '</span>')
-          + fld(T.I("f_unit"), '<span class="unum">' + esc(rec.equip) + '</span>')
-          + fld(T.I("f_cat"), esc(rec.clsLabel || ""))
-          + (rec.model ? fld(T.I("f_model"), esc(rec.model)) : "")
-          + fld(T.I("f_date"), '<b>' + esc(rec.date || "") + '</b>')
-          + (rec.smu ? fld(T.I("f_smu"), '<b>' + esc(rec.smu) + '</b>') : "")
-          /* Inspector and location on the strip too, when recorded — the
-             reference's metadata row carries them and the sheet has room in a
-             flex line that already wraps. */
-          + (rec.by ? fld(T.I("f_by"), esc(rec.by)) : "")
-          + (rec.gps ? fld(T.I("gps"), '<span class="num">'
-              + rec.gps.lat.toFixed(4) + ', ' + rec.gps.lon.toFixed(4) + '</span>') : "")
-          + fld(T.I("f_pts"), '<b>' + rec.items.length + '</b>')
+        + '<div class="msub"><span class="unum">' + esc(rec.equip) + '</span>'
+          + (rec.date ? ' · <b>' + esc(rec.date) + '</b>' : '')
+          + (rec.smu ? ' · <b>' + esc(rec.smu) + '</b> h' : '')
+          + (rec.model ? ' · ' + esc(rec.model) : '')
+          + (mine.length > 1 ? ' · ' + T.S("rounds_n", { n: mine.length - 1 }) : '')
         + '</div>'
-        + (mine.length > 1
-            ? '<div class="quiet" style="margin-top:7px;">'
-              + T.S("rounds_n", { n: mine.length - 1 }) + '</div>' : "")
-        /* Something the host knows about this sheet that the readings cannot
-           say. It exists for one case and the case matters: a round pulled from
-           the folder prints its photographs by fetching them, and a phone with
-           no signal cannot. Without a line here that sheet is indistinguishable
-           from a round where nobody took a picture — a real value rendered as
-           nothing, which is the failure this project keeps having to fix. Both
-           renderings come from the host, already translated. */
-        + (rec.note ? '<div class="quiet" style="margin-top:7px;">'
+        /* The note, when the host set one — a folder round whose photographs
+           could not be fetched offline says so here rather than looking like a
+           round nobody photographed. */
+        + (rec.note ? '<div class="quiet" style="margin-top:6px;">'
               + T.both(rec.note, rec.noteAlt, "altl") + '</div>' : "")
         + '</div>';
+      /* The four-cell metadata strip goes on the sheets with room (non-wear,
+         via the branches below) and, for a wear round whose first page is the
+         drawing measured to the A4 fold, onto the measurement-register page —
+         never onto the drawing page, where a 30px box slices the track frame
+         (tray.cjs). The msub line above still carries unit, date, SMU and model
+         so the drawing page is never without them. */
+      var mstrip = metaStrip(T, rec);
       /* The rating / level / decision strip and scale, under the masthead.
          Added per branch, NOT baked into `head` — a wear round's first page is
          the masthead plus the track drawing, measured to the millimetre against
@@ -2044,7 +2103,8 @@
          and still the thing being reported on. */
       var isLube = rec.items.some(function (it) { return it.lube; });
       if (!isWear && isLube) {
-        secs.push({ nb: n > 0, html: '<div class="sec">' + head + rbar + body + '</div>' });
+        secs.push({ nb: n > 0, html: '<div class="sec">' + head + rbar + mstrip
+          + generalBlock(T, rec) + body + '</div>' });
         lubeSections(ctx, T, rec, sign).forEach(function (x) { secs.push(x); });
         evidenceSections(T, rec).forEach(function (x) { secs.push(x); });
         return;
@@ -2065,8 +2125,8 @@
       if (!isWear) {
         var oneMap = rec.mapHTML
           ? CMR.mapBlock(T, rec.mapHTML, 11, rec.zones, rec.mapKey) : "";
-        secs.push({ nb: n > 0, html: '<div class="sec">' + head + rbar + body
-          + (oneMap ? "" : sign) + '</div>' });
+        secs.push({ nb: n > 0, html: '<div class="sec">' + head + rbar + mstrip
+          + generalBlock(T, rec) + body + (oneMap ? "" : sign) + '</div>' });
         if (oneMap) secs.push({ nb: false, html: '<div class="sec">' + oneMap + sign + '</div>' });
         evidenceSections(T, rec).forEach(function (x) { secs.push(x); });
         return;
@@ -2084,7 +2144,17 @@
         : T.S("verdict_" + vc, { n: flagged(rec).length, of: rec.items.length })
           + (unread ? T.S("unread_n", { n: unread, of: rec.items.length }) : "");
       var maps = CMR.mapBlock(T, rec.mapHTML, 8, rec.zones, rec.mapKey);
-      var top = '<div class="sec">' + head
+      /* Where the metadata strip and the rating bar go on a wear round depends
+         on whether it has a measurement-register page. A real undercarriage or
+         64-station tray has one, and its drawing page is measured to the A4 fold
+         with no room for either — so the strip and the compact rating ride the
+         register page. A wear round with no readings has no register page, so
+         they ride the drawing page, which then has the room. Deciding by the
+         same rule measSections uses (a reading present) keeps the two in step. */
+      var hasReg = rec.items.some(function (it) {
+        return it.w && (it.w.mm != null || it.w.reason); });
+      var formal = mstrip + ratingBar(T, rec, true);
+      var top = '<div class="sec">' + head + (hasReg ? "" : formal)
         + '<div class="verdict v-' + ((vc === "ok" && unread) ? "watch" : vc) + '">' + verd + '</div>'
         + (over.length ? '<div class="verdict v-' + (overAct.length ? "act" : "watch") + '" style="margin-top:9px;">'
             + (overAct.length ? T.I("uc_over", { n: overAct.length }) + ". " : "")
@@ -2100,8 +2170,18 @@
          this the three ran together and the fold landed wherever the pixels
          put it, which is how a legend came to be split across two sheets. */
       secs.push({ nb: n > 0, fit: !!maps, html: top });
+      /* The metadata strip rides the measurement-register page, not the drawing
+         page — the drawing page is measured to the fold. It leads the register
+         so the reader meets the four reference fields before the readings. */
+      /* Only the metadata strip leads the register — the rating rides the
+         drawing page as the verdict chip for a round that has a register, and
+         adding the rating bar here too shifted the register's own pagination
+         into a one-line crumb overleaf (rptfit.cjs). The strip is the part the
+         register page was missing. */
       measSections(ctx, T, rec, sign, !!maps).forEach(function (x, ix) {
-        if (ix === 0) x = Object.assign({}, x, { nb: true });
+        if (ix === 0 && hasReg) x = Object.assign({}, x, { nb: true,
+          html: (x.html || "").replace('<div class="sec">', '<div class="sec">' + mstrip) });
+        else if (ix === 0) x = Object.assign({}, x, { nb: true });
         secs.push(x);
       });
       /* A round that has BOTH gets both. Only the wear-less case is folded into
@@ -2119,7 +2199,10 @@
           + '<div class="board gal b' + (ph.length >= 2 ? 2 : 1) + '">'
           + ph.map(function (it) { return cell(ctx, T, it, null, true); }).join("") + '</div></div>' });
       }
-      evidenceSections(T, rec).forEach(function (x) { secs.push(x); });
+      /* A wear round is drawing-led — its whole-machine and left/right
+         photographs come here, after the measurements, which is the
+         reference's undercarriage order. keepGeneral, so they are not lost. */
+      evidenceSections(T, rec, true).forEach(function (x) { secs.push(x); });
     });
 
     if (older.length) {

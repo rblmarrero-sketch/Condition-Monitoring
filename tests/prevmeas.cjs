@@ -218,14 +218,21 @@ const run = async (p, recs, unit, want, photos) => {
      (r.text.match(/Earlier rounds/i) || ["absent"])[0]);
   ok('no point-by-point grid', !/point by point/i.test(r.text),
      (r.text.match(/Point by point/i) || ["absent"])[0]);
-  ok('and a plug report carries no table at all',
-     !/<table/.test(r.html), String((r.html.match(/<table/g) || []).length) + ' table(s)');
+  /* No MEASUREMENT or history table on a plug round — the readings live under
+     the photographs, not in a repeated grid. The approval sign-off is a table
+     now (the reference's three-role block), so it is excluded here: it is
+     furniture, not a data table. */
+  const dataTables = h => (h.replace(/<table class="appr"[\s\S]*?<\/table>/g, "")
+    .match(/<table/g) || []).length;
+  ok('and a plug report carries no measurement table',
+     dataTables(r.html) === 0, dataTables(r.html) + ' data table(s)');
 
   console.log('\nbut not the furniture');
   ok('one masthead, not one per round', (r.html.match(/class="mast"/g) || []).length === 1,
      String((r.html.match(/class="mast"/g) || []).length));
-  ok('one signature block', (r.html.match(/class="shsign"/g) || []).length === 1,
-     String((r.html.match(/class="shsign"/g) || []).length));
+  /* The sign-off is the three-role approval table now, once per report. */
+  ok('one sign-off block', (r.html.match(/class="appr"/g) || []).length === 1,
+     String((r.html.match(/class="appr"/g) || []).length));
 
   console.log('\nthe things that were being said twice');
   ok('a point code is not printed above a name that already starts with it',
@@ -295,7 +302,10 @@ const run = async (p, recs, unit, want, photos) => {
   console.log('\none round has no history to show');
   r = await run(p, TWO.slice(1), 'TK160');
   ok('nothing is reprinted below it', !r.full.length, r.full.length + ' section(s)');
-  ok('and no table appears with nothing to put in it', !/<table/.test(r.html));
+  /* No DATA table with nothing to put in it — the approval sign-off table is
+     expected furniture and does not count. */
+  ok('and no table appears with nothing to put in it',
+     !/<table/.test(r.html.replace(/<table class="appr"[\s\S]*?<\/table>/g, "")));
   ok('and is one page', r.pages === 1, r.pages + ' page(s)');
 
   console.log(fails.length ? '\nFAILURES:\n  ' + [...new Set(fails)].join('\n  ')
