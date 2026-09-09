@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=282">
+<link rel="manifest" href="manifest.webmanifest?v=283">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=282">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=282">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=282">
+<link rel="apple-touch-icon" href="icon-192.png?v=283">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=283">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=283">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2222,15 +2222,15 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=282"></script>
-<script src="upload-defaults.js?v=282"></script>
-<script src="hme.js?v=282"></script>
-<script src="mp-fc.js?v=282"></script>
-<script src="hme-cascade.js?v=282"></script>
-<script src="assets.js?v=282"></script>
-<script src="temp-limits.js?v=282"></script>
-<script src="normalize.js?v=282"></script>
-<script src="terms.js?v=282"></script>
+<script src="native.js?v=283"></script>
+<script src="upload-defaults.js?v=283"></script>
+<script src="hme.js?v=283"></script>
+<script src="mp-fc.js?v=283"></script>
+<script src="hme-cascade.js?v=283"></script>
+<script src="assets.js?v=283"></script>
+<script src="temp-limits.js?v=283"></script>
+<script src="normalize.js?v=283"></script>
+<script src="terms.js?v=283"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2249,25 +2249,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=282"></script>
-<script src="edits.js?v=282"></script>
-<script src="due.js?v=282"></script>
-<script src="wear.js?v=282"></script>
-<script src="wear-figs.js?v=282"></script>
-<script src="wear-map.js?v=282"></script>
-<script src="machine-photos.js?v=282"></script>
-<script src="machine-fig.js?v=282"></script>
-<script src="get.js?v=282"></script>
-<script src="points.js?v=282"></script>
-<script src="uc-points.js?v=282"></script>
-<script src="inspect-guide.js?v=282"></script>
-<script src="get-figs.js?v=282"></script>
-<script src="body-points.js?v=282"></script>
-<script src="body-map.js?v=282"></script>
-<script src="lube.js?v=282"></script>
-<script src="lube-overrides.js?v=282"></script>
-<script src="lube2027.js?v=282"></script>
-<script src="report-core.js?v=282"></script>
+<script src="grade.js?v=283"></script>
+<script src="edits.js?v=283"></script>
+<script src="due.js?v=283"></script>
+<script src="wear.js?v=283"></script>
+<script src="wear-figs.js?v=283"></script>
+<script src="wear-map.js?v=283"></script>
+<script src="machine-photos.js?v=283"></script>
+<script src="machine-fig.js?v=283"></script>
+<script src="get.js?v=283"></script>
+<script src="points.js?v=283"></script>
+<script src="uc-points.js?v=283"></script>
+<script src="inspect-guide.js?v=283"></script>
+<script src="get-figs.js?v=283"></script>
+<script src="body-points.js?v=283"></script>
+<script src="body-map.js?v=283"></script>
+<script src="lube.js?v=283"></script>
+<script src="lube-overrides.js?v=283"></script>
+<script src="lube2027.js?v=283"></script>
+<script src="report-core.js?v=283"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2619,7 +2619,7 @@ const I18N = {
     ud_ok_wait:"checked {t} · v{n} is on the server, download not started ({why}) · next try {next}",
     ud_via_sw:"through the worker",
     ud_fail:"check at {t} failed — {why} · last reached {last} · next try {next}",
-    ud_last_never:"never",
+    ud_data_ok:"backend answered {t}", ud_last_never:"never",
     ud_stuck:"This page has not reached the server for {m} min while the phone reports a network — it reloads itself when idle.",
     unit_guess:"{u} is not in the asset register. Showing the standard {c} component list — check it fits the machine, and ask for the register to be updated.",
     uc_fig_hide:"Hide the diagram", uc_fig_show:"Show the diagram",
@@ -2864,7 +2864,8 @@ const I18N = {
     rdy_bld_new:"A newer build is downloading. Keep signal until it finishes.",
     rdy_bld_wait:"Build {n} is on the server but the download has not started ({why}). Keep signal — it keeps trying.",
     rdy_bld_off:"Cannot check without signal — running build {n}.",
-    rdy_bld_fail:"Could not reach the server at {t} ({why}) — running build {n}. It keeps trying by itself.",
+    rdy_bld_fail:"Could not reach {h} at {t} ({why}) — running build {n}. It keeps trying by itself.",
+    rdy_bld_split:"The inspection server answered at {t}, so this phone has a network — it is the site the app is published from that it cannot reach. Nothing to do at the machine; report it.",
     rdy_bld_never:"Not checked yet — running build {n}.",
     rdy_bg_t:"Stays up to date on its own",
     rdy_bg_on:"On. This phone is woken when a build ships, when the fleet list changes and before each shift, and told whether it is ready.",
@@ -3177,7 +3178,7 @@ const I18N = {
     ud_ok_wait:"проверено {t} · v{n} на сервере, загрузка не началась ({why}) · следующая попытка {next}",
     ud_via_sw:"через воркер",
     ud_fail:"проверка {t} не удалась — {why} · последний ответ {last} · следующая попытка {next}",
-    ud_last_never:"никогда",
+    ud_data_ok:"сервер осмотров ответил в {t}", ud_last_never:"никогда",
     ud_stuck:"Эта страница {m} мин не может связаться с сервером, хотя телефон сообщает о сети — она перезагрузится сама в простое.",
     unit_guess:"{u} нет в реестре оборудования. Показан стандартный перечень узлов «{c}» — проверьте соответствие машине и запросите обновление реестра.",
     uc_fig_hide:"Скрыть схему", uc_fig_show:"Показать схему",
@@ -3406,7 +3407,8 @@ const I18N = {
     rdy_bld_new:"Загружается новая сборка. Не теряйте связь до конца.",
     rdy_bld_wait:"Сборка {n} есть на сервере, но загрузка не началась ({why}). Держите связь — приложение повторяет.",
     rdy_bld_off:"Без связи проверить нельзя — сборка {n}.",
-    rdy_bld_fail:"Сервер недоступен в {t} ({why}) — сборка {n}. Приложение повторяет само.",
+    rdy_bld_fail:"Недоступен {h} в {t} ({why}) — сборка {n}. Приложение повторяет само.",
+    rdy_bld_split:"Сервер осмотров ответил в {t}, значит сеть у телефона есть — недоступен именно сайт, откуда публикуется приложение. У машины делать нечего; сообщите об этом.",
     rdy_bld_never:"Ещё не проверялось — сборка {n}.",
     rdy_bg_t:"Обновляется самостоятельно",
     rdy_bg_on:"Включено. Телефон будят при выходе сборки, при изменении списка парка и перед сменой, и сообщают, готов ли он.",
@@ -11144,7 +11146,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="282";
+const BUILD="283";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -12833,7 +12835,10 @@ async function yardCheck(){
     else if(!U.at || inFlight) add("warn",t("rdy_bld_t"),t("rdy_bld_never",{n:BUILD}),
       { label:t("rdy_fix_retry"), run:async()=>{ await checkForNewBuild(); } },"build");
     else if(!U.server) add(navigator.onLine?"bad":"warn",t("rdy_bld_t"),
-      navigator.onLine ? t("rdy_bld_fail",{t:hhmm(U.failAt),why:U.why,n:BUILD}) : t("rdy_bld_off",{n:BUILD}),
+      navigator.onLine
+        ? t("rdy_bld_fail",{t:hhmm(U.failAt),why:U.why,n:BUILD,h:U.host||location.host})
+          + (U.dataOk ? " " + t("rdy_bld_split",{t:hhmm(U.dataOk)}) : "")
+        : t("rdy_bld_off",{n:BUILD}),
       { label:t("rdy_fix_retry"), run:async()=>{ await checkForNewBuild(); } },"build");
     else if(U.server!==BUILD && U.started) add("warn",t("rdy_bld_t"),t("rdy_bld_new"),null,"build");
     else if(U.server!==BUILD) add("bad",t("rdy_bld_t"),t("rdy_bld_wait",{n:U.server,why:U.why}),
@@ -13365,6 +13370,27 @@ async function renderNet(){
 const setNet=renderNet;                          // the old name, still called at init
 $("netStatus").onclick=()=>showPane("paneQueue");
 addEventListener("online",renderNet); addEventListener("offline",renderNet);
+/* THE BADGE HAD NO CLOCK, SO IT STOPPED BEING TRUE.
+
+   It was redrawn on a team pull, a finished send, a native network change, a
+   request outcome and a settings change — every one of which is something
+   HAPPENING. A phone with nothing to send makes no requests, so on the shift
+   this app is built for — switched on in the crib room, carried into the pit,
+   carried back out — the badge froze on whatever it said when the signal went
+   and never recovered.
+
+   That is how a handset came back reading "Offline — work saved here" at the
+   top while the readiness card below it, which recomputes itself, said the
+   phone had a network and was retrying. Two panels on one screen disagreeing
+   about the most basic fact there is, and the stale one is the one in the
+   masthead that everybody looks at first.
+
+   So it is on a clock, and on coming back to the front — the same two signals
+   the update check has always used, for the same reason. A minute is well
+   inside how long anybody stares at it, and netState() is a flag read plus a
+   queue count. */
+setInterval(renderNet, 60000);
+addEventListener("visibilitychange",()=>{ if(!document.hidden) renderNet(); });
 
 /* ===================== light / dark ===================== */
 /* Auto follows the phone; the other two override it. Stored per phone, because
@@ -13627,6 +13653,23 @@ function checkForNewBuild(){
       try{ const d=await swServerBuild(); want=d.server; UPD.via="sw"; }catch(_){ /* both paths failed */ } }
     if(!want){
       UPD.failAt=Date.now(); UPD.why=whyOf(err); UPD.server=null; UPD.started=false;
+      /* WHICH SERVER, AND IS THE OTHER ONE ANSWERING?
+
+         This app talks to two different hosts for two different things: the
+         BUILD comes from wherever the app is published (GitHub Pages), and the
+         inspections go to the backend. They fail independently, and a phone
+         that says "could not reach the server" while it is plainly syncing
+         rounds is telling a reader something that cannot be true of one
+         server. Baimskaya sits behind a link where one of those hosts can be
+         unreachable for hours while the other is fine — and which one it is
+         decides whether anybody can do anything about it.
+
+         So the failure records the host it asked, and whether the BACKEND has
+         answered since this attempt began. That is evidence, not a guess:
+         netOkAt is stamped by a real reply from the upload endpoint. */
+      UPD.host=location.host;
+      UPD.dataOk = (typeof netOkAt==="number" && netOkAt>0
+                    && (Date.now()-netOkAt) < 15*60*1000) ? netOkAt : 0;
       /* A phone that says it has a network and cannot reach anything through
          this page is counted; a phone that says it has none is simply offline. */
       if(navigator.onLine){ UPD.stuck++; if(!UPD.stuckSince) UPD.stuckSince=UPD.at; }
@@ -13712,7 +13755,16 @@ function renderUpdDiag(){
     if(UPD.server===BUILD) s=t("ud_ok",{t:hhmm(UPD.okAt),n:UPD.server})+via;
     else if(UPD.started) s=t("ud_ok_new",{t:hhmm(UPD.okAt),n:UPD.server})+via;
     else s=t("ud_ok_wait",{t:hhmm(UPD.okAt),n:UPD.server,why:UPD.why,next:UPD.next?inSecs(UPD.next):"—"})+via;
-  } else s=t("ud_fail",{t:hhmm(UPD.failAt),why:UPD.why,last:UPD.okAt?hhmm(UPD.okAt):t("ud_last_never"),next:UPD.next?inSecs(UPD.next):"—"});
+  } else { s=t("ud_fail",{t:hhmm(UPD.failAt),why:UPD.why,last:UPD.okAt?hhmm(UPD.okAt):t("ud_last_never"),next:UPD.next?inSecs(UPD.next):"—"});
+    /* The two hosts, told apart. "Could not reach the server" on a phone that
+       is visibly syncing rounds is a sentence a reader cannot act on, because
+       it is not true of one server: the build comes from where the app is
+       published and the rounds go to the backend. Naming the one that failed,
+       and saying the other answered, is the difference between a mystery and
+       a fault somebody can report. */
+    s += " · " + (UPD.host||location.host);
+    if(UPD.dataOk) s += " · " + t("ud_data_ok",{t:hhmm(UPD.dataOk)});
+  }
   if(UPD.stuck>=STUCK_N && UPD.stuckSince) s+=" · "+t("ud_stuck",{m:Math.round((Date.now()-UPD.stuckSince)/60000)});
   el.textContent=updSurface()+" · "+s;
   el.classList.toggle("bad", !!UPD.at && !UPD.server);
