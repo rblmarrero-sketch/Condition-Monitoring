@@ -252,8 +252,8 @@ const SEED = `(async () => {
   console.log('\n  the sections are numbered in the order they are read');
   const numbered = sec.map(h => (h.match(/class="n">(\d+)<\/span><span class="h2">([^<]+)/) || []))
     .filter(m => m.length).map(m => m[1] + ' ' + m[2].trim());
-  ok('01 work, 02 detail, 03 legend with no extras',
-    JSON.stringify(numbered) === JSON.stringify(['01 What needs doing','02 Inspection detail','03 How to read this report']),
+  ok('01 work, 02 detail, 03 approval, 04 legend with no extras',
+    JSON.stringify(numbered) === JSON.stringify(['01 What needs doing','02 Inspection detail','03 Approval and sign-off','04 How to read this report']),
     JSON.stringify(numbered));
 
   console.log('\n  the PDF itself');

@@ -753,6 +753,16 @@
       ap_sup_s:"Approved / work required",
       ma_head:"Maintenance action", ma_action:"Recorded action", ma_cause:"Direct cause",
       ma_owner:"Owner", ma_wo:"Work order", ma_due:"Due date", ma_none:"Not recorded",
+      period:"Period",
+      prog_head:"Inspection programme", prog_insp:"Inspection", prog_done:"Completed",
+      prog_worst:"Worst rating", prog_issue:"Main issue", prog_next:"Next action",
+      prog_none:"No completed round", prog_begin:"Begin a controlled round",
+      prog_watch:"Continue monitoring",
+      ac_head:"Action control", ac_open:"Open", ac_overdue:"Overdue",
+      ac_noowner:"No owner", ac_nowo:"No work order", ac_verified:"Verified", ac_na:"Not available",
+      rc_head:"Report controls", rc_source:"Source identified",
+      rc_rev_req:"Reviewer required", rc_appr_req:"Approval required",
+      ap_sec:"Approval and sign-off",
       by_who:"Inspected by", sup:"Verified by", nosign:"not signed off",
       gps:"Location", none_att:"None flagged.",
       /* What a machine photograph is of. */
@@ -881,6 +891,16 @@
       ap_sup_s:"Утверждено / требуется работа",
       ma_head:"Действие по обслуживанию", ma_action:"Записанное действие", ma_cause:"Прямая причина",
       ma_owner:"Ответственный", ma_wo:"Наряд-заказ", ma_due:"Срок", ma_none:"Не записано",
+      period:"Период",
+      prog_head:"Программа осмотров", prog_insp:"Осмотр", prog_done:"Выполнено",
+      prog_worst:"Худшая оценка", prog_issue:"Основная проблема", prog_next:"Следующее действие",
+      prog_none:"Нет завершённого осмотра", prog_begin:"Начать контролируемый осмотр",
+      prog_watch:"Продолжать наблюдение",
+      ac_head:"Контроль действий", ac_open:"Открыто", ac_overdue:"Просрочено",
+      ac_noowner:"Без ответственного", ac_nowo:"Без наряда", ac_verified:"Проверено", ac_na:"Нет данных",
+      rc_head:"Контроль отчёта", rc_source:"Источник определён",
+      rc_rev_req:"Требуется проверка", rc_appr_req:"Требуется утверждение",
+      ap_sec:"Утверждение и подпись",
       by_who:"Осмотр выполнил", sup:"Проверил", nosign:"не подписано",
       gps:"Координаты", none_att:"Не отмечено.",
       cat_OVERVIEW:"Общий вид машины", cat_LEFT:"Левая сторона", cat_RIGHT:"Правая сторона",
@@ -1369,6 +1389,88 @@
       if(a==="act") return a;
       if(isWatch(it)) return "watch";
       return a; }, "ok");
+  }
+  /* The grade WORD only — "Degraded", the part before the operational meaning
+     the grade label carries after an em-dash. One source (grade.js via g_N). */
+  function gword(T, n){ return n ? String(T("g_" + n)).split(" — ")[0] : ""; }
+
+  /* ── THE ALL-INSPECTIONS REPORT'S OWN BLOCKS (Report family B) ────────────
+     The reference combined report is three pages: a management summary, one
+     consolidated maintenance-action table, and technical highlights. The
+     fleet report already carries the summary stats, the action list and the
+     per-machine detail; these add the reference's own signature elements, all
+     from the records. */
+
+  /* THE PROGRAMME BY TYPE — for each round type present: how many completed,
+     the worst rating across them, the worst finding's defect, and the action
+     the worst rating implies. The reference's page-1 table. */
+  function progRows(T, recs){
+    var byType={}, order=[];
+    recs.forEach(function(r){
+      if(!byType[r.type]){ byType[r.type]={ label:r.typeLabel||r.type, labelAlt:r.typeAlt||"",
+        n:0, worst:0, issue:"", issueAlt:"", ig:-1 }; order.push(r.type); }
+      var t=byType[r.type]; t.n++;
+      (r.items||[]).forEach(function(it){
+        if(it.general) return;
+        var g=gnum(it.grade); if(g>t.worst) t.worst=g;
+        if(it.defect && g>t.ig){ t.issue=it.defect; t.ig=g; }
+      });
+    });
+    return order.map(function(ty){
+      var t=byType[ty], col=t.worst?GRADE_HEX[t.worst]:"#7b858e";
+      var next=t.worst?T.I("dec_"+t.worst):T.I("prog_watch");
+      return '<tr>'
+        + '<td class="stripe" style="border-left-color:'+col+'">'+T.both(t.label,t.labelAlt)+'</td>'
+        + '<td class="c n">'+t.n+'</td>'
+        + '<td class="c">'+(t.worst
+            ? '<b style="color:'+col+'">'+t.worst+' – '+esc(gword(T,t.worst))+'</b>'
+            : '<span class="muted">—</span>')+'</td>'
+        + '<td>'+(t.issue?esc(t.issue):'<span class="muted">—</span>')+'</td>'
+        + '<td>'+next+'</td></tr>';
+    }).join("");
+  }
+  /* DATA · EVIDENCE · REVIEW · APPROVAL for the whole report — the reference's
+     report-controls strip. Honest: the source is identified and evidence is
+     counted, but a review and an approval are required, not done. */
+  function fleetControls(T, recs){
+    var st=docStatus(recs), exp=0, got=0;
+    recs.forEach(function(r){ if(r.gap){ exp+=r.gap.expected||0; got+=r.gap.received||0; } });
+    function cell(k,v,cls){ return '<div class="sc"><div class="sk">'+esc(k)
+      +'</div><div class="sv '+(cls||"")+'">'+esc(v)+'</div></div>'; }
+    return '<div class="sstrip" style="margin-top:16px">'
+      + cell(T("ss_data"), T("rc_source"), st.undelivered?"pend":"ok")
+      + cell(T("ss_evidence"), exp?T("ss_recv",{r:got,e:exp}):T("ss_ev_none"), (exp&&got<exp)?"pend":"ok")
+      + cell(T("ss_review"), T("rc_rev_req"), "pend")
+      + cell(T("ss_approval"), T("rc_appr_req"), "pend")
+      + '</div>';
+  }
+  /* OPEN · OVERDUE · NO OWNER · NO WORK ORDER · VERIFIED — the reference's
+     action-control summary. Open is every finding that needs a maintenance
+     response; the rest are counted from what the records do and do not carry.
+     Verified is Not available: nothing in the record proves an action was
+     verified, and a fabricated count is the false reassurance this report
+     exists to avoid. */
+  function actionControl(T, recs, todayISO){
+    var open=0, overdue=0, noOwner=0, noWO=0;
+    recs.forEach(function(r){ (r.items||[]).forEach(function(it){
+      if(it.general) return;
+      var needs = it.action || gnum(it.grade)>=3 || (it.w&&(it.w.band==="act"||it.w.band==="watch"));
+      if(!needs) return;
+      open++;
+      if(it.target && String(it.target)<todayISO) overdue++;
+      if(!it.resp) noOwner++;
+      if(!it.wo) noWO++;
+    }); });
+    function cell(k,v,cls){ return '<div class="sc"><div class="sk">'+esc(k)
+      +'</div><div class="sv '+(cls||"")+'">'+esc(v)+'</div></div>'; }
+    return '<div class="subhd" style="margin-top:16px">'+T.I("ac_head")+'</div>'
+      + '<div class="sstrip" style="margin-top:6px">'
+      + cell(T("ac_open"), String(open), open?"":"ok")
+      + cell(T("ac_overdue"), String(overdue), overdue?"pend":"ok")
+      + cell(T("ac_noowner"), String(noOwner), noOwner?"pend":"")
+      + cell(T("ac_nowo"), String(noWO), noWO?"pend":"")
+      + cell(T("ac_verified"), T("ac_na"), "")
+      + '</div>';
   }
 
 
@@ -2774,7 +2876,9 @@
       + '<div class="h1">'+T.both(ctx.title,ctx.titleAlt)+'</div>'
       + '<div class="rule" style="margin:13px 0 0"></div>'
       + '<div class="muted num" style="font-size:10.5px;padding:7px 0 20px;">'
-        + T.I("generated")+' '+esc(stampTxt)+(typeLine?" · "+typeLine:"")+'</div>'
+        + T.I("generated")+' '+esc(stampTxt)
+        + (X.first?' · '+T.I("period")+' '+esc(X.first)+(X.last&&X.last!==X.first?' → '+esc(X.last):""):"")
+        + (typeLine?" · "+typeLine:"")+'</div>'
       /* On the face, under the date, before anything a reader would act on. */
       + statusHTML(T, docStatus(recs))
       + '<div class="lede" style="margin-bottom:18px;">'
@@ -2793,6 +2897,14 @@
       + '</div>'
       + (graded ? '<div style="margin-top:20px;"><div class="eyebrow" style="margin-bottom:8px;">'
           + T.I("cond")+'</div><div class="bar">'+bar+'</div><div class="barkey">'+key+'</div></div>' : "")
+      /* THE PROGRAMME BY TYPE — the reference's page-1 table: how each round type
+         stands, its worst rating and the action it implies. */
+      + '<div style="margin-top:22px;"><div class="eyebrow" style="margin-bottom:9px;">'+T.I("prog_head")+'</div>'
+        + '<table><tr><th>'+T.L("prog_insp")+'</th>'
+        + '<th class="c" style="width:74px">'+T.L("prog_done")+'</th>'
+        + '<th class="c" style="width:104px">'+T.L("prog_worst")+'</th>'
+        + '<th style="width:150px">'+T.L("prog_issue")+'</th>'
+        + '<th>'+T.L("prog_next")+'</th></tr>'+progRows(T,recs)+'</table></div>'
       + '<div style="margin-top:22px;"><div class="eyebrow" style="margin-bottom:9px;">'+T.I("glance")+'</div>'
         + '<table><tr><th style="width:78px">'+T.L("c_unit")+'</th>'
         + '<th style="width:118px">'+T.L("c_type")+'</th>'
@@ -2805,6 +2917,11 @@
           + '<span class="i"><span class="sw" style="background:'+GRADE_HEX[3]+'"></span><b>'+X.wear.watch+'</b> '+T.I("band_watch")+'</span>'
           + '<span class="i"><span class="sw" style="background:'+GRADE_HEX[5]+'"></span><b>'+X.wear.act+'</b> '+T.I("band_act")+'</span>'
           + '</div></div>' : "")
+      /* THE REPORT CONTROLS — the reference's DATA / EVIDENCE / REVIEW /
+         APPROVAL strip, honest about what is identified versus what a reviewer
+         and a planner still owe. */
+      + '<div style="margin-top:20px;"><div class="eyebrow" style="margin-bottom:8px;">'+T.I("rc_head")+'</div>'
+        + fleetControls(T, recs) + '</div>'
       + '</div>'});
 
     /* ---------- 2. the work ---------- */
@@ -2856,6 +2973,10 @@
           + '<td>'+todo+'</td>' + tail;
       });
       wl += '</table>';
+      /* The action-control summary — open, overdue, and what is missing an
+         owner or a work order — under the consolidated table, the reference's
+         page-2 footer. */
+      wl += actionControl(T, recs, today);
     }
     secs.push({nb:true, html: wl+'</div>'});
 
@@ -2983,13 +3104,23 @@
       }
     });
 
+    /* ---------- the report's own sign-off — the reference's three roles ------
+       A fleet report is not one technician's round, so all three lines are
+       open: the reliability engineer and the maintenance supervisor sign what
+       they review and approve, and the technician line is left blank rather
+       than borrowing a name from one of the many rounds inside. */
+    secs.push({nb:true, html:'<div class="sec">'
+      + '<div class="sechd"><span class="n">'+p2(secN+2)+'</span>'
+      + '<span class="h2">'+T.I("ap_sec")+'</span></div>'
+      + approvalBlock(T, {}) + '</div>'});
+
     /* ---------- 4. how to read any of it ---------- */
     var gl=GRADE_LEVELS.map(function(g){
       return '<div class="lgrow">'+gradeChip(g)+'<div class="t">'+T.S("g_"+g)+'</div></div>'; }).join("");
     var sl=["NOF","INC","DEG","CRI"].map(function(s){
       return '<div class="lgrow">'+sevChip(ctx,s)+'<div class="t">'+T.S("s_"+s)+'</div></div>'; }).join("");
     secs.push({nb:true, html:'<div class="sec">'
-      + '<div class="sechd"><span class="n">'+p2(secN+2)+'</span><span class="h2">'+T.I("legend")+'</span></div>'
+      + '<div class="sechd"><span class="n">'+p2(secN+3)+'</span><span class="h2">'+T.I("legend")+'</span></div>'
       + '<div class="legend"><div>'
         + '<div class="eyebrow" style="margin-bottom:9px;">'+T.I("lg_grade")+'</div>'+gl
         + '<div class="eyebrow" style="margin:16px 0 9px;">'+T.I("lg_sev")+'</div>'+sl
