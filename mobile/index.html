@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=286">
+<link rel="manifest" href="manifest.webmanifest?v=287">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=286">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=286">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=286">
+<link rel="apple-touch-icon" href="icon-192.png?v=287">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=287">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=287">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2222,15 +2222,15 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=286"></script>
-<script src="upload-defaults.js?v=286"></script>
-<script src="hme.js?v=286"></script>
-<script src="mp-fc.js?v=286"></script>
-<script src="hme-cascade.js?v=286"></script>
-<script src="assets.js?v=286"></script>
-<script src="temp-limits.js?v=286"></script>
-<script src="normalize.js?v=286"></script>
-<script src="terms.js?v=286"></script>
+<script src="native.js?v=287"></script>
+<script src="upload-defaults.js?v=287"></script>
+<script src="hme.js?v=287"></script>
+<script src="mp-fc.js?v=287"></script>
+<script src="hme-cascade.js?v=287"></script>
+<script src="assets.js?v=287"></script>
+<script src="temp-limits.js?v=287"></script>
+<script src="normalize.js?v=287"></script>
+<script src="terms.js?v=287"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2249,25 +2249,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=286"></script>
-<script src="edits.js?v=286"></script>
-<script src="due.js?v=286"></script>
-<script src="wear.js?v=286"></script>
-<script src="wear-figs.js?v=286"></script>
-<script src="wear-map.js?v=286"></script>
-<script src="machine-photos.js?v=286"></script>
-<script src="machine-fig.js?v=286"></script>
-<script src="get.js?v=286"></script>
-<script src="points.js?v=286"></script>
-<script src="uc-points.js?v=286"></script>
-<script src="inspect-guide.js?v=286"></script>
-<script src="get-figs.js?v=286"></script>
-<script src="body-points.js?v=286"></script>
-<script src="body-map.js?v=286"></script>
-<script src="lube.js?v=286"></script>
-<script src="lube-overrides.js?v=286"></script>
-<script src="lube2027.js?v=286"></script>
-<script src="report-core.js?v=286"></script>
+<script src="grade.js?v=287"></script>
+<script src="edits.js?v=287"></script>
+<script src="due.js?v=287"></script>
+<script src="wear.js?v=287"></script>
+<script src="wear-figs.js?v=287"></script>
+<script src="wear-map.js?v=287"></script>
+<script src="machine-photos.js?v=287"></script>
+<script src="machine-fig.js?v=287"></script>
+<script src="get.js?v=287"></script>
+<script src="points.js?v=287"></script>
+<script src="uc-points.js?v=287"></script>
+<script src="inspect-guide.js?v=287"></script>
+<script src="get-figs.js?v=287"></script>
+<script src="body-points.js?v=287"></script>
+<script src="body-map.js?v=287"></script>
+<script src="lube.js?v=287"></script>
+<script src="lube-overrides.js?v=287"></script>
+<script src="lube2027.js?v=287"></script>
+<script src="report-core.js?v=287"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -9503,6 +9503,32 @@ async function teamPhotosFor(g,rec,say){
   let hits=await scan(expandFolder(g.folder||FOLDER_DEFAULT, rec));
   if(!hits) return null;                           // no folder, no answer
   if(!hits.length){ hits=await scan(""); if(!hits) return null; }
+  /* WHERE THE OFFICE FILED IT WINS OVER WHERE IT WAS CAPTURED.
+
+     Everything above matches a file to the position whose NAME it carries,
+     which is where the inspector took it. The office can move a photograph
+     afterwards — onto the machine, onto another component — take it off the
+     record, or keep it off the report, and the marker for that arrives on
+     this phone with the round. It was never read here: the dashboard applied
+     these decisions and the phone did not, so a photograph tidied onto the
+     machine overview in the office was still printed under the component by
+     the inspector standing at the machine. One document, two answers.
+
+     CMEdits.fileOf is the rule the office reads through, so there is one
+     answer now rather than one each. `general` comes back as a flag because
+     the two surfaces spell the machine's position differently — GEN_KEY
+     here, MACHINE there — and the caller names it in its own vocabulary. */
+  {
+    const a=(window.CMEdits && typeof teamEditsAll==="function")
+      ? CMEdits.assignOf(teamEditsAll()[teamRecKey(rec)]) : null;
+    if(a && Object.keys(a).length) hits=hits.map(h=>{
+      const f=CMEdits.fileOf(a, h.name, h.key, h.key===GEN_KEY);
+      /* Off the record, or kept out of the report — and this list only ever
+         feeds a report. Either way the sheet must not carry it. */
+      if(f.off || f.exclude) return null;
+      return f.moved ? {...h, key:(f.general?GEN_KEY:f.key)} : h;
+    }).filter(Boolean);
+  }
   /* In the order they were taken, not the order the folder listed them. */
   hits.sort((a,b)=>a.key===b.key ? a.n-b.n : String(a.key).localeCompare(String(b.key)));
   const out={};
@@ -10840,6 +10866,39 @@ function teamRecToReport(rec){
            gps:rec.gps||null, signUrl:"",
            wear:!!(meta.wear||meta.get), temp:!!meta.temp, items };
 }
+/* EVERY PHOTOGRAPH THE FOLDER HANDED BACK, PLACED ON THE ROUND.
+
+   The report did this inline: walk the round's positions and take the
+   pictures for each. That silently drops any photograph filed onto a
+   position this round does NOT have, which the office
+   can produce two ways: it files against the class's reference list as well as
+   the round's own points, and a component photograph moved onto the machine
+   lands on the machine's position, which a round with no machine photographs
+   of its own has never had. The picture is in the folder, the decision was
+   made, and the sheet came out without it.
+
+   A position that only exists because a photograph was filed onto it carries
+   the photograph and NOTHING else — no grade, no reading, no action — so the
+   sheet says a picture was taken there and does not pretend anything was
+   measured. */
+function attachTeamPhotos(norm, rec, got){
+  if(!norm || !got) return;
+  Object.keys(got).forEach(k=>{
+    const ph=got[k];
+    if(!ph || !ph.length) return;
+    let it=(norm.items||[]).find(x=>x.key===k);
+    if(!it){
+      const nm=rptName(rec,k);
+      it={ key:k, name:nm.name, nameAlt:nm.nameAlt, code:nm.code, lube:null,
+           general:(k===GEN_KEY?1:0), cats:[], grade:"", sev:"",
+           resp:"", target:"", opstat:"", gradeWhy:"", defect:"", defectCode:"",
+           iso:"", cause:"", action:"", prio:"", prioLabel:"", wo:"",
+           comment:"", readings:[], photos:[], w:null, _filed:1 };
+      (norm.items || (norm.items=[])).push(it);
+    }
+    it.photos=ph;
+  });
+}
 /* The limits for one point, from whichever reference the round type uses. */
 function teamRefFor(rec,key){
   const a=ASSET_BY[rec.equip]||{};
@@ -10925,7 +10984,7 @@ $("roundRpt").onclick=async ()=>{
         got=await teamPhotosFor(gas, rec,
           (i,n)=>{ const el=$("dlgMsg"); if(el) el.textContent=t("rep_photo",{i:Math.min(i+1,n),n}); });
       }catch(e){ got=null; }
-      if(got) norm.items.forEach(it=>{ if(got[it.key]&&got[it.key].length) it.photos=got[it.key]; });
+      if(got) attachTeamPhotos(norm, rec, got);
       else addNote(norm,"rep_nophoto_net");
     } else addNote(norm, gas ? "rep_nophoto_off" : "rep_nophoto_nodrive");
     $("dlgMsg").textContent=t("rep_building")[1];
@@ -11174,7 +11233,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="286";
+const BUILD="287";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

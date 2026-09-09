@@ -107,5 +107,48 @@
     return m;
   }
 
-  return { apply: apply, latest: latest };
+  /* WHERE A PHOTOGRAPH BELONGS ONCE THE OFFICE HAS FILED IT.
+
+     The correction panel writes these decisions per FILE NAME, and until now
+     only the dashboard read them. So an engineer who moved a plug photograph
+     onto the machine overview saw it move on their screen, and an inspector
+     opening the same round on a phone — the same document, the same folder —
+     saw it still under the component. Two readers of one decision with one
+     reader implementing it is the same shape as the grade that never reached
+     the inspector, which is why apply() above exists.
+
+     Four decisions, all keyed by file name, and they are not alternatives:
+
+       point    it belongs to that inspection point — listed and printed there
+       general  it belongs to the machine, not to any one component
+       exclude  it stays on the record and does not print
+       off      it is off the record entirely
+
+     `general` is answered as a FLAG, never as a key: the phone keeps the
+     machine's photographs on "__general" and the office keys the same
+     position "MACHINE", and a rule that returned one spelling would be wrong
+     on the other surface. Each caller names it in its own vocabulary. */
+  function assignOf(e) { return (e && e.assign) || {}; }
+
+  /* For one file, on the position it arrived under. `from` is that position's
+     key and `wasGeneral` says whether that position is the machine's own. A
+     file nobody has filed comes back exactly where it arrived, with moved
+     false — the no-decision case must never look like a decision. */
+  function fileOf(a, name, from, wasGeneral) {
+    var out = { key: from, general: !!wasGeneral, cat: '', off: false, exclude: false, moved: false };
+    var d = a && a[name];
+    if (!d) return out;
+    out.off = !!d.off;
+    out.exclude = !!d.exclude;
+    if (d.general) {
+      out.general = true; out.key = null; out.cat = d.cat || '';
+      out.moved = !wasGeneral;
+    } else if (d.point) {
+      out.general = false; out.key = d.point; out.cat = '';
+      out.moved = !!wasGeneral || d.point !== from;
+    }
+    return out;
+  }
+
+  return { apply: apply, latest: latest, assignOf: assignOf, fileOf: fileOf };
 }));
