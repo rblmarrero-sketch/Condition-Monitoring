@@ -223,8 +223,8 @@ const SEED = `(async () => {
     const one = (over) => ({
       equip:'TK149', clsLabel:'HAUL TRUCK', model:'M', type:'GET', typeLabel:'GET',
       date:'2026-08-20', by:'S', sup:'A', smu:'1', wear:true, items:[
-        /* graded, and nowhere near a limit: the verdict is "watch" and the
-           count has to agree with it */
+        /* graded, and nowhere near a limit: the point register lists each grade
+           and the rating strip carries the worst of them (Degraded, 3) */
         { key:'A', name:'Tooth 1', grade:'C', sev:'DEG', w:{ mm:200, newMM:320,
           condemnMM:130, pct:63, band:'done' } },
         { key:'B', name:'Tooth 2', grade:'A', sev:'NOF', w:{ mm:300, newMM:320,
@@ -235,15 +235,22 @@ const SEED = `(async () => {
     const html = CMR.sections({ lang:'en', mode:'unit', title:'x', titleAlt:'x',
       stamp:new Date(), sevLabel:s => s, sevLabelAlt:s => s,
       records:[one(-280)] }).map(s => s.html).join('');
-    return { verdict: (html.match(/class="verdict[^"]*"[^>]*>([\s\S]*?)<\/div>/) || [])[1]
-                        .replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim(),
+    /* GET is a grade-based point register (v2 template p7-8): the worst grade
+       is on the rating strip, and every graded point has a register row. */
+    return { rating: (html.match(/class="rv"[^>]*>([\s\S]*?)<\/div>/) || [])[1]
+                        ? (html.match(/class="rv"[^>]*>([\s\S]*?)<\/div>/) || [])[1]
+                            .replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim() : '',
+             register: /Point register/.test(html),
+             rows: (html.match(/Tooth 1/) ? 1 : 0) + (html.match(/Shroud/) ? 1 : 0),
              neg: /-\s*\d+\s*%/.test(html),
              mm: html.indexOf('158') >= 0,
              ref: html.indexOf('60 → 25 mm') >= 0,
              good: html.indexOf('63%') >= 0 };
   });
-  ok('a graded round counts its findings, not zero of them',
-     /1 of 3/.test(nums.verdict), nums.verdict.slice(0, 60));
+  ok('a graded GET round carries its worst grade, not zero',
+     nums.rating === '3', nums.rating);
+  ok('  every graded point has a register row', nums.register && nums.rows === 2,
+     'register=' + nums.register + ' rows=' + nums.rows);
   ok('no percentage below zero reaches the paper', !nums.neg);
   ok('  but the millimetre does, with the reference beside it',
      nums.mm && nums.ref, 'reading and limits kept');

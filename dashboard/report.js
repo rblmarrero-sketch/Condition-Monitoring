@@ -338,6 +338,19 @@
                   ? inOther(() => actionName(it.action)) : "",
           prio: it.prio || "", prioLabel: it.prioLabel || "", wo: it.wo || "",
           comment: it.comment || "", readings: read,
+          /* The structured fields the type-specific templates print in their own
+             columns — particle count and component/oil hours (Magnetic Plug,
+             Filter Cut), measured/ambient/method (Thermography), detection
+             method (General Inspection) and the zone label (Dump Body). They
+             also feed `readings` above as a concatenated line, kept for the
+             history and earlier-round views; the columns read the raw values so
+             each is its own cell, honest as "Not recorded" when the field is
+             blank. */
+          particle: it.particle || "", comp: it.comp || "", oil: it.oil || "",
+          tempC: it.tempC || "", ambC: it.ambC || "",
+          tempM: it.tempMethod || it.tempM || "", tempMethodCode: it.tempMethod || "",
+          detect: it.detectionLabel || "", opstatLabel: it.opstatLabel || it.opstat || "",
+          zone: it.zone || "", zoneLabel: it.zoneLabel || "",
           lube: lubeBlock(rec, it),
           photos: wantPhotos ? photoSrcs(it, rec) : [],
           w: w ? { mm: w.mm, newMM: w.newMM, condemnMM: w.condemnMM, pct: w.wearPct,

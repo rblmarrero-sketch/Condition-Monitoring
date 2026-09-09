@@ -753,6 +753,29 @@
       ap_sup_s:"Approved / work required",
       ma_head:"Maintenance action", ma_action:"Recorded action", ma_cause:"Direct cause",
       ma_owner:"Owner", ma_wo:"Work order", ma_due:"Due date", ma_none:"Not recorded",
+      /* Type-body subheadings and column labels, to the v2 single-inspection
+         templates. Honest empty states share c_notrec / c_notmeas / c_nofind. */
+      tb_mp:"Equipment and component evidence",
+      tb_fc:"Filter findings", tb_fc_ev:"Required evidence",
+      tb_insp:"Findings by component or system", tb_insp_ph:"Photographs with findings",
+      tb_temp:"Temperature results", tb_temp_lim:"Technical limitation",
+      tb_temp_note:"No ambient temperature, operating state or load, method, or valid comparison was recorded, so the reading below stands alone and carries no confirmed defect conclusion.",
+      tb_uc_sum:"Condition summary", tb_get:"Point register",
+      tb_tb_ctrl:"Controlling readings",
+      uc_atlimit:"At / past limit", uc_above80:"Above 80%", uc_notmeas:"Not measured",
+      uc_controlling:"Controlling point", uc_decision:"Decision",
+      c_particle:"Particle finding", c_svchours:"Service hours", c_debris:"Debris / defect",
+      c_detection:"Detection", c_opstate:"Operating state", c_measured:"Measured",
+      c_ambient:"Ambient", c_method:"Method", c_comparison:"Comparison",
+      c_reference:"Reference", c_retention:"Defect / retention", c_new:"New",
+      c_minimum:"Minimum", c_change:"Change", c_status:"Status",
+      c_station:"Station", c_side:"Side", c_point:"Point", c_filter:"Filter",
+      c_notmeas:"Not measured", c_notrec:"Not recorded", c_nofind:"No finding",
+      ev_filterid:"Filter identification", ev_media:"Opened media", ev_debris:"Debris close-up",
+      ev_overview:"Equipment overview", ev_component:"Component", ev_defect:"Defect close-up",
+      ev_additional:"Additional", ev_thermal:"Thermal image with marker", ev_visible:"Visible-light comparison",
+      ev_assembly:"Whole GET assembly", ev_retention:"Retention", ev_pointmeas:"Point measurement",
+      tm_IR:"IR gun", tm_CAM:"Thermal camera", tm_CON:"Contact probe", tm_TEL:"Telemetry",
       period:"Period",
       prog_head:"Inspection programme", prog_insp:"Inspection", prog_done:"Completed",
       prog_worst:"Worst rating", prog_issue:"Main issue", prog_next:"Next action",
@@ -902,6 +925,27 @@
       ap_sup_s:"Утверждено / требуется работа",
       ma_head:"Действие по обслуживанию", ma_action:"Записанное действие", ma_cause:"Прямая причина",
       ma_owner:"Ответственный", ma_wo:"Наряд-заказ", ma_due:"Срок", ma_none:"Не записано",
+      tb_mp:"Данные и фото по компонентам",
+      tb_fc:"Результаты по фильтрам", tb_fc_ev:"Обязательные фотографии",
+      tb_insp:"Выявленное по узлам и системам", tb_insp_ph:"Фотографии выявленного",
+      tb_temp:"Результаты по температуре", tb_temp_lim:"Техническое ограничение",
+      tb_temp_note:"Не записаны ни температура окружающей среды, ни режим или нагрузка, ни метод, ни корректное сравнение — приведённое ниже показание приводится само по себе и не подтверждает вывод о дефекте.",
+      tb_uc_sum:"Сводка состояния", tb_get:"Реестр точек",
+      tb_tb_ctrl:"Определяющие замеры",
+      uc_atlimit:"На пределе / за пределом", uc_above80:"Свыше 80%", uc_notmeas:"Не измерено",
+      uc_controlling:"Определяющая точка", uc_decision:"Решение",
+      c_particle:"Частицы", c_svchours:"Наработка", c_debris:"Загрязнение / дефект",
+      c_detection:"Метод выявления", c_opstate:"Режим работы", c_measured:"Замер",
+      c_ambient:"Окр. среда", c_method:"Метод", c_comparison:"Сравнение",
+      c_reference:"Эталон", c_retention:"Дефект / фиксация", c_new:"Новый",
+      c_minimum:"Минимум", c_change:"Изменение", c_status:"Статус",
+      c_station:"Точка", c_side:"Сторона", c_point:"Точка", c_filter:"Фильтр",
+      c_notmeas:"Не измерено", c_notrec:"Не записано", c_nofind:"Без замечаний",
+      ev_filterid:"Идентификация фильтра", ev_media:"Вскрытый материал", ev_debris:"Крупный план загрязнения",
+      ev_overview:"Обзор техники", ev_component:"Компонент", ev_defect:"Крупный план дефекта",
+      ev_additional:"Дополнительно", ev_thermal:"Термограмма с меткой", ev_visible:"Сравнение в видимом свете",
+      ev_assembly:"Узел ГЭО целиком", ev_retention:"Фиксация", ev_pointmeas:"Замер точки",
+      tm_IR:"Пирометр", tm_CAM:"Тепловизионная камера", tm_CON:"Контактный датчик", tm_TEL:"Телеметрия",
       period:"Период",
       prog_head:"Программа осмотров", prog_insp:"Осмотр", prog_done:"Выполнено",
       prog_worst:"Худшая оценка", prog_issue:"Основная проблема", prog_next:"Следующее действие",
@@ -996,6 +1040,16 @@
   function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g, function(c){
     return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
   CMR.esc = esc;
+  /* A GPS pair as text, or "" when it is not two finite numbers. The record's
+     gps may be absent, half-populated (lat, no lon), or name its longitude
+     `lng`, as a phone build once did — any of which used to reach `.toFixed` on
+     undefined and throw, taking the whole report down. One guarded reader for
+     every place the report prints a location. */
+  function gpsPair(g){
+    if(!g) return "";
+    var la=Number(g.lat), lo=Number(g.lon!=null?g.lon:g.lng);
+    return (isFinite(la)&&isFinite(lo)) ? la.toFixed(4)+', '+lo.toFixed(4) : "";
+  }
 
   /* ---- the report speaks both languages at once ---------------------------
      One document, not two. The inspector who wrote it reads Russian, the
@@ -2008,20 +2062,24 @@
       + cell(T("ss_approval"), T("ss_pending"), "pend")
       + '</div>';
   }
-  /* The maintenance-action strip: the recorded action and direct cause of the
-     round's worst finding, and the control fields. Each is "Not recorded" when
-     the round does not carry it — never invented. */
+  /* The maintenance-action strip, on EVERY single-inspection sheet, in the
+     template's own position — under the type body, above the DATA/EVIDENCE/
+     REVIEW/APPROVAL status strip and the approval table. Driven by the round's
+     worst finding; each control field honest as "Not recorded" when the round
+     does not carry it, never invented. The template shows it even on a clean
+     round (five "Not recorded" cells), because "no action was required" is
+     itself a fact the sheet states rather than an empty space. */
   function actionStrip(T, rec) {
     var flagged = (rec.items || []).filter(function (it) {
       return it.action || it.defect || it.cause || gnum(it.grade) >= 3; });
-    if (!flagged.length) return "";
     flagged.sort(function (a, b) { return gnum(b.grade) - gnum(a.grade); });
-    var it = flagged[0];
+    var it = flagged[0] || {};
     var miss = '<b class="miss">' + esc(T("ma_none")) + '</b>';
     function f(k, v) {
       return '<span class="f"><i>' + esc(k) + '</i>' + (v ? '<b>' + esc(v) + '</b>' : miss) + '</span>';
     }
-    return '<div class="mact">'
+    return '<div class="subhd" style="margin-top:13px;">' + T.I("ma_head") + '</div>'
+      + '<div class="mact">'
       + f(T("ma_action"), it.action || "")
       + f(T("ma_cause"), it.cause || it.defect || "")
       + f(T("ma_owner"), it.resp || "")
@@ -2061,7 +2119,14 @@
       return '<div class="ms"><i>' + T.I(labelKey) + '</i>'
         + (val ? '<b>' + val + '</b>' : '<b class="miss">' + esc(T("ma_none")) + '</b>') + '</div>';
     }
-    var loc = rec.gps ? { k: "gps", v: esc(rec.gps.lat.toFixed(4) + ', ' + rec.gps.lon.toFixed(4)) }
+    /* GPS only when it is genuinely a pair of numbers. A record whose gps holds
+       a lat but no lon (or names it `lng`, as a phone build once did) used to
+       reach `.toFixed` on undefined and throw — taking the whole report down,
+       the pure form of this project's defect turned into a hard crash. Read
+       both coordinates, accept either lon or lng, and fall back to the
+       supervisor or class the moment the pair is not two finite numbers. */
+    var gp = gpsPair(rec.gps);
+    var loc = gp ? { k: "gps", v: esc(gp) }
             : rec.sup ? { k: "f_sup", v: esc(rec.sup) }
             : { k: "f_cat", v: esc(rec.clsLabel || "") };
     return '<div class="mstrip">'
@@ -2084,6 +2149,227 @@
       + '</div>'
       + '<div class="genwhy">' + T.I("gen_sub") + '</div></div>';
   }
+
+  /* ── The single-inspection type bodies, to the v2 templates ───────────────
+     Each returns the template's named subheading and its own table or cards,
+     read from the one normalised item shape both surfaces build. A field the
+     template prints but the round did not capture says so in the cell — "Not
+     recorded", "Not measured", "No finding" — never blank and never invented. */
+  function tbMiss(T, k) { return '<span class="muted">' + esc(T(k || "c_notrec")) + '</span>'; }
+  function tbGrade(T, it) {
+    var n = gnum(it.grade);
+    return n ? (n + ' – ' + esc(gname(n))) : (it.sev ? esc(it.sev) : tbMiss(T));
+  }
+  function tbAct(T, it) {
+    return it.action ? '<b>' + T.both(it.action, it.actionAlt, "alti") + '</b>'
+      + (it.wo ? ' <span class="code">' + esc(T("c_wo")) + ' ' + esc(it.wo) + '</span>' : "")
+      : tbMiss(T);
+  }
+  function tbPoint(T, it) {
+    return '<b>' + esc(it.code || it.key) + '</b>'
+      + (it.name && it.name !== (it.code || it.key)
+          ? '<div class="pn">' + T.both(it.name, it.nameAlt) + '</div>' : "");
+  }
+  /* One honest table: header cells, a row per item; each cell reads its own
+     field through the column's getter. */
+  function typeTable(cols, list) {
+    var x = '<table><tr>' + cols.map(function (c) {
+      return '<th' + (c.cls ? ' class="' + c.cls + '"' : "")
+        + (c.w ? ' style="width:' + c.w + '"' : "") + '>' + c.th + '</th>';
+    }).join("") + '</tr>';
+    list.forEach(function (it, i) {
+      x += '<tr class="' + (i % 2 ? "zebra" : "") + '">' + cols.map(function (c) {
+        return '<td' + (c.cls ? ' class="' + c.cls + '"' : "") + '>' + c.get(it) + '</td>';
+      }).join("") + '</tr>';
+    });
+    return x + '</table>';
+  }
+  /* MP — every plug as a card, photograph first, then code/component, grade,
+     the particle finding and component/oil hours, the defect and action. A
+     clean plug still earns its card: the reading IS the record. */
+  function mpEvidence(ctx, T, rec) {
+    var its = rec.items || [];
+    if (!its.length) return "";
+    var cols = its.length >= 4 ? 4 : its.length === 3 ? 3 : its.length === 2 ? 2 : 1;
+    var wide = its.length === 1 && ((its[0].photos || []).length > 1);
+    return '<div class="subhd" style="margin-top:12px;">' + T.I("tb_mp") + '</div>'
+      + '<div class="board b' + cols + (wide ? ' wide' : '') + '">'
+      + its.map(function (it) { return cell(ctx, T, it, {}); }).join("") + '</div>';
+  }
+  /* FC — one row per filter: identity, service hours, grade, debris/defect,
+     cause, action. The filter-identification, opened-media and debris photos
+     come after, through evidenceSections, as the template's Required evidence. */
+  function fcFindings(ctx, T, rec) {
+    return '<div class="subhd" style="margin-top:12px;">' + T.I("tb_fc") + '</div>'
+      + typeTable([
+        { th: T.L("c_filter"), get: function (it) { return tbPoint(T, it); } },
+        { th: T.L("c_svchours"), cls: "r n", w: "72px", get: function (it) {
+            var h = [it.comp && (it.comp + " h"), it.oil && ("oil " + it.oil + " h")].filter(Boolean);
+            return h.length ? esc(h.join(" · ")) : tbMiss(T); } },
+        { th: T.L("c_grade"), w: "92px", get: function (it) { return tbGrade(T, it); } },
+        { th: T.L("c_debris"), get: function (it) {
+            var d = [it.particle && ("PC " + it.particle), it.defect].filter(Boolean);
+            return d.length ? esc(d.join("; ")) : tbMiss(T, "c_nofind"); } },
+        { th: T.L("c_cause"), get: function (it) { return it.cause ? esc(it.cause) : tbMiss(T); } },
+        { th: T.L("c_action"), get: function (it) { return tbAct(T, it); } }
+      ], rec.items || []);
+  }
+  /* INSP — component/system, grade, defect, detection method, action and the
+     equipment operating status the template asks for. */
+  function inspFindings(ctx, T, rec) {
+    return '<div class="subhd" style="margin-top:12px;">' + T.I("tb_insp") + '</div>'
+      + typeTable([
+        { th: T.L("c_point"), get: function (it) { return tbPoint(T, it); } },
+        { th: T.L("c_grade"), w: "88px", get: function (it) { return tbGrade(T, it); } },
+        { th: T.L("c_defect"), get: function (it) {
+            return it.defect ? esc(it.defect) + (it.iso ? ' <span class="code">ISO ' + esc(it.iso) + '</span>' : "")
+                             : tbMiss(T, "c_nofind"); } },
+        { th: T.L("c_detection"), w: "96px", get: function (it) { return it.detect ? esc(it.detect) : tbMiss(T); } },
+        { th: T.L("c_action"), get: function (it) { return tbAct(T, it); } },
+        { th: T.L("c_opstat"), w: "84px", get: function (it) { return it.opstatLabel ? esc(it.opstatLabel) : tbMiss(T); } }
+      ], rec.items || []);
+  }
+  /* TEMP — measured and ambient temperature, method, operating state, the
+     comparison and the grade. When ambient/state/method/comparison is missing
+     the reading stands with a stated limitation and no confirmed conclusion. */
+  function tempResults(ctx, T, rec) {
+    var its = rec.items || [];
+    var tm = function (it) {
+      if (!it.tempM) return tbMiss(T);
+      var c = String(it.tempM).toUpperCase();
+      return T.key("tm_" + c, "") ? esc(T("tm_" + c)) : esc(it.tempM);
+    };
+    var incomplete = its.some(function (it) {
+      return it.tempC && !(it.ambC && it.tempM && (it.opstatLabel || it.comment)); });
+    return '<div class="subhd" style="margin-top:12px;">' + T.I("tb_temp") + '</div>'
+      + typeTable([
+        { th: T.L("c_point"), get: function (it) { return tbPoint(T, it); } },
+        { th: T.L("c_measured"), cls: "r n", w: "70px", get: function (it) { return it.tempC ? esc(it.tempC) + " °C" : tbMiss(T, "c_notmeas"); } },
+        { th: T.L("c_ambient"), cls: "r n", w: "64px", get: function (it) { return it.ambC ? esc(it.ambC) + " °C" : tbMiss(T); } },
+        { th: T.L("c_method"), w: "82px", get: tm },
+        { th: T.L("c_opstate"), w: "82px", get: function (it) { return it.opstatLabel ? esc(it.opstatLabel) : tbMiss(T); } },
+        { th: T.L("c_comparison"), get: function (it) { return it.comment ? esc(it.comment) : tbMiss(T); } },
+        { th: T.L("c_grade"), w: "88px", get: function (it) { return tbGrade(T, it); } }
+      ], its)
+      + (incomplete ? '<div class="verdict v-watch" style="margin-top:9px;"><b>' + T.I("tb_temp_lim")
+          + '.</b> ' + T.I("tb_temp_note") + '</div>' : "");
+  }
+  /* GET — the eleven-point register: point, component, grade, an optional
+     millimetre, the reference when one exists, percent worn only where it is
+     defensible, the defect or retention note, and the action. Grade is the
+     record; a millimetre and a percentage are printed only when present. */
+  function getCols(T) {
+    return [
+      { th: T.L("c_point"), get: function (it) { return tbPoint(T, it); } },
+      { th: T.L("c_grade"), w: "84px", get: function (it) { return tbGrade(T, it); } },
+      { th: T.L("c_measured"), cls: "r n", w: "58px", get: function (it) {
+          return (it.w && it.w.mm != null) ? '<b>' + esc(it.w.mm) + '</b>' : tbMiss(T, "c_notmeas"); } },
+      { th: T.L("c_reference"), cls: "n", w: "82px", get: function (it) {
+          return (it.w && it.w.newMM != null && it.w.newMM !== "")
+            ? esc(it.w.newMM + " → " + it.w.condemnMM + " mm") : tbMiss(T, "ac_na"); } },
+      { th: T.L("c_worn"), cls: "r n", w: "48px", get: function (it) {
+          return (it.w && it.w.pct != null) ? esc(it.w.pct) + "%" : ""; } },
+      { th: T.L("c_retention"), get: function (it) { return it.defect ? esc(it.defect) : tbMiss(T, "c_nofind"); } },
+      { th: T.L("c_action"), get: function (it) { return tbAct(T, it); } }
+    ];
+  }
+  /* The point register as a single block — used inline only where the caller
+     knows the round is short (a synthetic three-point GET). Long registers go
+     through getRegisterSections so no row is sliced at the fold. */
+  function getRegister(ctx, T, rec) {
+    return '<div class="subhd" style="margin-top:12px;">' + T.I("tb_get") + '</div>'
+      + typeTable(getCols(T), rec.items || []);
+  }
+  /* The eleven-point register, chunked to the page. A machine with many GET
+     positions makes a register taller than A4, and the PDF is a rasterised
+     bitmap sliced wherever the paper ends — so an un-chunked table splits a row
+     across the fold (pagecut.cjs). Each chunk is sized to a page, its own table
+     with its own header; the sign-off rides the last chunk, which is left short
+     enough to hold it. `lead` (the masthead, for a mapless round) prefixes the
+     first section. */
+  function getRegisterSections(ctx, T, rec, sign, lead, firstNb) {
+    var rows = rec.items || [];
+    var out = [];
+    var PER = 18;                 // 18 two-line rows + the sign block clear the fold
+    var parts = Math.max(1, Math.ceil(rows.length / PER));
+    PER = Math.ceil(rows.length / parts);
+    for (var o = 0; o < rows.length; o += PER) {
+      var chunk = rows.slice(o, o + PER);
+      var first = o === 0;
+      out.push({ nb: first ? !!firstNb : false,
+        html: '<div class="sec">' + (first && lead ? lead : "")
+          + '<div class="subhd"' + (first && lead ? "" : ' style="margin-top:12px;"') + '>'
+          + T.I("tb_get") + (parts > 1 ? ' <span class="muted">' + (o + 1) + "–"
+              + Math.min(o + PER, rows.length) + " / " + rows.length + '</span>' : "")
+          + '</div>' + typeTable(getCols(T), chunk) + '</div>' });
+    }
+    if (sign) {
+      var last = out.pop();
+      out.push({ nb: last.nb, html: last.html.replace(/<\/div>$/, sign + '</div>') });
+    }
+    return out;
+  }
+  /* UC — the condition summary strip the template opens with: how many points
+     are at or past the limit, how many above 80%, how many were not measured,
+     the controlling point and its percent, and the decision from the worst
+     grade. Counts are facts; an unmeasured point is counted, never called
+     Normal. */
+  function ucCondSummary(T, rec) {
+    var its = (rec.items || []).filter(function (it) { return it.w; });
+    var atlimit = 0, above80 = 0, notmeas = 0, ctrl = null;
+    its.forEach(function (it) {
+      var w = it.w;
+      if (w.mm == null) { notmeas++; return; }
+      if (w.pct != null && Number(w.pct) >= 100) atlimit++;
+      else if (w.pct != null && Number(w.pct) >= 80) above80++;
+      if (w.pct != null && (!ctrl || Number(w.pct) > Number(ctrl.w.pct))) ctrl = it;
+    });
+    var n = roundRating(rec);
+    var dec = T.I("dec_" + (n || 0));
+    function c(k, v, cls) {
+      return '<div class="sc"><div class="sk">' + esc(T(k)) + '</div>'
+        + '<div class="sv ' + (cls || "") + '">' + v + '</div></div>';
+    }
+    return '<div class="subhd" style="margin-top:12px;">' + T.I("tb_uc_sum") + '</div>'
+      + '<div class="sstrip">'
+      + c("uc_atlimit", String(atlimit), atlimit ? "pend" : "ok")
+      + c("uc_above80", String(above80), above80 ? "pend" : "ok")
+      + c("uc_notmeas", String(notmeas), notmeas ? "pend" : "ok")
+      + c("uc_controlling", ctrl ? (esc(ctrl.code || ctrl.key) + ' <span class="num">' + esc(ctrl.w.pct) + '%</span>') : tbMiss(T, "c_notmeas"), "")
+      + c("uc_decision", dec, "")
+      + '</div>';
+  }
+  /* TB — the controlling readings the template opens with: the worst stations
+     first (by percent worn), each with its zone, new and minimum reference,
+     measured value, percent and the grade/action. The complete register
+     follows on its own page through measSections. */
+  function tbControlling(ctx, T, rec) {
+    var its = (rec.items || []).filter(function (it) { return it.w && it.w.pct != null; })
+      .sort(function (a, b) { return Number(b.w.pct) - Number(a.w.pct); }).slice(0, 8);
+    if (!its.length) return "";
+    return '<div class="subhd" style="margin-top:12px;">' + T.I("tb_tb_ctrl") + '</div>'
+      + typeTable([
+        { th: T.L("c_station"), get: function (it) { return tbPoint(T, it); } },
+        { th: T.L("c_zone"), w: "96px", get: function (it) { return it.zoneLabel ? esc(it.zoneLabel) : (it.zone ? esc(it.zone) : ""); } },
+        { th: T.L("c_new"), cls: "r n", w: "48px", get: function (it) { return (it.w.newMM != null && it.w.newMM !== "") ? esc(it.w.newMM) : ""; } },
+        { th: T.L("c_minimum"), cls: "r n", w: "56px", get: function (it) { return (it.w.condemnMM != null && it.w.condemnMM !== "") ? esc(it.w.condemnMM) : ""; } },
+        { th: T.L("c_measured"), cls: "r n", w: "58px", get: function (it) { return it.w.mm != null ? '<b>' + esc(it.w.mm) + '</b>' : tbMiss(T, "c_notmeas"); } },
+        { th: T.L("c_worn"), cls: "r n", w: "48px", get: function (it) { return esc(it.w.pct) + "%"; } },
+        { th: T.L("c_grade"), w: "120px", get: function (it) { return tbGrade(T, it) + (it.action ? ' / ' + tbAct(T, it) : ""); } }
+      ], its);
+  }
+  /* The dispatcher for graded, non-wear single sheets. The types the template
+     gives a column table or a card grid go through their own builder; anything
+     else falls back to the compact findings board. */
+  function gradedBody(ctx, T, rec) {
+    if (rec.type === "MP") return mpEvidence(ctx, T, rec);
+    if (rec.type === "FC") return fcFindings(ctx, T, rec);
+    if (rec.type === "INSP") return inspFindings(ctx, T, rec);
+    if (rec.type === "TEMP") return tempResults(ctx, T, rec);
+    if (rec.type === "GET") return getRegister(ctx, T, rec);
+    return null;
+  }
+
   function unitSheets(ctx, T, recs) {
     var secs = [];
     /* One full sheet per inspection TYPE, not per round.
@@ -2112,7 +2398,14 @@
     older.sort(function (a, b) { return String(b.date || "").localeCompare(String(a.date || "")); });
 
     latest.forEach(function (rec, n) {
-      var isWear = !!rec.wear;
+      /* GET is carried as a "wear" type by both surfaces (isWearType = UC|GET|
+         TB), but the template renders it as a grade-based POINT REGISTER, not a
+         measurement register: grade is required, a millimetre is optional. Sent
+         down the measurement path, its grade-only points — which is most of a
+         GET round — produced no register at all and the grades were lost. So it
+         is treated as non-wear here and rendered by its own branch: the model
+         map and legend, then the eleven-point register. */
+      var isWear = !!rec.wear && rec.type !== "GET";
       var mine = byType[rec.type] || [rec];
       /* THE MASTHEAD, TO THE REFERENCE'S OWN SHAPE.
          Eyebrow with the report number opposite it; the inspection title; the
@@ -2181,7 +2474,14 @@
          recorded what he found; the finding is the comparison, not the grade. */
       var offStd = rec.items.filter(function (it) { return it.lube && it.lube.off; });
       var body = "";
-      if (!isWear && !board.length && !offStd.length) {
+      /* The template's own type body — a card grid or a column table — for the
+         types it specifies. GET is the exception: its body is the point
+         register, which the template puts on page 2 after the model map, so it
+         is built here but placed by the GET branch below, not into `body`. */
+      var tb = (!isWear && rec.type !== "GET") ? gradedBody(ctx, T, rec) : null;
+      if (tb) {
+        body = tb;
+      } else if (!isWear && !board.length && !offStd.length) {
         body = '<div class="allok">' + T.S("allok", { n: rec.items.length }) + '</div>'
              + restLine(T, rest, true);
       } else if (!isWear && !board.length) {
@@ -2204,20 +2504,16 @@
       } else if (board.length) {
         body = notableTable(ctx, T, board) + restLine(T, rest, false);
       }
-      /* The maintenance-action strip, on the graded single-inspection sheets
-         that are not wear rounds — MP, FC, TEMP, GET. A wear round already
-         carries its "required maintenance" as the over/verdict lines and the
-         measurement register, so it is not doubled there. Driven by the round's
-         worst finding; each control field honest as "Not recorded" when absent. */
-      if (!isWear && board.length) body += actionStrip(T, rec);
-
-      /* The sign-off is now the reference's status strip plus the three-role
-         approval table — the formal half of the hybrid, on the final page of
-         every round through the same `sign` string every branch already
-         threads to its last section. Honest throughout: the strip says what
-         the office holds, the table leaves review and approval as open lines
-         because no field records them. */
-      var sign = statusStrip(T, rec) + approvalBlock(T, rec);
+      /* The sign-off closes every sheet in the template's own order: the
+         maintenance-action strip, then the DATA/EVIDENCE/REVIEW/APPROVAL status
+         strip, then the three-role approval table. Threaded through the one
+         `sign` string every branch already appends to its final section, so a
+         graded sheet and a wear round's register page both end the same way.
+         Honest throughout: the action strip reads "Not recorded" where the
+         round carries no action, the status strip says what the office holds,
+         and the table leaves review and approval as open lines because no field
+         records them. */
+      var sign = actionStrip(T, rec) + statusStrip(T, rec) + approvalBlock(T, rec);
 
       /* A lubrication round has nothing to MEASURE and is still not one page.
          The audit is the compartment table - what is actually in each one, how
@@ -2249,10 +2545,36 @@
       if (!isWear) {
         var oneMap = rec.mapHTML
           ? CMR.mapBlock(T, rec.mapHTML, 11, rec.zones, rec.mapKey) : "";
+        /* GET, to the template: the model map and its numbered legend on page 1,
+           the eleven-point register on page 2 with the maintenance action,
+           status and approval beneath it. A model with no map asset (or a
+           synthetic round) still gets its register — inline on one page, so the
+           grades and findings are never lost for want of a drawing. */
+        if (rec.type === "GET") {
+          if (oneMap) {
+            secs.push({ nb: n > 0, html: '<div class="sec">' + head + rbar + mstrip
+              + generalBlock(T, rec) + oneMap + '</div>' });
+            /* The register starts its own page — the map page is measured to the
+               fold, and letting the first rows flow into whatever space is left
+               under the drawing splits a row there (pagecut.cjs). */
+            getRegisterSections(ctx, T, rec, sign, "", true).forEach(function (x) { secs.push(x); });
+          } else {
+            /* No model map: the masthead leads the first register chunk. */
+            getRegisterSections(ctx, T, rec, sign,
+              head + rbar + mstrip + generalBlock(T, rec), n > 0).forEach(function (x) { secs.push(x); });
+          }
+          evidenceSections(T, rec).forEach(function (x) { secs.push(x); });
+          return;
+        }
         secs.push({ nb: n > 0, html: '<div class="sec">' + head + rbar + mstrip
           + generalBlock(T, rec) + body + (oneMap ? "" : sign) + '</div>' });
         if (oneMap) secs.push({ nb: false, html: '<div class="sec">' + oneMap + sign + '</div>' });
-        evidenceSections(T, rec).forEach(function (x) { secs.push(x); });
+        /* MP prints every plug as a card with its photograph, so a second
+           gallery of the same frames would be the same evidence twice; the
+           machine's general photographs still lead through generalBlock. Every
+           other graded type shows its photos in the template's own evidence
+           section here. */
+        if (rec.type !== "MP") evidenceSections(T, rec).forEach(function (x) { secs.push(x); });
         return;
       }
 
@@ -2278,14 +2600,20 @@
       var hasReg = rec.items.some(function (it) {
         return it.w && (it.w.mm != null || it.w.reason); });
       var formal = mstrip + ratingBar(T, rec, true);
-      var top = '<div class="sec">' + head + (hasReg ? "" : formal)
+      /* The template opens a measurement round with its Condition summary — how
+         many points are at/past the limit, above 80%, unmeasured, the
+         controlling point and the decision. An unmeasured point is counted
+         here, never called Normal.
+
+         WHERE it goes obeys the same hard rule as the metadata strip: the
+         drawing page is measured to the A4 fold (pagecut.cjs, tray.cjs,
+         ucpage.cjs), so a 46px strip there slices the track frame. A round with
+         a measurement register therefore carries the summary on the register
+         page, next to the readings it summarises; a round with no register has
+         no second page, and its drawing page has the room. */
+      var condSum = rec.items.some(function (it) { return it.w; }) ? ucCondSummary(T, rec) : "";
+      var top = '<div class="sec">' + head + (hasReg ? "" : formal + condSum)
         + '<div class="verdict v-' + ((vc === "ok" && unread) ? "watch" : vc) + '">' + verd + '</div>'
-        + (over.length ? '<div class="verdict v-' + (overAct.length ? "act" : "watch") + '" style="margin-top:9px;">'
-            + (overAct.length ? T.I("uc_over", { n: overAct.length }) + ". " : "")
-            + (over.length > overAct.length ? T.I("uc_watch", { n: over.length - overAct.length }) + ". " : "")
-            + '<span style="font-weight:500;">' + over.slice(0, 6).map(function (it) {
-                return esc(it.name || it.key) + ' <span class="num">' + esc(it.w.pct) + '%</span>'; }).join(" · ")
-            + (over.length > 6 ? " · +" + (over.length - 6) : "") + '</span></div>' : "")
         + maps + '</div>';
       /* THE SHAPE OF A UNIT REPORT, STATED RATHER THAN LEFT TO THE ARITHMETIC.
          One: the machine, the verdict, the drawings and the key that explains
@@ -2302,9 +2630,18 @@
          adding the rating bar here too shifted the register's own pagination
          into a one-line crumb overleaf (rptfit.cjs). The strip is the part the
          register page was missing. */
+      /* A dump-body round leads its register page with the template's
+         Controlling readings — the worst stations first — so the planner meets
+         what governs the decision before the full station-by-station register.
+         The complete register follows, every saved station retained. */
+      var ctrlLead = (rec.type === "TB") ? tbControlling(ctx, T, rec) : "";
+      /* The condition summary leads the register page for a round that has one
+         (the drawing page has no room for it); a register-less round already
+         carried it on the drawing page above. */
+      var regLead = mstrip + condSum + ctrlLead;
       measSections(ctx, T, rec, sign, !!maps).forEach(function (x, ix) {
         if (ix === 0 && hasReg) x = Object.assign({}, x, { nb: true,
-          html: (x.html || "").replace('<div class="sec">', '<div class="sec">' + mstrip) });
+          html: (x.html || "").replace('<div class="sec">', '<div class="sec">' + regLead) });
         else if (ix === 0) x = Object.assign({}, x, { nb: true });
         secs.push(x);
       });
@@ -3160,8 +3497,8 @@
           + (rec.smu?'<span class="m"><i>SMU</i><span class="num">'+esc(rec.smu)+'</span></span>':"")
           + (rec.by?'<span class="m"><i>'+T.I("by_who")+'</i>'+esc(rec.by)+'</span>':"")
           + '<span class="m"><i>'+T.I("pts")+'</i><span class="num">'+rec.items.length+'</span></span>'
-          + (rec.gps?'<span class="m"><i>'+T.I("gps")+'</i><span class="num">'
-              + rec.gps.lat.toFixed(4)+', '+rec.gps.lon.toFixed(4)+'</span></span>':"")
+          + (gpsPair(rec.gps)?'<span class="m"><i>'+T.I("gps")+'</i><span class="num">'
+              + esc(gpsPair(rec.gps))+'</span></span>':"")
         + '</div>'
         + '<div class="verdict v-'+((vc==="ok"&&unread)?"watch":vc)+'">'
           + ((vc==="ok"&&unread)
