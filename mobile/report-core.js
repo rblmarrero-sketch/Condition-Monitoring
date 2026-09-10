@@ -318,18 +318,20 @@
   padding:3px 6px 3px 0;}
 #rptRoot .tbzone td{padding:3px 6px 3px 0;border-bottom:1px solid #eef1f4;}
 #rptRoot .tbzone .num{text-align:right;padding-right:12px;}
-/* Width is what makes a numbered puck readable, and height is what decides
-   whether the drawing shares its page with the readings. Capping the HEIGHT and
-   letting the width follow gives the widest frame that still leaves room for
-   the key underneath it — on any machine, without a per-model number.
-   The cap is the page's arithmetic, not a preference: a masthead, a verdict and
-   a key are about 390px of an A4 column's 1090, so the drawings get the rest.
-   A track frame comes in a pair and takes half of that each; a blade, a bucket
-   or a tooth diagram comes alone and takes the lot — which is the difference
-   between a 451px drawing and a 754px one on a page with the same room on it. */
+/* Width is what makes a numbered puck readable, and height is what decides how
+   much of the page the drawing takes. v3: the drawing shares page one with the
+   Condition summary and the immediate recommendation, not just the key — so it
+   is capped at roughly 35-42% of a page's own room (about 1090px of A4 column
+   at this render width), leaving the rest for the summary and recommendation
+   to sit beside or below it rather than being pushed to the register page.
+   Before this the only-child cap was 620px — nearly 57% of the page on its
+   own, which is what "the undercarriage drawing is too large" meant: a single
+   picture with nothing else fitting beside it. A track frame comes in a pair
+   and takes half the budget each; a blade, a bucket or a tooth diagram comes
+   alone and takes the whole of it. */
 #rptRoot .ucmap{display:block;width:auto;height:auto;max-width:100%;
-  max-height:300px;margin:0 auto;}
-#rptRoot .ucmaps .ucmapwrap:only-child .ucmap{max-height:620px;}
+  max-height:175px;margin:0 auto;}
+#rptRoot .ucmaps .ucmapwrap:only-child .ucmap{max-height:420px;}
 /* ---- the photographed walk, printed ------------------------------------
    The same picture the inspector tapped: the machine's own photograph with
    the catalogue's numbers on the parts they name. The pucks are smaller than
@@ -804,6 +806,11 @@
       sm_dec_ok:"No finding on this machine requires action; continue normal monitoring.",
       sm_actions:"Consolidated actions", sm_evidence:"Condition evidence",
       sm_none:"No completed round", sm_clean:"All points normal",
+      uh_title:"Equipment History and Trend", uh_sub:"One machine · condition, trend and evidence, not a bound copy of every round",
+      uh_since:"Since previous", uh_first:"First on record", uh_same:"Same", uh_worse:"Worsened", uh_better:"Improved",
+      uh_changes:"Changes since previous inspection", uh_no_change:"No type on this machine has a second round to compare yet.",
+      uh_findings:"Significant findings", uh_no_findings:"Nothing above Incipient across any inspection type.",
+      uh_appendix:"Appendix — complete inspection sheets", uh_appendix_note:"Every round below is printed the way its own single-inspection report is; the pages above are the machine's condition, trend and open work at a glance.",
       by_who:"Inspected by", sup:"Verified by", nosign:"not signed off",
       gps:"Location", none_att:"None flagged.",
       /* What a machine photograph is of. */
@@ -974,6 +981,11 @@
       sm_dec_ok:"Ни одно замечание на машине не требует действий; продолжать обычный контроль.",
       sm_actions:"Сводные действия", sm_evidence:"Фотоматериал состояния",
       sm_none:"Нет завершённого осмотра", sm_clean:"Все точки в норме",
+      uh_title:"История и тренд по технике", uh_sub:"Одна машина · состояние, тренд и подтверждения, не подшивка всех осмотров",
+      uh_since:"С прошлого раза", uh_first:"Первый в истории", uh_same:"Без изменений", uh_worse:"Ухудшилось", uh_better:"Улучшилось",
+      uh_changes:"Изменения с прошлого осмотра", uh_no_change:"Ни по одному типу на этой машине пока нет второго осмотра для сравнения.",
+      uh_findings:"Значимые замечания", uh_no_findings:"Ничего выше «Начальное» ни по одному типу осмотра.",
+      uh_appendix:"Приложение — полные листы осмотров", uh_appendix_note:"Каждый осмотр ниже напечатан так же, как его собственный единичный отчёт; страницы выше — это состояние машины, тренд и открытые работы одним взглядом.",
       by_who:"Осмотр выполнил", sup:"Проверил", nosign:"не подписано",
       gps:"Координаты", none_att:"Не отмечено.",
       cat_OVERVIEW:"Общий вид машины", cat_LEFT:"Левая сторона", cat_RIGHT:"Правая сторона",
@@ -2394,20 +2406,28 @@
     return null;
   }
 
-  function unitSheets(ctx, T, recs) {
-    var secs = [];
-    /* One full sheet per inspection TYPE, not per round.
-       A machine with four undercarriage rounds on it used to print four
-       mastheads, four pairs of track frames and four signature blocks — the
-       same 50 KB drawing rasterised four times for a document whose reader
-       already knows what the machine looks like. Worse, the one question they
-       opened it to answer, "is it getting worse?", appeared on none of the
-       four pages, because each page only knows about itself.
+  /* THE FULL DETAIL, EVERY ROUND OF EVERY TYPE, AS ITS OWN SINGLE-INSPECTION
+     SHEET WOULD PRINT IT — the appendix, and (until build 300) the whole of
+     what "Equipment history and trend" ever produced by default.
 
-       So: the latest round of each type is printed in full, and everything
-       before it becomes a history table that answers that question directly.
-       Nothing is dropped — every reading from every round is still in the
-       document, in the form that makes it comparable. */
+     A machine with four undercarriage rounds on it printed four mastheads,
+     four pairs of track frames and four signature blocks — the same 50 KB
+     drawing rasterised four times for a document whose reader already knew
+     what the machine looked like. Worse, the one question they opened it to
+     answer, "is it getting worse?", appeared on none of the four pages,
+     because each page only knows about itself. Three inspections came back as
+     six pages, and a planner with fourteen machines on one truck class was not
+     going to read eighty-four.
+
+     So the latest round of each type is printed in full here, and everything
+     before it becomes a comparable history table — nothing is dropped, every
+     reading from every round is still in the document. But this is now the
+     APPENDIX, reached only when somebody asks for it ("Include complete
+     inspection sheets as appendix"): the default document is unitSheets()
+     below, which answers the actual question — condition, trend, what changed,
+     what is open — in two or three pages, the way the template asks. */
+  function fullUnitSheets(ctx, T, recs) {
+    var secs = [];
     var byType = {}, typeOrder = [];
     recs.forEach(function (r) {
       if (!byType[r.type]) { byType[r.type] = []; typeOrder.push(r.type); }
@@ -2633,40 +2653,54 @@
          controlling point and the decision. An unmeasured point is counted
          here, never called Normal.
 
-         WHERE it goes obeys the same hard rule as the metadata strip: the
-         drawing page is measured to the A4 fold (pagecut.cjs, tray.cjs,
-         ucpage.cjs), so a 46px strip there slices the track frame. A round with
-         a measurement register therefore carries the summary on the register
-         page, next to the readings it summarises; a round with no register has
-         no second page, and its drawing page has the room. */
+         v3: the summary sits WITH the drawing, on page one, every time — beside
+         or directly below it, per the template — never deferred to the register
+         page. That used to depend on room: the drawing alone ran to 57% of a
+         page (the only-child cap was 620px of about 1090), so a round with a
+         register moved the summary and the metadata strip there instead. The
+         drawing is capped smaller now for exactly this reason (see .ucmap
+         above), so page one has the room every time. */
       var condSum = rec.items.some(function (it) { return it.w; }) ? ucCondSummary(T, rec) : "";
-      var top = '<div class="sec">' + head + (hasReg ? "" : formal + condSum)
-        + '<div class="verdict v-' + ((vc === "ok" && unread) ? "watch" : vc) + '">' + verd + '</div>'
-        + maps + '</div>';
       /* THE SHAPE OF A UNIT REPORT, STATED RATHER THAN LEFT TO THE ARITHMETIC.
-         One: the machine, the verdict, the drawings and the key that explains
-         them — whole, on one sheet (`fit`). Two: what was measured on this
-         visit. Then the history, which always starts a page of its own. Before
-         this the three ran together and the fold landed wherever the pixels
-         put it, which is how a legend came to be split across two sheets. */
+         One page: the machine, its equipment strip and overall condition, the
+         drawing with its orientation/labels/key, the condition summary and the
+         immediate recommendation — whole, on one sheet (`fit`). Two: the
+         complete measurement register. Then the history, which always starts a
+         page of its own. The drawing comes right after the overall-condition
+         strip and before the summary that explains it, so a reader meets the
+         machine, then what it looks like, then what that means.
+
+         This is proven — measured, not assumed — for a track frame (UC): capped
+         at 35-42% of a page's own room, it leaves enough for the strip, the
+         summary and the recommendation beside it on the same sheet (ucpage.cjs).
+         A dump-body tray is a different shape: one wide drawing plus its own
+         zone table UNDER it (CMR.mapBlock's "wide" layout), and that combination
+         together with the strip and the summary does not fit even at the
+         narrowest the drawing is allowed to go — it split the tray itself across
+         the fold (pagecut.cjs, tray.cjs). So TB keeps the room rule until the
+         wide layout is redesigned for it specifically, the way the template
+         asks (drawing and controlling results side by side, not stacked): the
+         strip and the summary ride the register page for a tray that has one,
+         same as before this build. */
+      var wide = rec.type === "TB";
+      var verdictDiv = '<div class="verdict v-' + ((vc === "ok" && unread) ? "watch" : vc) + '">' + verd + '</div>';
+      /* TB: unchanged from before this build — the room rule, verdict ahead of
+         the drawing. Every other wear type: the v3 order — strip, drawing,
+         summary, recommendation, all on one sheet. */
+      var top = '<div class="sec">' + head
+        + (wide ? (hasReg ? "" : formal + condSum) + verdictDiv + maps
+                : formal + maps + condSum + verdictDiv)
+        + '</div>';
       secs.push({ nb: n > 0, fit: !!maps, html: top });
-      /* The metadata strip rides the measurement-register page, not the drawing
-         page — the drawing page is measured to the fold. It leads the register
-         so the reader meets the four reference fields before the readings. */
-      /* Only the metadata strip leads the register — the rating rides the
-         drawing page as the verdict chip for a round that has a register, and
-         adding the rating bar here too shifted the register's own pagination
-         into a one-line crumb overleaf (rptfit.cjs). The strip is the part the
-         register page was missing. */
       /* A dump-body round leads its register page with the template's
          Controlling readings — the worst stations first — so the planner meets
          what governs the decision before the full station-by-station register.
-         The complete register follows, every saved station retained. */
-      var ctrlLead = (rec.type === "TB") ? tbControlling(ctx, T, rec) : "";
-      /* The condition summary leads the register page for a round that has one
-         (the drawing page has no room for it); a register-less round already
-         carried it on the drawing page above. */
-      var regLead = mstrip + condSum + ctrlLead;
+         The complete register follows, every saved station retained. For every
+         OTHER wear type the strip and the summary are on page one with the
+         drawing now, so nothing more leads the register page; TB still needs
+         them here until its own wide layout has room for them up front. */
+      var ctrlLead = wide ? tbControlling(ctx, T, rec) : "";
+      var regLead = wide && hasReg ? (formal + condSum + ctrlLead) : ctrlLead;
       measSections(ctx, T, rec, sign, !!maps).forEach(function (x, ix) {
         if (ix === 0 && hasReg) x = Object.assign({}, x, { nb: true,
           html: (x.html || "").replace('<div class="sec">', '<div class="sec">' + regLead) });
@@ -2736,6 +2770,229 @@
      cross-type comparison — the reference's page-1 table — then the machine's
      open actions consolidated and the sign-off. Not a full sheet per type (that
      is the unit report); a single comparison a planner reads at a glance. */
+  /* The eight report types the site runs, in a fixed order so a machine's
+     summary reads the same way every time. A type with no round is "Not
+     inspected"; nothing here is ever left to imply Normal. General Inspection
+     (INSP) is one of the eight the applications actually capture — it was
+     missing from this list once, so a machine's own walk-around never
+     appeared on the one page meant to show every inspection type at a
+     glance. Shared by the Condition Summary and the History-and-Trend intro,
+     so the two never come to name a type's latest result differently. */
+  var COND_TYPES = ["MP", "FC", "INSP", "TEMP", "UC", "GET", "TB", "LUBE"];
+  /* One row of the "latest by type" table. `prior`, when given, adds the
+     Since-previous column the History report needs and the plain Condition
+     Summary does not — the same row, one cell longer, rather than a second
+     copy of how a type's key result is chosen. */
+  function typeRow(T, ty, r, prior) {
+    var label = T.both(T("method_" + ty), T.alt("method_" + ty));
+    var deltaCell = prior === undefined ? "" : '<td>' + typeDelta(T, r, prior) + '</td>';
+    if (!r) return { html: '<tr><td>' + label + '</td>'
+      + '<td class="c muted">—</td><td class="c muted">—</td>'
+      + '<td class="c"><span class="muted">' + esc(T("sm_notdone")) + '</span></td>'
+      + '<td class="muted">—</td><td class="muted">—</td>'
+      + (prior === undefined ? "" : '<td class="muted">—</td>') + '</tr>', rn: 0 };
+    var rn = roundRating(r);
+    var col = rn ? GRADE_HEX[rn] : "#7b858e";
+    var wf = null;
+    (r.items || []).forEach(function (it) { if (it.general) return;
+      if (it.defect && (!wf || gnum(it.grade) > gnum(wf.grade))) wf = it; });
+    var keyres = (wf && wf.defect) ? esc(wf.defect)
+      : (rn >= 2 ? '<span class="muted">—</span>' : esc(T("sm_clean")));
+    return { html: '<tr>'
+      + '<td class="stripe" style="border-left-color:' + col + '">' + label + '</td>'
+      + '<td class="c n">' + esc(r.date || "") + '</td>'
+      + '<td class="c n">' + (r.smu ? esc(r.smu) : "—") + '</td>'
+      + '<td class="c">' + (rn ? '<b style="color:' + col + '">' + rn + ' – ' + esc(gword(T, rn)) + '</b>'
+          : '<span class="muted">—</span>') + '</td>'
+      + '<td>' + keyres + '</td>'
+      + '<td>' + (rn ? T.I("dec_" + rn) : '<span class="muted">—</span>') + '</td>'
+      + deltaCell + '</tr>', rn: rn };
+  }
+  /* Worse, same, improved or first-of-its-kind — read off the grade alone, the
+     one source of condition this project keeps to. "prior" is the round
+     before the latest of the SAME type, or null when this is the first one on
+     record: that is not "same", it is nothing to compare against. */
+  function typeDelta(T, r, prior) {
+    if (!r) return '<span class="muted">—</span>';
+    if (!prior) return '<span class="muted">' + esc(T("uh_first")) + '</span>';
+    var a = roundRating(r), b = roundRating(prior);
+    if (a === b) return '<span class="dlt fl">' + esc(T("uh_same")) + '</span>';
+    return a > b ? '<span class="dlt up">▲ ' + esc(T("uh_worse")) + '</span>'
+                 : '<span class="dlt dn">▼ ' + esc(T("uh_better")) + '</span>';
+  }
+  /* THE ROW A FINDING EARNS IN THE HISTORY REPORT'S OWN TABLE — one point,
+     but which round it came from has to travel with it, because this table
+     crosses every inspection type on one machine rather than staying inside
+     one round the way notableTable's callers all do. */
+  function historyFindings(ctx, T, pairs) {
+    if (!pairs.length) return '<div class="verdict v-ok">' + T.S("uh_no_findings") + '</div>';
+    var h = '<table><tr>'
+      + '<th style="width:96px">' + T.L("c_type") + '</th>'
+      + '<th style="width:150px">' + T.L("c_item") + '</th>'
+      + '<th class="c" style="width:100px">' + T.L("c_grade") + '</th>'
+      + '<th>' + T.L("c_defect") + '</th>'
+      + '<th>' + T.L("c_action") + '</th></tr>';
+    pairs.forEach(function (p, i) {
+      var rec = p.rec, it = p.it;
+      var col = GRADE_HEX[gnum(it.grade)] || SEV_HEX[it.sev] || "#c9d0d6";
+      h += '<tr class="' + (i % 2 ? "zebra" : "") + '">'
+        + '<td class="stripe" style="border-left-color:' + col + '"><span class="unit" style="font-size:11px">'
+          + esc(rec.typeLabel || rec.type) + '</span><br><span class="muted" style="font-size:9px">' + esc(rec.date || "") + '</span></td>'
+        + '<td>' + nameCell(T, it) + '</td>'
+        + '<td class="c">' + gradeChip(it.grade) + sevIf(ctx, it) + '</td>'
+        + '<td>' + (it.defect ? esc(it.defect) : '<span class="muted">—</span>')
+          + (it.iso ? '<div class="code">ISO ' + esc(it.iso) + '</div>' : "") + '</td>'
+        + '<td>' + (it.action ? '<b>' + esc(it.action) + '</b>' + prioTag(it) : '<span class="muted">' + T.I("do_tbd") + '</span>') + '</td></tr>';
+    });
+    return h + '</table>';
+  }
+  /* THE HISTORY-AND-TREND REPORT, TO THE TEMPLATE — a machine's condition,
+     what changed, what is open, in two or three pages. Until build 300 this
+     was fullUnitSheets: the latest round of every type printed IN FULL, one
+     complete single-inspection sheet after another. Three inspection types
+     came back as six pages; nobody reading fourteen machines a shift was going
+     to open eighty-four to find the one finding that mattered.
+
+     What a reader actually came for — is it getting worse, what needs doing,
+     what is the evidence — was already answered by pieces this file had:
+     typeRow/typeDelta for the condition and its trend since last time,
+     wearHistorySections for the measured trend (already compact, already
+     bounded to six columns), scan() for the open actions, notableTable's
+     sibling historyFindings for the worst points across every type. This
+     function is those pieces, assembled to the template's order, with the
+     full detail available on request rather than printed regardless. */
+  function unitSheets(ctx, T, recs) {
+    /* "unit" mode is not only Equipment History — it is also how a SINGLE
+       inspection is generated, on both surfaces: ctxFor calls one round on
+       its own "a unit report with one round in it", and the mobile app's
+       This-inspection button wraps exactly one record the same way. One round
+       has no trend to show and no history to compact; it is the plain,
+       complete single-inspection sheet the template always meant, so it goes
+       straight to fullUnitSheets unchanged. The compact History-and-Trend
+       document below is for the case that has more than one round to say
+       something ABOUT. */
+    if (recs.length <= 1) return fullUnitSheets(ctx, T, recs);
+    /* "Every round on this phone" is a technician's own offline record of
+       everything captured, not a management summary — the mobile spec asks
+       for the same type-specific layouts every round has always had, in
+       full, even when they all happen to be on one machine. ctx.full skips
+       the compact intro entirely rather than prepending it ahead of the
+       complete detail, which ctx.appendix (the dashboard's opt-in) does. */
+    if (ctx.full) return fullUnitSheets(ctx, T, recs);
+    var p2 = function (n) { return String(n).padStart(2, "0"); };
+    var st = ctx.stamp || new Date();
+    var sp = (typeof DUE !== "undefined" && DUE.parts) ? DUE.parts(st)
+           : { y: String(st.getFullYear()), m: p2(st.getMonth() + 1), d: p2(st.getDate()) };
+    var today = sp.y + "-" + sp.m + "-" + sp.d;
+
+    var byType = {}, typeOrder = [];
+    recs.forEach(function (r) {
+      if (!byType[r.type]) { byType[r.type] = []; typeOrder.push(r.type); }
+      byType[r.type].push(r);                 // already newest-first
+    });
+    var older = [];
+    var latestArr = typeOrder.map(function (ty) { older = older.concat(byType[ty].slice(1)); return byType[ty][0]; });
+    older.sort(function (a, b) { return String(b.date || "").localeCompare(String(a.date || "")); });
+    var latestByType = {}; latestArr.forEach(function (r) { latestByType[r.type] = r; });
+
+    var equip = (recs[0] || {}).equip || "", model = "", cls = "", smu = 0;
+    recs.forEach(function (r) {
+      if (r.model) model = r.model; if (r.clsLabel) cls = r.clsLabel;
+      var n = parseFloat(String(r.smu || "").replace(/[^\d.]/g, "")); if (n > smu) smu = n;
+    });
+
+    var worst = 0;
+    var rows = COND_TYPES.map(function (ty) {
+      var row = typeRow(T, ty, latestByType[ty], byType[ty] && byType[ty][1]);
+      if (row.rn > worst) worst = row.rn; return row.html;
+    }).join("");
+    var decKey = worst >= 5 ? "sm_dec_crit" : worst >= 3 ? "sm_dec_plan" : "sm_dec_ok";
+
+    var secs = [];
+    var head = '<div class="sec">'
+      + '<div class="mhead"><div class="eyebrow">' + T.I("sub") + '</div>'
+        + '<div class="rno"><i>' + T.I("rr_report") + '</i>EQH-' + esc(equip) + '-' + esc(today.replace(/-/g, "")) + '</div></div>'
+      + '<div class="m1">' + T.I("uh_title") + '</div>'
+      + '<div class="msub"><span class="unum">' + esc(equip) + '</span>'
+        + (model ? ' · ' + esc(model) : '') + (smu ? ' · <b>' + esc(String(smu)) + '</b> h' : '')
+        + ' · ' + T.I("sm_report_date") + ' ' + esc(today) + '</div>'
+      + '<div class="quiet" style="margin-top:2px;">' + T.S("uh_sub") + '</div>'
+      + '<div class="rule" style="margin:11px 0 0"></div>'
+      + '<div class="mstrip" style="margin-top:12px">'
+        + '<div class="ms"><i>' + T.I("f_unit") + '</i><b>' + esc(equip) + '</b></div>'
+        + '<div class="ms"><i>' + T.I("f_model") + '</i><b>' + (model ? esc(model) : esc(cls) || '<span class="miss">' + esc(T("ma_none")) + '</span>') + '</b></div>'
+        + '<div class="ms"><i>' + T.I("sm_latest_smu") + '</i><b>' + (smu ? esc(String(smu)) + ' h' : '<span class="miss">' + esc(T("ma_none")) + '</span>') + '</b></div>'
+        + '<div class="ms"><i>' + T.I("sm_report_date") + '</i><b>' + esc(today) + '</b></div>'
+      + '</div>'
+      + '<div style="margin-top:18px;"><div class="eyebrow" style="margin-bottom:9px;">' + T.I("sm_cond_head") + '</div>'
+        + '<table><tr><th>' + T.L("sm_insp") + '</th>'
+        + '<th class="c" style="width:70px">' + T.L("sm_last") + '</th>'
+        + '<th class="c" style="width:50px">SMU</th>'
+        + '<th class="c" style="width:86px">' + T.L("rr_rating") + '</th>'
+        + '<th style="width:120px">' + T.L("sm_result") + '</th>'
+        + '<th style="width:96px">' + T.L("sm_next") + '</th>'
+        + '<th style="width:92px">' + T.L("uh_since") + '</th></tr>' + rows + '</table></div>'
+      + '<div class="verdict v-' + (worst >= 5 ? "act" : worst >= 3 ? "watch" : "ok") + '" style="margin-top:14px">'
+        + '<b>' + T.I("sm_decision") + '.</b> ' + T.S(decKey) + '</div>'
+      + '<div style="margin-top:14px;"><div class="eyebrow" style="margin-bottom:8px;">' + T.I("rc_head") + '</div>'
+        + fleetControls(T, recs) + '</div>'
+      + '</div>';
+    secs.push({ nb: false, html: head });
+
+    /* The worst points across every type, one machine, one table — a reader
+       does not open eight sheets to find the finding that matters. Capped at
+       ten: past that it is not "significant" any more, it is the register,
+       and the register is what the appendix is for. */
+    var pairs = [];
+    latestArr.forEach(function (r) { (r.items || []).forEach(function (it) {
+      if (it.general) return;
+      if (gnum(it.grade) >= 2 || it.defect) pairs.push({ rec: r, it: it });
+    }); });
+    pairs.sort(function (a, b) { return (gnum(b.it.grade) || 0) - (gnum(a.it.grade) || 0); });
+    var shown = pairs.slice(0, 10);
+    var body2 = '<div class="sec"><div class="sechd"><span class="n">01</span>'
+      + '<span class="h2">' + T.I("sm_actions") + '</span></div>'
+      + actionTable(T, scan(recs))
+      + '<div class="subhd" style="margin-top:15px;">' + T.I("uh_findings") + '</div>'
+      + historyFindings(ctx, T, shown);
+    /* A handful of photographs, not the whole set every type already has in
+       its own detail sheet — the ones that go with a significant finding,
+       so a reader sees the evidence beside the table that named it. */
+    var photoPairs = shown.filter(function (p) { return p.it.photos && p.it.photos.length; }).slice(0, 6);
+    if (photoPairs.length) {
+      body2 += '<div class="subhd" style="margin-top:15px;">' + T.I("photos") + '</div>'
+        + '<div class="board gal b' + (photoPairs.length >= 2 ? 2 : 1) + '">'
+        + photoPairs.map(function (p) { return cell(ctx, T, p.it, null, true); }).join("") + '</div>';
+    }
+    secs.push({ nb: true, html: body2 + '</div>' });
+
+    /* The measured trend — already compact, already bounded to six columns —
+       is the one table this report keeps in full: nothing on a finding row
+       carries a condemn limit or a rate of wear, and a reader cannot
+       reconstruct either from the pictures. */
+    var trend = wearHistorySections(ctx, T, latestArr, older);
+    trend.forEach(function (x, ix) { secs.push(ix === 0 ? Object.assign({}, x, { nb: true }) : x); });
+
+    /* The sign-off closes the document — never alone on a page of its own,
+       so it rides whichever section above it has room, or its own short
+       block when none does. */
+    secs.push({ nb: false, html: '<div class="sec">' + approvalBlock(T, {}) + '</div>' });
+
+    /* "Include complete inspection sheets as appendix" — the whole of what
+       this report used to print by default, now opt-in and clearly marked as
+       what it is: every round the way its own single-inspection report would
+       show it, not a second opinion on the condition already stated above. */
+    if (ctx.appendix) {
+      var app = fullUnitSheets(ctx, T, recs);
+      if (app.length) {
+        secs.push({ nb: true, html: '<div class="sec"><div class="mhead"><div class="eyebrow">' + T.I("sub") + '</div></div>'
+          + '<div class="m1">' + T.I("uh_appendix") + '</div>'
+          + '<div class="quiet" style="margin-top:6px;max-width:520px;">' + T.S("uh_appendix_note") + '</div></div>' });
+        app.forEach(function (x, ix) { secs.push(ix === 0 ? Object.assign({}, x, { nb: true }) : x); });
+      }
+    }
+    return secs;
+  }
   function summarySheets(ctx, T, recs) {
     var secs = [], p2 = function (n) { return String(n).padStart(2, "0"); };
     var st = ctx.stamp || new Date();
@@ -2748,33 +3005,10 @@
       var n = parseFloat(String(r.smu || "").replace(/[^\d.]/g, "")); if (n > smu) smu = n;
       if (!latest[r.type] || String(r.date || "") >= String(latest[r.type].date || "")) latest[r.type] = r;
     });
-    /* The seven report types the site runs, in a fixed order so the summary of
-       any machine reads the same way. A type with no round is "Not inspected";
-       nothing here is ever left to imply Normal. */
-    var TYPES = ["MP", "FC", "TEMP", "UC", "GET", "TB", "LUBE"];
+    var TYPES = COND_TYPES;
     var worst = 0;
     var rows = TYPES.map(function (ty) {
-      var r = latest[ty];
-      var label = T.both(T("method_" + ty), T.alt("method_" + ty));
-      if (!r) return '<tr><td>' + label + '</td>'
-        + '<td class="c muted">—</td><td class="c muted">—</td>'
-        + '<td class="c"><span class="muted">' + esc(T("sm_notdone")) + '</span></td>'
-        + '<td class="muted">—</td><td class="muted">—</td></tr>';
-      var rn = roundRating(r); if (rn > worst) worst = rn;
-      var col = rn ? GRADE_HEX[rn] : "#7b858e";
-      var wf = null;
-      (r.items || []).forEach(function (it) { if (it.general) return;
-        if (it.defect && (!wf || gnum(it.grade) > gnum(wf.grade))) wf = it; });
-      var keyres = (wf && wf.defect) ? esc(wf.defect)
-        : (rn >= 2 ? '<span class="muted">—</span>' : esc(T("sm_clean")));
-      return '<tr>'
-        + '<td class="stripe" style="border-left-color:' + col + '">' + label + '</td>'
-        + '<td class="c n">' + esc(r.date || "") + '</td>'
-        + '<td class="c n">' + (r.smu ? esc(r.smu) : "—") + '</td>'
-        + '<td class="c">' + (rn ? '<b style="color:' + col + '">' + rn + ' – ' + esc(gword(T, rn)) + '</b>'
-            : '<span class="muted">—</span>') + '</td>'
-        + '<td>' + keyres + '</td>'
-        + '<td>' + (rn ? T.I("dec_" + rn) : '<span class="muted">—</span>') + '</td></tr>';
+      var row = typeRow(T, ty, latest[ty]); if (row.rn > worst) worst = row.rn; return row.html;
     }).join("");
     var decKey = worst >= 5 ? "sm_dec_crit" : worst >= 3 ? "sm_dec_plan" : "sm_dec_ok";
 
@@ -2811,32 +3045,8 @@
     /* Page 2: the machine's open actions, consolidated, then the sign-off. */
     var X = scan(recs);
     var wl = '<div class="sec"><div class="sechd"><span class="n">01</span>'
-      + '<span class="h2">' + T.I("sm_actions") + '</span></div>';
-    if (!X.act.length) {
-      wl += '<div class="verdict v-ok">' + T.S("work_none") + '</div>';
-    } else {
-      wl += '<table><tr>'
-        + '<th style="width:118px">' + T.L("c_type") + '</th>'
-        + '<th style="width:150px">' + T.L("c_comp") + '</th>'
-        + '<th>' + T.L("c_do") + '</th>'
-        + '<th style="width:96px">' + T.L("ma_owner") + '</th>'
-        + '<th style="width:80px">' + T.L("ma_wo") + '</th>'
-        + '<th class="c" style="width:70px">' + T.L("ma_due") + '</th></tr>';
-      X.act.forEach(function (f, i) {
-        var rec = f.rec, it = f.it || {}, col = GRADE_HEX[gnum(it.grade)] || SEV_HEX[f.sev] || "#c9d0d6";
-        var comp = f.roll ? T.I("uc_cond") : (it.name || it.key || "—");
-        var doit = it.action ? esc(it.action) : (f.roll ? esc(T("uc_over", { n: f.act.length })) : '<span class="muted">' + T.I("do_tbd") + '</span>');
-        var miss = '<span class="muted">' + esc(T("ma_none")) + '</span>';
-        wl += '<tr class="' + (i % 2 ? "zebra" : "") + '">'
-          + '<td class="stripe" style="border-left-color:' + col + '"><span class="unit" style="font-size:11px">' + esc(rec.typeLabel || rec.type) + '</span></td>'
-          + '<td>' + esc(comp) + '</td>'
-          + '<td>' + doit + prioTag(it) + '</td>'
-          + '<td>' + (it.resp ? esc(it.resp) : miss) + '</td>'
-          + '<td>' + (it.wo ? esc(it.wo) : miss) + '</td>'
-          + '<td class="c n">' + (it.target ? esc(it.target) : miss) + '</td></tr>';
-      });
-      wl += '</table>';
-    }
+      + '<span class="h2">' + T.I("sm_actions") + '</span></div>'
+      + actionTable(T, X);
     /* The report controls are on page 1; page 2 closes with the three-role
        sign-off, all lines open on a whole-machine summary. */
     wl += approvalBlock(T, {});
@@ -2845,6 +3055,34 @@
     secs.status = docStatus(recs);
     secs.status.word = T("st_mark");
     return secs;
+  }
+  /* The consolidated open-actions table, shared by the Condition Summary and
+     the History-and-Trend report — both close on the same open-work list, and
+     a planner reading one after the other must see one table, not two that
+     happen to agree today. */
+  function actionTable(T, X) {
+    if (!X.act.length) return '<div class="verdict v-ok">' + T.S("work_none") + '</div>';
+    var h = '<table><tr>'
+      + '<th style="width:118px">' + T.L("c_type") + '</th>'
+      + '<th style="width:150px">' + T.L("c_comp") + '</th>'
+      + '<th>' + T.L("c_do") + '</th>'
+      + '<th style="width:96px">' + T.L("ma_owner") + '</th>'
+      + '<th style="width:80px">' + T.L("ma_wo") + '</th>'
+      + '<th class="c" style="width:70px">' + T.L("ma_due") + '</th></tr>';
+    X.act.forEach(function (f, i) {
+      var rec = f.rec, it = f.it || {}, col = GRADE_HEX[gnum(it.grade)] || SEV_HEX[f.sev] || "#c9d0d6";
+      var comp = f.roll ? T.I("uc_cond") : (it.name || it.key || "—");
+      var doit = it.action ? esc(it.action) : (f.roll ? esc(T("uc_over", { n: f.act.length })) : '<span class="muted">' + T.I("do_tbd") + '</span>');
+      var miss = '<span class="muted">' + esc(T("ma_none")) + '</span>';
+      h += '<tr class="' + (i % 2 ? "zebra" : "") + '">'
+        + '<td class="stripe" style="border-left-color:' + col + '"><span class="unit" style="font-size:11px">' + esc(rec.typeLabel || rec.type) + '</span></td>'
+        + '<td>' + esc(comp) + '</td>'
+        + '<td>' + doit + prioTag(it) + '</td>'
+        + '<td>' + (it.resp ? esc(it.resp) : miss) + '</td>'
+        + '<td>' + (it.wo ? esc(it.wo) : miss) + '</td>'
+        + '<td class="c n">' + (it.target ? esc(it.target) : miss) + '</td></tr>';
+    });
+    return h + '</table>';
   }
   function earlierRoundSections(ctx, T, older) {
     var out = [];
@@ -3831,22 +4069,35 @@
      block is left alone and cut as before: a squinted-at drawing is worse than
      a two-page one, and this is a layout adjustment, never a crop. Nothing is
      ever hidden — the return value says what it took, so a caller can tell the
-     difference between "fitted" and "gave up". */
+     difference between "fitted" and "gave up".
+
+     v3: narrowing the CONTAINER only works while the drawing's own height is
+     still width-driven. Since the drawing is now capped at 35-42% of a page's
+     room by .ucmap's max-height (so it can share page one with the Condition
+     summary), that cap is usually what is binding, not the container width —
+     and shrinking a container around an image already pinned by its own
+     max-height moves nothing. So each .ucmap's max-height is narrowed too, by
+     the same fraction, on a section that still needs the room; a page that
+     already fits (nearly every one, measured) never touches either. */
   CMR.FIT_MIN = 0.6;
   CMR.fitPage = function (el, roomPx) {
     if (!el || !(roomPx > 0)) return 1;
     var maps = el.querySelector(".ucmaps");
     var h = el.getBoundingClientRect().height;
     if (h <= roomPx || !maps) return 1;
+    var frames = maps.querySelectorAll(".ucmap");
+    var baseH = []; frames.forEach(function (f) { baseH.push(f.getBoundingClientRect().height); });
     var w = 1;
     maps.style.marginLeft = "auto"; maps.style.marginRight = "auto";
     while (h > roomPx && w > CMR.FIT_MIN + 0.001) {
       w = Math.round((w - 0.05) * 100) / 100;
       maps.style.width = (w * 100) + "%";
+      frames.forEach(function (f, i) { f.style.maxHeight = Math.round(baseH[i] * w) + "px"; });
       h = el.getBoundingClientRect().height;
     }
     if (h > roomPx) {                       // could not be done; put it back
       maps.style.width = ""; maps.style.marginLeft = ""; maps.style.marginRight = "";
+      frames.forEach(function (f) { f.style.maxHeight = ""; });
       return 0;
     }
     return w;

@@ -624,6 +624,10 @@
         (window.WEAR && WEAR.forecast ? WEAR.forecast(ref, series) : null),
       records: normalise(recs, opts),
       extra: opts.extra || [],
+      /* "Include complete inspection sheets as appendix" — off by default, so
+         Equipment History and Trend is the compact document the template
+         asks for and not a bound copy of every round on the machine. */
+      appendix: !!opts.appendix,
     };
   }
 

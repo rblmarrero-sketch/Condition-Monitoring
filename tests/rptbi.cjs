@@ -58,7 +58,7 @@ const SEED = () => {
 
 /* Build the sections through exactly the context report.js hands over, so the
    suite cannot pass on a report nobody generates. */
-const BUILD = (scope, target) => {
+const BUILD = (scope, target, appendix) => {
   const other = f => { const was = lang; try { lang = was === 'ru' ? 'en' : 'ru'; return f(); }
                        finally { lang = was; } };
   const recs = CMReport.recsForScope(scope, target);
@@ -70,6 +70,10 @@ const BUILD = (scope, target) => {
     sevLabel: s => (SEV[s] ? SEV[s].l : s),
     sevLabelAlt: s => other(() => (SEV[s] ? SEV[s].l : s)),
     extra: [{ nb: true, html: '<div class="sec"><span class="n">__N__</span>HOST</div>' }],
+    /* Build 300: a multi-round unit report is compact by default and draws
+       nothing on its own — the drawing lives in the full detail, now the
+       opt-in appendix. Callers here that need the drawing ask for it. */
+    appendix: !!appendix,
   });
 };
 
@@ -241,7 +245,7 @@ const LAY = (secs) => {
   console.log('\nthe drawing names what it points at');
   const draw = await p.evaluate(({ BUILD }) => {
     const build = eval('(' + BUILD + ')');
-    const html = build('unit', 'DZ002').map(s => s.html).join('');
+    const html = build('unit', 'DZ002', true).map(s => s.html).join('');
     /* The numbers printed on the machine, and the key that resolves them. The
        report draws the same photo walk the app draws, so the marks are numbers
        — the lettered schematic and its O/I/S pucks are gone. */
@@ -308,11 +312,20 @@ const LAY = (secs) => {
   console.log('\nless, not more');
   const size = await p.evaluate(({ BUILD }) => {
     const build = eval('(' + BUILD + ')');
-    const u = build('unit', 'DZ002');
+    /* Build 300: the DEFAULT is the compact History-and-Trend document — no
+       appendix, no drawing repeated (none drawn at all, by design). The
+       "drawn once per type, not once per round" invariant is now proven on
+       the opt-in appendix, which still runs the same fullUnitSheets code a
+       four-round machine used to hit unconditionally. */
+    const compact = build('unit', 'DZ002');
+    const full = build('unit', 'DZ002', true);
     const one = build('one', 'DZ002|2026-08-11|UC');
-    const html = u.map(s => s.html).join('');
+    const chtml = compact.map(s => s.html).join('');
+    const html = full.map(s => s.html).join('');
     return {
-      sections: u.length, chars: html.length, html: html.slice(0, 400),
+      compactSections: compact.length, compactChars: chtml.length,
+      compactMaps: (chtml.match(/class="ucmap[ "]/g) || []).length,
+      sections: full.length, chars: html.length, html: html.slice(0, 400),
       maps: (html.match(/class="ucmap[ "]/g) || []).length,
       signs: (html.match(/class="shsign"/g) || []).length,
       mh: /class="mh"/.test(html),
@@ -325,13 +338,52 @@ const LAY = (secs) => {
       oneMaps: (one.map(s => s.html).join('').match(/class="ucmap[ "]/g) || []).length,
     };
   }, { BUILD: BUILD.toString() });
-  note('unit report', JSON.stringify(size));
+  note('compact (default) history report', 'sections=' + size.compactSections + ', ' + Math.round(size.compactChars / 1024) + ' KB, ' + size.compactMaps + ' frame(s)');
+  note('with the complete-sheets appendix', JSON.stringify({ sections: size.sections, chars: size.chars, maps: size.maps, signs: size.signs }));
+  ok('the default report draws the machine on nothing of its own — the four rounds are a table, not four drawings',
+     size.compactMaps === 0, size.compactMaps + ' frame(s)');
+  ok('  and stays a handful of sections regardless of how many rounds are on the machine',
+     size.compactSections <= 6, size.compactSections + ' section(s)');
+  /* Sections are not pages — several short ones pack onto one physical sheet
+     unless something forces a break. The number the template actually sets a
+     budget on (2-3 pages) is measured through the real paginator, the way a
+     PDF would actually come out, on the same DZ002 (two types, five rounds
+     total) that used to print six pages for three inspections. */
+  const pages = await p.evaluate(({ BUILD }) => {
+    const build = eval('(' + BUILD + ')');
+    /* Without the synthetic HOST section item 5 of this suite needs — a
+       placeholder-substitution probe unrelated to page budget, and one that
+       forces a page break of its own regardless of what report produced it. */
+    const secs = build('unit', 'DZ002').filter(s => !/>HOST</.test(s.html));
+    const st = document.createElement('style'); st.textContent = CMR.CSS; document.head.appendChild(st);
+    const d = document.createElement('div'); d.id = 'rptRoot';
+    d.style.cssText = 'position:fixed;left:-99999px;top:0;width:760px;background:#fff;';
+    d.innerHTML = secs.map(s => '<div class="secwrap">' + s.html + '</div>').join('');
+    document.body.appendChild(d);
+    const PW = 595, PH = 842, M = 38, FOOT = 22, cw = PW - 2 * M;
+    const k = cw / 760, roomPx = (PH - M - FOOT - M) / k;
+    CMR.fitAll(d, secs, roomPx);
+    let page = 1, y = 0;
+    [...d.children].forEach((el, i) => {
+      let h = el.getBoundingClientRect().height; if (h <= 0) return;
+      const gap = (secs[i].gap != null ? secs[i].gap : 14) / k;
+      if (secs[i].nb && y > 0) { page++; y = 0; }
+      else if (y > 0 && h <= roomPx && y + h > roomPx) { page++; y = 0; }
+      while (h > roomPx - y) { h -= (roomPx - y); page++; y = 0; }
+      y += h + gap;
+    });
+    st.remove(); d.remove();
+    return page;
+  }, { BUILD: BUILD.toString() });
+  ok('the compact history report actually prints in two to three pages for this machine',
+     pages >= 2 && pages <= 3, pages + ' page(s)');
   /* Four undercarriage rounds used to mean four copies of a two-frame drawing
-     — 200 KB of SVG for a machine that looks the same in all four. */
-  ok('the machine is drawn once per type, not once per round', size.maps === 2, size.maps + ' frames');
-  ok('and signed once per type', size.signs <= 2, size.signs + ' signature blocks');
-  ok('the document stays small', size.chars < 100000, Math.round(size.chars / 1024) + ' KB');
-  ok('the sections stay few', size.sections <= 6, size.sections + '');
+     — 200 KB of SVG for a machine that looks the same in all four. Still true
+     of the appendix, which is the full detail on request. */
+  ok('the appendix still draws the machine once per type, not once per round', size.maps === 2, size.maps + ' frames');
+  ok('and signed once per type there', size.signs <= 3, size.signs + ' signature blocks');
+  ok('the appendix stays bounded even with the compact intro ahead of it', size.chars < 140000, Math.round(size.chars / 1024) + ' KB');
+  ok('the sections stay few', size.sections <= 10, size.sections + '');
   /* Nothing is dropped, and there is no longer a summary table saying so.
 
      There used to be one — a line per earlier round — and it was struck out on

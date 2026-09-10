@@ -51,9 +51,15 @@ const SEED = () => {
 };
 
 /* Lay the document out exactly as the paginator does — same width, same room,
-   same fit pass — and report where each section lands. */
+   same fit pass — and report where each section lands.
+
+   Build 300: a multi-round unit report is compact by default and draws
+   nothing of its own — the drawing this suite is about lives in the full
+   detail, now the opt-in appendix, which this asks for. The drawing is no
+   longer necessarily section 0 (the compact intro comes first), so it is
+   found by what it IS, not by position. */
 const LAY = ([bi]) => {
-  const secs = CMReport.sectionsFor("unit", "EX015", { lang: "en", bi, photos: true });
+  const secs = CMReport.sectionsFor("unit", "EX015", { lang: "en", bi, photos: true, appendix: true });
   const st = document.createElement("style"); st.id = "fitcss"; st.textContent = CMR.CSS;
   document.head.appendChild(st);
   const d = document.createElement("div"); d.id = "rptRoot";
@@ -78,13 +84,22 @@ const LAY = ([bi]) => {
     y += h + gap;
     at.push({ start, end: page, split: page > start });
   });
+  /* CMR.fitAll only returns one entry per FIT-FLAGGED section, in order — a
+     shorter array than secs/before/after, not one aligned to the same index.
+     That went unnoticed while the drawing was always section 0 (fit-ordinal 0
+     too, on this fixture); now that the appendix can put it anywhere, `took`
+     is re-indexed here to line up with everything else this function returns. */
+  let fitOrd = 0;
+  const tookBySec = secs.map(s => (s.fit ? took[fitOrd++] : undefined));
   const out = {
-    roomPx: Math.round(roomPx), took, before, after, at, pages: page,
+    roomPx: Math.round(roomPx), took: tookBySec, before, after, at, pages: page,
     kinds: secs.map(s => ({ nb: !!s.nb, fit: !!s.fit })),
     /* what each section IS, read off its own heading rather than its index */
     what: [...d.children].map(el => (el.textContent || "").replace(/\s+/g, " ").trim().slice(0, 44)),
     /* every numbers-key entry, and which page it fell on */
     keyRows: [...d.querySelectorAll(".pkey > *, .ckey > *")].length,
+    /* the drawing page, wherever the appendix put it */
+    mapIx: secs.findIndex(s => /class="ucmaps"/.test(s.html)),
   };
   st.remove(); d.remove();
   return out;
@@ -114,11 +129,12 @@ const LAY = ([bi]) => {
 
   console.log("\n2. BILINGUAL — THE SHEET THAT CAME BACK");
   const bi = await p.evaluate(LAY, [true]);
+  ok("the drawing page was found in the appendix", bi.mapIx >= 0, "mapIx=" + bi.mapIx);
   ok("the drawings and the key are on one page",
-     bi.at[0] && !bi.at[0].split && bi.at[0].start === 1,
-     JSON.stringify(bi.at[0]) + " · " + bi.before[0] + "px → " + bi.after[0] + "px of " + bi.roomPx);
+     bi.at[bi.mapIx] && !bi.at[bi.mapIx].split,
+     JSON.stringify(bi.at[bi.mapIx]) + " · " + bi.before[bi.mapIx] + "px → " + bi.after[bi.mapIx] + "px of " + bi.roomPx);
   ok("  and it was not narrowed past what a puck can be read at",
-     (bi.took[0] || 1) >= 0.6, String(bi.took[0]));
+     (bi.took[bi.mapIx] || 1) >= 0.6, String(bi.took[bi.mapIx]));
 
   /* THE FIT ITSELF, MEASURED — not left to whether this fixture happens to
      overflow. A guard that only fires on a document taller than a page is a
@@ -127,11 +143,12 @@ const LAY = ([bi]) => {
      did. Three things it must do and one it must not: shrink, stop at the
      floor, leave a block that fits alone, and never crop. */
   const mech = await p.evaluate(() => {
-    const secs = CMReport.sectionsFor("unit", "EX015", { lang: "en", bi: true, photos: true });
+    const secs = CMReport.sectionsFor("unit", "EX015", { lang: "en", bi: true, photos: true, appendix: true });
+    const mapIx = secs.findIndex(s => /class="ucmaps"/.test(s.html));
     const st = document.createElement("style"); st.textContent = CMR.CSS; document.head.appendChild(st);
     const d = document.createElement("div"); d.id = "rptRoot";
     d.style.cssText = "position:fixed;left:-99999px;top:0;width:760px;background:#fff;";
-    d.innerHTML = '<div class="secwrap">' + secs[0].html + "</div>";
+    d.innerHTML = '<div class="secwrap">' + secs[mapIx].html + "</div>";
     document.body.appendChild(d);
     const el = d.children[0], full = el.getBoundingClientRect().height;
     const maps = el.querySelector(".ucmaps");
@@ -165,11 +182,13 @@ const LAY = ([bi]) => {
   ok("  and a block with room to spare is not touched",
      mech.plenty === 1 && mech.widthWhenAmple === "", "took " + mech.plenty);
   ok("every entry of the numbers key is on that page", bi.keyRows >= 11, bi.keyRows + " entries");
-  ok("this visit's measurements start page 2",
-     bi.at[1] && bi.at[1].start === 2, JSON.stringify(bi.at[1]) + " · " + bi.what[1]);
-  const histIx = bi.kinds.findIndex((k, i) => i > 1 && k.nb);
+  const measIx = bi.mapIx + 1;
+  ok("this visit's measurements start the page right after the drawing",
+     bi.at[measIx] && bi.at[measIx].start === bi.at[bi.mapIx].end + 1,
+     JSON.stringify(bi.at[measIx]) + " · " + bi.what[measIx]);
+  const histIx = bi.kinds.findIndex((k, i) => i > measIx && k.nb);
   ok("the history starts a page of its own",
-     histIx > 1 && bi.at[histIx] && bi.at[histIx].start > bi.at[histIx - 1].end - 1 && bi.kinds[histIx].nb,
+     histIx > measIx && bi.at[histIx] && bi.at[histIx].start > bi.at[histIx - 1].end - 1 && bi.kinds[histIx].nb,
      "section " + histIx + " on page " + (bi.at[histIx] || {}).start + " · " + bi.what[histIx]);
   ok("  and nothing before it is left hanging into it",
      bi.at[histIx] && bi.at[histIx - 1] && bi.at[histIx].start > bi.at[histIx - 1].start,
@@ -177,12 +196,14 @@ const LAY = ([bi]) => {
 
   console.log("\n3. AND IN ONE LANGUAGE, WHERE THE BLOCK IS SHORTER");
   const en = await p.evaluate(LAY, [false]);
-  ok("page one still holds all of it", en.at[0] && !en.at[0].split && en.at[0].start === 1,
-     JSON.stringify(en.at[0]) + " · " + en.before[0] + "px → " + en.after[0] + "px");
+  ok("the drawing page was found in the appendix", en.mapIx >= 0, "mapIx=" + en.mapIx);
+  ok("it still holds all of it, in one language", en.at[en.mapIx] && !en.at[en.mapIx].split,
+     JSON.stringify(en.at[en.mapIx]) + " · " + en.before[en.mapIx] + "px → " + en.after[en.mapIx] + "px");
   ok("  and a block that already fitted is left at full width",
-     en.before[0] <= en.roomPx ? en.took[0] === 1 : en.took[0] < 1,
-     en.before[0] + "px of " + en.roomPx + " · took " + en.took[0]);
-  ok("this visit's measurements still start page 2", en.at[1] && en.at[1].start === 2, JSON.stringify(en.at[1]));
+     en.before[en.mapIx] <= en.roomPx ? en.took[en.mapIx] === 1 : en.took[en.mapIx] < 1,
+     en.before[en.mapIx] + "px of " + en.roomPx + " · took " + en.took[en.mapIx]);
+  ok("this visit's measurements still start the page right after the drawing",
+     en.at[en.mapIx + 1] && en.at[en.mapIx + 1].start === en.at[en.mapIx].end + 1, JSON.stringify(en.at[en.mapIx + 1]));
 
   console.log("\n4. NO SECTION ENDS AS A FRAGMENT ON A PAGE OF ITS OWN");
   /* The shape of the reported defect, stated generally: a section may span

@@ -3328,6 +3328,12 @@
               <option value="2.4" data-i18n="r_q_high">High (larger file)</option>
               <option value="1.4" data-i18n="r_q_small">Small file (slow link)</option>
             </select></div>
+            <div class="field" id="rAppendixField" hidden style="align-self:flex-end">
+              <label class="row" style="gap:6px;align-items:center;font-weight:400">
+                <input type="checkbox" id="rAppendix">
+                <span data-i18n="r_appendix">Include complete inspection sheets as appendix</span>
+              </label>
+            </div>
           </div></div></div>
         <div class="rpreview" id="rPreview"></div>
         <div class="row" style="gap:12px;align-items:center;margin-top:var(--s3);flex-wrap:wrap">
@@ -3465,17 +3471,17 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=299"></script>
-<script src="../mobile/hme.js?v=299"></script>
-<script src="../mobile/mp-fc.js?v=299"></script>
-<script src="../mobile/hme-cascade.js?v=299"></script>
-<script src="../mobile/temp-limits.js?v=299"></script>
+<script src="../data/magnetic_plug.js?v=300"></script>
+<script src="../mobile/hme.js?v=300"></script>
+<script src="../mobile/mp-fc.js?v=300"></script>
+<script src="../mobile/hme-cascade.js?v=300"></script>
+<script src="../mobile/temp-limits.js?v=300"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=299"></script>
-<script src="../mobile/normalize.js?v=299"></script>
-<script src="../mobile/terms.js?v=299"></script>
+<script src="../mobile/assets.js?v=300"></script>
+<script src="../mobile/normalize.js?v=300"></script>
+<script src="../mobile/terms.js?v=300"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3494,19 +3500,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=299"></script>
-<script src="../mobile/edits.js?v=299"></script>
-<script src="../mobile/due.js?v=299"></script>
-<script src="../mobile/wear.js?v=299"></script>
-<script src="../mobile/wear-map.js?v=299"></script>
-<script src="../mobile/lube.js?v=299"></script>
-<script src="../mobile/lube-overrides.js?v=299"></script>
-<script src="../mobile/lube2027.js?v=299"></script>
-<script src="../mobile/lube-tds.js?v=299"></script>
+<script src="../mobile/grade.js?v=300"></script>
+<script src="../mobile/edits.js?v=300"></script>
+<script src="../mobile/due.js?v=300"></script>
+<script src="../mobile/wear.js?v=300"></script>
+<script src="../mobile/wear-map.js?v=300"></script>
+<script src="../mobile/lube.js?v=300"></script>
+<script src="../mobile/lube-overrides.js?v=300"></script>
+<script src="../mobile/lube2027.js?v=300"></script>
+<script src="../mobile/lube-tds.js?v=300"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=299"></script>
-<script src="../mobile/machine-photos.js?v=299"></script>
+<script src="../mobile/upload-defaults.js?v=300"></script>
+<script src="../mobile/machine-photos.js?v=300"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3515,17 +3521,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=299"></script>
-<script src="../mobile/get.js?v=299"></script>
-<script src="../mobile/points.js?v=299"></script>
-<script src="../mobile/uc-points.js?v=299"></script>
-<script src="../mobile/inspect-guide.js?v=299"></script>
-<script src="../mobile/get-figs.js?v=299"></script>
-<script src="../mobile/body-points.js?v=299"></script>
-<script src="../mobile/body-map.js?v=299"></script>
-<script src="../mobile/jspdf.umd.min.js?v=299"></script>
-<script src="../mobile/html2canvas.min.js?v=299"></script>
-<script src="../mobile/report-core.js?v=299"></script>
+<script src="../mobile/machine-fig.js?v=300"></script>
+<script src="../mobile/get.js?v=300"></script>
+<script src="../mobile/points.js?v=300"></script>
+<script src="../mobile/uc-points.js?v=300"></script>
+<script src="../mobile/inspect-guide.js?v=300"></script>
+<script src="../mobile/get-figs.js?v=300"></script>
+<script src="../mobile/body-points.js?v=300"></script>
+<script src="../mobile/body-map.js?v=300"></script>
+<script src="../mobile/jspdf.umd.min.js?v=300"></script>
+<script src="../mobile/html2canvas.min.js?v=300"></script>
+<script src="../mobile/report-core.js?v=300"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4299,6 +4305,7 @@ const I18N={
   r_photos:"Photos", r_withphotos:"Include photos", r_nophotos:"No photos (smaller file)",
   r_scale:"Quality", r_go:"📄 Generate PDF", r_nodata:"— no data —",
   r_lang:"Language", r_lang_both:"English + Russian", r_q_std:"Standard", r_q_high:"High (larger file)", r_q_small:"Small file (slow link)",
+  r_appendix:"Include complete inspection sheets as appendix",
   r_est:"About {p} page(s) · about {s} MB · {n} photograph(s) · roughly {t} to make", r_est_wait:"Estimating…",
   r_est_s:"{n} s", r_est_m:"{n} min",
   r_one:"This inspection", r_one_go:"📄 Report", r_unit_go:"📄 Report on this machine",
@@ -5099,6 +5106,7 @@ const I18N={
   r_photos:"Фото", r_withphotos:"С фото", r_nophotos:"Без фото (меньше файл)",
   r_scale:"Качество", r_go:"📄 Сформировать PDF", r_nodata:"— нет данных —",
   r_lang:"Язык", r_lang_both:"Английский + русский", r_q_std:"Стандарт", r_q_high:"Высокое (больше файл)", r_q_small:"Малый файл (слабая связь)",
+  r_appendix:"Включить полные листы осмотров приложением",
   r_est:"Около {p} стр. · около {s} МБ · фото: {n} · примерно {t} на формирование", r_est_wait:"Оценка…",
   r_est_s:"{n} с", r_est_m:"{n} мин",
   r_one:"Этот осмотр", r_one_go:"📄 Отчёт", r_unit_go:"📄 Отчёт по этой машине",
@@ -12505,6 +12513,11 @@ function reportTargetOpts(scope){
 function refreshReportTargets(){
   const scope=$("rScope").value, sel=$("rTarget"); const prev=sel.value;
   $("rTargetLbl").textContent = scope==="one" ? t("r_target") : (scope==="unit"||scope==="summary") ? t("r_unit_l") : scope==="round" ? t("th_date") : t("r_month_l");
+  /* The appendix choice means something only for Equipment History and
+     Trend — every other scope is either already the single full sheet
+     ("one"), already compact by nature (Condition Summary), or a fleet
+     document with its own exception-first shape (round/month). */
+  const af=$("rAppendixField"); if(af) af.hidden = scope!=="unit";
   let opts=reportTargetOpts(scope);
   /* SEARCHED AND BOUNDED, for the same reason as the equipment picker.
 
@@ -12576,7 +12589,7 @@ function reportEstimateSoon(scope,target){
   clearTimeout(rEstT);
   rEstT=setTimeout(async ()=>{
     const el=$("rEst"); if(!el || !window.CMReport || !CMReport.estimate) return;
-    const o=reportOpts(); const key=[scope,target,o.lang,o.bi,o.photos,o.scale].join("|");
+    const o=reportOpts(); const key=[scope,target,o.lang,o.bi,o.photos,o.scale,o.appendix].join("|");
     rEstKey=key;
     try{
       const e=await CMReport.estimate(scope,target,o);
@@ -12601,7 +12614,12 @@ function renderRecentReports(){
   const list=recentReports();
   const hint=$("rRecentHint"); if(hint) hint.textContent = list.length ? t("r_recent_hint",{n:list.length}) : "";
   if(!list.length){ ul.innerHTML=`<li class="muted">${esc(t("r_recent_none"))}</li>`; return; }
-  const scopeName={one:t("r_one"), unit:t("r_unit"), round:t("r_round"), month:t("r_month")};
+  /* Every scope the picker offers gets its translated label here, or a report
+     run under a scope this map forgot prints the internal scope NAME on the
+     screen — "summary" was missing and every Equipment Condition Summary
+     entry in Recent Reports read the literal word "summary" instead of its
+     translated label, in both languages. */
+  const scopeName={one:t("r_one"), unit:t("r_unit"), summary:t("r_summary"), round:t("r_round"), month:t("r_month")};
   ul.innerHTML=list.map((x,ix)=>`<li>
       <span><b>${esc(x.target)}</b> <span class="muted">· ${esc(scopeName[x.scope]||x.scope)}</span>
         ${x.pages?` <span class="muted">· ${esc(t("r_rec_pages",{n:x.pages}))}</span>`:""}${
@@ -12626,6 +12644,7 @@ function selectReportTarget(v){
 if($("rTarget")) $("rTarget").onchange=renderReportPreview;
 if($("rPhotos")) $("rPhotos").onchange=renderReportPreview;
 if($("rScale")) $("rScale").onchange=renderReportPreview;
+if($("rAppendix")) $("rAppendix").onchange=renderReportPreview;
 /* THE REPORT'S LANGUAGE IS CHOSEN, NOT IMPOSED. English, Russian, or both on
    one sheet — remembered per browser, defaulting to the screen's language.
    Every way of making a report reads the same options. */
@@ -12636,7 +12655,11 @@ function reportOpts(){
   return { msg:$("rMsg"), photos:($("rPhotos")||{}).value==="1", scale:sc,
            lang: v==="both" ? lang : v, bi: v==="both",
            /* the small-file point on the curve: a lower scale AND a tighter JPEG */
-           jpeg: sc<1.6 ? 0.8 : undefined };
+           jpeg: sc<1.6 ? 0.8 : undefined,
+           /* Equipment History and Trend only — every other scope ignores it.
+              Off by default, so the compact document the template asks for is
+              what a planner gets without having to know to ask for it. */
+           appendix: !!($("rAppendix") && $("rAppendix").checked) };
 }
 if($("rLang")){
   let v=""; try{ v=localStorage.getItem(RLANG_K)||""; }catch(e){}
@@ -15958,8 +15981,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=299"></script>
-<script src="sync-adapter.js?v=299"></script>
-<script src="report.js?v=299"></script>
+<script src="drive.js?v=300"></script>
+<script src="sync-adapter.js?v=300"></script>
+<script src="report.js?v=300"></script>
 </body>
 </html>

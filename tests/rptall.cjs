@@ -64,7 +64,13 @@ const SEED = () => {
 const RENDER = (unit, L) => {
   lang = L; applyLang();
   const recs = CMReport.recsForScope('unit', unit);
-  const secs = CMR.sections(CMReport.ctxFor(recs, { scope: 'unit', target: unit, extra: [], art: {} }));
+  /* Build 300: Equipment History and Trend is compact by default and no
+     longer draws the machine on its own — the drawing lives in the FULL
+     detail sheet, which is now the appendix. This suite is about the sheet
+     itself (dictionary completeness, no leaked markup, the drawing present
+     where the round has one), so it asks for the appendix explicitly rather
+     than asserting against the compact intro that replaced it. */
+  const secs = CMR.sections(CMReport.ctxFor(recs, { scope: 'unit', target: unit, extra: [], art: {}, appendix: true }));
   document.querySelectorAll('#rptProbe,#rptProbeCss').forEach(e => e.remove());
   const st = document.createElement('style'); st.id = 'rptProbeCss'; st.textContent = CMR.CSS; document.head.appendChild(st);
   const d = document.createElement('div'); d.id = 'rptProbe'; d.className = 'rp';

@@ -10,8 +10,10 @@
    So this suite drives the real CMR.paginate with a stub renderer that records
    exactly where every cut landed, measures the real rows in the real DOM, and
    asserts no cut fell through one. It also asserts the shape the sheet is now
-   meant to have: the drawing owns page one at full width, the readings begin
-   overleaf. */
+   meant to have: the drawing runs the full WIDTH of page one, shares that page
+   with the condition summary and the recommendation (build 300 — the drawing
+   used to be sized to fill the page, leaving no room for either), and the
+   readings begin overleaf. */
 const { chromium } = require(require('./pw.cjs'));
 const B = 'http://127.0.0.1:8093';
 const fails = [];
@@ -95,7 +97,7 @@ const HARNESS = `(async (sections) => {
   await p.waitForTimeout(500);
   const measured = await p.evaluate(SEED);
 
-  const secs  = await p.evaluate(async () => (await buildReportSections('rp')).map(s => ({ nb: s.nb, html: s.html })));
+  const secs  = await p.evaluate(async () => (await buildReportSections('rp')).map(s => ({ nb: s.nb, fit: s.fit, html: s.html })));
   const fleet = await p.evaluate(async () => (await buildReportSections()).map(s => ({ nb: s.nb, html: s.html })));   // all four rounds, with history
   const out   = await p.evaluate(async ([h, s]) => (0, eval)(h)(s), [HARNESS, secs]);
   const outF  = await p.evaluate(async ([h, s]) => (0, eval)(h)(s), [HARNESS, fleet]);
@@ -120,6 +122,43 @@ const HARNESS = `(async (sections) => {
     Math.round(out.cap[iMap].mapw) + ' of ' + Math.round(out.cap[iMap].w) + 'px');
   ok('and the drawing page is one page, key and all',
     out.cap[iMap].slices.length === 1, out.cap[iMap].slices.length + ' slices');
+
+  console.log('\n  v3: the Condition summary shares the drawing page, not the register page');
+  /* Build 300 — the drawing used to be sized to fill the page, which is why the
+     summary and the metadata strip had to move to the register page: there was
+     nowhere else to put them. The drawing is capped now (see .ucmap in
+     report-core.js) specifically so page one has room for all four things the
+     template asks for together: the equipment strip, the drawing, the
+     condition summary and the recommendation. */
+  const g = await p.evaluate((secsIn) => {
+    const holder = document.createElement('div'); holder.id = 'rptRoot';
+    holder.style.cssText = 'position:fixed;left:0;top:0;width:760px;background:#fff;';
+    const st = document.createElement('style'); st.textContent = CMR.CSS;
+    document.head.appendChild(st);
+    holder.innerHTML = secsIn.map(s => '<div class="secwrap">' + s.html + '</div>').join('');
+    document.body.appendChild(holder);
+    const PW = 595, PH = 842, M = 38, FOOT = 22, cw = PW - 2 * M, top = M, bottom = PH - M - FOOT;
+    const roomPx = (bottom - top) / (cw / 760);
+    const els = Array.prototype.slice.call(holder.children);
+    if (secsIn[0].fit) CMR.fitPage(els[0], roomPx);
+    const page1 = els[0], maps = page1.querySelector('.ucmaps');
+    const r = { page1H: page1.getBoundingClientRect().height, roomPx,
+      mapsH: maps ? maps.getBoundingClientRect().height : 0,
+      hasCondSum: /Condition summary|Сводка состояния/.test(page1.textContent || ''),
+      hasStrip: !!page1.querySelector('.mstrip'),
+      regPage2CarriesSummary: /Condition summary|Сводка состояния/.test((els[1] || {}).textContent || '') };
+    holder.remove(); st.remove();
+    return r;
+  }, secs);
+  ok('the drawing and the condition summary are on the same (page one) section',
+    g.hasCondSum && g.hasStrip, JSON.stringify(g));
+  ok('page one still fits in one physical page with all of it',
+    g.page1H <= g.roomPx, Math.round(g.page1H) + ' of ' + Math.round(g.roomPx) + 'px room');
+  ok('the drawing is roughly 35-42% of the page\'s own room, not most of it',
+    g.mapsH / g.roomPx >= 0.30 && g.mapsH / g.roomPx <= 0.46,
+    Math.round(g.mapsH / g.roomPx * 100) + '% (' + Math.round(g.mapsH) + ' of ' + Math.round(g.roomPx) + 'px)');
+  ok('the register page does not repeat the condition summary',
+    !g.regPage2CarriesSummary);
 
   console.log('\n  no cut falls through a row');
   /* Each element is drawn as one or more slices. Walk the cuts back into the
