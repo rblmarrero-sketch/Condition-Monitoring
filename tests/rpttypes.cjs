@@ -28,10 +28,22 @@ const SEED = `(function(){
    { equip:"TK900", date:"2026-08-10", type:"MP", cls:"HT", by:"Ivanov", smu:9100, sup:"Petrov",
      gps:{lat:63.12,lon:169.24,acc:6},
      items:[
-       { key:"4C", label:"Final drive LH", grade:3, particle:"18", comp:"5200", oil:"480",
+       { key:"1", label:"Engine", grade:3, particle:"18", comp:"5200", oil:"480",
          defect:"Ferrous flakes", cause:"Bearing wear", action:"Plan corrective work",
          resp:"A. Ivanov", wo:"WO-1", target:"2026-12-01", photos:[{name:"a.jpg"}] },
-       { key:"4D", label:"Final drive RH", grade:1, particle:"", comp:"", oil:"", photos:[] } ] },
+       { key:"4", label:"Differential", grade:2, particle:"6", comp:"5200", oil:"480", photos:[] },
+       { key:"4E", label:"Left Rear Final Drive", grade:1, particle:"", comp:"", oil:"", photos:[] } ] },
+   /* An old-scheme round: the two rear final drives each captured under two
+      position codes (4C+4E, 4D+4F). The report must fold each pair into one
+      position with both angles' photographs and the worse grade. */
+   { equip:"TK905", date:"2026-08-19", type:"MP", cls:"HT", by:"Ivanov", smu:9400,
+     gps:{lat:63.12,lon:169.24,acc:6},
+     items:[
+       { key:"4C", label:"Left Rear Final Drive", grade:1, photos:["data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="] },
+       { key:"4D", label:"Right Rear Final Drive", grade:1, photos:["data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=="] },
+       { key:"4E", label:"Left Rear Final Drive", grade:3, defect:"Ferrous flakes on plug",
+         action:"Plan corrective work", photos:["data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"] },
+       { key:"4F", label:"Right Rear Final Drive", grade:1, photos:["data:image/bmp;base64,Qk1G"] } ] },
    { equip:"TK901", date:"2026-08-11", type:"FC", cls:"HT", by:"Ivanov", smu:9200,
      items:[
        { key:"ENG", label:"Engine filter", grade:2, particle:"7", comp:"500", oil:"500",
@@ -113,7 +125,19 @@ const textOf = (p, key, lang) => p.evaluate(({ key, lang }) => {
   ok(/Equipment and component evidence/.test(mp), "the template subheading");
   ok(/Ferrous flakes/.test(mp), "  the particle finding is printed");
   ok(/5200/.test(mp) && /480/.test(mp), "  component and oil hours are printed");
-  ok(/4D/.test(mp), "  the clean plug still earns its card (the reading is the record)");
+  ok(/4E/.test(mp), "  the clean plug still earns its card (the reading is the record)");
+
+  console.log("\n1b. THE RETIRED 4C/4D ANGLES FOLD INTO 4E/4F");
+  const fold = await textOf(p, k("TK905", "2026-08-19", "MP"), "en");
+  ok(!/>?4C\b/.test(fold) && !/>?4D\b/.test(fold), "4C and 4D are gone from the sheet",
+     (fold.match(/4[CDEF]/g) || []).join(" "));
+  ok(/4E/.test(fold) && /4F/.test(fold), "  the two drives show under 4E and 4F");
+  ok(/Ferrous flakes on plug/.test(fold), "  the worse angle's finding is kept");
+  const foldImgs = await p.evaluate((key) => {
+    const secs = CMReport.sectionsFor("one", key, { lang: "en", photos: true });
+    return secs.map(s => (s.html || "").match(/<img[^>]+src="data:/g) || []).reduce((a, b) => a + b.length, 0);
+  }, k("TK905", "2026-08-19", "MP"));
+  ok(foldImgs >= 4, "  both angles' photographs are carried, not one", foldImgs + " images");
 
   console.log("\n2. FILTER CUT — the filter findings table");
   const fc = await textOf(p, k("TK901", "2026-08-11", "FC"), "en");

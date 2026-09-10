@@ -68,7 +68,12 @@
   // asset = the matrix Asset Range EN used to filter Direct Causes ("" = no filter).
   var CLASSES = {
     HT:{ en:"Haul Truck", ru:"Карьерный самосвал", asset:"TRUCK, DUMP",
-      MP:[mk("4C","Left Rear Final Drive","Левый задний бортовой редуктор"),mk("4D","Right Rear Final Drive","Правый задний бортовой редуктор"),
+      /* The TR60's magnetic plugs, as the fleet actually pulls them: the engine
+         plug (group 1) and the differential plug (group 4), then the two rear
+         final drives. The old 4C/4D final-drive positions are retired; 4E/4F
+         stay under their own keys, so records already captured on them keep
+         their names. ENG is group 1, DIFF group 4. */
+      MP:[mk("1","Engine","Двигатель"),mk("4","Differential","Дифференциал"),
           mk("4E","Left Rear Final Drive","Левый задний бортовой редуктор"),mk("4F","Right Rear Final Drive","Правый задний бортовой редуктор")],
       /* The transmission filter was missing from the haul truck's cut list —
          the one class where every other fluid compartment was named. The

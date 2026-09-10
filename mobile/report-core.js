@@ -3189,6 +3189,63 @@
       + '</div>';
   }
 
+  /* ── RETIRED PLUG ANGLES FOLD INTO THEIR CANONICAL POSITION ───────────────
+     The TR60's rear final drives were each photographed from two angles under
+     two position codes — 4C and 4E are the SAME left rear final drive, 4D and
+     4F the same right rear. The plug set has been reduced to one code per drive
+     (4E, 4F), so a round captured under the old scheme has its 4C folded into
+     4E and its 4D into 4F: one position, both angles' photographs, the worse of
+     the two grades, and the finding from whichever angle carried it. Nothing is
+     dropped — a second angle becomes another photograph on the one position
+     rather than a second position on the sheet.
+
+     Run in sane(), the one place both surfaces pass every record through, and
+     after photoSrcs/teamPhotosFor have already resolved each item's photographs
+     to URLs — so folding is a concatenation of resolved frames, needing no
+     knowledge of how a file is named. */
+  var MP_FOLD = { "4C": "4E", "4D": "4F" };
+  function foldOneMP(base, extra) {
+    var bg = gnum(base.grade) || 0, eg = gnum(extra.grade) || 0;
+    var lead = eg > bg ? extra : base, other = eg > bg ? base : extra;
+    var out = {}, k;
+    for (k in base) out[k] = base[k];
+    /* The finding is the worse angle's; anything it did not record is filled
+       from the other angle rather than lost. */
+    ["grade", "sev", "defect", "defectCode", "iso", "cause", "action", "actionAlt",
+     "prio", "prioLabel", "wo", "resp", "target", "opstat", "opstatLabel", "gradeWhy",
+     "comment", "particle", "comp", "oil", "tempC", "ambC", "tempM", "detect"]
+      .forEach(function (f) {
+        var v = lead[f]; if (v === "" || v == null) v = other[f];
+        if (v !== "" && v != null) out[f] = v;
+      });
+    /* Both angles' photographs, in order, without repeating a frame that the
+       correction panel had already filed onto both. */
+    var seen = {}, ph = [];
+    (base.photos || []).concat(extra.photos || []).forEach(function (u) {
+      if (u && !seen[u]) { seen[u] = 1; ph.push(u); } });
+    out.photos = ph;
+    var rd = {}, reads = [];
+    (base.readings || []).concat(extra.readings || []).forEach(function (r) {
+      if (r && !rd[r]) { rd[r] = 1; reads.push(r); } });
+    out.readings = reads;
+    return out;
+  }
+  function foldMP(items) {
+    if (!items.some(function (it) { return it && MP_FOLD[it.key]; })) return items;
+    var out = [], byKey = {};
+    items.forEach(function (it) {
+      var canon = MP_FOLD[it.key] || it.key;
+      if (byKey[canon]) {
+        var merged = foldOneMP(byKey[canon].item, it);
+        byKey[canon].item = merged; out[byKey[canon].i] = merged;
+      } else {
+        var c = {}, x; for (x in it) c[x] = it[x];
+        c.key = canon; if (c.code) c.code = canon;
+        byKey[canon] = { item: c, i: out.length }; out.push(c);
+      }
+    });
+    return out;
+  }
   /* ======================================================================== */
   /* A percentage below zero is a part thicker than new, which is not wear —
      it is a reading against the wrong reference, or the wrong point measured,
@@ -3211,7 +3268,9 @@
          and join the round's general photographs, captioned by what each is
          of (overview, left side, tray…). */
       var gen = (rec.items || []).filter(function (it) { return it && it.general; });
-      if (!hasNeg && !gen.length) return rec;
+      var needFold = rec.type === "MP"
+        && (rec.items || []).some(function (it) { return it && MP_FOLD[it.key]; });
+      if (!hasNeg && !gen.length && !needFold) return rec;
       var copy = {}, k;
       for (k in rec) copy[k] = rec[k];
       copy.items = rec.items.filter(function (it) { return !(it && it.general); }).map(function (it) {
@@ -3223,6 +3282,9 @@
         c.w = w;
         return c;
       });
+      /* Fold the retired 4C/4D angles into 4E/4F once the general photographs
+         are off the list, so a machine photo is never merged into a plug. */
+      if (needFold) copy.items = foldMP(copy.items);
       if (gen.length) {
         var g = (rec.general || []).slice();
         gen.forEach(function (it) {
