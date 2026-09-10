@@ -47,6 +47,10 @@
   text-transform:uppercase;color:#5b6670;}
 #rptRoot .h1{font-size:29px;font-weight:800;letter-spacing:-.02em;line-height:1.1;margin-top:7px;}
 #rptRoot .h2{font-size:16px;font-weight:750;letter-spacing:-.01em;}
+/* The title's own translation, inline rather than a second line under it —
+   still visibly quieter than the title itself, the way .altl's own-line
+   version was, just without the line. */
+#rptRoot .h1 .alti{font-size:.5em;font-weight:600;opacity:.68;margin-left:3px;}
 #rptRoot .lede{font-size:15px;line-height:1.45;font-weight:500;color:#12161a;}
 #rptRoot .muted{color:#5b6670;}
 #rptRoot .rule{height:2.5px;background:#16242c;}
@@ -183,7 +187,12 @@
 /* THE MAINTENANCE-ACTION STRIP — recorded action, direct cause, and the
    control fields (owner, work order, due), each honest as "Not recorded"
    when the round does not carry it. */
-#rptRoot .mact{display:flex;flex-wrap:wrap;gap:3px 20px;margin-top:12px;
+/* space-between, not packed left: five short fields in a full-width box
+   left everything after DUE DATE a bare grey gap nothing was using — the
+   same width the DATA/EVIDENCE/REVIEW/APPROVAL strip right below already
+   spends on itself instead of leaving idle. */
+#rptRoot .mact{display:flex;flex-wrap:wrap;justify-content:space-between;
+  gap:3px 20px;margin-top:12px;
   padding:7px 11px;border:1px solid #d7dde1;border-radius:5px;
   background:#f6f8f9;}
 #rptRoot .mact .f{font-size:9.5px;}
@@ -400,6 +409,10 @@
   font-variant-numeric:tabular-nums;white-space:nowrap;}
 #rptRoot .mast .rno i{font-style:normal;color:#9aa2a9;font-weight:700;margin-right:5px;letter-spacing:.11em;}
 #rptRoot .mast .m1{font-size:20px;font-weight:800;letter-spacing:-.02em;line-height:1.1;margin-top:3px;}
+/* Its translation inline, not on a second line — the masthead already
+   spends a title line, a subtitle line and a four-cell strip on identity;
+   "General Inspection" / "Общий осмотр" cost it a fourth for one fact. */
+#rptRoot .mast .m1 .alti{font-size:.58em;font-weight:600;opacity:.68;margin-left:3px;}
 #rptRoot .mast .msub{font-size:11px;color:#5b6670;margin-top:3px;font-weight:600;}
 #rptRoot .mast .msub .unum{font-size:12px;font-weight:800;color:#16242c;letter-spacing:-.01em;}
 #rptRoot .mast .msub b{font-variant-numeric:tabular-nums;color:#3d474f;}
@@ -432,7 +445,10 @@
    beside it into tall empty boxes — on a magnetic-plug sheet with one wordy
    finding that is most of a page of white, and on paper white is the one
    thing that cannot be scrolled past. */
-#rptRoot .board{display:grid;gap:12px 11px;margin-top:12px;align-items:start;}
+/* Tighter than the cards used to sit — the gap between them was never
+   information, and on a board of a dozen findings it added up to most of a
+   page of plain white. */
+#rptRoot .board{display:grid;gap:8px;margin-top:10px;align-items:start;}
 #rptRoot .cel{border:1px solid #dfe4e9;border-radius:6px;overflow:hidden;background:#fff;
   page-break-inside:avoid;min-width:0;}
 #rptRoot .cel .ph{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:#f2f5f7;}
@@ -446,11 +462,20 @@
 #rptRoot .cel .phx{display:grid;grid-template-columns:repeat(3,1fr);
   gap:1px;background:#dfe4e9;border-top:1px solid #dfe4e9;position:relative;}
 #rptRoot .cel .phx img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:#f2f5f7;}
-#rptRoot .cel .bd{padding:7px 9px 9px;}
-#rptRoot .cel .pk{font-size:11px;font-weight:750;letter-spacing:-.01em;line-height:1.25;}
-#rptRoot .cel .pn{font-size:9px;color:#7b858e;line-height:1.35;margin-top:1px;}
-#rptRoot .cel .chips{display:flex;gap:4px;align-items:center;margin-top:5px;flex-wrap:wrap;}
-#rptRoot .cel dl{margin-top:6px;display:grid;grid-template-columns:auto 1fr;gap:2px 7px;min-width:0;}
+#rptRoot .cel .bd{padding:6px 8px 7px;}
+/* Code, name and grade were three stacked lines for one fact — which
+   position this is and how bad it is. One row now: the code and its
+   bilingual name on the left, the grade pushed to the far side so it reads
+   as the verdict rather than a fourth label. A card too narrow for both
+   wraps the name under the code before it wraps anything else — .pk and
+   .chips are the two flex children space-between pushes apart; .pn rides
+   inside .pk so a wrap breaks between code and name, never mid-grade. */
+#rptRoot .cel .pkrow{display:flex;flex-wrap:wrap;align-items:center;
+  justify-content:space-between;gap:2px 8px;}
+#rptRoot .cel .pk{font-size:11px;font-weight:750;letter-spacing:-.01em;line-height:1.3;min-width:0;}
+#rptRoot .cel .pn{font-size:.86em;font-weight:500;color:#7b858e;}
+#rptRoot .cel .chips{display:flex;gap:4px;align-items:center;flex:0 0 auto;flex-wrap:wrap;}
+#rptRoot .cel dl{margin-top:5px;display:grid;grid-template-columns:auto 1fr;gap:2px 7px;min-width:0;}
 #rptRoot .cel dt{font-size:7.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
   color:#8b939b;padding-top:1px;min-width:0;overflow-wrap:anywhere;}
 #rptRoot .cel dd{font-size:9.5px;line-height:1.35;min-width:0;overflow-wrap:anywhere;}
@@ -474,7 +499,7 @@
 /* The photographs sheet. Same board, but the cells hold pictures rather than a
    paragraph, so they take the width of the paper — and the frames inside them
    are one size, in rows, rather than one big and a strip of stamps. */
-#rptRoot .board.gal{gap:14px 12px;}
+#rptRoot .board.gal{gap:9px 8px;}
 #rptRoot .board.gal.b1{max-width:none;}
 #rptRoot .cel .phg{display:grid;gap:2px;background:#dfe4e9;}
 #rptRoot .cel .phg img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;
@@ -635,14 +660,11 @@
 #rptRoot .board.mini .cel .ph{aspect-ratio:16/9;}
 #rptRoot .board.mini .cel .phx{grid-template-columns:repeat(4,1fr);}
 #rptRoot .board.mini .cel .bd{padding:4px 6px 4px;}
-/* Code and chips on ONE line, the way the office screen shows them, with the
-   name under. Stacked they are three lines for two facts. */
-#rptRoot .board.mini .cel .bd{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 5px;}
-#rptRoot .board.mini .cel .pk{font-size:9.5px;order:1;}
-#rptRoot .board.mini .cel .chips{order:2;margin-top:0;gap:3px;}
-#rptRoot .board.mini .cel .pn{font-size:8px;margin-top:1px;order:3;flex:1 0 100%;}
-#rptRoot .board.mini .cel dl{order:4;flex:1 0 100%;}
-#rptRoot .board.mini .cel .cm{order:5;flex:1 0 100%;}
+/* Code, name and grade already share one row by default (.pkrow, above) —
+   mini just shrinks it and the fields under it. */
+#rptRoot .board.mini .cel .pkrow{gap:1px 6px;}
+#rptRoot .board.mini .cel .pk{font-size:9.5px;}
+#rptRoot .board.mini .cel .chips{gap:3px;}
 #rptRoot .board.mini .cel dl{margin-top:3px;gap:1px 5px;}
 #rptRoot .board.mini .cel dt{font-size:6.5px;}
 #rptRoot .board.mini .cel dd{font-size:8.5px;line-height:1.3;}
@@ -2480,10 +2502,13 @@
           + '<div class="rno"><i>' + T.I("rr_report") + '</i>' + esc(reportNo(rec)) + '</div>'
         + '</div>'
         /* A type the dictionary has never heard of falls back to the label the
-           host resolved, not to the name of the key. */
+           host resolved, not to the name of the key. One line, the way the
+           metadata strip below it already says "MODEL / МОДЕЛЬ" — T.S's own
+           block translation put "General Inspection" and "Общий осмотр" on
+           two lines for one fact, on a masthead already tight for room. */
         + '<div class="m1">' + (T.key("method_" + rec.type, "")
-            ? T.S("method_" + rec.type)
-            : T.both(rec.typeLabel || rec.type, rec.typeAlt)) + '</div>'
+            ? T.I("method_" + rec.type)
+            : T.both(rec.typeLabel || rec.type, rec.typeAlt, "alti")) + '</div>'
         + '<div class="msub"><span class="unum">' + esc(rec.equip) + '</span>'
           + (rec.date ? ' · <b>' + esc(rec.date) + '</b>' : '')
           + (rec.smu ? ' · <b>' + esc(rec.smu) + '</b> h' : '')
@@ -3410,16 +3435,21 @@
       }
     }
     var rows = "";
+    /* Every label here names a fixed field ("Defect", "Action"...), not a
+       captured value — the same thing "MODEL / МОДЕЛЬ" already is in the
+       metadata strip above. T.L stacked its translation on its own line
+       under the label, which is how one card fact became two lines; T.I is
+       the strip's own one-line form, used here for the same reason. */
     function row(k, v) { rows += '<dt>' + k + '</dt><dd>' + v + '</dd>'; }
-    if (it.defect && !sh.defect) row(T.L("c_defect"), esc(it.defect)
+    if (it.defect && !sh.defect) row(T.I("c_defect"), esc(it.defect)
       + (it.iso ? ' <span class="code">ISO ' + esc(it.iso) + '</span>' : ""));
-    if (it.cause && !sh.cause) row(T.L("c_cause"), esc(it.cause));
+    if (it.cause && !sh.cause) row(T.I("c_cause"), esc(it.cause));
     /* The action in both languages: the host resolves it by code (actionAlt). */
-    if (it.action && !sh.action) row(T.L("c_action"), '<b>' + T.both(it.action, it.actionAlt, "alti") + '</b>'
+    if (it.action && !sh.action) row(T.I("c_action"), '<b>' + T.both(it.action, it.actionAlt, "alti") + '</b>'
       + prioTag(it) + (it.wo ? ' <span class="code">' + esc(T("c_wo")) + ' ' + esc(it.wo) + '</span>' : ""));
-    else if (it.wo || (it.prio && !sh.prio)) row(T.L("c_wo"),
+    else if (it.wo || (it.prio && !sh.prio)) row(T.I("c_wo"),
       (it.prio && !sh.prio ? prioTag(it) + " " : "") + '<span class="num">' + esc(it.wo || "") + '</span>');
-    if (it.resp || it.target || it.opstat || it.gradeWhy) row(T.L("c_resp"), planTag(T, it));
+    if (it.resp || it.target || it.opstat || it.gradeWhy) row(T.I("c_resp"), planTag(T, it));
     /* The lubrication round's whole answer. It is NOT a reading: a reading is
        a figure and gets tabular numerals, while this is a product name, how the
        fitter knows it, and whether a sample went with it. Folding it into the
@@ -3431,29 +3461,36 @@
        report bilingual only for undercarriage rounds. */
     if (it.lube) {
       var Lb = it.lube;
-      if (Lb.product) row(T.L("c_lube_prod"), '<b>' + esc(Lb.product) + '</b>');
-      if (Lb.evid) row(T.L("c_lube_evid"), T.both(Lb.evid.en, Lb.evid.ru, ""));
-      if (Lb.samp != null) row(T.L("c_lube_samp"),
+      if (Lb.product) row(T.I("c_lube_prod"), '<b>' + esc(Lb.product) + '</b>');
+      if (Lb.evid) row(T.I("c_lube_evid"), T.both(Lb.evid.en, Lb.evid.ru, ""));
+      if (Lb.samp != null) row(T.I("c_lube_samp"),
         T.I(Lb.samp ? "c_taken" : "c_nottaken"));
       /* The finding. Right specification, wrong drum is the thing this round
          exists to catch, so it is stated rather than left to be worked out by
          comparing two lines. */
       if (Lb.want && Lb.off)
-        row(T.L("c_lube_want"), '<b>' + esc(Lb.want) + '</b> '
+        row(T.I("c_lube_want"), '<b>' + esc(Lb.want) + '</b> '
           + '<span class="code">' + esc(T("c_lube_off")) + '</span>');
     }
     var read = (it.readings || []).slice();
     if (it.w && it.w.mm != null) read.unshift(it.w.mm + " mm" + (it.w.pct != null ? " · " + it.w.pct + "%" : ""));
-    if (read.length) row(T.L("c_reading"), '<span class="num">' + esc(read.join(" · ")) + '</span>');
+    if (read.length) row(T.I("c_reading"), '<span class="num">' + esc(read.join(" · ")) + '</span>');
     return '<div class="cel">' + top + '<div class="bd">'
-      /* The code first: it is what is stamped on the machine and what a fitter
-         navigates by. The name underneath says which one that is — in both
-         languages, because the fitter and the engineer read different ones. */
-      + '<div class="pk">' + esc(it.code || it.key) + '</div>'
-      + (it.code && it.name && it.name !== it.code
-          ? '<div class="pn">' + T.both(dropCode(it.code, it.name),
-              dropCode(it.code, it.nameAlt), "") + '</div>' : "")
+      /* The code, its name and the grade all belong to the same fact — WHICH
+         position this is and how bad it is — and used to cost three stacked
+         lines to say. One row: the code first (what is stamped on the
+         machine), the name after it in both languages (which one that is),
+         the grade pushed to the far side where it reads like a verdict
+         rather than a fourth label. Wide cards fit it on one line; a narrow
+         one wraps the name under the code before it wraps anything else. */
+      + '<div class="pkrow">'
+      + '<div class="pk">' + esc(it.code || it.key)
+          + (it.code && it.name && it.name !== it.code
+              ? ' <span class="pn">' + T.both(dropCode(it.code, it.name),
+                  dropCode(it.code, it.nameAlt), "alti") + '</span>' : "")
+          + '</div>'
       + ((it.grade || it.sev) ? '<div class="chips">' + gradeChip(it.grade) + sevIf(ctx, it) + '</div>' : "")
+      + '</div>'
       + (rows ? '<dl>' + rows + '</dl>' : "")
       + (it.comment ? '<div class="cm">' + esc(it.comment) + '</div>' : "")
       + '</div></div>';
@@ -3715,7 +3752,7 @@
     secs.push({nb:false, html:
       '<div class="sec">'
       + '<div class="eyebrow">'+(ctx.sub?T.both(ctx.sub,ctx.subAlt,"alti"):T.I("sub"))+'</div>'
-      + '<div class="h1">'+T.both(ctx.title,ctx.titleAlt)+'</div>'
+      + '<div class="h1">'+T.both(ctx.title,ctx.titleAlt,"alti")+'</div>'
       + '<div class="rule" style="margin:13px 0 0"></div>'
       + '<div class="muted num" style="font-size:10.5px;padding:7px 0 20px;">'
         + T.I("generated")+' '+esc(stampTxt)
