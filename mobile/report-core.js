@@ -2184,6 +2184,20 @@
     });
     return x + '</table>';
   }
+  /* The template's evidence section for a table-bodied type: every component
+     photograph the round carries, under the template's own heading. The table
+     above states the finding; the pictures are shown here rather than crammed
+     into a cell, which is how the template lays out Filter Cut, General
+     Inspection, Thermography and GET. Nothing when no photograph arrived — a
+     grey placeholder is the same area as a photograph and carries none of it. */
+  function photoGallery(ctx, T, rec, headKey) {
+    var ph = (rec.items || []).filter(function (it) {
+      return !it.general && it.photos && it.photos.length; });
+    if (!ph.length) return "";
+    return '<div class="subhd" style="margin-top:12px;">' + T.I(headKey) + '</div>'
+      + '<div class="board gal b' + (ph.length >= 2 ? 2 : 1) + '">'
+      + ph.map(function (it) { return cell(ctx, T, it, null, true); }).join("") + '</div>';
+  }
   /* MP — every plug as a card, photograph first, then code/component, grade,
      the particle finding and component/oil hours, the defect and action. A
      clean plug still earns its card: the reading IS the record. */
@@ -2212,7 +2226,8 @@
             return d.length ? esc(d.join("; ")) : tbMiss(T, "c_nofind"); } },
         { th: T.L("c_cause"), get: function (it) { return it.cause ? esc(it.cause) : tbMiss(T); } },
         { th: T.L("c_action"), get: function (it) { return tbAct(T, it); } }
-      ], rec.items || []);
+      ], rec.items || [])
+      + photoGallery(ctx, T, rec, "tb_fc_ev");
   }
   /* INSP — component/system, grade, defect, detection method, action and the
      equipment operating status the template asks for. */
@@ -2227,7 +2242,8 @@
         { th: T.L("c_detection"), w: "96px", get: function (it) { return it.detect ? esc(it.detect) : tbMiss(T); } },
         { th: T.L("c_action"), get: function (it) { return tbAct(T, it); } },
         { th: T.L("c_opstat"), w: "84px", get: function (it) { return it.opstatLabel ? esc(it.opstatLabel) : tbMiss(T); } }
-      ], rec.items || []);
+      ], rec.items || [])
+      + photoGallery(ctx, T, rec, "tb_insp_ph");
   }
   /* TEMP — measured and ambient temperature, method, operating state, the
      comparison and the grade. When ambient/state/method/comparison is missing
@@ -2252,7 +2268,8 @@
         { th: T.L("c_grade"), w: "88px", get: function (it) { return tbGrade(T, it); } }
       ], its)
       + (incomplete ? '<div class="verdict v-watch" style="margin-top:9px;"><b>' + T.I("tb_temp_lim")
-          + '.</b> ' + T.I("tb_temp_note") + '</div>' : "");
+          + '.</b> ' + T.I("tb_temp_note") + '</div>' : "")
+      + photoGallery(ctx, T, rec, "photos");
   }
   /* GET — the eleven-point register: point, component, grade, an optional
      millimetre, the reference when one exists, percent worn only where it is
@@ -2551,16 +2568,20 @@
            synthetic round) still gets its register — inline on one page, so the
            grades and findings are never lost for want of a drawing. */
         if (rec.type === "GET") {
+          /* Register → Evidence → maintenance action → status → approval, the
+             template's page-2 order; the evidence gallery rides the last
+             register chunk ahead of the sign-off. */
+          var getTail = photoGallery(ctx, T, rec, "photos") + sign;
           if (oneMap) {
             secs.push({ nb: n > 0, html: '<div class="sec">' + head + rbar + mstrip
               + generalBlock(T, rec) + oneMap + '</div>' });
             /* The register starts its own page — the map page is measured to the
                fold, and letting the first rows flow into whatever space is left
                under the drawing splits a row there (pagecut.cjs). */
-            getRegisterSections(ctx, T, rec, sign, "", true).forEach(function (x) { secs.push(x); });
+            getRegisterSections(ctx, T, rec, getTail, "", true).forEach(function (x) { secs.push(x); });
           } else {
             /* No model map: the masthead leads the first register chunk. */
-            getRegisterSections(ctx, T, rec, sign,
+            getRegisterSections(ctx, T, rec, getTail,
               head + rbar + mstrip + generalBlock(T, rec), n > 0).forEach(function (x) { secs.push(x); });
           }
           evidenceSections(T, rec).forEach(function (x) { secs.push(x); });
@@ -2569,12 +2590,12 @@
         secs.push({ nb: n > 0, html: '<div class="sec">' + head + rbar + mstrip
           + generalBlock(T, rec) + body + (oneMap ? "" : sign) + '</div>' });
         if (oneMap) secs.push({ nb: false, html: '<div class="sec">' + oneMap + sign + '</div>' });
-        /* MP prints every plug as a card with its photograph, so a second
-           gallery of the same frames would be the same evidence twice; the
-           machine's general photographs still lead through generalBlock. Every
-           other graded type shows its photos in the template's own evidence
-           section here. */
-        if (rec.type !== "MP") evidenceSections(T, rec).forEach(function (x) { secs.push(x); });
+        /* The incomplete-evidence note (and, for a wear round, the general
+           block) — evidenceSections with keepGeneral off adds only the gap note,
+           which every type needs so a reader knows photographs did not arrive.
+           MP shows its component photos in the cards and FC/INSP/TEMP in the
+           gallery inside the body, so no photo is doubled here. */
+        evidenceSections(T, rec).forEach(function (x) { secs.push(x); });
         return;
       }
 
