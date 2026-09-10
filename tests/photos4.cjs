@@ -114,7 +114,10 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
     return (await filesForRecord(r)).map(f => f.name).filter(n => /\.(jpg|png|webp)$/i.test(n));
   }, rec.id).catch(() => null);
   if (names) {
-    const first = names.filter(n => n.includes(keys[0].replace(/\./g, '-')));
+    /* Match the point key as a whole "_<key>_" segment, not a bare substring:
+       the first plug's key is now "1", and "1" appears in the unit (TK151), the
+       date and the photo index — a loose includes() matched 31 of them. */
+    const first = names.filter(n => n.includes('_' + keys[0].replace(/\./g, '-') + '_'));
     ok('the first component wrote an image file each', first.length === CAP, first.length + ' files');
     ok('and every name is different', new Set(first).size === first.length);
     ok('they are numbered in order', ['_1', '_2', '_3', '_4'].every(s => first.some(n => n.includes(s + '.'))),

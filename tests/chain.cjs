@@ -135,7 +135,7 @@ process.on('exit', bye); process.on('SIGINT', () => { bye(); process.exit(1); })
      the endpoint — not one, and not a placeholder standing in for two. */
   const pics = await dp.evaluate(async () => {
     const idx = await fetch(CMDrive.url + '?action=records&after=0&index=1').then(r => r.json());
-    const mine = (idx.index || []).filter(f => /TK149_4C_24\.08\.2026_MP/.test(f.name));
+    const mine = (idx.index || []).filter(f => /TK149_1_24\.08\.2026_MP/.test(f.name));
     if (!mine.length) return { n: 0, why: 'not in the media index' };
     const got = await fetch(CMDrive.url + '?action=files&ids=' +
       mine.map(f => encodeURIComponent(f.id)).join(',')).then(r => r.json());

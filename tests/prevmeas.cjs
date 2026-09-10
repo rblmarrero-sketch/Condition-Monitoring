@@ -42,7 +42,11 @@ const SHOT = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJ
    repeated down every row. */
 const PLUG = (dates, opts) => dates.map(([d, smu, grades, pcs], n) => ({
   equip: 'TK160', date: d, type: 'MP', cls: 'TRUCK, DUMP', by: 'Хасенов', smu: String(smu),
-  items: ['4C', '4D', '4E', '4F'].map((k, i) => ({
+  /* The four current TR60 plugs — engine, differential and the two rear final
+     drives — so the round has four DISTINCT points to make four history cards.
+     (4C/4D are retired and fold into 4E/4F, which is a different rule with its
+     own suite; this one is about the history layout, not the fold.) */
+  items: ['1', '4', '4E', '4F'].map((k, i) => ({
     key: k, label: k + ' ' + (i % 2 ? 'RIGHT' : 'LEFT') + ' REAR FINAL DRIVE',
     grade: grades[i], particle: String(pcs[i]),
     comp: String(smu), oil: '500',
@@ -236,7 +240,7 @@ const run = async (p, recs, unit, want, photos) => {
 
   console.log('\nthe things that were being said twice');
   ok('a point code is not printed above a name that already starts with it',
-     !/class="pk">4C<\/div><div class="pn">4C/.test(r.html),
+     !/class="pk">4E<\/div><div class="pn">4E/.test(r.html),
      (r.html.match(/class="pk">[^<]*<\/div><div class="pn">[^<]{0,30}/) || [""])[0]);
   /* One finding on four points, repeated once per point, reads as four
      different findings until you read it twice. */

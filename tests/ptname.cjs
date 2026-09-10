@@ -33,11 +33,11 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
    to different languages, so `label` disagrees where the reference does not. */
 const RECS = [
   { equip: 'TK156', date: '2026-07-29', type: 'MP', cls: 'HT', by: 'Хасенов', smu: '7180',
-    items: [{ key: '4C', label: '4C LEFT REAR FINAL DRIVE', grade: 'C' },
-            { key: '4D', label: '4D RIGHT REAR FINAL DRIVE', grade: 'C' }] },
+    items: [{ key: '4E', label: '4E LEFT REAR FINAL DRIVE', grade: 'C' },
+            { key: '4F', label: '4F RIGHT REAR FINAL DRIVE', grade: 'C' }] },
   { equip: 'TK156', date: '2026-08-14', type: 'MP', cls: 'HT', by: 'Хасенов', smu: '7506',
-    items: [{ key: '4C', label: 'Левый задний бортовой редуктор', grade: 'B' },
-            { key: '4D', label: 'Правый задний бортовой редуктор', grade: 'B' }] },
+    items: [{ key: '4E', label: 'Левый задний бортовой редуктор', grade: 'B' },
+            { key: '4F', label: 'Правый задний бортовой редуктор', grade: 'B' }] },
 ];
 /* A filter cut and a walk-around, because the fix has to cover the round types
    that had the same hole rather than the one that was reported. */
@@ -75,9 +75,9 @@ const fresh = async (p) => { await p.goto(B, { waitUntil: 'load' }); await p.wai
   console.log('the vocabulary is a file both ends load');
   ok('the office has it at all', await p.evaluate(() => !!(window.PTS && PTS.label)));
   ok('and it answers in both languages', await p.evaluate(() =>
-     PTS.label('HT', 'MP', '4C', 'en') === 'Left Rear Final Drive'
-     && PTS.label('HT', 'MP', '4C', 'ru') === 'Левый задний бортовой редуктор'),
-     await p.evaluate(() => PTS.label('HT', 'MP', '4C', 'en') + ' / ' + PTS.label('HT', 'MP', '4C', 'ru')));
+     PTS.label('HT', 'MP', '4E', 'en') === 'Left Rear Final Drive'
+     && PTS.label('HT', 'MP', '4E', 'ru') === 'Левый задний бортовой редуктор'),
+     await p.evaluate(() => PTS.label('HT', 'MP', '4E', 'en') + ' / ' + PTS.label('HT', 'MP', '4E', 'ru')));
   /* "" and not the key. A caller handed back a key cannot tell a real name
      from a fallback, and every one of them already knows how to print a key. */
   ok('a point it has never heard of gets "", not the key back',

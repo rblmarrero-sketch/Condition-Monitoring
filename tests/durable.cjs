@@ -75,10 +75,10 @@ const ok = (c, n, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
     const rec = { id: 'id__TK930__2026-07-30__X__z', type: 'MP', equip: 'TK930', date: '2026-07-30',
       cls: 'HT', by: 'R. Marrero', smu: 6200, created: new Date().toISOString(),
       up: 0, upTo: {}, rev: 1,
-      positions: { '4C': { grade: 'C', photos: [await shot(1), await shot(2), await shot(3)] } } };
+      positions: { '4E': { grade: 'C', photos: [await shot(1), await shot(2), await shot(3)] } } };
     await attSync(rec);
     // delete the middle photograph, exactly as the editor does
-    rec.positions['4C'].photos.splice(1, 1);
+    rec.positions['4E'].photos.splice(1, 1);
     await attSync(rec);
     await dbPut(rec);
     const r = (await dbAll()).find(x => x.equip === 'TK930');
@@ -112,7 +112,7 @@ const ok = (c, n, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
              seq: attList(r2).map(e => e.seq).sort((a, b2) => a - b2),
              sha: attList(r2).map(e => e.sha256).filter(Boolean).length,
              cap: attList(r2).map(e => e.capturedAt).filter(Boolean).length,
-             comment: (r2.positions['4C'] || {}).comment || '' };
+             comment: (r2.positions['4E'] || {}).comment || '' };
   });
   console.log('   ' + JSON.stringify(after));
   ok(after.comment === 'Re-read under light', 'the edit itself saved', after.comment);
@@ -132,11 +132,11 @@ const ok = (c, n, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
     const mk = async n => await intake(new Blob([new Uint8Array(Array(64).fill(n))], { type: 'image/jpeg' }));
     const a = await mk(7), c = await mk(9);
     const one = { type: 'MP', equip: 'TK931', date: '2026-07-30', smu: '1', by: 'R',
-                  positions: { '4C': { grade: 'C', photos: [a] } } };
+                  positions: { '4E': { grade: 'C', photos: [a] } } };
     const two = { type: 'MP', equip: 'TK931', date: '2026-07-30', smu: '1', by: 'R',
-                  positions: { '4C': { grade: 'C', photos: [c] } } };
+                  positions: { '4E': { grade: 'C', photos: [c] } } };
     const same = { type: 'MP', equip: 'TK931', date: '2026-07-30', smu: '1', by: 'R',
-                   positions: { '4C': { grade: 'C', photos: [a] } } };
+                   positions: { '4E': { grade: 'C', photos: [a] } } };
     return { swapped: draftSigOf(one) !== draftSigOf(two),
              stable: draftSigOf(one) === draftSigOf(same) };
   });
@@ -148,15 +148,15 @@ const ok = (c, n, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
     const mk = async n => await intake(new Blob([new Uint8Array(Array(64).fill(n))], { type: 'image/jpeg' }));
     await dbDel('__draft__');
     curEquip = 'TK931'; type = 'MP';
-    draft.positions = { '4C': { grade: 'C', photos: [await mk(7)] } };
+    draft.positions = { '4E': { grade: 'C', photos: [await mk(7)] } };
     await draftFlush();
     const first = await dbGet('__draft__');
-    const firstSize = ((((first || {}).positions || {})['4C'] || {}).photos || [])[0];
+    const firstSize = ((((first || {}).positions || {})['4E'] || {}).photos || [])[0];
     // retake: same count, different picture
-    draft.positions['4C'].photos = [await mk(9)];
+    draft.positions['4E'].photos = [await mk(9)];
     await draftFlush();
     const second = await dbGet('__draft__');
-    const secondBlob = ((((second || {}).positions || {})['4C'] || {}).photos || [])[0];
+    const secondBlob = ((((second || {}).positions || {})['4E'] || {}).photos || [])[0];
     const read = async bl => bl ? new Uint8Array(await bl.arrayBuffer())[0] : null;
     return { first: await read(firstSize), second: await read(secondBlob) };
   });
@@ -172,7 +172,7 @@ const ok = (c, n, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
     const rec = { id: 'id__TK932__2026-07-31__X__z', type: 'MP', equip: 'TK932', date: '2026-07-31',
       cls: 'HT', by: 'R. Marrero', smu: 6300, created: new Date().toISOString(),
       up: 0, upTo: {}, rev: 1,
-      positions: { '4C': { grade: 'C', photos: [await shot(1), await shot(2)] },
+      positions: { '4E': { grade: 'C', photos: [await shot(1), await shot(2)] },
                    '4D': { grade: 'B', photos: [await shot(3), await shot(4)] } } };
     await attSync(rec); await dbPut(rec);
     return (await filesForRecord(rec)).map(f => f.name);
