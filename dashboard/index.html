@@ -3465,17 +3465,17 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=298"></script>
-<script src="../mobile/hme.js?v=298"></script>
-<script src="../mobile/mp-fc.js?v=298"></script>
-<script src="../mobile/hme-cascade.js?v=298"></script>
-<script src="../mobile/temp-limits.js?v=298"></script>
+<script src="../data/magnetic_plug.js?v=299"></script>
+<script src="../mobile/hme.js?v=299"></script>
+<script src="../mobile/mp-fc.js?v=299"></script>
+<script src="../mobile/hme-cascade.js?v=299"></script>
+<script src="../mobile/temp-limits.js?v=299"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=298"></script>
-<script src="../mobile/normalize.js?v=298"></script>
-<script src="../mobile/terms.js?v=298"></script>
+<script src="../mobile/assets.js?v=299"></script>
+<script src="../mobile/normalize.js?v=299"></script>
+<script src="../mobile/terms.js?v=299"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3494,19 +3494,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=298"></script>
-<script src="../mobile/edits.js?v=298"></script>
-<script src="../mobile/due.js?v=298"></script>
-<script src="../mobile/wear.js?v=298"></script>
-<script src="../mobile/wear-map.js?v=298"></script>
-<script src="../mobile/lube.js?v=298"></script>
-<script src="../mobile/lube-overrides.js?v=298"></script>
-<script src="../mobile/lube2027.js?v=298"></script>
-<script src="../mobile/lube-tds.js?v=298"></script>
+<script src="../mobile/grade.js?v=299"></script>
+<script src="../mobile/edits.js?v=299"></script>
+<script src="../mobile/due.js?v=299"></script>
+<script src="../mobile/wear.js?v=299"></script>
+<script src="../mobile/wear-map.js?v=299"></script>
+<script src="../mobile/lube.js?v=299"></script>
+<script src="../mobile/lube-overrides.js?v=299"></script>
+<script src="../mobile/lube2027.js?v=299"></script>
+<script src="../mobile/lube-tds.js?v=299"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=298"></script>
-<script src="../mobile/machine-photos.js?v=298"></script>
+<script src="../mobile/upload-defaults.js?v=299"></script>
+<script src="../mobile/machine-photos.js?v=299"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3515,17 +3515,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=298"></script>
-<script src="../mobile/get.js?v=298"></script>
-<script src="../mobile/points.js?v=298"></script>
-<script src="../mobile/uc-points.js?v=298"></script>
-<script src="../mobile/inspect-guide.js?v=298"></script>
-<script src="../mobile/get-figs.js?v=298"></script>
-<script src="../mobile/body-points.js?v=298"></script>
-<script src="../mobile/body-map.js?v=298"></script>
-<script src="../mobile/jspdf.umd.min.js?v=298"></script>
-<script src="../mobile/html2canvas.min.js?v=298"></script>
-<script src="../mobile/report-core.js?v=298"></script>
+<script src="../mobile/machine-fig.js?v=299"></script>
+<script src="../mobile/get.js?v=299"></script>
+<script src="../mobile/points.js?v=299"></script>
+<script src="../mobile/uc-points.js?v=299"></script>
+<script src="../mobile/inspect-guide.js?v=299"></script>
+<script src="../mobile/get-figs.js?v=299"></script>
+<script src="../mobile/body-points.js?v=299"></script>
+<script src="../mobile/body-map.js?v=299"></script>
+<script src="../mobile/jspdf.umd.min.js?v=299"></script>
+<script src="../mobile/html2canvas.min.js?v=299"></script>
+<script src="../mobile/report-core.js?v=299"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -8482,11 +8482,16 @@ function mpDisplayFold(rec){
     c._openKey=real ? real.key : c.key; });
   return out;
 }
-/* Media across every source angle of a folded card, each frame once. */
+/* Media across every source angle of a folded card, each frame once. Each frame
+   remembers the point it CAME FROM (`_pk`) so the media editor can file a
+   withdrawal against the point that owns the photograph, not against the
+   surviving code the merged card is drawn under — a 4C frame shown on the 4E
+   card is still taken off the record as a 4C frame, or `hiddenSet(4C)` never
+   sees it and the removal does nothing. */
 function histMedia(src,rec,withHidden){
   const out=[], seen=new Set();
   (src||[]).forEach(it=>mediaOf(it,rec,withHidden).forEach(m=>{
-    if(m && !seen.has(m.name)){ seen.add(m.name); out.push(m); } }));
+    if(m && !seen.has(m.name)){ seen.add(m.name); out.push(Object.assign({},m,{_pk:it.key})); } }));
   return out;
 }
 function renderHistList(recs){
@@ -8654,7 +8659,7 @@ function renderHistory(){
                       title="${esc(m.excluded?t("px_excluded")+(m.excludeWhy?" \u2014 "+m.excludeWhy:""):m.name)}">
                   ${m.kind==="video"?`<video preload="metadata" src="${esc(m.src)}"></video>`
                                     :`<img loading="lazy" src="${esc(m.src)}" alt="">`}
-                  <button type="button" class="mx" data-name="${esc(m.name)}" data-on="${m.hidden?"0":"1"}"
+                  <button type="button" class="mx" data-name="${esc(m.name)}" data-pk="${esc(m._pk||"")}" data-on="${m.hidden?"0":"1"}"
                     title="${esc(m.hidden?t("ph_restore"):t("ph_remove"))}">${m.hidden?"↺":"×"}</button>
                 </span>`).join("")||`<span class="muted" style="font-size:11.5px">${esc(t("ph_none"))}</span>`}
                 <label class="madd" title="${esc(t("ph_add"))}">+
@@ -9281,17 +9286,23 @@ function wireMediaEdit(){
        and needs no defence, and a confirmation on the harmless direction is
        how people learn to click through the one that matters. */
     const whyBox=box.querySelector(".mwhy"), whyIn=box.querySelector(".mwhyi");
-    let armed=null;
-    const disarm=()=>{ armed=null; whyBox.classList.add("hidden"); whyIn.value=""; };
+    let armed=null, armedPk=null;
+    const disarm=()=>{ armed=null; armedPk=null; whyBox.classList.add("hidden"); whyIn.value=""; };
+    /* File the withdrawal against the point that OWNS the photograph. On a
+       merged plug card that is not always the code the card is drawn under:
+       a 4C frame shown on the 4E card must be taken off 4C, or hiddenSet(4C)
+       never sees it. `data-pk` carries the owning point; ik is the fallback for
+       an ordinary card where every frame is the item's own. */
     const commit=()=>{
       if(!armed) return;
       const why=whyIn.value.trim();
       if(!why){ msg.textContent=t("px_off_need"); whyIn.focus(); return; }
       const rec=RECS.find(r=>ekOf(r)===rk); if(!rec) return;
-      const it=(rec.items||[]).find(x=>x.key===ik); if(!it) return;
+      const pk=armedPk||ik;
+      const it=(rec.items||[]).find(x=>x.key===pk); if(!it) return;
       const cur=hiddenSet(it); cur.add(armed);
       const nm=armed; disarm();
-      mediaEditPost(rk, ik, [...cur], msg, nm, why);
+      mediaEditPost(rk, pk, [...cur], msg, nm, why);
       saveEdits(); rebuild(); refreshControls(); renderHistory();
     };
     box.querySelector(".mgo").onclick=commit;
@@ -9299,15 +9310,16 @@ function wireMediaEdit(){
     whyIn.onkeydown=e=>{ if(e.key==="Enter"){ e.preventDefault(); commit(); } };
     box.querySelectorAll(".mx").forEach(b=>b.onclick=()=>{
       const rec=RECS.find(r=>ekOf(r)===rk); if(!rec) return;
-      const it=(rec.items||[]).find(x=>x.key===ik); if(!it) return;
+      const pk=b.dataset.pk||ik;
+      const it=(rec.items||[]).find(x=>x.key===pk); if(!it) return;
       const nm=b.dataset.name;
       if(b.dataset.on==="1"){
-        armed=nm; whyBox.classList.remove("hidden");
+        armed=nm; armedPk=pk; whyBox.classList.remove("hidden");
         msg.textContent=t("px_off_hint"); whyIn.focus();
         return;
       }
       const cur=hiddenSet(it); cur.delete(nm);
-      mediaEditPost(rk, ik, [...cur], msg, nm, "");
+      mediaEditPost(rk, pk, [...cur], msg, nm, "");
       saveEdits(); rebuild(); refreshControls(); renderHistory();
     });
     const inp=box.querySelector(".madd input");
@@ -15946,8 +15958,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=298"></script>
-<script src="sync-adapter.js?v=298"></script>
-<script src="report.js?v=298"></script>
+<script src="drive.js?v=299"></script>
+<script src="sync-adapter.js?v=299"></script>
+<script src="report.js?v=299"></script>
 </body>
 </html>

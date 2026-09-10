@@ -224,12 +224,20 @@ const say = (p, k, v) => p.evaluate(([k, v]) => t(k, v || undefined), [k, v]);
     if (pv) pv.click();
     await new Promise(r => setTimeout(r, 400));
     const rec = RECS.find(r => ekOf(r) === rk);
-    const box = document.querySelector('#history .medit[data-ik="' + k + '"]');
-    if (!box) return { no: "no editor" };
-    box.querySelector(".mtog").click();
+    /* Find the editor by the PHOTOGRAPH it is showing, not by a point code. The
+       plug angles fold on the history card — a photograph filed against 4D is
+       shown on the merged card the 4D drive now lives under — so the editor that
+       holds it need not carry data-ik="4D". Opening every editor and looking for
+       the remove button reaches it wherever the fold put it. */
+    let box = null;
+    for (const bx of document.querySelectorAll('#history .medit')) {
+      bx.querySelector(".mtog").click();
+    }
     await new Promise(r => setTimeout(r, 150));
-    const btn = [...box.querySelectorAll(".mx")].find(b => b.dataset.name === n && b.dataset.on === "1");
+    const btn = [...document.querySelectorAll('#history .medit .mx')].find(b => b.dataset.name === n && b.dataset.on === "1");
     if (!btn) return { no: "no remove button for " + n };
+    box = btn.closest(".medit");
+    if (!box) return { no: "no editor" };
     const before = mediaOf((rec.items || []).find(x => x.key === k), rec).length;
     btn.click();
     await new Promise(r => setTimeout(r, 200));

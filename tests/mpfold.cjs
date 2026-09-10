@@ -138,6 +138,52 @@ const recOf = (p, unit) => p.evaluate(u => RECS.find(r => r.equip === u), unit);
   ok('no card carries a retired code as its open target', !cards.some(c => c.ik === '4C' || c.ik === '4D'), cards.map(c => c.ik).join(','));
   ok('the merged left-drive card shows two photographs', withImgs.includes(2), withImgs.join(','));
 
+  /* THE MEDIA EDITOR ON A MERGED CARD FILES AGAINST THE POINT THAT OWNS THE
+     PHOTOGRAPH, NOT THE CODE THE CARD IS DRAWN UNDER. A 4C frame is shown on
+     the 4E card; withdrawing it must take it off 4C, or hiddenSet(4C) never
+     sees it and the removal is a click that does nothing — the signature
+     defect, on the one screen whose whole subject is evidence. */
+  console.log('\nwithdrawing a folded-in photograph takes it off the point that owns it');
+  await p.evaluate(() => {
+    window.__w = [];
+    CMDrive.saveEdit = d => { window.__w.push(JSON.parse(JSON.stringify(d))); return Promise.resolve({ ok: true }); };
+    CMDrive.hasName = () => true; CMDrive.configured = () => true;
+    try { localStorage.setItem('cm_dash_who', 'R. Marrero'); localStorage.setItem('cm_drive_url', 'https://stub/exec'); } catch (e) {}
+    const el = document.getElementById('equipSel'); el.value = 'TK149'; el.dispatchEvent(new Event('change'));
+  });
+  await p.waitForTimeout(500);
+  const wd = await p.evaluate(async () => {
+    const r = RECS.find(x => x.equip === 'TK149');
+    /* The 4C frame, resolved the way the card resolves it, so we withdraw the
+       exact name the button carries. */
+    const c4c = (r.items || []).find(i => i.key === '4C');
+    const name = mediaOf(c4c, r).map(m => m.name)[0];
+    for (const bx of document.querySelectorAll('#history .medit')) bx.querySelector('.mtog').click();
+    await new Promise(r => setTimeout(r, 150));
+    const btn = [...document.querySelectorAll('#history .medit .mx')].find(b => b.dataset.name === name && b.dataset.on === '1');
+    if (!btn) return { no: 'no remove button for ' + name };
+    const card = btn.closest('.medit');
+    const pk = btn.dataset.pk;
+    const before4C = mediaOf((RECS.find(x => x.equip === 'TK149').items).find(i => i.key === '4C'), RECS.find(x => x.equip === 'TK149')).length;
+    btn.click();                                   // arms — first press asks
+    await new Promise(r => setTimeout(r, 120));
+    card.querySelector('.mwhyi').value = 'thumb over the lens';
+    card.querySelector('.mgo').click();            // confirm with a reason
+    await new Promise(r => setTimeout(r, 400));
+    const rec2 = RECS.find(x => x.equip === 'TK149');
+    const after4C = mediaOf((rec2.items).find(i => i.key === '4C'), rec2).length;
+    const doc = window.__w[window.__w.length - 1] || null;
+    return { name, cardIk: card.dataset.ik, pk, before4C, after4C,
+             filedItems: doc ? Object.keys(doc.items || {}) : [] };
+  });
+  if (wd.no) ok(false, 'the folded card offers a remove button', wd.no);
+  else {
+    ok('the frame is shown on the 4E card', wd.cardIk === '4E', wd.cardIk);
+    ok('  but its remove button knows the frame belongs to 4C', wd.pk === '4C', wd.pk);
+    ok('  and withdrawing it drops 4C\'s count by one', wd.after4C === wd.before4C - 1, wd.before4C + ' → ' + wd.after4C);
+    ok('  the withdrawal is filed against 4C, not the card code', wd.filedItems.includes('4C') && !wd.filedItems.includes('4E'), wd.filedItems.join(','));
+  }
+
   await b.close();
   console.log(fails.length ? '\nFAILED: ' + fails.length + '\n' + fails.join('\n') : '\nall green');
   process.exit(fails.length ? 1 : 0);
