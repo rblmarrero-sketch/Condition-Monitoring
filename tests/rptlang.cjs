@@ -86,7 +86,13 @@ const alts = h => (h.match(/class="alt[l2i]?"/g) || []).length;
     await p.evaluate(() => { $('rScope').value = 'unit'; refreshReportTargets(); cmbSet('rTarget', 'TK101'); renderReportPreview(); });
     await p.waitForTimeout(900);
     const P = await p.evaluate(() => ({ est: ($('rEst') || {}).textContent || '', prev: $('rPreview').textContent }));
-    ok('the preview says what the PDF will cost before the button is pressed', /About \d+ page/.test(P.est) && /MB/.test(P.est) && /\d+ s/.test(P.est), P.est);
+    /* The time is stated in whichever unit mmss() picks — seconds under a
+       minute, minutes at or past it — and build 300's compact History report
+       (TK101, unit scope) legitimately estimates at three pages now, which
+       crosses that boundary. Either is "before the button is pressed"; the
+       property under test is that SOME real duration is stated, not which
+       unit it came out in. */
+    ok('the preview says what the PDF will cost before the button is pressed', /About \d+ page/.test(P.est) && /MB/.test(P.est) && /\d+\s*(s|min)\b/.test(P.est), P.est);
 
     const O = await p.evaluate(() => { const r = {};
       $('rLang').value = 'ru'; $('rLang').dispatchEvent(new Event('change')); r.ru = reportOpts(); r.saved = localStorage.getItem('cm_dash_rlang');
