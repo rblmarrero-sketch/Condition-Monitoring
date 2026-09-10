@@ -222,18 +222,26 @@ const run = async (p, recs, unit, want, photos) => {
      (r.text.match(/Earlier rounds/i) || ["absent"])[0]);
   ok('no point-by-point grid', !/point by point/i.test(r.text),
      (r.text.match(/Point by point/i) || ["absent"])[0]);
-  /* No MEASUREMENT or history table on a plug round — the readings live under
-     the photographs, not in a repeated grid. The approval sign-off is a table
-     now (the reference's three-role block), so it is excluded here: it is
-     furniture, not a data table. */
+  /* No MEASUREMENT or history table for THIS plug round specifically — the
+     readings live under the photographs, not in a repeated grid. Excluded
+     here, alongside the approval sign-off (furniture, not a data table):
+     build 300's own condition-by-type / findings / actions tables, which are
+     the Equipment History report's new intro — real content, not a second
+     rendering of what a card already says, and marked class="sumtbl" for
+     exactly this reason. */
   const dataTables = h => (h.replace(/<table class="appr"[\s\S]*?<\/table>/g, "")
+    .replace(/<table class="sumtbl"[\s\S]*?<\/table>/g, "")
     .match(/<table/g) || []).length;
   ok('and a plug report carries no measurement table',
      dataTables(r.html) === 0, dataTables(r.html) + ' data table(s)');
 
   console.log('\nbut not the furniture');
-  ok('one masthead, not one per round', (r.html.match(/class="mast"/g) || []).length === 1,
-     String((r.html.match(/class="mast"/g) || []).length));
+  /* build 300: the multi-round report leads with its OWN header (class="mhead"
+     / "m1"), not the single-inspection masthead (class="mast") — one or the
+     other, never both, and never one per round either way. */
+  const heads = (r.html.match(/class="mast"/g) || []).length
+    + (r.html.match(/class="mhead"/g) || []).length;
+  ok('one report header, not one per round', heads === 1, String(heads));
   /* The sign-off is the three-role approval table now, once per report. */
   ok('one sign-off block', (r.html.match(/class="appr"/g) || []).length === 1,
      String((r.html.match(/class="appr"/g) || []).length));
@@ -274,7 +282,12 @@ const run = async (p, recs, unit, want, photos) => {
   const tallest = Math.max(...hs);
   ok('each reprinted round is still a compact strip, not a page of its own',
      tallest <= 250, tallest + 'pt tallest of ' + hs.length + ' · ' + most + ' to a page');
-  ok('nine rounds come to a handful of sheets, not one each', r.pages <= 4,
+  /* Build 300 adds the History report's own intro (condition by type,
+     findings, actions, wear trend) ahead of the older-round cards this
+     section is about — real pages of real content, not the one-round-per-page
+     defect this assertion was written against. Nine rounds still land in a
+     handful of sheets, just with the intro's own 1-2 pages counted in. */
+  ok('nine rounds come to a handful of sheets, not one each', r.pages <= 6,
      r.pages + ' page(s) for 9 rounds');
   ok('nothing runs off the right-hand edge', !r.wide.length, r.wide.join(' ') || 'within 760px');
 
@@ -282,7 +295,12 @@ const run = async (p, recs, unit, want, photos) => {
   r = await run(p, TWO_QUIET, 'TK160');
   ok('no header standing over an empty space', !r.full.length,
      r.full.map(x => x.head).join(' | ') || 'none');
-  ok('and the sheet is one page', r.pages === 1, r.pages + ' page(s)');
+  /* Build 300: even two all-clear rounds still get the History report's own
+     intro (the machine, its latest-by-type table, "no finding requires
+     action") — the property this guards is that nothing FALSE is printed
+     about an empty older round, not that the document is a single page. */
+  ok('and the sheet stays short — no block for the empty older round bloats it',
+     r.pages <= 2, r.pages + ' page(s)');
 
   console.log('\na measured round keeps the one table that cannot be looked at');
   r = await run(p, UC, 'DZ002');

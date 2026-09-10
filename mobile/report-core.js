@@ -2826,7 +2826,7 @@
      one round the way notableTable's callers all do. */
   function historyFindings(ctx, T, pairs) {
     if (!pairs.length) return '<div class="verdict v-ok">' + T.S("uh_no_findings") + '</div>';
-    var h = '<table><tr>'
+    var h = '<table class="sumtbl"><tr>'
       + '<th style="width:96px">' + T.L("c_type") + '</th>'
       + '<th style="width:150px">' + T.L("c_item") + '</th>'
       + '<th class="c" style="width:100px">' + T.L("c_grade") + '</th>'
@@ -2925,7 +2925,7 @@
         + '<div class="ms"><i>' + T.I("sm_report_date") + '</i><b>' + esc(today) + '</b></div>'
       + '</div>'
       + '<div style="margin-top:18px;"><div class="eyebrow" style="margin-bottom:9px;">' + T.I("sm_cond_head") + '</div>'
-        + '<table><tr><th>' + T.L("sm_insp") + '</th>'
+        + '<table class="sumtbl"><tr><th>' + T.L("sm_insp") + '</th>'
         + '<th class="c" style="width:70px">' + T.L("sm_last") + '</th>'
         + '<th class="c" style="width:50px">SMU</th>'
         + '<th class="c" style="width:86px">' + T.L("rr_rating") + '</th>'
@@ -2969,8 +2969,18 @@
     /* The measured trend — already compact, already bounded to six columns —
        is the one table this report keeps in full: nothing on a finding row
        carries a condemn limit or a rate of wear, and a reader cannot
-       reconstruct either from the pictures. */
-    var trend = wearHistorySections(ctx, T, latestArr, older);
+       reconstruct either from the pictures.
+
+       Beside it, every earlier round the way the office screen already shows
+       one: photographs, with what that point was under each — compact by its
+       own design (four or five rounds to a page), not the full per-type sheet
+       fullUnitSheets prints. This is not the "complete inspection sheets" the
+       appendix option is for; it is what "4C was C in July and is B today"
+       needs to mean something — the reader wants to see July's plug. Dropping
+       it from the compact document loses a real value the office screen
+       already had (prevmeas.cjs), so it stays. */
+    var trend = wearHistorySections(ctx, T, latestArr, older)
+      .concat(earlierRoundSections(ctx, T, older));
     trend.forEach(function (x, ix) { secs.push(ix === 0 ? Object.assign({}, x, { nb: true }) : x); });
 
     /* The sign-off closes the document — never alone on a page of its own,
@@ -3062,7 +3072,7 @@
      happen to agree today. */
   function actionTable(T, X) {
     if (!X.act.length) return '<div class="verdict v-ok">' + T.S("work_none") + '</div>';
-    var h = '<table><tr>'
+    var h = '<table class="sumtbl"><tr>'
       + '<th style="width:118px">' + T.L("c_type") + '</th>'
       + '<th style="width:150px">' + T.L("c_comp") + '</th>'
       + '<th>' + T.L("c_do") + '</th>'
