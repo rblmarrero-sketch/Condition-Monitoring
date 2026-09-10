@@ -432,7 +432,7 @@
    thing that cannot be scrolled past. */
 #rptRoot .board{display:grid;gap:12px 11px;margin-top:12px;align-items:start;}
 #rptRoot .cel{border:1px solid #dfe4e9;border-radius:6px;overflow:hidden;background:#fff;
-  page-break-inside:avoid;}
+  page-break-inside:avoid;min-width:0;}
 #rptRoot .cel .ph{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:#f2f5f7;}
 /* The rest of the position's photographs, in a strip under the first. Stacked
    at full width they would be most of a page for one plug; this shows them in
@@ -448,10 +448,17 @@
 #rptRoot .cel .pk{font-size:11px;font-weight:750;letter-spacing:-.01em;line-height:1.25;}
 #rptRoot .cel .pn{font-size:9px;color:#7b858e;line-height:1.35;margin-top:1px;}
 #rptRoot .cel .chips{display:flex;gap:4px;align-items:center;margin-top:5px;flex-wrap:wrap;}
-#rptRoot .cel dl{margin-top:6px;display:grid;grid-template-columns:auto 1fr;gap:2px 7px;}
+#rptRoot .cel dl{margin-top:6px;display:grid;grid-template-columns:auto 1fr;gap:2px 7px;min-width:0;}
 #rptRoot .cel dt{font-size:7.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
-  color:#8b939b;padding-top:1px;}
-#rptRoot .cel dd{font-size:9.5px;line-height:1.35;}
+  color:#8b939b;padding-top:1px;min-width:0;overflow-wrap:anywhere;}
+#rptRoot .cel dd{font-size:9.5px;line-height:1.35;min-width:0;overflow-wrap:anywhere;}
+/* The owner/target/status line is a full sentence, not an inline code, so it
+   wraps inside a narrow gallery card instead of running off the edge — a
+   nowrap .code line there set the value column wider than the card and the
+   card's overflow:hidden clipped every row (the "photographs with findings"
+   cards on a narrow two-up sheet). Inline codes (ISO, WO, priority) are spans
+   and keep their nowrap. */
+#rptRoot .cel div.code{white-space:normal;}
 #rptRoot .cel dd b{font-weight:700;}
 #rptRoot .cel .cm{font-size:9px;line-height:1.4;color:#2b333a;margin-top:6px;
   border-top:1px solid #eaeef1;padding-top:5px;}
