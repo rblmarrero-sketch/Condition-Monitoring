@@ -479,6 +479,15 @@
 #rptRoot .cel .phg{display:grid;gap:2px;background:#dfe4e9;}
 #rptRoot .cel .phg img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;
   background:#f2f5f7;}
+/* One floor size for every tile on the sheet, not one computed per card. A
+   card sized to how MANY photographs a position has (b2's half-page column,
+   gridCols' per-card division) is why the same physical close-up came out a
+   different size depending on how many other frames happened to sit beside
+   it. auto-fill fills a row with as many 130px tiles as the full-width card
+   holds and leaves the rest of the row's space on tracks nothing occupies,
+   so a position with one photograph gets one tile at the same size as
+   everyone else's, not the whole card stretched to fill it. */
+#rptRoot .cel .phg.gallery{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));}
 #rptRoot .allok{background:#eef6ef;color:#146b2c;font-size:12px;font-weight:650;
   padding:8px 12px;border-radius:4px;margin-top:12px;}
 #rptRoot .quiet{font-size:10px;color:#5b6670;margin-top:10px;line-height:1.5;}
@@ -2213,8 +2222,14 @@
     var ph = (rec.items || []).filter(function (it) {
       return !it.general && it.photos && it.photos.length; });
     if (!ph.length) return "";
+    /* Always the full-width board, never the two-up column a wordy finding
+       card gets capped to. Two position-cards side by side put a five-photo
+       card next to a one-photo card and called the result aligned when their
+       heights had nothing in common; stacked full width, every card starts
+       and ends at the same edge and the photographs inside it are the only
+       thing that decides how tall it is. */
     return '<div class="subhd" style="margin-top:12px;">' + T.I(headKey) + '</div>'
-      + '<div class="board gal b' + (ph.length >= 2 ? 2 : 1) + '">'
+      + '<div class="board gal b1">'
       + ph.map(function (it) { return cell(ctx, T, it, null, true); }).join("") + '</div>';
   }
   /* MP — every plug as a card, photograph first, then code/component, grade,
@@ -2716,10 +2731,14 @@
         /* One position with photographs is not one narrow card in the corner
            of an empty page. The findings board caps a single cell at 340px so a
            card of text does not stretch across A4 — right there, wrong here,
-           where the cell holds the pictures and the page is theirs. */
+           where the cell holds the pictures and the page is theirs. Always b1:
+           a two-up board put one position's five photographs beside another's
+           one and called their mismatched heights aligned — full width, every
+           card shares the same edges and only its own photographs decide how
+           tall it stands. */
         secs.push({ nb: false, html: '<div class="sec">'
           + '<div class="subhd">' + T.I("photos") + '</div>'
-          + '<div class="board gal b' + (ph.length >= 2 ? 2 : 1) + '">'
+          + '<div class="board gal b1">'
           + ph.map(function (it) { return cell(ctx, T, it, null, true); }).join("") + '</div></div>' });
       }
       /* A wear round is drawing-led — its whole-machine and left/right
@@ -2961,7 +2980,7 @@
     var photoPairs = shown.filter(function (p) { return p.it.photos && p.it.photos.length; }).slice(0, 6);
     if (photoPairs.length) {
       body2 += '<div class="subhd" style="margin-top:15px;">' + T.I("photos") + '</div>'
-        + '<div class="board gal b' + (photoPairs.length >= 2 ? 2 : 1) + '">'
+        + '<div class="board gal b1">'
         + photoPairs.map(function (p) { return cell(ctx, T, p.it, null, true); }).join("") + '</div>';
     }
     secs.push({ nb: true, html: body2 + '</div>' });
@@ -3357,8 +3376,18 @@
          photographs it made one frame four times the size of the rest for no
          reason, and left the right half of the sheet empty. */
       if (gallery) {
-        top = '<div class="phg" style="grid-template-columns:repeat('
-          + gridCols(ph.length) + ',1fr)">'
+        /* A page of nothing but photographs is read as a log, not a report —
+           the same frame size wherever it appears, so a reader comparing two
+           positions is comparing the wear, not being told by the layout that
+           one of them mattered four times as much. gridCols (below) sizes a
+           tile to ITS OWN card, so a position with one photograph got the
+           whole card and a position with five got a third of it — the exact
+           "one frame four times the size of the rest" this comment already
+           warned about, just moved one level up. auto-fill holds every tile
+           to the same floor width regardless of how many share the card, and
+           a lone photograph stays that size too rather than stretching to
+           fill the space nothing else is using. */
+        top = '<div class="phg gallery">'
           + ph.map(function (u) { return '<img src="' + u + '">'; }).join("")
           + '</div>';
       } else if (ph.length > 1) {
@@ -4120,6 +4149,82 @@
       if (sections[i] && sections[i].fit) out.push(CMR.fitPage(els[i], roomPx));
     return out;
   };
+  /* html2canvas has its own renderer for an <svg>'s children, and it does
+     not apply the outer element's own CSS shrink to a nested raster
+     <image> the way it does to every vector child: a puck, a track rail
+     and the track frame all scale down correctly with .ucmap's max-height,
+     but the photograph under them keeps its native, un-shrunk size and
+     paints past the edge of the frame it is supposed to sit inside. Every
+     .ucmap wide enough to matter used to be BIGGER than that native size
+     (max-height was 300/620, and nothing this app draws is that tall), so
+     the mismatch never had anything to bite into. v3 made the frame small
+     enough to share a page with the condition summary, and the drawing
+     the field reported cut — a real photograph, the walk's one CRITICAL
+     finding on the far side of the machine — was this, not a coordinate
+     or a viewBox problem: proven by removing the photograph and finding
+     the pure-vector drawing painted correctly small, and by confirming a
+     plain screenshot of the identical DOM has nothing missing.
+
+     The fix does not touch mapPhoto — the phone screen and the dashboard
+     still get the live, tappable SVG with the photograph inside it. Only
+     the copy about to be handed to html2canvas is replaced: rasterised
+     through the BROWSER's own SVG-to-canvas path (an <img> loading a
+     data:image/svg+xml URI is not html2canvas's code, so it does not
+     share the bug — and it is already proven correct, since that is
+     exactly what a plain screenshot of the same markup does), sized to
+     the box the drawing already occupies after fitAll has run, then
+     swapped in as a plain <img>. html2canvas has never mis-sized a plain
+     <img> anywhere else in this report. */
+  /* A clone carries no styling of its own — every colour a puck has comes
+     from CMR.CSS, scoped under #rptRoot, which a standalone SVG document
+     never sees. Copied onto the clone as plain attributes, so the picture
+     that comes back out is the one on screen and not a page of black
+     circles with their numbers gone into them. */
+  var UCMAP_PRESENTATION = ["fill", "stroke", "stroke-width", "stroke-dasharray",
+    "stroke-linecap", "stroke-linejoin", "opacity", "font-weight", "font-size",
+    "font-family", "letter-spacing", "display", "paint-order", "text-anchor"];
+  function inlineUcmapStyle(cloneEl, liveEl) {
+    var cs = getComputedStyle(liveEl), decl = "";
+    for (var i = 0; i < UCMAP_PRESENTATION.length; i++) {
+      var v = cs.getPropertyValue(UCMAP_PRESENTATION[i]);
+      if (v) decl += UCMAP_PRESENTATION[i] + ":" + v + ";";
+    }
+    if (decl) cloneEl.setAttribute("style", (cloneEl.getAttribute("style") || "") + decl);
+  }
+  CMR.flattenUcmapPhotos = function (holder, scale) {
+    var svgs = Array.prototype.slice.call(holder.querySelectorAll("svg.ucmap"))
+      .filter(function (svg) { return svg.querySelector("image"); });
+    if (!svgs.length) return Promise.resolve();
+    scale = scale || 2;
+    return Promise.all(svgs.map(function (svg) {
+      return new Promise(function (resolve) {
+        var r = svg.getBoundingClientRect();
+        var w = Math.max(1, Math.round(r.width)), h = Math.max(1, Math.round(r.height));
+        var clone = svg.cloneNode(true);
+        var liveEls = svg.querySelectorAll("*"), cloneEls = clone.querySelectorAll("*");
+        inlineUcmapStyle(clone, svg);
+        for (var i = 0; i < liveEls.length; i++) inlineUcmapStyle(cloneEls[i], liveEls[i]);
+        var xml = new XMLSerializer().serializeToString(clone);
+        var img = new Image();
+        img.onload = function () {
+          try {
+            var c = document.createElement("canvas");
+            c.width = w * scale; c.height = h * scale;
+            c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+            var out = document.createElement("img");
+            out.className = svg.getAttribute("class") || "ucmap";
+            var st = svg.getAttribute("style"); if (st) out.setAttribute("style", st);
+            out.width = w; out.height = h;
+            out.src = c.toDataURL("image/png");
+            if (svg.parentNode) svg.parentNode.replaceChild(out, svg);
+          } catch (e) { /* leave the live svg — a rare drawing beats a broken one */ }
+          resolve();
+        };
+        img.onerror = function () { resolve(); };            // leave the live svg
+        img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(xml);
+      });
+    }));
+  };
   CMR.paginate = async function (opts) {
     var holder = document.createElement("div");
     holder.id = "rptRoot";
@@ -4137,6 +4242,9 @@
       /* Fit before anything is measured or rasterised, so the page count, the
          cut points and the picture all agree about one layout. */
       CMR.fitAll(holder, opts.sections, (bottom - top) / (cw / 760));
+      /* After the fit, so the box each drawing is flattened into is the one
+         it actually ends up occupying, not the one it started at. */
+      await CMR.flattenUcmapPhotos(holder, opts.scale || 2);
       var y=top, drew=false;
       for(var i=0;i<els.length;i++){
         if(opts.onProgress) opts.onProgress(i+1, els.length);

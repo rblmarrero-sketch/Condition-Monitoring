@@ -360,7 +360,21 @@
     var p = (prof && typeof prof === 'object') ? prof : { rollers: prof, high: high };
     var g = geom(p.fam || '', !!p.high, p.rollers, p.carriers);
     var L = layout(g, p.photo || ''), s = [];
+    /* width/height on the SVG root, matching the viewBox exactly — not just
+       decoration. An inline SVG with none of its own reads its rendered size
+       off the CSS box it happens to be sitting in; the moment something
+       re-rasterises it as a standalone resource (which is exactly what
+       printing a report does), it has no size of its own to fall back to.
+       Built 300's own drawing became a real field defect this way: the
+       drawing shrank to 35-42% of a page (the fix this same build made), and
+       at that smaller box html2canvas's own SVG rasteriser silently redrew
+       the embedded photograph and every puck on it CROPPED to a fraction of
+       the frame — puck 8, dead centre on a real machine, printed as a red
+       sliver at the edge and the whole right third of the track vanished.
+       It was never wrong on screen, only in the file a technician actually
+       carries to the machine. */
     s.push('<svg class="ucmap' + (p.photo ? ' photo' : '') + '" viewBox="0 0 ' + VB_W + ' ' + VB_H +
+           '" width="' + VB_W + '" height="' + VB_H +
            '" role="group" aria-label="' + (side === 'L' ? 'Left' : 'Right') + ' track frame">');
     s.push('<text class="um-side" x="10" y="22">' + (label || side) + '</text>');
     /* A photograph of THIS model's track frame where there is one, and the
@@ -540,7 +554,12 @@
     var asp = o.aspect || (window.MACHINE_PHOTOS && o.photo ? MACHINE_PHOTOS.aspectOf(o.photo) : 0);
     var PVB_H = o.photo && asp ? Math.round(PVB_W / asp) : 210;
     PVB_H = Math.max(120, Math.min(360, PVB_H));
+    /* width/height on the root, matching the viewBox — see mapSVG's own copy
+       of this note. This is the SVG the field actually reported cut: a real
+       photograph and its pucks, rasterised to a fraction of the frame at
+       exactly the size build 300's own drawing-height fix put it at. */
     s.push('<svg class="ucmap photo" viewBox="0 0 ' + PVB_W + ' ' + PVB_H +
+           '" width="' + PVB_W + '" height="' + PVB_H +
            '" role="group" aria-label="' + (o.side === 'L' ? 'Left' : 'Right') + ' undercarriage">');
     /* The drawn frame goes in either way, and hides behind the photograph when
        there is one. It is the answer to the photograph not arriving — a cache
