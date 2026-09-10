@@ -3465,17 +3465,17 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=297"></script>
-<script src="../mobile/hme.js?v=297"></script>
-<script src="../mobile/mp-fc.js?v=297"></script>
-<script src="../mobile/hme-cascade.js?v=297"></script>
-<script src="../mobile/temp-limits.js?v=297"></script>
+<script src="../data/magnetic_plug.js?v=298"></script>
+<script src="../mobile/hme.js?v=298"></script>
+<script src="../mobile/mp-fc.js?v=298"></script>
+<script src="../mobile/hme-cascade.js?v=298"></script>
+<script src="../mobile/temp-limits.js?v=298"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=297"></script>
-<script src="../mobile/normalize.js?v=297"></script>
-<script src="../mobile/terms.js?v=297"></script>
+<script src="../mobile/assets.js?v=298"></script>
+<script src="../mobile/normalize.js?v=298"></script>
+<script src="../mobile/terms.js?v=298"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3494,19 +3494,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=297"></script>
-<script src="../mobile/edits.js?v=297"></script>
-<script src="../mobile/due.js?v=297"></script>
-<script src="../mobile/wear.js?v=297"></script>
-<script src="../mobile/wear-map.js?v=297"></script>
-<script src="../mobile/lube.js?v=297"></script>
-<script src="../mobile/lube-overrides.js?v=297"></script>
-<script src="../mobile/lube2027.js?v=297"></script>
-<script src="../mobile/lube-tds.js?v=297"></script>
+<script src="../mobile/grade.js?v=298"></script>
+<script src="../mobile/edits.js?v=298"></script>
+<script src="../mobile/due.js?v=298"></script>
+<script src="../mobile/wear.js?v=298"></script>
+<script src="../mobile/wear-map.js?v=298"></script>
+<script src="../mobile/lube.js?v=298"></script>
+<script src="../mobile/lube-overrides.js?v=298"></script>
+<script src="../mobile/lube2027.js?v=298"></script>
+<script src="../mobile/lube-tds.js?v=298"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=297"></script>
-<script src="../mobile/machine-photos.js?v=297"></script>
+<script src="../mobile/upload-defaults.js?v=298"></script>
+<script src="../mobile/machine-photos.js?v=298"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3515,17 +3515,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=297"></script>
-<script src="../mobile/get.js?v=297"></script>
-<script src="../mobile/points.js?v=297"></script>
-<script src="../mobile/uc-points.js?v=297"></script>
-<script src="../mobile/inspect-guide.js?v=297"></script>
-<script src="../mobile/get-figs.js?v=297"></script>
-<script src="../mobile/body-points.js?v=297"></script>
-<script src="../mobile/body-map.js?v=297"></script>
-<script src="../mobile/jspdf.umd.min.js?v=297"></script>
-<script src="../mobile/html2canvas.min.js?v=297"></script>
-<script src="../mobile/report-core.js?v=297"></script>
+<script src="../mobile/machine-fig.js?v=298"></script>
+<script src="../mobile/get.js?v=298"></script>
+<script src="../mobile/points.js?v=298"></script>
+<script src="../mobile/uc-points.js?v=298"></script>
+<script src="../mobile/inspect-guide.js?v=298"></script>
+<script src="../mobile/get-figs.js?v=298"></script>
+<script src="../mobile/body-points.js?v=298"></script>
+<script src="../mobile/body-map.js?v=298"></script>
+<script src="../mobile/jspdf.umd.min.js?v=298"></script>
+<script src="../mobile/html2canvas.min.js?v=298"></script>
+<script src="../mobile/report-core.js?v=298"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -8450,6 +8450,45 @@ function histRows(recs){
   }));
   return out;
 }
+/* THE RETIRED PLUG ANGLES, MERGED FOR DISPLAY. 4C and 4E are the same left
+   rear final drive photographed from two angles, 4D and 4F the same right rear;
+   the TR60 plug set now carries one code per drive. On the history and photo
+   views a round captured under the old scheme shows ONE card per drive — both
+   angles' photographs, the worse of the two grades — the same fold the report
+   makes. Display only: the stored record keeps its original positions, so
+   nothing is rewritten and the correction drawer still edits each position as
+   it was captured. */
+const MP_DISPLAY_FOLD={"4C":"4E","4D":"4F"};
+function mpDisplayFold(rec){
+  const items=(rec&&rec.items)||[];
+  if(!rec || rec.type!=="MP" || !items.some(i=>i&&MP_DISPLAY_FOLD[i.key])) return items;
+  const by={}, out=[];
+  items.forEach(it=>{
+    const canon=MP_DISPLAY_FOLD[it.key]||it.key;
+    if(!by[canon]){ const c=Object.assign({},it,{key:canon,_src:[it]}); by[canon]=c; out.push(c); }
+    else {
+      const c=by[canon];
+      const worse=((typeof GRADE!=="undefined"?GRADE.num(it.grade):0)||0) > ((typeof GRADE!=="undefined"?GRADE.num(c.grade):0)||0) ? it : c;
+      const merged=Object.assign({}, c, worse, {key:canon, _src:c._src.concat(it)});
+      out[out.indexOf(c)]=merged; by[canon]=merged;
+    }
+  });
+  /* The card shows the canonical code, but opening it must land on a position
+     the stored record actually has: the canonical one when it was captured, else
+     the angle it was folded from. Without this a lone-4C round (no 4E) showed a
+     "4E" card that opened nothing, because the record holds no 4E. */
+  out.forEach(c=>{ const src=c._src||[c];
+    const real=src.find(s=>s.key===c.key) || src[0];
+    c._openKey=real ? real.key : c.key; });
+  return out;
+}
+/* Media across every source angle of a folded card, each frame once. */
+function histMedia(src,rec,withHidden){
+  const out=[], seen=new Set();
+  (src||[]).forEach(it=>mediaOf(it,rec,withHidden).forEach(m=>{
+    if(m && !seen.has(m.name)){ seen.add(m.name); out.push(m); } }));
+  return out;
+}
 function renderHistList(recs){
   if(!recs.length) return `<div class="empty">${esc(t("hv_none"))}</div>`;
   const th=k=>`<th>${esc(t(k))}</th>`;
@@ -8461,16 +8500,16 @@ function renderHistList(recs){
      supervisor's name: eleven rows of finding and nothing saying who walked
      them. One line per round, then its positions as rows. */
   const blocks=recs.map(rec=>{
-    const items=rec.items||[];
+    const items=mpDisplayFold(rec);
     n+=items.length;
     const rows=items.map(i=>{
-      const sev=sevOf(rec,i), med=mediaOf(i,rec);
+      const sev=sevOf(rec,i), med=histMedia(i._src||[i],rec);
       const sc=sev?SEVC[sev]:"";
       /* Colour AND the word. A dot alone tells a colour-blind reader nothing,
          and this is the column the page is about. */
       const sevCell=sev?`<span class="sevcell" style="--sc:${sc}"><i></i>${esc(SEV[sev].l)}</span>`
                        :`<span class="muted">—</span>`;
-      return `<tr class="hrow" tabindex="0" data-rk="${esc(ekOf(rec))}" data-ik="${esc(i.key)}">
+      return `<tr class="hrow" tabindex="0" data-rk="${esc(ekOf(rec))}" data-ik="${esc(i._openKey||i.key)}">
         <td><b>${esc(i.key)}</b></td>
         <td title="${esc(i.label||"")}"><span class="trunc">${esc(i.label||"—")}</span></td>
         <td>${sevCell}</td>
@@ -8583,8 +8622,9 @@ function renderHistory(){
       <button class="btn" data-edit="${esc(ekOf(rec))}" style="padding:3px 10px;font-size:12px">${esc(t("ed_edit"))}</button></div>
       ${rec._note?`<div class="sub" style="margin:2px 0 8px">📝 ${esc(rec._note)}</div>`:""}
       ${isWearType(rec.type)?ucBlock(rec):""}
-      <div class="pos-grid${rec.items.filter(i=>!isWearType(rec.type)||photoSrc(i,rec)||i.comment||i.defect).length===1?" one":""}">${rec.items.filter(i=>!isWearType(rec.type)||photoSrc(i,rec)||i.comment||i.defect).map(i=>{
-        const s=sevOf(rec,i); const med=mediaOf(i,rec);
+      <div class="pos-grid${mpDisplayFold(rec).filter(i=>!isWearType(rec.type)||photoSrc(i,rec)||i.comment||i.defect).length===1?" one":""}">${mpDisplayFold(rec).filter(i=>!isWearType(rec.type)||photoSrc(i,rec)||i.comment||i.defect).map(i=>{
+        const src=i._src||[i];
+        const s=sevOf(rec,i); const med=histMedia(src,rec);
         const cap=esc(`${rec.equip} · ${i.key} · ${rec.date}`);
         /* Every frame, not the first one. The lead is shown large and the rest
            as a strip under it, so a position with six photos looks like six
@@ -8605,8 +8645,8 @@ function renderHistory(){
         /* The office edits what the field captured: add the shot somebody
            forgot, take down the one that came out as a thumb over the lens.
            Only where Drive is configured, because both are writes. */
-        const shown=mediaOf(i,rec,true);
-        const edit = drvOn() ? `<div class="medit" data-rk="${esc(ekOf(rec))}" data-ik="${esc(i.key)}">
+        const shown=histMedia(src,rec,true);
+        const edit = drvOn() ? `<div class="medit" data-rk="${esc(ekOf(rec))}" data-ik="${esc(i._openKey||i.key)}">
             <button class="mtog" type="button" title="${esc(t("ph_edit"))}" aria-label="${esc(t("ph_edit"))}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true" style="width:12px;height:12px;vertical-align:-2px"><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="m4.5 17 4.8-4.3 3.4 3 2.6-2.2 4.2 3.5"/></svg> ${shown.length}</button>
             <div class="mpanel hidden">
               <div class="mlist">${shown.map(m=>`
@@ -8636,7 +8676,7 @@ function renderHistory(){
            reachable only from the position drawer, which is not where anybody
            looks at photographs. */
         return `<div class="pos" data-med='${esc(JSON.stringify(med.map(m=>[m.orig||m.src,m.kind])))}' data-cap="${cap}"
-          data-rk="${esc(ekOf(rec))}" data-ik="${esc(i.key)}"
+          data-rk="${esc(ekOf(rec))}" data-ik="${esc(i._openKey||i.key)}"
           data-names='${esc(JSON.stringify(med.map(m=>m.name||"")))}'>
           ${gal}
           ${edit}
@@ -15906,8 +15946,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=297"></script>
-<script src="sync-adapter.js?v=297"></script>
-<script src="report.js?v=297"></script>
+<script src="drive.js?v=298"></script>
+<script src="sync-adapter.js?v=298"></script>
+<script src="report.js?v=298"></script>
 </body>
 </html>
