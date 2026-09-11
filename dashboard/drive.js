@@ -756,6 +756,17 @@
        _N for an added photograph, so one added from another desk yesterday is
        not overwritten by one added from this desk today. */
     hasName: (n) => !!index[n],
+    /* THE ONE CALL THAT ANSWERS "IS IT IN STORAGE YET" — exposed so a screen
+       that is about to tell somebody a photograph is missing can ask the
+       server itself first, rather than trust however old `index` happens to
+       be. `load()` already refreshes it on every automatic pull (every
+       AUTO_MS), but a panel opened between two of those pulls was reading a
+       listing up to that long out of date — long enough that a file which had
+       already landed still read as "missing" and put a correction task on
+       the sheet for something nobody needs to correct. This is the same
+       single cheap `after: 9e15` call `load()` already makes, just callable
+       on demand instead of waiting for the next cycle. */
+    refreshMediaIndex,
     get url() { return cfg().url; },
     get secret() { return cfg().sec; },
     get legacy() { return legacy; },

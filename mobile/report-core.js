@@ -583,8 +583,14 @@
   color:inherit;opacity:.62;margin-top:2px;}
 #rptRoot .verdict .altl,#rptRoot .allok .altl{opacity:.75;}
 /* Inline pairing, for the places a second line would break the row: the value
-   is one thing said twice, not two things. */
-#rptRoot .alti{color:#8b939b;font-weight:400;}
+   is one thing said twice, not two things. The gap before it is CSS, not a
+   character in the string — T.both's "alti" branch prints none of its own,
+   so a name and its translation ran together as "outer/Внешнее" wherever
+   nothing else supplied one. .h1 .alti and .mast .m1 .alti already carry
+   their own margin-left for the two mastheads; this is the same margin for
+   everywhere else, so a caller that never needed a masthead's specific rule
+   is not the caller that gets no gap at all. */
+#rptRoot .alti{color:#8b939b;font-weight:400;margin-left:3px;}
 /* Inside a coloured chip the translation cannot go grey — it borrows the
    chip's own ink and steps back with weight and size instead. */
 #rptRoot .alt2{display:block;font-size:.85em;font-weight:600;letter-spacing:.04em;
@@ -1152,12 +1158,7 @@
          and a pseudo-element would be the tidy fix that html2canvas does not
          reliably paint. */
       var inline = cls === "alti" || cls === "oalt";
-      /* "alti" carries no margin of its own — T.I's pair() puts the gap
-         before the span as a literal space, and this needed the same one
-         once callers started asking for "alti" here too, or a name and its
-         translation ran together as "outer/Внешнее". "oalt" already gets
-         its 4px from .ohd .oalt, so it does not need a second gap here. */
-      return esc(a) + (cls === "alti" ? ' ' : '') + '<span class="' + (cls || "alt") + '">'
+      return esc(a) + '<span class="' + (cls || "alt") + '">'
         + (inline ? "/ " : "") + esc(b) + '</span>';
     };
     /* A pair the host supplies as a fixed en/ru couple rather than as
