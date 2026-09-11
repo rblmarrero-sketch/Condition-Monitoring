@@ -754,6 +754,7 @@
       verdict_part:"{m} of {of} points measured and all inside limits. {n} could not be reached — see below.",
       unread_n:"{n} of {of} points could not be measured — see the table below.",
       unread_s:"{n} not measured", flagged:"{n} points flagged",
+      more_n:"+{n} more — see the technical appendix for the full unit report.",
       uc_over:"{n} points at or past condemn", uc_watch:"{n} more above 80%",
       uc_cause:"normal service wear unless noted",
       map_t:"Where the wear is", map_na:"Not measured",
@@ -934,6 +935,7 @@
       verdict_part:"Измерено {m} из {of} точек, все в пределах. К {n} не удалось подобраться — см. ниже.",
       unread_n:"{n} из {of} точек измерить не удалось — см. таблицу ниже.",
       unread_s:"{n} не измерено", flagged:"{n} точек отмечено",
+      more_n:"Ещё {n} — полный отчёт по машине см. в техническом приложении.",
       uc_over:"{n} точек на пределе или за ним", uc_watch:"ещё {n} выше 80%",
       uc_cause:"обычный эксплуатационный износ, если не указано иное",
       map_t:"Где износ", map_na:"Не измерено",
@@ -3712,6 +3714,29 @@
     var today = sp.y+"-"+sp.m+"-"+sp.d;
     var stampTxt = today+" "+sp.hh+":"+sp.mm;
 
+    /* A ROUND OR A MONTH IS A MANAGEMENT REPORT BY DEFAULT, NOT A STACK OF
+       INSPECTION SHEETS STAPLED TOGETHER.
+
+       Every flagged POINT used to get its own row in "the work" and every
+       RECORD — flagged or not — got a full detail block below it: a wear
+       map, a complete measurement grid, every photograph of every position,
+       a signature line. A four-truck day cost nine pages; a 44-round month
+       of dump-body and undercarriage work cost a hundred and twenty-seven,
+       for a document a superintendent opens once to see what needs doing
+       today. Two thirds of it was normal machines nobody needed to read
+       about, printed at the same length as the ones that did.
+
+       Compact is now the default: "the work" groups by MACHINE, not by
+       point — one row per round, its worst finding, the count behind it —
+       and a machine with nothing flagged does not get a detail section at
+       all, because the "at a glance" table on page one already said so. A
+       flagged machine still gets its own card, just not its whole unit
+       report: the worst few findings and up to four photographs, not the
+       wear map, the full grid or every picture taken. ctx.appendix asks for
+       the old behaviour back in full, unit by unit, as a technical
+       appendix — never silently, only when asked for. */
+    var wantFull = !!ctx.appendix;
+
     /* ---------- 1. the answer ---------- */
     var graded = GRADE_LEVELS.reduce(function(a,g){ return a+X.grade[g]; }, 0);
     var bar = GRADE_LEVELS.map(function(g){ var n=X.grade[g]; if(!n) return "";
@@ -3810,46 +3835,48 @@
     if(!X.act.length){
       wl += '<div class="verdict v-ok">'+T.S("work_none")+'</div>';
     } else {
+      /* ONE ROW PER MACHINE, WORST FINDING FIRST — "units requiring
+         attention", the way the reference states it and the way a planner
+         actually reads it, not one row per point that contributed to the
+         number. A 44-round month with 408 flagged points is 39 machines to
+         look at, not 408 rows — the point-level table stayed in the
+         technical appendix (ctx.appendix), unit by unit, where the detail
+         belongs. X.act is already sorted worst-first overall, so a stable
+         group-by preserves that order inside each machine's own bucket
+         without re-sorting. */
+      var byMach={}, machOrder=[];
+      X.act.forEach(function(f){
+        var k=f.rec.equip+"|"+f.rec.date+"|"+f.rec.type;
+        if(!byMach[k]){ byMach[k]={rec:f.rec, list:[]}; machOrder.push(k); }
+        byMach[k].list.push(f);
+      });
       wl += '<table><tr>'
         + '<th style="width:74px">'+T.L("c_unit")+'</th>'
-        + '<th style="width:150px">'+T.L("c_comp")+'</th>'
-        + '<th style="width:180px">'+T.L("c_find")+'</th>'
-        + '<th style="width:150px">'+T.L("c_cause")+'</th>'
-        + '<th style="width:130px">'+T.L("c_do")+'</th>'
+        + '<th style="width:110px">'+T.L("c_type")+'</th>'
+        + '<th class="c" style="width:104px">'+T.L("prog_worst")+'</th>'
+        + '<th style="width:220px">'+T.L("c_find")+'</th>'
+        + '<th style="width:150px">'+T.L("c_do")+'</th>'
         + '<th class="c" style="width:54px">'+T.L("c_date")+'</th></tr>';
-      X.act.forEach(function(f,i){
-        var rec=f.rec, it=f.it||{}, col=GRADE_HEX[gnum(it.grade)]||SEV_HEX[f.sev]||"#c9d0d6";
-        var todo = it.action
+      machOrder.forEach(function(k,i){
+        var g=byMach[k], rec=g.rec, f=g.list[0], it=f.it||{};
+        var col=GRADE_HEX[gnum(it.grade)]||SEV_HEX[f.sev]||"#c9d0d6";
+        var more=g.list.length>1 ? '<div class="code" style="margin-top:2px;">'
+          +T.I("flagged",{n:g.list.length})+'</div>' : "";
+        var find = f.roll
+          ? (f.act.length?T.S("uc_over",{n:f.act.length})+" ":"")
+            +(f.watch.length?T.S("uc_watch",{n:f.watch.length}):"")
+          : esc(it.defect || it.name || it.key || "");
+        var todo = (!f.roll && it.action)
           ? '<b>'+esc(it.action)+'</b>'+prioTag(it)
             +(it.wo?'<div class="code">'+esc(T("c_wo"))+' '+esc(it.wo)+'</div>':"")
           : '<span class="muted">'+T.I("do_tbd")+'</span>';
-        var head = '<tr class="'+(i%2?"zebra":"")+'">'
-          + '<td class="stripe" style="border-left-color:'+col+'"><span class="unit">'+esc(rec.equip)+'</span>'
-          + '<div class="code">'+esc(rec.typeLabel||rec.type)+'</div></td>';
-        var tail = '<td class="c n">'+esc(String(rec.date||"").slice(5))+'</td></tr>';
-        if(f.roll){
-          var worst=f.act.concat(f.watch).slice(0,3).map(function(x){
-            return esc(x.it.name||x.it.key)+' <span class="n">'+x.pct+'%</span>'; }).join("<br>");
-          wl += head
-            + '<td><b>'+T.I("uc_cond")+'</b><div class="code">'
-              + T.I("flagged",{n:f.act.length+f.watch.length})+'</div></td>'
-            + '<td>'+(f.act.length?'<b>'+T.S("uc_over",{n:f.act.length})+'</b>':"")
-              + (f.watch.length?T.S("uc_watch",{n:f.watch.length}):"")
-              + '<div style="margin-top:3px;">'+sevChip(ctx,f.sev)+'</div>'
-              + '<div class="code" style="margin-top:4px;line-height:1.5;">'+worst+'</div></td>'
-            + '<td><span class="muted">'+T.S("uc_cause")+'</span></td>'
-            + '<td>'+todo+'</td>' + tail;
-          return;
-        }
-        var find=[ it.defect?esc(it.defect):"",
-                   (f.w&&f.w.pct!=null)?esc(f.w.pct)+"% "+T.I("c_worn")+" · "+esc(f.w.mm)+" mm":"",
-                   (!it.defect&&it.comment)?esc(it.comment):"" ].filter(Boolean).join("<br>");
-        wl += head
-          + '<td>'+nameCell(T,it)+'</td>'
-          + '<td>'+(find||"—")+'<div style="margin-top:3px;">'+gradeChip(it.grade)+' '+(gnum(it.grade)?"":sevChip(ctx,f.sev))+'</div>'
-            + (it.defectCode?'<div class="code">'+esc(it.defectCode)+(it.iso?' · ISO '+esc(it.iso):"")+'</div>':"")+'</td>'
-          + '<td>'+(it.cause?esc(it.cause):'<span class="muted">'+T.I("cause_tbd")+'</span>')+'</td>'
-          + '<td>'+todo+'</td>' + tail;
+        wl += '<tr class="'+(i%2?"zebra":"")+'">'
+          + '<td class="stripe" style="border-left-color:'+col+'"><span class="unit">'+esc(rec.equip)+'</span></td>'
+          + '<td>'+esc(rec.typeLabel||rec.type)+'</td>'
+          + '<td class="c">'+(f.roll?sevChip(ctx,f.sev):gradeChip(it.grade)||sevChip(ctx,f.sev))+'</td>'
+          + '<td>'+find+more+'</td>'
+          + '<td>'+todo+'</td>'
+          + '<td class="c n">'+esc(String(rec.date||"").slice(5))+'</td></tr>';
       });
       wl += '</table>';
       /* The action-control summary — open, overdue, and what is missing an
@@ -3869,9 +3896,62 @@
       secs.push({nb:x.nb, html:String(x.html).split("__N__").join(p2(secN))});
     });
 
-    /* ---------- 3. the evidence, one machine at a time ---------- */
+    /* ---------- 3. the evidence, one machine at a time (flagged only) ------
+       A fully normal round already had its say on page one, in the "at a
+       glance" table and the programme-by-type row — it does not also need a
+       card here. A flagged one gets its worst few findings and up to four
+       selected photographs, not its whole unit report; ctx.appendix adds
+       that back in full, for every round, further down. */
     var first = true;
     recs.forEach(function(rec){
+      var vc0 = verdict(rec);
+      if(vc0==="ok") return;
+      var notableC = flagged(rec);
+      var shownC = notableC.slice(0,6);
+      var m2 = '<div class="sec"><div class="mach">'
+        + (first ? '<div class="sechd" style="border:0;padding:0;margin:0 0 11px;">'
+            + '<span class="n">'+p2(secN+1)+'</span><span class="h2">'+T.I("detail")+'</span></div>' : "")
+        + '<div class="machhd"><span class="u">'+esc(rec.equip)+'</span>'
+          + '<span class="c">'+esc(rec.clsLabel||"")+'</span>'
+          + '<span class="c" style="margin-left:auto;">'+esc(rec.typeLabel||rec.type)+'</span></div>'
+        + '<div class="meta">'
+          + '<span class="m"><i>'+T.I("c_date")+'</i><span class="num">'+esc(rec.date||"")+'</span></span>'
+          + (rec.smu?'<span class="m"><i>SMU</i><span class="num">'+esc(rec.smu)+'</span></span>':"")
+          + (rec.by?'<span class="m"><i>'+T.I("by_who")+'</i>'+esc(rec.by)+'</span>':"")
+          + '<span class="m"><i>'+T.I("pts")+'</i><span class="num">'+rec.items.length+'</span></span>'
+        + '</div>'
+        + '<div class="verdict v-'+vc0+'">'+T.S("verdict_"+vc0,{n:flagged(rec).length,of:rec.items.length})+'</div>';
+      if(shownC.length) m2 += notableTable(ctx,T,shownC);
+      if(notableC.length>shownC.length) m2 += '<div class="muted" style="font-size:10.5px;margin-top:6px;">'
+        + T.I("more_n",{n:notableC.length-shownC.length})+'</div>';
+      /* Up to four photographs — one per flagged finding — the same
+         "selected evidence" budget the reference spends everywhere else,
+         not every picture of every position on the machine. */
+      var selC=[];
+      notableC.forEach(function(it){ if(selC.length<4 && it.photos && it.photos.length)
+        selC.push({it:it,u:it.photos[0]}); });
+      if(selC.length){
+        m2 += '<div class="subhd" style="margin-top:11px;">'+T.I("photos")+'</div><div class="shots">';
+        selC.forEach(function(s){ m2+='<figure><img src="'+s.u+'"><figcaption>'
+          + esc(s.it.name||s.it.key)+'</figcaption></figure>'; });
+        m2 += '</div>';
+      }
+      if(rec.gap && rec.gap.missing>0) m2 += '<div class="evgap" style="margin-top:11px;"><b>'
+        + T.I("ev_gap_t")+'</b> '+T.I("ev_gap",{n:rec.gap.missing, e:rec.gap.expected, r:rec.gap.received})+'</div>';
+      secs.push({nb:false, html:m2+'</div></div>'});
+      first = false;
+    });
+
+    /* ---------- technical appendix: every round in full, unit by unit -----
+       "Include full inspection sheets as appendix" — the whole of what this
+       report used to print by default for every round, flagged or not, now
+       opt-in and clearly marked as what it is. */
+    if(wantFull){
+      secs.push({nb:true, html:'<div class="sec"><div class="mhead"><div class="eyebrow">'+T.I("sub")+'</div></div>'
+        + '<div class="m1">'+T.I("uh_appendix")+'</div>'
+        + '<div class="quiet" style="margin-top:6px;max-width:520px;">'+T.S("uh_appendix_note")+'</div></div>'});
+    }
+    (wantFull ? recs : []).forEach(function(rec){
       var isWear=!!rec.wear, isTemp=!!rec.temp;
       /* On a wear round the measurement grid IS the detail. Listing the same
          thirty-four points again above it, in a table whose grade, severity and
@@ -3891,8 +3971,6 @@
       var vn = flagged(rec).length;
 
       var m = '<div class="sec"><div class="mach">'
-        + (first ? '<div class="sechd" style="border:0;padding:0;margin:0 0 11px;">'
-            + '<span class="n">'+p2(secN+1)+'</span><span class="h2">'+T.I("detail")+'</span></div>' : "")
         + '<div class="machhd"><span class="u">'+esc(rec.equip)+'</span>'
           + '<span class="c">'+esc(rec.clsLabel||"")+'</span>'
           + '<span class="c" style="margin-left:auto;">'+esc(rec.typeLabel||rec.type)+'</span></div>'
@@ -3910,7 +3988,6 @@
               : T.S("verdict_"+vc,{n:vn,of:rec.items.length})
                 + (unread?T.S("unread_n",{n:unread,of:rec.items.length}):""))
           + '</div>';
-      first = false;
 
       if(notable.length) m += notableTable(ctx,T,notable);
       // the verdict already said "all N normal" — no need to say it twice
