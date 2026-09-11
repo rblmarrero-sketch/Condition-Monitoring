@@ -6,10 +6,13 @@
       scope had never heard of it.
 
    2. "Include complete inspection sheets as appendix" is the template's own
-      escape hatch from the compact default: off unless asked for, and it only
-      means anything on Equipment History and Trend — every other scope either
-      already IS the full sheet (one inspection) or already has its own
-      compact shape (Condition Summary, Round, Fleet).
+      escape hatch from the compact default: off unless asked for. It first
+      meant anything only on Equipment History and Trend; Round and Monthly
+      Fleet Report got their own exception-first compaction later and print a
+      management summary that can ALSO be asked for in full, unit by unit —
+      the same escape hatch, so the control now shows for those two scopes as
+      well. "one" is already the single full sheet and Condition Summary is
+      compact by a different rule; neither has an appendix to ask for.
 
    Run: node tests/rptappx.cjs   (needs tests/ed-srv.cjs on 8093)
 */
@@ -61,7 +64,13 @@ const SEED = () => {
   await p.waitForTimeout(200);
   let hidden = await p.evaluate(() => $('rAppendixField').hidden);
   ok('shown for Equipment History and Trend (unit)', hidden === false);
-  for (const sc of ['one', 'summary', 'round', 'month']) {
+  for (const sc of ['round', 'month']) {
+    await p.evaluate((sc) => { $('rScope').value = sc; refreshReportTargets(); }, sc);
+    await p.waitForTimeout(150);
+    hidden = await p.evaluate(() => $('rAppendixField').hidden);
+    ok('  shown for scope "' + sc + '" too — its own compact-by-default shape', hidden === false);
+  }
+  for (const sc of ['one', 'summary']) {
     await p.evaluate((sc) => { $('rScope').value = sc; refreshReportTargets(); }, sc);
     await p.waitForTimeout(150);
     hidden = await p.evaluate(() => $('rAppendixField').hidden);

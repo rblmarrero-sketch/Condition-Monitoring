@@ -4358,6 +4358,7 @@ const I18N={
   ed_point:"Component (point)", ed_point_taken:"already has a finding",
   ed_point_hint:"Choosing another point moves this finding, with its photographs, under it. Choosing one that already has a finding swaps the two.",
   ed_point_swap:"swap with {k}",
+  ed_fold_note:"Filed as {k} — shown as {c} on history, reports and the register",
   ed_rm:"Remove this position", ed_rm_undo:"Keep it", ed_rm_marked:"Marked for removal — saved with the correction",
   ed_rm_photos:"Has photographs — withdraw or re-file them first",
   ed_removed:"Removed from this round:", ed_restore:"Restore {k}",
@@ -5159,6 +5160,7 @@ const I18N={
   ed_point:"Компонент (точка)", ed_point_taken:"уже есть находка",
   ed_point_hint:"Выбор другой точки переносит эту находку вместе с фотографиями под неё. Выбор точки, где уже есть находка, меняет их местами.",
   ed_point_swap:"поменять с {k}",
+  ed_fold_note:"Записано как {k} — показывается как {c} в истории, отчётах и реестре",
   ed_rm:"Удалить эту позицию", ed_rm_undo:"Оставить", ed_rm_marked:"Помечена к удалению — сохранится вместе с исправлением",
   ed_rm_photos:"Есть фотографии — сначала скройте или переместите их",
   ed_removed:"Удалено из этого обхода:", ed_restore:"Вернуть {k}",
@@ -9608,8 +9610,18 @@ function openEdit(key,keepMsg){
     const stale = !!(gN && i.sev && !(wearOf(rec,i)||{}).band
                      && String(i.sev).toUpperCase()!==(GRADE.iso(gN)||""));
     const rm=edRemoved.has(rk0), hasPh=edHasPhotos(rec,i);
+    /* THE SAME POINT MUST NOT WEAR TWO NAMES ON TWO SCREENS. The history card
+       and every report fold a retired magnetic-plug angle (4C, 4D) into its
+       canonical code (4E, 4F) — see MP_DISPLAY_FOLD — but the correction
+       drawer still has to edit the position exactly as it was captured, so
+       the raw key stays the field the drawer acts on. Without this line the
+       badge here read "4C" for the very card the history list had just
+       opened as "4E", and the maintainer went looking for 4C, not knowing
+       they already had it open. */
+    const foldCanon=MP_DISPLAY_FOLD[i.key];
     return `<div class="srccard${rm?" edrm":""}" style="margin-bottom:10px" data-edcard="${esc(rk0)}"><div class="srchead">
       <span class="ico" style="${gN?`background:${SEVC[gN]};color:${GRADE.ink(gN)}`:""}">${gN?gN:"·"}</span><div><b>${esc(i.key)}</b>
+      ${foldCanon?`<div class="code">${esc(t("ed_fold_note",{k:i.key,c:foldCanon}))}</div>`:""}
       <div class="muted">${esc(i.label||"")}${i.comment?` — “${esc(i.comment)}”`:""}</div></div>
       <span class="state">${sev?esc(SEV[sev]?SEV[sev].l:sev):esc(t("ed_nosev"))}</span></div>
       <div class="edrmbar">${rm?`<span>${esc(t("ed_rm_marked"))}</span><button type="button" class="btn small" data-edrm="${esc(rk0)}">${esc(t("ed_rm_undo"))}</button>`

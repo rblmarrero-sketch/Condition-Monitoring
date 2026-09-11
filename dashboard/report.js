@@ -603,9 +603,17 @@
       lang: typeof lang !== "undefined" ? lang : "en",
       bi: RBI,
       /* A single inspection is a unit report with one round in it — the same
-         sheet, no cover and no triage list, which is what "one" means. */
+         sheet, no cover and no triage list, which is what "one" means.
+         "round" and "month" are named explicitly, not left to fall through
+         to the engine's own generic multi-machine guess — that guess is
+         also what an ad-hoc set of records without a named scope gets (a
+         phone's "every round on this phone" export, or a test comparing an
+         arbitrary set), and those still want the old full-detail document,
+         not the Report Builder's compact management summary. Only a report
+         actually asked for AS a Round or a Fleet Summary gets it. */
       mode: scope === "summary" ? "summary"
-          : (scope === "one" || scope === "unit") ? "unit" : undefined,
+          : (scope === "one" || scope === "unit") ? "unit"
+          : (scope === "round" || scope === "month") ? scope : undefined,
       title: L("rep_title_doc"),
       titleAlt: RBI ? inOther(() => L("rep_title_doc")) : "",
       sub: scope ? `${L("r_" + scope)} — ${target}` : "",

@@ -3527,7 +3527,10 @@
      to URLs — so folding is a concatenation of resolved frames, needing no
      knowledge of how a file is named. */
   var MP_FOLD = { "4C": "4E", "4D": "4F" };
-  function foldOneMP(base, extra) {
+  /* baseNative/extraNative say which side, if either, was captured UNDER
+     THE CANONICAL KEY ITSELF — 4E as 4E, not folded up from 4C. That side's
+     name is the one worth keeping. */
+  function foldOneMP(base, extra, baseNative, extraNative) {
     var bg = gnum(base.grade) || 0, eg = gnum(extra.grade) || 0;
     var lead = eg > bg ? extra : base, other = eg > bg ? base : extra;
     var out = {}, k;
@@ -3541,6 +3544,20 @@
         var v = lead[f]; if (v === "" || v == null) v = other[f];
         if (v !== "" && v != null) out[f] = v;
       });
+    /* IDENTITY IS NOT A FINDING, so it does not go to the worse angle by
+       grade — it goes to whichever angle was actually captured under this
+       position's current code. A 4C round predates the rename and its own
+       name field is frozen at whatever the sheet called the point back
+       then ("4C Left Bearing"); merged by grade like every other field, that
+       stale text buried the real name on every round where the position was
+       ALSO ever captured natively as 4E, because a plug wears the same on
+       both angles and the two sides tie on grade far more often than not. */
+    var nameSrc = (extraNative && !baseNative) ? extra
+                : (baseNative && !extraNative) ? base
+                : lead;
+    ["name", "label", "nameAlt"].forEach(function (f) {
+      if (nameSrc[f] !== "" && nameSrc[f] != null) out[f] = nameSrc[f];
+    });
     /* Both angles' photographs, in order, without repeating a frame that the
        correction panel had already filed onto both. */
     var seen = {}, ph = [];
@@ -3557,14 +3574,15 @@
     if (!items.some(function (it) { return it && MP_FOLD[it.key]; })) return items;
     var out = [], byKey = {};
     items.forEach(function (it) {
-      var canon = MP_FOLD[it.key] || it.key;
+      var canon = MP_FOLD[it.key] || it.key, native = it.key === canon;
       if (byKey[canon]) {
-        var merged = foldOneMP(byKey[canon].item, it);
-        byKey[canon].item = merged; out[byKey[canon].i] = merged;
+        var merged = foldOneMP(byKey[canon].item, it, byKey[canon].native, native);
+        byKey[canon].item = merged; byKey[canon].native = byKey[canon].native || native;
+        out[byKey[canon].i] = merged;
       } else {
         var c = {}, x; for (x in it) c[x] = it[x];
         c.key = canon; if (c.code) c.code = canon;
-        byKey[canon] = { item: c, i: out.length }; out.push(c);
+        byKey[canon] = { item: c, i: out.length, native: native }; out.push(c);
       }
     });
     return out;
@@ -3734,8 +3752,30 @@
        report: the worst few findings and up to four photographs, not the
        wear map, the full grid or every picture taken. ctx.appendix asks for
        the old behaviour back in full, unit by unit, as a technical
-       appendix — never silently, only when asked for. */
-    var wantFull = !!ctx.appendix;
+       appendix — never silently, only when asked for.
+
+       Only for a report actually ASKED FOR as a Round or a Fleet Summary —
+       ctx.mode carries that when the dashboard's Report Builder set it. A
+       set of records that landed here without one of those two names is
+       the OTHER caller of this same fleet path: a phone's "every round on
+       this phone" (which sets ctx.full precisely because it wants its own
+       full record back, not a management summary of it) and anything else
+       that built a multi-machine ctx without going through the Report
+       Builder's scope. Those keep the old, unconditional full behaviour —
+       compaction is an opt-in shape for a named report, not something a
+       caller that never asked for "Round" or "Fleet Summary" wakes up to
+       find has quietly halved its own output.
+
+       isMgmt is which SHAPE this document is; wantFull is whether the full,
+       unit-by-unit detail prints. Outside a named Round/Fleet Summary the
+       two are the same thing — there is no compact layer to add it after,
+       so the old report is the whole report. Inside one, they are not: the
+       compact summary always prints, and wantFull only decides whether the
+       technical appendix is bound in after it — never both compact AND the
+       old unconditional full loop at once, which is what printed every
+       photograph twice when this was one flag instead of two. */
+    var isMgmt = (ctx.mode==="round"||ctx.mode==="month");
+    var wantFull = isMgmt ? !!ctx.appendix : true;
 
     /* ---------- 1. the answer ---------- */
     var graded = GRADE_LEVELS.reduce(function(a,g){ return a+X.grade[g]; }, 0);
@@ -3862,10 +3902,25 @@
         var col=GRADE_HEX[gnum(it.grade)]||SEV_HEX[f.sev]||"#c9d0d6";
         var more=g.list.length>1 ? '<div class="code" style="margin-top:2px;">'
           +T.I("flagged",{n:g.list.length})+'</div>' : "";
+        /* A rolled-up round still has to name what it rolled up — "6 points at
+           or past condemn" is a count, not a job, until the worst of them are
+           named with the percentage that put them there. Up to three, worst
+           first (act.concat(watch) is already sorted that way per unit). */
         var find = f.roll
-          ? (f.act.length?T.S("uc_over",{n:f.act.length})+" ":"")
+          ? (f.act.length?'<b>'+T.S("uc_over",{n:f.act.length})+'</b> ':"")
             +(f.watch.length?T.S("uc_watch",{n:f.watch.length}):"")
-          : esc(it.defect || it.name || it.key || "");
+            +'<div class="code" style="margin-top:3px;line-height:1.5;">'
+              +f.act.concat(f.watch).slice(0,3).map(function(x){
+                return esc(x.it.name||x.it.key)+' <span class="n">'+x.pct+'%</span>'; }).join("<br>")
+              +'</div>'
+          : esc(it.defect || it.name || it.key || "")
+            /* The cause column folded into this cell when the table went from
+               one row per point to one per machine — it still has to say
+               "not yet set" rather than leave the reader guessing whether
+               nobody looked or nobody typed it in. Every row here is already
+               a flagged point (X.act), so the cause status always applies. */
+            +'<div class="code" style="margin-top:2px;">'
+              +(it.cause?esc(it.cause):'<span class="muted">'+T.I("cause_tbd")+'</span>')+'</div>';
         var todo = (!f.roll && it.action)
           ? '<b>'+esc(it.action)+'</b>'+prioTag(it)
             +(it.wo?'<div class="code">'+esc(T("c_wo"))+' '+esc(it.wo)+'</div>':"")
@@ -3901,9 +3956,12 @@
        glance" table and the programme-by-type row — it does not also need a
        card here. A flagged one gets its worst few findings and up to four
        selected photographs, not its whole unit report; ctx.appendix adds
-       that back in full, for every round, further down. */
+       that back in full, for every round, further down. Only for a named
+       Round or Fleet Summary (isMgmt) — everything else takes the full
+       loop below instead, whole and unsplit, as it always has. */
     var first = true;
     recs.forEach(function(rec){
+      if(!isMgmt) return;
       var vc0 = verdict(rec);
       if(vc0==="ok") return;
       var notableC = flagged(rec);
@@ -3945,8 +4003,11 @@
     /* ---------- technical appendix: every round in full, unit by unit -----
        "Include full inspection sheets as appendix" — the whole of what this
        report used to print by default for every round, flagged or not, now
-       opt-in and clearly marked as what it is. */
-    if(wantFull){
+       opt-in and clearly marked as what it is. The divider only makes sense
+       AFTER a compact summary — outside a named Round/Fleet Summary there is
+       no summary above it to be an appendix TO, so this is simply the whole
+       report again, unlabelled, exactly as it always printed. */
+    if(isMgmt && wantFull){
       secs.push({nb:true, html:'<div class="sec"><div class="mhead"><div class="eyebrow">'+T.I("sub")+'</div></div>'
         + '<div class="m1">'+T.I("uh_appendix")+'</div>'
         + '<div class="quiet" style="margin-top:6px;max-width:520px;">'+T.S("uh_appendix_note")+'</div></div>'});
@@ -3970,7 +4031,13 @@
          round that is graded rather than over a limit used to report zero. */
       var vn = flagged(rec).length;
 
+      /* Outside a named Round/Fleet Summary there is no compact card and no
+         Appendix divider above this loop to have already numbered it — this
+         is section 02 in its own right and has to say so once, on the first
+         machine, exactly as it always did. */
       var m = '<div class="sec"><div class="mach">'
+        + (!isMgmt && first ? '<div class="sechd" style="border:0;padding:0;margin:0 0 11px;">'
+            + '<span class="n">'+p2(secN+1)+'</span><span class="h2">'+T.I("detail")+'</span></div>' : "")
         + '<div class="machhd"><span class="u">'+esc(rec.equip)+'</span>'
           + '<span class="c">'+esc(rec.clsLabel||"")+'</span>'
           + '<span class="c" style="margin-left:auto;">'+esc(rec.typeLabel||rec.type)+'</span></div>'
@@ -4058,6 +4125,7 @@
         var last=secs.pop();
         secs.push({nb:!!last.nb, html:last.html.replace(/<\/div><\/div>$/, sign+'</div></div>')});
       }
+      first = false;
     });
 
     /* ---------- the report's own sign-off — the reference's three roles ------
