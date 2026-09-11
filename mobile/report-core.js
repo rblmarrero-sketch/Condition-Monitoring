@@ -1152,7 +1152,12 @@
          and a pseudo-element would be the tidy fix that html2canvas does not
          reliably paint. */
       var inline = cls === "alti" || cls === "oalt";
-      return esc(a) + '<span class="' + (cls || "alt") + '">'
+      /* "alti" carries no margin of its own — T.I's pair() puts the gap
+         before the span as a literal space, and this needed the same one
+         once callers started asking for "alti" here too, or a name and its
+         translation ran together as "outer/Внешнее". "oalt" already gets
+         its 4px from .ohd .oalt, so it does not need a second gap here. */
+      return esc(a) + (cls === "alti" ? ' ' : '') + '<span class="' + (cls || "alt") + '">'
         + (inline ? "/ " : "") + esc(b) + '</span>';
     };
     /* A pair the host supplies as a fixed en/ru couple rather than as
@@ -1631,7 +1636,7 @@
         x += '<tr class="' + (i % 2 ? "zebra" : "") + '">'
           + '<td style="padding-left:0;"><b>' + esc(it.code || it.key) + '</b>'
             + (it.name && it.name !== (it.code || it.key)
-                ? ' ' + T.both(it.name, it.nameAlt) : "") + '</td>'
+                ? ' ' + T.both(it.name, it.nameAlt, "alti") : "") + '</td>'
           /* Off standard is the finding this round exists to produce, so it is
              stated on the row next to what should have been there - not left to
              be worked out by comparing this table with the poster on the wall. */
@@ -1779,8 +1784,12 @@
     var half = function (it) {
       if (!it) return '<td></td><td></td>' + (anyRef ? '<td></td><td></td>' : "");
       var w = it.w, ref = w.newMM != null && w.newMM !== "";
+      /* The name in ONE line, not two — "alti" is the inline pairing (see
+         T.I), the same treatment the work list and every header already use.
+         Stacked, a name and its translation cost a whole extra line on every
+         one of sixty-three rows; run together they cost three characters. */
       return '<td style="padding-left:0;">'
-        + T.both(it.name || it.key, it.nameAlt)
+        + T.both(it.name || it.key, it.nameAlt, "alti")
         + (anyRef ? '<div class="code">' + (ref
             ? esc(w.newMM + " → " + w.condemnMM + " mm") : "—") + '</div>' : "")
         + '</td>'
@@ -1826,7 +1835,7 @@
         x += '<tr class="' + (i % 2 ? "zebra" : "") + '">'
           + '<td style="padding-left:0;">'
           + T.both(nameBoth(L && L.name, R && R.name) || any.key,
-                   nameBoth(L && L.nameAlt, R && R.nameAlt))
+                   nameBoth(L && L.nameAlt, R && R.nameAlt), "alti")
           /* One reference line serves both sides: it is the same part on the
              same model, and printing "21 → 33.5 mm" twice on one row is two
              thirds of a line of paper saying one thing. */
@@ -2220,7 +2229,7 @@
   function tbPoint(T, it) {
     return '<b>' + esc(it.code || it.key) + '</b>'
       + (it.name && it.name !== (it.code || it.key)
-          ? '<div class="pn">' + T.both(it.name, it.nameAlt) + '</div>' : "");
+          ? '<div class="pn">' + T.both(it.name, it.nameAlt, "alti") + '</div>' : "");
   }
   /* One honest table: header cells, a row per item; each cell reads its own
      field through the column's getter. */
@@ -3281,7 +3290,7 @@
         var dcls = d == null || Math.abs(d) < 0.05 ? "fl" : worse ? "up" : "dn";
         var ref = seen[k];
         return '<tr class="' + (i % 2 ? "zebra" : "") + '">'
-          + '<td style="padding-left:0">' + T.both(ref.name || k, ref.nameAlt) + '</td>'
+          + '<td style="padding-left:0">' + T.both(ref.name || k, ref.nameAlt, "alti") + '</td>'
           + '<td class="n muted" style="font-size:9px">' + (last && last.newMM != null && last.newMM !== ""
               ? esc(last.newMM + " → " + last.condemnMM) : T.I("noref_s")) + '</td>'
           + cells
