@@ -224,34 +224,53 @@ async function readRecords(p) {
                   .sort((a, b) => a.updated - b.updated);
   const records = [], edits = [], conflicts = [], deleted = [], deferrals = [];
   let read = 0, bad = 0, truncated = false, cursor = after;
-  for (const f of cars) {
-    if (read >= max) { truncated = true; break; }
-    try {
-      const j = JSON.parse((await getObj(f.key)).body.toString('utf8'));
-      if (/\.edit\.json$/i.test(f.name) || (j && j.type === 'cm-record-edit')) {
-        if (j && j.key) edits.push(j);
-      } else if (/\.conflict\.json$/i.test(f.name) || (j && j.type === 'cm-record-conflict')) {
-        if (j && j.key) conflicts.push(j);
-      } else if (/\.defer\.json$/i.test(f.name) || (j && j.type === 'cm-round-deferred')) {
-        /* A round somebody decided NOT to walk, and why. Not a record — the
-           round did not happen — and not a correction either. It is the other
-           half of the due list: without it the office sees a machine that is
-           overdue and cannot tell "nobody went" from "it was on a low-loader". */
-        if (j && j.u && j.t) deferrals.push({ u: j.u, t: j.t, until: j.until || null,
-          why: j.why || '', by: j.by || '', at: j.at || '' });
-      } else if (/\.deleted\.json$/i.test(f.name) || (j && j.type === 'cm-record-deleted')) {
-        /* The round was deleted from the office. The files are already gone —
-           this marker is the only thing left that says so, and a phone that
-           never sees it goes on counting the unit as inspected forever. It was
-           being skipped here, which is why a machine deleted in the dashboard
-           stayed on the due list. */
-        if (j && j.key) deleted.push({ key: j.key, by: j.by || '', at: j.at || '' });
-      } else if (!(j && j.type === 'cm-index-shard')) {
-        for (const r of ((j && j.records) || [])) { r._file = f.path; records.push(r); }
-      }
-      read++;
-    } catch (e) { bad++; }
-    cursor = f.updated;            // advance even on a bad file, or it blocks the queue
+  /* One GET per sidecar used to go out and come back before the next one was
+     even asked for — a folder of 189 sidecars was 189 sequential round trips
+     to Object Storage, measured at over 13 seconds for a pull the phone makes
+     on every check. Each GET is an independent https request with no shared
+     state (see s3()), so READ_CONCURRENCY of them go out together; the loop
+     still COMMITS results in the exact order `cars` is sorted in — read, bad
+     and cursor advance file by file, in order, so a cap that lands mid-chunk
+     truncates at exactly the file it always did, and the "advance even on a
+     bad file" rule reads the same result whether that file was fetched alone
+     or alongside seven others. */
+  const READ_CONCURRENCY = 8;
+  outer:
+  for (let i = 0; i < cars.length; i += READ_CONCURRENCY) {
+    const chunk = cars.slice(i, i + READ_CONCURRENCY);
+    const results = await Promise.all(chunk.map(f =>
+      getObj(f.key).then(o => ({ f, j: JSON.parse(o.body.toString('utf8')) }))
+                    .catch(e => ({ f, err: e }))));
+    for (const r of results) {
+      if (read >= max) { truncated = true; break outer; }
+      const f = r.f;
+      if (!r.err) {
+        const j = r.j;
+        if (/\.edit\.json$/i.test(f.name) || (j && j.type === 'cm-record-edit')) {
+          if (j && j.key) edits.push(j);
+        } else if (/\.conflict\.json$/i.test(f.name) || (j && j.type === 'cm-record-conflict')) {
+          if (j && j.key) conflicts.push(j);
+        } else if (/\.defer\.json$/i.test(f.name) || (j && j.type === 'cm-round-deferred')) {
+          /* A round somebody decided NOT to walk, and why. Not a record — the
+             round did not happen — and not a correction either. It is the other
+             half of the due list: without it the office sees a machine that is
+             overdue and cannot tell "nobody went" from "it was on a low-loader". */
+          if (j && j.u && j.t) deferrals.push({ u: j.u, t: j.t, until: j.until || null,
+            why: j.why || '', by: j.by || '', at: j.at || '' });
+        } else if (/\.deleted\.json$/i.test(f.name) || (j && j.type === 'cm-record-deleted')) {
+          /* The round was deleted from the office. The files are already gone —
+             this marker is the only thing left that says so, and a phone that
+             never sees it goes on counting the unit as inspected forever. It was
+             being skipped here, which is why a machine deleted in the dashboard
+             stayed on the due list. */
+          if (j && j.key) deleted.push({ key: j.key, by: j.by || '', at: j.at || '' });
+        } else if (!(j && j.type === 'cm-index-shard')) {
+          for (const rr of ((j && j.records) || [])) { rr._file = f.path; records.push(rr); }
+        }
+        read++;
+      } else { bad++; }
+      cursor = f.updated;          // advance even on a bad file, or it blocks the queue
+    }
   }
   const out = { ok: true, records, edits, conflicts, deleted, deferrals, read, failed: bad,
                 pending: Math.max(0, cars.length - read - bad),
@@ -285,12 +304,15 @@ async function readFile(id) {
 
 async function readFiles(ids) {
   const list = String(ids || '').split(',').filter(Boolean).slice(0, MEDIA_MAX);
-  const files = [];
-  for (const id of list) {
+  /* Eight independent GETs, not eight in a row. Each is its own https request
+     with no shared state (see s3()), and MEDIA_MAX already caps this at eight
+     — small enough to fire at once rather than chunk. Order is Promise.all's
+     own guarantee, not something built back in after the fact. */
+  const files = await Promise.all(list.map(async id => {
     const one = await readFile(id);
-    files.push(one.ok ? { id, ok: true, name: one.name, mime: one.mime, data: one.data }
-                      : { id, ok: false, error: one.error });
-  }
+    return one.ok ? { id, ok: true, name: one.name, mime: one.mime, data: one.data }
+                  : { id, ok: false, error: one.error };
+  }));
   return { ok: true, files };
 }
 
@@ -898,19 +920,24 @@ exports.handler = async function (event) {
     if (b.op === 'batch') {
       const list = b.files || [];
       if (!list.length) return json({ ok: false, error: 'Batch with no files' });
-      const saved = [], failed = [];
-      for (const one of list) {
+      /* Each file succeeds or fails on its own and says which — that was
+         already true one at a time; it is equally true run together, since
+         saveOne's four S3 calls per file share no state with another file's
+         (see s3()). A round with photographs used to upload them one after
+         another, each waiting on the last one's full round trip; now every
+         file in the batch goes out together and the batch finishes in the
+         time of its SLOWEST file, not the sum of all of them. Order in
+         `saved`/`failed` follows `list`'s own order, same as the loop this
+         replaced, so a caller matching results back up by position still can. */
+      const results = await Promise.all(list.map(one => {
         if (one.folder === undefined) one.folder = b.folder;
         if (one.dev === undefined) one.dev = b.dev;
-        /* Each file succeeds or fails on its own and says which. The phone
-           marks off what landed BY NAME and re-sends only what did not, so a
-           batch that half works is not a batch that failed — which is the
-           difference between an upload that converges on a bad link and one
-           that spends every attempt re-sending what already arrived. */
-        try { const r = await saveOne(one);
-              if (r.ok) saved.push(r); else failed.push({ name: one.name, error: r.error }); }
-        catch (e) { failed.push({ name: one.name, error: String(e.message || e) }); }
-      }
+        return saveOne(one).catch(e => ({ ok: false, error: String(e.message || e) }));
+      }));
+      const saved = [], failed = [];
+      results.forEach((r, i) => {
+        if (r.ok) saved.push(r); else failed.push({ name: list[i].name, error: r.error });
+      });
       if (saved.some(s => isSidecar(s.name))) folderChanged('batch');
       return json({ ok: true, batch: true, saved, failed });
     }
