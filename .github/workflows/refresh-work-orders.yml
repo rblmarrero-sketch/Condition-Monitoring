@@ -1,0 +1,90 @@
+# Keeps the dashboard's Plan vs Actual tab from going stale between manual
+# re-runs. Pulls a fresh WO.xlsx from the AS_KPI pipeline, re-resolves the
+# class/round mapping live from due.js (never hand-copied — see
+# ingest/gen_class_rounds.cjs's own header for why that matters), and commits
+# data/work_orders.js only if anything actually changed.
+#
+# DELIBERATELY DOES NOT BUMP BUILD. data/work_orders.js is loaded by
+# dashboard/index.html only — it is not referenced anywhere in mobile/ and
+# the phone's service worker never precaches it — so bumping the cache key
+# that decides whether 1,128 phones reinstall their offline app would force
+# a fleet-wide update cycle for a file no phone ever reads. tests/bump.cjs
+# (rightly) cannot tell that from a change that DOES need a bump, so this
+# job's own commits carry [skip ci]: that is a known, accepted gap in the
+# freshness guard for this one file, not something to silence by weakening
+# the guard itself.
+name: Refresh work orders (Plan vs Actual)
+
+on:
+  schedule:
+    # Hourly, on the hour, UTC.
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: claude/magnetic-plug-dashboard-llv4wc
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '20'
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install openpyxl
+        run: pip install openpyxl
+
+      - name: Install Playwright (Chromium only)
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+
+      - name: Serve the repo for gen_class_rounds.cjs
+        run: |
+          python3 -m http.server 8391 --directory "$GITHUB_WORKSPACE" &
+          echo $! > /tmp/http.pid
+          # Poll rather than a fixed sleep -- a fixed guess is either wasted
+          # time or a flaky failure on a loaded runner.
+          for i in $(seq 1 30); do
+            curl -fsS -o /dev/null http://127.0.0.1:8391/mobile/index.html && break
+            sleep 1
+          done
+
+      - name: Resolve the class/round mapping live from due.js
+        run: node ingest/gen_class_rounds.cjs http://127.0.0.1:8391
+
+      - name: Stop the local server
+        if: always()
+        run: kill "$(cat /tmp/http.pid)" 2>/dev/null || true
+
+      - name: Pull WO.xlsx and regenerate data/work_orders.js
+        run: |
+          python3 ingest/ingest_work_orders.py \
+            https://askpi.94-131-94-152.sslip.io/WO.xlsx \
+            --out data/work_orders.js
+
+      - name: Commit if anything changed
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- data/work_orders.js ingest/class_rounds.generated.json; then
+            echo "no change — WO.xlsx pull matched what is already committed"
+            exit 0
+          fi
+          git add data/work_orders.js ingest/class_rounds.generated.json
+          # [skip ci] -- see the note at the top of this file for why this
+          # job's own commits do not bump BUILD and should not trip the
+          # Build freshness guard.
+          git commit -m "Refresh work_orders.js from a fresh WO.xlsx pull [skip ci]" \
+                      -m "Automated hourly refresh (.github/workflows/refresh-work-orders.yml)."
+          git push origin HEAD:claude/magnetic-plug-dashboard-llv4wc

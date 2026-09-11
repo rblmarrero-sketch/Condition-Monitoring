@@ -3068,7 +3068,8 @@
   <section id="tab-planact" class="hidden">
     <div class="pagehd">
       <div class="pgt"><h1 data-i18n="pa_title">Plan vs Actual</h1>
-        <span class="pgsub" data-i18n="pa_purpose">1C's planned service date for each PM work order, matched to the nearest Condition Monitoring round actually walked on that machine.</span></div>
+        <span class="pgsub" data-i18n="pa_purpose">1C's planned service date for each PM work order, matched to the nearest Condition Monitoring round actually walked on that machine.</span>
+        <span class="pgsub" id="paAsOf"></span></div>
     </div>
     <div class="kpis" id="paKpis"></div>
     <div class="section">
@@ -3511,22 +3512,22 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=309"></script>
+<script src="../data/magnetic_plug.js?v=310"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=309"></script>
-<script src="../mobile/hme.js?v=309"></script>
-<script src="../mobile/mp-fc.js?v=309"></script>
-<script src="../mobile/hme-cascade.js?v=309"></script>
-<script src="../mobile/temp-limits.js?v=309"></script>
+<script src="../data/work_orders.js?v=310"></script>
+<script src="../mobile/hme.js?v=310"></script>
+<script src="../mobile/mp-fc.js?v=310"></script>
+<script src="../mobile/hme-cascade.js?v=310"></script>
+<script src="../mobile/temp-limits.js?v=310"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=309"></script>
-<script src="../mobile/normalize.js?v=309"></script>
-<script src="../mobile/terms.js?v=309"></script>
+<script src="../mobile/assets.js?v=310"></script>
+<script src="../mobile/normalize.js?v=310"></script>
+<script src="../mobile/terms.js?v=310"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3545,19 +3546,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=309"></script>
-<script src="../mobile/edits.js?v=309"></script>
-<script src="../mobile/due.js?v=309"></script>
-<script src="../mobile/wear.js?v=309"></script>
-<script src="../mobile/wear-map.js?v=309"></script>
-<script src="../mobile/lube.js?v=309"></script>
-<script src="../mobile/lube-overrides.js?v=309"></script>
-<script src="../mobile/lube2027.js?v=309"></script>
-<script src="../mobile/lube-tds.js?v=309"></script>
+<script src="../mobile/grade.js?v=310"></script>
+<script src="../mobile/edits.js?v=310"></script>
+<script src="../mobile/due.js?v=310"></script>
+<script src="../mobile/wear.js?v=310"></script>
+<script src="../mobile/wear-map.js?v=310"></script>
+<script src="../mobile/lube.js?v=310"></script>
+<script src="../mobile/lube-overrides.js?v=310"></script>
+<script src="../mobile/lube2027.js?v=310"></script>
+<script src="../mobile/lube-tds.js?v=310"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=309"></script>
-<script src="../mobile/machine-photos.js?v=309"></script>
+<script src="../mobile/upload-defaults.js?v=310"></script>
+<script src="../mobile/machine-photos.js?v=310"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3566,17 +3567,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=309"></script>
-<script src="../mobile/get.js?v=309"></script>
-<script src="../mobile/points.js?v=309"></script>
-<script src="../mobile/uc-points.js?v=309"></script>
-<script src="../mobile/inspect-guide.js?v=309"></script>
-<script src="../mobile/get-figs.js?v=309"></script>
-<script src="../mobile/body-points.js?v=309"></script>
-<script src="../mobile/body-map.js?v=309"></script>
-<script src="../mobile/jspdf.umd.min.js?v=309"></script>
-<script src="../mobile/html2canvas.min.js?v=309"></script>
-<script src="../mobile/report-core.js?v=309"></script>
+<script src="../mobile/machine-fig.js?v=310"></script>
+<script src="../mobile/get.js?v=310"></script>
+<script src="../mobile/points.js?v=310"></script>
+<script src="../mobile/uc-points.js?v=310"></script>
+<script src="../mobile/inspect-guide.js?v=310"></script>
+<script src="../mobile/get-figs.js?v=310"></script>
+<script src="../mobile/body-points.js?v=310"></script>
+<script src="../mobile/body-map.js?v=310"></script>
+<script src="../mobile/jspdf.umd.min.js?v=310"></script>
+<script src="../mobile/html2canvas.min.js?v=310"></script>
+<script src="../mobile/report-core.js?v=310"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4500,6 +4501,7 @@ const I18N={
   pa_k_missing:"No CM round", pa_k_missing_s:"nothing recorded on the unit within {w} d",
   pa_days_after:"{n} d after", pa_days_before:"{n} d before", pa_days_same:"same day",
   pa_no_data:"data/work_orders.js has not been generated yet — run ingest/ingest_work_orders.py against a WO.xlsx export.",
+  pa_asof:"Pulled from 1C {t}", pa_asof_now:"less than an hour ago", pa_asof_hr:"{n} hour ago", pa_asof_hrs:"{n} hours ago",
  },
  ru:{
   sub:"Панель парка", srcnone:"Нет данных — нажмите, чтобы подключить",
@@ -5322,6 +5324,7 @@ const I18N={
   pa_k_missing:"Нет обхода CM", pa_k_missing_s:"по единице ничего не записано в пределах {w} дн.",
   pa_days_after:"через {n} дн.", pa_days_before:"за {n} дн. до", pa_days_same:"в тот же день",
   pa_no_data:"data/work_orders.js ещё не сформирован — запустите ingest/ingest_work_orders.py по выгрузке WO.xlsx.",
+  pa_asof:"Данные из 1С получены {t}", pa_asof_now:"менее часа назад", pa_asof_hr:"{n} час назад", pa_asof_hrs:"{n} ч. назад",
  },
 };
 let lang=localStorage.getItem("cm_dash_lang")||"en";
@@ -15045,8 +15048,23 @@ function renderPlanActualTab(){
   if(!(window.CM_WO_DATA && Array.isArray(window.CM_WO_DATA.workOrders) && window.CM_WO_DATA.workOrders.length)){
     if($("paKpis")) $("paKpis").innerHTML="";
     if($("paSeg")) $("paSeg").innerHTML="";
+    if($("paAsOf")) $("paAsOf").textContent="";
     box.innerHTML=`<div class="sub">${esc(t("pa_no_data"))}</div>`;
     return;
+  }
+  /* WHEN WAS THIS PULLED, NOT JUST WHAT IT SAYS. This file is refreshed by an
+     hourly job (.github/workflows/refresh-work-orders.yml) with nobody
+     watching it run -- a number with no age on it invites being read as "as
+     of right now" long after a pull has quietly started failing. Said
+     plainly rather than assumed: a silent guard is how the folder's own
+     `failed` count went unread for years (see CLAUDE.md). */
+  if($("paAsOf")){
+    const gen=window.CM_WO_DATA.generated, at=gen?Date.parse(gen):NaN;
+    if(!isFinite(at)) $("paAsOf").textContent="";
+    else{
+      const h=Math.round((Date.now()-at)/3600000);
+      $("paAsOf").textContent=t("pa_asof",{t: h<1?t("pa_asof_now"):h===1?t("pa_asof_hr",{n:h}):t("pa_asof_hrs",{n:h})});
+    }
   }
   const q=(($("paQ")||{}).value||"").trim().toUpperCase();
   const rows=paRows().filter(r=>!q || String(r.w.equip).toUpperCase().indexOf(q)>=0);
@@ -16350,8 +16368,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=309"></script>
-<script src="sync-adapter.js?v=309"></script>
-<script src="report.js?v=309"></script>
+<script src="drive.js?v=310"></script>
+<script src="sync-adapter.js?v=310"></script>
+<script src="report.js?v=310"></script>
 </body>
 </html>
