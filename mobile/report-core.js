@@ -828,6 +828,12 @@
       prog_worst:"Worst rating", prog_issue:"Main issue", prog_next:"Next action",
       prog_none:"No completed round", prog_begin:"Begin a controlled round",
       prog_watch:"Continue monitoring",
+      rnd_head:"Round summary", rnd_completed:"Completed", rnd_units:"Units",
+      rnd_normal:"Normal", rnd_needsmon:"Needs monitoring", rnd_actreq:"Action required",
+      rnd_critical:"Critical",
+      mon_head:"Management summary", mon_insp:"Inspections", mon_normal:"Normal",
+      mon_incipient:"Incipient", mon_degraded:"Degraded", mon_severe:"Severe",
+      mon_critical:"Critical",
       ac_head:"Action control", ac_open:"Open", ac_overdue:"Overdue",
       ac_noowner:"No owner", ac_nowo:"No work order", ac_verified:"Verified", ac_na:"Not available",
       rc_head:"Report controls", rc_source:"Source identified",
@@ -1004,6 +1010,12 @@
       prog_worst:"Худшая оценка", prog_issue:"Основная проблема", prog_next:"Следующее действие",
       prog_none:"Нет завершённого осмотра", prog_begin:"Начать контролируемый осмотр",
       prog_watch:"Продолжать наблюдение",
+      rnd_head:"Сводка обхода", rnd_completed:"Выполнено", rnd_units:"Единиц техники",
+      rnd_normal:"Норма", rnd_needsmon:"Требует наблюдения", rnd_actreq:"Требует действия",
+      rnd_critical:"Критическое",
+      mon_head:"Сводка для руководства", mon_insp:"Осмотров", mon_normal:"Норма",
+      mon_incipient:"Начальное", mon_degraded:"Ухудшенное", mon_severe:"Серьёзное",
+      mon_critical:"Критическое",
       ac_head:"Контроль действий", ac_open:"Открыто", ac_overdue:"Просрочено",
       ac_noowner:"Без ответственного", ac_nowo:"Без наряда", ac_verified:"Проверено", ac_na:"Нет данных",
       rc_head:"Контроль отчёта", rc_source:"Источник определён",
@@ -1527,6 +1539,47 @@
   /* The grade WORD only — "Degraded", the part before the operational meaning
      the grade label carries after an em-dash. One source (grade.js via g_N). */
   function gword(T, n){ return n ? String(T("g_" + n)).split(" — ")[0] : ""; }
+
+  /* A MACHINE'S OWN VERDICT, NOT A POINT'S — the Round and Fleet Summary
+     counts row needs "how many UNITS are Normal/Incipient/.../Critical", and
+     every existing tally in this file (X.grade, X.act) counts POINTS: a
+     machine with three degraded plugs would count three times in one bucket
+     and zero times in the others it never touched. One number per unit,
+     its worst across every record and every item it has this document,
+     using the same grade-or-wear-band reading isAct/isWatch already settled
+     on so a unit graded 4 and a unit merely over its wear limit land in the
+     same bucket a reader would put them in by hand. A unit with nothing
+     flagged is Normal (1) — silence is the finding, not the absence of one. */
+  function unitWorst(recs){
+    var by={};
+    recs.forEach(function(rec){
+      var w=by[rec.equip]||1;
+      (rec.items||[]).forEach(function(it){
+        if(it.general) return;
+        var n=gnum(it.grade);
+        if(!n){
+          if(it.w&&it.w.band==="act") n=5;
+          else if(it.w&&it.w.band==="watch") n=3;
+          else if(it.sev==="CRI") n=5;
+          else if(it.sev==="DEG") n=4;
+          else if(it.sev==="INC") n=2;
+        }
+        if(n>w) w=n;
+      });
+      by[rec.equip]=w;
+    });
+    return by;
+  }
+  /* The counts row itself — Round asks for four bands (Normal/Needs
+     monitoring/Action required/Critical), Month for the full five grades;
+     both are the same per-unit worst, grouped differently, so one function
+     serves both rather than two copies of unitWorst() drifting apart. */
+  function unitVerdictCounts(recs){
+    var by=unitWorst(recs), g={1:0,2:0,3:0,4:0,5:0}, units=0;
+    Object.keys(by).forEach(function(k){ units++; g[by[k]]=(g[by[k]]||0)+1; });
+    return { rounds:recs.length, units:units, g:g,
+             normal:g[1], needsMon:g[2]+g[3], actReq:g[4], critical:g[5] };
+  }
 
   /* ── THE ALL-INSPECTIONS REPORT'S OWN BLOCKS (Report family B) ────────────
      The reference combined report is three pages: a management summary, one
@@ -3113,6 +3166,18 @@
     var wl = '<div class="sec"><div class="sechd"><span class="n">01</span>'
       + '<span class="h2">' + T.I("sm_actions") + '</span></div>'
       + actionTable(T, X);
+    /* SELECTED EVIDENCE — the summary's open-actions table named what is
+       wrong; a reader still has to take somebody's word for it unless a
+       photograph sits beside the claim. Four is the same budget every other
+       management document spends on evidence (the work list, the fleet
+       cards) — worst finding first, since X.act is already sorted that way,
+       and only the ones that actually carry a photograph. */
+    var evPairs = X.act.filter(function (f) { return !f.roll && f.it && f.it.photos && f.it.photos.length; }).slice(0, 4);
+    if (evPairs.length) {
+      wl += '<div class="subhd" style="margin-top:15px;">' + T.I("sm_evidence") + '</div>'
+        + '<div class="board gal b1">'
+        + evPairs.map(function (f) { return cell(ctx, T, f.it, null, true); }).join("") + '</div>';
+    }
     /* The report controls are on page 1; page 2 closes with the three-role
        sign-off, all lines open on a whole-machine summary. */
     wl += approvalBlock(T, {});
@@ -3837,6 +3902,29 @@
       + statusHTML(T, docStatus(recs))
       + '<div class="lede" style="margin-bottom:18px;">'
         + (X.total ? T.S("head_some",{n:X.total,c:X.crit}) : T.S("head_none"))+'</div>'
+      /* ROUND SUMMARY / MANAGEMENT SUMMARY — the counts row a superintendent
+         or a planner reads before anything else: how many units, and how
+         many of them are fine. Round and Month share the same per-unit
+         worst-grade tally (unitVerdictCounts) and differ only in how many
+         bands they show it in — Round collapses Incipient/Degraded into one
+         "needs monitoring" column, Month shows the full five-grade spread,
+         because a planner over a month wants to see 2 and 3 move separately
+         and a technician over a day just wants to know who to visit next. */
+      + (isMgmt ? (function(){
+          var uv = unitVerdictCounts(recs);
+          var cols = ctx.mode==="month"
+            ? [["rnd_units",uv.units],["mon_insp",uv.rounds],["mon_normal",uv.g[1]],
+               ["mon_incipient",uv.g[2]],["mon_degraded",uv.g[3]],["mon_severe",uv.g[4]],
+               ["mon_critical",uv.g[5]]]
+            : [["rnd_completed",uv.rounds],["rnd_units",uv.units],["rnd_normal",uv.normal],
+               ["rnd_needsmon",uv.needsMon],["rnd_actreq",uv.actReq],["rnd_critical",uv.critical]];
+          return '<div style="margin-top:2px;"><div class="eyebrow" style="margin-bottom:9px;">'
+            + T.I(ctx.mode==="month"?"mon_head":"rnd_head")+'</div>'
+            + '<table><tr>'+cols.map(function(c){ return '<th class="c">'+T.L(c[0])+'</th>'; }).join("")+'</tr>'
+            + '<tr>'+cols.map(function(c,i){ var hot=i>=cols.length-2&&c[1];
+                return '<td class="c n">'+(hot?'<b style="color:'+GRADE_HEX[5]+'">':'<b>')+c[1]+'</b></td>'; }).join("")
+            + '</tr></table></div>';
+        })() : "")
       + '<div class="stats">'
         + '<div class="stat"><div class="k">'+T.L("mach")+'</div><div class="v">'+X.unitN+'</div>'
           + '<div class="s">'+T.I("ins")+': '+X.rounds+'</div></div>'
