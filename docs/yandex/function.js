@@ -654,8 +654,23 @@ async function saveOne(b) {
   if (already && String(already.headers['x-amz-meta-cm-sha'] || '') === want) duplicate = true;
 
   if (!duplicate) {
-    await putObj(key, buf, b.contentType || 'application/octet-stream', dev,
-                 { 'x-amz-meta-cm-sha': want });
+    /* DIAGNOSTIC, TEMPORARY: a phone reported "The object can not be found
+       here" for every file in a batch, and that text exists nowhere in this
+       file or its history — it is Yandex's own response, not ours, and
+       neither saveOne's return value nor the top-level handler logs it
+       anywhere. Logged here, once, with exactly what was asked for (bucket,
+       key, byte count) so the next occurrence is diagnosed from this
+       server's own record instead of guessed at from what a phone screen had
+       room to show. Safe to remove once the cause is found: it changes
+       nothing about what is stored or what the client is told. */
+    try {
+      await putObj(key, buf, b.contentType || 'application/octet-stream', dev,
+                   { 'x-amz-meta-cm-sha': want });
+    } catch (e) {
+      console.error('[save] PUT failed', JSON.stringify({ bucket: BUCKET, key: key,
+        bytes: buf.length, dev: dev, err: String((e && e.message) || e) }));
+      throw e;
+    }
   }
 
   /* VERIFY AFTER STORAGE, NOT BEFORE.
