@@ -2671,6 +2671,7 @@
   <button data-tab="wear"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 15a7.5 7.5 0 1 1 15 0"/><path d="m12 15 3.5-4"/><path d="M4.5 19h15"/></svg><span data-i18n="tab_wear">Wear &amp; life</span></button>
   <button data-tab="actions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5.5" y="4.5" width="13" height="16" rx="2"/><path d="M9 4.5a3 3 0 0 1 6 0"/><path d="m8.8 13.5 2.2 2.2 4.2-4.4"/></svg><span data-i18n="tab_actions">Action register</span><span class="nb warn" id="nbAct"></span></button>
   <button data-tab="due"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span data-i18n="tab_due">Due &amp; missed</span><span class="nb" id="nbDue"></span></button>
+  <button data-tab="planact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="5.5" width="15" height="14" rx="2"/><path d="M8 3.5v3M16 3.5v3M4.5 10h15"/><path d="m8.3 14.6 2 2 5-5.4"/></svg><span data-i18n="tab_planact">Plan vs Actual</span><span class="nb warn" id="nbPlanAct"></span></button>
   <button data-tab="equipment"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3L4.5 8.9"/><path d="M4.5 4.5v4.4h4.4"/></svg><span data-i18n="tab_equipment">Equipment history</span></button>
   <button data-tab="lube"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5s5.8 6.3 5.8 10.2a5.8 5.8 0 0 1-11.6 0C6.2 9.8 12 3.5 12 3.5Z"/></svg><span data-i18n="tab_lube">Lubrication</span></button>
   <button data-tab="sync"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12a7.5 7.5 0 0 1 12.8-5.3L20 9.5"/><path d="M20 4.5v5h-5"/><path d="M19.5 12a7.5 7.5 0 0 1-12.8 5.3L4 14.5"/><path d="M4 19.5v-5h5"/></svg><span data-i18n="tab_sync">Sync operations</span><span class="nb warn" id="nbSync"></span></button>
@@ -3051,6 +3052,45 @@
         <button class="btn ghost" id="ddCsv" data-i18n="dd_csv">Export CSV</button>
       </div>
       <div id="ddList"></div>
+    </div>
+  </section>
+
+  <!-- Plan vs Actual. Two systems schedule the same round: 1C plans a
+       calendar date for a PM service work order (Start date plan / Start
+       date actual, from WO.xlsx), and Condition Monitoring records the
+       calendar date somebody actually walked a round on that machine (any
+       type -- RECS, the same source the Inspection Schedule tab reads).
+       Neither is derived from the other, so this tab joins them by unit and
+       nearest date and says how far apart they landed. It answers a
+       different question from the Inspection Schedule tab: that tab asks
+       "is this machine overdue against its OWN interval"; this one asks "did
+       maintenance planning's calendar and the inspector's calendar agree". -->
+  <section id="tab-planact" class="hidden">
+    <div class="pagehd">
+      <div class="pgt"><h1 data-i18n="pa_title">Plan vs Actual</h1>
+        <span class="pgsub" data-i18n="pa_purpose">1C's planned service date for each PM work order, matched to the nearest Condition Monitoring round actually walked on that machine.</span></div>
+    </div>
+    <div class="kpis" id="paKpis"></div>
+    <div class="section">
+      <div class="secthd"><h2 data-i18n="pa_h2">Planned service vs. actual round</h2>
+        <span class="spacer"></span>
+        <details class="defs" id="paDefs">
+          <summary data-i18n="ov_defs">Definitions</summary>
+          <div class="defsbody"><dl>
+            <dt data-i18n="pa_title">Plan vs Actual</dt><dd data-i18n="pa_sub">One row per planned 1C PM service work order (the "N Hours service Planned" maintenance types) for the unit's own equipment number. "Nearest CM round" is the closest date anybody recorded ANY Condition Monitoring round on that same unit -- it is not restricted to the round type the work order names, because 1C's work order and CM's round taxonomy do not share a key yet.</dd>
+            <dt data-i18n="pa_c_delta">CM vs plan</dt><dd data-i18n="pa_d_delta">Nearest CM round date minus 1C's planned date. Positive = the round was walked after the plan date; negative = before.</dd>
+            <dt data-i18n="pa_c_status">Status</dt><dd data-i18n="pa_d_status">On time: within {n} days of the plan either way. Late/Early: outside that, in the direction shown. No CM round: nothing recorded on that unit within {w} days of the plan date -- either CM does not yet cover this unit, or the round simply was not walked.</dd>
+            <dt data-i18n="pa_k_preinsp">General Inspection due soon</dt><dd data-i18n="pa_d_preinsp">General Inspection is the one round meant to run AHEAD of the PM, not alongside it -- every other round (Magnetic Plug, Undercarriage, Filter Cut, GET, Dump Body Liner / Tray) is judged against the plan date itself, above. A unit shows here when its PM is a P3 or P4 priority, the plan date is 3 days away or closer, and no General Inspection has been walked in the 14 days before it.</dd>
+          </dl></div>
+        </details></div>
+      <div class="ddbar">
+        <div class="seg" id="paSeg" role="tablist" aria-label="Plan vs Actual views"></div>
+        <span class="spacer"></span>
+        <label class="fld"><span data-i18n="dd_find">Search this table</span>
+          <input id="paQ" type="search" data-i18n-ph="dd_findph" placeholder="unit number"></label>
+        <button class="btn ghost" id="paCsv" data-i18n="pa_csv">Export CSV</button>
+      </div>
+      <div id="paList"></div>
     </div>
   </section>
 
@@ -3471,17 +3511,22 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=308"></script>
-<script src="../mobile/hme.js?v=308"></script>
-<script src="../mobile/mp-fc.js?v=308"></script>
-<script src="../mobile/hme-cascade.js?v=308"></script>
-<script src="../mobile/temp-limits.js?v=308"></script>
+<script src="../data/magnetic_plug.js?v=309"></script>
+<!-- 1C's planned PM service work orders (Start date plan / Start date
+     actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
+     only by the Plan vs Actual tab -- everything else on this page is
+     unaffected if this file is stale or absent. -->
+<script src="../data/work_orders.js?v=309"></script>
+<script src="../mobile/hme.js?v=309"></script>
+<script src="../mobile/mp-fc.js?v=309"></script>
+<script src="../mobile/hme-cascade.js?v=309"></script>
+<script src="../mobile/temp-limits.js?v=309"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=308"></script>
-<script src="../mobile/normalize.js?v=308"></script>
-<script src="../mobile/terms.js?v=308"></script>
+<script src="../mobile/assets.js?v=309"></script>
+<script src="../mobile/normalize.js?v=309"></script>
+<script src="../mobile/terms.js?v=309"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3500,19 +3545,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=308"></script>
-<script src="../mobile/edits.js?v=308"></script>
-<script src="../mobile/due.js?v=308"></script>
-<script src="../mobile/wear.js?v=308"></script>
-<script src="../mobile/wear-map.js?v=308"></script>
-<script src="../mobile/lube.js?v=308"></script>
-<script src="../mobile/lube-overrides.js?v=308"></script>
-<script src="../mobile/lube2027.js?v=308"></script>
-<script src="../mobile/lube-tds.js?v=308"></script>
+<script src="../mobile/grade.js?v=309"></script>
+<script src="../mobile/edits.js?v=309"></script>
+<script src="../mobile/due.js?v=309"></script>
+<script src="../mobile/wear.js?v=309"></script>
+<script src="../mobile/wear-map.js?v=309"></script>
+<script src="../mobile/lube.js?v=309"></script>
+<script src="../mobile/lube-overrides.js?v=309"></script>
+<script src="../mobile/lube2027.js?v=309"></script>
+<script src="../mobile/lube-tds.js?v=309"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=308"></script>
-<script src="../mobile/machine-photos.js?v=308"></script>
+<script src="../mobile/upload-defaults.js?v=309"></script>
+<script src="../mobile/machine-photos.js?v=309"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3521,17 +3566,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=308"></script>
-<script src="../mobile/get.js?v=308"></script>
-<script src="../mobile/points.js?v=308"></script>
-<script src="../mobile/uc-points.js?v=308"></script>
-<script src="../mobile/inspect-guide.js?v=308"></script>
-<script src="../mobile/get-figs.js?v=308"></script>
-<script src="../mobile/body-points.js?v=308"></script>
-<script src="../mobile/body-map.js?v=308"></script>
-<script src="../mobile/jspdf.umd.min.js?v=308"></script>
-<script src="../mobile/html2canvas.min.js?v=308"></script>
-<script src="../mobile/report-core.js?v=308"></script>
+<script src="../mobile/machine-fig.js?v=309"></script>
+<script src="../mobile/get.js?v=309"></script>
+<script src="../mobile/points.js?v=309"></script>
+<script src="../mobile/uc-points.js?v=309"></script>
+<script src="../mobile/inspect-guide.js?v=309"></script>
+<script src="../mobile/get-figs.js?v=309"></script>
+<script src="../mobile/body-points.js?v=309"></script>
+<script src="../mobile/body-map.js?v=309"></script>
+<script src="../mobile/jspdf.umd.min.js?v=309"></script>
+<script src="../mobile/html2canvas.min.js?v=309"></script>
+<script src="../mobile/report-core.js?v=309"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4428,6 +4473,33 @@ const I18N={
   dd_foot:"h/day is the machine's own measured rate; * marks the fleet assumption of {r} h/day, used until two hour-meter readings have measured that machine. \u201cDue\u201d counts hours, and the days beside it are those hours at that rate.",
   due_over:"overdue {n} d", due_in:"in {n} d", due_h:"{n} h", due_days:"{n} d ago",
   due_why_wear:"wear, not the interval",
+  /* Plan vs Actual. 1C's own planned service date (WO.xlsx) against the
+     nearest Condition Monitoring round actually walked -- see the tab's
+     definitions block for why "nearest, any type" rather than a matched
+     round type. */
+  tab_planact:"Plan vs Actual",
+  pa_title:"Plan vs Actual",
+  pa_purpose:"1C's planned service date for each PM work order, matched to the nearest Condition Monitoring round actually walked on that machine.",
+  pa_sub:"One row per planned 1C PM service work order (the “N Hours service Planned” maintenance types) for the unit's own equipment number. “Nearest CM round” is the closest date anybody recorded ANY Condition Monitoring round on that same unit — it is not restricted to the round type the work order names, because 1C's work order and CM's round taxonomy do not share a key yet.",
+  pa_h2:"Planned service vs. actual round",
+  pa_c_unit:"Unit", pa_c_wo:"Work order", pa_c_type:"Service", pa_c_plan:"1C plan date",
+  pa_c_woactual:"1C actual (WO closed)", pa_c_cmround:"Nearest CM round", pa_c_delta:"CM vs plan",
+  pa_c_status:"Status",
+  pa_d_delta:"Nearest CM round date minus 1C's planned date. Positive = the round was walked after the plan date; negative = before.",
+  pa_d_status:"On time: within {n} days of the plan either way. Late/Early: outside that, in the direction shown. No CM round: nothing recorded on that unit within {w} days of the plan date — either CM does not yet cover this unit, or the round simply was not walked.",
+  pa_d_preinsp:"General Inspection is the one round meant to run ahead of the PM, not alongside it — every other round (Magnetic Plug, Undercarriage, Filter Cut, GET, Dump Body Liner / Tray) is judged against the plan date itself, above. A unit shows here when its PM is a P3 or P4 priority, the plan date is 3 days away or closer, and no General Inspection has been walked in the 14 days before it.",
+  pa_st_ontime:"On time", pa_st_late:"Late", pa_st_early:"Early", pa_st_missing:"No CM round",
+  pa_st_preinsp:"Pre-PM check due",
+  pa_seg_open:"Open", pa_seg_done:"Completed", pa_seg_all:"All",
+  pa_csv:"Export CSV",
+  pa_none:"Nothing in this view.",
+  pa_k_total:"Open work orders", pa_k_total_s:"not yet marked complete in 1C",
+  pa_k_preinsp:"General Inspection due soon", pa_k_preinsp_s:"a P3/P4 PM is within {n} d and no pre-check has been walked",
+  pa_k_ontime:"On time", pa_k_ontime_s:"CM round within {n} d of the plan date",
+  pa_k_late:"Late or early", pa_k_late_s:"CM round found, outside {n} d of the plan date",
+  pa_k_missing:"No CM round", pa_k_missing_s:"nothing recorded on the unit within {w} d",
+  pa_days_after:"{n} d after", pa_days_before:"{n} d before", pa_days_same:"same day",
+  pa_no_data:"data/work_orders.js has not been generated yet — run ingest/ingest_work_orders.py against a WO.xlsx export.",
  },
  ru:{
   sub:"Панель парка", srcnone:"Нет данных — нажмите, чтобы подключить",
@@ -5227,6 +5299,29 @@ const I18N={
   dd_foot:"ч/сут — собственная измеренная наработка машины; * означает допущение по парку в {r} ч/сут, которое действует, пока машину не измерили два показания счётчика. «Срок» считается в часах, дни рядом — это те же часы при этой наработке.",
   due_over:"просрочено {n} дн.", due_in:"через {n} дн.", due_h:"{n} ч", due_days:"{n} дн. назад",
   due_why_wear:"по износу, не по интервалу",
+  tab_planact:"План и факт",
+  pa_title:"План и факт",
+  pa_purpose:"Плановая дата обслуживания по 1С для каждого наряд-заказа ТОиР, сопоставленная с ближайшим фактически проведённым обходом Condition Monitoring на этой машине.",
+  pa_sub:"Одна строка — один плановый наряд-заказ на ТО из 1С (типы обслуживания «N Hours service Planned») по номеру техники. «Ближайший обход CM» — это ближайшая по дате запись ЛЮБОГО обхода Condition Monitoring на той же единице техники: без привязки к конкретному типу обхода, потому что наряд-заказ 1С и виды обходов CM пока не связаны общим ключом.",
+  pa_h2:"Плановое обслуживание и фактический обход",
+  pa_c_unit:"Единица", pa_c_wo:"Наряд-заказ", pa_c_type:"Обслуживание", pa_c_plan:"План (1С)",
+  pa_c_woactual:"Факт по 1С (закрытие)", pa_c_cmround:"Ближайший обход CM", pa_c_delta:"CM минус план",
+  pa_c_status:"Статус",
+  pa_d_delta:"Дата ближайшего обхода CM минус плановая дата 1С. Положительное значение — обход выполнен после плана; отрицательное — до плана.",
+  pa_d_status:"В срок: в пределах {n} дн. от плана в любую сторону. Позже/раньше: за этими пределами, в указанную сторону. Нет обхода CM: за {w} дн. вокруг плановой даты по этой единице ничего не записано — либо CM пока не охватывает эту машину, либо обход просто не провели.",
+  pa_d_preinsp:"Общий осмотр — единственный обход, который должен пройти ДО ТО, а не одновременно с ним: все остальные обходы (магнитная пробка, ходовая часть, замена фильтров, GET, облицовка кузова) оцениваются по самой плановой дате, см. выше. Единица попадает сюда, если её ТО имеет приоритет P3 или P4, плановая дата — через 3 дня или ближе, а общий осмотр не проводился в течение предыдущих 14 дней.",
+  pa_st_ontime:"В срок", pa_st_late:"Позже", pa_st_early:"Раньше", pa_st_missing:"Нет обхода CM",
+  pa_st_preinsp:"Нужна проверка перед ТО",
+  pa_seg_open:"Открыто", pa_seg_done:"Завершено", pa_seg_all:"Все",
+  pa_csv:"Выгрузить CSV",
+  pa_none:"В этом представлении пусто.",
+  pa_k_total:"Открытых нарядов", pa_k_total_s:"ещё не закрыты в 1С",
+  pa_k_preinsp:"Скоро общий осмотр", pa_k_preinsp_s:"ТО с приоритетом P3/P4 в пределах {n} дн., предварительный осмотр ещё не проведён",
+  pa_k_ontime:"В срок", pa_k_ontime_s:"обход CM в пределах {n} дн. от плана",
+  pa_k_late:"Позже или раньше", pa_k_late_s:"обход CM найден, но за пределами {n} дн. от плана",
+  pa_k_missing:"Нет обхода CM", pa_k_missing_s:"по единице ничего не записано в пределах {w} дн.",
+  pa_days_after:"через {n} дн.", pa_days_before:"за {n} дн. до", pa_days_same:"в тот же день",
+  pa_no_data:"data/work_orders.js ещё не сформирован — запустите ingest/ingest_work_orders.py по выгрузке WO.xlsx.",
  },
 };
 let lang=localStorage.getItem("cm_dash_lang")||"en";
@@ -14830,6 +14925,237 @@ function dueCsv(){
   setTimeout(()=>URL.revokeObjectURL(a.href),4000);
 }
 
+/* ---------- Plan vs Actual ------------------------------------------------
+   1C plans a PM service work order on a calendar date (Start date plan /
+   Start date actual, from WO.xlsx, ingested by
+   ingest/ingest_work_orders.py). Condition Monitoring records the calendar
+   date somebody actually walked a round on that machine (RECS -- every
+   round from every source, the same array the Inspection Schedule tab
+   reads). The two schedules are never derived from one another, so this
+   tab's whole job is to say how far apart they landed.
+
+   OPEN VS CLOSED. "Open" means 1C has not recorded an actual start yet
+   (work.open, set at ingest time) -- not any particular status string,
+   because 1C's own vocabulary for "not done" varies (REL, "Elimination
+   scheduled", "Registered", ...). An open work order with a plan date is
+   the scheduling question this tab exists to answer: "1C wants this walked
+   on {date} -- has anybody from CM been to this machine near then?" An open
+   work order with NO plan date yet (1C has only registered the request, not
+   released it) cannot be compared to anything and is marked unscheduled
+   rather than guessed at.
+
+   TYPE MAPPING IS CLASS-AWARE, RESOLVED AT INGEST TIME. 1C's "N Hours
+   service Planned" names an interval, not a CM round type, and the interval
+   alone is not enough: due.js does not give every round one number (a
+   dozer's 1000h Undercarriage round and an excavator's is 4000h; a haul
+   truck's 1000h Dump Body Liner round is an articulated truck's 4000h).
+   ingest_work_orders.py already resolves (hours, equipment class) into
+   `cmLabel`/`cmTypes` against due.js's own table (mobile/assets.js gives it
+   the class), so this file reads that straight off each work order rather
+   than re-guessing from hours alone. `cmTypes` is null where the mapping is
+   genuinely ambiguous by design (500h always lists three candidate types,
+   never one asserted type) or not owned by any due.js entry at all. The
+   fallback below is only for a `data/work_orders.js` generated before this
+   field existed. */
+const PA_ON_TIME_DAYS = 10;   // within this many days of the plan, either way, counts as "on time"
+const PA_WINDOW_DAYS  = 60;   // beyond this many days from the plan, a CM record is not "nearby" at all
+function paHourInfo(w){
+  if(w && w.cmLabel) return { hours:w.hours!=null?w.hours:null, label:w.cmLabel, types:w.cmTypes||null };
+  // Fallback for a stale data file predating cmLabel/cmTypes.
+  const m=String((w&&w.maintType)||"").match(/(\d+)\s*Hours?/i);
+  const h=m?parseInt(m[1],10):null;
+  return { hours:h, label:h?(h+"h service"):String((w&&w.maintType)||"—"), types:null };
+}
+/* The most recent CM round on this unit, of one of `types` (or of ANY type
+   when the mapping above could not narrow it down), within PA_WINDOW_DAYS
+   of `near` (the plan date) when one is given -- so a round from eight
+   months ago does not get claimed as the answer to a work order due next
+   week just because nothing closer exists. */
+function paLastInspection(equip, types, near){
+  let best=null;
+  RECS.forEach(r=>{
+    if(!r || r._void || !r.equip || !r.date) return;
+    if(String(r.equip).toUpperCase()!==String(equip).toUpperCase()) return;
+    if(types && !types.includes(r.type||"MP")) return;
+    if(near){
+      const dd=window.DUE?Math.abs(DUE.dayDiff(near,r.date)):null;
+      if(dd!=null && dd>PA_WINDOW_DAYS) return;
+    }
+    if(!best || String(r.date)>String(best.date)) best={date:r.date, type:r.type||"MP"};
+  });
+  return best;
+}
+/* GENERAL INSPECTION IS THE ONE ROUND THAT WANTS TO GO EARLY, NOT ALONGSIDE.
+   Every other CM round (MP, UC, FC, GET, TB/Tray, ...) is scored against the
+   PM date itself -- ontime/late/early/missing, above, already answers "did
+   the round happen at the PM". A General Inspection is different by design:
+   its whole value is catching something BEFORE the PM crew arrives, so it
+   has to be walked ahead of the date, not on it. The office asked for this
+   specifically for INSP and named the window: 3 days. */
+const PA_PREINSP_DAYS = 3;      // notify this many days out from a PM that wants a pre-check
+const PA_PREINSP_LOOKBACK = 14; // an INSP round this many days before the plan counts as "already checked"
+/* 1C's Priority column is free text ("P3 Planned (PM)" is what real data
+   shows almost everywhere) -- matched loosely on the P3/P4 the office named,
+   not on the exact phrase, so a slightly different wording from 1C does not
+   silently drop a unit off this list. */
+function paPriorityIsPM(priority){ return /P3|P4/i.test(String(priority||"")); }
+/* Has a General Inspection already been walked for THIS pm, not just at
+   some point in the machine's life? Reuses paLastInspection's own nearby-
+   date search (INSP only) and asks whether what it found sits in the
+   lookback window before the plan date -- an inspection from two months ago
+   does not clear this PM's own pre-check. */
+function paPreInspDone(w){
+  if(!w.planStart) return false;
+  const last=paLastInspection(w.equip, ["INSP"], w.planStart);
+  if(!last || !window.DUE) return false;
+  const d=DUE.dayDiff(last.date, w.planStart);           // planStart - lastInspDate
+  return d!=null && d>=0 && d<=PA_PREINSP_LOOKBACK;
+}
+function paRows(){
+  const data=(window.CM_WO_DATA&&window.CM_WO_DATA.workOrders)||[];
+  const today=todayISO();
+  return data.map(w=>{
+    const info=paHourInfo(w);
+    const last=paLastInspection(w.equip, info.types, w.planStart);
+    let delta=null, status;
+    if(!w.planStart) status="unsched";
+    else{
+      if(last && window.DUE) delta=DUE.dayDiff(w.planStart, last.date);
+      if(!last || delta==null) status="missing";
+      else if(Math.abs(delta)<=PA_ON_TIME_DAYS) status="ontime";
+      else if(delta>0) status="late";
+      else status="early";
+    }
+    const daysUntilPlan = (w.planStart && window.DUE) ? DUE.dayDiff(today, w.planStart) : null;
+    const preInspNeeded = !!(w.open && w.planStart && (info.types||[]).includes("INSP")
+      && paPriorityIsPM(w.priority) && daysUntilPlan!=null && daysUntilPlan>=0
+      && daysUntilPlan<=PA_PREINSP_DAYS && !paPreInspDone(w));
+    return { w, info, last, delta, status, daysUntilPlan, preInspNeeded };
+  });
+}
+/* There is no #paScope control -- the segmented buttons in #paSeg call
+   paGo(scope) directly, which sets the module-level paScope var itself.
+   This just reads that var back for the callers (renderPlanActualTab,
+   paCsv) that need the current scope without caring how it got set. */
+function paScopeGet(){ return paScope; }
+let paScope="open";  // open | all | done -- which work orders, by 1C's own state
+function paGo(scope){ paScope=scope; renderPlanActualTab(); urlWrite(false); }
+function renderPlanActualTab(){
+  const box=$("paList"); if(!box) return;
+  if(!(window.CM_WO_DATA && Array.isArray(window.CM_WO_DATA.workOrders) && window.CM_WO_DATA.workOrders.length)){
+    if($("paKpis")) $("paKpis").innerHTML="";
+    if($("paSeg")) $("paSeg").innerHTML="";
+    box.innerHTML=`<div class="sub">${esc(t("pa_no_data"))}</div>`;
+    return;
+  }
+  const q=(($("paQ")||{}).value||"").trim().toUpperCase();
+  const rows=paRows().filter(r=>!q || String(r.w.equip).toUpperCase().indexOf(q)>=0);
+  const scope=paScopeGet();
+  const nOpen=rows.filter(r=>r.w.open).length, nDone=rows.length-nOpen;
+  const nOntime=rows.filter(r=>r.status==="ontime").length;
+  const nLateEarly=rows.filter(r=>r.status==="late"||r.status==="early").length;
+  const nMissing=rows.filter(r=>r.status==="missing").length;
+  const nPreInsp=rows.filter(r=>r.preInspNeeded).length;
+  const card=(sc,lab,val,sub,cls)=>
+    `<button type="button" class="kpi ${cls||""}${scope===sc?" on":""}" data-pa="${esc(sc)}">
+       <span class="k">${esc(lab)}</span><span class="v">${esc(String(val))}</span>
+       <span class="s">${esc(sub)}</span></button>`;
+  if($("paKpis")) $("paKpis").innerHTML=
+      card("open", t("pa_k_total"), nOpen, t("pa_k_total_s"), "info")
+    /* The only tile here that actually narrows the list to itself (see
+       paGo/"preinsp" below) -- this is the one meant to be acted on today,
+       not merely a count of something to eyeball. */
+    + card("preinsp", t("pa_k_preinsp"), nPreInsp, t("pa_k_preinsp_s",{n:PA_PREINSP_DAYS}), "warn"+(nPreInsp?"":" zero"))
+    + card("all",  t("pa_k_ontime"), nOntime, t("pa_k_ontime_s",{n:PA_ON_TIME_DAYS}), "good"+(nOntime?"":" zero"))
+    + card("all",  t("pa_k_late"), nLateEarly, t("pa_k_late_s",{n:PA_ON_TIME_DAYS}), "warn"+(nLateEarly?"":" zero"))
+    + card("all",  t("pa_k_missing"), nMissing, t("pa_k_missing_s",{w:PA_WINDOW_DAYS}), "bad"+(nMissing?"":" zero"));
+  if($("paKpis")) $("paKpis").querySelectorAll("[data-pa]").forEach(b=>b.onclick=()=>paGo(b.dataset.pa));
+  const seg=$("paSeg");
+  /* "preinsp" (the pre-PM-check KPI) is not one of the three state buckets
+     this tablist offers -- every preinsp row is, by construction, an open
+     work order (see preInspNeeded above), so it counts as "Open" here. The
+     tablist must always have exactly one tab selected (tests/tabsa11y.cjs),
+     and the KPI card itself still shows its own "on" state independently. */
+  const segScope = scope==="preinsp" ? "open" : scope;
+  if(seg){
+    const views=[["open","pa_seg_open",nOpen],["done","pa_seg_done",nDone],["all","pa_seg_all",rows.length]];
+    seg.innerHTML=views.map(([k,lab,n])=>
+      `<button type="button" role="tab" id="paTab-${k}" data-pa="${k}"
+        aria-controls="paList" aria-selected="${segScope===k?"true":"false"}"
+        tabindex="${segScope===k?"0":"-1"}"${segScope===k?' class="on"':''}>${esc(t(lab))}<span class="n">${n}</span></button>`
+    ).join("");
+    if(box){ box.setAttribute("role","tabpanel"); box.setAttribute("aria-labelledby","paTab-"+segScope); }
+    seg.querySelectorAll("[data-pa]").forEach(b=>b.onclick=()=>paGo(b.dataset.pa));
+  }
+  const show = rows.filter(r=> scope==="preinsp" ? r.preInspNeeded
+                             : scope==="open" ? r.w.open : scope==="done" ? !r.w.open : true)
+    /* Soonest-due first for the working view -- this is a scheduling list
+       first and a compliance record second. Unscheduled (no plan date yet)
+       sorts last: there is nothing to be "soon" about until 1C releases it. */
+    .sort((a,b)=>{
+      const pa=a.w.planStart||"9999-99-99", pb=b.w.planStart||"9999-99-99";
+      return pa<pb?-1:pa>pb?1:String(a.w.equip).localeCompare(String(b.w.equip)); });
+  if(!show.length){ box.innerHTML=`<div class="sub">${esc(t("pa_none"))}</div>`; return; }
+  const pg=paged("planact", show, renderPlanActualTab);
+  const kept=pg.rows;
+  const stChip=r=>{
+    const cls={ontime:"g",late:"w",early:"w",missing:"c",unsched:"n"}[r.status]||"n";
+    const lab = r.status==="unsched" ? "—"
+              : r.status==="missing" ? t("pa_st_missing")
+              : r.status==="ontime"  ? t("pa_st_ontime")
+              : (r.status==="late" ? t("pa_st_late") : t("pa_st_early"));
+    /* preInspNeeded is orthogonal to status -- a work order can be perfectly
+       "On time" from a past round and STILL want a fresh General Inspection
+       walked before THIS PM, so it is shown alongside the status chip, not
+       instead of it. */
+    return `<span class="pill ${cls}">${esc(lab)}</span>`
+      + (r.preInspNeeded ? ` <span class="pill w" title="${esc(t("pa_k_preinsp_s",{n:PA_PREINSP_DAYS}))}">${esc(t("pa_st_preinsp"))}</span>` : "");
+  };
+  const deltaTxt=r=>{
+    if(r.status==="unsched") return "—";
+    if(r.delta==null) return "—";
+    if(r.delta===0) return esc(t("pa_days_same"));
+    return r.delta>0 ? esc(t("pa_days_after",{n:r.delta})) : esc(t("pa_days_before",{n:-r.delta}));
+  };
+  box.innerHTML=`<div class="tblwrap scrollbox" style="--sb:560px"><table class="grid"><thead><tr>
+    <th>${esc(t("pa_c_unit"))}</th><th>${esc(t("pa_c_wo"))}</th><th>${esc(t("pa_c_type"))}</th>
+    <th>${esc(t("pa_c_plan"))}</th><th>${esc(t("pa_c_woactual"))}</th>
+    <th>${esc(t("pa_c_cmround"))}</th><th class="r">${esc(t("pa_c_delta"))}</th>
+    <th>${esc(t("pa_c_status"))}</th></tr></thead><tbody>`
+    + kept.map(r=>`<tr>
+        <td>${esc(r.w.equip)}</td>
+        <td>${esc(r.w.woNumber||"—")}</td>
+        <td title="${esc(r.w.maintType||"")}">${esc(r.info.label)}</td>
+        <td>${esc(r.w.planStart||"—")}</td>
+        <td>${esc(r.w.actualStart||"—")}</td>
+        <td>${r.last?esc(r.last.date)+" · "+esc(r.last.type):"—"}</td>
+        <td class="r">${deltaTxt(r)}</td>
+        <td>${stChip(r)}</td>
+      </tr>`).join("")
+    + `</tbody></table></div>`
+    + (pg.strip||"");
+}
+function paCsv(){
+  const rows=[["equip","work_order","maint_type","cm_round_label","priority","wo_open",
+               "plan_date","wo_actual_date","nearest_cm_round_date","nearest_cm_round_type",
+               "cm_vs_plan_days","status","preinsp_days_out","preinsp_needed"]];
+  const q=(($("paQ")||{}).value||"").trim().toUpperCase();
+  const scope=paScopeGet();
+  paRows().filter(r=>!q || String(r.w.equip).toUpperCase().indexOf(q)>=0)
+    .filter(r=> scope==="preinsp" ? r.preInspNeeded
+             : scope==="open" ? r.w.open : scope==="done" ? !r.w.open : true)
+    .forEach(r=>rows.push([r.w.equip, r.w.woNumber||"", r.w.maintType||"", r.info.label,
+      r.w.priority||"", r.w.open?1:0, r.w.planStart||"", r.w.actualStart||"",
+      r.last?r.last.date:"", r.last?r.last.type:"", r.delta==null?"":r.delta, r.status,
+      r.daysUntilPlan==null?"":r.daysUntilPlan, r.preInspNeeded?1:0]));
+  const csv=rows.map(r=>r.map(v=>{ const x=String(v==null?"":v);
+    return /[",\n]/.test(x) ? '"'+x.replace(/"/g,'""')+'"' : x; }).join(",")).join("\n");
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob(["﻿"+csv],{type:"text/csv;charset=utf-8"}));
+  a.download="plan-vs-actual.csv"; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+}
+
 /* Which of the seven is showing. Remembered, because somebody working through
    the fleet matrix on Tuesday is working through the fleet matrix on Wednesday. */
 const LSUBK="cm_dash_lubesub";
@@ -15715,6 +16041,15 @@ function renderSync(){
 function renderNavCounts(){
   const nb=(id,n)=>{ const el=$(id); if(el) el.textContent=n>0?(n>99?"99+":String(n)):""; };
   try{ nb("nbDue", dueTabRows().filter(r=>r.st==="over").length); }catch(e){}
+  /* Two different gaps, one badge: an open work order with no nearby CM
+     round at all, and a General Inspection due within the pre-PM window
+     that has not been walked yet. A work order cannot need re-counting
+     twice -- "missing" (no CM round anywhere near the plan) and
+     "preInspNeeded" (an INSP specifically, ahead of the plan) describe the
+     same open work order from two different angles, and a unit with no CM
+     round yet trivially has no pre-PM check either, so the sets never
+     overlap in a way that would double-count one row. */
+  try{ nb("nbPlanAct", paRows().filter(r=>(r.w.open && r.status==="missing") || r.preInspNeeded).length); }catch(e){}
   try{
     const f=findings(filtered());
     nb("nbAct", f.filter(x=>actionRequired(x.r,x.i)).length);
@@ -15759,6 +16094,7 @@ const TAB_RENDER={
   overview:()=>{ renderKpis(); renderCoverage(); renderTrend(); renderFleet(); },
   failure:()=>renderFailure(), wear:()=>renderWearTab(), actions:()=>renderActions(),
   equipment:()=>renderHistory(), lube:()=>renderLubeTab(), due:()=>renderDueTab(), sync:()=>renderSync(),
+  planact:()=>renderPlanActualTab(),
 };
 const TAB_DIRTY=new Set();
 /* A page opened stale is painted before it is seen, inside a pass of its own. */
@@ -15861,6 +16197,8 @@ cmbInit();
 $("ddType").onchange=renderDueTab; $("ddScope").onchange=()=>{ renderDueTab(); urlWrite(false); };
 $("ddQ").oninput=renderDueTab;
 $("ddCsv").onclick=dueCsv;
+if($("paQ")) $("paQ").oninput=renderPlanActualTab;
+if($("paCsv")) $("paCsv").onclick=paCsv;
 $("wBand").onchange=renderWearTab;
 $("follX").onclick=closeFollow;
 $("follSave").onclick=saveFollow;
@@ -16012,8 +16350,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=308"></script>
-<script src="sync-adapter.js?v=308"></script>
-<script src="report.js?v=308"></script>
+<script src="drive.js?v=309"></script>
+<script src="sync-adapter.js?v=309"></script>
+<script src="report.js?v=309"></script>
 </body>
 </html>

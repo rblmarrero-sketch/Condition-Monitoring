@@ -1,0 +1,88 @@
+{
+  "generated": "2026-09-11T23:29:44.424Z",
+  "source": "mobile/due.js (D.EVERY, D.hours) and mobile/index.html (roundsOnClass), evaluated live -- not hand-copied",
+  "map": {
+    "MP": {
+      "restricted": true,
+      "classes": {
+        "HT": 250,
+        "AT": 250
+      }
+    },
+    "FC": {
+      "restricted": false,
+      "classes": {
+        "GEN": 500,
+        "CRJ": 500,
+        "CRC": 500,
+        "DRE": 500,
+        "DRB": 500,
+        "DOZ": 500,
+        "EXC": 500,
+        "GRD": 500,
+        "LDR": 500,
+        "HRB": 500,
+        "SCR": 500,
+        "HT": 500,
+        "AT": 500
+      }
+    },
+    "UC": {
+      "restricted": true,
+      "classes": {
+        "DOZ": 1000,
+        "EXC": 4000
+      }
+    },
+    "GET": {
+      "restricted": false,
+      "classes": {
+        "GEN": 500,
+        "CRJ": 500,
+        "CRC": 500,
+        "DRE": 500,
+        "DRB": 500,
+        "DOZ": 500,
+        "EXC": 500,
+        "GRD": 500,
+        "LDR": 500,
+        "HRB": 500,
+        "SCR": 500,
+        "HT": 500,
+        "AT": 500
+      }
+    },
+    "TB": {
+      "restricted": true,
+      "classes": {
+        "AT": 4000
+      }
+    },
+    "INSP": {
+      "restricted": false,
+      "classes": {
+        "GEN": 500,
+        "CRJ": 500,
+        "CRC": 500,
+        "DRE": 500,
+        "DRB": 500,
+        "DOZ": 500,
+        "EXC": 500,
+        "GRD": 500,
+        "LDR": 500,
+        "HRB": 500,
+        "SCR": 500,
+        "HT": 500,
+        "AT": 500
+      }
+    },
+    "TEMP": {
+      "restricted": false,
+      "classes": {}
+    },
+    "LUBE": {
+      "restricted": false,
+      "classes": {}
+    }
+  }
+}
