@@ -44,10 +44,13 @@
   .row{ display:flex; justify-content:space-between; gap:12px; padding:5px 0; font-size:15px; }
   .row b{ font-variant-numeric:tabular-nums; }
   .ok{ color:#7fb069; } .warn{ color:#e0a458; } .bad{ color:#d9694e; }
-  button{ appearance:none; border:0; border-radius:11px; padding:15px 18px; width:100%;
-          font:inherit; font-weight:700; background:#c96442; color:#fff; margin-top:6px; }
+  button, a.btn{ appearance:none; border:0; border-radius:11px; padding:15px 18px; width:100%;
+          font:inherit; font-weight:700; background:#c96442; color:#fff; margin-top:6px;
+          display:block; box-sizing:border-box; text-align:center; text-decoration:none; }
   button[disabled]{ opacity:.55; }
-  a.app{ display:block; text-align:center; margin-top:12px; color:#c96442; font-weight:700; }
+  /* The update is the SECOND thing to try now, not the first: opening this
+     page has already done the repair that needs no network. */
+  button.sec{ background:#2a2927; color:#faf9f5; border:1px solid #3d3b38; font-weight:600; margin-top:14px; }
   .log{ font-size:13px; color:#b8b5ab; white-space:pre-wrap; word-break:break-word; margin-top:10px; }
   .keep{ font-size:13px; color:#b8b5ab; margin-top:14px; }
 </style>
@@ -57,20 +60,25 @@
   <h1>Repair the app<small>Восстановить приложение</small></h1>
   <p>This page is outside the app, so it always loads even when the app will not.</p>
   <p class="ru">Эта страница находится вне приложения, поэтому она открывается всегда — даже когда приложение не открывается.</p>
+  <p><b>Opening this page has already released the setting that was stopping the app.</b> Now tap <b>Open the app</b> below. If it opens, you are done — you do not need the button.</p>
+  <p class="ru"><b>Открытие этой страницы уже сняло настройку, из-за которой приложение не запускалось.</b> Теперь нажмите «Открыть приложение» ниже. Если оно откроется — всё готово, кнопка не нужна.</p>
 
   <div class="card">
     <div class="row"><span>Build on the server / На сервере</span><b id="srv">…</b></div>
     <div class="row"><span>Build on this phone / На телефоне</span><b id="loc">…</b></div>
     <div class="row"><span>Rounds waiting to send / Ожидают отправки</span><b id="q">…</b></div>
     <div class="row"><span>App worker / Служба приложения</span><b id="sw">…</b></div>
+    <div class="row"><span>Freeze released / Блокировка снята</span><b id="thaw">…</b></div>
   </div>
 
-  <button id="go">Update the app now / Обновить приложение</button>
-  <a class="app" id="open" href="mobile/">Open the app / Открыть приложение →</a>
+  <a class="btn" id="open" href="mobile/">Open the app / Открыть приложение →</a>
+  <button id="go" class="sec">Still not opening? Look for a new build / Всё ещё не открывается? Найти новую версию</button>
   <div class="log" id="log"></div>
 
-  <p class="keep"><b>If the app still will not open after this:</b> close it completely (swipe it away), then open it again — twice. The first launch is served the old copy while the new one downloads; the second gets the new one. Nothing is lost by doing this.</p>
-  <p class="keep">Если приложение всё равно не открывается: закройте его полностью и откройте снова — два раза. Ничего не потеряется.</p>
+  <p class="keep"><b>If the app still will not open after this:</b> close it completely (swipe it away), then open it again. Nothing is lost by doing this.</p>
+  <p class="keep">Если приложение всё равно не открывается: закройте его полностью и откройте снова. Ничего не потеряется.</p>
+  <p class="keep"><b>On an iPhone, if the app was added to the Home Screen:</b> open this page in the app itself if you can. A Home Screen app can keep its own separate settings from Safari, so repairing it in Safari may not reach it.</p>
+  <p class="keep">На iPhone, если приложение добавлено на экран «Домой»: по возможности откройте эту страницу в самом приложении — у него могут быть собственные настройки, отдельные от Safari.</p>
   <p class="keep">Nothing on this phone is deleted by this page — not the rounds, not the photographs, not the offline app.</p>
   <p class="keep">Эта страница ничего не удаляет — ни обходы, ни фотографии, ни офлайн-приложение.</p>
 </div>
@@ -79,6 +87,54 @@
   var $ = function (id) { return document.getElementById(id); };
   var say = function (s) { $("log").textContent += s + "\n"; };
   var SCOPE = "/mobile/";
+
+  /* =====================================================================
+     THE ONE REPAIR THAT NEEDS NOTHING FROM THE SERVER.
+
+     Asking the worker for a new build (the button below) only helps a
+     phone that can still fetch one. The handsets that stayed stuck could
+     not: a pegged main thread cannot check for a build, and the worker's
+     own update did not land either. They were beyond reach of every route
+     that requires an update to ARRIVE.
+
+     But the freeze was never in the build alone. It needed a reason to
+     want 1C's schedule while the Due screen drew, and both reasons are
+     remembered ON THE HANDSET — cm_due_sched and cm_due_view. localStorage
+     is shared by every page of an origin, and this page is on the app's
+     origin (deliberately one directory above its worker's scope, so the
+     broken build can never answer for it). So the state that pegs the
+     phone can be put back to its default FROM HERE, and the copy of the
+     app already on the phone then opens — no download, no new build, and
+     nothing deleted.
+
+     Measured, not assumed: with the server still serving the broken build,
+     a handset that stayed frozen across relaunches booted on the next one
+     once these two keys were gone, painted in 7 ms and reached the network
+     (tests/thawkey.cjs).
+
+     ONLY PURE DISPLAY PREFERENCES MAY EVER BE LISTED HERE. Not a
+     destination, not a cursor, not a draft, not a queue — those are work,
+     and this page does not touch work. If a future key is a candidate for
+     this list, the question to ask is: if it were wrong, would anything be
+     lost but a view? If the answer is anything else, it does not go in.
+     ===================================================================== */
+  var VIEW_KEYS = ["cm_due_sched", "cm_due_view"];
+  (function () {
+    try {
+      var dropped = [];
+      for (var i = 0; i < VIEW_KEYS.length; i++) {
+        if (localStorage.getItem(VIEW_KEYS[i]) !== null) {
+          dropped.push(VIEW_KEYS[i]);
+          localStorage.removeItem(VIEW_KEYS[i]);
+        }
+      }
+      $("thaw").innerHTML = dropped.length
+        ? '<span class="ok">yes / да</span>'
+        : '<span class="ok">nothing to release / нечего снимать</span>';
+    } catch (e) {
+      $("thaw").innerHTML = '<span class="bad">could not / не удалось</span>';
+    }
+  })();
 
   /* What the server has, asked with the HTTP cache bypassed — otherwise the
      answer can be the same stale copy that is the problem. */
@@ -142,13 +198,13 @@
   $("go").onclick = function () {
     var btn = $("go");
     btn.disabled = true;
-    btn.textContent = "Working… / Идёт обновление…";
+    btn.textContent = "Looking… / Идёт поиск…";
     $("log").textContent = "";
     regs().then(function (rs) {
       if (!rs.length) {
         say("No app worker on this phone yet — just open the app.");
         say("Служба приложения не установлена — просто откройте приложение.");
-        btn.disabled = false; btn.textContent = "Update the app now / Обновить приложение";
+        btn.disabled = false; btn.textContent = "Look again / Проверить ещё раз";
         return;
       }
       say("Asking the app to look for a new build…");

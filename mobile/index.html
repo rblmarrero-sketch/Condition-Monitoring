@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=327">
+<link rel="manifest" href="manifest.webmanifest?v=328">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=327">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=327">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=327">
+<link rel="apple-touch-icon" href="icon-192.png?v=328">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=328">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=328">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2333,6 +2333,14 @@
      for what that nearly cost. */
   var BOOT_WAIT = 30000;
   var seen = false, done = false, fired = false, t = null;
+
+  /* A counter of launches that never finished booting was written here and
+     taken out again, because it could not see the failure it was written
+     for. MEASURED: the frozen handset BOOTS — __bootOK runs, the watchdog
+     stands down — and pegs afterwards, when the Due screen draws. A boot
+     sentinel would have recorded nothing, every time, and read as a guard.
+     The guard for that failure is in renderDue, where the runaway is. */
+
   /* The parser being blocked on a subresource does not stop timers — which is
      the whole reason this can work from up here. */
   try { t = setTimeout(fire, BOOT_WAIT); } catch (e) { return; }
@@ -2431,15 +2439,15 @@
   }
 })();
 </script>
-<script src="native.js?v=327"></script>
-<script src="upload-defaults.js?v=327"></script>
-<script src="hme.js?v=327"></script>
-<script src="mp-fc.js?v=327"></script>
-<script src="hme-cascade.js?v=327"></script>
-<script src="assets.js?v=327"></script>
-<script src="temp-limits.js?v=327"></script>
-<script src="normalize.js?v=327"></script>
-<script src="terms.js?v=327"></script>
+<script src="native.js?v=328"></script>
+<script src="upload-defaults.js?v=328"></script>
+<script src="hme.js?v=328"></script>
+<script src="mp-fc.js?v=328"></script>
+<script src="hme-cascade.js?v=328"></script>
+<script src="assets.js?v=328"></script>
+<script src="temp-limits.js?v=328"></script>
+<script src="normalize.js?v=328"></script>
+<script src="terms.js?v=328"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2458,25 +2466,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=327"></script>
-<script src="edits.js?v=327"></script>
-<script src="due.js?v=327"></script>
-<script src="wear.js?v=327"></script>
-<script src="wear-figs.js?v=327"></script>
-<script src="wear-map.js?v=327"></script>
-<script src="machine-photos.js?v=327"></script>
-<script src="machine-fig.js?v=327"></script>
-<script src="get.js?v=327"></script>
-<script src="points.js?v=327"></script>
-<script src="uc-points.js?v=327"></script>
-<script src="inspect-guide.js?v=327"></script>
-<script src="get-figs.js?v=327"></script>
-<script src="body-points.js?v=327"></script>
-<script src="body-map.js?v=327"></script>
-<script src="lube.js?v=327"></script>
-<script src="lube-overrides.js?v=327"></script>
-<script src="lube2027.js?v=327"></script>
-<script src="report-core.js?v=327"></script>
+<script src="grade.js?v=328"></script>
+<script src="edits.js?v=328"></script>
+<script src="due.js?v=328"></script>
+<script src="wear.js?v=328"></script>
+<script src="wear-figs.js?v=328"></script>
+<script src="wear-map.js?v=328"></script>
+<script src="machine-photos.js?v=328"></script>
+<script src="machine-fig.js?v=328"></script>
+<script src="get.js?v=328"></script>
+<script src="points.js?v=328"></script>
+<script src="uc-points.js?v=328"></script>
+<script src="inspect-guide.js?v=328"></script>
+<script src="get-figs.js?v=328"></script>
+<script src="body-points.js?v=328"></script>
+<script src="body-map.js?v=328"></script>
+<script src="lube.js?v=328"></script>
+<script src="lube-overrides.js?v=328"></script>
+<script src="lube2027.js?v=328"></script>
+<script src="report-core.js?v=328"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3000,6 +3008,7 @@ const I18N = {
     due_sched_on_n:"1C's plan is shown on {n} round(s) below.",
     due_sched_on_none:"Nothing in this list has an open 1C work order on the same round. 1C has {n} due in the next 7 days — see This week.",
     due_sched_nofile:"1C's schedule has not been downloaded yet on this phone.",
+    due_healed:"This screen was repainting itself without stopping, so its settings were put back to their defaults to free the app. Nothing else was changed — every round and photograph on this phone is still here.",
     due_list_seg:"List",
     due_week_seg:"This week",
     due_week_sub:"Open work orders due in the next 7 days, grouped by the day something has to happen. General Inspection is listed on the day it should be carried out — ahead of the plan date, not on it.",
@@ -3567,6 +3576,7 @@ const I18N = {
     due_sched_on_n:"План 1С показан у {n} обход(ов) ниже.",
     due_sched_on_none:"Ни у одного обхода в этом списке нет открытого наряда 1С по тому же обходу. В 1С на ближайшие 7 дней их {n} — см. «Эта неделя».",
     due_sched_nofile:"График 1С ещё не загружен на этот телефон.",
+    due_healed:"Этот экран перерисовывался без остановки, поэтому его настройки возвращены к значениям по умолчанию, чтобы освободить приложение. Больше ничего не менялось — все обходы и фотографии на этом телефоне на месте.",
     due_list_seg:"Список",
     due_week_seg:"Эта неделя",
     due_week_sub:"Открытые наряды со сроком на ближайшие 7 дней, по дням. Общий осмотр указан на дне, когда его нужно провести — до даты ТО, а не в этот день.",
@@ -8671,7 +8681,55 @@ let dueFind="";
 const DUE_SCOPES=[["over","due_missed","over"],["soon","due_soon","soon"],
                   ["never","due_never_p","never"],
                   ["put","due_putoff","put"],["all","due_all","" ]];
+/* ============ THE GUARD THAT MAKES THIS CLASS OF FAULT SURVIVABLE ============
+   Build 321 repainted the Due screen whenever schedEnsureLoaded RESOLVED
+   rather than whenever the schedule CHANGED, and that call resolves at once
+   when it is throttled, fresh, or already in flight — so renderDue asked for
+   the schedule, was answered immediately, and repainted, for ever. The thread
+   never came back. A pegged page cannot check for a build, cannot apply one,
+   and cannot send the rounds already on the handset, so every automatic route
+   home was shut at the same moment, and phones sat frozen in the pit for days
+   holding work nobody could get at.
+
+   The loop itself is fixed. This is the guard for the NEXT one, and it lives
+   here because here is where the runaway can actually be caught: the cycle is
+   driven through promise callbacks, so renderDue is genuinely re-entered and
+   a counter inside it runs. (A sentinel at boot cannot see this at all — the
+   app boots perfectly well and pegs afterwards; that was measured before this
+   was written, and the boot counter that had been written was removed.)
+
+   The threshold is set by MEASUREMENT, not by feel, and it was moved once:
+   forty repaints in two seconds was tripped by a harness driving thirty
+   filter and search changes in under a second, which is not a fault — so it
+   would have fired on a real screen being worked hard, quietly resetting an
+   inspector's view. Two hundred and fifty in a second cannot be reached by
+   hands: every repaint is a full list build, and a phone cannot do that many
+   in a second even trying. A runaway does thousands. The gap between the two
+   is where a guard belongs — far above anything a person can cause, far
+   below what a loop does. When
+   it trips, the two settings that can ask for the schedule are put back to
+   their defaults — the only state that can re-arm the cycle — and the screen
+   SAYS so, because a tick box that is silently not where the inspector left
+   it is a second fault, not a fix. Nothing else is touched: not a round, not
+   a photograph, not a destination, not the offline app. */
+const DUE_BURST_MS = 1000, DUE_BURST_MAX = 250;
+let dueBurstT0 = 0, dueBurstN = 0, dueRunaway = false;
 function renderDue(){
+  {
+    const nw = Date.now();
+    if(nw - dueBurstT0 > DUE_BURST_MS){ dueBurstT0 = nw; dueBurstN = 0; }
+    if(++dueBurstN > DUE_BURST_MAX && !dueRunaway){
+      dueRunaway = true; dueBurstT0 = nw; dueBurstN = 0;
+      /* Left where a diagnostic can read it, like window.__upd. */
+      try{ window.__dueRunaway = { at:new Date().toISOString() }; }catch(e){}
+      dueSched = false; dueView = "list";
+      lsSet("cm_due_sched","0"); lsSet("cm_due_view","list");
+      const tg=$("dueSchedOn"); if(tg) tg.checked = false;
+      /* Deliberately does NOT return: with both reasons gone the paint below
+         cannot re-arm the cycle, and finishing it is what puts a working
+         screen — and the explanation — in front of the person holding it. */
+    }
+  }
   renderTabs();
   const box=$("dueList"); if(!box) return;
   /* Never blocks the paint in front of it — rows below draw with whatever
@@ -8966,7 +9024,12 @@ function renderDue(){
   {
     const note=$("dueSchedNote");
     if(note){
-      if(!dueSched || dueView==="week") note.textContent="";
+      /* The breaker turned this screen's settings off to stop a runaway
+         repaint. Say so — a tick box that is silently not where it was
+         left reads as a second fault, and the inspector's real question
+         ("is my work still here?") is answered in the same breath. */
+      if(dueRunaway){ note.textContent=t("due_healed"); }
+      else if(!dueSched || dueView==="week") note.textContent="";
       else if(!SCHED) note.textContent=t("due_sched_nofile");
       else note.textContent = schedShown
         ? t("due_sched_on_n",{n:schedShown})
@@ -11907,7 +11970,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="327";
+const BUILD="328";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
