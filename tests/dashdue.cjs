@@ -190,8 +190,24 @@ const rows = p => p.$$eval('#ddList tbody tr', a => a.map(tr => ({
   r = await rows(p);
   ok('only that round is listed', r.length > 0 && r.every(x => / MP /.test(' ' + x.text + ' ') || /MP/.test(x.text)),
      r.map(x => x.unit).join(' '));
-  ok('and machines whose only round is another type drop out',
-     !r.some(x => x.unit === 'TK102'), r.map(x => x.unit).join(' '));
+  /* THIS ASSERTION WAS WRONG, AND PASSED FOR A YEAR ON PAGINATION.
+     It said TK102 drops out of the plug round because its only record is a
+     UC one. But TK102 is a Komatsu HM400, class AT, and the plug round is
+     stated for HT AND AT — so it belongs here as a machine that has never
+     had one. It was simply never on the first page: thirty KAMAZ trucks
+     filled it ahead of TK102, and when the site took those off the plug
+     round on 2026-09-12 they stopped filling it and the claim collapsed.
+     A test whose subject is off-page is a test of the pager.
+     What is actually true, and is what the filter is for: this list shows
+     the plug round and nothing else, so TK102's UC row — the deferred one
+     the section above just found — must not be on it. */
+  const tk102 = r.filter(x => x.unit === 'TK102');
+  ok('and a machine\'s OTHER rounds drop out — TK102\'s deferred UC row is not here',
+     !tk102.some(x => /UC|low-loader/.test(x.text)),
+     tk102.map(x => x.text).join(' | ') || '(no TK102 row)');
+  ok('  and every row on the list is a plug round',
+     r.length > 0 && !r.some(x => /\b(UC|FC|TB|GET|LUBE|TEMP)\b/.test(x.text)),
+     r.length + ' rows');
   await p.selectOption('#ddType', ''); await p.waitForTimeout(200);
 
   console.log('\nthe page is one page');

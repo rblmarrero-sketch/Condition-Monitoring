@@ -62,13 +62,35 @@ async function phone(b, hist) {
 /* One machine of each class, by the app's own classifier, so the fixture
    cannot drift from the register. */
 const pick = p => p.evaluate(() => {
+  /* One machine of each class — and NOT one the site has taken off a round,
+     or "walk one and the rest of the class follows" would be seeded with a
+     machine that proposes nothing and the expectation would be off by one
+     for reasons having nothing to do with what is being tested. */
+  const heldAny = a => !!(window.DUE && DUE.OFF && DUE.offRound
+    && Object.keys(DUE.OFF).some(ty => DUE.offRound(ty, a)));
   const by = {};
+  (window.ASSETS || []).forEach(a => { const k = PTS.classOf(a.cls || a.cat || '');
+    if (k && !by[k] && !heldAny(a)) by[k] = a.n; });
+  /* Fall back to any machine for a class where every one is held off. */
   (window.ASSETS || []).forEach(a => { const k = PTS.classOf(a.cls || a.cat || '');
     if (k && !by[k]) by[k] = a.n; });
   const n = {};
   (window.ASSETS || []).forEach(a => { const k = PTS.classOf(a.cls || a.cat || '');
     n[k] = (n[k] || 0) + 1; });
-  return { one: by, count: n };
+  /* Machines the site has taken off a round, by class — read from the app's
+     own rule rather than counted here, so this fixture cannot drift from
+     what the app actually does. */
+  const off = {};
+  (window.ASSETS || []).forEach(a => {
+    const k = PTS.classOf(a.cls || a.cat || '');
+    ['MP', 'TB', 'INSP'].forEach(ty => {
+      if (window.DUE && DUE.offRound && DUE.offRound(ty, a)) {
+        const key = ty + '_' + k; off[key] = (off[key] || 0) + 1;
+      }
+    });
+  });
+  ['MP_HT', 'MP_AT', 'TB_HT', 'TB_AT', 'INSP_HT'].forEach(k => { off[k] = off[k] || 0; });
+  return { one: by, count: n, off };
 });
 
 (async () => {
@@ -100,8 +122,14 @@ const pick = p => p.evaluate(() => {
        it, and a haul truck got a plug round only because somebody happened to
        have already walked one on a truck of its kind. onClass says who is on
        the round without pretending to state a second figure. */
+    /* Every haul truck EXCEPT the ones the site has taken off it. The KAMAZ
+       trucks came off the plug round on 2026-09-12 and they are class HT,
+       so the figure to hold this against is the class minus them — not the
+       whole class, which would fail, and not "however many turn up", which
+       would pass whatever happened. */
     ok('every haul truck is on the plug round because the site says so',
-       tys['MP HT'] === f.count.HT, tys['MP HT'] + ' of ' + f.count.HT);
+       tys['MP HT'] === f.count.HT - f.off.MP_HT,
+       tys['MP HT'] + ' of ' + f.count.HT + ' (' + f.off.MP_HT + ' held off)');
     ok('and every articulated truck with them',
        tys['MP AT'] === f.count.AT, tys['MP AT'] + ' of ' + f.count.AT);
     /* AND NOWHERE ELSE. Membership is stated, not spread. */
@@ -135,15 +163,28 @@ const pick = p => p.evaluate(() => {
        neither. Two copies of this app disagreeing about the fleet is what this
        whole line of work is about, and a machine that is on no list and in no
        count is how a copy comes to be quietly missing one. */
+    /* THREE buckets since 2026-09-12, not two. The site can now take a
+       machine OFF a round it is otherwise on (the KAMAZ trucks, off the
+       plug, body and inspection rounds), and a machine every one of whose
+       rounds has been taken off appears on no work list at all. It has not
+       stopped existing, so it is counted — and this invariant is what found
+       it: the first version of that change left thirty machines on no list
+       and in no count, 1,098 of 1,128, silently. */
     const acct = await a.p.evaluate(() => {
       const onList = new Set(neverRows('').concat(dueRows()).map(r => r.unit));
       const total = (window.ASSETS || []).filter(x => x && x.n).length;
-      return { onList: onList.size, noProg: unclassedCount(), total };
+      return { onList: onList.size, noProg: unclassedCount(),
+               heldOff: typeof heldOffCount === 'function' ? heldOffCount() : 0, total };
     });
     ok('and every machine in the register is accounted for, exactly once',
-       acct.onList + acct.noProg === acct.total,
-       acct.onList + ' on the list + ' + acct.noProg + ' with no programme = '
-         + (acct.onList + acct.noProg) + ' of ' + acct.total);
+       acct.onList + acct.noProg + acct.heldOff === acct.total,
+       acct.onList + ' on the list + ' + acct.noProg + ' with no programme + '
+         + acct.heldOff + ' held off = ' + (acct.onList + acct.noProg + acct.heldOff)
+         + ' of ' + acct.total);
+    /* And the third bucket is not a place things quietly go: it must be the
+       machines the site actually named, not a catch-all that grew. */
+    ok('  and the held-off bucket is exactly the machines the site named',
+       acct.heldOff > 0 && acct.heldOff < acct.total * 0.1, acct.heldOff + ' machines');
     await a.ctx.close();
   }
 
@@ -160,7 +201,9 @@ const pick = p => p.evaluate(() => {
     const tys = await a.p.evaluate(() => {
       const o = {}; neverRows('').forEach(r => { const k = r.ty + ' ' + r.cls; o[k] = (o[k] || 0) + 1; }); return o; });
     ok('one plug round on a haul truck proposes the rest of them',
-       tys['MP HT'] === f.count.HT - 1, tys['MP HT'] + ' of ' + (f.count.HT - 1));
+       tys['MP HT'] === f.count.HT - f.off.MP_HT - 1,
+       tys['MP HT'] + ' of ' + (f.count.HT - f.off.MP_HT - 1)
+         + ' (' + f.off.MP_HT + ' held off)');
     ok('one walk-around on a dozer proposes the rest of them',
        tys['INSP DOZ'] === f.count.DOZ - 1, tys['INSP DOZ'] + ' of ' + (f.count.DOZ - 1));
     ok('one filter round on a jaw crusher proposes the rest of them',

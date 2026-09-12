@@ -143,7 +143,16 @@
        invent — this comes off the list when they say so.
        --------------------------------------------------------------------- */
     OFF: {
-      INSP: [{ model: 'KAMAZ', why: 'off_kamaz_insp', since: '2026-09-12' }],
+      INSP: [{ model: 'KAMAZ', why: 'off_kamaz', since: '2026-09-12' }],
+      /* Added the same day, once the office had seen what the exclusion did
+         to the schedule: the KAMAZ trucks come off the plug round and the
+         body round as well. All three are the rounds their class (HT) put
+         them on, so after this a KAMAZ is proposed no Condition Monitoring
+         work at all — which is a large thing to be true quietly, and is why
+         the count of held-off machines is on the Due screen and the Plan vs
+         Actual tab rather than left to this file. */
+      MP:   [{ model: 'KAMAZ', why: 'off_kamaz', since: '2026-09-12' }],
+      TB:   [{ model: 'KAMAZ', why: 'off_kamaz', since: '2026-09-12' }],
     },
   };
 

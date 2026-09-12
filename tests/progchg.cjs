@@ -11,9 +11,13 @@
      2. DZ011 ALONE stays at 500 h. Its own class does not: the other dozers
         are on the fleet's 1,000. No class rule can say this, so it is a
         figure stated for a MACHINE.
-     3. THE KAMAZ TRUCKS COME OFF GENERAL INSPECTION for now. 30 of the 55
-        are class HT — the same class as the Terex TR60 haul trucks, which
-        stay on it — so again no class rule can say it.
+     3. THE KAMAZ TRUCKS COME OFF GENERAL INSPECTION, THE PLUG ROUND AND
+        THE BODY ROUND for now. 30 of the 55 are class HT — the same class
+        as the Terex TR60 haul trucks, which stay on all three — so again no
+        class rule can say it. Those three ARE every round class HT is on,
+        so after this a KAMAZ is proposed no Condition Monitoring work at
+        all: a large thing to be true quietly, which is why the count is
+        asserted on screen as well as in the rule.
 
    Why this suite exists at all, rather than trusting due.js:
 
@@ -134,6 +138,9 @@ const srv = http.createServer((req, res) => {
       terexInsp: !!DUE.offRound('INSP', terex),
       kmMp: !!DUE.offRound('MP', kmHT),
       kmTb: !!DUE.offRound('TB', kmHT),
+      kmFc: !!DUE.offRound('FC', kmHT),
+      terexMp: !!DUE.offRound('MP', terex),
+      terexTb: !!DUE.offRound('TB', terex),
       dzInsp: !!DUE.offRound('INSP', a('DZ011')),
       why: (DUE.offRound('INSP', kmHT) || {}).why,
       unknown: DUE.offRound('INSP', null),
@@ -143,8 +150,12 @@ const srv = http.createServer((req, res) => {
   ok(off.kmGenInsp === true, '  including the ones the make field never named (' + off.kmGEN + ')');
   ok(off.terexInsp === false, '  and the Terex of the SAME CLASS (' + off.terex + ') stays on it');
   ok(off.dzInsp === false, '  and nothing else is swept up (' + 'DZ011' + ')');
-  ok(off.kmMp === false && off.kmTb === false,
-    '  the KAMAZ trucks keep their other rounds — only General Inspection was named');
+  ok(off.kmMp === true && off.kmTb === true,
+    '  and off the plug round and the body round as well');
+  ok(off.terexMp === false && off.terexTb === false,
+    '  which the Terex of the same class are NOT — all three rules are per machine');
+  ok(off.kmFc === false,
+    '  and a round nobody named is untouched: the KAMAZ keep their filter cut');
   ok(!!off.why, '  and the reason travels with it, so work not proposed can still be explained', String(off.why));
   ok(off.unknown === null, '  a machine the register does not know is held off nothing');
 
@@ -169,8 +180,13 @@ const srv = http.createServer((req, res) => {
       kamazInNever: never.filter(r => isKm(r.unit)).length,
       terexInNever: never.filter(r => { const a = ASSET_BY[r.unit]; return a && a.cls === 'HT' && !isKm(r.unit); }).length,
       kamazHT: ASSETS.filter(a => a.cls === 'HT' && isKm(a.n)).length,
-      /* Other rounds must still list them, or the rule has taken too much. */
       kamazInNeverMp: neverRows('MP').filter(r => isKm(r.unit)).length,
+      /* The rule must have removed a MAKE, not a list. */
+      terexInNeverMp: neverRows('MP').filter(r => { const a = ASSET_BY[r.unit];
+        return a && a.cls === 'HT' && !isKm(r.unit); }).length,
+      /* And nothing a KAMAZ IS still on may have gone with it. */
+      kamazAnyRound: neverRows('').filter(r => isKm(r.unit)).length,
+      kamazRoundsLeft: [...new Set(neverRows('').filter(r => isKm(r.unit)).map(r => r.ty))].join(','),
     };
   }, terexUnit);
   /* The list has to be NON-EMPTY for its emptiness of KAMAZ to mean anything. */
@@ -180,8 +196,10 @@ const srv = http.createServer((req, res) => {
     lists.terexInNever + ' of them');
   ok(lists.kamazInNever === 0, '  and not one of the ' + lists.kamazHT + ' KAMAZ haul trucks is',
     lists.kamazInNever + ' KAMAZ');
-  ok(lists.kamazInNeverMp > 0, '  while the same KAMAZ are still proposed their plug round',
+  ok(lists.kamazInNeverMp === 0, '  nor on the plug round',
     lists.kamazInNeverMp + ' rows');
+  ok(lists.terexInNeverMp > 0, '  which the Terex of the same class still are',
+    lists.terexInNeverMp + ' rows');
 
   /* AND THEY ARE COUNTED, NOT MERELY GONE. Thirty machines removed from a
      programme with nothing said about it is this project's signature defect:
@@ -195,10 +213,17 @@ const srv = http.createServer((req, res) => {
   /* THIRTY, not fifty-five. The rule holds all 55 KAMAZ off the round, but 25
      are class GEN and were never proposed anything — a note that said 55
      would name work that was never going to happen. */
-  ok(/\b30\b/.test(note.en) && /KAMAZ/i.test(note.en) && /General Inspection/i.test(note.en),
+  ok(/\b30\b/.test(note.en) && /KAMAZ/i.test(note.en),
     '  and the machines held off are COUNTED on screen, with the reason', note.en);
+  /* THIRTY MACHINES, NOT NINETY MACHINE-ROUNDS. Three rounds off thirty
+     trucks counted as pairs would print a number larger than the class it
+     describes, which is how a note meant to keep something visible becomes
+     one nobody trusts. */
+  ok(!/\b90\b/.test(note.en), '  counted as MACHINES, not as machine-rounds', note.en);
   ok(!/\b55\b/.test(note.en),
-    '  counted against the programme, not against the rule — the 25 GEN trucks were never proposed one');
+    '  and against the programme, not the rule — the 25 GEN trucks were never proposed anything');
+  ok(/Inspection/i.test(note.en) && /Magnetic Plug/i.test(note.en) && /body|liner/i.test(note.en),
+    '  and it names all three rounds it took away', note.en);
   ok(/КАМАЗ/.test(note.ru) && /осмотр/i.test(note.ru),
     '  in Russian too', note.ru);
   await second.ctx.close();
