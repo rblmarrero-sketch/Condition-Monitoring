@@ -3086,6 +3086,13 @@
         </details></div>
       <div class="ddbar">
         <div class="seg" id="paSeg" role="tablist" aria-label="Plan vs Actual views"></div>
+        <label class="fld"><span data-i18n="pa_window">1C plan date</span><select id="paWindow">
+          <option value="" data-i18n="pa_win_all">Any time</option>
+          <option value="over" data-i18n="pa_win_over">Overdue (plan date passed)</option>
+          <option value="7" data-i18n="pa_win_7">Next 7 days</option>
+          <option value="14" data-i18n="pa_win_14">Next 14 days</option>
+          <option value="30" data-i18n="pa_win_30">Next 30 days</option>
+        </select></label>
         <span class="spacer"></span>
         <label class="fld"><span data-i18n="dd_find">Search this table</span>
           <input id="paQ" type="search" data-i18n-ph="dd_findph" placeholder="unit number"></label>
@@ -3512,22 +3519,22 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=310"></script>
+<script src="../data/magnetic_plug.js?v=311"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=310"></script>
-<script src="../mobile/hme.js?v=310"></script>
-<script src="../mobile/mp-fc.js?v=310"></script>
-<script src="../mobile/hme-cascade.js?v=310"></script>
-<script src="../mobile/temp-limits.js?v=310"></script>
+<script src="../data/work_orders.js?v=311"></script>
+<script src="../mobile/hme.js?v=311"></script>
+<script src="../mobile/mp-fc.js?v=311"></script>
+<script src="../mobile/hme-cascade.js?v=311"></script>
+<script src="../mobile/temp-limits.js?v=311"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=310"></script>
-<script src="../mobile/normalize.js?v=310"></script>
-<script src="../mobile/terms.js?v=310"></script>
+<script src="../mobile/assets.js?v=311"></script>
+<script src="../mobile/normalize.js?v=311"></script>
+<script src="../mobile/terms.js?v=311"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3546,19 +3553,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=310"></script>
-<script src="../mobile/edits.js?v=310"></script>
-<script src="../mobile/due.js?v=310"></script>
-<script src="../mobile/wear.js?v=310"></script>
-<script src="../mobile/wear-map.js?v=310"></script>
-<script src="../mobile/lube.js?v=310"></script>
-<script src="../mobile/lube-overrides.js?v=310"></script>
-<script src="../mobile/lube2027.js?v=310"></script>
-<script src="../mobile/lube-tds.js?v=310"></script>
+<script src="../mobile/grade.js?v=311"></script>
+<script src="../mobile/edits.js?v=311"></script>
+<script src="../mobile/due.js?v=311"></script>
+<script src="../mobile/wear.js?v=311"></script>
+<script src="../mobile/wear-map.js?v=311"></script>
+<script src="../mobile/lube.js?v=311"></script>
+<script src="../mobile/lube-overrides.js?v=311"></script>
+<script src="../mobile/lube2027.js?v=311"></script>
+<script src="../mobile/lube-tds.js?v=311"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=310"></script>
-<script src="../mobile/machine-photos.js?v=310"></script>
+<script src="../mobile/upload-defaults.js?v=311"></script>
+<script src="../mobile/machine-photos.js?v=311"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3567,17 +3574,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=310"></script>
-<script src="../mobile/get.js?v=310"></script>
-<script src="../mobile/points.js?v=310"></script>
-<script src="../mobile/uc-points.js?v=310"></script>
-<script src="../mobile/inspect-guide.js?v=310"></script>
-<script src="../mobile/get-figs.js?v=310"></script>
-<script src="../mobile/body-points.js?v=310"></script>
-<script src="../mobile/body-map.js?v=310"></script>
-<script src="../mobile/jspdf.umd.min.js?v=310"></script>
-<script src="../mobile/html2canvas.min.js?v=310"></script>
-<script src="../mobile/report-core.js?v=310"></script>
+<script src="../mobile/machine-fig.js?v=311"></script>
+<script src="../mobile/get.js?v=311"></script>
+<script src="../mobile/points.js?v=311"></script>
+<script src="../mobile/uc-points.js?v=311"></script>
+<script src="../mobile/inspect-guide.js?v=311"></script>
+<script src="../mobile/get-figs.js?v=311"></script>
+<script src="../mobile/body-points.js?v=311"></script>
+<script src="../mobile/body-map.js?v=311"></script>
+<script src="../mobile/jspdf.umd.min.js?v=311"></script>
+<script src="../mobile/html2canvas.min.js?v=311"></script>
+<script src="../mobile/report-core.js?v=311"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4502,6 +4509,9 @@ const I18N={
   pa_days_after:"{n} d after", pa_days_before:"{n} d before", pa_days_same:"same day",
   pa_no_data:"data/work_orders.js has not been generated yet — run ingest/ingest_work_orders.py against a WO.xlsx export.",
   pa_asof:"Pulled from 1C {t}", pa_asof_now:"less than an hour ago", pa_asof_hr:"{n} hour ago", pa_asof_hrs:"{n} hours ago",
+  pa_window:"1C plan date", pa_win_all:"Any time", pa_win_over:"Overdue (plan date passed)",
+  pa_win_7:"Next 7 days", pa_win_14:"Next 14 days", pa_win_30:"Next 30 days",
+  pa_c_hours:"Hours",
  },
  ru:{
   sub:"Панель парка", srcnone:"Нет данных — нажмите, чтобы подключить",
@@ -5325,6 +5335,9 @@ const I18N={
   pa_days_after:"через {n} дн.", pa_days_before:"за {n} дн. до", pa_days_same:"в тот же день",
   pa_no_data:"data/work_orders.js ещё не сформирован — запустите ingest/ingest_work_orders.py по выгрузке WO.xlsx.",
   pa_asof:"Данные из 1С получены {t}", pa_asof_now:"менее часа назад", pa_asof_hr:"{n} час назад", pa_asof_hrs:"{n} ч. назад",
+  pa_window:"Плановая дата (1С)", pa_win_all:"Любое время", pa_win_over:"Просрочено (дата прошла)",
+  pa_win_7:"Следующие 7 дней", pa_win_14:"Следующие 14 дней", pa_win_30:"Следующие 30 дней",
+  pa_c_hours:"Наработка",
  },
 };
 let lang=localStorage.getItem("cm_dash_lang")||"en";
@@ -12315,8 +12328,16 @@ function showTab(t,push){
   /* The same holds for the support pages: the lubrication programme is read
      off the register, Data & Sync reconciles the whole folder, and a report
      is chosen by machine or date — none of them is narrowed by the bar, so a
-     bar shown above them would be a promise the page does not keep. */
-  const own = t==="due" || t==="lube" || t==="sync" || t==="reports";
+     bar shown above them would be a promise the page does not keep.
+
+     Plan vs Actual is the same shape as Due: a work order 1C planned eight
+     months ago is exactly the kind of gap this tab exists to surface, and a
+     30-day period window would silently drop it from view while the bar
+     above kept claiming "Period: Last 30 days" applied to what was on
+     screen. It carries its own plan-date window instead (see paWindowGo),
+     which looks FORWARD from today rather than back, because this tab's own
+     job is "what is coming up", not "what was found recently". */
+  const own = t==="due" || t==="lube" || t==="sync" || t==="reports" || t==="planact";
   const bar = document.querySelector("main > .controls:not(.more)");
   if(bar) bar.classList.toggle("hidden", own);
   if(typeof moreSync==="function") moreSync();
@@ -15043,6 +15064,41 @@ function paRows(){
 function paScopeGet(){ return paScope; }
 let paScope="open";  // open | all | done -- which work orders, by 1C's own state
 function paGo(scope){ paScope=scope; renderPlanActualTab(); urlWrite(false); }
+/* THE PLAN DATE IS A FORWARD-LOOKING QUESTION, SO ITS FILTER LOOKS FORWARD.
+   "" (any time) | "over" (past the plan date, still open) | "7"/"14"/"30"
+   (days from today). Answers "what is coming up", not "what happened
+   recently" -- the reason the global Period bar is hidden on this tab (see
+   showTab) rather than reused for this. */
+function paWindowGet(){ return ($("paWindow")||{}).value || ""; }
+function paInWindow(r, win){
+  if(!win) return true;
+  if(r.daysUntilPlan==null) return false;         // unscheduled -- no plan date to judge
+  if(win==="over") return r.daysUntilPlan<0 && r.w.open;
+  return r.daysUntilPlan>=0 && r.daysUntilPlan<=Number(win);
+}
+/* CLICK A HEADER, SORT BY IT -- same pattern as the fleet table (fleetSort).
+   Plan date first, soonest due first, matches the tab's own default order
+   below when nothing has been clicked yet. */
+let paSort={k:"plan", dir:1};
+function paSortKey(r,k){
+  switch(k){
+    case "equip": return r.w.equip||"";
+    case "wo": return r.w.woNumber||"";
+    case "svc": return r.info.label||"";
+    case "hours": return r.w.hours==null?-1:r.w.hours;
+    case "plan": return r.w.planStart||"9999-99-99";
+    case "actual": return r.w.actualStart||"9999-99-99";
+    case "cmround": return r.last?r.last.date:"";
+    case "delta": return r.delta==null?-Infinity:r.delta;
+    case "status": return r.status||"";
+    default: return "";
+  }
+}
+function paSortGo(k){
+  if(paSort.k===k) paSort.dir*=-1;
+  else paSort={k, dir:1};
+  renderPlanActualTab();
+}
 function renderPlanActualTab(){
   const box=$("paList"); if(!box) return;
   if(!(window.CM_WO_DATA && Array.isArray(window.CM_WO_DATA.workOrders) && window.CM_WO_DATA.workOrders.length)){
@@ -15067,7 +15123,9 @@ function renderPlanActualTab(){
     }
   }
   const q=(($("paQ")||{}).value||"").trim().toUpperCase();
-  const rows=paRows().filter(r=>!q || String(r.w.equip).toUpperCase().indexOf(q)>=0);
+  const win=paWindowGet();
+  const rows=paRows().filter(r=>!q || String(r.w.equip).toUpperCase().indexOf(q)>=0)
+                      .filter(r=>paInWindow(r,win));
   const scope=paScopeGet();
   const nOpen=rows.filter(r=>r.w.open).length, nDone=rows.length-nOpen;
   const nOntime=rows.filter(r=>r.status==="ontime").length;
@@ -15107,12 +15165,15 @@ function renderPlanActualTab(){
   }
   const show = rows.filter(r=> scope==="preinsp" ? r.preInspNeeded
                              : scope==="open" ? r.w.open : scope==="done" ? !r.w.open : true)
-    /* Soonest-due first for the working view -- this is a scheduling list
-       first and a compliance record second. Unscheduled (no plan date yet)
-       sorts last: there is nothing to be "soon" about until 1C releases it. */
+    /* Sortable on any column (paSort, click a header) -- defaults to plan
+       date, soonest first, which is what the tab opens on: a scheduling
+       list first and a compliance record second. Unscheduled rows (no plan
+       date yet) sort to the end of an ascending plan-date sort on their own,
+       since paSortKey gives them the highest possible date string. */
     .sort((a,b)=>{
-      const pa=a.w.planStart||"9999-99-99", pb=b.w.planStart||"9999-99-99";
-      return pa<pb?-1:pa>pb?1:String(a.w.equip).localeCompare(String(b.w.equip)); });
+      const x=paSortKey(a,paSort.k), y=paSortKey(b,paSort.k);
+      const c = typeof x==="number" ? x-y : String(x).localeCompare(String(y));
+      return (c || a.w.equip.localeCompare(b.w.equip)) * paSort.dir; });
   if(!show.length){ box.innerHTML=`<div class="sub">${esc(t("pa_none"))}</div>`; return; }
   const pg=paged("planact", show, renderPlanActualTab);
   const kept=pg.rows;
@@ -15135,15 +15196,20 @@ function renderPlanActualTab(){
     if(r.delta===0) return esc(t("pa_days_same"));
     return r.delta>0 ? esc(t("pa_days_after",{n:r.delta})) : esc(t("pa_days_before",{n:-r.delta}));
   };
+  const th=(k,lab,cls)=>{
+    const on=paSort.k===k;
+    return `<th class="sortable${cls?" "+cls:""}${on?" on":""}" data-sort="${esc(k)}">${esc(lab)}<span class="arrow">${on?(paSort.dir>0?"▲":"▼"):"↕"}</span></th>`;
+  };
   box.innerHTML=`<div class="tblwrap scrollbox" style="--sb:560px"><table class="grid"><thead><tr>
-    <th>${esc(t("pa_c_unit"))}</th><th>${esc(t("pa_c_wo"))}</th><th>${esc(t("pa_c_type"))}</th>
-    <th>${esc(t("pa_c_plan"))}</th><th>${esc(t("pa_c_woactual"))}</th>
-    <th>${esc(t("pa_c_cmround"))}</th><th class="r">${esc(t("pa_c_delta"))}</th>
-    <th>${esc(t("pa_c_status"))}</th></tr></thead><tbody>`
+    ${th("equip",t("pa_c_unit"))}${th("wo",t("pa_c_wo"))}${th("svc",t("pa_c_type"))}${th("hours",t("pa_c_hours"),"r")}
+    ${th("plan",t("pa_c_plan"))}${th("actual",t("pa_c_woactual"))}
+    ${th("cmround",t("pa_c_cmround"))}${th("delta",t("pa_c_delta"),"r")}
+    ${th("status",t("pa_c_status"))}</tr></thead><tbody>`
     + kept.map(r=>`<tr>
         <td>${esc(r.w.equip)}</td>
         <td>${esc(r.w.woNumber||"—")}</td>
         <td title="${esc(r.w.maintType||"")}">${esc(r.info.label)}</td>
+        <td class="r mono">${r.w.hours==null?"—":esc(String(r.w.hours))}</td>
         <td>${esc(r.w.planStart||"—")}</td>
         <td>${esc(r.w.actualStart||"—")}</td>
         <td>${r.last?esc(r.last.date)+" · "+esc(r.last.type):"—"}</td>
@@ -15152,17 +15218,20 @@ function renderPlanActualTab(){
       </tr>`).join("")
     + `</tbody></table></div>`
     + (pg.strip||"");
+  box.querySelectorAll("th[data-sort]").forEach(el=>el.onclick=()=>paSortGo(el.dataset.sort));
 }
 function paCsv(){
-  const rows=[["equip","work_order","maint_type","cm_round_label","priority","wo_open",
+  const rows=[["equip","work_order","maint_type","hours","cm_round_label","priority","wo_open",
                "plan_date","wo_actual_date","nearest_cm_round_date","nearest_cm_round_type",
                "cm_vs_plan_days","status","preinsp_days_out","preinsp_needed"]];
   const q=(($("paQ")||{}).value||"").trim().toUpperCase();
+  const win=paWindowGet();
   const scope=paScopeGet();
   paRows().filter(r=>!q || String(r.w.equip).toUpperCase().indexOf(q)>=0)
+    .filter(r=>paInWindow(r,win))
     .filter(r=> scope==="preinsp" ? r.preInspNeeded
              : scope==="open" ? r.w.open : scope==="done" ? !r.w.open : true)
-    .forEach(r=>rows.push([r.w.equip, r.w.woNumber||"", r.w.maintType||"", r.info.label,
+    .forEach(r=>rows.push([r.w.equip, r.w.woNumber||"", r.w.maintType||"", r.w.hours==null?"":r.w.hours, r.info.label,
       r.w.priority||"", r.w.open?1:0, r.w.planStart||"", r.w.actualStart||"",
       r.last?r.last.date:"", r.last?r.last.type:"", r.delta==null?"":r.delta, r.status,
       r.daysUntilPlan==null?"":r.daysUntilPlan, r.preInspNeeded?1:0]));
@@ -16216,6 +16285,7 @@ $("ddType").onchange=renderDueTab; $("ddScope").onchange=()=>{ renderDueTab(); u
 $("ddQ").oninput=renderDueTab;
 $("ddCsv").onclick=dueCsv;
 if($("paQ")) $("paQ").oninput=renderPlanActualTab;
+if($("paWindow")) $("paWindow").onchange=renderPlanActualTab;
 if($("paCsv")) $("paCsv").onclick=paCsv;
 $("wBand").onchange=renderWearTab;
 $("follX").onclick=closeFollow;
@@ -16368,8 +16438,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=310"></script>
-<script src="sync-adapter.js?v=310"></script>
-<script src="report.js?v=310"></script>
+<script src="drive.js?v=311"></script>
+<script src="sync-adapter.js?v=311"></script>
+<script src="report.js?v=311"></script>
 </body>
 </html>
