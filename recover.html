@@ -69,6 +69,8 @@
   <a class="app" id="open" href="mobile/">Open the app / Открыть приложение →</a>
   <div class="log" id="log"></div>
 
+  <p class="keep"><b>If the app still will not open after this:</b> close it completely (swipe it away), then open it again — twice. The first launch is served the old copy while the new one downloads; the second gets the new one. Nothing is lost by doing this.</p>
+  <p class="keep">Если приложение всё равно не открывается: закройте его полностью и откройте снова — два раза. Ничего не потеряется.</p>
   <p class="keep">Nothing on this phone is deleted by this page — not the rounds, not the photographs, not the offline app.</p>
   <p class="keep">Эта страница ничего не удаляет — ни обходы, ни фотографии, ни офлайн-приложение.</p>
 </div>
@@ -152,7 +154,32 @@
       say("Asking the app to look for a new build…");
       /* update() ONLY. No unregister, no cache delete — see the note at the
          top of this file for what that rule cost when it was broken. */
+      /* Ask the worker to move any window that has stopped answering onto
+         the build it now holds. Only the worker can see the app's windows
+         — this page is deliberately outside its scope — and a window that
+         cannot answer a ping is not running JavaScript at all, which is
+         exactly the handset somebody is standing there holding. */
+      var rescue = function () {
+        return Promise.all(rs.map(function (r) {
+          var sw = r.active;
+          if (!sw) return null;
+          return new Promise(function (res) {
+            var ch = new MessageChannel();
+            var done = false;
+            ch.port1.onmessage = function (ev) {
+              done = true;
+              var d = (ev && ev.data) || {};
+              if (d.moved) say("Moved " + d.moved + " stuck window(s) onto build " + d.build + ".");
+              res();
+            };
+            try { sw.postMessage({ type: "cm-rescue" }, [ch.port2]); }
+            catch (e) { return res(); }
+            setTimeout(function () { if (!done) res(); }, 12000);
+          });
+        }));
+      };
       return Promise.all(rs.map(function (r) { return r.update().catch(function () {}); }))
+        .then(function () { return rescue(); })
         .then(function () {
           var tries = 0;
           return new Promise(function (done) {

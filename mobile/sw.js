@@ -36,7 +36,7 @@
        explains itself and offers a retry — because an honest offline page is
        recoverable and a browser error page is not. */
 
-const BUILD = "326";
+const BUILD = "327";
 const CACHE = "plug-capture-v" + BUILD;
 
 /* Without these the app is not an app: no page, no equipment register, no
@@ -439,6 +439,100 @@ async function revalidate(reqOrUrl) {
 /* The page asks about its own footing: the System screen shows this, and the
    repair button uses it. A phone that says "12 of 13 files" is diagnosable over
    a radio; one that just fails is not. */
+
+/* ---- RESCUING A PAGE THAT HAS STOPPED ANSWERING --------------------------
+   A page can be alive enough to hold the screen and dead enough to be
+   useless: build 321 shipped a repaint loop that pegged the main thread
+   before boot finished, and a pegged page cannot check for a build, cannot
+   apply one, cannot send its queue and cannot even run a timer — so the
+   watchdog in the page could not fire either. Meanwhile this worker answers
+   every navigation in its scope from the cache, so relaunching the app
+   served the frozen build straight back. Phones sat for a day with a
+   fortnight of rounds on them, and the fix was live the whole time.
+
+   The worker is the one part that never freezes. So it asks: every window
+   client gets a ping, and a client that cannot answer within PING_WAIT is
+   not running JavaScript at all — nothing else makes a page silent while
+   its worker is being talked to. Those, and only those, are navigated onto
+   the build now in the cache.
+
+   Why a ping and not "has it fetched lately": the fetch history is empty
+   for the first minutes of a worker's life, so right after an activate —
+   the exact moment this matters — it cannot tell a frozen page from a new
+   one. A message round trip answers immediately or never.
+
+   WHAT THIS CANNOT DO, MEASURED RATHER THAN HOPED. A page pegged in a
+   microtask loop cannot be navigated at all: unloading a document needs
+   the very main thread that is spinning, so navigate() is issued and the
+   window stays exactly where it was. tests/swrescue.cjs holds that result
+   rather than hiding it — the worker reports honestly that it tried and
+   the window is still silent. For a SPUN page the only way back is to
+   close the app and open it again (twice: the first launch is served the
+   cached bad build while the worker fetches the good one), which is
+   measured in the same suite.
+
+   So this is not run automatically. It is not on activate and not on a
+   push: sweeping every window whenever a build lands would force-reload
+   healthy pages from older builds — mid-round, on a thread that was never
+   stuck — to fix a case it provably cannot fix. It runs only when a person
+   standing with a dead handset asks for it from recover.html, where what
+   it does and does not do is written down. What it does reach is a window
+   that is silent for a reason OTHER than a spin: one whose script threw
+   and left it half-built. */
+const PING_WAIT = 5000;
+async function rescueSilentClients(why) {
+  let cs = [], moved = 0, asked = 0;
+  try { cs = await self.clients.matchAll({ type: "window", includeUncontrolled: true }); }
+  catch (_) { return { asked: 0, moved: 0 }; }
+  /* THE APP'S OWN WINDOWS AND NOTHING ELSE. includeUncontrolled reaches a
+     window this worker has not claimed yet — which is wanted, since a
+     frozen page may never have been claimed — but it also reaches every
+     other page on the origin, and the first thing that caught was
+     recover.html: the page that ASKED for the rescue was pinged, could not
+     answer (it is not the app and has no listener), and was navigated away
+     mid-request. The scope is the line between "a window of the app that
+     has stopped answering" and "somebody else's page, none of my
+     business". */
+  const scope = String(self.registration && self.registration.scope || "");
+  for (const c of cs) {
+    if (scope && String(c.url || "").indexOf(scope) !== 0) continue;
+    asked++;
+    const answered = await new Promise((res) => {
+      let done = false;
+      let ch;
+      try { ch = new MessageChannel(); } catch (_) { return res(true); }
+      ch.port1.onmessage = () => { if (!done) { done = true; res(true); } };
+      /* Anything that stops the question being ASKED means we know nothing
+         about that client, and a client we know nothing about is left
+         alone. Only a definite silence counts. */
+      try { c.postMessage({ type: "cm-alive?" }, [ch.port2]); }
+      catch (_) { return res(true); }
+      setTimeout(() => { if (!done) { done = true; res(false); } }, PING_WAIT);
+    });
+    if (answered) continue;
+    console.warn("[sw] client not answering (" + why + "), moving it onto " + BUILD);
+    /* navigate() is the one that needs the client to be ours; a client this
+       worker has not claimed can still be reached by asking it to reload
+       through its own URL, so both are tried before giving up on it. */
+    /* NEVER WAIT ON IT. navigate() resolves when the new document is
+       ready, and the document being replaced is one whose thread is
+       pegged — on a frozen page that promise can simply never settle, and
+       awaiting it hangs the rescue itself, so the worker goes quiet and
+       whoever asked gets no answer. Started, bounded, and moved on from:
+       the phone either comes back or it does not, and either way the
+       worker stays able to say so. */
+    const NAV_WAIT = 3000;
+    const started = await Promise.race([
+      (async () => { try { await c.navigate(c.url); } catch (_) {
+        try { await self.clients.claim(); await c.navigate(c.url); } catch (__) { return false; } }
+        return true; })(),
+      new Promise(r => setTimeout(() => r(true), NAV_WAIT)),
+    ]);
+    if (started) moved++;
+  }
+  return { asked: asked, moved: moved };
+}
+
 self.addEventListener("message", (e) => {
   const d = e.data || {};
   if (d.type === "sw-health") {
@@ -449,6 +543,18 @@ self.addEventListener("message", (e) => {
                     have: ESSENTIAL.length - missing.length, need: ESSENTIAL.length, missing };
       if (port) port.postMessage(msg);
       else (await self.clients.matchAll()).forEach(c => c.postMessage(msg));
+    })());
+  }
+  /* ASKED FOR FROM OUTSIDE. recover.html sits above this worker's scope so
+     it is reachable when the app is not, but it cannot see the app's
+     clients — only the worker can. This is how a person standing with a
+     dead handset gets the frozen window moved onto the good build without
+     deleting anything. */
+  if (d.type === "cm-rescue") {
+    e.waitUntil((async () => {
+      const r = await rescueSilentClients("asked");
+      const port = e.ports && e.ports[0];
+      if (port) port.postMessage({ type: "cm-rescue", asked: r.asked, moved: r.moved, build: BUILD });
     })());
   }
   if (d.type === "sw-heal") healSoon();

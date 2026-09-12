@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=326">
+<link rel="manifest" href="manifest.webmanifest?v=327">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=326">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=326">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=326">
+<link rel="apple-touch-icon" href="icon-192.png?v=327">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=327">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=327">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2071,6 +2071,7 @@
           <span class="hint" data-i18n="due_sched_s" style="margin-top:2px;display:block;">Adds the office's own planned date under a round that has one. Off by default — nothing changes unless you turn it on.</span>
         </span>
       </label>
+      <div class="quiet" id="dueSchedNote" style="margin:-4px 0 8px"></div>
       <div class="quiet" id="dueBasis" style="margin:-4px 0 10px"></div>
       <div class="duelist" id="dueList"></div>
     </div>
@@ -2430,15 +2431,15 @@
   }
 })();
 </script>
-<script src="native.js?v=326"></script>
-<script src="upload-defaults.js?v=326"></script>
-<script src="hme.js?v=326"></script>
-<script src="mp-fc.js?v=326"></script>
-<script src="hme-cascade.js?v=326"></script>
-<script src="assets.js?v=326"></script>
-<script src="temp-limits.js?v=326"></script>
-<script src="normalize.js?v=326"></script>
-<script src="terms.js?v=326"></script>
+<script src="native.js?v=327"></script>
+<script src="upload-defaults.js?v=327"></script>
+<script src="hme.js?v=327"></script>
+<script src="mp-fc.js?v=327"></script>
+<script src="hme-cascade.js?v=327"></script>
+<script src="assets.js?v=327"></script>
+<script src="temp-limits.js?v=327"></script>
+<script src="normalize.js?v=327"></script>
+<script src="terms.js?v=327"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2457,25 +2458,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=326"></script>
-<script src="edits.js?v=326"></script>
-<script src="due.js?v=326"></script>
-<script src="wear.js?v=326"></script>
-<script src="wear-figs.js?v=326"></script>
-<script src="wear-map.js?v=326"></script>
-<script src="machine-photos.js?v=326"></script>
-<script src="machine-fig.js?v=326"></script>
-<script src="get.js?v=326"></script>
-<script src="points.js?v=326"></script>
-<script src="uc-points.js?v=326"></script>
-<script src="inspect-guide.js?v=326"></script>
-<script src="get-figs.js?v=326"></script>
-<script src="body-points.js?v=326"></script>
-<script src="body-map.js?v=326"></script>
-<script src="lube.js?v=326"></script>
-<script src="lube-overrides.js?v=326"></script>
-<script src="lube2027.js?v=326"></script>
-<script src="report-core.js?v=326"></script>
+<script src="grade.js?v=327"></script>
+<script src="edits.js?v=327"></script>
+<script src="due.js?v=327"></script>
+<script src="wear.js?v=327"></script>
+<script src="wear-figs.js?v=327"></script>
+<script src="wear-map.js?v=327"></script>
+<script src="machine-photos.js?v=327"></script>
+<script src="machine-fig.js?v=327"></script>
+<script src="get.js?v=327"></script>
+<script src="points.js?v=327"></script>
+<script src="uc-points.js?v=327"></script>
+<script src="inspect-guide.js?v=327"></script>
+<script src="get-figs.js?v=327"></script>
+<script src="body-points.js?v=327"></script>
+<script src="body-map.js?v=327"></script>
+<script src="lube.js?v=327"></script>
+<script src="lube-overrides.js?v=327"></script>
+<script src="lube2027.js?v=327"></script>
+<script src="report-core.js?v=327"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2483,6 +2484,24 @@ if (!window.TERMS) {
 /* Every blocking file above arrived, so a stall from here on is no longer
    "still downloading" and the watchdog should not say that it is. */
 try{ if(window.__bootSeen) window.__bootSeen(); }catch(e){}
+/* I AM STILL RUNNING. The worker asks this of every window it controls when
+   a new build activates, and again on a push; a window that does not answer
+   is not running JavaScript at all, and gets navigated onto the new build —
+   which is the only way to reach a page that has frozen, since everything
+   else that would rescue it runs on the thread that is stuck. Answering is
+   therefore how a HEALTHY page says "leave me alone, I am mid-round". It is
+   registered here, at the very top of the app's own script, so it works even
+   if something further down throws: a page that is half-built is still a
+   page nobody should reload out from under an inspector without cause. */
+try{
+  navigator.serviceWorker && navigator.serviceWorker.addEventListener("message", ev=>{
+    const d = ev && ev.data;
+    if(!d || d.type !== "cm-alive?") return;
+    const port = ev.ports && ev.ports[0];
+    try{ port ? port.postMessage({ type:"cm-alive", build: (typeof BUILD!=="undefined"?BUILD:"?") })
+              : null; }catch(e){}
+  });
+}catch(e){}
 /* A DOWNLOAD THAT STOPPED BETWEEN TWO FILES.
 
    index.html can be in the cache while one of the scripts above is not — the
@@ -2978,6 +2997,9 @@ const I18N = {
     due_sched_s:"Adds the office's own planned date under a round that has one. Off by default — nothing changes unless you turn it on.",
     due_sched_line:"1C plan {d} · {h} · WO {wo}",
     due_sched_precheck:"walk ahead of the PM",
+    due_sched_on_n:"1C's plan is shown on {n} round(s) below.",
+    due_sched_on_none:"Nothing in this list has an open 1C work order on the same round. 1C has {n} due in the next 7 days — see This week.",
+    due_sched_nofile:"1C's schedule has not been downloaded yet on this phone.",
     due_list_seg:"List",
     due_week_seg:"This week",
     due_week_sub:"Open work orders due in the next 7 days, grouped by the day something has to happen. General Inspection is listed on the day it should be carried out — ahead of the plan date, not on it.",
@@ -3542,6 +3564,9 @@ const I18N = {
     due_sched_s:"Добавляет плановую дату офиса под обходом, для которого она есть. По умолчанию выключено — ничего не меняется, пока вы сами не включите.",
     due_sched_line:"план 1С {d} · {h} · наряд {wo}",
     due_sched_precheck:"провести до ТО",
+    due_sched_on_n:"План 1С показан у {n} обход(ов) ниже.",
+    due_sched_on_none:"Ни у одного обхода в этом списке нет открытого наряда 1С по тому же обходу. В 1С на ближайшие 7 дней их {n} — см. «Эта неделя».",
+    due_sched_nofile:"График 1С ещё не загружен на этот телефон.",
     due_list_seg:"Список",
     due_week_seg:"Эта неделя",
     due_week_sub:"Открытые наряды со сроком на ближайшие 7 дней, по дням. Общий осмотр указан на дне, когда его нужно провести — до даты ТО, а не в этот день.",
@@ -8285,9 +8310,15 @@ function schedShortDate(iso){
 /* One line, printed under a row that already exists — see the mockup this
    was built from. Blank whenever 1C has nothing to say about this exact
    (unit, round) pair, which is most rows even with the toggle on. */
+/* How many rows the tick actually annotated on this paint. Reset by
+   renderDue() before the rows are built, read by the note under the
+   switch — the only thing that can tell an inspector the difference
+   between "1C has nothing to add to these rows" and "this is broken". */
+let schedShown = 0;
 function schedRowHtml(unit,ty){
   const s = schedFor(unit,ty); if(!s) return "";
   const hrs = s.hours!=null ? s.hours+"h" : "";
+  schedShown++;
   const line = t("due_sched_line",{ d: schedShortDate(s.plan), h: hrs, wo: s.wo || "—" });
   /* The one case worth a second note: General Inspection has to be WALKED
      AHEAD of a planned PM, not on it — see CLAUDE.md and the dashboard's
@@ -8649,6 +8680,7 @@ function renderDue(){
      independent reasons need SCHED now: the List toggle (dueSched) and the
      This week view, which needs it unconditionally since it IS 1C's
      schedule, nothing else. */
+  schedShown = 0;
   const needSched = dueSched || dueView==="week";
   if(needSched && !schedKick
      && (!SCHED || Date.now()-(schedCacheGet()||{at:0}).at >= SCHED_STALE_MS)){
@@ -8921,6 +8953,26 @@ function renderDue(){
      function above it is allowed to skip. Switching views is then just a
      class toggle: instant, and neither view can go stale from having been
      skipped. */
+  /* A TICK THAT APPEARS TO DO NOTHING IS THE DEFECT THIS PROJECT KEEPS
+     MAKING. "Show 1C schedule" annotates a row that is ALREADY in this
+     list and that 1C has an open work order for, on that same round.
+     Both halves can be true and the screen still not change: the list is
+     scoped to Overdue, or the rounds 1C planned are ones this machine's
+     class is not on, so they were never listed to be annotated. From the
+     inspector's side that is indistinguishable from a broken switch —
+     they tick it, nothing moves, and they stop trusting it. So it says
+     what it did; and when it did nothing it says why, and where the work
+     it does know about actually is. */
+  {
+    const note=$("dueSchedNote");
+    if(note){
+      if(!dueSched || dueView==="week") note.textContent="";
+      else if(!SCHED) note.textContent=t("due_sched_nofile");
+      else note.textContent = schedShown
+        ? t("due_sched_on_n",{n:schedShown})
+        : t("due_sched_on_none",{n:(typeof dueWeekRows==="function"?dueWeekRows().length:0)});
+    }
+  }
   const wrapL=$("dueListWrap"), wrapW=$("dueWeekWrap");
   if(wrapL) wrapL.classList.toggle("hidden", dueView==="week");
   if(wrapW) wrapW.classList.toggle("hidden", dueView!=="week");
@@ -11855,7 +11907,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="326";
+const BUILD="327";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
