@@ -894,6 +894,9 @@ exports.handler = async function (event) {
   const q = (event && (event.queryStringParameters || event.params)) || {};
   const method = String((event && (event.httpMethod || event.method)) || 'GET').toUpperCase();
   if (method === 'OPTIONS') return { statusCode: 204, headers: CORS, body: '' };
+  /* Hoisted out of the try below so the catch at the bottom can still say
+     what was actually being asked for, whatever failed. */
+  let b = {};
   try {
     if (method === 'GET') {
       if (!q.action) return json(await diagnose());       // health needs no secret
@@ -912,7 +915,6 @@ exports.handler = async function (event) {
          is a tested path (see tests/drv.cjs, "old deployment"). */
       return json({ ok: false, error: 'Unknown action: ' + q.action });
     }
-    let b = {};
     try { b = JSON.parse((event && event.body) || '{}'); } catch (e) { b = {}; }
     if (event && event.isBase64Encoded && event.body) {
       try { b = JSON.parse(Buffer.from(event.body, 'base64').toString('utf8')); } catch (e) {}
@@ -958,6 +960,24 @@ exports.handler = async function (event) {
     }
     { const r = await saveOne(b); if (r && r.ok && isSidecar(r.name)) folderChanged('save'); return json(r); }
   } catch (e) {
+    /* EVERY UNCAUGHT FAILURE, NOT JUST THE ONE PATH WE HAPPENED TO BE
+       WATCHING. The saveOne() PUT already had its own console.error, added
+       after a phone reported "The object can not be found here" for every
+       file in a batch -- and when that came back, this same failure was
+       nowhere in three weeks of logs. It never went through that line at
+       all, because a genuinely unexpected failure does not announce which
+       code path it will come from. This is the backstop: whatever throws,
+       on a GET or a POST, on any op, gets one line here with what was
+       actually being asked for -- so the NEXT unexplained failure has
+       something to go on instead of another empty grep. */
+    try {
+      console.error('[handler] request failed', JSON.stringify({
+        method: method, action: q && q.action, op: b && b.op,
+        name: b && b.name, folder: b && b.folder, dev: b && b.dev,
+        bytes: (b && b.file) ? Buffer.byteLength(String(b.file)) : undefined,
+        err: String((e && e.message) || e),
+      }));
+    } catch (logErr) { /* logging must never be why a request fails */ }
     return json({ ok: false, error: String((e && e.message) || e) });
   }
 };
