@@ -47,6 +47,15 @@ so no separate carve-out is needed for that case either.) A class with no
 evidence for a round gets "Nh service" and no cmTypes, same as any other
 unmatched figure -- not a guess, and not silently assumed.
 
+DEDUPE. 1C's own export is a known source of duplicate rows: it writes one
+row per line item on a work order, so a WO closed against two defects, two
+parts, or a meter read taken in both KM and Hours repeats the identical
+"N Hours service Planned" row that many times under the SAME work order
+number. Read raw, that showed up on the dashboard as the same job twice on
+the same unit and day. See the DEDUPE comment at the row loop below for the
+exact key; the collapsed count is written to the output as
+duplicateRowsCollapsed so it stays visible, not just fixed silently.
+
 Usage:
     python3 ingest/ingest_work_orders.py [source] [--out data/work_orders.js] [--fleet TK]
 
@@ -241,6 +250,8 @@ def main():
     work_orders = []
     kept_units = set()
     seen_units = set()
+    seen_keys = {}   # dedupe_key -> True, see dedupe_key() below
+    dup_count = 0
     for row in ws.iter_rows(min_row=hdr_row + 1, values_only=True):
         equip = row[col["Equip no"]]
         if not equip:
@@ -252,7 +263,6 @@ def main():
         maint_type = row[col["Maintenence type"]]
         if not maint_type or not PLANNED_SERVICE_RE.match(str(maint_type)):
             continue
-        kept_units.add(equip)
         plan_start_d, plan_start_dt = parse_1c_date(row[col["Start date plan"]])
         plan_end_d, plan_end_dt = parse_1c_date(row[col["End date plan"]])
         act_start_d, act_start_dt = parse_1c_date(row[col["Start date actual"]])
@@ -263,11 +273,33 @@ def main():
         hours = int(hm.group(1)) if hm else None
         cls = cls_by_equip.get(equip.upper(), "")
         cm_label, cm_types = resolve_cm_types(hours, cls, class_rounds)
+        wo_number = row[col["Work order number"]]
 
+        # DEDUPE. 1C's export is one ROW per line item on a work order, not
+        # one row per work order -- two defects, two parts, or a meter read
+        # in both KM and Hours all repeat the same "N Hours service
+        # Planned" row under the SAME work order number. Read raw, that
+        # showed up on the dashboard as the same job twice on the same unit
+        # and day (e.g. two "FC" pills on TK040, both WO-016435) -- not two
+        # real jobs, one row counted twice. A real work order number is
+        # 1C's own unique identity for one maintenance event, so the first
+        # occurrence wins and every later row carrying the same number is
+        # dropped. A blank work order number (seen on some still-registered,
+        # not yet released rows) falls back to the (equip, maint type, plan
+        # start, plan end) tuple -- the closest thing to identity 1C gives
+        # a row before it has a number of its own.
+        key = ("wo", equip.upper(), str(wo_number).strip().upper()) if wo_number \
+            else ("synth", equip.upper(), str(maint_type).strip(), plan_start_d, plan_end_d)
+        if key in seen_keys:
+            dup_count += 1
+            continue
+        seen_keys[key] = True
+
+        kept_units.add(equip)
         work_orders.append({
             "equip": equip,
             "cls": cls or None,
-            "woNumber": row[col["Work order number"]],
+            "woNumber": wo_number,
             "maintType": str(maint_type).strip(),
             "hours": hours,
             "cmLabel": cm_label,
@@ -294,6 +326,11 @@ def main():
                   + json.dumps(fleet if fleet else ["<all>"]),
         "unitsInWorkbook": len(seen_units),
         "unitsKept": sorted(kept_units),
+        # See the DEDUPE comment above -- 1C's export repeats a row per
+        # defect/part/meter-reading line under the same work order number.
+        # This is how many of THOSE repeat rows were collapsed away, not how
+        # many real duplicate work orders 1C itself has.
+        "duplicateRowsCollapsed": dup_count,
         "workOrders": work_orders,
     }
 
@@ -305,7 +342,8 @@ def main():
           "window.CM_WO_DATA = " + json.dumps(out, indent=2, ensure_ascii=False) + ";\n")
     out_file.write_text(js, encoding="utf-8")
     print(f"wrote {out_file} -- {len(work_orders)} planned service work order(s) "
-          f"across {len(kept_units)} unit(s) (of {len(seen_units)} in the workbook).")
+          f"across {len(kept_units)} unit(s) (of {len(seen_units)} in the workbook), "
+          f"{dup_count} duplicate row(s) collapsed.")
 
 
 if __name__ == "__main__":
