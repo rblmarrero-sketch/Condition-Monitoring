@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-09-12T01:04:31+00:00",
+  "generated": "2026-09-12T02:06:17+00:00",
   "source": "https://askpi.94-131-94-152.sslip.io/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 669,
@@ -415,12 +415,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016932",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -533,12 +529,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021523",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -594,12 +586,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025579",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -636,12 +624,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-004721",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -678,12 +662,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010779",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -720,12 +700,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015354",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -743,12 +719,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020944",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -804,12 +776,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001278",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -827,12 +795,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001278",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -850,12 +814,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001278",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -873,12 +833,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001278",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -896,12 +852,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001304",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -919,12 +871,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001304",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -942,12 +890,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001304",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -965,12 +909,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001304",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -988,12 +928,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001278",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -1011,12 +947,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001278",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -1034,12 +966,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001278",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -1057,12 +985,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001278",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -1080,12 +1004,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001304",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -1103,12 +1023,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001304",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -1126,12 +1042,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001304",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -1149,12 +1061,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001304",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -1191,12 +1099,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006884",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -1252,12 +1156,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021524",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -1294,12 +1194,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025585",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -1393,12 +1289,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002765",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -1435,12 +1327,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007956",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -1458,12 +1346,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007956",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -1538,12 +1422,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011253",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -1561,12 +1441,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013511",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -1622,12 +1498,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016252",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -1759,12 +1631,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023085",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -1839,12 +1707,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023090",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -1900,12 +1764,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023094",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -1961,12 +1821,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023098",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -2041,12 +1897,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023103",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -2140,12 +1992,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016944",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -2163,12 +2011,8 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": null,
       "cmmsStatus": "Registered",
@@ -2243,12 +2087,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023109",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -2323,12 +2163,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023115",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -2422,12 +2258,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023120",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -2445,12 +2277,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023123",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -2506,12 +2334,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013908",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -2586,12 +2410,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022925",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -2780,12 +2600,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023135",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -2841,12 +2657,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023139",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -2921,12 +2733,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023143",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -3058,12 +2866,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022920",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -3081,12 +2885,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022920",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -3180,12 +2980,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023193",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -3241,12 +3037,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023198",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -3302,12 +3094,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023201",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -3382,12 +3170,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023205",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -3462,12 +3246,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014721",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -3523,12 +3303,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023652",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -3565,12 +3341,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022890",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -3607,12 +3379,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000738",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -3687,12 +3455,8 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": null,
       "cmmsStatus": "Registered",
@@ -3710,12 +3474,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021586",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -3752,12 +3512,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-026124",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -3870,12 +3626,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002196",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -3893,12 +3645,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010177",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -3992,12 +3740,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000739",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4072,12 +3816,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-018716",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4095,12 +3835,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022901",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4194,12 +3930,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024927",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4217,12 +3949,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025430",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4278,12 +4006,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013913",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4358,12 +4082,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002826",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4400,12 +4120,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025606",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4442,12 +4158,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012965",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4484,12 +4196,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023649",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4526,12 +4234,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001406",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4587,12 +4291,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021065",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4629,12 +4329,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-026122",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4671,12 +4367,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025577",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4732,12 +4424,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013218",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4755,12 +4443,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013218",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4797,12 +4481,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-018636",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4820,12 +4500,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022895",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4862,12 +4538,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003801",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4904,12 +4576,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-019203",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4927,12 +4595,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022220",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4969,12 +4633,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000569",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -5011,12 +4671,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009078",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -5034,12 +4690,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007947",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -5133,10 +4785,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022737",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -5213,10 +4863,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021979",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -5293,10 +4941,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020070",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -5354,10 +5000,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025979",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -5396,10 +5040,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021977",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -5533,10 +5175,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000136",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -5575,10 +5215,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022013",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -5598,10 +5236,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022013",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -5640,10 +5276,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-018329",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -5663,10 +5297,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-018329",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -5857,10 +5489,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003333",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -5956,10 +5586,8 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -6036,10 +5664,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024815",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -6211,10 +5837,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-018331",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -6291,10 +5916,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023540",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -6373,10 +5997,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002071",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -6453,10 +6076,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006392",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -6535,10 +6157,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010613",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -6615,10 +6236,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014680",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -6697,10 +6317,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021641",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -6777,10 +6396,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024761",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -6859,10 +6477,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003275",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -6939,10 +6556,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008124",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -6962,10 +6578,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010005",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -7044,10 +6659,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014165",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -7124,10 +6738,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022068",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -7206,10 +6819,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-026366",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -7286,10 +6898,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003324",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -7387,10 +6998,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008904",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -7467,10 +7077,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013103",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -7549,10 +7158,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016563",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -7610,10 +7218,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021071",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -7692,10 +7299,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024763",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -7772,10 +7378,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003294",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -7854,10 +7459,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008906",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -7934,10 +7538,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013104",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -8016,10 +7619,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-018334",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -8098,10 +7700,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023551",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -8178,10 +7779,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002133",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -8260,10 +7860,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006398",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -8340,10 +7939,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011201",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -8422,10 +8020,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015644",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -8502,10 +8099,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022621",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -8584,10 +8180,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-026374",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -8607,10 +8202,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002136",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -8687,10 +8281,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003296",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -8769,10 +8362,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010626",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -8849,10 +8441,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014685",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -8931,10 +8522,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021166",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -9011,10 +8601,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024768",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -9093,10 +8682,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003311",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -9173,10 +8761,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007114",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -9276,10 +8863,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012172",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -9356,10 +8942,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016618",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -9398,10 +8983,9 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -9440,10 +9024,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021632",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -9520,10 +9103,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024771",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -9602,10 +9184,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003284",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -9682,10 +9263,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008911",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -9764,10 +9344,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014460",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -9806,10 +9385,9 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -9829,10 +9407,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020485",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -9909,10 +9486,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024772",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -9991,10 +9567,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002058",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -10071,10 +9646,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007116",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -10132,10 +9706,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013108",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -10212,10 +9785,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016584",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -10235,10 +9807,9 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -10258,10 +9829,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020493",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -10340,10 +9910,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023563",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -10458,10 +10027,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002046",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -10481,10 +10049,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008914",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -10525,10 +10092,9 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -10586,10 +10152,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024777",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -10668,10 +10233,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007117",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -10748,10 +10312,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011113",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -10771,10 +10334,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011113",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -10872,10 +10434,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002052",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -10916,10 +10477,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006409",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -10958,10 +10518,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013110",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -11002,10 +10561,9 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -11025,10 +10583,9 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -11109,10 +10666,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010605",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -11191,10 +10747,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016639",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -11425,10 +10980,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012209",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -11505,10 +11059,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015656",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -11566,10 +11119,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023357",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -11589,10 +11141,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023357",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -11631,10 +11182,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001315",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -11673,10 +11223,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007386",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -11738,10 +11287,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012297",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -11761,10 +11309,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012297",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -11822,10 +11369,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022261",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -11883,10 +11429,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025592",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -11927,10 +11472,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-004510",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -11969,10 +11513,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009150",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -12011,10 +11554,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013505",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -12150,10 +11692,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025573",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -12192,10 +11733,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007415",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -12234,10 +11774,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011260",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -12278,10 +11817,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015859",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -12301,10 +11839,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020497",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -12343,10 +11880,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024265",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -12385,10 +11921,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002144",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -12427,10 +11962,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006888",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -12471,10 +12005,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011849",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -12513,10 +12046,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015860",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -12576,10 +12108,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022233",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -12618,10 +12149,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025555",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -12660,10 +12190,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-005067",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -12702,10 +12231,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009520",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -12767,10 +12295,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015379",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -12847,10 +12374,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021525",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -12908,10 +12434,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025460",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -12950,10 +12475,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003776",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -12994,10 +12518,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009157",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -13036,10 +12559,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013904",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -13099,10 +12621,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022234",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -13141,10 +12662,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025564",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -13183,10 +12703,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-005081",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -13225,10 +12744,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009160",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -13269,10 +12787,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013902",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -13351,10 +12868,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023345",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -13374,10 +12890,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023345",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -13416,10 +12931,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002255",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -13458,10 +12972,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007402",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -13502,10 +13015,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013572",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -13565,10 +13077,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021072",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -13645,10 +13156,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-026385",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -13706,10 +13216,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003274",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -13786,10 +13295,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008917",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -13847,10 +13355,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016616",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -13889,10 +13396,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021092",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -13969,10 +13475,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024875",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -14049,10 +13554,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002848",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -14129,10 +13633,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006416",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -14211,10 +13714,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012178",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -14348,10 +13850,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023566",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -14428,10 +13929,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002065",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -14510,10 +14010,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006417",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -14590,10 +14089,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012203",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -14670,10 +14168,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016615",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -14712,10 +14209,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021627",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -14794,10 +14290,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024956",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -14893,10 +14388,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003310",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -14973,10 +14467,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007120",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -15053,10 +14546,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012208",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -15133,10 +14625,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015660",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -15175,10 +14666,9 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -15198,10 +14688,9 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -15240,10 +14729,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022082",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -15284,10 +14772,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-026433",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -15326,10 +14813,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003298",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -15368,10 +14854,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008939",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -15448,10 +14933,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022613",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -15530,10 +15014,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000527",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -15610,10 +15093,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003251",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -15690,10 +15172,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010060",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -15770,10 +15251,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014050",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -15871,10 +15351,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000600",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -15894,10 +15373,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002772",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -15936,10 +15414,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006897",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -15959,10 +15436,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007968",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -16001,10 +15477,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012300",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -16024,10 +15499,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012300",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -16047,10 +15521,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014379",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -16148,10 +15621,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022238",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -16190,10 +15662,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025560",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -16234,10 +15705,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-005093",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -16276,10 +15746,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010165",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -16318,10 +15787,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015397",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -16341,10 +15809,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020962",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -16364,10 +15831,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022923",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -16387,10 +15853,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024268",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -16429,10 +15894,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-004501",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -16471,10 +15935,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008613",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -16515,10 +15978,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013968",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -16557,10 +16019,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016929",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -16580,10 +16041,9 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -16679,10 +16139,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010088",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -16778,10 +16237,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023285",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -16839,10 +16297,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023289",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -16862,10 +16319,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023293",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -16942,10 +16398,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014171",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -17005,10 +16460,9 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -17085,10 +16539,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007122",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -17184,10 +16637,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012174",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -17266,10 +16718,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016623",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -17327,10 +16778,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007123",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -17407,10 +16857,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012201",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -17489,10 +16938,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016606",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -17531,10 +16979,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007086",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -17611,10 +17058,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010090",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -17691,10 +17137,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015451",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -17771,10 +17216,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008107",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -17870,10 +17314,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013129",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -17952,10 +17395,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016604",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -17975,12 +17417,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022877",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -18017,12 +17455,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021526",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -18059,12 +17493,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025588",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -18101,12 +17531,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-004506",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -18143,12 +17569,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012955",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -18166,12 +17588,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020968",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -18208,12 +17626,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025587",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -18250,12 +17664,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009619",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -18311,12 +17721,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025605",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -18334,12 +17740,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001340",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -18395,12 +17797,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023683",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -18437,12 +17835,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002777",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -18517,12 +17911,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024514",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -18559,12 +17949,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002146",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -18582,12 +17968,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020501",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -18643,12 +18025,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024501",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -18666,12 +18044,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025574",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -18689,12 +18063,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003802",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -18712,12 +18082,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011876",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -18735,12 +18101,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013924",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -18758,12 +18120,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015333",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -18781,12 +18139,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015333",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -18842,12 +18196,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025463",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -18922,12 +18272,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002781",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -19002,12 +18348,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007974",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -19101,12 +18443,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011229",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -19181,12 +18519,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014856",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -19204,12 +18538,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020502",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -19227,12 +18557,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022878",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -19250,12 +18576,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024935",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -19349,12 +18671,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006255",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -19391,12 +18709,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007975",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -19452,12 +18766,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012942",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -19513,12 +18823,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-018654",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -19574,12 +18880,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024485",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -19616,12 +18918,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025601",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -19639,12 +18937,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025601",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -19662,12 +18956,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001348",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -19818,12 +19108,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009521",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -19936,12 +19222,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022086",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -19959,12 +19241,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024502",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -20058,12 +19336,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003783",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -20138,12 +19412,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007977",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -20218,12 +19488,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011234",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -20298,12 +19564,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015331",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -20435,12 +19697,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024906",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -20553,12 +19811,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006895",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -20633,12 +19887,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009565",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -20789,12 +20039,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015801",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -20850,12 +20096,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022138",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -20930,12 +20172,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025567",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -20991,12 +20229,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-004498",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -21128,12 +20362,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014375",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -21265,12 +20495,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007408",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -21288,12 +20514,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008626",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -21311,12 +20533,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016886",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -21334,12 +20552,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023673",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -21414,12 +20628,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001353",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -21437,12 +20647,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-005071",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -21460,12 +20666,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-005052",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -21521,12 +20723,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013896",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -21544,12 +20742,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014843",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -21681,12 +20875,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021509",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -21704,12 +20894,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012556",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -21746,12 +20932,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022874",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -21769,12 +20951,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003786",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -21792,12 +20970,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006259",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -21815,12 +20989,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-018665",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -21857,12 +21027,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024496",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -21899,12 +21065,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001354",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -21941,12 +21103,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006262",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -21983,12 +21141,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009518",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -22006,12 +21160,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022075",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -22029,12 +21179,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023682",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -22052,12 +21198,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025452",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -22075,12 +21217,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022224",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -22098,12 +21236,8 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": null,
       "cmmsStatus": "Registered",
@@ -22140,12 +21274,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002785",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -22182,12 +21312,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007397",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -22224,12 +21350,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010774",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -22285,12 +21407,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022143",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -22327,12 +21445,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-026136",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -22369,12 +21483,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003769",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -22411,12 +21521,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008627",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -22453,12 +21559,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006264",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -22476,12 +21578,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021537",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -22518,12 +21616,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025444",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -22560,12 +21654,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003800",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -22583,12 +21673,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006257",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -22606,12 +21692,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007981",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -22648,12 +21730,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011249",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -22671,12 +21749,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012344",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -22713,12 +21787,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020506",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -22755,12 +21825,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024495",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -22797,12 +21863,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010160",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -22820,12 +21882,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013506",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -23128,12 +22186,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024490",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -23170,12 +22224,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002148",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -23212,12 +22262,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006917",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -23254,12 +22300,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010166",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -23296,12 +22338,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013499",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -23338,12 +22376,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022132",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -23361,12 +22395,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024510",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -23384,12 +22414,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025586",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -23426,12 +22452,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-004571",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -23696,12 +22718,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003797",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -23776,12 +22794,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008617",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -23970,12 +22984,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-004573",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -23993,12 +23003,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-005078",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -24054,12 +23060,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009165",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -24248,12 +23250,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014873",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -24518,12 +23516,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013892",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -24579,12 +23573,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016939",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -24659,12 +23649,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016278",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -24853,12 +23839,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014866",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -24895,12 +23877,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016924",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -24918,11 +23896,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021643",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
@@ -24960,11 +23936,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-005489",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
@@ -25002,11 +23976,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010067",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
@@ -25044,11 +24016,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014060",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
@@ -25067,11 +24037,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014060",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
@@ -25128,11 +24096,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-026514",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
@@ -25170,11 +24136,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023583",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
@@ -25212,11 +24176,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000549",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
@@ -25235,11 +24197,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002847",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
@@ -25277,11 +24237,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006422",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
@@ -25319,11 +24277,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013130",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
@@ -25361,11 +24317,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022081",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
@@ -25403,11 +24357,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000057",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
@@ -25445,11 +24397,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003345",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
@@ -25506,11 +24456,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010017",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
@@ -25548,11 +24496,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016651",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
@@ -25590,11 +24536,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003364",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
@@ -25632,11 +24576,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010007",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
@@ -25674,11 +24616,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016565",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
@@ -25773,11 +24713,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023588",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
@@ -25853,11 +24791,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002064",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
@@ -25914,11 +24850,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006423",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
@@ -26013,11 +24947,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012221",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
@@ -26093,11 +25025,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016607",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
@@ -26154,11 +25084,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002129",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
@@ -26234,11 +25162,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006424",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
@@ -26333,11 +25259,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011212",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
@@ -26356,11 +25280,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011212",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
@@ -26436,11 +25358,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015208",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
@@ -26687,11 +25607,9 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": null,
@@ -26710,11 +25628,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-018395",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
@@ -26733,11 +25649,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021628",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
@@ -26965,11 +25879,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022614",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
@@ -27007,11 +25919,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000551",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
@@ -27049,11 +25959,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013133",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
@@ -27091,11 +25999,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010044",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
@@ -27171,11 +26077,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014064",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
@@ -27251,11 +26155,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012656",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
@@ -27388,11 +26290,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016574",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
@@ -27449,11 +26349,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012189",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
@@ -27529,11 +26427,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015678",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut",
       "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
+        "FC"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
@@ -27685,12 +26581,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025456",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -27803,12 +26695,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000659",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -27826,12 +26714,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000659",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -27849,12 +26733,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000660",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -27948,12 +26828,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020477",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -27990,12 +26866,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023598",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -28032,12 +26904,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002053",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -28074,12 +26942,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006425",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -28116,12 +26980,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012225",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -28158,12 +27018,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016608",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -28200,12 +27056,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022615",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -28242,12 +27094,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000544",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -28284,12 +27132,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003260",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -28326,12 +27170,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010142",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -28368,12 +27208,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014535",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -28391,12 +27227,8 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": null,
       "cmmsStatus": "Registered",
@@ -28433,12 +27265,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008133",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -28456,12 +27284,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008133",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -28612,12 +27436,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000545",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -28692,12 +27512,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006426",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -28772,12 +27588,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010634",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -28852,12 +27664,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015458",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -28932,12 +27740,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022610",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -29012,12 +27816,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000546",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -29111,12 +27911,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006428",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -29191,12 +27987,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010640",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -29290,12 +28082,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014703",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -29370,12 +28158,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020473",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -29469,12 +28253,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025044",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -29549,12 +28329,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002852",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -29629,12 +28405,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007127",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -29709,12 +28481,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012657",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -29789,12 +28557,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016649",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -29831,12 +28595,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020836",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -29911,12 +28671,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025047",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -29991,12 +28747,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002040",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -30071,12 +28823,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007128",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -30151,12 +28899,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012658",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -30231,12 +28975,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016597",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -30292,12 +29032,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022097",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -30372,12 +29108,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-026512",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -30452,12 +29184,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003309",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -30551,12 +29279,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008958",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -30631,12 +29355,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013140",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -30711,12 +29431,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016582",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -30734,12 +29450,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000570",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -30757,12 +29469,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-004477",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -30799,12 +29507,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010750",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -30822,12 +29526,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010750",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -30883,12 +29583,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020540",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -30944,12 +29640,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023648",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -30986,12 +29678,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015317",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31009,12 +29697,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006882",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31108,12 +29792,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006876",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31169,12 +29849,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022232",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31230,12 +29906,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000661",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31272,12 +29944,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000662",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31333,12 +30001,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023656",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31375,12 +30039,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001363",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31398,12 +30058,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002787",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31421,12 +30077,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006275",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31463,12 +30115,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020992",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31505,12 +30153,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000663",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31528,12 +30172,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002164",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31551,12 +30191,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025562",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31593,12 +30229,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020510",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31616,12 +30248,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023675",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31639,12 +30267,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020511",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31681,12 +30305,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023672",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31704,12 +30324,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000664",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31727,12 +30343,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002165",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31750,12 +30362,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002788",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31792,12 +30400,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020512",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31834,12 +30438,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024499",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31876,12 +30476,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001364",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31899,12 +30495,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002166",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31941,12 +30533,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006916",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -31964,12 +30552,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020513",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -32006,12 +30590,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025624",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -32048,12 +30628,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001365",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -32090,12 +30666,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023660",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -32132,12 +30704,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001366",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -32155,12 +30723,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002168",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -32197,12 +30761,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006253",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -32220,12 +30780,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016272",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -32243,12 +30799,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020514",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -32285,12 +30837,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023653",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -32327,12 +30875,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001368",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -33528,12 +32072,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015278",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -33551,12 +32091,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020071",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -33612,12 +32148,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025325",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -33673,12 +32205,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-019320",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -33734,12 +32262,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022738",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -33856,10 +32380,9 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -33900,10 +32423,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025446",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -33961,10 +32483,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006877",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34024,10 +32545,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-005260",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34066,10 +32586,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010200",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34131,10 +32650,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016946",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34173,10 +32691,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023348",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34196,10 +32713,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023348",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34240,10 +32756,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001396",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34282,10 +32797,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006244",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34326,10 +32840,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009702",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34349,10 +32862,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010796",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34372,10 +32884,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013967",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34414,10 +32925,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021038",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34456,10 +32966,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024901",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34500,10 +33009,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002814",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34542,10 +33050,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007997",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34586,10 +33093,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012916",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34609,10 +33115,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014392",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34632,12 +33137,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020546",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -34655,12 +33156,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022904",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -34716,12 +33213,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011847",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -34739,12 +33232,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015406",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -34800,12 +33289,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024517",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -34842,12 +33327,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002184",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -34903,12 +33384,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010765",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -34945,10 +33422,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022927",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34989,10 +33465,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016301",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35031,10 +33506,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021554",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35096,10 +33570,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025589",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35119,10 +33592,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012927",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35161,10 +33633,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016920",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35184,10 +33655,9 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35207,10 +33677,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024267",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35251,10 +33720,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002186",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35293,10 +33761,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010193",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35377,10 +33844,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022932",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35400,10 +33866,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023346",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35423,10 +33888,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023346",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35446,10 +33910,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000720",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35488,10 +33951,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-005062",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35532,10 +33994,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010169",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35555,10 +34016,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012966",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35618,10 +34078,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021560",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35679,10 +34138,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025418",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35723,10 +34181,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-004473",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35765,10 +34222,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010170",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35788,10 +34244,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011231",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35811,10 +34266,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015409",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35855,10 +34309,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022926",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35897,10 +34350,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000721",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35941,10 +34393,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006267",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35983,10 +34434,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010788",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36048,10 +34498,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020547",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36090,10 +34539,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024912",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36134,10 +34582,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002188",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36176,10 +34623,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008000",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36199,10 +34645,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009516",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36243,10 +34688,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015876",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36327,10 +34771,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002189",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36371,10 +34814,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008001",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36394,10 +34836,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011251",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36417,10 +34858,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012296",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36440,10 +34880,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012296",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36482,10 +34921,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009622",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36547,10 +34985,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025604",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36570,10 +35007,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003793",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36635,10 +35071,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013478",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36658,10 +35093,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015878",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36702,10 +35136,9 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36744,10 +35177,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022140",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36788,10 +35220,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012943",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36811,10 +35242,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014720",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36855,10 +35285,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022240",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36897,10 +35326,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000723",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36962,10 +35390,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-005054",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -37023,10 +35450,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013490",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -37046,10 +35472,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015410",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -37132,10 +35557,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002966",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -37174,10 +35598,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009177",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -37260,10 +35683,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016283",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -37283,10 +35705,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020549",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -37325,10 +35746,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011252",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -37348,10 +35768,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012945",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -37392,10 +35811,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016435",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -37415,10 +35833,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016435",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -37459,10 +35876,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022934",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -37501,10 +35917,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000725",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -37545,10 +35960,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006252",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -37587,10 +36001,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012291",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -37610,10 +36023,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012291",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -37673,10 +36085,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022268",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -37717,10 +36128,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025565",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -37759,10 +36169,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-004481",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -37803,10 +36212,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010164",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -37845,10 +36253,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015412",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -37868,10 +36275,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016909",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -37910,10 +36316,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024905",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -37954,10 +36359,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-004499",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -37996,10 +36400,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008651",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -38019,10 +36422,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009605",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -38103,10 +36505,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001400",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -38147,10 +36548,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006905",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -38170,10 +36570,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008002",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -38212,10 +36611,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013513",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -38235,10 +36633,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016276",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -38277,10 +36674,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024269",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -38321,10 +36717,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001401",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -38363,10 +36758,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013917",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -38386,10 +36780,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015416",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -38409,12 +36802,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015419",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -38453,10 +36842,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024266",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -38495,10 +36883,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002192",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -38539,10 +36926,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011259",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -38581,10 +36967,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016894",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -38604,10 +36989,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021563",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -38665,10 +37049,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025417",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -38709,10 +37092,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-004511",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -38751,10 +37133,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009523",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -38795,10 +37176,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016307",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -38856,10 +37236,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022137",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -38900,10 +37279,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025571",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -38923,10 +37301,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002193",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -38946,10 +37323,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-004480",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -38990,10 +37366,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009562",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -39032,10 +37407,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014401",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -39055,10 +37429,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021051",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -39097,10 +37470,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024894",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -39162,10 +37534,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002821",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -39204,10 +37575,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008004",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -39269,10 +37639,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013907",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -39313,10 +37682,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022924",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -39336,10 +37704,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025626",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -39359,10 +37726,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001403",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -39403,10 +37769,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006263",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -39445,10 +37810,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010199",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -39468,10 +37832,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012935",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -39512,10 +37875,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021053",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -39554,10 +37916,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025580",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -39598,10 +37959,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-004475",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -39621,10 +37981,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021055",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -39682,10 +38041,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-026130",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -39726,10 +38084,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-005090",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -39787,10 +38144,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011247",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -39810,10 +38166,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013966",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -39873,10 +38228,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023360",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -39896,10 +38250,9 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023360",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -39940,10 +38293,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013474",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -39963,10 +38315,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015421",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -40068,10 +38419,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023498",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -40152,10 +38501,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002061",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -40236,10 +38583,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006349",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -40320,10 +38665,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010098",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -40404,10 +38747,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014536",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -40467,10 +38808,8 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -40490,10 +38829,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020470",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -40574,10 +38911,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023500",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -40658,10 +38993,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002054",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -40681,10 +39014,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010617",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -40765,10 +39096,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006350",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -40910,10 +39239,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014706",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -40996,10 +39323,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020478",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -41080,10 +39405,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023502",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -41164,10 +39487,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002045",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -41248,10 +39569,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006351",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -41332,10 +39651,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011217",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -41416,10 +39733,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015615",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -41481,10 +39796,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021782",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -41586,10 +39899,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024698",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -41670,10 +39981,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003292",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -41754,10 +40063,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008139",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -41857,10 +40164,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008112",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -41941,10 +40246,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016569",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -41964,10 +40267,8 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -42050,10 +40351,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023504",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -42134,10 +40433,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000420",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -42218,10 +40515,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016614",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -42365,10 +40660,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022619",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -42449,10 +40742,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-026275",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -42533,10 +40824,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003245",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -42657,10 +40946,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016640",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -42722,10 +41009,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021638",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -42806,10 +41091,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024714",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -42890,10 +41173,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003332",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -42974,10 +41255,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007099",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -43058,10 +41337,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012202",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -43144,10 +41421,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016560",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -43167,10 +41442,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021056",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -43251,10 +41524,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024716",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -43335,10 +41606,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002041",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -43419,10 +41688,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006355",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -43818,10 +42085,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012192",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -43902,10 +42167,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016601",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -43965,10 +42228,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022103",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -44049,10 +42310,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-026279",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -44133,10 +42392,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003319",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -44217,10 +42474,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000423",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -44303,10 +42558,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013616",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -44387,10 +42640,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012181",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -44471,10 +42722,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016575",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -44593,10 +42842,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023511",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -44677,10 +42924,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003330",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -44761,10 +43006,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007101",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -44868,10 +43111,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012224",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -44952,10 +43193,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016635",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -44975,10 +43214,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020483",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -45059,10 +43296,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023514",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -45143,10 +43378,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002039",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -45229,10 +43462,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006358",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -45313,10 +43544,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011554",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -45397,10 +43626,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015621",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -45460,10 +43687,8 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -45483,10 +43708,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021070",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -45567,10 +43790,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024723",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -45651,10 +43872,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003355",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -45735,10 +43954,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007102",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -45840,10 +44057,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012198",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -46006,10 +44221,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023316",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -46090,10 +44303,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000026",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -46174,10 +44385,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008977",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -46258,10 +44467,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013151",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -46342,10 +44549,8 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -46386,10 +44591,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022620",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -46470,10 +44673,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002055",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -46554,10 +44755,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006361",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -46640,10 +44839,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012230",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -46783,10 +44980,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023517",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -46888,10 +45083,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002042",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -46974,10 +45167,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006363",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -47058,10 +45249,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016658",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -47121,10 +45310,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023519",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -47207,10 +45394,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002062",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -47291,10 +45476,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006364",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -47375,10 +45558,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010642",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -47459,10 +45640,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014546",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -47583,10 +45762,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022596",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -47667,10 +45844,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-026290",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -47751,10 +45926,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003356",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -47835,10 +46008,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010051",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -47919,10 +46090,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013154",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -48026,10 +46195,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021616",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -48112,10 +46279,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024733",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -48196,10 +46361,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003338",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -48280,10 +46443,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008145",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -48364,10 +46525,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008114",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -48448,10 +46607,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015626",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -48513,10 +46670,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021623",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -48597,10 +46752,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024735",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -48681,10 +46834,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003335",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -48765,10 +46916,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008147",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -48851,10 +47000,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012236",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -48935,10 +47082,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015396",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -49061,10 +47206,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022616",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -49145,10 +47288,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-026295",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -49231,10 +47372,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003253",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -49315,10 +47454,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010624",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -49338,10 +47475,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013158",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -49441,10 +47576,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022606",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -49525,10 +47658,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-026299",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -49611,10 +47742,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003344",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -49695,10 +47824,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008985",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -49779,10 +47906,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013159",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -49865,10 +47990,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021640",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -49949,10 +48072,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024740",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -50033,10 +48154,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003289",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -50119,10 +48238,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008148",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -50203,10 +48320,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012165",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -50308,10 +48423,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020491",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -50392,10 +48505,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023531",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -50478,10 +48589,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002043",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -50562,10 +48671,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006374",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -50667,10 +48774,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011547",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -50751,10 +48856,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015400",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -50877,10 +48980,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023533",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -50961,10 +49062,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002069",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -51047,10 +49146,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006375",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -51131,10 +49228,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010604",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -51215,10 +49310,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014643",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -51320,10 +49413,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021167",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -51404,10 +49495,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024744",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -51490,10 +49579,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003329",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -51574,10 +49661,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007106",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -51658,10 +49743,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012231",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -51742,10 +49825,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016638",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -51765,12 +49846,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012347",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -51788,12 +49865,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020948",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -51868,12 +49941,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023681",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -51910,12 +49979,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001341",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -51952,12 +50017,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010792",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -51975,12 +50036,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014867",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -52017,12 +50074,8 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": null,
       "cmmsStatus": "Registered",
@@ -52059,12 +50112,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022887",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -52101,12 +50150,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000604",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -52162,12 +50207,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014451",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -52185,12 +50226,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009703",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -52267,10 +50304,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021081",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -52351,10 +50386,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024745",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -52435,10 +50468,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003300",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -52519,10 +50550,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007107",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -52603,10 +50632,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012204",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -52687,10 +50714,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015628",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "General Inspection",
       "cmTypes": [
-        "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -52811,10 +50836,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016572",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -52834,10 +50858,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010118",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -53103,10 +51126,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016598",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -53126,10 +51148,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010130",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -53273,10 +51294,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011560",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -53420,10 +51440,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010120",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -53504,10 +51523,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015365",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -53914,10 +51932,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014630",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -54120,10 +52137,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016557",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -54549,10 +52565,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016591",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -54572,10 +52587,9 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010123",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
         "FC",
-        "GET",
         "INSP"
       ],
       "priority": "P3 Planned (PM)",
@@ -54980,12 +52994,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022882",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -55022,12 +53032,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001390",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -55064,12 +53070,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006912",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -55106,12 +53108,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010787",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -55148,12 +53146,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013486",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -55171,12 +53165,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015879",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -55194,12 +53184,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021545",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -55236,12 +53222,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-026135",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -55278,12 +53260,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-005063",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -55320,12 +53298,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002181",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -55362,12 +53336,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009592",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -55423,12 +53393,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015880",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -55465,12 +53431,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022876",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -55507,12 +53469,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000680",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -55530,12 +53488,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000680",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -55553,12 +53507,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000680",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -55576,12 +53526,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000680",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -55599,12 +53545,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000681",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -55622,12 +53564,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000681",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -55645,12 +53583,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000681",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -55668,12 +53602,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000681",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -55710,12 +53640,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000680",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -55733,12 +53659,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000680",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -55756,12 +53678,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000680",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -55779,12 +53697,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000680",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -55802,12 +53716,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000681",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -55825,12 +53735,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000681",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -55848,12 +53754,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000681",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -55871,12 +53773,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000681",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -55894,12 +53792,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006874",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -55936,12 +53830,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014862",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -55978,12 +53868,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020544",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -56020,12 +53906,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024511",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -56062,12 +53944,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002183",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -56104,12 +53982,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008642",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -56146,12 +54020,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013893",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -56207,12 +54077,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015840",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -56382,12 +54248,8 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "Filter Cut / GET / General Inspection",
-      "cmTypes": [
-        "FC",
-        "GET",
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": null,
       "cmmsStatus": "Registered",
