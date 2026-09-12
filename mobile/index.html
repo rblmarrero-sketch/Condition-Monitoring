@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=317">
+<link rel="manifest" href="manifest.webmanifest?v=318">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=317">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=317">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=317">
+<link rel="apple-touch-icon" href="icon-192.png?v=318">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=318">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=318">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2232,15 +2232,15 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=317"></script>
-<script src="upload-defaults.js?v=317"></script>
-<script src="hme.js?v=317"></script>
-<script src="mp-fc.js?v=317"></script>
-<script src="hme-cascade.js?v=317"></script>
-<script src="assets.js?v=317"></script>
-<script src="temp-limits.js?v=317"></script>
-<script src="normalize.js?v=317"></script>
-<script src="terms.js?v=317"></script>
+<script src="native.js?v=318"></script>
+<script src="upload-defaults.js?v=318"></script>
+<script src="hme.js?v=318"></script>
+<script src="mp-fc.js?v=318"></script>
+<script src="hme-cascade.js?v=318"></script>
+<script src="assets.js?v=318"></script>
+<script src="temp-limits.js?v=318"></script>
+<script src="normalize.js?v=318"></script>
+<script src="terms.js?v=318"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2259,25 +2259,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=317"></script>
-<script src="edits.js?v=317"></script>
-<script src="due.js?v=317"></script>
-<script src="wear.js?v=317"></script>
-<script src="wear-figs.js?v=317"></script>
-<script src="wear-map.js?v=317"></script>
-<script src="machine-photos.js?v=317"></script>
-<script src="machine-fig.js?v=317"></script>
-<script src="get.js?v=317"></script>
-<script src="points.js?v=317"></script>
-<script src="uc-points.js?v=317"></script>
-<script src="inspect-guide.js?v=317"></script>
-<script src="get-figs.js?v=317"></script>
-<script src="body-points.js?v=317"></script>
-<script src="body-map.js?v=317"></script>
-<script src="lube.js?v=317"></script>
-<script src="lube-overrides.js?v=317"></script>
-<script src="lube2027.js?v=317"></script>
-<script src="report-core.js?v=317"></script>
+<script src="grade.js?v=318"></script>
+<script src="edits.js?v=318"></script>
+<script src="due.js?v=318"></script>
+<script src="wear.js?v=318"></script>
+<script src="wear-figs.js?v=318"></script>
+<script src="wear-map.js?v=318"></script>
+<script src="machine-photos.js?v=318"></script>
+<script src="machine-fig.js?v=318"></script>
+<script src="get.js?v=318"></script>
+<script src="points.js?v=318"></script>
+<script src="uc-points.js?v=318"></script>
+<script src="inspect-guide.js?v=318"></script>
+<script src="get-figs.js?v=318"></script>
+<script src="body-points.js?v=318"></script>
+<script src="body-map.js?v=318"></script>
+<script src="lube.js?v=318"></script>
+<script src="lube-overrides.js?v=318"></script>
+<script src="lube2027.js?v=318"></script>
+<script src="report-core.js?v=318"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -9056,8 +9056,10 @@ async function teamPull(manual,full,from,pre){
   if(manual) msg.textContent=t("team_checking");
   const run=++teamRun;                       // a superseded pull must not clobber
   const mine=()=>teamRun===run;
-  const ac=new AbortController(); teamAbort=ac;
-  const timer=setTimeout(()=>{ try{ ac.abort(); }catch(_){ } }, full?TEAM_TIMEOUT_FULL:TEAM_TIMEOUT);
+  /* Declared here, set below — once `after` is actually known — so the
+     abort deadline can be seen by the `finally` at the bottom of this
+     function either way. See the note where it is assigned. */
+  let timer;
   /* THE BUTTON IS NOT DISABLED WHILE A PULL OWNS IT, AND MUST NOT BE.
 
      Six lines above, a manual press that arrives while one is in flight aborts
@@ -9091,6 +9093,28 @@ async function teamPull(manual,full,from,pre){
     if(after) histRepair();
     if(full || (after && !teamAll().length) || (after && histIsShort())) after=0;
     if(from!=null) after=Number(from)||0;
+
+    /* THE TIMEOUT HAS TO MATCH THE WORK, NOT WHO ASKED FOR IT.
+
+       This used to be set the moment the function was entered, off the
+       CALLER's own `full` flag alone — before any of the self-heal above
+       ever ran. So a phone whose local cache had gone empty or short (a
+       fresh install, a cleared cache, histRepair() finding a gap) got
+       `after` reset to 0 right here, meaning "read the whole folder from
+       Object Storage", while still carrying the SHORT 20 s budget meant
+       for an incremental catch-up that reads almost nothing. Measured live
+       against the real backend, reading a folder of under 200 sidecars
+       already takes on the order of ten seconds even from a good
+       connection (see docs/yandex/function.js's own READ_CONCURRENCY
+       comment) — on a weaker field link, or a folder that has grown since,
+       20 s is not enough, and every automatic pull a phone in that state
+       makes times out and is reported as a failed sync, silently forever,
+       because nothing about the phone's OWN state looked unusual to it.
+       The deadline now looks at what `after` actually resolved to: a pull
+       starting from 0 is the slow, whole-folder case regardless of which
+       caller asked for it or why. */
+    const ac=new AbortController(); teamAbort=ac;
+    timer=setTimeout(()=>{ try{ ac.abort(); }catch(_){ } }, (full||after===0)?TEAM_TIMEOUT_FULL:TEAM_TIMEOUT);
 
     const ask=async p2=>{
       const q=new URLSearchParams(p2);
@@ -11268,7 +11292,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="317";
+const BUILD="318";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
