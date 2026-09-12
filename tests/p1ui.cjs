@@ -188,13 +188,21 @@ const key = e => new KeyboardEvent('keydown', { key: e, bubbles: true, cancelabl
      [Sp.g, Sp.f, Sp.dd, Sp.eq].join(' | '));
 
   console.log('\n7. IN RUSSIAN, THE SAME');
+  /* What the page ACTUALLY carries, counted in English first, rather than a
+     number written down here. It was written down here as 7, the office
+     grew a Plan vs Actual page with a Definitions control of its own, and
+     this line then failed for eight correctly-translated controls — a
+     suite reporting working code as broken because it kept its own copy of
+     something the app owns. */
+  const defsEn = await p.evaluate(() => document.querySelectorAll('details.defs > summary').length);
   await p.click('.lang button[data-lang="ru"]'); await p.waitForTimeout(500);
   const Ru = await p.evaluate(() => { showTab('due', true); const heads = [...document.querySelectorAll('#ddList th')].map(x => x.textContent.trim());
     showTab('actions', true); const k = [...document.querySelectorAll('#actKpis .kpi .k')].map(x => x.textContent.trim());
     return { heads, k, defs: [...document.querySelectorAll('details.defs > summary')].map(s => s.textContent.trim()), eq: $('equipQ').placeholder, shown: $('actShown').textContent.trim() }; });
   ok('Russian headings: ' + TERMS.ru.hours_per_day + ' · ' + TERMS.ru.defer_reason, Ru.heads.includes(TERMS.ru.hours_per_day) && Ru.heads.includes(TERMS.ru.defer_reason), Ru.heads.join(' | '));
   ok('  cards: Работы без ответственного', Ru.k.some(x => /без ответственного/i.test(x)), Ru.k.join(' | '));
-  ok('  Definitions → Определения, on every page', Ru.defs.length === 7 && Ru.defs.every(s => s === 'Определения'), Ru.defs.join(','));
+  ok('  Definitions → Определения, on every page (' + defsEn + ' of them)',
+     defsEn >= 7 && Ru.defs.length === defsEn && Ru.defs.every(s => s === 'Определения'), Ru.defs.join(','));
   ok('  the picker and the pager speak Russian', /Поиск техники/.test(Ru.eq) && /совпадений/.test(Ru.shown), Ru.eq + ' · ' + Ru.shown);
   await p.click('.lang button[data-lang="en"]');
 

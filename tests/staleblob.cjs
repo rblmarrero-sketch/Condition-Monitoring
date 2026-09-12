@@ -111,12 +111,19 @@ srv.listen(PORT, async () => {
   await p.waitForTimeout(500);
   await p.fill('#inspector', 'R. Marrero');
 
-  console.log('one photo among ten is the exact size FileReader is rigged to fail on, exactly like a reclaimed file');
+  /* TWENTY, not ten, and the dead one FIRST. Twenty photographs chunk into
+     six batches and only three lanes run at once, so a dead photo in the
+     first chunk used to abandon the three chunks that had not started —
+     every run, for ever, because the same photo is first every time. Ten
+     photographs are three chunks, all three in flight before the failure
+     lands, which is why the smaller case passed even without that fix and
+     would not have caught it. */
+  console.log('one photo among twenty is the exact size FileReader is rigged to fail on, exactly like a reclaimed file');
   await p.evaluate(async (staleSize) => {
     const pos = curP(); pos.photos ||= [];
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 20; i++) {
       let blob;
-      if (i === 4) {
+      if (i === 0) {
         // Content does not matter -- maybeShrink() skips decoding anything
         // this small (SHRINK_SKIP_BYTES) -- only that it is a Blob of
         // EXACTLY the rigged size, since a marker PROPERTY would not
@@ -138,10 +145,15 @@ srv.listen(PORT, async () => {
   await p.waitForTimeout(6000);
 
   const st = await (await fetch(B + '/__stat')).json();
-  const goodPhotoNames = st.files.filter(n => /_MP_(?!5\b)\d+\.jpg$/.test(n) || (/_MP\.jpg$/.test(n)));
+  const jpgs = st.files.filter(n => /\.jpg$/.test(n));
   ok('the sidecar still lands', st.files.some(n => /\.json$/.test(n)), st.files.find(n => /\.json$/.test(n)));
-  ok('the nine readable photographs land too, not just the sidecar', st.files.filter(n => /\.jpg$/.test(n)).length >= 9,
-     st.files.filter(n => /\.jpg$/.test(n)).length + ' jpg(s): ' + st.files.filter(n => /\.jpg$/.test(n)).join(', '));
+  /* 20 position photographs + 1 machine overview = 21, minus the one dead
+     file = 20, and ALL of them in this single run — not three chunks'
+     worth. Anything less than 20 means a chunk was abandoned. */
+  ok('every readable photograph lands in ONE run, all six chunks of them', jpgs.length === 20,
+     jpgs.length + ' jpg(s) of an expected 20');
+  ok('and the dead one is the only file missing', !jpgs.some(n => /_MP_1\.jpg$/.test(n)),
+     jpgs.filter(n => /_MP_1\.jpg$/.test(n)).join(',') || 'absent, as it should be');
 
   console.log('\nthe record is honest about the one photo that could not be read');
   const rec = await p.evaluate(async () => {
@@ -152,17 +164,21 @@ srv.listen(PORT, async () => {
   const lastErrText = await p.evaluate(() => lastErr || '');
   ok('the banner names it as a local, unreadable photograph, not a backend refusal',
      /can no longer be read/i.test(lastErrText) && !/object can not be found/i.test(lastErrText), lastErrText);
+  /* And it says WHICH SERVER, because "Main backend" is a slot whose URL has
+     been swapped once already — a screenshot of the old wording could not
+     answer whether the phone was even talking to the right machine. */
+  ok('  and it names the host it actually tried', lastErrText.includes('127.0.0.1:' + PORT),
+     lastErrText.split(':').slice(0, 2).join(':'));
   ok('it is tagged so the multi-record breaker does not treat it as a real destination failure',
      true /* covered structurally: putBatch tags e.localRead=true on this path, asserted by code review + the message above surfacing cleanly */);
 
   console.log('\na second sync attempt does not re-send what already landed');
-  const before = st.reqs.length;
   await p.evaluate(() => syncNow());
-  await p.waitForTimeout(3000);
+  await p.waitForTimeout(4000);
   const st2 = await (await fetch(B + '/__stat')).json();
-  const newJpgReqs = st2.reqs.slice(before).filter(r => /^batch:/.test(r) || r === 'one');
-  ok('the nine good photographs are not asked for again', new Set(st2.files.filter(n => /\.jpg$/.test(n))).size === new Set(st.files.filter(n => /\.jpg$/.test(n))).size,
-     'first pass ' + st.files.filter(n => /\.jpg$/.test(n)).length + ' jpgs, second pass ' + st2.files.filter(n => /\.jpg$/.test(n)).length);
+  ok('the twenty good photographs are not asked for again',
+     new Set(st2.files.filter(n => /\.jpg$/.test(n))).size === new Set(jpgs).size,
+     'first pass ' + jpgs.length + ' jpgs, second pass ' + st2.files.filter(n => /\.jpg$/.test(n)).length);
 
   ok('no page errors throughout', errs.length === 0, errs.slice(0, 3).join(' | '));
 

@@ -3068,7 +3068,7 @@
   <section id="tab-planact" class="hidden">
     <div class="pagehd">
       <div class="pgt"><h1 data-i18n="pa_title">Plan vs Actual</h1>
-        <span class="pgsub" data-i18n="pa_purpose">1C's planned service date for each PM work order, matched to the nearest Condition Monitoring round actually walked on that machine.</span>
+        <span class="pgsub" data-i18n="pa_purpose">1C's planned service date for each PM work order, matched to the nearest Condition Monitoring round actually carried out on that machine.</span>
         <span class="pgsub" id="paAsOf"></span></div>
     </div>
     <div class="kpis" id="paKpis"></div>
@@ -3079,7 +3079,7 @@
          reads as a shape rather than as fifty lines to scan one at a time. -->
     <div class="section">
       <div class="secthd"><h2 data-i18n="pa_week_h2">Next 7 days</h2>
-        <span class="pgsub" data-i18n="pa_week_sub">Open work orders due in the next week, by unit and day. General Inspection is highlighted — it is walked ahead of the date, not on it.</span></div>
+        <span class="pgsub" data-i18n="pa_week_sub">Open work orders due in the next week, by unit and day. General Inspection is highlighted — it is carried out ahead of the date, not on it.</span></div>
       <div id="paWeek"></div>
     </div>
     <div class="section">
@@ -3089,9 +3089,9 @@
           <summary data-i18n="ov_defs">Definitions</summary>
           <div class="defsbody"><dl>
             <dt data-i18n="pa_title">Plan vs Actual</dt><dd data-i18n="pa_sub">One row per planned 1C PM service work order (the "N Hours service Planned" maintenance types) for the unit's own equipment number. "Nearest CM round" is the closest date anybody recorded ANY Condition Monitoring round on that same unit -- it is not restricted to the round type the work order names, because 1C's work order and CM's round taxonomy do not share a key yet.</dd>
-            <dt data-i18n="pa_c_delta">CM vs plan</dt><dd data-i18n="pa_d_delta">Nearest CM round date minus 1C's planned date. Positive = the round was walked after the plan date; negative = before.</dd>
-            <dt data-i18n="pa_c_status">Status</dt><dd data-i18n="pa_d_status">On time: within {n} days of the plan either way. Late/Early: outside that, in the direction shown. No CM round: nothing recorded on that unit within {w} days of the plan date -- either CM does not yet cover this unit, or the round simply was not walked.</dd>
-            <dt data-i18n="pa_k_preinsp">General Inspection due soon</dt><dd data-i18n="pa_d_preinsp">General Inspection is the one round meant to run AHEAD of the PM, not alongside it -- every other round (Magnetic Plug, Undercarriage, Filter Cut, GET, Dump Body Liner / Tray) is judged against the plan date itself, above. A unit shows here when its PM is a P3 or P4 priority, the plan date is 3 days away or closer, and no General Inspection has been walked in the 14 days before it.</dd>
+            <dt data-i18n="pa_c_delta">CM vs plan</dt><dd data-i18n="pa_d_delta">Nearest CM round date minus 1C's planned date. Positive = the round was carried out after the plan date; negative = before.</dd>
+            <dt data-i18n="pa_c_status">Status</dt><dd data-i18n="pa_d_status">On time: within {n} days of the plan either way. Late/Early: outside that, in the direction shown. No CM round: nothing recorded on that unit within {w} days of the plan date -- either CM does not yet cover this unit, or the round simply was not carried out.</dd>
+            <dt data-i18n="pa_k_preinsp">General Inspection due soon</dt><dd data-i18n="pa_d_preinsp">General Inspection is the one round meant to run AHEAD of the PM, not alongside it -- every other round (Magnetic Plug, Undercarriage, Filter Cut, GET, Dump Body Liner / Tray) is judged against the plan date itself, above. A unit shows here when its PM is a P3 or P4 priority, the plan date is 3 days away or closer, and no General Inspection has been carried out in the 14 days before it.</dd>
           </dl></div>
         </details></div>
       <div class="ddbar">
@@ -3530,22 +3530,22 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=322"></script>
+<script src="../data/magnetic_plug.js?v=323"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=322"></script>
-<script src="../mobile/hme.js?v=322"></script>
-<script src="../mobile/mp-fc.js?v=322"></script>
-<script src="../mobile/hme-cascade.js?v=322"></script>
-<script src="../mobile/temp-limits.js?v=322"></script>
+<script src="../data/work_orders.js?v=323"></script>
+<script src="../mobile/hme.js?v=323"></script>
+<script src="../mobile/mp-fc.js?v=323"></script>
+<script src="../mobile/hme-cascade.js?v=323"></script>
+<script src="../mobile/temp-limits.js?v=323"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=322"></script>
-<script src="../mobile/normalize.js?v=322"></script>
-<script src="../mobile/terms.js?v=322"></script>
+<script src="../mobile/assets.js?v=323"></script>
+<script src="../mobile/normalize.js?v=323"></script>
+<script src="../mobile/terms.js?v=323"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3564,19 +3564,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=322"></script>
-<script src="../mobile/edits.js?v=322"></script>
-<script src="../mobile/due.js?v=322"></script>
-<script src="../mobile/wear.js?v=322"></script>
-<script src="../mobile/wear-map.js?v=322"></script>
-<script src="../mobile/lube.js?v=322"></script>
-<script src="../mobile/lube-overrides.js?v=322"></script>
-<script src="../mobile/lube2027.js?v=322"></script>
-<script src="../mobile/lube-tds.js?v=322"></script>
+<script src="../mobile/grade.js?v=323"></script>
+<script src="../mobile/edits.js?v=323"></script>
+<script src="../mobile/due.js?v=323"></script>
+<script src="../mobile/wear.js?v=323"></script>
+<script src="../mobile/wear-map.js?v=323"></script>
+<script src="../mobile/lube.js?v=323"></script>
+<script src="../mobile/lube-overrides.js?v=323"></script>
+<script src="../mobile/lube2027.js?v=323"></script>
+<script src="../mobile/lube-tds.js?v=323"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=322"></script>
-<script src="../mobile/machine-photos.js?v=322"></script>
+<script src="../mobile/upload-defaults.js?v=323"></script>
+<script src="../mobile/machine-photos.js?v=323"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3585,17 +3585,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=322"></script>
-<script src="../mobile/get.js?v=322"></script>
-<script src="../mobile/points.js?v=322"></script>
-<script src="../mobile/uc-points.js?v=322"></script>
-<script src="../mobile/inspect-guide.js?v=322"></script>
-<script src="../mobile/get-figs.js?v=322"></script>
-<script src="../mobile/body-points.js?v=322"></script>
-<script src="../mobile/body-map.js?v=322"></script>
-<script src="../mobile/jspdf.umd.min.js?v=322"></script>
-<script src="../mobile/html2canvas.min.js?v=322"></script>
-<script src="../mobile/report-core.js?v=322"></script>
+<script src="../mobile/machine-fig.js?v=323"></script>
+<script src="../mobile/get.js?v=323"></script>
+<script src="../mobile/points.js?v=323"></script>
+<script src="../mobile/uc-points.js?v=323"></script>
+<script src="../mobile/inspect-guide.js?v=323"></script>
+<script src="../mobile/get-figs.js?v=323"></script>
+<script src="../mobile/body-points.js?v=323"></script>
+<script src="../mobile/body-map.js?v=323"></script>
+<script src="../mobile/jspdf.umd.min.js?v=323"></script>
+<script src="../mobile/html2canvas.min.js?v=323"></script>
+<script src="../mobile/report-core.js?v=323"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4498,22 +4498,22 @@ const I18N={
      round type. */
   tab_planact:"Plan vs Actual",
   pa_title:"Plan vs Actual",
-  pa_purpose:"1C's planned service date for each PM work order, matched to the nearest Condition Monitoring round actually walked on that machine.",
+  pa_purpose:"1C's planned service date for each PM work order, matched to the nearest Condition Monitoring round actually carried out on that machine.",
   pa_sub:"One row per planned 1C PM service work order (the “N Hours service Planned” maintenance types) for the unit's own equipment number. “Nearest CM round” is the closest date anybody recorded ANY Condition Monitoring round on that same unit — it is not restricted to the round type the work order names, because 1C's work order and CM's round taxonomy do not share a key yet.",
   pa_h2:"Planned service vs. actual round",
   pa_c_unit:"Unit", pa_c_wo:"Work order", pa_c_type:"Service", pa_c_plan:"1C plan date",
   pa_c_woactual:"1C actual (WO closed)", pa_c_cmround:"Nearest CM round", pa_c_delta:"CM vs plan",
   pa_c_status:"Status",
-  pa_d_delta:"Nearest CM round date minus 1C's planned date. Positive = the round was walked after the plan date; negative = before.",
-  pa_d_status:"On time: within {n} days of the plan either way. Late/Early: outside that, in the direction shown. No CM round: nothing recorded on that unit within {w} days of the plan date — either CM does not yet cover this unit, or the round simply was not walked.",
-  pa_d_preinsp:"General Inspection is the one round meant to run ahead of the PM, not alongside it — every other round (Magnetic Plug, Undercarriage, Filter Cut, GET, Dump Body Liner / Tray) is judged against the plan date itself, above. A unit shows here when its PM is a P3 or P4 priority, the plan date is 3 days away or closer, and no General Inspection has been walked in the 14 days before it.",
+  pa_d_delta:"Nearest CM round date minus 1C's planned date. Positive = the round was carried out after the plan date; negative = before.",
+  pa_d_status:"On time: within {n} days of the plan either way. Late/Early: outside that, in the direction shown. No CM round: nothing recorded on that unit within {w} days of the plan date — either CM does not yet cover this unit, or the round simply was not carried out.",
+  pa_d_preinsp:"General Inspection is the one round meant to run ahead of the PM, not alongside it — every other round (Magnetic Plug, Undercarriage, Filter Cut, GET, Dump Body Liner / Tray) is judged against the plan date itself, above. A unit shows here when its PM is a P3 or P4 priority, the plan date is 3 days away or closer, and no General Inspection has been carried out in the 14 days before it.",
   pa_st_ontime:"On time", pa_st_late:"Late", pa_st_early:"Early", pa_st_missing:"No CM round",
   pa_st_preinsp:"Pre-PM check due",
   pa_seg_open:"Open", pa_seg_done:"Completed", pa_seg_all:"All",
   pa_csv:"Export CSV",
   pa_none:"Nothing in this view.",
   pa_k_total:"Open work orders", pa_k_total_s:"not yet marked complete in 1C",
-  pa_k_preinsp:"General Inspection due soon", pa_k_preinsp_s:"a P3/P4 PM is within {n} d and no pre-check has been walked",
+  pa_k_preinsp:"General Inspection due soon", pa_k_preinsp_s:"a P3/P4 PM is within {n} d and no pre-check has been carried out",
   pa_k_ontime:"On time", pa_k_ontime_s:"CM round within {n} d of the plan date",
   pa_k_late:"Late or early", pa_k_late_s:"CM round found, outside {n} d of the plan date",
   pa_k_missing:"No CM round", pa_k_missing_s:"nothing recorded on the unit within {w} d",
@@ -4523,7 +4523,7 @@ const I18N={
   pa_window:"1C plan date", pa_win_all:"Any time", pa_win_over:"Overdue (plan date passed)",
   pa_win_7:"Next 7 days", pa_win_14:"Next 14 days", pa_win_30:"Next 30 days",
   pa_c_hours:"Hours",
-  pa_week_h2:"Next 7 days", pa_week_sub:"Open work orders due in the next week, by unit and day. General Inspection is highlighted — it is walked ahead of the date, not on it.",
+  pa_week_h2:"Next 7 days", pa_week_sub:"Open work orders due in the next week, by unit and day. General Inspection is highlighted — it is carried out ahead of the date, not on it.",
   pa_week_none:"Nothing open falls in the next 7 days.", pa_week_pm:"PM",
  },
  ru:{
@@ -16590,8 +16590,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=322"></script>
-<script src="sync-adapter.js?v=322"></script>
-<script src="report.js?v=322"></script>
+<script src="drive.js?v=323"></script>
+<script src="sync-adapter.js?v=323"></script>
+<script src="report.js?v=323"></script>
 </body>
 </html>

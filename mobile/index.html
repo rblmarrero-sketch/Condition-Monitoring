@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=322">
+<link rel="manifest" href="manifest.webmanifest?v=323">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=322">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=322">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=322">
+<link rel="apple-touch-icon" href="icon-192.png?v=323">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=323">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=323">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2075,7 +2075,7 @@
       <div class="duelist" id="dueList"></div>
     </div>
     <div id="dueWeekWrap" class="hidden" role="tabpanel" aria-labelledby="dueViewWeek">
-      <div class="hint" id="dueWeekSub" style="margin:0 0 12px" data-i18n="due_week_sub">Open work orders due in the next 7 days, grouped by the day something has to happen. General Inspection is listed on the day it should be walked — ahead of the plan date, not on it.</div>
+      <div class="hint" id="dueWeekSub" style="margin:0 0 12px" data-i18n="due_week_sub">Open work orders due in the next 7 days, grouped by the day something has to happen. General Inspection is listed on the day it should be carried out — ahead of the plan date, not on it.</div>
       <div id="dueWeekList"></div>
     </div>
     <!-- THE ONE-TAP ANSWER TO "WHY IS THIS MACHINE NOT ON MY LIST".
@@ -2297,15 +2297,15 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=322"></script>
-<script src="upload-defaults.js?v=322"></script>
-<script src="hme.js?v=322"></script>
-<script src="mp-fc.js?v=322"></script>
-<script src="hme-cascade.js?v=322"></script>
-<script src="assets.js?v=322"></script>
-<script src="temp-limits.js?v=322"></script>
-<script src="normalize.js?v=322"></script>
-<script src="terms.js?v=322"></script>
+<script src="native.js?v=323"></script>
+<script src="upload-defaults.js?v=323"></script>
+<script src="hme.js?v=323"></script>
+<script src="mp-fc.js?v=323"></script>
+<script src="hme-cascade.js?v=323"></script>
+<script src="assets.js?v=323"></script>
+<script src="temp-limits.js?v=323"></script>
+<script src="normalize.js?v=323"></script>
+<script src="terms.js?v=323"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2324,25 +2324,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=322"></script>
-<script src="edits.js?v=322"></script>
-<script src="due.js?v=322"></script>
-<script src="wear.js?v=322"></script>
-<script src="wear-figs.js?v=322"></script>
-<script src="wear-map.js?v=322"></script>
-<script src="machine-photos.js?v=322"></script>
-<script src="machine-fig.js?v=322"></script>
-<script src="get.js?v=322"></script>
-<script src="points.js?v=322"></script>
-<script src="uc-points.js?v=322"></script>
-<script src="inspect-guide.js?v=322"></script>
-<script src="get-figs.js?v=322"></script>
-<script src="body-points.js?v=322"></script>
-<script src="body-map.js?v=322"></script>
-<script src="lube.js?v=322"></script>
-<script src="lube-overrides.js?v=322"></script>
-<script src="lube2027.js?v=322"></script>
-<script src="report-core.js?v=322"></script>
+<script src="grade.js?v=323"></script>
+<script src="edits.js?v=323"></script>
+<script src="due.js?v=323"></script>
+<script src="wear.js?v=323"></script>
+<script src="wear-figs.js?v=323"></script>
+<script src="wear-map.js?v=323"></script>
+<script src="machine-photos.js?v=323"></script>
+<script src="machine-fig.js?v=323"></script>
+<script src="get.js?v=323"></script>
+<script src="points.js?v=323"></script>
+<script src="uc-points.js?v=323"></script>
+<script src="inspect-guide.js?v=323"></script>
+<script src="get-figs.js?v=323"></script>
+<script src="body-points.js?v=323"></script>
+<script src="body-map.js?v=323"></script>
+<script src="lube.js?v=323"></script>
+<script src="lube-overrides.js?v=323"></script>
+<script src="lube2027.js?v=323"></script>
+<script src="report-core.js?v=323"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2844,7 +2844,7 @@ const I18N = {
     due_sched_precheck:"walk ahead of the PM",
     due_list_seg:"List",
     due_week_seg:"This week",
-    due_week_sub:"Open work orders due in the next 7 days, grouped by the day something has to happen. General Inspection is listed on the day it should be walked — ahead of the plan date, not on it.",
+    due_week_sub:"Open work orders due in the next 7 days, grouped by the day something has to happen. General Inspection is listed on the day it should be carried out — ahead of the plan date, not on it.",
     due_week_today:"Today",
     due_week_none:"Nothing open falls in the next 7 days.",
     due_week_n:"{n} machine(s)",
@@ -11621,6 +11621,20 @@ const DEST_META={ gas:{label:"Main backend", noop:true}, mirror:{label:"Second c
    whole sheet, dead, on a build that had already gone out. A missing label is
    worth showing as an id; it is not worth taking a screen down for. */
 function destLabel(id){ return (DEST_META[id]||{}).label || id; }
+/* THE LABEL DOES NOT SAY WHICH SERVER IT IS.
+
+   "Main backend" is the slot, not the address, and the slot's URL has been
+   swapped once already (Apps Script → the Yandex VM) with the id left as
+   "gas" on purpose. So "Upload failed: Main backend: ..." names a box, not
+   a destination, and a field screenshot of it cannot answer the first
+   question anybody asks — did this phone even talk to the right server? A
+   whole day went into that question with the answer sitting in localStorage
+   on the handset. The update check already names its host for exactly this
+   reason (see UPD/#updDiag); an upload failure is no different. */
+function destWhere(d){
+  try{ const h=new URL(d.url).host; return h ? destLabel(d.id)+" ("+h+")" : destLabel(d.id); }
+  catch(e){ return destLabel(d.id); }
+}
 function destMeta(id){ return DEST_META[id]||{label:id}; }
 /* "mirror" speaks the SAME protocol as "gas" and is never read from.
 
@@ -11647,7 +11661,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="322";
+const BUILD="323";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -12413,15 +12427,31 @@ async function putAll(dest, files, rec, sent){
     jobs=rest.map(f=>async()=>{ await putOne(dest,f.name,f.blob,f.type,rec); sentMark(sent,f.name); });
   }
 
-  let next=0, failed=null;
+  /* A DEAD LINK ENDS THIS RECORD'S TURN. A DEAD PHOTOGRAPH DOES NOT.
+
+     Stopping on the first failure is right for a link that has gone: the
+     next nine jobs would each buy their own timeout for the same answer.
+     It is wrong for a photograph this phone cannot read, which fails
+     identically on perfect signal and says nothing whatever about the
+     link — and a sixteen-photograph round is four chunks, so one dead
+     photo in the first chunk abandoned the other three, every run, for
+     ever: the round crawled a chunk per sync instead of finishing in one,
+     and on a queue of them nothing ever converged. Same distinction the
+     three-strikes breaker in syncNow() already draws, one level down. */
+  let next=0, failed=null, fatal=null;
   const lane=async()=>{ for(;;){
-    if(failed) return;                     // one failure ends this record's turn
+    if(fatal) return;
     const i=next++; if(i>=jobs.length) return;
     try{ await jobs[i](); }
-    catch(e){ failed=failed||e; }
+    catch(e){ failed=failed||e; if(!(e&&e.localRead)) fatal=fatal||e; }
   } };
   await Promise.all(Array.from({length:Math.min(uploadLanes(),jobs.length)},lane));
-  if(failed) throw failed;
+  /* A real failure outranks a dead photograph when both happened. Throwing
+     whichever came first would let a dead photo — which is exempt from the
+     three-strikes breaker precisely because it says nothing about the link
+     — stand in for a link that has actually gone, and the queue would keep
+     walking the rest of the shift into a hole it had already found. */
+  if(fatal||failed) throw fatal||failed;
 }
 async function putFile(name, blob, type){
   const dests=activeDests();
@@ -12430,7 +12460,7 @@ async function putFile(name, blob, type){
   const errs=[];
   for(const d of dests){
     try{ await putOne(d,name,blob,type); }
-    catch(e){ errs.push(destLabel(d.id)+": "+(e.message||e)); }
+    catch(e){ errs.push(destWhere(d)+": "+(e.message||e)); }
   }
   if(errs.length) throw new Error(errs.join(" · "));
   return true;
@@ -12932,7 +12962,7 @@ async function syncNow(manual){
            on this end of what a retry actually costs. */
         dupNote(payload.length-left.length);
         try{ await putAll(d,left,rec,already); done[d.id]=1; progressed=true; }
-        catch(e){ errs.push(destLabel(d.id)+": "+String(e.message||e));
+        catch(e){ errs.push(destWhere(d)+": "+String(e.message||e));
           if(e&&e.localRead) localReadFail=true; }
         /* Files landing IS progress, even when the destination did not finish.
            The breaker below gives up after three records that got nowhere;
