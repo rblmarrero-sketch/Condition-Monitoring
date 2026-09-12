@@ -227,6 +227,69 @@ const srv = http.createServer((req, res) => {
   ok(dash.kmOff === true && dash.terexOn === true, '  and the same exclusion');
   ok(dash.kamaz === 0, '  no KAMAZ on its never-inspected list either', dash.neverRows + ' rows');
   ok(dash.terexRows > 0, '  and the haul trucks that stay on the round are still there', dash.terexRows + ' rows');
+  console.log('\n6. PLAN VS ACTUAL — 1C\'s plan is a different source, and it obeyed too');
+  /* The screenshot that prompted this: the week grid was still printing INSP
+     pills for six KAMAZ haul trucks the day after the site took them off the
+     round. This tab reads 1C's work orders, not CM's programme, so the rule
+     in due.js did not reach it — two screens proposing different work off one
+     decision. Asserted on the REAL work-order file, not a fixture, because
+     the failure was that real data took a path the rule never saw. */
+  const pa = await d.evaluate(() => {
+    if (typeof paRows !== 'function') return { skip: 'no paRows' };
+    const isKm = u => { const a = ASSET_BY[String(u || '').toUpperCase()];
+      return a && /KAMAZ/i.test(String(a.m || '') + ' ' + String(a.mk || '')); };
+    const rows = paRows();
+    const km = rows.filter(r => isKm(r.w.equip));
+    const other = rows.filter(r => !isKm(r.w.equip));
+    const has = (rs, ty) => rs.filter(r => (r.info.types || []).includes(ty)).length;
+    return {
+      total: rows.length, kmRows: km.length, otherRows: other.length,
+      kmInsp: has(km, 'INSP'), otherInsp: has(other, 'INSP'),
+      kmFc: has(km, 'FC'), kmMp: has(km, 'MP'),
+      kmOffCount: km.reduce((n, r) => n + ((r.info.off || []).length), 0),
+      kmPreInsp: km.filter(r => r.preInspNeeded).length,
+      otherPreInsp: other.filter(r => r.preInspNeeded).length,
+      kmMissing: km.filter(r => r.status === 'missing').length,
+      kmHeldOffRows: km.filter(r => r.heldOff).length,
+      /* 1C's own plan must still be there — the work order is a fact.
+         Counted as ROWS SURVIVING, not as rows carrying a number: four of
+         1C's own KAMAZ work orders have no number in the source file, and
+         asserting on that measured the data rather than the change. */
+      kmSource: (CM_WO_DATA.workOrders || []).filter(w => isKm(w.equip)).length,
+      /* And the week grid itself. */
+      weekKmInsp: (typeof paWeekData === 'function' ? paWeekData(rows) : [])
+        .filter(e => isKm(e.equip) && e.code === 'INSP').length,
+      weekOtherInsp: (typeof paWeekData === 'function' ? paWeekData(rows) : [])
+        .filter(e => !isKm(e.equip) && e.code === 'INSP').length,
+      weekKmAny: (typeof paWeekData === 'function' ? paWeekData(rows) : [])
+        .filter(e => isKm(e.equip)).length,
+    };
+  });
+  if (pa.skip) { ok(false, 'Plan vs Actual could not be read', pa.skip); }
+  else {
+    ok(pa.total > 0 && pa.kmRows > 0,
+      '1C has planned work on KAMAZ machines', pa.kmRows + ' of ' + pa.total + ' work orders');
+    ok(pa.otherInsp > 0,
+      '  and General Inspection is still resolved for everything else — the rule did not empty the tab',
+      pa.otherInsp + ' rows keep INSP');
+    ok(pa.kmInsp === 0, '  but not one KAMAZ work order resolves to a General Inspection now',
+      pa.kmInsp + ' of ' + pa.kmRows);
+    ok(pa.kmOffCount > 0, '  and each one that lost it is COUNTED, not silently dropped',
+      pa.kmOffCount + ' rounds held off');
+    ok(pa.kmPreInsp === 0 && pa.otherPreInsp >= 0,
+      '  the 3-day pre-check no longer fires for a KAMAZ either', 'KAMAZ ' + pa.kmPreInsp);
+    ok(pa.kmRows === pa.kmSource,
+      '  1C\'s own plan is never hidden — every KAMAZ work order is still listed',
+      pa.kmRows + ' of ' + pa.kmSource + ' in the source file');
+    ok(pa.kmHeldOffRows === 0 || pa.kmMissing < pa.kmHeldOffRows + pa.kmMissing,
+      '  a round nobody is going to walk is not reported as one we missed',
+      pa.kmHeldOffRows + ' held off, ' + pa.kmMissing + ' missing');
+    ok(pa.weekKmInsp === 0, '  the week grid prints no INSP pill on a KAMAZ',
+      pa.weekKmInsp + ' pills');
+    ok(pa.weekOtherInsp > 0, '  while other machines still get theirs',
+      pa.weekOtherInsp + ' pills');
+  }
+
   await d.close(); await dctx.close();
 
   await b.close(); srv.close();

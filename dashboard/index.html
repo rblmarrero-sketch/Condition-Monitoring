@@ -3530,22 +3530,22 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=329"></script>
+<script src="../data/magnetic_plug.js?v=330"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=329"></script>
-<script src="../mobile/hme.js?v=329"></script>
-<script src="../mobile/mp-fc.js?v=329"></script>
-<script src="../mobile/hme-cascade.js?v=329"></script>
-<script src="../mobile/temp-limits.js?v=329"></script>
+<script src="../data/work_orders.js?v=330"></script>
+<script src="../mobile/hme.js?v=330"></script>
+<script src="../mobile/mp-fc.js?v=330"></script>
+<script src="../mobile/hme-cascade.js?v=330"></script>
+<script src="../mobile/temp-limits.js?v=330"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=329"></script>
-<script src="../mobile/normalize.js?v=329"></script>
-<script src="../mobile/terms.js?v=329"></script>
+<script src="../mobile/assets.js?v=330"></script>
+<script src="../mobile/normalize.js?v=330"></script>
+<script src="../mobile/terms.js?v=330"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3564,19 +3564,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=329"></script>
-<script src="../mobile/edits.js?v=329"></script>
-<script src="../mobile/due.js?v=329"></script>
-<script src="../mobile/wear.js?v=329"></script>
-<script src="../mobile/wear-map.js?v=329"></script>
-<script src="../mobile/lube.js?v=329"></script>
-<script src="../mobile/lube-overrides.js?v=329"></script>
-<script src="../mobile/lube2027.js?v=329"></script>
-<script src="../mobile/lube-tds.js?v=329"></script>
+<script src="../mobile/grade.js?v=330"></script>
+<script src="../mobile/edits.js?v=330"></script>
+<script src="../mobile/due.js?v=330"></script>
+<script src="../mobile/wear.js?v=330"></script>
+<script src="../mobile/wear-map.js?v=330"></script>
+<script src="../mobile/lube.js?v=330"></script>
+<script src="../mobile/lube-overrides.js?v=330"></script>
+<script src="../mobile/lube2027.js?v=330"></script>
+<script src="../mobile/lube-tds.js?v=330"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=329"></script>
-<script src="../mobile/machine-photos.js?v=329"></script>
+<script src="../mobile/upload-defaults.js?v=330"></script>
+<script src="../mobile/machine-photos.js?v=330"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3585,17 +3585,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=329"></script>
-<script src="../mobile/get.js?v=329"></script>
-<script src="../mobile/points.js?v=329"></script>
-<script src="../mobile/uc-points.js?v=329"></script>
-<script src="../mobile/inspect-guide.js?v=329"></script>
-<script src="../mobile/get-figs.js?v=329"></script>
-<script src="../mobile/body-points.js?v=329"></script>
-<script src="../mobile/body-map.js?v=329"></script>
-<script src="../mobile/jspdf.umd.min.js?v=329"></script>
-<script src="../mobile/html2canvas.min.js?v=329"></script>
-<script src="../mobile/report-core.js?v=329"></script>
+<script src="../mobile/machine-fig.js?v=330"></script>
+<script src="../mobile/get.js?v=330"></script>
+<script src="../mobile/points.js?v=330"></script>
+<script src="../mobile/uc-points.js?v=330"></script>
+<script src="../mobile/inspect-guide.js?v=330"></script>
+<script src="../mobile/get-figs.js?v=330"></script>
+<script src="../mobile/body-points.js?v=330"></script>
+<script src="../mobile/body-map.js?v=330"></script>
+<script src="../mobile/jspdf.umd.min.js?v=330"></script>
+<script src="../mobile/html2canvas.min.js?v=330"></script>
+<script src="../mobile/report-core.js?v=330"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4508,6 +4508,7 @@ const I18N={
   pa_d_status:"On time: within {n} days of the plan either way. Late/Early: outside that, in the direction shown. No CM round: nothing recorded on that unit within {w} days of the plan date — either CM does not yet cover this unit, or the round simply was not carried out.",
   pa_d_preinsp:"General Inspection is the one round meant to run ahead of the PM, not alongside it — every other round (Magnetic Plug, Undercarriage, Filter Cut, GET, Dump Body Liner / Tray) is judged against the plan date itself, above. A unit shows here when its PM is a P3 or P4 priority, the plan date is 3 days away or closer, and no General Inspection has been carried out in the 14 days before it.",
   pa_st_ontime:"On time", pa_st_late:"Late", pa_st_early:"Early", pa_st_missing:"No CM round",
+  pa_st_off:"Held off", pa_k_off:"Held off", pa_k_off_s:"rounds the site has taken off these machines",
   pa_st_preinsp:"Pre-PM check due",
   pa_seg_open:"Open", pa_seg_done:"Completed", pa_seg_all:"All",
   pa_csv:"Export CSV",
@@ -5336,6 +5337,7 @@ const I18N={
   pa_d_status:"В срок: в пределах {n} дн. от плана в любую сторону. Позже/раньше: за этими пределами, в указанную сторону. Нет обхода CM: за {w} дн. вокруг плановой даты по этой единице ничего не записано — либо CM пока не охватывает эту машину, либо обход просто не провели.",
   pa_d_preinsp:"Общий осмотр — единственный обход, который должен пройти ДО ТО, а не одновременно с ним: все остальные обходы (магнитная пробка, ходовая часть, замена фильтров, GET, облицовка кузова) оцениваются по самой плановой дате, см. выше. Единица попадает сюда, если её ТО имеет приоритет P3 или P4, плановая дата — через 3 дня или ближе, а общий осмотр не проводился в течение предыдущих 14 дней.",
   pa_st_ontime:"В срок", pa_st_late:"Позже", pa_st_early:"Раньше", pa_st_missing:"Нет обхода CM",
+  pa_st_off:"Сняты", pa_k_off:"Сняты с обхода", pa_k_off_s:"обходы, снятые площадкой с этих машин",
   pa_st_preinsp:"Нужна проверка перед ТО",
   pa_seg_open:"Открыто", pa_seg_done:"Завершено", pa_seg_all:"Все",
   pa_csv:"Выгрузить CSV",
@@ -15016,11 +15018,46 @@ function dueCsv(){
 const PA_ON_TIME_DAYS = 10;   // within this many days of the plan, either way, counts as "on time"
 const PA_WINDOW_DAYS  = 60;   // beyond this many days from the plan, a CM record is not "nearby" at all
 function paHourInfo(w){
-  if(w && w.cmLabel) return { hours:w.hours!=null?w.hours:null, label:w.cmLabel, types:w.cmTypes||null };
-  // Fallback for a stale data file predating cmLabel/cmTypes.
-  const m=String((w&&w.maintType)||"").match(/(\d+)\s*Hours?/i);
-  const h=m?parseInt(m[1],10):null;
-  return { hours:h, label:h?(h+"h service"):String((w&&w.maintType)||"—"), types:null };
+  let info;
+  if(w && w.cmLabel) info={ hours:w.hours!=null?w.hours:null, label:w.cmLabel, types:w.cmTypes||null };
+  else{
+    // Fallback for a stale data file predating cmLabel/cmTypes.
+    const m=String((w&&w.maintType)||"").match(/(\d+)\s*Hours?/i);
+    const h=m?parseInt(m[1],10):null;
+    info={ hours:h, label:h?(h+"h service"):String((w&&w.maintType)||"—"), types:null };
+  }
+  return paHeldOff(w, info);
+}
+/* A ROUND THE SITE HAS TAKEN OFF THIS MACHINE IS NOT PROPOSED HERE EITHER.
+
+   This tab reads 1C, not CM's own programme, so the exclusion stated in
+   due.js (DUE.OFF — the KAMAZ trucks are off General Inspection as of
+   2026-09-12) did not reach it, and the week grid went on printing INSP
+   pills for six KAMAZ haul trucks the day after the decision. Two screens
+   proposing different work off one decision is the thing this project keeps
+   producing, so it is filtered HERE — the one function that turns a work
+   order into CM round types — and the grid, the KPI tiles, the round filter
+   and the table all follow from it without a second rule.
+
+   1C'S OWN PLAN IS NEVER HIDDEN. The work order is real and stays listed
+   with its number, its hours and its date; what changes is that CM no longer
+   claims a round against it. A row whose rounds were ALL taken off is marked
+   `heldOff` and scored "off" rather than "No CM round", because "missing"
+   would report our own decision back to us as a failure to walk something. */
+function paHeldOff(w, info){
+  if(!info.types || !info.types.length || !window.DUE || !DUE.offRound) return info;
+  /* ASSET_BY is a top-level const, NOT a property of window — reading it as
+     window.ASSET_BY returned undefined, this function returned early, and
+     the whole exclusion silently did nothing while every test that asked
+     DUE.offRound directly still passed. A guard that cannot fail loudly is
+     the defect this project is made of; the suite now asserts the FILTERED
+     ROWS rather than the rule, which is what caught it. */
+  const a=(typeof ASSET_BY!=="undefined"?ASSET_BY:{})[String((w&&w.equip)||"").toUpperCase()];
+  if(!a) return info;
+  const off=[], keep=[];
+  info.types.forEach(ty=>{ const r=DUE.offRound(ty,a); (r?off:keep).push(r?{ty,why:r.why}:ty); });
+  if(!off.length) return info;
+  return Object.assign({}, info, { types:keep, off:off, allOff:!keep.length });
 }
 /* The most recent CM round on this unit, of one of `types` (or of ANY type
    when the mapping above could not narrow it down), within PA_WINDOW_DAYS
@@ -15074,7 +15111,10 @@ function paRows(){
     const info=paHourInfo(w);
     const last=paLastInspection(w.equip, info.types, w.planStart);
     let delta=null, status;
-    if(!w.planStart) status="unsched";
+    /* Scored before anything else: a round nobody is going to walk cannot be
+       late for it, and must never be counted among the missed. */
+    if(info.allOff) status="off";
+    else if(!w.planStart) status="unsched";
     else{
       if(last && window.DUE) delta=DUE.dayDiff(w.planStart, last.date);
       if(!last || delta==null) status="missing";
@@ -15086,7 +15126,7 @@ function paRows(){
     const preInspNeeded = !!(w.open && w.planStart && (info.types||[]).includes("INSP")
       && paPriorityIsPM(w.priority) && daysUntilPlan!=null && daysUntilPlan>=0
       && daysUntilPlan<=PA_PREINSP_DAYS && !paPreInspDone(w));
-    return { w, info, last, delta, status, daysUntilPlan, preInspNeeded };
+    return { w, info, last, delta, status, daysUntilPlan, preInspNeeded, heldOff:!!info.allOff };
   });
 }
 /* There is no #paScope control -- the segmented buttons in #paSeg call
@@ -15288,6 +15328,12 @@ function renderPlanActualTab(){
   const nLateEarly=rows.filter(r=>r.status==="late"||r.status==="early").length;
   const nMissing=rows.filter(r=>r.status==="missing").length;
   const nPreInsp=rows.filter(r=>r.preInspNeeded).length;
+  /* Rounds this tab is no longer proposing, COUNTED. Work that stops being
+     proposed is invisible by nature — the grid simply gets shorter, which
+     reads as "there is less to do" rather than "we decided not to do it".
+     Counted per ROUND rather than per row, because one work order can carry
+     two and only one of them may have been taken off. */
+  const nOff=rows.reduce((n,r)=>n+((r.info&&r.info.off)?r.info.off.length:0),0);
   const card=(sc,lab,val,sub,cls)=>
     `<button type="button" class="kpi ${cls||""}${scope===sc?" on":""}" data-pa="${esc(sc)}">
        <span class="k">${esc(lab)}</span><span class="v">${esc(String(val))}</span>
@@ -15300,7 +15346,8 @@ function renderPlanActualTab(){
     + card("preinsp", t("pa_k_preinsp"), nPreInsp, t("pa_k_preinsp_s",{n:PA_PREINSP_DAYS}), "warn"+(nPreInsp?"":" zero"))
     + card("all",  t("pa_k_ontime"), nOntime, t("pa_k_ontime_s",{n:PA_ON_TIME_DAYS}), "good"+(nOntime?"":" zero"))
     + card("all",  t("pa_k_late"), nLateEarly, t("pa_k_late_s",{n:PA_ON_TIME_DAYS}), "warn"+(nLateEarly?"":" zero"))
-    + card("all",  t("pa_k_missing"), nMissing, t("pa_k_missing_s",{w:PA_WINDOW_DAYS}), "bad"+(nMissing?"":" zero"));
+    + card("all",  t("pa_k_missing"), nMissing, t("pa_k_missing_s",{w:PA_WINDOW_DAYS}), "bad"+(nMissing?"":" zero"))
+    + card("all",  t("pa_k_off"), nOff, t("pa_k_off_s"), "info"+(nOff?"":" zero"));
   if($("paKpis")) $("paKpis").querySelectorAll("[data-pa]").forEach(b=>b.onclick=()=>paGo(b.dataset.pa));
   const seg=$("paSeg");
   /* "preinsp" (the pre-PM-check KPI) is not one of the three state buckets
@@ -15334,8 +15381,9 @@ function renderPlanActualTab(){
   const pg=paged("planact", show, renderPlanActualTab);
   const kept=pg.rows;
   const stChip=r=>{
-    const cls={ontime:"g",late:"w",early:"w",missing:"c",unsched:"n"}[r.status]||"n";
+    const cls={ontime:"g",late:"w",early:"w",missing:"c",unsched:"n",off:"n"}[r.status]||"n";
     const lab = r.status==="unsched" ? "—"
+              : r.status==="off" ? t("pa_st_off")
               : r.status==="missing" ? t("pa_st_missing")
               : r.status==="ontime"  ? t("pa_st_ontime")
               : (r.status==="late" ? t("pa_st_late") : t("pa_st_early"));
@@ -16597,8 +16645,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=329"></script>
-<script src="sync-adapter.js?v=329"></script>
-<script src="report.js?v=329"></script>
+<script src="drive.js?v=330"></script>
+<script src="sync-adapter.js?v=330"></script>
+<script src="report.js?v=330"></script>
 </body>
 </html>
