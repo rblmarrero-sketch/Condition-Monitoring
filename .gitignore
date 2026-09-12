@@ -55,3 +55,5 @@ docs/uc-calib/
 
 # Test server logs — written into tests/ by the helper servers at run time
 tests/*.log
+srvmock.log
+srv*.log
