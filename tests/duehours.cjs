@@ -59,7 +59,10 @@ const mk = `((id,ty,u,d,smu,pos)=>({id,type:ty,equip:u,date:d,by:'S. Volkov',sup
     TB: [DUE.hours('TB'), DUE.days('TB')],
     INSP: [DUE.hours('INSP'), DUE.days('INSP')],
     TEMP: [DUE.hours('TEMP'), DUE.days('TEMP')],
-    at500: DUE.partsDue('FC', 600), at1000: DUE.partsDue('FC', 1100),
+    FCdz: [DUE.hours('FC', null, 'DOZ', 'DZ011'), DUE.days('FC', null, null, 'DOZ', 'DZ011')],
+    FCdzOther: DUE.hours('FC', null, 'DOZ', 'DZ003'),
+    FCdzFlag: DUE.spec('FC', 'DOZ', 'DZ011').byUnitFor,
+    FCparts: DUE.partsDue('FC', 1100),
   }));
   ok('a machine is assumed to run 20 hours a day', iv.hpd === 20, iv.hpd + ' h/day');
   ok('magnetic plug every 250 h', iv.MP[0] === 250 && iv.MP[1] === 12.5, iv.MP.join(' h → ') + ' d');
@@ -98,14 +101,27 @@ const mk = `((id,ty,u,d,smu,pos)=>({id,type:ty,equip:u,date:d,by:'S. Volkov',sup
      the phone, the dashboard and the report does exactly that. */
   ok('the round still answers without a class', iv.UC[0] === 1000 && iv.TB[0] === 4000,
     'UC ' + iv.UC[0] + ' · TB ' + iv.TB[0]);
-  ok('the engine filter every 500 h and the rest every 1000',
-    iv.FCe[0] === 500 && iv.FCh[0] === 1000, 'ENG ' + iv.FCe[0] + ' · HYD ' + iv.FCh[0]);
-  ok('and the round itself comes due at the shortest of them',
-    iv.FCr[0] === 500, 'FC round ' + iv.FCr[0] + ' h');
-  ok('a 600-hour visit is the engine filter only',
-    JSON.stringify(iv.at500) === '["ENG"]', JSON.stringify(iv.at500));
-  ok('and an 1100-hour visit is all of them',
-    iv.at1000.length === 5, JSON.stringify(iv.at1000));
+  /* THE FILTER CUT IS ONE INTERVAL, AND IT WAS TWO.
+     Stated by the site against plan-vs-actual on 2026-09-12: 1,000 h, with
+     DZ011 alone at 500. The two-interval model — engine 500, the rest 1,000 —
+     made the ROUND due at 500 for every machine on site, because a round is
+     due at the shortest of its parts. Retiring it halves how often 1,127
+     machines are proposed for a filter cut, so it is asserted here in the
+     terms the site used rather than left to the interval table alone. */
+  ok('the filter cut every 1000 h — one interval, not two',
+    iv.FCr[0] === 1000 && iv.FCr[1] === 50, iv.FCr.join(' h → ') + ' d');
+  ok('  asking for a single filter gets the round\'s figure, not a second one',
+    iv.FCe[0] === 1000 && iv.FCh[0] === 1000, 'ENG ' + iv.FCe[0] + ' · HYD ' + iv.FCh[0]);
+  ok('  and no part of it comes round on its own any more',
+    iv.FCparts === null, JSON.stringify(iv.FCparts));
+  /* A figure stated for ONE MACHINE, which no class rule can express: the
+     other dozers are on the fleet's 1,000 h and DZ011 is not. */
+  ok('DZ011 alone is cut every 500 h', iv.FCdz[0] === 500 && iv.FCdz[1] === 25,
+    iv.FCdz.join(' h → ') + ' d');
+  ok('  and the rest of its own class are not', iv.FCdzOther === 1000,
+    'DZ003 ' + iv.FCdzOther + ' h');
+  ok('  and the answer says it came from the machine, not the class',
+    iv.FCdzFlag === 'DZ011', String(iv.FCdzFlag));
   ok('the walk-around every 500 h', iv.INSP[0] === 500 && iv.INSP[1] === 25,
     iv.INSP.join(' h → ') + ' d');
   /* Nobody has given the temperature round or the lubrication audit an hour

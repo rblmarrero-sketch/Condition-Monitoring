@@ -118,8 +118,11 @@ const STATED = [
     nextBase: DUE.next({ type: "UC", cls: "DOZ", last: { d: "2026-01-01" }, today: "2026-08-20" }),
   }));
   ok(compat.round === 1000, "a round asked without a class answers", compat.round + " h");
-  ok(compat.part === 500 && compat.partOther === 1000,
-     "the filter round still splits by part", `ENG ${compat.part} · HYD ${compat.partOther}`);
+  /* It used to split — engine 500, the rest 1,000 — and the site retired that
+     on 2026-09-12. Asking for a part must now answer the ROUND's figure
+     rather than a second one, which is what makes 1,000 h real. */
+  ok(compat.part === 1000 && compat.partOther === 1000,
+     "the filter round no longer splits by part", `ENG ${compat.part} · HYD ${compat.partOther}`);
   ok(compat.days === 12.5, "days still convert at the fleet rate", compat.days + " d");
   ok(compat.next, "next() still answers without a class");
   /* The whole point: the same elapsed time is overdue for one and not the

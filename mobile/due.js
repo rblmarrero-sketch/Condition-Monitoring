@@ -17,17 +17,23 @@
    be called overdue on a haul truck's calendar.
 
    ---------------------------------------------------------------------------
-   THE FILTER CUT IS TWO INTERVALS, NOT ONE.
+   THE FILTER CUT IS ONE INTERVAL: 1,000 h.
 
-   The engine filter is cut every 500 h and the rest every 1000. That is not a
-   detail to round away: cutting a hydraulic filter twice as often as it needs
-   is a filter thrown away, an hour of a fitter's shift and a machine held,
-   times a fleet of 1,128.
+   It was modelled as two — the engine filter at 500 h and the rest at 1,000 —
+   and because a round is due at the shortest of its parts, that made every
+   machine on site due for a filter cut at 500 h. The site reviewed the
+   programme against plan-vs-actual on 2026-09-12 and stated the round plainly:
+   1,000 h, with DZ011 alone at 500 h.
 
-   So the ROUND is due at the shortest of its parts — somebody has to be at the
-   machine at 500 h for the engine filter — and each part carries its own
-   figure, so the sheet can say which filters this visit is actually for. Every
-   second visit is all of them.
+   So the two-interval model is retired, and with it the `parts` map on FC.
+   That is a real change to the fleet's work, not a tidy-up: it HALVES how
+   often 1,127 machines are proposed for a filter cut. It is written here, in
+   the one file intervals live in, so there is exactly one place to read it
+   and exactly one place to put it back.
+
+   The exception is a property of the MACHINE, not of its class — DZ011 is a
+   Caterpillar D9R and the other dozers are not on 500 h — so it is stated
+   per unit. `byUnit` carries that, and only that: see the note on it below.
    ---------------------------------------------------------------------------
 
    Rounds this fleet has not given an hour figure for keep the calendar interval
@@ -77,7 +83,13 @@
          number, so it cannot become a second interval table — the figure on
          this line stays the only one. */
       MP:   { h: 250, onClass: ["HT", "AT"] },
-      FC:   { h: 500, parts: { ENG: 500, TRANS: 1000, HYD: 1000, FUEL: 1000, LUBE: 1000 } },
+      /* One interval, 1,000 h — see the note at the head of this file for
+         what was retired and why. byUnit is the ONE machine the site has
+         stated a different figure for; it is not a third interval table and
+         must never grow into one. A class that differs goes in byClass; a
+         MACHINE that differs from its own class goes here, and every entry
+         needs a reason somebody at the site actually gave. */
+      FC:   { h: 1000, byUnit: { DZ011: 500 } },
       /* Undercarriage is not one interval. A dozer's chain is in the ground
          every hour it works; an excavator's carries the machine and turns far
          less, and running both at 500 h walked the excavators eight times more
@@ -97,6 +109,7 @@
          rather than byClass, because there is no second figure to state. */
       TB:   { h: 4000, onClass: ["HT", "AT"] },
       INSP: { h: 500 },
+
       /* Still no hour figure for these two, so they keep the calendar the
          fleet already ran them on. Carried forward rather than converted: 30
          days is what somebody chose, and 600 h is a number nobody has said. */
@@ -104,7 +117,53 @@
       LUBE: { d: 30, carried: 1 },
     },
     FALLBACK: { d: 30, carried: 1 },
+
+    /* ---- MACHINES HELD OFF A ROUND -----------------------------------------
+       Membership in a round is decided by CLASS on both surfaces, and that is
+       right nearly always. This is the exception it cannot express: the site
+       has held the KAMAZ trucks off General Inspection for now, and 30 of
+       them are class HT — the same class as the Terex TR60 haul trucks, which
+       stay on it. No class rule can separate those two.
+
+       So it is stated per machine, once, here, and both the phone and the
+       office read it through DUE.offRound. A second copy of this list on the
+       office page is how the two screens would come to disagree about which
+       machines have work outstanding.
+
+       MATCHED ON THE MODEL TEXT, NOT THE MAKE. The register carries both, and
+       they do not agree: `mk` reads KAMAZ on 37 of the 55 KAMAZ machines and
+       is absent on the other 18 — every one of those a GEN truck whose model
+       field says KAMAZ plainly. A rule written against `mk` would have let 18
+       machines through while looking exactly as if it worked.
+
+       `why` is not decoration. A machine held off a round is work NOT being
+       proposed, which is invisible by nature, so the reason it is off travels
+       with it and can be put on screen. `until` is deliberately absent: the
+       site said "as of the moment", and a date nobody has given is not one to
+       invent — this comes off the list when they say so.
+       --------------------------------------------------------------------- */
+    OFF: {
+      INSP: [{ model: 'KAMAZ', why: 'off_kamaz_insp', since: '2026-09-12' }],
+    },
   };
+
+  /* Is this machine held off this round, and why? `asset` is a row of the
+     register ({n, cls, cat, m, mk}); anything else answers null, because a
+     machine we know nothing about is not one we can hold off anything. */
+  function offRound(type, asset) {
+    var rules = D.OFF && D.OFF[type];
+    if (!rules || !asset) return null;
+    var model = String(asset.m || '') + ' ' + String(asset.mk || '');
+    var unit = String(asset.n || '').toUpperCase();
+    for (var i = 0; i < rules.length; i++) {
+      var r = rules[i];
+      if (r.unit && String(r.unit).toUpperCase() === unit) return r;
+      if (r.model && model.toUpperCase().indexOf(String(r.model).toUpperCase()) >= 0) return r;
+    }
+    return null;
+  }
+  D.offRound = offRound;
+  D.onRound = function (type, asset) { return !offRound(type, asset); };
 
   /* THE INTERVAL IS A PROPERTY OF THE ROUND AND THE MACHINE, NOT THE ROUND.
 
@@ -116,8 +175,16 @@
      `cls` is optional everywhere, so every existing call still answers exactly
      as it did — the round's figure — and only a caller that knows which machine
      it is asking about gets the sharper answer. */
-  function spec(type, cls) {
+  function spec(type, cls, unit) {
     var s = D.EVERY[type] || D.FALLBACK;
+    /* A figure stated for THIS MACHINE beats the one stated for its class,
+       which beats the round's own — most specific wins, and the answer says
+       which it was so a coverage sheet can show the exception rather than a
+       number that silently disagrees with the rest of the class. */
+    if (unit && s.byUnit) {
+      var hu = s.byUnit[String(unit).toUpperCase()];
+      if (hu != null) return Object.assign({}, s, { h: hu, byUnitFor: String(unit).toUpperCase() });
+    }
     if (!cls || !s.byClass) return s;
     var h = s.byClass[cls];
     if (h == null) {
@@ -143,8 +210,8 @@
   /* The interval in hours, or null when this round is walked on the calendar.
      `part` narrows it to one thing inside the round — the engine filter rather
      than the filter round. */
-  D.hours = function (type, part, cls) {
-    var s = spec(type, cls);
+  D.hours = function (type, part, cls, unit) {
+    var s = spec(type, cls, unit);
     if (part && s.parts && s.parts[part] != null) return s.parts[part];
     return s.h != null ? s.h : null;
   };
@@ -152,8 +219,8 @@
   /* The interval in days at a given rate. A calendar round answers with its own
      figure and ignores the rate entirely — that is what makes it a calendar
      round. */
-  D.days = function (type, part, hoursPerDay, cls) {
-    var s = spec(type, cls), h = D.hours(type, part, cls);
+  D.days = function (type, part, hoursPerDay, cls, unit) {
+    var s = spec(type, cls, unit), h = D.hours(type, part, cls, unit);
     if (h == null) return s.d;
     var r = hoursPerDay > 0 ? hoursPerDay : D.HOURS_PER_DAY;
     return h / r;
@@ -216,7 +283,7 @@
     o = o || {};
     /* o.cls lets the caller say which machine this is, so a dozer and an
        excavator are not both due on one number. Omitted, it behaves as before. */
-    var s = spec(o.type, o.cls), last = o.last || {};
+    var s = spec(o.type, o.cls, o.unit), last = o.last || {};
     var measured = o.rate > 0;
     var rate = measured ? o.rate : D.HOURS_PER_DAY;
     var today = o.today || isoToday();
@@ -281,7 +348,7 @@
     if (!n) return { st: '', soonH: null, interval: null, deferLive: false, daysToRelease: null };
     var today = o.today || D.today();
     var interval = D.hours(o.type, null, o.cls);
-    if (interval == null) interval = Math.round(spec(o.type, o.cls).d * n.rate);
+    if (interval == null) interval = Math.round(spec(o.type, o.cls, o.unit).d * n.rate);
     var soonH = Math.max(20, Math.round(interval * 0.2));
 
     var live = !!(d && String(d.at || '') >= String(last.d || ''));

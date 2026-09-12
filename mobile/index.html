@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=328">
+<link rel="manifest" href="manifest.webmanifest?v=329">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=328">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=328">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=328">
+<link rel="apple-touch-icon" href="icon-192.png?v=329">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=329">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=329">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2439,15 +2439,15 @@
   }
 })();
 </script>
-<script src="native.js?v=328"></script>
-<script src="upload-defaults.js?v=328"></script>
-<script src="hme.js?v=328"></script>
-<script src="mp-fc.js?v=328"></script>
-<script src="hme-cascade.js?v=328"></script>
-<script src="assets.js?v=328"></script>
-<script src="temp-limits.js?v=328"></script>
-<script src="normalize.js?v=328"></script>
-<script src="terms.js?v=328"></script>
+<script src="native.js?v=329"></script>
+<script src="upload-defaults.js?v=329"></script>
+<script src="hme.js?v=329"></script>
+<script src="mp-fc.js?v=329"></script>
+<script src="hme-cascade.js?v=329"></script>
+<script src="assets.js?v=329"></script>
+<script src="temp-limits.js?v=329"></script>
+<script src="normalize.js?v=329"></script>
+<script src="terms.js?v=329"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2466,25 +2466,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=328"></script>
-<script src="edits.js?v=328"></script>
-<script src="due.js?v=328"></script>
-<script src="wear.js?v=328"></script>
-<script src="wear-figs.js?v=328"></script>
-<script src="wear-map.js?v=328"></script>
-<script src="machine-photos.js?v=328"></script>
-<script src="machine-fig.js?v=328"></script>
-<script src="get.js?v=328"></script>
-<script src="points.js?v=328"></script>
-<script src="uc-points.js?v=328"></script>
-<script src="inspect-guide.js?v=328"></script>
-<script src="get-figs.js?v=328"></script>
-<script src="body-points.js?v=328"></script>
-<script src="body-map.js?v=328"></script>
-<script src="lube.js?v=328"></script>
-<script src="lube-overrides.js?v=328"></script>
-<script src="lube2027.js?v=328"></script>
-<script src="report-core.js?v=328"></script>
+<script src="grade.js?v=329"></script>
+<script src="edits.js?v=329"></script>
+<script src="due.js?v=329"></script>
+<script src="wear.js?v=329"></script>
+<script src="wear-figs.js?v=329"></script>
+<script src="wear-map.js?v=329"></script>
+<script src="machine-photos.js?v=329"></script>
+<script src="machine-fig.js?v=329"></script>
+<script src="get.js?v=329"></script>
+<script src="points.js?v=329"></script>
+<script src="uc-points.js?v=329"></script>
+<script src="inspect-guide.js?v=329"></script>
+<script src="get-figs.js?v=329"></script>
+<script src="body-points.js?v=329"></script>
+<script src="body-map.js?v=329"></script>
+<script src="lube.js?v=329"></script>
+<script src="lube-overrides.js?v=329"></script>
+<script src="lube2027.js?v=329"></script>
+<script src="report-core.js?v=329"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2975,6 +2975,8 @@ const I18N = {
     due_only_none:"Nothing to drop — every date here came from the system or from this phone.",
     due_never_row:"no inspection of this round on record",
     due_noprog:"{n} machines have no round programme, so none is proposed for them",
+    due_heldoff:"{n} machines are held off a round and are not proposed for it: {what}",
+    off_kamaz_insp:"KAMAZ \u00b7 General Inspection",
     due_behind:"⚠ the folder holds {f} rounds and this phone has {m} — {n} missing",
     hist_fail:"⚠ could not reach the system — this list may be out of date",
     due_no_hist:"This phone has not loaded the fleet's history yet, so it cannot say what is due. Open System and press Refresh, or load a history file.",
@@ -3546,6 +3548,8 @@ const I18N = {
     due_only_none:"Удалять нечего — все даты пришли из системы или с этого телефона.",
     due_never_row:"осмотров этого типа в системе нет",
     due_noprog:"Для {n} машин программа осмотров не задана — они не предлагаются",
+    due_heldoff:"{n} машин сняты с обхода и не предлагаются на него: {what}",
+    off_kamaz_insp:"КАМАЗ \u00b7 Общий осмотр",
     due_behind:"⚠ в папке осмотров: {f}, на телефоне: {m} — не хватает {n}",
     hist_fail:"⚠ не удалось связаться с системой — список может быть устаревшим",
     due_no_hist:"Этот телефон ещё не загрузил историю парка и не может сказать, что просрочено. Откройте «Система» и нажмите «Обновить» или загрузите файл истории.",
@@ -8131,6 +8135,39 @@ function dueNoProgramme(){
   const n=unclassedCount();
   return n ? t("due_noprog",{n}) : "";
 }
+/* MACHINES DELIBERATELY HELD OFF A ROUND, COUNTED — never merely absent.
+
+   The site holds a make off a round from time to time (the KAMAZ trucks are
+   off General Inspection as of 2026-09-12). Every one of those is work this
+   screen is NOT proposing, and work that is not proposed is invisible by
+   nature: an empty list reads the same whether nobody is due or thirty
+   machines were quietly taken out of the reckoning. This screen already
+   accounts for the machines no programme covers, for exactly that reason;
+   held-off machines belong in the same accounting, with the reason the site
+   gave, so the number can be questioned by somebody who thinks it is wrong. */
+function heldOffNote(){
+  if(typeof ASSETS==="undefined" || !window.DUE || !DUE.OFF || !window.PTS) return "";
+  /* Counted against the programme, not against the rule. The rule holds all
+     55 KAMAZ off General Inspection, but 25 of them are class GEN and no
+     round was ever proposed for them — so quoting 55 would name work that
+     was never going to be done and overstate what this change removed. Only
+     a machine whose class IS on the round has been taken off anything. */
+  const on=roundsOnClass(), why={}; let n=0;
+  for(const ty of Object.keys(DUE.OFF)){
+    for(const a of ASSETS){
+      if(!a || !a.n) continue;
+      const k=PTS.classOf(a.cls||a.cat||"");
+      if(!k || k==="GEN" || k==="ALL") continue;
+      const rounds=on[k]; if(!rounds || !rounds.has(ty)) continue;
+      const r=DUE.offRound(ty,a);
+      if(!r) continue;
+      n++; if(r.why) why[r.why]=1;
+    }
+  }
+  if(!n) return "";
+  const what=Object.keys(why).map(k=>t(k)).join(" · ");
+  return t("due_heldoff",{n,what});
+}
 function dueCoverage(){
   try{
     const seen=new Set(), h=histAll(), gated=histGated();
@@ -8504,7 +8541,16 @@ function dueRows(only){
        for, with the correct figure sitting one argument away. A number that
        exists and is never read is the same as a number that does not exist. */
     const cls=assetClassOf(unit);
-    const n=DUE.next({type:ty, last:last, today:todayISO(), rate:unitRate(unit), cls:cls});
+    /* A machine the site has held off this round proposes no work — and that
+       has to be applied HERE as well as in neverRows, or a KAMAZ with one
+       General Inspection already recorded goes on proposing them for ever
+       while a KAMAZ with none is correctly silent. Two rules for one
+       question is how a screen comes to contradict itself. */
+    if(DUE.offRound && DUE.offRound(ty, ASSET_BY[unit])) continue;
+    /* The unit as well as the class: DZ011's filter cut is stated for the
+       MACHINE, and a figure that exists and is never read is the same as a
+       figure that does not exist. */
+    const n=DUE.next({type:ty, last:last, today:todayISO(), rate:unitRate(unit), cls:cls, unit:unit});
     if(!n) continue;
     /* The verdict — over / soon / ok / put / off — comes from due.js, the same
        call the dashboard makes. These four lines used to be written out here
@@ -8634,6 +8680,7 @@ function neverRows(only){
          work list altogether — which is the failure this whole change exists
          to stop, reproduced one function further along. */
       if(histFirm(histEntry(h[ty+"|"+a.n]),gated)) continue;   // it has been done
+      if(DUE.offRound && DUE.offRound(ty, a)) continue;         // held off this round
       out.push({ty, unit:a.n, cat:a.cat||"", cls:k, never:true, st:"never"});
     }
   }
@@ -8877,6 +8924,9 @@ function renderDue(){
          proposed for them. Saying nothing about that would make this screen
          quietly about a fifth of the fleet while reading as all of it. */
       dueNoProgramme(),
+      /* And the machines the site has deliberately taken OFF a round. Work
+         not proposed is invisible; a count with the reason on it is not. */
+      heldOffNote(),
       /* A round that was walked and cannot be scheduled, because nothing here
          knows what it is. Silently dropping it takes the machine off the
          screen and looks exactly like a machine with nothing due. */
@@ -11970,7 +12020,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="328";
+const BUILD="329";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
