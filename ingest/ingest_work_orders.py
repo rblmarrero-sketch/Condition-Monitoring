@@ -50,11 +50,16 @@ unmatched figure -- not a guess, and not silently assumed.
 DEDUPE. 1C's own export is a known source of duplicate rows: it writes one
 row per line item on a work order, so a WO closed against two defects, two
 parts, or a meter read taken in both KM and Hours repeats the identical
-"N Hours service Planned" row that many times under the SAME work order
-number. Read raw, that showed up on the dashboard as the same job twice on
-the same unit and day. See the DEDUPE comment at the row loop below for the
-exact key; the collapsed count is written to the output as
-duplicateRowsCollapsed so it stays visible, not just fixed silently.
+"N Hours service Planned" row that many times -- and NOT always under the
+same work order number: EX021 got seven distinct 1C-minted numbers on one
+day, three apiece for its 250h, 500h and 1000h tiers. So the identity this
+script dedupes on is not the work order number, it is a unit reaching one
+maintenance tier on one day -- (equip, maintenance type, plan start, plan
+end). Read raw, either shape showed up on the dashboard as the same job
+walked twice (or three times) on the same unit and day. See the DEDUPE
+comment at the row loop below; the collapsed count is written to the
+output as duplicateRowsCollapsed so it stays visible, not just fixed
+silently.
 
 Usage:
     python3 ingest/ingest_work_orders.py [source] [--out data/work_orders.js] [--fleet TK]
@@ -278,18 +283,19 @@ def main():
         # DEDUPE. 1C's export is one ROW per line item on a work order, not
         # one row per work order -- two defects, two parts, or a meter read
         # in both KM and Hours all repeat the same "N Hours service
-        # Planned" row under the SAME work order number. Read raw, that
-        # showed up on the dashboard as the same job twice on the same unit
-        # and day (e.g. two "FC" pills on TK040, both WO-016435) -- not two
-        # real jobs, one row counted twice. A real work order number is
-        # 1C's own unique identity for one maintenance event, so the first
-        # occurrence wins and every later row carrying the same number is
-        # dropped. A blank work order number (seen on some still-registered,
-        # not yet released rows) falls back to the (equip, maint type, plan
-        # start, plan end) tuple -- the closest thing to identity 1C gives
-        # a row before it has a number of its own.
-        key = ("wo", equip.upper(), str(wo_number).strip().upper()) if wo_number \
-            else ("synth", equip.upper(), str(maint_type).strip(), plan_start_d, plan_end_d)
+        # Planned" row. Sometimes that repeat carries the SAME work order
+        # number (two "FC" pills on TK040, both WO-016435) -- but not
+        # always: EX021 got SEVEN work orders on one day (2026-08-01),
+        # THREE different numbers each for its 250h, its 500h and its
+        # 1000h tier, one number apiece only for 2000h -- seven numbers 1C
+        # itself minted, for what is, from this fleet's side, one PM cycle
+        # per tier reached that day. A work order number is not a safe
+        # identity to key on, then: the real identity of "one maintenance
+        # event" here is a unit reaching one interval tier on one day, so
+        # the key is (equip, maintenance type, plan start, plan end)
+        # regardless of how many numbers 1C gave it. The first occurrence
+        # wins and keeps its own work order number; the rest are dropped.
+        key = (equip.upper(), str(maint_type).strip(), plan_start_d, plan_end_d)
         if key in seen_keys:
             dup_count += 1
             continue

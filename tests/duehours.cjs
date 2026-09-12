@@ -51,6 +51,7 @@ const mk = `((id,ty,u,d,smu,pos)=>({id,type:ty,equip:u,date:d,by:'S. Volkov',sup
     GET: [DUE.hours('GET'), DUE.days('GET')],
     UCd: [DUE.hours('UC', null, 'DOZ'), DUE.days('UC', null, null, 'DOZ')],
     UCe: [DUE.hours('UC', null, 'EXC'), DUE.days('UC', null, null, 'EXC')],
+    UCr: [DUE.hours('UC', null, 'DRB'), DUE.hours('UC', null, 'DRE')],
     TBa: [DUE.hours('TB', null, 'AT')],
     TBh: [DUE.hours('TB', null, 'HT')],
     TBhCarried: !!DUE.spec('TB', 'HT').carriedClass,
@@ -75,19 +76,27 @@ const mk = `((id,ty,u,d,smu,pos)=>({id,type:ty,equip:u,date:d,by:'S. Volkov',sup
     iv.UCd[0] === 1000 && iv.UCd[1] === 50, iv.UCd.join(' h → ') + ' d');
   ok('an excavator undercarriage every 4,000 h',
     iv.UCe[0] === 4000 && iv.UCe[1] === 200, iv.UCe.join(' h → ') + ' d');
-  ok('and the round can name both', JSON.stringify(iv.UCby) ===
-    '[{"cls":"DOZ","h":1000},{"cls":"EXC","h":4000}]', JSON.stringify(iv.UCby));
-  /* Body inspection is stated for the Komatsu HM400 articulated trucks only.
-     The rigid trucks the round also fits keep what they were walked on and are
-     FLAGGED as carried — inheriting the ADTs' figure would be inventing a
-     policy nobody set, on sixteen machines. */
+  /* Confirmed against the office's own initial programme
+     (docs/source/ConMon_initial_program.xlsx): a drill's undercarriage runs
+     at the excavator's rate, not the dozer's — the programme names the
+     class "Drill" without distinguishing the blasting and exploration rigs
+     under it, so both get the same stated figure. */
+  ok('a drill undercarriage every 4,000 h, blasting and exploration alike',
+    iv.UCr[0] === 4000 && iv.UCr[1] === 4000, 'DRB ' + iv.UCr[0] + ' · DRE ' + iv.UCr[1]);
+  ok('and the round can name all four', JSON.stringify(iv.UCby) ===
+    '[{"cls":"DOZ","h":1000},{"cls":"EXC","h":4000},{"cls":"DRB","h":4000},{"cls":"DRE","h":4000}]',
+    JSON.stringify(iv.UCby));
+  /* Body inspection is stated for BOTH truck types this round fits, at the
+     same figure — confirmed against the office's own initial programme,
+     which names the Komatsu HM400 articulated trucks and the Terex TR60
+     haul trucks at the same 4,000 h. */
   ok('an articulated truck body every 4,000 h', iv.TBa[0] === 4000, iv.TBa[0] + ' h');
-  ok('a rigid truck body keeps its carried figure', iv.TBh[0] === 1000, iv.TBh[0] + ' h');
-  ok('and is marked as carried rather than stated', iv.TBhCarried === true,
+  ok('a haul truck body every 4,000 h too', iv.TBh[0] === 4000, iv.TBh[0] + ' h');
+  ok('and neither is carried — both are stated', iv.TBhCarried === false,
     String(iv.TBhCarried));
   /* Asked without a class, a round still answers — every existing caller in
      the phone, the dashboard and the report does exactly that. */
-  ok('the round still answers without a class', iv.UC[0] === 1000 && iv.TB[0] === 1000,
+  ok('the round still answers without a class', iv.UC[0] === 1000 && iv.TB[0] === 4000,
     'UC ' + iv.UC[0] + ' · TB ' + iv.TB[0]);
   ok('the engine filter every 500 h and the rest every 1000',
     iv.FCe[0] === 500 && iv.FCh[0] === 1000, 'ENG ' + iv.FCe[0] + ' · HYD ' + iv.FCh[0]);

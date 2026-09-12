@@ -33,8 +33,11 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
 const STATED = [
   ["MP", "HT",  250,  "Terex TR60 haul trucks — final drive magnetic plugs"],
   ["TB", "AT",  4000, "Komatsu HM400 articulated trucks — body inspection"],
+  ["TB", "HT",  4000, "Terex TR60 haul trucks — body inspection"],
   ["UC", "DOZ", 1000, "Dozers — undercarriage"],
   ["UC", "EXC", 4000, "Excavators — undercarriage"],
+  ["UC", "DRB", 4000, "Blasting drills — undercarriage"],
+  ["UC", "DRE", 4000, "Exploration drills — undercarriage"],
 ];
 
 (async () => {
@@ -69,17 +72,40 @@ const STATED = [
   ok(one.mpDays < 20, "not the 90 days it used to use", one.mpDays + " days");
 
   console.log("\n── a class with no stated figure keeps its own, and says so");
+  /* TB used to be this suite's live example of a carried class (the rigid
+     trucks, before the office's own initial programme confirmed they run
+     the same 4,000 h as the articulated ones — see due.js). It now states
+     ONE figure for every class it fits (onClass, same shape as MP), so
+     there is no "unstated" class left to carry a figure for at all — the
+     fallback itself is proven against UC instead, which still names some
+     classes and not others (byClass), on a class that cannot possibly be
+     named: no due.js entry will ever state a figure for a class spelled
+     "ZZZ". */
   const carried = await p.evaluate(() => ({
+    zz: DUE.hours("UC", null, "ZZZ"),
+    zzFlag: !!DUE.spec("UC", "ZZZ").carriedClass,
     tbHt: DUE.hours("TB", null, "HT"),
     tbHtFlag: !!DUE.spec("TB", "HT").carriedClass,
     tbAt: DUE.hours("TB", null, "AT"),
     tbAtFlag: !!DUE.spec("TB", "AT").carriedClass,
+    ucDrb: DUE.hours("UC", null, "DRB"),
+    ucDre: DUE.hours("UC", null, "DRE"),
   }));
-  ok(carried.tbHt === 1000, "the rigid trucks keep what they were walked on", carried.tbHt + " h");
-  ok(carried.tbHtFlag === true, "flagged as carried, not stated", String(carried.tbHtFlag));
+  ok(carried.zz === 1000, "an unnamed class keeps the round's own figure", carried.zz + " h");
+  ok(carried.zzFlag === true, "and is flagged as carried, not stated", String(carried.zzFlag));
+  /* Confirmed against the office's own initial programme
+     (docs/source/ConMon_initial_program.xlsx): both truck types run Dump
+     Body Liner at the same 4,000 h, and both drill rigs run Undercarriage
+     at the excavator's 4,000 h, so none of these four is carried anymore. */
+  ok(carried.tbHt === 4000 && carried.tbHtFlag === false,
+     "the haul trucks now state the same figure as the articulated ones",
+     `${carried.tbHt} h, carried=${carried.tbHtFlag}`);
   ok(carried.tbAt === 4000 && carried.tbAtFlag === false,
-     "while the articulated trucks carry the stated one",
+     "and the articulated trucks still do",
      `${carried.tbAt} h, carried=${carried.tbAtFlag}`);
+  ok(carried.ucDrb === 4000 && carried.ucDre === 4000,
+     "and both drill rigs state the excavator's rate",
+     `DRB ${carried.ucDrb} h · DRE ${carried.ucDre} h`);
 
   console.log("\n── every existing caller still gets an answer");
   const compat = await p.evaluate(() => ({
@@ -131,9 +157,14 @@ const STATED = [
   });
   ok(/1,?000/.test(rows.uc || "") && /4,?000/.test(rows.uc || ""),
      "undercarriage shows both figures", rows.uc);
+  /* Body inspection now states the SAME figure for both truck types this
+     round fits (see due.js), so it collapses to one number the same way
+     the plug round does below — never two class rows with one flagged
+     carried, which is what it did before the office confirmed haul trucks
+     also run at 4,000 h. */
   ok(/4,?000/.test(rows.tb || ""), "body inspection shows the stated 4,000 h", rows.tb);
-  ok(/carried|перенес/i.test(rows.tb || ""),
-     "and marks the class that is on a carried figure", rows.tb);
+  ok(!/carried|перенес/i.test(rows.tb || ""),
+     "and no class is left carried now both are stated", rows.tb);
   ok(/250 h|250 ч/.test(rows.mp || ""), "the plug round shows hours, not 90 days", rows.mp);
 
   ok(errs.length === 0, "nothing threw throughout", errs.slice(0, 2).join(" | "));

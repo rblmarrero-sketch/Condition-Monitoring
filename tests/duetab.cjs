@@ -35,10 +35,10 @@ const on  = n => new Date(Date.now() + n * 86400000).toISOString().slice(0, 10);
 
      MP    250 h   magnetic plugs, every machine
      INSP  500 h
-     UC   1000 h   dozers       ·  4000 h  excavators
-     TB   4000 h   articulated  ·  1000 h  everything else, carried forward
+     UC   1000 h   dozers       ·  4000 h  excavators (and drills)
+     TB   4000 h   both truck types this round fits
 
-   UC and TB are TWO figures each, not one, and EX005 is here to prove it: at
+   UC is TWO figures, not one, and EX005 is here to prove it: at
    2,400 hours it is comfortably inside an excavator's 4,000 and comfortably
    past a dozer's 1,000. A build that reads the ROUND's interval without asking
    which MACHINE it is walking puts EX005 on the missed list — which is how

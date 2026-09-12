@@ -81,15 +81,21 @@
       /* Undercarriage is not one interval. A dozer's chain is in the ground
          every hour it works; an excavator's carries the machine and turns far
          less, and running both at 500 h walked the excavators eight times more
-         often than anybody asked for. Both figures are stated, and between them
-         they cover every machine the round fits — 22 dozers and 21 excavators. */
-      UC:   { h: 1000, byClass: { DOZ: 1000, EXC: 4000 } },
+         often than anybody asked for. Confirmed against the office's own
+         initial programme (docs/source/ConMon_initial_program.xlsx): dozers,
+         excavators AND drills (blasting and exploration alike — the
+         programme names the class, not the two rig types under it) are all
+         stated here, so between them they cover every tracked machine the
+         round fits. */
+      UC:   { h: 1000, byClass: { DOZ: 1000, EXC: 4000, DRB: 4000, DRE: 4000 } },
       GET:  { h: 500 },
-      /* Body inspection on the Komatsu HM400 articulated trucks at 4,000 h. The
-         sixteen rigid trucks this round also fits have no stated figure, so they
-         keep the one they were already walked on rather than inheriting the
-         ADTs' — see `carried`. */
-      TB:   { h: 1000, byClass: { AT: 4000 } },
+      /* Body inspection at 4,000 h on BOTH truck types this round fits —
+         confirmed against the office's own initial programme
+         (docs/source/ConMon_initial_program.xlsx), which names the Komatsu
+         HM400 articulated trucks and the Terex TR60 haul trucks at the same
+         figure. Same shape as MP above: one number, two classes, onClass
+         rather than byClass, because there is no second figure to state. */
+      TB:   { h: 4000, onClass: ["HT", "AT"] },
       INSP: { h: 500 },
       /* Still no hour figure for these two, so they keep the calendar the
          fleet already ran them on. Carried forward rather than converted: 30
