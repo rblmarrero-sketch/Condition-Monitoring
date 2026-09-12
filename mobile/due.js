@@ -118,6 +118,26 @@
     },
     FALLBACK: { d: 30, carried: 1 },
 
+    /* ---- THE AGENDA WINDOW: ONE WEEK BACK, ONE WEEK AHEAD ------------------
+       The phone's agenda and the office's Plan vs Actual grid both draw the
+       same window, so it is stated once here rather than as a 7 in each of
+       them. Two screens showing different weeks while both are called "this
+       week" is the kind of disagreement this file exists to prevent.
+
+       It looked FORWARD ONLY, and that is what the site asked to change. A
+       plan is not only a list of what is coming: the week just gone is where
+       the work that did NOT happen is, and a grid that starts at today can
+       only ever show a clean sheet — every round missed last Tuesday simply
+       is not drawn. Reading plan against actual with the actual half cropped
+       off is the harder question answered with the easier data.
+
+       Fifteen days, today in the middle. Kept as two numbers rather than a
+       span so the two halves can be asked about separately: a day BEFORE
+       today carries work that is late, and that is not the same fact as a
+       day after it. */
+    AGENDA_BACK: 7,
+    AGENDA_FWD: 7,
+
     /* ---- MACHINES HELD OFF A ROUND -----------------------------------------
        Membership in a round is decided by CLASS on both surfaces, and that is
        right nearly always. This is the exception it cannot express: the site
@@ -173,6 +193,31 @@
   }
   D.offRound = offRound;
   D.onRound = function (type, asset) { return !offRound(type, asset); };
+
+  /* Every day the agenda draws, oldest first, with today at index
+     AGENDA_BACK. Both surfaces build their columns from this, so a column
+     can never exist on one and not the other. */
+  D.agendaDays = function (today) {
+    const t0 = today || D.today();
+    const out = [];
+    for (let i = -D.AGENDA_BACK; i <= D.AGENDA_FWD; i++) out.push(D.shift(t0, i));
+    return out;
+  };
+  /* Is this date on the agenda at all? Answers on the same two numbers the
+     columns are built from, so a row can never land in the window while its
+     column is missing — or the reverse, which is how an entry becomes
+     invisible without anything being wrong anywhere in particular. */
+  D.inAgenda = function (today, d) {
+    const n = D.dayDiff(today || D.today(), d);
+    return n != null && n >= -D.AGENDA_BACK && n <= D.AGENDA_FWD;
+  };
+  /* A day already gone. The agenda's whole point is that these are drawn;
+     the caller still has to SAY they are behind, or a plan date in the past
+     reads exactly like one in the future. */
+  D.agendaPast = function (today, d) {
+    const n = D.dayDiff(today || D.today(), d);
+    return n != null && n < 0;
+  };
 
   /* THE INTERVAL IS A PROPERTY OF THE ROUND AND THE MACHINE, NOT THE ROUND.
 

@@ -19,9 +19,16 @@
       minus SCHED_PREINSP_DAYS), clamped forward to today if that day has
       already passed, and suppressed entirely once schedPreInspDone() says
       this PM's own inspection is already walked.
-   3. THE 7-DAY WINDOW is exactly today..today+6 — nothing before, nothing
-      on day 7 or later — and the empty state names itself rather than
+   3. THE WINDOW is one week back and one week ahead (DUE.AGENDA_BACK /
+      AGENDA_FWD, the same two numbers the office's grid draws) — nothing
+      beyond either edge — and the empty state names itself rather than
       showing a blank box.
+
+      It looked FORWARD ONLY until 2026-09-12. A plan is not only what is
+      coming: the week just gone is where the work that did not happen is,
+      and a window starting at today can only ever show a clean sheet. The
+      days behind today are drawn AND marked late, because a past plan date
+      drawn like a future one says the opposite of what it is.
 
    The server below intercepts only GET /data/schedule_slim.json, same
    pattern as duesched.cjs; the real (git-tracked, hourly-regenerated) file
@@ -42,7 +49,7 @@ const today = new Date();
 const plus = n => { const d = new Date(today); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
 
 // WEEK1: FC+INSP, P3, plan +5 -- FC stays on day 5, INSP splits to day 2.
-// WEEK2: MP alone, P3, plan +10 -- outside the 7-day window, must not appear.
+// WEEK2: MP alone, P3, plan +10 -- outside the window ahead, must not appear.
 // WEEK3: INSP alone, P1 (not P3/P4) -- not a PM shift candidate, INSP stays
 //   right on its own plan date (day 3), no separate pre-check entry.
 // WEEK4: TB alone, P4, plan +1 -- no INSP in the order at all, one entry.
@@ -60,6 +67,24 @@ const FIXTURE = {
     WEEK4: [{ wo: 'WO-020004', hours: 4000, types: ['TB'], plan: plus(1), priority: 'P4 Planned (PM)' }],
     WEEK5: [{ wo: 'WO-020005', hours: 500, types: ['INSP'], plan: plus(1), priority: 'P3 Planned (PM)' }],
     WEEK6: [{ wo: 'WO-020006', hours: 500, types: ['FC', 'INSP'], plan: plus(2), priority: 'P3 Planned (PM)' }],
+    /* THE WEEK THAT HAS ALREADY GONE. The agenda looked forward only until
+       2026-09-12, so a round the plan wanted last Tuesday and nobody walked
+       simply was not drawn — the half of plan-versus-actual that carries the
+       failures was the half being cropped off. WEEK7 is inside the new
+       window behind today; WEEK8 is one day beyond its far edge and must
+       still be absent, or "looks back" has quietly become "looks back for
+       ever" and the screen fills with history. */
+    WEEK7: [{ wo: 'WO-020007', hours: 250, types: ['MP'], plan: plus(-4), priority: 'P3 Planned (PM)' }],
+    WEEK8: [{ wo: 'WO-020008', hours: 250, types: ['MP'], plan: plus(-8), priority: 'P3 Planned (PM)' }],
+    /* THE CLAMP STILL HAS A JOB. WEEK5's wanted pre-check day (plan-3) used
+       to be in the past and was pulled forward to today so it could not
+       fall off the front of a forward-only window; now the window holds it
+       and it sits on the day it was actually wanted. What still cannot be
+       held is a pre-check wanted BEFORE the window opens — plan-3 here is
+       eight days back — and that one must still be pulled forward, or the
+       rule the clamp was written for ("do not go silent on an overdue
+       thing") has been quietly dropped along with the code. */
+    WEEK9: [{ wo: 'WO-020009', hours: 500, types: ['INSP'], plan: plus(-5), priority: 'P3 Planned (PM)' }],
   },
 };
 
@@ -138,16 +163,47 @@ const server = http.createServer((req, res) => {
   const groupWith = s => groups.find(g => g.includes(s)) || '';
   ok('WEEK1 FC sits on its own plan date (+5)', /FC/.test(groupWith('WEEK1')) && groupWith('WEEK1').includes('WO-020001'));
   ok('WEEK1 also gets a separate INSP pre-check entry, 3 days earlier', groups.some(g => /INSP/.test(g) && g.includes('WEEK1') && /walk ahead of PM/i.test(g)));
-  ok('WEEK2 (10 days out) is outside the 7-day window entirely', !groups.some(g => g.includes('WEEK2')));
+  ok('WEEK2 (10 days out) is beyond the far edge ahead', !groups.some(g => g.includes('WEEK2')));
+  /* THE HALF THAT WAS MISSING. A round the plan wanted four days ago and
+     nobody walked is the whole point of reading plan against actual, and a
+     forward-only window could not draw it at all. */
+  ok('WEEK7 (4 days BEHIND today) is drawn', groups.some(g => g.includes('WEEK7')),
+     groupWith('WEEK7').replace(/\n/g, ' ').slice(0, 120));
+  ok('  and its day is marked late, not left looking like work still to come',
+     /late|просроч/i.test(groupWith('WEEK7')), groupWith('WEEK7').replace(/\n/g, ' ').slice(0, 120));
+  ok('WEEK8 (8 days behind) is beyond the far edge back — this looks back one week, not for ever',
+     !groups.some(g => g.includes('WEEK8')));
   ok('WEEK3 (P1, not P3/P4) keeps INSP on its own plan date, no split', groupWith('WEEK3').includes('INSP') && !/walk ahead of PM/i.test(groupWith('WEEK3')));
   ok('WEEK4 (TB, no INSP in the order) is a single plain entry', groupWith('WEEK4').includes('TB') && groupWith('WEEK4').includes('WO-020004'));
 
-  console.log('\na pre-check day already in the past clamps forward to today, never drops');
-  const todayGroup = await p.evaluate(() => {
-    const gs = [...document.querySelectorAll('#dueWeekList .daygroup')];
-    return gs.length ? gs[0].innerText : '';
-  });
-  ok("today's group carries WEEK5's clamped pre-check", todayGroup.includes('WEEK5') && /walk ahead of PM/i.test(todayGroup), todayGroup.slice(0, 200));
+  console.log('\na pre-check in the past sits on the day it was wanted; one beyond the window still clamps');
+  /* NOT gs[0] any more. Today used to be the first group because the window
+     started there; it is now in the middle, and reading "the first group"
+     would have been reading whichever past day happened to have work on it
+     — a test passing or failing on the fixture's shape rather than on the
+     behaviour. Ask the app which day is today. */
+  const dayOf = await p.evaluate(unit => {
+    const out = [];
+    document.querySelectorAll('#dueWeekList .daygroup').forEach(g => {
+      const hd = (g.querySelector('.dayhd b') || {}).textContent || '';
+      g.querySelectorAll('.agitem').forEach(b => { if (b.dataset.u === unit) out.push(hd.trim()); });
+    });
+    return out;
+  }, 'WEEK5');
+  const todayWord = await p.evaluate(() => t('due_week_today'));
+  ok("WEEK5's pre-check sits on the day it was wanted, two days back — not pulled to today",
+     dayOf.length === 1 && dayOf[0].indexOf(todayWord) < 0, JSON.stringify(dayOf));
+  ok('  and that day says it is late', /late|просроч/i.test(dayOf[0] || ''), JSON.stringify(dayOf));
+  const day9 = await p.evaluate(unit => {
+    const out = [];
+    document.querySelectorAll('#dueWeekList .daygroup').forEach(g => {
+      const hd = (g.querySelector('.dayhd b') || {}).textContent || '';
+      g.querySelectorAll('.agitem').forEach(b => { if (b.dataset.u === unit) out.push(hd.trim()); });
+    });
+    return out;
+  }, 'WEEK9');
+  ok('WEEK9, wanted eight days back, is still pulled forward to today rather than lost',
+     day9.length === 1 && day9[0].indexOf(todayWord) >= 0, JSON.stringify(day9));
 
   console.log('\na PM whose own inspection is already walked gets no pre-check line');
   // Read WEEK6's OWN rows, not the day group's text -- WEEK6's plain FC entry
@@ -180,7 +236,14 @@ const server = http.createServer((req, res) => {
   await p.evaluate(() => { SCHED = { generated: new Date().toISOString(), byUnit: {} }; renderDue(); });
   await p.waitForTimeout(200);
   const emptyWeek = await p.evaluate(() => document.getElementById('dueWeekList').innerText);
-  ok('the empty state says so by name', /nothing open falls in the next 7 days/i.test(emptyWeek), emptyWeek);
+  /* ASK THE APP FOR THE WORDS. This held its own copy of the sentence and
+     went red the moment the agenda widened to a fortnight — a suite failing
+     on working code because it kept a duplicate of something the app owns,
+     which CLAUDE.md lists among the traps this project has already paid
+     for four times. */
+  const emptyWant = await p.evaluate(() => t('due_week_none'));
+  ok('the empty state says so by name', emptyWeek.indexOf(emptyWant) >= 0,
+     emptyWeek + '  (wanted: ' + emptyWant + ')');
   // Put the real fixture back for what follows, via a clean reload.
   await p.reload({ waitUntil: 'load' });
   await p.waitForFunction(() => (document.getElementById('verNum') || {}).textContent !== '?', null, { timeout: 20000 });

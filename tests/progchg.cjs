@@ -315,6 +315,65 @@ const srv = http.createServer((req, res) => {
       pa.weekOtherInsp + ' pills');
   }
 
+  console.log('\n7. THE AGENDA LOOKS BACK AS WELL AS FORWARD');
+  /* Asked for after reading the grid: a plan is not only what is coming.
+     The week just gone is where the work that did NOT happen is, and a
+     window starting at today can only ever show a clean sheet. Both
+     surfaces must draw the SAME window or the office and the field are
+     looking at different weeks while both say "the plan". */
+  const win = await d.evaluate(() => {
+    const t0 = DUE.today();
+    const days = DUE.agendaDays(t0);
+    return {
+      back: DUE.AGENDA_BACK, fwd: DUE.AGENDA_FWD,
+      n: days.length, first: days[0], last: days[days.length - 1],
+      todayAt: days.indexOf(t0),
+      inBack: DUE.inAgenda(t0, DUE.shift(t0, -DUE.AGENDA_BACK)),
+      offBack: DUE.inAgenda(t0, DUE.shift(t0, -DUE.AGENDA_BACK - 1)),
+      inFwd: DUE.inAgenda(t0, DUE.shift(t0, DUE.AGENDA_FWD)),
+      offFwd: DUE.inAgenda(t0, DUE.shift(t0, DUE.AGENDA_FWD + 1)),
+      pastYesterday: DUE.agendaPast(t0, DUE.shift(t0, -1)),
+      pastToday: DUE.agendaPast(t0, t0),
+      pastTomorrow: DUE.agendaPast(t0, DUE.shift(t0, 1)),
+    };
+  });
+  ok(win.back === 7 && win.fwd === 7, 'the window is one week back and one week ahead',
+    '-' + win.back + ' .. +' + win.fwd);
+  ok(win.n === 15 && win.todayAt === 7, '  fifteen days with today in the middle',
+    win.first + ' → ' + win.last);
+  ok(win.inBack === true && win.offBack === false && win.inFwd === true && win.offFwd === false,
+    '  and it ends where it says it does, at both ends');
+  ok(win.pastYesterday === true && win.pastToday === false && win.pastTomorrow === false,
+    '  "past" means before today, and today is not past');
+
+  /* The grid itself: fifteen columns, today marked, the gone days marked
+     late IN WORDS as well as by shading. */
+  const grid = await d.evaluate(() => {
+    if (typeof renderPaWeek !== 'function' || typeof paRows !== 'function') return { skip: 1 };
+    renderPaWeek(paRows());
+    const ths = [...document.querySelectorAll('#paWeek thead th')];
+    return {
+      cols: ths.length - 1,
+      today: ths.filter(x => x.classList.contains('pa-today')).length,
+      past: ths.filter(x => x.classList.contains('pa-past')).length,
+      titled: ths.filter(x => (x.getAttribute('title') || '').length).length,
+      latePillTitles: [...document.querySelectorAll('#paWeek td.pa-past .pill')]
+        .filter(el => /Late|Просроч/i.test(el.getAttribute('title') || '')).length,
+      pastPills: document.querySelectorAll('#paWeek td.pa-past .pill').length,
+    };
+  });
+  if (grid.skip) ok(false, 'the week grid could not be rendered');
+  else {
+    ok(grid.cols === 15, 'the office grid draws all fifteen days', grid.cols + ' columns');
+    ok(grid.today === 1, '  with today marked exactly once', String(grid.today));
+    ok(grid.past === 7, '  and the seven days already gone marked as past', String(grid.past));
+    ok(grid.titled >= 8, '  every marked column SAYS which it is, not only shades it',
+      grid.titled + ' columns titled');
+    ok(grid.pastPills === 0 || grid.latePillTitles === grid.pastPills,
+      '  and every round sitting on a gone day is labelled late',
+      grid.latePillTitles + ' of ' + grid.pastPills);
+  }
+
   await d.close(); await dctx.close();
 
   await b.close(); srv.close();

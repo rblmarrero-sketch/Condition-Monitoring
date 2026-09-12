@@ -588,6 +588,17 @@
   table.grid{width:100%;border-collapse:collapse;font-size:12.5px;}
   table.grid th{text-align:left;color:var(--ink-2);font-weight:600;border-bottom:1px solid var(--border);padding:5px 7px;white-space:nowrap;}
   table.grid td{border-bottom:1px solid var(--border);padding:5px 7px;vertical-align:top;}
+  /* THE AGENDA GRID READS BACKWARDS AS WELL AS FORWARDS. Fifteen columns
+     now, so today has to be findable at a glance on a shared screen, and
+     the week already gone has to look like the past rather than more work
+     to come. Shading is the weaker half of that on purpose — the column
+     heading and every pill in it also carry the word, because a tint is
+     not readable to somebody who cannot see it, and this grid is read
+     across a room. */
+  table.grid th.pa-today,table.grid td.pa-today{background:color-mix(in srgb,var(--accent) 8%,transparent);}
+  table.grid th.pa-today{color:var(--accent);font-weight:700;}
+  table.grid th.pa-past,table.grid td.pa-past{background:color-mix(in srgb,var(--ink) 5%,transparent);}
+  table.grid th.pa-past{color:var(--muted);}
   table.grid tr:hover td{background:var(--surface-2);}
   .tblwrap{overflow-x:auto;max-width:100%;min-width:0;}
   /* A table in a half-width column has to fit that column. Headers are
@@ -3078,8 +3089,8 @@
          with an open PM in the next 7 days, one column per day, so a week
          reads as a shape rather than as fifty lines to scan one at a time. -->
     <div class="section">
-      <div class="secthd"><h2 data-i18n="pa_week_h2">Next 7 days</h2>
-        <span class="pgsub" data-i18n="pa_week_sub">Open work orders due in the next week, by unit and day. General Inspection is highlighted — it is carried out ahead of the date, not on it.</span></div>
+      <div class="secthd"><h2 data-i18n="pa_week_h2">Two weeks</h2>
+        <span class="pgsub" data-i18n="pa_week_sub">Open work orders from one week ago to one week ahead, by unit and day. Days before today are shaded and their rounds marked late — that is work the plan wanted and nobody has recorded. General Inspection is highlighted — it is carried out ahead of the date, not on it.</span></div>
       <div id="paWeek"></div>
     </div>
     <div class="section">
@@ -3530,22 +3541,22 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=331"></script>
+<script src="../data/magnetic_plug.js?v=332"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=331"></script>
-<script src="../mobile/hme.js?v=331"></script>
-<script src="../mobile/mp-fc.js?v=331"></script>
-<script src="../mobile/hme-cascade.js?v=331"></script>
-<script src="../mobile/temp-limits.js?v=331"></script>
+<script src="../data/work_orders.js?v=332"></script>
+<script src="../mobile/hme.js?v=332"></script>
+<script src="../mobile/mp-fc.js?v=332"></script>
+<script src="../mobile/hme-cascade.js?v=332"></script>
+<script src="../mobile/temp-limits.js?v=332"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=331"></script>
-<script src="../mobile/normalize.js?v=331"></script>
-<script src="../mobile/terms.js?v=331"></script>
+<script src="../mobile/assets.js?v=332"></script>
+<script src="../mobile/normalize.js?v=332"></script>
+<script src="../mobile/terms.js?v=332"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3564,19 +3575,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=331"></script>
-<script src="../mobile/edits.js?v=331"></script>
-<script src="../mobile/due.js?v=331"></script>
-<script src="../mobile/wear.js?v=331"></script>
-<script src="../mobile/wear-map.js?v=331"></script>
-<script src="../mobile/lube.js?v=331"></script>
-<script src="../mobile/lube-overrides.js?v=331"></script>
-<script src="../mobile/lube2027.js?v=331"></script>
-<script src="../mobile/lube-tds.js?v=331"></script>
+<script src="../mobile/grade.js?v=332"></script>
+<script src="../mobile/edits.js?v=332"></script>
+<script src="../mobile/due.js?v=332"></script>
+<script src="../mobile/wear.js?v=332"></script>
+<script src="../mobile/wear-map.js?v=332"></script>
+<script src="../mobile/lube.js?v=332"></script>
+<script src="../mobile/lube-overrides.js?v=332"></script>
+<script src="../mobile/lube2027.js?v=332"></script>
+<script src="../mobile/lube-tds.js?v=332"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=331"></script>
-<script src="../mobile/machine-photos.js?v=331"></script>
+<script src="../mobile/upload-defaults.js?v=332"></script>
+<script src="../mobile/machine-photos.js?v=332"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3585,17 +3596,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=331"></script>
-<script src="../mobile/get.js?v=331"></script>
-<script src="../mobile/points.js?v=331"></script>
-<script src="../mobile/uc-points.js?v=331"></script>
-<script src="../mobile/inspect-guide.js?v=331"></script>
-<script src="../mobile/get-figs.js?v=331"></script>
-<script src="../mobile/body-points.js?v=331"></script>
-<script src="../mobile/body-map.js?v=331"></script>
-<script src="../mobile/jspdf.umd.min.js?v=331"></script>
-<script src="../mobile/html2canvas.min.js?v=331"></script>
-<script src="../mobile/report-core.js?v=331"></script>
+<script src="../mobile/machine-fig.js?v=332"></script>
+<script src="../mobile/get.js?v=332"></script>
+<script src="../mobile/points.js?v=332"></script>
+<script src="../mobile/uc-points.js?v=332"></script>
+<script src="../mobile/inspect-guide.js?v=332"></script>
+<script src="../mobile/get-figs.js?v=332"></script>
+<script src="../mobile/body-points.js?v=332"></script>
+<script src="../mobile/body-map.js?v=332"></script>
+<script src="../mobile/jspdf.umd.min.js?v=332"></script>
+<script src="../mobile/html2canvas.min.js?v=332"></script>
+<script src="../mobile/report-core.js?v=332"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4524,8 +4535,9 @@ const I18N={
   pa_window:"1C plan date", pa_win_all:"Any time", pa_win_over:"Overdue (plan date passed)",
   pa_win_7:"Next 7 days", pa_win_14:"Next 14 days", pa_win_30:"Next 30 days",
   pa_c_hours:"Hours",
-  pa_week_h2:"Next 7 days", pa_week_sub:"Open work orders due in the next week, by unit and day. General Inspection is highlighted — it is carried out ahead of the date, not on it.",
-  pa_week_none:"Nothing open falls in the next 7 days.", pa_week_pm:"PM",
+  pa_week_h2:"Two weeks", pa_week_sub:"Open work orders from one week ago to one week ahead, by unit and day. Days before today are shaded and their rounds marked late — that is work the plan wanted and nobody has recorded. General Inspection is highlighted — it is carried out ahead of the date, not on it.",
+  pa_week_none:"Nothing open falls between a week ago and a week ahead.", pa_week_pm:"PM",
+  pa_week_today:"Today", pa_week_late:"Late — planned and not recorded",
  },
  ru:{
   sub:"Панель парка", srcnone:"Нет данных — нажмите, чтобы подключить",
@@ -5353,8 +5365,9 @@ const I18N={
   pa_window:"Плановая дата (1С)", pa_win_all:"Любое время", pa_win_over:"Просрочено (дата прошла)",
   pa_win_7:"Следующие 7 дней", pa_win_14:"Следующие 14 дней", pa_win_30:"Следующие 30 дней",
   pa_c_hours:"Наработка",
-  pa_week_h2:"Следующие 7 дней", pa_week_sub:"Открытые наряды со сроком на следующую неделю, по единицам и дням. Общий осмотр выделен — его проводят до даты ТО, а не одновременно с ней.",
-  pa_week_none:"На ближайшие 7 дней ничего не запланировано.", pa_week_pm:"ТО",
+  pa_week_h2:"Две недели", pa_week_sub:"Открытые наряды за неделю назад и на неделю вперёд, по единицам и дням. Дни до сегодняшнего затенены, а их обходы помечены как просроченные — это работа, которую план требовал, а записи о ней нет. Общий осмотр выделен — его проводят до даты ТО, а не одновременно с ней.",
+  pa_week_none:"С прошлой недели по следующую ничего не запланировано.", pa_week_pm:"ТО",
+  pa_week_today:"Сегодня", pa_week_late:"Просрочено — запланировано и не записано",
  },
 };
 let lang=localStorage.getItem("cm_dash_lang")||"en";
@@ -15199,7 +15212,10 @@ function paSortGo(k){
 function paWeekData(rows){
   const today=todayISO();
   const entries=[];
-  const inWindow=d=>{ if(!window.DUE) return d===today; const n=DUE.dayDiff(today,d); return n!=null && n>=0 && n<=6; };
+  /* One week back as well as one forward, from DUE.AGENDA_BACK/FWD — the
+     same two numbers the phone's agenda draws, so the office and the field
+     can never be looking at different weeks. */
+  const inWindow=d=>window.DUE ? DUE.inAgenda(today,d) : d===today;
   rows.forEach(r=>{
     /* info.types null means this 1C service does not correspond to ANY CM
        round at all -- a 2000h tyre or transmission service, say, or a unit
@@ -15230,7 +15246,13 @@ function paWeekData(rows){
          it, the same "do not go silent on an overdue thing" rule the KPI
          tile above already applies. Only clamp forward: a pre-check that
          is not due for a while yet stays on its own real day. */
-      const day=(window.DUE && DUE.dayDiff(today,wanted)<0) ? today : wanted;
+      /* On the day it was actually wanted, now that the window reaches back
+         to hold it — which reads as "this is late" rather than "do this
+         today". Only one that has fallen off the BACK of the window is
+         still pulled forward, keeping the rule it was written for: do not
+         go silent on an overdue thing. */
+      const day=inWindow(wanted) ? wanted
+              : ((window.DUE && DUE.dayDiff(today,wanted)<0) ? today : wanted);
       if(inWindow(day)) entries.push({ equip:r.w.equip, day, code:"INSP", isPreCheck:true, r });
     }
   });
@@ -15244,7 +15266,8 @@ function renderPaWeek(qtyRows){
   const entries=paWeekData(qtyRows);
   if(!entries.length){ box.innerHTML=`<div class="sub">${esc(t("pa_week_none"))}</div>`; return; }
   const today=todayISO();
-  const days=Array.from({length:7},(_,i)=> window.DUE ? DUE.shift(today,i) : today);
+  const days=window.DUE ? DUE.agendaDays(today) : [today];
+  const isPast=d=>!!(window.DUE && DUE.agendaPast(today,d));
   const dayLabel=d=>{ const dt=new Date(d+"T00:00:00Z");
     const wd=dt.toLocaleDateString(lang==="ru"?"ru-RU":"en-US",{weekday:"short",timeZone:"UTC"});
     return wd.replace(/\.$/,"")+" "+dt.getUTCDate(); };
@@ -15257,13 +15280,15 @@ function renderPaWeek(qtyRows){
     const ma=Math.min(...byUnit[a].map(rank)), mb=Math.min(...byUnit[b].map(rank));
     return ma-mb || a.localeCompare(b); });
   box.innerHTML=`<div class="tblwrap scrollbox" style="--sb:340px"><table class="grid"><thead><tr>
-      <th>${esc(t("pa_c_unit"))}</th>${days.map(d=>`<th class="c">${esc(dayLabel(d))}</th>`).join("")}
+      <th>${esc(t("pa_c_unit"))}</th>${days.map(d=>
+        `<th class="c${d===today?" pa-today":isPast(d)?" pa-past":""}"${d===today?` title="${esc(t("pa_week_today"))}"`:isPast(d)?` title="${esc(t("pa_week_late"))}"`:""}>${esc(dayLabel(d))}</th>`).join("")}
     </tr></thead><tbody>`
     + units.map(u=>{
         const cells=days.map(d=>{
           const here=byUnit[u].filter(e=>e.day===d);
-          if(!here.length) return `<td class="c muted">—</td>`;
-          return `<td class="c">`+here.map(e=>{
+          const dc=d===today?" pa-today":isPast(d)?" pa-past":"";
+          if(!here.length) return `<td class="c muted${dc}">—</td>`;
+          return `<td class="c${dc}">`+here.map(e=>{
             const r=e.r;
             /* Maintenance Type + plan date, printed, not just in a hover
                title -- this grid is read on a shared screen. For a
@@ -15274,8 +15299,12 @@ function renderPaWeek(qtyRows){
             const planTxt=e.isPreCheck ? `${esc(t("pa_week_pm"))} ${esc(shortDate(r.w.planStart))}`
                                         : (hrs?"":esc(shortDate(r.w.planStart)));
             const sub2=[hrs,planTxt].filter(Boolean).join(" · ");
+            /* A pill on a day already gone is late, and its title says so —
+               a shaded column is not readable to somebody who cannot see
+               the shading. */
+            const late=isPast(d);
             return `<div style="display:inline-block;text-align:center;margin:1px 3px;vertical-align:top">`
-                 + `<span class="pill ${e.isPreCheck?"w":"g"}" title="${esc(r.info.label)}">${esc(e.code)}</span>`
+                 + `<span class="pill ${late?"c":e.isPreCheck?"w":"g"}" title="${esc(r.info.label)}${late?" — "+t("pa_week_late"):""}">${esc(e.code)}</span>`
                  + `<div class="mono muted" style="font-size:10px;line-height:1.4;white-space:nowrap">${esc(r.w.woNumber||"—")}</div>`
                  + (sub2?`<div class="mono muted" style="font-size:10px;line-height:1.4;white-space:nowrap">${sub2}</div>`:"")
                  + `</div>`;
@@ -16645,8 +16674,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=331"></script>
-<script src="sync-adapter.js?v=331"></script>
-<script src="report.js?v=331"></script>
+<script src="drive.js?v=332"></script>
+<script src="sync-adapter.js?v=332"></script>
+<script src="report.js?v=332"></script>
 </body>
 </html>

@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=331">
+<link rel="manifest" href="manifest.webmanifest?v=332">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=331">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=331">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=331">
+<link rel="apple-touch-icon" href="icon-192.png?v=332">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=332">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=332">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -479,6 +479,14 @@
   .dayhd b{font-size:13px;letter-spacing:.02em;text-transform:uppercase;color:var(--ink);}
   .dayhd span{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;}
   .dayhd .today{color:var(--accent);}
+  /* A day already gone. Colour alone would say nothing to somebody who
+     cannot see it, so the heading also carries the word "late" (see
+     due_week_late) and this only reinforces it. */
+  /* --critical, not --bad: there is no --bad in this palette and never was
+     (see the note on .ucmap below, where three rules were dead for exactly
+     that reason and rendered black). */
+  .dayhd .late{color:var(--critical);}
+  .daygroup.past .agitem{border-left:3px solid var(--critical);}
   .agitem{display:flex;align-items:center;gap:10px;background:var(--surface-2);
     border:1px solid var(--border);border-left:4px solid var(--good);border-radius:10px;
     padding:9px 12px;margin-bottom:6px;text-align:left;width:100%;font:inherit;color:var(--ink);
@@ -2052,7 +2060,7 @@
          one number. See dueweekRows()'s own header for the rest. -->
     <div class="viewseg" role="tablist" aria-label="Due view">
       <button type="button" role="tab" id="dueViewList" data-dv="list" aria-controls="dueListWrap" data-i18n="due_list_seg">List</button>
-      <button type="button" role="tab" id="dueViewWeek" data-dv="week" aria-controls="dueWeekWrap" data-i18n="due_week_seg">This week</button>
+      <button type="button" role="tab" id="dueViewWeek" data-dv="week" aria-controls="dueWeekWrap" data-i18n="due_week_seg">Two weeks</button>
     </div>
     <div id="dueListWrap" role="tabpanel" aria-labelledby="dueViewList">
       <div class="tfilter dfilter" id="dueScopeF"></div>
@@ -2076,7 +2084,7 @@
       <div class="duelist" id="dueList"></div>
     </div>
     <div id="dueWeekWrap" class="hidden" role="tabpanel" aria-labelledby="dueViewWeek">
-      <div class="hint" id="dueWeekSub" style="margin:0 0 12px" data-i18n="due_week_sub">Open work orders due in the next 7 days, grouped by the day something has to happen. General Inspection is listed on the day it should be carried out — ahead of the plan date, not on it.</div>
+      <div class="hint" id="dueWeekSub" style="margin:0 0 12px" data-i18n="due_week_sub">Open work orders from one week ago to one week ahead, grouped by the day something has to happen. Days before today are marked late — that is work the plan wanted and nobody has recorded. General Inspection is listed on the day it should be carried out — ahead of the plan date, not on it.</div>
       <div id="dueWeekList"></div>
     </div>
     <!-- THE ONE-TAP ANSWER TO "WHY IS THIS MACHINE NOT ON MY LIST".
@@ -2439,15 +2447,15 @@
   }
 })();
 </script>
-<script src="native.js?v=331"></script>
-<script src="upload-defaults.js?v=331"></script>
-<script src="hme.js?v=331"></script>
-<script src="mp-fc.js?v=331"></script>
-<script src="hme-cascade.js?v=331"></script>
-<script src="assets.js?v=331"></script>
-<script src="temp-limits.js?v=331"></script>
-<script src="normalize.js?v=331"></script>
-<script src="terms.js?v=331"></script>
+<script src="native.js?v=332"></script>
+<script src="upload-defaults.js?v=332"></script>
+<script src="hme.js?v=332"></script>
+<script src="mp-fc.js?v=332"></script>
+<script src="hme-cascade.js?v=332"></script>
+<script src="assets.js?v=332"></script>
+<script src="temp-limits.js?v=332"></script>
+<script src="normalize.js?v=332"></script>
+<script src="terms.js?v=332"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2466,25 +2474,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=331"></script>
-<script src="edits.js?v=331"></script>
-<script src="due.js?v=331"></script>
-<script src="wear.js?v=331"></script>
-<script src="wear-figs.js?v=331"></script>
-<script src="wear-map.js?v=331"></script>
-<script src="machine-photos.js?v=331"></script>
-<script src="machine-fig.js?v=331"></script>
-<script src="get.js?v=331"></script>
-<script src="points.js?v=331"></script>
-<script src="uc-points.js?v=331"></script>
-<script src="inspect-guide.js?v=331"></script>
-<script src="get-figs.js?v=331"></script>
-<script src="body-points.js?v=331"></script>
-<script src="body-map.js?v=331"></script>
-<script src="lube.js?v=331"></script>
-<script src="lube-overrides.js?v=331"></script>
-<script src="lube2027.js?v=331"></script>
-<script src="report-core.js?v=331"></script>
+<script src="grade.js?v=332"></script>
+<script src="edits.js?v=332"></script>
+<script src="due.js?v=332"></script>
+<script src="wear.js?v=332"></script>
+<script src="wear-figs.js?v=332"></script>
+<script src="wear-map.js?v=332"></script>
+<script src="machine-photos.js?v=332"></script>
+<script src="machine-fig.js?v=332"></script>
+<script src="get.js?v=332"></script>
+<script src="points.js?v=332"></script>
+<script src="uc-points.js?v=332"></script>
+<script src="inspect-guide.js?v=332"></script>
+<script src="get-figs.js?v=332"></script>
+<script src="body-points.js?v=332"></script>
+<script src="body-map.js?v=332"></script>
+<script src="lube.js?v=332"></script>
+<script src="lube-overrides.js?v=332"></script>
+<script src="lube2027.js?v=332"></script>
+<script src="report-core.js?v=332"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3012,10 +3020,11 @@ const I18N = {
     due_sched_nofile:"1C's schedule has not been downloaded yet on this phone.",
     due_healed:"This screen was repainting itself without stopping, so its settings were put back to their defaults to free the app. Nothing else was changed — every round and photograph on this phone is still here.",
     due_list_seg:"List",
-    due_week_seg:"This week",
-    due_week_sub:"Open work orders due in the next 7 days, grouped by the day something has to happen. General Inspection is listed on the day it should be carried out — ahead of the plan date, not on it.",
+    due_week_seg:"Two weeks",
+    due_week_sub:"Open work orders from one week ago to one week ahead, grouped by the day something has to happen. Days before today are marked late — that is work the plan wanted and nobody has recorded. General Inspection is listed on the day it should be carried out — ahead of the plan date, not on it.",
     due_week_today:"Today",
-    due_week_none:"Nothing open falls in the next 7 days.",
+    due_week_late:"late",
+    due_week_none:"Nothing open falls between a week ago and a week ahead.",
     due_week_n:"{n} machine(s)",
     due_week_pmnote:"walk ahead of PM {d}",
     m_due_loaded:["History loaded ✔","{n} unit/type dates added to the due list."],
@@ -3582,10 +3591,11 @@ const I18N = {
     due_sched_nofile:"График 1С ещё не загружен на этот телефон.",
     due_healed:"Этот экран перерисовывался без остановки, поэтому его настройки возвращены к значениям по умолчанию, чтобы освободить приложение. Больше ничего не менялось — все обходы и фотографии на этом телефоне на месте.",
     due_list_seg:"Список",
-    due_week_seg:"Эта неделя",
-    due_week_sub:"Открытые наряды со сроком на ближайшие 7 дней, по дням. Общий осмотр указан на дне, когда его нужно провести — до даты ТО, а не в этот день.",
+    due_week_seg:"Две недели",
+    due_week_sub:"Открытые наряды за неделю назад и на неделю вперёд, по дням. Дни до сегодняшнего помечены как просроченные — это работа, которую план требовал, а записи о ней нет. Общий осмотр указан на дне, когда его нужно провести — до даты ТО, а не в этот день.",
     due_week_today:"Сегодня",
-    due_week_none:"На ближайшие 7 дней ничего не запланировано.",
+    due_week_late:"просрочено",
+    due_week_none:"С прошлой недели по следующую ничего не запланировано.",
     due_week_n:"{n} машин(ы)",
     due_week_pmnote:"провести до ТО {d}",
     m_due_loaded:["История загружена ✔","Добавлено дат: {n}."],
@@ -8457,7 +8467,10 @@ function schedPreInspDone(unit, planDate){
 function dueWeekRows(){
   const today=todayISO(), out=[];
   if(!SCHED || !SCHED.byUnit || !window.DUE) return out;
-  const inWindow=d=>{ const n=DUE.dayDiff(today,d); return n!=null && n>=0 && n<=6; };
+  /* One week back as well as one forward — the days already gone are where
+     the work that did not happen is. See DUE.AGENDA_BACK/FWD; both surfaces
+     draw the same window from those two numbers. */
+  const inWindow=d=>DUE.inAgenda(today,d);
   Object.keys(SCHED.byUnit).forEach(unit=>{
     (SCHED.byUnit[unit]||[]).forEach(w=>{
       const types=w.types||[];
@@ -8469,7 +8482,15 @@ function dueWeekRows(){
       }
       if(shiftInsp && w.plan && !schedPreInspDone(unit,w.plan)){
         const wanted=DUE.shift(w.plan,-SCHED_PREINSP_DAYS);
-        const day=DUE.dayDiff(today,wanted)<0 ? today : wanted;
+        /* A pre-check whose day has passed used to be pulled forward to
+           today so it could not vanish off the front of a forward-only
+           window. Now that the window reaches a week back it sits on the
+           day it was actually wanted, which says "this is late" instead of
+           "do this today" — the truer of the two. Only one that has fallen
+           off the BACK of the window is still pulled forward, because the
+           rule it was written for stands: do not go silent on an overdue
+           thing. */
+        const day=inWindow(wanted) ? wanted : (DUE.dayDiff(today,wanted)<0 ? today : wanted);
         if(inWindow(day)) out.push({ unit, day, code:"INSP", isPre:true, w });
       }
     });
@@ -8480,21 +8501,25 @@ function renderDueWeek(){
   const box=$("dueWeekList"); if(!box) return;
   const entries=dueWeekRows();
   const today=todayISO();
-  const days=Array.from({length:7},(_,i)=>DUE.shift(today,i));
-  const dayLabel=(d,i)=>{
+  const days=DUE.agendaDays(today);
+  const dayLabel=d=>{
     const dt=new Date(d+"T00:00:00Z");
     const wd=dt.toLocaleDateString(lang==="ru"?"ru-RU":"en-US",{weekday:"short",timeZone:"UTC"}).replace(/\.$/,"");
-    return (i===0 ? t("due_week_today")+" · " : "")+wd+" "+dt.getUTCDate();
+    const base=wd+" "+dt.getUTCDate();
+    if(d===today) return t("due_week_today")+" · "+base;
+    /* A day already gone is SAID to be gone. Drawn the same as a future one
+       it reads as work still to come, which is the opposite of what it is. */
+    return DUE.agendaPast(today,d) ? base+" · "+t("due_week_late") : base;
   };
   const byDay={};
   entries.forEach(e=>(byDay[e.day]=byDay[e.day]||[]).push(e));
   const groups=days.filter(d=>byDay[d] && byDay[d].length);
   if(!groups.length){ box.innerHTML=`<div class="empty">${esc(t("due_week_none"))}</div>`; return; }
   box.innerHTML=groups.map(d=>{
-    const idx=days.indexOf(d);
+    const past=DUE.agendaPast(today,d);
     const rows=[...byDay[d]].sort((a,b)=>a.unit<b.unit?-1:a.unit>b.unit?1:0);
-    return `<div class="daygroup">
-      <div class="dayhd"><b${idx===0?' class="today"':""}>${esc(dayLabel(d,idx))}</b><span>${esc(t("due_week_n",{n:rows.length}))}</span></div>
+    return `<div class="daygroup${past?" past":""}">
+      <div class="dayhd"><b${d===today?' class="today"':past?' class="late"':""}>${esc(dayLabel(d))}</b><span>${esc(t("due_week_n",{n:rows.length}))}</span></div>
       ${rows.map(e=>{
         const a=ASSET_BY[e.unit];
         const hrs=e.w.hours!=null?e.w.hours+"h":"";
@@ -12048,7 +12073,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="331";
+const BUILD="332";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
