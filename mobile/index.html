@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=325">
+<link rel="manifest" href="manifest.webmanifest?v=326">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=325">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=325">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=325">
+<link rel="apple-touch-icon" href="icon-192.png?v=326">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=326">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=326">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2430,15 +2430,15 @@
   }
 })();
 </script>
-<script src="native.js?v=325"></script>
-<script src="upload-defaults.js?v=325"></script>
-<script src="hme.js?v=325"></script>
-<script src="mp-fc.js?v=325"></script>
-<script src="hme-cascade.js?v=325"></script>
-<script src="assets.js?v=325"></script>
-<script src="temp-limits.js?v=325"></script>
-<script src="normalize.js?v=325"></script>
-<script src="terms.js?v=325"></script>
+<script src="native.js?v=326"></script>
+<script src="upload-defaults.js?v=326"></script>
+<script src="hme.js?v=326"></script>
+<script src="mp-fc.js?v=326"></script>
+<script src="hme-cascade.js?v=326"></script>
+<script src="assets.js?v=326"></script>
+<script src="temp-limits.js?v=326"></script>
+<script src="normalize.js?v=326"></script>
+<script src="terms.js?v=326"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2457,25 +2457,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=325"></script>
-<script src="edits.js?v=325"></script>
-<script src="due.js?v=325"></script>
-<script src="wear.js?v=325"></script>
-<script src="wear-figs.js?v=325"></script>
-<script src="wear-map.js?v=325"></script>
-<script src="machine-photos.js?v=325"></script>
-<script src="machine-fig.js?v=325"></script>
-<script src="get.js?v=325"></script>
-<script src="points.js?v=325"></script>
-<script src="uc-points.js?v=325"></script>
-<script src="inspect-guide.js?v=325"></script>
-<script src="get-figs.js?v=325"></script>
-<script src="body-points.js?v=325"></script>
-<script src="body-map.js?v=325"></script>
-<script src="lube.js?v=325"></script>
-<script src="lube-overrides.js?v=325"></script>
-<script src="lube2027.js?v=325"></script>
-<script src="report-core.js?v=325"></script>
+<script src="grade.js?v=326"></script>
+<script src="edits.js?v=326"></script>
+<script src="due.js?v=326"></script>
+<script src="wear.js?v=326"></script>
+<script src="wear-figs.js?v=326"></script>
+<script src="wear-map.js?v=326"></script>
+<script src="machine-photos.js?v=326"></script>
+<script src="machine-fig.js?v=326"></script>
+<script src="get.js?v=326"></script>
+<script src="points.js?v=326"></script>
+<script src="uc-points.js?v=326"></script>
+<script src="inspect-guide.js?v=326"></script>
+<script src="get-figs.js?v=326"></script>
+<script src="body-points.js?v=326"></script>
+<script src="body-map.js?v=326"></script>
+<script src="lube.js?v=326"></script>
+<script src="lube-overrides.js?v=326"></script>
+<script src="lube2027.js?v=326"></script>
+<script src="report-core.js?v=326"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -8225,20 +8225,49 @@ function schedCacheSet(j){
    no signal from re-attempting this fetch on every single renderDue() call
    — the same reason teamPull() has TEAM_MIN_GAP. */
 let schedLoading=false, schedLastTry=0;
+/* One pending refresh at a time - see schedEnsureLoaded's own note. */
+let schedKick=false;
 const SCHED_RETRY_GAP=60000;
+/* RETURNS WHETHER ANYTHING ACTUALLY CHANGED, AND THE CALLER MUST OBEY IT.
+
+   This function can decide to do nothing — the copy in hand is fresh, a
+   fetch is already in flight, or the last attempt failed inside
+   SCHED_RETRY_GAP — and in every one of those cases it returns a promise
+   that resolves IMMEDIATELY. A caller that repaints on resolution rather
+   than on change therefore repaints at once, finds the same reason to ask
+   again, and asks again: renderDue -> schedEnsureLoaded -> renderDue,
+   round the microtask queue, never yielding to the browser. The tab does
+   not crash, it simply stops — spinner turning for ever, nothing on screen
+   answering a finger, and no upload or team pull able to run either,
+   because there is no thread left to run them on.
+
+   That shipped in build 321 and froze every phone whose "Show 1C
+   schedule" toggle was on, the moment schedule_slim.json could not be
+   fetched — and, worse, one hour after its last good fetch, when the
+   cached copy went stale and the retry gap began suppressing the refetch.
+   It read as a browser fault because the toggle is remembered per device:
+   a browser that had never switched it on was fine, and the same build in
+   another browser on the same machine was not.
+
+   So the answer is a fact — did SCHED become something new — and the
+   caller repaints only on true. */
 async function schedEnsureLoaded(){
   const cached = schedCacheGet();
-  if(cached && Date.now()-cached.at < SCHED_STALE_MS){ SCHED=cached.data; return; }
-  if(!SCHED && cached) SCHED=cached.data;   // stale beats nothing while this resolves
-  if(schedLoading || Date.now()-schedLastTry < SCHED_RETRY_GAP) return;
+  if(cached && Date.now()-cached.at < SCHED_STALE_MS){
+    const changed = SCHED !== cached.data; SCHED=cached.data; return changed;
+  }
+  let changed = false;
+  if(!SCHED && cached){ SCHED=cached.data; changed = true; }   // stale beats nothing
+  if(schedLoading || Date.now()-schedLastTry < SCHED_RETRY_GAP) return changed;
   schedLoading=true; schedLastTry=Date.now();
   try{
     const res = await fetch(SCHED_URL + (SCHED_URL.indexOf("?")<0?"?":"&") + "_=" + Date.now());
     if(!res.ok) throw new Error("HTTP "+res.status);
     const j = await res.json();
-    if(j && j.byUnit){ SCHED=j; schedCacheSet(j); }
+    if(j && j.byUnit){ SCHED=j; schedCacheSet(j); changed = true; }
   }catch(e){ /* stays on the stale copy, if any — see above */ }
   finally{ schedLoading=false; }
+  return changed;
 }
 /* The soonest open, CM-matched 1C work order for this unit that names this
    round type — schedule_slim.json is already sorted soonest-first per unit
@@ -8621,8 +8650,16 @@ function renderDue(){
      This week view, which needs it unconditionally since it IS 1C's
      schedule, nothing else. */
   const needSched = dueSched || dueView==="week";
-  if(needSched && (!SCHED || Date.now()-(schedCacheGet()||{at:0}).at >= SCHED_STALE_MS)){
-    schedEnsureLoaded().then(()=>{ if(dueSched || dueView==="week") renderDue(); });
+  if(needSched && !schedKick
+     && (!SCHED || Date.now()-(schedCacheGet()||{at:0}).at >= SCHED_STALE_MS)){
+    /* Repaint ONLY if the schedule actually became something new, and never
+       with a second request in flight — either guard alone stops the
+       runaway described above, and both are free. */
+    schedKick = true;
+    schedEnsureLoaded().then(changed=>{
+      schedKick = false;
+      if(changed && (dueSched || dueView==="week")) renderDue();
+    }, ()=>{ schedKick = false; });
   }
   /* Counted BEFORE the round filter, so the scope pills say how much there is
      on the machine and not how much survives the other filter. Two filters
@@ -11818,7 +11855,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="325";
+const BUILD="326";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
