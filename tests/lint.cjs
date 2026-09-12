@@ -240,7 +240,16 @@ for (const f of PAGES) {
      the wiring is skipped in silence, and a button ships that does nothing at
      all when pressed. That is the failure this project has shipped most often,
      and it is visible from here. */
-  const defined = new Set([...src.matchAll(/\bid="([^"${}]+)"/g)].map(m => m[1]));
+  /* AN ID THE CODE ITSELF CREATES DOES EXIST. The boot watchdog builds its
+     overlay in JavaScript — setAttribute("id","bootStall") — because it has
+     to be able to appear when the page's own markup never finished loading,
+     which is the whole failure it reports. Collecting only id="..." out of
+     the markup called that a ghost and this suite went red on working code.
+     The rule being enforced is "nothing reaches for an id nothing defines",
+     and defining one at runtime is still defining it. */
+  const defined = new Set([...src.matchAll(/\bid="([^"${}]+)"/g)].map(m => m[1])
+    .concat([...src.matchAll(/setAttribute\(\s*["']id["']\s*,\s*["']([^"'${}]+)["']/g)].map(m => m[1]))
+    .concat([...src.matchAll(/\.id\s*=\s*["']([^"'${}]+)["']/g)].map(m => m[1])));
   const asked = new Set([...src.matchAll(/\$\("([^"]+)"\)/g)].map(m => m[1])
     .concat([...src.matchAll(/getElementById\("([^"]+)"\)/g)].map(m => m[1])));
   const ghosts = [...asked].filter(id => !defined.has(id));

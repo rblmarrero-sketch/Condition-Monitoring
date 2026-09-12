@@ -374,6 +374,65 @@ const srv = http.createServer((req, res) => {
       grid.latePillTitles + ' of ' + grid.pastPills);
   }
 
+  console.log('\n8. A SERVICE TIER INCLUDES THE TIERS BELOW IT');
+  /* Reported from the grid: TK156's 4,000 h order (WO-015691) showed ONE
+     pill where four rounds were due. The mapping matched the hour figure
+     exactly, so a 4,000 h service meant "the round whose interval is 4,000"
+     rather than "the visit a machine at 4,000 hours is getting" — and a
+     haul truck at 4,000 hours is at its 16th plug round, 8th inspection and
+     4th filter cut as well as its 1st body liner.
+
+     It mattered because of how 1C raises work: 2,433 of the 2,439
+     unit-and-day visits in the file carry a SINGLE order. 1C is not issuing
+     a 250h order beside the 4,000h one to cover the plug round; the 4,000h
+     order IS the visit.
+
+     Read off the shipped data file, not a fixture — the whole failure was
+     real work orders taking a path the rule never saw. */
+  const wo = await d.evaluate(() => {
+    const W = (window.CM_WO_DATA || {}).workOrders || [];
+    const of = (u, day, hrs) => (W.find(w => w.equip === u
+      && (!day || w.planStart === day) && (!hrs || w.hours === hrs)) || {}).cmTypes || [];
+    /* No visit may claim one round twice. */
+    const seen = {}, twice = [];
+    W.forEach(w => { if (!w.planStart || !(w.cmTypes || []).length) return;
+      const k = w.equip + '|' + w.planStart;
+      (seen[k] = seen[k] || []).push(...w.cmTypes); });
+    Object.keys(seen).forEach(k => { if (new Set(seen[k]).size !== seen[k].length) twice.push(k); });
+    return {
+      tk156: of('TK156', '2026-09-12', 4000).slice().sort(),
+      tk156_250: of('TK156', '2026-09-24', 250).slice().sort(),
+      ex021_4000: of('EX021', null, 4000).slice().sort(),
+      ex021_500: of('EX021', '2026-08-01', 500).slice().sort(),
+      ex021_1000: of('EX021', '2026-08-01', 1000).slice().sort(),
+      twice: twice.length,
+      resolved: W.filter(w => w.open && (w.cmTypes || []).length).length,
+      open: W.filter(w => w.open).length,
+    };
+  });
+  ok(JSON.stringify(wo.tk156) === '["FC","INSP","MP","TB"]',
+    'TK156\'s 4,000 h service carries all four rounds due at it', wo.tk156.join('+'));
+  ok(JSON.stringify(wo.tk156_250) === '["MP"]',
+    '  and its 250 h service still carries only the plug round', wo.tk156_250.join('+') || '(none)');
+  /* An excavator is not on the plug round at all — the tier rule must not
+     have handed it one on the way past. */
+  ok(!wo.ex021_4000.includes('MP') && wo.ex021_4000.includes('UC'),
+    'EX021\'s 4,000 h service gains no plug round — excavators are not on it',
+    wo.ex021_4000.join('+'));
+  /* THE SIX VISITS WHERE 1C RAISES SEVERAL TIERS AT ONCE. A round belongs
+     to the order that NAMES its tier when the day has one. Giving them all
+     to the biggest order was the first rule written here, and it filed
+     EX021's filter cut under a 2,000 h service that does not mention
+     filters while its own 1,000 h order read "no CM round". */
+  ok(JSON.stringify(wo.ex021_500) === '["INSP"]',
+    'where 1C raised every tier on one day, the 500 h order keeps the inspection',
+    wo.ex021_500.join('+') || '(none)');
+  ok(JSON.stringify(wo.ex021_1000) === '["FC"]',
+    '  and the 1,000 h order keeps the filter cut', wo.ex021_1000.join('+') || '(none)');
+  ok(wo.twice === 0, '  and no visit claims the same round twice', wo.twice + ' visits');
+  ok(wo.resolved > 150, 'more open work orders now resolve to real CM work',
+    wo.resolved + ' of ' + wo.open);
+
   await d.close(); await dctx.close();
 
   await b.close(); srv.close();

@@ -133,23 +133,100 @@ def load_class_rounds(path=CLASS_ROUNDS_PATH):
 def resolve_cm_types(hours, cls, class_rounds):
     """Return (label, types_or_None) for an (hours, class) pair, by asking
     class_rounds (due.js's own numbers, evaluated live) which round type(s)
-    land on exactly this class at exactly this hour figure. Ambiguous by
-    design where 1C's own vocabulary is ambiguous -- e.g. 500h lands on
-    Filter Cut, GET and General Inspection all at once for most classes,
-    because due.js states no restriction distinguishing them at that figure,
-    and every candidate is listed rather than one asserted. Overstating the
-    match would be worse than admitting it is not 1:1."""
+    fall due on this class at this hour figure. Ambiguous by design where
+    1C's own vocabulary is ambiguous -- e.g. 500h lands on Filter Cut, GET
+    and General Inspection all at once for most classes, because due.js
+    states no restriction distinguishing them at that figure, and every
+    candidate is listed rather than one asserted. Overstating the match
+    would be worse than admitting it is not 1:1.
+
+    A TIER INCLUDES THE ONES BELOW IT. This matched the hour figure EXACTLY,
+    and that read a 4,000-hour service as "the round whose interval is
+    4,000" rather than "the visit a machine at 4,000 hours is getting". A
+    haul truck at 4,000 hours is at its 16th plug round, its 8th general
+    inspection and its 4th filter cut as well as its 1st body liner -- and
+    only the body liner was drawn. Reported from the field on TK156, whose
+    4,000h order (WO-015691) showed one pill where four rounds were due.
+
+    That mattered because of how 1C actually raises work: of the 2,439
+    unit-and-day visits in the file, 2,433 carry ONE tier. It is not
+    issuing a 250h order alongside the 4,000h one to cover the plug round;
+    the 4,000h order IS the visit. Six visits do carry several tiers (EX021
+    on 2026-08-01 has five), and those are deduped at the row loop below so
+    a round is claimed once per visit, by the tier that reaches it.
+
+    Divisibility, not a table: 4000 % 250 == 0 is the same arithmetic due.js
+    does, and it cannot fall out of step with a figure changing there."""
     cls = (cls or "").upper()
     if hours is None:
         return "—", None
     types = sorted(
         ty for ty, spec in class_rounds.items()
-        if spec["classes"].get(cls) == hours
+        if spec["classes"].get(cls) is not None
+        and hours > 0 and hours % spec["classes"][cls] == 0
     )
     if not types:
         return f"{hours}h service", None
     label = " / ".join(TYPE_LABEL.get(t, t) for t in types)
     return label, types
+
+
+def dedupe_within_visit(work_orders, class_rounds):
+    """ONE VISIT CLAIMS A ROUND ONCE, AND THE ORDER THAT NAMES IT KEEPS IT.
+
+    A tier now includes the tiers below it (see resolve_cm_types), which is
+    right for the 2,433 unit-and-day visits out of 2,439 where 1C raises a
+    single order. On the six where it raises several, a 250h order and a
+    4,000h order would both claim the plug round and the grid would print
+    two MP pills for one visit.
+
+    Highest-tier-wins was the obvious rule and it is WRONG, measured on the
+    case that prompted all this: EX021 on 2026-08-01 has 250h, 500h, 1000h
+    and 2000h orders, and giving the 2000h order everything left 1C's own
+    500h order (the general inspection) and 1000h order (the filter cut)
+    reading "no CM round" — each round torn off the work order that exists
+    to name it. A planner looking for the filter cut would find it filed
+    under a service that does not mention filters.
+
+    So the rule is in two passes: a round goes to the order whose tier IS
+    its interval when the day has one, and only what is left over goes to
+    the largest order that covers it. Returns how many claims were moved,
+    which the caller writes out rather than fixing silently.
+    """
+    visits = {}
+    for w in work_orders:
+        if not w.get("planStart") or not w.get("cmTypes"):
+            continue
+        visits.setdefault((str(w["equip"]).upper(), w["planStart"]), []).append(w)
+
+    trimmed = 0
+    for group in visits.values():
+        if len(group) < 2:
+            continue
+        cls = (group[0].get("cls") or "").upper()
+        interval = {ty: spec["classes"].get(cls) for ty, spec in class_rounds.items()}
+        wanted = {id(w): [] for w in group}
+        taken = set()
+        # Pass one: the order whose own tier is this round's interval.
+        for w in group:
+            for ty in w["cmTypes"]:
+                if ty not in taken and interval.get(ty) == w.get("hours"):
+                    wanted[id(w)].append(ty)
+                    taken.add(ty)
+        # Pass two: whatever is left, to the largest order that covers it.
+        for w in sorted(group, key=lambda x: (x.get("hours") or 0), reverse=True):
+            for ty in w["cmTypes"]:
+                if ty not in taken:
+                    wanted[id(w)].append(ty)
+                    taken.add(ty)
+        for w in group:
+            keep = sorted(wanted[id(w)])
+            if keep != sorted(w["cmTypes"]):
+                trimmed += len(w["cmTypes"]) - len(keep)
+                w["cmTypes"] = keep or None
+                w["cmLabel"] = (" / ".join(TYPE_LABEL.get(t, t) for t in keep)
+                                if keep else f"{w.get('hours')}h service")
+    return trimmed
 
 
 def load_asset_classes(path=ASSETS_PATH):
@@ -329,6 +406,8 @@ def main():
         })
 
     # oldest-first, stable per unit -- easiest to eyeball and to diff.
+    overlap_trimmed = dedupe_within_visit(work_orders, class_rounds)
+
     work_orders.sort(key=lambda w: (w["equip"], w["planStart"] or ""))
 
     out = {
@@ -343,6 +422,9 @@ def main():
         # This is how many of THOSE repeat rows were collapsed away, not how
         # many real duplicate work orders 1C itself has.
         "duplicateRowsCollapsed": dup_count,
+        # Rounds a smaller order on the same day gave up to the bigger one.
+        # Written out rather than fixed silently, same rule as the line above.
+        "roundsDedupedWithinVisit": overlap_trimmed,
         "workOrders": work_orders,
     }
 
