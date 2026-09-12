@@ -433,6 +433,40 @@ const srv = http.createServer((req, res) => {
   ok(wo.resolved > 150, 'more open work orders now resolve to real CM work',
     wo.resolved + ' of ' + wo.open);
 
+  /* AND EVERY ONE OF THEM IS DRAWN. Reported from the grid a second time:
+     TK156 showed Filter Cut alone where four rounds were due. The grid took
+     the FIRST resolved type and dropped the rest — which cost nothing while
+     an order resolved to one or two rounds, and became the whole point the
+     moment a tier started including the tiers below it. A real value
+     rendered as nothing, produced by the fix for the previous one. */
+  const pills = await d.evaluate(() => {
+    const W = (window.CM_WO_DATA || {}).workOrders || [];
+    const w = W.find(x => x.woNumber === 'WO-015691') || {};
+    const rows = paRows();
+    const r = rows.find(x => x.w.woNumber === 'WO-015691');
+    /* Draw the grid on a day when that visit is inside the window, so this
+       does not quietly pass by testing an empty grid in three weeks' time. */
+    DUE.setToday(w.planStart);
+    const entries = paWeekData(rows).filter(e => e.r && e.r.w.woNumber === 'WO-015691');
+    const out = {
+      resolved: (r && r.info.types || []).slice().sort(),
+      drawn: entries.map(e => e.code).sort(),
+      pre: entries.filter(e => e.isPreCheck).map(e => e.code),
+      /* Nothing may be drawn twice either. */
+      dupes: entries.length - new Set(entries.map(e => e.code + '|' + e.day)).size,
+    };
+    DUE.setToday(null);
+    return out;
+  });
+  ok(pills.resolved.length === 4, 'TK156\'s 4,000 h visit resolves to four rounds',
+    pills.resolved.join('+'));
+  ok(JSON.stringify(pills.drawn) === JSON.stringify(pills.resolved),
+    '  and the week grid draws every one of them, not just the first',
+    'drawn ' + pills.drawn.join('+'));
+  ok(pills.pre.length === 1 && pills.pre[0] === 'INSP',
+    '  with the General Inspection still split out as the pre-check', pills.pre.join('+'));
+  ok(pills.dupes === 0, '  and nothing is drawn twice on one day', String(pills.dupes));
+
   await d.close(); await dctx.close();
 
   await b.close(); srv.close();
