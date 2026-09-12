@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=321">
+<link rel="manifest" href="manifest.webmanifest?v=322">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=321">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=321">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=321">
+<link rel="apple-touch-icon" href="icon-192.png?v=322">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=322">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=322">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2297,15 +2297,15 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=321"></script>
-<script src="upload-defaults.js?v=321"></script>
-<script src="hme.js?v=321"></script>
-<script src="mp-fc.js?v=321"></script>
-<script src="hme-cascade.js?v=321"></script>
-<script src="assets.js?v=321"></script>
-<script src="temp-limits.js?v=321"></script>
-<script src="normalize.js?v=321"></script>
-<script src="terms.js?v=321"></script>
+<script src="native.js?v=322"></script>
+<script src="upload-defaults.js?v=322"></script>
+<script src="hme.js?v=322"></script>
+<script src="mp-fc.js?v=322"></script>
+<script src="hme-cascade.js?v=322"></script>
+<script src="assets.js?v=322"></script>
+<script src="temp-limits.js?v=322"></script>
+<script src="normalize.js?v=322"></script>
+<script src="terms.js?v=322"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2324,25 +2324,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=321"></script>
-<script src="edits.js?v=321"></script>
-<script src="due.js?v=321"></script>
-<script src="wear.js?v=321"></script>
-<script src="wear-figs.js?v=321"></script>
-<script src="wear-map.js?v=321"></script>
-<script src="machine-photos.js?v=321"></script>
-<script src="machine-fig.js?v=321"></script>
-<script src="get.js?v=321"></script>
-<script src="points.js?v=321"></script>
-<script src="uc-points.js?v=321"></script>
-<script src="inspect-guide.js?v=321"></script>
-<script src="get-figs.js?v=321"></script>
-<script src="body-points.js?v=321"></script>
-<script src="body-map.js?v=321"></script>
-<script src="lube.js?v=321"></script>
-<script src="lube-overrides.js?v=321"></script>
-<script src="lube2027.js?v=321"></script>
-<script src="report-core.js?v=321"></script>
+<script src="grade.js?v=322"></script>
+<script src="edits.js?v=322"></script>
+<script src="due.js?v=322"></script>
+<script src="wear.js?v=322"></script>
+<script src="wear-figs.js?v=322"></script>
+<script src="wear-map.js?v=322"></script>
+<script src="machine-photos.js?v=322"></script>
+<script src="machine-fig.js?v=322"></script>
+<script src="get.js?v=322"></script>
+<script src="points.js?v=322"></script>
+<script src="uc-points.js?v=322"></script>
+<script src="inspect-guide.js?v=322"></script>
+<script src="get-figs.js?v=322"></script>
+<script src="body-points.js?v=322"></script>
+<script src="body-map.js?v=322"></script>
+<script src="lube.js?v=322"></script>
+<script src="lube-overrides.js?v=322"></script>
+<script src="lube2027.js?v=322"></script>
+<script src="report-core.js?v=322"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -11647,7 +11647,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="321";
+const BUILD="322";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -12114,17 +12114,57 @@ async function canBatch(UP){
     setBatchCap(UP.url,v); return v;
   }catch(e){ return false; }                    // a dead link is not an answer — do not remember it
 }
+/* A STALE PHOTOGRAPH MUST NOT SINK EVERY OTHER PHOTOGRAPH BESIDE IT.
+
+   blob.size and blob.type are metadata this phone already holds and answer
+   without ever touching the underlying bytes — which is exactly why
+   maybeShrink() can wave a small photograph through untouched (see its own
+   note) without noticing that its bytes are already gone. The first thing
+   that actually TRIES to read such a file is blobToB64() here, at the
+   moment it is finally sent, and on a reference whose backing storage the
+   OS or browser has reclaimed it throws a real DOMException — tagged
+   e.localRead=true by blobToB64's own onerror handler.
+
+   Building the whole batch body in one Promise.all used to mean that ONE
+   such file aborted the Promise.all itself, before a single byte of ANY
+   file in the batch — including nine perfectly good photographs beside it
+   — had been assembled, let alone sent. No fetch() was ever made, so
+   nothing ever reached the backend to log, and the phone showed "Upload
+   failed: Main backend: <the browser's own file-not-found text>" — which
+   reads exactly like a server refusal for a problem that was never the
+   server's, and sent real debugging effort chasing backend logs that could
+   never have contained it. Reading every file on its own, catching each
+   file's own failure, is what lets the nine good photographs still go. */
 async function putBatch(UP, files, rec, sent){
   const folder=expandFolder(UP.folder||"", rec);
-  const body={ op:"batch", folder, secret:UP.sec||"", dev:(rec&&rec.dev)||DEVICE,
-    /* aid rides along. The backend reads only the fields it knows and ignores
-       the rest, so this costs nothing today and is the key a server that
-       suppresses duplicates for itself will need — without it, the only thing
-       either end can match on is a file name. */
-    files: await Promise.all(files.map(async f=>({ name:f.name,
-      contentType:f.type||f.blob.type||"application/octet-stream",
-      ...(f.aid?{aid:f.aid}:{}),
-      file: await blobToB64(f.blob) }))) };
+  const built=[], unreadable=[];
+  for(const f of files){
+    try{
+      built.push({ name:f.name, contentType:f.type||f.blob.type||"application/octet-stream",
+        /* aid rides along. The backend reads only the fields it knows and
+           ignores the rest, so this costs nothing today and is the key a
+           server that suppresses duplicates for itself will need —
+           without it, the only thing either end can match on is a file
+           name. */
+        ...(f.aid?{aid:f.aid}:{}), file: await blobToB64(f.blob) });
+    }catch(e){
+      try{ e.localRead=true; }catch(_){}
+      unreadable.push({name:f.name, err:e});
+    }
+  }
+  /* Says plainly what this actually is — a photograph this PHONE cannot
+     read any more, not something the backend rejected — and names it, so
+     the round is unstuck by retaking that one position rather than by
+     anybody chasing a server that was never involved. */
+  const unreadableErr=()=>{
+    const e=new Error(unreadable.length+" photo(s) on this phone can no longer be read and "+
+      (unreadable.length===1?"was":"were")+" skipped: "+unreadable.map(u=>u.name).join(", ")+
+      ". Retake the position — nothing else in this round is affected.");
+    try{ e.localRead=true; }catch(_){}
+    return e;
+  };
+  if(!built.length) throw unreadableErr();
+  const body={ op:"batch", folder, secret:UP.sec||"", dev:(rec&&rec.dev)||DEVICE, files: built };
   const r=await fetchT(UP.url,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
                                body:JSON.stringify(body)});
   if(!r.ok) throw new Error(await httpErr(r));
@@ -12134,10 +12174,17 @@ async function putBatch(UP, files, rec, sent){
      single-file path and trips on the missing name. That is the signature of a
      deployment that predates this, not of a failure: remember it, send this lot
      one at a time, and never ask again. One wasted round trip, once, and no
-     round is lost over it. */
+     round is lost over it. The already-known-unreadable files are skipped
+     rather than asked of putOne a second time — it would only fail them the
+     same way again. */
   if(j.ok===false && /missing file name|batch with no files/i.test(j.error||"")){
     setBatchCap(UP.url,false);
-    for(const f of files){ await putOne(UP,f.name,f.blob,f.type,rec); sentMark(sent,f.name); }
+    const bad=new Set(unreadable.map(u=>u.name));
+    for(const f of files){
+      if(bad.has(f.name)) continue;
+      await putOne(UP,f.name,f.blob,f.type,rec); sentMark(sent,f.name);
+    }
+    if(unreadable.length) throw unreadableErr();
     return;
   }
   if(j.ok===false) throw new Error(j.error||"Apps Script rejected the upload");
@@ -12152,7 +12199,13 @@ async function putBatch(UP, files, rec, sent){
   /* Some landed and some did not: the ones that did are marked, the rest come
      round again on the next attempt. Only raise it if the whole batch was
      refused, since that is the case that says something is actually wrong. */
-  if(bad.length && bad.length===files.length) throw new Error(bad[0].error||"batch refused");
+  if(bad.length && bad.length===built.length) throw new Error(bad[0].error||"batch refused");
+  /* Everything readable is sent and accounted for above; a file that never
+     made it into `built` still has to be SAID, not folded into a silent
+     success — the round is not fully up while a photo it once had is gone
+     for good, and the point of this whole function is that saying so must
+     not cost the files that DID arrive. */
+  if(unreadable.length) throw unreadableErr();
 }
 /* ---- READ-AFTER-WRITE: ASK THE SERVER WHAT IT ACTUALLY HAS ---------------
 
