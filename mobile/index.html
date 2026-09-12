@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=338">
+<link rel="manifest" href="manifest.webmanifest?v=339">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=338">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=338">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=338">
+<link rel="apple-touch-icon" href="icon-192.png?v=339">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=339">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=339">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2454,15 +2454,15 @@
   }
 })();
 </script>
-<script src="native.js?v=338"></script>
-<script src="upload-defaults.js?v=338"></script>
-<script src="hme.js?v=338"></script>
-<script src="mp-fc.js?v=338"></script>
-<script src="hme-cascade.js?v=338"></script>
-<script src="assets.js?v=338"></script>
-<script src="temp-limits.js?v=338"></script>
-<script src="normalize.js?v=338"></script>
-<script src="terms.js?v=338"></script>
+<script src="native.js?v=339"></script>
+<script src="upload-defaults.js?v=339"></script>
+<script src="hme.js?v=339"></script>
+<script src="mp-fc.js?v=339"></script>
+<script src="hme-cascade.js?v=339"></script>
+<script src="assets.js?v=339"></script>
+<script src="temp-limits.js?v=339"></script>
+<script src="normalize.js?v=339"></script>
+<script src="terms.js?v=339"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2481,25 +2481,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=338"></script>
-<script src="edits.js?v=338"></script>
-<script src="due.js?v=338"></script>
-<script src="wear.js?v=338"></script>
-<script src="wear-figs.js?v=338"></script>
-<script src="wear-map.js?v=338"></script>
-<script src="machine-photos.js?v=338"></script>
-<script src="machine-fig.js?v=338"></script>
-<script src="get.js?v=338"></script>
-<script src="points.js?v=338"></script>
-<script src="uc-points.js?v=338"></script>
-<script src="inspect-guide.js?v=338"></script>
-<script src="get-figs.js?v=338"></script>
-<script src="body-points.js?v=338"></script>
-<script src="body-map.js?v=338"></script>
-<script src="lube.js?v=338"></script>
-<script src="lube-overrides.js?v=338"></script>
-<script src="lube2027.js?v=338"></script>
-<script src="report-core.js?v=338"></script>
+<script src="grade.js?v=339"></script>
+<script src="edits.js?v=339"></script>
+<script src="due.js?v=339"></script>
+<script src="wear.js?v=339"></script>
+<script src="wear-figs.js?v=339"></script>
+<script src="wear-map.js?v=339"></script>
+<script src="machine-photos.js?v=339"></script>
+<script src="machine-fig.js?v=339"></script>
+<script src="get.js?v=339"></script>
+<script src="points.js?v=339"></script>
+<script src="uc-points.js?v=339"></script>
+<script src="inspect-guide.js?v=339"></script>
+<script src="get-figs.js?v=339"></script>
+<script src="body-points.js?v=339"></script>
+<script src="body-map.js?v=339"></script>
+<script src="lube.js?v=339"></script>
+<script src="lube-overrides.js?v=339"></script>
+<script src="lube2027.js?v=339"></script>
+<script src="report-core.js?v=339"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3025,6 +3025,8 @@ const I18N = {
     due_sched_on_n:"1C's plan is shown on {n} round(s) below.",
     due_sched_on_none:"Nothing in this list has an open 1C work order on the same round. 1C has {n} planned from a week ago to a week ahead — see Two weeks.",
     due_sched_nofile:"1C's schedule has not been downloaded yet on this phone.",
+    due_plan_p:"1C plan",
+    due_plan_row:"1C asked for this — {p}",
     saved_also:"{u} needs {n} more round(s) at this visit. Start one and the hours, the photographs of the machine, your name and the fix carry over — you do not walk it again.",
     saved_also_go:"Start {ty}",
     due_healed:"This screen was repainting itself without stopping, so its settings were put back to their defaults to free the app. Nothing else was changed — every round and photograph on this phone is still here.",
@@ -3598,6 +3600,8 @@ const I18N = {
     due_sched_on_n:"План 1С показан у {n} обход(ов) ниже.",
     due_sched_on_none:"Ни у одного обхода в этом списке нет открытого наряда 1С по тому же обходу. В 1С за неделю назад и на неделю вперёд их {n} — см. «Две недели».",
     due_sched_nofile:"График 1С ещё не загружен на этот телефон.",
+    due_plan_p:"План 1С",
+    due_plan_row:"Запрошено 1С — {p}",
     saved_also:"{u}: на этот выезд осталось обходов — {n}. Начните следующий: моточасы, фотографии машины, ваше имя и координаты перенесутся — обходить заново не нужно.",
     saved_also_go:"Начать: {ty}",
     due_healed:"Этот экран перерисовывался без остановки, поэтому его настройки возвращены к значениям по умолчанию, чтобы освободить приложение. Больше ничего не менялось — все обходы и фотографии на этом телефоне на месте.",
@@ -8888,6 +8892,58 @@ function neverRows(only){
                 || x.ty.localeCompare(y.ty));
   return out;
 }
+/* ═══════════ WHAT 1C HAS PLANNED, AS A LIST ═══════════════════════════════
+   The List is built from what CM has WALKED — the last-done index — so a
+   machine CM has no history for produces no row, and a round 1C has an open
+   work order for is invisible here no matter how urgent it is. The screen
+   said as much ("1C has 139 planned … see Two weeks") and pointed at the
+   agenda, which is a calendar: fifteen day-columns, no search, no sort by
+   urgency. From the office's side that is the wrong shape for "what has 1C
+   asked us for and what have we not done".
+
+   So 1C's plan gets a scope of its own. It does NOT join the other pills:
+   Overdue, Due soon and Never inspected are statements about CM's own
+   programme and their numbers must go on meaning that. This is a fourth
+   population beside the last-done rows and the never-walked rows, and it is
+   labelled as 1C's rather than presented as CM's judgement.
+
+   A round already walked since 1C asked for it is not work, so it is left
+   out — this is a worklist, not a copy of the work-order file. And a round
+   the site has taken off a machine is never proposed here either, or the
+   KAMAZ exclusion would hold everywhere except the one screen an inspector
+   reads first. */
+function planRows(only){
+  const out=new Map();
+  if(!SCHED || !SCHED.byUnit || !window.DUE) return [];
+  const today=todayISO();
+  let h={}; try{ h=histAll()||{}; }catch(e){}
+  Object.keys(SCHED.byUnit).forEach(unit=>{
+    const a=ASSET_BY[unit];
+    (SCHED.byUnit[unit]||[]).forEach(w=>{
+      if(!w || !w.plan || !DUE.inAgenda(today,w.plan)) return;
+      (w.types||[]).forEach(ty=>{
+        if(only && ty!==only) return;
+        if(!TYPE_META[ty]) return;
+        if(DUE.offRound && DUE.offRound(ty,a)) return;
+        let last=null; try{ last=histEntry(h[ty+"|"+unit]); }catch(e){}
+        if(last && last.d && String(last.d)>=String(w.plan)) return;   // already walked for it
+        /* One row per machine and round. Two work orders in the window can
+           resolve to the same round — the 1,000 h and the 4,000 h both
+           carry the filter cut — and two identical rows is a list that
+           cannot be counted. The EARLIER plan wins, because that is the
+           date the work is wanted by. */
+        const k=unit+"|"+ty, cur=out.get(k);
+        if(cur && String(cur.plan)<=String(w.plan)) return;
+        out.set(k,{ty, unit, cat:(a&&a.cat)||"", plan:w.plan, w, st:"plan"});
+      });
+    });
+  });
+  return [...out.values()].sort((x,y)=>
+    String(x.plan).localeCompare(String(y.plan))
+    || x.unit.localeCompare(y.unit,undefined,{numeric:true})
+    || x.ty.localeCompare(y.ty));
+}
+
 /* Machines the register knows and no programme covers. Counted, never listed
    as work — nobody can walk a round that has not been defined.
 
@@ -8927,6 +8983,10 @@ let dueType="";
 let dueFind="";
 const DUE_SCOPES=[["over","due_missed","over"],["soon","due_soon","soon"],
                   ["never","due_never_p","never"],
+                  /* 1C's own plan, beside CM's judgement rather than mixed
+                     into it — see planRows for why the other counts must go
+                     on meaning what they meant. */
+                  ["plan","due_plan_p","plan"],
                   ["put","due_putoff","put"],["all","due_all","" ]];
 /* ============ THE GUARD THAT MAKES THIS CLASS OF FAULT SURVIVABLE ============
    Build 321 repainted the Due screen whenever schedEnsureLoaded RESOLVED
@@ -9005,14 +9065,30 @@ function renderDue(){
      they are a separate population and are concatenated rather than filtered
      out of the other one. "All" means every machine this screen can say
      anything about, which now includes the ones nobody has walked to. */
-  const everyDue=dueRows(""), everyNever=neverRows("");
-  const every=everyDue.concat(everyNever);
+  const everyDue=dueRows(""), everyNever=neverRows(""), everyPlan=planRows("");
+  /* The search reaches 1C's plan too: somebody typing a unit wants what this
+     app has for that machine, and "nothing" because the round is only in the
+     office's schedule is the same wrong answer in a new place.
+
+     ONE ROUND IS ONE ROW, THOUGH. TK002's plug round is both a round CM has
+     never walked and a round 1C wants on the 8th, and listing it twice — once
+     saying "no inspection on record", once saying "1C asked for this" — reads
+     as two jobs at one machine. The CM row wins because it is this app's own
+     account of the round, and 1C's line is put ON it (see below: a search
+     shows the schedule line whether or not the tick is on, because somebody
+     who typed a unit number is asking for everything about it). A plan row
+     survives only where CM has no row for that round at all. */
+  const cmKeys=new Set(everyDue.concat(everyNever).map(r=>r.unit+"|"+r.ty));
+  const every=everyDue.concat(everyNever)
+    .concat(everyPlan.filter(r=>!cmKeys.has(r.unit+"|"+r.ty)));
   const rows=dueRows(dueType).concat(neverRows(dueType));
+  const planned=planRows(dueType);
   const scope=dueScope;
   const nOver=rows.filter(r=>r.st==="over").length;
   const nSoon=rows.filter(r=>r.st==="soon").length;
   const nPut =rows.filter(r=>r.st==="put"||r.st==="off").length;
   const nNever=rows.filter(r=>r.st==="never").length;
+  const nPlan=planned.length;
   const inScope=(list,sc)=> sc==="all" ? list
     : sc==="over" ? list.filter(r=>r.st==="over")
     : sc==="soon" ? list.filter(r=>r.st==="soon")
@@ -9027,9 +9103,15 @@ function renderDue(){
      giving all week, one control along. It searches every round and every
      state, and the row's own colour says which state each one is in. */
   const q=(dueFind||"").trim().toUpperCase();
+  /* Somebody who typed a unit number is asking for everything this app knows
+     about it, so the 1C line is not gated on the tick while a search is on. */
+  const searching=!!q;
   const hit=r=>r.unit.toUpperCase().indexOf(q)>=0
              || String((ASSET_BY[r.unit]||{}).cat||"").toUpperCase().indexOf(q)>=0;
-  let show = q ? every.filter(hit) : inScope(rows, scope);
+  /* 1C's rows are their own population, so the scope selects between two
+     lists rather than filtering one — mixing them would make "All" count
+     the same machine twice, once as CM sees it and once as 1C does. */
+  let show = q ? every.filter(hit) : (scope==="plan" ? planned : inScope(rows, scope));
   /* A MACHINE IN THE REGISTER THAT NO ROUND REACHES.
 
      The rule that decides which rounds a class is on is deliberately narrow —
@@ -9054,9 +9136,10 @@ function renderDue(){
      somebody has actually put something off. */
   const sbox=$("dueScopeF");
   if(sbox){
-    const cnt={over:nOver, soon:nSoon, never:nNever, put:nPut, all:rows.length};
+    const cnt={over:nOver, soon:nSoon, never:nNever, plan:nPlan, put:nPut, all:rows.length};
     sbox.innerHTML=DUE_SCOPES
-      .filter(([k])=> (k!=="put" || nPut>0) && (k!=="never" || nNever>0))
+      .filter(([k])=> (k!=="put" || nPut>0) && (k!=="never" || nNever>0)
+                   && (k!=="plan" || nPlan>0))
       .map(([k,lab,cls])=>`<button type="button" data-sc="${esc(k)}" class="${
         (scope===k?"on ":"")+(cls||"")}">${esc(t(lab))}<span class="n">${cnt[k]}</span></button>`)
       .join("");
@@ -9197,13 +9280,30 @@ function renderDue(){
         <span class="u">${esc(r.unit)}${
           r.cat?` · <span style="color:var(--muted);font-weight:400">${esc(r.cat)}</span>`:""}</span>
         <span class="d">${esc(t("due_reg_row"))}</span></button></div>`;
+    /* A ROUND 1C HAS ASKED FOR. No last-done date and no clock — there may
+       be no CM history for this machine at all — so it says what 1C said
+       and when, and nothing it cannot support. A plan date already gone is
+       marked late by the same rule the agenda uses, or a row from last
+       Tuesday reads exactly like one for next Tuesday. */
+    if(r.plan){
+      const w=r.w||{};
+      const late=DUE.agendaPast(todayISO(), r.plan);
+      const bits=[schedShortDate(r.plan), w.wo||"—", w.hours!=null?w.hours+"h":""].filter(Boolean);
+      return `<div class="duerow">
+      <button class="dueitem ${late?"over":"soon"}" data-u="${esc(r.unit)}" data-t="${esc(r.ty)}">
+        <span class="u"><span class="tag t-${esc(r.ty)}">${esc(r.ty)}</span> ${esc(r.unit)}${
+          r.cat?` · <span style="color:var(--muted);font-weight:400">${esc(r.cat)}</span>`:""}</span>
+        <span class="d">${esc(t("due_plan_row",{p:bits.join(" · ")}))}${
+          late?` · <span class="duewhy">${esc(t("due_week_late"))}</span>`:""}</span>
+      </button></div>`;
+    }
     if(r.never){
       /* A round CM has never walked is exactly where 1C's own schedule
          matters most — a machine sitting under "never inspected" with a
          work order already open for today is easy to miss otherwise, and
          was missing this line entirely until now: this branch returns
          before reaching the schedule lookup below. */
-      const neverSched = dueSched ? schedRowHtml(r.unit, r.ty) : "";
+      const neverSched = (dueSched||searching) ? schedRowHtml(r.unit, r.ty) : "";
       return `<div class="duerow">
       <button class="dueitem never" data-u="${esc(r.unit)}" data-t="${esc(r.ty)}">
         <span class="u"><span class="tag t-${esc(r.ty)}">${esc(r.ty)}</span> ${esc(r.unit)}${
@@ -9222,7 +9322,7 @@ function renderDue(){
     const put = r.d ? `<div class="dueput">${esc(r.d.until
         ? t("due_put_to").replace("{d}",r.d.until) : t("due_off"))} — ${esc(r.d.why||"")}${
         r.d.by?` · ${esc(r.d.by)}`:""}</div>` : "";
-    const sched = dueSched ? schedRowHtml(r.unit, r.ty) : "";
+    const sched = (dueSched||searching) ? schedRowHtml(r.unit, r.ty) : "";
     return `<div class="duerow">
       <button class="dueitem ${r.st}" data-u="${esc(r.unit)}" data-t="${esc(r.ty)}">
         <span class="u"><span class="tag t-${esc(r.ty)}">${esc(r.ty)}</span> ${esc(r.unit)}${
@@ -12220,7 +12320,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="338";
+const BUILD="339";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
