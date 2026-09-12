@@ -4,17 +4,21 @@
 # class/round mapping live from due.js and that history (never hand-copied —
 # see ingest/gen_class_rounds.cjs's own header for why that matters, and
 # ingest/fetch_cm_history.cjs's for why the history pull matters), and
-# commits data/work_orders.js only if anything actually changed.
+# commits data/work_orders.js and data/schedule_slim.json only if anything
+# actually changed. schedule_slim.json is the phone's own trimmed slice of
+# the same pull — see ingest_work_orders.py's own write site for what it
+# keeps and why it is a separate file, not a smaller copy of the same one.
 #
-# DELIBERATELY DOES NOT BUMP BUILD. data/work_orders.js is loaded by
-# dashboard/index.html only — it is not referenced anywhere in mobile/ and
-# the phone's service worker never precaches it — so bumping the cache key
-# that decides whether 1,128 phones reinstall their offline app would force
-# a fleet-wide update cycle for a file no phone ever reads. tests/bump.cjs
-# (rightly) cannot tell that from a change that DOES need a bump, so this
-# job's own commits carry [skip ci]: that is a known, accepted gap in the
-# freshness guard for this one file, not something to silence by weakening
-# the guard itself.
+# DELIBERATELY DOES NOT BUMP BUILD. Neither file is precached by the
+# service worker: work_orders.js is loaded by dashboard/index.html only,
+# and schedule_slim.json is fetched live by the phone (mobile/index.html's
+# own SCHED_* constants), never bundled into the offline install. Bumping
+# the cache key that decides whether 1,128 phones reinstall their offline
+# app would force a fleet-wide update cycle for data that refreshes hourly
+# by design. tests/bump.cjs (rightly) cannot tell that from a change that
+# DOES need a bump, so this job's own commits carry [skip ci]: that is a
+# known, accepted gap in the freshness guard for these two files, not
+# something to silence by weakening the guard itself.
 name: Refresh work orders (Plan vs Actual)
 
 on:
@@ -87,11 +91,11 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if git diff --quiet -- data/work_orders.js ingest/class_rounds.generated.json ingest/cm_history.generated.json; then
+          if git diff --quiet -- data/work_orders.js data/schedule_slim.json ingest/class_rounds.generated.json ingest/cm_history.generated.json; then
             echo "no change — the pull matched what is already committed"
             exit 0
           fi
-          git add data/work_orders.js ingest/class_rounds.generated.json ingest/cm_history.generated.json
+          git add data/work_orders.js data/schedule_slim.json ingest/class_rounds.generated.json ingest/cm_history.generated.json
           # [skip ci] -- see the note at the top of this file for why this
           # job's own commits do not bump BUILD and should not trip the
           # Build freshness guard.

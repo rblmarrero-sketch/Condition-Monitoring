@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=318">
+<link rel="manifest" href="manifest.webmanifest?v=319">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=318">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=318">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=318">
+<link rel="apple-touch-icon" href="icon-192.png?v=319">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=319">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=319">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1397,6 +1397,11 @@
   .dueitem.never{border-left-style:dashed;border-left-color:var(--accent);}
   #dueList .dueput{flex:1 1 100%;font-size:11.5px;color:var(--ink-2);text-align:left;margin-top:4px;
     white-space:normal;line-height:1.35;}
+  /* The "Show 1C schedule" overlay line — same shape as .dueput (put-off
+     reason) on purpose: both are context printed under a row, not part of
+     the row's own overdue/due-soon verdict. */
+  #dueList .duesched{flex:1 1 100%;font-size:11.5px;color:var(--ink-2);text-align:left;margin-top:4px;
+    white-space:normal;line-height:1.35;}
   .chipbtn{padding:8px 12px;font-size:13px;min-width:0;}
   dialog{border:none;border-radius:10px;background:var(--surface);color:var(--ink);max-width:92vw;width:420px;padding:0;}
   dialog::backdrop{background:rgba(0,0,0,.6);}
@@ -2011,6 +2016,20 @@
     <div class="quiet hidden" id="dueFindMsg" style="margin:-2px 0 8px"></div>
     <div class="tfilter dfilter" id="dueScopeF"></div>
     <div class="tfilter dfilter tfrounds" id="dueTypeF"></div>
+    <!-- OFF BY DEFAULT, AND ADDITIVE ONLY. This is the one new row on the
+         screen an inspector checks first every shift — see mobile/due.js's
+         own interval table for why that screen has to stay trustworthy on
+         its own. Nothing here changes what is overdue or due soon; it just
+         prints 1C's own plan date under a round that has one, when asked. -->
+    <label style="display:flex;align-items:center;gap:10px;padding:9px 12px;
+        border:1px solid var(--border);border-radius:10px;background:var(--surface-2);
+        margin:0 0 10px;cursor:pointer;min-height:var(--tap)">
+      <input type="checkbox" id="dueSchedOn" style="flex:none;width:20px;height:20px;">
+      <span style="flex:1 1 auto;min-width:0;">
+        <b data-i18n="due_sched_t" style="display:block;font-size:14px;">Show 1C schedule</b>
+        <span class="hint" data-i18n="due_sched_s" style="margin-top:2px;display:block;">Adds the office's own planned date under a round that has one. Off by default — nothing changes unless you turn it on.</span>
+      </span>
+    </label>
     <div class="quiet" id="dueBasis" style="margin:-4px 0 10px"></div>
     <div class="duelist" id="dueList"></div>
     <!-- THE ONE-TAP ANSWER TO "WHY IS THIS MACHINE NOT ON MY LIST".
@@ -2232,15 +2251,15 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=318"></script>
-<script src="upload-defaults.js?v=318"></script>
-<script src="hme.js?v=318"></script>
-<script src="mp-fc.js?v=318"></script>
-<script src="hme-cascade.js?v=318"></script>
-<script src="assets.js?v=318"></script>
-<script src="temp-limits.js?v=318"></script>
-<script src="normalize.js?v=318"></script>
-<script src="terms.js?v=318"></script>
+<script src="native.js?v=319"></script>
+<script src="upload-defaults.js?v=319"></script>
+<script src="hme.js?v=319"></script>
+<script src="mp-fc.js?v=319"></script>
+<script src="hme-cascade.js?v=319"></script>
+<script src="assets.js?v=319"></script>
+<script src="temp-limits.js?v=319"></script>
+<script src="normalize.js?v=319"></script>
+<script src="terms.js?v=319"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2259,25 +2278,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=318"></script>
-<script src="edits.js?v=318"></script>
-<script src="due.js?v=318"></script>
-<script src="wear.js?v=318"></script>
-<script src="wear-figs.js?v=318"></script>
-<script src="wear-map.js?v=318"></script>
-<script src="machine-photos.js?v=318"></script>
-<script src="machine-fig.js?v=318"></script>
-<script src="get.js?v=318"></script>
-<script src="points.js?v=318"></script>
-<script src="uc-points.js?v=318"></script>
-<script src="inspect-guide.js?v=318"></script>
-<script src="get-figs.js?v=318"></script>
-<script src="body-points.js?v=318"></script>
-<script src="body-map.js?v=318"></script>
-<script src="lube.js?v=318"></script>
-<script src="lube-overrides.js?v=318"></script>
-<script src="lube2027.js?v=318"></script>
-<script src="report-core.js?v=318"></script>
+<script src="grade.js?v=319"></script>
+<script src="edits.js?v=319"></script>
+<script src="due.js?v=319"></script>
+<script src="wear.js?v=319"></script>
+<script src="wear-figs.js?v=319"></script>
+<script src="wear-map.js?v=319"></script>
+<script src="machine-photos.js?v=319"></script>
+<script src="machine-fig.js?v=319"></script>
+<script src="get.js?v=319"></script>
+<script src="points.js?v=319"></script>
+<script src="uc-points.js?v=319"></script>
+<script src="inspect-guide.js?v=319"></script>
+<script src="get-figs.js?v=319"></script>
+<script src="body-points.js?v=319"></script>
+<script src="body-map.js?v=319"></script>
+<script src="lube.js?v=319"></script>
+<script src="lube-overrides.js?v=319"></script>
+<script src="lube2027.js?v=319"></script>
+<script src="report-core.js?v=319"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2773,6 +2792,10 @@ const I18N = {
     btn_due_import:"Load history file", due_days:"{n} d ago", due_over:"overdue {n} d", due_in:"in {n} d",
     due_never:"never inspected", due_empty:"Nothing is due right now.",
     due_hint:"Built from what this phone has recorded and what the team has sent. A history file from the dashboard fills in the rest of the fleet.",
+    due_sched_t:"Show 1C schedule",
+    due_sched_s:"Adds the office's own planned date under a round that has one. Off by default — nothing changes unless you turn it on.",
+    due_sched_line:"1C plan {d} · {h} · WO {wo}",
+    due_sched_precheck:"walk ahead of the PM",
     m_due_loaded:["History loaded ✔","{n} unit/type dates added to the due list."],
     sec_team:"Team inspections", btn_team_refresh:"Refresh",
     /* a round somebody else uploaded, opened here */
@@ -3326,6 +3349,10 @@ const I18N = {
     btn_due_import:"Загрузить историю", due_days:"{n} дн. назад", due_over:"просрочено {n} дн.", due_in:"через {n} дн.",
     due_never:"не проводился", due_empty:"Сейчас ничего не требуется.",
     due_hint:"Строится по данным этого телефона и по тому, что отправила бригада. Файл истории из дашборда дополнит остальную технику.",
+    due_sched_t:"Показать план 1С",
+    due_sched_s:"Добавляет плановую дату офиса под обходом, для которого она есть. По умолчанию выключено — ничего не меняется, пока вы сами не включите.",
+    due_sched_line:"план 1С {d} · {h} · наряд {wo}",
+    due_sched_precheck:"провести до ТО",
     m_due_loaded:["История загружена ✔","Добавлено дат: {n}."],
     sec_team:"Осмотры бригады", btn_team_refresh:"Обновить",
     rd_owned:"Обход другого инспектора — {by}. Показан как загружен; изменить его на этом телефоне нельзя.",
@@ -7958,6 +7985,109 @@ function daysBetween(iso){ const d=new Date(iso+"T00:00:00"); if(isNaN(d)) retur
    already narrowed to filter cuts is a phone showing an inspector a shorter
    list than the one they are answerable for. */
 
+/* ---- 1C's own schedule, shown on request -------------------------------
+
+   A SECOND OPINION, NEVER A SECOND SCHEDULE. The Due list above is built
+   entirely from due.js's interval math and this phone's own history — that
+   does not change here, and nothing in this section is allowed to touch
+   dueRows()'s own arithmetic. All this adds is one line under a row that
+   already exists, saying what 1C separately has planned for it, when it
+   has asked to see that. Two different numbers answering two different
+   questions ("when is this actually due" vs "when does 1C have it on
+   the calendar") is fine; a phone quietly picking one schedule over the
+   other, or averaging them, is exactly the failure this project keeps
+   finding when one fact is computed two ways.
+
+   FETCHED, NEVER PRECACHED. data/schedule_slim.json is regenerated hourly
+   by .github/workflows/refresh-work-orders.yml, from ingest_work_orders.py
+   (see its own write site for what it keeps: only OPEN work orders already
+   resolved to a real CM round — the same "nothing to say" rule the
+   dashboard's Next 7 days grid applies). Precaching it would mean bumping
+   BUILD every hour for a file that changes on 1C's clock, not this
+   project's — the same reasoning that already keeps data/work_orders.js
+   out of the service worker. A stale copy in localStorage is used if the
+   fetch fails; there is no version of "offline" in which this toggle goes
+   blank instead of showing what it last knew. */
+const SCHED_URL = "../data/schedule_slim.json";
+const SCHED_STALE_MS = 3600000;      // an hour — matches the refresh cadence
+const SCHED_PREINSP_DAYS = 3;        // mirrors the dashboard's PA_PREINSP_DAYS
+let dueSched = false;                 // the toggle's own state
+try{ dueSched = localStorage.getItem("cm_due_sched")==="1"; }catch(e){}
+let SCHED = null;                     // {generated, byUnit} once loaded
+function schedCacheGet(){
+  try{ return JSON.parse(localStorage.getItem("cm_sched_cache")||"null"); }
+  catch(e){ return null; }
+}
+function schedCacheSet(j){
+  try{ lsSet("cm_sched_cache", JSON.stringify({ at: Date.now(), data: j })); }
+  catch(e){ /* quota — the toggle just falls back to fetching every time */ }
+}
+/* Called once when the toggle turns on, and again whenever Due is opened
+   while it stays on and the cached copy has aged past SCHED_STALE_MS — the
+   same "ask again, but do not go blank while waiting" shape teamPull()
+   already uses for the fleet's own history. schedLastTry keeps a phone with
+   no signal from re-attempting this fetch on every single renderDue() call
+   — the same reason teamPull() has TEAM_MIN_GAP. */
+let schedLoading=false, schedLastTry=0;
+const SCHED_RETRY_GAP=60000;
+async function schedEnsureLoaded(){
+  const cached = schedCacheGet();
+  if(cached && Date.now()-cached.at < SCHED_STALE_MS){ SCHED=cached.data; return; }
+  if(!SCHED && cached) SCHED=cached.data;   // stale beats nothing while this resolves
+  if(schedLoading || Date.now()-schedLastTry < SCHED_RETRY_GAP) return;
+  schedLoading=true; schedLastTry=Date.now();
+  try{
+    const res = await fetch(SCHED_URL + (SCHED_URL.indexOf("?")<0?"?":"&") + "_=" + Date.now());
+    if(!res.ok) throw new Error("HTTP "+res.status);
+    const j = await res.json();
+    if(j && j.byUnit){ SCHED=j; schedCacheSet(j); }
+  }catch(e){ /* stays on the stale copy, if any — see above */ }
+  finally{ schedLoading=false; }
+}
+/* The soonest open, CM-matched 1C work order for this unit that names this
+   round type — schedule_slim.json is already sorted soonest-first per unit
+   (see ingest_work_orders.py), so the first match is the right one. */
+function schedFor(unit, ty){
+  if(!SCHED || !SCHED.byUnit) return null;
+  const rows = SCHED.byUnit[unit]; if(!rows) return null;
+  return rows.find(r=>(r.types||[]).includes(ty)) || null;
+}
+function schedShortDate(iso){
+  if(!iso) return "";
+  const m=/^(\d{4})-(\d{2})-(\d{2})/.exec(iso); if(!m) return iso;
+  return m[3]+"."+m[2];
+}
+/* One line, printed under a row that already exists — see the mockup this
+   was built from. Blank whenever 1C has nothing to say about this exact
+   (unit, round) pair, which is most rows even with the toggle on. */
+function schedRowHtml(unit,ty){
+  const s = schedFor(unit,ty); if(!s) return "";
+  const hrs = s.hours!=null ? s.hours+"h" : "";
+  const line = t("due_sched_line",{ d: schedShortDate(s.plan), h: hrs, wo: s.wo || "—" });
+  /* The one case worth a second note: General Inspection has to be WALKED
+     AHEAD of a planned PM, not on it — see CLAUDE.md and the dashboard's
+     own PA_PREINSP_DAYS. Named here only when that PM is close enough to
+     matter, so the note does not sit on every INSP row all season. */
+  let note="";
+  if(ty==="INSP" && /P3|P4/i.test(s.priority||"") && window.DUE && s.plan){
+    const days = DUE.dayDiff(todayISO(), s.plan);
+    if(days!=null && days>=0 && days<=SCHED_PREINSP_DAYS){
+      note = ` <span class="duewhy">${esc(t("due_sched_precheck"))}</span>`;
+    }
+  }
+  return `<div class="duesched">🗓 ${esc(line)}${note}</div>`;
+}
+(function initDueSchedToggle(){
+  const el=$("dueSchedOn"); if(!el) return;
+  el.checked=dueSched;
+  el.onchange=async()=>{
+    dueSched=el.checked;
+    try{ lsSet("cm_due_sched", dueSched?"1":"0"); }catch(e){}
+    if(dueSched) await schedEnsureLoaded();
+    renderDue();
+  };
+})();
+
 /* ---- what is due, and what was missed -----------------------------------
    Every round, not the one the capture screen happens to be set to. An
    inspector asking "what is due" is asking about the machine in front of them
@@ -8171,6 +8301,12 @@ const DUE_SCOPES=[["over","due_missed","over"],["soon","due_soon","soon"],
 function renderDue(){
   renderTabs();
   const box=$("dueList"); if(!box) return;
+  /* Never blocks the paint in front of it — rows below draw with whatever
+     SCHED already holds (nothing, the first time) and this repaints them
+     once the fetch lands, same shape as the sync card's own refresh. */
+  if(dueSched && (!SCHED || Date.now()-(schedCacheGet()||{at:0}).at >= SCHED_STALE_MS)){
+    schedEnsureLoaded().then(()=>{ if(dueSched) renderDue(); });
+  }
   /* Counted BEFORE the round filter, so the scope pills say how much there is
      on the machine and not how much survives the other filter. Two filters
      whose counts each move when the other is touched cannot be read. */
@@ -8375,12 +8511,13 @@ function renderDue(){
     const put = r.d ? `<div class="dueput">${esc(r.d.until
         ? t("due_put_to").replace("{d}",r.d.until) : t("due_off"))} — ${esc(r.d.why||"")}${
         r.d.by?` · ${esc(r.d.by)}`:""}</div>` : "";
+    const sched = dueSched ? schedRowHtml(r.unit, r.ty) : "";
     return `<div class="duerow">
       <button class="dueitem ${r.st}" data-u="${esc(r.unit)}" data-t="${esc(r.ty)}">
         <span class="u"><span class="tag t-${esc(r.ty)}">${esc(r.ty)}</span> ${esc(r.unit)}${
           a&&a.cat?` · <span style="color:var(--muted);font-weight:400">${esc(a.cat)}</span>`:""}</span>
         <span class="d">${t("due_days").replace("{n}",num(n.daysSince))} · ${days}${hrs}${why}</span>
-        ${put}</button>
+        ${put}${sched}</button>
       <button class="dueforget" data-f="${esc(r.unit)}" data-ft="${esc(r.ty)}"
         aria-label="${esc(t("due_not"))}" title="${esc(t("due_not"))}">⋯</button></div>`; }).join("");
   /* A LIST THAT STOPS AT TWO HUNDRED HAS TO SAY SO.
@@ -11292,7 +11429,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="318";
+const BUILD="319";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

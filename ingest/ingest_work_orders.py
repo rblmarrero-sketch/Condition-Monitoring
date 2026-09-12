@@ -71,6 +71,12 @@ Usage:
              the dashboard's own coverage panel already uses. Pass
              --fleet TK to narrow to one prefix if you want a smaller test run.
 
+Also writes data/schedule_slim.json alongside --out, in the SAME directory
+(unconditionally, no flag for it) -- the phone's own trimmed slice of this
+same data, for the Due tab's "Show 1C schedule" toggle. See the comment at
+its own write site for what it keeps and why it is not the same file the
+dashboard loads.
+
 Re-run this whenever you want a fresher plan-vs-actual comparison -- it is
 not wired into a schedule yet. See the ship note for a GitHub Actions
 version that runs this automatically and commits the refreshed file.
@@ -350,6 +356,34 @@ def main():
     print(f"wrote {out_file} -- {len(work_orders)} planned service work order(s) "
           f"across {len(kept_units)} unit(s) (of {len(seen_units)} in the workbook), "
           f"{dup_count} duplicate row(s) collapsed.")
+
+    # THE PHONE'S OWN SLICE. The dashboard already has the whole workbook via
+    # a <script> tag; the phone gets a plain JSON file it fetches over the
+    # network, not one it precaches -- see mobile/index.html's own SCHED_*
+    # constants for why (this file refreshes hourly, and the phone's cache
+    # key must not). Cut down to the ONLY rows the Due tab's "Show 1C
+    # schedule" toggle can ever show: still open, AND resolved to a real CM
+    # round -- the same "nothing to say" rule the dashboard's own Next 7
+    # days grid applies (see paWeekData's own comment). That is 116 of 2,535
+    # rows on the live fleet as this was written, not 1.4 MB repeated hourly
+    # to every handset for rows the toggle would never draw anyway.
+    slim_by_unit = {}
+    for w in work_orders:
+        if not w["open"] or not w["cmTypes"] or not w["planStart"]:
+            continue
+        slim_by_unit.setdefault(w["equip"], []).append({
+            "wo": w["woNumber"], "hours": w["hours"], "types": w["cmTypes"],
+            "plan": w["planStart"], "priority": w["priority"],
+        })
+    for rows in slim_by_unit.values():
+        rows.sort(key=lambda r: r["plan"])
+    slim_path = out_file.parent / "schedule_slim.json"
+    slim_path.write_text(json.dumps({
+        "generated": out["generated"],
+        "byUnit": slim_by_unit,
+    }, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    print(f"wrote {slim_path} -- {sum(len(v) for v in slim_by_unit.values())} open, "
+          f"CM-matched work order(s) across {len(slim_by_unit)} unit(s)")
 
 
 if __name__ == "__main__":
