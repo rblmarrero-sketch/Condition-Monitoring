@@ -101,13 +101,29 @@
          round fits. */
       UC:   { h: 1000, byClass: { DOZ: 1000, EXC: 4000, DRB: 4000, DRE: 4000 } },
       GET:  { h: 500 },
-      /* Body inspection at 4,000 h on BOTH truck types this round fits —
-         confirmed against the office's own initial programme
-         (docs/source/ConMon_initial_program.xlsx), which names the Komatsu
-         HM400 articulated trucks and the Terex TR60 haul trucks at the same
+      /* Body liner on BOTH truck types this round fits — the Komatsu HM400
+         articulated trucks and the Terex TR60 haul trucks at the same
          figure. Same shape as MP above: one number, two classes, onClass
-         rather than byClass, because there is no second figure to state. */
-      TB:   { h: 4000, onClass: ["HT", "AT"] },
+         rather than byClass, because there is no second figure to state.
+
+         2,000 h, and it was 4,000. The office asked for the liner to go
+         with the 3,000 h and 6,000 h services as well as the 4,000 h one,
+         and {3000, 4000, 6000, 8000} is not a multiple of any single
+         figure but 1,000. So the question was put back as an interval
+         rather than a list of services, because a list would have left the
+         Due list scheduling on 4,000 h while the plan grid drew the liner
+         at 6,000 — one round, two answers, which is the second-interval-
+         table failure this file exists to prevent.
+
+         2,000 lands on 2,000, 4,000, 6,000 and 8,000, which covers the
+         6,000 h service they named; 3,000 is moot because 1C raises no
+         3,000 h service on any truck (measured across the whole work-order
+         file: the tiers used on the 79 trucks are 250, 500, 1000, 1500,
+         2000, 4000, 6000, 8000). It roughly doubles the body round — 100
+         days a truck at the fleet rate rather than 200 — and that is a
+         real increase in work, decided by the site with the figure in
+         front of them. */
+      TB:   { h: 2000, onClass: ["HT", "AT"] },
       INSP: { h: 500 },
 
       /* Still no hour figure for these two, so they keep the calendar the

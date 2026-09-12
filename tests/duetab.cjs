@@ -36,7 +36,7 @@ const on  = n => new Date(Date.now() + n * 86400000).toISOString().slice(0, 10);
      MP    250 h   magnetic plugs, every machine
      INSP  500 h
      UC   1000 h   dozers       ·  4000 h  excavators (and drills)
-     TB   4000 h   both truck types this round fits
+     TB   2000 h   both truck types this round fits (4,000 h until 2026-09-12)
 
    UC is TWO figures, not one, and EX005 is here to prove it: at
    2,400 hours it is comfortably inside an excavator's 4,000 and comfortably
@@ -53,7 +53,14 @@ const HIST = {
   'MP|TK160':   { d: ago(14),  h: '7725' },  // 280 h on a 250 h round — missed
   'MP|TK158':   { d: ago(20),  h: '7900' },  // 400 h — missed
   'MP|TK154':   { d: ago(5),   h: '7300' },  // fine
-  'TB|TK105':   { d: ago(170), h: '12400' }, // 3400 h on an ADT's 4000 — due soon
+  /* Placed INSIDE the body round and near its end, so this row proves "due
+     soon" rather than "missed". It sat at 170 days — 3,400 h at the fleet
+     rate — which was 85% of the old 4,000 h figure and is 170% of the
+     2,000 h the site moved it to on 2026-09-12, so the same fixture flipped
+     from due-soon to overdue and every count in this suite moved with it.
+     90 days is 1,800 h: the same 90% of the interval, against the figure
+     that is actually stated. */
+  'TB|TK105':   { d: ago(90),  h: '12400' }, // 1800 h on a truck's 2000 — due soon
   'INSP|TK101': { d: ago(26),  h: '10200' }, // 520 h on a 500 h round — missed
 };
 const DEFER = { 'UC|DZ004': { u: 'DZ004', t: 'UC', until: on(6),

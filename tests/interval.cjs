@@ -32,8 +32,9 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
 /* What the site stated, in the site's own words. */
 const STATED = [
   ["MP", "HT",  250,  "Terex TR60 haul trucks — final drive magnetic plugs"],
-  ["TB", "AT",  4000, "Komatsu HM400 articulated trucks — body inspection"],
-  ["TB", "HT",  4000, "Terex TR60 haul trucks — body inspection"],
+  /* 2,000 h since 2026-09-12 — see due.js for why it moved from 4,000. */
+  ["TB", "AT",  2000, "Komatsu HM400 articulated trucks — body liner"],
+  ["TB", "HT",  2000, "Terex TR60 haul trucks — body liner"],
   ["UC", "DOZ", 1000, "Dozers — undercarriage"],
   ["UC", "EXC", 4000, "Excavators — undercarriage"],
   ["UC", "DRB", 4000, "Blasting drills — undercarriage"],
@@ -97,10 +98,10 @@ const STATED = [
      (docs/source/ConMon_initial_program.xlsx): both truck types run Dump
      Body Liner at the same 4,000 h, and both drill rigs run Undercarriage
      at the excavator's 4,000 h, so none of these four is carried anymore. */
-  ok(carried.tbHt === 4000 && carried.tbHtFlag === false,
+  ok(carried.tbHt === 2000 && carried.tbHtFlag === false,
      "the haul trucks now state the same figure as the articulated ones",
      `${carried.tbHt} h, carried=${carried.tbHtFlag}`);
-  ok(carried.tbAt === 4000 && carried.tbAtFlag === false,
+  ok(carried.tbAt === 2000 && carried.tbAtFlag === false,
      "and the articulated trucks still do",
      `${carried.tbAt} h, carried=${carried.tbAtFlag}`);
   ok(carried.ucDrb === 4000 && carried.ucDre === 4000,
@@ -160,12 +161,15 @@ const STATED = [
   });
   ok(/1,?000/.test(rows.uc || "") && /4,?000/.test(rows.uc || ""),
      "undercarriage shows both figures", rows.uc);
-  /* Body inspection now states the SAME figure for both truck types this
-     round fits (see due.js), so it collapses to one number the same way
-     the plug round does below — never two class rows with one flagged
-     carried, which is what it did before the office confirmed haul trucks
-     also run at 4,000 h. */
-  ok(/4,?000/.test(rows.tb || ""), "body inspection shows the stated 4,000 h", rows.tb);
+  /* The body liner states the SAME figure for both truck types this round
+     fits (see due.js), so it collapses to one number the same way the plug
+     round does below — never two class rows with one flagged carried.
+     2,000 h since 2026-09-12; asked of due.js rather than typed here, so
+     this line cannot go stale the next time the site moves it. */
+  const tbH = await p.evaluate(() => DUE.hours("TB", null, "HT"));
+  ok(new RegExp(String(tbH).replace(/(\d)(?=(\d{3})+$)/g, "$1,?")).test(rows.tb || "")
+     || rows.tb.includes(String(tbH)),
+     "the body liner shows the figure due.js states (" + tbH + " h)", rows.tb);
   ok(!/carried|перенес/i.test(rows.tb || ""),
      "and no class is left carried now both are stated", rows.tb);
   ok(/250 h|250 ч/.test(rows.mp || ""), "the plug round shows hours, not 90 days", rows.mp);

@@ -93,13 +93,19 @@ const mk = `((id,ty,u,d,smu,pos)=>({id,type:ty,equip:u,date:d,by:'S. Volkov',sup
      same figure — confirmed against the office's own initial programme,
      which names the Komatsu HM400 articulated trucks and the Terex TR60
      haul trucks at the same 4,000 h. */
-  ok('an articulated truck body every 4,000 h', iv.TBa[0] === 4000, iv.TBa[0] + ' h');
-  ok('a haul truck body every 4,000 h too', iv.TBh[0] === 4000, iv.TBh[0] + ' h');
+  /* 2,000 h, and it was 4,000 until 2026-09-12: the site asked for the body
+     liner to go with the 3,000 h and 6,000 h services as well as the 4,000 h
+     one, and that set is a multiple of no single figure but 1,000 — so it
+     was settled as an INTERVAL rather than a list of services, because a
+     list would leave the Due list scheduling on one figure while the plan
+     grid drew another. */
+  ok('an articulated truck body every 2,000 h', iv.TBa[0] === 2000, iv.TBa[0] + ' h');
+  ok('a haul truck body every 2,000 h too', iv.TBh[0] === 2000, iv.TBh[0] + ' h');
   ok('and neither is carried — both are stated', iv.TBhCarried === false,
     String(iv.TBhCarried));
   /* Asked without a class, a round still answers — every existing caller in
      the phone, the dashboard and the report does exactly that. */
-  ok('the round still answers without a class', iv.UC[0] === 1000 && iv.TB[0] === 4000,
+  ok('the round still answers without a class', iv.UC[0] === 1000 && iv.TB[0] === 2000,
     'UC ' + iv.UC[0] + ' · TB ' + iv.TB[0]);
   /* THE FILTER CUT IS ONE INTERVAL, AND IT WAS TWO.
      Stated by the site against plan-vs-actual on 2026-09-12: 1,000 h, with

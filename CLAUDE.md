@@ -226,7 +226,7 @@ rendered to a calendar at 20 h/day, and several are **per class**:
 | FC | 500 h engine filter, 1000 h the rest |
 | INSP | 500 h |
 | UC | **1000 h dozers · 4000 h excavators** |
-| TB | **4000 h articulated · 1000 h carried forward for the rest** |
+| TB | **2000 h on HT + AT** — was 4000 h until 2026-09-12, when the site asked for the liner to go with the 3,000 h and 6,000 h services too; stated as an interval rather than a list of services so the Due list and the plan grid cannot disagree |
 | TEMP, LUBE | 30 days, carried forward — no hour figure stated |
 
 **`onClass` says WHO IS ON the round; `byClass` says WHAT THE INTERVAL IS**

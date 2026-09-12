@@ -1,7 +1,7 @@
 {
-  "generated": "2026-09-12T21:50:21.138Z",
+  "generated": "2026-09-12T21:56:12.808Z",
   "source": "mobile/due.js (D.EVERY, D.hours) and mobile/index.html (roundsOnClass), evaluated live -- not hand-copied",
-  "history": "66 pair(s) from https://baimskaya-cm.duckdns.org?action=records (pulled 2026-09-12T21:50:18.030Z)",
+  "history": "65 pair(s) from https://baimskaya-cm.duckdns.org?action=records (pulled 2026-09-12T20:02:29.851Z)",
   "map": {
     "MP": {
       "restricted": true,
@@ -35,8 +35,8 @@
     "TB": {
       "restricted": true,
       "classes": {
-        "HT": 4000,
-        "AT": 4000
+        "HT": 2000,
+        "AT": 2000
       }
     },
     "INSP": {
