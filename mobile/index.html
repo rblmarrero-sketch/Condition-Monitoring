@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=324">
+<link rel="manifest" href="manifest.webmanifest?v=325">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=324">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=324">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=324">
+<link rel="apple-touch-icon" href="icon-192.png?v=325">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=325">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=325">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2297,15 +2297,148 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=324"></script>
-<script src="upload-defaults.js?v=324"></script>
-<script src="hme.js?v=324"></script>
-<script src="mp-fc.js?v=324"></script>
-<script src="hme-cascade.js?v=324"></script>
-<script src="assets.js?v=324"></script>
-<script src="temp-limits.js?v=324"></script>
-<script src="normalize.js?v=324"></script>
-<script src="terms.js?v=324"></script>
+<!-- ======================= THE BOOT WATCHDOG =============================
+     A PAGE THAT NEVER FINISHES LOADING MUST NOT SIT THERE SAYING NOTHING.
+
+     Everything below this line is a blocking <script src>. That is fine on a
+     link that works and fatal on one that half-works: a single request that
+     CONNECTS AND THEN DELIVERS NOTHING blocks the parser before any of the
+     app's own code runs, so the markup above paints, the version reads
+     "v?", the pickers are empty, and the tab spins for ever. Reproduced
+     exactly that way, and reported from the field three times in one day —
+     "it just keeps circling" — with nothing on screen to say what was
+     wrong, no error, and no way for the person holding the phone to tell it
+     apart from a dead app.
+
+     This is the project's own signature defect in its purest form: a real
+     failure rendered as nothing. So the page now watches its own boot. If
+     the app has not come up in BOOT_WAIT, it says so, in both languages,
+     names the files that never arrived, and offers to try again.
+
+     IT DOES NOT UNREGISTER THE WORKER AND IT DOES NOT DELETE A CACHE. That
+     is the one thing this page may never do (see build 246: the Update
+     button did exactly that and left phones with no app at all on a flaky
+     link). A retry here is a plain reload — under a healthy worker that is
+     served from the cache and costs nothing, and on a first load it is a
+     fresh set of connections, which is the case that hangs.
+
+     It must live BEFORE the first blocking script or it can never arm. -->
+<script>
+(function () {
+  /* Generous on purpose, and then some. A slow boot is not a broken one:
+     an older iPhone parsing 3.5 MB of script on a pit link can take a long
+     time and still arrive, and a watchdog that fires while the app is on
+     its way is worse than no watchdog at all — see the self-clear below
+     for what that nearly cost. */
+  var BOOT_WAIT = 30000;
+  var seen = false, done = false, fired = false, t = null;
+  /* The parser being blocked on a subresource does not stop timers — which is
+     the whole reason this can work from up here. */
+  try { t = setTimeout(fire, BOOT_WAIT); } catch (e) { return; }
+  /* The main script reached: every file arrived, so the diagnosis is no
+     longer "still downloading". */
+  window.__bootSeen = function () { seen = true; };
+  /* The app painted. Nothing more to watch — AND IF THE MESSAGE IS ALREADY
+     UP, TAKE IT DOWN. It covers the whole screen to be readable, which
+     means that left standing over an app that did in the end open, it
+     swallows every touch: the app is running, the inspector can see it,
+     and nothing they press does anything. That is a worse failure than the
+     one this whole thing exists to report, and it is the failure a SLOW
+     boot would have produced rather than a broken one. */
+  window.__bootOK = function () {
+    done = true;
+    if (t) { clearTimeout(t); t = null; }
+    try {
+      var el = document.getElementById("bootStall");
+      if (el && el.parentNode) el.parentNode.removeChild(el);
+      /* It arrived, so the stall is not a fact about this load any more. */
+      localStorage.removeItem("cm_boot_stall");
+    } catch (e) {}
+  };
+
+  function pending() {
+    /* A resource entry appears only once the response is COMPLETE, so a
+       script with no entry is one still in flight — which is precisely the
+       file to name. */
+    var got = {};
+    try {
+      (performance.getEntriesByType("resource") || []).forEach(function (r) {
+        got[String(r.name).split("?")[0].split("/").pop()] = 1;
+      });
+    } catch (e) { return []; }
+    var out = [];
+    try {
+      [].forEach.call(document.querySelectorAll("script[src]"), function (s) {
+        var n = String(s.getAttribute("src") || "").split("?")[0].split("/").pop();
+        if (n && !got[n]) out.push(n);
+      });
+    } catch (e) {}
+    return out;
+  }
+
+  function fire() {
+    if (done || fired) return;
+    fired = true;
+    var late = pending();
+    /* Recorded as well as shown: an inspector reads the message and taps
+       Try again, and the evidence of WHY would otherwise go with it. */
+    try {
+      localStorage.setItem("cm_boot_stall", JSON.stringify({
+        at: new Date().toISOString(), seen: seen, pending: late.slice(0, 8),
+        ua: String(navigator.userAgent || "").slice(0, 120)
+      }));
+    } catch (e) {}
+    var why = seen
+      ? ["The app started but did not finish opening.",
+         "Приложение запустилось, но не открылось до конца."]
+      : late.length
+        ? ["Some of the app's files never arrived — the connection accepted the request and then sent nothing.",
+           "Часть файлов приложения не пришла — соединение приняло запрос и ничего не передало."]
+        : ["The app is taking too long to open.",
+           "Приложение слишком долго открывается."];
+    var box = document.createElement("div");
+    box.setAttribute("id", "bootStall");
+    box.setAttribute("style", "position:fixed;inset:0;z-index:99999;background:#141413;color:#faf9f5;"
+      + "font:15px/1.5 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;"
+      + "padding:22px;overflow:auto;-webkit-overflow-scrolling:touch");
+    var esc = function (s) { return String(s).replace(/[&<>]/g, function (c) {
+      return c === "&" ? "&amp;" : c === "<" ? "&lt;" : "&gt;"; }); };
+    box.innerHTML =
+      '<div style="max-width:34em;margin:0 auto">'
+      + '<div style="font-size:19px;font-weight:700;margin-bottom:6px">Not opening / Не открывается</div>'
+      + '<p style="margin:0 0 4px">' + esc(why[0]) + '</p>'
+      + '<p style="margin:0 0 14px;color:#b8b5ab">' + esc(why[1]) + '</p>'
+      + (late.length
+          ? '<p style="margin:0 0 4px;color:#b8b5ab;font-size:13px">Still waiting on / Ожидание:</p>'
+            + '<p style="margin:0 0 14px;font-size:13px;word-break:break-all">' + esc(late.slice(0, 8).join(", ")) + '</p>'
+          : "")
+      + '<button id="bootRetry" style="appearance:none;border:0;border-radius:10px;padding:13px 18px;'
+      + 'font:inherit;font-weight:700;background:#c96442;color:#fff;width:100%;max-width:22em">'
+      + 'Try again / Повторить</button>'
+      + '<p style="margin:14px 0 0;color:#b8b5ab;font-size:13px">If it keeps happening, open it in another browser, '
+      + 'or move to where there is signal and try again.</p>'
+      + '<p style="margin:2px 0 0;color:#b8b5ab;font-size:13px">Если повторяется — откройте в другом браузере '
+      + 'или перейдите туда, где есть связь.</p></div>';
+    try { (document.body || document.documentElement).appendChild(box); } catch (e) { return; }
+    var btn = document.getElementById("bootRetry");
+    if (btn) btn.onclick = function () {
+      btn.disabled = true;
+      btn.textContent = "…";
+      /* A PLAIN reload. Never an unregister, never a cache delete. */
+      try { location.reload(); } catch (e) {}
+    };
+  }
+})();
+</script>
+<script src="native.js?v=325"></script>
+<script src="upload-defaults.js?v=325"></script>
+<script src="hme.js?v=325"></script>
+<script src="mp-fc.js?v=325"></script>
+<script src="hme-cascade.js?v=325"></script>
+<script src="assets.js?v=325"></script>
+<script src="temp-limits.js?v=325"></script>
+<script src="normalize.js?v=325"></script>
+<script src="terms.js?v=325"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2324,29 +2457,32 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=324"></script>
-<script src="edits.js?v=324"></script>
-<script src="due.js?v=324"></script>
-<script src="wear.js?v=324"></script>
-<script src="wear-figs.js?v=324"></script>
-<script src="wear-map.js?v=324"></script>
-<script src="machine-photos.js?v=324"></script>
-<script src="machine-fig.js?v=324"></script>
-<script src="get.js?v=324"></script>
-<script src="points.js?v=324"></script>
-<script src="uc-points.js?v=324"></script>
-<script src="inspect-guide.js?v=324"></script>
-<script src="get-figs.js?v=324"></script>
-<script src="body-points.js?v=324"></script>
-<script src="body-map.js?v=324"></script>
-<script src="lube.js?v=324"></script>
-<script src="lube-overrides.js?v=324"></script>
-<script src="lube2027.js?v=324"></script>
-<script src="report-core.js?v=324"></script>
+<script src="grade.js?v=325"></script>
+<script src="edits.js?v=325"></script>
+<script src="due.js?v=325"></script>
+<script src="wear.js?v=325"></script>
+<script src="wear-figs.js?v=325"></script>
+<script src="wear-map.js?v=325"></script>
+<script src="machine-photos.js?v=325"></script>
+<script src="machine-fig.js?v=325"></script>
+<script src="get.js?v=325"></script>
+<script src="points.js?v=325"></script>
+<script src="uc-points.js?v=325"></script>
+<script src="inspect-guide.js?v=325"></script>
+<script src="get-figs.js?v=325"></script>
+<script src="body-points.js?v=325"></script>
+<script src="body-map.js?v=325"></script>
+<script src="lube.js?v=325"></script>
+<script src="lube-overrides.js?v=325"></script>
+<script src="lube2027.js?v=325"></script>
+<script src="report-core.js?v=325"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
 <script>
+/* Every blocking file above arrived, so a stall from here on is no longer
+   "still downloading" and the watchdog should not say that it is. */
+try{ if(window.__bootSeen) window.__bootSeen(); }catch(e){}
 /* A DOWNLOAD THAT STOPPED BETWEEN TWO FILES.
 
    index.html can be in the cache while one of the scripts above is not — the
@@ -11682,7 +11818,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="324";
+const BUILD="325";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -14731,6 +14867,11 @@ function checkData(){
      left at 42 for four builds without anything noticing, so check it out loud
      rather than trusting the next person to remember. */
   const vn=$("verNum"); if(vn) vn.textContent=BUILD;   // never hand-typed again
+  /* The app is on screen: the boot watchdog above has nothing left to
+     watch. Cleared HERE, at the paint, and not when the script merely
+     started — a build that loads every file and then throws is still a
+     phone with nothing on it, and that is worth a message too. */
+  try{ if(window.__bootOK) window.__bootOK(); }catch(e){}
   const tagged=(document.querySelector('script[src^="assets.js"]')||{}).src||"";
   const m=tagged.match(/[?&]v=([^&]+)/);
   if(m && m[1]!==BUILD) console.warn(`[cm] asset tags say v=${m[1]} but BUILD is ${BUILD} —`
