@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=319">
+<link rel="manifest" href="manifest.webmanifest?v=320">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=319">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=319">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=319">
+<link rel="apple-touch-icon" href="icon-192.png?v=320">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=320">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=320">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2251,15 +2251,15 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=319"></script>
-<script src="upload-defaults.js?v=319"></script>
-<script src="hme.js?v=319"></script>
-<script src="mp-fc.js?v=319"></script>
-<script src="hme-cascade.js?v=319"></script>
-<script src="assets.js?v=319"></script>
-<script src="temp-limits.js?v=319"></script>
-<script src="normalize.js?v=319"></script>
-<script src="terms.js?v=319"></script>
+<script src="native.js?v=320"></script>
+<script src="upload-defaults.js?v=320"></script>
+<script src="hme.js?v=320"></script>
+<script src="mp-fc.js?v=320"></script>
+<script src="hme-cascade.js?v=320"></script>
+<script src="assets.js?v=320"></script>
+<script src="temp-limits.js?v=320"></script>
+<script src="normalize.js?v=320"></script>
+<script src="terms.js?v=320"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2278,25 +2278,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=319"></script>
-<script src="edits.js?v=319"></script>
-<script src="due.js?v=319"></script>
-<script src="wear.js?v=319"></script>
-<script src="wear-figs.js?v=319"></script>
-<script src="wear-map.js?v=319"></script>
-<script src="machine-photos.js?v=319"></script>
-<script src="machine-fig.js?v=319"></script>
-<script src="get.js?v=319"></script>
-<script src="points.js?v=319"></script>
-<script src="uc-points.js?v=319"></script>
-<script src="inspect-guide.js?v=319"></script>
-<script src="get-figs.js?v=319"></script>
-<script src="body-points.js?v=319"></script>
-<script src="body-map.js?v=319"></script>
-<script src="lube.js?v=319"></script>
-<script src="lube-overrides.js?v=319"></script>
-<script src="lube2027.js?v=319"></script>
-<script src="report-core.js?v=319"></script>
+<script src="grade.js?v=320"></script>
+<script src="edits.js?v=320"></script>
+<script src="due.js?v=320"></script>
+<script src="wear.js?v=320"></script>
+<script src="wear-figs.js?v=320"></script>
+<script src="wear-map.js?v=320"></script>
+<script src="machine-photos.js?v=320"></script>
+<script src="machine-fig.js?v=320"></script>
+<script src="get.js?v=320"></script>
+<script src="points.js?v=320"></script>
+<script src="uc-points.js?v=320"></script>
+<script src="inspect-guide.js?v=320"></script>
+<script src="get-figs.js?v=320"></script>
+<script src="body-points.js?v=320"></script>
+<script src="body-map.js?v=320"></script>
+<script src="lube.js?v=320"></script>
+<script src="lube-overrides.js?v=320"></script>
+<script src="lube2027.js?v=320"></script>
+<script src="report-core.js?v=320"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -8495,11 +8495,20 @@ function renderDue(){
         <span class="u">${esc(r.unit)}${
           r.cat?` · <span style="color:var(--muted);font-weight:400">${esc(r.cat)}</span>`:""}</span>
         <span class="d">${esc(t("due_reg_row"))}</span></button></div>`;
-    if(r.never) return `<div class="duerow">
+    if(r.never){
+      /* A round CM has never walked is exactly where 1C's own schedule
+         matters most — a machine sitting under "never inspected" with a
+         work order already open for today is easy to miss otherwise, and
+         was missing this line entirely until now: this branch returns
+         before reaching the schedule lookup below. */
+      const neverSched = dueSched ? schedRowHtml(r.unit, r.ty) : "";
+      return `<div class="duerow">
       <button class="dueitem never" data-u="${esc(r.unit)}" data-t="${esc(r.ty)}">
         <span class="u"><span class="tag t-${esc(r.ty)}">${esc(r.ty)}</span> ${esc(r.unit)}${
           r.cat?` · <span style="color:var(--muted);font-weight:400">${esc(r.cat)}</span>`:""}</span>
-        <span class="d">${esc(t("due_never_row"))}</span></button></div>`;
+        <span class="d">${esc(t("due_never_row"))}</span>
+        ${neverSched}</button></div>`;
+    }
     const a=ASSET_BY[r.unit], n=r.n;
     const cal = DUE.hours(r.ty)==null && !n.why;
     const days = n.over ? t("due_over").replace("{n}",num(n.dueInDays))
@@ -11429,7 +11438,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="319";
+const BUILD="320";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

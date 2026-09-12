@@ -27,11 +27,18 @@ const plus = n => { const d = new Date(today); d.setUTCDate(d.getUTCDate() + n);
 // DZ003: FC + INSP together, 13 days out — far enough that the pre-check
 // note must NOT appear. TK107: INSP alone, 2 days out — inside the 3-day
 // window, so the note MUST appear. GR016 deliberately has no entry at all.
+// TK108: MP, plan TODAY, and no cm_hist entry at all — this is the case
+// build 320 fixed: a round CM has never walked (so dueRows() never even
+// sees it — it comes from the register via neverRows() instead, a
+// SEPARATE row template) used to get no schedule line no matter what
+// schedule_slim.json said, because that branch returned before reaching
+// the lookup at all.
 const FIXTURE = {
   generated: new Date().toISOString(),
   byUnit: {
     DZ003: [{ wo: 'WO-016563', hours: 500, types: ['FC', 'INSP'], plan: plus(13), priority: 'P3 Planned (PM)' }],
     TK107: [{ wo: 'WO-012177', hours: 500, types: ['INSP'], plan: plus(2), priority: 'P3 Planned (PM)' }],
+    TK108: [{ wo: 'WO-016648', hours: 250, types: ['MP'], plan: plus(0), priority: 'P3 Planned (PM)' }],
   },
 };
 
@@ -77,7 +84,7 @@ const server = http.createServer((req, res) => {
   const before = await p.evaluate(() => document.getElementById('dueList').innerText);
   ok('the checkbox starts unchecked', await p.evaluate(() => !$('dueSchedOn').checked));
   ok('no schedule line anywhere yet', !/1C plan|WO-0/i.test(before), before.slice(0, 60));
-  ok('the four seeded rows are all there', ['DZ003', 'TK107', 'GR016'].every(u => before.includes(u)));
+  ok('the seeded rows are all there', ['DZ003', 'TK107', 'GR016'].every(u => before.includes(u)));
 
   console.log('\nturning it on adds exactly one line, only where 1C has one');
   await p.click('#dueSchedOn');
@@ -93,6 +100,21 @@ const server = http.createServer((req, res) => {
   ok('a PM 13 days out gets no pre-check note', !/walk ahead/i.test(inspDz || ''), inspDz);
   ok('a PM 2 days out DOES get the pre-check note', /WO-012177/.test(inspTk || '') && /walk ahead/i.test(inspTk || ''), inspTk);
   ok('a row schedule_slim.json says nothing about is untouched', !/1C plan|WO-/.test(fcGr || ''), fcGr);
+
+  console.log('\na round CM has NEVER walked still gets the schedule line');
+  // TK108 (AT, on MP's own stated onClass) has no MP history at all, so it
+  // renders from neverRows() — a separate row template that returned before
+  // ever reaching the schedule lookup, until build 320. Found via search,
+  // the same way an inspector would look for one machine (search bypasses
+  // the scope pills and the 200-row cap on purpose — see dueFind's own
+  // comment in mobile/index.html).
+  await p.fill('#dueFind', 'TK108');
+  await p.waitForTimeout(400);
+  const tk108Text = await p.evaluate(() => document.getElementById('dueList').innerText);
+  ok('the never-inspected row is found', /TK108/.test(tk108Text) && /no inspection of this round on record/i.test(tk108Text), tk108Text);
+  ok('and it now carries the schedule line', /WO-016648/.test(tk108Text), tk108Text);
+  await p.fill('#dueFind', '');
+  await p.waitForTimeout(400);
 
   console.log('\nit is off again exactly as fast as it went on');
   await p.click('#dueSchedOn');
