@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=323">
+<link rel="manifest" href="manifest.webmanifest?v=324">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=323">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=323">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=323">
+<link rel="apple-touch-icon" href="icon-192.png?v=324">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=324">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=324">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2297,15 +2297,15 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=323"></script>
-<script src="upload-defaults.js?v=323"></script>
-<script src="hme.js?v=323"></script>
-<script src="mp-fc.js?v=323"></script>
-<script src="hme-cascade.js?v=323"></script>
-<script src="assets.js?v=323"></script>
-<script src="temp-limits.js?v=323"></script>
-<script src="normalize.js?v=323"></script>
-<script src="terms.js?v=323"></script>
+<script src="native.js?v=324"></script>
+<script src="upload-defaults.js?v=324"></script>
+<script src="hme.js?v=324"></script>
+<script src="mp-fc.js?v=324"></script>
+<script src="hme-cascade.js?v=324"></script>
+<script src="assets.js?v=324"></script>
+<script src="temp-limits.js?v=324"></script>
+<script src="normalize.js?v=324"></script>
+<script src="terms.js?v=324"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2324,25 +2324,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=323"></script>
-<script src="edits.js?v=323"></script>
-<script src="due.js?v=323"></script>
-<script src="wear.js?v=323"></script>
-<script src="wear-figs.js?v=323"></script>
-<script src="wear-map.js?v=323"></script>
-<script src="machine-photos.js?v=323"></script>
-<script src="machine-fig.js?v=323"></script>
-<script src="get.js?v=323"></script>
-<script src="points.js?v=323"></script>
-<script src="uc-points.js?v=323"></script>
-<script src="inspect-guide.js?v=323"></script>
-<script src="get-figs.js?v=323"></script>
-<script src="body-points.js?v=323"></script>
-<script src="body-map.js?v=323"></script>
-<script src="lube.js?v=323"></script>
-<script src="lube-overrides.js?v=323"></script>
-<script src="lube2027.js?v=323"></script>
-<script src="report-core.js?v=323"></script>
+<script src="grade.js?v=324"></script>
+<script src="edits.js?v=324"></script>
+<script src="due.js?v=324"></script>
+<script src="wear.js?v=324"></script>
+<script src="wear-figs.js?v=324"></script>
+<script src="wear-map.js?v=324"></script>
+<script src="machine-photos.js?v=324"></script>
+<script src="machine-fig.js?v=324"></script>
+<script src="get.js?v=324"></script>
+<script src="points.js?v=324"></script>
+<script src="uc-points.js?v=324"></script>
+<script src="inspect-guide.js?v=324"></script>
+<script src="get-figs.js?v=324"></script>
+<script src="body-points.js?v=324"></script>
+<script src="body-map.js?v=324"></script>
+<script src="lube.js?v=324"></script>
+<script src="lube-overrides.js?v=324"></script>
+<script src="lube2027.js?v=324"></script>
+<script src="report-core.js?v=324"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -11012,6 +11012,27 @@ function ucSideCaption(sd){
   return WEAR.escMap(b && b!==a ? a+" / "+b : a);
 }
 function rptMapInner(rec,items,photo){
+  /* WHICH ROUNDS HAVE A DRAWING IS A QUESTION ABOUT THE ROUND, NOT THE MACHINE.
+     ucStatus() answers "does this MACHINE have a track reference" — it takes a
+     round type only to spot a tray round, and says nothing whatever about
+     whether the round in hand is an undercarriage round. So every type that is
+     not TB or GET fell through to the undercarriage branch and came back with
+     the SAME drawing: a Filter Cut on a tracked excavator printed "Where the
+     wear is", two track frames and the roller key, over a sheet about two oil
+     filters. Measured on a tracked machine before this line existed: MP, FC,
+     INSP, TEMP and LUBE each got a byte-identical 44,617-character
+     undercarriage drawing.
+     The office has always had this guard (dashboard/report.js: `if (rec.type
+     !== "UC") return {html:""}`), so the two surfaces printed different
+     documents from the same round — this project's signature defect, one fact
+     with two answers. Asked here of TYPE_META, which is where a round's nature
+     is already written down and is the same rule rptRecords() uses one level
+     up, so there is no third list of types to drift.
+     why:"" and not a reason: a Filter Cut is not MISSING a drawing, it never
+     had one, and mapNote() would otherwise print "no drawing" on a sheet where
+     that is simply not a fact about anything. */
+  const m0=TYPE_META[rec.type]||{};
+  if(!(m0.wear||m0.get)) return { html:"", key:null, why:"" };
   if(rec.type==="TB"){ const b=rptBodyMap(rec,items);
     return { html:b.html, key:null, zones:b.zones, why:b.html?"":"nodata" }; }
   if(!window.WEAR) return { html:"", key:null, why:"nomodule" };
@@ -11661,7 +11682,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="323";
+const BUILD="324";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
