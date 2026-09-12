@@ -28,15 +28,24 @@ rather than hand-typing due.js's numbers into a second table, which is how
 an earlier pass of this script put articulated trucks on Undercarriage at
 1000h, a pairing due.js never states.
 
-KNOWN GAP, NOT PAPERED OVER: due.js's own comment above the Dump Body Liner
-entry (TB) says haul trucks are "also" on it at the round's default 1000h --
-but roundsOnClass() (mobile/index.html), which this pipeline trusts for
-class membership, only reads the byClass override it names for articulated
-trucks (4000h) and never adds haul trucks from the prose alone. So a haul
-truck's 1000h service currently resolves to no CM round match ("1000h
-service") rather than Dump Body Liner, until that gap is fixed at the
-source (roundsOnClass() itself, or an explicit onClass on TB in due.js) --
-not something this script should paper over with a guess of its own.
+NO CLASS EVER GETS A ROUND THIS FLEET HAS NOT SHOWN IT DOES. Some rounds
+(MP, UC, TB) are RESTRICTED to named classes in due.js; others (FC, GET,
+INSP) are not restricted anywhere in due.js at all. An earlier pass of
+gen_class_rounds.cjs read that silence as "applies to everyone" and gave
+every class a figure regardless of whether this fleet had ever walked it --
+which is how a generator (CD001) and a loader (LD003), neither of which
+this fleet has ever run a single FC, GET or INSP round on, ended up
+resolving to "Filter Cut / GET / General Inspection" and showing up in the
+dashboard's forward-looking schedule. Fixed at the source: for EVERY round
+type, restricted or not, class_rounds.generated.json now only carries a
+class where roundsOnClass() says so -- either due.js names the class, or
+this fleet's own real history shows the round has actually been walked on
+that kind of machine. (This is also how the Dump Body Liner / haul-truck
+pairing due.js's prose mentions but never states structurally now resolves
+correctly -- real TB|HT history supplies what due.js's byClass leaves out --
+so no separate carve-out is needed for that case either.) A class with no
+evidence for a round gets "Nh service" and no cmTypes, same as any other
+unmatched figure -- not a guess, and not silently assumed.
 
 Usage:
     python3 ingest/ingest_work_orders.py [source] [--out data/work_orders.js] [--fleet TK]

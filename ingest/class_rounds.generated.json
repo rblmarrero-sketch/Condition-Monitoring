@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-12T01:04:18.287Z",
+  "generated": "2026-09-12T02:02:35.917Z",
   "source": "mobile/due.js (D.EVERY, D.hours) and mobile/index.html (roundsOnClass), evaluated live -- not hand-copied",
   "history": "65 pair(s) from https://baimskaya-cm.duckdns.org?action=records (pulled 2026-09-12T01:04:15.784Z)",
   "map": {
@@ -13,19 +13,10 @@
     "FC": {
       "restricted": false,
       "classes": {
-        "GEN": 500,
-        "CRJ": 500,
-        "CRC": 500,
-        "DRE": 500,
-        "DRB": 500,
         "DOZ": 500,
         "EXC": 500,
         "GRD": 500,
-        "LDR": 500,
-        "HRB": 500,
-        "SCR": 500,
-        "HT": 500,
-        "AT": 500
+        "HT": 500
       }
     },
     "UC": {
@@ -37,21 +28,7 @@
     },
     "GET": {
       "restricted": false,
-      "classes": {
-        "GEN": 500,
-        "CRJ": 500,
-        "CRC": 500,
-        "DRE": 500,
-        "DRB": 500,
-        "DOZ": 500,
-        "EXC": 500,
-        "GRD": 500,
-        "LDR": 500,
-        "HRB": 500,
-        "SCR": 500,
-        "HT": 500,
-        "AT": 500
-      }
+      "classes": {}
     },
     "TB": {
       "restricted": true,
@@ -63,17 +40,11 @@
     "INSP": {
       "restricted": false,
       "classes": {
-        "GEN": 500,
         "CRJ": 500,
         "CRC": 500,
-        "DRE": 500,
         "DRB": 500,
         "DOZ": 500,
         "EXC": 500,
-        "GRD": 500,
-        "LDR": 500,
-        "HRB": 500,
-        "SCR": 500,
         "HT": 500,
         "AT": 500
       }

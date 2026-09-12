@@ -26,15 +26,23 @@
    already works on the phone; this script no longer has to leave that half
    of the rule unanswered just because it runs unattended.
 
-   TWO DIFFERENT QUESTIONS FOR TWO DIFFERENT SHAPES OF ROUND, STILL:
-     - MP / UC / TB: due.js RESTRICTS these to named classes. Membership
-       comes from roundsOnClass(), stated-or-done as above.
-     - FC / GET / INSP: due.js states NO restriction for these at all -- no
-       onClass, no byClass -- unlike MP, which needed onClass added
-       specifically BECAUSE it is restricted. Absence of a stated
-       restriction is read as "applies broadly", not as "unproven", so every
-       equipment class gets these at due.js's own flat figure regardless of
-       history.
+   ONE RULE, EVERY ROUND TYPE -- no special case for the ones due.js does
+   not restrict. An earlier pass of this script read "no onClass, no
+   byClass" on FC / GET / INSP as "applies broadly", and gave every class
+   their flat hour figure regardless of history. That was wrong, and it was
+   wrong the same way the hand-typed Python table was wrong: it was a second
+   rule, living beside roundsOnClass() instead of inside it, and it drifted
+   from what the rest of the app actually does. roundsOnClass()'s Stated
+   half only adds a class when due.js NAMES it (onClass/byClass) -- for a
+   round due.js does not restrict, Stated adds nothing at all, so membership
+   comes ENTIRELY from Done: has this fleet ever actually walked that round
+   on that kind of machine. That is exactly the rule neverRows() already
+   uses for the phone's own Due tab. A class this fleet has never walked FC,
+   GET or INSP on -- a generator, a loader, at the time this was found --
+   got scheduled for them anyway, because this script alone assumed
+   "unrestricted" meant "universal". It does not: it means due.js is silent,
+   and Done is the only voice left. Fixed by asking roundsOnClass() the same
+   question for every round type, with no bypass.
 
    Run against a locally served copy of the repo:
        python3 -m http.server 8391 &
@@ -82,21 +90,16 @@ const HIST_PATH = path.join(__dirname, 'cm_history.generated.json');
 
   const map = await p.evaluate(() => {
     const classes = Array.from(new Set((window.ASSETS || []).map(a => a.cls).filter(Boolean)));
-    const restrictedMap = roundsOnClass();   // class -> Set of round types, stated + real history
+    const onClassMap = roundsOnClass();   // class -> Set of round types, stated + real history -- the SAME answer neverRows() trusts on the phone's own Due tab
     const out = {};
     for (const ty of Object.keys(DUE.EVERY)) {
       const spec = DUE.EVERY[ty];
-      const restricted = !!(spec.onClass || spec.byClass);
+      const restricted = !!(spec.onClass || spec.byClass);   // recorded for information only -- membership below never branches on it
       const clsHours = {};
       for (const cls of classes) {
-        if (restricted) {
-          const onIt = restrictedMap[cls] && restrictedMap[cls].has(ty);
-          if (!onIt) continue;                       // not a member -- no figure recorded
-          clsHours[cls] = DUE.hours(ty, null, cls);
-        } else {
-          const h = DUE.hours(ty, null, cls);
-          if (h != null) clsHours[cls] = h;
-        }
+        const onIt = onClassMap[cls] && onClassMap[cls].has(ty);
+        if (!onIt) continue;                       // neither stated nor ever walked -- no figure recorded
+        clsHours[cls] = DUE.hours(ty, null, cls);
       }
       out[ty] = { restricted, classes: clsHours };
     }
