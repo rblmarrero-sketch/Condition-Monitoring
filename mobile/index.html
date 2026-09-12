@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=334">
+<link rel="manifest" href="manifest.webmanifest?v=335">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=334">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=334">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=334">
+<link rel="apple-touch-icon" href="icon-192.png?v=335">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=335">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=335">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1578,6 +1578,13 @@
   <div class="card savedcard hidden" id="savedCard" role="status">
     <h2>✓ <span data-i18n="saved_t">Saved on this phone</span></h2>
     <div class="hint" id="savedText"></div>
+    <!-- The rest of THIS visit. One work order can call for four rounds at
+         one machine, and each of them wants its own overview photograph and
+         its own hour reading — so the inspector is offered the next one with
+         all of that already carried over, rather than walking back round the
+         truck. Empty and hidden on a machine with nothing else due. -->
+    <div class="hint" id="savedAlso" hidden></div>
+    <div class="row" id="savedAlsoRow" hidden></div>
     <div class="row">
       <button type="button" class="btn primary" id="savedNext" data-i18n="saved_next">Next machine</button>
       <button type="button" class="btn ghost" id="savedOpen" data-i18n="saved_open">Open Saved</button>
@@ -2447,15 +2454,15 @@
   }
 })();
 </script>
-<script src="native.js?v=334"></script>
-<script src="upload-defaults.js?v=334"></script>
-<script src="hme.js?v=334"></script>
-<script src="mp-fc.js?v=334"></script>
-<script src="hme-cascade.js?v=334"></script>
-<script src="assets.js?v=334"></script>
-<script src="temp-limits.js?v=334"></script>
-<script src="normalize.js?v=334"></script>
-<script src="terms.js?v=334"></script>
+<script src="native.js?v=335"></script>
+<script src="upload-defaults.js?v=335"></script>
+<script src="hme.js?v=335"></script>
+<script src="mp-fc.js?v=335"></script>
+<script src="hme-cascade.js?v=335"></script>
+<script src="assets.js?v=335"></script>
+<script src="temp-limits.js?v=335"></script>
+<script src="normalize.js?v=335"></script>
+<script src="terms.js?v=335"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2474,25 +2481,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=334"></script>
-<script src="edits.js?v=334"></script>
-<script src="due.js?v=334"></script>
-<script src="wear.js?v=334"></script>
-<script src="wear-figs.js?v=334"></script>
-<script src="wear-map.js?v=334"></script>
-<script src="machine-photos.js?v=334"></script>
-<script src="machine-fig.js?v=334"></script>
-<script src="get.js?v=334"></script>
-<script src="points.js?v=334"></script>
-<script src="uc-points.js?v=334"></script>
-<script src="inspect-guide.js?v=334"></script>
-<script src="get-figs.js?v=334"></script>
-<script src="body-points.js?v=334"></script>
-<script src="body-map.js?v=334"></script>
-<script src="lube.js?v=334"></script>
-<script src="lube-overrides.js?v=334"></script>
-<script src="lube2027.js?v=334"></script>
-<script src="report-core.js?v=334"></script>
+<script src="grade.js?v=335"></script>
+<script src="edits.js?v=335"></script>
+<script src="due.js?v=335"></script>
+<script src="wear.js?v=335"></script>
+<script src="wear-figs.js?v=335"></script>
+<script src="wear-map.js?v=335"></script>
+<script src="machine-photos.js?v=335"></script>
+<script src="machine-fig.js?v=335"></script>
+<script src="get.js?v=335"></script>
+<script src="points.js?v=335"></script>
+<script src="uc-points.js?v=335"></script>
+<script src="inspect-guide.js?v=335"></script>
+<script src="get-figs.js?v=335"></script>
+<script src="body-points.js?v=335"></script>
+<script src="body-map.js?v=335"></script>
+<script src="lube.js?v=335"></script>
+<script src="lube-overrides.js?v=335"></script>
+<script src="lube2027.js?v=335"></script>
+<script src="report-core.js?v=335"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3018,6 +3025,8 @@ const I18N = {
     due_sched_on_n:"1C's plan is shown on {n} round(s) below.",
     due_sched_on_none:"Nothing in this list has an open 1C work order on the same round. 1C has {n} due in the next 7 days — see This week.",
     due_sched_nofile:"1C's schedule has not been downloaded yet on this phone.",
+    saved_also:"{u} needs {n} more round(s) at this visit. Start one and the hours, the photographs of the machine, your name and the fix carry over — you do not walk it again.",
+    saved_also_go:"Start {ty}",
     due_healed:"This screen was repainting itself without stopping, so its settings were put back to their defaults to free the app. Nothing else was changed — every round and photograph on this phone is still here.",
     due_list_seg:"List",
     due_week_seg:"Two weeks",
@@ -3589,6 +3598,8 @@ const I18N = {
     due_sched_on_n:"План 1С показан у {n} обход(ов) ниже.",
     due_sched_on_none:"Ни у одного обхода в этом списке нет открытого наряда 1С по тому же обходу. В 1С на ближайшие 7 дней их {n} — см. «Эта неделя».",
     due_sched_nofile:"График 1С ещё не загружен на этот телефон.",
+    saved_also:"{u}: на этот выезд осталось обходов — {n}. Начните следующий: моточасы, фотографии машины, ваше имя и координаты перенесутся — обходить заново не нужно.",
+    saved_also_go:"Начать: {ty}",
     due_healed:"Этот экран перерисовывался без остановки, поэтому его настройки возвращены к значениям по умолчанию, чтобы освободить приложение. Больше ничего не менялось — все обходы и фотографии на этом телефоне на месте.",
     due_list_seg:"Список",
     due_week_seg:"Две недели",
@@ -7109,12 +7120,145 @@ function renderReview(){
 function showSaved(rec){
   const c=$("savedCard"); if(!c) return;
   $("savedText").textContent=t("saved_line",{u:rec.equip, ty:t("type_"+rec.type), st:TERMS.t(lang,"waiting")});
+  /* What this visit has covered, so the same round is never offered twice
+     even before the folder has heard about it. */
+  if(visitDone.unit!==rec.equip || visitDone.date!==rec.date) visitDone={unit:rec.equip, date:rec.date, types:{}};
+  visitDone.types[rec.type]=1;
+  renderSavedAlso(rec);
   /* The form behind the card has been reset, so the technician is at the
      start of the next round, not still standing on the review of the last. */
   c.classList.remove("hidden"); reviewOpen=false; curStep=1; renderSteps();
   scrollTo({top:0,behavior:"smooth"});
 }
+/* The rest of the visit, offered by name. Says what carries over, because an
+   inspector who does not believe it will photograph the machine again anyway
+   and the whole thing was for nothing. */
+function renderSavedAlso(rec){
+  const note=$("savedAlso"), row=$("savedAlsoRow");
+  if(!note || !row) return;
+  const left=visitRemaining(rec);
+  row.innerHTML=""; 
+  if(!left.length){ note.hidden=true; row.hidden=true; return; }
+  note.textContent=t("saved_also",{u:rec.equip, n:left.length});
+  note.hidden=false; row.hidden=false;
+  left.forEach(ty=>{
+    const b=document.createElement("button");
+    b.type="button"; b.className="btn"; b.dataset.also=ty;
+    b.textContent=t("saved_also_go",{ty:t("type_"+ty)});
+    b.onclick=()=>startNextRound(rec, ty);
+    row.appendChild(b);
+  });
+}
 function hideSaved(){ const c=$("savedCard"); if(c && !c.classList.contains("hidden")){ c.classList.add("hidden"); renderSteps(); } }
+
+/* ════════════ ONE VISIT, SEVERAL ROUNDS ════════════════════════════════════
+   A service tier includes the tiers below it, so one work order can call for
+   four rounds at one machine: TK156's 4,000 h order is Filter Cut, General
+   Inspection, Magnetic Plug and Dump Body Liner. Every round requires its own
+   overview photograph (machineSlots) and its own hour-meter reading — so the
+   inspector at that truck was photographing the same machine four times and
+   typing the same SMU four times, in a glove, at −40, to record one visit.
+
+   The rounds stay four records. That is not a detail to tidy away: the folder,
+   the due dates, the history and every report key on unit|date|type, and one
+   merged record would be a fifth kind of thing every one of those has to
+   learn. What changes is only what the INSPECTOR has to do twice.
+
+   So after a round is saved, the card offers the others this machine needs
+   today, and starting one carries the visit over: the date, the hours, the
+   inspector, the supervisor, the signature, the fix, and the machine
+   photographs that round asks for.
+
+   THE PHOTOGRAPH IS COPIED, NOT SHARED. Each record stays complete on its own
+   — its report shows the machine, its folder entry holds its own evidence, and
+   nothing downstream has to learn to follow a reference. It costs one more
+   upload per round, which is the trade that was chosen deliberately over
+   sending an inspector round a truck four times. */
+let visitDone = { unit:"", date:"", types:{} };
+
+/* Every round 1C has open for this machine inside the agenda window, minus
+   the ones the site has taken off it. 1C's plan is the right source here and
+   the due list is not: this answers "what else is this VISIT for", and the
+   visit is a work order somebody raised. */
+function visitRounds(unit){
+  const out=new Set();
+  if(!unit || !SCHED || !SCHED.byUnit || !window.DUE) return out;
+  const today=todayISO(), a=ASSET_BY[unit];
+  (SCHED.byUnit[unit]||[]).forEach(w=>{
+    if(!w || !w.plan || !DUE.inAgenda(today,w.plan)) return;
+    (w.types||[]).forEach(ty=>{
+      if(!TYPE_META[ty]) return;
+      if(DUE.offRound && DUE.offRound(ty,a)) return;
+      out.add(ty);
+    });
+  });
+  return out;
+}
+/* What is left of this visit: never the round just saved, never one already
+   walked today — by this phone in this visit, or by anybody, which the
+   last-done index knows. Offering a round that is already done is how an
+   inspector comes to walk one twice and the office to hold two records for
+   one visit. */
+function visitRemaining(rec){
+  if(!rec || !rec.equip) return [];
+  const mine=(visitDone.unit===rec.equip && visitDone.date===rec.date) ? visitDone.types : {};
+  let h={}; try{ h=histAll()||{}; }catch(e){}
+  return [...visitRounds(rec.equip)].filter(ty=>{
+    if(ty===rec.type || mine[ty]) return false;
+    let last=null;
+    try{ last=histEntry(h[ty+"|"+rec.equip]); }catch(e){}
+    return !(last && last.d && String(last.d)===String(rec.date));
+  }).sort();
+}
+/* A photograph carried into the next round is a NEW attachment. The id lives
+   in the blob's own filename, so handing the same File to a second record
+   would leave two records claiming one photograph — same identity, two
+   owners, and whichever uploaded second would be reconciled against the
+   first. Same bytes and the same sha256, which is how the office can still
+   see they are one image; a different identity, so each record owns its
+   own. */
+function cloneShot(b){
+  try{ return new File([b], attNew()+"."+extOf(b), {type:(b&&b.type)||"image/jpeg"}); }
+  catch(e){ return null; }
+}
+function carryMachinePhotos(rec, ty){
+  const src=(rec.positions||{})[GEN_KEY]; if(!src) return 0;
+  /* Only what THIS round asks for. Carrying a dump-body photograph into a
+     plug round would upload a picture nothing on that round is about. */
+  const want=new Set(machineSlots(ty).map(s=>s.cat));
+  const p=(draft.positions[GEN_KEY] ||= {});
+  p.photos=p.photos||[];
+  let n=0;
+  photosOf(src).forEach(b=>{
+    const cat=attCat(src,b);
+    if(!cat || !want.has(cat)) return;
+    const c=cloneShot(b); if(!c) return;
+    p.photos.push(c); setAttCat(p,c,cat); n++;
+  });
+  if(!p.photos.length) delete draft.positions[GEN_KEY];
+  return n;
+}
+/* Start the next round of this visit, with everything answered once already
+   answered. Order matters: both the type change and selectEquip clear the
+   draft, so the photographs are carried AFTER them or they are wiped by the
+   very act of opening the round they were carried for. */
+function startNextRound(rec, ty){
+  if(!rec || !TYPE_META[ty]) return 0;
+  const sel=$("typeSel");
+  if(sel){ sel.value=ty; sel.dispatchEvent(new Event("change")); }
+  selectEquip(rec.equip);
+  const d=$("date"); if(d) d.value=rec.date||todayISO();
+  const sm=$("smu"); if(sm) sm.value=rec.smu||"";
+  if(rec.by){ const ins=$("inspector"); if(ins) ins.value=rec.by; }
+  const sp=$("supName"); if(sp) sp.value=rec.sup||"";
+  try{ loadSign(rec.sign||null); }catch(e){}
+  if(rec.gps){ gps=rec.gps; try{ renderGps(); }catch(e){} }
+  const n=carryMachinePhotos(rec, ty);
+  applyForm();
+  hideSaved();
+  showPane("paneCapture");
+  return n;
+}
 if($("savedNext")) $("savedNext").onclick=()=>{ hideSaved(); openHdr(); const b=$("equipBtn"); if(b) b.focus(); };
 if($("savedOpen")) $("savedOpen").onclick=()=>showPane("paneQueue");
 /* ── the machines this phone actually works on ────────────────────────────
@@ -12076,7 +12220,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="334";
+const BUILD="335";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

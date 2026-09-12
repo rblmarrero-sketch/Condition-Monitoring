@@ -85,6 +85,12 @@ const FIXTURE = {
        rule the clamp was written for ("do not go silent on an overdue
        thing") has been quietly dropped along with the code. */
     WEEK9: [{ wo: 'WO-020009', hours: 500, types: ['INSP'], plan: plus(-5), priority: 'P3 Planned (PM)' }],
+    /* ONE ORDER, SEVERAL ROUNDS. Since a service tier includes the tiers
+       below it, a 4,000 h order on a haul truck resolves to four rounds at
+       once. The agenda drew the FIRST of them and dropped the rest — TK156
+       showed Filter Cut where four rounds were due — so this holds the
+       agenda to drawing one row per ROUND, not per work order. */
+    WEEK10: [{ wo: 'WO-020010', hours: 4000, types: ['FC', 'MP', 'TB'], plan: plus(4), priority: 'P3 Planned (PM)' }],
   },
 };
 
@@ -175,6 +181,13 @@ const server = http.createServer((req, res) => {
      !groups.some(g => g.includes('WEEK8')));
   ok('WEEK3 (P1, not P3/P4) keeps INSP on its own plan date, no split', groupWith('WEEK3').includes('INSP') && !/walk ahead of PM/i.test(groupWith('WEEK3')));
   ok('WEEK4 (TB, no INSP in the order) is a single plain entry', groupWith('WEEK4').includes('TB') && groupWith('WEEK4').includes('WO-020004'));
+  /* Every round the order calls for, each its own row — the inspector has
+     three things to do at that machine and has to be able to see three. */
+  const w10 = await p.evaluate(() =>
+    [...document.querySelectorAll('#dueWeekList .agitem')]
+      .filter(b => b.dataset.u === 'WEEK10').map(b => b.dataset.t).sort());
+  ok('a 4,000 h order resolving to three rounds draws all three, not the first',
+     JSON.stringify(w10) === '["FC","MP","TB"]', JSON.stringify(w10));
 
   console.log('\na pre-check in the past sits on the day it was wanted; one beyond the window still clamps');
   /* NOT gs[0] any more. Today used to be the first group because the window
