@@ -1,8 +1,10 @@
 # Keeps the dashboard's Plan vs Actual tab from going stale between manual
-# re-runs. Pulls a fresh WO.xlsx from the AS_KPI pipeline, re-resolves the
-# class/round mapping live from due.js (never hand-copied — see
-# ingest/gen_class_rounds.cjs's own header for why that matters), and commits
-# data/work_orders.js only if anything actually changed.
+# re-runs. Pulls a fresh WO.xlsx from the AS_KPI pipeline, pulls this fleet's
+# real inspection history from the live CM backend, re-resolves the
+# class/round mapping live from due.js and that history (never hand-copied —
+# see ingest/gen_class_rounds.cjs's own header for why that matters, and
+# ingest/fetch_cm_history.cjs's for why the history pull matters), and
+# commits data/work_orders.js only if anything actually changed.
 #
 # DELIBERATELY DOES NOT BUMP BUILD. data/work_orders.js is loaded by
 # dashboard/index.html only — it is not referenced anywhere in mobile/ and
@@ -59,6 +61,14 @@ jobs:
             sleep 1
           done
 
+      - name: Pull real inspection history from the live backend
+        # The "done" half of roundsOnClass()'s class/round rule -- a round
+        # this fleet has actually walked on a class. Without this, the first
+        # time a class gets a real round (a grader's first-ever Magnetic
+        # Plug, say) would never reach the mapping below. See
+        # ingest/fetch_cm_history.cjs's own header.
+        run: node ingest/fetch_cm_history.cjs
+
       - name: Resolve the class/round mapping live from due.js
         run: node ingest/gen_class_rounds.cjs http://127.0.0.1:8391
 
@@ -77,11 +87,11 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if git diff --quiet -- data/work_orders.js ingest/class_rounds.generated.json; then
-            echo "no change — WO.xlsx pull matched what is already committed"
+          if git diff --quiet -- data/work_orders.js ingest/class_rounds.generated.json ingest/cm_history.generated.json; then
+            echo "no change — the pull matched what is already committed"
             exit 0
           fi
-          git add data/work_orders.js ingest/class_rounds.generated.json
+          git add data/work_orders.js ingest/class_rounds.generated.json ingest/cm_history.generated.json
           # [skip ci] -- see the note at the top of this file for why this
           # job's own commits do not bump BUILD and should not trip the
           # Build freshness guard.

@@ -3072,6 +3072,16 @@
         <span class="pgsub" id="paAsOf"></span></div>
     </div>
     <div class="kpis" id="paKpis"></div>
+    <!-- THE FIRST THING ON THIS TAB, BECAUSE IT WAS THE FIRST QUESTION ASKED:
+         "what is my schedule next week, so I can prepare" -- not a filter
+         click away, on screen the moment the tab opens. One row per unit
+         with an open PM in the next 7 days, one column per day, so a week
+         reads as a shape rather than as fifty lines to scan one at a time. -->
+    <div class="section">
+      <div class="secthd"><h2 data-i18n="pa_week_h2">Next 7 days</h2>
+        <span class="pgsub" data-i18n="pa_week_sub">Open work orders due in the next week, by unit and day. General Inspection is highlighted — it is walked ahead of the date, not on it.</span></div>
+      <div id="paWeek"></div>
+    </div>
     <div class="section">
       <div class="secthd"><h2 data-i18n="pa_h2">Planned service vs. actual round</h2>
         <span class="spacer"></span>
@@ -3093,6 +3103,7 @@
           <option value="14" data-i18n="pa_win_14">Next 14 days</option>
           <option value="30" data-i18n="pa_win_30">Next 30 days</option>
         </select></label>
+        <label class="fld"><span data-i18n="dd_round">Round</span><select id="paType"></select></label>
         <span class="spacer"></span>
         <label class="fld"><span data-i18n="dd_find">Search this table</span>
           <input id="paQ" type="search" data-i18n-ph="dd_findph" placeholder="unit number"></label>
@@ -3519,22 +3530,22 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=311"></script>
+<script src="../data/magnetic_plug.js?v=312"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=311"></script>
-<script src="../mobile/hme.js?v=311"></script>
-<script src="../mobile/mp-fc.js?v=311"></script>
-<script src="../mobile/hme-cascade.js?v=311"></script>
-<script src="../mobile/temp-limits.js?v=311"></script>
+<script src="../data/work_orders.js?v=312"></script>
+<script src="../mobile/hme.js?v=312"></script>
+<script src="../mobile/mp-fc.js?v=312"></script>
+<script src="../mobile/hme-cascade.js?v=312"></script>
+<script src="../mobile/temp-limits.js?v=312"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=311"></script>
-<script src="../mobile/normalize.js?v=311"></script>
-<script src="../mobile/terms.js?v=311"></script>
+<script src="../mobile/assets.js?v=312"></script>
+<script src="../mobile/normalize.js?v=312"></script>
+<script src="../mobile/terms.js?v=312"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3553,19 +3564,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=311"></script>
-<script src="../mobile/edits.js?v=311"></script>
-<script src="../mobile/due.js?v=311"></script>
-<script src="../mobile/wear.js?v=311"></script>
-<script src="../mobile/wear-map.js?v=311"></script>
-<script src="../mobile/lube.js?v=311"></script>
-<script src="../mobile/lube-overrides.js?v=311"></script>
-<script src="../mobile/lube2027.js?v=311"></script>
-<script src="../mobile/lube-tds.js?v=311"></script>
+<script src="../mobile/grade.js?v=312"></script>
+<script src="../mobile/edits.js?v=312"></script>
+<script src="../mobile/due.js?v=312"></script>
+<script src="../mobile/wear.js?v=312"></script>
+<script src="../mobile/wear-map.js?v=312"></script>
+<script src="../mobile/lube.js?v=312"></script>
+<script src="../mobile/lube-overrides.js?v=312"></script>
+<script src="../mobile/lube2027.js?v=312"></script>
+<script src="../mobile/lube-tds.js?v=312"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=311"></script>
-<script src="../mobile/machine-photos.js?v=311"></script>
+<script src="../mobile/upload-defaults.js?v=312"></script>
+<script src="../mobile/machine-photos.js?v=312"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3574,17 +3585,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=311"></script>
-<script src="../mobile/get.js?v=311"></script>
-<script src="../mobile/points.js?v=311"></script>
-<script src="../mobile/uc-points.js?v=311"></script>
-<script src="../mobile/inspect-guide.js?v=311"></script>
-<script src="../mobile/get-figs.js?v=311"></script>
-<script src="../mobile/body-points.js?v=311"></script>
-<script src="../mobile/body-map.js?v=311"></script>
-<script src="../mobile/jspdf.umd.min.js?v=311"></script>
-<script src="../mobile/html2canvas.min.js?v=311"></script>
-<script src="../mobile/report-core.js?v=311"></script>
+<script src="../mobile/machine-fig.js?v=312"></script>
+<script src="../mobile/get.js?v=312"></script>
+<script src="../mobile/points.js?v=312"></script>
+<script src="../mobile/uc-points.js?v=312"></script>
+<script src="../mobile/inspect-guide.js?v=312"></script>
+<script src="../mobile/get-figs.js?v=312"></script>
+<script src="../mobile/body-points.js?v=312"></script>
+<script src="../mobile/body-map.js?v=312"></script>
+<script src="../mobile/jspdf.umd.min.js?v=312"></script>
+<script src="../mobile/html2canvas.min.js?v=312"></script>
+<script src="../mobile/report-core.js?v=312"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4512,6 +4523,8 @@ const I18N={
   pa_window:"1C plan date", pa_win_all:"Any time", pa_win_over:"Overdue (plan date passed)",
   pa_win_7:"Next 7 days", pa_win_14:"Next 14 days", pa_win_30:"Next 30 days",
   pa_c_hours:"Hours",
+  pa_week_h2:"Next 7 days", pa_week_sub:"Open work orders due in the next week, by unit and day. General Inspection is highlighted — it is walked ahead of the date, not on it.",
+  pa_week_none:"Nothing open falls in the next 7 days.",
  },
  ru:{
   sub:"Панель парка", srcnone:"Нет данных — нажмите, чтобы подключить",
@@ -5338,6 +5351,8 @@ const I18N={
   pa_window:"Плановая дата (1С)", pa_win_all:"Любое время", pa_win_over:"Просрочено (дата прошла)",
   pa_win_7:"Следующие 7 дней", pa_win_14:"Следующие 14 дней", pa_win_30:"Следующие 30 дней",
   pa_c_hours:"Наработка",
+  pa_week_h2:"Следующие 7 дней", pa_week_sub:"Открытые наряды со сроком на следующую неделю, по единицам и дням. Общий осмотр выделен — его проводят до даты ТО, а не одновременно с ней.",
+  pa_week_none:"На ближайшие 7 дней ничего не запланировано.",
  },
 };
 let lang=localStorage.getItem("cm_dash_lang")||"en";
@@ -15070,6 +15085,13 @@ function paGo(scope){ paScope=scope; renderPlanActualTab(); urlWrite(false); }
    recently" -- the reason the global Period bar is hidden on this tab (see
    showTab) rather than reused for this. */
 function paWindowGet(){ return ($("paWindow")||{}).value || ""; }
+/* WHICH ROUND, NOT JUST WHICH WORK ORDER. A row's own resolved type(s) live
+   in info.types (null where the mapping could not narrow it down, e.g. an
+   "800h service" nothing states) -- filtering asks whether the chosen type
+   is ONE OF them, since a 500h work order genuinely could be any of Filter
+   Cut, GET or General Inspection until CM's own record says which. */
+function paTypeGet(){ return ($("paType")||{}).value || ""; }
+function paInType(r, ty){ return !ty || (r.info.types||[]).includes(ty); }
 function paInWindow(r, win){
   if(!win) return true;
   if(r.daysUntilPlan==null) return false;         // unscheduled -- no plan date to judge
@@ -15099,12 +15121,58 @@ function paSortGo(k){
   else paSort={k, dir:1};
   renderPlanActualTab();
 }
+/* THE WEEK AS A SHAPE, NOT AS ROWS TO ADD UP. One column per day, one row
+   per unit that has an open PM landing in it -- so seven separate "in 3
+   days" / "in 4 days" lines, scattered through a table sorted by unit,
+   become one grid a planner reads in a glance. Deliberately narrow scope:
+   OPEN work orders only (a completed one is not something to prepare for)
+   and no attempt at a real Gantt's durations or dependencies -- a PM
+   service is a single day, not a span, so a day-grid says everything a
+   duration bar would and nothing it would not. */
+function paWeekData(rows){
+  return rows.filter(r=>r.w.open && r.daysUntilPlan!=null && r.daysUntilPlan>=0 && r.daysUntilPlan<=6);
+}
+/* Takes the search/round-type-filtered rows the main table already computed
+   (NOT its plan-date window -- this grid is always "next 7 days" by its own
+   definition, independent of whatever #paWindow is set to). */
+function renderPaWeek(qtyRows){
+  const box=$("paWeek"); if(!box) return;
+  const rows=paWeekData(qtyRows);
+  if(!rows.length){ box.innerHTML=`<div class="sub">${esc(t("pa_week_none"))}</div>`; return; }
+  const today=todayISO();
+  const days=Array.from({length:7},(_,i)=> window.DUE ? DUE.shift(today,i) : today);
+  const dayLabel=d=>{ const dt=new Date(d+"T00:00:00Z");
+    const wd=dt.toLocaleDateString(lang==="ru"?"ru-RU":"en-US",{weekday:"short",timeZone:"UTC"});
+    return wd.replace(/\.$/,"")+" "+dt.getUTCDate(); };
+  const byUnit={};
+  rows.forEach(r=>(byUnit[r.w.equip]=byUnit[r.w.equip]||[]).push(r));
+  const units=Object.keys(byUnit).sort((a,b)=>{
+    const ma=Math.min(...byUnit[a].map(r=>r.daysUntilPlan)), mb=Math.min(...byUnit[b].map(r=>r.daysUntilPlan));
+    return ma-mb || a.localeCompare(b); });
+  box.innerHTML=`<div class="tblwrap scrollbox" style="--sb:340px"><table class="grid"><thead><tr>
+      <th>${esc(t("pa_c_unit"))}</th>${days.map(d=>`<th class="c">${esc(dayLabel(d))}</th>`).join("")}
+    </tr></thead><tbody>`
+    + units.map(u=>{
+        const cells=days.map(d=>{
+          const here=byUnit[u].filter(r=>r.w.planStart===d);
+          if(!here.length) return `<td class="c muted">—</td>`;
+          return `<td class="c">`+here.map(r=>{
+            const isInsp=(r.info.types||[]).includes("INSP");
+            const code=(r.info.types&&r.info.types[0])||"?";
+            return `<span class="pill ${isInsp?"w":"g"}" title="${esc(r.info.label)}${r.w.woNumber?" · "+esc(r.w.woNumber):""}">${esc(code)}</span>`;
+          }).join(" ")+`</td>`;
+        }).join("");
+        return `<tr><td>${esc(u)}</td>${cells}</tr>`;
+      }).join("")
+    + `</tbody></table></div>`;
+}
 function renderPlanActualTab(){
   const box=$("paList"); if(!box) return;
   if(!(window.CM_WO_DATA && Array.isArray(window.CM_WO_DATA.workOrders) && window.CM_WO_DATA.workOrders.length)){
     if($("paKpis")) $("paKpis").innerHTML="";
     if($("paSeg")) $("paSeg").innerHTML="";
     if($("paAsOf")) $("paAsOf").textContent="";
+    if($("paWeek")) $("paWeek").innerHTML="";
     box.innerHTML=`<div class="sub">${esc(t("pa_no_data"))}</div>`;
     return;
   }
@@ -15122,10 +15190,19 @@ function renderPlanActualTab(){
       $("paAsOf").textContent=t("pa_asof",{t: h<1?t("pa_asof_now"):h===1?t("pa_asof_hr",{n:h}):t("pa_asof_hrs",{n:h})});
     }
   }
+  const paTypeSel=$("paType");
+  if(paTypeSel && !paTypeSel.options.length){
+    paTypeSel.innerHTML=`<option value="">${esc(t("dd_all_rounds"))}</option>`
+      + TYPE_ORDER.map(k=>`<option value="${esc(k)}">${esc(k)} · ${esc(t("type_"+k))}</option>`).join("");
+  }
   const q=(($("paQ")||{}).value||"").trim().toUpperCase();
   const win=paWindowGet();
-  const rows=paRows().filter(r=>!q || String(r.w.equip).toUpperCase().indexOf(q)>=0)
-                      .filter(r=>paInWindow(r,win));
+  const ty=paTypeGet();
+  const qtyRows=paRows().filter(r=>!q || String(r.w.equip).toUpperCase().indexOf(q)>=0)
+                         .filter(r=>paInType(r,ty));
+  renderPaWeek(qtyRows);
+  const rows=qtyRows.filter(r=>paInWindow(r,win))
+                      .filter(r=>paInType(r,ty));
   const scope=paScopeGet();
   const nOpen=rows.filter(r=>r.w.open).length, nDone=rows.length-nOpen;
   const nOntime=rows.filter(r=>r.status==="ontime").length;
@@ -15226,9 +15303,11 @@ function paCsv(){
                "cm_vs_plan_days","status","preinsp_days_out","preinsp_needed"]];
   const q=(($("paQ")||{}).value||"").trim().toUpperCase();
   const win=paWindowGet();
+  const ty=paTypeGet();
   const scope=paScopeGet();
   paRows().filter(r=>!q || String(r.w.equip).toUpperCase().indexOf(q)>=0)
     .filter(r=>paInWindow(r,win))
+    .filter(r=>paInType(r,ty))
     .filter(r=> scope==="preinsp" ? r.preInspNeeded
              : scope==="open" ? r.w.open : scope==="done" ? !r.w.open : true)
     .forEach(r=>rows.push([r.w.equip, r.w.woNumber||"", r.w.maintType||"", r.w.hours==null?"":r.w.hours, r.info.label,
@@ -16286,6 +16365,7 @@ $("ddQ").oninput=renderDueTab;
 $("ddCsv").onclick=dueCsv;
 if($("paQ")) $("paQ").oninput=renderPlanActualTab;
 if($("paWindow")) $("paWindow").onchange=renderPlanActualTab;
+if($("paType")) $("paType").onchange=renderPlanActualTab;
 if($("paCsv")) $("paCsv").onclick=paCsv;
 $("wBand").onchange=renderWearTab;
 $("follX").onclick=closeFollow;
@@ -16438,8 +16518,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=311"></script>
-<script src="sync-adapter.js?v=311"></script>
-<script src="report.js?v=311"></script>
+<script src="drive.js?v=312"></script>
+<script src="sync-adapter.js?v=312"></script>
+<script src="report.js?v=312"></script>
 </body>
 </html>
