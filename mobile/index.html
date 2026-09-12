@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=320">
+<link rel="manifest" href="manifest.webmanifest?v=321">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=320">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=320">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=320">
+<link rel="apple-touch-icon" href="icon-192.png?v=321">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=321">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=321">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -464,6 +464,35 @@
   .dfilter:empty{display:none;margin:0;}
   /* A bar with nothing to say takes no room at all — not even its margin. */
   .syncbar:empty{display:none;}
+  /* List vs This week — a segmented pair, styled like the app's own .seg
+     control elsewhere (steps, filters), not a new shape. */
+  .viewseg{display:flex;gap:6px;margin:0 0 10px;background:var(--surface-2);
+    border:1px solid var(--border);border-radius:10px;padding:4px;}
+  .viewseg button{flex:1;min-height:38px;border:none;border-radius:7px;background:transparent;
+    color:var(--ink-2);font:inherit;font-size:13.5px;font-weight:650;cursor:pointer;}
+  .viewseg button.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.12);}
+  /* This week's agenda: grouped by day, not by unit — see dueweekRows(). */
+  .daygroup{margin-bottom:14px;}
+  .daygroup:last-child{margin-bottom:0;}
+  .dayhd{display:flex;align-items:baseline;gap:8px;margin-bottom:6px;padding-bottom:4px;
+    border-bottom:1px solid var(--border);}
+  .dayhd b{font-size:13px;letter-spacing:.02em;text-transform:uppercase;color:var(--ink);}
+  .dayhd span{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;}
+  .dayhd .today{color:var(--accent);}
+  .agitem{display:flex;align-items:center;gap:10px;background:var(--surface-2);
+    border:1px solid var(--border);border-left:4px solid var(--good);border-radius:10px;
+    padding:9px 12px;margin-bottom:6px;text-align:left;width:100%;font:inherit;color:var(--ink);
+    min-height:var(--tap);}
+  .agitem:last-child{margin-bottom:0;}
+  .agitem.pre{border-left-color:var(--warn-ink);}
+  .agitem .tag{flex:none;font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:6px;
+    background:var(--good);color:#fff;}
+  .agitem.pre .tag{background:var(--warning);color:#111;}
+  .agitem .body{flex:1 1 auto;min-width:0;}
+  .agitem .u{font-weight:700;font-size:14px;}
+  .agitem .u .cat{color:var(--muted);font-weight:400;}
+  .agitem .m{font-size:11.5px;color:var(--muted);margin-top:1px;font-variant-numeric:tabular-nums;}
+  .agitem .prenote{color:var(--warn-ink);font-weight:650;}
   /* A recovery action, offered as a line of text rather than a second button
      of the same weight as the one used every day. */
   .linkrow{display:block;width:100%;text-align:left;background:none;border:0;padding:10px 0 2px;
@@ -2014,24 +2043,41 @@
     <input id="dueFind" class="findbox" type="search" inputmode="search"
            data-i18n-ph="due_find" placeholder="Find a machine — CR006, DZ003…">
     <div class="quiet hidden" id="dueFindMsg" style="margin:-2px 0 8px"></div>
-    <div class="tfilter dfilter" id="dueScopeF"></div>
-    <div class="tfilter dfilter tfrounds" id="dueTypeF"></div>
-    <!-- OFF BY DEFAULT, AND ADDITIVE ONLY. This is the one new row on the
-         screen an inspector checks first every shift — see mobile/due.js's
-         own interval table for why that screen has to stay trustworthy on
-         its own. Nothing here changes what is overdue or due soon; it just
-         prints 1C's own plan date under a round that has one, when asked. -->
-    <label style="display:flex;align-items:center;gap:10px;padding:9px 12px;
-        border:1px solid var(--border);border-radius:10px;background:var(--surface-2);
-        margin:0 0 10px;cursor:pointer;min-height:var(--tap)">
-      <input type="checkbox" id="dueSchedOn" style="flex:none;width:20px;height:20px;">
-      <span style="flex:1 1 auto;min-width:0;">
-        <b data-i18n="due_sched_t" style="display:block;font-size:14px;">Show 1C schedule</b>
-        <span class="hint" data-i18n="due_sched_s" style="margin-top:2px;display:block;">Adds the office's own planned date under a round that has one. Off by default — nothing changes unless you turn it on.</span>
-      </span>
-    </label>
-    <div class="quiet" id="dueBasis" style="margin:-4px 0 10px"></div>
-    <div class="duelist" id="dueList"></div>
+    <!-- LIST vs THIS WEEK — a segmented pair, not a checkbox, because it is
+         a different QUESTION ("which view"), not an on/off. List answers
+         "is this machine due" one row at a time, from due.js and this
+         phone's own history; This week answers "what does my week look
+         like", built entirely from 1C's own schedule (schedule_slim.json)
+         — a completely different source, on purpose, never blended into
+         one number. See dueweekRows()'s own header for the rest. -->
+    <div class="viewseg" role="tablist" aria-label="Due view">
+      <button type="button" role="tab" id="dueViewList" data-dv="list" aria-controls="dueListWrap" data-i18n="due_list_seg">List</button>
+      <button type="button" role="tab" id="dueViewWeek" data-dv="week" aria-controls="dueWeekWrap" data-i18n="due_week_seg">This week</button>
+    </div>
+    <div id="dueListWrap" role="tabpanel" aria-labelledby="dueViewList">
+      <div class="tfilter dfilter" id="dueScopeF"></div>
+      <div class="tfilter dfilter tfrounds" id="dueTypeF"></div>
+      <!-- OFF BY DEFAULT, AND ADDITIVE ONLY. This is the one new row on the
+           screen an inspector checks first every shift — see mobile/due.js's
+           own interval table for why that screen has to stay trustworthy on
+           its own. Nothing here changes what is overdue or due soon; it just
+           prints 1C's own plan date under a round that has one, when asked. -->
+      <label style="display:flex;align-items:center;gap:10px;padding:9px 12px;
+          border:1px solid var(--border);border-radius:10px;background:var(--surface-2);
+          margin:0 0 10px;cursor:pointer;min-height:var(--tap)">
+        <input type="checkbox" id="dueSchedOn" style="flex:none;width:20px;height:20px;">
+        <span style="flex:1 1 auto;min-width:0;">
+          <b data-i18n="due_sched_t" style="display:block;font-size:14px;">Show 1C schedule</b>
+          <span class="hint" data-i18n="due_sched_s" style="margin-top:2px;display:block;">Adds the office's own planned date under a round that has one. Off by default — nothing changes unless you turn it on.</span>
+        </span>
+      </label>
+      <div class="quiet" id="dueBasis" style="margin:-4px 0 10px"></div>
+      <div class="duelist" id="dueList"></div>
+    </div>
+    <div id="dueWeekWrap" class="hidden" role="tabpanel" aria-labelledby="dueViewWeek">
+      <div class="hint" id="dueWeekSub" style="margin:0 0 12px" data-i18n="due_week_sub">Open work orders due in the next 7 days, grouped by the day something has to happen. General Inspection is listed on the day it should be walked — ahead of the plan date, not on it.</div>
+      <div id="dueWeekList"></div>
+    </div>
     <!-- THE ONE-TAP ANSWER TO "WHY IS THIS MACHINE NOT ON MY LIST".
 
          A full re-read is the only call that returns rounds already behind the
@@ -2251,15 +2297,15 @@
   <div id="roundBody" class="picklist"></div>
 </div>
 
-<script src="native.js?v=320"></script>
-<script src="upload-defaults.js?v=320"></script>
-<script src="hme.js?v=320"></script>
-<script src="mp-fc.js?v=320"></script>
-<script src="hme-cascade.js?v=320"></script>
-<script src="assets.js?v=320"></script>
-<script src="temp-limits.js?v=320"></script>
-<script src="normalize.js?v=320"></script>
-<script src="terms.js?v=320"></script>
+<script src="native.js?v=321"></script>
+<script src="upload-defaults.js?v=321"></script>
+<script src="hme.js?v=321"></script>
+<script src="mp-fc.js?v=321"></script>
+<script src="hme-cascade.js?v=321"></script>
+<script src="assets.js?v=321"></script>
+<script src="temp-limits.js?v=321"></script>
+<script src="normalize.js?v=321"></script>
+<script src="terms.js?v=321"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2278,25 +2324,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=320"></script>
-<script src="edits.js?v=320"></script>
-<script src="due.js?v=320"></script>
-<script src="wear.js?v=320"></script>
-<script src="wear-figs.js?v=320"></script>
-<script src="wear-map.js?v=320"></script>
-<script src="machine-photos.js?v=320"></script>
-<script src="machine-fig.js?v=320"></script>
-<script src="get.js?v=320"></script>
-<script src="points.js?v=320"></script>
-<script src="uc-points.js?v=320"></script>
-<script src="inspect-guide.js?v=320"></script>
-<script src="get-figs.js?v=320"></script>
-<script src="body-points.js?v=320"></script>
-<script src="body-map.js?v=320"></script>
-<script src="lube.js?v=320"></script>
-<script src="lube-overrides.js?v=320"></script>
-<script src="lube2027.js?v=320"></script>
-<script src="report-core.js?v=320"></script>
+<script src="grade.js?v=321"></script>
+<script src="edits.js?v=321"></script>
+<script src="due.js?v=321"></script>
+<script src="wear.js?v=321"></script>
+<script src="wear-figs.js?v=321"></script>
+<script src="wear-map.js?v=321"></script>
+<script src="machine-photos.js?v=321"></script>
+<script src="machine-fig.js?v=321"></script>
+<script src="get.js?v=321"></script>
+<script src="points.js?v=321"></script>
+<script src="uc-points.js?v=321"></script>
+<script src="inspect-guide.js?v=321"></script>
+<script src="get-figs.js?v=321"></script>
+<script src="body-points.js?v=321"></script>
+<script src="body-map.js?v=321"></script>
+<script src="lube.js?v=321"></script>
+<script src="lube-overrides.js?v=321"></script>
+<script src="lube2027.js?v=321"></script>
+<script src="report-core.js?v=321"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2796,6 +2842,13 @@ const I18N = {
     due_sched_s:"Adds the office's own planned date under a round that has one. Off by default — nothing changes unless you turn it on.",
     due_sched_line:"1C plan {d} · {h} · WO {wo}",
     due_sched_precheck:"walk ahead of the PM",
+    due_list_seg:"List",
+    due_week_seg:"This week",
+    due_week_sub:"Open work orders due in the next 7 days, grouped by the day something has to happen. General Inspection is listed on the day it should be walked — ahead of the plan date, not on it.",
+    due_week_today:"Today",
+    due_week_none:"Nothing open falls in the next 7 days.",
+    due_week_n:"{n} machine(s)",
+    due_week_pmnote:"walk ahead of PM {d}",
     m_due_loaded:["History loaded ✔","{n} unit/type dates added to the due list."],
     sec_team:"Team inspections", btn_team_refresh:"Refresh",
     /* a round somebody else uploaded, opened here */
@@ -3353,6 +3406,13 @@ const I18N = {
     due_sched_s:"Добавляет плановую дату офиса под обходом, для которого она есть. По умолчанию выключено — ничего не меняется, пока вы сами не включите.",
     due_sched_line:"план 1С {d} · {h} · наряд {wo}",
     due_sched_precheck:"провести до ТО",
+    due_list_seg:"Список",
+    due_week_seg:"Эта неделя",
+    due_week_sub:"Открытые наряды со сроком на ближайшие 7 дней, по дням. Общий осмотр указан на дне, когда его нужно провести — до даты ТО, а не в этот день.",
+    due_week_today:"Сегодня",
+    due_week_none:"На ближайшие 7 дней ничего не запланировано.",
+    due_week_n:"{n} машин(ы)",
+    due_week_pmnote:"провести до ТО {d}",
     m_due_loaded:["История загружена ✔","Добавлено дат: {n}."],
     sec_team:"Осмотры бригады", btn_team_refresh:"Обновить",
     rd_owned:"Обход другого инспектора — {by}. Показан как загружен; изменить его на этом телефоне нельзя.",
@@ -8088,6 +8148,123 @@ function schedRowHtml(unit,ty){
   };
 })();
 
+/* ---- This week: the same schedule, laid out by day instead of by row ----
+
+   LIST answers "is this machine due" one row at a time, from due.js and
+   this phone's own history — that never changes, and This week does not
+   touch it. This week answers a different question ("what does my week
+   look like") entirely from 1C's own schedule, the same schedule_slim.json
+   the List toggle already fetches. Two views of two different sources,
+   never blended into one — see the toggle's own header for why that
+   matters here more than most places. */
+let dueView = "list";                 // list | week
+try{ dueView = localStorage.getItem("cm_due_view")==="week" ? "week" : "list"; }catch(e){}
+const SCHED_PREINSP_LOOKBACK = 14;    // mirrors the dashboard's PA_PREINSP_LOOKBACK
+/* Has a General Inspection already been walked for THIS PM, not just at
+   some point in the machine's life? histAll() is the same last-done index
+   the rest of this file already trusts (histFirm/histGated guard against a
+   stray, unverifiable date the way roundsOnClass() does). An inspection
+   found more than SCHED_PREINSP_LOOKBACK days before the plan date does
+   not clear THIS PM's own pre-check. */
+function schedPreInspDone(unit, planDate){
+  try{
+    const h=histAll(), gated=histGated();
+    const entry=histEntry(h["INSP|"+unit]);
+    if(!histFirm(entry,gated) || !entry || !entry.d || !window.DUE) return false;
+    const days=DUE.dayDiff(entry.d, planDate);      // planDate - entry.d
+    return days!=null && days>=0 && days<=SCHED_PREINSP_LOOKBACK;
+  }catch(e){ return false; }
+}
+/* One entry per OBLIGATION, not per work order — a 500h service that
+   resolves to Filter Cut + General Inspection is two separate things on
+   two separate days, same split the dashboard's Next 7 days grid already
+   makes (see paWeekData's own header there for the full reasoning): the
+   Filter Cut stays on the PM's own plan date; the General Inspection gets
+   its own entry PA_PREINSP_DAYS earlier, clamped forward to today if that
+   day has already passed and nothing has been walked yet — never dropped,
+   never pushed past today. */
+function dueWeekRows(){
+  const today=todayISO(), out=[];
+  if(!SCHED || !SCHED.byUnit || !window.DUE) return out;
+  const inWindow=d=>{ const n=DUE.dayDiff(today,d); return n!=null && n>=0 && n<=6; };
+  Object.keys(SCHED.byUnit).forEach(unit=>{
+    (SCHED.byUnit[unit]||[]).forEach(w=>{
+      const types=w.types||[];
+      const hasInsp=types.includes("INSP");
+      const shiftInsp=hasInsp && /P3|P4/i.test(w.priority||"");
+      const onDate=shiftInsp ? types.filter(ty=>ty!=="INSP") : types;
+      if(onDate.length && w.plan && inWindow(w.plan)){
+        out.push({ unit, day:w.plan, code:[...onDate].sort()[0], isPre:false, w });
+      }
+      if(shiftInsp && w.plan && !schedPreInspDone(unit,w.plan)){
+        const wanted=DUE.shift(w.plan,-SCHED_PREINSP_DAYS);
+        const day=DUE.dayDiff(today,wanted)<0 ? today : wanted;
+        if(inWindow(day)) out.push({ unit, day, code:"INSP", isPre:true, w });
+      }
+    });
+  });
+  return out;
+}
+function renderDueWeek(){
+  const box=$("dueWeekList"); if(!box) return;
+  const entries=dueWeekRows();
+  const today=todayISO();
+  const days=Array.from({length:7},(_,i)=>DUE.shift(today,i));
+  const dayLabel=(d,i)=>{
+    const dt=new Date(d+"T00:00:00Z");
+    const wd=dt.toLocaleDateString(lang==="ru"?"ru-RU":"en-US",{weekday:"short",timeZone:"UTC"}).replace(/\.$/,"");
+    return (i===0 ? t("due_week_today")+" · " : "")+wd+" "+dt.getUTCDate();
+  };
+  const byDay={};
+  entries.forEach(e=>(byDay[e.day]=byDay[e.day]||[]).push(e));
+  const groups=days.filter(d=>byDay[d] && byDay[d].length);
+  if(!groups.length){ box.innerHTML=`<div class="empty">${esc(t("due_week_none"))}</div>`; return; }
+  box.innerHTML=groups.map(d=>{
+    const idx=days.indexOf(d);
+    const rows=[...byDay[d]].sort((a,b)=>a.unit<b.unit?-1:a.unit>b.unit?1:0);
+    return `<div class="daygroup">
+      <div class="dayhd"><b${idx===0?' class="today"':""}>${esc(dayLabel(d,idx))}</b><span>${esc(t("due_week_n",{n:rows.length}))}</span></div>
+      ${rows.map(e=>{
+        const a=ASSET_BY[e.unit];
+        const hrs=e.w.hours!=null?e.w.hours+"h":"";
+        const pre=e.isPre?` <span class="prenote">· ${esc(t("due_week_pmnote",{d:schedShortDate(e.w.plan)}))}</span>`:"";
+        return `<button type="button" class="agitem${e.isPre?" pre":""}" data-u="${esc(e.unit)}" data-t="${esc(e.code)}">
+          <span class="tag">${esc(e.code)}</span>
+          <span class="body">
+            <span class="u">${esc(e.unit)}${a&&a.cat?` <span class="cat">${esc(a.cat)}</span>`:""}</span>
+            <span class="m">${esc(e.w.wo||"—")}${hrs?" · "+esc(hrs):""}${pre}</span>
+          </span></button>`;
+      }).join("")}
+    </div>`;
+  }).join("");
+  box.querySelectorAll("[data-u]").forEach(b=>b.onclick=()=>{
+    const sel=$("typeSel");
+    if(b.dataset.t && sel && sel.value!==b.dataset.t){ sel.value=b.dataset.t; sel.dispatchEvent(new Event("change")); }
+    selectEquip(b.dataset.u); showPane("paneCapture");
+  });
+}
+(function initDueViewSeg(){
+  const bl=$("dueViewList"), bw=$("dueViewWeek"); if(!bl||!bw) return;
+  const go=async v=>{
+    dueView=v; try{ lsSet("cm_due_view", v); }catch(e){}
+    if(v==="week") await schedEnsureLoaded();
+    renderDue();
+  };
+  bl.onclick=()=>go("list");
+  bw.onclick=()=>go("week");
+  /* Two tabs, so the arrow keys just swap and take focus with them — the
+     one-stop-in-the-tab-order rule (see renderDue()'s own tabIndex lines)
+     is only real if arrowing between tabs still works once Tab itself
+     stops landing on the unselected one. */
+  const arrow=e=>{
+    if(!["ArrowLeft","ArrowRight","ArrowUp","ArrowDown"].includes(e.key)) return;
+    e.preventDefault();
+    const other=e.currentTarget===bl?bw:bl;
+    other.focus(); go(other.dataset.dv);
+  };
+  bl.onkeydown=arrow; bw.onkeydown=arrow;
+})();
+
 /* ---- what is due, and what was missed -----------------------------------
    Every round, not the one the capture screen happens to be set to. An
    inspector asking "what is due" is asking about the machine in front of them
@@ -8303,9 +8480,13 @@ function renderDue(){
   const box=$("dueList"); if(!box) return;
   /* Never blocks the paint in front of it — rows below draw with whatever
      SCHED already holds (nothing, the first time) and this repaints them
-     once the fetch lands, same shape as the sync card's own refresh. */
-  if(dueSched && (!SCHED || Date.now()-(schedCacheGet()||{at:0}).at >= SCHED_STALE_MS)){
-    schedEnsureLoaded().then(()=>{ if(dueSched) renderDue(); });
+     once the fetch lands, same shape as the sync card's own refresh. Two
+     independent reasons need SCHED now: the List toggle (dueSched) and the
+     This week view, which needs it unconditionally since it IS 1C's
+     schedule, nothing else. */
+  const needSched = dueSched || dueView==="week";
+  if(needSched && (!SCHED || Date.now()-(schedCacheGet()||{at:0}).at >= SCHED_STALE_MS)){
+    schedEnsureLoaded().then(()=>{ if(dueSched || dueView==="week") renderDue(); });
   }
   /* Counted BEFORE the round filter, so the scope pills say how much there is
      on the machine and not how much survives the other filter. Two filters
@@ -8474,15 +8655,23 @@ function renderDue(){
 
   if(!show.length){
     /* "Nothing due" and "this phone has never heard from the fleet" are
-       different sentences, and only one of them is reassuring. */
+       different sentences, and only one of them is reassuring.
+
+       This used to be a `return` — which meant an empty List (a fresh phone,
+       an empty scope, a search with no hits) skipped every line below it,
+       including the view-segment toggle and renderDueWeek(). This week's
+       agenda comes from 1C's own schedule, not from cm_hist, so a phone
+       with nothing to show on the List had a real week's schedule to show
+       and never reached the code that would show it. An `if/else` instead
+       of a `return` keeps the empty state on the List and still lets This
+       week render regardless of whether the List has anything to say. */
     const w=histWhen();
     box.innerHTML=`<div class="empty">${
       histIsShort() ? t("due_short")
       : !w ? t("due_no_hist")
       : histStale() ? t("due_stale",{t:agoWords(w.at)})
       : t("due_empty")}</div>`;
-    return;
-  }
+  } else {
   box.innerHTML=show.slice(0,200).map(r=>{
     /* A machine with no round on record has no interval to be past and no
        date to be counted from. Printing "0 d ago" over one would be inventing
@@ -8549,6 +8738,26 @@ function renderDue(){
     if(b.dataset.t && sel && sel.value!==b.dataset.t){ sel.value=b.dataset.t; sel.dispatchEvent(new Event("change")); }
     selectEquip(b.dataset.u); showPane("paneCapture"); });
   box.querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>dueNotDoing(b.dataset.ft,b.dataset.f));
+  }
+
+  /* LIST vs THIS WEEK. Both are rendered every time, unconditionally — the
+     list above always was, and this week costs little enough (a fetch that
+     is already cached, a filter over at most a couple hundred entries) that
+     computing it every render and hiding one half with CSS is simpler and
+     safer than an early return that has to remember which parts of the
+     function above it is allowed to skip. Switching views is then just a
+     class toggle: instant, and neither view can go stale from having been
+     skipped. */
+  const wrapL=$("dueListWrap"), wrapW=$("dueWeekWrap");
+  if(wrapL) wrapL.classList.toggle("hidden", dueView==="week");
+  if(wrapW) wrapW.classList.toggle("hidden", dueView!=="week");
+  const dvl=$("dueViewList"), dvw=$("dueViewWeek");
+  if(dvl && dvw){
+    const onList=dueView!=="week";
+    dvl.classList.toggle("on", onList); dvl.setAttribute("aria-selected", onList?"true":"false"); dvl.tabIndex=onList?0:-1;
+    dvw.classList.toggle("on", !onList); dvw.setAttribute("aria-selected", (!onList)?"true":"false"); dvw.tabIndex=onList?-1:0;
+  }
+  renderDueWeek();
 }
 
 /* ---- "we are not doing this one, and here is why" -----------------------
@@ -11438,7 +11647,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="320";
+const BUILD="321";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

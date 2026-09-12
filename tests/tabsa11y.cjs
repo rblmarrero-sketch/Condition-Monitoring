@@ -153,6 +153,22 @@ function judge(tl) {
   });
   ok("the step bar was found", steps.length === 1, steps.length + " tablist(s)");
 
+  /* The Due tab's List/This week segment only exists on paneDue and is
+     genuine role="tablist" markup (not another nav dressed up), so the
+     generic sweep finds it exactly the way it finds the dashboard's own
+     bars above — the same reason this file audits by discovery instead of
+     by name. Restored to paneCapture afterwards because section 4 below
+     reads its "current" pane starting from rest. */
+  await m.evaluate(() => showPane("paneDue")); await m.waitForTimeout(400);
+  const dueTabs = (await m.evaluate(AUDIT)).filter(t => t.shown);
+  dueTabs.forEach(tl => {
+    const why = judge(tl);
+    ok("the " + tl.id + " bar (" + tl.n + " tabs) is a proper tablist",
+       why.length === 0, why.join(" · ") || tl.tabs.filter(t => t.on).map(t => t.text).join(""));
+  });
+  ok("the Due view segment was found", dueTabs.length === 1, dueTabs.length + " tablist(s)");
+  await m.evaluate(() => showPane("paneCapture")); await m.waitForTimeout(200);
+
   console.log("\n4. AND THE DESTINATION BAR SAYS WHICH SCREEN IS OPEN");
   const bar = async () => m.evaluate(() => {
     const n = document.getElementById("tabbar");
