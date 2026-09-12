@@ -949,7 +949,24 @@ exports.handler = async function (event) {
       const results = await Promise.all(list.map(one => {
         if (one.folder === undefined) one.folder = b.folder;
         if (one.dev === undefined) one.dev = b.dev;
-        return saveOne(one).catch(e => ({ ok: false, error: String(e.message || e) }));
+        return saveOne(one).catch(e => {
+          /* A batch file's failure is caught HERE, per file, before it can
+             ever reach the top-level handler's own catch below — so the
+             backstop added there for "whatever throws, on any op" never
+             actually saw a batch failure, no matter how wide it was cast.
+             A phone reported "The object can not be found here" for every
+             file in a batch and three weeks of the top-level log never
+             once mentioned it, because it was never in a position to. This
+             is the same backstop, at the layer that actually needed it. */
+          try {
+            console.error('[batch] file failed', JSON.stringify({
+              bucket: BUCKET, folder: one.folder, name: one.name, dev: one.dev,
+              bytes: one.file ? Buffer.byteLength(String(one.file)) : undefined,
+              err: String((e && e.message) || e),
+            }));
+          } catch (logErr) { /* logging must never be why a request fails */ }
+          return { ok: false, error: String((e && e.message) || e) };
+        });
       }));
       const saved = [], failed = [];
       results.forEach((r, i) => {
