@@ -230,7 +230,15 @@ if (require.main === module) {
      short: the headers are one packet. */
   srv.headersTimeout = 65000;
   srv.requestTimeout = 960000;
-  srv.listen(PORT, HOST, () => console.log('cm endpoint on ' + HOST + ':' + PORT));
+  /* SAY WHAT IS ACTUALLY RUNNING. A deploy that did not happen looks exactly
+     like a deploy that did — the endpoint answers either way — and the whole
+     reason this line exists is that the two-minute request cut was believed
+     to be a ten-minute one for months. The clocks are printed at startup, so
+     `journalctl -u cm -n 20` after a restart proves which file is loaded
+     rather than assuming it. */
+  srv.listen(PORT, HOST, () => console.log('cm endpoint on ' + HOST + ':' + PORT
+    + ' · request ' + Math.round(srv.requestTimeout / 1000) + 's'
+    + ' · headers ' + Math.round(srv.headersTimeout / 1000) + 's'));
   /* Say goodbye properly, so a deploy does not drop a round mid-upload. */
   for (const sig of ['SIGTERM', 'SIGINT'])
     process.on(sig, () => srv.close(() => process.exit(0)));

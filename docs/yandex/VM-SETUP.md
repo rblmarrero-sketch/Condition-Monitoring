@@ -447,6 +447,24 @@ The last line should say **active (running)**. If it says `failed`, the new file
 did not start — put the old one back with `sudo systemctl stop cm`, tell whoever
 made the change, and read the reason with `sudo journalctl -u cm -n 50`.
 
+**Then prove the new file is the one running.** A deploy that did not happen
+looks exactly like one that did — the endpoint answers either way — which is
+how the request cut sat at two minutes for months while everyone believed it
+was ten. Since build 354 the server prints its own clocks as it starts:
+
+```
+sudo journalctl -u cm -n 20 --no-pager | grep "cm endpoint"
+```
+
+which should read
+
+```
+cm endpoint on 127.0.0.1:8080 · request 960s · headers 65s
+```
+
+If the line has no `· request` on it, the old `server.js` is still loaded and
+the copy above did not take: check you were in `/opt/cm` when you ran it.
+
 Nothing in the bucket is touched by this, and `cm.env` — the file with the keys
 and the admin password in it — is not one of the files being replaced. Restarting
 takes about a second, during which a phone that happens to be syncing retries.
