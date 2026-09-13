@@ -53,6 +53,7 @@
 #rptRoot .h1 .alti{font-size:.5em;font-weight:600;opacity:.68;margin-left:3px;}
 #rptRoot .lede{font-size:15px;line-height:1.45;font-weight:500;color:#12161a;}
 #rptRoot .muted{color:#5b6670;}
+#rptRoot .alti{font-weight:500;color:#5b6670;}
 #rptRoot .rule{height:2.5px;background:#16242c;}
 #rptRoot .hair{height:1px;background:#dfe4e9;}
 #rptRoot .num{font-variant-numeric:tabular-nums;}
@@ -66,7 +67,7 @@
 #rptRoot .stats{display:flex;gap:0;border-top:1px solid #dfe4e9;border-bottom:1px solid #dfe4e9;}
 #rptRoot .stat{flex:1;padding:13px 16px 14px;border-right:1px solid #dfe4e9;}
 #rptRoot .stat:last-child{border-right:0;}
-#rptRoot .stat .k{font-size:9px;font-weight:700;letter-spacing:.13em;
+#rptRoot .stat .k{font-size:9.5px;font-weight:700;letter-spacing:.13em;
   text-transform:uppercase;color:#5b6670;}
 #rptRoot .stat .v{font-size:27px;font-weight:800;line-height:1.1;margin-top:5px;
   font-variant-numeric:tabular-nums;letter-spacing:-.02em;}
@@ -82,10 +83,10 @@
 
 /* tables: hairlines across, never down */
 #rptRoot table{width:100%;border-collapse:collapse;}
-#rptRoot th{font-size:8.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;
-  color:#5b6670;text-align:left;padding:0 8px 5px;border-bottom:1px solid #12161a;
+#rptRoot th{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:#3d474f;text-align:left;padding:0 8px 5px;border-bottom:1px solid #12161a;
   vertical-align:bottom;}
-#rptRoot td{font-size:11px;line-height:1.4;padding:6px 8px;border-bottom:1px solid #eaeef1;
+#rptRoot td{font-size:11px;line-height:1.45;padding:6px 8px;border-bottom:1px solid #eaeef1;
   vertical-align:top;}
 #rptRoot tr.zebra td{background:#fafbfc;}
 #rptRoot td.c,#rptRoot th.c{text-align:center;}
@@ -106,7 +107,7 @@
    that IS the stylesheet, and one would end it.) */
 #rptRoot tr.rnote td{border-top:0;padding-top:0;color:#4a545e;}
 #rptRoot .unit{font-weight:750;letter-spacing:-.01em;white-space:nowrap;}
-#rptRoot .code{font-size:9px;color:#7b858e;font-variant-numeric:tabular-nums;
+#rptRoot .code{font-size:9.5px;color:#5b6670;font-variant-numeric:tabular-nums;
   letter-spacing:.02em;white-space:nowrap;}
 
 /* chips */
@@ -116,17 +117,18 @@
    grade looking like two different objects on one page. The second language,
    where there is one, is its own line by design (.alt2). */
 #rptRoot .g{display:inline-block;min-width:17px;text-align:center;color:#fff;
-  font-size:10px;font-weight:800;border-radius:3px;padding:1px 5px;line-height:1.4;
+  font-size:9.5px;font-weight:700;border-radius:3px;padding:1px 6px;line-height:1.5;
   white-space:nowrap;}
-#rptRoot .g .alt2{white-space:nowrap;}
+#rptRoot .g .alt2,#rptRoot .sev .alt2{display:inline;white-space:nowrap;font-size:.9em;font-weight:600;
+  letter-spacing:.02em;margin-left:2px;opacity:.9;}
 /* Outlined, never filled. A solid chip beside a solid severity chip reads as a
    second opinion on how bad the part is; the priority is not that — it is how
    the job gets scheduled. The outline keeps the urgency colour and says so. */
-#rptRoot .prio{display:inline-block;font-size:8px;font-weight:800;letter-spacing:.06em;
+#rptRoot .prio{display:inline-block;font-size:8.5px;font-weight:800;letter-spacing:.06em;
   background:#fff;border:1px solid currentColor;border-radius:2.5px;
   padding:1px 4.5px;vertical-align:1px;}
-#rptRoot .sev{display:inline-block;font-size:8.5px;font-weight:700;letter-spacing:.07em;
-  text-transform:uppercase;color:#fff;border-radius:3px;padding:2px 6px;line-height:1.25;}
+#rptRoot .sev{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.05em;
+  text-transform:uppercase;color:#fff;border-radius:3px;padding:2px 6px;line-height:1.3;white-space:nowrap;}
 
 /* the machine block */
 #rptRoot .mach{border-top:2.5px solid #16242c;padding-top:9px;}
@@ -134,8 +136,8 @@
 #rptRoot .machhd .u{font-size:19px;font-weight:800;letter-spacing:-.02em;}
 #rptRoot .machhd .c{font-size:11.5px;color:#5b6670;}
 #rptRoot .meta{display:flex;flex-wrap:wrap;gap:3px 22px;margin-top:6px;}
-#rptRoot .meta .m{font-size:10px;}
-#rptRoot .meta .m i{font-style:normal;color:#7b858e;letter-spacing:.06em;
+#rptRoot .meta .m{font-size:10.5px;}
+#rptRoot .meta .m i{font-style:normal;color:#5b6670;letter-spacing:.06em;
   text-transform:uppercase;font-size:8.5px;font-weight:700;margin-right:5px;}
 #rptRoot .verdict{font-size:12.5px;font-weight:650;padding:7px 11px;border-radius:4px;
   margin-top:10px;}
@@ -150,12 +152,13 @@
   border:1px solid #d7dde1;border-radius:5px;overflow:hidden;}
 #rptRoot .rrate .rc{padding:5px 11px;border-right:1px solid #e4e9ec;}
 #rptRoot .rrate .rc:last-child{border-right:0;flex:1;}
-#rptRoot .rrate .rk{font-size:8px;font-weight:700;letter-spacing:.13em;
-  color:#7b858e;text-transform:uppercase;}
-#rptRoot .rrate .rv{font-size:12.5px;font-weight:750;font-variant-numeric:tabular-nums;
-  line-height:1.25;}
-#rptRoot .rrate .rd{border-left:5px solid #16242c;}
-#rptRoot .rscale{font-size:8.5px;color:#7b858e;margin-top:4px;letter-spacing:.02em;}
+#rptRoot .rrate .rk{font-size:8.5px;font-weight:700;letter-spacing:.12em;
+  color:#5b6670;text-transform:uppercase;white-space:nowrap;}
+#rptRoot .rrate .rv{font-size:13px;font-weight:750;font-variant-numeric:tabular-nums;
+  line-height:1.3;white-space:nowrap;}
+#rptRoot .rrate .rv .alti{font-size:.85em;font-weight:500;color:#5b6670;}
+#rptRoot .rrate .rd{border-left:1px solid #e4e9ec;}
+#rptRoot .rscale{font-size:9.5px;color:#5b6670;margin-top:5px;letter-spacing:.01em;}
 #rptRoot .rscale b{color:#3d474f;font-weight:700;}
 /* THE DATA · EVIDENCE · REVIEW · APPROVAL strip — one honest row: what the
    office holds, not what it approves. A synchronised round is not approved,
@@ -164,9 +167,9 @@
   overflow:hidden;margin-top:14px;}
 #rptRoot .sstrip .sc{flex:1;padding:5px 10px;border-right:1px solid #e4e9ec;}
 #rptRoot .sstrip .sc:last-child{border-right:0;}
-#rptRoot .sstrip .sk{font-size:8px;font-weight:700;letter-spacing:.13em;
-  color:#7b858e;text-transform:uppercase;}
-#rptRoot .sstrip .sv{font-size:9.5px;font-weight:650;margin-top:1px;}
+#rptRoot .sstrip .sk{font-size:8.5px;font-weight:700;letter-spacing:.12em;
+  color:#5b6670;text-transform:uppercase;}
+#rptRoot .sstrip .sv{font-size:10.5px;font-weight:650;margin-top:1px;}
 #rptRoot .sstrip .sv.pend{color:#8a6100;}
 #rptRoot .sstrip .sv.ok{color:#146b2c;}
 /* THE APPROVAL / SIGN-OFF TABLE — three roles, the reference's own. The
@@ -174,9 +177,9 @@
    lines, because the app has no field that records them and inventing one
    would be the false reassurance this project exists to prevent. */
 #rptRoot .appr{width:100%;border-collapse:collapse;margin-top:15px;
-  font-size:9px;}
-#rptRoot .appr th{text-align:left;font-size:8px;font-weight:700;
-  letter-spacing:.11em;color:#7b858e;text-transform:uppercase;
+  font-size:10.5px;}
+#rptRoot .appr th{text-align:left;font-size:8.5px;font-weight:700;
+  letter-spacing:.11em;color:#5b6670;text-transform:uppercase;
   border-bottom:1.5px solid #c4ccd1;padding:0 8px 3px;}
 #rptRoot .appr td{border-bottom:1px solid #e4e9ec;padding:6px 8px;
   vertical-align:bottom;}
@@ -184,6 +187,7 @@
 #rptRoot .appr td .sg{display:inline-block;min-width:130px;border-bottom:1px solid #98a2a9;
   height:13px;}
 #rptRoot .appr td .nm{font-weight:650;}
+#rptRoot .appr td img{display:block;height:34px;max-width:170px;object-fit:contain;object-position:left;margin-bottom:2px;}
 /* THE MAINTENANCE-ACTION STRIP — recorded action, direct cause, and the
    control fields (owner, work order, due), each honest as "Not recorded"
    when the round does not carry it. */
@@ -195,9 +199,9 @@
   gap:3px 20px;margin-top:12px;
   padding:7px 11px;border:1px solid #d7dde1;border-radius:5px;
   background:#f6f8f9;}
-#rptRoot .mact .f{font-size:9.5px;}
-#rptRoot .mact .f i{font-style:normal;color:#7b858e;letter-spacing:.08em;
-  text-transform:uppercase;font-size:8px;display:block;}
+#rptRoot .mact .f{font-size:10.5px;}
+#rptRoot .mact .f i{font-style:normal;color:#5b6670;letter-spacing:.08em;
+  text-transform:uppercase;font-size:8.5px;display:block;}
 #rptRoot .mact .f b{font-weight:700;}
 #rptRoot .mact .miss{color:#8a6100;font-weight:650;}
 
@@ -221,8 +225,8 @@
 #rptRoot .wb{display:block;height:5px;background:#eef1f4;border-radius:3px;
   position:relative;overflow:hidden;min-width:52px;}
 #rptRoot .wb i{display:block;height:5px;border-radius:3px;}
-#rptRoot .subhd{font-size:9px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
-  color:#5b6670;margin-bottom:5px;}
+#rptRoot .subhd{font-size:9.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
+  color:#3d474f;margin-bottom:5px;}
 
 /* The machine, printed. On screen the frame is a picker; on paper it is the one
    picture that says where the wear is without reading a single number — a red
@@ -387,7 +391,7 @@
 #rptRoot .um-spot.done .um-n,#rptRoot .um-spot.act .um-n,
 #rptRoot .um-spot.watch .um-n{fill:#fff;}
 #rptRoot .um-spot.na .um-puck{fill:#e6eaee;stroke:#a9b2ba;stroke-dasharray:4 3;}
-#rptRoot .mapkey{display:flex;flex-wrap:wrap;gap:5px 16px;margin-top:6px;font-size:9.5px;color:#5b6670;}
+#rptRoot .mapkey{display:flex;flex-wrap:wrap;gap:5px 16px;margin-top:6px;font-size:10px;color:#3d474f;}
 #rptRoot .mapkey .i{display:inline-flex;align-items:center;gap:5px;}
 #rptRoot .mapkey .d{width:10px;height:10px;border-radius:50%;display:block;border:1.5px solid #5b6670;}
 
@@ -407,37 +411,40 @@
 #rptRoot .mast .mhead{display:flex;justify-content:space-between;align-items:baseline;gap:12px;}
 #rptRoot .mast .rno{font-size:10px;font-weight:700;letter-spacing:.06em;color:#5b6670;
   font-variant-numeric:tabular-nums;white-space:nowrap;}
-#rptRoot .mast .rno i{font-style:normal;color:#9aa2a9;font-weight:700;margin-right:5px;letter-spacing:.11em;}
+#rptRoot .mast .rno i{font-style:normal;color:#5b6670;font-weight:700;margin-right:5px;letter-spacing:.11em;}
 #rptRoot .mast .m1{font-size:20px;font-weight:800;letter-spacing:-.02em;line-height:1.1;margin-top:3px;}
 /* Its translation inline, not on a second line — the masthead already
    spends a title line, a subtitle line and a four-cell strip on identity;
    "General Inspection" / "Общий осмотр" cost it a fourth for one fact. */
 #rptRoot .mast .m1 .alti{font-size:.58em;font-weight:600;opacity:.68;margin-left:3px;}
-#rptRoot .mast .msub{font-size:11px;color:#5b6670;margin-top:3px;font-weight:600;}
-#rptRoot .mast .msub .unum{font-size:12px;font-weight:800;color:#16242c;letter-spacing:-.01em;}
-#rptRoot .mast .msub b{font-variant-numeric:tabular-nums;color:#3d474f;}
+/* The unit number is the one thing a reader brings to this page and looks
+   for first, so it is the biggest thing on the subtitle line; the date and
+   the hours are facts about the visit and sit quieter beside it. */
+#rptRoot .mast .msub{font-size:11.5px;color:#3d474f;margin-top:4px;font-weight:500;}
+#rptRoot .mast .msub .unum{font-size:17px;font-weight:800;color:#16242c;letter-spacing:-.01em;margin-right:2px;}
+#rptRoot .mast .msub b{font-variant-numeric:tabular-nums;color:#3d474f;font-weight:600;}
 /* The metadata strip — four evenly spaced labelled cells, the reference's own
    MODEL / SMU / INSPECTED BY / LOCATION row. */
 #rptRoot .mstrip{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;
   border:1px solid #d7dde1;border-radius:5px;overflow:hidden;margin-top:8px;}
 #rptRoot .mstrip .ms{padding:4px 10px;border-right:1px solid #e4e9ec;min-width:0;}
 #rptRoot .mstrip .ms:last-child{border-right:0;}
-#rptRoot .mstrip .ms i{display:block;font-style:normal;color:#7b858e;letter-spacing:.1em;
-  text-transform:uppercase;font-size:8px;font-weight:700;}
+#rptRoot .mstrip .ms i{display:block;font-style:normal;color:#5b6670;letter-spacing:.1em;
+  text-transform:uppercase;font-size:8.5px;font-weight:700;}
 #rptRoot .mstrip .ms b{font-weight:700;font-size:11.5px;font-variant-numeric:tabular-nums;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block;}
-#rptRoot .mstrip .ms .miss{color:#9aa2a9;font-weight:600;}
+#rptRoot .mstrip .ms .miss{color:#5b6670;font-weight:600;}
 
 /* When every position says the same thing, the sheet says it once. Four columns
    repeating one defect, one cause and one action is four times the ink for the
    same sentence, and it buries the thing that does differ — the photograph. */
 #rptRoot .common{border:1px solid #dfe4e9;border-left:3px solid #12161a;border-radius:0 5px 5px 0;
   padding:9px 12px;margin-top:12px;background:#fafbfc;}
-#rptRoot .common .k{font-size:7.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
-  color:#8b939b;}
+#rptRoot .common .k{font-size:8.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
+  color:#5b6670;}
 #rptRoot .common dl{display:grid;grid-template-columns:auto 1fr;gap:3px 10px;margin-top:5px;}
-#rptRoot .common dt{font-size:7.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
-  color:#8b939b;padding-top:2px;}
+#rptRoot .common dt{font-size:8.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+  color:#5b6670;padding-top:2px;}
 #rptRoot .common dd{font-size:11px;line-height:1.35;}
 #rptRoot .common dd b{font-weight:700;}
 /* A CARD IS AS TALL AS WHAT IS IN IT. Grid stretches every cell in a row to
@@ -451,7 +458,9 @@
 #rptRoot .board{display:grid;gap:8px;margin-top:10px;align-items:start;}
 #rptRoot .cel{border:1px solid #dfe4e9;border-radius:6px;overflow:hidden;background:#fff;
   page-break-inside:avoid;min-width:0;}
-#rptRoot .cel .ph{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:#f2f5f7;}
+/* The whole photograph at its own proportions, never cropped and never boxed
+   in grey: a portrait frame stands portrait, centred, up to 300 px tall. */
+#rptRoot .cel .ph{display:block;width:auto;max-width:100%;height:auto;max-height:300px;margin:0 auto;background:#fff;}
 /* The rest of the position's photographs, in a strip under the first. Stacked
    at full width they would be most of a page for one plug; this shows them in
    about the height of two, and the reader still gets the establishing shot big.
@@ -461,7 +470,7 @@
    see the crack in. */
 #rptRoot .cel .phx{display:grid;grid-template-columns:repeat(3,1fr);
   gap:1px;background:#dfe4e9;border-top:1px solid #dfe4e9;position:relative;}
-#rptRoot .cel .phx img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:#f2f5f7;}
+#rptRoot .cel .phx img{display:block;width:100%;aspect-ratio:4/3;object-fit:contain;background:#eef1f4;}
 #rptRoot .cel .bd{padding:6px 8px 7px;}
 /* Code, name and grade were three stacked lines for one fact — which
    position this is and how bad it is. One row now: the code and its
@@ -473,12 +482,12 @@
 #rptRoot .cel .pkrow{display:flex;flex-wrap:wrap;align-items:center;
   justify-content:space-between;gap:2px 8px;}
 #rptRoot .cel .pk{font-size:11px;font-weight:750;letter-spacing:-.01em;line-height:1.3;min-width:0;}
-#rptRoot .cel .pn{font-size:.86em;font-weight:500;color:#7b858e;}
+#rptRoot .cel .pn{font-size:.9em;font-weight:500;color:#5b6670;}
 #rptRoot .cel .chips{display:flex;gap:4px;align-items:center;flex:0 0 auto;flex-wrap:wrap;}
 #rptRoot .cel dl{margin-top:5px;display:grid;grid-template-columns:auto 1fr;gap:2px 7px;min-width:0;}
-#rptRoot .cel dt{font-size:7.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
-  color:#8b939b;padding-top:1px;min-width:0;overflow-wrap:anywhere;}
-#rptRoot .cel dd{font-size:9.5px;line-height:1.35;min-width:0;overflow-wrap:anywhere;}
+#rptRoot .cel dt{font-size:8.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:#5b6670;padding-top:1px;min-width:0;overflow-wrap:anywhere;}
+#rptRoot .cel dd{font-size:10.5px;line-height:1.4;min-width:0;overflow-wrap:anywhere;}
 /* The owner/target/status line is a full sentence, not an inline code, so it
    wraps inside a narrow gallery card instead of running off the edge — a
    nowrap .code line there set the value column wider than the card and the
@@ -487,7 +496,7 @@
    and keep their nowrap. */
 #rptRoot .cel div.code{white-space:normal;}
 #rptRoot .cel dd b{font-weight:700;}
-#rptRoot .cel .cm{font-size:9px;line-height:1.4;color:#2b333a;margin-top:6px;
+#rptRoot .cel .cm{font-size:10.5px;line-height:1.45;color:#16242c;margin-top:6px;
   border-top:1px solid #eaeef1;padding-top:5px;}
 #rptRoot .cel .num{font-variant-numeric:tabular-nums;}
 #rptRoot .b4{grid-template-columns:repeat(4,1fr);}
@@ -502,8 +511,14 @@
 #rptRoot .board.gal{gap:9px 8px;}
 #rptRoot .board.gal.b1{max-width:none;}
 #rptRoot .cel .phg{display:grid;gap:2px;background:#dfe4e9;}
-#rptRoot .cel .phg img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;
-  background:#f2f5f7;}
+/* A finding's photographs side by side at their own proportions on white —
+   the grid of 130 px tracks put one portrait frame in the corner of a grey
+   band the width of the sheet. */
+#rptRoot .cel .phg.gallery{display:flex;flex-wrap:wrap;gap:6px;background:#fff;padding:6px 6px 0;}
+#rptRoot .cel .phg.gallery img{width:auto;max-width:100%;height:186px;aspect-ratio:auto;object-fit:contain;background:#fff;
+  border:1px solid #dfe4e9;border-radius:3px;}
+#rptRoot .cel .phg img{display:block;width:100%;aspect-ratio:4/3;object-fit:contain;
+  background:#eef1f4;}
 /* One floor size for every tile on the sheet, not one computed per card. A
    card sized to how MANY photographs a position has (b2's half-page column,
    gridCols' per-card division) is why the same physical close-up came out a
@@ -515,26 +530,30 @@
 #rptRoot .cel .phg.gallery{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));}
 #rptRoot .allok{background:#eef6ef;color:#146b2c;font-size:12px;font-weight:650;
   padding:8px 12px;border-radius:4px;margin-top:12px;}
-#rptRoot .quiet{font-size:10px;color:#5b6670;margin-top:10px;line-height:1.5;}
+#rptRoot .quiet{font-size:10.5px;color:#3d474f;margin-top:10px;line-height:1.5;}
 #rptRoot .quiet b{color:#12161a;font-weight:700;}
 #rptRoot .shsign{display:flex;gap:34px;align-items:flex-end;margin-top:16px;
   border-top:1px solid #dfe4e9;padding-top:11px;}
-#rptRoot .shots{display:flex;flex-wrap:wrap;gap:7px;}
-#rptRoot .shots figure{width:150px;}
-#rptRoot .shots img{width:150px;height:112px;object-fit:cover;border-radius:3px;
+/* Three frames to the width of the sheet, each the WHOLE photograph. A
+   cropped 150 px stamp is what management called "distorted": object-fit
+   cover cut the evidence and the small tile rasterised soft. */
+#rptRoot .shots{display:flex;flex-wrap:wrap;gap:10px 8px;}
+#rptRoot .shots figure{width:auto;max-width:248px;}
+#rptRoot .shots img{height:186px;width:auto;max-width:248px;object-fit:contain;background:#fff;border-radius:3px;
   border:1px solid #dfe4e9;display:block;}
-#rptRoot .shots figcaption{font-size:8.5px;color:#5b6670;margin-top:3px;line-height:1.3;}
+#rptRoot .shots figcaption{font-size:9.5px;color:#3d474f;margin-top:4px;line-height:1.3;}
 /* General evidence: the same size and rhythm as the point galleries, so a
    reader does not read "different size" as "different importance". */
-#rptRoot .genrow{display:flex;flex-wrap:wrap;gap:8px;}
-#rptRoot .genrow figure{width:176px;margin:0;}
-#rptRoot .genrow img{width:176px;height:132px;object-fit:cover;border-radius:3px;
+#rptRoot .genrow{display:flex;flex-wrap:wrap;gap:10px 8px;}
+#rptRoot .genrow figure{width:auto;max-width:248px;margin:0;}
+#rptRoot .genrow img{height:186px;width:auto;max-width:248px;object-fit:contain;background:#fff;border-radius:3px;
   border:1px solid #dfe4e9;display:block;}
-#rptRoot .genwhy{font-size:8.5px;color:#5b6670;margin-top:5px;line-height:1.35;}
+#rptRoot .genrow figcaption{font-size:9.5px;color:#3d474f;margin-top:4px;line-height:1.3;}
+#rptRoot .genwhy{font-size:9.5px;color:#5b6670;margin-top:6px;line-height:1.4;}
 /* Said plainly and without alarm. A missing file is a synchronisation problem,
    and a reader who cannot tell that from a bad measurement will distrust the
    measurements too. */
-#rptRoot .evgap{font-size:9px;line-height:1.45;color:#5b6670;padding:6px 9px;
+#rptRoot .evgap{font-size:10px;line-height:1.45;color:#3d474f;padding:6px 9px;
   border:1px solid #dfe4e9;border-left:3px solid #b9c2c9;border-radius:3px;
   background:#f6f8f9;}
 #rptRoot .evgap b{color:#3d474f;}
@@ -544,7 +563,7 @@
 #rptRoot .docst{display:flex;gap:10px;align-items:baseline;margin:0 0 14px;
   padding:7px 0 8px;border-top:2px solid #3d474f;border-bottom:1px solid #dfe4e9;}
 #rptRoot .docst b{font-size:11px;letter-spacing:.13em;white-space:nowrap;color:#3d474f;}
-#rptRoot .docst span{font-size:9px;line-height:1.45;color:#5b6670;}
+#rptRoot .docst span{font-size:10px;line-height:1.45;color:#3d474f;}
 #rptRoot .docst.pre{border-top-color:#a8791f;}
 #rptRoot .docst.pre b{color:#8c6317;}
 /* The one-field form, for a sheet with no room for the block. */
@@ -559,7 +578,7 @@
 #rptRoot .sign img{height:44px;display:block;}
 #rptRoot .sign .nm{font-size:11.5px;font-weight:700;margin-top:4px;}
 #rptRoot .sign .rl{font-size:8.5px;letter-spacing:.11em;text-transform:uppercase;
-  color:#7b858e;font-weight:700;}
+  color:#5b6670;font-weight:700;}
 
 #rptRoot .legend{display:flex;gap:26px;}
 #rptRoot .legend > div{flex:1;}
@@ -593,7 +612,7 @@
 #rptRoot .alti{color:#8b939b;font-weight:400;margin-left:3px;}
 /* Inside a coloured chip the translation cannot go grey — it borrows the
    chip's own ink and steps back with weight and size instead. */
-#rptRoot .alt2{display:block;font-size:.85em;font-weight:600;letter-spacing:.04em;
+#rptRoot .alt2{display:inline;font-size:.85em;font-weight:600;letter-spacing:.04em;
   opacity:.82;line-height:1.2;}
 
 /* ---- what the numbers on the chain row mean -----------------------------
@@ -626,7 +645,7 @@
    and the rate is what makes them believable, so they travel together or the
    hours read like a promise. */
 #rptRoot td.life b{display:block;font-size:11px;white-space:nowrap;}
-#rptRoot td.life i{display:block;font-style:normal;font-size:8.5px;color:#5b6670;
+#rptRoot td.life i{display:block;font-style:normal;font-size:9.5px;color:#5b6670;
   white-space:nowrap;}
 /* One column per round plus a name, a limit, a change and a bar is eight
    columns of a 760px page, and every heading now carries a second language.
@@ -669,17 +688,17 @@
 /* Code, name and grade already share one row by default (.pkrow, above) —
    mini just shrinks it and the fields under it. */
 #rptRoot .board.mini .cel .pkrow{gap:1px 6px;}
-#rptRoot .board.mini .cel .pk{font-size:9.5px;}
+#rptRoot .board.mini .cel .pk{font-size:10.5px;}
 #rptRoot .board.mini .cel .chips{gap:3px;}
 #rptRoot .board.mini .cel dl{margin-top:3px;gap:1px 5px;}
-#rptRoot .board.mini .cel dt{font-size:6.5px;}
-#rptRoot .board.mini .cel dd{font-size:8.5px;line-height:1.3;}
-#rptRoot .board.mini .cel .cm{font-size:8px;margin-top:3px;padding-top:3px;}
-#rptRoot .board.mini .cel .g,#rptRoot .board.mini .cel .sev{font-size:8px;padding:1px 4px;}
-#rptRoot .ocommon{font-size:9px;color:#2b333a;margin-top:6px;line-height:1.45;
+#rptRoot .board.mini .cel dt{font-size:8px;}
+#rptRoot .board.mini .cel dd{font-size:9.5px;line-height:1.35;}
+#rptRoot .board.mini .cel .cm{font-size:9.5px;margin-top:3px;padding-top:3px;}
+#rptRoot .board.mini .cel .g,#rptRoot .board.mini .cel .sev{font-size:8.5px;padding:1px 5px;}
+#rptRoot .ocommon{font-size:10px;color:#2b333a;margin-top:6px;line-height:1.45;
   background:#f4f7f9;border-left:2px solid #c9d2d9;padding:4px 8px;border-radius:0 3px 3px 0;}
 #rptRoot .ocommon b{font-weight:700;color:#12161a;margin-right:6px;}
-#rptRoot .sec.olderr .quiet{margin-top:6px;font-size:9px;}
+#rptRoot .sec.olderr .quiet{margin-top:6px;font-size:10px;}
 
 /* ---- one row per point, for a round measured in grades --------------------
    The millimetre table puts four digits in a 46px column. This one puts a
@@ -798,6 +817,7 @@
       ap_tech:"CM Technician", ap_rel:"Reliability Engineer", ap_sup:"Maintenance Supervisor",
       ap_tech_s:"Inspection complete", ap_rel_s:"Reviewed / returned",
       ap_sup_s:"Approved / work required",
+      ap_sup_v:"Verified in the field (signed)",
       ma_head:"Maintenance action", ma_action:"Recorded action", ma_cause:"Direct cause",
       ma_owner:"Owner", ma_wo:"Work order", ma_due:"Due date", ma_none:"Not recorded",
       /* Type-body subheadings and column labels, to the v2 single-inspection
@@ -982,6 +1002,7 @@
       ap_tech:"Техник CM", ap_rel:"Инженер по надёжности", ap_sup:"Мастер по обслуживанию",
       ap_tech_s:"Осмотр завершён", ap_rel_s:"Проверено / возвращено",
       ap_sup_s:"Утверждено / требуется работа",
+      ap_sup_v:"Проверено на месте (подпись)",
       ma_head:"Действие по обслуживанию", ma_action:"Записанное действие", ma_cause:"Прямая причина",
       ma_owner:"Ответственный", ma_wo:"Наряд-заказ", ma_due:"Срок", ma_none:"Не записано",
       tb_mp:"Данные и фото по компонентам",
@@ -1387,7 +1408,7 @@
        curLang by CMR.sections. */
     var b=(GR && curBi) ? GR.name(n, curLang==="ru"?"en":"ru") : "";
     return '<span class="g" style="background:'+c+';color:'+ink(c)+'">'+n+' – '+esc(a)
-      + (b && b!==a ? '<span class="alt2">'+esc(b)+'</span>' : "") + '</span>'; }
+      + (b && b!==a ? '<span class="alt2">/ '+esc(b)+'</span>' : "") + '</span>'; }
   /* The ISO class chip is shown only where there is no grade to show: a
      graded point's class is derived from the grade and would only repeat it
      in other words. */
@@ -1399,7 +1420,7 @@
     var c=SEV_HEX[s]||"#8a939b", a=ctx.sevLabel(s);
     var b=ctx.sevLabelAlt ? ctx.sevLabelAlt(s) : "";
     return '<span class="sev" style="background:'+c+';color:'+ink(c)+'">'+esc(a)
-      + (b && b!==a ? '<span class="alt2">'+esc(b)+'</span>' : "") + '</span>'; }
+      + (b && b!==a ? '<span class="alt2">/ '+esc(b)+'</span>' : "") + '</span>'; }
   function wearBar(pct){
     var p=Math.max(0,Math.min(130,Number(pct)||0));
     var col = p>=100?GRADE_HEX[5] : p>=80?GRADE_HEX[3] : GRADE_HEX[1];
@@ -2140,14 +2161,15 @@
        the two different jobs. */
     var gw = function (k) { return String(T(k)).split(" — ")[0]; };
     var gwA = function (k) { return String(T.alt(k)).split(" — ")[0]; };
-    var level = n ? T.both(n + " – " + gw("g_" + n),
-                           n + " – " + gwA("g_" + n)) : T.I("rr_none");
+    /* One line: "3 – Degraded / Ухудшенное". The translation used to stack
+       under the level as a second line and the strip read as broken. */
+    var level = n ? T.both(n + " – " + gw("g_" + n), gwA("g_" + n), "alti") : T.I("rr_none");
     var dec = T.I("dec_" + (n || 0));
     var scale = '<div class="rscale"><b>' + esc(T("rr_scale")) + ':</b> '
       + GRADE_LEVELS.map(function (g) { return g + " " + esc(gw("g_" + g)); }).join(" · ")
       + '</div>';
     return '<div class="rrate">'
-      + '<div class="rc" style="border-left:5px solid ' + col + '">'
+      + '<div class="rc" style="border-left:4px solid ' + col + '">'
         + '<div class="rk">' + esc(T("rr_rating")) + '</div>'
         + '<div class="rv" style="color:' + col + '">' + (n || "—") + '</div></div>'
       + '<div class="rc"><div class="rk">' + esc(T("rr_level")) + '</div>'
@@ -2206,19 +2228,29 @@
      record; the reliability and supervisor rows stay open lines, because the
      application holds no field that records them — an inked line a person signs
      is honest where a printed "Approved" nobody granted would not be. */
+  /* THE SUPERVISOR WHO SIGNED ON THE PHONE IS ON THE SHEET. The phone records
+     "Verified by (supervisor)" — a name and a drawn signature — and the office
+     PDF printed the Maintenance Supervisor row as an open line while the
+     phone's own PDF printed the signature. The row is filled from the record
+     where the record has it, with the signature as an image beside the date,
+     and stays an open line where it does not: nothing is invented. */
   function approvalBlock(T, rec) {
-    function row(role, name, status, date, open) {
+    function row(role, name, status, date, open, sig) {
       return '<tr><td class="rl">' + esc(role) + '</td>'
         + '<td>' + (open ? '<span class="sg"></span>' : '<span class="nm">' + esc(name) + '</span>') + '</td>'
         + '<td>' + esc(status) + '</td>'
-        + '<td>' + (date ? '<span class="nm">' + esc(date) + '</span>' : '<span class="sg"></span>') + '</td></tr>';
+        + '<td>' + (sig ? '<img src="' + esc(sig) + '" alt="">' : '')
+                 + (date ? '<span class="nm">' + esc(date) + '</span>' : (sig ? '' : '<span class="sg"></span>')) + '</td></tr>';
     }
+    var verified = !!(rec.sup || rec.signUrl);
     return '<table class="appr"><thead><tr>'
       + '<th>' + esc(T("ap_role")) + '</th><th>' + esc(T("ap_name")) + '</th>'
       + '<th>' + esc(T("ap_status")) + '</th><th>' + esc(T("ap_date")) + '</th></tr></thead><tbody>'
       + row(T("ap_tech"), rec.by || T("ma_none"), T("ap_tech_s"), rec.by ? (rec.date || "") : "", !rec.by)
       + row(T("ap_rel"), "", T("ap_rel_s"), "", true)
-      + row(T("ap_sup"), "", T("ap_sup_s"), "", true)
+      + (verified
+          ? row(T("ap_sup"), rec.sup || T("ma_none"), T("ap_sup_v"), rec.date || "", false, rec.signUrl || "")
+          : row(T("ap_sup"), "", T("ap_sup_s"), "", true))
       + '</tbody></table>';
   }
   /* The four-cell metadata strip — the reference's MODEL / SMU / INSPECTED BY /
@@ -2273,7 +2305,9 @@
   function tbMiss(T, k) { return '<span class="muted">' + esc(T(k || "c_notrec")) + '</span>'; }
   function tbGrade(T, it) {
     var n = gnum(it.grade);
-    return n ? (n + ' – ' + esc(gname(n))) : (it.sev ? esc(it.sev) : tbMiss(T));
+    /* One line: "3 – Degraded" split over two rows in a narrow grade column
+       read as two different things. */
+    return n ? ('<span style="white-space:nowrap">' + n + ' – ' + esc(gname(n)) + '</span>') : (it.sev ? esc(it.sev) : tbMiss(T));
   }
   function tbAct(T, it) {
     return it.action ? '<b>' + T.both(it.action, it.actionAlt, "alti") + '</b>'

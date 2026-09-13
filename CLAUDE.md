@@ -214,6 +214,37 @@ reclaimed file must rig ALL THREE readers (`tests/staleblob.cjs`,
 `tests/recovery.cjs`); one that rigs FileReader alone is the field case, and
 the photograph is expected to be SENT (`tests/readpath.cjs`).
 
+**An upload is dead when its bytes stop moving, not when a clock runs out.**
+"Press Sync four times and it goes through" (build 348): `fetchT` gave a POST
+90 s whatever it was doing, a 4 MB original at 55 KB/s needs 100, the server
+kept the file the client abandoned, and the next press found it and gave up
+on the next one. `postT` (XMLHttpRequest, because fetch cannot see its own
+upload) bounds a POST by `UP_IDLE` of silence while the body goes up,
+`UP_REPLY` once it is all up and the server is hashing and writing it, and
+`UP_MAX` outright; the error is the app's own timeout sentence
+(`tests/upidle.cjs`). `fetchT` stays for GETs and the ping.
+
+**The office's photo cache is keyed by path, and the bucket rewrites a path.**
+A round the phone re-sends — a retake, a new signature — lands under the same
+name with other bytes, and the dashboard served whatever it had first seen
+under that name for the life of the disk (a signature where the overview
+photograph belonged, on 2026-09-13). `cacheGet(id, size)` drops a cached copy
+whose length is not the index's, `fetchedSize` refetches a name the index now
+reports at another length, and `CMDash.signUrlOf(rec)` hands the round's
+`_SIGN.png` to the report, where the Maintenance Supervisor row of the
+approval table is filled from the record — name, "Verified in the field
+(signed)", date, the signature as an image — and stays an open line where the
+record has none (`tests/officesign.cjs`).
+
+**The report's type scale has a floor.** No label under 8.5 px, no text
+lighter than `#5b6670` (labels) or `#3d474f` (secondary text); the unit
+number is the largest thing on the subtitle line and the date and hours sit
+quieter beside it; a grade or severity chip is ONE line with its translation
+inline after a slash; a photograph keeps its own proportions (`object-fit:
+contain`, height-bounded, on white) and is never cropped into a 4:3 stamp;
+the phone's report thumbnails are `THUMB_PX` (900) at `THUMB_Q` (0.8). Senior
+management read this on paper; 7.5 px grey was a microscope job.
+
 **THE PAGE MUST NEVER UNREGISTER THE WORKER OR DELETE A CACHE.** Until build
 246 the Update button did exactly that — unregister every worker, delete every
 cache, swallow any refetch that failed, navigate. On a flaky link that left the

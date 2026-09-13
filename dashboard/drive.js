@@ -35,6 +35,13 @@
 
   let index = {};                       // file name -> {id, size}
   let fetched = {};                     // file name -> objectURL (or null if it failed)
+  /* The byte count of what was fetched under each name, so a name the index
+     now reports at another length — the phone re-sent the file — is fetched
+     again instead of shown from memory. */
+  let fetchedSize = {};
+  const stale = nm => !!(fetched[nm] && fetchedSize[nm] != null && index[nm]
+                         && Number(index[nm].size) > 0 && fetchedSize[nm] !== Number(index[nm].size));
+  const need = nm => !!(nm && index[nm] && (!(nm in fetched) || stale(nm)));
   let legacy = false;                   // deployed script predates ?action=records
 
   /* ---- THE FOLDER'S OBJECT INDEX IS NOT OPTIONAL ------------------------
@@ -445,7 +452,7 @@
         for (const e of (Array.isArray(it && it.att) ? it.att : [])) {
           const key = String((e && e.serverObjectId) || "");
           const nm = key ? key.split("/").pop() : String((e && e.storedName) || "");
-          if (nm && index[nm] && !(nm in fetched)) names.push(nm);
+          if (need(nm)) names.push(nm);
         }
         /* EVERY name the point could be under, not just the first.
            A machine-level photograph is filed by its category — OVERVIEW,
@@ -465,17 +472,17 @@
         // so a longer list costs lookups, not round trips.
         for (const base of bases) {
           for (const nm of window.CMDash.photoNames(base, rec)) {
-            if (index[nm] && !(nm in fetched)) names.push(nm);
+            if (need(nm)) names.push(nm);
           }
           for (const nm of window.CMDash.videoNames(base, rec)) {
-            if (index[nm] && !(nm in fetched)) names.push(nm);
+            if (need(nm)) names.push(nm);
           }
         }
       }
       const stem = `${rec.equip}_${(rec.date || "").split("-").reverse().join(".")}_${rec.type}_SIGN`;
       const dev = String(rec.dev || "");
       for (const sig of (dev ? [`${stem}~${dev}.png`, `${stem}.png`] : [`${stem}.png`]))
-        if (index[sig] && !(sig in fetched)) names.push(sig);
+        if (need(sig)) names.push(sig);
     }
     return [...new Set(names)];
   }
@@ -499,11 +506,23 @@
 
   const MEDIA_CACHE = "cm-media-v1";
   const MEDIA_CAP = 1500;                 // files; ~immutable, so FIFO is enough
-  async function cacheGet(id) {
+  /* A PATH IS NOT AN IMMUTABLE ID ON THIS BACKEND. The bucket files a photograph
+     under its name, and a round the phone re-sends — a retake, a new
+     signature — rewrites the same name with different bytes. The cache is
+     keyed by that name, so it went on handing back whatever it had first seen
+     under it, for the life of the disk. A copy whose length is not the length
+     the index reports now is a different file: dropped, and fetched again. */
+  async function cacheGet(id, size) {
     try {
       const c = await caches.open(MEDIA_CACHE);
       const r = await c.match("/cm-media/" + id);
-      return r ? URL.createObjectURL(await r.blob()) : null;
+      if (!r) return null;
+      const blob = await r.blob();
+      if (size != null && Number(size) > 0 && blob.size !== Number(size)) {
+        try { await c.delete("/cm-media/" + id); } catch (e) {}
+        return null;
+      }
+      return URL.createObjectURL(blob);
     } catch (e) { return null; }
   }
   async function cachePut(id, blob) {
@@ -558,14 +577,14 @@
     const e = index[name];
     if (!e) return null;
     if (fetched[name]) return fetched[name];
-    const cached = await cacheGet(e.id);
-    if (cached) { fetched[name] = cached; window.CMDash.addPhoto(name, cached); return cached; }
+    const cached = await cacheGet(e.id, e.size);
+    if (cached) { fetched[name] = cached; fetchedSize[name] = Number(e.size) || null; window.CMDash.addPhoto(name, cached); return cached; }
     const r = await api({ action: "file", id: e.id });
     if (!r || !r.data) { fetched[name] = null; return null; }
     const blob = b64ToBlob(r.data, r.mime);
     const url = URL.createObjectURL(blob);
     await cachePut(e.id, blob);
-    fetched[name] = url;
+    fetched[name] = url; fetchedSize[name] = blob.size;
     window.CMDash.addPhoto(name, url);
     return url;
   }
@@ -589,8 +608,8 @@
        at all the second time. */
     const miss = [];
     for (const nm of names) {
-      const url = await cacheGet(index[nm].id);
-      if (url) { fetched[nm] = url; window.CMDash.addPhoto(nm, url); }
+      const url = await cacheGet(index[nm].id, index[nm].size);
+      if (url) { fetched[nm] = url; fetchedSize[nm] = Number(index[nm].size) || null; window.CMDash.addPhoto(nm, url); }
       else miss.push(nm);
     }
     if (!miss.length) { if (onProgress) onProgress(names.length, names.length); return names.length; }
@@ -622,9 +641,9 @@
           const blob = b64ToBlob(f.data, f.mime);
           cachePut(id, blob);                      // not awaited: the picture goes up now
           const url = URL.createObjectURL(blob);
-          fetched[nm] = url;
+          fetched[nm] = url; fetchedSize[nm] = blob.size;
           window.CMDash.addPhoto(nm, url);
-        } catch (e) { fetched[nm] = null; }        // remember the failure, don't retry forever
+        } catch (e) { fetched[nm] = null; delete fetchedSize[nm]; }   // remember the failure, don't retry forever
         if (onProgress) onProgress(++done, names.length);
       }
     });

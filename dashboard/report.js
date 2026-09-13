@@ -280,7 +280,7 @@
       date: rec.date || "",
       by: rec.by || "", sup: rec.sup || "", smu: rec.smu || "",
       gps: rec.gps || null,
-      signUrl: rec.signUrl || "",
+      signUrl: rec.signUrl || (window.CMDash && CMDash.signUrlOf ? CMDash.signUrlOf(rec) : ""),
       ...(() => { const m = reportMap(rec, (opts && opts.art && opts.art[rec.equip + "|" + rec.type]) || "");
                   return { mapHTML: m.html, mapKey: m.key }; })(),
       zones: rec.type === "TB" ? bodyZones(rec) : null,

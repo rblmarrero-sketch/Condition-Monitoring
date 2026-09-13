@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=349">
+<link rel="manifest" href="manifest.webmanifest?v=350">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=349">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=349">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=349">
+<link rel="apple-touch-icon" href="icon-192.png?v=350">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=350">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=350">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2469,15 +2469,15 @@ function bootDel(k){ try { localStorage.removeItem(k); } catch (e) {} }
   }
 })();
 </script>
-<script src="native.js?v=349"></script>
-<script src="upload-defaults.js?v=349"></script>
-<script src="hme.js?v=349"></script>
-<script src="mp-fc.js?v=349"></script>
-<script src="hme-cascade.js?v=349"></script>
-<script src="assets.js?v=349"></script>
-<script src="temp-limits.js?v=349"></script>
-<script src="normalize.js?v=349"></script>
-<script src="terms.js?v=349"></script>
+<script src="native.js?v=350"></script>
+<script src="upload-defaults.js?v=350"></script>
+<script src="hme.js?v=350"></script>
+<script src="mp-fc.js?v=350"></script>
+<script src="hme-cascade.js?v=350"></script>
+<script src="assets.js?v=350"></script>
+<script src="temp-limits.js?v=350"></script>
+<script src="normalize.js?v=350"></script>
+<script src="terms.js?v=350"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2496,25 +2496,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=349"></script>
-<script src="edits.js?v=349"></script>
-<script src="due.js?v=349"></script>
-<script src="wear.js?v=349"></script>
-<script src="wear-figs.js?v=349"></script>
-<script src="wear-map.js?v=349"></script>
-<script src="machine-photos.js?v=349"></script>
-<script src="machine-fig.js?v=349"></script>
-<script src="get.js?v=349"></script>
-<script src="points.js?v=349"></script>
-<script src="uc-points.js?v=349"></script>
-<script src="inspect-guide.js?v=349"></script>
-<script src="get-figs.js?v=349"></script>
-<script src="body-points.js?v=349"></script>
-<script src="body-map.js?v=349"></script>
-<script src="lube.js?v=349"></script>
-<script src="lube-overrides.js?v=349"></script>
-<script src="lube2027.js?v=349"></script>
-<script src="report-core.js?v=349"></script>
+<script src="grade.js?v=350"></script>
+<script src="edits.js?v=350"></script>
+<script src="due.js?v=350"></script>
+<script src="wear.js?v=350"></script>
+<script src="wear-figs.js?v=350"></script>
+<script src="wear-map.js?v=350"></script>
+<script src="machine-photos.js?v=350"></script>
+<script src="machine-fig.js?v=350"></script>
+<script src="get.js?v=350"></script>
+<script src="points.js?v=350"></script>
+<script src="uc-points.js?v=350"></script>
+<script src="inspect-guide.js?v=350"></script>
+<script src="get-figs.js?v=350"></script>
+<script src="body-points.js?v=350"></script>
+<script src="body-map.js?v=350"></script>
+<script src="lube.js?v=350"></script>
+<script src="lube-overrides.js?v=350"></script>
+<script src="lube2027.js?v=350"></script>
+<script src="report-core.js?v=350"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -10635,7 +10635,7 @@ async function teamPhotosFor(g,rec,say){
          `||=` used to run before the decode, so a file that would not decode
          left the position carrying an empty list — a position that says it
          has photographs and has none. */
-      try{ const th=await blobToThumb(b64Blob(f.data,f.mime),420);
+      try{ const th=await blobToThumb(b64Blob(f.data,f.mime),THUMB_PX);
            (out[meta.key] ||= []).push(th); }catch(e){}
     }
   }
@@ -11657,6 +11657,11 @@ function itemLabelFor(rec,k){
    one operation that already needs the most of it. The capture screen has had
    urlPool() for exactly this reason since it shipped; this path never used it
    because it converts once and throws the URL away. It just never threw it. */
+/* THE PHOTOGRAPH A PHONE-MADE REPORT PRINTS. 420 px at 0.7 was what management
+   called "distorted": a 248 px frame on the sheet is rasterised at 1.8×, so
+   the source has to hold at least ~450 px across, and a plug close-up needs
+   the detail on top of that. 900 px at 0.8 is about 120 KB a photograph. */
+const THUMB_PX=900, THUMB_Q=0.8;
 async function blobToThumb(blob,max){
   const url=URL.createObjectURL(blob);
   try{
@@ -11664,7 +11669,7 @@ async function blobToThumb(blob,max){
       i.onerror=()=>rej(new Error("could not decode this image"));i.src=url;});
     const s=Math.min(1,max/Math.max(img.width,img.height)); const w=Math.round(img.width*s),h=Math.round(img.height*s);
     const c=document.createElement("canvas");c.width=w;c.height=h;c.getContext("2d").drawImage(img,0,0,w,h);
-    return c.toDataURL("image/jpeg",0.7);
+    return c.toDataURL("image/jpeg",THUMB_Q);
   } finally { try{ URL.revokeObjectURL(url); }catch(_){ } }
 }
 /* ===================== the report =====================
@@ -11894,7 +11899,7 @@ async function rptRecords(onlyId){
         (meta.temp&&p.tempV)&&`${p.tempV} °C${p.tempA?` / ${p.tempA}`:""}` ].filter(Boolean);
       const photos=[];
       for(const b of (p.photos||(p.photoBlob?[p.photoBlob]:[])))
-        { try{ photos.push(await blobToThumb(b,420)); }catch(e){} }
+        { try{ photos.push(await blobToThumb(b,THUMB_PX)); }catch(e){} }
       const a1=ASSET_BY[rec.equip]||{};
       const lube = meta.lube
         ? lubeReportBlock(a1.m||"", a1.cls||"", k,
@@ -12467,7 +12472,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="349";
+const BUILD="350";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -13079,8 +13084,7 @@ async function putBatch(UP, files, rec, sent){
   };
   if(!built.length) throw unreadableErr();
   const body={ op:"batch", folder, secret:UP.sec||"", dev:(rec&&rec.dev)||DEVICE, files: built };
-  const r=await fetchT(UP.url,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
-                               body:JSON.stringify(body)});
+  const r=await postT(UP.url, JSON.stringify(body));
   if(!r.ok) throw new Error(await httpErr(r));
   let j=null; try{ j=JSON.parse(await r.text()); }catch(e){}
   if(!j) throw new Error("Unexpected reply — check the deployment is set to “Anyone”.");
@@ -13466,6 +13470,44 @@ function fetchT(url,opts,ms){
     .finally(()=>clearTimeout(t));
 }
 const t_up_timeout=()=>t("up_timeout");
+/* AN UPLOAD IS DEAD WHEN ITS BYTES STOP MOVING, NOT WHEN A CLOCK RUNS OUT.
+
+   Read off a handset on build 348: "press Sync four times and it goes
+   through". fetchT() abandons a POST ninety seconds after it starts, whatever
+   it is doing — and a 4 MB original at the 55 KB/s that phone measured takes
+   a hundred. The server, which reads the whole body before it answers, kept
+   the file the client had given up on; the next press found it already there
+   (a duplicate costs nothing), reached the next big one, and gave up on that
+   — one photograph a press, and an error every time. fetch() cannot see its
+   own upload progress; XMLHttpRequest can, so a POST is bounded by UP_IDLE
+   of NOTHING moving in either direction, and by UP_MAX outright. The reply
+   is shaped like fetch's so the callers did not change. */
+/* Three clocks, each for a different silence: UP_IDLE while the body is
+   going up and nothing has moved; UP_REPLY once the body is all up and the
+   server is hashing and writing it (a 5 MB original into the bucket is
+   seconds of work during which no byte can move in either direction — an
+   idle clock alone would call that dead); UP_MAX outright. */
+const UP_IDLE=45000, UP_REPLY=180000, UP_MAX=900000;
+function postT(url, body, idle, max, reply){
+  if(typeof XMLHttpRequest==="undefined")
+    return fetchT(url,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body}, max||UP_MAX);
+  return new Promise((res,rej)=>{
+    const x=new XMLHttpRequest(); let t=null, cap=null, why="";
+    const stop=()=>{ clearTimeout(t); clearTimeout(cap); };
+    const arm=ms=>{ clearTimeout(t); t=setTimeout(()=>{ why="idle"; try{ x.abort(); }catch(_){ } }, ms); };
+    const onUp=()=>arm(idle||UP_IDLE);
+    try{ x.open("POST",url,true); x.setRequestHeader("Content-Type","text/plain;charset=utf-8"); }
+    catch(e){ return rej(e); }
+    if(x.upload){ try{ x.upload.onprogress=onUp; x.upload.onload=()=>arm(reply||UP_REPLY); }catch(_){ } }
+    x.onprogress=onUp;
+    x.onload=()=>{ stop(); res({ ok:x.status>=200&&x.status<300, status:x.status, text:()=>Promise.resolve(x.responseText||"") }); };
+    x.onerror=()=>{ stop(); rej(new TypeError("Failed to fetch")); };
+    x.onabort=()=>{ stop(); rej(new Error(why ? t_up_timeout() : "aborted")); };
+    cap=setTimeout(()=>{ why="max"; try{ x.abort(); }catch(_){ } }, max||UP_MAX);
+    onUp();
+    try{ x.send(body); }catch(e){ stop(); rej(e); }
+  });
+}
 
 async function putOne(UP, name, blob, type, ctx, aid){
   const folder=expandFolder(UP.folder||"", ctx);
@@ -13483,8 +13525,7 @@ async function putOne(UP, name, blob, type, ctx, aid){
                  file: await blobToB64(blob), secret: UP.sec||"",
                  dev:(ctx&&ctx.dev)||DEVICE,
                  ...(aid?{aid, inspectionId:(ctx&&ctx.id)||""}:{}) };
-    const r=await fetchT(UP.url,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
-                                 body:JSON.stringify(body)});
+    const r=await postT(UP.url, JSON.stringify(body));
     if(!r.ok) throw new Error(await httpErr(r));
     let j=null; try{ j=JSON.parse(await r.text()); }catch(e){}
     if(j && j.ok===false) throw new Error(j.error||"Apps Script rejected the upload");
