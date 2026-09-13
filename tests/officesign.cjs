@@ -126,6 +126,35 @@ const sidecar = (rev, withHS) => JSON.stringify({ type: 'cm-inspection-entries',
     return { sha: su ? await sha(su) : null, rev: rec.rev, hs: !!(rec.items || []).find(i => i.key === 'HS.CV') };
   }, hashOf);
   ok('the new signature is shown in the same tab, without a reload', r3.sha === sha12(PNG2), JSON.stringify({ got: r3.sha, want: sha12(PNG2), was: sha12(PNG1) }));
+
+  console.log('\n4. A SIGNATURE THE RECORD SAYS EXISTS BUT THE OFFICE DOES NOT HOLD IS SAID, NOT LEFT BLANK');
+  const r4 = await p.evaluate(async () => {
+    const rec = RECS.find(r => r.equip === 'BL999' && r.type === 'TEMP');
+    const back = { signUrlOf: CMDash.signUrlOf };
+    CMDash.signUrlOf = () => '';                      // the file is not here
+    try {
+      const html = CMReport.sectionsFor('one', ekOf(rec), { photos: false, lang: 'en' }).map(s => s.html).join('\n');
+      const m = /<table class="appr">([\s\S]*?)<\/table>/.exec(html);
+      const supRow = m ? (m[1].split('<tr>').find(r => /S\. Visor/.test(r)) || '') : '';
+      return { miss: /not yet received by the office/.test(supRow), img: /<img/.test(supRow), open: /class="sg"/.test(supRow) };
+    } finally { CMDash.signUrlOf = back.signUrlOf; }
+  });
+  ok('the Maintenance Supervisor row names the verifier and says the signature has not been received', r4.miss && !r4.img, JSON.stringify(r4));
+  const r5 = await p.evaluate(() => {
+    const rec = RECS.find(r => r.equip === 'BL999' && r.type === 'TEMP');
+    /* Nothing recorded: no verifier, no signed flag, and no signature file
+       in the folder (the file itself would be a recorded signature). */
+    const copy = Object.assign({}, rec, { sup: '', signed: 0 });
+    const back = CMDash.signUrlOf; CMDash.signUrlOf = () => '';
+    try {
+      const html = CMR.sections(CMReport.ctxFor([copy], { photos: false, lang: 'en', scope: 'one', target: ekOf(rec) })).map(s => s.html).join('\n');
+      const m = /<table class="appr">([\s\S]*?)<\/table>/.exec(html);
+      const rows = m ? m[1].split('<tr>') : [];
+      const sup = rows.find(r => /Maintenance Supervisor/.test(r)) || '';
+      return { open: /class="sg"/.test(sup), verified: /Verified in the field/.test(sup) };
+    } finally { CMDash.signUrlOf = back; }
+  });
+  ok('and with nothing recorded the row stays an open line — nothing is invented', r5.open && !r5.verified, JSON.stringify(r5));
   ok('no page errors', errs.length === 0, errs.slice(0, 3).join(' | '));
   await b.close();
   console.log(fails.length ? `\n${fails.length} FAILED: ` + fails.join(' | ') : '\nall passed');

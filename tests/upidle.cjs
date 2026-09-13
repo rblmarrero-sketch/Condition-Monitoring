@@ -107,6 +107,18 @@ srv.listen(PORT, async () => {
   const jpgs = st.files.filter(n => /\.jpg$/.test(n));
   ok('sidecar and every photograph landed through postT', st.files.some(n => /\.json$/.test(n)) && jpgs.filter(n => /_MP_\d\.jpg$/.test(n)).length === 3 && jpgs.length === 4, JSON.stringify(st.files));
   ok('  each once', new Set(jpgs).size === jpgs.length);
+
+  console.log('\n5. the attempt-by-attempt trace says what that run did, and survives a reload');
+  const tr = await p.evaluate(() => ({ evs: (window.__sync || []).map(e => e.ev), text: slogText(80), stored: !!localStorage.getItem('cm_sync_log') }));
+  const has = ev => tr.evs.includes(ev);
+  ok('the run, the queue, the record, every request and the read-back are on it',
+     has('run') && has('queue') && has('record') && (has('one-ok') || has('batch-reply')) && has('record-ok') && has('readback') && has('run-end'),
+     tr.evs.slice(-14).join(' '));
+  ok('  with durations and byte counts a person can read', /ms=\d+/.test(tr.text) && /bytes=\d+/.test(tr.text) && /rev=/.test(tr.text), tr.text.split('\n').slice(-4).join(' | ').slice(0, 300));
+  ok('  and it is kept in storage for the next open', tr.stored);
+  /* The trace is under the sync bar only while there is something to say. */
+  const diag = await p.evaluate(async () => { lastErr = 'x'; await renderSync(); const d = document.getElementById('syncDiag'); const shown = d && !d.classList.contains('hidden') && /What the last uploads did/.test(d.textContent) && !!d.querySelector('#slogCopy'); lastErr = ''; await renderSync(); return shown; });
+  ok('the Sync screen shows it, with a Copy button, when the bar has an error to explain', diag === true);
   ok('no page errors', errs.length === 0, errs.slice(0, 3).join(' | '));
   hung.forEach(r => { try { r.destroy(); } catch (e) {} });
   await b.close(); srv.close();

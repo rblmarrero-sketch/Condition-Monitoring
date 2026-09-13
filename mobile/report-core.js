@@ -818,6 +818,9 @@
       ap_tech_s:"Inspection complete", ap_rel_s:"Reviewed / returned",
       ap_sup_s:"Approved / work required",
       ap_sup_v:"Verified in the field (signed)",
+      ap_sup_n:"Named as verifier — no signature drawn",
+      ap_sig_err:"Recorded signature could not be loaded",
+      ap_sig_miss:"Recorded signature not yet received by the office",
       ma_head:"Maintenance action", ma_action:"Recorded action", ma_cause:"Direct cause",
       ma_owner:"Owner", ma_wo:"Work order", ma_due:"Due date", ma_none:"Not recorded",
       /* Type-body subheadings and column labels, to the v2 single-inspection
@@ -1003,6 +1006,9 @@
       ap_tech_s:"Осмотр завершён", ap_rel_s:"Проверено / возвращено",
       ap_sup_s:"Утверждено / требуется работа",
       ap_sup_v:"Проверено на месте (подпись)",
+      ap_sup_n:"Указан как проверяющий — подпись не ставилась",
+      ap_sig_err:"Записанную подпись не удалось загрузить",
+      ap_sig_miss:"Записанная подпись ещё не получена офисом",
       ma_head:"Действие по обслуживанию", ma_action:"Записанное действие", ma_cause:"Прямая причина",
       ma_owner:"Ответственный", ma_wo:"Наряд-заказ", ma_due:"Срок", ma_none:"Не записано",
       tb_mp:"Данные и фото по компонентам",
@@ -2242,14 +2248,22 @@
         + '<td>' + (sig ? '<img src="' + esc(sig) + '" alt="">' : '')
                  + (date ? '<span class="nm">' + esc(date) + '</span>' : (sig ? '' : '<span class="sg"></span>')) + '</td></tr>';
     }
-    var verified = !!(rec.sup || rec.signUrl);
+    /* Four honest states, never blurred: a signature the report holds; one
+       the record says exists but this surface could not load (signErr) or
+       has not received (signed, no file); a verifier named without a
+       signature; nothing recorded. */
+    var verified = !!(rec.sup || rec.signUrl || rec.signErr || rec.signed);
+    var supStatus = rec.signUrl ? T("ap_sup_v")
+                  : rec.signErr ? T("ap_sig_err")
+                  : rec.signed  ? T("ap_sig_miss")
+                  : T("ap_sup_n");
     return '<table class="appr"><thead><tr>'
       + '<th>' + esc(T("ap_role")) + '</th><th>' + esc(T("ap_name")) + '</th>'
       + '<th>' + esc(T("ap_status")) + '</th><th>' + esc(T("ap_date")) + '</th></tr></thead><tbody>'
       + row(T("ap_tech"), rec.by || T("ma_none"), T("ap_tech_s"), rec.by ? (rec.date || "") : "", !rec.by)
       + row(T("ap_rel"), "", T("ap_rel_s"), "", true)
       + (verified
-          ? row(T("ap_sup"), rec.sup || T("ma_none"), T("ap_sup_v"), rec.date || "", false, rec.signUrl || "")
+          ? row(T("ap_sup"), rec.sup || T("ma_none"), supStatus, rec.signUrl ? (rec.date || "") : "", false, rec.signUrl || "")
           : row(T("ap_sup"), "", T("ap_sup_s"), "", true))
       + '</tbody></table>';
   }

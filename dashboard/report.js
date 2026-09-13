@@ -281,6 +281,10 @@
       by: rec.by || "", sup: rec.sup || "", smu: rec.smu || "",
       gps: rec.gps || null,
       signUrl: rec.signUrl || (window.CMDash && CMDash.signUrlOf ? CMDash.signUrlOf(rec) : ""),
+      /* The phone says whether a signature was drawn (signed:1 on the
+         sidecar); the office may not hold the file yet. The report tells
+         those two apart rather than printing an open line for both. */
+      signed: !!rec.signed,
       ...(() => { const m = reportMap(rec, (opts && opts.art && opts.art[rec.equip + "|" + rec.type]) || "");
                   return { mapHTML: m.html, mapKey: m.key }; })(),
       zones: rec.type === "TB" ? bodyZones(rec) : null,

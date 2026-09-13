@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=350">
+<link rel="manifest" href="manifest.webmanifest?v=351">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=350">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=350">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=350">
+<link rel="apple-touch-icon" href="icon-192.png?v=351">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=351">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=351">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1447,6 +1447,9 @@
      and a row of three would put the labels back to two words each. */
   /* The speed check reads as a short report, not a form: a column of
      name/number rows, then one sentence that says what to do about them. */
+  pre.trace{font:11px/1.35 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap;
+    overflow-wrap:anywhere;max-height:220px;overflow:auto;margin:6px 0;padding:8px;border-radius:8px;
+    background:var(--surface-2);}
   .speed{margin-top:12px;padding:12px 14px;border-radius:10px;background:var(--surface-2);
     border:1px solid var(--line);font-size:13px;}
   .sp-r{display:flex;justify-content:space-between;gap:12px;padding:5px 0;
@@ -1951,6 +1954,9 @@
   </div>
 
   <div class="syncbar" id="syncBar"></div>
+  <!-- The attempt-by-attempt trace of the last runs, for the day the bar is
+       red: what was sent, how long it took, what the server said. -->
+  <div class="hint hidden" id="syncDiag"></div>
   <!-- Three ways of taking this phone's work somewhere by hand, and all three
        need work to be here. With an empty phone every one of them answered a
        tap with "nothing to export" — three controls whose only possible reply
@@ -2469,15 +2475,15 @@ function bootDel(k){ try { localStorage.removeItem(k); } catch (e) {} }
   }
 })();
 </script>
-<script src="native.js?v=350"></script>
-<script src="upload-defaults.js?v=350"></script>
-<script src="hme.js?v=350"></script>
-<script src="mp-fc.js?v=350"></script>
-<script src="hme-cascade.js?v=350"></script>
-<script src="assets.js?v=350"></script>
-<script src="temp-limits.js?v=350"></script>
-<script src="normalize.js?v=350"></script>
-<script src="terms.js?v=350"></script>
+<script src="native.js?v=351"></script>
+<script src="upload-defaults.js?v=351"></script>
+<script src="hme.js?v=351"></script>
+<script src="mp-fc.js?v=351"></script>
+<script src="hme-cascade.js?v=351"></script>
+<script src="assets.js?v=351"></script>
+<script src="temp-limits.js?v=351"></script>
+<script src="normalize.js?v=351"></script>
+<script src="terms.js?v=351"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2496,25 +2502,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=350"></script>
-<script src="edits.js?v=350"></script>
-<script src="due.js?v=350"></script>
-<script src="wear.js?v=350"></script>
-<script src="wear-figs.js?v=350"></script>
-<script src="wear-map.js?v=350"></script>
-<script src="machine-photos.js?v=350"></script>
-<script src="machine-fig.js?v=350"></script>
-<script src="get.js?v=350"></script>
-<script src="points.js?v=350"></script>
-<script src="uc-points.js?v=350"></script>
-<script src="inspect-guide.js?v=350"></script>
-<script src="get-figs.js?v=350"></script>
-<script src="body-points.js?v=350"></script>
-<script src="body-map.js?v=350"></script>
-<script src="lube.js?v=350"></script>
-<script src="lube-overrides.js?v=350"></script>
-<script src="lube2027.js?v=350"></script>
-<script src="report-core.js?v=350"></script>
+<script src="grade.js?v=351"></script>
+<script src="edits.js?v=351"></script>
+<script src="due.js?v=351"></script>
+<script src="wear.js?v=351"></script>
+<script src="wear-figs.js?v=351"></script>
+<script src="wear-map.js?v=351"></script>
+<script src="machine-photos.js?v=351"></script>
+<script src="machine-fig.js?v=351"></script>
+<script src="get.js?v=351"></script>
+<script src="points.js?v=351"></script>
+<script src="uc-points.js?v=351"></script>
+<script src="inspect-guide.js?v=351"></script>
+<script src="get-figs.js?v=351"></script>
+<script src="body-points.js?v=351"></script>
+<script src="body-map.js?v=351"></script>
+<script src="lube.js?v=351"></script>
+<script src="lube-overrides.js?v=351"></script>
+<script src="lube2027.js?v=351"></script>
+<script src="report-core.js?v=351"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2690,6 +2696,7 @@ const I18N = {
     sp_perphoto:"one photograph", sp_split:"of which", sp_split_v:"{w} waiting, {s} sending",
     sp_ten:"ten photographs",
     sp_copy:"Copy this for IT", sp_copied:"Copied", sp_copyfail:"Could not copy — read it off the screen",
+    sync_trace:"What the last uploads did (for IT)",
     sp_v_host:"The destination is the slow part, not your signal.",
     sp_v_host_d:"Every upload pays {o} before a single byte of photograph moves — {p}% of the time a photograph takes, against {s} actually sending it. This app's own host answers in {c}, so the link is not the problem. Smaller photographs will barely help. The fix is fewer requests: send several photographs in one, so that wait is paid once instead of once each.",
     sp_v_link:"The connection itself is slow, for everything.",
@@ -3293,6 +3300,7 @@ const I18N = {
     sp_perphoto:"одна фотография", sp_split:"из них", sp_split_v:"{w} ожидание, {s} передача",
     sp_ten:"десять фотографий",
     sp_copy:"Скопировать для ИТ", sp_copied:"Скопировано", sp_copyfail:"Не удалось скопировать — перепишите с экрана",
+    sync_trace:"Что делали последние отправки (для ИТ)",
     sp_v_host:"Медленно работает назначение, а не ваш сигнал.",
     sp_v_host_d:"Каждая загрузка тратит {o} до того, как уйдёт первый байт фотографии — это {p}% времени одной фотографии против {s} на саму передачу. Собственный хост приложения отвечает за {c}, значит дело не в канале. Уменьшение фотографий почти не поможет. Нужно меньше запросов: отправлять несколько фотографий за один, чтобы это ожидание оплачивалось один раз, а не каждый раз.",
     sp_v_link:"Медленно работает само соединение, для всего.",
@@ -11934,7 +11942,14 @@ async function rptRecords(onlyId){
                  reasonAlt:reasonPair(rec.type, w.reason).alt,
                  stood:!!w.stood } : null });
     }
-    let signUrl=""; if(rec.sign){ try{ signUrl=await blobToThumb(rec.sign,400); }catch(e){} }
+    /* THE SIGNATURE AS DRAWN. It was re-encoded through the JPEG thumbnail
+       path — strokes softened, and a decode failure swallowed into an empty
+       line that read as "nobody signed". The PNG bytes go to the report as
+       they are, by whichever reader answers, and a signature that cannot be
+       read is SAID (signErr) rather than left blank. */
+    let signUrl="", signErr=false;
+    if(rec.sign){ try{ signUrl="data:"+(rec.sign.type||"image/png")+";base64,"+bytesToB64(await readBlobBytes(rec.sign)); }
+                  catch(e){ signErr=true; } }
     /* One picture of the machine per round. A red puck at roller 6 is a place a
        fitter can walk to; a row in a table is a place they have to look up. */
     const a0=ASSET_BY[rec.equip]||{};
@@ -11974,7 +11989,7 @@ async function rptRecords(onlyId){
       model:a0.m||"",
       type:rec.type, typeLabel:t("type_"+(rec.type||"MP")),
       typeAlt:inOtherLang(()=>t("type_"+(rec.type||"MP"))), date:rec.date||"",
-      by:rec.by||"", sup:rec.sup||"", smu:rec.smu||"", gps:rec.gps||null, signUrl,
+      by:rec.by||"", sup:rec.sup||"", smu:rec.smu||"", gps:rec.gps||null, signUrl, signErr, signed:!!rec.sign,
       /* "This sheet is measurements" — which is NOT the same question as "does
          capture demand a millimetre at every position". meta.wear is the second
          one, and a GET round answers no to it: teeth are graded, and a tape is
@@ -12472,7 +12487,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="350";
+const BUILD="351";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -13082,12 +13097,17 @@ async function putBatch(UP, files, rec, sent){
     try{ e.localRead=true; }catch(_){}
     return e;
   };
-  if(!built.length) throw unreadableErr();
+  if(!built.length){ slog("batch-unreadable", {names:unreadable.map(u=>u.name).join(",")}); throw unreadableErr(); }
   const body={ op:"batch", folder, secret:UP.sec||"", dev:(rec&&rec.dev)||DEVICE, files: built };
-  const r=await postT(UP.url, JSON.stringify(body));
-  if(!r.ok) throw new Error(await httpErr(r));
+  const t0=Date.now(), bbytes=files.reduce((s,f)=>s+((f.blob&&f.blob.size)||0),0);
+  let r;
+  try{ r=await postT(UP.url, JSON.stringify(body)); }
+  catch(e){ slog("batch-fail", {n:built.length, bytes:bbytes, ms:Date.now()-t0, err:String((e&&e.message)||e).slice(0,160)}); throw e; }
+  if(!r.ok){ const he=await httpErr(r); slog("batch-http", {n:built.length, bytes:bbytes, ms:Date.now()-t0, status:r.status, err:he.slice(0,160)}); throw new Error(he); }
   let j=null; try{ j=JSON.parse(await r.text()); }catch(e){}
-  if(!j) throw new Error("Unexpected reply — check the deployment is set to “Anyone”.");
+  if(!j){ slog("batch-nojson", {n:built.length, ms:Date.now()-t0, status:r.status}); throw new Error("Unexpected reply — check the deployment is set to “Anyone”."); }
+  slog("batch-reply", {n:built.length, bytes:bbytes, ms:Date.now()-t0, ok:j.ok!==false, saved:(j.saved||[]).length, failed:(j.failed||[]).length,
+    unreadable:unreadable.length, err:String(j.error||((j.failed||[])[0]||{}).error||"").slice(0,160)});
   /* An older script has no batch branch, so the body falls through to its
      single-file path and trips on the missing name. That is the signature of a
      deployment that predates this, not of a failure: remember it, send this lot
@@ -13206,9 +13226,9 @@ async function confirmRun(done, dests){
   done.forEach(d=>{ const f=expandFolder(dest.folder||"", d.rec);
     (byFolder.get(f) || byFolder.set(f,[]).get(f)).push(d); });
   for(const [folder, group] of byFolder){
-    let have;
-    try{ have=await serverNames(dest, folder); }
-    catch(e){ continue; }        // unanswered is not "missing" — say nothing
+    let have; const lT0=Date.now();
+    try{ have=await serverNames(dest, folder); slog("readback", {folder, listed:have.size, ms:Date.now()-lT0}); }
+    catch(e){ slog("readback-fail", {folder, ms:Date.now()-lT0, err:String((e&&e.message)||e).slice(0,200)}); continue; }        // unanswered is not "missing" — say nothing
     for(const {rec, names, sizes, stored} of group){
       /* Looked up under the name the server said it FILED, where that
          differs from the name asked for (a rival device's variant). */
@@ -13430,6 +13450,7 @@ async function putAll(dest, files, rec, sent){
       if(e && e.localRead){ failed=failed||e; continue; }
       const chunk=chunks && chunks[i];
       if(chunk && chunk.length>1){
+        slog("batch-to-single", {n:chunk.length, why:String((e&&e.message)||e).slice(0,120)});
         try{ await oneByOne(chunk); continue; }
         catch(e2){ failed=failed||e2; fatal=fatal||e2; continue; }
       }
@@ -13521,15 +13542,21 @@ async function putOne(UP, name, blob, type, ctx, aid){
        receipt comes back addressed to the entry it is about. Without it a
        photograph sent one at a time — the whole fallback path — came back
        with an unaddressed receipt and could never read "verified". */
-    const body={ name, folder, contentType:type||blob.type||"application/octet-stream",
+    const t0=Date.now();
+    let body;
+    try{ body={ name, folder, contentType:type||blob.type||"application/octet-stream",
                  file: await blobToB64(blob), secret: UP.sec||"",
                  dev:(ctx&&ctx.dev)||DEVICE,
-                 ...(aid?{aid, inspectionId:(ctx&&ctx.id)||""}:{}) };
-    const r=await postT(UP.url, JSON.stringify(body));
-    if(!r.ok) throw new Error(await httpErr(r));
+                 ...(aid?{aid, inspectionId:(ctx&&ctx.id)||""}:{}) }; }
+    catch(e){ slog("one-unreadable", {name, bytes:blob&&blob.size, err:String((e&&e.message)||e).slice(0,160)}); throw e; }
+    let r;
+    try{ r=await postT(UP.url, JSON.stringify(body)); }
+    catch(e){ slog("one-fail", {name, bytes:blob&&blob.size, ms:Date.now()-t0, err:String((e&&e.message)||e).slice(0,160)}); throw e; }
+    if(!r.ok){ const he=await httpErr(r); slog("one-http", {name, bytes:blob&&blob.size, ms:Date.now()-t0, status:r.status, err:he.slice(0,160)}); throw new Error(he); }
     let j=null; try{ j=JSON.parse(await r.text()); }catch(e){}
-    if(j && j.ok===false) throw new Error(j.error||"Apps Script rejected the upload");
-    if(!j) throw new Error("Unexpected reply — check the deployment is set to “Anyone”.");
+    if(j && j.ok===false){ slog("one-refused", {name, ms:Date.now()-t0, err:String(j.error||"").slice(0,160)}); throw new Error(j.error||"Apps Script rejected the upload"); }
+    if(!j){ slog("one-nojson", {name, ms:Date.now()-t0, status:r.status}); throw new Error("Unexpected reply — check the deployment is set to “Anyone”."); }
+    slog("one-ok", {name, bytes:blob&&blob.size, ms:Date.now()-t0, stored:j.name||"", dup:!!(j.receipt&&j.receipt.duplicate), verified:j.receipt?j.receipt.verified:null});
     if(j.receipt && RCPT) RCPT[name]=j.receipt;
     if(j.name && j.name!==name && STORED) STORED[name]=j.name;
     return true;
@@ -13896,6 +13923,40 @@ async function renderStorage(){
    below, because a row left saying "sending" after the sync ended is the same
    class of lie as "Synced". */
 let syncing=false, lastErr="", syncingId=null;
+/* THE ATTEMPT-BY-ATTEMPT TRACE. "Error, press Sync, error, press again, green"
+   (build 350) cannot be diagnosed from the one sentence the banner keeps: it
+   is the LAST error of the LAST run, and the two runs before it are gone.
+   Every step of every run is written here — which record, which revision,
+   which files, how long each request took, what the server answered, why a
+   step failed, what the read-back found, when the retry is due — kept across
+   reloads (cm_sync_log, newest last, SLOG_MAX lines) and printed under the
+   sync bar with a Copy button, so a failure in the field is a paragraph
+   somebody can paste rather than a memory of a red bar. window.__sync. */
+const SLOG_KEY="cm_sync_log", SLOG_MAX=400;
+let SLOG=(()=>{ try{ const v=JSON.parse(localStorage.getItem(SLOG_KEY)||"[]"); return Array.isArray(v)?v:[]; }catch(e){ return []; } })();
+let slogT=null;
+function slog(ev, o){
+  const e=Object.assign({t:new Date().toISOString().slice(11,23), ev}, o||{});
+  SLOG.push(e); if(SLOG.length>SLOG_MAX) SLOG.splice(0, SLOG.length-SLOG_MAX);
+  window.__sync=SLOG;
+  clearTimeout(slogT); slogT=setTimeout(()=>{ try{ lsSet(SLOG_KEY, JSON.stringify(SLOG)); }catch(_){ } }, 300);
+  return e;
+}
+function slogText(n){
+  return SLOG.slice(-(n||60)).map(e=>{ const o=Object.assign({},e); delete o.t; delete o.ev;
+    return e.t+" "+e.ev+" "+Object.keys(o).map(k=>k+"="+(typeof o[k]==="string"?JSON.stringify(o[k]):JSON.stringify(o[k]))).join(" "); }).join("\n");
+}
+function renderSyncDiag(){
+  const el=$("syncDiag"); if(!el) return;
+  if(!SLOG.length){ el.classList.add("hidden"); el.innerHTML=""; return; }
+  el.classList.remove("hidden");
+  el.innerHTML=`<details><summary>${esc(t("sync_trace"))}</summary><pre class="trace">${esc(slogText(60))}</pre>
+    <button type="button" class="btn ghost" id="slogCopy">${esc(t("sp_copy"))}</button></details>`;
+  const b=$("slogCopy"); if(b) b.onclick=async()=>{
+    const head="Condition Monitoring sync trace · build "+BUILD+" · "+DEVICE+" · "+new Date().toISOString()+"\n";
+    try{ await navigator.clipboard.writeText(head+slogText(200)); b.textContent=t("sp_copied"); }
+    catch(e){ b.textContent=t("sp_copyfail"); } };
+}
 /* Receipts land in the two functions that talk to the endpoint and are read by
    the one that writes the record. Module-scoped and cleared per record rather
    than threaded through putAll's lanes, which would mean changing the shape of
@@ -13914,13 +13975,16 @@ async function syncNow(manual){
      round on this phone for ever. A send with no network fails at once and
      the retry clock backs off; the pill still reads "Offline" off the flag. */
   syncing=true; lastErr=""; renderSync();
+  const runT0=Date.now();
+  slog("run", {manual:!!manual, online:navigator.onLine, build:BUILD});
   try{
     const dests=activeDests();
     /* Said, not swallowed: an unreadable queue used to leave lastErr empty,
        so the pill had nothing to say about a sync that sent nothing. */
     let all;
     try{ all=(await dbAll()).filter(r=>!r.up); }
-    catch(e){ lastErr="Could not read the queue on this phone: "+String((e&&e.message)||e); return; }
+    catch(e){ lastErr="Could not read the queue on this phone: "+String((e&&e.message)||e); slog("queue-unreadable",{err:lastErr}); return; }
+    slog("queue", {pending:all.length, dests:dests.map(d=>d.id).join(",")});
     const justDone=[];
     let consecutive=0;
     for(const rec of all){
@@ -14028,9 +14092,16 @@ async function syncNow(manual){
            Counted rather than merely skipped: it is the only measure available
            on this end of what a retry actually costs. */
         dupNote(payload.length-left.length);
-        try{ await putAll(d,left,rec,already); done[d.id]=1; progressed=true; }
+        slog("record", {id:rec.id, u:rec.equip, ty:rec.type, d:rec.date, rev, dest:d.id,
+          files:payload.length, left:left.length, already:before,
+          bytes:left.reduce((s,f)=>s+((f.blob&&f.blob.size)||0),0)});
+        const recT0=Date.now();
+        try{ await putAll(d,left,rec,already); done[d.id]=1; progressed=true;
+          slog("record-ok", {u:rec.equip, rev, ms:Date.now()-recT0, landed:Object.keys(already).length-before}); }
         catch(e){ errs.push(destWhere(d)+": "+String(e.message||e));
-          if(e&&e.localRead) localReadFail=true; }
+          if(e&&e.localRead) localReadFail=true;
+          slog("record-fail", {u:rec.equip, rev, ms:Date.now()-recT0, landed:Object.keys(already).length-before,
+            localRead:!!(e&&e.localRead), err:String((e&&e.message)||e).slice(0,300)}); }
         /* Files landing IS progress, even when the destination did not finish.
            The breaker below gives up after three records that got nowhere;
            without this a round crawling up a bad link three files at a time
@@ -14094,7 +14165,8 @@ async function syncNow(manual){
              length rather than only look for a name. */
           sizes:payload.reduce((m,f)=>{ if(f.wireSize) m[f.name]=f.wireSize; return m; },{})});
       }
-      }catch(e){ errs.push(t("up_bookfail",{u:rec.equip||"?", why:String((e&&e.message)||e)})); }
+      }catch(e){ errs.push(t("up_bookfail",{u:rec.equip||"?", why:String((e&&e.message)||e)}));
+        slog("writeback-fail", {u:rec.equip, rev, err:String((e&&e.message)||e).slice(0,200)}); }
       if(errs.length) lastErr=errs.join(" · ");
       if(todo.length) netSeen(progressed);          // evidence, not navigator.onLine
       // The breaker exists so a dead link is not retried against all 50 records.
@@ -14125,8 +14197,9 @@ async function syncNow(manual){
     /* And now ASK the server what it has. One listing per folder written to,
        after the writing is finished — never in the way of it, and never able
        to fail an upload that already succeeded. */
-    try{ await confirmRun(justDone, dests); }catch(e){ /* silence is not a verdict */ }
+    try{ await confirmRun(justDone, dests); }catch(e){ /* silence is not a verdict */ slog("readback-throw",{err:String((e&&e.message)||e).slice(0,200)}); }
   } finally {
+    slog("run-end", {ms:Date.now()-runT0, err:(lastErr||"").slice(0,300)});
     syncing=false; syncingId=null; renderSync(); renderPending(); renderNet();
     // Whatever this phone just pushed, someone else has pushed something too.
     // One request, and it keeps the due list honest across the whole team.
@@ -14283,7 +14356,8 @@ async function renderSync(){
      it, not a second copy of an icon. */
   bar.innerHTML=`<span class="dot"></span><span class="sp">${txt}</span>
     <button id="syncGo">${t("sync_now")}</button>`;
-  const g=$("syncGo"); if(g)g.onclick=()=>{ retryAt=RETRY_MIN; syncThenArm(true); };
+  const g=$("syncGo"); if(g)g.onclick=()=>{ slog("press",{}); retryAt=RETRY_MIN; syncThenArm(true); };
+  renderSyncDiag();
 }
 /* Which destinations carry a shared secret in the body rather than a header.
    This was written twice as `id==="gas"`, once in each direction, and adding a

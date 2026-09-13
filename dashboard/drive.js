@@ -39,6 +39,7 @@
      now reports at another length — the phone re-sent the file — is fetched
      again instead of shown from memory. */
   let fetchedSize = {};
+  let lastFetch = null;                 // what the last ensurePhotos did — asked, cached, fetched, failed[]
   const stale = nm => !!(fetched[nm] && fetchedSize[nm] != null && index[nm]
                          && Number(index[nm].size) > 0 && fetchedSize[nm] !== Number(index[nm].size));
   const need = nm => !!(nm && index[nm] && (!(nm in fetched) || stale(nm)));
@@ -622,28 +623,38 @@
     let done = names.length - miss.length;
     const groups = [];
     for (let i = 0; i < miss.length; i += per) groups.push(miss.slice(i, i + per));
+    /* WHAT THIS FETCH DID, FOR THE MESSAGE AFTER THE REPORT. "Fetching
+       photos… then a PDF with none on it" is otherwise a silence: every name
+       that came back empty or threw is kept here with its reason, and
+       runReport says so beside the page count. */
+    lastFetch = { at: Date.now(), asked: names.length, cached: names.length - miss.length, fetched: 0, failed: [] };
 
     await pool(groups, async (grp) => {
       const ids = grp.map(nm => index[nm].id);
-      let got = null;
+      let got = null, batchErr = "";
       if (per > 1) {
         try {
           const r = await api({ action: "files", ids: ids.join(",") });
           got = {};
-          (r.files || []).forEach(f => { if (f.ok) got[f.id] = f; });
-        } catch (e) { got = null; setMediaBatch(1); }   // older deployment; stop asking
+          (r.files || []).forEach(f => { if (f.ok) got[f.id] = f; else if (f && f.id) got[f.id] = { error: f.error || "refused" }; });
+        } catch (e) { got = null; batchErr = String((e && e.message) || e); setMediaBatch(1); }   // older deployment; stop asking
       }
       for (let k = 0; k < grp.length; k++) {
         const nm = grp[k], id = ids[k];
         try {
           const f = got ? got[id] : await api({ action: "file", id });
-          if (!f || !f.data) { fetched[nm] = null; continue; }
+          if (!f || !f.data) {
+            fetched[nm] = null;
+            lastFetch.failed.push({ name: nm, why: (f && f.error) || (got ? "not in the reply" : batchErr || "no data") });
+            continue;
+          }
           const blob = b64ToBlob(f.data, f.mime);
           cachePut(id, blob);                      // not awaited: the picture goes up now
           const url = URL.createObjectURL(blob);
-          fetched[nm] = url; fetchedSize[nm] = blob.size;
+          fetched[nm] = url; fetchedSize[nm] = blob.size; lastFetch.fetched++;
           window.CMDash.addPhoto(nm, url);
-        } catch (e) { fetched[nm] = null; delete fetchedSize[nm]; }   // remember the failure, don't retry forever
+        } catch (e) { fetched[nm] = null; delete fetchedSize[nm];
+          lastFetch.failed.push({ name: nm, why: String((e && e.message) || e).slice(0, 120) }); }   // remember the failure, don't retry forever
         if (onProgress) onProgress(++done, names.length);
       }
     });
@@ -798,6 +809,9 @@
 
   window.CMDrive = {
     load, ensurePhotos, fetchByName, configured, ping, saveEdit, remove, deleteFile, resolve, putMedia,
+    /* The last fetch's outcome — read by the report message so "fetched" and
+       "on the page" are never allowed to disagree in silence. */
+    lastFetch: () => lastFetch,
     /* "Is this name already taken on Drive?" — asked before choosing the next
        _N for an added photograph, so one added from another desk yesterday is
        not overwritten by one added from this desk today. */
