@@ -1,7 +1,7 @@
 {
-  "generated": "2026-09-13T21:57:51.155Z",
+  "generated": "2026-09-13T23:38:01.282Z",
   "source": "mobile/due.js (D.EVERY, D.hours) and mobile/index.html (roundsOnClass), evaluated live -- not hand-copied",
-  "history": "77 pair(s) from https://baimskaya-cm.duckdns.org?action=records (pulled 2026-09-13T21:57:48.169Z)",
+  "history": "78 pair(s) from https://baimskaya-cm.duckdns.org?action=records (pulled 2026-09-13T23:37:52.226Z)",
   "map": {
     "MP": {
       "restricted": true,
@@ -42,13 +42,13 @@
     "INSP": {
       "restricted": false,
       "classes": {
-        "CRJ": 500,
-        "CRC": 500,
-        "DRB": 500,
-        "DOZ": 500,
-        "EXC": 500,
-        "HT": 500,
-        "AT": 500
+        "CRJ": 1000,
+        "CRC": 1000,
+        "DRB": 1000,
+        "DOZ": 1000,
+        "EXC": 1000,
+        "HT": 1000,
+        "AT": 1000
       }
     },
     "TEMP": {

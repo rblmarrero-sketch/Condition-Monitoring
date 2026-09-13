@@ -41,13 +41,17 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
    comfortably inside the new one. One shared date meant this fixture
    silently stopped testing five overdue rounds and started testing four, and
    the suite said "missed 4" without a word about why. A fixture placed
-   against an interval has to move when the interval does. */
+   against an interval has to move when the interval does.
+
+   It happened again, to the other three, on 2026-09-13: INSP went from 500 h
+   to 1,000 h and 880 h stopped being overdue on any of them — "missed 2".
+   Exactly the same lesson, so they join the filter cut on the older date. */
 const PILE = {
   'MP|BS001':   { d: '2026-07-31', s: 'f' },   //  44 d = 880 h on a 250 h round
   'FC|CR002':   { d: '2026-06-15', s: 'f' },   //  90 d = 1800 h on a 1,000 h round
-  'INSP|CR006': { d: '2026-07-31' },           //  44 d = 880 h on a 500 h round
-  'INSP|DZ003': { d: '2026-07-31' },
-  'INSP|DZ005': { d: '2026-07-31', s: 'f' },
+  'INSP|CR006': { d: '2026-06-15' },           //  90 d = 1800 h on a 1,000 h round
+  'INSP|DZ003': { d: '2026-06-15' },
+  'INSP|DZ005': { d: '2026-06-15', s: 'f' },
 };
 
 async function copy(b, hist) {

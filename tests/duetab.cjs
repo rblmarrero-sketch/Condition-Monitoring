@@ -61,7 +61,13 @@ const HIST = {
      90 days is 1,800 h: the same 90% of the interval, against the figure
      that is actually stated. */
   'TB|TK105':   { d: ago(90),  h: '12400' }, // 1800 h on a truck's 2000 — due soon
-  'INSP|TK101': { d: ago(26),  h: '10200' }, // 520 h on a 500 h round — missed
+  /* Just past the interval, so this row proves "missed". It sat at 26 days —
+     520 h, 104% of the 500 h INSP was then — and the site moved the general
+     inspection to 1,000 h on 2026-09-13, at which 26 days is barely half way
+     and the row went quietly from missed to fine, taking a count in this
+     suite with it. 52 days is 1,040 h: the same 104%, against the figure that
+     is actually stated. Same reasoning as the TB row above. */
+  'INSP|TK101': { d: ago(52),  h: '10200' }, // 1040 h on a 1000 h round — missed
 };
 const DEFER = { 'UC|DZ004': { u: 'DZ004', t: 'UC', until: on(6),
   why: 'on a low-loader to the workshop', by: 'S. Volkov', at: ago(2) } };

@@ -124,7 +124,28 @@
          real increase in work, decided by the site with the figure in
          front of them. */
       TB:   { h: 2000, onClass: ["HT", "AT"] },
-      INSP: { h: 500 },
+      /* 1,000 h, and it was 500. The office asked on 2026-09-13 for the
+         general inspection to go with "only every 1000, 2000, 3000, 4000 …"
+         service — the thousands, not the five-hundreds. That is the TB
+         change of the day before in the other direction, and it is answered
+         the same way, for the same reason: as an INTERVAL, not as a list of
+         service tiers.
+
+         A list would have been the shorter edit and it is the one this file
+         exists to refuse. Plan vs Actual resolves a 1C service to CM rounds
+         by dividing the service's hour figure by this number, so a list
+         living in the office page would have drawn the inspection on the
+         thousands while the phone's Due list went on proposing it every 500
+         h — one round, two answers, and the office reading coverage against
+         a cadence the field was not walking.
+
+         1,000 lands on 1000, 2000, 3000 … every figure they named, and off
+         500 and 1500, which is the whole of the request. It halves the
+         general inspection — roughly 50 days a machine at the fleet rate
+         rather than 25 — and that is a real reduction in work, decided by
+         the site with the figure in front of them. The KAMAZ trucks are
+         still held off it entirely (OFF.INSP below). */
+      INSP: { h: 1000 },
 
       /* Still no hour figure for these two, so they keep the calendar the
          fleet already ran them on. Carried forward rather than converted: 30

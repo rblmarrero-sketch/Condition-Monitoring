@@ -279,6 +279,59 @@ browser that pressed Delete removed the round, so a second desk kept it in every
 count and report for as long as its cache lived. `autoRefresh` is no longer
 gated on `navigator.onLine`.
 
+**THE DATE A DEFECT WAS RAISED IS NOT THE DATE SOMEBODY PLANS TO FIX IT.**
+The Defects raised register read its date off **"Start date plan"** — the
+second candidate in `CM_FIELDS` and the one this workbook has — so a defect
+written up this morning and scheduled for the 28th was filed under the 28th,
+the panel sorted newest-first on a column of FUTURE dates, and the twelve rows
+dated next week sat above everything raised today. From a desk that is exactly
+what a stopped feed looks like: *"already 24 hours since Defects raised
+updated, but it has been updated in FTP every hour"* — while the file behind
+it had refreshed six times that day. The workbook's own column is
+**"Work request creation date"** (58 of 61) and it is now the only thing
+`date` is read from; the planned start and the detection date are carried in
+their own fields (`planStart`, `detected`), every row says which of the three
+it was filed under (`dateFrom`), and the file totals them (`cmDateFrom`) so a
+future workbook that stops carrying the creation date makes the panel SAY so
+instead of quietly sorting on the plan again. A fallback is not a degraded
+answer to this question — it is the answer to a different one
+(`tests/cmraised.cjs`).
+
+**ONE WORK ORDER, ONE CAPTION IN THE PLAN GRID.** A tier includes the tiers
+below it, so TK156's 4,000 h order is four rounds — and each one printed the
+same `WO-015691` and the same `4000h · 13.09` under its own pill. Four
+identical captions in a cell 90 px wide is three lines of noise in front of the
+one thing a planner is reading, and it made the fortnight grid three times
+taller than the work in it. The rounds of one order on one day share a caption
+now: pills on one line, the order and the hours once beneath them, each pill
+titled with its OWN round name. Nothing is merged across orders — two orders on
+one day are two visits — and the key is every word the caption would say
+(order, hours, plan date, and whether it is a pre-check), so two entries share
+one only when it would have been identical.
+
+**AND NOTHING IN A CELL MAY READ AS A CLOCK TIME.** The caption said
+`1000h · PM 07.09`, and at 11 px mono the interpunct is a colon and "PM"
+after a number is a meridiem, so it spelled **ten in the evening** — on data
+that carries no time at all. Reported from the office as "what's with the
+time in INSP?". It is `1000 h` with a space now, and the pre-check note is
+its own line in words. `tests/progchg.cjs` fails on any cell text matching a
+clock shape or containing a bare "PM".
+
+**A ROUND WALKED AHEAD OF ITS SERVICE IS MARKED IN A CHANNEL COLOUR CANNOT
+TAKE AWAY.** The General Inspection is carried out `PA_PREINSP_DAYS` before
+the service it belongs to, so it sits three columns left of the order it is
+for — and that was said in the FILL alone, amber for a pre-check. A pill on a
+day already gone turns red for being late and red wins, so exactly the
+pre-checks somebody most needs to see lost the only mark saying what they
+were, while the subtitle went on promising "General Inspection is
+highlighted". It carries a **dashed ring** (`.pa-pre`) now, which is
+orthogonal to the fill and survives greyscale and print, and the caption
+states the gap **measured from the two dates on screen** — `3 d before
+service 10.09`, `the service is today`, `service was 01.08 — not carried
+out`. Never the rule's own 3 quoted back: a pre-check clamped forward to
+today, or one whose service has passed, is not three days ahead of anything.
+The key under the grid shows the ring rather than describing it.
+
 **AN UNREADABLE DOCUMENT IS COUNTED ONCE, BY NAME.** `action=records` now
 returns `failedKeys` beside `failed`; the phone keeps the set (`badNote`). The
 count used to be ADDED on every incremental pull, and an unreadable document
@@ -359,6 +412,41 @@ BUILD, so the tag cannot carry this file's freshness. At the other end,
 by its HEADERS every `WO_POLL_MS` and dispatches the workflow the moment they
 change, at most one run per `WO_GH_GAP_MS`. It is off unless `WO_GH_TOKEN` is
 in `cm.env`, and says so once when it is not (VM-SETUP §12).
+
+**AND THE PHONE IS THE THIRD END.** `data/schedule_slim.json` — the same pull,
+sliced for the handset — was fetched on exactly three occasions, every one of
+them requiring somebody to touch the Due screen: the toggle going on, This week
+being opened, and a Due paint that found the cached copy over an hour old. The
+shift that produces is the one the office reported: a phone opened at the crib
+room, Due looked at once at 06:30, then carried around on the capture screen
+all day while the pull behind it refreshed six times. `schedRefresh()` runs on
+a `SCHED_MS` (10 min) timer, on `visibilitychange` and on `online`; the
+freshness gate is `SCHED_STALE_MS`, cut from an hour to **15 minutes** because
+an hour-long gate does not track an hourly source, it tracks it with up to an
+hour of lag on top. `schedEnsureLoaded` refreshes the cache's timestamp on
+every pull but replaces `SCHED` — and tells the caller to repaint — only when
+1C's own `generated` has moved, so a timer, a visibility change and a paint
+arriving together cannot make three requests or redraw under a thumb. The Due
+screen states the age (`schedAge`, beside `histAge`) and says so only where 1C
+is actually on screen (`tests/duetoday.cjs`).
+
+**A ROUND ALREADY WALKED IS MARKED DONE, NOT LEFT AS WORK.** `schedWalkedFor`
+is the one rule — a CM round of that type on that unit dated on or after the
+day 1C wants the service — and it was written inline inside `planRows` and
+nowhere else. So the List's 1C scope dropped a finished round within the minute
+while the agenda went on listing it for the rest of the fortnight: two screens,
+one fact, two answers, and the one that was wrong is the one somebody walks
+off. Both read the function now and differ only in what they DO with it — the
+List leaves it out because it is a worklist, the agenda marks it `done` with a
+tick and the date because a calendar with the work struck off it is the answer
+to "did we do it" and a blank day is not. The chips count what is left TO DO;
+the day heading says both figures in words.
+
+**The agenda draws today or the fortnight** (`dueSpan`, `cm_due_span`, chips in
+`#dueSpanF`). It narrows the DAYS DRAWN and nothing else — same rows, same
+source, same late marking — so the two settings can never disagree about what
+is on a day. Not a third tab: it is the span of one question, not a second one,
+and `tests/tabsa11y.cjs`'s four rules are about panels.
 
 **The office's photo cache is keyed by path, and the bucket rewrites a path.**
 A round the phone re-sends — a retake, a new signature — lands under the same
@@ -461,7 +549,7 @@ rendered to a calendar at 20 h/day, and several are **per class**:
 |---|---|
 | MP | 250 h — confirmed for the Terex TR60 haul trucks · **on HT + AT** |
 | FC | 500 h engine filter, 1000 h the rest |
-| INSP | 500 h |
+| INSP | **1000 h** — was 500 h until 2026-09-13, when the site asked for the general inspection to go with "only every 1000, 2000, 3000, 4000 …" service; stated as an interval and not as a list of tiers, for the same reason TB is (Plan vs Actual divides the 1C service's hour figure by this number, so a list in the office page would draw the thousands while the phone went on proposing every 500 h) |
 | UC | **1000 h dozers · 4000 h excavators** |
 | TB | **2000 h on HT + AT** — was 4000 h until 2026-09-12, when the site asked for the liner to go with the 3,000 h and 6,000 h services too; stated as an interval rather than a list of services so the Due list and the plan grid cannot disagree |
 | TEMP, LUBE | 30 days, carried forward — no hour figure stated |

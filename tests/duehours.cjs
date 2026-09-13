@@ -58,6 +58,7 @@ const mk = `((id,ty,u,d,smu,pos)=>({id,type:ty,equip:u,date:d,by:'S. Volkov',sup
     UCby: DUE.byClass('UC'),
     TB: [DUE.hours('TB'), DUE.days('TB')],
     INSP: [DUE.hours('INSP'), DUE.days('INSP')],
+    RATE: DUE.HOURS_PER_DAY,
     TEMP: [DUE.hours('TEMP'), DUE.days('TEMP')],
     FCdz: [DUE.hours('FC', null, 'DOZ', 'DZ011'), DUE.days('FC', null, null, 'DOZ', 'DZ011')],
     FCdzOther: DUE.hours('FC', null, 'DOZ', 'DZ003'),
@@ -128,8 +129,16 @@ const mk = `((id,ty,u,d,smu,pos)=>({id,type:ty,equip:u,date:d,by:'S. Volkov',sup
     'DZ003 ' + iv.FCdzOther + ' h');
   ok('  and the answer says it came from the machine, not the class',
     iv.FCdzFlag === 'DZ011', String(iv.FCdzFlag));
-  ok('the walk-around every 500 h', iv.INSP[0] === 500 && iv.INSP[1] === 25,
-    iv.INSP.join(' h → ') + ' d');
+  /* THE THOUSANDS, NOT THE FIVE-HUNDREDS. 1,000 h since 2026-09-13, when the
+     site asked for the general inspection to go with "only every 1000, 2000,
+     3000, 4000 …" service — stated as an interval, in due.js, so Plan vs
+     Actual's divisibility rule follows it without a second table. What is
+     asserted is that the figure is stated in hours and rendered to the
+     calendar at the fleet's own rate; the number itself is read off the page
+     rather than kept here. */
+  ok('the walk-around is stated in hours, and only in due.js',
+    iv.INSP[0] === 1000 && iv.INSP[1] === iv.INSP[0] / iv.RATE,
+    iv.INSP.join(' h → ') + ' d at ' + iv.RATE + ' h/day');
   /* Nobody has given the temperature round or the lubrication audit an hour
      figure. Carrying the calendar they already ran on is the honest answer;
      inventing 600 h for them is not. */

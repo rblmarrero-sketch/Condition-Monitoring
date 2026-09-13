@@ -122,7 +122,14 @@ const srv = http.createServer((req, res) => {
   ok(iv.sibling === 1000 && iv.noUnit === 1000,
     '  and its own class is not — this is a machine, not a class', 'DZ003 ' + iv.sibling + ' h');
   ok(iv.from === 'DZ011', '  and the answer says the figure came from the machine', String(iv.from));
-  ok(iv.mp === 250 && iv.insp === 500 && iv.ucExc === 4000,
+  /* Nothing else moved WITH the filter cut. INSP reads 1,000 h here because
+     the site moved it separately on 2026-09-13 (see mobile/due.js and
+     tests/duehours.cjs, which is where that change is asserted); this line
+     is the guard that one interval edit does not carry another along with
+     it, so the figures it pins are simply the current ones and it is meant
+     to be updated, deliberately, whenever one of them is deliberately
+     changed. */
+  ok(iv.mp === 250 && iv.insp === 1000 && iv.ucExc === 4000,
     '  no other round moved', 'MP ' + iv.mp + ' · INSP ' + iv.insp + ' · UC/EXC ' + iv.ucExc);
 
   console.log('\n3. HELD OFF THE ROUND — the phone');
@@ -360,6 +367,42 @@ const srv = http.createServer((req, res) => {
       latePillTitles: [...document.querySelectorAll('#paWeek td.pa-past .pill')]
         .filter(el => /Late|Просроч/i.test(el.getAttribute('title') || '')).length,
       pastPills: document.querySelectorAll('#paWeek td.pa-past .pill').length,
+      /* NOTHING IN A CELL MAY READ AS A CLOCK TIME. The caption was
+         "1000h · PM 07.09", and at 11 px mono that is ten in the evening:
+         the interpunct is a colon and "PM" after a number is a meridiem.
+         Reported from the office as "what's with the time in INSP?" — a
+         caption spelling something false, which is this project's signature
+         defect wearing a typeface. */
+      clockish: [...document.querySelectorAll('#paWeek td.c .mono')]
+        .filter(el => /\d{1,2}:\d{2}/.test(el.textContent)).length,
+      pmAbbrev: [...document.querySelectorAll('#paWeek td.c .mono')]
+        .filter(el => /\bPM\b/.test(el.textContent)).length,
+      /* AND THE CODES SAY WHAT THEY ARE WITHOUT A MOUSE. Three letters in a
+         pill is all that fits fifteen columns, and the round's name lived in
+         the hover title alone — so a printed grid, or one on a wall, was a
+         page of initials. */
+      /* A ROUND WALKED AHEAD OF ITS SERVICE IS MARKED IN A CHANNEL COLOUR
+         CANNOT TAKE AWAY. The General Inspection sits three columns left of
+         the order it belongs to, and that was said in the fill alone —
+         amber for a pre-check. A pill on a gone day turns red for being
+         late and red won, so exactly the pre-checks somebody most needs to
+         see lost the only mark that said what they were, while the subtitle
+         went on promising they were highlighted. */
+      preRinged: [...document.querySelectorAll('#paWeek td.c .pill.pa-pre')].length,
+      preLate: [...document.querySelectorAll('#paWeek td.pa-past .pill.pa-pre')].length,
+      preDashed: (() => { const el = document.querySelector('#paWeek td.c .pill.pa-pre');
+                          return el ? getComputedStyle(el).outlineStyle : ''; })(),
+      /* And it says how far ahead in days, MEASURED from the two dates on
+         screen — never the rule's own 3 quoted back at a pre-check that was
+         clamped forward or whose service has already passed. */
+      preCaps: [...document.querySelectorAll('#paWeek td.c > div')]
+        .filter(d => d.querySelector('.pill.pa-pre'))
+        .map(d => d.textContent.replace(/\s+/g, ' ').trim()),
+      keyTxt: (document.querySelector('#paWeek > .sub') || {}).textContent || '',
+      keySize: (() => { const el = document.querySelector('#paWeek > .sub');
+                        return el ? parseFloat(getComputedStyle(el).fontSize) : 0; })(),
+      drawn: [...new Set([...document.querySelectorAll('#paWeek td.c .pill')]
+        .map(el => el.textContent.trim()))],
     };
   });
   if (grid.skip) ok(false, 'the week grid could not be rendered');
@@ -372,6 +415,24 @@ const srv = http.createServer((req, res) => {
     ok(grid.pastPills === 0 || grid.latePillTitles === grid.pastPills,
       '  and every round sitting on a gone day is labelled late',
       grid.latePillTitles + ' of ' + grid.pastPills);
+    ok(grid.clockish === 0 && grid.pmAbbrev === 0,
+      '  nothing in a cell reads as a clock time',
+      grid.clockish + ' clock-shaped, ' + grid.pmAbbrev + ' bare "PM"');
+    ok(grid.drawn.length > 0 && grid.drawn.every(c => grid.keyTxt.includes(c)),
+      '  every code on the grid is named in the key beneath it',
+      grid.drawn.join('+') + ' → ' + grid.keyTxt.slice(0, 90));
+    ok(grid.keySize >= 10.5, '  and the key is readable at tablet sizes',
+      grid.keySize + ' px');
+    ok(grid.preRinged > 0 && grid.preDashed === 'dashed',
+      '  a round walked ahead of its service is ringed, not only tinted',
+      grid.preRinged + ' ringed, outline ' + (grid.preDashed || 'none'));
+    ok(grid.preLate === 0 || grid.preRinged >= grid.preLate,
+      '  and it keeps that ring on a day already gone, where red would hide it',
+      grid.preLate + ' of ' + grid.preRinged + ' on a past day');
+    ok(grid.preCaps.length > 0 && grid.preCaps.every(c =>
+         /\d+ d before service|the service is today|service was .* not carried out|\d+ дн\. до ТО|ТО сегодня|ТО было/.test(c)),
+      '  every one says how far ahead of the service it is, in days',
+      (grid.preCaps[0] || '(none)').slice(0, 70));
   }
 
   console.log('\n8. A SERVICE TIER INCLUDES THE TIERS BELOW IT');
@@ -403,11 +464,42 @@ const srv = http.createServer((req, res) => {
       tk156: of('TK156', '2026-09-12', 4000).slice().sort(),
       tk156_250: of('TK156', '2026-09-24', 250).slice().sort(),
       ex021_4000: of('EX021', null, 4000).slice().sort(),
-      ex021_500: of('EX021', '2026-08-01', 500).slice().sort(),
-      ex021_1000: of('EX021', '2026-08-01', 1000).slice().sort(),
+      /* THE RULE, NOT THE ANSWER IT HAPPENED TO GIVE. This pinned
+         ex021_500 === ["INSP"] and ex021_1000 === ["FC"], which was true
+         while the inspection was a 500 h round. It is 1,000 h since
+         2026-09-13, so both now belong to the 1,000 h order and the 500 h
+         order carries nothing — and a suite holding the old pair would have
+         failed on a correct file. What is actually being tested is that a
+         round goes to the order whose tier IS its interval, so that is what
+         is measured: for each of EX021's orders on the day 1C raised four
+         tiers at once, the rounds it kept against the rounds whose interval
+         for an excavator equals its hour figure. */
+      ex021_day: (() => {
+        const day = '2026-08-01', cls = 'EXC';
+        const orders = W.filter(w => w.equip === 'EX021' && w.planStart === day)
+          .map(w => ({ hours: w.hours, kept: (w.cmTypes || []).slice().sort() }));
+        /* Only rounds this day actually resolved to — asking DUE.hours about
+           a round an excavator is not on would answer with the round's own
+           figure and invent a claim nobody made. Membership lives in the
+           generated fitment table, not on this page. */
+        const union = [...new Set([].concat(...orders.map(o => o.kept)))];
+        const want = union.map(ty => {
+          const iv = DUE.hours(ty, cls);
+          const named = orders.find(o => o.hours === iv);
+          return named ? { ty, iv, filedOn: (orders.find(o => o.kept.indexOf(ty) >= 0) || {}).hours } : null;
+        }).filter(Boolean);
+        return { orders: orders.sort((a, b) => (a.hours || 0) - (b.hours || 0)), want };
+      })(),
       twice: twice.length,
       resolved: W.filter(w => w.open && (w.cmTypes || []).length).length,
       open: W.filter(w => w.open).length,
+      /* Open orders that resolve ONLY because a tier includes the tiers
+         below it — their hour figure is a MULTIPLE of a round's interval
+         and not the interval itself. That number IS the change this section
+         is about, and unlike a share of the file it does not move when 1C
+         raises a different mix of services next hour. */
+      byTier: W.filter(w => w.open && (w.cmTypes || []).length && w.hours)
+        .filter(w => !(w.cmTypes || []).some(ty => DUE.hours(ty, w.cls) === w.hours)).length,
     };
   });
   ok(JSON.stringify(wo.tk156) === '["FC","INSP","MP","TB"]',
@@ -424,14 +516,34 @@ const srv = http.createServer((req, res) => {
      to the biggest order was the first rule written here, and it filed
      EX021's filter cut under a 2,000 h service that does not mention
      filters while its own 1,000 h order read "no CM round". */
-  ok(JSON.stringify(wo.ex021_500) === '["INSP"]',
-    'where 1C raised every tier on one day, the 500 h order keeps the inspection',
-    wo.ex021_500.join('+') || '(none)');
-  ok(JSON.stringify(wo.ex021_1000) === '["FC"]',
-    '  and the 1,000 h order keeps the filter cut', wo.ex021_1000.join('+') || '(none)');
+  ok(wo.ex021_day.orders.length >= 2,
+    'EX021 on 2026-08-01 is the day 1C raised several tiers at once',
+    wo.ex021_day.orders.map(x => x.hours + 'h').join(' '));
+  ok(wo.ex021_day.want.length > 0,
+    '  and at least one of those tiers IS a round\'s own interval',
+    wo.ex021_day.want.map(x => x.ty + '@' + x.iv + 'h').join(' ') || '(none)');
+  /* THE RULE: a round goes to the order that NAMES its tier. Giving them all
+     to the biggest order was the first rule written here, and it filed
+     EX021's filter cut under a 2,000 h service that does not mention filters
+     while its own 1,000 h order read "no CM round". */
+  wo.ex021_day.want.forEach(x => {
+    ok(x.filedOn === x.iv,
+      `  the ${x.iv} h order keeps ${x.ty}, the round whose interval it names`,
+      'filed on ' + (x.filedOn == null ? '(nothing)' : x.filedOn + 'h'));
+  });
   ok(wo.twice === 0, '  and no visit claims the same round twice', wo.twice + ' visits');
-  ok(wo.resolved > 150, 'more open work orders now resolve to real CM work',
-    wo.resolved + ' of ' + wo.open);
+  /* THE CHANGE, NOT A SHARE OF THE FILE. This said "resolved > 150" and the
+     pull on 2026-09-13 came back with 148 of 278 — a correct file failing a
+     suite over a figure the suite had written down about a file 1C's own
+     clock rebuilds every hour. Rewritten as a share it then broke again the
+     same day for a real reason: with the general inspection moved to 1,000 h
+     the 500 h and 1,500 h orders stopped carrying one, and 126 of 278 is
+     correct. Both numbers were about the FILE. What this section is actually
+     about is the RULE — that an order at a multiple of a round's interval
+     carries that round — so what is counted is the orders that resolve only
+     because of it. */
+  ok(wo.byTier > 0, 'orders resolve because a tier includes the tiers below it',
+    wo.byTier + ' of ' + wo.resolved + ' resolved open order(s), ' + wo.open + ' open');
 
   /* AND EVERY ONE OF THEM IS DRAWN. Reported from the grid a second time:
      TK156 showed Filter Cut alone where four rounds were due. The grid took

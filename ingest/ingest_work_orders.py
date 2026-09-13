@@ -253,8 +253,24 @@ CM_PEOPLE = ["nurbol", "slam", "irek", "zhomart", "bekzhan"]
 # defect exactly, and the whole reason the panel can be trusted is that the
 # data file states, in writing, which header each field came from and which
 # ones it could not find.
+#
+# THE DATE A DEFECT WAS RAISED IS NOT THE DATE SOMEBODY PLANS TO FIX IT.
+# Until this was corrected the register read its date off "Start date plan" —
+# the second candidate, and the one this workbook has. So a defect written up
+# this morning and scheduled for the 28th was filed under the 28th, the panel
+# sorted newest-first on a column of FUTURE dates, and the twelve rows dated
+# tomorrow sat above everything raised today. From the office it looked exactly
+# like a feed that had stopped: "already 24 hours since Defects raised updated"
+# while the file behind it had refreshed six times. The workbook's own column
+# for this is "Work request creation date" (column 58). It is now the only
+# thing "date" is read from — a fallback to the planned start is not a
+# degraded answer to this question, it is a different question, so the
+# planned start is carried in its OWN field and the panel can show both.
 CM_FIELDS = {
-    "date":     ["Date", "Start date plan", "Date created", "Creation date", "Registration date"],
+    "date":     ["Work request creation date", "Work request created", "Date created",
+                 "Creation date", "Registration date"],
+    "planStart": ["Start date plan"],
+    "detected": ["Defect detected on"],
     "asset":    ["Asset", "Equip no", "Equipment"],
     # The defect number lives in "Work request number" — corrected by the
     # office after the first pass looked for "…reference".
@@ -450,12 +466,26 @@ def main():
         who = cm_person_match(row[cm_idx["person"]]) if cm_idx["person"] is not None else None
         if who:
             cm_get = lambda f: (row[cm_idx[f]] if cm_idx[f] is not None else None)
-            d_iso, _ = parse_1c_date(cm_get("date"))
+            raised_iso, _ = parse_1c_date(cm_get("date"))
+            det_iso, _ = parse_1c_date(cm_get("detected"))
+            plan_iso, _ = parse_1c_date(cm_get("planStart"))
+            # WHICH DATE THIS ROW IS FILED UNDER, AND SAID OUT LOUD. The
+            # raised date is the answer to "what has the team written up";
+            # the other two are stand-ins for a workbook that stops carrying
+            # it, and a stand-in that is not named is how the register came
+            # to be sorted on a column of future dates in the first place.
+            d_iso = raised_iso or det_iso or plan_iso
+            d_from = ("raised" if raised_iso else "detected" if det_iso
+                      else "planStart" if plan_iso else None)
             if d_iso and d_iso >= CM_SINCE:
                 ref = str(cm_get("request") or "").strip()
                 m = DEFECT_RE.search(ref)
                 cm_rows.append({
                     "date": d_iso,
+                    "dateFrom": d_from,
+                    "raised": raised_iso,
+                    "detected": det_iso,
+                    "planStart": plan_iso,
                     "asset": str(cm_get("asset") or equip).strip(),
                     # The code when the cell carries one, and the cell itself
                     # when it does not — never a row dropped for the shape of
@@ -581,6 +611,12 @@ def main():
         # never be confused for each other.
         "columns": sorted(col),
         "cmColumns": cm_report,
+        # How many rows are filed under each date, by where that date came
+        # from. "raised" for all of them is the healthy answer; anything else
+        # is a workbook that stopped carrying the creation date, and the
+        # office is told rather than left to notice the sort looks odd.
+        "cmDateFrom": {k: sum(1 for r in cm_dedup if r.get("dateFrom") == k)
+                       for k in ("raised", "detected", "planStart")},
         "cmSince": CM_SINCE,
         "cmPeople": [n.capitalize() for n in CM_PEOPLE],
         "cmWorkOrders": cm_dedup,

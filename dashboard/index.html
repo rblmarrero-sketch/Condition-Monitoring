@@ -601,6 +601,26 @@
   table.grid th.pa-today{color:var(--accent);font-weight:700;}
   table.grid th.pa-past,table.grid td.pa-past{background:color-mix(in srgb,var(--ink) 5%,transparent);}
   table.grid th.pa-past{color:var(--muted);}
+  /* A ROUND CARRIED OUT AHEAD OF THE SERVICE, MARKED IN A WAY COLOUR CANNOT
+     TAKE AWAY. The General Inspection is walked PA_PREINSP_DAYS before the
+     planned maintenance it belongs to — so it sits on its own day in this
+     grid, three columns to the left of the order it is for, and if that is
+     not obvious the grid reads as "the inspection is on the 10th" when the
+     service is on the 13th.
+
+     It was said in the fill alone: amber for a pre-check, green otherwise.
+     But a pill on a day already gone turns red for being late, and red wins,
+     so exactly the pre-checks somebody most needs to notice — the ones not
+     yet done — lost the only mark that said what they were. The subtitle
+     went on promising "General Inspection is highlighted" while it was not.
+
+     A dashed ring is orthogonal to the fill: it survives every one of the
+     three states, it survives greyscale, and it survives print, which this
+     grid is. */
+  #paWeek .pill.pa-pre{outline:2px dashed var(--warn-ink);outline-offset:1px;}
+  /* The ring is drawn OUTSIDE the pill, so the line of pills needs room
+     under it or the dash strikes through the work-order number beneath. */
+  #paWeek .pline{white-space:nowrap;padding-bottom:4px;}
   /* A defect description is a sentence, not a code. Left to itself it makes
      one column as wide as the rest of the table put together. */
   table.grid td.wrapcell{white-space:normal;min-width:14em;max-width:26em;}
@@ -3157,7 +3177,7 @@
          reads as a shape rather than as fifty lines to scan one at a time. -->
     <div class="section">
       <div class="secthd"><h2 data-i18n="pa_week_h2">Two weeks</h2>
-        <span class="pgsub" data-i18n="pa_week_sub">Open work orders from one week ago to one week ahead, by unit and day. Days before today are shaded and their rounds marked late — that is work the plan wanted and nobody has recorded. General Inspection is highlighted — it is carried out ahead of the date, not on it.</span></div>
+        <span class="pgsub" data-i18n="pa_week_sub">Open work orders from one week ago to one week ahead, by unit and day. Days before today are shaded and their rounds marked late — that is work the plan wanted and nobody has recorded. General Inspection is ringed with a dashed outline — it is carried out ahead of the service, not on the day, and each one says how many days ahead.</span></div>
       <div id="paWeek"></div>
     </div>
     <div class="section">
@@ -3617,22 +3637,22 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=359"></script>
+<script src="../data/magnetic_plug.js?v=360"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=359"></script>
-<script src="../mobile/hme.js?v=359"></script>
-<script src="../mobile/mp-fc.js?v=359"></script>
-<script src="../mobile/hme-cascade.js?v=359"></script>
-<script src="../mobile/temp-limits.js?v=359"></script>
+<script src="../data/work_orders.js?v=360"></script>
+<script src="../mobile/hme.js?v=360"></script>
+<script src="../mobile/mp-fc.js?v=360"></script>
+<script src="../mobile/hme-cascade.js?v=360"></script>
+<script src="../mobile/temp-limits.js?v=360"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=359"></script>
-<script src="../mobile/normalize.js?v=359"></script>
-<script src="../mobile/terms.js?v=359"></script>
+<script src="../mobile/assets.js?v=360"></script>
+<script src="../mobile/normalize.js?v=360"></script>
+<script src="../mobile/terms.js?v=360"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3651,19 +3671,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=359"></script>
-<script src="../mobile/edits.js?v=359"></script>
-<script src="../mobile/due.js?v=359"></script>
-<script src="../mobile/wear.js?v=359"></script>
-<script src="../mobile/wear-map.js?v=359"></script>
-<script src="../mobile/lube.js?v=359"></script>
-<script src="../mobile/lube-overrides.js?v=359"></script>
-<script src="../mobile/lube2027.js?v=359"></script>
-<script src="../mobile/lube-tds.js?v=359"></script>
+<script src="../mobile/grade.js?v=360"></script>
+<script src="../mobile/edits.js?v=360"></script>
+<script src="../mobile/due.js?v=360"></script>
+<script src="../mobile/wear.js?v=360"></script>
+<script src="../mobile/wear-map.js?v=360"></script>
+<script src="../mobile/lube.js?v=360"></script>
+<script src="../mobile/lube-overrides.js?v=360"></script>
+<script src="../mobile/lube2027.js?v=360"></script>
+<script src="../mobile/lube-tds.js?v=360"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=359"></script>
-<script src="../mobile/machine-photos.js?v=359"></script>
+<script src="../mobile/upload-defaults.js?v=360"></script>
+<script src="../mobile/machine-photos.js?v=360"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3672,17 +3692,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=359"></script>
-<script src="../mobile/get.js?v=359"></script>
-<script src="../mobile/points.js?v=359"></script>
-<script src="../mobile/uc-points.js?v=359"></script>
-<script src="../mobile/inspect-guide.js?v=359"></script>
-<script src="../mobile/get-figs.js?v=359"></script>
-<script src="../mobile/body-points.js?v=359"></script>
-<script src="../mobile/body-map.js?v=359"></script>
-<script src="../mobile/jspdf.umd.min.js?v=359"></script>
-<script src="../mobile/html2canvas.min.js?v=359"></script>
-<script src="../mobile/report-core.js?v=359"></script>
+<script src="../mobile/machine-fig.js?v=360"></script>
+<script src="../mobile/get.js?v=360"></script>
+<script src="../mobile/points.js?v=360"></script>
+<script src="../mobile/uc-points.js?v=360"></script>
+<script src="../mobile/inspect-guide.js?v=360"></script>
+<script src="../mobile/get-figs.js?v=360"></script>
+<script src="../mobile/body-points.js?v=360"></script>
+<script src="../mobile/body-map.js?v=360"></script>
+<script src="../mobile/jspdf.umd.min.js?v=360"></script>
+<script src="../mobile/html2canvas.min.js?v=360"></script>
+<script src="../mobile/report-core.js?v=360"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4615,7 +4635,10 @@ const I18N={
   cw_none:"No defect work order matches these filters.",
   cw_nodata:"The work-order file does not carry the team's defects yet. It is rebuilt hourly; this panel fills in on the next pull.",
   cw_nocol:"1C's export has no column this file could match for: {f}. Those cells are blank because the column was not found, not because 1C left them empty.",
-  cw_c_date:"Date", cw_c_asset:"Asset", cw_c_defect:"Defect no", cw_c_eqtype:"Equipment type",
+  cw_c_date:"Raised", cw_c_asset:"Asset", cw_c_defect:"Defect no", cw_c_eqtype:"Equipment type",
+  cw_plan_on:"repair planned to start {d}", cw_plan_none:"no planned start in 1C",
+  cw_notraised:"{n} of these rows carry no creation date in 1C. They are filed under {f} instead, so their place in this list is when the repair is planned — not when the defect was written up.",
+  cw_from_detected:"the date the defect was detected", cw_from_plan:"the planned start of the repair",
   cw_c_system:"System component", cw_c_prio:"Priority", cw_c_dtype:"Defect type",
   cw_c_descr:"Defect description", cw_c_cause:"Cause of defect",
   cw_c_status:"Status", cw_c_by:"Raised by",
@@ -4637,8 +4660,14 @@ const I18N={
   pa_window:"1C plan date", pa_win_all:"Any time", pa_win_over:"Overdue (plan date passed)",
   pa_win_7:"Next 7 days", pa_win_14:"Next 14 days", pa_win_30:"Next 30 days",
   pa_c_hours:"Hours",
-  pa_week_h2:"Two weeks", pa_week_sub:"Open work orders from one week ago to one week ahead, by unit and day. Days before today are shaded and their rounds marked late — that is work the plan wanted and nobody has recorded. General Inspection is highlighted — it is carried out ahead of the date, not on it.",
-  pa_week_none:"Nothing open falls between a week ago and a week ahead.", pa_week_pm:"PM",
+  pa_week_h2:"Two weeks", pa_week_sub:"Open work orders from one week ago to one week ahead, by unit and day. Days before today are shaded and their rounds marked late — that is work the plan wanted and nobody has recorded. General Inspection is ringed with a dashed outline — it is carried out ahead of the service, not on the day, and each one says how many days ahead.",
+  pa_week_none:"Nothing open falls between a week ago and a week ahead.",
+  pa_week_pm:"{n} d before service {d}",
+  pa_week_pm_today:"the service is today",
+  pa_week_pm_past:"service was {d} — not carried out",
+  pa_week_pre_t:"carried out ahead of the service, not on the day",
+  pa_week_key:"Rounds on this grid:",
+  pa_week_key_pre:"dashed = carried out ahead of the service",
   pa_week_today:"Today", pa_week_late:"Late — planned and not recorded",
  },
  ru:{
@@ -5468,7 +5497,10 @@ const I18N={
   cw_none:"Нет нарядов по дефектам с такими фильтрами.",
   cw_nodata:"В файле нарядов пока нет дефектов службы мониторинга. Файл обновляется ежечасно — панель заполнится при следующей выгрузке.",
   cw_nocol:"В выгрузке 1С не найден столбец для: {f}. Эти ячейки пусты потому, что столбец не найден, а не потому, что 1С их не заполнил.",
-  cw_c_date:"Дата", cw_c_asset:"Единица", cw_c_defect:"№ дефекта", cw_c_eqtype:"Тип техники",
+  cw_c_date:"Заявлен", cw_c_asset:"Единица", cw_c_defect:"№ дефекта", cw_c_eqtype:"Тип техники",
+  cw_plan_on:"ремонт запланирован с {d}", cw_plan_none:"плановая дата начала в 1С не указана",
+  cw_notraised:"У {n} строк в 1С нет даты создания заявки. Они отнесены к «{f}», поэтому их место в списке — это дата планируемого ремонта, а не дата регистрации дефекта.",
+  cw_from_detected:"дата обнаружения дефекта", cw_from_plan:"плановая дата начала ремонта",
   cw_c_system:"Узел / система", cw_c_prio:"Приоритет", cw_c_dtype:"Тип дефекта",
   cw_c_descr:"Описание дефекта", cw_c_cause:"Причина дефекта",
   cw_c_status:"Статус", cw_c_by:"Заявил",
@@ -5490,8 +5522,14 @@ const I18N={
   pa_window:"Плановая дата (1С)", pa_win_all:"Любое время", pa_win_over:"Просрочено (дата прошла)",
   pa_win_7:"Следующие 7 дней", pa_win_14:"Следующие 14 дней", pa_win_30:"Следующие 30 дней",
   pa_c_hours:"Наработка",
-  pa_week_h2:"Две недели", pa_week_sub:"Открытые наряды за неделю назад и на неделю вперёд, по единицам и дням. Дни до сегодняшнего затенены, а их обходы помечены как просроченные — это работа, которую план требовал, а записи о ней нет. Общий осмотр выделен — его проводят до даты ТО, а не одновременно с ней.",
-  pa_week_none:"С прошлой недели по следующую ничего не запланировано.", pa_week_pm:"ТО",
+  pa_week_h2:"Две недели", pa_week_sub:"Открытые наряды за неделю назад и на неделю вперёд, по единицам и дням. Дни до сегодняшнего затенены, а их обходы помечены как просроченные — это работа, которую план требовал, а записи о ней нет. Общий осмотр обведён пунктиром — его проводят до ТО, а не в день ТО, и на каждом указано, за сколько дней.",
+  pa_week_none:"С прошлой недели по следующую ничего не запланировано.",
+  pa_week_pm:"за {n} дн. до ТО {d}",
+  pa_week_pm_today:"ТО сегодня",
+  pa_week_pm_past:"ТО было {d} — не проведён",
+  pa_week_pre_t:"проводится до ТО, а не в день ТО",
+  pa_week_key:"Обходы на этой сетке:",
+  pa_week_key_pre:"пунктир — проводится до ТО",
   pa_week_today:"Сегодня", pa_week_late:"Просрочено — запланировано и не записано",
  },
 };
@@ -15647,23 +15685,87 @@ function renderPaWeek(qtyRows){
           const here=byUnit[u].filter(e=>e.day===d);
           const dc=d===today?" pa-today":isPast(d)?" pa-past":"";
           if(!here.length) return `<td class="c muted${dc}">—</td>`;
-          return `<td class="c${dc}">`+here.map(e=>{
-            const r=e.r;
+          /* ONE WORK ORDER, ONE CAPTION. A tier includes the tiers below it,
+             so TK156's 4,000 h order is Filter Cut, General Inspection,
+             Magnetic Plug and Dump Body Liner — four entries in one cell,
+             and each one printed the same "WO-015691" and the same
+             "4000h · 13.09" underneath its own pill. Four identical
+             captions stacked in a cell 90 px wide is three lines of noise
+             in front of the one thing the planner is reading, and it made
+             the fortnight grid three times taller than the work in it.
+             The rounds of one order on one day now share a caption: the
+             pills on one line, the work order and the hours once beneath
+             them. Nothing is merged across orders — two orders on the same
+             day stay two blocks, because they are two visits. */
+          const late=isPast(d);
+          const groups=[];
+          const byWo={};
+          here.forEach(e=>{
+            /* Keyed on what the caption SAYS, so two entries only ever
+               share one when every word of it would be identical: same
+               order, same hour figure, same plan date, and the same reason
+               for being on this day (a pre-check is walked ahead of the PM
+               and says so — it cannot sit under a caption that does not). */
+            const k=[e.r.w.woNumber||"", e.r.w.hours==null?"":e.r.w.hours,
+                     e.r.w.planStart||"", e.isPreCheck?1:0].join("|");
+            if(!byWo[k]){ byWo[k]={ e, codes:[] }; groups.push(byWo[k]); }
+            byWo[k].codes.push(e.code);
+          });
+          return `<td class="c${dc}">`+groups.map(g=>{
+            const e=g.e, r=e.r;
             /* Maintenance Type + plan date, printed, not just in a hover
                title -- this grid is read on a shared screen. For a
                pre-check entry the plan date is the PM it is walked ahead
                of, not the day the pill sits on, so it also explains why
                INSP is here 3 days early rather than on the 13th itself. */
-            const hrs=r.w.hours!=null?r.w.hours+"h":"";
-            const planTxt=e.isPreCheck ? `${esc(t("pa_week_pm"))} ${esc(shortDate(r.w.planStart))}`
-                                        : (hrs?"":esc(shortDate(r.w.planStart)));
-            const sub2=[hrs,planTxt].filter(Boolean).join(" · ");
+            /* "1000h · PM 07.09" READ AS A CLOCK TIME. Reported from the
+               office on 2026-09-13 — "what's with the time in INSP?" — and
+               they were right: in 11 px mono the interpunct is a colon, so
+               "1000h" is ten o'clock, and "PM" after a number is a meridiem
+               to every reader alive. The caption was spelling something
+               false, which is this project's signature defect wearing a
+               typeface. Two changes, both about the same thing: a space
+               before the h ("1000 h" is not a time), and the pre-check
+               note says what it means in words, on its own line, instead of
+               abbreviating "planned maintenance" to the two letters that
+               collide with the clock. */
+            const hrs=r.w.hours!=null?r.w.hours+" h":"";
+            const sub2=[hrs, (hrs||e.isPreCheck)?"":esc(shortDate(r.w.planStart))]
+              .filter(Boolean).join(" · ");
+            /* HOW FAR AHEAD, IN DAYS, MEASURED — never the rule's 3 quoted
+               back. The pre-check normally sits PA_PREINSP_DAYS before the
+               service, but one that fell off the back of the fortnight is
+               clamped forward to today, and one whose service has already
+               come and gone is behind it. Printing "3 days before" on those
+               would be a caption stating something untrue, which is the
+               defect the "PM" clock already was. So the gap is computed from
+               the two dates on screen and worded for its sign. */
+            const gap = (e.isPreCheck && window.DUE && r.w.planStart)
+              ? DUE.dayDiff(e.day, r.w.planStart) : null;
+            const preTxt = !e.isPreCheck ? ""
+              : gap == null ? t("pa_week_pm",{ n:"", d:shortDate(r.w.planStart) })
+              : gap > 0    ? t("pa_week_pm",{ n:gap, d:shortDate(r.w.planStart) })
+              : gap === 0  ? t("pa_week_pm_today")
+              :              t("pa_week_pm_past",{ d:shortDate(r.w.planStart) });
+            const preLine=preTxt
+              ? `<div class="mono" style="font-size:11px;line-height:1.4;white-space:nowrap;color:var(--warn-ink);font-weight:650">${
+                  esc(preTxt)}</div>` : "";
             /* A pill on a day already gone is late, and its title says so —
                a shaded column is not readable to somebody who cannot see
-               the shading. */
-            const late=isPast(d);
+               the shading. Each pill names its OWN round: with four of them
+               side by side, one shared service label repeated four times in
+               the hover said nothing about which pill was which. */
+            /* The dashed ring says "ahead of the service" and the fill says
+               "late" — two facts, two channels, so neither can hide the
+               other. The title carries both in words for anybody who cannot
+               see either. */
+            const pills=g.codes.map(code=>
+              `<span class="pill ${late?"c":e.isPreCheck?"w":"g"}${e.isPreCheck?" pa-pre":""}" title="${
+                esc(t("type_"+code)||code)}${e.isPreCheck?" — "+esc(t("pa_week_pre_t")):""}${
+                late?" — "+esc(t("pa_week_late")):""}">${esc(code)}</span>`)
+              .join(" ");
             return `<div style="display:inline-block;text-align:center;margin:1px 3px;vertical-align:top">`
-                 + `<span class="pill ${late?"c":e.isPreCheck?"w":"g"}" title="${esc(r.info.label)}${late?" — "+t("pa_week_late"):""}">${esc(e.code)}</span>`
+                 + `<div class="pline">${pills}</div>`
                  /* 11px, not 10. tests/tabletru.cjs holds this page to
                     nothing under 10.5px at tablet widths in Russian, and
                     these two lines were the whole of that failure —
@@ -15672,12 +15774,51 @@ function renderPaWeek(qtyRows){
                     it worth looking at; the size was wrong at either. */
                  + `<div class="mono muted" style="font-size:11px;line-height:1.4;white-space:nowrap">${esc(r.w.woNumber||"—")}</div>`
                  + (sub2?`<div class="mono muted" style="font-size:11px;line-height:1.4;white-space:nowrap">${sub2}</div>`:"")
+                 + preLine
                  + `</div>`;
           }).join("")+`</td>`;
         }).join("");
         return `<tr><td>${esc(u)}</td>${cells}</tr>`;
       }).join("")
-    + `</tbody></table></div>`;
+    + `</tbody></table></div>`
+    /* THE CODES SAY WHAT THEY ARE, WITHOUT A MOUSE. Three letters in a pill
+       is the only thing that fits a fifteen-column grid, and until now the
+       round's name lived in the hover title alone — so a planner reading
+       this on a shared screen, or printing it, had to point at every pill to
+       learn what it was, and a work order carrying three rounds meant three
+       hovers. The key is built from the codes ACTUALLY DRAWN, in the fixed
+       type order, so it never lists a round that is not on the grid and
+       never grows into a glossary. One line, read once. */
+    + (()=>{
+        const seen=[...new Set(entries.map(e=>e.code))];
+        /* TYPE_ORDER is this page's one statement of the round order — the
+           filter above the grid and the round picker both read it — so the
+           key cannot come out in a different order from the control beside
+           it. A code the order has never heard of is still listed, at the
+           end, rather than dropped: an unexplained pill is the thing this
+           line exists to remove. */
+        const codes=TYPE_ORDER.filter(k=>seen.includes(k))
+          .concat(seen.filter(k=>TYPE_ORDER.indexOf(k)<0).sort());
+        if(!codes.length) return "";
+        /* 12 px and muted: a key is read once and then ignored, so it must
+           not compete with the grid it explains — and 12 is still well over
+           the 10.5 px floor tests/tabletru.cjs holds this page to in Russian
+           at tablet widths. The space between the pill and the name is
+           deliberate: without it the text copies and reads aloud as
+           "MPMagnetic Plug". */
+        return `<div class="sub" style="margin-top:8px;font-size:12px;color:var(--muted)">${
+            esc(t("pa_week_key"))} `
+          + codes.map(c=>`<span class="pill g" style="margin-right:4px">${esc(c)}</span>${
+              esc(t("type_"+c)||c)}`).join(" &nbsp;· ")
+          /* And the ring, shown as the ring rather than described. A legend
+             that says "dashed" without a dashed thing beside it asks the
+             reader to imagine what they are looking for. Only printed when
+             something on the grid actually carries one. */
+          + (entries.some(e=>e.isPreCheck)
+              ? ` &nbsp;· <span class="pill n pa-pre" style="margin-right:6px">INSP</span>${
+                  esc(t("pa_week_key_pre"))}` : "")
+          + `</div>`;
+      })();
 }
 /* WHEN WAS THIS PULLED — and is that too long ago. The work-order file is
    refreshed by a scheduled GitHub job that GitHub runs when it gets round to
@@ -15838,11 +15979,17 @@ function renderPlanActualTab(){
    opened in a spreadsheet six months from now should not depend on which
    language the browser happened to be in. */
 function cwCsv(){
-  const rows=[["date","asset","defect_no","work_request_number","equipment_type",
+  /* Three dates, each named for what it is. "date" is what the list is
+     sorted and filed on; "date_source" says which of the other three it was
+     taken from, so a spreadsheet built off this file can never mistake a
+     planned start for the day a defect was written up. */
+  const rows=[["date","date_source","raised","detected","planned_start",
+               "asset","defect_no","work_request_number","equipment_type",
                "system_component","priority","defect_type","defect_description",
                "cause_of_defect","status","raised_by","work_order","maintenance_type",
                "is_planned_service"]];
-  cwRows().forEach(r=>rows.push([r.date||"", r.asset||"", r.defect||"", r.requestNo||"",
+  cwRows().forEach(r=>rows.push([r.date||"", r.dateFrom||"", r.raised||"", r.detected||"",
+    r.planStart||"", r.asset||"", r.defect||"", r.requestNo||"",
     r.eqType||"", r.system||"", r.priority||"", r.defectType||"", r.descr||"", r.cause||"",
     r.status||"", r.by||"", r.woNumber||"", r.maintType||"", r.planned?1:0]));
   const csv=rows.map(r=>r.map(v=>{ const x=String(v==null?"":v);
@@ -16857,8 +17004,23 @@ function renderCmWoTab(){
   const warn = $("cwWarn");
   if(warn){
     const miss = Object.entries(D.cmColumns||{}).filter(([,v])=>!v).map(([k])=>k);
-    warn.innerHTML = miss.length
+    let html = miss.length
       ? `<div class="note bad">${esc(t("cw_nocol",{f:miss.join(", ")}))}</div>` : "";
+    /* A ROW FILED UNDER A DATE THAT IS NOT THE RAISED DATE SAYS SO. Until
+       build 360 the whole register was filed under "Start date plan" — the
+       date somebody intends to START the repair, which for most of these
+       rows is in the future. Sorted newest-first that put next week above
+       this morning, and the panel read as a feed that had stopped while the
+       file behind it was refreshing every hour. The ingester now reads the
+       creation date and NAMES its source; this line is what happens when a
+       future workbook stops carrying it. */
+    const df = D.cmDateFrom || {};
+    const nf = (df.detected||0) + (df.planStart||0);
+    /* Plain `note` — it is already the amber advisory box on this page, and
+       a modifier no rule paints is a class that says nothing. */
+    if(nf) html += `<div class="note">${esc(t("cw_notraised",{ n:String(nf),
+      f: t(df.planStart ? "cw_from_plan" : "cw_from_detected") }))}</div>`;
+    warn.innerHTML = html;
   }
   if($("cwAsOf")) asOfInto($("cwAsOf"), D.generated);
   if($("cwSub")) $("cwSub").textContent =
@@ -16914,7 +17076,7 @@ function renderCmWoTab(){
       <th data-i18n="cw_c_cause">Cause of defect</th><th data-i18n="cw_c_status">Status</th>
       <th data-i18n="cw_c_by">Raised by</th></tr></thead><tbody>`
     + pg.rows.map(r=>`<tr${r.planned?' class="muted"':''}>
-        <td class="mono">${cell(r.date)}</td>
+        <td class="mono" title="${esc(r.planStart ? t("cw_plan_on",{d:r.planStart}) : t("cw_plan_none"))}">${cell(r.date)}</td>
         <td><b>${cell(r.asset)}</b></td>
         <td class="mono">${r.defect ? esc(r.defect)
             : (r.requestNo ? `<span class="muted" title="${esc(r.requestNo)}">${esc(r.requestNo.slice(0,28))}</span>`
@@ -17202,8 +17364,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=359"></script>
-<script src="sync-adapter.js?v=359"></script>
-<script src="report.js?v=359"></script>
+<script src="drive.js?v=360"></script>
+<script src="sync-adapter.js?v=360"></script>
+<script src="report.js?v=360"></script>
 </body>
 </html>

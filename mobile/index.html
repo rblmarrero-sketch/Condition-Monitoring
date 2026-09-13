@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=359">
+<link rel="manifest" href="manifest.webmanifest?v=360">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=359">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=359">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=359">
+<link rel="apple-touch-icon" href="icon-192.png?v=360">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=360">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=360">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -501,6 +501,20 @@
   .agitem .u .cat{color:var(--muted);font-weight:400;}
   .agitem .m{font-size:11.5px;color:var(--muted);margin-top:1px;font-variant-numeric:tabular-nums;}
   .agitem .prenote{color:var(--warn-ink);font-weight:650;}
+  /* WALKED. Quieter than the work still to do and still perfectly readable:
+     the unit stands down to the secondary ink rather than the muted grey —
+     nothing on this screen goes lighter than that, by the same rule the
+     report's type scale follows — and the row keeps its full tap target,
+     because it is still the way onto the machine. Struck through would say
+     "cancelled"; a tick and a date say "done". The tag is the same green as
+     an outstanding round on purpose: a second colour here would be a fourth
+     state on a row that has three. */
+  .agitem.done{background:transparent;border-left-color:var(--border);}
+  .agitem.done .u{color:var(--ink-2);font-weight:600;}
+  .agitem.done .tag{background:var(--surface-2);color:var(--ink-2);
+    border:1px solid var(--border);}
+  .daygroup.past .agitem.done{border-left-color:var(--border);}
+  .agitem .donenote{color:var(--good);font-weight:650;}
   /* A recovery action, offered as a line of text rather than a second button
      of the same weight as the one used every day. */
   .linkrow{display:block;width:100%;text-align:left;background:none;border:0;padding:10px 0 2px;
@@ -2102,6 +2116,16 @@
       <div class="duelist" id="dueList"></div>
     </div>
     <div id="dueWeekWrap" class="hidden" role="tabpanel" aria-labelledby="dueViewWeek">
+      <!-- TODAY, OR THE WHOLE FORTNIGHT. Asked for from the field: an
+           inspector standing in the yard at the start of a shift wants the
+           list they are about to walk, and fourteen days of it — most of it
+           work for next week — is a list they have to read past to find it.
+           It narrows the DAYS DRAWN and nothing else: the same rows, the
+           same source, the same late marking, so the two settings can never
+           disagree about what is on a day. Not a third tab, because it is
+           not a different question or a different panel — it is the span of
+           one, which is what a chip row is for. -->
+      <div class="tfilter dfilter" id="dueSpanF" aria-label="Span"></div>
       <div class="hint" id="dueWeekSub" style="margin:0 0 12px" data-i18n="due_week_sub">Open work orders from one week ago to one week ahead, grouped by the day something has to happen. Days before today are marked late — that is work the plan wanted and nobody has recorded. General Inspection is listed on the day it should be carried out — ahead of the plan date, not on it.</div>
       <div id="dueWeekList"></div>
     </div>
@@ -2475,15 +2499,15 @@ function bootDel(k){ try { localStorage.removeItem(k); } catch (e) {} }
   }
 })();
 </script>
-<script src="native.js?v=359"></script>
-<script src="upload-defaults.js?v=359"></script>
-<script src="hme.js?v=359"></script>
-<script src="mp-fc.js?v=359"></script>
-<script src="hme-cascade.js?v=359"></script>
-<script src="assets.js?v=359"></script>
-<script src="temp-limits.js?v=359"></script>
-<script src="normalize.js?v=359"></script>
-<script src="terms.js?v=359"></script>
+<script src="native.js?v=360"></script>
+<script src="upload-defaults.js?v=360"></script>
+<script src="hme.js?v=360"></script>
+<script src="mp-fc.js?v=360"></script>
+<script src="hme-cascade.js?v=360"></script>
+<script src="assets.js?v=360"></script>
+<script src="temp-limits.js?v=360"></script>
+<script src="normalize.js?v=360"></script>
+<script src="terms.js?v=360"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2502,25 +2526,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=359"></script>
-<script src="edits.js?v=359"></script>
-<script src="due.js?v=359"></script>
-<script src="wear.js?v=359"></script>
-<script src="wear-figs.js?v=359"></script>
-<script src="wear-map.js?v=359"></script>
-<script src="machine-photos.js?v=359"></script>
-<script src="machine-fig.js?v=359"></script>
-<script src="get.js?v=359"></script>
-<script src="points.js?v=359"></script>
-<script src="uc-points.js?v=359"></script>
-<script src="inspect-guide.js?v=359"></script>
-<script src="get-figs.js?v=359"></script>
-<script src="body-points.js?v=359"></script>
-<script src="body-map.js?v=359"></script>
-<script src="lube.js?v=359"></script>
-<script src="lube-overrides.js?v=359"></script>
-<script src="lube2027.js?v=359"></script>
-<script src="report-core.js?v=359"></script>
+<script src="grade.js?v=360"></script>
+<script src="edits.js?v=360"></script>
+<script src="due.js?v=360"></script>
+<script src="wear.js?v=360"></script>
+<script src="wear-figs.js?v=360"></script>
+<script src="wear-map.js?v=360"></script>
+<script src="machine-photos.js?v=360"></script>
+<script src="machine-fig.js?v=360"></script>
+<script src="get.js?v=360"></script>
+<script src="points.js?v=360"></script>
+<script src="uc-points.js?v=360"></script>
+<script src="inspect-guide.js?v=360"></script>
+<script src="get-figs.js?v=360"></script>
+<script src="body-points.js?v=360"></script>
+<script src="body-map.js?v=360"></script>
+<script src="lube.js?v=360"></script>
+<script src="lube-overrides.js?v=360"></script>
+<script src="lube2027.js?v=360"></script>
+<script src="report-core.js?v=360"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3000,6 +3024,8 @@ const I18N = {
     hist_min:"{n} min ago", hist_hr:"{n} h ago", hist_day:"{n} d ago",
     hist_never:"⚠ this phone has never loaded the fleet's history",
     hist_short:"⚠ this phone ran out of room — its history is incomplete",
+    sched_at:"1C plan pulled {t}", sched_none:"⚠ 1C's plan has not been downloaded yet",
+    sched_nodate:"⚠ 1C's plan carries no date — its age is unknown",
     due_cover:"covering {n} of {m} machines",
     due_never_p:TERMS.en.never_inspected,
     due_more:"+{n} more — narrow by round to see them",
@@ -3062,7 +3088,12 @@ const I18N = {
     due_week_today:"Today",
     due_week_late:"late",
     due_week_none:"Nothing open falls between a week ago and a week ahead.",
+    due_span_today:"Today", due_span_all:"All 14 days",
+    due_week_sub_today:"Open work orders 1C has on today, grouped as they are on the fortnight. Nothing here is a different list — it is the same day, on its own. Switch to All 14 days for the week behind and the week ahead.",
+    due_week_none_today:"1C has nothing open on today. Tap All 14 days for the week behind and the week ahead.",
     due_week_n:"{n} machine(s)",
+    due_week_n_done:"{n} outstanding · {m} done",
+    due_week_done:"inspected {d}",
     due_week_pmnote:"walk ahead of PM {d}",
     m_due_loaded:["History loaded ✔","{n} unit/type dates added to the due list."],
     sec_team:"Team inspections", btn_team_refresh:"Refresh",
@@ -3602,6 +3633,8 @@ const I18N = {
     hist_min:"{n} мин назад", hist_hr:"{n} ч назад", hist_day:"{n} д назад",
     hist_never:"⚠ этот телефон ещё ни разу не загружал историю парка",
     hist_short:"⚠ на телефоне не хватило места — история неполная",
+    sched_at:"план 1С загружен {t}", sched_none:"⚠ план 1С ещё не загружен",
+    sched_nodate:"⚠ в плане 1С нет даты — возраст неизвестен",
     due_cover:"охвачено машин: {n} из {m}",
     due_never_p:TERMS.ru.never_inspected,
     due_more:"ещё {n} — выберите тип осмотра, чтобы увидеть",
@@ -3661,7 +3694,12 @@ const I18N = {
     due_week_today:"Сегодня",
     due_week_late:"просрочено",
     due_week_none:"С прошлой недели по следующую ничего не запланировано.",
+    due_span_today:"Сегодня", due_span_all:"Все 14 дней",
+    due_week_sub_today:"Открытые наряды 1С на сегодня, сгруппированные так же, как за две недели. Это не другой список — это тот же день, отдельно. Переключитесь на «Все 14 дней», чтобы увидеть неделю назад и неделю вперёд.",
+    due_week_none_today:"На сегодня у 1С нет открытых нарядов. Нажмите «Все 14 дней», чтобы увидеть неделю назад и неделю вперёд.",
     due_week_n:"{n} машин(ы)",
+    due_week_n_done:"осталось: {n} · выполнено: {m}",
+    due_week_done:"выполнено {d}",
     due_week_pmnote:"провести до ТО {d}",
     m_due_loaded:["История загружена ✔","Добавлено дат: {n}."],
     sec_team:"Осмотры бригады", btn_team_refresh:"Обновить",
@@ -8283,6 +8321,21 @@ function badNote(n,whole,keys){
   else if(v){ const o=badRead(); if(o.keys) return; badSet(Math.max(o.n,v), null); }
 }
 function dueBad(){ const n=badGet(); return n ? t("due_bad",{n}) : ""; }
+/* HOW OLD 1C'S HALF OF THIS SCREEN IS. The Due list is this phone's own
+   arithmetic and says its own age (histAge); the 1C plan beside it is a file
+   pulled off Pages and said nothing at all about itself, so a plan from
+   breakfast and a plan from five minutes ago looked identical. Said only
+   where 1C is actually on screen — under the plan scope, or with the
+   schedule line switched on — because a line about a feed nobody is reading
+   is noise. Nothing is assumed: no copy at all, or a stamp that will not
+   parse, says exactly that rather than "just now". */
+function schedAge(){
+  if(!(dueScope==="plan" || dueSched || dueView==="week")) return "";
+  if(!SCHED) return t("sched_none");
+  const at = SCHED.generated ? Date.parse(SCHED.generated) : NaN;
+  if(!isFinite(at)) return t("sched_nodate");
+  return t("sched_at",{t:agoWords(at)});
+}
 
 /* A ROUND THIS SCREEN CANNOT SCHEDULE, FOR EITHER OF THE TWO REASONS.
 
@@ -8578,7 +8631,14 @@ function daysBetween(iso){ const d=new Date(iso+"T00:00:00"); if(isNaN(d)) retur
    fetch fails; there is no version of "offline" in which this toggle goes
    blank instead of showing what it last knew. */
 const SCHED_URL = "../data/schedule_slim.json";
-const SCHED_STALE_MS = 3600000;      // an hour — matches the refresh cadence
+/* Fifteen minutes, not the hour it was. The source is refreshed hourly but
+   NOT on the hour — GitHub's scheduled job is best-effort and was measured
+   running at 02:09, 03:05, 07:47, 12:56, 16:47 and 19:06 on one day, and the
+   VM now dispatches it the moment the pipeline's WO.xlsx changes as well. So
+   an hour-long freshness gate does not track an hourly source; it tracks it
+   with up to an hour of lag on top, which is what the office reported. At
+   20 kB a pull this costs a handset nothing worth counting. */
+const SCHED_STALE_MS = 900000;
 const SCHED_PREINSP_DAYS = 3;        // mirrors the dashboard's PA_PREINSP_DAYS
 let dueSched = false;                 // the toggle's own state
 try{ dueSched = localStorage.getItem("cm_due_sched")==="1"; }catch(e){}
@@ -8624,9 +8684,9 @@ const SCHED_RETRY_GAP=60000;
 
    So the answer is a fact — did SCHED become something new — and the
    caller repaints only on true. */
-async function schedEnsureLoaded(){
+async function schedEnsureLoaded(force){
   const cached = schedCacheGet();
-  if(cached && Date.now()-cached.at < SCHED_STALE_MS){
+  if(!force && cached && Date.now()-cached.at < SCHED_STALE_MS){
     const changed = SCHED !== cached.data; SCHED=cached.data; return changed;
   }
   let changed = false;
@@ -8637,11 +8697,66 @@ async function schedEnsureLoaded(){
     const res = await fetch(SCHED_URL + (SCHED_URL.indexOf("?")<0?"?":"&") + "_=" + Date.now());
     if(!res.ok) throw new Error("HTTP "+res.status);
     const j = await res.json();
-    if(j && j.byUnit){ SCHED=j; schedCacheSet(j); changed = true; }
+    /* A PULL THAT HAS NOT MOVED IS NOT A CHANGE. The cache's timestamp is
+       refreshed either way — that is what stops the render path asking
+       again on the very next paint — but SCHED is only replaced, and the
+       caller only told to repaint, when 1C's own stamp has actually
+       advanced. Replacing an identical object every time would have
+       repainted the Due screen under somebody's thumb every ten minutes
+       for nothing. A file with no stamp at all is treated as new, because
+       "I cannot tell" is not "nothing happened". */
+    if(j && j.byUnit){
+      const moved = !j.generated || !SCHED || SCHED.generated !== j.generated;
+      schedCacheSet(j);
+      if(moved){ SCHED=j; changed = true; }
+    }
   }catch(e){ /* stays on the stale copy, if any — see above */ }
   finally{ schedLoading=false; }
   return changed;
 }
+/* ---- AND IT ASKS BY ITSELF -----------------------------------------------
+   Until build 360 this file was fetched on exactly three occasions: the
+   toggle being switched on, This week being opened, and a Due paint that
+   found the cached copy over an hour old. Every one of them needs somebody
+   to touch the screen.
+
+   The shift that produces is the one the office reported: a phone opened at
+   the crib room, Due looked at once at 06:30, then carried around all day on
+   the capture screen. 1C's pull refreshed six times behind it and the phone
+   showed breakfast's plan until somebody went back to Due AND the hour had
+   turned. It is the inbound half of the rule this app already applies to
+   its own history (teamPull's five-minute timer, build 300) and to its own
+   build (checkForNewBuild) — nobody should have to press anything to find
+   out whether what is on screen is still true.
+
+   So: a timer, a visibility change, and the radio coming back. Guarded on
+   the app being in front, throttled by SCHED_STALE_MS inside
+   schedEnsureLoaded, and repainting only when the pull actually moved. The
+   file is 20 kB, so this costs a handset almost nothing; going without it
+   cost a drive to a machine somebody had already walked. */
+const SCHED_MS = 600000;              // ten minutes, for an hourly source
+let schedTimer = null;
+function schedRefresh(why){
+  if(document.hidden) return Promise.resolve(false);
+  if(schedKick) return Promise.resolve(false);
+  schedKick = true;
+  return schedEnsureLoaded().then(changed=>{
+    schedKick = false;
+    /* Only the screen that is actually showing 1C's plan is repainted, and
+       only when there is something new on it. */
+    if(changed && paneIsDue()) renderDue();
+    return changed;
+  }, ()=>{ schedKick = false; return false; });
+}
+/* Is the Due screen the one in front of somebody? CUR_PANE is what showPane
+   sets and what every other screen-aware branch in this file reads, so it is
+   the one answer rather than a second rule about classes. */
+function paneIsDue(){
+  return (typeof CUR_PANE!=="undefined") && CUR_PANE==="paneDue";
+}
+/* Armed at the foot of this file, beside the inbound team pull's own timer,
+   because the two are the same rule about two different feeds and belong
+   where a reader can see them together. */
 /* The soonest open, CM-matched 1C work order for this unit that names this
    round type — schedule_slim.json is already sorted soonest-first per unit
    (see ingest_work_orders.py), so the first match is the right one. */
@@ -8703,6 +8818,13 @@ function schedRowHtml(unit,ty){
    matters here more than most places. */
 let dueView = "list";                 // list | week
 try{ dueView = localStorage.getItem("cm_due_view")==="week" ? "week" : "list"; }catch(e){}
+/* today | all — how much of the agenda the week view draws. Defaults to the
+   whole fortnight, which is what it has always shown; "today" is the narrower
+   answer an inspector asked for at the start of a shift. Remembered per
+   device like every other choice on this screen, because a setting that
+   resets every morning is one somebody has to make every morning. */
+let dueSpan = "all";
+try{ dueSpan = localStorage.getItem("cm_due_span")==="today" ? "today" : "all"; }catch(e){}
 const SCHED_PREINSP_LOOKBACK = 14;    // mirrors the dashboard's PA_PREINSP_LOOKBACK
 /* Has a General Inspection already been walked for THIS PM, not just at
    some point in the machine's life? histAll() is the same last-done index
@@ -8710,6 +8832,36 @@ const SCHED_PREINSP_LOOKBACK = 14;    // mirrors the dashboard's PA_PREINSP_LOOK
    stray, unverifiable date the way roundsOnClass() does). An inspection
    found more than SCHED_PREINSP_LOOKBACK days before the plan date does
    not clear THIS PM's own pre-check. */
+/* HAS THIS ROUND ALREADY BEEN WALKED FOR THIS 1C WORK ORDER?
+
+   Stated once, here, and read by both of the screens that show 1C's plan —
+   the List's "1C plan" scope, which leaves finished work out because it is a
+   worklist, and the agenda, which marks it DONE because it is a calendar and
+   a day with the work struck off it is the answer to "did we do it".
+
+   It was inline in planRows and nowhere else, so the agenda knew nothing
+   about it: an inspector walked the plug round on TK156 in the morning, the
+   List dropped it within the minute, and the Two weeks view went on listing
+   it as work for the rest of the fortnight. Two screens, one fact, two
+   answers — and the one that was wrong is the one somebody walks off.
+
+   Returns the last-done entry when it satisfies the order, null otherwise,
+   so the caller can print the date rather than just a tick. The rule is the
+   one planRows already used: a CM round of this type on this unit dated on
+   or after the day 1C wants the service. Nothing looser is invented here — a
+   round walked BEFORE the plan date is real work but it is not this order's,
+   and guessing that it is would take work off a list nobody had done.
+
+   `h` is optional: pass the last-done index when the caller already has it
+   (planRows reads it once for the whole fleet), and it is read here when not. */
+function schedWalkedFor(unit, ty, planDate, h){
+  if(!unit || !ty || !planDate) return null;
+  let idx=h;
+  if(!idx){ try{ idx=histAll()||{}; }catch(e){ return null; } }
+  let last=null; try{ last=histEntry(idx[ty+"|"+unit]); }catch(e){ return null; }
+  if(!last || !last.d) return null;
+  return String(last.d) >= String(planDate) ? last : null;
+}
 function schedPreInspDone(unit, planDate){
   try{
     const h=histAll(), gated=histGated();
@@ -8744,7 +8896,14 @@ function dueWeekRows(){
         /* One row per ROUND. It took the first of them and dropped the
            rest, which mattered the moment a 4,000 h order began resolving
            to four rounds — see the office's copy of this for the case. */
-        [...onDate].sort().forEach(code=>out.push({ unit, day:w.plan, code, isPre:false, w }));
+        /* WORK ALREADY WALKED IS MARKED, NOT DROPPED. This is a calendar,
+           and a day whose work is struck off is the answer to "did we do
+           it" — dropping the row would give the same blank as a day nobody
+           had planned anything on. The rule is schedWalkedFor's, the same
+           one the List's 1C scope uses to leave it out; the two screens now
+           differ in what they DO with the fact, never in the fact. */
+        [...onDate].sort().forEach(code=>out.push({ unit, day:w.plan, code, isPre:false, w,
+          done: schedWalkedFor(unit, code, w.plan) }));
       }
       if(shiftInsp && w.plan && !schedPreInspDone(unit,w.plan)){
         const wanted=DUE.shift(w.plan,-SCHED_PREINSP_DAYS);
@@ -8757,7 +8916,10 @@ function dueWeekRows(){
            rule it was written for stands: do not go silent on an overdue
            thing. */
         const day=inWindow(wanted) ? wanted : (DUE.dayDiff(today,wanted)<0 ? today : wanted);
-        if(inWindow(day)) out.push({ unit, day, code:"INSP", isPre:true, w });
+        /* The pre-check has its own "done" — schedPreInspDone, three lines
+           up, already keeps a walked one out entirely. Reaching here means
+           it is outstanding, so it is never marked done. */
+        if(inWindow(day)) out.push({ unit, day, code:"INSP", isPre:true, w, done:null });
       }
     });
   });
@@ -8767,7 +8929,37 @@ function renderDueWeek(){
   const box=$("dueWeekList"); if(!box) return;
   const entries=dueWeekRows();
   const today=todayISO();
-  const days=DUE.agendaDays(today);
+  /* The fortnight, or just the day being walked. Counted off the SAME
+     entries either way — the chip only chooses which days are drawn, so
+     "Today 3" on the chip and three rows under the heading are one fact,
+     not two. */
+  const allDays=DUE.agendaDays(today);
+  const days=dueSpan==="today" ? [today] : allDays;
+  const spanBox=$("dueSpanF");
+  if(spanBox){
+    /* The chip counts WORK, so a round already walked is not in it — the
+       number an inspector reads off a chip has to be the number of things
+       they still have to do. The day heading beside it says both, in words,
+       so the two figures can be told apart rather than silently disagreeing. */
+    const todo=entries.filter(e=>!e.done);
+    const nToday=todo.filter(e=>e.day===today).length;
+    const nAll=todo.filter(e=>allDays.indexOf(e.day)>=0).length;
+    spanBox.innerHTML=[["today","due_span_today",nToday],["all","due_span_all",nAll]]
+      .map(([k,lab,n])=>`<button type="button" data-dw="${k}" class="${dueSpan===k?"on":""}">${
+        esc(t(lab))}<span class="n">${n}</span></button>`).join("");
+    spanBox.querySelectorAll("[data-dw]").forEach(b=>b.onclick=()=>{
+      dueSpan=b.dataset.dw;
+      try{ lsSet("cm_due_span", dueSpan); }catch(e){}
+      renderDueWeek();
+    });
+  }
+  /* The KEY moves with the chip, not just the text: applyLang() repaints
+     every [data-i18n] node on a language change, so a text-only update
+     would be silently replaced by the fortnight's wording the first time
+     somebody switched to Russian while Today was on. */
+  const sub=$("dueWeekSub");
+  if(sub){ const k = dueSpan==="today" ? "due_week_sub_today" : "due_week_sub";
+           sub.dataset.i18n=k; sub.textContent=t(k); }
   const dayLabel=d=>{
     const dt=new Date(d+"T00:00:00Z");
     const wd=dt.toLocaleDateString(lang==="ru"?"ru-RU":"en-US",{weekday:"short",timeZone:"UTC"}).replace(/\.$/,"");
@@ -8780,21 +8972,31 @@ function renderDueWeek(){
   const byDay={};
   entries.forEach(e=>(byDay[e.day]=byDay[e.day]||[]).push(e));
   const groups=days.filter(d=>byDay[d] && byDay[d].length);
-  if(!groups.length){ box.innerHTML=`<div class="empty">${esc(t("due_week_none"))}</div>`; return; }
+  if(!groups.length){ box.innerHTML=`<div class="empty">${esc(t(
+      dueSpan==="today" ? "due_week_none_today" : "due_week_none"))}</div>`; return; }
   box.innerHTML=groups.map(d=>{
     const past=DUE.agendaPast(today,d);
-    const rows=[...byDay[d]].sort((a,b)=>a.unit<b.unit?-1:a.unit>b.unit?1:0);
+    /* Outstanding first, then what has been walked — a list read top-down
+       on a phone puts the work at the top. Within each half, by unit. */
+    const rows=[...byDay[d]].sort((a,b)=>
+      (a.done?1:0)-(b.done?1:0) || (a.unit<b.unit?-1:a.unit>b.unit?1:0));
+    const nDone=rows.filter(e=>e.done).length, nTodo=rows.length-nDone;
+    const hdCount=nDone ? t("due_week_n_done",{n:nTodo, m:nDone}) : t("due_week_n",{n:nTodo});
     return `<div class="daygroup${past?" past":""}">
-      <div class="dayhd"><b${d===today?' class="today"':past?' class="late"':""}>${esc(dayLabel(d))}</b><span>${esc(t("due_week_n",{n:rows.length}))}</span></div>
+      <div class="dayhd"><b${d===today?' class="today"':past?' class="late"':""}>${esc(dayLabel(d))}</b><span>${esc(hdCount)}</span></div>
       ${rows.map(e=>{
         const a=ASSET_BY[e.unit];
         const hrs=e.w.hours!=null?e.w.hours+"h":"";
         const pre=e.isPre?` <span class="prenote">· ${esc(t("due_week_pmnote",{d:schedShortDate(e.w.plan)}))}</span>`:"";
-        return `<button type="button" class="agitem${e.isPre?" pre":""}" data-u="${esc(e.unit)}" data-t="${esc(e.code)}">
-          <span class="tag">${esc(e.code)}</span>
+        /* WALKED. Said in words and not only in a colour: "done" as a tick
+           with the date it was recorded, so the row answers the question
+           without anybody having to know what grey means. */
+        const done=e.done?` <span class="donenote">· ${esc(t("due_week_done",{d:schedShortDate(e.done.d)}))}</span>`:"";
+        return `<button type="button" class="agitem${e.isPre?" pre":""}${e.done?" done":""}" data-u="${esc(e.unit)}" data-t="${esc(e.code)}">
+          <span class="tag">${e.done?"✓ ":""}${esc(e.code)}</span>
           <span class="body">
             <span class="u">${esc(e.unit)}${a&&a.cat?` <span class="cat">${esc(a.cat)}</span>`:""}</span>
-            <span class="m">${esc(e.w.wo||"—")}${hrs?" · "+esc(hrs):""}${pre}</span>
+            <span class="m">${esc(e.w.wo||"—")}${hrs?" · "+esc(hrs):""}${pre}${done}</span>
           </span></button>`;
       }).join("")}
     </div>`;
@@ -9040,8 +9242,7 @@ function planRows(only){
         if(only && ty!==only) return;
         if(!TYPE_META[ty]) return;
         if(DUE.offRound && DUE.offRound(ty,a)) return;
-        let last=null; try{ last=histEntry(h[ty+"|"+unit]); }catch(e){}
-        if(last && last.d && String(last.d)>=String(w.plan)) return;   // already walked for it
+        if(schedWalkedFor(unit, ty, w.plan, h)) return;   // already walked for it
         /* One row per machine and round. Two work orders in the window can
            resolve to the same round — the 1,000 h and the 4,000 h both
            carry the filter cut — and two identical rows is a list that
@@ -9351,6 +9552,8 @@ function renderDue(){
       dueVsFolder(),
       /* The line that decides whether "Missed 0" can be believed. */
       histAge(),
+      /* And the same question asked of 1C's half of the screen. */
+      schedAge(),
     ].filter(Boolean).join(" · ");
     note.classList.toggle("warn", histStale());
   }
@@ -12645,7 +12848,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="359";
+const BUILD="360";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -16235,7 +16438,7 @@ async function pushSetupNow(){
       sub=null;
       /* The remembered endpoint and key go with it, or the post below is
          skipped as "nothing changed" and the new subscription is never filed. */
-      try{ localStorage.removeItem(PUSH_EP); }catch(e){}
+      lsDel(PUSH_EP);
       madeWith="";
     }
   }
@@ -16579,6 +16782,20 @@ setInterval(()=>{ if(!document.hidden) pullIn(); }, 300000);
 document.addEventListener("visibilitychange",()=>{
   if(!document.hidden) pullIn();
 });
+
+/* 1C'S OWN PLAN IS THE SECOND INBOUND FEED, AND IT GETS THE SAME TREATMENT.
+   schedule_slim.json is regenerated hourly and was only ever fetched when
+   somebody touched the Due screen — see schedRefresh's own note for the
+   shift that produces. Three occasions, all of them the same rule as the
+   lines above: a timer, the app coming to the front, and the radio coming
+   back. schedEnsureLoaded throttles on SCHED_STALE_MS and repaints only
+   when 1C's stamp has moved, so none of these can turn into a request
+   storm or a screen that redraws under a thumb. */
+schedTimer = setInterval(()=>schedRefresh("timer"), SCHED_MS);
+document.addEventListener("visibilitychange",()=>{
+  if(!document.hidden) schedRefresh("visible");
+});
+window.addEventListener("online", ()=>schedRefresh("online"));
 </script>
 </body>
 </html>

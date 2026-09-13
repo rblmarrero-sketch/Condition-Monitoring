@@ -191,15 +191,28 @@ function diff(a, b) {
     });
   }
   /* The tip itself: the same record must change verdict on the same day on
-     both surfaces, not a day apart. */
+     both surfaces, not a day apart.
+
+     THE DAY IT TIPS IS ASKED FOR, NOT TYPED. This was pinned to the 29th and
+     the 30th of August, which is where a 500 h inspection walked on 4 August
+     turns over. The site moved the general inspection to 1,000 h on
+     2026-09-13 and the pair silently stopped straddling anything: both days
+     read "ok" and the suite reported a tip that had not happened, on code
+     that was working. The interval is due.js's to state — ask the phone for
+     it and compute the two days from the record's own date. */
   {
-    const a = await at('2026-08-29'), b3 = await at('2026-08-30');
+    const span = await surf['Asia/Anadyr'].phone.p.evaluate(
+      () => Math.round(DUE.hours('INSP', 'HT') / DUE.HOURS_PER_DAY));
+    const shift = n => { const d = new Date('2026-08-04T00:00:00Z');
+                         d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
+    const due = shift(span), past = shift(span + 1);
+    const a = await at(due), b3 = await at(past);
     ['TK109', 'TK152'].forEach(u => {
       const k = 'INSP|' + u;
       ok(`${u} · INSP tips from due-soon to overdue on the SAME day on both`,
          find(a.m, k).st === find(a.d, k).st && find(b3.m, k).st === find(b3.d, k).st
          && find(a.m, k).st !== find(b3.m, k).st,
-         `29th ${find(a.m, k).st}/${find(a.d, k).st}  30th ${find(b3.m, k).st}/${find(b3.d, k).st}`);
+         `${due} ${find(a.m, k).st}/${find(a.d, k).st}  ${past} ${find(b3.m, k).st}/${find(b3.d, k).st}`);
     });
   }
 

@@ -314,7 +314,7 @@ window.CM_WO_DATA = {
     "WE011"
   ],
   "duplicateRowsCollapsed": 175,
-  "roundsDedupedWithinVisit": 3,
+  "roundsDedupedWithinVisit": 2,
   "columns": [
     "Asset description",
     "Asset old no",
@@ -4134,10 +4134,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022737",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4214,10 +4212,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021979",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4294,10 +4290,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020070",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4353,10 +4347,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025979",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4393,10 +4385,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021977",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4534,10 +4524,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000136",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4576,10 +4564,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022013",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4616,10 +4602,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-018329",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4738,10 +4722,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024781",
       "maintType": "1500 Hours service Planned",
       "hours": 1500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "1500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4818,10 +4800,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003333",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -4917,10 +4897,8 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": null,
       "cmmsStatus": "Registered",
@@ -4997,10 +4975,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024815",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -5077,10 +5053,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003287",
       "maintType": "1500 Hours service Planned",
       "hours": 1500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "1500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -5199,10 +5173,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-018331",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -5281,10 +5253,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023540",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -5363,10 +5333,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002071",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -5445,10 +5413,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006392",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -5527,10 +5493,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010613",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -5609,10 +5573,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014680",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -5668,10 +5630,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021641",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -5750,10 +5710,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024761",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -5832,10 +5790,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003275",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -5914,10 +5870,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008124",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -5935,10 +5889,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010005",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -6017,10 +5969,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014165",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -6099,10 +6049,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022068",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -6181,10 +6129,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-026366",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -6263,10 +6209,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003324",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -6345,10 +6289,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008904",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -6427,10 +6369,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013103",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -6509,10 +6449,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016563",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -6572,10 +6510,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021071",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -6654,10 +6590,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024763",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -6736,10 +6670,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003294",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -6818,10 +6750,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008906",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -6900,10 +6830,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013104",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -6986,10 +6914,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-018334",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -7068,10 +6994,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023551",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -7150,10 +7074,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002133",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -7232,10 +7154,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006398",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -7314,10 +7234,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011201",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -7396,10 +7314,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015644",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CNF",
       "cmmsStatus": "Completed",
@@ -7478,10 +7394,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022621",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -7560,10 +7474,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-026374",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -7581,10 +7493,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002136",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -7663,10 +7573,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003296",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -7745,10 +7653,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010626",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -7827,10 +7733,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014685",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -7909,10 +7813,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021166",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -7991,10 +7893,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024768",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -8073,10 +7973,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003311",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -8155,10 +8053,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007114",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -8237,10 +8133,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012172",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -8319,10 +8213,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016618",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -8363,10 +8255,8 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": null,
       "cmmsStatus": "Registered",
@@ -8403,10 +8293,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021632",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -8485,10 +8373,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024771",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -8567,10 +8453,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003284",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -8649,10 +8533,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008911",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -8731,10 +8613,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014460",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -8771,10 +8651,8 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": null,
       "cmmsStatus": "Registered",
@@ -8792,10 +8670,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020485",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -8874,10 +8750,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024772",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -8956,10 +8830,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002058",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -9038,10 +8910,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007116",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -9097,10 +8967,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013108",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -9179,10 +9047,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016584",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -9200,10 +9066,8 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": null,
       "cmmsStatus": "Registered",
@@ -9221,10 +9085,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020493",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -9303,10 +9165,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023563",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -9423,10 +9283,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002046",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -9467,10 +9325,8 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": null,
       "cmmsStatus": "Registered",
@@ -9530,10 +9386,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024777",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -9612,10 +9466,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007117",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -9694,10 +9546,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011113",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -9799,10 +9649,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002052",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -9843,10 +9691,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006409",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -9887,10 +9733,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013110",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -9931,10 +9775,8 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": null,
       "cmmsStatus": "Registered",
@@ -9952,10 +9794,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013111",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -10038,10 +9878,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010605",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -10120,10 +9958,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016639",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -10183,10 +10019,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015435",
       "maintType": "1500 Hours service Planned",
       "hours": 1500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "1500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -10265,10 +10099,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013114",
       "maintType": "1500 Hours service Planned",
       "hours": 1500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "1500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -10366,10 +10198,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012209",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -10448,10 +10278,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015656",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -10510,10 +10338,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023357",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -10553,10 +10379,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001315",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -10596,10 +10420,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007386",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -10640,10 +10462,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012297",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -10705,10 +10525,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022261",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -10748,10 +10566,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025592",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -10792,10 +10608,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-004510",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -10835,10 +10649,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009150",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -10878,10 +10690,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013505",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -10966,10 +10776,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025573",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -11009,10 +10817,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007415",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -11052,10 +10858,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011260",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -11096,10 +10900,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015859",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -11117,10 +10919,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020497",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -11160,10 +10960,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024265",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -11203,10 +11001,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002144",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -11246,10 +11042,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006888",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -11290,10 +11084,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011849",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -11333,10 +11125,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015860",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -11399,10 +11189,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022233",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -11442,10 +11230,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025555",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -11485,10 +11271,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-005067",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -11528,10 +11312,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009520",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -11572,10 +11354,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015379",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -11637,10 +11417,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021525",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -11680,10 +11458,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025460",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -11723,10 +11499,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003776",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -11767,10 +11541,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009157",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -11810,10 +11582,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013904",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -11876,10 +11646,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022234",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -11919,10 +11687,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025564",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -11962,10 +11728,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-005081",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -12005,10 +11769,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009160",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -12049,10 +11811,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013902",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -12137,10 +11897,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023345",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -12180,10 +11938,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002255",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -12223,10 +11979,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007402",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -12267,10 +12021,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013572",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -12333,10 +12085,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021072",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -12415,10 +12165,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-026385",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -12474,10 +12222,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003274",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -12555,10 +12301,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008917",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -12617,10 +12361,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016616",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -12657,10 +12399,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021092",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -12738,10 +12478,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024875",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -12819,10 +12557,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002848",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -12900,10 +12636,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006416",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -12982,10 +12716,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012178",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -13123,10 +12855,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023566",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -13204,10 +12934,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002065",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -13286,10 +13014,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006417",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -13367,10 +13093,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012203",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -13448,10 +13172,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016615",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -13488,10 +13210,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021627",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -13570,10 +13290,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024956",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -13670,10 +13388,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003310",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -13751,10 +13467,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007120",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -13832,10 +13546,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012208",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -13914,10 +13626,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015660",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CNF",
       "cmmsStatus": "Completed",
@@ -13954,10 +13664,8 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": null,
       "cmmsStatus": "Registered",
@@ -13997,10 +13705,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022082",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -14041,10 +13747,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-026433",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -14084,10 +13788,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003298",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -14127,10 +13829,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008939",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -14211,10 +13911,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022613",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -14293,10 +13991,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000527",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -14374,10 +14070,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003251",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -14455,10 +14149,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010060",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -14536,10 +14228,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014050",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -14644,10 +14334,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000600",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -14665,10 +14353,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002772",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -14708,10 +14394,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006897",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -14729,10 +14413,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007968",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -14772,10 +14454,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012300",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -14793,10 +14473,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014379",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -14903,10 +14581,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022238",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -14946,10 +14622,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025560",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -14990,10 +14664,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-005093",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -15033,10 +14705,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010165",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -15076,10 +14746,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015397",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -15097,10 +14765,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020962",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -15118,10 +14784,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022923",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -15139,10 +14803,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024268",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -15182,10 +14844,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-004501",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -15225,10 +14885,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008613",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -15269,10 +14927,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013968",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -15312,10 +14968,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016929",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -15333,10 +14987,8 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": null,
       "cmmsStatus": null,
@@ -15433,10 +15085,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010088",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -15533,10 +15183,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023285",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -15554,9 +15202,10 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023287",
       "maintType": "1000 Hours service Planned",
       "hours": 1000,
-      "cmLabel": "Filter Cut",
+      "cmLabel": "Filter Cut / General Inspection",
       "cmTypes": [
-        "FC"
+        "FC",
+        "INSP"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
@@ -15613,10 +15262,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014171",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -15676,10 +15323,8 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": null,
       "cmmsStatus": "Registered",
@@ -15757,10 +15402,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007122",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -15838,10 +15481,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012174",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -15920,10 +15561,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016623",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -15982,10 +15621,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007123",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -16063,10 +15700,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012201",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -16145,10 +15780,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016606",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -16188,10 +15821,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007086",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -16269,10 +15900,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010090",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -16350,10 +15979,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015451",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -16431,10 +16058,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008107",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -16512,10 +16137,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013129",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "CLSD",
       "cmmsStatus": "Completed",
@@ -16594,10 +16217,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016604",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection",
-      "cmTypes": [
-        "INSP"
-      ],
+      "cmLabel": "500h service",
+      "cmTypes": null,
       "priority": "P3 Planned (PM)",
       "woStatus": "REL",
       "cmmsStatus": "Elimination scheduled",
@@ -30972,9 +30593,8 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -31017,9 +30637,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025446",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -31087,9 +30706,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006877",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -31156,9 +30774,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-005260",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -31202,9 +30819,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010200",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -31270,9 +30886,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016946",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -31316,9 +30931,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023348",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -31361,9 +30975,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001396",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -31407,9 +31020,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006244",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -31452,9 +31064,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009702",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -31474,9 +31085,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010796",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -31496,9 +31106,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013967",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -31542,9 +31151,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021038",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -31588,9 +31196,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024901",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -31633,9 +31240,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002814",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -31679,9 +31285,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007997",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -31724,9 +31329,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012916",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -31746,9 +31350,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014392",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -32058,9 +31661,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022927",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -32103,9 +31705,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016301",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -32149,9 +31750,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021554",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -32194,9 +31794,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025589",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -32216,9 +31815,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012927",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -32262,9 +31860,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016920",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -32284,9 +31881,8 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -32306,9 +31902,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024267",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -32351,9 +31946,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002186",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -32397,9 +31991,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010193",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -32489,9 +32082,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022932",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -32511,9 +32103,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023346",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -32533,9 +32124,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000720",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -32579,9 +32169,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-005062",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -32624,9 +32213,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010169",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -32646,9 +32234,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012966",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -32715,9 +32302,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021560",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -32761,9 +32347,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025418",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -32806,9 +32391,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-004473",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -32852,9 +32436,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010170",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -32874,9 +32457,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011231",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -32896,9 +32478,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015409",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -32941,9 +32522,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022926",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -32987,9 +32567,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000721",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -33032,9 +32611,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006267",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -33078,9 +32656,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010788",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -33146,9 +32723,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020547",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -33192,9 +32768,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024912",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -33237,9 +32812,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002188",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -33283,9 +32857,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008000",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -33305,9 +32878,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009516",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -33350,9 +32922,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015876",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -33419,9 +32990,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002189",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -33464,9 +33034,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008001",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -33486,9 +33055,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011251",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -33508,9 +33076,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012296",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -33554,9 +33121,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009622",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -33622,9 +33188,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025604",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -33644,9 +33209,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003793",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -33712,9 +33276,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013478",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -33734,9 +33297,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015878",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -33779,9 +33341,8 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -33825,9 +33386,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022140",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -33870,9 +33430,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012943",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -33892,9 +33451,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014720",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -33937,9 +33495,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022240",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -33983,9 +33540,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000723",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34028,9 +33584,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-005054",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34098,9 +33653,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013490",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34120,9 +33674,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015410",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34211,9 +33764,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002966",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34257,9 +33809,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009177",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34325,9 +33876,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016283",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34347,9 +33897,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020549",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34393,9 +33942,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011252",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34415,9 +33963,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012945",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34460,9 +34007,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016435",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34505,9 +34051,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022934",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34551,9 +34096,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000725",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34596,9 +34140,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006252",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34642,9 +34185,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012291",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34711,9 +34253,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022268",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34756,9 +34297,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025565",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34802,9 +34342,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-004481",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34847,9 +34386,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010164",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34893,9 +34431,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015412",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34915,9 +34452,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016909",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -34961,9 +34497,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024905",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35006,9 +34541,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-004499",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35052,9 +34586,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008651",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35074,9 +34607,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009605",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35166,9 +34698,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001400",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35211,9 +34742,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006905",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35233,9 +34763,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008002",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35279,9 +34808,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013513",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35301,9 +34829,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016276",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35347,9 +34874,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024269",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35392,9 +34918,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001401",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35438,9 +34963,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013917",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35460,9 +34984,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015416",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35524,9 +35047,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024266",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35570,9 +35092,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002192",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35615,9 +35136,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011259",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35661,9 +35181,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016894",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35683,9 +35202,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021563",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35729,9 +35247,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025417",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35774,9 +35291,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-004511",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35820,9 +35336,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009523",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35865,9 +35380,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016307",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35935,9 +35449,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022137",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -35980,9 +35493,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025571",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36002,9 +35514,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002193",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36024,9 +35535,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-004480",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36069,9 +35579,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-009562",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36115,9 +35624,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014401",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36137,9 +35645,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021051",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36183,9 +35690,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024894",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36228,9 +35734,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002821",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36274,9 +35779,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008004",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36319,9 +35823,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013907",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36364,9 +35867,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022924",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36386,9 +35888,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025626",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36408,9 +35909,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-001403",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36453,9 +35953,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006263",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36499,9 +35998,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010199",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36521,9 +36019,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012935",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36566,9 +36063,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021053",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36612,9 +36108,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-025580",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36657,9 +36152,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-004475",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36679,9 +36173,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021055",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36725,9 +36218,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-026130",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36770,9 +36262,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-005090",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36840,9 +36331,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011247",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36862,9 +36352,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013966",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36931,9 +36420,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023360",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36976,9 +36464,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013474",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -36998,9 +36485,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015421",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -37106,9 +36592,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023498",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -37192,9 +36677,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002061",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -37279,9 +36763,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006349",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -37365,9 +36848,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010098",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -37452,9 +36934,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014536",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -37517,9 +36998,8 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -37539,9 +37019,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020470",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -37625,9 +37104,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023500",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -37712,9 +37190,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002054",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -37734,9 +37211,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010617",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -37820,9 +37296,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006350",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -37971,9 +37446,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014706",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -38058,9 +37532,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020478",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -38144,9 +37617,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023502",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -38231,9 +37703,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002045",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -38317,9 +37788,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006351",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -38404,9 +37874,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011217",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -38490,9 +37959,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015615",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -38554,9 +38022,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021782",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -38662,9 +38129,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024698",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -38748,9 +38214,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003292",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -38835,9 +38300,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008139",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -38921,9 +38385,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008112",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -39008,9 +38471,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016569",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -39030,9 +38492,8 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -39117,9 +38578,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023504",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -39203,9 +38663,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000420",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -39290,9 +38749,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016614",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -39333,9 +38791,8 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -39420,9 +38877,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022619",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -39506,9 +38962,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-026275",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -39593,9 +39048,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003245",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -39766,9 +39220,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021638",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -39853,9 +39306,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024714",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -39939,9 +39391,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003332",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -40026,9 +39477,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007099",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -40112,9 +39562,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012202",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -40199,9 +39648,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016560",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -40221,9 +39669,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021056",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -40307,9 +39754,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024716",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -40394,9 +39840,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002041",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -40480,9 +39925,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006355",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -40588,9 +40032,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012192",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -40674,9 +40117,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016601",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -40740,9 +40182,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022103",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -40826,9 +40267,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-026279",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -40913,9 +40353,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003319",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -40999,9 +40438,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000423",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -41086,9 +40524,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013616",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -41172,9 +40609,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012181",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -41258,9 +40694,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016575",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -41389,9 +40824,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023511",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -41476,9 +40910,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003330",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -41562,9 +40995,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007101",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -41649,9 +41081,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012224",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -41735,9 +41166,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016635",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -41757,9 +41187,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020483",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -41844,9 +41273,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023514",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -41930,9 +41358,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002039",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -42017,9 +41444,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006358",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -42103,9 +41529,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011554",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -42190,9 +41615,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015621",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -42255,9 +41679,8 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -42277,9 +41700,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021070",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -42363,9 +41785,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024723",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -42450,9 +41871,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003355",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -42536,9 +41956,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007102",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -42644,9 +42063,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012198",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -42818,9 +42236,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023316",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -42904,9 +42321,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-000026",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -42991,9 +42407,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008977",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -43077,9 +42492,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013151",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -43143,9 +42557,8 @@ window.CM_WO_DATA = {
       "woNumber": null,
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -43186,9 +42599,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022620",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -43273,9 +42685,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002055",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -43359,9 +42770,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006361",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -43446,9 +42856,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012230",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -43598,9 +43007,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023517",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -43684,9 +43092,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002042",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -43771,9 +43178,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006363",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -43857,9 +43263,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016658",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -43922,9 +43327,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023519",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -44009,9 +43413,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002062",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -44095,9 +43498,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006364",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -44182,9 +43584,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010642",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -44268,9 +43669,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014546",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -44398,9 +43798,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022596",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -44485,9 +43884,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-026290",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -44571,9 +43969,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003356",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -44658,9 +44055,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010051",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -44744,9 +44140,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013154",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -44852,9 +44247,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021616",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -44939,9 +44333,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024733",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -45025,9 +44418,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003338",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -45112,9 +44504,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008145",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -45198,9 +44589,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008114",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -45285,9 +44675,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015626",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -45349,9 +44738,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021623",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -45435,9 +44823,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024735",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -45522,9 +44909,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003335",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -45608,9 +44994,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008147",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -45695,9 +45080,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012236",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -45781,9 +45165,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015396",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -45910,9 +45293,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022616",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -45996,9 +45378,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-026295",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -46083,9 +45464,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003253",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -46169,9 +45549,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010624",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -46191,9 +45570,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013158",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -46301,9 +45679,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-022606",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -46387,9 +45764,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-026299",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -46474,9 +45850,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003344",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -46560,9 +45935,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008985",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -46647,9 +46021,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013159",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -46732,9 +46105,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021640",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -46819,9 +46191,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024740",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -46905,9 +46276,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003289",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -46992,9 +46362,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-008148",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -47078,9 +46447,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012165",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -47165,9 +46533,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-020491",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -47251,9 +46618,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023531",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -47338,9 +46704,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002043",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -47424,9 +46789,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006374",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -47511,9 +46875,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011547",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -47597,9 +46960,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015400",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -47726,9 +47088,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-023533",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -47812,9 +47173,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-002069",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -47899,9 +47259,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-006375",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -47985,9 +47344,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010604",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -48072,9 +47430,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014643",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -48179,9 +47536,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021167",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -48265,9 +47621,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024744",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -48352,9 +47707,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003329",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -48438,9 +47792,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007106",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -48525,9 +47878,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012231",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -48611,9 +47963,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016638",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -49078,9 +48429,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-021081",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -49164,9 +48514,8 @@ window.CM_WO_DATA = {
       "woNumber": "GD-024745",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -49251,9 +48600,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-003300",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -49337,9 +48685,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-007107",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -49424,9 +48771,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012204",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -49510,9 +48856,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015628",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -49553,9 +48898,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013166",
       "maintType": "1500 Hours service Planned",
       "hours": 1500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -49641,9 +48985,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016572",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -49663,9 +49006,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010118",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -49750,9 +49092,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014067",
       "maintType": "1500 Hours service Planned",
       "hours": 1500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -49858,9 +49199,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012219",
       "maintType": "1500 Hours service Planned",
       "hours": 1500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -49946,9 +49286,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016598",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -49968,9 +49307,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010130",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -50055,9 +49393,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015682",
       "maintType": "1500 Hours service Planned",
       "hours": 1500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -50140,9 +49477,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011560",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -50227,9 +49563,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015364",
       "maintType": "1500 Hours service Planned",
       "hours": 1500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -50270,9 +49605,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010120",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -50358,9 +49692,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-015365",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -50466,9 +49799,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013169",
       "maintType": "1500 Hours service Planned",
       "hours": 1500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -50619,9 +49951,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013174",
       "maintType": "1500 Hours service Planned",
       "hours": 1500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -50797,9 +50128,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014630",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -50931,9 +50261,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012188",
       "maintType": "1500 Hours service Planned",
       "hours": 1500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -51019,9 +50348,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016557",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -51106,9 +50434,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014072",
       "maintType": "1500 Hours service Planned",
       "hours": 1500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -51238,9 +50565,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-013663",
       "maintType": "1500 Hours service Planned",
       "hours": 1500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -51394,9 +50720,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-012222",
       "maintType": "1500 Hours service Planned",
       "hours": 1500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -51482,9 +50807,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-016591",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -51504,9 +50828,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-010123",
       "maintType": "500 Hours service Planned",
       "hours": 500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -51591,9 +50914,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014632",
       "maintType": "1500 Hours service Planned",
       "hours": 1500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -51700,9 +51022,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-011557",
       "maintType": "1500 Hours service Planned",
       "hours": 1500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",
@@ -51853,9 +51174,8 @@ window.CM_WO_DATA = {
       "woNumber": "WO-014551",
       "maintType": "1500 Hours service Planned",
       "hours": 1500,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "cmLabel": "Magnetic Plug",
       "cmTypes": [
-        "INSP",
         "MP"
       ],
       "priority": "P3 Planned (PM)",

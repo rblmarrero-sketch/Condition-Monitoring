@@ -195,31 +195,48 @@ SEVEN.forEach(u => {
 }
 
 /* TK109 and TK152 on their INSP round — the two that tipped. The point is not
-   which answer is right; it is that ONE day produces ONE answer. */
-[['2026-08-29', 'soon'], ['2026-08-30', 'over']].forEach(([today, want]) => {
-  const v = verdict('INSP', 'HT', '2026-08-04', today);
-  ok(v.st === want, `TK109/TK152 · INSP walked 4 Aug reads "${want}" on ${today}`, v.st);
-});
+   which answer is right; it is that ONE day produces ONE answer, and that the
+   day it tips on is the interval's, not a date typed here. The two dates were
+   written when INSP was 500 h; it is 1,000 h since 2026-09-13, and a suite
+   holding its own copy of an interval is the trap CLAUDE.md names. Ask due.js
+   for the figure and compute the pair of days from it. */
+{
+  const last = '2026-08-04';
+  const span = Math.round(D.hours('INSP', 'HT') / D.HOURS_PER_DAY);   // whole days to due
+  const day = n => D.shift(last, n);
+  ok(verdict('INSP', 'HT', last, day(span)).st === 'soon',
+     `INSP walked ${last} still reads "soon" the day it comes due (${day(span)})`,
+     verdict('INSP', 'HT', last, day(span)).st);
+  ok(verdict('INSP', 'HT', last, day(span + 1)).st === 'over',
+     `  and "over" the day after (${day(span + 1)})`,
+     verdict('INSP', 'HT', last, day(span + 1)).st);
+}
 
 /* Exactly due is DUE, not overdue. A round you can still walk today is not a
    round somebody missed, and it must not read one way in the field and the
    other in the office.
 
    The plug round cannot be landed on exactly: 250 h at 20 h/day is 12.5 days
-   and no whole day hits it. INSP is 500 h — exactly 25 days — so that is the
-   round this case can actually be written for. */
+   and no whole day hits it. INSP divides by 20 exactly, so that is the round
+   this case can be written for — but the number of days is ASKED FOR, never
+   typed: it was 25 while INSP was 500 h and is 50 now that it is 1,000, and a
+   suite carrying its own copy of that figure fails on working code the day the
+   site changes it. */
 {
   const n = mk('MP', 'HT', '2026-08-30', '2026-09-11');   /* 12 days, 240 h of 250 */
   ok(n.over === false, 'ten hours to go is not overdue');
-  const e = mk('INSP', 'HT', '2026-08-05', '2026-08-30'); /* 25 days, exactly 500 h */
-  ok(e.daysSince === 25, 'twenty-five days on a 500 h round', e.daysSince);
+  const last = '2026-08-05';
+  const span = D.hours('INSP', 'HT') / D.HOURS_PER_DAY;
+  ok(span === Math.round(span), 'the inspection interval lands on a whole day', span);
+  const e = mk('INSP', 'HT', last, D.shift(last, span));
+  ok(e.daysSince === span, `${span} days on a ${D.hours('INSP', 'HT')} h round`, e.daysSince);
   ok(e.dueInHours === 0, 'exactly at the interval, zero hours remain', e.dueInHours);
   ok(e.over === false, 'and exactly due is NOT overdue');
-  ok(D.status({ type: 'INSP', cls: 'HT', n: e, last: { d: '2026-08-05' }, today: '2026-08-30' }).st === 'soon',
+  ok(D.status({ type: 'INSP', cls: 'HT', n: e, last: { d: last }, today: D.shift(last, span) }).st === 'soon',
      'exactly due reads "soon" — the same word on both screens');
-  const p = mk('INSP', 'HT', '2026-08-05', '2026-08-31');
+  const p = mk('INSP', 'HT', last, D.shift(last, span + 1));
   ok(p.over === true, 'one day past exactly due IS overdue');
-  ok(p.dueInHours === -20, 'by one shift', p.dueInHours);
+  ok(p.dueInHours === -D.HOURS_PER_DAY, 'by one shift', p.dueInHours);
 }
 
 /* A calendar round — TEMP and LUBE carry 30 days because nobody has stated an
