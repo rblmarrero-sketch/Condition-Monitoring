@@ -3617,22 +3617,22 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=356"></script>
+<script src="../data/magnetic_plug.js?v=357"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=356"></script>
-<script src="../mobile/hme.js?v=356"></script>
-<script src="../mobile/mp-fc.js?v=356"></script>
-<script src="../mobile/hme-cascade.js?v=356"></script>
-<script src="../mobile/temp-limits.js?v=356"></script>
+<script src="../data/work_orders.js?v=357"></script>
+<script src="../mobile/hme.js?v=357"></script>
+<script src="../mobile/mp-fc.js?v=357"></script>
+<script src="../mobile/hme-cascade.js?v=357"></script>
+<script src="../mobile/temp-limits.js?v=357"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=356"></script>
-<script src="../mobile/normalize.js?v=356"></script>
-<script src="../mobile/terms.js?v=356"></script>
+<script src="../mobile/assets.js?v=357"></script>
+<script src="../mobile/normalize.js?v=357"></script>
+<script src="../mobile/terms.js?v=357"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3651,19 +3651,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=356"></script>
-<script src="../mobile/edits.js?v=356"></script>
-<script src="../mobile/due.js?v=356"></script>
-<script src="../mobile/wear.js?v=356"></script>
-<script src="../mobile/wear-map.js?v=356"></script>
-<script src="../mobile/lube.js?v=356"></script>
-<script src="../mobile/lube-overrides.js?v=356"></script>
-<script src="../mobile/lube2027.js?v=356"></script>
-<script src="../mobile/lube-tds.js?v=356"></script>
+<script src="../mobile/grade.js?v=357"></script>
+<script src="../mobile/edits.js?v=357"></script>
+<script src="../mobile/due.js?v=357"></script>
+<script src="../mobile/wear.js?v=357"></script>
+<script src="../mobile/wear-map.js?v=357"></script>
+<script src="../mobile/lube.js?v=357"></script>
+<script src="../mobile/lube-overrides.js?v=357"></script>
+<script src="../mobile/lube2027.js?v=357"></script>
+<script src="../mobile/lube-tds.js?v=357"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=356"></script>
-<script src="../mobile/machine-photos.js?v=356"></script>
+<script src="../mobile/upload-defaults.js?v=357"></script>
+<script src="../mobile/machine-photos.js?v=357"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3672,17 +3672,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=356"></script>
-<script src="../mobile/get.js?v=356"></script>
-<script src="../mobile/points.js?v=356"></script>
-<script src="../mobile/uc-points.js?v=356"></script>
-<script src="../mobile/inspect-guide.js?v=356"></script>
-<script src="../mobile/get-figs.js?v=356"></script>
-<script src="../mobile/body-points.js?v=356"></script>
-<script src="../mobile/body-map.js?v=356"></script>
-<script src="../mobile/jspdf.umd.min.js?v=356"></script>
-<script src="../mobile/html2canvas.min.js?v=356"></script>
-<script src="../mobile/report-core.js?v=356"></script>
+<script src="../mobile/machine-fig.js?v=357"></script>
+<script src="../mobile/get.js?v=357"></script>
+<script src="../mobile/points.js?v=357"></script>
+<script src="../mobile/uc-points.js?v=357"></script>
+<script src="../mobile/inspect-guide.js?v=357"></script>
+<script src="../mobile/get-figs.js?v=357"></script>
+<script src="../mobile/body-points.js?v=357"></script>
+<script src="../mobile/body-map.js?v=357"></script>
+<script src="../mobile/jspdf.umd.min.js?v=357"></script>
+<script src="../mobile/html2canvas.min.js?v=357"></script>
+<script src="../mobile/report-core.js?v=357"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -11342,6 +11342,54 @@ function startAuto(){
   if(!drvOn()) return;
   autoTimer = setInterval(()=>autoRefresh("timer"), AUTO_MS);
 }
+/* THE 1C PULL REFRESHES ITSELF TOO.
+
+   data/work_orders.js is a <script> tag: it is read ONCE, when the page loads,
+   and never again. An office screen opened at the start of the shift and left
+   on the Defects tab therefore showed the work orders as they stood at
+   breakfast — for the rest of the day, with the stamp under the heading
+   quietly counting the hours and nobody watching it. The inspections beside
+   them refresh every three minutes (AUTO_MS); the 1C half did not refresh at
+   all, which is the same defect one column over.
+
+   So it is fetched again on a timer and on coming back to the tab. The file is
+   written by the hourly job as `window.CM_WO_DATA = { ... };` — the object is
+   read out of it and parsed as JSON rather than evaluated, because a file this
+   page did not write is data, not code. The cache is stepped past with a
+   timestamp, not the build tag: the build does not move when the data does,
+   which is exactly why the tag cannot carry this. */
+const WO_MS = 600000;                    // ten minutes; the source is hourly
+let woTimer = null, woBusy = false;
+async function woRefresh(why){
+  if(woBusy) return false;
+  woBusy = true;
+  try{
+    const r = await fetch("../data/work_orders.js?t=" + Date.now(), { cache: "no-store" });
+    if(!r.ok) return false;
+    const txt = await r.text();
+    const a = txt.indexOf("{"), b = txt.lastIndexOf("}");
+    if(a < 0 || b <= a) return false;
+    const j = JSON.parse(txt.slice(a, b + 1));
+    if(!j || !Array.isArray(j.workOrders)) return false;   // not a pull; say nothing
+    const was = (window.CM_WO_DATA || {}).generated || "";
+    if(String(j.generated || "") === String(was)) return false;   // same pull, nothing to redraw
+    window.CM_WO_DATA = j;
+    /* Only the two tabs this file feeds, and only the one on screen plus its
+       stamp — a full renderAll() on a data refresh would throw away a filter
+       somebody is in the middle of using. */
+    if(typeof renderCmWoTab === "function" && !$("tab-cmwo").hidden) renderCmWoTab();
+    if(typeof renderPlanActualTab === "function" && !$("tab-planact").hidden) renderPlanActualTab();
+    if(typeof renderDueTab === "function" && !$("tab-due").hidden) renderDueTab();
+    if($("cwAsOf")) asOfInto($("cwAsOf"), j.generated);
+    if($("paAsOf")) asOfInto($("paAsOf"), j.generated);
+    return true;
+  }catch(e){ return false; }              // silence is not a verdict
+  finally{ woBusy = false; }
+}
+function startWo(){
+  clearInterval(woTimer);
+  woTimer = setInterval(()=>woRefresh("timer"), WO_MS);
+}
 /* Coming back to the tab is the moment somebody most wants it to be current —
    they have walked back to the desk to look at what came in. */
 /* Coming BACK to the tab, not arriving at it. A fresh load fires
@@ -11353,11 +11401,16 @@ function startAuto(){
    schedule it was designed to happen on. */
 let autoBooted = false;
 document.addEventListener("visibilitychange", ()=>{
-  if(!document.hidden && autoBooted) autoRefresh("focus"); });
+  if(!document.hidden && autoBooted){ autoRefresh("focus"); woRefresh("focus"); } });
 window.addEventListener("online", ()=>autoRefresh("online"));
 /* On open: catch up first, then keep up. Deferred a beat so the page paints
    what it already holds rather than waiting on the network to show anything. */
 setTimeout(()=>{ autoBooted = true; autoRefresh("open"); startAuto(); }, 1200);
+/* The 1C pull keeps itself current whether or not a folder is attached — it is
+   a file on this site, not something the backend serves, so it has nothing to
+   do with drvOn(). */
+startWo();
+setTimeout(()=>woRefresh("open"), 3000);
 /* Photos live in Drive, not on disk — pull the ones this view needs, then repaint. */
 let drivePending=false, driveQueued=null;
 async function pullDrivePhotos(recs, after){
@@ -17149,8 +17202,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=356"></script>
-<script src="sync-adapter.js?v=356"></script>
-<script src="report.js?v=356"></script>
+<script src="drive.js?v=357"></script>
+<script src="sync-adapter.js?v=357"></script>
+<script src="report.js?v=357"></script>
 </body>
 </html>

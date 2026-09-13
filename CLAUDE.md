@@ -307,6 +307,22 @@ print three photographs where six were taken with nothing on the page saying so
 `rep_nophoto_off` was unreachable — it sat in the branch where there is no
 destination at all.
 
+**THE 1C PULL REFRESHES ITSELF, AT BOTH ENDS.** `data/work_orders.js` is a
+`<script>` tag: read once at load, never again — so an office screen opened at
+the start of the shift showed the work orders as they stood at breakfast, all
+day, while the inspections beside them refreshed every three minutes.
+`woRefresh()` fetches the file every `WO_MS` (10 min) and on returning to the
+tab, parses the object out of it as JSON rather than evaluating it, replaces
+`window.CM_WO_DATA` only when `generated` actually moved, and redraws just the
+tab on screen (`tests/wofresh.cjs`). The cache is stepped past with a
+timestamp, never the build tag: the hourly job deliberately does NOT bump
+BUILD, so the tag cannot carry this file's freshness. At the other end,
+**GitHub's schedule is best-effort** — the "hourly" job was measured running at
+21:49, 23:35, 02:09 and 07:47 — so `server.js` watches the pipeline's WO.xlsx
+by its HEADERS every `WO_POLL_MS` and dispatches the workflow the moment they
+change, at most one run per `WO_GH_GAP_MS`. It is off unless `WO_GH_TOKEN` is
+in `cm.env`, and says so once when it is not (VM-SETUP §12).
+
 **The office's photo cache is keyed by path, and the bucket rewrites a path.**
 A round the phone re-sends — a retake, a new signature — lands under the same
 name with other bytes, and the dashboard served whatever it had first seen

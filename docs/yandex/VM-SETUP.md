@@ -469,6 +469,55 @@ Nothing in the bucket is touched by this, and `cm.env` — the file with the key
 and the admin password in it — is not one of the files being replaced. Restarting
 takes about a second, during which a phone that happens to be syncing retries.
 
+### Watching for a new WO.xlsx (optional, but this is what makes 1C prompt)
+
+The 1C export lands on the pipeline every hour. Turning it into
+`data/work_orders.js` is a GitHub scheduled workflow, and **GitHub's scheduler
+is best-effort**: on 2026-09-13 the "hourly" job actually ran at 21:49, 23:35,
+02:09 and 07:47 UTC. Between those the office reads an old set of defects.
+
+This machine can do better, because its clock is not best-effort. Since build
+357 `server.js` asks the pipeline for the file's HEADERS every `WO_POLL_MS`
+(ten minutes by default) — an ETag and a length, a few hundred bytes, never the
+workbook — and when they change it asks GitHub to run the refresh **now**. A
+file that has not changed produces no request at all.
+
+It is **off unless a token is set**, and the token is the only new secret:
+
+1. On github.com, create a fine-grained personal access token limited to this
+   one repository, with **Actions: read and write** and nothing else.
+2. Put it in `/opt/cm/cm.env` — the same file as the other secrets, which is
+   never replaced by a deploy and is not in the repository:
+
+```
+sudo nano /opt/cm/cm.env
+```
+
+add one line
+
+```
+WO_GH_TOKEN=github_pat_…
+```
+
+then
+
+```
+sudo systemctl restart cm
+sudo journalctl -u cm -n 30 --no-pager | grep '\[push\] wo:'
+```
+
+Within ten minutes you should see `wo: first seen "…"`, and after the next
+export `wo: … → … — refresh dispatched`. If it says
+**`wo: not watching WO.xlsx — WO_GH_TOKEN is not set`** the line did not take.
+
+Optional, all with sensible defaults: `WO_URL` (the workbook), `WO_POLL_MS`
+(how often to look), `WO_GH_GAP_MS` (at most one run per 15 minutes, so two
+exports in quick succession cannot race two workflows onto one branch),
+`WO_GH_REPO`, `WO_GH_WORKFLOW`, `WO_GH_REF`.
+
+The hourly cron in the workflow stays as it is. This does not replace it; it
+closes the gaps in it.
+
 ### The grade migration (once, after the 1–5 build is deployed here)
 
 The grade scale changed from A/B/C/X to 1–5. Every phone and the dashboard read

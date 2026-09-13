@@ -144,6 +144,48 @@ function loadVapid(fn) {
   try { fs.writeFileSync(file, JSON.stringify(k), { mode: 0o600 }); P.vapidSet(k); return file + ' (generated)'; }
   catch (e) { P.vapidSet(k); return 'memory only — could not write ' + file + ' (' + e.message + '); phones re-subscribe after every restart'; }
 }
+/* JUST THE HEADERS. Used to notice a new WO.xlsx without pulling the
+   workbook: the file is a few megabytes and the only question is whether it
+   has changed. Redirects are followed once, because the pipeline serves the
+   file behind one. */
+function headOf(url, ms, depth) {
+  return new Promise((res, rej) => {
+    const mod = /^https:/.test(url) ? require('https') : http;
+    const req = mod.request(url, { method: 'HEAD', headers: { 'Cache-Control': 'no-cache' } }, r => {
+      if (r.statusCode >= 300 && r.statusCode < 400 && r.headers.location && (depth || 0) < 3) {
+        r.resume();
+        return headOf(new URL(r.headers.location, url).toString(), ms, (depth || 0) + 1).then(res, rej);
+      }
+      r.resume();
+      if (r.statusCode !== 200) return rej(new Error('HTTP ' + r.statusCode));
+      res({ etag: String(r.headers.etag || ''), modified: String(r.headers['last-modified'] || ''),
+            length: String(r.headers['content-length'] || '') });
+    });
+    req.setTimeout(ms || 20000, () => req.destroy(new Error('timeout')));
+    req.on('error', rej);
+    req.end();
+  });
+}
+/* Ask GitHub to run a workflow now. Nothing here holds a credential: the token
+   is read from the environment and the whole poller is off unless one is set. */
+function dispatchWorkflow(repo, wf, ref, token, ms) {
+  return new Promise((res, rej) => {
+    const body = JSON.stringify({ ref: ref });
+    const req = require('https').request({
+      host: 'api.github.com', method: 'POST',
+      path: '/repos/' + repo + '/actions/workflows/' + encodeURIComponent(wf) + '/dispatches',
+      headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json',
+                 'User-Agent': 'cm-endpoint', 'Content-Type': 'application/json',
+                 'Content-Length': Buffer.byteLength(body) },
+    }, r => { const ch = []; r.on('data', c => ch.push(c));
+      r.on('end', () => (r.statusCode === 204 || r.statusCode === 201)
+        ? res(true)
+        : rej(new Error('HTTP ' + r.statusCode + ': ' + Buffer.concat(ch).toString('utf8').slice(0, 200)))); });
+    req.setTimeout(ms || 20000, () => req.destroy(new Error('timeout')));
+    req.on('error', rej);
+    req.end(body);
+  });
+}
 function fetchText(url, ms) {
   return new Promise((res, rej) => {
     const mod = /^https:/.test(url) ? require('https') : http;
@@ -200,12 +242,65 @@ function startPushTriggers(fn, o) {
     const day = d.toISOString().slice(0, 10);
     if (hm === daily && st.lastDaily !== day) { st.lastDaily = day; pushDaily().catch(e => note('daily: ' + e.message)); }
   }
+  /* ---- a new WO.xlsx, noticed rather than waited for --------------------
+     The 1C export lands on the pipeline every hour. The refresh that turns it
+     into data/work_orders.js is a GitHub scheduled workflow, and GitHub's
+     scheduler is best-effort: measured on 2026-09-13 the "hourly" job ran at
+     21:49, 23:35, 02:09 and 07:47 UTC — gaps of two to four hours, during
+     which the office reads yesterday's defects with nothing on the page
+     saying the pull is late.
+
+     This machine's clock is not best-effort. Every WO_POLL_MS it asks the
+     pipeline for the file's HEADERS ONLY — an ETag, a Last-Modified, a
+     length; a few hundred bytes, not the workbook — and when they differ from
+     the last set it saw, it asks GitHub to run the workflow NOW. A file that
+     has not changed produces no request: there is nothing to refresh, and a
+     dispatch that rebuilds identical bytes is a commit nobody needed.
+
+     OFF UNLESS A TOKEN IS SET. `WO_GH_TOKEN` is read from the environment
+     (cm.env, alongside the other secrets, never in the repo) and needs only
+     `actions: write` on this one repository. Without it the poller does not
+     start and says so once, so a machine that was never configured for this
+     is not silently pretending to watch. */
+  const woUrl = o.woUrl || process.env.WO_URL || 'https://askpi.94-131-94-152.sslip.io/WO.xlsx';
+  const woMs = o.woPollMs != null ? o.woPollMs : Number(process.env.WO_POLL_MS || 600000);
+  const woToken = o.woToken || process.env.WO_GH_TOKEN || '';
+  const woRepo = o.woRepo || process.env.WO_GH_REPO || 'rblmarrero-sketch/Condition-Monitoring';
+  const woWf = o.woWorkflow || process.env.WO_GH_WORKFLOW || 'refresh-work-orders.yml';
+  const woRef = o.woRef || process.env.WO_GH_REF || 'claude/magnetic-plug-dashboard-llv4wc';
+  /* At most one dispatch per WO_GH_GAP_MS however often the file changes: the
+     workflow takes minutes and stacking runs on one branch is how two of them
+     race to push the same commit. */
+  const woGap = o.woGapMs != null ? o.woGapMs : Number(process.env.WO_GH_GAP_MS || 900000);
+  st.wo = { seen: '', lastFire: 0, fires: 0, checks: 0, lastErr: '' };
+  async function pollWorkOrders() {
+    if (!woToken) return null;
+    st.wo.checks++;
+    let h;
+    try { h = await headOf(woUrl, 20000); }
+    catch (e) { st.wo.lastErr = String((e && e.message) || e); note('wo: ' + st.wo.lastErr); return null; }
+    st.wo.lastErr = '';
+    const tag = h.etag + '|' + h.modified + '|' + h.length;
+    if (!st.wo.seen) { st.wo.seen = tag; note('wo: first seen ' + tag); return null; }
+    if (tag === st.wo.seen) return null;
+    /* Recorded BEFORE the dispatch, so a GitHub outage cannot turn one new
+       file into a dispatch attempt every ten minutes for ever. */
+    const was = st.wo.seen; st.wo.seen = tag;
+    if (Date.now() - st.wo.lastFire < woGap) { note('wo: changed, holding (one run per ' + Math.round(woGap / 60000) + ' min)'); return null; }
+    st.wo.lastFire = Date.now();
+    try { await dispatchWorkflow(woRepo, woWf, woRef, woToken, 20000); st.wo.fires++;
+          note('wo: ' + was + ' → ' + tag + ' — refresh dispatched'); return true; }
+    catch (e) { st.wo.lastErr = String((e && e.message) || e); note('wo: dispatch failed — ' + st.wo.lastErr); return false; }
+  }
+
   fn.onFolderChange(folderChanged);
   st.timers.push(setInterval(() => { pollBuild(); }, pollMs));
   st.timers.push(setInterval(tickDaily, 60000));
+  if (woToken) { st.timers.push(setInterval(() => { pollWorkOrders(); }, woMs)); pollWorkOrders(); }
+  else note('wo: not watching WO.xlsx — WO_GH_TOKEN is not set');
   st.timers.forEach(t => t.unref && t.unref());
   pollBuild();
-  return { pollBuild, pushFolder, pushDaily, folderChanged, state: st,
+  return { pollBuild, pushFolder, pushDaily, folderChanged, pollWorkOrders, state: st,
            stop() { st.timers.forEach(clearInterval); clearTimeout(st.folderTimer); fn.onFolderChange(null); } };
 }
 exports.loadVapid = loadVapid;
