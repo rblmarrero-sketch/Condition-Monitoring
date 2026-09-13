@@ -56,11 +56,37 @@ const buildOf = s => (s.match(/const BUILD\s*=\s*"([^"]+)"/) || [])[1];
    anything having CHANGED, which is what spun the thread. */
 const LOOP_RE = /    schedKick = true;\n    schedEnsureLoaded\(\)\.then\(changed=>\{\n      schedKick = false;\n      if\(changed && \(dueSched \|\| dueView==="week"\)\) renderDue\(\);\n    \}, \(\)=>\{ schedKick = false; \}\);/;
 const LOOP_BAD = '    schedEnsureLoaded().then(()=>{ if(dueSched || dueView==="week") renderDue(); });';
-function freeze(src, ver) {
-  const out = src.replace(LOOP_RE, LOOP_BAD)
+/* AND THE BREAKER TAKEN OUT, or this no longer builds a frozen phone at all.
+
+   Since build 328 every shipped build carries a circuit breaker at the top
+   of renderDue: past 250 repaints in a second it puts back the two settings
+   that can re-arm the cycle. That is the fix working — and it means putting
+   the build-321 loop back is no longer enough to peg anything. This suite
+   went red the day the breaker shipped, saying "the freeze reproduces" had
+   failed, which read as a regression and was the opposite: the app had
+   stopped being able to freeze.
+
+   The handsets this case is about ran a build from BEFORE the breaker, so
+   the breaker comes out too. Everything between the function's brace and
+   renderTabs() is the breaker and nothing else; removing it by that shape
+   rather than by its internals means it keeps working when the breaker is
+   edited. */
+function stripBreaker(src) {
+  const cut = src.replace(/function renderDue\(\)\{[\s\S]*?\n  renderTabs\(\);/,
+                          'function renderDue(){\n  renderTabs();');
+  if (cut === src) {
+    console.error('FAIL  the breaker could not be removed — renderDue has moved, this suite is blind');
+    process.exit(1);
+  }
+  return cut;
+}
+
+function freeze(src, ver, keepBreaker) {
+  const base = keepBreaker ? src : stripBreaker(src);
+  const out = base.replace(LOOP_RE, LOOP_BAD)
     .replace(/const BUILD="[^"]+"/, 'const BUILD="' + ver + '"')
     .replace(/v=\d+/g, 'v=' + ver);
-  if (out === src.replace(/const BUILD="[^"]+"/, 'const BUILD="' + ver + '"').replace(/v=\d+/g, 'v=' + ver)) {
+  if (out === base.replace(/const BUILD="[^"]+"/, 'const BUILD="' + ver + '"').replace(/v=\d+/g, 'v=' + ver)) {
     console.error('FAIL  the loop could not be put back — renderDue has moved, this suite is blind');
     process.exit(1);
   }
@@ -74,7 +100,7 @@ function swVer(src, ver) {
    loop of the same class put into it. */
 const PAGES = {
   900: { idx: freeze(shipped, 900), sw: swVer(shippedSw, 900) },
-  901: { idx: freeze(nowIdx, 901), sw: swVer(nowSw, 901) },
+  901: { idx: freeze(nowIdx, 901, true), sw: swVer(nowSw, 901) },
 };
 let serving = 900;
 

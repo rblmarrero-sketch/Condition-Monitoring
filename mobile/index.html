@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=339">
+<link rel="manifest" href="manifest.webmanifest?v=340">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=339">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=339">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=339">
+<link rel="apple-touch-icon" href="icon-192.png?v=340">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=340">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=340">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2340,6 +2340,18 @@
 
      It must live BEFORE the first blocking script or it can never arm. -->
 <script>
+/* THE BOOT WATCHDOG'S OWN lsSet, and why it needs one.
+
+   Every write to localStorage in this page goes through lsSet/lsDel, which
+   swallow a quota failure instead of throwing — tests/histfull.cjs enforces
+   that, because a throw on a full store once left a record stored and the
+   form un-reset, and the inspection looked lost. This script runs BEFORE the
+   main one, so lsSet does not exist yet and the watchdog cannot use it; what
+   it must not do is take that as licence to make the raw call in two places.
+   So it gets the same guard in two lines of its own, at column zero where
+   the rule can see them. */
+function bootSet(k, v){ try { localStorage.setItem(k, v); } catch (e) {} }
+function bootDel(k){ try { localStorage.removeItem(k); } catch (e) {} }
 (function () {
   /* Generous on purpose, and then some. A slow boot is not a broken one:
      an older iPhone parsing 3.5 MB of script on a pit link can take a long
@@ -2376,7 +2388,7 @@
       var el = document.getElementById("bootStall");
       if (el && el.parentNode) el.parentNode.removeChild(el);
       /* It arrived, so the stall is not a fact about this load any more. */
-      localStorage.removeItem("cm_boot_stall");
+      bootDel("cm_boot_stall");
     } catch (e) {}
   };
 
@@ -2406,12 +2418,10 @@
     var late = pending();
     /* Recorded as well as shown: an inspector reads the message and taps
        Try again, and the evidence of WHY would otherwise go with it. */
-    try {
-      localStorage.setItem("cm_boot_stall", JSON.stringify({
-        at: new Date().toISOString(), seen: seen, pending: late.slice(0, 8),
-        ua: String(navigator.userAgent || "").slice(0, 120)
-      }));
-    } catch (e) {}
+    bootSet("cm_boot_stall", JSON.stringify({
+      at: new Date().toISOString(), seen: seen, pending: late.slice(0, 8),
+      ua: String(navigator.userAgent || "").slice(0, 120)
+    }));
     var why = seen
       ? ["The app started but did not finish opening.",
          "Приложение запустилось, но не открылось до конца."]
@@ -2454,15 +2464,15 @@
   }
 })();
 </script>
-<script src="native.js?v=339"></script>
-<script src="upload-defaults.js?v=339"></script>
-<script src="hme.js?v=339"></script>
-<script src="mp-fc.js?v=339"></script>
-<script src="hme-cascade.js?v=339"></script>
-<script src="assets.js?v=339"></script>
-<script src="temp-limits.js?v=339"></script>
-<script src="normalize.js?v=339"></script>
-<script src="terms.js?v=339"></script>
+<script src="native.js?v=340"></script>
+<script src="upload-defaults.js?v=340"></script>
+<script src="hme.js?v=340"></script>
+<script src="mp-fc.js?v=340"></script>
+<script src="hme-cascade.js?v=340"></script>
+<script src="assets.js?v=340"></script>
+<script src="temp-limits.js?v=340"></script>
+<script src="normalize.js?v=340"></script>
+<script src="terms.js?v=340"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2481,25 +2491,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=339"></script>
-<script src="edits.js?v=339"></script>
-<script src="due.js?v=339"></script>
-<script src="wear.js?v=339"></script>
-<script src="wear-figs.js?v=339"></script>
-<script src="wear-map.js?v=339"></script>
-<script src="machine-photos.js?v=339"></script>
-<script src="machine-fig.js?v=339"></script>
-<script src="get.js?v=339"></script>
-<script src="points.js?v=339"></script>
-<script src="uc-points.js?v=339"></script>
-<script src="inspect-guide.js?v=339"></script>
-<script src="get-figs.js?v=339"></script>
-<script src="body-points.js?v=339"></script>
-<script src="body-map.js?v=339"></script>
-<script src="lube.js?v=339"></script>
-<script src="lube-overrides.js?v=339"></script>
-<script src="lube2027.js?v=339"></script>
-<script src="report-core.js?v=339"></script>
+<script src="grade.js?v=340"></script>
+<script src="edits.js?v=340"></script>
+<script src="due.js?v=340"></script>
+<script src="wear.js?v=340"></script>
+<script src="wear-figs.js?v=340"></script>
+<script src="wear-map.js?v=340"></script>
+<script src="machine-photos.js?v=340"></script>
+<script src="machine-fig.js?v=340"></script>
+<script src="get.js?v=340"></script>
+<script src="points.js?v=340"></script>
+<script src="uc-points.js?v=340"></script>
+<script src="inspect-guide.js?v=340"></script>
+<script src="get-figs.js?v=340"></script>
+<script src="body-points.js?v=340"></script>
+<script src="body-map.js?v=340"></script>
+<script src="lube.js?v=340"></script>
+<script src="lube-overrides.js?v=340"></script>
+<script src="lube2027.js?v=340"></script>
+<script src="report-core.js?v=340"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -12320,7 +12330,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="339";
+const BUILD="340";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

@@ -38,7 +38,32 @@ const NOW = (good.match(/const BUILD="(\d+)"/) || [])[1];
 
 /* "Build 900": the frozen one. The build-321 loop, its own build number, and
    — as an old build genuinely would — no answer to the worker's ping. */
-const brokenIdx = good
+/* AND THE BREAKER TAKEN OUT, or this no longer builds a frozen phone at all.
+
+   Since build 328 every shipped build carries a circuit breaker at the top
+   of renderDue: past 250 repaints in a second it puts back the two settings
+   that can re-arm the cycle. That is the fix working — and it means putting
+   the build-321 loop back is no longer enough to peg anything. This suite
+   went red the day the breaker shipped, saying "the freeze reproduces" had
+   failed, which read as a regression and was the opposite: the app had
+   stopped being able to freeze.
+
+   The handsets this case is about ran a build from BEFORE the breaker, so
+   the breaker comes out too. Everything between the function's brace and
+   renderTabs() is the breaker and nothing else; removing it by that shape
+   rather than by its internals means it keeps working when the breaker is
+   edited. */
+function stripBreaker(src) {
+  const cut = src.replace(/function renderDue\(\)\{[\s\S]*?\n  renderTabs\(\);/,
+                          'function renderDue(){\n  renderTabs();');
+  if (cut === src) {
+    console.error('FAIL  the breaker could not be removed — renderDue has moved, this suite is blind');
+    process.exit(1);
+  }
+  return cut;
+}
+
+const brokenIdx = stripBreaker(good)
   .replace(/    schedKick = true;\n    schedEnsureLoaded\(\)\.then\(changed=>\{\n      schedKick = false;\n      if\(changed && \(dueSched \|\| dueView==="week"\)\) renderDue\(\);\n    \}, \(\)=>\{ schedKick = false; \}\);/,
     '    schedEnsureLoaded().then(()=>{ if(dueSched || dueView==="week") renderDue(); });')
   .replace(new RegExp('const BUILD="' + NOW + '"'), 'const BUILD="900"')

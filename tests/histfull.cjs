@@ -123,8 +123,12 @@ function unguardedWrites() {
   };
   /* lsSet and lsDel ARE the guard — they are where the raw call is supposed
      to live. teamSave and histSave are the two that read the throw as an
-     answer. Nothing else may touch localStorage directly. */
-  const exempt = [span("teamSave"), span("histSave"), span("lsSet"), span("lsDel")].filter(Boolean);
+     answer. bootSet and bootDel are the same guard for the boot watchdog,
+     which runs before lsSet exists and so cannot use it: it gets two lines
+     of its own rather than licence to make the raw call wherever it likes.
+     Nothing else may touch localStorage directly. */
+  const exempt = [span("teamSave"), span("histSave"), span("lsSet"), span("lsDel"),
+                  span("bootSet"), span("bootDel")].filter(Boolean);
   const out = [];
   lines.forEach((l, i) => {
     if (!/localStorage\.(setItem|removeItem)\(/.test(l)) return;
@@ -138,7 +142,7 @@ function unguardedWrites() {
   console.log('every write goes through a guard');
   const uw = unguardedWrites();
   ok('the guard and the two that read a throw are the only exemptions',
-     uw.exempt === 4, uw.exempt + ' found');
+     uw.exempt === 6, uw.exempt + ' found');
   ok('and nothing else writes to localStorage directly', uw.out.length === 0,
      uw.out.slice(0, 4).join(' | ') || 'none');
 

@@ -32,10 +32,20 @@ const reset = q => fetch(BASE + '/__reset?' + q).then(r => r.text());
 /* What the browser copy was carrying and the installed one was not. Mixed on
    purpose: some laundered into "from the system" by builds 183-187, some never
    stamped at all — a phone in the field has both. */
+/* Five rounds, each placed PAST its own interval so all five are overdue —
+   which is the number every count below is measured against.
+
+   The filter cut carries an older date than the rest, and that is the point
+   rather than an accident: FC went from 500 h to 1,000 h on 2026-09-12, and
+   44 days at the fleet rate is 880 h — comfortably past the old figure and
+   comfortably inside the new one. One shared date meant this fixture
+   silently stopped testing five overdue rounds and started testing four, and
+   the suite said "missed 4" without a word about why. A fixture placed
+   against an interval has to move when the interval does. */
 const PILE = {
-  'MP|BS001':   { d: '2026-07-31', s: 'f' },
-  'FC|CR002':   { d: '2026-07-31', s: 'f' },
-  'INSP|CR006': { d: '2026-07-31' },
+  'MP|BS001':   { d: '2026-07-31', s: 'f' },   //  44 d = 880 h on a 250 h round
+  'FC|CR002':   { d: '2026-06-15', s: 'f' },   //  90 d = 1800 h on a 1,000 h round
+  'INSP|CR006': { d: '2026-07-31' },           //  44 d = 880 h on a 500 h round
   'INSP|DZ003': { d: '2026-07-31' },
   'INSP|DZ005': { d: '2026-07-31', s: 'f' },
 };
@@ -67,7 +77,12 @@ const shape = p => p.evaluate(() => ({
   /* Every machine in the register is on a row of work or in the no-programme
      count. If the two copies agree on both, no machine can be on one screen
      and missing from the other. */
-  seen:   new Set(neverRows().concat(dueRows()).map(r => r.unit)).size + unclassedCount(),
+  /* THREE buckets since 2026-09-12: a machine every one of whose rounds the
+     site has taken off appears on no work list at all, and counting only the
+     first two left thirty of them in neither — on no screen and in no
+     number, which is the exact absence this line exists to catch. */
+  seen:   new Set(neverRows().concat(dueRows()).map(r => r.unit)).size + unclassedCount()
+          + (typeof heldOffCount === 'function' ? heldOffCount() : 0),
   cover:  (document.getElementById('dueBasis').textContent.match(/covering (\d+) of/) || [])[1],
 }));
 
@@ -102,11 +117,14 @@ const shape = p => p.evaluate(() => ({
 
   /* NOT by throwing the residue away. Somebody typed it, or loaded it, and
      this app does not destroy that — it declines to plan on it. */
+  /* Held against the FIXTURE's own dates, not a date typed here a second
+     time: the moment one entry had to move for a changed interval, a
+     hard-coded '2026-07-31' failed on working code. */
+  const want = Object.fromEntries(Object.entries(PILE).map(([k, v]) => [k, v.d]));
   ok('the browser copy still holds every date it had',
-     await dirty.p.evaluate(k => k.every(x => (histAll()[x] || {}).d === '2026-07-31'),
-                            Object.keys(PILE)),
-     JSON.stringify(await dirty.p.evaluate(k => k.map(x => x + '=' + ((histAll()[x] || {}).d || '-')),
-                            Object.keys(PILE))));
+     await dirty.p.evaluate(w => Object.keys(w).every(x => (histAll()[x] || {}).d === w[x]), want),
+     JSON.stringify(await dirty.p.evaluate(w => Object.keys(w).map(x =>
+       x + '=' + ((histAll()[x] || {}).d || '-') + (((histAll()[x] || {}).d === w[x]) ? '' : ' WANTED ' + w[x])), want)));
   ok('and says how many it is declining to plan on',
      /not in the system/.test(await dirty.p.evaluate(() => document.getElementById('dueBasis').textContent)),
      (await dirty.p.evaluate(() => document.getElementById('dueBasis').textContent)).slice(-120));
@@ -136,7 +154,10 @@ const shape = p => p.evaluate(() => ({
     /* Nothing stamped: this is every handset in the fleet the moment it takes
        a build, before its first sync. A stamp is what proves the folder has
        spoken, so a pile carrying one is a phone that HAS heard from it. */
-    const VIRGIN = Object.fromEntries(Object.keys(PILE).map(k => [k, { d: '2026-07-31' }]));
+    /* The same rounds with the stray marker taken off — and each keeping its
+       OWN date. Rebuilding them all on one date is what let the filter cut
+       drift inside its new interval while the pile above still read as five. */
+    const VIRGIN = Object.fromEntries(Object.entries(PILE).map(([k, v]) => [k, { d: v.d }]));
     await p.addInitScript(h => {
       Object.defineProperty(navigator, 'onLine', { get: () => false });
       // and a port nobody listens on: the app no longer gates a pull on the flag
