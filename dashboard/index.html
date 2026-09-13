@@ -2683,6 +2683,8 @@
   <button data-tab="actions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5.5" y="4.5" width="13" height="16" rx="2"/><path d="M9 4.5a3 3 0 0 1 6 0"/><path d="m8.8 13.5 2.2 2.2 4.2-4.4"/></svg><span data-i18n="tab_actions">Action register</span><span class="nb warn" id="nbAct"></span></button>
   <button data-tab="due"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span data-i18n="tab_due">Due &amp; missed</span><span class="nb" id="nbDue"></span></button>
   <button data-tab="planact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="5.5" width="15" height="14" rx="2"/><path d="M8 3.5v3M16 3.5v3M4.5 10h15"/><path d="m8.3 14.6 2 2 5-5.4"/></svg><span data-i18n="tab_planact">Plan vs Actual</span><span class="nb warn" id="nbPlanAct"></span></button>
+  <button data-tab="cmwo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4.5h7l4 4V19a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V5.5a1 1 0 0 1 1-1z"/><path d="M13.5 4.5V9H18"/><path d="M9 13h6M9 16.5h4"/></svg><span data-i18n="cw_tab">Defects raised</span><span class="nb" id="nbCmWo"></span></button>
+
   <button data-tab="equipment"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3L4.5 8.9"/><path d="M4.5 4.5v4.4h4.4"/></svg><span data-i18n="tab_equipment">Equipment history</span></button>
   <button data-tab="lube"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5s5.8 6.3 5.8 10.2a5.8 5.8 0 0 1-11.6 0C6.2 9.8 12 3.5 12 3.5Z"/></svg><span data-i18n="tab_lube">Lubrication</span></button>
   <button data-tab="sync"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12a7.5 7.5 0 0 1 12.8-5.3L20 9.5"/><path d="M20 4.5v5h-5"/><path d="M19.5 12a7.5 7.5 0 0 1-12.8 5.3L4 14.5"/><path d="M4 19.5v-5h5"/></svg><span data-i18n="tab_sync">Sync operations</span><span class="nb warn" id="nbSync"></span></button>
@@ -3063,6 +3065,49 @@
         <button class="btn ghost" id="ddCsv" data-i18n="dd_csv">Export CSV</button>
       </div>
       <div id="ddList"></div>
+    </div>
+  </section>
+
+  <!-- DEFECTS THE CONDITION MONITORING TEAM RAISED.
+
+       Two sides of one story live in WO.xlsx. The "N Hours service Planned"
+       rows are the inspections being ASKED FOR — that is Plan vs Actual,
+       above. This tab is the other side: after walking a round the team
+       writes up a DEFECT, and the office asked how many they have written
+       since the kick-off on 1 July. Counting the two together would add a
+       request for work to a finding about a machine, so they are separate
+       tabs reading separate collections out of the same file.
+
+       Every row here is 1C's, not this app's: the date, the asset, the
+       defect number, the priority, the type, the cause and the status are
+       reproduced as 1C holds them. The one thing this app does is decide
+       WHICH rows — Responsible person is one of the five, dated on or after
+       the kick-off — and that rule is stated on screen rather than implied
+       by the number. -->
+  <section id="tab-cmwo" class="hidden">
+    <div class="pagehd">
+      <div class="pgt"><h1 data-i18n="cw_title">Defects raised by Condition Monitoring</h1>
+        <span class="pgsub" id="cwSub"></span>
+        <span class="pgsub" id="cwAsOf"></span></div>
+    </div>
+    <!-- A COLUMN THIS FILE COULD NOT FIND IS SAID OUT LOUD. An empty cell
+         reads as "1C did not fill this in"; it must never be able to mean
+         "the ingester looked for a header that is not there". -->
+    <div id="cwWarn"></div>
+    <div class="kpis" id="cwKpis"></div>
+    <div class="section">
+      <div class="secthd"><h2 data-i18n="cw_h2">Defect work orders</h2>
+        <span class="pgsub" data-i18n="cw_h2sub">One row per defect. 1C repeats a work order per line item, so a defect with two parts booked against it is shown once.</span></div>
+      <div class="toolbar">
+        <span class="spacer"></span>
+        <label class="fld"><span data-i18n="cw_status">Status</span><select id="cwStatus"></select></label>
+        <label class="fld"><span data-i18n="cw_find">Search</span>
+          <input id="cwQ" type="search" data-i18n-ph="cw_findph" placeholder="unit, defect no, cause"></label>
+        <label class="fld chk"><input type="checkbox" id="cwPlanned">
+          <span data-i18n="cw_showplanned">Show planned services too</span></label>
+        <button class="btn ghost" id="cwCsv" data-i18n="cw_csv">Export CSV</button>
+      </div>
+      <div id="cwList"></div>
     </div>
   </section>
 
@@ -3541,22 +3586,22 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=340"></script>
+<script src="../data/magnetic_plug.js?v=341"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=340"></script>
-<script src="../mobile/hme.js?v=340"></script>
-<script src="../mobile/mp-fc.js?v=340"></script>
-<script src="../mobile/hme-cascade.js?v=340"></script>
-<script src="../mobile/temp-limits.js?v=340"></script>
+<script src="../data/work_orders.js?v=341"></script>
+<script src="../mobile/hme.js?v=341"></script>
+<script src="../mobile/mp-fc.js?v=341"></script>
+<script src="../mobile/hme-cascade.js?v=341"></script>
+<script src="../mobile/temp-limits.js?v=341"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=340"></script>
-<script src="../mobile/normalize.js?v=340"></script>
-<script src="../mobile/terms.js?v=340"></script>
+<script src="../mobile/assets.js?v=341"></script>
+<script src="../mobile/normalize.js?v=341"></script>
+<script src="../mobile/terms.js?v=341"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3575,19 +3620,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=340"></script>
-<script src="../mobile/edits.js?v=340"></script>
-<script src="../mobile/due.js?v=340"></script>
-<script src="../mobile/wear.js?v=340"></script>
-<script src="../mobile/wear-map.js?v=340"></script>
-<script src="../mobile/lube.js?v=340"></script>
-<script src="../mobile/lube-overrides.js?v=340"></script>
-<script src="../mobile/lube2027.js?v=340"></script>
-<script src="../mobile/lube-tds.js?v=340"></script>
+<script src="../mobile/grade.js?v=341"></script>
+<script src="../mobile/edits.js?v=341"></script>
+<script src="../mobile/due.js?v=341"></script>
+<script src="../mobile/wear.js?v=341"></script>
+<script src="../mobile/wear-map.js?v=341"></script>
+<script src="../mobile/lube.js?v=341"></script>
+<script src="../mobile/lube-overrides.js?v=341"></script>
+<script src="../mobile/lube2027.js?v=341"></script>
+<script src="../mobile/lube-tds.js?v=341"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=340"></script>
-<script src="../mobile/machine-photos.js?v=340"></script>
+<script src="../mobile/upload-defaults.js?v=341"></script>
+<script src="../mobile/machine-photos.js?v=341"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3596,17 +3641,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=340"></script>
-<script src="../mobile/get.js?v=340"></script>
-<script src="../mobile/points.js?v=340"></script>
-<script src="../mobile/uc-points.js?v=340"></script>
-<script src="../mobile/inspect-guide.js?v=340"></script>
-<script src="../mobile/get-figs.js?v=340"></script>
-<script src="../mobile/body-points.js?v=340"></script>
-<script src="../mobile/body-map.js?v=340"></script>
-<script src="../mobile/jspdf.umd.min.js?v=340"></script>
-<script src="../mobile/html2canvas.min.js?v=340"></script>
-<script src="../mobile/report-core.js?v=340"></script>
+<script src="../mobile/machine-fig.js?v=341"></script>
+<script src="../mobile/get.js?v=341"></script>
+<script src="../mobile/points.js?v=341"></script>
+<script src="../mobile/uc-points.js?v=341"></script>
+<script src="../mobile/inspect-guide.js?v=341"></script>
+<script src="../mobile/get-figs.js?v=341"></script>
+<script src="../mobile/body-points.js?v=341"></script>
+<script src="../mobile/body-map.js?v=341"></script>
+<script src="../mobile/jspdf.umd.min.js?v=341"></script>
+<script src="../mobile/html2canvas.min.js?v=341"></script>
+<script src="../mobile/report-core.js?v=341"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4518,6 +4563,20 @@ const I18N={
   pa_d_delta:"Nearest CM round date minus 1C's planned date. Positive = the round was carried out after the plan date; negative = before.",
   pa_d_status:"On time: within {n} days of the plan either way. Late/Early: outside that, in the direction shown. No CM round: nothing recorded on that unit within {w} days of the plan date — either CM does not yet cover this unit, or the round simply was not carried out.",
   pa_d_preinsp:"General Inspection is the one round meant to run ahead of the PM, not alongside it — every other round (Magnetic Plug, Undercarriage, Filter Cut, GET, Dump Body Liner / Tray) is judged against the plan date itself, above. A unit shows here when its PM is a P3 or P4 priority, the plan date is 3 days away or closer, and no General Inspection has been carried out in the 14 days before it.",
+  cw_tab:"Defects raised", cw_title:"Defects raised by Condition Monitoring",
+  cw_sub:"Defect work orders raised by {who}, from {d} onward. Read from 1C's own export — the date, the number, the type, the cause and the status are as 1C holds them.",
+  cw_h2:"Defect work orders",
+  cw_h2sub:"One row per defect. 1C repeats a work order per line item, so a defect with two parts booked against it is shown once.",
+  cw_k_total:"Defects raised", cw_k_total_s:"since {d}", cw_k_person_s:"tap to show only theirs",
+  cw_status:"Status", cw_status_all:"Any status", cw_find:"Search", cw_findph:"unit, defect no, cause",
+  cw_showplanned:"Show planned services too", cw_csv:"Export CSV",
+  cw_is_planned:"planned service",
+  cw_none:"No defect work order matches these filters.",
+  cw_nodata:"The work-order file does not carry the team's defects yet. It is rebuilt hourly; this panel fills in on the next pull.",
+  cw_nocol:"1C's export has no column this file could match for: {f}. Those cells are blank because the column was not found, not because 1C left them empty.",
+  cw_c_date:"Date", cw_c_asset:"Asset", cw_c_defect:"Defect no", cw_c_eqtype:"Equipment type",
+  cw_c_prio:"Priority", cw_c_dtype:"Defect type", cw_c_cause:"Cause of defect",
+  cw_c_status:"Status", cw_c_by:"Raised by",
   pa_st_ontime:"On time", pa_st_late:"Late", pa_st_early:"Early", pa_st_missing:"No CM round",
   pa_st_off:"Held off", pa_k_off:"Held off", pa_k_off_s:"rounds the site has taken off these machines",
   pa_st_preinsp:"Pre-PM check due",
@@ -5348,6 +5407,20 @@ const I18N={
   pa_d_delta:"Дата ближайшего обхода CM минус плановая дата 1С. Положительное значение — обход выполнен после плана; отрицательное — до плана.",
   pa_d_status:"В срок: в пределах {n} дн. от плана в любую сторону. Позже/раньше: за этими пределами, в указанную сторону. Нет обхода CM: за {w} дн. вокруг плановой даты по этой единице ничего не записано — либо CM пока не охватывает эту машину, либо обход просто не провели.",
   pa_d_preinsp:"Общий осмотр — единственный обход, который должен пройти ДО ТО, а не одновременно с ним: все остальные обходы (магнитная пробка, ходовая часть, замена фильтров, GET, облицовка кузова) оцениваются по самой плановой дате, см. выше. Единица попадает сюда, если её ТО имеет приоритет P3 или P4, плановая дата — через 3 дня или ближе, а общий осмотр не проводился в течение предыдущих 14 дней.",
+  cw_tab:"Заявленные дефекты", cw_title:"Дефекты, заявленные службой мониторинга",
+  cw_sub:"Наряды по дефектам, заявленные: {who}, начиная с {d}. Данные из выгрузки 1С — дата, номер, тип, причина и статус приведены так, как их хранит 1С.",
+  cw_h2:"Наряды по дефектам",
+  cw_h2sub:"Одна строка на дефект. 1С повторяет наряд по каждой позиции, поэтому дефект с двумя позициями показан один раз.",
+  cw_k_total:"Заявлено дефектов", cw_k_total_s:"с {d}", cw_k_person_s:"нажмите, чтобы показать только его",
+  cw_status:"Статус", cw_status_all:"Любой статус", cw_find:"Поиск", cw_findph:"ед., № дефекта, причина",
+  cw_showplanned:"Показывать и плановые ТО", cw_csv:"Экспорт CSV",
+  cw_is_planned:"плановое ТО",
+  cw_none:"Нет нарядов по дефектам с такими фильтрами.",
+  cw_nodata:"В файле нарядов пока нет дефектов службы мониторинга. Файл обновляется ежечасно — панель заполнится при следующей выгрузке.",
+  cw_nocol:"В выгрузке 1С не найден столбец для: {f}. Эти ячейки пусты потому, что столбец не найден, а не потому, что 1С их не заполнил.",
+  cw_c_date:"Дата", cw_c_asset:"Единица", cw_c_defect:"№ дефекта", cw_c_eqtype:"Тип техники",
+  cw_c_prio:"Приоритет", cw_c_dtype:"Тип дефекта", cw_c_cause:"Причина дефекта",
+  cw_c_status:"Статус", cw_c_by:"Заявил",
   pa_st_ontime:"В срок", pa_st_late:"Позже", pa_st_early:"Раньше", pa_st_missing:"Нет обхода CM",
   pa_st_off:"Сняты", pa_k_off:"Сняты с обхода", pa_k_off_s:"обходы, снятые площадкой с этих машин",
   pa_st_preinsp:"Нужна проверка перед ТО",
@@ -15461,6 +15534,23 @@ function renderPlanActualTab(){
     + (pg.strip||"");
   box.querySelectorAll("th[data-sort]").forEach(el=>el.onclick=()=>paSortGo(el.dataset.sort));
 }
+/* Machine-readable headings, like every other export on this page — a CSV
+   opened in a spreadsheet six months from now should not depend on which
+   language the browser happened to be in. */
+function cwCsv(){
+  const rows=[["date","asset","defect_no","work_request_reference","equipment_type",
+               "priority","defect_type","cause_of_defect","status","raised_by",
+               "work_order","maintenance_type","is_planned_service"]];
+  cwRows().forEach(r=>rows.push([r.date||"", r.asset||"", r.defect||"", r.requestRef||"",
+    r.eqType||"", r.priority||"", r.defectType||"", r.cause||"", r.status||"", r.by||"",
+    r.woNumber||"", r.maintType||"", r.planned?1:0]));
+  const csv=rows.map(r=>r.map(v=>{ const x=String(v==null?"":v);
+    return /[",\n]/.test(x) ? '"'+x.replace(/"/g,'""')+'"' : x; }).join(",")).join("\n");
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"}));
+  a.download="cm-defects.csv"; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+}
 function paCsv(){
   const rows=[["equip","work_order","maint_type","hours","cm_round_label","priority","wo_open",
                "plan_date","wo_actual_date","nearest_cm_round_date","nearest_cm_round_type",
@@ -16420,11 +16510,124 @@ function renderAll(all){
     Object.keys(TAB_RENDER).forEach(k=>{ if(k===cur||all){ TAB_RENDER[k](); TAB_DIRTY.delete(k); } else TAB_DIRTY.add(k); });
     renderNavCounts();
   }finally{ RENDER_LIVE=false; renderSync.scan=null; PASS_MEMO=null; } }
+/* ═══════════ DEFECTS THE CM TEAM RAISED ═══════════════════════════════════
+   Reads cmWorkOrders out of the same generated file Plan vs Actual uses.
+   Nothing is computed here that the ingester has not already decided: which
+   rows belong to the team, what the defect number is, and whether a row is a
+   planned service or a defect. Deciding any of that a second time in this
+   file is how two screens come to disagree about one count. */
+let cwWho = "";              // "" = everyone on the team
+let cwStatusSel = "";
+function cwAll(){
+  const D = window.CM_WO_DATA || {};
+  return Array.isArray(D.cmWorkOrders) ? D.cmWorkOrders : null;   // null = not generated yet
+}
+function cwRows(){
+  const all = cwAll() || [];
+  const planned = !!($("cwPlanned")||{}).checked;
+  const q = (($("cwQ")||{}).value||"").trim().toUpperCase();
+  return all
+    .filter(r => planned || !r.planned)
+    .filter(r => !cwWho || r.by === cwWho)
+    .filter(r => !cwStatusSel || (r.status||"") === cwStatusSel)
+    .filter(r => !q || [r.asset, r.defect, r.requestRef, r.cause, r.defectType, r.eqType, r.woNumber]
+      .some(v => String(v||"").toUpperCase().indexOf(q) >= 0));
+}
+function renderCmWoTab(){
+  const box = $("cwList"); if(!box) return;
+  const D = window.CM_WO_DATA || {};
+  const all = cwAll();
+
+  /* A COLUMN THE INGESTER COULD NOT FIND, NAMED. Without this the panel
+     would show three empty columns and read as "1C left them blank". */
+  const warn = $("cwWarn");
+  if(warn){
+    const miss = Object.entries(D.cmColumns||{}).filter(([,v])=>!v).map(([k])=>k);
+    warn.innerHTML = miss.length
+      ? `<div class="note bad">${esc(t("cw_nocol",{f:miss.join(", ")}))}</div>` : "";
+  }
+  if($("cwAsOf")){
+    const gen=D.generated, at=gen?Date.parse(gen):NaN;
+    $("cwAsOf").textContent = isFinite(at)
+      ? t("pa_asof",{t:(()=>{ const h=Math.round((Date.now()-at)/3600000);
+          return h<1?t("pa_asof_now"):h===1?t("pa_asof_hr",{n:h}):t("pa_asof_hrs",{n:h}); })()})
+      : "";
+  }
+  if($("cwSub")) $("cwSub").textContent =
+    t("cw_sub",{ d:D.cmSince||"—", who:(D.cmPeople||[]).join(", ") });
+
+  if(all === null){
+    if($("cwKpis")) $("cwKpis").innerHTML="";
+    box.innerHTML = `<div class="sub">${esc(t("cw_nodata"))}</div>`;
+    return;
+  }
+
+  /* THE COUNT THE OFFICE ASKED FOR: how many defects the team wrote up.
+     Planned services are excluded from it even when they are being shown,
+     because they are the work being requested and not a finding. */
+  const defects = all.filter(r=>!r.planned);
+  const shown = cwRows();
+  const per = {};
+  (D.cmPeople||[]).forEach(n=>per[n]=0);
+  defects.forEach(r=>{ per[r.by]=(per[r.by]||0)+1; });
+
+  if($("cwKpis")) $("cwKpis").innerHTML =
+      `<div class="kpi info"><span class="k">${esc(t("cw_k_total"))}</span>
+         <span class="v">${defects.length}</span>
+         <span class="s">${esc(t("cw_k_total_s",{d:D.cmSince||"—"}))}</span></div>`
+    + Object.keys(per).map(n=>
+      `<button type="button" class="kpi${cwWho===n?" on":""}" data-cwwho="${esc(n)}">
+         <span class="k">${esc(n)}</span><span class="v">${per[n]}</span>
+         <span class="s">${esc(t("cw_k_person_s"))}</span></button>`).join("");
+  if($("cwKpis")) $("cwKpis").querySelectorAll("[data-cwwho]").forEach(b=>
+    b.onclick=()=>{ cwWho = (cwWho===b.dataset.cwwho) ? "" : b.dataset.cwwho; renderCmWoTab(); });
+
+  /* Status choices come from the DATA, not from a list typed here: 1C's own
+     vocabulary changes without telling anybody, and a hard-coded option that
+     no longer matches silently filters everything away. */
+  const sel = $("cwStatus");
+  if(sel){
+    const opts = [...new Set(all.map(r=>r.status).filter(Boolean))].sort();
+    const cur = cwStatusSel;
+    sel.innerHTML = `<option value="">${esc(t("cw_status_all"))}</option>`
+      + opts.map(o=>`<option value="${esc(o)}">${esc(o)}</option>`).join("");
+    sel.value = opts.includes(cur) ? cur : "";
+    cwStatusSel = sel.value;
+  }
+
+  if(!shown.length){ box.innerHTML = `<div class="sub">${esc(t("cw_none"))}</div>`; return; }
+  const pg = paged("cmwo", shown, renderCmWoTab);
+  const cell = v => v ? esc(v) : `<span class="muted">—</span>`;
+  box.innerHTML = `<div class="tblwrap"><table class="grid"><thead><tr>
+      <th data-i18n="cw_c_date">Date</th><th data-i18n="cw_c_asset">Asset</th>
+      <th data-i18n="cw_c_defect">Defect no</th><th data-i18n="cw_c_eqtype">Equipment type</th>
+      <th data-i18n="cw_c_prio">Priority</th><th data-i18n="cw_c_dtype">Defect type</th>
+      <th data-i18n="cw_c_cause">Cause of defect</th><th data-i18n="cw_c_status">Status</th>
+      <th data-i18n="cw_c_by">Raised by</th></tr></thead><tbody>`
+    + pg.rows.map(r=>`<tr${r.planned?' class="muted"':''}>
+        <td class="mono">${cell(r.date)}</td>
+        <td><b>${cell(r.asset)}</b></td>
+        <td class="mono">${r.defect ? esc(r.defect)
+            : (r.requestRef ? `<span class="muted" title="${esc(r.requestRef)}">${esc(r.requestRef.slice(0,28))}</span>`
+                            : `<span class="muted">—</span>`)}</td>
+        <td>${cell(r.eqType)}</td><td>${cell(r.priority)}</td>
+        <td>${r.planned ? `<span class="muted">${esc(t("cw_is_planned"))}</span>` : cell(r.defectType)}</td>
+        <td>${r.planned ? `<span class="muted">—</span>` : cell(r.cause)}</td>
+        <td>${cell(r.status)}</td><td>${cell(r.by)}</td></tr>`).join("")
+    + `</tbody></table></div>`
+    /* The pager's own strip, and the count in the words every other table on
+       this page uses — "{n} matching · showing a–b". Written once in t(),
+       never restated here. */
+    /* pgbar is already a progress bar on this page — a class reused for a
+       second thing is a style collision waiting for the next edit. */
+    + `<div class="sub">${esc(t("pg_of",{n:String(shown.length),
+         a:String(pg.from||0), b:String(pg.to||0)}))}</div>${pg.strip||""}`;
+}
 const TAB_RENDER={
   overview:()=>{ renderKpis(); renderCoverage(); renderTrend(); renderFleet(); },
   failure:()=>renderFailure(), wear:()=>renderWearTab(), actions:()=>renderActions(),
   equipment:()=>renderHistory(), lube:()=>renderLubeTab(), due:()=>renderDueTab(), sync:()=>renderSync(),
-  planact:()=>renderPlanActualTab(),
+  planact:()=>renderPlanActualTab(), cmwo:()=>renderCmWoTab(),
 };
 const TAB_DIRTY=new Set();
 /* A page opened stale is painted before it is seen, inside a pass of its own. */
@@ -16527,6 +16730,13 @@ cmbInit();
 $("ddType").onchange=renderDueTab; $("ddScope").onchange=()=>{ renderDueTab(); urlWrite(false); };
 $("ddQ").oninput=renderDueTab;
 $("ddCsv").onclick=dueCsv;
+if($("cwQ")) $("cwQ").oninput=renderCmWoTab;
+if($("cwStatus")) $("cwStatus").onchange=()=>{ cwStatusSel=$("cwStatus").value; renderCmWoTab(); };
+if($("cwPlanned")) $("cwPlanned").onchange=renderCmWoTab;
+/* THE EXPORT IS THE ROWS ON SCREEN, not the whole collection. A CSV that
+   quietly ignores the filters above it is the same number meaning two
+   things depending on where you read it. */
+if($("cwCsv")) $("cwCsv").onclick=cwCsv;
 if($("paQ")) $("paQ").oninput=renderPlanActualTab;
 if($("paWindow")) $("paWindow").onchange=renderPlanActualTab;
 if($("paType")) $("paType").onchange=renderPlanActualTab;
@@ -16682,8 +16892,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=340"></script>
-<script src="sync-adapter.js?v=340"></script>
-<script src="report.js?v=340"></script>
+<script src="drive.js?v=341"></script>
+<script src="sync-adapter.js?v=341"></script>
+<script src="report.js?v=341"></script>
 </body>
 </html>
