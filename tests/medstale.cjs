@@ -43,16 +43,21 @@ const srv = http.createServer((req, res) => {
   const errs = []; p.on('pageerror', e => errs.push(e.message));
   await p.addInitScript(u => { localStorage.setItem('cm_drive_url', u); localStorage.setItem('cm_drive_sec', ''); }, `http://127.0.0.1:${PORT}/live`);
   await p.goto(`http://127.0.0.1:${PORT}/dashboard/index.html`, { waitUntil: 'load' });
-  await p.waitForFunction(() => window.CMDrive && typeof CMDrive.mediaIndexState === 'function', null, { timeout: 20000 });
+  /* Waits on the function every build has, and reads the state through a
+     guard, so on a build WITHOUT mediaIndexState the suite reaches its
+     assertions and fails them — that is the reading that proves it was red
+     before the fix. */
+  await p.waitForFunction(() => window.CMDrive && typeof CMDrive.refreshMediaIndex === 'function', null, { timeout: 20000 });
   await p.waitForTimeout(1500);
+  const STATE = `(window.CMDrive.mediaIndexState ? CMDrive.mediaIndexState() : { at: null, fresh: null, err: 'no mediaIndexState on this build' })`;
 
   console.log('1. A LISTING THAT WAS FETCHED IS FRESH, AND SAYS WHEN');
-  const s1 = await p.evaluate(async () => { const n = await CMDrive.refreshMediaIndex(); return Object.assign({ n }, CMDrive.mediaIndexState(), { has: CMDrive.hasName('TK151_1A_09.09.2026_MP.jpg') }); });
+  const s1 = await p.evaluate(`(async () => { const n = await CMDrive.refreshMediaIndex(); return Object.assign({ n }, ${STATE}, { has: CMDrive.hasName('TK151_1A_09.09.2026_MP.jpg') }); })()`);
   ok('the index came down and is marked fresh', s1.n === 1 && s1.fresh === true && !s1.err && s1.at > 0 && s1.has, JSON.stringify(s1));
 
   console.log('\n2. THE SERVER STOPS ANSWERING');
   FAILING = true;
-  const s2 = await p.evaluate(async () => { const n = await CMDrive.refreshMediaIndex(); return Object.assign({ n }, CMDrive.mediaIndexState(), { has: CMDrive.hasName('TK151_1A_09.09.2026_MP.jpg') }); });
+  const s2 = await p.evaluate(`(async () => { const n = await CMDrive.refreshMediaIndex(); return Object.assign({ n }, ${STATE}, { has: CMDrive.hasName('TK151_1A_09.09.2026_MP.jpg') }); })()`);
   ok('the listing is kept — stale beats absent', s2.n === 1 && s2.has, JSON.stringify({ n: s2.n, has: s2.has }));
   ok('  but it is marked NOT fresh, with the reason', s2.fresh === false && /500|HTTP|gateway/i.test(s2.err), JSON.stringify({ fresh: s2.fresh, err: s2.err }));
   ok('  and the time is still the time it was actually fetched', s2.at === s1.at, s2.at + ' vs ' + s1.at);
@@ -63,7 +68,7 @@ const srv = http.createServer((req, res) => {
 
   console.log('\n3. AND CLEARS THE NOTE ONCE IT CAN');
   FAILING = false;
-  const s3 = await p.evaluate(async () => { await CMDrive.refreshMediaIndex(); return CMDrive.mediaIndexState(); });
+  const s3 = await p.evaluate(`(async () => { await CMDrive.refreshMediaIndex(); return ${STATE}; })()`);
   ok('fresh again', s3.fresh === true && !s3.err && s3.at > s1.at, JSON.stringify(s3));
   await p.evaluate(() => renderSync());
   const h3 = await p.evaluate(() => (document.getElementById('syHealth') || {}).textContent || '');

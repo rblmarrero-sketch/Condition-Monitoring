@@ -44,6 +44,7 @@ let store = {};            // "folder/name" -> {bytes, sha}
 let posted = [];           // every file name accepted, in order
 let DROP = new Set();      // names the listing leaves out
 let SIZES = {};            // name -> size the listing reports instead of the truth
+let RIVAL = new Set();     // names another device already owns: filed as <name>~RIVAL, like the backend does
 let reqs = [];
 const srv = http.createServer((req, res) => {
   const u = new URL(req.url, 'http://x'), cors = { 'Access-Control-Allow-Origin': '*' };
@@ -52,6 +53,7 @@ const srv = http.createServer((req, res) => {
   if (u.pathname === '/__reset') { store = {}; posted = []; reqs = []; DROP = new Set(); SIZES = {}; return send({ ok: true }); }
   if (u.pathname === '/__drop') { DROP = new Set(String(u.searchParams.get('n') || '').split(',').filter(Boolean)); return send({ ok: true }); }
   if (u.pathname === '/__size') { SIZES = {}; const n = u.searchParams.get('n'); if (n) SIZES[n] = Number(u.searchParams.get('s')); return send({ ok: true }); }
+  if (u.pathname === '/__rival') { RIVAL = new Set(String(u.searchParams.get('n') || '').split(',').filter(Boolean)); return send({ ok: true }); }
   if (u.pathname === '/exec') {
     if (req.method === 'GET') {
       reqs.push('get:' + u.searchParams.get('action'));
@@ -71,9 +73,12 @@ const srv = http.createServer((req, res) => {
       const save = (f, folder) => {
         const bytes = Buffer.from(String(f.file || ''), 'base64');
         const sha = crypto.createHash('sha256').update(bytes).digest('hex');
-        const key = (folder ? folder + '/' : '') + f.name;
+        /* The backend's own rule: a name another device owns is kept for
+           that device, and this phone's copy is filed as <name>~<DEV>. */
+        const stored = RIVAL.has(f.name) ? f.name.replace(/(\.[^.]+)$/, '~RIVAL$1') : f.name;
+        const key = (folder ? folder + '/' : '') + stored;
         store[key] = { bytes, sha }; posted.push(f.name);
-        return { ok: true, req: f.name, name: f.name, id: key,
+        return { ok: true, req: f.name, name: stored, id: key,
           receipt: { receiptId: 'r' + sha.slice(0, 24), attachmentId: String(f.aid || ''), objectId: key,
                      byteSize: bytes.length, sha256: sha, at: new Date().toISOString(), duplicate: false, verified: true } };
       };
@@ -201,7 +206,11 @@ const BAD = [12347, 23459, 34571];
   ok('the page did not reload', navs === 0, navs + ' navigations');
   ok('  the update is still waiting, with the reason recorded', held.waiting && /quota/i.test(held.hold), JSON.stringify(held.hold));
   ok('  and the diagnostic line says the update is held and why', held.diag.includes(await p.evaluate(() => t('ud_hold', { why: '' }).split('(')[0].trim())), held.diag.slice(-120));
-  await p.evaluate(() => { dbPut = window.__origPut; });
+  /* Guarded: on a build with the defect the page has ALREADY reloaded here
+     and window.__origPut is gone — the suite must go on to the next case
+     and report that one on its own merits (tests are also run against the
+     pre-fix build to prove they were red there). */
+  await p.evaluate(() => { if (window.__origPut) dbPut = window.__origPut; });
   await p.evaluate(() => applyUpdateIfIdle());
   await p.waitForFunction(() => document.readyState === 'complete' && typeof BUILD !== 'undefined', null, { timeout: 15000 }).catch(() => {});
   await p.waitForTimeout(1500);
@@ -228,8 +237,10 @@ const BAD = [12347, 23459, 34571];
     dbAll = window.__origAll;
     const n2 = await pendingCount();
     await armRetry();
+    /* The pre-fix build has no net_qbad string; t() answers with the key. */
     return { n, armed: retryTimer !== null, st, badge, screen, screenErr, n2, qbad: t('net_qbad'), ids };
-  });
+  }).catch(e => ({ thrown: String(e && e.message || e), ids: [] }));
+  if (q1.thrown) ok('the queue-read case ran at all', false, q1.thrown);
   ok('pendingCount() answers null, not zero', q1.n === null, String(q1.n));
   ok('  the retry clock stays armed', q1.armed);
   ok('  the pill says the queue could not be read — never "All sent"', q1.st && q1.st.cls === 'err' && q1.st.txt === q1.qbad, JSON.stringify(q1.st));
@@ -282,6 +293,19 @@ const BAD = [12347, 23459, 34571];
   const row5 = await p.evaluate(async () => { await renderPending(); return [...document.querySelectorAll('#pending .pitem .up')].map(e => e.textContent).find(x => /different copy/.test(x)) || ''; });
   ok('  the row names the file and says it was not overwritten', /different copy of 1 file/.test(row5) && /TK903_P1/.test(row5), row5);
   await ctl('/__size?n=');
+
+  console.log('\n   a file the server filed under a RIVAL device\'s variant name is found under that name — not re-sent');
+  await ctl('/__rival?n=TK903_P2_10.09.2026_MP.jpg');
+  await p.evaluate(async id => { const r = await dbGet(id); r.rev = 4; r.up = 0; delete r.upTo; delete r.sent; delete r.upAt; delete r.conf; await dbPut(r); }, r4);
+  const before7 = (await stat()).posted.length;
+  await syncOnce();
+  s4 = await rec(r4);
+  const st7b = await stat();
+  ok('the round is confirmed whole under the stored name', s4.up === 1 && s4.conf && s4.conf.n === s4.conf.of && !s4.conf.resend, JSON.stringify(s4.conf));
+  ok('  the variant is what the server holds', st7b.store.some(k => /TK903_P2_10\.09\.2026_MP~RIVAL\.jpg$/.test(k)), st7b.store.filter(k => /TK903_P2/.test(k)).join(', '));
+  await syncOnce();
+  ok('  and nothing was sent again', (await stat()).posted.length === st7b.posted.length, (await stat()).posted.length - before7 + ' file(s) after the send');
+  await ctl('/__rival?n=');
   await p.evaluate(async id => { await dbDel(id); }, r4);
 
   console.log('\n5. A PHOTOGRAPH THE PHONE CANNOT READ, THAT THE SERVER VERIFIABLY HOLDS, DOES NOT HOLD THE ROUND');
@@ -358,6 +382,41 @@ const BAD = [12347, 23459, 34571];
   ok('all nineteen records are still on the phone with both photographs', after.every(r => r && r.photos === 2), after.filter(r => !r || r.photos !== 2).length + ' short');
   ok('  every stored name is the app\'s own, unchanged', after.every(r => r.atts.every(a => /^TK9\d\d_P[12]_10\.09\.2026_MP\.jpg$/.test(a.name))), JSON.stringify(after[0].atts.map(a => a.name)));
   await p.evaluate(() => { window.__badSizes = []; });
+
+  console.log('\n8. THE READINESS CARD ROUTES EACH FAILURE TO ITS OWN ACTION');
+  /* The 19-round queue above left TK927 waiting with an unreadable, un-
+     receipted photograph. "19 waiting — Send now" is the wrong sentence for
+     it: a retry cannot read a file. */
+  const y1 = await p.evaluate(async () => { await yardCheck(); await new Promise(r => setTimeout(r, 300));
+    return { v: lastYard && lastYard.v, list: (document.getElementById('yardList') || {}).textContent || '',
+             want: t('rdy_q_recover', { n: 1 }), fix: t('rdy_fix_recover'), verdict: t('rdy_v_recover') }; });
+  ok('a photograph that needs recovery is said in those words, with the inventory as the action',
+     y1.list.includes(y1.want) && y1.list.includes(y1.fix), y1.list.slice(0, 160));
+  /* The verdict is read with the offline-copy row set aside: a test page with
+     the worker blocked reports "not installed for offline use", which on a
+     real phone rightly outranks everything — so the verdict is measured on
+     the rows this case is about. */
+  const yv = await p.evaluate(() => { const rows = (lastYard && lastYard.rows) || []; return yardVerdict(rows.filter(r => r.key !== 'offline' && r.key !== 'build')); });
+  ok('  and it is the card\'s verdict, loud', yv && yv.s === 'rdy_v_recover' && yv.k === 'bad', JSON.stringify(yv));
+  /* A queue nobody has tried for seven hours while the server answers is
+     not "waiting"; it is stuck, and the card says so. Every pending round's
+     last attempt is pushed back seven hours — including TK927's, which the
+     19-round send touched a moment ago. */
+  const y2 = await p.evaluate(async ids => {
+    const old = new Date(Date.now() - 7 * 3600000).toISOString();
+    const r = await dbGet(ids[0]); r.up = 0; delete r.upTo; delete r.sent; delete r.upAt;
+    for (const [, q] of positionsOf(r)) for (const aid of Object.keys(attMap(q) || {})) { attMap(q)[aid].lastAttemptAt = old; attMap(q)[aid].localState = 'stored'; }
+    await dbPut(r);
+    const r2 = await dbGet(ids[7]);
+    for (const [, q] of positionsOf(r2)) for (const aid of Object.keys(attMap(q) || {})) { attMap(q)[aid].lastAttemptAt = old; delete attMap(q)[aid].localState; }
+    await dbPut(r2);
+    window.__upd.okAt = Date.now();
+    await yardCheck(); await new Promise(r => setTimeout(r, 300));
+    const rows = (lastYard && lastYard.rows) || [];
+    return { v: yardVerdict(rows.filter(x => x.key !== 'offline' && x.key !== 'build')), list: (document.getElementById('yardList') || {}).textContent || '' };
+  }, ids);
+  ok('a queue with nothing attempted for hours while the server answers is called stalled', y2.list.includes('Uploads have not moved since') && y2.v && y2.v.k === 'bad' && y2.v.s === 'rdy_v_photos',
+     JSON.stringify(y2.v) + ' ' + (y2.list.match(/Uploads have not moved[^.]*/) || ['(no stalled line)'])[0]);
 
   ok('no page errors throughout', errs.length === 0, errs.slice(0, 3).join(' | ') || 'none');
   await b.close(); srv.close();

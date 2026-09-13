@@ -17,6 +17,7 @@ const sidecar = (unit, date, type, grade) => ({
               action: 'SCH', actionLabel: 'Schedule repair', wo: 'N-104' }] }] });
 
 let FILES = [];
+let UPLOADED = [];                    // what phones POSTed this run — listed, so a read-back finds it
 function seed(n) {
   FILES = [];
   for (let i = 1; i <= n; i++) {
@@ -79,8 +80,9 @@ function exec(q, legacy) {
   }
   if (action === 'list') {
     stats.list++;
-    return { ok: true, count: FILES.length, truncated: false,
-      files: FILES.map(f => ({ name: f.name, path: f.name, id: f.id, size: f.size, updated: f.updated })) };
+    const all = FILES.concat(UPLOADED.filter(u => !FILES.some(f => f.name === u.name)));
+    return { ok: true, count: all.length, truncated: false,
+      files: all.map(f => ({ name: f.name, path: f.name, id: f.id, size: f.size, updated: f.updated })) };
   }
   if (action === 'file') {
     stats.file++;
@@ -125,6 +127,28 @@ http.createServer((req, res) => {
     return res.end(b);
   }
   if (u.pathname === '/exec' || u.pathname === '/old') {
+    /* A WRITE IS REMEMBERED, SO THE READ-BACK CAN FIND IT. This answered every
+       POST with the health reply and stored nothing, which was fine while
+       "accepted" was the end of the story. Since build 343 the phone lists
+       the folder after a send and RE-SENDS what is not there — so a mock
+       that accepts and forgets made every round re-send for ever. A single
+       file upload is recorded under the name asked for and listed with the
+       fixture; everything else on POST keeps the old answer. */
+    if (req.method === 'POST') {
+      let raw = ''; req.on('data', c => raw += c);
+      return req.on('end', () => {
+        let j = null; try { j = JSON.parse(raw); } catch (e) {}
+        let out;
+        if (j && j.name && j.file && !j.op) {
+          const size = Buffer.from(String(j.file), 'base64').length;
+          if (!UPLOADED.some(f => f.name === j.name)) UPLOADED.push({ name: j.name, id: 'u' + UPLOADED.length, size, updated: Date.now() });
+          else UPLOADED.find(f => f.name === j.name).size = size;
+          out = { ok: true, name: j.name, id: j.name };
+        } else out = exec(u.searchParams, u.pathname === '/old');
+        res.writeHead(200, Object.assign({ 'Content-Type': 'application/json' }, cors));
+        res.end(JSON.stringify(out));
+      });
+    }
     const body = JSON.stringify(exec(u.searchParams, u.pathname === '/old'));
     res.writeHead(200, Object.assign({ 'Content-Type': 'application/json' }, cors));
     return res.end(body);
@@ -135,6 +159,7 @@ http.createServer((req, res) => {
   }
   if (u.pathname === '/__reset') {
     Object.keys(stats).forEach(k => stats[k] = 0);
+    UPLOADED = [];
     if (u.searchParams.get('n')) seed(Number(u.searchParams.get('n')));
     if (u.searchParams.get('fresh')) seedFresh(Number(u.searchParams.get('fresh')) || 12,
                                                Number(u.searchParams.get('span')) || 20);

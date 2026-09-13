@@ -134,6 +134,12 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
     rows: [...document.querySelectorAll("#syGapTbl tbody tr")].map(r => r.innerText.replace(/\s+/g, " ").trim()),
     hint: $("syGapHint").textContent,
     health: [...document.querySelectorAll("#syHealth dd")].map(d => d.textContent),
+    /* By its LABEL, not its position: the list grew a row ("File listing")
+       in build 345 and dd[1] became a different fact. Read the cell that
+       follows the "Last asked" label, whatever else the list carries. */
+    lastAsked: (() => { const dts = [...document.querySelectorAll("#syHealth dt")];
+      const dt = dts.find(x => x.textContent.trim() === t("sy_h_last"));
+      return dt && dt.nextElementSibling ? dt.nextElementSibling.textContent : ""; })(),
     badge: $("nbSync").textContent }));
   ok(seen.rows.length > 0, "the missing record is listed", seen.rows.length + " row(s)");
   ok(seen.rows.some(r => r.indexOf(live.unit) >= 0), "and it is the right machine",
@@ -144,8 +150,8 @@ const ok = (c, w, d) => { if (!c) { fail++; console.log("  FAIL  " + w + (d !== 
      seen.tiles.join("  "));
   ok(seen.badge !== "" && seen.badge !== "0",
      "and it reaches the navigation badge", `badge="${seen.badge}"`);
-  ok(/min ago|just now/.test(seen.health[1] || ""), "the backend says when it was last asked",
-     seen.health[1]);
+  ok(/min ago|just now/.test(seen.lastAsked || ""), "the backend says when it was last asked",
+     seen.lastAsked);
 
   console.log("\n── everything present reads as everything present");
   const full = await p.evaluate(() => {

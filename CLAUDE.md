@@ -162,7 +162,21 @@ badge, the queue screen and the sync bar all say "queue could not be read"
 server lists as missing, empty, or SHORTER than what was sent is re-sent —
 only that file, at most `CONF_RESEND_MAX` times per revision. A file the
 server holds LARGER than what was sent is a different file: recorded on
-`conf.differs`, named on the row, never overwritten from the phone.
+`conf.differs`, named on the row, never overwritten from the phone. Two
+rules keep that from looping: the listing is searched under the name the
+server said it FILED the file as (`STORED`, a rival device's `~DEV`
+variant), and a listing entry with no size makes no finding (`null`, not
+0). **A test mock that accepts an upload must list it afterwards** —
+`tests/mock.cjs` records single-file POSTs in `UPLOADED` for exactly this
+reason; a mock that accepts and forgets now makes every round re-send.
+
+**The readiness card routes a waiting queue by what is wrong with it**
+(`yardCheck` §5): a photograph that needs recovery (`localState:
+"unreadable"`, no `serverHeld`) → "Recovery inventory"; a queue nobody has
+attempted for `STALL_MS` while the server answers → stalled, assistance;
+otherwise waiting, and "Connection interrupted. Upload will resume
+automatically." when the last failure was the link. Verdict keys
+`queue_recover` / `queue_stalled` outrank `queue`.
 
 **A photograph the phone can no longer read does not hold the round when
 the manifest's receipt proves the server holds those bytes** (`serverHolds`:

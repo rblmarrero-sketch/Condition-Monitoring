@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=344">
+<link rel="manifest" href="manifest.webmanifest?v=345">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=344">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=344">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=344">
+<link rel="apple-touch-icon" href="icon-192.png?v=345">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=345">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=345">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2469,15 +2469,15 @@ function bootDel(k){ try { localStorage.removeItem(k); } catch (e) {} }
   }
 })();
 </script>
-<script src="native.js?v=344"></script>
-<script src="upload-defaults.js?v=344"></script>
-<script src="hme.js?v=344"></script>
-<script src="mp-fc.js?v=344"></script>
-<script src="hme-cascade.js?v=344"></script>
-<script src="assets.js?v=344"></script>
-<script src="temp-limits.js?v=344"></script>
-<script src="normalize.js?v=344"></script>
-<script src="terms.js?v=344"></script>
+<script src="native.js?v=345"></script>
+<script src="upload-defaults.js?v=345"></script>
+<script src="hme.js?v=345"></script>
+<script src="mp-fc.js?v=345"></script>
+<script src="hme-cascade.js?v=345"></script>
+<script src="assets.js?v=345"></script>
+<script src="temp-limits.js?v=345"></script>
+<script src="normalize.js?v=345"></script>
+<script src="terms.js?v=345"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2496,25 +2496,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=344"></script>
-<script src="edits.js?v=344"></script>
-<script src="due.js?v=344"></script>
-<script src="wear.js?v=344"></script>
-<script src="wear-figs.js?v=344"></script>
-<script src="wear-map.js?v=344"></script>
-<script src="machine-photos.js?v=344"></script>
-<script src="machine-fig.js?v=344"></script>
-<script src="get.js?v=344"></script>
-<script src="points.js?v=344"></script>
-<script src="uc-points.js?v=344"></script>
-<script src="inspect-guide.js?v=344"></script>
-<script src="get-figs.js?v=344"></script>
-<script src="body-points.js?v=344"></script>
-<script src="body-map.js?v=344"></script>
-<script src="lube.js?v=344"></script>
-<script src="lube-overrides.js?v=344"></script>
-<script src="lube2027.js?v=344"></script>
-<script src="report-core.js?v=344"></script>
+<script src="grade.js?v=345"></script>
+<script src="edits.js?v=345"></script>
+<script src="due.js?v=345"></script>
+<script src="wear.js?v=345"></script>
+<script src="wear-figs.js?v=345"></script>
+<script src="wear-map.js?v=345"></script>
+<script src="machine-photos.js?v=345"></script>
+<script src="machine-fig.js?v=345"></script>
+<script src="get.js?v=345"></script>
+<script src="points.js?v=345"></script>
+<script src="uc-points.js?v=345"></script>
+<script src="inspect-guide.js?v=345"></script>
+<script src="get-figs.js?v=345"></script>
+<script src="body-points.js?v=345"></script>
+<script src="body-map.js?v=345"></script>
+<script src="lube.js?v=345"></script>
+<script src="lube-overrides.js?v=345"></script>
+<script src="lube2027.js?v=345"></script>
+<script src="report-core.js?v=345"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3181,6 +3181,10 @@ const I18N = {
     rdy_up_t:"Somewhere to send rounds", rdy_up_ok:"Set up. Finished inspections send themselves.",
     rdy_up_none:"No destination set. Rounds will stay on this phone only.",
     rdy_q_t:"Nothing left over", rdy_q_ok:"Everything captured is in the cloud.",
+    rdy_q_recover:"{n} photo(s) need recovery — this phone can no longer read them. Other uploads are continuing. Open the recovery inventory before anything else.",
+    rdy_q_net:"Connection interrupted. Upload will resume automatically.",
+    rdy_q_stalled:"Uploads have not moved since {t} although the server answers. Press Send now; if nothing moves, export from the recovery inventory.",
+    rdy_fix_recover:"Recovery inventory", rdy_v_recover:"A photo needs recovery",
     rdy_q_pend:"{n} inspection(s) are safely stored on this phone and waiting to send.",
     rdy_ref_t:"Equipment register and inspection definitions", rdy_ref_ok:"{n} units, every inspection type, wear limits and lubricants.",
     rdy_ref_bad:"Reference data is missing. Reload the app with signal.",
@@ -3754,6 +3758,10 @@ const I18N = {
     rdy_up_t:"Есть куда отправлять", rdy_up_ok:"Настроено. Завершённые осмотры отправляются сами.",
     rdy_up_none:"Назначение не задано. Обходы останутся только на телефоне.",
     rdy_q_t:"Ничего не осталось", rdy_q_ok:"Всё записанное — в облаке.",
+    rdy_q_recover:"Фото требуют восстановления: {n} — телефон их больше не читает. Остальное продолжает отправляться. Сначала откройте опись для восстановления.",
+    rdy_q_net:"Связь прервана. Отправка продолжится автоматически.",
+    rdy_q_stalled:"Отправка не двигается с {t}, хотя сервер отвечает. Нажмите «Отправить»; если не помогло — выгрузите через опись.",
+    rdy_fix_recover:"Опись для восстановления", rdy_v_recover:"Фото требует восстановления",
     rdy_q_pend:"На телефоне ещё обходов: {n}. Отправьте до выезда.",
     rdy_ref_t:"Техника и пределы загружены", rdy_ref_ok:"Единиц: {n}, пределы износа и смазки.",
     rdy_ref_bad:"Справочные данные отсутствуют. Перезагрузите приложение при связи.",
@@ -12455,7 +12463,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="344";
+const BUILD="345";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -13024,6 +13032,7 @@ async function putBatch(UP, files, rec, sent){
   /* Mark by the name we ASKED for. Drive may hold it under another when a
      second phone already owns that name. */
   (j.saved||[]).forEach(x=>{ if(x&&(x.req||x.name)) sentMark(sent,x.req||x.name);
+    if(x && x.req && x.name && x.name!==x.req && STORED) STORED[x.req]=x.name;
     /* A backend that issues receipts hands one back per file. One that does
        not simply leaves this empty, and the evidence ladder stays where it
        was — nothing here demands a receipt in order to work. */
@@ -13092,7 +13101,12 @@ async function serverNames(dest, folder){
   const j=JSON.parse(await r.text());
   if(!j || j.ok===false) throw new Error((j&&j.error)||"list refused");
   const m=new Map();
-  (j.files||[]).forEach(f=>{ if(f&&f.name) m.set(String(f.name), Number(f.size||0)); });
+  /* A listing that carries no size says nothing about the size. Read as 0 it
+     said "empty", and once an empty file is something the read-back acts on
+     — it is re-sent — a backend that lists names only would have every
+     round re-sending every photograph for ever. Absent is null, and null
+     produces no finding. */
+  (j.files||[]).forEach(f=>{ if(f&&f.name) m.set(String(f.name), (f.size==null||f.size==="") ? null : Number(f.size)); });
   return m;
 }
 /* `done` is [{rec, names}] for the records that finished in this run. Returns
@@ -13111,8 +13125,12 @@ async function confirmRun(done, dests){
     let have;
     try{ have=await serverNames(dest, folder); }
     catch(e){ continue; }        // unanswered is not "missing" — say nothing
-    for(const {rec, names, sizes} of group){
-      const missing=names.filter(n=>!have.has(n));
+    for(const {rec, names, sizes, stored} of group){
+      /* Looked up under the name the server said it FILED, where that
+         differs from the name asked for (a rival device's variant). */
+      const srv=n=>(stored&&stored[n])||n;
+      const has=n=>have.has(srv(n)), size=n=>have.get(srv(n));
+      const missing=names.filter(n=>!has(n));
       /* NOT MERELY "NOT ZERO".
 
          A photograph cut off by a dying link is not empty — it is 40 KB of a
@@ -13128,11 +13146,11 @@ async function confirmRun(done, dests){
          wolf is the noise a real failure hides in. */
       const want=sizes||{};
       const short=names.filter(n=>{
-        if(!have.has(n)) return false;
+        if(!has(n) || size(n)==null) return false;
         const w=Number(want[n]||0);
-        return w>0 && Number(have.get(n))!==w;
+        return w>0 && Number(size(n))!==w;
       });
-      const empty=names.filter(n=>have.has(n) && have.get(n)===0);
+      const empty=names.filter(n=>has(n) && size(n)===0);
       const fresh=await dbGet(rec.id);
       if(!fresh || (fresh.rev||0)!==(rec.rev||0)) continue;   // edited under us
       /* A file the store holds at the wrong length counts against the round
@@ -13159,9 +13177,9 @@ async function confirmRun(done, dests){
          upload; it is a different file, and overwriting it from here would
          destroy something nobody on this phone has seen. That case is named
          (`conf.differs`, both sizes) and left exactly as it is. */
-      const shorter=short.filter(n=>Number(have.get(n))<Number(want[n]||0));
+      const shorter=short.filter(n=>size(n)!=null && Number(size(n))<Number(want[n]||0));
       const differs=short.filter(n=>!shorter.includes(n));
-      if(differs.length) fresh.conf.differs=differs.slice(0,8).map(n=>({name:n, sent:Number(want[n]||0), server:Number(have.get(n))}));
+      if(differs.length) fresh.conf.differs=differs.slice(0,8).map(n=>({name:n, sent:Number(want[n]||0), server:Number(size(n))}));
       const resend=missing.concat(empty).concat(shorter);
       const tries=(fresh.confTries && fresh.confTries.rev===(fresh.rev||0)) ? fresh.confTries.n : 0;
       if(resend.length && tries<CONF_RESEND_MAX){
@@ -13357,6 +13375,7 @@ async function putOne(UP, name, blob, type, ctx){
     if(j && j.ok===false) throw new Error(j.error||"Apps Script rejected the upload");
     if(!j) throw new Error("Unexpected reply — check the deployment is set to “Anyone”.");
     if(j.receipt && RCPT) RCPT[name]=j.receipt;
+    if(j.name && j.name!==name && STORED) STORED[name]=j.name;
     return true;
   }
   if(UP.id==="pa"){
@@ -13723,6 +13742,13 @@ let syncing=false, lastErr="", syncingId=null;
    than threaded through putAll's lanes, which would mean changing the shape of
    every upload path to carry a value most backends do not send yet. */
 let RCPT=null;
+/* THE NAME THE SERVER ACTUALLY FILED A FILE UNDER, where it differs from the
+   name asked for. A rival device already owning a name makes the backend
+   store this phone's copy as <name>~<DEV>; the read-back that follows must
+   look for THAT, or it reports the file missing and — now that a missing
+   file is re-sent — sends it again to be filed under the variant again,
+   five times over. Requested name → stored name, per record, per run. */
+let STORED=null;
 async function syncNow(manual){
   if(syncing) return; if(!UP.on){ renderSync(); return; }
   /* No navigator.onLine gate: a flag stuck at false would have kept every
@@ -13815,7 +13841,7 @@ async function syncNow(manual){
           for(const n of Object.keys(kept[id]||{})) m[n]=1;
         }
       }
-      RCPT={};
+      RCPT={}; STORED={};
       for(const d of todo){
         const already=(sent[d.id] ||= {});
         /* Named for sentMark: it persists only the map it is handed here. */
@@ -13874,7 +13900,7 @@ async function syncNow(manual){
            The names are taken from the payload actually sent rather than
            rebuilt afterwards, because rebuilding is how the two lists come to
            disagree about what was supposed to be there. */
-        if(fresh.up && payload) justDone.push({rec:fresh, names:payload.map(f=>f.name),
+        if(fresh.up && payload) justDone.push({rec:fresh, names:payload.map(f=>f.name), stored:Object.assign({},STORED||{}),
           /* What each file weighed on the wire, so the read-back can compare a
              length rather than only look for a name. */
           sizes:payload.reduce((m,f)=>{ if(f.wireSize) m[f.name]=f.wireSize; return m; },{})});
@@ -14267,6 +14293,8 @@ function yardVerdict(rows){
   if(hasKey("offline"))  return {k:"bad",  s:"rdy_v_setup"};
   if(hasKey("dest"))     return {k:"bad",  s:"rdy_v_setup"};
   if(hasKey("refs"))     return {k:"bad",  s:"rdy_v_setup"};
+  if(hasKey("queue_recover")) return {k:"bad", s:"rdy_v_recover"};
+  if(hasKey("queue_stalled")) return {k:"bad", s:"rdy_v_photos"};
   if(hasKey("queue"))    return {k:"warn", s:"rdy_v_photos"};
   if(hasKey("build"))    return {k:"warn", s:"rdy_v_update"};
   if(hasKey("bg"))       return {k:"warn", s:"rdy_v_bg"};
@@ -14284,7 +14312,10 @@ let lastYard=null;
 /* The verdicts worth interrupting somebody for: work that is not away, an
    update that did not finish, a phone that is out of room. "Some data is
    old" and "updates only while open" stay on the card, not on the bar. */
-const YARD_LOUD={rdy_v_photos:1, rdy_v_update:1, rdy_v_storage:1, rdy_v_setup:1};
+const YARD_LOUD={rdy_v_photos:1, rdy_v_update:1, rdy_v_storage:1, rdy_v_setup:1, rdy_v_recover:1};
+/* How long a queue may sit with nothing attempted, while the server answers,
+   before the card stops saying "waiting" and asks for a person. */
+const STALL_MS=6*3600000;
 const yardLoud=v=>v && (v.k==="bad" || !!YARD_LOUD[v.s]);
 function renderYardBar(){
   const el=$("readyBar"); if(!el || !lastYard) return;
@@ -14384,9 +14415,32 @@ async function yardCheck(){
     if(all===null) add("warn",t("rdy_q_t"),t("rdy_q_unknown"),
       { label:t("rdy_fix_retry"), run:async()=>{} },"queue_unknown");
     else{
-      const pend=all.filter(r=>!r.up).length;
-      if(pend && UP.on && dests.length) add("bad",t("rdy_q_t"),t("rdy_q_pend",{n:pend}),
-        { label:t("rdy_fix_send"), run:async()=>{ retryAt=RETRY_MIN; await syncThenArm(true); } },"queue");
+      const pendRecs=all.filter(r=>!r.up);
+      const pend=pendRecs.length;
+      /* ROUTED BY WHAT IS ACTUALLY WRONG. "N waiting — Send now" was the one
+         sentence for every case, and a retry cannot resolve every one of
+         them: a photograph this phone can no longer read fails identically
+         on perfect signal, and pressing Send for a week teaches nothing. So
+         three verdicts, worst first —
+           · a photograph needs RECOVERY (unreadable here, no receipt says
+             the server holds it): the inventory, before anything else;
+           · the queue has STALLED — nothing even attempted for STALL_MS
+             while the server has been answering: assistance, not patience;
+           · otherwise waiting, and if the last failure was the link, the
+             plain truth that it resumes by itself. */
+      let needRec=0, lastTry=0;
+      pendRecs.forEach(r=>{ try{ attList(r).forEach(e=>{
+        if(e.localState==="unreadable" && !e.serverHeld) needRec++;
+        const a=Date.parse(e.lastAttemptAt||"")||0; if(a>lastTry) lastTry=a; }); }catch(e){} });
+      const reach=!!(U.okAt && Date.now()-U.okAt<3600000);
+      const stalled=!!(pend && lastTry && reach && !syncing && (Date.now()-lastTry>STALL_MS));
+      const sendNow={ label:t("rdy_fix_send"), run:async()=>{ retryAt=RETRY_MIN; await syncThenArm(true); } };
+      if(needRec) add("bad",t("rdy_q_t"),t("rdy_q_recover",{n:needRec}),
+        { label:t("rdy_fix_recover"), run:async()=>{ location.href="../recover.html#inventory"; } },"queue_recover");
+      else if(stalled) add("bad",t("rdy_q_t"),t("rdy_q_stalled",{t:hhmm(lastTry)}),sendNow,"queue_stalled");
+      else if(pend && UP.on && dests.length) add("bad",t("rdy_q_t"),
+        t("rdy_q_pend",{n:pend})+((lastErr && !/can no longer be read/.test(lastErr)) ? " "+t("rdy_q_net") : ""),
+        sendNow,"queue");
       else if(pend) add("bad",t("rdy_q_t"),t("rdy_q_pend",{n:pend}),null,"queue");
       else add("ok",t("rdy_q_t"),t("rdy_q_ok"),null,"queue");
     }
