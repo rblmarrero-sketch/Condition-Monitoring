@@ -81,6 +81,38 @@
   <p class="keep">На iPhone, если приложение добавлено на экран «Домой»: по возможности откройте эту страницу в самом приложении — у него могут быть собственные настройки, отдельные от Safari.</p>
   <p class="keep">Nothing on this phone is deleted by this page — not the rounds, not the photographs, not the offline app.</p>
   <p class="keep">Эта страница ничего не удаляет — ни обходы, ни фотографии, ни офлайн-приложение.</p>
+
+  <!-- =====================================================================
+       THE RECOVERY INVENTORY — READ-ONLY, AND A WAY TO CARRY THE WORK OFF.
+
+       A handset with fifteen rounds waiting and one photograph it can no
+       longer read needs two things before anything is changed on it: a
+       true list of what it holds, and a copy of all of it somewhere else.
+       The app's own export was the wrong tool for that — one unreadable
+       photograph failed the whole ZIP — and the app itself may not open.
+
+       So this page, which opens whatever state the app is in, reads the
+       app's database and lists every round: its identity and revision, what
+       the app recorded about sending it, and every attachment with what the
+       manifest claims (size, hash, receipt) beside what the phone can read
+       NOW. Then it exports, one file at a time: every round's record as
+       JSON, every photograph that can be read under the name the app gave
+       it, and a report naming every one that cannot — with the server copy
+       where a receipt says there is one. Nothing is written to the database,
+       nothing is renamed, and nothing stands in for a photograph that is
+       not there.
+       ================================================================== -->
+  <div class="card" id="invCard">
+    <h1 style="font-size:18px">Recovery inventory<small>Опись для восстановления · read-only / только чтение</small></h1>
+    <div class="row"><span>Rounds on this phone / Обходов</span><b id="invN">…</b></div>
+    <div class="row"><span>Waiting to send / Ожидают отправки</span><b id="invPend">…</b></div>
+    <div class="row"><span>Photographs / Фотографий</span><b id="invPh">…</b></div>
+    <div class="row"><span>Unreadable now / Не читаются</span><b id="invBad">…</b></div>
+    <div class="row"><span>Round being typed / Незавершённый обход</span><b id="invDraft">…</b></div>
+    <button id="invExport" class="sec">Export everything, file by file / Выгрузить всё по файлам</button>
+    <div class="log" id="invLog"></div>
+    <div id="invList" class="log"></div>
+  </div>
 </div>
 <script>
 (function () {
@@ -269,6 +301,244 @@
       btn.textContent = "Try again / Повторить";
     });
   };
+
+  /* =====================================================================
+     THE INVENTORY. Everything below READS. The database is opened at its
+     current version with the upgrade aborted, every transaction is
+     readonly, and the only bytes that move are copied out into a ZIP.
+     ===================================================================== */
+  var DRAFT_ID = "__draft__", TEAM_ID = "__team__";
+  var isBlob = function (b) { return !!(b && typeof b === "object" && typeof b.size === "number" && typeof b.arrayBuffer === "function"); };
+  var attIdOf = function (b) { var m = /^(a[0-9a-z]{8,})\./i.exec((b && b.name) || ""); return m ? m[1] : ""; };
+  var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+  var invSay = function (s) { $("invLog").textContent += s + "\n"; };
+
+  function openDb() {
+    return new Promise(function (res, rej) {
+      var rq;
+      try { rq = indexedDB.open("plug_capture", 1); } catch (e) { return rej(e); }
+      rq.onsuccess = function () { res(rq.result); };
+      rq.onerror = function () { rej(rq.error || new Error("could not open")); };
+      /* An upgrade would mean the app has never run here; do not create one. */
+      rq.onupgradeneeded = function (e) { try { e.target.transaction.abort(); } catch (x) {} rej(new Error("no database on this phone")); };
+    });
+  }
+  function readAll(db) {
+    return new Promise(function (res, rej) {
+      if (!db.objectStoreNames.contains("inspections")) return res([]);
+      var g = db.transaction("inspections", "readonly").objectStore("inspections").getAll();
+      g.onsuccess = function () { res(g.result || []); };
+      g.onerror = function () { rej(g.error); };
+    });
+  }
+  /* Can the phone still read this photograph? The bytes are read in full —
+     a slice can succeed on a file whose tail is gone — and hashed, so the
+     inventory can say "matches the manifest" rather than "has a size". */
+  function sha256Hex(buf) {
+    if (!(window.crypto && crypto.subtle)) return Promise.resolve("");
+    return crypto.subtle.digest("SHA-256", buf).then(function (h) {
+      return Array.prototype.map.call(new Uint8Array(h), function (x) { return ("0" + x.toString(16)).slice(-2); }).join("");
+    }).catch(function () { return ""; });
+  }
+  function probe(blob) {
+    return blob.arrayBuffer().then(function (buf) {
+      return sha256Hex(buf).then(function (sha) { return { ok: true, bytes: new Uint8Array(buf), size: buf.byteLength, sha: sha }; });
+    }).catch(function (e) { return { ok: false, error: String((e && e.name) || "") + (e && e.message ? ": " + e.message : "") }; });
+  }
+  /* The name the app gave the file, never one invented here: the manifest's
+     storedName once it has been sent, its own attachment file name before. */
+  function fileNameOf(e, blob, k, i) {
+    if (e && e.storedName) return e.storedName;
+    if (blob && blob.name) return blob.name;
+    return (k || "pos") + "_" + (i + 1) + (blob && /png/i.test(blob.type || "") ? ".png" : ".jpg");
+  }
+  function positionsOf(rec) {
+    var out = [];
+    Object.keys((rec && rec.positions) || {}).forEach(function (k) {
+      var p = rec.positions[k]; if (p && typeof p === "object") out.push([k, p]);
+    });
+    return out;
+  }
+  function photosOf(p) {
+    var ph = p.photos || (p.photoBlob ? [p.photoBlob] : []);
+    return Array.isArray(ph) ? ph.filter(isBlob) : [];
+  }
+  function strip(rec) {
+    /* The record without its bytes — every field, every manifest entry,
+       every marker the app wrote about sending it. JSON.stringify drops a
+       Blob to {} on its own; this names what was there instead. */
+    var out = {};
+    Object.keys(rec).forEach(function (k) {
+      if (k === "positions" || k === "sign") return;
+      out[k] = rec[k];
+    });
+    out.signature = isBlob(rec.sign) ? { size: rec.sign.size, type: rec.sign.type } : null;
+    out.positions = {};
+    positionsOf(rec).forEach(function (kp) {
+      var k = kp[0], p = kp[1], q = {};
+      Object.keys(p).forEach(function (f) { if (f !== "photos" && f !== "photoBlob" && f !== "video") q[f] = p[f]; });
+      q.photos = photosOf(p).map(function (b) { return { attachmentId: attIdOf(b), name: b.name || "", size: b.size, type: b.type }; });
+      if (isBlob(p.video)) q.video = { attachmentId: attIdOf(p.video), name: p.video.name || "", size: p.video.size, type: p.video.type };
+      out.positions[k] = q;
+    });
+    return out;
+  }
+  var INV = null;   // what the last scan found, for the export
+  function scan() {
+    return openDb().then(readAll).then(function (rows) {
+      var recs = rows.filter(function (r) { return r && r.id !== DRAFT_ID && String(r.id || "").indexOf(TEAM_ID) !== 0; });
+      var draft = rows.filter(function (r) { return r && r.id === DRAFT_ID; })[0] || null;
+      var sent = {}; try { sent = JSON.parse(localStorage.getItem("cm_sent_progress") || "{}") || {}; } catch (e) {}
+      var out = { at: new Date().toISOString(), rounds: [], draft: null, photos: 0, unreadable: 0, pending: 0 };
+      var chain = Promise.resolve();
+      recs.forEach(function (rec) {
+        chain = chain.then(function () {
+          var row = { id: rec.id, equip: rec.equip, date: rec.date, type: rec.type, rev: rec.rev || 0, by: rec.by || "",
+                      up: rec.up ? 1 : 0, upTo: rec.upTo || {}, upAt: rec.upAt || "", conf: rec.conf || null,
+                      sentProgress: sent[rec.id] || null, record: strip(rec), files: [] };
+          if (!rec.up) out.pending++;
+          var work = Promise.resolve();
+          positionsOf(rec).forEach(function (kp) {
+            var k = kp[0], p = kp[1], man = (p.att && typeof p.att === "object") ? p.att : {};
+            var blobs = photosOf(p).map(function (b, i) { return { b: b, i: i, kind: "photo" }; });
+            if (isBlob(p.video)) blobs.push({ b: p.video, i: 0, kind: "video" });
+            blobs.forEach(function (x) {
+              work = work.then(function () {
+                var aid = attIdOf(x.b), e = (aid && man[aid]) || null;
+                return probe(x.b).then(function (pr) {
+                  out.photos++;
+                  var f = { point: k, kind: x.kind, attachmentId: aid, name: fileNameOf(e, x.b, k, x.i),
+                            sizeNow: x.b.size, readable: pr.ok, error: pr.ok ? "" : pr.error,
+                            readSize: pr.ok ? pr.size : null, readSha: pr.ok ? pr.sha : "",
+                            manifest: e ? { byteSize: e.byteSize, sha256: e.sha256 || "", uploadState: e.uploadState || "",
+                                            localState: e.localState || "", storedName: e.storedName || "",
+                                            serverObjectId: e.serverObjectId || "", serverByteSize: (e.serverByteSize == null ? null : e.serverByteSize),
+                                            serverSha256: e.serverSha256 || "", wireSha256: e.wireSha256 || "", serverReceivedAt: e.serverReceivedAt || "" } : null };
+                  f.matchesManifest = !!(pr.ok && e && e.sha256 && pr.sha === e.sha256);
+                  f.serverHolds = !!(e && e.serverSha256 && (e.serverSha256 === e.wireSha256 || e.serverSha256 === e.sha256));
+                  if (!pr.ok) { out.unreadable++; f.bytes = null; } else f.bytes = pr.bytes;
+                  row.files.push(f);
+                });
+              });
+            });
+          });
+          if (isBlob(rec.sign)) work = work.then(function () {
+            return probe(rec.sign).then(function (pr) {
+              row.files.push({ point: "__sign", kind: "signature", attachmentId: "", name: (rec.equip || "") + "_" + String(rec.date || "").split("-").reverse().join(".") + "_" + (rec.type || "") + "_SIGN.png",
+                               sizeNow: rec.sign.size, readable: pr.ok, error: pr.ok ? "" : pr.error, manifest: null, bytes: pr.ok ? pr.bytes : null });
+              if (!pr.ok) out.unreadable++;
+            });
+          });
+          return work.then(function () { out.rounds.push(row); });
+        });
+      });
+      return chain.then(function () {
+        if (draft) out.draft = { equip: draft.equip || "", type: draft.type || "", date: draft.date || "", at: draft.at || "",
+                                 positions: Object.keys(draft.positions || {}).length };
+        return out;
+      });
+    });
+  }
+  function renderInv(inv) {
+    INV = inv;
+    $("invN").textContent = String(inv.rounds.length);
+    $("invPend").innerHTML = inv.pending ? '<span class="warn">' + inv.pending + "</span>" : '<span class="ok">0</span>';
+    $("invPh").textContent = String(inv.photos);
+    $("invBad").innerHTML = inv.unreadable ? '<span class="bad">' + inv.unreadable + "</span>" : '<span class="ok">0</span>';
+    $("invDraft").textContent = inv.draft ? (inv.draft.equip + " " + inv.draft.type + " · " + inv.draft.positions + " position(s)") : "none / нет";
+    var lines = inv.rounds.slice().sort(function (a, b) { return String(b.date).localeCompare(String(a.date)); }).map(function (r) {
+      var bad = r.files.filter(function (f) { return !f.readable; });
+      var st = r.up ? "sent" : "WAITING";
+      var s = r.equip + " " + r.type + " " + r.date + " · rev " + r.rev + " · " + st + " · " + r.files.length + " file(s)";
+      if (r.conf) s += " · server listed " + r.conf.n + "/" + r.conf.of + (r.conf.miss && r.conf.miss.length ? " missing " + r.conf.miss.join(",") : "");
+      bad.forEach(function (f) {
+        s += "\n    UNREADABLE " + f.name + " — " + f.error
+          + (f.manifest && f.manifest.serverObjectId ? "\n      server copy: " + f.manifest.serverObjectId + " (" + f.manifest.serverByteSize + " bytes" + (f.serverHolds ? ", receipt matches the phone's hash" : "") + ")" : "\n      no server receipt on the manifest");
+      });
+      return s;
+    });
+    $("invList").textContent = lines.join("\n");
+  }
+  scan().then(renderInv).catch(function (e) {
+    $("invN").innerHTML = '<span class="bad">could not read / не удалось прочитать</span>';
+    invSay("Inventory failed: " + (e && e.message ? e.message : e));
+  });
+
+  /* ---- the export: a store-only ZIP, one entry per file ---------------- */
+  function crc32(buf) {
+    var t = crc32.t; if (!t) { t = crc32.t = new Uint32Array(256); for (var n = 0; n < 256; n++) { var c = n; for (var k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } }
+    var c = 0xFFFFFFFF; for (var i = 0; i < buf.length; i++) c = t[(c ^ buf[i]) & 0xFF] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0;
+  }
+  function makeZip(files) {
+    var enc = new TextEncoder(), chunks = [], central = [], offset = 0;
+    var u16 = function (n) { return [n & 255, (n >> 8) & 255]; }, u32 = function (n) { return [n & 255, (n >> 8) & 255, (n >> 16) & 255, (n >> 24) & 255]; };
+    files.forEach(function (f) {
+      var nameB = enc.encode(f.name), data = f.data, crc = crc32(data);
+      var local = [].concat([0x50, 0x4b, 0x03, 0x04], u16(20), u16(0x0800), u16(0), u16(0), u16(0), u32(crc), u32(data.length), u32(data.length), u16(nameB.length), u16(0));
+      chunks.push(new Uint8Array(local), nameB, data);
+      var cen = [].concat([0x50, 0x4b, 0x01, 0x02], u16(20), u16(20), u16(0x0800), u16(0), u16(0), u16(0), u32(crc), u32(data.length), u32(data.length), u16(nameB.length), u16(0), u16(0), u16(0), u16(0), u32(0), u32(offset));
+      central.push(new Uint8Array(cen), nameB); offset += local.length + nameB.length + data.length;
+    });
+    var censize = 0; central.forEach(function (c) { censize += c.length; });
+    var end = [].concat([0x50, 0x4b, 0x05, 0x06], u16(0), u16(0), u16(files.length), u16(files.length), u32(censize), u32(offset), u16(0));
+    var parts = chunks.concat(central, [new Uint8Array(end)]); var total = 0; parts.forEach(function (p) { total += p.length; });
+    var out = new Uint8Array(total), pos = 0; parts.forEach(function (p) { out.set(p, pos); pos += p.length; }); return out;
+  }
+  function buildExport(inv) {
+    var enc = new TextEncoder(), files = [], saved = 0, unreadable = [];
+    inv.rounds.forEach(function (r) {
+      var dir = (r.type || "X") + "/" + (r.equip || "X") + "/" + (r.date || "X") + "/";
+      files.push({ name: dir + (r.id || "record") + ".json", data: enc.encode(JSON.stringify({
+        type: "cm-recovery-record", version: 1, exported: inv.at, id: r.id, rev: r.rev, up: r.up, upTo: r.upTo, upAt: r.upAt, conf: r.conf,
+        sentProgress: r.sentProgress, record: r.record,
+        files: r.files.map(function (f) { var c = {}; Object.keys(f).forEach(function (k) { if (k !== "bytes") c[k] = f[k]; }); return c; })
+      }, null, 2)) });
+      r.files.forEach(function (f) {
+        if (f.readable && f.bytes) { files.push({ name: dir + f.name, data: f.bytes }); saved++; }
+        else unreadable.push({ file: dir + f.name, inspection: r.id, equip: r.equip, date: r.date, type: r.type, point: f.point,
+                               attachmentId: f.attachmentId, error: f.error, manifest: f.manifest, serverHolds: f.serverHolds });
+      });
+    });
+    var rep = { type: "cm-recovery-report", version: 1, exported: inv.at, source: "recover.html", inspections: inv.rounds.length,
+                pending: inv.pending, photosSaved: saved, photosUnreadable: unreadable.length, draft: inv.draft, unreadable: unreadable };
+    var txt = ["Recovery report · " + inv.at + " · recover.html",
+               inv.rounds.length + " inspection record(s) saved; " + saved + " photo(s) saved; " + unreadable.length + " photo(s) still require recovery.",
+               inv.pending + " round(s) were still waiting to send.", ""]
+      .concat(unreadable.map(function (u) {
+        return u.file + "  [" + u.equip + " " + u.type + " " + u.date + " · " + u.point + "]  " + u.error
+          + (u.manifest && u.manifest.serverObjectId
+              ? "\n    server copy: " + u.manifest.serverObjectId + " (" + u.manifest.serverByteSize + " bytes" + (u.serverHolds ? ", byte-for-byte match on receipt" : "") + ")"
+              : "\n    no server receipt recorded for this photograph");
+      }));
+    files.push({ name: "RECOVERY_REPORT.json", data: enc.encode(JSON.stringify(rep, null, 2)) });
+    files.push({ name: "RECOVERY_REPORT.txt", data: enc.encode(txt.join("\n") + "\n") });
+    return { files: files, saved: saved, unreadable: unreadable.length, records: inv.rounds.length };
+  }
+  /* Exposed for the suite, which reads the ZIP back rather than trusting a
+     count: tests/recoverinv.cjs. */
+  window.__recoverInventory = function () { return scan().then(function (inv) { renderInv(inv); return inv; }); };
+  window.__recoverExport = function () { return (INV ? Promise.resolve(INV) : scan()).then(buildExport); };
+  $("invExport").onclick = function () {
+    var btn = $("invExport"); btn.disabled = true;
+    (INV ? Promise.resolve(INV) : scan()).then(function (inv) {
+      var r = buildExport(inv);
+      var name = "cm_recovery_" + inv.at.slice(0, 19).replace(/[:T]/g, "-") + ".zip";
+      var blob = new Blob([makeZip(r.files)], { type: "application/zip" });
+      invSay(r.records + " inspection record(s) saved; " + r.saved + " photo(s) saved; " + r.unreadable + " photo(s) still require recovery.");
+      invSay("Сохранено обходов: " + r.records + "; фото: " + r.saved + "; требуют восстановления: " + r.unreadable + ".");
+      var file = null; try { file = new File([blob], name, { type: "application/zip" }); } catch (e) {}
+      if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+        return navigator.share({ files: [file], title: "CM recovery" }).catch(function () { download(blob, name); });
+      }
+      download(blob, name);
+    }).catch(function (e) { invSay("Export failed: " + (e && e.message ? e.message : e)); })
+      .then(function () { btn.disabled = false; });
+  };
+  function download(blob, name) {
+    var url = URL.createObjectURL(blob), a = document.createElement("a");
+    a.href = url; a.download = name; document.body.appendChild(a); a.click();
+    setTimeout(function () { URL.revokeObjectURL(url); a.remove(); }, 2000);
+  }
 })();
 </script>
 </body>

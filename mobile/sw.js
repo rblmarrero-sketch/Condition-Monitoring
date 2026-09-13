@@ -36,7 +36,7 @@
        explains itself and offers a retry — because an honest offline page is
        recoverable and a browser error page is not. */
 
-const BUILD = "342";
+const BUILD = "343";
 const CACHE = "plug-capture-v" + BUILD;
 
 /* Without these the app is not an app: no page, no equipment register, no
@@ -339,7 +339,7 @@ self.addEventListener("fetch", (e) => {
       // Nothing cached at all — a first visit, or a cache that never completed.
       try {
         const res = await withTimeout(fetch(req), NET_WAIT + 4000);
-        if (res && res.ok) (await caches.open(CACHE)).put("./index.html", res.clone());
+        if (res && res.ok) await keepPage(res);
         healSoon();
         return res;
       } catch (err) {
@@ -432,8 +432,47 @@ self.addEventListener("fetch", (e) => {
 async function revalidate(reqOrUrl) {
   try {
     const res = await withTimeout(fetch(new Request(reqOrUrl, { cache: "reload" })), 10000);
-    if (res && res.ok) (await caches.open(CACHE)).put(reqOrUrl, res.clone());
+    if (res && res.ok) await keepPage(res);
   } catch (_) { /* no network — the cached copy stands, which is the point */ }
+}
+
+/* THE PAGE IN THIS CACHE MUST BE THE BUILD THIS CACHE IS.
+
+   revalidate() fetched index.html past every cache on every navigation and
+   put whatever came back into THIS build's cache, unread. The moment a new
+   build was on the server — and an install of it was still running, or had
+   failed on one file, or had not been asked for yet — the next open wrote
+   the NEW page into the OLD build's cache. From then on this worker served
+   a page whose <script> tags ask for ?v=<new> against a cache that holds
+   only ?v=<old>: online the scripts came from the network and the page ran
+   a mixture of two releases; offline they fell back to the previous
+   build's copies, or to a 503, and the app opened on the pit face with
+   half its modules from another release. Nothing threw. The version line
+   read the new number, because the page carried it, while the worker
+   answering for it was the old one.
+
+   So a page is kept only when it names this worker's own build. A page
+   that names another build is not thrown away — it is what the install
+   path exists for, so the install is started, and the page goes into the
+   new build's cache by the one route that also fetches the scripts that
+   belong to it. A page whose build cannot be read is not kept either: a
+   file that cannot say what it is has no business standing in for one
+   that can. The response itself is still returned to the reader; only the
+   cache is refused (tests/swmixed.cjs). */
+async function pageBuildOf(res) {
+  try {
+    const m = (await res.clone().text()).match(/const BUILD\s*=\s*"([^"]+)"/);
+    return m ? m[1] : "";
+  } catch (_) { return ""; }
+}
+async function keepPage(res) {
+  const b = await pageBuildOf(res);
+  if (b !== BUILD) {
+    if (b) { try { if (self.registration && self.registration.update) await self.registration.update(); } catch (_) {} }
+    return false;
+  }
+  await (await caches.open(CACHE)).put("./index.html", res.clone());
+  return true;
 }
 
 /* The page asks about its own footing: the System screen shows this, and the

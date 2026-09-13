@@ -144,6 +144,42 @@ this path, because each was added to close a real gap:
 | `navigator.onLine` says anything | **nothing is gated on it.** It means "an interface is attached" and is wrong in both directions. The check, the pull, the send, opening a round, the full re-read, the speed probe — all ask; a phone with no network fails the request in a millisecond and is treated as offline in the catch (not as a failed pull, no note). The flag only chooses wording: "No signal" is said only when the phone itself reports no network, otherwise the host and the reason are named. Tests that want a phone in the pit point `up_dests` at `http://127.0.0.1:9/exec` (nobody listens) — faking the flag alone no longer keeps the app off the network |
 | nothing else worked | the banner, and `#forceUpdate` → `updateNow()`: asks the worker to fetch the build, waits for it to be proven complete, reloads. If it cannot finish, nothing changes and the label says so |
 
+**A build's cache holds only that build's page.** Until build 343 the worker
+revalidated `index.html` on every open and put whatever the server sent into
+its OWN cache — so with a newer build on Pages and its install unfinished, the
+old worker served the new page against the old scripts: a mixture of two
+releases, and offline a 503 for every `?v=<new>` module. `keepPage()` reads
+the `const BUILD` out of the page and refuses one that is not its own,
+starting the install instead (`tests/swmixed.cjs`).
+
+**A queue that cannot be read is not an empty queue.** `pendingCount()`
+answers `null` when IndexedDB fails, never `0` — `0` disarmed the retry
+clock and painted "All sent" over fifteen waiting rounds. The pill, the
+badge, the queue screen and the sync bar all say "queue could not be read"
+(`net_qbad`) instead (`tests/recovery.cjs`).
+
+**The read-back puts a missing file back on the send list.** A file the
+server lists as missing, empty, or SHORTER than what was sent is re-sent —
+only that file, at most `CONF_RESEND_MAX` times per revision. A file the
+server holds LARGER than what was sent is a different file: recorded on
+`conf.differs`, named on the row, never overwritten from the phone.
+
+**A photograph the phone can no longer read does not hold the round when
+the manifest's receipt proves the server holds those bytes** (`serverHolds`:
+receipt sha256 equal to the wire or stored hash). It is marked
+`localState:"unreadable"`, `serverHeld:1`, said on the row, and never
+sent; without the receipt the round waits and the photograph is named.
+
+**`recover.html` is also the recovery inventory** (`#inventory`): read-only
+— every round, every attachment with the manifest's claim beside what the
+phone can read now, and an export one file at a time (record JSON per round,
+readable photographs under the app's own names, `RECOVERY_REPORT.txt`
+naming the rest with their server copies). The app's own ZIP no longer
+aborts on one unreadable photograph and reports real counts
+(`tests/recoverinv.cjs`, `tests/recovery.cjs`). The dashboard's file index
+says when it could NOT be refreshed (`CMDrive.mediaIndexState`,
+`tests/medstale.cjs`) instead of handing back the stale count as fresh.
+
 **THE PAGE MUST NEVER UNREGISTER THE WORKER OR DELETE A CACHE.** Until build
 246 the Update button did exactly that — unregister every worker, delete every
 cache, swallow any refetch that failed, navigate. On a flaky link that left the

@@ -74,17 +74,44 @@
 
      Never clears what it has on a failure: an index that could not be
      refreshed is stale, and stale is a great deal better than absent. */
+  /* AND SAYS WHEN IT COULD NOT.
+
+     The number this returned on a failure was the size of the listing it
+     already had — the same number, in the same place, as a listing it had
+     just fetched. Nothing downstream could tell "the folder holds 434 files"
+     from "the folder held 434 files the last time anybody managed to ask",
+     so the evidence panel went on saying "missing" against a listing that
+     could be a day old, with no word that it was. Stale is still better
+     than absent, and the index is still kept; what changes is that the
+     staleness is now a fact the panel can read (`mediaIndexState`) rather
+     than one it cannot. */
+  let mediaState = { at: 0, fresh: false, err: "", n: 0 };
+  try {
+    const v = JSON.parse(localStorage.getItem(LS_MED + "_at") || "null");
+    if (v && typeof v === "object") mediaState = { at: Number(v.at) || 0, fresh: false, err: "", n: Object.keys(index).length };
+  } catch (e) {}
+  function mediaIndexState() {
+    return { at: mediaState.at, fresh: !!mediaState.fresh, err: mediaState.err || "", n: Object.keys(index).length };
+  }
   async function refreshMediaIndex() {
     try {
       const r = await api({ action: "records", after: 9e15, index: 1 });
       const list = r.index || [];
-      if (!Array.isArray(r.index)) return Object.keys(index).length;
+      if (!Array.isArray(r.index)) {
+        mediaState = { at: mediaState.at, fresh: false, err: "the backend sent no file index", n: Object.keys(index).length };
+        return Object.keys(index).length;
+      }
       const next = {};
       list.forEach(f => { if (f && f.name) next[f.name] = { id: f.id, size: f.size }; });
       index = next;
       saveIndex();
+      mediaState = { at: Date.now(), fresh: true, err: "", n: list.length };
+      try { localStorage.setItem(LS_MED + "_at", JSON.stringify({ at: mediaState.at })); } catch (e) {}
       return list.length;
-    } catch (e) { return Object.keys(index).length; }
+    } catch (e) {
+      mediaState = { at: mediaState.at, fresh: false, err: String((e && e.message) || e || "no answer"), n: Object.keys(index).length };
+      return Object.keys(index).length;
+    }
   }
 
   /* ---- where a browser that has never been set up gets its settings ----
@@ -767,6 +794,10 @@
        single cheap `after: 9e15` call `load()` already makes, just callable
        on demand instead of waiting for the next cycle. */
     refreshMediaIndex,
+    /* Whether that listing is the folder's answer or a remembered one, and
+       when it was last actually fetched — so a screen measuring evidence
+       against it can say which. */
+    mediaIndexState,
     get url() { return cfg().url; },
     get secret() { return cfg().sec; },
     get legacy() { return legacy; },

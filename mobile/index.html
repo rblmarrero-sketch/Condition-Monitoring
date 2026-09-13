@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=342">
+<link rel="manifest" href="manifest.webmanifest?v=343">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=342">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=342">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=342">
+<link rel="apple-touch-icon" href="icon-192.png?v=343">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=343">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=343">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -1992,6 +1992,11 @@
       <button class="btn ghost" id="yardGo">⟳ <span data-i18n="btn_ready_again">Check again</span></button>
     </div>
     <div class="hint" style="margin-top:8px" data-i18n="ready_hint">Run this while you still have signal. Anything amber here is something you cannot fix at the machine.</div>
+    <!-- The way to see, and to carry off, everything this phone holds when
+         the ordinary send cannot. It lives outside the worker's scope so it
+         opens even when the app will not; it only reads. -->
+    <a class="linkrow" id="recoverLink" href="../recover.html#inventory" data-i18n="btn_recover">Recovery inventory (read-only)</a>
+    <div class="hint" style="margin-top:4px" data-i18n="recover_hint">Lists every round and photograph on this phone and can export them file by file. Changes nothing.</div>
   </div>
 
   <div class="card">
@@ -2464,15 +2469,15 @@ function bootDel(k){ try { localStorage.removeItem(k); } catch (e) {} }
   }
 })();
 </script>
-<script src="native.js?v=342"></script>
-<script src="upload-defaults.js?v=342"></script>
-<script src="hme.js?v=342"></script>
-<script src="mp-fc.js?v=342"></script>
-<script src="hme-cascade.js?v=342"></script>
-<script src="assets.js?v=342"></script>
-<script src="temp-limits.js?v=342"></script>
-<script src="normalize.js?v=342"></script>
-<script src="terms.js?v=342"></script>
+<script src="native.js?v=343"></script>
+<script src="upload-defaults.js?v=343"></script>
+<script src="hme.js?v=343"></script>
+<script src="mp-fc.js?v=343"></script>
+<script src="hme-cascade.js?v=343"></script>
+<script src="assets.js?v=343"></script>
+<script src="temp-limits.js?v=343"></script>
+<script src="normalize.js?v=343"></script>
+<script src="terms.js?v=343"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2491,25 +2496,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=342"></script>
-<script src="edits.js?v=342"></script>
-<script src="due.js?v=342"></script>
-<script src="wear.js?v=342"></script>
-<script src="wear-figs.js?v=342"></script>
-<script src="wear-map.js?v=342"></script>
-<script src="machine-photos.js?v=342"></script>
-<script src="machine-fig.js?v=342"></script>
-<script src="get.js?v=342"></script>
-<script src="points.js?v=342"></script>
-<script src="uc-points.js?v=342"></script>
-<script src="inspect-guide.js?v=342"></script>
-<script src="get-figs.js?v=342"></script>
-<script src="body-points.js?v=342"></script>
-<script src="body-map.js?v=342"></script>
-<script src="lube.js?v=342"></script>
-<script src="lube-overrides.js?v=342"></script>
-<script src="lube2027.js?v=342"></script>
-<script src="report-core.js?v=342"></script>
+<script src="grade.js?v=343"></script>
+<script src="edits.js?v=343"></script>
+<script src="due.js?v=343"></script>
+<script src="wear.js?v=343"></script>
+<script src="wear-figs.js?v=343"></script>
+<script src="wear-map.js?v=343"></script>
+<script src="machine-photos.js?v=343"></script>
+<script src="machine-fig.js?v=343"></script>
+<script src="get.js?v=343"></script>
+<script src="points.js?v=343"></script>
+<script src="uc-points.js?v=343"></script>
+<script src="inspect-guide.js?v=343"></script>
+<script src="get-figs.js?v=343"></script>
+<script src="body-points.js?v=343"></script>
+<script src="body-map.js?v=343"></script>
+<script src="lube.js?v=343"></script>
+<script src="lube-overrides.js?v=343"></script>
+<script src="lube2027.js?v=343"></script>
+<script src="report-core.js?v=343"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3200,6 +3205,13 @@ const I18N = {
   up_conf:TERMS.en.confirmed+" — {n} file(s)",
   up_verif:TERMS.en.verified+" — {n} file(s)",
   up_short:"Sent, but the server is missing {n} of {of} files",
+  up_resend:"Server is missing {n} file(s) — sending again",
+  up_differs:"the server holds a different copy of {n} file(s) — not overwritten",
+  up_unread:"{n} photo(s) can no longer be read on this phone — the server's verified copy stands",
+  net_qbad:"Queue could not be read — your work is not lost; check again",
+  ud_hold:"update held: the round on screen could not be saved ({why})",
+  btn_recover:"Recovery inventory (read-only)",
+  recover_hint:"Lists every round and photograph on this phone and can export them file by file. Changes nothing.",
     up_sending:"Sending now",
     up_err:TERMS.en.attention,
     up_never:TERMS.en.saved_here, up_at:"sent {t}",
@@ -3214,6 +3226,7 @@ const I18N = {
     m_saved:["Saved ✔","{x} saved on this phone. Capture the next one, then Share/Export when you have internet."],
     m_nothing_export:["Nothing to export","Capture at least one item first."],
     m_exported:["Exported ✔","A ZIP with correctly-named photos + entries.json was downloaded. Put the photos in your N: drive folder."],
+    m_exported_n:["Exported","{r} inspection record(s) saved; {p} photo(s) saved; {k} photo(s) still require recovery. RECOVERY_REPORT.txt inside the ZIP names them."],
     m_nothing_share:["Nothing to share","Capture at least one item first."],
     m_share_na:["Sharing not available","Your phone can't share files from the browser. Use “Export ZIP” instead."],
     m_lib_pdf:["Report engine did not load","It is fetched the first time you build a report. Connect once, then try again."],
@@ -3751,6 +3764,13 @@ const I18N = {
   up_conf:"Подтверждено сервером — файлов: {n}",
   up_verif:"Проверено побайтно — хранилище перечитало все файлы: {n}",
   up_short:"Отправлено, но на сервере нет {n} из {of} файлов",
+  up_resend:"На сервере нет файлов: {n} — отправляем снова",
+  up_differs:"на сервере другая копия файлов: {n} — не перезаписана",
+  up_unread:"Фото больше не читаются на этом телефоне: {n} — действует проверенная копия на сервере",
+  net_qbad:"Очередь не читается — работа не потеряна; проверьте снова",
+  ud_hold:"обновление отложено: обход на экране не удалось сохранить ({why})",
+  btn_recover:"Опись для восстановления (только чтение)",
+  recover_hint:"Показывает все обходы и фото на этом телефоне и выгружает их по файлам. Ничего не меняет.",
     up_sending:"Идёт отправка",
     up_err:"Требует внимания",
     up_never:"Только на этом телефоне", up_at:"отправлено {t}",
@@ -3765,6 +3785,7 @@ const I18N = {
     m_saved:["Сохранено ✔","{x} сохранён на телефоне. Снимайте следующий, затем «Поделиться»/«Экспорт» при интернете."],
     m_nothing_export:["Нечего экспортировать","Сначала снимите хотя бы один пункт."],
     m_exported:["Экспортировано ✔","Скачан ZIP с правильно названными фото + entries.json. Положите фото в папку на N:."],
+    m_exported_n:["Экспортировано","Сохранено обходов: {r}; фото: {p}; требуют восстановления: {k}. Список — в RECOVERY_REPORT.txt внутри ZIP."],
     m_nothing_share:["Нечем делиться","Сначала снимите хотя бы один пункт."],
     m_share_na:["Общий доступ недоступен","Телефон не может делиться файлами из браузера. Используйте «Экспорт ZIP»."],
     m_lib_pdf:["Модуль отчётов не загрузился","Он загружается при первом построении отчёта. Подключитесь один раз и повторите."],
@@ -6774,19 +6795,35 @@ function draftSigOf(d){
     JSON.stringify(d.positions, (k,v)=> (k==="photos") ? (v||[]).map(blobSig).join(",")
       : (k==="video") ? blobSig(v) : v); }catch(e){ return String(Math.random()); }
 }
+/* ANSWERS WHETHER THE ROUND ON SCREEN IS NOW ON DISK.
+
+   This swallowed every failure and returned nothing, and reloadForUpdate()
+   reloaded on whatever came back — so a draft whose write had just failed
+   (a full phone is the ordinary way) was carried into a reload by a promise
+   that had resolved, and the reload took the readings with it. The whole
+   point of flushing before the reload is the answer; it is returned now:
+   {ok, kept} — `kept` is whether there is a round on screen at all, `ok`
+   whether what is on screen is what the database holds. `sig===draftSig`
+   is only ever true after a put that SUCCEEDED, so "unchanged" is a real
+   ok, not an assumed one. */
+let draftFlushErr="";
 async function draftFlush(){
   clearTimeout(draftT); draftT=null;
+  const kept=!!(curEquip && Object.keys(draft.positions||{}).length);
   try{
-    const has = curEquip && Object.keys(draft.positions||{}).length;
     /* An empty form deletes the draft ONLY if this session is the one that
        wrote it. On a fresh boot the form is empty by definition, and any flush
        that fires in the seconds before the resume question is answered would
        otherwise destroy the very round it is about to offer back. */
-    if(!has){ if(draftSig){ draftSig=""; await dbDel(DRAFT_ID); } return; }
+    if(!kept){ if(draftSig){ draftSig=""; await dbDel(DRAFT_ID); } draftFlushErr=""; return {ok:true, kept:false}; }
     const snap=draftSnapshot(), sig=draftSigOf(snap);
-    if(sig===draftSig) return;
-    await dbPut(snap); draftSig=sig;
-  }catch(e){ /* the reading on screen is still the thing that matters */ }
+    if(sig===draftSig){ draftFlushErr=""; return {ok:true, kept:true}; }
+    await dbPut(snap); draftSig=sig; draftFlushErr="";
+    return {ok:true, kept:true};
+  }catch(e){ /* the reading on screen is still the thing that matters */
+    draftFlushErr=String((e&&e.message)||e||"save failed");
+    return {ok:false, kept, why:draftFlushErr};
+  }
 }
 function draftKeep(){ clearTimeout(draftT); draftT=setTimeout(draftFlush, 400); reviewSoon(); }
 /* The two moments the browser gives you before it may never run your code
@@ -10944,7 +10981,10 @@ function renderTabs(){
   const set=(el,n,cls)=>{ if(!el) return;
     el.textContent=n>99?"99+":String(n);
     el.className="tb"+(cls?" "+cls:"")+(n?"":" hidden"); };
-  dbAll().then(all=>set($("tabQ"),all.filter(r=>!r.up).length,lastErr?"warn":"")).catch(()=>{});
+  dbAll().then(all=>set($("tabQ"),all.filter(r=>!r.up).length,lastErr?"warn":""))
+    /* Not left as it was: a badge showing last minute's count over a queue
+       that cannot be read now is a number nobody can trust. "?" is what is known. */
+    .catch(()=>{ const el=$("tabQ"); if(el){ el.textContent="?"; el.className="tb warn"; } });
   /* From the list itself, not from a second copy of its arithmetic.
 
      There WAS a second copy, and it filtered on `ty !== type` — so the badge
@@ -11065,8 +11105,17 @@ async function recToBundle(rec){
     /* The id travels with the bytes. An export that dropped it would hand back
        photographs with no identity on re-import, and every one of them would be
        minted a new id — which is how one photograph becomes two. */
-    q.photos=[]; for(const b of (p.photos||[])) q.photos.push({t:b.type||"image/jpeg", n:b.name||"", b:await b64of(b)});
-    if(p.video) q.video={t:p.video.type||"video/mp4", n:p.video.name||"", b:await b64of(p.video)};
+    /* A photograph this phone can no longer read is left out and NAMED, so
+       the bundle still carries the forty beside it and the other phone can
+       see which one it did not get. Never a placeholder. */
+    q.photos=[]; q.unreadable=[];
+    for(const b of (p.photos||[])){
+      try{ q.photos.push({t:b.type||"image/jpeg", n:b.name||"", b:await b64of(b)}); }
+      catch(e){ q.unreadable.push(b.name||attIdOf(b)||"photo"); }
+    }
+    if(p.video){ try{ q.video={t:p.video.type||"video/mp4", n:p.video.name||"", b:await b64of(p.video)}; }
+                 catch(e){ q.video=null; q.unreadable.push(p.video.name||"video"); } }
+    if(!q.unreadable.length) delete q.unreadable;
     out.positions[k]=q;
   }
   return out;
@@ -11165,7 +11214,22 @@ async function renderPending(){
      is not one of them. It comes in from the caller because the row has already
      counted them, and counting them twice is how two numbers on one screen come
      to disagree. */
-  const upState = (rec, nAtt) => {
+  /* Two facts appended to whatever the row says, because they are true
+     alongside every other state: a photograph this phone can no longer read
+     (the server's verified copy stands, or it does not), and a file the
+     server holds a different copy of. */
+  const upExtra = rec => {
+    let s="";
+    try{
+      const n=attList(rec).filter(e=>e && e.localState==="unreadable").length;
+      if(n) s+=" · "+t("up_unread",{n});
+      const d=rec.conf && rec.conf.differs;
+      if(rec.up && d && d.length) s+=" · "+t("up_differs",{n:d.length})+" · "+d[0].name;
+    }catch(e){}
+    return s;
+  };
+  const upState = (rec, nAtt) => { const r=upState0(rec, nAtt); const x=upExtra(rec); if(x) r.txt+=x; return r; };
+  const upState0 = (rec, nAtt) => {
     const dests = (typeof activeDests === "function") ? activeDests() : [];
     if (rec.up) {
       /* THE ONE STATE THAT IS ABOUT THE FOLDER RATHER THAN THE CONVERSATION.
@@ -11213,6 +11277,10 @@ async function renderPending(){
        the switch off afterwards, and calling it "Saved on this phone only" —
        in red, next to a bin — is a false alarm, which is the same failure as a
        false reassurance wearing the other coat. */
+    /* Put back in the queue by the read-back: the server listed the round
+       short, and the missing file is on its way again. */
+    if (rec.conf && rec.conf.resend && rec.conf.resend.length)
+      return { k:"part", txt:t("up_resend", { n:rec.conf.resend.length }) + " · " + rec.conf.resend[0] };
     const partial = sentState(rec, dests, nAtt);
     if (partial) return partial;
     if (!UP.on || !dests.length) return { k:"never", txt:t("up_never") };
@@ -11255,7 +11323,14 @@ async function renderPending(){
     return null;
   };
   const stamp = r => String((r && (r.created || r.id)) || "");
-  const all=(await dbAll()).sort((a,b)=>stamp(b).localeCompare(stamp(a)));
+  /* The screen whose promise is "your work is safe here" is the last one
+     allowed to go blank — and a store that cannot be read right now used to
+     reject this whole render and leave whatever was painted before, or
+     nothing. It says what it knows instead: the queue could not be read,
+     the work is not lost, look again. */
+  let all;
+  try{ all=(await dbAll()).sort((a,b)=>stamp(b).localeCompare(stamp(a))); }
+  catch(e){ $("qCount").textContent="?"; $("pending").innerHTML=`<div class="empty warn">${esc(t("net_qbad"))}</div>`; return; }
   $("qCount").textContent=all.length;
   if(!all.length){ $("pending").innerHTML=`<div class="empty">${t("empty_none")}</div>`; return; }
   $("pending").innerHTML=""; pendPool.free();
@@ -11359,8 +11434,46 @@ function fileName(equip,item,date,ext,suffix,isComp){
 function genFileName(equip,cat,date,ext,suffix){
   return `${equip}_${cat||"MACHINE"}_${ddmmyyyy(date)}_${suffix}.${ext}`; }
 function extOf(blob){ const t=(blob.type||"").toLowerCase(); if(t.includes("png"))return"png"; if(t.includes("webp"))return"webp"; return "jpg"; }
+/* ONE PHOTOGRAPH THIS PHONE CANNOT READ MUST NOT COST THE OTHER FORTY-ONE.
+
+   The ZIP read every photograph with a bare arrayBuffer(), so the first one
+   whose bytes the OS had reclaimed rejected the whole build: no ZIP, one
+   browser error, and the one route off a phone that cannot reach the server
+   closed by the very file that recovery was for. Each file is read on its
+   own now; the ones that cannot be read are NAMED — with everything the
+   manifest knows about them, including the server copy where a receipt says
+   there is one — in RECOVERY_REPORT.json / .txt inside the ZIP, and the
+   dialog says how many were saved and how many still need recovering
+   (tests/recovery.cjs). Nothing is renamed and nothing stands in for a
+   photograph that is not there. */
+async function readBytes(blob){ return new Uint8Array(await blob.arrayBuffer()); }
+function unreadableNote(rec,k,blob,name,err){
+  const aid=attIdOf(blob); let e=null;
+  try{ const p=(rec.positions||{})[k]; e=(aid && attMap(p) && attMap(p)[aid]) || null; }catch(_){ e=null; }
+  return { file:name, inspection:rec.id||"", equip:rec.equip||"", date:rec.date||"", type:rec.type||"", point:k,
+    attachmentId:aid||"",
+    error:String((err&&err.name)||"")+((err&&err.message)?": "+err.message:""),
+    manifest:e ? { storedName:e.storedName||"", originalFilename:e.originalFilename||"", byteSize:e.byteSize||0,
+      sha256:e.sha256||"", uploadState:e.uploadState||"", serverObjectId:e.serverObjectId||"",
+      serverByteSize:(e.serverByteSize==null?null:e.serverByteSize), serverSha256:e.serverSha256||"",
+      serverReceivedAt:e.serverReceivedAt||"" } : null,
+    serverHolds: !!(e && e.serverSha256 && (e.serverSha256===e.wireSha256 || e.serverSha256===e.sha256)) };
+}
+function recoveryReport(all, saved, skipped){
+  const rep={ type:"cm-recovery-report", version:1, exported:new Date().toISOString(), device:DEVICE, build:BUILD,
+    inspections:all.length, photosSaved:saved, photosUnreadable:skipped.length, unreadable:skipped };
+  const txt=[`Recovery report · ${rep.exported} · build ${BUILD} · device ${DEVICE}`,
+    `${all.length} inspection record(s) saved; ${saved} photo(s) saved; ${skipped.length} photo(s) still require recovery.`, ""]
+    .concat(skipped.map(u=>`${u.file}  [${u.equip} ${u.type} ${u.date} · ${u.point}]  ${u.error}`
+      +(u.manifest && u.manifest.serverObjectId
+          ? `\n    server copy: ${u.manifest.serverObjectId} (${u.manifest.serverByteSize} bytes${u.serverHolds?", byte-for-byte match on receipt":""})`
+          : "\n    no server receipt recorded for this photograph")));
+  return [ {name:"RECOVERY_REPORT.json", data:new TextEncoder().encode(JSON.stringify(rep,null,2))},
+           {name:"RECOVERY_REPORT.txt",  data:new TextEncoder().encode(txt.join("\n")+"\n")} ];
+}
 async function buildPackage(){
   const all=await dbAll(); const files=[]; const grades={}, notes={};
+  const skipped=[]; let saved=0;
   /* Bring every record's manifest up to date first. A round captured by an
      older build has photographs with no id; giving them one here means they go
      up identified rather than anonymous, and the ordinal in their file name
@@ -11377,9 +11490,12 @@ async function buildPackage(){
         const aid=attIdOf(ph[i]);
         const seq=aid ? attSeq(p,aid) : (i+1);
         const name = (ph.length>1||seq>1) ? base.replace("."+ext, "_"+seq+"."+ext) : base;
-        files.push({name, data:new Uint8Array(await ph[i].arrayBuffer())}); }
+        try{ files.push({name, data:await readBytes(ph[i])}); saved++; }
+        catch(err){ skipped.push(unreadableNote(rec,k,ph[i],name,err)); } }
       if(isBlob(p.video)){ const vext=(p.video.type||"").includes("quicktime")?"mov":"mp4";
-        files.push({name:fileName(rec.equip,k,rec.date,vext,suffix,isComp), data:new Uint8Array(await p.video.arrayBuffer())}); }
+        const vname=fileName(rec.equip,k,rec.date,vext,suffix,isComp);
+        try{ files.push({name:vname, data:await readBytes(p.video)}); saved++; }
+        catch(err){ skipped.push(unreadableNote(rec,k,p.video,vname,err)); } }
       if(GRADE.num(p.grade)) grades[`${rec.equip}|${rec.date}|${k}`]=GRADE.num(p.grade);
       const nk=`${rec.equip}|${rec.date}|${k}`; const n={};
       if(p.particle)n.particleCount=p.particle; if(p.comp)n.componentHours=p.comp; if(p.oil)n.oilHours=p.oil;
@@ -11416,7 +11532,9 @@ async function buildPackage(){
   // self-describing record list for the dashboard (type, class, inspector, coded findings)
   for(const rec of all){ if(!isBlob(rec.sign)) continue;
     const suffix=(TYPE_META[rec.type]&&TYPE_META[rec.type].suffix)||rec.type||"MP";
-    files.push({name:`${rec.equip}_${ddmmyyyy(rec.date)}_${suffix}_SIGN.png`, data:new Uint8Array(await rec.sign.arrayBuffer())}); }
+    const sname=`${rec.equip}_${ddmmyyyy(rec.date)}_${suffix}_SIGN.png`;
+    try{ files.push({name:sname, data:await readBytes(rec.sign)}); }
+    catch(err){ skipped.push(unreadableNote(rec,"__sign",rec.sign,sname,err)); } }
   const records=all.map(rec=>({
     /* The identity the phone has held all along, finally written down.
 
@@ -11471,14 +11589,21 @@ async function buildPackage(){
     /* version 3: grades are integers 1..5. A version-2 file carries letters,
        and every reader normalises them through GRADE.num on the way in. */
     {type:"cm-inspection-entries",version:3,gradeScale:"1-5",exported:todayISO(),records,grades,notes},null,2))});
-  return {files, count:all.length};
+  recoveryReport(all, saved, skipped).forEach(f=>files.push(f));
+  return {files, count:all.length, photos:saved, skipped};
 }
-$("exportBtn").onclick=guard(async ()=>{ const {files,count}=await buildPackage(); if(!count){ dlg(t("m_nothing_export")); return; }
-  const url=URL.createObjectURL(new Blob([makeZip(files)],{type:"application/zip"}));
-  const a=document.createElement("a"); a.href=url; a.download=`truck_inspection_${$("date").value||"export"}.zip`; a.click(); URL.revokeObjectURL(url); dlg(t("m_exported")); });
-$("shareBtn").onclick=guard(async ()=>{ const {files,count}=await buildPackage(); if(!count){ dlg(t("m_nothing_share")); return; }
-  const zf=new File([makeZip(files)],`truck_inspection_${$("date").value||"export"}.zip`,{type:"application/zip"});
-  if(navigator.canShare && navigator.canShare({files:[zf]})){ try{ await navigator.share({files:[zf],title:"Truck inspection"}); }catch(e){} } else dlg(t("m_share_na")); });
+/* The counts, as actually measured by the build — never "Exported ✔" over a
+   ZIP that is short a photograph. */
+function exportedMsg(r){
+  const m=t("m_exported_n");
+  return [m[0], m[1].replace("{r}",r.count).replace("{p}",r.photos).replace("{k}",r.skipped.length)];
+}
+$("exportBtn").onclick=guard(async ()=>{ const r=await buildPackage(); if(!r.count){ dlg(t("m_nothing_export")); return; }
+  const url=URL.createObjectURL(new Blob([makeZip(r.files)],{type:"application/zip"}));
+  const a=document.createElement("a"); a.href=url; a.download=`truck_inspection_${$("date").value||"export"}.zip`; a.click(); URL.revokeObjectURL(url); dlg(exportedMsg(r)); });
+$("shareBtn").onclick=guard(async ()=>{ const r=await buildPackage(); if(!r.count){ dlg(t("m_nothing_share")); return; }
+  const zf=new File([makeZip(r.files)],`truck_inspection_${$("date").value||"export"}.zip`,{type:"application/zip"});
+  if(navigator.canShare && navigator.canShare({files:[zf]})){ try{ await navigator.share({files:[zf],title:"Truck inspection"}); }catch(e){} if(r.skipped.length) dlg(exportedMsg(r)); } else dlg(t("m_share_na")); });
 
 /* ===================== PDF condition-monitoring report ===================== */
 /* Colours come from grade.js — GRADE.hex(n) — one table for every surface. */
@@ -12330,7 +12455,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="342";
+const BUILD="343";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -12818,6 +12943,17 @@ async function canBatch(UP){
    server's, and sent real debugging effort chasing backend logs that could
    never have contained it. Reading every file on its own, catching each
    file's own failure, is what lets the nine good photographs still go. */
+/* Does the manifest carry a receipt proving the store holds THIS photograph?
+   A receipt names the server's own size and hash of what it kept; it is
+   evidence only where it agrees with the hash this phone recorded for the
+   bytes it sent (or holds, for a photograph that was never shrunk), and
+   where the store did not report its own verification as failed. */
+function serverHolds(rec,f){
+  if(!rec || !f || !f.aid) return false;
+  let e=null; try{ e=attIndex(rec)[f.aid]||null; }catch(_){ e=null; }
+  return !!(e && e.serverSha256 && Number(e.serverByteSize)>0 && !e.lastError
+            && (e.serverSha256===e.wireSha256 || e.serverSha256===e.sha256));
+}
 async function putBatch(UP, files, rec, sent){
   const folder=expandFolder(UP.folder||"", rec);
   const built=[], unreadable=[];
@@ -12832,6 +12968,20 @@ async function putBatch(UP, files, rec, sent){
         ...(f.aid?{aid:f.aid}:{}), file: await blobToB64(f.blob) });
     }catch(e){
       try{ e.localRead=true; }catch(_){}
+      f.localUnreadable=true;
+      /* THE SERVER MAY ALREADY HOLD THIS EXACT PHOTOGRAPH. A round that is
+         re-sent — an edit bumps the revision and everything goes again —
+         asks the phone to read a file it has already delivered, and if the
+         phone cannot read it NOW the round was stuck for ever behind a
+         photograph that was verified byte for byte on the server weeks ago
+         (EX001 FC 2026-09-08, HYD: receipt sha256 99c56f67…, 952,728 bytes,
+         the same bytes listed on the server today). The receipt on the
+         manifest is the server's own measurement of what it kept; where it
+         matches the hash this phone recorded, the file has landed and is not
+         asked for again. It is not "sent" to clear the queue — it is sent
+         because the store has said so, and confirmRun lists it afterwards
+         like every other file. */
+      if(serverHolds(rec,f)){ f.serverHeld=true; sentMark(sent,f.name); continue; }
       unreadable.push({name:f.name, err:e});
     }
   }
@@ -12928,6 +13078,7 @@ function listCapable(d){ return d && (d.id==="gas" || d.id==="mirror") && d.url;
    So the same rule. The absence of a confirmation is only evidence once this
    phone has produced one. */
 const CONF_WORKS="cm_conf_works";
+const CONF_RESEND_MAX=5;          // re-sends of a missing file per revision before a person is asked
 function confEverWorked(){
   try{ return localStorage.getItem(CONF_WORKS)==="1"; }catch(e){ return false; }
 }
@@ -12990,7 +13141,39 @@ async function confirmRun(done, dests){
       fresh.conf={ at:new Date().toISOString(), of:names.length,
                    n:names.length-bad.length,
                    miss:bad.slice(0,8), dest:dest.id };
+      /* A FILE THE SERVER DOES NOT HAVE GOES BACK ON THE SEND LIST.
+
+         This wrote "the server is missing 1 of 4 files" onto the record and
+         left `up:1` standing, so nothing ever sent the file: the round sat
+         under that sentence for the rest of its life, and the only way the
+         photograph reached the folder was somebody noticing and re-editing
+         the round by hand. A missing, empty or TRUNCATED file — one the
+         server holds SHORTER than what left this phone, which is the only
+         shape a cut-off upload can have — is taken off the destination's
+         sent list and the round is put back in the queue; every file that
+         did land stays marked and is not sent again, so the retry costs one
+         upload. Bounded per revision (CONF_RESEND_MAX), after which the
+         sentence stands for a person to read.
+
+         A file the server holds LARGER than what was sent is not a cut-off
+         upload; it is a different file, and overwriting it from here would
+         destroy something nobody on this phone has seen. That case is named
+         (`conf.differs`, both sizes) and left exactly as it is. */
+      const shorter=short.filter(n=>Number(have.get(n))<Number(want[n]||0));
+      const differs=short.filter(n=>!shorter.includes(n));
+      if(differs.length) fresh.conf.differs=differs.slice(0,8).map(n=>({name:n, sent:Number(want[n]||0), server:Number(have.get(n))}));
+      const resend=missing.concat(empty).concat(shorter);
+      const tries=(fresh.confTries && fresh.confTries.rev===(fresh.rev||0)) ? fresh.confTries.n : 0;
+      if(resend.length && tries<CONF_RESEND_MAX){
+        const keep={}; names.forEach(n=>{ if(!resend.includes(n)) keep[n]=1; });
+        fresh.sent=Object.assign({}, fresh.sent||{}); fresh.sent[dest.id]=keep;
+        if(fresh.upTo) delete fresh.upTo[dest.id];
+        fresh.up=0; delete fresh.upAt;
+        fresh.conf.resend=resend.slice(0,8);
+        fresh.confTries={ rev:fresh.rev||0, n:tries+1, at:fresh.conf.at };
+      }
       await dbPut(fresh);
+      if(!fresh.up) sentStore(fresh, fresh.sent||{});
       /* This phone has now demonstrated that it CAN ask the store what it
          holds. Until it has, the absence of a confirmation says nothing about
          a round — see the delete dialog. */
@@ -13093,7 +13276,14 @@ async function putAll(dest, files, rec, sent){
     if(cur.length) chunks.push(cur);
     jobs=chunks.map(c=>()=>putBatch(dest,c,rec,sent));
   } else {
-    jobs=rest.map(f=>async()=>{ await putOne(dest,f.name,f.blob,f.type,rec); sentMark(sent,f.name); });
+    jobs=rest.map(f=>async()=>{
+      try{ await putOne(dest,f.name,f.blob,f.type,rec); }
+      catch(e){
+        /* The same rule as putBatch, one file at a time. */
+        if(e && e.localRead){ f.localUnreadable=true; if(serverHolds(rec,f)){ f.serverHeld=true; sentMark(sent,f.name); return; } }
+        throw e;
+      }
+      sentMark(sent,f.name); });
   }
 
   /* A DEAD LINK ENDS THIS RECORD'S TURN. A DEAD PHOTOGRAPH DOES NOT.
@@ -13382,6 +13572,10 @@ function attSettle(rec,payload,sent,dests,err){
        not its outcome, and a receipt for a failed-looking attempt still has to
        be judged against the right bytes. */
     if(f.wireSha){ e.wireSha256=f.wireSha; e.wireByteSize=Number(f.wireSize)||0; }
+    /* Whether this phone could still read the file when it tried — the fact
+       the recovery inventory and the queue row are built on. */
+    if(f.localUnreadable){ e.localState="unreadable"; e.localCheckedAt=at; if(f.serverHeld) e.serverHeld=1; }
+    else if(f.wireSha){ e.localState="stored"; e.localCheckedAt=at; }
     const all=(dests||[]).length>0 && dests.every(d=>(((sent||{})[d.id])||{})[f.name]);
     if(all){ e.uploadState="sent"; e.lastError=""; }
     else { e.uploadState="pending"; if(err) e.lastError=String(err).slice(0,200); }
@@ -13537,7 +13731,11 @@ async function syncNow(manual){
   syncing=true; lastErr=""; renderSync();
   try{
     const dests=activeDests();
-    const all=(await dbAll()).filter(r=>!r.up);
+    /* Said, not swallowed: an unreadable queue used to leave lastErr empty,
+       so the pill had nothing to say about a sync that sent nothing. */
+    let all;
+    try{ all=(await dbAll()).filter(r=>!r.up); }
+    catch(e){ lastErr="Could not read the queue on this phone: "+String((e&&e.message)||e); return; }
     const justDone=[];
     let consecutive=0;
     for(const rec of all){
@@ -13828,7 +14026,14 @@ async function renderSync(){
   const bar=$("syncBar"); if(!bar) return;
   if(!UP.on){ bar.className="syncbar"; bar.innerHTML=`<span class="dot"></span><span class="sp">${t("sync_off")}</span>
     <button id="syncSet">${t("sync_setup")}</button>`; const b=$("syncSet"); if(b)b.onclick=openSettings; return; }
-  const all=await dbAll(); const pend=all.filter(r=>!r.up).length;
+  /* The bar is repainted from timers and finally-blocks that never await it,
+     so a store that cannot be read here surfaced as an unhandled rejection
+     and a bar left saying whatever it said last. It says the queue could
+     not be read instead — the one thing that is known. */
+  let all;
+  try{ all=await dbAll(); }
+  catch(e){ bar.className="syncbar err"; bar.innerHTML=`<span class="dot"></span><span class="sp">${esc(t("net_qbad"))}</span>`; return; }
+  const pend=all.filter(r=>!r.up).length;
   let cls="syncbar", txt;
   if(syncing){ cls+=" pend"; txt=t("sync_running"); }
   /* lastErr carries a message off the wire — it is never trusted as markup.
@@ -14594,8 +14799,24 @@ $("provScan").onclick=()=>{ scanMode="cfg"; startScan(); };
 const RETRY_MIN=20000, RETRY_MAX=300000;     // 20 s, backing off to 5 min
 let retryAt=RETRY_MIN, retryTimer=null;
 
+/* A QUEUE THAT CANNOT BE READ IS NOT AN EMPTY QUEUE.
+
+   This answered 0 when IndexedDB failed, and 0 is the one answer that
+   switches everything off: armRetry() read it as "nothing waiting" and
+   dropped its timer, netState() read it as "All sent" and painted the pill
+   green, and the tab badge simply kept whatever it last showed. A phone
+   whose database was momentarily unreadable — iOS does this to a page
+   brought back from the background — therefore stopped retrying and told
+   the inspector everything was in the cloud, with fifteen rounds on it.
+   The false reassurance, at the exact moment a false alarm was warranted.
+
+   null now, and every reader treats null as "unknown": the retry clock keeps
+   running, the pill says the queue could not be read, and the readiness
+   card already had a row for it. */
+let queueReadErr="";
 async function pendingCount(){
-  try{ return (await dbAll()).filter(r=>!r.up).length; }catch(e){ return 0; }
+  try{ const n=(await dbAll()).filter(r=>!r.up).length; queueReadErr=""; return n; }
+  catch(e){ queueReadErr=String((e&&e.message)||e||"queue unreadable"); return null; }
 }
 async function armRetry(){
   clearTimeout(retryTimer); retryTimer=null;
@@ -14605,13 +14826,14 @@ async function armRetry(){
      "Upload failed". Repaint on the way out of every branch. */
   const done=()=>renderSync();
   if(!UP.on) { done(); return; }              // nowhere to send it
-  if(!(await pendingCount())) { retryAt=RETRY_MIN; done(); return; }   // nothing waiting
+  const pend=await pendingCount();
+  if(pend===0) { retryAt=RETRY_MIN; done(); return; }   // nothing waiting — and only a READ zero says so
   retryTimer=setTimeout(async ()=>{
     const before=await pendingCount();
     await syncNow();
     const after=await pendingCount();
-    // Progress resets the patience; no progress lengthens the wait.
-    retryAt = after < before ? RETRY_MIN : Math.min(retryAt*1.8, RETRY_MAX);
+    // Progress resets the patience; no progress — or no answer — lengthens the wait.
+    retryAt = (before!=null && after!=null && after < before) ? RETRY_MIN : Math.min(retryAt*1.8, RETRY_MAX);
     armRetry();
   }, retryAt);
   done();
@@ -14657,10 +14879,13 @@ let offSince=navigator.onLine?0:Date.now();
 addEventListener("offline",()=>{ offSince=Date.now(); });
 async function netState(){
   if(!UP.on) return {cls:"off", txt:t("net_nosync")};
-  let pend=0; try{ pend=(await dbAll()).filter(r=>!r.up).length; }catch(e){}
+  let pend=0, qbad=false; try{ pend=(await dbAll()).filter(r=>!r.up).length; }catch(e){ qbad=true; }
   /* The flag, unless the evidence contradicts it: a server that answered after
      the flag went false is a server that answered. */
   if(!navigator.onLine && !(netOkAt>offSince && netOkAt>netFailAt)) return {cls:pend?"warn":"off", txt:t("net_off")};
+  /* Before "failing" and long before "all sent": a queue this phone cannot
+     read right now is the one state in which no other verdict is available. */
+  if(qbad)                       return {cls:"err",  txt:t("net_qbad")};
   if(lastErr)                    return {cls:"err",  txt:t("net_failing")};
   // Attached to a network, but the last thing we tried did not get through and
   // nothing has since. That is the pit, and it is not "online".
@@ -15090,6 +15315,7 @@ function renderUpdDiag(){
     if(UPD.dataOk) s += " · " + t("ud_data_ok",{t:hhmm(UPD.dataOk)});
   }
   if(UPD.stuck>=STUCK_N && UPD.stuckSince) s+=" · "+t("ud_stuck",{m:Math.round((Date.now()-UPD.stuckSince)/60000)});
+  if(UPD.hold) s+=" · "+t("ud_hold",{why:UPD.hold});
   el.textContent=updSurface()+" · "+s;
   el.classList.toggle("bad", !!UPD.at && !UPD.server);
 }
@@ -15126,11 +15352,31 @@ function applyUpdateIfIdle(){
 let lastInput=Date.now();
 ["pointerdown","keydown","input","touchstart"].forEach(ev=>addEventListener(ev,()=>{ lastInput=Date.now(); },{passive:true,capture:true}));
 window.__idleSince=ms=>{ lastInput=Date.now()-ms; };     // tests set the clock
+/* AND NEVER WHILE THE ROUND ON SCREEN IS NOT ON DISK.
+
+   `p.then(go,go)` reloaded on failure as well as on success — so a draft the
+   database had just refused (storage full, a transaction aborted) went into
+   the reload unsaved, and the readings it held were the price of an update
+   the inspector never asked for. The one thing this reload is allowed to
+   cost is nothing. If the flush says the round could not be written, the
+   update is HELD: nothing reloads, the wait flag stays up, the check comes
+   round every half-minute instead of every second (each try is a put of
+   every photograph on the round), and the diagnostic line says why. The
+   build lands the moment a flush succeeds, or when the round is saved and
+   the screen is empty (tests/recovery.cjs). */
+function holdUpdate(why){
+  UPD.hold=String(why||"draft"); UPD.holdAt=Date.now();
+  window.__updateWaiting=true;
+  clearInterval(window.__updTimer);
+  window.__updTimer=setInterval(applyUpdateIfIdle, 30000);
+  try{ renderUpdDiag(); }catch(e){}
+}
 function reloadForUpdate(){
-  try{ sessionStorage.setItem("cm_resume_silent","1"); }catch(e){}
+  const go=()=>{ UPD.hold=""; try{ sessionStorage.setItem("cm_resume_silent","1"); }catch(e){} try{ location.reload(); }catch(e){} return true; };
   let p=null; try{ p=(typeof draftFlush==="function")?draftFlush():null; }catch(e){ p=null; }
-  const go=()=>{ try{ location.reload(); }catch(e){} };
-  if(p && p.then) p.then(go,go); else go();
+  if(!(p && p.then)) return Promise.resolve(go());
+  return p.then(r=>{ if(r && r.ok===false && r.kept){ holdUpdate(r.why); return false; } return go(); },
+                e=>{ holdUpdate(String((e&&e.message)||e)); return false; });
 }
 function withTimeoutMs(p,ms){ return Promise.race([p,
   new Promise((_,rej)=>setTimeout(()=>rej(new Error("timeout")),ms))]); }

@@ -3589,22 +3589,22 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=342"></script>
+<script src="../data/magnetic_plug.js?v=343"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=342"></script>
-<script src="../mobile/hme.js?v=342"></script>
-<script src="../mobile/mp-fc.js?v=342"></script>
-<script src="../mobile/hme-cascade.js?v=342"></script>
-<script src="../mobile/temp-limits.js?v=342"></script>
+<script src="../data/work_orders.js?v=343"></script>
+<script src="../mobile/hme.js?v=343"></script>
+<script src="../mobile/mp-fc.js?v=343"></script>
+<script src="../mobile/hme-cascade.js?v=343"></script>
+<script src="../mobile/temp-limits.js?v=343"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=342"></script>
-<script src="../mobile/normalize.js?v=342"></script>
-<script src="../mobile/terms.js?v=342"></script>
+<script src="../mobile/assets.js?v=343"></script>
+<script src="../mobile/normalize.js?v=343"></script>
+<script src="../mobile/terms.js?v=343"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3623,19 +3623,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=342"></script>
-<script src="../mobile/edits.js?v=342"></script>
-<script src="../mobile/due.js?v=342"></script>
-<script src="../mobile/wear.js?v=342"></script>
-<script src="../mobile/wear-map.js?v=342"></script>
-<script src="../mobile/lube.js?v=342"></script>
-<script src="../mobile/lube-overrides.js?v=342"></script>
-<script src="../mobile/lube2027.js?v=342"></script>
-<script src="../mobile/lube-tds.js?v=342"></script>
+<script src="../mobile/grade.js?v=343"></script>
+<script src="../mobile/edits.js?v=343"></script>
+<script src="../mobile/due.js?v=343"></script>
+<script src="../mobile/wear.js?v=343"></script>
+<script src="../mobile/wear-map.js?v=343"></script>
+<script src="../mobile/lube.js?v=343"></script>
+<script src="../mobile/lube-overrides.js?v=343"></script>
+<script src="../mobile/lube2027.js?v=343"></script>
+<script src="../mobile/lube-tds.js?v=343"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=342"></script>
-<script src="../mobile/machine-photos.js?v=342"></script>
+<script src="../mobile/upload-defaults.js?v=343"></script>
+<script src="../mobile/machine-photos.js?v=343"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3644,17 +3644,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=342"></script>
-<script src="../mobile/get.js?v=342"></script>
-<script src="../mobile/points.js?v=342"></script>
-<script src="../mobile/uc-points.js?v=342"></script>
-<script src="../mobile/inspect-guide.js?v=342"></script>
-<script src="../mobile/get-figs.js?v=342"></script>
-<script src="../mobile/body-points.js?v=342"></script>
-<script src="../mobile/body-map.js?v=342"></script>
-<script src="../mobile/jspdf.umd.min.js?v=342"></script>
-<script src="../mobile/html2canvas.min.js?v=342"></script>
-<script src="../mobile/report-core.js?v=342"></script>
+<script src="../mobile/machine-fig.js?v=343"></script>
+<script src="../mobile/get.js?v=343"></script>
+<script src="../mobile/points.js?v=343"></script>
+<script src="../mobile/uc-points.js?v=343"></script>
+<script src="../mobile/inspect-guide.js?v=343"></script>
+<script src="../mobile/get-figs.js?v=343"></script>
+<script src="../mobile/body-points.js?v=343"></script>
+<script src="../mobile/body-map.js?v=343"></script>
+<script src="../mobile/jspdf.umd.min.js?v=343"></script>
+<script src="../mobile/html2canvas.min.js?v=343"></script>
+<script src="../mobile/report-core.js?v=343"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4001,6 +4001,9 @@ const I18N={
   sy_sev_cf:"Grade {g} and the previous condition ({was}) do not match. Review the grade; the condition will update automatically.",
   sy_sev_ct:"{n} to settle · {u} with no grade · {c} contradicting their grade",
   sy_h_files:"Files on the server", sy_h_last:"Last asked",
+  sy_h_idx:"File listing", sy_h_idx_ok:"refreshed {t}",
+  sy_h_idx_stale:"NOT refreshed — {why}. Missing-evidence counts are measured against the listing from {t}.",
+  sy_h_idx_noask:"not asked yet this session",
   sy_h_att:"Attachments accounted for", sy_h_held:"Inspections requiring correction",
   sy_h_excl:"On inspections needing correction", sy_h_excl_m:"{n} not in the folder",
   sy_notlinked:"no backend attached — nothing to compare against",
@@ -4865,6 +4868,9 @@ const I18N={
   sy_sev_cf:"Оценка {g} и прежнее состояние ({was}) не совпадают. Проверьте оценку — состояние обновится автоматически.",
   sy_sev_ct:"К разбору: {n} · без оценки: {u} · расходятся с оценкой: {c}",
   sy_h_files:"Файлов на сервере", sy_h_last:"Последний запрос",
+  sy_h_idx:"Список файлов", sy_h_idx_ok:"обновлён {t}",
+  sy_h_idx_stale:"НЕ обновлён — {why}. Недостающие фото считаются по списку от {t}.",
+  sy_h_idx_noask:"в этой сессии ещё не запрашивался",
   sy_h_att:"Вложений учтено", sy_h_held:"Осмотры, требующие исправления",
   sy_h_excl:"На осмотрах, требующих исправления", sy_h_excl_m:"{n} нет в папке",
   sy_notlinked:"хранилище не подключено — не с чем сравнивать",
@@ -16210,8 +16216,20 @@ function renderSync(){
     + `<dt>${esc(t("sy_p_miss"))}</dt><dd>${esc(num(pop.mobMissing))}</dd>`
     + `<dt>${esc(t("sy_p_hist"))}</dt><dd>${esc(num(pop.historical))}</dd>`
     + `<dt>${esc(t("sy_p_dash"))}</dt><dd>${esc(num(pop.dashAdded))}</dd>`;
+  /* WHETHER THE FILE LISTING EVERY "MISSING" ON THIS PANEL IS MEASURED
+     AGAINST IS THE FOLDER'S ANSWER OR A REMEMBERED ONE. drive.js keeps the
+     last listing it managed to fetch and used to hand back its size on a
+     failed refresh as if it were fresh — so a photograph that landed an hour
+     ago read as missing with nothing on screen to say the listing was an
+     hour old. The listing is still used (stale beats absent); the panel now
+     says so, and when. */
+  const mi=(()=>{ try{ return (window.CMDrive&&CMDrive.mediaIndexState)?CMDrive.mediaIndexState():null; }catch(e){ return null; } })();
+  const idxLine = !mi ? "" : mi.fresh
+    ? `<dt>${esc(t("sy_h_idx"))}</dt><dd>${esc(t("sy_h_idx_ok",{t:ago(mi.at)}))}</dd>`
+    : `<dt class="bad">${esc(t("sy_h_idx"))}</dt><dd class="bad">${esc(t("sy_h_idx_stale",{t:ago(mi.at), why:mi.err||t("sy_h_idx_noask")}))}</dd>`;
   $("syHealth").innerHTML=
       `<dt>${esc(t("sy_h_files"))}</dt><dd>${esc(num(s.held))}</dd>`
+    + idxLine
     + `<dt>${esc(t("sy_h_last"))}</dt><dd>${esc(ago(s.cursorAt))}</dd>`
     + `<dt>${esc(t("sy_h_att"))}</dt><dd>${esc(num(s.present))} / ${esc(num(s.expected))}</dd>`
     + `<dt>${esc(t("sy_h_held"))}</dt><dd>${esc(num(s.quar.length))}</dd>`
@@ -16906,8 +16924,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=342"></script>
-<script src="sync-adapter.js?v=342"></script>
-<script src="report.js?v=342"></script>
+<script src="drive.js?v=343"></script>
+<script src="sync-adapter.js?v=343"></script>
+<script src="report.js?v=343"></script>
 </body>
 </html>
