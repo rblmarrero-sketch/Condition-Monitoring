@@ -87,7 +87,15 @@ const SCAN = ([w]) => {
     if (!vis(el) || el.children.length) return false;
     const t = (el.textContent || "").trim();
     if (t.length < 3) return false;
-    return parseFloat(getComputedStyle(el).fontSize) < 10.5;
+    const fs = parseFloat(getComputedStyle(el).fontSize);
+    /* FONT-SIZE ZERO IS NOT SMALL TEXT, IT IS NO TEXT. The navigation badge
+       becomes an 8px dot at rail widths and keeps its "99+" in the DOM for
+       a screen reader — deliberate, and the opposite of the failure this
+       rule is looking for, which is words a person is expected to read at a
+       size they cannot. Counting it kept this suite one short of passing
+       and sent me looking for a styling bug that was not there. */
+    if (!(fs > 0)) return false;
+    return fs < 10.5;
   }).map(el => (el.className || el.tagName) + ' "' + (el.textContent || "").trim().slice(0, 18) + '"');
   return {
     docW: document.documentElement.scrollWidth,
@@ -156,7 +164,7 @@ async function office(b, w, h) {
     ok("the office is in Russian", /ru/.test(lang) || await p.evaluate(() =>
       /[А-Яа-яЁё]/.test(document.querySelector("#tabs button span").textContent)), lang);
     const pages = await p.evaluate(() => [...document.querySelectorAll("#tabs button[data-tab]")].map(x => x.dataset.tab));
-    let worstPast = 0, worstClip = 0, worstTiny = 0, wideOn = [];
+    let worstPast = 0, worstClip = 0, worstTiny = 0, wideOn = [], tinyWhere = "";
     for (const k of pages) {
       await p.evaluate(k => showTab(k, true), k);
       await p.waitForTimeout(450);
@@ -164,13 +172,17 @@ async function office(b, w, h) {
       if (s.docW > s.winW + 1) wideOn.push(k + " (" + s.docW + ">" + s.winW + ")");
       if (s.pastN > worstPast) { worstPast = s.pastN; }
       if (s.clippedN > worstClip) { worstClip = s.clippedN; }
-      if (s.tinyN > worstTiny) { worstTiny = s.tinyN; }
+      /* NAMED, not just counted. This reported "214" and nothing else, and
+         finding which two lines on which page it meant took a purpose-built
+         probe. A count you cannot act on is half a finding. */
+      if (s.tinyN > worstTiny) { worstTiny = s.tinyN; tinyWhere = k + ": " + s.tiny.join(" · "); }
       ok("  " + k + ": nothing past the right edge, nothing cut off",
          s.pastN === 0 && s.clippedN === 0,
          [...s.past, ...s.clipped].join(" · ") || "clean");
     }
     ok("no page scrolls sideways", wideOn.length === 0, wideOn.join(", ") || "none of " + pages.length);
-    ok("  and no text is under 10.5px anywhere", worstTiny === 0, String(worstTiny));
+    ok("  and no text is under 10.5px anywhere", worstTiny === 0,
+       worstTiny ? worstTiny + " — " + tinyWhere : "0");
 
     /* The page header and toolbar are the controls a planner reaches for
        first; if Russian pushes one off the edge it is gone at this width. */

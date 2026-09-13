@@ -40,23 +40,31 @@ const ok = (n, c, d) => { console.log((c ? '  PASS  ' : '  FAIL  ') + n + (d !==
 const CM = {
   cmSince: '2026-07-01',
   cmPeople: ['Nurbol', 'Slam', 'Irek', 'Zhomart', 'Bekzhan'],
-  cmColumns: { date: 'Date', asset: 'Asset', request: 'Work request reference',
-               eqType: 'Equipment type', priority: 'Priority', defType: 'Defect Type',
-               cause: 'Cause of Defect', status: 'CMMSWork order status',
+  /* 1C's real header spellings, corrected by the office — including
+     "Equipmen type", which is missing its t in the workbook itself and which
+     a normaliser cannot reach from "Equipment type". */
+  cmColumns: { date: 'Date', asset: 'Asset', request: 'Work request number',
+               eqType: 'Equipmen type', sysComp: 'System component',
+               priority: 'Priority', defType: 'Defect Type',
+               cause: 'WODefect cause', desc: 'Defect description',
+               status: 'CMMSWork order status',
                person: 'Responsible person', wo: 'Work order number' },
   cmWorkOrders: [
-    { date: '2026-09-05', asset: 'GR013', defect: null, requestRef: 'verbal request from pit supervisor',
-      eqType: 'GRADER', priority: 'P2', defectType: 'Vibration', cause: 'Unknown',
+    { date: '2026-09-05', asset: 'GR013', defect: null, requestNo: 'verbal request from pit supervisor',
+      eqType: 'GRADER', system: 'WE.BKT', priority: 'P2', defectType: 'Vibration', descr: 'Cab vibration under load', cause: 'Unknown',
       status: 'Open', by: 'Irek', woNumber: 'WO-070004', maintType: 'Defect elimination', planned: false },
-    { date: '2026-08-15', asset: 'EX021', defect: 'DD-000456', requestRef: 'DD-000456',
-      eqType: 'EXCAVATOR, BUCKET', priority: 'P3 Planned', defectType: 'Oil leak', cause: 'Seal failure',
+    { date: '2026-08-15', asset: 'EX021', defect: 'DD-000456', requestNo: 'DD-000456',
+      eqType: 'EXCAVATOR, BUCKET', system: 'HS.PMP', priority: 'P3 Planned',
+      defectType: 'Oil leak', descr: 'Oil weeping at pump seal', cause: 'Seal failure',
       status: 'Closed', by: 'Zhomart', woNumber: 'WO-070002', maintType: 'Defect elimination', planned: false },
-    { date: '2026-07-01', asset: 'TK156', defect: 'DD-000123', requestRef: 'Request DD-000123 raised on plug round',
-      eqType: 'TRUCK, DUMP', priority: 'P2 Urgent', defectType: 'Ferrous debris', cause: 'Bearing wear',
+    { date: '2026-07-01', asset: 'TK156', defect: 'DD-000123', requestNo: 'Request DD-000123 raised on plug round',
+      eqType: 'TRUCK, DUMP', system: 'DRS.FDR', priority: 'P2 Urgent',
+      defectType: 'Ferrous debris', descr: 'Metal particles on plug, 3mm', cause: 'Bearing wear',
       status: 'In progress', by: 'Nurbol', woNumber: 'WO-070001', maintType: 'Defect elimination', planned: false },
     /* A planned service one of the five is responsible for. NOT a defect. */
-    { date: '2026-09-10', asset: 'TK156', defect: null, requestRef: null,
-      eqType: 'TRUCK, DUMP', priority: 'P3 Planned (PM)', defectType: null, cause: null,
+    { date: '2026-09-10', asset: 'TK156', defect: null, requestNo: null,
+      eqType: 'TRUCK, DUMP', system: null, priority: 'P3 Planned (PM)',
+      defectType: null, descr: null, cause: null,
       status: 'Open', by: 'Bekzhan', woNumber: 'WO-070005',
       maintType: '250 Hours service Planned', planned: true },
   ],
@@ -122,9 +130,14 @@ const cells = p => p.$$eval('#cwList tbody tr', rs => rs.map(r =>
   ok('  the defect number is the code out of the work request reference',
      tk[2] === 'DD-000123', tk[2]);
   ok('  and every other column is 1C\'s value, unaltered',
-     tk[3] === 'TRUCK, DUMP' && tk[4] === 'P2 Urgent' && tk[5] === 'Ferrous debris'
-     && tk[6] === 'Bearing wear' && tk[7] === 'In progress' && tk[8] === 'Nurbol',
+     tk[3] === 'TRUCK, DUMP' && tk[4] === 'DRS.FDR' && tk[5] === 'P2 Urgent'
+     && tk[6] === 'Ferrous debris' && tk[7] === 'Metal particles on plug, 3mm'
+     && tk[8] === 'Bearing wear' && tk[9] === 'In progress' && tk[10] === 'Nurbol',
      tk.join(' | '));
+  ok('  including the description the inspector typed',
+     tk[7] === 'Metal particles on plug, 3mm', tk[7]);
+  ok('  including the system component the office asked to see',
+     tk[4] === 'DRS.FDR', tk[4]);
   /* A reference with no code keeps its row and shows what IS there. */
   const gr = rows.find(r => r[1] === 'GR013') || [];
   ok('a reference with no code still gets a row, showing the text 1C holds',
@@ -139,20 +152,30 @@ const cells = p => p.$$eval('#cwList tbody tr', rs => rs.map(r =>
   ok('  but the headline still counts three — the count is of defects',
      kpiAfter === '3', kpiAfter);
   ok('  and the service row says what it is rather than showing a blank type',
-     (rows.find(r => r[8] === 'Bekzhan') || [])[5] === 'planned service',
-     JSON.stringify(rows.find(r => r[8] === 'Bekzhan')));
+     (rows.find(r => r[10] === 'Bekzhan') || [])[6] === 'planned service',
+     JSON.stringify(rows.find(r => r[10] === 'Bekzhan')));
   await p.evaluate(() => { document.getElementById('cwPlanned').checked = false; renderCmWoTab(); });
 
   await p.evaluate(() => { document.querySelector('#cwKpis [data-cwwho="Irek"]').click(); });
   rows = await cells(p);
-  ok('tapping a person narrows to theirs', rows.length === 1 && rows[0][8] === 'Irek',
-     rows.map(r => r[8]).join(' '));
+  ok('tapping a person narrows to theirs', rows.length === 1 && rows[0][10] === 'Irek',
+     rows.map(r => r[10]).join(' '));
   await p.evaluate(() => { document.querySelector('#cwKpis [data-cwwho="Irek"]').click(); });
 
   await p.fill('#cwQ', 'DD-000456');
   await p.waitForTimeout(200);
   rows = await cells(p);
   ok('search finds a defect by its number', rows.length === 1 && rows[0][1] === 'EX021',
+     rows.map(r => r[1]).join(' '));
+  await p.fill('#cwQ', 'HS.PMP');
+  await p.waitForTimeout(200);
+  rows = await cells(p);
+  ok('  and by its system component', rows.length === 1 && rows[0][1] === 'EX021',
+     rows.map(r => r[1]).join(' '));
+  await p.fill('#cwQ', 'particles on plug');
+  await p.waitForTimeout(200);
+  rows = await cells(p);
+  ok('  and by words in the description', rows.length === 1 && rows[0][1] === 'TK156',
      rows.map(r => r[1]).join(' '));
   await p.fill('#cwQ', 'bearing');
   await p.waitForTimeout(200);

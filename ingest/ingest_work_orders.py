@@ -256,11 +256,22 @@ CM_PEOPLE = ["nurbol", "slam", "irek", "zhomart", "bekzhan"]
 CM_FIELDS = {
     "date":     ["Date", "Start date plan", "Date created", "Creation date", "Registration date"],
     "asset":    ["Asset", "Equip no", "Equipment"],
-    "request":  ["Work request reference", "Work request", "Request reference"],
-    "eqType":   ["Equipment type", "Equip type", "Asset type"],
+    # The defect number lives in "Work request number" — corrected by the
+    # office after the first pass looked for "…reference".
+    "request":  ["Work request number", "Work request reference", "Work request"],
+    # "Equipmen type" IS the header, missing its t. 1C's own spelling, and
+    # the normaliser cannot reach it from "Equipment type": stripping
+    # punctuation still leaves equipmentype against equipmenttype. A list of
+    # candidate spellings only helps if the real one is in it, which is why
+    # the output records the header each field actually matched.
+    "eqType":   ["Equipmen type", "Equipment type", "Equip type", "Asset type"],
+    "sysComp":  ["System component", "System / component", "System and component", "Component"],
     "priority": ["Priority"],
     "defType":  ["Defect Type", "Defect type", "Type of defect"],
-    "cause":    ["Cause of Defect", "Cause of defect", "Defect cause"],
+    # "WODefect cause" is the header — corrected by the office. Left with
+    # the plainer spellings behind it, but the first one is the real one.
+    "cause":    ["WODefect cause", "Cause of Defect", "Cause of defect", "Defect cause"],
+    "desc":     ["Defect description", "Description of defect", "Defect descr"],
     "status":   ["CMMSWork order status"],      # the office asked for the CMMS one by name
     "person":   ["Responsible person", "Responsible", "Responsible person name"],
     "wo":       ["Work order number"],
@@ -450,11 +461,13 @@ def main():
                     # when it does not — never a row dropped for the shape of
                     # one field, and never a sentence filed as a number.
                     "defect": m.group(1).upper() if m else None,
-                    "requestRef": ref or None,
+                    "requestNo": ref or None,
                     "eqType": str(cm_get("eqType") or "").strip() or None,
+                    "system": str(cm_get("sysComp") or "").strip() or None,
                     "priority": str(cm_get("priority") or "").strip() or None,
                     "defectType": str(cm_get("defType") or "").strip() or None,
                     "cause": str(cm_get("cause") or "").strip() or None,
+                    "descr": str(cm_get("desc") or "").strip() or None,
                     "status": str(cm_get("status") or "").strip() or None,
                     "by": who,
                     "woNumber": str(cm_get("wo") or "").strip() or None,

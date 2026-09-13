@@ -599,6 +599,9 @@
   table.grid th.pa-today{color:var(--accent);font-weight:700;}
   table.grid th.pa-past,table.grid td.pa-past{background:color-mix(in srgb,var(--ink) 5%,transparent);}
   table.grid th.pa-past{color:var(--muted);}
+  /* A defect description is a sentence, not a code. Left to itself it makes
+     one column as wide as the rest of the table put together. */
+  table.grid td.wrapcell{white-space:normal;min-width:14em;max-width:26em;}
   table.grid tr:hover td{background:var(--surface-2);}
   .tblwrap{overflow-x:auto;max-width:100%;min-width:0;}
   /* A table in a half-width column has to fit that column. Headers are
@@ -3102,7 +3105,7 @@
         <span class="spacer"></span>
         <label class="fld"><span data-i18n="cw_status">Status</span><select id="cwStatus"></select></label>
         <label class="fld"><span data-i18n="cw_find">Search</span>
-          <input id="cwQ" type="search" data-i18n-ph="cw_findph" placeholder="unit, defect no, cause"></label>
+          <input id="cwQ" type="search" data-i18n-ph="cw_findph" placeholder="unit, defect no, cause, component, text"></label>
         <label class="fld chk"><input type="checkbox" id="cwPlanned">
           <span data-i18n="cw_showplanned">Show planned services too</span></label>
         <button class="btn ghost" id="cwCsv" data-i18n="cw_csv">Export CSV</button>
@@ -3586,22 +3589,22 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=341"></script>
+<script src="../data/magnetic_plug.js?v=342"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=341"></script>
-<script src="../mobile/hme.js?v=341"></script>
-<script src="../mobile/mp-fc.js?v=341"></script>
-<script src="../mobile/hme-cascade.js?v=341"></script>
-<script src="../mobile/temp-limits.js?v=341"></script>
+<script src="../data/work_orders.js?v=342"></script>
+<script src="../mobile/hme.js?v=342"></script>
+<script src="../mobile/mp-fc.js?v=342"></script>
+<script src="../mobile/hme-cascade.js?v=342"></script>
+<script src="../mobile/temp-limits.js?v=342"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=341"></script>
-<script src="../mobile/normalize.js?v=341"></script>
-<script src="../mobile/terms.js?v=341"></script>
+<script src="../mobile/assets.js?v=342"></script>
+<script src="../mobile/normalize.js?v=342"></script>
+<script src="../mobile/terms.js?v=342"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3620,19 +3623,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=341"></script>
-<script src="../mobile/edits.js?v=341"></script>
-<script src="../mobile/due.js?v=341"></script>
-<script src="../mobile/wear.js?v=341"></script>
-<script src="../mobile/wear-map.js?v=341"></script>
-<script src="../mobile/lube.js?v=341"></script>
-<script src="../mobile/lube-overrides.js?v=341"></script>
-<script src="../mobile/lube2027.js?v=341"></script>
-<script src="../mobile/lube-tds.js?v=341"></script>
+<script src="../mobile/grade.js?v=342"></script>
+<script src="../mobile/edits.js?v=342"></script>
+<script src="../mobile/due.js?v=342"></script>
+<script src="../mobile/wear.js?v=342"></script>
+<script src="../mobile/wear-map.js?v=342"></script>
+<script src="../mobile/lube.js?v=342"></script>
+<script src="../mobile/lube-overrides.js?v=342"></script>
+<script src="../mobile/lube2027.js?v=342"></script>
+<script src="../mobile/lube-tds.js?v=342"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=341"></script>
-<script src="../mobile/machine-photos.js?v=341"></script>
+<script src="../mobile/upload-defaults.js?v=342"></script>
+<script src="../mobile/machine-photos.js?v=342"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3641,17 +3644,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=341"></script>
-<script src="../mobile/get.js?v=341"></script>
-<script src="../mobile/points.js?v=341"></script>
-<script src="../mobile/uc-points.js?v=341"></script>
-<script src="../mobile/inspect-guide.js?v=341"></script>
-<script src="../mobile/get-figs.js?v=341"></script>
-<script src="../mobile/body-points.js?v=341"></script>
-<script src="../mobile/body-map.js?v=341"></script>
-<script src="../mobile/jspdf.umd.min.js?v=341"></script>
-<script src="../mobile/html2canvas.min.js?v=341"></script>
-<script src="../mobile/report-core.js?v=341"></script>
+<script src="../mobile/machine-fig.js?v=342"></script>
+<script src="../mobile/get.js?v=342"></script>
+<script src="../mobile/points.js?v=342"></script>
+<script src="../mobile/uc-points.js?v=342"></script>
+<script src="../mobile/inspect-guide.js?v=342"></script>
+<script src="../mobile/get-figs.js?v=342"></script>
+<script src="../mobile/body-points.js?v=342"></script>
+<script src="../mobile/body-map.js?v=342"></script>
+<script src="../mobile/jspdf.umd.min.js?v=342"></script>
+<script src="../mobile/html2canvas.min.js?v=342"></script>
+<script src="../mobile/report-core.js?v=342"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4575,7 +4578,8 @@ const I18N={
   cw_nodata:"The work-order file does not carry the team's defects yet. It is rebuilt hourly; this panel fills in on the next pull.",
   cw_nocol:"1C's export has no column this file could match for: {f}. Those cells are blank because the column was not found, not because 1C left them empty.",
   cw_c_date:"Date", cw_c_asset:"Asset", cw_c_defect:"Defect no", cw_c_eqtype:"Equipment type",
-  cw_c_prio:"Priority", cw_c_dtype:"Defect type", cw_c_cause:"Cause of defect",
+  cw_c_system:"System component", cw_c_prio:"Priority", cw_c_dtype:"Defect type",
+  cw_c_descr:"Defect description", cw_c_cause:"Cause of defect",
   cw_c_status:"Status", cw_c_by:"Raised by",
   pa_st_ontime:"On time", pa_st_late:"Late", pa_st_early:"Early", pa_st_missing:"No CM round",
   pa_st_off:"Held off", pa_k_off:"Held off", pa_k_off_s:"rounds the site has taken off these machines",
@@ -5419,7 +5423,8 @@ const I18N={
   cw_nodata:"В файле нарядов пока нет дефектов службы мониторинга. Файл обновляется ежечасно — панель заполнится при следующей выгрузке.",
   cw_nocol:"В выгрузке 1С не найден столбец для: {f}. Эти ячейки пусты потому, что столбец не найден, а не потому, что 1С их не заполнил.",
   cw_c_date:"Дата", cw_c_asset:"Единица", cw_c_defect:"№ дефекта", cw_c_eqtype:"Тип техники",
-  cw_c_prio:"Приоритет", cw_c_dtype:"Тип дефекта", cw_c_cause:"Причина дефекта",
+  cw_c_system:"Узел / система", cw_c_prio:"Приоритет", cw_c_dtype:"Тип дефекта",
+  cw_c_descr:"Описание дефекта", cw_c_cause:"Причина дефекта",
   cw_c_status:"Статус", cw_c_by:"Заявил",
   pa_st_ontime:"В срок", pa_st_late:"Позже", pa_st_early:"Раньше", pa_st_missing:"Нет обхода CM",
   pa_st_off:"Сняты", pa_k_off:"Сняты с обхода", pa_k_off_s:"обходы, снятые площадкой с этих машин",
@@ -15386,8 +15391,14 @@ function renderPaWeek(qtyRows){
             const late=isPast(d);
             return `<div style="display:inline-block;text-align:center;margin:1px 3px;vertical-align:top">`
                  + `<span class="pill ${late?"c":e.isPreCheck?"w":"g"}" title="${esc(r.info.label)}${late?" — "+t("pa_week_late"):""}">${esc(e.code)}</span>`
-                 + `<div class="mono muted" style="font-size:10px;line-height:1.4;white-space:nowrap">${esc(r.w.woNumber||"—")}</div>`
-                 + (sub2?`<div class="mono muted" style="font-size:10px;line-height:1.4;white-space:nowrap">${sub2}</div>`:"")
+                 /* 11px, not 10. tests/tabletru.cjs holds this page to
+                    nothing under 10.5px at tablet widths in Russian, and
+                    these two lines were the whole of that failure —
+                    110 of them at seven columns, 214 once the agenda
+                    widened to a fortnight. Doubling the count is what made
+                    it worth looking at; the size was wrong at either. */
+                 + `<div class="mono muted" style="font-size:11px;line-height:1.4;white-space:nowrap">${esc(r.w.woNumber||"—")}</div>`
+                 + (sub2?`<div class="mono muted" style="font-size:11px;line-height:1.4;white-space:nowrap">${sub2}</div>`:"")
                  + `</div>`;
           }).join("")+`</td>`;
         }).join("");
@@ -15538,12 +15549,13 @@ function renderPlanActualTab(){
    opened in a spreadsheet six months from now should not depend on which
    language the browser happened to be in. */
 function cwCsv(){
-  const rows=[["date","asset","defect_no","work_request_reference","equipment_type",
-               "priority","defect_type","cause_of_defect","status","raised_by",
-               "work_order","maintenance_type","is_planned_service"]];
-  cwRows().forEach(r=>rows.push([r.date||"", r.asset||"", r.defect||"", r.requestRef||"",
-    r.eqType||"", r.priority||"", r.defectType||"", r.cause||"", r.status||"", r.by||"",
-    r.woNumber||"", r.maintType||"", r.planned?1:0]));
+  const rows=[["date","asset","defect_no","work_request_number","equipment_type",
+               "system_component","priority","defect_type","defect_description",
+               "cause_of_defect","status","raised_by","work_order","maintenance_type",
+               "is_planned_service"]];
+  cwRows().forEach(r=>rows.push([r.date||"", r.asset||"", r.defect||"", r.requestNo||"",
+    r.eqType||"", r.system||"", r.priority||"", r.defectType||"", r.descr||"", r.cause||"",
+    r.status||"", r.by||"", r.woNumber||"", r.maintType||"", r.planned?1:0]));
   const csv=rows.map(r=>r.map(v=>{ const x=String(v==null?"":v);
     return /[",\n]/.test(x) ? '"'+x.replace(/"/g,'""')+'"' : x; }).join(",")).join("\n");
   const a=document.createElement("a");
@@ -16530,7 +16542,8 @@ function cwRows(){
     .filter(r => planned || !r.planned)
     .filter(r => !cwWho || r.by === cwWho)
     .filter(r => !cwStatusSel || (r.status||"") === cwStatusSel)
-    .filter(r => !q || [r.asset, r.defect, r.requestRef, r.cause, r.defectType, r.eqType, r.woNumber]
+    .filter(r => !q || [r.asset, r.defect, r.requestNo, r.cause, r.defectType, r.eqType,
+                        r.system, r.descr, r.woNumber]
       .some(v => String(v||"").toUpperCase().indexOf(q) >= 0));
 }
 function renderCmWoTab(){
@@ -16601,17 +16614,18 @@ function renderCmWoTab(){
   box.innerHTML = `<div class="tblwrap"><table class="grid"><thead><tr>
       <th data-i18n="cw_c_date">Date</th><th data-i18n="cw_c_asset">Asset</th>
       <th data-i18n="cw_c_defect">Defect no</th><th data-i18n="cw_c_eqtype">Equipment type</th>
-      <th data-i18n="cw_c_prio">Priority</th><th data-i18n="cw_c_dtype">Defect type</th>
+      <th data-i18n="cw_c_system">System component</th><th data-i18n="cw_c_prio">Priority</th><th data-i18n="cw_c_dtype">Defect type</th>
       <th data-i18n="cw_c_cause">Cause of defect</th><th data-i18n="cw_c_status">Status</th>
       <th data-i18n="cw_c_by">Raised by</th></tr></thead><tbody>`
     + pg.rows.map(r=>`<tr${r.planned?' class="muted"':''}>
         <td class="mono">${cell(r.date)}</td>
         <td><b>${cell(r.asset)}</b></td>
         <td class="mono">${r.defect ? esc(r.defect)
-            : (r.requestRef ? `<span class="muted" title="${esc(r.requestRef)}">${esc(r.requestRef.slice(0,28))}</span>`
-                            : `<span class="muted">—</span>`)}</td>
-        <td>${cell(r.eqType)}</td><td>${cell(r.priority)}</td>
+            : (r.requestNo ? `<span class="muted" title="${esc(r.requestNo)}">${esc(r.requestNo.slice(0,28))}</span>`
+                           : `<span class="muted">—</span>`)}</td>
+        <td>${cell(r.eqType)}</td><td class="mono">${cell(r.system)}</td><td>${cell(r.priority)}</td>
         <td>${r.planned ? `<span class="muted">${esc(t("cw_is_planned"))}</span>` : cell(r.defectType)}</td>
+        <td class="wrapcell">${r.planned ? `<span class="muted">—</span>` : cell(r.descr)}</td>
         <td>${r.planned ? `<span class="muted">—</span>` : cell(r.cause)}</td>
         <td>${cell(r.status)}</td><td>${cell(r.by)}</td></tr>`).join("")
     + `</tbody></table></div>`
@@ -16892,8 +16906,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=341"></script>
-<script src="sync-adapter.js?v=341"></script>
-<script src="report.js?v=341"></script>
+<script src="drive.js?v=342"></script>
+<script src="sync-adapter.js?v=342"></script>
+<script src="report.js?v=342"></script>
 </body>
 </html>
