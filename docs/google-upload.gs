@@ -115,6 +115,7 @@ function doPost(e) {
        long-running process here), and action=vapid says so. */
     if (b.op === 'subscribe')   return json(pushSubscribe_(b));
     if (b.op === 'unsubscribe') return json(pushUnsubscribe_(b));
+    if (b.op === 'held')        return json(pushHeld_(b));
     if (b.op === 'push')        return json({ ok: false, error: 'This backend cannot send push messages' });
 
     /* Several files in one request.
@@ -408,6 +409,22 @@ function pushUnsubscribe_(b) {
     while (old.hasNext()) old.next().setTrashed(true);
   } catch (e) { /* nothing to withdraw */ }
   return { ok: true };
+}
+/* "DO YOU STILL HOLD THIS ONE?" — the same answer function.js gives, because
+   two backends for one document have to agree about what the document IS. It
+   is the only question a phone can ask that settles whether its subscription
+   is worth anything: Safari does not expose the key a subscription was made
+   with, so a dead one looks exactly like a live one from the handset. This
+   backend never sends a push and so never retires one, but it must still
+   answer honestly about what it holds. */
+function pushHeld_(b) {
+  if (!b.endpoint) return { ok: false, error: 'Missing endpoint' };
+  var held = false;
+  try {
+    var f = folderPath_(rootFolder_(), META_DIR + '/push').getFilesByName(pushKey_(b.endpoint));
+    held = f.hasNext();
+  } catch (e) { held = false; }
+  return { ok: true, held: held };
 }
 
 /* ── two phones, one inspection ───────────────────────────────────────────────

@@ -307,6 +307,21 @@ print three photographs where six were taken with nothing on the page saying so
 `rep_nophoto_off` was unreachable — it sat in the branch where there is no
 destination at all.
 
+**A SUBSCRIPTION THE PUSH SERVICE REFUSES IS RETIRED BY THE END THAT KNOWS.**
+Read off the VM on 2026-09-13: six of seven handsets refused by Apple with
+`BadJwtToken`, two of them since 6 September — every build push, every folder
+push and every daily readiness push lost, with nothing visible but a log line
+claiming the phone "re-subscribes by itself at its next open". It does not, and
+it cannot: the phone decides by reading the key its subscription was MADE with,
+Safari does not expose it, so the phone falls back to what the page remembers
+storing — which matches — and a dead subscription is indistinguishable from a
+live one from the handset. So `pushAll` counts consecutive 401/403 on the
+subscription document and drops it at `PUSH_BAD_MAX` (2, not 1 — a push service
+can have a bad minute and retiring a healthy phone costs it every wake-up); a
+success clears the count; `op:"held"` lets a phone ask whether the server still
+has it, and the phone acts on `held:false` ONLY, never on silence
+(`tests/pushdead.cjs`). Both backends answer `held`.
+
 **THE 1C PULL REFRESHES ITSELF, AT BOTH ENDS.** `data/work_orders.js` is a
 `<script>` tag: read once at load, never again — so an office screen opened at
 the start of the shift showed the work orders as they stood at breakfast, all

@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=357">
+<link rel="manifest" href="manifest.webmanifest?v=358">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=357">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=357">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=357">
+<link rel="apple-touch-icon" href="icon-192.png?v=358">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=358">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=358">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2475,15 +2475,15 @@ function bootDel(k){ try { localStorage.removeItem(k); } catch (e) {} }
   }
 })();
 </script>
-<script src="native.js?v=357"></script>
-<script src="upload-defaults.js?v=357"></script>
-<script src="hme.js?v=357"></script>
-<script src="mp-fc.js?v=357"></script>
-<script src="hme-cascade.js?v=357"></script>
-<script src="assets.js?v=357"></script>
-<script src="temp-limits.js?v=357"></script>
-<script src="normalize.js?v=357"></script>
-<script src="terms.js?v=357"></script>
+<script src="native.js?v=358"></script>
+<script src="upload-defaults.js?v=358"></script>
+<script src="hme.js?v=358"></script>
+<script src="mp-fc.js?v=358"></script>
+<script src="hme-cascade.js?v=358"></script>
+<script src="assets.js?v=358"></script>
+<script src="temp-limits.js?v=358"></script>
+<script src="normalize.js?v=358"></script>
+<script src="terms.js?v=358"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2502,25 +2502,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=357"></script>
-<script src="edits.js?v=357"></script>
-<script src="due.js?v=357"></script>
-<script src="wear.js?v=357"></script>
-<script src="wear-figs.js?v=357"></script>
-<script src="wear-map.js?v=357"></script>
-<script src="machine-photos.js?v=357"></script>
-<script src="machine-fig.js?v=357"></script>
-<script src="get.js?v=357"></script>
-<script src="points.js?v=357"></script>
-<script src="uc-points.js?v=357"></script>
-<script src="inspect-guide.js?v=357"></script>
-<script src="get-figs.js?v=357"></script>
-<script src="body-points.js?v=357"></script>
-<script src="body-map.js?v=357"></script>
-<script src="lube.js?v=357"></script>
-<script src="lube-overrides.js?v=357"></script>
-<script src="lube2027.js?v=357"></script>
-<script src="report-core.js?v=357"></script>
+<script src="grade.js?v=358"></script>
+<script src="edits.js?v=358"></script>
+<script src="due.js?v=358"></script>
+<script src="wear.js?v=358"></script>
+<script src="wear-figs.js?v=358"></script>
+<script src="wear-map.js?v=358"></script>
+<script src="machine-photos.js?v=358"></script>
+<script src="machine-fig.js?v=358"></script>
+<script src="get.js?v=358"></script>
+<script src="points.js?v=358"></script>
+<script src="uc-points.js?v=358"></script>
+<script src="inspect-guide.js?v=358"></script>
+<script src="get-figs.js?v=358"></script>
+<script src="body-points.js?v=358"></script>
+<script src="body-map.js?v=358"></script>
+<script src="lube.js?v=358"></script>
+<script src="lube-overrides.js?v=358"></script>
+<script src="lube2027.js?v=358"></script>
+<script src="report-core.js?v=358"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -12639,7 +12639,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="357";
+const BUILD="358";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -16155,6 +16155,34 @@ async function pushSetupNow(){
     try{ await backendPost(g,{op:"unsubscribe", endpoint:sub.endpoint}); }catch(e){}
     try{ await sub.unsubscribe(); }catch(e){}
     sub=null;
+  }
+  /* AND WHERE THE PHONE CANNOT TELL, IT ASKS THE END THAT CAN.
+
+     The check above only works where the browser exposes the key a
+     subscription was made with. Safari does not, so `madeWith` falls back to
+     what this page remembers storing — which matches — and a subscription the
+     push service has been refusing for a week looks perfectly healthy from
+     here. Read off the VM on 2026-09-13: six of seven handsets refused with
+     BadJwtToken since 6 September, every build push and every daily readiness
+     push lost, and nothing on either side did anything about it.
+
+     The server sees the refusals, and since build 358 it drops a subscription
+     it has proven dead. So the question worth asking is not "is my key right"
+     — it is "do you still hold me". A `false` is the server's own record and
+     is acted on; anything else, including no answer at all, changes nothing,
+     because silence is not a verdict. */
+  if(sub){
+    let held=null;
+    try{ const r=await backendPost(g,{op:"held", endpoint:sub.endpoint});
+         if(r && r.ok===true && typeof r.held==="boolean") held=r.held; }catch(e){}
+    if(held===false){
+      try{ await sub.unsubscribe(); }catch(e){}
+      sub=null;
+      /* The remembered endpoint and key go with it, or the post below is
+         skipped as "nothing changed" and the new subscription is never filed. */
+      try{ localStorage.removeItem(PUSH_EP); }catch(e){}
+      madeWith="";
+    }
   }
   if(!sub){
     try{ sub=await withTimeoutMs(reg.pushManager.subscribe({userVisibleOnly:true, applicationServerKey:b64uToU8(key)}), 20000); }

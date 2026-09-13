@@ -823,6 +823,10 @@ function pushEncrypt(payload, p256dh, auth, fixed) {
   return Buffer.concat([salt, rs, Buffer.from([localPub.length]), localPub, enc]);
 }
 const subKey = ep => PUSH_DIR + '/' + sha256(String(ep)).slice(0, 32) + '.json';
+/* How many consecutive key refusals retire a subscription. Two, not one: a
+   push service can answer 403 for a moment of its own, and retiring a healthy
+   phone costs it every wake-up until somebody opens the app. */
+const PUSH_BAD_MAX = 2;
 /* THE DOCUMENT: {endpoint, keys:{p256dh, auth}, dev, lang, ua, at}. */
 async function pushSubscribe(b) {
   const s = b.sub || {};
@@ -892,8 +896,45 @@ async function pushAll(payload, opts) {
     try {
       const r = await pushSend(s, Object.assign({ at: new Date().toISOString(), lang: s.lang || 'en' }, payload || {}), opts);
       const st = r.status;
-      if (st >= 200 && st < 300) out.sent++;
+      if (st >= 200 && st < 300) {
+        out.sent++;
+        /* It worked, so any earlier refusal is history — otherwise a single
+           bad hour would eventually retire a healthy phone. */
+        if (s.bad) { try { const d = Object.assign({}, s); delete d.key; delete d.bad; delete d.badAt;
+                           await putObj(s.key, Buffer.from(JSON.stringify(d)), 'application/json', d.dev || ''); } catch (e) {} }
+      }
       else if (st === 404 || st === 410) { out.gone++; try { await delObj(s.key); } catch (e) {} }
+      /* THE KEY PAIR NO LONGER MATCHES, AND SAYING SO CHANGED NOTHING.
+
+         401/403 from the push service means this subscription was made under
+         a different VAPID key pair than the one signing now. The hint used to
+         claim the phone re-subscribes at its next open. It does not: the
+         phone decides by reading the key off its own subscription, Safari
+         does not expose it, so the phone falls back to what it remembers
+         storing — which matches — and concludes all is well. Read off the VM
+         on 2026-09-13: six of seven handsets refused for up to a week, every
+         build push and every daily readiness push lost, and the only visible
+         sign a line in a log nobody reads.
+
+         So the end that KNOWS acts. Two refusals in a row and the
+         subscription is dropped, exactly as a 410 is; the phone asks at its
+         next open whether the server still holds it (op:"held"), finds it
+         does not, and makes a fresh one under the current key. */
+      else if (st === 401 || st === 403) {
+        const bad = Number(s.bad || 0) + 1;
+        if (bad >= PUSH_BAD_MAX) {
+          out.gone++;
+          try { await delObj(s.key); } catch (e) {}
+          out.why.push(Object.assign(who, { status: st, said: String(r.body || '').replace(/\s+/g, ' ').trim(),
+            hint: 'refused ' + bad + ' times under this server\'s key — dropped; the phone makes a new subscription at its next open' }));
+        } else {
+          out.failed++;
+          try { const d = Object.assign({}, s, { bad: bad, badAt: new Date().toISOString() });
+                delete d.key;
+                await putObj(s.key, Buffer.from(JSON.stringify(d)), 'application/json', d.dev || ''); } catch (e) {}
+          out.why.push(Object.assign(who, { status: st, said: String(r.body || '').replace(/\s+/g, ' ').trim(), hint: pushHint(st) }));
+        }
+      }
       else { out.failed++; out.why.push(Object.assign(who, { status: st, said: String(r.body || '').replace(/\s+/g, ' ').trim(), hint: pushHint(st) })); }
     } catch (e) { out.failed++; out.why.push(Object.assign(who, { error: String((e && e.message) || e) })); }
   }
@@ -902,7 +943,7 @@ async function pushAll(payload, opts) {
 }
 /* What a status from the push service usually means, in one line. */
 function pushHint(st) {
-  if (st === 401 || st === 403) return 'the push service refused this server\'s key: the phone subscribed under a different key pair — it re-subscribes by itself at its next open';
+  if (st === 401 || st === 403) return 'the push service refused this server\'s key: the phone subscribed under a different key pair. One more refusal and the subscription is dropped, and the phone makes a new one at its next open';
   if (st === 400) return 'the push service rejected the message';
   if (st === 413) return 'the message is too large';
   if (st === 429) return 'the push service is rate-limiting this server';
@@ -951,6 +992,17 @@ exports.handler = async function (event) {
     if (b.op === 'edit')    { const r = await saveEdit(b); if (r && r.ok) folderChanged('edit'); return json(r); }
     if (b.op === 'subscribe')   return json(await pushSubscribe(b));
     if (b.op === 'unsubscribe') return json(await pushUnsubscribe(b));
+    /* "Do you still hold this one?" — the only question a phone can ask that
+       settles whether its own subscription is worth anything. It cannot tell
+       from its own side: Safari does not expose the key a subscription was
+       made with, so a phone with a dead subscription looks exactly like a
+       phone with a live one. Cheap: one HEAD-sized read of one document. */
+    if (b.op === 'held') {
+      if (!b.endpoint) return json({ ok: false, error: 'Missing endpoint' });
+      let held = false;
+      try { held = !!(await getObj(subKey(b.endpoint))); } catch (e) { held = false; }
+      return json({ ok: true, held: held });
+    }
     /* A push on demand — admin only, the same gate as deletion. */
     if (b.op === 'push') {
       if (!ADMIN || String(b.admin || '') !== ADMIN) return json({ ok: false, error: 'Push is admin-only. Send the admin secret as "admin".' });
