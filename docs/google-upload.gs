@@ -1118,6 +1118,7 @@ function readRecords_(p) {
   var records = [], edits = [], conflicts = [], deleted = [], deferrals = [],
       read = 0, bad = 0, truncated = false;
   var cursor = after;
+  var badKeys = [];
   for (var i = 0; i < sidecars.length; i++) {
     if (read >= max || new Date().getTime() - started > TIME_BUDGET_MS) { truncated = true; break; }
     var f = sidecars[i];
@@ -1146,12 +1147,19 @@ function readRecords_(p) {
         for (var k = 0; k < rs.length; k++) { rs[k]._file = f.path; records.push(rs[k]); }
       }
       read++;
-    } catch (err) { bad++; }
+    } catch (err) {
+      /* NAMED, not just counted — the same reason as function.js. A client
+         that receives only a NUMBER has to add it to what it already knew,
+         and an incremental read re-delivers the same unreadable file every
+         time the cursor sits on it, so one bad document became a figure that
+         climbed on every pull. A list can be de-duplicated by the reader. */
+      bad++; if (badKeys.length < 200) badKeys.push(f.path || f.name);
+    }
     cursor = f.updated;          // advance even on a bad file, or it blocks the queue
   }
 
   var out = { ok: true, records: records, edits: edits, conflicts: conflicts,
-              deleted: deleted, deferrals: deferrals, read: read, failed: bad,
+              deleted: deleted, deferrals: deferrals, read: read, failed: bad, failedKeys: badKeys,
               pending: Math.max(0, sidecars.length - read - bad),
               truncated: truncated, cursor: cursor, files: all.length,
               photos: all.filter(function (f) { return MEDIA_RE.test(f.name); }).length };

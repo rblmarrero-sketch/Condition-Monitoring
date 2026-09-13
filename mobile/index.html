@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=355">
+<link rel="manifest" href="manifest.webmanifest?v=356">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=355">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=355">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=355">
+<link rel="apple-touch-icon" href="icon-192.png?v=356">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=356">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=356">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2475,15 +2475,15 @@ function bootDel(k){ try { localStorage.removeItem(k); } catch (e) {} }
   }
 })();
 </script>
-<script src="native.js?v=355"></script>
-<script src="upload-defaults.js?v=355"></script>
-<script src="hme.js?v=355"></script>
-<script src="mp-fc.js?v=355"></script>
-<script src="hme-cascade.js?v=355"></script>
-<script src="assets.js?v=355"></script>
-<script src="temp-limits.js?v=355"></script>
-<script src="normalize.js?v=355"></script>
-<script src="terms.js?v=355"></script>
+<script src="native.js?v=356"></script>
+<script src="upload-defaults.js?v=356"></script>
+<script src="hme.js?v=356"></script>
+<script src="mp-fc.js?v=356"></script>
+<script src="hme-cascade.js?v=356"></script>
+<script src="assets.js?v=356"></script>
+<script src="temp-limits.js?v=356"></script>
+<script src="normalize.js?v=356"></script>
+<script src="terms.js?v=356"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2502,25 +2502,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=355"></script>
-<script src="edits.js?v=355"></script>
-<script src="due.js?v=355"></script>
-<script src="wear.js?v=355"></script>
-<script src="wear-figs.js?v=355"></script>
-<script src="wear-map.js?v=355"></script>
-<script src="machine-photos.js?v=355"></script>
-<script src="machine-fig.js?v=355"></script>
-<script src="get.js?v=355"></script>
-<script src="points.js?v=355"></script>
-<script src="uc-points.js?v=355"></script>
-<script src="inspect-guide.js?v=355"></script>
-<script src="get-figs.js?v=355"></script>
-<script src="body-points.js?v=355"></script>
-<script src="body-map.js?v=355"></script>
-<script src="lube.js?v=355"></script>
-<script src="lube-overrides.js?v=355"></script>
-<script src="lube2027.js?v=355"></script>
-<script src="report-core.js?v=355"></script>
+<script src="grade.js?v=356"></script>
+<script src="edits.js?v=356"></script>
+<script src="due.js?v=356"></script>
+<script src="wear.js?v=356"></script>
+<script src="wear-figs.js?v=356"></script>
+<script src="wear-map.js?v=356"></script>
+<script src="machine-photos.js?v=356"></script>
+<script src="machine-fig.js?v=356"></script>
+<script src="get.js?v=356"></script>
+<script src="points.js?v=356"></script>
+<script src="uc-points.js?v=356"></script>
+<script src="inspect-guide.js?v=356"></script>
+<script src="get-figs.js?v=356"></script>
+<script src="body-points.js?v=356"></script>
+<script src="body-map.js?v=356"></script>
+<script src="lube.js?v=356"></script>
+<script src="lube-overrides.js?v=356"></script>
+<script src="lube2027.js?v=356"></script>
+<script src="report-core.js?v=356"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -10742,7 +10742,13 @@ async function teamPhotosFor(g,rec,say){
      that printed as a complete sheet: three photographs where six were taken,
      and nothing on the page saying so. The counts go back with the pictures
      and the caller says the difference out loud. */
-  out.__asked=hits.length; out.__got=0;
+  /* NOT ENUMERABLE. Every caller of this map treats its VALUES as lists of
+     photographs — `Object.values(map).reduce((s,a)=>s+a.length,0)` is how the
+     suite counts them — so two plain numbers on the same object turn that sum
+     into NaN. The counts ride along where only a reader that asks by name can
+     see them. */
+  Object.defineProperty(out,"__asked",{value:hits.length, writable:true, enumerable:false});
+  Object.defineProperty(out,"__got",{value:0, writable:true, enumerable:false});
   for(let i=0;i<hits.length;i+=MEDIA_BATCH){
     const part=hits.slice(i,i+MEDIA_BATCH);
     if(say) say(i,hits.length);
@@ -12633,7 +12639,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="355";
+const BUILD="356";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

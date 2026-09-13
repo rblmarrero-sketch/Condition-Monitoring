@@ -255,8 +255,13 @@ const FEED = () => {
              uses: (src.match(/scale:PHONE_PDF\.scale/g) || []).length };
   });
   note('phone pdf', JSON.stringify(q));
-  ok('the phone encodes at Standard, not the office setting', q.scale === 1.8, String(q.scale));
-  ok('  and at the quality measured to hold the type', q.jpeg === 0.82, String(q.jpeg));
+  /* The property is that the phone has ONE setting and it is high enough to
+     print — not the number itself, which moved from 1.8 to 2.4 in build 354
+     when the raster scale was recognised as the print resolution (105 ppi x
+     scale on A4). A suite that pins the number is a second place the number
+     lives, which is the defect this project keeps producing. */
+  ok('the phone encodes at a resolution paper can hold', q.scale >= 2.4, String(q.scale));
+  ok('  and at a quality that holds the type without bloating the file', q.jpeg >= 0.8 && q.jpeg <= 0.95, String(q.jpeg));
   ok('  on every report path the phone has, not one of them',
      q.makes > 1 && q.uses === q.makes, q.uses + ' of ' + q.makes + ' call sites');
 
