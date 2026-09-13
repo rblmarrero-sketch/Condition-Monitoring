@@ -459,6 +459,15 @@ def main():
                     "by": who,
                     "woNumber": str(cm_get("wo") or "").strip() or None,
                     "maintType": str(row[col["Maintenence type"]] or "").strip() or None,
+                    # THE TWO SIDES OF ONE STORY, AND THEY ARE NOT THE SAME
+                    # COUNT. A planned service is the inspection being asked
+                    # for; a defect is what the team WROTE UP after walking
+                    # it. The office asked how many they created, so the
+                    # panel counts defects — and this flag is how it knows,
+                    # rather than re-reading the maintenance type in a second
+                    # place and drifting from the rule used here.
+                    "planned": bool(PLANNED_SERVICE_RE.match(
+                        str(row[col["Maintenence type"]] or "").strip())),
                 })
 
         maint_type = row[col["Maintenence type"]]
