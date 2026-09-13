@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=358">
+<link rel="manifest" href="manifest.webmanifest?v=359">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=358">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=358">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=358">
+<link rel="apple-touch-icon" href="icon-192.png?v=359">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=359">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=359">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2475,15 +2475,15 @@ function bootDel(k){ try { localStorage.removeItem(k); } catch (e) {} }
   }
 })();
 </script>
-<script src="native.js?v=358"></script>
-<script src="upload-defaults.js?v=358"></script>
-<script src="hme.js?v=358"></script>
-<script src="mp-fc.js?v=358"></script>
-<script src="hme-cascade.js?v=358"></script>
-<script src="assets.js?v=358"></script>
-<script src="temp-limits.js?v=358"></script>
-<script src="normalize.js?v=358"></script>
-<script src="terms.js?v=358"></script>
+<script src="native.js?v=359"></script>
+<script src="upload-defaults.js?v=359"></script>
+<script src="hme.js?v=359"></script>
+<script src="mp-fc.js?v=359"></script>
+<script src="hme-cascade.js?v=359"></script>
+<script src="assets.js?v=359"></script>
+<script src="temp-limits.js?v=359"></script>
+<script src="normalize.js?v=359"></script>
+<script src="terms.js?v=359"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2502,25 +2502,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=358"></script>
-<script src="edits.js?v=358"></script>
-<script src="due.js?v=358"></script>
-<script src="wear.js?v=358"></script>
-<script src="wear-figs.js?v=358"></script>
-<script src="wear-map.js?v=358"></script>
-<script src="machine-photos.js?v=358"></script>
-<script src="machine-fig.js?v=358"></script>
-<script src="get.js?v=358"></script>
-<script src="points.js?v=358"></script>
-<script src="uc-points.js?v=358"></script>
-<script src="inspect-guide.js?v=358"></script>
-<script src="get-figs.js?v=358"></script>
-<script src="body-points.js?v=358"></script>
-<script src="body-map.js?v=358"></script>
-<script src="lube.js?v=358"></script>
-<script src="lube-overrides.js?v=358"></script>
-<script src="lube2027.js?v=358"></script>
-<script src="report-core.js?v=358"></script>
+<script src="grade.js?v=359"></script>
+<script src="edits.js?v=359"></script>
+<script src="due.js?v=359"></script>
+<script src="wear.js?v=359"></script>
+<script src="wear-figs.js?v=359"></script>
+<script src="wear-map.js?v=359"></script>
+<script src="machine-photos.js?v=359"></script>
+<script src="machine-fig.js?v=359"></script>
+<script src="get.js?v=359"></script>
+<script src="points.js?v=359"></script>
+<script src="uc-points.js?v=359"></script>
+<script src="inspect-guide.js?v=359"></script>
+<script src="get-figs.js?v=359"></script>
+<script src="body-points.js?v=359"></script>
+<script src="body-map.js?v=359"></script>
+<script src="lube.js?v=359"></script>
+<script src="lube-overrides.js?v=359"></script>
+<script src="lube2027.js?v=359"></script>
+<script src="report-core.js?v=359"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3152,7 +3152,12 @@ const I18N = {
     rdy_v_storage:"Phone storage is almost full",
     rdy_v_update:"Update not finished",
     rdy_v_photos:"Photos still to send",
-    rdy_fix_retry:"Check again",
+    rdy_fix_retry:"Check again", rdy_fix_inv:"Open the inventory",
+    /* Said to somebody standing at a machine, so the first thing it says is
+       that nothing is lost. The rounds it counts have all been accepted AND
+       read back by the server; what failed is this phone writing down that
+       they went. */
+    rdy_sto_nowrite:"This phone is out of room. {n} round(s) reached the server and were verified there, but the phone could not record it, so they keep showing as waiting. Free space by deleting rounds already sent — nothing on the server is affected.",
     rdy_q_unknown:"Could not read the queue on this phone. Your work is not lost — check again.",
     rdy_err_t:"Check did not finish",
     rdy_err_sub:"Something stopped the check. Your inspections are safe. Tap to try again.",
@@ -3736,7 +3741,8 @@ const I18N = {
     rdy_v_storage:"Память телефона почти заполнена",
     rdy_v_update:"Обновление не завершено",
     rdy_v_photos:"Фото ещё не отправлены",
-    rdy_fix_retry:"Проверить снова",
+    rdy_fix_retry:"Проверить снова", rdy_fix_inv:"Открыть опись",
+    rdy_sto_nowrite:"На телефоне нет места. Обходов: {n} — они дошли до сервера и там проверены, но телефон не смог это записать, поэтому они по-прежнему числятся в очереди. Освободите место, удалив уже отправленные обходы: на сервере ничего не изменится.",
     rdy_q_unknown:"Не удалось прочитать очередь на телефоне. Работа не потеряна — проверьте снова.",
     rdy_err_t:"Проверка не завершилась",
     rdy_err_sub:"Проверка прервалась. Осмотры в безопасности. Нажмите, чтобы повторить.",
@@ -12639,7 +12645,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="358";
+const BUILD="359";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -14307,6 +14313,11 @@ let STORED=null;
    exactly like a press that failed. The run that is in flight finishes and
    one more starts. */
 let pressPending=false;
+/* Rounds whose upload finished in THIS session and whose "it is up" could not
+   be written to the phone's database. Never persisted — it is a fact about a
+   broken disk, not about the round — and cleared by a reload, which is right:
+   a phone with room again should try the write once more. */
+const bookFail=new Set();
 async function syncNow(manual){
   if(syncing){ if(manual){ pressPending=true; slog("press-queued",{}); } return; }
   if(!UP.on){ renderSync(); return; }
@@ -14327,6 +14338,16 @@ async function syncNow(manual){
     const justDone=[];
     let consecutive=0;
     for(const rec of all){
+      /* NOT SKIPPED, even when the write-back failed a moment ago. The first
+         attempt at this was to pass over such a record for the rest of the
+         session, to stop a full phone re-sending nineteen finished rounds
+         over a pit link. tests/recovery.cjs §7 caught what that costs: the
+         retry is ALSO what marks the round up the moment the phone can write
+         again, and it re-sends nothing to do it — `sent` already holds every
+         name, so the run is a write and a read-back, not an upload. Skipping
+         it left a round that would never be marked up at all. The loop is
+         answered by SAYING it (see the writeback catch and the readiness
+         card), not by refusing to try. */
       /* Only when somebody is looking at the queue. renderPending() rebuilds
          every row and recycles the thumbnail blob URLs, so running it once per
          record on a fifty-round queue nobody has open is fifty rebuilds paid
@@ -14505,7 +14526,27 @@ async function syncNow(manual){
           sizes:payload.reduce((m,f)=>{ if(f.wireSize) m[f.name]=f.wireSize; return m; },{})});
       }
       }catch(e){ errs.push(t("up_bookfail",{u:rec.equip||"?", why:String((e&&e.message)||e)}));
-        slog("writeback-fail", {u:rec.equip, rev, err:String((e&&e.message)||e).slice(0,200)}); }
+        slog("writeback-fail", {u:rec.equip, rev, err:String((e&&e.message)||e).slice(0,200)});
+        /* THE ROUND WENT UP AND THE PHONE COULD NOT WRITE THAT DOWN.
+
+           Read off a handset on 2026-09-13: nineteen rounds "waiting to
+           upload", every one of them already complete on the server —
+           TK156's plug round, its filter change, its tray liner, TK101's
+           general inspection, all of them, sidecar and photographs, verified.
+           The phone's own database was refusing writes ("out of room"), so
+           `fresh.up = 1` could never be stored; the queue therefore never
+           shrank, and every run sent all nineteen again, for ever, over a
+           pit link. From the inspector's side: "it never finishes".
+
+           Nothing here marks anything as sent — that state belongs on disk
+           and the disk is what is broken. What it does is stop the LOOP: a
+           round proven up in this session is not sent again in this session,
+           and the reason is said out loud rather than left as one line in a
+           list of errors. The queue still shows it, because it IS still
+           unrecorded, and the moment there is room the write succeeds and
+           the round clears properly. */
+        if(bookFail.size<500) bookFail.add(rec.id);
+      }
       if(errs.length) lastErr=errs.join(" · ");
       if(todo.length) netSeen(progressed);          // evidence, not navigator.onLine
       // The breaker exists so a dead link is not retried against all 50 records.
@@ -14899,6 +14940,13 @@ function yardVerdict(rows){
   if(hasKey("refs"))     return {k:"bad",  s:"rdy_v_setup"};
   if(hasKey("queue_recover")) return {k:"bad", s:"rdy_v_recover"};
   if(hasKey("queue_stalled")) return {k:"bad", s:"rdy_v_photos"};
+  /* A phone that cannot write down what it sent. Loud, and its own key: the
+     quota estimate ("storage") is the browser's opinion and can read
+     comfortable while the writes are already failing, so this is not folded
+     into it. Below the two queue verdicts, because a photograph that needs
+     recovering and a queue that has stopped moving are the things an
+     inspector must act on first. */
+  if(hasKey("storage_nowrite")) return {k:"bad", s:"rdy_v_storage"};
   if(hasKey("queue"))    return {k:"warn", s:"rdy_v_photos"};
   if(hasKey("build"))    return {k:"warn", s:"rdy_v_update"};
   if(hasKey("bg"))       return {k:"warn", s:"rdy_v_bg"};
@@ -14999,7 +15047,14 @@ async function yardCheck(){
 
     /* 3. room for the photographs the shift will take */
     const st=await within(5000, ()=>storageInfo(), null);
-    if(!st) add("warn",t("rdy_sto_t"),t("rdy_sto_unknown"),
+    /* PROVEN FULL BEATS ESTIMATED FULL. A quota figure is the browser's
+       opinion; a write that actually failed is a fact, and on the handset of
+       2026-09-13 the writes were failing while the estimate still read
+       comfortable. Every round it names is ALREADY on the server — that is
+       what makes the message safe to give an inspector at a machine. */
+    if(bookFail.size) add("bad",t("rdy_sto_t"),t("rdy_sto_nowrite",{n:bookFail.size}),
+      { label:t("rdy_fix_inv"), run:async()=>{ location.href="recover.html#inventory"; } },"storage_nowrite");
+    else if(!st) add("warn",t("rdy_sto_t"),t("rdy_sto_unknown"),
       { label:t("rdy_fix_retry"), run:async()=>{} },"storage_unknown");
     else if(st.pct>=80 || st.photos<60)
       add("bad",t("rdy_sto_t"),t("rdy_sto_low",{n:st.photos,p:st.pct}),null,"storage");

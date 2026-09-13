@@ -307,6 +307,28 @@ print three photographs where six were taken with nothing on the page saying so
 `rep_nophoto_off` was unreachable — it sat in the branch where there is no
 destination at all.
 
+**A PHONE THAT CANNOT WRITE DOWN WHAT IT SENT SAYS SO, LOUDLY.** Read off a
+handset on 2026-09-13: nineteen rounds "waiting to upload", every one of them
+already complete on the server — checked file by file against the folder, all
+23 rounds that phone held, 18 byte for byte and 5 at the resized size the app
+is designed to send (that phone stored 2–5 MB camera originals and shrank them
+at upload; on 11 and 12 September the manifest and the folder match exactly,
+because those were shrunk at capture). The phone's IndexedDB was refusing
+writes, so `fresh.up = 1` could never be stored, the queue never shrank, and
+every run sent all nineteen again over a pit link. `bookFail` holds the rounds
+whose upload finished and whose bookkeeping failed, and the readiness card
+says it in those words — the count, and that the server has them verified.
+**It does NOT skip the record on the next run**: the retry is also what marks
+the round up the moment the phone can write again, and it re-sends nothing to
+do it, because `sent` already holds every name (`tests/recovery.cjs` §7 caught
+exactly that when the first attempt skipped it). The verdict key is
+`storage_nowrite`, ranked BELOW `queue_recover` and `queue_stalled` and kept
+apart from `storage`: a quota estimate is the browser's opinion and reads
+comfortable while the writes are already failing. The same phone also throws
+`NotFoundError` on photographs the OS has reclaimed, which fails locally in
+under a second — that is the "instant error on pressing Sync", and no request
+was ever made.
+
 **A SUBSCRIPTION THE PUSH SERVICE REFUSES IS RETIRED BY THE END THAT KNOWS.**
 Read off the VM on 2026-09-13: six of seven handsets refused by Apple with
 `BadJwtToken`, two of them since 6 September — every build push, every folder
