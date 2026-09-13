@@ -266,7 +266,7 @@
   async function loadViaIndex(onProgress, opts) {
     const say = (m) => onProgress && onProgress(m);
     let at = opts.full ? 0 : cursor();
-    const recs = [], eds = [], cons = [], defs = [];
+    const recs = [], eds = [], cons = [], defs = [], dels = [];
     let pages = 0, shards = 0;
     for (;;) {
       const r = await api({ action: "index", since: at });
@@ -277,6 +277,7 @@
       (r.edits || []).forEach(x => eds.push(x));
       (r.conflicts || []).forEach(x => cons.push(x));
       (r.deferrals || []).forEach(x => defs.push(x));
+      (r.deleted || []).forEach(x => dels.push(x));
       shards = r.shards || shards;
       if (r.upToDate) { at = r.at || at; break; }
       if (!r.truncated) { at = r.at || at; break; }
@@ -294,8 +295,18 @@
        corrections because they are the same kind of thing: something somebody
        said ABOUT a round, filed beside it rather than inside it. */
     if (defs.length || opts.full) window.CMDash.setDeferrals(defs, { replace: !!opts.full });
+    /* A ROUND THE OFFICE DELETED IS DELETED EVERYWHERE.
+
+       The backend has sent these markers for a year and this loader dropped
+       them on the floor. Only the browser that pressed Delete removed the
+       round locally (dropLocal); a second desk on an incremental cursor kept
+       it in every count, every report and the schedule's "done" for as long
+       as its cache lived. The phone applies the same markers correctly
+       (teamGone), so the pit and the office disagreed about whether a round
+       existed. */
+    if (dels.length) window.CMDash.setDeleted(dels);
     try { localStorage.setItem(LS_CUR, String(at)); } catch (e) {}
-    return { records: recs.length, edits: eds.length, conflicts: cons.length,
+    return { records: recs.length, edits: eds.length, conflicts: cons.length, deleted: dels.length,
              held: window.CMDash.driveCount(), shards, pages, viaIndex: true,
              incremental: !opts.full && pages > 0 };
   }
@@ -357,7 +368,7 @@
     let at = opts.full ? 0 : cursor();
     say(resuming ? "Checking Drive for new inspections…" : "Reading inspections from Drive…");
 
-    const recs = [], eds = [], cons = [], defs = [];
+    const recs = [], eds = [], cons = [], defs = [], dels = [];
     let pages = 0, failed = 0, files = 0, photos = 0, truncated = false, pending = 0;
 
     try {
@@ -369,6 +380,7 @@
         (r.edits || []).forEach(x => eds.push(x));
         (r.conflicts || []).forEach(x => cons.push(x));
         (r.deferrals || []).forEach(x => defs.push(x));
+        (r.deleted || []).forEach(x => dels.push(x));
         (r.index || []).forEach(f => { index[f.name] = { id: f.id, size: f.size }; });
         failed += r.failed || 0;
         files = r.files || files;
@@ -395,6 +407,16 @@
        corrections because they are the same kind of thing: something somebody
        said ABOUT a round, filed beside it rather than inside it. */
     if (defs.length || opts.full) window.CMDash.setDeferrals(defs, { replace: !!opts.full });
+    /* A ROUND THE OFFICE DELETED IS DELETED EVERYWHERE.
+
+       The backend has sent these markers for a year and this loader dropped
+       them on the floor. Only the browser that pressed Delete removed the
+       round locally (dropLocal); a second desk on an incremental cursor kept
+       it in every count, every report and the schedule's "done" for as long
+       as its cache lived. The phone applies the same markers correctly
+       (teamGone), so the pit and the office disagreed about whether a round
+       existed. */
+    if (dels.length) window.CMDash.setDeleted(dels);
     try { localStorage.setItem(LS_CUR, String(at)); } catch (e) {}
     /* A page-0 reply carries the whole listing, but an incremental load that
        fetched nothing new carries none — and the audit needs it either way. */

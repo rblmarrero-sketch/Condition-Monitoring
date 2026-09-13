@@ -36,7 +36,7 @@
        explains itself and offers a retry — because an honest offline page is
        recoverable and a browser error page is not. */
 
-const BUILD = "353";
+const BUILD = "354";
 const CACHE = "plug-capture-v" + BUILD;
 
 /* Without these the app is not an app: no page, no equipment register, no
@@ -108,6 +108,12 @@ const OPTIONAL = [
   "./html2canvas.min.js?v=" + BUILD,
   "./icon-192.png",
   "./icon-512.png",
+  /* The page links them with the build tag (index.html <link rel="icon">);
+     cached under the bare name only, every offline open missed both, fell
+     through to the previous build's copy and started a heal pass for two
+     files that were never going to arrive. */
+  "./icon-192.png?v=" + BUILD,
+  "./icon-512.png?v=" + BUILD,
 ].concat(PHOTOS);
 
 const NET_WAIT = 4000;          // how long a fetch may hold anything up
@@ -144,6 +150,22 @@ async function fetchInto(cache, url, tries) {
       const res = await fetch(new Request(url, { cache: "reload" }), ac ? { signal: ac.signal } : {});
       if (res && res.ok) {
         const buf = await res.arrayBuffer();               // the body, under the same deadline
+        /* THE PAGE THIS CACHE HOLDS MUST BE THIS BUILD'S PAGE — at install as
+           well as on revalidate (keepPage). GitHub Pages propagates file by
+           file: a check in the minutes after a push can find the new sw.js
+           and the new scripts on the edge while index.html is still the old
+           one. Cached unread, the install was "complete", the worker took
+           over, and the reload served the OLD page under the NEW worker — a
+           page whose ?v= tags name a build this cache does not hold, and
+           every later check saw the server at the new number, the page at
+           the old, and nothing left to do. A page that names another build
+           is not cached: the essential is then missing, the install fails
+           when a build is in charge, and the next five-minute check installs
+           afresh once the edge has caught up. */
+        if (/\.\/index\.html$/.test(url)) {
+          const m = new TextDecoder().decode(buf).match(/const BUILD\s*=\s*"([^"]+)"/);
+          if (!m || m[1] !== BUILD) { clearTimeout(timer); console.warn("[sw] index.html on the server is build", m ? m[1] : "?", "not", BUILD); return false; }
+        }
         await cache.put(url, new Response(buf, { status: 200, headers: res.headers }));
         clearTimeout(timer); return true;
       }
@@ -258,7 +280,7 @@ function healSoon() {
 /* The last thing standing between an inspector and a browser error page. It is
    deliberately a whole page with no dependencies: if this needed a stylesheet
    or a script, it would fail exactly when it is needed. */
-function offlinePage() {
+function offlinePage(target) {
   return new Response(
     '<!doctype html><html lang="en"><head><meta charset="utf-8">' +
     '<meta name="viewport" content="width=device-width,initial-scale=1">' +
@@ -275,7 +297,12 @@ function offlinePage() {
     '<p>This screen means the app was still downloading when the connection ' +
     'dropped. It needs <b>signal once</b> to finish, then works offline again.</p>' +
     '<p>Try somewhere with a bar or two, or on camp wifi.</p>' +
-    '<button onclick="location.reload()">Try again</button>' +
+    /* Where "Try again" goes: the page that was asked for, by default a
+       reload. The __incomplete address is the exception — a reload of it is
+       the same request, matched by the same rule, answered by this same
+       page, for ever, however complete the cache has become. Its button
+       goes to the app instead (tests/swfail.cjs). */
+    '<button onclick="' + (target ? "location.replace('" + target + "')" : "location.reload()") + '">Try again</button>' +
     '</body></html>',
     { status: 200, headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" } });
 }
@@ -302,7 +329,7 @@ self.addEventListener("fetch", (e) => {
      background so the next attempt is the real app. */
   if (isDoc && /\/__incomplete$/.test(url.pathname)) {
     healSoon();
-    return e.respondWith(offlinePage());
+    return e.respondWith(offlinePage("./index.html"));
   }
 
   /* ---- a page navigation: cache first, always ------------------------------
@@ -430,10 +457,18 @@ self.addEventListener("fetch", (e) => {
 });
 
 async function revalidate(reqOrUrl) {
+  /* One deadline over the headers AND the body: keepPage reads the whole
+     page to find its build, and a stream that stalls after the headers used
+     to hold this fetch event open past the deadline — the same defect
+     FILE_WAIT closed in fetchInto, on the other path. An abort rejects the
+     pending .text() too. */
+  const ac = (typeof AbortController === "function") ? new AbortController() : null;
+  const timer = setTimeout(() => { try { if (ac) ac.abort(); } catch (_) {} }, 10000);
   try {
-    const res = await withTimeout(fetch(new Request(reqOrUrl, { cache: "reload" })), 10000);
+    const res = await fetch(new Request(reqOrUrl, { cache: "reload" }), ac ? { signal: ac.signal } : {});
     if (res && res.ok) await keepPage(res);
   } catch (_) { /* no network — the cached copy stands, which is the point */ }
+  clearTimeout(timer);
 }
 
 /* THE PAGE IN THIS CACHE MUST BE THE BUILD THIS CACHE IS.

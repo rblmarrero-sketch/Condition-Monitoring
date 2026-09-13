@@ -710,6 +710,9 @@
      from a planner's second report onwards the panel is quoting their own
      computer back to them. */
   const RATE_K = "cm_rpt_secpp", RATE_PP = 22, RATE_MIN = 1, RATE_MAX = 180;
+  /* The quality a report is made at unless the panel says otherwise, and the
+     one the size estimate is calibrated against (~290 kB a page). */
+  const DEF_SCALE = 2.4;
   function rate() {
     let v = 0; try { v = parseFloat(localStorage.getItem(RATE_K) || ""); } catch (e) {}
     return (v >= RATE_MIN && v <= RATE_MAX) ? v : RATE_PP;
@@ -761,8 +764,11 @@
         y += h + gap;
       });
       const photos = (opts && opts.photos === false) ? 0 : holder.querySelectorAll("figure img").length;
-      const sc = Number(opts && opts.scale) || 1.8;
-      const q = Math.pow(sc / 1.8, 1.5) * (opts && opts.jpeg ? 0.8 : 1);
+      /* Measured against the default quality, whatever that is set to: the
+         model said "times the 1.5 power of the ratio to 1.8" while the pages
+         were being made at 2.4, and quoted two thirds of the real size. */
+      const sc = Number(opts && opts.scale) || DEF_SCALE;
+      const q = Math.pow(sc / DEF_SCALE, 1.5) * (opts && opts.jpeg ? 0.9 : 1);
       /* SIZE FOLLOWS THE INK, NOT THE PAPER. Each page is a JPEG of what is on
          it, so a page that is a fifth full costs about a fifth of a full one —
          and a document forced onto a second page by a deliberate break (the
@@ -772,7 +778,7 @@
          the laid-out height over the room a page has, at about 200 kB a page
          at the standard scale. */
       const inkPages = Math.max(0.35, contentPx / roomPx);
-      const bytes = Math.round(inkPages * 200000 * q);
+      const bytes = Math.round(inkPages * 290000 * q);
       const secPp = rate();
       const seconds = Math.max(3, Math.round(pages * secPp + photos * 1.5));
       return { pages, photos, bytes, seconds, secPp, sections: secs.length };
@@ -799,7 +805,7 @@
       const stamp = new Date().toISOString().slice(0, 10);
       const doc = await window.CMR.paginate({
         sections, jsPDF: window.jspdf.jsPDF, html2canvas: window.html2canvas,
-        scale: Number(opts.scale) || 2, jpeg: opts.jpeg, h2c: { useCORS: true },
+        scale: Number(opts.scale) || DEF_SCALE, jpeg: opts.jpeg, h2c: { useCORS: true },
         docId: `CM-${String(target).replace(/[^\w.-]+/g, "_")}-${stamp}`,
         onProgress,
       });

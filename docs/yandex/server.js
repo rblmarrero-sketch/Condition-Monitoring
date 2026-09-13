@@ -216,11 +216,20 @@ if (require.main === module) {
   console.log('push keys: ' + loadVapid(fn));
   startPushTriggers(fn);
   const srv = createServer(fn.handler);
-  /* Longer than the handler's own worst case. A batch of eight photographs
-     over a slow link genuinely takes a while, and Node's default of two
-     minutes would cut an upload that was still working. */
-  srv.headersTimeout = 125000;
-  srv.requestTimeout = 120000;
+  /* LONGER THAN THE PHONE'S OWN CLOCKS. requestTimeout bounds the receipt of
+     the WHOLE body. Node 18's default is 300 s; the previous lines here
+     believed they were lengthening a two-minute default and were shortening
+     it to exactly two minutes — and a two-megabyte batch, or one unshrunk
+     camera original, on the 55 KB/s a phone measured, with three lanes
+     sharing the link, takes longer than that. The server closed the slowest
+     request, the phone reported an error, the other lanes' files had landed,
+     and each press had less left to send until the last file fitted: "press
+     Sync four times and it goes through". The phone allows a POST 900 s
+     outright (UP_CLOCKS.max); this allows more, and the body cap (MAX_BODY)
+     stays the guard against a body that never ends. headersTimeout stays
+     short: the headers are one packet. */
+  srv.headersTimeout = 65000;
+  srv.requestTimeout = 960000;
   srv.listen(PORT, HOST, () => console.log('cm endpoint on ' + HOST + ':' + PORT));
   /* Say goodbye properly, so a deploy does not drop a round mid-upload. */
   for (const sig of ['SIGTERM', 'SIGINT'])

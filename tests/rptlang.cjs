@@ -39,7 +39,14 @@ const alts = h => (h.match(/class="alt[l2i]?"/g) || []).length;
                scales: [...document.querySelectorAll('#rScale option')].map(o => o.value).join(',') }; });
     ok('a Language choice: English, Russian, both — defaulting to the screen\'s language', U.opts === 'en,ru,both' && U.def === 'en', U.opts + ' · ' + U.def);
     ok('  the page no longer promises a forced bilingual sheet', /or both/.test(U.sub) && !/Bilingual/.test(U.sub), U.sub);
-    ok('  and a small-file quality point beside Standard and High', U.scales === '1.8,2.4,1.4', U.scales);
+    /* Read off the page, not held here: Standard moved from 1.8 to 2.4 in
+       build 354 because the page is rasterised and the scale IS the print
+       resolution (105 ppi x scale on A4). What this asserts is the SHAPE —
+       three points, Standard first, High above it, a small-file point below
+       — and that Standard is high enough to print. */
+    const SC = U.scales.split(',').map(Number);
+    ok('  three quality points: Standard, High, small file', SC.length === 3 && SC[1] > SC[0] && SC[2] < SC[0], U.scales);
+    ok('  and Standard is at least 2.4 — 253 ppi on A4, which paper can hold', SC[0] >= 2.4, String(SC[0]));
 
     const S = await p.evaluate(() => {
       const out = {};
@@ -97,12 +104,15 @@ const alts = h => (h.match(/class="alt[l2i]?"/g) || []).length;
     const O = await p.evaluate(() => { const r = {};
       $('rLang').value = 'ru'; $('rLang').dispatchEvent(new Event('change')); r.ru = reportOpts(); r.saved = localStorage.getItem('cm_dash_rlang');
       $('rLang').value = 'both'; $('rLang').dispatchEvent(new Event('change')); r.both = reportOpts();
-      $('rScale').value = '1.4'; r.small = reportOpts(); $('rScale').value = '1.8';
+      r.scales = [...document.querySelectorAll('#rScale option')].map(o => o.value);
+      $('rScale').value = r.scales[2]; r.small = reportOpts(); $('rScale').value = r.scales[0];
       $('rLang').value = 'en'; $('rLang').dispatchEvent(new Event('change'));
       return r; });
     ok('the choice reaches the generator: Russian only', O.ru.lang === 'ru' && O.ru.bi === false && O.saved === 'ru', JSON.stringify({ lang: O.ru.lang, bi: O.ru.bi }));
     ok('  both: the screen\'s language leads, the other follows', O.both.lang === 'en' && O.both.bi === true);
-    ok('  small file: a lower scale and a tighter JPEG', O.small.scale === 1.4 && O.small.jpeg === 0.8, JSON.stringify({ scale: O.small.scale, jpeg: O.small.jpeg }));
+    ok('  small file: a lower scale AND a tighter JPEG than Standard',
+       O.small.scale === Number(O.scales[2]) && O.small.scale < Number(O.scales[0]) && O.small.jpeg > 0 && O.small.jpeg < 1,
+       JSON.stringify({ scale: O.small.scale, jpeg: O.small.jpeg }));
     await p.reload({ waitUntil: 'load' }); await p.waitForTimeout(800);
     ok('  and it is remembered', (await p.evaluate(() => $('rLang').value)) === 'en');
 

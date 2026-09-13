@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=353">
+<link rel="manifest" href="manifest.webmanifest?v=354">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=353">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=353">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=353">
+<link rel="apple-touch-icon" href="icon-192.png?v=354">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=354">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=354">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2475,15 +2475,15 @@ function bootDel(k){ try { localStorage.removeItem(k); } catch (e) {} }
   }
 })();
 </script>
-<script src="native.js?v=353"></script>
-<script src="upload-defaults.js?v=353"></script>
-<script src="hme.js?v=353"></script>
-<script src="mp-fc.js?v=353"></script>
-<script src="hme-cascade.js?v=353"></script>
-<script src="assets.js?v=353"></script>
-<script src="temp-limits.js?v=353"></script>
-<script src="normalize.js?v=353"></script>
-<script src="terms.js?v=353"></script>
+<script src="native.js?v=354"></script>
+<script src="upload-defaults.js?v=354"></script>
+<script src="hme.js?v=354"></script>
+<script src="mp-fc.js?v=354"></script>
+<script src="hme-cascade.js?v=354"></script>
+<script src="assets.js?v=354"></script>
+<script src="temp-limits.js?v=354"></script>
+<script src="normalize.js?v=354"></script>
+<script src="terms.js?v=354"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2502,25 +2502,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=353"></script>
-<script src="edits.js?v=353"></script>
-<script src="due.js?v=353"></script>
-<script src="wear.js?v=353"></script>
-<script src="wear-figs.js?v=353"></script>
-<script src="wear-map.js?v=353"></script>
-<script src="machine-photos.js?v=353"></script>
-<script src="machine-fig.js?v=353"></script>
-<script src="get.js?v=353"></script>
-<script src="points.js?v=353"></script>
-<script src="uc-points.js?v=353"></script>
-<script src="inspect-guide.js?v=353"></script>
-<script src="get-figs.js?v=353"></script>
-<script src="body-points.js?v=353"></script>
-<script src="body-map.js?v=353"></script>
-<script src="lube.js?v=353"></script>
-<script src="lube-overrides.js?v=353"></script>
-<script src="lube2027.js?v=353"></script>
-<script src="report-core.js?v=353"></script>
+<script src="grade.js?v=354"></script>
+<script src="edits.js?v=354"></script>
+<script src="due.js?v=354"></script>
+<script src="wear.js?v=354"></script>
+<script src="wear-figs.js?v=354"></script>
+<script src="wear-map.js?v=354"></script>
+<script src="machine-photos.js?v=354"></script>
+<script src="machine-fig.js?v=354"></script>
+<script src="get.js?v=354"></script>
+<script src="points.js?v=354"></script>
+<script src="uc-points.js?v=354"></script>
+<script src="inspect-guide.js?v=354"></script>
+<script src="get-figs.js?v=354"></script>
+<script src="body-points.js?v=354"></script>
+<script src="body-map.js?v=354"></script>
+<script src="lube.js?v=354"></script>
+<script src="lube-overrides.js?v=354"></script>
+<script src="lube2027.js?v=354"></script>
+<script src="report-core.js?v=354"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -2732,6 +2732,9 @@ const I18N = {
     src_take:"📷 Take one now", src_record:"🎥 Record one now",
     src_gallery:"🖼 Choose from the gallery", src_cancel:"Not now",
     gal_full_t:"Not everything fitted", gal_full_b:"{n} of the files you chose were left out. A position holds up to {p} photographs and one video clip.",
+    gal_odd_t:"Kept, but not in the usual format",
+    gal_odd_b:"{n} photograph(s) could not be converted to the standard format on this phone, so they were kept exactly as they are ({names}). They may not display in the office. Taking the shot with the camera button here always works.",
+    gal_odd_heic:"{n} photograph(s) are in Apple's HEIC format and this phone cannot convert them ({names}). They were kept as they are, but the office may not be able to open them. Either take the shot with the camera button here, or set iPhone Settings \u2192 Camera \u2192 Formats to \u201cMost Compatible\u201d.",
     media_hint:"Up to {p} photos + 1 video (max {s} sec).", media_empty:"No photos yet.",
     media_photo_n:"Photo {n}", media_del:"Remove",
     m_oops_t:"That did not work",
@@ -2812,6 +2815,7 @@ const I18N = {
     rep_nophoto_net:"Photographs could not be fetched from the shared folder, so this sheet has none. The round may still have them.",
     rep_nophoto_off:"This phone is offline, so the photographs in the shared folder could not be put on this sheet. The round may still have them.",
     rep_nophoto_nodrive:"No shared folder is configured on this phone, so any photographs taken on this round are not on this sheet.",
+    rep_nophoto_part:"{n} of {of} photographs could not be fetched from the shared folder, so they are not on this sheet. The round still has them.",
     rep_summary:"Condition summary", rep_attention:"Items needing attention", rep_none_att:"None flagged.",
     rep_item:"Item", rep_grade:"Grade", rep_defect:"Defect", rep_cause:"Direct cause", rep_read:"Readings / comment", rep_photos:"Photos",
     rep_unit:"Unit", rep_type:"Type", rep_date:"Date", rep_sev:"Severity", rep_action:"Action", rep_by_who:"Inspected by", rep_by:"Generated by the Truck Inspection app",
@@ -3336,6 +3340,9 @@ const I18N = {
     src_take:"📷 Снять сейчас", src_record:"🎥 Записать сейчас",
     src_gallery:"🖼 Выбрать из галереи", src_cancel:"Не сейчас",
     gal_full_t:"Поместилось не всё", gal_full_b:"Не добавлено файлов: {n}. На одну позицию — до {p} фотографий и один видеоролик.",
+    gal_odd_t:"Сохранено, но не в обычном формате",
+    gal_odd_b:"Не удалось привести к стандартному формату фотографий: {n} ({names}). Они сохранены как есть; в офисе они могут не открыться. Съёмка кнопкой камеры в приложении работает всегда.",
+    gal_odd_heic:"Фотографий в формате Apple HEIC: {n} ({names}). Этот телефон не может их преобразовать — они сохранены как есть, но в офисе могут не открыться. Снимайте кнопкой камеры в приложении или переключите на iPhone: Настройки \u2192 Камера \u2192 Форматы \u2192 \u00abНаиболее совместимые\u00bb.",
     media_hint:"До {p} фото + 1 видео (макс. {s} сек).", media_empty:"Пока нет фото.",
     media_photo_n:"Фото {n}", media_del:"Удалить",
     m_oops_t:"Не получилось",
@@ -3408,6 +3415,7 @@ const I18N = {
     rep_nophoto_net:"Не удалось загрузить фотографии из общей папки, поэтому их нет на этом листе. В обходе они могут быть.",
     rep_nophoto_off:"Телефон офлайн, поэтому фотографии из общей папки не попали на этот лист. В обходе они могут быть.",
     rep_nophoto_nodrive:"На этом телефоне не настроена общая папка, поэтому фотографии этого обхода на лист не попали.",
+    rep_nophoto_part:"Не удалось загрузить {n} из {of} фотографий из общей папки — их нет на этом листе. В обходе они сохранены.",
     rep_summary:"Сводка по состоянию", rep_attention:"Требуют внимания", rep_none_att:"Не отмечено.",
     rep_item:"Узел", rep_grade:"Степень", rep_defect:"Дефект", rep_cause:"Прямая причина", rep_read:"Показания / комментарий", rep_photos:"Фото",
     rep_unit:"Ед.", rep_type:"Тип", rep_date:"Дата", rep_sev:"Категория", rep_action:"Действие", rep_by_who:"Осмотр выполнил", rep_by:"Сформировано приложением осмотра",
@@ -4985,8 +4993,10 @@ async function takePhoto(){
     const p=curP(); (p.photos ||= []);
     // Shrunk here, once, with the button still disabled — not at sync time, when
     // the inspector has driven away and the link is the thing being waited on.
-    addPos(p, await intake(f), "COMPONENT");
+    const got=await intakeNoted(f);
+    addPos(p, got.att, "COMPONENT");
     renderMedia(); renderChips(); renderGrade();
+    if(got.why) dlg([t("gal_odd_t"), t(got.why==="heic"?"gal_odd_heic":"gal_odd_b",{n:1, names:f.name||""})]);
   } finally { renderMedia(); }                      // re-derives the disabled state
 }
 /* Ask where it comes from. Both buttons ask, and both offer the same two
@@ -5096,6 +5106,7 @@ async function addPicked(picked){
   try{
     const p=curP(); (p.photos ||= []);
     let room=MAX_PHOTOS-p.photos.length, skipped=0, vidSettled=!!p.video;
+    const odd=[];      // files kept, but not brought into the system's own shape
     for(const f of picked){
       const isVid = /^video\//.test(f.type) || (!f.type && /\.(mp4|mov|m4v|3gp|avi|mkv|webm)$/i.test(f.name||""));
       if(isVid){
@@ -5107,13 +5118,25 @@ async function addPicked(picked){
         continue;
       }
       if(room<=0){ skipped++; continue; }
-      /* Shrunk on the way in, exactly like a photograph taken here — a 12 MP
-         frame out of the gallery is the same 4 MB on the link otherwise. */
-      addPos(p, await intake(f), "COMPONENT"); room--;
+      /* Standardised on the way in, exactly like a photograph taken here — a
+         12 MP HEIC out of an iPhone gallery is otherwise 4 MB on the link and
+         a frame the office cannot open. */
+      const got=await intakeNoted(f);
+      addPos(p, got.att, "COMPONENT"); room--;
+      if(got.why) odd.push({name:f.name||"", why:got.why});
     }
     if(!p.photos.length) delete p.photos;
     renderMedia(); renderChips(); renderGrade();
     if(skipped) dlg([t("gal_full_t"), t("gal_full_b",{n:skipped, p:MAX_PHOTOS})]);
+    /* KEPT, AND SAID. The file is in the round either way — nothing here ever
+       discards evidence — but a photograph the phone could not bring into the
+       system's own shape may not display in the office, and the one person who
+       can do something about that is standing in front of the machine. */
+    else if(odd.length){
+      const heic=odd.some(o=>o.why==="heic");
+      dlg([t("gal_odd_t"), t(heic?"gal_odd_heic":"gal_odd_b",{n:odd.length,
+           names:odd.map(o=>o.name).filter(Boolean).slice(0,3).join(", ")})]);
+    }
   } finally { renderMedia(); }
 }
 /* Blob URLs pin the whole photo in memory until revoked. These render functions
@@ -5196,8 +5219,10 @@ async function takeMachinePhoto(cat){
   }
   if(!f) return;                                    // cancelled — not an error
   const p=(draft.positions[GEN_KEY] ||= {});
-  addPos(p, await intake(f), cat);
+  const got=await intakeNoted(f);
+  addPos(p, got.att, cat);
   renderMachinePhotos(); draftFlush();
+  if(got.why) dlg([t("gal_odd_t"), t(got.why==="heic"?"gal_odd_heic":"gal_odd_b",{n:1, names:f.name||""})]);
 }
 function dropMachinePhoto(cat,i){
   const p=draft.positions[GEN_KEY]; if(!p) return;
@@ -7454,10 +7479,7 @@ function renderPickList(q){ q=(q||"").trim(); const ql=q.toLowerCase();
   $("pickList").innerHTML=src.map(o=>`<button class="pickitem" data-k="${esc(o.k)}">${o.group?`<span class="pickgrp">${esc(o.group)}</span>`:""}${o.k==="__custom__"?o.label:esc(o.label)}</button>`).join("")||`<div class="empty-m">—</div>`; }
 function openPicker(mode){ pickMode=mode; $("pickSearch").value=""; $("pickSearch").placeholder=t("pick_search"); renderPickList(""); $("pickOv").classList.remove("hidden"); setTimeout(()=>$("pickSearch").focus(),50); }
 function closePicker(){ $("pickOv").classList.add("hidden"); }
-function updateDefectCauseBtns(){ const p=draft.positions[curItem]||{};
-  $("defectBtn").textContent = p.defect ? defectLabel(p.defect) : t("opt_none");
-  $("causeBtn").disabled = !p.defect;
-  $("causeBtn").textContent = p.cause ? causeLabel(p.cause) : (p.defect ? t("opt_cause_tbd") : t("opt_cause_pick")); }
+/* updateDefectCauseBtns is defined once, above the header fold; a second identical copy lived here until build 354. */
 $("equipBtn").onclick=()=>openPicker("equip");
 $("defectBtn").onclick=()=>{ showAllDefects=false; openPicker("defect"); };
 $("causeBtn").onclick=()=>{ showAllCauses=false; if((draft.positions[curItem]||{}).defect) openPicker("cause"); };
@@ -8220,19 +8242,39 @@ function histSources(){
    with no screen anywhere showing a gap. Somebody has to be told, or that
    round is simply gone while every number on every phone looks healthy. */
 const BAD_KEY="cm_fold_bad";
-function badGet(){
-  try{ const o=JSON.parse(localStorage.getItem(BAD_KEY)||"{}")||{}; return Math.max(0,Number(o.n||0)||0); }
-  catch(e){ return 0; }
+/* NAMES, NOT A RUNNING TOTAL. The count used to be added to on every
+   incremental pull — and an unreadable document sits ON the cursor, so the
+   same one file came back in every five-minute read and the Due screen's
+   "N files could not be read" climbed by one every five minutes: 288 a day
+   for one bad file. A guard that cries wolf is the noise a real failure
+   hides in. The backend now names them (failedKeys); the phone keeps the
+   set and counts its size. A backend that sends only the number is still
+   understood — its figure REPLACES the stored one rather than adding to it,
+   which under-counts a folder read in pages and never over-counts. */
+function badRead(){
+  try{ const o=JSON.parse(localStorage.getItem(BAD_KEY)||"{}")||{};
+       return {n:Math.max(0,Number(o.n||0)||0), keys:Array.isArray(o.keys)?o.keys:null}; }
+  catch(e){ return {n:0, keys:null}; }
 }
-function badSet(n){ lsSet(BAD_KEY,JSON.stringify({n:Math.max(0,Number(n)||0), at:Date.now()})); }
+function badGet(){ const o=badRead(); return o.keys ? o.keys.length : o.n; }
+function badSet(n,keys){ lsSet(BAD_KEY,JSON.stringify({n:Math.max(0,Number(n)||0),
+  ...(keys?{keys:keys.slice(0,500)}:{}), at:Date.now()})); }
 /* A read that covered the WHOLE folder knows the folder's figure and replaces
    what was stored. A read of a slice only ever knows about its own slice, so
    it can add and must not clear — which is why a paged full re-read zeroes the
    tally before its first call and lets the pages accumulate. */
-function badNote(n,whole){
+function badNote(n,whole,keys){
   const v=Math.max(0,Number(n)||0);
-  if(whole) badSet(v);
-  else if(v) badSet(badGet()+v);
+  if(Array.isArray(keys)){
+    /* A complete read is the whole truth about the folder; a page adds its
+       own names to what is already known, and a name already there counts
+       once however many times it is re-read. */
+    const was=whole ? [] : (badRead().keys||[]);
+    const set=[...new Set(was.concat(keys.map(String)))];
+    badSet(set.length, set); return;
+  }
+  if(whole) badSet(v, null);
+  else if(v){ const o=badRead(); if(o.keys) return; badSet(Math.max(o.n,v), null); }
 }
 function dueBad(){ const n=badGet(); return n ? t("due_bad",{n}) : ""; }
 
@@ -9258,8 +9300,19 @@ function renderDue(){
        rather than assumed. Repeating "7 missed" under a pill reading
        "Missed 7" is a line of the sheet spent saying nothing new. */
     note.textContent=[
-      dueType ? t("due_every").replace("{h}",num(DUE.hours(dueType)||0))
-             .replace("{d}",DUE.spec(dueType).d||"") : "",
+      /* THE ROUND'S FIGURE, AND THE CLASSES THAT DIFFER FROM IT. Undercarriage
+         is 1,000 h on a dozer and 4,000 on an excavator; this line printed
+         the round's own number over a list containing both, which is a
+         second interval table told as a sentence. `DUE.byClass` is the one
+         place a differing figure is stated. */
+      dueType ? (()=>{ const base=t("due_every").replace("{h}",num(DUE.hours(dueType)||0))
+                        .replace("{d}",DUE.spec(dueType).d||"");
+                 const per=(DUE.byClass&&DUE.byClass(dueType))||null;
+                 if(!per || !per.length) return base;
+                 const diff=per.filter(x=>Number(x.h)!==Number(DUE.hours(dueType)));
+                 return diff.length
+                   ? base+" ("+diff.map(x=>x.cls+" "+num(x.h)+" h").join(", ")+")"
+                   : base; })() : "",
       t("due_at_rate").replace("{r}",DUE.HOURS_PER_DAY),
       measured ? t("due_basis_own").replace("{n}",measured) : "",
       /* HOW MUCH OF THE FLEET THIS NUMBER IS ABOUT.
@@ -9496,10 +9549,15 @@ async function dueNotDoing(ty,unit){
   dlg.close();
   if(!done) return;
   const by=($("inspector")||{}).value ? $("inspector").value.trim() : "";
+  /* STAMPED TO THE SECOND, because the office's marker is and the two are
+     compared as strings: "2026-09-13T09:00Z" sorts above "2026-09-13", so a
+     planner's statement made at nine in the morning beat an inspector's made
+     at two in the afternoon, and the later one vanished without a word. */
+  const at=new Date().toISOString();
   if(done.until==="off"){
-    deferPut(ty,u,{until:null, why:done.why, by, at:todayISO()});
+    deferPut(ty,u,{until:null, why:done.why, by, at});
   }else{
-    deferPut(ty,u,{until:DUE.shift(todayISO(),Number(done.until)), why:done.why, by, at:todayISO()});
+    deferPut(ty,u,{until:DUE.shift(todayISO(),Number(done.until)), why:done.why, by, at});
   }
   renderDue();
 }
@@ -9539,11 +9597,18 @@ function cfMerge(list, complete){
   const seen=Object.create(null);
   for(const c of (list||[])){
     if(!c || !c.key) continue;
-    seen[c.key]=1;
-    const cur=have[c.key];
+    /* NORMALISED LIKE EVERY OTHER MARKER. The key comes off a filename, so
+       its case is the folder's; cfKey builds its side from rows that have
+       been through teamType/teamDate. A clash on `tk151_…_insp.json` was
+       counted on the badge and then hidden from the list behind it — the
+       same lie as a blank where a reading should be, told the other way. */
+    const p=String(c.key).split("|");
+    const k=p.length===3 ? (p[0].toUpperCase()+"|"+teamDate(p[1])+"|"+teamType(p[2])) : c.key;
+    seen[k]=1;
+    const cur=have[k];
     if(cur && String(c.at||"")<String(cur.at||"")) continue;   // a stale marker must not re-open a decision
-    if(c.resolved){ if(cur){ delete have[c.key]; touched=true; } }
-    else { have[c.key]={at:c.at||""}; touched=true; }
+    if(c.resolved){ if(cur){ delete have[k]; touched=true; } }
+    else { have[k]={at:c.at||""}; touched=true; }
   }
   /* A listing that read the WHOLE folder is also a statement about what is not
      in it. The office settles a clash by stamping the marker, so a settled one
@@ -9777,6 +9842,7 @@ function teamEditsStore(eds){
 async function teamReapply(keys){
   if(!keys || !keys.length) return 0;
   const have=new Map(teamAll().map(x=>[teamKey(x),x])); let n=0, fetched=0;
+  const moved=[];        // machines a round was re-filed AWAY from
   const g=loadDests().find(d=>d.id==="gas" && d.url);
   for(const k of keys){
     /* A withdrawn round is teamVoid()'s to remove, not this pass's to put
@@ -9791,14 +9857,55 @@ async function teamReapply(keys){
        records): fetch it, a few per pull, so the correction can be read over
        it. The marker is kept either way and applies the moment the round is
        opened or arrives. */
-    if(!rec && g && fetched<8 && have.has(k)){
+    /* A ROUND PUT BACK IS A ROUND TO FETCH. teamVoid removed the row when the
+       office withdrew it, so `have.has(k)` was false for exactly the case
+       this pass exists to undo — the round stayed withdrawn on the phone, and
+       the machine stayed due, until somebody reloaded the whole folder. */
+    if(!rec && g && fetched<8 && (have.has(k) || e.void===false)){
       fetched++;
       try{ await teamFetchOne(g, `${p[1]}|${p[2]}|${p[0]}`); }catch(e){}
       try{ rec=await dbGet(fid); }catch(e){}
     }
     if(!rec) continue;
+    const applied=teamApplied(rec);
     const row=teamRow(rec); if(!row.u||!row.d) continue;
+    /* A RE-FILE MOVES A ROUND; IT DOES NOT COPY IT. `_wasKey` is the identity
+       the round arrived with, and until build 354 nothing on the phone read
+       it: the corrected round was added under its new key and the old row
+       stayed, so both machines showed a round walked, the old one kept its
+       last-done date and stayed off the due list, and the office — which does
+       read `_wasKey` — said the opposite. The old row goes, and the old
+       machine's last-done is recomputed exactly as a deletion does it. */
+    if(applied && applied._moved && applied._wasKey){
+      const w=String(applied._wasKey).split("|");
+      if(w.length===3){
+        const ou=w[0].toUpperCase(), od=teamDate(w[1]), oty=teamType(w[2]);
+        if(!(ou===row.u && od===row.d && oty===row.t)){
+          for(const [k2,r2] of [...have]) if(r2.u===ou && r2.d===od && r2.t===oty) have.delete(k2);
+          moved.push({u:ou, d:od, t:oty});
+        }
+      }
+    }
     have.set(teamKey(row), row); n++;
+  }
+  /* The last-done date of the machine a round was moved AWAY from. Only where
+     that round was the one the due list was running on — the same rule, and
+     the same reason, as teamGone. */
+  if(moved.length){
+    const h=histAll(); let touched=false;
+    for(const m of moved){
+      const hk=m.t+"|"+m.u, cur=histEntry(h[hk]);
+      if(!cur || cur.d!==m.d) continue;
+      const rest=[...have.values()].filter(x=>x.t===m.t && x.u===m.u)
+                  .sort((a,b)=>String(a.d).localeCompare(String(b.d)));
+      if(rest.length){ const w=rest[rest.length-1]; const e2={d:w.d, s:"f"};
+        const hv=(w.s!=null&&w.s!=="")?Number(w.s):null;
+        if(hv!=null && isFinite(hv)) e2.h=hv;
+        h[hk]=e2; }
+      else delete h[hk];
+      touched=true;
+    }
+    if(touched){ histSave(h); histStamp(Object.keys(h).length); }
   }
   if(n) teamSave([...have.values()]);
   return n;
@@ -9941,7 +10048,11 @@ function teamGone(dels){
    anyway, because "unbounded on someone else's upload rate" is how a phone
    fills up in a month. */
 const TEAM_KEEP=250;
-const teamFullId=r=>TEAM_ID+(r.equip||"").toUpperCase()+"|"+(r.date||"")+"|"+(r.type||"");
+/* The SAME three rules the lookups use. It stashed under the raw date and
+   type and every reader asked for the normalised ones, so an odd-shaped
+   sidecar was fetched, written, and then missed on the very next line —
+   "that round is gone" for a round just downloaded. */
+const teamFullId=r=>TEAM_ID+(r.equip||"").toUpperCase()+"|"+teamDate(r.date)+"|"+teamType(r.type);
 /* The round somebody is waiting on, if any. Trimming keeps the newest, and a
    round being opened is by definition one the phone did not have — often an old
    one. Without this it would be written and deleted inside the same call, and
@@ -10278,7 +10389,7 @@ async function teamPull(manual,full,from,pre){
     /* What the folder holds and could not send. Not a network problem and not
        this phone's problem, and the only end that can see it is this one. */
     teamFailed = Number(j.failed||0)||0;
-    badNote(teamFailed, teamLastComplete);
+    badNote(teamFailed, teamLastComplete, Array.isArray(j.failedKeys)?j.failedKeys:null);
     /* WHAT THE FOLDER HOLDS, AS OPPOSED TO WHAT THIS PHONE HOLDS.
 
        Four builds have been spent asking why two copies of this app disagree,
@@ -10626,13 +10737,19 @@ async function teamPhotosFor(g,rec,say){
   /* In the order they were taken, not the order the folder listed them. */
   hits.sort((a,b)=>a.key===b.key ? a.n-b.n : String(a.key).localeCompare(String(b.key)));
   const out={};
+  /* WHAT WAS ASKED FOR AND WHAT ARRIVED. The loop breaks on the deadline and
+     returns early on a dead reply, and both used to hand back a partial set
+     that printed as a complete sheet: three photographs where six were taken,
+     and nothing on the page saying so. The counts go back with the pictures
+     and the caller says the difference out loud. */
+  out.__asked=hits.length; out.__got=0;
   for(let i=0;i<hits.length;i+=MEDIA_BATCH){
     const part=hits.slice(i,i+MEDIA_BATCH);
     if(say) say(i,hits.length);
     /* Out of time: print what arrived rather than keep somebody waiting. */
     if(Date.now()>until) break;
     const r=await teamAsk(g,{action:"files",ids:part.map(x=>x.id).join(",")},left());
-    if(!r) return Object.keys(out).length ? out : null;
+    if(!r) return out.__got ? out : null;
     for(const f of (r.files||[])){
       if(!f || f.ok===false || !f.data) continue;
       const meta=part.find(x=>x.id===f.id); if(!meta) continue;
@@ -10644,7 +10761,7 @@ async function teamPhotosFor(g,rec,say){
          left the position carrying an empty list — a position that says it
          has photographs and has none. */
       try{ const th=await blobToThumb(b64Blob(f.data,f.mime),THUMB_PX);
-           (out[meta.key] ||= []).push(th); }catch(e){}
+           (out[meta.key] ||= []).push(th); out.__got++; }catch(e){}
     }
   }
   if(say) say(hits.length,hits.length);
@@ -11453,7 +11570,15 @@ function fileName(equip,item,date,ext,suffix,isComp){
    standard and every sweep that reads it. */
 function genFileName(equip,cat,date,ext,suffix){
   return `${equip}_${cat||"MACHINE"}_${ddmmyyyy(date)}_${suffix}.${ext}`; }
-function extOf(blob){ const t=(blob.type||"").toLowerCase(); if(t.includes("png"))return"png"; if(t.includes("webp"))return"webp"; return "jpg"; }
+/* The name has to match the bytes. It returned "jpg" for anything it did not
+   recognise, so a HEIC the phone could not convert was filed as IMG.jpg — and
+   the office, the report and every browser showed a broken frame for a file
+   that was perfectly intact. */
+function extOf(blob){ const t=(blob.type||"").toLowerCase();
+  if(t.includes("png"))return"png"; if(t.includes("webp"))return"webp";
+  if(t.includes("heif"))return"heif"; if(t.includes("heic"))return"heic";
+  if(t.includes("avif"))return"avif"; if(t.includes("gif"))return"gif";
+  return "jpg"; }
 /* ONE PHOTOGRAPH THIS PHONE CANNOT READ MUST NOT COST THE OTHER FORTY-ONE.
 
    The ZIP read every photograph with a bare arrayBuffer(), so the first one
@@ -11669,7 +11794,9 @@ function itemLabelFor(rec,k){
    called "distorted": a 248 px frame on the sheet is rasterised at 1.8×, so
    the source has to hold at least ~450 px across, and a plug close-up needs
    the detail on top of that. 900 px at 0.8 is about 120 KB a photograph. */
-const THUMB_PX=900, THUMB_Q=0.8;
+/* The report's own figures, read off report-core so the phone and the office
+   put the same picture on the same page (CMR.PHOTO_PX / PHOTO_Q). */
+const THUMB_PX=(window.CMR&&CMR.PHOTO_PX)||900, THUMB_Q=(window.CMR&&CMR.PHOTO_Q)||0.86;
 async function blobToThumb(blob,max){
   const url=URL.createObjectURL(blob);
   try{
@@ -12020,7 +12147,10 @@ async function rptRecords(onlyId){
 
    The dashboard is untouched and keeps its Standard/High selector: High is
    the office's to choose. */
-const PHONE_PDF = { scale: 1.8, jpeg: 0.82 };
+/* The phone makes the same document the office does, so it rasterises it at
+   the same resolution: 2.4 is 253 ppi on A4 where 1.8 was 190, and the cost is
+   file size, not time (see the office's Quality control). */
+const PHONE_PDF = { scale: 2.4, jpeg: 0.86 };
 
 /* ===================== a round somebody else uploaded =====================
 
@@ -12114,6 +12244,7 @@ function teamRecToReport(rec){
 function attachTeamPhotos(norm, rec, got){
   if(!norm || !got) return;
   Object.keys(got).forEach(k=>{
+    if(k.slice(0,2)==="__") return;            // the counts teamPhotosFor rides back on
     const ph=got[k];
     if(!ph || !ph.length) return;
     let it=(norm.items||[]).find(x=>x.key===k);
@@ -12214,9 +12345,24 @@ $("roundRpt").onclick=async ()=>{
         got=await teamPhotosFor(gas, rec,
           (i,n)=>{ const el=$("dlgMsg"); if(el) el.textContent=t("rep_photo",{i:Math.min(i+1,n),n}); });
       }catch(e){ got=null; }
-      if(got) attachTeamPhotos(norm, rec, got);
-      else addNote(norm,"rep_nophoto_net");
-    } else addNote(norm, gas ? "rep_nophoto_off" : "rep_nophoto_nodrive");
+      if(got){
+        attachTeamPhotos(norm, rec, got);
+        /* SOME OF THEM IS NOT ALL OF THEM. A deadline that expired mid-fetch,
+           or a batch that came back dead after an earlier one had landed,
+           leaves a sheet with part of the evidence on it — which reads as the
+           whole of it. Said on the sheet, and recorded as an evidence gap so
+           the document's own status can see it. */
+        const asked=Number(got.__asked||0), gotN=Number(got.__got||0);
+        if(asked>gotN){
+          addNote(norm,"rep_nophoto_part",{n:asked-gotN, of:asked});
+          norm.gap={expected:asked, received:gotN, missing:asked-gotN};
+        }
+      }
+      /* Offline is a different sentence from "the folder would not answer",
+         and until build 354 it could never be reached: it sat in the branch
+         where there is no destination at all. */
+      else addNote(norm, navigator.onLine ? "rep_nophoto_net" : "rep_nophoto_off");
+    } else addNote(norm, "rep_nophoto_nodrive");
     $("dlgMsg").textContent=t("rep_building")[1];
     const doc=await CMR.paginate({
       sections:withRepLang(()=>CMR.sections(repSpec({ mode:"unit", records:[norm] }))),
@@ -12487,7 +12633,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="353";
+const BUILD="354";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -12900,15 +13046,114 @@ async function sha256Of(blob){
   try{ if(!(blob&&blob.arrayBuffer)) return ""; return await sha256Hex(await blob.arrayBuffer()); }
   catch(e){ return ""; }
 }
-async function intake(blob){
-  const px=photoPx();
-  let out=blob;
-  if(px && blob && isPhotoType(blob.type) && blob.size>SHRINK_SKIP_BYTES){
-    try{ out=await shrinkImage(blob,px); }catch(e){ out=blob; }
-  }
-  /* Named AFTER any shrink, so the id belongs to the bytes that are kept. */
-  return attWrap(out);
+/* WHAT THE FILE ACTUALLY IS, not what the picker said it is.
+
+   A photograph taken with the app's own camera button arrives as a
+   well-formed image/jpeg. One chosen out of the gallery does not always: some
+   Android file managers hand over an empty `type`, some hand over
+   application/octet-stream, and an iPhone gallery hands over image/heic
+   whenever the camera is set to "High Efficiency" rather than "Most
+   Compatible". Every one of those failed `isPhotoType`, skipped the shrink,
+   and went into the queue as the camera's own 3-12 MB frame — which is the
+   slow upload, and in the HEIC case a file the office cannot display at all
+   while its name says .jpg.
+
+   So the bytes are asked. Sixteen bytes is enough to tell a JPEG from a PNG
+   from a WebP from a HEIC container, and it costs nothing next to the decode
+   that follows. */
+async function sniffType(blob){
+  try{
+    const b=new Uint8Array(await blob.slice(0,16).arrayBuffer());
+    if(b.length<12) return "";
+    if(b[0]===0xFF && b[1]===0xD8) return "image/jpeg";
+    if(b[0]===0x89 && b[1]===0x50 && b[2]===0x4E && b[3]===0x47) return "image/png";
+    const asc=(i,n)=>String.fromCharCode.apply(null,b.subarray(i,i+n));
+    if(asc(0,4)==="RIFF" && asc(8,4)==="WEBP") return "image/webp";
+    if(asc(4,4)==="ftyp"){
+      const br=asc(8,4).toLowerCase();
+      if(/^(heic|heix|hevc|hevx|mif1|msf1|heim|heis|avif|avis)/.test(br)) return "image/heic";
+      return "video/mp4";
+    }
+    if(b[0]===0x47 && b[1]===0x49 && b[2]===0x46) return "image/gif";
+  }catch(e){}
+  return "";
 }
+/* ONE SHAPE GOES INTO THE SYSTEM, whatever shape came out of the gallery.
+
+   Every photograph is re-encoded to JPEG at the size setting, so a 12 MP
+   HEIC off an iPhone, a 40 MP PNG screenshot and a frame from the app's own
+   camera are the same kind of file by the time they reach the queue, the
+   report and the folder. The original on the phone's own camera roll is
+   untouched — this is a copy.
+
+   Returns {blob, why}: `why` is set only when the file could NOT be brought
+   into that shape, and then the caller says so rather than filing a
+   photograph nothing downstream can open. */
+async function standardise(blob){
+  const px=photoPx();
+  let type=String(blob.type||"").toLowerCase();
+  if(!isPhotoType(type) && !/^video\//.test(type)) type=(await sniffType(blob))||type;
+  if(/^video\//.test(type)) return {blob};
+  if(!isPhotoType(type)) return {blob, why:"type", type};
+  /* Re-typed to what the bytes say, so the name the attachment is given tells
+     the truth about them even when the conversion below cannot run. */
+  if(type!==String(blob.type||"").toLowerCase()){
+    try{ blob=new File([blob], blob.name||"photo", {type}); }catch(e){}
+  }
+  if(!px) return {blob};                     // "Original" — somebody chose it on purpose
+  /* NO BYTE DOOR HERE. maybeShrink skips a small file without opening it
+     because it runs over every attachment of every queued round; this runs
+     once, on a file a person just picked, and bytes are the wrong question:
+     a well-exposed 12 MP frame can compress to 200 KB and still be 4000 px
+     across, which the report then has to scale down on every page and the
+     office has to hold whole in memory. The frame is opened, and reencode
+     hands the original straight back when there is genuinely nothing to do. */
+  let out;
+  try{ out=await reencode(blob, px); }
+  catch(e){
+    /* A HEIC on a browser whose decoder will not take it — Android, and every
+       desktop but Safari. The file is kept (never discard evidence) but it is
+       NOT passed off as a JPEG, and the inspector is told what to change. */
+    return {blob, why:(type==="image/heic"?"heic":"decode")};
+  }
+  return {blob:out};
+}
+/* Decode, scale to the long-side limit, re-encode as JPEG. Unlike shrinkImage
+   this re-encodes even when the frame is already small enough, because the
+   point here is the FORMAT as much as the size. */
+async function reencode(blob,max){
+  const bmp=await decodeImage(blob);
+  const W=bmp.naturalWidth||bmp.width, H=bmp.naturalHeight||bmp.height;
+  if(!W || !H){ bmp.close&&bmp.close(); throw new Error("image did not decode"); }
+  /* Already exactly what the system asks for: a JPEG inside the size limit.
+     Re-encoding it would only lose a generation of quality for nothing. */
+  if(/jpe?g/i.test(String(blob.type||"")) && Math.max(W,H)<=max){ bmp.close&&bmp.close(); return blob; }
+  const big=Math.max(W,H), s=big>max?max/big:1;
+  const w=Math.max(1,Math.round(W*s)), h=Math.max(1,Math.round(H*s));
+  const c=document.createElement("canvas"); c.width=w; c.height=h;
+  c.getContext("2d").drawImage(bmp,0,0,w,h); bmp.close&&bmp.close();
+  const out=await new Promise(r=>c.toBlob(r,"image/jpeg",PHOTO_Q));
+  if(!out || !out.size) throw new Error("image did not re-encode");
+  /* A JPEG that came out BIGGER than the original is a JPEG worth throwing
+     away — unless the original was not a JPEG, in which case the whole point
+     was the format and the extra bytes are the price. */
+  const wasJpeg=/jpe?g/i.test(String(blob.type||""));
+  return (wasJpeg && out.size>=blob.size) ? blob : out;
+}
+/* Named AFTER any re-encode, so the id and the extension belong to the bytes
+   that are kept — a HEIC filed as ".jpg" is a photograph the office shows as
+   a broken frame.
+
+   Two doors on purpose. `intake` returns the attachment and is what most of
+   the app (and every suite written before build 354) calls; `intakeNoted`
+   returns the same attachment with the reason it could not be brought into
+   the system's shape, for the three places that put a person in front of a
+   dialog about it. One implementation under both. */
+async function intakeNoted(blob){
+  const r=await standardise(blob);
+  return { att:attWrap(r.blob), why:r.why||"" };
+}
+async function intake(blob){ return (await intakeNoted(blob)).att; }
 /* Shrink camera photos before upload — the single biggest lever on upload time.
    Skipped for the signature PNG and for anything already smaller than the limit. */
 /* The frame, decoded. createImageBitmap first; when it refuses — and on the
@@ -12991,6 +13236,7 @@ function uploadLanes(){
    a link that drops this often that has to stay small; four is about thirteen
    seconds on the link they actually have, well inside the timeout. */
 const BATCH_MAX_FILES=4, BATCH_MAX_BYTES=2*1024*1024;
+const LANE_SOLO_BYTES=1024*1024;   // a chunk above this goes up alone — see putAll
 
 /* Whether this endpoint understands a batch, asked once and remembered.
 
@@ -13105,7 +13351,7 @@ async function putBatch(UP, files, rec, sent){
   catch(e){ slog("batch-fail", {n:built.length, bytes:bbytes, ms:Date.now()-t0, sentAll:!!e.sentAll, err:String((e&&e.message)||e).slice(0,160)});
     const bad=new Set(unreadable.map(u=>u.name));
     const want=files.filter(f=>!bad.has(f.name)).map(f=>({name:f.name, size:f.blob&&f.blob.size}));
-    if(await landedAnyway(UP, folder, want, e)){
+    if(await landedAnyway(UP, folder, want, e, t0)){
       want.forEach(w=>sentMark(sent,w.name));
       if(unreadable.length) throw unreadableErr();
       return;
@@ -13136,17 +13382,25 @@ async function putBatch(UP, files, rec, sent){
   if(j.ok===false) throw new Error(j.error||"Apps Script rejected the upload");
   /* Mark by the name we ASKED for. Drive may hold it under another when a
      second phone already owns that name. */
-  (j.saved||[]).forEach(x=>{ if(x&&(x.req||x.name)) sentMark(sent,x.req||x.name);
-    if(x && x.req && x.name && x.name!==x.req && STORED) STORED[x.req]=x.name;
+  const bad=(j.failed||[]).slice();
+  (j.saved||[]).forEach(x=>{ const nm=x&&(x.req||x.name); if(!nm) return;
     /* A backend that issues receipts hands one back per file. One that does
        not simply leaves this empty, and the evidence ladder stays where it
        was — nothing here demands a receipt in order to work. */
-    if(x && x.receipt && RCPT) RCPT[x.req||x.name]=x.receipt; });
-  const bad=(j.failed||[]);
-  /* Some landed and some did not: the ones that did are marked, the rest come
-     round again on the next attempt. Only raise it if the whole batch was
-     refused, since that is the case that says something is actually wrong. */
-  if(bad.length && bad.length===built.length) throw new Error(bad[0].error||"batch refused");
+    if(x.receipt && RCPT) RCPT[nm]=x.receipt;
+    /* THE STORE SAID IT COULD NOT VERIFY WHAT IT KEPT. That is not a
+       delivery: the file is not marked sent, so it goes again, and the
+       server re-writes an object whose read-back failed (function.js). */
+    if(x.receipt && x.receipt.verified===false){ bad.push({name:nm, error:x.receipt.error||"the store could not verify what it kept"}); return; }
+    sentMark(sent,nm);
+    if(x.req && x.name && x.name!==x.req && STORED) STORED[x.req]=x.name; });
+  /* SOME LANDED AND SOME DID NOT: the ones that did are marked and the rest
+     are raised. Until build 354 a batch with one failed file returned as if
+     whole — the lane took it as done, the round went up:1 with a photograph
+     never sent, and the read-back was its only rescue, once. The names that
+     landed are in `sent`, so the retry the lane makes (one file at a time)
+     costs only the file that failed. */
+  if(bad.length) throw new Error(bad[0].error||"batch refused");
   /* Everything readable is sent and accounted for above; a file that never
      made it into `built` still has to be SAID, not folded into a silent
      success — the round is not fully up while a photo it once had is gone
@@ -13196,7 +13450,9 @@ const CONF_RESEND_MAX=5;          // re-sends of a missing file per revision bef
 function confEverWorked(){
   try{ return localStorage.getItem(CONF_WORKS)==="1"; }catch(e){ return false; }
 }
-async function serverNames(dest, folder){
+/* The folder's listing as the server gave it — name, size, updated — for the
+   readers that need more than a size (landedAnyway reads `updated`). */
+async function serverList(dest, folder){
   const u=new URL(dest.url);
   u.searchParams.set("action","list");
   if(folder) u.searchParams.set("folder", folder);
@@ -13205,6 +13461,11 @@ async function serverNames(dest, folder){
   if(!r.ok) throw new Error(await httpErr(r));
   const j=JSON.parse(await r.text());
   if(!j || j.ok===false) throw new Error((j&&j.error)||"list refused");
+  if(!Array.isArray(j.files)) throw new Error("list gave no files");
+  return j.files.filter(f=>f&&f.name);
+}
+async function serverNames(dest, folder){
+  const j={files: await serverList(dest, folder)};
   /* A reply with no `files` array is not a listing — it is a backend that
      answered something else ({ok:true} from an endpoint without the action,
      an older deployment, a proxy page). Read as an empty folder it said
@@ -13465,25 +13726,18 @@ async function putAll(dest, files, rec, sent){
       failed=failed||e; fatal=fatal||e;
     }
   } };
-  await Promise.all(Array.from({length:Math.min(uploadLanes(),jobs.length)},lane));
+  /* A BIG BODY HAS THE LINK TO ITSELF. Three lanes of two-megabyte chunks on
+     the 55 KB/s a phone measured is a hundred seconds each, all three racing
+     the same server deadline; one at a time each is thirty-five. On a good
+     link the difference is a second. */
+  const big=!!(chunks && chunks.some(c=>c.reduce((s,f)=>s+((f.blob&&f.blob.size)||0),0)>LANE_SOLO_BYTES));
+  await Promise.all(Array.from({length:Math.min(big?1:uploadLanes(),jobs.length)},lane));
   /* A real failure outranks a dead photograph when both happened. Throwing
      whichever came first would let a dead photo — which is exempt from the
      three-strikes breaker precisely because it says nothing about the link
      — stand in for a link that has actually gone, and the queue would keep
      walking the rest of the shift into a hole it had already found. */
   if(fatal||failed) throw fatal||failed;
-}
-async function putFile(name, blob, type){
-  const dests=activeDests();
-  if(!dests.length) throw new Error("upload not configured");
-  blob=await maybeShrink(blob,name);
-  const errs=[];
-  for(const d of dests){
-    try{ await putOne(d,name,blob,type); }
-    catch(e){ errs.push(destWhere(d)+": "+(e.message||e)); }
-  }
-  if(errs.length) throw new Error(errs.join(" · "));
-  return true;
 }
 /* fetch() has no timeout. On a signal that connects and then delivers nothing —
    the pit's normal state — an upload could sit open indefinitely, leaving
@@ -13519,7 +13773,7 @@ const t_up_timeout=()=>t("up_timeout");
 /* One object, so a suite can shorten the clocks on the running page instead
    of keeping a copy of them (tests/replylost.cjs sets reply to seconds). */
 const UP_CLOCKS={ idle:45000, reply:180000, max:900000 };
-const UP_IDLE=UP_CLOCKS.idle, UP_REPLY=UP_CLOCKS.reply, UP_MAX=UP_CLOCKS.max;
+/* The three clocks are read off UP_CLOCKS (tests shorten them there). */
 function postT(url, body, idle, max, reply){
   if(typeof XMLHttpRequest==="undefined")
     return fetchT(url,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body}, max||UP_CLOCKS.max);
@@ -13565,19 +13819,37 @@ function postT(url, body, idle, max, reply){
    invented — the read-back that follows every run lists the folder again
    and the row reads "confirmed", not "verified" — and a file that is not
    there, or not at that length, fails exactly as before. */
-async function landedAnyway(UP, folder, want, err){
+const LANDED_SKEW=10*60*1000;     // how far a phone's clock may run ahead of the server's
+async function landedAnyway(UP, folder, want, err, since){
   /* Not gated on the browser's own "upload complete" flag: when the server
      drops the socket the moment the body is in, Chromium reports the error
      before it reports the upload finished, so the flag is false for exactly
      the case this exists for. A listing is one small GET; it is asked for
      every request failure that was not a photograph this phone could not
-     read, and the folder — not the flag — is the evidence. */
+     read, and the folder — not the flag — is the evidence.
+
+     THE SAME NAME AT THE SAME LENGTH IS NOT THE SAME FILE. An edited round
+     re-sends its sidecar, and a sidecar with a grade changed and its
+     revision bumped is very often the same number of bytes as the one the
+     folder already holds — so a lost reply on the re-send found "the file"
+     and the edit was marked sent, never sent, and read back as confirmed.
+     A file counts as landed only when the folder's copy was written since
+     this request began (the listing's `updated`, with LANDED_SKEW for a
+     phone clock that runs ahead). A listing without `updated` says nothing
+     about when and is read as before. */
   if(!err || err.localRead || !listCapable(UP) || !want.length) return false;
-  let have; const t0=Date.now();
-  try{ have=await serverNames(UP, folder); }
+  let files; const t0=Date.now(), from=(since||t0)-LANDED_SKEW;
+  try{ files=await serverList(UP, folder); }
   catch(e){ slog("reply-lost", {folder, n:want.length, landed:null, sentAll:!!err.sentAll, ms:Date.now()-t0, err:String((e&&e.message)||e).slice(0,100)}); return false; }
-  const ok=want.every(w=>{ const s=have.get(w.name); return s!=null && (w.size==null || Number(s)===Number(w.size)); });
-  slog("reply-lost", {folder, n:want.length, landed:ok, sentAll:!!err.sentAll, ms:Date.now()-t0, err:String((err&&err.message)||err).slice(0,100)});
+  const have=new Map(files.map(f=>[String(f.name), f]));
+  let stale=0;
+  const ok=want.every(w=>{ const f=have.get(w.name); if(!f) return false;
+    const s=(f.size==null||f.size==="")?null:Number(f.size);
+    if(s==null || (w.size!=null && s!==Number(w.size))) return false;
+    const u=f.updated?Date.parse(f.updated):NaN;
+    if(isFinite(u) && u<from){ stale++; return false; }
+    return true; });
+  slog("reply-lost", {folder, n:want.length, landed:ok, stale, sentAll:!!err.sentAll, ms:Date.now()-t0, err:String((err&&err.message)||err).slice(0,100)});
   return ok;
 }
 async function putOne(UP, name, blob, type, ctx, aid){
@@ -13602,7 +13874,7 @@ async function putOne(UP, name, blob, type, ctx, aid){
     let r;
     try{ r=await postT(UP.url, JSON.stringify(body)); }
     catch(e){ slog("one-fail", {name, bytes:blob&&blob.size, ms:Date.now()-t0, sentAll:!!e.sentAll, err:String((e&&e.message)||e).slice(0,160)});
-      if(await landedAnyway(UP, folder, [{name, size:blob&&blob.size}], e)) return true;
+      if(await landedAnyway(UP, folder, [{name, size:blob&&blob.size}], e, t0)) return true;
       throw e; }
     if(!r.ok){ const he=await httpErr(r); slog("one-http", {name, bytes:blob&&blob.size, ms:Date.now()-t0, status:r.status, err:he.slice(0,160)}); throw new Error(he); }
     let j=null; try{ j=JSON.parse(await r.text()); }catch(e){}
@@ -13610,6 +13882,8 @@ async function putOne(UP, name, blob, type, ctx, aid){
     if(!j){ slog("one-nojson", {name, ms:Date.now()-t0, status:r.status}); throw new Error("Unexpected reply — check the deployment is set to “Anyone”."); }
     slog("one-ok", {name, bytes:blob&&blob.size, ms:Date.now()-t0, stored:j.name||"", dup:!!(j.receipt&&j.receipt.duplicate), verified:j.receipt?j.receipt.verified:null});
     if(j.receipt && RCPT) RCPT[name]=j.receipt;
+    /* The store could not verify what it kept: not a delivery (see putBatch). */
+    if(j.receipt && j.receipt.verified===false) throw new Error(j.receipt.error||"the store could not verify what it kept");
     if(j.name && j.name!==name && STORED) STORED[name]=j.name;
     return true;
   }
@@ -14021,8 +14295,15 @@ let RCPT=null;
    file is re-sent — sends it again to be filed under the variant again,
    five times over. Requested name → stored name, per record, per run. */
 let STORED=null;
+/* A press while a run is on the wire is kept, not dropped: the run it
+   collided with was most often the retry clock's (twenty seconds after the
+   error the inspector is reading), and a press that did nothing looked
+   exactly like a press that failed. The run that is in flight finishes and
+   one more starts. */
+let pressPending=false;
 async function syncNow(manual){
-  if(syncing) return; if(!UP.on){ renderSync(); return; }
+  if(syncing){ if(manual){ pressPending=true; slog("press-queued",{}); } return; }
+  if(!UP.on){ renderSync(); return; }
   /* No navigator.onLine gate: a flag stuck at false would have kept every
      round on this phone for ever. A send with no network fails at once and
      the retry clock backs off; the pill still reads "Offline" off the flag. */
@@ -14256,6 +14537,7 @@ async function syncNow(manual){
     // Whatever this phone just pushed, someone else has pushed something too.
     // One request, and it keeps the due list honest across the whole team.
     teamPull(false);
+    if(pressPending){ pressPending=false; setTimeout(()=>syncNow(true),0); }
   }
 }
 
@@ -15388,6 +15670,17 @@ if("serviceWorker" in navigator && window.isSecureContext){ let reloaded=false;
          with a retry running in the background is still not the one this
          clock is timing. */
       if(typeof syncing !== "undefined" && syncing) return true;
+      /* THE CAMERA IS WORK. A photograph or a video is an <input type=file
+         capture>: the last input this page saw was the tap that opened the
+         camera, the picker itself sends nothing, and a four-minute
+         walk-around video outlasted IDLE_MS — so a build that arrived while
+         the camera was up found the phone "idle", reloaded, and the file the
+         inspector had just captured was delivered to a dead document.
+         Nothing threw. A picker is open from the tap until its change or
+         cancel event, and counts as work for at most PICK_MAX (a picker
+         that never reports back — some browsers send no cancel — cannot
+         hold an update for ever). */
+      if(pickerAt && Date.now()-pickerAt < PICK_MAX) return true;
       if(idle()) return false;
       if(typeof editing !== "undefined" && editing) return true;
       if(typeof draft !== "undefined" && draft && draft.positions
@@ -15661,10 +15954,7 @@ function stuckHeal(){
 }
 /* Standalone or in a browser tab — the two keep separate storage and separate
    workers on iOS, so which one is speaking matters when reading this line. */
-function updSurface(){
-  try{ if(navigator.standalone===true || (matchMedia && matchMedia("(display-mode: standalone)").matches)) return t("ud_app"); }catch(e){}
-  return t("ud_tab");
-}
+function updSurface(){ return t(isStandalone()?"ud_app":"ud_tab"); }
 function renderUpdDiag(){
   const el=$("updDiag"); if(!el) return;
   let s;
@@ -15722,6 +16012,13 @@ function applyUpdateIfIdle(){
 let lastInput=Date.now();
 ["pointerdown","keydown","input","touchstart"].forEach(ev=>addEventListener(ev,()=>{ lastInput=Date.now(); },{passive:true,capture:true}));
 window.__idleSince=ms=>{ lastInput=Date.now()-ms; };     // tests set the clock
+/* The file pickers (camera, video, gallery): open from the click until they
+   report back, and work for as long as they are open — see busy(). */
+let pickerAt=0; const PICK_MAX=15*60*1000;
+["camera","video","gallery"].forEach(id=>{ const el=document.getElementById(id); if(!el) return;
+  el.addEventListener("click",()=>{ pickerAt=Date.now(); lastInput=Date.now(); });
+  ["change","cancel"].forEach(ev=>el.addEventListener(ev,()=>{ pickerAt=0; lastInput=Date.now(); })); });
+window.__pickerOpen=()=>!!(pickerAt && Date.now()-pickerAt<PICK_MAX);   // tests read it
 /* AND NEVER WHILE THE ROUND ON SCREEN IS NOT ON DISK.
 
    `p.then(go,go)` reloaded on failure as well as on success — so a draft the
@@ -15750,7 +16047,11 @@ function reloadForUpdate(){
 }
 function withTimeoutMs(p,ms){ return Promise.race([p,
   new Promise((_,rej)=>setTimeout(()=>rej(new Error("timeout")),ms))]); }
-document.addEventListener("visibilitychange",()=>{ if(!document.hidden){ checkForNewBuild(); applyUpdateIfIdle(); } });
+/* Coming back to the front is a touch: the phone was in a pocket or under
+   the camera, not idle at a desk, and a picker's change event lands a moment
+   after the app is visible again — so the idle clock restarts here and the
+   reload waits two seconds for that event before it asks. */
+document.addEventListener("visibilitychange",()=>{ if(!document.hidden){ lastInput=Date.now(); checkForNewBuild(); setTimeout(applyUpdateIfIdle, 2000); } });
 addEventListener("online",()=>checkForNewBuild());
 setTimeout(checkForNewBuild, 1500);
 renderUpdDiag();
@@ -15926,8 +16227,9 @@ async function updateNow(){
    finish its cache. */
 function newWorkerTakesOver(reg, ms){
   return new Promise(resolve=>{
-    let done=false; const fin=v=>{ if(!done){ done=true; clearTimeout(timer); resolve(v); } };
+    let done=false; const fin=v=>{ if(!done){ done=true; clearTimeout(timer); if(reg) reg.removeEventListener("updatefound",found); resolve(v); } };
     const timer=setTimeout(()=>fin(false), ms);
+    const found=()=>watch(reg.installing);
     /* A worker that reached "installed" without taking over is one whose
        cache came up short — sw.js only skips waiting when every essential file
        is in. Ask it rather than sitting out the timeout: an honest "could not
@@ -15940,7 +16242,7 @@ function newWorkerTakesOver(reg, ms){
         if(w.state==="redundant") fin(false); if(w.state==="installed") judge(w); }); };
     navigator.serviceWorker.addEventListener("controllerchange",()=>fin(true),{once:true});
     if(!reg){ fin(false); return; }
-    reg.addEventListener("updatefound",()=>watch(reg.installing));
+    reg.addEventListener("updatefound",found);
     if(reg.waiting){ try{ reg.waiting.postMessage({type:"sw-heal"}); }catch(_){} watch(reg.waiting); }
     watch(reg.installing);
     Promise.resolve().then(()=>reg.update()).catch(()=>{});
@@ -15961,12 +16263,7 @@ function workerHealth(w){
 async function swHealthOk(ms){
   const until=Date.now()+ms;
   while(Date.now()<until){
-    const h=await new Promise(res=>{
-      const ctl=navigator.serviceWorker.controller; if(!ctl) return res(null);
-      const ch=new MessageChannel(); const tm=setTimeout(()=>res(null),3000);
-      ch.port1.onmessage=e=>{ clearTimeout(tm); res(e.data||null); };
-      try{ ctl.postMessage({type:"sw-health"},[ch.port2]); }catch(_){ clearTimeout(tm); res(null); }
-    });
+    const h=await workerHealth(navigator.serviceWorker.controller);
     if(h && h.ok) return true;
     await new Promise(r=>setTimeout(r,1500));
   }

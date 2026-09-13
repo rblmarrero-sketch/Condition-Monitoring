@@ -224,6 +224,7 @@ async function readRecords(p) {
                   .sort((a, b) => a.updated - b.updated);
   const records = [], edits = [], conflicts = [], deleted = [], deferrals = [];
   let read = 0, bad = 0, truncated = false, cursor = after;
+  const badKeys = [];
   /* One GET per sidecar used to go out and come back before the next one was
      even asked for — a folder of 189 sidecars was 189 sequential round trips
      to Object Storage, measured at over 13 seconds for a pull the phone makes
@@ -268,11 +269,18 @@ async function readRecords(p) {
           for (const rr of ((j && j.records) || [])) { rr._file = f.path; records.push(rr); }
         }
         read++;
-      } else { bad++; }
+      } else {
+        /* NAMED, not just counted. A client that only receives a NUMBER has to
+           add it to what it already knew, and an incremental read re-delivers
+           the same unreadable file every time the cursor sits on it — so one
+           bad document became a figure that climbed by one every five minutes.
+           A list can be de-duplicated by the reader; a number cannot. */
+        bad++; if (badKeys.length < 200) badKeys.push(f.path || f.name);
+      }
       cursor = f.updated;          // advance even on a bad file, or it blocks the queue
     }
   }
-  const out = { ok: true, records, edits, conflicts, deleted, deferrals, read, failed: bad,
+  const out = { ok: true, records, edits, conflicts, deleted, deferrals, read, failed: bad, failedKeys: badKeys,
                 pending: Math.max(0, cars.length - read - bad),
                 truncated, cursor, files: all.length,
                 photos: all.filter(f => MEDIA_RE.test(f.name)).length };
@@ -694,6 +702,24 @@ async function saveOne(b) {
   } catch (e) { verifyError = 'read-after-write failed: ' + String(e.message || e); }
   if (!verifyError && storedSha !== want) {
     verifyError = 'stored bytes do not match what was sent';
+  }
+  /* A DUPLICATE THAT DOES NOT READ BACK IS NOT A DUPLICATE. The shortcut
+     above trusts the hash the previous PUT wrote as metadata; if that
+     object's read-back fails or disagrees now, the object is not what the
+     metadata claims, and answering "already here" would let the phone's
+     retry — which re-sends exactly because verified was false — be
+     suppressed for ever. Write it once more and measure again. */
+  if (duplicate && verifyError) {
+    duplicate = false;
+    await putObj(key, buf, b.contentType || 'application/octet-stream', dev, { 'x-amz-meta-cm-sha': want });
+    storedSize = null; storedSha = ''; verifyError = '';
+    try {
+      const back = await getObj(key);
+      const body = back && back.body ? Buffer.from(back.body) : null;
+      if (!body) verifyError = 'stored object could not be read back';
+      else { storedSize = body.length; storedSha = sha256(body); }
+    } catch (e) { verifyError = 'read-after-write failed: ' + String(e.message || e); }
+    if (!verifyError && storedSha !== want) verifyError = 'stored bytes do not match what was sent';
   }
 
   const out = { ok: true, req: b.name, id: key, name, url: '', folder: path || '/' };

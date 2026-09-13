@@ -140,11 +140,15 @@ const shown = (p, sel) => p.evaluate(s => { const e = document.querySelector(s);
   ok('the page is called Inspection Schedule', /Inspection Schedule/.test(D.title || ''), D.title);
   /* The page size, from the page: 25 since build 271, and never a number this suite owns. */
   const PAGE_SIZE_DEFAULT_T = await p.evaluate(() => PAGE_SIZE_DEFAULT);
-  /* Six since Phase 4: Never inspected and Completed joined the four, and the
-     five add up to All. Counts are read by KEY, never by position. */
+  /* Seven since build 354: the six of Phase 4 plus 1C plan, which the phone
+     has carried since 339. FIVE of them still add up to All — 1C plan is
+     somebody else's schedule, not this programme's arithmetic, and folding it
+     into All would leave two questions answered by one number. Counts are read
+     by KEY, never by position. */
   const tb = k => D.tabs.find(x => x.k === k) || { n: -1 };
-  ok('six named tabs: Overdue, Due soon, Never inspected, Deferred, Completed, All', D.tabs.map(x => x.k).join(',') === 'over,soon,never,put,done,all'
-     && D.tabs.map(x => x.label).join('|') === 'Overdue|Due soon|Never inspected|Deferred|Completed|All', D.tabs.map(x => x.label).join('|'));
+  ok('seven named tabs: Overdue, Due soon, Never inspected, 1C plan, Deferred, Completed, All',
+     D.tabs.map(x => x.k).join(',') === 'over,soon,never,plan,put,done,all'
+     && D.tabs.map(x => x.label).join('|') === 'Overdue|Due soon|Never inspected|1C plan|Deferred|Completed|All', D.tabs.map(x => x.label).join('|'));
   ok('the Overview door lands on the Overdue tab', D.scope === 'over' && D.tabs[0].on, D.scope);
   ok('  and the address says so', /^#due/.test(D.hash), D.hash);
   ok('Overdue counts what the schedule calls overdue', tb('over').n === (D.st.over || 0), tb('over').n + ' vs ' + (D.st.over || 0));
@@ -153,6 +157,7 @@ const shown = (p, sel) => p.evaluate(s => { const e = document.querySelector(s);
   ok('Completed counts the rounds walked within their interval', tb('done').n === (D.st.ok || 0), tb('done').n + ' vs ' + (D.st.ok || 0));
   ok('Never inspected counts the machines no round of that type has reached', tb('never').n === D.never && D.never > 0, String(tb('never').n));
   ok('All counts every unit-round with history plus the never-inspected', tb('all').n === D.all + D.never, tb('all').n + ' vs ' + (D.all + D.never));
+  ok('  and 1C plan is outside that sum, not folded into it', tb('all').n === D.all + D.never && tb('plan').n >= 0, 'all ' + tb('all').n + ' · plan ' + tb('plan').n);
   ok('the Overdue list draws one page of exactly the overdue rows', D.rows === Math.min(PAGE_SIZE_DEFAULT_T, D.st.over || 0), D.rows + ' of ' + (D.st.over || 0));
   ok('every row offers "Start inspection"', D.starts.length === 1 && D.starts[0] === 'Start inspection', D.starts.join('|'));
   ok('  and "Defer inspection"', D.defers.length === 1 && D.defers[0] === 'Defer inspection', D.defers.join('|'));

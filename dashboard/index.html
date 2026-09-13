@@ -3460,10 +3460,19 @@
               <option value="1" data-i18n="r_withphotos">Include photos</option>
               <option value="0" data-i18n="r_nophotos">No photos (smaller file)</option>
             </select></div>
+            <!-- STANDARD IS 2.4, NOT 1.8. The page is rasterised, so the
+                 scale is the print resolution of everything on it: 760 CSS px
+                 across a 519 pt line is 105 ppi times the scale, i.e. 190 ppi
+                 at 1.8 and 253 at 2.4. At 190 a 9 px column head printed on a
+                 600 dpi laser is a soft bitmap with JPEG ringing round it, and
+                 that is what "you have to zoom to read" is. The matrix timed
+                 the same nine pages at 207 / 209 / 208 s across the three
+                 qualities, so this costs no time; it costs about half again in
+                 file size. -->
             <div class="field"><label for="rScale" data-i18n="r_scale">Quality</label><select id="rScale">
-              <option value="1.8" data-i18n="r_q_std">Standard</option>
-              <option value="2.4" data-i18n="r_q_high">High (larger file)</option>
-              <option value="1.4" data-i18n="r_q_small">Small file (slow link)</option>
+              <option value="2.4" data-i18n="r_q_std">Standard</option>
+              <option value="3" data-i18n="r_q_high">High (larger file)</option>
+              <option value="1.8" data-i18n="r_q_small">Small file (slow link)</option>
             </select></div>
             <div class="field" id="rAppendixField" hidden style="align-self:flex-end">
               <label class="row" style="gap:6px;align-items:center;font-weight:400">
@@ -3608,22 +3617,22 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=353"></script>
+<script src="../data/magnetic_plug.js?v=354"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=353"></script>
-<script src="../mobile/hme.js?v=353"></script>
-<script src="../mobile/mp-fc.js?v=353"></script>
-<script src="../mobile/hme-cascade.js?v=353"></script>
-<script src="../mobile/temp-limits.js?v=353"></script>
+<script src="../data/work_orders.js?v=354"></script>
+<script src="../mobile/hme.js?v=354"></script>
+<script src="../mobile/mp-fc.js?v=354"></script>
+<script src="../mobile/hme-cascade.js?v=354"></script>
+<script src="../mobile/temp-limits.js?v=354"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=353"></script>
-<script src="../mobile/normalize.js?v=353"></script>
-<script src="../mobile/terms.js?v=353"></script>
+<script src="../mobile/assets.js?v=354"></script>
+<script src="../mobile/normalize.js?v=354"></script>
+<script src="../mobile/terms.js?v=354"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3642,19 +3651,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=353"></script>
-<script src="../mobile/edits.js?v=353"></script>
-<script src="../mobile/due.js?v=353"></script>
-<script src="../mobile/wear.js?v=353"></script>
-<script src="../mobile/wear-map.js?v=353"></script>
-<script src="../mobile/lube.js?v=353"></script>
-<script src="../mobile/lube-overrides.js?v=353"></script>
-<script src="../mobile/lube2027.js?v=353"></script>
-<script src="../mobile/lube-tds.js?v=353"></script>
+<script src="../mobile/grade.js?v=354"></script>
+<script src="../mobile/edits.js?v=354"></script>
+<script src="../mobile/due.js?v=354"></script>
+<script src="../mobile/wear.js?v=354"></script>
+<script src="../mobile/wear-map.js?v=354"></script>
+<script src="../mobile/lube.js?v=354"></script>
+<script src="../mobile/lube-overrides.js?v=354"></script>
+<script src="../mobile/lube2027.js?v=354"></script>
+<script src="../mobile/lube-tds.js?v=354"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=353"></script>
-<script src="../mobile/machine-photos.js?v=353"></script>
+<script src="../mobile/upload-defaults.js?v=354"></script>
+<script src="../mobile/machine-photos.js?v=354"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3663,17 +3672,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=353"></script>
-<script src="../mobile/get.js?v=353"></script>
-<script src="../mobile/points.js?v=353"></script>
-<script src="../mobile/uc-points.js?v=353"></script>
-<script src="../mobile/inspect-guide.js?v=353"></script>
-<script src="../mobile/get-figs.js?v=353"></script>
-<script src="../mobile/body-points.js?v=353"></script>
-<script src="../mobile/body-map.js?v=353"></script>
-<script src="../mobile/jspdf.umd.min.js?v=353"></script>
-<script src="../mobile/html2canvas.min.js?v=353"></script>
-<script src="../mobile/report-core.js?v=353"></script>
+<script src="../mobile/machine-fig.js?v=354"></script>
+<script src="../mobile/get.js?v=354"></script>
+<script src="../mobile/points.js?v=354"></script>
+<script src="../mobile/uc-points.js?v=354"></script>
+<script src="../mobile/inspect-guide.js?v=354"></script>
+<script src="../mobile/get-figs.js?v=354"></script>
+<script src="../mobile/body-points.js?v=354"></script>
+<script src="../mobile/body-map.js?v=354"></script>
+<script src="../mobile/jspdf.umd.min.js?v=354"></script>
+<script src="../mobile/html2canvas.min.js?v=354"></script>
+<script src="../mobile/report-core.js?v=354"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4526,6 +4535,12 @@ const I18N={
   dd_missed:TERMS.en.overdue, dd_due:"Overdue & due soon",
   dd_put:TERMS.en.deferred, dd_all:"All",
   dd_never:TERMS.en.never_inspected, dd_done:TERMS.en.completed,
+  /* The same words the phone's own pill uses (due_plan_p / due_plan_row): one
+     list, two screens, and a planner reading over an inspector's shoulder
+     should not have to translate between them. */
+  dd_plan:"1C plan", dd_plan_row:"1C asked for this — {p}", dd_plan_late:"planned {d}, not walked",
+  dd_plan_none:"Nothing 1C has planned in this fortnight is still to be walked.",
+  dd_plan_nofile:"The 1C plan has not been pulled into this page yet.",
   dd_h2:"Rounds by due date", dd_purpose:"Which rounds are overdue, due soon or never inspected, from the same intervals the phones use.",
   a_h2:"Action register", a_purpose:"Every finding that needs work: who owns it, by when, and what is still missing.",
   w_h2:"Measured positions", w_purpose:"Every measured position with its projected remaining life, so a worn component is replaced before it fails.",
@@ -5380,6 +5395,9 @@ const I18N={
   dd_missed:TERMS.ru.overdue, dd_due:"Просрочено и скоро",
   dd_put:TERMS.ru.deferred, dd_all:"Все",
   dd_never:TERMS.ru.never_inspected, dd_done:TERMS.ru.completed,
+  dd_plan:"План 1С", dd_plan_row:"Запрошено 1С — {p}", dd_plan_late:"план на {d}, обход не выполнен",
+  dd_plan_none:"Все обходы, запланированные 1С на эти две недели, уже выполнены.",
+  dd_plan_nofile:"План 1С ещё не загружен на эту страницу.",
   dd_h2:"Обходы по сроку", dd_purpose:"Какие обходы просрочены, скоро или ещё ни разу не проводились — по тем же интервалам, что и на телефонах.",
   a_h2:"Реестр работ", a_purpose:"Каждая находка, требующая работ: кто отвечает, к какому сроку и чего ещё не хватает.",
   w_h2:"Замеренные точки", w_purpose:"Каждая замеренная точка с прогнозом остаточного ресурса, чтобы заменить изношенный узел до отказа.",
@@ -5793,6 +5811,18 @@ let edits=asMap(ESTORE);
    same day and both versions are in Drive. Keyed the same way, and holding the
    device chosen once somebody here has decided. */
 let conflicts=asMap(CSTORE);
+/* ROUNDS THE OFFICE DELETED. The files are gone from the folder; this marker
+   is all that is left saying so, and it has to be REMEMBERED rather than
+   applied once — a phone that missed the marker can re-upload the round, and
+   without a tombstone the deleted round would quietly come back. Keyed the
+   same way as everything else, through the same two identity rules. */
+const DELSTORE="cm_dash_deleted";
+let deleted=asMap(DELSTORE);
+function saveDeleted(){
+  try{ localStorage.setItem(DELSTORE,JSON.stringify(deleted)); }catch(e){}
+}
+const delKey=(u,d,ty)=>String(u||"").trim().toUpperCase()+"|"+idDate(d)+"|"+idType(ty);
+function isDeleted(r){ return !!(r && deleted[delKey(r.equip,r.date,r.type)]); }
 /* Rounds an inspector decided NOT to walk, and why — keyed UNIT|TYPE.
 
    The other half of the due list, and the half that only a person can supply.
@@ -5969,6 +5999,21 @@ function groupRivals(list){
    rebuild called from anywhere above this line would have thrown on the
    assignment rather than merely reporting nothing. */
 let normStats={recs:[],removed:0,orphans:0,touched:0};
+/* THE PHONE'S OWN TWO RULES (teamType / teamDate in mobile/index.html), so
+   the office cannot key a round differently from the handset that walked it.
+   A four-digit year first is year-month-day whatever the separator; dotted
+   day.month.year is what this folder's own filenames are written as. DD/MM
+   against MM/DD is NOT guessed at. */
+function idType(v){ const s=String(v==null?"":v).trim().toUpperCase(); return s||"MP"; }
+function idDate(v){
+  const s=String(v==null?"":v).trim();
+  if(!s) return s;
+  let m=s.match(/^(\d{4})[-.\/](\d{1,2})[-.\/](\d{1,2})$/);
+  if(m) return m[1]+"-"+String(m[2]).padStart(2,"0")+"-"+String(m[3]).padStart(2,"0");
+  m=s.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/);
+  if(m) return m[3]+"-"+String(m[2]).padStart(2,"0")+"-"+String(m[1]).padStart(2,"0");
+  return s;
+}
 function rebuild(){
   const key=r=>`${r.equip}|${r.date}|${r.type}`;
   const map=new Map();
@@ -6007,6 +6052,26 @@ function rebuild(){
      is its own kind of defect. */
   const norm=(window.CMNorm ? CMNorm.list([...map.values()]) : {recs:[...map.values()],removed:0,orphans:0,touched:0});
   normStats=norm;
+  /* THE UNIT, THE ROUND AND THE DATE, IN THE ONE SHAPE THIS PAGE ASSUMES.
+
+     The phone has normalised all three on the way in since build 300
+     (teamType / teamDate); this page did not, and every index it builds is
+     keyed on the raw strings. A sidecar written `insp` keys as a round that
+     is not in the programme and DUE.next never sees it; one written
+     `31.07.2026` returns null from DUE.next and is dropped without a word —
+     and `dueNeverRows`, keyed the same raw way, then lists the machine as
+     NEVER INSPECTED while the phone counts the same round as walked. Two
+     surfaces, one folder, opposite answers.
+
+     The rules are `idType` and `idDate` below, which are the phone's own,
+     word for word. Ambiguity is never guessed at: 07/02/2026 is left as it
+     arrived and counted, because a wrong date is worse than an unreadable
+     one. `_rawDate` keeps what the folder said, for the file names. */
+  norm.recs.forEach(r=>{ if(!r) return;
+    const u=String(r.equip||"").trim().toUpperCase(); if(u) r.equip=u;
+    r.type=idType(r.type);
+    const d=idDate(r.date); if(d && d!==r.date){ r._rawDate=r.date; r.date=d; }
+  });
   /* NORMALISED ON THE WAY IN, ONCE.
      The grade: a number 1..5 whatever the sidecar wrote (a phone on the old
      build writes a letter). The machine's photographs: the phone carries
@@ -6018,6 +6083,10 @@ function rebuild(){
     if(i.grade!=null && i.grade!=="" && gradeNum(i.grade)!==i.grade) i.grade=gradeNum(i.grade)||"";
     if(i.general || i.key==="__general"){ i.general=1; if(i.key==="__general") i.key="MACHINE"; }
   }));
+  /* A deleted round is not a round. Dropped here, after normalisation, so a
+     marker written against `31.07.2026` matches a record filed as
+     `2026-07-31` — the mismatch that made half these fixes necessary. */
+  norm.recs=norm.recs.filter(r=>!isDeleted(r));
   RECS=norm.recs.map(applyEdits)                   // corrections last, over whatever won
     .sort((a,b)=>(b.date||"").localeCompare(a.date||"")||a.equip.localeCompare(b.equip));
 }
@@ -8406,6 +8475,21 @@ window.CMDash={
     saveConflicts(); rebuild(); refreshControls(); renderAll(); refreshSources();
   },
   conflictCount(){ return Object.values(conflicts).filter(c=>c&&!c.resolved).length; },
+  /* The office's own deletions, read from the folder rather than only applied
+     in the browser that pressed the button. A marker's key is UNIT|DATE|TYPE
+     as the deleting end wrote it, so it goes through the same two rules
+     everything else here does. */
+  setDeleted(list){
+    let touched=false;
+    (list||[]).forEach(d=>{ if(!d||!d.key) return;
+      const p=String(d.key).split("|"); if(p.length!==3) return;
+      const k=delKey(p[0],p[1],p[2]);
+      if(!deleted[k]){ deleted[k]={by:d.by||"", at:d.at||""}; touched=true; }
+    });
+    if(!touched) return;
+    saveDeleted(); rebuild(); refreshControls(); renderAll(); refreshSources();
+  },
+  deletedCount(){ return Object.keys(deleted).length; },
   recsFor(equip){ return RECS.filter(r=>r.equip===equip); },
   allRecs(){ return RECS; },
   rerender(){ renderAll(); },
@@ -11222,7 +11306,11 @@ const AUTO_MS = 180000;          // three minutes
 let autoBusy = false, autoLast = 0, autoTimer = null;
 
 async function autoRefresh(why){
-  if(autoBusy || !drvOn() || !navigator.onLine) return;
+  /* NOT GATED ON navigator.onLine. It means "an interface is attached" and is
+     wrong in both directions — an office laptop on a VPN adapter reported
+     offline and never refreshed itself again, silently, while the button
+     worked. The request is made and its failure is already caught below. */
+  if(autoBusy || !drvOn()) return;
   if(!$("editOv").classList.contains("hidden")) return;      // mid-correction
   if(Date.now() - autoLast < 20000) return;                  // focus events arrive in flurries
   autoBusy = true;
@@ -12967,14 +13055,18 @@ if($("rAppendix")) $("rAppendix").onchange=renderReportPreview;
 /* THE REPORT'S LANGUAGE IS CHOSEN, NOT IMPOSED. English, Russian, or both on
    one sheet — remembered per browser, defaulting to the screen's language.
    Every way of making a report reads the same options. */
+/* ONE default quality, named once. It was written into the markup, into this
+   function's fallback and into the estimate's size model, and the three
+   disagreed. */
+const RPT_SCALE=2.4;
 const RLANG_K="cm_dash_rlang";
 function reportLang(){ const v=($("rLang")||{}).value||""; return v||lang; }
 function reportOpts(){
-  const v=reportLang(), sc=parseFloat(($("rScale")||{}).value)||1.8;
+  const v=reportLang(), sc=parseFloat(($("rScale")||{}).value)||RPT_SCALE;
   return { msg:$("rMsg"), photos:($("rPhotos")||{}).value==="1", scale:sc,
            lang: v==="both" ? lang : v, bi: v==="both",
            /* the small-file point on the curve: a lower scale AND a tighter JPEG */
-           jpeg: sc<1.6 ? 0.8 : undefined,
+           jpeg: sc<RPT_SCALE ? 0.86 : undefined,
            /* Equipment History and Trend only — every other scope ignores it.
               Off by default, so the compact document the template asks for is
               what a planner gets without having to know to ask for it. */
@@ -14891,6 +14983,51 @@ function dueNeverRows(only){
   out.sort((x,y)=>x.unit.localeCompare(y.unit,undefined,{numeric:true}) || x.ty.localeCompare(y.ty));
   return out;
 }
+/* WHAT 1C HAS PLANNED, ON THE SAME SCREEN THE INSPECTORS' LIST IS ON.
+
+   The phone has carried this since build 339 (planRows) and the office did
+   not: a planner and an inspector opened the same question on two screens and
+   only one of them could see the work orders. The rule is the phone's, stated
+   once here so the two lists cannot drift:
+
+   · a work order whose planned date is inside the agenda window (a week back
+     to a week ahead — DUE.inAgenda, the same window the phone uses);
+   · resolved to the CM rounds that service carries (paHourInfo), with the
+     rounds this machine is held off dropped (paHeldOff) — a KAMAZ gets its
+     filter cut and nothing else;
+   · left out where the round has already been walked since 1C asked for it;
+   · ONE row per machine and round, dated by the EARLIER work order, because
+     the 1,000 h and the 4,000 h both carry the same filter cut and two rows
+     for one job is how a machine gets walked twice.
+
+   It is a tab of its own and adds to no other count: Overdue, Due soon,
+   Never inspected, Deferred and Completed are statements about CM's own
+   programme, and folding somebody else's plan into them would leave two
+   questions answered by one number and neither of them trustworthy. */
+function duePlanRows(only){
+  const data=(window.CM_WO_DATA&&window.CM_WO_DATA.workOrders)||[];
+  if(!data.length || !window.DUE) return [];
+  const today=todayISO(), out=new Map();
+  data.forEach(w=>{
+    if(!w || !w.equip || !w.planStart || !DUE.inAgenda(today, w.planStart)) return;
+    const info=paHourInfo(w);
+    (info.types||[]).forEach(ty=>{
+      if(only && ty!==only) return;
+      const unit=String(w.equip).toUpperCase();
+      const last=paLastInspection(unit, [ty], null);
+      if(last && String(last.date)>=String(w.planStart)) return;   // already walked for it
+      const k=unit+"|"+ty, cur=out.get(k);
+      if(cur && String(cur.plan)<=String(w.planStart)) return;
+      const a=(window.ASSETS||[]).find(x=>x&&String(x.n).toUpperCase()===unit);
+      out.set(k,{ unit, ty, st:"plan", plan:w.planStart, wo:w.woNumber||"", label:info.label||"",
+                  cat:(a&&(a.cat||a.cls))||"", late:String(w.planStart)<today, last:last||null });
+    });
+  });
+  return [...out.values()].sort((x,y)=>
+    String(x.plan).localeCompare(String(y.plan))
+    || x.unit.localeCompare(y.unit,undefined,{numeric:true})
+    || x.ty.localeCompare(y.ty));
+}
 /* The Due tab, opened already narrowed to the thing that was pressed. */
 function dueGo(scope){
   if($("ddScope")) $("ddScope").value=scope;
@@ -14909,6 +15046,7 @@ function renderDueTab(){
   const all=dueTabRows().filter(r=>(!only || r.ty===only) && (!q || r.unit.indexOf(q)>=0));
   const never=dueNeverRows(only).filter(r=>!q || r.unit.indexOf(q)>=0);
   const nNever=never.length;
+  const plan=duePlanRows(only).filter(r=>!q || r.unit.indexOf(q)>=0);
   const nDone=all.filter(r=>r.st==="ok").length;
   const nOver=all.filter(r=>r.st==="over").length;
   const nSoon=all.filter(r=>r.st==="soon").length;
@@ -14945,6 +15083,9 @@ function renderDueTab(){
   const seg=$("ddSeg");
   if(seg){
     const views=[["over","dd_missed",nOver],["soon","dd_soon",nSoon],["never","dd_never",nNever],
+                 /* 1C's own plan, beside CM's judgement rather than mixed into
+                    it — see duePlanRows for why the other counts must not move. */
+                 ["plan","dd_plan",plan.length],
                  ["put","dd_put",nPut+nOff],["done","dd_done",nDone],["all","dd_all",all.length+nNever]];
     /* SIX TABS OVER ONE PANEL, and every one of them says so. Until now these
        carried role="tab" and nothing else: no aria-controls, so a screen
@@ -14973,13 +15114,17 @@ function renderDueTab(){
     });
   }
   const show = scope==="all" ? all.concat(never)
+             : scope==="plan" ? plan
              : scope==="never" ? never
              : scope==="done" ? all.filter(r=>r.st==="ok")
              : scope==="put" ? all.filter(r=>r.st==="put"||r.st==="off")
              : scope==="due" ? all.filter(r=>r.st==="over"||r.st==="soon")
              : scope==="soon" ? all.filter(r=>r.st==="soon")
              : all.filter(r=>r.st==="over");
-  if(!show.length){ box.innerHTML=`<div class="sub">${esc(t("dd_none"))}</div>`; return; }
+  if(!show.length){ box.innerHTML=`<div class="sub">${esc(
+      scope!=="plan" ? t("dd_none")
+      : ((window.CM_WO_DATA&&(window.CM_WO_DATA.workOrders||[]).length) ? t("dd_plan_none") : t("dd_plan_nofile"))
+    )}</div>`; return; }
   /* Fifty at a time, not five hundred: the cap was there to stop the browser
      dying and never to help anybody read. */
   const pg=paged("due", show, renderDueTab);
@@ -14990,6 +15135,23 @@ function renderDueTab(){
     <th>${esc(t("dd_c_why"))}</th><th></th></tr></thead><tbody>`
     + kept.map(r=>{
       const n=r.n;
+      /* A 1C row is somebody else's plan, not this programme's arithmetic:
+         there is no interval to be late against and no rate to quote, so
+         those cells say nothing rather than borrowing CM's numbers. What it
+         does carry is the date 1C wants it by, the service it belongs to and
+         the work order — and, where the round HAS been walked before, when. */
+      if(r.st==="plan") return `<tr class="dd-plan">
+        <td><b>${esc(r.unit)}</b></td>
+        <td>${esc(r.ty)} · <span class="muted">${esc(t("type_"+r.ty)||r.ty)}</span></td>
+        <td>${r.last ? esc(r.last.date) : `<span class="need">${esc(TERMS.t(lang,"never_inspected"))}</span>`}</td>
+        <td class="r">${r.late?`<b style="color:var(--critical)">${esc(r.plan)}</b>`:esc(r.plan)}</td>
+        <td class="r"><span class="muted">—</span></td>
+        <td>${esc(t("dd_plan_row",{p:r.label||"—"}))}${r.wo?` <span class="muted">· ${esc(r.wo)}</span>`:""}${
+             r.late?` <span class="muted">· ${esc(t("dd_plan_late",{d:r.plan}))}</span>`:""}</td>
+        <td class="ddact">
+          <a class="minibtn" href="${esc(unitLink(r.unit,r.ty))}" target="_blank" rel="noopener"
+             title="${esc(t("dd_start_t"))}">${esc(t("dd_start"))}</a>
+        </td></tr>`;
       if(!n) return `<tr class="dd-never">
         <td><b>${esc(r.unit)}</b></td>
         <td>${esc(r.ty)} · <span class="muted">${esc(t("type_"+r.ty)||r.ty)}</span></td>
@@ -16987,8 +17149,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=353"></script>
-<script src="sync-adapter.js?v=353"></script>
-<script src="report.js?v=353"></script>
+<script src="drive.js?v=354"></script>
+<script src="sync-adapter.js?v=354"></script>
+<script src="report.js?v=354"></script>
 </body>
 </html>

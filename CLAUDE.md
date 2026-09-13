@@ -224,6 +224,89 @@ upload) bounds a POST by `UP_IDLE` of silence while the body goes up,
 `UP_MAX` outright; the error is the app's own timeout sentence
 (`tests/upidle.cjs`). `fetchT` stays for GETs and the ping.
 
+**A BATCH THAT PARTLY FAILED IS A FAILED BATCH.** `putBatch` threw only when
+EVERY file of a chunk was refused, so a reply of `{saved:3, failed:1}` returned
+as success: the lane took the chunk as done, the round went `up:1` with a
+photograph never sent, and the read-back was its only rescue — once. It now
+raises on any `failed` entry; the names that landed are already in `sent`, so
+the retry costs only the file that failed. A receipt saying `verified:false`
+counts as failed too (the server measured its own object and the check did not
+agree), and `function.js` re-writes a "duplicate" whose read-back now fails
+instead of answering "already here" for ever.
+
+**THE SAME NAME AT THE SAME LENGTH IS NOT THE SAME FILE.** `landedAnyway` — the
+lost-reply recovery — also reads the listing's `updated` and requires the
+folder's copy to have been written since the request began (`LANDED_SKEW` for a
+phone clock that runs ahead). Without it an edited round's re-sent sidecar, very
+often the same byte length as the one already there, was marked sent, never
+sent, and read back as confirmed.
+
+**A POST IS NOT CUT SHORT BY THE SERVER EITHER.** `server.js` set
+`requestTimeout = 120000` believing it was lengthening Node's default; Node 18's
+default is 300 s, so it was SHORTENING it to two minutes — under the phone's own
+`UP_CLOCKS.max` (900 s) and under what a 2 MB batch takes at the 55 KB/s a
+handset measured with three lanes sharing the link. That is the shape of "press
+Sync four times": each press lost the slowest request, the others landed, and
+the last press found little enough left to fit. It is 960 s now, with
+`headersTimeout` short and `MAX_BODY` still the guard. **This is a VM change and
+is not live on push** — see the deploy steps. `putAll` also drops to one lane
+while any chunk is over `LANE_SOLO_BYTES`.
+
+**A PRESS DURING A RUN IS KEPT, NOT DROPPED.** `syncNow` returned immediately
+when `syncing`, and the run it collided with was usually the retry clock's,
+twenty seconds after the error the inspector was reading — a press that did
+nothing looked exactly like a press that failed.
+
+**A PHOTOGRAPH OUT OF THE GALLERY IS BROUGHT INTO ONE SHAPE** (`standardise`,
+`sniffType`, `reencode`): the BYTES decide what a file is, not the picker's
+`type` — an empty type, `application/octet-stream` and `image/heic` all failed
+`isPhotoType` and skipped the shrink entirely, so a 12 MP frame went into the
+queue whole. Every photograph is re-encoded to JPEG at `photoPx()`; a frame
+already JPEG and inside the limit is handed back untouched. What this phone
+cannot convert (HEIC on Android) is KEPT, named with its real extension —
+`extOf` used to call everything `.jpg`, which is how an intact file became a
+broken frame in the office — and said out loud (`gal_odd_heic`). `intake`
+returns the attachment as it always did; `intakeNoted` returns the reason as
+well (`tests/intake.cjs`).
+
+**THE OFFICE NORMALISES IDENTITY ON THE WAY IN TOO** (`idType` / `idDate` in
+`dashboard/index.html`, the phone's `teamType` / `teamDate` word for word). It
+did not, and every index it builds is keyed on the raw strings: a sidecar
+written `insp` or `31.07.2026` was dropped from Due in silence and listed as
+NEVER INSPECTED, while the phone counted the same round as walked. The office
+also READS DELETION MARKERS now (`setDeleted`, a tombstone set): only the
+browser that pressed Delete removed the round, so a second desk kept it in every
+count and report for as long as its cache lived. `autoRefresh` is no longer
+gated on `navigator.onLine`.
+
+**AN UNREADABLE DOCUMENT IS COUNTED ONCE, BY NAME.** `action=records` now
+returns `failedKeys` beside `failed`; the phone keeps the set (`badNote`). The
+count used to be ADDED on every incremental pull, and an unreadable document
+sits on the cursor — so one bad file made the Due screen's warning climb by one
+every five minutes, 288 times a day.
+
+**THE REPORT CARRIES ITS OWN FONT AND ITS OWN RESOLUTION.** `CMR.FONT_CSS`
+embeds CM Sans (a kerned subset of Liberation Sans, Cyrillic in full, ~15 kB a
+weight) as data URIs — a relative font URL would resolve against the wrong
+directory on the office page, and `system-ui` meant a different set of glyph
+widths, line breaks and page counts on every device. **Keep the `kern` feature
+when re-subsetting**: the first subset dropped it and every capital T grew a
+gap. The default raster scale is `2.4` on both surfaces (`RPT_SCALE`,
+`DEF_SCALE`, `PHONE_PDF`) — the page IS a bitmap, so the scale is the print
+resolution: 105 ppi × scale on A4, i.e. 253 instead of 190. The matrix timed the
+same nine pages at 207/209/208 s across three qualities, so this costs size
+(~290 kB a page), not time. Nothing in the report is lighter than `#5b6670` and
+no label is under 9.5 px; `.alt` — the second language — is `.94em`, not
+`.84em`; the vector footer is 8.5 pt at `#5b6670`. `CMR.PHOTO_PX` / `PHOTO_Q`
+say once how big a photograph goes in, and the phone reads them.
+
+**A TEAM SHEET SAYS WHEN IT IS MISSING PHOTOGRAPHS.** `teamPhotosFor` returns
+what it asked for and what arrived; a deadline that expired mid-fetch used to
+print three photographs where six were taken with nothing on the page saying so
+(`rep_nophoto_part`, and `norm.gap` so the document's status can see it).
+`rep_nophoto_off` was unreachable — it sat in the branch where there is no
+destination at all.
+
 **The office's photo cache is keyed by path, and the bucket rewrites a path.**
 A round the phone re-sends — a retake, a new signature — lands under the same
 name with other bytes, and the dashboard served whatever it had first seen
@@ -469,12 +552,18 @@ Three dashboard conventions a suite has to respect since build 271:
   there is no separate grade column, because as two columns the Russian
   table ran 180 px past a 1366 screen. Read the grade off `.pill`, the rank
   off `.attn`.
-- **The schedule has six tabs** — Overdue · Due soon · Never inspected ·
-  Deferred · Completed · All — and the five add up to All. Never-inspected
-  rows come from `dueNeverRows()` (the phone's `neverRows` rule: a machine
-  whose class is on a round with nothing recorded for it), carry no last
-  date and no clock, and are excluded from `dueTabRows()`, whose every reader
-  does arithmetic on both. Read tab counts by `data-dd` key, never by position.
+- **The schedule has seven tabs** — Overdue · Due soon · Never inspected ·
+  1C plan · Deferred · Completed · All — and **five** of them add up to All.
+  Never-inspected rows come from `dueNeverRows()` (the phone's `neverRows`
+  rule: a machine whose class is on a round with nothing recorded for it),
+  carry no last date and no clock, and are excluded from `dueTabRows()`, whose
+  every reader does arithmetic on both. **1C plan** (`duePlanRows`, the office's
+  copy of the phone's `planRows`) is somebody else's schedule and is outside the
+  sum: a work order planned inside `DUE.inAgenda`, resolved to CM rounds by
+  `paHourInfo`, held-off rounds dropped, already-walked rounds dropped, one row
+  per unit and round dated by the earlier work order. Folding it into Overdue
+  or All would leave two questions answered by one number and neither of them
+  trustworthy. Read tab counts by `data-dd` key, never by position.
 - **Reports are made in ONE language or both** (`#rLang` / `cm_dash_rlang`
   on the dashboard, `#repLang` / `cm_rep_lang` on the phone). The bilingual
   switch is `ctx.bi`; `report.js` swaps the screen's `lang` for the report's
