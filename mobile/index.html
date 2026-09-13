@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=351">
+<link rel="manifest" href="manifest.webmanifest?v=352">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=351">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=351">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=351">
+<link rel="apple-touch-icon" href="icon-192.png?v=352">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=352">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=352">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2475,15 +2475,15 @@ function bootDel(k){ try { localStorage.removeItem(k); } catch (e) {} }
   }
 })();
 </script>
-<script src="native.js?v=351"></script>
-<script src="upload-defaults.js?v=351"></script>
-<script src="hme.js?v=351"></script>
-<script src="mp-fc.js?v=351"></script>
-<script src="hme-cascade.js?v=351"></script>
-<script src="assets.js?v=351"></script>
-<script src="temp-limits.js?v=351"></script>
-<script src="normalize.js?v=351"></script>
-<script src="terms.js?v=351"></script>
+<script src="native.js?v=352"></script>
+<script src="upload-defaults.js?v=352"></script>
+<script src="hme.js?v=352"></script>
+<script src="mp-fc.js?v=352"></script>
+<script src="hme-cascade.js?v=352"></script>
+<script src="assets.js?v=352"></script>
+<script src="temp-limits.js?v=352"></script>
+<script src="normalize.js?v=352"></script>
+<script src="terms.js?v=352"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2502,25 +2502,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=351"></script>
-<script src="edits.js?v=351"></script>
-<script src="due.js?v=351"></script>
-<script src="wear.js?v=351"></script>
-<script src="wear-figs.js?v=351"></script>
-<script src="wear-map.js?v=351"></script>
-<script src="machine-photos.js?v=351"></script>
-<script src="machine-fig.js?v=351"></script>
-<script src="get.js?v=351"></script>
-<script src="points.js?v=351"></script>
-<script src="uc-points.js?v=351"></script>
-<script src="inspect-guide.js?v=351"></script>
-<script src="get-figs.js?v=351"></script>
-<script src="body-points.js?v=351"></script>
-<script src="body-map.js?v=351"></script>
-<script src="lube.js?v=351"></script>
-<script src="lube-overrides.js?v=351"></script>
-<script src="lube2027.js?v=351"></script>
-<script src="report-core.js?v=351"></script>
+<script src="grade.js?v=352"></script>
+<script src="edits.js?v=352"></script>
+<script src="due.js?v=352"></script>
+<script src="wear.js?v=352"></script>
+<script src="wear-figs.js?v=352"></script>
+<script src="wear-map.js?v=352"></script>
+<script src="machine-photos.js?v=352"></script>
+<script src="machine-fig.js?v=352"></script>
+<script src="get.js?v=352"></script>
+<script src="points.js?v=352"></script>
+<script src="uc-points.js?v=352"></script>
+<script src="inspect-guide.js?v=352"></script>
+<script src="get-figs.js?v=352"></script>
+<script src="body-points.js?v=352"></script>
+<script src="body-map.js?v=352"></script>
+<script src="lube.js?v=352"></script>
+<script src="lube-overrides.js?v=352"></script>
+<script src="lube2027.js?v=352"></script>
+<script src="report-core.js?v=352"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -12487,7 +12487,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="351";
+const BUILD="352";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -13102,7 +13102,15 @@ async function putBatch(UP, files, rec, sent){
   const t0=Date.now(), bbytes=files.reduce((s,f)=>s+((f.blob&&f.blob.size)||0),0);
   let r;
   try{ r=await postT(UP.url, JSON.stringify(body)); }
-  catch(e){ slog("batch-fail", {n:built.length, bytes:bbytes, ms:Date.now()-t0, err:String((e&&e.message)||e).slice(0,160)}); throw e; }
+  catch(e){ slog("batch-fail", {n:built.length, bytes:bbytes, ms:Date.now()-t0, sentAll:!!e.sentAll, err:String((e&&e.message)||e).slice(0,160)});
+    const bad=new Set(unreadable.map(u=>u.name));
+    const want=files.filter(f=>!bad.has(f.name)).map(f=>({name:f.name, size:f.blob&&f.blob.size}));
+    if(await landedAnyway(UP, folder, want, e)){
+      want.forEach(w=>sentMark(sent,w.name));
+      if(unreadable.length) throw unreadableErr();
+      return;
+    }
+    throw e; }
   if(!r.ok){ const he=await httpErr(r); slog("batch-http", {n:built.length, bytes:bbytes, ms:Date.now()-t0, status:r.status, err:he.slice(0,160)}); throw new Error(he); }
   let j=null; try{ j=JSON.parse(await r.text()); }catch(e){}
   if(!j){ slog("batch-nojson", {n:built.length, ms:Date.now()-t0, status:r.status}); throw new Error("Unexpected reply — check the deployment is set to “Anyone”."); }
@@ -13508,28 +13516,70 @@ const t_up_timeout=()=>t("up_timeout");
    server is hashing and writing it (a 5 MB original into the bucket is
    seconds of work during which no byte can move in either direction — an
    idle clock alone would call that dead); UP_MAX outright. */
-const UP_IDLE=45000, UP_REPLY=180000, UP_MAX=900000;
+/* One object, so a suite can shorten the clocks on the running page instead
+   of keeping a copy of them (tests/replylost.cjs sets reply to seconds). */
+const UP_CLOCKS={ idle:45000, reply:180000, max:900000 };
+const UP_IDLE=UP_CLOCKS.idle, UP_REPLY=UP_CLOCKS.reply, UP_MAX=UP_CLOCKS.max;
 function postT(url, body, idle, max, reply){
   if(typeof XMLHttpRequest==="undefined")
-    return fetchT(url,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body}, max||UP_MAX);
+    return fetchT(url,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body}, max||UP_CLOCKS.max);
   return new Promise((res,rej)=>{
-    const x=new XMLHttpRequest(); let t=null, cap=null, why="";
+    const x=new XMLHttpRequest(); let t=null, cap=null, why="", sentAll=false;
     const stop=()=>{ clearTimeout(t); clearTimeout(cap); };
     const arm=ms=>{ clearTimeout(t); t=setTimeout(()=>{ why="idle"; try{ x.abort(); }catch(_){ } }, ms); };
-    const onUp=()=>arm(idle||UP_IDLE);
+    const onUp=()=>arm(idle||UP_CLOCKS.idle);
+    /* Whether the WHOLE body reached the server before this failed — the
+       fact that separates "the upload died" from "the reply died". The
+       caller asks the server what it holds in the second case. */
+    const fail=e=>{ stop(); try{ e.sentAll=sentAll; }catch(_){} rej(e); };
     try{ x.open("POST",url,true); x.setRequestHeader("Content-Type","text/plain;charset=utf-8"); }
     catch(e){ return rej(e); }
-    if(x.upload){ try{ x.upload.onprogress=onUp; x.upload.onload=()=>arm(reply||UP_REPLY); }catch(_){ } }
+    if(x.upload){ try{ x.upload.onprogress=onUp; x.upload.onload=()=>{ sentAll=true; arm(reply||UP_CLOCKS.reply); }; }catch(_){ } }
     x.onprogress=onUp;
     x.onload=()=>{ stop(); res({ ok:x.status>=200&&x.status<300, status:x.status, text:()=>Promise.resolve(x.responseText||"") }); };
-    x.onerror=()=>{ stop(); rej(new TypeError("Failed to fetch")); };
-    x.onabort=()=>{ stop(); rej(new Error(why ? t_up_timeout() : "aborted")); };
-    cap=setTimeout(()=>{ why="max"; try{ x.abort(); }catch(_){ } }, max||UP_MAX);
+    x.onerror=()=>fail(new TypeError("Failed to fetch"));
+    x.onabort=()=>fail(new Error(why ? t_up_timeout() : "aborted"));
+    cap=setTimeout(()=>{ why="max"; try{ x.abort(); }catch(_){ } }, max||UP_CLOCKS.max);
     onUp();
     try{ x.send(body); }catch(e){ stop(); rej(e); }
   });
 }
 
+/* THE REPLY WAS LOST. THE FILE MAY NOT HAVE BEEN.
+
+   Read off the server for the test round of 2026-09-13 08:44: the sidecar
+   landed at :00, the photograph batch at :13 and :14 — thirteen seconds in
+   which the body was all up and the phone was waiting for the server to
+   write and verify — and the phone reported an error twice before the third
+   press found everything already there. A mobile link that connected and
+   carried every byte can still drop the connection while it sits idle
+   waiting for the answer; the server finishes the write and answers into a
+   socket nobody is listening on. Until now that counted as a failed upload,
+   the round was re-sent in full on the next press (the server suppresses the
+   duplicates, so it cost time rather than bytes), and the reply could be
+   lost again.
+
+   So a failure that came AFTER the whole body was sent (e.sentAll) is not a
+   verdict: the phone lists the folder and, where every file it just sent is
+   there at the length it sent, the upload is taken as landed. No receipt is
+   invented — the read-back that follows every run lists the folder again
+   and the row reads "confirmed", not "verified" — and a file that is not
+   there, or not at that length, fails exactly as before. */
+async function landedAnyway(UP, folder, want, err){
+  /* Not gated on the browser's own "upload complete" flag: when the server
+     drops the socket the moment the body is in, Chromium reports the error
+     before it reports the upload finished, so the flag is false for exactly
+     the case this exists for. A listing is one small GET; it is asked for
+     every request failure that was not a photograph this phone could not
+     read, and the folder — not the flag — is the evidence. */
+  if(!err || err.localRead || !listCapable(UP) || !want.length) return false;
+  let have; const t0=Date.now();
+  try{ have=await serverNames(UP, folder); }
+  catch(e){ slog("reply-lost", {folder, n:want.length, landed:null, sentAll:!!err.sentAll, ms:Date.now()-t0, err:String((e&&e.message)||e).slice(0,100)}); return false; }
+  const ok=want.every(w=>{ const s=have.get(w.name); return s!=null && (w.size==null || Number(s)===Number(w.size)); });
+  slog("reply-lost", {folder, n:want.length, landed:ok, sentAll:!!err.sentAll, ms:Date.now()-t0, err:String((err&&err.message)||err).slice(0,100)});
+  return ok;
+}
 async function putOne(UP, name, blob, type, ctx, aid){
   const folder=expandFolder(UP.folder||"", ctx);
   if(UP.id==="gas" || UP.id==="mirror"){
@@ -13551,7 +13601,9 @@ async function putOne(UP, name, blob, type, ctx, aid){
     catch(e){ slog("one-unreadable", {name, bytes:blob&&blob.size, err:String((e&&e.message)||e).slice(0,160)}); throw e; }
     let r;
     try{ r=await postT(UP.url, JSON.stringify(body)); }
-    catch(e){ slog("one-fail", {name, bytes:blob&&blob.size, ms:Date.now()-t0, err:String((e&&e.message)||e).slice(0,160)}); throw e; }
+    catch(e){ slog("one-fail", {name, bytes:blob&&blob.size, ms:Date.now()-t0, sentAll:!!e.sentAll, err:String((e&&e.message)||e).slice(0,160)});
+      if(await landedAnyway(UP, folder, [{name, size:blob&&blob.size}], e)) return true;
+      throw e; }
     if(!r.ok){ const he=await httpErr(r); slog("one-http", {name, bytes:blob&&blob.size, ms:Date.now()-t0, status:r.status, err:he.slice(0,160)}); throw new Error(he); }
     let j=null; try{ j=JSON.parse(await r.text()); }catch(e){}
     if(j && j.ok===false){ slog("one-refused", {name, ms:Date.now()-t0, err:String(j.error||"").slice(0,160)}); throw new Error(j.error||"Apps Script rejected the upload"); }
