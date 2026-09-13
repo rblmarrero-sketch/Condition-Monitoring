@@ -136,6 +136,21 @@ const cells = p => p.$$eval('#cwList tbody tr', rs => rs.map(r =>
      tk.join(' | '));
   ok('  including the description the inspector typed',
      tk[7] === 'Metal particles on plug, 3mm', tk[7]);
+  /* A HEADING OVER EVERY COLUMN, AND THE RIGHT ONE. The description column
+     shipped in 342 with its cells and without its <th>, so every heading
+     from "Cause of defect" on sat one column to the left of its data —
+     "Status" over the cause, "Raised by" over the status, and the person's
+     name under nothing. Reported from the office with the table circled.
+     Read by what the cells ARE: the heading count must equal the cell
+     count, and the heading over the description cell must SAY description. */
+  const hdr = await p.evaluate(() => ({
+    ths: [...document.querySelectorAll('#cwList thead th')].map(x => x.textContent.trim()),
+    tds: document.querySelector('#cwList tbody tr') ? document.querySelector('#cwList tbody tr').querySelectorAll('td').length : 0,
+    want: t('cw_c_descr'), cause: t('cw_c_cause'), by: t('cw_c_by') }));
+  ok('  every column has a heading — as many headings as cells', hdr.ths.length === hdr.tds && hdr.tds > 0,
+     hdr.ths.length + ' headings over ' + hdr.tds + ' cells');
+  ok('  and the heading over the description is "' + hdr.want + '", the cause\'s is the cause\'s, the last is Raised by',
+     hdr.ths[7] === hdr.want && hdr.ths[8] === hdr.cause && hdr.ths[10] === hdr.by, hdr.ths.join(' | '));
   ok('  including the system component the office asked to see',
      tk[4] === 'DRS.FDR', tk[4]);
   /* A reference with no code keeps its row and shows what IS there. */
