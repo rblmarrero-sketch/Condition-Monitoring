@@ -20,7 +20,13 @@ http.createServer((req, res) => {
   if (u.pathname === '/__reset') { reset(); res.writeHead(200, cors); return res.end('ok'); }
   if (u.pathname === '/__log') return send({ log, maxInFlight });
   if (u.pathname === '/exec') {
-    if (req.method !== 'POST') return send({ ok: true, files: [] });
+    /* A listing that names what arrived. "files: []" was an honest answer
+       while nothing read it; since build 343 the phone lists the folder
+       after a send and re-sends what is not there, so an empty listing over
+       a full log made every round send itself twice. Sizes are the bytes
+       received, which is what a read-back compares. */
+    if (req.method !== 'POST') return send({ ok: true, files: log.filter(f => f.name !== '?')
+      .map((f, i) => ({ name: f.name, path: (f.folder ? f.folder + '/' : '') + f.name, id: 'f' + i, size: f.bytes, updated: Date.now() })) });
     let b = ''; req.on('data', c => b += c);
     return req.on('end', () => {
       let j = null; try { j = JSON.parse(b); } catch (e) {}
