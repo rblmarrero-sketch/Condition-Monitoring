@@ -229,6 +229,89 @@ def dedupe_within_visit(work_orders, class_rounds):
     return trimmed
 
 
+# ═══════════ THE CONDITION MONITORING TEAM'S OWN WORK ORDERS ═══════════════
+#
+# Everything above this line is about PLANNED SERVICES — 1C's "N Hours
+# service" rows, which is what the schedule needs. Those are matched by
+# PLANNED_SERVICE_RE and every other row in the workbook is dropped, so the
+# defect work orders the CM team RAISES have never been in this file at all.
+#
+# The office asked for them: what has the team written up since the kick-off
+# on 1 July. That is a different question about the same workbook — one row
+# per defect raised, not per service due — so it gets its own collection
+# rather than being mixed into workOrders, where every reader expects a
+# planned service and a cmTypes mapping that means nothing here.
+CM_SINCE = "2026-07-01"          # the kick-off; rows before it are not this team's record
+CM_PEOPLE = ["nurbol", "slam", "irek", "zhomart", "bekzhan"]
+# 1C's own header spellings, as the office reads them off the sheet, with the
+# variants this script has already met in second place. EVERY ONE IS
+# RECORDED IN THE OUTPUT (see cmColumns) — matched or not.
+#
+# WHY THAT MATTERS MORE THAN THE FALLBACKS. A column name that is wrong here
+# produces an empty cell in a panel, and an empty cell reads as "1C did not
+# say" rather than "this file never looked". That is this project's signature
+# defect exactly, and the whole reason the panel can be trusted is that the
+# data file states, in writing, which header each field came from and which
+# ones it could not find.
+CM_FIELDS = {
+    "date":     ["Date", "Start date plan", "Date created", "Creation date", "Registration date"],
+    "asset":    ["Asset", "Equip no", "Equipment"],
+    "request":  ["Work request reference", "Work request", "Request reference"],
+    "eqType":   ["Equipment type", "Equip type", "Asset type"],
+    "priority": ["Priority"],
+    "defType":  ["Defect Type", "Defect type", "Type of defect"],
+    "cause":    ["Cause of Defect", "Cause of defect", "Defect cause"],
+    "status":   ["CMMSWork order status"],      # the office asked for the CMMS one by name
+    "person":   ["Responsible person", "Responsible", "Responsible person name"],
+    "wo":       ["Work order number"],
+}
+# "DD-000001" — two or more letters, a dash, digits. Taken out of the work
+# request reference, which in this workbook carries the code inside a longer
+# string often enough that reading the whole cell as the number would file
+# half the register under a sentence.
+DEFECT_RE = re.compile(r"\b([A-Za-z]{2,}-\d{3,})\b")
+
+
+def _norm_header(s):
+    return re.sub(r"[^a-z0-9]", "", str(s or "").lower())
+
+
+def resolve_cm_columns(col):
+    """Map each wanted field to the column index it was found at, and say so.
+
+    Returns (index_by_field, report) where report names the header actually
+    matched for each field, or None. Nothing here raises: a missing column
+    must not stop the hourly refresh the field now depends on for its
+    schedule — it must be VISIBLE instead, which is what report is for."""
+    by_norm = {_norm_header(k): v for k, v in col.items()}
+    raw_by_norm = {_norm_header(k): k for k in col}
+    idx, report = {}, {}
+    for field, names in CM_FIELDS.items():
+        hit = None
+        for want in names:
+            n = _norm_header(want)
+            if n in by_norm:
+                hit = (by_norm[n], raw_by_norm[n])
+                break
+        idx[field] = hit[0] if hit else None
+        report[field] = hit[1] if hit else None
+    return idx, report
+
+
+def cm_person_match(value):
+    """One of the five, matched on any part of the cell. 1C's responsible
+    column carries a full name, a login, or a name in Cyrillic depending on
+    who typed it, so an exact match on 'Slam' would find almost none of
+    them. Returns the canonical first name, or None."""
+    v = str(value or "").lower()
+    if not v.strip():
+        return None
+    for name in CM_PEOPLE:
+        if name in v:
+            return name.capitalize()
+    return None
+
+
 def load_asset_classes(path=ASSETS_PATH):
     """equip -> cls, parsed straight out of mobile/assets.js -- the same file
     the phone and the dashboard's own coverage panel read, so a class figure
@@ -334,6 +417,8 @@ def main():
         raise SystemExit(f"Expected columns missing from WO.xlsx: {missing}. "
                           f"Columns seen: {sorted(col)}")
 
+    cm_idx, cm_report = resolve_cm_columns(col)
+    cm_rows = []
     hours_re = re.compile(r"(\d+)\s*Hours?", re.I)
     work_orders = []
     kept_units = set()
@@ -348,6 +433,34 @@ def main():
         seen_units.add(equip)
         if fleet and not any(equip.upper().startswith(p.upper()) for p in fleet):
             continue
+        # THE CM TEAM'S OWN ROWS, TAKEN BEFORE THE SERVICE FILTER. Every
+        # defect work order is dropped two lines below; this is the only
+        # point in the pass where it can still be seen.
+        who = cm_person_match(row[cm_idx["person"]]) if cm_idx["person"] is not None else None
+        if who:
+            cm_get = lambda f: (row[cm_idx[f]] if cm_idx[f] is not None else None)
+            d_iso, _ = parse_1c_date(cm_get("date"))
+            if d_iso and d_iso >= CM_SINCE:
+                ref = str(cm_get("request") or "").strip()
+                m = DEFECT_RE.search(ref)
+                cm_rows.append({
+                    "date": d_iso,
+                    "asset": str(cm_get("asset") or equip).strip(),
+                    # The code when the cell carries one, and the cell itself
+                    # when it does not — never a row dropped for the shape of
+                    # one field, and never a sentence filed as a number.
+                    "defect": m.group(1).upper() if m else None,
+                    "requestRef": ref or None,
+                    "eqType": str(cm_get("eqType") or "").strip() or None,
+                    "priority": str(cm_get("priority") or "").strip() or None,
+                    "defectType": str(cm_get("defType") or "").strip() or None,
+                    "cause": str(cm_get("cause") or "").strip() or None,
+                    "status": str(cm_get("status") or "").strip() or None,
+                    "by": who,
+                    "woNumber": str(cm_get("wo") or "").strip() or None,
+                    "maintType": str(row[col["Maintenence type"]] or "").strip() or None,
+                })
+
         maint_type = row[col["Maintenence type"]]
         if not maint_type or not PLANNED_SERVICE_RE.match(str(maint_type)):
             continue
@@ -408,6 +521,20 @@ def main():
     # oldest-first, stable per unit -- easiest to eyeball and to diff.
     overlap_trimmed = dedupe_within_visit(work_orders, class_rounds)
 
+    # ONE DEFECT, ONE ROW. 1C repeats a work order per line item here exactly
+    # as it does for services (see the DEDUPE note above), so a defect with
+    # two parts booked against it arrives twice. Keyed on the defect code
+    # where there is one and on the work order number otherwise, because the
+    # code is what the office refers to.
+    cm_seen, cm_dedup = set(), []
+    for r in cm_rows:
+        k = (r["defect"] or r["woNumber"] or "", r["asset"], r["date"])
+        if k in cm_seen:
+            continue
+        cm_seen.add(k)
+        cm_dedup.append(r)
+    cm_dedup.sort(key=lambda r: (r["date"] or "", r["asset"] or "", r["defect"] or ""), reverse=True)
+
     work_orders.sort(key=lambda w: (w["equip"], w["planStart"] or ""))
 
     out = {
@@ -425,6 +552,16 @@ def main():
         # Rounds a smaller order on the same day gave up to the bigger one.
         # Written out rather than fixed silently, same rule as the line above.
         "roundsDedupedWithinVisit": overlap_trimmed,
+        # ---- the CM team's own defect work orders ----
+        # Every header in the workbook, and which one each field was read
+        # from. A field that matched nothing is null HERE rather than blank
+        # in a panel, so "1C did not say" and "this file never looked" can
+        # never be confused for each other.
+        "columns": sorted(col),
+        "cmColumns": cm_report,
+        "cmSince": CM_SINCE,
+        "cmPeople": [n.capitalize() for n in CM_PEOPLE],
+        "cmWorkOrders": cm_dedup,
         "workOrders": work_orders,
     }
 
