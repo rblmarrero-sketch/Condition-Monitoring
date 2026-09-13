@@ -121,8 +121,12 @@ const SEED = () => {
     const opts = [...document.querySelectorAll('#ddScope option')].map(o => o.value);
     return { keys: tabs.map(t => t.k).join(','), labels: tabs.map(t => t.l).join(' | '), by, cells, never: count ? +count[1].replace(/,/g, '') : -1, opts: opts.join(','),
              sum: by.over.n + by.soon.n + by.never.n + by.put.n + by.done.n, all: by.all.n }; });
-  ok('Overdue · Due soon · Never inspected · Deferred · Completed · All', D.keys === 'over,soon,never,put,done,all', D.keys);
-  ok('  in the dictionary\'s words', D.labels === [TERMS.en.overdue, TERMS.en.due_soon, TERMS.en.never_inspected, TERMS.en.deferred, TERMS.en.completed, 'All'].join(' | '), D.labels);
+  /* Seven since build 354: 1C plan sits between Never inspected and Deferred.
+     It is somebody else's schedule, so it stays OUT of the sum below — the
+     five that are statements about CM's own programme are the five that add
+     up to All. */
+  ok('Overdue · Due soon · Never inspected · 1C plan · Deferred · Completed · All', D.keys === 'over,soon,never,plan,put,done,all', D.keys);
+  ok('  in the dictionary\'s words', D.labels === [TERMS.en.overdue, TERMS.en.due_soon, TERMS.en.never_inspected, '1C plan', TERMS.en.deferred, TERMS.en.completed, 'All'].join(' | '), D.labels);
   ok('  the five add up to All', D.sum === D.all && D.all > 0, D.sum + ' = ' + D.all);
   ok('  Overdue 1 (TK108\'s plug) · Completed 8 (walked within their interval)', D.by.over.n === 1 && D.by.done.n === 8, JSON.stringify({ over: D.by.over.n, done: D.by.done.n }));
   ok('  never inspected: every machine on a round with nothing recorded, one row per round', D.never > 100 && D.by.never.n === D.never, D.never + ' rows');
