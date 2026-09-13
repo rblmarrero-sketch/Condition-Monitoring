@@ -487,19 +487,32 @@ It is **off unless a token is set**, and the token is the only new secret:
 1. On github.com, create a fine-grained personal access token limited to this
    one repository, with **Actions: read and write** and nothing else.
 2. Put it in `/opt/cm/cm.env` — the same file as the other secrets, which is
-   never replaced by a deploy and is not in the repository:
+   never replaced by a deploy and is not in the repository. **One line, no
+   editor, and the token never appears on screen or in the shell's history**
+   (the same shape as the settings command in step 7):
 
 ```
-sudo nano /opt/cm/cm.env
+sudo bash -c 'read -rsp "Paste the token, then press Enter: " T; echo; printf "\nWO_GH_TOKEN=%s\n" "$T" >> /opt/cm/cm.env; chmod 600 /opt/cm/cm.env; echo written'
 ```
 
-add one line
+Paste with **right-click** (or Ctrl+Shift+V) — nothing appears as you paste,
+which is the point. Press Enter once.
+
+Check it is there without printing it:
 
 ```
-WO_GH_TOKEN=github_pat_…
+sudo grep -c '^WO_GH_TOKEN=' /opt/cm/cm.env
 ```
 
-then
+`1` is right. `0` means the line did not take; run the command again. `2` means
+it went in twice — open the file and delete the older line
+(`sudo nano /opt/cm/cm.env`, arrow to the line, hold Ctrl+K, then Ctrl+O,
+Enter, Ctrl+X).
+
+`EnvironmentFile` wants bare `KEY=value`: no quotes round the token, no spaces
+either side of the `=`.
+
+Then:
 
 ```
 sudo systemctl restart cm
