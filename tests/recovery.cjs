@@ -377,6 +377,32 @@ const BAD = [12347, 23459, 34571];
   ok('  and says so: ' + z7.msg.split('.')[0], /19 inspection record\(s\) saved; 37 photo\(s\) saved; 1 photo\(s\) still require recovery/.test(z7.msg));
   ok('  the report names the record the dead photograph belongs to', /TK927 MP 2026-09-10/.test(z7.rep), z7.rep.split('\n').slice(3, 5).join(' / '));
 
+  console.log('\n6b. ONE ROUND WHOSE PROGRESS CANNOT BE WRITTEN DOES NOT END THE OTHERS\' TURN');
+  /* The affected handset's own shape: the loop reached its second round,
+     that round's write-back was refused, and seventeen rounds behind it were
+     never attempted — for days — behind a banner about something else. */
+  await ctl('/__reset');
+  const ids6 = await p.evaluate(async () => { const out = []; for (let i = 0; i < 4; i++) out.push(await window.__seed('TK' + (940 + i), [await window.__jpg('w' + i)])); return out; });
+  const posted6 = (await stat()).posted.length;
+  await p.evaluate(async id => {
+    window.__origPut2 = dbPut;
+    /* The second round in key order cannot be written back — a full phone. */
+    dbPut = async r => { if (r && r.id === id) throw new DOMException('The quota has been exceeded.', 'QuotaExceededError'); return window.__origPut2(r); };
+  }, ids6[1]);
+  await syncOnce();
+  await p.evaluate(() => { dbPut = window.__origPut2; });
+  const st6b = await stat();
+  const recs6 = []; for (const id of ids6) recs6.push(await rec(id));
+  ok('every round was attempted — all four sidecars and photographs crossed the wire',
+     st6b.posted.length - posted6 === 8, (st6b.posted.length - posted6) + ' files');
+  ok('  the three whose bookkeeping could be written are up', recs6.filter((r, i) => i !== 1).every(r => r.up === 1), JSON.stringify(recs6.map(r => r.up)));
+  ok('  the one that could not be written is still waiting, and the banner says why in its own words',
+     recs6[1].up !== 1 && /Could not record TK941/.test(await p.evaluate(() => lastErr)) && /quota/i.test(await p.evaluate(() => lastErr)), await p.evaluate(() => lastErr));
+  await syncOnce();
+  ok('  and once the phone can write again it is marked up without re-sending a byte', (await rec(ids6[1])).up === 1 && (await stat()).posted.length === st6b.posted.length,
+     ((await stat()).posted.length - st6b.posted.length) + ' file(s) re-sent');
+  await p.evaluate(async ids => { for (const id of ids) await dbDel(id); }, ids6);
+
   console.log('\n7. NOTHING WAS DELETED OR RENAMED ALONG THE WAY');
   const after = []; for (const id of ids) after.push(await rec(id));
   ok('all nineteen records are still on the phone with both photographs', after.every(r => r && r.photos === 2), after.filter(r => !r || r.photos !== 2).length + ' short');
