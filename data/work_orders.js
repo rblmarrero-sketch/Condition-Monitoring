@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-09-13T16:49:12+00:00",
+  "generated": "2026-09-13T19:07:43+00:00",
   "source": "https://askpi.94-131-94-152.sslip.io/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 670,
@@ -41278,17 +41278,16 @@ window.CM_WO_DATA = {
       "equip": "TK112",
       "cls": "AT",
       "woNumber": null,
-      "maintType": "2000 Hours service Planned",
-      "hours": 2000,
-      "cmLabel": "General Inspection / Magnetic Plug / Dump Body Liner",
+      "maintType": "1000 Hours service Planned",
+      "hours": 1000,
+      "cmLabel": "General Inspection / Magnetic Plug",
       "cmTypes": [
         "INSP",
-        "MP",
-        "TB"
+        "MP"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": null,
-      "cmmsStatus": "Registered",
+      "cmmsStatus": null,
       "open": true,
       "planStart": null,
       "planStartDt": null,
@@ -41301,16 +41300,17 @@ window.CM_WO_DATA = {
       "equip": "TK112",
       "cls": "AT",
       "woNumber": null,
-      "maintType": "1000 Hours service Planned",
-      "hours": 1000,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "maintType": "2000 Hours service Planned",
+      "hours": 2000,
+      "cmLabel": "General Inspection / Magnetic Plug / Dump Body Liner",
       "cmTypes": [
         "INSP",
-        "MP"
+        "MP",
+        "TB"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": null,
-      "cmmsStatus": null,
+      "cmmsStatus": "Registered",
       "open": true,
       "planStart": null,
       "planStartDt": null,
