@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-12T23:36:11+00:00",
+  "generated": "2026-09-13T02:10:35+00:00",
   "byUnit": {
     "DZ001": [
       {
@@ -728,17 +728,6 @@
         "priority": "P3 Planned (PM)"
       }
     ],
-    "TK114": [
-      {
-        "wo": "WO-015622",
-        "hours": 250,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-09-11",
-        "priority": "P3 Planned (PM)"
-      }
-    ],
     "TK115": [
       {
         "wo": "WO-015623",
@@ -903,15 +892,6 @@
     ],
     "TK146": [
       {
-        "wo": "WO-015680",
-        "hours": 250,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-09-12",
-        "priority": "P3 Planned (PM)"
-      },
-      {
         "wo": "WO-016572",
         "hours": 500,
         "types": [
@@ -1001,15 +981,6 @@
       }
     ],
     "TK154": [
-      {
-        "wo": "WO-015689",
-        "hours": 250,
-        "types": [
-          "MP"
-        ],
-        "plan": "2026-09-08",
-        "priority": "P3 Planned (PM)"
-      },
       {
         "wo": "WO-016590",
         "hours": 1000,
