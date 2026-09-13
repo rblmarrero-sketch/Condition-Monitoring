@@ -89,18 +89,27 @@ srv.listen(PORT, async () => {
      expando. Size is real content, so it survives that clone the way a
      genuinely reclaimed file's own size metadata does. */
   const STALE_SIZE = 12345;
+  /* A reclaimed file refuses EVERY reader — arrayBuffer(), FileReader as an
+     ArrayBuffer and as a data URL — which is what distinguishes it from the
+     handset of build 347, where one reader refused and the bytes were there
+     (tests/readpath.cjs). Rigging only readAsDataURL would now be read round. */
   await p.addInitScript(size => {
-    const orig = FileReader.prototype.readAsDataURL;
-    FileReader.prototype.readAsDataURL = function (blob) {
-      if (blob && blob.size === size) {
-        setTimeout(() => {
-          try { Object.defineProperty(this, 'error', { value: new DOMException('A requested file or directory could not be found at the time an operation was processed.', 'NotFoundError'), configurable: true }); } catch (e) {}
-          if (typeof this.onerror === 'function') this.onerror(new ProgressEvent('error'));
-        }, 0);
-        return;
-      }
-      return orig.call(this, blob);
-    };
+    const err = () => new DOMException('A requested file or directory could not be found at the time an operation was processed.', 'NotFoundError');
+    ['readAsDataURL', 'readAsArrayBuffer'].forEach(m => {
+      const orig = FileReader.prototype[m];
+      FileReader.prototype[m] = function (blob) {
+        if (blob && blob.size === size) {
+          setTimeout(() => {
+            try { Object.defineProperty(this, 'error', { value: err(), configurable: true }); } catch (e) {}
+            if (typeof this.onerror === 'function') this.onerror(new ProgressEvent('error'));
+          }, 0);
+          return;
+        }
+        return orig.call(this, blob);
+      };
+    });
+    const origAB = Blob.prototype.arrayBuffer;
+    Blob.prototype.arrayBuffer = function () { if (this && this.size === size) return Promise.reject(err()); return origAB.call(this); };
   }, STALE_SIZE);
   await p.goto(B + '/mobile/index.html', { waitUntil: 'load' });
   await p.waitForFunction(() => (document.getElementById('verNum') || {}).textContent !== '?', null, { timeout: 20000 });
@@ -163,7 +172,7 @@ srv.listen(PORT, async () => {
   ok('the round is not marked fully up while one photo is missing', rec && rec.up !== 1, JSON.stringify({ up: rec && rec.up }));
   const lastErrText = await p.evaluate(() => lastErr || '');
   ok('the banner names it as a local, unreadable photograph, not a backend refusal',
-     /can no longer be read/i.test(lastErrText) && !/object can not be found/i.test(lastErrText), lastErrText);
+     /could not be read/i.test(lastErrText) && /NotFoundError/.test(lastErrText) && !/object can not be found/i.test(lastErrText) && !/retake/i.test(lastErrText), lastErrText);
   /* And it says WHICH SERVER, because "Main backend" is a slot whose URL has
      been swapped once already — a screenshot of the old wording could not
      answer whether the phone was even talking to the right machine. */

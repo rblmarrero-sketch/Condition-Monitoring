@@ -129,12 +129,14 @@ const BAD = [12347, 23459, 34571];
     window.__badSizes = [];
     const bad = b => b && window.__badSizes.indexOf(b.size) >= 0;
     const err = () => new DOMException('A requested file or directory could not be found at the time an operation was processed.', 'NotFoundError');
-    const origRead = FileReader.prototype.readAsDataURL;
-    FileReader.prototype.readAsDataURL = function (blob) {
-      if (bad(blob)) { setTimeout(() => { try { Object.defineProperty(this, 'error', { value: err(), configurable: true }); } catch (e) {}
-        if (typeof this.onerror === 'function') this.onerror(new ProgressEvent('error')); }, 0); return; }
-      return origRead.call(this, blob);
-    };
+    ['readAsDataURL', 'readAsArrayBuffer'].forEach(m => {
+      const origRead = FileReader.prototype[m];
+      FileReader.prototype[m] = function (blob) {
+        if (bad(blob)) { setTimeout(() => { try { Object.defineProperty(this, 'error', { value: err(), configurable: true }); } catch (e) {}
+          if (typeof this.onerror === 'function') this.onerror(new ProgressEvent('error')); }, 0); return; }
+        return origRead.call(this, blob);
+      };
+    });
     const origAB = Blob.prototype.arrayBuffer;
     Blob.prototype.arrayBuffer = function () { if (bad(this)) return Promise.reject(err()); return origAB.call(this); };
   });
@@ -356,7 +358,7 @@ const BAD = [12347, 23459, 34571];
   ok('the round completes', s5.up === 1, JSON.stringify({ up: s5.up, lastErr: await p.evaluate(() => lastErr) }));
   ok('  the dead photograph was NOT sent — the server already had it', !st6.posted.slice(posted5).includes('TK904_P2_10.09.2026_MP.jpg'), JSON.stringify(st6.posted.slice(posted5)));
   ok('  the manifest records that this phone can no longer read it, and that the server holds it', held5 && held5.name === 'TK904_P2_10.09.2026_MP.jpg' && held5.held === 1, JSON.stringify(s5.atts));
-  ok('  no "cannot be read" alarm is raised for it', !/can no longer be read/.test(await p.evaluate(() => lastErr)), await p.evaluate(() => lastErr));
+  ok('  no "cannot be read" alarm is raised for it', !/could not be read/.test(await p.evaluate(() => lastErr)), await p.evaluate(() => lastErr));
   const row6 = await p.evaluate(async () => { await renderPending(); return [...document.querySelectorAll('#pending .pitem .up')].map(e => e.textContent).find(x => /TK904|no longer be read/.test(x)) || [...document.querySelectorAll('#pending .pitem .up')].map(e => e.textContent).join(' | '); });
   ok('  the row says exactly that', /1 photo\(s\) can no longer be read on this phone/.test(row6) && /verified copy stands/.test(row6), row6);
   ok('  and the read-back still lists it whole', s5.conf && s5.conf.n === s5.conf.of, JSON.stringify(s5.conf));
@@ -368,7 +370,7 @@ const BAD = [12347, 23459, 34571];
   await syncOnce();
   s5 = await rec(r5);
   ok('the round is not marked up', s5.up !== 1, JSON.stringify({ up: s5.up }));
-  ok('  and the alarm names the photograph', /can no longer be read/.test(await p.evaluate(() => lastErr)) && /TK904_P2/.test(await p.evaluate(() => lastErr)), await p.evaluate(() => lastErr));
+  ok('  and the alarm names the photograph', /could not be read/.test(await p.evaluate(() => lastErr)) && /TK904_P2/.test(await p.evaluate(() => lastErr)), await p.evaluate(() => lastErr));
   await p.evaluate(() => { window.__badSizes = []; });
   await p.evaluate(async id => { await dbDel(id); }, r5);
 

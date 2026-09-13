@@ -194,6 +194,26 @@ aborts on one unreadable photograph and reports real counts
 says when it could NOT be refreshed (`CMDrive.mediaIndexState`,
 `tests/medstale.cjs`) instead of handing back the stale count as fresh.
 
+**A photograph one reader refuses is not a photograph the phone has lost.**
+Read off a handset on build 347: every photograph of every round failed in
+`FileReader.readAsDataURL` — "can no longer be read … Retake the position",
+62 attempts on one round, zero photographs on the server — while the same
+phone's recovery inventory read every one of them in full through
+`blob.arrayBuffer()` four minutes later and hashed them to the manifest. The
+same phone had stored 3–5 MB camera originals for every round since
+2026-09-12 21:45Z where every earlier round held 300–1,100 KB, because
+`createImageBitmap` had been refusing the same files and nothing was shrunk.
+`readBlobBytes` asks `arrayBuffer()`, then FileReader as an ArrayBuffer, then
+as a data URL, and calls a file unreadable only when every reader has refused
+it — the error carries each reader's verdict (`e.readers`) and the banner
+prints them (`up_noread`), and never tells anybody to retake a position.
+`decodeImage` falls back from `createImageBitmap` to an `<img>`. The upload
+reads each photograph ONCE, decodes from a memory copy of those bytes, and
+sends the stored file again only where nothing shrank. A test that wants a
+reclaimed file must rig ALL THREE readers (`tests/staleblob.cjs`,
+`tests/recovery.cjs`); one that rigs FileReader alone is the field case, and
+the photograph is expected to be SENT (`tests/readpath.cjs`).
+
 **THE PAGE MUST NEVER UNREGISTER THE WORKER OR DELETE A CACHE.** Until build
 246 the Update button did exactly that — unregister every worker, delete every
 cache, swallow any refetch that failed, navigate. On a flaky link that left the

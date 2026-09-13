@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=348">
+<link rel="manifest" href="manifest.webmanifest?v=349">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=348">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=348">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=348">
+<link rel="apple-touch-icon" href="icon-192.png?v=349">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=349">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=349">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2469,15 +2469,15 @@ function bootDel(k){ try { localStorage.removeItem(k); } catch (e) {} }
   }
 })();
 </script>
-<script src="native.js?v=348"></script>
-<script src="upload-defaults.js?v=348"></script>
-<script src="hme.js?v=348"></script>
-<script src="mp-fc.js?v=348"></script>
-<script src="hme-cascade.js?v=348"></script>
-<script src="assets.js?v=348"></script>
-<script src="temp-limits.js?v=348"></script>
-<script src="normalize.js?v=348"></script>
-<script src="terms.js?v=348"></script>
+<script src="native.js?v=349"></script>
+<script src="upload-defaults.js?v=349"></script>
+<script src="hme.js?v=349"></script>
+<script src="mp-fc.js?v=349"></script>
+<script src="hme-cascade.js?v=349"></script>
+<script src="assets.js?v=349"></script>
+<script src="temp-limits.js?v=349"></script>
+<script src="normalize.js?v=349"></script>
+<script src="terms.js?v=349"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2496,25 +2496,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=348"></script>
-<script src="edits.js?v=348"></script>
-<script src="due.js?v=348"></script>
-<script src="wear.js?v=348"></script>
-<script src="wear-figs.js?v=348"></script>
-<script src="wear-map.js?v=348"></script>
-<script src="machine-photos.js?v=348"></script>
-<script src="machine-fig.js?v=348"></script>
-<script src="get.js?v=348"></script>
-<script src="points.js?v=348"></script>
-<script src="uc-points.js?v=348"></script>
-<script src="inspect-guide.js?v=348"></script>
-<script src="get-figs.js?v=348"></script>
-<script src="body-points.js?v=348"></script>
-<script src="body-map.js?v=348"></script>
-<script src="lube.js?v=348"></script>
-<script src="lube-overrides.js?v=348"></script>
-<script src="lube2027.js?v=348"></script>
-<script src="report-core.js?v=348"></script>
+<script src="grade.js?v=349"></script>
+<script src="edits.js?v=349"></script>
+<script src="due.js?v=349"></script>
+<script src="wear.js?v=349"></script>
+<script src="wear-figs.js?v=349"></script>
+<script src="wear-map.js?v=349"></script>
+<script src="machine-photos.js?v=349"></script>
+<script src="machine-fig.js?v=349"></script>
+<script src="get.js?v=349"></script>
+<script src="points.js?v=349"></script>
+<script src="uc-points.js?v=349"></script>
+<script src="inspect-guide.js?v=349"></script>
+<script src="get-figs.js?v=349"></script>
+<script src="body-points.js?v=349"></script>
+<script src="body-map.js?v=349"></script>
+<script src="lube.js?v=349"></script>
+<script src="lube-overrides.js?v=349"></script>
+<script src="lube2027.js?v=349"></script>
+<script src="report-core.js?v=349"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3212,6 +3212,7 @@ const I18N = {
   up_resend:"Server is missing {n} file(s) — sending again",
   up_differs:"the server holds a different copy of {n} file(s) — not overwritten",
   up_unread:"{n} photo(s) can no longer be read on this phone — the server's verified copy stands",
+  up_noread:"{n} photo(s) could not be read on this phone by any reader and were skipped: {names}. Everything else in this round is sent, and the upload will try again by itself. If it keeps failing, Recovery inventory (⚙ → System) can still export it.",
   net_qbad:"Queue could not be read — your work is not lost; check again",
   up_bookfail:"Could not record {u}'s progress on this phone ({why}) — the phone may be out of room; what was sent is kept",
   ud_hold:"update held: the round on screen could not be saved ({why})",
@@ -3776,6 +3777,7 @@ const I18N = {
   up_resend:"На сервере нет файлов: {n} — отправляем снова",
   up_differs:"на сервере другая копия файлов: {n} — не перезаписана",
   up_unread:"Фото больше не читаются на этом телефоне: {n} — действует проверенная копия на сервере",
+  up_noread:"Фото не удалось прочитать на этом телефоне ни одним способом, они пропущены: {n} — {names}. Остальное в этом раунде отправлено; выгрузка попробует снова сама. Если не помогает — «Опись восстановления» (⚙ → Система) сможет их сохранить.",
   net_qbad:"Очередь не читается — работа не потеряна; проверьте снова",
   up_bookfail:"Не удалось записать ход отправки {u} на телефоне ({why}) — возможно, нет места; отправленное сохранено",
   ud_hold:"обновление отложено: обход на экране не удалось сохранить ({why})",
@@ -12465,7 +12467,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="348";
+const BUILD="349";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -12739,13 +12741,55 @@ function upHeaders(raw,extra){ const h=Object.assign({},extra||{});
    bad" from "the network is bad" from the one sentence the app could show.
    r.error is the real DOMException — NotReadableError, NotFoundError — the
    name a person can act on. */
-function blobToB64(b){ return new Promise((res,rej)=>{ const r=new FileReader();
-  r.onload=()=>res(String(r.result).split(",")[1]);
-  r.onerror=()=>{ const e=r.error||new Error("could not read this file");
-    /* Tagged so the sync loop can tell "this file cannot be read" from
-       "the destination is unreachable" — see the breaker in syncNow(). */
-    try{ e.localRead=true; }catch(_){} rej(e); };
-  r.readAsDataURL(b); }); }
+/* THE BYTES OF A PHOTOGRAPH, BY WHICHEVER READER THIS PHONE STILL ANSWERS.
+
+   Read off a handset on build 347: every photograph of every round failed in
+   FileReader.readAsDataURL — "can no longer be read", sixty-two attempts on
+   one round — while the same phone's Recovery inventory, four minutes later,
+   read every one of them in full through blob.arrayBuffer() and hashed them
+   to the manifest byte for byte. The files were there; ONE reader was not.
+   iOS runs the two through different machinery, the upload had bet the whole
+   round on the one that failed, and the banner told the inspector to retake
+   a position the phone held intact.
+
+   So the bytes are asked for by arrayBuffer() first, then by FileReader as an
+   ArrayBuffer, then as a data URL. A photograph is called unreadable only when
+   every reader has refused it, and the error carries each reader's own name
+   (e.readers) so the banner can say which — tagged e.localRead so the sync
+   loop can tell "this file cannot be read" from "the destination is
+   unreachable" (the breaker in syncNow()). A reader that hands back fewer
+   bytes than the file says it has read a stump, and counts as a refusal. */
+function readBlobBytes(b){
+  const tried=[];
+  const note=e=>{ tried.push(String((e&&e.name)||"Error")+(e&&e.message?": "+e.message:"")); };
+  const viaFR=how=>new Promise((res,rej)=>{
+    let r; try{ r=new FileReader(); }catch(e){ return rej(e); }
+    r.onload=()=>{ try{ res(how==="ab" ? new Uint8Array(r.result) : dataUrlBytes(String(r.result))); }catch(e){ rej(e); } };
+    r.onerror=()=>rej(r.error||new Error("could not read this file"));
+    try{ if(how==="ab") r.readAsArrayBuffer(b); else r.readAsDataURL(b); }catch(e){ rej(e); } });
+  const readers=[
+    ()=>{ if(!(b && typeof b.arrayBuffer==="function")) throw new Error("no arrayBuffer"); return b.arrayBuffer().then(x=>new Uint8Array(x)); },
+    ()=>viaFR("ab"),
+    ()=>viaFR("url")];
+  return (async()=>{
+    for(const rd of readers){
+      try{
+        const u=await rd();
+        if(b && typeof b.size==="number" && u.length!==b.size) throw new Error("read "+u.length+" of "+b.size+" bytes");
+        return u;
+      }catch(e){ note(e); }
+    }
+    const e=new Error("could not be read ("+tried.join("; ")+")");
+    try{ e.name="NotReadableError"; e.readers=tried; e.localRead=true; }catch(_){}
+    throw e;
+  })();
+}
+function dataUrlBytes(s){ const i=s.indexOf(","); const bin=atob(i>=0?s.slice(i+1):s);
+  const u=new Uint8Array(bin.length); for(let k=0;k<bin.length;k++) u[k]=bin.charCodeAt(k); return u; }
+/* Base64 of the bytes, 32 KB at a time: String.fromCharCode over a whole
+   photograph overruns the argument limit, and a data URL is a second copy. */
+function bytesToB64(u){ let s=""; for(let i=0;i<u.length;i+=0x8000) s+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000)); return btoa(s); }
+async function blobToB64(b){ return bytesToB64(await readBlobBytes(b)); }
 /* ================== how big a photograph needs to be ==================
    Nothing downstream ever wants the full frame. The report prints 420 px
    thumbnails; the dashboard's viewer fits a browser window. A phone hands us
@@ -12825,12 +12869,16 @@ function attWrap(blob,aid){
   try{ return new File([blob], id+"."+extOf(blob), {type:blob.type||"image/jpeg"}); }
   catch(e){ return blob; }               // no File constructor: behave as before
 }
-async function sha256Of(blob){
+async function sha256Hex(buf){
   try{
-    if(!(self.crypto&&crypto.subtle&&blob&&blob.arrayBuffer)) return "";
-    const h=await crypto.subtle.digest("SHA-256", await blob.arrayBuffer());
+    if(!(self.crypto&&crypto.subtle&&buf)) return "";
+    const h=await crypto.subtle.digest("SHA-256", buf);
     return [...new Uint8Array(h)].map(x=>x.toString(16).padStart(2,"0")).join("");
   }catch(e){ return ""; }
+}
+async function sha256Of(blob){
+  try{ if(!(blob&&blob.arrayBuffer)) return ""; return await sha256Hex(await blob.arrayBuffer()); }
+  catch(e){ return ""; }
 }
 async function intake(blob){
   const px=photoPx();
@@ -12843,11 +12891,29 @@ async function intake(blob){
 }
 /* Shrink camera photos before upload — the single biggest lever on upload time.
    Skipped for the signature PNG and for anything already smaller than the limit. */
+/* The frame, decoded. createImageBitmap first; when it refuses — and on the
+   handset of build 347 it did, on stored photographs whose bytes were
+   readable, which is how 3 MB originals came to sit in the queue at 3 MB —
+   the same bytes go through an Image element, the decoder the screen itself uses. */
+async function decodeImage(blob){
+  try{ return await createImageBitmap(blob); }
+  catch(e){
+    const url=URL.createObjectURL(blob);
+    try{
+      const img=new Image(); img.decoding="async";
+      await new Promise((res,rej)=>{ img.onload=()=>res(); img.onerror=()=>rej(new Error("image did not decode")); img.src=url; });
+      if(img.decode){ try{ await img.decode(); }catch(_){ } }
+      if(!img.naturalWidth) throw new Error("image did not decode");
+      return img;
+    } finally { URL.revokeObjectURL(url); }
+  }
+}
 async function shrinkImage(blob,max){
-  const bmp=await createImageBitmap(blob);
-  const big=Math.max(bmp.width,bmp.height);
+  const bmp=await decodeImage(blob);
+  const W=bmp.naturalWidth||bmp.width, H=bmp.naturalHeight||bmp.height;
+  const big=Math.max(W,H);
   if(big<=max){ bmp.close&&bmp.close(); return blob; }
-  const s=max/big, w=Math.round(bmp.width*s), h=Math.round(bmp.height*s);
+  const s=max/big, w=Math.round(W*s), h=Math.round(H*s);
   const c=document.createElement("canvas"); c.width=w; c.height=h;
   c.getContext("2d").drawImage(bmp,0,0,w,h); bmp.close&&bmp.close();
   const out=await new Promise(r=>c.toBlob(r,"image/jpeg",PHOTO_Q));
@@ -12999,10 +13065,15 @@ async function putBatch(UP, files, rec, sent){
      read any more, not something the backend rejected — and names it, so
      the round is unstuck by retaking that one position rather than by
      anybody chasing a server that was never involved. */
+  /* Named with the readers' own verdicts (NotFoundError, NotReadableError…)
+     and WITHOUT telling anybody to retake it: the phone of build 347 was
+     told to retake three photographs it still held intact. The upload tries
+     again by itself, and the inventory can export what the upload cannot. */
   const unreadableErr=()=>{
-    const e=new Error(unreadable.length+" photo(s) on this phone can no longer be read and "+
-      (unreadable.length===1?"was":"were")+" skipped: "+unreadable.map(u=>u.name).join(", ")+
-      ". Retake the position — nothing else in this round is affected.");
+    const names=unreadable.map(u=>{ const r=u.err&&u.err.readers;
+      const why=r&&r.length ? r.map(s=>String(s).split(":")[0]).filter((s,i,a)=>a.indexOf(s)===i).join(", ") : (u.err&&u.err.name)||"";
+      return u.name+(why?" ("+why+")":""); }).join(", ");
+    const e=new Error(t("up_noread",{n:unreadable.length, names}));
     try{ e.localRead=true; }catch(_){}
     return e;
   };
@@ -13859,9 +13930,24 @@ async function syncNow(manual){
                phone holds — that is what a local integrity check needs. The
                wire hash is what the receipt can be judged against, and only
                the wire hash. */
-            const wire=await maybeShrink(f.blob,f.name);
+            /* Read ONCE, by whichever reader answers (readBlobBytes), and
+               decoded from a memory copy of those bytes — a stored reference
+               one reader has refused is not offered to the decoder, which
+               reads it a fourth way. Bytes that did not shrink are sent from
+               the stored file again rather than from this copy, so a
+               twenty-six photograph round is not held in memory twice. A
+               photograph no reader can read goes in as it is, and putBatch
+               says so by name. */
+            let wire=f.blob, wireSha="";
+            try{
+              const bytes=await readBlobBytes(f.blob);
+              const mem=new Blob([bytes],{type:f.blob.type||"image/jpeg"});
+              const small=await maybeShrink(mem,f.name);
+              if(small && small.size<bytes.length){ wire=small; wireSha=await sha256Of(small); }
+              else wireSha=await sha256Hex(bytes);
+            }catch(e){}
             files.push({name:f.name, blob:wire, type:f.blob.type, aid:f.aid||"",
-                        wireSha:await sha256Of(wire), wireSize:wire.size});
+                        wireSha, wireSize:wire.size});
           }
           const meta={type:"cm-inspection-entries",version:2,records:[recToExport(rec)]};
           payload=[{name:`${rec.equip}_${ddmmyyyy(rec.date)}_${rec.type}.json`,
@@ -14502,7 +14588,7 @@ async function yardCheck(){
         { label:t("rdy_fix_recover"), run:async()=>{ location.href="../recover.html#inventory"; } },"queue_recover");
       else if(stalled) add("bad",t("rdy_q_t"),t("rdy_q_stalled",{t:hhmm(lastTry)}),sendNow,"queue_stalled");
       else if(pend && UP.on && dests.length) add("bad",t("rdy_q_t"),
-        t("rdy_q_pend",{n:pend})+((lastErr && !/can no longer be read/.test(lastErr)) ? " "+t("rdy_q_net") : ""),
+        t("rdy_q_pend",{n:pend})+((lastErr && !/could not be read|не удалось прочитать/.test(lastErr)) ? " "+t("rdy_q_net") : ""),
         sendNow,"queue");
       else if(pend) add("bad",t("rdy_q_t"),t("rdy_q_pend",{n:pend}),null,"queue");
       else add("ok",t("rdy_q_t"),t("rdy_q_ok"),null,"queue");
