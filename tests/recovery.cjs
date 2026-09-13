@@ -45,15 +45,18 @@ let posted = [];           // every file name accepted, in order
 let DROP = new Set();      // names the listing leaves out
 let SIZES = {};            // name -> size the listing reports instead of the truth
 let RIVAL = new Set();     // names another device already owns: filed as <name>~RIVAL, like the backend does
+let MAXBODY = 0;           // a link with a size limit: any POST body larger than this is cut off mid-request
+let cut = 0;
 let reqs = [];
 const srv = http.createServer((req, res) => {
   const u = new URL(req.url, 'http://x'), cors = { 'Access-Control-Allow-Origin': '*' };
   const send = o => { res.writeHead(200, Object.assign({ 'Content-Type': 'application/json' }, cors)); res.end(JSON.stringify(o)); };
-  if (u.pathname === '/__stat') return send({ posted, reqs, store: Object.keys(store) });
+  if (u.pathname === '/__stat') return send({ posted, reqs, store: Object.keys(store), cut });
   if (u.pathname === '/__reset') { store = {}; posted = []; reqs = []; DROP = new Set(); SIZES = {}; return send({ ok: true }); }
   if (u.pathname === '/__drop') { DROP = new Set(String(u.searchParams.get('n') || '').split(',').filter(Boolean)); return send({ ok: true }); }
   if (u.pathname === '/__size') { SIZES = {}; const n = u.searchParams.get('n'); if (n) SIZES[n] = Number(u.searchParams.get('s')); return send({ ok: true }); }
   if (u.pathname === '/__rival') { RIVAL = new Set(String(u.searchParams.get('n') || '').split(',').filter(Boolean)); return send({ ok: true }); }
+  if (u.pathname === '/__maxbody') { MAXBODY = Number(u.searchParams.get('n') || 0); cut = 0; return send({ ok: true }); }
   if (u.pathname === '/exec') {
     if (req.method === 'GET') {
       reqs.push('get:' + u.searchParams.get('action'));
@@ -67,8 +70,9 @@ const srv = http.createServer((req, res) => {
       }
       return send({ ok: false, error: 'Unknown action' });
     }
-    let b = ''; req.on('data', c => b += c);
+    let b = ''; req.on('data', c => { b += c; if (MAXBODY && b.length > MAXBODY) { cut++; try { req.socket.destroy(); } catch (e) {} } });
     return req.on('end', () => {
+      if (MAXBODY && b.length > MAXBODY) return;           // cut off above: no reply
       let j = null; try { j = JSON.parse(b); } catch (e) {}
       const save = (f, folder) => {
         const bytes = Buffer.from(String(f.file || ''), 'base64');
@@ -307,6 +311,31 @@ const BAD = [12347, 23459, 34571];
   ok('  and nothing was sent again', (await stat()).posted.length === st7b.posted.length, (await stat()).posted.length - before7 + ' file(s) after the send');
   await ctl('/__rival?n=');
   await p.evaluate(async id => { await dbDel(id); }, r4);
+
+  console.log('\n4b. A LINK THAT REFUSES A BATCH STILL TAKES THE PHOTOGRAPHS ONE AT A TIME');
+  /* Read off the affected handset on 347: fourteen sidecars in one minute,
+     not one photograph. A link with a size limit passes 70 KB and cuts 2 MB. */
+  await ctl('/__reset');
+  /* Photographs with real entropy — noise compresses to ~150 KB, the size a
+     field photograph actually is — so a single one fits the limit and a
+     batch of three does not. */
+  await p.evaluate(() => { window.__jpgBig = async () => { const c = document.createElement('canvas'); c.width = 640; c.height = 480;
+    const x = c.getContext('2d'); const im = x.createImageData(640, 480); for (let i = 0; i < im.data.length; i++) im.data[i] = (Math.random() * 256) | 0; x.putImageData(im, 0, 0);
+    return await new Promise(r => c.toBlob(r, 'image/jpeg', 0.9)); }; });
+  await ctl('/__maxbody?n=400000');           // the sidecar and one photograph pass; a batch of three is cut off
+  const r4b = await p.evaluate(async () => window.__seed('TK905', [await window.__jpgBig(), await window.__jpgBig(), await window.__jpgBig()]));
+  const reqs0 = (await stat()).reqs.length;
+  await syncOnce();
+  const s4b = await rec(r4b), st4b = await stat();
+  const after4b = st4b.reqs.slice(reqs0);
+  /* A cut-off request never reaches the mock's log, so the cut counter is
+     the evidence, and no batch appears among the requests that completed. */
+  ok('the batch was cut off by the link', st4b.cut >= 1 && !after4b.some(x => /^batch/.test(x)), 'cut ' + st4b.cut + ' · ' + after4b.join(','));
+  ok('  and the round still went up — the photographs went one at a time', s4b.up === 1 && st4b.posted.filter(n => /TK905_P\d/.test(n)).length === 3 && after4b.filter(x => x === 'one').length >= 4,
+     JSON.stringify({ up: s4b.up, posted: st4b.posted.filter(n => /TK905/.test(n)), reqs: after4b }));
+  ok('  every one verified byte for byte', s4b.atts.length === 3 && s4b.atts.every(a => a.srvSha && a.srvSha === a.wire), JSON.stringify(s4b.atts.map(a => a.st)));
+  await ctl('/__maxbody?n=0');
+  await p.evaluate(async id => { await dbDel(id); }, r4b);
 
   console.log('\n5. A PHOTOGRAPH THE PHONE CANNOT READ, THAT THE SERVER VERIFIABLY HOLDS, DOES NOT HOLD THE ROUND');
   await ctl('/__reset');

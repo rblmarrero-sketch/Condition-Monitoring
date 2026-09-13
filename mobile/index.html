@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=347">
+<link rel="manifest" href="manifest.webmanifest?v=348">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=347">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=347">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=347">
+<link rel="apple-touch-icon" href="icon-192.png?v=348">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=348">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=348">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2469,15 +2469,15 @@ function bootDel(k){ try { localStorage.removeItem(k); } catch (e) {} }
   }
 })();
 </script>
-<script src="native.js?v=347"></script>
-<script src="upload-defaults.js?v=347"></script>
-<script src="hme.js?v=347"></script>
-<script src="mp-fc.js?v=347"></script>
-<script src="hme-cascade.js?v=347"></script>
-<script src="assets.js?v=347"></script>
-<script src="temp-limits.js?v=347"></script>
-<script src="normalize.js?v=347"></script>
-<script src="terms.js?v=347"></script>
+<script src="native.js?v=348"></script>
+<script src="upload-defaults.js?v=348"></script>
+<script src="hme.js?v=348"></script>
+<script src="mp-fc.js?v=348"></script>
+<script src="hme-cascade.js?v=348"></script>
+<script src="assets.js?v=348"></script>
+<script src="temp-limits.js?v=348"></script>
+<script src="normalize.js?v=348"></script>
+<script src="terms.js?v=348"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2496,25 +2496,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=347"></script>
-<script src="edits.js?v=347"></script>
-<script src="due.js?v=347"></script>
-<script src="wear.js?v=347"></script>
-<script src="wear-figs.js?v=347"></script>
-<script src="wear-map.js?v=347"></script>
-<script src="machine-photos.js?v=347"></script>
-<script src="machine-fig.js?v=347"></script>
-<script src="get.js?v=347"></script>
-<script src="points.js?v=347"></script>
-<script src="uc-points.js?v=347"></script>
-<script src="inspect-guide.js?v=347"></script>
-<script src="get-figs.js?v=347"></script>
-<script src="body-points.js?v=347"></script>
-<script src="body-map.js?v=347"></script>
-<script src="lube.js?v=347"></script>
-<script src="lube-overrides.js?v=347"></script>
-<script src="lube2027.js?v=347"></script>
-<script src="report-core.js?v=347"></script>
+<script src="grade.js?v=348"></script>
+<script src="edits.js?v=348"></script>
+<script src="due.js?v=348"></script>
+<script src="wear.js?v=348"></script>
+<script src="wear-figs.js?v=348"></script>
+<script src="wear-map.js?v=348"></script>
+<script src="machine-photos.js?v=348"></script>
+<script src="machine-fig.js?v=348"></script>
+<script src="get.js?v=348"></script>
+<script src="points.js?v=348"></script>
+<script src="uc-points.js?v=348"></script>
+<script src="inspect-guide.js?v=348"></script>
+<script src="get-figs.js?v=348"></script>
+<script src="body-points.js?v=348"></script>
+<script src="body-map.js?v=348"></script>
+<script src="lube.js?v=348"></script>
+<script src="lube-overrides.js?v=348"></script>
+<script src="lube2027.js?v=348"></script>
+<script src="report-core.js?v=348"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -12465,7 +12465,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="347";
+const BUILD="348";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -13025,7 +13025,7 @@ async function putBatch(UP, files, rec, sent){
     const bad=new Set(unreadable.map(u=>u.name));
     for(const f of files){
       if(bad.has(f.name)) continue;
-      await putOne(UP,f.name,f.blob,f.type,rec); sentMark(sent,f.name);
+      await putOne(UP,f.name,f.blob,f.type,rec,f.aid); sentMark(sent,f.name);
     }
     if(unreadable.length) throw unreadableErr();
     return;
@@ -13282,7 +13282,7 @@ async function putAll(dest, files, rec, sent){
      the folders are already there and the lone first file is just a lost lane. */
   let rest=files;
   if(!Object.keys(sent).length){
-    await putOne(dest,files[0].name,files[0].blob,files[0].type,rec);
+    await putOne(dest,files[0].name,files[0].blob,files[0].type,rec,files[0].aid);
     sentMark(sent,files[0].name);
     rest=files.slice(1);
   }
@@ -13291,9 +13291,9 @@ async function putAll(dest, files, rec, sent){
   /* Chunk into batches where the endpoint takes them, and into single files
      where it does not. Below this the two are the same shape — a pool of lanes
      over a list of jobs — so nothing else has to know which happened. */
-  let jobs;
+  let jobs, chunks=null;
   if(await canBatch(dest)){
-    const chunks=[]; let cur=[], bytes=0;
+    chunks=[]; let cur=[], bytes=0;
     for(const f of rest){
       const b=Math.ceil((f.blob.size||0)*4/3);          // base64, a third more
       if(cur.length && (cur.length>=BATCH_MAX_FILES || bytes+b>BATCH_MAX_BYTES)){
@@ -13304,7 +13304,7 @@ async function putAll(dest, files, rec, sent){
     jobs=chunks.map(c=>()=>putBatch(dest,c,rec,sent));
   } else {
     jobs=rest.map(f=>async()=>{
-      try{ await putOne(dest,f.name,f.blob,f.type,rec); }
+      try{ await putOne(dest,f.name,f.blob,f.type,rec,f.aid); }
       catch(e){
         /* The same rule as putBatch, one file at a time. */
         if(e && e.localRead){ f.localUnreadable=true; if(serverHolds(rec,f)){ f.serverHeld=true; sentMark(sent,f.name); return; } }
@@ -13325,11 +13325,41 @@ async function putAll(dest, files, rec, sent){
      and on a queue of them nothing ever converged. Same distinction the
      three-strikes breaker in syncNow() already draws, one level down. */
   let next=0, failed=null, fatal=null;
+  /* A BATCH THE LINK REFUSES WHOLE MAY STILL GO ONE PHOTOGRAPH AT A TIME.
+
+     Read off a handset on build 347: fourteen sidecars landed in one
+     minute — small single POSTs — and not one photograph, from any round,
+     new or old. A link that passes 70 KB and refuses 2 MB is a link with a
+     size limit somewhere on it (a proxy, a captive network, a carrier), or
+     one so slow that a batch outlives its deadline; either way a batch is
+     the wrong shape for it and a single file may not be. So a batch that
+     fails for any reason but a dead photograph is retried as its files, one
+     at a time, before the record's turn is given up — the server suppresses
+     any file that did in fact land, so a retry costs nothing twice. Only
+     when a single file fails too is the link declared gone. */
+  const oneByOne=async(chunk)=>{
+    for(const f of chunk){
+      if(sent[f.name]) continue;
+      try{ await putOne(dest,f.name,f.blob,f.type,rec,f.aid); sentMark(sent,f.name); }
+      catch(e){
+        if(e && e.localRead){ f.localUnreadable=true; if(serverHolds(rec,f)){ f.serverHeld=true; sentMark(sent,f.name); continue; } failed=failed||e; continue; }
+        throw e;
+      }
+    }
+  };
   const lane=async()=>{ for(;;){
     if(fatal) return;
     const i=next++; if(i>=jobs.length) return;
     try{ await jobs[i](); }
-    catch(e){ failed=failed||e; if(!(e&&e.localRead)) fatal=fatal||e; }
+    catch(e){
+      if(e && e.localRead){ failed=failed||e; continue; }
+      const chunk=chunks && chunks[i];
+      if(chunk && chunk.length>1){
+        try{ await oneByOne(chunk); continue; }
+        catch(e2){ failed=failed||e2; fatal=fatal||e2; continue; }
+      }
+      failed=failed||e; fatal=fatal||e;
+    }
   } };
   await Promise.all(Array.from({length:Math.min(uploadLanes(),jobs.length)},lane));
   /* A real failure outranks a dead photograph when both happened. Throwing
@@ -13366,7 +13396,7 @@ function fetchT(url,opts,ms){
 }
 const t_up_timeout=()=>t("up_timeout");
 
-async function putOne(UP, name, blob, type, ctx){
+async function putOne(UP, name, blob, type, ctx, aid){
   const folder=expandFolder(UP.folder||"", ctx);
   if(UP.id==="gas" || UP.id==="mirror"){
     // Apps Script web apps cannot answer a CORS preflight, so this must stay a
@@ -13374,9 +13404,14 @@ async function putOne(UP, name, blob, type, ctx){
     // dev lets the script tell "this phone re-sending its own record" from "another
     // phone about to overwrite it". Without it the second upload of the day wins
     // silently and the first inspector's round is gone.
+    /* The attachment id rides along exactly as it does in a batch, so the
+       receipt comes back addressed to the entry it is about. Without it a
+       photograph sent one at a time — the whole fallback path — came back
+       with an unaddressed receipt and could never read "verified". */
     const body={ name, folder, contentType:type||blob.type||"application/octet-stream",
                  file: await blobToB64(blob), secret: UP.sec||"",
-                 dev:(ctx&&ctx.dev)||DEVICE };
+                 dev:(ctx&&ctx.dev)||DEVICE,
+                 ...(aid?{aid, inspectionId:(ctx&&ctx.id)||""}:{}) };
     const r=await fetchT(UP.url,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
                                  body:JSON.stringify(body)});
     if(!r.ok) throw new Error(await httpErr(r));
@@ -13625,7 +13660,10 @@ function attReceipt(rec, byName){
     /* Matched on the id the server was given, falling back to the name for a
        backend that does not echo one yet. */
     const e=(r.attachmentId && by[r.attachmentId]) ||
-            Object.values(by).find(x=>x && x.originalFilename===name) || null;
+            Object.values(by).find(x=>x && x.originalFilename===name) ||
+            /* The name a receipt is keyed by is the name the file was SENT
+               under — the stored name — never the original file name. */
+            Object.values(by).find(x=>x && x.storedName===name) || null;
     if(!e) continue;
     e.serverReceiptId=String(r.receiptId||"");
     e.serverObjectId =String(r.objectId||"");
