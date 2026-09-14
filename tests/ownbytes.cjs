@@ -144,6 +144,24 @@ const srv = http.createServer((q, s) => {
      held.bytes === held.size, held.bytes + ' bytes read' + (held.err ? ' (' + held.err + ')' : ''));
   ok('  with nothing to report, because nothing went wrong', held.why === '', held.why || '(clean)');
 
+  /* Owning the bytes must not re-label them. A picker that hands over a blank
+     type is common on Android, and attWrap's `blob.type||"image/jpeg"` is what
+     rescues it; stamp "application/octet-stream" in between and that rescue
+     can never fire — and Safari will not decode a blob: URL whose Blob claims
+     a non-image type, so a perfectly readable photograph renders as the "?"
+     this suite's §6 is about. The lie would arrive dressed as a tidy-up. */
+  const typ = await p.evaluate(async () => {
+    const src = await window.__mk(320, false);
+    const blank = new File([await src.arrayBuffer()], 'IMG_0002', { type: '' });
+    const own = await ownBytes(blank);
+    const att = attWrap(await ownBytes(new File([await src.arrayBuffer()], 'IMG_0003.jpg', { type: 'image/jpeg' })));
+    const attBlank = attWrap(own);
+    return { own: own.type, keptJpeg: att.type, rescued: attBlank.type };
+  });
+  ok('  a blank type is carried through blank, not invented', typ.own === '', JSON.stringify(typ.own));
+  ok('  so attWrap can still rescue it as a JPEG', typ.rescued === 'image/jpeg', typ.rescued);
+  ok('  and a real type is never touched', typ.keptJpeg === 'image/jpeg', typ.keptJpeg);
+
   console.log('\n3. the same holds for a frame that DOES go through the canvas');
   const big = await p.evaluate(async () => {
     const px = (typeof photoPx === 'function' && photoPx()) || 1600;
