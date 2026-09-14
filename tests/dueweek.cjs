@@ -302,6 +302,51 @@ const server = http.createServer((req, res) => {
     return !!tl && !!(tl.getAttribute('aria-label') || tl.getAttribute('aria-labelledby'));
   }));
 
+  /* A ROUND THE SITE HAS TAKEN OFF A MACHINE IS NOT ON THE CALENDAR EITHER.
+
+     Every other reader of the schedule applied DUE.offRound — planRows,
+     dueRows, neverRows, the office's duePlanRows — and dueWeekRows did not.
+     So from the day the KAMAZ trucks came off General Inspection the List
+     stopped proposing it while this screen went on drawing INSP rows for the
+     same trucks on the same days: two screens, one fact, two answers, and the
+     wrong one is the one somebody drives out on. Reported from the field with
+     TK030 and TK041 circled on the agenda, two days after the decision.
+
+     Asserted against DUE.offRound rather than against a list of round codes,
+     so the next machine the site holds off needs no change here. */
+  console.log('\n6. THE AGENDA OBEYS THE HOLD-OFF, AND AGREES WITH THE LIST');
+  const held = await p.evaluate(() => {
+    const a = ASSETS.find(x => /KAMAZ/i.test(String(x.m || '') + ' ' + String(x.mk || '')));
+    if (!a || !window.DUE || !DUE.offRound) return null;
+    const TYPES = ['MP', 'FC', 'INSP', 'TEMP', 'UC', 'GET', 'TB', 'LUBE'];
+    const day = DUE.today();
+    SCHED.byUnit = SCHED.byUnit || {};
+    SCHED.byUnit[a.n] = [{ wo: 'WO-AGENDA', hours: 4000, types: TYPES.slice(),
+                           plan: day, priority: 'P3 Planned (PM)' }];
+    const agenda = dueWeekRows().filter(r => r.unit === a.n).map(r => r.code).sort();
+    const list = planRows('').filter(r => r.unit === a.n).map(r => r.ty).sort();
+    /* and the whole agenda, not only the planted machine */
+    const anyHeld = dueWeekRows()
+      .filter(r => DUE.offRound(r.code, ASSET_BY[r.unit]))
+      .map(r => r.unit + ' ' + r.code);
+    delete SCHED.byUnit[a.n];
+    return { unit: a.n, agenda, list, anyHeld,
+             onAny: TYPES.filter(ty => !DUE.offRound(ty, a)) };
+  });
+  if (held) {
+    ok('a held-off machine planned for every round draws nothing on the agenda',
+       held.agenda.length === 0, held.unit + ' -> ' + JSON.stringify(held.agenda));
+    ok('  the agenda and the List give the SAME answer',
+       JSON.stringify(held.agenda) === JSON.stringify(held.list),
+       'agenda ' + JSON.stringify(held.agenda) + ' vs list ' + JSON.stringify(held.list));
+    ok('  and it really is held off every round, so the test can see a failure',
+       held.onAny.length === 0, 'still on ' + JSON.stringify(held.onAny));
+    ok('  no row anywhere on the agenda is a round its machine is off',
+       held.anyHeld.length === 0, held.anyHeld.slice(0, 4).join(', ') || 'none');
+  } else {
+    ok('a KAMAZ and DUE.offRound are both present to test against', false);
+  }
+
   ok('no page errors throughout', errs.length === 0, errs.slice(0, 3).join(' | '));
 
   await b.close();
