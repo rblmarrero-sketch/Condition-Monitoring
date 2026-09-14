@@ -509,10 +509,70 @@ that belongs to the change:
 | any `server.js` change | `ssh cmadmin@baimskaya-cm.duckdns.org 'sudo journalctl -u cm -n 20 --no-pager \| grep cm.endpoint'` — reads `request 960s · headers 65s` |
 | `MEDIA_BATCH` (was `MEDIA_MAX`) | `ssh cmadmin@baimskaya-cm.duckdns.org 'grep -c MEDIA_BATCH /opt/cm/function.js'` — reads `6`. `grep -c MEDIA_MAX` reads **1**, not 0: the comment above the constant names what it used to be called, deliberately. An expected figure quoted from memory rather than from the file made a good deploy look half-done once already. |
 | deferral reasons (`whyKey`) | `ssh cmadmin@baimskaya-cm.duckdns.org 'grep -c "whyKey" /opt/cm/function.js'` — reads `2` |
-| the hourly 1C dispatch | `ssh cmadmin@baimskaya-cm.duckdns.org 'sudo journalctl -u cm -n 200 --no-pager \| grep -i WO_GH'` — silence means the token is not set; see §12's note |
+| the hourly 1C dispatch | `ssh cmadmin@baimskaya-cm.duckdns.org 'sudo journalctl -u cm -n 200 --no-pager \| grep -i \"wo:\"'` — see the section below; `REFUSED` and `not set` are different problems |
 
 A grep against the file on the VM is the only check that cannot be satisfied
 by a server that merely answers. Prefer it to anything that reads the endpoint.
+
+### The 1C dispatch token — and the failure that looks like nothing
+
+`WO_GH_TOKEN` lets the VM ask GitHub to rebuild `data/work_orders.js` the
+moment a new WO.xlsx appears, instead of waiting for GitHub's own schedule
+(measured firing at 21:49, 23:35, 02:09 and 07:47 — "hourly" it is not).
+
+**A token that is set is not a token that works.** Read off this machine on
+2026-09-14, every attempt for as long as one had been set:
+
+```
+[push] wo: dispatch failed — HTTP 403: {"message":"Resource not accessible by personal access token"}
+```
+
+From the office that is indistinguishable from no token at all — the 1C figures
+are simply old — and the only trace was one journal line that stated the
+failure without the remedy. Since build 375 the server names the cause and the
+fix in the line itself.
+
+To set it, WITHOUT ever printing it back:
+
+```powershell
+ssh cmadmin@baimskaya-cm.duckdns.org 'sudo grep -c ^WO_GH_TOKEN= /opt/cm/cm.env'
+```
+
+`0` means it is absent, `1` present — and the value is never shown, because
+`cm.env` also holds `ADMIN_SECRET` and the VAPID keys. Then, with the token in
+your clipboard:
+
+```powershell
+ssh -t cmadmin@baimskaya-cm.duckdns.org 'sudo nano /opt/cm/cm.env'
+```
+
+Add one line, save with Ctrl+O then Enter, leave with Ctrl+X:
+
+```
+WO_GH_TOKEN=github_pat_...
+```
+
+then restart and watch what it says:
+
+```powershell
+ssh cmadmin@baimskaya-cm.duckdns.org 'sudo systemctl restart cm; sleep 3; sudo journalctl -u cm -n 30 --no-pager | grep -i wo:'
+```
+
+**What the token needs.** A fine-grained personal access token on
+`rblmarrero-sketch/Condition-Monitoring` with **Actions: Read and write** —
+that one permission and no other — and an expiry date somebody has written
+down. `Contents: Read` alone gives the 403 above. A classic token needs the
+`workflow` scope.
+
+**What each line means:**
+
+| Line | What it means |
+|---|---|
+| `wo: first seen …` | working; it is now watching the file's headers |
+| `wo: … → … — refresh dispatched` | working; a new WO.xlsx was noticed and the rebuild was asked for |
+| `wo: dispatch REFUSED — HTTP 403 …` | the token is there and GitHub will not use it: wrong permission, or expired |
+| `wo: not watching WO.xlsx — WO_GH_TOKEN is not set` | absent; GitHub's own schedule still runs, best-effort |
+| `wo: changed, holding …` | working; a second change inside the gap, deliberately not stacked |
 
 **Take every expected number off the file in the repository, at the moment you
 write the instruction — never from memory.** A check whose expected value is

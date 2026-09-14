@@ -305,14 +305,36 @@ function startPushTriggers(fn, o) {
     st.wo.lastFire = Date.now();
     try { await dispatchWorkflow(woRepo, woWf, woRef, woToken, 20000); st.wo.fires++;
           note('wo: ' + was + ' → ' + tag + ' — refresh dispatched'); return true; }
-    catch (e) { st.wo.lastErr = String((e && e.message) || e); note('wo: dispatch failed — ' + st.wo.lastErr); return false; }
+    catch (e) {
+      st.wo.lastErr = String((e && e.message) || e);
+      /* A REFUSED TOKEN IS NOT A MISSING ONE, AND THE LOG HAS TO SAY WHICH.
+         Read off this VM on 2026-09-14: every dispatch answered
+         `HTTP 403: Resource not accessible by personal access token`, for as
+         long as the token had been set. From the office that is identical to
+         no token at all — the 1C figures are simply old — and the only trace
+         was this line, which stated the failure and not the remedy, so it was
+         read as noise. GitHub refuses a fine-grained token that has no
+         `actions: write` on the repository, and also one whose expiry has
+         passed; both come back 401/403 and both are fixed in the same place.
+         The message names it now, because a diagnostic nobody can act on is a
+         diagnostic nobody reads twice. */
+      if (/HTTP 40[13]/.test(st.wo.lastErr))
+        note('wo: dispatch REFUSED — ' + st.wo.lastErr
+             + ' — WO_GH_TOKEN exists but GitHub will not use it: it needs Actions: Read and write '
+             + 'on ' + woRepo + ', and must not have expired. Until it is fixed the hourly refresh '
+             + 'never runs and the office sees stale 1C figures with nothing on screen to say so.');
+      else note('wo: dispatch failed — ' + st.wo.lastErr);
+      return false;
+    }
   }
 
   fn.onFolderChange(folderChanged);
   st.timers.push(setInterval(() => { pollBuild(); }, pollMs));
   st.timers.push(setInterval(tickDaily, 60000));
   if (woToken) { st.timers.push(setInterval(() => { pollWorkOrders(); }, woMs)); pollWorkOrders(); }
-  else note('wo: not watching WO.xlsx — WO_GH_TOKEN is not set');
+  else note('wo: not watching WO.xlsx — WO_GH_TOKEN is not set in /opt/cm/cm.env. '
+            + 'GitHub\'s own schedule still runs it, but best-effort: measured firing at '
+            + '21:49, 23:35, 02:09 and 07:47.');
   st.timers.forEach(t => t.unref && t.unref());
   pollBuild();
   return { pollBuild, pushFolder, pushDaily, folderChanged, pollWorkOrders, state: st,
