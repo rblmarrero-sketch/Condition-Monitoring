@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=371">
+<link rel="manifest" href="manifest.webmanifest?v=372">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=371">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=371">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=371">
+<link rel="apple-touch-icon" href="icon-192.png?v=372">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=372">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=372">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2392,6 +2392,52 @@
    the rule can see them. */
 function bootSet(k, v){ try { localStorage.setItem(k, v); } catch (e) {} }
 function bootDel(k){ try { localStorage.removeItem(k); } catch (e) {} }
+
+/* ── NOTHING FAILS WITHOUT LEAVING A MARK ─────────────────────────────────
+   A rejected promise nobody handles is this app's quietest failure: no
+   throw reaches a handler, no catch runs, the browser prints one line to a
+   console nobody on a handset can open, and the work simply does not happen.
+   It is the signature defect in its purest form, and it had a habit to
+   produce it — `try{ asyncThing(); }catch(e){}`, which reads as a guard and
+   catches nothing at all, because the call returns a promise before it can
+   fail. Six of those shipped.
+
+   So two things live here, at the top, before the first blocking script:
+
+     · bad(where, e) — the one way to answer a failure that has nowhere
+       else to go. It records into a small ring; once the sync log exists it
+       mirrors there too, so a failure of this class ends up in the trace an
+       inspector can send in.
+     · the listeners for `unhandledrejection` and for a window `error`, so a
+       failure NOBODY handled is recorded anyway, including ones in code
+       written after this and ones nobody thought to guard.
+
+   It is deliberately tiny and dependency-free: it runs before lsSet, before
+   SLOG, before TERMS, and storage code here cannot depend on load order —
+   the same rule histSave() learned the hard way. `window.__errs` is where
+   the System screen and the tests read it. */
+var CM_ERRS = [];
+window.__errs = CM_ERRS;
+function bad(where, e){
+  var m = "";
+  try { m = (e && (e.message || e.reason || e.name)) || String(e || ""); } catch (_) { m = "?"; }
+  try {
+    CM_ERRS.push({ t: Date.now(), where: String(where || "?"), m: String(m).slice(0, 300) });
+    if (CM_ERRS.length > 50) CM_ERRS.shift();
+  } catch (_) {}
+  /* The sync log is the channel a technician can already export. It is a
+     `let` further down the file, so it may not exist yet — asking for it
+     before then is a ReferenceError, which is why this is guarded and why
+     the ring above is written FIRST and unconditionally. */
+  try { if (typeof slog === "function") slog("failed", { at: String(where || "?"), e: String(m).slice(0, 200) }); } catch (_) {}
+  return undefined;                        /* usable as a .catch() handler */
+}
+window.addEventListener("unhandledrejection", function (ev) {
+  bad("unhandled-rejection", ev && ev.reason);
+});
+window.addEventListener("error", function (ev) {
+  if (ev && ev.message) bad("uncaught", ev.error || ev.message);
+});
 (function () {
   /* Generous on purpose, and then some. A slow boot is not a broken one:
      an older iPhone parsing 3.5 MB of script on a pit link can take a long
@@ -2504,15 +2550,15 @@ function bootDel(k){ try { localStorage.removeItem(k); } catch (e) {} }
   }
 })();
 </script>
-<script src="native.js?v=371"></script>
-<script src="upload-defaults.js?v=371"></script>
-<script src="hme.js?v=371"></script>
-<script src="mp-fc.js?v=371"></script>
-<script src="hme-cascade.js?v=371"></script>
-<script src="assets.js?v=371"></script>
-<script src="temp-limits.js?v=371"></script>
-<script src="normalize.js?v=371"></script>
-<script src="terms.js?v=371"></script>
+<script src="native.js?v=372"></script>
+<script src="upload-defaults.js?v=372"></script>
+<script src="hme.js?v=372"></script>
+<script src="mp-fc.js?v=372"></script>
+<script src="hme-cascade.js?v=372"></script>
+<script src="assets.js?v=372"></script>
+<script src="temp-limits.js?v=372"></script>
+<script src="normalize.js?v=372"></script>
+<script src="terms.js?v=372"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2531,25 +2577,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=371"></script>
-<script src="edits.js?v=371"></script>
-<script src="due.js?v=371"></script>
-<script src="wear.js?v=371"></script>
-<script src="wear-figs.js?v=371"></script>
-<script src="wear-map.js?v=371"></script>
-<script src="machine-photos.js?v=371"></script>
-<script src="machine-fig.js?v=371"></script>
-<script src="get.js?v=371"></script>
-<script src="points.js?v=371"></script>
-<script src="uc-points.js?v=371"></script>
-<script src="inspect-guide.js?v=371"></script>
-<script src="get-figs.js?v=371"></script>
-<script src="body-points.js?v=371"></script>
-<script src="body-map.js?v=371"></script>
-<script src="lube.js?v=371"></script>
-<script src="lube-overrides.js?v=371"></script>
-<script src="lube2027.js?v=371"></script>
-<script src="report-core.js?v=371"></script>
+<script src="grade.js?v=372"></script>
+<script src="edits.js?v=372"></script>
+<script src="due.js?v=372"></script>
+<script src="wear.js?v=372"></script>
+<script src="wear-figs.js?v=372"></script>
+<script src="wear-map.js?v=372"></script>
+<script src="machine-photos.js?v=372"></script>
+<script src="machine-fig.js?v=372"></script>
+<script src="get.js?v=372"></script>
+<script src="points.js?v=372"></script>
+<script src="uc-points.js?v=372"></script>
+<script src="inspect-guide.js?v=372"></script>
+<script src="get-figs.js?v=372"></script>
+<script src="body-points.js?v=372"></script>
+<script src="body-map.js?v=372"></script>
+<script src="lube.js?v=372"></script>
+<script src="lube-overrides.js?v=372"></script>
+<script src="lube2027.js?v=372"></script>
+<script src="report-core.js?v=372"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -7054,6 +7100,12 @@ function effSev(p){ return (p&&(gradeIso(p.grade)||p.sev))||""; }
    lost afternoon. So the draft is written continuously, and the app offers to
    carry on rather than assuming either answer. */
 let draftT=null, draftSig="";
+/* "The draft in the store belongs to a round that has already been saved."
+   Set only when dropping it FAILED (see resetForm), and read by offerDraft,
+   which otherwise restores a draft silently on the resume path. A phone that
+   cannot write is the one phone where this matters, and it is the one phone
+   where the draft cannot be deleted. */
+let draftStale=false;
 function draftSnapshot(){
   return { id:DRAFT_ID, type, equip:curEquip, item:curItem,
            date:$("date").value, smu:$("smu").value.trim(),
@@ -7916,7 +7968,14 @@ function setEditing(rec){ editing=rec||null;
   else $("editBanner").classList.add("hidden");
   $("cancelEdit").textContent=t("btn_cancel"); updateSaveLabel(); }
 function resetForm(){ draft={positions:{}}; curEquip=""; curItem=""; draftSig="";
-  clearTimeout(draftT); draftT=null; try{ dbDel(DRAFT_ID); }catch(e){}
+  clearTimeout(draftT); draftT=null;
+  /* The saved round's draft, dropped. A sync try here caught nothing — dbDel
+     is async and rejects — so on a phone whose IndexedDB refuses writes the
+     draft survived its own round: offered again at the next boot, and on the
+     silent-resume path restored WITHOUT asking, which is how one round comes
+     to be walked into the folder twice. Handled, recorded, and the resume is
+     told not to trust it. */
+  dbDel(DRAFT_ID).catch(e=>{ draftStale=true; bad("draft-drop", e); });
   updateEquipBtn(); $("smu").value=""; $("date").value=todayISO();
   gps=null; renderGps(); clearSign();
   applyForm(); setEditing(null); }
@@ -10880,7 +10939,7 @@ async function teamPull(manual,full,from,pre){
     if(saved && nextCur){
       const was=Number(localStorage.getItem(TEAM_CUR)||0)||0;
       const now=Number(nextCur)||0;
-      if(now>was || !was){ lsSet(TEAM_CUR,String(nextCur)); try{ mirrorSwConfig(); }catch(e){} }
+      if(now>was || !was){ lsSet(TEAM_CUR,String(nextCur)); mirrorSwConfig().catch(e=>bad("sw-config", e)); }
     }
     /* A complete read that stored everything is the one thing that can retire
        the repair flag — and only then, or the next pull goes straight back to
@@ -13086,7 +13145,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="371";
+const BUILD="372";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -15591,8 +15650,8 @@ async function yardNotify(v){
     await reg.showNotification(t("rdy_notif_not"),{ body:t(v.s), tag:"cm-ready", renotify:false, icon:"icon-192.png", badge:"icon-192.png" });
   }catch(e){}
 }
-setTimeout(()=>{ try{ yardCheck(); }catch(e){} }, 5000);
-setInterval(()=>{ if(!document.hidden){ try{ yardCheck(); }catch(e){} } }, 600000);
+setTimeout(()=>{ yardCheck().catch(e=>bad("yard-boot", e)); }, 5000);
+setInterval(()=>{ if(!document.hidden) yardCheck().catch(e=>bad("yard-tick", e)); }, 600000);
 /* NOT renderReady(). There is already one of those, and it drives the one-line
    bar at the top of the capture screen — declared later in the file, so mine
    silently replaced it and the bar stopped speaking at all. Two answers to two
@@ -16165,7 +16224,7 @@ async function armRetry(){
 /* Every finish re-arms, whether it worked or not: cleared queue → disarmed,
    anything left → another attempt scheduled. */
 const syncThenArm = (manual)=>syncNow(manual).finally(()=>{ armRetry();
-  setTimeout(()=>{ try{ yardCheck(); }catch(e){} }, 800); });   // the verdict follows every send
+  setTimeout(()=>{ yardCheck().catch(e=>bad("yard-sent", e)); }, 800); });   // the verdict follows every send
 
 /* Through the seam: inside the shell this is the OS telling us the connection
    changed, which fires in the cases navigator.onLine sleeps through. On the
@@ -17023,6 +17082,11 @@ async function offerDraft(){
   try{ d=await dbGet(DRAFT_ID); }catch(e){ return; }
   const n=d && d.positions ? Object.keys(d.positions).length : 0;
   if(!n || !d.equip) return;
+  /* A draft whose round was saved and whose deletion failed is not work in
+     progress — it is a copy of something already in the queue. Never offered
+     silently; the inspector is asked, so a round is not walked in twice by a
+     phone that simply could not write. */
+  if(draftStale){ try{ sessionStorage.removeItem("cm_resume_silent"); }catch(e){} }
   const ty=d.type||"MP";
   let silent=false;
   try{ silent=sessionStorage.getItem("cm_resume_silent")==="1"; sessionStorage.removeItem("cm_resume_silent"); }catch(e){}
@@ -17210,7 +17274,7 @@ document.addEventListener("visibilitychange",()=>{
    evicts under pressure — either takes an un-uploaded round with it.
    It costs one call, it is idempotent, and the answer is recorded honestly so
    ⚙ can say what is true rather than reassure. */
-try{ if(persistState===null) askPersist(); }catch(e){}
+if(persistState===null) askPersist().catch(e=>bad("persist", e));
 schedTimer = setInterval(()=>schedRefresh("timer"), SCHED_MS);
 document.addEventListener("visibilitychange",()=>{
   if(!document.hidden) schedRefresh("visible");

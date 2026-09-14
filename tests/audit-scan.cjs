@@ -441,6 +441,37 @@ function scanUnit(u) {
       + ' — the later one wins, silently');
     else seen.set(key, L(i));
   });
+
+  /* ── 7. A SYNCHRONOUS try AROUND AN ASYNCHRONOUS CALL CATCHES NOTHING ────
+     `try{ dbDel(DRAFT_ID); }catch(e){}` reads as "if that fails, never mind".
+     It is not: the call returns a promise before it can fail, the catch never
+     runs, and the failure becomes an unhandled rejection — which neither
+     surface listens for, so it leaves no trace anywhere. The work the guard
+     was written to protect does not happen and nothing says so: this
+     project's signature defect, produced by a habit rather than a typo.
+
+     Only calls to functions this unit DECLARES async are counted, and a line
+     that awaits or attaches its own .catch() is already handled. */
+  const asyncFns = new Set();
+  {
+    let m; const code = safe.join('\n');
+    const re1 = /\basync\s+function\s+([A-Za-z_$][\w$]*)/g;
+    while ((m = re1.exec(code))) asyncFns.add(m[1]);
+    const re2 = /\b(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*=\s*async\b/g;
+    while ((m = re2.exec(code))) asyncFns.add(m[1]);
+  }
+  safe.forEach((s, i) => {
+    const m = s.match(/try\s*\{([^}]*)\}\s*catch\s*\([^)]*\)\s*\{\s*\}/);
+    if (!m) return;
+    const inner = m[1];
+    if (/\bawait\b|\.catch\s*\(/.test(inner)) return;
+    const called = (inner.match(/\b[A-Za-z_$][\w$]*\s*\(/g) || [])
+      .map(c => c.replace(/\s*\($/, '')).filter(n => asyncFns.has(n));
+    if (!called.length) return;
+    add('high', 'async-in-sync-try', u.file, L(i), raw[i],
+      called.join(', ') + ' is async, so this catch can never run — a failure '
+      + 'becomes an unhandled rejection and the guard protects nothing');
+  });
 }
 
 /* ── 0. THE SCANNER PROVES IT CAN SEE, BEFORE IT IS BELIEVED ──────────────
@@ -458,6 +489,7 @@ const PLANT = [
   ['json-parse',  'var o = JSON.parse(wire);'],
   ['dead-guard',  'const ZZNOBODY = window.ZZNOBODY || {};'],
   ['redeclared',  'function zzTwice(){}\nfunction zzTwice(){}'],
+  ['async-in-sync-try', 'async function zzLater(){}\ntry{ zzLater(); }catch(e){}'],
 ];
 {
   const before = findings.length;
@@ -638,6 +670,7 @@ ok('no element is fetched by an id its page does not carry', count('missing-id')
 ok('no guard reads a window property nothing publishes', count('dead-guard') === 0, count('dead-guard'));
 ok('no name is declared twice in one scope', count('redeclared') === 0, count('redeclared'));
 ok('no JSON.parse is reachable with nothing to catch it', count('json-parse') === 0, count('json-parse'));
+ok('no sync try pretends to guard an async call', count('async-in-sync-try') === 0, count('async-in-sync-try'));
 ok('nothing at high or medium severity', show.length === 0, show.length + ' finding(s)');
 console.log('\n' + (fails.length ? fails.length + ' FAILED' : 'ALL PASS'));
 process.exit(fails.length ? 1 : 0);
