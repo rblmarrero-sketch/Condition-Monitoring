@@ -2,7 +2,7 @@
 // Re-run the ingester (against a fresh WO.xlsx) to refresh.
 // Loaded by dashboard/index.html for the Plan vs Actual tab.
 window.CM_WO_DATA = {
-  "generated": "2026-09-14T20:04:29+00:00",
+  "generated": "2026-09-14T23:37:23+00:00",
   "source": "https://askpi.94-131-94-152.sslip.io/WO.xlsx",
   "filter": "Maintenence type matches /^\\d+ Hours service Planned$/, equip prefix in [\"<all>\"]",
   "unitsInWorkbook": 670,
@@ -1676,15 +1676,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-09-12",
-      "planStartDt": "2026-09-12T00:00:00",
-      "planEnd": "2026-09-12",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planStartDt": "2026-09-12T19:00:00",
+      "planEnd": "2026-09-13",
+      "actualStart": "2026-09-12",
+      "actualStartDt": "2026-09-12T19:00:00",
+      "actualEnd": "2026-09-13"
     },
     {
       "equip": "BSL003",
@@ -15907,15 +15907,15 @@ window.CM_WO_DATA = {
         "UC"
       ],
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-09-14",
-      "planStartDt": "2026-09-14T00:00:00",
-      "planEnd": "2026-09-15",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planStartDt": "2026-09-14T07:00:00",
+      "planEnd": "2026-09-14",
+      "actualStart": "2026-09-14",
+      "actualStartDt": "2026-09-14T07:00:00",
+      "actualEnd": "2026-09-14"
     },
     {
       "equip": "EX022",
@@ -27012,15 +27012,15 @@ window.CM_WO_DATA = {
       "cmLabel": "250h service",
       "cmTypes": null,
       "priority": "P3 Planned (PM)",
-      "woStatus": "REL",
-      "cmmsStatus": "Elimination scheduled",
-      "open": true,
+      "woStatus": "CNF",
+      "cmmsStatus": "Completed",
+      "open": false,
       "planStart": "2026-09-13",
-      "planStartDt": "2026-09-13T00:00:00",
-      "planEnd": "2026-09-14",
-      "actualStart": null,
-      "actualStartDt": null,
-      "actualEnd": null
+      "planStartDt": "2026-09-13T13:20:00",
+      "planEnd": "2026-09-13",
+      "actualStart": "2026-09-13",
+      "actualStartDt": "2026-09-13T13:20:00",
+      "actualEnd": "2026-09-13"
     },
     {
       "equip": "LD005",
@@ -41313,17 +41313,16 @@ window.CM_WO_DATA = {
       "equip": "TK112",
       "cls": "AT",
       "woNumber": null,
-      "maintType": "2000 Hours service Planned",
-      "hours": 2000,
-      "cmLabel": "General Inspection / Magnetic Plug / Dump Body Liner",
+      "maintType": "1000 Hours service Planned",
+      "hours": 1000,
+      "cmLabel": "General Inspection / Magnetic Plug",
       "cmTypes": [
         "INSP",
-        "MP",
-        "TB"
+        "MP"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": null,
-      "cmmsStatus": "Registered",
+      "cmmsStatus": null,
       "open": true,
       "planStart": null,
       "planStartDt": null,
@@ -41336,16 +41335,17 @@ window.CM_WO_DATA = {
       "equip": "TK112",
       "cls": "AT",
       "woNumber": null,
-      "maintType": "1000 Hours service Planned",
-      "hours": 1000,
-      "cmLabel": "General Inspection / Magnetic Plug",
+      "maintType": "2000 Hours service Planned",
+      "hours": 2000,
+      "cmLabel": "General Inspection / Magnetic Plug / Dump Body Liner",
       "cmTypes": [
         "INSP",
-        "MP"
+        "MP",
+        "TB"
       ],
       "priority": "P3 Planned (PM)",
       "woStatus": null,
-      "cmmsStatus": null,
+      "cmmsStatus": "Registered",
       "open": true,
       "planStart": null,
       "planStartDt": null,
