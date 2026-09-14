@@ -481,12 +481,20 @@ sudo curl -fsSLO $B/server.js
 sudo systemctl restart cm
 sleep 2
 sudo systemctl status cm --no-pager | head -3
-sudo journalctl -u cm -n 20 --no-pager | grep "cm endpoint"
+sudo journalctl -u cm -n 20 --no-pager | grep cm.endpoint
 '@
 ```
 
 `set -e` stops at the first failure, so a download that did not arrive cannot
-be followed by a restart onto a half-written file. If PowerShell complains
+be followed by a restart onto a half-written file.
+
+**NO DOUBLE QUOTES INSIDE A COMMAND SENT THROUGH `ssh` FROM POWERSHELL.**
+PowerShell strips them on the way to a native command, so `grep "cm endpoint"`
+arrives at the VM as two arguments and answers
+`grep: endpoint: No such file or directory` — which is how a deploy that
+WORKED reported a failure on its last line, on 2026-09-14. Write a pattern
+that needs no quoting: `grep cm.endpoint`, where the `.` matches the space.
+The same applies to anything else pasted from here. If PowerShell complains
 about the `@'` block, the connection and the commands can always be done in
 two steps as above.
 
@@ -498,10 +506,10 @@ that belongs to the change:
 
 | What was deployed | What proves it, from PowerShell |
 |---|---|
-| any `server.js` change | `ssh cmadmin@baimskaya-cm.duckdns.org 'journalctl -u cm -n 20 --no-pager \| grep "cm endpoint"'` — reads `request 960s · headers 65s` |
+| any `server.js` change | `ssh cmadmin@baimskaya-cm.duckdns.org 'sudo journalctl -u cm -n 20 --no-pager \| grep cm.endpoint'` — reads `request 960s · headers 65s` |
 | `MEDIA_BATCH` (was `MEDIA_MAX`) | `ssh cmadmin@baimskaya-cm.duckdns.org 'grep -c MEDIA_BATCH /opt/cm/function.js'` — reads `6`, and `grep -c MEDIA_MAX` reads `0` |
 | deferral reasons (`whyKey`) | `ssh cmadmin@baimskaya-cm.duckdns.org 'grep -c "whyKey" /opt/cm/function.js'` — reads `2` |
-| the hourly 1C dispatch | `ssh cmadmin@baimskaya-cm.duckdns.org 'journalctl -u cm -n 200 --no-pager \| grep -i "WO_GH"'` — silence means the token is not set; see §12's note |
+| the hourly 1C dispatch | `ssh cmadmin@baimskaya-cm.duckdns.org 'sudo journalctl -u cm -n 200 --no-pager \| grep -i WO_GH'` — silence means the token is not set; see §12's note |
 
 A grep against the file on the VM is the only check that cannot be satisfied
 by a server that merely answers. Prefer it to anything that reads the endpoint.

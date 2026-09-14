@@ -65,8 +65,14 @@ sudo systemctl restart cm
 sudo systemctl status cm --no-pager
 ```
 
-`cm.env` is never among the replaced files. **Always include a check that proves
-the NEW file is the one running** — a deploy that did not happen looks exactly
+`cm.env` is never among the replaced files.
+
+**No double quotes inside a command sent through `ssh` from PowerShell** — it
+strips them, so `grep "cm endpoint"` arrives as two arguments and a deploy that
+worked reports a failure on its last line. Use a pattern that needs no quoting
+(`grep cm.endpoint`). VM-SETUP §12 carries the case.
+
+**Always include a check that proves the NEW file is the one running** — a deploy that did not happen looks exactly
 like one that did, which is how the request cut sat at two minutes for months
 while everyone believed it was ten.
 
