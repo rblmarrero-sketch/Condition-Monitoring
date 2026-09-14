@@ -39,13 +39,20 @@ const alts = h => (h.match(/class="alt[l2i]?"/g) || []).length;
                scales: [...document.querySelectorAll('#rScale option')].map(o => o.value).join(',') }; });
     ok('a Language choice: English, Russian, both — defaulting to the screen\'s language', U.opts === 'en,ru,both' && U.def === 'en', U.opts + ' · ' + U.def);
     ok('  the page no longer promises a forced bilingual sheet', /or both/.test(U.sub) && !/Bilingual/.test(U.sub), U.sub);
-    /* Read off the page, not held here: Standard moved from 1.8 to 2.4 in
-       build 354 because the page is rasterised and the scale IS the print
-       resolution (105 ppi x scale on A4). What this asserts is the SHAPE —
-       three points, Standard first, High above it, a small-file point below
-       — and that Standard is high enough to print. */
+    /* Read off the page, not held here. The SHAPE changed on 2026-09-14: the
+       small-file point is gone. The scale IS the print resolution (105 ppi x
+       scale on A4), so 1.8 was 190 ppi — and three DZ002 reports came off the
+       office at 190 while the phone's EX021 came off at 253, because the phone
+       has no such picker. One surface could emit a document the other could
+       not, which is the opposite of a standard, and the option only ever
+       bought a smaller file: the matrix timed all three qualities at
+       207/209/208 s. What is asserted now is that every point offered is at
+       or above the floor that prints. */
     const SC = U.scales.split(',').map(Number);
-    ok('  three quality points: Standard, High, small file', SC.length === 3 && SC[1] > SC[0] && SC[2] < SC[0], U.scales);
+    ok('  every quality offered is at or above the printable floor',
+       SC.length >= 1 && SC.every(x => x >= 2.4) && SC[0] === 2.4, U.scales);
+    ok('  and none of them is the 190 ppi point that had to be zoomed to read',
+       !SC.some(x => x < 2.4), U.scales);
     ok('  and Standard is at least 2.4 — 253 ppi on A4, which paper can hold', SC[0] >= 2.4, String(SC[0]));
 
     const S = await p.evaluate(() => {
@@ -105,14 +112,23 @@ const alts = h => (h.match(/class="alt[l2i]?"/g) || []).length;
       $('rLang').value = 'ru'; $('rLang').dispatchEvent(new Event('change')); r.ru = reportOpts(); r.saved = localStorage.getItem('cm_dash_rlang');
       $('rLang').value = 'both'; $('rLang').dispatchEvent(new Event('change')); r.both = reportOpts();
       r.scales = [...document.querySelectorAll('#rScale option')].map(o => o.value);
-      $('rScale').value = r.scales[2]; r.small = reportOpts(); $('rScale').value = r.scales[0];
+      /* Forced below the floor the way a restored form would: the option no
+         longer exists, so it is planted rather than chosen. */
+      const opt = document.createElement('option'); opt.value = '1.8';
+      $('rScale').appendChild(opt); $('rScale').value = '1.8';
+      r.small = reportOpts(); opt.remove(); $('rScale').value = r.scales[0];
       $('rLang').value = 'en'; $('rLang').dispatchEvent(new Event('change'));
       return r; });
     ok('the choice reaches the generator: Russian only', O.ru.lang === 'ru' && O.ru.bi === false && O.saved === 'ru', JSON.stringify({ lang: O.ru.lang, bi: O.ru.bi }));
     ok('  both: the screen\'s language leads, the other follows', O.both.lang === 'en' && O.both.bi === true);
-    ok('  small file: a lower scale AND a tighter JPEG than Standard',
-       O.small.scale === Number(O.scales[2]) && O.small.scale < Number(O.scales[0]) && O.small.jpeg > 0 && O.small.jpeg < 1,
-       JSON.stringify({ scale: O.small.scale, jpeg: O.small.jpeg }));
+    /* THE FLOOR HOLDS EVEN WHEN THE VALUE DOES NOT COME FROM THE PICKER. A
+       browser restores a <select> across a reload and an old or hand-set
+       value would otherwise be honoured, so reportOpts() clamps what it
+       READS. Set below the floor on purpose and check it is lifted. */
+    ok('  a scale below the floor is lifted to it, not obeyed',
+       O.small.scale >= 2.4, JSON.stringify({ asked: 1.8, got: O.small.scale }));
+    ok('  and no tighter JPEG rides along with it',
+       O.small.jpeg === undefined, JSON.stringify({ jpeg: O.small.jpeg }));
     await p.reload({ waitUntil: 'load' }); await p.waitForTimeout(800);
     ok('  and it is remembered', (await p.evaluate(() => $('rLang').value)) === 'en');
 

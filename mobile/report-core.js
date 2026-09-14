@@ -462,6 +462,12 @@
 #rptRoot .mast .rno{font-size:10px;font-weight:700;letter-spacing:.06em;color:#5b6670;
   font-variant-numeric:tabular-nums;white-space:nowrap;}
 #rptRoot .mast .rno i{font-style:normal;color:#5b6670;font-weight:700;margin-right:5px;letter-spacing:.11em;}
+/* THE NUMBER IS ITS OWN ELEMENT. It used to be a bare text node after </i>,
+   leaning on that inline margin-right for its gap — and html2canvas does not
+   reliably paint an inline margin, so the masthead printed "ОТЧЁТEQH-DZ002-
+   20260914", the label welded to the number. A literal space AND a box of its
+   own: two ways to be right, because this is the first line of a signed page. */
+#rptRoot .mast .rno .rnum{font-weight:700;letter-spacing:.06em;padding-left:2px;}
 #rptRoot .mast .m1{font-size:20px;font-weight:800;letter-spacing:-.02em;line-height:1.1;margin-top:3px;}
 /* Its translation inline, not on a second line — the masthead already
    spends a title line, a subtitle line and a four-cell strip on identity;
@@ -570,12 +576,57 @@
 #rptRoot .board.gal{gap:9px 8px;}
 #rptRoot .board.gal.b1{max-width:none;}
 #rptRoot .cel .phg{display:grid;gap:2px;background:#dfe4e9;}
-/* A finding's photographs side by side at their own proportions on white —
-   the grid of 130 px tracks put one portrait frame in the corner of a grey
-   band the width of the sheet. */
-#rptRoot .cel .phg.gallery{display:flex;flex-wrap:wrap;gap:6px;background:#fff;padding:6px 6px 0;}
-#rptRoot .cel .phg.gallery img{width:auto;max-width:100%;height:206px;aspect-ratio:auto;object-fit:contain;background:#fff;
-  border:1px solid #dfe4e9;border-radius:3px;}
+/* ONE CELL, EVERYWHERE, AND IT IS A GRID BECAUSE IT SAYS IT IS.
+
+   This rule said display:flex and the rule fifty lines below it set
+   grid-template-columns:repeat(auto-fill,minmax(130px,1fr)) on the same
+   selector — a grid property on a flex container, which does nothing at all.
+   So the uniform tracks the comment down there describes were never once in
+   effect: the photographs laid out as flex items at width:auto, each one as
+   wide as its own aspect ratio made it, and a landscape frame beside two
+   portrait ones produced the ragged row and the half-empty line reported off
+   EX021 as "the 3rd photo is not a standard size".
+
+   Contain, not cover, in a fixed cell: the frame is letterboxed on white and
+   nothing is cropped, which is the rule CLAUDE.md sets — what it forbids is
+   cover, the 4:3 STAMP that cuts the evidence. A uniform cell and an
+   uncropped photograph are not in tension; the old code simply had neither. */
+#rptRoot .cel .phg.gallery{display:grid;gap:8px;background:#fff;padding:6px 6px 0;}
+/* AN EXPLICIT HEIGHT, BECAUSE THE PDF IS NOT A BROWSER. aspect-ratio gives a
+   perfect 4:3 cell on screen — measured 243x182 across eight frames of mixed
+   proportion — and html2canvas, which is what actually draws the page, does
+   not honour it: the frames came back at their own heights and the row went
+   ragged again in the FILE while the DOM said it was uniform. The height is
+   stated in pixels, which no engine can decline, and 182 is 3/4 of the 243 px
+   track the standard 760 px sheet produces, so the cell is still 4:3. */
+/* HOW A PHOTOGRAPH IS SIZED ON A PAGE THAT IS DRAWN BY html2canvas.
+
+   object-fit does not exist in html2canvas — the string appears zero times in
+   the build this repository ships — so every object-fit:contain in this
+   stylesheet has been a no-op in the PDF since the day it was written. On
+   screen a 4:3 cell letterboxed a portrait frame politely; in the FILE the
+   frame was stretched to fill it, and nobody saw it because a field
+   photograph is usually landscape already.
+
+   aspect-ratio is not honoured either: a cell measured 243x182 in the DOM and
+   came out at the image's own proportions in the file.
+
+   What html2canvas DOES honour is an explicit height with an automatic width
+   — that is how every photograph in every report before this one came out
+   correctly proportioned. So that is the rule: the TRACK is uniform, which is
+   what makes the sheet look like a sheet, and the PHOTOGRAPH inside it keeps
+   its own shape and is centred, which is what stops a portrait being squashed
+   into a landscape box. Letterboxing by white space in a uniform cell, done
+   with the two properties the renderer actually implements. */
+#rptRoot .cel .phg.gallery{justify-items:center;align-items:center;}
+/* aspect-ratio:auto is not decoration. The generic .cel .phg img rule above
+   sets aspect-ratio:4/3, and it is inherited here by anything carrying both
+   classes — so with an explicit height the browser DERIVES the width from the
+   ratio (182 x 4/3 = 242.67, measured to the pixel) and the photograph is
+   stretched to it. Cancelling the ratio is what lets width:auto mean the
+   photograph's own width. */
+#rptRoot .cel .phg.gallery img{display:block;height:182px;width:auto;max-width:100%;
+  aspect-ratio:auto;background:#fff;border:1px solid #dfe4e9;border-radius:3px;}
 #rptRoot .cel .phg img{display:block;width:100%;aspect-ratio:4/3;object-fit:contain;
   background:#eef1f4;}
 /* One floor size for every tile on the sheet, not one computed per card. A
@@ -586,7 +637,7 @@
    holds and leaves the rest of the row's space on tracks nothing occupies,
    so a position with one photograph gets one tile at the same size as
    everyone else's, not the whole card stretched to fill it. */
-#rptRoot .cel .phg.gallery{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));}
+#rptRoot .cel .phg.gallery{grid-template-columns:repeat(auto-fill,minmax(200px,1fr));}
 #rptRoot .allok{background:#eef6ef;color:#146b2c;font-size:12px;font-weight:650;
   padding:8px 12px;border-radius:4px;margin-top:12px;}
 #rptRoot .quiet{font-size:10.5px;color:#3d474f;margin-top:10px;line-height:1.5;}
@@ -596,17 +647,19 @@
 /* Three frames to the width of the sheet, each the WHOLE photograph. A
    cropped 150 px stamp is what management called "distorted": object-fit
    cover cut the evidence and the small tile rasterised soft. */
-#rptRoot .shots{display:flex;flex-wrap:wrap;gap:10px 8px;}
-#rptRoot .shots figure{width:auto;max-width:272px;}
-#rptRoot .shots img{height:206px;width:auto;max-width:272px;object-fit:contain;background:#fff;border-radius:3px;
-  border:1px solid #dfe4e9;display:block;}
+#rptRoot .shots{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px 8px;}
+#rptRoot .shots figure{width:auto;max-width:none;margin:0;}
+#rptRoot .shots{justify-items:center;align-items:center;}
+#rptRoot .shots img{display:block;height:182px;width:auto;max-width:100%;background:#fff;
+  border-radius:3px;border:1px solid #dfe4e9;}
 #rptRoot .shots figcaption{font-size:9.5px;color:#3d474f;margin-top:4px;line-height:1.3;}
 /* General evidence: the same size and rhythm as the point galleries, so a
    reader does not read "different size" as "different importance". */
-#rptRoot .genrow{display:flex;flex-wrap:wrap;gap:10px 8px;}
-#rptRoot .genrow figure{width:auto;max-width:272px;margin:0;}
-#rptRoot .genrow img{height:206px;width:auto;max-width:272px;object-fit:contain;background:#fff;border-radius:3px;
-  border:1px solid #dfe4e9;display:block;}
+#rptRoot .genrow{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px 8px;}
+#rptRoot .genrow figure{width:auto;max-width:none;margin:0;}
+#rptRoot .genrow{justify-items:center;align-items:center;}
+#rptRoot .genrow img{display:block;height:182px;width:auto;max-width:100%;background:#fff;
+  border-radius:3px;border:1px solid #dfe4e9;}
 #rptRoot .genrow figcaption{font-size:9.5px;color:#3d474f;margin-top:4px;line-height:1.3;}
 #rptRoot .genwhy{font-size:9.5px;color:#5b6670;margin-top:6px;line-height:1.4;}
 /* Said plainly and without alarm. A missing file is a synchronisation problem,
@@ -798,6 +851,13 @@
          GET report printed the literal words "method_TB" / "method_GET" in
          22px bold at the top of a signed PDF. */
       method_TB:"Dump Body Thickness", method_GET:"Ground Engaging Tools",
+      /* AND IT HAPPENED AGAIN, TO LUBE. The comment above was written when TB
+         and GET printed their own keys; LUBE was left out of both language
+         tables in the same way and printed "method_LUBE" as a round name on
+         the first page of every machine report. A note warning about a trap
+         does not close it — typeLabelOf() does, by refusing to hand back a
+         string that is still the key it was asked for. */
+      method_LUBE:"Lubrication",
       /* The measurement table used to be headed "Undercarriage measurements"
          whatever had been measured — including a truck body, which has no
          undercarriage in it at all. */
@@ -993,6 +1053,7 @@
       method_INSP:"\u041e\u0431\u0449\u0438\u0439 \u043e\u0441\u043c\u043e\u0442\u0440", method_TEMP:"\u0422\u0435\u0440\u043c\u043e\u0433\u0440\u0430\u0444\u0438\u044f",
       method_UC:"\u0417\u0430\u043c\u0435\u0440\u044b \u0445\u043e\u0434\u043e\u0432\u043e\u0439 \u0447\u0430\u0441\u0442\u0438",
       method_TB:"\u0417\u0430\u043c\u0435\u0440\u044b \u0442\u043e\u043b\u0449\u0438\u043d\u044b \u043a\u0443\u0437\u043e\u0432\u0430", method_GET:"\u0420\u0430\u0431\u043e\u0447\u0438\u0435 \u043e\u0440\u0433\u0430\u043d\u044b",
+      method_LUBE:"\u0421\u043c\u0430\u0437\u043a\u0430",
       meas_UC:"\u0417\u0430\u043c\u0435\u0440\u044b \u0445\u043e\u0434\u043e\u0432\u043e\u0439 \u0447\u0430\u0441\u0442\u0438", meas_TB:"\u0417\u0430\u043c\u0435\u0440\u044b \u0442\u043e\u043b\u0449\u0438\u043d\u044b \u043a\u0443\u0437\u043e\u0432\u0430",
       meas_LUBE:"\u041c\u0430\u0441\u043b\u043e, \u043d\u0430\u0439\u0434\u0435\u043d\u043d\u043e\u0435 \u0432 \u0443\u0437\u043b\u0430\u0445",
       meas_GET:"\u0417\u0430\u043c\u0435\u0440\u044b \u0440\u0430\u0431\u043e\u0447\u0438\u0445 \u043e\u0440\u0433\u0430\u043d\u043e\u0432",
@@ -3136,8 +3197,22 @@
      Since-previous column the History report needs and the plain Condition
      Summary does not — the same row, one cell longer, rather than a second
      copy of how a type's key result is chosen. */
+  /* THE NAME OF A ROUND TYPE, NEVER THE KEY THAT LOOKS ONE UP.
+
+     T() answers a missing key with the key itself, which is a truthy string,
+     so every miss reaches paper looking like a value: "method_TB" and
+     "method_GET" on a masthead once, and "method_LUBE" on the first page of
+     every machine report until 2026-09-14. The masthead had already learned
+     to ask T.key() first; this table had not, so one table was protected and
+     the other was not. One rule, asked by both, and the fallback is the round
+     CODE — "LUBE" is terse but it is true, which "method_LUBE" is not. */
+  function typeLabelOf(T, ty, label, alt) {
+    if (T.key("method_" + ty, "")) return T.I("method_" + ty);
+    return T.both(label || String(ty || "—"), alt, "alti");
+  }
+  CMR.__typeLabelOf = typeLabelOf;
   function typeRow(T, ty, r, prior) {
-    var label = T.both(T("method_" + ty), T.alt("method_" + ty));
+    var label = typeLabelOf(T, ty);
     var deltaCell = prior === undefined ? "" : '<td>' + typeDelta(T, r, prior) + '</td>';
     if (!r) return { html: '<tr><td>' + label + '</td>'
       + '<td class="c muted">—</td><td class="c muted">—</td>'
@@ -3259,12 +3334,33 @@
       var row = typeRow(T, ty, latestByType[ty], byType[ty] && byType[ty][1]);
       if (row.rn > worst) worst = row.rn; return row.html;
     }).join("");
+    /* A VERDICT MAY NOT CONTRADICT THE TABLE UNDER IT.
+
+       `worst` is the worst GRADE across the types, and a measured point past
+       its condemn limit carries no grade — it is a millimetre against a
+       number. So DZ002 printed "No finding on this machine requires action;
+       continue normal monitoring" on page 1 and "Nothing above Incipient" on
+       page 2, directly above a consolidated actions table whose first row was
+       RED and read "1 points at or past condemn". Two statements of one fact,
+       on facing pages, and the reassuring one is the one a superintendent
+       signs.
+
+       The open-work list is the same scan() the table itself is built from,
+       so the verdict now reads what the table reads. Anything outstanding
+       lifts it off "nothing to do"; a roll-up at or past condemn lifts it to
+       the same rung a 5 would. */
+    var openWork = scan(recs);
+    if (openWork.act && openWork.act.length) {
+      var rolled = openWork.act.some(function (f) { return f.roll; });
+      if (worst < 3) worst = 3;
+      if (rolled && worst < 5) worst = 5;
+    }
     var decKey = worst >= 5 ? "sm_dec_crit" : worst >= 3 ? "sm_dec_plan" : "sm_dec_ok";
 
     var secs = [];
     var head = '<div class="sec">'
       + '<div class="mhead"><div class="eyebrow">' + T.I("sub") + '</div>'
-        + '<div class="rno"><i>' + T.I("rr_report") + '</i>EQH-' + esc(equip) + '-' + esc(today.replace(/-/g, "")) + '</div></div>'
+        + '<div class="rno"><i>' + T.I("rr_report") + '</i> <b class="rnum">EQH-' + esc(equip) + '-' + esc(today.replace(/-/g, "")) + '</b></div></div>'
       + '<div class="m1">' + T.I("uh_title") + '</div>'
       + '<div class="msub"><span class="unum">' + esc(equip) + '</span>'
         + (model ? ' · ' + esc(model) : '') + (smu ? ' · <b>' + esc(String(smu)) + '</b> h' : '')
@@ -3310,8 +3406,37 @@
       + historyFindings(ctx, T, shown);
     /* A handful of photographs, not the whole set every type already has in
        its own detail sheet — the ones that go with a significant finding,
-       so a reader sees the evidence beside the table that named it. */
+       so a reader sees the evidence beside the table that named it.
+
+       AND WHEN THERE IS NO SIGNIFICANT FINDING, THE VISIT ITSELF.
+
+       `shown` comes off `pairs`, which takes an item only at grade 2 and
+       above or with a defect on it, and skips `it.general` outright. So a
+       machine walked and found in order — every position 1 Normal — produced
+       an empty list, and this report printed NOT ONE photograph while its own
+       first page announced "12/12 received" off the manifest. Read off DZ002
+       on 2026-09-14: twelve taken, twelve confirmed on the server, twelve
+       printed on the two single-round reports, none on the machine's own. The
+       count and the document describing the same fact differently, which is
+       the exact pairing this project exists to avoid.
+
+       The machine-level frames come back in here too — the overview, the two
+       sides, the tray. `pairs` is right to skip them, because they are not
+       POINTS and nothing grades them; but they are the first thing a
+       superintendent looks for, and "not a finding" was never a reason to
+       leave the photograph of the machine off the machine's report. */
     var photoPairs = shown.filter(function (p) { return p.it.photos && p.it.photos.length; }).slice(0, 6);
+    if (!photoPairs.length) {
+      var visit = [];
+      latestArr.forEach(function (r) {
+        (r.items || []).forEach(function (it) {
+          if (it && it.photos && it.photos.length) visit.push({ rec: r, it: it });
+        });
+      });
+      /* The machine's own frames first — they are the establishing shot. */
+      visit.sort(function (a, b) { return (b.it.general ? 1 : 0) - (a.it.general ? 1 : 0); });
+      photoPairs = visit.slice(0, EV_MAX);
+    }
     if (photoPairs.length) {
       body2 += '<div class="subhd" style="margin-top:15px;">' + T.I("photos") + '</div>'
         + '<div class="board gal b1">'
@@ -3373,11 +3498,25 @@
     var rows = TYPES.map(function (ty) {
       var row = typeRow(T, ty, latest[ty]); if (row.rn > worst) worst = row.rn; return row.html;
     }).join("");
+    /* The same rule as the History report's, and it has to be stated in both
+       because the two builders each compute their own verdict: the worst
+       GRADE cannot see a measured point past its condemn limit, which carries
+       a millimetre rather than a grade. Without this the page says "continue
+       normal monitoring" directly above a red row reading "at or past
+       condemn". A machine with a single round reaches THIS builder and a
+       machine with several reaches the other, so a fix in one is a fix for
+       half the fleet. */
+    var openWork2 = scan(recs);
+    if (openWork2.act && openWork2.act.length) {
+      var rolled2 = openWork2.act.some(function (f) { return f.roll; });
+      if (worst < 3) worst = 3;
+      if (rolled2 && worst < 5) worst = 5;
+    }
     var decKey = worst >= 5 ? "sm_dec_crit" : worst >= 3 ? "sm_dec_plan" : "sm_dec_ok";
 
     var head = '<div class="sec">'
       + '<div class="mhead"><div class="eyebrow">' + T.I("sub") + '</div>'
-        + '<div class="rno"><i>' + T.I("rr_report") + '</i>EQ-' + esc(equip) + '-' + esc(today.replace(/-/g, "")) + '</div></div>'
+        + '<div class="rno"><i>' + T.I("rr_report") + '</i> <b class="rnum">EQ-' + esc(equip) + '-' + esc(today.replace(/-/g, "")) + '</b></div></div>'
       + '<div class="m1">' + T.I("sm_title") + '</div>'
       + '<div class="msub"><span class="unum">' + esc(equip) + '</span>'
         + (model ? ' · ' + esc(model) : '') + (smu ? ' · <b>' + esc(String(smu)) + '</b> h' : '')
@@ -3417,6 +3556,32 @@
        cards) — worst finding first, since X.act is already sorted that way,
        and only the ones that actually carry a photograph. */
     var evPairs = X.act.filter(function (f) { return !f.roll && f.it && f.it.photos && f.it.photos.length; }).slice(0, 4);
+    /* A MACHINE IN ORDER STILL HAS ITS PHOTOGRAPHS TAKEN, AND THEY STILL GO ON
+       THE REPORT.
+
+       evPairs comes off X.act — OPEN ACTIONS — so a visit where every position
+       was graded 1 Normal produced an empty list and the document showed not
+       one photograph, while page 1 announced "12/12 received" off the
+       manifest. Read off DZ002 on 2026-09-14: twelve photographs taken, twelve
+       confirmed on the server, twelve printed on the two single-round reports,
+       and none at all on the machine's own. Somebody walked to that dozer and
+       photographed it; the office got a page saying the evidence had arrived
+       and showing none of it — the count and the document disagreeing about
+       the same fact, which is the pairing this project exists to avoid.
+
+       So the fallback is the visit itself: when nothing is wrong there is no
+       "selected evidence" to select, and what belongs on the page is what was
+       seen. Findings first when there are any (worst first, X.act is already
+       ordered), the visit's own photographs when there are not. */
+    var evFallback = [];
+    if (!evPairs.length) {
+      (recs || []).forEach(function (rec) {
+        (rec.items || []).forEach(function (it) {
+          if (it && it.photos && it.photos.length) evFallback.push({ it: it, rec: rec });
+        });
+      });
+      evPairs = evFallback.slice(0, EV_MAX);
+    }
     if (evPairs.length) {
       wl += '<div class="subhd" style="margin-top:15px;">' + T.I("sm_evidence") + '</div>'
         + '<div class="board gal b1">'
@@ -3431,6 +3596,13 @@
     secs.status.word = T("st_mark");
     return secs;
   }
+  /* How many photographs the machine's own report carries. Four was the
+     budget while the block only ever showed FINDINGS — worst first, and a
+     reader who wants the fifth opens the round. Where there are no findings
+     the block shows the visit instead, and a dozer's visit is a dozen frames,
+     so the ceiling is the visit's own size rather than a management excerpt.
+     Nine keeps it to one page at the uniform cell. */
+  var EV_MAX = 9;
   /* The consolidated open-actions table, shared by the Condition Summary and
      the History-and-Trend report — both close on the same open-work list, and
      a planner reading one after the other must see one table, not two that
@@ -3446,12 +3618,20 @@
       + '<th class="c" style="width:70px">' + T.L("ma_due") + '</th></tr>';
     X.act.forEach(function (f, i) {
       var rec = f.rec, it = f.it || {}, col = GRADE_HEX[gnum(it.grade)] || SEV_HEX[f.sev] || "#c9d0d6";
-      var comp = f.roll ? T.I("uc_cond") : (it.name || it.key || "—");
+      /* ESCAPED ONCE, AND ONLY WHAT IS TEXT. T.I() returns BUILT HTML — the
+         bilingual form is `English <span class="alti">/ Русский</span>`, its
+         own halves already escaped — so running esc() over it printed the
+         markup on the page: a signed PDF whose component column read
+         `Undercarriage wear <span class="alti">/ Износ ходовой</span>`.
+         The two branches are different kinds of value and are now kept
+         apart: one is markup and goes through untouched, the other is a
+         name off a record and is escaped here, where it is known to be text. */
+      var comp = f.roll ? T.I("uc_cond") : esc(it.name || it.key || "—");
       var doit = it.action ? esc(it.action) : (f.roll ? esc(T("uc_over", { n: f.act.length })) : '<span class="muted">' + T.I("do_tbd") + '</span>');
       var miss = '<span class="muted">' + esc(T("ma_none")) + '</span>';
       h += '<tr class="' + (i % 2 ? "zebra" : "") + '">'
         + '<td class="stripe" style="border-left-color:' + col + '"><span class="unit" style="font-size:11px">' + esc(rec.typeLabel || rec.type) + '</span></td>'
-        + '<td>' + esc(comp) + '</td>'
+        + '<td>' + comp + '</td>'
         + '<td>' + doit + prioTag(it) + '</td>'
         + '<td>' + (it.resp ? esc(it.resp) : miss) + '</td>'
         + '<td>' + (it.wo ? esc(it.wo) : miss) + '</td>'

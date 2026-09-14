@@ -3489,10 +3489,19 @@
                  the same nine pages at 207 / 209 / 208 s across the three
                  qualities, so this costs no time; it costs about half again in
                  file size. -->
+            <!-- THE SMALL-FILE OPTION IS GONE, AND THE COMMENT ABOVE IS WHY.
+                 It said, in this file, that 190 ppi is "what you have to zoom
+                 to read" — and the office went on offering it, and on
+                 2026-09-14 three DZ002 reports were produced at 190 while the
+                 phone's EX021 came out at 253, because the phone has no such
+                 choice. One surface could emit a document the other could not,
+                 which is the opposite of a standard. It costs no TIME (the
+                 matrix: 207/209/208 s across all three), only file size, so
+                 the only thing the option ever bought was a smaller file at
+                 the price of a document senior management cannot read. -->
             <div class="field"><label for="rScale" data-i18n="r_scale">Quality</label><select id="rScale">
               <option value="2.4" data-i18n="r_q_std">Standard</option>
               <option value="3" data-i18n="r_q_high">High (larger file)</option>
-              <option value="1.8" data-i18n="r_q_small">Small file (slow link)</option>
             </select></div>
             <div class="field" id="rAppendixField" hidden style="align-self:flex-end">
               <label class="row" style="gap:6px;align-items:center;font-weight:400">
@@ -3637,22 +3646,22 @@
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=370"></script>
+<script src="../data/magnetic_plug.js?v=371"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=370"></script>
-<script src="../mobile/hme.js?v=370"></script>
-<script src="../mobile/mp-fc.js?v=370"></script>
-<script src="../mobile/hme-cascade.js?v=370"></script>
-<script src="../mobile/temp-limits.js?v=370"></script>
+<script src="../data/work_orders.js?v=371"></script>
+<script src="../mobile/hme.js?v=371"></script>
+<script src="../mobile/mp-fc.js?v=371"></script>
+<script src="../mobile/hme-cascade.js?v=371"></script>
+<script src="../mobile/temp-limits.js?v=371"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=370"></script>
-<script src="../mobile/normalize.js?v=370"></script>
-<script src="../mobile/terms.js?v=370"></script>
+<script src="../mobile/assets.js?v=371"></script>
+<script src="../mobile/normalize.js?v=371"></script>
+<script src="../mobile/terms.js?v=371"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3671,19 +3680,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=370"></script>
-<script src="../mobile/edits.js?v=370"></script>
-<script src="../mobile/due.js?v=370"></script>
-<script src="../mobile/wear.js?v=370"></script>
-<script src="../mobile/wear-map.js?v=370"></script>
-<script src="../mobile/lube.js?v=370"></script>
-<script src="../mobile/lube-overrides.js?v=370"></script>
-<script src="../mobile/lube2027.js?v=370"></script>
-<script src="../mobile/lube-tds.js?v=370"></script>
+<script src="../mobile/grade.js?v=371"></script>
+<script src="../mobile/edits.js?v=371"></script>
+<script src="../mobile/due.js?v=371"></script>
+<script src="../mobile/wear.js?v=371"></script>
+<script src="../mobile/wear-map.js?v=371"></script>
+<script src="../mobile/lube.js?v=371"></script>
+<script src="../mobile/lube-overrides.js?v=371"></script>
+<script src="../mobile/lube2027.js?v=371"></script>
+<script src="../mobile/lube-tds.js?v=371"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=370"></script>
-<script src="../mobile/machine-photos.js?v=370"></script>
+<script src="../mobile/upload-defaults.js?v=371"></script>
+<script src="../mobile/machine-photos.js?v=371"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3692,17 +3701,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=370"></script>
-<script src="../mobile/get.js?v=370"></script>
-<script src="../mobile/points.js?v=370"></script>
-<script src="../mobile/uc-points.js?v=370"></script>
-<script src="../mobile/inspect-guide.js?v=370"></script>
-<script src="../mobile/get-figs.js?v=370"></script>
-<script src="../mobile/body-points.js?v=370"></script>
-<script src="../mobile/body-map.js?v=370"></script>
-<script src="../mobile/jspdf.umd.min.js?v=370"></script>
-<script src="../mobile/html2canvas.min.js?v=370"></script>
-<script src="../mobile/report-core.js?v=370"></script>
+<script src="../mobile/machine-fig.js?v=371"></script>
+<script src="../mobile/get.js?v=371"></script>
+<script src="../mobile/points.js?v=371"></script>
+<script src="../mobile/uc-points.js?v=371"></script>
+<script src="../mobile/inspect-guide.js?v=371"></script>
+<script src="../mobile/get-figs.js?v=371"></script>
+<script src="../mobile/body-points.js?v=371"></script>
+<script src="../mobile/body-map.js?v=371"></script>
+<script src="../mobile/jspdf.umd.min.js?v=371"></script>
+<script src="../mobile/html2canvas.min.js?v=371"></script>
+<script src="../mobile/report-core.js?v=371"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -13155,11 +13164,19 @@ const RPT_SCALE=2.4;
 const RLANG_K="cm_dash_rlang";
 function reportLang(){ const v=($("rLang")||{}).value||""; return v||lang; }
 function reportOpts(){
-  const v=reportLang(), sc=parseFloat(($("rScale")||{}).value)||RPT_SCALE;
+  /* RPT_SCALE IS A FLOOR, NOT A DEFAULT. The picker no longer offers less,
+     but a browser restores a <select> across a reload, an old value can sit
+     in a restored form, and a hand-edited option would be honoured — so the
+     figure is clamped where it is READ. The phone has no picker at all and is
+     fixed at PHONE_PDF.scale; this is the same number, enforced rather than
+     assumed, so neither surface can produce a page the other would not. */
+  const v=reportLang(), want=parseFloat(($("rScale")||{}).value)||RPT_SCALE;
+  const sc=Math.max(RPT_SCALE, want);
   return { msg:$("rMsg"), photos:($("rPhotos")||{}).value==="1", scale:sc,
            lang: v==="both" ? lang : v, bi: v==="both",
-           /* the small-file point on the curve: a lower scale AND a tighter JPEG */
-           jpeg: sc<RPT_SCALE ? 0.86 : undefined,
+           /* No tighter JPEG either: it went with the small-file point, and
+              that point is gone. Undefined means the engine's own standard. */
+           jpeg: undefined,
            /* Equipment History and Trend only — every other scope ignores it.
               Off by default, so the compact document the template asks for is
               what a planner gets without having to know to ask for it. */
@@ -17376,8 +17393,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=370"></script>
-<script src="sync-adapter.js?v=370"></script>
-<script src="report.js?v=370"></script>
+<script src="drive.js?v=371"></script>
+<script src="sync-adapter.js?v=371"></script>
+<script src="report.js?v=371"></script>
 </body>
 </html>
