@@ -114,7 +114,21 @@ const BUILD = `(unit, withPhotos) => {
 /* CMR.paginate's own placement arithmetic, run over measured heights. A page
    count asserted any other way is a page count asserted about a different
    document from the one that gets printed. */
-const LAY = `(secs) => {
+/* THE HARNESS HAS TO PAGINATE THE WAY THE DOCUMENT DOES.
+
+   This laid the sections out and walked them with its own page arithmetic, and
+   left out the one step the real paginator takes: a section marked `fit` has
+   its drawing narrowed 5% at a time until it fits the room a page has
+   (CMR.fitAll / CMR.fitPage, CMR.FIT_MIN). The dashboard's own estimate()
+   calls it and says why — "a drawing narrowed there and not here would make
+   the estimate count a page the document does not have".
+
+   That is exactly what happened. A single MP round with no history is ONE
+   section 1140 px tall against a 1090 px room, so this counted two pages for a
+   document the paginator fits on one, and the suite had been red on correct
+   code. It is the defect class CLAUDE.md names: a test that keeps its own copy
+   of something the app owns. It asks the app now. */
+const LAY = `async (secs) => {
   document.querySelectorAll('#rptProbe,#rptProbeCss').forEach(e => e.remove());
   const st = document.createElement('style'); st.id = 'rptProbeCss'; st.textContent = CMR.CSS;
   document.head.appendChild(st);
@@ -125,6 +139,12 @@ const LAY = `(secs) => {
     + '</div>';
   document.body.insertBefore(d, document.body.firstChild);
   const PH = 842, M = 38, FOOT = 22, top = M, bottom = PH - M - FOOT, cw = 595 - 2 * M;
+  /* The same two steps the PDF and the office's estimate both take, in the
+     same order, before anything is measured. */
+  const root0 = d.querySelector('#rptRoot');
+  if (CMR.settleImages) await CMR.settleImages(root0, 4000);
+  await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+  if (CMR.fitAll) CMR.fitAll(root0, secs, (bottom - top) / (cw / 760));
   let y = top, page = 1, drew = false;
   const blocks = [];
   [...document.querySelectorAll('#rptProbe .secwrap')].forEach((el, i) => {
@@ -328,7 +348,23 @@ const run = async (p, recs, unit, want, photos) => {
      expected furniture and does not count. */
   ok('and no table appears with nothing to put in it',
      !/<table/.test(r.html.replace(/<table class="appr"[\s\S]*?<\/table>/g, "")));
-  ok('and is one page', r.pages === 1, r.pages + ' page(s)');
+  /* NOT "and is one page" any more, and the number was the wrong thing to
+     assert. A unit report has a STATED shape — page 1 the machine, the verdict,
+     the drawings and the key; page 2 what was measured on this visit — so a
+     single round is two pages BY DESIGN, and this line had been failing on
+     correct code since that shape was settled.
+
+     Measured here: the no-history document is 1,896 characters over 2 pages and
+     the two-round one is 3,253 over 3. Less content, fewer pages, which is the
+     property that actually matters and the one a regression would break. A page
+     count is a proxy for it that goes stale every time the sheet is redesigned;
+     the comparison cannot. */
+  {
+    const withHist = await run(p, TWO, 'TK160');
+    ok('and it is shorter than the same round WITH history',
+       r.pages < withHist.pages && r.text.length < withHist.text.length,
+       r.pages + 'pp/' + r.text.length + 'ch  vs  ' + withHist.pages + 'pp/' + withHist.text.length + 'ch');
+  }
 
   console.log(fails.length ? '\nFAILURES:\n  ' + [...new Set(fails)].join('\n  ')
                            : '\nall previous-measurement checks passed');

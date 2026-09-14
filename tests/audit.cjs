@@ -5,13 +5,62 @@ const { chromium } = require(require('./pw.cjs'));
 
 let hold = null;                 // set to delay uploads, to open the edit-during-upload window
 const got = [];
+
+/* A MOCK THAT ACCEPTS AN UPLOAD MUST LIST IT AFTERWARDS.
+
+   This one did not, and it is the trap CLAUDE.md names by name: the phone's
+   read-after-write asks the folder what it actually holds, and a backend that
+   says "ok" and then lists nothing is a backend that lost the file. So no
+   record was ever marked up=1 — not the rejected one, not the good ones — and
+   two assertions here read as an app that cannot upload at all.
+
+   Two things were stale, both from before the confirmation existed. Every GET
+   answered with `files: 0` — a COUNT where a listing needs an ARRAY, so
+   serverList() threw "list gave no files" on every read-back. And the POST
+   handler forgot what it had accepted. It keeps a folder now, exactly as
+   tests/mock.cjs does, and answers action=list off it; `updated` is stamped at
+   acceptance because landedAnyway() requires the folder's copy to have been
+   written since the request began. */
+const FOLDER = [];               // what this run accepted, as the folder would hold it
+let preflights = 0;              // and how many preflights it was asked to answer
 const srv = http.createServer((req, res) => {
-  const cors = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
-  if (req.method === 'OPTIONS') { res.writeHead(405, cors); res.end(); return; }
-  // The app also GETs ?action=records to pull what the rest of the team uploaded.
-  // That is not an upload — answer it, and keep it out of the upload tally.
+  const cors = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json',
+                 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+                 'Access-Control-Allow-Headers': 'Content-Type',
+                 'Access-Control-Max-Age': '3600' };
+  /* THE UPLOAD IS PREFLIGHTED, AND THIS MOCK USED TO REFUSE THE PREFLIGHT.
+
+     It answered OPTIONS with 405, so the browser blocked every POST before it
+     was made and two assertions below read as "the app cannot upload at all".
+     That was not a stale mock. It was modelling Apps Script — which has only
+     doGet and doPost and cannot answer a preflight — and it had been telling
+     the truth since postT arrived: against a backend that refuses OPTIONS,
+     nothing uploads.
+
+     What changed under it is postT. It is an XMLHttpRequest because fetch
+     cannot watch its own upload, and bounding a POST by its own idle time is
+     what cured "press Sync four times" — but ATTACHING ANY LISTENER TO
+     xhr.upload makes the request non-simple, so the text/plain content type no
+     longer keeps it preflight-free. The invariant two comments in this repo
+     still asserted ("every request stays simple, no preflight is needed")
+     stopped being true at that moment, silently.
+
+     Live it is harmless: function.js answers OPTIONS with 204 and
+     Access-Control-Max-Age 3600, so it costs one round trip an hour, not one
+     per file. This mock answers it the way the live backend does, and §8 below
+     asserts the preflight HAPPENS, so the next person to meet it finds a
+     stated fact instead of a red suite nobody reads. */
+  if (req.method === 'OPTIONS') { preflights++; res.writeHead(204, cors); res.end(); return; }
+  // The app also GETs ?action=records to pull what the rest of the team uploaded,
+  // and ?action=list to read back what it just sent. Neither is an upload —
+  // answer both, and keep them out of the upload tally.
   if (req.method === 'GET') {
+    const q = new URL(req.url, 'http://x').searchParams;
     res.writeHead(200, cors);
+    if (q.get('action') === 'list') {
+      return res.end(JSON.stringify({ ok: true, count: FOLDER.length, truncated: false,
+        files: FOLDER.map(f => ({ name: f.name, path: f.name, id: f.id, size: f.size, updated: f.updated })) }));
+    }
     return res.end(JSON.stringify({ ok: true, records: [], cursor: 0, files: 0, photos: 0 }));
   }
   let b = ''; req.on('data', c => b += c);
@@ -20,6 +69,14 @@ const srv = http.createServer((req, res) => {
     if (j && j.name) got.push(j.name);
     if (hold) await hold;
     if (j && /TK900/.test(j.name || '')) { res.writeHead(500, cors); res.end('{"error":"rejected"}'); return; }
+    if (j && j.name && j.file && !j.op) {
+      const size = Buffer.from(String(j.file), 'base64').length;
+      const had = FOLDER.find(f => f.name === j.name);
+      if (had) { had.size = size; had.updated = Date.now(); }
+      else FOLDER.push({ name: j.name, id: 'u' + FOLDER.length, size, updated: Date.now() });
+      res.writeHead(200, cors);
+      return res.end(JSON.stringify({ ok: true, name: j.name, id: j.name }));
+    }
     res.writeHead(200, cors); res.end('{"ok":true}');
   });
 });
@@ -202,6 +259,25 @@ const shot = async (p) => p.evaluate(async () => {
     ok('retry does not re-upload to the healthy destination', got.length === before,
        `requests during retry = ${got.length - before}`);
     await ctx.close();
+  }
+
+  // ---- 8. the upload is preflighted, and that is a fact about the backend ----
+  console.log('\n8. the CORS preflight the upload now needs');
+  /* Counted rather than assumed. If postT ever loses its upload listeners the
+     preflight goes away and this fails — which is the moment to revisit the
+     two backends, not months later. And if a backend is ever added that
+     cannot answer OPTIONS, §4 and §7 above go red again and this line says
+     why in one sentence. */
+  ok('the single-file POST asked for a preflight', preflights > 0, preflights + ' OPTIONS answered');
+  ok('  and every upload still landed once it was answered', FOLDER.length > 0,
+     FOLDER.length + ' file(s) in the folder');
+  /* Apps Script has doGet and doPost and no doOptions, so it cannot answer
+     one. Asserted against the file so "switch the old backend back on" can
+     never be believed to be a one-step fallback. */
+  {
+    const gs = require('fs').readFileSync(require('path').join(__dirname, '..', 'docs', 'google-upload.gs'), 'utf8');
+    ok('  the retired Apps Script still has no doOptions, so it could not serve this client',
+       !/function\s+doOptions/.test(gs), 'noted, not a defect — it is retired');
   }
 
   console.log('\n' + (fails.length ? 'FAILURES: ' + fails.join(' | ') : 'all checks passed'));

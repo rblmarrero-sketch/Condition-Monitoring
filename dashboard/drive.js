@@ -631,11 +631,50 @@
        at all the second time. */
     const miss = [];
     for (const nm of names) {
-      const url = await cacheGet(index[nm].id, index[nm].size);
-      if (url) { fetched[nm] = url; fetchedSize[nm] = Number(index[nm].size) || null; window.CMDash.addPhoto(nm, url); }
+      /* WHAT LENGTH THE CACHED COPY SHOULD BE — our own measurement once we
+         have one, the index's claim until then.
+
+         cacheGet DELETES a cached copy whose length is not the one it is given,
+         which is right: a round the phone re-sends lands under the same name
+         with other bytes, and the office used to serve whatever it saw first.
+         But measured against the INDEX for ever, a name whose index size is
+         simply wrong is dropped and refetched on every single pass — and since
+         a pass repaints, and a repaint starts a pass, that is an unbounded
+         loop with a network request per photograph in it.
+
+         Once these bytes have been fetched here, their length is a fact and the
+         index's figure is a claim, so the fact is what the cache is held to. A
+         genuine re-upload still gets caught: it changes the index size, which
+         is what stale() watches, and that is the one place that question is
+         supposed to be answered. */
+      const want = fetchedSize[nm] != null ? fetchedSize[nm] : index[nm].size;
+      const url = await cacheGet(index[nm].id, want);
+      if (url) {
+        fetched[nm] = url;
+        if (fetchedSize[nm] == null) fetchedSize[nm] = Number(index[nm].size) || null;
+        window.CMDash.addPhoto(nm, url);
+      }
       else miss.push(nm);
     }
-    if (!miss.length) { if (onProgress) onProgress(names.length, names.length); return names.length; }
+    /* NOTHING WAS MISSING, SO NOTHING HAPPENED — and saying otherwise put the
+       office page into a permanent re-render loop.
+
+       This answered with names.length (what the unit WANTS) and called the
+       progress callback once, both truthy, both meaning "work was done". The
+       only caller that reads the answer is pullDrivePhotos, whose whole job is
+       "if photographs arrived, repaint" — and its repaint is renderHistory,
+       which calls pullDrivePhotos again. Everything already cached, so nothing
+       missing, so truthy again: measured at 210 repaints of the whole history
+       in three seconds, one every 15 ms, for as long as the tab stayed open.
+
+       A human sees it as a photograph that cannot be clicked — the card is
+       detached and rebuilt under the cursor before the press lands, which is
+       exactly how tests/phase3.cjs had been failing, read as a flaky click.
+
+       So the answer is what this call ADDED, which is nothing, and there is no
+       progress to report for work that did not happen. A caller that wants to
+       know whether the unit has photographs at all asks the index, not this. */
+    if (!miss.length) return 0;
 
     /* Several photographs to a request where the deployment allows it. Each one
        used to be its own Apps Script invocation — a script start and a round
@@ -680,7 +719,11 @@
         if (onProgress) onProgress(++done, names.length);
       }
     });
-    return names.length;
+    /* What this call ADDED, so a caller that repaints on the answer repaints
+       once per arrival and not for ever. A pull where every file failed adds
+       nothing and is not a reason to redraw either — the failures are on
+       lastFetch for whoever wants to say so. */
+    return lastFetch.fetched;
   }
 
   /* ---- 3. corrections, voids and deletion ----

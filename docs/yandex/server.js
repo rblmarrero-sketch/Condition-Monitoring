@@ -45,12 +45,19 @@ function toEvent(req, raw) {
 
 /* And back. The handler's own headers, verbatim — CORS included.
 
-   This is not a detail. Both clients deliberately send text/plain so the
-   request stays "simple" and needs no preflight, but the browser still refuses
-   to let the page READ a cross-origin reply that has no
-   Access-Control-Allow-Origin. Strip or replace these headers and the upload
+   This is not a detail, and it is now load-bearing twice over. The browser
+   refuses to let the page READ a cross-origin reply that has no
+   Access-Control-Allow-Origin — strip or replace these headers and the upload
    succeeds, the file lands, and the phone counts it as a failure and sends it
-   again for ever. */
+   again for ever.
+
+   And the phone's single-file POST is PREFLIGHTED. It no longer stays "simple"
+   despite its text/plain content type: postT is an XMLHttpRequest with upload
+   listeners on it (the idle timeout that cured "press Sync four times"), and an
+   upload listener makes any request non-simple. So every OPTIONS must reach the
+   handler and its 204 must come back verbatim — see the long note at CORS in
+   function.js. Answer an OPTIONS here instead, or drop one, and no file leaves
+   any phone. */
 function send(res, out) {
   const h = Object.assign({}, (out && out.headers) || { 'Content-Type': 'application/json' });
   res.writeHead((out && out.statusCode) || 200, h);

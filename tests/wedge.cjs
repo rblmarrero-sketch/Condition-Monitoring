@@ -26,8 +26,19 @@ const msg = p => p.textContent('#teamMsg').then(s=>s.trim());
      || await p.evaluate(()=>teamBusy===true), 'either enabled or a live pull owns it');
 
   console.log('\nthe hung request times out instead of hanging for ever');
+  /* THE DEADLINE IS THE APP'S, NOT A NUMBER KEPT HERE.
+
+     This waited a hard-coded 30 s. The startup pull is a FULL pull (no cursor
+     yet), so it runs on TEAM_TIMEOUT_FULL — 150 s, because a first read of the
+     whole folder on a pit link legitimately takes that long — and the wait
+     could never reach it. The suite had been red on correct code, timing out
+     on the app's own patience. Asking the page for its limit is the rule this
+     project already states: take limits from the running page, never keep a
+     second copy. */
+  const full = await p.evaluate(()=>TEAM_TIMEOUT_FULL);
+  console.log('  (the app gives a full pull ' + Math.round(full/1000) + ' s; waiting that long)');
   await p.waitForFunction(()=>/did not answer|Could not reach|⚠/.test(document.getElementById('teamMsg').textContent),
-    null,{timeout:30000});
+    null,{timeout: full + 20000});
   ok('it says the signal is the problem', /did not answer|Could not reach/.test(await msg(p)), await msg(p));
   ok('and the button is usable again', await p.evaluate(()=>!document.getElementById('teamRefresh').disabled));
   ok('nothing is left marked busy', await p.evaluate(()=>teamBusy===false));

@@ -190,9 +190,33 @@ const delObj  = key => s3('DELETE', key, null, '');
    successful upload as a failure and sends it again, for ever.
 
    Both clients deliberately send text/plain with the secret inside the body,
-   which keeps every request "simple" and means no preflight is needed. OPTIONS
-   is answered anyway: it costs four lines, and the day something adds a header
-   is not the day to discover this. */
+   which USED to keep every request "simple" so no preflight was needed. OPTIONS
+   was answered anyway: it cost four lines, and the day something adds a header
+   is not the day to discover this.
+
+   THAT DAY CAME, and those four lines are the reason nobody noticed. The phone
+   sends single files through postT — an XMLHttpRequest, because fetch cannot
+   watch its own upload, and bounding a POST by its own idle time is what cured
+   "press Sync four times". Attaching ANY listener to xhr.upload makes the
+   request non-simple whatever its content type, so every single-file upload has
+   been preflighted since that change. Live it costs one round trip an hour
+   rather than one per file, because of the Max-Age below.
+
+   Two things follow, and both matter more than the round trip:
+
+     · This endpoint MUST go on answering OPTIONS. It is no longer a courtesy;
+       remove it and every photograph and sidecar stops uploading, everywhere,
+       at once.
+     · The retired Apps Script has doGet and doPost and no doOptions, and an
+       Apps Script web app cannot serve one. It can no longer accept a single
+       file from this client at all, so "switch the old backend back on" is not
+       a one-step fallback. Keeping it field-for-field in step is still right —
+       it is how a revived backend cannot disagree about what a record IS — but
+       it would need a CORS-answering front before it could take an upload.
+
+   tests/audit.cjs §8 asserts the preflight happens and is answered; it had been
+   failing for roughly twenty-five builds, saying exactly this, read as "the app
+   cannot upload". */
 const CORS = { 'Access-Control-Allow-Origin': '*',
                'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
                'Access-Control-Allow-Headers': 'Content-Type',
