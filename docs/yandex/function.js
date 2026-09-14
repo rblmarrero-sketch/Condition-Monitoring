@@ -289,8 +289,13 @@ async function readRecords(p) {
              round did not happen — and not a correction either. It is the other
              half of the due list: without it the office sees a machine that is
              overdue and cannot tell "nobody went" from "it was on a low-loader". */
+          /* whyKey is the STABLE code for one of the ten standard reasons
+             (TERMS.WHY); `why` is the sentence somebody will read. Both travel:
+             the label is for people and the key is for counting, and a field
+             dropped here is a field the office can never count no matter what
+             the phone sends. */
           if (j && j.u && j.t) deferrals.push({ u: j.u, t: j.t, until: j.until || null,
-            why: j.why || '', by: j.by || '', at: j.at || '' });
+            why: j.why || '', whyKey: j.whyKey || '', by: j.by || '', at: j.at || '' });
         } else if (/\.deleted\.json$/i.test(f.name) || (j && j.type === 'cm-record-deleted')) {
           /* The round was deleted from the office. The files are already gone —
              this marker is the only thing left that says so, and a phone that

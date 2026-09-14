@@ -94,6 +94,53 @@
     /* Does a visible string carry a banned word? Returns the pattern or null. */
     offends(s) { const x = String(s || ""); for (const re of banned) if (re.test(x)) return re; return null; },
   };
+  /* ── WHY A ROUND WAS NOT WALKED ──────────────────────────────────────────
+     The ten the site actually gives, in the order they are offered, each with
+     a STABLE KEY beside its two labels.
+
+     The key is the point. A reason is free text printed verbatim, and free
+     text alone puts "in the workshop", "In workshop", "в ремонте" and "ремонт"
+     in the folder as four different answers to one question — so the office
+     can read them one at a time and can never count them. That is the same
+     defect `respRole` was added to cure for the responsible person: THE LABEL
+     IS FOR PEOPLE, THE KEY IS FOR COUNTING. The label is written in the
+     reader's language at the moment it is shown, never stored translated.
+
+     An eleventh reason is still typed, not forced into the nearest of these:
+     a list that makes somebody choose a wrong reason is worse than one that
+     admits it is incomplete. Typing over a chosen reason DROPS its key, so a
+     key never travels beside words that do not match it.
+
+     Both surfaces read this list; neither keeps a copy. */
+  const WHY = [
+    { k: "sched",     en: "Incorrect schedule",            ru: "Ошибка в графике" },
+    { k: "dup",       en: "Duplicate work order",          ru: "Дублирующий заказ-наряд" },
+    { k: "operator",  en: "No operator available",         ru: "Нет оператора" },
+    { k: "notgiven",  en: "Equipment not released",        ru: "Техника не предоставлена" },
+    { k: "repair",    en: "Equipment under repair",        ru: "Техника в ремонте" },
+    { k: "clean",     en: "Cleaning required",             ru: "Требуется очистка" },
+    { k: "access",    en: "Inspection point inaccessible", ru: "Нет доступа к точке осмотра" },
+    { k: "unsafe",    en: "Unsafe conditions",             ru: "Небезопасные условия" },
+    { k: "transport", en: "No transport to site",          ru: "Нет транспорта до места работ" },
+    { k: "tools",     en: "Inspection tools unavailable",  ru: "Нет инструментов для осмотра" },
+  ];
+  T.WHY = WHY;
+  /* The label for a key, in a language. Empty for a reason nobody chose from
+     the list — the caller then has the inspector's own words and should print
+     those. Never invents a label for a key it does not know: a reason list
+     that grows on one surface before the other must go quiet there, not
+     print a code at a superintendent. */
+  T.whyLabel = function (k, lang) {
+    const row = WHY.filter(function (w) { return w.k === k; })[0];
+    return row ? (lang === "ru" ? row.ru : row.en) : "";
+  };
+  /* What to SHOW for a deferral: the standard label when it carries a known
+     key, the inspector's own words otherwise. One rule, so the phone, the
+     office and a report cannot disagree about which of the two is shown. */
+  T.whyText = function (key, free, lang) {
+    return T.whyLabel(key, lang) || String(free || "");
+  };
+
   if (typeof module !== "undefined" && module.exports) module.exports = T;
   root.TERMS = T;
 })(typeof self !== "undefined" ? self : (typeof window !== "undefined" ? window : globalThis));

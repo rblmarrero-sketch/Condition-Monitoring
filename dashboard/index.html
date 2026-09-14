@@ -2356,7 +2356,13 @@
 <div id="dfBox" class="dispbox hidden" role="dialog" aria-modal="true" aria-labelledby="dfTitle">
   <h3 id="dfTitle" data-i18n="dd_defer_title">Put this round off</h3>
   <p class="sub" id="dfWhat"></p>
-  <label class="sf"><span data-i18n="dd_why">Reason</span><textarea id="dfWhy" rows="3"></textarea></label>
+  <!-- THE SAME TEN THE PHONE OFFERS, out of TERMS.WHY. Two vocabularies for
+       one question is how a register nobody can count is built: the office
+       would file "workshop" against the inspectors' "Equipment under repair"
+       and the two would never add up. The box below stays for the eleventh
+       reason. -->
+  <label class="sf"><span data-i18n="dd_why">Reason</span><select id="dfWhySel"></select></label>
+  <label class="sf"><span class="sub" data-i18n="dd_why_own">Or write your own</span><textarea id="dfWhy" rows="3"></textarea></label>
   <label class="sf"><span data-i18n="dd_until">Review on</span><input id="dfUntil" type="date"></label>
   <label class="sf"><span data-i18n="dd_by">Deferred by</span><input id="dfBy" type="text"></label>
   <div class="dispact">
@@ -3671,22 +3677,22 @@ window.addEventListener("error", function (ev) { if (ev && ev.message) bad("unca
      builds, and the report it prints belongs to neither. The version tag makes
      each build a new URL, so the pair always arrives together. Bump it with
      mobile/index.html's BUILD; ver.cjs fails the sweep if they drift. -->
-<script src="../data/magnetic_plug.js?v=374"></script>
+<script src="../data/magnetic_plug.js?v=375"></script>
 <!-- 1C's planned PM service work orders (Start date plan / Start date
      actual), ingested by ingest/ingest_work_orders.py from WO.xlsx. Used
      only by the Plan vs Actual tab -- everything else on this page is
      unaffected if this file is stale or absent. -->
-<script src="../data/work_orders.js?v=374"></script>
-<script src="../mobile/hme.js?v=374"></script>
-<script src="../mobile/mp-fc.js?v=374"></script>
-<script src="../mobile/hme-cascade.js?v=374"></script>
-<script src="../mobile/temp-limits.js?v=374"></script>
+<script src="../data/work_orders.js?v=375"></script>
+<script src="../mobile/hme.js?v=375"></script>
+<script src="../mobile/mp-fc.js?v=375"></script>
+<script src="../mobile/hme-cascade.js?v=375"></script>
+<script src="../mobile/temp-limits.js?v=375"></script>
 <!-- The register and the wear reference, the same files the phones carry. A
      millimetre is judged here exactly as it was judged in the pit; the exported
      figures are a fallback for a machine this build does not know. -->
-<script src="../mobile/assets.js?v=374"></script>
-<script src="../mobile/normalize.js?v=374"></script>
-<script src="../mobile/terms.js?v=374"></script>
+<script src="../mobile/assets.js?v=375"></script>
+<script src="../mobile/normalize.js?v=375"></script>
+<script src="../mobile/terms.js?v=375"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -3705,19 +3711,19 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="../mobile/grade.js?v=374"></script>
-<script src="../mobile/edits.js?v=374"></script>
-<script src="../mobile/due.js?v=374"></script>
-<script src="../mobile/wear.js?v=374"></script>
-<script src="../mobile/wear-map.js?v=374"></script>
-<script src="../mobile/lube.js?v=374"></script>
-<script src="../mobile/lube-overrides.js?v=374"></script>
-<script src="../mobile/lube2027.js?v=374"></script>
-<script src="../mobile/lube-tds.js?v=374"></script>
+<script src="../mobile/grade.js?v=375"></script>
+<script src="../mobile/edits.js?v=375"></script>
+<script src="../mobile/due.js?v=375"></script>
+<script src="../mobile/wear.js?v=375"></script>
+<script src="../mobile/wear-map.js?v=375"></script>
+<script src="../mobile/lube.js?v=375"></script>
+<script src="../mobile/lube-overrides.js?v=375"></script>
+<script src="../mobile/lube2027.js?v=375"></script>
+<script src="../mobile/lube-tds.js?v=375"></script>
 <!-- The same destinations file the phones read on first open, so one place
      configures both and a new browser needs nothing typed into it. -->
-<script src="../mobile/upload-defaults.js?v=374"></script>
-<script src="../mobile/machine-photos.js?v=374"></script>
+<script src="../mobile/upload-defaults.js?v=375"></script>
+<script src="../mobile/machine-photos.js?v=375"></script>
 <script>
 /* The artwork lives beside the app, and both modules build their URLs from
    this one base. Left as "machine/" it resolves against /dashboard/ and every
@@ -3726,17 +3732,17 @@ if (!window.TERMS) {
    on it. GET reads the same property, so this fixes both rounds. */
 if (window.MACHINE_PHOTOS) MACHINE_PHOTOS.BASE = "../mobile/machine/";
 </script>
-<script src="../mobile/machine-fig.js?v=374"></script>
-<script src="../mobile/get.js?v=374"></script>
-<script src="../mobile/points.js?v=374"></script>
-<script src="../mobile/uc-points.js?v=374"></script>
-<script src="../mobile/inspect-guide.js?v=374"></script>
-<script src="../mobile/get-figs.js?v=374"></script>
-<script src="../mobile/body-points.js?v=374"></script>
-<script src="../mobile/body-map.js?v=374"></script>
-<script src="../mobile/jspdf.umd.min.js?v=374"></script>
-<script src="../mobile/html2canvas.min.js?v=374"></script>
-<script src="../mobile/report-core.js?v=374"></script>
+<script src="../mobile/machine-fig.js?v=375"></script>
+<script src="../mobile/get.js?v=375"></script>
+<script src="../mobile/points.js?v=375"></script>
+<script src="../mobile/uc-points.js?v=375"></script>
+<script src="../mobile/inspect-guide.js?v=375"></script>
+<script src="../mobile/get-figs.js?v=375"></script>
+<script src="../mobile/body-points.js?v=375"></script>
+<script src="../mobile/body-map.js?v=375"></script>
+<script src="../mobile/jspdf.umd.min.js?v=375"></script>
+<script src="../mobile/html2canvas.min.js?v=375"></script>
+<script src="../mobile/report-core.js?v=375"></script>
 <script>
 const $=(id)=>document.getElementById(id);
 /* ---- settings handed over in the link ----
@@ -4610,6 +4616,7 @@ const I18N={
   dd_start:"Start inspection", dd_start_t:"Open this machine and this round on the phone app",
   dd_defer:"Defer inspection", dd_defer_edit:"Edit deferral", dd_defer_t:"Put this round off, with a reason",
   dd_defer_title:"Put this round off", dd_why:"Reason", dd_until:"Review on",
+  dd_why_pick:"Choose a reason\u2026", dd_why_own:"Or write your own",
   dd_by:"Deferred by", dd_defer_save:"Save", dd_undefer:"Cancel the deferral",
   dd_need:"A reason and a name are both required.",
   dd_put_to:"deferred to {d}", dd_not_doing:"not being done",
@@ -5477,6 +5484,7 @@ const I18N={
   dd_start:"Начать осмотр", dd_start_t:"Открыть эту машину и этот обход в приложении",
   dd_defer:"Отложить осмотр", dd_defer_edit:"Изменить отсрочку", dd_defer_t:"Отложить обход с указанием причины",
   dd_defer_title:"Отложить обход", dd_why:"Причина", dd_until:"Пересмотреть",
+  dd_why_pick:"Выберите причину\u2026", dd_why_own:"Или впишите свою",
   dd_by:"Отложил", dd_defer_save:"Сохранить", dd_undefer:"Снять отсрочку",
   dd_need:"Нужны и причина, и имя.",
   dd_put_to:"отложено до {d}", dd_not_doing:"не выполняется",
@@ -15267,7 +15275,7 @@ function renderDueTab(){
         <td><span class="need">${esc(TERMS.t(lang,"never_inspected"))}</span></td>
         <td class="r"><span class="muted">—</span></td>
         <td class="r"><span class="muted">—</span></td>
-        <td>${r.d ? esc(r.d.until?t("dd_put_to",{d:r.d.until}):t("dd_not_doing"))+" — "+esc(r.d.why||"") : ""}</td>
+        <td>${r.d ? esc(r.d.until?t("dd_put_to",{d:r.d.until}):t("dd_not_doing"))+" — "+esc(deferWhy(r.d)) : ""}</td>
         <td class="ddact">
           <a class="minibtn" href="${esc(unitLink(r.unit,r.ty))}" target="_blank" rel="noopener"
              title="${esc(t("dd_start_t"))}">${esc(t("dd_start"))}</a>
@@ -15277,7 +15285,7 @@ function renderDueTab(){
       const when = n.over ? `<b style="color:var(--critical)">${esc(t("due_over",{n:numAbs(n.dueInDays)}))}</b>`
                           : esc(t("due_in",{n:numAbs(n.dueInDays)}));
       const why = r.d
-        ? `${esc(r.d.until?t("dd_put_to",{d:r.d.until}):t("dd_not_doing"))} — ${esc(r.d.why||"")}${
+        ? `${esc(r.d.until?t("dd_put_to",{d:r.d.until}):t("dd_not_doing"))} — ${esc(deferWhy(r.d))}${
             r.d.by?` <span class="muted">· ${esc(r.d.by)}</span>`:""}`
         : (n.why==="wear" ? `<span class="muted">${esc(t("due_why_wear"))}</span>` : "");
       return `<tr class="dd-${esc(r.st)}">
@@ -15326,13 +15334,50 @@ function unitLink(unit,ty){
 
    It is answered by a round of that type actually being walked, so nothing has
    to be deleted for it to stop being true. */
-let dfCtx=null;
+let dfCtx=null, dfWhyKey="";
+/* WHAT A DEFERRAL SAYS, IN THE READER'S LANGUAGE.
+
+   A reason chosen from the ten is stored with a stable key AND the words as
+   they were chosen — on a Russian phone, in Russian. Printing those words to
+   an English-speaking reliability engineer is the wrong half of the pair: the
+   KEY is the fact, so the label is looked up here and the stored words are the
+   fallback for the eleventh reason somebody typed. TERMS.whyText is the one
+   rule; the phone reads the same one. */
+const deferWhy = d => (window.TERMS && TERMS.whyText)
+  ? TERMS.whyText(d && d.whyKey, d && d.why, lang)
+  : String((d && d.why) || "");
 function askDefer(key){
   const [ty,unit]=key.split("|");
   dfCtx={ty,unit};
   const cur=deferrals[key]||null;
   $("dfWhat").textContent=`${unit} \u00b7 ${TYPE_LABEL[ty]||ty}`;
   $("dfWhy").value=(cur&&cur.why)||"";
+  /* Built on open, so the labels are in the language on screen now and a
+     reason added to TERMS.WHY reaches both surfaces without either keeping a
+     copy. No terms.js, no picker — the free text alone still records it. */
+  {
+    const sel=$("dfWhySel"), list=(window.TERMS && TERMS.WHY) || [];
+    dfWhyKey=(cur&&cur.whyKey)||"";
+    const wrap=sel && sel.closest("label");
+    if(wrap) wrap.classList.toggle("hidden", !list.length);
+    if(sel && list.length){
+      sel.innerHTML=`<option value="">${esc(t("dd_why_pick"))}</option>`
+        + list.map(w=>`<option value="${esc(w.k)}">${esc(TERMS.whyLabel(w.k,lang))}</option>`).join("");
+      sel.value=dfWhyKey;
+      /* The alternative, not an addition — see the phone's copy of this. */
+      const own=$("dfWhy").closest("label");
+      const showOwn=()=>{ if(own) own.classList.toggle("hidden", !!dfWhyKey); };
+      sel.onchange=()=>{ dfWhyKey=sel.value;
+        if(dfWhyKey){ $("dfWhy").value=TERMS.whyLabel(dfWhyKey,lang); $("dfMsg").textContent=""; }
+        else $("dfWhy").value="";
+        showOwn(); if(!dfWhyKey && own) $("dfWhy").focus(); };
+      showOwn();
+    }
+    /* Typed over, so the key no longer describes the words — dropped, for the
+       reason the phone drops it. */
+    $("dfWhy").oninput=()=>{ if(!dfWhyKey) return;
+      if($("dfWhy").value.trim()!==TERMS.whyLabel(dfWhyKey,lang)){ dfWhyKey=""; if(sel) sel.value=""; } };
+  }
   $("dfUntil").value=(cur&&cur.until)||"";
   let who=""; try{ who=localStorage.getItem("cm_dash_who")||""; }catch(e){}
   $("dfBy").value=(cur&&cur.by)||who;
@@ -15354,12 +15399,13 @@ function dfSave(clear){
   /* Clearing writes the act rather than deleting the file: the row coming back
      with no record that anybody ever put it off is how an audit trail loses
      the only part somebody would later ask about. */
+  const whyKey = clear ? "" : (dfWhyKey||"");
   const doc={ type:"cm-round-deferred", version:1, u:unit, t:ty,
-              until: clear?null:until, why: clear?"":why, by, at,
+              until: clear?null:until, why: clear?"":why, whyKey, by, at,
               cleared: clear?1:0, dev:"DASH" };
   const before=deferrals[k]?JSON.parse(JSON.stringify(deferrals[k])):null;
   if(clear) delete deferrals[k];
-  else deferrals[k]={u:unit,t:ty,until,why,by,at};
+  else deferrals[k]={u:unit,t:ty,until,why,whyKey,by,at};
   saveDefer(); renderAll();
   $("dfMsg").textContent=t("ed_sending");
   const name=`_meta/deferrals/${unit}_${ty}.defer.json`;
@@ -17388,8 +17434,8 @@ applyLang();                          // paints the static markup and re-renders
    have. Deferred a beat so drive.js has loaded and can be asked. */
 setTimeout(()=>{ if(!RECS.length && !drvOn()) openData(); }, 300);
 </script>
-<script src="drive.js?v=374"></script>
-<script src="sync-adapter.js?v=374"></script>
-<script src="report.js?v=374"></script>
+<script src="drive.js?v=375"></script>
+<script src="sync-adapter.js?v=375"></script>
+<script src="report.js?v=375"></script>
 </body>
 </html>

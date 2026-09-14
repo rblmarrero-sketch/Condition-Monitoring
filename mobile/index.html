@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=374">
+<link rel="manifest" href="manifest.webmanifest?v=375">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=374">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=374">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=374">
+<link rel="apple-touch-icon" href="icon-192.png?v=375">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=375">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=375">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -497,6 +497,17 @@
     padding:9px 12px;margin-bottom:6px;text-align:left;width:100%;font:inherit;color:var(--ink);
     min-height:var(--tap);}
   .agitem:last-child{margin-bottom:0;}
+  /* THE SAME SIDE MENU THE LIST HAS. A round is deferred or called off from
+     wherever it is being read, and the fortnight is where a planner reads it
+     — having to find the same round in the other view to say "not doing this
+     one" is how it goes unsaid. Reuses .duerow and .dueforget so the two
+     views cannot drift into two controls; the spacing moves to the wrapper so
+     the row keeps its own rhythm. A round already WALKED gets no menu: there
+     is nothing to defer, and offering it would invite undoing a fact. */
+  .agrow{margin-bottom:6px;}
+  .agrow:last-child{margin-bottom:0;}
+  .agrow .agitem{margin-bottom:0;}
+  .agrow .dueforget{align-self:stretch;}
   .agitem.pre{border-left-color:var(--warn-ink);}
   .agitem .tag{flex:none;font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:6px;
     background:var(--good);color:#fff;}
@@ -2301,7 +2312,14 @@
 <dialog id="dueDlg"><div class="dlg-in"><h3 id="dueDlgT"></h3>
   <p class="hint" id="dueDlgSub" style="margin:0 0 12px"></p>
   <div class="row" id="dueWhen" style="gap:6px;flex-wrap:wrap"></div>
+  <!-- THE REASON IS CHOSEN FIRST AND TYPED SECOND. Ten the site actually
+       gives, from TERMS.WHY so the office reads the same ten; the box below
+       stays, because a list that forces somebody into the nearest wrong
+       reason is worse than one that admits it is incomplete. Choosing fills
+       the box; typing over it drops the key (dueNotDoing). -->
   <label class="fld" style="margin:12px 0 0"><span data-i18n="due_why">Reason</span>
+    <select id="dueWhySel"></select></label>
+  <label class="fld" style="margin:8px 0 0"><span class="hint" data-i18n="due_why_own">Or write your own</span>
     <input id="dueWhy" type="text" data-i18n-ph="due_why_ph" placeholder="why it is not being done"></label>
   <div class="hint" id="dueDlgMsg" style="margin-top:8px"></div>
   <div class="row" style="margin-top:14px">
@@ -2550,15 +2568,15 @@ window.addEventListener("error", function (ev) {
   }
 })();
 </script>
-<script src="native.js?v=374"></script>
-<script src="upload-defaults.js?v=374"></script>
-<script src="hme.js?v=374"></script>
-<script src="mp-fc.js?v=374"></script>
-<script src="hme-cascade.js?v=374"></script>
-<script src="assets.js?v=374"></script>
-<script src="temp-limits.js?v=374"></script>
-<script src="normalize.js?v=374"></script>
-<script src="terms.js?v=374"></script>
+<script src="native.js?v=375"></script>
+<script src="upload-defaults.js?v=375"></script>
+<script src="hme.js?v=375"></script>
+<script src="mp-fc.js?v=375"></script>
+<script src="hme-cascade.js?v=375"></script>
+<script src="assets.js?v=375"></script>
+<script src="temp-limits.js?v=375"></script>
+<script src="normalize.js?v=375"></script>
+<script src="terms.js?v=375"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2577,25 +2595,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=374"></script>
-<script src="edits.js?v=374"></script>
-<script src="due.js?v=374"></script>
-<script src="wear.js?v=374"></script>
-<script src="wear-figs.js?v=374"></script>
-<script src="wear-map.js?v=374"></script>
-<script src="machine-photos.js?v=374"></script>
-<script src="machine-fig.js?v=374"></script>
-<script src="get.js?v=374"></script>
-<script src="points.js?v=374"></script>
-<script src="uc-points.js?v=374"></script>
-<script src="inspect-guide.js?v=374"></script>
-<script src="get-figs.js?v=374"></script>
-<script src="body-points.js?v=374"></script>
-<script src="body-map.js?v=374"></script>
-<script src="lube.js?v=374"></script>
-<script src="lube-overrides.js?v=374"></script>
-<script src="lube2027.js?v=374"></script>
-<script src="report-core.js?v=374"></script>
+<script src="grade.js?v=375"></script>
+<script src="edits.js?v=375"></script>
+<script src="due.js?v=375"></script>
+<script src="wear.js?v=375"></script>
+<script src="wear-figs.js?v=375"></script>
+<script src="wear-map.js?v=375"></script>
+<script src="machine-photos.js?v=375"></script>
+<script src="machine-fig.js?v=375"></script>
+<script src="get.js?v=375"></script>
+<script src="points.js?v=375"></script>
+<script src="uc-points.js?v=375"></script>
+<script src="inspect-guide.js?v=375"></script>
+<script src="get-figs.js?v=375"></script>
+<script src="body-points.js?v=375"></script>
+<script src="body-map.js?v=375"></script>
+<script src="lube.js?v=375"></script>
+<script src="lube-overrides.js?v=375"></script>
+<script src="lube2027.js?v=375"></script>
+<script src="report-core.js?v=375"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -3108,6 +3126,7 @@ const I18N = {
     due_not_m:"{ty}. Defer it to a date, or say it is not being done at all. Either way the reason is kept, so the office can see what was not completed and why.",
     due_put_n:"+{n} d", due_put_to:"deferred to {d}", due_off:"Not being done",
     due_why:"Reason", due_why_ph:"in the workshop · off site · no access",
+    due_why_pick:"Choose a reason\u2026", due_why_own:"Or write your own",
     due_why_need:"Say why — this is the part somebody will read later.",
     due_overdue:"Overdue & due soon", due_all:"All",
     /* On a pill, not in a dropdown: the count beside it says how many, so the
@@ -3721,6 +3740,7 @@ const I18N = {
     due_not_m:"{ty}. Отложите на срок или укажите, что осмотр не будет выполнен. В обоих случаях причина сохраняется — офис увидит, что не выполнено и почему.",
     due_put_n:"+{n} сут", due_put_to:"отложено до {d}", due_off:"Не выполняется",
     due_why:"Причина", due_why_ph:"в ремонте · вне участка · нет доступа",
+    due_why_pick:"Выберите причину\u2026", due_why_own:"Или впишите свою",
     due_why_need:"Укажите причину — её будут читать позже.",
     due_overdue:"Просроченные и скоро", due_all:"Все",
     due_soon:TERMS.ru.due_soon, due_putoff:TERMS.ru.deferred,
@@ -9267,12 +9287,16 @@ function renderDueWeek(){
            with the date it was recorded, so the row answers the question
            without anybody having to know what grey means. */
         const done=e.done?` <span class="donenote">· ${esc(t("due_week_done",{d:schedShortDate(e.done.d)}))}</span>`:"";
-        return `<button type="button" class="agitem${e.isPre?" pre":""}${e.done?" done":""}" data-u="${esc(e.unit)}" data-t="${esc(e.code)}">
+        const item=`<button type="button" class="agitem${e.isPre?" pre":""}${e.done?" done":""}" data-u="${esc(e.unit)}" data-t="${esc(e.code)}">
           <span class="tag">${e.done?"✓ ":""}${esc(e.code)}</span>
           <span class="body">
             <span class="u">${esc(e.unit)}${a&&a.cat?` <span class="cat">${esc(a.cat)}</span>`:""}</span>
             <span class="m">${esc(e.w.wo||"—")}${hrs?" · "+esc(hrs):""}${pre}${done}</span>
           </span></button>`;
+        /* Walked rounds keep the plain row — see the .agrow note in the CSS. */
+        if(e.done) return `<div class="duerow agrow">${item}</div>`;
+        return `<div class="duerow agrow">${item}<button class="dueforget" data-f="${esc(e.unit)}" data-ft="${esc(e.code)}"
+          aria-label="${esc(t("due_not"))}" title="${esc(t("due_not"))}">⋯</button></div>`;
       }).join("")}
     </div>`;
   }).join("");
@@ -9281,6 +9305,9 @@ function renderDueWeek(){
     if(b.dataset.t && sel && sel.value!==b.dataset.t){ sel.value=b.dataset.t; sel.dispatchEvent(new Event("change")); }
     selectEquip(b.dataset.u); showPane("paneCapture");
   });
+  /* The same call the list makes, so the two views cannot come to mean
+     different things by the same control. */
+  box.querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>dueNotDoing(b.dataset.ft,b.dataset.f));
 }
 (function initDueViewSeg(){
   const bl=$("dueViewList"), bw=$("dueViewWeek"); if(!bl||!bw) return;
@@ -10011,8 +10038,56 @@ async function dueNotDoing(ty,unit){
   const dlg=$("dueDlg"); let until=String(DUE_PUT[0]);
   $("dueDlgT").textContent=t("due_not_t",{u});
   $("dueDlgSub").textContent=t("due_not_m",{ty:t("type_"+ty)});
-  $("dueWhy").value=(deferOf(ty,u)||{}).why||"";
+  const had=deferOf(ty,u)||{};
+  $("dueWhy").value=had.why||"";
   $("dueDlgMsg").textContent="";
+
+  /* THE TEN, FROM THE ONE TABLE. Built here rather than in the markup so the
+     labels are in the language on screen at the moment it opens, and so a
+     reason added to TERMS.WHY appears on both surfaces without either
+     keeping a copy.
+
+     If terms.js did not arrive, TERMS.WHY is undefined and the picker is
+     hidden — the free-text box alone still works. A deferral that cannot be
+     categorised is worth far more than one that cannot be recorded, and this
+     screen is reached at −40 with gloves on. */
+  const sel=$("dueWhySel");
+  let whyKey=had.whyKey||"";
+  const list=(window.TERMS && TERMS.WHY) || [];
+  const wrap=sel && sel.closest("label");
+  if(wrap) wrap.classList.toggle("hidden", !list.length);
+  if(sel && list.length){
+    sel.innerHTML=`<option value="">${esc(t("due_why_pick"))}</option>`
+      + list.map(w=>`<option value="${esc(w.k)}">${esc(TERMS.whyLabel(w.k,lang))}</option>`).join("");
+    sel.value=whyKey;
+    /* Choosing writes the words into the box as well, so what is SENT is
+       always the sentence somebody will read, in the language it was chosen
+       in — the key travels beside it for counting, never instead of it. */
+    /* CHOOSE OR TYPE, NEVER BOTH ON SCREEN AT ONCE. The box below is the
+       ALTERNATIVE to the ten, not an addition to them — so while one is
+       chosen it is filled with that reason's words and put away. Left
+       visible it showed the same sentence twice, which reads as a mistake
+       and invites somebody to edit one half of a pair that must agree.
+       Picking the blank entry brings it back to write the eleventh. */
+    const own=$("dueWhy").closest("label");
+    const showOwn=()=>{ if(own) own.classList.toggle("hidden", !!whyKey); };
+    sel.onchange=()=>{
+      whyKey=sel.value;
+      if(whyKey){ $("dueWhy").value=TERMS.whyLabel(whyKey,lang); $("dueDlgMsg").textContent=""; }
+      else $("dueWhy").value="";
+      showOwn();
+      if(!whyKey && own) $("dueWhy").focus();
+    };
+    showOwn();
+  }
+  /* TYPING OVER A CHOSEN REASON DROPS ITS KEY. Otherwise "Equipment under
+     repair" could reach the folder keyed as "No operator" and the office's
+     count would be confidently wrong — the failure `respRole` was given the
+     same rule to avoid. */
+  $("dueWhy").oninput=()=>{
+    if(!whyKey) return;
+    if($("dueWhy").value.trim()!==TERMS.whyLabel(whyKey,lang)){ whyKey=""; if(sel) sel.value=""; }
+  };
   const paint=()=>{ $("dueWhen").innerHTML=
       DUE_PUT.map(n=>`<button class="btn chipbtn ${String(n)===until?"primary":""}" data-w="${n}">${
         esc(t("due_put_n").replace("{n}",n))}</button>`).join("")
@@ -10027,7 +10102,7 @@ async function dueNotDoing(ty,unit){
       /* Refused, not defaulted. "No reason given" recorded a hundred times is
          the same as having no record at all. */
       if(why.length<3){ $("dueDlgMsg").textContent=t("due_why_need"); $("dueWhy").focus(); return; }
-      res({until, why});
+      res({until, why, whyKey});
     };
   });
   dlg.close();
@@ -10039,9 +10114,9 @@ async function dueNotDoing(ty,unit){
      at two in the afternoon, and the later one vanished without a word. */
   const at=new Date().toISOString();
   if(done.until==="off"){
-    deferPut(ty,u,{until:null, why:done.why, by, at});
+    deferPut(ty,u,{until:null, why:done.why, whyKey:done.whyKey||"", by, at});
   }else{
-    deferPut(ty,u,{until:DUE.shift(todayISO(),Number(done.until)), why:done.why, by, at});
+    deferPut(ty,u,{until:DUE.shift(todayISO(),Number(done.until)), why:done.why, whyKey:done.whyKey||"", by, at});
   }
   renderDue();
 }
@@ -13142,7 +13217,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="374";
+const BUILD="375";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
@@ -15261,7 +15336,7 @@ async function syncDefer(dests){
     const d=m[k]; if(!d || d.up) continue;
     const [ty,unit]=k.split("|");
     const body={ type:"cm-round-deferred", version:1,
-                 u:unit, t:ty, until:d.until||null, why:d.why||"",
+                 u:unit, t:ty, until:d.until||null, why:d.why||"", whyKey:d.whyKey||"",
                  by:d.by||"", at:d.at||todayISO(), dev:DEVICE };
     const blob=new Blob([JSON.stringify(body,null,2)],{type:"application/json"});
     const name=`${unit}_${ty}.defer.json`;

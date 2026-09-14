@@ -982,7 +982,7 @@ function metaSince_(since) {
         if (/\.conflict\.json$/i.test(n)) conflicts.push(j);
         else if (/\.deleted\.json$/i.test(n)) deleted.push({ key: j.key, by: j.by || '', at: j.at || '' });
         else if (/\.defer\.json$/i.test(n)) deferrals.push({ u: j.u, t: j.t, until: j.until || null,
-          why: j.why || '', by: j.by || '', at: j.at || '' });
+          why: j.why || '', whyKey: j.whyKey || '', by: j.by || '', at: j.at || '' });
         else edits.push(j);
       } catch (err) { /* skip */ }
     }
@@ -1151,7 +1151,7 @@ function readRecords_(p) {
            half of the due list: without it the office sees a machine that is
            overdue and cannot tell "nobody went" from "it was on a low-loader". */
         if (j && j.u && j.t) deferrals.push({ u: j.u, t: j.t, until: j.until || null,
-          why: j.why || '', by: j.by || '', at: j.at || '' });
+          why: j.why || '', whyKey: j.whyKey || '', by: j.by || '', at: j.at || '' });
       } else if (/\.deleted\.json$/i.test(f.name) || (j && j.type === 'cm-record-deleted')) {
         /* The round was deleted from the office. Its files are already gone, so
            this marker is the only thing left that says so — and a phone that
