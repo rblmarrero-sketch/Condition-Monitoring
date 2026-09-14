@@ -244,6 +244,54 @@ const SEED = () => {
        c.slice(0, 90));
   });
 
+  console.log('\n8. AND THE PHONE MAKES THE SAME DOCUMENT, MEASURED THE SAME WAY');
+  /* The office half above is measured off a real file. This is the other
+     half: a round saved on a handset, its report built by the phone's own
+     button, and the resulting PDF held to the same raster. Anything that
+     drifts between the two surfaces shows up here as a different number. */
+  const c3 = await b.newContext({ viewport: { width: 412, height: 915 }, isMobile: true,
+                                  hasTouch: true, acceptDownloads: true });
+  const q = await c3.newPage(); const qerr = []; q.on('pageerror', e => qerr.push(e.message));
+  await q.addInitScript(() => localStorage.setItem('up_dests', '[]'));
+  await q.goto(BASE + '/mobile/index.html', { waitUntil: 'load' });
+  await q.waitForFunction(() => typeof reportOne === 'function' && typeof dbPut === 'function'
+    && typeof items === 'function', null, { timeout: 30000 });
+  const seeded = await q.evaluate(async () => {
+    const frame = (n) => { const c = document.createElement('canvas');
+      c.width = 640; c.height = n % 2 ? 480 : 800;
+      const x = c.getContext('2d'); x.fillStyle = n % 2 ? '#4a6' : '#46a';
+      x.fillRect(0, 0, c.width, c.height);
+      x.fillStyle = '#fff'; x.font = '64px sans-serif'; x.fillText('P' + n, 30, 110);
+      return new Promise(r => c.toBlob(r, 'image/jpeg', 0.9)); };
+    type = 'FC'; selectEquip('DZ002');
+    await new Promise(r => setTimeout(r, 500));
+    const pos = {}; let n = 0;
+    for (const k of items().map(x => x.k).slice(0, 3))
+      pos[k] = { grade: 1, sev: 'NOF', defect: '', cause: '', action: '', wo: '', comment: '',
+                 photos: [await frame(++n), await frame(++n)] };
+    const rec = { id: 'mirror-1', equip: 'DZ002', date: '2026-09-14', type: 'FC', cls: 'DOZ',
+      by: 'Rayanov', smu: '27908', positions: pos, up: 0, upTo: {}, rev: 1,
+      dev: 'PH-01', gps: null, sign: null, created: '2026-09-14T06:00:00.000Z' };
+    await dbPut(rec);
+    return Object.keys(pos).length;
+  });
+  ok('a round is saved on the handset to report on', seeded > 0, seeded + ' position(s)');
+  const pdl = q.waitForEvent('download', { timeout: 900000 }); pdl.catch(() => {});
+  await q.evaluate(async () => { const r = (await dbAll()).find(x => x.id === 'mirror-1');
+                                 await reportOne(r); });
+  let phoneFile = null;
+  try { const d = await pdl; phoneFile = path.join(OUT, 'phone-one.pdf'); await d.saveAs(phoneFile); }
+  catch (e) { phoneFile = null; }
+  const pr = phoneFile && raster(phoneFile);
+  ok('the phone produced a real PDF', !!pr, phoneFile || 'no download');
+  if (pr && unit.r) {
+    ok('  at the very same raster as the office\'s', pr.ppi === unit.r.ppi,
+       'phone ' + pr.ppi + ' ppi · office ' + unit.r.ppi + ' ppi');
+    ok('  which is the standard, not merely equal to each other', pr.ppi >= 250, pr.ppi + ' ppi');
+  }
+  ok('  and the handset raised nothing while doing it', qerr.length === 0, qerr.slice(0, 2).join(' | '));
+  await c3.close();
+
   ok('no page errors throughout', errs.length === 0, errs.slice(0, 3).join(' | '));
   console.log('\n   PDFs kept in ' + OUT);
   await b.close();
