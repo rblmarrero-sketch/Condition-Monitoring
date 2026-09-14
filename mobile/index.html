@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=366">
+<link rel="manifest" href="manifest.webmanifest?v=367">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=366">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=366">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=366">
+<link rel="apple-touch-icon" href="icon-192.png?v=367">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=367">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=367">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2504,15 +2504,15 @@ function bootDel(k){ try { localStorage.removeItem(k); } catch (e) {} }
   }
 })();
 </script>
-<script src="native.js?v=366"></script>
-<script src="upload-defaults.js?v=366"></script>
-<script src="hme.js?v=366"></script>
-<script src="mp-fc.js?v=366"></script>
-<script src="hme-cascade.js?v=366"></script>
-<script src="assets.js?v=366"></script>
-<script src="temp-limits.js?v=366"></script>
-<script src="normalize.js?v=366"></script>
-<script src="terms.js?v=366"></script>
+<script src="native.js?v=367"></script>
+<script src="upload-defaults.js?v=367"></script>
+<script src="hme.js?v=367"></script>
+<script src="mp-fc.js?v=367"></script>
+<script src="hme-cascade.js?v=367"></script>
+<script src="assets.js?v=367"></script>
+<script src="temp-limits.js?v=367"></script>
+<script src="normalize.js?v=367"></script>
+<script src="terms.js?v=367"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2531,25 +2531,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=366"></script>
-<script src="edits.js?v=366"></script>
-<script src="due.js?v=366"></script>
-<script src="wear.js?v=366"></script>
-<script src="wear-figs.js?v=366"></script>
-<script src="wear-map.js?v=366"></script>
-<script src="machine-photos.js?v=366"></script>
-<script src="machine-fig.js?v=366"></script>
-<script src="get.js?v=366"></script>
-<script src="points.js?v=366"></script>
-<script src="uc-points.js?v=366"></script>
-<script src="inspect-guide.js?v=366"></script>
-<script src="get-figs.js?v=366"></script>
-<script src="body-points.js?v=366"></script>
-<script src="body-map.js?v=366"></script>
-<script src="lube.js?v=366"></script>
-<script src="lube-overrides.js?v=366"></script>
-<script src="lube2027.js?v=366"></script>
-<script src="report-core.js?v=366"></script>
+<script src="grade.js?v=367"></script>
+<script src="edits.js?v=367"></script>
+<script src="due.js?v=367"></script>
+<script src="wear.js?v=367"></script>
+<script src="wear-figs.js?v=367"></script>
+<script src="wear-map.js?v=367"></script>
+<script src="machine-photos.js?v=367"></script>
+<script src="machine-fig.js?v=367"></script>
+<script src="get.js?v=367"></script>
+<script src="points.js?v=367"></script>
+<script src="uc-points.js?v=367"></script>
+<script src="inspect-guide.js?v=367"></script>
+<script src="get-figs.js?v=367"></script>
+<script src="body-points.js?v=367"></script>
+<script src="body-map.js?v=367"></script>
+<script src="lube.js?v=367"></script>
+<script src="lube-overrides.js?v=367"></script>
+<script src="lube2027.js?v=367"></script>
+<script src="report-core.js?v=367"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -5453,6 +5453,55 @@ $("gradeWhy").addEventListener("input",()=>{ const p=curP(); p.gradeWhy=$("grade
    a number at all: it is the round's own interval for THIS machine's class,
    read from due.js, which is the only place an interval is allowed to live. */
 const GRADE_DUE_DAYS = { 4: 7, 5: 1 };
+/* WHAT 1C HAS PLANNED FOR THIS MACHINE, ONCE, FOR THE TWO THINGS THAT NEED IT.
+
+   `near` is the order this round is being walked AGAINST — the one nearest
+   today, past or future, whose types include the round. That is the work
+   order number to put on the finding.
+   `next` is the soonest order still to come. That is when the machine is
+   next open, which is a different question and must not be answered with
+   the same figure.
+
+   Read from SCHED, which schedRefresh() already keeps current, so neither
+   caller gets a second copy of the schedule to fall out of step with. */
+function schedOrdersFor(unit, ty){
+  const out={near:null, next:null};
+  try{
+    /* SCHED, not window.SCHED. It is declared `let SCHED = null` at module
+       scope, so it never becomes a property of window — and `window.SCHED &&`
+       is therefore always false, which would have made this function answer
+       "1C has nothing planned" for every machine on the fleet, for ever,
+       with no error and no empty field to notice. The signature defect of
+       this project, written into the guard meant to be careful. */
+    const list=(SCHED && SCHED.byUnit && SCHED.byUnit[unit])||[];
+    const today=todayISO();
+    let bestGap=Infinity;
+    for(const w of list){
+      if(!w || !w.plan) continue;
+      const types=Array.isArray(w.types)?w.types:[];
+      if(ty && types.length && types.indexOf(ty)<0) continue;
+      const gap=DUE.dayDiff(today, w.plan);
+      if(gap==null) continue;
+      if(Math.abs(gap)<bestGap){ bestGap=Math.abs(gap); out.near=w; }
+      if(gap>0 && (!out.next || w.plan<out.next.plan)) out.next=w;
+    }
+  }catch(e){}
+  return out;
+}
+/* The 1C notification / work order this round belongs to, or "". Only from an
+   order that covers THIS round on THIS machine — a number borrowed from some
+   other order is worse than an empty field, because a wrong reference sends
+   the office looking at the wrong job. */
+function schedWOFor(unit, ty){
+  const o=schedOrdersFor(unit, ty);
+  return (o.near && o.near.wo) ? String(o.near.wo) : "";
+}
+/* Set once per round, the first time it is asked for, so a round started from
+   a scheduled row and one started from the machine picker behave the same. */
+function roundWO(){
+  if(draft.wo==null) draft.wo = (curEquip && type) ? schedWOFor(curEquip, type) : "";
+  return draft.wo || "";
+}
 function defaultTargetFor(g){
   if(!window.DUE) return null;
   const today = todayISO();
@@ -5469,7 +5518,27 @@ function defaultTargetFor(g){
      stated for one machine (DZ011 is cut every 500 h where its class is on
      1,000) is the one this default uses. */
   const d = DUE.days(type, null, null, cls, curEquip);
-  return (d && isFinite(d) && d > 0) ? DUE.shift(today, Math.round(d)) : null;
+  let iso = (d && isFinite(d) && d > 0) ? DUE.shift(today, Math.round(d)) : null;
+  /* AND NEVER LATER THAN THE NEXT TIME THE MACHINE IS ACTUALLY OPEN.
+
+     The interval alone is the right answer for the rounds it was specified
+     against — MP at 250 h is 13 days, INSP at 1,000 h is 50 — and a wrong
+     one for the long ones: a 3 on an excavator's undercarriage (4,000 h)
+     came out at 200 days, April 2027, and a haul truck's body liner (2,000 h)
+     at 100. "Plan the repair" with a date two seasons out is "never" with a
+     date on it, and it would have been written onto findings by default.
+
+     So the interval is capped by 1C's own next planned service for this
+     machine when 1C has one sooner. Only ever sooner: the plan can pull a
+     target in, never push it out, so a machine 1C has nothing booked for
+     still gets the interval and nothing silently drifts later. */
+  const nx = schedOrdersFor(curEquip, null).next;
+  if(nx && nx.plan && (!iso || nx.plan < iso)) iso = nx.plan;
+  /* Not today and not yesterday: a target date has to be a date somebody can
+     still work to. Below this the grade's own floor applies. */
+  const tomorrow = DUE.shift(today, 1);
+  if(iso && iso < tomorrow) iso = tomorrow;
+  return iso;
 }
 /* ---- what a grade of 3, 4 or 5 asks for ------------------------------------ */
 function renderGradeReq(){
@@ -7049,6 +7118,14 @@ function loadPos(){ causeGate();
   /* Always — leaving a wear type with the sheet up strands the media controls
      inside #ucFields and leaves the body unscrollable behind a live backdrop. */
   else renderUCSheet();
+  /* THE WORK ORDER THIS ROUND IS BEING WALKED AGAINST IS ALREADY KNOWN.
+     It is on the row the inspector tapped to get here — "WO-016609 · 1000h"
+     — and they were then asked to type it again, with gloves on, from memory
+     of a screen they have left. Filled from 1C's own plan for this machine
+     and this round, only into an empty field, written into the record the
+     same instant it appears (the pattern the target date uses) so what is on
+     screen and what is saved can never disagree, and overtyped freely. */
+  if(!p.wo){ const w=roundWO(); if(w){ curP().wo=w; p.wo=w; } }
   $("comment").value=p.comment||""; $("wo").value=p.wo||"";
   $("tempV").value=p.tempV||""; $("tempA").value=p.tempA||""; $("tempM").value=p.tempM||"IR";
   renderGrade(); renderSev(); updateActionBtn(); updatePrioBtn(); updateDetectBtn(); renderMedia(); updateDefectCauseBtns(); renderTempHint(); renderISOFold(); toggleCapture(); }
@@ -12943,7 +13020,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="366";
+const BUILD="367";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that
