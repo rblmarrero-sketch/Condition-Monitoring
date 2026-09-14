@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-13T23:52:43+00:00",
+  "generated": "2026-09-14T02:28:34+00:00",
   "byUnit": {
     "DZ002": [
       {
@@ -251,6 +251,19 @@
           "INSP",
           "MP",
           "TB"
+        ],
+        "plan": "2026-09-12",
+        "priority": "P3 Planned (PM)"
+      }
+    ],
+    "TK032": [
+      {
+        "wo": "WO-016303",
+        "hours": 1000,
+        "types": [
+          "FC",
+          "INSP",
+          "MP"
         ],
         "plan": "2026-09-12",
         "priority": "P3 Planned (PM)"
