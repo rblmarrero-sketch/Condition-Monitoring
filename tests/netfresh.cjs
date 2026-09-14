@@ -75,8 +75,21 @@ const ok = (n, c, d) => { console.log((c ? "  PASS  " : "  FAIL  ") + n + (d !==
      sweep's load this failed about one run in five and passed alone every
      time — the kind of intermittent that gets called flaky and ignored. */
   await p.evaluate(() => renderNet());
-  await p.evaluate(() => { Object.defineProperty(navigator, "onLine", { get: () => true, configurable: true }); });
-  const stillOff = await badge();
+  /* READ, FLIP, READ — IN ONE SYNCHRONOUS TURN, so nothing can run between.
+
+     Awaiting a render first removed the paint this test starts itself, but not
+     the ones the app starts: teamPull, yardCheck and the retry clock all reach
+     renderNet, and under load — two sweeps at once, which is how this was
+     found the second time — one of them can land in the gap between two
+     separate p.evaluate calls and repaint with the new flag. JavaScript is
+     single-threaded and nothing here awaits, so no task can interleave inside
+     this one evaluate; the gap it could land in no longer exists. */
+  const stillOff = await p.evaluate(() => {
+    const before = (document.getElementById("netStatus") || {}).textContent || "";
+    Object.defineProperty(navigator, "onLine", { get: () => true, configurable: true });
+    const after = (document.getElementById("netStatus") || {}).textContent || "";
+    return before === after ? after.trim() : "CHANGED MID-TURN: " + before + " -> " + after;
+  });
   ok("  nothing has redrawn it yet, so it is still saying offline",
      stillOff === off, JSON.stringify(stillOff));
 

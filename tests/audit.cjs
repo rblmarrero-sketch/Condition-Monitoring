@@ -88,6 +88,23 @@ const shot = async (p) => p.evaluate(async () => {
 });
 
 (async () => {
+  /* A PORT ALREADY IN USE IS ANOTHER SWEEP, NOT A DEFECT.
+
+     This suite counts requests at its OWN server on 8181. Start a second
+     sweep while one is running and the second instance cannot bind — it then
+     talks to the FIRST one's server, counts its traffic, and reports
+     "retry does not re-upload to the healthy destination: requests during
+     retry = 1" about a build that is fine. CLAUDE.md names concurrent sweeps
+     as a known trap; this makes the trap announce itself instead of arriving
+     as a false finding about the upload path. */
+  srv.on("error", e => {
+    if (e && e.code === "EADDRINUSE") {
+      console.log("  SKIP  port 8181 is already in use — another sweep is running.");
+      console.log("        This suite counts requests at its own server and cannot share one.");
+      process.exit(2);
+    }
+    throw e;
+  });
   await new Promise(r => srv.listen(8181, r));
   const b = await chromium.launch();
   const fails = [];
