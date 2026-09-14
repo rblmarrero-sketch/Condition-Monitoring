@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Condition">
 <title>Condition Monitoring — Field Capture</title>
-<link rel="manifest" href="manifest.webmanifest?v=367">
+<link rel="manifest" href="manifest.webmanifest?v=368">
 <!-- iOS does not read the manifest for "Add to Home Screen". Without an
      apple-touch-icon it puts a screenshot of the page on the home screen,
      which is unrecognisable at icon size and looks like a bookmark rather
      than an app. Same file the manifest uses; iOS wants 180×180 and will
      scale 192 without complaint. -->
-<link rel="apple-touch-icon" href="icon-192.png?v=367">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=367">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=367">
+<link rel="apple-touch-icon" href="icon-192.png?v=368">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=368">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=368">
 <!--
   Truck Inspection — mobile CAPTURE app (offline-first) for NHL TR60 dump trucks.
   Three types via the dropdown: Magnetic Plug (MP) · Filter Cut (FC) · Inspection (INSP).
@@ -2504,15 +2504,15 @@ function bootDel(k){ try { localStorage.removeItem(k); } catch (e) {} }
   }
 })();
 </script>
-<script src="native.js?v=367"></script>
-<script src="upload-defaults.js?v=367"></script>
-<script src="hme.js?v=367"></script>
-<script src="mp-fc.js?v=367"></script>
-<script src="hme-cascade.js?v=367"></script>
-<script src="assets.js?v=367"></script>
-<script src="temp-limits.js?v=367"></script>
-<script src="normalize.js?v=367"></script>
-<script src="terms.js?v=367"></script>
+<script src="native.js?v=368"></script>
+<script src="upload-defaults.js?v=368"></script>
+<script src="hme.js?v=368"></script>
+<script src="mp-fc.js?v=368"></script>
+<script src="hme-cascade.js?v=368"></script>
+<script src="assets.js?v=368"></script>
+<script src="temp-limits.js?v=368"></script>
+<script src="normalize.js?v=368"></script>
+<script src="terms.js?v=368"></script>
 <!-- BOOT-SAFE. The dictionary is a file, and a file can fail to arrive: a
      phone's very first load on a one-bar link got index.html and nothing
      else, the language table below then read TERMS.en at load, the main
@@ -2531,25 +2531,25 @@ if (!window.TERMS) {
   })();
 }
 </script>
-<script src="grade.js?v=367"></script>
-<script src="edits.js?v=367"></script>
-<script src="due.js?v=367"></script>
-<script src="wear.js?v=367"></script>
-<script src="wear-figs.js?v=367"></script>
-<script src="wear-map.js?v=367"></script>
-<script src="machine-photos.js?v=367"></script>
-<script src="machine-fig.js?v=367"></script>
-<script src="get.js?v=367"></script>
-<script src="points.js?v=367"></script>
-<script src="uc-points.js?v=367"></script>
-<script src="inspect-guide.js?v=367"></script>
-<script src="get-figs.js?v=367"></script>
-<script src="body-points.js?v=367"></script>
-<script src="body-map.js?v=367"></script>
-<script src="lube.js?v=367"></script>
-<script src="lube-overrides.js?v=367"></script>
-<script src="lube2027.js?v=367"></script>
-<script src="report-core.js?v=367"></script>
+<script src="grade.js?v=368"></script>
+<script src="edits.js?v=368"></script>
+<script src="due.js?v=368"></script>
+<script src="wear.js?v=368"></script>
+<script src="wear-figs.js?v=368"></script>
+<script src="wear-map.js?v=368"></script>
+<script src="machine-photos.js?v=368"></script>
+<script src="machine-fig.js?v=368"></script>
+<script src="get.js?v=368"></script>
+<script src="points.js?v=368"></script>
+<script src="uc-points.js?v=368"></script>
+<script src="inspect-guide.js?v=368"></script>
+<script src="get-figs.js?v=368"></script>
+<script src="body-points.js?v=368"></script>
+<script src="body-map.js?v=368"></script>
+<script src="lube.js?v=368"></script>
+<script src="lube-overrides.js?v=368"></script>
+<script src="lube2027.js?v=368"></script>
+<script src="report-core.js?v=368"></script>
 <!-- jsQR, qrcode, jsPDF and html2canvas are fetched on the tap that needs
      them; see loadLib(). The service worker precaches all four at install,
      so that tap resolves from cache and works with no signal. -->
@@ -5568,9 +5568,30 @@ function renderGradeReq(){
      property of the round and the machine both — an excavator's undercarriage
      is 4,000 h where a dozer's is 1,000, and defaulting both to one number is
      a mistake this project has already shipped once. */
-  if(!p.target && req.target){
-    const d=defaultTargetFor(g);
-    if(d){ curP().target=d; p.target=d; }
+  /* AND IT FOLLOWS THE GRADE FOR AS LONG AS IT IS STILL A DEFAULT.
+
+     Reported from the field on EX016: a 5 selected, and the target date
+     reading 03.11.2026 — fifty days out, which is the FC interval on an
+     excavator, i.e. the answer for a 3. The condition cards are tapped in
+     order on the way down, so a 3 is very often selected on the way to a 5;
+     the 3 filled the field, and `if(!p.target)` then refused to touch it
+     again. The date shown was a real answer to a question the inspector had
+     already moved on from — and 03.11 against "this machine stops now" is
+     the worst possible pairing of the two.
+
+     Which needs the one distinction the old test could not make: a date this
+     phone proposed versus a date a person chose. `targetAuto` remembers
+     exactly what was last written automatically, so an untouched default is
+     recomputed on every grade change and a typed date is never moved again —
+     including a typed date that happens to equal a default, which is only
+     ever recomputed to something a grade genuinely implies. It is a marker,
+     not a finding, and recToExport's field list keeps it off the wire. */
+  if(req.target){
+    const auto = p.targetAuto || "";
+    if(!p.target || p.target === auto){
+      const d = defaultTargetFor(g);
+      if(d && d !== p.target){ curP().target=d; curP().targetAuto=d; p.target=d; p.targetAuto=d; }
+    }
   }
   $("gResp").value=p.resp||""; $("gTarget").value=p.target||""; $("gOpstat").value=p.opstat||"";
   $("gNotifyWrap").classList.toggle("hidden", !req.notify);
@@ -13020,7 +13041,7 @@ const DEST_IDS=["gas","mirror","pa","post"];
    same string for a phone set up from scratch; this one is what the one-time
    upgrade moves an existing phone to. */
 const FOLDER_DEFAULT="{TYPE}/{UNIT}/{YYYY-MM-DD}";
-const BUILD="367";
+const BUILD="368";
 /* Eight hundred and fifty kilobytes of the payload is a PDF engine, a QR reader
    and a QR writer. A round of measurements touches none of them, yet every cold
    start waited for all four before the first paint. Fetch them on the tap that

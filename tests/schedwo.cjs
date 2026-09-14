@@ -161,6 +161,41 @@ const srv = http.createServer((q, s) => {
   ok('  1 and 2 propose nothing: they are not findings and ask for no date',
      tgt.g1 === null && tgt.g2 === null, JSON.stringify([tgt.g1, tgt.g2]));
 
+  console.log('\n5. AND IT FOLLOWS THE GRADE, UNTIL SOMEBODY TYPES ONE');
+  /* Reported from the field on EX016: a 5 selected and the target reading
+     03.11.2026 — fifty days out, the FC interval on an excavator, i.e. the
+     answer for a 3. The cards are tapped in order on the way down, so a 3 is
+     usually selected on the way to a 5; the 3 filled the field and the old
+     `if(!p.target)` refused to touch it again. Walked here exactly as a
+     thumb walks it. */
+  const walk = await p.evaluate(t0 => {
+    curEquip = 'EX016'; type = 'FC'; draft = { positions: {} };
+    const k = (items()[0] || {}).k; if (!k) return null;
+    curItem = k;
+    const pick = g => { curP().grade = g; renderGradeReq();
+                        return DUE.dayDiff(t0, (draft.positions[k] || {}).target); };
+    const out = { three: pick(3), four: pick(4), five: pick(5) };
+    /* now a date the inspector chooses: it must survive every later grade */
+    document.getElementById('gTarget').value = DUE.shift(t0, 9);
+    document.getElementById('gTarget').dispatchEvent(new Event('change'));
+    out.typed = DUE.dayDiff(t0, (draft.positions[k] || {}).target);
+    out.afterFour = pick(4); out.afterThree = pick(3);
+    /* cleared by hand: the phone may propose again */
+    curP().target = '';
+    out.recleared = pick(5);
+    return out;
+  }, today);
+  if (walk) {
+    ok('tapping 3 proposes the round\'s interval', walk.three === 50, walk.three + 'd');
+    ok('  moving to 4 moves the date with it', walk.four === 7, walk.four + 'd');
+    ok('  and 5 is tomorrow, not the 3 left behind', walk.five === 1, walk.five + 'd');
+    ok('a date the inspector types is never moved again',
+       walk.typed === 9 && walk.afterFour === 9 && walk.afterThree === 9,
+       [walk.typed, walk.afterFour, walk.afterThree].join(' / '));
+    ok('  but a field cleared by hand may be proposed again',
+       walk.recleared === 1, walk.recleared + 'd');
+  } else ok('EX016 FC has a position to walk', false);
+
   ok('no page errors throughout', errs.length === 0, errs.slice(0, 3).join(' | '));
   await b.close(); srv.close();
   console.log(fails.length ? `\n${fails.length} FAILED: ` + fails.join(' | ') : '\nall passed');
